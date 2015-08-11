@@ -46,7 +46,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 
 		this.callParent(arguments);
 
-		if (!this.slideStore && !this.transcript) {
+		if (!this.resourceList && !this.transcript) {
 			this.hasNoPresentationParts = true;
 		}
 
@@ -104,12 +104,17 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 			}];
 		}
 		else {
-			items.push({
-				xtype: 'no-video-transcript',
-				video: this.videoPlaylist[0]
-			});
+			if (this.resourceList) {
+				items = this.resourceList;
+			}
+			else {
+				items.push({
+					xtype: 'no-video-transcript',
+					video: this.videoPlaylist[0]
+				});
 
-			this.hasNoPresentationParts = true;
+				this.hasNoPresentationParts = true;
+			}
 		}
 
 		this.items = items;
@@ -171,7 +176,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 			'mousedown': 'mayBeHideAnnotationView'
 		});
 
-		if (!this.transcript) {
+		if (!this.transcript && !this.resourceList) {
 			this.el.addCls('no-transcript-view');
 		}
 

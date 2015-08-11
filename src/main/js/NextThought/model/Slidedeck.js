@@ -2,6 +2,9 @@ Ext.define('NextThought.model.Slidedeck', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.ntislidedeck',
 
+	statics: {
+		mimeType: 'application/vnd.nextthought.ntislidedeck'
+	},
 	idProperty: 'ID',
 	fields: [
 		{ name: 'Creator', type: 'string'},

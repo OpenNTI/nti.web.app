@@ -35,12 +35,14 @@ Ext.define('NextThought.app.course.overview.Index', {
 		this.addRoute('/:lesson/content/:id', this.showContent.bind(this));
 		this.addRoute('/:lesson/content/:id/:page', this.showContent.bind(this));
 		this.addRoute('/:lesson/video/', this.showMediaViewer.bind(this));
+		this.addRoute('/:lesson/slidedeck/', this.showMediaViewer.bind(this));
 
 		this.addDefaultRoute(this.showLessons.bind(this));
 
 		this.addObjectHandler(NextThought.model.PageInfo.mimeType, this.getPageInfoRoute.bind(this));
 		this.addObjectHandler(NextThought.model.RelatedWork.mimeType, this.getRelatedWorkRoute.bind(this));
 		this.addObjectHandler(NextThought.model.PlaylistItem.mimeType, this.getVideoRoute.bind(this));
+		this.addObjectHandler(NextThought.model.Slidedeck.mimeType, this.getSlidedeckRoute.bind(this));
 
 		this.lessons = this.down('course-overview-view');
 
@@ -319,6 +321,26 @@ Ext.define('NextThought.app.course.overview.Index', {
 			title: obj.get && obj.get('title'),
 			precache: {
 				video: obj.isModel ? obj : null,
+				lesson: lesson,
+				basePath: obj.basePath
+			}
+		};
+	},
+
+
+	getSlidedeckRoute: function(obj) {
+		var lesson = obj.parent,
+			lessonId = lesson && lesson.getId(),
+			sid = obj.get && obj.getId();
+
+		lessonId = ParseUtils.encodeForURI(lessonId);
+		sid = ParseUtils.encodeForURI(sid);
+
+		return {
+			route: lessonId + '/slidedeck/' + sid,
+			title: obj.get && obj.get('title'),
+			precache: {
+				slidedeck: obj.isModel ? obj : null,
 				lesson: lesson,
 				basePath: obj.basePath
 			}

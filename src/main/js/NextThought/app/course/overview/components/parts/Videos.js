@@ -509,18 +509,9 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 
 			slide = m.get('slidedeck');
 			if (Ext.isEmpty(slide)) {
-				// me.fireEvent('start-media-player', me.videoIndex[m.getId()], m.getId(), getURL(li.root), null, {
-				// 	closeCallback: function() {
-				// 		me.setProgress();
-				// 	}
-				// });
 				me.navigateToTarget(m, getURL(li.root));
 			} else {
-				// FIXME: REMOVE this, this is just to test loading slidedeck data.
-				// Otherwise, we would channel this through navigation, the same way we do for navigation to a video.
-				v = NextThought.model.PlaylistItem.create(Ext.apply( {NTIID: m.getId()}, me.videoIndex[m.getId()]) );
-				slideActions = NextThought.app.slidedeck.media.Actions.create();
-				slideActions.loadSlidedeckContent(slide);
+				me.navigateToSlidedeck(slide);
 			}
 			return;
 		}
@@ -553,6 +544,17 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 
 		video.basePath = basePath;
 		this.navigate.call(null, video);
+	},
+
+
+	navigateToSlidedeck: function(slidedeckId) {
+		var me = this;
+		if (slidedeckId) {
+			Service.getObject(slidedeckId)
+				.then(function(slidedeck) {
+					me.navigate.call(null, slidedeck);
+				});
+		}
 	},
 
 

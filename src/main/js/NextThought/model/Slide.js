@@ -10,7 +10,7 @@ Ext.define('NextThought.model.Slide', {
 	fields: [
 		{ name: 'id', type: 'string', mapping: 'ntiid'},
 		{ name: 'title', type: 'string' },
-		{ name: 'image', type: 'string', mapping: 'slidedeckimage'},
+		{ name: 'image', type: 'string', mapping: 'slideimage'},
 		{ name: 'image-thumbnail', type: 'string' },
 		{ name: 'media', type: 'auto' },
 		{ name: 'video', type: 'string' },

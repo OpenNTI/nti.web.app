@@ -207,16 +207,8 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 	},
 
 
-	loadSlidedeckContent: function(slidedeckId) {
-		var me = this;
-		Service.getObject(slidedeckId)
-			.then(function(slidedeck) {
-				console.log(slidedeck);
-				me.buildSlidedeckPlaylist(slidedeck);
-			})
-			.fail(function() {
-				console.log(arguments);
-			});
+	loadSlidedeck: function(slidedeckId) {
+		return Service.getObject(slidedeckId);
 	},
 
 
@@ -237,12 +229,23 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 	},
 
 
+	fixSlideImagesPath: function(slides, basePath) {
+		Ext.each(slides || [], function(slide) {
+			var image = slide.get('image');
+			if (image) {
+				image = (basePath || '') + image;
+				slide.set('image', image);
+			}
+		});
+	},
+
+
 	buildSlidedeckPlaylist: function(slidedeck) {
 		var videos = {},
 			transcripts = {}, me = this, promises,
 			slideStore;
 
-		if (!slidedeck) {
+		if (!slidedeck || !(slidedeck instanceof NextThought.model.Slidedeck)) {
 			return Promise.reject();
 		}
 
@@ -264,16 +267,29 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 							.then(function(basePath) {
 								transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
 								transcripts[slidevideo.NTIID] = transcript;
+								me.fixSlideImagesPath(slideStore.getRange(), basePath);
 								fulfill();
 							});
 					});
 			});
 		});
 
-		Promise.all(promises)
-			.then(function() {
-				me.buildSlidedeckComponents(slideStore, videos, transcripts);
-			});
+
+		return new  Promise( function(fulfill, reject) {
+			Promise.all(promises)
+				.then(function() {
+					var items = me.buildSlidedeckComponents(slideStore, videos, transcripts),
+						vids = [], k;
+
+					for (k in videos) {
+						if (videos.hasOwnProperty(k)) {
+							vids.push(videos[k]);
+						}
+					}
+
+					fulfill({videos: vids, items: items});
+				});
+		});
 	},
 
 
@@ -326,7 +342,6 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
             }
         }, this);
 
-		debugger;
-        console.log(items);
+        return items;
     }
 });

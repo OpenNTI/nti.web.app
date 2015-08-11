@@ -96,6 +96,41 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 	},
 
 
+	setSlidedeckContent: function(slidedeck, videos, resourceList, options) {
+		var me = this;
+
+		if (!this.rendered) {
+			this.onceRendered.then(function() {
+				wait().then(me.setSlidedeckContent.bind(me, slidedeck, videos, resourceList));
+			});
+			return;
+		}
+
+		// FIXME: For now, we will naively assume that each slidedeck is made of only one video.
+		this.video = videos[0];
+		this.slidedeck = slidedeck;
+		this.resourceList = resourceList;
+		this.options = options;
+
+		// Only build set the contect and build a new viewer if the video actually changed.
+		if (!this.viewer || this.viewer.video.getId() !== this.video.getId()) {
+			this.toolbar.setContent(this.video, this.resourceList);
+			this.gridView.setContent(this.video, this.currentBundle);
+			this.buildInitialViewer();
+		}
+
+
+		if (this.getLayout().getActiveItem() !== this.viewer) {
+			this.getLayout().setActiveItem(this.viewer);
+		}
+
+
+		if (this.toolbar && this.getViewerType()) {
+			this.toolbar.updateCurrentType(this.getViewerType());
+		}
+	},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
 
@@ -175,6 +210,7 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		this.viewer = this.add({
 			xtype: this.viewerXtypeMap[playerType],
 			transcript: this.transcript,
+			resourceList: this.resourceList,
 			record: this.record,
 			accountForScrollbars: false,
 			scrollToId: this.scrollToId,
@@ -197,7 +233,7 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 
 
 	getViewerType: function(type) {
-		if (this.lockVideoWithNoTranscript && !this.transcript) {
+		if (this.lockVideoWithNoTranscript && !this.transcript && !this.resourceList) {
 			return 'full-video';
 		}
 
