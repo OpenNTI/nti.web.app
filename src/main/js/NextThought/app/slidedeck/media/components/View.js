@@ -369,6 +369,8 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 				} else {
 					//if we have a target viewer its set to a different video so
 					//remove it
+					// FIXME: We need to setContent if we have a different video,
+					// rather than creating a new one.
 					if (targetViewer) {
 						me.remove(targetViewer, true);
 					}
@@ -376,6 +378,7 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 					me.viewer = me.add({
 						xtype: viewerXType,
 						transcript: me.transcript,
+						resourceList: me.resourceList,
 						record: me.record,
 						accountForScrollbars: false,
 						scrollToId: me.scrollToId,
