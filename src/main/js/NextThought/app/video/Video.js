@@ -132,7 +132,7 @@ Ext.define('NextThought.app.video.Video', {
 			usesService: function(s) {
 				var x = this.length - 1;
 				for (x; x >= 0; x--) {
-					if (this[x].usesService(s)) {
+					if (this[x].usesService && this[x].usesService(s)) {
 						return true;
 					}
 				}
@@ -207,9 +207,9 @@ Ext.define('NextThought.app.video.Video', {
 		//		If loadFirstEntry is true, we load the first playlist entry. For some subclasses this behavior is not desired.
 		if (this.loadFirstEntry) {
 			item = this.playlist[this.playlistIndex];
-			this.maybeSwitchPlayers(item && item.activeSource().service);
+			this.maybeSwitchPlayers(item && item.activeSource && item.activeSource().service);
 			if (item) {
-				this.setVideoAndPosition(item.activeSource().source);
+				this.setVideoAndPosition(item.activeSource && item.activeSource().source);
 			}
 		}
 		else {
