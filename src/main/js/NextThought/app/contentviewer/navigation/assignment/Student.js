@@ -286,6 +286,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 
 		var grade = history && history.get('Grade'),
 			due = this.assignment && this.assignment.getDueDate(),
+			historyDuration = history && history.getDuration() || {},
 			submission = history && history.get('Submission'),
 			parts = this.assignment.get('parts'),
 			hasParts = parts && parts.length > 0,
@@ -309,7 +310,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 		this.turnedInEl.update(NextThought.app.course.assessment.AssignmentStatus.getStatusHTML({
 			due: this.assignment.getDueDate(),
 			maxTime: this.assignment.isTimed && this.assignment.getMaxTime(),
-			duration: this.assignment.isTimed && this.assignment.getDuration(),
+			duration: this.assignment.isTimed && (this.assignment.getDuration() || historyDuration),
 			isNoSubmitAssignment: this.assignment.isNoSubmit(),
 			completed: completed,
 			isExcused: grade && grade.get('IsExcused')
