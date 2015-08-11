@@ -31,7 +31,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 
 		this.loadingEl = this.add({xtype: 'window-loading'});
 
-		if (!this.record) {
+		if (!this.record || this.state === 'edit') {
 			this.loadEditor();
 		} else if (this.record instanceof NextThought.model.forums.CommentPost) {
 			this.loadComment();
@@ -242,6 +242,10 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 				me.remove(editor);
 				me.record = rec;
 				me.showTopic(rec, forum);
+
+				if (me.monitors && me.monitors.afterSave) {
+					me.monitors.afterSave(rec);
+				}
 			}
 		});
 	}

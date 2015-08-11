@@ -120,13 +120,12 @@ Ext.define('NextThought.app.Body', {
 
 
 	onNewContext: function() {
-		var parts = this.ContextStore.getCurrentObjectParts(),
-			state = window.location.hash.replace('#', '');
+		var parts = this.ContextStore.getCurrentObjectParts();
 
 		if (parts.mimeType && parts.id) {
-			this.WindowActions.showWindowWithMimeType(parts.id, parts.mimeType, state);
+			this.WindowActions.showWindowWithMimeType(parts.id, parts.mimeType, parts.state);
 		} else if (parts.id) {
-			this.WindowActions.showWindow(parts.id, state);
+			this.WindowActions.showWindow(parts.id, parts.state);
 		}
 	},
 
@@ -174,7 +173,7 @@ Ext.define('NextThought.app.Body', {
 			hash = this.ContextStore.getCurrentHash();
 
 		if (id) {
-			if (id == this.ContextStore.getCurrentObjectId()) {
+			if (id === this.ContextStore.getCurrentObjectId()) {
 				return;
 			}
 
@@ -183,16 +182,15 @@ Ext.define('NextThought.app.Body', {
 			if (mimeType) {
 				mimeType = encodeURIComponent(mimeType);
 				location.pathname = Globals.trimRoute(location.pathname) + '/object/' + mimeType + '/' + id;
+			} else if (state) {
+				state = encodeURIComponent(state);
+				location.pathname = Globals.trimRoute(location.pathname) + '/object/' + id + '/' + state;
 			} else {
 				location.pathname = Globals.trimRoute(location.pathname) + '/object/' + id;
 			}
 		} else {
 			state = null;
 			location.pathname = this.ContextStore.removeObjectRoute();
-		}
-
-		if (state) {
-			location.hash = '#' + state;
 		}
 
 		if (search) {

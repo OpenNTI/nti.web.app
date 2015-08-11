@@ -34,7 +34,7 @@ Ext.define('NextThought.app.profiles.group.components.activity.Body', {
 
 	onNewPost: function() {
 		if (this.postContainer && this.postContainer.getLink('add')) {
-			this.WindowActions.showWindow('new-topic', null, this.newPostCmp.el.dom, {afterClose: this.onPostSaved.bind(this)}, {
+			this.WindowActions.showWindow('new-topic', null, this.newPostCmp.el.dom, {afterSave: this.onPostSaved.bind(this)}, {
 				forum: this.postContainer
 			});
 		}

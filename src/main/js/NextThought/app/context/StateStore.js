@@ -95,16 +95,39 @@ Ext.define('NextThought.app.context.StateStore', {
 	},
 
 
+	__parseTwoObjectParts: function(parts) {
+		return {
+			id: ParseUtils.decodeFromURI(parts.last())
+		};
+	},
+
+
+	__parseThreeObjectParts: function(parts) {
+		var first = parts[parts.length - 2],
+			last = parts.last(),
+			parts = {};
+
+		if (ParseUtils.isEncodedNTIID(first)) {
+			parts.id = ParseUtils.decodeFromURI(first);
+			parts.state = decodeURIComponent(last);
+		} else if (ParseUtils.isEncodedNTIID(last)) {
+			parts.id = ParseUtils.decodeFromURI(last);
+			parts.mimeType = decodeURIComponent(first);
+		}
+
+		return parts;
+	},
+
+
 	getCurrentObjectParts: function() {
 		var route = Globals.trimRoute(this.getCurrentRoute()),
 			parts = route.split('/'),
 			objectParts = {};
 
 		if (parts[parts.length - 2] === 'object') {
-			objectParts.id = ParseUtils.decodeFromURI(parts.last());
+			objectParts = this.__parseTwoObjectParts(parts);
 		} else if (parts[parts.length - 3] === 'object') {
-			objectParts.id = ParseUtils.decodeFromURI(parts.last());
-			objectParts.mimeType = decodeURIComponent(parts[parts.length - 2]);
+			objectParts = this.__parseThreeObjectParts(parts);
 		}
 
 		return objectParts;

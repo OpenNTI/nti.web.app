@@ -10,7 +10,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		'NextThought.editor.Editor',
 		'NextThought.layout.component.Natural',
 		'NextThought.app.navigation.path.Actions',
-		'NextThought.app.forums.Actions'
+		'NextThought.app.forums.Actions',
+		'NextThought.app.windows.Actions'
 	],
 
 	mixins: {
@@ -100,6 +101,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		avatarEl: '.avatar',
 		nameEl: '.name',
 
+		titleEl: '.meta .subject',
+
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
 		favoritesSpacer: '.controls .favorite-spacer',
@@ -130,6 +133,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 
 		me.PathActions = NextThought.app.navigation.path.Actions.create();
 		me.ForumActions = NextThought.app.forums.Actions.create();
+		me.WindowActions = NextThought.app.windows.Actions.create();
 
 		me.callParent(arguments);
 		me.mixins.likeAndFavoriteActions.constructor.call(me);
@@ -401,8 +405,26 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 
 	bodyClickHandler: function() {
 		this.navigateToObject(this.record);
-	}
+	},
 
+
+	navigateToTopicForEdit: function(e, el) {
+		var me = this;
+
+		me.WindowActions.pushWindow(me.record, 'edit', el, {
+			afterSave: function(rec) {
+				if (!this.rendered) {
+					return;
+				}
+
+				var headline = rec.get('headline');
+
+				headline.compileBodyContent(me.setBody, me);
+
+				me.titleEl.update(rec.get('title'));
+			}
+		});
+	}
 });
 
 

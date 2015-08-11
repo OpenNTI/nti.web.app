@@ -56,7 +56,8 @@ Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
 			this.setPublished(r.isPublished());
 		}
 
-		parentCtEl.addCls('scroll-lock' + (hasScrollBar ? ' scroll-padding-right' : '')).scrollTo(0);
+		parentCtEl.addCls('scroll-lock').scrollTo(0);
+
 		Ext.EventManager.onWindowResize(this.syncHeight, this, null);
 		if (!Ext.is.iOS) {
 			Ext.defer(this.syncHeight, 1, this);
