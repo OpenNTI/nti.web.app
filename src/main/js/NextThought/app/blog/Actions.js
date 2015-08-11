@@ -3,8 +3,16 @@ Ext.define('NextThought.app.blog.Actions', {
 
 	requires: [
 		'NextThought.model.forums.PersonalBlogComment',
-		'NextThought.model.forums.PersonalBlogEntryPost'
+		'NextThought.model.forums.PersonalBlogEntryPost',
+		'NextThought.app.userdata.Actions'
 	],
+
+
+	constructor: function() {
+		this.callParent(arguments);
+
+		this.UserDataActions = NextThought.app.userdata.Actions.create();
+	},
 
 
 	__parseSharingInfo: function(sharingInfo) {
@@ -172,6 +180,53 @@ Ext.define('NextThought.app.blog.Actions', {
 				failure: function() {
 					console.error('Failed to create blog comment: ', arguments);
 
+					reject();
+				}
+			});
+		});
+	},
+
+
+	deleteBlogPost: function(record) {
+		var idToDestroy, me = this;
+
+		function maybeDeleteFromStore(id, store) {
+			var r;
+
+			if (store) {
+				r = store.findRecord('NTIID', idToDestroy, 0, false, true, true);
+
+				if (!r) {
+					console.warn('Could not remove, the store did not have item with id: ' + idToDestroy, r);
+					return;
+				}
+
+				//The store will handle making it a placeholder if it needs and fire events,etc... this is all we need to do.
+				store.remove(r);
+			}
+		}
+
+		if (!record.get('href')) {
+			record.set('href', record.getLink('contents').replace(/\/contents$/, '') || 'no-luck');
+		}
+
+		idToDestroy = record.get('NTIID');
+
+
+		return new Promise(function(fulfill, reject) {
+			record.destroy({
+				success: function() {
+					me.UserDataActions.applyToStoresThatWantItem(maybeDeleteFromStore, record);
+
+					//Delete anything left that we know of
+					Ext.StoreManager.each(function(s) {
+						maybeDeleteFromStore(null, s);
+					}, me);
+
+					fulfill();
+				},
+				failure: function() {
+					alert('Sorry, could not delete that');
 					reject();
 				}
 			});

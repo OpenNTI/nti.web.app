@@ -4,9 +4,17 @@ Ext.define('NextThought.app.blog.parts.Comment', {
 
 	cls: 'blog-comment',
 
+	requires: ['NextThought.app.blog.Actions'],
+
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.BlogActions = NextThought.app.blog.Actions.create();
+	},
+
 
 	fireDeleteEvent: function() {
-		this.fireEvent('delete-post', this.record, this);
+		this.BlogActions.deleteBlogPost(this.record);
 	}
-
 });
