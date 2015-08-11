@@ -247,12 +247,13 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 		}
 
 		function storeLoad() {
-			if (me.notLoadedYet) {
-				delete me.notLoadedYet;
-				fulfill();
-			}
-
-			me.onStoreAdd.apply(me, arguments);
+			me.onStoreAdd.apply(me, arguments)
+				.then(function() {
+					if (me.notLoadedYet) {
+						delete me.notLoadedYet;
+						fulfill();
+					}
+				});
 		}
 
 		me.mon(s, {
@@ -269,15 +270,11 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 
 
 	onStoreAdd: function(store, records) {
-		//if its our first time through
-		if (this.notLoadedYet) {
-			delete this.notLoadedYet;
-			this.initialLoad.fulfill(true);
-		}
+		var loading = (records || []).map(this.fillInData.bind(this));
 
-		(records || []).forEach(this.fillInData, this);
-		this.clearLoadBox();
-		this.fireEvent('realign-editor');
+		return Promise.all((loading))
+			.then(this.clearLoadBox.bind(this))
+			.then(this.fireEvent('realign-editor'));
 	},
 
 
@@ -289,10 +286,12 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 
 
 	fillInData: function(record) {
-		var me = this;
+		var me = this,
+			loadUser;
+
 
 		if (typeof record.get('Creator') === 'string') {
-			UserRepository.getUser(record.get('Creator'))
+			loadUser = UserRepository.getUser(record.get('Creator'))
 				.then(function(user) {
 					record.set({
 						'Creator': user
@@ -301,7 +300,39 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 				.fail(function(reason) {
 					console.error(reason);
 				});
+		} else {
+			loadUser = Promise.resolve();
 		}
+
+		return loadUser.then(function() {
+			return new Promise(function(fulfill, reject) {
+				record.compileBodyContent(function(body) {
+					var index;
+
+					if (!me.store) {return;}
+
+					me.store.suspendEvents();
+
+					record.set({
+						'bodyContent': DomUtils.adjustLinks(body, window.location.href)
+					});
+
+					me.store.resumeEvents();
+
+					if (me.store.filtersCleared) {
+						me.recordsToRefresh.push(record);
+					} else {
+						index = me.store.indexOf(record);
+						me.refreshNode(index);
+					}
+
+					wait()
+						.then(fulfill);
+				}, this, function(id, data) {
+					me.wbData[id] = data;
+				}, 226);
+			})
+		})
 
 		record.compileBodyContent(function(body) {
 			var index;
