@@ -17,7 +17,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 	layout: 'none',
 
 	items: [
-		{xtype: 'profile-user-activity-stream'},
+		{xtype: 'profile-user-activity-body'},
 		{xtype: 'profile-user-activity-sidebar'}
 	],
 
@@ -51,6 +51,13 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 	},
 
 
+	getSuggestedSharing: function() {
+		var community = Service.getFakePublishCommunity();
+
+		return NextThought.model.UserSearch.create(community.asJSON());
+	},
+
+
 	onActivate: function() {
 		this.items.each(function(item) {
 			item.fireEvent('activate');
@@ -66,19 +73,21 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 
 
 	initChildComponentRefs: function() {
-		this.streamCmp = this.down('profile-user-activity-stream');
+		this.streamCmp = this.down('profile-user-activity-body');
 		this.sidebarCmp = this.down('profile-user-activity-sidebar');
 	},
 
 	userChanged: function(user, isMe) {
-
 		this.activeUser = user;
 		this.isMe = isMe;
 
 		this.store = this.buildStore();
 		this.streamCmp.setStore(this.store, user);
 
-		return Promise.resolve();
+		return Promise.all([
+				this.streamCmp.userChanged.apply(this.streamCmp, arguments),
+				this.sidebarCmp.userChanged.apply(this.sidebarCmp, arguments)
+			]);
 	},
 
 

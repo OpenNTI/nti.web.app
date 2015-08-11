@@ -875,7 +875,6 @@
 }
 
 @mixin forum-post-editor{
-	border: 1px solid #dcdcdc;
 	background: #fff;
 
 	.editor {
@@ -979,6 +978,12 @@
 		position: absolute;
 		top: 5px; right:0;
 		z-index: 101;
+	}
+}
+
+.blog-window {
+	.blog-editor {
+		@include forum-post-editor;
 	}
 }
 

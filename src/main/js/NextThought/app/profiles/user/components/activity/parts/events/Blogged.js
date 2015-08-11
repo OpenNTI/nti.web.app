@@ -80,19 +80,5 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Blogg
 	},
 
 
-	onClick: function(e) {
-		var t = e.getTarget('[data-target]'),
-			u = this.user,
-			postId = this.record.get('ID'),
-			args = ['Thoughts', postId];
-
-		if (!postId || !Ext.isString(postId)) {
-			args.pop();
-		}
-		else if (t) {
-			args.push(t.getAttribute('data-target'));
-		}
-
-		this.fireEvent('show-profile', u, args);
-	}
+	onClick: function(e) {}
 });

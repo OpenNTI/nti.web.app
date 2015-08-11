@@ -1,0 +1,12 @@
+// .topic-window .forums-topic-editor-box .forums-topic-editor .editor .main .content
+
+.blog-window {
+	overflow-x: hidden;
+
+	.blog-editor {
+		.editor .main .content {
+			max-height: none;
+			min-height: 0;
+		}
+	}
+}

@@ -6,5 +6,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 
 	cls: 'activity-sidebar',
 
-	items: []
+	items: [],
+
+	userChanged: function() {}
 });

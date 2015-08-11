@@ -88,6 +88,8 @@ Ext.define('NextThought.app.sharing.Actions', {
 		(context || []).forEach(function(item) {
 			if (item.obj && item.obj.getSuggestedSharing) {
 				suggestions.push(item.obj.getSuggestedSharing());
+			} else if (item.cmp && item.cmp.getSuggestedSharing) {
+				suggestions.push(item.cmp.getSuggestedSharing());
 			}
 		});
 

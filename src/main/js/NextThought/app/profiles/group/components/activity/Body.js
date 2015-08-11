@@ -1,5 +1,5 @@
 Ext.define('NextThought.app.profiles.group.components.activity.Body', {
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.app.profiles.user.components.activity.Body',
 	alias: 'widget.profile-group-activity-body',
 
 	requires: [
@@ -18,17 +18,9 @@ Ext.define('NextThought.app.profiles.group.components.activity.Body', {
 	],
 
 
-	initComponent: function() {
-		this.callParent(arguments);
-
+	setUpComponents: function() {
 		this.newPostCmp = this.down('profile-group-newpost');
 		this.activityCmp = this.down('profile-group-activity-stream');
-		this.WindowActions = NextThought.app.windows.Actions.create();
-
-		this.activityCmp.navigateToObject = this.navigateToActivityItem.bind(this);
-		this.newPostCmp.onNewPost = this.onNewPost.bind(this);
-
-		this.newPostCmp.hide();
 	},
 
 
@@ -57,7 +49,7 @@ Ext.define('NextThought.app.profiles.group.components.activity.Body', {
 
 		me.newPostCmp.hide();
 
-		entity.getDefaultForum()
+		return entity.getDefaultForum()
 			.then(function(forum) {
 				me.postContainer = forum;
 
@@ -67,17 +59,5 @@ Ext.define('NextThought.app.profiles.group.components.activity.Body', {
 					me.newPostCmp.show();
 				}
 			});
-	},
-
-
-	setStore: function(store, entity) {
-		this.activityCmp.setStore(store, entity);
-	},
-
-
-	navigateToActivityItem: function(item) {
-		if (this.navigateToObject) {
-			this.navigateToObject(item);
-		}
 	}
 });

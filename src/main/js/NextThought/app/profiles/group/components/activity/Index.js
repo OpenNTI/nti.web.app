@@ -39,16 +39,6 @@ Ext.define('NextThought.app.profiles.group.components.activity.Index', {
 		};
 	},
 
-	userChanged: function() {
-		var superP = this.callParent(arguments);
-
-		return Promise.all([
-				superP,
-				this.streamCmp.userChanged.apply(this.streamCmp, arguments),
-				this.sidebarCmp.userChanged.apply(this.sidebarCmp, arguments)
-			]);
-	},
-
 
 	navigateToActivityItem: function(item) {
 		this.Router.root.attemptToNavigateToObject(item);

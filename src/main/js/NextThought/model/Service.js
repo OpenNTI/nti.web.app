@@ -362,6 +362,28 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	FAKE_PUBLISH_COMMUNITY_NAME: 'client:publish',
+
+
+	getFakePublishCommunity: function() {
+		if (!this.__fakePublishCommunity) {
+			this.__fakePublishCommunity = NextThought.model.Community.create({
+				Username: this.FAKE_PUBLISH_COMMUNITY_NAME,
+				alias: 'Public'
+			});
+		}
+
+		return this.__fakePublishCommunity;
+	},
+
+
+	isFakePublishCommunity: function(community) {
+		community = community.isModel ? community.get('Username') : community;
+
+		return community === this.FAKE_PUBLISH_COMMUNITY_NAME;
+	},
+
+
 	getGroupsMap: function() {
 		if (this.__loadUserGroups) { return this.__loadUserGroups; }
 
