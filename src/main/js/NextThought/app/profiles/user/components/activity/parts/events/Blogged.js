@@ -80,5 +80,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Blogg
 	},
 
 
-	onClick: function(e) {}
+	onClick: function(e) {
+		this.navigateToObject(this.record);
+	}
 });

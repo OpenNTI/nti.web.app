@@ -985,6 +985,26 @@
 	.blog-editor {
 		@include forum-post-editor;
 	}
+
+	.entry {
+		padding: 0;
+		@include post-view;
+		.navigation-bar {
+			.pager {
+				right: 10px;
+			}
+		}
+
+		& > .wrap {
+			position: relative;
+			padding: 20px 35px;
+			background: #fff;
+
+			.controls {
+				overflow: hidden;
+			}
+		}
+	}
 }
 
 #profile {
