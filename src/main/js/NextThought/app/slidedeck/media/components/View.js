@@ -25,7 +25,7 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header'},
-		{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']}
+		{id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out, values)%}']}
 	]),
 
 	getTargetEl: function() {

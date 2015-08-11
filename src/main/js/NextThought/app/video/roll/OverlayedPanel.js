@@ -14,7 +14,7 @@ Ext.define('NextThought.app.video.roll.OverlayedPanel', {
 	statics: {
 		getData: function(dom, reader) {
 			var videos = DomUtils.getVideosFromDom(dom);
-			return NextThought.view.cards.Launcher.getData(dom, reader, videos, function() {
+			return NextThought.common.components.cards.Launcher.getData(dom, reader, videos, function() {
 				var thumb = videos[0];
 				thumb = thumb && thumb.sources && thumb.sources[0];
 				return thumb && thumb.thumbnail;

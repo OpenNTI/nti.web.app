@@ -13,7 +13,9 @@ Ext.define('NextThought.app.course.overview.components.parts.Timeline', {
 
 		var root = this.locationInfo.root,
 			width = this['suggested-width'],
-			height = this['suggested-height'];
+			height = this['suggested-height'],
+			thumbURL = this.icon.indexOf(root) === -1 ? root + this.icon : this.icon,
+			jsonURL = this.href.indexOf(root) === -1 ? root + this.href : this.href;
 
 		height = height ? parseInt(height, 10) : -1;
 		width = width ? parseInt(width, 10) : -1;
@@ -21,10 +23,10 @@ Ext.define('NextThought.app.course.overview.components.parts.Timeline', {
 		this.WindowActions = NextThought.app.windows.Actions.create();
 
 		this.data = {
-			thumbnail: root + this.icon,
+			thumbnail: thumbURL,
 			description: this.desc,
 			title: this.label,
-			json: root + this.href,
+			json: jsonURL,
 			desiredHeight: height,
 			desiredWidth: width,
 			ntiid: this.ntiid,

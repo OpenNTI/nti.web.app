@@ -167,10 +167,29 @@ Ext.define('NextThought.app.chat.Gutter', {
 	onOnlineContactRemove: function(store, record) {
 		// Make sure we don't remove a user with an active chat window.
 		var r = this.store.findRecord('Username', record.get('Username'), 0, false, false, true);
-		if (r && !r.associatedWindow) {
+		if (r && !this.hasActiveChat(r.get('Username'))) {
 			this.store.remove(r);
 		}
 	},
+
+
+	hasActiveChat: function(username) {
+		var occupantsKeys = this.ChatStore.getAllOccupantsKeyAccepted() || [],
+			isActiveChat = false;
+
+		occupantsKeys.forEach(function(occupantsKey) {
+			var isNTIID = ParseUtils.isNTIID(occupantsKey),
+				users = isNTIID === false ? occupantsKey.split('_') : [],
+				o = Ext.Array.remove(users.slice(), $AppConfig.username);
+
+			if (username === o[0]) {
+				isActiveChat = true;
+			}
+		});
+
+		return isActiveChat;
+	},
+
 
 	removeContact: function(store, user) {
 		var entry = this.findEntryForUser(user);

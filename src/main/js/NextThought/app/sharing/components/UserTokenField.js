@@ -57,7 +57,8 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 			ownerCls: this.ownerCls,
 			focusOnToFront: false,
 			renderTo: spEl || Ext.getBody(),
-			selectItem: this.searchItemSelected.bind(this)
+			selectItem: this.searchItemSelected.bind(this),
+			stopHide: this.stopPickerHide()
 		});
 
 		this.mon(this.searchStore, {
@@ -134,17 +135,10 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 					return true;
 				},
 				enter: function(e) {
-					var selModel = picker.getSelectionModel(),
-						count = selModel.getCount();
-
-					this.selectHighlighted(e);
-
-					// Handle the case where the highlighted item is already selected
-					// In this case, the change event won't fire, so just collapse
-					if (!me.multiSelect && count === selModel.getCount()) {
-						me.collapse();
-					}
-				}
+					picker.addSelected();
+				},
+				up: function() {},
+				down: function() {}
 			});
 		}
 	},
@@ -228,6 +222,10 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		return c.length > 0;
 	},
 
+	containsUnresolved: function(){
+		c = Ext.Array.filter(this.selections, function(o, i) { return o.Unresolved === true; });
+		return c.length > 0;
+	},
 
 	getSnippet: function(value) {
 		//Truncate long names.
@@ -239,8 +237,11 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		var value = record && record.get('displayName'),
 			type = this.getType(record.getData());
 
-		if (this.isToken(value)) {
+		if (this.isToken(value) && !record.Unresolved) {
 			this.addTag(value, type);
+			this.updatePlaceholderLabel();
+		}else if(!this.containsUnresolved() && record.Unresolved){
+			this.addTag('Others',type);
 			this.updatePlaceholderLabel();
 		}
 
@@ -333,6 +334,7 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 			if (val && (val.length === 1 || val === sel)) {
 				this.clearResults(true);
 				this.inputEl.focus(100);
+				this.alignPicker();
 				return true;
 			}
 		}
@@ -351,6 +353,16 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 			this.inputEl.dom.value = '';
 			this.inputEl.focus(100);
 			return true;
+		}
+
+		if (key === e.DOWN) {
+			this.pickerView.selectNext();
+			e.stopEvent();
+		}
+
+		if (key === e.UP) {
+			this.pickerView.selectPrev();
+			e.stopEvent();
 		}
 
 		if (key === e.DOWN && !this.getPicker().isVisible()) {
@@ -382,13 +394,21 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 	onInputFocus: function() {
 		this.search();
 		this.alignPicker();
+		clearTimeout(this.hideOnBlurTimeout);
 	},
 
 
-	onInputBlur: function() {
-		//Wait a bit so the pickerView has time to get the click event
-		wait(300)
-			.then(this.hidePicker.bind(this));
+	onInputBlur: function(e) {
+		e.stopPropagation();
+
+		var me = this;
+
+		clearTimeout(this.hideOnBlurTimeout);
+
+		//Wait to see if the picker el is being clicked
+		this.hideOnBlurTimeout = setTimeout(function() {
+			me.hidePicker();
+		}, 500);
 	},
 
 
@@ -509,9 +529,14 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		});
 	},
 
+	stopPickerHide: function() {
+		clearTimeout(this.hideOnBlurTimeout);
+	},
+
 
 	hidePicker: function() {
 		console.log('Picker hidden');
+		this.pickerView.unselectItem();
 		this.pickerView.hide().setHeight(null);
 	},
 

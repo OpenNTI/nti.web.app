@@ -159,10 +159,16 @@ Ext.define('NextThought.app.course.overview.Index', {
 		if (me.reader) {
 			if (me.reader.root === rootId) {
 				if (!pageId && me.reader.pageId === rootId) {
+					if (me.activeMediaWindow) {
+						me.activeMediaWindow.destroy();
+					}
 					return Promise.resolve();
 				}
 
 				if (pageId && me.reader.pageId && me.reader.pageId === pageId) {
+					if (me.activeMediaWindow) {
+						me.activeMediaWindow.destroy();
+					}
 					return Promise.resolve();
 				}
 			}
@@ -220,6 +226,10 @@ Ext.define('NextThought.app.course.overview.Index', {
 					root: rootId,
 					rootRoute: route.precache.parent.route + '/content/' + route.params.id + '/'
 				});
+
+				 if (me.activeMediaWindow) {
+				 	me.activeMediaWindow.destroy();
+				}
 
 				me.getLayout().setActiveItem(me.reader);
 

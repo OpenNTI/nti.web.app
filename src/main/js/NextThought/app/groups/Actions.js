@@ -3,7 +3,8 @@ Ext.define('NextThought.app.groups.Actions', {
 
 	requires: [
 		'NextThought.login.StateStore',
-		'NextThought.app.groups.StateStore'
+		'NextThought.app.groups.StateStore',
+		'NextThought.model.DynamicFriendsList'
 	],
 
 
@@ -14,6 +15,7 @@ Ext.define('NextThought.app.groups.Actions', {
 		this.LoginStore = NextThought.login.StateStore.getInstance();
 
 		this.LoginStore.registerLoginAction(this.loadFriendsList.bind(this));
+		this.LoginStore.registerLoginAction(this.loadGroupsList.bind(this));
 	},
 
 
@@ -41,6 +43,30 @@ Ext.define('NextThought.app.groups.Actions', {
 
 			store.load();
 		});
+	},
+
+
+	loadGroupsList: function() {
+		var me = this,
+			store = me.GroupStore.getGroupsList(),
+			collection = Service.getCollection('Groups');
+
+		if (!collection || !collection.href) {
+			return;
+		}
+
+		return new Promise(function(fulfill, reject) {
+			store.on({
+				load: function(listStore, records, success) {
+					fulfill();
+				}
+			});
+
+			store.proxy.url = getURL(collection.href);
+
+			store.load();
+		});
+
 	},
 
 
@@ -150,8 +176,8 @@ Ext.define('NextThought.app.groups.Actions', {
 
 	createFriendsListUnguarded: function(displayName, username, friends, dynamic, callback, errorCallback, scope) {
 		var me = this,
-			rec = NextThought.model.FriendsList.create(),
-			store = me.GroupStore.getFriendsList();
+			rec = dynamic ? NextThought.model.DynamicFriendsList.create() : NextThought.model.FriendsList.create(),
+			store = dynamic ? me.GroupStore.getGroupsList() : me.GroupStore.getFriendsList();
 
 		rec.set('Username', username);
 		//We used to set realname here, but we really want alias

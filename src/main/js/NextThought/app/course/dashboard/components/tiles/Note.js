@@ -107,7 +107,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 	getNavigationPath: function() {
 		return this.PathActions.getBreadCrumb(this.record)
 			.then(function(path) {
-				path = path.slice(0, 3);
+				path = path && path.slice(0, 3) || [];
 
 				return path.map(function(item) {
 					return item.label;

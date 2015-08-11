@@ -170,11 +170,11 @@ Ext.define('NextThought.util.Time', {
 	 */
 	getNaturalDuration: function(millis, numberOfUnits, doNotPluralize, overrides) {
 		var units = [], lastItem, s,
-			weeks = parseInt(millis / this.DIVISORS.WEEKS, 10),
-			days = parseInt(millis / this.DIVISORS.DAYS, 10) % 7,
-			hours = parseInt(millis / this.DIVISORS.HOURS, 10) % 24,
-			minutes = parseInt(millis / this.DIVISORS.MINUTES, 10) % 60,
-			seconds = parseInt(millis / this.DIVISORS.SECONDS, 10) % 60;
+			weeks = Math.floor(parseInt(millis, 10) / this.DIVISORS.WEEKS),
+			days =  Math.floor(parseInt(millis, 10) / this.DIVISORS.DAYS % 7),
+			hours =  Math.floor(parseInt(millis, 10) / this.DIVISORS.HOURS % 24),
+			minutes =  Math.floor(parseInt(millis, 10) / this.DIVISORS.MINUTES % 60),
+			seconds =  Math.round(parseInt(millis, 10) / this.DIVISORS.SECONDS % 60);
 
 		overrides = overrides || {};
 		numberOfUnits = numberOfUnits || 5;
@@ -221,7 +221,10 @@ Ext.define('NextThought.util.Time', {
 			s = units[0];
 		} else if (units.length === 2) {
 			s = units.join(' and ');
-		} else {
+		} else if (units.length === 0){
+			s = '';
+		}
+		else {
 			lastItem = units.pop();
 
 			s = units.join(', ');

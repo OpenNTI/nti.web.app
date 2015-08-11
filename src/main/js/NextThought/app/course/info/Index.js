@@ -40,7 +40,10 @@ Ext.define('NextThought.app.course.info.Index', {
 	},
 
 	onActivate: function() {
+		if (!this.rendered) { return; }
+
 		this.setTitle(this.title);
+		this.alignNavigation();
 	},
 
 	bundleChanged: function(bundle) {

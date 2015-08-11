@@ -6,6 +6,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 	cls: 'topic-window',
 
 	requires: [
+		'NextThought.model.forums.DFLHeadlineTopic',
 		'NextThought.app.windows.StateStore',
 		'NextThought.app.windows.components.Header',
 		'NextThought.app.windows.components.Loading',
@@ -30,7 +31,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 
 		this.loadingEl = this.add({xtype: 'window-loading'});
 
-		if (!this.record) {
+		if (!this.record || this.state === 'edit') {
 			this.loadEditor();
 		} else if (this.record instanceof NextThought.model.forums.CommentPost) {
 			this.loadComment();
@@ -241,6 +242,10 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 				me.remove(editor);
 				me.record = rec;
 				me.showTopic(rec, forum);
+
+				if (me.monitors && me.monitors.afterSave) {
+					me.monitors.afterSave(rec);
+				}
 			}
 		});
 	}
@@ -249,6 +254,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 	NextThought.app.windows.StateStore.register('application/vnd.nextthought.forums.generalforumcomment', this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.ContentHeadlineTopic.mimeType, this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.CommunityHeadlineTopic.mimeType, this);
+	NextThought.app.windows.StateStore.register(NextThought.model.forums.DFLHeadlineTopic.mimeType, this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.CommunityHeadlinePost.mimeType, this);
 	NextThought.app.windows.StateStore.register('new-topic', this);
 });

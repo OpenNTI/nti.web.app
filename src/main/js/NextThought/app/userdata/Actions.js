@@ -12,6 +12,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 		'NextThought.app.context.StateStore',
 		'NextThought.util.Anchors',
 		'NextThought.util.Annotations',
+		'NextThought.app.contentviewer.components.definition.Window',
 		'NextThought.app.slidedeck.transcript.AnchorResolver'
 	],
 
@@ -930,8 +931,8 @@ Ext.define('NextThought.app.userdata.Actions', {
 			this.saveSharingPrefs(record.get('ContainerId'), newSharedWith, context);
 		}
 
-		if (Globals.arrayEquals(record.get('shareWith') || [], newSharedWith || [])) {
-			console.log('Sharing not mutated. Not showing changes', record.get('shareWith'), newSharedWith);
+		if (Globals.arrayEquals(record.get('sharedWith') || [], newSharedWith || [])) {
+			console.log('Sharing not mutated. Not showing changes', record.get('sharedWith'), newSharedWith);
 			return Promise.resolve();
 		}
 
@@ -947,5 +948,18 @@ Ext.define('NextThought.app.userdata.Actions', {
 				}
 			});
 		});
+	},
+
+	define: function(term, boundingScreenBox, reader) {
+
+		if (this.definition) {
+			this.definition.close();
+			delete this.definition;
+		}
+		this.definition = Ext.widget('dictionary-window', {
+					term: term,
+					pointTo: boundingScreenBox,
+					reader: reader
+				}).show();
 	}
 });

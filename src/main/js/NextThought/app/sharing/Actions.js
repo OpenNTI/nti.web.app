@@ -65,14 +65,18 @@ Ext.define('NextThought.app.sharing.Actions', {
 
 
 	getSiteCommunity: function() {
-		var siteId = Service.get('SiteCommunity'), i,
-			memberships = $AppConfig.userObject.get('DynamicMemberships');
+		var siteId = Service.get('SiteCommunity');
 
-		for (i = 0; i < memberships.length; i++) {
-			if (memberships[i].getId && memberships[i].getId() === siteId) {
-				return NextThought.model.UserSearch.create(memberships[i].asJSON());
-			}
-		}
+		return Service.getCommunitiesList()
+			.then(function(communities) {
+				communities = communities.filter(function(community) {
+					return community.getId() === siteId;
+				});
+
+				if (communities[0]) {
+					return NextThought.model.UserSearch.create(communities[0].asJSON());
+				}
+			});
 	},
 
 
@@ -111,26 +115,25 @@ Ext.define('NextThought.app.sharing.Actions', {
 
 
 	getCommunities: function() {
-		var memberships = $AppConfig.userObject.get('DynamicMemberships'),
-			siteId = Service.get('SiteCommunity');
+		var siteId = Service.get('SiteCommunity');
 
-		return memberships.filter(function(membership) {
-			var id = membership.getId();
-
-			return membership instanceof NextThought.model.Community && !membership.isEveryone() && id !== siteId && membership.getLink('Activity');
-		}).map(function(membership) {
-			return NextThought.model.UserSearch.create(membership.asJSON());
-		});
+		return Service.getCommunitiesList()
+			.then(function(communities) {
+				return communities.filter(function(community) {
+					return !community.isEveryone() && community.getId() !== siteId;
+				}).map(function(community) {
+					return NextThought.model.UserSearch.create(community.asJSON());
+				});
+			});
 	},
 
 
 	getGroups: function() {
-		var memberships = $AppConfig.userObject.get('DynamicMemberships');
-
-		return memberships.filter(function(membership) {
-			return membership instanceof NextThought.model.FriendsList;
-		}).map(function(membership) {
-			return NextThought.model.UserSearch.create(membership.asJSON());
-		});
+		return Service.getGroupsList()
+			.then(function(groups) {
+				return groups.map(function(group) {
+					return NextThought.model.UserSearch.create(group.asJSON());
+				});
+			});
 	}
 });

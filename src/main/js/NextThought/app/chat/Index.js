@@ -142,7 +142,11 @@ Ext.define('NextThought.app.chat.Index', {
 
 
 	handleTabNotifications: function (win, msg) {
-		if(win && win.isVisible()) { return; }
+		if (win && win.isVisible() ||
+			this.gutterWin && this.gutterWin.isVisible() ||
+			this.listWin && this.listWin.isVisible()) {
+			return;
+		}
 
 		var showTab = this.shouldHaveChatTab();
 		if (showTab) {
@@ -176,7 +180,7 @@ Ext.define('NextThought.app.chat.Index', {
 			save: function(win, wb) {
 				wbData = wb.getValue();
 				me.ChatActions.clearErrorForRoom(room);
-				me.ChatActions.postMessage(room, [wbData], mid, channel, recipients, Ext.bind(me.sendAckHandler, me));
+				me.ChatActions.postMessage(room, [wbData], mid, channel, recipients, Ext.bind(me.ChatActions.sendAckHandler, me.ChatActions));
 				wbWin.close();
 			},
 			cancel: function() {

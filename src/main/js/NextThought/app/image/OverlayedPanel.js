@@ -45,6 +45,7 @@ Ext.define('NextThought.app.image.OverlayedPanel', {
 
 
 	showImageRole: function(data) {
-		Ext.widget('image-lightbox', { data: data.items }).show();
+		this.imagePopout = Ext.widget('image-lightbox', { data: data.items }).show();
+		this.on('destroy', this.imagePopout.destroy.bind(this.imagePopout));
 	}
 });

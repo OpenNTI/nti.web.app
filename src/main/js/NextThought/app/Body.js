@@ -120,13 +120,12 @@ Ext.define('NextThought.app.Body', {
 
 
 	onNewContext: function() {
-		var parts = this.ContextStore.getCurrentObjectParts(),
-			state = window.location.hash.replace('#', '');
+		var parts = this.ContextStore.getCurrentObjectParts();
 
 		if (parts.mimeType && parts.id) {
-			this.WindowActions.showWindowWithMimeType(parts.id, parts.mimeType, state);
+			this.WindowActions.showWindowWithMimeType(parts.id, parts.mimeType, parts.state);
 		} else if (parts.id) {
-			this.WindowActions.showWindow(parts.id, state);
+			this.WindowActions.showWindow(parts.id, parts.state);
 		}
 	},
 
@@ -174,24 +173,24 @@ Ext.define('NextThought.app.Body', {
 			hash = this.ContextStore.getCurrentHash();
 
 		if (id) {
-			if(id == this.ContextStore.getCurrentObjectId()){
+			if (id === this.ContextStore.getCurrentObjectId()) {
 				return;
 			}
+
 			id = ParseUtils.encodeForURI(id);
 
 			if (mimeType) {
 				mimeType = encodeURIComponent(mimeType);
 				location.pathname = Globals.trimRoute(location.pathname) + '/object/' + mimeType + '/' + id;
+			} else if (state) {
+				state = encodeURIComponent(state);
+				location.pathname = Globals.trimRoute(location.pathname) + '/object/' + id + '/' + state;
 			} else {
 				location.pathname = Globals.trimRoute(location.pathname) + '/object/' + id;
 			}
 		} else {
 			state = null;
 			location.pathname = this.ContextStore.removeObjectRoute();
-		}
-
-		if (state) {
-			location.hash = '#' + state;
 		}
 
 		if (search) {
@@ -479,6 +478,8 @@ Ext.define('NextThought.app.Body', {
 			route = this.getRouteForUser(root, subPath);
 		} else if (root instanceof NextThought.model.Community) {
 			route = this.getRouteForCommunity(root, subPath);
+		} else if (root instanceof NextThought.model.DynamicFriendsList) {
+			route = this.getRouteForGroup(root, subPath);
 		} else {
 			console.error('No route for path: ', root, subPath);
 			route = {
@@ -534,6 +535,28 @@ Ext.define('NextThought.app.Body', {
 
 		route.path = Globals.trimRoute(route.path);
 		route.path = '/community/' + id + '/' + route.path;
+
+		return route;
+	},
+
+
+	getRouteForGroup: function(group, path) {
+		var cmp = this.getCmp('profile-group'),
+			route, id = group.getId();
+
+		id = ParseUtils.encodeForURI(id);
+
+		if (path.length) {
+			route = cmp.getRouteForPath && cmp.getRouteForPath(path, group);
+		} else {
+			route = {
+				isFull: true,
+				path: ''
+			};
+		}
+
+		route.path = Globals.trimRoute(route.path);
+		route.path = '/group/' + id + '/' + route.path;
 
 		return route;
 	}

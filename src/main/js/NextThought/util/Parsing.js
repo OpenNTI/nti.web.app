@@ -285,6 +285,13 @@ Ext.define('NextThought.util.Parsing', {
 	},
 
 
+	isEncodedNTIID: function(component) {
+		var decoded = this.decodeFromURI(component);
+
+		return this.isNTIID(decoded);
+	},
+
+
 	encodeForURI: function(ntiid) {
 		var cut = this.COMMON_PREFIX.length;
 

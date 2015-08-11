@@ -199,7 +199,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	getEnrollmentOption: function(name) {
 		var options = this.get('EnrollmentOptions');
 
-		return options.getType(name);
+		return options && options.getType(name);
 	},
 
 

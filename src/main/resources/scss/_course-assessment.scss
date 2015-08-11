@@ -736,6 +736,7 @@ canvas.x-component-course-assessment {
 				left: 50%;
 				margin-left: -6px;
 				transform: rotate(-90deg);
+				-webkit-transform: rotate(-90deg);
 			}
 
 			&::before {

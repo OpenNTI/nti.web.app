@@ -36,7 +36,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 			handler: Ext.bind(this.deleteGroup, this, [group]),
 			itemId: 'delete-group',
 			ui: 'nt-menuitem', plain: true,
-			hidden: group && !group.getLink('edit')
+			hidden: (group && !group.getLink('edit')) ||  (group && group.get('friends').length > 0)
 		});
 
 		this.leaveGroupAction = new Ext.Action({

@@ -196,5 +196,19 @@ Ext.define('NextThought.app.forums.components.forum.Navigation', {
 		this.pushRoute(record.get('title'), id, {
 			forum: record
 		});
+	},
+
+	onItemClick: function(record, node, index, e) {
+		if (e.getTarget('.report-icon')) {
+			e.stopEvent();
+
+			Ext.widget('report-menu', {
+				links: record.getReportLinks(),
+				showIfOne: true,
+				showByEl: node
+			});
+
+			return false;
+		}
 	}
 });

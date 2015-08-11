@@ -333,7 +333,7 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 					text: 'Define...',
 					cls: 'define',
 					handler: function() {
-						me.fireEvent('define', text, boundingBox, me.reader);
+						me.UserDataActions.define(text, boundingBox, me.reader);
 						me.clearSelection();
 					}
 				};

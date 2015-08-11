@@ -2,6 +2,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 	extend: 'Ext.container.Container',
 	alias: [
 		'widget.profile-activity-communityheadlinetopic-item',
+		'widget.profile-activity-dflheadlinetopic-item',
 		'widget.profile-forum-activity-item'
 	],
 
@@ -9,7 +10,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		'NextThought.editor.Editor',
 		'NextThought.layout.component.Natural',
 		'NextThought.app.navigation.path.Actions',
-		'NextThought.app.forums.Actions'
+		'NextThought.app.forums.Actions',
+		'NextThought.app.windows.Actions'
 	],
 
 	mixins: {
@@ -99,6 +101,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		avatarEl: '.avatar',
 		nameEl: '.name',
 
+		titleEl: '.meta .subject',
+
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
 		favoritesSpacer: '.controls .favorite-spacer',
@@ -129,6 +133,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 
 		me.PathActions = NextThought.app.navigation.path.Actions.create();
 		me.ForumActions = NextThought.app.forums.Actions.create();
+		me.WindowActions = NextThought.app.windows.Actions.create();
 
 		me.callParent(arguments);
 		me.mixins.likeAndFavoriteActions.constructor.call(me);
@@ -294,6 +299,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 				scope: this,
 				'activated-editor': Ext.bind(box.hide, box, [false]),
 				'deactivated-editor': Ext.bind(box.show, box, [false]),
+				'save': this.saveComment.bind(this),
 				'no-body-content': function(editor, bodyEl) {
 					editor.markError(bodyEl, 'You need to type something');
 					return false;
@@ -321,6 +327,32 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);
+	},
+
+
+	saveComment: function(editor, record, valueObject, successCallback) {
+		var me = this,
+			topic = this.record;
+
+		if (editor.el) {
+			editor.el.mask('Saving...');
+			editor.el.repaint();
+		}
+
+		this.ForumActions.saveTopicComment(topic, record, valueObject)
+			.then(function(rec) {
+				if (!me.isDestroyed) {
+					me.store.add(rec);
+					editor.deactivate();
+					editor.setValue('');
+					editor.reset();
+				}
+			})
+			.always(function() {
+				if (editor.el) {
+					editor.el.unmask();
+				}
+			});
 	},
 
 
@@ -373,8 +405,26 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 
 	bodyClickHandler: function() {
 		this.navigateToObject(this.record);
-	}
+	},
 
+
+	navigateToTopicForEdit: function(e, el) {
+		var me = this;
+
+		me.WindowActions.pushWindow(me.record, 'edit', el, {
+			afterSave: function(rec) {
+				if (!this.rendered) {
+					return;
+				}
+
+				var headline = rec.get('headline');
+
+				headline.compileBodyContent(me.setBody, me);
+
+				me.titleEl.update(rec.get('title'));
+			}
+		});
+	}
 });
 
 
@@ -382,6 +432,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItemReply', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-forum-activity-item-reply',
+
+	requires: ['NextThought.app.forums.Actions'],
 
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
@@ -434,6 +486,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		this.callParent(arguments);
 		this.mixins.flagActions.constructor.call(this);
 		this.mon(this.record, 'destroy', this.onRecordDestroyed, this);
+
+		this.ForumActions = NextThought.app.forums.Actions.create();
 	},
 
 	beforeRender: function() {
@@ -511,6 +565,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 			this.mon(this.editor, {
 				'activated-editor' : hide,
 				'deactivated-editor' : show,
+				'save': this.saveComment.bind(this),
 				'no-body-content': function(editor, el) {
 					editor.markError(el, 'You need to type something');
 					return false;
@@ -521,6 +576,32 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		if (this.record.get('Deleted') === true) {
 			this.respondEl.hide();
 		}
+	},
+
+
+	saveComment: function(editor, record, valueObject, successCallback) {
+		var me = this,
+			topic = this.record;
+
+		if (editor.el) {
+			editor.el.mask('Saving...');
+			editor.el.repaint();
+		}
+
+		this.ForumActions.saveTopicComment(topic, record, valueObject)
+			.then(function(rec) {
+				if (!me.isDestroyed) {
+					rec.compileBodyContent(me.setBody, me);
+					editor.deactivate();
+					editor.setValue('');
+					editor.reset();
+				}
+			})
+			.always(function() {
+				if (editor.el) {
+					editor.el.unmask();
+				}
+			});
 	},
 
 
@@ -554,8 +635,23 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 	},
 
 
-	onDelete: function() {
-		this.fireEvent('delete-topic-comment', this.record, this);
+	onDelete: function(e) {
+		e.stopEvent();
+		var me = this;
+		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+		Ext.Msg.show({
+			msg: 'Deleting this comment will permanently remove it.',
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			scope: me,
+			icon: 'warning-red',
+			buttonText: {'ok': 'Delete'},
+			title: 'Are you sure?',
+			fn: function(str) {
+				if (str === 'ok') {
+					me.ForumActions.deleteObject(me.record);
+				}
+			}
+		});
 	},
 
 

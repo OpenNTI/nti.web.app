@@ -192,6 +192,7 @@
 
 				&::after {
 					transform: rotate(-90deg);
+					-webkit-transform: rotate(-90deg);
 				}
 
 				&:hover {
@@ -210,7 +211,7 @@
 			}
 		}
 		//comment-small-dark_hover, search-highlight, search-reading, search-video
-		
+
 		.meta {
 			.root-icon {
 				display: inline-block;
@@ -271,7 +272,7 @@
 
 			&::-webkit-input-placeholder ,
 			&::-moz-placeholder { /* Firefox 18- */
-				   color: red;  
+				   color: red;
 			}
 		}
 
@@ -336,7 +337,7 @@
 // 				text-transform: uppercase;
 // 				font-weight: 700;
 // 			}
-			
+
 // 			.chapter {
 // 				display: inline;
 // 			}
@@ -376,15 +377,15 @@
 // 			}
 
 // 		}
-		
+
 // 		.search-result-post{
 // 			.tags{
 // 				margin-top: 1em;
 // 				overflow: hidden;
 // 				@include ellipse;
 // 			}
-// 		}	
-		
+// 		}
+
 // 		.see-all, .see-all a {
 // 			color: $primary-blue;
 // 			text-decoration: none;

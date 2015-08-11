@@ -77,10 +77,10 @@ Ext.define('NextThought.app.course.info.components.Menu', {
 	},
 
 	setActiveItem: function(route) {
-		var activeItem = this.el.down('.x-item-selected'),
+		var activeItem = this.el && this.el.down('.x-item-selected'),
 			activeItemRoute = activeItem && activeItem.getAttribute('data-route');
 
-		if (activeItemRoute === route) { return; }
+		if (activeItemRoute === route || !this.rendered) { return; }
 
 		activeItem.removeCls('x-item-selected');
 		activeItem = this.el.down('[data-route=' + route + ']');

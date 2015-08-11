@@ -463,8 +463,8 @@ Ext.define('NextThought.util.Content', {
 			.then(function(info) {
 				if (bundleOrToc.canGetToContent) {
 					return Promise.all([
-						bundleOrToc.canGetToContent(info.previous),
-						bundleOrToc.canGetToContent(info.next)
+						bundleOrToc.canGetToContent(info.previous, rootId),
+						bundleOrToc.canGetToContent(info.next, rootId)
 					]).then(function(result) {
 						info.previous = result[0] ? info.previous : null;
 						info.next = result[1] ? info.next : null;

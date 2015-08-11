@@ -85,7 +85,8 @@ Ext.define('NextThought.app.windows.Index', {
 			precache: precache || {},
 			state: state,
 			doClose: this.doClose.bind(this, monitors && monitors.afterClose),
-			doNavigate: this.doNavigate.bind(this, monitors && monitors.beforeNavigate)
+			doNavigate: this.doNavigate.bind(this, monitors && monitors.beforeNavigate),
+			monitors: monitors
 		});
 
 		this.viewContainer.removeAll();
