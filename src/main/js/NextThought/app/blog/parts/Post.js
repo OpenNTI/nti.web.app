@@ -4,7 +4,8 @@ Ext.define('NextThought.app.blog.parts.Post', {
 
 	requires: [
 		'NextThought.app.blog.parts.Comment',
-		'NextThought.store.Blog'
+		'NextThought.store.Blog',
+		'NextThought.app.blog.Actions'
 	],
 
 	cls: 'entry',
@@ -20,6 +21,8 @@ Ext.define('NextThought.app.blog.parts.Post', {
 	constructor: function() {
 		this.threaded = false;
 		this.callParent(arguments);
+
+		this.BlogActions = NextThought.app.blog.Actions.create();
 	},
 
 
@@ -150,6 +153,31 @@ Ext.define('NextThought.app.blog.parts.Post', {
 		if (!this.destroying) {
 			this.destroy();
 		}
+	},
+
+
+	saveComment: function(editor, record, valueObject) {
+		var me = this;
+
+		if (me.editor.el) {
+			me.editor.el.mask('Saving...');
+			me.editor.el.repaint();
+		}
+
+		me.BlogActions.saveBlogComment(record, me.record, valueObject)
+			.then(function(comment) {
+				if (!me.isDestroyed) {
+					if (!record) {
+						if (me.store) {
+							me.store.insert(0, comment);
+						}
+					}
+				}
+
+				me.editor.deactivate();
+				me.editor.setValue('');
+				me.editor.reset();
+			});
 	},
 
 

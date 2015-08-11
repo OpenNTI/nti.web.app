@@ -1,7 +1,10 @@
 Ext.define('NextThought.app.blog.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	requires: ['NextThought.model.forums.PersonalBlogEntryPost'],
+	requires: [
+		'NextThought.model.forums.PersonalBlogComment',
+		'NextThought.model.forums.PersonalBlogEntryPost'
+	],
 
 
 	__parseSharingInfo: function(sharingInfo) {
@@ -147,5 +150,31 @@ Ext.define('NextThought.app.blog.Actions', {
 			return blogEntry;
 		});
 
+	},
+
+
+	saveBlogComment: function(record, blogPost, valueObject) {
+		var isEdit = Boolean(record && !record.phantom),
+			commentPost = record || NextThought.model.forums.PersonalBlogComment.create();
+
+		commentPost.set({body: valueObject.body});
+
+		return new Promise(function(fulfill, reject) {
+			commentPost.save({
+				url: isEdit ? undefined : blogPost && blogPost.getLink('add'),//only use the blog post record if its a new post.
+				success: function(rec) {
+					if (!isEdit) {
+						blogPost.set('PostCount', blogPost.get('PostCount') + 1);
+					}
+
+					fulfill(rec);
+				},
+				failure: function() {
+					console.error('Failed to create blog comment: ', arguments);
+
+					reject();
+				}
+			});
+		});
 	}
 });

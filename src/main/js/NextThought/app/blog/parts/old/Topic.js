@@ -268,7 +268,8 @@ Ext.define('NextThought.app.blog.parts.old.Topic', {
 				'no-body-content': function(editor, bodyEl) {
 					editor.markError(bodyEl, 'You need to type something');
 					return false;
-				}
+				},
+				'save': this.saveComment.bind(this)
 			});
 		}
 	},
@@ -403,6 +404,9 @@ Ext.define('NextThought.app.blog.parts.old.Topic', {
 		this.editor.focus(true);
 		this.getMainView().scrollChildIntoView(this.editor.getEl());
 	},
+
+
+	saveComment: function() {},
 
 
 	updateField: function(key, value) {
