@@ -207,7 +207,10 @@ Ext.define('NextThought.app.blog.parts.Post', {
 	},
 
 
-	fireDeleteEvent: function() { this.fireEvent('delete-post', this.record, this); },
+	fireDeleteEvent: function() {
+		this.BlogActions.deleteBlogPost(this.record)
+			.then(this.fireEvent.bind(this, 'record-deleted'));
+	},
 
 
 	destroyWarningMessage: function() {
@@ -217,7 +220,7 @@ Ext.define('NextThought.app.blog.parts.Post', {
 
 	onEditPost: function(e) {
 		e.stopEvent();
-		this.fireEvent('show-post', this.record.get('ID'), 'edit');
+		this.fireEvent('edit-topic', this.record);
 	},
 
 

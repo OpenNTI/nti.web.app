@@ -222,7 +222,7 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		return c.length > 0;
 	},
 
-	containsUnresolved: function(){
+	containsUnresolved: function() {
 		c = Ext.Array.filter(this.selections, function(o, i) { return o.Unresolved === true; });
 		return c.length > 0;
 	},
@@ -240,8 +240,8 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		if (this.isToken(value) && !record.Unresolved) {
 			this.addTag(value, type);
 			this.updatePlaceholderLabel();
-		}else if(!this.containsUnresolved() && record.Unresolved){
-			this.addTag('Others',type);
+		} else if (!this.containsUnresolved() && record.Unresolved) {
+			this.addTag('Others', type);
 			this.updatePlaceholderLabel();
 		}
 
@@ -305,13 +305,20 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		}
 		delete this.setValueAfterRenderListener;
 
-		var me = this, explicitEntities;
+		var me = this, explicitEntities,
+			clientEntities = [];
 
 		this.clear();
 		explicitEntities = (sharingInfo && sharingInfo.entities) || [];
 
+		explicitEntities.forEach(function(entity) {
+			if (Service.isFakePublishCommunity(entity)) {
+				clientEntities.push(Service.getFakePublishCommunity());
+			}
+		});
+
 		UserRepository.getUser(explicitEntities, function(users) {
-			me.addSelection(users);
+			me.addSelection(clientEntities.concat(users));
 		});
 	},
 

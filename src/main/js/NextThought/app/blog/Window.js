@@ -68,14 +68,14 @@ Ext.define('NextThought.app.blog.Window', {
 	},
 
 
-	loadEditor: function() {
+	loadEditor: function(blogPost) {
 		var me = this;
 
 		me.loadBlog()
 			.then(function(blog) {
 				me.remove(me.loadingEl);
 
-				me.showEditor(me.record, blog);
+				me.showEditor(blogPost || me.record, blog);
 
 				//TODO: Show Path
 			});
@@ -86,7 +86,52 @@ Ext.define('NextThought.app.blog.Window', {
 
 
 	showBlogPost: function(blogPost) {
-		var blogPostCmp = this.down('profile-blog-post');
+		var me = this,
+			blogPostCmp = this.down('profile-blog-post');
+
+		function startTimer() {
+			if (!me.hasCurrentTimer) {
+				me.hasCurrentTimer = true;
+
+				AnalyticsUtil.getResourceTimer(me.currentAnalyticId, {
+					type: 'thought-viewed',
+					topic_id: me.currentAnalyticId
+				});
+			}
+		}
+
+		function stopTimer() {
+			if (me.currentAnalyticId && me.hasTimer) {
+				delete me.hasCurrentTimer;
+				AnalyticsUtil.stopResourceTimer(me.currentAnalyticId, 'thought-viewed');
+			}
+		}
+
+		me.activeBlogPost = blogPost;
+
+		if (blogPost && blogPost.getId() !== me.currentAnalyticId) {
+			stopTimer();
+			me.currentAnalyticId = blogPost.getId();
+			startTimer();
+		}
+
+		if (!me.visibilityMonitors) {
+			me.visibilityMonitors = me.on({
+				'destroy': function() {
+					Ext.destroy(me.visibilityMonitors);
+					stopTimer();
+				},
+				'visibility-changed': function(visible) {
+					//start the time when we become visible, stop it when we hide
+					if (visible) {
+						startTimer();
+					} else {
+						stopTimer();
+					}
+				}
+			}, me, {destroyable: true});
+		}
+
 
 		if (blogPostCmp) {
 			Ext.destroy(blogPostCmp);
@@ -94,28 +139,43 @@ Ext.define('NextThought.app.blog.Window', {
 
 
 		blogPostCmp = this.add({xtype: 'profile-blog-post', record: blogPost});
+
+		this.mon(blogPostCmp, {
+			'record-deleted': me.doClose.bind(this),
+			'edit-topic': me.loadEditor.bind(this)
+		});
 	},
 
 
 	showEditor: function(blogPost, blog) {
 		var me = this,
+			blogPostCmp = this.down('profile-blog-post'),
+			sharingInfo = blogPost && blogPost.getSharingInfo(),
 			editor;
 
-		//TODO: destroy any blog components already there
-		editor = me.add({
-				xtype: 'profile-blog-editor',
-				record: blogPost,
-				blog: blog,
-				sharingValue: {entities: [Service.getFakePublishCommunity()]}
-			});
+		if (blogPostCmp) {
+			Ext.destroy(blogPostCmp);
+		}
 
+		if (sharingInfo && sharingInfo.publicToggleOn) {
+			sharingInfo.entities.push(Service.getFakePublishCommunity());
+		} else if (!sharingInfo) {
+			sharingInfo = {entities: [Service.getFakePublishCommunity()]};
+		}
+
+		editor = me.add({
+			xtype: 'profile-blog-editor',
+			record: blogPost,
+			blog: blog,
+			sharingValue: sharingInfo
+		});
 
 		me.mon(editor, {
 			'cancel': function(rec) {
 				me.remove(editor);
 
-				if (me.record) {
-					me.showBlog(blog);
+				if (blogPost) {
+					me.showBlogPost(blogPost);
 				} else {
 					me.doClose();
 				}
@@ -123,7 +183,7 @@ Ext.define('NextThought.app.blog.Window', {
 			'after-save': function(rec) {
 				me.remove(editor);
 				me.record = rec;
-				me.showBlog(rec, forum);
+				me.showBlogPost(rec);
 
 				if (me.monitors && me.monitors.afterSave) {
 					me.monitors.afterSave(rec);

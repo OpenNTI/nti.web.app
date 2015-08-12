@@ -149,7 +149,7 @@ Ext.define('NextThought.app.blog.Actions', {
 				object = isPublic ? blogEntry.get('headline') : blogEntry,
 				action = isPublic ? Ext.Array.merge : function(a) { return a; };
 
-			object.set(name, fieldAction(entities, entityObject.get(name)));
+			object.set(name, action(entities, object.get(name)));
 
 			return new Promise(function(fulfill, reject) {
 				object.save({callback: fulfill});

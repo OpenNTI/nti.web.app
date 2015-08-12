@@ -54,9 +54,14 @@ Ext.define('NextThought.app.blog.parts.Editor', {
 
 			//if we have entities, the callback will set them... (resolved)
 			UserRepository.getUser(sharedWith.entities, function(entities) {
+				if (sharedWith && sharedWith.publicToggleOn) {
+					entities.push(Service.getFakePublishCommunity());
+				}
+
 				sharedWith.entities = Ext.Array.map(entities, function(u) {
 					return u.get('Username');
 				});
+
 				me.setSharedWith(sharedWith);
 			}, function() {
 				console.error('failed to resolve:', sharedWith.entities, arguments);
@@ -187,10 +192,12 @@ Ext.define('NextThought.app.blog.parts.Editor', {
 		// NOTE: For now, as a matter of simplicit, we are ignoring the 'publish' field.
 		// We will derive it from the sharedWith value. ~PM.
 		me.BlogActions.savePost(me.record, me.blog, v.title, v.tags, v.body, v.sharingInfo)
-			.then(function() {
+			.then(function(rec) {
 				if (me.el) {
 					me.el.unmask();
 				}
+
+				me.fireEvent('after-save', rec);
 			});
 	},
 
@@ -216,6 +223,8 @@ Ext.define('NextThought.app.blog.parts.Editor', {
 
 	onCancel: function(e) {
 		e.stopEvent();
+
+		this.fireEvent('cancel');
 
 		//TODO: Logic... if edit go back to post, if new just destroy and go back to list.
 		this.destroy();
