@@ -11,7 +11,8 @@ Ext.define('NextThought.app.blog.Window', {
 		'NextThought.app.windows.StateStore',
 		'NextThought.app.windows.components.Header',
 		'NextThought.app.windows.components.Loading',
-		'NextThought.model.forums.PersonalBlogEntry'
+		'NextThought.model.forums.PersonalBlogEntry',
+		'NextThought.model.forums.PersonalBlogComment'
 	],
 
 	items: [],
@@ -33,6 +34,8 @@ Ext.define('NextThought.app.blog.Window', {
 			this.loadEditor();
 		} else if (this.record instanceof NextThought.model.forums.PersonalBlogEntry) {
 			this.loadBlogPost();
+		} else if (this.record instanceof NextThought.model.forums.PersonalBlogComment) {
+			this.loadBlogComment();
 		}
 	},
 
@@ -68,6 +71,18 @@ Ext.define('NextThought.app.blog.Window', {
 	},
 
 
+	loadBlogComment: function() {
+		var me = this,
+			postId = me.record.get('ContainerId');
+
+		Service.getObject(postId)
+			.then(function(blogPost) {
+				me.remove(me.loadingEl);
+				me.showBlogPost(blogPost, me.record);
+			});
+	},
+
+
 	loadEditor: function(blogPost) {
 		var me = this;
 
@@ -85,7 +100,7 @@ Ext.define('NextThought.app.blog.Window', {
 	showBlog: function() {},
 
 
-	showBlogPost: function(blogPost) {
+	showBlogPost: function(blogPost, activeComment) {
 		var me = this,
 			blogPostCmp = this.down('profile-blog-post');
 
@@ -138,7 +153,7 @@ Ext.define('NextThought.app.blog.Window', {
 		}
 
 
-		blogPostCmp = this.add({xtype: 'profile-blog-post', record: blogPost});
+		blogPostCmp = this.add({xtype: 'profile-blog-post', record: blogPost, scrollToComment: activeComment});
 
 		this.mon(blogPostCmp, {
 			'record-deleted': me.doClose.bind(this),
@@ -195,4 +210,5 @@ Ext.define('NextThought.app.blog.Window', {
 }, function() {
 	NextThought.app.windows.StateStore.register('new-blog', this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.PersonalBlogEntry.mimeType, this);
+	NextThought.app.windows.StateStore.register(NextThought.model.forums.PersonalBlogComment.mimeType, this);
 });
