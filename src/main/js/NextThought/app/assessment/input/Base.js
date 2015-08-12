@@ -217,7 +217,7 @@ Ext.define('NextThought.app.assessment.input.Base', {
 
 	editAnswer: function() {
 		var ans;
-		if (this.submitted && !this.isAssignment) {
+		if (this.submitted && !this.isAssignment && !this.reponseBoxMasked) {
 			ans = this.getValue();
 
 			if (this.questionSet) {
@@ -234,8 +234,10 @@ Ext.define('NextThought.app.assessment.input.Base', {
 
 
 	setSubmitted: function() {
+		var question = this.up('assessment-question');
+
 		this.submitted = true;
-		this.checkItBtn.update('Try again');
+		this.checkItBtn.update(question.SubmittedTextOverride || 'Try again');
 	},
 
 
@@ -508,6 +510,8 @@ Ext.define('NextThought.app.assessment.input.Base', {
 
 
 	reset: function() {
+		var question = this.up('assessment-question');
+
 		this.submitted = false;
 		this.up('question-parts').removeCls('correct incorrect submitted');
 		this.hintActive = (this.part.get('hints').length > 0);
@@ -515,7 +519,7 @@ Ext.define('NextThought.app.assessment.input.Base', {
 		this.updateSolutionButton();
 		this.checkItBtn.show();
 		this.footer.show();
-		this.checkItBtn.removeCls('wrong').update(getString('NextThought.view.assessment.input.Base.check'));
+		this.checkItBtn.removeCls('wrong').update(question.NotSubmittedTextOverride || getString('NextThought.view.assessment.input.Base.check'));
 		this.hideSolution();
 		this.disableSubmission(true);
 		this.updateLayout();
@@ -523,6 +527,7 @@ Ext.define('NextThought.app.assessment.input.Base', {
 
 
 	maskResponseBox: function() {
+		this.reponseBoxMasked = true;
 		this.inputBox.mask();
 	},
 

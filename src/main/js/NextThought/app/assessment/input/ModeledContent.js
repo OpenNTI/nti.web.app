@@ -2,7 +2,7 @@ Ext.define('NextThought.app.assessment.input.ModeledContent', {
 	extend: 'NextThought.app.assessment.input.Base',
 	alias: 'widget.question-input-modeledcontentpart',
 
-	cls: 'modeled-body-part',
+	cls: 'modeled-body-part field',
 
 	inputTpl: Ext.DomHelper.markup({
 		cls: 'answer-field'

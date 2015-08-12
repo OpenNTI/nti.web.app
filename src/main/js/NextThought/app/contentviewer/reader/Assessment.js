@@ -25,7 +25,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			o = this.reader.getComponentOverlay();
 
 		//See below
-		p.getVideos = Ext.bind(DomUtils.getVideos, DomUtils, [contentElement]);
+		p.getVideos = Ext.bind(DomUtils.getVideosFromDom, DomUtils, [contentElement]);
 
 		o.registerOverlayedPanel(p.getId(), Ext.widget('assessment-poll', {
 			reader: this.reader,
@@ -483,13 +483,15 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			else { me.makeAssessmentQuestion(q); }
 		});
 
-		Ext.each(this.cleanPollsThatAreInSurveys(items, pollObjs), function(p) {
-			if (p.isSet) {
-				me.makeAssessmentSurvey(p, guid);
-			} else {
-				me.makeAssessmentPoll(p);
-			}
-		});
+		if (pollObjs.length) {
+			Ext.each(this.cleanQuestionsThatAreInQuestionSets(items, pollObjs), function(p) {
+				if (p.isSet) {
+					me.makeAssessmentSurvey(p, guid);
+				} else {
+					me.makeAssessmentPoll(p);
+				}
+			});
+		}
 
 		slice.call(doc.querySelectorAll('object[type*=naquestion][data-ntiid]:not([data-used])')).forEach(function(e) {
 			e.parentNode.removeChild(e);
@@ -520,66 +522,6 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 	setAssignmentFromStudentProspective: function(assignment, history) {
 		this.injectedAssignment = assignment;
 		this.injectedAssignmentHistory = history;
-	},
-
-	cleanPollsThatAreInSurveys: function(items, objects) {
-		items = items.slice();
-
-		var results = [],
-			push = Array.prototype.push,
-			pollsInSurvey = [],
-			sets = {},
-			usedPolls = {};
-
-		function inSet(id) {
-			var i = pollsInSurvey.length - 1;
-
-			for (i; i >= 0; i--) {
-				if (id === pollsInSurvey[i].getId()) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		function hasElement(id) {
-			var i;
-
-			for (i = 0; i < objects.length; i++) {
-				if (objects[i] && typeof objects[i] !== 'string') {
-					objects[i] = objects[i].getAttribute('data-ntiid');
-				}
-
-				if (objects[i] === id) { return true;}
-			}
-
-			return false;
-		}
-
-
-		function pushSurveyPolls(i) {
-			if (i.isSet) { push.apply(questionsInSets, i.get('questions')); }
-		}
-
-		//get sets
-		items.forEach(pushSurveyPolls);
-
-		items.forEach(function(i) {
-			//work around dups
-			if (i.isSet) {
-				if (sets[i.getId()]) { return; }
-
-				sets[i.getId()] = i;
-			}
-
-			if (i.isSet || (i.getId && !inSet(i.getId()) && !usedPolls[i.getId()] && hasElement(i.getId()))) {
-				results.push(i);
-				usedPolls[i.getId()] = true;
-			}
-		});
-
-		return results;
 	},
 
 
