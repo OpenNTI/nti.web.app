@@ -242,6 +242,11 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 						me.contextEl.unmask();
 						me.contextEl.select('input').addCls('preview').set({readonly: true});
 					}
+				})
+				.fail(function(error){
+					if(me.contextEl){
+						me.contextEl.unmask();
+					}
 				});
 		}
 	},
