@@ -7,7 +7,8 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 		'NextThought.app.userdata.Actions',
 		'NextThought.app.userdata.StateStore',
 		'NextThought.app.navigation.path.Actions',
-		'NextThought.model.Slidedeck'
+		'NextThought.model.Slidedeck',
+		'NextThought.app.library.Actions'
 	],
 
 	constructor: function() {
@@ -17,6 +18,7 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
 		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
+		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
 
@@ -255,6 +257,8 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 				data: slidedeck.get('Slides') || []
 			});
 
+		this.setSlideDocContent(slidedeck, slideStore);
+
 		promises = Ext.Array.map(slidedeck.get('Videos'), function(slidevideo) {
 			var transcript;
 
@@ -279,6 +283,7 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 
 		return new  Promise( function(fulfill, reject) {
 			Promise.all(promises)
+				.then(me.__fixSlideContainer.bind(me, slidedeck, slideStore))
 				.then(function() {
 					var items = me.buildSlidedeckComponents(slideStore, videos, transcripts),
 						vids = [], k;
@@ -292,6 +297,91 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 					fulfill({videos: vids, items: items});
 				});
 		});
+	},
+
+
+	__fixSlideContainer: function(slidedeck, slideStore) {
+		var me = this;
+
+		return new Promise(function(fulfill) {
+			me.__getSlidedeckContainer(slidedeck)
+				.then(function(containerId) {
+					slideStore.each(function(slide){
+						slide.set('ContainerId', containerId);
+					});
+					fulfill();
+				});
+		});
+	},
+
+
+	__getSlidedeckContainer: function(slidedeck) {
+		var me = this;
+		return new Promise(function(fulfill){
+			me.PathActions.getPathToObject(slidedeck)
+			.then(function(path) {
+				var last = path && path.last();
+				if (!last) { reject(); }
+
+				fulfill(last.getId());
+			});
+		});
+	},
+
+
+	setSlideDocContent: function(slidedeck, slideStore) {
+		var me = this,
+			cid;
+
+		return new Promise(function(fulfill, reject) {
+			me.__getSlidedeckContainer(slidedeck)
+				.then(Service.getObject.bind(Service))
+				.then(me.loadPageContent.bind(me))
+				.then(me.parseSlideDocFragments.bind(me, cid, slideStore))
+				.then(fulfill);
+			});
+	},
+
+
+	loadPageContent: function(pageInfo) {
+		var me = this,
+			link = pageInfo.getLink('content'),
+			contentPackage = pageInfo.get('ContentPackageNTIID');
+
+		return Promise.all([
+				Service.request(link),
+				me.LibraryActions.findContentPackage(contentPackage)
+			]).then(function(results) {
+				var xml = results[0],
+					content = results[1];
+
+				xml = (new DOMParser()).parseFromString(xml, 'text/xml');
+
+				if (xml.querySelector('parsererror')) {
+					return Promise.resolve('');
+				}
+				return Promise.resolve(xml);
+			});
+	},
+
+
+	parseSlideDocFragments: function(containerId, slideStore, doc) {
+		var slideFrags = Ext.DomQuery.select('object[type="application/vnd.nextthought.slide"]', doc),
+			fragsMap = {};
+
+		Ext.each(slideFrags, function(dom) {
+			var id = dom.getAttribute('data-ntiid'),
+				frag = (dom.ownerDocument || document).createDocumentFragment();
+			frag.appendChild(dom);
+			fragsMap[id] = frag;
+		});
+
+		slideStore.each(function(slide) {
+			console.log('slide id: ', slide.getId(), ', doc fragment: ', fragsMap[slide.getId()]);
+			slide.set('dom-clone', fragsMap[slide.getId()]);
+		});
+
+		return Promise.resolve();
 	},
 
 

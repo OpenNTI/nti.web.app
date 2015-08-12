@@ -72,19 +72,17 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Slide', {
 			img = dom.querySelector('img'), range;
 
 		if (!img) {
-      //			onError();
 			console.error('Missing img for the slide.');
 			return false;
 		}
 
 		range = dom.ownerDocument.createRange();
 		range.selectNode(img);
-
 		data.range = range;
+		data.isDomRange = true;
+
 		data.containerId = this.slide.get('ContainerId');
 		data.userDataStore = this.userDataStore;
-
-		data.isDomRange = true;
 		this.fireEvent('show-editor', data, e.getTarget('.add-note-here', null, true));
 	},
 
@@ -142,17 +140,17 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Slide', {
 	},
 
 
-  isTimeWithinTimeRange: function(time) {
-    var start = this.slide.get('video-start'),
+    isTimeWithinTimeRange: function(time) {
+		var start = this.slide.get('video-start'),
             end = this.slide.get('video-end');
 
-    return start <= time && time <= end;
-  },
+        return start <= time && time <= end;
+    },
 
 
-  getElementAtTime: function(time) {
-    return this.slideImage;
-  },
+    getElementAtTime: function(time) {
+		return this.slideImage;
+	},
 
 
 	wantsRecord: function(rec) {
