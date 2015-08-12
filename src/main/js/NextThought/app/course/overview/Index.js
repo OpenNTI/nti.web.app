@@ -270,7 +270,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 
 	getPageInfoRoute: function(obj) {
-		var lesson = obj.parent,
+		var lesson = obj.parent || this.activeLesson,
 			lessonId = lesson && lesson.getId(),
 			label = obj.get ? obj.get('label') : obj.label,
 			pageInfo = obj.getId ? obj.getId() : obj.NTIID;
