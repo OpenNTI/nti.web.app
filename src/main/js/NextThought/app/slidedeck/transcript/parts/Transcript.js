@@ -469,6 +469,10 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Transcript', {
 			start = t.get('desired-time-start'),
 			end = t.get('desired-time-end');
 
+		if (!start || start < 0) {
+			start = this.getCueStore().first().get('startTime');
+		}
+
 		// if the end is not set, set it to be the endTime of the last cue. CueStore should be sorted.
 		if (Ext.isEmpty(end) || end <= 0) {
 			end = this.getCueStore().last().get('endTime');

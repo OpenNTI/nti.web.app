@@ -281,27 +281,37 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 
 
 	highlightAtTime: function(seconds, allowScroll) {
-		var cmp = this.down('video-transcript[transcript]'),
-			scrollingEl = Ext.get(this.getScrollTarget()),
-			offset = scrollingEl.getY(), tEl;
+		var cmps = this.getPartComponents(),
+			me = this,
+			offset = 10;
 
-		if (!cmp) { return; }
-
-		tEl = cmp.getElementAtTime && cmp.getElementAtTime(seconds);
-
-		if (tEl && this.currentTime !== seconds) {
-			if (this.currentCue) {
-				this.currentCue.removeCls('current');
-			}
-
-			tEl.addCls('current');
-			this.currentCue = tEl;
-			this.currentTime = seconds;
-
-			if (allowScroll) {
-				this.scrollToEl(tEl, offset);
-			}
+		if (this.currentTime === seconds || Ext.isEmpty(cmps)) {
+			return;
 		}
+
+		// highlight and scroll the component that contains the given time into view.
+		Ext.each(cmps, function(cmp) {
+			var isTimePart = cmp.isTimeWithinTimeRange && cmp.isTimeWithinTimeRange(seconds), tEl;
+			if (isTimePart) {
+				tEl = cmp.getElementAtTime && cmp.getElementAtTime(seconds);
+
+				if (tEl) {
+					if (me.currentCue) {
+						me.currentCue.removeCls('current');
+					}
+
+					// Checking the time make sure we only scroll the first part,
+					// when we have parts that are overlapping.
+					if (allowScroll && me.currentTime !== seconds) {
+						me.scrollToEl(tEl, offset);
+					}
+
+					tEl.addCls('current');
+					me.currentCue = tEl;
+					me.currentTime = seconds;
+				}
+			}
+		});
 	},
 
 
