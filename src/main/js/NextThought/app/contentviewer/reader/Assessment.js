@@ -4,6 +4,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 	requires: [
 		'NextThought.app.assessment.Scoreboard',
 		'NextThought.app.assessment.Question',
+		'NextThought.app.assessment.Poll',
 		'NextThought.app.assessment.QuizSubmission',
 		'NextThought.app.assessment.AssignmentFeedback',
 		'NextThought.app.course.assessment.AssignmentStatus'
@@ -16,6 +17,32 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 	constructor: function(config) {
 		Ext.apply(this, config);
 		this.reader.on('set-content', 'injectAssessments', this);
+	},
+
+
+	makeAssessmentPoll: function(p, set) {
+		var contentElement = this.getContentElement('object', 'data-ntiid', p.getId()),
+			o = this.reader.getComponentOverlay();
+
+		//See below
+		p.getVideos = Ext.bind(DomUtils.getVideos, DomUtils, [contentElement]);
+
+		o.registerOverlayedPanel(p.getId(), Ext.widget('assessment-poll', {
+			reader: this.reader,
+			question: p,
+			poll: p,
+			renderTo: o.componentOverlayEl,
+			questionSet: set || null,
+			survey: set || null,
+			tabIndexTracker: o.tabIndexer,
+			contentElement: contentElement
+		}));
+
+		if (contentElement) {
+			Ext.fly(contentElement).set({
+				'data-used': true
+			});
+		}
 	},
 
 
@@ -416,7 +443,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 	injectAssessments: function(reader, doc, items) {
 		var me = this,
 			slice = Array.prototype.slice,
-			questionObjs,
+			questionObjs, pollObjs,
 			r = me.reader,
 			h = me.injectedAssignmentHistory,
 			o = r.getComponentOverlay(),
@@ -433,15 +460,35 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 
 		questionObjs = slice.call(doc.querySelectorAll('object[type*=naquestion][data-ntiid]'));
 
+		//For polls just treat them exactly like we do questions
+		pollObjs = slice.call(doc.querySelectorAll('object[type*=napoll][data-ntiid]'));
+
 		Ext.Array.sort(items, function(ar, br) {
 			var a = questionObjs.indexOf(me.getRelatedElement(ar.get('NTIID'), questionObjs)),
 				b = questionObjs.indexOf(me.getRelatedElement(br.get('NTIID'), questionObjs));
 			return ((a === b) ? 0 : ((a > b) ? 1 : -1));
 		});
 
+		if (pollObjs.length) {
+			Ext.Array.sort(items, function(ar, br) {
+				var a = pollObjs.indexOf(me.getRelatedElement(ar.get('NTIID'), pollObjs)),
+					b = pollObjs.indexOf(me.getRelatedElement(br.get('NTIID'), pollObjs));
+
+				return ((a === b) ? 0 : ((a > b) ? 1 : -1));
+			});
+		}
+
 		Ext.each(this.cleanQuestionsThatAreInQuestionSets(items, questionObjs), function(q) {
 			if (q.isSet) { me.makeAssessmentQuiz(q, guid); }
 			else { me.makeAssessmentQuestion(q); }
+		});
+
+		Ext.each(this.cleanPollsThatAreInSurveys(items, pollObjs), function(p) {
+			if (p.isSet) {
+				me.makeAssessmentSurvey(p, guid);
+			} else {
+				me.makeAssessmentPoll(p);
+			}
 		});
 
 		slice.call(doc.querySelectorAll('object[type*=naquestion][data-ntiid]:not([data-used])')).forEach(function(e) {
@@ -473,6 +520,66 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 	setAssignmentFromStudentProspective: function(assignment, history) {
 		this.injectedAssignment = assignment;
 		this.injectedAssignmentHistory = history;
+	},
+
+	cleanPollsThatAreInSurveys: function(items, objects) {
+		items = items.slice();
+
+		var results = [],
+			push = Array.prototype.push,
+			pollsInSurvey = [],
+			sets = {},
+			usedPolls = {};
+
+		function inSet(id) {
+			var i = pollsInSurvey.length - 1;
+
+			for (i; i >= 0; i--) {
+				if (id === pollsInSurvey[i].getId()) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		function hasElement(id) {
+			var i;
+
+			for (i = 0; i < objects.length; i++) {
+				if (objects[i] && typeof objects[i] !== 'string') {
+					objects[i] = objects[i].getAttribute('data-ntiid');
+				}
+
+				if (objects[i] === id) { return true;}
+			}
+
+			return false;
+		}
+
+
+		function pushSurveyPolls(i) {
+			if (i.isSet) { push.apply(questionsInSets, i.get('questions')); }
+		}
+
+		//get sets
+		items.forEach(pushSurveyPolls);
+
+		items.forEach(function(i) {
+			//work around dups
+			if (i.isSet) {
+				if (sets[i.getId()]) { return; }
+
+				sets[i.getId()] = i;
+			}
+
+			if (i.isSet || (i.getId && !inSet(i.getId()) && !usedPolls[i.getId()] && hasElement(i.getId()))) {
+				results.push(i);
+				usedPolls[i.getId()] = true;
+			}
+		});
+
+		return results;
 	},
 
 
