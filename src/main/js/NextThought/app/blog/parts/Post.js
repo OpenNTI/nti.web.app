@@ -174,6 +174,10 @@ Ext.define('NextThought.app.blog.parts.Post', {
 					}
 				}
 
+				if (me.el && me.postCountEl) {
+					me.postCountEl.update(Ext.util.Format.plural(me.record.get('PostCount'), 'Comment'));
+				}
+
 				me.editor.deactivate();
 				me.editor.setValue('');
 				me.editor.reset();

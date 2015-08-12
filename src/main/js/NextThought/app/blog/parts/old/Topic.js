@@ -69,7 +69,7 @@ Ext.define('NextThought.app.blog.parts.old.Topic', {
 				]},
 				{ cls: 'comment-box', cn: [
 					{ cls: 'response', cn: [
-						{ tag: 'span', html: '{PostCount:plural("Comment")}'},
+						{ tag: 'span', cls: 'post-count', html: '{PostCount:plural("Comment")}'},
 						{ tag: 'tpl', 'if': 'canReply', cn: [
 							{ tag: 'span', cls: 'reply link', html: 'Add a Comment' }
 						]},
@@ -95,6 +95,7 @@ Ext.define('NextThought.app.blog.parts.old.Topic', {
 		editEl: '.meta .edit',
 		deleteEl: '.meta .delete',
 		commentBoxEl: '.comment-box',
+		postCountEl: '.comment-box .post-count',
 		responseEl: '.comment-box .response',
 		replyLinkEl: '.comment-box .response .reply',
 		reportLinkEl: '.comment-box .response .report',
