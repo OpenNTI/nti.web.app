@@ -38,5 +38,32 @@ Ext.define('NextThought.app.assessment.Poll', {
 
 		parts.showQuestionSetWithAnswers();
 		header.setTitle('Thank You!');
+	},
+
+
+	checkIt: function() {
+		if (this.submissionDisabled) {
+			return;
+		}
+
+		this.submitted = true;
+
+		var me = this,
+			col = {};
+
+		me.gatherQuestionResponse(null, col);
+
+		me.mask('Submitting');
+
+		me.AssessmentActions.submitPoll(me.poll, col[me.poll.getId()], me.startTimeStamp, me.canSubmitIndividually())
+			.then(function(result) {
+				me.updateWithResults(result);
+			})
+			.fail(function() {
+				alert('Failed to submit your poll');
+			})
+			.always(function() {
+				me.unmask();
+			});
 	}
 });

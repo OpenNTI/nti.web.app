@@ -176,5 +176,38 @@ Ext.define('NextThought.app.assessment.Actions', {
 				}
 			});
 		});
+	},
+
+
+	submitPoll: function(poll, answerValues, startTime, canSubmitIndividually) {
+		var endTimeStamp = (new Date()).getTime(),
+			// in seconds
+			// TODO We may have to reset startTimestamp, depending on flow.
+			// SelfAssessments (and maybe assignments) could be re-submitted.
+			duration = (endTimeStamp - startTime) / 1000,
+			readerContext = this.ContextStore.getReaderLocation(),
+			containerId = canSubmitIndividually ? poll.getId() : readerContext.NTIID,
+			submission = NextThought.model.assessment.PollSubmission.create({
+				// ContainerId: containerId,
+				pollId: poll.getId(),
+				questionId: poll.getId(),
+				parts: answerValues,
+				CreatorRecordedEffortDuration: duration
+			});
+
+		return new Promise(function(fulfill, reject) {
+			submission.save({
+				url: Service.getObjectURL(poll.getId()),
+				failure: function() {
+					console.error('Failed to save poll: ', arguments);
+					reject();
+				},
+				success: function(self, op) {
+					var result = op.getResultSet().records.first();
+
+					fulfill(result);
+				}
+			});
+		});
 	}
 });
