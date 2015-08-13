@@ -118,6 +118,53 @@
 		}
 	}
 
+
+	&.overview-survey {
+		background: #fcfcfc;
+		border: 1px solid #e2e2e2;
+		border-radius: 5px;
+		box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.08);
+		padding: 0 15px 0 90px;
+
+
+		@include icon('survey', $side: after, $top: 50%, $left: 18px);
+
+		&::after {
+			margin-top: -27px;//54/2
+		}
+
+
+		.meta {
+			display: inline-block;
+			vertical-align: middle;
+			width: 90%;
+			max-width: 509px;
+			margin: 15px 0;
+
+			.title {
+				font: italic 500 1.125em/1.5em $font;
+				color: $primary-grey;
+			}
+
+			span {
+				font: normal 0.75em/1em $font;
+				color: $tertiary-grey;
+			}
+
+			.responses:not(:empty)::before {
+				content: '\b7';
+				margin: 0 0.5em;
+			}
+		}
+
+		.button {
+			display: inline-block;
+			vertical-align: middle;
+			color: white;
+		}
+	}
+
+
 	&.overview-discussion {
 		cursor: pointer;
 		background: #f5f5f5;

@@ -98,7 +98,15 @@ Ext.define('NextThought.app.content.content.Index', {
 			return Promise.resolve(obj);
 		}
 
-		return Service.getObject(id);
+		return Service.getObject(id)
+			.then(function(obj) {
+				//If we didn't get a page (PageInfo or RelatedWork), just get a page info
+				if (!obj.isPage) {
+					return Service.getPageInfo(id);
+				}
+
+				return obj;
+			});
 	},
 
 
