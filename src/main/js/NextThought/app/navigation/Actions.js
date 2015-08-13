@@ -46,10 +46,9 @@ Ext.define('NextThought.app.navigation.Actions', {
 					.then(function(obj) {
 						//iterate backwards
 						for (i = context.length - 1; i >= 0; i--) {
-							if(context[i].cmp && context[i].cmp.navigateToObject){
-								debugger;
+							if (context[i].cmp && context[i].cmp.navigateToObject) {
 								context[i].cmp.navigateToObject(obj)
-									.then(function(){
+									.then(function() {
 										Ext.getBody().el.unmask();
 									});
 								break;
@@ -57,7 +56,7 @@ Ext.define('NextThought.app.navigation.Actions', {
 						}
 						//the first item with a cmp that implements navigateToObject
 						//Ext.getBody().el.unmask()
-					})
+					});
 
 				return true;
 			}

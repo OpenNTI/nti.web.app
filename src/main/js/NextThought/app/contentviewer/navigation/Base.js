@@ -124,7 +124,6 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		}
 
 		if (!me.hideControls && !me.hideHeader && me.pageSource) {
-			debugger;
 			if (me.pageSource instanceof Promise) {
 				rd.showPaging = true;
 				me.pageSource.then(me.onPageSourceLoad.bind(me));
