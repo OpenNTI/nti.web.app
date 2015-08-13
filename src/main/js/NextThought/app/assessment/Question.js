@@ -157,7 +157,7 @@ Ext.define('NextThought.app.assessment.Question', {
 
 		if (assessedQuestionSet && assessedQuestionSet.isSet) {
 			Ext.each(assessedQuestionSet.get('questions'), function(i) {
-				if (i.getId() === id || i.get('questionId') === id) {
+				if (i.getId() === id || i.get('questionId') === id || i.get('pollId')) {
 					q = i;
 					return false;
 				}

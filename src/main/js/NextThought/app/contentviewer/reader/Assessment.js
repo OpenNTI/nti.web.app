@@ -72,6 +72,37 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 	},
 
 
+	makeAssessmentSurvey: function(survey, guid) {
+		var me = this,
+			o = me.reader.getComponentOverlay(),
+			c = o.componentOverlayEl,
+			r = me.reader,
+			questions = survey.get('questions') || [],
+			historyLink = survey.getLink('History');
+
+
+		questions.forEach(function(poll) {
+			me.makeAssessmentPoll(poll, survey);
+		});
+
+		if (!historyLink) {
+			this.submission = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessment-quiz-submission', {
+				reader: r, renderTo: c, questionSet: survey,
+				tabIndexTracker: o.tabIndexer,
+				history: null, isInstructor: null
+			}));
+		} else {
+			Service.request(historyLink)
+				.then(function(response) {
+					return ParseUtils.parseItems(response)[0];
+				})
+				.then(function(history) {
+					survey.fireEvent('graded', history.get('Submission'));
+				});
+		}
+	},
+
+
 	makeAssessmentQuiz: function(set, guid) {
 		var me = this,
 			isInstructor = this.isInstructorProspective,
@@ -478,10 +509,14 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			});
 		}
 
-		Ext.each(this.cleanQuestionsThatAreInQuestionSets(items, questionObjs), function(q) {
-			if (q.isSet) { me.makeAssessmentQuiz(q, guid); }
-			else { me.makeAssessmentQuestion(q); }
-		});
+
+		if (questionObjs.length) {
+			Ext.each(this.cleanQuestionsThatAreInQuestionSets(items, questionObjs), function(q) {
+				if (q.isSet) { me.makeAssessmentQuiz(q, guid); }
+				else { me.makeAssessmentQuestion(q); }
+			});
+		}
+
 
 		if (pollObjs.length) {
 			Ext.each(this.cleanQuestionsThatAreInQuestionSets(items, pollObjs), function(p) {

@@ -28,19 +28,17 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 
 	constructor: function(config) {
 		var n = config.node || {getAttribute: function(a) { return config[a];} },
+			links = n.getAttribute('Links'),
 			ntiid = n.getAttribute('ntiid');
 
 		config.data = {
 			title: n.getAttribute('label'),
 			ntiid: ntiid,
 			questionCount: n.getAttribute('question-count'),
-			submissions: n.getAttribute('submissions')
+			submissions: n.getAttribute('submissions'),
+			isSubmitted: Service.getLinkFrom(links, 'History')
 		};
 
-
-		Service.getObject(ntiid)
-			.then(this.onSurveyLoaded.bind(this))
-			.fail(this.onSurveyFailed.bind(this));
 
 		this.callParent([config]);
 	},
@@ -64,29 +62,10 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 		if (this.data.submissions) {
 			this.responsesEl.update(Ext.util.Format.plural(this.data.submissions, 'Response'));
 		}
-	},
 
-
-	onSurveyLoaded: function(survey) {
-		if (!this.rendered) {
-			this.on('afterrender', this.onSurveyLoaded.bind(this, survey));
-			return;
+		if (this.data.isSubmitted) {
+			this.startEl.update('Review');
 		}
-
-		var responses = survey.get('submissions');
-
-		this.survey = survey;
-
-		if (responses) {
-			this.responseEl.update(Ext.util.Format.plural(responses, 'Responses'));
-		}
-	},
-
-
-	onSurveyFailed: function(reason) {
-		console.error('Failed to load Survey: ', reason);
-
-		this.hide();
 	},
 
 

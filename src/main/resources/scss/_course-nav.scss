@@ -125,6 +125,7 @@
 		border-radius: 5px;
 		box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.08);
 		padding: 0 15px 0 90px;
+		overflow: hidden;
 
 
 		@include icon('survey', $side: after, $top: 50%, $left: 18px);
@@ -144,6 +145,8 @@
 			.title {
 				font: italic 500 1.125em/1.5em $font;
 				color: $primary-grey;
+				overflow: hidden;
+				@include ellipse;
 			}
 
 			span {
@@ -161,6 +164,10 @@
 			display: inline-block;
 			vertical-align: middle;
 			color: white;
+			position: absolute;
+			top: 50%;
+			right: 15px;
+			margin-top: -20px;
 		}
 	}
 

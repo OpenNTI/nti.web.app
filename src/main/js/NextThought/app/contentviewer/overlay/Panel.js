@@ -4,7 +4,7 @@ Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 
 	requires: ['NextThought.util.Anchors'],
 
-	OBJECT_QUERY: 'object[type*=naquestion]',
+	OBJECT_QUERY: 'object[type*=naquestion],object[type*=napoll]',
 
 	placementHolderTpl: Ext.DomHelper.createTemplate({type: 'application/vnd.nextthought.placeholder'}),
 

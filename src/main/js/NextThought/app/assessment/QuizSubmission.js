@@ -511,6 +511,8 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 
 		if (isAssignment) {
 			this.submitAssignment(questionSet, submission);
+		} else if (questionSet instanceof NextThought.model.assessment.Survey) {
+			this.submitSurvey(questionSet, submission);
 		} else {
 			this.submitAssessment(questionSet, submission);
 		}
@@ -559,6 +561,27 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 			}, function() {
 				me.unmask();
 				me.onFailure();
+			});
+	},
+
+
+	submitSurvey: function(questionSet, submission) {
+		var me = this,
+			container = me.reader.getLocation().NTIID;
+
+		me.mask();
+
+		me.AssessmentActions.submitSurvey(questionSet, submission, container, me.startTimeStamp)
+			.then(function(result) {
+				me.setGradingResult(result);
+
+				me.unmask();
+
+				me.reader.fireEvent('survey-submitted', result);
+			}, function() {
+				me.onFailure();
+				me.maybeDoReset(true);
+				me.unmask();
 			});
 	},
 
