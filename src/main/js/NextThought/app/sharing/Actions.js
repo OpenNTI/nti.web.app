@@ -74,7 +74,7 @@ Ext.define('NextThought.app.sharing.Actions', {
 				});
 
 				if (communities[0]) {
-					return NextThought.model.UserSearch.create(communities[0].asJSON());
+					return NextThought.model.UserSearch.create(communities[0].getData());
 				}
 			});
 	},
@@ -124,7 +124,7 @@ Ext.define('NextThought.app.sharing.Actions', {
 				return communities.filter(function(community) {
 					return !community.isEveryone() && community.getId() !== siteId;
 				}).map(function(community) {
-					return NextThought.model.UserSearch.create(community.asJSON());
+					return NextThought.model.UserSearch.create(community.getData());
 				});
 			});
 	},
@@ -134,7 +134,7 @@ Ext.define('NextThought.app.sharing.Actions', {
 		return Service.getGroupsList()
 			.then(function(groups) {
 				return groups.map(function(group) {
-					return NextThought.model.UserSearch.create(group.asJSON());
+					return NextThought.model.UserSearch.create(group.getData());
 				});
 			});
 	}

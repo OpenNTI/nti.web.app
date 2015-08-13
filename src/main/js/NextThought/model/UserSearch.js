@@ -20,7 +20,7 @@ Ext.define('NextThought.model.UserSearch', {
 			if (/^community$/.test(m)) {
 				type = 'public';
 			}
-			else if (/^friendslist$/.test(m)) {
+			else if (/friendslist$/.test(m)) {
 				type = NextThought.mixins.ShareEntity.getPresentationType(modelData);
 			}
 			else {

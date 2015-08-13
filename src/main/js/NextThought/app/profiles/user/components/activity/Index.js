@@ -54,7 +54,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 	getSuggestedSharing: function() {
 		var community = Service.getFakePublishCommunity();
 
-		return NextThought.model.UserSearch.create(community.asJSON());
+		return NextThought.model.UserSearch.create(community.getData());
 	},
 
 
