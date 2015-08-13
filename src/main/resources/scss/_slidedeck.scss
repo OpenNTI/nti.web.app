@@ -1610,7 +1610,7 @@ $experimental-support-for-svg: true;
 
 				@include note-control-box;
 				.note-here-control-box{
-					left: 40px;
+					left: 10px;
 
 					&.hidden{
 						display: none;
