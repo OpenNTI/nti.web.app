@@ -33,9 +33,16 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 		var basePath = route.precache.basePath,
 			rec = route.precache.rec,
 			options = route.precache.options || {},
-			me = this;
+			me = this, id;
 
-		this.mediaId = ParseUtils.decodeFromURI(route.params.id);
+		id = ParseUtils.decodeFromURI(route.params.id);
+
+		if (this.activeMediaView && (this.videoId === id || this.slidedeckId === id)) {
+			// We are already there.
+			return Promise.resolve();
+		}
+
+		this.mediaId = id;
 		options.rec = rec;
 
 		this.PathActions.getPathToObject(this.mediaId);
@@ -68,6 +75,9 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 				.then(function(video) {
 					me.video = video;
 					me.videoId = me.mediaId;
+					delete me.slidedeck;
+					delete me.slidedeckId;
+
 					me.__presentVideo(me.mediaId, basePath, options);
 				})
 				.fail(function() {
@@ -100,6 +110,9 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 		p.then(function(deck){
 			me.slidedeck = deck;
 			me.slidedeckId = slidedeckId;
+			delete me.video;
+			delete me.videoId;
+
 			me.MediaActions.buildSlidedeckPlaylist(deck)
 				.then( function(obj) {
 					me.activeMediaView.setSlidedeckContent(deck, obj.videos, obj.items, options);
@@ -173,13 +186,19 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 
 
 	getContext: function() {
-		if (this.videoId) {
-			return this.resolveVideo(this.videoId);
-		}
-		if (this.slidedeckId) {
-			return this.slidedeck && Promise.resolve(this.slidedeck) || Service.getObject(this.slidedeckId);
-		}
-		return Promise.resolve();
+		var me = this;
+		return new Promise(function(fulfill) {
+			me.resolveVideo(me.mediaId)
+				.then(fulfill)
+				.fail(function() {
+					if (me.slidedeck && me.slidedeck.getId() === me.mediaId) {
+						fulfill(me.slidedeck);
+						return;
+					}
+
+					Service.getObject(me.mediaId).then(fulfill);
+				});
+		});
 	},
 
 
