@@ -8,6 +8,14 @@ Ext.define('NextThought.app.navigation.Actions', {
 
 
 	statics: {
+		getContext: function() {
+			if (!this.NavStateStore) {
+				this.NavStateStore = NextThought.app.context.StateStore.getInstance();
+			}
+
+			return this.NavStateStore.getContext();
+		},
+
 		pushRootRoute: function(title, route, precache) {
 			if (this.doPushRootRoute) {
 				this.doPushRootRoute(title, route, precache);
@@ -22,6 +30,7 @@ Ext.define('NextThought.app.navigation.Actions', {
 
 		navigateToHref: function(href) {
 			var parts = href.split('#'),
+					context = this.getContext(),
 					newBase = parts[0],
 					newFragment = parts[1],
 					currentLocation = window.location.href,
@@ -32,9 +41,23 @@ Ext.define('NextThought.app.navigation.Actions', {
 			//Are we an nttid?
 			if (ParseUtils.isNTIID(newBase)) {
 				//TODO: figure this out
-				newBase = ParseUtils.encodeForURI(newBase);
+				Ext.getBody().el.mask('Loading...');
+				Service.getObject(newBase)
+					.then(function(obj) {
+						//iterate backwards
+						for (i = context.length - 1; i >= 0; i--) {
+							if (context[i].cmp && context[i].cmp.navigateToObject) {
+								context[i].cmp.navigateToObject(obj)
+									.then(function() {
+										Ext.getBody().el.unmask();
+									});
+								break;
+							}
+						}
+						//the first item with a cmp that implements navigateToObject
+						//Ext.getBody().el.unmask()
+					});
 
-				this.pushRootRoute('', '/id/' + newBase);
 				return true;
 			}
 

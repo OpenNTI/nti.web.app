@@ -114,14 +114,16 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		var me = this,
 			rd = {};
 
-		if (me.path && me.path instanceof Promise) {
+		if (me.hideHeader) {
+			rd.path = [];
+		} else if (me.path && me.path instanceof Promise) {
 			me.path.then(me.onPathLoad.bind(me));
 			rd.path = [];
 		} else if (me.path) {
 			rd.path = me.path;
 		}
 
-		if (!me.hideControls && me.pageSource) {
+		if (!me.hideControls && !me.hideHeader && me.pageSource) {
 			if (me.pageSource instanceof Promise) {
 				rd.showPaging = true;
 				me.pageSource.then(me.onPageSourceLoad.bind(me));

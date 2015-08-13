@@ -132,7 +132,8 @@ Ext.define('NextThought.app.content.content.Index', {
 			bundle: this.currentBundle,
 			handleNavigation: this.handleNavigation.bind(this),
 			navigateToObject: this.navigateToObject && this.navigateToObject.bind(this),
-			fragment: hash
+			fragment: hash,
+			hideHeader: this.hideHeader
 		});
 
 		this.setTitle(page.get('label'));

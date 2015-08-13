@@ -52,7 +52,7 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 					  'share-with',
 					  'resize'
 				  ]));
-				  
+
 	    reader.on('destroy', 'clearAnnotations', this);
 
 		Ext.apply(me, {
@@ -406,7 +406,7 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 			listeners: {
 				select: function(picker, selColor) {
 					var hColor = Ext.Array.findBy(highlightColors, function(item) {return item.color === selColor;});
-					record.set('fillColor', Color.toRGBA(selColor));
+
 					record.set('presentationProperties', {highlightColorName: hColor.name});
 					me.UserDataActions.savePhantomAnnotation(record, false);
 					me.clearSelection();

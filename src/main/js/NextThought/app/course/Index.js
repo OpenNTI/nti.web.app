@@ -54,7 +54,8 @@ Ext.define('NextThought.app.course.Index', {
 		},
 		{
 			xtype: 'bundle-content',
-			id: 'course-content'
+			id: 'course-content',
+			hideHeader: true
 		}
 	],
 
@@ -439,6 +440,8 @@ Ext.define('NextThought.app.course.Index', {
 			route = this.getRouteForAssignment(root, subPath);
 		} else if (root instanceof NextThought.model.courses.navigation.CourseOutlineContentNode) {
 			route = this.getRouteForLesson(root, subPath);
+		} else if (root instanceof NextThought.model.PageInfo) {
+			route = this.getRouteForPageInfo(root, subPath);
 		} else {
 			route = {
 				path: '',
@@ -470,5 +473,18 @@ Ext.define('NextThought.app.course.Index', {
 		route.path = '/lessons/' + Globals.trimRoute(route.path);
 
 		return route;
+	},
+
+
+	getRouteForPageInfo: function(pageInfo, path) {
+		var id = pageInfo.getId();
+
+		id = ParseUtils.encodeForURI(id);
+
+		return {
+			path: '/content/' + id,
+			isFull: true,
+			isAccessible: true
+		};
 	}
 });
