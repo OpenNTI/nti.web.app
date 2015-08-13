@@ -15,6 +15,12 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Slide', {
 		]}
 	]),
 
+	contextTpl: Ext.DomHelper.markup([
+		{cls: 'image-wrap', cn: [
+			{tag: 'img', src: '{image}'}
+		]}
+	]),
+
 	ui: 'slide',
 
 	renderSelectors: {

@@ -32,6 +32,11 @@ Ext.define('NextThought.model.Slide', {
 
 
 	statics: {
+		getParamFromDom: function(dom, name) {
+			var el = Ext.DomQuery.select('param[name="' + name + '"]', dom)[0];
+			return el ? el.getAttribute('value') : null;
+		},
+
 		fromDom: function(dom, containerId, videoIndex) {
 
 			function getParam(name) {
