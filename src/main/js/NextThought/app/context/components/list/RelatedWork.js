@@ -8,6 +8,10 @@ Ext.define('NextThought.app.context.components.list.RelatedWork', {
 
 		iconUrl = iconUrl && 'url(' + getURL(iconUrl) + ')';
 
+		if (!this.iconEl) {
+			return;
+		}
+
 		if (iconUrl) {
 			this.iconEl.setStyle({
 				backgroundImage: iconUrl

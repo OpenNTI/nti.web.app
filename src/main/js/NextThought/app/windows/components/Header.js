@@ -74,8 +74,9 @@ Ext.define('NextThought.app.windows.components.Header', {
 				if (parent) {
 					titles.push({label: parent});
 				}
-
-				container.dom.innerHTML = '';
+				if (container.dom) {
+					container.dom.innerHTML = '';
+				}
 				container = me.pathTpl.append(container, {labels: titles, leaf: leaf}, true);
 			});
 	},
