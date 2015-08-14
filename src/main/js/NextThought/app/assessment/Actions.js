@@ -7,6 +7,7 @@ Ext.define('NextThought.app.assessment.Actions', {
 		'NextThought.model.assessment.QuestionSubmission',
 		'NextThought.model.assessment.SurveySubmission',
 		'NextThought.model.assessment.PollSubmission',
+		'NextThought.model.assessment.UsersCourseInquiryItemResponse',
 		'NextThought.app.context.StateStore'
 	],
 

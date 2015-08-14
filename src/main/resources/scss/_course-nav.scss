@@ -126,6 +126,7 @@
 		box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.08);
 		padding: 0 15px 0 90px;
 		overflow: hidden;
+		margin-top: 10px;
 
 
 		@include icon('survey', $side: after, $top: 50%, $left: 18px);

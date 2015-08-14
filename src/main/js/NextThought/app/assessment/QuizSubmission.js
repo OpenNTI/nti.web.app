@@ -573,7 +573,7 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 
 		me.AssessmentActions.submitSurvey(questionSet, submission, container, me.startTimeStamp)
 			.then(function(result) {
-				me.setGradingResult(result);
+				me.setGradingResult(result.get('Submission').get('Submission'));
 
 				me.unmask();
 
