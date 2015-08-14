@@ -551,12 +551,12 @@ Ext.define('NextThought.model.Service', {
 		}
 
 
-		if (cache.hasOwnProperty(url)) {
-			return wait(1).then(onSuccess.bind(this, cache[url]));//make this call from its own stack
-		}
+		// if (cache.hasOwnProperty(url)) {
+		// 	return wait(1).then(onSuccess.bind(this, cache[url]));//make this call from its own stack
+		// }
 
 		return this.getObjectRaw({url: url, ntiid: ntiid}, mime + '+json', true)
-				.then(cacheWrapper)
+				// .then(cacheWrapper)
 				.then(onSuccess)
 				.fail(onFailure);
 	},
