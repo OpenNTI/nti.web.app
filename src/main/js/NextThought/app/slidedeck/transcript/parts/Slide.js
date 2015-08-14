@@ -73,14 +73,7 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Slide', {
 	},
 
 	openNoteEditor: function(e) {
-		var data = {startTime: this.slide.get('video-start'), endTime: this.slide.get('video-end')},
-			dom = this.slide.get('dom-clone'),
-			img = dom.querySelector('img');
-
-		if (!img) {
-			console.error('Missing img for the slide.');
-			return false;
-		}
+		var data = {startTime: this.slide.get('video-start'), endTime: this.slide.get('video-end')};
 
 		data.isDomRange = true;
 		data.range = null;
