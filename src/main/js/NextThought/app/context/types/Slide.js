@@ -1,7 +1,8 @@
 Ext.define('NextThought.app.context.types.Slide', {
 
 	requires: [
-		'NextThought.app.context.components.Default'
+		'NextThought.app.context.components.Default',
+		'NextThought.app.context.components.cards.Slide'
 	],
 
 	statics: {
@@ -55,13 +56,25 @@ Ext.define('NextThought.app.context.types.Slide', {
 						cmp;
 					dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
 
-					cmp = Ext.widget('context-default', {
+					if (kind === 'card' || kind === 'list') {
+						cmp = Ext.widget('context-slide-card', {
+							slide: slide,
+							contextDom: dom,
+							containerId: me.container,
+							record: me.record,
+							doNavigate: me.doNavigate,
+							type: kind
+						});
+					}
+					else {
+						cmp = Ext.widget('context-default', {
 							snippet: dom,
 							fullContext: dom,
 							containerId: me.container,
 							record: me.record,
 							doNavigate: me.doNavigate
 						});
+					}
 
 					return Promise.resolve(cmp);
 				});
