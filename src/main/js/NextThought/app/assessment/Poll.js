@@ -2,7 +2,10 @@ Ext.define('NextThought.app.assessment.Poll', {
 	extend: 'NextThought.app.assessment.Question',
 	alias: 'widget.assessment-poll',
 
-	requires: ['NextThought.model.assessment.UsersCourseInquiryItem'],
+	requires: [
+		'NextThought.model.assessment.UsersCourseInquiryItem',
+		'NextThought.model.assessment.UsersCourseInquiryItemResponse'
+	],
 
 	NotSubmittedTextOverride: 'Submit',
 	SubmittedTextOverride: 'Submit',
@@ -74,7 +77,7 @@ Ext.define('NextThought.app.assessment.Poll', {
 
 		me.AssessmentActions.submitPoll(me.poll, col[me.poll.getId()], me.startTimeStamp, me.canSubmitIndividually())
 			.then(function(result) {
-				me.updateWithResults(result);
+				me.updateWithResults(result.get('Submission').get('Submission'));
 			})
 			.fail(function() {
 				alert('Failed to submit your poll');
