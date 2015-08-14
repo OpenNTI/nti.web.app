@@ -165,7 +165,8 @@ Ext.define('NextThought.app.profiles.community.Index', {
 			activeTopic: 'all'
 		});
 
-		return cmp.handleRoute(subRoute, route.precache);
+		return cmp.userChanged(this.activeCommunity)
+			.then(cmp.handleRoute.bind(cmp, subRoute, route.precache));
 	},
 
 
@@ -225,7 +226,8 @@ Ext.define('NextThought.app.profiles.community.Index', {
 			activeTopic: id
 		});
 
-		return cmp.handleRoute(subRoute, route.precache);
+		return cmp.userChanged(me.activeCommunity)
+			.then(cmp.handleRoute.bind(cmp, subRoute, route.precache));
 	},
 
 

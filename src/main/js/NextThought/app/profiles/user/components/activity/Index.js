@@ -51,6 +51,30 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 	},
 
 
+	startResourceViewed: function() {
+		var id = this.activeUser && this.activeUser.getId();
+
+		if (id && !this.hasCurrentTimer) {
+			AnalyticsUtil.getResourceTimer(id, {
+				type: 'profile-activity-viewed',
+				ProfileEntity: id
+			});
+
+			this.hasCurrentTimer = true;
+		}
+	},
+
+
+	stopResourceViewed: function() {
+		var id = this.activeUser && this.activeUser.getId();
+
+		if (id && this.hasCurrentTimer) {
+			AnalyticsUtil.stopResourceTimer(id, 'profile-activity-viewed');
+			delete this.hasCurrentTimer;
+		}
+	},
+
+
 	getSuggestedSharing: function() {
 		var community = Service.getFakePublishCommunity();
 
@@ -59,6 +83,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 
 
 	onActivate: function() {
+		this.startResourceViewed();
 		this.items.each(function(item) {
 			item.fireEvent('activate');
 		});
@@ -66,6 +91,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 
 
 	onDeactivate: function() {
+		this.stopResourceViewed();
 		this.items.each(function(item) {
 			item.fireEvent('deactivate');
 		});
@@ -78,12 +104,16 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 	},
 
 	userChanged: function(user, isMe) {
-		if(this.activeUser == user){
+		if (this.activeUser === user) {
 			return Promise.resolve();
 		}
-		
+
+		this.stopResourceViewed();
+
 		this.activeUser = user;
 		this.isMe = isMe;
+
+		this.startResourceViewed();
 
 		this.store = this.buildStore();
 		this.streamCmp.setStore(this.store, user);

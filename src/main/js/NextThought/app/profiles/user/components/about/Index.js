@@ -78,11 +78,41 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 			me.suggestedCmp
 		];
 
+		me.on({
+			'clear-errors': me.clearError.bind(me),
+			'activate': me.startResourceViewed.bind(me),
+			'deactivate': me.stopResourceViewed.bind(me)
+		});
+
 		me.on('clear-errors', me.clearError.bind(me));
 
 		me.profileParts.forEach(function(part) {
 			part.doEdit = me.doEdit.bind(me);
 		});
+	},
+
+
+	startResourceViewed: function() {
+		var id = this.activeUser && this.activeUser.getId();
+
+		if (id && !this.hasCurrentTimer) {
+			AnalyticsUtil.getResourceTimer(id, {
+				type: 'profile-about-viewed',
+				ProfileEntity: id
+			});
+
+			this.hasCurrentTimer = true;
+		}
+	},
+
+
+	stopResourceViewed: function() {
+		var id = this.activeUser && this.activeUser.getId();
+
+		if (id && this.hasCurrentTimer) {
+			AnalyticsUtil.stopResourceTimer(id, 'profile-about-viewed');
+			delete this.hasCurrentTimer;
+		}
 	},
 
 
@@ -137,8 +167,14 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 	userChanged: function(user, isMe) {
 		var cmps = this.profileParts;
 
+		if (this.activeUser !== user) {
+			this.stopResourceViewed();
+		}
+
 		this.activeUser = user;
 		this.isMe = isMe;
+
+		this.startResourceViewed();
 
 		if (this.isDataEmpty(user) && !isMe) {
 			this.setEmpty(user);

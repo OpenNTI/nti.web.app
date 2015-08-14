@@ -50,6 +50,35 @@ Ext.define('NextThought.app.profiles.community.components.membership.Index', {
 		this.addRoute('/', this.showMembership.bind(this));
 
 		this.addDefaultRoute('/');
+
+		this.on({
+			'activate': this.startResourceViewed.bind(this),
+			'deactivate': this.stopResourceViewed.bind(this)
+		});
+	},
+
+
+	startResourceViewed: function() {
+		var id = this.activeEntity && this.activeEntity.getId();
+
+		if (id && !this.hasCurrentTimer) {
+			AnalyticsUtil.getResourceTimer(id, {
+				type: 'profile-membership-viewed',
+				ProfileEntity: id
+			});
+
+			this.hasCurrentTimer = true;
+		}
+	},
+
+
+	stopResourceViewed: function() {
+		var id = this.activeEntity && this.activeEntity.getId();
+
+		if (id && this.hasCurrentTimer) {
+			AnalyticsUtil.stopResourceTimer(id, 'profile-membership-viewed');
+			delete this.hasCurrentTimer;
+		}
 	},
 
 
@@ -66,12 +95,18 @@ Ext.define('NextThought.app.profiles.community.components.membership.Index', {
 			return;
 		}
 
-		if (this.activeEntity === entity) { return; }
+		if (this.activeEntity === entity) {
+			return;
+		} else {
+			this.stopResourceViewed();
+		}
 
 		this.membersLink = entity.getLink('members');
 		this.activeEntity = entity;
 		this.removeAll();
 		this.loadPage(1);
+
+		this.startResourceViewed();
 	},
 
 
