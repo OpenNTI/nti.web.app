@@ -115,7 +115,9 @@ Ext.define('NextThought.mixins.UserContainer', {
 
 
 	groupChatHidden: function(group) {
-		return !Service.canChat() || !group || !isMe(group.get('Creator')) || group.getFriendCount() === 0;
+		return true;
+		// TODO: Add group chat functionality
+		// return !Service.canChat() || !group || !isMe(group.get('Creator')) || group.getFriendCount() === 0;
 	},
 
 	getUserList: function() {
