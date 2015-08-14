@@ -250,6 +250,15 @@ Ext.define('NextThought.cache.UserRepository', {
 						return;
 					}
 
+					if (ParseUtils.isNTIID(name)) {
+						Service.getObject(name)
+							.then(function(u) {
+								maybeFinish(name, me.cacheUser(u, true));
+							});
+
+						return;
+					}
+
 					result[name] = null;
 					toResolve.push(name);
 					//Legacy Path begin:

@@ -12,8 +12,7 @@ Ext.define('NextThought.util.Sharing', {
 	},
 
 	entitiesDefiningPublic: function(scopeProvider) {
-		var siteCommunity = Service.get('SiteCommunity');
-		return siteCommunity ? [siteCommunity] : null;
+		return null;
 	},
 
 	setSharedWith: function(sharable, sharedTo, callback) {
