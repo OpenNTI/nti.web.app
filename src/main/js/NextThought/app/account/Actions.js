@@ -360,7 +360,7 @@ Ext.define('NextThought.app.account.Actions', {
 					if (!success) {
 						reject(Ext.decode(resp.responseText, true) || 'There was an error setting your password.');
 					} else {
-						fulfill()
+						fulfill();
 					}
 				}
 			});

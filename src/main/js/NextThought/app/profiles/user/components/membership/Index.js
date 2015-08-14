@@ -25,10 +25,47 @@ Ext.define('NextThought.app.profiles.user.components.membership.Index', {
 
 		this.communitiesCmp = this.down('profile-user-membership-communities');
 		this.groupsCmp = this.down('profile-user-membership-groups');
+
+		this.on({
+			'activate': this.startResourceViewed.bind(this),
+			'deactivate': this.stopResourceViewed.bind(this)
+		});
+	},
+
+
+	startResourceViewed: function() {
+		var id = this.activeUser && this.activeUser.getId();
+
+		if (id && !this.hasCurrentTimer) {
+			AnalyticsUtil.getResourceTimer(id, {
+				type: 'profile-membership-viewed',
+				ProfileEntity: id
+			});
+
+			this.hasCurrentTimer = true;
+		}
+	},
+
+
+	stopResourceViewed: function() {
+		var id = this.activeUser && this.activeUser.getId();
+
+		if (id && this.hasCurrentTimer) {
+			AnalyticsUtil.stopResourceTimer(id, 'profile-membership-viewed');
+			delete this.hasCurrentTimer;
+		}
 	},
 
 
 	userChanged: function(user, isMe) {
+		if (this.activeUser !== user) {
+			this.stopResourceViewed();
+		}
+
+		this.activeUser = user;
+
+		this.startResourceViewed();
+
 		return Promise.all([
 				this.communitiesCmp.setUser(user, isMe),
 				this.groupsCmp.setUser(user, isMe)

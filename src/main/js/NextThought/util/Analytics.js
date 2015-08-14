@@ -30,7 +30,10 @@ Ext.define('NextThought.util.Analytics', {
 		'discussion-viewed': true,
 		'course-catalog-viewed': true,
 		'assignment-viewed': true,
-		'assessment-viewed': true
+		'assessment-viewed': true,
+		'profile-about-viewed': true,
+		'profile-activity-viewed': true,
+		'profile-membership-viewed': true
 	},
 
 	TYPE_TO_MIMETYPE: {
@@ -44,7 +47,10 @@ Ext.define('NextThought.util.Analytics', {
 		'discussion-viewed': 'application/vnd.nextthought.analytics.topicviewevent',
 		'course-catalog-viewed': 'application/vnd.nextthought.analytics.coursecatalogviewevent',
 		'assessment-viewed': 'application/vnd.nextthought.analytics.selfassessmentviewevent',
-		'assignment-viewed': 'application/vnd.nextthought.analytics.assignmentviewevent'
+		'assignment-viewed': 'application/vnd.nextthought.analytics.assignmentviewevent',
+		'profile-about-viewed': 'application/vnd.nextthought.analytics.profileviewevent',
+		'profile-activity-viewed': 'application/vnd.nextthought.analytics.profileactivityviewevent',
+		'profile-membership-viewed': 'application/vnd.nextthought.analytics.profilemembershipviewevent'
 	},
 
 	FILL_IN_MAP: {

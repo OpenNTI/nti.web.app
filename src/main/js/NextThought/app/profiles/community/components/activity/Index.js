@@ -68,14 +68,52 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 		this.onScroll = this.onScroll.bind(this);
 	},
 
+	startResourceViewed: function() {
+		var id = this.activeUser && this.activeUser.getId();
+
+		if (id && !this.hasCurrentTimer) {
+			AnalyticsUtil.getResourceTimer(id, {
+				type: 'profile-activity-viewed',
+				ProfileEntity: id
+			});
+
+			this.hasCurrentTimer = true;
+		}
+	},
+
+
+	stopResourceViewed: function() {
+		var id = this.activeUser && this.activeUser.getId();
+
+		if (id && this.hasCurrentTimer) {
+			AnalyticsUtil.stopResourceTimer(id, 'profile-activity-viewed');
+			delete this.hasCurrentTimer;
+		}
+	},
+
 
 	onActivate: function() {
+		this.startResourceViewed();
 		window.addEventListener('scroll', this.onScroll);
 	},
 
 
 	onDeactivate: function() {
+		this.stopResourceViewed();
 		window.removeEventListener('scroll', this.onScroll);
+	},
+
+
+	userChanged: function(user) {
+		if (this.activeUser !== user) {
+			this.stopResourceViewed();
+		}
+
+		this.activeUser = user;
+
+		this.startResourceViewed();
+
+		return Promise.resolve();
 	},
 
 

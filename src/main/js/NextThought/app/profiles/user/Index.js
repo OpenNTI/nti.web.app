@@ -38,11 +38,24 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		this.initRoutes();
 
 	    this.finalizeInit();
+
+	    this.on('deactivate', this.onDeactivate.bind(this));
 	},
+
+
+	onDeactivate: function() {
+		var active = this.bodyCmp && this.bodyCmp.getLayout().getActiveItem();
+
+		if (active) {
+			active.fireEvent('deactivate');
+		}
+	},
+
 
 	getContext: function() {
 		return this.activeEntity;
 	},
+
 
 	initRoutes: function() {
 		this.addRoute('/about', this.showAbout.bind(this));

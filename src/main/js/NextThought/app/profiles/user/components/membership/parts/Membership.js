@@ -40,7 +40,7 @@ Ext.define('NextThought.app.profiles.user.components.membership.parts.Membership
 		var entry = Ext.get(this.entryTpl.append(this.entriesEl, data));
 
 		if (data && data.member) {
-			this.mon(data.member, 'changed', this.updateAvatar.bind(this, entry));
+			this.mon(data.member, 'avatarChanged', this.updateAvatar.bind(this, entry));
 		}
 	},
 

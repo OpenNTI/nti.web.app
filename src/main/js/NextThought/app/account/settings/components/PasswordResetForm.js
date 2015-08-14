@@ -157,7 +157,9 @@ Ext.define('NextThought.app.account.settings.components.PasswordResetForm', {
 
 		var button = this.down('button');
 
-		this.mon(button, 'click', this.onSaveClick.bind(this));
+		if(button){
+			this.mon(button, 'click', this.onSaveClick.bind(this));
+		}
 
 		this.inputs = this.query('simpletext');
 		Ext.each(this.inputs, function(i) {
