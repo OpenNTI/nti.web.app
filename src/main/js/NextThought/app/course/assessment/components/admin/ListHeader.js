@@ -86,6 +86,16 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 	},
 
 
+	setDisabled: function() {
+		this.addCls('disabled');
+	},
+
+
+	setEnabled: function() {
+		this.removeCls('disabled');
+	},
+
+
 	buildPageMenu: function() {
 		if (!this.store || !this.rendered) { return; }
 
@@ -235,7 +245,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 
 	setPageSize: function(size) {
 		this.pageSize = size;
-		
+
 		this.fireEvent('set-page-size', this.pageSize);
 	},
 

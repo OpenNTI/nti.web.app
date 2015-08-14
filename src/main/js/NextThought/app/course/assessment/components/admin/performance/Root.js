@@ -166,7 +166,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 		//a state so we want to override it, but if we are coming from after
 		//render we don't want to override a previous state.
 		if (fromAfterRender && this.stateRestored) {
-			return;
+			return Promise.resolve();
 		}
 
 		this.stateRestored = true;
@@ -254,6 +254,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			clearEl: {click: this.clearSearch.bind(this)}
 		});
 
+		me.mon(me.header, {
+			inputEl: {keydown: this.maybeStopFilter.bind(this)}
+		});
+
 		me.mon(grid, {
 			cellClick: this.onCellClick.bind(this)
 		});
@@ -333,6 +337,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	showStudentMenu: function() {
+		if (this.applyingState) { return; }
+
 		this.studentMenu.showBy(this.header.studentEl, 'tl-tl?', this.studentMenu.offset);
 	},
 
@@ -464,6 +470,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	showItemMenu: function() {
+		if (this.applyingState) { return; }
+
 		this.itemMenu.showBy(this.header.itemEl, 'tl-tl?', this.itemMenu.offset);
 	},
 
@@ -487,7 +495,16 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 	},
 
 
+	maybeStopFilter: function(e) {
+		if (this.applyingState) {
+			e.stopEvent();
+		}
+	},
+
+
 	changeNameFilter: function() {
+		if (this.applyingState) { return; }
+
 		this.searchKey = this.header.inputEl.getValue();
 		this.updateFilter();
 	},
@@ -571,9 +588,21 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 	},
 
 
+	disableState: function() {
+		this.header.addCls('disabled');
+		this.pageHeader.setDisabled();
+	},
+
+
+	enableState: function() {
+		this.header.removeCls('disabled');
+		this.pageHeader.setEnabled();
+	},
+
+
 	applyState: function(state) {
 		//if we are already applying state or the state hasn't changed and the store has loaded don't do anything
-		if (this.applyingState) { return; }
+		if (this.applyingState) { return Promise.resolve(); }
 
 		if (this.isSameState(state) && this.initialLoad) {
 			this.refresh();
@@ -586,6 +615,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			params = store.proxy.extraParams;
 
 		me.applyingState = true;
+		me.disableState();
 		state = state || {};
 
 		filters.push(state.studentFilter || this.studentFilter || 'ForCredit');
@@ -629,6 +659,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 					me.initialLoad = true;
 
 					delete me.applyingState;
+					me.enableState();
 
 					fulfill();
 				}
@@ -664,7 +695,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 		if (this.searchKey) {
 			state.searchKey = this.searchKey;
-			if(this.currentPage && this.currentPage > 1){
+			if (this.currentPage && this.currentPage > 1) {
 				this.currentPage = 1;
 			}
 		} else {
