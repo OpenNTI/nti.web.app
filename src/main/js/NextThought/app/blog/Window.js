@@ -41,7 +41,7 @@ Ext.define('NextThought.app.blog.Window', {
 
 
 	onClose: function() {
-		this.doClose(this.activeTopic);
+		this.doClose(this.activeBlogPost);
 	},
 
 

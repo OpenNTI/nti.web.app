@@ -78,6 +78,10 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 	},
 
 	userChanged: function(user, isMe) {
+		if(this.activeUser == user){
+			return Promise.resolve();
+		}
+		
 		this.activeUser = user;
 		this.isMe = isMe;
 
