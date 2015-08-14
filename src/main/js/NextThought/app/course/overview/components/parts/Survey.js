@@ -16,7 +16,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 			{tag: 'span', cls: 'question-count', html: '{questions:plural("Question")}'},
 			{tag: 'span', cls: 'responses', html: 'No Responses Yet'}
 		]},
-		{cls: 'button x-btn x-btn-primary-large', html: 'Take'}
+		{cls: 'button x-btn x-btn-primary-large{buttonCls}', html: '{buttonTxt}'}
 	]),
 
 
@@ -36,9 +36,9 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 			ntiid: ntiid,
 			questionCount: n.getAttribute('question-count'),
 			submissions: n.getAttribute('submissions'),
-			isSubmitted: Service.getLinkFrom(links, 'History')
+			isSubmitted: Service.getLinkFrom(links, 'History'),
+			isClosed: n.getAttribute('isClosed')
 		};
-
 
 		this.callParent([config]);
 	},
@@ -49,7 +49,9 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			title: this.data.title,
-			questions: this.data.questionCount
+			questions: this.data.questionCount,
+			buttonTxt: this.data.isSubmitted ? 'Review' : this.data.isClosed ? 'Closed' : 'Take',
+			buttonCls: this.data.isClosed ? ' closed' : ''
 		});
 	},
 
@@ -69,12 +71,13 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 	},
 
 
-	onStart: function() {
+	onStart: function(e) {
 		var ntiid = this.data.ntiid;
 
-
-		this.navigate(NextThought.model.PageInfo.fromOutlineNode({
-			href: ntiid
-		}));
+		if (!e.getTarget('.closed')) {
+			this.navigate(NextThought.model.PageInfo.fromOutlineNode({
+				href: ntiid
+			}));
+		}
 	}
 });

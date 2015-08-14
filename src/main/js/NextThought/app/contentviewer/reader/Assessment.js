@@ -80,12 +80,11 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			questions = survey.get('questions') || [],
 			historyLink = survey.getLink('History');
 
-
 		questions.forEach(function(poll) {
 			me.makeAssessmentPoll(poll, survey);
 		});
 
-		if (!historyLink) {
+		if (!historyLink && !survey.get('isClosed')) {
 			this.submission = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessment-quiz-submission', {
 				reader: r, renderTo: c, questionSet: survey,
 				tabIndexTracker: o.tabIndexer,

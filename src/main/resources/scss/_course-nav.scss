@@ -169,6 +169,15 @@
 			top: 50%;
 			right: 15px;
 			margin-top: -20px;
+
+			&.closed {
+				background: $tertiary-grey-alt;
+				color: $secondary-grey;
+				border-color: $tertiary-grey;
+				box-shadow: none;
+				cursor: default;
+				opacity: 0.7;
+			}
 		}
 	}
 
