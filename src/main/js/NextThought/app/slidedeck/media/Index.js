@@ -240,23 +240,57 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 		var me = this,
 			mediaId = this.videoId || this.slidedeckId;
 
-		me.PathActions.getPathToObject(mediaId)
-			.then(function(path) {
-				var i,
-					parentPath = [];
-
-				for (i = 0; i < path.length; i++) {
-					if (path[i].get('NTIID') === mediaId) {
-						break;
-					}
-
-					parentPath.push(path[i]);
-				}
-
-				me.Router.root.attemptToNavigateToPath(parentPath);
-			})
+		this.goToParentLesson()
 			.fail(function() {
-				me.pushRootRoute('Library', '/library');
+				me.PathActions.getPathToObject(mediaId)
+					.then(function(path) {
+						var i,
+							parentPath = [];
+
+						for (i = 0; i < path.length; i++) {
+							if (path[i].get('NTIID') === mediaId) {
+								break;
+							}
+
+							parentPath.push(path[i]);
+						}
+
+						me.Router.root.attemptToNavigateToPath(parentPath);
+					})
+					.fail(function() {
+						me.pushRootRoute('Library', '/library');
+					});
 			});
+	},
+
+
+
+	/**
+	 * This function provides a way to go to the parent lesson.
+	 * Now, it's mainly used by the Slidedeck, since its libraryPath is not correct
+	 * For videos, we will resolve the parent lesson based on their library path.
+	 * @return {[type]} [description]
+	 */
+	goToParentLesson: function() {
+		var me = this;
+
+		// video object know how to get the parent path.
+		if (!this.parentLesson || this.videoId) {
+			return Promise.reject();
+		}
+
+		return new Promise(function(fulfill, reject) {
+			me.PathActions.getPathToObject(me.parentLesson)
+				.then(function(path) {
+					if (path) {
+						// Get rid of the pageInfo part,
+						// since we want to navigate to the CourseOutlineNode.
+						path.pop();
+						me.Router.root.attemptToNavigateToPath(path);
+						fulfill();
+					}
+				})
+				.fail(reject);
+		});
 	}
 });

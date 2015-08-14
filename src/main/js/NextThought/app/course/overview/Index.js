@@ -239,7 +239,8 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 
 	showMediaViewer: function(route, subRoute) {
-		var me = this;
+		var me = this,
+			lessonId = ParseUtils.decodeFromURI(route.params.lesson);
 
 		if (!me.activeMediaWindow) {
 			me.activeMediaWindow = me.add({
@@ -267,6 +268,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		me.getLayout().setActiveItem(me.activeMediaWindow);
 		me.activeMediaWindow.currentBundle = me.currentBundle;
+		me.activeMediaWindow.parentLesson = lessonId;
 		return me.activeMediaWindow.handleRoute(subRoute, route.precache);
 	},
 
