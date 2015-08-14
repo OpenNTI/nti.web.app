@@ -40,7 +40,7 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Slide', {
 	},
 
 	containerIdForData: function() {
-		return this.slide && this.slide.get('ContainerId');
+		return this.slide && this.slide.getId();
 	},
 
 
@@ -75,19 +75,16 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Slide', {
 	openNoteEditor: function(e) {
 		var data = {startTime: this.slide.get('video-start'), endTime: this.slide.get('video-end')},
 			dom = this.slide.get('dom-clone'),
-			img = dom.querySelector('img'), range;
+			img = dom.querySelector('img');
 
 		if (!img) {
 			console.error('Missing img for the slide.');
 			return false;
 		}
 
-		range = dom.ownerDocument.createRange();
-		range.selectNode(img);
-		data.range = range;
 		data.isDomRange = true;
-
-		data.containerId = this.slide.get('ContainerId');
+		data.range = null;
+		data.containerId = this.slide.getId();
 		data.userDataStore = this.userDataStore;
 		this.fireEvent('show-editor', data, e.getTarget('.add-note-here', null, true));
 	},
