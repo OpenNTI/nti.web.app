@@ -3,7 +3,9 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 	alias: 'widget.media-window-view',
 
 	requires: [
-		'NextThought.app.navigation.path.Actions'
+		'NextThought.app.navigation.path.Actions',
+		'NextThought.app.slidedeck.transcript.parts.Transcript',
+		'NextThought.app.slidedeck.media.Actions'
 	],
 
 	mixins: {
@@ -19,7 +21,7 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 		this.initRouter();
 
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
-
+		this.MediaActions = NextThought.app.slidedeck.media.Actions.create();
 		this.LibraryActions = NextThought.app.library.Actions.create();
 		this.addRoute('/:id', this.showMediaView.bind(this));
 		this.addDefaultRoute(this.showVideoGrid.bind(this));
@@ -31,13 +33,27 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 		var basePath = route.precache.basePath,
 			rec = route.precache.rec,
 			options = route.precache.options || {},
-			me = this;
+			me = this, id;
 
-		this.videoId = ParseUtils.decodeFromURI(route.params.id);
-		this.video = route.precache.video;
+		id = ParseUtils.decodeFromURI(route.params.id);
+
+		if (this.activeMediaView && (this.videoId === id || this.slidedeckId === id)) {
+			// We are already there.
+			return Promise.resolve();
+		}
+
+		this.mediaId = id;
 		options.rec = rec;
 
-		this.PathActions.getPathToObject(this.videoId);
+		this.PathActions.getPathToObject(this.mediaId);
+		if (route.precache.video) {
+			this.video = route.precache.video;
+			this.videoId = this.mediaId;
+		}
+		if (route.precache.slidedeck) {
+			this.slidedeck = route.precache.slidedeck;
+			this.slidedeckId = this.mediaId;
+		}
 
 		if (!me.activeMediaView) {
 			me.activeMediaView = Ext.widget('media-view', {
@@ -48,17 +64,60 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 			});
 		}
 
-		me.resolveVideo(me.videoId)
+		if (this.video) {
+			this.__presentVideo(this.videoId, basePath, options);
+		}
+		else if (this.slidedeck) {
+			this.__presentSlidedeck(this.slidedeckId, this.slidedeck, options);
+		}
+		else {
+			this.resolveVideo(this.mediaId)
+				.then(function(video) {
+					me.video = video;
+					me.videoId = me.mediaId;
+					delete me.slidedeck;
+					delete me.slidedeckId;
+
+					me.__presentVideo(me.mediaId, basePath, options);
+				})
+				.fail(function() {
+					me.__presentSlidedeck(me.mediaId, null, options);
+				});
+		}
+	},
+
+
+	__presentVideo: function(videoId, basePath, options) {
+		var me = this;
+		me.resolveVideo(videoId)
 			.then(function(videoRec) {
 				me.video = videoRec;
 
-				if (!basePath && basePath != '') {
+				if (!Ext.isEmpty(basePath)) {
 					basePath = me.currentBundle.getContentRoots()[0];
 				}
 
  				me.transcript = NextThought.model.transcript.TranscriptItem.fromVideo(me.video, basePath);
 				me.activeMediaView.setContent(me.video, me.transcript, options);
 			});
+	},
+
+
+	__presentSlidedeck: function(slidedeckId, slidedeck, options) {
+		var me = this,
+			p = slidedeck && slidedeck.isModel ? Promise.resolve(slidedeck) : Service.getObject(slidedeckId);
+
+		p.then(function(deck){
+			me.slidedeck = deck;
+			me.slidedeckId = slidedeckId;
+			delete me.video;
+			delete me.videoId;
+
+			me.MediaActions.buildSlidedeckPlaylist(deck)
+				.then( function(obj) {
+					me.activeMediaView.setSlidedeckContent(deck, obj.videos, obj.items, options);
+				});
+		});
 	},
 
 
@@ -127,7 +186,27 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 
 
 	getContext: function() {
-		return this.resolveVideo(this.videoId);
+		var me = this;
+		return new Promise(function(fulfill) {
+			me.resolveVideo(me.mediaId)
+				.then(fulfill)
+				.fail(function() {
+					if (me.slidedeck && me.slidedeck.getId() === me.mediaId) {
+						fulfill(me.slidedeck);
+						return;
+					}
+
+					Service.getObject(me.mediaId).then(fulfill);
+				});
+		});
+	},
+
+
+	containsId: function(contextRecord, id) {
+		if (contextRecord.getId() === this.slidedeckId) {
+			return this.slidedeck.containsSlide(id);
+		}
+		return false;
 	},
 
 
@@ -158,15 +237,16 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 
 
 	exitViewer: function() {
-		var me = this;
+		var me = this,
+			mediaId = this.videoId || this.slidedeckId;
 
-		me.PathActions.getPathToObject(me.videoId)
+		me.PathActions.getPathToObject(mediaId)
 			.then(function(path) {
 				var i,
 					parentPath = [];
 
 				for (i = 0; i < path.length; i++) {
-					if (path[i].get('NTIID') === me.videoId) {
+					if (path[i].get('NTIID') === mediaId) {
 						break;
 					}
 

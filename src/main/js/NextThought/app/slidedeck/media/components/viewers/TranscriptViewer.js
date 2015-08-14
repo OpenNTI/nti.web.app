@@ -78,6 +78,7 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 		this.resourceView = this.add({
 			xtype: 'slidedeck-transcript',
 			transcript: this.transcript,
+			resourceList: this.resourceList,
 			record: this.record,
 			video: this.video,
 			accountForScrollbars: false,

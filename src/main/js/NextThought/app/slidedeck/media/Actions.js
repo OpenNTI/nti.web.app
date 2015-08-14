@@ -5,7 +5,10 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 		'NextThought.app.slidedeck.media.StateStore',
 		'NextThought.webvtt.Transcript',
 		'NextThought.app.userdata.Actions',
-		'NextThought.app.userdata.StateStore'
+		'NextThought.app.userdata.StateStore',
+		'NextThought.app.navigation.path.Actions',
+		'NextThought.model.Slidedeck',
+		'NextThought.app.library.Actions'
 	],
 
 	constructor: function() {
@@ -14,6 +17,8 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 		this.MediaUserDataStore = NextThought.app.slidedeck.media.StateStore.getInstance();
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
 		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
+		this.PathActions = NextThought.app.navigation.path.Actions.create();
+		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
 
@@ -201,5 +206,234 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 				}
 			});
 		});
-	}
+	},
+
+
+	loadSlidedeck: function(slidedeckId) {
+		return Service.getObject(slidedeckId);
+	},
+
+
+	getBasePath: function(obj) {
+		var me = this;
+		return new Promise(function(fulfill, reject) {
+			me.PathActions.getPathToObject(obj)
+				.then(function(path) {
+					var course = path[0], p;
+
+					if (course) {
+						p = course.getContentRoots()[0];
+					}
+					fulfill(p);
+				})
+				.fail(reject);
+		});
+	},
+
+
+	fixSlideImagesPath: function(slides, basePath) {
+		Ext.each(slides || [], function(slide) {
+			var image = slide.get('image');
+			if (image) {
+				image = (basePath || '') + image;
+				slide.set('image', image);
+			}
+		});
+	},
+
+
+	buildSlidedeckPlaylist: function(slidedeck) {
+		var videos = {},
+			transcripts = {}, me = this, promises,
+			slideStore;
+
+		if (!slidedeck || !(slidedeck instanceof NextThought.model.Slidedeck)) {
+			return Promise.reject();
+		}
+
+		slideStore = new Ext.data.Store({
+				proxy: 'memory',
+				model: 'NextThought.model.Slide',
+				data: slidedeck.get('Slides') || []
+			});
+
+		this.setSlideDocContent(slidedeck, slideStore);
+
+		promises = Ext.Array.map(slidedeck.get('Videos'), function(slidevideo) {
+			var transcript;
+
+			return new Promise(function(fulfill) {
+				Service.getObject(slidevideo.video_ntiid)
+					.then(function(video) {
+						var obj = video.raw || video.getData();
+						video = NextThought.model.PlaylistItem.create(obj);
+						videos[slidevideo.NTIID] = video;
+
+						return me.getBasePath(slidedeck)
+							.then(function(basePath) {
+								transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
+								transcripts[slidevideo.NTIID] = transcript;
+								me.fixSlideImagesPath(slideStore.getRange(), basePath);
+								fulfill();
+							});
+					});
+			});
+		});
+
+
+		return new  Promise( function(fulfill, reject) {
+			Promise.all(promises)
+				.then(me.__fixSlideContainer.bind(me, slidedeck, slideStore))
+				.then(function() {
+					var items = me.buildSlidedeckComponents(slideStore, videos, transcripts),
+						vids = [], k;
+
+					for (k in videos) {
+						if (videos.hasOwnProperty(k)) {
+							vids.push(videos[k]);
+						}
+					}
+
+					fulfill({videos: vids, items: items});
+				});
+		});
+	},
+
+
+	__fixSlideContainer: function(slidedeck, slideStore) {
+		var me = this;
+
+		return new Promise(function(fulfill) {
+			me.__getSlidedeckContainer(slidedeck)
+				.then(function(containerId) {
+					slideStore.each(function(slide){
+						slide.set('ContainerId', containerId);
+					});
+					fulfill();
+				});
+		});
+	},
+
+
+	__getSlidedeckContainer: function(slidedeck) {
+		var me = this;
+		return new Promise(function(fulfill){
+			me.PathActions.getPathToObject(slidedeck)
+			.then(function(path) {
+				var last = path && path.last();
+				if (!last) { reject(); }
+
+				fulfill(last.getId());
+			});
+		});
+	},
+
+
+	setSlideDocContent: function(slidedeck, slideStore) {
+		var me = this,
+			cid;
+
+		return new Promise(function(fulfill, reject) {
+			me.__getSlidedeckContainer(slidedeck)
+				.then(Service.getObject.bind(Service))
+				.then(me.loadPageContent.bind(me))
+				.then(me.parseSlideDocFragments.bind(me, cid, slideStore))
+				.then(fulfill);
+			});
+	},
+
+
+	loadPageContent: function(pageInfo) {
+		var me = this,
+			link = pageInfo.getLink('content'),
+			contentPackage = pageInfo.get('ContentPackageNTIID');
+
+		return Promise.all([
+				Service.request(link),
+				me.LibraryActions.findContentPackage(contentPackage)
+			]).then(function(results) {
+				var xml = results[0],
+					content = results[1];
+
+				xml = (new DOMParser()).parseFromString(xml, 'text/xml');
+
+				if (xml.querySelector('parsererror')) {
+					return Promise.resolve('');
+				}
+				return Promise.resolve(xml);
+			});
+	},
+
+
+	parseSlideDocFragments: function(containerId, slideStore, doc) {
+		var slideFrags = Ext.DomQuery.select('object[type="application/vnd.nextthought.slide"]', doc),
+			fragsMap = {};
+
+		Ext.each(slideFrags, function(dom) {
+			var id = dom.getAttribute('data-ntiid'),
+				frag = (dom.ownerDocument || document).createDocumentFragment();
+			frag.appendChild(dom);
+			fragsMap[id] = frag;
+		});
+
+		slideStore.each(function(slide) {
+			console.log('slide id: ', slide.getId(), ', doc fragment: ', fragsMap[slide.getId()]);
+			slide.set('dom-clone', fragsMap[slide.getId()]);
+		});
+
+		return Promise.resolve();
+	},
+
+
+	buildSlidedeckComponents: function(slideStore, videosMap, transcriptsMap){
+		var isTitle = true, items = [];
+
+        slideStore.each(function(slide) {
+            var vid = slide.get('video-id'),
+                t = transcriptsMap && transcriptsMap[vid],
+                video = videosMap && videosMap[vid],
+                start = slide.get('video-start'),
+                end = slide.get('video-end');
+
+            console.log('slide starts: ', start, ' slide ends: ', end, ' and has transcript for videoid: ', t && t.get('associatedVideoId'));
+
+            if (video && isTitle) {
+                items.push({
+                    xtype: 'video-title-component',
+                    video: video
+                });
+
+                isTitle = false;
+            }
+
+            items.push({
+                xtype: 'slide-component',
+                slide: slide,
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                }
+            });
+
+            if (t) {
+                // NOTE: make a copy of the transcript record,
+                // since many slide can have the same transcript but different start and end time.
+                t = t.copy();
+                t.set('desired-time-start', start);
+                t.set('desired-time-end', end);
+
+                items.push({
+                    xtype: 'video-transcript',
+                    flex: 1,
+                    transcript: t,
+                    layout: {
+                        type: 'vbox',
+                        align: 'stretch'
+                    }
+                });
+            }
+        }, this);
+
+        return items;
+    }
 });

@@ -15,6 +15,12 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Slide', {
 		]}
 	]),
 
+	contextTpl: Ext.DomHelper.markup([
+		{cls: 'image-wrap', cn: [
+			{tag: 'img', src: '{image}'}
+		]}
+	]),
+
 	ui: 'slide',
 
 	renderSelectors: {
@@ -34,7 +40,7 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Slide', {
 	},
 
 	containerIdForData: function() {
-		return this.slide && this.slide.get('ContainerId');
+		return this.slide && this.slide.getId();
 	},
 
 
@@ -67,24 +73,12 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Slide', {
 	},
 
 	openNoteEditor: function(e) {
-		var data = {startTime: this.slide.get('video-start'), endTime: this.slide.get('video-end')},
-			dom = this.slide.get('dom-clone'),
-			img = dom.querySelector('img'), range;
-
-		if (!img) {
-      //			onError();
-			console.error('Missing img for the slide.');
-			return false;
-		}
-
-		range = dom.ownerDocument.createRange();
-		range.selectNode(img);
-
-		data.range = range;
-		data.containerId = this.slide.get('ContainerId');
-		data.userDataStore = this.userDataStore;
+		var data = {startTime: this.slide.get('video-start'), endTime: this.slide.get('video-end')};
 
 		data.isDomRange = true;
+		data.range = null;
+		data.containerId = this.slide.getId();
+		data.userDataStore = this.userDataStore;
 		this.fireEvent('show-editor', data, e.getTarget('.add-note-here', null, true));
 	},
 
@@ -142,17 +136,17 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Slide', {
 	},
 
 
-  isTimeWithinTimeRange: function(time) {
-    var start = this.slide.get('video-start'),
+    isTimeWithinTimeRange: function(time) {
+		var start = this.slide.get('video-start'),
             end = this.slide.get('video-end');
 
-    return start <= time && time <= end;
-  },
+        return start <= time && time <= end;
+    },
 
 
-  getElementAtTime: function(time) {
-    return this.slideImage;
-  },
+    getElementAtTime: function(time) {
+		return this.slideImage;
+	},
 
 
 	wantsRecord: function(rec) {

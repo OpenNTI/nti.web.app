@@ -1,0 +1,14 @@
+
+.context-card {
+	.image-context {
+		img {
+			max-width: 640px;
+		}
+
+		&.slide {
+			img {
+				margin-left: 38px;
+			}
+		}
+	}
+}

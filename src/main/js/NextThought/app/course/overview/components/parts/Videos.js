@@ -25,7 +25,8 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 		'NextThought.model.PlaylistItem',
 		'NextThought.app.video.Video',
 		'Ext.data.reader.Json',
-		'NextThought.app.library.Actions'
+		'NextThought.app.library.Actions',
+		'NextThought.app.slidedeck.media.Actions'
 	],
 
 	ui: 'course',
@@ -491,7 +492,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 		var me = this,
 			m = me.getSelectedVideo(),
 			li = me.locationInfo,
-			slide;
+			slide, slideActions;
 
 
 		if (!e.getTarget('.launch-player') && e.getTarget('.transcripts')) {
@@ -508,19 +509,9 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 
 			slide = m.get('slidedeck');
 			if (Ext.isEmpty(slide)) {
-				// me.fireEvent('start-media-player', me.videoIndex[m.getId()], m.getId(), getURL(li.root), null, {
-				// 	closeCallback: function() {
-				// 		me.setProgress();
-				// 	}
-				// });
 				me.navigateToTarget(m, getURL(li.root));
 			} else {
-				me.fireEvent('open-slide-deck', li.ContentNTIID, slide,
-					NextThought.model.PlaylistItem.create(Ext.apply(
-							{
-								NTIID: m.getId()
-							},
-							me.videoIndex[m.getId()])));
+				me.navigateToSlidedeck(slide);
 			}
 			return;
 		}
@@ -548,11 +539,22 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 			return;
 		}
 
-		var o = this.videoIndex[videoItem.getId()];
+		var o = this.videoIndex[videoItem.getId()],
 			video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
 
 		video.basePath = basePath;
 		this.navigate.call(null, video);
+	},
+
+
+	navigateToSlidedeck: function(slidedeckId) {
+		var me = this;
+		if (slidedeckId) {
+			Service.getObject(slidedeckId)
+				.then(function(slidedeck) {
+					me.navigate.call(null, slidedeck);
+				});
+		}
 	},
 
 

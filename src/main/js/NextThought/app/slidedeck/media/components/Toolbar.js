@@ -129,7 +129,10 @@ Ext.define('NextThought.app.slidedeck.media.components.Toolbar', {
 
 	showVideoPlayerPicker: function() {
 		console.log('clicked on show the video player picker..');
-		this.createViewPlayerPicker();
+
+		if (!this.videoPicker) {
+			this.createViewPlayerPicker();
+		}
 		this.videoPicker.showBy(this.pickerEl, 'tl-tl', [0, 0]);
 	},
 

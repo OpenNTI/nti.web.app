@@ -468,11 +468,11 @@ Ext.define('NextThought.app.Body', {
 
 
 	getRouteForPath: function(path) {
-		var root = path[0],
-			subPath = path.slice(1),
+		var root = path && path[0],
+			subPath = path && path.slice(1),
 			route;
 
-		if (root.isCourse) {
+		if (root && root.isCourse) {
 			route = this.getRouteForCourse(root, subPath);
 		} else if (root instanceof NextThought.model.User) {
 			route = this.getRouteForUser(root, subPath);

@@ -66,8 +66,9 @@ Ext.define('NextThought.app.context.components.list.Content', {
 
 
 	setIcon: function(path) {
-		var iconUrl = '',
-			i;
+		var iconUrl = '', i;
+
+		if (!this.iconEl) { return; }
 
 		for (i = path.length - 1; i >= 0; i--) {
 			iconUrl = path[i].getIcon && path[i].getIcon();

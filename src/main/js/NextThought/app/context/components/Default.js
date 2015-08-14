@@ -30,9 +30,17 @@ Ext.define('NextThought.app.context.components.Default', {
 	isInContext: function() {
 		var context = this.ContextStore.getContext(),
 			currentContext = context.last(),
-			contextRecord = currentContext && currentContext.obj;
+			contextRecord = currentContext && currentContext.obj,
+			currentCmp = currentContext && currentContext.cmp, inContext = false;
 
-		return contextRecord && contextRecord.get('NTIID') === this.containerId;
+		// Add a way for the current component to let us know if it contains a given containerId
+		// i.e. Slide notes have the slide as the container, which is contained in by a slidedeck
+		// It can be applied to different cases though.
+		if (currentCmp && currentCmp.containsId) {
+			inContext = currentCmp.containsId(contextRecord, this.containerId);
+		}
+
+		return inContext || contextRecord && contextRecord.get('NTIID') === this.containerId;
 	},
 
 

@@ -41,7 +41,7 @@ Ext.define('NextThought.mixins.Avatar', {
 		getUsernameHash: function(str) {
 			var hash = 0, c, i;
 
-			if (str.length === 0) { return hash; }
+			if (!str || str.length === 0) { return hash; }
 
 			for (i = 0; i < str.length; i++) {
 				c = str.charCodeAt(i);
