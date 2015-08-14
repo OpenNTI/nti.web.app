@@ -145,6 +145,11 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 		if (this.isActive()) {
 			return;
 		}
+
+		if (this.questionSet.associatedAssignment && this.submitted) {
+			return;
+		}
+
 		delete this.allowResettingAssignment;
 		console.log('New status is active');
 		this.state = 'active';
@@ -160,6 +165,10 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 
 	moveToInActive: function() {
 		if (this.isInActive()) {
+			return;
+		}
+
+		if (this.questionSet.associatedAssignment && this.submitted) {
 			return;
 		}
 
@@ -245,6 +254,14 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 		this.answeredMap[question.getId()][part.id] = count;
 		this.reflectStateChange();
 		return status;
+	},
+
+
+	historyUpdated: function() {
+		if (this.submitted) {
+			this.submitted = false;
+			this.moveToSubmitted();
+		}
 	},
 
 
@@ -368,6 +385,8 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 				.then(function(deleted) {
 					if (deleted) {
 						me.fireEvent('assignment-reset');
+						me.reset();
+						me.moveToActive();
 						return finish();
 					}
 

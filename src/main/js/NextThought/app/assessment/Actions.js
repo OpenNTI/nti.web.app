@@ -171,7 +171,7 @@ Ext.define('NextThought.app.assessment.Actions', {
 
 
 	saveProgress: function(questionSet, submissionData, startTime) {
-		var data = this.__getDataForSubmission(questionSet, submissionData, '', startTime),
+		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, '', startTime),
 			qsetSubmission, assignmentSubmission,
 			assignment = questionSet.associatedAssignment,
 			url = assignment && assignment.getLink('Savepoint');

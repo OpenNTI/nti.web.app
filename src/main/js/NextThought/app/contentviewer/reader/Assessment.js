@@ -193,12 +193,19 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			grade = historyItem.get('Grade'),
 			historyAssignmentId = grade.get('AssignmentId');
 
+		this.injectedAssignmentHistory = historyItem;
+
 		if (historyItem && (assignmentId == historyAssignmentId)) {
 			if (this.injectedAssignment.isTimed) {
 				this.injectedAssignment.updateMetaData(historyItem.get('Metadata'));
 			}
+
 			if (this.feedback) {
 				this.feedback.setHistory(historyItem);
+			}
+
+			if (this.submission) {
+				this.submission.historyUpdated();
 			}
 		}
 
@@ -416,6 +423,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 
 	shouldAllowReset: function() {
 		var history,
+			injectedHistory = this.injectedAssignmentHistory,
 			allow = true;
 
 		//if we have an assignment but not an assignment history default to false
@@ -423,8 +431,8 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			allow = false;
 		} else if (this.injectedAssignmentHistory) {
 			//otherwise if the injected history has allowReset allow it
-			history = this.injectedAssignmentHistory.get('history');
-			allow = history && !!history.allowReset();
+			history = injectedHistory.get('history') || injectedHistory;
+			allow = history && history.allowReset && !!history.allowReset();
 		}
 
 		return allow;
@@ -433,7 +441,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 
 	resetAssignment: function() {
 		var me = this,
-			history = me.injectedAssignmentHistory.get('history'),
+			history = me.injectedAssignmentHistory.get('history') || me.injectedAssignmentHistory,
 			reset = history && history.resetAssignment ? history.resetAssignment(isMe(history.get('Creator'))) : Promise.reject();
 
 		return reset
@@ -532,7 +540,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		});
 
 		if (!(h instanceof NextThought.model.courseware.UsersCourseAssignmentHistoryItem)) {
-			h = h && h.get('history');
+			h = h && (h.get('history') || h);
 		}
 
 		if (me.injectedAssignment) {
