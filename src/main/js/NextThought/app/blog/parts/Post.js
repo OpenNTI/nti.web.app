@@ -133,11 +133,6 @@ Ext.define('NextThought.app.blog.parts.Post', {
 			}
 		}
 
-		AnalyticsUtil.getResourceTimer(this.record.getId(), {
-			type: 'thought-viewed',
-			blog_id: this.record.getId()
-		});
-
 		this.record.addObserverForField(this, 'sharedWith', this.updateSharedWith, this);
 	},
 
@@ -205,7 +200,6 @@ Ext.define('NextThought.app.blog.parts.Post', {
 
 
 	onDestroy: function() {
-		AnalyticsUtil.stopResourceTimer(this.record.getId(), 'thought-viewed');
 		this.closeView();
 		this.callParent(arguments);
 	},

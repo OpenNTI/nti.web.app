@@ -116,7 +116,7 @@ Ext.define('NextThought.app.blog.Window', {
 		}
 
 		function stopTimer() {
-			if (me.currentAnalyticId && me.hasTimer) {
+			if (me.currentAnalyticId && me.hasCurrentTimer) {
 				delete me.hasCurrentTimer;
 				AnalyticsUtil.stopResourceTimer(me.currentAnalyticId, 'thought-viewed');
 			}
