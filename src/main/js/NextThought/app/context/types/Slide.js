@@ -27,31 +27,21 @@ Ext.define('NextThought.app.context.types.Slide', {
 
 
 	getBasePath: function(obj) {
-		var me = this;
+		var slidedeckId = obj && obj.get('slidedeckid'),
+			me = this;
 
-		return new Promise(function(fulfill, reject) {
-			if (me.course && me.course.getContentRoots) {
-				fulfill(me.course.getContentRoots()[0]);
-			} else {
-				me.PathActions.getPathToObject(obj)
-					.then(function(path) {
-						var course = path[0], p;
+		if (!slidedeckId) {
+			return Promise.resolve();
+		}
 
-						if (course) {
-							p = course.getContentRoots()[0];
-						}
-						fulfill(p);
-					})
-					.fail(reject);
-			}
-		});
+		return this.MediaActions.loadSlidedeck(slidedeckId)
+			.then(this.MediaActions.getBasePath.bind(this.MediaActions));
 	},
 
 
 	parse: function(slide, kind) {
 		var context, cmp, me = this, store, t;
 
-		debugger;
 		return this.getBasePath(slide)
 				.then(function(basePath) {
 					return Promise.resolve(basePath);
