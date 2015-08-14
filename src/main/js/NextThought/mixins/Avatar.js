@@ -111,8 +111,7 @@ Ext.define('NextThought.mixins.Avatar', {
 				// when it's been temporary set to a unresolved or initials avatar while we verify if it's a valid URL.
 				// Since this promise fulfills asynchronously, the view that requested
 				// it could be rendered when it fulfills within the next even loop.
-				// TODO: change the name of the event to something more specific.
-				me.fireEvent('changed', me);
+				me.fireEvent('avatarChanged', me);
 			});
 	},
 

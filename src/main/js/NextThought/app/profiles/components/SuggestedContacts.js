@@ -49,9 +49,18 @@ Ext.define('NextThought.app.profiles.components.SuggestedContacts', {
 				me.hide();
 			});
 	},
-	
+
 	setUser: function(){
 		this.setEntity.apply(this, arguments);
+	},
+
+
+	addEntry: function(data) {
+		var entry = Ext.get(this.entryTpl.append(this.entriesEl, data));
+
+		if (data && data.entity) {
+			this.mon(data.entity, 'avatarChanged', this.updateAvatar.bind(this, entry));
+		}
 	},
 
 	getValues: function() {}
