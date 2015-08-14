@@ -34,7 +34,7 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.VideoViewer',{
 
 
     buildResourceView: function(){
-        if(!this.transcript){
+        if(!this.transcript && !this.resourceList){
             this.callParent(arguments);
         }
     },
