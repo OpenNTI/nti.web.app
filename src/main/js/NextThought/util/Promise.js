@@ -273,7 +273,7 @@ Promise.all = Promise.all || function(promises) {
  */
 Promise.first = Promise.first || function(values) {
 	if (!Ext.isArray(values) || !values.length) {
-		return Promsie.reject('No promise');
+		return Promise.reject('No promise');
 	}
 
 	return new Promise(function(fulfill, reject) {
