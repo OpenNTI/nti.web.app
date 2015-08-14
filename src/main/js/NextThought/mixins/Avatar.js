@@ -152,7 +152,7 @@ Ext.define('NextThought.mixins.Avatar', {
 		var background = this.get('backgroundURL'),
 			username = this.get('Username');
 
-		if (background && false) {
+		if (background) {
 			return Promise.resolve(background);
 		}
 
