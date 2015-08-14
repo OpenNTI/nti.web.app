@@ -15,5 +15,20 @@ Ext.define('NextThought.model.Slidedeck', {
 		{ name: 'DCTitle', type: 'string' },
 		{ name: 'description', type: 'string' },
 		{ name: 'href', type: 'string'}
-	]
+	],
+
+	containsSlide: function(slide) {
+		var slides = this.get('Slides') || [],
+			slideId = slide && slide.isModel ? slide.getId() : slide,
+			result = false;
+
+		Ext.each(slides, function(slide){
+			if (slide.NTIID === slideId) {
+				result = true;
+				return false;
+			}
+		});
+
+		return result;
+	}
 });

@@ -202,6 +202,14 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 	},
 
 
+	containsId: function(contextRecord, id) {
+		if (contextRecord.getId() === this.slidedeckId) {
+			return this.slidedeck.containsSlide(id);
+		}
+		return false;
+	},
+
+
 	bundleChanged: function(bundle) {
 		if (bundle && bundle !== this.currentBundle) {
 			// TODO: Do more, maybe?
