@@ -69,6 +69,10 @@ Ext.define('NextThought.model.UserSearch', {
 	constructor: function() {
 		this.callParent(arguments);
 		this.initAvatar();
+	},
+
+	isUnresolved: function() {
+		return this.Unresolved === true;
 	}
 
 }, function() {
