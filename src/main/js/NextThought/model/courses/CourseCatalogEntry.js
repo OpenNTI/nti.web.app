@@ -244,21 +244,21 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		return false;
 	},
 
-	isArchived: function(){
-        var end = this.get('EndDate'),
-            now = new Date();
-        return end && end.getTime() < now.getTime();
+	isArchived: function() {
+		var end = this.get('EndDate'),
+			now = new Date();
+		return end && end.getTime() < now.getTime();
 	},
-	
-	isCurrent: function(){
+
+	isCurrent: function() {
 	   return !(this.isUpcoming() || this.isArchived());
 	},
-	
-	isUpcoming: function(){
-	    var start = this.get('StartDate'),
-	        now = new Date();
-	        
-	    return start && start.getTime() > now.getTime();
+
+	isUpcoming: function() {
+		var start = this.get('StartDate'),
+			now = new Date();
+
+		return start && start.getTime() > now.getTime();
 	},
 
 	findByMyCourseInstance: function() {
@@ -328,7 +328,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 			query = Ext.Object.toQueryString(params, true),
 			a = document.createElement('a');
 
-		a.setAttribute('href', './');
+		a.setAttribute('href', './paymentcomplete');
 		a.search = query;
 
 		return a.href;

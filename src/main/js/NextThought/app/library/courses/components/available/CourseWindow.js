@@ -140,7 +140,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		this.addRoute('/', this.showCourses.bind(this));
 		this.addRoute('/:id', this.showCourseDetail.bind(this));
 		this.addRoute('/:id/redeem/:token', this.showRedeemToken.bind(this));
-
+		this.addRoute('/:id/paymentcomplete', this.showPaymenComplete.bind(this));
 
 		this.addDefaultRoute('/');
 		this.on('beforeclose', this.onBeforeClose, this);
@@ -544,6 +544,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 				steps: me.CourseEnrollmentStore.getEnrollmentSteps(course, name, type, config),
 				course: course
 			});
+			me.removeMask();
 		}
 
 		if (!me.courseEnrollment) {
@@ -572,10 +573,24 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			'enrollment-enrolled-complete': me.CourseEnrollmentActions.refreshEnrolledCourses.bind(me.CourseEnrollmentActions)
 		});
 
-
 		me.getLayout().setActiveItem(me.courseEnrollment);
+
 		me.updateButtons();
 		me.closeMsg();
+	},
+
+
+	showPaymenComplete: function(route, subRoute) {
+		var mostRecent = this.CourseStore.getMostRecentEnrollmentCourse();
+
+		this.showTabpanel();
+
+		if (mostRecent && mostRecent.getEnrollmentOption('FiveminuteEnrollment')) {
+			this.showEnrollmentOption(mostRecent, 'FiveminuteEnrollment');
+			return Promise.resolve;
+		}
+
+		return this.showCourseDetail(route, subRoute);
 	},
 
 
