@@ -7,7 +7,8 @@ Ext.define('NextThought.app.chat.components.Window', {
 		'NextThought.app.chat.components.Entry',
 		'NextThought.app.chat.StateStore',
 		'NextThought.app.groups.Actions',
-		'NextThought.app.groups.StateStore'
+		'NextThought.app.groups.StateStore',
+		'NextThought.app.chat.transcript.Pager'
 		// 'NextThought.view.chat.Gutter' //,
 		// 'NextThought.view.chat.WindowManager'
 	],
@@ -88,6 +89,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 		this.ChatActions = NextThought.app.chat.Actions.create();
 		this.GroupActions = NextThought.app.groups.Actions.create();
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
+		this.Pager = NextThought.app.chat.transcript.Pager.create();
 
 		this.setChatStatesMap();
 		this.logView = this.down('chat-log-view');
@@ -186,6 +188,8 @@ Ext.define('NextThought.app.chat.components.Window', {
 
 		//Update the presence of the users
 		me.onlineOccupants = me.onlineOccupants || [];
+
+		me.Pager.getChatSummariesForOccupants(roomInfo.get('Occupants'));
 
 		UserRepository.getUser(roomInfo.get('Occupants'), function(users) {
 
