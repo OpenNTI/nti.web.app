@@ -282,7 +282,9 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 
 
 	switchPath: function(menu, item) {
-		this.doNavigation(item.title || '', item.route, item.precache || {});
+		if (item) {
+			this.doNavigation(item.title || '', item.route, item.precache || {});
+		}
 	},
 
 
