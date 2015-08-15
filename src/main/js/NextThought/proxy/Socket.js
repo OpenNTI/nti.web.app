@@ -14,6 +14,7 @@ Ext.define('NextThought.proxy.Socket', {
 			socket: null,
 			control: {
 				//'connect': function(){me.onConnect.apply(me, arguments);},
+				'reconnect': function(){me.onReconnect.apply(me, arguments);},
 				'serverkill': function() {me.onKill.apply(me, arguments);},
 				'error': function() {me.onError.apply(me, arguments);},
 				'disconnect': function() {me.onDisconnect.apply(me, arguments);},
@@ -206,6 +207,12 @@ Ext.define('NextThought.proxy.Socket', {
 		ds.count++;
 		if (this.isDebug) {
 			console.debug('Socket Disconnect ' + JSON.stringify(arguments) + ' count ' + ds.count);
+		}
+	},
+
+	onReconnect: function(){
+		if(this.isDebug){
+			console.log('reconnecting');
 		}
 	},
 
