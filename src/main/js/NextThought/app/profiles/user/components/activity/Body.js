@@ -30,6 +30,21 @@ Ext.define('NextThought.app.profiles.user.components.activity.Body', {
 		this.newPostCmp.onNewPost = this.onNewPost.bind(this);
 
 		this.newPostCmp.hide();
+
+		this.on({
+			'activate': this.onActivate.bind(this),
+			'deactivate': this.onDeactivate.bind(this)
+		});
+	},
+
+
+	onActivate: function() {
+		this.activityCmp.fireEvent('activate');
+	},
+
+
+	onDeactivate: function() {
+		this.activityCmp.fireEvent('deactivate');
 	},
 
 

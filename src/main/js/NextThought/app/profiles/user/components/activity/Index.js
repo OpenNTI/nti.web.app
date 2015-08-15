@@ -3,7 +3,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 	alias: 'widget.profile-user-activity',
 
 	requires: [
-		'NextThought.app.profiles.user.components.activity.Stream',
+		'NextThought.app.profiles.user.components.activity.Body',
 		'NextThought.app.profiles.user.components.activity.Sidebar',
 		'NextThought.app.userdata.Actions'
 	],
