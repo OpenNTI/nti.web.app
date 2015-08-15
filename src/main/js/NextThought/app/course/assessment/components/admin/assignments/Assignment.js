@@ -50,6 +50,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 
 	renderSelectors: {
+		toolbarEl: '.toolbar',
 		rootPathEl: '.toolbar .path.part.root',
 		previousEl: '.toolbar .controls .up',
 		nextEl: '.toolbar .controls .down',
@@ -203,7 +204,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		//a state so we want to override it, but if we are coming from after
 		//render we don't want to override a previous state.
 		if (fromAfterRender && this.stateRestored) {
-			return;
+			return Promise.resolve();
 		}
 
 		state.currentPage = state.currentPage || 1;
@@ -501,9 +502,27 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 	},
 
 
+	setDisabled: function() {
+		if (this.toolbarEl) {
+			this.toolbarEl.addCls('disabled');
+		}
+
+		this.pageHeader.setDisabled();
+	},
+
+
+	setEnabled: function() {
+		if (this.toolbarEl) {
+			this.toolbarEl.removeCls('disabled');
+		}
+
+		this.pageHeader.setEnabled();
+	},
+
+
 	applyState: function(state) {
 		//if we are already applying state or the state hasn't changed and the store has loaded don't do anything
-		if (this.applyingState) { return; }
+		if (this.applyingState) { return Promise.resolve(); }
 
 		if (this.isSameState(state) && this.initialLoad) {
 			this.refresh();
@@ -515,6 +534,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 			params = store.proxy.extraParams;
 
 		me.applyingState = true;
+		me.setDisabled();
 
 		if (!state || state.filter) {
 			params.filter = me.currentFilter = state.filter || 'ForCredit';
@@ -555,6 +575,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 					me.unmask();
 
 					delete me.applyingState;
+					me.setEnabled();
 
 					fulfill();
 				}
@@ -583,15 +604,19 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 	updateColumns: function(filter) {
 		var grid = this.down('grid');
 
-		if(filter === 'ForCredit'){
+		if (filter === 'ForCredit') {
 			grid.showColumn('Username');
-		}else if(filter === 'Open'){
+		} else if (filter === 'Open') {
 			grid.hideColumn('Username');
 		}
 	},
 
 
 	onFiltersClicked: function(el) {
+		if (this.applyingState) {
+			return;
+		}
+
 		this.filterMenu.showBy(el, 'tl-tl', [0, -39]);
 	},
 

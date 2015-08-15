@@ -538,6 +538,22 @@ canvas.x-component-course-assessment {
 			overflow: hidden;
 		}
 
+		&.disabled {
+			.page, .controls {
+				opacity: 0.6;
+				pointer-events: none;
+			}
+
+			.assignment {
+				.meta, .extras {
+					span.link {
+						opacity: 0.6;
+						cursor: default;
+					}
+				}
+			}
+		}
+
 		&::after {
 			content: '';
 			box-shadow: 0 -5px 15px 5px rgba(0,0,0,0.2);
@@ -980,6 +996,11 @@ canvas.x-component-course-assessment {
 	position: relative;
 	font: normal 500 0.9em/3.5em $font;
 
+	&.disabled, .disabled & {
+		opacity: 0.6;
+		pointer-events: none;
+	}
+
 	input {
 		font: normal 500 1em/2 $font;
 		color: $secondary-grey;
@@ -1374,6 +1395,11 @@ canvas.x-component-course-assessment {
 			color: $primary-grey;
 			height: 50px;
 			white-space: nowrap;
+
+			&.disabled {
+				opacity: 0.6;
+				pointer-events: none;
+			}
 
 			.path-items {
 				position: relative;
