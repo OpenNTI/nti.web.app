@@ -90,7 +90,7 @@ Ext.define('NextThought.app.library.Index', {
 		var myCourses = this.down('library-view-course-page');
 
 		if (myCourses) {
-			myCourses.setItems(items)
+			myCourses.setItems(items);
 		}
 	},
 
@@ -157,9 +157,17 @@ Ext.define('NextThought.app.library.Index', {
 				var hasAvailableCourses = me.CourseStore.hasAllCoursesLink(),
 					hasAvailablePurchases = me.PurchaseStore.getPurchasables().length > 0,
 					active = state && state.active,
+					courses = me.CourseStore.getEnrolledCourses(),
+					adminCourses = me.CourseStore.getAdminCourses(),
+					bundles = me.ContentStore.getContentBundles(),
+					packages = me.ContentStore.getContentPackages(),
 					current, options = [];
 
-				if (me.CourseStore.getEnrolledCourses().length > 0 || hasAvailableCourses) {
+				if (!active) {
+					active = adminCourses.length ? 'admins' : courses.length ? 'courses' : 'books';
+				}
+
+				if (courses.length > 0 || hasAvailableCourses) {
 					if (!active || active === 'courses') {
 						current = {
 							text: 'Your Courses',
@@ -171,7 +179,7 @@ Ext.define('NextThought.app.library.Index', {
 							}
 						};
 
-						me.showMyCourses(me.CourseStore.getEnrolledCourses());
+						me.showMyCourses(courses);
 					} else {
 						options.push({
 							text: 'Your Courses',
@@ -180,13 +188,13 @@ Ext.define('NextThought.app.library.Index', {
 					}
 				}
 
-				if (me.CourseStore.getAdminCourses().length > 0) {
+				if (adminCourses.length > 0) {
 					if (active === 'admins') {
 						current = {
 							text: 'Your Administered Courses'
 						};
 
-						me.showMyAdminCourses(me.CourseStore.getAdminCourses());
+						me.showMyAdminCourses(adminCourses);
 					} else {
 						options.push({
 							text: 'Your Administered Courses',
@@ -196,7 +204,7 @@ Ext.define('NextThought.app.library.Index', {
 				}
 
 
-				if (me.ContentStore.getContentBundles().length > 0 || me.ContentStore.getContentPackages().length > 0 || hasAvailablePurchases) {
+				if (bundles.length > 0 || packages.length > 0 || hasAvailablePurchases) {
 					if (active === 'books') {
 						current = {
 							text: 'Your Books'
@@ -209,7 +217,7 @@ Ext.define('NextThought.app.library.Index', {
 							// }
 						};
 
-						me.showMyBooks(me.ContentStore.getContentBundles(), me.ContentStore.getContentPackages());
+						me.showMyBooks(bundles, packages);
 					} else {
 						options.push({
 							text: 'Your Books',
