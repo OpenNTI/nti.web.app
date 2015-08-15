@@ -32,7 +32,7 @@ Ext.define('NextThought.app.whiteboard.Editor', {
 	},
 
 	constructor: function() {
-		this.maxHeight = 635; // FIXME: Naturally we shouldn't hardcode this. But we need some kind of maxHeight.
+		// this.maxHeight = 635; // FIXME: Naturally we shouldn't hardcode this. But we need some kind of maxHeight.
 		this.callParent(arguments);
 	},
 

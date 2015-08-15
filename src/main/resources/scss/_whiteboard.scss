@@ -117,8 +117,21 @@
 	@extend .nti-window;
 	background: #ffffff;
 
+	&.wb-small {
+		.x-panel-whiteboard-editor {
+			.x-panel-body-whiteboard-editor {
+				padding-bottom: 85px;
+			}
+		}
+	}
+
 	.nti-window-footer {
 		overflow: hidden;
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		left: 0;
+		border-top: 1px solid #E1E1E1 !important;
 
 		.footer-region {
 			float: left;
@@ -166,6 +179,8 @@
 .x-panel-whiteboard-editor {
 	.x-panel-body-whiteboard-editor{
 		background: white;
+		max-height: 100vh;
+		padding-bottom: 58px;
 	}
 
 	canvas { 

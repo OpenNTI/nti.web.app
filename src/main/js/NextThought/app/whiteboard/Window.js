@@ -14,6 +14,7 @@ Ext.define('NextThought.app.whiteboard.Window', {
 	minWidth: 750,
 	maxWidth: 750,
 	minHeight: 400,
+	TARGET_HEIGHT: 662,
 
 	resizable: true,
 	maximizable: false,
@@ -173,7 +174,28 @@ Ext.define('NextThought.app.whiteboard.Window', {
 				me.ownerCmp.fireEvent('status-change', {status: 'composing'});
 			}
 		});
+
+		this.onWindowResize();
+		Ext.EventManager.onWindowResize(this.onWindowResize, this);
 	},
+
+
+	onWindowResize: function() {
+		var viewportHeight = Ext.Element.getViewportHeight(),
+			targetH = this.readonly ? this.TARGET_HEIGHT - 142 : this.TARGET_HEIGHT;
+
+		if (!this.el) {
+			return;
+		}
+
+		if (viewportHeight < targetH) {
+			this.el.addCls('wb-small');
+		}
+		else {
+			this.el.removeCls('wb-small');
+		}
+	},
+
 
 	clearAll: function() {
 		var me = this;
