@@ -1,6 +1,10 @@
 Ext.define('NextThought.common.components.Navigation', {
 	extend: 'Ext.Component',
 
+	requires: [
+		'NextThought.common.menus.LabeledSeparator'
+	],
+
 	cls: 'content-navigation',
 
 	tabsTpl: new Ext.XTemplate(Ext.DomHelper.markup(
@@ -25,6 +29,7 @@ Ext.define('NextThought.common.components.Navigation', {
 		{cls: 'content-container', cn: [
 			{cls: 'content', cn: [
 				{cls: 'active-content', html: ''},
+				{cls: 'quick-links disabled', html: ''},
 				{cls: 'tab-container'},
 				{cls: 'active-tab'}
 			]}
@@ -34,6 +39,7 @@ Ext.define('NextThought.common.components.Navigation', {
 
 	renderSelectors: {
 		titleEl: '.content .active-content',
+		quickLinksEl: '.content .quick-links',
 		tabContainerEl: '.content .tab-container',
 		activeTabEl: '.content .active-tab'
 	},
@@ -43,9 +49,85 @@ Ext.define('NextThought.common.components.Navigation', {
 		this.callParent(arguments);
 
 		this.mon(this.tabContainerEl, 'click', this.onTabClick.bind(this));
+		this.mon(this.quickLinksEl, 'click', this.onQuickLinksClicked.bind(this));
 
 		if (this.tabs) {
 			this.setTabs(this.tabs, true);
+		}
+	},
+
+	/**
+	 * Add a list of quick links to other pieces of content
+	 * links config: {
+	 * 		route: String, //the route for the object
+	 * 		title: String, //the title of the route
+	 * 		text: String, //the text to show for this link
+	 * 		active: Boolean // if this is the active link
+	 * 		isLabel: Boolean // if this is just suppose to be a label in the menu
+	 * }
+	 *
+	 * @param {Array} links [description]
+	 */
+	setQuickLinks: function(links) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setQuickLinks.bind(this, links));
+			return;
+		}
+
+		var active, items = [];
+
+		if (!links || !links.length) {
+			this.quickLinksEl.addCls('hidden disabled');
+			return;
+		}
+
+		if (this.__quickLinkMenu) {
+			this.__quickLinkMenu.destroy();
+		}
+
+		links.forEach(function(link) {
+			if (link.active) {
+				active = link;
+			} else if (link.isLabel) {
+				items.push({
+					xtype: 'labeledseparator',
+					cls: 'seperator',
+					text: link.text,
+					height: 1
+				});
+			} else {
+				items.push(link);
+			}
+		});
+
+		this.quickLinksEl.removeCls('hidden');
+
+		if (items.length) {
+			this.quickLinksEl.removeCls('disabled');
+
+			this.__quickLinkMenu = Ext.widget('menu', {
+				cls: 'section-menu quick-link-menu',
+				ui: 'quick-link',
+				floating: true,
+				constrain: true,
+				constrainTo: Ext.getBody(),
+				defaults: {
+					xtype: 'menucheckitem',
+					group: 'quickLinkOption',
+					cls: 'section-option',
+					height: 30,
+					plain: true,
+					listeners: {
+						scope: this,
+						'checkchange': this.quickLinkSelected.bind(this)
+					}
+				},
+				items: items
+			});
+		}
+
+		if (active) {
+			this.quickLinksEl.update(active.text);
 		}
 	},
 
@@ -138,6 +220,25 @@ Ext.define('NextThought.common.components.Navigation', {
 			this.bodyView.onTabChange(tab.getAttribute('data-title'), route + '/' + root, tab);
 		} else {
 			this.bodyView.onTabChange(tab.getAttribute('data-title'), route + '/' + subRoute, tab);
+		}
+	},
+
+
+	quickLinkSelected: function(item) {
+		if (this.bodyView.onQuickLinkNav) {
+			this.bodyView.onQuickLinkNav(item.title, item.route);
+		}
+	},
+
+
+	onQuickLinksClicked: function(e) {
+		var rect = this.quickLinksEl.dom.getBoundingClientRect();
+
+		if (this.__quickLinkMenu) {
+			this.__quickLinkMenu.showBy(this.quickLinksEl);
+
+			this.__quickLinkMenu.el.dom.style.top = rect.bottom + 'px';
+			this.__quickLinkMenu.el.dom.style.left = rect.left + 'px';
 		}
 	}
 });

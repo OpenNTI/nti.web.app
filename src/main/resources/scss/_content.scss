@@ -1,3 +1,7 @@
+.quick-link-menu {
+	position: fixed !important;
+}
+
 .content-navigation {
 	height: $header-height;
 	overflow: hidden;
@@ -49,6 +53,38 @@
 			left: 0;
 			position: relative;
 			transition: opacity 0.5s, left 0.5s;
+			display: inline-block;
+			vertical-align: baseline;
+		}
+
+		.quick-links {
+			display: inline-block;
+			vertical-align: baseline;
+			transition: opacity 0.5s, left 0.5s;
+			position: relative;
+			opacity: 1;
+			left: 0;
+			margin-left: 1em;
+			padding-right: 18px;
+			font-size: 0.875em;
+			font-weight: 600;
+			color: $secondary-grey;
+
+			&.hidden {
+				display: none;
+			}
+
+			&:not(.disabled) {
+				color: $primary-grey;
+				cursor: pointer;
+				opacity: 0.7;
+
+				@include icon('mv-dropdown-arrow', $side: after, $top: 5px, $left: auto, $right: 0);
+
+				&:hover {
+					opacity: 1;
+				}
+			}
 		}
 
 		.active-tab {
@@ -71,7 +107,7 @@
 	li.tab {
 		float: left;
 		margin-right: 1.5em;
-		line-height: 36px;
+		line-height: 34px;
 		cursor: pointer;
 		position: relative;
 		opacity: 1;
@@ -140,8 +176,8 @@
 			left: -5px;
 		}
 
-		.icon, .branding, .active-content, li.tab {
-			opacity: 0;
+		.icon, .branding, .active-content, .quick-links, li.tab {
+			opacity: 0 !important;
 			left: 5px;
 		}
 

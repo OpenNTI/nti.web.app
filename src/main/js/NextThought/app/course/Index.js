@@ -91,6 +91,15 @@ Ext.define('NextThought.app.course.Index', {
 	},
 
 
+	onQuickLinkNav: function(title, route) {
+		var activeRoute = this.getCurrentRoute() || '';
+
+		route = Globals.trimRoute(route) + '/' + Globals.trimRoute(activeRoute);
+
+		this.pushRootRoute(title, route);
+	},
+
+
 	setActiveCourse: function(ntiid, course) {
 		var me = this;
 
@@ -133,6 +142,60 @@ Ext.define('NextThought.app.course.Index', {
 		}
 
 		return me.getActiveCourse;
+	},
+
+
+	getQuickLinks: function() {
+		var bundle = this.activeBundle,
+			now = new Date(),
+			activeId = bundle.getId(),
+			courseStore = this.CourseStore;
+
+		if (!bundle || !bundle.getWrapper) {
+			return Promise.resolve([]);
+		}
+
+		return bundle.getWrapper()
+			.then(function(enrollment) {
+				if (!enrollment.isAdministrative) {
+					return [];
+				}
+
+				var adminCourses = courseStore.getAdminCourses() || [],
+					current = [], archived = [];
+
+
+				adminCourses.forEach(function(course) {
+					var instance = course.get('CourseInstance'),
+						data = instance && instance.asUIData() || {},
+						routeId = data.id && ParseUtils.encodeForURI(data.id),
+						catalog = instance && instance.getCourseCatalogEntry(),
+						endDate = catalog.get('EndDate'),
+						labelData;
+
+					if (data.label) {
+						labelData = {
+							route: '/course/' + routeId,
+							title: data.title,
+							text: data.label,
+							active: data.id === activeId
+						};
+
+						if (endDate < now) {
+							archived.push(labelData);
+						} else {
+							current.push(labelData);
+						}
+					}
+				});
+
+				if (archived.length) {
+					current.push({text: 'Acrhived', isLabel: true});
+					current = current.concat(archived);
+				}
+
+				return current;
+			});
 	},
 
 
@@ -280,6 +343,10 @@ Ext.define('NextThought.app.course.Index', {
 
 	showAssignments: function(route, subRoute) {
 		this.assignmentRoute = subRoute;
+
+		if (!NextThought.app.course.assessment.Index.showTab(this.activeBundle)) {
+			return this.showOverview(route, '');
+		}
 
 		return this.setActiveView('course-assessment-container', [
 				'course-dashboard',
