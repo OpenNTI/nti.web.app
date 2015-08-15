@@ -70,12 +70,15 @@ Ext.define('NextThought.proxy.Socket', {
 			if (newControl.hasOwnProperty(k)) {
 				//We don't want uncaught errors killing the sequence
 				f = this.wrapHandler(newControl[k], k);
-				//if there's already a callback registered, sequence it.
-				x = this.control[k];
-				this.control[k] = x ? Ext.Function.createSequence(x, f) : f;
 
 				if (this.socket) {
+					//this handles sequencing appropriately
 					this.socket.on(k, this.control[k]);
+				}
+				else{
+					//No socket yet so track it (sequencing if necessary) for addition later
+					x = this.control[k];
+					this.control[k] = x ? Ext.Function.createSequence(x, f) : f;
 				}
 			}
 		}
