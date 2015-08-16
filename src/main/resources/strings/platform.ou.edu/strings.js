@@ -16,7 +16,7 @@ NTIStrings['months'] = {
 };
 
 NTIStrings['application.title-bar-prefix'] = 'Janux';
-
+NTIStrings['NextThougth.view.account.activity.joined.community'] = 'Janux';
 
 NTIStrings['UnresolvedUsernamePattern'] = 'Anonymous ####';
 NTIStrings['course.catalog'] = 'Available Courses';
