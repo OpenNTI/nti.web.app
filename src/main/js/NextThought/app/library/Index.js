@@ -164,7 +164,7 @@ Ext.define('NextThought.app.library.Index', {
 					current, options = [];
 
 				if (!active) {
-					active = adminCourses.length ? 'admins' : courses.length ? 'courses' : 'books';
+					active = adminCourses.length ? 'admins' : courses.length || hasAvailableCourses ? 'courses' : 'books';
 				}
 
 				if (courses.length > 0 || hasAvailableCourses) {
