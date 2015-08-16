@@ -42,11 +42,11 @@ Ext.define('NextThought.app.course.info.components.Body', {
 
 	scrollRosterIntoView: function(route, subRoute) {
 		// Set scroll to top. Maybe change scroll based on route and subroute??
-		Ext.getBody().dom.scrollTop = 0;
+		window.scrollTo(0, 0);
 	},
 
 	scrollReportsIntoView: function(route, subRoute) {
-		Ext.getBody().dom.scrollTop = 0;
+		window.scrollTo(0, 0);
 	},
 
 	scrollInfoSectionIntoView: function(route) {
@@ -59,7 +59,7 @@ Ext.define('NextThought.app.course.info.components.Body', {
 
 		route = route && route.path || '/';
 		if (route === '/') {
-			Ext.getBody().dom.scrollTop = 0;
+			window.scrollTo(0, 0);
 			return;
 		}
 
@@ -73,7 +73,7 @@ Ext.define('NextThought.app.course.info.components.Body', {
 		scrollTarget = infoCmp.down(hash);
 		scrollTarget = scrollTarget && scrollTarget.getEl();
 		brect = scrollTarget && scrollTarget.dom.getBoundingClientRect();
-		Ext.getBody().dom.scrollTop = brect.top;
+		window.scrollTo(0, brect.top);
 	}
 
 });
