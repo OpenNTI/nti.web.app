@@ -3,6 +3,13 @@ Ext.define('NextThought.app.context.components.list.RelatedWork', {
 	alias: 'widget.context-relatedwork-list',
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.snippetEl.update(this.content.get('label'));
+	},
+
+
 	setIcon: function() {
 		var iconUrl = this.content.get('icon'),
 
