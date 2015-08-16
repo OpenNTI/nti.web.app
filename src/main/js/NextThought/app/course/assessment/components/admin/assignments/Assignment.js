@@ -668,6 +668,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		}
 
 		if (this.currentPage) {
+			if(!newPage) { this.currentPage = 1; } 
 			state.currentPage = this.currentPage;
 		} else {
 			delete state.currentPage;
