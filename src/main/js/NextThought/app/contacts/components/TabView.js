@@ -68,7 +68,7 @@ Ext.define('NextThought.app.contacts.components.TabView', {
 
 	onActivate: function() {
 		if (!this.rendered) { return; }
-
+		this.alignNavigation();
 		this.navigation.refresh();
 	}
 
