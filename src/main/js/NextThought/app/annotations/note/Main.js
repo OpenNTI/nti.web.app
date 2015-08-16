@@ -272,6 +272,10 @@ Ext.define('NextThought.app.annotations.note.Main', {
 		if (cmp.deleting && c === 0 && (!this.record || this.record.placeholder)) {
 			this.record.destroy();
 			this.destroy();
+
+			if (this.doClose) {
+				this.doClose();
+			}
 		}
 	},
 
@@ -280,7 +284,7 @@ Ext.define('NextThought.app.annotations.note.Main', {
 		var c = this.items.getCount();
 
 		this.callParent(arguments);
-		if (c === 0) {
+		if (c === 0 && this.doClose) {
 			this.doClose();
 		}
 	},
