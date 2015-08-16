@@ -4,6 +4,8 @@ Ext.define('NextThought.model.RelatedWork', {
 
 	isPage: true,
 
+	CONTENT_TYPE: 'application/vnd.nextthought.content',
+
 	statics: {
 		mimeType: 'application/vnd.nextthought.relatedworkref',
 
@@ -48,7 +50,22 @@ Ext.define('NextThought.model.RelatedWork', {
 	},
 
 
+	isContentRef: function() {
+		return this.CONTENT_TYPE === this.get('type');
+	},
+
+
 	getIcon: function() {
 		return this.get('icon');
+	},
+
+
+	getTitle: function() {
+		return this.isContentRef() ? '' : this.get('label');
+	},
+
+
+	shouldBeRoot: function() {
+		return !this.isContentRef();
 	}
 });

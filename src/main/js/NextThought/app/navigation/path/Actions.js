@@ -162,24 +162,28 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 		//Get the path for the record
 		return me.getPathToObject(record)
 			.then(function(path) {
+				var i, titles = [], item;
+
 				//if the first path item is the root bundle, take it off
 				if ((path && rootObject) && path[0].getId() == rootObject.getId()) {
 					path.shift();
 				}
-				//map to item.getTitle && item.getTitle() | filter out empty
-				title = path.map(function(item) {
-					if (item.getTitle && item.getTitle() != '') {
-						return {
-							label: item.getTitle()
-						};
-					} else {
-						return '';
-					}
-				});
 
-				return title.filter(function(value) {
-					return !!value;
-				});
+				for (i = 0; i < path.length; i++) {
+					item = path[i];
+
+					if (item.getTitle && item.getTitle() != '') {
+						titles.push({
+							label: item.getTitle()
+						});
+					}
+
+					if (item.shouldBeRoot && item.shouldBeRoot()) {
+						break;
+					}
+				}
+
+				return titles;
 			})
 			.fail(function(error) {
 				console.error('Unable to get path because  ' + error);
