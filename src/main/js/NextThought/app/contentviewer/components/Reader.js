@@ -326,8 +326,8 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 
 		return new Promise(function(fulfill, reject) {
 			function success(resp) {
-				me.splash.hide();
 				me.getContent().setContent(resp, pageInfo.get('AssessmentItems'), fulfill);
+				me.splash.hide();
 			}
 
 			function failure(r) {
