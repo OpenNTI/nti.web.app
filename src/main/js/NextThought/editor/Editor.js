@@ -17,6 +17,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	enableTitle: false,
 	enableWhiteboards: true,
 	enableVideo: false,
+	enableSaveControls: true,
 
 	saveButtonLabel: 'Save',
 	cancelButtonLabel: 'Cancel',
@@ -38,7 +39,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		]),
 
 	renderSelectors: {
-		saveButtonEl: '.action.save'
+		saveButtonEl: '.action.save',
+		saveControlsEl: '.save-controls'
 	},
 
 	toolbarTpl: Ext.DomHelper.markup(
@@ -113,7 +115,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 					]
 				},
 				{
-					cls: 'right',
+					cls: 'right save-controls',
 					cn: [
 						{cls: 'action save', html: 'Save'},
 						{cls: 'action cancel', html: 'Cancel'}
@@ -295,6 +297,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.mon(Ext.getBody(), 'click', 'hidePopovers');
 
 		this.maybeEnableSave();
+
+		if (!this.enableSaveControls) {
+			this.saveControlsEl.hide();
+		}
 	},
 
 

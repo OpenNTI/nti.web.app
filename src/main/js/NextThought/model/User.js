@@ -59,7 +59,7 @@ Ext.define('NextThought.model.User', {
 		{ name: 'displayName', type: 'Synthetic', persist: false, fn: function(r) {
 			return r.getName();
 		} },
-		{ name: 'about', type: 'string'},
+		{ name: 'about', type: 'auto'},
 		{ name: 'affiliation', type: 'string'},
 		{ name: 'education', type: 'auto'},
 		{ name: 'role', type: 'string'},
