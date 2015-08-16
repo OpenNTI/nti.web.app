@@ -199,7 +199,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 
 	setPath: function(value) {
 		value = Ext.clone(value);
-		this.setCurrent(value.shift());
+		this.setCurrent(value.shift(), value.length);
 
 		value.reverse();
 
@@ -207,8 +207,8 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 	},
 
 
-	setCurrent: function(value) {
-		if (value) {
+	setCurrent: function(value, otherParts) {
+		if (value && otherParts) {
 			this.pathEl.addCls('has-current');
 		}
 		this.currentEl.update(value);

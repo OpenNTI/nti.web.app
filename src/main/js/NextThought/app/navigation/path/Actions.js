@@ -186,7 +186,24 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 				return titles;
 			})
 			.fail(function(error) {
-				console.error('Unable to get path because  ' + error);
+				console.error('Unable to get path because: ', error, 'showing container title instead');
+
+				var containerId = record.get('ContainerId');
+
+				if (!containerId) {
+					return Promise.reject();
+				}
+
+				return Service.getObject(containerId)
+					.then(function(container) {
+						if (container.getTitle) {
+							return [{
+								label: container.getTitle()
+							}];
+						}
+
+						return Promise.reject();
+					});
 			});
 	}
 
