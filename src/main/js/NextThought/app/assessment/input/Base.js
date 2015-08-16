@@ -613,6 +613,9 @@ Ext.define('NextThought.app.assessment.input.Base', {
 		this.inputBox.show();
 		this.updateLayout();
 		if (this.canHaveAnswerHistory()) { this.historyMenuEl.show(); }
+
+		wait()
+			.then(this.updateLayout.bind(this));
 	},
 
 
