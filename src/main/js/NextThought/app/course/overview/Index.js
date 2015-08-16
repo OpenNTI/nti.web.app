@@ -400,23 +400,23 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 	getRouteForRelatedWorkPath: function(relatedWork, path, lesson) {
 		var page = path[0],
-			relatedWorkId = relatedWork && relatedWork.get('target');
 			pageId = page && page.getId(),
+			relatedWorkId = relatedWork && relatedWork.get('target'),
 			path = '';
 
-		if (pageId === lesson.getId()) {
+		if (pageId === lesson.getId() || !pageId) {
 			pageId = null;
-			relatedWorkId = relatedWork.getId();
+			relatedWorkId = relatedWork && relatedWork.getId();
 		}
 
-		pageId = (pageId && ParseUtils.encodeForURI(pageId));
+		pageId = pageId && ParseUtils.encodeForURI(pageId);
 		relatedWorkId = relatedWorkId && ParseUtils.encodeForURI(relatedWorkId);
 
 		if (relatedWorkId) {
 			path = relatedWorkId;
 
 			if (pageId) {
-				path += '/' + pageId;
+				page += '/' + pageId;
 			}
 		}
 
