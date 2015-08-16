@@ -58,7 +58,7 @@ Ext.define('NextThought.app.course.info.components.parts.NotStarted', {
 			}
 		});
 
-	},
+	}
 
 }, function() {
 	this.borrow(NextThought.app.course.info.components.OpenCourseInfo, ['showEnrollWindow']);
