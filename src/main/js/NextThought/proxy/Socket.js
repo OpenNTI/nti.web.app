@@ -103,7 +103,7 @@ Ext.define('NextThought.proxy.Socket', {
 		}
 
 		var me = this,
-			socket = io.connect(getURL(), {'reconnection delay': 500}),
+			socket = io.connect(getURL(), {'reconnection delay': $AppConfig.socketReconnectDelay || 2000}),
 			k;
 
 		if (this.isDebug && !socket.emit.chained) {
