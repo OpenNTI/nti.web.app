@@ -144,6 +144,8 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 		this.addDefaultRoute('/');
 		this.on('beforeclose', this.onBeforeClose, this);
+
+		this.mon(this.CourseStore, 'update-available-courses', this.updateCourses.bind(this));
 	},
 
 
@@ -153,7 +155,10 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			upcoming = this.CourseStore.getAllUpcomingCourses();
 
 		this.updateAvailableCourses(current, upcoming, archived);
-		if (!this.tabpanel || this.tabpanel.activeTab) { return; }
+		if (!this.tabpanel || this.tabpanel.activeTab) {
+			this.removeMask();
+			return;
+		}
 
 		if (!Ext.isEmpty(upcoming)) {
 			this.tabpanel.selectTabWithName('Upcoming');
@@ -275,7 +280,6 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 	},
 
 
-
 	showPrevItem: function(xtype) {
 		var me = this, p,
 			current = this.getLayout().getActiveItem();
@@ -291,9 +295,11 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		return p.then(function() {
 			var course;
 			if (current.is('course-enrollment-details')) {
-				me.courseDetail.destroy();
-				delete me.courseDetail;
-				me.pushRoute(null, '/');
+				if(!me.courseDetail.changingEnrollment){
+					me.courseDetail.destroy();
+					delete me.courseDetail;
+					me.pushRoute(null, '/');
+				}
 			}
 
 			if (current.is('enrollment-process')) {
@@ -404,6 +410,15 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 	},
 
 
+	updateCourses: function() {
+		var me = this,
+			current = me.CourseStore.getAllCurrentCourses(),
+			archived = me.CourseStore.getAllArchivedCourses(),
+			upcoming = me.CourseStore.getAllUpcomingCourses();
+
+		me.updateAvailableCourses(current, upcoming, archived);
+	},
+
 	showTabpanel: function() {
 		var me = this;
 
@@ -443,6 +458,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 	showCourses: function(route, subRoute) {
 		this.mun(this.CourseStore, 'all-courses-set');
 		this.mon(this.CourseStore, 'all-courses-set', this.setupCourses.bind(this));
+		this.addMask();
 		this.CourseActions.loadAllCourses();
 		this.showTabpanel();
 	},
@@ -468,6 +484,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			me.mon(me.CourseStore, {
 				'all-courses-set': function(courses) {
 					me.showTabpanel();
+					me.addMask();
 					me.setupCourses(courses);
 
 

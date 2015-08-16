@@ -56,6 +56,11 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 	},
 
 
+	updatedAvailableCourses: function() {
+			this.fireEvent('update-available-courses');
+	},
+
+
 	setAllCoursesLink: function(link) {
 		this.all_courses_link = link;
 	},

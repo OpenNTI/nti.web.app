@@ -29,22 +29,44 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 
 		me.__toggleEnrollmentStatus(course, enrollment)
 			.then(function() {
-				course.setEnrolled(false);
-				me.refreshEnrolledCourses(callback.bind(null, true, true), function(reason) {
-					console.error(reason);
-					callback.call(null, false);
-				});
+				var updateCatalog, updateEnrolled;
 
-				Service.request(getURL(courseHref))
+				course.setEnrolled(false);
+
+				updateCatalog = Service.request(getURL(courseHref))
 					.then(function(catalog) {
 						var catalogEntry = ParseUtils.parseItems(catalog)[0];
 
 						if (catalogEntry) {
 							course.set('EnrollmentOptions', catalogEntry.get('EnrollmentOptions'));
 						}
+
+						me.courseStore.updatedAvailableCourses();
+					})
+					.fail(function(reason){
+						console.error('Failed to update catalog: ', reason);
 					});
 
+				updateEnrolled = new Promise(function(fulfill, reject) {
+					me.refreshEnrolledCourses(fulfill.bind(null, true), fulfill.bind(null, false));
+				});
+
+				Promise.all([
+					updateCatalog,
+					updateEnrolled
+				]).then(function(results){
+					var success = results[1];
+
+					callback.call(null, success, true);
+				}).fail(function(reason){
+					console.error('Failed to enroll in course: ', reason);
+				});
+			}).fail(function(reason) {
+				console.error('Failed to enroll in course: ', reason);
+
+				callback.call(null, false, false);
 			});
+
 	},
 
 	/**
@@ -55,7 +77,8 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 	 */
 	enrollCourse: function(course, callback) {
 		var me = this;
-			enrollment = me.courseStore.findEnrollmentForCourse(course.getId());
+			enrollment = me.courseStore.findEnrollmentForCourse(course.getId()),
+			courseHref = course.get('href');
 
 		//if we trying to enroll, and we are already enrolled no need to enroll again
 		if (enrollment) {
@@ -63,13 +86,47 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 			return;
 		}
 
+
 		me.__toggleEnrollmentStatus(course)
 			.then(function() {
+				var updateCatalog, updateEnrolled;
+
 				course.setEnrolled(true);
-				me.refreshEnrolledCourses(callback.bind(null, true, true), function(reason) {
-					console.error(reason);
-					callback.call(null, false, false);
+
+				updateCatalog = Service.request(getURL(courseHref))
+					.then(function(catalog) {
+						var catalogEntry = ParseUtils.parseItems(catalog)[0];
+
+						if (catalogEntry) {
+							course.set('EnrollmentOptions', catalogEntry.get('EnrollmentOptions'));
+						}
+
+						me.courseStore.updatedAvailableCourses();
+					})
+					.fail(function(reason) {
+						console.error('Failed to update catalog: ', reason);
+					});
+
+				updateEnrolled = new Promise(function(fulfill, reject) {
+					me.refreshEnrolledCourses(fulfill.bind(null, true), fulfill.bind(null, false));
 				});
+
+
+				Promise.all([
+					updateCatalog,
+					updateEnrolled
+				]).then(function(results) {
+					var success = results[1];
+
+					callback.call(null, success, true);
+				}).fail(function(reason){
+					console.error('Failed to enroll in course: ', reason);
+				});
+			})
+			.fail(function(reason) {
+				console.error('Failed to enroll in course: ', reason);
+
+				callback.call(null, false, false);
 			});
 	},
 
