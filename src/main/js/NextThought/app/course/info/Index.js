@@ -37,6 +37,8 @@ Ext.define('NextThought.app.course.info.Index', {
 				'show-enrollment': me.showEnrollment.bind(me)
 			}
 		);
+
+		me.on('show-enrollment', me.showEnrollment.bind(me));
 	},
 
 	onActivate: function() {
