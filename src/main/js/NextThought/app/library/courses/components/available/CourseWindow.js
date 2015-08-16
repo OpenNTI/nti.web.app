@@ -38,7 +38,39 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 	childEls: ['body'],
 	getDockedItems: function() { return []; },
-	center: Ext.emptyFn,
+
+	/**
+	 * Ext is shooting us in the foot when it tries to center it
+	 * so for now just don't let Ext do anything here.
+	 */
+	setPosition: function() {},
+
+
+	/**
+	 * This is always going to be positioned  fixed, so don't
+	 * let Ext layout try to calculate according to parents.
+	 */
+	center: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.center.bind(this));
+			return;
+		}
+
+		var myWidth = this.getWidth(),
+			myHeight = this.getHeight(),
+			viewWidth = Ext.Element.getViewportWidth(),
+			viewHeight = Ext.Element.getViewportHeight(),
+			top, left;
+
+		top = (viewHeight - myHeight) / 2;
+		left = (viewWidth - myWidth) / 2;
+
+		top = Math.max(top, 0);
+		left = Math.max(left, 0);
+
+		this.setY(top);
+		this.setX(left);
+	},
 
 	buttonCfg: [
 		{name: getString('NextThought.view.library.available.CourseWindow.Finished'), action: 'close'}
@@ -295,7 +327,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		return p.then(function() {
 			var course;
 			if (current.is('course-enrollment-details')) {
-				if(!me.courseDetail.changingEnrollment){
+				if (!me.courseDetail.changingEnrollment) {
 					me.courseDetail.destroy();
 					delete me.courseDetail;
 					me.pushRoute(null, '/');
