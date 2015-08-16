@@ -141,5 +141,34 @@ Ext.define('NextThought.app.bundle.Index', {
 					item.handleRoute(subRoute, route);
 				}
 			});
+	},
+
+
+	getRouteForPath: function(path, bundle) {
+		var root = path[0] || {},
+			isAccessible = this.ContentStore.hasContent(bundle),
+			subPath = path.slice[1],
+			route;
+
+		if (root.isBoard) {
+			root = subPath[0];
+			subPath = subPath.slice(1);
+		}
+
+		if (root.isForum) {
+			route = this.getRouteForForum(root, subPath);
+		} else if (root instanceof NextThought.model.PageInfo) {
+			route = this.getRouteForPageInfo(root, subPath);
+		} else {
+			route = {
+				path: '',
+				isFull: path.length <= 0,
+				isAccessible: isAccessible
+			};
+		}
+
+		route.isAccessible = route.isAccessible === false ? false : isAccessible;
+
+		return route;
 	}
 });

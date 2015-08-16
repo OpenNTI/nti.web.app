@@ -126,5 +126,12 @@ Ext.define('NextThought.app.library.content.StateStore', {
 
 	findForNTIID: function() {
 		//TODO: fill this in
+	},
+
+
+	hasContent: function(bundle) {
+		var id = bundle.getId();
+
+		return !! this.findContent(id);
 	}
 });

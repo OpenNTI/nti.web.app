@@ -49,6 +49,11 @@ Ext.define('NextThought.model.ContentPackage', {
 	},
 
 
+	getTitle: function() {
+		return this.get('title');
+	},
+
+
 	getToc: function(status) {
 		var me = this,
 			library = me.LibraryActions;

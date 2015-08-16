@@ -213,6 +213,19 @@ Ext.define('NextThought.app.content.Index', {
 	},
 
 
+	getRouteForPageInfo: function(pageInfo, path) {
+		var id = pageInfo.getId();
+
+		id = ParseUtils.encodeForURI(id);
+
+		return {
+			path: '/content/' + id,
+			isFull: true,
+			isAccessible: true
+		};
+	},
+
+
 	getRouteForForum: function(forum, path) {
 		var forumId = forum.getId(),
 			topic = path.shift(),

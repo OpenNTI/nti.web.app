@@ -474,6 +474,10 @@ Ext.define('NextThought.app.Body', {
 
 		if (root && root.isCourse) {
 			route = this.getRouteForCourse(root, subPath);
+		} else if (root instanceof NextThought.model.ContentPackage) {
+			route = this.getRouteForBundle(NextThought.model.ContentBundle.fromPackage(root), subPath);
+		} else if (root instanceof NextThought.model.ContentBundle) {
+			route = this.getRouteForBundle(root, subPath);
 		} else if (root instanceof NextThought.model.User) {
 			route = this.getRouteForUser(root, subPath);
 		} else if (root instanceof NextThought.model.Community) {
@@ -557,6 +561,28 @@ Ext.define('NextThought.app.Body', {
 
 		route.path = Globals.trimRoute(route.path);
 		route.path = '/group/' + id + '/' + route.path;
+
+		return route;
+	},
+
+
+	getRouteForBundle: function(bundle, path) {
+		var cmp = this.getCmp('bundle-view-container'),
+			route, id = bundle.get('NTIID');
+
+		id = ParseUtils.encodeForURI(id);
+
+		if (path.length) {
+			route = cmp.getRouteForPath && cmp.getRouteForPath(path, bundle);
+		} else {
+			route = {
+				isFull: true,
+				path: ''
+			};
+		}
+
+		route.path = Globals.trimRoute(route.path);
+		route.path = '/bundle/' + id + '/' + route.path;
 
 		return route;
 	}

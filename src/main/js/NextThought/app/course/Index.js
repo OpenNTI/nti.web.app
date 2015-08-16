@@ -540,18 +540,5 @@ Ext.define('NextThought.app.course.Index', {
 		route.path = '/lessons/' + Globals.trimRoute(route.path);
 
 		return route;
-	},
-
-
-	getRouteForPageInfo: function(pageInfo, path) {
-		var id = pageInfo.getId();
-
-		id = ParseUtils.encodeForURI(id);
-
-		return {
-			path: '/content/' + id,
-			isFull: true,
-			isAccessible: true
-		};
 	}
 });
