@@ -254,6 +254,9 @@ Ext.define('NextThought.cache.UserRepository', {
 						Service.getObject(name)
 							.then(function(u) {
 								maybeFinish(name, me.cacheUser(u, true));
+							})
+							.fail(function() {
+								maybeFinish(name);
 							});
 
 						return;
