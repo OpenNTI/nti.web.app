@@ -337,7 +337,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	showStudentMenu: function() {
-		if (this.applyingState) { return; }
+		if (this.applyingState || this.isDisabled) { return; }
 
 		this.studentMenu.showBy(this.header.studentEl, 'tl-tl?', this.studentMenu.offset);
 	},
@@ -470,7 +470,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	showItemMenu: function() {
-		if (this.applyingState) { return; }
+		if (this.applyingState || this.isDisabled) { return; }
 
 		this.itemMenu.showBy(this.header.itemEl, 'tl-tl?', this.itemMenu.offset);
 	},
@@ -496,14 +496,14 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	maybeStopFilter: function(e) {
-		if (this.applyingState) {
+		if (this.applyingState || this.isDisabled) {
 			e.stopEvent();
 		}
 	},
 
 
 	changeNameFilter: function() {
-		if (this.applyingState) { return; }
+		if (this.applyingState || this.isDisabled) { return; }
 
 		this.searchKey = this.header.inputEl.getValue();
 		this.updateFilter();
@@ -588,15 +588,19 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 	},
 
 
-	disableState: function() {
+	setDisabled: function() {
+		this.isDisabled = true;
 		this.header.addCls('disabled');
 		this.pageHeader.setDisabled();
+		this.grid.setDisabled();
 	},
 
 
-	enableState: function() {
+	setEnabled: function() {
+		delete this.isDisabled;
 		this.header.removeCls('disabled');
 		this.pageHeader.setEnabled();
+		this.grid.setEnabled();
 	},
 
 
@@ -615,7 +619,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			params = store.proxy.extraParams;
 
 		me.applyingState = true;
-		me.disableState();
+		me.setDisabled();
 		state = state || {};
 
 		filters.push(state.studentFilter || this.studentFilter || 'ForCredit');
@@ -659,7 +663,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 					me.initialLoad = true;
 
 					delete me.applyingState;
-					me.enableState();
+					me.setEnabled();
 
 					fulfill();
 				}
@@ -736,6 +740,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	changeSort: function(ct, column, direction) {
+		if (this.isDisabled || this.applyingState) {
+			return false;
+		}
+
 		var prop = column.sortOn || column.dataIndex;
 
 		if (prop) {
@@ -926,6 +934,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			Ext.fly(node).setStyle({opacity: '0.3'});
 		}
 
+		me.setDisabled();
+
 		wait(300).then(function() {
 			return historyItem.saveGrade(value, letter);
 		}).always(function() {
@@ -934,6 +944,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			if (n) {
 				Ext.fly(n).setStyle({opacity: 1});
 			}
+
+			me.setEnabled();
 		});
 	}
 });

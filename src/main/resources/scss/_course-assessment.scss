@@ -1995,3 +1995,20 @@ canvas.x-component-course-assessment {
         }
 	}
 }
+
+
+.admin-paged-grid {
+	&.disabled {
+		.x-grid-header-ct {
+			pointer-events: none;
+
+			.x-box-inner::before {
+				content: '';
+				display: block;
+				position: absolute;
+				top: 0; bottom: 0;
+				left: 0; right: 0;
+			}
+		}
+	}
+}

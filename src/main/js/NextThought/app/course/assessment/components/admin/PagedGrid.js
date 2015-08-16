@@ -10,6 +10,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
 		gridGrades: 'NextThought.mixins.grid-feature.GradeInputs'
 	},
 
+	cls: 'admin-paged-grid',
+
 	layout: 'none',
 
 	scroll: false,
@@ -341,6 +343,16 @@ Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
 		this.mon(this.el, 'click', 'maybeLoadPage');
 
 		this.monitorSubTree();
+	},
+
+
+	setDisabled: function() {
+		this.addCls('disabled');
+	},
+
+
+	setEnabled: function() {
+		this.removeCls('disabled');
 	},
 
 

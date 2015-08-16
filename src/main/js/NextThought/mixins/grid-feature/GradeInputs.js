@@ -142,8 +142,9 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 
 
 	editGrade: function(record, value) {
-		var view = this.__getGridView(), store = this.store,
-			historyItem = this.getHistoryItemFromRecord(record),
+		var me = this,
+			view = me.__getGridView(), store = me.store,
+			historyItem = me.getHistoryItemFromRecord(record),
 			node = view.getNode(record),
 			save;
 
@@ -158,12 +159,20 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 			save = Promise.resolve();
 		}
 
+		if (me.beforeEdit) {
+			me.beforeEdit();
+		}
+
 		save.always(function() {
 			var n = view.getNode(record);//get the node fresh since it may have changed
 
 			console.log(node);
 			if (n) {
 				Ext.fly(n).setStyle({opacity: 1});
+			}
+
+			if (me.afterEdit) {
+				me.afterEdit();
 			}
 		});
 

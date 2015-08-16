@@ -74,7 +74,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		{xtype: 'course-assessment-admin-listheader'},
 		{
 			xtype: 'course-admin-paged-grid',
-			cls: 'student-assignment-overview',
+			cls: 'student-assignment-overview admin-paged-grid',
 			columnOrder: ['Student', 'Username', 'Completed', 'Grade', 'Feedback', 'Submission'],
 			columnOverrides: {
 				Student: {padding: '0 0 0 30'},
@@ -154,6 +154,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 		grid.bindStore(me.store);
 		grid.dueDate = me.assignment.getDueDate();
+		grid.beforeEdit = me.setDisabled.bind(me);
+		grid.afterEdit = me.setEnabled.bind(me);
 
 		me.mon(grid, {
 			'load-page': me.loadPage.bind(me),
@@ -503,20 +505,28 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 
 	setDisabled: function() {
+		var grid = this.down('grid');
+
+		this.isDisabled = true;
 		if (this.toolbarEl) {
 			this.toolbarEl.addCls('disabled');
 		}
 
 		this.pageHeader.setDisabled();
+		grid.setDisabled();
 	},
 
 
 	setEnabled: function() {
+		var grid = this.down('grid');
+
+		delete this.isDisabled;
 		if (this.toolbarEl) {
 			this.toolbarEl.removeCls('disabled');
 		}
 
 		this.pageHeader.setEnabled();
+		grid.setEnabled();
 	},
 
 
@@ -613,7 +623,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 
 	onFiltersClicked: function(el) {
-		if (this.applyingState) {
+		if (this.applyingState || this.isDisabled) {
 			return;
 		}
 
@@ -700,6 +710,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 
 	changeSort: function(ct, column, direction) {
+		if (this.applyingState || this.isDisabled) { return false; }
+
 		var prop = column.sortOn || column.dataIndex;
 
 		if (prop) {
