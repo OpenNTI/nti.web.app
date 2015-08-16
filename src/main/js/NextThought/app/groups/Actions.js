@@ -524,7 +524,13 @@ Ext.define('NextThought.app.groups.Actions', {
 
 	deleteGroup: function(record) {
 		if (record.get('Username') !== this.getMyContactsId()) {
-			record.destroy();
+			record.destroy({
+				callback: function(recs, op, success) {
+					if (!success) {
+						alert('Unable to delete group.');
+					}
+				}
+			});
 		}
 	},
 
