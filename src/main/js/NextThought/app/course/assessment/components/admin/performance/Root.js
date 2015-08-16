@@ -517,6 +517,12 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 	},
 
 
+	setSearch: function(val) {
+		this.searchKey = val;
+		this.header.inputEl.dom.value = val;
+	},
+
+
 	updateUIFromState: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateUIFromState.bind(this));
@@ -661,6 +667,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 					me.maybeSwitchStudents();
 					me.updateUIFromState();
 					me.initialLoad = true;
+
+					if (state.searchKey) {
+						me.setSearch(state.searchKey);
+					}
 
 					delete me.applyingState;
 					me.setEnabled();
