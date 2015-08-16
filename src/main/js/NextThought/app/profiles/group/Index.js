@@ -6,7 +6,8 @@ Ext.define('NextThought.app.profiles.group.Index', {
 		'NextThought.app.profiles.group.components.Header',
 		'NextThought.app.profiles.user.components.membership.Index',
 		'NextThought.app.profiles.group.components.activity.Index',
-		'NextThought.app.profiles.group.components.membership.Index'
+		'NextThought.app.profiles.group.components.membership.Index',
+		'NextThought.app.groups.Actions'
 	],
 
 	cls: 'group-profile profile',
@@ -16,11 +17,14 @@ Ext.define('NextThought.app.profiles.group.Index', {
 	   this.addRoute('/members', this.showMembership.bind(this));
 
 	   this.addDefaultRoute('/activity');
+
+	   this.GroupActions = NextThought.app.groups.Actions.create();
 	},
 
 	buildHeaderComponent: function() {
 		return {
-		   xtype: 'profile-group-header'
+		   xtype: 'profile-group-header',
+		   doLeaveGroup: this.leaveGroup.bind(this)
 		};
 	},
 
@@ -84,5 +88,30 @@ Ext.define('NextThought.app.profiles.group.Index', {
 
 		return activityCmp.userChanged(this.activeEntity, false)
 		   .then(activityCmp.handleRoute.bind(activityCmp, subRoute, route.params));
+	},
+
+
+	leaveGroup: function() {
+		var me = this,
+			user = $AppConfig.userObject;
+
+		if (me.activeEntity) {
+			Ext.Msg.show({
+				title: 'Are you sure?',
+				msg: 'You will no longer have access to ' + me.activeEntity.getName(),
+				buttons: {
+					primary: {
+						text: 'Yes',
+						handler: function() {
+							me.GroupActions.leaveGroup(me.activeEntity)
+								.then(function() {
+									me.pushRootRoute(user.getName(), '/user/' + user.getURLPart());
+								});
+						}
+					},
+					secondary: 'No'
+				}
+			});
+		}
 	}
 });

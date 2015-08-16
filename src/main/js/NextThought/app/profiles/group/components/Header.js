@@ -28,7 +28,8 @@ Ext.define('NextThought.app.profiles.group.components.Header', {
 		avatarContainerEl: '.avatar-container',
 		usernameEl: '.about .username',
 		aboutFieldEl: '.about .field.about',
-		tabsEl: '.tabs'
+		tabsEl: '.tabs',
+		buttonsEl: '.buttons'
 	},
 
 
@@ -50,6 +51,15 @@ Ext.define('NextThought.app.profiles.group.components.Header', {
 		this.fillInEntity(entity);
 
 		this.__updateTabs(tabs);
+		this.clearButtons();
+
+		if (this.entity.getLink('my_membership')) {
+			this.addButton({
+				cls: 'leave',
+				action: 'leaveGroup',
+				label: 'Leave Group'
+			});
+		}
 	},
 
 
@@ -69,6 +79,12 @@ Ext.define('NextThought.app.profiles.group.components.Header', {
 		this.clearTabs();
 
 		tabs.forEach(this.addTab.bind(this));
-	}
+	},
 
+
+	leaveGroup: function() {
+		if (this.doLeaveGroup) {
+			this.doLeaveGroup();
+		}
+	}
 });
