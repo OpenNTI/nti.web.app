@@ -507,7 +507,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 	setDisabled: function() {
 		var grid = this.down('grid');
 
-		this.isDisabled = true;
+		this.stateDisabled = true;
 		if (this.toolbarEl) {
 			this.toolbarEl.addCls('disabled');
 		}
@@ -520,7 +520,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 	setEnabled: function() {
 		var grid = this.down('grid');
 
-		delete this.isDisabled;
+		delete this.stateDisabled;
 		if (this.toolbarEl) {
 			this.toolbarEl.removeCls('disabled');
 		}
@@ -623,7 +623,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 
 	onFiltersClicked: function(el) {
-		if (this.applyingState || this.isDisabled) {
+		if (this.applyingState || this.stateDisabled) {
 			return;
 		}
 
@@ -710,7 +710,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 
 	changeSort: function(ct, column, direction) {
-		if (this.applyingState || this.isDisabled) { return false; }
+		if (this.applyingState || this.stateDisabled) { return false; }
 
 		var prop = column.sortOn || column.dataIndex;
 

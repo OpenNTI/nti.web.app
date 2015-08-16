@@ -337,7 +337,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	showStudentMenu: function() {
-		if (this.applyingState || this.isDisabled) { return; }
+		if (this.applyingState || this.stateDisabled) { return; }
 
 		this.studentMenu.showBy(this.header.studentEl, 'tl-tl?', this.studentMenu.offset);
 	},
@@ -470,7 +470,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	showItemMenu: function() {
-		if (this.applyingState || this.isDisabled) { return; }
+		if (this.applyingState || this.stateDisabled) { return; }
 
 		this.itemMenu.showBy(this.header.itemEl, 'tl-tl?', this.itemMenu.offset);
 	},
@@ -496,14 +496,14 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	maybeStopFilter: function(e) {
-		if (this.applyingState || this.isDisabled) {
+		if (this.applyingState || this.stateDisabled) {
 			e.stopEvent();
 		}
 	},
 
 
 	changeNameFilter: function() {
-		if (this.applyingState || this.isDisabled) { return; }
+		if (this.applyingState || this.stateDisabled) { return; }
 
 		this.searchKey = this.header.inputEl.getValue();
 		this.updateFilter();
@@ -589,7 +589,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	setDisabled: function() {
-		this.isDisabled = true;
+		this.stateDisabled = true;
 		this.header.addCls('disabled');
 		this.pageHeader.setDisabled();
 		this.grid.setDisabled();
@@ -597,7 +597,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	setEnabled: function() {
-		delete this.isDisabled;
+		delete this.stateDisabled;
 		this.header.removeCls('disabled');
 		this.pageHeader.setEnabled();
 		this.grid.setEnabled();
@@ -740,7 +740,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	changeSort: function(ct, column, direction) {
-		if (this.isDisabled || this.applyingState) {
+		if (this.stateDisabled || this.applyingState) {
 			return false;
 		}
 
