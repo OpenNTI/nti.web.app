@@ -18,14 +18,15 @@ Ext.define('NextThought.app.profiles.components.SuggestedContacts', {
 	setEntity: function(entity) {
 		var me = this,
 			link = entity.getLink('SuggestedContacts');
-		if(!link){
+
+		if (!link) {
 			this.hide();
 			return Promise.reject('No suggested contacts link');
 		}
 
 		me.removeAll();
 		Service.request(link)
-			.then(function(responseBody){
+			.then(function(responseBody) {
 				var json = JSON.parse(responseBody) || {},
 					items = json.Items;
 				return ParseUtils.parseItems(items);
@@ -37,7 +38,7 @@ Ext.define('NextThought.app.profiles.components.SuggestedContacts', {
 							return {
 								entity: entity,
 								name: entity.getName(),
-								route: ParseUtils.encodeForURI(entity.getId())
+								route: entity.getURLPart()
 							};
 						})
 						.forEach(me.addEntry.bind(me));
@@ -45,12 +46,12 @@ Ext.define('NextThought.app.profiles.components.SuggestedContacts', {
 					me.hide();
 				}
 			})
-			.fail(function(){
+			.fail(function() {
 				me.hide();
 			});
 	},
 
-	setUser: function(){
+	setUser: function() {
 		this.setEntity.apply(this, arguments);
 	},
 
