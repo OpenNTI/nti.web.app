@@ -268,6 +268,18 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 	},
 
 
+	goToFragment: function(fragment) {
+		var me = this;
+
+		if (fragment) {
+			me.getIframe().onceSettled()
+				.then(function() {
+					me.getScroll().toTarget(fragment);
+				});
+		}
+	},
+
+
 	setPageInfo: function(pageInfo, bundle, fragment) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setPageInfo.bind(this, pageInfo, bundle, fragment));

@@ -151,6 +151,9 @@ Ext.define('NextThought.app.contentviewer.Index', {
 		this.reader.showSearchHit(hit, fragment);
 	},
 
+	goToFragment: function(fragment) {
+		this.reader.goToFragment(fragment);
+	},
 
 	resolvePageInfo: function() {
 		var p;

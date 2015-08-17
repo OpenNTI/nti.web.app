@@ -276,6 +276,17 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	},
 
 
+	goToFragment: function(fragment) {
+		var reader = this.getReaderContent();
+
+		this.fragment = fragment;
+
+		if (reader) {
+			reader.goToFragment(fragment);
+		}
+	},
+
+
 	beforeDeactivate: function() {
 		var reader = this.down('reader-content');
 		return !reader || reader.getNoteOverlay().onNavigation();

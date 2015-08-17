@@ -121,9 +121,11 @@ Ext.define('NextThought.app.content.content.Index', {
 			pageSource = this.ContentActions.getContentPageSource(page.getId(), this.currentBundle, this.root);
 
 		if (this.reader && !this.reader.isDestroyed) {
-			if (this.reader.pageInfo && this.reader.pageInfo.getId() === pageId) {
-				return;
-			} else if (this.reader.relatedWork && this.reader.relatedWork.getId() === pageId) {
+			//If the reader is already showing the page no need to destroy it anc create it again
+			if ((this.reader.pageInfo && this.reader.pageInfo.getId() === pageId) || (this.reader.relatedWork && this.reader.relatedWork.getId() === pageId)) {
+				if (hash) {
+					this.reader.goToFragment(hash);
+				}
 				return;
 			} else {
 				this.reader.destroy();
