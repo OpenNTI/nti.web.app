@@ -76,9 +76,15 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 
 	constructor: function() {
 		this.callParent(arguments);
-		this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
+		//this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 	},
 
+	onceAssestsLoadedPromise: function(){
+		if(!this.onceAssetsLoaded){
+			this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
+		}
+		return this.onceAssetsLoaded;
+	},
 
 	getAuthorLine: function() {
 		function makeName(instructor) {
@@ -111,7 +117,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	getBackgroundImage: function() {
 		var me = this;
 
-		return me.onceAssetsLoaded
+		return me.onceAssetsLoadedPromise()
 			.then(function() {
 				return me.get('background');
 			});

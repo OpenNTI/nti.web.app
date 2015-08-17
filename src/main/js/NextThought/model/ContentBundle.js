@@ -58,9 +58,15 @@ Ext.define('NextThought.model.ContentBundle', {
 	constructor: function() {
 		this.callParent(arguments);
 
-		this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
+		//this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 	},
 
+	onceAssetsLoadedPromise: function(){
+		if(!this.onceAssetsLoaded){
+			this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
+		}
+		return this.onceAssetsLoaded;
+	},
 
 	asUIData: function() {
 		return {
@@ -117,14 +123,12 @@ Ext.define('NextThought.model.ContentBundle', {
 	 * @return {Promise} fulfills with the url
 	 */
 	getBackgroundImage: function() {
-		return this.onceAssetsLoaded
-			.then(this.get.bind(this, 'background'));
+		return this.onceAssetsLoadedPromise().then(this.get.bind(this, 'background'));
 	},
 
 
 	getIconImage: function() {
-		return this.onceAssetsLoaded
-			.then(this.get.bind(this, 'icon'));
+		return this.onceAssetsLoadedPromise().then(this.get.bind(this, 'icon'));
 	},
 
 
