@@ -374,7 +374,10 @@ Ext.define('NextThought.app.chat.Actions', {
 				pushNotification = opts && opts.pushNotification,
 				occupants = [m.get('Creator'), $AppConfig.username];
 
-		if (!w) {
+		if (!w && !msg.handled) {
+			// Use this to avoid get into a loop where we keep resolving the roomInfo (cid)
+			msg.handled = true;
+
 			// TODO: This is going to break for GroupChat,
 			// since we might have more occupants than just the sender and the receiver (Me).
 			// Group chat may have to depend on the roomInfo rather than occupants.
