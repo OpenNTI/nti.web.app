@@ -296,10 +296,12 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
 
 
 	onScroll: function() {
-		var el = document.body,
+		var scroll = Ext.getBody().getScroll(),
+			//TODO: figure out how to not have to do a user agent check for this
+			el = Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body,
 			height = document.documentElement.clientHeight;
 
-		if (el.scrollTop + height >= el.scrollHeight) {
+		if (scroll.top + height >= el.scrollHeight) {
 			this.onScrolledToBottom();
 		}
 	},

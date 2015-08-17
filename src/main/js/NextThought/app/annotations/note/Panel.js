@@ -761,7 +761,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 			}
 			contextCmp.render(this.context);
 
-			if (Ext.isGecko || Ext.isIE9) {
+			if (this.resizeMathJax && (Ext.isGecko || Ext.isIE9)) {
 				this.resizeMathJax(this.context);
 			}
 		}
