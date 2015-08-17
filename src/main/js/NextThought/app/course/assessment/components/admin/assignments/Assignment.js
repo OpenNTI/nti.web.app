@@ -584,6 +584,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 					me.initialLoad = true;
 					me.unmask();
 
+					if (state.searchTerm) {
+						me.setSearch(state.searchTerm);
+					}
+
 					delete me.applyingState;
 					me.setEnabled();
 
@@ -631,6 +635,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 	},
 
 
+	setSearch: function(str) {
+		this.filterMenu.setSearch(str);
+	},
+
+
 	doSearch: function(str) {
 		this.down('grid').getSelectionModel().deselectAll(true);
 		this.searchTerm = str;
@@ -668,7 +677,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		}
 
 		if (this.currentPage) {
-			if(!newPage) { this.currentPage = 1; } 
+			if (!newPage) { this.currentPage = 1; }
 			state.currentPage = this.currentPage;
 		} else {
 			delete state.currentPage;

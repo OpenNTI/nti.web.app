@@ -75,6 +75,11 @@ Ext.define('NextThought.common.ux.FilterMenu', {
 	},
 
 
+	setSearch: function(search) {
+		this.search.setValue(search || '');
+	},
+
+
 	onSearch: function(searchTerm) {
 		console.log('Search:', searchTerm);
 		this.fireEvent('search', searchTerm);

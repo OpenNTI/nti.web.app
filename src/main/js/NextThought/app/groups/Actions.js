@@ -166,10 +166,9 @@ Ext.define('NextThought.app.groups.Actions', {
 						}, 1);
 					}
 				});
-		}
-		else{
+		} else {
 			rec.hidden = true;
-			me.__setContactGroup(rec);	
+			me.__setContactGroup(rec);
 		}
 	},
 
@@ -352,12 +351,12 @@ Ext.define('NextThought.app.groups.Actions', {
 			return Promise.reject();
 		}
 
-		return new Promise(function (fulfill, reject) {
+		return new Promise(function(fulfill, reject) {
 			me.createGroupUnguarded(displayName, username, friends)
-				.then( function (record) {
+				.then(function(record) {
 					fulfill(record);
 				})
-				.fail(function (record, operation, response) {
+				.fail(function(record, operation, response) {
 					var msg = response.message,
 						field = response.field,
 						code = response.code;
@@ -380,7 +379,7 @@ Ext.define('NextThought.app.groups.Actions', {
 	},
 
 
-	createGroupAndCode: function (btn) {
+	createGroupAndCode: function(btn) {
 		var w = btn.up('window'), username, displayName, me = this;
 
 		if (!Service.canCreateDynamicGroups()) {
@@ -393,12 +392,12 @@ Ext.define('NextThought.app.groups.Actions', {
 		console.log('Create group with name ' + displayName);
 		btn.setDisabled(true);
 
-		return new Promise( function(fulfill, reject) {
+		return new Promise(function(fulfill, reject) {
 			me.createDFLUnguarded(displayName, username)
 					.then(function(record) {
 						return me.fetchGroupCode(record, displayName);
 					})
-					.then(function (code) {
+					.then(function(code) {
 						fulfill(code);
 					})
 					.fail(function(rec, operation, response) {
@@ -435,7 +434,7 @@ Ext.define('NextThought.app.groups.Actions', {
 			return Promise.reject();
 		}
 
-		return new Promise(function (fulfill, reject) {
+		return new Promise(function(fulfill, reject) {
 			Ext.Ajax.request({
 				url: link,
 				scope: this,
@@ -493,7 +492,7 @@ Ext.define('NextThought.app.groups.Actions', {
 			return Promise.reject({field: 'Code', message: 'There was an error applying your Group Code.'});
 		}
 
-		return new Promise(function( fulfill, reject) {
+		return new Promise(function(fulfill, reject) {
 			Ext.Ajax.request({
 				url: getURL(url),
 				scope: this,
@@ -514,6 +513,7 @@ Ext.define('NextThought.app.groups.Actions', {
 							console.warn('Performing expensive reload of friends list store.', store);
 							store.reload();
 						}
+						me.loadGroupsList();
 						fulfill();
 					}
 				}
@@ -524,20 +524,27 @@ Ext.define('NextThought.app.groups.Actions', {
 
 	deleteGroup: function(record) {
 		if (record.get('Username') !== this.getMyContactsId()) {
-			record.destroy();
+			record.destroy({
+				callback: function(recs, op, success) {
+					if (!success) {
+						alert('Unable to delete group.');
+					}
+				}
+			});
 		}
 	},
 
 
 	leaveGroup: function(record) {
 		var link = record.getLink('my_membership'),
+			groupStore = this.GroupStore.getGroupsList(),
 			dn = record.get('displayName'), me = this;
 
 		if (!link) {
 			return Promise.reject('Unable to leave ' + dn);
 		}
 
-		return new Promise( function(fulfill, reject) {
+		return new Promise(function(fulfill, reject) {
 			Ext.Ajax.request({
 				url: link,
 				scope: this,
@@ -562,6 +569,7 @@ Ext.define('NextThought.app.groups.Actions', {
 						//onSuccess instead of reloading the whole store
 						//lets try and just remove the one thing we need
 						me.GroupStore.getFriendsList().remove(record);
+						groupStore.remove(record);
 						fulfill();
 					}
 				}

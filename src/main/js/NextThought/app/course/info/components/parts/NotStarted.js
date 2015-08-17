@@ -24,6 +24,9 @@ Ext.define('NextThought.app.course.info.components.parts.NotStarted', {
 		info: null
 	},
 
+	renderSelectors: {
+		editLink: '.edit'
+	},
 
 	beforeRender: function() {
 		var i = this.getInfo() || {},
@@ -43,6 +46,18 @@ Ext.define('NextThought.app.course.info.components.parts.NotStarted', {
 			enrollUrl: e.url,
 			registered: registeredText || ''
 		});
+
+		this.enableBubble(['show-enrollment']);
+
+		this.on({
+			editLink: {
+				click: {
+					fn: 'showEnrollWindow',
+					scope: this
+				}
+			}
+		});
+
 	}
 
 }, function() {

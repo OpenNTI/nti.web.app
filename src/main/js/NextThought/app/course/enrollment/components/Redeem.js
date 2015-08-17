@@ -83,6 +83,13 @@ Ext.define('NextThought.app.course.enrollment.components.Redeem', {
 		if (this.enrollmentOption.AllowVendorUpdates) {
 			this.revealItem('allowupdates_container');
 		}
+		
+		this.redeemable = false;
+
+		this.on({
+			'reveal-item': 'enableRedeem',
+			'hide-item': 'disableRedeem'
+		});
 	},
 
 
@@ -94,8 +101,17 @@ Ext.define('NextThought.app.course.enrollment.components.Redeem', {
 		return values;
 	},
 
+	disableRedeem: function(){
+		this.redeemable = false;
+	},
+
+	enableRedeem: function() {
+		this.redeemable = true;
+	},
 
 	maybeSubmit: function() {
+		if(!this.redeemable) {return;}
+
 		var me = this, invalid,
 			value = me.getValue();
 

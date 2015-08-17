@@ -95,21 +95,25 @@ Ext.define('NextThought.app.contacts.Index', {
 	},
 
 
-	showContacts: function (route, subRoute) {
+	showContacts: function(route, subRoute) {
 		this.contactsRoute = subRoute;
+
+		this.setTitle('Contacts');
 		this.setActiveView('contacts-tab-view',
 			['groups-tab-view', 'lists-tab-view'],
 			'contacts'
 		).then(function(item) {
-			if(item && item.handleRoute) {
+			if (item && item.handleRoute) {
 				item.handleRoute(subRoute);
 			}
 		});
 	},
 
 
-	showGroups: function (route, subRoute) {
+	showGroups: function(route, subRoute) {
 		this.groupsRoute = subRoute;
+
+		this.setTitle('Groups');
 		this.setActiveView('groups-tab-view',
 			['contacts-tab-view', 'lists-tab-view'],
 			'groups'
@@ -117,8 +121,10 @@ Ext.define('NextThought.app.contacts.Index', {
 	},
 
 
-	showLists: function (route, subRoute) {
+	showLists: function(route, subRoute) {
 		this.listsRoute = subRoute;
+
+		this.setTitle('Distribution List');
 		this.setActiveView('lists-tab-view',
 			['groups-tab-view', 'contacts-tab-view'],
 			'lists'
@@ -134,7 +140,7 @@ Ext.define('NextThought.app.contacts.Index', {
 			active: tab || active
 		});
 
-		return new Promise(function (fulfill, reject) {
+		return new Promise(function(fulfill, reject) {
 			item = me.setActiveItem(active);
 			fulfill(item);
 		});
@@ -161,7 +167,7 @@ Ext.define('NextThought.app.contacts.Index', {
 
 		if (!cmp) {
 			cmp = this.cmp_map[xtype] = this.down(xtype);
-			if(cmp.handleRoute) {
+			if (cmp.handleRoute) {
 				this.addChildRouter(cmp);
 			}
 			cmp.contactsContainer = this;
@@ -171,7 +177,7 @@ Ext.define('NextThought.app.contacts.Index', {
 	},
 
 
-	prepareNavigation: function () {
+	prepareNavigation: function() {
 		this.NavigationActions.updateNavBar({
 			cmp: this.getNavigation(),
 			hideBranding: true
@@ -205,7 +211,7 @@ Ext.define('NextThought.app.contacts.Index', {
 	},
 
 
-	__adjustmentForiOS: function () {
+	__adjustmentForiOS: function() {
 		var outline = this.el.down('.contact:nth-child(1)'),
 			list = this.el.down('.contact:nth-child(2)'),
 			input = this.el.down('input'),

@@ -1,5 +1,31 @@
 Ext.define('NextThought.mixins.ModelWithBodyContent', {
 
+	statics: {
+		/**
+		 * A naive model body content compiler that only shows styled text, will not include whiteboards etc...
+		 * DON'T USE UNLESS YOU ARE 100% SURE
+		 *
+		 * @param  {Array} parts the body content
+		 * @return {String}       compiled content
+		 */
+		unsafeSyncCompileBodyContent: function(parts) {
+			var i, text = [], part;
+
+			for (i = 0; i < parts.length; i++) {
+				part = parts[i];
+
+				if (typeof part === 'string') {
+					text.push(part.replace(/\s*(class)=".*?"\s*/ig, ' ')
+						.replace(/<span.*?>&nbsp;<\/span>/ig, '&nbsp;'));
+				} else {
+					console.warn('Non simple part');
+				}
+			}
+
+			return text.join('');
+		}
+	},
+
 	textDescriptionForPartType: {
 		'application/vnd.nextthought.canvas': '[image]',
 		'application/vnd.nextthought.embeddedvideo': '[video]'
@@ -14,9 +40,9 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 		'application/vnd.nextthought.embeddedvideo': 'renderVideoComponent'
 	},
 
-	getBodyText: function(hasNoPlaceholderForImage) {
+	getBodyText: function(hasNoPlaceholderForImage, bodyOverride) {
 
-		var o = this.get('body'), text = [];
+		var o = bodyOverride || this.get('body'), text = [];
 
 		Ext.each(o, function(c) {
 			if (typeof c === 'string') {

@@ -9,7 +9,7 @@ Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 			scroll = me.menuHideOnScroll.bind(me);
 
 		function afterReaderRenders() {
-			me.scrollingEl = Ext.isIE11p ? Ext.get(document.documentElement) : Ext.getBody();
+			me.scrollingEl = Ext.isIE11p || Ext.isGecko ? Ext.get(document.documentElement) : Ext.getBody();
 			reader.on('destroy', 'destroy',
 					reader.relayEvents(me.scrollingEl, [
 						'scroll'

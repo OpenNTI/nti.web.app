@@ -2,7 +2,16 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 	extend: 'NextThought.app.profiles.user.components.about.parts.FieldSet',
 	alias: 'widget.profile-user-about-about',
 
-	requires: ['NextThought.app.account.Actions'],
+	mixins: {
+		ModelBodyContent: 'NextThought.mixins.ModelWithBodyContent'
+	},
+
+
+	requires: [
+		'NextThought.app.account.Actions',
+		'NextThought.editor.Editor'
+	],
+
 
 	cls: 'about fieldset',
 	name: 'about',
@@ -13,7 +22,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		{cls: 'field-container', cn: [
 			{tag: 'span', cls: 'field-label edit-only', html: 'Write something about yourself.'},
 			{cls: 'error-msg'},
-			{cls: 'field about multi-line', 'data-field': 'about', tabindex: '0'}
+			{cls: 'field about multi-line use-editor', 'data-field': 'about', tabindex: '0'}
 		]},
 		{cls: 'field-container', cn: [
 			{tag: 'span', cls: 'field-label edit-only', html: 'Name'},
@@ -102,19 +111,20 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		}
 
 		this.isMe = isMe;
+		this.activeUser = user;
 
-		var data = user.getAboutData();
+		var data = user.getAboutData(),
+			aboutTxt;
 
-		if (!data.about && isMe) {
-			this.emptyTextEl.removeCls('hidden');
+		if (data.about && Array.isArray(data.about)) {
+			aboutTxt = NextThought.mixins.ModelWithBodyContent.unsafeSyncCompileBodyContent(data.about);
 		} else {
-			this.emptyTextEl.addCls('hidden');
+			aboutTxt = data.about;
 		}
-
 
 		this.nameEl.update(data.displayName || '');
 		this.realnameEl.update(data.realname || '');
-		this.aboutEl.update(data.about || '');
+		this.aboutEl.update(aboutTxt);
 		this.emailEl.update(data.email || '');
 		this.locationEl.update(data.location || '');
 		this.homepageEl.update(data.home_page || '');
@@ -134,12 +144,49 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 	setEditable: function() {
 		this.callParent(arguments);
 		this.updateRequestAlias();
+
+		var aboutEl = this.el && this.el.dom.querySelector('.field.about'),
+			about = this.activeUser.get('about');
+
+		if (aboutEl) {
+
+			if (this.editor) {
+				this.editor.destroy();
+			}
+
+			aboutEl.innerHTML = '';
+
+			this.editor = Ext.widget('nti-editor', {
+				ownerCt: this,
+				renderTo: aboutEl,
+				enableSaveControls: false
+			});
+
+			this.editor.activate();
+			this.editor.editBody(about);
+		}
 	},
 
 
 	setUneditable: function() {
 		this.callParent(arguments);
 		this.updateRequestAlias();
+
+		var aboutEl = this.el && this.el.dom.querySelector('.field.about'),
+			about = this.activeUser.get('about');
+
+		if (Array.isArray(about)) {
+			about = NextThought.mixins.ModelWithBodyContent.unsafeSyncCompileBodyContent(about);
+		}
+
+		if (aboutEl) {
+			aboutEl.innerHTML = about;
+
+			if (this.editor) {
+				this.editor.destroy();
+				delete this.editor;
+			}
+		}
 	},
 
 	setSchema: function() {
@@ -200,7 +247,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 				{
 					name: 'about',
 					selector: 'aboutEl',
-					allowHTML: true
+					allowHTML: true,
+					isEditor: true
 				},
 				{
 					name: 'alias',
@@ -251,7 +299,9 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 			if (fieldSchema && !fieldSchema.readonly) {
 				dom = me[key.selector] && me[key.selector].dom;
 
-				if (key.allowHTML) {
+				if (key.isEditor) {
+					value = me.editor && me.editor.getValue().body;
+				} else if (key.allowHTML) {
 					value = dom.innerHTML;
 				} else {
 					value = dom.textContent !== undefined ? dom.textContent : (dom.innerHTML || '');

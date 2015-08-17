@@ -146,11 +146,11 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 		}
 
 		var dom = this.el.dom,
-			fields = dom.querySelectorAll('.editable[contenteditable]');
+			simpleFields = dom.querySelectorAll('.editable[contenteditable]:not(.use-editor)');
 
-		fields = Array.prototype.slice.call(fields);
+		simpleFields = Array.prototype.slice.call(simpleFields);
 
-		fields.forEach(function(field) {
+		simpleFields.forEach(function(field) {
 			field.removeAttribute('contenteditable');
 		});
 	},
@@ -164,11 +164,11 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 		}
 
 		var dom = this.el.dom,
-			fields = dom.querySelectorAll('.editable[data-field]');
+			simpleFields = dom.querySelectorAll('.editable[data-field]:not(.use-editor)');
 
-		fields = Array.prototype.slice.call(fields);
+		simpleFields = Array.prototype.slice.call(simpleFields);
 
-		fields.forEach(function(field) {
+		simpleFields.forEach(function(field) {
 			field.setAttribute('contenteditable', true);
 		});
 	},
