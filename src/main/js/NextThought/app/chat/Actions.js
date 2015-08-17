@@ -126,7 +126,12 @@ Ext.define('NextThought.app.chat.Actions', {
 
 		ri = this.ChatStore.existingRoom(users, options.ContainerId, options);
 		if (ri) {
-			this.ChatStore.showChatWindow(ri);
+			if ((options || {}).silent === true) {
+				this.onEnteredRoom(ri);
+			}
+			else {
+				this.ChatStore.showChatWindow(ri);
+			}
 		}
 		else {
 			//If there were no existing rooms, create a new one.
@@ -136,16 +141,21 @@ Ext.define('NextThought.app.chat.Actions', {
 			if (options.ContainerId && this.ChatStore.isPersistantRoomId(options.ContainerId)) {
 				roomCfg.Occupants = [];
 			}
-			socket.emit('chat_enterRoom', Ext.apply(m, options), Ext.bind(me.shouldShowRoom, me));
+			socket.emit('chat_enterRoom', Ext.apply(m, options), me.shouldShowRoom.bind(me, options));
 		}
 	},
 
 
-	shouldShowRoom: function(msg) {
+	shouldShowRoom: function(options, msg) {
 		// This is mainly used as a callback to the socket to determine showing chat rooms that we created.
 		var rInfo = msg && msg.isModel ? msg : ParseUtils.parseItems([msg])[0], w;
 		if (rInfo) {
-			this.ChatStore.showChatWindow(rInfo);
+			if ((options || {}).silent === true) {
+				this.onEnteredRoom(rInfo);
+			}
+			else {
+				this.ChatStore.showChatWindow(rInfo);
+			}
 		} else {
 			alert({title: 'Error', msg: 'Unable to start your chat at this time. Please try again later.', icon: 'warning-red'});
 		}
@@ -368,8 +378,10 @@ Ext.define('NextThought.app.chat.Actions', {
 			// TODO: This is going to break for GroupChat,
 			// since we might have more occupants than just the sender and the receiver (Me).
 			// Group chat may have to depend on the roomInfo rather than occupants.
+			// NOTE: If the getObject call on the roomInfoId fails, go ahead and create a new chat room
 			this.resolveWindowForUsers(cid, occupants)
-				.then(me.onMessage.bind(me, msg, opts));
+				.then(me.onMessage.bind(me, msg, opts))
+				.fail(me.startChat.bind(me, occupants, {silent: true}));
 			return;
 		}
 
