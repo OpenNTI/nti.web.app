@@ -104,7 +104,7 @@ Ext.define('NextThought.app.chat.transcript.Pager', {
 						transcripts.push(transcript);
 					}
 
-					console.debug('startIndex: ', startIndex, 'endIndex: ', endIndex, 'transcripts: ', transcripts, 'messageCount: ', me.PAGE_SIZE);
+					// console.debug('startIndex: ', startIndex, 'endIndex: ', endIndex, 'transcripts: ', transcripts, 'messageCount: ', me.PAGE_SIZE);
 					pages.push({
 						startIndex: startIndex,
 						endIndex: endIndex,
@@ -128,7 +128,7 @@ Ext.define('NextThought.app.chat.transcript.Pager', {
 			}
 
 			if (me.transcriptStore.last() === transcript && messageCount > 0 && messageCount <= me.PAGE_SIZE) {
-				console.debug('startIndex: ', startIndex, 'endIndex: ', endIndex, 'transcripts: ', transcripts, 'messageCount: ', messageCount);
+				// console.debug('startIndex: ', startIndex, 'endIndex: ', endIndex, 'transcripts: ', transcripts, 'messageCount: ', messageCount);
 				pages.push({
 					startIndex: startIndex,
 					endIndex: endIndex,
