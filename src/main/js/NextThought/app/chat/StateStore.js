@@ -166,6 +166,7 @@ Ext.define('NextThought.app.chat.StateStore', {
 
 		// Cache the new room to make sure the map that the store is in sync
 		console.debug('caching new room info : ', newRoom.getId());
+		me.CHAT_WIN_MAP[occupantsKey] = chatWindow;
 		me.ROOM_USER_MAP[newRoom.getId()] = occupantsKey;
 		me.putRoomInfoIntoSession(newRoom);
 	},
