@@ -284,6 +284,11 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 		this.fireEvent('realign-editor');
 	},
 
+	setAvatar: function(user, record){
+		record.set({
+			'Creator': user
+		});
+	},
 
 	fillInData: function(record) {
 		var me = this,
@@ -295,6 +300,11 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 				.then(function(user) {
 					record.set({
 						'Creator': user
+					});
+
+					me.mon(user, {
+						single: true,
+						'avatarChanged': me.setAvatar.bind(me, user, record)
 					});
 				})
 				.fail(function(reason) {
