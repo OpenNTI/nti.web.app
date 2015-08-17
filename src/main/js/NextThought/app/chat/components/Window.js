@@ -89,8 +89,11 @@ Ext.define('NextThought.app.chat.components.Window', {
 		this.ChatActions = NextThought.app.chat.Actions.create();
 		this.GroupActions = NextThought.app.groups.Actions.create();
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
-		this.Pager = NextThought.app.chat.transcript.Pager.create();
-		this.Pager.bindWindow(this);
+
+		if (isFeature('chat-history')) {
+			this.Pager = NextThought.app.chat.transcript.Pager.create();
+			this.Pager.bindWindow(this);
+		}
 
 		this.setChatStatesMap();
 		this.logView = this.down('chat-log-view');
@@ -190,7 +193,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 		//Update the presence of the users
 		me.onlineOccupants = me.onlineOccupants || [];
 
-		if (!this.historySet) {
+		if (!this.historySet && isFeature('chat-history')) {
 			me.maskWindow();
 			me.Pager.buildTranscriptStore(roomInfo.get('Occupants'));
 		}
