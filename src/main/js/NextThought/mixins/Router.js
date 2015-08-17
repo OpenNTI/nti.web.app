@@ -157,6 +157,8 @@ Ext.define('NextThought.mixins.Router', {
 
 	onFailedToGetFullPath: function(obj, route) {
 		this.WindowActions.pushWindow(obj);
+
+		return Promise.reject();
 	},
 
 
