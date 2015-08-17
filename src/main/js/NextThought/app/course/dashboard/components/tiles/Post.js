@@ -184,14 +184,15 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 	//this should be the same for all sub instances
 	getCreator: function() {
 		var rec = this.record,
-			creator = rec.get('Creator');
+			creator = rec.get('Creator'),
+			me = this;
 
 		if (!Ext.isString(creator)) { return creator; }
 
 		return UserRepository.getUser(creator)
 			.then(function(user) {
 				rec.set('Creator', user);
-
+				me.mon(user, 'avatarChanged', me.setCreator.bind(me, user));
 				return user;
 			});
 	},
