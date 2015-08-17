@@ -173,7 +173,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		this.updateRequestAlias();
 
 		var aboutEl = this.el && this.el.dom.querySelector('.field.about'),
-			about = this.activeUser.get('about');
+			about = this.activeUser && this.activeUser.get('about');
 
 		if (Array.isArray(about)) {
 			about = NextThought.mixins.ModelWithBodyContent.unsafeSyncCompileBodyContent(about);
