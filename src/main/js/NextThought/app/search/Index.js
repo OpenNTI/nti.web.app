@@ -231,9 +231,11 @@ Ext.define('NextThought.app.search.Index', {
 
 		this.showLoading();
 
+		this.lock = Date.now();
+
 		this.SearchActions.loadSearchPage(search.term, accepts, search.bundle, search.page, page)
-			.then(this.onLoadResults.bind(this))
-			.fail(this.onLoadFail.bind(this));
+			.then(this.onLoadResults.bind(this, this.lock))
+			.fail(this.onLoadFail.bind(this, this.lock));
 	},
 
 
@@ -251,7 +253,9 @@ Ext.define('NextThought.app.search.Index', {
 	},
 
 
-	onLoadResults: function(batch) {
+	onLoadResults: function(lock, batch) {
+		if (lock !== this.lock) { return; }
+
 		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
 
 		this.removeLoading();
@@ -274,7 +278,9 @@ Ext.define('NextThought.app.search.Index', {
 	},
 
 
-	onLoadFail: function(reason) {
+	onLoadFail: function(lock, reason) {
+		if (lock !== this.lock) { return; }
+
 		console.error('Failed to load search results: ', reason);
 
 		this.removeLoading();
