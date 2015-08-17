@@ -357,6 +357,11 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 
 
 	setPath: function(path) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setPath.bind(this, path));
+			return;
+		}
+
 		var labels;
 
 		labels = path.map(function(p) {
