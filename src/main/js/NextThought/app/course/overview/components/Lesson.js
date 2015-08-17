@@ -102,7 +102,6 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 		// 	AnalyticsUtil.addContext(me.currentPage);
 		// }
 
-		overviewSrc = '';
 		return Promise.all([
 			(overviewSrc && ContentProxy.get(overviewSrc)) || Promise.resolve(null),
 			course.getAssignments(),
