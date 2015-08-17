@@ -120,7 +120,7 @@ Ext.define('NextThought.app.content.content.Index', {
 			pageId = page.getId(),
 			pageSource = this.ContentActions.getContentPageSource(page.getId(), this.currentBundle, this.root);
 
-		if (this.reader) {
+		if (this.reader && !this.reader.isDestroyed) {
 			if (this.reader.pageInfo && this.reader.pageInfo.getId() === pageId) {
 				return;
 			} else if (this.reader.relatedWork && this.reader.relatedWork.getId() === pageId) {
