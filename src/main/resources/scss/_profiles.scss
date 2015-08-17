@@ -1086,24 +1086,6 @@
 			border-color: #eaeaea;
 			background: white;
 
-			&.context .meta {
-			    position: relative;
-			    overflow: hidden;
-			    font: normal 400 20px "Open Sans",sans-serif;
-			    color: #494949;
-			    display: block;
-			    height: 50px;
-			    bottom: 5px;
-
-				.message {
-				    font-size: 12px;
-				}
-
-				.action.button {
-				    display: none;
-				}
-			}
-
 			.icon {
 				float: left;
 				width: 54px; height: 66px;
