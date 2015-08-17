@@ -196,6 +196,11 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	},
 
 
+	getTitle: function(isOnly) {
+		return isOnly ? this.get('title') : '';
+	},
+
+
 	getEnrollmentOption: function(name) {
 		var options = this.get('EnrollmentOptions');
 

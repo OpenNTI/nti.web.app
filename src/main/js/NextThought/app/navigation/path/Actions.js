@@ -153,6 +153,24 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 			});
 	},
 
+
+	__resolveForbiddenBreadCrumb: function(resp) {
+		var json = Globals.parseJSON(resp, true),
+			items = json && json.Items,
+			obj = items && items[0];
+
+		obj = obj && ParseUtils.parseItems(obj)[0];
+
+		if (obj && obj.getTitle) {
+			return [{
+				label: obj.getTitle(true)
+			}];
+		}
+
+		return Promise.reject();
+	},
+
+
 	getBreadCrumb: function(record) {
 		var me = this,
 			rootObject = me.ContextStore.getRootBundle() || me.ContextStore.getRootProfile(),
@@ -186,8 +204,8 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 				return titles;
 			})
 			.fail(function(error) {
-				console.error('Unable to get path because: ', error, 'showing container title instead');
-
+				//if we fail to get the path to the item, try to get the container
+				//and show its title
 				var containerId = record.get('ContainerId');
 
 				if (!containerId) {
@@ -200,6 +218,18 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 							return [{
 								label: container.getTitle()
 							}];
+						}
+
+						return Promise.reject();
+					})
+					.fail(function(reason) {
+						//If the container fails, check if it 403s. If it did
+						//the response text should be an object the user needs
+						//to gain access to, so show it in the breadcrumb
+						var resp = Array.isArray(reason) ? reason[1] : null;
+
+						if (resp && resp.status === 403) {
+							return me.__resolveForbiddenBreadCrumb(resp.responseText);
 						}
 
 						return Promise.reject();
