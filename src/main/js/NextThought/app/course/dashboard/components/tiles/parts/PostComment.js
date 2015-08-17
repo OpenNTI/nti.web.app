@@ -71,6 +71,12 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.parts.PostComment'
 		UserRepository.getUser(me.record.get('Creator'))
 			.then(function(user) {
 				me.avatarEl.setHTML(Ext.DomHelper.createTemplate('{user:avatar}').apply({user: user}));
+
+				me.mon(user, {
+					single: true,
+					'avatarChanged': me.fillInUser.bind(me, user)
+				});
+
 				me.nameEl.update(user.getName());
 			});
 	},
