@@ -15,7 +15,7 @@ Ext.define('NextThought.model.Change', {
 		};
 	},
 
-	idProperty: 'ID',
+	idProperty: 'OID',
 	fields: [
 		{ name: 'ID', type: 'string' },
 		{ name: 'ChangeType', type: 'string' },

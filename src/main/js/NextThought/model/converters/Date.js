@@ -23,4 +23,18 @@ Ext.define('NextThought.model.converters.Date', {
 		type: 'ISODate',
 		sortType: Ext.data.SortTypes.asDate
 	};
+
+	Ext.data.Types.NTIDATE = {
+		convert: function(v) {
+			if (Number(v) !== v) {
+				v = 0;
+			} else if (v % 1 !== 0) {
+				v = Math.round(v * 1000);
+			}
+
+			return new Date(v);
+		},
+		type: 'NTIDate',
+		sortType: Ext.data.SortTypes.asDate
+	};
 });

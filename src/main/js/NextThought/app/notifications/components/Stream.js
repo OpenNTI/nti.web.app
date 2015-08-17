@@ -25,6 +25,12 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 	},
 
 
+	getScrollEl: function() {
+		//TODO: figure out how to not have to do a user agent check for this
+		return Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body;
+	},
+
+
 	setUpListeners: function(store) {
 		var me = this;
 
@@ -43,7 +49,11 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 					store.sort();
 				}
 
-				me.maybeLoadMoreIfNothingNew();
+				if (recs.length < store.backingStore.pageSize) {
+					me.onLastBatch = true;
+				} else {
+					me.maybeLoadMoreIfNothingNew();
+				}
 			}
 		});
 
@@ -94,9 +104,7 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 
 		this.currentCount = s.getCount();
 
-		max = s.getPageFromRecordIndex(s.getTotalCount());
-
-		if (s.currentPage < max && !s.isLoading()) {
+		if (!this.onLastBatch && !s.isLoading()) {
 			s.clearOnPageLoad = false;
 			this.addMask();
 			s.nextPage();
@@ -107,7 +115,7 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 
 
 	onScroll: function() {
-		var body = document.body,
+		var body = this.getScrollEl(),
 			height = document.documentElement.clientHeight,
 			top = body.scrollTop,
 			scrollTopMax = body.scrollHeight - height,
