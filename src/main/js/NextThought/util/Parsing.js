@@ -288,7 +288,15 @@ Ext.define('NextThought.util.Parsing', {
 	isEncodedNTIID: function(component) {
 		var decoded = this.decodeFromURI(component);
 
-		return this.isNTIID(decoded);
+		return this.isNTIID(decoded) && !this.isEncodedNTIIMimeType(component);
+	},
+
+
+	isEncodedNTIIMimeType: function(component) {
+		var decoded = decodeURIComponent(component),
+			index = decoded.indexOf('application/vnd.nextthought');
+
+		return index > -1;
 	},
 
 
