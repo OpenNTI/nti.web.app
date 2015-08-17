@@ -56,7 +56,8 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			return;
 		}
 
-		var myWidth = this.getWidth(),
+		var dom = this.el && this.el.dom,
+			myWidth = this.getWidth(),
 			myHeight = this.getHeight(),
 			viewWidth = Ext.Element.getViewportWidth(),
 			viewHeight = Ext.Element.getViewportHeight(),
@@ -68,8 +69,8 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		top = Math.max(top, 0);
 		left = Math.max(left, 0);
 
-		this.setY(top);
-		this.setX(left);
+		dom.style.top = top + 'px';
+		dom.style.left = left + 'px';
 	},
 
 	buttonCfg: [
