@@ -190,7 +190,7 @@ Ext.define('NextThought.app.course.Index', {
 				});
 
 				if (archived.length) {
-					current.push({text: 'Acrhived', isLabel: true});
+					current.push({text: 'Archived', isLabel: true});
 					current = current.concat(archived);
 				}
 
