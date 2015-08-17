@@ -82,7 +82,7 @@ Ext.define('NextThought.app.chat.transcript.Pager', {
 		this.transcriptStore.each(function(transcript) {
 			var room = transcript.get('RoomInfo'),
 				mCount = room.get('MessageCount'),
-				pCount = Math.ceil(mCount / me.PAGE_SIZE), i;
+				pCount = Math.ceil(mCount / me.PAGE_SIZE), i, diff;
 
 			for (i = 0; i < pCount; i++) {
 				if (messageCount + mCount < me.PAGE_SIZE) {
@@ -92,11 +92,19 @@ Ext.define('NextThought.app.chat.transcript.Pager', {
 					}
 				}
 				else {
-					endIndex = startIndex + me.PAGE_SIZE - 1;
+					diff = me.PAGE_SIZE - messageCount;
+					if (i > 0) {
+						endIndex = startIndex + me.PAGE_SIZE - 1;
+					}
+					else {
+						endIndex = (i * me.PAGE_SIZE) + diff - 1;
+					}
+
 					if (!Ext.Array.contains(transcripts, transcript)) {
 						transcripts.push(transcript);
 					}
 
+					console.debug('startIndex: ', startIndex, 'endIndex: ', endIndex, 'transcripts: ', transcripts, 'messageCount: ', me.PAGE_SIZE);
 					pages.push({
 						startIndex: startIndex,
 						endIndex: endIndex,
@@ -109,11 +117,18 @@ Ext.define('NextThought.app.chat.transcript.Pager', {
 					endIndex = null;
 					transcripts = [];
 					messageCount = 0;
-					mCount -= me.PAGE_SIZE;
+					mCount -= diff;
+
+					// If we're the last page, make sure we don't leave any message unaccounted for.
+					if (i === (pCount - 1)) {
+						messageCount = mCount;
+						transcripts.push(transcript);
+					}
 				}
 			}
 
-			if (me.transcriptStore.last() === transcript && messageCount > 0 && messageCount < me.PAGE_SIZE) {
+			if (me.transcriptStore.last() === transcript && messageCount > 0 && messageCount <= me.PAGE_SIZE) {
+				console.debug('startIndex: ', startIndex, 'endIndex: ', endIndex, 'transcripts: ', transcripts, 'messageCount: ', messageCount);
 				pages.push({
 					startIndex: startIndex,
 					endIndex: endIndex,
@@ -187,7 +202,6 @@ Ext.define('NextThought.app.chat.transcript.Pager', {
 					allMessages = allMessages.concat(msgs);
 				});
 
-				console.log(allMessages);
 				fulfill(allMessages);
 			});
 		});
