@@ -405,25 +405,5 @@ Ext.define('NextThought.app.chat.StateStore', {
 
 	getTranscripts: function() {
 		return this.__transcriptStore;
-	},
-
-
-	initializeTranscriptStore: function() {
-		var url = Service.getContainerUrl(Globals.CONTENT_ROOT, Globals.RECURSIVE_USER_GENERATED_DATA),
-			s = NextThought.store.PageItem.make(url, Globals.CONTENT_ROOT, true);
-
-		s.pageSize = 100;
-		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-			sortOn: 'createdTime',
-			sortOrder: 'descending',
-			pageSize: 100,
-			accept: [
-				NextThought.model.TranscriptSummary.prototype.mimeType,
-				NextThought.model.Transcript.prototype.mimeType
-			].join(',')
-		});
-
-		this.__transcriptStore = s;
-		s.load();
 	}
 });

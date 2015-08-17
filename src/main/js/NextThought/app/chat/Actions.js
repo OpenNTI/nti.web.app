@@ -62,7 +62,6 @@ Ext.define('NextThought.app.chat.Actions', {
 
 	onSessionReady: function() {
 		console.log('Chat onSessionReady');
-		this.ChatStore.initializeTranscriptStore();
 		this.onNewSocketConnection();
 	},
 
