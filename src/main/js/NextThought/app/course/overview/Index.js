@@ -176,31 +176,32 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		return me.store.onceBuilt()
 			.then(function() {
-				var siblings;
+				var siblings = [];
 
 				if (lessonId && (!lesson || lesson.getId() !== lessonId)) {
 					lesson = me.store.findRecord('NTIID', lessonId, false, true, true);
 				}
 
-				siblings = me.store.getRange().reduce(function(c, item) {
-					var id;
+				//For now don't make the lessons have a menu
+				// siblings = me.store.getRange().reduce(function(c, item) {
+				// 	var id;
 
-					if (item.get('type') === 'lesson') {
-						id = item.getId();
+				// 	if (item.get('type') === 'lesson') {
+				// 		id = item.getId();
 
-						c.push({
-							route: ParseUtils.encodeForURI(id),
-							precache: {
-								lesson: item
-							},
-							label: item.get('label'),
-							title: item.get('label'),
-							cls: item === lesson ? 'current' : ''
-						});
-					}
+				// 		c.push({
+				// 			route: ParseUtils.encodeForURI(id),
+				// 			precache: {
+				// 				lesson: item
+				// 			},
+				// 			label: item.get('label'),
+				// 			title: item.get('label'),
+				// 			cls: item === lesson ? 'current' : ''
+				// 		});
+				// 	}
 
-					return c;
-				}, []);
+				// 	return c;
+				// }, []);
 
 				me.activeLesson = lesson;
 
@@ -208,6 +209,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 					label: lesson.get('label'),
 					title: lesson.get('label'),
 					route: ParseUtils.encodeForURI(lesson.getId()),
+					ntiid: lesson.getId(),
 					precache: {
 						lesson: lesson
 					},

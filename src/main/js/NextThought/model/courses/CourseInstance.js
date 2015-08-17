@@ -297,6 +297,27 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	getContentBreadCrumb: function(path, pageId, rootId, parent) {
+		var root = path[0];
+
+		if (parent) {
+			if (root.ntiid === rootId) {
+				path.unshift(parent);
+			} else {
+				path[0] = parent;
+			}
+		}
+
+		path.forEach(function(part) {
+			if (part.ntiid === rootId) {
+				part.siblings = [];
+			}
+		});
+
+		return path;
+	},
+
+
 	//get a count of how many things the user has done in the course
 	getCompletionStatus: function() {},
 

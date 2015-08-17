@@ -14,7 +14,7 @@ Ext.define('NextThought.app.content.Actions', {
 
 	MAX_PATH_LENGTH: 2,
 
-	getContentPath: function(ntiid, bundle, parent) {
+	getContentPath: function(ntiid, bundle, parent, rootPageId, rootRoute) {
 		var me = this;
 
 		return ContentUtils.getPageID(ntiid, bundle)
@@ -62,13 +62,11 @@ Ext.define('NextThought.app.content.Actions', {
 					return;
 				}
 
-				return me.buildContentPath(parentNode, location.location, lineage, leftOvers, allowMenus, bundle);
+				return me.buildContentPath(parentNode, location.location, lineage, leftOvers, allowMenus, bundle, rootPageId, rootRoute || '');
 			})
 			.then(function(path) {
-				var root = path[0];
-
-				if (parent) {
-					path[0] = parent;
+				if (bundle.getContentBreadCrumb) {
+					return bundle.getContentBreadCrumb(path, ntiid, rootPageId, parent);
 				}
 
 				return path;
@@ -88,25 +86,25 @@ Ext.define('NextThought.app.content.Actions', {
 	},
 
 
-	buildContentPath: function(parentNode, topic, lineage, leftOvers, allowMenus, bundle) {
+	buildContentPath: function(parentNode, topic, lineage, leftOvers, allowMenus, bundle, rootPageId, rootRoute) {
 		var path = [],
 			i = 0, pathLength = 0;
 
 		if ((lineage.length + leftOvers.length) <= 1) {
 			if (ContentUtils.hasChildren(topic)) {
-				path.push(this.buildContentPathPart(this.levelLabels[lineage.length], this.__getFirstTopic(topic), parentNode, true, bundle));
+				path.push(this.buildContentPathPart(this.levelLabels[lineage.length], this.__getFirstTopic(topic), parentNode, true, bundle, rootPageId, rootRoute));
 			} else {
-				path.push(this.buildContentPathPart(this.levelLabels[NaN], topic.getAttribute('ntiid'), null, false, bundle));
+				path.push(this.buildContentPathPart(this.levelLabels[NaN], topic.getAttribute('ntiid'), null, false, bundle, rootPageId, rootRoute));
 			}
 		}
 
 		for (i; i < this.MAX_PATH_LENGTH && i < lineage.length; i++) {
-			path.push(this.buildContentPathPart(null, lineage[i], parentNode, allowMenus, bundle));
+			path.push(this.buildContentPathPart(null, lineage[i], parentNode, allowMenus, bundle, rootPageId, rootRoute));
 			pathLength++;
 		}
 
 		for (i = 0; pathLength < this.MAX_PATH_LENGTH && i < leftOvers.length; i++) {
-			path.push(this.buildContentPathPart(null, leftOvers[i], parentNode, false, bundle));
+			path.push(this.buildContentPathPart(null, leftOvers[i], parentNode, false, bundle, rootPageId, rootRoute));
 			pathLength++;
 		}
 
@@ -117,7 +115,7 @@ Ext.define('NextThought.app.content.Actions', {
 	},
 
 
-	buildContentPathPart: function(label, ntiid, parentNode, allowMenus, bundle) {
+	buildContentPathPart: function(label, ntiid, parentNode, allowMenus, bundle, rootPageId, rootRoute) {
 		if (!ntiid) {
 			return Promise.resolve({
 				label: label,
@@ -129,14 +127,22 @@ Ext.define('NextThought.app.content.Actions', {
 
 		return ContentUtils.getLocation(ntiid, bundle)
 			.then(function(locations) {
-				var l = locations[0],
+				var l = locations[0], route,
 					part = {};
 
 				part.label = (bundle.isCourse) ? l.label || label : label || l.label;
 				part.ntiid = l.NTIID;
 
+				if (rootPageId && rootPageId !== l.NTIID) {
+					route = ParseUtils.encodeForURI(l.NTIID);
+				} else {
+					route = '';
+				}
+				
+				part.route = Globals.trimRoute(rootRoute) + '/' + route;
+
 				if (allowMenus) {
-					return me.buildContentPathPartMenu(l, parentNode, bundle)
+					return me.buildContentPathPartMenu(l, parentNode, bundle, rootRoute)
 							.then(function(siblings) {
 								part.siblings = siblings;
 
@@ -229,7 +235,7 @@ Ext.define('NextThought.app.content.Actions', {
 	},
 
 
-	buildContentPathPartMenu: function(location, parentNode, bundle) {
+	buildContentPathPartMenu: function(location, parentNode, bundle, rootRoute) {
 		var me = this,
 			p = bundle && bundle.getOutline && bundle.getOutline(),
 			currentNode = location ? location.location : null;
@@ -254,7 +260,7 @@ Ext.define('NextThought.app.content.Actions', {
 						return Promise.resolve(null);
 					}
 
-					if (outline) {
+					if (outline && false) {
 						return outline.isVisible(sibling.getAttribute('ntiid'))
 							.then(function(visible) {
 								if (!visible) {
@@ -284,7 +290,7 @@ Ext.define('NextThought.app.content.Actions', {
 							return {
 								label: text,
 								title: text,
-								route: ParseUtils.encodeForURI(node.getAttribute('ntiid')),
+								route: Globals.trimRoute(rootRoute) + '/' + ParseUtils.encodeForURI(node.getAttribute('ntiid')),
 								ntiid: node.getAttribute('ntiid'),
 								cls: node.getAttribute('ntiid') === currentNode ? 'current' : ''
 							};

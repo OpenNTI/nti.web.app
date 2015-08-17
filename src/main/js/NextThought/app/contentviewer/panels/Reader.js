@@ -192,7 +192,8 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 			hideControls: this.pageInfo.hideControls,
 			doNavigation: this.doNavigation.bind(this),
 			toc: this.toc,
-			hideHeader: this.hideHeader
+			hideHeader: this.hideHeader,
+			rootRoute: this.rootRoute,
 		};
 	},
 
