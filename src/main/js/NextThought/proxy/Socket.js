@@ -75,12 +75,16 @@ Ext.define('NextThought.proxy.Socket', {
 				f = this.wrapHandler(newControl[k], k);
 
 				if (this.socket) {
-					console.log('registering handler for ', k);
+					if (this.isDebug){
+						console.debug('registering handler for ', k);
+					}
 					//this handles sequencing appropriately
 					this.socket.on(k, newControl[k]);
 				}
 				else{
-					console.log('chaining handler for ', k, ' because socket not read');
+					if (this.isDebug){
+						console.debug('chaining handler for ', k, ' because socket not ready');
+					}
 					//No socket yet so track it (sequencing if necessary) for addition later
 					x = this.control[k];
 					this.control[k] = x ? Ext.Function.createSequence(x, f) : f;
@@ -138,7 +142,9 @@ Ext.define('NextThought.proxy.Socket', {
 
 		for (k in this.control) {
 			if (this.control.hasOwnProperty(k)) {
-				console.debug('Registering handler for ', k);
+				if (this.isDebug){ 
+					console.debug('Attaching handler for ', k);
+				}
 				socket.on(k, this.control[k]);
 			}
 		}
