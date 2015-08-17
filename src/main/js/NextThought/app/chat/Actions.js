@@ -192,7 +192,7 @@ Ext.define('NextThought.app.chat.Actions', {
 			w =  Ext.widget({xtype: 'chat-window', roomInfo: roomInfo});
 			this.ChatStore.cacheChatWindow(w, roomInfo);
 			this.ChatStore.putRoomInfoIntoSession(roomInfo);
-			this.fillInHistoryForOccupants(roomInfo.get('Occupants'), w);
+			// this.fillInHistoryForOccupants(roomInfo.get('Occupants'), w);
 		}
 		return w;
 	},

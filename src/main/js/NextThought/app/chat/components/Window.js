@@ -90,6 +90,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 		this.GroupActions = NextThought.app.groups.Actions.create();
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.Pager = NextThought.app.chat.transcript.Pager.create();
+		this.Pager.bindWindow(this);
 
 		this.setChatStatesMap();
 		this.logView = this.down('chat-log-view');
@@ -189,7 +190,10 @@ Ext.define('NextThought.app.chat.components.Window', {
 		//Update the presence of the users
 		me.onlineOccupants = me.onlineOccupants || [];
 
-		me.Pager.getChatSummariesForOccupants(roomInfo.get('Occupants'));
+		if (!this.historySet) {
+			me.Pager.buildTranscriptStore(roomInfo.get('Occupants'));
+		}
+		this.historySet = true;
 
 		UserRepository.getUser(roomInfo.get('Occupants'), function(users) {
 
@@ -491,6 +495,11 @@ Ext.define('NextThought.app.chat.components.Window', {
 	},
 
 
+	insertBulkMessages: function(index, messages) {
+		this.logView.insertBulkMessages(index, messages);
+	},
+
+
 	/**
 	 *  We use this method to update the state of other chat participants.
 	 *  Thus, it is responsible for updating the appropriate view,
@@ -606,5 +615,15 @@ Ext.define('NextThought.app.chat.components.Window', {
 
 	hasBeenAccepted: function() {
 		return this.chatAccepted;
+	},
+
+
+	maskWindow: function() {
+		this.logView.addMask();
+	},
+
+
+	unmaskWindow: function() {
+		this.logView.removeMask();
 	}
 });

@@ -232,8 +232,8 @@ Ext.define('NextThought.app.chat.components.Log', {
 	},
 
 
-	addBulkMessages: function(messages) {
-		var m = [], me = this, lastTimeStamp, lastItem, win;
+	prepareMessagesBeforeAdd: function(messages) {
+		var m = [], me = this, lastTimeStamp, lastItem;
 
 		function scroll() {
 			if (lastItem && lastItem.el) {
@@ -273,12 +273,19 @@ Ext.define('NextThought.app.chat.components.Log', {
 			lastTimeStamp = newMsgTime;
 		});
 
+		return m;
+	},
+
+
+	addBulkMessages: function(messages) {
+		var m, win;
+
+		m = this.prepareMessagesBeforeAdd(messages) || [];
 		if (!Ext.isEmpty(m)) {
-			me.add(m);
+			this.add(m);
 		}
 
 		// Scroll to the last item.
-		lastItem = me.items.items.last();
 		win = this.up('window');
 		if (win) {
 			if (win.isVisible()) {
@@ -287,6 +294,15 @@ Ext.define('NextThought.app.chat.components.Log', {
 			else {
 				win.on('show', scroll);
 			}
+		}
+	},
+
+
+	insertBulkMessages: function(index, messages) {
+		var m = this.prepareMessagesBeforeAdd(messages) || [];
+
+		if (!Ext.isEmpty(m)) {
+			this.insert(index, m);
 		}
 	},
 

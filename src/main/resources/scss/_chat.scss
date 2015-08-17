@@ -240,6 +240,16 @@
 
 			.message{
 				word-wrap: break-word;
+
+				&.more {
+					padding: 10px 10px;
+    				background-color: #3f3f3f;
+				    font-size: 14px;
+				    width: 160px;
+				    margin: 8px auto;
+				    border-radius: 5px;
+				    cursor: pointer;
+				}
 			}
 		}
 
