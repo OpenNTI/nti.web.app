@@ -191,6 +191,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 		me.onlineOccupants = me.onlineOccupants || [];
 
 		if (!this.historySet) {
+			me.maskWindow();
 			me.Pager.buildTranscriptStore(roomInfo.get('Occupants'));
 		}
 		this.historySet = true;

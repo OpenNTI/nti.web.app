@@ -150,7 +150,7 @@ Ext.define('NextThought.app.chat.transcript.Pager', {
 		// Filter messages
 		if(pageTranscriptIndex === 0) {
 			if (pageTranscriptCount === 1) {
-				if (page.endIndex && page.endIndex >= 0) {
+				if (page.endIndex !== null && page.endIndex >= 0) {
 					toAdd = messages.slice(page.startIndex, page.endIndex + 1);
 				}
 				else {
@@ -162,7 +162,7 @@ Ext.define('NextThought.app.chat.transcript.Pager', {
 			}
 		}
 		else {
-			if (page.endIndex) {
+			if (page.endIndex !== null && page.endIndex >= 0) {
 				toAdd = messages.slice(page.startIndex, page.endIndex + 1);
 			}
 			else {

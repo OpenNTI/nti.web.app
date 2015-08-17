@@ -395,12 +395,16 @@ Ext.define('NextThought.app.chat.components.Log', {
 
 
 	addMask: function() {
-		this.el.mask('loading chat history');
+		if (this.rendered) {
+			this.el.mask('loading chat history');
+		}
 	},
 
 
 	removeMask: function() {
-		this.el.unmask();
+		if (this.rendered) {
+			this.el.unmask();
+		}
 	},
 
 
