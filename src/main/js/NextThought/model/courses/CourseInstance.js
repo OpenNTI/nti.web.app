@@ -306,12 +306,17 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 		if (!me.navStore) {
 			me.navStore = new NextThought.store.courseware.Navigation({
-				outlinePromise: me.getOutline()
+				outlinePromise: me.getOutline(),
+				tocPromise: this.getLocationInfo()
+					.then(function(location) {
+						return new NextThought.store.courseware.ToCBasedOutline({data: location.toc});
+					})
 			});
 		}
 
-		return me.navStore;
+		return this.navStore;
 	},
+
 
 
 	getTocs: function() {

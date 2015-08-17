@@ -59,7 +59,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 
 	__updateProgress: function() {
-        if (!this.__getCurrentProgress) { return; }
+		if (!this.__getCurrentProgress) { return; }
 
 		var me = this;
 
@@ -102,6 +102,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 		// 	AnalyticsUtil.addContext(me.currentPage);
 		// }
 
+		overviewSrc = '';
 		return Promise.all([
 			(overviewSrc && ContentProxy.get(overviewSrc)) || Promise.resolve(null),
 			course.getAssignments(),
@@ -265,7 +266,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 					if (t === 'video') {
 						if (c.items.length === 0) {
-							c.items.push({xtype: 'course-overview-video', items: []});
+							c.items.push({xtype: 'course-overview-video', items: [], course: course});
 						}
 						c = c.items[0];
 					}
@@ -311,7 +312,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 				sectionOverride: section,
 				assignment: assignment,
 				course: course,
-				navigate: me.navigate.bind(me)
+				navigate: this.navigate.bind(this)
 			};
 		}
 

@@ -19,10 +19,17 @@ Ext.define('NextThought.store.courseware.Navigation', {
 			config.outlinePromise = Promise.reject('Not Given');
 		}
 
-		this.building = config.outlinePromise
-				.then(this.fillFromOutline.bind(this))
-				.fail(this.failedToBuild.bind(this));
-		
+		if (!config.tocPromise) {
+			config.tocPromise = Promise.resolve();
+		}
+
+		this.building = Promise.all([
+				config.outlinePromise,
+				config.tocPromise
+			])
+			.then(this.fillFromOutline.bind(this))
+			.fail(this.failedToBuild.bind(this));
+
 		this.callParent(arguments);
 	},
 
@@ -37,8 +44,10 @@ Ext.define('NextThought.store.courseware.Navigation', {
 		return this;
 	},
 
-	fillFromOutline: function(outline) {
-		var index = 0, r = [],
+	fillFromOutline: function(results) {
+		var outline = results[0],
+			tocNodes = results[1],
+			index = 0, r = [], t,
 			depth = 0, maxDepth;
 
 		function itr(node) {
@@ -46,12 +55,22 @@ Ext.define('NextThought.store.courseware.Navigation', {
 				fill = {};
 
 			if (node.isNode) {
+				t = id && tocNodes.getById(id);
+
+				if (t) {
+					fill.tocOutlineNode = t;
+				}
+
+				fill.position = index++;
+
 				node._max_depth = maxDepth;
 				node._depth = depth;
 
 				if (!node.get('label')) {
-					node.set('label', 'Empty');
+					fill.label = 'Empty';
 				}
+
+				node.set(fill);
 
 				r.push(node);
 			}
