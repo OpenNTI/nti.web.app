@@ -124,7 +124,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 
 		this.nameEl.update(data.displayName || '');
 		this.realnameEl.update(data.realname || '');
-		this.aboutEl.update(aboutTxt);
+		this.aboutEl.update(aboutTxt || '');
 		this.emailEl.update(data.email || '');
 		this.locationEl.update(data.location || '');
 		this.homepageEl.update(data.home_page || '');
@@ -173,14 +173,20 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		this.updateRequestAlias();
 
 		var aboutEl = this.el && this.el.dom.querySelector('.field.about'),
-			about = this.activeUser && this.activeUser.get('about');
+			about = this.activeUser && this.activeUser.get('about'),
+			action = 'addCls';
 
 		if (Array.isArray(about)) {
 			about = NextThought.mixins.ModelWithBodyContent.unsafeSyncCompileBodyContent(about);
 		}
 
+		if (!about) {
+			action = 'removeCls';
+		}
+		this.emptyTextEl[action]('hidden');
+
 		if (aboutEl) {
-			aboutEl.innerHTML = about;
+			aboutEl.innerHTML = about || '';
 
 			if (this.editor) {
 				this.editor.destroy();
