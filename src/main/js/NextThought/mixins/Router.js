@@ -48,13 +48,17 @@ Ext.define('NextThought.mixins.Router', {
 	},
 
 
-	__handleObjectNav: function(result) {
+	__handleObjectNav: function(fragment, result) {
 		result = result || {};
 
 		if (typeof result === 'string') {
 			result = {
 				route: result
 			};
+		}
+
+		if (fragment) {
+			result.route = Globals.trimRoute(result.route) + '#' + fragment;
 		}
 
 		this.pushRoute(result.title || '', result.route, result.precache);
@@ -74,17 +78,17 @@ Ext.define('NextThought.mixins.Router', {
 	},
 
 
-	__handleNoObjectNavigation: function(object) {
+	__handleNoObjectNavigation: function(object, fragment) {
 		if (this.__parentRouter) {
-			 return this.__parentRouter.navigateToObject(object);
+			 return this.__parentRouter.navigateToObject(object, fragment);
 		}
 	},
 
 
-	navigateToObject: function(object) {
+	navigateToObject: function(object, fragment) {
 		return this.mixins.Object.handleObject.call(this, object)
-			.then(this.__handleObjectNav.bind(this))
-			.fail(this.__handleNoObjectNavigation.bind(this, object));
+			.then(this.__handleObjectNav.bind(this, fragment))
+			.fail(this.__handleNoObjectNavigation.bind(this, object, fragment));
 	},
 
 	/**

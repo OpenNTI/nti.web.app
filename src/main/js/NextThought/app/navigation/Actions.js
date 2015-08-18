@@ -47,7 +47,7 @@ Ext.define('NextThought.app.navigation.Actions', {
 						//iterate backwards
 						for (i = context.length - 1; i >= 0; i--) {
 							if (context[i].cmp && context[i].cmp.navigateToObject) {
-								context[i].cmp.navigateToObject(obj)
+								context[i].cmp.navigateToObject(obj, newFragment)
 									.then(function() {
 										Ext.getBody().el.unmask();
 									});
