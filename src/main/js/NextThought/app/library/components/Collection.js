@@ -57,6 +57,15 @@ Ext.define('NextThought.app.library.components.Collection', {
 		}
 	},
 
+	prepareData: function(data, index, record) {
+		var i = this.callParent(arguments);
+
+		if(record.getIconImage){
+			record.getIconImage();
+		}
+
+		return i;
+	},
 
 	handleSelect: function(selModel, record) {
 		selModel.deselect(record);
