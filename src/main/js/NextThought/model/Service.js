@@ -641,9 +641,11 @@ Ext.define('NextThought.model.Service', {
 
 
 	getSupportLinks: function() {
+		var aboutLink = getString('NextThought.view.menus.Settings.about.href',null,true) || 'http://nextthought.com';
 		this.supportLinks = this.supportLinks || {};
+
 		return Ext.applyIf(this.supportLinks, {
-			about: 'http://nextthought.com',
+			about: aboutLink,
 			termsOfService: 'about:blank'
 		});
 	},
