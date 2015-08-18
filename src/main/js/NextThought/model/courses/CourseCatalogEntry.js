@@ -76,9 +76,15 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 
 	constructor: function() {
 		this.callParent(arguments);
-		this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
+		//this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 	},
 
+	onceAssestsLoadedPromise: function(){
+		if(!this.onceAssetsLoaded){
+			this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
+		}
+		return this.onceAssetsLoaded;
+	},
 
 	getAuthorLine: function() {
 		function makeName(instructor) {
@@ -100,21 +106,42 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 
 	__setImage: function() {
 		var me = this;
-		me.getImgAsset('landing')
-				.then(function(url) { me.set('icon', url); });
-		me.getImgAsset('thumb')
-				.then(function(url) { me.set('thumb', url); });
-		me.getImgAsset('background')
-			.then(function(url) {me.set('background', url); });
+		me.getBackgroundImage();
+		me.getThumbImage();
+		me.getIconImage();
+	},
+		   
+	__ensureAsset: function(key, asset){
+	   var existing = null,
+	   me = this;
+	   
+	   if(!this.__assetPromises){
+		   this.__assetPromises = {};
+		}
+		   
+		existing = this.__assetPromises[key];
+		if(!existing){
+		   existing = this.getImgAsset(asset || key).then(function(url) { me.set(key, url); }, me.set.bind(me, [key, null]));
+		   this.__assetPromises[key] = existing;
+		}
+		   
+		return existing;
+	},
+		   
+	getBackgroundImage: function() {
+		return this.getAsset('background');
+	},
+		   
+	getThumbImage: function() {
+		return this.getAsset('thumb');
+	},
+		   
+	getIconImage: function() {
+		return this.getAsset('icon', 'landing');
 	},
 
-	getBackgroundImage: function() {
-		var me = this;
-
-		return me.onceAssetsLoaded
-			.then(function() {
-				return me.get('background');
-			});
+	getAsset: function(key, asset){
+		return this.__ensureAsset(key, asset).then(this.get.bind(this, key));
 	},
 
 	//update the enrollment scopes enrollment
