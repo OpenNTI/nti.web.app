@@ -40,8 +40,6 @@ Ext.define('NextThought.model.ContentPackage', {
 		this.callParent(arguments);
 
 		wait()
-			//preload the page info to make the other loads faster
-			.then(this.__cacheContentPreferences.bind(this))
 			//pre resolve which image assets to use
 			.then(this.__setImage.bind(this));
 

@@ -288,6 +288,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 		record.set({
 			'Creator': user
 		});
+		this.refresh();
 	},
 
 	fillInData: function(record) {
