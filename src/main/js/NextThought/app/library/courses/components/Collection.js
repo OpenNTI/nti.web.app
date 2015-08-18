@@ -27,7 +27,8 @@ Ext.define('NextThought.app.library.courses.components.Collection', {
 
 	prepareData: function(data, index, record) {
 		var i = Ext.Object.chain(this.callParent(arguments)),
-			course = record.get('CourseInstance').asUIData();
+			courseRecord = record.get('CourseInstance'),
+			course = courseRecord.asUIData();
 
 		if (course) {
 			Ext.apply(i, {
@@ -37,6 +38,9 @@ Ext.define('NextThought.app.library.courses.components.Collection', {
 				author: course.author,
 				enableSettings: true
 			});
+			if(courseRecord.getIconImage){
+				courseRecord.getIconImage();
+			}
 		}
 
 		return i;

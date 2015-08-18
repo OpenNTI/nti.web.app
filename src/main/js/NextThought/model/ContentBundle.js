@@ -102,18 +102,28 @@ Ext.define('NextThought.model.ContentBundle', {
 
 		//do a head request to make sure the assets exist
 		return Promise.all([
-			me.getImgAsset('landing')
-				.then(function(url) { me.set('icon', url); }, me.set.bind(me, ['icon', null])),
-
-			me.getImgAsset('thumb')
-				.then(function(url) { me.set('thumb', url); }, me.set.bind(me, ['thumb', null])),
-
-			me.getImgAsset('background')
-				.then(function(url) { me.set('background', url); }, me.set.bind(me, ['background', null])),
-
-			me.getImgAsset('vendorIcon')
-				.then(function(url) { me.set('vendorIcon', url);}, me.set.bind(me, ['vendorIcon', null]))
+			me.getBackgroundImage(),
+			me.getVendorIcon(),
+			me.getIconImage(),
+			me.__ensureAsset('thumb'),
 		]);
+	},
+
+	__ensureAsset: function(key, asset){
+		var existing = null,
+			me = this;
+
+		if(!this.__assetPromises){
+			this.__assetPromises = {};
+		}
+
+		existing = this.__assetPromises[key];
+		if(!existing){
+			existing = this.getImgAsset(asset || key).then(function(url) { me.set(key, url); }, me.set.bind(me, [key, null]));
+			this.__assetPromises[key] = existing;
+		}
+
+		return existing;
 	},
 
 	/**
@@ -123,14 +133,21 @@ Ext.define('NextThought.model.ContentBundle', {
 	 * @return {Promise} fulfills with the url
 	 */
 	getBackgroundImage: function() {
-		return this.onceAssetsLoadedPromise().then(this.get.bind(this, 'background'));
+		return this.getAsset('background');
 	},
 
+
+	getVendorIcon: function() {
+		return this.getAsset('vendorIcon');
+	},
 
 	getIconImage: function() {
-		return this.onceAssetsLoadedPromise().then(this.get.bind(this, 'icon'));
+		return this.getAsset('icon', 'landing');
 	},
 
+	getAsset: function(key, asset){
+		return this.__ensureAsset(key, asset).then(this.get.bind(this, key));	
+	},
 
 	getTocs: function(status) {
 		var packages = this.get('ContentPackages');
