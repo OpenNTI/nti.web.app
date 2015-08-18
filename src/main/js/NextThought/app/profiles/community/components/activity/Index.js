@@ -291,6 +291,7 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 				batchStart: (page - 1) * me.PAGE_SIZE
 			};
 
+		me.isLoading = true;
 		me.loadingCmp.removeCls('hidden');
 
 		me.currentPage = page;
@@ -317,6 +318,7 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 		console.error('Failed to load community activity: ', error);
 
 		this.loadingCmp.removeCls('hidden');
+		this.isLoading = false;
 
 		this.currentPage = -1;
 
@@ -330,6 +332,8 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 
 	onBatchLoad: function(batch, feedUrl) {
 		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
+
+		this.isLoading = false;
 
 		//if we have items
 		if (batch.ItemCount) {
@@ -370,7 +374,7 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 			scrollTop = el.scrollTop,
 			scrollHeight = el.scrollHeight;
 
-		if (scrollTop + height >= scrollHeight) {
+		if (scrollTop + height >= scrollHeight && !this.isLoading) {
 			this.loadNextBatch();
 		}
 	}
