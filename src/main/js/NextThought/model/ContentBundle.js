@@ -105,7 +105,7 @@ Ext.define('NextThought.model.ContentBundle', {
 			me.getBackgroundImage(),
 			me.getVendorIcon(),
 			me.getIconImage(),
-			me.__ensureAsset('thumb'),
+			me.__ensureAsset('thumb')
 		]);
 	},
 
