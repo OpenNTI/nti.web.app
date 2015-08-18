@@ -193,7 +193,7 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 			doNavigation: this.doNavigation.bind(this),
 			toc: this.toc,
 			hideHeader: this.hideHeader,
-			rootRoute: this.rootRoute,
+			rootRoute: this.rootRoute
 		};
 	},
 
