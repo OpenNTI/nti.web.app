@@ -1205,7 +1205,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	__insertIntoRange: function(el, range) {
 		var content = this.el.dom.querySelector('.content'),
-			parents, i, node,
+			parent, i, node,
 			potentialParents = content.childNodes,
 			endContainer = range.endContainer,
 			after;
@@ -1234,8 +1234,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 
 		if (!parent) {
-			console.error('This shouldnt be possible what did you do?');
-			throw 'No Parent';
+			console.error('Error: No Parent');
+
+			// Since IE only supports the Node.contains on html Elements, not objects, it's possible
+			// to end up with no parent. If so, use the content div.
+			parent = content;
 		}
 
 		if (parent === content) {
