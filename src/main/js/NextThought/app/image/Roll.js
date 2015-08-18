@@ -2,9 +2,8 @@ Ext.define('NextThought.app.image.Roll', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.image-roll',
 
-	layout: 'anchor',
-	defaults: {anchor: '100%'},
-	cls: 'image',
+	layout: 'none',
+	cls: 'image image-roll',
 	ui: 'image',
 	items: [
 		{
@@ -12,7 +11,6 @@ Ext.define('NextThought.app.image.Roll', {
 			xtype: 'box',
 			cls: 'image',
 			width: 640,
-			height: 480,
 			autoEl: {
 				tag: 'img',
 				src: Ext.BLANK_IMAGE_URL

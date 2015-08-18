@@ -1,5 +1,5 @@
 Ext.define('NextThought.common.ux.IFramePopout', {
-	extend: 'Ext.panel.Panel',
+	extend: 'NextThought.common.window.Window',
 	alias: 'widget.iframe-lightbox',
 	requires: [
 		'Ext.data.Store',
@@ -13,7 +13,7 @@ Ext.define('NextThought.common.ux.IFramePopout', {
 	border: false,
 	floating: true,
 	closeAction: 'destroy',
-	cls: 'lightbox',
+	cls: 'lightbox x-panel-lightbox',
 	ui: 'lightbox',
 	widthRatio: 0.8,
 	heightRatio: 0.75,
@@ -37,10 +37,6 @@ Ext.define('NextThought.common.ux.IFramePopout', {
 			itemId: 'content',
 			cls: 'content loading'
 		});
-
-
-		this.mon(history.observable, 'pop', 'destroy');
-
 
 		ContentProxy.get(this.src)
 				.then(this.setContent.bind(this), this.noContent.bind(this));
@@ -110,6 +106,33 @@ Ext.define('NextThought.common.ux.IFramePopout', {
 			scope: this,
 			click: this.close
 		});
+	},
+
+
+	setPosition: function() {},
+
+	//TODO: come up with a better system for positioning these windows
+	center: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.center.bind(this));
+			return;
+		}
+
+		var dom = this.el && this.el.dom,
+			myHeight = this.getHeight(),
+			myWidth = this.getWidth(),
+			viewHeight = Ext.Element.getViewportHeight(),
+			viewWidth = Ext.Element.getViewportWidth(),
+			top, left;
+
+		top = (viewHeight - myHeight) / 2;
+		left = (viewWidth - myWidth) / 2;
+
+		top = Math.max(top, 0);
+		left = Math.max(left, 0);
+
+		dom.style.top = top + 'px';
+		dom.style.left = left + 'px';
 	}
 
 });

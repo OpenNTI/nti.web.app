@@ -475,7 +475,6 @@
 		background: transparent $icons no-repeat;
 		@include sprite($icons,'close_popup',$dimensions: true);
 		cursor: pointer;
-		box-shadow: 0 0 10px 5px #ffffff;
 		border-radius: 90px;
 	}
 

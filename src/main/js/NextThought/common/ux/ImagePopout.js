@@ -1,5 +1,5 @@
 Ext.define('NextThought.common.ux.ImagePopout', {//TODO: this is 99% copied from the video version. Unify this in to a configurable popup.
-	extend: 'Ext.panel.Panel',
+	extend: 'NextThought.common.window.Window',
 	alias: 'widget.image-lightbox',
 	requires: [
 		'Ext.data.Store',
@@ -12,11 +12,10 @@ Ext.define('NextThought.common.ux.ImagePopout', {//TODO: this is 99% copied from
 	frame: false,
 	border: false,
 	floating: true,
-	cls: 'videos',
+	cls: 'videos x-panel-video',
 	ui: 'video',
 	width: 640,
-	height: 550,
-	layout: 'fit',
+	layout: 'none',
 
 	constructor: function(config) {
 		var me = this;
@@ -70,6 +69,31 @@ Ext.define('NextThought.common.ux.ImagePopout', {//TODO: this is 99% copied from
 			scope: this,
 			click: this.close
 		});
-	}
+	},
 
+
+	setPosition: function() {},
+
+	center: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.center.bind(this));
+			return;
+		}
+
+		var dom = this.el && this.el.dom,
+			myHeight = this.getHeight() + 35,//my width + the close button
+			myWidth = this.getWidth(),
+			viewHeight = Ext.Element.getViewHeight(),
+			viewWidth = Ext.Element.getViewWidth(),
+			top, left;
+
+		top = (viewHeight - myHeight) / 2;
+		left = (viewWidth - myWidth) / 2;
+
+		top = Math.max(top, 25);//account for the close button
+		left = Math.max(left, 0);
+
+		dom.style.top = top + 'px';
+		dom.style.left = left + 'px';
+	}
 });
