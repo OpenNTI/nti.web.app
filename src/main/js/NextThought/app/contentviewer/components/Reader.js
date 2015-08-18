@@ -26,7 +26,7 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 	cls: 'x-reader-pane scrollable',
 
 	overflowX: 'hidden',
-	overflowY: 'scroll',
+	overflowY: 'visible',
 	ui: 'reader',
 	layout: 'auto',
 	prefix: 'default',
