@@ -358,10 +358,17 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	},
 
 
+	getScrollEl: function() {
+		//TODO: figure out how to not have to do a user agent check for this
+		return Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body;
+	},
+
+
 	onScroll: function() {
 		var height = document.documentElement.clientHeight,
-			scrollTop = document.body.scrollTop,
-			scrollHeight = document.body.scrollHeight;
+			el = this.getScrollEl(),
+			scrollTop = el.scrollTop,
+			scrollHeight = el.scrollHeight;
 
 		if (scrollTop + height >= scrollHeight) {
 			this.loadNextBatch();
