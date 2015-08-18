@@ -63,7 +63,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Blogg
 
 	likeCountUpdated: function(f, v) {
 		if (this.rendered) {
-			this.el.down('.likes').update(v + ' Likes');
+			this.el.down('.likes').update(v + ' Like' + (v === 1 ? '' : 's'));
 		}
 	},
 
