@@ -33,6 +33,21 @@ Ext.define('NextThought.app.library.content.StateStore', {
 	},
 
 
+	/**
+	 * Remove any content packages in the used map
+	 * TODO: needs unit tests
+	 * @param  {Object} used keys are the ids of content packages to remove
+	 */
+	deDupContentPackages: function(used) {
+		this.CONTENT_PACKAGES = this.CONTENT_PACKAGES.filter(function(fakeBundle) {
+			var packages = fakeBundle.getContentPackages(),
+				p = packages[0];
+
+			return !used[p.getId()] && !p.get('isCourse');
+		});
+	},
+
+
 	getTitle: function(index) {
 		var title, i, packages = this.CONTENT_PACKAGES, content;
 

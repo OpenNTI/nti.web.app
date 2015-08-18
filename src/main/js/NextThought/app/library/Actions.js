@@ -4,7 +4,9 @@ Ext.define('NextThought.app.library.Actions', {
 	requires: [
 		'NextThought.app.library.StateStore',
 		'NextThought.app.library.courses.Actions',
+		'NextThought.app.library.courses.StateStore',
 		'NextThought.app.library.content.Actions',
+		'NextThought.app.library.content.StateStore',
 		'NextThought.login.StateStore',
 		'NextThought.proxy.JSONP'
 	],
@@ -15,6 +17,9 @@ Ext.define('NextThought.app.library.Actions', {
 
 		this.CourseActions = NextThought.app.library.courses.Actions.create();
 		this.ContentActions = NextThought.app.library.content.Actions.create();
+
+		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
+		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
 
 		this.LibraryStore = NextThought.app.library.StateStore.getInstance();
 		this.LoginStore = NextThought.login.StateStore.getInstance();
@@ -39,9 +44,48 @@ Ext.define('NextThought.app.library.Actions', {
 		Promise.all([
 			this.CourseActions.loadCourses(s),
 			this.ContentActions.loadContent(s)
-		]).then(function() {
+		])
+		.then(this.deDupContentPackages.bind(this))
+		.then(function() {
 			store.setLoaded();
 		});
+	},
+
+
+	/**
+	 * Iterate the courses, admin courses, and content bundles, adding the content packages
+	 * they use to a list, then tell the content store to remove any content packages in that
+	 * list
+	 *
+	 * TODO: needs unit tests
+	 */
+	deDupContentPackages: function() {
+		var courses = this.CourseStore.getEnrolledCourses(),
+			admin = this.CourseStore.getAdminCourses(),
+			bundles = this.ContentStore.getContentBundles(),
+			used = {};
+
+		function unWrapBundle(bundle) {
+			var packages = bundle.getContentPackages();
+
+			packages.forEach(function(p) {
+				used[p.getId()] = true;
+			});
+		}
+
+		function unWrapCourse(course) {
+			return unWrapBundle(course.get('CourseInstance'));
+		}
+
+		courses.forEach(unWrapCourse);
+
+
+		admin.forEach(unWrapCourse);
+
+
+		bundles.forEach(unWrapBundle);
+
+		this.ContentStore.deDupContentPackages(used);
 	},
 
 

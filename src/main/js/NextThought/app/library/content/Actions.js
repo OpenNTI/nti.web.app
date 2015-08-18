@@ -40,12 +40,6 @@ Ext.define('NextThought.app.library.content.Actions', {
 		}
 
 		return StoreUtils.loadItems(getURL(link), null, 'titles')
-			.then(function(items) {
-				//filter out packages that are courses
-				return items.filter(function(item) {
-					return !item.get('isCourse');
-				});
-			})
 			.then(this.ContentStore.setContentPackages.bind(this.ContentStore));
 	},
 
