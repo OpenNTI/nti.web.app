@@ -33,7 +33,7 @@ Ext.define('NextThought.app.chat.transcript.Pager', {
 
 		s.pageSize = 100;
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-			sortOn: 'createdTime',
+			sortOn: 'CreatedTime',
 			sortOrder: 'descending',
 			pageSize: 100,
 			transcriptUser: user || '',
@@ -120,7 +120,7 @@ Ext.define('NextThought.app.chat.transcript.Pager', {
 					mCount -= diff;
 
 					// If we're the last page, make sure we don't leave any message unaccounted for.
-					if (i === (pCount - 1)) {
+					if (i === (pCount - 1) && mCount > 0) {
 						messageCount = mCount;
 						transcripts.push(transcript);
 					}
@@ -148,25 +148,28 @@ Ext.define('NextThought.app.chat.transcript.Pager', {
 		var toAdd = [];
 
 		// Filter messages
-		if(pageTranscriptIndex === 0) {
-			if (pageTranscriptCount === 1) {
-				if (page.endIndex !== null && page.endIndex >= 0) {
-					toAdd = messages.slice(page.startIndex, page.endIndex + 1);
-				}
-				else {
-					toAdd = messages.slice(page.startIndex);
-				}
+		if (pageTranscriptCount === 1) {
+			if (page.endIndex !== null && page.endIndex >= 0) {
+				toAdd = messages.slice(page.startIndex, page.endIndex + 1);
 			}
 			else {
 				toAdd = messages.slice(page.startIndex);
 			}
 		}
 		else {
-			if (page.endIndex !== null && page.endIndex >= 0) {
-				toAdd = messages.slice(page.startIndex, page.endIndex + 1);
+			if(pageTranscriptIndex === 0) {
+				toAdd = messages.slice(page.startIndex);
+			}
+			else if (pageTranscriptIndex === (pageTranscriptCount - 1)) {
+				if (page.endIndex !== null && page.endIndex >= 0) {
+					toAdd = messages.slice(0, page.endIndex + 1);
+				}
+				else {
+					toAdd = messages.slice();
+				}
 			}
 			else {
-				toAdd = messages.slice(page.startIndex);
+				toAdd = messages.slice();
 			}
 		}
 
@@ -176,21 +179,16 @@ Ext.define('NextThought.app.chat.transcript.Pager', {
 
 	loadPage: function(pageToLoad) {
 		var pageCount = this.pages && this.pages.length, page,
-			me = this, transcript, i, toAdd = [], p;
+			i, toAdd = [], p;
 
 		if (pageToLoad > pageCount || pageCount === 0) {
 			return Promise.reject();
 		}
 
 		page = this.pages[pageToLoad - 1];
-		for (i = 0; i < page.transcripts.length; i++) {
-			transcript = page.transcripts[i];
-			p = me.ChatActions.loadTranscript(transcript.get('RoomInfo'))
-				.then(function(t) {
-					var messages = t && t.get('Messages') || [];
-					return me.filterChatMessages(messages, page, i, page.transcripts.length);
-				});
 
+		for (i = 0; i < page.transcripts.length; i++) {
+			p = this.getMessages(page, i, page.transcripts.length);
 			toAdd.push(p);
 		}
 
@@ -208,9 +206,35 @@ Ext.define('NextThought.app.chat.transcript.Pager', {
 	},
 
 
+	getMessages: function(page, index, count) {
+		var me = this,
+			transcript = page.transcripts && page.transcripts[index];
+
+		return me.ChatActions.loadTranscript(transcript.get('RoomInfo'))
+				.then(function(t) {
+					var messages = t && t.get('Messages') || [];
+					return me.filterChatMessages(messages.reverse(), page, index, count);
+				});
+	},
+
+
+	sortMessages: function(messages) {
+		function timeSort(a, b) {
+			var aRaw = a.raw || {CreatedTime: 0},
+					bRaw = b.raw || {CreatedTime: 0};
+
+			return aRaw.CreatedTime - bRaw.CreatedTime;
+		}
+
+		messages = Ext.Array.sort(messages, timeSort);
+		return messages;
+	},
+
+
 	addBulkMessages: function(records) {
 		this.clearPaging();
 
+		records = this.sortMessages(records);
 		if (this.chatWindow) {
 			this.chatWindow.addBulkMessages(records);
 		}
@@ -221,6 +245,7 @@ Ext.define('NextThought.app.chat.transcript.Pager', {
 	insertBulkMessages: function(records) {
 		this.clearPaging();
 
+		records = this.sortMessages(records);
 		if (this.chatWindow) {
 			this.chatWindow.insertBulkMessages(0, records);
 		}
