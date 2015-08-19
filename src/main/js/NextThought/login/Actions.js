@@ -183,6 +183,7 @@ Ext.define('NextThought.login.Actions', {
 				siteFeatures = $AppConfig.features[response.Site];
 
 			if (siteFeatures) {
+				delete $AppConfig.features[response.Site];
 				$AppConfig.features = Ext.apply(siteFeatures, $AppConfig.features);
 			}
 
