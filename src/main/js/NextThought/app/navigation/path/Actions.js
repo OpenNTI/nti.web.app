@@ -100,7 +100,7 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 				return ParseUtils.parseItems(json[0]);
 			});
 
-		cache.fail(this.PathStore.removeFromCache.bind(this.PathStore, id));
+		cache.fail(this.PathStore.removeFromCache.bind(this.PathStore, link));
 
 		return this.PathStore.setInCache(link, cache);
 	},
