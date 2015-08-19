@@ -139,8 +139,19 @@ Ext.define('NextThought.app.library.content.StateStore', {
 	},
 
 
-	findForNTIID: function() {
-		//TODO: fill this in
+	findForNTIID: function(ntiid) {
+		return this.findContentBy(function(bundle) {
+			var contentPackages = bundle.get('ContentPackages'),
+				i;
+
+			if (bundle.getId() === ntiid) { return true; }
+
+			for (i = 0; i < contentPackages.length; i++) {
+				if (contentPackages[i].get('NTIID') === ntiid) {
+					return true;
+				}
+			}
+		});
 	},
 
 

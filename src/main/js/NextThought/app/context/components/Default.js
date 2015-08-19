@@ -58,7 +58,7 @@ Ext.define('NextThought.app.context.components.Default', {
 
 
 	__setContent: function() {
-		var div = document.createElement(div);
+		var div = document.createElement('div');
 
 		// If we are within the current context, so just render the simpler version of context.
 		// i.e. For content's note, we will just render the range context we were given.
