@@ -247,9 +247,11 @@ Ext.define('NextThought.app.search.Index', {
 		this.removeNext();
 		this.showLoading();
 
+		this.lock = Date.now();
+
 		StoreUtils.loadBatch(this.nextPageLink)
-			.then(this.onLoadResults.bind(this))
-			.fail(this.onLoadFail.bind(this));
+			.then(this.onLoadResults.bind(this, this.lock))
+			.fail(this.onLoadFail.bind(this, this.lock));
 	},
 
 
