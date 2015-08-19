@@ -77,6 +77,13 @@ Ext.define('NextThought.app.library.Index', {
 	},
 
 
+	allowNavigation: function() {
+		if (this.availableWin && this.availableWin.isVisible()) {
+			return this.availableWin.allowNavigation();
+		}
+	},
+
+
 	onClicked: function(e) {
 		var anchor = e.getTarget('a[data-event]');
 

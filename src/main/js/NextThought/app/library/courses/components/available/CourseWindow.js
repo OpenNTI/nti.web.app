@@ -176,7 +176,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		this.addRoute('/:id/paymentcomplete', this.showPaymenComplete.bind(this));
 
 		this.addDefaultRoute('/');
-		this.on('beforeclose', this.onBeforeClose, this);
+		// this.on('beforeclose', this.onBeforeClose, this);
 
 		this.mon(this.CourseStore, 'update-available-courses', this.updateCourses.bind(this));
 	},
@@ -293,6 +293,17 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 	},
 
 
+	allowNavigation: function() {
+		var active = this.getLayout().getActiveItem();
+
+		if (active.stopClose) {
+			return active.stopClose();
+		}
+
+		return true;
+	},
+
+
 	//TODO: this needs to be needs to be allowNavigation
 	onBeforeClose: function() {
 		var me = this,
@@ -314,38 +325,26 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 
 	showPrevItem: function(xtype) {
-		var me = this, p,
-			current = this.getLayout().getActiveItem();
+		var current = this.getLayout().getActiveItem(),
+			course;
 
 		if (current.xtype === xtype) { return; }
 
-		if (current.stopClose) {
-			p = current.stopClose();
-		} else {
-			p = new Promise.resolve();
+		if (current.is('course-enrollment-details')) {
+			if (!this.courseDetail.changingEnrollment) {
+				this.courseDetail.destroy();
+				delete this.courseDetail;
+				this.pushRoute(null, '/');
+			}
 		}
 
-		return p.then(function() {
-			var course;
-			if (current.is('course-enrollment-details')) {
-				if (!me.courseDetail.changingEnrollment) {
-					me.courseDetail.destroy();
-					delete me.courseDetail;
-					me.pushRoute(null, '/');
-				}
+		if (current.is('enrollment-process')) {
+			course = current.course;
+			if (course) {
+				delete this.courseEnrollment;
+				this.pushRoute(course.get('Title'), ParseUtils.encodeForURI(course.getId()), {course: course});
 			}
-
-			if (current.is('enrollment-process')) {
-				course = current.course;
-				if (course) {
-					delete me.courseEnrollment;
-					me.pushRoute(course.get('Title'), ParseUtils.encodeForURI(course.getId()), {course: course});
-				}
-			}
-
-			current.fireEvent('beforedeactivate');
-			current.destroy();
-		});
+		}
 	},
 
 	/**
@@ -431,7 +430,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		action = btn.getAttribute('data-action');
 
 		if (action === 'close') {
-			this.close();
+			this.handleClose();
 		} else if (action === 'go-back') {
 			this.showPrevItem();
 		} else {
