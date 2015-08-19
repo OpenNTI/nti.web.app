@@ -309,6 +309,10 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 
 				if (key.isEditor) {
 					value = me.editor && me.editor.getValue().body;
+					if (Ext.isEmpty(value)) {
+						// Pass null rather than an empty array as value.
+						value = null;
+					}
 				} else if (key.allowHTML) {
 					value = dom.innerHTML;
 				} else {
