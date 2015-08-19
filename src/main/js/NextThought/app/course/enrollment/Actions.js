@@ -2,8 +2,9 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 	extend: 'NextThought.common.Actions',
 	requires: [
 		'NextThought.app.library.courses.StateStore',
-		'NextThought.app.library.courses.Actions',
+		'NextThought.app.library.courses.Actions'
 	],
+
 	constructor: function() {
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 		this.CourseActions = NextThought.app.library.courses.Actions.create();
@@ -87,9 +88,6 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 
 						course.set('EnrollmentOptions', catalogEntry.get('EnrollmentOptions'));
 						// me.CourseStore.updatedAvailableCourses();
-					})
-					.fail(function(response){
-						debugger;
 					});
 
 				updateEnrolled = new Promise(function(fulfill, reject) {
