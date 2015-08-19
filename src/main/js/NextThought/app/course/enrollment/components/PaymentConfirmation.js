@@ -146,6 +146,8 @@ Ext.define('NextThought.app.course.enrollment.components.PaymentConfirmation', {
 		}
 
 		if (purchaseDesc.receiver) {
+			this.giftToEl.show();
+
 			if (purchaseDesc.to) {
 				this.giftToEl.down('.to-email').update(purchaseDesc.to + ' (' + purchaseDesc.receiver + ')');
 			} else {
@@ -156,6 +158,7 @@ Ext.define('NextThought.app.course.enrollment.components.PaymentConfirmation', {
 		}
 
 		if (purchaseDesc.message) {
+			this.giftMessageEl.show();
 			this.giftMessageEl.down('.message-text').update(purchaseDesc.message);
 		} else {
 			this.giftMessageEl.hide();
