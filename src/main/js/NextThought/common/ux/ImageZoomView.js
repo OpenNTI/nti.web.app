@@ -36,7 +36,7 @@ Ext.define('NextThought.common.ux.ImageZoomView', {
 			cls: 'bar-cell slide',
 			html: ' '
 		},{
-			cls: 'bar-cell {[values.title || values.caption ? \'\' : \'no-details\']}',
+			cls: 'bar-cell {[values.markUpEnabled || values.title || values.caption ? \'\' : \'no-details\']}',
 			cn: [{
 				tag: 'tpl',
 				'if': 'title',

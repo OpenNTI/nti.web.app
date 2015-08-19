@@ -45,7 +45,7 @@ Ext.define('NextThought.app.contentviewer.reader.ResourceManagement', {
 				cls: 'bar-cell slide',
 				html: ' '
 			},{
-				cls: 'bar-cell {[values.title || values.caption ? \'\' : \'no-details\']}',
+				cls: 'bar-cell {[values.annotatable || values.title || values.caption ? \'\' : \'no-details\']}',
 				cn: [{
 					tag: 'tpl',
 					'if': 'title',
@@ -326,7 +326,7 @@ Ext.define('NextThought.app.contentviewer.reader.ResourceManagement', {
 				});
 			}
 
-			if (!title && !caption) {
+			if (!title && !caption && !annotatable) {
 				Ext.fly(el).addCls('no-details');
 			}
 			Ext.fly(bar).unselectable();
