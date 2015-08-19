@@ -159,7 +159,9 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 			this.editor = Ext.widget('nti-editor', {
 				ownerCt: this,
 				renderTo: aboutEl,
-				enableSaveControls: false
+				enableSaveControls: false,
+				enableWhiteboards: false,
+				enableObjectControls: false
 			});
 
 			this.editor.activate();
