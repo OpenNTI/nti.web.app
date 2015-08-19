@@ -271,7 +271,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 
 		if (context.type && this.contextEl) {
 			show = true;
-			context = Ext.apply(context, {renderTo: this.contextEl});
+			context = Ext.apply(context, {renderTo: this.contextEl, width: me.width});
 			cmp = Ext.widget(context);
 			me.on('destroy', 'destroy', cmp);
 		}
