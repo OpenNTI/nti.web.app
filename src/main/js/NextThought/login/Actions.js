@@ -179,7 +179,12 @@ Ext.define('NextThought.login.Actions', {
 		}).then(function(response) {
 			response = Globals.parseJSON(response, true);
 
-			var link = me.ServiceInterface.getLinkFrom(response.Links, 'logon.handshake');
+			var link = me.ServiceInterface.getLinkFrom(response.Links, 'logon.handshake'),
+				siteFeatures = $AppConfig.features[response.Site];
+
+			if (siteFeatures) {
+				$AppConfig.features = Ext.apply(siteFeatures, $AppConfig.features);
+			}
 
 			if (!link) {
 				return Promise.reject('No handshake link!');

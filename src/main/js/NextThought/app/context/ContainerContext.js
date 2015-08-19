@@ -21,6 +21,11 @@ Ext.define('NextThought.app.context.ContainerContext', {
 	 */
 	load: function(type) {
 		var url = Service.getObjectURL(this.container);
+
+		if (type === 'card' && isFeature('disable-context-in-activity')) {
+			return Promise.reject();
+		}
+
 		return Service.request({
 				url: url
 			})
