@@ -537,6 +537,12 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		});
 	},
 
+
+	onDrop: function() {
+		this.pushRoute('', '/');
+	},
+
+
 	showCourse: function(course) {
 		var me = this;
 
@@ -544,7 +550,8 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			me.courseDetail = me.add({
 				xtype: 'course-enrollment-details',
 				course: course,
-				ownerCt: me
+				ownerCt: me,
+				onDrop: me.onDrop.bind(me)
 			});
 		}
 
@@ -577,7 +584,6 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		}
 
 		me.mon(me.courseDetail, 'enroll-in-course', 'showEnrollmentOption');
-
 		me.getLayout().setActiveItem(me.courseDetail);
 		me.onceRendered.then(function() {
 			me.updateButtons();

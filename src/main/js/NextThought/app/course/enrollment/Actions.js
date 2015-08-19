@@ -2,11 +2,11 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 	extend: 'NextThought.common.Actions',
 	requires: [
 		'NextThought.app.library.courses.StateStore',
-		'NextThought.app.library.courses.Actions'
+		'NextThought.app.library.courses.Actions',
 	],
 	constructor: function() {
-		this.courseStore = NextThought.app.library.courses.StateStore.getInstance();
-		this.LibraryActions = NextThought.app.library.courses.Actions.create();
+		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
+		this.CourseActions = NextThought.app.library.courses.Actions.create();
 	},
 
 
@@ -18,7 +18,7 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 	 */
 	dropCourse: function(course, callback) {
 		var me = this;
-			enrollment = me.courseStore.findEnrollmentForCourse(course.getId()),
+			enrollment = me.CourseStore.findEnrollmentForCourse(course.getId()),
 			courseHref = course.get('href');
 
 
@@ -32,20 +32,7 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 				var updateCatalog, updateEnrolled;
 
 				course.setEnrolled(false);
-
-				updateCatalog = Service.request(getURL(courseHref))
-					.then(function(catalog) {
-						var catalogEntry = ParseUtils.parseItems(catalog)[0];
-
-						if (catalogEntry) {
-							course.set('EnrollmentOptions', catalogEntry.get('EnrollmentOptions'));
-						}
-
-						me.courseStore.updatedAvailableCourses();
-					})
-					.fail(function(reason){
-						console.error('Failed to update catalog: ', reason);
-					});
+				updateCatalog = me.CourseActions.loadAllCourses();
 
 				updateEnrolled = new Promise(function(fulfill, reject) {
 					me.refreshEnrolledCourses(fulfill.bind(null, true), fulfill.bind(null, false));
@@ -77,7 +64,7 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 	 */
 	enrollCourse: function(course, callback) {
 		var me = this;
-			enrollment = me.courseStore.findEnrollmentForCourse(course.getId()),
+			enrollment = me.CourseStore.findEnrollmentForCourse(course.getId()),
 			courseHref = course.get('href');
 
 		//if we trying to enroll, and we are already enrolled no need to enroll again
@@ -86,25 +73,23 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 			return;
 		}
 
-
 		me.__toggleEnrollmentStatus(course)
-			.then(function() {
-				var updateCatalog, updateEnrolled;
+			.then(function(response) {
+				var updateCatalog, updateEnrolled,
+				courseEnrollment = ParseUtils.parseItems(response)[0],
+				courseInstance = courseEnrollment.get('CourseInstance');
 
 				course.setEnrolled(true);
 
-				updateCatalog = Service.request(getURL(courseHref))
-					.then(function(catalog) {
-						var catalogEntry = ParseUtils.parseItems(catalog)[0];
+				updateCatalog = Service.request(courseInstance.getLink('CourseCatalogEntry'))
+					.then(function(catalogEntry){
+						catalogEntry = ParseUtils.parseItems(catalogEntry)[0];
 
-						if (catalogEntry) {
-							course.set('EnrollmentOptions', catalogEntry.get('EnrollmentOptions'));
-						}
-
-						me.courseStore.updatedAvailableCourses();
+						course.set('EnrollmentOptions', catalogEntry.get('EnrollmentOptions'));
+						// me.CourseStore.updatedAvailableCourses();
 					})
-					.fail(function(reason) {
-						console.error('Failed to update catalog: ', reason);
+					.fail(function(response){
+						debugger;
 					});
 
 				updateEnrolled = new Promise(function(fulfill, reject) {
@@ -147,7 +132,7 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 		var me = this,
 			collection = (Service.getCollection('EnrolledCourses', 'Courses') || {}).href;
 
-		me.LibraryActions.setUpEnrolledCourses(collection)
+		me.CourseActions.setUpEnrolledCourses(collection)
 			.then(fulfill)
 			.fail(reject || function(){});
 	},

@@ -31,6 +31,10 @@ Ext.define('NextThought.app.library.courses.components.available.CourseDetailWin
 		}
 	},
 
+	onDrop: function() {
+		this.doClose();
+	},
+
 	addMask: function() {},
 
 	handleClose: function() {

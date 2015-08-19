@@ -834,7 +834,12 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 									me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.dropped', {
 										course: course
 									}));
-									done(true, changed);
+									if (me.onDrop) {
+										done(true, changed);
+										me.onDrop();
+									} else {
+										done(true, changed);
+									}
 								})
 								.fail(function(reason) {
 									var msg;
