@@ -424,8 +424,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			scope: me,
 			mousedown: me.editorMouseDown,
 			click: function(e) {
+				var content = el.down('.content'),
+					oldScroll = content.getScroll();
+
 				if (!e.getTarget('.content') && !e.getTarget('.action')) {
-					el.down('.content').focus();
+					content.focus();
+					content.scrollTo('top', oldScroll.top);
 					me.collapseToEnd();
 				}
 			}
@@ -893,9 +897,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	setTypingAttributes: function(attrs, alreadyFocused) {
+		var content = this.el.down('.content'),
+			oldScroll = content.getScroll();
+
 		this.typingAttributes = attrs.slice();
 		if (!alreadyFocused) {
-			this.el.down('.content').focus();
+			content.focus();
+			content.scrollTo('top', oldScroll.top);
 			this.editorFocus();
 		}
 		this.syncTypingAttributeButtons();
@@ -952,14 +960,18 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 		var state = el && el.hasCls('selected'),
 			action = state ? 'removeCls' : 'addCls',
-			tip = state ? el.getAttribute('data-tiptext') : undefined;
+			tip = state ? el.getAttribute('data-tiptext') : undefined,
+			content = this.el.down('.content'),
+			oldScroll;
 
 
 		if (el && !e.getTarget('.control')) {
 			el[action]('selected');
 			el.set({'data-qtip': tip});
 	  //			Ext.QuickTipManager.getQuickTip().hide();
-			this.el.down('.content').focus();
+	  		oldScroll = content.getScroll();
+			content.focus();
+			content.scrollTo('top', oldScroll.top);
 			this.editorFocus();
 		}
 	},
@@ -1611,7 +1623,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	focus: function(collapse) {
-		this.el.down('[contenteditable=true]').focus();
+		var content = this.el.down('[contenteditable=true]'),
+			oldScroll = content.getScroll();
+
+		content.focus();
+		content.scrollTo('top', oldScroll.top);
+
 		if (collapse) {
 			this.collapseToEnd();
 		}
