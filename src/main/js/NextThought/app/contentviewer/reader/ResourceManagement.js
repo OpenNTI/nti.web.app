@@ -6,8 +6,8 @@ Ext.define('NextThought.app.contentviewer.reader.ResourceManagement', {
 		'NextThought.common.ux.SlideDeck',
 		'NextThought.common.components.cards.CardTarget',
 		'NextThought.common.components.cards.OverlayedPanel',
-		'NextThought.app.slidedeck.OverlayedPanel',
-		'NextThought.app.slidedeck.slidevideo.OverlayedPanel',
+		'NextThought.app.mediaviewer.content.deck.OverlayedPanel',
+		'NextThought.app.mediaviewer.content.OverlayedPanel',
 		'NextThought.app.video.OverlayedPanel',
 		'NextThought.app.video.roll.OverlayedPanel',
 		'NextThought.app.image.OverlayedPanel'

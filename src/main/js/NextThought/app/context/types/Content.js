@@ -5,10 +5,10 @@ Ext.define('NextThought.app.context.types.Content', {
 		'NextThought.common.components.cards.OverlayedPanel',
 		'NextThought.common.components.cards.Card',
 		'NextThought.app.library.Actions',
-		'NextThought.app.slidedeck.OverlayedPanel',
-		'NextThought.app.slidedeck.SlideDeck',
-		'NextThought.app.slidedeck.slidevideo.SlideVideo',
-		'NextThought.app.slidedeck.slidevideo.OverlayedPanel',
+		'NextThought.app.mediaviewer.content.deck.OverlayedPanel',
+		'NextThought.app.mediaviewer.content.SlideDeck',
+		'NextThought.app.mediaviewer.content.SlideVideo',
+		'NextThought.app.mediaviewer.content.OverlayedPanel',
 		'NextThought.app.context.components.cards.*',
 		'NextThought.app.context.components.Default',
 		'NextThought.app.context.components.list.Content'
@@ -152,23 +152,23 @@ Ext.define('NextThought.app.context.types.Content', {
 			Ext.fly(c).remove();
 		});
 
-		slideDeckTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.app.slidedeck.SlideDeck.prototype.renderTpl.html});
+		slideDeckTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.app.mediaviewer.content.SlideDeck.prototype.renderTpl.html});
 		Ext.each(node.query('object[type*=ntislidedeck]'), function(c) {
-			var d = NextThought.app.slidedeck.OverlayedPanel.getData(c);
+			var d = NextThought.app.mediaviewer.content.deck.OverlayedPanel.getData(c);
 			slideDeckTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
 		});
 
-		slideVideoTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.app.slidedeck.slidevideo.SlideVideo.prototype.renderTpl.html});
+		slideVideoTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.app.mediaviewer.content.SlideVideo.prototype.renderTpl.html});
 		Ext.each(node.query('object[type*=ntislidevideo][itemprop$=card]'), function(c) {
-			var d = NextThought.app.slidedeck.slidevideo.OverlayedPanel.getData(c);
+			var d = NextThought.app.mediaviewer.content.OverlayedPanel.getData(c);
 			slideVideoTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
 		});
 
 		if (node.query('object[type$=slide]').length) {
 			data = NextThought.model.Slide.getParamFromDom(node.query('object[type$=slide]')[0], 'slideimage');
-			dom = new Ext.XTemplate(NextThought.app.slidedeck.transcript.parts.Slide.prototype.contextTpl).apply({image: root + data});
+			dom = new Ext.XTemplate(NextThought.app.mediaviewer.components.reader.parts.Slide.prototype.contextTpl).apply({image: root + data});
 			dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
 			return dom;
 		}

@@ -2,8 +2,8 @@ Ext.define('NextThought.app.context.types.Video', {
 
 	requires: [
 		'NextThought.model.transcript.TranscriptItem',
-		'NextThought.app.slidedeck.media.Actions',
-		'NextThought.app.slidedeck.transcript.AnchorResolver',
+		'NextThought.app.mediaviewer.Actions',
+		'NextThought.app.mediaviewer.components.reader.AnchorResolver',
 		'NextThought.app.context.components.Default',
 		'NextThought.app.context.components.VideoContext',
 		'NextThought.app.context.components.cards.*',
@@ -33,7 +33,7 @@ Ext.define('NextThought.app.context.types.Video', {
 	constructor: function(config) {
 		this.callParent(arguments);
 		Ext.applyIf(this, config || {});
-		this.MediaActions = NextThought.app.slidedeck.media.Actions.create();
+		this.MediaActions = NextThought.app.mediaviewer.Actions.create();
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
@@ -91,7 +91,7 @@ Ext.define('NextThought.app.context.types.Video', {
 		obj = obj.getData();
 
 		var video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: obj.ntiid }, obj)),
-			Resolver = NextThought.app.slidedeck.transcript.AnchorResolver,
+			Resolver = NextThought.app.mediaviewer.components.reader.AnchorResolver,
 			context, cmp, me = this, store, t;
 
 		return this.__getBasePath(obj)

@@ -13,7 +13,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 		'NextThought.util.Anchors',
 		'NextThought.util.Annotations',
 		'NextThought.app.contentviewer.components.definition.Window',
-		'NextThought.app.slidedeck.transcript.AnchorResolver'
+		'NextThought.app.mediaviewer.components.reader.AnchorResolver'
 	],
 
 	constructor: function() {
@@ -803,7 +803,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 	saveNewSeriesNote: function(title, body, range, cueInfo, containerId, shareWith, style, callback) {
 		console.log(cueInfo);
 		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
-				AnchorResolver = NextThought.app.slidedeck.transcript.AnchorResolver,
+				AnchorResolver = NextThought.app.mediaviewer.components.AnchorResolver,
 				rangeDescription = AnchorResolver.createRangeDescriptionFromRange(range, doc, cueInfo),
 				selectedText = range ? range.toString() : '';
 

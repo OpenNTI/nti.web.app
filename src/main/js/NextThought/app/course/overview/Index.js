@@ -9,7 +9,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 	requires: [
 		'NextThought.app.course.overview.components.View',
 		'NextThought.app.content.content.Index',
-		'NextThought.app.slidedeck.media.Index'
+		'NextThought.app.mediaviewer.Index'
 	],
 
 	statics: {
