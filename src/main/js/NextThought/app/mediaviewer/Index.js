@@ -203,10 +203,15 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 
 
 	containsId: function(contextRecord, id) {
+		var result = false;
 		if (contextRecord.getId() === this.slidedeckId) {
-			return this.slidedeck.containsSlide(id);
+			result = this.slidedeck.containsSlide(id);
+
+			if (!result) {
+				result = this.slidedeck.containsVideo(id);
+			}
 		}
-		return false;
+		return result;
 	},
 
 

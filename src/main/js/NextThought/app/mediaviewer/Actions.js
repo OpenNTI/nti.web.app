@@ -377,7 +377,6 @@ Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 
 		slideStore.each(function(slide) {
-			console.log('slide id: ', slide.getId(), ', doc fragment: ', fragsMap[slide.getId()]);
 			slide.set('dom-clone', fragsMap[slide.getId()]);
 		});
 
@@ -394,8 +393,6 @@ Ext.define('NextThought.app.mediaviewer.Actions', {
                 video = videosMap && videosMap[vid],
                 start = slide.get('video-start'),
                 end = slide.get('video-end');
-
-            console.log('slide starts: ', start, ' slide ends: ', end, ' and has transcript for videoid: ', t && t.get('associatedVideoId'));
 
             if (video && isTitle) {
                 items.push({

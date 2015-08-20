@@ -803,7 +803,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 	saveNewSeriesNote: function(title, body, range, cueInfo, containerId, shareWith, style, callback) {
 		console.log(cueInfo);
 		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
-				AnchorResolver = NextThought.app.mediaviewer.components.AnchorResolver,
+				AnchorResolver = NextThought.app.mediaviewer.components.reader.AnchorResolver,
 				rangeDescription = AnchorResolver.createRangeDescriptionFromRange(range, doc, cueInfo),
 				selectedText = range ? range.toString() : '';
 
