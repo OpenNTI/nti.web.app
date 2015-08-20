@@ -487,9 +487,11 @@ Ext.define('NextThought.app.store.Actions', {
 			AllowVendorUpdates: allowVendorUpdates,
 			NTIID: ntiid
 		})
-			.then(function() {
+			.then(function(response) {
+				var courseInstance = ParseUtils.parseItems(response)[0];
+				
 				done();
-				success.call();
+				success.call(null, courseInstance);
 			})
 			.fail(function(response) {
 				done();
