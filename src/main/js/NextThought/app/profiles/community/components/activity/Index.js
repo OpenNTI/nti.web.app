@@ -5,6 +5,7 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	requires: [
 		'NextThought.app.course.dashboard.components.tiles.Note',
 		'NextThought.app.course.dashboard.components.tiles.Topic',
+		'NextThought.app.course.dashboard.components.tiles.Blog',
 		'NextThought.app.profiles.community.components.activity.parts.NewPost',
 		'NextThought.app.windows.Actions',
 		'NextThought.util.Store'
@@ -222,6 +223,8 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 			load = NextThought.app.course.dashboard.components.tiles.Topic.getTileConfig(item, null, 336, true);
 		} else if (item instanceof NextThought.model.Note) {
 			load = NextThought.app.course.dashboard.components.tiles.Note.getTileConfig(item, null, 336, true);
+		} else if (item instanceof NextThought.model.forums.PersonalBlogEntry) {
+			load = NextThought.app.course.dashboard.components.tiles.Blog.getTileConfig(item, null, 336, true);
 		} else {
 			console.warn('Unknown item in activity: ', item);
 			load = Promise.resolve(null);

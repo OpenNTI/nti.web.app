@@ -2,7 +2,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Topic', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.Post',
 	alias: 'widget.dashboard-topic',
 
-	requiers: [
+	requires: [
 		'NextThought.app.course.dashboard.components.tiles.parts.TopicComment',
 		'NextThought.app.navigation.path.Actions'
 	],
