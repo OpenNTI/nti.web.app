@@ -3,7 +3,7 @@ Ext.define('NextThought.app.context.components.cards.Slide', {
 	alias: 'widget.context-slide-card',
 
 	requires: [
-		'NextThought.app.slidedeck.media.Actions'
+		'NextThought.app.mediaviewer.Actions'
 	],
 
 	cls: 'context-card',
@@ -19,7 +19,7 @@ Ext.define('NextThought.app.context.components.cards.Slide', {
 
 	constructor: function() {
 		this.callParent(arguments);
-		this.MediaActions = NextThought.app.slidedeck.media.Actions.create();
+		this.MediaActions = NextThought.app.mediaviewer.Actions.create();
 	},
 
 

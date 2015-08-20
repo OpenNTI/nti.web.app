@@ -30,5 +30,20 @@ Ext.define('NextThought.model.Slidedeck', {
 		});
 
 		return result;
+	},
+
+
+	containsVideo: function(videoId) {
+		var videos = this.get('Videos') || [],
+			result = false;
+
+		Ext.each(videos, function(video) {
+			if (video.NTIID === videoId || video.video_ntiid === videoId) {
+				result = true;
+				return false;
+			}
+		});
+
+		return result;
 	}
 });

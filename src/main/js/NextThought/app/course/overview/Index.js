@@ -9,7 +9,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 	requires: [
 		'NextThought.app.course.overview.components.View',
 		'NextThought.app.content.content.Index',
-		'NextThought.app.slidedeck.media.Index'
+		'NextThought.app.mediaviewer.Index'
 	],
 
 	statics: {
@@ -387,7 +387,10 @@ Ext.define('NextThought.app.course.overview.Index', {
 			route.path = 'content/' + Globals.trimRoute(route.path);
 		} else if (root instanceof NextThought.model.Video) {
 			route = this.getRouteForVideoPath(root, subPath);
-		} else {
+		} else if (root instanceof NextThought.model.Slidedeck) {
+			route = this.getRouteForSlidedeckPath(root, subPath);
+		} 
+		else {
 			route = {
 				path: '',
 				isFull: subPath.length <= 0
@@ -450,5 +453,20 @@ Ext.define('NextThought.app.course.overview.Index', {
 			path: 'video/' + videoId,
 			isFull: true
 		};
+	},
+
+
+	getRouteForSlidedeckPath: function(slidedeck, path) {
+		var slidedeckId = slidedeck && slidedeck.getId();
+
+		slidedeckId = ParseUtils.encodeForURI(slidedeckId);
+
+		return {
+			path: 'slidedeck/' + slidedeckId,
+			isFull: true,
+			precache: {
+				slidedeck: slidedeck
+			}
+		}
 	}
 });

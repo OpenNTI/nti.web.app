@@ -22,7 +22,7 @@ Ext.define('NextThought.app.context.types.Slide', {
 	constructor: function(config) {
 		this.callParent(arguments);
 		Ext.applyIf(this, config || {});
-		this.MediaActions = NextThought.app.slidedeck.media.Actions.create();
+		this.MediaActions = NextThought.app.mediaviewer.Actions.create();
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
