@@ -7,7 +7,6 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Blog', {
 		COMMENT_HEIGHT: 100,
 
 		getTileConfig: function(record, course, width, removeOnDelete) {
-			debugger;
 			var comments = Math.min(record.get('PostCount'), 2);
 
 			return Promise.resolve({
