@@ -16,7 +16,9 @@ Ext.define('NextThought.app.contacts.components.Card', {
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'contact-card',
 		cn: [
-			'{user:avatar}',
+			{cls: 'user-avatar-container', cn: [
+					'{user:avatar}'
+			]},
 			{
 				cls: 'meta',
 				cn: [
@@ -59,7 +61,8 @@ Ext.define('NextThought.app.contacts.components.Card', {
 
 	renderSelectors: {
 		cardEl: '.contact-card',
-		chatEl: '.actions .chat'
+		chatEl: '.actions .chat',
+		avatarContainerEl: '.user-avatar-container'
 	},
 
 	initComponent: function() {
@@ -86,12 +89,20 @@ Ext.define('NextThought.app.contacts.components.Card', {
 		this.updateLayout();
 
 		this.mon(this.el, 'click', this.clicked, this);
+		this.mon(this.userObject, 'avatarChanged', this.setAvatar.bind(this, this.record));
 
 		if (Ext.is.iOS) {
 			this.mon(this.el, 'mouseup', this.mouseup, this);
 		}
 
 		this.updatePresenceState();
+	},
+
+
+	setAvatar: function(record){
+		if (this.rendered) {
+			this.avatarContainerEl.update(Ext.util.Format.avatar(record));
+		}
 	},
 
 
