@@ -1083,6 +1083,10 @@ li.library-grid-item {
 			font: normal 300 0.875em/2em $font;
 			display: inline-block;
 
+			&.hidden {
+				display: none;
+			}
+
 			&::before {
 				content: '+';
 				margin-right: 0.1em;
@@ -1102,7 +1106,7 @@ li.library-grid-item {
 		position: absolute;
 		top: 0; bottom: 0;
 		right: 0; left: 0;
-		background: rgba(245, 245, 245, 0.96);
+		background: rgba(52, 52, 52, 0.5);
 		z-index: 5;
 		min-height: 50px;
 
@@ -1111,6 +1115,7 @@ li.library-grid-item {
 			top: 10%;
 			left: 50%;
 			margin-left: -25px;
+			color: white;
 
 			&::after {
 				@include loadingSpinner($top: 0, $left: -30px);

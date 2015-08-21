@@ -114,6 +114,7 @@ Ext.define('NextThought.app.library.courses.Index', {
 					}
 
 					if (me.coursePage) {
+						//Only force an update if we want to, to prevent a blink
 						if (force) {
 							me.coursePage.setItems(upcomingCourses, currentCourses, archivedCourses);
 						}

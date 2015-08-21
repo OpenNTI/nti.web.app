@@ -42,6 +42,7 @@ Ext.define('NextThought.app.library.courses.Current', {
 		this.CourseStore.onceLoaded()
 			.then(this.showCurrentItems.bind(this));
 
+		//update the list every time you enroll or drop a course in a course
 		this.mon(this.CourseStore, 'enrolled-courses-set', this.showCurrentItems.bind(this));
 	},
 
@@ -52,9 +53,13 @@ Ext.define('NextThought.app.library.courses.Current', {
 			archived = this.CourseStore.getArchivedEnrolledCourses(),
 			otherCourses = upcoming.concat(archived), otherLength;
 
+		//make sure we have at least 4 if its at all possible
 		otherLength = 4 - current.length;
 
+		//if we have < 4 current enrolled courses
 		if (otherLength > 0) {
+
+			//get the number of upcoming or archived we need, sorted on when you enrolled
 			otherCourses.sort(function(a, b) {
 				var aVal = a.get('CreatedTime'),
 					bVal = a.get('CreatedTime');
@@ -65,6 +70,8 @@ Ext.define('NextThought.app.library.courses.Current', {
 			current = current.concat(otherCourses.slice(0, otherLength));
 		}
 
+		//We are already showing all the current enrollment, so we only need to check
+		//if there are more upcoming and archived than we added to get to at least 4
 		if ((upcoming.length + archived.length) > otherLength) {
 			this.showSeeAll();
 		} else {
@@ -83,6 +90,7 @@ Ext.define('NextThought.app.library.courses.Current', {
 			this.store = new Ext.data.Store({
 				model: this.storeModel,
 				data: current,
+				//Order by when you enrolled
 				sorters: [{property: 'CreatedTime', direction: 'ASC'}]
 			});
 		}
@@ -90,6 +98,7 @@ Ext.define('NextThought.app.library.courses.Current', {
 
 		if (this.collection) {
 			this.remove(this.collection, true);
+			delete this.collection;
 		}
 
 		this.collection = this.add({
