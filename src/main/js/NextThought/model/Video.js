@@ -4,6 +4,7 @@ Ext.define('NextThought.model.Video', {
 
 	fields: [
 		{name: 'description', type: 'string'},
+		{name: 'poster', type: 'string'},
 		{name: 'subtitle', type: 'string'},
 		{name: 'title', type: 'string'},
 		{name: 'sources', type: 'auto'},
@@ -14,5 +15,13 @@ Ext.define('NextThought.model.Video', {
 
 	getTitle: function() {
 		return this.get('label');
+	},
+
+	getPoster: function() {
+		return Promise.resolve(this.get('poster'));
+	},
+
+	getIcon: function() {
+		return this.getPoster();
 	}
 });

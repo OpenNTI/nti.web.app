@@ -66,27 +66,39 @@ Ext.define('NextThought.app.context.components.list.Content', {
 
 
 	setIcon: function(path) {
-		var iconUrl = '', i;
+		var me = this,
+			iconUrl,
+			i;
 
 		if (!this.iconEl) { return; }
 
 		for (i = path.length - 1; i >= 0; i--) {
 			iconUrl = path[i].getIcon && path[i].getIcon();
-
 			if (iconUrl) {
+				iconUrl = Promise.resolve(iconUrl);
 				break;
 			}
 		}
 
-		iconUrl = iconUrl && 'url(' + getURL(iconUrl) + ')';
+		iconUrl = iconUrl || Promise.reject();
 
-		if (iconUrl) {
-			this.iconEl.setStyle({
-				backgroundImage: iconUrl
+
+		iconUrl
+			.then(function (url) {
+				if (!url) {
+					return Promise.reject();
+				}
+
+				url = url && 'url(' + getURL(url) + ')';
+				
+				me.iconEl.setStyle({
+					backgroundImage: url
+				});
+
+			})
+			.fail(function() {
+				me.iconEl.hide();
 			});
-		} else {
-			this.iconEl.hide();
-		}
 	},
 
 
