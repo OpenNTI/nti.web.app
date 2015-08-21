@@ -66,6 +66,7 @@ Ext.define('NextThought.app.library.courses.Index', {
 	onDeactivate: function() {
 		if (this.availableWin) {
 			this.availableWin.destroy();
+			delete this.availableWin;
 		}
 	},
 
@@ -149,10 +150,6 @@ Ext.define('NextThought.app.library.courses.Index', {
 		if (!me.availableWin) {
 			me.availableWin = Ext.widget('library-available-courses-window', {
 				doClose: history.back.bind(history)
-			});
-
-			me.mon(me.availableWin, 'destroy', function() {
-				delete me.availableWin;
 			});
 		}
 

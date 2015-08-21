@@ -32,6 +32,17 @@ Ext.define('NextThought.app.library.Index', {
 		this.addRoute('/books', this.showBooks.bind(this));
 		this.addRoute('/communities', this.showCommunities.bind(this));
 		this.addDefaultRoute('/');
+
+		this.on({
+			deactivate: this.onDeactivate.bind(this)
+		});
+	},
+
+
+	onDeactivate: function() {
+		var activeItem = this.getLayout().getActiveItem();
+
+		activeItem.fireEvent('deactivate');
 	},
 
 
