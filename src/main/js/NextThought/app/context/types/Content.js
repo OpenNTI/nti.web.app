@@ -100,8 +100,10 @@ Ext.define('NextThought.app.context.types.Content', {
 	//TODO: clean this up to not rely on ext so much.
 	__fixUpContext: function(n, root) {
 		var node = Ext.get(n), cardTpl, slideDeckTpl, slideVideoTpl, dom, data,
-			imgs = n.querySelectorAll('img'),
+			imgs = n && n.querySelectorAll('img'),
 			maxWidth = this.maxWidth, Slide;
+
+		if (!node){ return;}
 
 		node.select('.injected-related-items,.related,.anchor-magic').remove();
 
