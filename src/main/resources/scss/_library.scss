@@ -114,10 +114,9 @@
 }
 
 ul.library-grid {
-	width: 100%;
 	list-style: none;
 	padding: 0;
-	margin: 0;
+	margin: 0 -8px;
 
 	&::after {
 		content: '';
@@ -130,7 +129,7 @@ li.library-grid-item {
 	float: left;
 	width: 242px;
 	height: 290px;
-	margin: 7px;
+	margin: 7px 9px;
 	cursor: pointer;
 	background: white;
 	position: relative;
@@ -1022,4 +1021,61 @@ li.library-grid-item {
 		@include experimental-value(max-height, calc(100% - 40px));
 	}
 
+}
+
+
+.library-homepage {
+	.library-group-header { display: none; }
+
+	.x-component-library-collection {
+		margin: 0;
+	}
+
+	.current-collection {
+		margin-bottom: 40px;
+
+		.header {
+			display: -webkit-box;
+			display: -moz-box;
+			display: -ms-flexbox;
+			display: -webkit-flex;
+			display: flex;
+			align-items: baseline;
+			
+			.title, .add, .see-all {
+				flex: 0 0 auto;
+
+				&.hidden {
+					display: none;
+				}
+			}
+
+			.space {
+				flex: 1 1 auto;
+			}
+
+			.title {
+				font: normal 300 1.25em/2em $font;
+				color: white;
+				margin-right: 0.8em;
+			}
+
+			.add {
+				color: $primary-blue;
+				cursor: pointer;
+				font: normal 300 0.875em/2em $font;
+
+				&::before {
+					content: '+';
+					margin-right: 0.1em;
+				}
+			}
+
+			.see-all {
+				color: white;
+				font: normal 300 0.875em/2em $font;
+				cursor: pointer;
+			}
+		}
+	}
 }

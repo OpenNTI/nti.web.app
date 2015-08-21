@@ -38,7 +38,8 @@ Ext.define('NextThought.app.library.courses.components.Collection', {
 				author: course.author,
 				enableSettings: true
 			});
-			if(courseRecord.getIconImage){
+
+			if (courseRecord.getIconImage) {
 				courseRecord.getIconImage();
 			}
 		}
@@ -78,7 +79,7 @@ Ext.define('NextThought.app.library.courses.components.Collection', {
 		selModel.deselect(record);
 
 		var node = this.getNodeByRecord(record);
-		
+
 		if (this.navigate) {
 			this.navigate.call(this, record, node);
 		}
