@@ -149,7 +149,7 @@ Ext.applyIf(Promise.prototype, {
 
 
 Ext.applyIf(Promise, {
-	resolve: function(v) { return new Promise(function(f) {f.call(this, v);}); },
+	resolve: function(v) { return v instanceof Promise ? v : new Promise(function(f) {f.call(this, v);}); },
 	reject: function(v) { return new Promise(function(f, r) {r.call(this, v);}); },
 	wait: function(t) { return new Promise(function(f) {setTimeout(f, t || 1);});}
 });
@@ -312,4 +312,3 @@ Promise.first = Promise.first || function(values) {
 
 
 Ext.define('NextThought.util.Promise', {});
-
