@@ -17,8 +17,10 @@ Ext.define('NextThought.app.library.communities.Index', {
 		xtype: 'box',
 		cls: 'title-container',
 		autoEl: {cn: [
+			{cls: 'home', html: 'Home'},
 			{cls: 'title', html: 'Communities'},
-			{cls: 'add-more-link hidden', html: 'Add'}
+			{cls: 'spacer'},
+			{cls: 'add-more-link hidden', html: 'Add Courses'}
 		]}
 	}],
 
@@ -28,6 +30,13 @@ Ext.define('NextThought.app.library.communities.Index', {
 
 		this.addRoute('/', this.showCommunities.bind(this));
 		this.addDefaultRoute('/');
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.mon(this.el, 'click', this.onClick.bind(this));
 	},
 
 
@@ -65,6 +74,7 @@ Ext.define('NextThought.app.library.communities.Index', {
 	},
 
 
+
 	showCommunities: function() {
 		this.setTitle('Communities');
 
@@ -90,6 +100,12 @@ Ext.define('NextThought.app.library.communities.Index', {
 
 		if (route) {
 			this.pushRootRoute(null, route, {community: community});
+		}
+	},
+
+	onClick: function(e) {
+		if (e.getTarget('.home')) {
+			this.pushRootRoute('', '/');
 		}
 	}
 });

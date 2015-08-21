@@ -10,10 +10,12 @@ Ext.define('NextThought.app.library.admin.Index', {
 
 	items: [{
 		xtype: 'box',
-		cls: 'title',
-		autoEl: {html: 'My Courses'}
+		cls: 'title-container',
+		autoEl: {cn: [
+			{cls: 'home', html: 'Home'},
+			{cls: 'title', html: 'Administered Courses'}
+		]}
 	}],
-
 
 	__getUpcomingCourses: function() {
 		return this.CourseStore.getUpcomingAdminCourses();

@@ -20,8 +20,10 @@ Ext.define('NextThought.app.library.courses.Index', {
 		xtype: 'box',
 		cls: 'title-container',
 		autoEl: {cn: [
+			{cls: 'home', html: 'Home'},
 			{cls: 'title', html: 'Courses'},
-			{cls: 'add-more-link hidden', html: 'Add'}
+			{cls: 'spacer'},
+			{cls: 'add-more-link hidden', html: 'Add Courses'}
 		]}
 	}],
 
@@ -201,6 +203,8 @@ Ext.define('NextThought.app.library.courses.Index', {
 	onClick: function(e) {
 		if (e.getTarget('.add-more-link')) {
 			this.pushRoute('Available', '/available');
+		} else if (e.getTarget('.home')) {
+			this.pushRootRoute('', '/');
 		}
 	}
 });

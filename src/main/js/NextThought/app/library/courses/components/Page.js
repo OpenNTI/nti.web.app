@@ -22,15 +22,15 @@ Ext.define('NextThought.app.library.courses.components.Page', {
 		this.removeAll(true);
 
 		if (upcoming && upcoming.length) {
-			this.addCourses(upcoming, 'Upcoming');
+			this.addCourses(upcoming, 'Upcoming Courses');
 		}
 
 		if (current && current.length) {
-			this.addCourses(current, 'Current');
+			this.addCourses(current, 'Current Courses');
 		}
 
 		if (archived && archived.length) {
-			this.addBinnedCourses(this.binCourses(archived), 'Archived');
+			this.addBinnedCourses(this.binCourses(archived), 'Archived Courses');
 		}
 	},
 
