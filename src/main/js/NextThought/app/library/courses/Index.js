@@ -5,7 +5,8 @@ Ext.define('NextThought.app.library.courses.Index', {
 	requires: [
 		'NextThought.app.library.courses.StateStore',
 		'NextThought.app.library.courses.components.Page',
-		'NextThought.app.course.Actions'
+		'NextThought.app.course.Actions',
+		'NextThought.app.library.courses.components.available.CourseWindow'
 	],
 
 	mixins: {
@@ -17,8 +18,11 @@ Ext.define('NextThought.app.library.courses.Index', {
 
 	items: [{
 		xtype: 'box',
-		cls: 'title',
-		autoEl: {html: 'My Courses'}
+		cls: 'title-container',
+		autoEl: {cn: [
+			{cls: 'title', html: 'Your Courses'},
+			{cls: 'add-more-link hidden', html: 'Find Courses'}
+		]}
 	}],
 
 
@@ -36,9 +40,33 @@ Ext.define('NextThought.app.library.courses.Index', {
 
 		me.mon(me.CourseStore, 'enrolled-courses-set', function() {
 			if (me.isVisible) {
-				me.loadCourses();
+				me.loadCourses(true);
 			}
 		});
+
+		me.on({
+			deactivate: me.onDeactivate.bind(me)
+		});
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.mon(this.el, 'click', this.onClick.bind(this));
+
+		var addMoreLink = this.el.down('.add-more-link');
+
+		if (this.CourseStore.hasAllCoursesLink() && addMoreLink) {
+			addMoreLink.removeCls('hidden');
+		}
+	},
+
+
+	onDeactivate: function() {
+		if (this.availableWin) {
+			this.availableWin.destroy();
+		}
 	},
 
 
@@ -57,7 +85,7 @@ Ext.define('NextThought.app.library.courses.Index', {
 	},
 
 
-	loadCourses: function() {
+	loadCourses: function(force) {
 		var me = this;
 
 		me.loadingCmp = me.loadingCmp || me.add({
@@ -81,7 +109,9 @@ Ext.define('NextThought.app.library.courses.Index', {
 					}
 
 					if (me.coursePage) {
-						me.coursePage.setItems(upcomingCourses, currentCourses, archivedCourses);
+						if (force) {
+							me.coursePage.setItems(upcomingCourses, currentCourses, archivedCourses);
+						}
 					} else {
 						me.coursePage = me.add({
 							xtype: 'library-view-course-page',
@@ -96,11 +126,39 @@ Ext.define('NextThought.app.library.courses.Index', {
 
 
 	showCourses: function(route, subRoute) {
+		this.setTitle('Your Courses');
+
+		if (this.availableWin) {
+			this.availableWin.destroy();
+			delete this.availableWin;
+		}
+
 		return this.loadCourses();
 	},
 
 
-	showAvailableCourses: function(route, subRoute) {},
+	showAvailableCourses: function(route, subRoute) {
+		var me = this;
+
+		if (!me.availableWin) {
+			me.availableWin = Ext.widget('library-available-courses-window', {
+				doClose: me.pushRoute.bind(me, 'You Courses', '/')
+			});
+
+			me.mon(me.availableWin, 'destroy', function() {
+				delete me.availableWin;
+			});
+		}
+
+		me.loadCourses();
+		me.availableWin.show();
+		me.setTitle('All Courses');
+
+		me.addChildRouter(me.availableWin);
+		if (me.availableWin && me.availableWin.handleRoute) {
+			return me.availableWin.handleRoute(subRoute, route.precache);
+		}
+	},
 
 
 	navigateToCourse: function(enrollment, el) {
@@ -111,5 +169,12 @@ Ext.define('NextThought.app.library.courses.Index', {
 			.then(function(route) {
 				me.pushRootRoute(null, route, {course: instance});
 			});
+	},
+
+
+	onClick: function(e) {
+		if (e.getTarget('.add-more-link')) {
+			this.pushRoute('Available', '/available');
+		}
 	}
 });
