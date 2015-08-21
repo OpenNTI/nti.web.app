@@ -17,9 +17,13 @@ Ext.define('NextThought.app.library.Home', {
 
 	layout: 'none',
 
-	cls: 'library-homepage',
+	cls: 'library-homepage library-page',
 
-	items: [{xtype: 'box', loadingCmp: true, cls: 'loading', html: 'Loading...'}],
+	items: [{
+		xtype: 'box',
+		loadingCmp: true,
+		autoEl: {cls: 'loading-mask', cn: {cls: 'load-text', html: 'Loading...'}}
+	}],
 
 
 	initComponent: function() {
@@ -38,7 +42,7 @@ Ext.define('NextThought.app.library.Home', {
 			return c.shouldShow();
 		}))
 			.then(function(showing) {
-				me.remove(loadingCmp);
+				me.remove(loadingCmp, true);
 				cmps.forEach(function(cmp, i) {
 					if (showing[i]) {
 						me.add({
@@ -52,7 +56,7 @@ Ext.define('NextThought.app.library.Home', {
 				});
 			})
 			.fail(function() {
-				me.remove(loadingCmp);
+				me.remove(loadingCmp, true);
 
 				me.add({
 					xtype: 'box', autoEl: 'Failed to Load Library'

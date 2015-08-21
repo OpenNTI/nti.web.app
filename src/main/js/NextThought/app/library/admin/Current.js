@@ -7,7 +7,7 @@ Ext.define('NextThought.app.library.admin.Current', {
 	],
 
 	layout: 'none',
-	title: 'Admin Courses',
+	title: 'Administered Courses',
 	storeModel: 'NextThought.model.courses.CourseInstanceAdministrativeRole',
 
 	statics: {

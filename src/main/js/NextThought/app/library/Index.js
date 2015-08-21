@@ -48,7 +48,7 @@ Ext.define('NextThought.app.library.Index', {
 		this.getLayout().setActiveItem(cmp);
 
 		this.NavActions.updateNavBar({
-			noLibraryLink: true,
+			noLibraryLink: xtype === 'library-home',
 			darkStyle: true
 		});
 

@@ -20,8 +20,8 @@ Ext.define('NextThought.app.library.courses.Index', {
 		xtype: 'box',
 		cls: 'title-container',
 		autoEl: {cn: [
-			{cls: 'title', html: 'Your Courses'},
-			{cls: 'add-more-link hidden', html: 'Find Courses'}
+			{cls: 'title', html: 'Courses'},
+			{cls: 'add-more-link hidden', html: 'Add'}
 		]}
 	}],
 
@@ -90,22 +90,27 @@ Ext.define('NextThought.app.library.courses.Index', {
 
 		me.loadingCmp = me.loadingCmp || me.add({
 			xtype: 'box',
-			cls: 'loading',
-			autoEl: {cls: 'loaiding-text', html: 'Loading...'}
+			autoEl: {cls: 'loading-mask', cn: {cls: 'load-text', html: 'Loading...'}}
 		});
 
 		return me.CourseStore.onceLoaded()
 				.then(function() {
-					var upcomingCourses = me.__getUpcomingCourses(),
-						currentCourses = me.__getCurrentCourses(),
-						archivedCourses = me.__getArchivedCourses();
+					var upcomingCourses = [] || me.__getUpcomingCourses(),
+						currentCourses = [] || me.__getCurrentCourses(),
+						archivedCourses = [] || me.__getArchivedCourses();
 
 					if (me.loadingCmp) {
 						me.remove(me.loadingCmp, true);
+						delete me.loadingCmp;
 					}
 
 					if (!upcomingCourses.length && !currentCourses.length && !archivedCourses.length) {
 						return me.showEmptyState();
+					}
+
+					if (me.emptyText) {
+						me.remove(me.emptyText, true);
+						delete me.emptyText;
 					}
 
 					if (me.coursePage) {
@@ -158,6 +163,19 @@ Ext.define('NextThought.app.library.courses.Index', {
 		if (me.availableWin && me.availableWin.handleRoute) {
 			return me.availableWin.handleRoute(subRoute, route.precache);
 		}
+	},
+
+
+	showEmptyState: function() {
+		if (this.coursePage) {
+			this.remove(this.coursePage, true);
+			delete this.coursePage;
+		}
+
+		this.emptyText = this.emptyText || this.add({
+			xtype: 'box',
+			autoEl: {cls: 'empty-text', html: 'You don\'t have any courses yet...<br><a class="add-more-link">+ Add Courses</a>'}
+		});
 	},
 
 
