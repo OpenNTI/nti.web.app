@@ -17,6 +17,7 @@ Ext.define('NextThought.app.MessageBox', {
 
 	layout: 'auto',
 	componentLayout: 'natural',
+	isOverlay: false,
 
 	statics: {
 		OK: 1,
