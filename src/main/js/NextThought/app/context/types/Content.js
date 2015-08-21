@@ -101,7 +101,7 @@ Ext.define('NextThought.app.context.types.Content', {
 	__fixUpContext: function(n, root) {
 		var node = Ext.get(n), cardTpl, slideDeckTpl, slideVideoTpl, dom, data,
 			imgs = n.querySelectorAll('img'),
-			maxWidth = this.maxWidth;
+			maxWidth = this.maxWidth, Slide;
 
 		node.select('.injected-related-items,.related,.anchor-magic').remove();
 
@@ -168,7 +168,8 @@ Ext.define('NextThought.app.context.types.Content', {
 
 		if (node.query('object[type$=slide]').length) {
 			data = NextThought.model.Slide.getParamFromDom(node.query('object[type$=slide]')[0], 'slideimage');
-			dom = new Ext.XTemplate(NextThought.app.mediaviewer.components.reader.parts.Slide.prototype.contextTpl).apply({image: root + data});
+			Slide = NextThought.app.mediaviewer.components.reader.parts.Slide; 
+			dom = new Ext.XTemplate(Slide && Slide.prototype.contextTpl).apply({image: root + data});
 			dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
 			return dom;
 		}
