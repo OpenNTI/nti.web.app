@@ -334,7 +334,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		//like an assignment.  We would probably want to allowNavigation in that case.
 		//Seems like we need to pass some more information to this method or have
 		//the framework support that in another way.
-		if (!this.submission || !this.injectedAssignments) {
+		if (!this.submission || !this.injectedAssignment) {
 			return true;
 		}
 
