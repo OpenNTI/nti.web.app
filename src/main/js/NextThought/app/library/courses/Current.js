@@ -110,8 +110,8 @@ Ext.define('NextThought.app.library.courses.Current', {
 
 
 	onAddClick: function() {
-		if (this.pushRoute) {
-			this.pushRoute('Available Courses', '/courses/available');
+		if (this.navigateToAllCourses) {
+			this.navigateToAllCourses();
 		}
 	},
 

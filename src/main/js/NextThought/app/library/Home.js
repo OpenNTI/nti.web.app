@@ -48,6 +48,7 @@ Ext.define('NextThought.app.library.Home', {
 					if (showing[i]) {
 						me.add({
 							xtype: cmp.xtype,
+							navigateToAllCourses: me.navigateToAllCourses.bind(me),
 							pushRoute: me.pushRoute.bind(me),
 							navigateToBundle: me.navigateToBundle.bind(me),
 							navigateToCourse: me.navigateToCourse.bind(me),
@@ -95,5 +96,12 @@ Ext.define('NextThought.app.library.Home', {
 		if (route) {
 			this.pushRootRoute(null, route, {community: community});
 		}
+	},
+
+
+	navigateToAllCourses: function() {
+		this.pushRoute('All Courses', '/courses/available', {
+			closeURL: '/'
+		});
 	}
 });

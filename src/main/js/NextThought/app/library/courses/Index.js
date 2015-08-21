@@ -152,7 +152,13 @@ Ext.define('NextThought.app.library.courses.Index', {
 			.then(function() {
 				if (!me.availableWin) {
 					me.availableWin = Ext.widget('library-available-courses-window', {
-						doClose: history.back.bind(history)
+						doClose: function() {
+							if (route.precache.closeURL) {
+								me.pushRootRoute('', route.precache.closeURL);
+							} else {
+								me.pushRoute('', '/');
+							}
+						}
 					});
 				}
 

@@ -81,34 +81,34 @@ Ext.define('NextThought.app.library.Index', {
 
 		this.setTitle('Home');
 
-		return cmp.handleRoute(subRoute, route.params);
+		return cmp.handleRoute(subRoute, route.precache);
 	},
 
 
 	showCourses: function(route, subRoute) {
 		var cmp = this.setActiveView('library-courses');
 
-		return cmp.handleRoute(subRoute, route.params);
+		return cmp.handleRoute(subRoute, route.precache);
 	},
 
 
 	showAdminCourses: function(route, subRoute) {
 		var cmp = this.setActiveView('library-admin');
 
-		return cmp.handleRoute(subRoute, route.params);
+		return cmp.handleRoute(subRoute, route.precache);
 	},
 
 
 	showBooks: function(route, subRoute) {
 		var cmp = this.setActiveView('library-content');
 
-		return cmp.handleRoute(subRoute, route.params);
+		return cmp.handleRoute(subRoute, route.precache);
 	},
 
 
 	showCommunities: function(route, subRoute) {
 		var cmp = this.setActiveView('library-communities');
 
-		return cmp.handleRoute(subRoute, route.params);
+		return cmp.handleRoute(subRoute, route.precache);
 	}
 });
