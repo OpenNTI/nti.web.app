@@ -29,7 +29,10 @@ Ext.define('NextThought.app.library.communities.components.Collection', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.on('refresh', 'truncateLabels', this);
+		this.on({
+			'refresh': this.truncateLabels.bind(this),
+			select: this.handleSelect.bind(this)
+		});
 	},
 
 
@@ -48,5 +51,15 @@ Ext.define('NextThought.app.library.communities.components.Collection', {
 				me.truncateText(label.dom, null, true);
 			});
 		});
+	},
+
+	handleSelect: function(selModel, record) {
+		selModel.deselect(record);
+
+		var node = this.getNodeByRecord(record);
+
+		if (this.navigate) {
+			this.navigate.call(this, record, node);
+		}
 	}
 });

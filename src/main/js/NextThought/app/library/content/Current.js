@@ -79,5 +79,19 @@ Ext.define('NextThought.app.library.content.Current', {
 			xtype: 'library-collection',
 			store: this.store
 		});
+	},
+
+
+	onSeeAllClick: function() {
+		if (this.pushRoute) {
+			this.pushRoute('Books', '/books');
+		}
+	},
+
+
+	navigate: function(bundle, el) {
+		if (this.navigateToBundle) {
+			this.navigateToBundle(bundle, el);
+		}
 	}
 });

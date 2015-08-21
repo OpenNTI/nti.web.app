@@ -94,7 +94,29 @@ Ext.define('NextThought.app.library.courses.Current', {
 
 		this.collection = this.add({
 			xtype: 'course-collection',
-			store: this.store
+			store: this.store,
+			navigate: this.navigate.bind(this)
 		});
+	},
+
+
+	onAddClick: function() {
+		if (this.pushRoute) {
+			this.pushRoute('Available Courses', '/courses/available');
+		}
+	},
+
+
+	onSeeAllClick: function() {
+		if (this.pushRoute) {
+			this.pushRoute('Courses', '/courses');
+		}
+	},
+
+
+	navigate: function(course, el) {
+		if (this.navigateToCourse) {
+			this.navigateToCourse(course, el);
+		}
 	}
 });

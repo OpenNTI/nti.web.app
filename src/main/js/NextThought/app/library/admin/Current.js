@@ -46,5 +46,11 @@ Ext.define('NextThought.app.library.admin.Current', {
 
 
 		return this.showItems(current);
+	},
+
+	onSeeAllClick: function() {
+		if (this.pushRoute) {
+			this.pushRoute('Administered Courses', '/admin');
+		}
 	}
 });

@@ -6,7 +6,9 @@ Ext.define('NextThought.app.library.Home', {
 		'NextThought.app.library.admin.Current',
 		'NextThought.app.library.communities.Current',
 		'NextThought.app.library.content.Current',
-		'NextThought.app.library.courses.Current'
+		'NextThought.app.library.courses.Current',
+		'NextThought.app.bundle.Actions',
+		'NextThought.app.course.Actions'
 	],
 
 	mixins: {
@@ -39,14 +41,54 @@ Ext.define('NextThought.app.library.Home', {
 				me.remove(loadingCmp);
 				cmps.forEach(function(cmp, i) {
 					if (showing[i]) {
-						me.add({xtype: cmp.xtype});
+						me.add({
+							xtype: cmp.xtype,
+							pushRoute: me.pushRoute.bind(me),
+							navigateToBundle: me.navigateToBundle.bind(me),
+							navigateToCourse: me.navigateToCourse.bind(me),
+							navigateToCommunity: me.navigateToCommunity.bind(me)
+						});
 					}
 				});
 			})
 			.fail(function() {
 				me.remove(loadingCmp);
 
-				me.add({xtype: 'box', autoEl: 'Failed to Load Library'});
+				me.add({
+					xtype: 'box', autoEl: 'Failed to Load Library'
+				});
 			});
+
+		me.CourseViewActions = NextThought.app.course.Actions.create();
+		me.BundleViewActions = NextThought.app.bundle.Actions.create();
+	},
+
+	navigateToBundle: function(bundle, el) {
+		var me = this;
+
+		me.BundleViewActions.transitionToBundle(bundle, el)
+			.then(function(route) {
+				me.pushRootRoute(null, route, {bundle: bundle});
+			});
+	},
+
+
+	navigateToCourse: function(enrollment, el) {
+		var me = this,
+			instance = enrollment.get('CourseInstance');
+
+		me.CourseViewActions.transitionToCourse(instance, el)
+			.then(function(route) {
+				me.pushRootRoute(null, route, {course: instance});
+			});
+	},
+
+
+	navigateToCommunity: function(community, el) {
+		var route = community.getProfileUrl();
+
+		if (route) {
+			this.pushRootRoute(null, route, {community: community});
+		}
 	}
 });

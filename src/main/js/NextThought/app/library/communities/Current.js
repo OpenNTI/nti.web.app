@@ -78,7 +78,22 @@ Ext.define('NextThought.app.library.communities.Current', {
 
 		this.collection = this.add({
 			xtype: 'library-communities-collection',
-			store: this.store
+			store: this.store,
+			navigate: this.navigate.bind(this)
 		});
+	},
+
+
+	onSeeAllClick: function() {
+		if (this.pushRoute) {
+			this.pushRoute('Communities', '/communities');
+		}
+	},
+
+
+	navigate: function(community, el) {
+		if (this.navigateToCommunity) {
+			this.navigateToCommunity(community, el);
+		}
 	}
 });
