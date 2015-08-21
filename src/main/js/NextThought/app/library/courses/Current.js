@@ -33,17 +33,22 @@ Ext.define('NextThought.app.library.courses.Current', {
 
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 
-		if (this.CourseStore.hasAllCoursesLink()) {
-			this.showAdd();
-		} else {
-			this.hideAdd();
-		}
+		this.maybeShowAdd();
 
 		this.CourseStore.onceLoaded()
 			.then(this.showCurrentItems.bind(this));
 
 		//update the list every time you enroll or drop a course in a course
 		this.mon(this.CourseStore, 'enrolled-courses-set', this.showCurrentItems.bind(this));
+	},
+
+
+	maybeShowAdd: function() {
+		if (this.CourseStore.hasAllCoursesLink()) {
+			this.showAdd();
+		} else {
+			this.hideAdd();
+		}
 	},
 
 

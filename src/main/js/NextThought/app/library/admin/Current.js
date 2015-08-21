@@ -45,8 +45,21 @@ Ext.define('NextThought.app.library.admin.Current', {
 		}
 
 
+		//We are already showing all the current enrollment, so we only need to check
+		//if there are more upcoming and archived than we added to get to at least 4
+		if ((upcoming.length + archived.length) > otherLength) {
+			this.showSeeAll();
+		} else {
+			this.hideSeeAll();
+		}
+
+
 		return this.showItems(current);
 	},
+
+
+	maybeShowAdd: function() {},
+
 
 	onSeeAllClick: function() {
 		if (this.pushRoute) {
