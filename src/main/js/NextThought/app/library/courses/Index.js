@@ -148,7 +148,7 @@ Ext.define('NextThought.app.library.courses.Index', {
 
 		if (!me.availableWin) {
 			me.availableWin = Ext.widget('library-available-courses-window', {
-				doClose: me.pushRoute.bind(me, 'You Courses', '/')
+				doClose: history.back.bind(history)
 			});
 
 			me.mon(me.availableWin, 'destroy', function() {
