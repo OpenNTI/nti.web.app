@@ -97,6 +97,6 @@ Ext.define('NextThought.app.context.ContainerContext', {
 			return Promise.resolve(cmp);
 		}
 
-		return Promise.reject();
+		return Promise.resolve();
 	}
 });

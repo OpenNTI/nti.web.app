@@ -749,9 +749,9 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 			return;
 		}
 
+		var  t;		
+
 		this.context.setHTML('');
-
-
 		if (!Ext.isEmpty(contextCmp)) {
 			//We have seen a case where we try and render a component twice.  That is a no no and causes
 			//terrible crashes
@@ -764,6 +764,12 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 			if (this.resizeMathJax && (Ext.isGecko || Ext.isIE9)) {
 				this.resizeMathJax(this.context);
 			}
+		}
+		else {
+			t = this.context.up('.context') || this.context;
+			// for no context, hide it.	
+			t.setVisibilityMode(Ext.dom.Element.DISPLAY);
+			t.hide();
 		}
 	},
 
