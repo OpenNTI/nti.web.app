@@ -22,7 +22,6 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 
 
 	renderSelectors: {
-		avatar: '.avatar .profile.avatar-pic',
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
 		favoritesSpacer: '.controls .favorite-spacer',
@@ -346,7 +345,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 			cn: [
 				{ cls: 'content-callout context', onclick: 'void(0)'},
 				{ cls: 'item', cn: [
-					'{user:avatar}',
+					{cls: 'avatar-wrapper', cn: ['{user:avatar}']},
 					{ cls: 'controls', cn: [
 						{ cls: 'favorite-spacer' },
 						{ cls: 'favorite' },
