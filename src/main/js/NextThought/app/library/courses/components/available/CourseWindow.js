@@ -273,7 +273,9 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 	},
 
 	handleClose: function() {
-		this.pushRootRoute('', '/');
+		if (this.doClose) {
+			this.doClose();
+		}
 	},
 
 	updateAvailableCourses: function(current, upcoming, archived) {

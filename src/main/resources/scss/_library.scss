@@ -95,10 +95,10 @@
 			display: none;
 		}
 
-	  	&::before {
-	  		content: '';
-	  		display: block;
-	  		width: 0;
+		&::before {
+			content: '';
+			display: block;
+			width: 0;
 			height: 0;
 			border-style: solid;
 			border-width: 5px 5px 5px 0;
@@ -107,17 +107,16 @@
 			left: -5px;
 			top: 50%;
 			margin-top: -5px;
-	  	}
+		}
 	}
 
 
 }
 
 ul.library-grid {
-	width: 100%;
 	list-style: none;
 	padding: 0;
-	margin: 0;
+	margin: 0 -8px;
 
 	&::after {
 		content: '';
@@ -126,11 +125,46 @@ ul.library-grid {
 	}
 }
 
+li.community-grid-item {
+	float: left;
+	width: 242px;
+	height: 70px;
+	margin: 7px 9px;
+	cursor: pointer;
+	background: white;
+	position: relative;
+	padding-left: 70px;
+
+	.avatar-container {
+		position: absolute;
+		top: 0;	bottom: 0;
+		left: 0;
+		width: 70px;
+	}
+
+	.title-container {
+		position: relative;
+		height: 70px;
+	}
+
+	.title {
+		padding: 0 15px;
+		text-transform: uppercase;
+		font: normal 700 1em/1em $condensed-font;
+		color: $primary-grey;
+		max-height: 4em;
+		overflow: hidden;
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+}
+
 li.library-grid-item {
 	float: left;
 	width: 242px;
 	height: 290px;
-	margin: 7px;
+	margin: 7px 9px;
 	cursor: pointer;
 	background: white;
 	position: relative;
@@ -217,7 +251,6 @@ li.library-grid-item {
 .library-group-header{
 	height: 20px;
 	margin-bottom: 10px;
-	padding: 0 9px;
 
 	div {
 		float: left;
@@ -1022,4 +1055,134 @@ li.library-grid-item {
 		@include experimental-value(max-height, calc(100% - 40px));
 	}
 
+}
+
+
+.library-page {
+	position: relative;
+	min-height: 200px;
+
+	.empty-text {
+		color: $tertiary-grey;
+		font: normal 300 2em $font;
+		margin: 2em auto;
+		width: 530px;
+		text-align: center;
+
+		a {
+			color: white;
+			font-size: 0.8em;
+			cursor: pointer;
+		}
+	}
+
+	.title-container {
+		.add-more-link {
+			color: $primary-blue;
+			cursor: pointer;
+			font: normal 300 0.875em/2em $font;
+			display: inline-block;
+
+			&.hidden {
+				display: none;
+			}
+
+			&::before {
+				content: '+';
+				margin-right: 0.1em;
+			}
+		}
+	}
+
+	.title {
+		font-size: 1.5em;
+		color: rgba(255, 255, 255, 0.8);
+		display: inline-block;
+		font-weight: 300;
+		margin-right: 0.5em;
+	}
+
+	.loading-mask {
+		position: absolute;
+		top: 0; bottom: 0;
+		right: 0; left: 0;
+		background: rgba(52, 52, 52, 0.5);
+		z-index: 5;
+		min-height: 50px;
+
+		.load-text {
+			position: absolute;
+			top: 10%;
+			left: 50%;
+			margin-left: -25px;
+			color: white;
+
+			&::after {
+				@include loadingSpinner($top: 0, $left: -30px);
+			}
+		}
+	}
+
+	.error-cmp {
+		text-align: center;
+		color: $primary-red;
+		font-size: 1.25em;
+	}
+}
+
+
+.library-homepage {
+	.library-group-header { display: none; }
+
+	.x-component-library-collection {
+		margin: 0;
+	}
+
+	.current-collection {
+		margin-bottom: 40px;
+
+		.header {
+			display: -webkit-box;
+			display: -moz-box;
+			display: -ms-flexbox;
+			display: -webkit-flex;
+			display: flex;
+			align-items: baseline;
+			
+			.title, .add, .see-all {
+				flex: 0 0 auto;
+
+				&.hidden {
+					display: none;
+				}
+			}
+
+			.space {
+				flex: 1 1 auto;
+			}
+
+			.title {
+				font: normal 300 1.25em/2em $font;
+				color: white;
+				margin-right: 0.8em;
+			}
+
+			.add {
+				color: $primary-blue;
+				cursor: pointer;
+				font: normal 300 0.875em/2em $font;
+
+				&::before {
+					content: '+';
+					margin-right: 0.1em;
+				}
+			}
+
+			.see-all {
+				color: white;
+				font: normal 300 0.875em/2em $font;
+				cursor: pointer;
+			}
+		}
+	}
 }
