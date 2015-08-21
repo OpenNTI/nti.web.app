@@ -145,21 +145,30 @@ Ext.define('NextThought.app.course.assessment.components.admin.Activity', {
 
 	goToAssignment: function(s, record) {
 		var user = record.get('user'),
-			userId = user.getURLPart(),
+			userId,
+			me = this,
 			assignment = record.get('item'),
 			assignmentId = assignment.getId();
 
-		assignmentId = ParseUtils.encodeForURI(assignmentId);
+		UserRepository.getUser(user)
+			.then(function(userObj){
+				userId = userObj.getURLPart();
 
-		if (isMe(user)) {
-			//don't know what to do here. We need a reply-to?
-			// or a submission object to get the target user.
-			user = null;
-		}
+				assignmentId = ParseUtils.encodeForURI(assignmentId);
 
-		this.pushRoute(assignment.get('title'), assignmentId + '/students/' + userId, {
-			assignment: assignment,
-			user: user
-		});
+				if (isMe(user)) {
+					//don't know what to do here. We need a reply-to?
+					// or a submission object to get the target user.
+					user = null;
+				}
+
+				me.pushRoute(assignment.get('title'), assignmentId + '/students/' + userId, {
+					assignment: assignment,
+					user: user
+				});
+			})
+			.fail(function(reason){
+				console.log("Couldn't get user because " + reason);
+			});
 	}
 });
