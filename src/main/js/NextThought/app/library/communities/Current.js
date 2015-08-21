@@ -45,7 +45,7 @@ Ext.define('NextThought.app.library.communities.Current', {
 
 
 	showCurrentItems: function(communities) {
-		if (communities.length > 8) {
+		if (communities.length > 8 || true) {
 			this.showSeeAll();
 		} else {
 			this.hideSeeAll();

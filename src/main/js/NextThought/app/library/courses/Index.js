@@ -95,9 +95,9 @@ Ext.define('NextThought.app.library.courses.Index', {
 
 		return me.CourseStore.onceLoaded()
 				.then(function() {
-					var upcomingCourses = [] || me.__getUpcomingCourses(),
-						currentCourses = [] || me.__getCurrentCourses(),
-						archivedCourses = [] || me.__getArchivedCourses();
+					var upcomingCourses = me.__getUpcomingCourses(),
+						currentCourses = me.__getCurrentCourses(),
+						archivedCourses = me.__getArchivedCourses();
 
 					if (me.loadingCmp) {
 						me.remove(me.loadingCmp, true);
