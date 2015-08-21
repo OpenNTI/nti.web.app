@@ -461,6 +461,7 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 	beforeSaveProgress: function() {
 		var assessmentReader = this.reader.getAssessment();
 
+		if (this.isInstructor) { return ; }
 		assessmentReader.showSavingProgress();
 	},
 
@@ -475,6 +476,10 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 
 
 	saveProgress: function(progress) {
+		if (this.isInstructor) {
+			return Promise.reject();
+		}
+
 		return this.AssessmentActions.saveProgress(this.questionSet, progress, this.startTimestamp);
 	},
 
