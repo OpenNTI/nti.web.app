@@ -51,6 +51,10 @@ Ext.define('NextThought.model.ContentPackage', {
 		return this.get('title');
 	},
 
+	getIcon: function() {
+		return this.get('icon');
+	},
+
 
 	getToc: function(status) {
 		var me = this,
