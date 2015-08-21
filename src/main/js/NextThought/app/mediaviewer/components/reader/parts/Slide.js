@@ -181,9 +181,15 @@ Ext.define('NextThought.app.mediaviewer.components.reader.parts.Slide', {
 
 	wantsRecord: function(rec) {
 		var anchorResolver = this.getAnchorResolver(),
-			domFrag = this.slide.get('dom-clone');
+			domFrag = this.slide.get('dom-clone'),
+			containerId = rec.get('ContainerId'),
+			result = this.slide.getId() === containerId;
 
-		return anchorResolver.doesContentRangeDescriptionResolve(rec.get('applicableRange'), domFrag);
+		if (!result) {
+			result = anchorResolver.doesContentRangeDescriptionResolve(rec.get('applicableRange'), domFrag);
+		}
+
+		return result;
 	},
 
 
