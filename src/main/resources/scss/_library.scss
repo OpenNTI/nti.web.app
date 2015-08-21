@@ -251,7 +251,6 @@ li.library-grid-item {
 .library-group-header{
 	height: 20px;
 	margin-bottom: 10px;
-	padding: 0 9px;
 
 	div {
 		float: left;
@@ -1056,6 +1055,14 @@ li.library-grid-item {
 		@include experimental-value(max-height, calc(100% - 40px));
 	}
 
+}
+
+
+.library-page {
+	.title {
+		font-size: 1.5em;
+		color: rgba(255, 255, 255, 0.8);
+	}
 }
 
 

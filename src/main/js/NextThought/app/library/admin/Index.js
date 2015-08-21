@@ -1,5 +1,5 @@
 Ext.define('NextThought.app.library.admin.Index', {
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.app.library.courses.Index',
 	alias: 'widget.library-admin',
 
 	mixins: {
@@ -8,5 +8,27 @@ Ext.define('NextThought.app.library.admin.Index', {
 
 	layout: 'none',
 
-	items: [{xtype: 'box', autoEl: {html: 'Admin'}}]
+	items: [{
+		xtype: 'box',
+		cls: 'title',
+		autoEl: {html: 'My Courses'}
+	}],
+
+
+	__getUpcomingCourses: function() {
+		return this.CourseStore.getUpcomingAdminCourses();
+	},
+
+
+	__getCurrentCourses: function() {
+		return this.CourseStore.getCurrentAdminCourses();
+	},
+
+
+	__getArchivedCourses: function() {
+		return this.CourseStore.getArchivedAdminCourses();
+	},
+
+
+	showAvailableCourses: function(route, subRoute) {}
 });

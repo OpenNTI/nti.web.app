@@ -14,52 +14,26 @@ Ext.define('NextThought.app.library.courses.components.Page', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.enableBubble(['show-available']);
-
-		this.emptyCfg = {
-			xtype: 'box',
-			autoEl: {cls: 'empty-text', html: this.emptyText}
-		};
-
-		this.setItems(this.courses);
-	},
-
-	showEmptyText: function() {
-		if (!this.emptyCmp) {
-			this.removeAll(true);
-			this.emptyCmp = this.add(this.emptyCfg);
-		}
+		this.setItems(this.upcoming, this.current, this.archived);
 	},
 
 
-	afterRender: function() {
-		this.callParent(arguments);
-
-		var me = this;
-
-		if (me.emptyCmp && me.emptyCmp.el) {
-			me.mon(me.emptyCmp.el, 'click', function(e) {
-				var a = e.getTarget('a[data-event]'),
-					eventName = a && a.getAttribute('data-event');
-
-				if (eventName) {
-					me.fireEvent(eventName);
-				}
-			});
-		}
-	},
-
-
-	setItems: function(items) {
-		if (Ext.isEmpty(items)) {
-			this.showEmptyText();
-			return;
-		}
-
-		delete this.emptyCmp;
+	setItems: function(upcoming, current, archived) {
 		this.removeAll(true);
-		this.addBinnedCourses(this.binCourses(items));
+
+		if (upcoming && upcoming.length) {
+			this.addCourses(upcoming, 'Upcoming');
+		}
+
+		if (current && current.length) {
+			this.addCourses(current, 'Current');
+		}
+
+		if (archived && archived.length) {
+			this.addBinnedCourses(this.binCourses(archived), 'Archived');
+		}
 	},
+
 
 	/*
 		returns {
@@ -70,7 +44,6 @@ Ext.define('NextThought.app.library.courses.components.Page', {
 		}
 	*/
 	binCourses: function(courses) {
-
 		var	me = this,
 			bins = {upcoming: {}},
 			years = [], upcoming = [],
@@ -88,14 +61,6 @@ Ext.define('NextThought.app.library.courses.components.Page', {
 				yearBin = bins[year], list = years, bin = bins,
 				semesterBin = yearBin && yearBin[semester];
 
-			//if it hasn't started yet put it in an upcoming bin
-			if (catalog.isUpcoming()) {
-				yearBin = bins.upcoming[year];
-				semesterBin = yearBin && yearBin[semester];
-				list = upcoming;
-				bin = bins.upcoming;
-			}
-
 			//if we already have a bin for the year
 			if (yearBin) {
 				//if we already have a bin in that year for the semester
@@ -111,7 +76,6 @@ Ext.define('NextThought.app.library.courses.components.Page', {
 				yearBin = bin[year] = {};
 				semesterBin = yearBin[semester] = [course];
 			}
-			semesterBin.label = catalog.isArchived() ? 'Archived' : 'Current';
 		});
 
 		return {
@@ -123,17 +87,15 @@ Ext.define('NextThought.app.library.courses.components.Page', {
 	},
 
 
-	addBinnedCourses: function(binObj) {
+	addBinnedCourses: function(binObj, label) {
 		var me = this, i, semester,
 			bins = binObj.bins || {},
 			years = binObj.years || [],
-			upcoming = binObj.upcoming || [],
 			semesters = binObj.semesters || [];
 
 		//show the ongoing courses by biggest year first (biggest will be the current)
 		years.sort().reverse();
-		//show the upcoming courses by smallest year first (smallest will be closest to the current)
-		upcoming.sort();
+
 		//show the ongoing courses by last semester first (it will be the current)
 		semesters = ((semesters && Ext.Array.unique(semesters)) || []).reverse();
 
@@ -143,31 +105,19 @@ Ext.define('NextThought.app.library.courses.components.Page', {
 
 			semesters.forEach(function(semester) {
 				if (bin[semester] && bin[semester].length) {
-					me.add({
-						label: bin.label || me.groupLabel || bin[semester].label,
-						group: semester + ' ' + year,
-						store: me.getCourseStore(bin[semester]),
-						navigate: me.navigate && me.navigate.bind(me)
-					});
+					me.addCourses(bin[semester], label, semester + ' ' + year);
 				}
 			});
 		});
+	},
 
 
-		upcoming.forEach(function(year) {
-			var bin = bins.upcoming[year];
-
-			//show the first semester first
-			semesters.reverse().forEach(function(semester) {
-				if (bin[semester] && bin[semester].length) {
-					me.add({
-						label: 'upcoming',
-						group: semester + ' ' + year,
-						store: me.getCourseStore(bin[semester]),
-						navigate: me.navigate && me.navigate.bind(me)
-					});
-				}
-			});
+	addCourses: function(courses, label, group) {
+		this.add({
+			label: label,
+			group: group || '',
+			store: this.getCourseStore(courses),
+			navigate: this.navigate && this.navigate.bind(this)
 		});
 	},
 
@@ -175,7 +125,21 @@ Ext.define('NextThought.app.library.courses.components.Page', {
 	getCourseStore: function(data) {
 		return new Ext.data.Store({
 			model: 'NextThought.model.courseware.CourseInstanceEnrollment',
-			data: data
+			data: data,
+			sorters: [{
+				sorterFn: function(a, b) {
+					var aVal = a.get('CourseInstance'),
+						bVal = b.get('CourseInstance');
+
+					aVal = aVal && aVal.getCourseCatalogEntry();
+					bVal = bVal && bVal.getCourseCatalogEntry();
+
+					aVal = aVal && aVal.get('ProviderUniqueId');
+					bVal = bVal && bVal.get('ProviderUniqueId');
+
+					return aVal < bVal ? -1 : aVal === bVal ? 0 : 1;
+				}
+			}]
 		});
 	}
 });

@@ -24,7 +24,7 @@ Ext.define('NextThought.app.library.Index', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.NavigationActions = NextThought.app.navigation.Actions.create();
+		this.NavActions = NextThought.app.navigation.Actions.create();
 
 		this.addRoute('/', this.showHome.bind(this));
 		this.addRoute('/courses', this.showCourses.bind(this));
@@ -46,6 +46,13 @@ Ext.define('NextThought.app.library.Index', {
 		}
 
 		this.getLayout().setActiveItem(cmp);
+
+		this.NavActions.updateNavBar({
+			noLibraryLink: true,
+			darkStyle: true
+		});
+
+		this.NavActions.setActiveContent(null);
 
 		//If this is the first element added, the card layout
 		//wont' fire the activate event so trigger it ourselves.
