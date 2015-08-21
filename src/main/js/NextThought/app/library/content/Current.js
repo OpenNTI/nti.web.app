@@ -61,19 +61,23 @@ Ext.define('NextThought.app.library.content.Current', {
 
 
 	showItems: function(current) {
-		var store = new Ext.data.Store({
+		if (this.store) {
+			this.store.loadRecords(current);
+		} else {
+			this.store = new Ext.data.Store({
 				model: this.storeModel,
 				data: current,
 				sorters: [{property: 'title', direction: 'DSC'}]
 			});
+		}
 
 		if (this.collection) {
-			this.remove(this.collection);
+			this.remove(this.collection, true);
 		}
 
 		this.collection = this.add({
 			xtype: 'library-collection',
-			store: store
+			store: this.store
 		});
 	}
 });

@@ -125,6 +125,41 @@ ul.library-grid {
 	}
 }
 
+li.community-grid-item {
+	float: left;
+	width: 242px;
+	height: 70px;
+	margin: 7px 9px;
+	cursor: pointer;
+	background: white;
+	position: relative;
+	padding-left: 70px;
+
+	.avatar-container {
+		position: absolute;
+		top: 0;	bottom: 0;
+		left: 0;
+		width: 70px;
+	}
+
+	.title-container {
+		position: relative;
+		height: 70px;
+	}
+
+	.title {
+		padding: 0 15px;
+		text-transform: uppercase;
+		font: normal 700 1em/1em $condensed-font;
+		color: $primary-grey;
+		max-height: 4em;
+		overflow: hidden;
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+}
+
 li.library-grid-item {
 	float: left;
 	width: 242px;

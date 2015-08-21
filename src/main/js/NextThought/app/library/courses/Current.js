@@ -77,19 +77,24 @@ Ext.define('NextThought.app.library.courses.Current', {
 
 
 	showItems: function(current) {
-		var store = new Ext.data.Store({
+		if (this.store) {
+			this.store.loadRecords(current);
+		} else {
+			this.store = new Ext.data.Store({
 				model: this.storeModel,
 				data: current,
 				sorters: [{property: 'CreatedTime', direction: 'ASC'}]
 			});
+		}
+
 
 		if (this.collection) {
-			this.remove(this.collection);
+			this.remove(this.collection, true);
 		}
 
 		this.collection = this.add({
 			xtype: 'course-collection',
-			store: store
+			store: this.store
 		});
 	}
 });
