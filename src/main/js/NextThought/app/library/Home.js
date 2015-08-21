@@ -43,6 +43,7 @@ Ext.define('NextThought.app.library.Home', {
 		}))
 			.then(function(showing) {
 				me.remove(loadingCmp, true);
+
 				cmps.forEach(function(cmp, i) {
 					if (showing[i]) {
 						me.add({
@@ -59,7 +60,7 @@ Ext.define('NextThought.app.library.Home', {
 				me.remove(loadingCmp, true);
 
 				me.add({
-					xtype: 'box', autoEl: 'Failed to Load Library'
+					xtype: 'box', autoEl: {cls: 'error-cmp', html: 'Failed to Load Library'}
 				});
 			});
 
