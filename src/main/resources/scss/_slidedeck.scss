@@ -1409,6 +1409,10 @@ $experimental-support-for-svg: true;
                             }
                         }
                     }
+
+                    .x-component-slide {
+	                	padding-left: 90px;
+	                }
                 }
             }
         }
@@ -1598,7 +1602,7 @@ $experimental-support-for-svg: true;
 	.x-component-slide{
         //Only set the max, if it's smaller, adjust.
 		max-width: 860px;
-        padding: 50px 90px 0 90px;
+        padding: 50px 90px 0 0;
 
 		.image-wrap{
 			position: relative;

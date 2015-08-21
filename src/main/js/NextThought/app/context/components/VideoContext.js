@@ -37,9 +37,13 @@ Ext.define('NextThought.app.context.components.VideoContext', {
 	isInContext: function() {
 		var context = this.ContextStore.getContext(),
 			currentContext = context && context.last(),
-			contextRecord = currentContext && currentContext.obj;
+			contextRecord = currentContext && currentContext.obj,
+			currentCmp = currentContext && currentContext.cmp, inContext;
 
-		return contextRecord && contextRecord.get('NTIID') === this.containerId;
+		if (currentCmp && currentCmp.containsId) {
+			inContext = currentCmp.containsId(contextRecord, this.containerId);
+		}
+		return inContext || contextRecord && contextRecord.get('NTIID') === this.containerId;
 	},
 
 

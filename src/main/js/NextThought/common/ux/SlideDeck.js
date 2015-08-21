@@ -7,7 +7,7 @@ Ext.define('NextThought.common.ux.SlideDeck', {
 		'NextThought.util.Content',
 		'NextThought.model.PlaylistItem',
 		'NextThought.model.Slide',
-		'NextThought.app.slidedeck.Overlay'
+		'NextThought.app.mediaviewer.content.Overlay'
 	],
 
 

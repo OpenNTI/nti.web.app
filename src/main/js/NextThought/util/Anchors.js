@@ -344,7 +344,7 @@ Ext.define('NextThought.util.Anchors', {
 	/*tested*/
 	scopedContainerNode: function(fragOrNode, containerId, rootId) {
 		var searchWithin,
-				node = fragOrNode.body || this.findElementsWithTagName(fragOrNode, 'body')[0] || fragOrNode;
+				node = fragOrNode && fragOrNode.body || fragOrNode && this.findElementsWithTagName(fragOrNode, 'body')[0] || fragOrNode;
 
 		if (!containerId) {
 			searchWithin = node;

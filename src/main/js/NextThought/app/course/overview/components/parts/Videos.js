@@ -25,8 +25,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 		'NextThought.model.PlaylistItem',
 		'NextThought.app.video.Video',
 		'Ext.data.reader.Json',
-		'NextThought.app.library.Actions',
-		'NextThought.app.slidedeck.media.Actions'
+		'NextThought.app.library.Actions'
 	],
 
 	ui: 'course',

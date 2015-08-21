@@ -285,7 +285,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 								});
 
 								record.isPlaceholder = true;
-
+								record.fireEvent('reset-assignment');
 								record.fireEvent('was-destroyed');
 							});
 

@@ -642,11 +642,14 @@ Ext.define('NextThought.model.Service', {
 
 	getSupportLinks: function() {
 		var aboutLink = getString('NextThought.view.menus.Settings.about.href',null,true) || 'http://nextthought.com';
+		var supportEmailLink = getString('NextThought.view.menus.Settings.supportEmail',null,true) || null;
+
 		this.supportLinks = this.supportLinks || {};
 
 		return Ext.applyIf(this.supportLinks, {
 			about: aboutLink,
-			termsOfService: 'about:blank'
+			termsOfService: 'about:blank',
+			supportEmail: supportEmailLink
 		});
 	},
 

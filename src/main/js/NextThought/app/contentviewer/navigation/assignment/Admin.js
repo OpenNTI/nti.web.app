@@ -244,6 +244,8 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 			this.currentLetter = letter;
 			//this.letterEl.update(letter);
 		}
+		this.mon(this.assignmentHistory, 'excused-changed', this.excuseGradeStatusChanged.bind(this));
+		this.mon(this.assignmentHistory, 'reset-assignment', this.markAssignmentAsReset.bind(this));
 	},
 
 
