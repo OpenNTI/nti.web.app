@@ -7,7 +7,8 @@ Ext.define('NextThought.app.course.info.Index', {
 	requires: [
 		'NextThought.app.course.info.components.Outline',
 		'NextThought.app.course.info.components.Body',
-		'NextThought.app.windows.Actions'
+		'NextThought.app.windows.Actions',
+		'NextThought.app.library.courses.components.available.CourseDetailWindow'
 	],
 
 	mixins: {

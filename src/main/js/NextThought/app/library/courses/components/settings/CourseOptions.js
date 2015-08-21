@@ -4,7 +4,8 @@ Ext.define('NextThought.app.library.courses.components.settings.CourseOptions', 
 
 	requires: [
 		'NextThought.app.course.enrollment.StateStore',
-		'NextThought.app.windows.Actions'
+		'NextThought.app.windows.Actions',
+		'NextThought.app.library.courses.components.available.CourseDetailWindow'
 	],
 
 	cls: 'course-setting-options',
