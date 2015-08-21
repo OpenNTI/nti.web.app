@@ -224,6 +224,8 @@ Ext.define('NextThought.util.Globals', {
 
 		script.type = 'text/javascript';
 		script.setAttribute('src', url);
+		script.setAttribute('async', true);
+		script.async = true;
 		script.src = url;
 		script.onload = onLoadFn;
 		script.onerror = onErrorFn;
