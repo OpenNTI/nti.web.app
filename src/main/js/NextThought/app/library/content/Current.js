@@ -39,7 +39,8 @@ Ext.define('NextThought.app.library.content.Current', {
 		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
 		this.PurchaseStore = NextThought.app.store.StateStore.getInstance();
 
-		if (this.PurchaseStore.getPurchasables().length) {
+		//for now force the books to not have an add button
+		if (this.PurchaseStore.getPurchasables().length && false) {
 			this.showAdd();
 		} else {
 			this.hideAdd();
