@@ -6,7 +6,7 @@ Ext.define('NextThought.app.mediaviewer.content.deck.OverlayedPanel', {
 
 	requires: [
 		'NextThought.util.Dom',
-		'NextThought.app.mediaviewer.content.SlideDeck'
+		'NextThought.app.mediaviewer.content.Slidedeck'
 	],
 
 	ui: 'content-launcher',

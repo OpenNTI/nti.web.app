@@ -6,7 +6,7 @@ Ext.define('NextThought.app.context.types.Content', {
 		'NextThought.common.components.cards.Card',
 		'NextThought.app.library.Actions',
 		'NextThought.app.mediaviewer.content.deck.OverlayedPanel',
-		'NextThought.app.mediaviewer.content.SlideDeck',
+		'NextThought.app.mediaviewer.content.Slidedeck',
 		'NextThought.app.mediaviewer.content.SlideVideo',
 		'NextThought.app.mediaviewer.content.OverlayedPanel',
 		'NextThought.app.context.components.cards.*',
@@ -152,7 +152,7 @@ Ext.define('NextThought.app.context.types.Content', {
 			Ext.fly(c).remove();
 		});
 
-		slideDeckTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.app.mediaviewer.content.SlideDeck.prototype.renderTpl.html});
+		slideDeckTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.app.mediaviewer.content.Slidedeck.prototype.renderTpl.html});
 		Ext.each(node.query('object[type*=ntislidedeck]'), function(c) {
 			var d = NextThought.app.mediaviewer.content.deck.OverlayedPanel.getData(c);
 			slideDeckTpl.insertAfter(c, d, false);
