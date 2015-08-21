@@ -53,25 +53,34 @@ Ext.define('NextThought.app.context.types.Slide', {
 				})
 				.then(function(root) {
 					var dom = new Ext.XTemplate(me.contextTpl).apply({image: (root || '') + slide.get('image')}),
-						cmp;
+						cmp, config;
 					dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
 
 					if (kind === 'card' || kind === 'list') {
-						cmp = Ext.widget('context-slide-card', {
+						config = {
 							slide: slide,
 							contextDom: dom,
 							containerId: me.container,
-							record: me.record,
+							record: me.record || me.contextRecord,
 							doNavigate: me.doNavigate,
 							type: kind
-						});
+						}
+
+						if (kind === 'card') {
+							cmp = Ext.apply(config, {xtype: 'context-slide-card'});
+						}
+						else {
+							cmp = Ext.widget('context-slide-card', config);	
+						}
+
+						
 					}
 					else {
 						cmp = Ext.widget('context-default', {
 							snippet: dom,
 							fullContext: dom,
 							containerId: me.container,
-							record: me.record,
+							record: me.record || me.contextRecord,
 							doNavigate: me.doNavigate
 						});
 					}

@@ -12,3 +12,19 @@
 		}
 	}
 }
+
+.dashboard-post {
+	.context-card {
+		.image-context {
+			&.slide {
+				.content-launcher {
+					padding: 10px;
+
+					img {
+						margin-left: 0;
+					}
+				}
+			}
+		}
+	}
+}
