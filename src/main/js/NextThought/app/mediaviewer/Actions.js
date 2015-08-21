@@ -220,7 +220,6 @@ Ext.define('NextThought.app.mediaviewer.Actions', {
 			me.PathActions.getPathToObject(obj)
 				.then(function(path) {
 					var course = path[0], p;
-
 					if (course) {
 						p = course.getContentRoots()[0];
 					}
@@ -231,12 +230,17 @@ Ext.define('NextThought.app.mediaviewer.Actions', {
 	},
 
 
-	fixSlideImagesPath: function(slides, basePath) {
+	fixSlideImagesPath: function(slides, basePath, fullPath) {
+		var pageInfo = (fullPath || []).last(),
+			courseBundle = (fullPath || []).first();
+
 		Ext.each(slides || [], function(slide) {
 			var image = slide.get('image');
 			if (image) {
 				image = (basePath || '') + image;
 				slide.set('image', image);
+				slide.pageInfo = pageInfo;
+				slide.courseBundle = courseBundle;
 			}
 		});
 	},
@@ -269,11 +273,16 @@ Ext.define('NextThought.app.mediaviewer.Actions', {
 						video = NextThought.model.PlaylistItem.create(obj);
 						videos[slidevideo.NTIID] = video;
 
-						return me.getBasePath(slidedeck)
-							.then(function(basePath) {
+						return me.PathActions.getPathToObject(slidedeck)
+							.then(function(path) {
+								var course = path[0], basePath;
+								if (course) {
+									basePath = course.getContentRoots()[0];
+								}
+
 								transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
 								transcripts[slidevideo.NTIID] = transcript;
-								me.fixSlideImagesPath(slideStore.getRange(), basePath);
+								me.fixSlideImagesPath(slideStore.getRange(), basePath, path);
 								fulfill();
 							});
 					});

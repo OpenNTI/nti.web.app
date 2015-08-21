@@ -5,7 +5,8 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 	requires: [
 		'NextThought.app.navigation.path.Actions',
 		'NextThought.app.mediaviewer.components.reader.parts.Transcript',
-		'NextThought.app.mediaviewer.Actions'
+		'NextThought.app.mediaviewer.Actions',
+		'NextThought.app.mediaviewer.components.View'
 	],
 
 	mixins: {

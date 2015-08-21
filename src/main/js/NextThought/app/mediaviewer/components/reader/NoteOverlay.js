@@ -112,6 +112,8 @@ Ext.define('NextThought.app.mediaviewer.components.reader.NoteOverlay', {
 			'show-editor': 'showEditorByEl',
 			'show-editor-inline': 'showEditorAtPosition'
 		});
+
+		view.noteOverlay = this;
 	},
 
 

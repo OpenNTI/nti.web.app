@@ -6,6 +6,10 @@ Ext.define('NextThought.app.mediaviewer.components.reader.parts.Slide', {
 		transcriptItem: 'NextThought.app.mediaviewer.components.reader.mixins.AnnotationsMixin'
 	},
 
+	requires: [
+		'NextThought.app.userdata.Actions'
+	],
+
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'image-wrap', cn: [
 			{tag: 'img', cls: 'slide'},
@@ -35,8 +39,8 @@ Ext.define('NextThought.app.mediaviewer.components.reader.parts.Slide', {
 		this.callParent(arguments);
 
 		this.mixins.transcriptItem.constructor.apply(this, arguments);
-
 		this.enableBubble(['register-records', 'unregister-records']);
+		this.UserDataActions = NextThought.app.userdata.Actions.create();
 	},
 
 	containerIdForData: function() {
@@ -80,6 +84,32 @@ Ext.define('NextThought.app.mediaviewer.components.reader.parts.Slide', {
 		data.containerId = this.slide.getId();
 		data.userDataStore = this.userDataStore;
 		this.fireEvent('show-editor', data, e.getTarget('.add-note-here', null, true));
+		wait()
+			.then(this.setEditorDefaultSharing.bind(this));
+	},
+
+
+	setEditorDefaultSharing: function() {
+		var pageInfo = this.slide.pageInfo,
+			pid = pageInfo && pageInfo.getId(),
+			reader = this.up('slidedeck-transcript'),
+			course = reader && reader.currentBundle || this.slide.courseBundle,
+			me = this;
+
+		if (!pid || !course) { return; }
+
+		me.UserDataActions.getPreferences(pid, course)
+			.then(function(prefs) {
+				var sharing = prefs && prefs.sharing,
+					sharedWith = sharing && sharing.sharedWith;
+
+				return SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith), course);
+			})
+			.then(function(shareInfo) {
+				if (me.noteOverlay && me.noteOverlay.editor) {
+					me.noteOverlay.editor.setSharedWith(shareInfo);
+				}
+			});
 	},
 
 
