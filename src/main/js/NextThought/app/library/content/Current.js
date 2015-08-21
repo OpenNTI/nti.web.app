@@ -77,7 +77,8 @@ Ext.define('NextThought.app.library.content.Current', {
 
 		this.collection = this.add({
 			xtype: 'library-collection',
-			store: this.store
+			store: this.store,
+			navigate: this.navigate.bind(this)
 		});
 	},
 
