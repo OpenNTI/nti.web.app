@@ -57,7 +57,8 @@ Ext.define('NextThought.app.library.communities.Index', {
 				} else {
 					me.communityPage = me.add({
 						xtype: 'library-view-community-page',
-						communities: communities
+						communities: communities,
+						navigate: me.navigateToCommunity.bind(me)
 					});
 				}
 			});
@@ -81,5 +82,14 @@ Ext.define('NextThought.app.library.communities.Index', {
 			xtype: 'box',
 			autoEl: {cls: 'empty-text', html: 'You don\'t have any communities yet...'}
 		});
+	},
+
+
+	navigateToCommunity: function(community, el) {
+		var route = community.getProfileUrl();
+
+		if (route) {
+			this.pushRootRoute(null, route, {community: community});
+		}
 	}
 });
