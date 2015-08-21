@@ -147,20 +147,24 @@ Ext.define('NextThought.app.library.courses.Index', {
 	showAvailableCourses: function(route, subRoute) {
 		var me = this;
 
-		if (!me.availableWin) {
-			me.availableWin = Ext.widget('library-available-courses-window', {
-				doClose: history.back.bind(history)
+
+		return me.CourseStore.onceLoaded()
+			.then(function() {
+				if (!me.availableWin) {
+					me.availableWin = Ext.widget('library-available-courses-window', {
+						doClose: history.back.bind(history)
+					});
+				}
+
+				me.loadCourses();
+				me.availableWin.show();
+				me.setTitle('All Courses');
+
+				me.addChildRouter(me.availableWin);
+				if (me.availableWin && me.availableWin.handleRoute) {
+					return me.availableWin.handleRoute(subRoute, route.precache);
+				}
 			});
-		}
-
-		me.loadCourses();
-		me.availableWin.show();
-		me.setTitle('All Courses');
-
-		me.addChildRouter(me.availableWin);
-		if (me.availableWin && me.availableWin.handleRoute) {
-			return me.availableWin.handleRoute(subRoute, route.precache);
-		}
 	},
 
 
