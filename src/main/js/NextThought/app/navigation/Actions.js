@@ -3,7 +3,9 @@ Ext.define('NextThought.app.navigation.Actions', {
 
 	requires: [
 		'NextThought.app.navigation.StateStore',
-		'NextThought.util.Content'
+		'NextThought.util.Content',
+		'NextThought.app.context.StateStore',
+		'NextThought.model.PageInfo'
 	],
 
 
@@ -44,6 +46,7 @@ Ext.define('NextThought.app.navigation.Actions', {
 				Ext.getBody().el.mask('Loading...');
 				Service.getObject(newBase)
 					.then(function(obj) {
+						var i;
 						//iterate backwards
 						for (i = context.length - 1; i >= 0; i--) {
 							if (context[i].cmp && context[i].cmp.navigateToObject) {
@@ -75,6 +78,54 @@ Ext.define('NextThought.app.navigation.Actions', {
 
 			console.error('Expected href to be an interal url/hash change but it was', href, currentLocation);
 			return false;
+		},
+
+
+		navigateToCardTarget: function(data, silent, callback, bundle) {
+			var ntiid = data.ntiid,
+				postfix = data.notTarget ? '' : '-target',
+				DH = Ext.DomHelper,
+				s = encodeURIComponent('Pages(' + ntiid + ')'),
+				u = encodeURIComponent($AppConfig.username),
+				context = this.getContext(), i;
+
+			pi = NextThought.model.PageInfo.create({
+				ID: ntiid,
+				NTIID: ntiid,
+				content: DH.markup([
+					{tag: 'head', cn: [
+						{tag: 'title', html: data.title},
+						{tag: 'meta', name: 'icon', content: data.thumbnail}
+					]},
+					{tag: 'body', cn: {
+						cls: 'page-contents no-padding',
+						cn: Ext.applyIf({
+							tag: 'object',
+							cls: 'nticard' + postfix,
+							type: 'application/vnd.nextthought.nticard' + postfix,
+							'data-ntiid': ntiid,
+							html: DH.markup([
+								{tag: 'img', src: data.thumbnail},
+								{tag: 'span', cls: 'description', html: data.description}
+							])
+						}, data.asDomSpec())
+					}}
+				]),
+				Links: [
+					{
+						Class: 'Link',
+						href: '/dataserver2/users/' + u + '/' + s + '/UserGeneratedData',
+						rel: 'UserGeneratedData'
+					}
+				]
+			});
+
+			for (i = context.length - 1; i >= 0; i--) {
+				if (context[i].cmp && context[i].cmp.navigateToObject) {
+					context[i].cmp.navigateToObject(pi);
+					break;
+				}
+			}
 		}
 	},
 

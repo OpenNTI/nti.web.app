@@ -89,7 +89,7 @@ Ext.define('NextThought.common.components.cards.Card', {
 			status = NextThought.app.navigation.Actions.navigateToHref(this.target);
 		}
 		else {
-			status = this.fireEvent('show-target', this, this.data, !e, Ext.emptyFn/*needs a callback, we just don't care*/, bundle);
+			status = NextThought.app.navigation.Actions.navigateToCardTarget(this.data, !e, function() {}, bundle);
 		}
 		return status;
 	},
