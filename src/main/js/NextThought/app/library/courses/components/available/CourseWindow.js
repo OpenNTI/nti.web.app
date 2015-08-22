@@ -531,6 +531,9 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 								me.showCourse(course);
 								fulfill();
 							});
+					} else {
+						me.showTabpanel();
+						fulfill();
 					}
 				}
 			});
@@ -656,7 +659,9 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 		return me.showCourseDetail(route, subRoute)
 			.then(function() {
-				me.courseDetail.restoreEnrollmentOption('redeem', [route.params.token]);
+				if (me.courseDetail) {
+					me.courseDetail.restoreEnrollmentOption('redeem', [route.params.token]);
+				}
 			});
 	},
 
