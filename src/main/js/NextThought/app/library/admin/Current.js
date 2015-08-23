@@ -38,7 +38,7 @@ Ext.define('NextThought.app.library.admin.Current', {
 				var aVal = a.get('CreatedTime'),
 					bVal = a.get('CreatedTime');
 
-				return aVal < bVal ? 1 : aVal === bVal ? 0 : -1;
+				return aVal > bVal ? 1 : aVal === bVal ? 0 : -1;
 			});
 
 			current = current.concat(otherCourses.slice(0, otherLength));

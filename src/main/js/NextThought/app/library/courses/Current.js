@@ -69,7 +69,7 @@ Ext.define('NextThought.app.library.courses.Current', {
 				var aVal = a.get('CreatedTime'),
 					bVal = a.get('CreatedTime');
 
-				return aVal < bVal ? 1 : aVal === bVal ? 0 : -1;
+				return aVal > bVal ? 1 : aVal === bVal ? 0 : -1;
 			});
 
 			current = current.concat(otherCourses.slice(0, otherLength));
@@ -94,9 +94,7 @@ Ext.define('NextThought.app.library.courses.Current', {
 		} else {
 			this.store = new Ext.data.Store({
 				model: this.storeModel,
-				data: current,
-				//Order by when you enrolled
-				sorters: [{property: 'CreatedTime', direction: 'ASC'}]
+				data: current
 			});
 		}
 
