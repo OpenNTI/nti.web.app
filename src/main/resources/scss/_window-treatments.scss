@@ -192,6 +192,11 @@
 		&.error, &.warning-red {
 			@include icon('modal-red-sign', $left: 10px, $top: -5px);
 		}
+
+		a {
+			text-decoration: none;
+			color: $primary-blue;
+		}
 	}
 
 	.button-body {

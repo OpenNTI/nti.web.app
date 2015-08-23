@@ -533,7 +533,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 							});
 					} else {
 						me.showTabpanel();
-						fulfill();
+						reject();
 					}
 				}
 			});
@@ -662,6 +662,15 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 				if (me.courseDetail) {
 					me.courseDetail.restoreEnrollmentOption('redeem', [route.params.token]);
 				}
+			})
+			.fail(function() {
+				wait()
+					.then(function() {
+						//TODO: a better system for getting this email
+						var email = Service.getSupportLinks().email || 'support@nextthought.com';
+
+						alert('This course is not redeemable by this account. Please contact <a href="mailto:' + email + '">Support.</a>');
+					});
 			});
 	},
 
