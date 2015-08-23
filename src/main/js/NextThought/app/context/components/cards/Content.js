@@ -36,10 +36,12 @@ Ext.define('NextThought.app.context.components.cards.Content', {
 	setContent: function() {
 		var div = document.createElement('div');
 
-		if (this.textEl) {
+		if (this.textEl && this.snippet) {
 			div.appendChild(this.snippet);
 
 			this.textEl.dom.innerHTML = div.innerHTML;
+		} else if (this.textEl) {
+			this.addCls('hidden');
 		}
 	}
 });
