@@ -224,7 +224,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 		var items = getItems(content).reduce(process, []);
 
-		me.add([{xtype: 'course-overview-header', title: content.title, record: node}].concat(items));
+		me.add([{xtype: 'course-overview-header', title: content.title, record: node, course: course}].concat(items));
 	},
 
 

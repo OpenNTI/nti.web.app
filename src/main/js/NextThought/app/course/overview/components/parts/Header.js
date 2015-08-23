@@ -20,15 +20,17 @@ Ext.define('NextThought.app.course.overview.components.parts.Header', {
 
 	beforeRender: function() {
 		this.callParent(arguments);
+
 		this.renderData = Ext.apply(this.renderData || {}, this.record.getData());
+
 		if (this.getTitle()) {
 			this.renderData.label = this.getTitle();
 		}
 
-		var e = this.record.store;
-		e = e && e.courseInstance;
-		e = e && e.getCourseCatalogEntry();
+		var e = this.course;
+
 		e = e && e.isExpired();
+
 		if (e) {
 			this.renderData.expired = 'expired';
 		}

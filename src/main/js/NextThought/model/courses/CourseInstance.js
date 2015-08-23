@@ -333,6 +333,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 						return new NextThought.store.courseware.ToCBasedOutline({data: location.toc});
 					})
 			});
+
+			me.navStore.courseInstance = this;
 		}
 
 		return this.navStore;
