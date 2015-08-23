@@ -124,6 +124,12 @@ Ext.define('NextThought.app.navigation.Index', {
 			this.noLibraryLink = false;
 		}
 
+		if (config && config.darkStyle) {
+			this.addCls('dark-nav');
+		} else {
+			this.removeCls('dark-nav');
+		}
+
 		if (config && config.noRouteOnSearch) {
 			this.noRouteOnSearch = true;
 			if (this.searchCmp) {

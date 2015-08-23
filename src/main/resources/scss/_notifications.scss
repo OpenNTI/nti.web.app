@@ -30,6 +30,22 @@
 	&.menu-showing {
 		transition: background-color 0.3s, box-shadow 0.3s;
 	}
+
+	.main-navigation.dark-nav & {
+		@include icon('rhp-notifications_white', $side: after, $top: 23px, $left: 25px);
+
+		&::after {
+			opacity: 0.8;
+		}
+
+		&:hover::after {
+			opacity: 1;
+		}
+
+		&[data-badge]:not([data-badge="0"])::before {
+			border: 2px solid #313131;
+		}
+	}
 }
 
 .notifications-index {

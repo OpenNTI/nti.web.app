@@ -105,6 +105,10 @@
 			border-radius: 11px;
 			z-index: 3;
 
+			.main-navigation.dark-nav & {
+				background-color: #313131
+			}
+
 			@include presence-style-sudo($x: 2px, $y: 2px);
 		}
 	}
