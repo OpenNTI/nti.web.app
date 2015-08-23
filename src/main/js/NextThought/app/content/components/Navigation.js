@@ -29,5 +29,11 @@ Ext.define('NextThought.app.content.components.Navigation', {
 			data = bundle.asUIData();
 
 		this.titleEl.update(data.title);
+
+		if (data.label) {
+			this.titleEl.dom.setAttribute('data-label', data.label);
+		} else {
+			this.titleEl.dom.removeAttribute('data-label');
+		}
 	}
 });

@@ -78,6 +78,7 @@ Ext.define('NextThought.common.components.Navigation', {
 
 		if (!links || !links.length) {
 			this.quickLinksEl.addCls('hidden disabled');
+			this.titleEl.removeCls('has-quick-link');
 			return;
 		}
 
@@ -128,6 +129,7 @@ Ext.define('NextThought.common.components.Navigation', {
 
 		if (active) {
 			this.quickLinksEl.update(active.text);
+			this.titleEl.addCls('has-quick-link');
 		}
 	},
 
