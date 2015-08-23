@@ -217,6 +217,11 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 
 
 	setCreator: function(value) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setCreator.bind(this, value));
+			return;
+		}
+
 		var name = value.getName();
 
 		this.nameEl.update(name);
