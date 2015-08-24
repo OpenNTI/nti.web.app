@@ -172,6 +172,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 		this.addRoute('/', this.showCourses.bind(this));
 		this.addRoute('/:id', this.showCourseDetail.bind(this));
+		this.addRoute('/:id/forcredit', this.showForCredit.bind(this));
 		this.addRoute('/:id/redeem/:token', this.showRedeemToken.bind(this));
 		this.addRoute('/:id/paymentcomplete', this.showPaymenComplete.bind(this));
 
@@ -671,6 +672,18 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			.then(function() {
 				if (me.courseDetail) {
 					me.courseDetail.restoreEnrollmentOption('redeem', [route.params.token]);
+				}
+			});
+	},
+
+
+	showForCredit: function(route, subRoute) {
+		var me = this;
+
+		return me.showCourseDetail(route, subRoute)
+			.then(function() {
+				if (me.courseDetail) {
+					me.courseDetail.restoreEnrollmentOption('forcredit');
 				}
 			});
 	},

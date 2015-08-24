@@ -136,6 +136,8 @@ Ext.define('NextThought.controller.Application', {
 
 			if (parts[3] === 'redeem') {
 				subRoute = 'redeem/' + parts[4];
+			} else if (parts[3] === 'forcredit') {
+				subRoute = 'forcredit';
 			}
 
 		} else if (this.NOTIFICATIONS_FRAG_ROUTE.test(fragment)) {

@@ -197,6 +197,7 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 
 			if (option && option.Redeemable) {
 				option.doEnrollment(this, 'redeem', config);
+				delete this.__stateToRestore;
 			}
 		} else if (type === 'forcredit') {
 			option = this.enrollmentOptions.FiveminuteEnrollment;
@@ -207,10 +208,10 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 				if (checkbox) {
 					this.updateSelectedEnrollment(checkbox);
 				}
+
+				delete this.__stateToRestore;
 			}
 		}
-
-		delete this.__stateToRestore;
 	},
 
 
@@ -390,7 +391,7 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 
 		loading = me.__addEnrollmentBase(base);
 
-		addOns.forEach(function(addOn) {
+		addOns = addOns.map(function(addOn) {
 			if (!addOn) { return; }
 
 			me.state.addOns[addOn.name] = {
@@ -398,8 +399,15 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 				loading: true
 			};
 
-			me.__addEnrollmentOption(addOn);
+			return me.__addEnrollmentOption(addOn);
 		});
+
+		Promise.all(addOns)
+			.then(function() {
+				if (me.__stateToRestore) {
+					me.__stateToRestore.call();
+				}
+			});
 
 		return loading;
 	},
