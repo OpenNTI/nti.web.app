@@ -147,14 +147,17 @@ Ext.define('NextThought.app.chat.transcript.Pager', {
 	maybeAddMoreEntry: function(lastLoadRecords) {
 		var pageCount = Math.ceil(this.transcriptStore.getTotalCount() / this.PAGE_SIZE),
 			hasMore = pageCount > 0 ? this.transcriptStore.currentPage < pageCount : false,
-			logView = this.chatWindow && this.chatWindow.logView;
+			logView = this.chatWindow && this.chatWindow.logView, me = this;
 
 		if (logView && hasMore) {
 			this.pagingCmp = logView.insert(0, {
 				xtype: 'chat-pager-entry'
 			});
 
-			this.mon(this.pagingCmp.messageEl, 'click', this.loadNext.bind(this));
+			this.pagingCmp.onceRendered
+				.then(function(){
+					me.mon(me.pagingCmp.messageEl, 'click', me.loadNext.bind(me));		
+				});
 		}
 
 		return Promise.resolve();
