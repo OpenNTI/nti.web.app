@@ -186,7 +186,29 @@ Ext.define('NextThought.controller.Application', {
 
 
 	handleRoute: function(title, route, precache) {
-		var body = this.getBody(), location;
+		var me = this, location;
+
+		function handleRoute(r, p) {
+			var tries = 0;
+
+			return new Promise(function handle(fulfill, reject) {
+				var body = me.getBody();
+
+				tries += 1;
+
+				if (!body && tries > 30) {
+					return reject();
+				}
+
+				if (!body) {
+					wait(100).then(handle);
+					return;
+				}
+
+				body.handleRoute(r, p)
+					.then(fulfill, reject);
+			});
+		}
 
 		location = Globals.getURLParts('/' + route.replace(/^\//, ''));
 
@@ -211,7 +233,7 @@ Ext.define('NextThought.controller.Application', {
 
 		this.currentRoute = location.pathname + location.search + location.hash;
 
-		return body.handleRoute(this.currentRoute, precache)
+		return handleRoute(this.currentRoute, precache)
 			.then(this.onRoute.bind(this, title, route));
 	},
 
