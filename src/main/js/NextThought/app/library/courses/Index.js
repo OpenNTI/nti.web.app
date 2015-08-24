@@ -65,6 +65,13 @@ Ext.define('NextThought.app.library.courses.Index', {
 	},
 
 
+	getActiveItem: function() {
+		if (this.availableWin && !this.availableWin.isDestroyed) {
+			return this.availableWin;
+		}
+	},
+
+
 	onDeactivate: function() {
 		if (this.availableWin) {
 			this.availableWin.destroy();
