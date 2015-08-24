@@ -32,7 +32,6 @@ Ext.define('NextThought.mixins.Scrolling', {
 			up = delta > 0;
 
 		function prevent() {
-			console.log('stopping mouse wheel');
 			e.stopPropagation();
 			e.preventDefault();
 			e.returnValue = false;
@@ -40,7 +39,6 @@ Ext.define('NextThought.mixins.Scrolling', {
 		}
 
 		if (!target || target.classList.contains('allow-scroll-bleed')) {
-			console.log('allowing mouse wheel', target);
 			return true;
 		}
 
