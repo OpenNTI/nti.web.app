@@ -79,8 +79,8 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		//this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 	},
 
-	onceAssestsLoadedPromise: function(){
-		if(!this.onceAssetsLoaded){
+	onceAssestsLoadedPromise: function() {
+		if (!this.onceAssetsLoaded) {
 			this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 		}
 		return this.onceAssetsLoaded;
@@ -110,39 +110,45 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		me.getThumbImage();
 		me.getIconImage();
 	},
-		   
-	__ensureAsset: function(key, asset){
+
+
+	__ensureAsset: function(key, asset) {
 	   var existing = null,
 	   me = this;
-	   
-	   if(!this.__assetPromises){
+
+	   if (!this.__assetPromises) {
 		   this.__assetPromises = {};
 		}
-		   
+
 		existing = this.__assetPromises[key];
-		if(!existing){
+		if (!existing) {
 		   existing = this.getImgAsset(asset || key).then(function(url) { me.set(key, url); }, me.set.bind(me, [key, null]));
 		   this.__assetPromises[key] = existing;
 		}
-		   
+
 		return existing;
 	},
-		   
+
+
 	getBackgroundImage: function() {
 		return this.getAsset('background');
 	},
-		   
+
+
 	getThumbImage: function() {
 		return this.getAsset('thumb');
 	},
-		   
+
+
 	getIconImage: function() {
 		return this.getAsset('icon', 'landing');
 	},
 
-	getAsset: function(key, asset){
+
+	getAsset: function(key, asset) {
 		return this.__ensureAsset(key, asset).then(this.get.bind(this, key));
 	},
+
 
 	//update the enrollment scopes enrollment
 	setEnrolled: function(enrolled) {
@@ -320,6 +326,16 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 
 		return s;
 	},
+
+
+	getSemesterBadge: function() {
+		var start = this.get('StartDate'),
+			year = start.getFullYear(),
+			semester = this.getSemester();
+
+		return semester + ' ' + year;
+	},
+
 
 
 	setEnrollmentLinks: function(links) {

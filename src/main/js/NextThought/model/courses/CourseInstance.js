@@ -60,7 +60,11 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				isCourse: true,
 				author: e && e.getAuthorLine(),
 				title: e && e.get('Title'),
-				label: e && e.get('ProviderUniqueID')
+				label: e && e.get('ProviderUniqueID'),
+				semester: e && e.getSemesterBadge(),
+				archived: e && e.isArchived(),
+				upcoming: e && e.isUpcoming(),
+				startDate: e && e.get('StartDate')
 			};
 
 		ObjectUtils.clean(bundle);

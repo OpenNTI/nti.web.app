@@ -28,7 +28,15 @@ Ext.define('NextThought.app.library.courses.components.Collection', {
 	prepareData: function(data, index, record) {
 		var i = Ext.Object.chain(this.callParent(arguments)),
 			courseRecord = record.get('CourseInstance'),
-			course = courseRecord.asUIData();
+			course = courseRecord.asUIData(),
+			label = course.label,
+			badge;
+
+		if (course.upcoming) {
+			badge = Ext.Date.format(course.startDate, 'F j, Y');
+		} else if (course.archived) {
+			badge = course.semester;
+		}
 
 		if (course) {
 			Ext.apply(i, {
@@ -36,7 +44,11 @@ Ext.define('NextThought.app.library.courses.components.Collection', {
 				title: course.title,
 				courseName: course.label,
 				author: course.author,
-				enableSettings: true
+				enableSettings: true,
+				semester: course.semester,
+				badge: badge,
+				archived: course.archived ? 'archived' : '',
+				upcoming: course.upcoming ? 'upcoming' : ''
 			});
 
 			if (courseRecord.getIconImage) {

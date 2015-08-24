@@ -193,16 +193,21 @@ li.library-grid-item {
 		padding: 0 10px;
 	}
 
-	.author,.courseName {
+	.author,.courseName, .semester {
 		text-transform: uppercase;
 		font: normal bold 0.6em/1.6em $font;
 		overflow: hidden;
 		@include ellipse();
 	}
 
-	.courseName {
+	.courseName, .semester {
 		text-transform: uppercase;
 		color: $tertiary-grey;
+		display: inline-block;
+	}
+
+	.courseName {
+		margin-right: 0.5em;
 	}
 
 	.author {
@@ -236,6 +241,32 @@ li.library-grid-item {
 		@include icon('rhp-contact-flyout-settings', $top: 7px, $left: 7px, $position: absolute);
 	}
 
+	.archived {
+		position: absolute;
+		top: 85px; left: 50%;
+		margin: -25px 0 0 -75px;
+		height: 50px;
+		width: 150px;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: white;
+		line-height: 50px;
+		text-align: center;
+		padding-left: 40px;
+		border-radius: 3px;
+		display: none;
+	}
+
+	.badge {
+		position: absolute;
+		top: 10px;
+		color: white;
+		text-transform: uppercase;
+		font: normal 600 0.7em/2.4em $font;
+		padding: 0 10px;
+		display: none;
+	}
+
+
 	&.allow-zoom:hover {
 		.cover img {
 			@include experimental(transform, scale(1.05,1.05));
@@ -244,6 +275,35 @@ li.library-grid-item {
 
 		.settings {
 			display: block;
+		}
+	}
+
+	&.archived {
+		.badge {
+			left: 10px;
+			background: rgba(0, 0, 0, 0.6);
+			line-height: 23px;
+			border-radius: 4px;
+		}
+	}
+
+	&.upcoming {
+		.badge {
+			left: 5px;
+			background: rgba(63, 179, 246, 0.95);
+			letter-spacing: 0.06em;
+			display: block;
+
+			&::after {
+				content: '';
+				position: absolute;
+				right: -5px;
+				width: 0;
+				height: 0;
+				border-style: solid;
+				border-width: 0 0 24px 5px;
+				border-color: transparent transparent transparent rgba(63, 179, 246, 0.95);
+			}
 		}
 	}
 }
@@ -1203,6 +1263,14 @@ li.library-grid-item {
 				color: white;
 				font: normal 300 0.875em/2em $font;
 				cursor: pointer;
+			}
+		}
+
+		.library-grid-item {
+			&.archived {
+				.badge {
+					display: block;
+				}
 			}
 		}
 	}

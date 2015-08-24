@@ -19,14 +19,20 @@ Ext.define('NextThought.app.library.components.Collection', {
 	]),
 
 	entryTpl: Ext.DomHelper.markup({
-		tag: 'li', cls: 'library-grid-item item {featured} allow-zoom', 'role': 'link', 'aria-label': '{title}', cn: [
+		tag: 'li',
+		cls: 'library-grid-item item {featured} allow-zoom {archived} {upcoming}',
+		'role': 'link',
+		'aria-label': '{title}',
+		cn: [
 			{ cls: 'cover', cn: [
 				{tag: 'img', src: '{icon}'}
 			]},
+			{ tag: 'tpl', 'if': 'badge', cn: {cls: 'badge', html: '{badge}'}},
 			{ tag: 'tpl', 'if': 'enableSettings', cn: { cls: 'settings'}},
 			{ tag: 'tpl', 'if': 'sample', cn: { cls: 'sample', 'data-qtip': 'Sample' }}, //store - sample flag
 			{ cls: 'meta', 'aria-hidden': 'true', cn: [
 				{ cls: 'courseName', html: '{courseName}' },  //course name/id
+				{ cls: 'semester', html: '{semester}'},
 				{ tag: 'tpl', 'if': 'title', cn: { cls: 'title', html: '{title}',
 					'data-qtip': '{[values.title.length>40?Ext.String.htmlEncode(values.title):""]}' } },
 				{ tag: 'tpl', 'if': 'author', cn: { cls: 'author', html: '{author}',
@@ -60,7 +66,7 @@ Ext.define('NextThought.app.library.components.Collection', {
 	prepareData: function(data, index, record) {
 		var i = this.callParent(arguments);
 
-		if(record.getIconImage){
+		if (record.getIconImage) {
 			record.getIconImage();
 		}
 
