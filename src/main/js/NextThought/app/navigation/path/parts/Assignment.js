@@ -1,5 +1,9 @@
 Ext.define('NextThought.app.navigation.path.parts.Assignment', {
-	requires: ['NextThought.app.library.Actions'],
+	requires: [
+		'NextThought.app.library.Actions',
+		'NextThought.model.courseware.Grade',
+		'NextThought.model.assessment.Assignment'
+	],
 
 	constructor: function() {
 		this.LibraryActions = NextThought.app.library.Actions.create();
