@@ -1332,6 +1332,10 @@ div.contact-buttons {
 				max-width: 600px;
 				display: inline-block;
 				vertical-align: bottom;
+
+				&.group {
+					cursor: pointer;
+				}
 			}
 
 			span{

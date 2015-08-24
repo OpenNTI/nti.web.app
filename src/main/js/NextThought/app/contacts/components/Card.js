@@ -16,7 +16,7 @@ Ext.define('NextThought.app.contacts.components.Card', {
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'contact-card',
 		cn: [
-			{cls: 'user-avatar-container', cn: [
+			{cls: 'user-avatar-container', 'data-qtip': '{user:displayName}', cn: [
 					'{user:avatar}'
 			]},
 			{

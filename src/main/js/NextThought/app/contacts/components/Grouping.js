@@ -9,7 +9,8 @@ Ext.define('NextThought.app.contacts.components.Grouping', {
 	defaultType: 'contacts-tabs-card',
 
 	mixins: {
-		userContainer: 'NextThought.mixins.UserContainer'
+		userContainer: 'NextThought.mixins.UserContainer',
+		enableProfiles: 'NextThought.mixins.ProfileLinks'
 	},
 
 	ui: 'contact-grouping',
@@ -146,6 +147,11 @@ Ext.define('NextThought.app.contacts.components.Grouping', {
 		Ext.each(this.tools, function(t) {
 			t.render(this.toolsEl);
 		}, this);
+
+		if (this.record && this.record.isGroup) {
+			this.nameEl.addCls('group');
+			this.mon(this.nameEl, 'click', this.navigateToProfile.bind(this, this.record));
+		}
 	},
 
 
