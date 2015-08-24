@@ -26,7 +26,8 @@ Ext.define('NextThought.app.Body', {
 
 	mixins: {
 		Router: 'NextThought.mixins.Router',
-		State: 'NextThought.mixins.State'
+		State: 'NextThought.mixins.State',
+		Scrolling: 'NextThought.mixins.Scrolling'
 	},
 
 	layout: 'card',
@@ -69,6 +70,12 @@ Ext.define('NextThought.app.Body', {
 		this.addDefaultRoute('/library');
 
 		this.addDefaultObjectHandler(this.getObjectRoute.bind(this));
+
+		this.initScrolling();
+
+		window.addEventListener('DOMMouseScroll', this.maybeStopScrollBleed.bind(this));
+		window.addEventListener('mousewheel', this.maybeStopScrollBleed.bind(this));
+		window.addEventListener('wheel', this.maybeStopScrollBleed.bind(this));
 	},
 
 
