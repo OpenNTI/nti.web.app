@@ -39,7 +39,19 @@ Ext.define('NextThought.app.profiles.user.Index', {
 
 	    this.finalizeInit();
 
-	    this.on('deactivate', this.onDeactivate.bind(this));
+	    this.on({
+	    	'activate': this.onActivate.bind(this),
+	    	'deactivate': this.onDeactivate.bind(this)
+	    });
+	},
+
+
+	onActivate: function() {
+		var active = this.bodyCmp && this.bodyCmp.getLayout().getActiveItem();
+
+		if (active) {
+			active.fireEvent('activate');
+		}
 	},
 
 
