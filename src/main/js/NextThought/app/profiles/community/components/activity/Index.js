@@ -291,7 +291,9 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 			feedUrl = me.feedUrl,
 			params = {
 				batchSize: me.PAGE_SIZE,
-				batchStart: (page - 1) * me.PAGE_SIZE
+				batchStart: (page - 1) * me.PAGE_SIZE,
+				sortOn: 'createdTime',
+				sortOrder: 'descending'
 			};
 
 		me.isLoading = true;
