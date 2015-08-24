@@ -82,7 +82,8 @@ Ext.define('NextThought.app.course.catalog.TabPanel', {
 	buildStore: function(data) {
 		return new Ext.data.Store({
 			model: 'NextThought.model.courses.CourseCatalogEntry',
-			data: data
+			data: data,
+			sorters: [{property: 'ProviderUniqueID', direction: 'ASC'}]
 		});
 	},
 
@@ -116,9 +117,10 @@ Ext.define('NextThought.app.course.catalog.TabPanel', {
 		};
 	},
 
-	selectTabWithName: function(tabName){
-		var tab = this.down('[title='+tabName+']');
-		if(tab){
+
+	selectTabWithName: function(tabName) {
+		var tab = this.down('[title=' + tabName + ']');
+		if (tab) {
 			this.setActiveTab(tab);
 		}
 	},
