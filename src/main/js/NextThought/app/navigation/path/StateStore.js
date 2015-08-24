@@ -17,7 +17,11 @@ Ext.define('NextThought.app.navigation.path.StateStore', {
 
 	removeFromCache: function(ntiid) {
 		delete this.CONTAINER_PATH[ntiid];
-	}
+	},
 
+
+	clearCache: function() {
+		this.CONTAINER_PATH = {};
+	}
 
 });

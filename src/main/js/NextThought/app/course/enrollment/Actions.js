@@ -2,12 +2,14 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 	extend: 'NextThought.common.Actions',
 	requires: [
 		'NextThought.app.library.courses.StateStore',
-		'NextThought.app.library.courses.Actions'
+		'NextThought.app.library.courses.Actions',
+		'NextThought.app.navigation.path.Actions'
 	],
 
 	constructor: function() {
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 		this.CourseActions = NextThought.app.library.courses.Actions.create();
+		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
 
@@ -39,14 +41,17 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 					me.refreshEnrolledCourses(fulfill.bind(null, true), fulfill.bind(null, false));
 				});
 
+				//Clear the library path caches since they may have changed
+				me.PathActions.clearCache();
+
 				Promise.all([
 					updateCatalog,
 					updateEnrolled
-				]).then(function(results){
+				]).then(function(results) {
 					var success = results[1];
 
 					callback.call(null, success, true);
-				}).fail(function(reason){
+				}).fail(function(reason) {
 					console.error('Failed to enroll in course: ', reason);
 				});
 			}).fail(function(reason) {
@@ -83,7 +88,7 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 				course.setEnrolled(true);
 
 				updateCatalog = Service.request(courseInstance.getLink('CourseCatalogEntry'))
-					.then(function(catalogEntry){
+					.then(function(catalogEntry) {
 						catalogEntry = ParseUtils.parseItems(catalogEntry)[0];
 
 						course.set('EnrollmentOptions', catalogEntry.get('EnrollmentOptions'));
@@ -94,6 +99,8 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 					me.refreshEnrolledCourses(fulfill.bind(null, true), fulfill.bind(null, false));
 				});
 
+				//Clear the library path caches since they may have changed
+				me.PathActions.clearCache();
 
 				Promise.all([
 					updateCatalog,
@@ -102,7 +109,7 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 					var success = results[1];
 
 					callback.call(null, success, true);
-				}).fail(function(reason){
+				}).fail(function(reason) {
 					console.error('Failed to enroll in course: ', reason);
 				});
 			})
@@ -130,9 +137,11 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 		var me = this,
 			collection = (Service.getCollection('EnrolledCourses', 'Courses') || {}).href;
 
+		reject = reject || function() {};
+
 		me.CourseActions.setUpEnrolledCourses(collection)
 			.then(fulfill)
-			.fail(reject || function(){});
+			.fail(reject);
 	},
 
 

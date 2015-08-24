@@ -21,6 +21,11 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 	},
 
 
+	clearCache: function() {
+		this.PathStore.clearCache();
+	},
+
+
 	buildHandlerMap: function() {
 		var parts = NextThought.app.navigation.path.parts,
 			keys = Object.keys(parts), handlers = {};

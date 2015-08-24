@@ -6,6 +6,7 @@ Ext.define('NextThought.app.Body', {
 
 	requires: [
 		'NextThought.app.library.Index',
+		'NextThought.app.library.StateStore',
 		'NextThought.app.bundle.Index',
 		'NextThought.app.content.Index',
 		'NextThought.app.course.Index',
@@ -46,6 +47,7 @@ Ext.define('NextThought.app.Body', {
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 		this.WindowActions = NextThought.app.windows.Actions.create();
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
+		this.LibraryStore = NextThought.app.library.StateStore.getInstance();
 
 		this.mon(this.NavigationStore, 'set-active-content', this.updateBodyContent.bind(this));
 		this.mon(this.WindowStore, {
@@ -373,7 +375,9 @@ Ext.define('NextThought.app.Body', {
 			return;
 		}
 
-		Service.getObject(id)
+		//What for the library to load so we don't unmask too soon
+		return me.LibraryStore.onceLoaded()
+			.then(Service.getObject.bind(Service, id))
 			.then(function(obj) {
 				me.attemptToNavigateToObject(obj, {
 					doNavigateToFullPath: doNavigate,

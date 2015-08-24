@@ -500,7 +500,6 @@ Ext.define('NextThought.app.course.Index', {
 
 	getRouteForPath: function(path, course) {
 		var root = path[0] || {},
-			isAccessible = this.CourseStore.hasCourse(course),
 			subPath = path.slice(1),
 			route;
 
@@ -520,12 +519,9 @@ Ext.define('NextThought.app.course.Index', {
 		} else {
 			route = {
 				path: '',
-				isFull: path.length <= 0,
-				isAccessible: isAccessible
+				isFull: path.length <= 0
 			};
 		}
-
-		route.isAccessible = route.isAccessible === false ? false : isAccessible;
 
 		return route;
 	},
