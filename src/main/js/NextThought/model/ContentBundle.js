@@ -61,8 +61,8 @@ Ext.define('NextThought.model.ContentBundle', {
 		//this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 	},
 
-	onceAssetsLoadedPromise: function(){
-		if(!this.onceAssetsLoaded){
+	onceAssetsLoadedPromise: function() {
+		if (!this.onceAssetsLoaded) {
 			this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 		}
 		return this.onceAssetsLoaded;
@@ -109,16 +109,16 @@ Ext.define('NextThought.model.ContentBundle', {
 		]);
 	},
 
-	__ensureAsset: function(key, asset){
+	__ensureAsset: function(key, asset) {
 		var existing = null,
 			me = this;
 
-		if(!this.__assetPromises){
+		if (!this.__assetPromises) {
 			this.__assetPromises = {};
 		}
 
 		existing = this.__assetPromises[key];
-		if(!existing){
+		if (!existing) {
 			existing = this.getImgAsset(asset || key).then(function(url) { me.set(key, url); }, me.set.bind(me, [key, null]));
 			this.__assetPromises[key] = existing;
 		}
@@ -145,8 +145,8 @@ Ext.define('NextThought.model.ContentBundle', {
 		return this.getAsset('icon', 'landing');
 	},
 
-	getAsset: function(key, asset){
-		return this.__ensureAsset(key, asset).then(this.get.bind(this, key));	
+	getAsset: function(key, asset) {
+		return this.__ensureAsset(key, asset).then(this.get.bind(this, key));
 	},
 
 	getTocs: function(status) {

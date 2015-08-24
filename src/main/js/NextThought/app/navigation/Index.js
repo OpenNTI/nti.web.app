@@ -144,7 +144,44 @@ Ext.define('NextThought.app.navigation.Index', {
 	},
 
 
-	setActiveContent: function(bundle) {},
+	__removeVendorIcon: function() {
+		this.brandingEl.removeCls('custom-vendor');
+		this.brandingEl.setStyle({backgroundImage: undefined, width: undefined});
+	},
+
+
+	__setVendorIcon: function(url) {
+		var img = new Image(),
+			brandingEl = this.brandingEl;
+
+		return new Promise(function(fulfill, reject) {
+			img.onload = fulfill;
+			img.onerror = reject;
+			img.src = url;
+		}).then(function(i) {
+			var aspect = img.width / img.height,
+				width = aspect * 70;
+
+			brandingEl.addCls('custom-vendor');
+			brandingEl.setStyle({backgroundImage: 'url(' + url + ')', width: width + 'px'});
+		});
+	},
+
+
+	setActiveContent: function(bundle) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setActiveContent.bind(this, bundle));
+			return;
+		}
+
+		if (!bundle || !bundle.getVendorIconImage) {
+			this.__removeVendorIcon();
+		} else {
+			bundle.getVendorIconImage()
+				.then(this.__setVendorIcon.bind(this))
+				.fail(this.__removeVendorIcon.bind(this));
+		}
+	},
 
 
 	afterRender: function() {
