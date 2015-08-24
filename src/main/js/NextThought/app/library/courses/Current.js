@@ -43,6 +43,20 @@ Ext.define('NextThought.app.library.courses.Current', {
 	},
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.mon(this.el, 'click', this.onClick.bind(this));
+	},
+
+
+	onClick: function(e) {
+		if (e.getTarget('.add-more-link')) {
+			this.onAddClick();
+		}
+	},
+
+
 	maybeShowAdd: function() {
 		if (this.CourseStore.hasAllCoursesLink()) {
 			this.showAdd();
@@ -93,6 +107,13 @@ Ext.define('NextThought.app.library.courses.Current', {
 
 
 	showItems: function(current) {
+		if (current.length === 0) {
+			this.showEmptyText();
+			return;
+		}
+
+		this.hideEmptyText();
+
 		if (this.store) {
 			this.store.loadRecords(current);
 		} else {
@@ -133,6 +154,27 @@ Ext.define('NextThought.app.library.courses.Current', {
 	navigate: function(course, el) {
 		if (this.navigateToCourse) {
 			this.navigateToCourse(course, el);
+		}
+	},
+
+
+	showEmptyText: function() {
+		if (this.collection) {
+			this.remove(this.collection, true);
+			delete this.collection;
+		}
+
+		this.emptyText = this.emptyText || this.add({
+			xtype: 'box',
+			autoEl: {cls: 'empty-text', html: 'You don\'t have any courses yet...<br><a class="add-more-link">+ Add Courses</a>'}
+		});
+	},
+
+
+	hideEmptyText: function() {
+		if (this.emptyText) {
+			this.remove(this.emptyText, true);
+			delete this.emptyText;
 		}
 	}
 });

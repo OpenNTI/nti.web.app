@@ -1226,6 +1226,10 @@ li.library-grid-item {
 	.current-collection {
 		margin-bottom: 40px;
 
+		.empty-text {
+			margin: 1em auto;
+		}
+
 		& > .header {
 			@include flexContainer();
 			align-items: baseline;
