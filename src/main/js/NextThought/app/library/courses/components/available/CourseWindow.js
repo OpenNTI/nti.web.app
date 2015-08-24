@@ -489,6 +489,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		me.updateButtons();
 	},
 
+
 	showCourses: function(route, subRoute) {
 		this.mun(this.CourseStore, 'all-courses-set');
 		this.mon(this.CourseStore, 'all-courses-set', this.setupCourses.bind(this));
@@ -497,7 +498,8 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		this.showTabpanel();
 	},
 
-	showCourseDetail: function(route, subRoute) {
+
+	showCourseDetail: function(route, subRoute, notFoundMsg) {
 		var ntiid = ParseUtils.decodeFromURI(route.params.id),
 			course = route.precache.course,
 			q = route.queryParams,
@@ -512,6 +514,8 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			// We need to show the most recent enrollent, which should be the course we just enrolled in.
 			isEnrollmentConfirmation = true;
 		}
+
+		notFoundMsg = notFoundMsg || 'Unable to find the course';
 
 		return new Promise(function(fulfill, reject) {
 			me.mun(me.CourseStore, 'all-courses-set');
@@ -533,7 +537,11 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 							});
 					} else {
 						me.showTabpanel();
-						reject();
+
+						wait()
+							.then(alert.bind(null, notFoundMsg));
+
+						fulfill();
 					}
 				}
 			});
@@ -655,22 +663,15 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 
 	showRedeemToken: function(route, subRoute) {
-		var me = this;
+		var me = this,
+			//TODO: a better system for getting this email
+			email = Service.getSupportLinks().email || 'support@nextthought.com';
 
-		return me.showCourseDetail(route, subRoute)
+		return me.showCourseDetail(route, subRoute, 'This course is not redeemable by this account. Please contact <a href="mailto:' + email + '">Support.</a>')
 			.then(function() {
 				if (me.courseDetail) {
 					me.courseDetail.restoreEnrollmentOption('redeem', [route.params.token]);
 				}
-			})
-			.fail(function() {
-				wait()
-					.then(function() {
-						//TODO: a better system for getting this email
-						var email = Service.getSupportLinks().email || 'support@nextthought.com';
-
-						alert('This course is not redeemable by this account. Please contact <a href="mailto:' + email + '">Support.</a>');
-					});
 			});
 	},
 
