@@ -479,6 +479,15 @@ Ext.define('NextThought.app.video.Video', {
 			}
 		}
 
+		// If we were playing and just paused the video, end the previous watch event.
+		if (this.hasWatchEvent && (state.state === this.self.states.PAUSED)) {
+			delete this.hasWatchEvent;
+			AnalyticsUtil.stopResourceTimer(id, 'video-watch', {
+				video_end_time: this.lasttime,
+				MaxDuration: state.duration / 1000
+			});
+		}
+
 		//Not an else if so a new timer will start when the other one ends
 		if (!this.hasWatchEvent && ((state.state === this.self.states.PLAYING) || (state.state === this.self.states.BUFFERING))) {
 			AnalyticsUtil.getResourceTimer(id, {
