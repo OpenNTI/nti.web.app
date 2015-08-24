@@ -58,6 +58,15 @@ Ext.define('NextThought.app.library.courses.Current', {
 			archived = this.CourseStore.getArchivedEnrolledCourses(),
 			otherCourses = upcoming.concat(archived), otherLength;
 
+		function sort(a, b) {
+			var aVal = a.get('CreatedTime'),
+				bVal = a.get('CreatedTime');
+
+				return aVal > bVal ? 1 : aVal === bVal ? 0 : -1;
+		}
+
+		current.sort(sort);
+
 		//make sure we have at least 4 if its at all possible
 		otherLength = 4 - current.length;
 
@@ -65,12 +74,7 @@ Ext.define('NextThought.app.library.courses.Current', {
 		if (otherLength > 0) {
 
 			//get the number of upcoming or archived we need, sorted on when you enrolled
-			otherCourses.sort(function(a, b) {
-				var aVal = a.get('CreatedTime'),
-					bVal = a.get('CreatedTime');
-
-				return aVal > bVal ? 1 : aVal === bVal ? 0 : -1;
-			});
+			otherCourses.sort(sort);
 
 			current = current.concat(otherCourses.slice(0, otherLength));
 		}
