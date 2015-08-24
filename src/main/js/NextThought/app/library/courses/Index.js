@@ -13,6 +13,8 @@ Ext.define('NextThought.app.library.courses.Index', {
 		Router: 'NextThought.mixins.Router'
 	},
 
+	isCoursePage: true,
+
 	layout: 'none',
 	cls: 'library-page',
 

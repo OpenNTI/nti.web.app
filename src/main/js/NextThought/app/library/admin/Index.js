@@ -6,6 +6,8 @@ Ext.define('NextThought.app.library.admin.Index', {
 		Router: 'NextThought.mixins.Router'
 	},
 
+	isCoursePage: false,
+
 	layout: 'none',
 
 	items: [{

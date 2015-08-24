@@ -46,9 +46,9 @@ Ext.define('NextThought.app.library.Index', {
 	},
 
 
-	setActiveView: function(xtype) {
+	setActiveView: function(xtype, selector) {
 		var old = this.getLayout().getActiveItem(),
-			cmp = this.down(xtype);
+			cmp = this.down(selector || xtype);
 
 		if (!cmp) {
 			cmp = this.add(Ext.widget(xtype));
@@ -86,7 +86,7 @@ Ext.define('NextThought.app.library.Index', {
 
 
 	showCourses: function(route, subRoute) {
-		var cmp = this.setActiveView('library-courses');
+		var cmp = this.setActiveView('library-courses', '[isCoursePage]');
 
 		return cmp.handleRoute(subRoute, route.precache);
 	},
