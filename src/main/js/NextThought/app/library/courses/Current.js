@@ -74,7 +74,7 @@ Ext.define('NextThought.app.library.courses.Current', {
 
 		function sort(a, b) {
 			var aVal = a.get('CreatedTime'),
-				bVal = a.get('CreatedTime');
+				bVal = b.get('CreatedTime');
 
 				return aVal > bVal ? 1 : aVal === bVal ? 0 : -1;
 		}
