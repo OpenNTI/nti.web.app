@@ -313,7 +313,7 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 				if (feedUrl !== me.feedUrl) {
 					console.warn('Failed to loaded batch for a different feedurl than the active, drop it on the floor');
 				} else {
-					me.onBatchError(error);
+					me.onBatchError(reason);
 				}
 			});
 	},
