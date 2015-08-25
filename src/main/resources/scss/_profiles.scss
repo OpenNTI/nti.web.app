@@ -1814,6 +1814,7 @@
 .profile-achievements {
 	min-height: 100%;
 	background: $panel-background;
+	overflow: hidden;
 
 	.empty-achievements-text {
 		color: $tertiary-grey;

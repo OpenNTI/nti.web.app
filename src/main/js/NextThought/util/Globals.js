@@ -76,6 +76,14 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 
+	getContainerLoadingMask: function() {
+		return {
+			xtype: 'box',
+			autoEl: {cls: 'loading-mask container-loading-mask', cn: {cls: 'load-text', html: 'Loading...'}}
+		};
+	},
+
+
 	shouldOpenInApp: function(ntiid, url, basePath) {
 		var isTargetAnNTIID = ParseUtils.isNTIID(url),
 			//isLocal = (new RegExp('^'+RegExp.escape(basePath),'i')).test(url),

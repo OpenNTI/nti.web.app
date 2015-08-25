@@ -9,7 +9,8 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		'NextThought.app.profiles.user.components.Header',
 		'NextThought.app.profiles.user.components.activity.Index',
 		'NextThought.app.profiles.user.components.about.Index',
-		'NextThought.app.profiles.user.components.membership.Index'
+		'NextThought.app.profiles.user.components.membership.Index',
+		'NextThought.app.profiles.user.components.achievements.Index'
 	],
 
 	mixins: {
@@ -73,6 +74,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		this.addRoute('/about', this.showAbout.bind(this));
 		this.addRoute('/activity', this.showActivity.bind(this));
 		this.addRoute('/membership', this.showMembership.bind(this));
+		this.addRoute('/achievements', this.showAchievements.bind(this));
 
 		this.addDefaultRoute('/activity');
 	},
@@ -174,11 +176,20 @@ Ext.define('NextThought.app.profiles.user.Index', {
 			active: active === 'activity'
 		});
 
+		if (isFeature('badges')) {
+			tabs.push({
+				label: 'Achievements',
+				route: '/achievements',
+				active: active === 'achievements'
+			});
+		}
+
 		tabs.push({
 			label: 'Memberships',
 			route: '/membership',
 			active: active === 'membership'
 		});
+
 
 		this.headerCmp.updateUser(this.activeEntity, tabs, isContact, this.isMe);
 
@@ -208,7 +219,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		aboutCmp.gotoMembership = this.pushRoute.bind(this, 'Membership', '/membership');
 
 		return aboutCmp.userChanged(this.activeEntity, this.isMe)
-			.then(aboutCmp.handleRoute.bind(aboutCmp, subRoute, route.params));
+			.then(aboutCmp.handleRoute.bind(aboutCmp, subRoute, route.precache));
 	},
 
 
@@ -227,7 +238,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 
 
 		return activityCmp.userChanged(this.activeEntity, this.isMe)
-			.then(activityCmp.handleRoute.bind(activityCmp, subRoute, route.params));
+			.then(activityCmp.handleRoute.bind(activityCmp, subRoute, route.precache));
 	},
 
 
@@ -245,7 +256,25 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		}
 
 		return membershipCmp.userChanged(this.activeEntity, this.isMe)
-			.then(membershipCmp.handleRoute.bind(membershipCmp, subRoute, route.params));
+			.then(membershipCmp.handleRoute.bind(membershipCmp, subRoute, route.precache));
+	},
+
+
+	showAchievements: function(route, subRoute) {
+		var achievementsCmp = this.setActiveItem('user-profile-achievements'),
+			headerCmp = this.headerCmp;
+
+		this.setState('achievements');
+
+		if (this.isMe) {
+			this.activeEntity.getSchema()
+				.then(function(schema) {
+					headerCmp.setSchema();
+				});
+		}
+
+		return achievementsCmp.userChanged(this.activeEntity, this.isMe)
+			.then(achievementsCmp.handleRoute.bind(achievementsCmp, subRoute, route.precache));
 	},
 
 
