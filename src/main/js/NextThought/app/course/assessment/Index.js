@@ -115,6 +115,8 @@ Ext.define('NextThought.app.course.assessment.Index', {
 			onSubmission: this.onAssignmentSubmission.bind(this)
 		});
 
+		this.addChildRouter(this.assignment);
+
 		this.getLayout().setActiveItem(this.assignment);
 	},
 
