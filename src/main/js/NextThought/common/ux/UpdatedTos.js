@@ -4,7 +4,6 @@ Ext.define('NextThought.common.ux.UpdatedTos', {
 
 	cls: 'tos-window',
 	width: 695,
-	height: 640,
 	layout: 'none',
 	modal: true,
 	resizable: false,
