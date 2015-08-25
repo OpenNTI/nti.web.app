@@ -40,9 +40,17 @@
 
 
 				}
+
+				&.has-tools {
+					padding-left: 5px;
+					&:after {
+						content: none;
+					}
+				}
 			}
 
 			.tools {
+				padding-right: 0;
 				img.tool{
 					&.settings {
 						opacity: 0.6;
