@@ -458,15 +458,26 @@ Ext.define('NextThought.app.Body', {
 
 
 	getObjectRoute: function(obj) {
-		return this.PathActions.getPathToObject(obj)
+		var me = this,
+			id = obj.getId && obj.getId();
+
+		id = id && ParseUtils.encodeForURI(id);
+
+		return me.PathActions.getPathToObject(obj)
 			.then(function(path) {
 				path.push(obj);
 
 				return path;
 			})
-			.then(this.getRouteForPath.bind(this))
+			.then(me.getRouteForPath.bind(me))
 			.then(function(route) {
-				return route.path;
+				var path = route.path;
+
+				if (me.WindowActions.hasWindow(obj)) {
+					path = Globals.trimRoute(path) + '/object/' + id;
+				}
+
+				return path;
 			})
 			.fail(function(reason) {
 				console.error(('Unable to find path for: ', obj, reason));
