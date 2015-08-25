@@ -73,6 +73,8 @@ Ext.define('NextThought.controller.Application', {
 			nav = this.getNav(),
 			body = this.getBody();
 
+		this.loggedIn = true;
+
 		body.pushRoute = this.pushRoute.bind(this);
 		body.replaceRoute = this.replaceRoute.bind(this);
 		body.pushRootRoute = this.pushRoute.bind(this);
@@ -97,6 +99,9 @@ Ext.define('NextThought.controller.Application', {
 		var path = Globals.trimRoute(window.location.pathname),
 			hash = window.location.hash,
 			parts = path.split('/');
+
+		//Don't handle the state until we are logged in
+		if (!this.loggedIn) { return; }
 
 		//Get the first part of the path and use that as the path root for all the routes
 		this.APP_ROOT = parts[0];
