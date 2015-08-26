@@ -3,7 +3,8 @@ Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeLis
 	alias: 'widget.profile-badge-list',
 
 	requires: [
-		'NextThought.app.badge.Window'
+		'NextThought.app.badge.Window',
+		'NextThought.model.openbadges.Badge'
 	],
 
 
@@ -61,7 +62,7 @@ Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeLis
 			newConfig = Ext.clone(config);
 
 		delete newConfig.cls;
-		this.callParent(arguments);
+		this.callParent([newConfig]);
 
 		if (cls) {
 			this.addCls(cls);
@@ -147,6 +148,29 @@ Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeLis
 	},
 
 
+	showPreference: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.showPreference.bind(this));
+			return;
+		}
+
+		if (this.preferenceEl) {
+			this.preferenceEl.show();
+		}
+	},
+
+
+	hidePreference: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.hidePreference.bind(this));
+			return;
+		}
+		if (this.preferenceEl) {
+			this.preferenceEl.hide();
+		}
+	},
+
+
 	updatePreference: function() {
 		var state = !this.preferenceEl.hasCls('checked');
 
@@ -158,5 +182,22 @@ Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeLis
 	onItemClick: function() {},
 
 
-	setItems: function(items) {}
+	setItems: function(items) {
+		if (!this.badgeStore) {
+			this.badgeStore = new Ext.data.Store({
+				model: 'NextThought.model.openbadges.Badge',
+				data: items
+			});
+
+			this.bindStore(this.badgeStore);
+		} else {
+			this.badgeStore.removeAll();
+
+			if (items.length) {
+				this.badgeStore.add(items);
+			}
+		}
+
+		this.refresh();
+	}
 });

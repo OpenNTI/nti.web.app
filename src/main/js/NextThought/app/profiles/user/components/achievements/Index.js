@@ -11,6 +11,8 @@ Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 		Route: 'NextThought.mixins.Router'
 	},
 
+	columns: 7,
+
 	layout: 'none',
 	ui: 'profile-achievements',
 	cls: 'profile-achievements',
@@ -63,6 +65,67 @@ Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 		this.currentCourses = this.down('[current]');
 		this.achievements = this.down('[achievements]');
 	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		var me = this;
+
+		me.tip = Ext.widget('nt-tooltip', {
+			target: me.el,
+			delegate: me.completedCourses.itemSelector,
+			html: Ext.DomHelper.markup({
+				cls: 'tool-tip',
+				cn: [
+					{tag: 'h2'},
+					{tag: 'p'}
+				]
+			}),
+			mouseOffset: [0, 15],
+			cls: 'badge-tip x-tip',
+			componentLayout: {
+				type: 'auto',
+				setHeightInDom: false,
+				setWidthInDom: false,
+				getDockedItems: function() { return []; }
+			},
+			layout: 'auto',
+			anchor: 'bottom',
+			tipAnchor: 'b',
+			dismissDelay: 0,
+			maxWidth: null,
+			renderSelectors: {
+				header: 'h2',
+				description: 'p'
+			},
+			renderTo: Ext.getBody(),
+			listeners: {
+				beforeshow: function(tip) {
+					debugger;
+					var trigger = tip.triggerElement,
+						record = trigger && me.getRecord(trigger);
+
+					if (!record) {
+						console.error('No badge record to fill out the tool tip with', tip);
+						return false;
+					}
+
+					this.header.update(record.get('name'));
+					this.description.update(record.get('description'));
+				}
+			}
+		});
+	},
+
+
+	getRecord: function(el) {
+		var p = Ext.fly(el).parent('.badge-list'),
+			cmp = p && Ext.getCmp(p.id);
+
+		return cmp && cmp.getRecord(el);
+	},
+
 
 
 	userChanged: function(user, isMe) {
@@ -170,7 +233,7 @@ Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 				earned = earned && Ext.JSON.decode(earned);
 
 				earnable = (earnable && earnable.Items) || [];
-				earned = (earned && earned) || [];
+				earned = (earned && earned.Items) || [];
 
 				earned.forEach(function(item) {
 					item.earnedCls = 'earned';
