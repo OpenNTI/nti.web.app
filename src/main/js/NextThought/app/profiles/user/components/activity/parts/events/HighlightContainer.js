@@ -263,7 +263,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Highl
 		if (!ntiid) { return; }
 
 		this.items.forEach(function(item) {
-			if (item.getId() === ntiid) {
+			if (item.getId() === ntiid || item.get('ContainerId') === ntiid) {
 				selectedItem = item;
 			}
 		});
