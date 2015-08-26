@@ -100,7 +100,7 @@ Ext.define('NextThought.app.windows.Actions', {
 	},
 
 
-	showWindowWithMimeType: function(id, mimeType, state) {
+	showWindowWithMimeType: function(id, mimeType, state, rawId) {
 		var me = this,
 			resolver = me.WindowStore.getResolverFor(mimeType);
 
@@ -109,7 +109,7 @@ Ext.define('NextThought.app.windows.Actions', {
 			return;
 		}
 
-		resolver(id)
+		resolver(id, rawId)
 			.then(function(result) {
 				me.WindowStore.fireShowWindow(result, state);
 			})

@@ -97,7 +97,8 @@ Ext.define('NextThought.app.context.StateStore', {
 
 	__parseTwoObjectParts: function(parts) {
 		return {
-			id: ParseUtils.decodeFromURI(parts.last())
+			id: ParseUtils.decodeFromURI(parts.last()),
+			rawId: parts.last()
 		};
 	},
 
@@ -109,9 +110,11 @@ Ext.define('NextThought.app.context.StateStore', {
 
 		if (ParseUtils.isEncodedNTIID(first)) {
 			parts.id = ParseUtils.decodeFromURI(first);
+			parts.rawId = first;
 			parts.state = decodeURIComponent(last);
 		} else if (ParseUtils.isEncodedNTIID(last)) {
 			parts.id = ParseUtils.decodeFromURI(last);
+			parts.rawId = last;
 			parts.mimeType = decodeURIComponent(first);
 		}
 

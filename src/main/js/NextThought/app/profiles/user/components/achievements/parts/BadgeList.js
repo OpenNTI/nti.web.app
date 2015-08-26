@@ -4,7 +4,8 @@ Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeLis
 
 	requires: [
 		'NextThought.app.badge.Window',
-		'NextThought.model.openbadges.Badge'
+		'NextThought.model.openbadges.Badge',
+		'NextThought.app.windows.Actions'
 	],
 
 
@@ -72,6 +73,8 @@ Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeLis
 
 	beforeRender: function() {
 		this.callParent(arguments);
+
+		this.WindowActions = NextThought.app.windows.Actions.create();
 
 		this.emptyText = Ext.DomHelper.markup({cls: 'empty-badge-text', html: this.emptyText});
 
@@ -180,7 +183,9 @@ Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeLis
 	},
 
 
-	onItemClick: function() {},
+	onItemClick: function(record) {
+		this.WindowActions.pushWindow(record);
+	},
 
 
 	setItems: function(items) {
