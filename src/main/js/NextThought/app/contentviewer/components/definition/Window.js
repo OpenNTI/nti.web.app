@@ -19,6 +19,7 @@ Ext.define('NextThought.app.contentviewer.components.definition.Window', {
 			src: Ext.SSL_SECURE_URL,
 			frameBorder: 0,
 			marginWidth: 0,
+			height: 210,
 			marginHeight: 0,
 			seamless: true,
 			transparent: true,
