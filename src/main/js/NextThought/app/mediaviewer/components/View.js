@@ -411,13 +411,13 @@ Ext.define('NextThought.app.mediaviewer.components.View', {
 			.then(function() {
 				if (action === 'show') {
 					me.getLayout().setActiveItem(me.gridView);
-					me.el.setStyle('overflowY', 'auto');
+					me.getTargetEl().addCls('grid');
 					me.gridView.refresh();
 
 					wait(2000)
 						.then(me.adjustOnResize.bind(me));
 				} else {
-					me.el.setStyle('overflowY', 'hidden');
+					me.getTargetEl().removeCls('grid');
 					me.getLayout().setActiveItem(me.viewer);
 				}
 			});

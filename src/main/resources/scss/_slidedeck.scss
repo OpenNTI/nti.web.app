@@ -1195,6 +1195,12 @@ $experimental-support-for-svg: true;
 
 	& > .body {
 		margin-top: 75px;
+
+		&.grid {
+			height: 90vh;
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
 	}
 
 
