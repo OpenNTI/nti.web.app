@@ -21,9 +21,10 @@ Ext.define('NextThought.app.badge.Window', {
 }, function() {
 	NextThought.app.windows.StateStore.register(NextThought.model.openbadges.Badge.mimeType, this);
 	NextThought.app.windows.StateStore.registerCustomResolver(NextThought.model.openbadges.Badge.mimeType, function(id, raw) {
-		raw = decodeURIComponent(raw);
+		var workspace = Service.getWorkspace('Badges'),
+			link = Service.getLinkFrom(workspace.Links, 'OpenBadges');
 
-		return Service.request('/dataserver2/OpenBadges/' + raw)
+		return Service.request('/' + Globals.trimRoute(link) + '/' + raw)
 			.then(function(badge) {
 				return ParseUtils.parseItems(badge)[0];
 			});
