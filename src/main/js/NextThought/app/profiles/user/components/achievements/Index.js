@@ -23,6 +23,7 @@ Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 			layout: 'none',
 			cls: 'course-badges',
 			defaultType: 'profile-badge-list',
+			courseContainer: true,
 			items: [
 				{
 					header: getString('NextThought.view.profiles.parts.Achievements.current_title'),
@@ -60,7 +61,7 @@ Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 		this.addRoute('/', this.showBadges.bind(this));
 		this.addDefaultRoute('/');
 
-
+		this.coursesContainer = this.down('[courseContainer]');
 		this.completedCourses = this.down('[completed]');
 		this.currentCourses = this.down('[current]');
 		this.achievements = this.down('[achievements]');
@@ -102,7 +103,6 @@ Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 			renderTo: Ext.getBody(),
 			listeners: {
 				beforeshow: function(tip) {
-					debugger;
 					var trigger = tip.triggerElement,
 						record = trigger && me.getRecord(trigger);
 
@@ -145,17 +145,23 @@ Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 		this.activeUser = user;
 		this.isMe = isMe;
 
+		this.coursesContainer.show();
 		this.completedCourses.setPublicPreference(isMe);
+
+		this.completedCourses.hide();
+		this.currentCourses.hide();
+		this.achievements.hide();
 
 		if (isMe) {
 			this.loadWorkSpace(Service.getWorkspace('Badges'));
 		} else {
-			this.currentCourses.destroy();
+			this.currentCourses.hide();
 
 			if (link) {
-				Service.reqeust(link)
+				Service.request(link)
 					.done(this.loadWorkSpace.bind(this));
 			} else {
+				this.finishLoading();
 				this.setEmptyState();
 			}
 		}
@@ -176,6 +182,7 @@ Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 		var earnableUrl, earnedUrl;
 
 		if (!workspace) {
+			this.finishLoading();
 			this.setEmptyState();
 			return;
 		}
@@ -215,6 +222,7 @@ Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 		} else if (earnedUrl) {
 			loadPromise = Service.request(earnedUrl);
 		} else {
+			me.finishLoading();
 			me.setEmptyState();
 			return;
 		}
@@ -270,6 +278,7 @@ Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 				if (me.isMe) {
 					me.buildIsMe([], [], []);
 				} else {
+					me.finishLoading();
 					me.setEmptyState();
 				}
 			});
@@ -337,8 +346,9 @@ Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 		}
 
 		//no badges to show, display the empty state
-		if (!completed.length && !achievemtns.length) {
+		if (!completed.length && !achievements.length) {
 			me.setEmptyState();
+			me.finishLoading();
 			return;
 		}
 
@@ -349,7 +359,7 @@ Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 
 			this.achievements.show();
 			this.achievements.setColumns(this.columns);
-			this.achievements.setItems(achievemtns);
+			this.achievements.setItems(achievements);
 		} else if (!achievements.length) {
 			this.achievements.hide();
 
@@ -362,7 +372,7 @@ Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 
 			this.achievements.show();
 			this.achievements.setColumns(this.columns);
-			this.achievemtns.setItems(ahievements);
+			this.achievements.setItems(achievements);
 
 			this.completedCourses.show();
 			this.completedCourses.setColumns(this.columns);
@@ -381,14 +391,15 @@ Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 	},
 
 
-	setEmpteState: function() {
+	setEmptyState: function() {
+		this.coursesContainer.hide();
 		this.achievements.hide();
 		this.currentCourses.hide();
 		this.completedCourses.hide();
 
 		this.emptyText = this.add({
 			xtype: 'box',
-			autoEl: {cls: 'empty-achivements-text', html: getString('NextThought.view.profiles.parts.Achievements.empty')}
+			autoEl: {cls: 'empty-achievements-text', html: getString('NextThought.view.profiles.parts.Achievements.empty')}
 		});
 	}
 });

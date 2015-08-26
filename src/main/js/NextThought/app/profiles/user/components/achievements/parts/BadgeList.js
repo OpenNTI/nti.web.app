@@ -176,6 +176,7 @@ Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeLis
 
 		this.preference.set(this.preferenceKey, state);
 		this.preference.save();
+		this.updateUIFromPreference(this.preference);
 	},
 
 
