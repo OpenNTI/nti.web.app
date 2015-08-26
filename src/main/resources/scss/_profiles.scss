@@ -2131,6 +2131,7 @@
 		.field.about {
 			color: $primary-grey;
 			font-size: 0.875em;
+			word-wrap: break-word;
 
 			.editor {
 				height: 250px;
@@ -2214,6 +2215,7 @@
 
 		.entry-container {
 			position: relative;
+			overflow: hidden;
 		}
 
 		.entry-container:not(:first-of-type) {
