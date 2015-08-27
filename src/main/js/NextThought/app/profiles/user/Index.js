@@ -74,7 +74,10 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		this.addRoute('/about', this.showAbout.bind(this));
 		this.addRoute('/activity', this.showActivity.bind(this));
 		this.addRoute('/membership', this.showMembership.bind(this));
-		this.addRoute('/achievements', this.showAchievements.bind(this));
+
+		if (isFeature('badges')) {
+			this.addRoute('/achievements', this.showAchievements.bind(this));
+		}
 
 		this.addDefaultRoute('/activity');
 	},
@@ -341,9 +344,11 @@ Ext.define('NextThought.app.profiles.user.Index', {
 	},
 
 
-	getRouteForPath: function(path, root) {
+	getRouteForPath: function(path, user) {
+		var root = path[0];
+
 		return {
-			path: '',
+			path: typeof root === 'string' ? root : '',
 			isFull: true
 		};
 	}
