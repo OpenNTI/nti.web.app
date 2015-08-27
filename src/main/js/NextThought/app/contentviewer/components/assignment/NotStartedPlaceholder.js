@@ -61,11 +61,11 @@ Ext.define('NextThought.app.contentviewer.components.assignment.NotStartedPlaceh
 		{cls: 'nti-alert', cn: [
 			{cls: 'alert-container', cn: [
 				{cls: 'message-container', cn: [
-					{cls: 'title', html: 'Assignment Not Started'},
+					{cls: 'title', html: 'Assignment Not Available'},
 					{cls: 'message', cn: [
 						'{title} is not available yet.',
 						{tag: 'tpl', 'if': 'start', cn: [
-							' It will be available at {start}.'
+							' It will be available {start}.'
 						]}
 					]}
 				]}
