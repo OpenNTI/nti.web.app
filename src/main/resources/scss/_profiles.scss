@@ -903,24 +903,24 @@
 		min-height: 120px;
 		position: relative;
 		overflow: hidden;
-		padding-bottom: 10px;
+		padding: 10px;
 
 		.img {
 			width: 100px;
 			height: 100px;
 			background-size: contain;
-			float: left;
-			margin: 25px 20px 0 20px;
+			display: inline-block;
+			vertical-align: middle;
 		}
 
 		.wrap {
-			float: left;
 			color: $primary-grey;
-			padding-top: 15px;
     		padding-left: 26px;
 			margin-bottom: 15px;
-			width: 850px;
+			width: 620px;
 			font: normal 500 1em/1 $font;
+			display: inline-block;
+			vertical-align: middle;
 
 			.name {
 				line-height: 1.3;
