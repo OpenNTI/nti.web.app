@@ -164,9 +164,9 @@ Ext.define('NextThought.app.contentviewer.Index', {
 		} else if (this.relatedWork) {
 			p = this.ContentViewerActions.getRelatedWorkPageInfo(this.relatedWork, this.bundle);
 		} else if (this.assignment) {
-			p = Service.getPageInfo(this.assignment.getId());
+			p = Service.getPageInfo(this.assignment.getId(), null, null, null, this.bundle);
 		} else if (this.contentId) {
-			p = Service.getPageInfo(this.contentId);
+			p = Service.getPageInfo(this.contentId, null, null, null, this.bundle);
 		}
 
 		return p;

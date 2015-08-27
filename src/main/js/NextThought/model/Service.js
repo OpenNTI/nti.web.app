@@ -296,8 +296,9 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	getObjectRaw: function(url, mime, forceMime) {
-		var headers = {}, opts = {};
+	getObjectRaw: function(url, mime, forceMime, targetBundle) {
+		var headers = {}, opts = {},
+			params = {type: mime};
 
 		if (!url || (Ext.isObject(url) && !url.url)) {
 			return Promise.reject('No URL');
@@ -312,7 +313,11 @@ Ext.define('NextThought.model.Service', {
 			url = opts.url;
 		}
 
-		url = Ext.String.urlAppend(url, Ext.Object.toQueryString({type: mime}));
+		if (targetBundle) {
+			params.course = targetBundle.getId();
+		}
+
+		url = Ext.String.urlAppend(url, Ext.Object.toQueryString(params));
 
 		return new Promise(function(fulfill, reject) {
 			var req = {
@@ -579,7 +584,7 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	getObject: function(ntiid, success, failure, scope, safe) {
+	getObject: function(ntiid, success, failure, scope, safe, targetBundle) {
 		var url, result;
 
 		if (!ParseUtils.isNTIID(ntiid)) {
@@ -589,7 +594,7 @@ Ext.define('NextThought.model.Service', {
 
 		url = this.getObjectURL(ntiid);
 
-		result = this.getObjectRaw(url, null, false)
+		result = this.getObjectRaw(url, null, false, targetBundle)
 				.then(function(resp) {
 					try {
 						return ParseUtils.parseItems(resp.responseText)[0];
@@ -641,8 +646,8 @@ Ext.define('NextThought.model.Service', {
 
 
 	getSupportLinks: function() {
-		var aboutLink = getString('NextThought.view.menus.Settings.about.href',null,true) || 'http://nextthought.com';
-		var supportEmailLink = getString('NextThought.view.menus.Settings.supportEmail',null,true) || null;
+		var aboutLink = getString('NextThought.view.menus.Settings.about.href', null, true) || 'http://nextthought.com';
+		var supportEmailLink = getString('NextThought.view.menus.Settings.supportEmail', null, true) || null;
 
 		this.supportLinks = this.supportLinks || {};
 

@@ -98,11 +98,12 @@ Ext.define('NextThought.app.content.content.Index', {
 			return Promise.resolve(obj);
 		}
 
-		return Service.getObject(id)
+		//Try getting the object first, since it would return a related work or page info
+		return Service.getObject(id, null, null, null, null, this.currentBundle)
 			.then(function(obj) {
-				//If we didn't get a page (PageInfo or RelatedWork), just get a page info
+				//if we don't get a page (pageinfo or related work) request a page info
 				if (!obj.isPage) {
-					return Service.getPageInfo(id);
+					return Service.getPageInfo(id, null, null, null, this.currentBundle);
 				}
 
 				return obj;
@@ -214,7 +215,7 @@ Ext.define('NextThought.app.content.content.Index', {
 	showRoot: function(route, subRoute) {
 		var me = this;
 
-		return Service.getPageInfo(this.root)
+		return Service.getPageInfo(this.root, null, null, null, me.currentBundle)
 			.then(function(pageInfo) {
 				me.showReader(pageInfo, null, route.hash);
 			})

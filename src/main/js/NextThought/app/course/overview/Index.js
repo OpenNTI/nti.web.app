@@ -389,8 +389,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 			route = this.getRouteForVideoPath(root, subPath);
 		} else if (root instanceof NextThought.model.Slidedeck) {
 			route = this.getRouteForSlidedeckPath(root, subPath);
-		} 
-		else {
+		} else {
 			route = {
 				path: '',
 				isFull: subPath.length <= 0
@@ -467,6 +466,6 @@ Ext.define('NextThought.app.course.overview.Index', {
 			precache: {
 				slidedeck: slidedeck
 			}
-		}
+		};
 	}
 });
