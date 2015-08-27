@@ -366,7 +366,7 @@ Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 			setEmptyCls(false);
 			this.completedCourses.show();
 			this.completedCourses.setColumns(this.columns);
-			this.completedCourses.setItems(this.columns);
+			this.completedCourses.setItems(completed);
 		} else {
 			setEmptyCls(false);
 
