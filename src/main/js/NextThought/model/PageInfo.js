@@ -135,7 +135,7 @@ Ext.define('NextThought.model.PageInfo', {
 
 
 	getAssignment: function() {
-		var items = this.get('AssessmentItems'),
+		var items = this.get('AssessmentItems') || [],
 			i;
 
 		for (i = 0; i < items.length; i++) {
