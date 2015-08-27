@@ -30,7 +30,8 @@ Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeLis
 		]}
 	]), {
 		canExport: function(values) {
-			return values.earnedCls === 'earned' && values.isMe === true;
+			//TODO: remove the last false once we have email verification
+			return values.earnedCls === 'earned' && values.isMe === true && false;
 		}
 	}),
 
@@ -183,8 +184,12 @@ Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeLis
 	},
 
 
-	onItemClick: function(record) {
-		this.WindowActions.pushWindow(record);
+	onItemClick: function(record, item, index, e) {
+		if (e.getTarget('.export')) {
+			this.showExportMenu(record, Ext.get(item));
+		} else {
+			this.WindowActions.pushWindow(record);
+		}
 	},
 
 
