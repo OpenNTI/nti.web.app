@@ -10,6 +10,8 @@ Ext.define('NextThought.app.badge.Window', {
 
 	layout: 'none',
 
+	cls: 'badge-window',
+
 	initComponent: function() {
 		this.callParent(arguments);
 

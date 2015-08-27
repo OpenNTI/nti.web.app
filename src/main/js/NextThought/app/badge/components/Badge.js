@@ -5,7 +5,7 @@ Ext.define('NextThought.app.badge.components.Badge', {
 	cls: 'badge-preview',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'img', style: {backgroundImage: 'url({img})'}},
+		{tag: 'img', cls: 'img', src: '{img}'},
 		{cls: 'wrap', cn: [
 			{cls: 'name', html: '{name}'},
 			{cls: 'description', html: '{description}'},
