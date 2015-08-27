@@ -154,7 +154,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	setEnrolled: function(enrolled) {
 		var options = this.get('EnrollmentOptions'),
 			open = options && options.getType('OpenEnrollment'),
-			fmaep = options && options.getType('FiveminutEnrollment'),
+			fmaep = options && options.getType('FiveminuteEnrollment'),
 			store = options && options.getType('StoreEnrollment');
 
 		//if we are dropping the course, we won't update our scopes
