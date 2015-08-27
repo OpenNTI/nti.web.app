@@ -501,7 +501,19 @@ Ext.define('NextThought.app.course.Index', {
 	getRouteForPath: function(path, course) {
 		var root = path[0] || {},
 			subPath = path.slice(1),
+			page, i,
 			route;
+
+		for (i = 0; i < subPath.length; i++) {
+			if (subPath[i] instanceof NextThought.model.PageInfo) {
+				page = subPath[i];
+				break;
+			}
+		}
+
+		if (page && page.getAssignment()) {
+			root = page.getAssignment();
+		}
 
 		if (root.isBoard) {
 			root = subPath[0];
