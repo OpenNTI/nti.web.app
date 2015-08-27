@@ -38,7 +38,7 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 
 		id = ParseUtils.decodeFromURI(route.params.id);
 
-		if (this.activeMediaView && (this.videoId === id || this.slidedeckId === id)) {
+		if (this.activeMediaView && (this.mediaId === id)) {
 			// We are already there.
 			return Promise.resolve();
 		}
@@ -46,7 +46,6 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 		this.mediaId = id;
 		options.rec = rec;
 
-		this.PathActions.getPathToObject(this.mediaId);
 		if (route.precache.video) {
 			this.video = route.precache.video;
 			this.videoId = this.mediaId;
@@ -65,10 +64,10 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 			});
 		}
 
-		if (this.video) {
+		if (this.video && this.video.getId() === this.mediaId) {
 			this.__presentVideo(this.videoId, basePath, options);
 		}
-		else if (this.slidedeck) {
+		else if (this.slidedeck && this.slidedeck.getId() === this.mediaId) {
 			this.__presentSlidedeck(this.slidedeckId, this.slidedeck, options);
 		}
 		else {

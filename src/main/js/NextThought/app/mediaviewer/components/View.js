@@ -76,6 +76,9 @@ Ext.define('NextThought.app.mediaviewer.components.View', {
 		this.transcript = transcript;
 		this.options = options;
 
+		delete this.resourceList;
+		delete this.slidedeck;
+
 		// Only build set the contect and build a new viewer if the video actually changed.
 		if (!this.viewer || this.viewer.video.getId() !== this.video.getId()) {
 			this.toolbar.setContent(this.video, this.transcript);
@@ -111,6 +114,8 @@ Ext.define('NextThought.app.mediaviewer.components.View', {
 		this.slidedeck = slidedeck;
 		this.resourceList = resourceList;
 		this.options = options;
+
+		delete this.transcript;
 
 		// Only build set the contect and build a new viewer if the video actually changed.
 		if (!this.viewer || this.viewer.video.getId() !== this.video.getId()) {

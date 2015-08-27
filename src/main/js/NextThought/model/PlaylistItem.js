@@ -29,7 +29,8 @@ Ext.define('NextThought.model.PlaylistItem', {
 		{name: 'comments', type: 'int', defaultValue: 0},
 		{name: 'poster', type: 'VideoPoster'},
 		{name: 'thumbnail', type: 'VideoPoster'},
-        {name: 'progress', type: 'string', persist: false}
+        {name: 'progress', type: 'string', persist: false},
+        {name: 'slidedeck', type: 'string', persist: false}
 	],
 
 	statics: {

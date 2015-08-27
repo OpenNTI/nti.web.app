@@ -148,8 +148,11 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 		var me = this;
 
 		me.currentBundle = bundle;
-		me.LibraryActions.getVideoIndex(me.currentBundle)
-				.then(me.applyVideoData.bind(me));
+		Promise.all([
+			me.getBundleOutline(),
+			me.LibraryActions.getVideoIndex(me.currentBundle)
+		])
+			.then(me.fillInData.bind(me));
 
 		ContentUtils.getLineage(me.source.get('NTIID'), bundle)
 			.then(function(lineages) {
@@ -253,59 +256,52 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 	},
 
 
-	applyVideoData: function(data) {
+	fillInData: function(results) {
+		var navStore = results[0],
+			videos = results[1];
+
+		this.applyVideoData(videos, navStore);
+	},
+
+
+	applyVideoData: function(data, navStore) {
 		//data is a NTIID->source map
 		var me = this,
 			reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
 			selected = me.getSource().get('NTIID'),
 			sections = {},
-			videos = [],
-			fillingIn = [];
+			videos = [];
 
-		function iter(key) {
-			var v = data[key], section;
-			if (key !== v.ntiid) {
-				console.error(key, '!=', v);
+
+		function fillIn(ids, section) {
+			var i, v;
+
+			for (i = 0; i < ids.length; i++) {
+				v = NextThought.model.PlaylistItem(data[ids[i]]);
+				v.NTIID = v.ntiid;
+				v.section = section && section.getId();
+				videos.push(v);
 			}
-
-			return new Promise(function(fulfill, reject) {
-				ContentUtils.getLineage(key, me.currentBundle)
-					.then(function(lineages) {
-						//get the ntiid of the section to key the groups by
-						var lineage = lineages[0];
-						section = lineage[1];
-						return Promise.resolve(lineage[1]);
-					})
-					.then(function(section) {
-						//get the label to show to the user
-						ContentUtils.getLineageLabels(key, false, me.currentBundle)
-							.then(function(labels) {
-								var label = labels[0] && labels[0][1];
-
-								if (!sections.hasOwnProperty(section)) {
-									sections[section] = NextThought.model.PlaylistItem({section: label, sources: []});
-									videos.push(sections[section]);
-								}
-
-								videos.push(reader.read(Ext.apply(v, {
-									NTIID: v.ntiid,
-									section: section
-								})).records[0]);
-
-								if (key === selected) {
-									selected = videos.last();
-								}
-
-								fulfill();
-							});
-					})
-					.fail(reject)
-				});
 		}
 
-		fillingIn = data._order.map(iter);
+		//go through the navigation store and add the videos in order
+		//the lessons they appear in do
+		navStore.each(function(node) {
+			if (node.get('type') !== 'lesson') { return; }
 
-		Promise.all(fillingIn)
+			var videoIds = data.containers[node.getId()];
+
+			if (videoIds && videoIds.length) {
+				videos.push(NextThought.model.PlaylistItem({
+					section: node.get('label'),
+					sources: []
+				}));
+
+				fillIn(videoIds, node);
+			}
+		});
+
+		Promise.resolve(videos)
 			.then(function(results) {
 				me.store = new Ext.data.Store({
 					model: NextThought.model.PlaylistItem,
@@ -331,7 +327,6 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 				}
 			});
 	},
-	//</editor-fold>
 
 
     __updateProgress: function(){
@@ -354,11 +349,18 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 	fireSelection: function() {
 		var rec = this.getSelectionModel().getSelection().first(),
 			li = this.getLocationInfo(), 
+			slidedeckId = rec && rec.get('slidedeck'),
 			section = rec && rec.get('section'),
-			route = section && ParseUtils.encodeForURI(section) + '/video/' + ParseUtils.encodeForURI(rec.getId());
+			route = section && ParseUtils.encodeForURI(section) + '/video/' + ParseUtils.encodeForURI(rec.getId()),
+			isVideo = true;
 
-		if (this.ownerCt && this.ownerCt.handleNavigation) {
-			this.ownerCt.handleNavigation(rec.get('title'), route, {video: rec, basePath: getURL(li.root)});
+		if (!Ext.isEmpty(slidedeckId)) {
+			route = section && ParseUtils.encodeForURI(section) + '/slidedeck/' + ParseUtils.encodeForURI(slidedeckId);
+			isVideo = false;
+		}
+
+		if (this.ownerCt && this.ownerCt.handleNavigation && !Ext.isEmpty(route)) {
+			this.ownerCt.handleNavigation(rec.get('title'), route, {video: isVideo ? rec : null, basePath: getURL(li.root)});
 		}
 	},
 
