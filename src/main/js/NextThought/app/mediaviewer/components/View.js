@@ -9,7 +9,8 @@ Ext.define('NextThought.app.mediaviewer.components.View', {
 		'NextThought.app.mediaviewer.components.mode.SmallVideo',
 		'NextThought.app.library.Actions',
 		'NextThought.model.transcript.TranscriptItem',
-		'NextThought.app.account.identity.Index'
+		'NextThought.app.account.identity.Index',
+		'NextThought.app.notifications.Tab'
 	],
 
 	mixins: {
@@ -140,7 +141,8 @@ Ext.define('NextThought.app.mediaviewer.components.View', {
 		this.callParent(arguments);
 
 		var me = this,
-			playerType = this.getViewerType();
+			playerType = this.getViewerType(),
+			mainNav = Ext.getCmp('nav');
 
 		this.addCls(['showing', 'ready']);
 
@@ -163,6 +165,15 @@ Ext.define('NextThought.app.mediaviewer.components.View', {
 
 		this.gridView = this.add({
 			xtype: 'media-grid-view'
+		});
+
+		this.notificationCmp = NextThought.app.notifications.Tab.create({
+			setMenuOpen: this.setState.bind(this, {active: 'notificationCmp'}),
+			setMenuClosed: this.setState.bind(this, {}),
+			pushRootRoute: mainNav && mainNav.pushRoute.bind(mainNav),
+			navigateToObject: mainNav && mainNav.gotoObject.bind(mainNav),
+			renderTo: this.toolbar.getEl(),
+			floatParent: this.toolbar
 		});
 
 		this.identityCmp = Ext.widget({
@@ -201,10 +212,11 @@ Ext.define('NextThought.app.mediaviewer.components.View', {
 			show = 'onMenuShow';
 
 		function showOrHide(name) {
-			me[name][state.active === name ? show : hide]();
+			me[name][state && state.active === name ? show : hide]();
 		}
 
 		showOrHide('identityCmp');
+		showOrHide('notificationCmp');
 	},
 
 
