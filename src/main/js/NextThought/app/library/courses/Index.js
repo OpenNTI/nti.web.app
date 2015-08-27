@@ -100,10 +100,7 @@ Ext.define('NextThought.app.library.courses.Index', {
 	loadCourses: function(force) {
 		var me = this;
 
-		me.loadingCmp = me.loadingCmp || me.add({
-			xtype: 'box',
-			autoEl: {cls: 'loading-mask', cn: {cls: 'load-text', html: 'Loading...'}}
-		});
+		me.loadingCmp = me.loadingCmp || me.add(Globals.getContainerLoadingMask());
 
 		return me.CourseStore.onceLoaded()
 				.then(function() {

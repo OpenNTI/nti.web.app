@@ -1,6 +1,9 @@
 Ext.define('NextThought.model.openbadges.Badge', {
 	extend: 'NextThought.model.Base',
 
+	addMimeTypeToRoute: true,
+	idProperty: 'name',
+
 	fields: [
 		{name: 'alignment', type: 'auto'},
 		{name: 'criteria', type: 'string'},

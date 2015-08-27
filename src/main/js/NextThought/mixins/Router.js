@@ -147,12 +147,13 @@ Ext.define('NextThought.mixins.Router', {
 	doNavigateToFullPath: function(obj, route) {
 		var path = route.path,
 			objId = obj && obj.getId(),
-			hasWindow = objId && this.Router.WindowActions.hasWindow(obj);
+			hasWindow = objId && this.Router.WindowActions.hasWindow(obj),
+			windowRoute = hasWindow && this.Router.WindowActions.getRouteForObject(obj);
 
 		objId = objId && ParseUtils.encodeForURI(objId);
 
 		if (hasWindow) {
-			path = Globals.trimRoute(path) + '/object/' + objId;
+			path = Globals.trimRoute(path) + '/' + Globals.trimRoute(windowRoute);
 		}
 
 		this.pushRootRoute('', path);

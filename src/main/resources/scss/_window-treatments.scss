@@ -316,16 +316,16 @@
 
 
 .badge-window {
-	position: fixed !important;
-
 	.badge-preview {
+		padding: 0 40px;
+
 		.img{
 			width: 128px;
 			height: 128px;
 		}
 
 		.wrap{
-			width: 350px;
+			width: 545px;
 			min-height: 148px;
 			font-size: 1.1em;
 		}

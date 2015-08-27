@@ -132,7 +132,7 @@ Ext.define('NextThought.app.Body', {
 		var parts = this.ContextStore.getCurrentObjectParts();
 
 		if (parts.mimeType && parts.id) {
-			this.WindowActions.showWindowWithMimeType(parts.id, parts.mimeType, parts.state);
+			this.WindowActions.showWindowWithMimeType(parts.id, parts.mimeType, parts.state, parts.rawId);
 		} else if (parts.id) {
 			this.WindowActions.showWindow(parts.id, parts.state);
 		}

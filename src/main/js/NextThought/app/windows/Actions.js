@@ -22,6 +22,27 @@ Ext.define('NextThought.app.windows.Actions', {
 		return this.WindowStore.hasComponentForMimeType(obj.mimeType);
 	},
 
+	/**
+	 * Given an object return the object url
+	 *
+	 * TODO: unify this with the building of the url in Body.js
+	 *
+	 * @param  {Model} obj model to get url for
+	 * @return {String}     the url
+	 */
+	getRouteForObject: function(obj) {
+		var id = obj.getId(),
+			mimeType = obj.mimeType;
+
+		id = ParseUtils.encodeForURI(id);
+
+		if (obj.addMimeTypeToRoute) {
+			return '/object/' + encodeURIComponent(mimeType) + '/' + id;
+		}
+
+		return '/object/' + id;
+	},
+
 
 	/**
 	 * Push a window to the state
@@ -100,7 +121,7 @@ Ext.define('NextThought.app.windows.Actions', {
 	},
 
 
-	showWindowWithMimeType: function(id, mimeType, state) {
+	showWindowWithMimeType: function(id, mimeType, state, rawId) {
 		var me = this,
 			resolver = me.WindowStore.getResolverFor(mimeType);
 
@@ -109,7 +130,7 @@ Ext.define('NextThought.app.windows.Actions', {
 			return;
 		}
 
-		resolver(id)
+		resolver(id, rawId)
 			.then(function(result) {
 				me.WindowStore.fireShowWindow(result, state);
 			})

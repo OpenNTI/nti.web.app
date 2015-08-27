@@ -37,7 +37,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Badge
 
 		if (user) {
 			me.mon(me.el.down('.link'), 'click', function() {
-				me.fireEvent('show-profile', user, ['Achievements']);
+				me.record.targetUser = me.user;
+				me.navigateToObject(me.record);
 			});
 		}
 	}

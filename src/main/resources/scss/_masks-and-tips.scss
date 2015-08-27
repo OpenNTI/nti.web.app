@@ -304,3 +304,24 @@ body > .x-mask {
 		left: 327px;
 	}
 } 
+
+.container-loading-mask {
+		position: absolute;
+		top: 0; bottom: 0;
+		right: 0; left: 0;
+		background: rgba(52, 52, 52, 0.5);
+		z-index: 5;
+		min-height: 50px;
+
+		.load-text {
+			position: absolute;
+			top: 10%;
+			left: 50%;
+			margin-left: -25px;
+			color: white;
+
+			&::after {
+				@include loadingSpinner($top: 0, $left: -30px);
+			}
+		}
+	}

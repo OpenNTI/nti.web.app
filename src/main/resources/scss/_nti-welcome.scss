@@ -1,5 +1,5 @@
 
-.guide-window, .tos-window, .iframe-window, .badge-window, .notifications-window, .confirm-window {
+.guide-window, .tos-window, .iframe-window, .notifications-window, .confirm-window {
 	@extend .nti-window;
 	background-color: $quad-grey;
 	box-shadow: 0 10px 40px rgba(0,0,0,0.61);

@@ -113,13 +113,19 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 
 	__doHandledRequest: function(obj, handler) {
 		var id = obj.getId(),
-			cache = this.PathStore.getFromCache(id);
+			cache = this.PathStore.getFromCache(id),
+			doNotCache = Ext.isObject(handler) && handler.doNotCache,
+			fn = Ext.isObject(handler) ? handler.fn : handler;
 
 		if (cache) {
 			return cache;
 		}
 
-		cache = handler.call(null, obj, this.getPathToObject.bind(this));
+		if (doNotCache) {
+			return fn.call(null, obj, this.getPathToObject.bind(this));
+		}
+
+		cache = fn.call(null, obj, this.getPathToObject.bind(this));
 
 		cache.fail(this.PathStore.removeFromCache.bind(this.PathStore, id));
 
