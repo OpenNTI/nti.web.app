@@ -149,6 +149,7 @@ Ext.define('NextThought.app.course.assessment.Index', {
 		var me = this,
 			id = route.params.assignment,
 			assignment = route.precache.assignment,
+			now = new Date(),
 			view = this.getView();
 
 		id = ParseUtils.decodeFromURI(id);
@@ -161,11 +162,26 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 		return Promise.all([
 			assignment,
-			view.getAssignmentList()
+			view.getAssignmentList(),
+			me.currentBundle.getWrapper()
 		]).then(function(result) {
 			var	assignment = result[0],
 				assignments = result[1] || [],
+				enrollment = result[2],
 				index, prev, next, path = [], pageSource;
+
+			if (!enrollment.isAdministrative) {
+				assignments = assignments.filter(function(assignment) {
+					var start = assignment.get('availableBeginning'),
+						available = true;
+
+					if (start) {
+						available = start < now;
+					}
+
+					return available;
+				});
+			}
 
 			assignments.forEach(function(item, i) {
 				if (item.getId() === assignment.getId()) {
