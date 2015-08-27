@@ -105,6 +105,8 @@ Ext.define('NextThought.app.contentviewer.Index', {
 			.then(function(pageInfo) {
 				me.readerConfig.pageInfo = pageInfo;
 
+				me.readerConfig = me.__fixConfigForPageInfo(me.readerConfig, pageInfo);
+
 				me.reader = me.add(me.readerConfig);
 				me.reader.fireEvent('activate');
 
@@ -121,6 +123,21 @@ Ext.define('NextThought.app.contentviewer.Index', {
 			'deactivate': this.onDeactivate.bind(this),
 			'beforedestroy': this.onDeactivate.bind(this)
 		});
+	},
+
+
+	__fixConfigForPageInfo: function(config, pageInfo) {
+		var assignment = pageInfo.getAssignment();
+
+		if (config.xtype === 'reader' && assignment) {
+			config.xtype = 'assignment-reader';
+			config.assignment = assignment;
+			config.assignmentId = assignment.getId();
+			config.student = $AppConfig.userObject;
+			config.instructorProspective = false;
+		}
+
+		return config;
 	},
 
 

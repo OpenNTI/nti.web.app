@@ -18,6 +18,14 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	],
 
 
+	isAvailable: function() {
+		var now = new Date(),
+			start = this.get('availableBeginning');
+
+		return !start || start < now;
+	},
+
+
 	containsId: function(id) {
 		var parts = this.get('parts') || [],
 			items = parts.filter(function(p) {

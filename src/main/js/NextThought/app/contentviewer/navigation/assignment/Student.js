@@ -98,7 +98,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 
 			me.on('destroy', function() {
 				Ext.EventManager.removeResizeListener(me.alignTimer, me);
-				if(me.timer){
+				if (me.timer) {
 					me.timer.stop();
 				}
 			});
@@ -280,7 +280,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 
 	setHistory: function(history) {
 		if (!this.rendered) {
-			this.on('afterrender', this.setHistory.bind(this.history));
+			this.on('afterrender', this.setHistory.bind(this, history));
 			return;
 		}
 

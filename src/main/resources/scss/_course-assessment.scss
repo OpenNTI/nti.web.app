@@ -54,6 +54,7 @@ canvas.x-component-course-assessment {
 		left: 50%;
 		margin-left: -31%;
 		box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3);
+		background: white;
 
 		.alert-container {
 			@include experimental(animation-name, none);

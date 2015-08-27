@@ -162,26 +162,13 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 		return Promise.all([
 			assignment,
-			view.getAssignmentList(),
-			me.currentBundle.getWrapper()
+			view.getAssignmentList()
 		]).then(function(result) {
 			var	assignment = result[0],
 				assignments = result[1] || [],
 				enrollment = result[2],
+				assignmentStart = assignment.get('availableBeginning'),
 				index, prev, next, path = [], pageSource;
-
-			if (!enrollment.isAdministrative) {
-				assignments = assignments.filter(function(assignment) {
-					var start = assignment.get('availableBeginning'),
-						available = true;
-
-					if (start) {
-						available = start < now;
-					}
-
-					return available;
-				});
-			}
 
 			assignments.forEach(function(item, i) {
 				if (item.getId() === assignment.getId()) {

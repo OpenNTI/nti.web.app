@@ -4,7 +4,8 @@ Ext.define('NextThought.model.PageInfo', {
 	requires: [
 		'NextThought.model.converters.Items',
 		'NextThought.util.Parsing',
-		'NextThought.model.assessment.Question'
+		'NextThought.model.assessment.Question',
+		'NextThought.model.assessment.Assignment'
 	],
 
 	isPage: true,
@@ -131,6 +132,21 @@ Ext.define('NextThought.model.PageInfo', {
 
 		return !Ext.isEmpty(items);
 	},
+
+
+	getAssignment: function() {
+		var items = this.get('AssessmentItems'),
+			i;
+
+		for (i = 0; i < items.length; i++) {
+			if (items[i] instanceof NextThought.model.assessment.Assignment) {
+				return items[i];
+			}
+		}
+
+		return null;
+	},
+
 
 	/**
 	 * If the user has more than one section of the course the assessmentItems might

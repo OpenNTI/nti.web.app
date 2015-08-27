@@ -4,7 +4,8 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 
 	requires: [
 		'NextThought.app.contentviewer.navigation.assignment.Student',
-		'NextThought.app.contentviewer.components.assignment.TimedPlaceholder'
+		'NextThought.app.contentviewer.components.assignment.TimedPlaceholder',
+		'NextThought.app.contentviewer.components.assignment.NotStartedPlaceholder'
 	],
 
 	prefix: 'course-assignment',
@@ -35,6 +36,12 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 				xtype: 'assignment-timedplaceholder',
 				assignment: assignment,
 				startAssignment: this.startTimed.bind(this),
+				flex: 1
+			};
+		} else if (!assignment.isAvailable()) {
+			return {
+				xtype: 'assignment-notstarted-placeholder',
+				assignment: assignment,
 				flex: 1
 			};
 		} else {
@@ -85,10 +92,14 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 		var me = this,
 			header = me.getToolbar(),
 			reader = me.getReaderContent(),
-			readerAssessment = reader.getAssessment(),
+			readerAssessment = reader && reader.getAssessment(),
 			assignment = me.assignment,
 			savepoint = assignment && assignment.getSavePoint(),
 			assignmentHistory = me.assignmentHistory;
+
+		if (!reader) {
+			return;
+		}
 
 		reader.getScroll().lock();
 		reader.hidePageWidgets();
