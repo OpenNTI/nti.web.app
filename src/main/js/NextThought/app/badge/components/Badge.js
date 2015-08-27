@@ -18,7 +18,7 @@ Ext.define('NextThought.app.badge.components.Badge', {
 			{tag: 'tpl', 'if': 'criteria', cn: [
 				{cls: 'criteria', cn: [
 					{cls: 'label', html: 'Criteria'},
-					{tag: 'a', cls: 'link', href: '{criteria.href}', target: '_blank', html: '{criteria.href}'}
+					{tag: 'a', cls: 'link', href: '{criteria.href}', target: '_blank', html: '{criteria.name}'}
 				]}
 			]}
 		]}
@@ -44,7 +44,7 @@ Ext.define('NextThought.app.badge.components.Badge', {
 			name: this.badge.get('name'),
 			description: this.badge.get('description'),
 			issuer: issuer && {name: issuer.name, href: issuer.url},
-			criteria: criteria && {name: criteria, href: criteria}
+			criteria: criteria && {name: 'Badge Completion Criteria', href: criteria}
 		});
 	}
 });

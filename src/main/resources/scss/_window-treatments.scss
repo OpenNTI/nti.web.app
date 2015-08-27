@@ -317,21 +317,29 @@
 
 .badge-window {
 	.badge-preview {
-		padding: 0 40px;
-
 		.img{
 			width: 128px;
 			height: 128px;
 		}
 
 		.wrap{
-			width: 545px;
+			width: 631px;
 			min-height: 148px;
 			font-size: 1.1em;
+			padding-right: 128px;
+
+			.description {
+				margin: 4px 0 40px;
+			}
 		}
 
 		.issuer, .criteria {
 			margin-bottom: 4px;
+			display: inline-block;
+		}
+
+		.issuer {
+			margin-right: 4em;
 		}
 
 		.link {
