@@ -14,6 +14,7 @@ Ext.define('NextThought.login.StateStore', {
 		this.callParent(arguments);
 
 		this.onLoginActions = [];
+		this.loginActionsNames = {};
 
 		this.AccountActions = NextThought.app.account.Actions.create();
 
@@ -24,8 +25,13 @@ Ext.define('NextThought.login.StateStore', {
 	},
 
 
-	registerLoginAction: function(fn) {
-		this.onLoginActions.push(fn);
+	registerLoginAction: function(fn, name) {
+		if (name && !this.loginActionsNames[name]) {
+			this.onLoginActions.push(fn);
+			this.loginActionsNames[name] = true;
+		} else if (!name) {
+			this.onLoginActions.push(fn);
+		}
 	},
 
 

@@ -29,7 +29,7 @@ Ext.define('NextThought.app.library.Actions', {
 		if (window.Service && !store.loading && !store.hasFinishedLoad) {
 			this.onLogin();
 		} else {
-			this.mon(this.LoginStore, 'login-ready', this.onLogin.bind(this));
+			this.LoginStore.registerLoginAction(this.onLogin.bind(this), 'load-library');
 		}
 	},
 
