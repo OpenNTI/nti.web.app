@@ -2006,6 +2006,13 @@
 		.empty-text {
 			display: none;
 		}
+
+		.groupset {
+			.entry-container {
+				overflow: visible;
+			}
+		}
+
 	}
 
 	.left {
