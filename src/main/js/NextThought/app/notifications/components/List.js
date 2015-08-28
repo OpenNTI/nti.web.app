@@ -131,6 +131,11 @@ Ext.define('NextThought.app.notifications.components.List', {
 	onDeactivate: function() {},
 
 
+	isOnLastBatch: function() {
+		return false;
+	},
+
+
 	unwrap: function(record) {
 		if (this.ISCHANGE.test(record.get('MimeType'))) {
 			return record.getItem();
