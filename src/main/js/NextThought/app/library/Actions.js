@@ -36,7 +36,9 @@ Ext.define('NextThought.app.library.Actions', {
 
 	onLogin: function() {
 		var s = window.Service,
-			store = this.LibraryStore;
+			store = this.LibraryStore,
+			courseStore = this.CourseStore,
+			contentStore = this.ContentStore;
 
 
 		store.setLoading();
@@ -48,6 +50,8 @@ Ext.define('NextThought.app.library.Actions', {
 		.then(this.deDupContentPackages.bind(this))
 		.then(function() {
 			store.setLoaded();
+			courseStore.setLoaded();
+			contentStore.setLoaded();
 		});
 	},
 
