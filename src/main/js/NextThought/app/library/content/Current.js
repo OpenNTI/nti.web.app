@@ -26,7 +26,7 @@ Ext.define('NextThought.app.library.content.Current', {
 						packages = ContentStore.getContentPackages() || [],
 						hasAvailablePurchases = PurchaseStore.getPurchasables().length > 0;
 
-					return bundles.length || packages.length || hasAvailablePurchases;
+					return bundles.length || packages.length;//TODO: add || hasAvailablePurchases back once we have the UI
 				});
 		}
 	},
