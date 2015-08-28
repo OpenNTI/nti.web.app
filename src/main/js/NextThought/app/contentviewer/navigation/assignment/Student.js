@@ -4,7 +4,8 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 
 	requires: [
 		'NextThought.util.Time',
-		'NextThought.app.course.assessment.AssignmentStatus'
+		'NextThought.app.course.assessment.AssignmentStatus',
+		'NextThought.app.account.Actions'
 	],
 
 	WARNING_PERCENT: 0.2,
@@ -67,6 +68,8 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 
 		var rd = {};
 
+		this.AccountActions = NextThought.app.account.Actions.create();
+
 		if (this.assignmentHistory) {
 			rd.title = this.assignment.get('title');
 
@@ -112,6 +115,10 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 
 
 	alignTimer: function() {
+		if (!this.rendered) {
+			return;
+		}
+
 		var rect = this.el.dom.getBoundingClientRect();
 
 		this.timeContainerEl.setStyle({
@@ -121,7 +128,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 
 
 	helpClicked: function() {
-		//TODO: fill this out
+		this.AccountActions.showContactUs();
 	},
 
 
