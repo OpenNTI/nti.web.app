@@ -126,7 +126,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Lis
 			dueEl = e.getTarget('[data-qtip-fn]');
 
 		if (dueEl && rec) {
-			qtip = NextThought.view.courseware.assessment.AssignmentStatus.getTimeRemaining(due);
+			qtip = NextThought.app.course.assessment.AssignmentStatus.getTimeRemaining(due);
 			dueEl.setAttribute('data-qtip', qtip);
 		}
 	},
