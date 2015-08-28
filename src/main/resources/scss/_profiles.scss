@@ -136,6 +136,19 @@
 					@include icon('chat-32', $top: 7px, $left: 1.5em);
 				}
 			}
+
+			&.email-verify {
+				cursor: default;
+				padding-right: 0;
+
+				.action {
+					cursor: pointer;
+					background-color: $secondary-green;
+    				padding: 11px 10px;
+    				border-radius: 3px;
+    				margin-left: 10px;
+				}
+			}
 		}
 	}
 
