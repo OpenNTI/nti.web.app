@@ -591,6 +591,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 					delete me.applyingState;
 					me.setEnabled();
 
+					me.syncFilterToUI();
+
 					fulfill();
 				}
 			});
@@ -636,6 +638,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 
 	setSearch: function(str) {
+		this.searchTerm = str;
 		this.filterMenu.setSearch(str);
 	},
 
