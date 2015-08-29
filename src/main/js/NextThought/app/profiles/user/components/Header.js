@@ -301,7 +301,14 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 			user = $AppConfig.userObject,
 			emailVerifyWin = Ext.widget('email-token-window', {
 				user: $AppConfig.userObject,
-				autoShow: false
+				autoShow: false,
+				onVerificationComplete: function(){
+					var verifyEl = me.el && me.el.down('.email-verify');
+
+					if (verifyEl) {
+						verifyEl.hide();
+					}
+				}
 			});
 
 		user.sendEmailVerification()

@@ -131,6 +131,9 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Window', {
 			return this.user.verifyEmailToken(tokenVal)
 				.then(function(resp) {
 					me.showCongrats();
+					if (me.onVerificationComplete) {
+						me.onVerificationComplete();
+					}
 				});
 		}
 
