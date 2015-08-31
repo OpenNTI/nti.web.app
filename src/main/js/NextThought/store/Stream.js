@@ -86,6 +86,14 @@ Ext.define('NextThought.store.Stream', {
 		if (!me.hasSource() && me.storeId !== 'Stream') {
 			me.setProxy(Ext.clone(me.getProxy().proxyConfig));
 		}
+
+		me.on('load', function(s, recs) {
+			recs = recs || [];
+
+			if (recs.length < me.pageSize) {
+				me.lastBatchLoaded = true;
+			}
+		});
 	},
 
 
@@ -118,6 +126,11 @@ Ext.define('NextThought.store.Stream', {
 
 	hasAdditionalPagesToLoad: function() {
 		return this.mayHaveAdditionalPages === undefined || this.mayHaveAdditionalPages;
+	},
+
+
+	isOnLastBatch: function() {
+		return this.lastBatchLoaded;
 	},
 
 

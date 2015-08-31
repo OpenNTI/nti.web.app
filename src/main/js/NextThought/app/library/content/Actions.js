@@ -26,9 +26,7 @@ Ext.define('NextThought.app.library.content.Actions', {
 		return Promise.all([
 			this.setUpContentPackages((service.getCollection('Main', 'Library') || {}).href),
 			this.setUpContentBundles((service.getCollection('VisibleContentBundles', 'ContentBundles') || {}).href)
-		]).always(function() {
-			store.setLoaded();
-		});
+		]);
 	},
 
 

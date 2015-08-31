@@ -44,7 +44,7 @@ Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeLis
 					tag: 'span',
 					cls: 'not-ready nti-checkbox email',
 					'data-qtip': '{preferenceTooltip}',
-					html: 'Public',
+					html: 'Display My Badges Publicly',
 					tabIndex: 0,
 					role: 'button',
 					'aria-role': 'button'

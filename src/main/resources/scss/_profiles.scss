@@ -1839,22 +1839,33 @@
 
 	.course-badges {
 		background-color: white;
-		padding: 25px 8px 0 8px;
 		width: 100%;
-		border-bottom: 1px solid #f0f0f0;
-		box-shadow: 0 1px 0 0 white;
+		padding: 0 8px;
+		box-shadow: 0 1px 0 0 #e3e3e3;
 		overflow: hidden;
+		@include flexContainer();
 
 		&.empty {
 			padding: 0;
 			border-bottom: 0;
 			box-shadow: none;
 		}
+
+		.current {
+			box-shadow: 1px 0 0 0 #e3e3e3;
+			@include flexItem();
+		}
+
+		.completed {
+			@include flexItem(1 1 auto);
+		}
 	}
 
 	.completed,.current{
 		float: left;
-		$columnWidth: 128px + 16px;
+		padding: 25px 0 0;
+
+		$columnWidth: 128px + 16;
 
 		&[data-columns='1'] {
 			width: $columnWidth;
@@ -1864,7 +1875,7 @@
 			width: $columnWidth * 2;
 		}
 
-		&[data-columns='3'] {
+		&[data-columns='3'], .empty-text {
 			width: $columnWidth * 3;
 		}
 
@@ -1883,10 +1894,6 @@
 		&[data-columns='7'] {
 			width: $columnWidth * 7;
 		}
-
-		.empty-badge-text {
-			width: 400px;
-		}
 	}
 
 	.achievements {
@@ -1903,7 +1910,9 @@
 
 		.header-container {
 			height: 14px;
-			padding-left: 5px;
+			padding-left: 8px;
+			width: 100%;
+			@include flexContainer();
 		}
 
 		.header {
@@ -1912,6 +1921,7 @@
 			text-transform: uppercase;
 			float: left;
 			clear: both;
+			@include flexItem(1 1 auto);
 		}
 
 		.nti-checkbox {
@@ -1920,12 +1930,14 @@
 			text-transform: uppercase;
 			float: right;
 			margin: 0 10px;
+			@include flexItem(0 0 auto);
 		}
 
 		.empty-badge-text {
 			color: $tertiary-grey;
 			font: italic 400 0.9em/20px $font;
 			margin-top: 20px;
+			padding: 0 8px;
 		}
 	}
 
@@ -2007,6 +2019,13 @@
 		.empty-text {
 			display: none;
 		}
+
+		.groupset {
+			.entry-container {
+				overflow: visible;
+			}
+		}
+
 	}
 
 	.left {

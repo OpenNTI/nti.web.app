@@ -16,7 +16,7 @@ Ext.define('NextThought.app.notifications.Actions', {
 		this.LoginStore = NextThought.login.StateStore.getInstance();
 		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
 
-        this.mon(this.UserDataStore, 'incomingChange', this.incomingChange, this);
+		this.mon(this.UserDataStore, 'incomingChange', this.incomingChange, this);
 
 		if (window.Service && !store.loading && !store.hasFinishedLoad) {
 			this.doLogin();
@@ -54,23 +54,24 @@ Ext.define('NextThought.app.notifications.Actions', {
 				console.error('Could not setup notifications!');
 			});
 	},
-	
+
 	incomingChange: function(change) {
-	    var me = this;
-		this.NotificationsStore.getStore().then(function(store){
-		    if (!store) { return; }
-		    if (!change.isModel) {
-			     change = ParseUtils.parseItems([change])[0];
-		    }
+		var me = this;
 
-		    if (change.isNotable()) {
-			     if (/^DELETE/i.test(change.get('ChangeType'))) {
-				      me.__remove(change, store);
-				      return;
-			     }
+		this.NotificationsStore.getStore().then(function(store) {
+			if (!store) { return; }
+			if (!change.isModel) {
+				 change = ParseUtils.parseItems([change])[0];
+			}
 
-			     store.add(change);
-		    }
+			if (change.isNotable()) {
+				 if (/^DELETE/i.test(change.get('ChangeType'))) {
+					  me.__remove(change, store);
+					  return;
+				 }
+
+				 store.add(change);
+			}
 		});
 	},
 

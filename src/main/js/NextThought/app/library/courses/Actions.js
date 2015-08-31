@@ -36,9 +36,7 @@ Ext.define('NextThought.app.library.courses.Actions', {
 			this.setUpAdministeredCourses((s.getCollection('AdministeredCourses', 'Courses') || {}).href),
 			this.setUpAllCourses((s.getCollection('AllCourses', 'Courses') || {}).href),
 			this.setUpEnrolledCourses((s.getCollection('EnrolledCourses', 'Courses') || {}).href)
-		]).always(function() {
-			store.setLoaded();
-		});
+		]);
 	},
 
 

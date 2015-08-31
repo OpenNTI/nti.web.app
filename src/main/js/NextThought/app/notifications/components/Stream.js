@@ -49,7 +49,7 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 					store.sort();
 				}
 
-				if (recs.length < store.backingStore.pageSize) {
+				if (!recs || recs.length < store.backingStore.pageSize) {
 					me.onLastBatch = true;
 				} else {
 					me.maybeLoadMoreIfNothingNew();
@@ -70,10 +70,22 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 	},
 
 
+	isOnLastBatch: function() {
+		var store = this.getStore();
+
+		return this.onLastBatch || (store.backingStore && store.backingStore.isOnLastBatch());
+	},
+
+
 	maybeShowMoreItems: function() {
 		//if we can't scroll
 		var body = document.body,
-			height = document.documentElement.clientHeight;
+			height = document.documentElement.clientHeight,
+			store = this.getStore();
+
+		if (this.isOnLastBatch()) {
+			return;
+		}
 
 		if (this.el && this.el.isVisible() && height >= body.scrollHeight) {
 			this.prefetchNext();
