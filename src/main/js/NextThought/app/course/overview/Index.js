@@ -264,6 +264,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 					if (me.activeMediaWindow) {
 						me.activeMediaWindow.fireEvent('resume-annotation-manager', this);
 					}
+					delete me.activeMediaWindow;
 				}
 			});
 		}
