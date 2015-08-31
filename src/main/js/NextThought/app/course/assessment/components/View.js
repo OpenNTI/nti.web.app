@@ -215,8 +215,8 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 	},
 
 
-	setActiveItem: function(item) {
-		this.navigation.updateActive(item);
+	setActiveItem: function(item, route) {
+		this.navigation.updateActive(item, route);
 
 		this.callParent(arguments);
 	},
@@ -346,7 +346,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		student = student && student.getId();
 
-		me.setActiveItem(me.performanceView);
+		me.setActiveItem(me.performanceView, route.path);
 
 		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle, student)
 			.then(function() {
@@ -367,7 +367,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		me.maybeMask();
 
-		me.setActiveItem(me.assignmentsView);
+		me.setActiveItem(me.assignmentsView, route.path);
 
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
 			.then(function() {
@@ -397,7 +397,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		me.maybeMask();
 
-		me.setActiveItem(me.assignmentsView);
+		me.setActiveItem(me.assignmentsView, route.path);
 
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle, true)
 			.then(me.assignmentsView.showAssignment.bind(me.assignmentsView, assignment, student))
@@ -417,7 +417,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		me.maybeMask();
 
-		me.setActiveItem(me.performanceView);
+		me.setActiveItem(me.performanceView, route.path);
 
 		UserRepository.getUser(student)
 			.then(function(user) {
