@@ -695,6 +695,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			newPage = state.currentPage !== this.currentPage,
 			header = this.pageHeader;
 
+		if (this.stateDisabled) { return; }
+
 		if (this.studentFilter) {
 			state.studentFilter = this.studentFilter;
 		} else {
