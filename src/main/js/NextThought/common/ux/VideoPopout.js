@@ -48,7 +48,13 @@ Ext.define('NextThought.common.ux.VideoPopout', {
 
 
 	syncSize: function() {
-		this.center();
+		var vh = Ext.Element.getViewportHeight(),
+			mh = this.getHeight(),
+			top = Math.round((vh - mh) / 2);
+
+		if (top > 0) {
+			this.el.setStyle('top', top + 'px');
+		}
 	},
 
 
@@ -70,6 +76,9 @@ Ext.define('NextThought.common.ux.VideoPopout', {
 			scope: this,
 			click: this.close
 		});
+
+		wait()
+			.then(this.syncSize.bind(this));
 	}
 
 });
