@@ -23,6 +23,10 @@ Ext.define('NextThought.util.PagedPageSource', {
 		if (config.getRoute) {
 			this.getRoute = config.getRoute.bind(this);
 		}
+
+		if (config.fillInRecord) {
+			this.fillInRecord = config.fillInRecord.bind(this);
+		}
 	},
 
 	//Relative to the total
@@ -41,16 +45,26 @@ Ext.define('NextThought.util.PagedPageSource', {
 	},
 
 
-	__loadRecord: function(index) {
-		var url = this.store.proxy.url,
-			params = this.store.proxy.extraParams;
+	fillInRecord: function(items) {
+		return items;
+	},
 
-		params.batchState = index;
+
+	__loadRecord: function(index) {
+		var store = this.store,
+			url = store.proxy.url,
+			params = Ext.clone(store.proxy.extraParams);
+
+		params.batchStart = index;
 		params.batchSize = 1;
 
-		return StoreUtils.loadItems(url, params, null, this.store.model)
+		return StoreUtils.loadItems(url, params, null, store.model)
 			.then(function(items) {
 				return items[0];
+			})
+			.then(this.fillInRecord.bind(this))
+			.then(function(item) {
+				return item;
 			})
 			.fail(function(reason) {
 				console.error('Failed to load record', reason);

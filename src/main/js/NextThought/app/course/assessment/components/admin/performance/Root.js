@@ -652,6 +652,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 		if (state.pageSize) {
 			store.setPageSize(state.pageSize);
+		} else {
+			store.setPageSize(50);
 		}
 
 		this.current_state = state;
