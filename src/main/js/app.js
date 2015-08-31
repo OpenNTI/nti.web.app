@@ -70,6 +70,7 @@ Ext.application({
 	launch: function() {
 		console.debug('launching');
 
+		debugger;
 		function start() {
 			if (Ext.is.iOS) {
 				Ext.getBody().addCls('x-ios');
