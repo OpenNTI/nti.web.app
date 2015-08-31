@@ -238,10 +238,10 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 				}).then(function(courseInstanceEnrollment) {
 					//trigger the library to reload
 					var courseInstance = courseInstanceEnrollment.get('CourseInstance');
-					
+
 					return new Promise(function(fulfill, reject) {
 						Service.request(courseInstance.getLink('CourseCatalogEntry'))
-							.then(function(catalogEntry){
+							.then(function(catalogEntry) {
 								catalogEntry = ParseUtils.parseItems(catalogEntry)[0];
 								course.set('EnrollmentOptions', catalogEntry.get('EnrollmentOptions'));
 								me.CourseEnrollmentActions.refreshEnrolledCourses(fulfill, reject);
@@ -339,7 +339,7 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 			loadDetails;
 
 		//if there is an option, and its either enrolled or available
-		if (!option || (!option.IsEnrolled && !option.IsAvailable)) {
+		if (!option || (!option.IsEnrolled && !option.IsAvailable) || course.get('isAdmin')) {
 			return {
 				name: this.NAME,
 				loaded: Promise.reject(),

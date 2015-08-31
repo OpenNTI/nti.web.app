@@ -38,8 +38,8 @@ Ext.define('NextThought.app.course.catalog.Collection', {
 		i.author = record.getAuthorLine();
 		i.isCourse = true;
 		i.enrolledText = isAdmin ? 'Administering' : isOpen ? 'Not For Credit' : 'For Credit';
-		
-		if(record.getIconImage){
+
+		if (record.getIconImage) {
 			record.getIconImage();
 		}
 

@@ -271,18 +271,13 @@ Ext.define('NextThought.app.course.enrollment.options.FiveminuteEnrollment', {
 			loadDetails,
 			option = course.getEnrollmentOption(name);
 
-		if (!option || (!option.IsEnrolled && !option.IsAvailable)) {
-			//if we aren't enrolled in the fiveminute option but we are enrolled for credit
-			if (course.get('enrolled') && !course.get('isOpen')) {
-				return this.__getForCreditEnrolled(details);
-			} else {
-				return {
-					name: this.NAME,
-					loaded: Promise.reject(),
-					IsEnrolled: false,
-					IsAvailable: false
-				};
-			}
+		if (!option || (!option.IsEnrolled && !option.IsAvailable) || course.get('isAdmin')) {
+			return {
+				name: this.NAME,
+				loaded: Promise.reject(),
+				IsEnrolled: false,
+				IsAvailable: false
+			};
 		}
 
 		link = Service.getLinkFrom(option.Links, 'fmaep.course.details');
