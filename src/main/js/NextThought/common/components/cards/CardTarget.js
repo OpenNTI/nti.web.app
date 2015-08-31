@@ -33,7 +33,7 @@ Ext.define('NextThought.common.components.cards.CardTarget', {
 		}
 
 		var version, data = DomUtils.parseDomObject(config.contentElement),
-			nativeSupport = Ext.Array.contains(Ext.Array.pluck(navigator.mimeTypes, 'type'), 'application/pdf'),
+			nativeSupport = Globals.hasPDFSupport(),
 			anchorAttr = 'class=\'link\' target=\'_blank\'',
 			chrome = '<a ' + anchorAttr + ' href=\'http://www.google.com/chrome\'>Chrome</a>',
 			safari = '<a ' + anchorAttr + ' href=\'http://www.apple.com/safari/download/\'>Safari 5.0+</a>',
