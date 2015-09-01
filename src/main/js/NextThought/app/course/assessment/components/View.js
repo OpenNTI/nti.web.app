@@ -425,7 +425,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 			});
 
 		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle, student)
-			.then(me.performanceView.showStudent.bind(me.performanceView, student))
+			.then(me.performanceView.showStudent.bind(me.performanceView, student, route.precache))
 			.then(me.maybeUnmask.bind(me))
 			.then(function() { return wait(); })
 			.then(me.alignNavigation.bind(me));

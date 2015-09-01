@@ -96,6 +96,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 			record, pageSource,
 			historyURL, user, view;
 
+		//When we handle the route to show a students assignments, we tell the root
+		//to load to this student, so when this calls the store will already have loaded
+		//the page that contains this record.
 		current = me.store.findBy(function(rec) {
 			var user = rec.get('User');
 

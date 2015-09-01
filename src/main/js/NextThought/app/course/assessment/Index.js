@@ -409,6 +409,20 @@ Ext.define('NextThought.app.course.assessment.Index', {
 							id = user.getURLPart();
 
 						return ParseUtils.encodeForURI(assignmentId) + '/students/' + id;
+					},
+					fillInRecord: function(item) {
+						var user = item.get('User');
+
+						if (!user) {
+							return item;
+						}
+
+						return UserRepository.getUser(user.Username || user)
+							.then(function(u) {
+								item.set('User', u);
+
+								return item;
+							});
 					}
 				});
 
