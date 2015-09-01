@@ -40,6 +40,10 @@ Ext.define('NextThought.app.course.assessment.components.Navigation', {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', this.onClick.bind(this));
+
+		if (this.items && this.items.length) {
+			this.addItems(this.items);
+		}
 	},
 
 
@@ -48,6 +52,7 @@ Ext.define('NextThought.app.course.assessment.components.Navigation', {
 			this.outlineEl.dom.innerHTML = '';
 		}
 
+		this.items = [];
 		this.cmp_map = {};
 	},
 
@@ -86,7 +91,7 @@ Ext.define('NextThought.app.course.assessment.components.Navigation', {
 
 	addItems: function(items) {
 		if (!this.rendered) {
-			this.on('afterrender', this.addItems.bind(this, items));
+			this.items = items;
 			return;
 		}
 

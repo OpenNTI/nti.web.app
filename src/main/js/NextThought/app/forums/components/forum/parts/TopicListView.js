@@ -2,6 +2,10 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 	extend: 'Ext.view.View',
 	alias: 'widget.forums-forum-topic-list-view',
 
+	mixins: {
+		UIHelpers: 'NextThought.mixins.UIHelpers'
+	},
+
 	require: [
 		'NextThought.view.menus.Reports',
 		'NextThought.app.windows.Actions'
@@ -131,6 +135,8 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 		if (this.loadMask.isVisible) {
 			this.beforeLoadMask();
 		}
+
+		this.fillElementToBottom(this.el.dom);
 	},
 
 

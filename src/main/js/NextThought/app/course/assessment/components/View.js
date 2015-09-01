@@ -92,7 +92,11 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 				return bundle.getAssignments();
 			})
 			.then(function(assignments) {
-				if (isSync) { return; }
+				if (isSync) {
+					wait()
+						.then(me.alignNavigation.bind(me));
+					return;
+				}
 
 				var items = me.body.items.items || [];
 
