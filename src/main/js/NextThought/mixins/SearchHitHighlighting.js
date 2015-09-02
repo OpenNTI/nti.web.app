@@ -14,6 +14,11 @@ Ext.define('NextThought.mixins.SearchHitHighlighting', {
 	},
 
 
+	getSearchScrollTarget: function() {
+		return Ext.getBody();
+	},
+
+
 	//	@returns an object with top and left properties used to adjust the
 	//  coordinate space of the ranges bounding client rects.
 	//  It decides based on the type of container( main content or overlays).
@@ -71,7 +76,7 @@ Ext.define('NextThought.mixins.SearchHitHighlighting', {
 			doc = searchIn.ownerDocument,
 			index = this.buildSearchIndex(),
 			ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, fragRegex.re, fragRegex.matchingGroups, index),
-			p = Ext.getBody(),
+			p = this.getSearchScrollTarget(),
 			height = Ext.Element.getViewportHeight(),
 			scrollOffset = p.getScrollTop(),
 			range, pos = -2, nodeTop;

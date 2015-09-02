@@ -667,6 +667,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 			newPage = state.currentPage !== this.currentPage,
 			header = this.pageHeader;
 
+		if (this.stateDisabled) { return; }
+
 		if (this.currentFilter) {
 			state.filter = this.currentFilter;
 		} else {

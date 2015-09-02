@@ -142,6 +142,7 @@ Ext.define('NextThought.app.contentviewer.Index', {
 
 
 	onActivate: function() {
+		this.initSearch();
 		if (this.reader) {
 			this.reader.fireEvent('activate');
 		}
@@ -161,11 +162,12 @@ Ext.define('NextThought.app.contentviewer.Index', {
 
 
 	onceReadyForSearch: function() {
-		return this.reader.onceReadyForSearch();
+		return this.reader ? this.reader.onceReadyForSearch() : Promise.resolve();
 	},
 
 
 	showSearchHit: function(hit, fragment) {
+		this.clearSearchHit();
 		this.reader.showSearchHit(hit, fragment);
 	},
 

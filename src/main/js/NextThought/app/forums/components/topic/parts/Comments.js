@@ -342,31 +342,8 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 				}, this, function(id, data) {
 					me.wbData[id] = data;
 				}, 226);
-			})
-		})
-
-		record.compileBodyContent(function(body) {
-			var index;
-
-			if (!me.store) {return;}
-
-			me.store.suspendEvents();
-
-			record.set({
-				'bodyContent': DomUtils.adjustLinks(body, window.location.href)
 			});
-
-			me.store.resumeEvents();
-
-			if (me.store.filtersCleared) {
-				me.recordsToRefresh.push(record);
-			} else {
-				index = me.store.indexOf(record);
-				me.refreshNode(index);
-			}
-		}, this, function(id, data) {
-			me.wbData[id] = data;
-		}, 226);
+		});
 	},
 
 

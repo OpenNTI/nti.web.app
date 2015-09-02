@@ -6,7 +6,7 @@ Ext.define('NextThought.app.course.assessment.components.Navigation', {
 	cls: 'nav-outline scrollable',
 
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'outline-row{[values.active ? " x-item-selected" : ""]}', 'data-qtip': '{title:htmlEncode}', 'data-route': '{route}', cn: [
+		cls: 'outline-row{[values.active ? " x-item-selected" : ""]}', 'data-qtip': '{title:htmlEncode}', 'data-root': '{route}', 'data-route': '{route}', cn: [
 			{cls: 'count{[values.count ? "" : " hidden"]}', html: '{count}'},
 			{cls: 'label', html: '{title:htmlEncode}'}
 		]
@@ -40,6 +40,10 @@ Ext.define('NextThought.app.course.assessment.components.Navigation', {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', this.onClick.bind(this));
+
+		if (this.items && this.items.length) {
+			this.addItems(this.items);
+		}
 	},
 
 
@@ -48,6 +52,7 @@ Ext.define('NextThought.app.course.assessment.components.Navigation', {
 			this.outlineEl.dom.innerHTML = '';
 		}
 
+		this.items = [];
 		this.cmp_map = {};
 	},
 
@@ -61,14 +66,18 @@ Ext.define('NextThought.app.course.assessment.components.Navigation', {
 	},
 
 
-	updateActive: function(item) {
+	updateActive: function(item, route) {
 		if (!this.rendered) {
 			this.activeItem = item.xtype || item;
 			return;
 		}
 
-		var current = this.el.down('.outline-list .outline-row.x-item-selected')
+		var current = this.el.down('.outline-list .outline-row.x-item-selected'),
 			n = this.cmp_map[item.xtype];
+
+		if (n.dom) {
+			n.dom.setAttribute('data-route', route);
+		}
 
 		if (n && n !== current) {
 			if (current) {
@@ -82,7 +91,7 @@ Ext.define('NextThought.app.course.assessment.components.Navigation', {
 
 	addItems: function(items) {
 		if (!this.rendered) {
-			this.on('afterrender', this.addItems.bind(this, items));
+			this.items = items;
 			return;
 		}
 
@@ -108,6 +117,10 @@ Ext.define('NextThought.app.course.assessment.components.Navigation', {
 
 		if (!item) { return; }
 
-		this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
+		var route = item.getAttribute('data-route'),
+			root = item.getAttribute('data-root'),
+			isSelected = item.classList.contains('x-item-selected');
+
+		this.fireEvent('select-route', item.getAttribute('data-qtip'), isSelected ? root : route);
 	}
 });

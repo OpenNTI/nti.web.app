@@ -92,7 +92,11 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 				return bundle.getAssignments();
 			})
 			.then(function(assignments) {
-				if (isSync) { return; }
+				if (isSync) {
+					wait()
+						.then(me.alignNavigation.bind(me));
+					return;
+				}
 
 				var items = me.body.items.items || [];
 
@@ -215,8 +219,8 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 	},
 
 
-	setActiveItem: function(item) {
-		this.navigation.updateActive(item);
+	setActiveItem: function(item, route) {
+		this.navigation.updateActive(item, route);
 
 		this.callParent(arguments);
 	},
@@ -346,7 +350,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		student = student && student.getId();
 
-		me.setActiveItem(me.performanceView);
+		me.setActiveItem(me.performanceView, route.path);
 
 		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle, student)
 			.then(function() {
@@ -367,7 +371,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		me.maybeMask();
 
-		me.setActiveItem(me.assignmentsView);
+		me.setActiveItem(me.assignmentsView, route.path);
 
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
 			.then(function() {
@@ -397,7 +401,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		me.maybeMask();
 
-		me.setActiveItem(me.assignmentsView);
+		me.setActiveItem(me.assignmentsView, route.path);
 
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle, true)
 			.then(me.assignmentsView.showAssignment.bind(me.assignmentsView, assignment, student))
@@ -417,7 +421,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		me.maybeMask();
 
-		me.setActiveItem(me.performanceView);
+		me.setActiveItem(me.performanceView, route.path);
 
 		UserRepository.getUser(student)
 			.then(function(user) {
@@ -425,7 +429,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 			});
 
 		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle, student)
-			.then(me.performanceView.showStudent.bind(me.performanceView, student))
+			.then(me.performanceView.showStudent.bind(me.performanceView, student, route.precache))
 			.then(me.maybeUnmask.bind(me))
 			.then(function() { return wait(); })
 			.then(me.alignNavigation.bind(me));

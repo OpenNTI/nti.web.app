@@ -67,7 +67,7 @@ Ext.define('NextThought.app.context.ContainerContext', {
 			}
 		}
 
-		if (this.contextCmp) {
+		if (this.contextCmp && this.contextCmp.destroy) {
 		    this.contextCmp.destroy();
 		    delete this.contextCmp;
 		}

@@ -35,7 +35,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Stude
 
 		var grid = this.down('grid');
 
-
+		//Having the student in the precache tells it to
+		//restore to the page the student is on
 		this.pathRoot.precache = {student: this.student};
 
 		this.pathBranch = {
@@ -205,6 +206,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Stude
 
 
 	doNavigation: function(title, route, precache) {
+		var userId = this.student.getId();
+
 		this.pushRoute(title, route, precache);
 	}
 });

@@ -200,7 +200,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 		record = this.store.findBy(function(rec) {
 			var user = rec.get('User');
 
-			return student === NextThought.model.User.getIdFromRaw(user);
+			return student === NextThought.model.User.getIdFromRaw(user) && !rec.isPagingRecord;
 		});
 
 		if (record < 0) {
@@ -588,6 +588,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			isEqual = false;
 		} else if (state.sort && (state.sort.prop !== storeState.sort.prop || state.sort.direction !== storeState.sort.direction)) {
 			isEqual = false;
+		} else if ((state.student && state.student !== this.student) || (!state.student && this.student)) {
+			isEqual = false;
 		}
 
 		return isEqual;
@@ -650,8 +652,14 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			params.batchContainingUsernameFilterByScope = me.student;
 		}
 
+		if (state.student) {
+			params.batchContainingUsernameFilterByScope = state.student;
+		}
+
 		if (state.pageSize) {
 			store.setPageSize(state.pageSize);
+		} else {
+			store.setPageSize(50);
 		}
 
 		this.current_state = state;
@@ -694,6 +702,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 		var state = Ext.clone(this.current_state) || {},
 			newPage = state.currentPage !== this.currentPage,
 			header = this.pageHeader;
+
+		if (this.stateDisabled) { return; }
 
 		if (this.studentFilter) {
 			state.studentFilter = this.studentFilter;

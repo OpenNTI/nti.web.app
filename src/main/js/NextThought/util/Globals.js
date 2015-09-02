@@ -105,6 +105,82 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 
+	/**
+	 * Search the navigator for a  mimeType
+	 * @param  {String} type mimeType to search for
+	 * @return {MimeType}    the mimeType if we find it or null
+	 */
+	getNavigatorMimeType: function(type) {
+		var key, mimeType;
+
+		for (key in navigator.mimeTypes) {
+			mimeType = navigator.mimeTypes[key];
+
+			if (mimeType && mimeType.type === type) {
+				return mimeType;
+			}
+		}
+	},
+
+
+	/**
+	 * Search the navigator for a plugin
+	 * @param  {String} name name of the plugin
+	 * @return {Plugin}      the plugin if we find it or null
+	 */
+	getNavigatorPlugin: function(name) {
+		var key, plugin;
+
+		for (key in navigator.plugins) {
+			plugin = navigator.plugins[key];
+
+			if (plugin && plugin.name === name) {
+				return plugin;
+			}
+		}
+	},
+
+
+	/**
+	 * Attempt to create an active x object
+	 *
+	 * @param  {String} name name of the application providing the object
+	 * @return {Object}      the active x object or null if we couldn't create one
+	 */
+	getActiveXObject: function(name) {
+		try {
+			return new ActiveXObject(name);
+		} catch (e) {
+			swallow(e);
+		}
+	},
+
+
+	/**
+	 * Attempt to detect whether or not a browser can render a pdf
+	 *
+	 * Adapted from: http://stackoverflow.com/questions/21485521/detecting-adobe-reader-in-ie11-with-javascript
+	 *
+	 * @return {Boolean} true if it can, false it it can't
+	 */
+	hasPDFSupport: function() {
+		var support = false;
+
+		//check if pdfs are registered as supported by the browser
+		if (this.getNavigatorMimeType('application/pdf')) {
+			support = true;
+		//check for a plugin that could render a pdf
+		} else if (this.getNavigatorPlugin('Adobe Acrobat') || this.getNavigatorPlugin('Chrome PDF Viewer') || this.getNavigatorPlugin('WebKit built-in PDF')) {
+			support = true;
+		//for IE check if we can create an active x object to show a pdf`
+		} else if (this.getActiveXObject('AcroPDF.PDF') || this.getActiveXObject('PDF.PdfCtrl')) {
+			support = true;
+		}
+
+		return support;
+	},
+
+
 	flatten: function(a) {
 		if (!a.reduce) { return a; }
 

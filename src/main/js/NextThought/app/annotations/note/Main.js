@@ -14,6 +14,10 @@ Ext.define('NextThought.app.annotations.note.Main', {
 		'NextThought.common.components.cards.Card'
 	],
 
+	mixins: {
+		Searchable: 'NextThought.mixins.Searchable'
+	},
+
 	root: true,
 	enableTitle: true,
 
@@ -107,6 +111,7 @@ Ext.define('NextThought.app.annotations.note.Main', {
 		catch (e) {
 			console.error(Globals.getError(e));
 		}
+		this.initSearch();
 	},
 
 
@@ -123,14 +128,19 @@ Ext.define('NextThought.app.annotations.note.Main', {
 		var r = this.record, me = this;
 		this.removeAll(true);
 
-		Ext.defer(function() {
-			if (me.isDestroyed) {
-				return;
-			}
+		return wait()
+				.then(function() {
+					if (me.isDestroyed) {
+						return Promise.reject();
+					}
 
-			me.loadReplies(r);
-			me.record.notifyObserversOfFieldChange('AdjustedReferenceCount');
-		}, 1, this);
+					me.record.notifyObserversOfFieldChange('AdjustedReferenceCount');
+					return me.loadReplies(r)
+							.then(function() {
+								me.record.notifyObserversOfFieldChange('AdjustedReferenceCount');
+								return Promise.resolve();
+							});			
+				});
 	},
 
 	disable: function() {
@@ -253,10 +263,10 @@ Ext.define('NextThought.app.annotations.note.Main', {
 		var me = this;
 
 		if (me.readerContext) {
-			me.readerContext.load()
-				.then(function(context) {
-					me.setContext(context);
-				});
+			me.contextLoad = me.readerContext.load()
+								.then(function(context) {
+									me.setContext(context);
+								});
 		}
 
 		me.callParent(arguments);
@@ -392,6 +402,35 @@ Ext.define('NextThought.app.annotations.note.Main', {
 		}
 
 		return false;
+	},
+
+
+	getContainerIdForSearch: function() {
+		return this.record.get('ContainerId');
+	},
+
+
+	onceReadyForSearch: function() {
+		var ps = [];
+
+		if (this.contextLoad) {
+			ps.push(this.contextLoad);
+		}
+		if (this.initialRepliesLoad) {
+			ps.push(this.initialRepliesLoad);
+		}
+
+		// Wait for context and all replies to be loaded before doing search.
+		return Promise.all(ps)
+					.then(function() {
+						return wait();
+					});
+	},
+
+
+	getSearchScrollTarget: function() {
+		var targetEl = this.el && this.el.up('.window-container') || this.el;
+		return targetEl;
 	},
 
 

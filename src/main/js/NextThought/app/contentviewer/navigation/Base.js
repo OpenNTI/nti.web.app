@@ -313,7 +313,8 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		}
 
 		var previous = this.pageSource.getPrevious(),
-			title = this.pageSource.getPreviousTitle();
+			title = this.pageSource.getPreviousTitle(),
+			precache = this.pageSource.getPreviousPrecache();
 
 		this.doNavigation(title, previous);
 	},
@@ -325,9 +326,10 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		}
 
 		var next = this.pageSource.getNext(),
-			title = this.pageSource.getNextTitle();
+			title = this.pageSource.getNextTitle(),
+			precache = this.pageSource.getNextPrecache();
 
-		this.doNavigation(title, next);
+		this.doNavigation(title, next, precache);
 	},
 
 

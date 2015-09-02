@@ -80,6 +80,35 @@ Ext.define('NextThought.app.course.enrollment.options.OpenEnrollment', {
 	},
 
 
+	__getAdmin: function(details) {
+		var me = this;
+
+		return {
+			name: me.NAME,
+			loaded: new Promise(function(fulfill, reject) {
+				var state = me.getWording('enrolled', {
+					date: Ext.Date.format(details.StartDate, me.DateFormat),
+					drop: ''
+				});
+
+				state.cls = '';
+				state.price = null;
+				state.title = 'You are administering this course.';
+				state.name = me.NAME;
+
+				fulfill({
+					Name: me.NAME,
+					BaseOption: me.isBase,
+					Enrolled: true,
+					Wording: state
+				});
+			}),
+			IsEnrolled: true,
+			IsAvailable: true
+		};
+	},
+
+
 	__getOptionDetails: function(course, option) {
 		return {
 			Enrolled: option.IsEnrolled,
@@ -94,6 +123,10 @@ Ext.define('NextThought.app.course.enrollment.options.OpenEnrollment', {
 		var me = this,
 			loadDetails,
 			option = course.getEnrollmentOption && course.getEnrollmentOption(me.NAME);
+
+		if (course.get('isAdmin')) {
+			return this.__getAdmin(details);
+		}
 
 		if (!option || (!option.IsAvailable && !option.IsEnrolled)) {
 			return {

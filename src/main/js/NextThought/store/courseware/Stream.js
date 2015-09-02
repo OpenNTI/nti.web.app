@@ -71,7 +71,7 @@ Ext.define('NextThought.store.courseware.Stream', {
 
 			this.WEEK_RANGES.push({
 				start: moment.utc(bins[i].OldestTimestamp * 1000).startOf('isoWeek'), //timestamps are in seconds
-				end: moment.utc(bins[i].MostRecentimestamp * 1000),
+				end: moment.utc(bins[i].MostRecentTimestamp * 1000),
 				key: key
 			});
 

@@ -23,16 +23,29 @@ Ext.define('NextThought.util.PagedPageSource', {
 		if (config.getRoute) {
 			this.getRoute = config.getRoute.bind(this);
 		}
+
+		if (config.fillInRecord) {
+			this.fillInRecord = config.fillInRecord.bind(this);
+		}
+
+		if (config.getPrecache) {
+			this.getPrecache = config.getPrecache.bind(this);
+		}
 	},
 
 	//Relative to the total
 	getPageNumber: function() {
+		return this.getAbsoluteIndex() + 1;//account for zero indexing
+	},
+
+
+	getAbsoluteIndex: function() {
 		var currentPage = this.store.getCurrentPage(),
 			pageSize = this.store.pageSize;
 
-		//(currentPage - 1) * pageSize = the number of records in the pages before this one
-		//this.currentIndex + 1 = the number records in this page before the current account for 0 indexing
-		return ((currentPage - 1) * pageSize) + this.currentIndex + 1;
+		//(currentPage - 1) * pageSize = number of records in the pages before this one
+		//this.currentindex = the number of records in this page before the current
+		return ((currentPage - 1) * pageSize) + this.currentIndex;
 	},
 
 
@@ -41,17 +54,52 @@ Ext.define('NextThought.util.PagedPageSource', {
 	},
 
 
-	__loadRecord: function(index) {
-		var url = this.store.proxy.url,
-			params = this.store.proxy.extraParams;
+	fillInRecord: function(items) {
+		return items;
+	},
 
-		params.batchState = index;
+	/**
+	 * Check if the index is in the store's current page
+	 *
+	 * @param  {Integer} absoluteIndex index to look up
+	 * @return {Record}               the record from the store if its there
+	 */
+	__maybeGetFromStore: function(absoluteIndex) {
+		var pageSize = this.store.pageSize,
+			currentPage = this.store.getCurrentPage(),
+			pageStart = (currentPage - 1) * pageSize,
+			pageEnd = (currentPage * pageSize) - 1,
+			relativeIndex;
+
+		if (absoluteIndex >= pageStart && absoluteIndex <= pageEnd) {
+			relativeIndex = absoluteIndex % pageSize;
+
+			return this.store.getAt(relativeIndex);
+		}
+
+		return null;
+	},
+
+
+	__loadRecord: function(index) {
+		var store = this.store,
+			url = store.proxy.url,
+			storeRecord = this.__maybeGetFromStore(index),
+			params = Ext.clone(store.proxy.extraParams);
+
+		//if the index is already in the store no need to make a requests
+		if (storeRecord) {
+			return storeRecord;
+		}
+
+		params.batchStart = index;
 		params.batchSize = 1;
 
-		return StoreUtils.loadItems(url, params, null, this.store.model)
+		return StoreUtils.loadItems(url, params, null, store.model)
 			.then(function(items) {
 				return items[0];
 			})
+			.then(this.fillInRecord.bind(this))
 			.fail(function(reason) {
 				console.error('Failed to load record', reason);
 				return null;
@@ -145,5 +193,19 @@ Ext.define('NextThought.util.PagedPageSource', {
 
 	getNextTitle: function() {
 		return this.getTitle(this.next);
+	},
+
+
+	getNextPrecache: function() {
+		var index = this.currentIndex + 1;
+
+		return this.getPrecache ? this.getPrecache(this.next, index) : null;
+	},
+
+
+	getPreviousPrecache: function() {
+		var index = this.currentIndex - 1;
+
+		return this.getPrecache ? this.getPrecache(this.previous, index) : null;
 	}
 });

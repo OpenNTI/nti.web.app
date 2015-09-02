@@ -564,7 +564,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 		}
 
 		if (this.autoFillInReplies !== false) {
-			this.fillInReplies();
+			this.initialRepliesLoad = this.fillInReplies();
 		}
 
 
@@ -611,72 +611,75 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 		}
 		console.group('Loading Replies');
 
-		function setReplies(theStore) {
+		return new Promise(function(fulfill, reject) {
+			function setReplies(theStore) {
+				var items;
+				console.log('Store load args', arguments);
 
-			var items;
+				items = theStore.getItems();
 
-			console.log('Store load args', arguments);
+				if (items.length === 1 && items[0].getId() === record.getId()) {
+					items = (items[0].children || []).slice();
+				}
+				else {
+					console.warn('There was an unexpected result from the reply store.');
+				}
 
-			items = theStore.getItems();
+				console.log('Setting replies to ', items);
 
-			if (items.length === 1 && items[0].getId() === record.getId()) {
-				items = (items[0].children || []).slice();
+				record.children = items;
+				Ext.each(items, function(i) {
+					i.parent = record;
+				});
+
+				//the store's count is the reply count.
+				//update the count for next time the carousel renders
+				record.set('ReferencedByCount', theStore.getCount());
+				record.fireEvent('count-updated');
+
+				me.addReplies(items);
+
+				if (toMask) {
+					toMask.unmask();
+				}
+
+				me.maybeApplyState();
+
+				if (me.hasCallback) {
+					Ext.callback(me.hasCallback);
+					delete me.hasCallback;
+				}
+				console.groupEnd('Loading Replies');
+				fulfill();
 			}
-			else {
-				console.warn('There was an unexpected result from the reply store.');
-			}
 
-			console.log('Setting replies to ', items);
-
-			record.children = items;
-			Ext.each(items, function(i) {
-				i.parent = record;
-			});
-
-			//the store's count is the reply count.
-			//update the count for next time the carousel renders
-			record.set('ReferencedByCount', theStore.getCount());
-			record.fireEvent('count-updated');
-
-			me.addReplies(items);
-
-			if (toMask) {
-				toMask.unmask();
-			}
-
-			me.maybeApplyState();
-
-			if (me.hasCallback) {
-				Ext.callback(me.hasCallback);
-				delete me.hasCallback;
-			}
-			console.groupEnd('Loading Replies');
-		}
-
-		record.getDescendants(setReplies);
+			record.getDescendants(setReplies);
+		});
 	},
 
 
 	fillInReplies: function() {
-		var r = this.record;
+		var r = this.record, me = this;
 		this.removeAll(true);
 
 		//Multiple containers/cmps involved here
 		//So notice we do the bulkiest suspend resume
 		//we can. Also getting this onto the next event pump
 		//helps the app not seem like it is hanging
-		Ext.defer(function() {
-			if (this.isDestroyed) {
-				return;
-			}
+		return wait()
+				.then(function() {
+					if (me.isDestroyed) {
+						return Promise.reject();
+					}
 
-			if (!r.hasOwnProperty('parent') && r.getLink('replies')) {
-				this.loadReplies(r);
-			}
-			else {
-				this.addReplies(r.children);
-			}
-		}, 1, this);
+					if (!r.hasOwnProperty('parent') && r.getLink('replies')) {
+						return me.loadReplies(r);
+					}
+
+					// Adding replies is synchronous.
+					me.addReplies(r.children);
+					return Promise.resolve();
+				});
 	},
 
 
@@ -744,33 +747,33 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 
 
 	setContext: function(contextCmp) {
-		if (!this.rendered) {
-			this.on('afterrender', Ext.bind(this.setContext, this, arguments), this, {single: true});
-			return;
-		}
+		var t, me = this;
 
-		var  t;		
+		return me.onceRendered
+				.then(function() {
+					me.context.setHTML('');
+					if (!Ext.isEmpty(contextCmp)) {
+						//We have seen a case where we try and render a component twice.  That is a no no and causes
+						//terrible crashes
+						if (contextCmp.rendered) {
+							console.error('Attempting to rerender a context cmp');
+							return Promise.reject();
+						}
+						contextCmp.render(me.context);
 
-		this.context.setHTML('');
-		if (!Ext.isEmpty(contextCmp)) {
-			//We have seen a case where we try and render a component twice.  That is a no no and causes
-			//terrible crashes
-			if (contextCmp.rendered) {
-				console.error('Attempting to rerender a context cmp');
-				return;
-			}
-			contextCmp.render(this.context);
+						if (me.resizeMathJax && (Ext.isGecko || Ext.isIE9)) {
+							me.resizeMathJax(me.context);
+						}
+					}
+					else {
+						t = me.context.up('.context') || me.context;
+						// for no context, hide it.	
+						t.setVisibilityMode(Ext.dom.Element.DISPLAY);
+						t.hide();
+					}
 
-			if (this.resizeMathJax && (Ext.isGecko || Ext.isIE9)) {
-				this.resizeMathJax(this.context);
-			}
-		}
-		else {
-			t = this.context.up('.context') || this.context;
-			// for no context, hide it.	
-			t.setVisibilityMode(Ext.dom.Element.DISPLAY);
-			t.hide();
-		}
+					return Promise.resolve();
+				});		
 	},
 
 

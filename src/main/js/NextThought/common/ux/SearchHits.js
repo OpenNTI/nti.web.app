@@ -10,7 +10,7 @@ Ext.define('NextThought.common.ux.SearchHits', {
 			hit: config.hit,
 			phraseSearch: (config.ps || false),
 			ownerCmp: config.owner,
-			container: config.owner.getInsertionPoint('innerCt').dom
+			container: config.owner && config.owner.getInsertionPoint('innerCt').dom
 		});
 
 		this.mon(me.ownerCmp, {

@@ -591,6 +591,10 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 	getPriceString: function(base, addOn) {
 		var price;
 
+		if (!addOn && base === null) {
+			return '';
+		}
+
 		base = base === 'Free' ? 0 : base;
 		addOn = addOn === 'Free' ? 0 : addOn;
 

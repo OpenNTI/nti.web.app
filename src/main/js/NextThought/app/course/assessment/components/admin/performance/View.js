@@ -9,7 +9,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 	requires: [
 		'NextThought.app.course.assessment.components.admin.performance.Root',
 		'NextThought.app.course.assessment.components.admin.performance.Student',
-		'NextThought.util.PagedPageSource'
+		'NextThought.util.PagedPageSource',
+		'NextThought.model.User'
 	],
 
 	layout: 'card',
@@ -95,6 +96,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 			record, pageSource,
 			historyURL, user, view;
 
+		//When we handle the route to show a students assignments, we tell the root
+		//to load to this student, so when this calls the store will already have loaded
+		//the page that contains this record.
 		current = me.store.findBy(function(rec) {
 			var user = rec.get('User');
 
@@ -131,6 +135,20 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 				var user = rec.get('User');
 
 				return 'performance/' + user.getURLPart();
+			},
+			fillInRecord: function(item) {
+				var user = item.get('User');
+
+				if (!user) {
+					return item;
+				}
+
+				return UserRepository.getUser(user.Username || user)
+					.then(function(u) {
+						item.set('User', u);
+
+						return item;
+					});
 			}
 		});
 

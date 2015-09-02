@@ -49,10 +49,12 @@ Ext.define('NextThought.app.context.components.Question', {
 
 
 	__setContent: function() {
-		var content = this.question && this.question.get('content');
+		var content = this.question && this.question.get('content'),
+		readerLocation = this.ContextStore.getReaderLocation(),
+		root = readerLocation.root;
 
 		if (content && this.rendered) {
-			this.snippetEl.dom.innerHTML = content;
+			this.snippetEl.dom.innerHTML = ContentUtils.fixReferences(content, root);
 		}
 	}
 });
