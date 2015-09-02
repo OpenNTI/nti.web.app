@@ -842,6 +842,26 @@
 	}
 }
 
+.chat-container {
+	.chat-gutter-window {
+		display: block;
+	}
+
+	.chat-gutter-list-window {
+		display: none;
+	}
+
+	&.show-all {
+		.chat-gutter-window {
+			display: none;
+		}
+
+		.chat-gutter-list-window {
+			display: block;
+		}
+	}
+}
+
 .chat-gutter-window, .chat-gutter-list-window {
 	position: fixed;
 	top: 100px;
@@ -852,6 +872,12 @@
   	background-color: rgba(35, 35, 35, 0.70);
 	border-radius: 5px;
 	padding-bottom: 60px;
+
+	@media #{$hide-chat-break-point} {
+		.chat-container:not(.show-gutter) & {
+			display: none;
+		}
+	}
 
   	.presence-gutter-entry {
   		margin: 8px auto;
