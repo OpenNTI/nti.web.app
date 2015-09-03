@@ -1049,14 +1049,19 @@
 
 
 .chat-notifications-icon {
-	width: 70px;
+	width: 50px;
 	cursor: pointer;
 	height: $header-height;
 
-	@include icon('rhp-contacts', $side: after, $top: 23px, $left: 25px);
+	@include icon('rhp-contacts', $side: after, $top: 50%, $left: 50%);
+
+	&::after {
+		margin-top: -10px;
+		margin-left: -15px;
+	}
 
 	&:hover, &.gutter-showing {
-		@include icon('rhp-contacts_active', $side: after, $top: 23px, $left: 25px);
+		@include icon('rhp-contacts_active', $side: after, $top: 50%, $left: 50%);
 	}
 
 	&[data-badge]:not([data-badge="0"])::before {
@@ -1082,7 +1087,7 @@
 	}
 
 	.main-navigation.dark-nav & {
-		@include icon('rhp-contacts-white', $side: after, $top: 23px, $left: 25px);
+		@include icon('rhp-contacts-white', $side: after, $top: 50%, $left: 50%);
 
 		&::after {
 			opacity: 0.8;
