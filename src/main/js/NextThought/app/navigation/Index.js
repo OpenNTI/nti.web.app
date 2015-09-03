@@ -93,7 +93,7 @@ Ext.define('NextThought.app.navigation.Index', {
 			return;
 		}
 
-		this.__removeNavCmp()
+		return this.__removeNavCmp()
 			.then(render.bind(null, true));
 	},
 
@@ -106,10 +106,18 @@ Ext.define('NextThought.app.navigation.Index', {
 		if (config && config.cmp) {
 			this.__renderNavCmp(config.cmp);
 			this.removeCls('no-nav');
+			this.addCls('has-nav');
 			this.searchCmp.isActive = true;
 		} else {
+			this.addCls('removing-nav');
+
 			this.__removeNavCmp();
-			this.addCls('no-nav');
+
+			wait(300)
+				.then(this.addCls.bind(this, 'no-nav'))
+				.then(this.removeCls.bind(this, 'has-nav'))
+				.then(this.removeCls.bind(this, 'removing-nav'));
+
 			this.searchCmp.isActive = false;
 		}
 

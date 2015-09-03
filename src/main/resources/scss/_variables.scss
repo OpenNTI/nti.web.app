@@ -49,5 +49,6 @@ $highlight-colors: (
 ) !default;
 
 $hide-chat-break-point: "only screen and (max-width: 1200px)";
+$show-chat-break-point: "only screen and (min-width: 1200px)";
 
 @import "common-mixins";

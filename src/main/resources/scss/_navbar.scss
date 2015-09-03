@@ -1,16 +1,66 @@
 .main-navigation {
 	@include flexContainer();
 
-	.branding {
+	.back-container {
 		@include flexItem(0 0 auto);
+
+		.branding {
+			cursor: pointer;
+		}
+
+		.back {
+			display: none;
+			width: 70px;
+			height: 70px;
+			float: left;
+			cursor: pointer;
+			opacity: 1;
+			left: 0;
+			transition: opacity 0.5s, left 0.5s;
+
+			@include icon('overlay_close_x_dark', $top: 50%, $left: 50%);
+
+			&::after {
+				margin-top: -16px;
+				margin-left: -12px;
+				opacity: 0.7
+			}
+
+			&.disabled {
+				cursor: defalut;
+
+				&::after {
+					opacity: 0.5;
+				}
+
+				&::hover::after {
+					opacity: 0.5;
+				}
+			}
+
+			&:hover::after {
+				opacity: 1;
+			}
+		}
 	}
 
 	.nav-container {
 		@include flexItem(1 1 auto);
+		position: relative;
+		left: 0;
 	}
 
 	.search-container {
 		@include flexItem(1 1 auto);
+		position: relative;
+
+		.search-field-wrap {
+			position: absolute;
+			top: 0; bottom: 0;
+			right: 0;
+			width: 200px;
+			transition: width 0.5s;
+		}
 	}
 
 	.icons {
@@ -30,15 +80,57 @@
 			}
 		}
 	}
+
+	&.hide-branding {
+		.back-container {
+			.branding {
+				display: none;
+			}
+
+			.back {
+				display: block;
+			}
+		}
+	}
+
+	&.removing-nav {
+		.nav-container {
+			position: absolute;
+			transition: left 0.3s;
+			left: -1000px;
+			flex: none;
+		}
+
+		.search-container {
+			.search-field-wrap {
+				width: 100%;
+			}
+		}
+	}
 }
 
 .main-navigation.no-nav {
 	.nav-container {
 		display: none;
+		left: 0;
 	}
 
-	.branding, .icons {
+	.back-container, .icons {
 		@include flexBasis(210px);
+	}
+
+	.icons {
+		@media #{$hide-chat-break-point} {
+			& {
+				@include flexBasis(210px !important);
+			}
+		}
+	}
+
+	.search-container {
+		.search-field-wrap {
+			width: 100%;
+		}
 	}
 }
 

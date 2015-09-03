@@ -4,6 +4,7 @@
 
 .content-navigation {
 	height: $header-height;
+	overflow: hidden;
 
 	.content-container {
 		float: left;
@@ -186,7 +187,7 @@
 		}
 	}
 
-	&.showing, &.removing {
+	&.showing {
 		.back {
 			opacity: 0;
 			left: -5px;
@@ -202,49 +203,49 @@
 		}
 	}
 
-	&.removing {
-		li.tab {
-			&[data-index="1"] {
-				transition-delay: 0s;
-			}
+	// &.removing {
+	// 	li.tab {
+	// 		&[data-index="1"] {
+	// 			transition-delay: 0s;
+	// 		}
 
-			&[data-index="2"] {
-				transition-delay: 0.1s;
-			}
+	// 		&[data-index="2"] {
+	// 			transition-delay: 0.1s;
+	// 		}
 
-			&[data-index="3"] {
-				transition-delay: 0.2s;
-			}
+	// 		&[data-index="3"] {
+	// 			transition-delay: 0.2s;
+	// 		}
 
-			&[data-index="4"] {
-				transition-delay: 0.3s;
-			}
+	// 		&[data-index="4"] {
+	// 			transition-delay: 0.3s;
+	// 		}
 
-			&[data-index="5"] {
-				transition-delay: 0.4s;
-			}
+	// 		&[data-index="5"] {
+	// 			transition-delay: 0.4s;
+	// 		}
 
-			&[data-index="6"] {
-				transition-delay: 0.5s; 
-			}
+	// 		&[data-index="6"] {
+	// 			transition-delay: 0.5s; 
+	// 		}
 
-			&[data-index="7"] {
-				transition-delay: 0.6s; 
-			}
+	// 		&[data-index="7"] {
+	// 			transition-delay: 0.6s; 
+	// 		}
 
-			&[data-index="8"] {
-				transition-delay: 0.7s; 
-			}
+	// 		&[data-index="8"] {
+	// 			transition-delay: 0.7s; 
+	// 		}
 
-			&[data-index="9"] {
-				transition-delay: 0.8s;
-			}
+	// 		&[data-index="9"] {
+	// 			transition-delay: 0.8s;
+	// 		}
 
-			&[data-index="10"] {
-				transition-delay: 0.9s; 
-			}
-		}
-	}
+	// 		&[data-index="10"] {
+	// 			transition-delay: 0.9s; 
+	// 		}
+	// 	}
+	// }
 }
 
 
