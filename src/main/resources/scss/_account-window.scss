@@ -402,16 +402,35 @@
 	.header {
 		margin: 15px 15px 5px 15px;
 		color: $secondary-grey;
+		font: normal 300 14px/normal $font;
 
 		.title {
-			font: normal 300 19px/normal $font;
+			font: normal 600 19px/normal $font;
 		}
 
-		.sub{
-			font: normal 300 14px/normal $font;
+		.email {
+			font-style: italic;
+			font-size: 12px;
+		}
+
+		.sub {
+			font-weight: 500;
+		}
+
+		.buttons{
+			display: inline-block;
+
 			.link{
+				float: left;
+				padding-right: 10px;
 				color: $primary-blue;
 				cursor: pointer;
+				font: normal 300 14px/normal $font;
+
+				&.error {
+					color: $primary-red;
+					cursor: default;
+				}
 			}
 		}
 	}
@@ -441,7 +460,7 @@
 	.error-msg {
 		visibility: hidden;
 		color: $primary-red;
-		margin: 5px 34px;
+		margin: 15px 34px;
 		font: normal 300 15px/normal $font;
 		line-height: 20px;
 		min-height: 20px;
@@ -454,7 +473,6 @@
 	.footer{
 		background-color: #f8f8f8;
 		overflow: hidden;
-		position: absolute;
 		bottom: 0;
 		left: 0;
 		right: 0;

@@ -42,7 +42,7 @@ Ext.define('NextThought.app.profiles.user.Actions', {
 						action: 'onMoreInfo',
 						label: 'More Info',
 						handler: function() {
-							// Show an more Info card.
+							// Show a more info card.
 							console.log('Show email verification more info');
 						}
 					}
