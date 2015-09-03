@@ -36,15 +36,6 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 		]}
 	]),
 
-
-	emailVerifyTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{cls: 'button email-verify', 'data-action': 'onEmailVerify', cn: [
-			{tag: 'span', cls: 'tagline', html: 'We noticed your email is not verified.'},
-			{tag: 'span', cls: 'action', html: 'Verify Email Now'}
-		]}
-	])),
-
-
 	renderSelectors: {
 		avatarContainerEl: '.avatar-container',
 		usernameEl: '.about .username',
@@ -244,10 +235,6 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 			action: 'onEditProfile',
 			label: 'Edit Profile'
 		});
-
-		if (!this.user.isEmailVerified()) {
-			this.emailVerifyTpl.append(this.buttonsEl);
-		}
 	},
 
 
@@ -289,41 +276,6 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 		if (this.editCancelAction) {
 			this.editCancelAction();
 		}
-	},
-
-
-	onEmailVerify: function(button, e) {
-		if (!e.getTarget('.action')) {
-			return;
-		}
-
-		var me = this,
-			user = $AppConfig.userObject,
-			emailVerifyWin = Ext.widget('email-token-window', {
-				user: $AppConfig.userObject,
-				autoShow: false,
-				onVerificationComplete: function(){
-					var verifyEl = me.el && me.el.down('.email-verify');
-
-					if (verifyEl) {
-						verifyEl.hide();
-					}
-				}
-			});
-
-		user.sendEmailVerification()
-			.then(function() {
-				emailVerifyWin.show();
-				emailVerifyWin.center();
-			})
-			.fail(function(error) {
-				var e = Ext.decode(error && error.responseText);
-				if (error.status === 422) {
-					emailVerifyWin.presentPendingVerification(e && e.seconds);
-				}
-				emailVerifyWin.show();
-				emailVerifyWin.center();
-			});
 	},
 
 

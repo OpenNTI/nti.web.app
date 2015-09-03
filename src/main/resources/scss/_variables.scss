@@ -40,6 +40,8 @@ $annotations-menu-bg-color:rgba(#333,.95) !default;
 $annotations-menu-bg:$annotations-menu-bg-color !default;
 
 $header-height: 70px !default;
+$header-height-withbar: 110px !default;
+$msg-bar-height: 40px !default;
 
 $highlight-colors: (
 	// (name, menu color, hover) actual highlight will be computed from hover color.

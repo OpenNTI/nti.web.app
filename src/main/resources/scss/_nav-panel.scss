@@ -7,6 +7,10 @@
 		top: 90px;//$header-height + 20;
 		bottom: 20px;
 		height: auto !important;
+
+		html.msg-bar-open & {
+			top: 132px; // $header-height + $msg-bar-height + 20
+		}
 	}
 
 	//Override these, since the placeholder is not suppose to be visible

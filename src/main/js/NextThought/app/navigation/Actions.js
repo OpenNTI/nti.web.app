@@ -163,5 +163,43 @@ Ext.define('NextThought.app.navigation.Actions', {
 
 	markReturnPoint: function(route) {
 		this.store.markReturnPoint(route);
+	},
+
+
+	/**
+	 * Present a message in the main message bar
+	 *
+	 * Takes a config object:
+	 *
+	 * message: string // message or title of the message bar
+	 * iconCls: string  // the class of the icon (warning, delete, ok...),
+	 * buttons: array // action buttons to be added
+	 * Each button has the following:
+	 * 	{
+	 * 		cls: string // name of the button class,
+	 * 		action: string // name of the method to call on click,
+	 * 		label: string // label of the button
+	 * 	}
+	 *
+	 * @param  {Object} cfg configuration to build a message bar.
+	 */
+	presentMessageBar: function(cfg) {
+		var messageCmp = Ext.getCmp('message-bar'),
+			htmlEl;
+
+		if (messageCmp) {
+			messageCmp.onceRendered
+				.then(function(){
+					messageCmp.setIcon(cfg.iconCls);
+					messageCmp.setMessage(cfg.message);
+					Ext.each(cfg.buttons || [], messageCmp.addButton.bind(messageCmp));
+					messageCmp.closeHandler = cfg.closeHandler;
+
+					htmlEl = Ext.query('.x-viewport')[0];
+					if (htmlEl) {
+						Ext.fly(htmlEl).addCls('msg-bar-open');
+					}
+				});
+		}
 	}
 });

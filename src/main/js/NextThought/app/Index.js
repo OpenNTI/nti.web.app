@@ -6,6 +6,7 @@ Ext.define('NextThought.app.Index', {
 		'NextThought.app.MessageBox',
 		'NextThought.app.MessageBar',
 		'NextThought.app.navigation.Index',
+		'NextThought.app.navigation.MessageBar',
 		'NextThought.app.Body',
 		'NextThought.app.windows.Index',
 		'NextThought.app.chat.Index'
@@ -22,6 +23,7 @@ Ext.define('NextThought.app.Index', {
 	touchStartTime: -1,
 
 	items: [
+		{xtype: 'navigation-message-bar', id:'message-bar'},
 		{xtype: 'main-navigation', id: 'nav'},
 		{xtype: 'main-views', id: 'view'},
 		{xtype: 'windows-view', id: 'window'},

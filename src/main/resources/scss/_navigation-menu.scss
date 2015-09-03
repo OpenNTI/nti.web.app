@@ -119,6 +119,52 @@
 	}
 }
 
+.main-message-bar {
+	background-color: #f7f2d6;
+	border-bottom: 1px solid #e1e1e1 !important;
+
+	.icon {
+		display: inline-block;
+		width: 30px;
+		margin-right: 5px;
+	}
+
+	.msg {
+		display: inline-block;
+		font-size: 14px;
+		margin-right: 10px;
+		line-height: 40px;
+    	vertical-align: top;
+    	font-weight: 500;
+	}
+
+	.buttons {
+		display: inline-block;
+
+		.button {
+			float: left;
+			padding-right: 15px;
+			color: $primary-blue;
+			font-size: 14px;
+			line-height: 40px;
+			cursor: pointer;
+		}
+	}
+
+	.close{
+		@include icon('note-window-x', $side: after, $position: absolute);
+		top: 10px;
+		right: 10px;
+		cursor: pointer;
+		width: 24px;
+		height: 24px;
+
+		&:hover{
+			@include icon('note-window-x_hover', $side: after, $position: absolute);
+		}
+	}
+}
+
 
 .x-panel-navigation-menu{
 	position: absolute !important;

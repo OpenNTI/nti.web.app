@@ -13,7 +13,8 @@ Ext.define('NextThought.controller.Application', {
 		'NextThought.app.groups.Actions',
 		'NextThought.app.context.StateStore',
 		'NextThought.app.notifications.Actions',
-		'NextThought.common.state.Actions'
+		'NextThought.common.state.Actions',
+		'NextThought.app.profiles.user.Actions'
 	],
 
 	refs: [
@@ -54,6 +55,7 @@ Ext.define('NextThought.controller.Application', {
 		me.ContextStore = NextThought.app.context.StateStore.getInstance();
 		me.NotificationActions = NextThought.app.notifications.Actions.create();
 		me.NavigationActions = NextThought.app.navigation.Actions.create();
+		me.UserProfileActions = NextThought.app.profiles.user.Actions.create();
 
 		window.addEventListener('popstate', function(e) {
 			me.handleCurrentState();

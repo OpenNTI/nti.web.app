@@ -853,6 +853,10 @@
 	border-radius: 5px;
 	padding-bottom: 60px;
 
+	html.msg-bar-open & {
+		top: 140px;
+	}
+
   	.presence-gutter-entry {
   		margin: 8px auto;
   		width: 45px;
