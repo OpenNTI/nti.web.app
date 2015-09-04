@@ -5,8 +5,8 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 	congratsWrapperTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cls: 'congrats-wrapper', cn: [
 			{cls: 'text', cn: [
-				{cls: 'title', html: '{{{NextThought.view.account.verification.EmailToken.CongratulationTitle}}}'},
-				{cls: 'sub', html: '{{{NextThought.view.account.verification.EmailToken.CongratulationSubTitle}}}'}
+				{cls: 'title', html: 'Thank you!'},
+				{cls: 'sub', html: 'Your email has been verified'}
 			]}
 		]}
 	])),
@@ -55,7 +55,8 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 		changeLinkEl: '.buttons .change-email',
 		titleEl: '.header .title',
 		subtitleEl: '.header .sub',
-		emailEl: '.header .email'
+		emailEl: '.header .email',
+		clearEl: '.input-box .clear'
 	},
 
 
@@ -75,6 +76,7 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 		this.mon(this.cancelEl, 'click', 'close', this);
 		this.mon(this.tokenEl, 'keyup', 'maybeEnableSubmit', this);
 		this.mon(this.requestLinkEl, 'click', 'sendEmailVerification', this);
+		this.mon(this.clearEl, 'click', this.reset.bind(this));
 		this.on('show', function() {
 			me.tokenEl.focus(200);
 		});
@@ -83,12 +85,19 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 
 	maybeEnableSubmit: function(e) {
 		var val = this.tokenEl.getValue(),
-			cls = 'disabled';
+			cls = 'disabled',
+			hasError = this.el.down('.input-box.error');
 
 		if (Ext.isEmpty(val) && !this.submitEl.hasCls(cls)) {
 			this.submitEl.addCls(cls);
+			this.clearEl.hide();
 		} else if (!Ext.isEmpty(val) && this.submitEl.hasCls(cls)) {
 			this.submitEl.removeCls(cls);
+			this.clearEl.show();
+		}
+
+		if (hasError) {
+			this.clearError();
 		}
 	},
 
@@ -143,8 +152,8 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 	presentPendingVerification: function(waitingSeconds) {
 		if (!waitingSeconds) { return; }
 
-		var timeTxt = TimeUtils.getNaturalDuration(waitingSeconds * 1000, null, null, {hour: 'h', minute: 'min', second: 'sec'}),
-			txt = 'It may take several minutes for the email to reach your inbox. Please wait before requesting another',
+		var timeTxt = TimeUtils.getNaturalDuration(waitingSeconds * 1000, null, true, {hour: 'h', minute: 'm', second: 's'}),
+			txt = 'It may take several minutes for the email to reach your inbox. Please wait before requesting another.',
 			remainingTime = 'Send another email in ' + timeTxt,
 			me = this;
 
@@ -175,14 +184,19 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 	},
 
 
-	clearError: function() {
+	reset: function() {
+		this.clearError();
+		this.tokenEl.dom.value = '';
+		this.maybeEnableSubmit();
+	},
+
+
+	clearError: function(){
 		var errorEl = this.el.down('.error-msg'),
 			inputBoxEl = this.el.down('.input-box');
 
-		if (errorEl) {
-			errorEl.removeCls('visible');
-			inputBoxEl.removeCls('error');
-		}
+		errorEl.removeCls('visible');
+		inputBoxEl.removeCls('error');
 	},
 
 
