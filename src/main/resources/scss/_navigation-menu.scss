@@ -143,11 +143,31 @@
 
 		.button {
 			float: left;
-			padding-right: 15px;
+			padding: 0 13px 0 15px;
 			color: $primary-blue;
 			font-size: 14px;
 			line-height: 40px;
 			cursor: pointer;
+			position: relative;
+
+			&::after{
+				content: "|";
+				position: absolute;
+				right: 0;
+				color: $tertiary-grey;
+				width: 3px;
+				font-size: 14px;
+			}
+
+			&:last-of-type {
+					&::after {
+						content: none;
+					}
+				}
+
+				&:first-of-type {
+					padding-left: 0;
+				}
 		}
 	}
 

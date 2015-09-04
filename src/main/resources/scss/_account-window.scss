@@ -400,49 +400,76 @@
 	min-height: 204px;
 
 	.header {
-		margin: 15px 15px 5px 15px;
+		margin: 10px 15px;
 		color: $secondary-grey;
-		font: normal 300 14px/normal $font;
+		font: normal 400 14px/normal $font;
 
 		.title {
-			font: normal 600 19px/normal $font;
+			font: normal 300 18px/normal $font;
+			color: $primary-grey;
 		}
 
 		.email {
 			font-style: italic;
-			font-size: 12px;
+			margin: 0 0 5px 0;
+			color: $tertiary-grey;
 		}
 
 		.sub {
-			font-weight: 500;
+			font-weight: 300;
+			color: $primary-grey;
+			margin-top: 15px;
+			display: inline-block;
 		}
 
 		.buttons{
 			display: inline-block;
+			margin: 0;
 
 			.link{
 				float: left;
-				padding-right: 10px;
+				padding: 0 7px 0 9px;
 				color: $primary-blue;
 				cursor: pointer;
 				font: normal 300 14px/normal $font;
+				position: relative;
 
 				&.error {
 					color: $primary-red;
 					cursor: default;
+					font-style: italic;
+				}
+
+				&::after{
+					content: "|";
+					position: absolute;
+					right: 0;
+					color: $tertiary-grey;
+					width: 3px;
+					font-size: 14px;
+				}
+
+				&:last-of-type {
+					&::after {
+						content: none;
+					}
+				}
+
+				&:first-of-type {
+					padding-left: 0;
 				}
 			}
 		}
 	}
 
 	.input-box {
-		border: 1px solid #dbdbdb;
+		border: 1px solid $tertiary-grey;
 		padding-right: 30px;
 		background: #ffffff;
-		margin: 0px 34px 12px 34px;
+		margin: 0 34px 0 15px;
 
 		input{
-			color: #757474;
+			color: $secondary-grey;
 			font: normal 500 14px/25px $font;
 			border: 0;
 			background: #ffffff;
@@ -452,15 +479,25 @@
 			@include experimental-value(width, calc(100% - 8px));
 			position: relative;
 			left: 4px;
-			box-shadow: -4px 0 0 0 #dbdbdb;
+			box-shadow: -4px 0 0 0 $tertiary-grey;
 			outline: none;
+		}
+
+
+		&.error {
+			border-color: $primary-red;
+
+			input {
+				color: $primary-red;
+				box-shadow: -4px 0 0 0 $primary-red;
+			}
 		}
 	}
 
 	.error-msg {
 		visibility: hidden;
 		color: $primary-red;
-		margin: 15px 34px;
+		margin: 10px 15px;
 		font: normal 300 15px/normal $font;
 		line-height: 20px;
 		min-height: 20px;

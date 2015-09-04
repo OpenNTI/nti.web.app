@@ -54,7 +54,8 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 		requestLinkEl: '.buttons .send-email',
 		changeLinkEl: '.buttons .change-email',
 		titleEl: '.header .title',
-		subtitleEl: '.header .sub'
+		subtitleEl: '.header .sub',
+		emailEl: '.header .email'
 	},
 
 
@@ -142,16 +143,16 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 	presentPendingVerification: function(waitingSeconds) {
 		if (!waitingSeconds) { return; }
 
-		var time = TimeUtils.getNaturalDuration(waitingSeconds * 1000),
-			timeTxt = '<b>' + time + '</b>',
-			txt = getString('NextThought.view.account.verification.EmailToken.PendingTitle'),
-			sub = getFormattedString('NextThought.view.account.verification.EmailToken.PendingSubTitle', {time: timeTxt}),
+		var timeTxt = TimeUtils.getNaturalDuration(waitingSeconds * 1000, null, null, {hour: 'h', minute: 'min', second: 'sec'}),
+			txt = 'It may take several minutes for the email to reach your inbox. Please wait before requesting another',
+			remainingTime = 'Send another email in ' + timeTxt,
 			me = this;
 
 		me.onceRendered
 			.then(function() {
-				me.titleEl.update(txt);
-				me.subtitleEl.update(sub);
+				me.subtitleEl.update(txt);
+				me.requestLinkEl.update(remainingTime);
+				me.requestLinkEl.addCls('error');
 			});
 	},
 
@@ -164,10 +165,23 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 
 
 	showError: function(error) {
-		var errorEl = this.el.down('.error-msg');
+		var errorEl = this.el.down('.error-msg'),
+			inputBoxEl = this.el.down('.input-box');
 		if (errorEl) {
 			errorEl.addCls('visible');
-			errorEl.update(getString('NextThought.view.account.verification.EmailToken.InvalidToken'));
+			errorEl.update('This token is not valid.');
+			inputBoxEl.addCls('error');
+		}
+	},
+
+
+	clearError: function() {
+		var errorEl = this.el.down('.error-msg'),
+			inputBoxEl = this.el.down('.input-box');
+
+		if (errorEl) {
+			errorEl.removeCls('visible');
+			inputBoxEl.removeCls('error');
 		}
 	},
 

@@ -24,11 +24,13 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Window', {
 		{xtype: 'email-verify-view'}
 	],
 
-	presentPendingVerification: function (seconds) {
-		var active = this.down('email-verify-view');
+	initComponent: function(){
+		this.callParent(arguments);
+		this.view = this.down('email-verify-view');
+		this.view.user = this.user;
+	},
 
-		if (active && active.presentPendingVerification) {
-			active.presentPendingVerification(seconds);
-		}
+	presentPendingVerification: function (seconds) {
+		return this.view.presentPendingVerification(seconds);
 	}
 });
