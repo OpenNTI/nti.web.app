@@ -75,7 +75,7 @@ Ext.define('NextThought.app.course.assessment.components.Navigation', {
 		var current = this.el.down('.outline-list .outline-row.x-item-selected'),
 			n = this.cmp_map[item.xtype];
 
-		if (n.dom) {
+		if (n.dom && route) {
 			n.dom.setAttribute('data-route', route);
 		}
 
