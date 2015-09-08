@@ -114,6 +114,10 @@
 			position: absolute;
 			opacity: 1;
 			transition: width 0.5s, left 0.5s, opacity 0.5s 0.5s;
+
+			&.hidden {
+				display: none;
+			}
 		}
 	}
 
@@ -136,7 +140,7 @@
 			line-height: 20px;
 		}
 
-		.show-dropdown.content-navigation .show-more, &:hover {
+		&.active, &:hover {
 			&::before {
 				font-weight: 600;
 				color: $primary-blue;

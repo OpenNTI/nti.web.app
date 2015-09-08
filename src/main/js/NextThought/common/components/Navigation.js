@@ -169,6 +169,8 @@ Ext.define('NextThought.common.components.Navigation', {
 			active = active.getBoundingClientRect();
 			container = container.getBoundingClientRect();
 
+			me.maybeCollapse();
+
 			me.activeTabEl.setStyle({
 				width: active.width + 'px',
 				left: active.left - container.left + 'px'
@@ -178,7 +180,7 @@ Ext.define('NextThought.common.components.Navigation', {
 		container.dom.innerHTML = '';
 
 		tabs = me.tabsTpl.append(container, {tabs: tabs}, true);
-		tabs = tabs && tabs.dom;
+		tabs = container && container.dom;
 		active = tabs && tabs.querySelector('.tab.active');
 		container = container && container.dom;
 
@@ -190,7 +192,7 @@ Ext.define('NextThought.common.components.Navigation', {
 			alignCurrentTab();
 		}
 
-		this.maybeCollapse();
+		me.maybeCollapse();
 	},
 
 
@@ -217,13 +219,18 @@ Ext.define('NextThought.common.components.Navigation', {
 
 	maybeHideDropdown: function(e) {
 		if (!e.getTarget('.content-navigation')) {
-			this.removeCls('show-dropdown');
+			this.hideDropdown();
 		}
 	},
 
 
 	toggleDropdown: function() {
 		this[this.hasCls('show-dropdown') ? 'removeCls' : 'addCls']('show-dropdown');
+	},
+
+
+	hideDropdown: function() {
+		this.removeCls('show-dropdown');
 	},
 
 
@@ -241,6 +248,8 @@ Ext.define('NextThought.common.components.Navigation', {
 		route = Globals.trimRoute(route);
 		subRoute = Globals.trimRoute(subRoute);
 		root = Globals.trimRoute(root);
+
+		this.hideDropdown();
 
 		if (!tab || !this.bodyView.onTabChange) { return; }
 
@@ -280,6 +289,8 @@ Ext.define('NextThought.common.components.Navigation', {
 		if (!this.el) { return; }
 
 		var tabs = this.el.dom.querySelectorAll('li.tab'),
+			activeTabEl = this.activeTabEl,
+			seeMoreEl = this.el.dom.querySelector('.show-more'),
 			shouldCollapse = false, numberToShow, dropdowns = 0;
 
 		function collapse(li) {
@@ -287,11 +298,21 @@ Ext.define('NextThought.common.components.Navigation', {
 				li.classList.add('dropdown');
 			}
 
+			if (li.classList.contains('active')) {
+				seeMoreEl.classList.add('active');
+				activeTabEl.addCls('hidden');
+			}
+
 			li.style.top = (35 + (dropdowns * 35)) + 'px';
 			dropdowns += 1;
 		}
 
 		function unCollapse(li) {
+			if (li.classList.contains('active')) {
+				seeMoreEl.classList.remove('active');
+				activeTabEl.removeCls('hidden');
+			}
+
 			if (!li.classList.contains('dropdown')) { return; }
 
 			li.classList.remove('dropdown');
@@ -300,10 +321,10 @@ Ext.define('NextThought.common.components.Navigation', {
 
 		tabs = Array.prototype.slice.call(tabs);
 
-		if (barWidth <= 630) {
+		if (barWidth <= 645) {
 			numberToShow = 3;
 			shouldCollapse = true;
-		} else if (barWidth <= 740) {
+		} else if (barWidth <= 745) {
 			numberToShow = 4;
 			shouldCollapse = true;
 		} else if (barWidth <= 860) {
