@@ -3,7 +3,9 @@ Ext.define('NextThought.app.profiles.user.Actions', {
 
 	requires: [
 		'NextThought.app.navigation.Actions',
-		'NextThought.login.StateStore'
+		'NextThought.login.StateStore',
+		'NextThought.app.profiles.user.components.emailverify.Window',
+		'NextThought.app.profiles.user.components.emailverify.info.Window'
 	],
 
 
@@ -41,10 +43,7 @@ Ext.define('NextThought.app.profiles.user.Actions', {
 						cls: 'info',
 						action: 'onMoreInfo',
 						label: 'More Info',
-						handler: function() {
-							// Show a more info card.
-							console.log('Show email verification more info');
-						}
+						handler: this.showMoreInfo.bind(this)
 					}
 				]
 			};
@@ -79,6 +78,13 @@ Ext.define('NextThought.app.profiles.user.Actions', {
 				me.emailVerifyWin.show();
 				me.emailVerifyWin.center();
 			});
+	},
+
+
+	showMoreInfo: function() {
+		this.moreInfo = Ext.widget('email-verify-info-window');
+		this.moreInfo.show();
+		this.moreInfo.center();
 	},
 
 

@@ -399,6 +399,10 @@
 	border: 1px solid rgb(206, 206, 206);
 	min-height: 204px;
 
+	&.info {
+		min-height: 150px;
+	}
+
 	.header {
 		margin: 10px 15px;
 		color: $secondary-grey;
