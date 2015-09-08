@@ -75,7 +75,7 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 		this.mon(this.submitEl, 'click', 'submitClicked', this);
 		this.mon(this.cancelEl, 'click', 'close', this);
 		this.mon(this.tokenEl, 'keyup', 'maybeEnableSubmit', this);
-		this.mon(this.requestLinkEl, 'click', 'sendEmailVerification', this);
+		this.mon(this.requestLinkEl, 'click', this.handleVerificationRequest.bind(this));
 		this.mon(this.clearEl, 'click', this.reset.bind(this));
 		this.on('show', function() {
 			me.tokenEl.focus(200);
@@ -152,16 +152,12 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 	presentPendingVerification: function(waitingSeconds) {
 		if (!waitingSeconds) { return; }
 
-		var timeTxt = TimeUtils.getNaturalDuration(waitingSeconds * 1000, null, true, {hour: 'h', minute: 'm', second: 's'}),
-			txt = 'It may take several minutes for the email to reach your inbox. Please wait before requesting another.',
-			remainingTime = 'Send another email in ' + timeTxt,
+		var txt = 'It may take several minutes for the email to reach your inbox. Please wait before requesting another.',
 			me = this;
 
 		me.onceRendered
 			.then(function() {
 				me.subtitleEl.update(txt);
-				me.requestLinkEl.update(remainingTime);
-				me.requestLinkEl.addCls('error');
 			});
 	},
 
@@ -208,27 +204,39 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 		return new Promise(function(fulfill, reject) {
 			$AppConfig.userObject.sendEmailVerification()
 				.then(function() {
-					var txt = getString('NextThought.view.account.verification.EmailToken.Title'),
-						sub = getString('NextThought.view.account.verification.EmailToken.SubTitle');
-
-					me.onceRendered
-						.then(function() {
-							me.titleEl.update(txt);
-							me.subtitleEl.update(sub);
-						});
-
 					delete me.isVerifyingEmail;
 					fulfill();
 				})
 				.fail(function(resp) {
-					var e = Ext.decode(resp.responseText);
-					if (resp.status === 422) {
-						me.presentPendingVerification(e && e.seconds);
-					}
-
 					delete me.isVerifyingEmail;
-					reject();
+					reject(resp);
 				});
 		});
+	},
+
+
+	handleVerificationRequest: function() {
+		var me = this;
+
+		// Per Design request, we would like to simulate the sending and sent states for email verification,
+		// even if the server might respond a lot faster. That's why we're adding the time interval
+		this.requestLinkEl.update('Sending...');
+		wait(1000)
+			.then(this.sendEmailVerification.bind(this))
+			.then(function() {
+				me.requestLinkEl.update('Sent!');
+				me.titleEl.update('We sent another verification email to:');
+				wait(1000)
+					.then(function() {
+						me.requestLinkEl.update('Send another email');
+					});
+			})
+			.fail(function(resp) {
+				var e = Ext.decode(resp.responseText);
+				if (resp.status === 422) {
+					me.presentPendingVerification(e && e.seconds);
+				}
+				me.requestLinkEl.update('Send another email');
+			});
 	}
 });
