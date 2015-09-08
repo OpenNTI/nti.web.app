@@ -87,6 +87,7 @@ Ext.define('NextThought.app.navigation.Index', {
 			cmp.render(me.navContainerEl);
 
 			me.nav_cmp = cmp;
+			me.onWindowResize();
 		}
 
 		if (this.nav_cmp && this.nav_cmp.xtype === cmp.xtype) {
@@ -150,6 +151,8 @@ Ext.define('NextThought.app.navigation.Index', {
 				delete this.searchCmp.noRouteOnSearch;
 			}
 		}
+
+		this.onWindowResize();
 	},
 
 
@@ -215,7 +218,8 @@ Ext.define('NextThought.app.navigation.Index', {
 			pushRootRoute: this.pushRoute.bind(this),
 			onSearchFocus: this.onSearchFocus.bind(this),
 			onSearchBlur: this.onSearchBlur.bind(this),
-			noRouteOnSearch: this.noRouteOnSearch
+			noRouteOnSearch: this.noRouteOnSearch,
+			containerCmp: this.searchEl
 		});
 
 		this.chatCmp = NextThought.app.chat.components.gutter.Tab.create({
@@ -233,6 +237,25 @@ Ext.define('NextThought.app.navigation.Index', {
 
 		this.mon(this.brandingEl, 'click', this.gotoLibrary.bind(this));
 		this.mon(this.backEl, 'click', this.goBack.bind(this));
+
+		Ext.EventManager.onWindowResize(this.onWindowResize.bind(this));
+	},
+
+
+	onWindowResize: function(height, width) {
+		var shouldCollapseSearch = false,
+			width = this.navContainerEl.getWidth(),
+			bar = Ext.Element.getViewportWidth() - this.brandingEl.getWidth();
+
+		if (this.nav_cmp && this.nav_cmp.maybeCollapse) {
+			shouldCollapseSearch = this.nav_cmp.maybeCollapse(width, bar);
+		}
+
+		if (shouldCollapseSearch) {
+			this.searchEl.addCls('collapsed');
+		} else {
+			this.searchEl.removeCls('collapsed');
+		}
 	},
 
 

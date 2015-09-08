@@ -66,6 +66,40 @@
 			width: 100%;
 			transition: width 0.5s;
 		}
+
+		&.collapsed {
+			.search-field-wrap {
+				width: 50px;
+				height: 70px;
+				text-align: right;
+
+				input {
+					display: none;
+				}
+
+				.search-field {
+					height: 70px;
+					width: 50px;
+					margin: 0;
+					border: none;
+					background: none;
+				}
+
+				.search-icon {
+					border: none;
+					background: none;
+					height: 70px;
+					width: 50px;
+
+					@include icon('rhp-search', $side: after, $top: 50%, $left: 50%);
+
+					&::after {
+						margin-top: -9px;
+						margin-left: -9px;
+					}
+				}
+			}
+		}
 	}
 
 	.icons {
@@ -142,12 +176,22 @@
 .main-navigation.has-nav {
 	.search-container {
 		@include flexBasis(150px);
+		max-width: 200px;
 
 		.search-field-wrap {
 			max-width: 200px;
 
 			.search-field {
 				width: 100%;
+			}
+		}
+
+		&.collapsed {
+			@include flexItem(0 0 50px);
+			.search-field-wrap {
+				.search-field {
+					width: 50px;
+				}
 			}
 		}
 	}

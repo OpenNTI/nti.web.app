@@ -36,6 +36,7 @@ Ext.define('NextThought.app.search.SearchBar', {
 
 
 	renderSelectors: {
+		wrapEl: '.search-field-wrap',
 		boxEl: '.search-field',
 		inputEl: 'input',
 		triggerEl: '.trigger',

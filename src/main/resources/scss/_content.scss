@@ -6,6 +6,10 @@
 	height: $header-height;
 	overflow: hidden;
 
+	&.show-dropdown {
+		overflow: visible;
+	}
+
 	.content-container {
 		float: left;
 		position: relative;
@@ -43,6 +47,7 @@
 	.content {
 		float: left;
 		position: relative;
+		height: $header-height;
 
 		.active-content{
 			font: 600 1.375em/1 $font;
@@ -112,6 +117,41 @@
 		}
 	}
 
+	.tab-container {
+		display: inline-block;
+		position: relative;
+	}
+
+	.show-more {
+		position: absolute;
+		right: 0;
+		bottom: 10px;
+		display: none;
+		cursor: pointer;
+		width: 22px;
+		text-align: center;
+
+		&::before {
+			content: '\b7\b7\b7';
+			line-height: 20px;
+		}
+
+		.show-dropdown.content-navigation .show-more, &:hover {
+			&::before {
+				font-weight: 600;
+				color: $primary-blue;
+			}
+		}
+	}
+
+
+
+	&.has-more {
+		.show-more {
+			display: block;
+		}
+	}
+
 
 	ul.tabs {
 		list-style: none;
@@ -120,7 +160,7 @@
 	}
 
 	li.tab {
-		float: left;
+		display: inline-block;
 		margin-right: 1.5em;
 		line-height: 34px;
 		cursor: pointer;
@@ -139,6 +179,23 @@
 			color: transparent;
 			overflow: hidden;
 			visibility: hidden;
+		}
+
+		&.dropdown {
+			position: absolute;
+			margin-right: 0;
+			background: white;
+			left: auto;
+			right: -130px;
+			width: 150px;
+			text-align: center;
+			border: 0px solid rgba(0, 0, 0, 0.2);
+			border-right-width: 1px;
+			border-left-width: 1px;
+
+			&:last-of-type {
+				border-bottom-width: 1px;
+			}
 		}
 
 		&.active, &:hover {
