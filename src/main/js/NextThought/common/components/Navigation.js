@@ -321,13 +321,13 @@ Ext.define('NextThought.common.components.Navigation', {
 
 		tabs = Array.prototype.slice.call(tabs);
 
-		if (barWidth <= 645) {
+		if (barWidth <= 650) {
 			numberToShow = 3;
 			shouldCollapse = true;
-		} else if (barWidth <= 745) {
+		} else if (barWidth <= 750) {
 			numberToShow = 4;
 			shouldCollapse = true;
-		} else if (barWidth <= 860) {
+		} else if (barWidth <= 865) {
 			numberToShow = 4;
 		} else {
 			numberToShow = tabs.length;

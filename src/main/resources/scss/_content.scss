@@ -5,6 +5,7 @@
 .content-navigation {
 	height: $header-height;
 	overflow: hidden;
+	min-width: 330px;
 
 	&.show-dropdown {
 		overflow: visible;
