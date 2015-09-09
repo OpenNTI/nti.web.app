@@ -128,7 +128,7 @@ Ext.define('NextThought.controller.Application', {
 		var path = '',
 			parts = fragment.split('/'),
 			subRoute = '',
-			id, state;
+			id, state, hash;
 
 		if (this.OBJECT_FRAG_ROUTE.test(fragment)) {
 			id = parts.last();
@@ -155,12 +155,18 @@ Ext.define('NextThought.controller.Application', {
 		}
 
 		if (id) {
-			id = ParseUtils.encodeForURI(id);
-			path += id;
+			id = id.split('#');
+			hash = id[1];
+			id[0] = ParseUtils.encodeForURI(id[0]);
+			path += id[0];
 		}
 
 		if (subRoute) {
 			path = Globals.trimRoute(path) + '/' + Globals.trimRoute(subRoute);
+		}
+
+		if (hash) {
+			path = Globals.trimRoute(path) + '#' + hash;
 		}
 
 		return this.handleRoute(document.title, path);
