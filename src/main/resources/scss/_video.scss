@@ -92,3 +92,16 @@
 		}
 	}
 }
+
+
+.content-video-container {
+	.content-video-curtain {
+		z-index: 1;
+	}
+
+	&.playing, .no-poster {
+		.content-video-curtain {
+			display: none;
+		}
+	}
+}

@@ -189,14 +189,19 @@ Ext.define('NextThought.app.video.OverlayedPanel', {
 			backgroundPosition: '0 0'
 		});
 
+		if (!src) {
+			this.addCls('no-poster');
+		}
+
 		this.down('box').getEl().down('.label').update(label);
 
-		this.mon(this.down('content-video').getEl(), 'click', 'play');
+		this.mon(this.el, 'click', this.play.bind(this));
 	},
 
 
 	play: function() {
 		this.fromClick = true;
+		this.addCls('playing');
 		this.down('content-video').resumePlayback(true);
 	},
 
