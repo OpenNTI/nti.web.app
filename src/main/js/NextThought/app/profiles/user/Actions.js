@@ -45,7 +45,8 @@ Ext.define('NextThought.app.profiles.user.Actions', {
 						label: 'More Info',
 						handler: this.showMoreInfo.bind(this)
 					}
-				]
+				],
+				type: 'email-verification'
 			};
 
 		this.NavActions.presentMessageBar(cfg);

@@ -171,6 +171,7 @@ Ext.define('NextThought.app.navigation.Actions', {
 	 *
 	 * Takes a config object:
 	 *
+	 * type: string // should be unique for each message. 
 	 * message: string // message or title of the message bar
 	 * iconCls: string  // the class of the icon (warning, delete, ok...),
 	 * buttons: array // action buttons to be added
@@ -185,9 +186,11 @@ Ext.define('NextThought.app.navigation.Actions', {
 	 */
 	presentMessageBar: function(cfg) {
 		var messageCmp = Ext.getCmp('message-bar'),
-			htmlEl;
+			id = cfg.type || cfg.id,
+			hasBeenSeen = !!this.store.getMessageBarItemFromSession(id),
+			htmlEl, me = this;
 
-		if (messageCmp) {
+		if (messageCmp && !hasBeenSeen) {
 			messageCmp.onceRendered
 				.then(function(){
 					messageCmp.setIcon(cfg.iconCls);
@@ -198,6 +201,10 @@ Ext.define('NextThought.app.navigation.Actions', {
 					htmlEl = Ext.query('.x-viewport')[0];
 					if (htmlEl) {
 						Ext.fly(htmlEl).addCls('msg-bar-open');
+					}
+
+					if (id) {
+						me.store.putMessageBarItemIntoSession(id, cfg);
 					}
 				});
 		}

@@ -20,5 +20,22 @@ Ext.define('NextThought.app.navigation.StateStore', {
 
 	getReturnPoint: function() {
 		return this.returnPoint;
+	},
+
+
+	putMessageBarItemIntoSession: function(id, cfg) {
+		var stateKey = 'topMessages',
+			o = TemporaryStorage.get(stateKey) || {};
+
+		o[id] = true;
+		TemporaryStorage.set(stateKey, o);
+	},
+
+
+	getMessageBarItemFromSession: function(id) {
+		var stateKey = 'topMessages',
+			o = TemporaryStorage.get(stateKey) || {};
+
+		return o[id];
 	}
 });
