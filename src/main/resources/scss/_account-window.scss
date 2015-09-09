@@ -399,10 +399,14 @@
 
 	&.info {
 		min-height: 150px;
-		height: 150px;
+		height: 160px;
 		background-color: #fcfcfc;
 		border: 1px solid rgb(206, 206, 206);			
 		box-shadow: rgba(0, 0, 0, 0.137255) 0px 2px 4px 1px, rgba(255, 255, 255, 0.498039) 0px 2px inset;
+	}
+
+	&.has-time-error{
+		height: 270px;
 	}
 
 	.header {
@@ -528,6 +532,10 @@
 		&.visible {
 			visibility: visible;
 		}
+
+		&.success {
+			color: $primary-green;
+		}
 	}
 
 	.footer{
@@ -557,6 +565,7 @@
 			font: normal 400 0.9em/40px $font;
 			text-align: center;
 			min-width: 90px;
+			color: $primary-grey;
 
 			&.confirm {
 				background-color: $primary-blue;
