@@ -278,7 +278,7 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 						due: o.get('availableEnding'),
 						completed: submission && submission.get('CreatedTime'),
 						Grade: grade,
-						grade: gradeValue && parseInt(gradeValue, 10),
+						grade: gradeValue && parseFloat(gradeValue, 10),
 						average: grade && grade.get('average'),
 						Feedback: feedback,
 						feedback: feedback && feedback.get('Items').length,
