@@ -66,6 +66,11 @@ Ext.define('NextThought.app.context.components.list.Content', {
 
 
 	setIcon: function(path) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setIcon.bind(this, path));
+			return;
+		}
+
 		var me = this,
 			iconUrl,
 			i;
