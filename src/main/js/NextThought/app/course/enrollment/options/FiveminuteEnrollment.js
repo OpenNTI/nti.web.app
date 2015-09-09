@@ -205,24 +205,10 @@ Ext.define('NextThought.app.course.enrollment.options.FiveminuteEnrollment', {
 	__getOptionDetails: function(course, option) {
 		var drop = option.OU_DropCutOffDate,
 			enroll = option.EnrollCutOffDate,
-			rv,	unsupported = Ext.isGecko;
+			rv,	unsupported = false;
 
 		drop = drop && new Date(drop);
 		enroll = enroll ? new Date(enroll) : new Date();
-
-		if (unsupported) {
-			rv = this.RV_REGEX.exec(navigator.userAgent);
-
-			rv = rv && rv[1];
-
-			rv = rv && parseFloat(rv, 10);
-
-			if (rv && rv > 36) {
-				unsupported = true;
-			} else {
-				unsupported = false;
-			}
-		}
 
 		return {
 			StartDate: course.StartDate,
