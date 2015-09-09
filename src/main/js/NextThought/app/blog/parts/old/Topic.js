@@ -50,8 +50,10 @@ Ext.define('NextThought.app.blog.parts.old.Topic', {
 			{ cls: 'avatar', style: { backgroundImage: 'url({headline.Creator:avatarURL()});'}},
 			{ cls: 'title', html: '{title}' },
 			{ cls: 'meta', cn: [
-				{ tag: 'tpl', 'if': 'showName', cn: { tag: 'span', cls: 'name link', html: '{headline.Creator}'}},
-				{ tag: 'span', cls: 'datetime', html: '{CreatedTime:ago}'},
+				{ cls: 'name-wrap', cn: [
+					{ tag: 'tpl', 'if': 'showName', cn: { tag: 'span', cls: 'name link', html: '{headline.Creator}'}},
+					{ tag: 'span', cls: 'datetime', html: '{CreatedTime:ago}'}
+				]},
 				{ tag: 'tpl', 'if': 'headline.isModifiable || showPermissions', cn: [
 					{ tag: 'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'}
 				]},
