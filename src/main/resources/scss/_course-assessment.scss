@@ -1629,6 +1629,7 @@ canvas.x-component-course-assessment {
 
 					.gradebox {
 						width: 8.1em;
+						height: 2.9em;
 
 						input {
 							width: 100%;
@@ -1771,9 +1772,9 @@ canvas.x-component-course-assessment {
 
 				.gradebox {
 					overflow: hidden;
+					height: 2.859em;
 					width: 10.5em;
 					font: normal 500 1em/1 $font;
-					border: 1px solid #dcdcdc;
 					background: #fff;
 					& > * {
 						font: normal 500 1em/1 $font;
@@ -1786,8 +1787,10 @@ canvas.x-component-course-assessment {
 
 					input {
 						width: 56%;
-						border-width: 0 1px 0 0;
-						border-right: { style: solid; color: #dcdcdc; }
+						border: 1px solid #dcdcdc !important;
+					}
+					input:focus {
+					    border-color: #B8B8B9 !important;
 					}
 					.dropdown {
 						width: 44%;
