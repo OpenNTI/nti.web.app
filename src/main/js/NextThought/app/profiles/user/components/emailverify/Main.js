@@ -21,42 +21,82 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 		]}
 	])),
 
+	layout: 'none',
+
+	cls: 'email-verification-window',
+	ui: 'nt-window',
+	minimizable: false,
+	constrain: true,
+	constrainTo: Ext.getBody(),
+	floating: true,
+	closable: true,
+	resizable: false,
+
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'header', cn: [
-			{cls: 'title', html: 'We sent a verification email to:'},
-			{cls: 'email', html: '{email}'},
-			{cls: 'sub'},
-			{cls: 'buttons', cn: [
-					{cls: 'button send-email link', html: 'Send another email'},
-					{cls: 'button link change-email', html: 'Change email address'}
-				]
-			}
-		]},
-		{cls: 'input-box', cn: [
-			{tag: 'input', cls: 'token-field', placeholder: 'Enter your verification token'},
-			{tag: 'span', cls: 'clear'}
-		]},
-		{cls: 'error-msg', html: ''},
-		{cls: 'footer', cn: [
-			{cls: 'controls', cn: [
-				{tag: 'a', cls: 'button confirm disabled', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Submit}}}'},
-				{tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Cancel}}}'}
+		{cls: 'card', cn: [
+			{cls: 'face front', cn: [
+				{ cls: 'header', cn: [
+					{cls: 'title', html: 'We sent a verification email to:'},
+					{cls: 'email', html: '{email}'},
+					{cls: 'sub'},
+					{cls: 'buttons', cn: [
+							{cls: 'button send-email link', html: 'Send another email'},
+							{cls: 'button link change-email', html: 'Change email address'}
+						]
+					}
+				]},
+				{cls: 'input-box', cn: [
+					{tag: 'input', cls: 'token-field', placeholder: 'Enter your verification token'},
+					{tag: 'span', cls: 'clear'}
+				]},
+				{cls: 'error-msg', html: ''},
+				{cls: 'footer', cn: [
+					{cls: 'controls', cn: [
+						{tag: 'a', cls: 'button confirm disabled', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Submit}}}'},
+						{tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Cancel}}}'}
+					]}
+				]}
+			]},
+			{cls: 'face back', cn: [
+				{ cls: 'header', cn: [
+					{cls: 'title', html: 'Change Email Address'},
+					{cls: 'sub'},
+					{cls: 'buttons', cn: [
+							{cls: 'button verify-email link', html: 'Go to verify email'}
+						]
+					}
+				]},
+				{cls: 'input-box', cn: [
+					{tag: 'input', cls: 'email', value: '{email}'},
+					{tag: 'span', cls: 'clear'}
+				]},
+				{cls: 'error-msg', html: ''},
+				{cls: 'footer', cn: [
+					{cls: 'controls', cn: [
+						{tag: 'a', cls: 'button confirm', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Submit}}}'},
+						{tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Cancel}}}'}
+					]}
+				]}
 			]}
 		]}
 	]),
 
 
 	renderSelectors: {
-		tokenEl: '.input-box input',
-		submitEl: '.footer .confirm',
-		cancelEl: '.footer .cancel',
-		requestLinkEl: '.buttons .send-email',
-		changeLinkEl: '.buttons .change-email',
-		titleEl: '.header .title',
-		subtitleEl: '.header .sub',
-		emailEl: '.header .email',
-		clearEl: '.input-box .clear'
+		tokenEl: '.front .input-box input',
+		submitEl: '.front .footer .confirm',
+		cancelEl: '.front .footer .cancel',
+		requestLinkEl: '.front .buttons .send-email',
+		changeLinkEl: '.front .buttons .change-email',
+		gotoVerifyEl: '.buttons .verify-email',
+		titleEl: '.front .header .title',
+		subtitleEl: '.front .header .sub',
+		emailEl: '.front .header .email',
+		clearEl: '.front .input-box .clear',
+		emailEditEl: '.back .input-box input',
+		cancelEditEl: '.back .footer .cancel',
+		confirmEditEl: '.back .footer .confirm'
 	},
 
 
@@ -77,6 +117,11 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 		this.mon(this.tokenEl, 'keyup', 'maybeEnableSubmit', this);
 		this.mon(this.requestLinkEl, 'click', this.handleVerificationRequest.bind(this));
 		this.mon(this.clearEl, 'click', this.reset.bind(this));
+		this.mon(this.changeLinkEl, 'click', this.showEmailCard.bind(this));
+		this.mon(this.gotoVerifyEl, 'click', this.showVerifyCard.bind(this));
+		this.mon(this.confirmEditEl, 'click', this.saveEmailClicked.bind(this));
+		this.mon(this.cancelEditEl, 'click', this.close.bind(this));
+
 		this.on('show', function() {
 			me.tokenEl.focus(200);
 		});
@@ -119,9 +164,7 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 
 
 	close: function() {
-		if (this.ownerCt && this.ownerCt.close) {
-			this.ownerCt.close();
-		}
+		this.destroy();
 	},
 
 
@@ -138,6 +181,47 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 		}
 
 		return Promise.reject();
+	},
+
+
+	saveEmailClicked: function(e) {
+		var emailVal = this.emailEditEl.getValue(), me = this, oldEmail = this.user && this.user.get('email');
+
+		if (Ext.isEmpty(emailVal) || !isMe(this.user) || this.user.get('email') === emailVal) {
+			return;
+		}
+
+		this.user.set('email', emailVal);
+
+		return new Promise(function(fulfill, reject) {
+			me.user.save({
+				success: function(resp) {
+					var o = resp.responseText,
+						newUser = ParseUtils.parseItems(o)[0];
+
+					//NOTE: Update the links that way in case the email changed, we request verification.
+					me.user.set('Links', newUser.get('Links'));
+					fulfill(true);
+				},
+				failure: function(resp) {
+					var msg = Ext.JSON.decode(resp.responseText, true) || {};
+
+					me.showEmailEditError(msg);
+					me.user.set('email', oldEmail);
+					reject(false);
+				}
+			});
+		});
+	},
+
+
+	showEmailCard: function() {
+		this.el.down('.card').addCls('flipped');
+	},
+
+
+	showVerifyCard: function() {
+		this.el.down('.card').removeCls('flipped');
 	},
 
 
@@ -170,11 +254,23 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 
 
 	showError: function(error) {
-		var errorEl = this.el.down('.error-msg'),
-			inputBoxEl = this.el.down('.input-box');
+		var errorEl = this.el.down('.front .error-msg'),
+			inputBoxEl = this.el.down('.front .input-box');
 		if (errorEl) {
 			errorEl.addCls('visible');
 			errorEl.update('This token is not valid.');
+			inputBoxEl.addCls('error');
+		}
+	},
+
+
+	showEmailEditError: function(msg) {
+		var errorEl = this.el.down('.back .error-msg'),
+			inputBoxEl = this.el.down('.back .input-box');
+
+		if (errorEl) {
+			errorEl.addCls('visible');
+			errorEl.update(msg.message || 'Invalid Email');
 			inputBoxEl.addCls('error');
 		}
 	},
@@ -197,30 +293,19 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 
 
 	sendEmailVerification: function(e) {
-		var me = this;
-
-		me.isVerifyingEmail = true;
-
-		return new Promise(function(fulfill, reject) {
-			$AppConfig.userObject.sendEmailVerification()
-				.then(function() {
-					delete me.isVerifyingEmail;
-					fulfill();
-				})
-				.fail(function(resp) {
-					delete me.isVerifyingEmail;
-					reject(resp);
-				});
-		});
+		return $AppConfig.userObject.sendEmailVerification();
 	},
 
 
 	handleVerificationRequest: function() {
 		var me = this;
 
+		if (me.isVerifyingEmail) { return; }
+
 		// Per Design request, we would like to simulate the sending and sent states for email verification,
 		// even if the server might respond a lot faster. That's why we're adding the time interval
 		this.requestLinkEl.update('Sending...');
+		me.isVerifyingEmail = true;
 		wait(1000)
 			.then(this.sendEmailVerification.bind(this))
 			.then(function() {
@@ -229,6 +314,7 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 				wait(1000)
 					.then(function() {
 						me.requestLinkEl.update('Send another email');
+						delete me.isVerifyingEmail;
 					});
 			})
 			.fail(function(resp) {
@@ -237,6 +323,7 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 					me.presentPendingVerification(e && e.seconds);
 				}
 				me.requestLinkEl.update('Send another email');
+				delete me.isVerifyingEmail;
 			});
 	}
 });
