@@ -519,7 +519,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 	setSearch: function(val) {
 		this.searchKey = val;
-		this.header.inputEl.dom.value = val;
+
+		if (this.header && this.header.inputEl && this.header.inputEl.dom) {
+			this.header.inputEl.dom.value = val;
+		}
 	},
 
 

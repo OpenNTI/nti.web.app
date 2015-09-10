@@ -29,7 +29,12 @@ Ext.define('NextThought.app.forums.components.forum.parts.FilterBar', {
 	afterRender: function() {
 		this.callParent(arguments);
 		this.currentSort = 'active';
-		this.searchKey = '';
+
+		if (this.searchKey) {
+			this.setSearch(this.searchKey);
+		} else {
+			this.searchKey = '';
+		}
 
 		this.searchKeyPressed = Ext.Function.createBuffered(this.searchKeyPressed, 500, this);
 
@@ -66,8 +71,8 @@ Ext.define('NextThought.app.forums.components.forum.parts.FilterBar', {
 
 	showGroupByMenu: function() {
 		var menu = this.groupByMenu, item = menu.down('[checked]');
-		if(!this.groupEl.hasCls('disabled')){
-			if(item){
+		if (!this.groupEl.hasCls('disabled')) {
+			if (item) {
 				menu.insert(0, item);
 			}
 			menu.showBy(this.groupEl, 'tl-tl');
@@ -132,6 +137,11 @@ Ext.define('NextThought.app.forums.components.forum.parts.FilterBar', {
 
 
 	setSearch: function(search) {
+		if (!this.rendered) {
+			this.searchKey = search;
+			return;
+		}
+
 		this.searchEl.dom.value = search || '';
 	},
 
