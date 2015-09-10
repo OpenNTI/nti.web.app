@@ -1201,6 +1201,10 @@ canvas.x-component-course-assessment {
 		color: white;
 		background-color: white;
 
+		html.msg-bar-open & {
+			top: 132px;
+		}
+
 		&.hidden {
 			display: none;
 		}
