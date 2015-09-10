@@ -21,6 +21,22 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 		]}
 	])),
 
+
+	supportEmailLinkTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{cls: 'support', cn: [
+			{ tag: 'span', html: 'Changing your email is not enabled on this platform. Please '},
+			{ tag: 'tpl', 'if': 'email', cn: [
+				{ tag: 'span', cls: 'link', cn: [
+					{ tag: 'a', target: '_blank', href: 'mailto:{email}', html: 'Contact support'}
+				]}
+			]},
+			{ tag: 'tpl', 'if': '!email', cn: [
+				{ tag: 'span', html: 'Contact support'}	
+			]},
+			{ tag: 'span', html: ' to update your email'}
+		]}
+	])),
+
 	cls: 'email-verify-view',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -250,7 +266,8 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 					email = profileSchema && profileSchema.email;
 
 				if(email.readonly) {
-					me.subEmailEl.update('Changing your email is not enabled on this platform. Please Contact Support to update your email');
+					me.subEmailEl.update('');
+					me.supportEmailLinkTpl.append(me.subEmailEl, {'email': Service.getSupportLinks().supportEmail});
 					me.el.down('.back .input-box').hide();
 					me.confirmEditEl.update('Done');
 					me.confirmEditEl.addCls('done');

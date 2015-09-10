@@ -427,6 +427,13 @@
 			margin-top: 15px;
 			display: inline-block;
 			margin-bottom: 5px;
+
+			.support {
+				.link a{
+					text-decoration: none;
+					color: $primary-blue;
+				}
+			}
 		}
 
 		.buttons{
