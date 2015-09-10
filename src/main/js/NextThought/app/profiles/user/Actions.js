@@ -92,7 +92,7 @@ Ext.define('NextThought.app.profiles.user.Actions', {
 	createEmailVerifyWindow: function() {
 		var me = this;
 
-		this.emailVerifyWin = Ext.widget('email-verify-view', {
+		this.emailVerifyWin = Ext.widget('email-token-window', {
 			user: $AppConfig.userObject,
 			autoShow: false,
 			onVerificationComplete: function(){

@@ -21,17 +21,7 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 		]}
 	])),
 
-	layout: 'none',
-
-	cls: 'email-verification-window',
-	ui: 'nt-window',
-	minimizable: false,
-	constrain: true,
-	constrainTo: Ext.getBody(),
-	floating: true,
-	closable: true,
-	resizable: false,
-
+	cls: 'email-verify-view',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'card', cn: [
@@ -169,7 +159,12 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 
 
 	close: function() {
-		this.destroy();
+		if(this.ownerCt && this.ownerCt.close) {
+			this.ownerCt.close();
+		}
+		else {
+			this.destroy();
+		}
 	},
 
 
@@ -179,8 +174,8 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 			return this.user.verifyEmailToken(tokenVal)
 				.then(function(resp) {
 					me.showCongrats();
-					if (me.onVerificationComplete) {
-						me.onVerificationComplete();
+					if (me.ownerCt && me.ownerCt.onVerificationComplete) {
+						me.ownerCt.onVerificationComplete();
 					}
 				});
 		}
@@ -381,6 +376,7 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 		// Per Design request, we would like to simulate the sending and sent states for email verification,
 		// even if the server might respond a lot faster. That's why we're adding the time interval
 		this.requestLinkEl.update('Sending...');
+		this.requestLinkEl.addCls('sending');
 		me.isVerifyingEmail = true;
 		wait(1000)
 			.then(this.sendEmailVerification.bind(this))
@@ -393,6 +389,8 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 				wait(1000)
 					.then(function() {
 						me.requestLinkEl.update('Send another email');
+						me.requestLinkEl.removeCls('sending');
+
 						delete me.isVerifyingEmail;
 					});
 			})
@@ -402,6 +400,8 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 					me.presentPendingVerification(e && e.seconds);
 				}
 				me.requestLinkEl.update('Send another email');
+				me.requestLinkEl.removeCls('sending');
+
 				delete me.isVerifyingEmail;
 			});
 	}
