@@ -129,6 +129,9 @@ Ext.define('NextThought.app.mediaviewer.components.Toolbar', {
 
 	showVideoPlayerPicker: function() {
 		console.log('clicked on show the video player picker..');
+		
+		// No menu, if we don't have a transcript.
+		if (this.noTranscript) { return; }
 
 		if (!this.videoPicker) {
 			this.createViewPlayerPicker();
