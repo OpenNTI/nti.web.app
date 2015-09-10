@@ -55,23 +55,21 @@ Ext.define('NextThought.app.chat.Index', {
 			'show-whiteboard': this.showWhiteboard.bind(this),
 			'notify': this.handleTabNotifications.bind(this),
 			'show-all-gutter-contacts': this.showAllOnlineContacts.bind(this),
+			'hide-all-gutter-contacts': this.hideAllOnlineContacts.bind(this),
 			'toggle-gutter': this.toggleGutter.bind(this)
 		});
-
-		Ext.EventManager.onWindowResize(this.onWindowResize, this);
 	},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
 		this.gutterWin = Ext.widget('chat-gutter-window', {renderTo: this.gutter, autoShow: true});
-		this.onWindowResize();
 	},
 
 
 	showAllOnlineContacts: function(gutter) {
 		var me = this;
-		if(!this.listWin) {
+		if (!this.listWin) {
 			this.listWin = Ext.widget('chat-gutter-list-view', {
 				store: gutter && gutter.store,
 				renderTo: this.listEl,
@@ -81,10 +79,14 @@ Ext.define('NextThought.app.chat.Index', {
 			});
 
 			gutter.gutterList = this.listWin;
-			gutter.hide();
 		}
 
-		this.listWin.show();
+		this.addCls('show-all');
+	},
+
+
+	hideAllOnlineContacts: function() {
+		this.removeCls('show-all');
 	},
 
 
@@ -100,17 +102,14 @@ Ext.define('NextThought.app.chat.Index', {
 	},
 
 	toggleGutter: function() {
-		var isGutterVisible = this.gutterWin && this.gutterWin.isVisible(),
-			isListVisible = this.listWin && this.listWin.isVisible();
+		var active = this.hasCls('show-gutter');
 
-		if (!isGutterVisible && !isListVisible) {
-			this.gutterWin.show();
-		}
-		else if (!isGutterVisible && isListVisible) {
-			this.listWin.hide();
-		}
-		else if (isGutterVisible && !isListVisible) {
-			this.gutterWin.hide();
+		if (active) {
+			this.ChatStore.fireEvent('gutter-deactive');
+			this.removeCls('show-gutter');
+		} else {
+			this.ChatStore.fireEvent('gutter-active');
+			this.addCls('show-gutter');
 		}
 	},
 
@@ -141,7 +140,7 @@ Ext.define('NextThought.app.chat.Index', {
 	},
 
 
-	handleTabNotifications: function (win, msg) {
+	handleTabNotifications: function(win, msg) {
 		if (win && win.isVisible() ||
 			this.gutterWin && this.gutterWin.isVisible() ||
 			this.listWin && this.listWin.isVisible()) {

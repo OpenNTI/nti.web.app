@@ -62,13 +62,14 @@ Ext.define('NextThought.app.chat.components.gutter.List', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.on('itemclick', this.onItemClicked.bind(this));
+		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
 	},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.mon(this.closeBtn, 'click', this.hide.bind(this));
+		this.mon(this.closeBtn, 'click', this.hideOtherContacts.bind(this));
 		this.mon(this.contactsEl, 'click', this.goToContacts.bind(this));
 		this.addToggleListeners();
 		this.gutter.on({
@@ -111,6 +112,11 @@ Ext.define('NextThought.app.chat.components.gutter.List', {
 
 	goToContacts: function(e) {
 		NextThought.app.navigation.Actions.pushRootRoute('Contacts', '/contacts/');
+	},
+
+
+	hideOtherContacts: function() {
+		this.ChatStore.fireEvent('hide-all-gutter-contacts', this);
 	},
 
 

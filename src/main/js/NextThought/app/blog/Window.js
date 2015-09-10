@@ -104,6 +104,8 @@ Ext.define('NextThought.app.blog.Window', {
 		var me = this,
 			blogPostCmp = this.down('profile-blog-post');
 
+		me.headerCmp.showPathFor(me.record, 'Thoughts', 3);
+
 		function startTimer() {
 			if (!me.hasCurrentTimer) {
 				me.hasCurrentTimer = true;

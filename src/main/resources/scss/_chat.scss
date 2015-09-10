@@ -842,6 +842,26 @@
 	}
 }
 
+.chat-container {
+	.chat-gutter-window {
+		display: block;
+	}
+
+	.chat-gutter-list-window {
+		display: none;
+	}
+
+	&.show-all {
+		.chat-gutter-window {
+			display: none;
+		}
+
+		.chat-gutter-list-window {
+			display: block;
+		}
+	}
+}
+
 .chat-gutter-window, .chat-gutter-list-window {
 	position: fixed;
 	top: 100px;
@@ -855,6 +875,12 @@
 
 	html.msg-bar-open & {
 		top: 140px;
+	}
+
+	@media #{$hide-chat-break-point} {
+		.chat-container:not(.show-gutter) & {
+			display: none;
+		}
 	}
 
   	.presence-gutter-entry {
@@ -1027,14 +1053,19 @@
 
 
 .chat-notifications-icon {
-	width: 70px;
+	width: 50px;
 	cursor: pointer;
 	height: $header-height;
 
-	@include icon('rhp-contacts', $side: after, $top: 23px, $left: 25px);
+	@include icon('rhp-contacts', $side: after, $top: 50%, $left: 50%);
+
+	&::after {
+		margin-top: -10px;
+		margin-left: -15px;
+	}
 
 	&:hover, &.gutter-showing {
-		@include icon('rhp-contacts_active', $side: after, $top: 23px, $left: 25px);
+		@include icon('rhp-contacts_active', $side: after, $top: 50%, $left: 50%);
 	}
 
 	&[data-badge]:not([data-badge="0"])::before {
@@ -1060,7 +1091,7 @@
 	}
 
 	.main-navigation.dark-nav & {
-		@include icon('rhp-contacts-white', $side: after, $top: 23px, $left: 25px);
+		@include icon('rhp-contacts-white', $side: after, $top: 50%, $left: 50%);
 
 		&::after {
 			opacity: 0.8;

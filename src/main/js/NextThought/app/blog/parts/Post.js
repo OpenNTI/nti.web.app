@@ -32,7 +32,7 @@ Ext.define('NextThought.app.blog.parts.Post', {
 		var r, headline = this.record.get('headline');
 
 		this.renderData = Ext.apply(this.renderData || {},{
-			showName: false,
+			showName: true,
 			headerCls: 'blog-post',
 			path: 'Thoughts',
 			showPermissions: true

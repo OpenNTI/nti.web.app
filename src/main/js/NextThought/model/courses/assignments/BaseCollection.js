@@ -19,6 +19,9 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 		fromJson: function(assignments, nonAssignments, gradeBook, historyURL) {
 			if (!assignments) { return null; }
 
+			assignments = assignments.Items || assignments;
+			nonAssignments = nonAssignments && (nonAssignments.Items || nonAssignments);
+
 			var assignmentMimeType = this.ASSIGNMENT,
 				timedAssignmentMimeType = this.TIMEDASSIGNMENT,
 				href = assignments.href, hitmap = {}, nodemap = {};

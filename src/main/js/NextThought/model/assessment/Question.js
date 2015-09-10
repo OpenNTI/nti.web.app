@@ -11,7 +11,8 @@ Ext.define('NextThought.model.assessment.Question', {
 		{ name: 'content', type: 'auto' },
 		{ name: 'parts', type: 'arrayItem' },
 		{ name: 'wordbank', type: 'singleItem' },
-		{ name: 'containerId', type: 'string'}
+		{ name: 'containerId', type: 'string'},
+		{ name: 'ContentRoot', type: 'string'}
 	],
 
 	getVideos: function() {

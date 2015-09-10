@@ -4,6 +4,12 @@
 
 .content-navigation {
 	height: $header-height;
+	overflow: hidden;
+	min-width: 330px;
+
+	&.show-dropdown {
+		overflow: visible;
+	}
 
 	.content-container {
 		float: left;
@@ -42,6 +48,7 @@
 	.content {
 		float: left;
 		position: relative;
+		height: $header-height;
 
 		.active-content{
 			font: 600 1.375em/1 $font;
@@ -108,6 +115,45 @@
 			position: absolute;
 			opacity: 1;
 			transition: width 0.5s, left 0.5s, opacity 0.5s 0.5s;
+
+			&.hidden {
+				display: none;
+			}
+		}
+	}
+
+	.tab-container {
+		display: inline-block;
+		position: relative;
+	}
+
+	.show-more {
+		position: absolute;
+		right: 0;
+		bottom: 10px;
+		display: none;
+		cursor: pointer;
+		width: 22px;
+		text-align: center;
+
+		&::before {
+			content: '\b7\b7\b7';
+			line-height: 20px;
+		}
+
+		&.active, &:hover {
+			&::before {
+				font-weight: 600;
+				color: $primary-blue;
+			}
+		}
+	}
+
+
+
+	&.has-more {
+		.show-more {
+			display: block;
 		}
 	}
 
@@ -119,7 +165,7 @@
 	}
 
 	li.tab {
-		float: left;
+		display: inline-block;
 		margin-right: 1.5em;
 		line-height: 34px;
 		cursor: pointer;
@@ -138,6 +184,23 @@
 			color: transparent;
 			overflow: hidden;
 			visibility: hidden;
+		}
+
+		&.dropdown {
+			position: absolute;
+			margin-right: 0;
+			background: white;
+			left: auto;
+			right: -130px;
+			width: 150px;
+			text-align: center;
+			border: 0px solid rgba(0, 0, 0, 0.2);
+			border-right-width: 1px;
+			border-left-width: 1px;
+
+			&:last-of-type {
+				border-bottom-width: 1px;
+			}
 		}
 
 		&.active, &:hover {
@@ -186,7 +249,7 @@
 		}
 	}
 
-	&.showing, &.removing {
+	&.showing {
 		.back {
 			opacity: 0;
 			left: -5px;
@@ -202,49 +265,49 @@
 		}
 	}
 
-	&.removing {
-		li.tab {
-			&[data-index="1"] {
-				transition-delay: 0s;
-			}
+	// &.removing {
+	// 	li.tab {
+	// 		&[data-index="1"] {
+	// 			transition-delay: 0s;
+	// 		}
 
-			&[data-index="2"] {
-				transition-delay: 0.1s;
-			}
+	// 		&[data-index="2"] {
+	// 			transition-delay: 0.1s;
+	// 		}
 
-			&[data-index="3"] {
-				transition-delay: 0.2s;
-			}
+	// 		&[data-index="3"] {
+	// 			transition-delay: 0.2s;
+	// 		}
 
-			&[data-index="4"] {
-				transition-delay: 0.3s;
-			}
+	// 		&[data-index="4"] {
+	// 			transition-delay: 0.3s;
+	// 		}
 
-			&[data-index="5"] {
-				transition-delay: 0.4s;
-			}
+	// 		&[data-index="5"] {
+	// 			transition-delay: 0.4s;
+	// 		}
 
-			&[data-index="6"] {
-				transition-delay: 0.5s; 
-			}
+	// 		&[data-index="6"] {
+	// 			transition-delay: 0.5s; 
+	// 		}
 
-			&[data-index="7"] {
-				transition-delay: 0.6s; 
-			}
+	// 		&[data-index="7"] {
+	// 			transition-delay: 0.6s; 
+	// 		}
 
-			&[data-index="8"] {
-				transition-delay: 0.7s; 
-			}
+	// 		&[data-index="8"] {
+	// 			transition-delay: 0.7s; 
+	// 		}
 
-			&[data-index="9"] {
-				transition-delay: 0.8s;
-			}
+	// 		&[data-index="9"] {
+	// 			transition-delay: 0.8s;
+	// 		}
 
-			&[data-index="10"] {
-				transition-delay: 0.9s; 
-			}
-		}
-	}
+	// 		&[data-index="10"] {
+	// 			transition-delay: 0.9s; 
+	// 		}
+	// 	}
+	// }
 }
 
 

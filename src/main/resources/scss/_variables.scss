@@ -50,4 +50,7 @@ $highlight-colors: (
 	('blue',#3FB3F6,#CFECFD)
 ) !default;
 
+$hide-chat-break-point: "only screen and (max-width: 1200px)";
+$show-chat-break-point: "only screen and (min-width: 1200px)";
+
 @import "common-mixins";

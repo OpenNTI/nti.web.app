@@ -76,7 +76,9 @@ Ext.define('NextThought.app.library.courses.Current', {
 			var aVal = a.get('CreatedTime'),
 				bVal = b.get('CreatedTime');
 
-				return aVal > bVal ? 1 : aVal === bVal ? 0 : -1;
+				//Since we want the most recent enrollments to be at the, sort the lower value
+				//to the higher index
+				return aVal > bVal ? -1 : aVal === bVal ? 0 : 1;
 		}
 
 		current.sort(sort);

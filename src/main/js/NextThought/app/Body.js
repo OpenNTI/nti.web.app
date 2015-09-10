@@ -333,6 +333,7 @@ Ext.define('NextThought.app.Body', {
 
 	setObjectActive: function(route, subRoute) {
 		var me = this,
+			hash = route.hash,
 			id = route.params.id;
 
 		function doNavigate(obj, route) {
@@ -344,6 +345,10 @@ Ext.define('NextThought.app.Body', {
 
 			if (hasWindow) {
 				path = Globals.trimRoute(path) + '/object/' + objId;
+			}
+
+			if (hash) {
+				path = Globals.trimRoute(path) + '#' + hash;
 			}
 
 			me.el.unmask();

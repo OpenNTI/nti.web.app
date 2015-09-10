@@ -231,6 +231,7 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 		if (headers.length) {
 			Ext.data.Store.prototype.add.call(s, headers);
+			s.sort();
 			this.refresh();
 		}
 	},

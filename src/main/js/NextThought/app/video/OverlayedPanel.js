@@ -7,6 +7,7 @@ Ext.define('NextThought.app.video.OverlayedPanel', {
 	requires: [
 		'NextThought.util.Dom',
 		'NextThought.model.PlaylistItem',
+		'NextThought.model.resolvers.VideoPosters',
 		'NextThought.app.video.Video',
 		'NextThought.app.library.Actions'
 	],
@@ -157,11 +158,20 @@ Ext.define('NextThought.app.video.OverlayedPanel', {
 
 
 	fillVideo: function(index) {
-		var id = this.data['attribute-data-ntiid'],
-			poster = index[id].sources[0].poster,
+		var me = this,
+			id = me.data['attribute-data-ntiid'],
+			source = index[id].sources[0],
+			poster = source.poster,
 			label = index[id].title;
 
-		this.setBackground(poster, label);
+		if (poster) {
+			me.setBackground(poster, label);
+		} else {
+			NextThought.model.resolvers.VideoPosters.resolveForSource(source)
+				.then(function(imgs) {
+					me.setBackground(imgs.poster, label);
+				});
+		}
 	},
 
 
@@ -179,14 +189,19 @@ Ext.define('NextThought.app.video.OverlayedPanel', {
 			backgroundPosition: '0 0'
 		});
 
+		if (!src) {
+			this.addCls('no-poster');
+		}
+
 		this.down('box').getEl().down('.label').update(label);
 
-		this.mon(this.down('content-video').getEl(), 'click', 'play');
+		this.mon(this.el, 'click', this.play.bind(this));
 	},
 
 
 	play: function() {
 		this.fromClick = true;
+		this.addCls('playing');
 		this.down('content-video').resumePlayback(true);
 	},
 

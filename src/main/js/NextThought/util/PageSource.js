@@ -55,5 +55,12 @@ Ext.define('NextThought.util.PageSource', {
 
 	getPreviousTitle: function() {
 		return this.previousTitle;
+	},
+
+	getNextPrecache: function() {
+	},
+
+
+	getPreviousPrecache: function() {
 	}
 });

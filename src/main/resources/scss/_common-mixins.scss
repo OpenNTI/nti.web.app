@@ -26,6 +26,12 @@
 	flex: $flex;
 }
 
+@mixin flexBasis($basis: auto) {
+	-webkit-flex-basis: $basis;
+	-ms-flex-basis: $basis;
+	flex-basis: $basis;
+}
+
 @mixin blur-effect() {
 	filter: url(#blur-effect);//moz
 	filter: blur(add = 0, direction = 0, strength = 10);//IE

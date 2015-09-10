@@ -24,10 +24,12 @@ Ext.define('NextThought.app.navigation.Index', {
 			{cls: 'back'}
 		]},
 		{cls: 'nav-container'},
-		{cls: 'identity-container'},
-		{cls: 'notification-container'},
-		{cls: 'chat-notification-container'},
-		{cls: 'search-container'}
+		{cls: 'search-container'},
+		{cls: 'icons', cn: [
+			{cls: 'chat-notification-container'},
+			{cls: 'notification-container'},
+			{cls: 'identity-container'}
+		]}
 	]),
 
 
@@ -49,8 +51,7 @@ Ext.define('NextThought.app.navigation.Index', {
 
 		this.mon(this.NavStore, {
 			'update-nav': this.updateNav.bind(this),
-			'set-active-content': this.setActiveContent.bind(this),
-			'show-chat-tab': this.maybeShowChatTab.bind(this)
+			'set-active-content': this.setActiveContent.bind(this)
 		});
 	},
 
@@ -86,13 +87,14 @@ Ext.define('NextThought.app.navigation.Index', {
 			cmp.render(me.navContainerEl);
 
 			me.nav_cmp = cmp;
+			me.onWindowResize();
 		}
 
 		if (this.nav_cmp && this.nav_cmp.xtype === cmp.xtype) {
 			return;
 		}
 
-		this.__removeNavCmp()
+		return this.__removeNavCmp()
 			.then(render.bind(null, true));
 	},
 
@@ -105,10 +107,18 @@ Ext.define('NextThought.app.navigation.Index', {
 		if (config && config.cmp) {
 			this.__renderNavCmp(config.cmp);
 			this.removeCls('no-nav');
+			this.addCls('has-nav');
 			this.searchCmp.isActive = true;
 		} else {
+			this.addCls('removing-nav');
+
 			this.__removeNavCmp();
-			this.addCls('no-nav');
+
+			wait(300)
+				.then(this.addCls.bind(this, 'no-nav'))
+				.then(this.removeCls.bind(this, 'has-nav'))
+				.then(this.removeCls.bind(this, 'removing-nav'));
+
 			this.searchCmp.isActive = false;
 		}
 
@@ -141,6 +151,8 @@ Ext.define('NextThought.app.navigation.Index', {
 				delete this.searchCmp.noRouteOnSearch;
 			}
 		}
+
+		this.onWindowResize();
 	},
 
 
@@ -206,17 +218,44 @@ Ext.define('NextThought.app.navigation.Index', {
 			pushRootRoute: this.pushRoute.bind(this),
 			onSearchFocus: this.onSearchFocus.bind(this),
 			onSearchBlur: this.onSearchBlur.bind(this),
-			noRouteOnSearch: this.noRouteOnSearch
+			noRouteOnSearch: this.noRouteOnSearch,
+			containerCmp: this.searchEl
+		});
+
+		this.chatCmp = NextThought.app.chat.components.gutter.Tab.create({
+			setMenuOpen: this.setState.bind(this, {active: 'chatTabCmp'}),
+			setMenuClosed: this.setState.bind(this, {}),
+			pushRootRoute: this.pushRoute.bind(this)
 		});
 
 		this.identityCmp.render(this.identityEl);
 		this.notificationCmp.render(this.notificationEl);
 		this.searchCmp.render(this.searchEl);
+		this.chatCmp.render(this.chatNotifyEl);
 
 		this.on('destroy', 'destroy', this.identityCmp);
 
 		this.mon(this.brandingEl, 'click', this.gotoLibrary.bind(this));
 		this.mon(this.backEl, 'click', this.goBack.bind(this));
+
+		Ext.EventManager.onWindowResize(this.onWindowResize.bind(this));
+	},
+
+
+	onWindowResize: function(height, width) {
+		var shouldCollapseSearch = false,
+			width = this.navContainerEl.getWidth(),
+			bar = Ext.Element.getViewportWidth() - this.brandingEl.getWidth();
+
+		if (this.nav_cmp && this.nav_cmp.maybeCollapse) {
+			shouldCollapseSearch = this.nav_cmp.maybeCollapse(width, bar);
+		}
+
+		if (shouldCollapseSearch) {
+			this.searchEl.addCls('collapsed');
+		} else {
+			this.searchEl.removeCls('collapsed');
+		}
 	},
 
 
@@ -255,53 +294,6 @@ Ext.define('NextThought.app.navigation.Index', {
 
 	onSearchBlur: function() {
 		this.removeCls('search-focused');
-	},
-
-
-	maybeShowChatTab: function() {
-		var viewportWidth = Ext.Element.getViewportWidth(),
-			minViewportWidth = NextThought.app.chat.Index.MIN_VIEWPORT_WIDTH;
-
-		if (viewportWidth <= minViewportWidth && !this.hasCls('has-chat-tab')) {
-			this.showChatTab();
-		}
-		else if (viewportWidth > minViewportWidth && this.hasCls('has-chat-tab')) {
-			this.hideChatTab();
-		}
-	},
-
-
-	showChatTab: function() {
-		var me = this;
-
-		if (!this.chatTabCmp) {
-			this.chatTabCmp = NextThought.app.chat.components.gutter.Tab.create({
-				setMenuOpen: this.setState.bind(this, {active: 'chatTabCmp'}),
-				setMenuClosed: this.setState.bind(this, {}),
-				pushRootRoute: this.pushRoute.bind(this),
-				renderTo: this.chatNotifyEl
-			});
-		}
-
-		this.addCls('has-chat-tab');
-		wait()
-			.then(function() {
-				var gutterContainer = Ext.getCmp('chat-window'),
-					gutterWin = gutterContainer && gutterContainer.gutterWin,
-					listWin = gutterContainer.listWin && gutterContainer.listWin;
-
-				if ((gutterWin && gutterWin.isVisible()) || (listWin && listWin.isVisible())) {
-					me.chatTabCmp.addCls('gutter-showing');
-				}
-				else {
-					me.chatTabCmp.removeCls('gutter-showing');
-				}
-			});
-	},
-
-
-	hideChatTab: function() {
-		this.removeCls('has-chat-tab');
 	},
 
 

@@ -7,7 +7,9 @@ Ext.define('NextThought.common.components.Navigation', {
 
 	cls: 'content-navigation',
 
-	tabsTpl: new Ext.XTemplate(Ext.DomHelper.markup(
+	TAB_MARGIN: 35, //TODO: figure out how to now have this hard coded
+
+	tabsTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'ul', cls: 'tabs', cn: [
 			{tag: 'tpl', 'for': 'tabs', cn: [
 				{
@@ -22,15 +24,18 @@ Ext.define('NextThought.common.components.Navigation', {
 					html: '{text}'
 				}
 			]}
-		]}
-	)),
+		]},
+		{cls: 'show-more'}
+	])),
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'content-container', cn: [
 			{cls: 'content', cn: [
 				{cls: 'active-content', html: ''},
 				{cls: 'quick-links disabled', html: ''},
-				{cls: 'tab-container'},
+				{cls: 'wrapper', cn: [
+					{cls: 'tab-container'}
+				]},
 				{cls: 'active-tab'}
 			]}
 		]}
@@ -50,10 +55,14 @@ Ext.define('NextThought.common.components.Navigation', {
 
 		this.mon(this.tabContainerEl, 'click', this.onTabClick.bind(this));
 		this.mon(this.quickLinksEl, 'click', this.onQuickLinksClicked.bind(this));
+		this.mon(Ext.getBody(), 'click', this.maybeHideDropdown.bind(this));
 
 		if (this.tabs) {
 			this.setTabs(this.tabs, true);
 		}
+
+		wait()
+			.then(this.maybeCollapse.bind(this));
 	},
 
 	/**
@@ -156,9 +165,11 @@ Ext.define('NextThought.common.components.Navigation', {
 
 		function alignCurrentTab() {
 			//if for some reason the element was removed before we could call this
-			if (!me.activeTabEl) { return; }
+			if (!me.activeTabEl || !active) { return; }
 			active = active.getBoundingClientRect();
 			container = container.getBoundingClientRect();
+
+			me.maybeCollapse();
 
 			me.activeTabEl.setStyle({
 				width: active.width + 'px',
@@ -169,7 +180,7 @@ Ext.define('NextThought.common.components.Navigation', {
 		container.dom.innerHTML = '';
 
 		tabs = me.tabsTpl.append(container, {tabs: tabs}, true);
-		tabs = tabs && tabs.dom;
+		tabs = container && container.dom;
 		active = tabs && tabs.querySelector('.tab.active');
 		container = container && container.dom;
 
@@ -180,6 +191,8 @@ Ext.define('NextThought.common.components.Navigation', {
 		} else {
 			alignCurrentTab();
 		}
+
+		me.maybeCollapse();
 	},
 
 
@@ -204,7 +217,29 @@ Ext.define('NextThought.common.components.Navigation', {
 	},
 
 
+	maybeHideDropdown: function(e) {
+		if (!e.getTarget('.content-navigation')) {
+			this.hideDropdown();
+		}
+	},
+
+
+	toggleDropdown: function() {
+		this[this.hasCls('show-dropdown') ? 'removeCls' : 'addCls']('show-dropdown');
+	},
+
+
+	hideDropdown: function() {
+		this.removeCls('show-dropdown');
+	},
+
+
 	onTabClick: function(e) {
+		if (e.getTarget('.show-more')) {
+			this.toggleDropdown();
+			return;
+		}
+
 		var tab = e.getTarget('.tab'),
 			route = tab && tab.getAttribute('data-route'),
 			subRoute = tab && tab.getAttribute('data-subroute'),
@@ -213,6 +248,8 @@ Ext.define('NextThought.common.components.Navigation', {
 		route = Globals.trimRoute(route);
 		subRoute = Globals.trimRoute(subRoute);
 		root = Globals.trimRoute(root);
+
+		this.hideDropdown();
 
 		if (!tab || !this.bodyView.onTabChange) { return; }
 
@@ -242,5 +279,76 @@ Ext.define('NextThought.common.components.Navigation', {
 			this.__quickLinkMenu.el.dom.style.top = rect.bottom + 'px';
 			this.__quickLinkMenu.el.dom.style.left = rect.left + 'px';
 		}
+	},
+
+
+	maybeCollapse: function(navWidth, barWidth) {
+		barWidth = barWidth || this.barWidth;
+		this.barWidth = barWidth;
+
+		if (!this.el) { return; }
+
+		var tabs = this.el.dom.querySelectorAll('li.tab'),
+			activeTabEl = this.activeTabEl,
+			seeMoreEl = this.el.dom.querySelector('.show-more'),
+			shouldCollapse = false, numberToShow, dropdowns = 0;
+
+		function collapse(li) {
+			if (!li.classList.contains('dropdown')) {
+				li.classList.add('dropdown');
+			}
+
+			if (li.classList.contains('active')) {
+				seeMoreEl.classList.add('active');
+				activeTabEl.addCls('hidden');
+			}
+
+			li.style.top = (35 + (dropdowns * 35)) + 'px';
+			dropdowns += 1;
+		}
+
+		function unCollapse(li) {
+			if (li.classList.contains('active')) {
+				seeMoreEl.classList.remove('active');
+				activeTabEl.removeCls('hidden');
+			}
+
+			if (!li.classList.contains('dropdown')) { return; }
+
+			li.classList.remove('dropdown');
+			li.style.top = null;
+		}
+
+		tabs = Array.prototype.slice.call(tabs);
+
+		if (barWidth <= 650) {
+			numberToShow = 3;
+			shouldCollapse = true;
+		} else if (barWidth <= 750) {
+			numberToShow = 4;
+			shouldCollapse = true;
+		} else if (barWidth <= 865) {
+			numberToShow = 4;
+		} else {
+			numberToShow = tabs.length;
+		}
+
+		console.log('Number To Show: ', numberToShow);
+
+		tabs.forEach(function(tab, i) {
+			if (i + 1 <= numberToShow) {
+				unCollapse(tab);
+			} else {
+				collapse(tab);
+			}
+		});
+
+		if (numberToShow < tabs.length) {
+			this.addCls('has-more');
+		} else {
+			this.removeCls('has-more');
+		}
+
+		return shouldCollapse;
 	}
 });
