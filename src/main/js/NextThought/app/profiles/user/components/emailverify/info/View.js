@@ -34,5 +34,5 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.info.View', {
 		if (this.ownerCt && this.ownerCt.close) {
 			this.ownerCt.close();
 		}
-	},
+	}
 });
