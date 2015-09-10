@@ -273,7 +273,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 			this.unansweredEl.update('All questions answered.');
 		} else {
 			this.unansweredEl.removeCls('good');
-			this.unansweredEl.update(Ext.util.Format.plural(submitState.unanswered, 'question') + ' unansered.');
+			this.unansweredEl.update(Ext.util.Format.plural(submitState.unanswered, 'question') + ' unanswered.');
 		}
 	},
 
