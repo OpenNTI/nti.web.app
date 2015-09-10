@@ -190,6 +190,30 @@ Ext.define('NextThought.common.ux.ImageZoomView', {
 	}, 80),
 
 
+	center: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.center.bind(this));
+			return;
+		}
+
+		var dom = this.el && this.el.dom,
+			myHeight = this.getHeight() + 35,//my height + the close button
+			myWidth = this.getWidth() + 35,//my width + the close button
+			viewHeight = Ext.Element.getViewHeight(),
+			viewWidth = Ext.Element.getViewWidth(),
+			top, left;
+
+		top = (viewHeight - myHeight) / 2;
+		left = (viewWidth - myWidth) / 2;
+
+		top = Math.max(top, 25);//account for the close button
+		left = Math.max(left, 0);
+
+		dom.style.top = top + 'px';
+		dom.style.left = left + 'px';
+	},
+
+
 	openPresentation: function(e) {
 		this.close();
 		var w = this.ownerCmp && this.ownerCmp.up('window');
