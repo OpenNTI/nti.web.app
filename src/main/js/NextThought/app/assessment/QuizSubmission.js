@@ -187,7 +187,7 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 	moveToSubmitted: function() {
 		var isAssignment = !!this.questionSet.associatedAssignment,
 			assessmentReader = this.reader.getAssessment(),
-			allowReset = assessmentReader.shouldAllowReset();
+			allowReset = assessmentReader.shouldStudentAllowReset();
 
 		//if we aren't an assignment and we are already marked submitted don't do it again
 		if (!isAssignment && this.isSubmitted()) {
@@ -380,7 +380,7 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 		//if we are in an assignment that allows itself to be reset and
 		//keep answers is true, which means we are resetting from a submitted state
 		//as opposed to clearing out the current answers
-		if (isAssignment && assessmentReader && assessmentReader.shouldAllowReset() && keepAnswers) {
+		if (isAssignment && assessmentReader && assessmentReader.shouldStudentAllowReset() && keepAnswers) {
 			return assessmentReader.resetAssignment()
 				.then(function(deleted) {
 					if (deleted) {
@@ -461,7 +461,7 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 	beforeSaveProgress: function() {
 		var assessmentReader = this.reader.getAssessment();
 
-		if (this.isInstructor) { return ; }
+		if (this.isInstructor) { return; }
 		assessmentReader.showSavingProgress();
 	},
 

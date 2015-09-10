@@ -421,13 +421,16 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 	},
 
 
-	shouldAllowReset: function() {
+	shouldStudentAllowReset: function() {
 		var history,
 			injectedHistory = this.injectedAssignmentHistory,
 			allow = true;
 
+		//instructors don't get the reset option here
+		if (this.isInstructorProspective) {
+			allow = false;
 		//if we have an assignment but not an assignment history default to false
-		if (this.injectedAssignment && !this.injectedAssignmentHistory) {
+		} else if (this.injectedAssignment && !this.injectedAssignmentHistory) {
 			allow = false;
 		} else if (this.injectedAssignmentHistory) {
 			//otherwise if the injected history has allowReset allow it
