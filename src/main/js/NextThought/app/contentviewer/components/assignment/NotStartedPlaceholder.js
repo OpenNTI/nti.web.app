@@ -85,7 +85,7 @@ Ext.define('NextThought.app.contentviewer.components.assignment.NotStartedPlaceh
 		var title = this.assignment.get('title'),
 			start = this.assignment.get('availableBeginning');
 
-		start = start && Ext.Date.format(start, '\\a\\t g:ia \\o\\n F n, Y');
+		start = start && Ext.Date.format(start, '\\a\\t g:ia \\o\\n F j, Y');
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			title: title,
