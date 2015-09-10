@@ -197,6 +197,11 @@ Ext.define('NextThought.app.contentviewer.Index', {
 	},
 
 
+	beforeRouteChange: function() {
+		return this.reader && this.reader.beforeRouteChange();
+	},
+
+
 	getLocation: function() {
 		return this.reader.getLocation();
 	},

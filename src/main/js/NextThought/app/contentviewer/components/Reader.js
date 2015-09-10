@@ -327,6 +327,13 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 	},
 
 
+	beforeRouteChange: function() {
+		var assessment = this.getAssessment();
+
+		return assessment.beforeRouteChange();
+	},
+
+
 	onNavigationAborted: function(resp, ntiid) {
 		this.splash.removeCls('initial');
 	},

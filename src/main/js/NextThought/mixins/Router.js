@@ -267,5 +267,20 @@ Ext.define('NextThought.mixins.Router', {
 		var activeItem = this.getActiveItem();
 
 		return activeItem && activeItem.allowNavigation ? activeItem.allowNavigation() : true;
+	},
+
+
+	/**
+	 * A function that is called before the route changes, at this point you can't stop it
+	 * and the navigation doesn't wait on any async actions.
+	 *
+	 * @override
+	 */
+	beforeRouteChange: function() {
+		var activeItem = this.getActiveItem();
+
+		if (activeItem && activeItem.beforeRoute) {
+			activeItem.beforeRouteChange();
+		}
 	}
 });

@@ -22,6 +22,11 @@ Ext.define('NextThought.app.course.assessment.components.Assignment', {
 	},
 
 
+	beforeRouteChange: function() {
+		return this.reader && this.reader.beforeRouteChange();
+	},
+
+
 	handleSubmission: function(assignmentId, historyItemLink) {
 		if (this.onSubmission) {
 			this.onSubmission(assignmentId, historyItemLink);

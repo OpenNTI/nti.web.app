@@ -364,6 +364,11 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 	},
 
 
+	beforeRouteChange: function() {
+		this.submission.beforeRouteChange();
+	},
+
+
 	showSavingProgress: function() {
 		if (this.progressToast && !this.progressToast.el.isDestroyed) {
 			console.warn('Toast already open');

@@ -220,6 +220,8 @@ Ext.define('NextThought.controller.Application', {
 					return;
 				}
 
+				body.beforeRouteChange();
+
 				body.handleRoute(r, p)
 					.then(fulfill, reject);
 			});

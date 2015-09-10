@@ -59,10 +59,10 @@ Ext.define('NextThought.model.assessment.QuestionSet', {
 
 
 	setProgress: function(question, input) {
-		if(input.isDestroyed){
+		if (input.isDestroyed) {
 			return;
 		}
-		
+
 		var id = question.getId(),
 			values = this.progress[id] || [],
 			value = input.getValue();

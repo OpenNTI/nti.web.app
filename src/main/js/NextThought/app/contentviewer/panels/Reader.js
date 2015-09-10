@@ -311,6 +311,13 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	},
 
 
+	beforeRouteChange: function() {
+		var reader = this.getReaderContent();
+
+		return reader && reader.beforeRouteChange();
+	},
+
+
 	doNavigation: function(title, route, precache) {
 		this.handleNavigation(title, route, precache);
 	},

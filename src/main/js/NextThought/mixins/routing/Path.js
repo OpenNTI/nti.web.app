@@ -156,7 +156,7 @@ Ext.define('NextThought.mixins.routing.Path', {
 
 		this.beforeRoute();
 
-		var location = NextThought.model.Base.getLocationInterfaceAt('/'+path),
+		var location = NextThought.model.Base.getLocationInterfaceAt('/' + path),
 			route = this.trimRoute(location.pathname),
 			query = location.search.slice(1),
 			hash = location.hash.slice(1),
@@ -198,7 +198,7 @@ Ext.define('NextThought.mixins.routing.Path', {
 		if (query) {
 			subRoute += '?' + query;
 		}
-		
+
 		if (hash) {
 			subRoute += '#' + hash;
 		}
@@ -210,7 +210,7 @@ Ext.define('NextThought.mixins.routing.Path', {
 			val = sub.handler.call(null, {
 				path: '/' + route,
 				params: params,
-				hash: hash, 
+				hash: hash,
 				queryParams: Ext.Object.fromQueryString(query || ''),
 				precache: precache
 			}, '/' + subRoute);

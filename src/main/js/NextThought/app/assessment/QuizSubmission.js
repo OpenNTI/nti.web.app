@@ -484,6 +484,15 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 	},
 
 
+	beforeRouteChange: function() {
+		var submission = {};
+
+		this.questionSet.fireEvent('beforesubmit', this.questionSet, submission);
+
+		this.saveProgress(submission);
+	},
+
+
 	shouldAllowSubmit: function(onChangeHandler) {
 		var enabled;
 
