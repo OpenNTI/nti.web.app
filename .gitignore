@@ -13,3 +13,4 @@ app.min.js*
 #ext source and byproducts
 ext-4.2
 src/main/bootstrap.js
+node_modules
