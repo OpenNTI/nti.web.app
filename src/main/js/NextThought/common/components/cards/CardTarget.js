@@ -35,10 +35,10 @@ Ext.define('NextThought.common.components.cards.CardTarget', {
 		var version, data = DomUtils.parseDomObject(config.contentElement),
 			nativeSupport = Globals.hasPDFSupport(),
 			anchorAttr = 'class=\'link\' target=\'_blank\'',
-			chrome = '<a ' + anchorAttr + ' href=\'http://www.google.com/chrome\'>Chrome</a>',
-			safari = '<a ' + anchorAttr + ' href=\'http://www.apple.com/safari/download/\'>Safari 5.0+</a>',
-			ff = '<a ' + anchorAttr + ' href=\'http://www.getfirefox.com\'>Firefox 5.0+</a>',
-			ie = '<a ' + anchorAttr + ' href=\'http://www.microsoft.com/ie\'>Internet Explorer 9+</a>';
+			chrome = '<a ' + anchorAttr + ' href=\'http://www.google.com/chrome\'>Chrome,</a>',
+			safari = '<a ' + anchorAttr + ' href=\'http://www.apple.com/safari/download/\'>Safari,</a>',
+			ff = '<a ' + anchorAttr + ' href=\'http://www.getfirefox.com\'>Firefox,</a>',
+			ie = '<a ' + anchorAttr + ' href=\'http://www.microsoft.com/ie\'>Internet Explorer.</a>';
 
 		//the data-href has the adjusted href.
 		data.href = data['attribute-data-href'];
@@ -55,25 +55,6 @@ Ext.define('NextThought.common.components.cards.CardTarget', {
 			version = /Firefox\/(\d+\.\d+)/.exec(navigator.userAgent)[1];
 			version = parseInt(version, 10);
 		}
-		//If we are in IE have them open it in another window
-		if (Ext.isIE10m) {
-			this.add({
-				xtype: 'box',
-				autoEl: {
-					tag: 'a',
-					href: data.href,
-					target: '_blank',
-					cls: 'no-support',
-					cn: [
-						{ cls: 'message', html: getString('NextThought.view.cards.CardTarget.no-browser-support') },
-						{ cn: [
-							getString('NextThought.view.cards.CardTarget.click-here')
-						]}
-					]
-				}
-			});
-			return;
-		}
 
 		//Not supported in mobile. Telling them to update to latest version would be confusing.
 		if (Ext.is.iOS) {
@@ -88,18 +69,30 @@ Ext.define('NextThought.common.components.cards.CardTarget', {
 			return;
 		}
 
-		//if we are in FF < v.19 or we don't detect a native support ask them to update
-		//after FF 19 there is a native viewer that is on by default
-		if ((version && version <= 18) || (!nativeSupport && !Ext.isGecko)) {
-			this.add({
-				xtype: 'box',
-				renderTpl: Ext.DomHelper.markup({
-					cls: 'no-support', 'data-link': data.href, cn: [
-						{ cls: 'message', html: '{{{NextThought.view.cards.CardTarget.no-browser-support}}}'},
-						{ cn: ['{{{NextThought.view.cards.CardTarget.update-browser}}}']}
-					]
-				})
-			});
+		if ((version && version <= 18) || (!nativeSupport && !Ext.isGecko) || true) {
+				this.add({
+					xtype: 'box',
+					renderTpl: Ext.DomHelper.markup({
+						cls: 'no-support', cn: [
+							{cls: 'message', html: 'Your browser does not currently support viewing PDF files.'},
+							{cls: '', cn: [
+								{tag: 'a', cls: 'link', href: 'https://get.adobe.com/reader/', target: '_blank', html: 'Install Adobe Acrobat Reader '},
+								'or try the latest version of one of the following browsers:<br>',
+								chrome,
+								' ',
+								safari,
+								' ',
+								ff,
+								' ',
+								ie
+							]},
+							'<br>',
+							{cls: '', cn: [
+								{tag: 'a', cls: 'link', href: data.href, html: 'Download the PDF'}
+							]}
+						]
+					})
+				});
 			return;
 		}
 
