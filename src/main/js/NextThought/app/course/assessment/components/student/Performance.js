@@ -174,8 +174,7 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 		function complete(o) {return !!o.get('completed'); }
 
 		var me = this,
-			container = me.up('content-view-container'),
-			currentBundle = container && container.currentBundle,
+			currentBundle = me.currentBundle,
 			tpl = me.tempCount.msgTpl,
 			t = me.store.getCount(),
 			c = me.store.getRange().filter(complete).length,
@@ -246,10 +245,12 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 	},
 
 	//This is a read-only view from the STUDENT'S perspective. READ: updates when students navigate to it.
-	setAssignmentsData: function(assignments) {
+	setAssignmentsData: function(assignments, currentBundle) {
 		var raw = [], waitsOn = [], me = this;
 
 		this.clearAssignmentsData();
+
+		this.currentBundle = currentBundle;
 
 		if (!assignments) {
 			console.error('No assignments??');
