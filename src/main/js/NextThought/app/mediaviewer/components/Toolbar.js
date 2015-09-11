@@ -95,6 +95,9 @@ Ext.define('NextThought.app.mediaviewer.components.Toolbar', {
 			if (me.noTranscript) {
 				me.pickerEl.removeCls('hasTranscript');
 			}
+			else {
+				me.pickerEl.addCls('hasTranscript');
+			}
 		});
 
 	},
