@@ -29,9 +29,7 @@ Ext.application({
 		'NextThought.util.Localization',//require this SUPER early.
 		'NextThought.util.*',
 
-		'Ext.ux.ajax.SimManager',
-
-		'NextThought.mixins.Router'
+		'Ext.ux.ajax.SimManager'
 
 		// 'Ext.grid.Panel',
 		// 'Ext.grid.column.Date',
