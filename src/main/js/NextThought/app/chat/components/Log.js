@@ -302,10 +302,18 @@ Ext.define('NextThought.app.chat.components.Log', {
 
 
 	insertBulkMessages: function(index, messages) {
-		var m = this.prepareMessagesBeforeAdd(messages) || [];
-
+		var m = this.prepareMessagesBeforeAdd(messages) || [],
+			lastItem, me = this, lastIndex;
 		if (!Ext.isEmpty(m)) {
 			this.insert(index, m);
+			lastIndex = m.length;
+			wait()
+				.then(function(){
+					lastItem = me.items.items[lastIndex] || me.items.items.last();
+					if (lastItem) {
+						lastItem.el.scrollIntoView(me.el);
+					}
+				});
 		}
 	},
 
