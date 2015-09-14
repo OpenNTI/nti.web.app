@@ -3,7 +3,8 @@ Ext.define('NextThought.app.store.Actions', {
 
 	requires: [
 		'NextThought.app.library.StateStore',
-		'NextThought.app.store.StateStore'
+		'NextThought.app.store.StateStore',
+		'NextThought.login.StateStore'
 	],
 
 
@@ -11,8 +12,18 @@ Ext.define('NextThought.app.store.Actions', {
 		this.callParent(arguments);
 
 		this.LibraryStore = NextThought.app.library.StateStore.getInstance();
+		this.LoginStore = NextThought.login.StateStore.getInstance();
 		this.Store = NextThought.app.store.StateStore.getInstance();
 
+		if (window.Service && !this.Store.loading && !this.Store.hasFinishedLoad) {
+			this.onLogin();
+		} else {
+			this.LoginStore.registerLoginAction(this.onLogin.bind(this), 'load-purchasables');
+		}
+	},
+
+
+	onLogin: function() {
 		if (this.LibraryStore.hasLoaded()) {
 			this.loadPurchasables();
 		} else {
@@ -489,7 +500,7 @@ Ext.define('NextThought.app.store.Actions', {
 		})
 			.then(function(response) {
 				var courseInstance = ParseUtils.parseItems(response)[0];
-				
+
 				done();
 				success.call(null, courseInstance);
 			})
