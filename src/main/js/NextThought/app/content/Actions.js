@@ -74,6 +74,21 @@ Ext.define('NextThought.app.content.Actions', {
 	},
 
 
+	__getLevelLabel: function(level) {
+		var label = this.levelLabels[level], i;
+
+		if (label) { return label; }
+
+		label = ' Section';
+
+		for (i = 1; i < level; i++) {
+			label = 'Sub ' + label;
+		}
+
+		return 'Select a ' + label;
+	},
+
+
 	__getFirstTopic: function(node) {
 		var topic = node.querySelector('topic');
 
@@ -92,10 +107,12 @@ Ext.define('NextThought.app.content.Actions', {
 
 		if ((lineage.length + leftOvers.length) <= 1) {
 			if (ContentUtils.hasChildren(topic)) {
-				path.push(this.buildContentPathPart(this.levelLabels[lineage.length], this.__getFirstTopic(topic), parentNode, true, bundle, rootPageId, rootRoute));
+				path.push(this.buildContentPathPart(this.__getLevelLabel(lineage.length), this.__getFirstTopic(topic), parentNode, true, bundle, rootPageId, rootRoute));
 			} else {
-				path.push(this.buildContentPathPart(this.levelLabels[NaN], topic.getAttribute('ntiid'), null, false, bundle, rootPageId, rootRoute));
+				path.push(this.buildContentPathPart(this.__getLevelLabel(NaN), topic.getAttribute('ntiid'), null, false, bundle, rootPageId, rootRoute));
 			}
+		} else if (!bundle.isCourse && ContentUtils.hasChildren(topic)) {
+			path.push(this.buildContentPathPart(this.__getLevelLabel(lineage.length), this.__getFirstTopic(topic), parentNode, true, bundle, rootPageId, rootRoute));
 		}
 
 		for (i; i < this.MAX_PATH_LENGTH && i < lineage.length; i++) {
@@ -138,7 +155,7 @@ Ext.define('NextThought.app.content.Actions', {
 				} else {
 					route = '';
 				}
-				
+
 				part.route = Globals.trimRoute(rootRoute) + '/' + route;
 
 				if (allowMenus) {
