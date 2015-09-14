@@ -167,6 +167,10 @@ Ext.define('NextThought.app.mediaviewer.components.View', {
 			xtype: 'media-grid-view'
 		});
 
+		this.chatCmp = NextThought.app.chat.components.gutter.Tab.create({
+			renderTo: this.toolbar.getEl()
+		});
+
 		this.notificationCmp = NextThought.app.notifications.Tab.create({
 			setMenuOpen: this.setState.bind(this, {active: 'notificationCmp'}),
 			setMenuClosed: this.setState.bind(this, {}),

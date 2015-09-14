@@ -44,7 +44,8 @@ Ext.define('NextThought.app.chat.Gutter', {
 			'notify': this.handleWindowNotify.bind(this),
 			'added-chat-window': this.bindChatWindow.bind(this),
 			'exited-room': this.onRoomExit.bind(this),
-			'presence-changed': this.updatePresence.bind(this)
+			'presence-changed': this.updatePresence.bind(this),
+			'gutter-active': this.updateList.bind(this, this.store, this.store.data.items)
 		});
 		this.otherContacts = [];
 		this.collapsedMessageCount = 0;
@@ -230,7 +231,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 			maxEntryNumber = Math.floor((gutterHeight - this.ENTRY_BOTTOM_OFFSET) / gutterEntryHeight),
 			currentCount = this.query('chat-gutter-entry').length;
 
-		return currentCount < maxEntryNumber;
+		return maxEntryNumber > 0 ? currentCount < maxEntryNumber : true;
 	},
 
 
