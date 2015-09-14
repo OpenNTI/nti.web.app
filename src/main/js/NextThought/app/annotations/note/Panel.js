@@ -360,10 +360,12 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 
 
 	scrollIntoView: function() {
-		var scroller = this.el.up('.note-content-container.scrollbody');
+		var scroller = this.scrollingParent;
+
 		if (this.noteBody) {
 			this.noteBody.addCls('hover');
 		}
+
 		this.responseBox.scrollIntoView(scroller);
 	},
 
@@ -767,13 +769,13 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 					}
 					else {
 						t = me.context.up('.context') || me.context;
-						// for no context, hide it.	
+						// for no context, hide it.
 						t.setVisibilityMode(Ext.dom.Element.DISPLAY);
 						t.hide();
 					}
 
 					return Promise.resolve();
-				});		
+				});
 	},
 
 
@@ -975,7 +977,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 			}
 
 			if (add) {
-				toAdd.push({record: record, id: guid});
+				toAdd.push({record: record, id: guid, scrollingParent: this.scrollingParent});
 			}
 		}, this);
 		console.log('Adding note records', toAdd);

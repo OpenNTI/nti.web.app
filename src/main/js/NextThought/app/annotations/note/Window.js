@@ -54,7 +54,9 @@ Ext.define('NextThought.app.annotations.note.Window', {
 			record: record,
 			readerContext: context,
 			doClose: this.doClose.bind(this),
-			state: this.state
+			state: this.state,
+			scrollingParent: this.scrollingParent,
+			scrollToId: record.getId() !== this.record.getId() ? this.record.getId() : null
 		});
 	},
 
