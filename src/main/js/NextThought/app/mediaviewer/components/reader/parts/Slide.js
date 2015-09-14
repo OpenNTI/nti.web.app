@@ -7,7 +7,8 @@ Ext.define('NextThought.app.mediaviewer.components.reader.parts.Slide', {
 	},
 
 	requires: [
-		'NextThought.app.userdata.Actions'
+		'NextThought.app.userdata.Actions',
+		'NextThought.app.mediaviewer.StateStore'
 	],
 
 	renderTpl: Ext.DomHelper.markup([
@@ -41,6 +42,7 @@ Ext.define('NextThought.app.mediaviewer.components.reader.parts.Slide', {
 		this.mixins.transcriptItem.constructor.apply(this, arguments);
 		this.enableBubble(['register-records', 'unregister-records']);
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
+		this.MediaViewerStore = NextThought.app.mediaviewer.StateStore.getInstance();
 	},
 
 	containerIdForData: function() {
@@ -98,7 +100,7 @@ Ext.define('NextThought.app.mediaviewer.components.reader.parts.Slide', {
 
 		if (!pid || !course) { return; }
 
-		me.UserDataActions.getPreferences(pid, course)
+		me.MediaViewerStore.getSharingPreferences(pid, course)
 			.then(function(prefs) {
 				var sharing = prefs && prefs.sharing,
 					sharedWith = sharing && sharing.sharedWith;

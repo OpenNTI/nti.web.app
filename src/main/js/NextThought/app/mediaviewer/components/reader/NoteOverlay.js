@@ -24,6 +24,7 @@ Ext.define('NextThought.app.mediaviewer.components.reader.NoteOverlay', {
 		var me = this;
 
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
+		this.MediaViewerStore = NextThought.app.mediaviewer.StateStore.getInstance();
 
 		this.adjustAnnotationOverlayPosition = Ext.Function.createBuffered(this.adjustAnnotationOverlayPosition, 10);
 		this.syncHeight = Ext.Function.createBuffered(this.syncHeight, 10);
@@ -343,7 +344,7 @@ Ext.define('NextThought.app.mediaviewer.components.reader.NoteOverlay', {
 		var me = this,
 			pageInfo;
 
-		me.UserDataActions.getPreferences(ntiid, me.reader.currentBundle)
+		me.MediaViewerStore.getSharingPreferences(ntiid, me.reader.currentBundle)
 			.then(function(prefs) {
 				var sharing = prefs && prefs.sharing,
 					sharedWith = sharing && sharing.sharedWith;

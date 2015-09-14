@@ -1,9 +1,20 @@
 Ext.define('NextThought.app.mediaviewer.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
+	requires: [
+		'NextThought.app.userdata.Actions'
+	],
+
 	obj_map: {},
 
 	cmpMap: {},
+
+	DEFAULT_SHARING: {},
+
+	constructor: function(){
+		this.callParent(arguments);
+		this.UserDataActions = NextThought.app.userdata.Actions.create();
+	},
 
 	cacheTranscriptObject: function(id, content) {
 		this.obj_map[id] = content;
@@ -50,5 +61,28 @@ Ext.define('NextThought.app.mediaviewer.StateStore', {
 		}
 
 		return this.currentContext;
+	},
+
+
+	cacheSharingPreferences: function(ntiid, prefs) {
+		this.DEFAULT_SHARING[ntiid] = prefs;
+	},
+
+
+	getSharingPreferences: function(ntiid, currentBundle) {
+		var prefs = this.DEFAULT_SHARING[ntiid],
+			me = this;
+
+		if (prefs) {
+			return Promise.resolve(prefs);
+		}
+
+		return new Promise(function(fulfill) {
+			me.UserDataActions.getPreferences(ntiid, currentBundle)
+				.then(function(prefs){
+					me.cacheSharingPreferences(ntiid, prefs);
+					fulfill(prefs);
+				});
+		});
 	}
 });
