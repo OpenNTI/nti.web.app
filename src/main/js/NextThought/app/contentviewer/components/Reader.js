@@ -380,9 +380,15 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 	//region Statics
 	statics: {
 		get: function(prefix) {
-			prefix = prefix || 'default';
-			function search(r) { return r.prefix === prefix; }
-			return Ext.Array.findBy(this.instances, search, this);
+			var instances = this.instances;
+
+			if (prefix) {
+				instances.filter(function(r) {
+					return r.prefix === prefix;
+				});
+			}
+
+			return instances[0];
 		},
 
 
