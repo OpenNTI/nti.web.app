@@ -45,6 +45,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Topic', {
 	onWindowClose: function() {
 		this.removeAll(true);
 		this.updateBody(); // Safe guard for now
+		this.setTitle(this.getTitle());
 		this.showComments();
 	},
 
