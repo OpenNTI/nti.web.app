@@ -309,7 +309,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 			icon: 'warning-red',
 			buttons: {
 				primary: {
-					text: getString('NextThought.view.profiles.outline.View.delete'),
+					text: 'Remove',
 					cls: 'caution',
 					handler: function() {
 						actions.deleteContact(user)
