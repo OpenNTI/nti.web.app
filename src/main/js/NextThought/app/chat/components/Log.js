@@ -307,11 +307,20 @@ Ext.define('NextThought.app.chat.components.Log', {
 		if (!Ext.isEmpty(m)) {
 			this.insert(index, m);
 			lastIndex = m.length;
-			wait()
+
+			// Wait is needed to make sure we account
+			// for whether the load more history button is added or not.
+			wait(10)
 				.then(function(){
 					lastItem = me.items.items[lastIndex] || me.items.items.last();
 					if (lastItem) {
-						lastItem.el.scrollIntoView(me.el);
+						lastItem.onceRendered
+							.then(function(){
+								wait()
+									.then(function(){
+										lastItem.el.scrollIntoView(me.el);
+									});
+							});
 					}
 				});
 		}
