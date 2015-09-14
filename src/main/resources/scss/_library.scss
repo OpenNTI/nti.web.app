@@ -160,6 +160,12 @@ li.community-grid-item {
 	}
 }
 
+.books li.library-grid-item {
+	.author:not(:empty)::before {
+		content: 'By ';
+	}
+}
+
 li.library-grid-item {
 	float: left;
 	width: 242px;
@@ -213,8 +219,6 @@ li.library-grid-item {
 	.author {
 		color: $primary-blue;
 	}
-
-	.author:not(:empty):not(.provider-id)::before {content: 'By ';}
 
 	.title {
 		font: normal 700 1em/1.1em "Open Sans Condensed";
