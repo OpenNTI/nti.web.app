@@ -587,6 +587,7 @@ canvas.x-component-course-assessment {
 				margin-top: 1em;
 
 				span {
+					display: inline-block;
 					&.link { color: $primary-blue; cursor: pointer; }
 
 					&::before {
@@ -597,6 +598,10 @@ canvas.x-component-course-assessment {
 					&:first-of-type::before {
 						content: none;
 					}
+				}
+
+				.arrow::after {
+					top: -0.1em;
 				}
 			}
 
