@@ -309,6 +309,8 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 			return me.getCmpForComment(item);
 		});
 
+		items.reverse();
+
 		me.add(items);
 	},
 
