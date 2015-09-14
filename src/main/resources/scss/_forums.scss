@@ -729,6 +729,10 @@
 			.commentAvatar{
 				left: 130px;
 			}
+
+			.wrap .meta .name {
+				max-width: 25em;
+			}
 		}
 
 		&[data-depth='3']{
@@ -737,6 +741,10 @@
 			.commentAvatar{
 				left: 95px;
 			}
+
+			.wrap .meta .name {
+				max-width: 30em;
+			}
 		}
 
 		&[data-depth='2']{
@@ -744,6 +752,10 @@
 			.commentAvatar{
 				left: 55px;
 			} 
+
+			.wrap .meta .name {
+				max-width: 30em;
+			}
 		}
 
 		&[data-depth='1'], &[data-depth='0']{
@@ -754,6 +766,10 @@
 
 			.commentAvatar{
 				left: 25px;
+			}
+
+			.wrap .meta .name {
+				max-width: 35em;
 			}
 		}
 
@@ -775,7 +791,7 @@
 					overflow: hidden;
 					white-space: nowrap;
 					@include ellipse;
-					max-width: 10em;
+					max-width: 20em;
 					display: inline-block;
 					vertical-align: middle;
 				}

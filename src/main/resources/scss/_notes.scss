@@ -242,6 +242,10 @@
 				.name{
 					font-size: 14px;
 					color: $primary-blue;
+					display: inline-block;
+					max-width: 40em;
+					overflow: hidden;
+					@include ellipse;
 				}
 			}
 		}
