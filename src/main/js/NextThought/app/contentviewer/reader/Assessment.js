@@ -365,7 +365,9 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 
 
 	beforeRouteChange: function() {
-		this.submission.beforeRouteChange();
+		if (this.submission) {
+			this.submission.beforeRouteChange();
+		}
 	},
 
 
