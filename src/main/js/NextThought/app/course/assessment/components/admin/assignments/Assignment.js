@@ -498,6 +498,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 			isEqual = false;
 		} else if (state.sort && (state.sort.prop !== storeState.sort.prop || state.sort.direction !== storeState.sort.direction)) {
 			isEqual = false;
+		} else if ((state.student && state.student !== this.student) || (!state.student && this.student)) {
+			isEqual = false;
 		}
 
 		return isEqual;
