@@ -150,6 +150,8 @@
 }
 
 .recent-notifications {
+	overflow: auto;
+
 	.group-header {
 		display: none;
 	}

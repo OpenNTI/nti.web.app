@@ -65,7 +65,7 @@ Ext.define('NextThought.app.notifications.components.TabView', {
 			el = this.el,
 			maxHeight = winHeight - 85 - 20 - 32;//the top of the list is set at 85 and allow some room on the bottom
 
-		el = el.down('.notifications.user-data-panel');
+		el = el.down('.recent-notifications');
 
 		if (el) {
 			el.setStyle({
