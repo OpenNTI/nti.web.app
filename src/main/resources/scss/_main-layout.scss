@@ -1,7 +1,15 @@
 html.x-viewport { 
 	height: auto !important; 
-	overflow-y: auto; 
+	overflow-y: auto !important; 
 	padding-top: $header-height;
+
+	&.window-open {
+		overflow: hidden !important;
+
+		.window-container {
+			display: block;
+		}
+	}
 
 	&.msg-bar-open {
 		padding-top: $header-height-withbar;
@@ -19,6 +27,7 @@ html.x-viewport {
 		}	
 	}
 }
+
 
 
 body.x-body {
@@ -118,14 +127,6 @@ body.x-body {
 	}
 }
 
-
-html.window-open {
-	overflow: hidden !important;
-
-	.window-container {
-		display: block;
-	}
-}
 
 .window-container {
 	position: fixed;
