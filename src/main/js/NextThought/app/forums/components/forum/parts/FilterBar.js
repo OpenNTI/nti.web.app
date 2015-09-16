@@ -127,6 +127,11 @@ Ext.define('NextThought.app.forums.components.forum.parts.FilterBar', {
 
 
 	setSortBy: function(group) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setSortBy.bind(this, group));
+			return;
+		}
+
 		var item = this.groupByMenu.down('[groupBy="' + group + '"]');
 
 		if (item) {
