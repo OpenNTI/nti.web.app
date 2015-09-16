@@ -7,9 +7,9 @@ Ext.define('NextThought.app.notifications.components.types.Note', {
 	},
 
 	showCreator: true,
-	wording1: 'Shared a note',
-	wording2: 'Commented on a note',
-	wording3: 'Shared a note: {title}',
+	wording1: 'shared a note',
+	wording2: 'commented on a note',
+	wording3: 'shared a note: {title}',
 
 
 	fillInWording: function() {
@@ -19,7 +19,7 @@ Ext.define('NextThought.app.notifications.components.types.Note', {
 		if (item.get('inReplyTo') || (item.get('references') || []).length > 0) {
 			wording = this.wording2;
 		} else if (item.get('title')) {
-			wording = this.wording3.replace('{title}', item.get('title'));
+			wording = this.wording3.replace('{title}', this.titleTpl.apply({name: item.get('title')}));
 		} else {
 			wording = this.wording1;
 		}
