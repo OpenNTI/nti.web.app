@@ -1,41 +1,20 @@
 Ext.define('NextThought.app.notifications.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
-	requires: ['NextThought.store.Stream'],
+	requires: ['NextThought.store.BatchInterface'],
 
 	PAGE_SIZE: 50,
 
 	buildStore: function(url, lastViewed) {
-		var store;
-
-		store = NextThought.store.Stream.create({
-			storeId: 'notification',
-			autoLoad: false,
-			pageSize: 50,
-			proxy: {
-				type: 'rest',
-				pageParam: undefined,
-				limitParam: 'batchSize',
-				startParam: 'batchBefore',
-				reader: {
-					type: 'nti',
-					root: 'Items',
-					totalProperty: 'TotalItemCount'
-				},
-				headers: {
-					'Accept': 'application/vnd.nextthought.collection+json'
-				},
-				model: 'NextThought.model.Change'
+		this.NOTABLE_STORE = NextThought.store.BatchInterface.create({
+			url: url,
+			params: {
+				batchSize: this.PAGE_SIZE
 			}
 		});
 
-		store.lastViewed = lastViewed;
-		store.proxy.proxyConfig.url = url;
-		store.url = store.proxy.url = url;
+		this.lastViewed = lastViewed;
 
-		this.NOTABLE_STORE = store;
-
-		store.load();
 		this.setLoaded();
 	},
 

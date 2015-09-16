@@ -4,6 +4,8 @@ Ext.define('NextThought.app.notifications.components.MostRecent', {
 
 	SHOW_COUNT: 20,
 
+	cls: 'recent-notifications',
+
 	onActivate: function() {
 		this.store.lastViewed = new Date();
 		this.clearBadge();

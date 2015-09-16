@@ -1,43 +1,81 @@
 Ext.define('NextThought.app.notifications.components.types.Badge', {
 	extend: 'NextThought.app.notifications.components.types.Base',
-	alias: 'widget.notification-item-badge',
-	keyVal: 'application/vnd.nextthought.openbadges.badge',
+	alias: 'widget.notifications-item-badge',
+
+	statics: {
+		keyVal: 'application/vnd.nextthought.openbadges.badge'
+	},
 
 	showCreator: false,
 	itemCls: 'badge',
-	wording: 'NextThought.view.account.notifications.types.Badge.wording',
+	wording: 'awarded you a badge: {badge}',
 
-	emptyTpl: '',
+	fillInData: function() {
+		var img = this.item.get('image');
 
-	badgeTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'link', html: '{name}'}).compile(),
-
-	getWording: function(values) {
-		var name;
-
-		if (values.isEmpty) {
-			name = this.emptyTpl;
-		} else {
-			name = this.badgeTpl.apply({name: values.name});
-		}
-
-		return getFormattedString(this.wording, {
-			badge: name
+		this.iconEl.innerHTML = Ext.DomHelper.markup({
+			cls: 'icon',
+			style: {backgroundImage: 'url(' + img + ')'}
 		});
 	},
 
-	getIcon: function(values) {
-		return Ext.DomHelper.markup({cls: 'icon', style: {backgroundImage: 'url(' + values.image + ')'}});
+
+	fillInWording: function() {
+		var wording = this.wording;
+
+		wording = wording.replace('{badge}', this.titleTpl.apply({name: this.item.get('name')}));
+
+		this.wordingEl.innerHTML = wording;
 	},
 
-	clicked: function(view, rec) {
-		//TODO: figure out this navigation		
-	},
 
+	getDisplayTime: function() {
+		var t = this.item.get('EventTime') || this.item.get('Last Modified');
 
-	getDisplayTime: function(values) {
-		var t = values.EventTime || values.CreatedTime;
-
-		values.Time = t;
-		return Ext.util.Format.date(t, 'c');
+		return t;
 	}
 });
+
+// Ext.define('NextThought.app.notifications.components.types.Badge', {
+// 	extend: 'NextThought.app.notifications.components.types.Base',
+// 	alias: 'widget.notification-item-badge',
+// 	keyVal: 'application/vnd.nextthought.openbadges.badge',
+
+// 	showCreator: false,
+// 	itemCls: 'badge',
+// 	wording: 'NextThought.view.account.notifications.types.Badge.wording',
+
+// 	emptyTpl: '',
+
+// 	badgeTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'link', html: '{name}'}).compile(),
+
+// 	getWording: function(values) {
+// 		var name;
+
+// 		if (values.isEmpty) {
+// 			name = this.emptyTpl;
+// 		} else {
+// 			name = this.badgeTpl.apply({name: values.name});
+// 		}
+
+// 		return getFormattedString(this.wording, {
+// 			badge: name
+// 		});
+// 	},
+
+// 	getIcon: function(values) {
+// 		return Ext.DomHelper.markup({cls: 'icon', style: {backgroundImage: 'url(' + values.image + ')'}});
+// 	},
+
+// 	clicked: function(view, rec) {
+// 		//TODO: figure out this navigation
+// 	},
+
+
+// 	getDisplayTime: function(values) {
+// 		var t = values.EventTime || values.CreatedTime;
+
+// 		values.Time = t;
+// 		return Ext.util.Format.date(t, 'c');
+// 	}
+// });

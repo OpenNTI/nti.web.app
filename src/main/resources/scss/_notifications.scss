@@ -106,6 +106,78 @@
 	}
 }
 
+.notification-stream {
+	.notification {
+		margin-bottom: 10px;
+		padding: 15px 14px;
+		@include flexContainer();
+
+		.icon-wrapper {
+			@include flexItem(0 0 auto);
+			margin-right: 14px;
+		}
+
+		.username {
+			@include flexItem(0 0 auto);
+			float: left;
+			width: 200px;
+			height: 40px;
+			font: normal 400 0.875em/1.36 $font;
+			color: $primary-blue;
+		}
+
+		.wrap {
+			@include flexItem(1 1 auto);
+		}
+
+		.wording {
+			display: block;
+
+			&::first-letter {
+				text-transform: uppercase;
+			}
+		}
+	}
+}
+
+.recent-notifications {
+	.group-header {
+		display: none;
+	}
+
+	.notification {
+		padding: 10px 10px 10px 60px;
+
+		.icon-wrapper {
+			position: absolute;
+			top: 10px;
+			left: 10px;
+		}
+
+		.username {
+			display: inline;
+			margin-right: 0.5em;
+		}
+
+		.time {
+			display: block;
+		}
+	}
+}
+
+.notification-group {
+	.notification {
+		background: white;
+		overflow: hidden;
+
+		.icon-wrapper, .avatar-container {
+			width: 40px;
+			height: 40px;
+			float: left;
+		}
+	}
+}
+
 .user-data-panel.notifications {
 	background: #fffefe;
 

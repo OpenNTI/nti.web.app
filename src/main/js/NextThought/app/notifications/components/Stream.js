@@ -1,3 +1,14 @@
+// Ext.define('NextThought.app.notifications.components.Stream', {
+// 	extend: 'NextThought.app.notifications.components.List',
+// 	alias: 'widget.notifications-stream-list',
+
+// 	mixins: {
+// 		Router: 'NextThought.mixins.Router'
+// 	},
+
+// 	cls: 'notification-list'
+// });
+
 Ext.define('NextThought.app.notifications.components.Stream', {
 	extend: 'NextThought.app.notifications.components.List',
 	alias: 'widget.notifications-stream-list',
@@ -5,6 +16,8 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
+
+	cls: 'notification-stream',
 
 	initComponent: function() {
 		this.callParent(arguments);
