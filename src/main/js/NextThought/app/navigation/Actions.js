@@ -187,10 +187,10 @@ Ext.define('NextThought.app.navigation.Actions', {
 	presentMessageBar: function(cfg) {
 		var messageCmp = Ext.getCmp('message-bar'),
 			id = cfg.type || cfg.id,
-			hasBeenSeen = !!this.store.getMessageBarItemFromSession(id),
+			// hasBeenSeen = !!this.store.getMessageBarItemFromSession(id),
 			htmlEl, me = this;
 
-		if (messageCmp && !hasBeenSeen) {
+		if (messageCmp) {
 			messageCmp.onceRendered
 				.then(function(){
 					messageCmp.setIcon(cfg.iconCls);
@@ -203,9 +203,9 @@ Ext.define('NextThought.app.navigation.Actions', {
 						Ext.fly(htmlEl).addCls('msg-bar-open');
 					}
 
-					if (id) {
-						me.store.putMessageBarItemIntoSession(id, cfg);
-					}
+					// if (id) {
+					// 	me.store.putMessageBarItemIntoSession(id, cfg);
+					// }
 				});
 		}
 	}

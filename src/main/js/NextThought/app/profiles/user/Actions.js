@@ -14,14 +14,16 @@ Ext.define('NextThought.app.profiles.user.Actions', {
 		this.LoginStore = NextThought.login.StateStore.getInstance();
 		this.NavActions = NextThought.app.navigation.Actions.create();
 
-		this.mon(this.LoginStore, 'login-ready', this.maybeAskForEmailVerification.bind(this));
+		if (isFeature('email-verification')) {
+			this.mon(this.LoginStore, 'login-ready', this.maybeAskForEmailVerification.bind(this));	
+		}
 	},
 
 
 	maybeAskForEmailVerification: function() {
 		var user = $AppConfig.userObject;
 
-		if (user && !user.isEmailVerified()) {
+		if (user && user.get('email') && !user.isEmailVerified()) {
 			wait()
 				.then(this.askForEmailVerfication.bind(this));
 		}

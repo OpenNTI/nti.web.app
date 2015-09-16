@@ -69,7 +69,7 @@ Ext.define('NextThought.common.components.cards.CardTarget', {
 			return;
 		}
 
-		if ((version && version <= 18) || (!nativeSupport && !Ext.isGecko) || true) {
+		if ((version && version <= 18) || (!nativeSupport && !Ext.isGecko)) {
 				this.add({
 					xtype: 'box',
 					renderTpl: Ext.DomHelper.markup({
