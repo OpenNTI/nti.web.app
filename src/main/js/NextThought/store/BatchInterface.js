@@ -6,10 +6,19 @@ Ext.define('NextThought.store.BatchInterface', {
 		this.callParent(arguments);
 
 		this.url = config.url;
+		this.batchSize = config.batchSize;
 		this.params = config.params;
 
 		this.__nextLink = config.nextLink;
 		this.__previousLink = config.previousLink;
+
+		if (config.getNextConfig) {
+			this.getNextConfig = config.getNextConfig.bind(this);
+		}
+
+		if (config.getPreviousConfig) {
+			this.getPreviousConfig = config.getPreviousConfig.bind(this);
+		}
 	},
 
 
@@ -48,7 +57,15 @@ Ext.define('NextThought.store.BatchInterface', {
 
 
 	getParams: function() {
-		return this.params;
+		var params = this.params;
+
+		params = params || {};
+
+		if (this.batchSize) {
+			params.batchSize = this.batchSize;
+		}
+
+		return params;
 	},
 
 
@@ -60,14 +77,14 @@ Ext.define('NextThought.store.BatchInterface', {
 	getNextConfig: function(current) {
 		var link = Service.getLinkFrom(current.Links || [], 'batch-next');
 
-		return {url: link};
+		return link && {url: link};
 	},
 
 
 	getPreviousConfig: function(current) {
 		var link = Service.getLinkFrom(current.Links || [], 'batch-previous');
 
-		return {url: link};
+		return link && {url: link};
 	},
 
 
@@ -86,6 +103,10 @@ Ext.define('NextThought.store.BatchInterface', {
 			.then(function(batch) {
 				var config = me.getNextConfig(batch);
 
+				if (!config) {
+					return Promise.reject();
+				}
+
 				config.previousLink = batch.href;
 
 				return me.__buildBatch(config);
@@ -99,6 +120,10 @@ Ext.define('NextThought.store.BatchInterface', {
 		return me.getBatch()
 			.then(function(batch) {
 				var config = me.getPreviousConfig(batch);
+
+				if (!config) {
+					return Promise.reject();
+				}
 
 				config.nextLink = batch.href;
 

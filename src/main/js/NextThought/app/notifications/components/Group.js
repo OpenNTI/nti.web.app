@@ -6,6 +6,8 @@ Ext.define('NextThought.app.notifications.components.Group', {
 
 	cls: 'notification-group',
 
+	ISCHANGE: /change$/,
+
 	statics: {
 		MIME_TO_COMPONENT: {},
 
@@ -63,6 +65,8 @@ Ext.define('NextThought.app.notifications.components.Group', {
 
 
 	addItem: function(item) {
+		item = this.ISCHANGE.test(item.mimeType) ? item.getItem() : item;
+
 		var cmp = this.self.MIME_TO_COMPONENT[item.mimeType];
 
 		if (cmp) {

@@ -9,8 +9,6 @@ Ext.define('NextThought.app.notifications.components.List', {
 		'NextThought.app.navigation.path.Actions'
 	],
 
-	ISCHANGE: /change$/,
-
 	cls: 'notification-list',
 	layout: 'none',
 
@@ -22,10 +20,20 @@ Ext.define('NextThought.app.notifications.components.List', {
 		this.groups = {};
 
 		this.NotificationsStore = NextThought.app.notifications.StateStore.getInstance();
+		this.PathActions = NextThought.app.navigation.path.Actions.create();
+
+		this.on({
+			activate: this.onActivate.bind(this),
+			deactivate: this.onDeactivate.bind(this)
+		});
+
 
 		this.NotificationsStore.getStore()
 			.then(this.loadBatch.bind(this));
 	},
+
+	onActivate: function() {},
+	onDeactivate: function() {},
 
 
 	getGroupContainer: function() {
@@ -34,19 +42,30 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 
 	loadBatch: function(batch) {
+		this.currentBatch = batch;
+
+		this.addMask();
 
 		batch.getItems()
-			.then(this.fillInItems.bind(this));
+			.then(this.fillInItems.bind(this))
+			.always(this.removeMask.bind(this));
 	},
 
 
 	fillInItems: function(items) {
 		var me = this;
 
+		if (items.length < me.currentBatch.batchSize) {
+			me.isLastBatch = true;
+		}
+
 		items.forEach(function(item) {
 			var group = item.get('NotificationGroupingField'),
 				groupName = group.getTime();
 
+			//fill this in here so hopefully it will be cached when the
+			//user tries to navigate
+			me.PathActions.getPathToObject(item);
 			if (!me.groups[groupName]) {
 				me.addGroup(groupName, group);
 			}
@@ -59,7 +78,12 @@ Ext.define('NextThought.app.notifications.components.List', {
 				console.error('No group for: ', group, item);
 			}
 		});
+
+		me.maybeShowMoreItems();
 	},
+
+
+	maybeShowMoreItems: function() {},
 
 
 	addGroup: function(groupName, group) {
@@ -67,6 +91,26 @@ Ext.define('NextThought.app.notifications.components.List', {
 			xtype: 'notification-group',
 			group: group
 		});
+	},
+
+
+	addMask: function() {
+		this.loadingCmp = this.add({
+			xtype: 'box',
+			autoEl: {cls: 'item', cn: [
+				{cls: 'container-loading-mask', cn: [
+					{cls: 'load-text', html: 'Loading...'}
+				]}
+			]}
+		});
+	},
+
+
+	removeMask: function() {
+		if (this.loadingCmp) {
+			this.remove(this.loadingCmp);
+			delete this.loadingCmp;
+		}
 	}
 });
 

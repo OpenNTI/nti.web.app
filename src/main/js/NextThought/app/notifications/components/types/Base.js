@@ -79,7 +79,7 @@ Ext.define('NextThought.app.notifications.components.types.Base', {
 		var time = this.item.get('Last Modified');
 
 		if (!time || time.getTime() === 0) {
-			time = values.CreatedTime;
+			time = this.item.get('CreatedTime');
 		}
 
 		return time;
