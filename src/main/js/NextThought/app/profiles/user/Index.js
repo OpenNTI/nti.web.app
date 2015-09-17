@@ -79,7 +79,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 			this.addRoute('/achievements', this.showAchievements.bind(this));
 		}
 
-		this.addDefaultRoute('/activity');
+		this.addDefaultRoute('/about');
 	},
 
 	buildHeaderComponent: function() {
