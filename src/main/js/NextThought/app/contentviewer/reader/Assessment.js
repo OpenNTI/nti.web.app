@@ -658,6 +658,10 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		});
 
 		return result;
+	},
+
+	getFeedbackContentEl: function() {
+		return this.feedback && this.feedback.contentElement;
 	}
 
 }, function() {

@@ -140,7 +140,7 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 
 			reader.getNoteOverlay().disable();
 
-			return reader.setPageInfo(me.pageInfo, me.bundle);
+			return reader.setPageInfo(me.pageInfo, me.bundle, me.fragment);
 		}).always(done.bind(this));
 	},
 

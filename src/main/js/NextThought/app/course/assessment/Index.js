@@ -229,7 +229,8 @@ Ext.define('NextThought.app.course.assessment.Index', {
 				assignment: assignment,
 				student: $AppConfig.userObject,
 				assignmentHistory: view.assignmentCollection.getHistoryItem(assignment.getId(), true),
-				instructorProspective: view.isAdmin
+				instructorProspective: view.isAdmin,
+				fragment: route.hash
 			};
 		})
 		.then(me.showReader.bind(me))
@@ -606,12 +607,20 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 
 	getRouteForPath: function(path, assignment) {
-		var assignmentId = assignment.getId();
+		var assignmentId = assignment.getId(),
+			root = path[0],
+			route;
 
 		assignmentId = ParseUtils.encodeForURI(assignmentId);
 
+		route = '/' + assignmentId;
+
+		if (root instanceof NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback) {
+			route += '#feedback';
+		}
+
 		return {
-			path: '/' + assignmentId,
+			path: route,
 			isFull: true
 		};
 	}

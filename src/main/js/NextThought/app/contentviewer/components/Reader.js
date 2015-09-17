@@ -307,7 +307,16 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 				me.isReadyForSearch = true;
 				me.fireEvent('ready-for-search');
 
-				if (fragment) {
+				if (fragment === 'feedback') {
+					me.getIframe().onceSettled()
+						.then(function() {
+							var el = me.getAssessment().getFeedbackContentEl();
+
+							if (el) {
+								me.getScroll().toNode(el);
+							}
+						});
+				} else if (fragment) {
 					//give everything a chance to settle
 					me.getIframe().onceSettled()
 						.then(function() {
