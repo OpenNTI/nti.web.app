@@ -4,6 +4,8 @@ Ext.define('NextThought.app.Body', {
 
 	state_key: 'main-view',
 
+	ISCHANGE: /change$/,
+
 	requires: [
 		'NextThought.app.library.Index',
 		'NextThought.app.library.StateStore',
@@ -384,6 +386,10 @@ Ext.define('NextThought.app.Body', {
 		return me.LibraryStore.onceLoaded()
 			.then(Service.getObject.bind(Service, id))
 			.then(function(obj) {
+				if (me.ISCHANGE.test(obj.mimeType)) {
+					obj = obj.getItem();
+				}
+
 				me.attemptToNavigateToObject(obj, {
 					doNavigateToFullPath: doNavigate,
 					onFailedToGetFullPath: failedNavigate
