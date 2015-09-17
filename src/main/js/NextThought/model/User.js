@@ -155,6 +155,16 @@ Ext.define('NextThought.model.User', {
 	},
 
 
+	shouldBeRoot: function() {
+		return true;
+	},
+
+
+	getTitle: function() {
+		return this.getName();
+	},
+
+
 	getName: function() {
 		return this.get('alias') ||
 			   this.get('realname') ||
