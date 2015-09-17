@@ -531,7 +531,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 	setRecord: function(r) {
 		//Remove the old listener
 		if (this.record) {
-			this.mun(this.record, 'child-added', this.addNewChild, this);
+			this.mun(this.record, 'child-added', this.onNewChild, this);
 			this.mun(this.record, 'child-removed', this.removedChild, this);
 			this.mun(this.record, 'destroy', this.wasDeleted, this);
 			this.mun(this.record, 'changed', this.recordChanged, this);
@@ -572,7 +572,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 
 		this.updateToolState();
 		this.mon(r, {
-			'child-added': this.addNewChild,
+			'child-added': this.onNewChild,
 			'child-removed': this.removedChild,
 			scope: this
 		});
@@ -905,6 +905,24 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 		}
 
 		return r.isModifiable();
+	},
+
+
+	onNewChild: function(child) {
+		if (child.get('inReplyTo') === this.record.getId()) {
+			this.addNewChild(child);
+			return true;
+		}
+
+		var children = this.items.items, i;
+
+		for (i = 0; i < children.length; i++) {
+			if (children[i].onNewChild(child)) {
+				return true;
+			}
+		}
+
+		return false;
 	},
 
 
