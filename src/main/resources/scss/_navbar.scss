@@ -205,18 +205,30 @@
 	border-bottom: 1px solid #e1e1e1 !important;
 
 	.icon {
-		display: inline-block;
+		display: none;
 		width: 30px;
 		margin-right: 5px;
+
+		&.warning {
+			display: block;
+			top: 10px;
+			left: 15px;
+			@include icon('warning-icon-red', $side: after, $position: absolute);
+
+			& + .msg {
+				margin-left: 40px;
+			}	
+		}
 	}
 
 	.msg {
 		display: inline-block;
 		font-size: 14px;
-		margin-right: 10px;
 		line-height: 40px;
+		margin-right: 10px;
     	vertical-align: top;
     	font-weight: 500;
+    	margin: 0 10px 0 20px;
 	}
 
 	.buttons {
