@@ -106,6 +106,9 @@
 		@include flexItem(0 0 auto);
 		@include flexContainer();
 		justify-content: flex-end;
+		-webkit-box-pack: end;
+		-webkit-justify-content: flex-end;
+        -ms-flex-pack: end;
 
 
 		& > div {
