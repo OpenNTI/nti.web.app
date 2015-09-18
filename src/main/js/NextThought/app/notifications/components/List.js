@@ -18,6 +18,7 @@ Ext.define('NextThought.app.notifications.components.List', {
 		this.callParent(arguments);
 
 		this.groups = {};
+		this.groupOrder = [];
 
 		this.NotificationsStore = NextThought.app.notifications.StateStore.getInstance();
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
@@ -32,13 +33,48 @@ Ext.define('NextThought.app.notifications.components.List', {
 			.then(this.loadBatch.bind(this));
 	},
 
-	onActivate: function() {},
-	onDeactivate: function() {},
+
+	onActivate: function() {
+		this.storeListeners = this.mon(this.NotificationsStore, {
+			destroyable: true,
+			'record-added': this.addRecord.bind(this, true),
+			'record-deleted': this.deleteRecord.bind(this)
+		});
+	},
+
+
+	onDeactivate: function() {
+		Ext.destroy(this.storeListeners);
+	},
 
 
 	getGroupContainer: function() {
 		return this;
 	},
+
+
+	addRecord: function(prepend, record) {
+		var groupValue = record.get('NotificationGroupingField'),
+			groupName = groupValue.getTime(),
+			group = this.groups[groupName];
+
+		//fill this in here so hopefully it will be cached when the
+		//user tries to navigate
+		this.PathActions.getPathToObject(record);
+
+		if (!group) {
+			group = this.addGroup(groupName, groupValue, prepend);
+		}
+
+		if (group) {
+			group.addItem(record, prepend);
+		} else {
+			console.error('No group for: ', group, record);
+		}
+	},
+
+
+	deleteRecord: function(record) {},
 
 
 	loadBatch: function(batch) {
@@ -53,44 +89,34 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 
 	fillInItems: function(items) {
-		var me = this;
-
-		if (items.length < me.currentBatch.batchSize) {
-			me.isLastBatch = true;
+		if (items.length < this.currentBatch.batchSize) {
+			this.isLastBatch = true;
 		}
 
-		items.forEach(function(item) {
-			var group = item.get('NotificationGroupingField'),
-				groupName = group.getTime();
+		items.forEach(this.addRecord.bind(this, false));
 
-			//fill this in here so hopefully it will be cached when the
-			//user tries to navigate
-			me.PathActions.getPathToObject(item);
-			if (!me.groups[groupName]) {
-				me.addGroup(groupName, group);
-			}
-
-			group = me.groups[groupName];
-
-			if (group) {
-				group.addItem(item);
-			} else {
-				console.error('No group for: ', group, item);
-			}
-		});
-
-		me.maybeShowMoreItems();
+		this.maybeShowMoreItems();
 	},
 
 
 	maybeShowMoreItems: function() {},
 
 
-	addGroup: function(groupName, group) {
-		this.groups[groupName] = this.add({
-			xtype: 'notification-group',
-			group: group
-		});
+	addGroup: function(groupName, group, prepend) {
+		var cmp, config = {
+				xtype: 'notification-group',
+				group: group
+			};
+
+		if (prepend) {
+			cmp = this.insert(0, config);
+		} else {
+			cmp = this.add(config);
+		}
+
+		this.groups[groupName] = cmp;
+
+		return this.groups[groupName];
 	},
 
 

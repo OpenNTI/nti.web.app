@@ -64,13 +64,16 @@ Ext.define('NextThought.app.notifications.components.Group', {
 	},
 
 
-	addItem: function(item) {
+	addItem: function(item, prepend) {
 		item = this.ISCHANGE.test(item.mimeType) ? item.getItem() : item;
 
-		var cmp = this.self.MIME_TO_COMPONENT[item.mimeType];
+		var cmp = this.self.MIME_TO_COMPONENT[item.mimeType],
+			config = {item: item};
 
-		if (cmp) {
-			this.add(cmp.create({item: item}));
+		if (prepend) {
+			this.insert(1, cmp.create(config));
+		} else {
+			this.add(cmp.create(config));
 		}
 	}
 });

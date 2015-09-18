@@ -18,11 +18,15 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 
 
 	onActivate: function() {
+		this.callParent(arguments);
+
 		window.addEventListener('scroll', this.onScroll);
 	},
 
 
 	onDeactivate: function() {
+		this.callParent(arguments);
+
 		window.addEventListener('scroll', this.onScroll);
 	},
 

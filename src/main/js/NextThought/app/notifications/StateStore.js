@@ -43,5 +43,15 @@ Ext.define('NextThought.app.notifications.StateStore', {
 			.then(function() {
 				return me.NOTABLE_STORE;
 			});
+	},
+
+
+	addRecord: function(change) {
+		this.fireEvent('record-added', change);
+	},
+
+
+	removeRecord: function(change) {
+		this.fireEvent('record-deleted', change);
 	}
 });
