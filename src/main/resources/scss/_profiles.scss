@@ -230,6 +230,14 @@
 
 		.about {
 			float: left;
+			.field{
+				&.education {
+					margin-bottom: 6px;
+				}
+				&.position {
+				    margin-bottom: 4px;
+				}
+			}
 		}
 
 		.social-fields {
