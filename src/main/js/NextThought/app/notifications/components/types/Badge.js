@@ -25,14 +25,14 @@ Ext.define('NextThought.app.notifications.components.types.Badge', {
 	fillInWording: function() {
 		var wording = this.wording;
 
-		wording = wording.replace('{badge}', this.titleTpl.apply({name: this.item.get('name')}));
+		wording = wording.replace('{badge}', this.titleTpl.apply({name: this.record.get('name')}));
 
 		this.wordingEl.dom.innerHTML = wording;
 	},
 
 
 	getDisplayTime: function() {
-		var t = this.item.get('EventTime') || this.item.get('Last Modified');
+		var t = this.recrd.get('EventTime') || this.record.get('Last Modified');
 
 		return t;
 	}

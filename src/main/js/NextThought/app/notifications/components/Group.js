@@ -64,16 +64,34 @@ Ext.define('NextThought.app.notifications.components.Group', {
 	},
 
 
+	unwrap: function(item) {
+		return this.ISCHANGE.test(item.mimeType) ? item.getItem() : item;
+	},
+
+
 	addItem: function(item, prepend) {
-		item = this.ISCHANGE.test(item.mimeType) ? item.getItem() : item;
+		item = this.unwrap(item);
 
 		var cmp = this.self.MIME_TO_COMPONENT[item.mimeType],
-			config = {item: item};
+			config = {record: item};
 
 		if (prepend) {
 			this.insert(1, cmp.create(config));
 		} else {
 			this.add(cmp.create(config));
 		}
+	},
+
+
+	deleteRecord: function(record) {
+		record = this.unwrap(record);
+
+		var me = this;
+
+		me.items.each(function(item) {
+			if (item.record && item.record.getId() === record.getId()) {
+				me.remove(item, true);
+			}
+		});
 	}
 });

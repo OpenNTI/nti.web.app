@@ -15,7 +15,7 @@ Ext.define('NextThought.app.notifications.components.types.ForumTopic', {
 	fillInWording: function() {
 		var wording = this.wording;
 
-		wording = wording.replace('{title}', this.titleTpl.apply({name: this.item.get('title')}));
+		wording = wording.replace('{title}', this.titleTpl.apply({name: this.record.get('title')}));
 
 		this.wordingEl.dom.innerHTML = wording;
 	}

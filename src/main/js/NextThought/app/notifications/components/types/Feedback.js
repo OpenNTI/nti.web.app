@@ -11,7 +11,7 @@ Ext.define('NextThought.app.notifications.components.types.Feedback', {
 
 	fillInWording: function() {
 		var me = this,
-			assignmentId = me.item.get('AssignmentId');
+			assignmentId = me.record.get('AssignmentId');
 
 		Service.getObject(assignmentId)
 			.then(function(assignment) {

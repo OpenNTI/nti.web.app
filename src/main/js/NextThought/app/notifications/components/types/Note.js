@@ -13,7 +13,7 @@ Ext.define('NextThought.app.notifications.components.types.Note', {
 
 
 	fillInWording: function() {
-		var item = this.item,
+		var item = this.record,
 			wording;
 
 		if (item.get('inReplyTo') || (item.get('references') || []).length > 0) {

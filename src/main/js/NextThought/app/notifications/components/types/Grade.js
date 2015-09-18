@@ -11,7 +11,7 @@ Ext.define('NextThought.app.notifications.components.types.Grade', {
 
 	fillInWording: function() {
 		var me = this,
-			assignmentId = me.item.get('AssignmentId');
+			assignmentId = me.record.get('AssignmentId');
 
 		if (!assignmentId) {
 			me.addCls('x-hidden');

@@ -60,7 +60,7 @@ Ext.define('NextThought.app.notifications.components.types.Base', {
 
 	fillInData: function() {
 		var me = this,
-			creator = me.item.get('Creator');
+			creator = me.record.get('Creator');
 
 		UserRepository.getUser(creator)
 			.then(function(user) {
@@ -76,10 +76,10 @@ Ext.define('NextThought.app.notifications.components.types.Base', {
 
 
 	getDisplayTime: function() {
-		var time = this.item.get('Last Modified');
+		var time = this.record.get('Last Modified');
 
 		if (!time || time.getTime() === 0) {
-			time = this.item.get('CreatedTime');
+			time = this.record.get('CreatedTime');
 		}
 
 		return time;

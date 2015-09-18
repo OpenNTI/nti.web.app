@@ -74,7 +74,17 @@ Ext.define('NextThought.app.notifications.components.List', {
 	},
 
 
-	deleteRecord: function(record) {},
+	deleteRecord: function(record) {
+		var groupValue = record.get('NotificationGroupingField'),
+			groupName = groupValue.getTime(),
+			group = this.groups[groupName];
+
+		if (group) {
+			group.deleteRecord(record);
+		} else {
+			console.warn('No group to delete record from: ', record);
+		}
+	},
 
 
 	loadBatch: function(batch) {
