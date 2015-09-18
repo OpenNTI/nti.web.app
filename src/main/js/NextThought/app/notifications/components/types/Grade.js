@@ -2,11 +2,26 @@ Ext.define('NextThought.app.notifications.components.types.Grade', {
 	extend: 'NextThought.app.notifications.components.types.Base',
 	alias: 'widget.notification-item-grade',
 
+	statics: {
+		keyVal: 'application/vnd.nextthought.grade'
+	},
+
 	itemCls: 'grade',
-	wording: 'grade recieved for {assignment}',
+	wording: 'graded {assignment}',
 
 	fillInWording: function() {
-		this.wordingEl.dom.innerHTML = this.wording;
+		var me = this,
+			assignmentId = me.item.get('AssignmentId');
+
+		if (!assignmentId) {
+			me.addCls('x-hidden');
+			return;
+		}
+
+		return Service.getObject(assignmentId)
+			.then(function(assignment) {
+				me.wordingEl.dom.innerHTML = me.wording.replace('{assignment}', me.titleTpl.apply({name: assignment.get('title')}));
+			});
 	}
 });
 

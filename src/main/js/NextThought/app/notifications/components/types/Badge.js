@@ -8,15 +8,17 @@ Ext.define('NextThought.app.notifications.components.types.Badge', {
 
 	showCreator: false,
 	itemCls: 'badge',
-	wording: 'awarded you a badge: {badge}',
+	wording: 'awarded you {badge}',
 
 	fillInData: function() {
-		var img = this.item.get('image');
+		var me = this,
+			creator = Service.get('SiteCommunity');
 
-		this.iconEl.innerHTML = Ext.DomHelper.markup({
-			cls: 'icon',
-			style: {backgroundImage: 'url(' + img + ')'}
-		});
+		UserRepository.getUser(creator)
+			.then(function(user) {
+				me.iconEl.update(NTIFormat.avatar(user));
+				me.usernameEl.update(user.getName());
+			});
 	},
 
 
@@ -25,7 +27,7 @@ Ext.define('NextThought.app.notifications.components.types.Badge', {
 
 		wording = wording.replace('{badge}', this.titleTpl.apply({name: this.item.get('name')}));
 
-		this.wordingEl.innerHTML = wording;
+		this.wordingEl.dom.innerHTML = wording;
 	},
 
 
