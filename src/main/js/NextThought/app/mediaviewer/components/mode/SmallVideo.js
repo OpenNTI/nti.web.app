@@ -39,7 +39,7 @@ Ext.define('NextThought.app.mediaviewer.components.mode.SmallVideo', {
 	]),
 
 	layout: 'none',
-	// componentLayout: 'natural',
+
 	childEls: ['body'],
 	getTargetEl: function() { return this.body; },
 
@@ -194,37 +194,20 @@ Ext.define('NextThought.app.mediaviewer.components.mode.SmallVideo', {
 		this.on('jump-video-to', Ext.bind(this.videoplayer.jumpToVideoLocation, this.videoplayer), this);
 	},
 
-	adjustOnResize: function() {},
+	adjustOnResize: function(availableHeight, availableWidth) {
+		if (!this.resourceView) { return; }
 
+		var videoWidth = this.videoPlayerEl.getWidth(),
+			targetEl = this.getTargetEl(),
+			transcriptWidth = Math.floor(availableWidth * this.transcriptRatio),
+			tEl = this.el.down('.content-video-transcript'),
+			top = this.videoPlayerEl.getTop() - targetEl.getTop();
 
-	// adjustOnResize: function(availableHeight, availableWidth) {
-	// 	if (!this.resourceView) { return; }
-
-	// 	var videoWidth = this.videoPlayerEl.getWidth(),
-	// 		targetEl = this.getTargetEl(),
-	// 		transcriptWidth = Math.floor(availableWidth * this.transcriptRatio),
-	// 		tEl = this.el.down('.content-video-transcript'),
-	// 		top = this.videoPlayerEl.getTop() - targetEl.getTop();
-
-	// 	targetEl.setStyle('height', availableHeight + 'px');
-
-	// 	if (!tEl) {
-	// 		this.alignResourceViewNextToVideo(videoWidth, top);
-	// 	}
-	// 	else {
-	// 		if (transcriptWidth > 80) {
-	// 			transcriptWidth -= 80;
-	// 			tEl.parent('.transcript-view').show();
-	// 			tEl.setStyle('width', transcriptWidth + 'px');
-	// 		}else {
-	// 			tEl.parent('.transcript-view').hide();
-	// 		}
-	// 		videoWidth += 80;
-	// 		targetEl.setStyle('marginLeft', videoWidth + 'px');
-	// 	}
-
-	// 	console.log('Media viewer resizing');
-	// },
+		targetEl.setStyle('height', availableHeight + 'px');
+		this.videoPlayerEl.setStyle('flex-basis', videoWidth + 'px');
+		this.videoPlayerEl.setStyle('-webkit-flex-basis', videoWidth + 'px');
+		this.videoPlayerEl.setStyle('-ms-flex-basis', videoWidth + 'px');
+	},
 
 
 	alignResourceViewNextToVideo: function(left, top) {
