@@ -57,6 +57,15 @@ Ext.define('NextThought.app.notifications.components.types.Base', {
 
 		this.fillInData();
 		this.fillInWording();
+
+		this.mon(this.el, 'click', this.onClicked.bind(this));
+	},
+
+
+	onClicked: function() {
+		if (this.navigateToItem) {
+			this.navigateToItem(this.record);
+		}
 	},
 
 

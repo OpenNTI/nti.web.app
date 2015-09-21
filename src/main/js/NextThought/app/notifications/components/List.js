@@ -46,11 +46,17 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 
 	onDeactivate: function() {
+		var container = this.getGroupContainer(),
+			groups = container && container.el && container.el.select('.notification-group');
+
 		Ext.destroy(this.storeListeners);
 
 		this.NotificationsStore.removeActiveView();
 
-		this.removeAll(true);
+		if (groups) {
+			groups.destroy();
+		}
+
 		this.groups = {};
 	},
 
@@ -125,7 +131,8 @@ Ext.define('NextThought.app.notifications.components.List', {
 			config = {
 				xtype: 'notification-group',
 				group: group,
-				showLabel: this.SHOW_GROUP_LABEL
+				showLabel: this.SHOW_GROUP_LABEL,
+				navigateToItem: this.navigateToItem.bind(this)
 			};
 
 		if (prepend) {
@@ -163,7 +170,10 @@ Ext.define('NextThought.app.notifications.components.List', {
 			container.remove(this.loadingCmp);
 			delete this.loadingCmp;
 		}
-	}
+	},
+
+
+	navigateToItem: function() {}
 });
 
 // Ext.define('NextThought.app.notifications.components.List', {

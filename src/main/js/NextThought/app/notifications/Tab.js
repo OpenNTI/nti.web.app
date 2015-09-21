@@ -18,7 +18,7 @@ Ext.define('NextThought.app.notifications.Tab', {
 			updateBadge: this.updateBadge.bind(this),
 			close: this.setMenuClosed.bind(this),
 			pushRootRoute: this.pushRootRoute.bind(this),
-			navigateToObject: this.navigateToObject.bind(this)
+			navigateToObject: this.doNavigateToObject.bind(this)
 		});
 
 		this.NotificationsStore = NextThought.app.notifications.StateStore.getInstance();
@@ -68,6 +68,13 @@ Ext.define('NextThought.app.notifications.Tab', {
 		} else {
 			this.setMenuOpen();
 		}
+	},
+
+
+	doNavigateToObject: function(rec) {
+		this.toggleMenu();
+
+		this.navigateToObject(rec);
 	},
 
 

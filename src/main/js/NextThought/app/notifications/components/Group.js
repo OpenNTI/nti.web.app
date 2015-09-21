@@ -75,7 +75,10 @@ Ext.define('NextThought.app.notifications.components.Group', {
 		item = this.unwrap(item);
 
 		var cmp = this.self.MIME_TO_COMPONENT[item.mimeType],
-			config = {record: item};
+			config = {
+				record: item,
+				navigateToItem: this.navigateToItem.bind(this)
+			};
 
 		if (!cmp) {
 			console.warn('No CMP for item: ', item);
