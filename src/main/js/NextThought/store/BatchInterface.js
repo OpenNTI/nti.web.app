@@ -35,21 +35,23 @@ Ext.define('NextThought.store.BatchInterface', {
 	},
 
 
-	getBatch: function() {
+	getBatch: function(force) {
 		var me = this,
 			url = me.getUrl(),
 			params = me.getParams();
 
-		me.__load = me.__load || this.__loadBatch(url, params);
+		if (!me.__load || force) {
+			me.__load = this.__loadBatch(url, params);
+		}
 
 		return me.__load;
 	},
 
 
-	getItems: function() {
+	getItems: function(force) {
 		var me = this;
 
-		return me.getBatch()
+		return me.getBatch(force)
 			.then(function(batch) {
 				return batch.Items;
 			});

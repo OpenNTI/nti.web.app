@@ -37,6 +37,8 @@ Ext.define('NextThought.app.notifications.components.List', {
 			'record-deleted': this.deleteRecord.bind(this)
 		});
 
+		this.NotificationsStore.addActiveView();
+
 		this.NotificationsStore.getStore()
 			.then(this.loadBatch.bind(this));
 	},
@@ -44,6 +46,8 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 	onDeactivate: function() {
 		Ext.destroy(this.storeListeners);
+
+		this.NotificationsStore.removeActiveView();
 
 		this.removeAll(true);
 		this.groups = {};

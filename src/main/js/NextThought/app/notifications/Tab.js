@@ -3,7 +3,8 @@ Ext.define('NextThought.app.notifications.Tab', {
 	alias: 'widget.notifications-tab',
 
 	requires: [
-		'NextThought.app.notifications.components.TabView'
+		'NextThought.app.notifications.components.TabView',
+		'NextThought.app.notifications.StateStore'
 	],
 
 	cls: 'notifications-icon',
@@ -19,6 +20,9 @@ Ext.define('NextThought.app.notifications.Tab', {
 			pushRootRoute: this.pushRootRoute.bind(this),
 			navigateToObject: this.navigateToObject.bind(this)
 		});
+
+		this.NotificationsStore = NextThought.app.notifications.StateStore.getInstance();
+		this.mon(this.NotificationsStore, 'update-unseen-count', this.updateBadge.bind(this));
 
 		this.on('destroy', 'destroy', this.listComponent);
 	},
