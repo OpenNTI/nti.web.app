@@ -119,7 +119,7 @@
 		background: #424242;
 		box-shadow: 1px 0 0 0 #5e5e5e;
 		min-height: calc(100vh - 72px);
-		@include flexItem(1 1 210px);
+		@include flexItem(1 1 25%);
 	}
 
 	.groups {
@@ -176,6 +176,10 @@
 		margin-bottom: 60px;
 	}
 
+	.item-container {
+		max-width: 775px;
+	}
+
 	.notification {
 		max-width: 775px;
 		margin-bottom: 10px;
@@ -188,9 +192,8 @@
 		}
 
 		.username {
-			@include flexItem(0 0 auto);
+			@include flexItem(0 0 25%);
 			float: left;
-			width: 200px;
 			font: normal 400 0.875em/1.36 $font;
 			color: $primary-blue;
 			margin-right: 5px;
@@ -298,6 +301,6 @@
 	h3 {
 		font: normal 300 2em/1.3em $font;
 		color: white;
-		margin: 40px 0 0;
+		margin: 40px 0 12px;
 	}
 }
