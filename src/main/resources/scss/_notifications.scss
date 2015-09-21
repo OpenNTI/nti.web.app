@@ -193,6 +193,9 @@
 			width: 200px;
 			font: normal 400 0.875em/1.36 $font;
 			color: $primary-blue;
+			margin-right: 5px;
+			overflow: hidden;
+			@include ellipse;
 		}
 
 		.wrap {
