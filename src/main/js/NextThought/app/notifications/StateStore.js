@@ -52,7 +52,10 @@ Ext.define('NextThought.app.notifications.StateStore', {
 
 
 	updateLastViewed: function() {
-		this.NOTABLE_STORE.getBatch()
+		this.getStore()
+			.then(function(store) {
+				return store.getBatch();
+			})
 			.then(function(batch) {
 				var link = Service.getLinkFrom(batch.Links, 'lastViewed'),
 					lastViewed = new Date();
@@ -67,7 +70,10 @@ Ext.define('NextThought.app.notifications.StateStore', {
 
 
 	addRecord: function(change) {
-		this.NOTABLE_STORE.getBatch()
+		this.getStore()
+			.then(function(store) {
+				return store.getBatch();
+			})
 			.then(function(batch) {
 				batch.Items.unshift(change);
 			});
