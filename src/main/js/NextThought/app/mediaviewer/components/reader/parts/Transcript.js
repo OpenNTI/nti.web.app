@@ -13,12 +13,14 @@ Ext.define('NextThought.app.mediaviewer.components.reader.parts.Transcript', {
 		transcriptItem: 'NextThought.app.mediaviewer.components.reader.mixins.AnnotationsMixin'
 	},
 
-    flex: 1,
+    // flex: 1,
 
-	layout: {
-	    type: 'vbox',
-	    align: 'stretch'
-	},
+	// layout: {
+	//     type: 'vbox',
+	//     align: 'stretch'
+	// },
+
+	// layout: 'none',
 
 	//	ui: 'content-launcher',
 	cls: 'content-video-transcript',

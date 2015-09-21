@@ -1319,7 +1319,7 @@ $experimental-support-for-svg: true;
     .x-container-media-viewer{
         position: relative;
         overflow: hidden;
-        display: block;
+        @include flexContainer();
 
         .sync-button {
             position: absolute;
@@ -1345,15 +1345,16 @@ $experimental-support-for-svg: true;
         }
 
         .video-player{
-            position: absolute;
             top: 20px;
             left: 10px;
             margin: 0 auto;
+            @include flexItem($flex: 0 0 67%);
         }
 
         .body{
             @include scrollbar($track:$slidedeck-controls-background, $nib:$secondary-grey);
-            margin: 10px 0 0 1000px;
+         	@include flexItem($flex: 1 1 auto);   
+            /*margin: 10px 0 0 1000px;*/
             overflow:{
                 y: auto; //scroll;
                 x: hidden;
@@ -1376,7 +1377,7 @@ $experimental-support-for-svg: true;
 
                 .content-video-transcript{
                     margin: 0 !important;
-                    max-width: 390px !important;
+                    /*max-width: 390px !important;*/
 
                     .row-item{
                         .timestamp{

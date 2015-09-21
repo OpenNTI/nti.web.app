@@ -16,7 +16,7 @@ Ext.define('NextThought.app.mediaviewer.components.mode.Split', {
                 tWidth = Math.floor(screenWidth * transcriptRatio),
                 ratio = NextThought.app.video.Video.ASPECT_RATIO,
                 chatGutterWidth = 60,
-                defaultWidth = Ext.Element.getViewportWidth() - tWidth - chatGutterWidth,
+                defaultWidth = Ext.Element.getViewportWidth() - tWidth,
                 defaultHeight = Math.round(defaultWidth * ratio),
                 y = 80,
                 diff = screenHeight - (y + defaultHeight),
