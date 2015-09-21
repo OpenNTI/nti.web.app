@@ -38,8 +38,8 @@ Ext.define('NextThought.app.mediaviewer.components.mode.SmallVideo', {
 		{id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out, values)%}']}
 	]),
 
-	layout: 'auto',
-	componentLayout: 'natural',
+	layout: 'none',
+
 	childEls: ['body'],
 	getTargetEl: function() { return this.body; },
 
@@ -194,7 +194,6 @@ Ext.define('NextThought.app.mediaviewer.components.mode.SmallVideo', {
 		this.on('jump-video-to', Ext.bind(this.videoplayer.jumpToVideoLocation, this.videoplayer), this);
 	},
 
-
 	adjustOnResize: function(availableHeight, availableWidth) {
 		if (!this.resourceView) { return; }
 
@@ -205,23 +204,9 @@ Ext.define('NextThought.app.mediaviewer.components.mode.SmallVideo', {
 			top = this.videoPlayerEl.getTop() - targetEl.getTop();
 
 		targetEl.setStyle('height', availableHeight + 'px');
-
-		if (!tEl) {
-			this.alignResourceViewNextToVideo(videoWidth, top);
-		}
-		else {
-			if (transcriptWidth > 80) {
-				transcriptWidth -= 80;
-				tEl.parent('.transcript-view').show();
-				tEl.setStyle('width', transcriptWidth + 'px');
-			}else {
-				tEl.parent('.transcript-view').hide();
-			}
-			videoWidth += 80;
-			targetEl.setStyle('marginLeft', videoWidth + 'px');
-		}
-
-		console.log('Media viewer resizing');
+		this.videoPlayerEl.setStyle('flex-basis', videoWidth + 'px');
+		this.videoPlayerEl.setStyle('-webkit-flex-basis', videoWidth + 'px');
+		this.videoPlayerEl.setStyle('-ms-flex-basis', videoWidth + 'px');
 	},
 
 

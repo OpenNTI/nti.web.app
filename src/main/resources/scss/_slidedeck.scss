@@ -776,6 +776,8 @@ $experimental-support-for-svg: true;
 }
 
 .content-video-navigation{
+	position: relative;
+
 	.navigation{
 		position: absolute;
 		width: 40px;
@@ -938,7 +940,6 @@ $experimental-support-for-svg: true;
 	bottom: 0 !important;
 	right: 0 !important;
 	left: 0 !important;
-	min-width: 1024px;
 	box-shadow: 0 1px 0 0 rgba(0,0,0, 0.1);
 	background: $slidedeck-controls-background !important;
 	display: none;
@@ -1319,7 +1320,8 @@ $experimental-support-for-svg: true;
     .x-container-media-viewer{
         position: relative;
         overflow: hidden;
-        display: block;
+        @include flexContainer();
+        flex-flow : row;
 
         .sync-button {
             position: absolute;
@@ -1345,15 +1347,16 @@ $experimental-support-for-svg: true;
         }
 
         .video-player{
-            position: absolute;
             top: 20px;
             left: 10px;
-            margin: 0 auto;
+            @include flexItem($flex: 0 0 67%);
+            position: relative;
         }
 
         .body{
             @include scrollbar($track:$slidedeck-controls-background, $nib:$secondary-grey);
-            margin: 10px 0 0 1000px;
+         	@include flexItem($flex: 1 1 auto);   
+            /*margin: 10px 0 0 1000px;*/
             overflow:{
                 y: auto; //scroll;
                 x: hidden;
@@ -1364,6 +1367,7 @@ $experimental-support-for-svg: true;
                 width: auto !important;
                 position: relative;
                 overflow-y: hidden !important;
+                margin-right: 75px;
 
                 .searchHit-overlay{
                     pointer-events: none;
@@ -1376,7 +1380,7 @@ $experimental-support-for-svg: true;
 
                 .content-video-transcript{
                     margin: 0 !important;
-                    max-width: 390px !important;
+                    /*max-width: 390px !important;*/
 
                     .row-item{
                         .timestamp{
@@ -1384,11 +1388,6 @@ $experimental-support-for-svg: true;
                         }
                     }
                 }
-
-                .x-component-slide {
-                	max-width: 430px;
-                }
-
 
                 &.no-transcript-view{
                     height: 60px;
@@ -1403,16 +1402,14 @@ $experimental-support-for-svg: true;
 
         &.small-video-player{
             .video-player{
-                width: 512px !important;
-                height: 288px !important;
+                @include flexItem($flex: 0 0 512px);
             }
 
             .body{
-                margin-left: 560px !important;
+                margin-left: 40px;
                 .x-container-transcript{
                     .content-video-transcript{
                         padding-left: 70px !important;
-                        max-width: 820px !important;
 
                         .row-item{
                             .timestamp{
@@ -1423,7 +1420,6 @@ $experimental-support-for-svg: true;
 
                     .x-component-slide {
 	                	padding-left: 90px;
-	                	max-width: 860px;
 	                }
                 }
             }
@@ -1431,11 +1427,13 @@ $experimental-support-for-svg: true;
 
         &.full-video-player{
             right: 0 !important;
+            display: block;
 
             .video-player{
                 position: relative;
                 left: 0;
-                margin-bottom: 20px;
+                top: 0;
+                margin: 10px auto;
 
                 .content-video{
                     margin: 10px auto;
@@ -1612,8 +1610,6 @@ $experimental-support-for-svg: true;
 	}
 
 	.x-component-slide{
-        //Only set the max, if it's smaller, adjust.
-		max-width: 860px;
         padding: 50px 90px 0 0;
 
 		.image-wrap{

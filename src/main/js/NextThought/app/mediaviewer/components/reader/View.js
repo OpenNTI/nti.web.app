@@ -22,6 +22,8 @@ Ext.define('NextThought.app.mediaviewer.components.reader.View', {
 	cls: 'transcript-view scrollable',
 	items: [],
 
+	layout: 'none',
+
 	desiredTop: 0,
 
 	lineFilterId: 'plinefilter',

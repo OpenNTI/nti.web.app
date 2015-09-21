@@ -13,12 +13,6 @@ Ext.define('NextThought.app.mediaviewer.components.reader.parts.Transcript', {
 		transcriptItem: 'NextThought.app.mediaviewer.components.reader.mixins.AnnotationsMixin'
 	},
 
-    flex: 1,
-
-	layout: {
-	    type: 'vbox',
-	    align: 'stretch'
-	},
 
 	//	ui: 'content-launcher',
 	cls: 'content-video-transcript',
@@ -170,6 +164,10 @@ Ext.define('NextThought.app.mediaviewer.components.reader.parts.Transcript', {
 				me.store = me.buildStore(cueList, me.getTimeRangeFilter());
 				me.bindStore(me.store);
 				me.cueList = cueList;
+
+				if (me.rendered) {
+					me.refresh();
+				}
 				
 				wait()
 					.then(me.notifyReady.bind(me));
