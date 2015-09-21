@@ -10,6 +10,8 @@ Ext.define('NextThought.app.notifications.components.types.Base', {
 	wording: '',
 	itemCls: '',
 
+	cls: 'item-container',
+
 	titleTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'title', html: '{name}'}).compile(),
 
 	renderTpl: Ext.DomHelper.markup({

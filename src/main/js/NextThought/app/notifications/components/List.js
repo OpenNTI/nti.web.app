@@ -12,6 +12,7 @@ Ext.define('NextThought.app.notifications.components.List', {
 	cls: 'notification-list',
 	layout: 'none',
 	SHOW_GROUP_LABEL: true,
+	PREPEND_INDEX: 0,
 
 	items: [],
 
@@ -119,16 +120,18 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 
 	addGroup: function(groupName, group, prepend) {
-		var cmp, config = {
+		var cmp,
+			container = this.getGroupContainer(),
+			config = {
 				xtype: 'notification-group',
 				group: group,
 				showLabel: this.SHOW_GROUP_LABEL
 			};
 
 		if (prepend) {
-			cmp = this.insert(0, config);
+			cmp = container.insert(this.PREPEND_INDEX, config);
 		} else {
-			cmp = this.add(config);
+			cmp = container.add(config);
 		}
 
 		this.groups[groupName] = cmp;
@@ -138,8 +141,10 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 
 	addMask: function() {
+		var container = this.getGroupContainer();
+
 		if (!this.loadingCmp) {
-			this.loadingCmp = this.add({
+			this.loadingCmp = container.add({
 				xtype: 'box',
 				autoEl: {cls: 'item loading', cn: [
 					{cls: 'container-loading-mask', cn: [
@@ -152,8 +157,10 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 
 	removeMask: function() {
+		var container = this.getGroupContainer();
+
 		if (this.loadingCmp) {
-			this.remove(this.loadingCmp);
+			container.remove(this.loadingCmp);
 			delete this.loadingCmp;
 		}
 	}

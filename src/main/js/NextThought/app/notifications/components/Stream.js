@@ -6,14 +6,38 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 		Router: 'NextThought.mixins.Router'
 	},
 
+	requires: [
+		'NextThought.app.notifications.components.Header'
+	],
+
 	cls: 'notification-stream',
+	PREPEND_INDEX: 1,
+
+	items: [
+		{xtype: 'box', cls: 'sidebar'},
+		{
+			xtype: 'container',
+			layout: 'none',
+			groupContainer: true,
+			cls: 'groups',
+			items: [
+				{xtype: 'notification-header'}
+			]
+		}
+	],
 
 	initComponent: function() {
 		this.callParent(arguments);
 
 		this.initRouter();
 
+		this.groupsContainer = this.down('[groupContainer]');
+
 		this.onScroll = this.onScroll.bind(this);
+	},
+
+	getGroupContainer: function() {
+		return this.groupsContainer;
 	},
 
 

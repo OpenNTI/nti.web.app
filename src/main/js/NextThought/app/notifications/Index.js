@@ -6,10 +6,11 @@ Ext.define('NextThought.app.notifications.Index', {
 
 	layout: 'none',
 
+	fullwidth: true,
+
 	requires: [
 		'NextThought.app.navigation.Actions',
 		'NextThought.app.notifications.StateStore',
-		'NextThought.app.notifications.components.Header',
 		'NextThought.app.notifications.components.Stream'
 	],
 
@@ -17,11 +18,7 @@ Ext.define('NextThought.app.notifications.Index', {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	items: [
-		{
-			xtype: 'notification-header'
-		}
-	],
+	items: [],
 
 
 	initComponent: function() {
@@ -79,29 +76,9 @@ Ext.define('NextThought.app.notifications.Index', {
 	},
 
 
-	showLoading: function() {
-		if (!this.loadingCmp) {
-			this.loadingCmp = this.add({
-				xtype: 'box',
-				autoEl: {cls: 'loading-container item', cn: {cls: 'loading', html: 'Loading...'}}
-			});
-		}
-	},
-
-
-	removeLoading: function() {
-		if (this.loadingCmp) {
-			this.remove(this.loadingCmp, true);
-			delete this.loadingCmp;
-		}
-	},
-
-
 	buildStream: function() {
 		this.stream = this.add({
-			xtype: 'notifications-stream-list',
-			addMask: this.showLoading.bind(this),
-			removeMask: this.removeLoading.bind(this)
+			xtype: 'notifications-stream-list'
 		});
 
 		this.addChildRouter(this.stream);

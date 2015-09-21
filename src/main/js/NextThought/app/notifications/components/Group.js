@@ -41,7 +41,7 @@ Ext.define('NextThought.app.notifications.components.Group', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var groupLabel = this.group && Ext.data.Types.GROUPBYTIME.groupTitle(this.group),
+		var groupLabel = this.group && Ext.data.Types.GROUPBYTIME.groupTitle(this.group, 'Today'),
 			Types = NextThought.app.notifications.components.types;
 
 		this.self.fillInMimeTypeComponent([
