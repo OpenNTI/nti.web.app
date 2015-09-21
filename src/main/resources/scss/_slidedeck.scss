@@ -776,6 +776,8 @@ $experimental-support-for-svg: true;
 }
 
 .content-video-navigation{
+	position: relative;
+
 	.navigation{
 		position: absolute;
 		width: 40px;
@@ -938,7 +940,6 @@ $experimental-support-for-svg: true;
 	bottom: 0 !important;
 	right: 0 !important;
 	left: 0 !important;
-	min-width: 1024px;
 	box-shadow: 0 1px 0 0 rgba(0,0,0, 0.1);
 	background: $slidedeck-controls-background !important;
 	display: none;
@@ -1426,11 +1427,13 @@ $experimental-support-for-svg: true;
 
         &.full-video-player{
             right: 0 !important;
+            display: block;
 
             .video-player{
                 position: relative;
                 left: 0;
-                margin-bottom: 20px;
+                top: 0;
+                margin: 10px auto;
 
                 .content-video{
                     margin: 10px auto;
