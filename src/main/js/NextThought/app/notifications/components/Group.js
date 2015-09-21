@@ -57,10 +57,12 @@ Ext.define('NextThought.app.notifications.components.Group', {
 			Types.Badge
 		]);
 
-		this.add({
-			xtype: 'box',
-			autoEl: {cls: 'group-header', html: groupLabel || ''}
-		});
+		if (this.showLabel) {
+			this.add({
+				xtype: 'box',
+				autoEl: {cls: 'group-header', html: groupLabel || ''}
+			});
+		}
 	},
 
 
@@ -74,6 +76,11 @@ Ext.define('NextThought.app.notifications.components.Group', {
 
 		var cmp = this.self.MIME_TO_COMPONENT[item.mimeType],
 			config = {record: item};
+
+		if (!cmp) {
+			console.warn('No CMP for item: ', item);
+			return;
+		}
 
 		if (prepend) {
 			this.insert(1, cmp.create(config));

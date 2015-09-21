@@ -55,6 +55,16 @@ Ext.define('NextThought.app.notifications.components.TabView', {
 	},
 
 
+	onActivate: function() {
+		this.list.onActivate();
+	},
+
+
+	onDeactivate: function() {
+		this.list.onDeactivate();
+	},
+
+
 	setMaxHeight: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.setMaxHeight.bind(this));

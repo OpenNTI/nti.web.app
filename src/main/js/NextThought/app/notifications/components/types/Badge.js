@@ -32,7 +32,7 @@ Ext.define('NextThought.app.notifications.components.types.Badge', {
 
 
 	getDisplayTime: function() {
-		var t = this.recrd.get('EventTime') || this.record.get('Last Modified');
+		var t = this.record.get('EventTime') || this.record.get('Last Modified');
 
 		return t;
 	}

@@ -3,11 +3,13 @@ Ext.define('NextThought.app.notifications.components.MostRecent', {
 	alias: 'widget.notifications-most-recent',
 
 	SHOW_COUNT: 20,
+	SHOW_GROUP_LABEL: false,
 
 	cls: 'recent-notifications',
 
 	onActivate: function() {
-		this.store.lastViewed = new Date();
+		// this.store.lastViewed = new Date();
+		this.callParent(arguments);
 		this.clearBadge();
 	},
 

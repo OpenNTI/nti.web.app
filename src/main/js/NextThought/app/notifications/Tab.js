@@ -54,6 +54,7 @@ Ext.define('NextThought.app.notifications.Tab', {
 
 	onMenuHide: function() {
 		this.list.hide();
+		this.list.onDeactivate();
 	},
 
 

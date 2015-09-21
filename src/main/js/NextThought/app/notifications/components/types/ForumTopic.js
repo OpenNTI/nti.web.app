@@ -5,7 +5,8 @@ Ext.define('NextThought.app.notifications.components.types.ForumTopic', {
 	statics: {
 		keyVal: [
 			'application/vnd.nextthought.forums.communityheadlinetopic',
-			'application/vnd.nextthought.forums.contentheadlinetopic'
+			'application/vnd.nextthought.forums.contentheadlinetopic',
+			'application/vnd.nextthought.forums.dflheadlinetopic'
 		]
 	},
 

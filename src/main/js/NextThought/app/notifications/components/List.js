@@ -11,6 +11,7 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 	cls: 'notification-list',
 	layout: 'none',
+	SHOW_GROUP_LABEL: true,
 
 	items: [],
 
@@ -18,7 +19,6 @@ Ext.define('NextThought.app.notifications.components.List', {
 		this.callParent(arguments);
 
 		this.groups = {};
-		this.groupOrder = [];
 
 		this.NotificationsStore = NextThought.app.notifications.StateStore.getInstance();
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
@@ -27,10 +27,6 @@ Ext.define('NextThought.app.notifications.components.List', {
 			activate: this.onActivate.bind(this),
 			deactivate: this.onDeactivate.bind(this)
 		});
-
-
-		this.NotificationsStore.getStore()
-			.then(this.loadBatch.bind(this));
 	},
 
 
@@ -40,11 +36,17 @@ Ext.define('NextThought.app.notifications.components.List', {
 			'record-added': this.addRecord.bind(this, true),
 			'record-deleted': this.deleteRecord.bind(this)
 		});
+
+		this.NotificationsStore.getStore()
+			.then(this.loadBatch.bind(this));
 	},
 
 
 	onDeactivate: function() {
 		Ext.destroy(this.storeListeners);
+
+		this.removeAll(true);
+		this.groups = {};
 	},
 
 
@@ -115,7 +117,8 @@ Ext.define('NextThought.app.notifications.components.List', {
 	addGroup: function(groupName, group, prepend) {
 		var cmp, config = {
 				xtype: 'notification-group',
-				group: group
+				group: group,
+				showLabel: this.SHOW_GROUP_LABEL
 			};
 
 		if (prepend) {
@@ -131,14 +134,16 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 
 	addMask: function() {
-		this.loadingCmp = this.add({
-			xtype: 'box',
-			autoEl: {cls: 'item', cn: [
-				{cls: 'container-loading-mask', cn: [
-					{cls: 'load-text', html: 'Loading...'}
+		if (!this.loadingCmp) {
+			this.loadingCmp = this.add({
+				xtype: 'box',
+				autoEl: {cls: 'item loading', cn: [
+					{cls: 'container-loading-mask', cn: [
+						{cls: 'load-text', html: 'Loading...'}
+					]}
 				]}
-			]}
-		});
+			});
+		}
 	},
 
 
