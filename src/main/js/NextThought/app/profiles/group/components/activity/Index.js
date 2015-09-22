@@ -40,7 +40,7 @@ Ext.define('NextThought.app.profiles.group.components.activity.Index', {
 	},
 
 
-	navigateToActivityItem: function(item) {
-		this.Router.root.attemptToNavigateToObject(item);
+	navigateToActivityItem: function(item, monitors) {
+		this.Router.root.attemptToNavigateToObject(item, monitors);
 	}
 });

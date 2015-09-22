@@ -404,7 +404,9 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 
 
 	forumClickHandler: function() {
-		this.navigateToObject(this.record);
+		this.navigateToObject(this.record, { 
+			afterClose: this.updateRecord.bind(this) 
+		});
 	},
 
 
@@ -413,21 +415,22 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 	},
 
 
+	updateRecord: function(rec) {
+		if (!this.rendered || !rec) {
+			return;
+		}
+
+		var headline = rec.get('headline');
+		headline.compileBodyContent(this.setBody, this);
+		this.titleEl.update(rec.get('title'));
+	},
+
+
 	navigateToTopicForEdit: function(e, el) {
 		var me = this;
 
 		me.WindowActions.pushWindow(me.record, 'edit', el, {
-			afterSave: function(rec) {
-				if (!this.rendered) {
-					return;
-				}
-
-				var headline = rec.get('headline');
-
-				headline.compileBodyContent(me.setBody, me);
-
-				me.titleEl.update(rec.get('title'));
-			}
+			afterSave: this.updateRecord.bind(this)
 		});
 	}
 });

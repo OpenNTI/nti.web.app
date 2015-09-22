@@ -105,9 +105,9 @@ Ext.define('NextThought.app.profiles.user.components.activity.Body', {
 	},
 
 
-	navigateToActivityItem: function(item) {
+	navigateToActivityItem: function(item, monitors) {
 		if (this.navigateToObject) {
-			this.navigateToObject(item);
+			this.navigateToObject(item, monitors);
 		}
 	}
 });
