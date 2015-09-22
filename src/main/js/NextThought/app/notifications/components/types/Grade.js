@@ -1,26 +1,26 @@
 Ext.define('NextThought.app.notifications.components.types.Grade', {
-	extend: 'NextThought.app.notifications.components.types.Feedback',
-	keyVal: 'application/vnd.nextthought.grade',
+	extend: 'NextThought.app.notifications.components.types.Base',
 	alias: 'widget.notification-item-grade',
 
-	showCreator: false,
-	wording: 'NextThought.view.account.notifications.types.Grade.wording',
-	quotePreview: false,
+	statics: {
+		keyVal: 'application/vnd.nextthought.grade'
+	},
+
 	itemCls: 'grade',
+	wording: 'graded {assignment}',
 
-	getWording: function(values) {
-		var wording = this.callParent(arguments);
+	fillInWording: function() {
+		var me = this,
+			assignmentId = me.record.get('AssignmentId');
 
-		return this.getDisplayNameTpl(values) + wording;
-	},
+		if (!assignmentId) {
+			me.addCls('x-hidden');
+			return;
+		}
 
-	getDisplayName: function(values) {
-		if (!values || !values.course) { return ''; }
-		return values.course.get('Title');
-	},
-
-
-	getIcon: function(values) {
-		return Ext.DomHelper.markup({cls: 'icon'});
+		return Service.getObject(assignmentId)
+			.then(function(assignment) {
+				me.wordingEl.dom.innerHTML = me.wording.replace('{assignment}', me.titleTpl.apply({name: assignment.get('title')}));
+			});
 	}
 });

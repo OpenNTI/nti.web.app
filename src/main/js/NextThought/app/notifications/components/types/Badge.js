@@ -1,43 +1,39 @@
 Ext.define('NextThought.app.notifications.components.types.Badge', {
 	extend: 'NextThought.app.notifications.components.types.Base',
-	alias: 'widget.notification-item-badge',
-	keyVal: 'application/vnd.nextthought.openbadges.badge',
+	alias: 'widget.notifications-item-badge',
+
+	statics: {
+		keyVal: 'application/vnd.nextthought.openbadges.badge'
+	},
 
 	showCreator: false,
 	itemCls: 'badge',
-	wording: 'NextThought.view.account.notifications.types.Badge.wording',
+	wording: 'awarded you {badge}',
 
-	emptyTpl: '',
+	fillInData: function() {
+		var me = this,
+			creator = Service.get('SiteCommunity');
 
-	badgeTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'link', html: '{name}'}).compile(),
-
-	getWording: function(values) {
-		var name;
-
-		if (values.isEmpty) {
-			name = this.emptyTpl;
-		} else {
-			name = this.badgeTpl.apply({name: values.name});
-		}
-
-		return getFormattedString(this.wording, {
-			badge: name
-		});
-	},
-
-	getIcon: function(values) {
-		return Ext.DomHelper.markup({cls: 'icon', style: {backgroundImage: 'url(' + values.image + ')'}});
-	},
-
-	clicked: function(view, rec) {
-		//TODO: figure out this navigation		
+		UserRepository.getUser(creator)
+			.then(function(user) {
+				me.iconEl.update(NTIFormat.avatar(user));
+				me.usernameEl.update(user.getName());
+			});
 	},
 
 
-	getDisplayTime: function(values) {
-		var t = values.EventTime || values.CreatedTime;
+	fillInWording: function() {
+		var wording = this.wording;
 
-		values.Time = t;
-		return Ext.util.Format.date(t, 'c');
+		wording = wording.replace('{badge}', this.titleTpl.apply({name: this.record.get('name')}));
+
+		this.wordingEl.dom.innerHTML = wording;
+	},
+
+
+	getDisplayTime: function() {
+		var t = this.record.get('EventTime') || this.record.get('Last Modified');
+
+		return t;
 	}
 });

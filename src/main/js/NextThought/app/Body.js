@@ -120,6 +120,12 @@ Ext.define('NextThought.app.Body', {
 			cmp.fireEvent('activate');
 		}
 
+		if (cmp.fullwidth) {
+			this.addCls('fullwidth');
+		} else {
+			this.removeCls('fullwidth');
+		}
+
 
 		return cmp;
 	},

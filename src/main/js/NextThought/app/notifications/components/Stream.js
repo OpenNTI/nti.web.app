@@ -6,22 +6,52 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 		Router: 'NextThought.mixins.Router'
 	},
 
+	requires: [
+		'NextThought.app.notifications.components.Header'
+	],
+
+	cls: 'notification-stream',
+	PREPEND_INDEX: 1,
+
+	items: [
+		{xtype: 'box', cls: 'sidebar'},
+		{
+			xtype: 'container',
+			layout: 'none',
+			groupContainer: true,
+			cls: 'groups',
+			items: [
+				{xtype: 'notification-header'}
+			]
+		}
+	],
+
 	initComponent: function() {
 		this.callParent(arguments);
 
 		this.initRouter();
 
+		this.groupsContainer = this.down('[groupContainer]');
+
 		this.onScroll = this.onScroll.bind(this);
+	},
+
+	getGroupContainer: function() {
+		return this.groupsContainer;
 	},
 
 
 	onActivate: function() {
+		this.callParent(arguments);
+
 		window.addEventListener('scroll', this.onScroll);
 	},
 
 
 	onDeactivate: function() {
-		window.removeEventListener('scroll', this.onScroll);
+		this.callParent(arguments);
+
+		window.addEventListener('scroll', this.onScroll);
 	},
 
 
@@ -31,57 +61,15 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 	},
 
 
-	setUpListeners: function(store) {
-		var me = this;
-
-		me.mon(store.backingStore, {
-			add: function(s, recs) {
-				if (recs) {
-					store.add(recs);
-					store.sort();
-				}
-
-				me.removeMask();
-			},
-			load: function(s, recs) {
-				if (recs) {
-					store.loadRecords(recs, {addRecords: true});
-					store.sort();
-				}
-
-				if (!recs || recs.length < store.backingStore.pageSize) {
-					me.onLastBatch = true;
-				} else {
-					me.maybeLoadMoreIfNothingNew();
-				}
-			}
-		});
-
-		me.mon(store, {
-			add: 'recordsAdded',
-			refresh: 'storeLoaded'
-		});
-
-		if (!store.backingStore.getCount() && store.backingStore.loading) {
-			me.addMask();
-		}
-
-		store.loadRecords(store.backingStore.getRange(), {addRecords: true});
-	},
-
-
 	isOnLastBatch: function() {
-		var store = this.getStore();
-
-		return this.onLastBatch || (store.backingStore && store.backingStore.isOnLastBatch());
+		return this.isLastBatch;
 	},
 
 
 	maybeShowMoreItems: function() {
 		//if we can't scroll
 		var body = document.body,
-			height = document.documentElement.clientHeight,
-			store = this.getStore();
+			height = document.documentElement.clientHeight;
 
 		if (this.isOnLastBatch()) {
 			return;
@@ -93,35 +81,10 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 	},
 
 
-	maybeLoadMoreIfNothingNew: function() {
-		if (this.currentCount !== undefined && this.store.getCount() <= this.currentCount) {
-			console.log('Need to fetch again. Didn\'t return any new data');
-			delete this.currentCount;
-			this.prefetchNext();
-		} else {
-			this.removeMask();
-		}
-	},
-
 	prefetchNext: Ext.Function.createBuffered(function() {
-		var s = this.getStore(), max;
-
-		s = s && s.backingStore;
-
-
-		if (!s || !s.hasOwnProperty('data')) {
-			this.removeMask();
-			return;
-		}
-
-		this.currentCount = s.getCount();
-
-		if (!this.onLastBatch && !s.isLoading()) {
-			s.clearOnPageLoad = false;
-			this.addMask();
-			s.nextPage();
-		} else {
-			this.removeMask();
+		if (!this.isOnLastBatch()) {
+			this.currentBatch.getNextBatch()
+				.then(this.loadBatch.bind(this));
 		}
 	}, 500, null, null),
 
@@ -131,7 +94,7 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 			height = document.documentElement.clientHeight,
 			top = body.scrollTop,
 			scrollTopMax = body.scrollHeight - height,
-			//trigger when the top goes over a limit value.
+			//trigger when the top goes over a limit value
 			//That limit value is defined by the max scrollTop can be, minus a buffer zone. (defined here as 10% of the viewable area)
 			triggerZone = scrollTopMax - Math.floor(height * 0.1),
 			wantedDirection = (this.lastScroll || 0) < top;
@@ -144,9 +107,8 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 	},
 
 
-	rowClicked: function(view, rec, item) {
-		rec = this.unwrap(rec);
-
+	navigateToItem: function(rec) {
 		this.Router.root.attemptToNavigateToObject(rec);
 	}
+
 });

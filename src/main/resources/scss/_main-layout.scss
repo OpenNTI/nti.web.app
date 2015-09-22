@@ -51,6 +51,11 @@ body.x-body {
     width: 1024px;
     margin: 0 auto;
 
+    &.fullwidth {
+    	width: 100%;
+    	margin: 0;
+    }
+
     &.height-locked {
     	overflow: hidden;
     }

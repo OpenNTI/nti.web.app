@@ -66,22 +66,12 @@ Ext.define('NextThought.app.notifications.Actions', {
 
 			if (change.isNotable()) {
 				 if (/^DELETE/i.test(change.get('ChangeType'))) {
-					  me.__remove(change, store);
+					  me.NotificationsStore.removeRecord(change);
 					  return;
 				 }
 
-				 store.add(change);
+				 me.NotificationsStore.addRecord(change);
 			}
 		});
-	},
-
-	__remove: function(event, store) {
-		var i = event.get('Item');
-		if (!i) { return; }
-		i = i.getId();
-		store.remove(store.getRange().filter(function(c) {
-				var o = c && c.get('item');
-				return i === (o && o.getId());
-			}));
 	}
 });
