@@ -47,14 +47,15 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 	onDeactivate: function() {
 		var container = this.getGroupContainer(),
-			groups = container && container.el && container.el.select('.notification-group');
+			group = container && container.down('notification-group');
 
 		Ext.destroy(this.storeListeners);
 
 		this.NotificationsStore.removeActiveView();
 
-		if (groups) {
-			groups.destroy();
+		while (group) {
+			group.destroy();
+			group = container && container.down('notification-group');
 		}
 
 		this.groups = {};
