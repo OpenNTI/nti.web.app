@@ -212,7 +212,7 @@ Ext.define('NextThought.app.account.contacts.management.Popout', {
 		var me = this, data = this.getSelected();
 
 		this.GroupActions.addContact(this.user, data.groups)
-			.then(function () {
+			.then(function() {
 				me.destroy();
 			});
 	},
@@ -221,22 +221,21 @@ Ext.define('NextThought.app.account.contacts.management.Popout', {
 		var me = this, data = this.getSelected(),
 			fin = function() { me.destroy(); };
 
-		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
 			msg: getString('NextThought.view.account.contacts.management.Popout.remove-msg'),
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
-			scope: me,
-			icon: 'warning-red',
-			buttonText: {'ok': getString('NextThought.view.account.contacts.management.Popout.remove-button')},
 			title: getString('NextThought.view.account.contacts.management.Popout.remove-title'),
-			fn: function(str) {
-				if (str === 'ok') {
-					me.GroupActions.deleteContact(me.user, data.groups)
-						.then(fin);
-				}
+			icon: 'warning-red',
+			buttons: {
+				primary: {
+					text: 'Remove',
+					handler: function() {
+						me.GroupActions.deleteContact(me.user, data.groups)
+							.then(fin);
+					}
+				},
+				secondary: 'Cancel'
 			}
 		});
-
 	},
 
 
