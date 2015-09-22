@@ -107,12 +107,19 @@ Ext.define('NextThought.mixins.Router', {
 	 * @param  {Object} monitors key val map of events to functions
 	 */
 	attemptToNavigateToObject: function(obj, monitors) {
-		var me = this;
+		var me = this,
+			objId = obj && obj.getId(),
+			WindowStore = this.Router.WindowActions && this.Router.WindowActions.WindowStore,
+			hasWindow = objId && this.Router.WindowActions.hasWindow(obj);
 
 		monitors = monitors || {};
 
 		monitors.doNavigateToFullPath = monitors.doNavigateToFullPath || me.doNavigateToFullPath.bind(me);
 		monitors.onFailedToGetFullPath = monitors.onFailedToGetFullPath || me.onFailedToGetFullPath.bind(me);
+
+		if (hasWindow && obj && obj.isModel) {
+			WindowStore.cacheObject(obj.getId(), obj, null, monitors);	
+		}
 
 		me.Router.PathActions.getPathToObject(obj)
 			.then(function(path) {
