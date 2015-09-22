@@ -52,6 +52,16 @@ Ext.define('NextThought.app.assessment.Scoreboard', {
 
 	doReset: function() {
 		this.hide();
+
+		wait()
+			.then(this.realignAnnotations.bind(this));
+	},
+
+
+	realignAnnotations: function() {
+		var annotations = this.reader.getAnnotations();
+
+		annotations.realignAnnotations();
 	},
 
 
@@ -76,6 +86,9 @@ Ext.define('NextThought.app.assessment.Scoreboard', {
 
 		this.show();
 		this.reader.getScroll().to(0);
+
+		wait()
+			.then(this.realignAnnotations.bind(this));
 	},
 
 

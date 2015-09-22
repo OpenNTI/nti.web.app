@@ -731,6 +731,30 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 	},
 
 
+	getAnnotations: function() {
+		var key,
+			items = [];
+
+		for (key in this.annotations) {
+			if (this.annotations.hasOwnProperty(key)) {
+				items.push(this.annotations[key]);
+			}
+		}
+
+		return items;
+	},
+
+
+	realignAnnotations: function() {
+		var items = this.getAnnotations();
+
+		items = items.map(function(x) { return x.record; });
+
+		this.clearAnnotations();
+		this.buildAnnotations(items);
+	},
+
+
 	getSelection: function() {
 		var doc = this.getDocumentElement(),
 				range, selection, txt;

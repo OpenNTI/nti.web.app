@@ -598,6 +598,12 @@ Ext.define('NextThought.app.assessment.input.Base', {
 
 
 	toggleSolution: function() {
+		var annotations = this.reader.getAnnotations();
+
+		if (annotations) {
+			annotations.realignAnnotations();
+		}
+
 		if (this.solutionBox && this.solutionBox.isVisible()) {
 			this.hideSolution();
 		}
