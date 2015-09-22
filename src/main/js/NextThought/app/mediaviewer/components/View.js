@@ -291,7 +291,7 @@ Ext.define('NextThought.app.mediaviewer.components.View', {
 
 	adjustOnResize: function() {
 		var toolbarHeight = this.toolbar.el && this.toolbar.getHeight() || 0,
-			availableHeight, paddingHeight = 30, availableWidth,
+			availableHeight, paddingHeight = 0, availableWidth,
 			activeItem = this.getLayout().getActiveItem();
 
 		if (activeItem && activeItem.adjustOnResize) {
