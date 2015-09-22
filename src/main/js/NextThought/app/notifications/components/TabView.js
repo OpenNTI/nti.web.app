@@ -106,6 +106,8 @@ Ext.define('NextThought.app.notifications.components.TabView', {
 
 
 	showAll: function() {
+		this.onDeactivate();
+		this.hide();
 		this.pushRootRoute('Notifications', 'notifications');
 	}
 });
