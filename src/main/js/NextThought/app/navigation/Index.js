@@ -104,6 +104,7 @@ Ext.define('NextThought.app.navigation.Index', {
 			return;
 		}
 
+		debugger;
 		if (config && config.cmp) {
 			this.__renderNavCmp(config.cmp);
 			this.removeCls('no-nav');
@@ -112,7 +113,9 @@ Ext.define('NextThought.app.navigation.Index', {
 		} else {
 			this.addCls('removing-nav');
 
-			this.__removeNavCmp()
+			this.__removeNavCmp();
+
+			wait(300)
 				.then(this.addCls.bind(this, 'no-nav'))
 				.then(this.removeCls.bind(this, 'has-nav'))
 				.then(this.removeCls.bind(this, 'removing-nav'));

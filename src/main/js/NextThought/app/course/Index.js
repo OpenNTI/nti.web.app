@@ -100,6 +100,11 @@ Ext.define('NextThought.app.course.Index', {
 	},
 
 
+	afterRoute: function(route) {
+		this.CourseViewStore.markRouteFor(this.activeBundle.getId(), route);
+	},
+
+
 	setActiveCourse: function(ntiid, course) {
 		var me = this;
 

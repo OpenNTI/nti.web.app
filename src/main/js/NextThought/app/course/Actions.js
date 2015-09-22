@@ -19,10 +19,14 @@ Ext.define('NextThought.app.course.Actions', {
 	 * @return {Promise}            fulfills with the route for the course, once the animation is done
 	 */
 	transitionToCourse: function(course, libraryCard) {
-		var ntiid = course.getId();
+		var ntiid = course.getId(),
+			route = '/course/' + ParseUtils.encodeForURI(ntiid),
+			subRoute = this.StateStore.getRouteFor(ntiid);
 
-		ntiid = ParseUtils.encodeForURI(ntiid);
+		if (subRoute) {
+			route = route + '/' + Globals.trimRoute(subRoute);
+		}
 
-		return Promise.resolve('/course/' + ntiid);
+		return Promise.resolve(route);
 	}
 });

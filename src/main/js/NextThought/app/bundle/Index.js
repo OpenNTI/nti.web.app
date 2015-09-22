@@ -5,6 +5,7 @@ Ext.define('NextThought.app.bundle.Index', {
 	state_key: 'bundle_index',
 
 	requires: [
+		'NextThought.app.bundle.StateStore',
 		'NextThought.app.library.content.StateStore',
 		'NextThought.app.content.content.Index',
 		'NextThought.app.content.forum.Index'
@@ -31,6 +32,7 @@ Ext.define('NextThought.app.bundle.Index', {
 		this.callParent(arguments);
 
 		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
+		this.BundleViewStore = NextThought.app.bundle.StateStore.getInstance();
 
 		this.getActiveBundle = Promise.reject();
 
@@ -40,6 +42,11 @@ Ext.define('NextThought.app.bundle.Index', {
 		this.addRoute('/discussions', this.showDiscussions.bind(this));
 
 		this.addDefaultRoute('/content');
+	},
+
+
+	afterRoute: function(route) {
+		this.BundleViewStore.markRouteFor(this.activeBundle.getId(), route);
 	},
 
 

@@ -230,7 +230,7 @@ Ext.define('NextThought.mixins.routing.Path', {
 		 	val = Promise.resolve(val);
 		}
 
-		val.then(this.afterRoute.bind(this));
+		val.then(this.afterRoute.bind(this, path));
 
 		return val;
 	},

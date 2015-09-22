@@ -146,6 +146,7 @@ Ext.define('NextThought.app.navigation.Actions', {
 	 * @param  {Object} configuration to build the nav
 	 */
 	updateNavBar: function(config) {
+		debugger;
 		this.store.updateNavBar(config);
 	},
 
@@ -171,7 +172,7 @@ Ext.define('NextThought.app.navigation.Actions', {
 	 *
 	 * Takes a config object:
 	 *
-	 * type: string // should be unique for each message. 
+	 * type: string // should be unique for each message.
 	 * message: string // message or title of the message bar
 	 * iconCls: string  // the class of the icon (warning, delete, ok...),
 	 * buttons: array // action buttons to be added
@@ -192,7 +193,7 @@ Ext.define('NextThought.app.navigation.Actions', {
 
 		if (messageCmp) {
 			messageCmp.onceRendered
-				.then(function(){
+				.then(function() {
 					messageCmp.setIcon(cfg.iconCls);
 					messageCmp.setMessage(cfg.message);
 					Ext.each(cfg.buttons || [], messageCmp.addButton.bind(messageCmp));
