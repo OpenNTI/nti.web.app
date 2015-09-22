@@ -104,7 +104,6 @@ Ext.define('NextThought.app.navigation.Index', {
 			return;
 		}
 
-		debugger;
 		if (config && config.cmp) {
 			this.__renderNavCmp(config.cmp);
 			this.removeCls('no-nav');

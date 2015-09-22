@@ -146,7 +146,6 @@ Ext.define('NextThought.app.navigation.Actions', {
 	 * @param  {Object} configuration to build the nav
 	 */
 	updateNavBar: function(config) {
-		debugger;
 		this.store.updateNavBar(config);
 	},
 
