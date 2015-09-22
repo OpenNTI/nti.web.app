@@ -46,6 +46,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 		if (!this.record || !this.record.isModel) {
 			Ext.Error.raise('We need a record for this component');
 		}
+
 		this.callParent(arguments);
 	},
 
@@ -93,6 +94,21 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 				Ext.defer(this.maybeOpenReplyEditor, 1, this);
 			}
 		});
+	},
+
+
+	createEditor: function() {
+		if (this.xtype === 'profile-activity-note-item') {
+			this.enableTitle = true;
+		}
+
+		this.callParent();
+
+		var title = this.editor.el.down('.title');
+
+		if (title) {
+			title.addCls('small');
+		}
 	},
 
 
@@ -242,8 +258,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 						me.contextEl.select('input').addCls('preview').set({readonly: true});
 					}
 				})
-				.fail(function(error){
-					if(me.contextEl){
+				.fail(function(error) {
+					if (me.contextEl) {
 						me.contextEl.unmask();
 					}
 				});
@@ -253,13 +269,21 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 
 	onEdit: function() {
 		this.callParent(arguments);
+
 		if (!this.replyMode) {
 			this.footEl.hide();
 		}
+
+		if (this.xtype === 'profile-activity-note-item') {
+			this.editor.setTitle(this.record.get('title'));
+		}
+
+		this.editor.showTitle();
 	},
 
 
 	activateReplyEditor: function() {
+		this.editor.hideTitle();
 		this.callParent(arguments);
 		this.addCls('has-active-editor');
 	},

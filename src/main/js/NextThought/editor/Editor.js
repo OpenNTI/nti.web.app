@@ -31,7 +31,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	titleTpl: Ext.DomHelper.markup(
 		[
 			{tag: 'tpl', 'if': 'enableTitle', cn: {
-				cls: 'title',
+				cls: 'title title-container',
 				cn: [
 					{tag: 'input', tabIndex: -1, type: 'text', placeholder: 'Title...'}
 				]
@@ -300,6 +300,24 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		if (!this.enableSaveControls) {
 			this.saveControlsEl.hide();
+		}
+	},
+
+
+	showTitle: function() {
+		var title = this.el.down('.title-container');
+
+		if (title) {
+			title.removeCls('x-hidden');
+		}
+	},
+
+
+	hideTitle: function() {
+		var title = this.el.down('.title-container');
+
+		if (title) {
+			title.addCls('x-hidden');
 		}
 	},
 
