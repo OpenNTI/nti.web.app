@@ -304,7 +304,8 @@ Ext.define('NextThought.app.mediaviewer.components.reader.View', {
 
 					// Checking the time make sure we only scroll the first part,
 					// when we have parts that are overlapping.
-					if (allowScroll && me.currentTime !== seconds) {
+					// NOTE: For now, if we have overlapping parts scroll to the last one. We use to scroll to the first one. 
+					if (allowScroll) {
 						me.scrollToEl(tEl, offset);
 					}
 
