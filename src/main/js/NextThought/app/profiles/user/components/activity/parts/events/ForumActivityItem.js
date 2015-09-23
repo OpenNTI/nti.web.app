@@ -416,13 +416,15 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 
 
 	updateRecord: function(rec) {
-		if (!this.rendered || !rec) {
+		var headline;
+		if (!this.rendered) {
 			return;
 		}
 
-		var headline = rec.get('headline');
+		rec =  rec && rec.isModel ? rec : this.record;
+		headline = rec.get('headline');
 		headline.compileBodyContent(this.setBody, this);
-		this.titleEl.update(rec.get('title'));
+		this.titleEl.update(headline.get('title'));
 	},
 
 
