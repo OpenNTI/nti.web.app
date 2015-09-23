@@ -9,6 +9,13 @@ Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay', {
 	constructor: function(config) {
 		Ext.apply(this, config);
 
+		function sync() {
+			var p = NextThought.app.contentviewer.overlay.Panel;
+
+			p.relayout();
+			p.syncPositioning();
+		}
+
 		this.reader.on({
 			scope: this,
 			'set-content': 'clearOverlayedPanels',
@@ -16,11 +23,8 @@ Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay', {
 			'destroy': 'clearOverlayedPanels',
 			'image-loaded': 'adjustOverlayedPanels',
 			'afterRender': 'insertComponentOverlay',
-			'afterLayout': function() {
-				var p = NextThought.view.content.overlay.Panel;
-				p.relayout();
-				p.syncPositioning();
-			}
+			'afterLayout': sync,
+			'sync-overlays': sync
 		});
 
 		this.tabIndexer = new NextThought.util.TabIndexTracker();

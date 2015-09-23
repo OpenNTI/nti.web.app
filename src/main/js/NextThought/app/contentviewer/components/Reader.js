@@ -306,23 +306,24 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 
 				me.isReadyForSearch = true;
 				me.fireEvent('ready-for-search');
+				me.fireEvent('sync-overlays');
 
-				if (fragment === 'feedback') {
-					me.getIframe().onceSettled()
-						.then(function() {
-							var el = me.getAssessment().getFeedbackContentEl();
+				me.getIframe().onceSettled()
+					.then(function() {
+						var el;
+
+						if (fragment === 'feedback') {
+							el = me.getAssessment().getFeedbackContentEl();
 
 							if (el) {
 								me.getScroll().toNode(el);
 							}
-						});
-				} else if (fragment) {
-					//give everything a chance to settle
-					me.getIframe().onceSettled()
-						.then(function() {
+						} else if (fragment) {
 							me.getScroll().toTarget(fragment);
-						});
-				}
+						}
+
+						me.fireEvent('sync-overlays');
+					});
 			});
 	},
 
