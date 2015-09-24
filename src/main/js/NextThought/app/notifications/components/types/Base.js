@@ -93,7 +93,11 @@ Ext.define('NextThought.app.notifications.components.types.Base', {
 
 
 	getDisplayTime: function() {
-		var time = this.record.get('Last Modified');
+		var time = this.record.get('EventTime');
+
+		if (!time || time.getTime() === 0) {
+			time = this.record.get('Last Modified');
+		}
 
 		if (!time || time.getTime() === 0) {
 			time = this.record.get('CreatedTime');
