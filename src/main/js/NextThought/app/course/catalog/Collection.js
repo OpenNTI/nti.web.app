@@ -8,6 +8,15 @@ Ext.define('NextThought.app.course.catalog.Collection', {
 	cls: 'courses available-catalog',
 
 
+	tpl: Ext.DomHelper.markup([
+		{ cls: 'library-group-header', cn: [
+			{cls: 'label', html: '{label}'},
+			{cls: 'group', html: '{group}'}
+		]},
+		{ cls: 'grid', cn: { tag: 'tpl', 'for': 'items', cn: ['{entry}']} }
+	]),
+
+
 	entryTpl: Ext.DomHelper.markup({
 		cls: '{inGrid} item {Class:lowercase} {enrolled:boolStr("activated")} row-{rows} col-{cols}',
 		'data-qtip': '{Title:htmlEncode}', cn: [
@@ -44,6 +53,16 @@ Ext.define('NextThought.app.course.catalog.Collection', {
 		}
 
 		return i;
+	},
+
+
+	collectData: function() {
+		var data = this.callParent(arguments);
+
+		data.label = this.label;
+		data.group = this.group;
+
+		return data;
 	},
 
 

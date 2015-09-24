@@ -54,7 +54,8 @@ Ext.define('NextThought.app.library.courses.components.Page', {
 		}
 
 		(courses || []).forEach(function(course) {
-			var catalog = course.getCourseCatalogEntry(),
+			var isCatalogEntry = course instanceof NextThought.model.courses.CourseCatalogEntry,
+				catalog = isCatalogEntry ? course : course.getCourseCatalogEntry(),
 				start = catalog.get('StartDate'),
 				year = start.getFullYear(),
 				semester = catalog.getSemester(),
