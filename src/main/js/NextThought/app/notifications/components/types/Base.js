@@ -73,9 +73,15 @@ Ext.define('NextThought.app.notifications.components.types.Base', {
 		var me = this,
 			creator = me.record.get('Creator');
 
+		function updateAvatar(user) {
+			me.iconEl.update(NTIFormat.avatar(user));
+		}
+
 		UserRepository.getUser(creator)
 			.then(function(user) {
-				me.iconEl.update(NTIFormat.avatar(user));
+				updateAvatar(user);
+				me.mon(user, 'avatarChanged', updateAvatar.bind(me, user));
+
 				me.usernameEl.update(user.getName());
 			});
 	},
