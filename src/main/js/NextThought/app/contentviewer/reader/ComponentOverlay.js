@@ -13,7 +13,7 @@ Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay', {
 			var p = NextThought.app.contentviewer.overlay.Panel;
 
 			p.relayout();
-			p.syncPositioning();
+			p.syncPositioningTillStable();
 		}
 
 		this.reader.on({

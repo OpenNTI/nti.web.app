@@ -13,7 +13,13 @@ Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 			Ext.each(Ext.ComponentQuery.query('overlayed-panel'), function(p) {p.updateLayout();}); },10),
 
 		syncPositioning: Ext.Function.createBuffered(function() {
-			Ext.each(Ext.ComponentQuery.query('overlayed-panel'), function(p) { p.syncTop(); }); },10)
+			Ext.each(Ext.ComponentQuery.query('overlayed-panel'), function(p) { p.syncTop(); }); },10),
+
+		syncPositioningTillStable: Ext.Function.createBuffered(function() {
+			Ext.each(Ext.ComponentQuery.query('overlayed-panel'), function(p) {
+				p.syncTopTillStable();
+			});
+		}, 10)
 	},
 
 	representsUserDataContainer: false,
@@ -79,24 +85,9 @@ Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 	},
 
 	afterRender: function() {
-		var me = this, lastY = 0, sameCount = 0;
-		me.callParent(arguments);
-		this.interval = setInterval(function() {
-			var y;
-			me.syncTop();
+		this.callParent(arguments);
 
-			if (!me.el || !me.el.dom) { sameCount = NaN; }
-			else {
-				y = me.el.getY();
-				if (Math.abs(y - lastY) < 2) { sameCount++; }
-				else { sameCount = 0; }
-				lastY = y;
-			}
-
-			if (isNaN(sameCount) || sameCount > 5) {
-				clearInterval(me.interval);
-			}
-		},200);
+		this.syncTopTillStable();
 	},
 
 
@@ -140,15 +131,41 @@ Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 	},
 
 
+	syncTopTillStable: function() {
+		if (this.interval || !this.rendered) { return; }
+
+		var me = this, lastTop = 0, sameCount = 0;
+
+		me.interval = setInterval(function() {
+			var y = me.syncTop();
+
+			if (Math.abs(y - lastTop) < 2) {
+				sameCount += 1;
+			} else {
+				sameCount = 0;
+			}
+
+			lastTop = y;
+
+			if (sameCount > 5) {
+				clearInterval(me.interval);
+				delete me.interval;
+			}
+		}, 200);
+	},
+
+
 	syncTop: function() {
-		if (!this.contentElement) {return;}
+		if (!this.contentElement) {return 0;}
+
+		var o, myTop, ctTop, top;
 
 		try {
 			if (!this.reader.isDestroyed) {
-				var o = this.reader.getAnnotationOffsets(),
-					myTop = Ext.fly(this.contentElement).getY(),
-					ctTop = this.el.up('.x-reader-pane').getY(),
-					top = (myTop + ctTop) - o.scrollTop;
+				o = this.reader.getAnnotationOffsets();
+				myTop = Ext.fly(this.contentElement).getY();
+				ctTop = this.el.up('.x-reader-pane').getY();
+				top = (myTop + ctTop) - o.scrollTop;
 				this.el.setY(top);
 			} else {
 				this.destroy();
@@ -159,8 +176,10 @@ Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 		catch (e) {
 			console.debug(e.message);
 			clearInterval(this.interval);
+			delete this.interval;
 		}
 
+		return top;
 	},
 
 

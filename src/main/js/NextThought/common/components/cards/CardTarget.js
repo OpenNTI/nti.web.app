@@ -25,6 +25,8 @@ Ext.define('NextThought.common.components.cards.CardTarget', {
 			top = (10 + ctTop);
 		this.el.setY(top);
 		this.viewportMonitor();
+
+		return top;
 	},
 
 	constructor: function(config) {

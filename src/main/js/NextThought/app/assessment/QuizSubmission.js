@@ -655,6 +655,6 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 		if (this.shouldShow) {
 			this.show();
 		}
-		this.callParent();
+		return this.callParent();
 	}
 });
