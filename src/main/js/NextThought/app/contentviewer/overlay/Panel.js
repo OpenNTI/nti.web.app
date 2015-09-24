@@ -158,15 +158,11 @@ Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 	syncTop: function() {
 		if (!this.contentElement) {return 0;}
 
-		var o, myTop, ctTop, top;
+		var top = this.contentElement.getBoundingClientRect().top;
 
 		try {
 			if (!this.reader.isDestroyed) {
-				o = this.reader.getAnnotationOffsets();
-				myTop = Ext.fly(this.contentElement).getY();
-				ctTop = this.el.up('.x-reader-pane').getY();
-				top = (myTop + ctTop) - o.scrollTop;
-				this.el.setY(top);
+				this.el.dom.style.top = top + 'px';
 			} else {
 				this.destroy();
 			}
