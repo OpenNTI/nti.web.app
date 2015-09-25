@@ -41,6 +41,36 @@ var globals = {
 };
 
 
-module.exports = function(fileInfo, api) {
+function fixRequires() {
 
+}
+
+
+function fixMixins() {
+
+}
+
+
+function fixReauires() {
+
+}
+
+//Useful links:
+//https://github.com/facebook/jscodeshift
+//https://github.com/benjamn/recast
+//http://felix-kling.de/esprima_ast_explorer/
+//https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API
+//https://github.com/benjamn/ast-types
+//https://github.com/facebook/react/blob/master/packages/react-codemod/transforms/react-to-react-dom.js
+module.exports = function(fileInfo, api) {
+	const j = api.jscodeshift;
+	var root = j(fileInfo.source);
+
+
+	console.log(root.find(j.ExportDefaultDeclaration)
+		.insertBefore(j.importDeclaration(
+			[j.importDefaultSpecifier(j.identifier('foor'))],
+			j.literal('bar')
+		))
+		.toSource());
 };
