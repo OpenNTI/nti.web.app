@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contacts.components.group.Window', {
+export default Ext.define('NextThought.app.contacts.components.group.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.codecreation-window',
 

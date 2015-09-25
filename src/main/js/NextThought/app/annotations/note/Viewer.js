@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.annotations.note.Viewer', {
+export default Ext.define('NextThought.app.annotations.note.Viewer', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.note-window',
 

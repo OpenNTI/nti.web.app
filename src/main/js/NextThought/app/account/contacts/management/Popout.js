@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.contacts.management.Popout', {
+export default Ext.define('NextThought.app.account.contacts.management.Popout', {
 	extend: 'NextThought.app.account.activity.Popout',
 	alias: ['widget.contact-popout', 'widget.activity-popout-user'],
 

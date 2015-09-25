@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.courseware.Navigation', {
+export default Ext.define('NextThought.store.courseware.Navigation', {
 	extend: 'Ext.data.Store',
 	requires: [
 		'NextThought.model.courses.navigation.CourseOutlineNode'

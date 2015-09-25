@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.note-feature.GetLatestReply', {
+export default Ext.define('NextThought.mixins.note-feature.GetLatestReply', {
   //Mixin assumptions: Mixed into a Container, with a property "record" that has implemented "loadReplies"
 
 	getItemReplies: function() {

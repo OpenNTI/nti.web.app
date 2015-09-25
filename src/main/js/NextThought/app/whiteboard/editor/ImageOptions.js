@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.editor.ImageOptions', {
+export default Ext.define('NextThought.app.whiteboard.editor.ImageOptions', {
 	alias: 'widget.wb-tool-image-options',
 	extend: 'Ext.toolbar.Toolbar',
 	requires: [

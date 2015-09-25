@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.builtins.Console', function() {
+export default Ext.define('NextThought.overrides.builtins.Console', function() {
 
 	$AppConfig.maxLogCapture = $AppConfig.maxLogCapture || 20;
 

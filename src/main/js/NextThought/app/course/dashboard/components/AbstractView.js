@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.AbstractView', {
+export default Ext.define('NextThought.app.course.dashboard.components.AbstractView', {
 	extend: 'Ext.container.Container',
 
 	requires: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeList', {
+export default Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeList', {
 	extend: 'Ext.view.View',
 	alias: 'widget.profile-badge-list',
 

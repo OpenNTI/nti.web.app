@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.Hit', {
+export default Ext.define('NextThought.store.Hit', {
 	extend: 'Ext.data.Store',
 
 	requires: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courses.CourseInstanceAdministrativeRole', {
+export default Ext.define('NextThought.model.courses.CourseInstanceAdministrativeRole', {
 	extend: 'NextThought.model.Base',
 
 	isAdministrative: true,

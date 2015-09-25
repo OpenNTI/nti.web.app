@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.coppa.Main', {
+export default Ext.define('NextThought.app.account.coppa.Main', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.coppa-main-view',
 	requires: [

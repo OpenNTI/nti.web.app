@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.Blog', {
+export default Ext.define('NextThought.store.Blog', {
 	extend: 'Ext.data.Store',
 	alias: 'store.blog',
 

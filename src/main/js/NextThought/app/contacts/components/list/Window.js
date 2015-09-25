@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contacts.components.list.Window', {
+export default Ext.define('NextThought.app.contacts.components.list.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.createlist-window',
 

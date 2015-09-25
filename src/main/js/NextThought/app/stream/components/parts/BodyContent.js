@@ -15,7 +15,7 @@
  * fires: show-object, edit, report, delete
  * @type {String}
  */
-Ext.define('NextThought.app.stream.components.parts.BodyContent', {
+export default Ext.define('NextThought.app.stream.components.parts.BodyContent', {
 	extend: 'Ext.Component',
 	alias: 'widget.stream-parts-bodycontent',
 

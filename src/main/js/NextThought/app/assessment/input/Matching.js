@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.input.Matching', function() {
+export default Ext.define('NextThought.app.assessment.input.Matching', function() {
 
 	function asInt(e, i) {
 		return e && parseInt(e.getAttribute(i), 10);

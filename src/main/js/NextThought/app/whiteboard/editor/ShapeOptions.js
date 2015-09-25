@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.editor.ShapeOptions', {
+export default Ext.define('NextThought.app.whiteboard.editor.ShapeOptions', {
 	alias: 'widget.wb-tool-shape-options',
 	extend: 'Ext.container.Container',
 	requires: [

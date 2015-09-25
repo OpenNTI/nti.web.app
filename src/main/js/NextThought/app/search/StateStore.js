@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.search.StateStore', {
+export default Ext.define('NextThought.app.search.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	requires: ['NextThought.store.Hit'],

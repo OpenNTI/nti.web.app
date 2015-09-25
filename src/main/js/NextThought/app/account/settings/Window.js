@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.settings.Window', {
+export default Ext.define('NextThought.app.account.settings.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.account-window',
 

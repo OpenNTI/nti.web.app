@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.image.Roll', {
+export default Ext.define('NextThought.app.image.Roll', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.image-roll',
 

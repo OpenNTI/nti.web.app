@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.group.components.activity.parts.Users', {
+export default Ext.define('NextThought.app.profiles.group.components.activity.parts.Users', {
 	extend: 'NextThought.app.profiles.group.components.membership.parts.Users',
 	alias: 'widget.profile-group-membership-condensed',
 

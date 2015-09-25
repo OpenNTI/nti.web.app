@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Dom', {
+export default Ext.define('NextThought.util.Dom', {
 	singleton: true,
 
 
@@ -321,6 +321,4 @@ Ext.define('NextThought.util.Dom', {
 	}
 
 
-},function() {
-	window.DomUtils = this;
 });

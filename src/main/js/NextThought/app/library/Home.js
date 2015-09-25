@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.Home', {
+export default Ext.define('NextThought.app.library.Home', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.library-home',
 

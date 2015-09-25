@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.components.types.BlogEntryPost', {
+export default Ext.define('NextThought.app.notifications.components.types.BlogEntryPost', {
 	extend: 'NextThought.app.notifications.components.types.Base',
 	alias: 'widget.notifications-item-blog-entry-post',
 

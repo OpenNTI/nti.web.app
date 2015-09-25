@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.dd.DragDropManager', {
+export default Ext.define('NextThought.overrides.dd.DragDropManager', {
 	override: 'Ext.dd.DragDropManager',
 
 

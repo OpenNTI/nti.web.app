@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.TranscriptSummary', {
+export default Ext.define('NextThought.model.TranscriptSummary', {
 	extend: 'NextThought.model.Base',
 
 	addMimeTypeToRoute: true,

@@ -1,5 +1,5 @@
 /*global DomUtils, NextThought */
-Ext.define('NextThought.app.image.OverlayedPanel', {
+export default Ext.define('NextThought.app.image.OverlayedPanel', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.overlay-image-roll',
 

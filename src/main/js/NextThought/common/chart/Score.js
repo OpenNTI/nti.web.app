@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.chart.Score', {
+export default Ext.define('NextThought.common.chart.Score', {
 	extend:	'Ext.Component',
 	alias: 'widget.chart-score',
 	ui: 'course-assessment',

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.tiles.TopicComment', {
+export default Ext.define('NextThought.app.course.dashboard.components.tiles.TopicComment', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.BaseCmp',
 	alias: 'widget.dashboard-topic-comment',
 

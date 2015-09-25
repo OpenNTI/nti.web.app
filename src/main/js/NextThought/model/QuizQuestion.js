@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.QuizQuestion', {
+export default Ext.define('NextThought.model.QuizQuestion', {
 	extend: 'NextThought.model.Base',
 	fields: [
 		{ name: 'Answers', type: 'auto' },

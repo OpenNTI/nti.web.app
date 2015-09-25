@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Change', {
+export default Ext.define('NextThought.model.Change', {
 	extend: 'NextThought.model.Base',
 	requires: [
 		'NextThought.model.converters.GroupByTime',

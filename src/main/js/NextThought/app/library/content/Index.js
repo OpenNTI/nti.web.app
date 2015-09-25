@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.content.Index', {
+export default Ext.define('NextThought.app.library.content.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.library-content',
 

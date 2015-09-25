@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.navigation.path.parts.Profiles', {
+export default Ext.define('NextThought.app.navigation.path.parts.Profiles', {
 
 	requires: [
 		'NextThought.model.User',

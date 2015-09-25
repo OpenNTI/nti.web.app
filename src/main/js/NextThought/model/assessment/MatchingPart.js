@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.MatchingPart', {
+export default Ext.define('NextThought.model.assessment.MatchingPart', {
 	extend: 'NextThought.model.assessment.Part',
 	fields: [
 		{ name: 'labels', type: 'auto' },

@@ -1,6 +1,6 @@
 /*jslint */
 /*global $AppConfig, Globals, ImageZoomView, NextThought, ReaderPanel, SlideDeck, TemplatesForNotes, UserRepository, WBUtils*/
-Ext.define('NextThought.app.annotations.note.Main', {
+export default Ext.define('NextThought.app.annotations.note.Main', {
 	extend: 'NextThought.app.annotations.note.Panel',
 	alias: 'widget.note-main-view',
 

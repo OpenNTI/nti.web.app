@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.GiftConfirmation', {
+export default Ext.define('NextThought.app.course.enrollment.components.GiftConfirmation', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-gift-confirmation',
 

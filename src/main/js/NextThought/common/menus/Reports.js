@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.menus.Reports', {
+export default Ext.define('NextThought.common.menus.Reports', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.report-menu',
 

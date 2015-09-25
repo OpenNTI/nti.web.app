@@ -3,7 +3,7 @@
  * different views and components, so a change to one will trigger
  * a change to all
  */
-Ext.define('NextThought.cache.SharedInstance', {
+export default Ext.define('NextThought.cache.SharedInstance', {
 
 	//A list of props to include in the JSON of a record when updating
 	UPDATE_WHITELIST: ['href', 'IsExcused', 'Links'],

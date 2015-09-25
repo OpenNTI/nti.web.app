@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.widgets.Announcements', {
+export default Ext.define('NextThought.app.course.dashboard.components.widgets.Announcements', {
 	extend: 'NextThought.app.course.dashboard.components.widgets.Base',
 
 	//requires: ['NextThought.app.course.dashboard.components.tiles.AnnouncementsList'],

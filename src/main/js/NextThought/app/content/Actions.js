@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.content.Actions', {
+export default Ext.define('NextThought.app.content.Actions', {
 
 	requires: [
 		'NextThought.util.Content',

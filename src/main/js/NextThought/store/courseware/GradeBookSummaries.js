@@ -1,5 +1,5 @@
 /*globals User, PersistentStorage*/
-Ext.define('NextThought.store.courseware.GradeBookSummaries', {
+export default Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 	extend: 'Ext.data.Store',
 
 	model: 'NextThought.model.courses.assignments.Summary',

@@ -1,4 +1,4 @@
-Ext.define('NextThought.cache.LocationMeta', {
+export default Ext.define('NextThought.cache.LocationMeta', {
 	alias: 'LocationMeta',
 	singleton: true,
 
@@ -187,7 +187,4 @@ Ext.define('NextThought.cache.LocationMeta', {
 		return ParseUtils.ntiidPrefix(id);
 	}
 
-},
-function() {
-	window.LocationMeta = this;
 });

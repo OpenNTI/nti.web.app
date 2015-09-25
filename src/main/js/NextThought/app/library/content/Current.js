@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.content.Current', {
+export default Ext.define('NextThought.app.library.content.Current', {
 	extend: 'NextThought.app.library.components.Current',
 	alias: 'widget.library-current-content',
 

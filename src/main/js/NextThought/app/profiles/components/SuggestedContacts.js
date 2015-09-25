@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.components.SuggestedContacts', {
+export default Ext.define('NextThought.app.profiles.components.SuggestedContacts', {
 	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
 	alias: 'widget.profile-suggested-contacts',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.Index', {
+export default Ext.define('NextThought.app.course.overview.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-overview',
 

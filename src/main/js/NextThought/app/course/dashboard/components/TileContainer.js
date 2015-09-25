@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.TileContainer', {
+export default Ext.define('NextThought.app.course.dashboard.components.TileContainer', {
 	extend: 'NextThought.app.course.dashboard.components.AbstractView',
 	alias: 'widget.dashboard-tile-container',
 

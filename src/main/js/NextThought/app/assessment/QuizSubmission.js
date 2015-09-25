@@ -1,5 +1,5 @@
 /*globals getFormattedString:false*/
-Ext.define('NextThought.app.assessment.QuizSubmission', {
+export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.assessment-quiz-submission',
 

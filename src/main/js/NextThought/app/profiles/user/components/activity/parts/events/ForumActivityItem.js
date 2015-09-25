@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItem', {
+export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItem', {
 	extend: 'Ext.container.Container',
 	alias: [
 		'widget.profile-activity-communityheadlinetopic-item',
@@ -439,7 +439,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 
 
 
-Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItemReply', {
+export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItemReply', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-forum-activity-item-reply',
 

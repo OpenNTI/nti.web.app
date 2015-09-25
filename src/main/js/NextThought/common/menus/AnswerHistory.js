@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.menus.AnswerHistory', {
+export default Ext.define('NextThought.common.menus.AnswerHistory', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.answer-history-menu',
 	requires: [

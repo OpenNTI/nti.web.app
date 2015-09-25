@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.anchorables.TextContext', {
+export default Ext.define('NextThought.model.anchorables.TextContext', {
 
 	config: {
 		contextText: '',

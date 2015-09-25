@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.search.SearchBar', {
+export default Ext.define('NextThought.app.search.SearchBar', {
 	extend: 'Ext.Component',
 	alias: 'widget.search-searchbar',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.Actions', {
+export default Ext.define('NextThought.common.Actions', {
 	mixins: {
 		observable: 'Ext.util.Observable'
 	},

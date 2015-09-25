@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.Index', {
+export default Ext.define('NextThought.app.Index', {
 	extend: 'Ext.container.Viewport',
 	alias: 'widget.master-view',
 

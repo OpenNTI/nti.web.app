@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.stream.Grid', {
+export default Ext.define('NextThought.app.stream.Grid', {
 	extend: 'NextThought.app.stream.Base',
 
 	cls: 'grid-stream',

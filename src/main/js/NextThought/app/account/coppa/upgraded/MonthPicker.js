@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.coppa.upgraded.MonthPicker', {
+export default Ext.define('NextThought.app.account.coppa.upgraded.MonthPicker', {
 	extend: 'Ext.view.BoundList',
 	alias: 'widget.month-picker',
 

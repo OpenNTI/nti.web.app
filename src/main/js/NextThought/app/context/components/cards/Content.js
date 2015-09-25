@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.context.components.cards.Content', {
+export default Ext.define('NextThought.app.context.components.cards.Content', {
 	extend: 'Ext.Component',
 	alias: 'widget.context-content-card',
 

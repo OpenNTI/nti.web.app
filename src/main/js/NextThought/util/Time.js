@@ -1,5 +1,5 @@
 /*globals Duration: false*/
-Ext.define('NextThought.util.Time', {
+export default Ext.define('NextThought.util.Time', {
 	singleton: true,
 
 	DIVISORS: {
@@ -260,7 +260,7 @@ Ext.define('NextThought.util.Time', {
 	}
 },
 function() {
-	window.TimeUtils = this;
+	var TimeUtils = this;
 	Ext.util.Format.timeDifference = Ext.bind(this.timeDifference, this);
 
 	/**

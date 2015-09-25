@@ -215,4 +215,4 @@ if (!document.documentElement.dataset &&
 }
 
 
-Ext.define('NextThought.overrides.builtins.Element', {});
+export default Ext.define('NextThought.overrides.builtins.Element', {});

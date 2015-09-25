@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.store.StripePurchaseItem', {
+export default Ext.define('NextThought.model.store.StripePurchaseItem', {
 	extend: 'NextThought.model.Base',
 
 	fields: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.components.reader.View', {
+export default Ext.define('NextThought.app.mediaviewer.components.reader.View', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.slidedeck-transcript',
 	requires: [

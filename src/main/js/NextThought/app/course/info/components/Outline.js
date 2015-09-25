@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.info.components.Outline', {
+export default Ext.define('NextThought.app.course.info.components.Outline', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-info-outline',
 

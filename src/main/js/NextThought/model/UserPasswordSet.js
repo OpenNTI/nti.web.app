@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.UserPasswordSet', {
+export default Ext.define('NextThought.model.UserPasswordSet', {
 	extend: 'Ext.data.Model',
 	requires: [
 		'NextThought.mixins.HasLinks',

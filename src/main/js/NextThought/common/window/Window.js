@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.window.Window', {
+export default Ext.define('NextThought.common.window.Window', {
 	extend: 'Ext.window.Window',
 	alias: 'widget.nti-window',
 

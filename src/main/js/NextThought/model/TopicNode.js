@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.TopicNode', {
+export default Ext.define('NextThought.model.TopicNode', {
 	extend: 'Ext.data.Model',
 	requires: [
 		'Ext.data.reader.Xml'

@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.forums.CommunityHeadlineTopic', {
+export default Ext.define('NextThought.model.forums.CommunityHeadlineTopic', {
 	extend: 'NextThought.model.forums.HeadlineTopic',
 
 	mixins: {

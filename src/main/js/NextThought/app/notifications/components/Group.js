@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.components.Group', {
+export default Ext.define('NextThought.app.notifications.components.Group', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.notification-group',
 

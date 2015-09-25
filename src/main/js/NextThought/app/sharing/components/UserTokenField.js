@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.sharing.components.UserTokenField', {
+export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 	extend: 'NextThought.common.form.fields.TagField',
 	alias: ['widget.user-sharing-list'],
 	requires: [

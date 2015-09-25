@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.content.timeline.Window', {
+export default Ext.define('NextThought.app.content.timeline.Window', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.timeline-window',
 

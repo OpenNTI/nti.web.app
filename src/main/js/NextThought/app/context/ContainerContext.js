@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.context.ContainerContext', {
+export default Ext.define('NextThought.app.context.ContainerContext', {
 	requires: [
 		'NextThought.app.context.types.*',
 		'NextThought.app.context.components.AuthorizationContext'

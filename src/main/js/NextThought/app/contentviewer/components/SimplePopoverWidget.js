@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.components.SimplePopoverWidget', {
+export default Ext.define('NextThought.app.contentviewer.components.SimplePopoverWidget', {
 	extend: 'Ext.container.Container',
 
 	alias: 'widget.simple-popover-widget',

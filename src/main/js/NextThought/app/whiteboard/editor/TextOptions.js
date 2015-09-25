@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.editor.TextOptions', {
+export default Ext.define('NextThought.app.whiteboard.editor.TextOptions', {
 	alias: 'widget.wb-tool-text-options',
 	extend: 'Ext.toolbar.Toolbar',
 	requires: [

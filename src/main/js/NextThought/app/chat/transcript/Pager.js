@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.chat.transcript.Pager', {
+export default Ext.define('NextThought.app.chat.transcript.Pager', {
 
 	requires: [
 		'NextThought.app.chat.Actions',

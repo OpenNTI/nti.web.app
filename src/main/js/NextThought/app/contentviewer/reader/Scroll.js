@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.reader.Scroll', {
+export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 	alias: 'reader.scroll',
 	requires: ['NextThought.util.Search'],
 

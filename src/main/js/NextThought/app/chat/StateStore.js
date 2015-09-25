@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.chat.StateStore', {
+export default Ext.define('NextThought.app.chat.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	requires: [

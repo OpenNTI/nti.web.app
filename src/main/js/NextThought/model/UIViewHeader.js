@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.UIViewHeader', {
+export default Ext.define('NextThought.model.UIViewHeader', {
 	extend: 'Ext.data.Model',
 
 	isHeader: true,

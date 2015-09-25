@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courses.LegacyCommunityBasedCourseInstance', {
+export default Ext.define('NextThought.model.courses.LegacyCommunityBasedCourseInstance', {
 	extend: 'NextThought.model.courses.CourseInstance',
 	mimeType: 'application/vnd.nextthought.courses.legacycommunitybasedcourseinstance',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.parts.Survey', {
+export default Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-overview-surveyref',
 

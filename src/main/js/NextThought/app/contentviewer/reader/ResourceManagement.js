@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.reader.ResourceManagement', {
+export default Ext.define('NextThought.app.contentviewer.reader.ResourceManagement', {
 	alias: 'reader.resourceManager',
 
 	requires: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.groups.StateStore', {
+export default Ext.define('NextThought.app.groups.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 

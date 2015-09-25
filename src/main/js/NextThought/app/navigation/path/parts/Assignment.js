@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.navigation.path.parts.Assignment', {
+export default Ext.define('NextThought.app.navigation.path.parts.Assignment', {
 	requires: [
 		'NextThought.app.library.Actions',
 		'NextThought.model.courseware.Grade',

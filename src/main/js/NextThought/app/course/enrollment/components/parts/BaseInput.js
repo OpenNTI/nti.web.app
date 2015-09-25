@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.parts.BaseInput', {
+export default Ext.define('NextThought.app.course.enrollment.components.parts.BaseInput', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-baseinput',
 

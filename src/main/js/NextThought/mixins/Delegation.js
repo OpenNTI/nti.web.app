@@ -7,7 +7,7 @@
  * To attach delegate(s) to a component set the `delegate` config property to be either 'inherit' or a selector of the
  * component that will be delegated to. (It can also be an array if different components care about different aspects)
  */
-Ext.define('NextThought.mixins.Delegation', function() {
+export default Ext.define('NextThought.mixins.Delegation', function() {
 	var debug = $AppConfig.debugDelegation;
 
 	/** @private */
@@ -124,7 +124,7 @@ Ext.define('NextThought.mixins.Delegation', function() {
 /**
  * Utility class to aid in defining delegated functions.
  */
-Ext.define('NextThought.mixins.Delegation.Factory', {
+export default Ext.define('NextThought.mixins.Delegation.Factory', {
 	singleton: true,
 	alternateClassName: 'DelegateFactory',
 
@@ -148,4 +148,4 @@ Ext.define('NextThought.mixins.Delegation.Factory', {
 		fn.applyAll = Boolean(applyAll);
 		return fn;
 	}
-},function() {window.DelegateFactory = this;});
+});

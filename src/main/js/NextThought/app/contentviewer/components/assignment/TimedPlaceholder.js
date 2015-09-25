@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.components.assignment.TimedPlaceholder', {
+export default Ext.define('NextThought.app.contentviewer.components.assignment.TimedPlaceholder', {
 	extend: 'Ext.Component',
 	alias: 'widget.assignment-timedplaceholder',
 

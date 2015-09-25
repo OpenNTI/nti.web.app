@@ -1,4 +1,4 @@
-Ext.define('NextThought.cache.AbstractStorage', function() {
+export default Ext.define('NextThought.cache.AbstractStorage', function() {
 
 	var prefix = function prefix(v) {
 		if (!prefix.val) {
@@ -152,6 +152,7 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 		console.error('Could not acces browser storage %o', e.stack || e.message || e);
 	}
 
+	//TODO: figure out how to handle this since it puts two classes on the window...
 	window.TemporaryStorage = new Cls(ss || fallback, true);
 	window.PersistentStorage = new Cls(ls || fallback);
 });

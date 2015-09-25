@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.content.components.Navigation', {
+export default Ext.define('NextThought.app.content.components.Navigation', {
 	extend: 'NextThought.common.components.Navigation',
 	alias: 'widget.content-navigation',
 

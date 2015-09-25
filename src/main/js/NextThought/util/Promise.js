@@ -1,4 +1,5 @@
 /** force our implementation for now. */
+//TODO: don't use a custom promise
 window.Promise = null;
 
 //TODO: Adapt these node.js tests to our platform so we can unit test our promise polyfill. https://github.com/promises-aplus/promises-tests
@@ -311,4 +312,4 @@ Promise.first = Promise.first || function(values) {
 };
 
 
-Ext.define('NextThought.util.Promise', {});
+export default Ext.define('NextThought.util.Promise', {});

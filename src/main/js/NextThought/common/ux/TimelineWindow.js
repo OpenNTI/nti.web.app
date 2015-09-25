@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.ux.TimelineWindow', {
+export default Ext.define('NextThought.common.ux.TimelineWindow', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.timeline-window',
 

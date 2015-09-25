@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.Window', {
+export default Ext.define('NextThought.app.whiteboard.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.wb-window',
 	requires: [

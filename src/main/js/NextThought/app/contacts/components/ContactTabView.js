@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contacts.components.ContactTabView', {
+export default Ext.define('NextThought.app.contacts.components.ContactTabView', {
 	extend: 'NextThought.app.contacts.components.TabView',
 	alias: 'widget.contacts-tab-view',
 

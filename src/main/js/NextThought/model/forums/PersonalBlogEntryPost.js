@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.forums.PersonalBlogEntryPost', {
+export default Ext.define('NextThought.model.forums.PersonalBlogEntryPost', {
 	extend: 'NextThought.model.forums.HeadlinePost',
 
 	fields: [

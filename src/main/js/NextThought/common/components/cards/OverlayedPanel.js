@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.components.cards.OverlayedPanel', {
+export default Ext.define('NextThought.common.components.cards.OverlayedPanel', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.overlay-card',
 

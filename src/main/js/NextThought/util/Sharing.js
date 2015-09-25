@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Sharing', {
+export default Ext.define('NextThought.util.Sharing', {
 	singleton: true,
 
 
@@ -334,6 +334,4 @@ Ext.define('NextThought.util.Sharing', {
 	}
 
 
-}, function() {
-	window.SharingUtils = this;
 });

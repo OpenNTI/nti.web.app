@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courses.navigation.CourseOutlineContentNode', {
+export default Ext.define('NextThought.model.courses.navigation.CourseOutlineContentNode', {
 	extend: 'NextThought.model.courses.navigation.CourseOutlineNode',
 	mimeType: 'application/vnd.nextthought.courses.courseoutlinecontentnode',
 	fields: [

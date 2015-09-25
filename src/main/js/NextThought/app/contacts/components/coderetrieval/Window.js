@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contacts.components.coderetrieval.Window', {
+export default Ext.define('NextThought.app.contacts.components.coderetrieval.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.coderetrieval-window',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.components.BoundPanel', {
+export default Ext.define('NextThought.common.components.BoundPanel', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.data-bound-panel',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.components.Header', {
+export default Ext.define('NextThought.app.notifications.components.Header', {
 	extend: 'Ext.Component',
 	alias: 'widget.notification-header',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.Ext', {
+export default Ext.define('NextThought.overrides.Ext', {
 	override: 'Ext',
 
 

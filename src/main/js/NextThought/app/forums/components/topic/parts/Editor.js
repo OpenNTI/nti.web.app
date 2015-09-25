@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
+export default Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
 	extend: 'NextThought.editor.Editor',
 	alias: 'widget.forums-topic-editor',
 

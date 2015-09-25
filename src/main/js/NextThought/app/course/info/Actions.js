@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.info.Actions', {
+export default Ext.define('NextThought.app.course.info.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	openEnrollmentWindow: function(catalogEntry) {

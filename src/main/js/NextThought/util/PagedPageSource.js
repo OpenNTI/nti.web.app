@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.PagedPageSource', {
+export default Ext.define('NextThought.util.PagedPageSource', {
 
 	requires: 'NextThought.util.Store',
 

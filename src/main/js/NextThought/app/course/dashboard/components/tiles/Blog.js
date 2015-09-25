@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.tiles.Blog', {
+export default Ext.define('NextThought.app.course.dashboard.components.tiles.Blog', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.Topic',
 	alias: 'widget.dashboard-blog',
 

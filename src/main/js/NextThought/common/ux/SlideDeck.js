@@ -1,6 +1,6 @@
 /*JSLint */
 /*globals ContentUtils, Library, NextThought */
-Ext.define('NextThought.common.ux.SlideDeck', {
+export default Ext.define('NextThought.common.ux.SlideDeck', {
 	singleton: true,
 
 	requires: [
@@ -127,6 +127,4 @@ Ext.define('NextThought.common.ux.SlideDeck', {
 	}
 
 
-},function() {
-	window.SlideDeck = this;
 });

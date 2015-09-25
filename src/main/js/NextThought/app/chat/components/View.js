@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.chat.components.View', {
+export default Ext.define('NextThought.app.chat.components.View', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.chat-view',
 

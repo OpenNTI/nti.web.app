@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
+export default Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 	alias: 'reader.noteOverlay',
 	mixins: {
 		observable: 'Ext.util.Observable'

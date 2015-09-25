@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.preference.Root', {
+export default Ext.define('NextThought.model.preference.Root', {
 	extend: 'NextThought.model.preference.Base',
 
 	fields: [

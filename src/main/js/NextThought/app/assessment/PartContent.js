@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.PartContent', {
+export default Ext.define('NextThought.app.assessment.PartContent', {
 	extend: 'Ext.Component',
 	alias: 'widget.part-content',
 

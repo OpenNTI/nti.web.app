@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.activity.Popout', {
+export default Ext.define('NextThought.app.account.activity.Popout', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.activity-popout',
 

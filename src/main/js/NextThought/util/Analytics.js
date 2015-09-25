@@ -1,5 +1,5 @@
 /*globals PageVisibility*/
-Ext.define('NextThought.util.Analytics', {
+export default Ext.define('NextThought.util.Analytics', {
 	singleton: true,
 
 	requires: [
@@ -371,7 +371,6 @@ Ext.define('NextThought.util.Analytics', {
 		return this.VIEWED_MAP[id];
 	}
 }, function() {
-
 	if (!isFeature('capture-analytics')) {
 		this.addContext = function() {};
 		this.beginSession = function() {};
@@ -379,5 +378,4 @@ Ext.define('NextThought.util.Analytics', {
 		this.stopResourceTimer = function() {};
 		this.sendBatch = function() {};
 	}
-	window.AnalyticsUtil = this;
 });

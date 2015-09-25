@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.picker.Color', {
+export default Ext.define('NextThought.overrides.picker.Color', {
 	override: 'Ext.picker.Color',
 
 	colorRe: /(?:^|\s)color-([^ ]*)(?:\s|$)/,

@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.preference.WebApp', {
+export default Ext.define('NextThought.model.preference.WebApp', {
 	extend: 'NextThought.model.preference.Base',
 
 	fields: [

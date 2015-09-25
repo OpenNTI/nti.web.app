@@ -1,7 +1,7 @@
 /*
 	TODO: Does this need to be a model?
  */
-Ext.define('NextThought.model.resolvers.VideoPosters', {
+export default Ext.define('NextThought.model.resolvers.VideoPosters', {
 	requires: [
 		'NextThought.model.resolvers.videoservices.*'
 	],

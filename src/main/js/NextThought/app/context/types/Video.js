@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.context.types.Video', {
+export default Ext.define('NextThought.app.context.types.Video', {
 
 	requires: [
 		'NextThought.model.transcript.TranscriptItem',

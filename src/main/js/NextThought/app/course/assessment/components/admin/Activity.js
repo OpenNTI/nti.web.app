@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.assessment.components.admin.Activity', {
+export default Ext.define('NextThought.app.course.assessment.components.admin.Activity', {
 	extend: 'NextThought.app.course.assessment.components.student.Activity',
 	alias: 'widget.course-assessment-admin-activity',
 

@@ -1,5 +1,5 @@
 /*globals Duration:false*/
-Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
+export default Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	alternateClassName: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItemSummary',
 	extend: 'NextThought.model.Base',
 

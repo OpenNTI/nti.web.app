@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.input.SymbolicMath', {
+export default Ext.define('NextThought.app.assessment.input.SymbolicMath', {
 	extend: 'NextThought.app.assessment.input.FreeResponse',
 
 	requires: [

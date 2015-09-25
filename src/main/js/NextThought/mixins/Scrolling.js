@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.Scrolling', {
+export default Ext.define('NextThought.mixins.Scrolling', {
 
 	initScrolling: function() {
 		this.Scrolling = this.Scrolling || {};

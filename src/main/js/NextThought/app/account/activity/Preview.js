@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.activity.Preview', {
+export default Ext.define('NextThought.app.account.activity.Preview', {
 	extend: 'Ext.container.Container',
 
 	requires: [

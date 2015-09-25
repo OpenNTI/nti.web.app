@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.courseware.Stream', {
+export default Ext.define('NextThought.store.courseware.Stream', {
 
 	params: {
 		NonEmptyBucketCount: 2,

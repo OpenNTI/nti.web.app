@@ -1,7 +1,7 @@
 /**
 * Use this mixin to truncate text and add ellipsis depending on its parent node or itself
 */
-Ext.define('NextThought.mixins.EllipsisText', {
+export default Ext.define('NextThought.mixins.EllipsisText', {
 
 	/**
 	 * Goal: Group dom reads/writes into single passes.

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.editor.Tools', {
+export default Ext.define('NextThought.app.whiteboard.editor.Tools', {
 	alias: 'widget.whiteboard-tools',
 	extend: 'Ext.container.Container',
 	requires: [

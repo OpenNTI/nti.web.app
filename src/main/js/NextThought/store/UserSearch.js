@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.UserSearch', {
+export default Ext.define('NextThought.store.UserSearch', {
 	extend: 'Ext.data.Store',
 	requires: [
 		'NextThought.proxy.UserSearch',

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.components.MostRecent', {
+export default Ext.define('NextThought.app.notifications.components.MostRecent', {
 	extend: 'NextThought.app.notifications.components.List',
 	alias: 'widget.notifications-most-recent',
 

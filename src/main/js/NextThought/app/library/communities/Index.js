@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.communities.Index', {
+export default Ext.define('NextThought.app.library.communities.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.library-communities',
 

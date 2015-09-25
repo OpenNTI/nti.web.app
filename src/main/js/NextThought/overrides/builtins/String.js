@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.builtins.String', function() {
+export default Ext.define('NextThought.overrides.builtins.String', function() {
 
 	function hash(str) {
 		var h = 0, i, c;

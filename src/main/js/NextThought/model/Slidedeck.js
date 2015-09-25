@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Slidedeck', {
+export default Ext.define('NextThought.model.Slidedeck', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.ntislidedeck',
 

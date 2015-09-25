@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.converters.Future', {
+export default Ext.define('NextThought.model.converters.Future', {
 	override: 'Ext.data.Types',
 	requires: ['Ext.data.SortTypes'],
 

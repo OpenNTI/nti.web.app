@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.anchorables.TranscriptContentPointer', {
+export default Ext.define('NextThought.model.anchorables.TranscriptContentPointer', {
 	extend: 'NextThought.model.anchorables.TimeContentPointer',
 
 

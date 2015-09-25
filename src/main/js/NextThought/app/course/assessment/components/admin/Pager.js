@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.assessment.components.admin.Pager', {
+export default Ext.define('NextThought.app.course.assessment.components.admin.Pager', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-assessment-admin-pager',
 

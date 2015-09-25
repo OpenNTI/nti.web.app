@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.tiles.parts.NoteComment', {
+export default Ext.define('NextThought.app.course.dashboard.components.tiles.parts.NoteComment', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.parts.PostComment',
 	alias: 'widget.dashboard-note-comment',
 

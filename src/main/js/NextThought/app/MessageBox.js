@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.MessageBox', {
+export default Ext.define('NextThought.app.MessageBox', {
 	extend: 'NextThought.common.window.Window',
 
 	ui: 'nti-alert',

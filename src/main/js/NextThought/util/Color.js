@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Color', {
+export default Ext.define('NextThought.util.Color', {
 	singleton: true,
 	requires: [
 		'Ext.draw.Color'
@@ -165,8 +165,4 @@ Ext.define('NextThought.util.Color', {
 			this.sources.unshift(id);
 		}
 	}
-},
-function() {
-	window.Color = this;
-}
-);
+});

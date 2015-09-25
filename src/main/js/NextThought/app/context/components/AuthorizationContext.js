@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.context.components.AuthorizationContext', {
+export default Ext.define('NextThought.app.context.components.AuthorizationContext', {
 	extend: 'Ext.Component',
 	alias: 'widget.context-authorization',
 

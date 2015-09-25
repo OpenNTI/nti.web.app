@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.parts.Checkbox', {
+export default Ext.define('NextThought.app.course.enrollment.components.parts.Checkbox', {
 	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
 	alias: 'widget.enrollment-checkbox',
 

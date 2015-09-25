@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.editor.MoveOptions', {
+export default Ext.define('NextThought.app.whiteboard.editor.MoveOptions', {
 	alias: 'widget.wb-tool-move-options',
 	extend: 'Ext.toolbar.Toolbar',
 	requires: [

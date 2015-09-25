@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.parts.Timeline', {
+export default Ext.define('NextThought.app.course.overview.components.parts.Timeline', {
 	extend: 'NextThought.common.components.cards.Card',
 	alias: 'widget.course-overview-ntitimeline',
 

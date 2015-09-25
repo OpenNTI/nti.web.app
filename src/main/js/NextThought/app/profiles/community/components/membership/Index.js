@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.community.components.membership.Index', {
+export default Ext.define('NextThought.app.profiles.community.components.membership.Index', {
 	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
 	alias: 'widget.profile-community-membership',
 

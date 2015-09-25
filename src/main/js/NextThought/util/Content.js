@@ -1,5 +1,5 @@
 /*globals ContentProxy:false, AnnotationUtils:false*/
-Ext.define('NextThought.util.Content', {
+export default Ext.define('NextThought.util.Content', {
 	singleton: true,
 
 	requires: ['NextThought.util.Parsing', 'NextThought.app.library.StateStore', 'NextThought.overrides.builtins.RegExp'],
@@ -766,6 +766,4 @@ Ext.define('NextThought.util.Content', {
 		return html;
 	}
 
-}, function() {
-	window.ContentUtils = this;
 });

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
+export default Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 	extend: 'NextThought.common.components.cards.Card',
 
 	requires: [

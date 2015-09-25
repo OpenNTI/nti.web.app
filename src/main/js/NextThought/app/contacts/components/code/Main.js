@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contacts.components.code.Main', {
+export default Ext.define('NextThought.app.contacts.components.code.Main', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.code-main-view',
 	requires: [

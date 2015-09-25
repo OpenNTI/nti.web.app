@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.input.SingleChoice', {
+export default Ext.define('NextThought.app.assessment.input.SingleChoice', {
 	extend: 'NextThought.app.assessment.input.MultipleChoice',
 	alias: 'widget.question-input-multiplechoicepart',
 

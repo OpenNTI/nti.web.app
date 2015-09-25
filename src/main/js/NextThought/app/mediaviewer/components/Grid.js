@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.components.Grid', {
+export default Ext.define('NextThought.app.mediaviewer.components.Grid', {
 	extend: 'Ext.view.View',
 	alias: 'widget.media-grid-view',
 

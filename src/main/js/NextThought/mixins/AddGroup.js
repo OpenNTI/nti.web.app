@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.AddGroup', {
+export default Ext.define('NextThought.mixins.AddGroup', {
 
 	requires: [
 		'NextThought.app.groups.Actions'

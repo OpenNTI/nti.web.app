@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.info.components.parts.Title', {
+export default Ext.define('NextThought.app.course.info.components.parts.Title', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info-title',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
+export default Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.BaseContainer',
 
 	requires: [

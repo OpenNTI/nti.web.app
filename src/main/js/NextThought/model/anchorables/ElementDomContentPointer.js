@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {
+export default Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {
 	extend: 'NextThought.model.anchorables.DomContentPointer',
 
 	config: {

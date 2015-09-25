@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.community.components.sidebar.Index', {
+export default Ext.define('NextThought.app.profiles.community.components.sidebar.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-community-sidebar',
 

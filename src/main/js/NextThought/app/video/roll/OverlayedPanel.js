@@ -1,5 +1,5 @@
 /*global DomUtils, NextThought */
-Ext.define('NextThought.app.video.roll.OverlayedPanel', {
+export default Ext.define('NextThought.app.video.roll.OverlayedPanel', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.overlay-video-roll',
 

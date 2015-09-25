@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.assessment.components.admin.performance.View', {
+export default Ext.define('NextThought.app.course.assessment.components.admin.performance.View', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-admin-performance',
 

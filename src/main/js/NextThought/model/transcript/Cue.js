@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.transcript.Cue', {
+export default Ext.define('NextThought.model.transcript.Cue', {
 	extend: 'Ext.data.Model',
 
 	fields: [

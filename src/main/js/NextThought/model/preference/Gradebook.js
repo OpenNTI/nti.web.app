@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.preference.Gradebook', {
+export default Ext.define('NextThought.model.preference.Gradebook', {
 	extend: 'NextThought.model.preference.Base',
 
 	fields: [

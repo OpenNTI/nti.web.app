@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.catalog.TabPanel', {
+export default Ext.define('NextThought.app.course.catalog.TabPanel', {
 	extend: 'Ext.tab.Panel',
 	alias: 'widget.course-catalog-tabpanel',
 	requires: [

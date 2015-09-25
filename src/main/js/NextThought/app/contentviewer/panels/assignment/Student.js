@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
+export default Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 	extend: 'NextThought.app.contentviewer.panels.Reader',
 	alias: 'widget.assignment-reader',
 

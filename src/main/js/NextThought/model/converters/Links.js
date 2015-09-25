@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.converters.Links', {
+export default Ext.define('NextThought.model.converters.Links', {
 	override: 'Ext.data.Types',
 	requires: [
 		'Ext.data.SortTypes'

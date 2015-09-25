@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.parts.RadioGroup', {
+export default Ext.define('NextThought.app.course.enrollment.components.parts.RadioGroup', {
 	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
 	alias: 'widget.enrollment-radiogroup',
 

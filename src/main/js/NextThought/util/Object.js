@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Object', {
+export default Ext.define('NextThought.util.Object', {
 	alternateClassName: 'ObjectUtils',
 	singleton: true,
 
@@ -58,6 +58,4 @@ Ext.define('NextThought.util.Object', {
 
 		return Ext.Object.isEmpty(o);
 	}
-},function() {
-	window.ObjectUtils = this;
 });

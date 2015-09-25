@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.components.cards.Card', {
+export default Ext.define('NextThought.common.components.cards.Card', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-card',
 

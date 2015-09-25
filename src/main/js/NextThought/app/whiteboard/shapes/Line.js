@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.shapes.Line', {
+export default Ext.define('NextThought.app.whiteboard.shapes.Line', {
 	extend:	'NextThought.app.whiteboard.shapes.Base',
 
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.StateStore', {
+export default Ext.define('NextThought.common.StateStore', {
 	mixins: {
 		observable: 'Ext.util.Observable'
 	},

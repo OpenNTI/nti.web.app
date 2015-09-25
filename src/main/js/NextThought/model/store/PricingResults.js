@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.store.PricingResults', {
+export default Ext.define('NextThought.model.store.PricingResults', {
 	extend: 'NextThought.model.Base',
 
 	requires: [

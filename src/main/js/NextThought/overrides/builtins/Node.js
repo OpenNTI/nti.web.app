@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.builtins.Node', {});
+export default Ext.define('NextThought.overrides.builtins.Node', {});
 	//Patch-in features that might be missing.
 (function() {
 

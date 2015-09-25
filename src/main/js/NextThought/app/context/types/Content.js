@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.context.types.Content', {
+export default Ext.define('NextThought.app.context.types.Content', {
 
 	requires: [
 		'NextThought.util.Ranges',

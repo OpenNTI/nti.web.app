@@ -1,4 +1,4 @@
-Ext.define('NextThought.proxy.JSONP', {
+export default new Ext.define('NextThought.proxy.JSONP', {
 	bufferedContent: {},
 
 
@@ -209,8 +209,6 @@ Ext.define('NextThought.proxy.JSONP', {
 	if (window.JSONP) {
 		console.warn('JSONP is already defined!!!');
 	}
-
-	window.ContentProxy = window.JSONP = new this();
 
 	window.jsonpReceiveContent = Ext.bind(JSONP.receiveContent, JSONP);
 	/** @deprecated use jsonpReceiveContent instaed */

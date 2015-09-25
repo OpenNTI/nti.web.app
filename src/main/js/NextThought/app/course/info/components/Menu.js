@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.info.components.Menu', {
+export default Ext.define('NextThought.app.course.info.components.Menu', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info-outline-menu',
 

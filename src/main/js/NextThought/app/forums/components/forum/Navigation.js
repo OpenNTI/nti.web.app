@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.forums.components.forum.Navigation', {
+export default Ext.define('NextThought.app.forums.components.forum.Navigation', {
 	extend: 'Ext.view.View',
 	alias: 'widget.forums-forum-nav',
 

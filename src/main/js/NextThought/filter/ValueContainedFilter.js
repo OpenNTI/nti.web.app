@@ -1,4 +1,4 @@
-Ext.define('NextThought.filter.ValueContainedFilter', {
+export default Ext.define('NextThought.filter.ValueContainedFilter', {
 	extend: 'NextThought.filter.Filter',
 	alternateClassName: 'NextThought.ValueContainedFilter',
 

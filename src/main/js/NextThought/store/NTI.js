@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.NTI', {
+export default Ext.define('NextThought.store.NTI', {
 	extend: 'Ext.data.Store',
 	requires: [
 		'NextThought.proxy.reader.Json'

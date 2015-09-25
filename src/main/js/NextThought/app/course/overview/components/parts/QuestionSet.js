@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
+export default Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 	extend: 'Ext.Panel',
 	alias: [
 		'widget.course-overview-naquestionset',

@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Localization', {
+export default Ext.define('NextThought.util.Localization', {
 	singleton: true,
 
 	formatRe: /\{([^\{]+)\}/g,
@@ -63,6 +63,7 @@ Ext.define('NextThought.util.Localization', {
 	}
 
 }, function() {
+	//TODO: figure out how to not make these globals
 	window.getString = this.getExternalizedString.bind(this);
 	window.getFormattedString = this.formatExternalString.bind(this);
 

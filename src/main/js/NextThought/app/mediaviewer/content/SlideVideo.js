@@ -1,6 +1,6 @@
 /*jslint */
 /*globals SlideDeck */
-Ext.define('NextThought.app.mediaviewer.content.SlideVideo', {
+export default Ext.define('NextThought.app.mediaviewer.content.SlideVideo', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-slidevideo',
 

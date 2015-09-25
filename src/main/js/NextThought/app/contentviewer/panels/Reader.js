@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.panels.Reader', {
+export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	extend: 'NextThought.common.components.NavPanel',
 	alias: 'widget.reader',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.about.parts.EntrySet', {
+export default Ext.define('NextThought.app.profiles.user.components.about.parts.EntrySet', {
 	extend: 'NextThought.app.profiles.user.components.about.parts.FieldSet',
 
 	title: '',

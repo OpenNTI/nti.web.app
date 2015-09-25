@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.widgets.Base', {
+export default Ext.define('NextThought.app.course.dashboard.components.widgets.Base', {
 	statics: {
 
 		//the base weight for tiles we return

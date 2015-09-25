@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.Header', {
+export default Ext.define('NextThought.app.account.Header', {
   extend: 'Ext.Component',
   alias: 'widget.account-header-view',
   requires: [

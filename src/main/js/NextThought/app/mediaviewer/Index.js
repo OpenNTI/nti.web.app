@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.Index', {
+export default Ext.define('NextThought.app.mediaviewer.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.media-window-view',
 

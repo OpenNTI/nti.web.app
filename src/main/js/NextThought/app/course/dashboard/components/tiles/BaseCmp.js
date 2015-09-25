@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.tiles.BaseCmp', {
+export default Ext.define('NextThought.app.course.dashboard.components.tiles.BaseCmp', {
 	extend: 'Ext.Component',
 
 	cls: 'tile',

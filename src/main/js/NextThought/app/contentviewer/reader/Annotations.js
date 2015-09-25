@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.reader.Annotations', {
+export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 	alias: 'reader.annotations',
 	requires: [
 		'NextThought.model.Highlight',

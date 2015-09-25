@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.input.NumericMath', {
+export default Ext.define('NextThought.app.assessment.input.NumericMath', {
 	extend: 'NextThought.app.assessment.input.FreeResponse',
 	alias: 'widget.question-input-numericmathpart',
 

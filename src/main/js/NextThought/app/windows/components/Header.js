@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.windows.components.Header', {
+export default Ext.define('NextThought.app.windows.components.Header', {
 	extend: 'Ext.Component',
 	alias: 'widget.window-header',
 

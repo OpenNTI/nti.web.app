@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.converters.VideoSources', {
+export default Ext.define('NextThought.model.converters.VideoSources', {
 	override: 'Ext.data.Types',
 	requires: [
 		'Ext.data.SortTypes',

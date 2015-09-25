@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.ProfileItem', {
+export default Ext.define('NextThought.store.ProfileItem', {
 	extend: 'NextThought.store.PageItem',
 
 	sorters: [{

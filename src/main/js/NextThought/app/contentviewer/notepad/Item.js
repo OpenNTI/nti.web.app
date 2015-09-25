@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.notepad.Item', {
+export default Ext.define('NextThought.app.contentviewer.notepad.Item', {
 	extend: 'Ext.Component',
 	alias: 'widget.notepad-item',
 

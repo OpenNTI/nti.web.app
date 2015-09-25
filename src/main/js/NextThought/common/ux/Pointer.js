@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.ux.Pointer', {
+export default Ext.define('NextThought.common.ux.Pointer', {
 	extend: 'Ext.Component',
 	alias: 'widget.pointer',
 

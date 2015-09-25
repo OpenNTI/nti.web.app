@@ -1,5 +1,5 @@
 //styles in identity.scss
-Ext.define('NextThought.app.account.identity.components.Presence', {
+export default Ext.define('NextThought.app.account.identity.components.Presence', {
 	extend: 'Ext.Component',
 	alias: 'widget.presence-menu',
 

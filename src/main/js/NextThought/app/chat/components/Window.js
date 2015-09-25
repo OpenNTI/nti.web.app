@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.chat.components.Window', {
+export default Ext.define('NextThought.app.chat.components.Window', {
 	extend: 'Ext.window.Window',
 	alias: 'widget.chat-window',
 

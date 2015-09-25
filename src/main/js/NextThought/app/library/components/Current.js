@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.components.Current', {
+export default Ext.define('NextThought.app.library.components.Current', {
 	extend: 'Ext.container.Container',
 
 	layout: 'none',

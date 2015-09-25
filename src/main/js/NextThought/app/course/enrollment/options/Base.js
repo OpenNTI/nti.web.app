@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.options.Base', {
+export default Ext.define('NextThought.app.course.enrollment.options.Base', {
 	NAME: '', //the name of the option
 
 	EnrolledWordingKey: '',//key to pass to get string to get Enrolled wording

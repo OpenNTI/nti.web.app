@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.JSONValue', {
+export default Ext.define('NextThought.mixins.JSONValue', {
 
 	ignoredKeyMap: {
 		config: true,

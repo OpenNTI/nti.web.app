@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.ux.WelcomeGuide', {
+export default Ext.define('NextThought.common.ux.WelcomeGuide', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.welcome-guide',
 

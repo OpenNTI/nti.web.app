@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.userdata.StateStore', {
+export default Ext.define('NextThought.app.userdata.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	getSocket: function() {

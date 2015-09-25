@@ -5,7 +5,7 @@
  *
  * We also try to apply sane defaults.
  */
-Ext.define('NextThought.overrides.tip.QuickTip', {
+export default Ext.define('NextThought.overrides.tip.QuickTip', {
 	override: 'Ext.tip.QuickTip',
 	requires: ['Ext.tip.QuickTipManager'],
 
@@ -209,7 +209,7 @@ Ext.define('NextThought.overrides.tip.QuickTip', {
 });
 
 
-Ext.define('NextThought.view.tip.Tooltip', {
+export default Ext.define('NextThought.view.tip.Tooltip', {
 	extend: 'Ext.tip.ToolTip',
 	alias: 'widget.nt-tooltip',
 

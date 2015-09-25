@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.community.components.sidebar.parts.About', {
+export default Ext.define('NextThought.app.profiles.community.components.sidebar.parts.About', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-community-about',
 

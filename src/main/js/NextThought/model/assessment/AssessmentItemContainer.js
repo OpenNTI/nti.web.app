@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.AssessmentItemContainer', {
+export default Ext.define('NextThought.model.assessment.AssessmentItemContainer', {
 	extend: 'NextThought.model.Base',
 	fields: [
 	]

@@ -1,6 +1,6 @@
 /*jslint */
 /*global DomUtils */
-Ext.define('NextThought.app.mediaviewer.content.OverlayedPanel', {
+export default Ext.define('NextThought.app.mediaviewer.content.OverlayedPanel', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.overlay-slidevideo',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.input.ModeledContent', {
+export default Ext.define('NextThought.app.assessment.input.ModeledContent', {
 	extend: 'NextThought.app.assessment.input.Base',
 	alias: 'widget.question-input-modeledcontentpart',
 

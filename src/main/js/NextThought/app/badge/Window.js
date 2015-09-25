@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.badge.Window', {
+export default Ext.define('NextThought.app.badge.Window', {
 	extend: 'Ext.container.Container',
 
 	requires: [

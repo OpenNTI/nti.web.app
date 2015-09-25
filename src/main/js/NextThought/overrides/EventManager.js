@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.EventManager', function() {
+export default Ext.define('NextThought.overrides.EventManager', function() {
 
 	var EM = Ext.EventManager,
 		normalizeEventExt = EM.normalizeEvent;

@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Redaction', {
+export default Ext.define('NextThought.model.Redaction', {
 	extend: 'NextThought.model.Base',
 
 	mixins: {

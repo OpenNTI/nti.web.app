@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.QuestionSetSubmission', {
+export default Ext.define('NextThought.model.assessment.QuestionSetSubmission', {
 	extend: 'NextThought.model.Base',
 	requires: [
 		'NextThought.model.converters.Items',

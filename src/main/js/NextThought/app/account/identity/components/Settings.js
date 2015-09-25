@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.identity.components.Settings', {
+export default Ext.define('NextThought.app.account.identity.components.Settings', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.settings-menu',
 

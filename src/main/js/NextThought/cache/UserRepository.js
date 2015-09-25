@@ -1,4 +1,4 @@
-Ext.define('NextThought.cache.UserRepository', {
+export default Ext.define('NextThought.cache.UserRepository', {
 	alias: 'UserRepository',
 	singleton: true,
 	isDebug: $AppConfig.userRepositoryDebug,
@@ -709,7 +709,6 @@ Ext.define('NextThought.cache.UserRepository', {
 
 },
 function() {
-	window.UserRepository = this;
 	function worker() {
 		var keep = {
 			Class: 1,

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.info.Index', {
+export default Ext.define('NextThought.app.course.info.Index', {
 	extend: 'NextThought.common.components.NavPanel',
 	alias: 'widget.course-info',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.PresentationResources', {
+export default Ext.define('NextThought.mixins.PresentationResources', {
 	ASSET_MAP: {
 		thumb: {
 			check: false,

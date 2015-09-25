@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.MultiPartSubmission', {
+export default Ext.define('NextThought.app.assessment.MultiPartSubmission', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-multipart-submission',
 	requires: [

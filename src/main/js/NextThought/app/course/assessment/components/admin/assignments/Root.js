@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.assessment.components.admin.assignments.Root', {
+export default Ext.define('NextThought.app.course.assessment.components.admin.assignments.Root', {
 	extend: 'NextThought.app.course.assessment.components.student.assignments.View',
 	alias: 'widget.course-assessment-admin-assignments-root',
 

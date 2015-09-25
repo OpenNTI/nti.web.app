@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.UsersCourseAssignmentSavepointItem', {
+export default Ext.define('NextThought.model.assessment.UsersCourseAssignmentSavepointItem', {
 	extend: 'NextThought.model.Base',
 
 	fields: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
+export default Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.user-profile-achievements',
 

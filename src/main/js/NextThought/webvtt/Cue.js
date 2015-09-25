@@ -4,7 +4,7 @@
  * @author Bryan Hoke
  */
 
-Ext.define('NextThought.webvtt.Cue', {
+export default Ext.define('NextThought.webvtt.Cue', {
 	config: {
 		// ID for the cue
 		identifier: '',

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.emailverify.Window', {
+export default Ext.define('NextThought.app.profiles.user.components.emailverify.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.email-token-window',
 

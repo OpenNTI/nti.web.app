@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.GenericObject', {
+export default Ext.define('NextThought.model.GenericObject', {
 	extend: 'NextThought.model.Base',
 
 	fields: [

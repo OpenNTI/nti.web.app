@@ -3,7 +3,7 @@
  * As of the checkin time, it is not referenced anywhere and will be tossed out by the minification process which is just fine.
  */
 
-Ext.define('NextThought.app.whiteboard.CollisionDetection', {
+export default Ext.define('NextThought.app.whiteboard.CollisionDetection', {
   singleton: true,
 
 
@@ -123,8 +123,5 @@ Ext.define('NextThought.app.whiteboard.CollisionDetection', {
       return false;
 		}
   }
-},
-function() {
-  window.CollisionDetection = this;
 });
 

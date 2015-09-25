@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.stream.components.tiles.Note', {
+export default Ext.define('NextThought.app.stream.components.tiles.Note', {
 	extend: 'Ext.container.Container',
 
 	layout: 'none',

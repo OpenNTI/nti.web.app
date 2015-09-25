@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.UserDataThreader', {
+export default Ext.define('NextThought.util.UserDataThreader', {
 	singleton: true,
 	requires: [
 	],

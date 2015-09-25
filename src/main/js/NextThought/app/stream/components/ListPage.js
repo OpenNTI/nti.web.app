@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.stream.components.ListPage', {
+export default Ext.define('NextThought.app.stream.components.ListPage', {
 	extend: 'NextThought.app.stream.components.BasePage',
 	alias: 'widget.stream-list-page',
 

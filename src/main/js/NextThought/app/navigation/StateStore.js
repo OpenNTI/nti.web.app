@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.navigation.StateStore', {
+export default Ext.define('NextThought.app.navigation.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	updateNavBar: function(config) {

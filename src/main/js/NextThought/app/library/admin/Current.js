@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.admin.Current', {
+export default Ext.define('NextThought.app.library.admin.Current', {
 	extend: 'NextThought.app.library.courses.Current',
 	alias: 'widget.library-current-admin',
 

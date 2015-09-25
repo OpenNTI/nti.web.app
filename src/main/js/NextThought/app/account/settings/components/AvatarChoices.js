@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.settings.components.AvatarChoices', {
+export default Ext.define('NextThought.app.account.settings.components.AvatarChoices', {
 	extend: 'Ext.Component',
 	alias: 'widget.avatar-choices',
 

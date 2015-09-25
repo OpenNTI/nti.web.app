@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.community.components.Header', {
+export default Ext.define('NextThought.app.profiles.community.components.Header', {
 	extend: 'NextThought.app.profiles.components.Header',
 	alias: 'widget.profile-community-header',
 

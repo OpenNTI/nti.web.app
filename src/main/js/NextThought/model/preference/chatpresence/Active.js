@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.preference.chatpresence.Active', {
+export default Ext.define('NextThought.model.preference.chatpresence.Active', {
 	extend: 'NextThought.model.preference.chatpresence.Base',
 
 	getResourceUrl: function() {

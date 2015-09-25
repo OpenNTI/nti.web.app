@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.Avatar', {
+export default Ext.define('NextThought.mixins.Avatar', {
 
 	statics: {
 		BAKCGROUND_CHOICE_COUNT: 13,

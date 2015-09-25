@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.sharing.components.ShareSearch', {
+export default Ext.define('NextThought.app.sharing.components.ShareSearch', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.search-sharesearch',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.menus.SymbolicMathMenuItem', {
+export default Ext.define('NextThought.common.menus.SymbolicMathMenuItem', {
 	extend: 'Ext.menu.Item',
 	alias: 'widget.symbolicmath-menuitem',
 

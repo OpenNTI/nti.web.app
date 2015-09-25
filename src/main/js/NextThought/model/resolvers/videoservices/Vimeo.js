@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.resolvers.videoservices.Vimeo', {
+export default Ext.define('NextThought.model.resolvers.videoservices.Vimeo', {
 	alias: 'resolvers.videoservices.vimeo',
 
 	statics: {

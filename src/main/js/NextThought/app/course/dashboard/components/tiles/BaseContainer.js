@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.tiles.BaseContainer', {
+export default Ext.define('NextThought.app.course.dashboard.components.tiles.BaseContainer', {
 	extend: 'Ext.Container',
 
 	cls: 'tile',

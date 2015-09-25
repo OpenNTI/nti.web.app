@@ -1,4 +1,4 @@
-Ext.define('NextThought.proxy.Rest', {
+export default Ext.define('NextThought.proxy.Rest', {
 	extend: 'Ext.data.proxy.Rest',
 	alias: 'proxy.nti',
 	requires: [

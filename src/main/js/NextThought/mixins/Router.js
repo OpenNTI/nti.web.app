@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.Router', {
+export default Ext.define('NextThought.mixins.Router', {
 
 	requires: [
 		'NextThought.app.navigation.path.Actions',

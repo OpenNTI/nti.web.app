@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.transcript.TranscriptItem', {
+export default Ext.define('NextThought.model.transcript.TranscriptItem', {
 	extend: 'Ext.data.Model',
 
 	fields: [

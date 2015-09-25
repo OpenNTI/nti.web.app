@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.blog.Window', {
+export default Ext.define('NextThought.app.blog.Window', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.blog-window',
 

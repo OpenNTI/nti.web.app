@@ -1,5 +1,5 @@
 /*globals getFormattedString*/
-Ext.define('NextThought.app.course.enrollment.Details', {
+export default Ext.define('NextThought.app.course.enrollment.Details', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-enrollment-details',
 

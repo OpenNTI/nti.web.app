@@ -1,4 +1,4 @@
-Ext.define('NextThought.proxy.reader.Base', {
+export default Ext.define('NextThought.proxy.reader.Base', {
 	extend: 'Ext.data.reader.Json',
 	alias: 'reader.nti-base',
 

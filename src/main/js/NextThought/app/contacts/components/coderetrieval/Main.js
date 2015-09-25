@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contacts.components.coderetrieval.Main', {
+export default Ext.define('NextThought.app.contacts.components.coderetrieval.Main', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.coderetrieval-main-view',
 	requires: [

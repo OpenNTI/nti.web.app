@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.components.types.Note', {
+export default Ext.define('NextThought.app.notifications.components.types.Note', {
 	extend: 'NextThought.app.notifications.components.types.Base',
 	alias: 'widget.notifications-item-note',
 

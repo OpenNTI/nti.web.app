@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.editor.StrokeWidthSelector', {
+export default Ext.define('NextThought.app.whiteboard.editor.StrokeWidthSelector', {
 	extend: 'NextThought.common.form.fields.ComboBox',
 	alias: 'widget.stroke-select',
 

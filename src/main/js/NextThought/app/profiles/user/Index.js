@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.Index', {
+export default Ext.define('NextThought.app.profiles.user.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-user',
 
@@ -90,6 +90,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		   addContact: this.addContact.bind(this)
 		};
 	},
+
 
 	finalizeInit: function() {
 	   window.saveProfile = this.saveProfile.bind(this);

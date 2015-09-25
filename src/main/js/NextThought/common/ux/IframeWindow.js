@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.ux.IframeWindow', {
+export default Ext.define('NextThought.common.ux.IframeWindow', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.iframe-window',
 

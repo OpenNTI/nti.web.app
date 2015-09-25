@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.components.reader.parts.TranscriptItemMixin', {
+export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.TranscriptItemMixin', {
 	requires: ['NextThought.app.userdata.Actions'],
 
 	isPresentationPartReady: false,

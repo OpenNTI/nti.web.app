@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
+export default Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 	extend: 'Ext.Component',
 
 	INPUT_TYPE_KEY_HANDLER: {

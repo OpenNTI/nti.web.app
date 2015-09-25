@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.chat.Gutter', {
+export default Ext.define('NextThought.app.chat.Gutter', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.chat-gutter-window',
 

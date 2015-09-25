@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.container.Viewport', {
+export default Ext.define('NextThought.overrides.container.Viewport', {
 	override: 'Ext.container.Viewport',
 
 	setSize: function() {},

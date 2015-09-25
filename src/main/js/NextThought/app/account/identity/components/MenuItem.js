@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.identity.components.MenuItem', {
+export default Ext.define('NextThought.app.account.identity.components.MenuItem', {
 	extend: 'Ext.Component',
 	alias: 'widget.account-menuitem',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.window.Header', {
+export default Ext.define('NextThought.common.window.Header', {
   extend: 'Ext.Component',
   alias: 'widget.nti-window-header',
 

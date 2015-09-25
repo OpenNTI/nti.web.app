@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.PageSource', {
+export default Ext.define('NextThought.util.PageSource', {
 
 	mixins: {
 		observable: 'Ext.util.Observable'

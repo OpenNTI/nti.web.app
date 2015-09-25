@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.input.FileSubmission', {
+export default Ext.define('NextThought.app.assessment.input.FileSubmission', {
 	extend: 'NextThought.app.assessment.input.Base',
 	alias: 'widget.question-input-filepart',
 

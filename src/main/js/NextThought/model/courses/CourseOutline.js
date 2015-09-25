@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courses.CourseOutline', {
+export default Ext.define('NextThought.model.courses.CourseOutline', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.courses.courseoutline',
 

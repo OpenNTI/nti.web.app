@@ -1,5 +1,5 @@
 /*global DomUtils, ParseUtils */
-Ext.define('NextThought.model.PlaylistItem', {
+export default Ext.define('NextThought.model.PlaylistItem', {
 	extend: 'Ext.data.Model',
 	// extend: 'NextThought.model.Base',
 

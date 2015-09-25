@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.PaymentConfirmation', {
+export default Ext.define('NextThought.app.course.enrollment.components.PaymentConfirmation', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-paymentconfirmation',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.form.fields.TagField', {
+export default Ext.define('NextThought.common.form.fields.TagField', {
 	alternateClassName: 'NextThought.common.form.fields.TokenField',
 	extend: 'Ext.Component',
 	alias: ['widget.tags', 'widget.tokens'],

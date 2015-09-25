@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.info.components.parts.Instructors', {
+export default Ext.define('NextThought.app.course.info.components.parts.Instructors', {
 	extend: 'Ext.view.View',
 	alias: 'widget.course-info-instructors',
 	ui: 'course-info',

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.annotations.Base', {
+export default Ext.define('NextThought.app.annotations.Base', {
 	alias: 'annotations.base',
 
 	requires: [

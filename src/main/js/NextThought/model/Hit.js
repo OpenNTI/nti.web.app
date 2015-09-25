@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Hit', {
+export default Ext.define('NextThought.model.Hit', {
 	extend: 'NextThought.model.Base',
 
 	requires: ['Ext.util.Inflector'],

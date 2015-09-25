@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.navigation.path.parts.Forums', {
+export default Ext.define('NextThought.app.navigation.path.parts.Forums', {
 
 	requires: ['NextThought.app.library.Actions'],
 

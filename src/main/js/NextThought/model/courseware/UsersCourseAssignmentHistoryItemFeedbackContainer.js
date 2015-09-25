@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedbackContainer', {
+export default Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedbackContainer', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.assessment.userscourseassignmenthistoryitemfeedbackcontainer',
 

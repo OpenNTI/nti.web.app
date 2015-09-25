@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.parts.Group', {
+export default Ext.define('NextThought.app.course.enrollment.components.parts.Group', {
 	extend: 'NextThought.app.course.enrollment.components.parts.Set',
 	alias: 'widget.enrollment-group',
 

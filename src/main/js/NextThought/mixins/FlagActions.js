@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.FlagActions', {
+export default Ext.define('NextThought.mixins.FlagActions', {
 
 	constructor: function() {
 		function onAfterRender() {

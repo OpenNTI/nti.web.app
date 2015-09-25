@@ -1,5 +1,5 @@
 /*globals swallow*/
-Ext.define('NextThought.app.whiteboard.Canvas', {
+export default Ext.define('NextThought.app.whiteboard.Canvas', {
 	extend: 'Ext.Component',
 	alias:	'widget.whiteboard-canvas',
 	requires: [

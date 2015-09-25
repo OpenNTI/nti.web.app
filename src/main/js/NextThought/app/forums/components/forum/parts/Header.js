@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.forums.components.forum.parts.Header', {
+export default Ext.define('NextThought.app.forums.components.forum.parts.Header', {
 	extend: 'Ext.Component',
 	alias: 'widget.forums-forum-header',
 

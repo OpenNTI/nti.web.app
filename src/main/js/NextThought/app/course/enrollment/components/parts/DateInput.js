@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.parts.DateInput', {
+export default Ext.define('NextThought.app.course.enrollment.components.parts.DateInput', {
 	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
 	alias: 'widget.enrollment-dateinput',
 

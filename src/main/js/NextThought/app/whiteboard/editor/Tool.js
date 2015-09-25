@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.editor.Tool', {
+export default Ext.define('NextThought.app.whiteboard.editor.Tool', {
 	alias: 'widget.wb-tool',
 	extend: 'Ext.button.Button',
 

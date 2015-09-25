@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.community.components.sidebar.parts.Membership', {
+export default Ext.define('NextThought.app.profiles.community.components.sidebar.parts.Membership', {
 	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
 	alias: 'widget.profile-community-sidebar-memberships',
 

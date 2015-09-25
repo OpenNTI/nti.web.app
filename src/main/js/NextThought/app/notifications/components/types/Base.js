@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.components.types.Base', {
+export default Ext.define('NextThought.app.notifications.components.types.Base', {
 	extend: 'Ext.Component',
 
 	//the mime type this item renders

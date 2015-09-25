@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.FlatPage', {
+export default Ext.define('NextThought.store.FlatPage', {
 	extend: 'Ext.data.Store',
 	model: 'NextThought.model.Base',
 	proxy: 'memory',

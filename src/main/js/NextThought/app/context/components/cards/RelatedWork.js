@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.context.components.cards.RelatedWork', {
+export default Ext.define('NextThought.app.context.components.cards.RelatedWork', {
 	extend: 'Ext.Component',
 	alias: 'widget.context-relatedwork-card',
 

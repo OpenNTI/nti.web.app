@@ -2,7 +2,7 @@
  * This layout is essentially a card layout based on the auto layout instead of the fit layout.
  * It also will enforce that the last item is always active.
  */
-Ext.define('NextThought.layout.container.Stack', {
+export default Ext.define('NextThought.layout.container.Stack', {
 	extend: 'Ext.layout.container.Card',
 	alias: 'layout.stack',
 	type: 'stack',

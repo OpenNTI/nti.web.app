@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.components.mode.FullVideo', {
+export default Ext.define('NextThought.app.mediaviewer.components.mode.FullVideo', {
     extend: 'NextThought.app.mediaviewer.components.mode.Split',
     alias: 'widget.media-video-viewer',
 

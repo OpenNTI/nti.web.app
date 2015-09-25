@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.communities.components.Page', {
+export default Ext.define('NextThought.app.library.communities.components.Page', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.library-view-community-page',
 

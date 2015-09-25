@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.chat.components.Entry', {
+export default Ext.define('NextThought.app.chat.components.Entry', {
 	extend: 'Ext.Component',
 	alias: 'widget.chat-entry',
 

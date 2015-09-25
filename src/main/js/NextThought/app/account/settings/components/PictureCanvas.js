@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.settings.components.PictureCanvas', {
+export default Ext.define('NextThought.app.account.settings.components.PictureCanvas', {
 	extend: 'Ext.Component',
 	alias: 'widget.picture-canvas',
 

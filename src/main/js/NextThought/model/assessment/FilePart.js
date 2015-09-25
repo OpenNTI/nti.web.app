@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.FilePart', {
+export default Ext.define('NextThought.model.assessment.FilePart', {
 	extend: 'NextThought.model.assessment.Part',
 	fields: [
 		{ name: 'AllowedExtentions', mapping: 'allowed_extensions', type: 'auto'},

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.context.types.Slide', {
+export default Ext.define('NextThought.app.context.types.Slide', {
 
 	requires: [
 		'NextThought.app.context.components.Default',

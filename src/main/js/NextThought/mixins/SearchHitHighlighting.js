@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.SearchHitHighlighting', {
+export default Ext.define('NextThought.mixins.SearchHitHighlighting', {
 
 	showSearchHit: function(hit, scrollToFragment) {
 		this.clearSearchHit();

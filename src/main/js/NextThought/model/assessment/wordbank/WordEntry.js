@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.wordbank.WordEntry', {
+export default Ext.define('NextThought.model.assessment.wordbank.WordEntry', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.naqwordentry',
 	fields: [

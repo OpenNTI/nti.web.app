@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courses.CourseInstance', {
+export default Ext.define('NextThought.model.courses.CourseInstance', {
 	extend: 'NextThought.model.Base',
 
 	isBundle: true,

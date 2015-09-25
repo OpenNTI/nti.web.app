@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.recovery.Window', {
+export default Ext.define('NextThought.app.account.recovery.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.recovery-email-window',
 

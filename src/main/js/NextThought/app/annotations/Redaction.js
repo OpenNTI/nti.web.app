@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.annotations.Redaction', {
+export default Ext.define('NextThought.app.annotations.Redaction', {
 	extend: 'NextThought.app.annotations.Highlight',
 	alias: 'widget.redaction',
 	requires: [

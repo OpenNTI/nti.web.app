@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Course', {
+export default Ext.define('NextThought.model.Course', {
 	extend: 'NextThought.model.Base',
 
 	requires: ['NextThought.model.converters.Date'],

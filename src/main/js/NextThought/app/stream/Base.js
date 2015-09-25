@@ -9,7 +9,7 @@
  * Monitors can be added by the container for beforePageLoad, and afterPageLoad
  */
 
-Ext.define('NextThought.app.stream.Base', {
+export default Ext.define('NextThought.app.stream.Base', {
 	extend: 'Ext.container.Container',
 
 	requires: [

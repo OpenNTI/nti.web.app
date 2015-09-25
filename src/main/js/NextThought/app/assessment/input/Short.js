@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.input.Short', {
+export default Ext.define('NextThought.app.assessment.input.Short', {
 	extend: 'NextThought.app.assessment.input.Base',
 	alias: [
 		'widget.question-input-fillintheblankshortanswerpart'

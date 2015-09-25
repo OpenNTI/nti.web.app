@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.context.components.Default', {
+export default Ext.define('NextThought.app.context.components.Default', {
 	extend: 'Ext.Component',
 	alias: 'widget.context-default',
 

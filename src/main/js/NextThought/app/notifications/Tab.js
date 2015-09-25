@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.Tab', {
+export default Ext.define('NextThought.app.notifications.Tab', {
 	extend: 'Ext.Component',
 	alias: 'widget.notifications-tab',
 

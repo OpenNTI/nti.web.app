@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.grid.column.Column', {
+export default Ext.define('NextThought.overrides.grid.column.Column', {
 	override: 'Ext.grid.column.Column',
 
 	afterRender: function() {

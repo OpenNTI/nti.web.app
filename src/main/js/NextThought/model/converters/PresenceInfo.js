@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.converters.PresenceInfo', {
+export default Ext.define('NextThought.model.converters.PresenceInfo', {
 	override: 'Ext.data.Types',
 	requires: ['Ext.data.SortTypes'],
 

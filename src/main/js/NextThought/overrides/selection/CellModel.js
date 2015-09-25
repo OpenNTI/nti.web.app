@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.selection.CellModel', {
+export default Ext.define('NextThought.overrides.selection.CellModel', {
 	override: 'Ext.selection.CellModel',
 
 	onViewRefresh: function() {

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.community.components.activity.parts.NewPost', {
+export default Ext.define('NextThought.app.profiles.community.components.activity.parts.NewPost', {
 	extend: 'Ext.Component',
 	alias: 'widget.profiles-community-newpost',
 

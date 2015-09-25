@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.ux.ImagePopout', {//TODO: this is 99% copied from the video version. Unify this in to a configurable popup.
+export default Ext.define('NextThought.common.ux.ImagePopout', {//TODO: this is 99% copied from the video version. Unify this in to a configurable popup.
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.image-lightbox',
 	requires: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.ChatLinks', {
+export default Ext.define('NextThought.mixins.ChatLinks', {
 
 	/*
 	 * This mixin assumes we are mixed into a class that is Observable, and has a userObject property (or a user

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.Utils', {
+export default Ext.define('NextThought.app.whiteboard.Utils', {
 	alternateClassName: 'WBUtils',
 	singleton: true,
 

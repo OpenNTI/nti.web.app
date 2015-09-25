@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.assessment.components.Navigation', {
+export default Ext.define('NextThought.app.course.assessment.components.Navigation', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-assessment-navigation',
 

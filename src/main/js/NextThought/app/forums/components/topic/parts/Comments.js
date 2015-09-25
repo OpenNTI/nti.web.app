@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
+export default Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 	extend: 'Ext.view.View',
 	alias: 'widget.forums-topic-comment-thread',
 

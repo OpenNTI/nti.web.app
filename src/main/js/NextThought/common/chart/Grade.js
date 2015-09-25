@@ -1,5 +1,5 @@
 //See Working preview at http://jsfiddle.net/jsg2021/7gaU2/
-Ext.define('NextThought.common.chart.Grade', {
+export default Ext.define('NextThought.common.chart.Grade', {
 	extend: 'Ext.Component',
 	alias: 'widget.grade-chart',
 	ui: 'course-assessment',

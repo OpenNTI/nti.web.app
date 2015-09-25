@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.windows.StateStore', {
+export default Ext.define('NextThought.app.windows.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	statics: {

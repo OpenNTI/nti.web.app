@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.anchorables.TimeRangeDescription', {
+export default Ext.define('NextThought.model.anchorables.TimeRangeDescription', {
 	extend: 'NextThought.model.anchorables.ContentRangeDescription',
 
 

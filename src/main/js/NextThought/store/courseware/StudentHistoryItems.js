@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.courseware.StudentHistoryItems', {
+export default Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 	extend: 'NextThought.store.courseware.HistoryItems',
 
 	getTotalCount: function() {

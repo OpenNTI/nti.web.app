@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Timeline', {
+export default Ext.define('NextThought.model.Timeline', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.ntitimeline',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.settings.components.PictureEditor', {
+export default Ext.define('NextThought.app.account.settings.components.PictureEditor', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.picture-editor',
 

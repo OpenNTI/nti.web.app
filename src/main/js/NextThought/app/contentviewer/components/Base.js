@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.components.Base', {
+export default Ext.define('NextThought.app.contentviewer.components.Base', {
 	extend: 'Ext.panel.Panel',
 
 	overflowX: 'hidden',

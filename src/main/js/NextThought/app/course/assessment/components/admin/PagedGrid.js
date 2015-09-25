@@ -1,5 +1,5 @@
 /* globals getFormattedString,Duration */
-Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
+export default Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
 	extend: 'Ext.grid.Panel',
 	alias: 'widget.course-admin-paged-grid',
 

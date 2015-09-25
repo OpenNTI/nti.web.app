@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.forums.Post', {
+export default Ext.define('NextThought.model.forums.Post', {
 	extend: 'NextThought.model.forums.Base',
 	mixins: {
 		bodyContent: 'NextThought.mixins.ModelWithBodyContent'

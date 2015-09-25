@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.Component', {
+export default Ext.define('NextThought.overrides.Component', {
 	override: 'Ext.Component',
 	requires: ['NextThought.mixins.Delegation', 'NextThought.util.Promise'],
 

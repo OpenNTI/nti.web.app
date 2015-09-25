@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.components.WordBank', {
+export default Ext.define('NextThought.app.assessment.components.WordBank', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-components-wordbank',
 

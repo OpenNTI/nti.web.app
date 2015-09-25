@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.ScoreboardHeader', {
+export default Ext.define('NextThought.app.assessment.ScoreboardHeader', {
 	extend: 'Ext.Component',
 
 	requires: [

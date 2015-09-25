@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.components.definition.Window', {
+export default Ext.define('NextThought.app.contentviewer.components.definition.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.dictionary-window',
 

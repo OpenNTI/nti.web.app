@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.CSS', {
+export default Ext.define('NextThought.util.CSS', {
 	singleton: true,
 
 	getOrMakeSheet: function(id) {
@@ -49,6 +49,4 @@ Ext.define('NextThought.util.CSS', {
 	}
 
 
-}, function() {
-	window.CSSUtils = this;
 });

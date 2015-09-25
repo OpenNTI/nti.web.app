@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.Shareable', {
+export default Ext.define('NextThought.mixins.Shareable', {
 	requires: [
 		'Ext.dd.DragZone',
 		'Ext.dd.DropZone',

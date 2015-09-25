@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.courses.components.Collection', {
+export default Ext.define('NextThought.app.library.courses.components.Collection', {
 	extend: 'NextThought.app.library.components.Collection',
 	alias: 'widget.course-collection',
 

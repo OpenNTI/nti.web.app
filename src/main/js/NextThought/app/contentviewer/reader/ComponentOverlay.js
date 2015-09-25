@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay', {
+export default Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay', {
 	alias: 'reader.componentOverlay',
 
 	requires: [

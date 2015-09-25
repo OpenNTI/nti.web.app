@@ -1,6 +1,6 @@
 /*jslint */
 /*globals Globals, NextThought, YT */
-Ext.define('NextThought.util.media.YouTubePlayer', {
+export default Ext.define('NextThought.util.media.YouTubePlayer', {
 
 	statics: {
 		kind: 'video',

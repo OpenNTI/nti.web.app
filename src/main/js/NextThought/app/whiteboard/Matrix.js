@@ -1,7 +1,7 @@
 /**
  * based on: http://jsfiddle.net/DRf9P/
  */
-Ext.define('NextThought.app.whiteboard.Matrix', {
+export default Ext.define('NextThought.app.whiteboard.Matrix', {
 	alternateClassName: 'NTMatrix',
 
 	constructor: function(transform) {
@@ -135,7 +135,5 @@ Ext.define('NextThought.app.whiteboard.Matrix', {
 			'ty': this.m[5]
 		};
 	}
-},function() {
-	window.NTMatrix = this;
 });
 

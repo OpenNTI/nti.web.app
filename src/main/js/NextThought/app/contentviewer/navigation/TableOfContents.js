@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.navigation.TableOfContents', {
+export default Ext.define('NextThought.app.contentviewer.navigation.TableOfContents', {
 	extend: 'Ext.view.View',
 	alias: 'widget.table-of-contents-flyout',
 

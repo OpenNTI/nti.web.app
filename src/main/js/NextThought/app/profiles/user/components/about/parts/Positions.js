@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
+export default Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 	extend: 'NextThought.app.profiles.user.components.about.parts.EntrySet',
 	alias: 'widget.profile-user-about-positions',
 

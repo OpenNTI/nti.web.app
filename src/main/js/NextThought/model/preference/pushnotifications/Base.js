@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.preference.pushnotifications.Base', {
+export default Ext.define('NextThought.model.preference.pushnotifications.Base', {
 	extend: 'NextThought.model.preference.Base',
 
 	getResourceUrl: function() {

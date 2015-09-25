@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
+export default Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 
 	__inputSelector: '.score input',
 

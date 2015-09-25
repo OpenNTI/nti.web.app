@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.identity.Index', {
+export default Ext.define('NextThought.app.account.identity.Index', {
 	extend: 'Ext.Component',
 	alias: 'widget.identity',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.courseware.ToCBasedOutline', {
+export default Ext.define('NextThought.store.courseware.ToCBasedOutline', {
 	extend: 'Ext.data.Store',
 	requires: [
 		'NextThought.model.courses.navigation.Node'

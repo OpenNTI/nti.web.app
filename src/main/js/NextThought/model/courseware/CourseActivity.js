@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courseware.CourseActivity', {
+export default Ext.define('NextThought.model.courseware.CourseActivity', {
 	extend: 'NextThought.model.Base',
 
 	fields: [

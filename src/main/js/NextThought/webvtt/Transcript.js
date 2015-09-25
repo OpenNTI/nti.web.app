@@ -3,7 +3,7 @@
  * This class defines an array of headers and an array of cues which are parsed from a WebVTT file, as well as methods for parsing.
  * @author Bryan Hoke
  */
-Ext.define('NextThought.webvtt.Transcript', {
+export default Ext.define('NextThought.webvtt.Transcript', {
 	requires: ['NextThought.model.transcript.Cue'],
 
 	/*@private

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.Enroll', {
+export default Ext.define('NextThought.app.course.enrollment.components.Enroll', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-enroll',
 

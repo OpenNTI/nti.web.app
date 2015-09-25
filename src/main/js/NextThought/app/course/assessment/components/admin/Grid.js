@@ -1,5 +1,5 @@
 /*globals getFormattedString:false, Duration:false*/
-Ext.define('NextThought.app.course.assessment.components.admin.Grid', {
+export default Ext.define('NextThought.app.course.assessment.components.admin.Grid', {
 	extend: 'Ext.grid.Panel',
 	alias: 'widget.course-admin-grid',
 

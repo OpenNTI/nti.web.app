@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.store.Collection', {
+export default Ext.define('NextThought.app.store.Collection', {
 	extend: 'NextThought.common.components.Collection',
 	alias: 'widget.purchasable-collection',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.parts.TextInput', {
+export default Ext.define('NextThought.app.course.enrollment.components.parts.TextInput', {
 	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
 	alias: 'widget.enrollment-textinput',
 

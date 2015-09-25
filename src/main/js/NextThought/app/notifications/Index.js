@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.Index', {
+export default Ext.define('NextThought.app.notifications.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.notifications-index',
 

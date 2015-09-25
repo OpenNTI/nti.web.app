@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.ScoreboardTally', {
+export default Ext.define('NextThought.app.assessment.ScoreboardTally', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-tally',
 

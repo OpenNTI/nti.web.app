@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.StateStore', {
+export default Ext.define('NextThought.app.course.enrollment.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 

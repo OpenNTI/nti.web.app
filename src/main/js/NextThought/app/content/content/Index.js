@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.content.content.Index', {
+export default Ext.define('NextThought.app.content.content.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.bundle-content',
 

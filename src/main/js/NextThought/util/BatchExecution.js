@@ -2,7 +2,7 @@
  * A utility that allows you to schedule tasks to be ran sequentially, if a task returns a promise
  * it will wait for it to finish before executing the next.
  */
-Ext.define('NextThought.util.BatchExecution', {
+export default Ext.define('NextThought.util.BatchExecution', {
 	/**
 	 * Create a BatchExecution instance
 	 * config properties:

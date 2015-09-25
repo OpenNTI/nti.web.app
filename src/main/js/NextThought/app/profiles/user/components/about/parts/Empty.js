@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.about.parts.Empty', {
+export default Ext.define('NextThought.app.profiles.user.components.about.parts.Empty', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-user-empty',
 

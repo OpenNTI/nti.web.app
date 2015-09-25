@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.components.tool.Action', {
+export default Ext.define('NextThought.common.components.tool.Action', {
 	extend: 'Ext.Component',
 	alias: 'widget.nti-tool-action',
 

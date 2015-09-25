@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.Actions', {
+export default Ext.define('NextThought.app.mediaviewer.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	requires: [

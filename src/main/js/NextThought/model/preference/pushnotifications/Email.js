@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.preference.pushnotifications.Email', {
+export default Ext.define('NextThought.model.preference.pushnotifications.Email', {
 	extend: 'NextThought.model.preference.pushnotifications.Base',
 
 	fields: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.UsersCourseInquiryItemResponse', {
+export default Ext.define('NextThought.model.assessment.UsersCourseInquiryItemResponse', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.assessment.userscourseinquiryitemresponse',
 

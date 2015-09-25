@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.badge.components.Badge', {
+export default Ext.define('NextThought.app.badge.components.Badge', {
 	extend: 'Ext.Component',
 	alias: 'widget.badge-info',
 

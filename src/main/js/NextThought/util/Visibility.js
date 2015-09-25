@@ -1,5 +1,5 @@
 /*globals Toaster*/
-Ext.define('NextThought.util.Visibility', {
+export default Ext.define('NextThought.util.Visibility', {
 	singleton: true,
 
 	requires: ['NextThought.common.toast.Manager'],
@@ -280,6 +280,4 @@ Ext.define('NextThought.util.Visibility', {
 		return document[this.VISIBILITY_STATE];
 	}
 
-}, function() {
-	window.PageVisibility = this;
 });

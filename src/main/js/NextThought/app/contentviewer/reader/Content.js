@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.reader.Content', {
+export default Ext.define('NextThought.app.contentviewer.reader.Content', {
 	alias: 'reader.content',
 	mixins: {
 		observable: 'Ext.util.Observable'

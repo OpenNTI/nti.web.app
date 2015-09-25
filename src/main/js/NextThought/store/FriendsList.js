@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.FriendsList', {
+export default Ext.define('NextThought.store.FriendsList', {
 	extend: 'Ext.data.Store',
 
 	model: 'NextThought.model.FriendsList',

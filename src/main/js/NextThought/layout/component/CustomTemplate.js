@@ -1,4 +1,4 @@
-Ext.define('NextThought.layout.component.CustomTemplate', {
+export default Ext.define('NextThought.layout.component.CustomTemplate', {
 	extend: 'Ext.layout.component.Body',
 	alias: 'layout.customtemplate',
 	type: 'customtemplate',

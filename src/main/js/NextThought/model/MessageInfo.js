@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.MessageInfo', {
+export default Ext.define('NextThought.model.MessageInfo', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.messageinfo',
 

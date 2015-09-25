@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.settings.components.Preferences', {
+export default Ext.define('NextThought.app.account.settings.components.Preferences', {
 	extend: 'Ext.Component',
 	alias: 'widget.account-preferences',
 

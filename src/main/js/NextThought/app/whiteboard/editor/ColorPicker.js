@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.editor.ColorPicker', {
+export default Ext.define('NextThought.app.whiteboard.editor.ColorPicker', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.color-picker',
 	requires: [

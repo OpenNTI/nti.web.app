@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.input.WordBank', {
+export default Ext.define('NextThought.app.assessment.input.WordBank', {
 	extend: 'NextThought.app.assessment.input.Base',
 	alias: [
 		'widget.question-input-fillintheblankwithwordbankpart'

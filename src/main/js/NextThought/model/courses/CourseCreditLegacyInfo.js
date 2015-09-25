@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courses.CourseCreditLegacyInfo', {
+export default Ext.define('NextThought.model.courses.CourseCreditLegacyInfo', {
 	extend: 'NextThought.model.Base',
 
 	fields: [

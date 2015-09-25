@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.courses.components.available.CourseWindow', {
+export default Ext.define('NextThought.app.library.courses.components.available.CourseWindow', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.library-available-courses-window',
 

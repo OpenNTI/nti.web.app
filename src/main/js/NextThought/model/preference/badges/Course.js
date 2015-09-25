@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.preference.badges.Course', {
+export default Ext.define('NextThought.model.preference.badges.Course', {
 	extend: 'NextThought.model.preference.badges.Base',
 
 	fields: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.menus.JumpTo', {
+export default Ext.define('NextThought.common.menus.JumpTo', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.jump-menu',
 	minWidth: 200,

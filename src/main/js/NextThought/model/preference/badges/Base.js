@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.preference.badges.Base', {
+export default Ext.define('NextThought.model.preference.badges.Base', {
 	extend: 'NextThought.model.preference.Base',
 
 	getResourceUrl: function() {

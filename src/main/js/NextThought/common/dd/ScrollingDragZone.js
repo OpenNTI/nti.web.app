@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.dd.ScrollingDragZone', {
+export default Ext.define('NextThought.common.dd.ScrollingDragZone', {
 	extend: 'Ext.dd.DragZone',
 
 	constructor: function(el, cfg) {

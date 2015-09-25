@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.search.components.AdvancedOptions', {
+export default Ext.define('NextThought.app.search.components.AdvancedOptions', {
 	extend: 'Ext.Component',
 	alias: 'widget.search-advanced-menu',
 

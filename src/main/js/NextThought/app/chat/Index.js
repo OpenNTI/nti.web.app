@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.chat.Index', {
+export default Ext.define('NextThought.app.chat.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.chats-view',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.parts.IframeWindow', {
+export default Ext.define('NextThought.app.course.overview.components.parts.IframeWindow', {
 	extend: 'NextThought.common.components.cards.Card',
 	alias: 'widget.course-overview-ntigenericiframewindow',
 

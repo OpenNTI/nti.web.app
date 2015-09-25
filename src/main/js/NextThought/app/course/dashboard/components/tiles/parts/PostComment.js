@@ -1,5 +1,5 @@
 /*globals User*/
-Ext.define('NextThought.app.course.dashboard.components.tiles.parts.PostComment', {
+export default Ext.define('NextThought.app.course.dashboard.components.tiles.parts.PostComment', {
 	extend: 'Ext.Component',
 
 	cls: 'post-comment',

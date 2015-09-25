@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.forums.Comments', {
+export default Ext.define('NextThought.store.forums.Comments', {
 	extend: 'NextThought.store.NTI',
 
 	requires: [

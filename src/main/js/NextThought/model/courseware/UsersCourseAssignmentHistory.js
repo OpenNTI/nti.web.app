@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistory', {
+export default Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistory', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.assessment.userscourseassignmenthistory',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.about.Index', {
+export default Ext.define('NextThought.app.profiles.user.components.about.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-user-about',
 

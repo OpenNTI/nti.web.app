@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
+export default Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 	extend: 'NextThought.app.profiles.user.components.about.parts.EntrySet',
 	alias: 'widget.profile-user-about-interests',
 

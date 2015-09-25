@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.stream.util.StreamSource', {
+export default Ext.define('NextThought.app.stream.util.StreamSource', {
 
 	requires: ['NextThought.util.Store'],
 

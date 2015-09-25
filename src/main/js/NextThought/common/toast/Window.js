@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.toast.Window', {
+export default Ext.define('NextThought.common.toast.Window', {
 	extend: 'Ext.Component',
 	alias: 'widget.toast',
 

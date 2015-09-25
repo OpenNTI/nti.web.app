@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.Score', {
+export default Ext.define('NextThought.app.assessment.Score', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.assessment-score',
 	requires: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.stream.components.parts.AddComment', {
+export default Ext.define('NextThought.app.stream.components.parts.AddComment', {
 	extend: 'Ext.Component',
 	alias: 'widget.stream-parts-addcomment',
 

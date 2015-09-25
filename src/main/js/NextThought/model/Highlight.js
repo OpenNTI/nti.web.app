@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Highlight', {
+export default Ext.define('NextThought.model.Highlight', {
 	extend: 'NextThought.model.Base',
 
 	requires: [

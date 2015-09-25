@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.PresenceInfo', {
+export default Ext.define('NextThought.model.PresenceInfo', {
 	extend: 'NextThought.model.Base',
 	idProperty: 'username',
 	fields: [

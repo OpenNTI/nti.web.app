@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.form.fields.ComboBox', {
+export default Ext.define('NextThought.common.form.fields.ComboBox', {
 	extend: 'Ext.form.field.ComboBox',
 	alias: 'widget.nt-combobox',
 

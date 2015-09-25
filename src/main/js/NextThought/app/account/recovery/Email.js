@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.recovery.Email', {
+export default Ext.define('NextThought.app.account.recovery.Email', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.recovery-email-view',
 	requires: [

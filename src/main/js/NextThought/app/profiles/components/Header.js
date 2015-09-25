@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.components.Header', {
+export default Ext.define('NextThought.app.profiles.components.Header', {
 	extend: 'Ext.Component',
 
 	mixins: {

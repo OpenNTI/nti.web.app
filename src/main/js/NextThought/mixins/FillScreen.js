@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.FillScreen', {
+export default Ext.define('NextThought.mixins.FillScreen', {
 
 	fillScreen: function(node) {
 		var me = this,

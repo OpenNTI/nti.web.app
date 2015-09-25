@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.AssignmentSubmissionPendingAssessment', {
+export default Ext.define('NextThought.model.assessment.AssignmentSubmissionPendingAssessment', {
 	extend: 'NextThought.model.Base',
 	fields: [
 		{name: 'assignmentId', type: 'string'},

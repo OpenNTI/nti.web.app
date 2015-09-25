@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.group.components.activity.parts.events.Created', {
+export default Ext.define('NextThought.app.profiles.group.components.activity.parts.events.Created', {
 	extend: 'Ext.Component',
 	alias: 'widget.created-event',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.parts.Pricing', {
+export default Ext.define('NextThought.app.course.enrollment.components.parts.Pricing', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-pricing',
 

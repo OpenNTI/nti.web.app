@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.routing.Object', {
+export default Ext.define('NextThought.mixins.routing.Object', {
 
 	initRouter: function() {
 		this.__mimeMap = {};

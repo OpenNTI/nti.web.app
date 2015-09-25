@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.annotations.renderer.Manager', {
+export default Ext.define('NextThought.app.annotations.renderer.Manager', {
 	requires: [
 		'NextThought.util.Line'
 	],

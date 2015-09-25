@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.PageInfo', {
+export default Ext.define('NextThought.model.PageInfo', {
 	extend: 'NextThought.model.Base',
 	idProperty: 'ID', //TODO shouldn't this be the NTIID
 	requires: [

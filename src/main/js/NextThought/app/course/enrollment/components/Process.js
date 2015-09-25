@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.Process', {
+export default Ext.define('NextThought.app.course.enrollment.components.Process', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.enrollment-process',
 

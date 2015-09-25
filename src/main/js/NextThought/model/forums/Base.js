@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.forums.Base', {
+export default Ext.define('NextThought.model.forums.Base', {
 	extend: 'NextThought.model.Base',
 
 	requires: [

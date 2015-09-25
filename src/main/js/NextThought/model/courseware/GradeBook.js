@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courseware.GradeBook', {
+export default Ext.define('NextThought.model.courseware.GradeBook', {
 	extend: 'NextThought.model.Base',
 
 	mimeType: 'application/vnd.nextthought.gradebook',

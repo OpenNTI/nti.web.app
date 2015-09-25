@@ -1,4 +1,4 @@
-Ext.define('NextThought.filter.Filter', {
+export default Ext.define('NextThought.filter.Filter', {
 	alternateClassName: 'NextThought.Filter',
 
 	inheritableStatics: {

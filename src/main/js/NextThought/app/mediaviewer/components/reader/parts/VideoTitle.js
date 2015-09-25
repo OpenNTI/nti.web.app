@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.components.reader.parts.VideoTitle', {
+export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.VideoTitle', {
 	extend: 'Ext.Component',
 	alias: 'widget.video-title-component',
 

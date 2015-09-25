@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Format', {
+export default Ext.define('NextThought.util.Format', {
 	singleton: true,
 
 	currencyInfo: {
@@ -144,7 +144,6 @@ Ext.define('NextThought.util.Format', {
 	}
 
 },function() {
-	window.NTIFormat = this;
 	Ext.util.Format.ntiCurrency = Ext.bind(NTIFormat.currency, NTIFormat);//PhantomJS doesn't support .bind()
 	Ext.util.Format.ago = NTIFormat.ago;
 	Ext.util.Format.avatarURL = NTIFormat.avatarURL;

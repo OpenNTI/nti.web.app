@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.anchorables.TimeContentPointer', {
+export default Ext.define('NextThought.model.anchorables.TimeContentPointer', {
 	extend: 'NextThought.model.anchorables.ContentPointer',
 
 	config: {

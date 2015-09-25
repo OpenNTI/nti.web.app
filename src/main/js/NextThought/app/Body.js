@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.Body', {
+export default Ext.define('NextThought.app.Body', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.main-views',
 

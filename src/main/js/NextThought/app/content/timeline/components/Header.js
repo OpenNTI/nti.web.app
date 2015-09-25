@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.content.timeline.components.Header', {
+export default Ext.define('NextThought.app.content.timeline.components.Header', {
 	extend: 'Ext.Component',
 	alias: 'widget.timeline-header',
 

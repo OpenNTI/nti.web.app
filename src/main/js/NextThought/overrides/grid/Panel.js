@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.grid.Panel', {
+export default Ext.define('NextThought.overrides.grid.Panel', {
 	override: 'Ext.grid.Panel',
 
 	ui: 'nti',

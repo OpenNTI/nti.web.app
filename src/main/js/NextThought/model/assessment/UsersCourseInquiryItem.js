@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.UsersCourseInquiryItem', {
+export default Ext.define('NextThought.model.assessment.UsersCourseInquiryItem', {
 	extend: 'NextThought.model.Base',
 
 	requires: ['NextThought.model.assessment.PollSubmission'],

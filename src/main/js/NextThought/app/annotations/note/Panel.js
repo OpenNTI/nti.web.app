@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.annotations.note.Panel', {
+export default Ext.define('NextThought.app.annotations.note.Panel', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.note-panel',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.info.components.parts.NotStarted', {
+export default Ext.define('NextThought.app.course.info.components.parts.NotStarted', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info-not-started',
 

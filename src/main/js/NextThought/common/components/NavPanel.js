@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.components.NavPanel', {
+export default Ext.define('NextThought.common.components.NavPanel', {
 	extend: 'Ext.container.Container',
 	//alias: Extend, do not use this directly
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.store.PurchaseAttempt', {
+export default Ext.define('NextThought.model.store.PurchaseAttempt', {
   extend: 'NextThought.model.Base',
 
 	requires: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.components.Stream', {
+export default Ext.define('NextThought.app.notifications.components.Stream', {
 	extend: 'NextThought.app.notifications.components.List',
 	alias: 'widget.notifications-stream-list',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.info.components.parts.Support', {
+export default Ext.define('NextThought.app.course.info.components.parts.Support', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info-support',
 

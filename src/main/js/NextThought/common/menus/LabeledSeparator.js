@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.menus.LabeledSeparator', {
+export default Ext.define('NextThought.common.menus.LabeledSeparator', {
 	extend: 'Ext.menu.Separator',
 	alias: 'widget.labeledseparator',
 

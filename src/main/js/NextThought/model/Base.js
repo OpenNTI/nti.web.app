@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Base', {
+export default Ext.define('NextThought.model.Base', {
 	extend: 'Ext.data.Model',
 	requires: [
 		'NextThought.mixins.HasLinks',

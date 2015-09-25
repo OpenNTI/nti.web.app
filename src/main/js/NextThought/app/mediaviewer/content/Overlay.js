@@ -1,7 +1,7 @@
 
 // FIXME: Maybe delete this? We no longer use a different version of slidedeck
 // We use the mediaviewer for showing both videos and slidedeck.
-Ext.define('NextThought.app.mediaviewer.content.Overlay', {
+export default Ext.define('NextThought.app.mediaviewer.content.Overlay', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.slidedeck-overlay',
 	requires: [

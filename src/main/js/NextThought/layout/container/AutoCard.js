@@ -1,6 +1,6 @@
 //A version of card layout that extends auto instead of fit
 //take from http://docs.sencha.com/extjs/4.2.1/source/Card.html#Ext-layout-container-Card
-Ext.define('NextThought.layout.container.AutoCard', {
+export default Ext.define('NextThought.layout.container.AutoCard', {
 
 	extend: 'Ext.layout.container.Container',
 

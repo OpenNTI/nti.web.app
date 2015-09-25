@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ActivityItemReply', {
+export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ActivityItemReply', {
 	extend: 'NextThought.app.annotations.note.Panel',
 	requires: [
 		'NextThought.util.Content'

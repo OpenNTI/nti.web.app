@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.builtins.Array', {});
+export default Ext.define('NextThought.overrides.builtins.Array', {});
 
 (function() {
 

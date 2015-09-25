@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.navigation.path.StateStore', {
+export default Ext.define('NextThought.app.navigation.path.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	CONTAINER_PATH: {},

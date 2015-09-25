@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.content.StateStore', {
+export default Ext.define('NextThought.app.library.content.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	CONTENT_PACKAGES: [],

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.info.components.OpenCourseInfo', {
+export default Ext.define('NextThought.app.course.info.components.OpenCourseInfo', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info-outline-open-course',
 

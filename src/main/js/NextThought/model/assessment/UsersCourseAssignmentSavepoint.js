@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.UsersCourseAssignmentSavepoint', {
+export default Ext.define('NextThought.model.assessment.UsersCourseAssignmentSavepoint', {
 	extend: 'NextThought.model.Base',
 
 	requires: [

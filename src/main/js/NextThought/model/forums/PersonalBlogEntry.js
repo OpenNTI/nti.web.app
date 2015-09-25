@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.forums.PersonalBlogEntry', {
+export default Ext.define('NextThought.model.forums.PersonalBlogEntry', {
 	extend: 'NextThought.model.forums.HeadlineTopic',
 
 	isBlogEntry: true,

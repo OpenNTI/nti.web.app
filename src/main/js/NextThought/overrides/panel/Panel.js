@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.panel.Panel', {
+export default Ext.define('NextThought.overrides.panel.Panel', {
 	override: 'Ext.panel.Panel',
 
 	render: function() {

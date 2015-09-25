@@ -13,6 +13,8 @@
 // DO NOT DELETE - this directive is required for Sencha Cmd packages to work.
 //@require @packageOverrides
 
+import Application from './NextThought/controller/Application.js';
+
 window.URL = window.URL || window.webkitURL;
 window.Blob = window.Blob || window.webkitBlob;
 
@@ -43,28 +45,7 @@ Ext.application({
 	],
 
 	controllers: [
-		// 'Account',
-		// 'UserData',
 		'Application'
-		// 'Assessment',
-		// 'Chat',
-		// 'ContentManagement',
-		// 'CourseWare',
-		// 'FilterControl',
-		// 'Forums',
-		// 'Groups',
-		// 'Library',
-		// 'Navigation',
-		// 'Notifications',
-		// 'Profile',
-		// 'Reader',
-		// 'Search',
-		// 'Session',
-		// 'SlideDeck',
-		// 'State',
-		// 'Store',
-		// 'Stream',
-		// 'Updates'
 	],
 
 	launch: function() {

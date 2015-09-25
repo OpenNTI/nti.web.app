@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.components.reader.parts.Slide', {
+export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.Slide', {
 	extend: 'Ext.Component',
 	alias: 'widget.slide-component',
 

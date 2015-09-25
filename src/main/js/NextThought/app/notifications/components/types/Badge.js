@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.components.types.Badge', {
+export default Ext.define('NextThought.app.notifications.components.types.Badge', {
 	extend: 'NextThought.app.notifications.components.types.Base',
 	alias: 'widget.notifications-item-badge',
 

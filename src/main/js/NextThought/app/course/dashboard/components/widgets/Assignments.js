@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.widgets.Assignments', {
+export default Ext.define('NextThought.app.course.dashboard.components.widgets.Assignments', {
 	extend: 'NextThought.app.course.dashboard.components.widgets.Base',
 
 	requires: ['NextThought.app.course.dashboard.components.tiles.Assignment'],

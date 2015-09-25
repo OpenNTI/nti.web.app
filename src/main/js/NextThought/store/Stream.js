@@ -15,7 +15,7 @@
  * the first page and successive pages (as the user scrolls back in time) is enough.
  */
 
-Ext.define('NextThought.store.Stream', {
+export default Ext.define('NextThought.store.Stream', {
 	extend: 'Ext.data.Store',
 	requires: [
 		'NextThought.proxy.reader.Json'

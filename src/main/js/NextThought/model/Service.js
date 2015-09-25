@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Service', {
+export default Ext.define('NextThought.model.Service', {
 	extend: 'NextThought.model.Base',
 	idProperty: 'Class',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.overlay.Panel', {
+export default Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.overlayed-panel',
 

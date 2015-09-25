@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.components.types.Contact', {
+export default Ext.define('NextThought.app.notifications.components.types.Contact', {
 	extend: 'NextThought.app.notifications.components.types.Base',
 	alias: 'widget.notifications-item-contact',
 

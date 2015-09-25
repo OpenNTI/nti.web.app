@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.video.Panel', {
+export default Ext.define('NextThought.app.video.Panel', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.video',
 

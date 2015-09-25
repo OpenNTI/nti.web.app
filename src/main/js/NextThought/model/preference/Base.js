@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.preference.Base', {
+export default Ext.define('NextThought.model.preference.Base', {
 	extend: 'Ext.data.Model',
 	requires: ['NextThought.model.converters.Future', 'NextThought.proxy.Preference', 'NextThought.model.Base'],
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.components.TabView', {
+export default Ext.define('NextThought.app.notifications.components.TabView', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.notifications-tab-view',
 

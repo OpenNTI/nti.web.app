@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courses.assignments.BaseCollection', {
+export default Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 	extend: 'NextThought.model.Base',
 
 	requires: [

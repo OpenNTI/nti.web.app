@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.QuestionContent', {
+export default Ext.define('NextThought.mixins.QuestionContent', {
 	requires: ['NextThought.app.assessment.components.*', 'NextThought.model.assessment.*'],
 
 	typeToComponent: {

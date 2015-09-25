@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.courseware.AssignmentView', {
+export default Ext.define('NextThought.store.courseware.AssignmentView', {
 	extend: 'Ext.data.Store',
 	model: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItem',
 	proxy: {

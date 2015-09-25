@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.stream.components.BasePage', {
+export default Ext.define('NextThought.app.stream.components.BasePage', {
 	extend: 'Ext.container.Container',
 
 	ISCHANGE: /change$/,

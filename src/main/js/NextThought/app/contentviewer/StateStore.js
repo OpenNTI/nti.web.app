@@ -1,3 +1,3 @@
-Ext.define('NextThought.app.contentviewer.StateStore', {
+export default Ext.define('NextThought.app.contentviewer.StateStore', {
 	extend: 'NextThought.common.StateStore'
 });

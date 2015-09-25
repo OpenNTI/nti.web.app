@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.context.components.list.Question', {
+export default Ext.define('NextThought.app.context.components.list.Question', {
 	extend: 'NextThought.app.context.components.Question',
 	alias: 'widget.question-context-list',
 

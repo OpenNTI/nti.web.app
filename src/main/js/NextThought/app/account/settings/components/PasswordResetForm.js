@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.settings.components.PasswordResetForm', {
+export default Ext.define('NextThought.app.account.settings.components.PasswordResetForm', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.password-reset-form',
 

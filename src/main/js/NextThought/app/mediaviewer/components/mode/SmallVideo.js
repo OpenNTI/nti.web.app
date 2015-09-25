@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.components.mode.SmallVideo', {
+export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVideo', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.media-transcript-viewer',
 	requires: [

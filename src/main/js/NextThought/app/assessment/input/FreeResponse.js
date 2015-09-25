@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.input.FreeResponse', {
+export default Ext.define('NextThought.app.assessment.input.FreeResponse', {
 	extend: 'NextThought.app.assessment.input.Base',
 	alias: 'widget.question-input-freeresponsepart',
 

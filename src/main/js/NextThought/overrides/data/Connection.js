@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.data.Connection', {
+export default Ext.define('NextThought.overrides.data.Connection', {
 	override: 'Ext.data.Connection',
 	requires: ['Ext.Ajax'],
 

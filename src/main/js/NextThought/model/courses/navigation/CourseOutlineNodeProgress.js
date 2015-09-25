@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courses.navigation.CourseOutlineNodeProgress', {
+export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNodeProgress', {
 	extend: 'NextThought.model.BaseProgress'
 
 });

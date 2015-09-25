@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.parts.Set', {
+export default Ext.define('NextThought.app.course.enrollment.components.parts.Set', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.enrollment-set',
 

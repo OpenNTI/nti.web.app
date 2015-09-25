@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.PageItem', function() {
+export default Ext.define('NextThought.store.PageItem', function() {
 
 	//TODO: use event domains
 	var coordinator = new Ext.util.Observable();

@@ -41,7 +41,7 @@
  * 			}
  *
  */
-Ext.define('NextThought.app.contentviewer.Index', {
+export default Ext.define('NextThought.app.contentviewer.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.content-viewer',
 

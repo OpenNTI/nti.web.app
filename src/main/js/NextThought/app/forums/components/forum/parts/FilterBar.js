@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.forums.components.forum.parts.FilterBar', {
+export default Ext.define('NextThought.app.forums.components.forum.parts.FilterBar', {
 	extend: 'Ext.Component',
 	alias: 'widget.forums-forum-filterbar',
 	ui: 'course-assessment',

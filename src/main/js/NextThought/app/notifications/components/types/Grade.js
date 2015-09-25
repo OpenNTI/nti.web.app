@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.components.types.Grade', {
+export default Ext.define('NextThought.app.notifications.components.types.Grade', {
 	extend: 'NextThought.app.notifications.components.types.Base',
 	alias: 'widget.notification-item-grade',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.content.components.Page', {
+export default Ext.define('NextThought.app.library.content.components.Page', {
 	extend: 'NextThought.app.library.courses.components.Page',
 	alias: 'widget.library-view-book-page',
 

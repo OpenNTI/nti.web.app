@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.reader.IFrame', {
+export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 	alias: 'reader.iframe',
 	requires: [
 		'NextThought.app.contentviewer.reader.ContentAPIRegistry',

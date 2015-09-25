@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.sharing.Actions', {
+export default Ext.define('NextThought.app.sharing.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	requires: ['NextThought.app.context.StateStore'],

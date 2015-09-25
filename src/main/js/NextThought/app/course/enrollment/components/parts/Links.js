@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.parts.Links', {
+export default Ext.define('NextThought.app.course.enrollment.components.parts.Links', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-link',
 

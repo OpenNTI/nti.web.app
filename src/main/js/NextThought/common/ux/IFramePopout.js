@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.ux.IFramePopout', {
+export default Ext.define('NextThought.common.ux.IFramePopout', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.iframe-lightbox',
 	requires: [

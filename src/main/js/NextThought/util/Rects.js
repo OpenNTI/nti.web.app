@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Rects', {
+export default Ext.define('NextThought.util.Rects', {
 	singleton: true,
 
 
@@ -153,6 +153,4 @@ Ext.define('NextThought.util.Rects', {
 		return rect.top === 0 && rect.left === 0 && rect.height === 0 && rect.width === 0;
 	}
 
-},function() {
-	window.RectUtils = this;
 });

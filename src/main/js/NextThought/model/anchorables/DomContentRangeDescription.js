@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
+export default Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
 	extend: 'NextThought.model.anchorables.ContentRangeDescription',
 	requires: [
 		'NextThought.model.anchorables.DomContentPointer'

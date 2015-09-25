@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.components.reader.NoteOverlay', {
+export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOverlay', {
 
 	requires: [
 		'NextThought.util.Line',

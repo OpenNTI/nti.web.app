@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.components.AudioClip', {
+export default Ext.define('NextThought.app.assessment.components.AudioClip', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-components-audio-clip',
 

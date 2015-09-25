@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
+export default Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 	extend: 'Ext.Component',
 	alias: 'widget.email-verify-view',
 

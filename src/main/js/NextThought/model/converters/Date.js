@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.converters.Date', {
+export default Ext.define('NextThought.model.converters.Date', {
 	override: 'Ext.data.Types',
 	requires: ['Ext.data.SortTypes']
 }, function() {

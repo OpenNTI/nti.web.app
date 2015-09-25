@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.activity.Body', {
+export default Ext.define('NextThought.app.profiles.user.components.activity.Body', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-user-activity-body',
 

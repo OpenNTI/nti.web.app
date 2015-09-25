@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.AssignmentFeedback', {
+export default Ext.define('NextThought.app.assessment.AssignmentFeedback', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.assignment-feedback',
 

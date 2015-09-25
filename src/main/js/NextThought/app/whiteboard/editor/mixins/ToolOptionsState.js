@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.editor.mixins.ToolOptionsState', {
+export default Ext.define('NextThought.app.whiteboard.editor.mixins.ToolOptionsState', {
 
 	constructor: function() {
 		this.toolOptionsState = NextThought.app.whiteboard.editor.mixins.ToolOptionsState;

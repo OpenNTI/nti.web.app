@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.widgets.Stream', {
+export default Ext.define('NextThought.app.course.dashboard.components.widgets.Stream', {
 	extend: 'NextThought.app.course.dashboard.components.widgets.Base',
 
 	requires: [

@@ -1,6 +1,6 @@
 /*jslint */
 /*globals NextThought, ParseUtils */
-Ext.define('NextThought.model.Slide', {
+export default Ext.define('NextThought.model.Slide', {
 	extend: 'NextThought.model.Base',
 
 	requires: [

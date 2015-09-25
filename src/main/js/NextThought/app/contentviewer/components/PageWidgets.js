@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.components.PageWidgets', {
+export default Ext.define('NextThought.app.contentviewer.components.PageWidgets', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-page-widgets',
 	ui: 'content-page-widgets',

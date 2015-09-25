@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
+export default Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 	extend: 'NextThought.app.contentviewer.navigation.Base',
 	alias: 'widget.course-assessment-admin-reader-header',
 	ui: 'course-assessment',

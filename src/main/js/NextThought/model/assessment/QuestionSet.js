@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.QuestionSet', {
+export default Ext.define('NextThought.model.assessment.QuestionSet', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.naquestionset',
 	requires: [

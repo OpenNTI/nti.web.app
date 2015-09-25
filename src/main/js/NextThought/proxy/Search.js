@@ -1,4 +1,4 @@
-Ext.define('NextThought.proxy.Search', {
+export default Ext.define('NextThought.proxy.Search', {
 	extend: 'Ext.data.proxy.Rest',
 	alias: 'proxy.search',
 	requires: [

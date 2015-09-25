@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.input.Base', {
+export default Ext.define('NextThought.app.assessment.input.Base', {
 	extend: 'Ext.Component',
 	alias: 'widget.abstract-question-input',
 

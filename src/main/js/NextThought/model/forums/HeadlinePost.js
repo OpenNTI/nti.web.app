@@ -1,3 +1,3 @@
-Ext.define('NextThought.model.forums.HeadlinePost', {
+export default Ext.define('NextThought.model.forums.HeadlinePost', {
 	extend: 'NextThought.model.forums.Post'
 });

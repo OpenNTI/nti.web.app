@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.LikeFavoriteActions', {
+export default Ext.define('NextThought.mixins.LikeFavoriteActions', {
 
 	constructor: function() {
 		var me = this;

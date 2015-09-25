@@ -1,4 +1,4 @@
-Ext.define('NextThought.proxy.writer.Json', {
+export default Ext.define('NextThought.proxy.writer.Json', {
 	extend: 'Ext.data.writer.Json',
 	alias: 'writer.nti',
 

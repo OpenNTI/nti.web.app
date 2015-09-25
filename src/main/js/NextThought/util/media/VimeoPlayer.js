@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.media.VimeoPlayer', {
+export default Ext.define('NextThought.util.media.VimeoPlayer', {
 
 	statics: {
 		PLAYER_ORIGIN: 'https://player.vimeo.com',

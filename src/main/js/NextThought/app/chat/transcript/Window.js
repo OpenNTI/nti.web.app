@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.chat.transcript.Window', {
+export default Ext.define('NextThought.app.chat.transcript.Window', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.chat-transcript-window',
 

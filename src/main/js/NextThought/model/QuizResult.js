@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.QuizResult', {
+export default Ext.define('NextThought.model.QuizResult', {
 	extend: 'NextThought.model.Base',
 	requires: [
 		'NextThought.model.QuizQuestionResponse'

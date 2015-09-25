@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.activity.parts.events.NoteReply', {
+export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.NoteReply', {
 	extend: 'NextThought.app.profiles.user.components.activity.parts.events.ActivityItem',
 	alias: 'widget.profile-activity-note-reply-item',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.chat.components.log.NotificationEntry', {
+export default Ext.define('NextThought.app.chat.components.log.NotificationEntry', {
 	extend: 'Ext.Component',
 	alias: 'widget.chat-notification-entry',
 

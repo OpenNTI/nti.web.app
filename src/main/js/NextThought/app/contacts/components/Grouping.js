@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contacts.components.Grouping', {
+export default Ext.define('NextThought.app.contacts.components.Grouping', {
 	extend: 'NextThought.common.components.BoundPanel',
 	alias: 'widget.contacts-tabs-grouping',
 	requires: [

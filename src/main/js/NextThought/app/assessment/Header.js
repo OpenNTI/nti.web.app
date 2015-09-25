@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.Header', {
+export default Ext.define('NextThought.app.assessment.Header', {
 	extend: 'Ext.Component',
 	alias: 'widget.question-header',
 

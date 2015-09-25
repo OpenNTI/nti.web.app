@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.content.Index', {
+export default Ext.define('NextThought.app.content.Index', {
 	extend: 'Ext.container.Container',
 	//Should only be extended
 

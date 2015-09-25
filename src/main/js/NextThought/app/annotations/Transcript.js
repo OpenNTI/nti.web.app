@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.annotations.Transcript', {
+export default Ext.define('NextThought.app.annotations.Transcript', {
 	extend: 'NextThought.app.annotations.Base',
 	alias: ['widget.transcript', 'widget.transcriptsummary'],
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.proxy.Socket', {
+export default Ext.define('NextThought.proxy.Socket', {
 	singleton: true,
 	isDebug: $AppConfig.debugSocket,
 	isVerbose: $AppConfig.debugSocketVerbosely,
@@ -264,8 +264,4 @@ Ext.define('NextThought.proxy.Socket', {
 		console.error('Socket connection failed', arguments);
 	}
 
-},
-function() {
-	window.Socket = NextThought.proxy.Socket;
-}
-);
+});

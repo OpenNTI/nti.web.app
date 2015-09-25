@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.components.reader.parts.NoTranscript', {
+export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.NoTranscript', {
     extend: 'NextThought.app.mediaviewer.components.reader.parts.VideoTitle',
     alias: 'widget.no-video-transcript',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Store', {
+export default Ext.define('NextThought.util.Store', {
 	singleton: true,
 
 	fillInUsers: function fillIn(store, records) {
@@ -131,6 +131,4 @@ Ext.define('NextThought.util.Store', {
 			});
 	}
 
-}, function() {
-	window.StoreUtils = this;
 });

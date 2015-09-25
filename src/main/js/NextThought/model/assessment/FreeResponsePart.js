@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.FreeResponsePart', {
+export default Ext.define('NextThought.model.assessment.FreeResponsePart', {
 	extend: 'NextThought.model.assessment.Part',
 	fields: [
 	]

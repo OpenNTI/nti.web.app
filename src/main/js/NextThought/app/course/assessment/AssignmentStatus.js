@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.assessment.AssignmentStatus', {
+export default Ext.define('NextThought.app.course.assessment.AssignmentStatus', {
 
 	requires: ['Ext.Action'],
 

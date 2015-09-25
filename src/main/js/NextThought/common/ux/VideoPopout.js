@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.ux.VideoPopout', {
+export default Ext.define('NextThought.common.ux.VideoPopout', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.video-lightbox',
 	requires: [

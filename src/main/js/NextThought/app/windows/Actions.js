@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.windows.Actions', {
+export default Ext.define('NextThought.app.windows.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	requires: [

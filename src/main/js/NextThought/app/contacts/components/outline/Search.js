@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contacts.components.outline.Search', {
+export default Ext.define('NextThought.app.contacts.components.outline.Search', {
 	extend: 'Ext.view.View',
 	alias: 'widget.contact-search-overlay',
 

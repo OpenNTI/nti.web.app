@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.MenuShowHideBehavior', {
+export default Ext.define('NextThought.mixins.MenuShowHideBehavior', {
 
 	constructor: function() {
 		// iPad doesn't need/want these

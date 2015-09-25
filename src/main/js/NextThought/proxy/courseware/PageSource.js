@@ -1,4 +1,4 @@
-Ext.define('NextThought.proxy.courseware.PageSource', {
+export default Ext.define('NextThought.proxy.courseware.PageSource', {
 	extend: 'NextThought.util.PageSource',
 
 	statics: {

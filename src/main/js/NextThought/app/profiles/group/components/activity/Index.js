@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.group.components.activity.Index', {
+export default Ext.define('NextThought.app.profiles.group.components.activity.Index', {
 	extend: 'NextThought.app.profiles.user.components.activity.Index',
 	alias: 'widget.profile-group-activity',
 

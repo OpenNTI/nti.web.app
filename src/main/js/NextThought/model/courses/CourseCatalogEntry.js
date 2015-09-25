@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courses.CourseCatalogEntry', {
+export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	alternateClassName: 'NextThought.model.courses.CourseCatalogLegacyEntry',
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.courses.coursecataloglegacyentry',

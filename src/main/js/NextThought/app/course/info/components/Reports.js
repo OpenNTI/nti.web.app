@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.info.components.Reports', {
+export default Ext.define('NextThought.app.course.info.components.Reports', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info-reports',
 

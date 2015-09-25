@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Anchors', {
+export default Ext.define('NextThought.util.Anchors', {
 	requires: [
 		'NextThought.model.anchorables.TextDomContentPointer',
 		'NextThought.model.anchorables.ElementDomContentPointer',
@@ -2007,8 +2007,4 @@ Ext.define('NextThought.util.Anchors', {
 	}
 
 
-},
-
-function() {
-	window.Anchors = this;
 });

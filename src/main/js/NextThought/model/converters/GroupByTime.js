@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.converters.GroupByTime', {
+export default Ext.define('NextThought.model.converters.GroupByTime', {
 	requires: ['Ext.data.SortTypes']
 }, function() {
 	Ext.data.Types.GROUPBYTIME = {

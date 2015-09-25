@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.courses.components.settings.CourseOptions', {
+export default Ext.define('NextThought.app.library.courses.components.settings.CourseOptions', {
 	extend: 'Ext.Component',
 	alias: 'widget.library-course-options',
 

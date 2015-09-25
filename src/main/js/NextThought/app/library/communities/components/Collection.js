@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.communities.components.Collection', {
+export default Ext.define('NextThought.app.library.communities.components.Collection', {
 	extend: 'Ext.view.View',
 	alias: 'widget.library-communities-collection',
 

@@ -1,5 +1,5 @@
 /*global DomUtils */
-Ext.define('NextThought.common.components.cards.Launcher', {
+export default Ext.define('NextThought.common.components.cards.Launcher', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-launcher',
 

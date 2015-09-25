@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.RelatedWork', {
+export default Ext.define('NextThought.model.RelatedWork', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.relatedworkref',
 

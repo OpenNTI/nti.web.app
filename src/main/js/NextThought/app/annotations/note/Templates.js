@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.annotations.note.Templates', {
+export default Ext.define('NextThought.app.annotations.note.Templates', {
 	singleton: true,
 
 	//Merge these functions into note.Panel
@@ -232,6 +232,4 @@ Ext.define('NextThought.app.annotations.note.Templates', {
 	}
 
 
-},function() {
-	window.TemplatesForNotes = this;
 });

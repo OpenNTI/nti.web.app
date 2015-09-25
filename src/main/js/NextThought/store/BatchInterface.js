@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.BatchInterface', {
+export default Ext.define('NextThought.store.BatchInterface', {
 
 	requires: ['NextThought.util.Store'],
 

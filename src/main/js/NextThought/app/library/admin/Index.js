@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.admin.Index', {
+export default Ext.define('NextThought.app.library.admin.Index', {
 	extend: 'NextThought.app.library.courses.Index',
 	alias: 'widget.library-admin',
 

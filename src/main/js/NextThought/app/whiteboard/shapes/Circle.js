@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.shapes.Circle', {
+export default Ext.define('NextThought.app.whiteboard.shapes.Circle', {
 	extend: 'NextThought.app.whiteboard.shapes.Base',
 
 	draw: function(ctx,renderCallback) {

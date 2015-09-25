@@ -1,4 +1,4 @@
-Ext.define('NextThought.login.Actions', {
+export default Ext.define('NextThought.login.Actions', {
 
 	requires: [
 		'NextThought.login.StateStore',
@@ -289,6 +289,7 @@ Ext.define('NextThought.login.Actions', {
 					Ext.Error.raise('bad service doc');
 				}
 
+				//TODO: figure out how to get this off of window...
 				window.Service = $AppConfig.service = doc;
 
 				if (Ext.isEmpty($AppConfig.userObject)) {

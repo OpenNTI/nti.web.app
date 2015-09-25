@@ -1,4 +1,4 @@
-Ext.define('NextThought.proxy.Preference', {
+export default Ext.define('NextThought.proxy.Preference', {
 	extend: 'Ext.data.proxy.Rest',
 	alias: 'proxy.preference',
 	requires: ['NextThought.proxy.reader.Json'],

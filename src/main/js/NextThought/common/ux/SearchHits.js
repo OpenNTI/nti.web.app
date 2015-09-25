@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.ux.SearchHits', {
+export default Ext.define('NextThought.common.ux.SearchHits', {
 	alias: 'widget.search-hits',
 	mixins: {observable: 'Ext.util.Observable'},
 	requires: ['NextThought.util.Search'],

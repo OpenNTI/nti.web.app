@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.annotations.Note', {
+export default Ext.define('NextThought.app.annotations.Note', {
 	extend: 'NextThought.app.annotations.Highlight',
 	alias: 'widget.note',
 

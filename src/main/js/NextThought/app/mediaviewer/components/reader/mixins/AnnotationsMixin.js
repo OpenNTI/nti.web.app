@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.components.reader.mixins.AnnotationsMixin', {
+export default Ext.define('NextThought.app.mediaviewer.components.reader.mixins.AnnotationsMixin', {
 	requires: ['NextThought.app.userdata.Actions'],
 
 	isPresentationPartReady: false,

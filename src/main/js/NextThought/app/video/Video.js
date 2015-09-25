@@ -1,6 +1,6 @@
 /*jslint */
 /*globals Globals, NextThought, ObjectUtils, YT */
-Ext.define('NextThought.app.video.Video', {
+export default Ext.define('NextThought.app.video.Video', {
 	alternateClassName: 'NextThought.Video',
 	extend: 'Ext.Component',
 	alias: 'widget.content-video',

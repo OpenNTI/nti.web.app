@@ -1,6 +1,6 @@
 /*jslint */
 /*global Anchors, Globals, Node, NodeFilter*/
-Ext.define('NextThought.util.Ranges', {
+export default Ext.define('NextThought.util.Ranges', {
 	singleton: true,
 
 	nonContextWorthySelectors: [
@@ -464,6 +464,4 @@ Ext.define('NextThought.util.Ranges', {
 	}
 
 
-}, function() {
-	window.RangeUtils = this;
 });

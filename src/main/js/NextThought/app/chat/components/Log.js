@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.chat.components.Log', {
+export default Ext.define('NextThought.app.chat.components.Log', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.chat-log-view',
 	requires: [

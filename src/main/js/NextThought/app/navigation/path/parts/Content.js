@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.navigation.path.parts.Content', {
+export default Ext.define('NextThought.app.navigation.path.parts.Content', {
 	requires: [
 		'NextThought.app.library.Actions',
 		'NextThought.app.content.Actions'

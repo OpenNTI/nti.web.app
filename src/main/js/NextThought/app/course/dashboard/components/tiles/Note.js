@@ -1,5 +1,5 @@
 /*globals RangeUtils:false*/
-Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
+export default Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.Post',
 	alias: 'widget.dashboard-note',
 

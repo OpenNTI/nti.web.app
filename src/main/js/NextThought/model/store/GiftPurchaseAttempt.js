@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.store.GiftPurchaseAttempt', {
+export default Ext.define('NextThought.model.store.GiftPurchaseAttempt', {
 	extend: 'NextThought.model.store.PurchaseAttempt',
 
 	statics: {

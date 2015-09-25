@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.parts.Description', {
+export default Ext.define('NextThought.app.course.enrollment.components.parts.Description', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-description',
 

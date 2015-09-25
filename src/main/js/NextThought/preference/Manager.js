@@ -1,4 +1,4 @@
-Ext.define('NextThought.preference.Manager', {
+export default Ext.define('NextThought.preference.Manager', {
 
 	requires: [
 		'NextThought.proxy.Preference',

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.forums.components.topic.parts.Topic', {
+export default Ext.define('NextThought.app.forums.components.topic.parts.Topic', {
 	extend: 'Ext.Component',
 	alias: 'widget.forums-topic-topic',
 

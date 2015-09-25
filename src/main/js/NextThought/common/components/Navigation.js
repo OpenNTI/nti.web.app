@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.components.Navigation', {
+export default Ext.define('NextThought.common.components.Navigation', {
 	extend: 'Ext.Component',
 
 	requires: [

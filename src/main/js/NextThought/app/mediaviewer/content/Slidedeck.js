@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.content.Slidedeck', {
+export default Ext.define('NextThought.app.mediaviewer.content.Slidedeck', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-slidedeck',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.XTemplate', {
+export default Ext.define('NextThought.overrides.XTemplate', {
 	override: 'Ext.XTemplate',
 	requires: ['NextThought.util.Globals']
 });

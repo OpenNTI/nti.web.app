@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.converters.Synthetic', {
+export default Ext.define('NextThought.model.converters.Synthetic', {
 	requires: [
 		'Ext.data.Types',
 		'Ext.data.SortTypes',

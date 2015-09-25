@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.StateStore', {
+export default Ext.define('NextThought.app.mediaviewer.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	requires: [

@@ -1,5 +1,5 @@
 /*globals User*/
-Ext.define('NextThought.model.Note', {
+export default Ext.define('NextThought.model.Note', {
 	extend: 'NextThought.model.Base',
 
 	mixins: {

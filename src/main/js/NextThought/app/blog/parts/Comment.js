@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.blog.parts.Comment', {
+export default Ext.define('NextThought.app.blog.parts.Comment', {
 	extend: 'NextThought.app.blog.parts.old.Comment',
 	alias: 'widget.profile-blog-comment',
 

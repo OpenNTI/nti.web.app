@@ -1,4 +1,4 @@
-Ext.define('NextThought.editor.AbstractEditor', {
+export default Ext.define('NextThought.editor.AbstractEditor', {
 	extend: 'Ext.Component',
 
 	requires: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.ContentPackage', {
+export default Ext.define('NextThought.model.ContentPackage', {
 	extend: 'NextThought.model.Base',
 	requires: [
 		'NextThought.model.converters.DCCreatorToAuthor'

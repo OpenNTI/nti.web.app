@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.forums.components.forum.Forum', {
+export default Ext.define('NextThought.app.forums.components.forum.Forum', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.forums-forum-body',
 

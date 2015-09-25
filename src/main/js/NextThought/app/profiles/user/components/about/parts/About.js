@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
+export default Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 	extend: 'NextThought.app.profiles.user.components.about.parts.FieldSet',
 	alias: 'widget.profile-user-about-about',
 

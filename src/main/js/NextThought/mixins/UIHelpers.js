@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.UIHelpers', {
+export default Ext.define('NextThought.mixins.UIHelpers', {
 	fillElementToBottom: function(el) {
 		var top = el.getBoundingClientRect().top,
 			style = 'calc(100vh - {top}px)';

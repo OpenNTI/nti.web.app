@@ -3,7 +3,7 @@
  *
  * DO NOT let these be queried for by the user search/ UserRepository resolver methods. (Bad things will happen)
  */
-Ext.define('NextThought.model.Community', {
+export default Ext.define('NextThought.model.Community', {
 	extend: 'NextThought.model.Base',
 
 	mixins: {

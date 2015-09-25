@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contacts.components.Card', {
+export default Ext.define('NextThought.app.contacts.components.Card', {
 	extend: 'Ext.Component',
 	alias: 'widget.contacts-tabs-card',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.filter.FilterGroup', {
+export default Ext.define('NextThought.filter.FilterGroup', {
 	alternateClassName: 'NextThought.FilterGroup',
 	extend: 'NextThought.filter.Filter',
 

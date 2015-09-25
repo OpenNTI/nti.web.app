@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.Scoreboard', {
+export default Ext.define('NextThought.app.assessment.Scoreboard', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.assessment-scoreboard',
 	requires: [

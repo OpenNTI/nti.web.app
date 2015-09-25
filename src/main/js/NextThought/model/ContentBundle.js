@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.ContentBundle', {
+export default Ext.define('NextThought.model.ContentBundle', {
 	alternateClassName: 'NextThought.model.ContentPackageBundle',
 	extend: 'NextThought.model.Base',
 

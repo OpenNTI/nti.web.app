@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.components.types.ForumComment', {
+export default Ext.define('NextThought.app.notifications.components.types.ForumComment', {
 	extend: 'NextThought.app.notifications.components.types.Base',
 	alias: 'widget.notifications-item-forum-comment',
 

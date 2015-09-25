@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.ux.ImageZoomView', {
+export default Ext.define('NextThought.common.ux.ImageZoomView', {
 	alias: 'widget.image-zoom-view',
 	extend: 'Ext.Component',
 
@@ -281,6 +281,4 @@ Ext.define('NextThought.common.ux.ImageZoomView', {
 		}
 	}
 
-}, function() {
-	window.ImageZoomView = this;
 });

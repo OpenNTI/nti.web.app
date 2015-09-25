@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.blog.parts.old.Comment', {
+export default Ext.define('NextThought.app.blog.parts.old.Comment', {
 	extend: 'Ext.Component',
 
 	requires: [

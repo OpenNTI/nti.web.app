@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.anchorables.TranscriptRangeDescription', {
+export default Ext.define('NextThought.model.anchorables.TranscriptRangeDescription', {
 	extend: 'NextThought.model.anchorables.TimeRangeDescription',
 
 	requires: [

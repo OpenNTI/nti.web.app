@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.context.types.Question', {
+export default Ext.define('NextThought.app.context.types.Question', {
 
 	requires: [
 		'NextThought.app.context.components.Question',

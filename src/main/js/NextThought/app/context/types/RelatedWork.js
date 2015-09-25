@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.context.types.RelatedWork', {
+export default Ext.define('NextThought.app.context.types.RelatedWork', {
 
 	requires: [
 		'NextThought.app.context.components.cards.*',

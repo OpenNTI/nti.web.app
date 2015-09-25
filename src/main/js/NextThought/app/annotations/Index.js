@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.annotations.Index', {
+export default Ext.define('NextThought.app.annotations.Index', {
 	extend: 'Ext.view.View',
 	alias: 'widget.annotation-view',
 

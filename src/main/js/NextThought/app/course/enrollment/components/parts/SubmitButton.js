@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.parts.SubmitButton', {
+export default Ext.define('NextThought.app.course.enrollment.components.parts.SubmitButton', {
 	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
 	alias: 'widget.enrollment-submit-button',
 

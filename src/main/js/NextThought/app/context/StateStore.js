@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.context.StateStore', {
+export default Ext.define('NextThought.app.context.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	setContext: function(context, title, route) {

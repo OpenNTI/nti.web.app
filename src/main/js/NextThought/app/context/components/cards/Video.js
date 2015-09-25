@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.context.components.cards.Video', {
+export default Ext.define('NextThought.app.context.components.cards.Video', {
 	extend: 'NextThought.app.context.components.cards.Content',
 	alias: 'widget.context-video-card',
 

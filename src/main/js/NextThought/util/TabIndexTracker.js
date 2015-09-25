@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.TabIndexTracker', {
+export default Ext.define('NextThought.util.TabIndexTracker', {
 
 	current: 1,
 

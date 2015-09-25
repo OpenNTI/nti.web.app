@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.chat.components.log.Moderated', {
+export default Ext.define('NextThought.app.chat.components.log.Moderated', {
 	extend: 'Ext.form.field.Checkbox',
 	alias: 'widget.chat-log-entry-moderated',
 	mixins: {

@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.JSON', {
+export default Ext.define('NextThought.overrides.JSON', {
 	override: 'Ext.JSON',
 	encodeDate: function(d) {
 		var t = d.getTime();

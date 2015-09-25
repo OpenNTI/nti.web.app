@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.State', {
+export default Ext.define('NextThought.mixins.State', {
 	state_key: 'default',
 
 	requires: [

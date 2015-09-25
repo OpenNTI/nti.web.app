@@ -8,7 +8,7 @@
  * {@see Ext.app.Controller#getRef()}
  * {@see Ext.app.Controller#hasRef()}
  */
-Ext.define('NextThought.common.ux.ComponentReferencing', {
+export default Ext.define('NextThought.common.ux.ComponentReferencing', {
 	extend: 'Ext.AbstractPlugin',
 	alias: 'plugin.component-referencing',
 

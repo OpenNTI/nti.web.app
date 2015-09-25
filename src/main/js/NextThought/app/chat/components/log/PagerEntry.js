@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.chat.components.log.PagerEntry', {
+export default Ext.define('NextThought.app.chat.components.log.PagerEntry', {
 	extend: 'Ext.Component',
 	alias: 'widget.chat-pager-entry',
 

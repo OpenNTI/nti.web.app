@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.group.components.membership.Index', {
+export default Ext.define('NextThought.app.profiles.group.components.membership.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.group-profile-membership',
 

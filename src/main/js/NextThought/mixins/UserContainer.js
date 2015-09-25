@@ -7,7 +7,7 @@
  *  reactToChildPresenceChanged to false to stop that behaviour.  By default this component will also watch the underlying model for changes
  *  to the specified field.  Set the property reactToModelChanges to false to turn off this behaviour
  */
-Ext.define('NextThought.mixins.UserContainer', {
+export default Ext.define('NextThought.mixins.UserContainer', {
 
 	requires: [
 		'Ext.Action',

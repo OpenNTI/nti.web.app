@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.media.HTML5Player', {
+export default Ext.define('NextThought.util.media.HTML5Player', {
 
 	statics: {
 		kind: 'audio',

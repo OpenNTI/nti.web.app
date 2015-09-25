@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courses.CourseInstanceSharingScope', {
+export default Ext.define('NextThought.model.courses.CourseInstanceSharingScope', {
 	extend: 'NextThought.model.Base',
 
 	fields: [

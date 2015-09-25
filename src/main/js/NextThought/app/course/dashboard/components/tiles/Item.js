@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.tiles.Item', {
+export default Ext.define('NextThought.app.course.dashboard.components.tiles.Item', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.BaseCmp',
 
 	inheritableStatics: {

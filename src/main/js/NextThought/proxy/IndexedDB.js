@@ -1,4 +1,4 @@
-Ext.define('NextThought.proxy.IndexedDB', {
+export default Ext.define('NextThought.proxy.IndexedDB', {
 	extend: 'Ext.data.proxy.Proxy',
 	alias: 'proxy.indexeddb',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.info.components.Roster', {
+export default Ext.define('NextThought.app.course.info.components.Roster', {
 extend: 'Ext.container.Container',
 	alias: 'widget.course-info-roster',
 

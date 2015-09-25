@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
+export default Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 	extend: 'Ext.view.View',
 	alias: 'widget.forums-forum-topic-list-view',
 

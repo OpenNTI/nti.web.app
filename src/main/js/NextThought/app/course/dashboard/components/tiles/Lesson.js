@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.tiles.Lesson', {
+export default Ext.define('NextThought.app.course.dashboard.components.tiles.Lesson', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.Item',
 	alias: 'widget.dashboard-lesson',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.ProfileLinks', function() {
+export default Ext.define('NextThought.mixins.ProfileLinks', function() {
 	var contactCardPopout, showCardTimer,
 			canShow;
 	//the scope is being set by the caller

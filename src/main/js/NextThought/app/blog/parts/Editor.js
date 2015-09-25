@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.blog.parts.Editor', {
+export default Ext.define('NextThought.app.blog.parts.Editor', {
 	extend: 'NextThought.editor.Editor',
 	alias: 'widget.profile-blog-editor',
 

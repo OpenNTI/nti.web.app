@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.state.StateStore', {
+export default Ext.define('NextThought.common.state.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	setStateKey: function(key) {

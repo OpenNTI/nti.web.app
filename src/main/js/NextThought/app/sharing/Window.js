@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.sharing.Window', {
+export default Ext.define('NextThought.app.sharing.Window', {
 	extend: 'NextThought.common.window.Window',
 	requires: [
 		'NextThought.util.Annotations',

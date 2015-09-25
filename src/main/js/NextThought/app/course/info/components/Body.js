@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.info.components.Body', {
+export default Ext.define('NextThought.app.course.info.components.Body', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-info-body',
 

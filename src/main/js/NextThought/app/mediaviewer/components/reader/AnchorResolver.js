@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.components.reader.AnchorResolver', {
+export default Ext.define('NextThought.app.mediaviewer.components.reader.AnchorResolver', {
 	requires: [
 		'NextThought.model.anchorables.*'
 	],

@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.preference.chatpresence.Base', {
+export default Ext.define('NextThought.model.preference.chatpresence.Base', {
 	extend: 'NextThought.model.preference.Base',
 
 	fields: [

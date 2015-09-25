@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.dom.Element', {
+export default Ext.define('NextThought.overrides.dom.Element', {
 	override: 'Ext.dom.Element',
   //	requires: ['NextThought.util.Rects'],
 

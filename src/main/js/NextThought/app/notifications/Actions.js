@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.Actions', {
+export default Ext.define('NextThought.app.notifications.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	requires: [

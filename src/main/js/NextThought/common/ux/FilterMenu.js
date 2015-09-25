@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.ux.FilterMenu', {
+export default Ext.define('NextThought.common.ux.FilterMenu', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.filter-menupanel',
 

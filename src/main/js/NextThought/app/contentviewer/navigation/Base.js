@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.navigation.Base', {
+export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 	extend: 'Ext.Component',
 
 	requires: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.editor.ToolOption', {
+export default Ext.define('NextThought.app.whiteboard.editor.ToolOption', {
 	alias: 'widget.wb-tool-option',
 	extend: 'Ext.button.Split',
 

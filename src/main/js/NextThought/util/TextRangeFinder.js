@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.TextRangeFinder', {
+export default Ext.define('NextThought.util.TextRangeFinder', {
 	requires: ['NextThought.util.Search'],
 
 
@@ -287,6 +287,4 @@ Ext.define('NextThought.util.TextRangeFinder', {
 		return ranges;
 	}
 
-}, function() {
-	window.TextRangeFinderUtils = new this();
 });

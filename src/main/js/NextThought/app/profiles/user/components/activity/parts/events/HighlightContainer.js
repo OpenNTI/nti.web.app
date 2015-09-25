@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.activity.parts.events.HighlightContainer', {
+export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.HighlightContainer', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-activity-highlight-container',
 

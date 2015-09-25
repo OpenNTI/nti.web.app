@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.activity.parts.events.PostReply', {
+export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.PostReply', {
 	extend: 'Ext.Component',
 
 	requires: ['NextThought.app.navigation.path.Actions'],

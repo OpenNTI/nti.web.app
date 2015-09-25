@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courseware.GradeBookEntry', {
+export default Ext.define('NextThought.model.courseware.GradeBookEntry', {
 	extend: 'NextThought.model.Base',
 	requires: ['NextThought.model.converters.Date'],
 	mimeType: 'application/vnd.nextthought.gradebookentry',

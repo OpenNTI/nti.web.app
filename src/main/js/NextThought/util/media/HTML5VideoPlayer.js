@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.media.HTML5VideoPlayer', {
+export default Ext.define('NextThought.util.media.HTML5VideoPlayer', {
 	extend: 'NextThought.util.media.HTML5Player',
 
 	statics: {

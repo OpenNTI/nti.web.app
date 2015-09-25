@@ -1,6 +1,6 @@
 /*jslint continue: true*/
 /*globals console, document, DOMParser */
-Ext.define('NextThought.util.Parsing', {
+export default Ext.define('NextThought.util.Parsing', {
 	singleton: true,
 
 	requires: [
@@ -320,9 +320,6 @@ Ext.define('NextThought.util.Parsing', {
 		return ntiid;
 	}
 },function() {
-	window.ParseUtils = this;
-
-
 	/*
 	 * DOMParser HTML extension
 	 * 2012-02-02

@@ -1,6 +1,6 @@
 //TODO: find a way to generalize this and make this class responsible for all filter operations for UGD calls.
 
-Ext.define('NextThought.filter.FilterManager', {
+export default Ext.define('NextThought.filter.FilterManager', {
 	singleton: true,
 	requires: [
 		'Ext.util.Observable',
@@ -122,6 +122,4 @@ Ext.define('NextThought.filter.FilterManager', {
 
 
 
-},function() {
-	window.FilterManager = this;
 });

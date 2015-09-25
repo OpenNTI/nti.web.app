@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.FriendsList', {
+export default Ext.define('NextThought.model.FriendsList', {
 	extend: 'NextThought.model.Base',
 
 	requires: [

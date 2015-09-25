@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.components.Reader', {
+export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 	extend: 'NextThought.app.contentviewer.components.Base',
 	alias: 'widget.reader-content',
 
@@ -425,8 +425,6 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 
 
 }, function() {
-	window.ReaderPanel = this;
-
 	//TODO: can we get rid of this?
 	ContentAPIRegistry.register('togglehint', function(e) {
 		e = Ext.EventObject.setEvent(e || event);

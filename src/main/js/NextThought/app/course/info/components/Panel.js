@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.info.components.Panel', {
+export default Ext.define('NextThought.app.course.info.components.Panel', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-info-panel',
 	cls: 'course-info-panel scrollable',

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.coppa.upgraded.Window', {
+export default Ext.define('NextThought.app.account.coppa.upgraded.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.coppa-confirm-window',
 

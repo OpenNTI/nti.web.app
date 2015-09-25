@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.Searchable', {
+export default Ext.define('NextThought.mixins.Searchable', {
 
 	mixins: {
 		SearchHighlighting: 'NextThought.mixins.SearchHitHighlighting'

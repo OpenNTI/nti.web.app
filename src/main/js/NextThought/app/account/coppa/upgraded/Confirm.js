@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
+export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 	extend: 'Ext.Component',
 	alias: 'widget.coppa-birthday-form',
 

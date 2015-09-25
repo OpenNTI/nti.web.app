@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.PageSourceStore', {
+export default Ext.define('NextThought.util.PageSourceStore', {
 
 	isPageSource: true,
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.store.StripeConnectKey', {
+export default Ext.define('NextThought.model.store.StripeConnectKey', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.store.stripeconnectkey',
 

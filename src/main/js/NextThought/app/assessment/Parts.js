@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.Parts', {
+export default Ext.define('NextThought.app.assessment.Parts', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.question-parts',
 

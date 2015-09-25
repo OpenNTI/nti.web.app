@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.group.components.membership.parts.Admins', {
+export default Ext.define('NextThought.app.profiles.group.components.membership.parts.Admins', {
 	extend: 'NextThought.app.profiles.group.components.membership.parts.Users',
 	alias: 'widget.profile-group-membership-administrators',
 

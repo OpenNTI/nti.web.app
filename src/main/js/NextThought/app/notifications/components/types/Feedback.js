@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.components.types.Feedback', {
+export default Ext.define('NextThought.app.notifications.components.types.Feedback', {
 	extend: 'NextThought.app.notifications.components.types.Base',
 	alias: 'widget.notification-item-feedback',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.components.Toolbar', {
+export default Ext.define('NextThought.app.mediaviewer.components.Toolbar', {
 	extend: 'Ext.Component',
 	alias: 'widget.media-toolbar',
 

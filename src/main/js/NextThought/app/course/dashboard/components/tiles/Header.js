@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.tiles.Header', {
+export default Ext.define('NextThought.app.course.dashboard.components.tiles.Header', {
 	extend: 'Ext.Component',
 	alias: 'widget.dashboard-header',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courses.navigation.Node', {
+export default Ext.define('NextThought.model.courses.navigation.Node', {
 	extend: 'Ext.data.Model',
 	requires: [
 		'Ext.data.reader.Xml'

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.Question', {
+export default Ext.define('NextThought.app.assessment.Question', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.assessment-question',
 

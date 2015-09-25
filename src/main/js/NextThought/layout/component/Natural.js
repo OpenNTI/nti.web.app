@@ -1,4 +1,4 @@
-Ext.define('NextThought.layout.component.Natural', {
+export default Ext.define('NextThought.layout.component.Natural', {
 	extend: 'Ext.layout.component.Body',
 	alias: 'layout.natural',
 	type: 'natural',

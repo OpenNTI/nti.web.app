@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.DateMenu', {
+export default Ext.define('NextThought.app.assessment.DateMenu', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.assessment-date-menu',
 	ui: 'nt',

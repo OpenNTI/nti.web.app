@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.blog.parts.old.Topic', {
+export default Ext.define('NextThought.app.blog.parts.old.Topic', {
 	extend: 'Ext.container.Container',
 
 	threaded: true,

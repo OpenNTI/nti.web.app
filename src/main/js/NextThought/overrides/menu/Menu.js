@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.menu.Menu', {
+export default Ext.define('NextThought.overrides.menu.Menu', {
 	override: 'Ext.menu.Menu',
 
 	ui: 'nt',

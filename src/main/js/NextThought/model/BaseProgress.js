@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.BaseProgress', {
+export default Ext.define('NextThought.model.BaseProgress', {
     extend: 'NextThought.model.Base',
 
     fields: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contacts.components.outline.View', {
+export default Ext.define('NextThought.app.contacts.components.outline.View', {
 	extend: 'Ext.view.View',
 	alias: 'widget.contacts-outline',
 

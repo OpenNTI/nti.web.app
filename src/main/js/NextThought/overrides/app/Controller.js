@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.app.Controller', {
+export default Ext.define('NextThought.overrides.app.Controller', {
 	override: 'Ext.app.Controller',
 
 	callOnAllControllersWith: function(functionName) {

@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.Assignment', {
+export default Ext.define('NextThought.model.assessment.Assignment', {
 	extend: 'NextThought.model.Base',
 	requires: ['NextThought.model.converters.Date'],
 	isAssignment: true,

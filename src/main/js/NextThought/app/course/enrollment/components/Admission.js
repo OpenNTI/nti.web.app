@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.Admission', {
+export default Ext.define('NextThought.app.course.enrollment.components.Admission', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.enrollment-admission',
 

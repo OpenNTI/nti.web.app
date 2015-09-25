@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Video', {
+export default Ext.define('NextThought.model.Video', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.ntivideo',
 

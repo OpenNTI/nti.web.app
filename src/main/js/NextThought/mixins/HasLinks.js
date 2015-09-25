@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.HasLinks', {
+export default Ext.define('NextThought.mixins.HasLinks', {
 
 	getLink: function(rel, raw) {
 		var links = this.get('Links') || Ext.data.Types.LINKS.convert((this.raw && this.raw.Links) || []),

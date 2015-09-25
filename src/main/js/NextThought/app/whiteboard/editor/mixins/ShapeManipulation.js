@@ -5,7 +5,7 @@
  * {@link NextThought.app.whiteboard.Canvas canvas}
  * currentTool : String
  */
-Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipulation', {
+export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipulation', {
 	requires: [
 		'NextThought.app.whiteboard.Matrix',
 		'NextThought.app.whiteboard.Utils'

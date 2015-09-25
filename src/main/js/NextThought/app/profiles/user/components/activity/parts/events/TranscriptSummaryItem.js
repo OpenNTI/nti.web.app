@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.activity.parts.events.TranscriptSummaryItem', {
+export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.TranscriptSummaryItem', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-activity-transcriptsummary-item',
 

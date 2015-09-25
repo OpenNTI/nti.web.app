@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.shapes.Url', {
+export default Ext.define('NextThought.app.whiteboard.shapes.Url', {
 	extend:	'NextThought.app.whiteboard.shapes.Base',
 
 	constructor: function() {

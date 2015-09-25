@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.windows.Index', {
+export default Ext.define('NextThought.app.windows.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.windows-view',
 

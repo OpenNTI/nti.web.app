@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.components.List', {
+export default Ext.define('NextThought.app.notifications.components.List', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.notifications-panel',
 

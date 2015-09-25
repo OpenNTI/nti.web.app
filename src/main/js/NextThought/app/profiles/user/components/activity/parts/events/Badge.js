@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Badge', {
+export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Badge', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-activity-badge-item',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.group.components.activity.Sidebar', {
+export default Ext.define('NextThought.app.profiles.group.components.activity.Sidebar', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-group-activity-sidebar',
 

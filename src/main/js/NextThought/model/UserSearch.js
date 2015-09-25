@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.UserSearch', {
+export default Ext.define('NextThought.model.UserSearch', {
 	extend: 'NextThought.model.Base',
 	requires: [
 		'NextThought.model.User',

@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.store.StripePurchaseError', {
+export default Ext.define('NextThought.model.store.StripePurchaseError', {
 	alternateClassName: 'NextThought.model.store.PurchaseError',
 	extend: 'NextThought.model.Base',
 

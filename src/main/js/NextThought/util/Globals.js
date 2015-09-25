@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Globals', {
+export default Ext.define('NextThought.util.Globals', {
 	singleton: true,
 
 
@@ -833,7 +833,7 @@ Ext.define('NextThought.util.Globals', {
 },
 function() {
 	var proto = '__proto__';
-	window.Globals = this;
+	//TODO: figure out how to fix this globals
 	window.guidGenerator = this.guidGenerator;
 	window.isMe = this.isMe;
 	window.getURL = this.getURL;

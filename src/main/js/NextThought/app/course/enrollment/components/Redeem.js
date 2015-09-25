@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.Redeem', {
+export default Ext.define('NextThought.app.course.enrollment.components.Redeem', {
 	extend: 'NextThought.app.course.enrollment.components.Purchase',
 	alias: 'widget.enrollment-gift-redeem',
 

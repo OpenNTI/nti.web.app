@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.reader.Location', {
+export default Ext.define('NextThought.app.contentviewer.reader.Location', {
 	alias: 'reader.locationProvider',
 	mixins: { observable: 'Ext.util.Observable' },
 	requires: [

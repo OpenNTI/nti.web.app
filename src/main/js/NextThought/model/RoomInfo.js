@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.RoomInfo', {
+export default Ext.define('NextThought.model.RoomInfo', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought._meeting',
 

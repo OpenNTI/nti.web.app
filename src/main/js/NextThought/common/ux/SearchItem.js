@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.ux.SearchItem', {
+export default Ext.define('NextThought.common.ux.SearchItem', {
 	extend: 'NextThought.common.form.fields.SimpleTextField',
 	alias: 'widget.search-menu-item',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.editor.PencilOptions', {
+export default Ext.define('NextThought.app.whiteboard.editor.PencilOptions', {
 	alias: 'widget.wb-tool-pencil-options',
 	extend: 'Ext.container.Container',
 	requires: [

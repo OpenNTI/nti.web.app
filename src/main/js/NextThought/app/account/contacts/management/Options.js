@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.contacts.management.Options', {
+export default Ext.define('NextThought.app.account.contacts.management.Options', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.person-options-menu',
 	cls: 'person-options-menu',

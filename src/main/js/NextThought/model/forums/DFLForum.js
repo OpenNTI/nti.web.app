@@ -1,3 +1,3 @@
-Ext.define('NextThought.model.forums.DFLForum', {
+export default Ext.define('NextThought.model.forums.DFLForum', {
 	extend: 'NextThought.model.forums.Forum'
 });

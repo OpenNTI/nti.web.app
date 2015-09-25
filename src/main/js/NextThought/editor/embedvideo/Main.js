@@ -1,4 +1,4 @@
-Ext.define('NextThought.editor.embedvideo.Main', {
+export default Ext.define('NextThought.editor.embedvideo.Main', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.embedvideo-main-view',
 	requires: [

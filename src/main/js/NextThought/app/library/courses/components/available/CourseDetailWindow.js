@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.courses.components.available.CourseDetailWindow', {
+export default Ext.define('NextThought.app.library.courses.components.available.CourseDetailWindow', {
 	extend: 'NextThought.app.library.courses.components.available.CourseWindow',
 
 	isSingle: true,

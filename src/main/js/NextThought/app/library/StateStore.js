@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.StateStore', {
+export default Ext.define('NextThought.app.library.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	requires: [

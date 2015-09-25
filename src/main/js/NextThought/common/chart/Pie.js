@@ -1,5 +1,5 @@
 //See Working preview at http://jsfiddle.net/jsg2021/7gaU2/
-Ext.define('NextThought.common.chart.Pie', {
+export default Ext.define('NextThought.common.chart.Pie', {
 	extend: 'Ext.Component',
 	alias: 'widget.pie-chart',
 	ui: 'chart',

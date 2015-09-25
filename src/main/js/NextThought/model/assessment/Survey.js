@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.Survey', {
+export default Ext.define('NextThought.model.assessment.Survey', {
 	extend: 'NextThought.model.assessment.QuestionSet',
 	mimeType: 'application/vnd.nextthought.nasurvey',
 

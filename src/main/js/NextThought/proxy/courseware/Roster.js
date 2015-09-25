@@ -1,4 +1,4 @@
-Ext.define('NextThought.proxy.courseware.Roster', {
+export default Ext.define('NextThought.proxy.courseware.Roster', {
 	extend: 'Ext.data.proxy.Rest',
 	alias: 'proxy.nti.roster',
 

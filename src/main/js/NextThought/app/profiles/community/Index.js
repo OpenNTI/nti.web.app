@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.community.Index', {
+export default Ext.define('NextThought.app.profiles.community.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-community',
 

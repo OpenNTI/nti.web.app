@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.chat.components.gutter.List', {
+export default Ext.define('NextThought.app.chat.components.gutter.List', {
 	extend: 'Ext.view.View',
 	alias: 'widget.chat-gutter-list-view',
 

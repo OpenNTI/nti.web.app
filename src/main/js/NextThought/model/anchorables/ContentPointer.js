@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.anchorables.ContentPointer', {
+export default Ext.define('NextThought.model.anchorables.ContentPointer', {
 	config: {},
 
 	statics: {

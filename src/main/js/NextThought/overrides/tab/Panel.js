@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.tab.Panel', {
+export default Ext.define('NextThought.overrides.tab.Panel', {
 	override: 'Ext.tab.Panel',
 
 	stateEvents: ['tabchange'],

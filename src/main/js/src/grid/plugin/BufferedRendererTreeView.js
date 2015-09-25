@@ -25,7 +25,7 @@ Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
  * These overrides of Ext.tree.View take into account the affect of a buffered renderer and
  * divert execution from the default course where necessary.
  */
-Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {
+export default Ext.define('Ext.grid.plugin.BufferedRendererTreeView', {
     override: 'Ext.tree.View',
 
     onRemove: function(store, records, indices) {

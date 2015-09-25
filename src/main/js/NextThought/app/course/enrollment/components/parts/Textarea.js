@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.parts.Textarea', {
+export default Ext.define('NextThought.app.course.enrollment.components.parts.Textarea', {
 	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
 	alias: 'widget.enrollment-textarea',
 

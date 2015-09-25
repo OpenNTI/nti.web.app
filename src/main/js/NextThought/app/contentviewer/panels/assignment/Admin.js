@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.panels.assignment.Admin', {
+export default Ext.define('NextThought.app.contentviewer.panels.assignment.Admin', {
 	extend: 'NextThought.app.contentviewer.panels.Reader',
 	alias: 'widget.admin-assignment-reader',
 

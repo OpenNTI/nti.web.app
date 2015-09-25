@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.components.Sequence', {
+export default Ext.define('NextThought.app.assessment.components.Sequence', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-components-sequence',
 

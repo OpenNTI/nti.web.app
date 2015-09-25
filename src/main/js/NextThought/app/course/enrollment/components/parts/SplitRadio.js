@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.components.parts.SplitRadio', {
+export default Ext.define('NextThought.app.course.enrollment.components.parts.SplitRadio', {
 	extend: 'NextThought.app.course.enrollment.components.parts.RadioGroup',
 	alias: 'widget.enrollment-split-radio',
 

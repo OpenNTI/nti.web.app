@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.BundleLike', {
+export default Ext.define('NextThought.mixins.BundleLike', {
 
 
 	containsNTIID: function(id) {

@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Bookmark', {
+export default Ext.define('NextThought.model.Bookmark', {
   extend: 'NextThought.model.Base',
 
   isBookmark: true,

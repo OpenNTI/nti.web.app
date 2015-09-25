@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.enrollment.options.OpenEnrollment', {
+export default Ext.define('NextThought.app.course.enrollment.options.OpenEnrollment', {
 	extend: 'NextThought.app.course.enrollment.options.Base',
 
 	singleton: true,

@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.InstanceTracking', {
+export default Ext.define('NextThought.mixins.InstanceTracking', {
 
 	trackThis: function() {
 		if (!this.isComponent) {

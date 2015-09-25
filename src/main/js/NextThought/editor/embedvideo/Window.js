@@ -1,4 +1,4 @@
-Ext.define('NextThought.editor.embedvideo.Window', {
+export default Ext.define('NextThought.editor.embedvideo.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.embedvideo-window',
 

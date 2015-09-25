@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.FillInTheBlankShortAnswerPart', {
+export default Ext.define('NextThought.model.assessment.FillInTheBlankShortAnswerPart', {
 	extend: 'NextThought.model.assessment.Part',
 	fields: [
 		//remove this field so we do not render it in the 'content' area

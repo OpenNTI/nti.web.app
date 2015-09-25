@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.community.components.sidebar.parts.Topics', {
+export default Ext.define('NextThought.app.profiles.community.components.sidebar.parts.Topics', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-community-topics',
 

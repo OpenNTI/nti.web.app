@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.TimedAssignment', {
+export default Ext.define('NextThought.model.assessment.TimedAssignment', {
 	extend: 'NextThought.model.assessment.Assignment',
 
 	isTimed: true,

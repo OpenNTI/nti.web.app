@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.editor.EraserOptions', {
+export default Ext.define('NextThought.app.whiteboard.editor.EraserOptions', {
 	alias: 'widget.wb-tool-eraser-options',
 	extend: 'Ext.container.Container',
 	requires: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contacts.components.GroupTabView', {
+export default Ext.define('NextThought.app.contacts.components.GroupTabView', {
 	extend: 'NextThought.app.contacts.components.TabView',
 	alias: 'widget.groups-tab-view',
 

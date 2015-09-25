@@ -1,6 +1,6 @@
 /*jslint */
 /*globals Globals, mw, NextThought, kWidget */
-Ext.define('NextThought.util.media.KalturaPlayer', {
+export default Ext.define('NextThought.util.media.KalturaPlayer', {
 
 	reqruies: ['NextThought.util.Globals'],
 

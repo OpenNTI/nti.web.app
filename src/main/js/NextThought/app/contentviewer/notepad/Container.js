@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.notepad.Container', {
+export default Ext.define('NextThought.app.contentviewer.notepad.Container', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.notepad-item-container',
 

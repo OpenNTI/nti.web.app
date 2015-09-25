@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.ux.UpdatedTos', {
+export default Ext.define('NextThought.common.ux.UpdatedTos', {
 	extend: 'NextThought.common.ux.WelcomeGuide',
 	alias: 'widget.updated-tos',
 

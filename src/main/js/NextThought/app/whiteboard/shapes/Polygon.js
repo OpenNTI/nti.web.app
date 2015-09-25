@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.shapes.Polygon', {
+export default Ext.define('NextThought.app.whiteboard.shapes.Polygon', {
 	extend:	'NextThought.app.whiteboard.shapes.Base',
 
 

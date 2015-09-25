@@ -1,5 +1,5 @@
 /*globals getFormattedString:false*/
-Ext.define('NextThought.app.course.assessment.components.student.assignments.List', {
+export default Ext.define('NextThought.app.course.assessment.components.student.assignments.List', {
 	extend: 'Ext.view.View',
 	alias: 'widget.course-assessment-assignment-list',
 	ui: 'course-assessment',

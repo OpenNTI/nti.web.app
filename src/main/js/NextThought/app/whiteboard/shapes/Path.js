@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.shapes.Path', {
+export default Ext.define('NextThought.app.whiteboard.shapes.Path', {
 	extend:	'NextThought.app.whiteboard.shapes.Base',
 
 	draw: function(ctx,renderCallback) {

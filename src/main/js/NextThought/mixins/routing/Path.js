@@ -1,7 +1,7 @@
 /*
 	Inspired by https://github.com/chrisdavies/rlite/blob/master/rlite.js
  */
-Ext.define('NextThought.mixins.routing.Path', {
+export default Ext.define('NextThought.mixins.routing.Path', {
 	VARIABLE_KEY: '@var',
 
 	/*

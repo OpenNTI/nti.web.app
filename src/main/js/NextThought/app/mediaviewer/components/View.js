@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.mediaviewer.components.View', {
+export default Ext.define('NextThought.app.mediaviewer.components.View', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.media-view',
 	requires: [

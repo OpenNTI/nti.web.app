@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.assessment.Index', {
+export default Ext.define('NextThought.app.course.assessment.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-container',
 

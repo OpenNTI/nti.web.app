@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.group.Index', {
+export default Ext.define('NextThought.app.profiles.group.Index', {
 	extend: 'NextThought.app.profiles.user.Index',
 	alias: 'widget.profile-group',
 

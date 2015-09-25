@@ -1,21 +1,18 @@
-Ext.define('NextThought.controller.Application', {
-	extend: 'Ext.app.Controller',
+import LoginStore from '../login/StateStore';
+import LoginActions from '../login/Actions';
+import Index from '../app/Index';
+import LibraryActions from '../app/library/Actions';
+import StoreActions from '../app/store/Actions';
+import ChatActions from '../app/chat/Actions';
+import GroupActions from '../app/group/Actions';
+import ContextStore from '../app/context/StateStore';
+import NotificationActions from '../app/notifications/Actions';
+import StateActions from '../common/State/Actions';
+import UserActions from '../app/profiles/user/Actions';
+import Globals from '../util/Globals';
 
-	requires: [
-		'NextThought.cache.*',
-		'NextThought.login.StateStore',
-		'NextThought.login.Actions',
-		'NextThought.app.Index',
-		//require actions that need to do something on login
-		'NextThought.app.library.Actions',
-		'NextThought.app.store.Actions',
-		'NextThought.app.chat.Actions',
-		'NextThought.app.groups.Actions',
-		'NextThought.app.context.StateStore',
-		'NextThought.app.notifications.Actions',
-		'NextThought.common.state.Actions',
-		'NextThought.app.profiles.user.Actions'
-	],
+export default Ext.define('NextThought.controller.Application', {
+	extend: 'Ext.app.Controller',
 
 	refs: [
 		{ref: 'body', selector: 'main-views'},
@@ -43,19 +40,19 @@ Ext.define('NextThought.controller.Application', {
 	init: function() {
 		var me = this;
 
-		me.LoginActions = NextThought.login.Actions.create();
-		me.LoginStore = NextThought.login.StateStore.getInstance();
+		me.LoginActions = LoginActions.create();
+		me.LoginStore = LoginStore.getInstance();
 
 		//create the actions that need to do something on login
-		me.LibraryActions = NextThought.app.library.Actions.create();
-		me.StoreActions = NextThought.app.store.Actions.create();
-		me.StateActions = NextThought.common.state.Actions.create();
-		me.ChatActions = NextThought.app.chat.Actions.create();
-		me.GroupActions = NextThought.app.groups.Actions.create();
-		me.ContextStore = NextThought.app.context.StateStore.getInstance();
-		me.NotificationActions = NextThought.app.notifications.Actions.create();
-		me.NavigationActions = NextThought.app.navigation.Actions.create();
-		me.UserProfileActions = NextThought.app.profiles.user.Actions.create();
+		me.LibraryActions = LibraryActions.create();
+		me.StoreActions = StoreActions.create();
+		me.StateActions = StateActions.create();
+		me.ChatActions = ChatActions.create();
+		me.GroupActions = GroupsActions.create();
+		me.ContextStore = ContextStateStore.getInstance();
+		me.NotificationActions = NotificationsActions.create();
+		me.NavigationActions = NavigationActions.create();
+		me.UserProfileActions = UserActions.create();
 
 		window.addEventListener('popstate', function(e) {
 			me.handleCurrentState();

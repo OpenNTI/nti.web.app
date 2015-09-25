@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.ShareEntity', {
+export default Ext.define('NextThought.mixins.ShareEntity', {
 
 	isDynamicSharing: function() {
 		return NextThought.mixins.ShareEntity.isDynamicSharing(this.data);

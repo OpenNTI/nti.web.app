@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.chat.components.gutter.Tab', {
+export default Ext.define('NextThought.app.chat.components.gutter.Tab', {
 	extend: 'Ext.Component',
 
 	cls: 'chat-notifications-icon',

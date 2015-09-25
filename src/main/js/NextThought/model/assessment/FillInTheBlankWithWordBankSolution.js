@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.FillInTheBlankWithWordBankSolution', {
+export default Ext.define('NextThought.model.assessment.FillInTheBlankWithWordBankSolution', {
 	extend: 'NextThought.model.assessment.Solution',
 	requires: [
 		'NextThought.model.assessment.WordBank'

@@ -1,5 +1,5 @@
 /*globals isMe:false, Toaster:false, swallow:false*/
-Ext.define('NextThought.app.contentviewer.reader.Assessment', {
+export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 	alias: 'reader.assessment',
 	requires: [
 		'NextThought.app.assessment.Scoreboard',

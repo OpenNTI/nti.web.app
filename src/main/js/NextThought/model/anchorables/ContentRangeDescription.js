@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.anchorables.ContentRangeDescription', {
+export default Ext.define('NextThought.model.anchorables.ContentRangeDescription', {
 	mixins: {
 		JSONValue: 'NextThought.mixins.JSONValue'
 	},

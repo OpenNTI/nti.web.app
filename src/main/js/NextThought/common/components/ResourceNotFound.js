@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.components.ResourceNotFound', {
+export default Ext.define('NextThought.common.components.ResourceNotFound', {
 	extend: 'Ext.Component',
 	alias: 'widget.notfound',
 

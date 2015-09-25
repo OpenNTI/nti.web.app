@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.ux.IframeConfirmWindow', {
+export default Ext.define('NextThought.common.ux.IframeConfirmWindow', {
 	extend: 'NextThought.common.ux.IframeWindow',
 	alias: 'widget.iframe-confirm-window',
 

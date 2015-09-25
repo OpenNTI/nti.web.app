@@ -3,7 +3,7 @@
  *
  * TODO: de-lint
  */
-Ext.define('NextThought.util.Base64', {
+export default Ext.define('NextThought.util.Base64', {
 	alternateClassName: 'B64',
 	singleton: true,
 
@@ -169,6 +169,4 @@ Ext.define('NextThought.util.Base64', {
 		return string;
 	}
 
-}, function() {
-	window.B64 = this;
 });

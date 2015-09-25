@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.toast.Manager', {
+export default new Ext.define('NextThought.common.toast.Manager', {
 	requires: [
 		'NextThought.common.toast.Window'
 	],
@@ -117,6 +117,4 @@ Ext.define('NextThought.common.toast.Manager', {
 		});
 	}
 
-}, function() {
-	window.Toaster = new this();
 });

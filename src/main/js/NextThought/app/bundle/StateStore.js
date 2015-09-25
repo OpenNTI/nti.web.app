@@ -1,3 +1,3 @@
-Ext.define('NextThought.app.bundle.StateStore', {
+export default Ext.define('NextThought.app.bundle.StateStore', {
 	extend: 'NextThought.app.course.StateStore'
 });

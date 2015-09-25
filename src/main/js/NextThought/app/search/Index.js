@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.search.Index', {
+export default Ext.define('NextThought.app.search.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.search-index',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Line', {
+export default Ext.define('NextThought.util.Line', {
 	singleton: true,
 
 	containerMimeSelectors: ['object[type$=naquestion]', 'object[type$=ntivideo]'],
@@ -470,6 +470,4 @@ Ext.define('NextThought.util.Line', {
 		return result;
 	}
 
-}, function() {
-	window.LineUtils = this;
 });

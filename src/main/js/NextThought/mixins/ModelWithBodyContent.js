@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.ModelWithBodyContent', {
+export default Ext.define('NextThought.mixins.ModelWithBodyContent', {
 
 	statics: {
 		/**

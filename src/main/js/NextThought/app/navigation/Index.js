@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.navigation.Index', {
+export default Ext.define('NextThought.app.navigation.Index', {
 	extend: 'Ext.Component',
 	alias: 'widget.main-navigation',
 

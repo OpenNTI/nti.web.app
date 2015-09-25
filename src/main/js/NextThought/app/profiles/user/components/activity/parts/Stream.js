@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
+export default Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-user-activity-stream',
 

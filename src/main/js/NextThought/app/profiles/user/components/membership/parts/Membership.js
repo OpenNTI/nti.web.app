@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.membership.parts.Membership', {
+export default Ext.define('NextThought.app.profiles.user.components.membership.parts.Membership', {
 	extend: 'Ext.Component',
 
 	title: '',

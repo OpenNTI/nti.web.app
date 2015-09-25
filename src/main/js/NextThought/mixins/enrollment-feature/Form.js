@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.enrollment-feature.Form', {
+export default Ext.define('NextThought.mixins.enrollment-feature.Form', {
 	STATE_VALUES: {},
 
 	changeMonitors: {},

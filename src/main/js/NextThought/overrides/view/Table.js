@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.view.Table', {
+export default Ext.define('NextThought.overrides.view.Table', {
 	override: 'Ext.view.Table',
 
 	getRecord: function() {

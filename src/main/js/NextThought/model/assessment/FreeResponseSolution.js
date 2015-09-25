@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessment.FreeResponseSolution', {
+export default Ext.define('NextThought.model.assessment.FreeResponseSolution', {
 	extend: 'NextThought.model.assessment.SingleValuedSolution',
 	fields: [
 		{ name: 'value', type: 'string' }

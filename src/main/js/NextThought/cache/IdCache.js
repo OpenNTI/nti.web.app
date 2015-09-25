@@ -1,4 +1,4 @@
-Ext.define('NextThought.cache.IdCache', {
+export default Ext.define('NextThought.cache.IdCache', {
 	alias: 'IdCache',
 	singleton: true,
 	requires: [
@@ -31,7 +31,4 @@ Ext.define('NextThought.cache.IdCache', {
 
 		return 'cmp-' + prefix + '-' + this.getIdentifier(i);
 	}
-},
-function() {
-	window.IdCache = this;
 });

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.MessageBar', {
+export default Ext.define('NextThought.app.MessageBar', {
 	extend: 'Ext.Component',
 	alias: 'widget.message-bar',
 

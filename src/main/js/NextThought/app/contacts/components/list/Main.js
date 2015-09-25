@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contacts.components.list.Main', {
+export default Ext.define('NextThought.app.contacts.components.list.Main', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.createlist-main-view',
 	requires: [

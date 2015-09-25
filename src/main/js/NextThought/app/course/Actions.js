@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.Actions', {
+export default Ext.define('NextThought.app.course.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	requires: [

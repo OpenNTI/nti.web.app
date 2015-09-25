@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.video.roll.Roll', {
+export default Ext.define('NextThought.app.video.roll.Roll', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.video-roll',
 

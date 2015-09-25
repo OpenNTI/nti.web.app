@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.account.coppa.Window', {
+export default Ext.define('NextThought.app.account.coppa.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.coppa-window',
 

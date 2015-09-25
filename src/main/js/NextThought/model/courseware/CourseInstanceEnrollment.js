@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courseware.CourseInstanceEnrollment', {
+export default Ext.define('NextThought.model.courseware.CourseInstanceEnrollment', {
 	extend: 'NextThought.model.Base',
 
 	idProperty: 'href',

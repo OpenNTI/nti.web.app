@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.search.components.results.HighlightResult', {
+export default Ext.define('NextThought.app.search.components.results.HighlightResult', {
 	extend: 'NextThought.app.search.components.results.Base',
 	alias: ['widget.search-result-highlight'],
 	cls: 'search-result search-highlight',

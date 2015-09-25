@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.courseware.HistoryItems', {
+export default Ext.define('NextThought.store.courseware.HistoryItems', {
 	extend: 'Ext.data.Store',
 
 	model: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItem',

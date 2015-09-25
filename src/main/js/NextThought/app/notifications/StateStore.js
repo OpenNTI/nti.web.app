@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.notifications.StateStore', {
+export default Ext.define('NextThought.app.notifications.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	requires: ['NextThought.store.BatchInterface'],

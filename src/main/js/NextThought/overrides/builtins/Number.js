@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.builtins.Number', {});
+export default Ext.define('NextThought.overrides.builtins.Number', {});
 
 (function() {
 	Ext.applyIf(Number.prototype, {

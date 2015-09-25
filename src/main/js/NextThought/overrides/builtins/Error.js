@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.builtins.Error', {});
+export default Ext.define('NextThought.overrides.builtins.Error', {});
 
 
 /**

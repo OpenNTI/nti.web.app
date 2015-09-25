@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.activity.parts.events.TopicReply', {
+export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.TopicReply', {
 	extend: 'NextThought.app.profiles.user.components.activity.parts.events.PostReply',
 	alias: [
 		'widget.profile-activity-generalforumcomment-item',

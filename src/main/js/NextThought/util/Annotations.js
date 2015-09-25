@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Annotations', {
+export default Ext.define('NextThought.util.Annotations', {
 			   requires: [
 				   'NextThought.model.Highlight',
 				   'NextThought.model.Note',
@@ -282,7 +282,4 @@ Ext.define('NextThought.util.Annotations', {
 
 
 			   updateHistory: Ext.emptyFn
-		   },
-		   function() {
-			   window.AnnotationUtils = this;
 		   });

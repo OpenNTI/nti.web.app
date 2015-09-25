@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contacts.Index', {
+export default Ext.define('NextThought.app.contacts.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.contacts-index',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.GroupLike', {
+export default Ext.define('NextThought.mixins.GroupLike', {
   //must be mixed into a model
 
 	EVERYONE_USERNAME: 'everyone',

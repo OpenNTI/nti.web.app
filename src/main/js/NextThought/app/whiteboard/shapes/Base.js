@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.whiteboard.shapes.Base', {
+export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 	requires: [
 		'NextThought.util.Color',
 		'NextThought.app.whiteboard.Matrix',

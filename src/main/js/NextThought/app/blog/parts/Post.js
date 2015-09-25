@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.blog.parts.Post', {
+export default Ext.define('NextThought.app.blog.parts.Post', {
 	extend: 'NextThought.app.blog.parts.old.Topic',
 	alias: 'widget.profile-blog-post',
 

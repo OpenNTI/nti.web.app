@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.catalog.Collection', {
+export default Ext.define('NextThought.app.course.catalog.Collection', {
 	extend: 'NextThought.app.store.Collection',
 	alias: 'widget.course-catalog-collection',
 

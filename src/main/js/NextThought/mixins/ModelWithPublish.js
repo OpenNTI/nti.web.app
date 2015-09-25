@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.ModelWithPublish', {
+export default Ext.define('NextThought.mixins.ModelWithPublish', {
 
 	getPublishState: function() {
 		return this.isPublished() ? 'Public' : 'Only Me';

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.contentviewer.Actions', {
+export default Ext.define('NextThought.app.contentviewer.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	requires: [

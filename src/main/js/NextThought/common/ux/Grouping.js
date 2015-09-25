@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.ux.Grouping', {
+export default Ext.define('NextThought.common.ux.Grouping', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.grouping',
 	ui: 'nt',

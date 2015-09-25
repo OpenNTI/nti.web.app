@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.forums.PersonalBlogComment', {
+export default Ext.define('NextThought.model.forums.PersonalBlogComment', {
 	extend: 'NextThought.model.forums.CommentPost',
 
 	isBlogComment: true,

@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.form.fields.SimpleTextField', {
+export default Ext.define('NextThought.common.form.fields.SimpleTextField', {
 	extend: 'Ext.Component',
 	alias: 'widget.simpletext',
 

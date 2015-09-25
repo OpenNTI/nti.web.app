@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.app.Application', {
+export default Ext.define('NextThought.overrides.app.Application', {
 	override: 'Ext.app.Application',
 
 	init: function() {

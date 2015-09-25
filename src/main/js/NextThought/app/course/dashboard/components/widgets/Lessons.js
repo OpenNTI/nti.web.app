@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.dashboard.components.widgets.Lessons', {
+export default Ext.define('NextThought.app.course.dashboard.components.widgets.Lessons', {
 	extend: 'NextThought.app.course.dashboard.components.widgets.Base',
 
 	requires: ['NextThought.app.course.dashboard.components.tiles.Lesson'],

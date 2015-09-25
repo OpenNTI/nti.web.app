@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.video.navigation.Video', {
+export default Ext.define('NextThought.app.video.navigation.Video', {
 	extend: 'NextThought.app.video.Video',
 	alias: 'widget.content-video-navigation',
 
