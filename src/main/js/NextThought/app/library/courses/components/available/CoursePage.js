@@ -50,6 +50,7 @@ Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 		this.removeAll(true);
 		this.clearTabs();
 
+		var me = this;
 		if (upcoming && upcoming.length) {
 			this.addCourses(upcoming, 'Upcoming Courses', null, {category: 'upcoming'});
 			this.addTab({label: 'Upcoming', category: 'upcoming'});
@@ -68,6 +69,30 @@ Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 		this.onceRendered
 			.then(this.setTops.bind(this));
 
+		this.query('course-catalog-collection').forEach(function(cmp) {
+			me.relayEvents(cmp, ['show-course-detail']);
+		});
+	},
+
+
+	getTabForCourse: function(course) {
+		var id = course.get('NTIID'), targetCmp;
+
+		Ext.each(this.query('course-catalog-collection'), function(cmp) {
+			if (cmp.store && cmp.store.find('NTIID', id) >= 0) {
+				targetCmp = cmp;
+				return false; 
+			}
+		});
+
+		if (targetCmp) {
+			targetCmp.title = Ext.String.capitalize(targetCmp.category);
+			return targetCmp;
+		}
+
+		return {
+			title: 'Courses'
+		};
 	},
 
 
@@ -83,7 +108,6 @@ Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 
 
 	setTops: function () {
-		debugger;
 		var upcoming = this.down('[category=upcoming]'),
 			current = this.down('[category=current]'),
 			archived = this.down('[category=archived]'),
