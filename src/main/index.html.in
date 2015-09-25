@@ -15,7 +15,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=EDGE">
 	<!-- x-itunes -->
 	<link rel="shortcut icon" href="/app/resources/images/favicon.ico">
-	<link rel="stylesheet" id="ext-base" type="text/css" href="/app/ext-4.2/resources/css/ext-all-gray.css">
+	<link rel="stylesheet" id="ext-base" type="text/css" href="/app/resources/vendor/ext/ext-all.css">
 	<link rel="stylesheet" id="mathquill-stylesheet" type="text/css" href="/app/resources/lib/mathquill/mathquill.css">
 	<link rel="stylesheet" id="main-stylesheet" type="text/css" href="/app/resources/css/main.css">
 	<link rel="stylesheet" id="site-stylesheet" type="text/css" href="/app/resources/css/site.css">
@@ -53,16 +53,9 @@
 	<script type="text/javascript" src="/app/resources/strings/strings.js"></script>
 	<script type="text/javascript" src="/app/resources/strings/site.js"></script>
 	<script src="https://backpack.openbadges.org/issuer.js"></script>
-	<!-- <x-compile> -->
-		<!-- <x-bootstrap> -->
-			<script type="text/javascript" src="/app/ext-4.2/ext-debug.js" id="ext-js-library"></script>
-			<script type="text/javascript" src="/app/bootstrap.js"></script>
-			<!--<script type="text/javascript" src="ext-4.2/src/diag/layout/Context.js"></script>-->
-			<!--<script type="text/javascript" src="ext-4.2/src/diag/layout/ContextItem.js"></script>-->
+	<script type="text/javascript" src="/app/resources/vendor/ext/ext-all.js"></script>
 
-		<!-- </x-bootstrap> -->
-		<script type="text/javascript" src="/app/js/app.js"></script>
-	<!-- </x-compile> -->
+	<script type="text/javascript" src="/app/js/app.js"></script>
 	<!-- analytics -->
 </body>
 </html>
