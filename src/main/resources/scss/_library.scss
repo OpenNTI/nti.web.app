@@ -1056,14 +1056,14 @@ li.library-grid-item {
 		overflow: hidden;
 
 		.page {
-			height: 90%;
-			@include experimental-value(height, calc(100% - 100px));
 			overflow: hidden;
 			position: relative;
 
 			& > .body-container {
 				overflow-y: auto;
-				height: 100%; 
+				max-height: 95%;
+				margin-top: 40px;
+				@include experimental-value(max-height, calc(100% - 40px));
 			}
 
 			.x-component-library-collection {
