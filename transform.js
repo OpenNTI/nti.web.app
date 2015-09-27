@@ -41,17 +41,47 @@ var globals = {
 };
 
 
-function fixRequires() {
+function findAndRemoveRequires(root, j) {
+	var identifier = root.find(j.Identifier, {name: 'requires'}),
+		imports = [];
 
+	identifier.forEach(function(i) {
+		var property = i.parent;
+		var elements = property && property.value.value.elements;
+
+		elements = elements || [];
+
+		imports = imports.concat(elements.map(function(element) {
+			return element.raw;
+		}));
+
+		//TODO figure out how to remove the requires property...
+	});
+
+	return imports;
 }
 
 
-function fixMixins() {
+function findMixins(root, j) {
+	var identifier = root.find(j.Identifier, {name: 'mixins'}),
+		imports = [];
 
+	identifier.forEach(function(i) {
+		var property = i.parent;
+		var properties = property && property.value.value && property.value.value.properties;
+
+		properties = properties || [];
+
+		imports = imports.concat(properties.map(function(prop) {
+			return prop.value.value;
+		}));
+	});
+
+	return imports;
 }
 
 
-function fixReauires() {
+function findGlobals(root, j) {
 
 }
 
@@ -64,7 +94,7 @@ function fixReauires() {
 //https://github.com/facebook/react/blob/master/packages/react-codemod/transforms/react-to-react-dom.js
 module.exports = function(fileInfo, api) {
 	const j = api.jscodeshift;
-	var root = j(fileInfo.source);
+	const root = j(fileInfo.source);
 
 
 	console.log(root.find(j.ExportDefaultDeclaration)
