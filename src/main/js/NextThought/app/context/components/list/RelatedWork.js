@@ -10,7 +10,12 @@ Ext.define('NextThought.app.context.components.list.RelatedWork', {
 	},
 
 
-	setIcon: function() {
+	setIcon: function(path) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setIcon.bind(this, path));
+			return;
+		}
+
 		var iconUrl = this.content.get('icon'),
 
 		iconUrl = iconUrl && 'url(' + getURL(iconUrl) + ')';
