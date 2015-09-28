@@ -38,7 +38,7 @@ Ext.define('NextThought.util.Format', {
 			bgColor = getField('avatarBGColor'),
 			initials = getField('avatarInitials'),
 			className = getField('Class'),
-			defaultAvatar = className !== 'User' ? NextThought.model.FriendsList.BLANK_AVATAR : NextThought.model.User.BLANK_AVATAR,
+			defaultAvatar = className && className !== 'User' ? NextThought.model.FriendsList.BLANK_AVATAR : NextThought.model.User.BLANK_AVATAR,
 			clsList = [cls || 'avatar', 'avatar-container'], cn = [];
 
 		function getField(name) {
