@@ -4,7 +4,6 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 	requires: [
 		'NextThought.app.course.catalog.Collection',
-		'NextThought.app.course.catalog.TabPanel',
 		'NextThought.app.library.courses.components.available.Actions',
 		// 'NextThought.app.library.courses.components.available.CoursePage',
 		'NextThought.app.library.courses.StateStore',
@@ -194,14 +193,6 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			this.removeMask();
 			return;
 		}
-
-		// if (!Ext.isEmpty(upcoming)) {
-		// 	this.tabpanel.selectTabWithName('Upcoming');
-		// } else if (!Ext.isEmpty(current)) {
-		// 	this.tabpanel.selectTabWithName('Current');
-		// } else if (!Ext.isEmpty(archived)) {
-		// 	this.tabpanel.selectTabWithName('Archived');
-		// }
 
 		this.removeMask();
 	},
