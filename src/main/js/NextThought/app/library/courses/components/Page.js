@@ -54,7 +54,8 @@ export default Ext.define('NextThought.app.library.courses.components.Page', {
 		}
 
 		(courses || []).forEach(function(course) {
-			var catalog = course.getCourseCatalogEntry(),
+			var isCatalogEntry = course instanceof NextThought.model.courses.CourseCatalogEntry,
+				catalog = isCatalogEntry ? course : course.getCourseCatalogEntry(),
 				start = catalog.get('StartDate'),
 				year = start.getFullYear(),
 				semester = catalog.getSemester(),
@@ -87,7 +88,7 @@ export default Ext.define('NextThought.app.library.courses.components.Page', {
 	},
 
 
-	addBinnedCourses: function(binObj, label) {
+	addBinnedCourses: function(binObj, label, options) {
 		var me = this, i, semester,
 			bins = binObj.bins || {},
 			years = binObj.years || [],
@@ -105,20 +106,23 @@ export default Ext.define('NextThought.app.library.courses.components.Page', {
 
 			semesters.forEach(function(semester) {
 				if (bin[semester] && bin[semester].length) {
-					me.addCourses(bin[semester], label, semester + ' ' + year);
+					me.addCourses(bin[semester], label, semester + ' ' + year, options);
 				}
 			});
 		});
 	},
 
 
-	addCourses: function(courses, label, group) {
-		this.add({
+	addCourses: function(courses, label, group, options) {
+		var o = {
 			label: label,
 			group: group || '',
 			store: this.getCourseStore(courses),
 			navigate: this.navigate && this.navigate.bind(this)
-		});
+		};
+
+		o = Ext.applyIf(o, options || {});
+		this.add(o);
 	},
 
 

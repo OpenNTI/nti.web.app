@@ -6,6 +6,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		'NextThought.app.course.catalog.Collection',
 		'NextThought.app.course.catalog.TabPanel',
 		'NextThought.app.library.courses.components.available.Actions',
+		// 'NextThought.app.library.courses.components.available.CoursePage',
 		'NextThought.app.library.courses.StateStore',
 		'NextThought.app.course.enrollment.Details',
 		'NextThought.app.course.enrollment.StateStore',
@@ -194,13 +195,13 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 			return;
 		}
 
-		if (!Ext.isEmpty(upcoming)) {
-			this.tabpanel.selectTabWithName('Upcoming');
-		} else if (!Ext.isEmpty(current)) {
-			this.tabpanel.selectTabWithName('Current');
-		} else if (!Ext.isEmpty(archived)) {
-			this.tabpanel.selectTabWithName('Archived');
-		}
+		// if (!Ext.isEmpty(upcoming)) {
+		// 	this.tabpanel.selectTabWithName('Upcoming');
+		// } else if (!Ext.isEmpty(current)) {
+		// 	this.tabpanel.selectTabWithName('Current');
+		// } else if (!Ext.isEmpty(archived)) {
+		// 	this.tabpanel.selectTabWithName('Archived');
+		// }
 
 		this.removeMask();
 	},
@@ -282,17 +283,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 	updateAvailableCourses: function(current, upcoming, archived) {
 		if (!this.tabpanel) { return; }
 
-		if (current) {
-			this.tabpanel.updateCurrent(current);
-		}
-
-		if (upcoming) {
-			this.tabpanel.updateUpcoming(upcoming);
-		}
-
-		if (archived) {
-			this.tabpanel.updateArchived(archived);
-		}
+		this.tabpanel.setItems(upcoming, current, archived);
 	},
 
 
@@ -459,7 +450,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 
 		if (!me.tabpanel) {
 			me.tabpanel = me.add({
-				xtype: 'course-catalog-tabpanel',
+				xtype: 'library-availalble-courses-page',
 				upcoming: me.upcoming,
 				current: me.current,
 				archived: me.archived,
