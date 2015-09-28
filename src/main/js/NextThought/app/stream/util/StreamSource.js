@@ -1,9 +1,31 @@
+/**
+ * An interface for the BatchInterface to handle paging through a stream of activity.
+ * Keeps track of the batch you are on, so you only have to call getNextBatch repeatedly.
+ *
+ * @class NextThought.app.stream.util.StreamSource
+ * @author andrew.ligon@nexthought.com (Andrew Ligon)
+ */
 Ext.define('NextThought.app.stream.util.StreamSource', {
 
-	requires: ['NextThought.util.Store'],
+	requires: ['NextThought.store.BatchInterface'],
 
-	DONE: 'done',
-
+	/**
+	 * Construct an instance of a StreamSource
+	 *
+	 * @memberOf NextThought.app.stream.util.StreamSource#
+	 *
+	 * @param {Object} config - values to set up the stream source with
+	 * @param {String} config.batch - which batch to start on
+	 * @param {String} config.batchParam - the value to key the batch on
+	 * @param {Array} config.filters - filters to apply to the batch
+	 * @param {String} config.filterParam - the value to key the filters on
+	 * @param {Number} config.pageSize - the size of the batch
+	 * @param {String} config.sizeParam - the value to key the size on
+	 * @param {String} config.sort - the field to sort the items on
+	 * @param {String} config.sortParam - the value to key the sort on
+	 * @param {String} config.context - an ntiid to filter to items contained in it
+	 * @param {String} config.contextParam - the value to key the context on
+	 */
 	constructor: function(config) {
 		this.callParent(arguments);
 
@@ -12,167 +34,105 @@ Ext.define('NextThought.app.stream.util.StreamSource', {
 		}
 
 		this.url = config.url;
-		this.batchParam = config.batchParam || 'batchStart';
-		this.sizeParam = config.sizeParam || 'batchSize';
-		this.filterParam = config.filterParam || 'filter';
-		this.pageSize = config.pageSize || 50;
-		this.filters = [];
-		this.searchTerm = '';
-		this.nextPage = 1;
+		this.extraParams = config.extraParams || {};
+
+		this.batch = {
+			param: config.batchParam || 'batchStart',
+			value: config.batch
+		};
+
+		this.filters = {
+			param: config.filterParam || 'filter',
+			value: config.filters
+		};
+
+		this.size = {
+			param: config.sizeParam || 'batchSize',
+			value: config.pageSize || 50
+		};
+
+		this.sort = {
+			param: config.sortParam || 'sortOn',
+			value: config.sortOn || 'Created'
+		};
+
+		this.context = {
+			param: config.contextParam || 'topLevelContextFilter',
+			value: config.context
+		};
 	},
 
 
-	__loadPage: function(page) {
-		var me = this,
-			params = {};
+	getURL: function() {
+		return this.url;
+	},
 
-		params[me.batchParam] = (page - 1) * me.pageSize;
-		params[me.sizeParam] = me.pageSize;
+	/**
+	 * Build the params to send back with the request
+	 *
+	 * @memberOf  NextThought.app.stream.util.StreamSource#
+	 * @return {Object} params
+	 */
+	getParams: function() {
+		var params,
+			knownParams = [
+				this.batch,
+				this.filters,
+				this.size,
+				this.sort,
+				this.context
+			];
 
-		if (me.filters.length) {
-			params[me.filterParam] = me.filters.join(',');
+		params = knownParams.reduce(function(acc, param) {
+			if (param.value) {
+				acc[param.param] = param.value;
+			}
+
+			return acc;
+		}, this.extraParams || {});
+
+		return params;
+	},
+
+
+	getBatch: function() {
+		if (!this.currentBatch) {
+			this.currentBatch = new NextThought.store.BatchInterface({
+				url: this.getURL(),
+				params: this.getParams()
+			});
 		}
 
-		return StoreUtils.loadBatch(me.url, params)
-			.then(function(batch) {
-				me.Links = batch.Links;
-
-				return batch.Items;
-			});
+		return Promise.fulfill(this.currentBatch);
 	},
 
 
-	loadNextPage: function() {
+	getNextBatch: function() {
 		var me = this;
 
-		if (me.isEmpty()) {
-			return Promise.reject(this.DONE);
-		}
+		return me.getInitialBatch()
+			.then(function(batch) {
+				return batch.getNextBatch();
+			})
+			.then(function(batch) {
+				me.currentBatch = batch;
 
-		return me.__loadPage(me.nextPage)
-			.then(function(items) {
-
-				if (items.length === 0) {
-					return Promise.reject(me.DONE);
-				} else if (items.length < me.pageSize) {
-					me.__isEmpty = true;
-				}
-
-				me.nextPage += 1;
-
-				return items;
+				return batch;
 			});
 	},
 
 
-	isEmpty: function() {
-		return this.__isEmpty;
-	},
+	getPreviousBatch: function() {
+		var me = this;
 
+		return me.getInitialBatch()
+			.then(function(batch) {
+				return batch.getPreviousBatch();
+			})
+			.then(function(batch) {
+				me.currentBatch = batch;
 
-	/**
-	 * Get a link off of the batch, only works if the link is the same for every batch
-	 * @param  {String} rel the rel of the link to look for
-	 * @return {String}     the link for that rel, or null
-	 */
-	getLink: function(rel) {},
-
-
-	/**
-	 * Add a filter to the page requests
-	 * trigger a reset
-	 * @param {String} filters the filter(s) to add
-	 */
-	addFilter: function(filter) {
-		this.addFilters([filter]);
-	},
-
-
-	/**
-	 * Add an array of filters
-	 * trigger a reset
-	 * @param {[String]} filters filters to add
-	 */
-	addFilters: function(filters) {
-		if (!Array.isArray(filters)) {
-			filters = [filters];
-		}
-
-		this.filters = this.filters.concat(filters);
-
-		this.fireEvent('reset');
-	},
-
-
-	/**
-	 * Add a filter if its not currently there, or remove it if it is
-	 * trigger a reset
-	 * @param  {String} filter
-	 * @return {[type]}        [description]
-	 */
-	toggleFilter: function(filter) {
-		var index = this.filters.indexOf(filters);
-
-		if (index > -1) {
-			this.filters.splice(index, 1);
-		} else {
-			this.filters.push(filter);
-		}
-
-		this.fireEvent('reset');
-	},
-
-
-	/**
-	 * Remove a filter from the list
-	 * trigger a reset
-	 * @param  {String} filter the filter to remove
-	 */
-	removeFilter: function(filter) {
- 		this.removeFilters([filter]);
-	},
-
-
-	/**
-	 * Remove a group of filters from the list
-	 * triggers a reset
-	 * @param  {[String]} filters the filters to remove
-	 */
-	removeFilters: function(filters) {
-		if (!Array.isArray(filters)) {
-			filters = [filters];
-		}
-
-		var newFilters = [];
-
-		this.filters.forEach(function(filter) {
-			if (filters.indexOf(filter) < 0) {
-				newFilters.push(filter);
-			}
-		});
-
-		this.filters = newFilters;
-
-		this.fireEvent('reset');
-	},
-
-	/**
-	 * Remove all the current filters
-	 * triggers a reset
-	 */
-	removeAllFilters: function() {
-		this.filters = [];
-
-		this.fireEvent('reset');
-	},
-
-
-	/**
-	 * Add a search term to the page params
-	 * triggers a reset
-	 * @param  {String} term term to search for
-	 */
-	search: function(term) {
-		console.warn('Search not implemented yet');
+				return batch;
+			});
 	}
 });
