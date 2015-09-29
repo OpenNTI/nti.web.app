@@ -95,7 +95,12 @@ Ext.define('NextThought.app.stream.util.StreamSource', {
 	},
 
 
-	getBatch: function() {
+	__getBatch: function() {
+		return this.currentBatch;
+	},
+
+
+	getCurrentBatch: function() {
 		if (!this.currentBatch) {
 			this.currentBatch = new NextThought.store.BatchInterface({
 				url: this.getURL(),
@@ -103,14 +108,14 @@ Ext.define('NextThought.app.stream.util.StreamSource', {
 			});
 		}
 
-		return Promise.fulfill(this.currentBatch);
+		return this.currentBatch.getBatch();
 	},
 
 
 	getNextBatch: function() {
 		var me = this;
 
-		return me.getInitialBatch()
+		return me.__getBatch()
 			.then(function(batch) {
 				return batch.getNextBatch();
 			})
@@ -125,7 +130,7 @@ Ext.define('NextThought.app.stream.util.StreamSource', {
 	getPreviousBatch: function() {
 		var me = this;
 
-		return me.getInitialBatch()
+		return me.__getBatch()
 			.then(function(batch) {
 				return batch.getPreviousBatch();
 			})
@@ -134,5 +139,10 @@ Ext.define('NextThought.app.stream.util.StreamSource', {
 
 				return batch;
 			});
+	},
+
+
+	reset: function() {
+		delete this.currentBatch;
 	}
 });

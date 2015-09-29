@@ -7,6 +7,21 @@ Ext.define('NextThought.mixins.Scrolling', {
 	},
 
 
+	getPageScrollingEl: function() {
+		return this.Scrolling.scrollingEl;
+	},
+
+
+	getPageScrollHeight: function() {
+		return this.getPageScrollingEl().scrollHeight;
+	},
+
+
+	getPageHeight: function() {
+		return document.documentElement.clientHeight;
+	},
+
+
 	__findScrollableParent: function(node) {
 		function isScrollable(node) {
 			var computed = node && getComputedStyle(node);
