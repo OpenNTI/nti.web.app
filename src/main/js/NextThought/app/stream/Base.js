@@ -24,6 +24,12 @@ Ext.define('NextThought.app.stream.Base', {
 
 	items: [],
 
+	/**
+	 * Contains a map of a mimeType to a component to show for it
+	 * @type {Object}
+	 */
+	MIME_TO_COMPONENTS: {},
+
 	clearOnDeactivate: false,
 	pageOnScroll: true,
 
@@ -70,6 +76,27 @@ Ext.define('NextThought.app.stream.Base', {
 
 		this.onScroll = this.onScroll.bind(this);
 		this.prefetchNext = Ext.Function.createBuffered(this.loadNextPage, 500);
+
+		this.fillInMimeTypes(this.tiles || []);
+	},
+
+
+	fillInMimeTypes: function(cmps) {
+		this.MIME_TO_COMPONENTS = cmps.reduce(function(acc, cmp) {
+			var mimeType = cmp.mimeType;
+
+			if (!Array.isArray(mimeType)) {
+				mimeType = [mimeType];
+			}
+
+			mimeType.forEach(function(mime) {
+				if (mime) {
+					acc[mime] = cmp;
+				}
+			});
+
+			return acc;
+		}, {});
 	},
 
 
@@ -78,17 +105,27 @@ Ext.define('NextThought.app.stream.Base', {
 	},
 
 
-	onActivate: function() {
-		//if we might have cleared on deactivate or haven't loaded any pages yet
-		if (this.clearOnDeactivate || this.PAGES.length === 0) {
-			this.clearPages();
-			this.StreamSource.reset();
+	setStreamSource: function(source) {
+		this.clearPages();
+		this.StreamSource = source;
+
+		if (source) {
 			this.showLoading();
 			this.StreamSource.getCurrentBatch()
 				.then(this.loadBatch.bind(this))
 				.then(this.maybeLoadMoreItems.bind(this))
 				.fail(this.showError.bind(this))
 				.always(this.removeLoading.bind(this));
+		} else {
+			this.onEmpty();
+		}
+	},
+
+
+	onActivate: function() {
+		//if we might have cleared on deactivate or haven't loaded any pages yet
+		if (this.clearOnDeactivate || this.PAGES.length === 0) {
+			this.setStreamSource(this.StreamSource);
 		}
 
 		if (this.pageOnScroll) {
@@ -137,6 +174,8 @@ Ext.define('NextThought.app.stream.Base', {
 				this.onDone();
 				this.isOnLastBatch = true;
 			}
+
+			this.removeEmpty();
 
 			this.fillInItems(batch.Items);
 		}
@@ -231,7 +270,7 @@ Ext.define('NextThought.app.stream.Base', {
 			cmp.remove(this.emptyCmp, true);
 			delete this.emptyCmp;
 		}
-	}
+	},
 
 
 	onDone: function() {

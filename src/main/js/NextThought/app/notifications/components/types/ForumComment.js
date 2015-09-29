@@ -3,7 +3,7 @@ Ext.define('NextThought.app.notifications.components.types.ForumComment', {
 	alias: 'widget.notifications-item-forum-comment',
 
 	statics: {
-		keyVal: [
+		mimeType: [
 			'application/vnd.nextthought.forums.generalforumcomment',
 			'application/vnd.nextthought.forums.contentforumcomment'
 		]

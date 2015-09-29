@@ -113,12 +113,10 @@ Ext.define('NextThought.app.stream.util.StreamSource', {
 
 
 	getNextBatch: function() {
-		var me = this;
+		var me = this,
+			batch = me.__getBatch();
 
-		return me.__getBatch()
-			.then(function(batch) {
-				return batch.getNextBatch();
-			})
+		return batch.getNextBatch()
 			.then(function(batch) {
 				me.currentBatch = batch;
 
@@ -128,12 +126,10 @@ Ext.define('NextThought.app.stream.util.StreamSource', {
 
 
 	getPreviousBatch: function() {
-		var me = this;
+		var me = this,
+			batch = me.__getBatch();
 
-		return me.__getBatch()
-			.then(function(batch) {
-				return batch.getPreviousBatch();
-			})
+		return batch.getPreviousBatch()
 			.then(function(batch) {
 				me.currentBatch = batch;
 

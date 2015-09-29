@@ -5,7 +5,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 	requires: [
 		'NextThought.app.profiles.user.components.activity.Body',
 		'NextThought.app.profiles.user.components.activity.Sidebar',
-		'NextThought.app.userdata.Actions'
+		'NextThought.app.userdata.Actions',
+		'NextThought.app.stream.util.StreamSource'
 	],
 
 	mixins: {
@@ -115,8 +116,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 
 		this.startResourceViewed();
 
-		this.store = this.buildStore();
-		this.streamCmp.setStore(this.store, user);
+		this.StreamSource = this.buildStreamSource();
+		this.streamCmp.setStreamSource(this.StreamSource);
 
 		return Promise.all([
 				this.streamCmp.userChanged.apply(this.streamCmp, arguments),
@@ -125,45 +126,12 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 	},
 
 
-	buildStore: function() {
-		var username = this.activeUser.getId(),
-			id = 'profile-activity-' + username,
-			s = Ext.getStore(id);
+	buildStreamSource: function() {
+		var url = this.activeUser.getLink('Activity');
 
-		if (!s) {
-			s = NextThought.store.ProfileItem.create({id: id});
-		}
-
-		s.proxy.url = this.activeUser.getLink('Activity');
-
-		if (!s.proxy.url) {
-			//don't attempt to do anything if no url
-			s.setProxy('memory');
-		}
-
-		function makeMime(v) {
-			return 'application/vnd.nextthought.' + v.toLowerCase();
-		}
-
-		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-			sortOn: 'createdTime',
-			sortOrder: 'descending',
-			exclude: [
-				'redaction',
-				'bookmark',
-				//'forums.CommentPost',
-				'assessment.AssessedQuestion'
-			].map(makeMime).join(',')
+		return new NextThought.app.stream.util.StreamSource({
+			url: url
 		});
-
-		if (!this.hasPageStore(s.storeId)) {
-			s.doesNotClear = true;
-			s.doesNotShareEventsImplicitly = true;
-			s.profileStoreFor = username;
-			this.addPageStore(s.storeId, s);
-		}
-
-		return s;
 	},
 
 

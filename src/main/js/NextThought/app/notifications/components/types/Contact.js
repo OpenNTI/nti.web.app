@@ -3,7 +3,7 @@ Ext.define('NextThought.app.notifications.components.types.Contact', {
 	alias: 'widget.notifications-item-contact',
 
 	statics: {
-		keyVal: 'application/vnd.nextthought.user'
+		mimeType: 'application/vnd.nextthought.user'
 	},
 
 	wording: 'added you as a contact'

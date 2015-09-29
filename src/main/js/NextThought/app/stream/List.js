@@ -10,9 +10,17 @@ Ext.define('NextThought.app.stream.List', {
 	cls: 'list-stream',
 
 
-	getPageConfig: function() {
+	getPageConfig: function(items) {
 		return {
-			xtype: 'stream-list-page'
+			xtype: 'stream-list-page',
+			records: items
 		};
+	},
+
+
+	fillInItems: function(items) {
+		var config = this.getPageConfig(items);
+
+		this.PAGES.push(this.add(config));
 	}
 });

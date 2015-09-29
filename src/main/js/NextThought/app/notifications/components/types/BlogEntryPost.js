@@ -3,7 +3,7 @@ Ext.define('NextThought.app.notifications.components.types.BlogEntryPost', {
 	alias: 'widget.notifications-item-blog-entry-post',
 
 	statis: {
-		keyVal: 'application/vnd.nextthought.forums.personalblogentrypost'
+		mimeType: 'application/vnd.nextthought.forums.personalblogentrypost'
 	},
 
 	itemCls: 'post',

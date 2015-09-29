@@ -100,8 +100,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.Body', {
 	},
 
 
-	setStore: function(store, entity) {
-		this.activityCmp.setStore(store, entity);
+	setStreamSource: function(store, entity) {
+		this.activityCmp.setStreamSource(store, entity);
 	},
 
 

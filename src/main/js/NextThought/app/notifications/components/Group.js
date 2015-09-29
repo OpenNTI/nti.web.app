@@ -15,13 +15,13 @@ Ext.define('NextThought.app.notifications.components.Group', {
 			var map = {};
 
 			this.MIME_TO_COMPONENT = cmps.reduce(function(acc, cmp) {
-				var keyVal = cmp.keyVal;
+				var mimeType = cmp.mimeType;
 
-				if (!Array.isArray(keyVal)) {
-					keyVal = [keyVal];
+				if (!Array.isArray(mimeType)) {
+					mimeType = [mimeType];
 				}
 
-				keyVal.forEach(function(val) {
+				mimeType.forEach(function(val) {
 					if (val) {
 						acc[val] = cmp;
 					}

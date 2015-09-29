@@ -3,7 +3,7 @@ Ext.define('NextThought.app.notifications.components.types.Note', {
 	alias: 'widget.notifications-item-note',
 
 	statics: {
-		keyVal: 'application/vnd.nextthought.note'
+		mimeType: 'application/vnd.nextthought.note'
 	},
 
 	showCreator: true,
