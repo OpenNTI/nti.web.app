@@ -344,8 +344,25 @@ Ext.define('NextThought.app.profiles.user.Index', {
 	},
 
 
+	getRouteForBlog: function(blog, path) {
+		var blogId = blog.getId(),
+			entry = path.shift();
+
+		// Select the activity tab.
+		return {
+			path: '/activity/',
+			isFull: true
+		};
+	},
+
+
 	getRouteForPath: function(path, user) {
-		var root = path[0];
+		var root = path[0],
+			subPath = path.slice(1);
+
+		if (root && root instanceof NextThought.model.forums.PersonalBlog) {
+			return this.getRouteForBlog(root, subPath);
+		}
 
 		return {
 			path: typeof root === 'string' ? root : '',
