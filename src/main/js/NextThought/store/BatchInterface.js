@@ -72,7 +72,7 @@ Ext.define('NextThought.store.BatchInterface', {
 		return me.__load
 			.then(function(batch) {
 				var next = Service.getLinkFrom(batch.Links || [], 'batch-next'),
-					prev = Service.getLinkFrom(batch.Links || [], 'batch-previous');
+					prev = Service.getLinkFrom(batch.Links || [], 'batch-prev');
 
 				if (!prev) {
 					batch.isFirst = true;

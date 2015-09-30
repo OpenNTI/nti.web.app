@@ -84,6 +84,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.Body', {
 			return Promise.resolve();
 		}
 
+		this.activityCmp.userChanged(entity);
+
 		return Service.request(href)
 			.then(function(resp) {
 				return ParseUtils.parseItems(resp)[0];

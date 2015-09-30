@@ -120,7 +120,7 @@ Ext.define('NextThought.app.stream.util.StreamSource', {
 			.then(function(batch) {
 				me.currentBatch = batch;
 
-				return batch;
+				return batch.getBatch();
 			});
 	},
 
@@ -133,7 +133,7 @@ Ext.define('NextThought.app.stream.util.StreamSource', {
 			.then(function(batch) {
 				me.currentBatch = batch;
 
-				return batch;
+				return batch.getBatch();
 			});
 	},
 

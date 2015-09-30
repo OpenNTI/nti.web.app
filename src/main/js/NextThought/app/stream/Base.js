@@ -110,6 +110,7 @@ Ext.define('NextThought.app.stream.Base', {
 		this.StreamSource = source;
 
 		if (source) {
+			this.removeEmpty();
 			this.showLoading();
 			this.StreamSource.getCurrentBatch()
 				.then(this.loadBatch.bind(this))
@@ -140,7 +141,7 @@ Ext.define('NextThought.app.stream.Base', {
 		}
 
 		if (this.pageOnScroll) {
-			this.removeScrolListener();
+			this.removeScrollListener();
 		}
 	},
 
@@ -170,14 +171,13 @@ Ext.define('NextThought.app.stream.Base', {
 		if (batch.isFirst && !batch.Items.length) {
 			this.onEmpty();
 		} else {
-			if (batch.isLast) {
-				this.onDone();
-				this.isOnLastBatch = true;
-			}
-
 			this.removeEmpty();
-
 			this.fillInItems(batch.Items);
+		}
+
+		if (batch.isLast) {
+			this.onDone();
+			this.isOnLastBatch = true;
 		}
 	},
 
@@ -196,12 +196,14 @@ Ext.define('NextThought.app.stream.Base', {
 
 
 	loadNextPage: function() {
-		this.showLoading();
-		this.StreamSource.getNextBatch()
-			.then(this.loadBatch.bind(this))
-			.then(this.maybeLoadMoreItems.bind(this))
-			.fail(this.showError.bind(this))
-			.always(this.removeLoading.bind(this));
+		if (!this.isOnLastBatch) {
+			this.showLoading();
+			this.StreamSource.getNextBatch()
+				.then(this.loadBatch.bind(this))
+				.then(this.maybeLoadMoreItems.bind(this))
+				.fail(this.showError.bind(this))
+				.always(this.removeLoading.bind(this));
+		}
 	},
 
 

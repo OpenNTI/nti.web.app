@@ -6,6 +6,12 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
 		'NextThought.app.profiles.user.components.activity.parts.Page'
 	],
 
+
+	userChanged: function(user) {
+		this.user = user;
+	},
+
+
 	initialWidgetConfig: function() {
 		return { xtype: 'joined-event', username: this.user };
 	},
@@ -21,6 +27,25 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
 			records: items,
 			navigateToObject: this.navigateToObject.bind(this)
 		};
+	},
+
+
+	initialWidgetConfig: function() {
+		return { xtype: 'joined-event', username: this.user };
+	},
+
+
+	hasInitialWidget: function() {
+		return !!this.down('joined-event');
+	},
+
+
+	onDone: function() {
+		var config = this.initialWidgetConfig();
+
+		if (!this.hasInitialWidget()) {
+			this.add(config);
+		}
 	}
 });
 
