@@ -252,7 +252,7 @@ Ext.define('NextThought.app.stream.Base', {
 	onEmpty: function() {
 		var cmp = this.getGroupContainer();
 
-		if (!this.emptyCmp) {
+		if (!this.emptyCmp && this.emptyText) {
 			this.emptyCmp = cmp.add({
 				xtype: 'box',
 				autoEl: {cls: 'item empty', cn: [
