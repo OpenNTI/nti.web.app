@@ -21,8 +21,12 @@ Ext.define('NextThought.app.stream.util.StreamSource', {
 	 * @param {String} config.filterParam - the value to key the filters on
 	 * @param {Number} config.pageSize - the size of the batch
 	 * @param {String} config.sizeParam - the value to key the size on
-	 * @param {String} config.sort - the field to sort the items on
+	 * @param {String|Object} config.sort - the field to sort the items on, or an object
+	 * @param {String} config.sort.on - the field to sort the items on
+	 * @param {String} config.sort.order - the order to sort on
 	 * @param {String} config.sortParam - the value to key the sort on
+	 * @param {String} config.sortOrder - the order to sort on
+	 * @param {Strin} config.sortOrderParam - the value to key the sort order on
 	 * @param {String} config.context - an ntiid to filter to items contained in it
 	 * @param {String} config.contextParam - the value to key the context on
 	 */
@@ -51,14 +55,25 @@ Ext.define('NextThought.app.stream.util.StreamSource', {
 			value: config.pageSize || 50
 		};
 
+
 		this.sort = {
 			param: config.sortParam || 'sortOn',
-			value: config.sortOn || 'Created'
+			value: config.sortOn || (config.sort && config.sort.on) || 'CreatedTime'
+		};
+
+		this.sortOrder = {
+			param: config.sortOrderParam || 'sortOrder',
+			value: config.sortOrder || (config.sort && config.sort.order)
 		};
 
 		this.context = {
 			param: config.contextParam || 'topLevelContextFilter',
 			value: config.context
+		};
+
+		this.accepts = {
+			param: config.acceptsParam || 'accept',
+			value: config.accepts && config.accepts.join(',')
 		};
 	},
 
@@ -80,7 +95,9 @@ Ext.define('NextThought.app.stream.util.StreamSource', {
 				this.filters,
 				this.size,
 				this.sort,
-				this.context
+				this.sortOrder,
+				this.context,
+				this.accepts
 			];
 
 		params = knownParams.reduce(function(acc, param) {

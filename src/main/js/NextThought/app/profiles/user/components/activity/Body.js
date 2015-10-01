@@ -107,6 +107,11 @@ Ext.define('NextThought.app.profiles.user.components.activity.Body', {
 	},
 
 
+	setStreamParams: function(params) {
+		this.activityCmp.setStreamParams(params);
+	},
+
+
 	navigateToActivityItem: function(item, monitors) {
 		if (this.navigateToObject) {
 			this.navigateToObject(item, monitors);

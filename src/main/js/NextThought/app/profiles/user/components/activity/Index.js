@@ -116,9 +116,6 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 
 		this.startResourceViewed();
 
-		this.StreamSource = this.buildStreamSource();
-		this.streamCmp.setStreamSource(this.StreamSource);
-
 		return Promise.all([
 				this.streamCmp.userChanged.apply(this.streamCmp, arguments),
 				this.sidebarCmp.userChanged.apply(this.sidebarCmp, arguments)
@@ -126,23 +123,25 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 	},
 
 
-	buildStreamSource: function() {
-		var url = this.activeUser.getLink('Activity');
-
-		return new NextThought.app.stream.util.StreamSource({
-			url: url
-		});
-	},
-
-
 	applyState: function() {},
 
 
-	updateFilter: function() {},
+	updateFilter: function(filter) {
+		this.replaceRoute('Activity', '/?' + Ext.Object.toQueryString(filter));
+	},
 
 
-	onRoute: function() {
+	onRoute: function(route, subRoute) {
 		this.setTitle('Activity');
+
+		var streamParams;
+
+		this.sidebarCmp.setFilterFromQueryParams(route.queryParams);
+
+		streamParams = this.sidebarCmp.getStreamParams();
+		streamParams.url = this.activeUser.getLink('Activity');
+
+		this.streamCmp.setStreamParams(streamParams);
 	},
 
 

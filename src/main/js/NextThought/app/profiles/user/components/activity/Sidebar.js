@@ -6,14 +6,43 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 
 	BASE_FILTERS: {
 		activity: {
-			cls: 'activity',
-			name: 'Activity Type',
-			defaultItem: 'all',
-			activeItem: null,
-			active: false,
+			cls: 'activity', //class to apply to the item
+			name: 'Activity Type', //the text to display for the user
+			defaultItem: 'all', //the key of the item to show when nothing is selected
+			activeItem: null, //the key of whatever item is selected
+			active: false, //whether or not to expand this group
+			paramName: 'a', //the name to key off the query param
+			streamParam: 'accepts', //the name of the param to pass to the stream
 			items: {
-				all: 'All Activity',
-				notes: 'Notes'
+				all: {//the key is what is put in the query param
+					text: 'All Activity',//the text to display to the user for this option
+					streamValue: ['*']//the value to pass to the stream
+				},
+				notes: {
+					text: 'Notes',
+					streamValue: ['application/vnd.nextthought.note']
+				},
+				disscussions: {
+					text: 'Discussions',
+					streamValue: [
+						'application/vnd.nextthought.forums.dflheadlinetopic',
+						'application/vnd.nextthought.forums.communityheadlinetopic',
+						'application/vnd.nextthought.forums.generalforumcomment',
+						'application/vnd.nextthought.forums.communityheadlinetopic'
+					]
+				},
+				blogs: {
+					text: 'Thoughts',
+					streamValue: [
+						'application/vnd.nextthought.forums.personalblogentry',
+						'application/vnd.nextthought.forums.personalblogcomment'
+					]
+				},
+				chat: {
+					text: 'Chat',
+					streamValue: ['application/vnd.nextthought.transcriptsummary']
+				}
+
 			}
 		},
 		sort: {
@@ -22,9 +51,23 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			defaultItem: 'recent',
 			activeItem: null,
 			active: false,
+			paramName: 's',
+			streamParam: 'sort',
 			items: {
-				recent: 'Most Recent',
-				activity: 'Recent'
+				recent: {
+					text: 'Most Recent',
+					streamValue: {
+						on: 'CreatedTime',
+						order: 'DESC'
+					}
+				},
+				activity: {
+					text: 'Recent Activity',
+					streamValue: {
+						on: 'Last Modified',
+						order: 'DESC'
+					}
+				}
 			}
 		}
 	},
@@ -67,7 +110,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 		}
 
 		return {
-			text: item,
+			text: item.text,
 			value: key,
 			active: isActive
 		};
@@ -90,11 +133,11 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 		}
 
 		if (group.multiselect) {
-			activeText = group.activeItems.map(function(active) {
-				return items[active];
+			activeText = (group.activeItems || group.defaultItems).map(function(active) {
+				return items[active].text;
 			}).join(', ');
 		} else {
-			activeText = items[group.activeItem];
+			activeText = items[group.activeItem || group.defaultItem].text;
 		}
 
 		return {
@@ -128,6 +171,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 		var filters = this.filters,
 			filterKeys = Object.keys(this.filters);
 
+		//set active to true for group, and false for the rest
 		filterKeys.forEach(function(key) {
 			filters[key].active = key === group;
 		});
@@ -158,6 +202,98 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			group.activeItem = itemKey;
 		}
 
+		this.replaceFilter();
+	},
+
+	/**
+	 * Update the filter, should trigger the filter to be pushed to state i.e. queryParams
+	 */
+	replaceFilter: function() {
+		var filters = this.filters,
+			keys = Object.keys(filters),
+			params = {};
+
+		keys.forEach(function(key) {
+			var filter = filters[key],
+				active;
+
+			if (filter.multiselect) {
+				active = filter.activeItems;
+
+				if (active.length) {
+					params[filter.paramName] = filter.activeItems.join(',');
+				}
+			} else if (filter.activeItem && filter.activeItem !== filter.defaultItem) {
+				params[filter.paramName] = filter.activeItem;
+			}
+		});
+
+		this.updateFilter(params);
+	},
+
+	/**
+	 * Apply the state set by replaceFilter
+	 */
+	setFilterFromQueryParams: function(params) {
+		var filters = this.filters,
+			keys = Object.keys(filters);
+
+		keys.forEach(function(key) {
+			var filter = filters[key],
+				paramValue = params[filter.paramName];
+
+
+			if (filter.multiselect) {
+				filter.activeItems = paramValue && paramValue.split(',');
+			} else {
+				filter.activeItem = paramValue;
+			}
+		});
+
 		this.updateFilterUI();
+	},
+
+	/**
+	 * Convert the current filters to params to pass to the stream
+	 * @return {Object} config to pass to the stream
+	 */
+	getStreamParams: function() {
+		var params = {},
+			filters = this.filters,
+			keys = Object.keys(this.filters);
+
+		function addMutliSelectValue(filter) {
+			var activeItems = filter.activeItems || [],
+				value = [];
+
+			activeItems.forEach(function(item) {
+				value.push(filter.items[item].streamValue);
+			});
+
+			if (value.length) {
+				params[filter.streamParam] = value.join(',');
+			}
+		}
+
+		function addSingleSelectValue(filter) {
+			var activeItem = filter.activeItem,
+				value = activeItem && filter.items[activeItem].streamValue;
+
+			if (value) {
+				params[filter.streamParam] = value;
+			}
+		}
+
+		keys.forEach(function(key) {
+			var filter = filters[key];
+
+			if (filter.multiselect) {
+				addMutliSelectValue(filter);
+			} else {
+				addSingleSelectValue(filter);
+			}
+		});
+
+		return params;
 	}
 });

@@ -15,6 +15,10 @@
 Ext.define('NextThought.app.stream.Base', {
 	extend: 'Ext.container.Container',
 
+	requires: [
+		'NextThought.app.stream.util.StreamSource'
+	],
+
 	mixins: {
 		Scrolling: 'NextThought.mixins.Scrolling'
 	},
@@ -120,6 +124,13 @@ Ext.define('NextThought.app.stream.Base', {
 		} else {
 			this.onEmpty();
 		}
+	},
+
+
+	setStreamParams: function(params) {
+		params.url = params.url || this.StreamSource.getURL();
+
+		this.setStreamSource(new NextThought.app.stream.util.StreamSource(params));
 	},
 
 
