@@ -616,7 +616,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	 * @param  {String} link rel of the link to get
 	 * @return {Promise}      the request for the link
 	 */
-	__getAssignmentList: function(link) {
+	__getList: function(link) {
 		var promiseName = '__get' + link + 'Promise',
 			link;
 
@@ -638,12 +638,12 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 
 	__getAssignmentsByOutline: function() {
-		return this.__getAssignmentList('AssignmentsByOutlineNode');
+		return this.__getList('AssignmentsByOutlineNode');
 	},
 
 
 	__getNonAssignmentsByOutline: function() {
-		return this.__getAssignmentList('NonAssignmentAssessmentItemsByOutlineNode');
+		return this.__getList('NonAssignmentAssessmentItemsByOutlineNode');
 	},
 
 
@@ -739,6 +739,19 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		});
 	},
 
+
+	getMediaByOutline: function() {
+		return this.__getList('MediaByOutlineNode');
+	},
+
+
+	getVideoForId: function(vid) {	
+		return this.getMediaByOutline()
+				.then(function(outline) {
+					var items = outline.Items || {};
+					return Promise.resolve(items[vid]);
+				});
+	},
 
 	/**
 	*Takes two arrays of forums and bins then

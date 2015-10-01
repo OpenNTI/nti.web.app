@@ -171,7 +171,9 @@ Ext.define('NextThought.app.video.Video', {
 				this.onHeartBeat();
 				this.fireEvent('media-heart-beat');
 			},
-			onError: function() {console.error(arguments);}
+			onError: function() {
+				console.error(arguments);
+			}
 		};
 
 		Ext.TaskManager.start(this.taskMediaHeartBeat);

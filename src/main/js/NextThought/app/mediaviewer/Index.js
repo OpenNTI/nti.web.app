@@ -38,6 +38,10 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 
 		id = ParseUtils.decodeFromURI(route.params.id);
 
+		if (Ext.isEmpty(basePath)) {
+			basePath = this.currentBundle.getContentRoots()[0];
+		}
+
 		if (this.activeMediaView && (this.mediaId === id)) {
 			// We are already there.
 			return Promise.resolve();
@@ -92,11 +96,6 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 		me.resolveVideo(videoId)
 			.then(function(videoRec) {
 				me.video = videoRec;
-
-				if (!Ext.isEmpty(basePath)) {
-					basePath = me.currentBundle.getContentRoots()[0];
-				}
-
  				me.transcript = NextThought.model.transcript.TranscriptItem.fromVideo(me.video, basePath);
 				me.activeMediaView.setContent(me.video, me.transcript, options);
 			});
@@ -172,12 +171,10 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 		}
 
 		return new Promise(function(fulfill, reject) {
-			me.LibraryActions.getVideoIndex(me.currentBundle)
-				.then(function(videoIndex) {
-					var o = videoIndex[id];
+			me.currentBundle.getVideoForId(id)
+				.then(function(o) {
 					if (!o) { return reject(); }
 
-					basePath = me.currentBundle.getContentRoots()[0];
 					video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
 					fulfill(video);
 				});
