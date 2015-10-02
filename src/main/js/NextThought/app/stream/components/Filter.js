@@ -8,7 +8,7 @@ Ext.define('NextThought.app.stream.components.Filter', {
 		tag: 'li', cls: 'group {cls}', 'data-key': '{key}', cn: [
 			{cls: 'group-details', cn: [
 				{tag: 'span', cls: 'name', html: '{name}'},
-				{tag: 'span', cls: 'active', html: '{activeText}'}
+				{tag: 'span', cls: 'active-text', html: '{activeText}'}
 			]},
 			{tag: 'ul', cls: 'group-list', cn: [
 				{tag: 'tpl', 'for': 'items', cn: [
@@ -35,6 +35,31 @@ Ext.define('NextThought.app.stream.components.Filter', {
 	},
 
 
+	__updateItem: function(item, dom) {
+		dom.classList[item.active ? 'add' : 'remove']('active');
+	},
+
+
+	__updateGroup: function(option, dom) {
+		var me = this,
+			activeText = dom.querySelector('.active-text');
+
+		dom.classList[option.active ? 'add' : 'remove']('active');
+
+		activeText.innerText = option.activeText || '';
+
+		option.items.forEach(function(item) {
+			var itemDom = dom.querySelector('[data-value="' + item.value + '"]');
+
+			if (itemDom) {
+				me.__updateItem(item, itemDom);
+			} else {
+				console.warn('Updating an option that isnt there');
+			}
+		});
+	},
+
+
 	setOptions: function(options) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setOptions.bind(this, options));
@@ -43,16 +68,14 @@ Ext.define('NextThought.app.stream.components.Filter', {
 
 		var me = this;
 
-		me.groupsEl.dom.innerHTML = '';
-
 		options.forEach(function(option) {
-			option.items.forEach(function(item) {
-				if (item.active) {
-					option.activeText = item.text;
-				}
-			});
+			var dom = me.el.dom.querySelector('[data-key="' + option.key + '"]');
 
-			me.groupTpl.append(me.groupsEl, option);
+			if (dom) {
+				me.__updateGroup(option, dom);
+			} else {
+				me.groupTpl.append(me.groupsEl, option);
+			}
 		});
 	},
 

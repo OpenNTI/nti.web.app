@@ -80,11 +80,46 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 	initComponent: function() {
 		this.callParent(arguments);
 
+		if (!isFeature('profile-activity-filters')) {
+			this.BASE_FILTERS = {};
+		}
+
 		this.filterCmp = this.down('stream-filter');
 		this.filterCmp.onGroupSelect = this.onGroupSelect.bind(this);
 		this.filterCmp.onItemSelect = this.onItemSelect.bind(this);
 
 		this.resetFilters();
+
+		this.onBodyClick = this.onBodyClick.bind(this);
+
+		this.on({
+			activate: this.onActivate.bind(this),
+			deactivate: this.onDeactivate.bind(this)
+		});
+	},
+
+
+	onActivate: function() {
+		Ext.getBody().on('click', this.onBodyClick);
+	},
+
+
+	onDeactivate: function() {
+		Ext.getBody().un('click', this.onBodyClick);
+	},
+
+
+	onBodyClick: function(e) {
+		var filters = this.filters,
+			keys = Object.keys(filters);
+
+		if (!e.getTarget('.activity-sidebar')) {
+			keys.forEach(function(key) {
+				filters[key].active = false;
+			});
+
+			this.updateFilterUI();
+		}
 	},
 
 
@@ -128,10 +163,6 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			cls = cls + ' multiselect';
 		}
 
-		if (group.active) {
-			cls = cls + ' expanded';
-		}
-
 		if (group.multiselect) {
 			activeText = (group.activeItems || group.defaultItems).map(function(active) {
 				return items[active].text;
@@ -144,6 +175,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			cls: cls,
 			name: group.name,
 			activeText: activeText,
+			active: group.active,
 			key: key,
 			items: itemKeys.map(this.__mapItemForUI.bind(this, group))
 		};
@@ -173,7 +205,11 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 
 		//set active to true for group, and false for the rest
 		filterKeys.forEach(function(key) {
-			filters[key].active = key === group;
+			if (key !== group) {
+				filters[key].active = false;
+			} else {
+				filters[key].active = !filters[key].active;
+			}
 		});
 
 		this.updateFilterUI();
@@ -201,6 +237,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 		} else {
 			group.activeItem = itemKey;
 		}
+
+		group.active = false;
 
 		this.replaceFilter();
 	},
