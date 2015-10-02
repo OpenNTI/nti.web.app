@@ -65,6 +65,7 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 			deactivate: this.onDeactivate.bind(this)
 		});
 
+		this.mon(this.firstColumn, 'remove', this.onRemove.bind(this));
 
 		this.onScroll = this.onScroll.bind(this);
 	},
@@ -105,6 +106,14 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	},
 
 
+	onRemove: function() {
+		var i = this.firstColumn.items;
+		if (Ext.isEmpty(i && i.items) && this.currentPage === -1) {
+			this.showEmpty();
+		}
+	},
+
+
 	userChanged: function(user) {
 		if (this.activeUser !== user) {
 			this.stopResourceViewed();
@@ -134,10 +143,7 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 			batchStart: 0
 		};
 
-		if (this.emptyCmp) {
-			this.emptyCmp.destroy();
-			delete this.emptyCmp;
-		}
+		this.clearEmpty();
 
 		if (this.errorCmp) {
 			this.errorCmp.destroy();
@@ -190,12 +196,13 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	onPostSaved: function(record) {
 		if (!record) { return; }
 
-		var left = this.firstColumn;
+		var left = this.firstColumn, me = this;
 
 		this.__loadItem(record)
 			.then(function(cmp) {
 				if (cmp) {
 					left.insert(0, cmp);
+					me.clearEmpty();
 				}
 			});
 	},
@@ -277,6 +284,14 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 			cls: 'empty-text',
 			autoEl: {html: 'No Activity'}
 		});
+	},
+
+
+	clearEmpty: function() {
+		if (this.emptyCmp) {
+			this.emptyCmp.destroy();
+			delete this.emptyCmp;
+		}
 	},
 
 	/**

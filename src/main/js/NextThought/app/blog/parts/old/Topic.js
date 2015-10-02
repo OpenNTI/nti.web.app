@@ -6,8 +6,7 @@ Ext.define('NextThought.app.blog.parts.old.Topic', {
 	mixins: {
 		flagActions: 'NextThought.mixins.FlagActions',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
-		profileLink: 'NextThought.mixins.ProfileLinks',
-		searchHitHighlighting: 'NextThought.mixins.SearchHitHighlighting'
+		profileLink: 'NextThought.mixins.ProfileLinks'
 	},
 
 	requires: [

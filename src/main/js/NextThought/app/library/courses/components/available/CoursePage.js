@@ -61,17 +61,17 @@ Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 		var me = this;
 		if (upcoming && upcoming.length) {
 			this.addCourses(upcoming, 'Upcoming Courses', null, {category: 'upcoming'});
-			this.addTab({label: 'Upcoming', category: 'upcoming'});
+			this.addTab({label: 'Upcoming', category: 'upcoming', active: true});
 		}
 
 		if (current && current.length) {
 			this.addCourses(current, 'Current Courses', null, {category: 'current'});
-			this.addTab({label: 'Current', category: 'current', active: true});
+			this.addTab({label: 'Current', category: 'current', active: Ext.isEmpty(upcoming)});
 		}
 
 		if (archived && archived.length) {
 			this.addBinnedCourses(this.binCourses(archived), 'Archived Courses', {category: 'archived'});
-			this.addTab({label: 'Archived', category: 'archived'});
+			this.addTab({label: 'Archived', category: 'archived', active: Ext.isEmpty(current)});
 		}
 
 		this.onceRendered

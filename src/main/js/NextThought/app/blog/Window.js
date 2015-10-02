@@ -12,7 +12,8 @@ Ext.define('NextThought.app.blog.Window', {
 		'NextThought.app.windows.components.Header',
 		'NextThought.app.windows.components.Loading',
 		'NextThought.model.forums.PersonalBlogEntry',
-		'NextThought.model.forums.PersonalBlogComment'
+		'NextThought.model.forums.PersonalBlogComment',
+		'NextThought.model.forums.PersonalBlogEntryPost'
 	],
 
 	items: [],
@@ -34,9 +35,11 @@ Ext.define('NextThought.app.blog.Window', {
 			this.loadEditor();
 		} else if (this.record instanceof NextThought.model.forums.PersonalBlogEntry) {
 			this.loadBlogPost();
+		} else if (this.record instanceof NextThought.model.forums.PersonalBlogEntryPost) {
+			this.loadBlogEntry();
 		} else if (this.record instanceof NextThought.model.forums.PersonalBlogComment) {
 			this.loadBlogComment();
-		}
+		} 
 	},
 
 
@@ -68,6 +71,18 @@ Ext.define('NextThought.app.blog.Window', {
 		this.remove(this.loadingEl);
 
 		this.showBlogPost(this.record);
+	},
+
+
+	loadBlogEntry: function() {
+		var entry = this.record.get('ContainerId'),
+			me = this;
+
+		return Service.getObject(entry)
+			.then(function(blogPost) {
+				me.remove(me.loadingEl);
+				me.showBlogPost(blogPost);
+			});
 	},
 
 
@@ -213,4 +228,5 @@ Ext.define('NextThought.app.blog.Window', {
 	NextThought.app.windows.StateStore.register('new-blog', this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.PersonalBlogEntry.mimeType, this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.PersonalBlogComment.mimeType, this);
+	NextThought.app.windows.StateStore.register(NextThought.model.forums.PersonalBlogEntryPost.mimeType, this);
 });

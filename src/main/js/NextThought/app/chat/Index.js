@@ -86,7 +86,14 @@ Ext.define('NextThought.app.chat.Index', {
 
 
 	hideAllOnlineContacts: function() {
+		var me = this;
+
 		this.removeCls('show-all');
+		Ext.each(this.ChatStore.getAllChatWindows(), function(win) {
+			if (me.gutterWin && me.gutterWin.adjustToExpandedChat && win.isVisible()) {
+				me.gutterWin.adjustToExpandedChat(win);
+			}
+		});
 	},
 
 

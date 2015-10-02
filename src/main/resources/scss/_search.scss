@@ -213,8 +213,12 @@
 		//comment-small-dark_hover, search-highlight, search-reading, search-video
 
 		.meta {
+			position: relative;
+
 			.root-icon {
-				display: inline-block;
+				position: absolute;
+				top: 5px;
+				left: 0;
 				width: 20px;
 				height: 20px;
 				vertical-align: middle;
@@ -224,6 +228,10 @@
 
 				&.hidden {
 					display: none;
+
+					& + .path {
+						margin-left: 0;
+					}
 				}
 			}
 
@@ -237,7 +245,8 @@
 			}
 
 			.path {
-				display: inline-block;
+				position: relative;
+				margin-left: 30px;
 			}
 		}
 	}

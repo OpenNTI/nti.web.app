@@ -4,7 +4,8 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 	alias: 'widget.assessment-quiz-submission',
 
 	requires: [
-		'NextThought.app.assessment.Actions'
+		'NextThought.app.assessment.Actions',
+		'NextThought.model.assessment.Survey'
 	],
 
 	cls: 'submission-panel',
@@ -184,8 +185,14 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 	},
 
 
+	isSurvey: function() {
+		return this.questionSet instanceof NextThought.model.assessment.Survey;
+	},
+
+
 	moveToSubmitted: function() {
 		var isAssignment = !!this.questionSet.associatedAssignment,
+			isSurvey = this.isSurvey(),
 			assessmentReader = this.reader.getAssessment(),
 			allowReset = assessmentReader.shouldStudentAllowReset();
 
@@ -195,7 +202,7 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 		}
 
 		//if we are an assignment that doesn't allow resetting hide
-		if (isAssignment && !allowReset) {
+		if ((isAssignment && !allowReset) || isSurvey) {
 			this.shouldShow = false;
 			delete this.allowResettingAssignment;
 			this.hide();

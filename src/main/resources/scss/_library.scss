@@ -1061,6 +1061,7 @@ li.library-grid-item {
 
 			& > .body-container {
 				overflow-y: auto;
+				height: 100%;
 				max-height: 95%;
 				margin-top: 40px;
 				@include experimental-value(max-height, calc(100% - 40px));

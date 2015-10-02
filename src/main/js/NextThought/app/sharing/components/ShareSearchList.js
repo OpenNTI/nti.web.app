@@ -207,7 +207,7 @@ Ext.define('NextThought.app.sharing.components.ShareSearchList', {
 
 	unselectItem: function() {
 		var selected = this.getSelectionModel().selected,
-			index = this.store.indexOf(selected.items[0]);
+			index = this.store && this.store.indexOf(selected.items[0]) || -1;
 
 		if(index > -1){
 		 	this.getSelectionModel().deselect(index);
