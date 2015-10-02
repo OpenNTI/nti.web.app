@@ -135,9 +135,8 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 		if (i) {
 			this.locationInfo = i;
 
-			this.LibraryActions.getVideoIndex(this.course)
+			this.course.getVideoIndex()
 				.then(this.applyVideoData.bind(this));
-				//TODO: handle no video index.
 		}
 		else {
 			Ext.callback(this.getVideoDataLoadedCallback(), this, [undefined, 0]);
@@ -508,7 +507,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 
 			slide = m.get('slidedeck');
 			if (Ext.isEmpty(slide)) {
-				me.navigateToTarget(m, getURL(li.root));
+				me.navigateToTarget(m, li.root);
 			} else {
 				me.navigateToSlidedeck(slide);
 			}

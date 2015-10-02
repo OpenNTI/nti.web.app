@@ -745,11 +745,24 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	getVideoIndex: function() {
+		if (this.videoIndexPromise) {
+			return this.videoIndexPromise;
+		}
+
+		this.videoIndexPromise = this.getMediaByOutline()
+									.then(function(outline) {
+										return Promise.resolve(outline.Items || {});
+									});
+
+		return this.videoIndexPromise;
+	},
+
+
 	getVideoForId: function(vid) {	
-		return this.getMediaByOutline()
-				.then(function(outline) {
-					var items = outline.Items || {};
-					return Promise.resolve(items[vid]);
+		return this.getVideoIndex()
+				.then(function(index) {
+					return Promise.resolve(index[vid]);
 				});
 	},
 
