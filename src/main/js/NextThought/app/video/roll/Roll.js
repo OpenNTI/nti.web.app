@@ -53,7 +53,8 @@ Ext.define('NextThought.app.video.roll.Roll', {
 		this.store = store || new Ext.data.Store({
 			fields: [
 				{name: 'url', type: 'string'},
-				{name: 'thumbnail', type: 'string'}
+				{name: 'thumbnail', type: 'string'},
+				{name: 'type', type: 'string'}
 			],
 			data: data
 		});
@@ -90,7 +91,7 @@ Ext.define('NextThought.app.video.roll.Roll', {
 
 	selection: function(v, s) {
 		if (s && s[0]) {
-			this.iframe.el.dom.setAttribute('src', this.filterVideoUrl(s[0].get('url')));
+			this.iframe.el.dom.setAttribute('src', this.filterVideoUrl(s[0]));
 		}
 	},
 
@@ -104,14 +105,31 @@ Ext.define('NextThought.app.video.roll.Roll', {
 		}), '*');
 	},
 
-	filterVideoUrl: function(url) {
+	filterVideoUrl: function(video) {
+		var type = video.get('type'),
+			url = video.get('url'),
+			a = document.createElement('a'),
+			query;
 
-		if ((/^(http(s)?:)?\/\/www.youtube.com/i).test(url)) {
-			url = url.split('?')[0];
-			url += '?html5=1&enablejsapi=1&autohide=1&modestbranding=0&rel=0&showinfo=1';
+		a.href = url;
+		query = Ext.Object.fromQueryString(a.search);
+
+		if (type === 'youtube') {
+			query.html5 = 1;
+			query.enablejsapi = 1;
+			query.autohide = 1;
+			query.modestbranding = 0;
+			query.rel = 0;
+			query.showinfo = 1;
+		} else if (type === 'vimeo') {
+			query.badge = 0;
+			query.byline = 0;
+			query.portrait = 0;
 		}
 
-		return url;
+		a.search = Ext.Object.toQueryString(query);
+
+		return a.href;
 	},
 
 

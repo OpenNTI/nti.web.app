@@ -44,17 +44,26 @@ Ext.define('NextThought.app.video.roll.OverlayedPanel', {
 
 
 	showVideoRole: function(data) {
-
 		var videos = [];
 
 		Ext.each((data && data.items) || [], function(v) {
-			var s = v.sources[0];
-			if (s) {
-				videos.push({
-					thumbnail: s.thumbnail, url: Ext.String.format('https://www.youtube.com/embed/{0}?rel=0&wmode=opaque', s.source)
-				});
+			var s = v.sources[0],
+				source = s && s.source,
+				data = {
+					type: s && s.service,
+					thumbnail: s && s.thumbnail
+				};
+
+			if (data.type === 'vimeo') {
+				data.url = Ext.String.format('//player.vimeo.com/video/{0}?badge=0&portrait=0&byline=0', source);
+			} else if (data.type === 'youtube') {
+				data.url = Ext.String.format('//www.youtube.com/embed/{0}?rel=0&wmode=opaque', source);
 			} else {
-				console.warn('Video has no sourse? %o', v);
+				console.warn('Unknown source:', v);
+			}
+
+			if (data.url) {
+				videos.push(data);
 			}
 		});
 
