@@ -248,7 +248,9 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 
 
 	setTitle: function(value) {
-		this.titleEl.update(value);
+		if (this.titleEl) {
+			this.titleEl.update(value);	
+		}
 	},
 
 
@@ -259,7 +261,9 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 
 
 	setBody: function(value) {
-		this.bodyEl.update(value);
+		if (this.bodyEl) {
+			this.bodyEl.update(value);	
+		}
 	},
 
 	setCommentCount: function(value) {
