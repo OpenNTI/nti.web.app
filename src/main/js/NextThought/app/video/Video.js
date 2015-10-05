@@ -209,9 +209,9 @@ Ext.define('NextThought.app.video.Video', {
 		//		If loadFirstEntry is true, we load the first playlist entry. For some subclasses this behavior is not desired.
 		if (this.loadFirstEntry) {
 			item = this.playlist[this.playlistIndex];
-			this.maybeSwitchPlayers(item && item.activeSource && item.activeSource().service);
+			this.maybeSwitchPlayers(item && item.activeSource && (item.activeSource() || {}).service);
 			if (item) {
-				this.setVideoAndPosition(item.activeSource && item.activeSource().source);
+				this.setVideoAndPosition(item.activeSource && (item.activeSource() || {}).source);
 			}
 		}
 		else {

@@ -347,24 +347,20 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 		var rec = this.getSelectionModel().getSelection().first(),
 			root = this.currentBundle.getContentRoots()[0],
 			section = rec && rec.get('section'), route,
-			me = this;
+			slidedeckId = rec && rec.get('slidedeck'),
+			me = this, isVideo = true;
 
-		me.currentBundle.getSlidedeckForVideo(rec.getId())
-			.then(function(slidedeck) {
-				var slidedeckId = slidedeck && slidedeck.NTIID;
-				route = section && ParseUtils.encodeForURI(section) + '/slidedeck/' + ParseUtils.encodeForURI(slidedeckId);
-				
-				if (me.ownerCt && me.ownerCt.handleNavigation && !Ext.isEmpty(route)) {
-					slidedeck = ParseUtils.parseItems(slidedeck)[0];
-					me.ownerCt.handleNavigation(rec.get('title'), route, {slidedeck: slidedeck, basePath: root});
-				}
-			})
-			.fail(function() {
-				route = section && ParseUtils.encodeForURI(section) + '/video/' + ParseUtils.encodeForURI(rec.getId());
-				if (me.ownerCt && me.ownerCt.handleNavigation && !Ext.isEmpty(route)) {
-					me.ownerCt.handleNavigation(rec.get('title'), route, {video: rec, basePath: root});
-				}		
-			});
+		if (!Ext.isEmpty(slidedeckId)) {
+			route = section && ParseUtils.encodeForURI(section) + '/slidedeck/' + ParseUtils.encodeForURI(slidedeckId);
+			isVideo = false;
+		}
+		else {
+			route = section && ParseUtils.encodeForURI(section) + '/video/' + ParseUtils.encodeForURI(rec.getId());
+		}
+
+		if (this.ownerCt && this.ownerCt.handleNavigation && !Ext.isEmpty(route)) {
+			this.ownerCt.handleNavigation(rec.get('title'), route, {video: isVideo ? rec : null, basePath: root});
+		}
 	},
 
 

@@ -752,7 +752,24 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 		this.videoIndexPromise = this.getMediaByOutline()
 									.then(function(outline) {
-										return Promise.resolve(outline.Items || {});
+										var items = outline.Items;
+
+										// if we have slidedeck, map video obj to their respective slidedeck
+										for (var key in items) {
+											if (items.hasOwnProperty(key)) {
+												item = items[key] || {};
+												if (item.Class === 'NTISlideDeck') {
+													Ext.each(item.Videos || [], function(slidevideo) {
+														var vid = slidevideo.video_ntiid;
+														if (vid && items[vid]) {
+															items[vid].slidedeck = item.NTIID;
+														}
+													});
+												}
+											}
+										}
+
+										return Promise.resolve(items || {});
 									});
 
 		return this.videoIndexPromise;
@@ -762,61 +779,14 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	getVideoForId: function(vid) {	
 		return this.getVideoIndex()
 				.then(function(index) {
-					return Promise.resolve(index[vid]);
+					var i = index[vid];
+					if (i && i.Class === 'Video') {
+						return Promise.resolve(i);	
+					}
+					return Promise.resolve();
 				});
 	},
 
-
-	getSlidedecks: function() {
-		if (this.slidedeckPromise) {
-			return this.slidedeckPromise;
-		}
-
-		this.slidedeckPromise = this.getMediaByOutline()
-			.then( function(outline){
-				var items = outline && outline.Items || {},
-					item, decks = [];
-
-				for (var k in items) {
-					if (items.hasOwnProperty(k)) {
-						item = items[k];
-						if (item.Class === 'NTISlideDeck') {
-							decks.push(item);
-						}
-					}
-				}
-
-				return Promise.resolve(decks);
-			});
-
-		return this.slidedeckPromise;
-	},
-
-
-	/**
-	 * Returns the slidedeck object if a particular video is part of a slidedeck
-	 * @param  {auto} video string (video id) or video model instance 
-	 * @return {[type]}       [description]
-	 */
-	getSlidedeckForVideo: function(video) {
-		var vid = video.isModel ? video.getId() : video, 
-			me = this;
-
-		return new Promise(function(fulfill, reject) {
-			me.getSlidedecks()
-				.then(function(decks) {
-					Ext.each(decks, function(deck){
-						Ext.each(deck.Videos || [], function(slidevideo) {
-							if (slidevideo.video_ntiid === vid) {
-								fulfill(deck);
-							}
-						});
-					});
-
-					reject();
-				});	
-		});
-	},
 
 	/**
 	*Takes two arrays of forums and bins then
