@@ -505,12 +505,14 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 				if (me.hasCls('playing')) { return; }
 			}
 
-			slide = m.get('slidedeck');
-			if (Ext.isEmpty(slide)) {
-				me.navigateToTarget(m, li.root);
-			} else {
-				me.navigateToSlidedeck(slide);
-			}
+			this.course.getSlidedeckForVideo(m.getId())
+				.then(function(slidedeck) {
+					slidedeck = ParseUtils.parseItems(slidedeck)[0];
+					me.navigateToSlidedeck(slidedeck, m);
+				})
+				.fail(function() {
+					me.navigateToTarget(m, li.root);
+				});
 			return;
 		}
 
@@ -545,13 +547,10 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 	},
 
 
-	navigateToSlidedeck: function(slidedeckId) {
+	navigateToSlidedeck: function(slidedeck, startVideo) {
 		var me = this;
-		if (slidedeckId) {
-			Service.getObject(slidedeckId)
-				.then(function(slidedeck) {
-					me.navigate.call(null, slidedeck);
-				});
+		if (slidedeck) {
+			me.navigate.call(null, slidedeck);
 		}
 	},
 

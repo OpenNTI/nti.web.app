@@ -766,6 +766,58 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				});
 	},
 
+
+	getSlidedecks: function() {
+		if (this.slidedeckPromise) {
+			return this.slidedeckPromise;
+		}
+
+		this.slidedeckPromise = this.getMediaByOutline()
+			.then( function(outline){
+				var items = outline && outline.Items || {},
+					item, decks = [];
+
+				for (var k in items) {
+					if (items.hasOwnProperty(k)) {
+						item = items[k];
+						if (item.Class === 'NTISlideDeck') {
+							decks.push(item);
+						}
+					}
+				}
+
+				return Promise.resolve(decks);
+			});
+
+		return this.slidedeckPromise;
+	},
+
+
+	/**
+	 * Returns the slidedeck object if a particular video is part of a slidedeck
+	 * @param  {auto} video string (video id) or video model instance 
+	 * @return {[type]}       [description]
+	 */
+	getSlidedeckForVideo: function(video) {
+		var vid = video.isModel ? video.getId() : video, 
+			me = this;
+
+		return new Promise(function(fulfill, reject) {
+			me.getSlidedecks()
+				.then(function(decks) {
+					Ext.each(decks, function(deck){
+						Ext.each(deck.Videos || [], function(slidevideo) {
+							if (slidevideo.video_ntiid === vid) {
+								fulfill(deck);
+							}
+						});
+					});
+
+					reject();
+				});	
+		});
+	},
+
 	/**
 	*Takes two arrays of forums and bins then
 	*
