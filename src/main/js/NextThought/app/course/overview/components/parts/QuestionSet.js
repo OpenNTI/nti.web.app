@@ -2,9 +2,11 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 	extend: 'Ext.Panel',
 	alias: [
 		'widget.course-overview-naquestionset',
+		'widget.course-overview-questionsetref',
 		'widget.course-overview-nanosubmitassignment',
 		'widget.course-overview-naassignment',
-		'widget.course-overview-assignment'
+		'widget.course-overview-assignment',
+		'widget.course-overview-assignmentref'
 	],
 
 	requires: [
