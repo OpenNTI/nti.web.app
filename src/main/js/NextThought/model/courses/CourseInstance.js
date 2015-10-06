@@ -616,7 +616,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	 * @param  {String} link rel of the link to get
 	 * @return {Promise}      the request for the link
 	 */
-	__getAssignmentList: function(link) {
+	__getList: function(link) {
 		var promiseName = '__get' + link + 'Promise',
 			link;
 
@@ -638,12 +638,12 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 
 	__getAssignmentsByOutline: function() {
-		return this.__getAssignmentList('AssignmentsByOutlineNode');
+		return this.__getList('AssignmentsByOutlineNode');
 	},
 
 
 	__getNonAssignmentsByOutline: function() {
-		return this.__getAssignmentList('NonAssignmentAssessmentItemsByOutlineNode');
+		return this.__getList('NonAssignmentAssessmentItemsByOutlineNode');
 	},
 
 
@@ -737,6 +737,57 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				fulfill();
 			});
 		});
+	},
+
+
+	getMediaByOutline: function() {
+		return this.__getList('MediaByOutlineNode');
+	},
+
+
+	getVideoIndex: function() {
+		if (this.videoIndexPromise) {
+			return this.videoIndexPromise;
+		}
+
+		this.videoIndexPromise = this.getMediaByOutline()
+									.then(function(outline) {
+										var items = outline.Items;
+
+										// if we have slidedeck, map video obj to their respective slidedeck
+										for (var key in items) {
+											if (items.hasOwnProperty(key)) {
+												item = items[key] || {};
+												if (item.Class === 'NTISlideDeck') {
+													Ext.each(item.Videos || [], function(slidevideo) {
+														var vid = slidevideo.video_ntiid;
+														if (vid && items[vid]) {
+															items[vid].slidedeck = item.NTIID;
+														}
+													});
+												}
+											}
+										}
+
+										return Promise.resolve(items || {});
+									});
+
+		return this.videoIndexPromise;
+	},
+
+
+	getVideoForId: function(vid) {	
+		return this.getVideoIndex()
+				.then(function(index) {
+					var i = index[vid];
+					// Note: Old courses (i.e.Spring 14) don't have the class type but the outline only contains videos. 
+					// Newer outline contains more that just a video, they include slidedeck...So, for backwards compatibility, 
+					// to be a video if it has a class it has to be Video, if not, default to video.
+					if (i && (i.Class === undefined || i.Class === 'Video')) {
+						return Promise.resolve(i);	
+					}
+					return Promise.resolve();
+				});
 	},
 
 

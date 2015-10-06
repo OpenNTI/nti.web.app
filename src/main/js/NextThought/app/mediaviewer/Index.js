@@ -38,6 +38,10 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 
 		id = ParseUtils.decodeFromURI(route.params.id);
 
+		if (Ext.isEmpty(basePath)) {
+			basePath = this.currentBundle.getContentRoots()[0];
+		}
+
 		if (this.activeMediaView && (this.mediaId === id)) {
 			// We are already there.
 			return Promise.resolve();
@@ -92,11 +96,6 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 		me.resolveVideo(videoId)
 			.then(function(videoRec) {
 				me.video = videoRec;
-
-				if (!Ext.isEmpty(basePath)) {
-					basePath = me.currentBundle.getContentRoots()[0];
-				}
-
  				me.transcript = NextThought.model.transcript.TranscriptItem.fromVideo(me.video, basePath);
 				me.activeMediaView.setContent(me.video, me.transcript, options);
 			});
@@ -172,12 +171,10 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 		}
 
 		return new Promise(function(fulfill, reject) {
-			me.LibraryActions.getVideoIndex(me.currentBundle)
-				.then(function(videoIndex) {
-					var o = videoIndex[id];
+			me.currentBundle.getVideoForId(id)
+				.then(function(o) {
 					if (!o) { return reject(); }
 
-					basePath = me.currentBundle.getContentRoots()[0];
 					video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
 					fulfill(video);
 				});
@@ -263,9 +260,31 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 						me.Router.root.attemptToNavigateToPath(parentPath);
 					})
 					.fail(function() {
+						return Ext.isEmpty(me.parentLesson) ? Promise.reject() : me.__navigateToParent(me.parentLesson);
+					})
+					.fail(function() {
 						me.pushRootRoute('Library', '/library');
 					});
 			});
+	},
+
+
+	__navigateToParent: function(lesson) {
+		var me = this;
+
+		return new Promise(function(fulfill, reject) {
+			me.PathActions.getPathToObject(lesson)
+				.then(function(path) {
+					if (path) {
+						// Get rid of the pageInfo part,
+						// since we want to navigate to the CourseOutlineNode.
+						path.pop();
+						me.Router.root.attemptToNavigateToPath(path);
+						fulfill();
+					}
+				})
+				.fail(reject);
+		});
 	},
 
 
@@ -284,18 +303,6 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 			return Promise.reject();
 		}
 
-		return new Promise(function(fulfill, reject) {
-			me.PathActions.getPathToObject(me.parentLesson)
-				.then(function(path) {
-					if (path) {
-						// Get rid of the pageInfo part,
-						// since we want to navigate to the CourseOutlineNode.
-						path.pop();
-						me.Router.root.attemptToNavigateToPath(path);
-						fulfill();
-					}
-				})
-				.fail(reject);
-		});
+		return this.__navigateToParent(me.parentLesson);
 	}
 });

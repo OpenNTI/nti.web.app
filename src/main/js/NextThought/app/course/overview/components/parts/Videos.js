@@ -135,9 +135,8 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 		if (i) {
 			this.locationInfo = i;
 
-			this.LibraryActions.getVideoIndex(this.course)
+			this.course.getVideoIndex()
 				.then(this.applyVideoData.bind(this));
-				//TODO: handle no video index.
 		}
 		else {
 			Ext.callback(this.getVideoDataLoadedCallback(), this, [undefined, 0]);
@@ -491,7 +490,8 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 		var me = this,
 			m = me.getSelectedVideo(),
 			li = me.locationInfo,
-			slide, slideActions;
+			slidedeck, slideActions,
+			video = me.videoIndex[m.getId()];
 
 
 		if (!e.getTarget('.launch-player') && e.getTarget('.transcripts')) {
@@ -506,12 +506,13 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 				if (me.hasCls('playing')) { return; }
 			}
 
-			slide = m.get('slidedeck');
-			if (Ext.isEmpty(slide)) {
-				me.navigateToTarget(m, getURL(li.root));
+			slidedeck = video.slidedeck || m.get('slidedeck');
+			if (Ext.isEmpty(slidedeck)) {
+				me.navigateToTarget(m, li.root);
 			} else {
-				me.navigateToSlidedeck(slide);
+				me.navigateToSlidedeck(slidedeck);
 			}
+
 			return;
 		}
 
@@ -546,7 +547,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 	},
 
 
-	navigateToSlidedeck: function(slidedeckId) {
+	navigateToSlidedeck: function(slidedeckId, startVideo) {
 		var me = this;
 		if (slidedeckId) {
 			Service.getObject(slidedeckId)
@@ -554,6 +555,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 					me.navigate.call(null, slidedeck);
 				});
 		}
+
 	},
 
 

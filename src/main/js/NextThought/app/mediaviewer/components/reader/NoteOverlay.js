@@ -209,14 +209,6 @@ Ext.define('NextThought.app.mediaviewer.components.reader.NoteOverlay', {
 
 
 	editorSaved: function(editor, r, v) {
-
-		function callback(success, record) {
-			me.editorEl.unmask();
-			if (success) {
-				me.deactivateEditor();
-			}
-		}
-
 		function onError(error) {
 			console.error('Error saving note - ' + (error ? Globals.getError(error) : ''));
 			alert('There was an error saving your note.');
@@ -245,21 +237,19 @@ Ext.define('NextThought.app.mediaviewer.components.reader.NoteOverlay', {
 		try {
 			// NOTE: For slide notes, for now we're keeping them domRange notes.
 			if (me.data.isDomRange) {
-				// me.fireEvent('save-new-note', title, note, range, container, sharing, style, callback);
 				me.UserDataActions.saveNewNote(title, note, range, container, sharing, style)
 					.then(function(){
 						editor.unmask();
-						editor.deactivate();
+						me.deactivateEditor();
 					}).fail(function() {
 						editor.unmask();
 					});
 			}
 			else {
-				// me.fireEvent('save-new-series-note', title, note, range, me.data, container, sharing, style, callback);
 				me.UserDataActions.saveNewSeriesNote(title, note, range, me.data, container, sharing, style)
 					.then(function() {
 						editor.unmask();
-						editor.deactivate();
+						me.deactivateEditor();
 					}).fail(function() {
 						editor.unmask();
 					});

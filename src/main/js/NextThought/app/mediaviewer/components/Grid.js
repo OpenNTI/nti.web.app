@@ -148,11 +148,8 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 		var me = this;
 
 		me.currentBundle = bundle;
-		Promise.all([
-			me.getBundleOutline(),
-			me.LibraryActions.getVideoIndex(me.currentBundle)
-		])
-			.then(me.fillInData.bind(me));
+
+		me.buildVideoStore(bundle);
 
 		ContentUtils.getLineage(me.source.get('NTIID'), bundle)
 			.then(function(lineages) {
@@ -236,11 +233,6 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
     },
 
 
-	getVideoData: function(title) {
-		Library.getVideoIndex(title).then(this.applyVideoData.bind(this));
-	},
-
-
 	getThumbnail: function(video) {
 		var source = video.get('sources')[0],
 			thumbnail = source && source.thumbnail;
@@ -256,61 +248,75 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 	},
 
 
-	fillInData: function(results) {
-		var navStore = results[0],
-			videos = results[1];
+	/**
+	 * Get list of videos for a course with section titles.
+	 * @return {[type]} [description]
+	 */
+	getVideosForBundle: function(bundle) {
+		this.__getVideosPromise = Promise.all([
+				bundle.getMediaByOutline(),	
+				bundle.getNavigationStore().building
+			])
+			.then(function(results) {
+				var outline = results[0],
+					navStore = results[1],
+					orderedContainers = outline.ContainerOrder || [],
+					containers = outline.Containers || {},
+					videoObject = outline.Items || {},
+					videos = [];
 
-		this.applyVideoData(videos, navStore);
+				function addContainerVideos(cid) {
+					var videoIds = containers[cid],
+						node = navStore && navStore.findRecord('NTIID', cid);
+
+					if (node) {
+						videos.push(NextThought.model.PlaylistItem({
+							section: node.get('label'),
+							sources: []
+						}));
+					}
+
+					Ext.each(videoIds, function(vid) {
+						var v = videoObject[vid];
+
+						// Filter Videos only
+						if (v && (v.Class === undefined || v.Class === 'Video')) {
+							v = NextThought.model.PlaylistItem(v);
+							v.NTIID = v.ntiid;
+							v.section = cid;
+							videos.push(v);	
+						}
+					});
+				}
+
+				if (orderedContainers.length > 0) {
+					Ext.each(orderedContainers, addContainerVideos);	
+				}
+				else {
+					navStore.each(function(node) {
+						addContainerVideos(node.getId());
+					});
+				}	
+
+				return Promise.resolve(videos);
+			});
+
+		return this.__getVideosPromise;
 	},
 
 
-	applyVideoData: function(data, navStore) {
-		//data is a NTIID->source map
+	buildVideoStore: function(bundle) {
+		if (!bundle) { return; }
+
 		var me = this,
-			reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
-			selected = me.getSource().get('NTIID'),
-			sections = {},
-			videos = [];
+			selected = me.getSource().get('NTIID');
 
-
-		function fillIn(ids, section) {
-			var i, v;
-
-			for (i = 0; i < ids.length; i++) {
-				v = NextThought.model.PlaylistItem(data[ids[i]]);
-				v.NTIID = v.ntiid;
-				v.section = section && section.getId();
-				videos.push(v);
-			}
-		}
-
-		//go through the navigation store and add the videos in order
-		//the lessons they appear in do
-		navStore.each(function(node) {
-			if (node.get('type') !== 'lesson') { return; }
-
-			var videoIds = data.containers[node.getId()];
-
-			if (videoIds && videoIds.length) {
-				videos.push(NextThought.model.PlaylistItem({
-					section: node.get('label'),
-					sources: []
-				}));
-
-				fillIn(videoIds, node);
-			}
-		});
-
-		Promise.resolve(videos)
-			.then(function(results) {
+		this.getVideosForBundle(bundle)
+			.then(function(videos) {
 				me.store = new Ext.data.Store({
 					model: NextThought.model.PlaylistItem,
 					proxy: 'memory',
-					data: videos,
-					sorters: [
-						//Globals.getNaturalSorter('section'),
-						//Globals.getNaturalSorter('title')
-					]
+					data: videos
 				});
 				
 				me.store.each(function(record) {
@@ -348,19 +354,21 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 
 	fireSelection: function() {
 		var rec = this.getSelectionModel().getSelection().first(),
-			li = this.getLocationInfo(), 
+			root = this.currentBundle.getContentRoots()[0],
+			section = rec && rec.get('section'), route,
 			slidedeckId = rec && rec.get('slidedeck'),
-			section = rec && rec.get('section'),
-			route = section && ParseUtils.encodeForURI(section) + '/video/' + ParseUtils.encodeForURI(rec.getId()),
-			isVideo = true;
+			me = this, isVideo = true;
 
 		if (!Ext.isEmpty(slidedeckId)) {
 			route = section && ParseUtils.encodeForURI(section) + '/slidedeck/' + ParseUtils.encodeForURI(slidedeckId);
 			isVideo = false;
 		}
+		else {
+			route = section && ParseUtils.encodeForURI(section) + '/video/' + ParseUtils.encodeForURI(rec.getId());
+		}
 
 		if (this.ownerCt && this.ownerCt.handleNavigation && !Ext.isEmpty(route)) {
-			this.ownerCt.handleNavigation(rec.get('title'), route, {video: isVideo ? rec : null, basePath: getURL(li.root)});
+			this.ownerCt.handleNavigation(rec.get('title'), route, {video: isVideo ? rec : null, basePath: root});
 		}
 	},
 
