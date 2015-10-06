@@ -265,7 +265,7 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 					videoObject = outline.Items || {},
 					videos = [];
 
-				Ext.each(orderedContainers, function(cid) {
+				function addContainerVideos(cid) {
 					var videoIds = containers[cid],
 						node = navStore && navStore.findRecord('NTIID', cid);
 
@@ -280,14 +280,23 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 						var v = videoObject[vid];
 
 						// Filter Videos only
-						if (v && v.Class === 'Video') {
+						if (v && (v.Class === undefined || v.Class === 'Video')) {
 							v = NextThought.model.PlaylistItem(v);
 							v.NTIID = v.ntiid;
 							v.section = cid;
 							videos.push(v);	
 						}
 					});
-				});
+				}
+
+				if (orderedContainers.length > 0) {
+					Ext.each(orderedContainers, addContainerVideos);	
+				}
+				else {
+					navStore.each(function(node) {
+						addContainerVideos(node.getId());
+					});
+				}	
 
 				return Promise.resolve(videos);
 			});
