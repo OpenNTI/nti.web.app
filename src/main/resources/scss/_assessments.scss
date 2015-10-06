@@ -1709,3 +1709,48 @@ input.preview[readonly] {
 .underline {
 	text-decoration: underline;
 }
+
+.survey-header {
+	@include flexContainer();
+	@include experimental(align-items, center);
+
+	.survey-history {
+		@include flexItem(1 1 auto);
+		font-size: 1.5em;
+		color: $primary-grey;
+	}
+
+	.survey-report {
+		@include flexItem(0 0 auto);
+		padding: 0 20px;
+		color: $primary-blue;
+		opacity: 0.8;
+		cursor: pointer;
+		font-weight: 600;
+
+		@include icon('reports-blue_hover', $side: after);
+
+		&:hover {
+			opacity: 1;
+		}
+
+		&::after {
+			opacity: 0.8;
+		}
+	}
+
+	.survey-results {
+		line-height: 35px;
+		padding: 0 20px;
+		color: white;
+		background-color: $primary-blue;
+		opacity: 0.8;
+		cursor: pointer;
+
+		@include flexItem(0 0 auto);
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}
