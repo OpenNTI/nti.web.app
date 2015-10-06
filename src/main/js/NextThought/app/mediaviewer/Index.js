@@ -260,9 +260,31 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 						me.Router.root.attemptToNavigateToPath(parentPath);
 					})
 					.fail(function() {
+						return Ext.isEmpty(me.parentLesson) ? Promise.reject() : me.__navigateToParent(me.parentLesson);
+					})
+					.fail(function() {
 						me.pushRootRoute('Library', '/library');
 					});
 			});
+	},
+
+
+	__navigateToParent: function(lesson) {
+		var me = this;
+
+		return new Promise(function(fulfill, reject) {
+			me.PathActions.getPathToObject(lesson)
+				.then(function(path) {
+					if (path) {
+						// Get rid of the pageInfo part,
+						// since we want to navigate to the CourseOutlineNode.
+						path.pop();
+						me.Router.root.attemptToNavigateToPath(path);
+						fulfill();
+					}
+				})
+				.fail(reject);
+		});
 	},
 
 
@@ -281,18 +303,6 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 			return Promise.reject();
 		}
 
-		return new Promise(function(fulfill, reject) {
-			me.PathActions.getPathToObject(me.parentLesson)
-				.then(function(path) {
-					if (path) {
-						// Get rid of the pageInfo part,
-						// since we want to navigate to the CourseOutlineNode.
-						path.pop();
-						me.Router.root.attemptToNavigateToPath(path);
-						fulfill();
-					}
-				})
-				.fail(reject);
-		});
+		return this.__navigateToParent(me.parentLesson);
 	}
 });

@@ -780,7 +780,10 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		return this.getVideoIndex()
 				.then(function(index) {
 					var i = index[vid];
-					if (i && i.Class === 'Video') {
+					// Note: Old courses (i.e.Spring 14) don't have the class type but the outline only contains videos. 
+					// Newer outline contains more that just a video, they include slidedeck...So, for backwards compatibility, 
+					// to be a video if it has a class it has to be Video, if not, default to video.
+					if (i && (i.Class === undefined || i.Class === 'Video')) {
 						return Promise.resolve(i);	
 					}
 					return Promise.resolve();
