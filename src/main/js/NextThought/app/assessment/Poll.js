@@ -57,7 +57,10 @@ Ext.define('NextThought.app.assessment.Poll', {
 		this.removeCls('no-data');
 
 		parts.showQuestionSetWithAnswers();
-		header.setTitle('Thank You!');
+
+		if (!this.questionSet || !this.questionSet.isSurvey) {
+			header.setTitle('Thank You!');
+		}
 	},
 
 
