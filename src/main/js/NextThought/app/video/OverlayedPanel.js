@@ -106,7 +106,7 @@ Ext.define('NextThought.app.video.OverlayedPanel', {
 
 		this.callParent([config]);
 
-		bundle.getVideoIndex()
+		this.LibraryActions.getVideoIndex(bundle)
 			.then(this.fillVideo.bind(this));
 	},
 
