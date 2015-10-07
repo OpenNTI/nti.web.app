@@ -14,7 +14,10 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 		{cls: 'meta', cn: [
 			{cls: 'title', html: '{title}'},
 			{tag: 'span', cls: 'question-count', html: '{questions:plural("Question")}'},
-			{tag: 'span', cls: 'responses', html: 'No Responses Yet'}
+			{tag: 'span', cls: 'responses', html: 'No Responses Yet'},
+			{tag: 'tpl', 'if': 'hasReportLink', cn: [
+				{tag: 'span', cls: 'report', html: 'View Reports'}
+			]}
 		]},
 		{cls: 'button x-btn x-btn-primary-large{buttonCls}', html: '{buttonTxt}'}
 	]),
@@ -22,7 +25,8 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 
 	renderSelectors: {
 		responsesEl: '.responses',
-		startEl: '.button'
+		startEl: '.button',
+		reportEl: '.report'
 	},
 
 
@@ -36,6 +40,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 			ntiid: ntiid,
 			questionCount: n.getAttribute('question-count'),
 			submissions: n.getAttribute('submissions'),
+			reportLink: Service.getLinkFrom(links, 'report-SurveyReport.pdf'),
 			isSubmitted: Service.getLinkFrom(links, 'History'),
 			isClosed: n.getAttribute('isClosed')
 		};
@@ -51,7 +56,8 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 			title: this.data.title,
 			questions: this.data.questionCount,
 			buttonTxt: this.data.isSubmitted ? 'Review' : this.data.isClosed ? 'Closed' : 'Take',
-			buttonCls: this.data.isClosed ? ' closed' : ''
+			buttonCls: this.data.isClosed ? ' closed' : '',
+			hasReportLink: !!this.data.reportLink
 		});
 	},
 
@@ -68,6 +74,10 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 		if (this.data.isSubmitted) {
 			this.startEl.update('Review');
 		}
+
+		if (this.reportEl) {
+			this.mon(this.reportEl, 'click', this.showReport.bind(this));
+		}
 	},
 
 
@@ -79,5 +89,17 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 				href: ntiid
 			}));
 		}
+	},
+
+
+	showReport: function(e) {
+		var win = Ext.widget('iframe-window', {
+				width: 'max',
+				saveText: getString('NextThought.view.menus.Reports.savetext'),
+				link: this.data.reportLink,
+				loadingText: getString('NextThought.view.menus.Reports.loadingtext')
+			});
+
+		win.show();
 	}
 });

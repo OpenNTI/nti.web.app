@@ -155,9 +155,14 @@
 				color: $tertiary-grey;
 			}
 
-			.responses:not(:empty)::before {
+			.responses:not(:empty)::before, .report:not(:empty)::before {
 				content: '\b7';
 				margin: 0 0.5em;
+			}
+
+			.report {
+				color: $primary-blue;
+				cursor: pointer;
 			}
 		}
 
