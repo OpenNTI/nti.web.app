@@ -79,7 +79,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			r = me.reader,
 			questions = survey.get('questions') || [],
 			historyLink = survey.getLink('History'),
-			reportLink = survey.getLink('report-SurveyReport.pdf');
+			reportLink = survey.getReportLink();
 
 		if (historyLink || survey.get('isClosed') || reportLink) {
 			this.surveyHeader = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessent-survey-header', {

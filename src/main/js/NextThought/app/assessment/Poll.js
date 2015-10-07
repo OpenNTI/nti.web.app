@@ -8,7 +8,7 @@ Ext.define('NextThought.app.assessment.Poll', {
 	],
 
 	NotSubmittedTextOverride: 'Submit',
-	SubmittedTextOverride: 'Submit',
+	SubmittedTextOverride: false,
 
 
 	initComponent: function() {
@@ -55,6 +55,8 @@ Ext.define('NextThought.app.assessment.Poll', {
 			header = this.down('question-header');
 
 		this.removeCls('no-data');
+
+		debugger;
 
 		parts.showQuestionSetWithAnswers();
 

@@ -7,5 +7,15 @@ Ext.define('NextThought.model.assessment.Survey', {
 	fields: [
 		{name: 'isClosed', type: 'Boolean'},
 		{name: 'submissions', type: 'Number'}
-	]
+	],
+
+
+	getReportLink: function() {
+		return this.getLink('report-InquiryReport.pdf');
+	},
+
+
+	getResultsLink: function() {
+		return this.getLink('Aggregated');
+	}
 });

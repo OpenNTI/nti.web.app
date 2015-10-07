@@ -32,7 +32,7 @@ Ext.define('NextThought.app.assessment.SurveyHeader', {
 
 	updateSurvey: function(survey) {
 		var	items = [],
-			reportLink = survey.getLink('report-SurveyReport.pdf');
+			reportLink = survey.getReportLink();
 
 		if (!this.surveyCmp) {
 			return;

@@ -40,7 +40,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 			ntiid: ntiid,
 			questionCount: n.getAttribute('question-count'),
 			submissions: n.getAttribute('submissions'),
-			reportLink: Service.getLinkFrom(links, 'report-SurveyReport.pdf'),
+			reportLink: Service.getLinkFrom(links, 'InquiryReport'),
 			isSubmitted: Service.getLinkFrom(links, 'History'),
 			isClosed: n.getAttribute('isClosed')
 		};

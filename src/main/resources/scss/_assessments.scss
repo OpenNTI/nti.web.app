@@ -1205,6 +1205,10 @@ body.dragging * {
 					}
 				}
 
+				&.report {
+					@include icon('reports-gray_hover', $top: 12px);
+				}
+
 			}
 		}
 	}
