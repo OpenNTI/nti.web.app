@@ -37,7 +37,7 @@ Ext.define('NextThought.util.Dom', {
 		});
 
 		Ext.each(directChildNodes('param'), function(p) {
-			addValue(obj, p.name, p.value);
+			addValue(obj, p.getAttribute('name'), p.getAttribute('value'));
 		});
 
     //		SAJ: Does not work as intent and just wastes CPU cycles.
