@@ -16,5 +16,30 @@ Ext.define('NextThought.model.assessment.Poll', {
 
 	getResultsLink: function() {
 		return this.getLink('Aggregated');
+	},
+
+	__loadResults: function() {
+		var link = this.getResultsLink(),
+			load;
+
+		if (this.__loadResultsPromise) {
+			load = this.__loadResultsPromise;
+		} else if (link) {
+			load = Service.request(link)
+				.then(function(response) {
+					return Ext.decode(response);
+				});
+		} else {
+			load = Promise.reject('No Link');
+		}
+
+		this.__loadResultsPromise = load;
+
+		return this.__loadResultsPromise;
+	},
+
+
+	getResults: function() {
+		return this.__loadResults();
 	}
 });

@@ -4,8 +4,11 @@ Ext.define('NextThought.app.assessment.Poll', {
 
 	requires: [
 		'NextThought.model.assessment.UsersCourseInquiryItem',
-		'NextThought.model.assessment.UsersCourseInquiryItemResponse'
+		'NextThought.model.assessment.UsersCourseInquiryItemResponse',
+		'NextThought.app.assessment.results.Poll'
 	],
+
+	cls: 'question scrollable poll',
 
 	NotSubmittedTextOverride: 'Submit',
 	SubmittedTextOverride: false,
@@ -56,8 +59,6 @@ Ext.define('NextThought.app.assessment.Poll', {
 
 		this.removeCls('no-data');
 
-		debugger;
-
 		parts.showQuestionSetWithAnswers();
 
 		if (!this.questionSet || !this.questionSet.isSurvey) {
@@ -90,5 +91,24 @@ Ext.define('NextThought.app.assessment.Poll', {
 			.always(function() {
 				me.unmask();
 			});
+	},
+
+
+	getResults: function() {
+		return this.survey ? this.survey.getResults(this.poll.getId()) : this.poll.getResults();
+	},
+
+
+	showResults: function() {
+		var parts = this.down('question-parts');
+
+		parts.hide();
+
+		this.add(Ext.widget('assessment-result', {
+			poll: this.poll,
+			getResults: this.getResults.bind(this),
+			syncHeight: this.syncElementHeight.bind(this),
+			syncPositioning: this.self.syncPositioningTillStable.bind(this.self)
+		}));
 	}
 });

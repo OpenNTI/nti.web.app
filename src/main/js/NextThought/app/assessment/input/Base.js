@@ -171,6 +171,11 @@ Ext.define('NextThought.app.assessment.input.Base', {
 			click: this.showReport.bind(this)
 		});
 
+		this.mon(this.resultsBtn, {
+			scope: this,
+			click: this.showResults.bind(this)
+		});
+
 		this.showSolutionBtn.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.checkItBtn.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.resultsBtn.setVisibilityMode(Ext.dom.Element.DISPLAY);
@@ -214,7 +219,6 @@ Ext.define('NextThought.app.assessment.input.Base', {
 
 
 	maybeShowReport: function() {
-		debugger;
 		var questionLink = this.question && this.question.getReportLink && this.question.getReportLink(),
 			setLink = this.questionSet && this.questionSet.getReportLink && this.questionSet.getReportLink();
 
@@ -320,6 +324,13 @@ Ext.define('NextThought.app.assessment.input.Base', {
 			});
 
 		win.show();
+	},
+
+
+	showResults: function() {
+		var question = this.up('assessment-question');
+
+		question.showResults();
 	},
 
 
