@@ -8,7 +8,7 @@ Ext.define('NextThought.app.assessment.results.Poll', {
 
 	items: [
 		{xtype: 'container', layout: 'none', isResultContainer: true},
-		{xtype: 'container', layout: 'none', isFooter: true}
+		{xtype: 'container', layout: 'none', cls: 'footer', isFooter: true}
 	],
 
 	initComponent: function() {
@@ -17,19 +17,36 @@ Ext.define('NextThought.app.assessment.results.Poll', {
 		this.resultContainer = this.down('[isResultContainer]');
 		this.footerContainer = this.down('[isFooter]');
 
+		this.footerContainer.add({
+			xtype: 'box',
+			autoEl: {html: 'Hide Results'},
+			listeners: {
+				click: {
+					element: 'el',
+					fn: this.onHideResults.bind(this)
+				}
+			}
+		});
+
 		this.loadingCmp = this.resultContainer.add(Globals.getContainerLoadingMask());
 
 		this.resize();
 
 		this.getResults()
 			.then(this.showResults.bind(this))
-			.then(this.resize.bind(this));
+			.fail(this.showError.bind(this))
+			.always(this.resize.bind(this));
 	},
 
 
 	resize: function() {
 		this.syncHeight();
 		this.syncPositioning();
+	},
+
+
+	showError: function() {
+		debugger;
 	},
 
 
@@ -43,5 +60,12 @@ Ext.define('NextThought.app.assessment.results.Poll', {
 			xtype: 'box',
 			autoEl: {html: 'Results'}
 		});
+	},
+
+
+	onHideResults: function() {
+		if (this.doHideResults) {
+			this.doHideResults();
+		}
 	}
 });

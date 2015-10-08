@@ -100,15 +100,34 @@ Ext.define('NextThought.app.assessment.Poll', {
 
 
 	showResults: function() {
-		var parts = this.down('question-parts');
+		var parts = this.down('question-parts'),
+			header = this.down('question-header');
 
+		header.hide();
 		parts.hide();
+
+		this.addCls('showing-results');
 
 		this.add(Ext.widget('assessment-result', {
 			poll: this.poll,
 			getResults: this.getResults.bind(this),
 			syncHeight: this.syncElementHeight.bind(this),
-			syncPositioning: this.self.syncPositioningTillStable.bind(this.self)
+			syncPositioning: this.self.syncPositioningTillStable.bind(this.self),
+			doHideResults: this.hideResults.bind(this)
 		}));
+	},
+
+
+	hideResults: function() {
+		var parts = this.down('question-parts'),
+			results = this.down('assessment-result'),
+			header = this.down('question-header');
+
+		this.removeCls('showing-results');
+
+		parts.show();
+		header.show();
+
+		this.remove(results, true);
 	}
 });
