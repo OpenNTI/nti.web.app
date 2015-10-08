@@ -126,7 +126,7 @@ Ext.define('NextThought.app.assessment.Poll', {
 		this.removeCls('showing-results');
 
 		parts.show();
-		header.show();
+		header.maybeShow();
 
 		this.remove(results, true);
 	}
