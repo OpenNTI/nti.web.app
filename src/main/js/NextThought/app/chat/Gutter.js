@@ -38,6 +38,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
 		this.ChatActions = NextThought.app.chat.Actions.create();
+		this.NavigationStore = NextThought.app.navigation.StateStore.getInstance();
 
 		this.buildStore();
 		this.mon(this.ChatStore, {
@@ -256,6 +257,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 			this.ChatActions.startChat(user);
 		}
 		this.clearUnreadCount(user);
+		this.NavigationStore.fireEvent('clear-chat-tab', user);
 	},
 
 

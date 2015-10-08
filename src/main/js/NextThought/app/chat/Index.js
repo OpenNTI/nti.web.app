@@ -128,29 +128,10 @@ Ext.define('NextThought.app.chat.Index', {
 	},
 
 
-	onWindowResize: function() {
-		var showTab = this.shouldHaveChatTab();
-		this.NavigationStore.maybeShowChatTab();
-
-		if (showTab) {
-			this.gutterWin.hide();
-
-			if (this.listWin) {
-				this.listWin.hide();
-			}
-		}
-		else {
-			if (!this.gutterWin.isVisible() && (!this.listWin || !this.listWin.isVisible())) {
-				this.gutterWin.show();
-			}
-		}
-	},
-
-
 	handleTabNotifications: function(win, msg) {
 		if (win && win.isVisible() ||
-			this.gutterWin && this.gutterWin.isVisible() ||
-			this.listWin && this.listWin.isVisible()) {
+			this.gutterWin && this.gutterWin.el && this.gutterWin.el.isVisible() ||
+			this.listWin && this.listWin.el && this.listWin.el.isVisible()) {
 			return;
 		}
 
