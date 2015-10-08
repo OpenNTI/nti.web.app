@@ -67,8 +67,6 @@ Ext.define('NextThought.model.ContentPackage', {
 			me.tocPromise = Service.request(getURL(index))
 					//parse the response into a xml
 					.then(library.parseXML.bind(library))
-					//remove all the nodes that aren't visible to us
-					.then(me.__cleanToCNodes.bind(me, status))
 					//set my root, icon, and title on the doc
 					.then(function(xml) {
 						var doc = xml.documentElement;
@@ -98,52 +96,6 @@ Ext.define('NextThought.model.ContentPackage', {
 
 		return me.tocPromise;
 	},
-
-
-	__cleanToCNodes: function(status, xml) {
-		function strip(e) { Ext.fly(e).remove(); }
-
-		//returns all nodes that reference an ntiid
-		function getAllNodesReferencing(ntiid) {
-			if (!ntiid) {
-				console.warn('Ntiid is empty. Should provide a valid toc');
-				return [];
-			}
-
-			var nodes = [];
-
-			ntiid = ParseUtils.escapeId(ntiid);
-
-			//look at target-ntiid and ntiid attributes
-			nodes = xml.querySelectorAll('[target-ntiid="' + ntiid + '"],[ntiid="' + ntiid + '"]');
-
-			return Array.prototype.slice.call(nodes);
-		}
-
-		function permitOrRemove(node) {
-			//if the node isn't visible for the status
-			if (!ContentUtils.hasVisibilityForContent(node, status)) {
-				getAllNodesReferencing(node.getAttribute('target-ntiid')).forEach(strip);
-			}
-		}
-
-		var i, nodes;
-
-		//all nodes that have a visibility attribute not set to everyone
-		if (xml) {
-			//TODO: figure out if we have to use the Ext.DomQuery, or if we can use querySelectorAll
-			nodes = Ext.DomQuery.select('[visibility]:not([visibility=everyone])', xml);//xml.querySelectorAll('[visibility]:not([visibility=everyone])');
-		} else {
-			return;
-		}
-
-		for (i = 0; i < nodes.length; i++) {
-			permitOrRemove(nodes[i]);
-		}
-
-		return xml;
-	},
-
 
 
 
