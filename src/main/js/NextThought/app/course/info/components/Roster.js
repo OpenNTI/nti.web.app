@@ -158,6 +158,9 @@ extend: 'Ext.container.Container',
 		var el = this.filterLink.el;
 		el.update(this.filterMenu.getFilterLabel(this.store.getTotalCount()));
 		el.repaint();
+
+		// Bind store after load.
+		this.down('grid').bindStore(this.store);
 	},
 
 
@@ -215,7 +218,7 @@ extend: 'Ext.container.Container',
 			remoteFilter: true
 		});
 
-		this.down('grid').bindStore(this.store);
+		
 		//TODO: only load if we're visible!
 		this.store.load();
 		Ext.destroy(this.storeMonitors);
