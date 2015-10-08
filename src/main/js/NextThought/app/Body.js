@@ -250,7 +250,12 @@ Ext.define('NextThought.app.Body', {
 		return courseView.setActiveCourse(ntiid, course)
 			.then(courseView.handleRoute.bind(courseView, subRoute, route.precache))
 			.fail(function() {
-				me.replaceRoute('', '/library');
+				//If we have a sub route that fails try setting the root of the course
+				if (Globals.trimRoute(subRoute)) {
+					me.replaceRoute('', '/course/' + route.params.id);
+				} else {
+					me.replaceRoute('', '/library');
+				}
 			});
 	},
 
