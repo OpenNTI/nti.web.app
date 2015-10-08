@@ -19,7 +19,7 @@ Ext.define('NextThought.app.assessment.results.Poll', {
 
 		this.footerContainer.add({
 			xtype: 'box',
-			autoEl: {html: 'Hide Results'},
+			autoEl: {cls: 'action right', html: 'Hide Results'},
 			listeners: {
 				click: {
 					element: 'el',
