@@ -2,6 +2,9 @@ Ext.define('NextThought.app.assessment.results.Poll', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.assessment-result',
 
+	requires: [
+		'NextThought.app.assessment.results.parts.MultiChoice'
+	],
 
 	cls: 'assessment-result',
 	layout: 'none',
@@ -13,6 +16,12 @@ Ext.define('NextThought.app.assessment.results.Poll', {
 
 	initComponent: function() {
 		this.callParent(arguments);
+
+		var parts = NextThought.app.assessment.results.parts;
+
+		this.fillInMimeTypeToComponent([
+			parts.MultiChoice
+		]);
 
 		this.resultContainer = this.down('[isResultContainer]');
 		this.footerContainer = this.down('[isFooter]');
@@ -39,6 +48,29 @@ Ext.define('NextThought.app.assessment.results.Poll', {
 	},
 
 
+	fillInMimeTypeToComponent: function(cmps) {
+		this.mimeToComponent = cmps.reduce(function(acc, cmp) {
+			acc[cmp.mimeType] = cmp;
+
+			return acc;
+		}, {});
+
+	},
+
+
+	getCmpForMimeType: function(mimeType) {
+		return this.mimeToComponent[mimeType];
+	},
+
+
+	removeLoadingCmp: function() {
+		if (this.loadingCmp) {
+			this.loadingCmp.destroy();
+			delete this.loadingCmp;
+		}
+	},
+
+
 	resize: function() {
 		this.syncHeight();
 		this.syncPositioning();
@@ -46,20 +78,34 @@ Ext.define('NextThought.app.assessment.results.Poll', {
 
 
 	showError: function() {
-		debugger;
+		this.removeLoadingCmp();
 	},
 
 
 	showResults: function(results) {
-		if (this.loadingCmp) {
-			this.loadingCmp.destroy();
-			delete this.loadingCmp;
-		}
+		this.removeLoadingCmp();
 
-		this.resultContainer.add({
-			xtype: 'box',
-			autoEl: {html: 'Results'}
+		var me = this,
+			resultParts = results.parts,
+			questionParts = me.poll.get('parts');
+
+		resultParts.forEach(function(part, idx) {
+			me.addPart(part, questionParts[idx]);
 		});
+	},
+
+
+	addPart: function(resultPart, questionPart) {
+		var cmp = this.getCmpForMimeType(resultPart.MimeType);
+
+		if (cmp) {
+			this.resultContainer.add(new cmp({
+				resultPart: resultPart,
+				questionPart: questionPart
+			}));
+		} else {
+			console.warn('Unknown result type: ', resultPart);
+		}
 	},
 
 

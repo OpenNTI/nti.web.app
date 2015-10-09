@@ -1769,3 +1769,108 @@ input.preview[readonly] {
 		}
 	}
 }
+
+.assessment-result {
+	background: #fbfbfb;
+}
+
+.result.chart {
+	padding: 20px;
+	border-radius: 0 0 3px 3px;
+	border: 0px solid #e2e2e2;
+	border-top-width: 1px !important;
+
+	.graph {
+		background: #ffffff;
+		border: 1px solid #b8b8b8;
+	}
+
+	.row {
+		height: 40px;
+
+		&:not(:last-of-type) {
+			border-bottom: 1px solid #d1d1d1;
+		}
+
+		div.label {
+			box-shadow: 1px 0 0 0 #d1d1d1;
+			display: inline-block;
+			vertical-align: top;
+			width: 30%;
+			font: normal 400 0.875rem/40px $font;
+			padding: 0 10px;
+			overflow: hidden;
+			@include ellipse;
+		}
+
+		div.series {
+			display: inline-block;
+			vertical-align: top;
+			width: 70%;
+			height: 100%;
+
+			.item {
+				height: 100%;
+				position: relative;
+
+				 & > .label {
+					text-align: right;
+					line-height: 40px;
+					font-size: 0.875rem;
+					color: white;
+					width: 100%;
+				}
+
+				&:hover {
+					& > .label {
+						opacity: 0.8;
+					}
+
+					.info {
+						display: block;
+					}
+				}
+
+				.info {
+					display: none;
+					position: absolute;
+					left: 50%;
+					bottom: 45px;
+					transform: translateX(-50%);
+					background-color: #fbfbfb;
+					color: $primary-grey;
+					padding: 10px;
+					box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+
+					.label {
+						white-space: nowrap;
+					}
+
+					.sublabel {
+						display: block;
+					}
+
+					&::after {
+						content: '';
+						position: absolute;
+						bottom: -16px;
+						left: 50%;
+						margin-left: -8px;
+
+						@include arrow($pointFrom: top, $width: 16px, $height: 8px, $color: #fbfbfb);
+					}
+
+					&::before {
+						content: '';
+						position: absolute;
+						bottom: -17px;
+						left: 50%;
+						margin-left: -9px;
+
+						@include arrow($pointFrom: top, $width: 16px, $height: 8px, $color: rgba(0, 0, 0, 0.1));
+					}
+				}
+			}
+		}
+	}
+}
