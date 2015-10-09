@@ -747,7 +747,11 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 
 				if (me.isNewRecord) {
 					if (record.isTopLevel() && !me.isOnLastPage()) {
-						me.loadLastPage(true);
+						me.loadLastPage(true)
+							.then(function() {
+								me.goToComment(record);
+							});
+
 					} else {
 						if (record.isTopLevel()) {
 							me.store.totalCount += 1;
