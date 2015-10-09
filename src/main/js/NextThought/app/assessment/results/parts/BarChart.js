@@ -17,7 +17,7 @@ Ext.define('NextThought.app.assessment.results.parts.BarChart', {
 						]},
 						{cls: 'series', cn: [
 							{tag: 'tpl', 'for': 'series', cn: [
-								{cls: 'item', style: {width: '{percent}%'}, cn: [
+								{cls: 'item', style: {width: '{percentWidth}%'}, cn: [
 									{cls: 'label', style: {backgroundColor: '{color}'}, html: '{count}'},
 									{cls: 'info', cn: [
 										{tag: 'span', cls: 'percent', html: '{percent}%'},
@@ -67,7 +67,6 @@ Ext.define('NextThought.app.assessment.results.parts.BarChart', {
 
 
 	getColorForLabel: function(label) {
-		debugger;
 		this.seenLabels = this.seenLabels || [];
 
 		var idx = this.seenLabels.indexOf(label);
@@ -83,15 +82,13 @@ Ext.define('NextThought.app.assessment.results.parts.BarChart', {
 
 	__getRows: function() {
 		var me = this,
-			d = document.createElement('div'),
 			axis = me.getAxis();
 
 		axis.forEach(function(axi) {
-			d.innerHTML = axi.label;
-			axi.label = d.innerText;
-
 			axi.series.forEach(function(item) {
 				item.color = me.getColorForLabel(item.label);
+				item.percentWidth = item.percent;
+				item.percent = item.percent.toFixed(0);
 			});
 		});
 

@@ -3,7 +3,9 @@ Ext.define('NextThought.app.assessment.results.Poll', {
 	alias: 'widget.assessment-result',
 
 	requires: [
-		'NextThought.app.assessment.results.parts.MultiChoice'
+		'NextThought.app.assessment.results.parts.MultiChoice',
+		'NextThought.app.assessment.results.parts.Matching',
+		'NextThought.app.assessment.results.parts.Ordering'
 	],
 
 	cls: 'assessment-result',
@@ -20,7 +22,9 @@ Ext.define('NextThought.app.assessment.results.Poll', {
 		var parts = NextThought.app.assessment.results.parts;
 
 		this.fillInMimeTypeToComponent([
-			parts.MultiChoice
+			parts.MultiChoice,
+			parts.Matching,
+			parts.Ordering
 		]);
 
 		this.resultContainer = this.down('[isResultContainer]');

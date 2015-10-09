@@ -26,13 +26,19 @@ Ext.define('NextThought.app.assessment.results.parts.MultiChoice', {
 		var resultParts = this.resultPart.Results,
 			total = this.resultPart.Total,
 			choices = this.questionPart.get('choices'),
+			d = document.createElement('div'),
 			axis = [];
+
+		function clean(text) {
+			d.innerHTML = text;
+			return d.innerText;
+		}
 
 		choices.forEach(function(choice, idx) {
 			var result = resultParts[idx],
 				row = {
 					labelPrefix: String.fromCharCode(65 + idx) + '.',
-					label: choice,
+					label: clean(choice),
 					series: []
 				};
 

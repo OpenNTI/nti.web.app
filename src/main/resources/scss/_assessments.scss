@@ -1812,6 +1812,7 @@ input.preview[readonly] {
 			.item {
 				height: 100%;
 				position: relative;
+				display: inline-block;
 
 				 & > .label {
 					text-align: right;
@@ -1848,6 +1849,7 @@ input.preview[readonly] {
 
 					.sublabel {
 						display: block;
+						white-space: nowrap;
 					}
 
 					&::after {

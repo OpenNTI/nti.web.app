@@ -168,7 +168,6 @@ Ext.define('NextThought.util.Color', {
 	 * @return {String}     the hex code
 	 */
 	getColorHex: function(idx) {
-		debugger;
 		return this.rgbaToHex(this.toRGBA((this.getColor(idx))));
 	},
 
