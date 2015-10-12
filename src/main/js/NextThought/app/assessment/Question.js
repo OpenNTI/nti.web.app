@@ -19,6 +19,10 @@ Ext.define('NextThought.app.assessment.Question', {
 	cls: 'question scrollable',
 	ui: 'assessment',
 
+	items: [
+		{xtype: 'box', questionContainer: true}
+	],
+
 	dockedItems: [
 		{ dock: 'top', xtype: 'question-header'},
 		{ dock: 'bottom', xtype: 'question-parts'}
@@ -29,6 +33,8 @@ Ext.define('NextThought.app.assessment.Question', {
 		this.callParent(arguments);
 		var parts = this.question.get('parts'),
 				multiPart = (parts.length > 1);
+
+		this.questionContainer = this.down('[questionContainer]');
 
 		this.down('question-parts').setQuestionAndPart(
 				this.question,
@@ -253,7 +259,7 @@ Ext.define('NextThought.app.assessment.Question', {
 			c += '<br/>';
 		}
 
-		this.update(
+		this.questionContainer.update(
 			Ext.DomHelper.markup({
 				 cls: 'question-content',
 				 html: this.buildContent(ContentUtils.fixReferences(c + p, root))

@@ -4,11 +4,14 @@ Ext.define('NextThought.app.assessment.Poll', {
 
 	requires: [
 		'NextThought.model.assessment.UsersCourseInquiryItem',
-		'NextThought.model.assessment.UsersCourseInquiryItemResponse'
+		'NextThought.model.assessment.UsersCourseInquiryItemResponse',
+		'NextThought.app.assessment.results.Poll'
 	],
 
+	cls: 'question scrollable poll',
+
 	NotSubmittedTextOverride: 'Submit',
-	SubmittedTextOverride: 'Submit',
+	SubmittedTextOverride: false,
 
 
 	initComponent: function() {
@@ -45,6 +48,13 @@ Ext.define('NextThought.app.assessment.Poll', {
 			this.addCls('no-data');
 			header.setTitle('Closed');
 		}
+
+		if (this.survey) {
+			this.mon(this.survey, {
+				'show-results': this.showResults.bind(this),
+				'hide-results': this.hideResults.bind(this)
+			});
+		}
 	},
 
 
@@ -57,7 +67,10 @@ Ext.define('NextThought.app.assessment.Poll', {
 		this.removeCls('no-data');
 
 		parts.showQuestionSetWithAnswers();
-		header.setTitle('Thank You!');
+
+		if (!this.questionSet || !this.questionSet.isSurvey) {
+			header.setTitle('Thank You!');
+		}
 	},
 
 
@@ -85,5 +98,44 @@ Ext.define('NextThought.app.assessment.Poll', {
 			.always(function() {
 				me.unmask();
 			});
+	},
+
+
+	getResults: function() {
+		return this.survey ? this.survey.getResults(this.poll.getId()) : this.poll.getResults();
+	},
+
+
+	showResults: function() {
+		var parts = this.down('question-parts'),
+			header = this.down('question-header');
+
+		header.hide();
+		parts.hide();
+
+		this.addCls('showing-results');
+
+		this.add(Ext.widget('assessment-result', {
+			poll: this.poll,
+			survey: this.survey,
+			getResults: this.getResults.bind(this),
+			syncHeight: this.syncElementHeight.bind(this),
+			syncPositioning: this.self.syncPositioningTillStable.bind(this.self),
+			doHideResults: this.hideResults.bind(this)
+		}));
+	},
+
+
+	hideResults: function() {
+		var parts = this.down('question-parts'),
+			results = this.down('assessment-result'),
+			header = this.down('question-header');
+
+		this.removeCls('showing-results');
+
+		parts.show();
+		header.maybeShow();
+
+		this.remove(results, true);
 	}
 });
