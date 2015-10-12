@@ -6,6 +6,8 @@ Ext.define('NextThought.app.assessment.results.parts.Matching', {
 		'NextThought.app.assessment.results.parts.BarChart'
 	],
 
+	cls: 'result-part',
+
 	statics: {
 		mimeType: 'application/vnd.nextthought.assessment.aggregatedmatchingpart'
 	},

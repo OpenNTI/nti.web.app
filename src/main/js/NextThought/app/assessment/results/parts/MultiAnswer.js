@@ -4,5 +4,7 @@ Ext.define('NextThought.app.assessment.results.parts.MultiAnswer', {
 
 	statics: {
 		mimeType: 'application/vnd.nextthought.assessment.aggregatedmultiplechoicemultipleanswerpart'
-	}
+	},
+
+	cls: 'result-part'
 });

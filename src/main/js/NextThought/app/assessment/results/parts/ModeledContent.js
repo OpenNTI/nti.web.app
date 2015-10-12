@@ -10,7 +10,7 @@ Ext.define('NextThought.app.assessment.results.parts.ModeledContent', {
 		ModelWithBodyContent: 'NextThought.mixins.ModelWithBodyContent'
 	},
 
-	cls: 'modeled-content-results',
+	cls: 'modeled-content-results result-part',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header', cn: [

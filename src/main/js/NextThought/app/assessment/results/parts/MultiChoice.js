@@ -11,6 +11,8 @@ Ext.define('NextThought.app.assessment.results.parts.MultiChoice', {
 		mimeType: 'application/vnd.nextthought.assessment.aggregatedmultiplechoicepart'
 	},
 
+	cls: 'result-part',
+
 
 	initComponent: function() {
 		this.callParent(arguments);

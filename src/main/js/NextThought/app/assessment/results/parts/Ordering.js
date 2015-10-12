@@ -6,6 +6,8 @@ Ext.define('NextThought.app.assessment.results.parts.Ordering', {
 		mimeType: 'application/vnd.nextthought.assessment.aggregatedorderingpart'
 	},
 
+	cls: 'result-part',
+
 	getRowLabels: function() {
 		return this.questionPart.get('labels');
 	},
