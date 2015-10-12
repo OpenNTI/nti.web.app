@@ -146,6 +146,18 @@ Ext.define('NextThought.app.context.types.Content', {
 			}
 		}, this);
 
+		// Fix up URL for external links
+		Ext.each(node.query('a[target=_blank]'), function(a) {
+			var url = a.getAttribute('href'),
+				isExternalNTILink = !(/^(http(s)?:)/i.test(url));
+
+			if (isExternalNTILink) {
+				url = root + url;
+				url = getURL(url);
+				a.setAttribute('href', url);	
+			}
+		});
+
 
 		cardTpl = Ext.DomHelper.createTemplate({cls: 'content-card', html: NextThought.common.components.cards.Card.prototype.renderTpl.html});
 		Ext.each(node.query('object[type*=nticard]'), function(c) {

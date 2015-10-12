@@ -316,8 +316,14 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 	},
 
 
-	goToObject: function() {
-		var rec = this.record;
+	goToObject: function(e) {
+		var rec = this.record,
+			t = e && e.target,
+			externalLink = t && t.getAttribute('target');
+
+		if (externalLink === '_blank') {
+			return;
+		}
 
 		this.navigateToObject(rec);
 	},
