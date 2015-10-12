@@ -63,7 +63,7 @@ Ext.define('NextThought.app.stream.util.StreamSource', {
 
 		this.sortOrder = {
 			param: config.sortOrderParam || 'sortOrder',
-			value: config.sortOrder || (config.sort && config.sort.order)
+			value: config.sortOrder || (config.sort && config.sort.order) || 'descending'
 		};
 
 		this.context = {

@@ -30,11 +30,6 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
 	},
 
 
-	initialWidgetConfig: function() {
-		return { xtype: 'joined-event', username: this.user };
-	},
-
-
 	hasInitialWidget: function() {
 		return !!this.down('joined-event');
 	},
