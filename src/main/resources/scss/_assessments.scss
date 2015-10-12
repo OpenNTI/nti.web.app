@@ -1776,6 +1776,14 @@ input.preview[readonly] {
 	.footer {
 		min-height: 20px;
 	}
+
+	.error {
+		border: 0px solid #e2e2e2;
+		border-top-width: 1px !important;
+		padding: 20px 20px 0;
+		font-size: 0.875rem;
+		color: $primary-red;
+	}
 }
 
 .result.chart, .modeled-content-results {

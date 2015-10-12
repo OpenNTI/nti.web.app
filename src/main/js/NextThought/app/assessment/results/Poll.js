@@ -89,6 +89,10 @@ Ext.define('NextThought.app.assessment.results.Poll', {
 
 	showError: function() {
 		this.removeLoadingCmp();
+		this.resultContainer.add({
+			xtype: 'box',
+			autoEl: {cls: 'error', html: 'There was an error showing the results.'}
+		});
 	},
 
 
