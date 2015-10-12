@@ -33,7 +33,7 @@ Ext.define('NextThought.app.assessment.results.parts.MultiChoice', {
 
 		function clean(text) {
 			d.innerHTML = text;
-			return d.innerText;
+			return d.textContent;
 		}
 
 		choices.forEach(function(choice, idx) {
