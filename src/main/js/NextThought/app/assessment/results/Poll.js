@@ -107,7 +107,8 @@ Ext.define('NextThought.app.assessment.results.Poll', {
 		if (cmp) {
 			this.resultContainer.add(new cmp({
 				resultPart: resultPart,
-				questionPart: questionPart
+				questionPart: questionPart,
+				resize: this.resize.bind(this)
 			}));
 		} else {
 			console.warn('Unknown result type: ', resultPart);

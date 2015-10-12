@@ -13,15 +13,30 @@ Ext.define('NextThought.app.assessment.results.parts.ModeledContent', {
 	cls: 'modeled-content-results',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'prev-arrow', html: 'prev'},
-		{cls: 'next-arrow', html: 'next'},
+		{cls: 'header', cn: [
+			{tag: 'span', cls: 'current', html: ''},
+			{tag: 'span', html: ' of '},
+			{tag: 'span', cls: 'total', html: '{total}'},
+			{cls: 'prev-arrow'},
+			{cls: 'next-arrow'}
+		]},
 		{cls: 'content'}
 	]),
 
 	renderSelectors: {
 		prevArrow: '.prev-arrow',
 		nextArrow: '.next-arrow',
-		contentEl: '.content'
+		contentEl: '.content',
+		currentEl: '.current'
+	},
+
+
+	beforeRender: function() {
+		this.callParent(arguments);
+
+		this.renderData = Ext.apply(this.renderData || {}, {
+			total: this.resultPart.Total
+		});
 	},
 
 
@@ -36,6 +51,7 @@ Ext.define('NextThought.app.assessment.results.parts.ModeledContent', {
 
 
 	showResult: function(index) {
+		index = index || 0;
 		this.currentIndex = index;
 
 		var parts = this.resultPart.Results,
@@ -50,6 +66,8 @@ Ext.define('NextThought.app.assessment.results.parts.ModeledContent', {
 			this.contentEl.dom.innerHTML = 'Error showing response.';
 		}
 
+		this.currentEl.update(index + 1);
+
 		if (index <= 0) {
 			this.prevArrow.addCls('disabled');
 		} else {
@@ -62,6 +80,7 @@ Ext.define('NextThought.app.assessment.results.parts.ModeledContent', {
 			this.nextArrow.removeCls('disabled');
 		}
 
+		this.resize();
 	},
 
 
