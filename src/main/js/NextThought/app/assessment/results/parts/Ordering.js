@@ -4,5 +4,14 @@ Ext.define('NextThought.app.assessment.results.parts.Ordering', {
 
 	statics: {
 		mimeType: 'application/vnd.nextthought.assessment.aggregatedorderingpart'
+	},
+
+	getRowLabels: function() {
+		return this.questionPart.get('labels');
+	},
+
+
+	getSeriesLabels: function() {
+		return this.questionPart.get('values');
 	}
 });

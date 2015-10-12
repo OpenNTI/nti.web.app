@@ -35,10 +35,10 @@ Ext.define('NextThought.app.assessment.results.parts.BarChart', {
 				]
 			}
 		]},
-		{cls: 'legend', cn: [
+		{tag: 'ul', cls: 'legend', cn: [
 			{
 				tag: 'tpl', 'for': 'legend', cn: [
-					{cls: 'item', cn: [
+					{tag: 'li', cls: 'item', cn: [
 						{cls: 'key', style: {backgroundColor: '{color}'}},
 						{cls: 'value', html: '{label}'}
 					]}

@@ -1841,6 +1841,7 @@ input.preview[readonly] {
 					bottom: 45px;
 					transform: translateX(-50%);
 					background-color: #fbfbfb;
+					white-space: nowrap;
 					color: $primary-grey;
 					padding: 10px;
 					box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
@@ -1874,6 +1875,33 @@ input.preview[readonly] {
 						@include arrow($pointFrom: top, $width: 16px, $height: 8px, $color: rgba(0, 0, 0, 0.1));
 					}
 				}
+			}
+		}
+	}
+
+	.legend {
+		padding: 20px 0 0 0;
+		list-style: none;
+		margin: 0;
+
+		.item {
+			float: left;
+			width: 25%;
+			margin-bottom: 5px;
+			overflow: hidden;
+			@include ellipse;
+
+			.key {
+				display: inline-block;
+				vertical-align: middle;
+				width: 20px;
+				height: 20px;
+			}
+
+			.value {
+				display: inline;
+				vertical-align: middle;
+				padding-left: 0.5em;
 			}
 		}
 	}
