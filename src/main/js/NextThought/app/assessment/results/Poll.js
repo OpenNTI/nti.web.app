@@ -4,6 +4,7 @@ Ext.define('NextThought.app.assessment.results.Poll', {
 
 	requires: [
 		'NextThought.app.assessment.results.parts.MultiChoice',
+		'NextThought.app.assessment.results.parts.MultiAnswer',
 		'NextThought.app.assessment.results.parts.Matching',
 		'NextThought.app.assessment.results.parts.Ordering',
 		'NextThought.app.assessment.results.parts.ModeledContent'
@@ -26,22 +27,25 @@ Ext.define('NextThought.app.assessment.results.Poll', {
 			parts.MultiChoice,
 			parts.Matching,
 			parts.Ordering,
-			parts.ModeledContent
+			parts.ModeledContent,
+			parts.MultiAnswer
 		]);
 
 		this.resultContainer = this.down('[isResultContainer]');
 		this.footerContainer = this.down('[isFooter]');
 
-		this.footerContainer.add({
-			xtype: 'box',
-			autoEl: {cls: 'action right', html: 'Hide Results'},
-			listeners: {
-				click: {
-					element: 'el',
-					fn: this.onHideResults.bind(this)
+		if (!this.survey) {
+			this.footerContainer.add({
+				xtype: 'box',
+				autoEl: {cls: 'action right', html: 'Hide Results'},
+				listeners: {
+					click: {
+						element: 'el',
+						fn: this.onHideResults.bind(this)
+					}
 				}
-			}
-		});
+			});
+		}
 
 		this.loadingCmp = this.resultContainer.add(Globals.getContainerLoadingMask());
 

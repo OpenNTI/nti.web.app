@@ -93,5 +93,18 @@ Ext.define('NextThought.app.assessment.SurveyHeader', {
 	},
 
 
-	toggleResults: function() {}
+	toggleResults: function(e) {
+		var button = e.getTarget('.survey-results'),
+			hidden = e.getTarget('.hidden');
+
+		if (hidden) {
+			button.textContent = 'View Results';
+			button.classList.remove('hidden');
+			this.survey.fireEvent('hide-results');
+		} else {
+			button.textContent = 'Hide Results';
+			button.classList.add('hidden');
+			this.survey.fireEvent('show-results');
+		}
+	}
 });

@@ -48,6 +48,13 @@ Ext.define('NextThought.app.assessment.Poll', {
 			this.addCls('no-data');
 			header.setTitle('Closed');
 		}
+
+		if (this.survey) {
+			this.mon(this.survey, {
+				'show-results': this.showResults.bind(this),
+				'hide-results': this.hideResults.bind(this)
+			});
+		}
 	},
 
 
@@ -110,6 +117,7 @@ Ext.define('NextThought.app.assessment.Poll', {
 
 		this.add(Ext.widget('assessment-result', {
 			poll: this.poll,
+			survey: this.survey,
 			getResults: this.getResults.bind(this),
 			syncHeight: this.syncElementHeight.bind(this),
 			syncPositioning: this.self.syncPositioningTillStable.bind(this.self),

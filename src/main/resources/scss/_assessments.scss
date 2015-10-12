@@ -1772,6 +1772,10 @@ input.preview[readonly] {
 
 .assessment-result {
 	background: #fbfbfb;
+
+	.footer {
+		min-height: 20px;
+	}
 }
 
 .result.chart, .modeled-content-results {
