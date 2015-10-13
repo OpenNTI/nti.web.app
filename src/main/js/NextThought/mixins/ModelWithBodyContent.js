@@ -106,16 +106,15 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 			{
 				onclick: '{2}',
 				cls: 'video-placeholder',
+				style: {width: '{3}px'},
 				cn: [
 					{
 						tag: 'img',
 						src: '{1}',
 						cls: 'video-thumbnail',
 						alt: 'Video Thumbnail',
-						border: 0,
-						width: '{3}'
-					},
-					{cls: 'play'}
+						border: 0
+					}
 				]
 			}
 		]

@@ -336,7 +336,6 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 					} else {
 						index = me.store.indexOf(record);
 						me.refreshNode(index);
-						cb.call();
 					}
 
 					wait()

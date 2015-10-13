@@ -105,3 +105,19 @@
 		}
 	}
 }
+
+.body-divider {
+	.video-placeholder {
+		cursor: pointer;
+
+		@include icon('play-small', $side: after, $top: 50%, $left: 50%);
+
+		&::after {
+			margin: -16px 0 0 -16px;
+		}
+
+		img {
+			width: 100%;
+		}
+	}
+}
