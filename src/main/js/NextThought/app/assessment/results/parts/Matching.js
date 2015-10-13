@@ -74,9 +74,58 @@ Ext.define('NextThought.app.assessment.results.parts.Matching', {
 		return this.questionPart.get('labels');
 	},
 
+	/**
+	 * The Results coming back look like:
+	 *
+	 * {
+	 * 	labelIndex: {
+	 * 		valueIndex: number of times this value was placed with this label
+	 * 	}
+	 * }
+	 *
+	 * For graphing the results, we are trying to make the axis labels be the
+	 * parts that are fixed in the question, and the values be the parts that
+	 * the user can move. For ordering, the results work as is, since the labels
+	 * are what stays still and the values are movable. However for matching, its
+	 * the reverse (values stay still, while the labels move). So to get them to
+	 * line up, for matching we need to inverse the results to look like:
+	 *
+	 * {
+	 * 	valueIndex: {
+	 * 		labelIndex: number of times this label was placed with this value
+	 * 	}
+	 * }
+	 *
+	 * @return {Object} Map of the results
+	 */
+	getResults: function() {
+		var oldResults = this.resultPart.Results,
+			newResults = {},
+			resultKeys = Object.keys(oldResults);
 
+		resultKeys.forEach(function(labelIdx) {
+			var result = oldResults[labelIdx],
+				keys = Object.keys(result);
+
+			keys.forEach(function(valueIdx) {
+				newResults[valueIdx] = newResults[valueIdx] || {};
+
+				newResults[valueIdx][labelIdx] = oldResults[labelIdx][valueIdx];
+			});
+		});
+
+		return newResults;
+	},
+
+	/**
+	 * Return an array of rows to pass to the bar chart.
+	 * See the comments in NextThought.app.assessment.results.parts.MultiChoice
+	 * for more explanation of why its structured this way.
+	 *
+	 * @return {Array} the rows to show in the bar chart.
+	 */
 	getAxis: function() {
-		var resultParts = this.resultPart.Results,
+		var resultParts = this.getResults(),
 			total = this.resultPart.Total,
 			rowLabels = this.getRowLabels(),
 			seriesLabels = this.getSeriesLabels(),

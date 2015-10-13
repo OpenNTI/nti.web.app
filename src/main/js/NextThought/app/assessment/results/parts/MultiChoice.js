@@ -23,7 +23,21 @@ Ext.define('NextThought.app.assessment.results.parts.MultiChoice', {
 		});
 	},
 
-
+	/**
+	 * Get the rows to pass to the bar chart.
+	 *
+	 * The results we get back look like:
+	 *
+	 * {
+	 * 	choiceIndex: number of times it was chosen
+	 * }
+	 *
+	 * To map this to the labels, we iterate the choices listed in the question.
+	 * Since there may be no results for a choice, doing this will ensure we have
+	 * rows for every choice.
+	 *
+	 * @return {Array} Rows to pass to the bar chart
+	 */
 	getAxis: function() {
 		var resultParts = this.resultPart.Results,
 			total = this.resultPart.Total,

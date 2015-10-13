@@ -15,5 +15,13 @@ Ext.define('NextThought.app.assessment.results.parts.Ordering', {
 
 	getSeriesLabels: function() {
 		return this.questionPart.get('values');
+	},
+
+	/**
+	 * See Comment in NextThought.app.assessment.results.parts.Matching
+	 * @return {Object} Map of results
+	 */
+	getResults: function() {
+		return this.resultPart.Results;
 	}
 });
