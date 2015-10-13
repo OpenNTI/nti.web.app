@@ -19,11 +19,12 @@ Ext.define('NextThought.model.assessment.Poll', {
 	},
 
 	__loadResults: function() {
-		var link = this.getResultsLink(),
+		var me = this,
+			link = me.getResultsLink(),
 			load;
 
-		if (this.__loadResultsPromise) {
-			load = this.__loadResultsPromise;
+		if (me.__loadResultsPromise) {
+			load = me.__loadResultsPromise;
 		} else if (link) {
 			load = Service.request(link)
 				.then(function(response) {
@@ -33,9 +34,16 @@ Ext.define('NextThought.model.assessment.Poll', {
 			load = Promise.reject('No Link');
 		}
 
-		this.__loadResultsPromise = load;
+		me.__loadResultsPromise = load;
 
-		return this.__loadResultsPromise;
+		//Wait an event pump then clear the cached result
+		wait()
+			.then(function() {
+				delete me.__loadResultsPromise;
+			});
+
+
+		return me.__loadResultsPromise;
 	},
 
 
