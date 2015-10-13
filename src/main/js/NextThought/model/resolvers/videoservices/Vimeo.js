@@ -53,6 +53,12 @@ Ext.define('NextThought.model.resolvers.videoservices.Vimeo', {
 			}
 
 			return null;
+		},
+
+		URL_MATCHES: /vimeo/,
+
+		urlIsFor: function(url) {
+			return this.URL_MATCHES.test(url);
 		}
 	},
 

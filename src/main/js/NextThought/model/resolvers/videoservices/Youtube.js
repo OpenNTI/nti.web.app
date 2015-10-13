@@ -21,6 +21,12 @@ Ext.define('NextThought.model.resolvers.videoservices.Youtube', {
 				return match[2];
 			}
 			return null;
+		},
+
+		URL_MATCHES: /youtu\.?be/,
+
+		urlIsFor: function(url) {
+			return this.URL_MATCHES.test(url);
 		}
 	}
 });

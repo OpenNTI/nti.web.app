@@ -160,7 +160,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 
 		Video.resolvePosterFromEmbedded(o)
 			.then(function(poster) {
-				return poster;
+				return poster.poster || poster;
 			}, function(reason) {
 				return Globals.CANVAS_BROKEN_IMAGE.src;
 			})
