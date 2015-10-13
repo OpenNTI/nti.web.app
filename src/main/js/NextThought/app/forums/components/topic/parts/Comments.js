@@ -25,6 +25,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 	loadMask: false,
 	updateFromMeMap: {},
 	wbData: {},
+	videoData: {},
 	recordsToRefresh: [],
 
 	tpl: Ext.DomHelper.markup([
@@ -163,7 +164,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 			scrollEl.el.mask();
 		}
 
-		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null});
+		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null, enableVideo: true});
 		me.relayEvents(me.editor, ['activated-editor', 'deactivated-editor']);
 		me.editor.addCls('threaded-forum-editor');
 		me.el.selectable();
@@ -284,7 +285,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 		this.fireEvent('realign-editor');
 	},
 
-	setAvatar: function(user, record){
+	setAvatar: function(user, record) {
 		record.set({
 			'Creator': user
 		});
@@ -335,13 +336,18 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 					} else {
 						index = me.store.indexOf(record);
 						me.refreshNode(index);
+						cb.call();
 					}
 
 					wait()
 						.then(fulfill);
-				}, this, function(id, data) {
-					me.wbData[id] = data;
-				}, 226);
+				}, this, function(id, data, type) {
+					if (type === 'video') {
+						me.videoData[id] = data;
+					} else {
+						me.wbData[id] = data;
+					}
+				}, 226, null, {useVideoPlaceholder: true});
 			});
 		});
 	},

@@ -1,5 +1,7 @@
 Ext.define('NextThought.mixins.ModelWithBodyContent', {
 
+	requires: ['NextThought.app.video.Video'],
+
 	statics: {
 		/**
 		 * A naive model body content compiler that only shows styled text, will not include whiteboards etc...
@@ -96,6 +98,30 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 		]
 	}).compile(),
 
+
+	VIDEO_THUMBNAIL_TPL: Ext.DomHelper.createTemplate({
+		id: '{0}',
+		cls: 'body-divider',
+		cn: [
+			{
+				onclick: '{2}',
+				cls: 'video-placeholder',
+				cn: [
+					{
+						tag: 'img',
+						src: '{1}',
+						cls: 'video-thumbnail',
+						alt: 'Video Thumbnail',
+						border: 0,
+						width: '{3}'
+					},
+					{cls: 'play'}
+				]
+			}
+		]
+	}),
+
+
 	whiteboardRenderer: function(o, clickHandlerMaker, size, callback, scope) {
 		var id = guidGenerator(),
 				me = this,
@@ -111,7 +137,8 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 		});
 	},
 
-	embeddedVideoRenderer: function(o, clickHandlerMaker, size, callback, scope) {
+
+	__embeddedVideoNoPlaceholder: function(o, clickHandlerMaker, size, callback, scope) {
 		var width = (size || 360), height = width / (4.0 / 3.0),
 				cfg = {
 					cls: 'data-component-placeholder',
@@ -121,11 +148,45 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 					'data-height': height,
 					'data-width': width
 				};
+
+
 		Ext.callback(callback, scope, [Ext.DomHelper.markup(cfg)]);
 	},
 
 
-	renderVideoComponent: function(node, owner) {
+	__embeddedVideoWithPlaceholder: function(o, clickHandlerMaker, size, callback, scope) {
+		var id = guidGenerator(),
+			me = this,
+			Video = NextThought.app.video.Video;
+
+		Video.resolvePosterFromEmbedded(o)
+			.then(function(poster) {
+				return poster;
+			}, function(reason) {
+				return Globals.CANVAS_BROKEN_IMAGE.src;
+			})
+			.then(function(poster) {
+					var tpl = me.VIDEO_THUMBNAIL_TPL.apply([
+							id,
+							poster,
+							clickHandlerMaker(id, o, 'video') || '',
+							size || ''
+						]);
+
+				Ext.callback(callback, scope, [tpl]);
+			});
+	},
+
+	embeddedVideoRenderer: function(o, clickHandlerMaker, size, callback, scope, config) {
+		if (config && config.useVideoPlaceholder) {
+			return this.__embeddedVideoWithPlaceholder(o, clickHandlerMaker, size, callback, scope);
+		}
+
+		return this.__embeddedVideoNoPlaceholder(o, clickHandlerMaker, size, callback, scope);
+	},
+
+
+	renderVideoComponent: function(node, owner, config) {
 
 
 		var p, width = node.getAttribute('data-width'),
@@ -144,11 +205,12 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 	},
 
 
-	compileBodyContent: function(result, scope, clickHandlerMaker, size, bodyOverride) {
-
+	compileBodyContent: function(result, scope, clickHandlerMaker, size, bodyOverride, config) {
 		var me = this,
 				body = (bodyOverride || me.get('body') || []).slice().reverse(),
 				text = [];
+
+		config = config || {};
 
 		clickHandlerMaker = clickHandlerMaker || function() {return '';};
 
@@ -162,7 +224,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 						var mime = ph.getAttribute('data-mimetype'),
 								fn = me.componentRendererForPart[mime || ''];
 						if (Ext.isFunction(me[fn])) {
-							cmpAdded = me[fn](ph, cmp);
+							cmpAdded = me[fn](ph, cmp, config);
 							if (cmpAdded) {
 								added.push(cmpAdded);
 							}
@@ -184,7 +246,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 							function(t) {
 								text.push(t);
 								render(i - 1);
-							}, me);
+							}, me, config);
 				}
 				else {
 					console.error('Not rendering part we don\'t understand', o);
