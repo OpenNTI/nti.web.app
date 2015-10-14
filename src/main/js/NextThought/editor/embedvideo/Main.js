@@ -2,7 +2,10 @@ Ext.define('NextThought.editor.embedvideo.Main', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.embedvideo-main-view',
 	requires: [
-		'Ext.form.field.TextArea'
+		'Ext.form.field.TextArea',
+		'NextThought.model.resolvers.videoservices.Kaltura',
+		'NextThought.model.resolvers.videoservices.Vimeo',
+		'NextThought.model.resolvers.videoservices.Youtube'
 	],
 
 	cls: 'embedvideo-main-view',
@@ -43,49 +46,31 @@ Ext.define('NextThought.editor.embedvideo.Main', {
 		}
 	},
 
-
 	getValues: function() {
-		var raw = this.down('[name=embed]').getEl().getValue(), id,
-			stupidURLRegex = /^(http:\/\/|https:\/\/|\/\/).*/i,
-			youtubeEmbedURLRegex = /^(http:\/\/|https:\/\/|\/\/)www.youtube.com\/embed\/.+/i,
-			youtubeEmbedFrameRegex = /<iframe.*src="(.*?)".*?><\/iframe>/i,
-			kalturaRegex = /kaltura:\/\/[^\/]+\/[^\/]+\/{0,1}/i,
-			match;
+		var raw = this.down('[name=embed]').getEl().getValue(), matches,
+			iframeRegex = /<iframe.*src="(.*?)".*?><\/iframe>/i,
+			Videos = NextThought.model.resolvers.videoservices,
+			type = null;
 
-		raw = (raw || '').trim();
+		matches = iframeRegex.exec(raw);
 
-		match = kalturaRegex.exec(raw);
-		if (match) {
-			return {type: 'kaltura', embedURL: raw};
+		if (matches && match[1]) {
+			raw = match[1];
 		}
 
-		//Is it a youtube embed, we can work with that
-		match = youtubeEmbedFrameRegex.exec(raw);
-		if (match && youtubeEmbedURLRegex.test(match[1])) {
-			return {type: 'youtube' , embedURL: match[1]};
+		if (Videos.Kaltura.urlIsFor(raw)) {
+			type = {type: 'kaltura', embedURL: raw};
+		} else if (Videos.Youtube.urlIsFor(raw)) {
+			type = {type: 'youtube', embedURL: raw};
+		} else if (Videos.Vimeo.urlIsFor(raw)) {
+			type = {type: 'vimeo', embedURL: raw};
+		} else if (Videos.HTML.urlIsFor(raw)) {
+			type = {type: 'html5', embedURL: raw};
 		}
 
-		//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
-		function parseYoutubeIdOut(url) {
-			var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&\?]*).*/,
-				match = url.match(regExp);
-			if (match && match[2].length === 11) {
-				return match[2];
-			}
-			return null;
-		}
-
-		//Ok its not.  Is it a url?
-		if (stupidURLRegex.test(raw)) {
-			id = parseYoutubeIdOut(raw);
-
-			return {type: (id ? 'youtube' : 'html5'), embedURL: raw};
-		}
-
-
-
-		return null;
+		return type;
 	},
+
 
 	setError: function(error) {
 		var box = this.down('[name=error]'),

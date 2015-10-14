@@ -6,7 +6,8 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 		'NextThought.store.forums.Comments',
 		'NextThought.util.UserDataThreader',
 		'NextThought.app.whiteboard.Window',
-		'NextThought.app.forums.Actions'
+		'NextThought.app.forums.Actions',
+		'NextThought.app.video.window.Window'
 	],
 
 	mixins: {
@@ -25,6 +26,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 	loadMask: false,
 	updateFromMeMap: {},
 	wbData: {},
+	videoData: {},
 	recordsToRefresh: [],
 
 	tpl: Ext.DomHelper.markup([
@@ -163,7 +165,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 			scrollEl.el.mask();
 		}
 
-		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null});
+		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null, enableVideo: true});
 		me.relayEvents(me.editor, ['activated-editor', 'deactivated-editor']);
 		me.editor.addCls('threaded-forum-editor');
 		me.el.selectable();
@@ -284,7 +286,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 		this.fireEvent('realign-editor');
 	},
 
-	setAvatar: function(user, record){
+	setAvatar: function(user, record) {
 		record.set({
 			'Creator': user
 		});
@@ -339,9 +341,13 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 
 					wait()
 						.then(fulfill);
-				}, this, function(id, data) {
-					me.wbData[id] = data;
-				}, 226);
+				}, this, function(id, data, type) {
+					if (type === 'video') {
+						me.videoData[id] = data;
+					} else {
+						me.wbData[id] = data;
+					}
+				}, 226, null, {useVideoPlaceholder: true});
 			});
 		});
 	},
@@ -421,6 +427,17 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 	},
 
 
+	videoPlaceholderClick: function(record, container, e, el) {
+		var me = this,
+			guid = container && container.up('.body-divider').getAttribute('id'),
+			value = me.videoData[guid];
+
+		if (container && value) {
+			Ext.widget('video-window-window', {url: value.embedURL}).show();
+		}
+	},
+
+
 	loadThread: function(record, el) {
 		if (!record.threadLoaded) {
 			this.maskLoadBox(el);
@@ -440,7 +457,8 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 
 	handleItemClick: function(record, item, index, e) {
 		var load, me = this, width,
-			t = e.getTarget('.whiteboard-container', null, true),
+			whiteboard = e.getTarget('.whiteboard-container', null, true),
+			video = e.getTarget('.video-placeholder', null, true),
 			el = Ext.get(item),
 			box;
 
@@ -449,8 +467,13 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 			return;
 		}
 
-		if (t) {
-			this.whiteboardContainerClick(record, t, e, el);
+		if (whiteboard) {
+			this.whiteboardContainerClick(record, whiteboard, e, el);
+			return;
+		}
+
+		if (video) {
+			this.videoPlaceholderClick(record, video, e, el);
 			return;
 		}
 

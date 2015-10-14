@@ -105,3 +105,39 @@
 		}
 	}
 }
+
+.body-divider {
+	.video-placeholder {
+		cursor: pointer;
+
+		@include icon('play-small', $side: after, $top: 50%, $left: 50%);
+
+		&::after {
+			margin: -16px 0 0 -16px;
+		}
+
+		img {
+			width: 100%;
+		}
+	}
+}
+
+.video-window {
+	.video-window-container {
+		padding: 30px;
+		position: relative;
+		.controls {
+			display: none;
+		}
+
+		.close {
+			cursor: pointer;
+			top: 0; right: 0;
+			width: 26px;
+			height: 26px;
+			display: inline-block;
+			@include icon('close_popup', $position: absolute);
+
+		}
+	}
+}

@@ -3,10 +3,13 @@
  */
 Ext.define('NextThought.model.resolvers.VideoPosters', {
 	requires: [
-		'NextThought.model.resolvers.videoservices.*'
+		'NextThought.model.resolvers.videoservices.Vimeo',
+		'NextThought.model.resolvers.videoservices.Youtube'
 	],
 
 	statics: {
+		YOUTUBE: 'youtube',
+		VIMEO: 'vimeo',
 
 		getResolver: function(source) {
 			var service = source.service,
@@ -27,6 +30,21 @@ Ext.define('NextThought.model.resolvers.VideoPosters', {
 			}
 
 			return resolver.resolve();
+		},
+
+
+		resolvePoster: function(type, id) {
+			var resolve;
+
+			if (type === this.YOUTUBE) {
+				resolve = NextThought.model.resolvers.videoservices.Youtube.resolvePosterForID(id);
+			} else if (type === this.VIMEO) {
+				resolve = NextThought.model.resolvers.videoservices.Vimeo.resolvePosterForID(id);
+			} else {
+				resolve = Promise.reject('Unknown video type: ', type, id);
+			}
+
+			return resolve;
 		}
 
 	}
