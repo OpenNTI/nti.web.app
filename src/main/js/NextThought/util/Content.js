@@ -426,6 +426,20 @@ Ext.define('NextThought.util.Content', {
 			next = getRef(next);
 		}
 
+		//If the current index is not in the visible nodes, just show it as 1 page
+		//with not next or previous
+		if (currentIndex < 0) {
+			return {
+				isSupressed: onSuppressed,
+				currentIndex: 0,
+				totalNodes: 1,
+				previous: null,
+				next: null,
+				previousTitle: '',
+				nextTitle: ''
+			};
+		}
+
 		return {
 			isSuppressed: onSuppressed,
 			currentIndex: currentIndex,

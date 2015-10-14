@@ -201,7 +201,7 @@ Ext.define('NextThought.app.content.Actions', {
 		if (tocProps) {
 			o.maxLevel = tocProps['max-level'];
 			o.useTocLevelName = tocProps['use-toc-level-name'];
-		} 
+		}
 
 		return o;
 	},
