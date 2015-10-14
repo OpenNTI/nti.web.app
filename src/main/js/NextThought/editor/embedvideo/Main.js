@@ -54,8 +54,8 @@ Ext.define('NextThought.editor.embedvideo.Main', {
 
 		matches = iframeRegex.exec(raw);
 
-		if (matches && match[1]) {
-			raw = match[1];
+		if (matches && matches[1]) {
+			raw = matches[1];
 		}
 
 		if (Videos.Kaltura.urlIsFor(raw)) {
