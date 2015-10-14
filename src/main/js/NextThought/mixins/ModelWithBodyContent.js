@@ -114,7 +114,8 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 						cls: 'video-thumbnail',
 						alt: 'Video Thumbnail',
 						border: 0
-					}
+					},
+					{cls: 'play'}
 				]
 			}
 		]

@@ -109,11 +109,22 @@
 .body-divider {
 	.video-placeholder {
 		cursor: pointer;
+		position: relative;
 
-		@include icon('play-small', $side: after, $top: 50%, $left: 50%);
+		.play {
+			top: 50%; left: 50%;
+			margin-top: -23px;
+			margin-left: -23px;
+			width: 46px;
+			height: 46px;
+			background: rgba(0, 0, 0, 0.68);
+			box-shadow: 0 0 3px 0 #000;
+			border-radius: 48px;
+			@include icon('play', $position: absolute, $side: after, $top: 50%, $left: 50%);
 
-		&::after {
-			margin: -16px 0 0 -16px;
+			&::after {
+				margin: -21px 0 0 -21px;
+			}
 		}
 
 		img {
