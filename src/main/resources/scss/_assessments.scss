@@ -1144,6 +1144,7 @@ body.dragging * {
 		.field .footer {
 			position: relative;
 			overflow: hidden;
+			min-height: 43px;
 
 			.left {
 				float: left;
