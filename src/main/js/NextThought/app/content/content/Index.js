@@ -72,6 +72,25 @@ Ext.define('NextThought.app.content.content.Index', {
 	},
 
 
+	isShowingPage: function(ntiid) {
+		var isShowing, assessmentItems;
+
+		if (!this.page) {
+			return false;
+		}
+
+		if (this.page.get('NTIID') === ntiid) {
+			return true;
+		}
+
+		assessmentItems = this.page.get('AssessmentItems') || [];
+
+		return assessmentItems.reduce(function(acc, item) {
+			return acc || item.getId() === ntiid;
+		}, false);
+	},
+
+
 	onBeforeDeactivate: function() {
 		if (!this.reader) { return; }
 
@@ -139,6 +158,7 @@ Ext.define('NextThought.app.content.content.Index', {
 			};
 		});
 
+		this.page = page;
 		this.pageId = page.getId();
 
 		this.reader = NextThought.app.contentviewer.Index.create({
