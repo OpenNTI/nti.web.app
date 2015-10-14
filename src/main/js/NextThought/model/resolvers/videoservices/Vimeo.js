@@ -2,6 +2,8 @@ Ext.define('NextThought.model.resolvers.videoservices.Vimeo', {
 	alias: 'resolvers.videoservices.vimeo',
 
 	statics: {
+		TYPE: 'vimeo',
+
 		RESOLVED: {},
 
 		//URL: '//vimeo.com/api/v2/video/{0}.json',

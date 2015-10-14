@@ -2,6 +2,10 @@ Ext.define('NextThought.app.video.roll.Roll', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.video-roll',
 
+	requires: [
+		'NextThought.model.resolvers.videoservices.Vimeo'
+	],
+
 	layout: 'anchor',
 	defaults: {anchor: '100%'},
 	cls: 'videos',
@@ -31,11 +35,13 @@ Ext.define('NextThought.app.video.roll.Roll', {
 	constructor: function(config) {
 		var store = config ? (config.store || undefined) : undefined,
 			data = config ? (config.data || undefined) : undefined,
+			Vimeo = NextThought.model.resolvers.videoservices.Vimeo,
 			me = this;
 
 		me.callParent(arguments);
 
 		this.iframe = this.down('box[name=video]');
+
 
 		if (!data) {
 			data = [{
@@ -57,6 +63,18 @@ Ext.define('NextThought.app.video.roll.Roll', {
 				{name: 'type', type: 'string'}
 			],
 			data: data
+		});
+
+		this.store.each(function(item) {
+			if (item.get('thumbnail') || item.get('type') !== Vimeo.TYPE) { return; }
+
+			var url = item.get('url'),
+				id = Vimeo.getIdFromURL(url);
+
+			Vimeo.resolvePosterForID(id)
+				.then(function(poster) {
+					item.set('thumbnail', poster.poster);
+				});
 		});
 
 		this.others = this.add({
