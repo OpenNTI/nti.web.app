@@ -1,5 +1,7 @@
 Ext.define('NextThought.model.resolvers.videoservices.Youtube', {
 	statics: {
+		TYPE: 'youtube',
+
 		//http://stackoverflow.com/questions/2068344/how-do-i-get-a-youtube-video-thumbnail-from-the-youtube-api
 		POSTER_URL: '//img.youtube.com/vi/{0}/0.jpg',
 
@@ -7,9 +9,12 @@ Ext.define('NextThought.model.resolvers.videoservices.Youtube', {
 			return Promise.resolve(Ext.String.format(this.POSTER_URL, id));
 		},
 
+		EMBED_URL: '//www.youtube.com/embed/{0}',
 
-		isYoutubeVideo: function() {
+		getEmbedURL: function(url) {
+			var id = this.getIdFromURL(url);
 
+			return Ext.String.format(this.EMBED_URL, id);
 		},
 
 		//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url

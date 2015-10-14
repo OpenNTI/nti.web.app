@@ -5,7 +5,8 @@ Ext.define('NextThought.editor.embedvideo.Main', {
 		'Ext.form.field.TextArea',
 		'NextThought.model.resolvers.videoservices.Kaltura',
 		'NextThought.model.resolvers.videoservices.Vimeo',
-		'NextThought.model.resolvers.videoservices.Youtube'
+		'NextThought.model.resolvers.videoservices.Youtube',
+		'NextThought.model.resolvers.videoservices.HTML'
 	],
 
 	cls: 'embedvideo-main-view',
@@ -50,7 +51,12 @@ Ext.define('NextThought.editor.embedvideo.Main', {
 		var raw = this.down('[name=embed]').getEl().getValue(), matches,
 			iframeRegex = /<iframe.*src="(.*?)".*?><\/iframe>/i,
 			Videos = NextThought.model.resolvers.videoservices,
-			type = null;
+			types = [
+				Videos.Kaltura,
+				Videos.Youtube,
+				Videos.Vimeo,
+				Videos.HTML
+			], i, type = null;
 
 		matches = iframeRegex.exec(raw);
 
@@ -58,17 +64,30 @@ Ext.define('NextThought.editor.embedvideo.Main', {
 			raw = matches[1];
 		}
 
-		if (Videos.Kaltura.urlIsFor(raw)) {
-			type = {type: 'kaltura', embedURL: raw};
-		} else if (Videos.Youtube.urlIsFor(raw)) {
-			type = {type: 'youtube', embedURL: raw};
-		} else if (Videos.Vimeo.urlIsFor(raw)) {
-			type = {type: 'vimeo', embedURL: raw};
-		} else if (Videos.HTML.urlIsFor(raw)) {
-			type = {type: 'html5', embedURL: raw};
-		}
+		types.forEach(function(video) {
+			if (video.urlIsFor(raw) && !type) {
+				type = {
+					type: video.TYPE,
+					embedURL: video.getEmbedURL(raw),
+					VideoId: video.getIdFromURL(raw)
+				};
+			}
+		});
 
 		return type;
+
+
+		// if (Videos.Kaltura.urlIsFor(raw)) {
+		// 	type = {type: 'kaltura', embedURL: raw};
+		// } else if (Videos.Youtube.urlIsFor(raw)) {
+		// 	type = {type: 'youtube', embedURL: raw};
+		// } else if (Videos.Vimeo.urlIsFor(raw)) {
+		// 	type = {type: 'vimeo', embedURL: raw};
+		// } else if (Videos.HTML.urlIsFor(raw)) {
+		// 	type = {type: 'html5', embedURL: raw};
+		// }
+
+		// return type;
 	},
 
 

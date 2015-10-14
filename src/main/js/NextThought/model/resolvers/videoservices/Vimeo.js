@@ -41,7 +41,13 @@ Ext.define('NextThought.model.resolvers.videoservices.Vimeo', {
 		},
 
 
-		isVimeoURL: function(url) {},
+		EMBED_URL: '//www.vimeo.com/{0}',
+
+		getEmbedURL: function(url) {
+			var id = this.getIdFromURL(url);
+
+			return Ext.String.format(this.EMBED_URL, id);
+		},
 
 
 		ID_REGEX: /https?:\/\/(?:(www|player)\.)?vimeo.com\/(?:(channels|video)\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/,
