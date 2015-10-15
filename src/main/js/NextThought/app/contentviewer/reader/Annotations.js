@@ -152,18 +152,16 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 
 
 	convertRectToScreen: function(r) {
-		var iframe = this.reader.getIframe().get(),
-				result;
+		var readerOffsets = this.reader.getAnnotationOffsets().rect;
 
-		result = {
-			top: r.top + iframe.getY(),
-			left: r.left + iframe.getX(),
-			right: r.right + iframe.getX(),
-			bottom: r.bottom + iframe.getY(),
+		return {
+			top: r.top + readerOffsets.top,
+			left: r.left + readerOffsets.left,
+			right: r.right + readerOffsets.left,
+			bottom: r.bottom + readerOffsets.top,
 			height: r.height,
 			width: r.width
 		};
-		return result;
 	},
 
 
