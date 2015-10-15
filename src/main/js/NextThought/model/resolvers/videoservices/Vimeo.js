@@ -41,7 +41,7 @@ Ext.define('NextThought.model.resolvers.videoservices.Vimeo', {
 		},
 
 
-		EMBED_URL: '//www.vimeo.com/{0}',
+		EMBED_URL: 'https://www.vimeo.com/{0}',
 
 		getEmbedURL: function(url) {
 			var id = this.getIdFromURL(url);
