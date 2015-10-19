@@ -1,0 +1,36 @@
+// .topic-window .forums-topic-editor-box .forums-topic-editor .editor .main .content
+.blog-window {
+	overflow-x: hidden;
+	.blog-editor {
+		.editor {
+			.main .content {
+				max-height: none;
+				min-height: 0;
+			}
+		}
+	}
+	.entry {
+		.meta {
+			.name-wrap {
+				display: inline;
+
+				&::before {
+					content: 'Posted by ';
+				}
+
+				.datetime::after {
+					text-decoration: none !important;
+					position: static;
+					content: '\00B7';
+					padding: 0 0.5em;
+					background: none;
+				}
+
+				.name {
+					color: #3fb3f6;
+					margin-right: 5px;
+				}
+			}
+		}
+	}
+}

@@ -1,5 +1,5 @@
 
-.guide-window, .tos-window, .iframe-window, .badge-window, .notifications-window, .confirm-window {
+.guide-window, .tos-window, .iframe-window, .notifications-window, .confirm-window {
 	@extend .nti-window;
 	background-color: $quad-grey;
 	box-shadow: 0 10px 40px rgba(0,0,0,0.61);
@@ -48,8 +48,37 @@
 			opacity: 0.5 !important;
 		}
 		.yes-checkbox{ //tos
-			margin-top: 4px;
+			margin-top: 6px;
+			float: left;
 		}
+
+		.x-btn-blue-large {
+			float: right;
+		}
+	}
+}
+
+.guide-window,
+.tos-window {
+	max-height: 100vh;
+
+	.x-window-item {
+		height: 100%;
+	}
+
+	.x-window-body {
+		padding-bottom: 55px;
+		height: 100% !important;
+	}
+
+	iframe.help-iframe {
+		height: 100% !important;
+	}
+
+	.nti-window-footer {
+		position: absolute;
+		bottom: 0;
+		left: 0; right: 0;
 	}
 }
 
@@ -60,7 +89,24 @@
 }
 
 .confirm-window {
+	max-height: 100vh;
+
 	.nti-window-header {
 		display: block;
+	}
+
+	.x-window-item:not(.nti-window-header) {
+		height: 100% !important;
+		padding-bottom: 85px;
+	}
+
+	iframe.confirm {
+		height: 100% !important;
+	}
+
+	.x-container-footer {
+		position: absolute;
+		bottom: 0;
+		left: 0; right: 0;
 	}
 }

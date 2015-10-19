@@ -357,13 +357,27 @@
 		font-size: 32px;
 		font-weight: normal;
 		line-height: 48px;
-		img {
-			width: auto;
+
+		.avatarContainer {
+			display: inline-block;
+			width: 48px;
 			height: 48px;
-			border-radius: 4px;
 			vertical-align: middle;
 			margin: 10px;
 			margin-right: 15px;
+
+			.avatar-container {
+				position: relative;
+				height: 48px;
+				width: auto;
+
+				.initials {
+				  border-radius: 4px;
+				}
+				.avatar-pic{
+				  border-radius: 4px;
+				}
+			}
 		}
 	}
 
@@ -450,6 +464,8 @@
 	border-radius: 1px;
 	box-shadow: 0 10px 40px 0 rgba(0,0,0,0.45);
 	background: #fafafa;
+	position: fixed !important;
+	margin-top: 35px;//account for the close button
 
 	@include image-bar;
 
@@ -461,7 +477,6 @@
 		background: transparent $icons no-repeat;
 		@include sprite($icons,'close_popup',$dimensions: true);
 		cursor: pointer;
-		box-shadow: 0 0 10px 5px #ffffff;
 		border-radius: 90px;
 	}
 
@@ -915,6 +930,7 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 	$transition-duration:.1s;
 	background: $annotations-menu-bg;
 	border-radius:6px;
+	position: fixed !important;
 	opacity: 0.01; // so we can show the menu, compute its width, and center it. (can't get the width until it's rendered in the dom.)
 	&.visible {
 		opacity: 1;

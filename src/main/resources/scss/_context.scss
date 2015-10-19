@@ -1,0 +1,34 @@
+
+.context-card {
+	.image-context {
+		img {
+			max-width: 640px;
+		}
+
+		&.slide {
+			img {
+				margin-left: 38px;
+			}
+		}
+	}
+
+	&.hidden {
+		display: none;
+	}
+}
+
+.dashboard-post {
+	.context-card {
+		.image-context {
+			&.slide {
+				.content-launcher {
+					padding: 10px;
+
+					img {
+						margin-left: 0;
+					}
+				}
+			}
+		}
+	}
+}

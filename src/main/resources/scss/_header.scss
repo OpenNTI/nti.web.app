@@ -59,7 +59,8 @@
 	}
 }
 
-.main-navigation {
+//TODO: get rid of this
+.x-main-navigation {
 	.x-masked & {z-index: 99;}//below the extjs mask z-index
 
 	background: #ebebec;
@@ -67,31 +68,6 @@
 	height: 57px;
 	z-index: 150;//keep this above dashboard
 
-	@include element('top-nav-logo', $position:absolute);
-
-	&::after{
-		z-index: 0;
-		clip: rect(auto, auto, 57px, auto);
-	}
-
-	&::before {
-		content: '';
-		display: block;
-		position: absolute;
-
-		bottom: 0;
-		left: 0;
-		right: 0;
-
-		z-index: 1;
-		height: 10px;
-		overflow: hidden;
-
-		//border-radius: 10% / 10px;
-		background: #ccc;
-		box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-		clip: rect(10px, auto, 20px, auto);
-	}
 
 	& > div {
 		width: 70px;

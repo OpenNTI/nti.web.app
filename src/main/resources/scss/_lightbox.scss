@@ -1,19 +1,23 @@
 
-.x-panel-lightbox {
+.x-panel-lightbox {	
 	overflow: visible;
 	background: #fff;
 	box-shadow: 0 0 30px 5px rgba(0, 0, 0, 0.6);
+	position: fixed !important;
 
 	.close {
-		top: -34px;
-		right: -34px;
+		top: 10px;
+		right: 10px;
 		position: absolute;
 
 		background: transparent $icons no-repeat;
-		@include sprite($icons,'close_popup',$dimensions: true);
+		@include sprite($icons,'note-window-x',$dimensions: true);
 		cursor: pointer;
-		box-shadow: 0 0 10px 5px #ffffff;
-		border-radius: 90px;
+
+		&:hover {
+			@include sprite($icons,'note-window-x_hover',$dimensions: true);
+		}
+
 	}
 
 	.content {
@@ -26,6 +30,7 @@
 		}
 
 		padding: 25px 30px;
+		height: 100%;
 
 		.page-contents {
 			display: -ms-flexbox;
@@ -50,7 +55,7 @@
 			border: 1px solid #ddd;
 			padding: 18px 20px;
 			margin: 0;
-			overflow: scroll;
+			overflow: auto;
 			-webkit-overflow-scrolling: touch;
 		}
 	}

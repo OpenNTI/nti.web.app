@@ -1,0 +1,171 @@
+html.x-viewport { 
+	height: auto !important; 
+	overflow-y: auto !important; 
+	padding-top: $header-height;
+
+	&.window-open {
+		overflow: hidden !important;
+
+		.window-container {
+			display: block;
+		}
+	}
+
+	&.msg-bar-open {
+		padding-top: $header-height-withbar;
+		
+		.main-navigation {
+			top: $msg-bar-height;
+		}
+
+		.window-container {
+			top: $header-height-withbar; 
+		}
+
+		.main-message-bar {
+			display: block;
+		}	
+	}
+}
+
+
+
+body.x-body {
+	min-height: 100%;
+	height: auto !important;
+	overflow: hidden !important;
+	background: white;
+	background: #343434;
+	background-size: cover;
+	background-attachment: fixed;
+	position: relative;
+
+	.make-white {
+		background: white;
+	}
+}
+
+#view {
+	@include hardware-accelerate();
+    min-height: 100%;
+    width: 1024px;
+    margin: 0 auto;
+
+    &.fullwidth {
+    	width: 100%;
+    	margin: 0;
+    }
+
+    &.height-locked {
+    	overflow: hidden;
+    }
+}
+
+.body-shade-mask {
+	position: fixed;
+	top: 0; bottom: 0;
+	left: 0; right: 0;
+	z-index: -1;
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
+.main-viewport {
+	position: relative;
+
+	.main-message-bar {
+		position: fixed;
+		top: 0; left: 0;
+		right: 0;
+		height: $msg-bar-height;
+		z-index: 99;
+		display: none;
+	}
+}
+
+.main-navigation {
+	position: fixed;
+	top: 0; left: 0;
+	right: 0;
+	height: $header-height;
+	z-index: 150;
+	background-color: rgba(255, 255, 255, 0.97);
+	backface-visibility: hidden;
+
+	&.dark-nav {
+		background-color: rgba(42, 42, 42, 0.97);
+
+		&::before {
+			background-color: #292929;
+			box-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
+		}
+	}
+
+	&::after{
+		content: '';
+		display: block;
+		position: absolute;
+
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 0;
+		clip: rect(auto, auto, 57px, auto);
+	}
+
+	&::before {
+		content: '';
+		display: block;
+		position: absolute;
+
+		bottom: 0;
+		left: 0;
+		right: 0;
+
+		z-index: 1;
+		height: 10px;
+		overflow: hidden;
+
+		//border-radius: 10% / 10px;
+		background: #ccc;
+		box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+		clip: rect(10px, auto, 20px, auto);
+	}
+}
+
+
+.window-container {
+	position: fixed;
+	top: $header-height; bottom: 0;
+	left: 0; right: 0;
+	background-color: rgba(0, 0, 0, 0.3);
+	z-index: 100;
+	overflow: auto;
+	display: none;
+
+	.window-content {
+		width: 780px;
+		max-width: 100%;
+		margin: 20px auto;
+		background-color: white;
+
+		.window-header{
+			.title {
+				span{
+					color: #3fb3f6;
+					
+					&:after {
+					    content: ' / ';
+					    color: #b8b8b8;
+					}
+
+					&:last-of-type:after {
+					    content: '';
+					}
+					&:last-of-type {
+					    color: #b8b8b8;
+					}
+				}
+			}
+		}
+	}
+}

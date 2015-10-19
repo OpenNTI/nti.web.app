@@ -77,7 +77,9 @@ Ext.application({
 
 			Ext.applyIf($AppConfig, {links: {}});
 
-			me.getController('Session').login(me);
+			me.getController('Application').load(me);
+
+			// me.getController('Session').login(me);
 			NextThought.isReady = true;
 		}
 

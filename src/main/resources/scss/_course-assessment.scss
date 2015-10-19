@@ -33,8 +33,8 @@ canvas.x-component-course-assessment {
 .timed-placeholder {
 	font-size: 1rem;
 	padding: 0 60px 0 35px;
-	max-height: 800px;
-	overflow: visible;
+	overflow: hidden;
+	position: relative;
 
 	.header {
 		color: #494949;
@@ -47,14 +47,14 @@ canvas.x-component-course-assessment {
 	}
 
 	.nti-alert {
-		position: absolute;
+		position: absolute !important;
 		width: 62%;
-		top: 40%;
-		top: calc(50% - 60px);
+		top: 250px;
 		@include experimental(transform, translateY(-50%));
 		left: 50%;
 		margin-left: -31%;
 		box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3);
+		background: white;
 
 		.alert-container {
 			@include experimental(animation-name, none);
@@ -159,66 +159,74 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.course-assessment-view.navigation-panel {
+	padding-top: 20px;
+	.body-view {
+		background: white;
+		padding-top: 0;
+	}
+}
 
-.x-component-course-assessment {
-	.assignment-status {
-		font: normal 600 0.6em/1 $font;
-		text-transform: uppercase;
-		color: $tertiary-grey;
+.assignment-status {
+	font: normal 600 0.6em/1 $font;
+	text-transform: uppercase;
+	color: $tertiary-grey;
 
-		* {
-			display: inline;
+	* {
+		display: inline;
+	}
+
+	.status-item{
+
+		&:first-of-type::before {
+			display: none;
 		}
 
-		.status-item{
-
-			&:first-of-type::before {
-				display: none;
-			}
-
-			&::before {
-				content: '\b7';
-				font-size: 1.2em;
-				vertical-align: middle;
-				margin: 0 0.3em;
-			}
-		}
-
-		.completed {
-			.completed-label {
-				margin-right: 0.3em;
-
-				&.ontime {
-					color: $secondary-green;
-				}
-			}
-
-			.completed-errors {
-				color: $primary-red;
-				margin-right: 0.3em;
-			}
-		}
-
-        .excused{
-            padding-left: 6px;
-            color: $primary-red;
-        }
-
-		.due{
-			&.today {
-			 color: $primary-orange;
-			}
-
-			&.late {
-				color: $primary-red;
-			}
-
-			&.nosubmit {
-				color: $tertiary-grey;
-			}
+		&::before {
+			content: '\b7';
+			font-size: 1.2em;
+			vertical-align: middle;
+			margin: 0 0.3em;
 		}
 	}
 
+	.completed {
+		.completed-label {
+			margin-right: 0.3em;
+
+			&.ontime {
+				color: $secondary-green;
+			}
+		}
+
+		.completed-errors {
+			color: $primary-red;
+			margin-right: 0.3em;
+		}
+	}
+
+    .excused{
+        padding-left: 6px;
+        color: $primary-red;
+    }
+
+	.due{
+		&.today {
+		 color: $primary-orange;
+		}
+
+		&.late {
+			color: $primary-red;
+		}
+
+		&.nosubmit {
+			color: $tertiary-grey;
+		}
+	}
+}
+
+
+.x-component-course-assessment {
 	&.nav-outline{
 		position: relative;
 		background: #f5f4f4;
@@ -256,6 +264,10 @@ canvas.x-component-course-assessment {
 				padding: 0.4em 0.8em 0.3em;
 				color: #fff;
 				background: $primary-blue;
+
+				&.hidden {
+					display: none
+				}
 			}
 
 
@@ -527,6 +539,22 @@ canvas.x-component-course-assessment {
 			overflow: hidden;
 		}
 
+		&.disabled {
+			.page, .controls {
+				opacity: 0.6;
+				pointer-events: none;
+			}
+
+			.assignment {
+				.meta, .extras {
+					span.link {
+						opacity: 0.6;
+						cursor: default;
+					}
+				}
+			}
+		}
+
 		&::after {
 			content: '';
 			box-shadow: 0 -5px 15px 5px rgba(0,0,0,0.2);
@@ -559,6 +587,7 @@ canvas.x-component-course-assessment {
 				margin-top: 1em;
 
 				span {
+					display: inline-block;
 					&.link { color: $primary-blue; cursor: pointer; }
 
 					&::before {
@@ -569,6 +598,10 @@ canvas.x-component-course-assessment {
 					&:first-of-type::before {
 						content: none;
 					}
+				}
+
+				.arrow::after {
+					top: -0.1em;
 				}
 			}
 
@@ -665,7 +698,7 @@ canvas.x-component-course-assessment {
 						display: none;
 					}
 				}
-				
+
 				@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 16px, $left: auto, $right: 15px);
 
 				&:hover {
@@ -701,6 +734,7 @@ canvas.x-component-course-assessment {
 				left: 50%;
 				margin-left: -6px;
 				transform: rotate(90deg);
+				-webkit-transform: rotate(90deg);
 			}
 
 			&::before {
@@ -725,6 +759,7 @@ canvas.x-component-course-assessment {
 				left: 50%;
 				margin-left: -6px;
 				transform: rotate(-90deg);
+				-webkit-transform: rotate(-90deg);
 			}
 
 			&::before {
@@ -967,6 +1002,11 @@ canvas.x-component-course-assessment {
 	position: relative;
 	font: normal 500 0.9em/3.5em $font;
 
+	&.disabled, .disabled & {
+		opacity: 0.6;
+		pointer-events: none;
+	}
+
 	input {
 		font: normal 500 1em/2 $font;
 		color: $secondary-grey;
@@ -1000,6 +1040,7 @@ canvas.x-component-course-assessment {
 		&.disabled{
 			cursor: default;
 			opacity: 0.5;
+			pointer-events: none;
 
 			&:hover {
 				color: inherit;
@@ -1105,6 +1146,16 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.course-performance {
+	.x-container.grouping table {
+		table-layout: fixed !important;
+	}
+
+	.x-grid-body .x-grid-row .x-grid-cell.x-grid-cell-first {
+		max-width: 269px;
+	}
+}
+
 .course-assessment-assignments {
 	.show-older-container{
 		height: 1em;
@@ -1146,15 +1197,18 @@ canvas.x-component-course-assessment {
 
 .assignment-reader, .course-assessment-header {
 	.time-remaining {
-		position: absolute;
+		position: fixed;
 		z-index: 5;
-		top: 0;
-		right: 0;
+		top: 92px;
 		height: 60px;
 		line-height: 60px;
 		width: 258px;
 		color: white;
 		background-color: white;
+
+		html.msg-bar-open & {
+			top: 132px;
+		}
 
 		&.hidden {
 			display: none;
@@ -1346,12 +1400,16 @@ canvas.x-component-course-assessment {
 	&.assignment-item {
 
 		.toolbar {
-			box-shadow: inset 0 -1px 0 0 #f1f1f1;
 			padding: 0 17px 0 30px;
 			font: normal normal 0.75em/49px $font;
 			color: $primary-grey;
 			height: 50px;
 			white-space: nowrap;
+
+			&.disabled {
+				opacity: 0.6;
+				pointer-events: none;
+			}
 
 			.path-items {
 				position: relative;
@@ -1359,6 +1417,10 @@ canvas.x-component-course-assessment {
 				text-overflow: ellipsis;
 				width: 520px;
 				display: inline-block;
+
+				.toc {
+					display: none;
+				}
 
 				.path.current {
 					position: relative;
@@ -1369,6 +1431,11 @@ canvas.x-component-course-assessment {
 				&.show-toast {
 					.path.current {
 						top: -8px;
+
+						&::before {
+							position: relative;
+							top: 8px
+						}
 					}
 
 					.header-toast {
@@ -1414,12 +1481,6 @@ canvas.x-component-course-assessment {
 					color: $primary-grey;
 				}
 
-				&::after {
-					content: ' /  ';
-					color: $tertiary-grey;
-					font-weight: 400;
-					margin: 0.3em;
-				}
 
 				&:last-of-type {
 					cursor: default;
@@ -1505,8 +1566,8 @@ canvas.x-component-course-assessment {
 
 			.header{
 				padding-left: 80px;
-				display: none;
 				height: 70px;
+				display: none;
 
 				@include icon('assignment_late', $side:'before', $top:16px, $left:30px);
 
@@ -1549,7 +1610,7 @@ canvas.x-component-course-assessment {
 			}
 		}
 
-		&.reader-header {
+		&:not(.performance-header).reader-header {
 			.toolbar {
 				height: 60px;
 				line-height: 59px;
@@ -1577,6 +1638,7 @@ canvas.x-component-course-assessment {
 
 					.gradebox {
 						width: 8.1em;
+						height: 2.9em;
 
 						input {
 							width: 100%;
@@ -1719,9 +1781,9 @@ canvas.x-component-course-assessment {
 
 				.gradebox {
 					overflow: hidden;
+					height: 2.859em;
 					width: 10.5em;
 					font: normal 500 1em/1 $font;
-					border: 1px solid #dcdcdc;
 					background: #fff;
 					& > * {
 						font: normal 500 1em/1 $font;
@@ -1734,8 +1796,10 @@ canvas.x-component-course-assessment {
 
 					input {
 						width: 56%;
-						border-width: 0 1px 0 0;
-						border-right: { style: solid; color: #dcdcdc; }
+						border: 1px solid #dcdcdc !important;
+					}
+					input:focus {
+					    border-color: #B8B8B9 !important;
 					}
 					.dropdown {
 						width: 44%;
@@ -1892,6 +1956,21 @@ canvas.x-component-course-assessment {
 
 .x-container-course-assessment.grade > .body { margin-top: 0; }
 
+.student-assignment-overview,
+.course-assessment-admin {
+	.x-grid-header-ct {
+		position: static !important;
+	}
+
+	.x-grid-body {
+		top: 0 !important;
+	}
+
+	table {
+		table-layout: fixed !important;
+	}
+}
+
 
 .x-grid-body {
 	.x-grid-row .x-grid-cell {
@@ -1931,12 +2010,18 @@ canvas.x-component-course-assessment {
 }
 
 
-//Grid Views:
-.x-grid {
-	&.student-performance-overview {
-		position: absolute;
-		bottom: 0; left: 0; right: 0;
-	}
+.admin-paged-grid {
+	&.disabled {
+		.x-grid-header-ct {
+			pointer-events: none;
 
-	&.student-performance-overview { top: 171px; }
+			.x-box-inner::before {
+				content: '';
+				display: block;
+				position: absolute;
+				top: 0; bottom: 0;
+				left: 0; right: 0;
+			}
+		}
+	}
 }

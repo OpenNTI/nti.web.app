@@ -1108,10 +1108,6 @@ Ext.define('NextThought.controller.Chat', {
 			if (log) {
 				log.showInputStateNotifications(inputStates);
 			}
-			// NOTE: if the user is typing that means he is active.
-			if (!wasPreviouslyInactive) {
-				return;
-			}
 
 			state = 'active';
 		}
@@ -1270,6 +1266,7 @@ Ext.define('NextThought.controller.Chat', {
 		delete status[id];
 
 		this.setSessionObject(status, key);
+		this.fireEve('exited-room', id);
 	},
 
 

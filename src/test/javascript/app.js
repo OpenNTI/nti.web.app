@@ -18,40 +18,51 @@ Ext.Loader.setPath('Ext.ux.ajax', Ext.Loader.getPath('Ext').replace(/\/src$/, '/
 
 Ext.application({
 	name: 'NextThought',
-	appFolder: (window.testRoot || '') + 'javascript/NextThought',
+	appProperty: 'appInstance',
+	appFolder: 'javascript/NextThought',
+	autoCreateViewport: false,
 
 	requires: [
+		'NextThought.cache.*',
 		'NextThought.util.Globals',
 		'NextThought.overrides.*',
+		'NextThought.util.Localization',//require this SUPER early.
 		'NextThought.util.*',
 
-		//Require this early so we have it if we need it
-		'NextThought.view.MessageBar',
-		'NextThought.view.MessageBox',
 		'Ext.ux.ajax.SimManager'
+
+		// 'Ext.grid.Panel',
+		// 'Ext.grid.column.Date',
+		// 'Ext.grid.plugin.CellEditing',
+
+		// //Require this early so we have it if we need it
+		// 'NextThought.view.MessageBar',
+		// 'NextThought.view.MessageBox'
 	],
 
-
 	controllers: [
-		'Account',
-		'UserData',
-		'Application',
-		'Assessment',
-		'Chat',
-		'CourseWare',
-		'FilterControl',
-		'Forums',
-		'Groups',
-		'Navigation',
-		'Notifications',
-		'Profile',
-		'Reader',
-		'Search',
-		'Session',
-		'SlideDeck',
-		'State',
-		'Store',
-		'Stream'
+		// 'Account',
+		// 'UserData',
+		'Application'
+		// 'Assessment',
+		// 'Chat',
+		// 'ContentManagement',
+		// 'CourseWare',
+		// 'FilterControl',
+		// 'Forums',
+		// 'Groups',
+		// 'Library',
+		// 'Navigation',
+		// 'Notifications',
+		// 'Profile',
+		// 'Reader',
+		// 'Search',
+		// 'Session',
+		// 'SlideDeck',
+		// 'State',
+		// 'Store',
+		// 'Stream',
+		// 'Updates'
 	],
 
 	launch: function() {

@@ -8,6 +8,10 @@ Ext.define('NextThought.controller.Application', {
 
 	launchToken: {timeout: 3600000},//hour
 
+	load: function(app) {
+		// debugger;
+	},
+
 	init: function() {
 		this.application.registerInitializeTask(this.launchToken);
 

@@ -444,6 +444,10 @@
 		color: $primary-grey;
 		font: normal 400 14px/28px $font;
 
+		.video-placeholder {
+			width: 60% !important;
+		}
+
 		img.whiteboard-thumbnail {
 			width: 80%;
 			height: auto;
@@ -729,6 +733,10 @@
 			.commentAvatar{
 				left: 130px;
 			}
+
+			.wrap .meta .name {
+				max-width: 25em;
+			}
 		}
 
 		&[data-depth='3']{
@@ -737,6 +745,10 @@
 			.commentAvatar{
 				left: 95px;
 			}
+
+			.wrap .meta .name {
+				max-width: 30em;
+			}
 		}
 
 		&[data-depth='2']{
@@ -744,6 +756,10 @@
 			.commentAvatar{
 				left: 55px;
 			} 
+
+			.wrap .meta .name {
+				max-width: 30em;
+			}
 		}
 
 		&[data-depth='1'], &[data-depth='0']{
@@ -754,6 +770,10 @@
 
 			.commentAvatar{
 				left: 25px;
+			}
+
+			.wrap .meta .name {
+				max-width: 35em;
 			}
 		}
 
@@ -775,7 +795,7 @@
 					overflow: hidden;
 					white-space: nowrap;
 					@include ellipse;
-					max-width: 10em;
+					max-width: 20em;
 					display: inline-block;
 					vertical-align: middle;
 				}
@@ -875,7 +895,6 @@
 }
 
 @mixin forum-post-editor{
-	border: 1px solid #dcdcdc;
 	background: #fff;
 
 	.editor {
@@ -979,6 +998,32 @@
 		position: absolute;
 		top: 5px; right:0;
 		z-index: 101;
+	}
+}
+
+.blog-window {
+	.blog-editor {
+		@include forum-post-editor;
+	}
+
+	.entry {
+		padding: 0;
+		@include post-view;
+		.navigation-bar {
+			.pager {
+				right: 10px;
+			}
+		}
+
+		& > .wrap {
+			position: relative;
+			padding: 20px 35px;
+			background: #fff;
+
+			.controls {
+				overflow: hidden;
+			}
+		}
 	}
 }
 
@@ -1202,21 +1247,117 @@
 	}
 }
 
+.topic-window {
+	-webkit-font-smoothing: antialiased;
+	.topic-post, .forum-comment-thread {
+		position: relative;
+		margin-top: 0;
+		.header-container {
+			height: 50px;
+			z-index: 3;
+			border: 0 solid #f1f1f1;
+			border-bottom-width: 1px !important;
+		}
+
+		.avatar {
+			position: absolute;
+			width: 60px; height: 60px;
+			top: 35px; left: 30px;
+			border-radius: 3px;
+			background:{
+				color: transparent;
+				position: center;
+				repeat: no-repeat;
+				size: cover;
+			}
+		}
+
+		& > .wrap {
+			padding: 30px 25px 0 25px;
+			position: relative;
+
+			.meta{
+				margin-left: 75px;
+			}
+
+			.meta,
+			.foot {
+				position: relative;
+
+				.paging-comments-nav{
+					position: absolute;
+					bottom: -3px;
+					right: 0;
+					width: 330px;
+					text-align: right;
+					display: block;
+
+					&.single {
+						display: none;
+					}
+
+					.pager-container{
+						.pages{
+							.page{
+								color: $primary-blue;
+								display: inline-block;
+								padding-right: 20px;
+								cursor: pointer;
+
+								&.disabled, &.active{
+									color: $tertiary-grey;
+									cursor: default;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		@include post-view;
+
+		.searchHit-overlay{
+			z-index: 1;
+			left: 0;
+			pointer-events: none;
+		}
+
+		.title{
+			margin-left: 70px;
+			cursor: default;
+			white-space: normal;
+		}
+	}
+
+	.forums-topic-editor-box{
+		margin: 0 auto;
+
+		.forums-topic-editor{
+			border: none !important;
+			
+			.title {
+				margin-left: 0;
+			}
+
+
+			@include forum-post-editor;
+		}
+	}
+}
+
 #forums, 
 .course-forum{
 	-webkit-font-smoothing: antialiased;
 	@include scrollbar(#ffffff, $tertiary-grey);
-	overflow:{
-		x: hidden;
-		y: auto; //scroll;
-	}
 
 	&.scroll-lock{
 		overflow: hidden;
 	}
 
 	.empty-forum{
-		margin: 100px 20px 0;
+		background-color: white;
+		padding: 100px 20px;
 		text-align: center;
 		font: normal 300 30px $font;
 		color: $tertiary-grey;
@@ -1477,19 +1618,6 @@
 		}
 	}
 
-	.forum-body{
-		overflow-x: hidden;
-		background-color: white;
-		
-		&.scroll-content,
-		.scroll-content {
-			overflow-y: auto;
-			position: absolute;
-			top: 50px; bottom: 0px;
-			left: 0px; right: 0px; 
-		}
-	}
-
 	.topic-view{
 		.forum-nav{
 			border: 0 solid #EDEDED;
@@ -1516,21 +1644,6 @@
 			}
 		}
 
-		&.forums-topic-editor-box{
-			margin: 0 auto;
-
-			.forums-topic-editor{
-				border: none !important;
-				
-				.title {
-					margin-left: 0;
-				}
-
-
-				@include forum-post-editor;
-			}
-		}
-
 		&.forum-list {
 			@include forum-list-item;
 			margin-top: 0;
@@ -1544,11 +1657,22 @@
 		}
 
 		&.topic-list-body {
+			position: relative;
+
+			.x-mask-msg{
+				height: 50px;
+				width: 100px;
+				margin-left: -50px;
+				margin-top: -25px;
+				top: 50% !important;
+				left: 50% !important;
+			}
+
 			.topic-list-header{
 				height: 90px;
 				padding: 29px 15px;
 				background-color: #f8f8f8;
-				box-shadow: 0 -3px 8px 3px rgba(0, 0, 0, 0.25);
+				box-shadow: inset 0 -2px 0px 0px rgba(0,0,0,0.06);
 
 				.new-topic{
 					float: left;
@@ -1618,108 +1742,22 @@
 				}
 				
 			}
-
-			.scroll-content {
-				top: 142px;//50 + 70
-			}
-
-			.x-mask-msg{
-				margin-left: 47%;
-				height: 50px;
-				margin-top: 5%;
-			}
 		}
 
 		&.topic-list {
 			margin-top: 0;
+			background-color: white;
 			@include topic-list-item;
+
+			&.loading {
+				overflow: hidden;
+			}
 
 			.header-container {
 				height: 52px;
 				.header {
 					@include forum-navigation;
 				}
-			}
-		}
-
-		&.topic-post, &.topic-body {
-			position: relative;
-			margin-top: 0;
-			.header-container {
-				height: 50px;
-				z-index: 3;
-				border: 0 solid #f1f1f1;
-				border-bottom-width: 1px !important;
-			}
-
-			.avatar {
-				position: absolute;
-				width: 60px; height: 60px;
-				top: 35px; left: 30px;
-				border-radius: 3px;
-				background:{
-					color: transparent;
-					position: center;
-					repeat: no-repeat;
-					size: cover;
-				}
-			}
-
-			& > .wrap {
-				padding: 30px 25px 0 25px;
-				position: relative;
-
-				.meta{
-					margin-left: 75px;
-				}
-
-				.meta,
-				.foot {
-					position: relative;
-
-					.paging-comments-nav{
-						position: absolute;
-						bottom: -3px;
-						right: 0;
-						width: 330px;
-						text-align: right;
-						display: block;
-
-						&.single {
-							display: none;
-						}
-
-						.pager-container{
-							.pages{
-								.page{
-									color: $primary-blue;
-									display: inline-block;
-									padding-right: 20px;
-									cursor: pointer;
-
-									&.disabled, &.active{
-										color: $tertiary-grey;
-										cursor: default;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-
-			@include post-view;
-
-			.searchHit-overlay{
-				z-index: 1;
-				left: 0;
-				pointer-events: none;
-			}
-
-			.title{
-				margin-left: 70px;
-				cursor: default;
-				white-space: normal;
 			}
 		}
 	}

@@ -18,6 +18,7 @@
 	box-shadow: 3px 3px 3px 0 rgba(0,0,0,0.1);
 	border: 1px solid $border-grey;
 	overflow: hidden;
+	position: fixed !important;
 
 	iframe {
         &.padded {
@@ -126,6 +127,7 @@
 
 .nti-alert {
 	overflow: visible;
+	position: fixed !important;
 
 	&:not(.showing) {
 		.alert-container {
@@ -189,6 +191,11 @@
 
 		&.error, &.warning-red {
 			@include icon('modal-red-sign', $left: 10px, $top: -5px);
+		}
+
+		a {
+			text-decoration: none;
+			color: $primary-blue;
 		}
 	}
 
@@ -277,7 +284,15 @@
 	}
 }
 
+.iframe-window {
+	iframe.iframe {
+		width: 100%;
+	}
+}
+
 .iframe-window, .confirm-window{
+	position: fixed !important;
+
 	.iframe{
 		width: auto;
 
@@ -308,13 +323,23 @@
 		}
 
 		.wrap{
-			width: 350px;
+			width: 631px;
 			min-height: 148px;
 			font-size: 1.1em;
+			padding-right: 128px;
+
+			.description {
+				margin: 4px 0 40px;
+			}
 		}
 
 		.issuer, .criteria {
 			margin-bottom: 4px;
+			display: inline-block;
+		}
+
+		.issuer {
+			margin-right: 4em;
 		}
 
 		.link {
@@ -353,15 +378,75 @@
 	}
 }
 
+.object-window {
+
+	overflow-y: hidden;
+
+	.window-loading {
+		height: 100px;
+		padding: 45px 0 0 6px;
+		position: relative;
+
+		div {
+			position: absolute;
+			width: 100px;
+			top: 50%;
+			left: 50%;
+			line-height: 24px;
+			padding-left: 28px;
+			margin-top: -12px;
+			margin-left: -50px;
+
+			&::before {
+				@include loadingSpinner($top: 0, $left: 0);
+			}
+		}
+
+	}
+
+	.window-header{
+		position: relative;
+		height: 44px;
+		border-bottom: 1px solid #ededed;
+		font-size: 0.75em;
+
+		.title{
+			color: #494949;
+			margin-left: 15px;
+			line-height: 44px;
+			max-width: 675px;
+			overflow: hidden;
+			white-space: nowrap;
+			@include ellipse;
+		}
+
+		.close{
+			@include icon('note-window-x', $side: after, $position: absolute);
+			top: 10px;
+			right: 10px;
+			cursor: pointer;
+			width: 24px;
+			height: 24px;
+
+			&:hover{
+				@include icon('note-window-x_hover', $side: after, $position: absolute);
+			}
+		}
+	}
+}
+
 .timeline-window {
+	margin: auto;
+
 	.nti-window-header {
 		height: 50px;
 		border-bottom: 1px solid #e5e5e5;
 		background-color: $quad-grey;
 		padding: 10px 50px 10px 10px;
+		position: relative;
 
 		.controls {
-			img.close {
+			.close {
 				cursor: pointer;
 				position: absolute;
 				right: 13px;
@@ -395,12 +480,14 @@
 		box-shadow: inset 0 1px 0 0 #e5e5e5;
 		border: none;
 
-		.x-btn.dismiss {
-			.x-btn-button {
-				padding: 0 20px;
-				border: none;
-				border-radius: 0;
-			}
+		.close-btn {
+			cursor: pointer;
+			display: inline-block;
+			float: right;
+			font: italic 600 0.875em/40px $font;
+			color: white;
+			background-color: $primary-blue;
+			padding: 0 2em;
 		}
 	}
 
@@ -413,3 +500,4 @@
 		background-color: rgba(0,0,0,0.5);
 	}
 }
+

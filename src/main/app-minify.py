@@ -44,7 +44,7 @@ ga('send', 'pageview');
 			continue
 		line = line.replace( 'main.css', 'main.css?dc=%s' % BUILDTIME )
 		if minify:
-			line = line.replace( 'app.min.js', 'app.min.js?dc=%s' % BUILDTIME )
+			line = line.replace( '"app/js/app.min.js"', '"/app/js/app.min.js?dc=%s"' % BUILDTIME )
 			if '<x-bootstrap>' in line:
 				in_bootstrap = True
 				continue
@@ -99,21 +99,21 @@ def _combine_javascript( output_file, input_files ):
 					output.write( line )
 
 def _minify_app( app_root, extjs_sdk, closure ):
-	output_file = 'javascript/app.min.js'
+	output_file = 'app/js/app.min.js'
 
-	sencha_bootstrap_command = [ 'sencha',
+	sencha_bootstrap_command = [ '../../../../parts/senchacmd/sencha',
 				     '-sdk', extjs_sdk,
 				     'compile',
-				     '-classpath=javascript/libs.js,javascript/app.js,javascript/NextThought',
+				     '-classpath=js/app.js,js/NextThought',
 				     'meta', '-alias',
 				     '-out', 'bootstrap.js',
 				     'and',
 				     'meta', '-alt', '-append', '-out', 'bootstrap.js' ]
 	sencha_compile_command = [
-		'sencha',
+		'../../../../parts/senchacmd/sencha',
 		'-sdk', extjs_sdk,
 		'compile',
-		'-classpath=javascript/libs.js,javascript/app.js,javascript/NextThought',
+		'-classpath=js/app.js,js/NextThought',
 		'exclude', '-namespace', 'Ext.diag',
 		'and',
 		'-option', 'debug:false',

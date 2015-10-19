@@ -965,7 +965,7 @@ NTIStrings['NextThought.view.courseware.enrollment.Admission.ContactHelpDesk'] =
 NTIStrings['NextThought.view.courseware.enrollment.Admission.SubmitApp'] = 'Submit Application';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.CancelApp'] = 'Cancel';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.ConcurrentEnroll'] = 'You May Qualify for Concurrent Enrollment';
-NTIStrings['NextThought.view.courseware.enrollment.Admission.CEDescription'] = 'Through Concurrent Enrollment (CE), high school juniors and seniors can enroll in college classes and earn college credit while still in high school. Submit your contact info and date of birth below and a Concurrent Enrollment Counselor will be in touch to guide you through the <a href="http://www.ou.edu/content/go2/admissions/concurrent.html" target="_blank">Concurrent Enrollment Process.</a>';
+NTIStrings['NextThought.view.courseware.enrollment.Admission.CEDescription'] = 'Through Concurrent Enrollment (CE), high school juniors and seniors can enroll in college classes and earn college credit while still in high school. Submit your contact info and date of birth below and a Concurrent Enrollment Counselor will be in touch to guide you through the <a href="http://www.ou.edu/concurrent/admission.html" target="_blank">Concurrent Enrollment Process.</a>';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.ContactInfo'] = 'Contact Information';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.FullName'] = 'Full Name';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.Email'] = 'Email';
@@ -1038,7 +1038,7 @@ NTIStrings['NextThought.view.courseware.enrollment.Admission.UnabletoConfirm'] =
 NTIStrings['NextThought.view.courseware.enrollment.Admission.ComeBackEnroll'] = 'Your application for admission is being process by OU. Once you are admitted come back here to enroll in {title}.';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.CantProcessNow'] = 'Your application could not be processed at this time.';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.InterestCE'] = 'Thank you for your interest in concurrent enrollment.';
-NTIStrings['NextThought.view.courseware.enrollment.Admission.CECounselorContact'] = 'We&apos;ve received your contact info and a Concurrent Enrollment Counselor will be contacting you shortly. In the mean time, please feel free to explore the <a href="http://www.ou.edu/content/go2/admissions/concurrent.html" target="_blank">Concurrent Enrollment website</a> to learn more about the process.';
+NTIStrings['NextThought.view.courseware.enrollment.Admission.CECounselorContact'] = 'We&apos;ve received your contact info and a Concurrent Enrollment Counselor will be contacting you shortly. In the mean time, please feel free to explore the <a href="http://www.ou.edu/concurrent/admission.html" target="_blank">Concurrent Enrollment website</a> to learn more about the process.';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.FillOutAllInfo'] = 'Please fill out all required information.';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.AppSuccess'] = 'Your application was successful.';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.ContactInfoSent'] = 'Your contact information has been sent.';

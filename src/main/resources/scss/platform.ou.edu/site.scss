@@ -34,6 +34,15 @@
 		background: url(../images/platform.ou.edu/ou_cover.png) center center no-repeat;
 	}
 
+	&.dark-nav .branding {
+		display: block;
+		background: url(../images/platform.ou.edu/ou_janux_home_white.png) center center no-repeat;
+		background-size: contain !important;
+		margin: 17px 0 17px 30px;
+		width: 149px;
+		height: 39px;
+	}
+
 	.content {
 		// .image::after {
 		// 	content: '';

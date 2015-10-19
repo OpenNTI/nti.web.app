@@ -30,7 +30,6 @@ NTIStrings['library:branding message'] = '';
 NTIStrings['reset-password-not-allowed-subtext'] = 'You are not allowed to change your password at this time.  Please contact us for assistance.';
 
 NTIStrings['course-info.description-widget.enrolled'] = 'You are enrolled.';
-NTIStrings['course-info.course-supoprt.photo'] = 'resources/images/platform.ou.edu/tech_support.jpg';
 
 NTIStrings['course-info.course-supoprt.phone'] = '';
 NTIStrings['course-info.course-supoprt.link1.Label'] = '';

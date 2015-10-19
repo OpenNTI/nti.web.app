@@ -480,7 +480,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 
 	getSelectedVideoIndex: function(r) {
 		return this.getStore().indexOf(r || this.getSelectedVideo() || 0);
-	},
+	}
 
 
 	onCurtainClicked: function(e) {
@@ -489,8 +489,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 		var me = this,
 			m = me.getSelectedVideo(),
 			li = me.locationInfo,
-			slide;
-
+			slide, v;
 
 		if (!e.getTarget('.launch-player') && e.getTarget('.transcripts')) {
 			if (me.player) {

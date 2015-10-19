@@ -40,6 +40,7 @@
 	//This looks suspicious, but this is the only real way to get the
 	//crisp edges on the top/left while still giving a soft shadow to the right & bottom.
 	box-shadow: 3px 3px 3px -3px rgba(0,0,0,0.3);
+	position: fixed !important;
 
 	.x-menu-body {
 		padding: 0 0 10px 0;
@@ -48,6 +49,10 @@
 	&.no-footer .x-menu-body {
 		padding: 0;
 	}
+}
+
+.annotation-menu {
+	position: fixed !important;
 }
 
 

@@ -776,6 +776,8 @@ $experimental-support-for-svg: true;
 }
 
 .content-video-navigation{
+	position: relative;
+
 	.navigation{
 		position: absolute;
 		width: 40px;
@@ -933,17 +935,30 @@ $experimental-support-for-svg: true;
 }
 
 .x-container-media{
-	position: absolute;
-	top: 0;
-	bottom: 0;
+	position: fixed !important;
+	top: 0 !important;
+	bottom: 0 !important;
 	right: 0 !important;
-	left: 0;
-	min-width: 1024px;
+	left: 0 !important;
 	box-shadow: 0 1px 0 0 rgba(0,0,0, 0.1);
 	background: $slidedeck-controls-background !important;
+	display: none;
+	z-index: 199 !important;
+	@include experimental(backface-visibility, hidden);	
 
 	&.ready {
+		display: block;
+
+		.header{
+			.media-toolbar{
+				display: block;
+			}
+		}
+	}
+
+	&.showing {
 		@include animate(FullScreenSlideInRight);
+
 		.x-gecko &{
 			animation: none;
 		}
@@ -957,10 +972,12 @@ $experimental-support-for-svg: true;
 	}
 
 	.header{
-		position: relative;
+		position: fixed;
 		top: 0; left: 0;
+		width: 100%;
 
 		.media-toolbar{
+			display: none;
 			background-color: $video-background;
 			//height: 75px;
 
@@ -1177,6 +1194,16 @@ $experimental-support-for-svg: true;
 		}
 	}
 
+	& > .body {
+		margin-top: 75px;
+
+		&.grid {
+			height: 90vh;
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+	}
+
 
 	.x-component-media-viewer-grid{
 		position: relative;
@@ -1293,7 +1320,8 @@ $experimental-support-for-svg: true;
     .x-container-media-viewer{
         position: relative;
         overflow: hidden;
-        display: block;
+        @include flexContainer();
+        flex-flow : row;
 
         .sync-button {
             position: absolute;
@@ -1319,15 +1347,16 @@ $experimental-support-for-svg: true;
         }
 
         .video-player{
-            position: absolute;
-            top: 160px;
+            top: 20px;
             left: 10px;
-            margin: 0 auto;
+            @include flexItem($flex: 0 0 67%);
+            position: relative;
         }
 
         .body{
             @include scrollbar($track:$slidedeck-controls-background, $nib:$secondary-grey);
-            margin: 10px 0 0 1000px;
+         	@include flexItem($flex: 1 1 auto);   
+            /*margin: 10px 0 0 1000px;*/
             overflow:{
                 y: auto; //scroll;
                 x: hidden;
@@ -1338,6 +1367,7 @@ $experimental-support-for-svg: true;
                 width: auto !important;
                 position: relative;
                 overflow-y: hidden !important;
+                margin-right: 75px;
 
                 .searchHit-overlay{
                     pointer-events: none;
@@ -1350,7 +1380,7 @@ $experimental-support-for-svg: true;
 
                 .content-video-transcript{
                     margin: 0 !important;
-                    max-width: 360px !important;
+                    /*max-width: 390px !important;*/
 
                     .row-item{
                         .timestamp{
@@ -1358,7 +1388,6 @@ $experimental-support-for-svg: true;
                         }
                     }
                 }
-
 
                 &.no-transcript-view{
                     height: 60px;
@@ -1373,16 +1402,14 @@ $experimental-support-for-svg: true;
 
         &.small-video-player{
             .video-player{
-                width: 512px !important;
-                height: 288px !important;
+                @include flexItem($flex: 0 0 512px);
             }
 
             .body{
-                margin-left: 560px !important;
+                margin-left: 40px;
                 .x-container-transcript{
                     .content-video-transcript{
                         padding-left: 70px !important;
-                        max-width: 720px !important;
 
                         .row-item{
                             .timestamp{
@@ -1390,18 +1417,23 @@ $experimental-support-for-svg: true;
                             }
                         }
                     }
+
+                    .x-component-slide {
+	                	padding-left: 90px;
+	                }
                 }
             }
         }
 
         &.full-video-player{
             right: 0 !important;
-            padding-bottom: 70px;
+            display: block;
 
             .video-player{
                 position: relative;
-                top: 70px;
                 left: 0;
+                top: 0;
+                margin: 10px auto;
 
                 .content-video{
                     margin: 10px auto;
@@ -1441,14 +1473,15 @@ $experimental-support-for-svg: true;
 
 		border-width: 0px;
 		width: 240px;
-		position: absolute !important;
+		position: fixed !important;
 		top: 77px !important;
 		bottom: 0 !important;
 		right: 0 !important;
 		left: auto !important;
+		z-index: 200 !important;
 
 		& ~ .note-window {
-			position: absolute !important;
+			position: fixed !important;
 			//z-index: 30000 !important;
 		}
 	}
@@ -1510,7 +1543,6 @@ $experimental-support-for-svg: true;
 	.content-video-transcript{
 		position: relative;
 		margin: 50px 20px 20px 100px;
-		width: 760px;
 		color: $primary-grey;
 		font-size: 14px;
 		font-weight: normal;
@@ -1578,9 +1610,7 @@ $experimental-support-for-svg: true;
 	}
 
 	.x-component-slide{
-        //Only set the max, if it's smaller, adjust.
-		max-width: 860px;
-        padding: 50px 90px 0 90px;
+        padding: 50px 90px 0 0;
 
 		.image-wrap{
 			position: relative;
@@ -1592,7 +1622,7 @@ $experimental-support-for-svg: true;
 
 				@include note-control-box;
 				.note-here-control-box{
-					left: 40px;
+					left: 10px;
 
 					&.hidden{
 						display: none;
@@ -1648,6 +1678,9 @@ $experimental-support-for-svg: true;
 
 .x-menu{
 	&.video-player-options-menu{
+		position: fixed !important;
+		top: 0 !important;
+
 		.x-menu-body{
 			padding: 0 !important;
 			border-width: 0 !important;
@@ -1746,18 +1779,21 @@ $experimental-support-for-svg: true;
 //Make sure the identity el is on top of the mv.
 body.media-viewer-open{
 
-	& > div.viewport {
-		@include animate(FullScreenSlideOutLeft);
+	#window{
+		z-index: 300;
 	}
 
 	.media-toolbar .x-component.identity{
 		display: block;
-		top: 17px !important;
+	  	top: 2px !important;
+	  	width: 70px;
+	  	position: absolute;
+	  	right: 0px;
 	}
-}
 
-body.media-viewer-closing {
-	& > div.viewport {
-		@include animate(FullScreenSlideInLeft);
+	.media-toolbar .notifications-icon {
+		position: absolute;
+		top: 0;
+		right: 75px;
 	}
 }

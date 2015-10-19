@@ -1,4 +1,37 @@
 
+@mixin icon-font() {
+	font-family: $icon-font;
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+@mixin flexContainer() {
+	display: -webkit-box;  /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+	display: -ms-flexbox;  /* TWEENER - IE 10 */
+	display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+	display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
+}
+
+@mixin flexItem($flex: 0 0 auto) {
+	-webkit-box-flex: $flex;
+	-webkit-flex: $flex;
+	-ms-flex: $flex;
+	flex: $flex;
+}
+
+@mixin flexBasis($basis: auto) {
+	-webkit-flex-basis: $basis;
+	-ms-flex-basis: $basis;
+	flex-basis: $basis;
+}
+
 @mixin blur-effect() {
 	filter: url(#blur-effect);//moz
 	filter: blur(add = 0, direction = 0, strength = 10);//IE

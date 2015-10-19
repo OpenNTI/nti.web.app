@@ -1332,6 +1332,10 @@ div.contact-buttons {
 				max-width: 600px;
 				display: inline-block;
 				vertical-align: bottom;
+
+				&.group {
+					cursor: pointer;
+				}
 			}
 
 			span{
@@ -1491,12 +1495,22 @@ div.contact-buttons {
 	.contact-sub-view {
 		.empty {
 			background: #fff;
+			margin-top: 40px !important;
 		}
 
-		.contact {
+		.contact-panel {
 			padding: 35px 30px;
+			margin-top: 40px;
 		}
+
+		.group-panel, .list-panel {
+			padding: 35px 0;
+			margin-top: 5px;
+		}
+
 		.nav-outline{
+			margin-top: 20px;
+
 			&.contact{
 				padding: 0;
 			}

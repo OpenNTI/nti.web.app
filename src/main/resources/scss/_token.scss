@@ -168,9 +168,14 @@
 				cursor: default;
 			}
 		}
+		
+		.control.disabled{
+			cursor: default;
+			opacity: .3;
+		}
+		
 		.tokens{
 			position: relative;
-			margin-right: 85px !important;
 			padding-left: 3px;
 
 			.token + .inputArea{

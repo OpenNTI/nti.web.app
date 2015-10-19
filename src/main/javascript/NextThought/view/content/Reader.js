@@ -329,6 +329,17 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
+	setPageInfo: function(pageInfo) {
+		var location = this.getLocationProvider();
+
+		location.currentNTIID = pageInfo.getId();
+
+		this.onNavigateComplete(pageInfo, function() {
+			location.currentPageInfo = pageInfo;
+		});
+	},
+
+
 	onNavigationAborted: function(resp, ntiid) {
 		this.splash.removeCls('initial');
 	},

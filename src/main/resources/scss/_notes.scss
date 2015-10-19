@@ -221,6 +221,8 @@
 
 
 .note-container {
+	position: relative;
+
 	.note {
 		position: relative;
 		padding: 16px 27px 5px 30px;
@@ -240,6 +242,10 @@
 				.name{
 					font-size: 14px;
 					color: $primary-blue;
+					display: inline-block;
+					max-width: 40em;
+					overflow: hidden;
+					@include ellipse;
 				}
 			}
 		}
@@ -299,6 +305,18 @@
 				height: auto;
 				cursor: pointer;
 			}
+		}
+
+		.avatar-container {
+			width: 32px;
+			height: 32px;
+			cursor: pointer;
+			margin-left: 4px;
+			
+			.avatar-pic {
+				background-size: cover;
+				border-radius: 2px;	
+			}	
 		}
 
 		@include meta-row-window;
@@ -413,25 +431,6 @@
 	background: #fff;
 	box-shadow: 3px 0px 9px -3px rgba(0,0,0,0.3);
 
-	.title-bar{
-		position: relative;
-		height: 44px;
-		border-bottom: 1px solid #ededed;
-
-		.close-note-viewer{
-			@include icon('note-window-x', $side: after, $position: absolute);
-			top: 10px;
-			right: 10px;
-			cursor: pointer;
-			width: 24px;
-			height: 24px;
-
-			&:hover{
-				@include icon('note-window-x_hover', $side: after, $position: absolute);
-			}
-		}
-	}
-
 	.note {
 		box-shadow: inset 0 1px 0 0 #ffffff;
 	}
@@ -446,13 +445,19 @@
 			box-shadow: inset 0 1px 0 0 #ffffff;
 		}
 
-		img.avatar {
+		img.avatar, .avatar-container {
 			float: left;
 			width: 60px;
 			height: 60px;
 			border-radius: 6px;
 			background-size: cover;
 			margin-top: 10px;
+		}
+
+		.avatar-container {
+			.avatar-pic {
+				border-radius: 6px;	
+			}	
 		}
 
 		.meta {
@@ -501,6 +506,9 @@
 
 				.shared-to{
 					color: $primary-blue;
+					name[data-profile-idx]:not([data-profile-idx=""]){
+						cursor: pointer;
+					}
 				}
 
 				.time{
@@ -528,6 +536,18 @@
 				y: auto //scroll;
 			}
 			max-height: 30em;
+
+			.see-more {
+				color: $primary-blue;
+				display: inline;
+				position: relative;
+				bottom: -20px;
+				cursor: pointer;
+				
+				&.hidden {
+					display: none;
+				}
+			}
 
 			&.slide {
 				max-height: 42em;
@@ -598,6 +618,32 @@
 				-moz-hyphens: auto;
 				-ms-hyphens: auto;
 				hyphens: auto;
+
+				.context-authorization {
+					.context-image {
+						.meta {
+							.message {
+								font-size: 14px;
+							}
+
+							.action {
+								  	background-color: #3fb34f;
+  									width: 120px;
+  									
+								&.button {
+								  	line-height: 42px;
+								  	text-align: center;
+								  	font-weight: 300;
+								  	font-size: 1.2em;
+								  	letter-spacing: 1px;
+								  	color: white;
+								  	cursor: pointer;
+								  	border-radius: 3px;
+								}
+							}
+						}
+					}
+				}
 			}
 
 			//experiment to kill links in note window

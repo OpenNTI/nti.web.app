@@ -72,7 +72,7 @@ Ext.define('NextThought.controller.Reader', {
 					'suspend-annotation-manager': 'suspendManager',
 					'resume-annotation-manager': 'resumeManager'
 				},
-				'#main-reader-view reader-content': {
+				'reader-content': {
 					'beforeNavigate': 'beforeSetLocation',
 					'navigateCanceled': 'resetNavigationMenuBar',
 					'set-content': 'updateControls',

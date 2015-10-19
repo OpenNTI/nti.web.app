@@ -16,7 +16,7 @@ NTIStrings['months'] = {
 };
 
 NTIStrings['application.title-bar-prefix'] = 'Janux';
-
+NTIStrings['NextThougth.view.account.activity.joined.community'] = 'Janux';
 
 NTIStrings['UnresolvedUsernamePattern'] = 'Anonymous ####';
 NTIStrings['course.catalog'] = 'Available Courses';
@@ -30,7 +30,6 @@ NTIStrings['library:branding message'] = 'The University of Oklahoma is proud to
 NTIStrings['reset-password-not-allowed-subtext'] = 'You are not allowed to change your password at this time.  Please contact OU Information Technology at 325-Help for assistance.';
 
 NTIStrings['course-info.description-widget.enrolled'] = 'You are enrolled for credit.';
-NTIStrings['course-info.course-supoprt.photo'] = 'resources/images/platform.ou.edu/tech_support.jpg';
 
 NTIStrings['course-info.course-supoprt.phone'] = '(405) 325-HELP';
 NTIStrings['course-info.course-supoprt.link1.Label'] = 'janux@ou.edu';
@@ -91,7 +90,7 @@ NTIStrings.EnrollmentText = {
 		archivedNotEnrolled: {
 			title: 'This Course is Archived.',
 			price: 0,
-			information: 'Archived courses are out of session but all course content will remain available' +
+			information: 'Archived courses are out of session but all course content will remain available ' +
 							'including the lectures, course materials, quizzes, and discussions.'
 		}
 	},
@@ -170,7 +169,7 @@ NTIStrings.EnrollmentText = {
 		},
 		archivedNotEnrolled: {
 			title: 'This Course is Archived',
-			information: 'Archived courses are out of session but all course content will remain available' +
+			information: 'Archived courses are out of session but all course content will remain available ' +
 							'including the lectures, course materials, quizzes, and discussions.'
 		}
 	}

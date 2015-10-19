@@ -4,7 +4,7 @@ PRINT_JUST_NAMES="false"
 JUST_THE_NEXT="false"
 FILES=
 VCSLIST=
-LIST="find src/main/javascript -name \*.js"
+LIST="find src/main/js -name \*.js"
 
 if [ -d .svn ]; then
 	VCSLIST="svn status | cut -c9-"

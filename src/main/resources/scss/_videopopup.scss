@@ -3,6 +3,8 @@
 	overflow: visible;
 	background: #2b2b2b;
 	box-shadow: 0 0 30px 5px rgba(0, 0, 0, 0.6);
+	position: fixed !important;
+	max-height: calc(100vh - 40px);
 }
 .component-overlay .x-panel-image-roll,
 .component-overlay .x-panel-video-roll {
@@ -74,14 +76,13 @@
 .x-panel-video.videos {
 
 	.close {
-		top: -34px;
-		right: -34px;
+		top: -26px;//22 + 4
+		right: -26px;//22 + 4
 		position: absolute;
 
 		background: transparent $icons no-repeat;
 		@include sprite($icons,'close_popup',$dimensions: true);
 		cursor: pointer;
-		box-shadow: 0 0 10px 5px #ffffff;
 		border-radius: 90px;
 	}
 
@@ -179,6 +180,23 @@
 				border-color: transparent transparent transparent white;
 			}
 		}
+	}
+}
+
+.image-roll {
+	height: 100%;
+	padding-bottom: 115px;
+	position: relative;
+	max-height: 480px;
+
+	img {
+		max-height: 100%;
+	}
+
+	.carousel {
+		position: absolute;
+		bottom: 0;
+		left: 0; right: 0;
 	}
 }
 

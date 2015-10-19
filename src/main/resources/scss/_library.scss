@@ -1,4 +1,346 @@
+.library-view {
+	margin: 2em 0 2.5em;
 
+	.empty-text {
+		color: $tertiary-grey;
+		font: normal 300 2em $font;
+		margin: 2em auto;
+		width: 530px;
+		text-align: center;
+
+		a {
+			color: white;
+			font-size: 0.8em;
+			cursor: pointer;
+		}
+	}
+}
+
+.x-component-library-collection {
+	  margin: 2em 0 2.5em;
+}
+
+.library-navigation {
+	height: 100%;
+	opacity: 1;
+	transition: opacity 0.5s;
+
+	&.showing {
+		opacity: 0;
+	}
+
+	&.removing {
+		opacity: 0;
+	}
+
+	.branding {
+		height: 100%;
+		width: 100px;
+		float: left;
+	}
+
+	.dropdown {
+		height: 100%;
+		float: left;
+		position: relative;
+
+		&.disabled {
+			.label {
+				cursor: default;
+
+				&::after {
+					display: none;
+				}
+			}
+		}
+	}
+
+	.label {
+		font: normal 300 1.5em/#{$header-height} $font;
+		padding: 0 0.875em 0 0;
+		cursor: pointer;
+		color: $secondary-grey;
+
+		&::after {
+			content: '';
+			display: block;
+			position: absolute;
+			top: 50%;
+			right: 0;
+			margin-top: -4px;
+
+			background: $icons no-repeat;
+			$disable-magic-sprite-selectors: true;
+			@include sprite($icons,'arrow-course-dropdown',$dimensions: true);
+		}
+
+	}
+
+	.available {
+		cursor: pointer;
+		position: absolute;
+		left: 100%;
+		top: 50%;
+		min-width: 110px;
+		margin-top: -15px;
+		margin-left: 15px;
+		font: normal 400 0.875em/30px $font;
+		color: white;
+		text-align: center;
+		border-radius: 5px;
+		padding: 0 0.5em;
+		background-color: $secondary-green;
+
+		&.hidden {
+			display: none;
+		}
+
+		&::before {
+			content: '';
+			display: block;
+			width: 0;
+			height: 0;
+			border-style: solid;
+			border-width: 5px 5px 5px 0;
+			border-color: transparent $secondary-green transparent transparent;
+			position: absolute;
+			left: -5px;
+			top: 50%;
+			margin-top: -5px;
+		}
+	}
+
+
+}
+
+ul.library-grid {
+	list-style: none;
+	padding: 0;
+	margin: 0 -8px;
+
+	&::after {
+		content: '';
+		display: block;
+		clear: both;
+	}
+}
+
+li.community-grid-item {
+	float: left;
+	width: 242px;
+	height: 70px;
+	margin: 7px 9px;
+	cursor: pointer;
+	background: white;
+	position: relative;
+	padding-left: 70px;
+
+	.avatar-container {
+		position: absolute;
+		top: 0;	bottom: 0;
+		left: 0;
+		width: 70px;
+	}
+
+	.title-container {
+		position: relative;
+		height: 70px;
+	}
+
+	.title {
+		padding: 0 10px;
+		text-transform: uppercase;
+		font: normal 700 1em/1em $condensed-font;
+		color: $primary-grey;
+		max-height: 4em;
+		overflow: hidden;
+		position: absolute;
+		top: 50%;
+		@include experimental(transform, translateY(-50%));
+	}
+}
+
+.books li.library-grid-item {
+	.author:not(:empty)::before {
+		content: 'By ';
+	}
+}
+
+li.library-grid-item {
+	float: left;
+	width: 242px;
+	height: 290px;
+	margin: 7px 9px;
+	cursor: pointer;
+	background: white;
+	position: relative;
+
+	.cover {
+		width: 232px;
+		height: 170px;
+		margin: 5px;
+		overflow: hidden;
+
+		img {
+			display: block;
+			height: 100%;
+			@include experimental(transform, scale(1,1));
+			@include experimental(transition, all 0.5s);
+		}
+	}
+
+	.sample {
+		@include element('sample-banner', $position: absolute);
+	}
+
+	.meta {
+		overflow: hidden;
+		color: $primary-grey;
+		padding: 0 10px;
+	}
+
+	.author,.courseName, .semester {
+		text-transform: uppercase;
+		font: normal bold 0.6em/1.6em $font;
+		overflow: hidden;
+		@include ellipse();
+	}
+
+	.courseName, .semester {
+		text-transform: uppercase;
+		color: $tertiary-grey;
+		display: inline-block;
+	}
+
+	.courseName {
+		margin-right: 0.5em;
+	}
+
+	.author {
+		color: $primary-blue;
+	}
+
+	.title {
+		font: normal 700 1em/1.1em "Open Sans Condensed";
+		color: $secondary-grey;
+		max-height: 2.2em;
+		margin-bottom: 10px;
+		text-transform: uppercase;
+		overflow: hidden;
+	}
+
+	.description {
+		overflow: hidden;
+		display: none;
+	}
+
+	.settings {
+		top: 10px;
+		right: 10px;
+		width: 27px;
+		height: 27px;
+		background: rgba(0,0,0,0.6);
+		border-radius: 5px;
+		display: none;
+		@include icon('library-gear', $side: after, $top: 50%, $left: 50%, $position: absolute);
+
+		&::after {
+			margin-left: -7px;//14/2
+			margin-top: -7px;//14/2
+		}
+	}
+
+	.archived {
+		position: absolute;
+		top: 85px; left: 50%;
+		margin: -25px 0 0 -75px;
+		height: 50px;
+		width: 150px;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: white;
+		line-height: 50px;
+		text-align: center;
+		padding-left: 40px;
+		border-radius: 3px;
+		display: none;
+	}
+
+	.badge {
+		position: absolute;
+		top: 10px;
+		height: 27px;
+		color: white;
+		text-transform: uppercase;
+		font: normal 600 0.625em/27px $font;
+		padding: 0 7px;
+		display: none;
+	}
+
+
+	&.allow-zoom:hover {
+		.cover img {
+			@include experimental(transform, scale(1.05,1.05));
+			opacity: 0.7;
+		}
+
+		.settings {
+			display: block;
+		}
+	}
+
+	&.archived {
+		.badge {
+			left: 10px;
+			background: rgba(0, 0, 0, 0.6);
+			border-radius: 4px;
+			padding-left: 25px;
+
+			@include icon('archived-library', $side: after, $top: 50%, $left: 7px, $position: absolute);
+
+			&::after {
+				margin-top: -7px;
+			}
+		}
+	}
+
+	&.upcoming {
+		.badge {
+			left: 5px;
+			background: rgba(63, 179, 246, 0.95);
+			letter-spacing: 0.06em;
+			display: block;
+
+			&::after {
+				content: '';
+				position: absolute;
+				right: -5px;
+				width: 0;
+				height: 0;
+				border-style: solid;
+				border-width: 0 0 24px 5px;
+				border-color: transparent transparent transparent rgba(63, 179, 246, 0.95);
+			}
+		}
+	}
+}
+
+.library-group-header{
+	height: 20px;
+	margin-bottom: 10px;
+
+	div {
+		float: left;
+		color: white;
+		font: normal 300 1.125em/1 $font;
+	}
+
+	.group {
+		margin-left: 0.5em;
+		color: rgba(255,255,255, 0.30);
+	}
+}
+
+//TODO: Clean up unused styles here
 #library {
 
 	margin-top: -105px;
@@ -244,7 +586,7 @@
 				}
 
 				.author:not(:empty):not(.provider-id)::before{content: 'By ';}
-				
+
 				.title {
 					font: normal 700 1em/1.1em "Open Sans Condensed";
 					color: $secondary-grey;
@@ -426,7 +768,7 @@
 			}
 
 			.author:not(:empty):not(.provider-id)::before{content: 'By ';}
-			
+
 			.title {
 				font: normal 700 1em/1.1em "Open Sans Condensed";
 				color: $secondary-grey;
@@ -462,7 +804,7 @@
 
 		&.x-menu-item-active {
 			background-color: rgba(255,255,255,0.8) !important;
-			color: #646464 !important; 
+			color: #646464 !important;
 		}
 
 		&.x-menu-item-checked::after {
@@ -500,9 +842,17 @@
 	}
 }
 
+.available-courses, .available-books {
+	position: fixed !important;
+}
+
 .course-settings-window, .available-courses, .available-books {
 	box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
 	background-color: white;
+
+	// &.object-window {
+	// 	top: 110px !important;
+	// }
 
 	.header{
 		position: relative;
@@ -511,7 +861,7 @@
 		padding: 10px 50px 10px 10px;
 		border-bottom: 1px solid #e5e5e5;
 		text-transform: uppercase;
-		z-index: 3;
+		z-index: 12;
 
 		.close {
 			cursor: pointer;
@@ -650,7 +1000,7 @@
 		background-color: $secondary-green;
 		color: white;
 		max-height: 2em;
-		z-index: 2;
+		z-index: 11;
 		@include experimental(transition, all 0.5s);
 
 
@@ -697,11 +1047,69 @@
 		left: 0; right: 0;
 	}
 
-	.body-container {
+	& > .body-container {
 		height: 90%;
 		@include experimental-value(height, calc(100% - 100px));
 		background-color: $panel-background;
 		position: relative;
+		z-index: 10 !important;
+		overflow: hidden;
+
+		.page {
+			overflow: hidden;
+			position: relative;
+
+			& > .body-container {
+				overflow-y: auto;
+				height: 100%;
+				max-height: 95%;
+				margin-top: 40px;
+				@include experimental-value(max-height, calc(100% - 40px));
+			}
+
+			.x-component-library-collection {
+				.library-group-header {
+					& > div {
+						color: $primary-grey;
+					}
+				}
+			}
+
+			.tabs {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 40px;
+				background-color: #efefef;
+				box-shadow: inset 0 0 0 1px #e3e3e3;
+				z-index: 10;
+
+				.tab {
+					color: $secondary-grey;
+					cursor: pointer;
+					padding: 0 20px;
+					border-radius: 0;
+					height: 40px;
+					box-shadow: 1px 0 0 0 #e3e3e3;
+					font: normal 500 0.9em/40px $font;
+					text-transform: uppercase;
+					float: left;
+
+					&.active, &.active:hover{
+						color: white;
+						background-color: $primary-blue;
+						box-shadow: -1px 0 0 0 #e3e3e3,
+							1px 0 0 0 #e3e3e3;
+					}
+
+					&:hover {
+						background-color: #fafafa;
+						box-shadow: inset 0 0 0 1px #e3e3e3;
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -709,7 +1117,7 @@
 	padding: 20px 40px;
 	color: $primary-blue;
 	font: normal 500 1em/1.5em $font;
-	
+
 	.enrollment {
 		font-size: 0.9em;
 		color: $secondary-grey;
@@ -779,4 +1187,168 @@
 		@include experimental-value(max-height, calc(100% - 40px));
 	}
 
+}
+
+
+.library-page {
+	position: relative;
+	min-height: 200px;
+
+	.empty-text {
+		color: $tertiary-grey;
+		font: normal 300 2em $font;
+		margin: 2em auto;
+		width: 530px;
+		text-align: center;
+
+		a {
+			color: white;
+			font-size: 0.8em;
+			cursor: pointer;
+		}
+	}
+
+	& > .title-container {
+		@include flexContainer();
+		align-items: baseline;
+		padding-bottom: 10px;
+		margin-bottom: 40px;
+		box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.2), 0 1px 0 0 rgba(255, 255, 255, 0.08);
+
+		.home, .title, .add-more-link {
+			@include flexItem(0 0 auto);
+		}
+
+		.home, .title {
+			color: white;
+			font: normal 400 0.875em/2em $font;
+		}
+
+		.title{
+			opacity: 0.5;
+
+			&::before {
+				content: '\203A';
+				margin: 0 0.5em;
+				font-size: 1.3em;
+				font-weight: 300;
+			}
+		}
+
+
+		.home {
+			cursor: pointer;
+		}
+
+		.spacer {
+			@include flexItem(1 1 auto);
+		}
+
+		.add-more-link {
+			cursor: pointer;
+			font: normal 300 0.875em/35px $font;
+			color: white;
+			text-align: center;
+			border-radius: 5px;
+			padding: 0 1.5em;
+			background-color: $secondary-green;
+
+			&.hidden {
+				display: none;
+			}
+		}
+	}
+
+
+	.loading-mask {
+		position: absolute;
+		top: 0; bottom: 0;
+		right: 0; left: 0;
+		background: rgba(52, 52, 52, 0.5);
+		z-index: 5;
+		min-height: 50px;
+
+		.load-text {
+			position: absolute;
+			top: 10%;
+			left: 50%;
+			margin-left: -25px;
+			color: white;
+
+			&::after {
+				@include loadingSpinner($top: 0, $left: -30px);
+			}
+		}
+	}
+
+	.error-cmp {
+		text-align: center;
+		color: $primary-red;
+		font-size: 1.25em;
+	}
+}
+
+
+.library-homepage {
+	.library-group-header { display: none; }
+
+	.x-component-library-collection {
+		margin: 0;
+	}
+
+	.current-collection {
+		margin-bottom: 40px;
+
+		.empty-text {
+			margin: 1em auto;
+		}
+
+		& > .header {
+			@include flexContainer();
+			align-items: baseline;
+			
+			.title, .add, .see-all {
+				@include flexItem($flex: 0 0 auto);
+
+				&.hidden {
+					display: none;
+				}
+			}
+
+			.space {
+				@include flexItem($flex: 1 1 auto);
+			}
+
+			.title {
+				font: normal 300 1.25em/2em $font;
+				color: white;
+				margin-right: 0.8em;
+			}
+
+			.add {
+				color: $primary-blue;
+				cursor: pointer;
+				font: normal 600 0.875em/2em $font;
+
+				&::before {
+					content: '+';
+					margin-right: 0.1em;
+				}
+			}
+
+			.see-all {
+				color: white;
+				font: normal 300 0.875em/2em $font;
+				cursor: pointer;
+			}
+		}
+
+		.library-grid-item {
+			&.archived {
+				.badge {
+					display: block;
+				}
+			}
+		}
+	}
 }

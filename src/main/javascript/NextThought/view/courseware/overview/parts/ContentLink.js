@@ -6,6 +6,8 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 		'widget.course-overview-externallink'
 	],
 
+	requires: ['NextThought.view.contentviewer.View'],
+
 	constructor: function(config) {
 		var n = config.node || {getAttribute: function(a) { return config[a];} },
 			i = config.locationInfo,
@@ -106,11 +108,20 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 
 
 	navigateToTarget: function() {
-		if (ParseUtils.isNTIID(this.target)) {
-			return this.fireEvent('set-location-rooted', this.target, null, null, this.getCurrentBundle());
-		}
+		var container = this.up('content-view-container'),
+			reader = Ext.widget('content-viewer', {
+				contentId: this.target,
+				width: 1024,
+				height: '90%'
+			});
 
-		return this.callParent(arguments);
+		reader.showBy(container.el, 'tl-tl');
+		// debugger;
+		// if (ParseUtils.isNTIID(this.target)) {
+		// 	return this.fireEvent('set-location-rooted', this.target, null, null, this.getCurrentBundle());
+		// }
+
+		// return this.callParent(arguments);
 	},
 
 

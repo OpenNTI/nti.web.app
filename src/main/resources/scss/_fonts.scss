@@ -649,3 +649,14 @@
     font-weight: normal;
     font-style: normal;
 }
+
+//ICON font set
+@font-face {
+    font-family: 'icomoon';
+    src: url('../lib/fonts/icon/icomoon.eot');
+    src: url('../lib/fonts/icon/icomoon.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/icon/icomoon.woff') format('woff'),
+         url('../lib/fonts/icon/icomoon.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

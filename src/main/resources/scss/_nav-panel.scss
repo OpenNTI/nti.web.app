@@ -1,0 +1,34 @@
+.navigation-panel {
+	overflow: hidden;
+	height: auto;
+
+	.navigation-view.floating {
+		position: fixed;
+		top: 90px;//$header-height + 20;
+		bottom: 20px;
+		height: auto !important;
+		transition: left 0.5s, right 0.5s;
+		z-index: 1;
+		
+		html.msg-bar-open & {
+			top: 132px; // $header-height + $msg-bar-height + 20
+		}
+	}
+
+	//Override these, since the placeholder is not suppose to be visible
+	.navigation-placeholder {
+		background: none !important;
+		box-shadow: none !important;
+		border: none !important;
+
+		width: 255px;
+		float: left;
+		margin-right: 5px;
+	}
+
+	.body-view {
+		float: right;
+		width: 764px;
+		padding-top: 20px;
+	}
+}

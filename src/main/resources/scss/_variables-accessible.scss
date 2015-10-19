@@ -4,6 +4,8 @@ $elements: sprite-map("elements/*.png",$layout:smart);
 $disable-magic-sprite-selectors: true;
 
 $font: 'Open Sans', sans-serif;
+$condensed-font: 'Open Sans Condensed', $font;
+$icon-font: 'icomoon';
 
 $loading-indicator:			url(../images/elements/spinning_logo.png);
 $data-view-over-bg:			url(../images/elements/over.gif);
@@ -37,11 +39,11 @@ $toast-border-top: #78caf9;
 $annotations-menu-bg-color:rgba(#333,.95);
 $annotations-menu-bg:$annotations-menu-bg-color;
 
+$header-height: 70px;
+
 $highlight-colors: (
 	// (name, menu color, hover) actual highlight will be computed from hover color.
 	('yellow',#EDE619,#F9F6AF),
 	('green',#4CE67F,#B7F5CC),
 	('blue',#3FB3F6,#CFECFD)
 );
-
-@import "common-mixins";

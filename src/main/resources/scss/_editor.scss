@@ -440,6 +440,7 @@ span.tab{
 	&.in-gutter{
 		background: #ffffff;
 		border: 1px solid #cfcfcf;//#ededed
+		position: fixed !important;
 
 		.main {
 			margin: 0 10px;
@@ -472,6 +473,83 @@ span.tab{
 				&.show-placeholder[data-placeholder]::after{
 					left: 0;
 				}
+			}
+		}
+	}
+}
+
+.share-search-container {
+	position: fixed !important;
+	width: 331px;
+	overflow-y: auto;
+	height: auto !important;
+	box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3) !important;
+
+	.share-search {
+		position: static !important;
+
+		.x-menu-item.x-item-selected {
+		    border-radius: 0;
+		    border-width: 0;
+		    border-style: none;
+		    background: #efefef !important;
+		    color: #3c3c3c !important;
+		}
+	}
+
+	.share-search-mask {
+		position: absolute !important;
+		top: 0 !important; bottom: 0 !important;
+		left: 0 !important; right: 0 !important;
+		background: white;
+		text-align: center;
+	}
+
+	.x-mask-msg .x-mask-msg-text {
+		display: inline-block;
+		position: relative;
+
+		&::after {
+			left: 0;
+		}
+	}
+
+	.contact-card.marked {
+		@include icon('check_gray', $side: after, $top: 23px, $left: 31px);//top: 7 + 32/2, left: 15 + 32/2
+
+		&::after {
+			z-index: 4;
+			margin-top: -7px;
+			margin-left: -8px;
+		}
+
+		.avatar-container::before {
+			content: '';
+			position: absolute;
+			top: 0; bottom: 0;
+			left: 0; right: 0;
+			background: $secondary-green;
+			opacity: 0.7;
+			z-index: 3;
+		}
+	}
+}
+
+
+.share-search{
+	position: fixed !important;
+	background-color: white;
+
+	.contact-card{
+		.avatar-container{
+			display: none;
+		}
+		&.person{
+			.avatar.icon{
+				display: none;
+			}
+			.avatar-container{
+				display: block;
 			}
 		}
 	}

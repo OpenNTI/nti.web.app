@@ -130,6 +130,10 @@
 			y: auto;//scroll
 			x: hidden;
 		}
+
+		.x-grid-table{
+			position: relative !important;
+		}
 	}
 
 	.x-grid-row-over {
@@ -203,6 +207,10 @@
 		&.x-grid-cell-first {
 			color: $primary-blue;
 			cursor: pointer;
+		}
+
+		.right-aligned{
+			text-align: right;				
 		}
 
 		.check {

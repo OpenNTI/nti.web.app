@@ -15,6 +15,12 @@
 		height: 360px !important;
 	}
 
+	&.context-video-curtain {
+		right: auto; bottom: auto;
+		width: 330px;
+		height: 188px;
+	}
+
 	.ctr {
 		position: absolute;
 		overflow: visible;
@@ -83,6 +89,66 @@
 				padding-right: 60px;
 				@include icon('play-transcript',$top:3px,$right:3px, $left:auto);
 			}
+		}
+	}
+}
+
+
+.content-video-container {
+	.content-video-curtain {
+		z-index: 1;
+	}
+
+	&.playing, .no-poster {
+		.content-video-curtain {
+			display: none;
+		}
+	}
+}
+
+.body-divider {
+	.video-placeholder {
+		cursor: pointer;
+		position: relative;
+
+		.play {
+			top: 50%; left: 50%;
+			margin-top: -23px;
+			margin-left: -23px;
+			width: 46px;
+			height: 46px;
+			background: rgba(0, 0, 0, 0.68);
+			box-shadow: 0 0 3px 0 #000;
+			border-radius: 48px;
+			@include icon('play', $position: absolute, $side: after, $top: 50%, $left: 50%);
+
+			&::after {
+				margin: -21px 0 0 -21px;
+			}
+		}
+
+		img {
+			width: 100%;
+		}
+	}
+}
+
+.video-window {
+	.video-window-container {
+		padding: 30px;
+		position: relative;
+		.controls {
+			display: none;
+		}
+
+		.close {
+			cursor: pointer;
+			top: 0; right: 0;
+			width: 26px;
+			height: 26px;
+			display: inline-block;
+			@include icon('close_popup', $position: absolute);
+
 		}
 	}
 }

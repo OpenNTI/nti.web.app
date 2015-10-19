@@ -118,6 +118,75 @@
 		}
 	}
 
+
+	&.overview-survey {
+		background: #fcfcfc;
+		border: 1px solid #e2e2e2;
+		border-radius: 5px;
+		box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.08);
+		padding: 0 15px 0 90px;
+		overflow: hidden;
+		margin-top: 10px;
+
+
+		@include icon('survey', $side: after, $top: 50%, $left: 18px);
+
+		&::after {
+			margin-top: -27px;//54/2
+		}
+
+
+		.meta {
+			display: inline-block;
+			vertical-align: middle;
+			width: 90%;
+			max-width: 509px;
+			margin: 15px 0;
+
+			.title {
+				font: italic 500 1.125em/1.5em $font;
+				color: $primary-grey;
+				overflow: hidden;
+				@include ellipse;
+			}
+
+			span {
+				font: normal 0.75em/1em $font;
+				color: $tertiary-grey;
+			}
+
+			.responses:not(:empty)::before, .report:not(:empty)::before {
+				content: '\b7';
+				margin: 0 0.5em;
+			}
+
+			.report {
+				color: $primary-blue;
+				cursor: pointer;
+			}
+		}
+
+		.button {
+			display: inline-block;
+			vertical-align: middle;
+			color: white;
+			position: absolute;
+			top: 50%;
+			right: 15px;
+			margin-top: -20px;
+
+			&.closed {
+				background: $tertiary-grey-alt;
+				color: $secondary-grey;
+				border-color: $tertiary-grey;
+				box-shadow: none;
+				cursor: default;
+				opacity: 0.7;
+			}
+		}
+	}
+
+
 	&.overview-discussion {
 		cursor: pointer;
 		background: #f5f5f5;
@@ -226,7 +295,7 @@
 			position: relative;
 			overflow: hidden;
 			height: 288px;
-			margin: 0 -30px;
+			margin: 0 -31px 0 -29px;
 
 			.curtain {
 				position: absolute;
@@ -342,15 +411,44 @@
 
 	.overview-naquestionset {
 		margin-top: 5px;
+		position: relative;
+
+		.x-panel-body-assessment {
+			padding: 0 15px 0 90px;
+		}
+
+		canvas.score {
+			position: absolute;
+			left: 15px;
+			top: 50%;
+			margin-top: -37px;//75/2
+		}
+
+		.tally-box {
+			display: inline-block;
+			vertical-align: middle;
+			min-height: 75px;
+			max-width: 510px;
+			padding: 15px 0;
+
+			.message {
+				max-height: 2.8em;
+				overflow: hidden;
+			}
+		}
+
+		.x-btn {
+			position: absolute;
+			right: 15px;
+			top: 50%;
+			margin-top: -18px;//37 / 2
+		}
 
 		&.assignment{
-			height: 75px !important;
-			padding: 14px 0;
-			@include icon('assignment_due', $side:'before', $top:17px, $left: 25px);
+			@include icon('assignment_due', $side:'before', $top:50%, $left: 25px);
 
-			.tally-box{
-				margin-left: 55px !important;
-				left: 0 !important;
+			&::before {
+				margin-top: -20px;//40/2
 			}
 
 			&.ontime::before{
@@ -371,7 +469,7 @@
 
 .overview-section{
 	h2 {
-		margin: 5em 0 0 -3.15em;
+		margin: 5em 0 0 -3.05em;
 		font: normal 600 0.6em/2em $font;
 		color: #fff;
 		text-transform: uppercase;

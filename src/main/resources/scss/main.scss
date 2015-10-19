@@ -6,6 +6,13 @@ $accessibility_mode: false;
 
 @import "nti-override.css";
 
+@import "reader";
+
+@import "main-layout";
+
+@import "nav-panel";
+@import "navbar";
+
 @import "branding-defaults";
 @import "containers";
 @import "charts";
@@ -22,8 +29,10 @@ $accessibility_mode: false;
 @import "account-window";
 @import "profiles";
 @import "forums";
+@import "blog";
 
 @import "notifications";
+@import "stream";
 
 @import "tabbars";
 @import "buttons";
@@ -36,6 +45,7 @@ $accessibility_mode: false;
 @import "form-fields";
 @import "menu-items";
 @import "video";
+@import "context";
 
 
 @import "contact-search";
@@ -134,7 +144,12 @@ input:-ms-input-placeholder{ @include placeholder-style(); }
 }
 
 .x-repaint {
-	display: none !important;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	-webkit-transform: translate3d(0, 0, 1px);
+	transform: translate3d(0,0,1px);
+	-webkit-perspective: 1000px;
+	perspective: 1000px;
 }
 
 .scroll-lock{
@@ -151,6 +166,9 @@ input:-ms-input-placeholder{ @include placeholder-style(); }
 
 	.sub{
 		font-size: 0.5em;
+	}
+	&.no-assignments{
+	  margin-bottom: 2em;
 	}
 }
 
