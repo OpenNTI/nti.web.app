@@ -786,7 +786,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 					if (i && (i.Class === undefined || i.Class === 'Video')) {
 						return Promise.resolve(i);	
 					}
-					return Promise.resolve();
+					return Promise.reject();
 				});
 	},
 

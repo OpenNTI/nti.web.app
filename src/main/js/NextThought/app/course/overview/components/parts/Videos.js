@@ -490,8 +490,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 		var me = this,
 			m = me.getSelectedVideo(),
 			li = me.locationInfo,
-			slidedeck, slideActions,
-			video = me.videoIndex[m.getId()];
+			slidedeck, slideActions;
 
 
 		if (!e.getTarget('.launch-player') && e.getTarget('.transcripts')) {
@@ -506,13 +505,15 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 				if (me.hasCls('playing')) { return; }
 			}
 
-			slidedeck = video.slidedeck || m.get('slidedeck');
-			if (Ext.isEmpty(slidedeck)) {
-				me.navigateToTarget(m, li.root);
-			} else {
-				me.navigateToSlidedeck(slidedeck);
-			}
-
+			this.course.getVideoForId(m.getId())
+				.then(function(video) {
+					slidedeck = video && video.slidedeck || m.get('slidedeck');
+					if (Ext.isEmpty(slidedeck)) {
+						me.navigateToTarget(m, li.root);
+					} else {
+						me.navigateToSlidedeck(slidedeck);
+					}
+				});
 			return;
 		}
 
@@ -539,11 +540,14 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 			return;
 		}
 
-		var o = this.videoIndex[videoItem.getId()],
-			video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
+		var me = this;
 
-		video.basePath = basePath;
-		this.navigate.call(null, video);
+		this.course.getVideoForId(videoItem.getId())
+			.then(function(o) {
+				var video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
+				video.basePath = basePath;
+				me.navigate.call(null, video);
+			});
 	},
 
 
