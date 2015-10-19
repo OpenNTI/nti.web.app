@@ -289,7 +289,7 @@ Ext.define('NextThought.app.contentviewer.reader.ResourceManagement', {
 
 
 	activateAnnotatableItems: function(reader, doc) {
-		var els = doc.querySelectorAll('[itemprop*=nti-data-markup],[itemprop~=nti-slide-video]'),
+		var els = reader.isAssignment() ? [] : doc.querySelectorAll('[itemprop*=nti-data-markup],[itemprop~=nti-slide-video]'),
 			tpl = this.IMAGE_TEMPLATE,
 			activators = {
 				'nti-data-resizeable': Ext.bind(this.activateZoomBox, this)

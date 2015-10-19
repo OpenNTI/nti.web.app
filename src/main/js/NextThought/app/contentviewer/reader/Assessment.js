@@ -572,6 +572,11 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 	},
 
 
+	isAssignment: function() {
+		return !!this.injectedAssignment;
+	},
+
+
 	setAssignmentFromInstructorProspective: function(assignment, history) {
 		this.isInstructorProspective = true;
 		this.injectedAssignment = assignment;
