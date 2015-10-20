@@ -105,13 +105,6 @@ extend: 'Ext.container.Container',
 		this.filterMenu = this.down('filter-menupanel');
 		this.grid = this.down('grid');
 
-		this.on({
-			el: {
-				mousewheel: 'onPushScroll',
-				DOMMouseScroll: 'onPushScroll'
-			}
-		});
-
 		this.mon(this.filterMenu, {
 			filter: 'doFilter',
 			search: {fn: 'doSearch', buffer: 450}
@@ -132,20 +125,16 @@ extend: 'Ext.container.Container',
 		});
 
 		this.mon(this.grid, 'itemClick', 'maybeShowDisclosureMenu');
+		Ext.EventManager.onWindowResize(this.onWindowResize, this, false);
 	},
+
 
 	onActivate: function(){
 		var grid = this.down('grid');
 		if(grid && grid.store){
 			grid.getView().refresh();
+			wait().then(this.adjustHeight.bind(this));
 		}
-	},
-
-
-	onPushScroll: function pushScroll(e) {
-		var d = e.getWheelDelta();
-
-		console.debug(d);
 	},
 
 
@@ -161,6 +150,40 @@ extend: 'Ext.container.Container',
 
 		// Bind store after load.
 		this.down('grid').bindStore(this.store);
+		wait().then(this.adjustHeight.bind(this));
+	},
+
+
+	__getGridMaxHeight: function() {
+		// deduct in order Top NavBar, paddingtop, roster header, roster grouping, column header. 
+		// TODO: Find a better way to do this.
+		return Ext.Element.getViewportHeight() - 70 - 20 - 200 - 72 - 30;
+	},
+
+
+	adjustHeight: function() {
+		var grid = this.down('grid'),
+			scrollTarget = grid && grid.getScrollTarget(),
+			currentHeight = scrollTarget && scrollTarget.getHeight(),
+			maxHeight = this.__getGridMaxHeight();
+
+		if (currentHeight > maxHeight && scrollTarget) {
+			scrollTarget.el.setHeight(maxHeight);
+			grid.el.setHeight(maxHeight + 30);
+		}
+	},
+
+
+	onWindowResize: function() {
+		var grid = this.down('grid'),
+			scrollTarget = grid && grid.getScrollTarget(),
+			currentHeight = scrollTarget && scrollTarget.getHeight(),
+			maxHeight = this.__getGridMaxHeight();
+
+		if (maxHeight > 0 && scrollTarget) {
+			scrollTarget.el.setHeight(maxHeight);
+			grid.el.setHeight(maxHeight + 30);
+		}
 	},
 
 
