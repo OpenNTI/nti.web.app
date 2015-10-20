@@ -157,7 +157,7 @@ extend: 'Ext.container.Container',
 	__getGridMaxHeight: function() {
 		// deduct in order Top NavBar, paddingtop, roster header, roster grouping, column header. 
 		// TODO: Find a better way to do this.
-		return Ext.Element.getViewportHeight() - 70 - 20 - 200 - 72 - 30;
+		return Ext.Element.getViewportHeight() - 70 - 40 - 200 - 72 - 30;
 	},
 
 
@@ -169,7 +169,7 @@ extend: 'Ext.container.Container',
 
 		if (currentHeight > maxHeight && scrollTarget) {
 			scrollTarget.el.setHeight(maxHeight);
-			grid.el.setHeight(maxHeight + 30);
+			this.el.setHeight(Ext.Element.getViewportHeight() - 90 - 20);
 		}
 	},
 
@@ -182,7 +182,7 @@ extend: 'Ext.container.Container',
 
 		if (maxHeight > 0 && scrollTarget) {
 			scrollTarget.el.setHeight(maxHeight);
-			grid.el.setHeight(maxHeight + 30);
+			this.el.setHeight(Ext.Element.getViewportHeight() - 90 - 20);
 		}
 	},
 
