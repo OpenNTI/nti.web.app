@@ -177,10 +177,10 @@ extend: 'Ext.container.Container',
 	onWindowResize: function() {
 		var grid = this.down('grid'),
 			scrollTarget = grid && grid.getScrollTarget(),
-			currentHeight = scrollTarget && scrollTarget.getHeight(),
+			scrollHeight = scrollTarget && scrollTarget.el && scrollTarget.el.dom.scrollHeight,
 			maxHeight = this.__getGridMaxHeight();
 
-		if (maxHeight > 0 && scrollTarget) {
+		if (scrollHeight > maxHeight) {
 			scrollTarget.el.setHeight(maxHeight);
 			this.el.setHeight(Ext.Element.getViewportHeight() - 90 - 20);
 		}
