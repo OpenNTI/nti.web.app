@@ -116,6 +116,8 @@ extend: 'Ext.container.Container',
 
 	afterRender: function() {
 		this.callParent(arguments);
+
+		var me = this;
 		this.filterLink = this.down('[itemId=filtermenu]');
 		this.mon(this.filterLink, {
 			el: {
@@ -126,6 +128,9 @@ extend: 'Ext.container.Container',
 
 		this.mon(this.grid, 'itemClick', 'maybeShowDisclosureMenu');
 		Ext.EventManager.onWindowResize(this.onWindowResize, this, false);
+		me.on('destroy', function() {
+			Ext.EventManager.removeResizeListener(me.onWindowResize, me);
+		});
 	},
 
 
