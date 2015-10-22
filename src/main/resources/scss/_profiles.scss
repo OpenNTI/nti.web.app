@@ -328,7 +328,7 @@
 		.field {
 			color: white;
 			max-width: 580px;
-			overflow: visible;
+			overflow: hidden;
 			font-size: 0.875em;
 			font-weight: 300;
 			@include ellipse;
