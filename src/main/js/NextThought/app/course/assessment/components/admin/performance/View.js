@@ -16,6 +16,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 	layout: 'card',
 
 	clearAssignmentsData: function() {
+		var root = this.getRoot();
+		if (root && root.clearSearch) {
+			root.clearSearch();
+		}
+
 		this.removeAll(true);
 	},
 
