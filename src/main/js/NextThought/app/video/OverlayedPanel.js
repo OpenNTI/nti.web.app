@@ -198,17 +198,33 @@ Ext.define('NextThought.app.video.OverlayedPanel', {
 	},
 
 
-	play: function() {
-		this.fromClick = true;
-		this.addCls('playing');
-		this.down('content-video').resumePlayback(true);
+	play: function(e) {
+		if (e.getTarget('.launch-player')) {
+			this.fromClick = true;
+			this.addCls('playing');
+			this.down('content-video').resumePlayback(true);	
+		}
+		if (!e.getTarget('.launch-player') && e.getTarget('.label')) {
+			this.openMediaViewer();
+		}
 	},
 
 
 	openMediaViewer: function() {
-		var v = this.playlist[0];
-		console.log('should start media player for video: ', v.get('NTIID'));
-		this.fireEvent('start-media-player', v, v.get('NTIID'), this.reader.basePath);
+		var v = this.playlist[0],
+			bundleContent = this.up('bundle-content'),
+			location = this.reader && this.reader.getLocation && this.reader.getLocation() || {},
+			path;
+
+		if (bundleContent && bundleContent.getVideoRouteForObject) {
+			v.pageInfo = location.pageInfo;
+			v.page = location.NTIID;
+			path = bundleContent.getVideoRouteForObject(v);
+
+			if (path && path.route) {
+				bundleContent.handleNavigation(path.title, path.route, path.precache);
+			}
+		}
 	},
 
 

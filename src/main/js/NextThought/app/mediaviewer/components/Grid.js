@@ -253,6 +253,14 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 	 * @return {[type]} [description]
 	 */
 	getVideosForBundle: function(bundle) {
+		if (!bundle.getMediaByOutline || !bundle.getNavigationStore) {
+			return Promise.reject();
+		}
+
+		if (this.__getVideosPromise) {
+			return this.__getVideosPromise;
+		}
+
 		this.__getVideosPromise = Promise.all([
 				bundle.getMediaByOutline(),	
 				bundle.getNavigationStore().building
