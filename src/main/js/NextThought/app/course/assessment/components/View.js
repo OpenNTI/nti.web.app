@@ -230,8 +230,8 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 		var items = this.body.items.items || [];
 
 		items.forEach(function(item) {
-			if (item.clearAssignmentData) {
-				item.clearAssignmentData();
+			if (item.clearAssignmentsData) {
+				item.clearAssignmentsData();
 			}
 		});
 

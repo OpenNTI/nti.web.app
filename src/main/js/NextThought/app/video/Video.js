@@ -13,7 +13,8 @@ export default Ext.define('NextThought.app.video.Video', {
 	requires: [
 		'NextThought.util.Globals',
 		'NextThought.util.media.*',
-		'NextThought.model.PlaylistItem'
+		'NextThought.model.PlaylistItem',
+		'NextThought.model.resolvers.VideoPosters'
 	],
 
 	ui: 'content-video',
@@ -84,6 +85,24 @@ export default Ext.define('NextThought.app.video.Video', {
 		urlToPlaylist: function(url) {
 			var item = NextThought.model.PlaylistItem.fromURL(url);
 			return item && [item];
+		},
+
+
+		resolvePosterFromEmbedded: function(embedded) {
+			var PosterResolver = NextThought.model.resolvers.VideoPosters,
+				type = embedded.type,
+				url = embedded.embedURL,
+				id;
+
+			if (type === PosterResolver.YOUTUBE) {
+				id = NextThought.model.resolvers.videoservices.Youtube.getIdFromURL(url);
+			} else if (type === PosterResolver.VIMEO) {
+				id = NextThought.model.resolvers.videoservices.Vimeo.getIdFromURL(url);
+			} else {
+				return Promise.resolve(Globals.CANVAS_BROKEN_IMAGE.src);
+			}
+
+			return PosterResolver.resolvePoster(type, id);
 		}
 	},
 
@@ -171,7 +190,9 @@ export default Ext.define('NextThought.app.video.Video', {
 				this.onHeartBeat();
 				this.fireEvent('media-heart-beat');
 			},
-			onError: function() {console.error(arguments);}
+			onError: function() {
+				console.error(arguments);
+			}
 		};
 
 		Ext.TaskManager.start(this.taskMediaHeartBeat);
@@ -207,9 +228,9 @@ export default Ext.define('NextThought.app.video.Video', {
 		//		If loadFirstEntry is true, we load the first playlist entry. For some subclasses this behavior is not desired.
 		if (this.loadFirstEntry) {
 			item = this.playlist[this.playlistIndex];
-			this.maybeSwitchPlayers(item && item.activeSource && item.activeSource().service);
+			this.maybeSwitchPlayers(item && item.activeSource && (item.activeSource() || {}).service);
 			if (item) {
-				this.setVideoAndPosition(item.activeSource && item.activeSource().source);
+				this.setVideoAndPosition(item.activeSource && (item.activeSource() || {}).source);
 			}
 		}
 		else {

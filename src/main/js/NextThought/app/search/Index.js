@@ -290,7 +290,13 @@ export default Ext.define('NextThought.app.search.Index', {
 	},
 
 
-	navigateToSearchHit: function(record, hit, frag, containerId) {
+	navigateToSearchHit: function(record, hit, frag) {
+		var containerId = record && record.isModel ? record.getId() : undefined;
+		
+		if (!containerId && typeof(record) === 'string') {
+			containerId = record;
+		}
+
 		this.SearchStore.setHitForContainer(containerId || hit.get('ContainerId'), hit, frag);
 
 		this.Router.root.attemptToNavigateToObject(record);

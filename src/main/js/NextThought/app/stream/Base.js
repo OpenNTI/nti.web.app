@@ -3,21 +3,39 @@
  * as they get scrolled into and out of view.
  *
  * The stream source is an interface that implements the following methods
- * 		loadPage(Interger, [1, Infinity)) load a specific page and reset the current to this page so load next will work from here
- * 		it can fire an event 'reset' to trigger to scroll to the top and start from page 1
+ * 		getCurrentBatch: fulfills with the current batch
+ * 		getNextBatch: fulfills with the next batch
+ * 		getPreviousBatch: fulfills with the previous batch
  *
  * Monitors can be added by the container for beforePageLoad, and afterPageLoad
+ *
+ * @class  NextThought.app.stream.Base
+ * @author andrew.ligon@nextthought.com (Andrew Ligon)
  */
-
 export default Ext.define('NextThought.app.stream.Base', {
 	extend: 'Ext.container.Container',
 
 	requires: [
-		'NextThought.app.stream.components.ListPage'
+		'NextThought.app.stream.util.StreamSource'
 	],
+
+	mixins: {
+		Scrolling: 'NextThought.mixins.Scrolling'
+	},
 
 	layout: 'none',
 	cls: 'stream',
+
+	items: [],
+
+	/**
+	 * Contains a map of a mimeType to a component to show for it
+	 * @type {Object}
+	 */
+	MIME_TO_COMPONENTS: {},
+
+	clearOnDeactivate: false,
+	pageOnScroll: true,
 
 	/**
 	 * The text to display when its empty
@@ -25,6 +43,21 @@ export default Ext.define('NextThought.app.stream.Base', {
 	 * @type {String}
 	 */
 	emptyText: '',
+
+	/**
+	 * The text to display when there is an error
+	 * @override
+	 * @type {String}
+	 */
+	errorText: 'Error: Unable to load more data.',
+
+	/**
+	 * The text to display at the bottom of the list
+	 * @override
+	 * @type {String}
+	 */
+	doneText: '',
+
 
 	onClassExtended: function(cls, data) {
 		if (data.cls) {
@@ -36,104 +69,256 @@ export default Ext.define('NextThought.app.stream.Base', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.scrollTarget = Ext.getBody().dom;
+		this.initScrolling();
+
+		this.on({
+			'activate': this.onActivate.bind(this),
+			'deactivate': this.onDeactivate.bind(this)
+		});
+
 		this.PAGES = [];
+
+		this.onScroll = this.onScroll.bind(this);
+		this.prefetchNext = Ext.Function.createBuffered(this.loadNextPage, 500);
+
+		this.fillInMimeTypes(this.tiles || []);
 	},
 
 
-	afterRender: function() {
-		this.callParent(arguments);
+	fillInMimeTypes: function(cmps) {
+		this.MIME_TO_COMPONENTS = cmps.reduce(function(acc, cmp) {
+			var mimeType = cmp.mimeType;
 
-		this.doInitialLoad();
+			if (!Array.isArray(mimeType)) {
+				mimeType = [mimeType];
+			}
+
+			mimeType.forEach(function(mime) {
+				if (mime) {
+					acc[mime] = cmp;
+				}
+			});
+
+			return acc;
+		}, {});
 	},
 
 
-	addLoadingCmp: function() {
-		if (!this.loadignCmp) {
-			this.loadingCmp = this.add({
+	getGroupContainer: function() {
+		return this;
+	},
+
+
+	setStreamSource: function(source) {
+		this.clearPages();
+		this.StreamSource = source;
+
+		if (source) {
+			this.removeEmpty();
+			this.showLoading();
+			this.StreamSource.getCurrentBatch()
+				.then(this.loadBatch.bind(this))
+				.then(this.maybeLoadMoreItems.bind(this))
+				.fail(this.showError.bind(this))
+				.always(this.removeLoading.bind(this));
+		} else {
+			this.onEmpty();
+		}
+	},
+
+
+	setStreamParams: function(params) {
+		params.url = params.url || this.StreamSource.getURL();
+
+		this.setStreamSource(new NextThought.app.stream.util.StreamSource(params));
+	},
+
+
+	onActivate: function() {
+		//if we might have cleared on deactivate or haven't loaded any pages yet
+		if (this.clearOnDeactivate || this.PAGES.length === 0) {
+			this.setStreamSource(this.StreamSource);
+		}
+
+		if (this.pageOnScroll) {
+			this.setUpScrollListener();
+		}
+	},
+
+
+	onDeactivate: function() {
+		if (this.clearOnDeactivate) {
+			this.clearPages();
+		}
+
+		if (this.pageOnScroll) {
+			this.removeScrollListener();
+		}
+	},
+
+
+	setUpScrollListener: function() {
+		window.addEventListener('scroll', this.onScroll);
+	},
+
+
+	removeScrollListener: function() {
+		window.removeEventListener('scroll', this.onScroll);
+	},
+
+
+	clearPages: function() {
+		this.PAGES.forEach(function(page) {
+			page.destroy();
+		});
+
+		this.PAGES = [];
+
+		delete this.isOnLastBatch;
+	},
+
+
+	loadBatch: function(batch) {
+		if (batch.isFirst && !batch.Items.length) {
+			this.onEmpty();
+		} else {
+			this.removeEmpty();
+			this.fillInItems(batch.Items);
+		}
+
+		if (batch.isLast) {
+			this.onDone();
+			this.isOnLastBatch = true;
+		}
+	},
+
+
+	fillInItems: function(items) {},
+
+
+	maybeLoadMoreItems: function(batch) {
+		var height = this.getPageHeight(),
+			scrollHeight = this.getPageScrollHeight();
+
+		if (height <= 0 || scrollHeight < height) {
+			this.loadNextPage();
+		}
+	},
+
+
+	loadNextPage: function() {
+		if (!this.isOnLastBatch) {
+			this.showLoading();
+			this.StreamSource.getNextBatch()
+				.then(this.loadBatch.bind(this))
+				.then(this.maybeLoadMoreItems.bind(this))
+				.fail(this.showError.bind(this))
+				.always(this.removeLoading.bind(this));
+		}
+	},
+
+
+	showLoading: function() {
+		var cmp = this.getGroupContainer();
+
+		if (!this.loadingCmp) {
+			this.loadingCmp = cmp.add({
 				xtype: 'box',
-				autoEl: {cls: 'loading-container item', cn: {cls: 'loading', html: 'Loading...'}}
+				autoEl: {cls: 'item loading', cn: [
+					{cls: 'container-loading-mask', cn: [
+						{cls: 'load-text', html: 'Loading...'}
+					]}
+				]}
 			});
 		}
 	},
 
 
-	removeLoadingCmp: function() {
+	removeLoading: function() {
+		var cmp = this.getGroupContainer();
+
 		if (this.loadingCmp) {
-			this.remove(this.loadingCmp, true);
+			cmp.remove(this.loadingCmp, true);
 			delete this.loadingCmp;
 		}
 	},
 
 
-	doInitialLoad: function() {
-		var height = document.documentElement.clientHeight,
-			scrollHeight = this.scrollTarget.scrollHeight;
+	showError: function() {
+		var cmp = this.getGroupContainer();
 
-		if (height > 0 && scrollHeight > height) {
-			return Promise.resolve();
-		}
-
-		//recursively call doInitial load until the scroll height is greater than the dom height
-		//should hopefully only take 1
-		return this.loadNextPage()
-			.then(this.doInitialLoad.bind(this));
-	},
-
-
-	loadNextPage: function() {
-		var me = this;
-
-		me.addLoadingCmp();
-
-		return me.StreamSource.loadNextPage()
-			.then(me.addPage.bind(me))
-			.fail(function(reason) {
-				//On error if the reason is DONE then show the end of the stream
-				if (reason === me.StreamSource.DONE) {
-					me.addDone();
-				//else show an error
-				} else {
-					console.error(reason);
-					me.addError();
-				}
-
-				//either way prevent loadNextPage from being called again
-				me.loadNextPage = function() { return Promise.resolve(); };
-			})
-			.always(me.removeLoadingCmp.bind(me));
-	},
-
-	/**
-	 * @override
-	 * @param  {[Object]} items the items to put in the page
-	 * @return {[type]}       [description]
-	 */
-	getPageConfig: function(items) {},
-
-
-	addPage: function(items) {
-		var page = this.getPageConfig();
-
-		page.streamItems = items;
-		page.tileOverrides = this.tileOverrides;
-
-		this.PAGES.push(this.add(page));
-	},
-
-
-	addDone: function() {
-		console.log('End of stream');
-	},
-
-
-	addError: function() {
 		if (!this.errorCmp) {
-			this.errorCmp = this.add({
+			this.errorCmp = cmp.add({
 				xtype: 'box',
-				cls: 'error-container item',
-				autoEl: {html: 'Error: Unable to load more data.'}
+				autoEl: {cls: 'item error', cn: [
+					{cls: 'container-error', cn: [
+						{cls: 'error-text', html: this.errorText}
+					]}
+				]}
 			});
+		}
+	},
+
+
+	onEmpty: function() {
+		var cmp = this.getGroupContainer();
+
+		if (!this.emptyCmp && this.emptyText) {
+			this.emptyCmp = cmp.add({
+				xtype: 'box',
+				autoEl: {cls: 'item empty', cn: [
+					{cls: 'container-empty', cn: [
+						{cls: 'empty-text', html: this.emptyText}
+					]}
+				]}
+			});
+		}
+	},
+
+
+	removeEmpty: function() {
+		var cmp = this.getGroupContainer();
+
+		if (this.emptyCmp) {
+			cmp.remove(this.emptyCmp, true);
+			delete this.emptyCmp;
+		}
+	},
+
+
+	onDone: function() {
+		var cmp = this.getGroupContainer();
+
+		if (!this.doneCmp && this.doneText) {
+			this.doneCmp = cmp.add({
+				xtype: 'box',
+				autoEl: {cls: 'item done', cn: [
+					{cls: 'container-done', cn: [
+						{cls: 'done-text', html: this.doneText}
+					]}
+				]}
+			});
+		}
+	},
+
+
+	onScroll: function() {
+		if (this.isOnLastBatch) { return; }
+
+		var body = this.getPageScrollingEl(),
+			height = this.getPageHeight(),
+			scrollHeight = this.getPageScrollHeight(),
+			top = body.scrollTop,
+			scrollTopMax = scrollHeight - height,
+			//trigger when the top goes over a limit value
+			//That limit value is defined by the max scrollTop can be, minus a buffer zone. (defined here as 10% of the viewable area)
+			triggetZone = scrollTopMax - Math.floor(height * 0.1),
+			wantedDirection = (this.lastScroll || 0) < top;
+
+		this.lastScroll = top;
+
+		if (wantedDirection && top > triggetZone) {
+			this.prefetchNext();
 		}
 	}
 });

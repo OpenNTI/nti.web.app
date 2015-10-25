@@ -101,7 +101,7 @@ export default Ext.define('NextThought.app.context.types.Content', {
 	__fixUpContext: function(n, root) {
 		var node = Ext.get(n), cardTpl, slideDeckTpl, slideVideoTpl, dom, data,
 			imgs = n && n.querySelectorAll('img'),
-			maxWidth = this.maxWidth, Slide;
+			maxWidth = this.maxWidth, Slide, c;
 
 		if (!node){ return;}
 
@@ -146,6 +146,18 @@ export default Ext.define('NextThought.app.context.types.Content', {
 			}
 		}, this);
 
+		// Fix up URL for external links
+		Ext.each(node.query('a[target=_blank]'), function(a) {
+			var url = a.getAttribute('href'),
+				isExternalNTILink = !(/^(http(s)?:)/i.test(url));
+
+			if (isExternalNTILink) {
+				url = root + url;
+				url = getURL(url);
+				a.setAttribute('href', url);	
+			}
+		});
+
 
 		cardTpl = Ext.DomHelper.createTemplate({cls: 'content-card', html: NextThought.common.components.cards.Card.prototype.renderTpl.html});
 		Ext.each(node.query('object[type*=nticard]'), function(c) {
@@ -161,12 +173,13 @@ export default Ext.define('NextThought.app.context.types.Content', {
 			Ext.fly(c).remove();
 		});
 
-		slideVideoTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.app.mediaviewer.content.SlideVideo.prototype.renderTpl.html});
-		Ext.each(node.query('object[type*=ntislidevideo][itemprop$=card]'), function(c) {
-			var d = NextThought.app.mediaviewer.content.OverlayedPanel.getData(c);
-			slideVideoTpl.insertAfter(c, d, false);
-			Ext.fly(c).remove();
-		});
+		if (node.query('object[type*=ntislidevideo][itemprop$=card]').length > 0) {
+			c = node.query('object[type*=ntislidevideo][itemprop$=card]')[0];
+			data = NextThought.app.mediaviewer.content.OverlayedPanel.getData(c);
+			dom = new Ext.XTemplate(NextThought.app.mediaviewer.content.SlideVideo.prototype.renderTpl).apply(data);
+			dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
+			return dom;
+		}
 
 		if (node.query('object[type$=slide]').length) {
 			data = NextThought.model.Slide.getParamFromDom(node.query('object[type$=slide]')[0], 'slideimage');

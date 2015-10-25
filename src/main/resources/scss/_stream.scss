@@ -2,9 +2,31 @@
 	-webkit-font-smoothing: antialiased;
 	
 	.item {
-		position: relative;
-		background-color: white;
-		margin-bottom: 5px;
+		&.loading, &.empty, &.done, &.error {
+			position: relative;
+			background-color: white;
+			height: 50px;
+			margin-top: 5px;
+		}
+
+		&.loading {
+			.container-loading-mask {
+				background: white;
+
+				.load-text {
+					color: $primary-grey;
+					top: 25%;
+				}
+			}
+		}
+
+		&.error {
+			.error-text {
+				text-align: center;
+				line-height: 50px;
+				color: $primary-red;
+			}
+		}
 	}
 
 	.loading-container {

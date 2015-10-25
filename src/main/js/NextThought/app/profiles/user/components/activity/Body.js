@@ -84,6 +84,8 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Bod
 			return Promise.resolve();
 		}
 
+		this.activityCmp.userChanged(entity);
+
 		return Service.request(href)
 			.then(function(resp) {
 				return ParseUtils.parseItems(resp)[0];
@@ -100,8 +102,13 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Bod
 	},
 
 
-	setStore: function(store, entity) {
-		this.activityCmp.setStore(store, entity);
+	setStreamSource: function(store, entity) {
+		this.activityCmp.setStreamSource(store, entity);
+	},
+
+
+	setStreamParams: function(params) {
+		this.activityCmp.setStreamParams(params);
 	},
 
 

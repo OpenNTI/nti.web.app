@@ -110,7 +110,12 @@ export default Ext.define('NextThought.util.Content', {
 	externalUriRegex: /^((\/\/)|([a-z][a-z0-9\+\-\.]*):)/i,
 
 	isExternalUri: function(r) {
-		return this.externalUriRegex.test(r);
+		var targetURL = new URL(r),
+			targetHost = targetURL && targetURL.host,
+			currentHost = window.location && window.location.host;
+		
+		// return this.externalUriRegex.test(r);
+		return targetHost !== currentHost;
 	},
 
 	/**
@@ -424,6 +429,20 @@ export default Ext.define('NextThought.util.Content', {
 		if (!maybeBlocker(getRef(next))) {
 			nextTitle = getTitle(next);
 			next = getRef(next);
+		}
+
+		//If the current index is not in the visible nodes, just show it as 1 page
+		//with not next or previous
+		if (currentIndex < 0) {
+			return {
+				isSupressed: onSuppressed,
+				currentIndex: 0,
+				totalNodes: 1,
+				previous: null,
+				next: null,
+				previousTitle: '',
+				nextTitle: ''
+			};
 		}
 
 		return {

@@ -18,10 +18,18 @@ export default Ext.define('NextThought.util.Color', {
 			}
 		}
 
+		var red = color.getRed(),
+			green = color.getGreen(),
+			blue = color.getBlue();
+
+		red = red.toFixed(0);
+		green = green.toFixed(0);
+		blue = blue.toFixed(0);
+
 		return Ext.String.format('rgba({0},{1},{2},{3})',
-				color.getRed(),
-				color.getGreen(),
-				color.getBlue(),
+				red,
+				green,
+				blue,
 				typeof alpha === 'number' ? alpha : 1
 		);
 	},
@@ -137,8 +145,8 @@ export default Ext.define('NextThought.util.Color', {
 		/* Divide by 2**bitcount */
 		hue = ridx / Math.pow(2, bitcount);
 
-		/* Start at .6 (216 degrees) */
-		return (hue + 0.6) % 1;
+		/* Start at .561 (202 degrees) start at primary blue */
+		return (hue + 0.561) % 1;
 	},
 
 	/**
@@ -151,8 +159,18 @@ export default Ext.define('NextThought.util.Color', {
 			idx = Ext.Array.indexOf(this.sources, idx);
 		}
 
-		return Ext.draw.Color.fromHSL(Math.round(this.hue(idx) * 360), 100, 50);
+		return Ext.draw.Color.fromHSL(Math.round(this.hue(idx) * 360), 0.91, 0.606);
 	},
+
+	/**
+	 * Return a unique hex value for the index
+	 * @param  {number} idx the index
+	 * @return {String}     the hex code
+	 */
+	getColorHex: function(idx) {
+		return this.rgbaToHex(this.toRGBA((this.getColor(idx))));
+	},
+
 
 	addSource: function(userId) {
 		if (userId && !Ext.Array.contains(this.sources, userId)) {

@@ -177,7 +177,7 @@ export default Ext.define('NextThought.util.Analytics', {
 		data.timestamp = now.getTime() / 1000;//send seconds back
 		data.MimeType = this.TYPE_TO_MIMETYPE[data.type];
 		data.user = $AppConfig.username;
-		data.resource_id = resourceId;
+		data.ResourceId = resourceId;
 		data.RootContextID = data.RootContextId || data.context_path[0] || '';
 
 		if (data.course && data.context_path.first() != data.course) {
@@ -283,7 +283,7 @@ export default Ext.define('NextThought.util.Analytics', {
 		data.timestamp = now.getTime() / 1000;//send seconds back
 		data.MimeType = this.TYPE_TO_MIMETYPE[data.type];
 		data.user = $AppConfig.username;
-		data.resource_id = resourceId;
+		data.ResourceId = resourceId;
 
 		this.maybePush(data);
 		this.__maybeStartBatchTimer();
@@ -343,7 +343,7 @@ export default Ext.define('NextThought.util.Analytics', {
 			if (this.TIMER_MAP.hasOwnProperty(key)) {
 				resource = this.TIMER_MAP[key];
 
-				this.stopResourceTimer(resource.data.resource_id, resource.data.type, null, true);
+				this.stopResourceTimer(resource.data.ResourceId, resource.data.type, null, true);
 			}
 		}
 	},

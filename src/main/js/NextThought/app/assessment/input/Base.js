@@ -30,7 +30,9 @@ export default Ext.define('NextThought.app.assessment.input.Base', {
 					 cls: 'right',
 					 cn: [
 						 {cls: 'action check'},
-						 {cls: 'action solution', html: '{{{NextThought.view.assessment.input.Base.show-solution}}}'}
+						 {cls: 'action solution', html: '{{{NextThought.view.assessment.input.Base.show-solution}}}'},
+						 {cls: 'action results', html: 'View Results'},
+					 	 {cls: 'action report', html: 'View Report'}
 					 ]
 				 }]
 		}
@@ -46,6 +48,8 @@ export default Ext.define('NextThought.app.assessment.input.Base', {
 		solutionExplanationBox: '.response-container .solution .explanation',
 		showSolutionBtn: '.footer .action.solution',
 		checkItBtn: '.footer .action.check',
+		reportBtn: '.footer .action.report',
+		resultsBtn: '.footer .action.results',
 		footer: '.footer'
 	},
 
@@ -162,7 +166,20 @@ export default Ext.define('NextThought.app.assessment.input.Base', {
 			click: this.editAnswer
 		});
 
+		this.mon(this.reportBtn, {
+			scope: this,
+			click: this.showReport.bind(this)
+		});
+
+		this.mon(this.resultsBtn, {
+			scope: this,
+			click: this.showResults.bind(this)
+		});
+
+		this.showSolutionBtn.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.checkItBtn.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		this.resultsBtn.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		this.reportBtn.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		this.solutionAnswerBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.inputBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
@@ -195,6 +212,33 @@ export default Ext.define('NextThought.app.assessment.input.Base', {
 			this.questionSet.setProgress(this.question, this);
 		}
 
+
+		this.maybeShowReport();
+		this.maybeShowResults();
+	},
+
+
+	maybeShowReport: function() {
+		var questionLink = this.question && this.question.getReportLink && this.question.getReportLink(),
+			setLink = this.questionSet && this.questionSet.getReportLink && this.questionSet.getReportLink();
+
+		if (questionLink && !setLink) {
+			this.reportBtn.show();
+		} else {
+			this.reportBtn.hide();
+		}
+	},
+
+
+	maybeShowResults: function() {
+		var questionLink = this.question && this.question.getResultsLink && this.question.getResultsLink(),
+			setLink = this.questionSet && this.questionSet.getResultsLink && this.questionSet.getResultsLink();
+
+		if (questionLink && !setLink) {
+			this.resultsBtn.show();
+		} else {
+			this.resultsBtn.hide();
+		}
 	},
 
 
@@ -237,7 +281,11 @@ export default Ext.define('NextThought.app.assessment.input.Base', {
 		var question = this.up('assessment-question');
 
 		this.submitted = true;
-		this.checkItBtn.update(question.SubmittedTextOverride || 'Try again');
+		if (question.SubmittedTextOverride === false) {
+			this.checkItBtn.hide();
+		} else {
+			this.checkItBtn.update(question.SubmittedTextOverride || 'Try again');
+		}
 	},
 
 
@@ -264,6 +312,25 @@ export default Ext.define('NextThought.app.assessment.input.Base', {
 
 	setValue: function() {
 		console.log(this.$className + ' does not implement the setValue function');
+	},
+
+
+	showReport: function() {
+		var win = Ext.widget('iframe-window', {
+				width: 'max',
+				saveText: getString('NextThought.view.menus.Reports.savetext'),
+				link: this.question.getReportLink(),
+				loadingText: getString('NextThought.view.menus.Reports.loadingtext')
+			});
+
+		win.show();
+	},
+
+
+	showResults: function() {
+		var question = this.up('assessment-question');
+
+		question.showResults();
 	},
 
 

@@ -406,7 +406,7 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 
 
 	getContainerIdForSearch: function() {
-		return this.record.get('ContainerId');
+		return this.record.get('NTIID');
 	},
 
 

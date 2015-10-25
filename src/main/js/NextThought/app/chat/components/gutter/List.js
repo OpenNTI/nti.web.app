@@ -35,7 +35,7 @@ export default Ext.define('NextThought.app.chat.components.gutter.List', {
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': '.', cn: [
-			{cls: 'presence-gutter-entry', cn: [
+			{cls: 'presence-gutter-entry', 'data-qtip': '{displayName}', cn: [
 				{cls: 'name', html: '{displayName}'},
 				{cls: 'profile-pic {[this.getPresence(values)]}', 'data-badge': '{[this.getBadgeCount(values)]}', cn: [
 					'{[this.getAvatar(values)]}',

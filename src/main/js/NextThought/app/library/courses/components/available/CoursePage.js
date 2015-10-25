@@ -43,9 +43,14 @@ Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 		var me = this;
 
 		this.setPageHeight();
-		this.mon(this.getTargetEl(), 'scroll', this.onScroll.bind(this));
+		this.bufferedScroll = Ext.Function.createBuffered(this.onScroll, 500);
+		this.mon(this.getTargetEl(), 'scroll', this.bufferedScroll.bind(this));
 		this.mon(this.tabsEl, 'click', this.onTabClick.bind(this));
 		Ext.EventManager.onWindowResize(this.setPageHeight, this);
+		me.on('destroy', function() {
+			Ext.EventManager.removeResizeListener(me.setPageHeight, me);
+		});
+
 		if ($AppConfig.userObject.hasLink('first_time_logon') && isFeature('suggest-contacts')) {
 			wait().then(function() {
 				me.showWelcomeMessage();
@@ -61,17 +66,17 @@ Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 		var me = this;
 		if (upcoming && upcoming.length) {
 			this.addCourses(upcoming, 'Upcoming Courses', null, {category: 'upcoming'});
-			this.addTab({label: 'Upcoming', category: 'upcoming'});
+			this.addTab({label: 'Upcoming', category: 'upcoming', active: true});
 		}
 
 		if (current && current.length) {
 			this.addCourses(current, 'Current Courses', null, {category: 'current'});
-			this.addTab({label: 'Current', category: 'current', active: true});
+			this.addTab({label: 'Current', category: 'current', active: Ext.isEmpty(upcoming)});
 		}
 
 		if (archived && archived.length) {
 			this.addBinnedCourses(this.binCourses(archived), 'Archived Courses', {category: 'archived'});
-			this.addTab({label: 'Archived', category: 'archived'});
+			this.addTab({label: 'Archived', category: 'archived', active: Ext.isEmpty(current)});
 		}
 
 		this.onceRendered
@@ -105,12 +110,14 @@ Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 
 
 	setPageHeight: function () {
-		var h = this.ownerCt.el.getHeight(),
+		var h =this.ownerCt &&  this.ownerCt.el && this.ownerCt.el.getHeight(),
 			me = this;
 
 		wait(10)
 			.then(function () {
-				me.el.setStyle('height', (h - 100) + 'px');
+				if (h !== undefined && h >= 0) {
+					me.el.setStyle('height', (h - 100) + 'px');	
+				}
 			});
 	},
 
@@ -164,7 +171,7 @@ Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 		if (selectTab) {
 			selectTab = this.tabsEl.down('[data-category='+ selectTab +']');
 
-			if (selectTab && activeTabEl != selectTab) {
+			if (selectTab && activeTabEl !== selectTab) {
 				activeTabEl.removeCls('active');
 				selectTab.addCls('active');
 			}
@@ -176,7 +183,7 @@ Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 		var target = Ext.get(e.getTarget()),
 			isTab = target && target.hasCls('tab'),
 			category = target && target.getAttribute('data-category'), 
-			activeTab = this.tabsEl.down('.active');
+			activeTab = this.tabsEl.down('.active'), me = this;
 
 		if (!isTab || target.hasCls('active')) {
 			return;
@@ -185,6 +192,16 @@ Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 		if (this.scrollTops[category] >= 0) {
 			this.getTargetEl().scrollTo('top', this.scrollTops[category], true);
 		}
+
+		wait()
+			.then(function() {
+				var selectTab = me.tabsEl.down('[data-category='+ category +']');
+
+				if (selectTab && activeTab !== selectTab) {
+					activeTab.removeCls('active');
+					selectTab.addCls('active');
+				}
+			});
 	},
 
 

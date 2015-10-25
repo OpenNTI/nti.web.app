@@ -135,9 +135,8 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Vide
 		if (i) {
 			this.locationInfo = i;
 
-			this.LibraryActions.getVideoIndex(this.course)
+			this.course.getVideoIndex()
 				.then(this.applyVideoData.bind(this));
-				//TODO: handle no video index.
 		}
 		else {
 			Ext.callback(this.getVideoDataLoadedCallback(), this, [undefined, 0]);
@@ -491,7 +490,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Vide
 		var me = this,
 			m = me.getSelectedVideo(),
 			li = me.locationInfo,
-			slide, slideActions;
+			slidedeck, slideActions;
 
 
 		if (!e.getTarget('.launch-player') && e.getTarget('.transcripts')) {
@@ -506,12 +505,15 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Vide
 				if (me.hasCls('playing')) { return; }
 			}
 
-			slide = m.get('slidedeck');
-			if (Ext.isEmpty(slide)) {
-				me.navigateToTarget(m, getURL(li.root));
-			} else {
-				me.navigateToSlidedeck(slide);
-			}
+			this.course.getVideoForId(m.getId())
+				.then(function(video) {
+					slidedeck = video && video.slidedeck || m.get('slidedeck');
+					if (Ext.isEmpty(slidedeck)) {
+						me.navigateToTarget(m, li.root);
+					} else {
+						me.navigateToSlidedeck(slidedeck);
+					}
+				});
 			return;
 		}
 
@@ -538,15 +540,18 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Vide
 			return;
 		}
 
-		var o = this.videoIndex[videoItem.getId()],
-			video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
+		var me = this;
 
-		video.basePath = basePath;
-		this.navigate.call(null, video);
+		this.course.getVideoForId(videoItem.getId())
+			.then(function(o) {
+				var video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
+				video.basePath = basePath;
+				me.navigate.call(null, video);
+			});
 	},
 
 
-	navigateToSlidedeck: function(slidedeckId) {
+	navigateToSlidedeck: function(slidedeckId, startVideo) {
 		var me = this;
 		if (slidedeckId) {
 			Service.getObject(slidedeckId)
@@ -554,6 +559,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Vide
 					me.navigate.call(null, slidedeck);
 				});
 		}
+
 	},
 
 

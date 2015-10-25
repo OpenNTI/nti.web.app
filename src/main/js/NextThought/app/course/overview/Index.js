@@ -158,17 +158,11 @@ export default Ext.define('NextThought.app.course.overview.Index', {
 		//then don't on set the reader to prevent it from flashing.
 		if (me.reader) {
 			if (me.reader.root === rootId) {
-				if (!pageId && me.reader.pageId === rootId) {
+				if (me.reader.isShowingPage(pageId || rootId)) {
 					if (me.activeMediaWindow) {
 						me.activeMediaWindow.destroy();
 					}
-					return Promise.resolve();
-				}
 
-				if (pageId && me.reader.pageId && me.reader.pageId === pageId) {
-					if (me.activeMediaWindow) {
-						me.activeMediaWindow.destroy();
-					}
 					return Promise.resolve();
 				}
 			}

@@ -1,12 +1,28 @@
+/**
+ * An interface to interact with batches that come back from the server,
+ * specifically around paging using the links provided.
+ *
+ * @class NextThought.store.BatchInterface
+ * @author andrew.ligon@nextthought.com (Andrew Ligon)
+ */
 export default Ext.define('NextThought.store.BatchInterface', {
-
 	requires: ['NextThought.util.Store'],
 
+	/**
+	 * @memberOf NextThought.store.BatchInterface#
+	 *
+	 * @param {Object} config - values to set up the batch interface with
+	 * @param {String} config.url - the url of the batch
+	 * @param {Object} config.params - the params to send
+	 */
 	constructor: function(config) {
 		this.callParent(arguments);
 
+		if (!config.url) {
+			throw 'No url given to batch interface';
+		}
+
 		this.url = config.url;
-		this.batchSize = config.batchSize;
 		this.params = config.params;
 
 		this.__nextLink = config.nextLink;
@@ -21,7 +37,15 @@ export default Ext.define('NextThought.store.BatchInterface', {
 		}
 	},
 
-
+	/**
+	 * Given a url and params, get a batch from the server
+	 *
+	 * @memberOf NextThought.store.BatchInterface#
+	 *
+	 * @param  {String} url - url of the batch
+	 * @param  {String} params - params to send back
+	 * @return {Promise} - fulfills with the response from the server
+	 */
 	__loadBatch: function(url, params) {
 		if (!url) {
 			return Promise.resolve({
@@ -44,7 +68,21 @@ export default Ext.define('NextThought.store.BatchInterface', {
 			me.__load = this.__loadBatch(url, params);
 		}
 
-		return me.__load;
+		return me.__load
+			.then(function(batch) {
+				var next = Service.getLinkFrom(batch.Links || [], 'batch-next'),
+					prev = Service.getLinkFrom(batch.Links || [], 'batch-prev');
+
+				if (!prev) {
+					batch.isFirst = true;
+				}
+
+				if (!next) {
+					batch.isLast = true;
+				}
+
+				return batch;
+			});
 	},
 
 
@@ -62,10 +100,6 @@ export default Ext.define('NextThought.store.BatchInterface', {
 		var params = this.params;
 
 		params = params || {};
-
-		if (this.batchSize) {
-			params.batchSize = this.batchSize;
-		}
 
 		return params;
 	},

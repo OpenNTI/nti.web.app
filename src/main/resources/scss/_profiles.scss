@@ -328,7 +328,7 @@
 		.field {
 			color: white;
 			max-width: 580px;
-			overflow: visible;
+			overflow: hidden;
 			font-size: 0.875em;
 			font-weight: 300;
 			@include ellipse;
@@ -874,6 +874,7 @@
 		overflow: hidden;
 		position: relative;
 		padding: 18px;
+		margin-top: 5px;
 
 		&:not(.joined-event){
 			cursor: pointer;
@@ -2790,5 +2791,67 @@
 				}
 			}
 		}
+	}
+}
+
+.activity-sidebar .stream-filter {
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.group {
+		background-color: #d5d4d3;
+		padding: 10px 15px;
+		position: relative;
+		margin-bottom: 5px;
+
+		.group-details {
+			cursor: pointer;
+		}
+
+		.name {
+			display: block;
+			font: normal 600 0.625em/1em $font;
+			text-transform: uppercase;
+			color: $secondary-grey;
+		}
+
+		.active-text {
+			display: block;
+		}
+	}
+
+	.group.active {
+		background-color: white;
+
+		.group-details {
+			overflow: hidden;
+		}
+
+		.group-list {
+			display: block;
+		}
+	}
+
+	ul.group-list {
+		position: absolute;
+		overflow: hidden;
+		top: 0; left: -205px;
+		width: 200px;
+		z-index: 10;
+		background-color: white;
+		padding: 10px 15px;
+		display: none;
+	    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.2);
+	
+	    li {
+	    	cursor: pointer;
+
+	    	&.active, &:hover {
+	    		color: $primary-blue;
+	    	}
+	    }
 	}
 }

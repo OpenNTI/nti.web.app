@@ -178,7 +178,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 	groupByTimeInterval: function(cueList, timeInterval) {
 		// TODO: Group by Sections defined in the parser. Right now we're only grouping by time Interval.
 		var list = [],
-			currentTime = this.transcript.get('desired-time-start') || cueList[0].startTime;
+			currentTime = this.transcript.get('desired-time-start') || (cueList[0] && cueList[0].startTime);
 
 		list.push({type: 'section', startTime: currentTime, endTime: -1});
 		Ext.each(cueList, function(t) {
@@ -465,15 +465,18 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 	getTimeRange: function() {
 		var t = this.transcript,
 			start = t.get('desired-time-start'),
-			end = t.get('desired-time-end');
+			end = t.get('desired-time-end'),
+			node;
 
 		if (!start || start < 0) {
-			start = this.getCueStore().first().get('startTime');
+			node = this.getCueStore().first();
+			start = node && node.get('startTime');
 		}
 
 		// if the end is not set, set it to be the endTime of the last cue. CueStore should be sorted.
 		if (Ext.isEmpty(end) || end <= 0) {
-			end = this.getCueStore().last().get('endTime');
+			node = this.getCueStore().last();
+			end = node && node.get('endTime');
 		}
 		return {start: start, end: end};
 	},

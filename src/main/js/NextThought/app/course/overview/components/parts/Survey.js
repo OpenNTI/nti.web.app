@@ -14,7 +14,10 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Surv
 		{cls: 'meta', cn: [
 			{cls: 'title', html: '{title}'},
 			{tag: 'span', cls: 'question-count', html: '{questions:plural("Question")}'},
-			{tag: 'span', cls: 'responses', html: 'No Responses Yet'}
+			{tag: 'span', cls: 'responses', html: 'No Responses Yet'},
+			{tag: 'tpl', 'if': 'hasReportLink', cn: [
+				{tag: 'span', cls: 'report', html: 'View Reports'}
+			]}
 		]},
 		{cls: 'button x-btn x-btn-primary-large{buttonCls}', html: '{buttonTxt}'}
 	]),
@@ -22,7 +25,8 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Surv
 
 	renderSelectors: {
 		responsesEl: '.responses',
-		startEl: '.button'
+		startEl: '.button',
+		reportEl: '.report'
 	},
 
 
@@ -36,6 +40,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Surv
 			ntiid: ntiid,
 			questionCount: n.getAttribute('question-count'),
 			submissions: n.getAttribute('submissions'),
+			reportLink: Service.getLinkFrom(links, 'InquiryReport'),
 			isSubmitted: Service.getLinkFrom(links, 'History'),
 			isClosed: n.getAttribute('isClosed')
 		};
@@ -51,7 +56,8 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Surv
 			title: this.data.title,
 			questions: this.data.questionCount,
 			buttonTxt: this.data.isSubmitted ? 'Review' : this.data.isClosed ? 'Closed' : 'Take',
-			buttonCls: this.data.isClosed ? ' closed' : ''
+			buttonCls: this.data.isClosed ? ' closed' : '',
+			hasReportLink: !!this.data.reportLink
 		});
 	},
 
@@ -68,6 +74,10 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Surv
 		if (this.data.isSubmitted) {
 			this.startEl.update('Review');
 		}
+
+		if (this.reportEl) {
+			this.mon(this.reportEl, 'click', this.showReport.bind(this));
+		}
 	},
 
 
@@ -79,5 +89,17 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Surv
 				href: ntiid
 			}));
 		}
+	},
+
+
+	showReport: function(e) {
+		var win = Ext.widget('iframe-window', {
+				width: 'max',
+				saveText: getString('NextThought.view.menus.Reports.savetext'),
+				link: this.data.reportLink,
+				loadingText: getString('NextThought.view.menus.Reports.loadingtext')
+			});
+
+		win.show();
 	}
 });

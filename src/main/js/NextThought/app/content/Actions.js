@@ -74,8 +74,8 @@ export default Ext.define('NextThought.app.content.Actions', {
 	},
 
 
-	__getLevelLabel: function(level) {
-		var label = this.levelLabels[level], i;
+	__getLevelLabel: function(level, levelName, useTocLevelName) {
+		var label = Boolean(useTocLevelName) ? 'Select ' + levelName : this.levelLabels[level], i;
 
 		if (label) { return label; }
 
@@ -103,24 +103,30 @@ export default Ext.define('NextThought.app.content.Actions', {
 
 	buildContentPath: function(parentNode, topic, lineage, leftOvers, allowMenus, bundle, rootPageId, rootRoute) {
 		var path = [],
-			i = 0, pathLength = 0;
+			i = 0, pathLength = 0,
+			presentation = this.__getPresentationProps(parentNode, bundle),
+			MaxLevel = presentation && presentation.maxLevel || this.MAX_PATH_LENGTH,
+			levelName;
+
 
 		if ((lineage.length + leftOvers.length) <= 1) {
 			if (ContentUtils.hasChildren(topic)) {
-				path.push(this.buildContentPathPart(this.__getLevelLabel(lineage.length), this.__getFirstTopic(topic), parentNode, true, bundle, rootPageId, rootRoute));
+				levelName = ContentUtils.getFirstTopic(topic).getAttribute('level');
+				path.push(this.buildContentPathPart(this.__getLevelLabel(lineage.length, levelName, presentation.useTocLevelName), this.__getFirstTopic(topic), parentNode, true, bundle, rootPageId, rootRoute));
 			} else {
 				path.push(this.buildContentPathPart(this.__getLevelLabel(NaN), topic.getAttribute('ntiid'), null, false, bundle, rootPageId, rootRoute));
 			}
 		} else if (!bundle.isCourse && ContentUtils.hasChildren(topic)) {
-			path.push(this.buildContentPathPart(this.__getLevelLabel(lineage.length), this.__getFirstTopic(topic), parentNode, true, bundle, rootPageId, rootRoute));
+			levelName = ContentUtils.getFirstTopic(topic).getAttribute('level');
+			path.push(this.buildContentPathPart(this.__getLevelLabel(lineage.length, levelName, presentation.useTocLevelName), this.__getFirstTopic(topic), parentNode, true, bundle, rootPageId, rootRoute));
 		}
 
-		for (i; i < this.MAX_PATH_LENGTH && i < lineage.length; i++) {
+		for (i; i < MaxLevel && i < lineage.length; i++) {
 			path.push(this.buildContentPathPart(null, lineage[i], parentNode, allowMenus, bundle, rootPageId, rootRoute));
 			pathLength++;
 		}
 
-		for (i = 0; pathLength < this.MAX_PATH_LENGTH && i < leftOvers.length; i++) {
+		for (i = 0; pathLength < MaxLevel && i < leftOvers.length; i++) {
 			path.push(this.buildContentPathPart(null, leftOvers[i], parentNode, false, bundle, rootPageId, rootRoute));
 			pathLength++;
 		}
@@ -182,22 +188,22 @@ export default Ext.define('NextThought.app.content.Actions', {
 
 	__getPresentationProps: function(ntiid, bundle) {
 		var presentationProps = bundle && bundle.getPresentationProperties && bundle.getPresentationProperties(ntiid),
-			numberProps = presentationProps && presentationProps.numbering,
-			num = 1, type = '1', sep = '.', suppress = false;
+			numberProps = presentationProps && presentationProps.numbering || {},
+			tocProps = presentationProps && presentationProps.toc,
+			num = 1, type = '1', sep = '.', suppress = false,
+			o = {
+				start: numberProps.start || num,
+				type: numberProps.type || type,
+				seperator: numberProps.separator || sep,
+				suppressed: numberProps.suppressed || suppress
+			};
 
-		if (numberProps) {
-			num = numberProps.start || num;
-			type = numberProps.type || type;
-			sep = numberProps.separator || sep;
-			suppress = numberProps.suppressed || suppress;
+		if (tocProps) {
+			o.maxLevel = tocProps['max-level'];
+			o.useTocLevelName = tocProps['use-toc-level-name'];
 		}
 
-		return {
-			start: num,
-			type: type,
-			seperator: sep,
-			suppressed: suppress
-		};
+		return o;
 	},
 
 

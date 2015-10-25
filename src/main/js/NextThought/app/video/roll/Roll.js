@@ -2,6 +2,10 @@ export default Ext.define('NextThought.app.video.roll.Roll', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.video-roll',
 
+	requires: [
+		'NextThought.model.resolvers.videoservices.Vimeo'
+	],
+
 	layout: 'anchor',
 	defaults: {anchor: '100%'},
 	cls: 'videos',
@@ -31,11 +35,13 @@ export default Ext.define('NextThought.app.video.roll.Roll', {
 	constructor: function(config) {
 		var store = config ? (config.store || undefined) : undefined,
 			data = config ? (config.data || undefined) : undefined,
+			Vimeo = NextThought.model.resolvers.videoservices.Vimeo,
 			me = this;
 
 		me.callParent(arguments);
 
 		this.iframe = this.down('box[name=video]');
+
 
 		if (!data) {
 			data = [{
@@ -53,9 +59,22 @@ export default Ext.define('NextThought.app.video.roll.Roll', {
 		this.store = store || new Ext.data.Store({
 			fields: [
 				{name: 'url', type: 'string'},
-				{name: 'thumbnail', type: 'string'}
+				{name: 'thumbnail', type: 'string'},
+				{name: 'type', type: 'string'}
 			],
 			data: data
+		});
+
+		this.store.each(function(item) {
+			if (item.get('thumbnail') || item.get('type') !== Vimeo.TYPE) { return; }
+
+			var url = item.get('url'),
+				id = Vimeo.getIdFromURL(url);
+
+			Vimeo.resolvePosterForID(id)
+				.then(function(poster) {
+					item.set('thumbnail', poster.poster);
+				});
 		});
 
 		this.others = this.add({
@@ -90,7 +109,7 @@ export default Ext.define('NextThought.app.video.roll.Roll', {
 
 	selection: function(v, s) {
 		if (s && s[0]) {
-			this.iframe.el.dom.setAttribute('src', this.filterVideoUrl(s[0].get('url')));
+			this.iframe.el.dom.setAttribute('src', this.filterVideoUrl(s[0]));
 		}
 	},
 
@@ -104,14 +123,31 @@ export default Ext.define('NextThought.app.video.roll.Roll', {
 		}), '*');
 	},
 
-	filterVideoUrl: function(url) {
+	filterVideoUrl: function(video) {
+		var type = video.get('type'),
+			url = video.get('url'),
+			a = document.createElement('a'),
+			query;
 
-		if ((/^(http(s)?:)?\/\/www.youtube.com/i).test(url)) {
-			url = url.split('?')[0];
-			url += '?html5=1&enablejsapi=1&autohide=1&modestbranding=0&rel=0&showinfo=1';
+		a.href = url;
+		query = Ext.Object.fromQueryString(a.search);
+
+		if (type === 'youtube') {
+			query.html5 = 1;
+			query.enablejsapi = 1;
+			query.autohide = 1;
+			query.modestbranding = 0;
+			query.rel = 0;
+			query.showinfo = 1;
+		} else if (type === 'vimeo') {
+			query.badge = 0;
+			query.byline = 0;
+			query.portrait = 0;
 		}
 
-		return url;
+		a.search = Ext.Object.toQueryString(query);
+
+		return a.href;
 	},
 
 

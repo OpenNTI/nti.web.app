@@ -3,7 +3,7 @@ export default Ext.define('NextThought.app.notifications.components.types.Grade'
 	alias: 'widget.notification-item-grade',
 
 	statics: {
-		keyVal: 'application/vnd.nextthought.grade'
+		mimeType: 'application/vnd.nextthought.grade'
 	},
 
 	itemCls: 'grade',

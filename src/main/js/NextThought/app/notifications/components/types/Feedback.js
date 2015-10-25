@@ -3,7 +3,7 @@ export default Ext.define('NextThought.app.notifications.components.types.Feedba
 	alias: 'widget.notification-item-feedback',
 
 	statics: {
-		keyVal: 'application/vnd.nextthought.assessment.userscourseassignmenthistoryitemfeedback'
+		mimeType: 'application/vnd.nextthought.assessment.userscourseassignmenthistoryitemfeedback'
 	},
 
 	itemCls: 'feedback',

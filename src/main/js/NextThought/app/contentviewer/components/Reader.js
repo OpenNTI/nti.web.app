@@ -349,6 +349,11 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 	},
 
 
+	isAssignment: function() {
+		return this.getAssessment().isAssignment();
+	},
+
+
 	loadPageInfo: function(pageInfo) {
 		var me = this,
 			proxy = ContentProxy;

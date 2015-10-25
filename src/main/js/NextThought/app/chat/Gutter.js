@@ -38,6 +38,7 @@ export default Ext.define('NextThought.app.chat.Gutter', {
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
 		this.ChatActions = NextThought.app.chat.Actions.create();
+		this.NavigationStore = NextThought.app.navigation.StateStore.getInstance();
 
 		this.buildStore();
 		this.mon(this.ChatStore, {
@@ -256,6 +257,7 @@ export default Ext.define('NextThought.app.chat.Gutter', {
 			this.ChatActions.startChat(user);
 		}
 		this.clearUnreadCount(user);
+		this.NavigationStore.fireEvent('clear-chat-tab', user);
 	},
 
 
@@ -364,13 +366,16 @@ export default Ext.define('NextThought.app.chat.Gutter', {
 	adjustToExpandedChat: function(win) {
 		if(!win) { return; }
 
-		if (this.gutterList && this.gutterList.isVisible()) {
+		if (this.gutterList && this.gutterList.el && this.gutterList.el.isVisible()) {
 			win.addCls('gutter-list-open');
 			this.gutterList.on({
 				hide: function() {
 					win.removeCls('gutter-list-open');
 				}
 			});
+		}
+		else {
+			win.removeCls('gutter-list-open');
 		}
 	},
 

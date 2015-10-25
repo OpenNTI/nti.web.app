@@ -5,7 +5,8 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Ind
 	requires: [
 		'NextThought.app.profiles.user.components.activity.Body',
 		'NextThought.app.profiles.user.components.activity.Sidebar',
-		'NextThought.app.userdata.Actions'
+		'NextThought.app.userdata.Actions',
+		'NextThought.app.stream.util.StreamSource'
 	],
 
 	mixins: {
@@ -115,9 +116,6 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Ind
 
 		this.startResourceViewed();
 
-		this.store = this.buildStore();
-		this.streamCmp.setStore(this.store, user);
-
 		return Promise.all([
 				this.streamCmp.userChanged.apply(this.streamCmp, arguments),
 				this.sidebarCmp.userChanged.apply(this.sidebarCmp, arguments)
@@ -125,56 +123,25 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Ind
 	},
 
 
-	buildStore: function() {
-		var username = this.activeUser.getId(),
-			id = 'profile-activity-' + username,
-			s = Ext.getStore(id);
-
-		if (!s) {
-			s = NextThought.store.ProfileItem.create({id: id});
-		}
-
-		s.proxy.url = this.activeUser.getLink('Activity');
-
-		if (!s.proxy.url) {
-			//don't attempt to do anything if no url
-			s.setProxy('memory');
-		}
-
-		function makeMime(v) {
-			return 'application/vnd.nextthought.' + v.toLowerCase();
-		}
-
-		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-			sortOn: 'createdTime',
-			sortOrder: 'descending',
-			exclude: [
-				'redaction',
-				'bookmark',
-				//'forums.CommentPost',
-				'assessment.AssessedQuestion'
-			].map(makeMime).join(',')
-		});
-
-		if (!this.hasPageStore(s.storeId)) {
-			s.doesNotClear = true;
-			s.doesNotShareEventsImplicitly = true;
-			s.profileStoreFor = username;
-			this.addPageStore(s.storeId, s);
-		}
-
-		return s;
-	},
-
-
 	applyState: function() {},
 
 
-	updateFilter: function() {},
+	updateFilter: function(filter) {
+		this.replaceRoute('Activity', '/?' + Ext.Object.toQueryString(filter));
+	},
 
 
-	onRoute: function() {
+	onRoute: function(route, subRoute) {
 		this.setTitle('Activity');
+
+		var streamParams;
+
+		this.sidebarCmp.setFilterFromQueryParams(route.queryParams);
+
+		streamParams = this.sidebarCmp.getStreamParams();
+		streamParams.url = this.activeUser.getLink('Activity');
+
+		this.streamCmp.setStreamParams(streamParams);
 	},
 
 

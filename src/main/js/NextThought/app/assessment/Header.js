@@ -84,6 +84,13 @@ export default Ext.define('NextThought.app.assessment.Header', {
 	},
 
 
+	maybeShow: function() {
+		if (this.currentTitle) {
+			this.show();
+		}
+	},
+
+
 	maybeHide: function(title) {
 		var v = this.videos.length;
 		this[!v && Ext.isEmpty(title) ? 'hide' : 'show']();
@@ -97,6 +104,7 @@ export default Ext.define('NextThought.app.assessment.Header', {
 			this.renderData.title = title;
 			return;
 		}
+		this.currentTitle = title;
 		this.myTitle.update(title);
 	},
 

@@ -413,10 +413,15 @@ export default Ext.define('NextThought.app.contentviewer.reader.Content', {
 			return false;
 		}
 
-
 		if (NextThought.app.navigation.Actions.navigateToHref(r)) {
 			//Someone handled us so stop the event
 			return false;
+		}
+		else {
+			// if we have hash/fragment and it's an internal link, scroll to the fragment.
+			if (target && !ContentUtils.isExternalUri(r)) {
+				this.reader.goToFragment(target);
+			}
 		}
 
 		console.warn('Unable to handle content link navigation for ', el, r);

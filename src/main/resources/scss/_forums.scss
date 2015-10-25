@@ -444,6 +444,10 @@
 		color: $primary-grey;
 		font: normal 400 14px/28px $font;
 
+		.video-placeholder {
+			width: 60% !important;
+		}
+
 		img.whiteboard-thumbnail {
 			width: 80%;
 			height: auto;

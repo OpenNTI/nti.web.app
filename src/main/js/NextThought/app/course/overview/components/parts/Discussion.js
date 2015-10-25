@@ -1,6 +1,9 @@
 export default Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
 	extend: 'Ext.Component',
-	alias: 'widget.course-overview-discussion',
+	alias: [
+		'widget.course-overview-discussion', 
+		'widget.course-overview-discussionref'
+	],
 
 	mixins: {
 		EllipsisText: 'NextThought.mixins.EllipsisText'

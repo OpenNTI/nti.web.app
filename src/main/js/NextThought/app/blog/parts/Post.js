@@ -8,6 +8,10 @@ export default Ext.define('NextThought.app.blog.parts.Post', {
 		'NextThought.app.blog.Actions'
 	],
 
+	mixins: {
+		Searchable: 'NextThought.mixins.Searchable'
+	},
+
 	cls: 'entry',
 	defaultType: 'profile-blog-comment',
 
@@ -134,6 +138,17 @@ export default Ext.define('NextThought.app.blog.parts.Post', {
 		}
 
 		this.record.addObserverForField(this, 'sharedWith', this.updateSharedWith, this);
+		this.initSearch();
+	},
+
+
+	getContainerIdForSearch: function() {
+		return this.record.get('NTIID');
+	},
+
+
+	onceReadyForSearch: function() {
+		return wait();
 	},
 
 

@@ -3,7 +3,7 @@ export default Ext.define('NextThought.app.notifications.components.types.Base',
 
 	//the mime type this item renders
 	statics: {
-		keyVal: ''
+		mimeType: ''
 	},
 
 	showCreator: true,

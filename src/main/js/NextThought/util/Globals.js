@@ -93,7 +93,7 @@ export default Ext.define('NextThought.util.Globals', {
 
 		if ($AppConfig.openExternalPDFsInNewWindow) {
 			anchor.setAttribute('href', url);
-			internal = location.protocol === anchor.protocol && location.host === anchor.host;
+			internal = location.protocol === anchor.protocol && location.hostname === anchor.hostname;
 		}
 
 		//if the target is an NTIID, must open in the app. OR

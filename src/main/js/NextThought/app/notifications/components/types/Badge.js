@@ -3,7 +3,7 @@ export default Ext.define('NextThought.app.notifications.components.types.Badge'
 	alias: 'widget.notifications-item-badge',
 
 	statics: {
-		keyVal: 'application/vnd.nextthought.openbadges.badge'
+		mimeType: 'application/vnd.nextthought.openbadges.badge'
 	},
 
 	showCreator: false,
