@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.results.Poll', {
+export default Ext.define('NextThought.app.assessment.results.Poll', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.assessment-result',
 

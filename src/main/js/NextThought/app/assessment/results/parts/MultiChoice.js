@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.results.parts.MultiChoice', {
+export default Ext.define('NextThought.app.assessment.results.parts.MultiChoice', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.assessment-multichoice-result',
 

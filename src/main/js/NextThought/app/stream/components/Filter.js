@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.stream.components.Filter', {
+export default Ext.define('NextThought.app.stream.components.Filter', {
 	extend: 'Ext.Component',
 	alias: 'widget.stream-filter',
 

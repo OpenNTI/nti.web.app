@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.results.parts.BarChart', {
+export default Ext.define('NextThought.app.assessment.results.parts.BarChart', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-barchart-results',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.results.parts.Matching', {
+export default Ext.define('NextThought.app.assessment.results.parts.Matching', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.assessment-matching-results',
 

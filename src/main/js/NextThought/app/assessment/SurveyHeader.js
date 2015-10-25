@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.SurveyHeader', {
+export default Ext.define('NextThought.app.assessment.SurveyHeader', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.assessent-survey-header',
 

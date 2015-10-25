@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.resolvers.videoservices.HTML', {
+export default Ext.define('NextThought.model.resolvers.videoservices.HTML', {
 	statics: {
 		TYPE: 'html5',
 

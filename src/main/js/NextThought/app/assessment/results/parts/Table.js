@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.results.parts.Table', {
+export default Ext.define('NextThought.app.assessment.results.parts.Table', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-table-results',
 

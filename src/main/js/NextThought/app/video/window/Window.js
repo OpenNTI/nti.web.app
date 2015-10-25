@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.video.window.Window', {
+export default Ext.define('NextThought.app.video.window.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.video-window-window',
 

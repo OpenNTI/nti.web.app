@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.resolvers.videoservices.Kaltura', {
+export default Ext.define('NextThought.model.resolvers.videoservices.Kaltura', {
 	statics: {
 		type: 'kaltura',
 

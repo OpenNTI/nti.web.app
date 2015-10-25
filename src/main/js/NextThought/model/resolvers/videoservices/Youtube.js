@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.resolvers.videoservices.Youtube', {
+export default Ext.define('NextThought.model.resolvers.videoservices.Youtube', {
 	statics: {
 		TYPE: 'youtube',
 

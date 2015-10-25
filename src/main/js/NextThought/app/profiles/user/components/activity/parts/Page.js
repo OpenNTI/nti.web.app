@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.activity.parts.Page', {
+export default Ext.define('NextThought.app.profiles.user.components.activity.parts.Page', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-stream-page',
 

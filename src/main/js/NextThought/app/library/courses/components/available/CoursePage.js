@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
+export default Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 	extend: 'NextThought.app.library.courses.components.Page',
 	alias: ['widget.library-availalble-courses-page'],
 

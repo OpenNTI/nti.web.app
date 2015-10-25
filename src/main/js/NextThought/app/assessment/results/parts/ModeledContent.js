@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.assessment.results.parts.ModeledContent', {
+export default Ext.define('NextThought.app.assessment.results.parts.ModeledContent', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-modeledcontent-result',
 
