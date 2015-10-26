@@ -158,7 +158,7 @@ Ext.define('NextThought.app.course.Index', {
 
 		function getAdmin() {
 			var adminCourses = courseStore.getAdminCourses() || [],
-					current = [], archived = [];
+					current = [];
 
 			adminCourses.forEach(function(course) {
 				var instance = course.get('CourseInstance'),
@@ -168,26 +168,25 @@ Ext.define('NextThought.app.course.Index', {
 					endDate = catalog.get('EndDate'),
 					labelData;
 
-				if (data.label && bundle.inSameFamily(instance)) {
+				if (data.label && bundle.inSameFamily(instance) && data.id !== activeId) {
 					labelData = {
 						route: '/course/' + routeId,
 						title: data.title,
 						text: data.label,
-						active: data.id === activeId
+						endDate: endDate,
+						cls: endDate < now ? 'archived' : 'current'
 					};
 
-					if (endDate < now) {
-						archived.push(labelData);
-					} else {
-						current.push(labelData);
-					}
+					current.push(labelData);
 				}
 			});
 
-			if (archived.length) {
-				current.push({text: 'Archived', isLabel: true});
-				current = current.concat(archived);
-			}
+			current = current.sort(function(a, b) {
+				var aVal = a.endDate,
+					bVal = a.endDate;
+
+				return aVal > bVal ? -1 : aVal === bVal ? 0 : 1;
+			});
 
 			return current;
 		}

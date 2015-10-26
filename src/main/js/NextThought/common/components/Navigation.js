@@ -28,15 +28,30 @@ Ext.define('NextThought.common.components.Navigation', {
 		{cls: 'show-more'}
 	])),
 
+	quickLinksTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{tag: 'ul', cn: [
+			{tag: 'tpl', 'for': 'links', cn: [
+				{
+					tag: 'li',
+					cls: 'link',
+					'data-index': '{#}',
+					'data-route': '{route}',
+					'data-title': '{title}',
+					html: '{text}'
+				}
+			]}
+		]}
+	])),
+
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'content-container', cn: [
 			{cls: 'content', cn: [
-				{cls: 'active-content', cn: [
-					{cls: 'title', cn: [
-						{tag: 'span'}
-					]},
-					{cls: 'label', html: ''},
-					{cls: 'quick-links disabled', html: ''}
+				{cls: 'active-content has-switcher', cn: [
+					{cls: 'label'},
+					{cls: 'title'},
+					{cls: 'switcher dropdown', cn: [
+						{cls: 'quick-links'}
+					]}
 				]},
 				{cls: 'wrapper', cn: [
 					{cls: 'tab-container'}
@@ -50,7 +65,7 @@ Ext.define('NextThought.common.components.Navigation', {
 	renderSelectors: {
 		activeContentEl: '.content .active-content',
 		titleContainerEl: '.content .active-content .title',
-		titleEl: '.content .active-content .title span',
+		titleEl: '.content .active-content .title',
 		labelEl: '.content .active-content .label',
 		quickLinksEl: '.content .active-content .quick-links',
 		tabContainerEl: '.content .tab-container',
@@ -62,12 +77,8 @@ Ext.define('NextThought.common.components.Navigation', {
 		this.callParent(arguments);
 
 		this.mon(this.tabContainerEl, 'click', this.onTabClick.bind(this));
-		this.mon(this.quickLinksEl, 'click', this.onQuickLinksClicked.bind(this));
+		this.mon(this.activeContentEl, 'click', this.onActiveContentClicked.bind(this));
 		this.mon(Ext.getBody(), 'click', this.maybeHideDropdown.bind(this));
-		this.mon(this.titleContainerEl, {
-			'mouseenter': this.onMouseEnterTitle.bind(this),
-			'mouseleave': this.onMouseLeaveTitle.bind(this)
-		});
 
 		if (this.tabs) {
 			this.setTabs(this.tabs, true);
@@ -117,63 +128,17 @@ Ext.define('NextThought.common.components.Navigation', {
 			return;
 		}
 
-		var active, items = [];
-
 		if (!links || !links.length) {
-			this.quickLinksEl.addCls('hidden disabled');
-			this.activeContentEl.removeCls('has-quick-link');
+			this.activeContentEl.removeCls('has-switcher');
 			return;
 		}
 
-		if (this.__quickLinkMenu) {
-			this.__quickLinkMenu.destroy();
-		}
+		this.activeContentEl.addCls('has-switcher');
 
-		links.forEach(function(link) {
-			if (link.active) {
-				active = link;
-			} else if (link.isLabel) {
-				items.push({
-					xtype: 'labeledseparator',
-					cls: 'seperator',
-					text: link.text,
-					height: 1
-				});
-			} else {
-				items.push(link);
-			}
+		this.quickLinksEl.dom.innerHTML = '';
+		this.quickLinksTpl.append(this.quickLinksEl, {
+			links: links
 		});
-
-		this.quickLinksEl.removeCls('hidden');
-
-		if (items.length) {
-			this.quickLinksEl.removeCls('disabled');
-
-			this.__quickLinkMenu = Ext.widget('menu', {
-				cls: 'section-menu quick-link-menu',
-				ui: 'quick-link',
-				floating: true,
-				constrain: true,
-				constrainTo: Ext.getBody(),
-				defaults: {
-					xtype: 'menucheckitem',
-					group: 'quickLinkOption',
-					cls: 'section-option',
-					height: 30,
-					plain: true,
-					listeners: {
-						scope: this,
-						'checkchange': this.quickLinkSelected.bind(this)
-					}
-				},
-				items: items
-			});
-		}
-
-		if (active) {
-			this.quickLinksEl.update(active.text);
-			this.activeContentEl.addCls('has-quick-link');
-		}
 	},
 
 
@@ -265,6 +230,7 @@ Ext.define('NextThought.common.components.Navigation', {
 
 	hideDropdown: function() {
 		this.removeCls('show-dropdown');
+		this.activeContentEl.removeCls('show-switcher');
 	},
 
 
@@ -304,14 +270,14 @@ Ext.define('NextThought.common.components.Navigation', {
 	},
 
 
-	onQuickLinksClicked: function(e) {
-		var rect = this.quickLinksEl.dom.getBoundingClientRect();
+	onActiveContentClicked: function(e) {
+		var hasSwitcher = e.getTarget('.has-switcher'),
+			isActive = e.getTarget('.show-switcher');
 
-		if (this.__quickLinkMenu) {
-			this.__quickLinkMenu.showBy(this.quickLinksEl);
-
-			this.__quickLinkMenu.el.dom.style.top = rect.bottom + 'px';
-			this.__quickLinkMenu.el.dom.style.left = rect.left + 'px';
+		if (hasSwitcher && !isActive) {
+			this.activeContentEl.addCls('show-switcher');
+		} else {
+			this.activeContentEl.removeCls('show-switcher');
 		}
 	},
 
