@@ -303,7 +303,7 @@ Ext.define('NextThought.common.components.Navigation', {
 				activeTabEl.addCls('hidden');
 			}
 
-			li.style.top = (35 + (dropdowns * 35)) + 'px';
+			li.style.top = (25 + (dropdowns * 25)) + 'px';
 			dropdowns += 1;
 		}
 
@@ -321,19 +321,31 @@ Ext.define('NextThought.common.components.Navigation', {
 
 		tabs = Array.prototype.slice.call(tabs);
 
-		if (barWidth <= 650) {
+		if (navWidth <= 290) {
+			numberToShow = 2;
+			shouldCollapse = true;
+		}else if (navWidth <= 410) {
 			numberToShow = 3;
 			shouldCollapse = true;
-		} else if (barWidth <= 750) {
+		} else if (navWidth <= 518) {
 			numberToShow = 4;
 			shouldCollapse = true;
-		} else if (barWidth <= 865) {
-			numberToShow = 4;
 		} else {
 			numberToShow = tabs.length;
 		}
 
-		console.log('Number To Show: ', numberToShow);
+		// if (barWidth <= 650) {
+		// 	numberToShow = 3;
+		// 	shouldCollapse = true;
+		// } else if (barWidth <= 750) {
+		// 	numberToShow = 4;
+		// 	shouldCollapse = true;
+		// } else if (barWidth <= 865) {
+		// 	numberToShow = 4;
+		// } else {
+		// 	numberToShow = tabs.length;
+		// }
+
 
 		tabs.forEach(function(tab, i) {
 			if (i + 1 <= numberToShow) {

@@ -50,7 +50,7 @@
 	}
 
 	.nav-container {
-		@include flexItem(1 1 600px);
+		@include flexItem(1 1 100px);
 		position: relative;
 		left: 0;
 	}

@@ -4,11 +4,6 @@
 
 .content-navigation {
 	height: $header-height;
-	min-width: 330px;
-
-	&.show-dropdown {
-		overflow: visible;
-	}
 
 	.content-container {
 		float: left;
@@ -63,7 +58,7 @@
 			transition: opacity 0.5s, left 0.5s, background-color 0.2s 0.2s, box-shadow 0.4s;
 			min-width: 490px;
 			max-width: 100%;
-			padding: 0 5px;
+			padding: 5px 5px 0;
 			margin-left: -5px;
 
 			&.show-switcher {
@@ -152,7 +147,7 @@
 	.show-more {
 		position: absolute;
 		right: 0;
-		bottom: 10px;
+		bottom: 3px;
 		display: none;
 		cursor: pointer;
 		width: 22px;
@@ -177,6 +172,19 @@
 		.show-more {
 			display: block;
 		}
+
+		.content {
+			.active-content {
+				min-width: 0;
+			}
+		}
+	}
+
+
+	&.show-dropdown {
+		li.tab.dropdown {
+			display: inline-block;
+		}
 	}
 
 
@@ -189,7 +197,7 @@
 	li.tab {
 		display: inline-block;
 		margin-right: 1.5em;
-		line-height: 34px;
+		line-height: 25px;
 		cursor: pointer;
 		position: relative;
 		opacity: 1;
@@ -219,6 +227,7 @@
 			border: 0px solid rgba(0, 0, 0, 0.2);
 			border-right-width: 1px;
 			border-left-width: 1px;
+			display: none;
 
 			&:last-of-type {
 				border-bottom-width: 1px;
