@@ -3,7 +3,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 	alias: 'widget.course-assessment-admin-listheader',
 
 	requires: [
-		'NextThought.common.menus.LabeledSeparator'
+		'NextThought.common.menus.LabeledSeparator',
+		'NextThought.app.course.assessment.components.admin.email.Window'
 	],
 
 
@@ -34,6 +35,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 				]}
 			]},
 			{cls: 'controls', cn: [
+				{tag: 'a', cls: 'request email', 'data-qtip': 'Email Enrolled Students'},
 				{tag: 'a', cls: 'export'},
 				{tag: 'a', cls: 'settings'}
 			]},
@@ -62,6 +64,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		filterEl: '.assignment .filter',
 		exportEl: '.controls .export',
 		settingsEl: '.controls .settings',
+		emailEl: '.controls .email',
 		viewingEl: '.page .viewing',
 		startIndexEl: '.page .viewing .startIndex',
 		endIndexEl: '.page .viewing .endIndex',
@@ -83,6 +86,15 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		this.mon(this.viewingEl, 'click', 'showPageMenu');
 		this.mon(this.filterEl, 'click', this.fireEvent.bind(this, 'showFilters', this.filterEl));
 		this.mon(this.viewAssignmentEl, 'click', this.fireEvent.bind(this, 'goToRawAssignment'));
+		if (this.currentBundle && this.currentBundle.getLink('Mail')) {
+			this.mon(this.emailEl, 'click', 'showEmailEditor');	
+		}
+		else {
+			this.emailEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+			this.emailEl.hide();
+		}
+
+		this.WindowActions = NextThought.app.windows.Actions.create();
 	},
 
 
@@ -208,6 +220,19 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 
 		me.settingsMenu.show().hide();
 	},
+
+	
+	showEmailEditor: function(e) {
+		var me = this,
+			editor;
+
+		this.WindowActions.showWindow('new-email', null, e.getTarget(), {afterSave: this.onCourseEmailSent.bind(this)}, {
+     		currentBundle: this.currentBundle
+     	});
+	},
+
+
+	onCourseEmailSent: function(){},
 
 
 	showSettingsMenu: function() {

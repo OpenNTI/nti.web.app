@@ -63,7 +63,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 				pushRouteState: this.pushRouteState.bind(this),
 				replaceRouteState: this.replaceRouteState.bind(this),
 				student: student,
-				path: 'root'
+				path: 'root',
+				currentBundle: bundle
 			});
 
 		this.currentBundle = bundle;
