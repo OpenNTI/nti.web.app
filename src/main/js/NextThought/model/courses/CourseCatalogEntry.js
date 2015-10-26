@@ -2,15 +2,19 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	alternateClassName: 'NextThought.model.courses.CourseCatalogLegacyEntry',
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.courses.coursecataloglegacyentry',
+
 	statics: {
 		mimeType: 'application/vnd.nextthought.courses.coursecataloglegacyentry'
 	},
+
 	requires: [
 		'NextThought.model.converters.Date',
 		'NextThought.model.courses.EnrollmentOptions',
 		'NextThought.model.courses.CourseCreditLegacyInfo',
-		'NextThought.model.courses.CourseCatalogInstructorInfo'
+		'NextThought.model.courses.CourseCatalogInstructorInfo',
+		'NextThought.model.CatalogFamilies'
 	],
+
 	mixins: {
 		PresentationResources: 'NextThought.mixins.PresentationResources'
 	},
@@ -18,7 +22,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	fields: [
 		{ name: 'ContentPackages', mapping: 'ContentPackageNTIID',
 			convert: function(v) { return [v]; } },
-
+		{ name: 'CatalogFamilies', type: 'singleItem', persist: false},
 		{ name: 'CourseEntryNTIID', type: 'string', persist: false},
 		{ name: 'Credit', type: 'arrayItem', persist: false },
 		{ name: 'Description', type: 'string', persist: false },
@@ -258,6 +262,20 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		}
 
 		return enrollment;
+	},
+
+	/**
+	 * Compare a given catalog entry to this one to see if they
+	 * are in the same family
+	 * @param  {CourseCatalogEntry} catalog entry to compare
+	 * @return {Boolean}         	whether or not they are in the same family
+	 */
+	inSameFamily: function(catalog) {
+		var families = this.get('CatalogFamilies');
+
+		if (!families) { return false; }
+
+		return families.hasInstersectionWith(catalog.get('CatalogFamilies'));
 	},
 
 

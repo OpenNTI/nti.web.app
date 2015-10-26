@@ -441,6 +441,17 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		});
 	},
 
+	/**
+	 * Check is this instance is in the same family as another
+	 * @param  {CourseInstance} instance the instance to compare against
+	 * @return {Boolean}        if they are in the same family
+	 */
+	inSameFamily: function(instance) {
+		var catalog = this.getCourseCatalogEntry();
+
+		return catalog.inSameFamily(instance.getCourseCatalogEntry());
+	},
+
 
 	isExpired: function() {
 		var c = this.getCourseCatalogEntry();

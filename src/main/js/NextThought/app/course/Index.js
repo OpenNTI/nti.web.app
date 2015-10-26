@@ -168,7 +168,7 @@ Ext.define('NextThought.app.course.Index', {
 					endDate = catalog.get('EndDate'),
 					labelData;
 
-				if (data.label) {
+				if (data.label && bundle.inSameFamily(instance)) {
 					labelData = {
 						route: '/course/' + routeId,
 						title: data.title,
