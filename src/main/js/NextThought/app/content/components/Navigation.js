@@ -31,9 +31,11 @@ Ext.define('NextThought.app.content.components.Navigation', {
 		this.titleEl.update(data.title);
 
 		if (data.label) {
-			this.titleEl.dom.setAttribute('data-label', data.label);
+			this.labelEl.update(data.label);
+			this.labelEl.removeCls('hidden');
 		} else {
-			this.titleEl.dom.removeAttribute('data-label');
+			this.labelEl.update('');
+			this.labelEl.addCls('hidden');
 		}
 	}
 });

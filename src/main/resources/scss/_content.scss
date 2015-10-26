@@ -51,7 +51,7 @@
 		height: $header-height;
 
 		.active-content{
-			font: 600 1.375em/1 $font;
+			font: 600 1.375em/1.375em $font;
 			color: $primary-grey;
 			padding-top: 11px;
 			-webkit-font-smoothing: antialiased;
@@ -59,22 +59,47 @@
 			left: 0;
 			position: relative;
 			transition: opacity 0.5s, left 0.5s;
-			display: inline-block;
-			vertical-align: baseline;
+			max-width: 490px;
+			@include flexContainer();
 
-			&[data-label]:not(.has-quick-link):hover {
-				&::after {
-					content: attr(data-label);
-					display: inline-block;
-					vertical-align: middle;
-					margin-left: 0.3em;
-					white-space: nowrap;
-					font: normal 600 11px/15px $font;
-					text-transform: uppercase;
-					color: white;
-					background-color: #404040;
-					padding: 3px 5px;
+			.title {
+				@include flexItem(1 1 auto);
+				overflow: hidden;
+				white-space: nowrap;
+				transition: text-indent 5s linear;
+			}
+
+			.label, .quick-links {
+				@include flexItem(0 0 auto);
+
+				&.hidden {
+					display: none;
 				}
+			}
+
+			&.has-quick-link {
+				.label {
+					display: none;
+				}
+			}
+
+			&:not(.has-quick-link):hover {
+				.label {
+					display: block;
+				}
+			}
+
+			.label {
+				padding-left: 0.3em;
+				white-space: nowrap;
+				font: normal 600 11px/15px $font;
+				text-transform: uppercase;
+				color: white;
+				background-color: #404040;
+				padding: 3px 5px;
+				display: none;
+				height: 21px;//15 + 3 + 3
+				margin-top: 3px;
 			}
 		}
 
@@ -87,7 +112,7 @@
 			left: 0;
 			margin-left: 1em;
 			padding-right: 18px;
-			font-size: 0.875em;
+			font-size: 0.875rem;
 			font-weight: 600;
 			color: $secondary-grey;
 
@@ -100,7 +125,11 @@
 				cursor: pointer;
 				opacity: 0.7;
 
-				@include icon('mv-dropdown-arrow', $side: after, $top: 5px, $left: auto, $right: 0);
+				@include icon('mv-dropdown-arrow', $side: after, $top: 50%, $left: auto, $right: 0);
+
+				&::after {
+					margin-top: -4px;
+				}
 
 				&:hover {
 					opacity: 1;

@@ -31,8 +31,13 @@ Ext.define('NextThought.common.components.Navigation', {
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'content-container', cn: [
 			{cls: 'content', cn: [
-				{cls: 'active-content', html: ''},
-				{cls: 'quick-links disabled', html: ''},
+				{cls: 'active-content', cn: [
+					{cls: 'title', cn: [
+						{tag: 'span'}
+					]},
+					{cls: 'label', html: ''},
+					{cls: 'quick-links disabled', html: ''}
+				]},
 				{cls: 'wrapper', cn: [
 					{cls: 'tab-container'}
 				]},
@@ -43,8 +48,11 @@ Ext.define('NextThought.common.components.Navigation', {
 
 
 	renderSelectors: {
-		titleEl: '.content .active-content',
-		quickLinksEl: '.content .quick-links',
+		activeContentEl: '.content .active-content',
+		titleContainerEl: '.content .active-content .title',
+		titleEl: '.content .active-content .title span',
+		labelEl: '.content .active-content .label',
+		quickLinksEl: '.content .active-content .quick-links',
 		tabContainerEl: '.content .tab-container',
 		activeTabEl: '.content .active-tab'
 	},
@@ -56,6 +64,10 @@ Ext.define('NextThought.common.components.Navigation', {
 		this.mon(this.tabContainerEl, 'click', this.onTabClick.bind(this));
 		this.mon(this.quickLinksEl, 'click', this.onQuickLinksClicked.bind(this));
 		this.mon(Ext.getBody(), 'click', this.maybeHideDropdown.bind(this));
+		this.mon(this.titleContainerEl, {
+			'mouseenter': this.onMouseEnterTitle.bind(this),
+			'mouseleave': this.onMouseLeaveTitle.bind(this)
+		});
 
 		if (this.tabs) {
 			this.setTabs(this.tabs, true);
@@ -64,6 +76,28 @@ Ext.define('NextThought.common.components.Navigation', {
 		wait()
 			.then(this.maybeCollapse.bind(this));
 	},
+
+
+	onMouseEnterTitle: function() {
+		var el = this.titleContainerEl.dom,
+			span = el.querySelector('span'),
+			title = span && span.textContent;
+
+		//if we are wide enough to show the whole title don't do anything
+		if (el.clientWidth >= span.offsetWidth) {
+			return;
+		}
+
+		el.style.textIndent = el.clientWidth - span.offsetWidth + 'px';
+	},
+
+
+	onMouseLeaveTitle: function() {
+		var el = this.titleContainerEl.dom;
+
+		el.style.textIndent = 0;
+	},
+
 
 	/**
 	 * Add a list of quick links to other pieces of content
@@ -87,7 +121,7 @@ Ext.define('NextThought.common.components.Navigation', {
 
 		if (!links || !links.length) {
 			this.quickLinksEl.addCls('hidden disabled');
-			this.titleEl.removeCls('has-quick-link');
+			this.activeContentEl.removeCls('has-quick-link');
 			return;
 		}
 
@@ -138,7 +172,7 @@ Ext.define('NextThought.common.components.Navigation', {
 
 		if (active) {
 			this.quickLinksEl.update(active.text);
-			this.titleEl.addCls('has-quick-link');
+			this.activeContentEl.addCls('has-quick-link');
 		}
 	},
 
