@@ -40,10 +40,36 @@ var globals = {
 	SearchUtils: 'NextThought.util.Search'
 };
 
+var path = require('path');
 
-function findAndRemoveRequires(root, j) {
-	var identifier = root.find(j.Identifier, {name: 'requires'}),
-		imports = [];
+
+function getPathToClassName(cls) {
+	var parts = cls.split('.');
+
+	return 'src/main/js/' + parts.join('/');
+}
+
+
+function getNameFromClassName(cls, length) {
+	var parts = cls.split('.');
+
+	length = length || 2;
+
+	parts = parts.reverse();
+	parts = parts.slice(0, length);
+	parts.reverse();
+
+	parts = parts.map(function(part) {
+		return part.charAt(0).toUpperCase() + part.slice(1);
+	});
+
+	return parts.join('');
+}
+
+
+function findRequires(root, j) {
+	var identifier = root.find(j.Identifier, {name: 'requires'});
+	var	imports = [];
 
 	identifier.forEach(function(i) {
 		var property = i.parent;
@@ -52,7 +78,15 @@ function findAndRemoveRequires(root, j) {
 		elements = elements || [];
 
 		imports = imports.concat(elements.map(function(element) {
-			return element.raw;
+			var cls = element.raw;
+
+			cls = cls.replace(/\'/g, '');
+
+			return {
+				name: getNameFromClassName(cls),
+				cls: cls,
+				path: getPathToClassName(cls)
+			};
 		}));
 
 		//TODO figure out how to remove the requires property...
@@ -62,9 +96,14 @@ function findAndRemoveRequires(root, j) {
 }
 
 
+function removeRequires(fileSource) {
+
+}
+
+
 function findMixins(root, j) {
-	var identifier = root.find(j.Identifier, {name: 'mixins'}),
-		imports = [];
+	var identifier = root.find(j.Identifier, {name: 'mixins'});
+	var	imports = [];
 
 	identifier.forEach(function(i) {
 		var property = i.parent;
@@ -73,7 +112,13 @@ function findMixins(root, j) {
 		properties = properties || [];
 
 		imports = imports.concat(properties.map(function(prop) {
-			return prop.value.value;
+			var cls = prop.value.value;
+
+			return {
+				name: getNameFromClassName(cls),
+				cls: cls,
+				path: getPathToClassName(cls)
+			};
 		}));
 	});
 
@@ -81,8 +126,30 @@ function findMixins(root, j) {
 }
 
 
-function findGlobals(root, j) {
+function findGlobals(fileSource) {
+	var keys = Object.keys(globals);
+	var g = [];
 
+	keys.forEach(function(key) {
+		var regex = RegExp(key + '\.', 'gm');
+		var	matches = fileSource.match(regex);
+
+		if (matches && matches.length) {
+			g.push({
+				name: key,
+				cls: globals[key],
+				path: getPathToClassName(globals[key])
+			});
+		}
+	});
+
+	return g;
+}
+
+var importTpl = 'import {name} from "{path}"';
+
+function buildImportStatement(imp, clsPath) {
+	return importTpl.replace('{name}', imp.name).replace('{path}', path.relative(clsPath, imp.path));
 }
 
 //Useful links:
@@ -95,12 +162,15 @@ function findGlobals(root, j) {
 module.exports = function(fileInfo, api) {
 	const j = api.jscodeshift;
 	const root = j(fileInfo.source);
+	var imports = [];
 
+	imports = imports.concat(findGlobals(fileInfo.source));
+	imports = imports.concat(findMixins(root, j));
+	imports = imports.concat(findRequires(root, j));
 
-	console.log(root.find(j.ExportDefaultDeclaration)
-		.insertBefore(j.importDeclaration(
-			[j.importDefaultSpecifier(j.identifier('foor'))],
-			j.literal('bar')
-		))
-		.toSource());
+	imports = imports.map(function(imp) {
+		return buildImportStatement(imp, fileInfo.path);
+	});
+
+	console.log(imports);
 };
