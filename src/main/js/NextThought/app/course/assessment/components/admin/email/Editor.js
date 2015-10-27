@@ -2,38 +2,92 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 	extend: 'NextThought.editor.Editor',
 	alias: 'widget.course-email-editor',
 
+	requires: [
+		'NextThought.model.Email',
+		'NextThought.app.course.assessment.components.admin.email.Actions'
+	],
+
 	toolbarTpl: Ext.DomHelper.markup(
 		[
 			{
 				cls: 'aux', cn: [
 				{
-					cls: 'receiver', cn: [
+					cls: 'row receiver', cn: [
 					 	{cls: 'label', html: 'To'},
 						{cls: 'field'},
 						{cls: 'action no-reply on'}
 					]
 				},
-				{ cls: 'receiver cc-ed', cn: [
+				{ cls: 'row cc-ed', cn: [
 					{cls: 'label', html: 'cc'},
 					{cls: 'field'}
 				]}
 			]}
 		]),
 
-	cls: 'blog-editor scrollable',
+	headerTplOrder: '{toolbar}{title}',
+
+	cls: 'email-editor scrollable',
 
 	renderTpl: Ext.DomHelper.markup({ cls: 'editor active', html: '{super}' }),
 
 	renderSelectors: {
 		titleEl: '.title',
-		footerEl: '.footer'
+		footerEl: '.footer',
+		receiverEl: '.row.receiver .field',
+		copiedEl: '.row.cc-ed .field'
 	},
 
 	afterRender: function() {
 		this.callParent(arguments);
 
+		var tabTracker = new NextThought.util.TabIndexTracker(),
+			el = this.el, me = this;
+
 		Ext.EventManager.onWindowResize(this.syncHeight.bind(this));
 		wait(500).then(this.syncHeight.bind(this)); //let the animation finish
+
+		this.EmailActions = NextThought.app.course.assessment.components.admin.email.Actions.create();
+
+		if (this.receiverEl) {
+			this.receiverCmp = Ext.widget('tags', {renderTo: this.receiverEl, tabIndex: tabTracker.next()});
+			this.on('destroy', 'destroy', this.receiverCmp);
+			this.mon(this.receiverCmp, 'blur', function() {
+				var e = el.down('.content');
+				Ext.defer(e.focus, 10, e);
+			});
+			this.receiverCmp.onceRendered
+				.then(function() {
+					var e = me.receiverCmp.el.down('input');
+					if (e) {
+						e.dom.setAttribute('placeholder', "");
+					}
+				});
+
+			// For testing
+			this.receiverCmp.addTag('ForCredit');
+		}
+
+		if (this.copiedEl) {
+			this.copiedCmp = Ext.widget('tags', {renderTo: this.copiedEl, tabIndex: tabTracker.next()});
+			this.on('destroy', 'destroy', this.copiedCmp);
+			this.mon(this.copiedCmp, 'blur', function() {
+				var e = el.down('.content');
+				Ext.defer(e.focus, 10, e);
+			});
+
+			this.copiedCmp.onceRendered
+				.then(function() {
+					var e = me.copiedCmp.el.down('input');
+					if (e) {
+						e.dom.setAttribute('placeholder', "");
+					}
+				});
+
+			if ($AppConfig.userObject.get('email')) {
+				this.copiedCmp.addTag($AppConfig.userObject.get('email'));
+			}
+		}
 	},
 
 
@@ -58,7 +112,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 			el.setHeight(min);
 		}
 
-		top = Math.max(containerRect.top, 0);
+		top = Math.max(containerRect && containerRect.top || 0, 0);
 
 		otherPartsHeight += this.titleEl && this.titleEl.getHeight() || 50;
 		// otherPartsHeight += this.tagsEl.getHeight();
@@ -71,6 +125,67 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 		wait(700)
 			.then(this.updateLayout.bind(this));
+	},
+
+
+	getValue: function() {
+		return {
+			body: this.getBody(this.getBodyValue()),
+			NoReply: false,
+			title: this.titleEl ? this.titleEl.getValue() : undefined,
+		}
+	},
+
+
+	onSave: function(e){
+		e.stopEvent();
+		var me = this,
+			v = this.getValue(),
+			t, trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l, rec;
+
+		if (DomUtils.isEmpty(v.body)) {
+			me.markError(me.editorBodyEl, getString('NextThought.view.profiles.parts.BlogEditor.emptybody'));
+			return;
+		}
+
+		l = v.body.length;
+		if (l > 0 && v.body[l - 1].replace) {
+			v.body[l - 1] = v.body[l - 1].replace(trimEndRe, '');
+		}
+
+		if (/^[^a-z0-9]+$/i.test(v.title)) {
+			me.markError(me.titleWrapEl, getString('NextThought.view.profiles.parts.BlogEditor.specialtitle'));
+			me.titleWrapEl.addCls('error-on-bottom');
+			return;
+		}
+
+		if (/^@{1,}/.test(v.title)) {
+			console.error('Title cant start with @');
+			me.markError(me.titleWrapEl, getString('NextThought.view.profiles.parts.BlogEditor.attitle'));
+			me.titleWrapEl.addCls('error-on-bottom');
+			return;
+		}
+
+		if (me.el) {
+			me.el.mask('Saving...');
+		}
+
+		// NOTE: for now the server expects the email's body to be plainText, treat it as such
+		v.body = v.body.join("");
+
+		if (this.record) {
+			this.record.set({
+				'Body': v.body,
+				'Subject': v.title,
+				'NoReply': v.NoReply 
+			});
+
+			this.EmailActions.sendEmail(this.record)
+				.then(function() {
+					console.log(arguments);
+				});	
+		}
+		
 	},
 
 

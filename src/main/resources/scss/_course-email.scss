@@ -1,0 +1,68 @@
+.email-window {
+	.email-editor {
+		.editor {
+			.main {
+				.aux {
+					padding: 0;
+
+					.row {
+						padding: 0 10px;
+						border-bottom: 1px solid #f2f2f2;
+						position: relative;
+						height: 30px;
+
+						&:last-of-type {
+							border-bottom-width: 0;
+						}
+
+						.label {
+							font: normal italic 16px/30px $font;
+							padding: 0;
+							color: $tertiary-grey;
+							position: absolute;
+							top: 3px;
+							left: 15px;
+							width: 30px;
+						}
+
+						.field {
+							position: relative;
+							margin-left: 40px;
+							top: 0;
+
+							input {
+								display: block;
+								font: normal 300 16px/30px $font;
+								border: 0;
+								margin: 0;
+								width: 100%;
+								color: $secondary-grey;
+								height: 28px;
+							}
+						}
+
+						.action {
+							position: absolute;
+							top: 0;
+							right: 10px;
+							left: auto;
+							bottom: auto;
+							width: 60px;
+
+							&.no-reply {
+								display: none;
+
+								&.on {
+									display: block;
+								}
+							}
+						}
+
+					}
+				}
+			}
+		}
+
+	}
+	
+}

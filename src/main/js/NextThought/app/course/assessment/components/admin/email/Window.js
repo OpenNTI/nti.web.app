@@ -3,7 +3,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 	alias: 'widget.course-email-window',
 
 	layout: 'none',
-	cls: 'blog-window',
+	cls: 'email-window',
 
 	requires: [
 		'NextThought.app.course.assessment.components.admin.email.Editor',
@@ -36,15 +36,12 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 		var me = this,
 			editor;
 
-		// if (!this.currentBundle || !this.currentBundle.getLink('Mail')) {
-		// 	return;
-		// }
-
-		editor = me.add({xtype: 'course-email-editor', currentBundle: this.currentBundle});	
+		editor = me.add({xtype: 'course-email-editor', record: this.record});	
 
 		me.mon(editor, {
 			'cancel': function(rec) {
 				me.remove(editor);
+				me.doClose();
 			},
 			'after-save': function(rec) {
 				me.remove(editor);
@@ -58,4 +55,5 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 	},
 }, function(){
 	NextThought.app.windows.StateStore.register('new-email', this);
+	NextThought.app.windows.StateStore.register(NextThought.model.Email.mimeType, this);
 });

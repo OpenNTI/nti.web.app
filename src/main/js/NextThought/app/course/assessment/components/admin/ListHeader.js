@@ -4,7 +4,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 
 	requires: [
 		'NextThought.common.menus.LabeledSeparator',
-		'NextThought.app.course.assessment.components.admin.email.Window'
+		'NextThought.app.course.assessment.components.admin.email.Window',
+		'NextThought.model.Email',
+		'NextThought.app.windows.StateStore'
 	],
 
 
@@ -95,6 +97,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		}
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 	},
 
 
@@ -224,11 +227,16 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 	
 	showEmailEditor: function(e) {
 		var me = this,
-			editor;
+			editor,
+			emailRecord = new NextThought.model.Email();
 
-		this.WindowActions.showWindow('new-email', null, e.getTarget(), {afterSave: this.onCourseEmailSent.bind(this)}, {
-     		currentBundle: this.currentBundle
-     	});
+		// Set the link to post the email to
+		emailRecord.set('url', this.currentBundle && this.currentBundle.getLink('Mail'));
+
+		// Cache the email record
+		this.WindowStore.cacheObject('new-email', emailRecord);
+
+		this.WindowActions.showWindow('new-email', null, e.getTarget(), {afterSave: this.onCourseEmailSent.bind(this)});
 	},
 
 

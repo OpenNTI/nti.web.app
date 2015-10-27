@@ -74,7 +74,7 @@
 			vertical-align: middle;
 		}
 
-		&:hover {
+		&:hover, &.active {
 			color: #fff;
 			border-color: $border-blue;
 			background: $primary-blue;
