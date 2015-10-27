@@ -109,6 +109,8 @@ Ext.define('NextThought.app.navigation.Index', {
 			this.removeCls('no-nav');
 			this.addCls('has-nav');
 			this.searchCmp.isActive = true;
+			this.searchEl.addCls('collapsed');
+			this.hasNavCmp = true;
 		} else {
 			this.addCls('removing-nav');
 
@@ -120,6 +122,8 @@ Ext.define('NextThought.app.navigation.Index', {
 				.then(this.removeCls.bind(this, 'removing-nav'));
 
 			this.searchCmp.isActive = false;
+
+			this.searchEl.removeCls('collapsed');
 		}
 
 		if (config && config.hideBranding) {
@@ -143,14 +147,12 @@ Ext.define('NextThought.app.navigation.Index', {
 		if (config && config.noRouteOnSearch) {
 			this.noRouteOnSearch = true;
 
-			this.searchEl.removeCls('collapsed');
 			if (this.searchCmp) {
 				this.searchCmp.noRouteOnSearch = true;
 			}
 		} else {
 			delete this.noRouteOnSearch;
 
-			this.searchEl.addCls('collapsed');
 			if (this.searchCmp) {
 				delete this.searchCmp.noRouteOnSearch;
 			}
@@ -248,10 +250,6 @@ Ext.define('NextThought.app.navigation.Index', {
 
 
 	onWindowResize: function(height, width, fromExpandedSearch) {
-		if (!this.noRouteOnSearch && !fromExpandedSearch) {
-			// this.searchEl.addCls('collapsed');
-		}
-
 		this.resizeNavCmp();
 	},
 
