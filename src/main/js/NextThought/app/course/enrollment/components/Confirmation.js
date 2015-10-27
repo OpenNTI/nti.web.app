@@ -3,7 +3,8 @@ Ext.define('NextThought.app.course.enrollment.components.Confirmation', {
 	alias: 'widget.enrollment-confirmation',
 
 	requires: [
-		'NextThought.app.account.Actions'
+		'NextThought.app.account.Actions',
+		'NextThought.app.library.courses.StateStore'
 	],
 
 	mixins: {
@@ -30,13 +31,23 @@ Ext.define('NextThought.app.course.enrollment.components.Confirmation', {
 			{tag: 'tpl', 'for': 'helplinks', cn: [
 				{tag: 'a', href: '{href}', html: '{text}', target: '_blank'}
 			]}
-		]}
+		]},
+		{cls: 'iframe-container'}
 	]),
 
 
 	renderSelectors: {
 		transactionContainerEl: '.transaction',
-		transactionEl: '.transaction .transaction-id'
+		transactionEl: '.transaction .transaction-id',
+		iframeEl: '.iframe-container'
+	},
+
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.AccountActions = NextThought.app.account.Actions.create();
+		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 	},
 
 
@@ -72,8 +83,6 @@ Ext.define('NextThought.app.course.enrollment.components.Confirmation', {
 			helplinks: helplinks
 		});
 
-
-		this.AccountActions = NextThought.app.account.Actions.create();
 	},
 
 
@@ -121,12 +130,35 @@ Ext.define('NextThought.app.course.enrollment.components.Confirmation', {
 
 	beforeShow: function() {
 		var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
-			transactionId = purchaseAttempt && purchaseAttempt.get('TransactionID');
+			transactionId = purchaseAttempt && purchaseAttempt.get('TransactionID'),
+			enrollment = this.CourseStore.findEnrollmentForCourse(this.course),
+			thankYou = enrollment && enrollment.get('VendorThankYouPage');
 
 		if (transactionId) {
 			this.transactionInput.update(transactionId);
 		} else {
 			this.transactionContainerEl.hide();
 		}
+
+		if (thankYou && thankYou.thankYouURL) {
+			this.addThankYouPage(thankYou.thankYouURL);
+		}
+	},
+
+
+	addThankYouPage: function(url) {
+		var container = this.iframeEl.dom,
+			existing = container.querySelector('iframe'),
+			iframe;
+
+		//Don't add the same frame twice
+		if (existing && existing.src === url) { return; }
+
+		container.innerHTML = '';
+
+		iframe = document.createElement('iframe');
+		iframe.src = url;
+
+		container.appendChild(iframe);
 	}
 });
