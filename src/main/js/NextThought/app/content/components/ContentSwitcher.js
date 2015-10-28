@@ -42,7 +42,7 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 										tag: 'li',
 										cls: 'sub-item{[values.cls ? " " + values.cls : ""]}',
 										'data-root-route': '{rootRoute}',
-										'data-id': '{data-id}',
+										'data-id': '{id}',
 										'data-route': '{activeRoute}',
 										html: '{title}'
 									}
@@ -148,6 +148,10 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 			courses = this.LibraryCourseStateStore.findForCatalogFamily(id),
 			uiData = family.asUIData();
 
+		if (courses.length === 1) {
+			return this.getCourseData(bundle, route);
+		}
+
 		courses = courses.map(function(course) {
 			var instance = course.get('CourseInstance'),
 				isCurrent = instance.getId() === bundle.getId(),
@@ -167,6 +171,7 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 				courses,
 				family.getThumbImage()
 			]).then(function(results) {
+				uiData.cls = 'has-sub-items';
 				uiData.subItems = results[0];
 				uiData.thumb = results[1];
 
@@ -176,6 +181,7 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 
 
 	getCourseOrFamilyData: function(bundle, route) {
+		debugger;
 		var family = bundle.getCatalogFamily();
 
 		return family ? this.getFamilyData(family, bundle, route) : this.getCourseData(bundle, route);
@@ -227,5 +233,20 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 	},
 
 
-	onItemClicked: function(e) {}
+	onItemClicked: function(e) {
+		if (!e.getTarget('li')) { return; }
+
+		var item = e.getTarget('li'),
+			isTopLevel = item.classList.contains('item'),
+			root, route;
+
+		if (isTopLevel && item.classList.contains('expanded')) {
+			item = li.querySelector('li.subItem');
+		}
+
+		root = item.getAttribute('data-root-route');
+		route = item.getAttribute('data-route') || '';
+
+		this.switchContent(Globals.trimRoute(root) + '/' + Globals.trimRoute(route));
+	}
 });

@@ -57,8 +57,10 @@ Ext.define('NextThought.app.content.components.Navigation', {
 	},
 
 
-	switchContent: function() {
-
+	switchContent: function(route) {
+		if (this.bodyView && this.bodyView.onContentChange) {
+			this.bodyView.onContentChange('', route);
+		}
 	},
 
 

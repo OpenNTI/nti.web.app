@@ -31,6 +31,10 @@
 			margin-right: 10px;
 		}
 
+		&:not(.has-sub-items) {
+			cursor: pointer;
+		}
+
 		&:not(:last-of-type) {
 			border-bottom: 1px solid #f0f0f0;
 		}
@@ -48,6 +52,7 @@
 		color: $secondary-grey;
 		border-radius: 3px;
 		padding: 0 10px;
+		cursor: pointer;
 
 		&.current {
 			color: $primary-blue;
@@ -140,6 +145,7 @@
 			max-width: 100%;
 			padding: 5px 5px 0;
 			margin-left: -5px;
+			cursor: pointer;
 
 			&.show-switcher {
 				background: white;
