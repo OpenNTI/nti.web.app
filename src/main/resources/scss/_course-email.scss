@@ -9,7 +9,7 @@
 						padding: 0 10px;
 						border-bottom: 1px solid #f2f2f2;
 						position: relative;
-						height: 30px;
+						height: 40px;
 
 						&:last-of-type {
 							border-bottom-width: 0;
@@ -20,7 +20,7 @@
 							padding: 0;
 							color: $tertiary-grey;
 							position: absolute;
-							top: 3px;
+							top: 10px;
 							left: 15px;
 							width: 30px;
 						}
@@ -28,7 +28,7 @@
 						.field {
 							position: relative;
 							margin-left: 40px;
-							top: 0;
+							top: 5px;
 
 							input {
 								display: block;
@@ -60,9 +60,13 @@
 
 					}
 				}
+
+				.title {
+					input {
+					    font: normal 300 18px/30px $font;
+					}
+				}
 			}
 		}
-
 	}
-	
 }

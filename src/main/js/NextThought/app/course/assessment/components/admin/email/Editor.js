@@ -7,6 +7,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		'NextThought.app.course.assessment.components.admin.email.Actions'
 	],
 
+	enableTitle: true,
+	enableCopied: false,
+	enableObjectControls: false,
+	enableTextControls: false,
+
 	toolbarTpl: Ext.DomHelper.markup(
 		[
 			{
@@ -18,9 +23,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 						{cls: 'action no-reply on'}
 					]
 				},
-				{ cls: 'row cc-ed', cn: [
-					{cls: 'label', html: 'cc'},
-					{cls: 'field'}
+				{tag: 'tpl', 'if': 'enableCopied', cn: [
+					{ cls: 'row cc-ed', cn: [
+						{cls: 'label', html: 'cc'},
+						{cls: 'field'}
+					]}
 				]}
 			]}
 		]),
@@ -38,55 +45,83 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		copiedEl: '.row.cc-ed .field'
 	},
 
+	
 	afterRender: function() {
 		this.callParent(arguments);
-
-		var tabTracker = new NextThought.util.TabIndexTracker(),
-			el = this.el, me = this;
-
+		
 		Ext.EventManager.onWindowResize(this.syncHeight.bind(this));
 		wait(500).then(this.syncHeight.bind(this)); //let the animation finish
 
 		this.EmailActions = NextThought.app.course.assessment.components.admin.email.Actions.create();
 
-		if (this.receiverEl) {
-			this.receiverCmp = Ext.widget('tags', {renderTo: this.receiverEl, tabIndex: tabTracker.next()});
-			this.on('destroy', 'destroy', this.receiverCmp);
-			this.mon(this.receiverCmp, 'blur', function() {
-				var e = el.down('.content');
-				Ext.defer(e.focus, 10, e);
-			});
-			this.receiverCmp.onceRendered
-				.then(function() {
-					var e = me.receiverCmp.el.down('input');
-					if (e) {
-						e.dom.setAttribute('placeholder', "");
-					}
-				});
+		this.setupReceiverField();
+		this.setupCopiedField();
+		this.setupTitleField();
+	},
 
-			// For testing
-			this.receiverCmp.addTag('ForCredit');
+
+	setupTitleField: function() {
+		if (!this.titleEl) { return; }
+
+		this.titleEl.dom.setAttribute('placeholder', 'Subject');
+	},
+
+
+	setupReceiverField: function() {
+		if (!this.receiverEl) {
+			return;
 		}
 
-		if (this.copiedEl) {
-			this.copiedCmp = Ext.widget('tags', {renderTo: this.copiedEl, tabIndex: tabTracker.next()});
-			this.on('destroy', 'destroy', this.copiedCmp);
-			this.mon(this.copiedCmp, 'blur', function() {
-				var e = el.down('.content');
-				Ext.defer(e.focus, 10, e);
+		var tabTracker = new NextThought.util.TabIndexTracker(),
+			el = this.el, me = this, t;
+
+		this.receiverCmp = Ext.widget('tags', {renderTo: this.receiverEl, tabIndex: tabTracker.next()});
+		this.on('destroy', 'destroy', this.receiverCmp);
+		this.mon(this.receiverCmp, 'blur', function() {
+			var e = el.down('.content');
+			Ext.defer(e.focus, 10, e);
+		});
+		this.receiverCmp.onceRendered
+			.then(function() {
+				var e = me.receiverCmp.el.down('input');
+				if (e) {
+					e.dom.setAttribute('placeholder', "");
+				}
 			});
 
-			this.copiedCmp.onceRendered
-				.then(function() {
-					var e = me.copiedCmp.el.down('input');
-					if (e) {
-						e.dom.setAttribute('placeholder', "");
-					}
-				});
+		// For testing
+		t = this.receiverCmp.addTag('ForCredit');
+		if (t && t.hasCls('token')) {
+			t.addCls('active');
+		}
+	},
 
-			if ($AppConfig.userObject.get('email')) {
-				this.copiedCmp.addTag($AppConfig.userObject.get('email'));
-			}
+
+	setupCopiedField: function() {
+		if (!this.copiedEl) {
+			return;
+		}
+
+		var tabTracker = new NextThought.util.TabIndexTracker(),
+			el = this.el, me = this;
+
+		this.copiedCmp = Ext.widget('tags', {renderTo: this.copiedEl, tabIndex: tabTracker.next()});
+		this.on('destroy', 'destroy', this.copiedCmp);
+		this.mon(this.copiedCmp, 'blur', function() {
+			var e = el.down('.content');
+			Ext.defer(e.focus, 10, e);
+		});
+
+		this.copiedCmp.onceRendered
+			.then(function() {
+				var e = me.copiedCmp.el.down('input');
+				if (e) {
+					e.dom.setAttribute('placeholder', "");
+				}
+			});
+
+		if ($AppConfig.userObject.get('email')) {
+			this.copiedCmp.addTag($AppConfig.userObject.get('email'));
 		}
 	},
 
@@ -118,6 +153,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		// otherPartsHeight += this.tagsEl.getHeight();
 		// otherPartsHeight += this.sharedListEl.getHeight();
 		otherPartsHeight += this.footerEl && this.footerEl.getHeight() || 0;
+		otherPartsHeight += this.receiverEl && this.receiverEl.getHeight() || 0;
 
 		height = Ext.Element.getViewportHeight() - (top + otherPartsHeight + 90 + 10);//top of window + height of other parts + height of header + padding
 
