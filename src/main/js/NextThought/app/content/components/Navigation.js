@@ -2,7 +2,22 @@ Ext.define('NextThought.app.content.components.Navigation', {
 	extend: 'NextThought.common.components.Navigation',
 	alias: 'widget.content-navigation',
 
+	requires: [
+		'NextThought.app.content.components.ContentSwitcher'
+	],
+
 	cls: 'content-navigation',
+
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.ContentSwitcher = Ext.widget('content-switcher', {
+			ownerCt: this,
+			switchContent: this.switchContent.bind(this)
+		});
+	},
+
 
 	afterRender: function() {
 		this.callParent(arguments);
@@ -13,7 +28,7 @@ Ext.define('NextThought.app.content.components.Navigation', {
 	},
 
 
-	bundleChanged: function(bundle) {
+	bundleChanged: function(bundle, activeRoute) {
 		if (!this.rendered) {
 			this.bundle = bundle;
 			return;
@@ -24,6 +39,8 @@ Ext.define('NextThought.app.content.components.Navigation', {
 		}
 
 		this.currentBundle = bundle;
+
+		this.ContentSwitcher.addBundle(bundle, activeRoute);
 
 		var cls = 'is-book',
 			data = bundle.asUIData();
@@ -37,5 +54,10 @@ Ext.define('NextThought.app.content.components.Navigation', {
 			this.labelEl.update('');
 			this.labelEl.addCls('hidden');
 		}
+	},
+
+
+	switchContent: function() {
+
 	}
 });

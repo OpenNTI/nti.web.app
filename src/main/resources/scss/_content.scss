@@ -80,23 +80,20 @@
 				}
 			}
 
-			&.has-switcher {
-				.title {
-					padding-right: 18px;
-					@include icon('mv-dropdown-arrow', $side: after, $top: 50%, $left: auto, $right: 0);
-
-					&::after {
-						margin-top: -4px;
-					}
-				}
-			}
-
 			.title {
 				font: 600 1.375em/1.2em $font;
 				display: inline-block;
 				max-width: 100%;
 				overflow: hidden;
+				padding-right: 18px;
+
 				@include ellipse();
+
+				@include icon('mv-dropdown-arrow', $side: after, $top: 50%, $left: auto, $right: 0);
+
+				&::after {
+					margin-top: -4px;
+				}
 			}
 
 

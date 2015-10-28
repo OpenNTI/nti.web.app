@@ -5,7 +5,7 @@ Ext.define('NextThought.common.components.Navigation', {
 		'NextThought.common.menus.LabeledSeparator'
 	],
 
-	cls: 'content-navigation',
+	cls: 'navigation',
 
 	TAB_MARGIN: 35, //TODO: figure out how to now have this hard coded
 
@@ -46,12 +46,9 @@ Ext.define('NextThought.common.components.Navigation', {
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'content-container', cn: [
 			{cls: 'content', cn: [
-				{cls: 'active-content has-switcher', cn: [
+				{cls: 'active-content', cn: [
 					{cls: 'label'},
-					{cls: 'title'},
-					{cls: 'switcher dropdown', cn: [
-						{cls: 'quick-links'}
-					]}
+					{cls: 'title'}
 				]},
 				{cls: 'wrapper', cn: [
 					{cls: 'tab-container'}
@@ -270,16 +267,7 @@ Ext.define('NextThought.common.components.Navigation', {
 	},
 
 
-	onActiveContentClicked: function(e) {
-		var hasSwitcher = e.getTarget('.has-switcher'),
-			isActive = e.getTarget('.show-switcher');
-
-		if (hasSwitcher && !isActive) {
-			this.activeContentEl.addCls('show-switcher');
-		} else {
-			this.activeContentEl.removeCls('show-switcher');
-		}
-	},
+	onActiveContentClicked: function(e) {},
 
 
 	maybeCollapse: function(navWidth, barWidth) {

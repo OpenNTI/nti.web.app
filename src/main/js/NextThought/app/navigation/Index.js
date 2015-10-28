@@ -307,7 +307,6 @@ Ext.define('NextThought.app.navigation.Index', {
 
 
 	onSearchBlur: function() {
-		debugger;
 		this.removeCls('search-focused');
 
 		if (!this.noRouteOnSearch) {

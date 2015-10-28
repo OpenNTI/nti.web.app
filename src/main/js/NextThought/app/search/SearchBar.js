@@ -95,7 +95,6 @@ Ext.define('NextThought.app.search.SearchBar', {
 	onInputBlur: function() {
 		var me = this;
 
-		debugger;
 		me.isFocused = false;
 		me.fromBlur = true;
 		me.onSearchBlur();
@@ -135,7 +134,6 @@ Ext.define('NextThought.app.search.SearchBar', {
 
 
 	searchClicked: function(e) {
-		debugger;
 		if (!e.getTarget('.collapsed') || this.fromBlur) {
 			e.stopPropagation();
 			this.doNavigation();

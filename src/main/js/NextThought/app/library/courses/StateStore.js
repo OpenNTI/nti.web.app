@@ -348,5 +348,14 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 		});
 
 		return !!found;
+	},
+
+	/**
+	 * Return all courses in the same catalog family
+	 * @param  {String} familyId id of the catalog family to search for
+	 * @return {[Course]}        list of courses in the same catalog family
+	 */
+	findForCatalogFamily: function(familyId) {
+
 	}
 });

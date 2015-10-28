@@ -43,5 +43,14 @@ Ext.define('NextThought.model.CatalogFamilies', {
 
 			return acc;
 		}, false);
+	},
+
+
+	getFamilyIds: function() {
+		var items = this.get('Items');
+
+		return items.map(function(family) {
+			return family.get('CatalogFamilyID');
+		});
 	}
 });

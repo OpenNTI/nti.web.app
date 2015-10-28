@@ -36,6 +36,11 @@ Ext.define('NextThought.app.content.Index', {
 	},
 
 
+	onContentChange: function(title, route) {
+		this.pushRootRoute('', route);
+	},
+
+
 	onTabChange: function(title, route) {
 		this.pushRoute('', route);
 	},
@@ -184,7 +189,7 @@ Ext.define('NextThought.app.content.Index', {
 
 		me.__loadBundle();
 
-		me.navigation.bundleChanged(me.activeBundle);
+		me.navigation.bundleChanged(me.activeBundle, me.getCurrentRoute());
 
 		me.getQuickLinks()
 			.then(me.navigation.setQuickLinks.bind(me.navigation));

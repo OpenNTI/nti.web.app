@@ -134,6 +134,22 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	},
 
 
+	getCatalogFamilyInfo: function() {
+		var families = this.get('CatalogFamilies'),
+			items = families ? families.get('Items') : [],
+			family = items[0];
+
+		if (items.length > 1) { console.warn('More than one family, just using the first '); }
+
+		if (!family) { return null; }
+
+		return {
+			title: family.get('title'),
+			familyId: family.get('CatalogFamilyID')
+		};
+	},
+
+
 	getBackgroundImage: function() {
 		return this.getAsset('background');
 	},

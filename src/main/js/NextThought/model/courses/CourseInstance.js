@@ -64,7 +64,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				semester: e && e.getSemesterBadge(),
 				archived: e && e.isArchived(),
 				upcoming: e && e.isUpcoming(),
-				startDate: e && e.get('StartDate')
+				startDate: e && e.get('StartDate'),
+				catalogFamily: e && e.getCatalogFamilyInfo()
 			};
 
 		ObjectUtils.clean(bundle);

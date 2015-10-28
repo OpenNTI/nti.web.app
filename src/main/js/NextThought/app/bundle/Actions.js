@@ -22,7 +22,7 @@ Ext.define('NextThought.app.bundle.Actions', {
 	 */
 	transitionToBundle: function(bundle, libraryCard) {
 		var ntiid = bundle.get('NTIID'),
-			route = '/bundle/' + ParseUtils.encodeForURI(ntiid),
+			route = this.getRouteForId(),
 			subRoute = this.StateStore.getRouteFor(ntiid);
 
 		if (subRoute) {
@@ -30,5 +30,10 @@ Ext.define('NextThought.app.bundle.Actions', {
 		}
 
 		return Promise.resolve(route);
+	},
+
+
+	getRouteForId: function(id) {
+		return '/bundle/' + ParseUtils.encodeForURI(ntiid);
 	}
 });
