@@ -370,6 +370,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 		this.maybeSwitch(noEmpty);
 		this.updateFilter();
+		if (this.pageHeader.onStudentFilterChange) {
+			this.pageHeader.onStudentFilterChange(this.studentFilter);
+		}
 	},
 
 

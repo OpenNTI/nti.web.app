@@ -9,38 +9,46 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Actions', {
 
 	sendEmail: function(record, postURL, scope) {
 		var me = this, 
-			p = record && record.getProxy();
+			data = record && record.asJSON();
+
+		delete data.ContainerId;
+		delete data.NTIID;
 
 		if (!postURL) {
 			postURL = record.get('url');
 		}
 
-		if (!scope) {
-			scope = record.get('scope');
+		if (!postURL) {
+			return Promise.reject();
 		}
 
-		if (scope && p) {
-			if (p && p.setExtraParam) {
-				p.setExtraParam('scope', scope);	
-			}
+		if (!scope) {
+			scope = record.get('scope'); 
+		}
+
+		if (scope === 'All') {
+			scope = null;
 		}
 
 		return new Promise(function(fulfill, reject) {
-			record.save({
+			Ext.Ajax.request({
 				url: postURL,
-				scope: me,
-				success: function(post, operation) {
-					//the first argument is the record...problem is, it was a post, and the response from the server is
-					// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
-					// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
-					// one off re-parse of the responseText is necissary to get at what we want.
-					// HOWEVER, if we are editing an existing one... we get back what we send (type wise)
-
-					fulfill(isEdit ? record : ParseUtils.parseItems(operation.response.responseText)[0]);
+				scope: this,
+				jsonData: data,
+				params: {scope: scope || ""},
+				method: 'POST',
+				headers: {
+					Accept: 'application/json'
 				},
-				failure: function() {
-					console.debug('Failed to send email: ', arguments);
-					reject();
+				callback: function(q, success, r) {
+					var store;
+
+					if (!success) {
+						reject({field: 'Email', message: 'There was an error sending your email.'});
+					}
+					else {
+						fulfill();
+					}
 				}
 			});
 		})

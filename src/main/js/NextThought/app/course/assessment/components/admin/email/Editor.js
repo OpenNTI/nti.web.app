@@ -12,6 +12,12 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 	enableObjectControls: false,
 	enableTextControls: false,
 
+	RECEIVER_MAP: {
+		'ForCredit': 'Enrolled Students',
+		'All': 'All Students',
+		'Open': 'Open Students'
+	},
+
 	toolbarTpl: Ext.DomHelper.markup(
 		[
 			{
@@ -57,6 +63,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		this.setupReceiverField();
 		this.setupCopiedField();
 		this.setupTitleField();
+		this.saveButtonEl.setHTML(' Send');
 	},
 
 
@@ -73,7 +80,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		}
 
 		var tabTracker = new NextThought.util.TabIndexTracker(),
-			el = this.el, me = this, t;
+			el = this.el, me = this, t, scope;
 
 		this.receiverCmp = Ext.widget('tags', {renderTo: this.receiverEl, tabIndex: tabTracker.next()});
 		this.on('destroy', 'destroy', this.receiverCmp);
@@ -89,11 +96,14 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 				}
 			});
 
-		// For testing
-		t = this.receiverCmp.addTag('ForCredit');
-		if (t && t.hasCls('token')) {
-			t.addCls('active');
-		}
+		scope = this.record && this.record.get('scope');
+		scope = this.RECEIVER_MAP[scope];
+		if (scope) {
+			t = this.receiverCmp.addTag(scope);
+			if (t && t.hasCls('token')) {
+				t.addCls('active');
+			}	
+		}	
 	},
 
 
@@ -219,9 +229,28 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 			this.EmailActions.sendEmail(this.record)
 				.then(function() {
 					console.log(arguments);
-				});	
+					me.presentSuccessMessage();
+					me.fireEvent('after-save');
+				})
+				.fail(function(e) {
+					me.el.unmask();
+					alert({
+						title: 'Error',
+						msg: 'There was an error sending your email. Please try again later.'
+					});
+					console.error(arguments);
+				});
 		}
 		
+	},
+
+
+	presentSuccessMessage: function(){
+		alert({
+			icon: 'success',
+			title: 'Email Sent',
+			msg: 'Your message has been sent.'
+		});
 	},
 
 

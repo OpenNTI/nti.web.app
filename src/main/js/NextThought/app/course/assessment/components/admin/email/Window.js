@@ -50,6 +50,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 				if (me.monitors && me.monitors.afterSave) {
 					me.monitors.afterSave(rec);
 				}
+				me.doClose();
 			}
 		});
 	},

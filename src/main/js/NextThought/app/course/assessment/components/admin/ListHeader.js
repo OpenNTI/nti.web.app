@@ -98,6 +98,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
+		this.onStudentFilterChange();
 	},
 
 
@@ -224,14 +225,30 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		me.settingsMenu.show().hide();
 	},
 
+
+	onStudentFilterChange: function(filter) {
+		var q;
+		
+		if (!filter) {
+			filter = this.ownerCt && this.ownerCt.studentFilter;
+		}
+
+		q = filter === 'ForCredit' ? 'Email Enrolled Students' : 'Email All Students';
+		if (this.emailEl) {
+			this.emailEl.dom.setAttribute('data-qtip', q);
+		}
+	},
+
 	
 	showEmailEditor: function(e) {
 		var me = this,
 			editor,
-			emailRecord = new NextThought.model.Email();
+			emailRecord = new NextThought.model.Email(),
+			scope = this.ownerCt && this.ownerCt.studentFilter === 'ForCredit' ? 'ForCredit' : 'All';
 
 		// Set the link to post the email to
 		emailRecord.set('url', this.currentBundle && this.currentBundle.getLink('Mail'));
+		emailRecord.set('scope', scope);
 
 		// Cache the email record
 		this.WindowStore.cacheObject('new-email', emailRecord);
