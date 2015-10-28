@@ -33,7 +33,7 @@ Ext.define('NextThought.app.bundle.Actions', {
 	},
 
 
-	getRouteForId: function(id) {
+	getRootRouteForId: function(id) {
 		return '/bundle/' + ParseUtils.encodeForURI(ntiid);
 	}
 });

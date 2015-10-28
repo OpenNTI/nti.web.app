@@ -64,8 +64,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				semester: e && e.getSemesterBadge(),
 				archived: e && e.isArchived(),
 				upcoming: e && e.isUpcoming(),
-				startDate: e && e.get('StartDate'),
-				catalogFamily: e && e.getCatalogFamilyInfo()
+				startDate: e && e.get('StartDate')
 			};
 
 		ObjectUtils.clean(bundle);
@@ -141,6 +140,24 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 	getCourseCatalogEntry: function() {
 		return this.__courseCatalogEntry;
+	},
+
+	/**
+	 * Get the catalog family for this course
+	 * @return {CatalogFamily}
+	 */
+	getCatalogFamily: function() {
+		return this.__courseCatalogEntry.getCatalogFamily();
+	},
+
+
+	/**
+	 * Whether or not this instance is in a given family id
+	 * @param  {String}  id FamilyId
+	 * @return {Boolean}    if it is in the family
+	 */
+	isInFamily: function(id) {
+		return this.__courseCatalogEntry.isInFamily(id);
 	},
 
 
@@ -788,15 +805,15 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-	getVideoForId: function(vid) {	
+	getVideoForId: function(vid) {
 		return this.getVideoIndex()
 				.then(function(index) {
 					var i = index[vid];
-					// Note: Old courses (i.e.Spring 14) don't have the class type but the outline only contains videos. 
-					// Newer outline contains more that just a video, they include slidedeck...So, for backwards compatibility, 
+					// Note: Old courses (i.e.Spring 14) don't have the class type but the outline only contains videos.
+					// Newer outline contains more that just a video, they include slidedeck...So, for backwards compatibility,
 					// to be a video if it has a class it has to be Video, if not, default to video.
 					if (i && (i.Class === undefined || i.Class === 'Video')) {
-						return Promise.resolve(i);	
+						return Promise.resolve(i);
 					}
 					return Promise.reject();
 				});

@@ -23,15 +23,11 @@ Ext.define('NextThought.app.course.Actions', {
 			route = this.getRouteForId(ntiid),
 			subRoute = this.StateStore.getRouteFor(ntiid);
 
-		if (subRoute) {
-			route = route + '/' + Globals.trimRoute(subRoute);
-		}
-
 		return Promise.resolve(route);
 	},
 
 
-	getRouteForId: function(id) {
+	getRootRouteForId: function(id) {
 		return '/course/' + ParseUtils.encodeForURI(id);
 	}
 });

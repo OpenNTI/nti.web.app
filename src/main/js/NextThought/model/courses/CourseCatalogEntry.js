@@ -116,40 +116,6 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	},
 
 
-	__ensureAsset: function(key, asset) {
-	   var existing = null,
-	   me = this;
-
-	   if (!this.__assetPromises) {
-		   this.__assetPromises = {};
-		}
-
-		existing = this.__assetPromises[key];
-		if (!existing) {
-		   existing = this.getImgAsset(asset || key).then(function(url) { me.set(key, url); }, me.set.bind(me, [key, null]));
-		   this.__assetPromises[key] = existing;
-		}
-
-		return existing;
-	},
-
-
-	getCatalogFamilyInfo: function() {
-		var families = this.get('CatalogFamilies'),
-			items = families ? families.get('Items') : [],
-			family = items[0];
-
-		if (items.length > 1) { console.warn('More than one family, just using the first '); }
-
-		if (!family) { return null; }
-
-		return {
-			title: family.get('title'),
-			familyId: family.get('CatalogFamilyID')
-		};
-	},
-
-
 	getBackgroundImage: function() {
 		return this.getAsset('background');
 	},
@@ -165,8 +131,29 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	},
 
 
-	getAsset: function(key, asset) {
-		return this.__ensureAsset(key, asset).then(this.get.bind(this, key));
+	/**
+	 * Get the catalog family for this catalog entry
+	 * @return {CatalogFamily}
+	 */
+	getCatalogFamily: function() {
+		var catalogFamilies = this.get('CatalogFamilies'),
+			families = (catalogFamilies && catalogFamilies.get('Items')) || [];
+
+		if (families.length > 1) { console.warn('More than one catalog family only using the first one'); }
+
+		return families[0];
+	},
+
+
+	/**
+	 * Whether or not this catalog entry is in a given family id
+	 * @param  {String}  id FamilyId
+	 * @return {Boolean}    if it is in the family
+	 */
+	isInFamily: function(id) {
+		var catalogFamilies = this.get('CatalogFamilies');
+
+		return catalogFamilies && catalogFamilies.containsFamily(id);
 	},
 
 

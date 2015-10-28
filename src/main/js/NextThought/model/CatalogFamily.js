@@ -13,6 +13,20 @@ Ext.define('NextThought.model.CatalogFamily', {
 		{name: 'ProviderDepartmentTitle', type: 'string'},
 		{name: 'ProviderUniqueID', type: 'string'},
 		{name: 'StartDate', type: 'ISODate'},
-		{name: 'EndDate', type: 'ISODate'}
-	]
+		{name: 'EndDate', type: 'ISODate'},
+		{name: 'thumb', type: 'string', persist: false}
+	],
+
+
+	asUIData: function() {
+		return {
+			id: this.get('CatalogFamilyID'),
+			title: this.get('Title')
+		};
+	},
+
+
+	getThumbImage: function() {
+		return this.getAsset('thumb');
+	}
 });
