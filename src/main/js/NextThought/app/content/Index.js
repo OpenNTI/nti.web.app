@@ -166,19 +166,6 @@ Ext.define('NextThought.app.content.Index', {
 
 
 	/**
-	 * Return a promise that fulfills with links to show in the header
-	 *
-	 * See NextThought.common.components.Navigation setQuickLinks to see what the links
-	 * should look like
-	 *
-	 * @return {Promise}
-	 */
-	getQuickLinks: function() {
-		return Promise.resolve([]);
-	},
-
-
-	/**
 	 * Set up the active tab
 	 * @param  {String} active   xtype of the active tab
 	 * @param  {Array} inactive xtypes of the other views to set the active course on, but not wait
@@ -190,9 +177,6 @@ Ext.define('NextThought.app.content.Index', {
 		me.__loadBundle();
 
 		me.navigation.bundleChanged(me.activeBundle, me.getCurrentRoute());
-
-		me.getQuickLinks()
-			.then(me.navigation.setQuickLinks.bind(me.navigation));
 
 		me.activeState = {
 			active: tab || active

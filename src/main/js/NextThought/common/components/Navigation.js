@@ -107,37 +107,6 @@ Ext.define('NextThought.common.components.Navigation', {
 	},
 
 
-	/**
-	 * Add a list of quick links to other pieces of content
-	 * links config: {
-	 * 		route: String, //the route for the object
-	 * 		title: String, //the title of the route
-	 * 		text: String, //the text to show for this link
-	 * 		active: Boolean // if this is the active link
-	 * 		isLabel: Boolean // if this is just suppose to be a label in the menu
-	 * }
-	 *
-	 * @param {Array} links [description]
-	 */
-	setQuickLinks: function(links) {
-		if (!this.rendered) {
-			this.on('afterrender', this.setQuickLinks.bind(this, links));
-			return;
-		}
-
-		if (!links || !links.length) {
-			this.activeContentEl.removeCls('has-switcher');
-			return;
-		}
-
-		this.activeContentEl.addCls('has-switcher');
-
-		this.quickLinksEl.dom.innerHTML = '';
-		this.quickLinksTpl.append(this.quickLinksEl, {
-			links: links
-		});
-	},
-
 
 	/**
 	 * Take an array of tabs to render in the navigation
@@ -227,7 +196,7 @@ Ext.define('NextThought.common.components.Navigation', {
 
 	hideDropdown: function() {
 		this.removeCls('show-dropdown');
-		this.activeContentEl.removeCls('show-switcher');
+		this.onActiveContentUnClicked();
 	},
 
 
@@ -260,14 +229,8 @@ Ext.define('NextThought.common.components.Navigation', {
 	},
 
 
-	quickLinkSelected: function(item) {
-		if (this.bodyView.onQuickLinkNav) {
-			this.bodyView.onQuickLinkNav(item.title, item.route);
-		}
-	},
-
-
 	onActiveContentClicked: function(e) {},
+	onActiveContentUnClicked: function() {},
 
 
 	maybeCollapse: function(navWidth, barWidth) {

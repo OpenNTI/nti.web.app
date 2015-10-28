@@ -20,7 +20,7 @@ Ext.define('NextThought.app.course.Actions', {
 	 */
 	transitionToCourse: function(course, libraryCard) {
 		var ntiid = course.getId(),
-			route = this.getRouteForId(ntiid),
+			route = this.getRootRouteForId(ntiid),
 			subRoute = this.StateStore.getRouteFor(ntiid);
 
 		return Promise.resolve(route);

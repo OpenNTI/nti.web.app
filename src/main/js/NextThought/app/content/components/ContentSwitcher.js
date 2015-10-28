@@ -18,6 +18,55 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 
 	floating: true,
 
+	cls: 'content-switcher',
+
+
+	listTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+		tag: 'ul', cn: [
+			{tag: 'tpl', 'for': 'recent', cn: [
+				{
+					tag: 'li',
+					cls: 'item{[values.cls ? " " + values.cls : ""]}',
+					'data-root-route': '{rootRoute}',
+					'data-id': '{id}',
+					'data-route': '{activeRoute}',
+					cn: [
+						{cls: 'meta', cn: [
+							{tag: 'img', src: '{thumb}'},
+							{tag: 'span', cls: 'title', html: '{title}'}
+						]},
+						{tag: 'tpl', 'if': 'subItems', cn: [
+							{tag: 'ul', cls: 'sub-sections', cn: [
+								{tag: 'tpl', 'for': 'subItems', cn: [
+									{
+										tag: 'li',
+										cls: 'sub-item{[values.cls ? " " + values.cls : ""]}',
+										'data-root-route': '{rootRoute}',
+										'data-id': '{data-id}',
+										'data-route': '{activeRoute}',
+										html: '{title}'
+									}
+								]}
+							]}
+						]}
+					]
+				}
+			]}
+		]
+	})),
+
+
+	renderTpl: Ext.DomHelper.markup([
+		{cls: 'pointer'},
+		{cls: 'list'}
+	]),
+
+
+	renderSelectors: {
+		pointerEl: '.pointer',
+		listEl: '.list'
+	},
+
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -27,6 +76,41 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 		this.CourseActions = NextThought.app.course.Actions.create();
 		this.CourseStateStore = NextThought.app.course.StateStore.getInstance();
 		this.LibraryCourseStateStore = NextThought.app.library.courses.StateStore.getInstance();
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.applyState(this.getCurrentState());
+
+		this.mon(this.el, 'click', this.onItemClicked.bind(this));
+	},
+
+
+	openAt: function(x, y) {
+		this.show();
+
+		var myWidth = this.getWidth(),
+			pointerHeight = this.pointerEl.getHeight(),
+			viewWidth = Ext.Element.getViewportWidth(),
+			viewHeight = Ext.Element.getViewportHeight(),
+			top, left;
+
+		top = y;
+		left = x - (myWidth / 2);
+
+		if (left <= 5) {
+			left = 5;
+		} else if ((left + myWidth) > (viewWidth + 5)) {
+			left = left - ((left + myWidth) - (viewWidth + 5));
+		}
+
+		this.el.dom.style.maxHeight = (viewHeight - (top + pointerHeight) - 5) + 'px';
+		this.el.dom.style.left = left + 'px';
+		this.el.dom.style.top = top + 'px';
+
+		this.pointerEl.dom.style.left = (x - left) + 'px';
 	},
 
 
@@ -66,13 +150,21 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 
 		courses = courses.map(function(course) {
 			var instance = course.get('CourseInstance'),
-				isCurrent = instance.getId() === bundle.getId();
+				isCurrent = instance.getId() === bundle.getId(),
+				uiData = instance.asUIData();
 
-			return me.getCourseData(instance, isCurrent ? route : null, isCurrent ? 'current' : null);
+			return {
+				id: uiData.id,
+				title: uiData.label,
+				thumb: uiData.thumb,
+				cls: isCurrent ? 'current' : null,
+				rootRoute: me.CourseActions.getRootRouteForId(uiData.id),
+				activeRoute: isCurrent ? route : me.CourseStateStore.getRouteFor(uiData.id)
+			};
 		});
 
 		return Promise.all([
-				Promise.all(courses),
+				courses,
 				family.getThumbImage()
 			]).then(function(results) {
 				uiData.subItems = results[0];
@@ -91,14 +183,49 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 
 
 	addBundle: function(bundle, route) {
-		var state = this.getState() || {recent: []},
+		var state = this.getCurrentState() || {recent: []},
+			recent = state.recent || [],
 			getData = bundle.isCourse ? this.getCourseOrFamilyData(bundle, route) : this.getBundleData(bundle, route);
 
-		getData.then(function(data) {});
+		state.recent.forEach(function(item) {
+			if (item.subItems) {
+				item.subItems.forEach(function(subItem) {
+					subItem.cls = '';
+				});
+			}
+		});
+
+		getData
+			.then(function(data) {
+				var currentIndex = -1;
+
+				recent.forEach(function(item, idx) {
+					if (item.id === data.id) {
+						currentIndex = idx;
+					}
+				});
+
+				if (currentIndex >= 0) {
+					recent.splice(currentIndex, 1);
+				}
+
+				recent.unshift(data);
+				recent = recent.slice(0, 5);
+
+				return state;
+			})
+			.then(this.setState.bind(this));
 	},
 
 
 	applyState: function(state) {
+		if (!this.rendered) { return; }
 
-	}
+		this.listEl.dom.innerHTML = '';
+
+		this.listTpl.append(this.listEl, state);
+	},
+
+
+	onItemClicked: function(e) {}
 });

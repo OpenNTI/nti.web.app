@@ -59,5 +59,18 @@ Ext.define('NextThought.app.content.components.Navigation', {
 
 	switchContent: function() {
 
+	},
+
+
+	onActiveContentClicked: function() {
+		var active = this.titleContainerEl.dom,
+			rect = active && active.getBoundingClientRect();
+
+		this.ContentSwitcher.openAt(rect.right - 10, rect.bottom);
+	},
+
+
+	onActiveContentUnClicked: function() {
+		this.ContentSwitcher.hide();
 	}
 });

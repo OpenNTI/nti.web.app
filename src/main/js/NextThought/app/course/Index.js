@@ -150,67 +150,6 @@ Ext.define('NextThought.app.course.Index', {
 	},
 
 
-	getQuickLinks: function() {
-		var bundle = this.activeBundle,
-			now = new Date(),
-			activeId = bundle.getId(),
-			courseStore = this.CourseStore;
-
-		function getAdmin() {
-			var adminCourses = courseStore.getAdminCourses() || [],
-					current = [];
-
-			adminCourses.forEach(function(course) {
-				var instance = course.get('CourseInstance'),
-					data = instance && instance.asUIData() || {},
-					routeId = data.id && ParseUtils.encodeForURI(data.id),
-					catalog = instance && instance.getCourseCatalogEntry(),
-					endDate = catalog.get('EndDate'),
-					labelData;
-
-				if (data.label && bundle.inSameFamily(instance) && data.id !== activeId) {
-					labelData = {
-						route: '/course/' + routeId,
-						title: data.title,
-						text: data.label,
-						endDate: endDate,
-						cls: endDate < now ? 'archived' : 'current'
-					};
-
-					current.push(labelData);
-				}
-			});
-
-			current = current.sort(function(a, b) {
-				var aVal = a.endDate,
-					bVal = a.endDate;
-
-				return aVal > bVal ? -1 : aVal === bVal ? 0 : 1;
-			});
-
-			return current;
-		}
-
-
-		function getStudent() {
-			return [];
-		}
-
-		if (!bundle || !bundle.getWrapper) {
-			return Promise.resolve([]);
-		}
-
-		return bundle.getWrapper()
-			.then(function(enrollment) {
-				if (!enrollment.isAdministrative) {
-					return getStudent();
-				}
-
-				return getAdmin();
-			});
-	},
-
-
 	clearRouteStates: function() {
 		delete this.dashboardRoute;
 		delete this.overviewRoute;
