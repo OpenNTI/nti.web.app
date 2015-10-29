@@ -41,8 +41,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Actions', {
 					Accept: 'application/json'
 				},
 				callback: function(q, success, r) {
-					var store;
-
 					if (!success) {
 						reject({field: 'Email', message: 'There was an error sending your email.'});
 					}

@@ -53,7 +53,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 				me.doClose();
 			}
 		});
-	},
+	}
 }, function(){
 	NextThought.app.windows.StateStore.register('new-email', this);
 	NextThought.app.windows.StateStore.register(NextThought.model.Email.mimeType, this);

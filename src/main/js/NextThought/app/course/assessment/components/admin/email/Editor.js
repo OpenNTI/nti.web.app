@@ -4,7 +4,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 	requires: [
 		'NextThought.model.Email',
-		'NextThought.app.course.assessment.components.admin.email.Actions'
+		'NextThought.app.course.assessment.components.admin.email.Actions',
+		'NextThought.app.course.assessment.components.admin.email.ScopeTokenField'
 	],
 
 	enableTitle: true,
@@ -82,12 +83,16 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		var tabTracker = new NextThought.util.TabIndexTracker(),
 			el = this.el, me = this, t, scope;
 
-		this.receiverCmp = Ext.widget('tags', {renderTo: this.receiverEl, tabIndex: tabTracker.next()});
+		this.receiverCmp = Ext.widget('course-scope-list', {renderTo: this.receiverEl, tabIndex: tabTracker.next()});
 		this.on('destroy', 'destroy', this.receiverCmp);
-		this.mon(this.receiverCmp, 'blur', function() {
-			var e = el.down('.content');
-			Ext.defer(e.focus, 10, e);
+		this.mon(this.receiverCmp, {
+			'blur': function() {
+				var e = el.down('.content');
+				Ext.defer(e.focus, 10, e);
+			},
+			'selection-changed': this.updateScope.bind(this)
 		});
+
 		this.receiverCmp.onceRendered
 			.then(function() {
 				var e = me.receiverCmp.el.down('input');
@@ -98,11 +103,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 		scope = this.record && this.record.get('scope');
 		scope = this.RECEIVER_MAP[scope];
-		if (scope) {
-			t = this.receiverCmp.addTag(scope);
-			if (t && t.hasCls('token')) {
-				t.addCls('active');
-			}	
+		if (this.receiverCmp.setInitialToken) {
+			this.receiverCmp.setInitialToken(scope);				
 		}	
 	},
 
@@ -132,6 +134,15 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 		if ($AppConfig.userObject.get('email')) {
 			this.copiedCmp.addTag($AppConfig.userObject.get('email'));
+		}
+	},
+
+
+	updateScope: function(record){
+		var scope = record && record.raw && record.raw.studentFilter;
+
+		if (scope) {
+			this.record.set('scope', scope);
 		}
 	},
 
@@ -178,7 +189,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		return {
 			body: this.getBody(this.getBodyValue()),
 			NoReply: false,
-			title: this.titleEl ? this.titleEl.getValue() : undefined,
+			title: this.titleEl ? this.titleEl.getValue() : undefined
 		}
 	},
 
