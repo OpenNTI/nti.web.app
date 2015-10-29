@@ -92,7 +92,6 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 
 
 	openAt: function(x, y) {
-		debugger;
 		this.show();
 
 		var myWidth = this.getWidth(),
@@ -128,7 +127,6 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 
 
 	onBodyClick: function(e) {
-		debugger;
 		if (!e.getTarget('.content-switcher')) {
 			this.doHide();
 		}
