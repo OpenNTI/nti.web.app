@@ -47,7 +47,8 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 										html: '{title}'
 									}
 								]}
-							]}
+							]},
+							{cls: 'arrow', html: 'sections'}
 						]}
 					]
 				}
@@ -76,6 +77,8 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 		this.CourseActions = NextThought.app.course.Actions.create();
 		this.CourseStateStore = NextThought.app.course.StateStore.getInstance();
 		this.LibraryCourseStateStore = NextThought.app.library.courses.StateStore.getInstance();
+
+		this.onBodyClick = this.onBodyClick.bind(this);
 	},
 
 
@@ -89,6 +92,7 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 
 
 	openAt: function(x, y) {
+		debugger;
 		this.show();
 
 		var myWidth = this.getWidth(),
@@ -106,39 +110,70 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 			left = left - ((left + myWidth) - (viewWidth + 5));
 		}
 
-		this.el.dom.style.maxHeight = (viewHeight - (top + pointerHeight) - 5) + 'px';
+		this.listEl.dom.style.maxHeight = (viewHeight - (top + pointerHeight) - 5) + 'px';
+
 		this.el.dom.style.left = left + 'px';
 		this.el.dom.style.top = top + 'px';
 
 		this.pointerEl.dom.style.left = (x - left) + 'px';
+
+		wait()
+			.then(this.mon.bind(this, Ext.getBody(), 'click', this.onBodyClick));
+	},
+
+
+	addBodyClickListener: function() {
+
+	},
+
+
+	onBodyClick: function(e) {
+		debugger;
+		if (!e.getTarget('.content-switcher')) {
+			this.doHide();
+		}
+	},
+
+
+	doHide: function() {
+		this.mun(Ext.getBody(), 'click', this.onBodyClick);
+
+		this.hide();
 	},
 
 
 	getBundleData: function(bundle, route, cls) {
 		var uiData = bundle.asUIData();
 
-		return Promise.resolve({
-			id: uiData.id,
-			title: uiData.title,
-			thumb: uiData.thumb,
-			cls: cls,
-			rootRoute: this.BundleActions.getRootRouteForId(uiData.id),
-			activeRoute: route
-		});
+		return bundle.getThumbnail()
+			.then(function(thumb) {
+				return {
+					id: uiData.id,
+					title: uiData.title,
+					thumb: thumb,
+					cls: cls,
+					rootRoute: me.BundleActions.getRootRouteForId(uiData.id),
+					activeRoute: route
+				};
+			});
 	},
 
 
 	getCourseData: function(bundle, route, cls) {
-		var uiData = bundle.asUIData();
+		var me = this,
+			uiData = bundle.asUIData();
 
-		return Promise.resolve({
-			id: uiData.id,
-			title: uiData.title,
-			thumb: uiData.thumb,
-			cls: cls,
-			rootRoute: this.CourseActions.getRootRouteForId(uiData.id),
-			activeRoute: route || this.CourseStateStore.getRouteFor(uiData.id)
-		});
+		return bundle.getThumbnail()
+			.then(function(thumb) {
+				return {
+					id: uiData.id,
+					title: uiData.title,
+					thumb: thumb,
+					cls: cls,
+					rootRoute: me.CourseActions.getRootRouteForId(uiData.id),
+					activeRoute: route
+				};
+			});
 	},
 
 
@@ -169,11 +204,13 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 
 		return Promise.all([
 				courses,
-				family.getThumbImage()
+				family.getThumbnail()
 			]).then(function(results) {
 				uiData.cls = 'has-sub-items';
 				uiData.subItems = results[0];
 				uiData.thumb = results[1];
+				uiData.rootRoute = me.CourseActions.getRootRouteForId(bundle.getId());
+				uiData.activeRoute = me.CourseStateStore.getRouteFor(bundle.id);
 
 				return uiData;
 			});
@@ -181,7 +218,6 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 
 
 	getCourseOrFamilyData: function(bundle, route) {
-		debugger;
 		var family = bundle.getCatalogFamily();
 
 		return family ? this.getFamilyData(family, bundle, route) : this.getCourseData(bundle, route);
@@ -198,6 +234,8 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 				item.subItems.forEach(function(subItem) {
 					subItem.cls = '';
 				});
+
+				item.cls = 'has-sub-items collapsed';
 			}
 		});
 
@@ -224,6 +262,31 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 	},
 
 
+	updateRouteFor: function(bundle, route) {
+		var id = bundle.getId(),
+			rootRoute = this[bundle.isCourse ? 'CourseActions' : 'BundleActions'].getRootRouteForId(id),
+			state = this.getCurrentState() || {recent: []};
+
+		state.recent.forEach(function(item) {
+			if (item.id === id) {
+				item.activeRoute = route;
+			} else if (item.subItems) {
+				item.subItems.forEach(function(subItem) {
+					if (subItem.id === id) {
+						subItem.activeRoute = route;
+
+						if (item.rootRoute === subItem.rootRoute) {
+							item.activeRoute = route;
+						}
+					}
+				});
+			}
+		});
+
+		this.setState(state);
+	},
+
+
 	applyState: function(state) {
 		if (!this.rendered) { return; }
 
@@ -233,20 +296,23 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 	},
 
 
+
 	onItemClicked: function(e) {
 		if (!e.getTarget('li')) { return; }
 
 		var item = e.getTarget('li'),
+			arrow = e.getTarget('.arrow'),
 			isTopLevel = item.classList.contains('item'),
 			root, route;
 
-		if (isTopLevel && item.classList.contains('expanded')) {
-			item = li.querySelector('li.subItem');
+		if (arrow) {
+			item.classList.toggle('collapsed');
+		} else if (!isTopLevel || (isTopLevel && e.getTarget('.meta'))) {
+			root = item.getAttribute('data-root-route');
+			route = item.getAttribute('data-route') || '';
+
+			this.doHide();
+			this.switchContent(Globals.trimRoute(root) + '/' + Globals.trimRoute(route));
 		}
-
-		root = item.getAttribute('data-root-route');
-		route = item.getAttribute('data-route') || '';
-
-		this.switchContent(Globals.trimRoute(root) + '/' + Globals.trimRoute(route));
 	}
 });

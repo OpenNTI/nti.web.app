@@ -111,7 +111,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	__setImage: function() {
 		var me = this;
 		me.getBackgroundImage();
-		me.getThumbImage();
+		me.getThumbnail();
 		me.getIconImage();
 	},
 
@@ -121,7 +121,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	},
 
 
-	getThumbImage: function() {
+	getThumbnail: function() {
 		return this.getAsset('thumb');
 	},
 

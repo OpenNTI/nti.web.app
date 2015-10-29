@@ -194,9 +194,8 @@ Ext.define('NextThought.common.components.Navigation', {
 	},
 
 
-	hideDropdown: function() {
+	hideDropdown: function(e) {
 		this.removeCls('show-dropdown');
-		this.onActiveContentUnClicked();
 	},
 
 
@@ -230,7 +229,6 @@ Ext.define('NextThought.common.components.Navigation', {
 
 
 	onActiveContentClicked: function(e) {},
-	onActiveContentUnClicked: function() {},
 
 
 	maybeCollapse: function(navWidth, barWidth) {

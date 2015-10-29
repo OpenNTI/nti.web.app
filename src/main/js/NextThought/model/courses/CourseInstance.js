@@ -522,6 +522,11 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	getThumbnail: function() {
+		return this.get('Bundle').getThumbnail();
+	},
+
+
 	getVendorIconImage: function() {
 		return this.get('Bundle').getVendorIcon();
 	},

@@ -26,7 +26,7 @@ Ext.define('NextThought.model.CatalogFamily', {
 	},
 
 
-	getThumbImage: function() {
+	getThumbnail: function() {
 		return this.getAsset('thumb');
 	}
 });

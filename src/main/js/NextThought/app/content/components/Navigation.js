@@ -35,6 +35,7 @@ Ext.define('NextThought.app.content.components.Navigation', {
 		}
 
 		if (this.currentBundle === bundle) {
+			this.ContentSwitcher.updateRouteFor(bundle, activeRoute);
 			return;
 		}
 
@@ -69,10 +70,5 @@ Ext.define('NextThought.app.content.components.Navigation', {
 			rect = active && active.getBoundingClientRect();
 
 		this.ContentSwitcher.openAt(rect.right - 10, rect.bottom);
-	},
-
-
-	onActiveContentUnClicked: function() {
-		this.ContentSwitcher.hide();
 	}
 });
