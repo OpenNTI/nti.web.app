@@ -27,7 +27,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 					cls: 'row receiver', cn: [
 					 	{cls: 'label', html: 'To'},
 						{cls: 'field'},
-						{cls: 'action no-reply on'}
+						{cls: 'action', cn: [
+							{cls: 'no-reply-picker', cn: [
+								{cls: 'noreply selected', html: 'No Reply'}
+							]}
+						]}
 					]
 				},
 				{tag: 'tpl', 'if': 'enableCopied', cn: [
