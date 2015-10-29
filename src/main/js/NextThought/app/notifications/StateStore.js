@@ -13,7 +13,7 @@ Ext.define('NextThought.app.notifications.StateStore', {
 			url: url,
 			batchSize: me.PAGE_SIZE,
 			params: {
-				batchBefore: new Date() / 1000
+				batchSize: me.PAGE_SIZE
 			},
 			getNextConfig: function(batch) {
 				var item = batch.Items.last(),
@@ -25,7 +25,8 @@ Ext.define('NextThought.app.notifications.StateStore', {
 					url: url,
 					batchSize: me.PAGE_SIZE,
 					params: {
-						batchBefore: lastModified
+						batchBefore: lastModified,
+						batchSize: me.PAGE_SIZE
 					}
 				};
 			}

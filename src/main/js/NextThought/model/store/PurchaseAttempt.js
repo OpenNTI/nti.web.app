@@ -28,7 +28,8 @@ Ext.define('NextThought.model.store.PurchaseAttempt', {
 		{ name: 'Order', type: 'singleitem', persist: false},
 		{ name: 'Pricing', type: 'singleitem', persist: false},
 		{ name: 'RedemptionCode', type: 'string', persist: false },
-		{ name: 'RedemptionTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() }
+		{ name: 'RedemptionTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
+		{ name: 'VendorThankYouPage', type: 'auto'}
   ],
 
 	isPurchaseAttempt: true,
