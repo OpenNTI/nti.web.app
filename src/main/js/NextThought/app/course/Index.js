@@ -79,8 +79,6 @@ Ext.define('NextThought.app.course.Index', {
 		this.addRoute('/info', this.showInfo.bind(this));
 		this.addRoute('/content', this.showContent.bind(this));
 
-		this.addObjectHandler(NextThought.model.PageInfo.mimeType, this.getPageInfoRoute.bind(this));
-		this.addObjectHandler(NextThought.model.RelatedWork.mimeType, this.getRelatedWorkRoute.bind(this));
 		this.addObjectHandler([
 			NextThought.model.assessment.Assignment.mimeType,
 			NextThought.model.assessment.TimedAssignment.mimeType
