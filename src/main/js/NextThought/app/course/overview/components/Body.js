@@ -12,25 +12,40 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 	layout: 'none',
 
-	clear: function(){
+	clear: function() {
 		this.removeAll(true);
 	},
 
 
+	getLesson: function() {
+		var lesson = this.down('course-overview-lesson');
+
+		if (!lesson) {
+			lesson = this.add({
+				xtype: 'course-overview-lesson',
+				bundle: this.currentBundle
+			});
+
+			this.addChildRouter(lesson);
+		}
+
+		return lesson;
+	},
+
+
 	setActiveBundle: function(bundle) {
+		var lesson = this.down('course-overview-lesson');
+
+		if (lesson) {
+			lesson.setActiveBundle(bundle);
+		}
+
 		this.currentBundle = bundle;
 	},
 
 
 	showLesson: function(record) {
-		this.clear();
-
-		var lesson = this.add({
-			xtype: 'course-overview-lesson',
-			bundle: this.currentBundle
-		});
-
-		this.addChildRouter(lesson);
+		var lesson = this.getLesson();
 
 		return lesson.renderLesson(record);
 	}

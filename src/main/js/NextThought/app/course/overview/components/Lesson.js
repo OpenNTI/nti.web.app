@@ -3,14 +3,31 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 	alias: 'widget.course-overview-lesson',
 	ui: 'course',
 
+	requires: [
+		'NextThought.app.course.overview.components.types.Content',
+		'NextThought.app.course.overview.components.types.Toc'
+	],
+
 	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
+	layout: 'none',
 	cls: 'course-overview',
 
 	requires: [
-		'NextThought.app.course.overview.components.parts.*',
+		'NextThought.app.course.overview.components.parts.ContentLink',
+		'NextThought.app.course.overview.components.parts.Discussion',
+		'NextThought.app.course.overview.components.parts.Header',
+		'NextThought.app.course.overview.components.parts.IframeWindow',
+		'NextThought.app.course.overview.components.parts.Poll',
+		'NextThought.app.course.overview.components.parts.QuestionSet',
+		'NextThought.app.course.overview.components.parts.Section',
+		'NextThought.app.course.overview.components.parts.Spacer',
+		'NextThought.app.course.overview.components.parts.Survey',
+		'NextThought.app.course.overview.components.parts.Timeline',
+		'NextThought.app.course.overview.components.parts.Topic',
+		'NextThought.app.course.overview.components.parts.Videos',
 		'NextThought.proxy.JSONP'
 	],
 
@@ -24,7 +41,6 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 		'assignments': getString('NextThought.view.courseware.overview.View.assignments')
 	},
 
-
 	SECTION_TYPE_MAP: {
 		'course-overview-ntivideo': 'video',
 		'course-overview-content': 'additional',
@@ -33,7 +49,6 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 		'course-overview-naquestionset': 'assessments',
 		'course-overview-assignment': 'assignments'
 	},
-
 
 	SECTION_CONTAINER_MAP: {
 		'video': 'course-overview-section',
@@ -50,6 +65,31 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 		this.callParent(arguments);
 
 		this.maybeMask();
+	},
+
+
+	setActiveBundle: function(bundle) {
+		this.bundle = bundle;
+	},
+
+
+	maybeMask: function() {
+		if (!this.rendered || !this.buildingOverview) {
+			return;
+		}
+
+		this.addCls('loading');
+		this.el.mask(getString('NextThought.view.courseware.overview.View.loading'), 'loading');
+	},
+
+
+	maybeUnmask: function() {
+		delete this.buildingOverview;
+
+		if (this.rendered) {
+			this.removeCls('loading');
+			this.el.unmask();
+		}
 	},
 
 
@@ -78,247 +118,79 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 
 	renderLesson: function(record) {
+		debugger;
 		var me = this,
 			course = me.bundle,
-			overviewSrc = (record && record.getLink('overview-content')) || null;
+			overviewsrc = (record && record.getLink('overview-content')) || null;
 
-		if (!record || record.getId() === me.currentPage || !course || !course.getAssignments) {
+		if (!record || !course) {
 			//show empty state?
-			console.warn('Nothing?', record, course);
-		}
-
-		me.buildingOverview = true;
-		me.maybeMask();
-
-		me.clear();
-
-		me.currentPage = record.getId();
-		me.currentNode = record;
-
-		me.__getCurrentProgress = record.getProgress ? record.getProgress.bind(record) : null;
-
-		//TODO: figure out how the anlaytic context should work with the new navigation
-		// if (AnalyticsUtil.getContextRoot() === 'overview') {
-		// 	AnalyticsUtil.addContext(me.currentPage);
-		// }
-
-		return Promise.all([
-			(overviewSrc && ContentProxy.get(overviewSrc)) || Promise.resolve(null),
-			course.getAssignments(),
-			course.getWrapper && course.getWrapper(),
-			ContentUtils.getLocation(record.getId(), course)
-		]).then(function(results) {
-			var content = results[0],
-				assignments = results[1],
-				enrollment = results[2],
-				//Just use the first one for now
-				locInfo = results[3][0];
-
-			if (me.currentPage !== record.getId()) {
-				return;
-			}
-
-			me.removeAll(true);
-
-			if (!content) {
-				me.buildFromToc(record, locInfo, assignments, course);
-			} else {
-				content = Globals.parseJSON(content);
-				me.currentContent = content;
-				me.buildFromContent(content, record, enrollment, locInfo, assignments, course);
-			}
-
-			me.__updateProgress();
-		})
-		.fail(function(reason) { console.error(reason); })
-		.done(me.maybeUnmask.bind(me));
-
-	},
-
-
-	maybeMask: function() {
-		if (!this.rendered || !this.buildingOverview) {
+			cnosole.warn('Nothing?', record, course);
 			return;
 		}
 
-		this.addCls('loading');
-		this.el.mask(getString('NextThought.view.courseware.overview.View.loading'), 'loading');
-	},
+		me.currentPage = record.getId();
+		me.buildingOverview = true;
+		me.maybeMask();
 
+		me.__getCurrentProgress = record.getProgress ? record.getProgress.bind(record) : null;
 
-	maybeUnmask: function() {
-		delete this.buildingOverview;
-
-		if (this.rendered) {
-			this.removeCls('loading');
-			this.el.unmask();
+		if (me.currentOverview && me.currentOverview.record.getId() === record.getId()) {
+			if (me.currentOverview.refresh) {
+				me.currentOverview.refresh();
+			}
+			me.maybeUnmask();
+			return Promise.resolve();
 		}
-	},
 
+		me.removeAll(true);
 
-	buildFromContent: function(content, node, enrollment, locInfo, assignments, course) {
-		var me = this;
+		return Promise.all([
+				course.getAssignments(),
+				course.getWrapper && course.getWrapper(),
+				ContentUtils.getLocation(record.getId(), course)
+			]).then(function(results) {
+				var assignments = results[0],
+					enrollment = results[1],
+					//Just use the first one for now
+					locInfo = results[2][0];
 
-		function getItems(c) { return c.Items || c.items || {};}
-		function getType(i) { return 'course-overview-' + (i.MimeType || i.type || '').split('.').last();}
-		function getClass(t) { return t && Ext.ClassManager.getByAlias('widget.' + t); }
-
-		function process(items, item) {
-			var type = getType(item),
-				cls = getClass(type),
-				assignment, prev;
-
-			if (!cls) {
-				console.debug('No component found for:', item);
-				return items;
-			}
-
-			if (!ContentUtils.hasVisibilityForContent({
-							getAttribute: function(i) { return item[i]; }},
-							enrollment.get('Status'))) {
-				return items;
-			}
-
-			if (cls.isSection) {
-				items.push({
-					xtype: type,
-					title: item.title,
-					type: 'content-driven',
-					color: item.accentColor,
-					items: getItems(item).reduce(process, [])
-				});
-			} else {
-				Ext.applyIf(item, {
-					//too many references to these to make changes to accept all spellings.
-					'target-ntiid': item['Target-NTIID'],
-					ntiid: item.NTIID
-				});
-
-				if (cls.isAssessmentWidget) {
-					assignment = assignments.isAssignment(item['target-ntiid']);
-					type = assignment ? 'course-overview-assignment' : type;
-					assignment = assignments.getItem(item['target-ntiid']);
+				//Make sure we haven't changed what record to show before
+				//this finished
+				if (me.currentPage !== record.getId()) {
+					return;
 				}
 
-				prev = items.last();
-				item = Ext.applyIf({
-					xtype: type,
-					locationInfo: locInfo,
-					courseRecord: node,
-					assignment: assignment,
+				if (!overviewsrc) {
+					me.currentOverview = me.add({
+						xtype: 'overview-types-toc',
+						record: record,
+						locInfo: locInfo,
+						assignments: assignments,
+						enrollment: enrollment,
+						course: course,
+						navigate: me.navigate
+					});
+
+					return;
+				}
+
+
+				me.currentOverview = me.add({
+					xtype: 'overview-types-content',
+					record: record,
+					locInfo: locInfo,
+					assignments: assignments,
+					enrollment: enrollment,
 					course: course,
-					navigate: me.navigate.bind(me)
-				}, item);
-
-				if (cls.buildConfig) {
-					item = cls.buildConfig(item, prev);
-				}
-
-				if (item) {
-					items.push(item);
-				}
-			}
-
-			return items;
-		}
-
-		var items = getItems(content).reduce(process, []);
-
-		me.add([{xtype: 'course-overview-header', title: content.title, record: node, course: course}].concat(items));
-	},
+					navigate: me.navigate
+				});
 
 
-	buildFromToc: function(node, locInfo, assignments, course) {
-		var me = this,
-			SECTION_CONTAINER_MAP = me.SECTION_CONTAINER_MAP,
-			SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,
-			SECTION_TITLE_MAP = me.SECTION_TITLE_MAP,
-			sections = {},
-			items = [];
-
-		Ext.each(node.getChildren(), function(i) {
-			var c, t, p;
-
-			if (i.getAttribute('suppressed') === 'true') {
-				return;
-			}
-
-			if (/^object$/i.test(i.tagName) && i.getAttribute('mimeType') === 'application/vnd.nextthought.relatedworkref') {
-				return;
-			}
-
-			i = me.getComponentForNode(i, locInfo, node, assignments, course);
-			t = i && (i.sectionOverride || SECTION_TYPE_MAP[i.xtype] || 'Unknown');
-
-			if (t) {
-				if (i.xtype !== 'course-overview-topic') {
-					c = sections[t];
-					if (!c) {
-						c = sections[t] = {
-							xtype: SECTION_CONTAINER_MAP[t] || 'course-overview-section',
-							type: t,
-							title: SECTION_TITLE_MAP[t] || 'Section ' + t,
-							items: []
-						};
-						items.push(c);
-					}
-
-					if (t === 'video') {
-						if (c.items.length === 0) {
-							c.items.push({xtype: 'course-overview-video', items: [], course: course});
-						}
-						c = c.items[0];
-					}
-
-					c.items.push(i);
-				}
-				else {
-					items.push(i);
-				}
-
-			}
-		});
-
-		this.add([{xtype: 'course-overview-header', record: node}].concat(items));
-	},
-
-
-	getComponentForNode: function(node, info, rec, assignments, course) {
-		var type = node && node.nodeName,
-			section = (node && node.getAttribute('section')) || null,
-			assignment, cls;
-
-		if (/^content:related$/i.test(type) || /^object$/i.test(type)) {
-			type = node.getAttribute('type') || node.getAttribute('mimeType');
-			type = type && type.replace(/^application\/vnd\.nextthought\./, '');
-		}
-
-		type = type && ('course-overview-' + type.toLowerCase());
-		cls = Ext.ClassManager.getByAlias('widget.' + type);
-
-		if (cls) {
-			if (cls && cls.isAssessmentWidget) {
-				assignment = assignments.isAssignment(node.getAttribute('target-ntiid'));
-				type = assignment ? 'course-overview-assignment' : type;
-				assignment = assignments.getItem(node.getAttribute('target-ntiid'));
-			}
-
-			return {
-				xtype: type,
-				node: node,
-				locationInfo: info,
-				courseRecord: rec,
-				sectionOverride: section,
-				assignment: assignment,
-				course: course,
-				navigate: this.navigate.bind(this)
-			};
-		}
-
-		if (this.self.debug) {
-			console.warn('Unknown overview type:', type, node);
-		}
-		return null;
+				return me.currentOverview.loadCollection(overviewsrc);
+			})
+			.fail(function(reason) { console.error(reason); })
+			.done(me.maybeUnmask.bind(me));
 	},
 
 
