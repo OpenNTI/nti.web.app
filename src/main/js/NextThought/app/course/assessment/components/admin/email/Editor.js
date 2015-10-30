@@ -239,7 +239,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 	handleNoReplyMenuClick: function(item, menu){
 		var t = this.noreplyPickerEl.down('.noreply');
-		
+
 		this.record.set('NoReply', item.NoReply);
 		if (t) {
 			t.setHTML(item.text);
@@ -250,7 +250,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 	getValue: function() {
 		return {
 			body: this.getBody(this.getBodyValue()),
-			NoReply: false,
+			NoReply: this.record && this.record.get('NoReply'),
 			title: this.titleEl ? this.titleEl.getValue() : undefined
 		}
 	},

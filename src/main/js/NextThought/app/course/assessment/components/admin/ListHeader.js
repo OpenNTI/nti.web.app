@@ -98,7 +98,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
-		this.onStudentFilterChange();
+		wait(10).then(this.onStudentFilterChange.bind(this));
 	},
 
 
