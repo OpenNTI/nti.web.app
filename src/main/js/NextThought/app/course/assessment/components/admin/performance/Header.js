@@ -61,6 +61,14 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Heade
 	},
 
 
+	setupCourseEmail: function(emailLink){	
+		var emailEl = this.el.down('.email');
+		if (emailEl) {
+			emailEl.show();
+		}
+	},
+
+
 	changeGrade: function(number, letter) {
 		if (!this.historyItem) { return; }
 
