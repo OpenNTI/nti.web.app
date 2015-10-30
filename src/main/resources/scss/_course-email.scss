@@ -47,7 +47,8 @@
 							right: 10px;
 							left: auto;
 							bottom: auto;
-							width: 100px;
+							width: 112px;
+							height: 26px;
 
 							.no-reply-picker {
 								cursor: pointer;
@@ -55,8 +56,9 @@
 								font-weight: 400;
 								font-size: 0.875em;
 								color: $secondary-grey;
-								padding: 3px 15px 3px 10px;
+								padding: 3px 25px 3px 10px;
 								position: relative;
+								text-align: right;
 
 								.empty {
 									display: none;

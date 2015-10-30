@@ -27,9 +27,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 					cls: 'row receiver', cn: [
 					 	{cls: 'label', html: 'To'},
 						{cls: 'field'},
-						{cls: 'action', cn: [
+						{cls: 'action reply-option', cn: [
 							{cls: 'no-reply-picker', cn: [
-								{cls: 'noreply selected', html: 'No Reply'}
+								{cls: 'noreply', html: 'Allow Reply'}
 							]}
 						]}
 					]
@@ -53,7 +53,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		titleEl: '.title',
 		footerEl: '.footer',
 		receiverEl: '.row.receiver .field',
-		copiedEl: '.row.cc-ed .field'
+		copiedEl: '.row.cc-ed .field',
+		noreplyPickerEl: '.action.reply-option'
 	},
 
 	
@@ -69,6 +70,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		this.setupCopiedField();
 		this.setupTitleField();
 		this.saveButtonEl.setHTML(' Send');
+		this.mon(this.noreplyPickerEl, 'click', this.replyPickerClicked.bind(this));
 	},
 
 
@@ -186,6 +188,62 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 		wait(700)
 			.then(this.updateLayout.bind(this));
+	},
+
+
+	replyPickerClicked: function(e) {
+		var target = Ext.get(e.getTarget());
+
+		target = target.up('.reply-option') || target;
+		if (!this.noReplyPicker) {
+			this.noReplyPicker = this.createNoReplyMenu();
+		}
+
+		if (this.noReplyPicker.isVisible()) {
+			this.noReplyPicker.hide();
+		}
+		else {
+			this.noReplyPicker.showBy(target, 'tr-br?');
+		}
+	},
+
+
+	createNoReplyMenu: function(){
+		var me = this,
+			menu = Ext.widget('menu', {
+						defaults: {
+							ui: 'nt-menuitem',
+							xtype: 'menucheckitem',
+							plain: true,
+							group: 'no-reply',
+							handler: function(item) {
+								me.handleNoReplyMenuClick(item, item.up('.menu'));
+							}
+						},
+						width: 140,
+						items: [
+							{
+								text: 'Allow Reply',
+								NoReply: false,
+								checked: true
+							},
+							{
+								text: 'No Reply',
+								NoReply: true
+							}
+						]
+					});
+		return menu;
+	},
+
+
+	handleNoReplyMenuClick: function(item, menu){
+		var t = this.noreplyPickerEl.down('.noreply');
+		
+		this.record.set('NoReply', item.NoReply);
+		if (t) {
+			t.setHTML(item.text);
+		}
 	},
 
 
