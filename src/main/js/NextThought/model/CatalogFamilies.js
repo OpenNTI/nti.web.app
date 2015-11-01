@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.CatalogFamilies', {
+export default Ext.define('NextThought.model.CatalogFamilies', {
 	extend: 'NextThought.model.Base',
 
 	requires: [

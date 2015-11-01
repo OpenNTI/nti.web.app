@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.content.components.ContentSwitcher', {
+export default Ext.define('NextThought.app.content.components.ContentSwitcher', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-switcher',
 

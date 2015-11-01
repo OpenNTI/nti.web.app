@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.CatalogFamily', {
+export default Ext.define('NextThought.model.CatalogFamily', {
 	extend: 'NextThought.model.Base',
 
 	mixins: {
