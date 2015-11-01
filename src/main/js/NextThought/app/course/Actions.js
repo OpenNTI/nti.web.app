@@ -20,13 +20,14 @@ export default Ext.define('NextThought.app.course.Actions', {
 	 */
 	transitionToCourse: function(course, libraryCard) {
 		var ntiid = course.getId(),
-			route = '/course/' + ParseUtils.encodeForURI(ntiid),
+			route = this.getRootRouteForId(ntiid),
 			subRoute = this.StateStore.getRouteFor(ntiid);
 
-		if (subRoute) {
-			route = route + '/' + Globals.trimRoute(subRoute);
-		}
-
 		return Promise.resolve(route);
+	},
+
+
+	getRootRouteForId: function(id) {
+		return '/course/' + ParseUtils.encodeForURI(id);
 	}
 });

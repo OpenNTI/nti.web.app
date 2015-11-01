@@ -74,6 +74,43 @@ export default Ext.define('NextThought.mixins.PresentationResources', {
 		}
 
 		return p;
-	}
+	},
 
+
+	/**
+	 * Keep track of which assets we have checked existed, so we don't do
+	 * it more than once
+	 *
+	 * @param  {String} key   field to store the value on
+	 * @param  {String} asset the name of the asset (defaults to the key arg)
+	 * @return {Promise}      fulfills once the asset has been found to exist or not
+	 */
+	__ensureAsset: function(key, asset) {
+		var existing = null,
+			me = this;
+
+		if (!this.__assetPromises) {
+			this.__assetPromises = {};
+		}
+
+		existing = this.__assetPromises[key];
+
+		if (!existing) {
+			existing = this.getImgAsset(asset || key).then(function(url) { me.set(key, url); }, me.set.bind(me, [key, null]));
+			this.__assetPromises[key] = existing;
+		}
+
+		return existing;
+	},
+
+
+	/**
+	 * Return the url for the asset if the asset exists
+	 * @param  {String} key   field to store the value on
+	 * @param  {String} asset the name of the asset (defaults to key arg)
+	 * @return {Promise}      fulfills with the url to the asset if it exists
+	 */
+	getAsset: function(key, asset) {
+		return this.__ensureAsset(key, asset).then(this.get.bind(this, key));
+	}
 });

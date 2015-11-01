@@ -149,7 +149,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 			canReply: Boolean(r && r.getLink('add'))
 		});
 
-		h.compileBodyContent(me.setBody, me);
+		h.compileBodyContent(me.setBody, me, null, null, null, {useVideoPlaceholder: true});
 
 		// me.fillInPath();
 
@@ -404,8 +404,8 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 
 
 	forumClickHandler: function() {
-		this.navigateToObject(this.record, { 
-			afterClose: this.updateRecord.bind(this) 
+		this.navigateToObject(this.record, {
+			afterClose: this.updateRecord.bind(this)
 		});
 	},
 
@@ -421,7 +421,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 			return;
 		}
 
-		rec =  rec && rec.isModel ? rec : this.record;
+		rec = rec && rec.isModel ? rec : this.record;
 		headline = rec.get('headline');
 		headline.compileBodyContent(this.setBody, this);
 		this.titleEl.update(headline.get('title'));
@@ -509,7 +509,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 
 		rd = me.renderData = Ext.apply(me.renderData || {},r.getData());
 		rd.date = Ext.Date.format(r.get('CreatedTime'), 'F j, Y');
-		r.compileBodyContent(me.setBody, me);
+		r.compileBodyContent(me.setBody, me, null, null, null, {useVideoPlaceholder: true});
 
 		UserRepository.getUser(username, function(u) {
 			me.user = u;

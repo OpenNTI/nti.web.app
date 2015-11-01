@@ -39,14 +39,16 @@ export default Ext.define('NextThought.app.course.enrollment.components.GiftConf
 		{cls: 'transaction', cn: [
 			{tag: 'span', cls: 'label', html: '{{{NextThought.view.courseware.enrollment.GiftConfirmation.TransID}}}'},
 			{cls: 'transaction-id'}
-		]}
+		]},
+		{cls: 'iframe-container'}
 	]),
 
 	renderSelectors: {
 		tokenEl: '.token .token-text',
 		transactionEl: '.transaction .transaction-id',
 		giftEl: '.gift-info',
-		promptEl: '.prompt'
+		promptEl: '.prompt',
+		iframeEl: '.iframe-container'
 	},
 
 	beforeRender: function() {
@@ -112,7 +114,8 @@ export default Ext.define('NextThought.app.course.enrollment.components.GiftConf
 		var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
 			receiverEmail = purchaseAttempt && purchaseAttempt.get('Receiver'),
 			transactionId = purchaseAttempt && purchaseAttempt.get('TransactionID'),
-			token = purchaseAttempt && purchaseAttempt.get('RedemptionCode');
+			token = purchaseAttempt && purchaseAttempt.get('RedemptionCode'),
+			thankYou = purchaseAttempt && purchaseAttempt.get('VendorThankYouPage');
 
 		if (!this.rendered) { return; }
 
@@ -132,5 +135,26 @@ export default Ext.define('NextThought.app.course.enrollment.components.GiftConf
 			receiverEmail: receiverEmail,
 			senderEmail: purchaseAttempt && purchaseAttempt.get('Creator')
 		});
+
+		if (thankYou && thankYou.thankYouURL) {
+			this.addThankYouPage(thankYou.thankYouURL);
+		}
+	},
+
+
+	addThankYouPage: function(url) {
+		var container = this.iframeEl.dom,
+			existing = container.querySelector('iframe'),
+			iframe;
+
+		//Don't add the same frame twice
+		if (existing && existing.src === url) { return; }
+
+		container.innerHTML = '';
+
+		iframe = document.createElement('iframe');
+		iframe.src = url;
+
+		container.appendChild(iframe);
 	}
 });

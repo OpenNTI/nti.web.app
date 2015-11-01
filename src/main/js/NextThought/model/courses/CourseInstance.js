@@ -142,6 +142,24 @@ export default Ext.define('NextThought.model.courses.CourseInstance', {
 		return this.__courseCatalogEntry;
 	},
 
+	/**
+	 * Get the catalog family for this course
+	 * @return {CatalogFamily}
+	 */
+	getCatalogFamily: function() {
+		return this.__courseCatalogEntry.getCatalogFamily();
+	},
+
+
+	/**
+	 * Whether or not this instance is in a given family id
+	 * @param  {String}  id FamilyId
+	 * @return {Boolean}    if it is in the family
+	 */
+	isInFamily: function(id) {
+		return this.__courseCatalogEntry.isInFamily(id);
+	},
+
 
 	getFirstPage: function() {
 		var bundle = this.get('Bundle');
@@ -441,6 +459,17 @@ export default Ext.define('NextThought.model.courses.CourseInstance', {
 		});
 	},
 
+	/**
+	 * Check is this instance is in the same family as another
+	 * @param  {CourseInstance} instance the instance to compare against
+	 * @return {Boolean}        if they are in the same family
+	 */
+	inSameFamily: function(instance) {
+		var catalog = this.getCourseCatalogEntry();
+
+		return catalog.inSameFamily(instance.getCourseCatalogEntry());
+	},
+
 
 	isExpired: function() {
 		var c = this.getCourseCatalogEntry();
@@ -490,6 +519,11 @@ export default Ext.define('NextThought.model.courses.CourseInstance', {
 
 	getIconImage: function() {
 		return this.get('Bundle').getIconImage();
+	},
+
+
+	getThumbnail: function() {
+		return this.get('Bundle').getThumbnail();
 	},
 
 
@@ -776,15 +810,15 @@ export default Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-	getVideoForId: function(vid) {	
+	getVideoForId: function(vid) {
 		return this.getVideoIndex()
 				.then(function(index) {
 					var i = index[vid];
-					// Note: Old courses (i.e.Spring 14) don't have the class type but the outline only contains videos. 
-					// Newer outline contains more that just a video, they include slidedeck...So, for backwards compatibility, 
+					// Note: Old courses (i.e.Spring 14) don't have the class type but the outline only contains videos.
+					// Newer outline contains more that just a video, they include slidedeck...So, for backwards compatibility,
 					// to be a video if it has a class it has to be Video, if not, default to video.
 					if (i && (i.Class === undefined || i.Class === 'Video')) {
-						return Promise.resolve(i);	
+						return Promise.resolve(i);
 					}
 					return Promise.reject();
 				});

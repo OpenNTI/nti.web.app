@@ -135,7 +135,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 						return c;
 					});
 				}
-			});
+			}, this, null, null, null, {useVideoPlaceholder: true});
 		}
 	},
 

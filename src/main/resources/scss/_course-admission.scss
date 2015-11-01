@@ -1309,6 +1309,10 @@
 		@include icon('assignment_ontime_small', $left: -35px);
 	}
 
+	.iframe-container {
+		display: none;
+	}
+
 	.things-to-do {
 		margin-bottom: 30px;
 		.prompt {

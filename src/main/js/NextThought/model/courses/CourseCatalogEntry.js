@@ -2,15 +2,19 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	alternateClassName: 'NextThought.model.courses.CourseCatalogLegacyEntry',
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.courses.coursecataloglegacyentry',
+
 	statics: {
 		mimeType: 'application/vnd.nextthought.courses.coursecataloglegacyentry'
 	},
+
 	requires: [
 		'NextThought.model.converters.Date',
 		'NextThought.model.courses.EnrollmentOptions',
 		'NextThought.model.courses.CourseCreditLegacyInfo',
-		'NextThought.model.courses.CourseCatalogInstructorInfo'
+		'NextThought.model.courses.CourseCatalogInstructorInfo',
+		'NextThought.model.CatalogFamilies'
 	],
+
 	mixins: {
 		PresentationResources: 'NextThought.mixins.PresentationResources'
 	},
@@ -18,7 +22,7 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	fields: [
 		{ name: 'ContentPackages', mapping: 'ContentPackageNTIID',
 			convert: function(v) { return [v]; } },
-
+		{ name: 'CatalogFamilies', type: 'singleItem', persist: false},
 		{ name: 'CourseEntryNTIID', type: 'string', persist: false},
 		{ name: 'Credit', type: 'arrayItem', persist: false },
 		{ name: 'Description', type: 'string', persist: false },
@@ -107,26 +111,8 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	__setImage: function() {
 		var me = this;
 		me.getBackgroundImage();
-		me.getThumbImage();
+		me.getThumbnail();
 		me.getIconImage();
-	},
-
-
-	__ensureAsset: function(key, asset) {
-	   var existing = null,
-	   me = this;
-
-	   if (!this.__assetPromises) {
-		   this.__assetPromises = {};
-		}
-
-		existing = this.__assetPromises[key];
-		if (!existing) {
-		   existing = this.getImgAsset(asset || key).then(function(url) { me.set(key, url); }, me.set.bind(me, [key, null]));
-		   this.__assetPromises[key] = existing;
-		}
-
-		return existing;
 	},
 
 
@@ -135,7 +121,7 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	},
 
 
-	getThumbImage: function() {
+	getThumbnail: function() {
 		return this.getAsset('thumb');
 	},
 
@@ -145,8 +131,29 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	},
 
 
-	getAsset: function(key, asset) {
-		return this.__ensureAsset(key, asset).then(this.get.bind(this, key));
+	/**
+	 * Get the catalog family for this catalog entry
+	 * @return {CatalogFamily}
+	 */
+	getCatalogFamily: function() {
+		var catalogFamilies = this.get('CatalogFamilies'),
+			families = (catalogFamilies && catalogFamilies.get('Items')) || [];
+
+		if (families.length > 1) { console.warn('More than one catalog family only using the first one'); }
+
+		return families[0];
+	},
+
+
+	/**
+	 * Whether or not this catalog entry is in a given family id
+	 * @param  {String}  id FamilyId
+	 * @return {Boolean}    if it is in the family
+	 */
+	isInFamily: function(id) {
+		var catalogFamilies = this.get('CatalogFamilies');
+
+		return catalogFamilies && catalogFamilies.containsFamily(id);
 	},
 
 
@@ -258,6 +265,20 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		}
 
 		return enrollment;
+	},
+
+	/**
+	 * Compare a given catalog entry to this one to see if they
+	 * are in the same family
+	 * @param  {CourseCatalogEntry} catalog entry to compare
+	 * @return {Boolean}         	whether or not they are in the same family
+	 */
+	inSameFamily: function(catalog) {
+		var families = this.get('CatalogFamilies');
+
+		if (!families) { return false; }
+
+		return families.hasInstersectionWith(catalog.get('CatalogFamilies'));
 	},
 
 

@@ -5,7 +5,7 @@ export default Ext.define('NextThought.common.components.Navigation', {
 		'NextThought.common.menus.LabeledSeparator'
 	],
 
-	cls: 'content-navigation',
+	cls: 'navigation',
 
 	TAB_MARGIN: 35, //TODO: figure out how to now have this hard coded
 
@@ -28,11 +28,28 @@ export default Ext.define('NextThought.common.components.Navigation', {
 		{cls: 'show-more'}
 	])),
 
+	quickLinksTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{tag: 'ul', cn: [
+			{tag: 'tpl', 'for': 'links', cn: [
+				{
+					tag: 'li',
+					cls: 'link',
+					'data-index': '{#}',
+					'data-route': '{route}',
+					'data-title': '{title}',
+					html: '{text}'
+				}
+			]}
+		]}
+	])),
+
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'content-container', cn: [
 			{cls: 'content', cn: [
-				{cls: 'active-content', html: ''},
-				{cls: 'quick-links disabled', html: ''},
+				{cls: 'active-content', cn: [
+					{cls: 'label'},
+					{cls: 'title'}
+				]},
 				{cls: 'wrapper', cn: [
 					{cls: 'tab-container'}
 				]},
@@ -43,8 +60,11 @@ export default Ext.define('NextThought.common.components.Navigation', {
 
 
 	renderSelectors: {
-		titleEl: '.content .active-content',
-		quickLinksEl: '.content .quick-links',
+		activeContentEl: '.content .active-content',
+		titleContainerEl: '.content .active-content .title',
+		titleEl: '.content .active-content .title',
+		labelEl: '.content .active-content .label',
+		quickLinksEl: '.content .active-content .quick-links',
 		tabContainerEl: '.content .tab-container',
 		activeTabEl: '.content .active-tab'
 	},
@@ -54,7 +74,7 @@ export default Ext.define('NextThought.common.components.Navigation', {
 		this.callParent(arguments);
 
 		this.mon(this.tabContainerEl, 'click', this.onTabClick.bind(this));
-		this.mon(this.quickLinksEl, 'click', this.onQuickLinksClicked.bind(this));
+		this.mon(this.activeContentEl, 'click', this.onActiveContentClicked.bind(this));
 		this.mon(Ext.getBody(), 'click', this.maybeHideDropdown.bind(this));
 
 		if (this.tabs) {
@@ -65,82 +85,27 @@ export default Ext.define('NextThought.common.components.Navigation', {
 			.then(this.maybeCollapse.bind(this));
 	},
 
-	/**
-	 * Add a list of quick links to other pieces of content
-	 * links config: {
-	 * 		route: String, //the route for the object
-	 * 		title: String, //the title of the route
-	 * 		text: String, //the text to show for this link
-	 * 		active: Boolean // if this is the active link
-	 * 		isLabel: Boolean // if this is just suppose to be a label in the menu
-	 * }
-	 *
-	 * @param {Array} links [description]
-	 */
-	setQuickLinks: function(links) {
-		if (!this.rendered) {
-			this.on('afterrender', this.setQuickLinks.bind(this, links));
+
+	onMouseEnterTitle: function() {
+		var el = this.titleContainerEl.dom,
+			span = el.querySelector('span'),
+			title = span && span.textContent;
+
+		//if we are wide enough to show the whole title don't do anything
+		if (el.clientWidth >= span.offsetWidth) {
 			return;
 		}
 
-		var active, items = [];
-
-		if (!links || !links.length) {
-			this.quickLinksEl.addCls('hidden disabled');
-			this.titleEl.removeCls('has-quick-link');
-			return;
-		}
-
-		if (this.__quickLinkMenu) {
-			this.__quickLinkMenu.destroy();
-		}
-
-		links.forEach(function(link) {
-			if (link.active) {
-				active = link;
-			} else if (link.isLabel) {
-				items.push({
-					xtype: 'labeledseparator',
-					cls: 'seperator',
-					text: link.text,
-					height: 1
-				});
-			} else {
-				items.push(link);
-			}
-		});
-
-		this.quickLinksEl.removeCls('hidden');
-
-		if (items.length) {
-			this.quickLinksEl.removeCls('disabled');
-
-			this.__quickLinkMenu = Ext.widget('menu', {
-				cls: 'section-menu quick-link-menu',
-				ui: 'quick-link',
-				floating: true,
-				constrain: true,
-				constrainTo: Ext.getBody(),
-				defaults: {
-					xtype: 'menucheckitem',
-					group: 'quickLinkOption',
-					cls: 'section-option',
-					height: 30,
-					plain: true,
-					listeners: {
-						scope: this,
-						'checkchange': this.quickLinkSelected.bind(this)
-					}
-				},
-				items: items
-			});
-		}
-
-		if (active) {
-			this.quickLinksEl.update(active.text);
-			this.titleEl.addCls('has-quick-link');
-		}
+		el.style.textIndent = el.clientWidth - span.offsetWidth + 'px';
 	},
+
+
+	onMouseLeaveTitle: function() {
+		var el = this.titleContainerEl.dom;
+
+		el.style.textIndent = 0;
+	},
+
 
 
 	/**
@@ -229,7 +194,7 @@ export default Ext.define('NextThought.common.components.Navigation', {
 	},
 
 
-	hideDropdown: function() {
+	hideDropdown: function(e) {
 		this.removeCls('show-dropdown');
 	},
 
@@ -263,23 +228,7 @@ export default Ext.define('NextThought.common.components.Navigation', {
 	},
 
 
-	quickLinkSelected: function(item) {
-		if (this.bodyView.onQuickLinkNav) {
-			this.bodyView.onQuickLinkNav(item.title, item.route);
-		}
-	},
-
-
-	onQuickLinksClicked: function(e) {
-		var rect = this.quickLinksEl.dom.getBoundingClientRect();
-
-		if (this.__quickLinkMenu) {
-			this.__quickLinkMenu.showBy(this.quickLinksEl);
-
-			this.__quickLinkMenu.el.dom.style.top = rect.bottom + 'px';
-			this.__quickLinkMenu.el.dom.style.left = rect.left + 'px';
-		}
-	},
+	onActiveContentClicked: function(e) {},
 
 
 	maybeCollapse: function(navWidth, barWidth) {
@@ -303,7 +252,7 @@ export default Ext.define('NextThought.common.components.Navigation', {
 				activeTabEl.addCls('hidden');
 			}
 
-			li.style.top = (35 + (dropdowns * 35)) + 'px';
+			li.style.top = (25 + (dropdowns * 25)) + 'px';
 			dropdowns += 1;
 		}
 
@@ -321,19 +270,31 @@ export default Ext.define('NextThought.common.components.Navigation', {
 
 		tabs = Array.prototype.slice.call(tabs);
 
-		if (barWidth <= 650) {
+		if (navWidth <= 290) {
+			numberToShow = 2;
+			shouldCollapse = true;
+		}else if (navWidth <= 410) {
 			numberToShow = 3;
 			shouldCollapse = true;
-		} else if (barWidth <= 750) {
+		} else if (navWidth <= 518) {
 			numberToShow = 4;
 			shouldCollapse = true;
-		} else if (barWidth <= 865) {
-			numberToShow = 4;
 		} else {
 			numberToShow = tabs.length;
 		}
 
-		console.log('Number To Show: ', numberToShow);
+		// if (barWidth <= 650) {
+		// 	numberToShow = 3;
+		// 	shouldCollapse = true;
+		// } else if (barWidth <= 750) {
+		// 	numberToShow = 4;
+		// 	shouldCollapse = true;
+		// } else if (barWidth <= 865) {
+		// 	numberToShow = 4;
+		// } else {
+		// 	numberToShow = tabs.length;
+		// }
+
 
 		tabs.forEach(function(tab, i) {
 			if (i + 1 <= numberToShow) {

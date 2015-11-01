@@ -6,7 +6,8 @@ export default Ext.define('NextThought.model.courseware.CourseInstanceEnrollment
 		{ name: 'CourseInstance', type: 'singleItem', persist: false },
 		{ name: 'Username', type: 'string' },
 		{ name: 'Status', type: 'string', mapping: 'LegacyEnrollmentStatus'},
-		{ name: 'RealEnrollmentStatus', type: 'string'}
+		{ name: 'RealEnrollmentStatus', type: 'string'},
+		{ name: 'VendorThankYouPage', type: 'auto'}
 	],
 
 
