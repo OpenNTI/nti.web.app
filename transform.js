@@ -126,6 +126,27 @@ function findMixins(root, j) {
 }
 
 
+function findExtends(root, j) {
+	var identifier = root.find(j.Identifier, {name: 'extend'});
+	var	extend = [];
+
+	identifier.forEach(function(i) {
+		var property = i && i.parent && i.parent.value;
+		var value = property && property.value.value;
+
+		if (value) {
+			extend.push({
+				name: getNameFromClassName(value),
+				cls: value,
+				path: getPathToClassName(value)
+			});
+		}
+	});
+
+	return extend;
+}
+
+
 function findGlobals(fileSource) {
 	var keys = Object.keys(globals);
 	var g = [];
@@ -144,6 +165,14 @@ function findGlobals(fileSource) {
 	});
 
 	return g;
+}
+
+
+var isExt = /^Ext/;
+
+
+function isExtComponent(imp) {
+	return !isExt.test(imp.cls);
 }
 
 var importTpl = 'import {name} from "{path}"';
@@ -165,8 +194,11 @@ module.exports = function(fileInfo, api) {
 	var imports = [];
 
 	imports = imports.concat(findGlobals(fileInfo.source));
+	imports = imports.concat(findExtends(root, j));
 	imports = imports.concat(findMixins(root, j));
 	imports = imports.concat(findRequires(root, j));
+
+	imports.filter(isExtComponent);
 
 	imports = imports.map(function(imp) {
 		return buildImportStatement(imp, fileInfo.path);
