@@ -52,7 +52,15 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 						]}
 					]
 				}
-			]}
+			]},
+			{
+				tag: 'li',
+				cls: 'item library meta',
+				'data-root-route': '/',
+				'data-id': 'library',
+				'data-route': '',
+				html: 'See All'
+			}
 		]
 	})),
 
@@ -228,7 +236,7 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 				}
 
 				recent.unshift(data);
-				recent = recent.slice(0, 5);
+				state.recent = recent.slice(0, 5);
 
 				return state;
 			})
