@@ -76,7 +76,7 @@ Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 
 		if (archived && archived.length) {
 			this.addBinnedCourses(this.binCourses(archived), 'Archived Courses', {category: 'archived'});
-			this.addTab({label: 'Archived', category: 'archived', active: Ext.isEmpty(current)});
+			this.addTab({label: 'Archived', category: 'archived', active: Ext.isEmpty(current) && Ext.isEmpty(upcoming)});
 		}
 
 		this.onceRendered
