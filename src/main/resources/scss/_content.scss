@@ -264,14 +264,22 @@
 				display: inline-block;
 				max-width: 100%;
 				overflow: hidden;
-				padding-right: 18px;
 
 				@include ellipse();
 
-				@include icon('mv-dropdown-arrow', $side: after, $top: 50%, $left: auto, $right: 0);
+				&:hover {
+					color: $primary-blue;
+				}
 
 				&::after {
-					margin-top: -4px;
+				    content: '\203a';
+				    line-height: 20px;
+				    width: 1.652rem;
+				    display: inline-block;
+				    text-align: center;
+				    font-size: 30px;
+				    padding-left: 0.2em;
+				    transform: rotate(90deg);
 				}
 			}
 
