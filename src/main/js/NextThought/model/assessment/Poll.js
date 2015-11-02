@@ -18,6 +18,12 @@ Ext.define('NextThought.model.assessment.Poll', {
 		return this.getLink('Aggregated');
 	},
 
+
+	setResults: function(results) {
+		this.__loadResultsPromise = Promise.resolve(results);
+	},
+
+
 	__loadResults: function() {
 		var me = this,
 			link = me.getResultsLink(),
