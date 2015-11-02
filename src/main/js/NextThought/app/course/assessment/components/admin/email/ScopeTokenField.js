@@ -5,7 +5,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.ScopeTokenF
 		'NextThought.app.course.assessment.components.admin.email.components.ScopeSearch'
 	],
 
-	
+	cls: 'user-token-field email-token-field',
 	placeholder: 'Add a recipient',
 
 
@@ -36,6 +36,14 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.ScopeTokenF
 
 		if (token) {
 			this.addSelection(token);
+		}
+	},
+
+
+	setNonEditableToken: function(token){
+		if(token) {
+			this.addSelection(token);
+			this.el.addCls('readOnly');
 		}
 	},
 

@@ -87,7 +87,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		}
 
 		var tabTracker = new NextThought.util.TabIndexTracker(),
-			el = this.el, me = this, t, scope;
+			el = this.el, me = this, t, scope, 
+			to = this.record.get('Receiver'),
+			isIndividualEmail = !Ext.isEmpty(to);
 
 		this.receiverCmp = Ext.widget('course-scope-list', {renderTo: this.receiverEl, tabIndex: tabTracker.next()});
 		this.on('destroy', 'destroy', this.receiverCmp);
@@ -107,11 +109,19 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 				}
 			});
 
-		scope = this.record && this.record.get('scope');
-		scope = this.RECEIVER_MAP[scope];
-		if (this.receiverCmp.setInitialToken) {
-			this.receiverCmp.setInitialToken(scope);				
-		}	
+		if (!isIndividualEmail) {
+			scope = this.record && this.record.get('scope');
+			scope = this.RECEIVER_MAP[scope];
+			if (this.receiverCmp.setInitialToken) {
+				this.receiverCmp.setInitialToken(scope);				
+			}	
+		}
+		else {
+			if (this.receiverCmp.setNonEditableToken) {
+				this.receiverCmp.setNonEditableToken(to);				
+			}
+		}
+			
 	},
 
 

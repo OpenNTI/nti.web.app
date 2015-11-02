@@ -167,6 +167,18 @@
 			.control.publish{
 				cursor: default;
 			}
+
+			&.email-token-field {
+				.token-input-wrap {
+					display: none;
+				}
+
+				.token {
+					.x {
+						display: none !important;
+					}
+				}
+			}
 		}
 		
 		.control.disabled{

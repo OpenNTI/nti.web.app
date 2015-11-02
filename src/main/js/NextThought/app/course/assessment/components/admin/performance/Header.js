@@ -11,6 +11,14 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Heade
 	},
 
 
+	initComponent: function(){
+		this.callParent(arguments);
+
+		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
+	},
+
+
 	setGradeBook: function(historyItem) {
 		this.historyItem = historyItem;
 		this.setUpGradeBox();
@@ -63,9 +71,26 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Heade
 
 	setupCourseEmail: function(emailLink){	
 		var emailEl = this.el.down('.email');
+		this.emailLink = emailLink;
+
 		if (emailEl) {
+			this.mon(emailEl, 'click', this.showEmailEditor.bind(this));
 			emailEl.show();
 		}
+	},
+
+
+	showEmailEditor: function(e) {
+		var me = this,
+			emailRecord = new NextThought.model.Email();
+
+		// Set the link to post the email to
+		emailRecord.set('url', this.emailLink);
+		emailRecord.set('Receiver', this.student);
+
+		// Cache the email record
+		this.WindowStore.cacheObject('new-email', emailRecord);
+		this.WindowActions.showWindow('new-email', null, e.getTarget());
 	},
 
 
