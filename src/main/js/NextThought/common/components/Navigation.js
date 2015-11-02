@@ -5,7 +5,7 @@ Ext.define('NextThought.common.components.Navigation', {
 		'NextThought.common.menus.LabeledSeparator'
 	],
 
-	cls: 'navigation',
+	cls: 'navigation content-navigation',
 
 	TAB_MARGIN: 35, //TODO: figure out how to now have this hard coded
 
