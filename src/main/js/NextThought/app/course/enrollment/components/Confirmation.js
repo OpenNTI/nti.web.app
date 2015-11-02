@@ -131,8 +131,15 @@ Ext.define('NextThought.app.course.enrollment.components.Confirmation', {
 	beforeShow: function() {
 		var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
 			transactionId = purchaseAttempt && purchaseAttempt.get('TransactionID'),
-			enrollment = this.CourseStore.findEnrollmentForCourse(this.course),
-			thankYou = enrollment && enrollment.get('VendorThankYouPage');
+			family = this.course.getCatalogFamily(),
+			enrollment = this.CourseStore.findEnrollmentForCourse(this.course) || this.CourseStore.findForCatalogFamily(family),
+			thankYou;
+
+		if (Array.isArray(enrollment)) {
+			enrollment = enrollment[0];
+		}
+
+		thankYou = enrollment && enrollment.get('VendorThankYouPage');
 
 		if (transactionId) {
 			this.transactionInput.update(transactionId);
