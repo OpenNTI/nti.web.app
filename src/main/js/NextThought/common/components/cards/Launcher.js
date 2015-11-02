@@ -4,7 +4,7 @@ Ext.define('NextThought.common.components.cards.Launcher', {
 	alias: 'widget.content-launcher',
 
 	requires: [
-		'NextThought.model.resolvers.videoservices.Vimeo'
+		'NextThought.model.resolvers.VideoPosters'
 	],
 
 	statics: {
@@ -62,11 +62,12 @@ Ext.define('NextThought.common.components.cards.Launcher', {
 		var video = this.data && this.data.items && this.data.items[0],
 			s = video && video.sources[0],
 			id = s && s.source,
-			Vimeo = NextThought.model.resolvers.videoservices.Vimeo,
+			type = s && s.service,
+			Resolver = NextThought.model.resolvers.VideoPosters,
 			me = this;
 
 		if (id) {
-			Vimeo.resolvePosterForID(id)
+			Resolver.resolvePoster(type, id)
 				.then(function(thumb){
 					var thumbnail = thumb && thumb.thumbnail;
 					me.onceRendered
