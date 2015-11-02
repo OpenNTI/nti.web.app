@@ -65,10 +65,24 @@ Ext.define('NextThought.app.content.components.Navigation', {
 	},
 
 
-	onActiveContentClicked: function() {
+	onActiveContentClicked: function(e) {
 		var active = this.titleContainerEl.dom,
 			rect = active && active.getBoundingClientRect();
 
-		this.ContentSwitcher.openAt(rect.right - 10, rect.bottom);
+		if (this.ContentSwitcher.isVisible()) {
+			this.ContentSwitcher.hide();
+		} else {
+			this.ContentSwitcher.openAt(rect.right - 10, rect.bottom);
+		}
+
+		e.stopPropagation();
+		e.preventDefault();
+	},
+
+
+	onBodyClick: function(e) {
+		if (!e.getTarget('.content-switcher') && this.ContentSwitcher.isVisible()) {
+			this.ContentSwitcher.hide();
+		}
 	}
 });

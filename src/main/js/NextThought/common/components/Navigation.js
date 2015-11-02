@@ -186,6 +186,8 @@ Ext.define('NextThought.common.components.Navigation', {
 		if (!e.getTarget('.content-navigation')) {
 			this.hideDropdown();
 		}
+
+		this.onBodyClick(e);
 	},
 
 
@@ -229,6 +231,7 @@ Ext.define('NextThought.common.components.Navigation', {
 
 
 	onActiveContentClicked: function(e) {},
+	onBodyClick: function(e) {},
 
 
 	maybeCollapse: function(navWidth, barWidth) {
