@@ -63,7 +63,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 				pushRouteState: this.pushRouteState.bind(this),
 				replaceRouteState: this.replaceRouteState.bind(this),
 				student: student,
-				path: 'root'
+				path: 'root',
+				currentBundle: bundle
 			});
 
 		this.currentBundle = bundle;
@@ -169,11 +170,40 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 			path: 'student'
 		});
 
+		me.getStudentEnrollment(record)
+			.then(function(enrollment){	
+				if (enrollment && view.setEnrollmentData) {
+					view.setEnrollmentData(enrollment);
+				}
+			});
+
 		me.getLayout().setActiveItem(view);
 
 		me.setTitle(user.getName());
 
 		return view.setAssignmentsData.apply(view, me.assignmentsData);
+	},
+
+
+	getStudentEnrollment: function(studentRecord) {
+		var roster = this.currentBundle && this.currentBundle.getLink('CourseEnrollmentRoster'),
+			username = studentRecord && studentRecord.get('Username'),
+			smallRequestURLToGetCounts = roster && !Ext.isEmpty(roster) && Ext.String.urlAppend(
+					roster,
+					Ext.Object.toQueryString({
+						batchSize: 1,
+						batchStart: 0,
+						batchAround: username
+					}));
+
+		if (!username) { return Promise.reject(); }
+
+		return Service.request(smallRequestURLToGetCounts)
+					.then(JSON.parse)
+					.then(function(obj) {
+						var enrollment = obj.Items && obj.Items[0];
+						return Promise.resolve(ParseUtils.parseItems(enrollment)[0]);
+					});
 	},
 
 
