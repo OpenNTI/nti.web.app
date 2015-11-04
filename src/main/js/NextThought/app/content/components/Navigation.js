@@ -22,6 +22,8 @@ Ext.define('NextThought.app.content.components.Navigation', {
 	afterRender: function() {
 		this.callParent(arguments);
 
+		this.activeContentEl.addCls('has-switcher');
+
 		if (this.bundle) {
 			this.bundleChanged(this.bundle);
 		}

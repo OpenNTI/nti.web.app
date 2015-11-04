@@ -125,7 +125,8 @@ Ext.define('NextThought.app.content.components.ContentSwitcher', {
 
 
 	getBundleData: function(bundle, route, cls) {
-		var uiData = bundle.asUIData();
+		var me = this,
+			uiData = bundle.asUIData();
 
 		return bundle.getThumbnail()
 			.then(function(thumb) {
