@@ -202,7 +202,7 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 
 
 	resetPlaceholderLabel: function() {
-		this.setPlaceholderText(getString('NextThought.view.form.fields.UserTokenField.resetplaceholder'));
+		this.setPlaceholderText(this.placeholder);
 	},
 
 

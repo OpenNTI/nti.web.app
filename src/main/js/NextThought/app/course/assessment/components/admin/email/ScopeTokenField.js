@@ -6,7 +6,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.ScopeTokenF
 	],
 
 	cls: 'user-token-field email-token-field',
-	placeholder: 'Add a recipient',
+	placeholder: '   Add a recipient',
 
 
 	setupPickerView: function(){
@@ -47,11 +47,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.ScopeTokenF
 		}
 	},
 
-	
-	updatePlaceholderLabel: function(e) {
-		this.setPlaceholderText('   ');
-	},
-
 
 	onBeforeAddToken: function(record) {
 		if (!Ext.isEmpty(this.selections) && !this.containsToken(record)) {
@@ -73,10 +68,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.ScopeTokenF
 				t.addCls('active');
 			}
 
-			this.updatePlaceholderLabel();
+			this.resetPlaceholderLabel();
 		} else if (!this.containsUnresolved() && record.Unresolved) {
 			this.addTag('Others', type);
-			this.updatePlaceholderLabel();
+			this.resetPlaceholderLabel();
 		}
 
 		this.fireEvent('sync-height', this);
@@ -84,8 +79,32 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.ScopeTokenF
 	},
 
 
+	clearResults: function() {
+		this.searchStore.clearFilter();
+	},
+
+
+	showSearch: function(value) {
+		this.pickerView.bindStore(this.searchStore);
+
+		//Clear results right before making a search.
+		this.clearResults();
+		this.searchStore.filter("realname", value);
+	},
+
+
 	getInsertionPoint: function() {
 		return this.wrapEl;
+	},
+
+
+	buildSearchStore: function() {
+		/**
+		 * NOTE: Right now, there no way to add any user/entity to the email sender list. At the gradebook level, 
+		 * it's either All Students or Enrolled Students.
+		 * Both those options are given by the suggestions store.
+		 */
+		return this.buildSuggestionStore();
 	},
 
 
