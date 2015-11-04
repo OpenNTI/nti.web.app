@@ -357,10 +357,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
 
 
 	scrollToTop: function() {
-		var dom = this.view && this.view.el && this.view.el.dom;
+		var dom = Ext.getBody();
 
 		if (dom) {
-			dom.scrollTop = 0;
+			dom.setScrollTop(0);
 		}
 	},
 
