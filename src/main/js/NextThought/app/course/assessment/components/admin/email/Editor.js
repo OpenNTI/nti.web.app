@@ -5,7 +5,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 	requires: [
 		'NextThought.model.Email',
 		'NextThought.app.course.assessment.components.admin.email.Actions',
-		'NextThought.app.course.assessment.components.admin.email.ScopeTokenField'
+		'NextThought.app.course.assessment.components.admin.email.EmailTokenField'
 	],
 
 	enableTitle: true,
