@@ -78,7 +78,45 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 						{ text: 'Completed', dataIndex: 'completed', width: 80, resizable: false, renderer: function(v) {
 							return (v && v.getTime() > 0) ? this.checkMarkTpl : '';
 						} },
-						{ text: 'Score', dataIndex: 'grade', width: 70, resizable: false },
+						{
+							text: 'Score',
+							dataIndex: 'grade',
+							width: 70,
+							resizable: false,
+							doSort: function(state) {
+								function get(o) {
+									var grade = o.get('Grade'),
+										values = grade && grade.getValues(),
+										value = values && values.value,
+										completed = o.get('completed');
+
+									if (!completed) {
+										value = -2;
+									} else if (!value) {
+										value = -1;
+									} else {
+										value = parseFloat(value, 10);
+									}
+
+									return value;
+								}
+
+								var store = this.up('grid').getStore(),
+									sorter = new Ext.util.Sorter({
+										direction: state,
+										property: 'grade',
+										root: 'data',
+										sorterFn: function (a, b) {
+											var aVal = get(a),
+												bVal = get(b);
+
+											return aVal > bVal ? 1 : (aVal < bVal ? -1 : 0);
+										}
+									});
+
+								store.sort(sorter);
+							}
+						},
 						{ text: 'Feedback', dataIndex: 'feedback', tdCls: 'feedback', width: 140, resizable: false,
 							renderer: function(value, col, rec) {
 								var grade = rec.get('Grade'),
