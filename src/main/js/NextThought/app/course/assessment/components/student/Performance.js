@@ -2,6 +2,51 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-performance',
 
+	statics: {
+		getScoreSorter: function() {
+			function get(o) {
+				var grade = o.get('Grade'),
+					values = grade && grade.getValues();
+
+				return (values && values.value) || '';
+			}
+
+			return function(a, b) {
+				var aComp = a.get('completed'),
+					bComp = b.get('completed'),
+					aVal = get(a),
+					bVal = get(b),
+					aNum = parseFloat(aVal),
+					bNum = parseFloat(bVal),
+					sort;
+
+				//Sort completed assignments to the top and
+				//uncompleted to the bottom
+				if (aComp && !bComp) {
+					sort = -1;
+				} else if (!aComp && bComp) {
+					sort = 1;
+				//Sort purely Numeric values to the top and
+				//mixed alphanumeric to the bottom
+				} else if (!isNaN(aNum) && isNaN(bNum)) {
+					sort = -1;
+				} else if (isNaN(aNum) && !isNaN(bNum)) {
+					sort = 1;
+				//Sort higher numbers to the top and
+				//lower numbers to the bottom
+				} else if (!isNaN(aNum) && !isNaN(bNum)) {
+					sort = aNum > bNum ? -1 : aNum === bNum ? 0 : 1;
+				//Sort the strings natural, to put A on top and
+				//Z on bottom
+				} else {
+					sort = Globals.naturalSortComparator(aVal, bVal);
+				}
+
+				return sort;
+			}
+		}
+	},
+
 	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
@@ -97,39 +142,7 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 										direction: state,
 										property: 'grade',
 										root: 'data',
-										sorterFn: function(a, b) {
-											var aComp = a.get('completed'),
-												bComp = b.get('completed'),
-												aVal = get(a),
-												bVal = get(b),
-												aNum = parseFloat(aVal),
-												bNum = parseFloat(bVal),
-												sort;
-
-											//Sort completed assignments to the top and
-											//uncompleted to the bottom
-											if (aComp && !bComp) {
-												sort = -1;
-											} else if (!aComp && bComp) {
-												sort = 1;
-											//Sort purely Numeric values to the top and
-											//mixed alphanumeric to the bottom
-											} else if (!isNaN(aNum) && isNaN(bNum)) {
-												sort = -1;
-											} else if (isNaN(aNum) && !isNaN(bNum)) {
-												sort = 1;
-											//Sort higher numbers to the top and
-											//lower numbers to the bottom
-											} else if (!isNaN(aNum) && !isNaN(bNum)) {
-												sort = aNum > bNum ? -1 : aNum === bNum ? 0 : 1;
-											//Sort the strings natural, to put A on top and
-											//Z on bottom
-											} else {
-												sort = Globals.naturalSortComparator(aVal, bVal);
-											}
-
-											return sort;
-										}
+										sorterFn: NextThought.app.course.assessment.components.student.Performance.getScoreSorter()
 									});
 
 								store.sort(sorter);
