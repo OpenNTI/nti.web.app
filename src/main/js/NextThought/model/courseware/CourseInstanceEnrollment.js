@@ -28,15 +28,5 @@ Ext.define('NextThought.model.courseware.CourseInstanceEnrollment', {
 		var status = this.get('Status');
 
 		return status === 'Open';
-	},
-
-
-	isDroppable: function() {
-		/**
-		 * NOTE: We need better heuristic to tell dropable course from non dropable. 
-		 * For now, if it's open, then it can be droped. 
-		 * Or if it's real enrollment is Public (as opposed to Purchased, ForCredit, ForCreditNonDegree)
-		 */
-		return this.isOpen() || this.get('RealEnrollmentStatus') === 'Public';
 	}
 });

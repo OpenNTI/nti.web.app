@@ -22,7 +22,9 @@ Ext.define('NextThought.app.library.courses.components.settings.CourseOptions', 
 		this.callParent(arguments);
 
 		var isOpen = this.course.isOpen(),
-			registered;
+			registered,
+			catalog = this.course.getCourseCatalogEntry(),
+			isDroppable = catalog && catalog.isDroppable();
 
 		this.CourseEnrollmentStore = NextThought.app.course.enrollment.StateStore.getInstance();
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -34,7 +36,7 @@ Ext.define('NextThought.app.library.courses.components.settings.CourseOptions', 
 			enrollText: registered,// || isOpen ? 'You are taking the Open Course.' : 'You are taking the Credit Course.',
 			supportLink: 'mailto:support@nextthought.com?subject=Support%20Request',
 			reportLink: '',
-			isDroppable: this.course && this.course.isDroppable && this.course.isDroppable()
+			isDroppable: isDroppable
 		});
 	},
 
