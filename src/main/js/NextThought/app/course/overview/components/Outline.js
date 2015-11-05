@@ -49,7 +49,7 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 			this.fromClick = true;
 		},
 		beforeselect: function(s, r) {
-			var pass = r && (r.get('type') !== 'unit' && Boolean(r.get('NTIID'))),
+			var pass = r && (r.get('type') !== 'unit' && Boolean(r.get('isAvailable'))),
 				store = s.getStore(),
 				last = s.lastSelected || store.first(), next;
 
