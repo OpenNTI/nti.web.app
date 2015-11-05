@@ -87,18 +87,9 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 								function get(o) {
 									var grade = o.get('Grade'),
 										values = grade && grade.getValues(),
-										value = values && values.value,
-										completed = o.get('completed');
+										value = values && values.value;
 
-									if (!completed) {
-										value = -2;
-									} else if (!value) {
-										value = -1;
-									} else {
-										value = parseFloat(value, 10);
-									}
-
-									return value;
+									return value || '';
 								}
 
 								var store = this.up('grid').getStore(),
@@ -106,11 +97,38 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 										direction: state,
 										property: 'grade',
 										root: 'data',
-										sorterFn: function (a, b) {
-											var aVal = get(a),
-												bVal = get(b);
+										sorterFn: function(a, b) {
+											var aComp = a.get('completed'),
+												bComp = b.get('completed'),
+												aVal = get(a),
+												bVal = get(b),
+												aNum = parseFloat(aVal),
+												bNum = parseFloat(bVal),
+												sort;
 
-											return aVal > bVal ? 1 : (aVal < bVal ? -1 : 0);
+											//Sort completed assignments to the top and
+											//uncompleted to the bottom
+											if (aComp && !bComp) {
+												sort = -1;
+											} else if (!aComp && bComp) {
+												sort = 1;
+											//Sort purely Numeric values to the top and
+											//mixed alphanumeric to the bottom
+											} else if (!isNaN(aNum) && isNaN(bNum)) {
+												sort = -1;
+											} else if (isNaN(aNum) && !isNaN(bNum)) {
+												sort = 1;
+											//Sort higher numbers to the top and
+											//lower numbers to the bottom
+											} else if (!isNaN(aNum) && !isNaN(bNum)) {
+												sort = aNum > bNum ? -1 : aNum === bNum ? 0 : 1;
+											//Sort the strings natural, to put A on top and
+											//Z on bottom
+											} else {
+												sort = Globals.naturalSortComparator(aVal, bVal);
+											}
+
+											return sort;
 										}
 									});
 
@@ -317,7 +335,7 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 						due: o.get('availableEnding'),
 						completed: submission && submission.get('CreatedTime'),
 						Grade: grade,
-						grade: gradeValue && parseFloat(gradeValue, 10),
+						grade: gradeValue,
 						average: grade && grade.get('average'),
 						Feedback: feedback,
 						feedback: feedback && feedback.get('Items').length,
