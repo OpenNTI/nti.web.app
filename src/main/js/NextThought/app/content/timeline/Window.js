@@ -5,7 +5,8 @@ Ext.define('NextThought.app.content.timeline.Window', {
 	requires: [
 		'NextThought.model.Timeline',
 		'NextThought.app.windows.StateStore',
-		'NextThought.app.content.timeline.components.Header'
+		'NextThought.app.content.timeline.components.Header',
+		'NextThought.util.Analytics'
 	],
 
 	cls: 'timeline-window',
@@ -29,7 +30,7 @@ Ext.define('NextThought.app.content.timeline.Window', {
 
 		me.add({
 			xtype: 'timeline-header',
-			doClose: me.doClose.bind(me)
+			doClose: me.handleClose.bind(me)
 		});
 
 		me.timelineHeight = size[1] - 70 - 40;
@@ -48,7 +49,7 @@ Ext.define('NextThought.app.content.timeline.Window', {
 					xtype: 'box',
 					autoEl: {cls: 'close-btn', html: 'Close'},
 					afterRender: function() {
-						this.mon(this.el, 'click', me.doClose.bind(me));
+						this.mon(this.el, 'click', me.handleClose.bind(me));
 					}
 				}
 			]
@@ -64,6 +65,15 @@ Ext.define('NextThought.app.content.timeline.Window', {
 			embed_id: this.timelineContainer.id,
 			height: this.timelineHeight
 		});
+
+		AnalyticsUtil.getResourceTimer(this.record.get('NTIID'), {type: 'resource-viewed'});
+	},
+
+
+	handleClose: function() {
+		AnalyticsUtil.stopResourceTimer(this.record.get('NTIID'), 'resource-viewed');
+
+		this.doClose();
 	},
 
 
