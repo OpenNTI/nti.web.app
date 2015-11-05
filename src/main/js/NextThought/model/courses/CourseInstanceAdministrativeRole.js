@@ -26,5 +26,9 @@ Ext.define('NextThought.model.courses.CourseInstanceAdministrativeRole', {
 	//return false since admins are enrolled for credit
 	isOpen: function() {
 		return false;
+	},
+
+	isDroppable: function(){
+		return false;
 	}
 });

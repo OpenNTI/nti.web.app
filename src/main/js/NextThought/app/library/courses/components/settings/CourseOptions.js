@@ -15,7 +15,7 @@ Ext.define('NextThought.app.library.courses.components.settings.CourseOptions', 
 		//{cls: 'contact', html: 'Contact the Instructor'},
 		{ tag: 'a', cls: 'support', href: '{supportLink}', html: 'Request Support'},
 		//{ tag: 'a', cls: 'report', html: 'Report an Issue'},
-		{cls: 'drop', html: 'Drop Course'}
+		{ tag: 'tpl', 'if': 'isDroppable', cn: {cls: 'drop', html: 'Drop Course'}}
 	]),
 
 	beforeRender: function() {
@@ -33,7 +33,8 @@ Ext.define('NextThought.app.library.courses.components.settings.CourseOptions', 
 			enrollCls: isOpen ? 'open' : 'enrolled',
 			enrollText: registered,// || isOpen ? 'You are taking the Open Course.' : 'You are taking the Credit Course.',
 			supportLink: 'mailto:support@nextthought.com?subject=Support%20Request',
-			reportLink: ''
+			reportLink: '',
+			isDroppable: this.course && this.course.isDroppable && this.course.isDroppable()
 		});
 	},
 
