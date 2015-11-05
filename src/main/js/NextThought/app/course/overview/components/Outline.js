@@ -30,7 +30,7 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 	overItemCls: 'over',
 	itemSelector: '.outline-row',
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
-		{ cls: 'outline-row {type} {NTIID:boolStr("","disabled")}', 'data-qtip': '{label:htmlEncode}', cn: [
+		{ cls: 'outline-row {type} {isAvailable:boolStr("","disabled")}', 'data-qtip': '{label:htmlEncode}', cn: [
 			{cls: 'label', html: '{label}'},
 			{tag: 'tpl', 'if': 'this.shouldShowDate(values)', cn: {cls: 'date', cn: [
 				{html: '{startDate:date("M")}'},

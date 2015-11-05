@@ -23,6 +23,26 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 
 		{ name: 'position', type: 'int' },
 
+		{ name: 'isAvailable', type: 'Synthetic', persis: false, fn: function(r) {
+			var now = new Date(),
+				ntiid = r.get('NTIID'),
+				start = r.get('AvailableBeginning'),
+				end = r.get('AvailableEnding'),
+				available = true;
+
+			if (!ntiid) {
+				available = false;
+			} else if (start && end) {
+				available = start < now && now < end;
+			} else if (start) {
+				available = start < now;
+			} else if (end) {
+				available = now < end;
+			}
+
+			return available;
+		}},
+
 		{ name: 'type', type: 'Synthetic', persist: false, fn: function(r) {
 			var d = r._max_depth || 2,
 				myDepth = r._depth,
