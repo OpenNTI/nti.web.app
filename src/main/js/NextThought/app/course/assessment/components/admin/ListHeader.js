@@ -88,7 +88,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		this.mon(this.viewingEl, 'click', 'showPageMenu');
 		this.mon(this.filterEl, 'click', this.fireEvent.bind(this, 'showFilters', this.filterEl));
 		this.mon(this.viewAssignmentEl, 'click', this.fireEvent.bind(this, 'goToRawAssignment'));
-		if (this.currentBundle && this.currentBundle.getLink('Mail')) {
+		if (isFeature('instructor-email') && this.currentBundle && this.currentBundle.getLink('Mail')) {
 			this.mon(this.emailEl, 'click', 'showEmailEditor');	
 		}
 		else {

@@ -196,7 +196,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 						batchAround: username
 					}));
 
-		if (!username) { return Promise.reject(); }
+		if (!isFeature('instructor-email') || !username) { return Promise.reject(); }
 
 		return Service.request(smallRequestURLToGetCounts)
 					.then(JSON.parse)
