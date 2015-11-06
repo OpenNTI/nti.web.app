@@ -278,7 +278,7 @@ Ext.define('NextThought.app.mediaviewer.components.reader.NoteOverlay', {
 				r = this.reader,
 				el = r && r.el;
 
-		if (el && el.isVisible(true)) {
+		if (el && !el.isVisible(true)) {
 			Ext.defer(this.syncHeight, 10, this);
 			return;
 		}

@@ -193,6 +193,10 @@
 			@include icon('modal-red-sign', $left: 10px, $top: -5px);
 		}
 
+		&.success {
+			@include icon('assignment_ontime', $left: 10px, $top: -5px);
+		}
+
 		a {
 			text-decoration: none;
 			color: $primary-blue;

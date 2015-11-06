@@ -109,22 +109,6 @@ Ext.define('NextThought.model.ContentBundle', {
 		]);
 	},
 
-	__ensureAsset: function(key, asset) {
-		var existing = null,
-			me = this;
-
-		if (!this.__assetPromises) {
-			this.__assetPromises = {};
-		}
-
-		existing = this.__assetPromises[key];
-		if (!existing) {
-			existing = this.getImgAsset(asset || key).then(function(url) { me.set(key, url); }, me.set.bind(me, [key, null]));
-			this.__assetPromises[key] = existing;
-		}
-
-		return existing;
-	},
 
 	/**
 	 * Return a promise that fulfills with the background image,
@@ -145,9 +129,10 @@ Ext.define('NextThought.model.ContentBundle', {
 		return this.getAsset('icon', 'landing');
 	},
 
-	getAsset: function(key, asset) {
-		return this.__ensureAsset(key, asset).then(this.get.bind(this, key));
+	getThumbnail: function() {
+		return this.getAsset('thumb');
 	},
+
 
 	getTocs: function(status) {
 		var packages = this.get('ContentPackages');

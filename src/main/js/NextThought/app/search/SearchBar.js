@@ -60,7 +60,7 @@ Ext.define('NextThought.app.search.SearchBar', {
 
 		this.mon(this.inputEl, {
 			// focus: this.onInputFocus.bind(this),
-			// blur: this.onInputBlur.bind(this),
+			blur: this.onInputBlur.bind(this),
 			keypress: this.keyPressed.bind(this),
 			keydown: this.keyDown.bind(this)
 		});
@@ -81,6 +81,11 @@ Ext.define('NextThought.app.search.SearchBar', {
 	},
 
 
+	focusInput: function() {
+		this.inputEl.focus();
+	},
+
+
 	onInputFocus: function() {
 		this.isFocused = true;
 		this.onSearchFocus();
@@ -88,8 +93,15 @@ Ext.define('NextThought.app.search.SearchBar', {
 
 
 	onInputBlur: function() {
-		this.isFocused = false;
-		this.onSearchBlur();
+		var me = this;
+
+		me.isFocused = false;
+		me.fromBlur = true;
+		me.onSearchBlur();
+
+		wait(1000).then(function() {
+			delete me.fromBlur;
+		});
 	},
 
 
@@ -122,9 +134,10 @@ Ext.define('NextThought.app.search.SearchBar', {
 
 
 	searchClicked: function(e) {
-		e.stopPropagation();
-
-		this.doNavigation();
+		if (!e.getTarget('.collapsed') || this.fromBlur) {
+			e.stopPropagation();
+			this.doNavigation();
+		}
 	},
 
 

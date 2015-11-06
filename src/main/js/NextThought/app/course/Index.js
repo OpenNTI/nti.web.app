@@ -79,8 +79,6 @@ Ext.define('NextThought.app.course.Index', {
 		this.addRoute('/info', this.showInfo.bind(this));
 		this.addRoute('/content', this.showContent.bind(this));
 
-		this.addObjectHandler(NextThought.model.PageInfo.mimeType, this.getPageInfoRoute.bind(this));
-		this.addObjectHandler(NextThought.model.RelatedWork.mimeType, this.getRelatedWorkRoute.bind(this));
 		this.addObjectHandler([
 			NextThought.model.assessment.Assignment.mimeType,
 			NextThought.model.assessment.TimedAssignment.mimeType
@@ -147,68 +145,6 @@ Ext.define('NextThought.app.course.Index', {
 		}
 
 		return me.getActiveCourse;
-	},
-
-
-	getQuickLinks: function() {
-		var bundle = this.activeBundle,
-			now = new Date(),
-			activeId = bundle.getId(),
-			courseStore = this.CourseStore;
-
-		function getAdmin() {
-			var adminCourses = courseStore.getAdminCourses() || [],
-					current = [], archived = [];
-
-			adminCourses.forEach(function(course) {
-				var instance = course.get('CourseInstance'),
-					data = instance && instance.asUIData() || {},
-					routeId = data.id && ParseUtils.encodeForURI(data.id),
-					catalog = instance && instance.getCourseCatalogEntry(),
-					endDate = catalog.get('EndDate'),
-					labelData;
-
-				if (data.label) {
-					labelData = {
-						route: '/course/' + routeId,
-						title: data.title,
-						text: data.label,
-						active: data.id === activeId
-					};
-
-					if (endDate < now) {
-						archived.push(labelData);
-					} else {
-						current.push(labelData);
-					}
-				}
-			});
-
-			if (archived.length) {
-				current.push({text: 'Archived', isLabel: true});
-				current = current.concat(archived);
-			}
-
-			return current;
-		}
-
-
-		function getStudent() {
-			return [];
-		}
-
-		if (!bundle || !bundle.getWrapper) {
-			return Promise.resolve([]);
-		}
-
-		return bundle.getWrapper()
-			.then(function(enrollment) {
-				if (!enrollment.isAdministrative) {
-					return getStudent();
-				}
-
-				return getAdmin();
-			});
 	},
 
 

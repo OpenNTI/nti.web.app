@@ -74,7 +74,7 @@
 			vertical-align: middle;
 		}
 
-		&:hover {
+		&:hover, &.active {
 			color: #fff;
 			border-color: $border-blue;
 			background: $primary-blue;
@@ -166,6 +166,18 @@
 		&.readOnly{
 			.control.publish{
 				cursor: default;
+			}
+
+			&.email-token-field {
+				.token-input-wrap {
+					display: none;
+				}
+
+				.token {
+					.x {
+						display: none !important;
+					}
+				}
 			}
 		}
 		

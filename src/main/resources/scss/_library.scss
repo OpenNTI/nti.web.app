@@ -765,6 +765,7 @@ li.library-grid-item {
 
 			.author {
 				color: $primary-blue;
+				@include ellipse();
 			}
 
 			.author:not(:empty):not(.provider-id)::before{content: 'By ';}

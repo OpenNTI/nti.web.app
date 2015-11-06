@@ -105,13 +105,6 @@ extend: 'Ext.container.Container',
 		this.filterMenu = this.down('filter-menupanel');
 		this.grid = this.down('grid');
 
-		this.on({
-			el: {
-				mousewheel: 'onPushScroll',
-				DOMMouseScroll: 'onPushScroll'
-			}
-		});
-
 		this.mon(this.filterMenu, {
 			filter: 'doFilter',
 			search: {fn: 'doSearch', buffer: 450}
@@ -123,6 +116,8 @@ extend: 'Ext.container.Container',
 
 	afterRender: function() {
 		this.callParent(arguments);
+
+		var me = this;
 		this.filterLink = this.down('[itemId=filtermenu]');
 		this.mon(this.filterLink, {
 			el: {
@@ -132,20 +127,19 @@ extend: 'Ext.container.Container',
 		});
 
 		this.mon(this.grid, 'itemClick', 'maybeShowDisclosureMenu');
+		Ext.EventManager.onWindowResize(this.onWindowResize, this, false);
+		me.on('destroy', function() {
+			Ext.EventManager.removeResizeListener(me.onWindowResize, me);
+		});
 	},
+
 
 	onActivate: function(){
 		var grid = this.down('grid');
 		if(grid && grid.store){
 			grid.getView().refresh();
+			wait().then(this.adjustHeight.bind(this));
 		}
-	},
-
-
-	onPushScroll: function pushScroll(e) {
-		var d = e.getWheelDelta();
-
-		console.debug(d);
 	},
 
 
@@ -161,6 +155,40 @@ extend: 'Ext.container.Container',
 
 		// Bind store after load.
 		this.down('grid').bindStore(this.store);
+		wait().then(this.adjustHeight.bind(this));
+	},
+
+
+	__getGridMaxHeight: function() {
+		// deduct in order Top NavBar, paddingtop, roster header, roster grouping, column header. 
+		// TODO: Find a better way to do this.
+		return Ext.Element.getViewportHeight() - 70 - 40 - 200 - 72 - 30;
+	},
+
+
+	adjustHeight: function() {
+		var grid = this.down('grid'),
+			scrollTarget = grid && grid.getScrollTarget(),
+			currentHeight = scrollTarget && scrollTarget.getHeight(),
+			maxHeight = this.__getGridMaxHeight();
+
+		if (currentHeight > maxHeight && scrollTarget) {
+			scrollTarget.el.setHeight(maxHeight);
+			this.el.setHeight(Ext.Element.getViewportHeight() - 90 - 20);
+		}
+	},
+
+
+	onWindowResize: function() {
+		var grid = this.down('grid'),
+			scrollTarget = grid && grid.getScrollTarget(),
+			scrollHeight = scrollTarget && scrollTarget.el && scrollTarget.el.dom.scrollHeight,
+			maxHeight = this.__getGridMaxHeight();
+
+		if (scrollHeight > maxHeight) {
+			scrollTarget.el.setHeight(maxHeight);
+			this.el.setHeight(Ext.Element.getViewportHeight() - 90 - 20);
+		}
 	},
 
 

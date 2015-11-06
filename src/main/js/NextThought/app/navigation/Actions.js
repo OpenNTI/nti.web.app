@@ -32,13 +32,13 @@ Ext.define('NextThought.app.navigation.Actions', {
 
 		navigateToHref: function(href) {
 			var parts = href.split('#'),
-					context = this.getContext(),
-					newBase = parts[0],
-					newFragment = parts[1],
-					currentLocation = window.location.href,
-					currentParts = currentLocation.split('#'),
-					currentBase = currentParts[0],
-					currentFragment = currentParts[1];
+				context = this.getContext(),
+				newBase = parts[0],
+				newFragment = parts[1],
+				currentLocation = window.location.href,
+				currentParts = currentLocation.split('#'),
+				currentBase = currentParts[0],
+				currentFragment = currentParts[1];
 
 			//Are we an nttid?
 			if (ParseUtils.isNTIID(newBase)) {
@@ -73,6 +73,16 @@ Ext.define('NextThought.app.navigation.Actions', {
 				catch (er) {
 					console.error('Unable to open ', href, 'with target _blank.', Globals.getError(href));
 				}
+				return true;
+			//Even is the link is internal, if its a pdf we want to open it in a new tab
+			//TODO: Should we open this in a new tab or the same tab?
+			} else if (/\.pdf(\?.*|\#.*)?$/.test(href)) {
+				try {
+					window.open(href, '_blank');
+				} catch (er) {
+					console.error('Unable to open pdf ', href);
+				}
+
 				return true;
 			}
 

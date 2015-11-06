@@ -24,7 +24,9 @@ Ext.define('NextThought.store.BatchInterface', {
 		}
 
 		this.url = config.url;
-		this.params = config.params;
+		this.params = config.params || {};
+
+		this.batchSize = this.params.batchSize;
 
 		this.__nextLink = config.nextLink;
 		this.__previousLink = config.previousLink;

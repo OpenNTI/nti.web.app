@@ -3,6 +3,10 @@ Ext.define('NextThought.common.components.cards.Launcher', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-launcher',
 
+	requires: [
+		'NextThought.model.resolvers.VideoPosters'
+	],
+
 	statics: {
 		getData: function(dom, reader, items, getThumb) {
 			var data = DomUtils.parseDomObject(dom);
@@ -12,7 +16,7 @@ Ext.define('NextThought.common.components.cards.Launcher', {
 				basePath: reader && reader.basePath,
 				description: data.description,
 				title: data.title,
-				thumbnail: getThumb(dom, data),
+				thumbnail: data && data.poster || getThumb(dom, data),
 				items: items
 			});
 			return data;
@@ -32,6 +36,10 @@ Ext.define('NextThought.common.components.cards.Launcher', {
 		]}
 	]),
 
+	renderSelectors: {
+		thumbnailEl: '.thumbnail'
+	},
+
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -42,6 +50,33 @@ Ext.define('NextThought.common.components.cards.Launcher', {
 				click: 'onLaunch'
 			}
 		});
+
+		// For vimeo video, we will have to resolve their thumbnail.
+		if(this.data && !this.data.thumbnail) {
+			this.resolveVideoThumbnail();
+		}
+	},
+
+
+	resolveVideoThumbnail: function() {
+		var video = this.data && this.data.items && this.data.items[0],
+			s = video && video.sources[0],
+			id = s && s.source,
+			type = s && s.service,
+			Resolver = NextThought.model.resolvers.VideoPosters,
+			me = this;
+
+		if (id) {
+			Resolver.resolvePoster(type, id)
+				.then(function(thumb){
+					var thumbnail = thumb && thumb.thumbnail;
+					me.onceRendered
+						.then(function(){
+							me.thumbnailEl.setStyle('backgroundImage', 'url('+ thumbnail +')');
+						})
+				});
+		}
+
 	},
 
 

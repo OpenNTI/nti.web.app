@@ -206,6 +206,9 @@ Ext.define('NextThought.app.content.content.Index', {
 		return this.__loadContent(ntiid, obj)
 			.then(function(page) {
 				me.showReader(page, route.precache.parent, route.hash);
+				if (me.activeMediaWindow) {
+					me.activeMediaWindow.destroy();
+				}
 			});
 	},
 
@@ -214,9 +217,35 @@ Ext.define('NextThought.app.content.content.Index', {
 	 	var me = this,
 	 		root = route.params.id,
 	 		page = route.params.page,
-	 		obj = route.precache.pageInfo || route.precache.relatedWork;
+	 		obj = route.precache.pageInfo || route.precache.relatedWork,
+	 		precache = route.precache,
+	 		vid, video;
 
 	 	root = ParseUtils.decodeFromURI(root);
+
+	 	if (page === 'video') {
+	 		vid = subRoute.split('/')[1];
+	 		vid = ParseUtils.decodeFromURI(vid);
+	 		video = precache.video || precache.precache && precache.precache.video;
+	 		
+	 		return this.__loadContent(root, obj)
+				.then(function(page) {
+					me.showReader(page, route.precache.parent, route.hash);
+					var p = video ? Promise.resolve(video) 
+								  : Service.getObject(vid).then(function(v){
+								  		var o = v.isModel ? v.raw : v,
+								  			video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
+
+								  		return Promise.resolve(video);
+								    });
+
+					p.then(function(video) {
+						route.precache.video = video;
+						me.showMediaView(route, subRoute);	
+					});
+				});
+	 	}
+
 	 	page = ParseUtils.decodeFromURI(page);
 
 	 	if (!this.root) {
@@ -224,6 +253,10 @@ Ext.define('NextThought.app.content.content.Index', {
 	 	} else if (this.root !== root) {
 	 		console.warn('Trying to show a reading a root that is different form what we got the root set as...');
 	 	}
+
+	 	if (me.activeMediaWindow) {
+			me.activeMediaWindow.destroy();
+		}
 
 	 	return this.__loadContent(page, obj)
 	 		.then(function(page) {
@@ -240,6 +273,61 @@ Ext.define('NextThought.app.content.content.Index', {
 				me.showReader(pageInfo, null, route.hash);
 			})
 			.fail(this.__onFail.bind(this));
+	},
+
+
+	getVideoRouteForObject: function(obj) {
+		var page = obj.page,
+			pageId = page && page.isModel ? page.getId() : page,
+			videoId = obj.get && obj.getId();
+
+		pageId = ParseUtils.encodeForURI(pageId);
+		videoId = ParseUtils.encodeForURI(videoId);
+
+		return {
+			route: pageId + '/video/' + videoId,
+			title: obj.get && obj.get('title'),
+			precache: {
+				video: obj.isModel ? obj : null,
+				page: page,
+				basePath: obj.basePath
+			}
+		};
+	},
+
+
+	showMediaView: function(route, subRoute) {
+		var me = this,
+			root = route.params.id;
+
+		if (!me.activeMediaWindow) {
+			me.activeMediaWindow = me.add({
+				xtype: 'media-window-view',
+				currentBundle: me.currentBundle,
+				autoShow: true,
+				handleNavigation: me.handleNavigation.bind(me)
+			});
+
+			me.addChildRouter(me.activeMediaWindow);
+
+			me.activeMediaWindow.fireEvent('suspend-annotation-manager', this);
+			me.activeMediaWindow.on({
+				'beforedestroy': function() {
+					// me.getLayout().setActiveItem(me.getLessons());
+				},
+				'destroy': function() {
+					if (me.activeMediaWindow) {
+						me.activeMediaWindow.fireEvent('resume-annotation-manager', this);
+					}
+					delete me.activeMediaWindow;
+				}
+			});
+		}
+
+		// me.getLayout().setActiveItem(me.activeMediaWindow);
+		me.activeMediaWindow.currentBundle = me.currentBundle;
+		me.activeMediaWindow.parentLesson = root;
+		return me.activeMediaWindow.handleRoute(subRoute, route.precache);
 	},
 
 

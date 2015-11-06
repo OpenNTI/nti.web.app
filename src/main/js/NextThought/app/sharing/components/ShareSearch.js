@@ -17,18 +17,22 @@ Ext.define('NextThought.app.sharing.components.ShareSearch', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.searchList = this.add({
-			xtype: 'share-search',
-			ownerCls: this.ownerCls,
-			loadMaskContainer: this.el,
-			selectItem: this.selectItem.bind(this)
-		});
+		this.setupSearchList();
 
 		if (this.store) {
 			this.searchList.bindStore(this.store);
 		}
 
 		this.mon(this.el, 'click', this.onClicked.bind(this));
+	},
+
+	setupSearchList: function(){
+		this.searchList = this.add({
+			xtype: 'share-search',
+			ownerCls: this.ownerCls,
+			loadMaskContainer: this.el,
+			selectItem: this.selectItem.bind(this)
+		});
 	},
 
 

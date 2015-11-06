@@ -110,7 +110,12 @@ Ext.define('NextThought.util.Content', {
 	externalUriRegex: /^((\/\/)|([a-z][a-z0-9\+\-\.]*):)/i,
 
 	isExternalUri: function(r) {
-		return this.externalUriRegex.test(r);
+		var targetURL = new URL(r),
+			targetHost = targetURL && targetURL.host,
+			currentHost = window.location && window.location.host;
+		
+		// return this.externalUriRegex.test(r);
+		return targetHost !== currentHost;
 	},
 
 	/**

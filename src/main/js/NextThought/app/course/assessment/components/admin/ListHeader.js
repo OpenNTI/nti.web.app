@@ -3,7 +3,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 	alias: 'widget.course-assessment-admin-listheader',
 
 	requires: [
-		'NextThought.common.menus.LabeledSeparator'
+		'NextThought.common.menus.LabeledSeparator',
+		'NextThought.app.course.assessment.components.admin.email.Window',
+		'NextThought.model.Email',
+		'NextThought.app.windows.StateStore'
 	],
 
 
@@ -34,6 +37,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 				]}
 			]},
 			{cls: 'controls', cn: [
+				{tag: 'a', cls: 'request email', 'data-qtip': 'Email Enrolled Students'},
 				{tag: 'a', cls: 'export'},
 				{tag: 'a', cls: 'settings'}
 			]},
@@ -62,6 +66,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		filterEl: '.assignment .filter',
 		exportEl: '.controls .export',
 		settingsEl: '.controls .settings',
+		emailEl: '.controls .email',
 		viewingEl: '.page .viewing',
 		startIndexEl: '.page .viewing .startIndex',
 		endIndexEl: '.page .viewing .endIndex',
@@ -83,6 +88,17 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		this.mon(this.viewingEl, 'click', 'showPageMenu');
 		this.mon(this.filterEl, 'click', this.fireEvent.bind(this, 'showFilters', this.filterEl));
 		this.mon(this.viewAssignmentEl, 'click', this.fireEvent.bind(this, 'goToRawAssignment'));
+		if (isFeature('instructor-email') && this.currentBundle && this.currentBundle.getLink('Mail')) {
+			this.mon(this.emailEl, 'click', 'showEmailEditor');	
+		}
+		else {
+			this.emailEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+			this.emailEl.hide();
+		}
+
+		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
+		wait(10).then(this.onStudentFilterChange.bind(this));
 	},
 
 
@@ -208,6 +224,40 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 
 		me.settingsMenu.show().hide();
 	},
+
+
+	onStudentFilterChange: function(filter) {
+		var q;
+		
+		if (!filter) {
+			filter = this.ownerCt && this.ownerCt.studentFilter;
+		}
+
+		q = filter === 'ForCredit' ? 'Email Enrolled Students' : 'Email All Students';
+		if (this.emailEl) {
+			this.emailEl.dom.setAttribute('data-qtip', q);
+		}
+	},
+
+	
+	showEmailEditor: function(e) {
+		var me = this,
+			editor,
+			emailRecord = new NextThought.model.Email(),
+			scope = this.ownerCt && this.ownerCt.studentFilter === 'ForCredit' ? 'ForCredit' : 'All';
+
+		// Set the link to post the email to
+		emailRecord.set('url', this.currentBundle && this.currentBundle.getLink('Mail'));
+		emailRecord.set('scope', scope);
+
+		// Cache the email record
+		this.WindowStore.cacheObject('new-email', emailRecord);
+
+		this.WindowActions.showWindow('new-email', null, e.getTarget(), {afterSave: this.onCourseEmailSent.bind(this)});
+	},
+
+
+	onCourseEmailSent: function(){},
 
 
 	showSettingsMenu: function() {

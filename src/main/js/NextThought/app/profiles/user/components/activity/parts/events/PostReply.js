@@ -135,7 +135,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.PostR
 						return c;
 					});
 				}
-			});
+			}, this, null, null, null, {useVideoPlaceholder: true});
 		}
 	},
 

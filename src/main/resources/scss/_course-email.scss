@@ -1,0 +1,86 @@
+.email-window {
+	.email-editor {
+		.editor {
+			.main {
+				.aux {
+					padding: 0;
+
+					.row {
+						padding: 0 10px;
+						border-bottom: 1px solid #f2f2f2;
+						position: relative;
+						height: 40px;
+
+						&:last-of-type {
+							border-bottom-width: 0;
+						}
+
+						.label {
+							font: normal italic 16px/30px $font;
+							padding: 0;
+							color: $tertiary-grey;
+							position: absolute;
+							top: 10px;
+							left: 15px;
+							width: 30px;
+						}
+
+						.field {
+							position: relative;
+							margin-left: 40px;
+							top: 5px;
+
+							input {
+								display: block;
+								font: normal 300 16px/30px $font;
+								border: 0;
+								margin: 0;
+								width: 100%;
+								color: $secondary-grey;
+								height: 28px;
+							}
+						}
+
+						.action {
+							position: absolute;
+							top: 7px;
+							right: 10px;
+							left: auto;
+							bottom: auto;
+							width: 112px;
+							height: 26px;
+
+							.no-reply-picker {
+								cursor: pointer;
+								background-color: white;
+								font-weight: 400;
+								font-size: 0.875em;
+								color: $secondary-grey;
+								padding: 3px 25px 3px 10px;
+								position: relative;
+								text-align: right;
+
+								.empty {
+									display: none;
+								}
+
+								@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 10px, $left: auto, $right: 7px);
+
+								&:hover {
+									color: $primary-grey;
+									@include icon('mv-dropdown-arrow', $position: relative, $side: after, $top: 10px, $left: auto, $right: 7px);
+								}
+							}
+						}
+					}
+				}
+
+				.title {
+					input {
+					    font: normal 300 18px/30px $font;
+					}
+				}
+			}
+		}
+	}
+}

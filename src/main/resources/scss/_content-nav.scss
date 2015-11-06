@@ -415,16 +415,6 @@
 		&.x-active {
 			color: $secondary-grey;
 
-			&::after{
-				content: '';
-				position: absolute;
-				display: block;
-				bottom: 0;
-				left: 0; right: 0;
-				background: $secondary-grey;
-				height: 4px;
-			}
-
 			.x-tab-icon-el {
 				&.notepad::after { @include sprite($icons,'notepad_active'); }
 				&.discuss::after { @include sprite($icons,'discussions_active'); }

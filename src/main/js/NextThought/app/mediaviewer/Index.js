@@ -106,14 +106,14 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 		var me = this,
 			p = slidedeck && slidedeck.isModel ? Promise.resolve(slidedeck) : Service.getObject(slidedeckId);
 
-		p.then(function(deck){
+		p.then(function(deck) {
 			me.slidedeck = deck;
 			me.slidedeckId = slidedeckId;
 			delete me.video;
 			delete me.videoId;
 
 			me.MediaActions.buildSlidedeckPlaylist(deck)
-				.then( function(obj) {
+				.then(function(obj) {
 					me.activeMediaView.setSlidedeckContent(deck, obj.videos, obj.items, options);
 				});
 		});
@@ -170,32 +170,27 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 			return Promise.resolve(me.video);
 		}
 
-		return new Promise(function(fulfill, reject) {
-			me.currentBundle.getVideoForId(id)
-				.then(function(o) {
-					if (!o) { return reject(); }
+		return me.currentBundle.getVideoForId()
+			.then(function(o) {
+				if (!o) { return reject(); }
 
-					video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
-					fulfill(video);
-				});
-		});
+				video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
+				return video;
+			});
 	},
 
 
 	getContext: function() {
 		var me = this;
-		return new Promise(function(fulfill) {
-			me.resolveVideo(me.mediaId)
-				.then(fulfill)
+
+		return me.resolveVideo(me.mediaId)
 				.fail(function() {
 					if (me.slidedeck && me.slidedeck.getId() === me.mediaId) {
-						fulfill(me.slidedeck);
-						return;
+						return me.slidedeck;
 					}
 
-					Service.getObject(me.mediaId).then(fulfill);
+					return Service.getObject(me.mediaId);
 				});
-		});
 	},
 
 

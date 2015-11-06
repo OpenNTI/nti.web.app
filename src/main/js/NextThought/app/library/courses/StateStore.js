@@ -184,6 +184,17 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 	},
 
 
+	__findAllIn: function(list, fn) {
+		return list.reduce(function(acc, item) {
+			if (fn.call(null, item)) {
+				acc.push(item);
+			}
+
+			return acc;
+		}, []);
+	},
+
+
 	findCourseBy: function(fn) {
 		var enrolled = this.ENROLLED_COURSES || [],
 			admin = this.ADMIN_COURSES || [],
@@ -196,6 +207,14 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 		}
 
 		return course;
+	},
+
+
+	findCoursesBy: function(fn) {
+		var enrolled = this.__findAllIn(this.ENROLLED_COURSES || [], fn),
+			admin = this.__findAllIn(this.ADMIN_COURSES || [], fn);
+
+		return admin.concat(enrolled);
 	},
 
 
@@ -348,5 +367,18 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 		});
 
 		return !!found;
+	},
+
+	/**
+	 * Return all courses in the same catalog family
+	 * @param  {String} familyId id of the catalog family to search for
+	 * @return {[Course]}        list of courses in the same catalog family
+	 */
+	findForCatalogFamily: function(familyId) {
+		return this.findCoursesBy(function(course) {
+			var instance = course.get('CourseInstance');
+
+			return instance.isInFamily(familyId);
+		});
 	}
 });
