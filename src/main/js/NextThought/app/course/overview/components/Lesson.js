@@ -15,52 +15,6 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 	layout: 'none',
 	cls: 'course-overview',
 
-	requires: [
-		'NextThought.app.course.overview.components.parts.ContentLink',
-		'NextThought.app.course.overview.components.parts.Discussion',
-		'NextThought.app.course.overview.components.parts.Header',
-		'NextThought.app.course.overview.components.parts.IframeWindow',
-		'NextThought.app.course.overview.components.parts.Poll',
-		'NextThought.app.course.overview.components.parts.QuestionSet',
-		'NextThought.app.course.overview.components.parts.Section',
-		'NextThought.app.course.overview.components.parts.Spacer',
-		'NextThought.app.course.overview.components.parts.Survey',
-		'NextThought.app.course.overview.components.parts.Timeline',
-		'NextThought.app.course.overview.components.parts.Topic',
-		'NextThought.app.course.overview.components.parts.Videos',
-		'NextThought.proxy.JSONP'
-	],
-
-	SECTION_TITLE_MAP: {
-		'video': getString('NextThought.view.courseware.overview.View.video'),
-		'discussions': getString('NextThought.view.courseware.overview.View.discussion'),
-		'additional': getString('NextThought.view.courseware.overview.View.additional'),
-		'required': getString('NextThought.view.courseware.overview.View.required'),
-		'assessments': getString('NextThought.view.courseware.overview.View.assessment'),
-		'session-overview': getString('NextThought.view.courseware.overview.View.session'),
-		'assignments': getString('NextThought.view.courseware.overview.View.assignments')
-	},
-
-	SECTION_TYPE_MAP: {
-		'course-overview-ntivideo': 'video',
-		'course-overview-content': 'additional',
-		'course-overview-discussion': 'discussions',
-		'course-overview-externallink': 'additional',
-		'course-overview-naquestionset': 'assessments',
-		'course-overview-assignment': 'assignments'
-	},
-
-	SECTION_CONTAINER_MAP: {
-		'video': 'course-overview-section',
-		'discussions': 'course-overview-section',
-		'additional': 'course-overview-section',
-		'required': 'course-overview-section',
-		'assessments': 'course-overview-section',
-		'session-overview': 'course-overview-section',
-		'assigments': 'course-overview-section'
-	},
-
-
 	afterRender: function() {
 		this.callParent(arguments);
 
@@ -118,7 +72,6 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 
 	renderLesson: function(record) {
-		debugger;
 		var me = this,
 			course = me.bundle,
 			overviewsrc = (record && record.getLink('overview-content')) || null;
@@ -137,9 +90,12 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 		if (me.currentOverview && me.currentOverview.record.getId() === record.getId()) {
 			if (me.currentOverview.refresh) {
-				me.currentOverview.refresh();
+				 return me.currentOverview.refresh()
+							.always(me.maybeUnmask.bind(me));
 			}
+
 			me.maybeUnmask();
+
 			return Promise.resolve();
 		}
 

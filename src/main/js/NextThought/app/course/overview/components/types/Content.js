@@ -20,9 +20,8 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 	],
 
 
-
-	setItems: function(items) {
-
+	setCollection: function(collection) {
+		this.buildFromContent(collection, this.record, this.enrollment, this.locInfo, this.assignments, this.course);
 	},
 
 
