@@ -5,7 +5,7 @@ Ext.define('NextThought.common.components.Navigation', {
 		'NextThought.common.menus.LabeledSeparator'
 	],
 
-	cls: 'navigation',
+	cls: 'navigation content-navigation',
 
 	TAB_MARGIN: 35, //TODO: figure out how to now have this hard coded
 
@@ -186,6 +186,8 @@ Ext.define('NextThought.common.components.Navigation', {
 		if (!e.getTarget('.content-navigation')) {
 			this.hideDropdown();
 		}
+
+		this.onBodyClick(e);
 	},
 
 
@@ -229,6 +231,7 @@ Ext.define('NextThought.common.components.Navigation', {
 
 
 	onActiveContentClicked: function(e) {},
+	onBodyClick: function(e) {},
 
 
 	maybeCollapse: function(navWidth, barWidth) {

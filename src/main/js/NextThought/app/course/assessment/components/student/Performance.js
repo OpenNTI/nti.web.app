@@ -2,6 +2,51 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-performance',
 
+	statics: {
+		getScoreSorter: function() {
+			function get(o) {
+				var grade = o.get('Grade'),
+					values = grade && grade.getValues();
+
+				return (values && values.value) || '';
+			}
+
+			return function(a, b) {
+				var aComp = a.get('completed'),
+					bComp = b.get('completed'),
+					aVal = get(a),
+					bVal = get(b),
+					aNum = parseFloat(aVal),
+					bNum = parseFloat(bVal),
+					sort;
+
+				//Sort completed assignments to the top and
+				//uncompleted to the bottom
+				if (aComp && !bComp) {
+					sort = -1;
+				} else if (!aComp && bComp) {
+					sort = 1;
+				//Sort purely Numeric values to the top and
+				//mixed alphanumeric to the bottom
+				} else if (!isNaN(aNum) && isNaN(bNum)) {
+					sort = -1;
+				} else if (isNaN(aNum) && !isNaN(bNum)) {
+					sort = 1;
+				//Sort higher numbers to the top and
+				//lower numbers to the bottom
+				} else if (!isNaN(aNum) && !isNaN(bNum)) {
+					sort = aNum > bNum ? -1 : aNum === bNum ? 0 : 1;
+				//Sort the strings natural, to put A on top and
+				//Z on bottom
+				} else {
+					sort = Globals.naturalSortComparator(aVal, bVal);
+				}
+
+				return sort;
+			}
+		}
+	},
+
 	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
@@ -78,7 +123,31 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 						{ text: 'Completed', dataIndex: 'completed', width: 80, resizable: false, renderer: function(v) {
 							return (v && v.getTime() > 0) ? this.checkMarkTpl : '';
 						} },
-						{ text: 'Score', dataIndex: 'grade', width: 70, resizable: false },
+						{
+							text: 'Score',
+							dataIndex: 'grade',
+							width: 70,
+							resizable: false,
+							doSort: function(state) {
+								function get(o) {
+									var grade = o.get('Grade'),
+										values = grade && grade.getValues(),
+										value = values && values.value;
+
+									return value || '';
+								}
+
+								var store = this.up('grid').getStore(),
+									sorter = new Ext.util.Sorter({
+										direction: state,
+										property: 'grade',
+										root: 'data',
+										sorterFn: NextThought.app.course.assessment.components.student.Performance.getScoreSorter()
+									});
+
+								store.sort(sorter);
+							}
+						},
 						{ text: 'Feedback', dataIndex: 'feedback', tdCls: 'feedback', width: 140, resizable: false,
 							renderer: function(value, col, rec) {
 								var grade = rec.get('Grade'),
@@ -279,7 +348,7 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 						due: o.get('availableEnding'),
 						completed: submission && submission.get('CreatedTime'),
 						Grade: grade,
-						grade: gradeValue && parseFloat(gradeValue, 10),
+						grade: gradeValue,
 						average: grade && grade.get('average'),
 						Feedback: feedback,
 						feedback: feedback && feedback.get('Items').length,

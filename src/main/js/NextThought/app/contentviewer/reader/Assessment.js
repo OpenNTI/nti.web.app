@@ -81,12 +81,10 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			historyLink = survey.getLink('History'),
 			reportLink = survey.getReportLink();
 
-		if (historyLink || survey.get('isClosed') || reportLink) {
-			this.surveyHeader = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessent-survey-header', {
-				reader: r, renderTo: c, survey: survey,
-				tabIndexTracker: o.tabIndexer
-			}));
-		}
+		this.surveyHeader = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessent-survey-header', {
+			reader: r, renderTo: c, survey: survey,
+			tabIndexTracker: o.tabIndexer
+		}));
 
 		questions.forEach(function(poll) {
 			me.makeAssessmentPoll(poll, survey);

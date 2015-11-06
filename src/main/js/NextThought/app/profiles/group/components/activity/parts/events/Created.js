@@ -15,11 +15,10 @@ Ext.define('NextThought.app.profiles.group.components.activity.parts.events.Crea
 
 
 	beforeRender: function() {
-		var me = this;
-		me.callParent(arguments);
-		var rd = me.renderData = Ext.apply(this.renderData || {},me.entity.getData());
-		rd.entity = me.entity;
-	    rd.name = me.entity.getName();
-		rd.date = Ext.Date.format(me.entity.get('CreatedTime'), 'F j, Y');
+		this.callParent(arguments);
+		var rd = this.renderData = Ext.apply(this.renderData || {}, this.entity && this.entity.getData());
+		rd.entity = this.entity;
+	    rd.name = this.entity && this.entity.getName();
+		rd.date = this.entity && Ext.Date.format(this.entity.get('CreatedTime'), 'F j, Y');
 	}
 });

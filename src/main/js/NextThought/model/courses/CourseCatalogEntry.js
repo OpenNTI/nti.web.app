@@ -292,6 +292,12 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	},
 
 
+	isDroppable: function() {
+		var enrollmentOptions = this.get('EnrollmentOptions');
+		return enrollmentOptions && enrollmentOptions.isDroppable && enrollmentOptions.isDroppable();
+	},
+
+
 	isExpired: function() {
 		var d, s;
 		try {

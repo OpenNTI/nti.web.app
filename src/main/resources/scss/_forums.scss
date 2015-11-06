@@ -1001,8 +1001,8 @@
 	}
 }
 
-.blog-window {
-	.blog-editor {
+.blog-window, .email-window {
+	.blog-editor, .email-editor {
 		@include forum-post-editor;
 	}
 

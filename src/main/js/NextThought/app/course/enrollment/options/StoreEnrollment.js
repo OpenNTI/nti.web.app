@@ -16,6 +16,30 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 	EnrolledWordingKey: true,
 	EnrolledWording: 'You are enrolled as a Lifelong Learner',
 
+	DefaultStrings: {
+		notEnrolled: {
+			title: 'Candidate',
+			information: 'Gain complete access to all exam preparation materials in the course',
+			refund: 'Enrollment is not refundable.'
+		},
+		enrolled: {
+			title: 'You\'re Enrolled',
+			information: 'Your access to exam preparation materials begins now.',
+			links: [],
+			cls: 'enrolled'
+		},
+		archivedEnrolled: {
+			title: 'You took the Course',
+			information: 'Thanks for your participation!' +
+							'The content of this course will remain available for you to review at any time.'
+		},
+		archivedNotEnrolled: {
+			title: 'This Course is Archived',
+			information: 'Archived courses are out of session but all course content will remain available ' +
+							'including the lectures, course materials, quizzes, and discussions.'
+		}
+	},
+
 
 	constructor: function(config) {
 		this.callParent(arguments);

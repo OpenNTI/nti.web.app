@@ -22,6 +22,8 @@ Ext.define('NextThought.app.content.components.Navigation', {
 	afterRender: function() {
 		this.callParent(arguments);
 
+		this.activeContentEl.addCls('has-switcher');
+
 		if (this.bundle) {
 			this.bundleChanged(this.bundle);
 		}
@@ -65,10 +67,40 @@ Ext.define('NextThought.app.content.components.Navigation', {
 	},
 
 
-	onActiveContentClicked: function() {
+	onActiveContentClicked: function(e) {
 		var active = this.titleContainerEl.dom,
 			rect = active && active.getBoundingClientRect();
 
-		this.ContentSwitcher.openAt(rect.right - 10, rect.bottom);
+		//e will only be truthy if this is called from an event handler
+		//if we call it manually, we don't want it to toggle
+		if (this.ContentSwitcher.isVisible() && e) {
+			this.ContentSwitcher.hide();
+		} else {
+			this.ContentSwitcher.openAt(rect.left + (rect.width / 2), rect.bottom + 5);
+		}
+
+		if (e) {
+			e.stopPropagation();
+			e.preventDefault();
+		}
+	},
+
+
+	onBodyClick: function(e) {
+		if (!e.getTarget('.content-switcher') && this.ContentSwitcher.isVisible()) {
+			this.ContentSwitcher.hide();
+		}
+	},
+
+	//when we are collapsing tabs from a resize, go ahead and
+	//realign the content switcher
+	maybeCollapse: function() {
+		var r = this.callParent(arguments);
+
+		if (this.ContentSwitcher.isVisible()) {
+			this.onActiveContentClicked();
+		}
+
+		return r;
 	}
 });

@@ -57,18 +57,18 @@ Ext.define('NextThought.app.navigation.Index', {
 
 
 	__removeNavCmp: function() {
-		if (!this.nav_cmp) {
+		if (!this.navCmp) {
 			return Promise.resolve();
 		}
 
 		var me = this;
 
-		me.nav_cmp.addCls('removing');
+		me.navCmp.addCls('removing');
 
 		return wait(300)
 			.then(function() {
-				Ext.destroy(me.nav_cmp);
-				delete me.nav_cmp;
+				Ext.destroy(me.navCmp);
+				delete me.navCmp;
 			});
 	},
 
@@ -86,11 +86,11 @@ Ext.define('NextThought.app.navigation.Index', {
 
 			cmp.render(me.navContainerEl);
 
-			me.nav_cmp = cmp;
+			me.navCmp = cmp;
 			me.resizeNavCmp();
 		}
 
-		if (this.nav_cmp && this.nav_cmp.xtype === cmp.xtype) {
+		if (this.navCmp && this.navCmp.xtype === cmp.xtype) {
 			return;
 		}
 
@@ -258,8 +258,8 @@ Ext.define('NextThought.app.navigation.Index', {
 		var width = this.navContainerEl.getWidth(),
 			bar = Ext.Element.getViewportWidth() - this.brandingEl.getWidth();
 
-		if (this.nav_cmp && this.nav_cmp.maybeCollapse) {
-			this.nav_cmp.maybeCollapse(width, bar);
+		if (this.navCmp && this.navCmp.maybeCollapse) {
+			this.navCmp.maybeCollapse(width, bar);
 		}
 	},
 
@@ -309,7 +309,7 @@ Ext.define('NextThought.app.navigation.Index', {
 	onSearchBlur: function() {
 		this.removeCls('search-focused');
 
-		if (!this.noRouteOnSearch) {
+		if (!this.noRouteOnSearch && this.navCmp) {
 			this.searchEl.addCls('collapsed');
 		}
 	},

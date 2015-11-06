@@ -21,5 +21,19 @@ Ext.define('NextThought.model.courses.EnrollmentOptions', {
 		items[name] = option;
 
 		this.set('Items', items);
+	},
+
+	/**
+	 * For now, a course is droppable when we have an explicit open enrollment. Otherwise, it's not.
+	 * @return {Boolean} whether it's droppable or not.
+	 */
+	isDroppable: function(){
+		var items = this.get('Items') || {};
+
+		if (!items['OpenEnrollment'] || items['OpenEnrollment'].IsEnrolled !== true) {
+			return false;
+		}
+
+		return true;
 	}
 });

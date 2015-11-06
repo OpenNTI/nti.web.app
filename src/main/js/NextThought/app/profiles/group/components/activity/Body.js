@@ -49,6 +49,8 @@ Ext.define('NextThought.app.profiles.group.components.activity.Body', {
 
 		me.newPostCmp.hide();
 
+		this.activityCmp.userChanged(entity);
+
 		return entity.getDefaultForum()
 			.then(function(forum) {
 				me.postContainer = forum;

@@ -279,11 +279,13 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 
 
 	showEmpty: function() {
-		this.emptyCmp = this.add({
-			xtype: 'box',
-			cls: 'empty-text',
-			autoEl: {html: 'No Activity'}
-		});
+		if (!this.emptyCmp) {
+			this.emptyCmp = this.add({
+				xtype: 'box',
+				cls: 'empty-text',
+				autoEl: {html: 'No Activity'}
+			});
+		}
 	},
 
 

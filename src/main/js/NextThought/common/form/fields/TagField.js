@@ -102,7 +102,7 @@ Ext.define('NextThought.common.form.fields.TagField', {
 			p = t ? t.up('.token') : null;
 		if (t && p) {
 			this.onBeforeRemoveToken(p);
-			p.remove();
+			this.removeToken(p);
 		}
 		if (!Ext.is.iOS) {
 			this.inputEl.focus();
@@ -217,6 +217,13 @@ Ext.define('NextThought.common.form.fields.TagField', {
 		}
 
 		return t;
+	},
+
+
+	removeToken: function(p) {
+		if (p && p.remove) {
+			p.remove();
+		}
 	},
 
 

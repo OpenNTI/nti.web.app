@@ -107,7 +107,8 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 
 
 	getScrollTarget: function() {
-		return document.body;
+		//TODO: figure out how to not have to do a user agent check for this
+  		return Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body;
 	},
 
 
