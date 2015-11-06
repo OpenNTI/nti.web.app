@@ -132,6 +132,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 		me.grid.bindStore(this.store);
 		me.pageHeader.bindStore(this.store);
+		me.pageHeader.currentBundle = me.currentBundle;
 
 		me.mon(me.grid, {
 			'load-page': me.loadPage.bind(me),
@@ -369,6 +370,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 		this.maybeSwitch(noEmpty);
 		this.updateFilter();
+		if (this.pageHeader.onStudentFilterChange) {
+			this.pageHeader.onStudentFilterChange(this.studentFilter);
+		}
 	},
 
 

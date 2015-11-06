@@ -16,12 +16,18 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 		{ name: 'title', type: 'string'},
 		{ name: 'src', type: 'string'},
 
+		{ name: 'ContentNTIID', type: 'string'},
+
 		{ name: 'AvailableBeginning', type: 'ISODate'},
 		{ name: 'AvailableEnding', type: 'ISODate'},
 
 		{ name: 'label', type: 'string', mapping: 'title'},
 
 		{ name: 'position', type: 'int' },
+
+		{ name: 'isAvailable', type: 'Synthetic', persis: false, fn: function(r) {
+			return !!this.get('ContentNTIID');
+		}},
 
 		{ name: 'type', type: 'Synthetic', persist: false, fn: function(r) {
 			var d = r._max_depth || 2,

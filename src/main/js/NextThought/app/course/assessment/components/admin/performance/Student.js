@@ -138,6 +138,22 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Stude
 	},
 
 
+	setEnrollmentData: function(enrollment) {
+		var mailLink = enrollment && enrollment.getLink('Mail'),
+			me = this;
+
+		this.courseEnrollment = enrollment;
+		if (mailLink) {
+			this.header.onceRendered
+				.then(function(){
+					if (me.header.setupCourseEmail) {
+						me.header.setupCourseEmail(mailLink);
+					}
+				});
+		}
+	},
+
+
 	applyState: function(state) {
 		if (this.applyingState) { return; }
 
