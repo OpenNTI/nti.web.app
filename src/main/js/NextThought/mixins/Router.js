@@ -118,7 +118,7 @@ Ext.define('NextThought.mixins.Router', {
 		monitors.onFailedToGetFullPath = monitors.onFailedToGetFullPath || me.onFailedToGetFullPath.bind(me);
 
 		if (hasWindow && obj && obj.isModel) {
-			WindowStore.cacheObject(obj.getId(), obj, null, monitors);	
+			WindowStore.cacheObject(obj.getId(), obj, null, monitors);
 		}
 
 		me.Router.PathActions.getPathToObject(obj)
@@ -278,13 +278,16 @@ Ext.define('NextThought.mixins.Router', {
 
 
 	/**
-	 * A function that is called before the route changes, at this point you can't stop it
-	 * and the navigation doesn't wait on any async actions.
-	 *
-	 * @override
+	 * Before changing routes, go down the active route and call onDeactivate
+	 * on any components that implement it. Handling it here is too late to
+	 * stop the route from changing
 	 */
 	beforeRouteChange: function() {
 		var activeItem = this.getActiveItem();
+
+		if (activeItem && activeItem.onRouteDeactivate) {
+			activeItem.onRouteDeactivate();
+		}
 
 		if (activeItem && activeItem.beforeRoute) {
 			activeItem.beforeRouteChange();

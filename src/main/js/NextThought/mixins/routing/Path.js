@@ -230,13 +230,27 @@ Ext.define('NextThought.mixins.routing.Path', {
 		 	val = Promise.resolve(val);
 		}
 
-		val.then(this.afterRoute.bind(this, path));
+		val
+			.then(this.afterRoute.bind(this, path))
+			.then(this.onRouteActivate.bind(this));
 
 		return val;
 	},
 
 	beforeRoute: function() {},
 	afterRoute: function() {},
+
+	/**
+	 * Gets called whenever a route we handle becomes active
+	 * @override
+	 */
+	onRouteActivate: function() {},
+
+	/**
+	 * Gets called whenever a route we handle changes
+	 * @override
+	 */
+	onRouteDeactivate: function() {},
 
 
 	getCurrentRoute: function() {

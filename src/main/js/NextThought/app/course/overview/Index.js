@@ -48,11 +48,6 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		this.addChildRouter(this.lessons);
 
-		this.on({
-			'activate': this.onActivate.bind(this),
-			'deactivate': this.onDeactivate.bind(this)
-		});
-
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
@@ -63,18 +58,12 @@ Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 
-	onActivate: function() {
-		var item = this.getLayout().getActiveItem();
-
+	onRouteActivate: function() {
 		this.setTitle(this.title);
-
-		if (item.onActivate) {
-			item.onActivate();
-		}
 	},
 
 
-	onDeactivate: function() {
+	onRouteDeactivate: function() {
 		if (this.activeMediaWindow) {
 			Ext.destroy(this.activeMediaWindow);
 			delete this.activeMediaWindow;

@@ -30,12 +30,9 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 		this.addChildRouter(this.body);
 
-
 		this.addRoute('/:lesson', this.showLesson.bind(this));
 
 		this.addDefaultRoute(this.showLesson.bind(this));
-
-		me.on('activate', me.onActivate.bind(me));
 
 		me.mon(me.navigation, {
 			'empty-outline': function() {
@@ -50,10 +47,13 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	},
 
 
-	onActivate: function() {
+	onRouteActivate: function() {
 		this.navigation.refresh();
 		this.alignNavigation();
 	},
+
+
+	onRouteDeactivate: function() {},
 
 
 	getActiveLesson: function() {
