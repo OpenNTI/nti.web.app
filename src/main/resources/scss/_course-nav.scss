@@ -61,6 +61,20 @@
 
 	&.overview-header{
 		margin: 0 0 15px 0;
+		padding: 0 20px 0 0;
+		position: relative;
+
+		.controls {
+			position: absolute;
+			right: 0;
+			top: 0;
+
+			span {
+				font-size: 0.875em;
+				color: $primary-blue;
+				cursor: pointer;
+			}
+		}
 
 		.date {
 			color: $tertiary-grey;

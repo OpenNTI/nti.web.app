@@ -28,9 +28,12 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 		this.initRouter();
 
+		this.body.onEdit = this.onEdit.bind(this);
+
 		this.addChildRouter(this.body);
 
 		this.addRoute('/:lesson', this.showLesson.bind(this));
+		this.addRoute('/:lesson/edit', this.showEditor.bind(this));
 
 		this.addDefaultRoute(this.showLesson.bind(this));
 
@@ -58,6 +61,13 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 	getActiveLesson: function() {
 		return this.activeLesson;
+	},
+
+
+	onEdit: function(id) {
+		id = ParseUtils.encodeForURI(id);
+
+		this.pushRoute('', id + '/edit');
 	},
 
 
@@ -112,12 +122,10 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	},
 
 
-	showLesson: function(route, subRoute) {
-		var me = this,
-			id = route.params && route.params.lesson && ParseUtils.decodeFromURI(route.params.lesson),
-			record = route.precache.lesson, rIndex;
+	__getRecord: function(id, record) {
+		var me = this, rIndex;
 
-		return this.store.onceBuilt()
+		return me.store.onceBuilt()
 			.then(function() {
 				if (id && (!record || record.getId() !== id)) {
 					record = me.store.findRecord('NTIID', id, false, true, true);
@@ -125,7 +133,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 				if (!record || record.get('type') !== 'lesson' || !record.get('NTIID')) {
 					rIndex = me.store.findBy(function(rec) {
-						return rec.get('type') === 'lesson' && rec.get('NTIID');
+						return rec.get('type') === 'lesson' && rec.get('NTIID') && rec.get('isAvailable');
 					});
 
 					if (rIndex > -1) {
@@ -133,6 +141,18 @@ Ext.define('NextThought.app.course.overview.components.View', {
 					}
 				}
 
+				return record;
+			});
+	},
+
+
+	showLesson: function(route, subRoute) {
+		var me = this,
+			id = route.params && route.params.lesson && ParseUtils.decodeFromURI(route.params.lesson),
+			record = route.precache.lesson;
+
+		return this.__getRecord(id, record)
+			.then(function(record) {
 				if (!record) {
 					console.error('No valid lesson to show');
 					return;
@@ -144,6 +164,29 @@ Ext.define('NextThought.app.course.overview.components.View', {
 				me.activeLesson = record;
 
 				return me.body.showLesson(record)
+					.then(me.alignNavigation.bind(me));
+			});
+	},
+
+
+	showEditor: function(route, subRoute) {
+		var me = this,
+			id = route.params && route.params.lesson && ParseUtils.decodeFromURI(route.params.lesson),
+			record = route.precache.lesson;
+
+		return this.__getRecord(id, record)
+			.then(function(record) {
+				if (!record) {
+					console.error('No valid lesson to edit');
+					return;
+				}
+
+				record = me.navigation.selectRecord(record);
+				me.unmask();
+				me.setTitle(record.get('label'));
+				me.activeLesson = record;
+
+				return me.body.editLesson(record)
 					.then(me.alignNavigation.bind(me));
 			});
 	}

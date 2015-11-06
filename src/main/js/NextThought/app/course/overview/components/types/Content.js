@@ -93,6 +93,6 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 
 		var items = getItems(content).reduce(process, []);
 
-		me.add([{xtype: 'course-overview-header', title: content.title, record: node, course: course}].concat(items));
+		me.add([{xtype: 'course-overview-header', title: content.title, record: node, course: course, onEdit: this.onEdit}].concat(items));
 	}
 });
