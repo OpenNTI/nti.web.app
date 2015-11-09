@@ -11,6 +11,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 	requires: [
 		'NextThought.common.ux.Grouping',
+		'NextThought.app.navigation.path.Actions',
 		'NextThought.app.course.assessment.components.student.assignments.FilterBar',
 		'NextThought.app.course.assessment.components.student.assignments.List'
 	],
@@ -136,35 +137,32 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 				store.getGroups(false).forEach(function(g) {
 					//add a group cmp for each group
-					var name = g.name.split('|').last(),
+					var name = g.name,
+						proto = g.children[0],
+						node = proto.get('outlineNode'),
 						store = new Ext.data.Store({fields: me.getFields(), data: g.children, groupName: name}),
 						group = Ext.widget(me.newGroupUIConfig({
 							store: store
 						}));
 
-					groups.push(group);
-
-					function fill(node) {
-						store.groupName = node.get('title');
-						group.setTitle(node.get('title'));
+					function fill(n) {
+						store.groupName = n.getTitle();
+						group.setTitle(n.get('title'));
 						group.setSubTitle(Ext.Date.format(
 								node.get('AvailableBeginning') || node.get('AvailableEnding'),
 								'F j, Y'
-						));
+							));
 					}
 
-					function drop() {}
 
-					function resolve(o) { o.findNode(name).done(fill).fail(drop); }
+					groups.push(group);
 
 					me.mon(group.down('course-assessment-assignment-list'), 'itemclick', 'onItemClicked');
-
 
 					me.activeStores.push(store);
 
 					if (groupBy === 'lesson') {
-						group.setTitle('');//lets never show the NTIID
-						resolve(me.data.outline);
+						if (node) { fill(node); }
 					} else {
 						group.setTitle(name);
 					}
@@ -210,6 +208,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 	getFields: function() {
 		return [
 			{name: 'lesson', type: 'string'},
+			{name: 'outlineNode', type: 'auto'},
 			{name: 'id', type: 'string'},
 			{name: 'containerId', type: 'string'},
 			{name: 'name', type: 'string'},
@@ -234,6 +233,8 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 		this.subviewBackingStores = [];
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment', 'update-assignment-view', 'close-reader']);
+
+		this.PathActions = NextThought.app.navigation.path.Actions.create();
 
 		this.on('filters-changed', this.updateFilters.bind(this));
 		this.on('search-changed', 'filterSearchValue');
@@ -303,7 +304,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 		(this.activeStores || []).forEach(function(store) {
 			//if we are grouped by lessons we will have an ntiid here
-			var name = store.groupName.split('|').last();
+			var name = store.groupName.split('|').last;
 
 			name = name.toLowerCase();
 			val = val.toLowerCase();
@@ -384,10 +385,11 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 
 	applyAssignmentsData: function(silent) {
-		var lesson, raw = [], waitsOn = [],
-			bundle = this.data.instance,
-			outline = this.data.outline,
-			assignments = this.data.assignments;
+		var me = this,
+			lesson, raw = [], waitsOn = [],
+			bundle = me.data.instance,
+			outline = me.data.outline,
+			assignments = me.data.assignments;
 
 		function collect(assignment) {
 			if (assignment.doNotShow()) { return; }
@@ -397,42 +399,29 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 			waitsOn.push(Promise.all([
 				assignments.getHistoryItem(id, true).fail(function() { return; }),
 				assignments.getGradeBookEntry(id),
-				ContentUtils.getLineage(assignment.get('containerId'), bundle)
+				ContentUtils.getLineage(id, bundle)
+					.then(function(lineages) {
+						var lineage = lineages[0];
+
+						return Promise.all(lineage.map(function(ntiid) {
+							return outline.findOutlineNode(ntiid);
+						})).then(function(results) {
+							results = results.filter(function(x) { return !!x; });
+
+							return results[0];
+						});
+					})
 			])
 				.then(function(results) {
 					var history = results[0],//history item
 						grade = results[1],//gradebook entry
-						lesson = results[2][0],//lineage
-						node;
-
-					lesson.pop(); //discard the root
-
-					//search through the entire lineage to find an outline node for the assignment
-					while (!node) {
-						//doing this the first time through is alright because
-						//it is discarding the leaf page
-						lesson.shift();
-
-						//if there are no lessons in the lineage we can't find a node
-						//do don't keep looping 'ZZZ', will be placed at the bottom
-						if (lesson.length === 0) {
-							node = 'ZZZ';
-						} else {
-							node = outline.getNode(lesson[0]);
-						}
-					}
-
-					if (node.get) {
-						node = node.index;
-						node = (node && node.pad && node.pad(3)) || 'ZZZ';
-					}
-
-					lesson = node + '|' + lesson.reverse().join('|');
+						node = results[2];//outline node
 
 					return {
 						id: id,
 						containerId: assignment.get('containerId'),
-						lesson: lesson,
+						lesson: node && node.getTitle(),
+						outlineNode: node,
 						item: assignment,
 						name: assignment.get('title'),
 						opens: assignment.get('availableBeginning'),
@@ -456,8 +445,8 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 		assignments.each(collect);
 
 		return Promise.all(waitsOn)
-			.then(this.store.loadRawData.bind(this.store))
-			.then(this.restoreState.bind(this));
+			.then(me.store.loadRawData.bind(me.store))
+			.then(me.restoreState.bind(me));
 	},
 
 

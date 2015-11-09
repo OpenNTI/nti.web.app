@@ -2,6 +2,11 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.courses.courseoutline',
 
+	mixins: {
+		DurationCache: 'NextThought.mixins.DurationCache'
+	},
+
+
 	requires: [
 		'NextThought.model.courses.navigation.CourseOutlineNode',
 		'NextThought.model.courses.navigation.CourseOutlineContentNode',
@@ -11,6 +16,37 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 	fields: [
 		{name: 'Items', type: 'auto', persist: false}
 	],
+
+
+	getOutlineContents: function() {
+		var link = this.getLink('contents'),
+			key = 'LoadContents',
+			load;
+
+		load = this.getFromCache(key);
+
+		if (!load) {
+			load = Service.request(link)
+				.then(function(text) { return Ext.decode(text); })
+				.then(function(json) { return ParseUtils.parseItems(json); });
+
+			this.cacheForShortPeriod(key, load);
+		}
+
+		return load;
+	},
+
+
+	findOutlineNode: function(id) {
+		return this.getOutlineContents()
+			.then(function(items) {
+				var node = (items || []).reduce(function(acc, o) {
+					return acc || (o.findNode && o.findNode(id));
+				}, null);
+
+				return node;
+			});
+	},
 
 	getContents: function() {
 		var me = this, l;
