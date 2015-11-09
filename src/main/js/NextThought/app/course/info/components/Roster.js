@@ -31,7 +31,7 @@ extend: 'Ext.container.Container',
 			cls: 'roster',
 			tools: [{
 				itemId: 'filtermenu',
-				autoEl: { tag: 'span', cls: 'tool link arrow'}
+				autoEl: { tag: 'div', cls: 'tool link arrow'}
 			}],
 			items: [
 				{

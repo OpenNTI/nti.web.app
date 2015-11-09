@@ -888,7 +888,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		this.previousEditorHeight = h;
 
-		if (h !== p) {
+		// NOTE: we check if the previousEditorHeight is greater than zero to avoid trying
+		// to update layout while in the middle of updating initial layout 
+		if (h !== p && p > 0) {
 			this.updateLayout();
 			this.fireEvent(h < p ? 'shrank' : 'grew');
 			// TODO: In Safari 6, the editor resize but it doesn't paint properly upon

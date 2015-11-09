@@ -397,7 +397,23 @@
 				position: relative;
 				font-size: 1.3em;
 			}
-			//.tools {}
+			.tools {
+				.tool {
+					display: inline-block;
+					max-width: 100%;
+
+					&.arrow {
+						&::after {
+							display: inline-block;
+							position: relative;
+							height: auto;
+							padding-left: 0.4em;
+							vertical-align: middle;
+							right: auto;
+						}
+					}
+				}
+			}
 		}
 	}
 
