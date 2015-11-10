@@ -484,53 +484,61 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 	},
 
 
+	maybePauseCurrentVideo: function(){
+		if (!this.player) { return; }
+
+		if (this.player.isPlaying()) {
+			console.debug('Pausing video for media');
+			this.player.pausePlayback();
+		} else {
+			console.warn('Player did not report being in a state where the media viewer would interfere');
+		}
+
+		if (this.hasCls('playing')) { return; }
+	},
+
+
+	/**
+	 * Handle the play button click on the overview videos
+	 *
+	 * For a video that belongs to a slidedeck, we open the media viewer with a slidedeck. 
+	 * Otherwise, we determine whether to play the video inline or launch the mediaviewer 
+	 * based on where the user clicked on the overview.
+	 * 
+	 * @param  {Event} e browser click event 
+	 */
 	onCurtainClicked: function(e) {
 		e.stopEvent();
 
-		var me = this,
-			m = me.getSelectedVideo(),
-			li = me.locationInfo,
-			slidedeck, slideActions;
+		var m = this.getSelectedVideo(),
+			li = this.locationInfo,
+			slidedeck = m.get('slidedeck'),
+			slideActions;
 
+		if (!Ext.isEmpty(slidedeck)) {
+			this.maybePauseCurrentVideo();		
+			this.navigateToSlidedeck(slidedeck);
+		}
+		else if (!e.getTarget('.launch-player') && e.getTarget('.transcripts')) {
+			this.maybePauseCurrentVideo();		
+			this.navigateToTarget(m, li.root);
+		} 
+		else {
+			this.maybeCreatePlayer();
 
-		if (!e.getTarget('.launch-player') && e.getTarget('.transcripts')) {
-			if (me.player) {
-				if (me.player.isPlaying()) {
-					console.debug('Pausing video for media');
-					me.player.pausePlayback();
-				} else {
-					console.warn('Player did not report being in a state where the media viewer would interfere');
-				}
-
-				if (me.hasCls('playing')) { return; }
+			if (!m || !this.player) {
+				console.warn('Ignoring on curtain click', this, m);
+				return;
 			}
 
-			this.course.getVideoForId(m.getId())
-				.then(function(video) {
-					slidedeck = video && video.slidedeck || m.get('slidedeck');
-					if (Ext.isEmpty(slidedeck)) {
-						me.navigateToTarget(m, li.root);
-					} else {
-						me.navigateToSlidedeck(slidedeck);
-					}
-				});
-			return;
-		}
-
-		me.maybeCreatePlayer();
-
-		if (!m || !me.player) {
-			console.warn('Ignoring on curtain click', me, m);
-			return;
-		}
-
-		if (e && e.shiftKey && me.player.canOpenExternally()) {
-			me.player.openExternally();
-		}
-		else {
-			console.log('Masking z curtain');
-			me.hideCurtain();
-			me.player.resumePlayback(true);
+			if (e && e.shiftKey && this.player.canOpenExternally()) {
+				this.player.openExternally();
+			}
+			else {
+				console.log('Masking z curtain');
+				this.hideCurtain();
+				this.player.resumePlayback(true);
+			}
 		}
 	},
 
