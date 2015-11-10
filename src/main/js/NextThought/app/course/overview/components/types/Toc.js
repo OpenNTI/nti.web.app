@@ -22,17 +22,18 @@ Ext.define('NextThought.app.course.overview.components.types.Toc', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var base = NextThought.app.course.overview.components.type.Base;
+		var base = NextThought.app.course.overview.components.types.Base;
 
-		me.SECTION_CONTAINER_MAP = base.SECTION_CONTAINER_MAP;
-		me.SECTION_TYPE_MAP = base.SECTION_TYPE_MAP;
-		me.SECTION_TITLE_MAP = base.SECTION_TITLE_MAP;
+		this.SECTION_CONTAINER_MAP = base.SECTION_CONTAINER_MAP;
+		this.SECTION_TYPE_MAP = base.SECTION_TYPE_MAP;
+		this.SECTION_TITLE_MAP = base.SECTION_TITLE_MAP;
 
 		this.buildFromToc(this.record, this.locInfo, this.assignments, this.course);
 	},
 
 
 	buildFromToc: function(node, locInfo, assignments, course) {
+		debugger;
 		var me = this,
 			SECTION_CONTAINER_MAP = me.SECTION_CONTAINER_MAP,
 			SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,

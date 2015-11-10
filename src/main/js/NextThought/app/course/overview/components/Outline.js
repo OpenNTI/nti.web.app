@@ -217,6 +217,11 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 	},
 
 
+	setOutlineContents: function(bundle, outline) {
+
+	},
+
+
 	setNavigationStore: function(bundle, store) {
 		if (bundle === this.currentBundle && store === this.store) {
 			return;

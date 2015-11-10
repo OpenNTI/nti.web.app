@@ -77,14 +77,19 @@ Ext.define('NextThought.app.course.overview.components.View', {
 		this.clear();
 		this.currentBundle = bundle;
 
-		if (!bundle || !bundle.getNavigationStore) {
+		if (!bundle || !bundle.getOutlineInterface) {
 			delete this.currentBundle;
 			return;
 		}
 
-		this.store = bundle.getNavigationStore();
+		this.outline = bundle.getOutlineInterface();
 
-		this.navigation.setNavigationStore(bundle, this.store);
+		this.outline.onceBuilt()
+			.then(function(outline) {
+				return outline.getContents();
+			})
+			.then(this.navigation.setOutlineContents.bind(this.navigation, bundle));
+
 		this.body.setActiveBundle(bundle);
 	},
 
@@ -125,20 +130,16 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	__getRecord: function(id, record) {
 		var me = this, rIndex;
 
-		return me.store.onceBuilt()
-			.then(function() {
+		return me.outline.onceBuilt()
+			.then(function(outline) {
 				if (id && (!record || record.getId() !== id)) {
-					record = me.store.findRecord('NTIID', id, false, true, true);
-				}
-
-				if (!record || record.get('type') !== 'lesson' || !record.get('NTIID')) {
-					rIndex = me.store.findBy(function(rec) {
+					record = outline.getNode(id);
+				} else if (record) {
+					record = outline.fillInNode(record);
+				} else {
+					record = outline.findNodeBy(function(rec) {
 						return rec.get('type') === 'lesson' && rec.get('NTIID') && rec.get('isAvailable');
 					});
-
-					if (rIndex > -1) {
-						record = me.store.getAt(rIndex);
-					}
 				}
 
 				return record;
