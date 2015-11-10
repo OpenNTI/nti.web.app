@@ -109,14 +109,24 @@ Ext.define('NextThought.util.Content', {
 	/** @private */
 	externalUriRegex: /^((\/\/)|([a-z][a-z0-9\+\-\.]*):)/i,
 
+
+	/**
+	 * Detect whether or not a uri is pointing out of the site
+	 * @param  {String}  r uri to check
+	 * @return {Boolean}   true if its outside of the side
+	 */
 	isExternalUri: function(r) {
-		var targetURL = new URL(r),
-			targetHost = targetURL && targetURL.host,
-			currentHost = window.location && window.location.host;
-		
-		// return this.externalUriRegex.test(r);
+		var anchor = document.createElement('a'),
+			currentHost = window.location && window.location.host,
+			targetHost;
+
+		anchor.href = r;
+
+		targetHost = anchor.host;
+
 		return targetHost !== currentHost;
 	},
+
 
 	/**
 	 * Resolve the node for a ntiid with in a bundle or toc
