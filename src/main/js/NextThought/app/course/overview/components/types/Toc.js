@@ -33,7 +33,6 @@ Ext.define('NextThought.app.course.overview.components.types.Toc', {
 
 
 	buildFromToc: function(node, locInfo, assignments, course) {
-		debugger;
 		var me = this,
 			SECTION_CONTAINER_MAP = me.SECTION_CONTAINER_MAP,
 			SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,

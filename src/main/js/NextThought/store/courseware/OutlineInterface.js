@@ -20,9 +20,9 @@ Ext.define('NextThought.store.courseware.OutlineInterface', {
 
 
 	__build: function(results) {
-		this.outlineContents = results[0];
+		this.outline = results[0];
 		this.tocStore = results[1];
-		this.__flatContents = this.__flatten(this.outlineContents);
+		this.__flatContents = this.__flatten(this.outline);
 
 		this.isBuilt = true;
 
@@ -30,7 +30,7 @@ Ext.define('NextThought.store.courseware.OutlineInterface', {
 	},
 
 
-	__flatten: function(contents) {
+	__flatten: function(outline) {
 		var records = [], maxDepth,
 			index = 0, depth = 0;
 
@@ -54,11 +54,16 @@ Ext.define('NextThought.store.courseware.OutlineInterface', {
 			return i ? (getDepth(i) + 1) : 0;
 		}
 
-		maxDepth = getDepth(contents[0]);
+		maxDepth = getDepth(outline);
 
-		contents.forEach(itr);
+		itr(outline);
 
 		return records;
+	},
+
+
+	getOutline: function() {
+		return this.outline;
 	},
 
 
@@ -68,7 +73,7 @@ Ext.define('NextThought.store.courseware.OutlineInterface', {
 			return null;
 		}
 
-		return this.outlineContents;
+		return this.outline.get('Items');
 	},
 
 

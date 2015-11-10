@@ -19,18 +19,26 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 
 
 	getOutlineContents: function() {
-		var link = this.getLink('contents'),
+		var me = this,
+			link = me.getLink('contents'),
 			key = 'LoadContents',
 			load;
 
-		load = this.getFromCache(key);
+		load = me.getFromCache(key);
 
 		if (!load) {
 			load = Service.request(link)
 				.then(function(text) { return Ext.decode(text); })
-				.then(function(json) { return ParseUtils.parseItems(json); });
+				.then(function(json) { return ParseUtils.parseItems(json); })
+				.then(function(items) {
+					//create a clone of this model
+					var clone = me.self.create(me.getData());
 
-			this.cacheForShortPeriod(key, load);
+					clone.set('Items', items);
+					return clone;
+				});
+
+			me.cacheForShortPeriod(key, load);
 		}
 
 		return load;
