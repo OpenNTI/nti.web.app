@@ -6,58 +6,58 @@
 	}
 }
 
+.nav-outline.course{
+	.outline-list {
+		margin-left: -50px;
+		padding-left: 50px;
+	}
 
-.x-component-course{
+	.outline-row {
+		.date {
+			pointer-events: none;
+			cursor: default;
+			display: none;
+			opacity: 0.3;
+			min-width: 25px;
+			position: absolute;
+			left: -40px;
+			top: 7px;
+			text-transform: uppercase;
+			border-radius: 2px;
+			box-shadow: 0 0 0 1px white, inset 0 0 0 1px white;
+			text-align: center;
 
-	&.nav-outline{
-		.outline-list {
-			margin-left: -50px;
-			padding-left: 50px;
+			div:first-child {
+				background: white;
+				color: black;
+				border-radius: 0;
+				padding-bottom: 1px;
+				font: normal 700 0.7em/1.1em $font;
+			}
+
+			div:last-child {
+				color: white;
+				font: normal 500 0.8em/1.3em $font;
+				border-radius: 0;
+			}
 		}
 
-		.outline-row {
-			.date {
-				pointer-events: none;
-				cursor: default;
-				display: none;
-				opacity: 0.3;
-				min-width: 25px;
-				position: absolute;
-				left: -40px;
-				top: 7px;
-				text-transform: uppercase;
-				border-radius: 2px;
-				box-shadow: 0 0 0 1px white, inset 0 0 0 1px white;
-				text-align: center;
-
-				div:first-child {
-					background: white;
-					color: black;
-					border-radius: 0;
-					padding-bottom: 1px;
-					font: normal 700 0.7em/1.1em $font;
-				}
-
-				div:last-child {
-					color: white;
-					font: normal 500 0.8em/1.3em $font;
-					border-radius: 0;
-				}
+		&:not(.lesson),&.out-of-view{
+			.date{
+				display: none !important;
 			}
+		}
 
-			&:not(.lesson),&.out-of-view{
-				.date{
-					display: none !important;
-				}
-			}
-
-			&.x-item-selected,&.over {
-				.date{
-					display: block;
-				}
+		&.selected,&:hover {
+			.date{
+				display: block;
 			}
 		}
 	}
+}
+
+
+.x-component-course{
 
 	&.overview-header{
 		margin: 0 0 15px 0;

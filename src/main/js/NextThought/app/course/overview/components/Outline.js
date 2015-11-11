@@ -3,13 +3,12 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 	alias: 'widget.course-outline',
 
 	requires: [
-		'NextThought.app.course.overview.components.outline.Group',
+		'NextThought.app.course.overview.components.outline.OutlineNode',
 		'NextThought.model.courses.navigation.CourseOutlineNode'
 	],
 
 	ui: 'course',
-	cls: 'nav-outline scrollable',
-
+	cls: 'nav-outline course scrollable',
 
 	items: [
 		{xtype: 'box', autoEl: {cls: 'header', html: 'Outline'}},
@@ -23,16 +22,19 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 
 	setOutline: function(bundle, outline) {
-		this.activeBundle = bundle;
+		var catalog = bundle.getCourseCatalogEntry();
 
+		this.activeBundle = bundle;
+		this.shouldShowDates = !catalog.get('DisableOverviewCalendar');
 		this.setCollection(outline);
 	},
 
 
 	getCmpForRecord: function(record) {
 		if (record instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
-			return NextThought.app.course.overview.components.outline.Group.create({
-				outlineNode: record
+			return NextThought.app.course.overview.components.outline.OutlineNode.create({
+				outlineNode: record,
+				shouldShowDates: this.shouldShowDates
 			});
 		}
 
@@ -41,12 +43,12 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 
 	selectRecord: function(record) {
-		return record;
+		this.selectedRecord = record;
 	},
 
 
 	getActiveItem: function() {
-
+		return this.selectedRecord;
 	}
 });
 
