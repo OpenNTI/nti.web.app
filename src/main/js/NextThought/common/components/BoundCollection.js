@@ -28,6 +28,29 @@ Ext.define('NextThought.common.components.BoundCollection', {
 	},
 
 
+	getItems: function(collection) {
+		return collection.get('Items');
+	},
+
+
+	setCollection: function(collection) {
+		var me = this,
+			body = me.getBodyContainer(),
+			items = me.getItems(collection);
+
+		items = items.map(function(item) {
+			return me.getCmpForRecord(item);
+		}).filter(function(item) { return !!item; });
+
+		body.add(items);
+	},
+
+
+	getCmpForRecord: function(record) {
+
+	},
+
+
 	clearCollection: function() {
 		var body = this.getBodyContainer();
 

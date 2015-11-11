@@ -51,7 +51,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 
 	onRouteActivate: function() {
-		this.navigation.refresh();
+		// this.navigation.refresh();
 		this.alignNavigation();
 	},
 
@@ -86,9 +86,9 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 		this.outline.onceBuilt()
 			.then(function(outline) {
-				return outline.getContents();
+				return outline.getOutline();
 			})
-			.then(this.navigation.setOutlineContents.bind(this.navigation, bundle));
+			.then(this.navigation.setOutline.bind(this.navigation, bundle));
 
 		this.body.setActiveBundle(bundle);
 	},
@@ -110,7 +110,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 				}
 			});
 
-		me.navigation.clear();
+		me.navigation.clearCollection();
 		me.body.clear();
 	},
 
