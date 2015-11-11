@@ -70,6 +70,15 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 		this.callParent(arguments);
 
 		this.truncateLabels();
+
+		this.mon(this.nodeCmp.el, 'click', this.onClick.bind(this));
+	},
+
+
+	onClick: function(e) {
+		if (e.getTarget('.outline-row')) {
+			this.doSelectNode(this.outlineNode);
+		}
 	},
 
 
@@ -116,7 +125,8 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 		if (record instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
 			return NextThought.app.course.overview.components.outline.OutlineNode.create({
 				outlineNode: record,
-				shouldShowDates: this.shouldShowDates
+				shouldShowDates: this.shouldShowDates,
+				doSelectNode: this.doSelectNode
 			});
 		}
 

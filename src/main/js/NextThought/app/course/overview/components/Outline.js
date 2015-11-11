@@ -57,11 +57,17 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		if (record instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
 			return NextThought.app.course.overview.components.outline.OutlineNode.create({
 				outlineNode: record,
-				shouldShowDates: this.shouldShowDates
+				shouldShowDates: this.shouldShowDates,
+				doSelectNode: this.doSelectNode.bind(this)
 			});
 		}
 
 		console.warn('Unknown type: ', record);
+	},
+
+
+	doSelectNode: function(record) {
+		this.fireEvent('select-lesson', record);
 	},
 
 
