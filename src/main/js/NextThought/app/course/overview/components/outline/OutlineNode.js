@@ -8,6 +8,10 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 		'NextThought.model.courses.navigation.CourseOutlineCalendarNode'
 	],
 
+	mixins: {
+		'EllipsisText': 'NextThought.mixins.EllipsisText'
+	},
+
 	cls: 'outline-group',
 
 	items: [],
@@ -56,7 +60,50 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 			}
 		]);
 
+		this.nodeCmp = this.down('[isNode]');
+
 		this.setCollection(node);
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.truncateLabels();
+	},
+
+
+	truncateLabels: function() {
+		var me = this;
+
+		if (!me.el) {
+			me.onceRendered.then(me.truncateLabels.bind(me));
+			return;
+		}
+
+		wait(100).then(function() {
+			var label = me.nodeCmp.el.dom.querySelector('.label');
+
+			if (label) {
+				me.truncateText(label, null, true);
+			}
+		});
+	},
+
+
+	selectRecord: function(record) {
+		var body = this.getBodyContainer();
+
+		if (record.getId() === this.outlineNode.getId()) {
+			this.nodeCmp.addCls('selected');
+		} else {
+			this.nodeCmp.removeCls('selected');
+			this.nodeCmp.removeCls('out-of-view');
+		}
+
+		body.items.each(function(item) {
+			item.selectRecord(record);
+		});
 	},
 
 

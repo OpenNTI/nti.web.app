@@ -28,9 +28,10 @@
 
 	.outline-group {
 		position: relative;
-		padding-top: 1.75em;
 
 		&:not(:first-of-type) {
+			padding-top: 1.75em;
+
 			&::before {
 				content: '';
 				position: absolute;
@@ -128,7 +129,7 @@
 				}
 			}
 
-			&.x-item-selected {
+			&.selected {
 				color: #ffffff;
 				font-weight: 600;
 				background: $primary-blue;

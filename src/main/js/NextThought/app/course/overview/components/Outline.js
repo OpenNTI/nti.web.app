@@ -16,6 +16,29 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 	],
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+
+		var body = this.getBodyContainer();
+
+		this.mon(body.el, 'scroll', this.onScroll.bind(this));
+	},
+
+
+	onScroll: function() {
+		var body = this.getBodyContainer(),
+			bodyRect = body && body.el && body.el.dom && body.el.dom.getBoundingClientRect(),
+			selected = this.el.dom.querySelector('.outline-row.selected'),
+			selectedRect = selected && selected.getBoundingClientRect();
+
+		if (selectedRect.top < bodyRect.top || selectedRect.bottom > bodyRect.bottom) {
+			selected.classList.add('out-of-view');
+		} else {
+			selected.classList.remove('out-of-view');
+		}
+	},
+
+
 	getBodyContainer: function() {
 		return this.down('[bodyContainer]');
 	},
@@ -43,7 +66,13 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 
 	selectRecord: function(record) {
+		var body = this.getBodyContainer();
+
 		this.selectedRecord = record;
+
+		body.items.each(function(item) {
+			item.selectRecord(record);
+		});
 
 		return record;
 	},
