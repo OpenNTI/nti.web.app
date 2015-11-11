@@ -44,6 +44,8 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 	selectRecord: function(record) {
 		this.selectedRecord = record;
+
+		return record;
 	},
 
 
