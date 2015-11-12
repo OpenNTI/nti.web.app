@@ -108,6 +108,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.EmailTokenF
 	},
 
 
+	getSnippet: function(value) {
+		return value;
+	},
+
+
 	buildSuggestionStore: function() {
 		var data = [],
 			store = new Ext.data.Store({
