@@ -1,5 +1,5 @@
-Ext.define('NextThought.app.course.overview.components.parts.Section', {
-	extend: 'Ext.container.Container',
+Ext.define('NextThought.app.course.overview.components.parts.SectionHeader', {
+	extend: 'Ext.Component',
 	alias: [
 		'widget.course-overview-section',
 		'widget.course-overview-nticourseoverviewgroup'
@@ -25,10 +25,6 @@ Ext.define('NextThought.app.course.overview.components.parts.Section', {
 			tag: 'h2', cls: '{type}', cn: [
 			{tag: 'span', html: '{title}', style: '{[(values.color && ("background-color: #" + values.color)) || "" ]}'}
 		]
-		},
-		{
-			id: '{id}-body',
-			cn: ['{%this.renderContainer(out,values)%}']
 		}
 	]),
 

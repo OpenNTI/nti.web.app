@@ -9,7 +9,7 @@ Ext.define('NextThought.app.course.overview.components.types.Toc', {
 		'NextThought.app.course.overview.components.parts.IframeWindow',
 		'NextThought.app.course.overview.components.parts.Poll',
 		'NextThought.app.course.overview.components.parts.QuestionSet',
-		'NextThought.app.course.overview.components.parts.Section',
+		'NextThought.app.course.overview.components.parts.SectionHeader',
 		'NextThought.app.course.overview.components.parts.Spacer',
 		'NextThought.app.course.overview.components.parts.Survey',
 		'NextThought.app.course.overview.components.parts.Timeline',

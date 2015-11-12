@@ -16,7 +16,9 @@ Ext.define('NextThought.common.components.BoundCollection', {
 
 		return Service.request(url)
 			.then(function(response) {
-				return JSON.parse(response);
+				var obj = ParseUtils.parseItems(response)[0];
+
+				return obj || JSON.parse(response);
 			})
 			.then(function(json) {
 				me.setCollection(json);

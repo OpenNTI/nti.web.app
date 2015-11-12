@@ -3,25 +3,44 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 	alias: 'widget.overview-types-content',
 
 	requires: [
-		'NextThought.app.course.overview.components.parts.ContentLink',
-		'NextThought.app.course.overview.components.parts.Discussion',
 		'NextThought.app.course.overview.components.parts.Header',
-		'NextThought.app.course.overview.components.parts.IframeWindow',
-		'NextThought.app.course.overview.components.parts.Poll',
-		'NextThought.app.course.overview.components.parts.QuestionSet',
-		'NextThought.app.course.overview.components.parts.Section',
-		'NextThought.app.course.overview.components.parts.Spacer',
-		'NextThought.app.course.overview.components.parts.Survey',
-		'NextThought.app.course.overview.components.parts.Timeline',
-		'NextThought.app.course.overview.components.parts.Topic',
-		'NextThought.app.course.overview.components.parts.Videos',
-		'NextThought.app.course.overview.components.types.Base',
-		'NextThought.proxy.JSONP'
+		'NextThought.app.course.overview.components.parts.Group',
+		'NextThought.model.courses.overview.Lesson',
+		'NextThought.model.courses.overview.Group'
 	],
 
 
+	getBodyContainer: function() {
+		return this.down('[bodyContainer]');
+	},
+
+
 	setCollection: function(collection) {
-		this.buildFromContent(collection, this.record, this.enrollment, this.locInfo, this.assignments, this.course);
+		this.removeAll(true);
+
+		this.add([
+			{xtype: 'course-overview-header', record: this.record, title: collection.title},
+			{xtype: 'container', layout: 'none', bodyContainer: true, items: []}
+		]);
+
+		this.callParent(arguments);
+		// this.buildFromContent(collection, this.record, this.enrollment, this.locInfo, this.assignments, this.course);
+	},
+
+
+	getCmpForRecord: function(record) {
+		if (record instanceof NextThought.model.courses.overview.Group) {
+			return NextThought.app.course.overview.components.parts.Group.create({
+				record: record,
+				outlineNode: this.record,
+				enrollment: this.enrollment,
+				locInfo: this.locInfo,
+				assignments: this.assignments,
+				course: this.course
+			});
+		}
+
+		console.warn('Unknown type: ', record);
 	},
 
 
