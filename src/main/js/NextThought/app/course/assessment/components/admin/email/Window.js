@@ -23,6 +23,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 			doClose: this.onClose.bind(this)
 		});
 
+		this.headerCmp.setTitle('Email');
 		this.showEditor();
 	},
 

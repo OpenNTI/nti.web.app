@@ -6,7 +6,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.EmailTokenF
 	],
 
 	cls: 'user-token-field email-token-field',
-	placeholder: '   Add a recipient',
+	placeholder: 'Add a recipient',
 
 
 	setupPickerView: function(){
