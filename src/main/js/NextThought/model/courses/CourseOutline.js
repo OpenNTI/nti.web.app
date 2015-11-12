@@ -47,10 +47,11 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 
 	findOutlineNode: function(id) {
 		return this.getOutlineContents()
-			.then(function(items) {
-				var node = (items || []).reduce(function(acc, o) {
-					return acc || (o.findNode && o.findNode(id));
-				}, null);
+			.then(function(outline) {
+				var items = outline.get('Items'),
+					node = (items || []).reduce(function(acc, o) {
+						return acc || (o.findNode && o.findNode(id));
+					}, null);
 
 				return node;
 			});

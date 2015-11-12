@@ -1,4 +1,4 @@
-.nav-outline{
+.nav-outline {
 	background: #ffffff;
 	position: absolute;
 	top: 0;
@@ -61,8 +61,6 @@
 
 		@include icon('topic', $top:15px, $left: 18px);
 	}
-
-	.outline-group
 
 	.outline-row {
 		position: relative;
@@ -129,7 +127,7 @@
 				}
 			}
 
-			&.selected {
+			&.selected, &.x-item-selected {
 				color: #ffffff;
 				font-weight: 600;
 				background: $primary-blue;
