@@ -51,6 +51,7 @@
 
 	.nav-container {
 		@include flexItem(1 1 100px);
+		transition: opacity 0.5s, width 0.5s;
 		position: relative;
 		left: 0;
 	}
@@ -140,7 +141,7 @@
 			position: absolute;
 			transition: left 0.3s;
 			left: -1000px;
-			flex: none;
+			flex-grow: 0;
 		}
 
 		.search-container {
@@ -153,8 +154,11 @@
 
 .main-navigation.no-nav {
 	.nav-container {
-		display: none;
+		opacity: 0;
 		left: 0;
+		display: none;
+		@include flexBasis(0px);
+		@include flexItem(0 1 100px);
 	}
 
 	.back-container, .icons {

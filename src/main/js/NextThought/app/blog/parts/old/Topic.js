@@ -50,7 +50,7 @@ Ext.define('NextThought.app.blog.parts.old.Topic', {
 			{ cls: 'title', html: '{title}' },
 			{ cls: 'meta', cn: [
 				{ cls: 'name-wrap', cn: [
-					{ tag: 'tpl', 'if': 'showName', cn: { tag: 'span', cls: 'name link', html: '{headline.Creator}'}},
+					{ tag: 'tpl', 'if': 'showName', cn: { tag: 'span', cls: 'name link', html: '{headline.Creator:displayName()}'}},
 					{ tag: 'span', cls: 'datetime', html: '{CreatedTime:ago}'}
 				]},
 				{ tag: 'tpl', 'if': 'headline.isModifiable || showPermissions', cn: [
@@ -232,6 +232,11 @@ Ext.define('NextThought.app.blog.parts.old.Topic', {
 			this.loadMoreEl.destroy();
 		} else {
 			this.mon(this.loadMoreEl, 'click', this.fetchNextPage, this);
+		}
+
+		if (this.user) {
+			this.nameEl.update(this.user.getName());
+			this.avatarEl.setStyle({backgroundImage: 'url(' + this.user.get('avatarURL') + ')'});
 		}
 
 		this.updateRecord(this.record);
