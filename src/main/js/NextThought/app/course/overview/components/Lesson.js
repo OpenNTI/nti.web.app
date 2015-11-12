@@ -82,6 +82,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 			return;
 		}
 
+		me.currentNode = record;
 		me.currentPage = record.getId();
 		me.buildingOverview = true;
 		me.maybeMask();

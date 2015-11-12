@@ -51,7 +51,14 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 
 	onRouteActivate: function() {
-		// this.navigation.refresh();
+		this.outline = this.currentBundle.getOutlineInterface();
+
+		this.outline.onceBuilt()
+			.then(function(outline) {
+				return outline.getOutline();
+			})
+			.then(this.navigation.setOutline.bind(this.navigation, this.currentBundle));
+
 		this.alignNavigation();
 	},
 
