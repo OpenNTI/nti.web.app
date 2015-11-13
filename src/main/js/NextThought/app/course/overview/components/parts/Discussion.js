@@ -1,8 +1,12 @@
 Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
 	extend: 'Ext.Component',
 	alias: [
-		'widget.course-overview-discussion', 
+		'widget.course-overview-discussion',
 		'widget.course-overview-discussionref'
+	],
+
+	requires: [
+		'NextThought.model.DiscussionRef'
 	],
 
 	mixins: {

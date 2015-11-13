@@ -420,6 +420,7 @@
 	&.course-overview{
 		background: #ffffff;
 		padding: 1.5em 1.87em;//25px 30px;
+		overflow: hidden;
 		@include scrollbar(#ffffff, $tertiary-grey);
 	}
 
@@ -528,6 +529,10 @@
 
 	&.discussions{
 		margin-right: -20px;
+	}
+
+	.group-container {
+		clear: both;
 	}
 
 	.content-card {

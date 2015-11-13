@@ -14,19 +14,44 @@ Ext.define('NextThought.app.course.overview.components.types.Toc', {
 		'NextThought.app.course.overview.components.parts.Survey',
 		'NextThought.app.course.overview.components.parts.Timeline',
 		'NextThought.app.course.overview.components.parts.Topic',
-		'NextThought.app.course.overview.components.parts.Videos',
-		'NextThought.app.course.overview.components.types.Base'
+		'NextThought.app.course.overview.components.parts.Videos'
 	],
+
+
+	SECTION_TITLE_MAP: {
+		'video': getString('NextThought.view.courseware.overview.View.video'),
+		'discussions': getString('NextThought.view.courseware.overview.View.discussion'),
+		'additional': getString('NextThought.view.courseware.overview.View.additional'),
+		'required': getString('NextThought.view.courseware.overview.View.required'),
+		'assessments': getString('NextThought.view.courseware.overview.View.assessment'),
+		'session-overview': getString('NextThought.view.courseware.overview.View.session'),
+		'assignments': getString('NextThought.view.courseware.overview.View.assignments')
+	},
+
+
+	SECTION_TYPE_MAP: {
+		'course-overview-ntivideo': 'video',
+		'course-overview-content': 'additional',
+		'course-overview-discussion': 'discussions',
+		'course-overview-externallink': 'additional',
+		'course-overview-naquestionset': 'assessments',
+		'course-overview-assignment': 'assignments'
+	},
+
+
+	SECTION_CONTAINER_MAP: {
+		'video': 'course-overview-section',
+		'discussions': 'course-overview-section',
+		'additional': 'course-overview-section',
+		'required': 'course-overview-section',
+		'assessments': 'course-overview-section',
+		'session-overview': 'course-overview-section',
+		'assigments': 'course-overview-section'
+	},
 
 
 	initComponent: function() {
 		this.callParent(arguments);
-
-		var base = NextThought.app.course.overview.components.types.Base;
-
-		this.SECTION_CONTAINER_MAP = base.SECTION_CONTAINER_MAP;
-		this.SECTION_TYPE_MAP = base.SECTION_TYPE_MAP;
-		this.SECTION_TITLE_MAP = base.SECTION_TITLE_MAP;
 
 		this.buildFromToc(this.record, this.locInfo, this.assignments, this.course);
 	},

@@ -12,14 +12,6 @@ Ext.define('NextThought.app.course.overview.components.parts.SectionHeader', {
 	ui: 'course',
 	cls: 'overview-section',
 
-	hidden: true,
-	layout: 'auto',
-	componentLayout: 'natural',
-	childEls: ['body'],
-	getTargetEl: function() {
-		return this.body;
-	},
-
 	renderTpl: Ext.DomHelper.markup([
 		{
 			tag: 'h2', cls: '{type}', cn: [
