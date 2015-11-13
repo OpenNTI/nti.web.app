@@ -57,10 +57,15 @@ Ext.define('NextThought.app.course.enrollment.components.Confirmation', {
 		var c = this.course,
 			start = c.get('StartDate'),
 			helplinks = [], i, labelprefix,
+			confirmationText = getString('EnrollmentConfirmation') || {},
+			prompt = confirmationText.subtitle && getFormattedString(confirmationText.subtitle, {course: c.get('Title')});
+
+		if (!prompt) {
 			prompt = getFormattedString('NextThought.view.courseware.enrollment.Confirmation.ClassStartInfo', {
                 date: Ext.Date.format(start, 'F j, Y'),
                 course: c.get('Title')
-            });
+            });	
+		}
 
 		for (i = 1; i <= 3; i++) {
 			labelprefix = 'course-info.course-supoprt.link' + i;

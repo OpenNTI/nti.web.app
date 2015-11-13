@@ -170,7 +170,7 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 			return Promise.resolve(me.video);
 		}
 
-		return me.currentBundle.getVideoForId()
+		return me.currentBundle.getVideoForId(id)
 			.then(function(o) {
 				if (!o) { return reject(); }
 

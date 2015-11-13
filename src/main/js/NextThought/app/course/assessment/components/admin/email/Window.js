@@ -23,6 +23,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 			doClose: this.onClose.bind(this)
 		});
 
+		this.headerCmp.setTitle('Email');
 		this.showEditor();
 	},
 
@@ -50,9 +51,14 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 				if (me.monitors && me.monitors.afterSave) {
 					me.monitors.afterSave(rec);
 				}
-				me.doClose();
+
+				if(me.doClose) {
+					me.doClose();	
+				}
 			}
 		});
+
+		me.editor = editor;
 	}
 }, function(){
 	NextThought.app.windows.StateStore.register('new-email', this);

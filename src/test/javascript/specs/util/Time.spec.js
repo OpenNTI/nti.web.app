@@ -7,6 +7,12 @@ describe('Time Util Tests', function() {
 			expect(TimeUtils.timeDifference(now, then)).toEqual('1 second ago');
 		});
 
+		it('timeDifference 1s for reversed order (or in case of skewness)', function() {
+			var then = Ext.Date.now(),
+				now = then - 700;
+			expect(TimeUtils.timeDifference(now, then).toEqual('1 second ago'));
+		})
+
 		it('timeDifference 1m', function() {
 			var now = Ext.Date.now(),
 				then = now - 1000 * 60;

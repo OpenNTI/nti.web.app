@@ -34,13 +34,10 @@ Ext.define('NextThought.app.navigation.Actions', {
 			var parts = href.split('#'),
 				context = this.getContext(),
 				newBase = parts[0],
-				newFragment = parts[1],
-				currentLocation = window.location.href,
-				currentParts = currentLocation.split('#'),
-				currentBase = currentParts[0],
-				currentFragment = currentParts[1];
+				newFragment = parts[1];
 
-			//Are we an nttid?
+			//If we are an NTIID find a component in the context
+			//that can handle showing it
 			if (ParseUtils.isNTIID(newBase)) {
 				//TODO: figure this out
 				Ext.getBody().el.mask('Loading...');
@@ -60,34 +57,16 @@ Ext.define('NextThought.app.navigation.Actions', {
 						//the first item with a cmp that implements navigateToObject
 						//Ext.getBody().el.unmask()
 					});
-
-				return true;
-			}
-
-			//Is href an exteranl url whose base does not match the current base (i.e. not in our app)?
-			if (ContentUtils.isExternalUri(href) &&
-				(newBase.indexOf(currentBase) !== 0 || (/\/content\//.test(href) && !/\.html$/.test(href)))) {
-				try {
-					window.open(href, '_blank');
-				}
-				catch (er) {
-					console.error('Unable to open ', href, 'with target _blank.', Globals.getError(href));
-				}
-				return true;
-			//Even is the link is internal, if its a pdf we want to open it in a new tab
-			//TODO: Should we open this in a new tab or the same tab?
-			} else if (/\.pdf(\?.*|\#.*)?$/.test(href)) {
+			} else {
+				//if we aren't an ntiid, just open the href in a new tab.
 				try {
 					window.open(href, '_blank');
 				} catch (er) {
-					console.error('Unable to open pdf ', href);
+					console.error('Unable to open ', href, ' with target _blank.', Globals.getError(er));
 				}
-
-				return true;
 			}
 
-			console.error('Expected href to be an interal url/hash change but it was', href, currentLocation);
-			return false;
+			return true;
 		},
 
 

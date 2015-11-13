@@ -121,7 +121,8 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 
 
 	__addBaseSteps: function(course, option, steps) {
-		var me = this;
+		var me = this,
+			confirmationText = getString('EnrollmentConfirmation') || {};
 
 		me.__addStep({
 			xtype: 'enrollment-purchase',
@@ -172,7 +173,7 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 		me.__addStep({
 			xtype: 'enrollment-confirmation',
 			name: 'Confirmation',
-			heading: 'You\'re Enrolled as a Lifelong Learner',
+			heading: confirmationText.heading || 'You\'re Enrolled as a Lifelong Learner',
 			hasPricingCard: true,
 			lockCoupon: true,
 			enrollmentOption: option,
@@ -314,7 +315,8 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 				});
 			} else {
 				state = this.getWording('notEnrolled');
-				state.buttonText = 'Enroll as a Lifelong Learner';
+				// Give strings files preferences in determining the text of the button text
+				state.buttonText = state.buttonText || 'Enroll as a Lifelong Learner';
 				state.price = details.Price;
 			}
 		}

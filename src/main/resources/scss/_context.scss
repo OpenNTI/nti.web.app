@@ -31,4 +31,20 @@
 			}
 		}
 	}
+
+	.context-content {
+		& > .snippet {
+			overflow: hidden;
+    		height: inherit;
+    		font: italic 300 1.1em/1.6em $font;
+    		color: #7593a4;
+    		background-color: #f6fcff;
+    		padding: 0.2em 15px;
+
+    		.par {
+    			margin-top: 0;
+    			margin-bottom: 0;
+    		}
+		}
+	}
 }

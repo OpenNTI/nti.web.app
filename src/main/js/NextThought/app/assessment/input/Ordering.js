@@ -204,6 +204,21 @@ Ext.define('NextThought.app.assessment.input.Ordering', {
 		this.callParent();
 	},
 
+	/**
+	 * Set the ordering question to submitted state. 
+	 * Once an ordering question has been submitted, we disable drag and drop.
+	 */
+	setSubmitted: function(){
+		this.callParent(arguments);
+
+		if(this.dropZone && this.dropZone.lock) {
+			this.dropZone.lock();
+		}
+		if(this.dragZone && this.dragZone.lock) {
+			this.dragZone.lock();
+		}
+	},
+
 
 	resetOrder: function() {
 		var draggableParts = this.el.select('.ordinal .draggable-area');
