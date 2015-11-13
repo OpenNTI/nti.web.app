@@ -1966,8 +1966,12 @@ canvas.x-component-course-assessment {
 		top: 0 !important;
 	}
 
-	table {
-		table-layout: fixed !important;
+	.x-grid {
+		&.fixed-table{
+			table {
+				table-layout: fixed !important;
+			}	
+		}	
 	}
 }
 
