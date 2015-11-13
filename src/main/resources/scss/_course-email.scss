@@ -1,4 +1,11 @@
 .email-window {
+	.window-header {
+		.title {
+			font: normal 300 18px/44px $font;
+			color: $secondary-grey;
+		}
+	}
+
 	.email-editor {
 		.editor {
 			.main {
@@ -78,8 +85,16 @@
 				.title {
 					input {
 					    font: normal 300 18px/30px $font;
+					    padding-left: 0;
 					}
 				}
+			}
+
+			.footer {
+				.save {
+					width: 140px;	
+				}
+				
 			}
 		}
 	}

@@ -74,7 +74,13 @@
 			vertical-align: middle;
 		}
 
-		&:hover, &.active {
+		&.active {
+			color: #fff;
+			border-color: $border-blue;
+			background: $primary-blue;
+		}
+
+		&:hover {
 			color: #fff;
 			border-color: $border-blue;
 			background: $primary-blue;
