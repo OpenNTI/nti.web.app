@@ -69,7 +69,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		this.setupReceiverField();
 		this.setupCopiedField();
 		this.setupTitleField();
-		this.saveButtonEl.setHTML(' Send');
+		this.saveButtonEl.setHTML(' Send Email');
 		this.mon(this.noreplyPickerEl, 'click', this.replyPickerClicked.bind(this));
 	},
 
