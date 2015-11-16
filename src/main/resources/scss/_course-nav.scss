@@ -260,7 +260,7 @@
 
 	&.overview-videos {
 		margin: 10px 0;
-		@extend .overview-section;
+		@extend .overview-group;
 
 		&.singular{
 			position: relative;
@@ -482,7 +482,9 @@
 }
 
 
-.overview-section{
+.overview-group{
+	clear: both;
+
 	h2 {
 		margin: 5em 0 0 -3.05em;
 		font: normal 600 0.6em/2em $font;

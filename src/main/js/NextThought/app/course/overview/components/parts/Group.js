@@ -18,7 +18,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Group', {
 	],
 
 	ui: 'course',
-	cls: 'overview-section',
+	cls: 'overview-group',
 
 
 	initComponent: function() {
