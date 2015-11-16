@@ -304,7 +304,16 @@ Ext.define('NextThought.app.course.assessment.components.admin.Grid', {
 		this.callParent(arguments);
 
 		this.monitorSubTree(arguments);
+		var grid = this.down('gridview');
+
+		// NOTE: We've observed that Safari invalidates
+		// the table layout styles every time it refreshes
+		// So we will need to listen on refresh to reapply those styles.
+		if (grid && Ext.isSafari) {
+			grid.on('refresh', this.adjustTableLayout.bind(this));
+		}
 	},
+
 
 	bindStore: function(store) {
 		var res = this.callParent(arguments),
@@ -339,7 +348,29 @@ Ext.define('NextThought.app.course.assessment.components.admin.Grid', {
 			}
 		}
 
+		// Add table layout styles.
+		this.adjustTableLayout();
+
 		return res;
+	},
+
+
+	/**
+	 * This function sets the table layout to fixed.
+	 * We've observed that some browsers(i.e. Safari) 
+	 * end up mixing our styles and Ext Js table styles. 
+	 * In this method, we add the necessary class to override Ext Js styles.
+	 */
+	adjustTableLayout: function(){
+		var me = this;
+		this.onceRendered
+			.then(function(){
+				me.el.removeCls('fixed-table');
+				wait(100)
+					.then(function(){
+						me.el.addCls('fixed-table');
+					});
+			});
 	},
 
 
