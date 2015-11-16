@@ -75,6 +75,7 @@ Ext.define('NextThought.app.contentviewer.Index', {
 			handleNavigation: config.handleNavigation,
 			navigateToObject: config.navigateToObject,
 			fragment: config.fragment,
+			note: config.note,
 			rootRoute: config.rootRoute
 		};
 
@@ -173,6 +174,10 @@ Ext.define('NextThought.app.contentviewer.Index', {
 
 	goToFragment: function(fragment) {
 		this.reader.goToFragment(fragment);
+	},
+
+	goToNote: function(note) {
+		this.reader.goToNote(note);
 	},
 
 	resolvePageInfo: function() {

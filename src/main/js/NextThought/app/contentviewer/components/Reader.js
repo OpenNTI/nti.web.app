@@ -279,15 +279,26 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 		}
 	},
 
+	goToNote: function(note) {
+		var me = this;
 
-	setPageInfo: function(pageInfo, bundle, fragment) {
+		if(note) {
+			me.getIframe().onceSettled()
+				.then(function(){
+					me.getScroll().toNote(note);
+				});
+		}
+	},
+
+
+	setPageInfo: function(pageInfo, bundle, fragment, note) {
 		if (!this.rendered) {
-			this.on('afterrender', this.setPageInfo.bind(this, pageInfo, bundle, fragment));
+			this.on('afterrender', this.setPageInfo.bind(this, pageInfo, bundle, fragment, note));
 			return;
 		}
 
 		if (!this.iframeReady) {
-			this.getIframe().on('iframe-ready', this.setPageInfo.bind(this, pageInfo, bundle, fragment), this, {single: true});
+			this.getIframe().on('iframe-ready', this.setPageInfo.bind(this, pageInfo, bundle, fragment, note), this, {single: true});
 			return;
 		}
 
@@ -320,6 +331,8 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 							}
 						} else if (fragment) {
 							me.getScroll().toTarget(fragment);
+						} else if (note) {
+							me.getScroll().toNote(note);
 						}
 
 						me.fireEvent('sync-overlays');

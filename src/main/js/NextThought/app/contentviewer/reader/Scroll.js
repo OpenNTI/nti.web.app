@@ -207,6 +207,16 @@ Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 		this.scrollingEl.scrollTo('top', top, animate !== false);
 	},
 
+	toNote: function(note) {
+		var applicableRange = note.get('applicableRange'),
+			containerId = note.get('ContainerId'),
+			doc = this.reader.getIframe().getDocumentElement(),
+			cleanContent = this.reader.getCleanContent(),
+			range = Anchors.toDomRange(applicableRange, doc, cleanContent, containerId);
+
+		this.toNode(range.startContainer);
+	},
+
 	toSearchHit: function(hit, fragment) {
 		var me = this, pos;
 

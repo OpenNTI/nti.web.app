@@ -269,7 +269,7 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 
 		//the reader might not be defined if we are in a timed assignment
 		if (reader) {
-			reader.setPageInfo(pageInfo, bundle, this.fragment);
+			reader.setPageInfo(pageInfo, bundle, this.fragment, this.note);
 		}
 
 		this.onceReadyForSearch()
@@ -287,6 +287,15 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		}
 	},
 
+
+	goToNote: function(note) {
+		var reader = this.getReaderContent();
+
+		this.note = note;
+		if (reader) {
+			reader.goToNote(note);
+		}
+	},
 
 	beforeDeactivate: function() {
 		var reader = this.down('reader-content');
