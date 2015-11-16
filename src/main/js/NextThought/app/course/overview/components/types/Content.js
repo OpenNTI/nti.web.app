@@ -36,7 +36,8 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 				enrollment: this.enrollment,
 				locInfo: this.locInfo,
 				assignments: this.assignments,
-				course: this.course
+				course: this.course,
+				navigate: this.navigate
 			});
 		}
 
