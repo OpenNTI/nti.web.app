@@ -79,10 +79,27 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	},
 
 
+	/**
+	 * Handles resize event on the reader
+	 *
+	 * NOTE: Since most video APIs do not provide events for when the browser goes into fullscreen mode,
+	 * we are caching the lastScroll zone before we're in fullscreen mode. And when they exist fullscreen mode,
+	 * it will fire a resize event. When the resize event is fired, we go ahead and scroll to the last scroll position.
+	 * 
+	 */
 	onWindowResize: function() {
 		if (this.navigation && this.navigation.setWidth) {
 			this.navigation.setWidth('100%');
 			this.alignNavigation();
+		}
+
+
+		var r = this.body.down('reader-content'),
+			readerScroll = r && r.getScroll && r.getScroll();
+
+		if (r && r.scrollBeforeFullscreen !== undefined) {
+			readerScroll.to(r.scrollBeforeFullscreen);
+			delete r.scrollBeforeFullscreen;
 		}
 	},
 
