@@ -59,10 +59,7 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 				if (visible) {
 					AnalyticsUtil.addContext('dashboard', true);
 				}
-			},
-			'activate': this.onActivate.bind(this),
-			'deactivate': this.onDeactivate.bind(this),
-			'destroy': this.onDeactivate.bind(this)
+			}
 		});
 	},
 
@@ -88,17 +85,16 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 		this.lastScrollTop = el.scrollTop;
 	},
 
-
-	onDeactivate: function() {
+	onRouteDeactivate: function(){
 		window.removeEventListener('scroll', this.onScroll);
 	},
 
-
-	onActivate: function() {
+	onRouteActivate: function(){
 		this.setTitle(this.title);
+		this.reloadTiles();
 
 		if (!this.rendered) {
-			this.on('afterrender', this.onActivate.bind(this));
+			this.on('afterrender', this.onRouteActivate.bind(this));
 			return;
 		}
 
@@ -401,6 +397,16 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 		}
 	},
 
+
+	reloadTiles: function(){
+		var tileContainers = this.query('dashboard-tile-container');
+
+		Ext.each(tileContainers, function(tileContainer) {
+			if(tileContainer.reloadTiles){
+				tileContainer.reloadTiles();
+			}
+		});
+	},
 
 	__emptyContainer: function(cmp) {
 		var index = cmp.number,

@@ -110,6 +110,11 @@ Ext.define('NextThought.store.courseware.OutlineInterface', {
 	},
 
 
+	forEach: function(fn) {
+		this.__flatContents.forEach(fn);
+	},
+
+
 	fillInNode: function(node) {
 		if (!this.isBuilt) {
 			console.warn('Calling fill in node before it is finished building');
