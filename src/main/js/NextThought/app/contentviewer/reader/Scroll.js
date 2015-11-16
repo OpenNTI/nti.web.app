@@ -39,7 +39,6 @@ Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 		// Track and cache the last scroll position prior to going into fullscreen mode.
 		if (!this.isInFullScreenMode()) {
 			this.reader.lastScroll = scrollPosition;
-			console.debug('lastScroll: ', this.reader.lastScroll);	
 		}
 		else {
 			this.reader.scrollBeforeFullscreen = this.reader.lastScroll;
