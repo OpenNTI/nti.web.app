@@ -44,6 +44,17 @@ Ext.define('NextThought.app.course.overview.components.parts.Group', {
 	},
 
 
+	setProgress: function(progress) {
+		var body = this.getBodyContainer();
+
+		body.items.each(function(item) {
+			if (item.setProgress) {
+				item.setProgress(progress);
+			}
+		});
+	},
+
+
 	getBodyContainer: function() {
 		return this.down('[bodyContainer]');
 	},

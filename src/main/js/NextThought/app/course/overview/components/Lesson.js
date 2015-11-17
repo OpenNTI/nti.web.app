@@ -53,11 +53,11 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 
 	__updateProgress: function() {
-		if (!this.__getCurrentProgress) { return; }
+		if (!this.currentNode || !this.currentNode.getProgress) { return; }
 
 		var me = this;
 
-		return me.__getCurrentProgress()
+		return me.currentNode.getProgress()
 					.then(function(progress) {
 						me.items.each(function(item) {
 							if (item.setProgress) {
@@ -92,6 +92,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 		if (me.currentOverview && me.currentOverview.record.getId() === record.getId()) {
 			if (me.currentOverview.refresh) {
 				 return me.currentOverview.refresh()
+				 			.then(me.__updateProgress.bind(me))
 							.always(me.maybeUnmask.bind(me));
 			}
 
@@ -147,7 +148,8 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 				return me.currentOverview.loadCollection(overviewsrc);
 			})
 			.fail(function(reason) { console.error(reason); })
-			.done(me.maybeUnmask.bind(me));
+			.then(me.__updateProgress.bind(me))
+			.then(me.maybeUnmask.bind(me));
 	},
 
 
