@@ -26,7 +26,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Group', {
 
 		this.add([
 			{
-				xtype: 'course-overview-section',
+				xtype: 'course-overview-section-header',
 				title: this.record.get('title'),
 				color: this.record.get('accentColor'),
 				type: 'content-driven'

@@ -1,7 +1,8 @@
-Ext.define('NextThought.app.course.overview.components.parts.SectionHeader', {
-	extend: 'Ext.Component',
+Ext.define('NextThought.app.course.overview.components.parts.Section', {
+	extend: 'Ext.container.Container',
 	alias: [
-		'widget.course-overview-section-header'
+		'widget.course-overview-section',
+		'widget.course-overview-nticourseoverviewgroup'
 	],
 
 	statics: {
@@ -11,11 +12,23 @@ Ext.define('NextThought.app.course.overview.components.parts.SectionHeader', {
 	ui: 'course',
 	cls: 'overview-section',
 
+	hidden: true,
+	layout: 'auto',
+	componentLayout: 'natural',
+	childEls: ['body'],
+	getTargetEl: function() {
+		return this.body;
+	},
+
 	renderTpl: Ext.DomHelper.markup([
 		{
 			tag: 'h2', cls: '{type}', cn: [
 			{tag: 'span', html: '{title}', style: '{[(values.color && ("background-color: #" + values.color)) || "" ]}'}
 		]
+		},
+		{
+			id: '{id}-body',
+			cn: ['{%this.renderContainer(out,values)%}']
 		}
 	]),
 
