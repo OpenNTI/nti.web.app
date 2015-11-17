@@ -134,7 +134,8 @@ Ext.define('NextThought.app.course.overview.Index', {
 			rootId = route.params.id,
 			pageId = route.params.page,
 			lessonId = route.params.lesson,
-			lesson = route.precache.lesson;
+			lesson = route.precache.lesson,
+			readerRoute;
 
 		lessonId = ParseUtils.decodeFromURI(lessonId);
 		rootId = ParseUtils.decodeFromURI(rootId);
@@ -152,13 +153,26 @@ Ext.define('NextThought.app.course.overview.Index', {
 						me.activeMediaWindow.destroy();
 					}
 
+					if (route.object.id) {
+						return Service.getObject(ParseUtils.decodeFromURI(route.object.id))
+									.then(me.reader.showNote.bind(me.reader));
+					}
+
 					return Promise.resolve();
 				}
 			}
 		}
 
 		return me.store.onceBuilt()
-			.then(function() {
+			.then(function () {
+				if (route.object.id) {
+					return Service.getObject(ParseUtils.decodeFromURI(route.object.id))
+						.fail(function(reason) {
+							console.log('Failed to resolve note: ', reason);
+						});
+				}
+			})
+			.then(function(note) {
 				var siblings = [];
 
 				if (lessonId && (!lesson || lesson.getId() !== lessonId)) {
@@ -199,6 +213,10 @@ Ext.define('NextThought.app.course.overview.Index', {
 					siblings: siblings
 				};
 
+				if (note) {
+					route.precache.note = note;
+				}
+
 				if (me.reader) {
 					me.reader.destroy();
 				}
@@ -218,7 +236,13 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 				me.getLayout().setActiveItem(me.reader);
 
-				return me.reader.handleRoute(route.params.id + '/' + (route.params.page || ''), route.precache);
+				readerRoute = route.params.id;
+
+				if (route.params.page) {
+					readerRoute = readerRoute + '/' + route.params.page;
+				}
+
+				return me.reader.handleRoute(readerRoute, route.precache);
 			});
 	},
 
@@ -404,7 +428,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 			path = relatedWorkId;
 
 			if (pageId) {
-				page += '/' + pageId;
+				path += '/' + pageId;
 			}
 		}
 

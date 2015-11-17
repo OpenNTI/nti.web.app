@@ -467,7 +467,7 @@
 				}
 			}
 		}
-		
+
 		$control: 45px;
 		$avatar: 180px;
 		.avatar {
@@ -479,7 +479,7 @@
 				size: cover;
 				repeat: no-repeat;
 				position: center center;
-			}			
+			}
 		}
 
 		&.editing {
@@ -706,7 +706,7 @@
 
 					&:not(.disabled).x-item-selected{
 						box-shadow: none;
-						
+
 						.label {
 							visibility: hidden;
 						}
@@ -1127,7 +1127,7 @@
 				    display: none;
 				}
 			}
-			
+
 			.icon {
 				float: left;
 				width: 54px; height: 66px;
@@ -1822,8 +1822,8 @@
 				content: '*'
 			}
 		}
-		
-		
+
+
 	}
 
 	.label {
@@ -2104,7 +2104,7 @@
 				color: $primary-red;
 			}
 		}
-	
+
 		&.about {
 			box-shadow: inset 5px 0 0 0 #fc9f77;
 			.editable {
@@ -2367,7 +2367,7 @@
 .memberships {
 	background: white;
 	padding: 20px;
-	
+
 	&.admin .entry .avatar{
 		@include icon('admin_badge', $top: auto, $left: auto, $side: after);
 		&::after{
@@ -2376,7 +2376,7 @@
 			right: 2px;
 		}
 	}
-	
+
 	.entry.admin{
 		@include icon('admin_badge', $top: auto, $left: auto, $side: after);
 		&::after{
@@ -2385,18 +2385,18 @@
 			right: 0px;
 		}
 	}
-	
+
 	.entry[data-route]:not([data-route=""]){
 		cursor: pointer;
 	}
-	
+
 	&.suggested.users {
 		padding: 20px;
 	}
 
 	&.condensed {
 		.header {
-			
+
 			color: $secondary-grey;
 			.title {
 				font-size: 18px;
@@ -2482,13 +2482,13 @@
 				margin-right: 0;
 			}
 		}
-		
+
 		&.three-column {
 			.entry:nth-of-type(3n) {
 				margin-right: 0;
 			}
 		}
-		
+
 		&.four-column {
 			.entry {
 				width: 238px;
@@ -2497,7 +2497,7 @@
 				margin-right: 0;
 			}
 		}
-		
+
 		&.communities {
 			.entry {
 				vertical-align: top;
@@ -2583,14 +2583,13 @@
 	}
 
 	.community-body {
-		width: 682px;
+		width: 679px;
 		float: right;
 	}
 
 	.community-sidebar {
-		width: 332px;
+		width: 334px;
 		float: left;
-		padding-right: 5px;
 
 		.card {
 			border-radius: 5px;
@@ -2745,7 +2744,7 @@
 	border-radius: 5px;
 	height: 60px;
 	padding: 8px;
-	margin-bottom: 10px;
+	margin-bottom: 11px;
 
 	.prompt {
 		background-color: white;
@@ -2845,7 +2844,7 @@
 		padding: 10px 15px;
 		display: none;
 	    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.2);
-	
+
 	    li {
 	    	cursor: pointer;
 

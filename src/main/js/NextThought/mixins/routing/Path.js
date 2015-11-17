@@ -164,11 +164,28 @@ Ext.define('NextThought.mixins.routing.Path', {
 			varKey = this.VARIABLE_KEY,
 			params = {}, subRoute,
 			currentRoute = '',
-			sub, i, key, val;
+			sub, i, key, val, objectParts, oId, oMimeType;
 
 		precache = precache || {};
 
 		sub = this.__routeMap;
+
+		// Strip and cache the object route data
+
+		//object/mimeType/id
+		if (parts[parts.length - 3] === 'object') {
+			oMimeType = parts[parts.length - 2];
+			oId = parts[parts.length - 1];
+
+			objectParts = parts.slice(-3);
+			parts = parts.slice(0, -3);
+		//object/id
+		} else if (parts[parts.length - 2] === 'object') {
+			oId = parts[parts.length - 1];
+
+			objectParts = parts.slice(-2);
+		 	parts = parts.slice(0, -2);
+		}
 
 		//for each part in the url
 		for (i = 0; i < parts.length; i++) {
@@ -192,8 +209,11 @@ Ext.define('NextThought.mixins.routing.Path', {
 			currentRoute = currentRoute + '/' + key;
 		}
 
-		//add the remaining parts as sub route
+
 		subRoute = parts.slice(i).join('/');
+
+		if(objectParts) {subRoute +=  '/' + objectParts.join('/')};
+		//add the object data back to the subroute
 
 		if (query) {
 			subRoute += '?' + query;
@@ -212,7 +232,11 @@ Ext.define('NextThought.mixins.routing.Path', {
 				params: params,
 				hash: hash,
 				queryParams: Ext.Object.fromQueryString(query || ''),
-				precache: precache
+				precache: precache,
+				object: {
+					id: oId || null,
+					mimeType: oMimeType || null
+				}
 			}, '/' + subRoute);
 		//if there is no handler but we have a default handler call that
 		} else if (this.defaultRouteHandler) {
