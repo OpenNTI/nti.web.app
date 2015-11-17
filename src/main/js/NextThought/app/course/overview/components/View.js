@@ -8,7 +8,9 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 	requires: [
 		'NextThought.app.course.overview.components.Outline',
-		'NextThought.app.course.overview.components.Body'
+		'NextThought.app.course.overview.components.Body',
+		'NextThought.app.course.overview.components.editing.Window',
+		'NextThought.app.windows.Actions'
 	],
 
 	cls: 'course-overview',
@@ -26,14 +28,18 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 		var me = this;
 
+		this.WindowActions = NextThought.app.windows.Actions.create();
+
 		this.initRouter();
 
-		this.body.onEdit = this.onEdit.bind(this);
+		this.body.onEditLesson = this.onEditLesson.bind(this);
+		this.navigation.onEditOutline = this.onEditOutline.bind(this);
 
 		this.addChildRouter(this.body);
 
+		this.addRoute('/edit', this.showOutlineEditor.bind(this));
 		this.addRoute('/:lesson', this.showLesson.bind(this));
-		this.addRoute('/:lesson/edit', this.showEditor.bind(this));
+		this.addRoute('/:lesson/edit', this.showLessonEditor.bind(this));
 
 		this.addDefaultRoute(this.showLesson.bind(this));
 
@@ -71,10 +77,15 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	},
 
 
-	onEdit: function(id) {
+	onEditLesson: function(id) {
 		id = ParseUtils.encodeForURI(id);
 
-		this.pushRoute('', id + '/edit');
+		this.pushRoute('Editing', id + '/edit');
+	},
+
+
+	onEditOutline: function() {
+		this.pushRoute('Editing', 'edit');
 	},
 
 
@@ -172,30 +183,67 @@ Ext.define('NextThought.app.course.overview.components.View', {
 				me.activeLesson = record;
 
 				return me.body.showLesson(record)
-					.then(me.alignNavigation.bind(me));
+					.then(me.alignNavigation.bind(me))
+					.then(function() {
+						return record;
+					});
 			});
 	},
 
 
-	showEditor: function(route, subRoute) {
+	showOutlineEditor: function(route, subRoute) {
 		var me = this,
-			id = route.params && route.params.lesson && ParseUtils.decodeFromURI(route.params.lesson),
-			record = route.precache.lesson;
+			outline = me.currentBundle.getOutlineInterface();
 
-		return this.__getRecord(id, record)
+		me.setTitle('Editing');
+
+		return me.showLesson(route, subRoute)
+			.then(outline.onceBuilt.bind(outline))
+			.then(function(outline) {
+				return outline.getOutline();
+			})
+			.then(function(outline) {
+				me.navigation.clearCollection();
+				me.navigation.setOutline(me.currentBundle, outline);
+
+				me.WindowActions.showWindow('outline-editing', null, null,
+				{
+					doClose: function() {
+						me.pushRoute('', '/');
+					}
+				},
+				{
+					outline: outline
+				});
+			});
+	},
+
+
+	showLessonEditor: function(route, subRoute) {
+		var me = this;
+
+		return me.showLesson(route, subRoute)
 			.then(function(record) {
+
+				me.setTitle('Editing');
+
 				if (!record) {
-					console.error('No valid lesson to edit');
-					return;
+					return Promise.reject('Unable to find lesson');
 				}
 
-				record = me.navigation.selectRecord(record);
-				me.unmask();
-				me.setTitle(record.get('label'));
-				me.activeLesson = record;
+				me.WindowActions.showWindow('lesson-editing', null, null,
+				{
+					doClose: function() {
+						var id = record.getId();
 
-				return me.body.editLesson(record)
-					.then(me.alignNavigation.bind(me));
+						id = ParseUtils.encodeForURI(id);
+
+						me.pushRoute('', id);
+					}
+				},
+				{
+					lesson: record
+				});
 			});
 	}
 });

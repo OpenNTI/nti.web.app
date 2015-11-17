@@ -7,6 +7,29 @@
 }
 
 .nav-outline.course {
+
+	.outline-header {
+		box-shadow: 0 1px 0 0 #eaeaea;
+		position: relative;
+		z-index: 2;
+
+		.header {
+			box-shadow: none;
+			display: inline-block;
+			padding: 0 0 0 3em;
+		}
+
+		.edit {
+			display: inline-block;
+			font-size: 0.875em;
+			line-height: 3.5em;
+			padding-right: 0.5em;
+			color: $primary-blue;
+			float: right;
+			cursor: pointer;
+		}
+	}
+
 	.outline-list {
 		margin-left: -50px;
 		padding-left: 50px;

@@ -84,7 +84,7 @@ Ext.define('NextThought.app.windows.Index', {
 			record: object && object.isModel && object,//only pass a record when we have an object and it is a model
 			precache: precache || {},
 			state: state,
-			doClose: this.doClose.bind(this, monitors && monitors.afterClose),
+			doClose: this.doClose.bind(this, monitors && monitors.doClose, monitors && monitors.afterClose),
 			doNavigate: this.doNavigate.bind(this, monitors && monitors.beforeNavigate),
 			monitors: monitors,
 			scrollingParent: this.el
@@ -134,8 +134,13 @@ Ext.define('NextThought.app.windows.Index', {
 	},
 
 
-	doClose: function(afterClose, record) {
-		this.WindowActions.closeWindow();
+	doClose: function(doClose, afterClose, record) {
+
+		if (doClose) {
+			doClose();
+		} else {
+			this.WindowActions.closeWindow();
+		}
 
 		document.body.removeEventListener('keydown', this.onKeyPress);
 		if (afterClose) {

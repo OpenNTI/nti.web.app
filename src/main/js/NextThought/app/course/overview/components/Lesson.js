@@ -132,7 +132,6 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 					return;
 				}
 
-
 				me.currentOverview = me.add({
 					xtype: 'overview-types-content',
 					record: record,
@@ -159,8 +158,8 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 
 	edit: function() {
-		if (this.onEdit) {
-			this.onEdit(this.currentPage);
+		if (this.onEditLesson) {
+			this.onEditLesson(this.currentPage);
 		}
 	}
 });

@@ -8,7 +8,8 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 	requires: [
 		'NextThought.app.course.overview.components.Lesson',
-		'NextThought.app.course.overview.components.Editor'
+		'NextThought.app.course.overview.components.editing.Outline',
+		'NextThought.app.course.overview.components.editing.Lesson'
 	],
 
 	layout: 'none',
@@ -25,7 +26,7 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 			lesson = this.add({
 				xtype: 'course-overview-lesson',
 				bundle: this.currentBundle,
-				onEdit: this.edit.bind(this)
+				onEditLesson: this.edit.bind(this)
 			});
 
 			this.addChildRouter(lesson);
@@ -35,33 +36,11 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 	},
 
 
-	getEditor: function(addIfNotThere) {
-		var editor = this.down('course-overview-editor');
-
-		if (!editor && addIfNotThere) {
-			editor = this.add({
-				xtype: 'course-overview-editor',
-				bundle: this.currentBundle,
-				onDoneEditing: this.doneEditing.bind(this)
-			});
-
-			this.addChildRouter(editor);
-		}
-
-		return editor;
-	},
-
-
 	setActiveBundle: function(bundle) {
-		var lesson = this.down('course-overview-lesson'),
-			editor = this.down('course-overview-editor');
+		var lesson = this.getLesson();
 
 		if (lesson) {
 			lesson.setActiveBundle(bundle);
-		}
-
-		if (editor) {
-			editor.setActiveBundle(bundle);
 		}
 
 		this.currentBundle = bundle;
@@ -69,33 +48,15 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 
 	showLesson: function(record) {
-		var lesson = this.getLesson(),
-			editor = this.getEditor();
-
-		if (editor) {
-			editor.hide();
-		}
-
-		lesson.show();
+		var lesson = this.getLesson();
 
 		return lesson.renderLesson(record);
 	},
 
 
-	editLesson: function(record) {
-		var editor = this.getEditor(true),
-			lesson = this.getLesson();
-
-		editor.show();
-		lesson.hide();
-
-		return editor.editLesson(record);
-	},
-
-
 	edit: function(id) {
-		if (this.onEdit) {
-			this.onEdit(id);
+		if (this.onEditLesson) {
+			this.onEditLesson(id);
 		}
 	},
 

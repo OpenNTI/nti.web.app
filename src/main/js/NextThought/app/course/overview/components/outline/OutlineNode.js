@@ -91,7 +91,7 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 		}
 
 		wait(100).then(function() {
-			var label = me.nodeCmp.el.dom.querySelector('.label');
+			var label = me.nodeCmp && me.nodeCmp.el && me.nodeCmp.el.dom.querySelector('.label');
 
 			if (label) {
 				me.truncateText(label, null, true);
