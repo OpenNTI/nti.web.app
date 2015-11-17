@@ -79,12 +79,13 @@ Ext.define('NextThought.app.profiles.user.components.activity.Body', {
 			collection = Service.getCollection('Blog'),
 			href = collection && collection.href;
 
+		// Update the activityCmp with the new user entity.
+		this.activityCmp.userChanged(entity);
+
 		if (!href || !isMe(entity) || !Service.canBlog()) {
 			me.newPostCmp.hide();
 			return Promise.resolve();
 		}
-
-		this.activityCmp.userChanged(entity);
 
 		return Service.request(href)
 			.then(function(resp) {

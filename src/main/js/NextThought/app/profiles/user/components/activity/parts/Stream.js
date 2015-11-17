@@ -8,7 +8,15 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
 
 
 	userChanged: function(user) {
+		var joined;
+
 		this.user = user;
+		if (this.hasInitialWidget() && this.rendered) {
+			joined = this.down('joined-event');
+			if (joined && joined.setUser) {
+				joined.setUser(this.user);	
+			}
+		}
 	},
 
 

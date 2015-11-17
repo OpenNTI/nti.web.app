@@ -15,18 +15,20 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Joine
 
 
 	beforeRender: function() {
-		var me = this;
-		me.callParent(arguments);
+		this.callParent(arguments);
+		UserRepository.getUser(this.username, this.setUser.bind(this));
+	},
 
-		UserRepository.getUser(me.username, function(u) {
-			var rd = me.renderData = Ext.apply(this.renderData || {},u.getData());
-			rd.user = u;
-			rd.name = u.getName();
-			rd.date = Ext.Date.format(u.get('CreatedTime'), 'F j, Y');
-			if (me.rendered) {
-				//oops...we resolved later than the render...re-render
-				me.renderTpl.overwrite(me.el, rd);
-			}
-		});
+
+	setUser: function(u){
+		var rd = this.renderData = Ext.apply(this.renderData || {}, u && u.getData());
+
+		rd.user = u;
+		rd.name = u && u.getName();
+		rd.date = Ext.Date.format(u && u.get('CreatedTime'), 'F j, Y');
+		if (this.rendered) {
+			//oops...we resolved later than the render...re-render
+			this.renderTpl.overwrite(this.el, rd);
+		}
 	}
 });
