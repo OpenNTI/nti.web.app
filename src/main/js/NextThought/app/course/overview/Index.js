@@ -439,7 +439,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 			path = relatedWorkId;
 
 			if (pageId) {
-				page += '/' + pageId;
+				path += '/' + pageId;
 			}
 		}
 
