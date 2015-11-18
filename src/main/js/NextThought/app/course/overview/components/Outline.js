@@ -21,7 +21,6 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		this.callParent(arguments);
 
 		this.headerCmp = this.down('overview-outline-header');
-		this.headerCmp.onEdit = this.onEdit.bind(this);
 	},
 
 
@@ -31,6 +30,8 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		var body = this.getBodyContainer();
 
 		this.mon(body.el, 'scroll', this.onScroll.bind(this));
+
+		if (this.SYNCED_TOP) { this.syncTop(this.SYNCED_TOP); }
 	},
 
 
@@ -58,7 +59,6 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 	setOutline: function(bundle, outline) {
 		var catalog = bundle.getCourseCatalogEntry();
 
-		this.headerCmp.setOutline(outline);
 		this.activeBundle = bundle;
 		this.shouldShowDates = !catalog.get('DisableOverviewCalendar');
 		this.setCollection(outline);
@@ -100,10 +100,17 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		return this.selectedRecord;
 	},
 
+	MIN_TOP: 90,
+	MAX_TOP: 150,
 
-	onEdit: function() {
-		if (this.onEditOutline) {
-			this.onEditOutline();
+	syncTop: function(top) {
+		top = Math.max(top, this.MIN_TOP);
+		top = Math.min(top, this.MAX_TOP);
+
+		this.SYNCED_TOP = top;
+
+		if (this.rendered) {
+			this.el.dom.style.top = top + 'px';
 		}
 	}
 });

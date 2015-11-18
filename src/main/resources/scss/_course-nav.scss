@@ -438,6 +438,30 @@
 	}
 }
 
+.course-overview {
+	.editing-controls {
+		margin-bottom: 20px;
+		overflow: hidden;
+
+		.buttons {
+			float: right;
+
+			.button {
+				display: inline-block;
+				line-height: 40px;
+				text-align: center;
+				padding: 0 1.5em;
+				border-radius: 3px;
+
+				&.edit {
+					color: white;
+					background-color: $primary-blue;
+				}
+			}
+		}
+	}
+}
+
 
 .x-container-course {
 	&.course-overview{

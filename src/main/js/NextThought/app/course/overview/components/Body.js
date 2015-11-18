@@ -69,6 +69,14 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 	},
 
 
+	getLessonTop: function() {
+		var lesson = this.getLesson(),
+			rect = lesson && lesson.el && lesson.el.dom && lesson.el.dom.getBoundingClientRect();
+
+		return rect ? rect.top : 0;
+	},
+
+
 	setActiveBundle: function(bundle) {
 		var lesson = this.getLesson();
 

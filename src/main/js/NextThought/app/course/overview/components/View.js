@@ -53,11 +53,16 @@ Ext.define('NextThought.app.course.overview.components.View', {
 				me.pushRoute(record.get('label'), id, {lesson: record});
 			}
 		});
+
+
+		this.onScroll = this.onScroll.bind(this);
 	},
 
 
 	onRouteActivate: function() {
 		this.outline = this.currentBundle.getOutlineInterface();
+
+		this.isActive = true;
 
 		this.outline.onceBuilt()
 			.then(function(outline) {
@@ -66,10 +71,39 @@ Ext.define('NextThought.app.course.overview.components.View', {
 			.then(this.navigation.setOutline.bind(this.navigation, this.currentBundle));
 
 		this.alignNavigation();
+
+		if (this.hasEditControls) {
+			this.addScrollListener();
+		}
 	},
 
 
-	onRouteDeactivate: function() {},
+	onRouteDeactivate: function() {
+		delete this.isActive;
+		this.removeScrollListener();
+	},
+
+	alignNavigation: function() {
+		this.callParent(arguments);
+
+		this.onScroll();
+	},
+
+
+	addScrollListener: function() {
+		this.removeScrollListener();
+		window.addEventListener('scroll', this.onScroll);
+	},
+
+
+	removeScrollListener: function() {
+		window.removeEventListener('scroll', this.onScroll);
+	},
+
+
+	onScroll: function() {
+		this.navigation.syncTop(this.body.getLessonTop());
+	},
 
 
 	getActiveLesson: function() {
@@ -90,14 +124,24 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 
 	showEditControls: function() {
+		this.hasEditControls = true;
+
+		if (this.isActive) {
+			this.addScrollListener();
+		}
+
 		this.addCls('has-editing-controls');
 		this.body.showEditControls();
+		this.navigation.hasEditControls();
 	},
 
 
 	hideEditControls: function() {
+		delete this.hasEditControls;
+		this.removeScrollListener();
 		this.removeCls('has-editing-controls');
 		this.body.hideEditControls();
+		this.navigation.noEditControls();
 	},
 
 
@@ -125,6 +169,8 @@ Ext.define('NextThought.app.course.overview.components.View', {
 				} else {
 					me.hideEditControls();
 				}
+
+				return outline;
 			})
 			.then(me.navigation.setOutline.bind(me.navigation, bundle));
 
