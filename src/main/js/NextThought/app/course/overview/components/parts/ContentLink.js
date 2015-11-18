@@ -5,7 +5,8 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 		'NextThought.model.Note',
 		'NextThought.model.RelatedWork',
 		'NextThought.app.contentviewer.Actions',
-		'NextThought.util.Parsing'
+		'NextThought.util.Parsing',
+		'NextThought.app.course.overview.components.editing.contentlink.Window'
 	],
 
 	alias: [
@@ -15,6 +16,19 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 	],
 
 	// requires: ['NextThought.view.contentviewer.View'],
+
+	renderTpl: Ext.DomHelper.markup([
+		{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
+    		{ cls: 'controls', cn: [
+    			{ cls: 'edit', html: 'Edit'}
+    		]},
+		{ cls: 'meta', cn: [
+			{ cls: 'title', html: '{title}' },
+			{ cls: 'byline', html: '{{{NextThought.view.cards.Card.by}}}' },
+			{ cls: 'description', html: '{description}' }
+		]}
+	]),
+
 
 	constructor: function(config) {
 		var n = config.node || {getAttribute: function(a) { return config[a];} },
@@ -49,6 +63,9 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 		this.ContentActions = NextThought.app.contentviewer.Actions.create();
 
 		this.callParent([config]);
+
+		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 	},
 
 
@@ -144,6 +161,11 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 		if (e && e.getTarget('.comment')) {
 			e.stopEvent();
 			this.bypassEvent = false;
+		}
+
+		if (e && e.getTarget('.edit')) {
+			this.WindowActions.showWindow('edit-contentlink', null, null, {}, {data: this.data});
+			return;
 		}
 
 		if (this.bypassEvent) {
