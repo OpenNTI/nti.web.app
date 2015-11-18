@@ -31,6 +31,24 @@
 			top: -1.375em;//half the line-height
 			left: -50%;
 		}
+		.controls{
+		    position: absolute;
+		    overflow: visible;
+		    left: 50%;
+		    top: -40%;
+
+		 	.edit {
+			    padding: 5px 10px;
+			    color: #3fb3f6;
+			    margin: 5px;
+
+				&:hover {
+				    background-color: #3fb3f6;
+				    color: #fff;
+				    border-radius: 5px;
+				}
+			}
+		}
 	}
 
 	.play {

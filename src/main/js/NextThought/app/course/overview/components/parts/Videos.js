@@ -25,7 +25,8 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 		'NextThought.model.PlaylistItem',
 		'NextThought.app.video.Video',
 		'Ext.data.reader.Json',
-		'NextThought.app.library.Actions'
+		'NextThought.app.library.Actions',
+		'NextThought.app.course.overview.components.editing.video.Window'
 	],
 
 	ui: 'course',
@@ -54,7 +55,10 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 						{cls: 'blur-clip', cn: {cls: 'blur'}},
 						{ cls: 'label', 'data-qtip': '{{{NextThought.view.courseware.overview.parts.Videos.playtranscript}}}'},
 						{cls: 'launch-player', 'data-qtip': '{{{NextThought.view.courseware.overview.parts.Videos.play}}}'}
-					] }
+					] },
+		    		{ cls: 'controls', cn: [
+		    			{ cls: 'edit', html: 'Edit'}
+		    		]}
 				] }
 			]},
 			{ cls: 'video-list'}
@@ -129,6 +133,8 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 		}
 
 		this.LibraryActions = NextThought.app.library.Actions.create();
+		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 
 		this.playlist = [];
 
@@ -501,11 +507,11 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 	/**
 	 * Handle the play button click on the overview videos
 	 *
-	 * For a video that belongs to a slidedeck, we open the media viewer with a slidedeck. 
-	 * Otherwise, we determine whether to play the video inline or launch the mediaviewer 
+	 * For a video that belongs to a slidedeck, we open the media viewer with a slidedeck.
+	 * Otherwise, we determine whether to play the video inline or launch the mediaviewer
 	 * based on where the user clicked on the overview.
-	 * 
-	 * @param  {Event} e browser click event 
+	 *
+	 * @param  {Event} e browser click event
 	 */
 	onCurtainClicked: function(e) {
 		e.stopEvent();
@@ -516,13 +522,17 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 			slideActions;
 
 		if (!Ext.isEmpty(slidedeck)) {
-			this.maybePauseCurrentVideo();		
+			this.maybePauseCurrentVideo();
 			this.navigateToSlidedeck(slidedeck);
 		}
+		else if(e && e.getTarget('.edit'))
+		{
+			this.WindowActions.showWindow('edit-video', null, null, {});
+		}
 		else if (!e.getTarget('.launch-player') && e.getTarget('.transcripts')) {
-			this.maybePauseCurrentVideo();		
+			this.maybePauseCurrentVideo();
 			this.navigateToTarget(m, li.root);
-		} 
+		}
 		else {
 			this.maybeCreatePlayer();
 
