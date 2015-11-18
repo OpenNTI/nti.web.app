@@ -89,26 +89,46 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	},
 
 
+	showEditControls: function() {
+		this.addCls('has-editing-controls');
+		this.body.showEditControls();
+	},
+
+
+	hideEditControls: function() {
+		this.removeCls('has-editing-controls');
+		this.body.hideEditControls();
+	},
+
+
 	bundleChanged: function(bundle) {
 		if (this.currentBundle === bundle) { return; }
 
-		this.clear();
-		this.currentBundle = bundle;
+		var me = this;
+
+		me.clear();
+		me.currentBundle = bundle;
 
 		if (!bundle || !bundle.getOutlineInterface) {
-			delete this.currentBundle;
+			delete me.currentBundle;
 			return;
 		}
 
-		this.outline = bundle.getOutlineInterface();
+		me.outline = bundle.getOutlineInterface();
 
-		this.outline.onceBuilt()
-			.then(function(outline) {
-				return outline.getOutline();
+		me.outline.onceBuilt()
+			.then(function(outlineInterface) {
+				var outline = outlineInterface.getOutline();
+
+				if (outline.getLink('edit')) {
+					me.showEditControls();
+				} else {
+					me.hideEditControls();
+				}
 			})
-			.then(this.navigation.setOutline.bind(this.navigation, bundle));
+			.then(me.navigation.setOutline.bind(me.navigation, bundle));
 
-		this.body.setActiveBundle(bundle);
+		me.body.setActiveBundle(bundle);
 	},
 
 

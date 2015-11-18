@@ -164,7 +164,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 		}
 
 		return me.store.onceBuilt()
-			.then(function () {
+			.then(function() {
 				if (route.object.id) {
 					return Service.getObject(ParseUtils.decodeFromURI(route.object.id))
 						.fail(function(reason) {

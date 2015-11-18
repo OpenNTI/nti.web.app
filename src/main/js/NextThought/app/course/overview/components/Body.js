@@ -7,6 +7,7 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 	},
 
 	requires: [
+		'NextThought.app.course.overview.components.EditingControls',
 		'NextThought.app.course.overview.components.Lesson',
 		'NextThought.app.course.overview.components.editing.Outline',
 		'NextThought.app.course.overview.components.editing.Lesson'
@@ -14,8 +15,40 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 	layout: 'none',
 
+	items: [
+		{xtype: 'course-overview-editing-controls'}
+	],
+
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.editingControlsCmp = this.down('course-overview-editing-controls');
+
+		this.editingControlsCmp.hide();
+	},
+
+
+	showEditControls: function() {
+		this.addCls('has-editing-controls');
+
+		this.editingControlsCmp.show();
+	},
+
+
+	hideEditControls: function() {
+		this.removeCls('has-editing-controls');
+
+		this.editingControlsCmp.hide();
+	},
+
+
 	clear: function() {
-		this.removeAll(true);
+		var lesson = this.down('course-overview-lesson');
+
+		if (lesson) {
+			lesson.destroy();
+		}
 	},
 
 
