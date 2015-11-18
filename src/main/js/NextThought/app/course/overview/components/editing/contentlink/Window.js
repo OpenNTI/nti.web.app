@@ -10,7 +10,8 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Windo
 		'NextThought.app.course.overview.components.editing.contentlink.Preview',
 		'NextThought.app.windows.StateStore',
 		'NextThought.app.windows.components.Header',
-		'NextThought.app.windows.components.Loading'
+		'NextThought.app.windows.components.Loading',
+		'NextThought.common.form.Form'
 	],
 
 	items: [],
@@ -31,9 +32,31 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Windo
 		this.setupComponents();
 	},
 
+
+	getSchema: function(data) {
+		return [
+			{name: 'title', displayName: 'Title', type: 'text', placeholder: 'Title....'},
+			{name: 'creator', displayName: 'Author', type: 'text', placeholder: 'Author...'},
+			{name: 'description', displayName: 'Description', type: 'textarea', placeholder: 'Description goes here...'},
+			{name: 'icon', displayName: 'Icon', type: 'file'}
+		]
+	},
+
 	setupComponents: function(){
-		this.add({xtype: 'editing-contentlink-preview', data: this.data});
-		this.add({xtype: 'editing-contentlink-editor', data: this.data});
+		this.preview = this.add({xtype: 'editing-contentlink-preview', data: this.data});
+		this.form = this.add({
+			xtype: 'common-form', 
+			schema: this.getSchema(this.data),
+			data: this.data,
+			onChange: this.onFormChange.bind(this)
+		});
+	},
+
+
+	onFormChange: function (values) {
+		if (this.preview && this.preview.update) {
+			this.preview.update(values);
+		}
 	},
 
 

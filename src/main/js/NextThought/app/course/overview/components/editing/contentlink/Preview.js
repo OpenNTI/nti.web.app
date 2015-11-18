@@ -18,5 +18,10 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Previ
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, this.data);
+	},
+
+
+	update: function (values) {
+		// TODO: Update the preview as values changes.
 	}
 });

@@ -2,7 +2,7 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Edito
 	extend: 'Ext.Component',
 	alias: 'widget.editing-contentlink-editor',
 
-	csl: 'content-editor',
+	cls: 'content-editor',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header', cn: [
