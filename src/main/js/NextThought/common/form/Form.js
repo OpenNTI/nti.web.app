@@ -76,7 +76,7 @@ Ext.define('NextThought.common.form.Form', {
 			var el = Ext.get(field);
 
 			me.mon(el, {
-				keyup: me.formChanged.bind(this)
+				keyup: me.formChanged.bind(me)
 			})
 		});
 	},
@@ -95,10 +95,10 @@ Ext.define('NextThought.common.form.Form', {
 	 * 
 	 */
 	formChanged: function(e) {
-		var vals = {};
+		var vals = {}, me = this;
 
 		Ext.each(this.schema, function (entry) {
-			var el = me.el.down('.field.'+ entry.name + ' ' + entry.type);
+			var el = me.el.down('.field.'+ entry.name + ' [type=' + entry.type + ']');
 			if (el){
 				vals[entry.name] = el.dom.value;
 			}

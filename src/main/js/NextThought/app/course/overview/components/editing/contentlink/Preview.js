@@ -9,7 +9,7 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Previ
 		{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
 		{ cls: 'meta', cn: [
 			{ cls: 'title', html: '{title}' },
-			{ cls: 'byline', html: '{{{NextThought.view.cards.Card.by}}}' },
+			{ cls: 'byline creator', html: '{{{NextThought.view.cards.Card.by}}}' },
 			{ cls: 'description', html: '{description}' }
 		]}
 	]),
@@ -22,6 +22,16 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Previ
 
 
 	update: function (values) {
-		// TODO: Update the preview as values changes.
+		var el;
+
+		console.log(values);
+		for(var k in values) {
+			if(values.hasOwnProperty(k)){
+				el = this.el.down('.' + k);
+				if (el) {
+					el.setHTML(values[k]);
+				}
+			}
+		}
 	}
 });
