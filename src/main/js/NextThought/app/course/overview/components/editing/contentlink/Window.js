@@ -17,11 +17,11 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Windo
 	items: [],
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 
 		// TODO: This will need to change. We need the content link to be a record, right now we have a object (node)
-		this.data = this.data || this.precache && this.precache.data || {};		
+		this.data = this.data || this.precache && this.precache.data || {};
 
 		this.headerCmp = this.add({
 			xtype: 'window-header',
@@ -39,13 +39,13 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Windo
 			{name: 'creator', displayName: 'Author', type: 'text', placeholder: 'Author...'},
 			{name: 'description', displayName: 'Description', type: 'textarea', placeholder: 'Description goes here...'},
 			{name: 'icon', displayName: 'Icon', type: 'file'}
-		]
+		];
 	},
 
-	setupComponents: function(){
+	setupComponents: function() {
 		this.preview = this.add({xtype: 'editing-contentlink-preview', data: this.data});
 		this.form = this.add({
-			xtype: 'common-form', 
+			xtype: 'common-form',
 			schema: this.getSchema(this.data),
 			data: this.data,
 			onChange: this.onFormChange.bind(this)
@@ -53,18 +53,18 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Windo
 	},
 
 
-	onFormChange: function (values) {
+	onFormChange: function(values) {
 		if (this.preview && this.preview.update) {
 			this.preview.update(values);
 		}
 	},
 
 
-	onClose: function(){
+	onClose: function() {
 		this.doClose();
-	},
+	}
 
 
-}, function(){
+}, function() {
 	NextThought.app.windows.StateStore.register('edit-contentlink', this);
 });

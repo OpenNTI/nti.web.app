@@ -7,12 +7,12 @@ Ext.define('NextThought.app.course.overview.components.editing.video.VideoEditin
 
 	requires: [
 		'NextThought.app.course.overview.components.editing.video.Editor',
-		'NextThought.app.course.overview.components.editing.video.Preview',
+		'NextThought.app.course.overview.components.editing.video.Preview'
 	],
 
 	items: [],
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.data = this.data || this.precahce && this.precahce.data || {};
