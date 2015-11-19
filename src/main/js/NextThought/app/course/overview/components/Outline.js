@@ -61,7 +61,12 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 		this.activeBundle = bundle;
 		this.shouldShowDates = !catalog.get('DisableOverviewCalendar');
+		this.clearCollection();
 		this.setCollection(outline);
+
+		if (this.selectedRecord) {
+			this.selectRecord(this.selectedRecord);
+		}
 	},
 
 
@@ -79,7 +84,7 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 
 	doSelectNode: function(record) {
-		this.selectLesson(record);
+		this.selectOutlineNode(record);
 	},
 
 

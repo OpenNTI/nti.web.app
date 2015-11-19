@@ -32,7 +32,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 		this.body.openEditing = this.openEditing.bind(this);
 		this.body.closeEditing = this.closeEditing.bind(this);
 
-		this.navigation.selectLesson = this.selectLesson.bind(this);
+		this.navigation.selectOutlineNode = this.selectOutlineNode.bind(this);
 
 		this.addChildRouter(this.body);
 
@@ -129,10 +129,15 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	},
 
 
-	selectLesson: function(record) {
-		var id = ParseUtils.encodeForURI(record.getId());
+	selectOutlineNode: function(record) {
+		var id = ParseUtils.encodeForURI(record.getId()),
+			route = id;
 
-		this.pushRoute(record.get('label'), id, {outlineNode: record});
+		if (this.isEditing) {
+			route = Globals.trimRoute(route) + '/edit';
+		}
+
+		this.pushRoute(record.get('label'), route, {outlineNode: record});
 	},
 
 
@@ -222,7 +227,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	},
 
 
-	__getRecord: function(id, record) {
+	__getRecord: function(id, record, editing) {
 		var me = this, rIndex;
 
 		return me.outline.onceBuilt()
@@ -237,6 +242,8 @@ Ext.define('NextThought.app.course.overview.components.View', {
 					});
 				}
 
+				//TODO: if the record isn't a content node, find the next node that is a content node, if editing isn't true
+
 				return record;
 			});
 	},
@@ -250,6 +257,8 @@ Ext.define('NextThought.app.course.overview.components.View', {
 		me.alignNavigation();
 		me.navigation.stopEditing();
 		me.body.showNotEditing();
+
+		delete me.isEditing;
 
 		return me.__getRecord(id, record)
 			.then(function(record) {
@@ -281,7 +290,9 @@ Ext.define('NextThought.app.course.overview.components.View', {
 		me.navigation.startEditing();
 		me.body.showEditing();
 
-		return me.__getRecord(id, record)
+		me.isEditing = true;
+
+		return me.__getRecord(id, record, true)
 			.then(function(record) {
 				if (!record) {
 					console.error('No valid outline node to edit');

@@ -9,7 +9,7 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 	requires: [
 		'NextThought.app.course.overview.components.EditingControls',
 		'NextThought.app.course.overview.components.Lesson',
-		'NextThought.app.course.overview.components.editing.outlinenode.Editor'
+		'NextThought.app.course.overview.components.editing.Index'
 	],
 
 	layout: 'none',
@@ -98,11 +98,11 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 
 	getEditor: function(addIfNotThere) {
-		var editor = this.down('overview-outlinenode-editor');
+		var editor = this.down('overview-editing');
 
 		if (!editor && addIfNotThere) {
 			editor = this.add({
-				xtype: 'overview-outlinenode-editor',
+				xtype: 'overview-editing',
 				bundle: this.currentBundle
 			});
 
