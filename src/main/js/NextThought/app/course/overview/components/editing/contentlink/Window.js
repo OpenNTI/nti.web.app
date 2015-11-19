@@ -35,11 +35,11 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Windo
 
 	getSchema: function(data) {
 		return [
+			{name: 'thumbnail', displayName: 'Icon', type: 'file'},
 			{name: 'title', displayName: 'Title', type: 'text', placeholder: 'Title....'},
 			{name: 'creator', displayName: 'Author', type: 'text', placeholder: 'Author...'},
-			{name: 'description', displayName: 'Description', type: 'textarea', placeholder: 'Description goes here...'},
-			{name: 'icon', displayName: 'Icon', type: 'file'}
-		];
+			{name: 'description', displayName: 'Description', type: 'textarea', placeholder: 'Description goes here...'}
+		]
 	},
 
 	setupComponents: function() {

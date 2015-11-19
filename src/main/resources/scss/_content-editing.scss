@@ -13,6 +13,10 @@
 				display: block;
 				border-bottom: 1px solid #e1e1e1;
 
+				&:last-of-type {
+					border-bottom: 0;
+				}
+
 				input, textarea {
 					display: block;
     				font: normal 300 14px/30px $font;
@@ -38,11 +42,48 @@
 					vertical-align: top;
     				margin-top: 5px;
 
-					& ~ input, & ~ textarea {
+					& + input, & + textarea {
 						display: inline-block;
     					width: auto;
     					min-width: 80%;
 					}
+				}
+
+				input[type=file] {
+		            position: absolute;
+		            cursor: pointer;
+		            right: 0;
+		            bottom: 0;
+		            padding: 0;
+		            margin: 0;
+		            font-size: 2rem;
+		            border: 0;
+		            opacity: 0;
+		        }
+
+				&.thumbnail {
+					width: 80px;
+	    			float: left;
+
+					.img {
+						background-size: cover;
+	    				background-repeat: no-repeat;
+	    				background-position: center;
+	    				box-shadow: 0px 0px 3px 0 rgba(0,0,0,0.35);
+	    				width: 80px;
+	    				height: 100px;
+	    				position: relative;	
+					}
+
+					.img-name {
+						font: normal 500 14px/30px $font;
+						color: $primary-grey;
+					}
+
+    				& ~ .field {
+    					margin-left: 100px; 
+    					@include experimental-value(width, calc(100% - 100px));
+    				}
 				}
 			}
 		}

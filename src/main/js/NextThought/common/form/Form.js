@@ -25,7 +25,10 @@ Ext.define('NextThought.common.form.Form', {
 				]},
 				{tag: 'tpl', 'if': 'this.isFile(type)', cn: [
 					{cls: 'field {name}', cn: [
-						{tag: 'file-picker'}
+						{cls: 'img', style: { backgroundImage: 'url({[this.getDefaultValue(values.name)]})'}, cn: [
+							{tag: 'input', type: 'file'}
+						]},
+						{cls: 'img-name'}
 					]}
 				]}
 			]}
@@ -70,6 +73,7 @@ Ext.define('NextThought.common.form.Form', {
 
 	attachChangeListeners: function () {
 		var inputFields = this.el.query('.field input, .field textarea'),
+			fileInputFields = document.querySelectorAll('input[type=file]'),
 			me = this;
 
 		Ext.each(inputFields, function (field) {
@@ -79,6 +83,11 @@ Ext.define('NextThought.common.form.Form', {
 				keyup: me.formChanged.bind(me)
 			})
 		});
+
+		Ext.each(fileInputFields, function (field) {
+			field.addEventListener('change', me.onFileChanged.bind(me));
+		});
+
 	},
 
 
@@ -107,6 +116,11 @@ Ext.define('NextThought.common.form.Form', {
 		if (this.onChange) {
 			this.onChange(vals);	
 		}
+	},
+
+
+	onFileChanged: function (e) {
+		console.log('File Uploaded: event=', e);
 	},
 
 
@@ -158,7 +172,7 @@ Ext.define('NextThought.common.form.Form', {
 	 * @param  {String} fieldName schema's name for a particular field.
 	 * @return {[type]}           [description]
 	 */
-	getTypeSelector(fieldName) {
+	getTypeSelector: function (fieldName) {
 		// We will need to loop through the schema to find the field with the given name.
 		// TODO: To be implemented
 	}
