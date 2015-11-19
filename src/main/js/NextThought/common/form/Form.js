@@ -25,10 +25,16 @@ Ext.define('NextThought.common.form.Form', {
 				]},
 				{tag: 'tpl', 'if': 'this.isFile(type)', cn: [
 					{cls: 'field {name}', cn: [
-						{cls: 'img', style: { backgroundImage: 'url({[this.getDefaultValue(values.name)]})'}, cn: [
-							{tag: 'input', type: 'file'}
-						]},
-						{cls: 'img-name'}
+						{
+							cls: 'img',  
+							style: { backgroundImage: 'url({[this.getDefaultValue(values.name)]})'}, 
+							cn: [
+								{tag: 'input', type: 'file', 'data-value':'{[this.getDefaultValue(values.name)]}'}
+							]
+						},
+						{
+							cls: 'img-name'
+						}
 					]}
 				]}
 			]}
@@ -52,6 +58,13 @@ Ext.define('NextThought.common.form.Form', {
 	defaultValues: {
 		'title': 'title'
 	},
+
+
+	DEFAULT_DOC_THUMBNAIL: '',
+
+	DEFAULT_PDF_THUMBNAIL: '',
+
+	DEFAULT_THUMBNAIL: '',
 
 
 	beforeRender: function(){
@@ -92,35 +105,130 @@ Ext.define('NextThought.common.form.Form', {
 
 
 	/**
-	 * Fire an change event event when a field is edited.
-	 * This allows whoever is listening on form change event to update instantly.
-	 *
-	 * This function fires a change event with a key-value pair for each field in the form.
+	 * When a field is edited, call the onChange listener if it's provided.
+	 * This allows the creator of the form to act on form change events.
+	 * The onChange function is passed a key-value object for the schema fields of the form. 
 	 *
 	 * NOTE: while in the future, we will optimize this to only return the value of the field that changed,
-	 * for now, we will return the entire form values. 
+	 * for now, we will return the entire form values.
 	 * 
 	 * @param  {[type]} e Browser Event.
 	 * 
 	 */
 	formChanged: function(e) {
-		var vals = {}, me = this;
-
-		Ext.each(this.schema, function (entry) {
-			var el = me.el.down('.field.'+ entry.name + ' [type=' + entry.type + ']');
-			if (el){
-				vals[entry.name] = el.dom.value;
-			}
-		});
-
+		var vals = this.getValues();
 		if (this.onChange) {
 			this.onChange(vals);	
 		}
 	},
 
+	/**
+	 * This function returns an object of key-value pairs for each field of the schema.
+	 *
+	 * @return {[type]} [description]
+	 */
+	getValues: function () {
+		var vals = {}, me = this;
 
+		Ext.each(this.schema, function (entry) {
+			var el = me.el.down('.field.'+ entry.name + ' [type=' + entry.type + ']');
+			if (entry.type === 'file') {
+				vals[entry.name] = el.dom.getAttribute('data-value');
+			}
+			else {
+				vals[entry.name] = el.dom.value;
+			}
+		});
+
+		return vals;
+	},
+
+
+	/**
+	 * Handles file upload and broadcast the change 
+	 * 
+	 * @param  {Event} e Event representing a new file upload.
+	 */
 	onFileChanged: function (e) {
-		console.log('File Uploaded: event=', e);
+		var i = e.target,
+			f = i && i.files && i.files[0],
+			thumb, img;
+
+		console.log('File Uploaded: event=', e, ' input=', i, ' files=', i.files);
+		if (f) {
+			thumb = this.resolveFileThumbnail(f);
+			if (thumb) {
+				img = Ext.fly(i).up('.img');
+				if (img && img.setStyle) {
+					img.setStyle('backgroundImage', 'url(' + thumb + ')');
+
+					// set the thumbnail url name on the input file field.
+					i.setAttribute('data-value', thumb);
+
+					// Broadcast the change. 
+					this.formChanged();
+				}
+			}
+		}
+	},
+
+
+	/**
+	 * Resolve the thumbnail for the newly uploaded image or document.
+	 * As a rule of thumb, for images, we will create a thumbnail 
+	 * for other documents, we will return a default icon for recognized types (i.e. PDF, Doc)
+	 * Otherwise, we will return the default icon for all other types.
+	 * 
+	 * @param  {File} fileObj JS File object 
+	 * @return {String} string representing the url of the thumbnail
+	 */
+	resolveFileThumbnail: function(fileObj) {
+		var type = fileObj && fileObj.type || "";
+		if (type.indexOf('image') >= 0) {
+			return this.getFileThumbnail(fileObj);
+		}
+		if (type === "application/pdf") {
+			// PDF default thumbnail file
+			return this.DEFAULT_PDF_THUMBNAIL;
+		}
+		if (type === "application/doc") {
+			// PDF default thumbnail file
+			return this.DEFAULT_DOC_THUMBNAIL;
+		}
+		
+		// default thumbnail
+		return this.DEFAULT_THUMBNAIL;
+	},
+
+
+	/**
+	 * Build and return a thumbnail URL for a File object.
+	 * 
+	 * @param  {File} fileObj JS File object.
+	 * @return {String} URL for the newly generated thumbnail.
+	 */
+	getFileThumbnail: function(fileObj) {
+		var url = null,
+			objectURL = null;
+		if (URL && URL.createObjectURL) {
+			url = URL;
+		}
+		else if(webkitURL && webkitURL.createObjectURL) {
+			url = webkitURL;
+		}
+
+		if(url && fileObj) {
+			objectURL = url.createObjectURL(fileObj);
+
+			// Attach destroy listen to cleanup
+			if (objectURL) {
+				this.on('destroy', function(){
+					url.revokeObjectURL(objectURL);
+				});
+			}
+		}
+
+		return objectURL;
 	},
 
 
@@ -128,7 +236,7 @@ Ext.define('NextThought.common.form.Form', {
 	 * Get a form data. We are using HTML5 FormData object to return an object that contains
 	 * the whole form object.
 	 * 
-	 * @return {[type]} [description]
+	 * @return {FormData} JS FormData object.
 	 */
 	getData: function () {
 		var formDom = this.el.dom.querySelector('form');

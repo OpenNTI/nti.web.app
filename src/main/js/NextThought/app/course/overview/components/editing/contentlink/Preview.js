@@ -29,7 +29,12 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Previ
 			if(values.hasOwnProperty(k)){
 				el = this.el.down('.' + k);
 				if (el) {
-					el.setHTML(values[k]);
+					if (k === 'thumbnail') {
+						el.setStyle('backgroundImage', 'url(' + values[k] + ')');
+					}
+					else {
+						el.setHTML(values[k]);						
+					}
 				}
 			}
 		}
