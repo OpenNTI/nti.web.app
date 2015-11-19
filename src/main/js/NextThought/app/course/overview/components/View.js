@@ -9,7 +9,6 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	requires: [
 		'NextThought.app.course.overview.components.Outline',
 		'NextThought.app.course.overview.components.Body',
-		'NextThought.app.course.overview.components.editing.Window',
 		'NextThought.app.windows.Actions'
 	],
 
@@ -26,34 +25,22 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var me = this;
-
 		this.WindowActions = NextThought.app.windows.Actions.create();
 
 		this.initRouter();
 
-		this.body.onEditLesson = this.onEditLesson.bind(this);
-		this.navigation.onEditOutline = this.onEditOutline.bind(this);
+		this.body.openEditing = this.openEditing.bind(this);
+		this.body.closeEditing = this.closeEditing.bind(this);
+
+		this.navigation.selectLesson = this.selectLesson.bind(this);
 
 		this.addChildRouter(this.body);
 
-		this.addRoute('/edit', this.showOutlineEditor.bind(this));
-		this.addRoute('/:lesson', this.showLesson.bind(this));
-		this.addRoute('/:lesson/edit', this.showLessonEditor.bind(this));
+		this.addRoute('/edit', this.showEditOutlineNode.bind(this));
+		this.addRoute('/:node', this.showOutlineNode.bind(this));
+		this.addRoute('/:node/edit', this.showEditOutlineNode.bind(this));
 
-		this.addDefaultRoute(this.showLesson.bind(this));
-
-		me.mon(me.navigation, {
-			'empty-outline': function() {
-				me.unmask();
-			},
-			'select-lesson': function(record) {
-				var id = ParseUtils.encodeForURI(record.getId());
-
-				me.pushRoute(record.get('label'), id, {lesson: record});
-			}
-		});
-
+		this.addDefaultRoute(this.showOutlineNode.bind(this));
 
 		this.onScroll = this.onScroll.bind(this);
 	},
@@ -111,15 +98,41 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	},
 
 
-	onEditLesson: function(id) {
+	openEditing: function() {
+		var node = this.activeNode,
+			id = node && node.getId();
+
 		id = ParseUtils.encodeForURI(id);
 
-		this.pushRoute('Editing', id + '/edit');
+		if (id) {
+			this.pushRoute('Editing', id + '/edit');
+		} else {
+			this.pushRoute('Editing', 'edit');
+		}
 	},
 
 
-	onEditOutline: function() {
-		this.pushRoute('Editing', 'edit');
+	closeEditing: function() {
+		var node = this.activeNode,
+			id = node && node.getId();
+
+		//TODO: check if its not a content node,
+		//if its not select the first child that is a content node
+
+		id = ParseUtils.encodeForURI(id);
+
+		if (id) {
+			this.pushRoute('', id);
+		} else {
+			this.pushRoute('', '');
+		}
+	},
+
+
+	selectLesson: function(record) {
+		var id = ParseUtils.encodeForURI(record.getId());
+
+		this.pushRoute(record.get('label'), id, {outlineNode: record});
 	},
 
 
@@ -132,7 +145,6 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 		this.addCls('has-editing-controls');
 		this.body.showEditControls();
-		this.navigation.hasEditControls();
 	},
 
 
@@ -141,7 +153,6 @@ Ext.define('NextThought.app.course.overview.components.View', {
 		this.removeScrollListener();
 		this.removeCls('has-editing-controls');
 		this.body.hideEditControls();
-		this.navigation.noEditControls();
 	},
 
 
@@ -231,12 +242,16 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	},
 
 
-	showLesson: function(route, subRoute) {
+	showOutlineNode: function(route, subRoute) {
 		var me = this,
-			id = route.params && route.params.lesson && ParseUtils.decodeFromURI(route.params.lesson),
-			record = route.precache.lesson;
+			id = route.params && route.params.node && ParseUtils.decodeFromURI(route.params.node),
+			record = route.precache.outlineNode;
 
-		return this.__getRecord(id, record)
+		me.alignNavigation();
+		me.navigation.stopEditing();
+		me.body.showNotEditing();
+
+		return me.__getRecord(id, record)
 			.then(function(record) {
 				if (!record) {
 					console.error('No valid lesson to show');
@@ -246,9 +261,9 @@ Ext.define('NextThought.app.course.overview.components.View', {
 				record = me.navigation.selectRecord(record);
 				me.unmask();
 				me.setTitle(record.get('label'));
-				me.activeLesson = record;
+				me.activeNode = record;
 
-				return me.body.showLesson(record)
+				return me.body.showOutlineNode(record)
 					.then(me.alignNavigation.bind(me))
 					.then(function() {
 						return record;
@@ -257,59 +272,32 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	},
 
 
-	showOutlineEditor: function(route, subRoute) {
+	showEditOutlineNode: function(route, subRoute) {
 		var me = this,
-			outline = me.currentBundle.getOutlineInterface();
+			id = route.params && route.params.node && ParseUtils.decodeFromURI(route.params.node),
+			record = route.precache.outlineNode;
 
-		me.setTitle('Editing');
+		me.alignNavigation();
+		me.navigation.startEditing();
+		me.body.showEditing();
 
-		return me.showLesson(route, subRoute)
-			.then(outline.onceBuilt.bind(outline))
-			.then(function(outline) {
-				return outline.getOutline();
-			})
-			.then(function(outline) {
-				me.navigation.clearCollection();
-				me.navigation.setOutline(me.currentBundle, outline);
-
-				me.WindowActions.showWindow('outline-editing', null, null,
-				{
-					doClose: function() {
-						me.pushRoute('', '/');
-					}
-				},
-				{
-					outline: outline
-				});
-			});
-	},
-
-
-	showLessonEditor: function(route, subRoute) {
-		var me = this;
-
-		return me.showLesson(route, subRoute)
+		return me.__getRecord(id, record)
 			.then(function(record) {
-
-				me.setTitle('Editing');
-
 				if (!record) {
-					return Promise.reject('Unable to find lesson');
+					console.error('No valid outline node to edit');
+					return;
 				}
 
-				me.WindowActions.showWindow('lesson-editing', null, null,
-				{
-					doClose: function() {
-						var id = record.getId();
+				record = me.navigation.selectRecord(record);
+				me.unmask();
+				me.setTitle('Editing | ' + record.get('label'));
+				me.activeNode = record;
 
-						id = ParseUtils.encodeForURI(id);
-
-						me.pushRoute('', id);
-					}
-				},
-				{
-					lesson: record
-				});
+				return me.body.editOutlineNode(record)
+					.then(me.alignNavigation.bind(me))
+					.then(function() {
+						return record;
+					});
 			});
 	}
 });

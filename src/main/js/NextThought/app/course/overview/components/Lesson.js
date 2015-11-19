@@ -140,8 +140,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 					assignments: assignments,
 					enrollment: enrollment,
 					course: course,
-					navigate: me.navigate.bind(me),
-					onEdit: me.edit.bind(me)
+					navigate: me.navigate.bind(me)
 				});
 
 
@@ -156,12 +155,5 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 	navigate: function(obj) {
 		obj.parent = this.currentNode;
 		this.navigateToObject(obj);
-	},
-
-
-	edit: function() {
-		if (this.onEditLesson) {
-			this.onEditLesson(this.currentPage);
-		}
 	}
 });

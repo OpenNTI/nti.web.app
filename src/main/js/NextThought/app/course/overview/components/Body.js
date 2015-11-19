@@ -9,8 +9,7 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 	requires: [
 		'NextThought.app.course.overview.components.EditingControls',
 		'NextThought.app.course.overview.components.Lesson',
-		'NextThought.app.course.overview.components.editing.Outline',
-		'NextThought.app.course.overview.components.editing.Lesson'
+		'NextThought.app.course.overview.components.editing.outlinenode.Editor'
 	],
 
 	layout: 'none',
@@ -23,23 +22,53 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.editingControlsCmp = this.down('course-overview-editing-controls');
+		var me = this;
 
-		this.editingControlsCmp.hide();
+		me.editingControlsCmp = me.down('course-overview-editing-controls');
+
+		me.editingControlsCmp.openEditing = function() {
+			if (me.openEditing) {
+				me.openEditing();
+			}
+		};
+
+		me.editingControlsCmp.closeEditing = function() {
+			if (me.closeEditing) {
+				me.closeEditing();
+			}
+		};
+
+		me.editingControlsCmp.hide();
 	},
 
 
 	showEditControls: function() {
 		this.addCls('has-editing-controls');
-
+		this.hasEditingControls = true;
 		this.editingControlsCmp.show();
+		this.editingControlsCmp.showNotEditing();
 	},
 
 
 	hideEditControls: function() {
 		this.removeCls('has-editing-controls');
-
+		delete this.hasEditingControls;
+		this.editingControlsCmp.clearButtons();
 		this.editingControlsCmp.hide();
+	},
+
+
+	showEditing: function() {
+		if (this.hasEditingControls) {
+			this.editingControlsCmp.showEditing();
+		}
+	},
+
+
+	showNotEditing: function() {
+		if (this.hasEditingControls) {
+			this.editingControlsCmp.showNotEditing();
+		}
 	},
 
 
@@ -52,14 +81,13 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 	},
 
 
-	getLesson: function() {
+	getLesson: function(addIfNotThere) {
 		var lesson = this.down('course-overview-lesson');
 
-		if (!lesson) {
+		if (!lesson && addIfNotThere) {
 			lesson = this.add({
 				xtype: 'course-overview-lesson',
-				bundle: this.currentBundle,
-				onEditLesson: this.edit.bind(this)
+				bundle: this.currentBundle
 			});
 
 			this.addChildRouter(lesson);
@@ -69,9 +97,32 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 	},
 
 
+	getEditor: function(addIfNotThere) {
+		var editor = this.down('overview-outlinenode-editor');
+
+		if (!editor && addIfNotThere) {
+			editor = this.add({
+				xtype: 'overview-outlinenode-editor',
+				bundle: this.currentBundle
+			});
+
+			this.addChildRouter(editor);
+		}
+
+		return editor;
+	},
+
+
 	getLessonTop: function() {
 		var lesson = this.getLesson(),
+			editor = this.getEditor(),
+			rect;
+
+		if (lesson && lesson.isVisible()) {
 			rect = lesson && lesson.el && lesson.el.dom && lesson.el.dom.getBoundingClientRect();
+		} else if (editor && editor.isVisible()) {
+			rect = editor && editor.el && editor.el.dom && editor.el.dom.getBoundingClientRect();
+		}
 
 		return rect ? rect.top : 0;
 	},
@@ -88,21 +139,30 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 	},
 
 
-	showLesson: function(record) {
-		var lesson = this.getLesson();
+	showOutlineNode: function(record) {
+		var lesson = this.getLesson(true),
+			editor = this.getEditor();
+
+		if (editor) {
+			editor.hide();
+		}
+
+		lesson.show();
 
 		return lesson.renderLesson(record);
 	},
 
 
-	edit: function(id) {
-		if (this.onEditLesson) {
-			this.onEditLesson(id);
+	editOutlineNode: function(record) {
+		var editor = this.getEditor(true),
+			lesson = this.getLesson();
+
+		if (lesson) {
+			lesson.hide();
 		}
-	},
 
+		editor.show();
 
-	doneEditing: function(id) {
-
+		return editor.editOutlineNode(record);
 	}
 });

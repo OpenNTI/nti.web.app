@@ -79,7 +79,7 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 
 	doSelectNode: function(record) {
-		this.fireEvent('select-lesson', record);
+		this.selectLesson(record);
 	},
 
 
@@ -112,5 +112,15 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		if (this.rendered) {
 			this.el.dom.style.top = top + 'px';
 		}
+	},
+
+
+	startEditing: function() {
+
+	},
+
+
+	stopEditing: function() {
+
 	}
 });
