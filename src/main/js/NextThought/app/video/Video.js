@@ -172,7 +172,7 @@ Ext.define('NextThought.app.video.Video', {
 		};
 
 		this.players = {};
-		Ext.applyIf(this.self, {playerBlacklist: []});
+		Ext.applyIf(this, {playerBlacklist: []});
 
 		this.playlistIndex = this.playlistIndex || 0;
 
