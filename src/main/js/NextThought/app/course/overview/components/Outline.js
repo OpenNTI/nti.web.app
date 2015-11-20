@@ -5,7 +5,9 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 	requires: [
 		'NextThought.app.course.overview.components.outline.Header',
 		'NextThought.app.course.overview.components.outline.OutlineNode',
-		'NextThought.model.courses.navigation.CourseOutlineNode'
+		'NextThought.model.courses.navigation.CourseOutlineNode',
+		'NextThought.model.courses.navigation.CourseOutlineCalendarNode',
+		'NextThought.model.courses.navigation.CourseOutlineContentNode'
 	],
 
 	ui: 'course',
@@ -84,7 +86,9 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 
 	doSelectNode: function(record) {
-		this.selectOutlineNode(record);
+		if (this.isEditing || record instanceof NextThought.model.courses.navigation.CourseOutlineContentNode) {
+			this.selectOutlineNode(record);
+		}
 	},
 
 
@@ -121,11 +125,13 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 
 	startEditing: function() {
-
+		this.isEditing = true;
+		this.addCls('editing');
 	},
 
 
 	stopEditing: function() {
-
+		delete this.isEditing;
+		this.addCls('editing');
 	}
 });

@@ -62,6 +62,41 @@
 		@include icon('topic', $top:15px, $left: 18px);
 	}
 
+	.outline-row:not(.disabled), &.editing .outline-row.disabled {
+		&:hover,
+		&.over {
+			background: #f0f0f0;
+			box-shadow: inset 3px 0 0 0 #cfcfcf;
+
+			.report-icon {
+				display: block;
+
+				&:hover::after {
+					background-position: sprite-position($icons, 'reports-gray_hover');
+				}
+			}
+		}
+
+		&.selected, &.x-item-selected {
+			color: #ffffff;
+			font-weight: 600;
+			background: $primary-blue;
+			box-shadow: inset 3px 0 0 0 #107eed;
+
+			.report-icon {
+				display: block;
+
+				&::after {
+					background-position: sprite-position($icons, 'reports-white_default');
+				}
+
+				&:hover::after {
+					background-position: sprite-position($icons, 'reports-white_hover');
+				}
+			}
+		}
+	}
+
 	.outline-row {
 		position: relative;
 		background: #ffffff;
@@ -103,48 +138,13 @@
 			@include icon('reports-gray-card_hover', $top: 12px, $left: 12px);
 		}
 
-		&.disabled {
+		.nav-outline:not(.editing) &.disabled {
 			cursor: default;
 			color: $tertiary-grey;
 		}
 
 
 		&.out-of-view{
-		}
-
-		&:not(.disabled) {
-			&:hover,
-			&.over {
-				background: #f0f0f0;
-				box-shadow: inset 3px 0 0 0 #cfcfcf;
-
-				.report-icon {
-					display: block;
-
-					&:hover::after {
-						background-position: sprite-position($icons, 'reports-gray_hover');
-					}
-				}
-			}
-
-			&.selected, &.x-item-selected {
-				color: #ffffff;
-				font-weight: 600;
-				background: $primary-blue;
-				box-shadow: inset 3px 0 0 0 #107eed;
-
-				.report-icon {
-					display: block;
-
-					&::after {
-						background-position: sprite-position($icons, 'reports-white_default');
-					}
-
-					&:hover::after {
-						background-position: sprite-position($icons, 'reports-white_hover');
-					}
-				}
-			}
 		}
 
 		&.unit {
@@ -167,18 +167,29 @@
 
 	&:not(.multi-level) {//the "not" is just disabling the selector without restructuring the css.
 
+		&:not(.editing) {
+			.outline-row {
+				&.unit, &.heading {
+					background: none !important;
+					box-shadow: none;
+				}
+			}
+		}
+
 		.outline-row {
 			&.lesson {
 				//font-style: italic;
 			}
 
-			&.unit, &.heading {
-				background: none !important;
-				box-shadow: none;
-			}
-
 			&.unit.heading + .unit:not(.heading) {
 				margin-top: 0;
+			}
+
+			&.unit, &.heading {
+				&:not(.selected) {
+					background: none !important;
+					box-shadow: none;
+				}
 			}
 
 			&.unit:not(.heading) {
