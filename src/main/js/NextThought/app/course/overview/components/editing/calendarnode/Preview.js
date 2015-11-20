@@ -1,8 +1,4 @@
 Ext.define('NextThought.app.course.overview.components.editing.calendarnode.Preview', {
-	extend: 'Ext.Component',
-	alias: 'widget.overview-editing-calendarnode-preview',
-
-	renderTpl: Ext.DomHelper.markup({
-		html: 'Calendar Node'
-	})
+	extend: 'NextThought.app.course.overview.components.editing.outlinenode.Preview',
+	alias: 'widget.overview-editing-calendarnode-preview'
 });
