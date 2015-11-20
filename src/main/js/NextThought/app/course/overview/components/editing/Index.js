@@ -6,9 +6,9 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 		'NextThought.model.courses.navigation.CourseOutlineNode',
 		'NextThought.model.courses.navigation.CourseOutlineCalendarNode',
 		'NextThought.model.courses.navigation.CourseOutlineContentNode',
-		'NextThought.app.course.overview.components.editing.outlinenode.Preview',
-		'NextThought.app.course.overview.components.editing.calendarnode.Preview',
-		'NextThought.app.course.overview.components.editing.contentnode.Preview'
+		'NextThought.app.course.overview.components.editing.outlinenode.Index',
+		'NextThought.app.course.overview.components.editing.calendarnode.Index',
+		'NextThought.app.course.overview.components.editing.contentnode.Index'
 	],
 
 	mixins: {
@@ -23,11 +23,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 		this.removeAll(true);
 
 		if (record instanceof NextThought.model.courses.navigation.CourseOutlineContentNode) {
-			this.add({xtype: 'overview-editing-contentnode-preview', outlineNode: record});
+			this.add({xtype: 'overview-editing-contentnode', outlineNode: record});
 		} else if (record instanceof NextThought.model.courses.navigation.CourseOutlineCalendarNode) {
-			this.add({xtype: 'overview-editing-calendarnode-preview', outlineNode: record});
+			this.add({xtype: 'overview-editing-calendarnode', outlineNode: record});
 		} else if (record instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
-			this.add({xtype: 'overview-editing-outlinenode-preview', outlineNode: record});
+			this.add({xtype: 'overview-editing-outlinenode', outlineNode: record});
 		}
 
 		return Promise.resolve();

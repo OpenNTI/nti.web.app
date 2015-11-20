@@ -91,3 +91,23 @@
 		}
 	}
 }
+
+.outline-node-editing {
+	background: white;
+}
+
+.outline-node-preview {
+	padding: 1.5em 1.87em;
+	position: relative;
+
+	.title {
+		color: $primary-grey;
+		font: normal 300 2.25em/1.15em "Open Sans",sans-serif;
+	}
+
+	.controls {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+	}
+}
