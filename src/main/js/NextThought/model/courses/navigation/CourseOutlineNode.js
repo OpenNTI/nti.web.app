@@ -134,6 +134,18 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 	},
 
 
+	getFirstContentNode: function() {
+		var items = this.get('Items'), index = 0,
+			contentNode;
+
+		while (!contentNode) {
+			contentNode = items[index].getFirstContentNode();
+		}
+
+		return contentNode;
+	},
+
+
 	getProgress: function() {
 		var link = this.getLink('Progress');
 

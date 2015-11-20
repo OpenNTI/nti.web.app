@@ -113,11 +113,8 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 
 	closeEditing: function() {
-		var node = this.activeNode,
+		var node = this.activeNode && this.activeNode.getFirstContentNode(),
 			id = node && node.getId();
-
-		//TODO: check if its not a content node,
-		//if its not select the first child that is a content node
 
 		id = ParseUtils.encodeForURI(id);
 
@@ -242,7 +239,10 @@ Ext.define('NextThought.app.course.overview.components.View', {
 					});
 				}
 
-				//TODO: if the record isn't a content node, find the next node that is a content node, if editing isn't true
+				//With editing the record may or may not be a content node
+				if (!editing && record) {
+					record = record.getFirstContentNode();
+				}
 
 				return record;
 			});

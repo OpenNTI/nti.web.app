@@ -3,5 +3,10 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineContentNode', {
 	mimeType: 'application/vnd.nextthought.courses.courseoutlinecontentnode',
 	fields: [
 		{name: 'NTIID', type: 'string', mapping: 'ContentNTIID'}
-	]
+	],
+
+
+	getFirstContentNode: function() {
+		return this;
+	}
 });
