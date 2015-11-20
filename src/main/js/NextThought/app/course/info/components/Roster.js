@@ -25,13 +25,15 @@ extend: 'Ext.container.Container',
 			]
 		}, {
 			xtype: 'grouping',
-			title: 'Roster',
 			anchor: '0 -200',
 			layout: 'fit',
 			cls: 'roster',
 			tools: [{
 				itemId: 'filtermenu',
-				autoEl: { tag: 'div', cls: 'tool link arrow'}
+				autoEl: { tag: 'div', cls: 'tool link arrow title-filter'}
+			},{ 
+				itemId: 'email',
+				autoEl: {tag: 'div', cls: 'tool link email', html: 'Email'}
 			}],
 			items: [
 				{
@@ -70,7 +72,7 @@ extend: 'Ext.container.Container',
 							xtype: 'templatecolumn',
 							dataIndex: 'LegacyEnrollmentStatus',
 							tpl: Ext.DomHelper.markup({
-								cls: 'right-aligned status', html: '{LegacyEnrollmentStatus}'
+								cls: 'status', html: '{LegacyEnrollmentStatus}'
 							}) 
 						},
 						{
@@ -99,6 +101,10 @@ extend: 'Ext.container.Container',
 		}
 	],
 
+	renderSelectors: {
+		emailEl: '.tools .email'
+	},
+
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -111,6 +117,8 @@ extend: 'Ext.container.Container',
 		});
 
 		this.on('activate', this.onActivate.bind(this));
+		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 	},
 
 
@@ -193,7 +201,7 @@ extend: 'Ext.container.Container',
 
 
 	onFilterClicked: function() {
-		this.filterMenu.showBy(this.filterLink.el, 'tl-tl', [0, -39]);
+		this.filterMenu.showBy(this.filterLink.el, 'tl-tl', [0, 20]);
 	},
 
 
@@ -210,6 +218,9 @@ extend: 'Ext.container.Container',
 		this.down('grid').bindStore(Ext.getStore('ext-empty-store'));
 
 		this.filterMenu.setState('*');
+
+		this.currentBundle = instance;
+		this.setupEmail();
 
 		if (Ext.isEmpty(roster) || !roster) {
 			if (this.store) {this.store.destroyStore();}
@@ -254,6 +265,61 @@ extend: 'Ext.container.Container',
 	},
 
 
+	setupEmail: function(){
+		var me = this;
+		this.onceRendered
+			.then(function(){
+				me.emailEl = me.emailEl || me.el.down('.tools .email');
+				if (!me.emailListenerSet && me.emailEl && me.shouldAllowInstructorEmail()) {
+					me.emailListenerSet = true;
+					me.mon(me.emailEl, 'click', 'showEmailEditor');
+				}
+				me.maybeShowEmailButton();
+			});
+	},
+
+	shouldAllowInstructorEmail: function(){
+		// Right now, we will only 
+		return isFeature('instructor-email') && 
+				this.currentBundle && this.currentBundle.getLink('Mail') && 
+				this.currentFilter !== 'Open';
+	},
+
+
+	maybeShowEmailButton: function () {
+		if (!this.emailEl) {return; }
+
+		if (this.shouldAllowInstructorEmail()) {
+			this.emailEl.show();
+		}
+		else {
+			this.emailEl.hide();
+		}
+	},
+
+
+	showEmailEditor: function(e) {
+		var me = this,
+			editor,
+			emailRecord = new NextThought.model.Email(),
+			scope = this.currentFilter || 'All';
+
+		if (scope === '*'){
+			scope = 'All';
+		}
+
+		// Set the link to post the email to
+		emailRecord.set('url', this.currentBundle && this.currentBundle.getLink('Mail'));
+		emailRecord.set('scope', scope);
+
+		// Cache the email record
+		// this.WindowStore.cacheObject('new-email', emailRecord);
+		this.WindowActions.showWindow('new-email', null, e.getTarget(), null, {
+			record: emailRecord
+		});
+	},
+
+
 	doSearch: function(str) {
 		this.down('grid').getSelectionModel().deselectAll(true);
 		this.store.filter([{id: 'search', property: 'usernameSearchTerm', value: str}]);
@@ -267,6 +333,7 @@ extend: 'Ext.container.Container',
 			this.store.filter([
 				{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: filter}
 			]);
+			this.maybeShowEmailButton();
 		} catch (e) {
 			console.log('Meh');
 		}
