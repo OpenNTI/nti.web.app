@@ -285,7 +285,7 @@ Ext.define('NextThought.app.video.Video', {
 	playerSetup: function() {
 		this.log('Initializing the players.');
 		var me = this,
-			blacklist = this.playerBlacklist;
+			blacklist = this.playerBlacklist || [];
 
 		Ext.Object.each(NextThought.util.media, function(name, cls) {
 			if (cls.kind !== 'video') {return;}
