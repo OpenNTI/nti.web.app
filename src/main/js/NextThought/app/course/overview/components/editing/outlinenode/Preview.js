@@ -2,7 +2,15 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Previ
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-outlinenode-preview',
 
+	requires: [
+		'NextThought.app.windows.Actions',
+		'NextThought.app.course.overview.components.editing.outlinenode.Window'
+	],
+
+	windowName: 'edit-outlinenode',
+
 	cls: 'outline-node-preview',
+
 
 	controlTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'if': 'tip', cn: [
@@ -29,6 +37,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Previ
 
 	beforeRender: function() {
 		this.callParent(arguments);
+
+		this.WindowActions = NextThought.app.windows.Actions.create();
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			title: this.outlineNode.getTitle()
@@ -68,5 +78,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Previ
 	},
 
 
-	editNode: function() {}
+	editNode: function() {
+		this.WindowActions.showWindow(this.windowName, null, null, null, {outlineNode: this.outlineNode});
+	}
 });
