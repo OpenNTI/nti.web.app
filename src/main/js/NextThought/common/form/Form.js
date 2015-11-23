@@ -71,7 +71,7 @@ Ext.define('NextThought.common.form.Form', {
 	beforeRender: function() {
 		this.callParent(arguments);
 
-		this.defaultValues = Ext.applyIf(this.data || {}, this.defaultValues);
+		this.defaultValues = this.defaultValues || {};
 		this.renderTpl.defaultValues = this.defaultValues;
 
 		this.renderData = Ext.apply(this.renderData || {}, {

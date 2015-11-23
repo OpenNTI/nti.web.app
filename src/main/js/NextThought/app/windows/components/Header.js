@@ -9,7 +9,12 @@ Ext.define('NextThought.app.windows.components.Header', {
 
 	pathTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': 'labels', cn: [
-			{tag: 'span', html: '{label}'}
+			{tag: 'tpl', 'if': 'noLink', cn: [
+				{tag: 'span', cls: 'no-link', html: '{label}'}
+			]},
+			{tag: 'tpl', 'if': '!noLink', cn: [
+				{tag: 'span', html: '{label}'}
+			]}
 		]},
 		{tag: 'tpl', 'if': 'leaf', cn: [
 			{tag: 'span', cls: 'leaf' , html: '{leaf}'}
@@ -54,6 +59,16 @@ Ext.define('NextThought.app.windows.components.Header', {
 	},
 
 
+	showPath: function(titles, leaf) {
+		if (!this.rendered) {
+			this.on('afterrender', this.showPath.bind(this, titles, leaf));
+			return;
+		}
+
+		this.pathTpl.append(this.titleEl, {labels: titles, leaf: leaf});
+	},
+
+
 	showPathFor: function(record, leaf, length, parent) {
 		//Get the root bundle, from the context StateStore
 		if (!this.rendered) {
@@ -74,6 +89,11 @@ Ext.define('NextThought.app.windows.components.Header', {
 				if (parent) {
 					titles.push({label: parent});
 				}
+
+				titles = titles.map(function(title) {
+					title.noLink = false;
+				});
+
 				if (container.dom) {
 					container.dom.innerHTML = '';
 					container = me.pathTpl.append(container, {labels: titles, leaf: leaf}, true);
@@ -82,12 +102,12 @@ Ext.define('NextThought.app.windows.components.Header', {
 	},
 
 
-	onPathClicked: function(e){
+	onPathClicked: function(e) {
 		var rootContext = this.ContextStore.getRootContext(),
 			rootObj = rootContext.obj,
-			rootId =  rootObj && rootObj.getId();
+			rootId = rootObj && rootObj.getId();
 
-		if(this.record && (this.record.get('ContainerId') != rootId)){
+		if (this.record && (this.record.get('ContainerId') != rootId)) {
 			this.doNavigate(this.record);
 		}
 	}

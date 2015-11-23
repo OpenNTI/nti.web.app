@@ -1,49 +1,28 @@
 Ext.define('NextThought.app.course.overview.components.editing.contentlink.Editor', {
-	extend: 'Ext.Component',
-	alias: 'widget.editing-contentlink-editor',
+	extend: 'NextThought.app.course.overview.components.editing.Editor',
+	alias: 'widget.overview-editing-contentlink-editor',
+
+	requires: [
+		'NextThought.app.course.overview.components.editing.contentlink.Preview'
+	],
+
+	FORM_SCHEMA: [
+		{name: 'thumbnail', displayName: 'Icon', type: 'file'},
+		{name: 'title', displayName: 'Title', type: 'text', placeholder: 'Title....'},
+		{name: 'creator', displayName: 'Author', type: 'text', placeholder: 'Author...'},
+		{name: 'description', displayName: 'Description', type: 'textarea', placeholder: 'Description goes here...'}
+	],
 
 	cls: 'content-editor',
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'header', cn: [
-			{cls: 'left', cn: [
-				{cls: 'thumbnail'}
-			]},
-			{cls: 'right', cn: [
-				{cls: 'title', cn: [
-					{tag: 'input', tabIndex: -1, type: 'text', placeholder: 'Title...'}
-				]},
-				{cls: 'author', cn: [
-					{tag: 'input', tabIndex: -1, type: 'text', placeholder: 'Author...'}
-				]}
-			]}
-		]},
-		{cls: 'main', cn: [
-			{cls: 'description', cn: [
-				{
-					cls: 'content show-placeholder scrollable',
-					'data-placeholder': '{placeholderText}',
-					contentEditable: true,
-					unselectable: 'off',
-					tabIndex: -1,
-					cn: [
-						{ //inner div for IE
-							//default value (U+2060 -- allow the cursor in to this placeholder div, but don't take any space)
-							html: '\u2060'
-						}
-					]
-				}
-			]}
-		]},
-		{cls: 'footer', cn: [
-			{
-				cls: 'right save-controls',
-				cn: [
-					{cls: 'action save', html: 'Save'},
-					{cls: 'action cancel', html: 'Cancel'}
-				]
-			}
-		]}
-	])
 
+	addPreview: function(values) {
+		return this.add({
+			xtype: 'overview-editing-contentlink-preview',
+			values: values
+		});
+	},
+
+
+	getDefaultValues: function() {}
 });

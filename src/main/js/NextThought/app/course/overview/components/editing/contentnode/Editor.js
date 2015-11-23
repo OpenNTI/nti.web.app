@@ -1,9 +1,8 @@
 Ext.define('NextThought.app.course.overview.components.editing.contentnode.Editor', {
-	extend: 'NextThought.app.course.overview.components.editing.calendarnode.Editor',
+	extend: 'NextThought.app.course.overview.components.editing.Editor',
 	alias: 'widget.overview-editing-contentnode-editor',
 
-	items: [{
-		xtype: 'box',
-		autoEl: {html: 'Content Node Editor'}
-	}]
+	FORM_SCHEMA: [
+		{type: 'text', name: 'title'}
+	]
 });

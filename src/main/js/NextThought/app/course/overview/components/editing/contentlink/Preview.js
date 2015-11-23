@@ -1,6 +1,6 @@
 Ext.define('NextThought.app.course.overview.components.editing.contentlink.Preview', {
 	extend: 'Ext.Component',
-	alias: 'widget.editing-contentlink-preview',
+	alias: 'widget.overview-editing-contentlink-preview',
 
 	ui: 'content-card',
 	cls: 'content-card preview',
@@ -17,7 +17,7 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Previ
 	beforeRender: function () {
 		this.callParent(arguments);
 
-		this.renderData = Ext.apply(this.renderData || {}, this.data);
+		this.renderData = Ext.apply(this.renderData || {}, this.values);
 	},
 
 

@@ -79,6 +79,6 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Previ
 
 
 	editNode: function() {
-		this.WindowActions.showWindow(this.windowName, null, null, null, {outlineNode: this.outlineNode});
+		this.WindowActions.showWindow(this.windowName, null, null, null, {record: this.outlineNode});
 	}
 });

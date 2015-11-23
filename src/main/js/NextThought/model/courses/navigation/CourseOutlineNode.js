@@ -80,6 +80,20 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 	],
 
 
+	constructor: function() {
+		this.callParent(arguments);
+
+		var me = this,
+			items = me.get('Items');
+
+		if (items) {
+			me.set('Items', items.map(function(item) {
+				item.parent = me;
+			}));
+		}
+	},
+
+
 	findNode: function(id) {
 		if (this.getId() === id) { return this; }
 		return (this.get('Items') || []).reduce(function(a, o) {

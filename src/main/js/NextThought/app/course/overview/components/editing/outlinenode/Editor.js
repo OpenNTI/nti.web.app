@@ -1,10 +1,11 @@
 Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Editor', {
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.app.course.overview.components.editing.Editor',
 	alias: 'widget.overview-editing-outlinenode-editor',
 
-	layout: 'none',
-	items: [{
-		xtype: 'box',
-		autoEl: {html: 'Outline Node Editor'}
-	}]
+	FORM_SCHEMA: [
+		{type: 'text', name: 'title'}
+	],
+
+
+	getDefaultValues: function() {}
 });
