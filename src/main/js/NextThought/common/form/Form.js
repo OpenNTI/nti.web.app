@@ -61,13 +61,6 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
-	DEFAULT_DOC_THUMBNAIL: '',
-
-	DEFAULT_PDF_THUMBNAIL: '',
-
-	DEFAULT_THUMBNAIL: '',
-
-
 	beforeRender: function() {
 		this.callParent(arguments);
 
@@ -89,7 +82,6 @@ Ext.define('NextThought.common.form.Form', {
 
 	attachChangeListeners: function() {
 		var inputFields = this.el.query('.field input, .field textarea'),
-			fileInputFields = document.querySelectorAll('input[type=file]'),
 			me = this;
 
 		Ext.each(inputFields, function(field) {
@@ -99,11 +91,6 @@ Ext.define('NextThought.common.form.Form', {
 				keyup: me.formChanged.bind(me)
 			});
 		});
-
-		Ext.each(fileInputFields, function(field) {
-			field.addEventListener('change', me.onFileChanged.bind(me));
-		});
-
 	},
 
 
@@ -118,7 +105,8 @@ Ext.define('NextThought.common.form.Form', {
 
 			cmp = Ext.widget('file-picker-field', {
 				thumbnail: name && me.defaultValues[name],
-				renderTo: el
+				renderTo: el,
+				formChanged: me.formChanged.bind(me)
 			});
 		});
 	},
@@ -160,93 +148,6 @@ Ext.define('NextThought.common.form.Form', {
 		});
 
 		return vals;
-	},
-
-
-	/**
-	 * Handles file upload and broadcast the change
-	 *
-	 * @param  {Event} e Event representing a new file upload.
-	 */
-	onFileChanged: function(e) {
-		var i = e.target,
-			f = i && i.files && i.files[0],
-			thumb, img;
-
-		console.log('File Uploaded: event=', e, ' input=', i, ' files=', i.files);
-		if (f) {
-			thumb = this.resolveFileThumbnail(f);
-			if (thumb) {
-				img = Ext.fly(i).up('.img');
-				if (img && img.setStyle) {
-					img.setStyle('backgroundImage', 'url(' + thumb + ')');
-
-					// set the thumbnail url name on the input file field.
-					i.setAttribute('data-value', thumb);
-
-					// Broadcast the change.
-					this.formChanged();
-				}
-			}
-		}
-	},
-
-
-	/**
-	 * Resolve the thumbnail for the newly uploaded image or document.
-	 * As a rule of thumb, for images, we will create a thumbnail
-	 * for other documents, we will return a default icon for recognized types (i.e. PDF, Doc)
-	 * Otherwise, we will return the default icon for all other types.
-	 *
-	 * @param  {File} fileObj JS File object
-	 * @return {String} string representing the url of the thumbnail
-	 */
-	resolveFileThumbnail: function(fileObj) {
-		var type = fileObj && fileObj.type || '';
-		if (type.indexOf('image') >= 0) {
-			return this.getFileThumbnail(fileObj);
-		}
-		if (type === 'application/pdf') {
-			// PDF default thumbnail file
-			return this.DEFAULT_PDF_THUMBNAIL;
-		}
-		if (type === 'application/doc') {
-			// PDF default thumbnail file
-			return this.DEFAULT_DOC_THUMBNAIL;
-		}
-
-		// default thumbnail
-		return this.DEFAULT_THUMBNAIL;
-	},
-
-
-	/**
-	 * Build and return a thumbnail URL for a File object.
-	 *
-	 * @param  {File} fileObj JS File object.
-	 * @return {String} URL for the newly generated thumbnail.
-	 */
-	getFileThumbnail: function(fileObj) {
-		var url = null,
-			objectURL = null;
-		if (URL && URL.createObjectURL) {
-			url = URL;
-		} else if (webkitURL && webkitURL.createObjectURL) {
-			url = webkitURL;
-		}
-
-		if (url && fileObj) {
-			objectURL = url.createObjectURL(fileObj);
-
-			// Attach destroy listen to cleanup
-			if (objectURL) {
-				this.on('destroy', function() {
-					url.revokeObjectURL(objectURL);
-				});
-			}
-		}
-
-		return objectURL;
 	},
 
 
