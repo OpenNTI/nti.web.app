@@ -37,7 +37,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Window', {
 
 		while (parent) {
 			if (parent.getTitle) {
-				titles.push({label: parent.getTitle()});
+				titles.push({label: parent.getTitle(), noLink: true});
 			}
 
 			parent = parent.parent;

@@ -83,13 +83,19 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 	constructor: function() {
 		this.callParent(arguments);
 
+		//wait a beat for the Items to get filled in through the mapping
+		wait().then(this.fillInParent.bind(this));
+	},
+
+
+	fillInParent: function() {
 		var me = this,
 			items = me.get('Items');
 
 		if (items) {
-			me.set('Items', items.map(function(item) {
+			items.forEach(function(item) {
 				item.parent = me;
-			}));
+			});
 		}
 	},
 
