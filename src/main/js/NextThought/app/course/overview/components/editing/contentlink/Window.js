@@ -20,7 +20,7 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Windo
 	initComponent: function() {
 		this.callParent(arguments);
 
-		// TODO: This will need to change. We need the content link to be a record, right now we have a object (node)
+		// TODO: This will need to change. We need the content link to be a record, right now we have an object (node)
 		this.data = this.data || this.precache && this.precache.data || {};
 
 		this.headerCmp = this.add({

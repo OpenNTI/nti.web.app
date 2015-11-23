@@ -4,6 +4,10 @@ Ext.define('NextThought.common.form.Form', {
 
 	cls: 'form-container',
 
+	requires: [
+		'NextThought.common.form.fields.FilePicker'
+	],
+
 	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'form', cn: [
 			{tag: 'tpl', 'for': 'schema', cn: [
@@ -24,22 +28,11 @@ Ext.define('NextThought.common.form.Form', {
 					]}
 				]},
 				{tag: 'tpl', 'if': 'this.isFile(type)', cn: [
-					{cls: 'field {name}', cn: [
-						{
-							cls: 'img',
-							style: { backgroundImage: 'url({[this.getDefaultValue(values.name)]})'},
-							cn: [
-								{tag: 'input', type: 'file', 'data-value': '{[this.getDefaultValue(values.name)]}'}
-							]
-						},
-						{
-							cls: 'img-name'
-						}
-					]}
+					{cls: 'field {name}', 'data-name': '{name}', 'data-type': '{type}'}
 				]},
 				{tag: 'tpl', 'if': 'this.isHidden(type)', cn: [
 					{cls: 'field {name} hidden', cn: [
-						{tag: 'input', type: 'hidden', value: '{[this.getDefaultValue(values.name}]}'}
+						{tag: 'input', type: 'hidden', value: '{[this.getDefaultValue(values.name)]}'}
 					]}
 				]}
 			]}
@@ -78,7 +71,8 @@ Ext.define('NextThought.common.form.Form', {
 	beforeRender: function() {
 		this.callParent(arguments);
 
-		this.renderTpl.defaultValues = Ext.applyIf(this.data || {}, this.defaultValues);
+		this.defaultValues = Ext.applyIf(this.data || {}, this.defaultValues);
+		this.renderTpl.defaultValues = this.defaultValues;
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			schema: this.schema
@@ -89,6 +83,7 @@ Ext.define('NextThought.common.form.Form', {
 	afterRender: function() {
 		this.callParent(arguments);
 		this.attachChangeListeners();
+		this.setupFilePickerFields();
 	},
 
 
@@ -111,6 +106,22 @@ Ext.define('NextThought.common.form.Form', {
 
 	},
 
+
+	setupFilePickerFields: function(){
+		var fileFields = this.el.query('.field[data-type=file]'),
+			me = this;
+
+		Ext.each(fileFields, function(field){
+			var el = Ext.get(field),
+				name = field.getAttribute && field.getAttribute('data-name'), 
+				cmp;
+
+			cmp = Ext.widget('file-picker-field', {
+				thumbnail: name && me.defaultValues[name],
+				renderTo: el
+			});
+		});
+	},
 
 	/**
 	 * When a field is edited, call the onChange listener if it's provided.
