@@ -89,6 +89,10 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	 */
 	resolveFileThumbnail: function(fileObj) {
 		var type = fileObj && fileObj.type || '';
+
+		// cleanup previous object URL.
+		this.cleanupObjectURL();
+		
 		if (type.indexOf('image') >= 0) {
 			return this.getFileThumbnail(fileObj);
 		}
@@ -106,6 +110,30 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	},
 
 
+	onDestroy: function(){
+		this.cleanupObjectURL();
+	},
+
+	cleanupObjectURL: function(){
+		var url = this.getGlobalURL();
+		if (this.currentObjectURL && url && url.revokeObjectURL) {
+			url.revokeObjectURL(this.currentObjectURL);
+		}
+	},
+
+
+	getGlobalURL: function(){
+		var url = null;
+		if (URL && URL.createObjectURL) {
+			url = URL;
+		} else if (webkitURL && webkitURL.createObjectURL) {
+			url = webkitURL;
+		}
+
+		return url;
+	},
+
+
 	/**
 	 * Build and return a thumbnail URL for a File object.
 	 *
@@ -113,23 +141,12 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	 * @return {String} URL for the newly generated thumbnail.
 	 */
 	getFileThumbnail: function(fileObj) {
-		var url = null,
+		var url = this.getGlobalURL(),
 			objectURL = null;
-		if (URL && URL.createObjectURL) {
-			url = URL;
-		} else if (webkitURL && webkitURL.createObjectURL) {
-			url = webkitURL;
-		}
-
-		if (url && fileObj) {
+		
+		if (url && url.createObjectURL && fileObj) {
 			objectURL = url.createObjectURL(fileObj);
-
-			// Attach destroy listen to cleanup
-			if (objectURL) {
-				this.on('destroy', function() {
-					url.revokeObjectURL(objectURL);
-				});
-			}
+			this.currentObjectURL = objectURL;
 		}
 
 		return objectURL;
