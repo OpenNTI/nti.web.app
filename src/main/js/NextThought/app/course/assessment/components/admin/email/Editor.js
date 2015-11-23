@@ -92,7 +92,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 			isIndividualEmail = !Ext.isEmpty(to);
 
 		this.receiverCmp = Ext.widget('course-scope-list', {renderTo: this.receiverEl, tabIndex: tabTracker.next()});
-		this.on('destroy', 'destroy', this.receiverCmp);
+		this.on('destroy', function () {
+			me.receiverCmp.destroy();
+			delete me.receiverCmp;
+		});
 		this.mon(this.receiverCmp, {
 			'blur': function() {
 				var e = el.down('.content');

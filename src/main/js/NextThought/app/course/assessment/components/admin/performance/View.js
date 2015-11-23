@@ -193,7 +193,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 					Ext.Object.toQueryString({
 						batchSize: 1,
 						batchStart: 0,
-						batchAround: username
+						usernameSearchTerm: username
 					}));
 
 		if (!isFeature('instructor-email') || !username) { return Promise.reject(); }
