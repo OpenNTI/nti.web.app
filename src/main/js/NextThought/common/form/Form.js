@@ -26,15 +26,20 @@ Ext.define('NextThought.common.form.Form', {
 				{tag: 'tpl', 'if': 'this.isFile(type)', cn: [
 					{cls: 'field {name}', cn: [
 						{
-							cls: 'img',  
-							style: { backgroundImage: 'url({[this.getDefaultValue(values.name)]})'}, 
+							cls: 'img',
+							style: { backgroundImage: 'url({[this.getDefaultValue(values.name)]})'},
 							cn: [
-								{tag: 'input', type: 'file', 'data-value':'{[this.getDefaultValue(values.name)]}'}
+								{tag: 'input', type: 'file', 'data-value': '{[this.getDefaultValue(values.name)]}'}
 							]
 						},
 						{
 							cls: 'img-name'
 						}
+					]}
+				]},
+				{tag: 'tpl', 'if': 'this.isHidden(type)', cn: [
+					{cls: 'field {name} hidden', cn: [
+						{tag: 'input', type: 'hidden', value: '{[this.getDefaultValue(values.name}]}'}
 					]}
 				]}
 			]}
@@ -49,7 +54,10 @@ Ext.define('NextThought.common.form.Form', {
 		isFile: function(type) {
 			return type === 'file';
 		},
-		getDefaultValue: function(name, defaultValues){
+		isHidden: function(type) {
+			return type === 'hidden';
+		},
+		getDefaultValue: function(name, defaultValues) {
 			return this.defaultValues[name];
 		}
 	}),
@@ -67,10 +75,10 @@ Ext.define('NextThought.common.form.Form', {
 	DEFAULT_THUMBNAIL: '',
 
 
-	beforeRender: function(){
+	beforeRender: function() {
 		this.callParent(arguments);
 
-		this.renderTpl.defaultValues = Ext.applyIf(this.data || {},  this.defaultValues);
+		this.renderTpl.defaultValues = Ext.applyIf(this.data || {}, this.defaultValues);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			schema: this.schema
@@ -84,20 +92,20 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
-	attachChangeListeners: function () {
+	attachChangeListeners: function() {
 		var inputFields = this.el.query('.field input, .field textarea'),
 			fileInputFields = document.querySelectorAll('input[type=file]'),
 			me = this;
 
-		Ext.each(inputFields, function (field) {
+		Ext.each(inputFields, function(field) {
 			var el = Ext.get(field);
 
 			me.mon(el, {
 				keyup: me.formChanged.bind(me)
-			})
+			});
 		});
 
-		Ext.each(fileInputFields, function (field) {
+		Ext.each(fileInputFields, function(field) {
 			field.addEventListener('change', me.onFileChanged.bind(me));
 		});
 
@@ -107,18 +115,18 @@ Ext.define('NextThought.common.form.Form', {
 	/**
 	 * When a field is edited, call the onChange listener if it's provided.
 	 * This allows the creator of the form to act on form change events.
-	 * The onChange function is passed a key-value object for the schema fields of the form. 
+	 * The onChange function is passed a key-value object for the schema fields of the form.
 	 *
 	 * NOTE: while in the future, we will optimize this to only return the value of the field that changed,
 	 * for now, we will return the entire form values.
-	 * 
+	 *
 	 * @param  {[type]} e Browser Event.
-	 * 
+	 *
 	 */
 	formChanged: function(e) {
 		var vals = this.getValues();
 		if (this.onChange) {
-			this.onChange(vals);	
+			this.onChange(vals);
 		}
 	},
 
@@ -127,11 +135,11 @@ Ext.define('NextThought.common.form.Form', {
 	 *
 	 * @return {[type]} [description]
 	 */
-	getValues: function () {
+	getValues: function() {
 		var vals = {}, me = this;
 
-		Ext.each(this.schema, function (entry) {
-			var el = me.el.down('.field.'+ entry.name + ' [type=' + entry.type + ']');
+		Ext.each(this.schema, function(entry) {
+			var el = me.el.down('.field.' + entry.name + ' [type=' + entry.type + ']');
 			if (entry.type === 'file') {
 				vals[entry.name] = el.dom.getAttribute('data-value');
 			}
@@ -145,11 +153,11 @@ Ext.define('NextThought.common.form.Form', {
 
 
 	/**
-	 * Handles file upload and broadcast the change 
-	 * 
+	 * Handles file upload and broadcast the change
+	 *
 	 * @param  {Event} e Event representing a new file upload.
 	 */
-	onFileChanged: function (e) {
+	onFileChanged: function(e) {
 		var i = e.target,
 			f = i && i.files && i.files[0],
 			thumb, img;
@@ -165,7 +173,7 @@ Ext.define('NextThought.common.form.Form', {
 					// set the thumbnail url name on the input file field.
 					i.setAttribute('data-value', thumb);
 
-					// Broadcast the change. 
+					// Broadcast the change.
 					this.formChanged();
 				}
 			}
@@ -175,27 +183,27 @@ Ext.define('NextThought.common.form.Form', {
 
 	/**
 	 * Resolve the thumbnail for the newly uploaded image or document.
-	 * As a rule of thumb, for images, we will create a thumbnail 
+	 * As a rule of thumb, for images, we will create a thumbnail
 	 * for other documents, we will return a default icon for recognized types (i.e. PDF, Doc)
 	 * Otherwise, we will return the default icon for all other types.
-	 * 
-	 * @param  {File} fileObj JS File object 
+	 *
+	 * @param  {File} fileObj JS File object
 	 * @return {String} string representing the url of the thumbnail
 	 */
 	resolveFileThumbnail: function(fileObj) {
-		var type = fileObj && fileObj.type || "";
+		var type = fileObj && fileObj.type || '';
 		if (type.indexOf('image') >= 0) {
 			return this.getFileThumbnail(fileObj);
 		}
-		if (type === "application/pdf") {
+		if (type === 'application/pdf') {
 			// PDF default thumbnail file
 			return this.DEFAULT_PDF_THUMBNAIL;
 		}
-		if (type === "application/doc") {
+		if (type === 'application/doc') {
 			// PDF default thumbnail file
 			return this.DEFAULT_DOC_THUMBNAIL;
 		}
-		
+
 		// default thumbnail
 		return this.DEFAULT_THUMBNAIL;
 	},
@@ -203,7 +211,7 @@ Ext.define('NextThought.common.form.Form', {
 
 	/**
 	 * Build and return a thumbnail URL for a File object.
-	 * 
+	 *
 	 * @param  {File} fileObj JS File object.
 	 * @return {String} URL for the newly generated thumbnail.
 	 */
@@ -212,17 +220,16 @@ Ext.define('NextThought.common.form.Form', {
 			objectURL = null;
 		if (URL && URL.createObjectURL) {
 			url = URL;
-		}
-		else if(webkitURL && webkitURL.createObjectURL) {
+		} else if (webkitURL && webkitURL.createObjectURL) {
 			url = webkitURL;
 		}
 
-		if(url && fileObj) {
+		if (url && fileObj) {
 			objectURL = url.createObjectURL(fileObj);
 
 			// Attach destroy listen to cleanup
 			if (objectURL) {
-				this.on('destroy', function(){
+				this.on('destroy', function() {
 					url.revokeObjectURL(objectURL);
 				});
 			}
@@ -235,12 +242,12 @@ Ext.define('NextThought.common.form.Form', {
 	/**
 	 * Get a form data. We are using HTML5 FormData object to return an object that contains
 	 * the whole form object.
-	 * 
+	 *
 	 * @return {FormData} JS FormData object.
 	 */
-	getData: function () {
+	getData: function() {
 		var formDom = this.el.dom.querySelector('form');
-		if (formDom){
+		if (formDom) {
 			return new FormData(formDom);
 		}
 		return null;
@@ -249,22 +256,22 @@ Ext.define('NextThought.common.form.Form', {
 
 	/**
 	 * Provides a way to update the default value of a particular field after it's been rendered.
-	 * 
+	 *
 	 * @param {[type]} fieldName  [description]
 	 * @param {[type]} fieldValue [description]
 	 */
 	setValue: function(fieldName, fieldValue) {
 		var me = this,
-			selector = this.getTypeSelector(fieldName)
+			selector = this.getTypeSelector(fieldName);
 
 		if (!selector) {
-			console.warn('No selector for schema field: '+ fieldName);
+			console.warn('No selector for schema field: ' + fieldName);
 			return;
 		}
 
 		this.onceRendered
-			.then(function(){
-				var el = me.el.down('.field '+ selector);
+			.then(function() {
+				var el = me.el.down('.field ' + selector);
 				if (el) {
 					el.setValue(fieldName, fieldValue);
 				}
@@ -273,15 +280,15 @@ Ext.define('NextThought.common.form.Form', {
 
 
 	/**
-	 * Get a selector for a particular field. Fields of each form are going to have different selectors 
-	 * based on the schema and each field's type. 
+	 * Get a selector for a particular field. Fields of each form are going to have different selectors
+	 * based on the schema and each field's type.
 	 * This method builds a selector to get to one particular field value given its name.
-	 * 
+	 *
 	 * @param  {String} fieldName schema's name for a particular field.
 	 * @return {[type]}           [description]
 	 */
-	getTypeSelector: function (fieldName) {
+	getTypeSelector: function(fieldName) {
 		// We will need to loop through the schema to find the field with the given name.
 		// TODO: To be implemented
 	}
-})
+});
