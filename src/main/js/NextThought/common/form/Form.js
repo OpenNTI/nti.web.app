@@ -81,34 +81,39 @@ Ext.define('NextThought.common.form.Form', {
 
 
 	attachChangeListeners: function() {
-		var inputFields = this.el.query('.field input, .field textarea'),
-			me = this;
+		var inputFields = document.querySelectorAll('.field input, .field textarea'),
+			me = this, field, el;
 
-		Ext.each(inputFields, function(field) {
-			var el = Ext.get(field);
-
-			me.mon(el, {
-				keyup: me.formChanged.bind(me)
-			});
-		});
+		for (var i=0; i < inputFields.length; i++){
+			field = inputFields[i];
+			if (field) {
+				field.addEventListener('keyup', this.formChanged.bind(this));
+			}
+		}
 	},
 
 
 	setupFilePickerFields: function(){
-		var fileFields = this.el.query('.field[data-type=file]'),
-			me = this;
+		var fileFields = document.querySelectorAll('.field[data-type=file]'),
+			me = this, field, el, name, cmp;
 
-		Ext.each(fileFields, function(field){
-			var el = Ext.get(field),
-				name = field.getAttribute && field.getAttribute('data-name'), 
-				cmp;
+		for (var i = 0; i < fileFields.length; i++) {
+			field = fileFields[i];
+			el = Ext.get(field);
 
-			cmp = Ext.widget('file-picker-field', {
-				thumbnail: name && me.defaultValues[name],
-				renderTo: el,
-				formChanged: me.formChanged.bind(me)
-			});
-		});
+			if (el) {
+				name = field.getAttribute && field.getAttribute('data-name');
+
+				cmp = Ext.widget('file-picker-field', {
+					thumbnail: name && me.defaultValues[name],
+					renderTo: el,
+					formChanged: me.formChanged.bind(me)
+				});
+
+				// cleanup the file picker.
+				me.on('destroy', cmp.destroy.bind(cmp));
+			}
+		}
 	},
 
 	/**
@@ -137,13 +142,15 @@ Ext.define('NextThought.common.form.Form', {
 	getValues: function() {
 		var vals = {}, me = this;
 
-		Ext.each(this.schema, function(entry) {
-			var el = me.el.down('.field.' + entry.name + ' [type=' + entry.type + ']');
-			if (entry.type === 'file') {
-				vals[entry.name] = el.dom.getAttribute('data-value');
-			}
-			else {
-				vals[entry.name] = el.dom.value;
+		(this.schema || []).forEach(function(entry) {
+			var dom = document.querySelector('.field.' + entry.name + ' [type=' + entry.type + ']');
+			if (dom) {
+				if (entry.type === 'file') {
+					vals[entry.name] = dom.getAttribute('data-value');
+				}
+				else {
+					vals[entry.name] = dom.value;
+				}
 			}
 		});
 
@@ -158,7 +165,7 @@ Ext.define('NextThought.common.form.Form', {
 	 * @return {FormData} JS FormData object.
 	 */
 	getData: function() {
-		var formDom = this.el.dom.querySelector('form');
+		var formDom = document.querySelector('form');
 		if (formDom) {
 			return new FormData(formDom);
 		}
@@ -171,6 +178,8 @@ Ext.define('NextThought.common.form.Form', {
 	 *
 	 * @param {[type]} fieldName  [description]
 	 * @param {[type]} fieldValue [description]
+	 * 
+	 * // TODO: Incomplete.
 	 */
 	setValue: function(fieldName, fieldValue) {
 		var me = this,
