@@ -6,10 +6,6 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 		'NextThought.model.courses.navigation.CourseOutlineNodeProgress'
 	],
 
-	//TODO: once the server is sending the Items back when we update
-	//get rid of this
-	SYNC_BLACKLIST: ['Items'],
-
 	isNode: true,
 
 	fields: [

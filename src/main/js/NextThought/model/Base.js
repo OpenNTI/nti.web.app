@@ -212,6 +212,21 @@ Ext.define('NextThought.model.Base', {
 		this.fireEvent('updated', this);
 	},
 
+	/**
+	 * Given a response from the server, update my values
+	 * @param  {String} response server response
+	 */
+	syncWithResponse: function(response) {
+		var json = JSON.parse(response),
+			newRecord;
+
+		json = Ext.applyIf(json, this.raw);
+
+		newRecord = ParseUtils.parseItems([json])[0];
+
+		return this.syncWith(newRecord);
+	},
+
 
 	constructor: function(data, id, raw) {
 		var fs = this.fields,

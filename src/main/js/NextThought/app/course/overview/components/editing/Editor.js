@@ -103,9 +103,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		} else {
 			Service.put(editLink, data)
 				.then(function(response) {
-					var newRecord = ParseUtils.parseItems(response)[0];
-
-					me.record.syncWith(newRecord);
+					me.record.syncWithResponse(response);
 					me.onClose();
 				})
 				.fail(function(reason) {
