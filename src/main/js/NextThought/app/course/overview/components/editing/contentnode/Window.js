@@ -8,11 +8,10 @@ Ext.define('NextThought.app.course.overview.components.editing.contentnode.Windo
 
 	newItemText: 'New Lesson',
 
-	editRecord: function(outlineNode) {
-		this.add({
-			xtype: 'overview-editing-contentnode-editor',
-			outlineNode: outlineNode
-		});
+	getEditorConfig: function() {
+		return {
+			xtype: 'overview-editing-contentnode-editor'
+		};
 	}
 
 }, function() {

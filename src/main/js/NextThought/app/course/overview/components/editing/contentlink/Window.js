@@ -8,7 +8,7 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Windo
 
 	newItemText: 'New Content Link',
 
-	editRecord: function(record) {
+	getEditorConfig: function(record) {
 	}
 }, function() {
 	NextThought.app.windows.StateStore.register('edit-contentlink', this);

@@ -75,6 +75,54 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	},
 
 
+	setCollection: function(collection) {
+		this.removeAll(true);
+
+		var startDate = collection.get('startDate'),
+			classes = ['outline-row', collection.get('type')],
+			items = [];
+
+		if (!collection.get('isAvailable')) {
+			classes.push('disabled');
+		}
+
+		items.push({cls: 'label', html: collection.getTitle()});
+
+		if (this.shouldShowDates && startDate) {
+			items.push({
+				cls: 'date',
+				cn: [
+					{html: Ext.Date.format(startDate, 'M')},
+					{html: Ext.Date.format(startDate, 'j')}
+				]
+			});
+		}
+
+		this.add([
+			{
+				xtype: 'box',
+				isNode: true,
+				autoEl: {
+					cls: classes.join(' '),
+					'data-qtip': collection.getTitle(),
+					cn: items
+				}
+			},
+			{
+				xtype: 'container',
+				bodyContainer: true,
+				cls: 'items',
+				layout: 'none',
+				items: []
+			}
+		]);
+
+		this.nodeCmp = this.down('[isNode]');
+
+		this.callParent(arguments);
+	},
+
+
 	onClick: function(e) {
 		if (e.getTarget('.outline-row')) {
 			this.doSelectNode(this.outlineNode);

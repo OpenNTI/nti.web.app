@@ -27,7 +27,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Window', {
 
 		this.setPath(this.record, this.parentRecord);
 
-		this.editRecord(this.record);
+		this.editRecord(this.record, this.parentRecord);
 	},
 
 
@@ -53,5 +53,18 @@ Ext.define('NextThought.app.course.overview.components.editing.Window', {
 	},
 
 
-	editRecord: function(record) {}
+	getEditorConfig: function(record, parentRecord) {
+		return {};
+	},
+
+
+	editRecord: function(record, parentRecord) {
+		var config = this.getEditorConfig(record, parentRecord);
+
+		config.record = record;
+		config.parentRecord = record;
+		config.doClose = this.doClose.bind(this);
+
+		this.add(config);
+	}
 });

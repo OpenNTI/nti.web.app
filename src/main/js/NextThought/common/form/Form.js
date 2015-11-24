@@ -9,14 +9,14 @@ Ext.define('NextThought.common.form.Form', {
 	],
 
 	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{tag: 'form', cn: [
+		{tag: 'form', enctype: 'multipart/form-data', method: 'post', name: 'form', cn: [
 			{tag: 'tpl', 'for': 'schema', cn: [
 				{tag: 'tpl', 'if': 'this.isText(type)', cn: [
 					{cls: 'field {name}', cn: [
 						{tag: 'tpl', 'if': 'displayName', cn: [
 							{tag: 'label', html: '{displayName}'}
 						]},
-						{tag: 'input', type: '{type}', placeholder: '{placeholder}', value: '{[this.getDefaultValue(values.name)]}'}
+						{tag: 'input', type: '{type}', name: '{name}', placeholder: '{placeholder}', value: '{[this.getDefaultValue(values.name)]}'}
 					]}
 				]},
 				{tag: 'tpl', 'if': 'this.isTextArea(type)', cn: [
@@ -24,7 +24,7 @@ Ext.define('NextThought.common.form.Form', {
 						{tag: 'tpl', 'if': 'displayName', cn: [
 							{tag: 'label', html: '{displayName}'}
 						]},
-						{tag: 'textarea', type: '{type}', placeholder: '{placeholder}', html: '{[this.getDefaultValue(values.name)]}'}
+						{tag: 'textarea', type: '{type}', name: '{name}', placeholder: '{placeholder}', html: '{[this.getDefaultValue(values.name)]}'}
 					]}
 				]},
 				{tag: 'tpl', 'if': 'this.isFile(type)', cn: [
@@ -58,6 +58,11 @@ Ext.define('NextThought.common.form.Form', {
 
 	defaultValues: {
 		'title': 'title'
+	},
+
+
+	renderSelectors: {
+		formEl: 'form'
 	},
 
 

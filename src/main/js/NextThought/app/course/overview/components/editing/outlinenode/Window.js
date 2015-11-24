@@ -8,11 +8,10 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Windo
 
 	newItemText: 'New Unit',
 
-	editRecord: function(outlineNode) {
-		this.add({
-			xtype: 'overview-editing-outlinenode-editor',
-			outlineNode: outlineNode
-		});
+	getEditorConfig: function() {
+		return {
+			xtype: 'overview-editing-outlinenode-editor'
+		};
 	}
 }, function() {
 	NextThought.app.windows.StateStore.register('edit-outlinenode', this);

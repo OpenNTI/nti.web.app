@@ -31,7 +31,7 @@ Ext.define('NextThought.common.components.BoundCollection', {
 
 
 	getItems: function(collection) {
-		return collection.get('Items');
+		return collection.get('Items') || [];
 	},
 
 
@@ -39,6 +39,16 @@ Ext.define('NextThought.common.components.BoundCollection', {
 		var me = this,
 			body = me.getBodyContainer(),
 			items = me.getItems(collection);
+
+		if (me.updateMonitor) {
+			Ext.destroy(me.updateMonitor);
+		}
+
+		me.mon(collection, {
+			single: true,
+			destroyable: true,
+			'update': this.setCollection.bind(this)
+		});
 
 		items = items.map(function(item) {
 			return me.getCmpForRecord(item);

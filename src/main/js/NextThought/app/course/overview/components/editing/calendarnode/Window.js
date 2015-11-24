@@ -8,11 +8,10 @@ Ext.define('NextThought.app.course.overview.components.editing.calendarnode.Wind
 
 	newItemText: 'New Section',
 
-	editRecord: function(outlineNode) {
-		this.add({
-			xtype: 'overview-editing-calendarnode-editor',
-			outlineNode: outlineNode
-		});
+	getEditorConfig: function(outlineNode) {
+		return {
+			xtype: 'overview-editing-calendarnode-editor'
+		};
 	}
 
 }, function() {

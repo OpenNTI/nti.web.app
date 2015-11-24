@@ -185,6 +185,33 @@ Ext.define('NextThought.model.Base', {
 		return false;
 	},
 
+	/**
+	 * A list of keys to not include when syncing a record
+	 * @type {Array}
+	 */
+	SYNC_BLACKLIST: [],
+
+	/**
+	 * Given another instance of the same class, update this values.
+	 *
+	 * @param  {Model} record the instance to update with
+	 */
+	syncWith: function(record) {
+		if (!this.self.isInstanceOf(record)) {
+			consle.error('Trying to sync records or two different classes');
+			return;
+		}
+
+		var newData = record.getData();
+
+		this.SYNC_BLACKLIST.forEach(function(key) {
+			delete newData[key];
+		});
+
+		this.set(newData);
+		this.fireEvent('updated', this);
+	},
+
 
 	constructor: function(data, id, raw) {
 		var fs = this.fields,

@@ -13,8 +13,6 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Edito
 		{name: 'description', displayName: 'Description', type: 'textarea', placeholder: 'Description goes here...'}
 	],
 
-	cls: 'content-editor',
-
 
 	addPreview: function(values) {
 		return this.add({

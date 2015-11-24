@@ -7,7 +7,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 			cls: 'img',
 			style: { backgroundImage: 'url({thumbnail})'},
 			cn: [
-				{tag: 'input', type: 'file', 'data-value': '{thumbnail}'}
+				{tag: 'input', type: 'file', name: '{name}', 'data-value': '{thumbnail}'}
 			]
 		},
 		{
@@ -24,7 +24,8 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	beforeRender: function () {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
-			thumbnail: this.thumbnail
+			thumbnail: this.thumbnail,
+			name: this.name
 		});
 	},
 
