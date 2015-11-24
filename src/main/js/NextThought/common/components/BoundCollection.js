@@ -9,17 +9,20 @@ Ext.define('NextThought.common.components.BoundCollection', {
 	},
 
 
+	parseCollection: function(response) {
+		var obj = ParseUtils.parseItems(response)[0];
+
+		return obj || JSON.parse(response);
+	},
+
+
 	loadCollection: function(url) {
 		var me = this;
 
 		me.activeUrl = url;
 
 		return Service.request(url)
-			.then(function(response) {
-				var obj = ParseUtils.parseItems(response)[0];
-
-				return obj || JSON.parse(response);
-			})
+			.then(me.parseCollection.bind(me))
 			.then(function(json) {
 				me.setCollection(json);
 			})

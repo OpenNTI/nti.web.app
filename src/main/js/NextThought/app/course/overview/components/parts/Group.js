@@ -14,7 +14,10 @@ Ext.define('NextThought.app.course.overview.components.parts.Group', {
 		'NextThought.app.course.overview.components.parts.Survey',
 		'NextThought.app.course.overview.components.parts.Timeline',
 		'NextThought.app.course.overview.components.parts.Topic',
-		'NextThought.app.course.overview.components.parts.Videos'
+		'NextThought.app.course.overview.components.parts.Videos',
+		'NextThought.app.course.overview.components.parts.VideoRoll',
+		'NextThought.model.VideoRoll',
+		'NextThought.model.Video'
 	],
 
 	ui: 'course',
@@ -76,6 +79,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Group', {
 		if (!items.length) {
 			this.hide();
 		}
+
 
 		items = (items || []).reduce(function(items, record) {
 			var item = record.raw,
