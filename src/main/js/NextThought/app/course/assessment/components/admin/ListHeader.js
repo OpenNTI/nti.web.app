@@ -88,11 +88,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		this.mon(this.viewingEl, 'click', 'showPageMenu');
 		this.mon(this.filterEl, 'click', this.fireEvent.bind(this, 'showFilters', this.filterEl));
 		this.mon(this.viewAssignmentEl, 'click', this.fireEvent.bind(this, 'goToRawAssignment'));
+		this.emailEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		if (this.shouldAllowInstructorEmail() && this.currentBundle && this.currentBundle.getLink('Mail')) {
 			this.mon(this.emailEl, 'click', 'showEmailEditor');	
 		}
 		else {
-			this.emailEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 			this.emailEl.hide();
 		}
 
@@ -233,9 +233,31 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 			filter = this.ownerCt && this.ownerCt.studentFilter;
 		}
 
-		q = filter === 'ForCredit' ? 'Email Enrolled Students' : 'Email All Students';
-		if (this.emailEl) {
+		if (filter === 'ForCredit') {
+			q = getString('NextThought.view.courseware.assessment.admin.performance.Root.emailenrolled');
+		}
+		else if (filter === 'Open') {
+			q = getString('NextThought.view.courseware.assessment.admin.performance.Root.emailopen');
+		}
+		else if (filter === 'All') {
+			q = getString('NextThought.view.courseware.assessment.admin.performance.Root.emailall');
+		}
+
+		if (this.emailEl && q) {
 			this.emailEl.dom.setAttribute('data-qtip', q);
+			this.maybeShowEmailButton(filter);
+		}
+	},
+
+	maybeShowEmailButton: function(filter){
+		var isAllowed = this.shouldAllowInstructorEmail() && this.currentBundle && this.currentBundle.getLink('Mail');
+		if (isAllowed && this.emailEl) {
+			if (filter === 'Open') {
+				this.emailEl.hide();
+			}
+			else {
+				this.emailEl.show();
+			}
 		}
 	},
 
@@ -249,7 +271,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		var me = this,
 			editor,
 			emailRecord = new NextThought.model.Email(),
-			scope = this.ownerCt && this.ownerCt.studentFilter === 'ForCredit' ? 'ForCredit' : 'All';
+			scope = this.ownerCt && this.ownerCt.studentFilter;
 
 		// Set the link to post the email to
 		emailRecord.set('url', this.currentBundle && this.currentBundle.getLink('Mail'));

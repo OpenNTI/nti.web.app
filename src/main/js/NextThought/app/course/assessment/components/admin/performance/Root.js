@@ -307,7 +307,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 	createStudentMenu: function() {
 		var type = this.studentFilter || (isFeature('show-open-students-first') ? 'Open' : 'ForCredit'),
 			items = [
-				//{ text: 'All Students', type: 'all', checked: type === 'all'},
+				{ text: 'All Students', type: 'All', checked: type === 'All'},
 				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.open'), type: 'Open', checked: type === 'Open'},
 				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.enrolled'), type: 'ForCredit', checked: type === 'ForCredit'}
 			];
@@ -429,7 +429,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			return;
 		}
 
-		if (type === 'Open') {
+		if (type === 'All'){
+			url = base;
+			this.pageHeader.setExportURL(url, getString('NextThought.view.courseware.assessment.admin.performance.Root.exportall'));
+		}
+		else if (type === 'Open') {
 			url = base + '?LegacyEnrollmentStatus=Open';
 			this.pageHeader.setExportURL(url, getString('NextThought.view.courseware.assessment.admin.performance.Root.exportopen'));
 		} else {
@@ -631,13 +635,15 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 		var me = this,
 			store = me.store,
 			filters = [],
-			params = store.proxy.extraParams;
+			params = store.proxy.extraParams,
+			studentFilter;
 
 		me.applyingState = true;
 		me.setDisabled();
 		state = state || {};
+		studentFilter = state.studentFilter || this.studentFilter || 'ForCredit';
 
-		filters.push(state.studentFilter || this.studentFilter || 'ForCredit');
+		filters.push(studentFilter);
 
 		if (state.itemFilter && !/all/i.test(state.itemFilter)) {
 			filters.push(state.itemFilter);
