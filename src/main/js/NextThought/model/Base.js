@@ -832,6 +832,11 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+	toJSON: function() {
+		return this.asJSON();
+	},
+
+
 	asJSON: function() {
 		var data = {},
 			me = this;
