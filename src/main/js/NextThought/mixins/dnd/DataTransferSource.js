@@ -1,4 +1,12 @@
+/**
+ * Things that use this mixins, need to implement a getDataForTransfer
+ * method to return the value to store in the dataTransfer
+ */
 Ext.define('NextThought.mixins.dnd.DataTransferSource', {
+	/**
+	 * Stringify the value of getDataForTransfer
+	 * @return {String} value for the data transfer
+	 */
 	getDataTransferValue: function() {
 		if (!this.getDataForTransfer) {
 			console.error('DataTransferSource does not implement getDataForTransfer');
@@ -7,6 +15,6 @@ Ext.define('NextThought.mixins.dnd.DataTransferSource', {
 
 		var data = this.getDataForTransfer();
 
-		return JSON.stringify();
+		return JSON.stringify(data);
 	}
 });
