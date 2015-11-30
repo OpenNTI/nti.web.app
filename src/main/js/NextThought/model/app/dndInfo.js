@@ -57,5 +57,25 @@ Ext.define('NextThought.model.app.dndInfo', {
 			DnDSession: this.get('DnDSession'),
 			Version: this.get('Version')
 		};
+	},
+
+
+	isSameSession: function() {
+		return this.get('DnDSession') === this.self.getSessionId();
+	},
+
+
+	isSameVersion: function() {
+		return this.get('Version') === this.self.getVersion();
+	},
+
+
+	isSameApp: function() {
+		return this.get('SourceApp') === this.self.getSourceApp();
+	},
+
+
+	isSame: function() {
+		return this.isSameSession() && this.isSameVersion() && this.isSameApp();
 	}
 });
