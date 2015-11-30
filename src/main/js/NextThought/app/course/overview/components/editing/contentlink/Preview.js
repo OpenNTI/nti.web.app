@@ -6,17 +6,16 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Previ
 	cls: 'content-card preview',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
+		{ cls: 'thumbnail icon', style: { backgroundImage: 'url({icon})'} },
 		{ cls: 'meta', cn: [
-			{ cls: 'title', html: '{title}' },
-			{ cls: 'byline creator', html: '{{{NextThought.view.cards.Card.by}}}' },
+			{ cls: 'title label', html: '{label}' },
+			{ cls: 'byline Creator', html: '{{{NextThought.view.cards.Card.by}}} {Creator}' },
 			{ cls: 'description', html: '{description}' }
 		]}
 	]),
 
 	beforeRender: function () {
 		this.callParent(arguments);
-
 		this.renderData = Ext.apply(this.renderData || {}, this.values);
 	},
 
@@ -29,7 +28,7 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Previ
 			if(values.hasOwnProperty(k)){
 				el = this.el.down('.' + k);
 				if (el) {
-					if (k === 'thumbnail') {
+					if (k === 'icon') {
 						el.setStyle('backgroundImage', 'url(' + values[k] + ')');
 					}
 					else {

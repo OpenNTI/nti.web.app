@@ -36,8 +36,10 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		this.footer = this.add({
 			xtype: 'box',
 			autoEl: {cls: 'content-editor-footer', cn: [
-				{cls: 'button close', html: 'Close'},
-				{cls: 'button save', html: 'Save'}
+				{cls: 'right save-controls', cn: [
+					{cls: 'button action save', html: 'Save'},
+					{cls: 'button action cancel', html: 'Close'}
+				]}
 			]},
 			listeners: {
 				click: {
@@ -63,7 +65,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 
 	onFooterClick: function(e) {
-		if (e.getTarget('.close')) {
+		if (e.getTarget('.cancel')) {
 			this.onClose();
 		} else if (e.getTarget('.save')) {
 			this.onSave();

@@ -126,7 +126,8 @@ Ext.define('NextThought.app.course.overview.components.parts.Group', {
 					courseRecord: node,
 					assignment: assignment,
 					course: course,
-					navigate: me.navigate.bind(me)
+					navigate: me.navigate.bind(me),
+					record: record
 				}, item);
 
 				if (cls.buildConfig) {

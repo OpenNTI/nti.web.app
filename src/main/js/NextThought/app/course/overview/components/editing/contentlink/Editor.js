@@ -7,9 +7,9 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Edito
 	],
 
 	FORM_SCHEMA: [
-		{name: 'thumbnail', displayName: 'Icon', type: 'file'},
-		{name: 'title', displayName: 'Title', type: 'text', placeholder: 'Title....'},
-		{name: 'creator', displayName: 'Author', type: 'text', placeholder: 'Author...'},
+		{name: 'icon', displayName: 'Icon', type: 'file'},
+		{name: 'label', displayName: 'Title', type: 'text', placeholder: 'Title....'},
+		{name: 'Creator', displayName: 'Author', type: 'text', placeholder: 'Author...'},
 		{name: 'description', displayName: 'Description', type: 'textarea', placeholder: 'Description goes here...'}
 	],
 
@@ -22,5 +22,7 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Edito
 	},
 
 
-	getDefaultValues: function() {}
+	getDefaultValues: function() {
+		return this.record && this.record.isModel && this.record.getData();
+	}
 });

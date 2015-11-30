@@ -164,7 +164,7 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 		}
 
 		if (e && e.getTarget('.edit')) {
-			this.WindowActions.showWindow('edit-contentlink', null, null, {}, {data: this.data});
+			this.WindowActions.showWindow('edit-contentlink', null, null, {}, {record: this.record});
 			return;
 		}
 

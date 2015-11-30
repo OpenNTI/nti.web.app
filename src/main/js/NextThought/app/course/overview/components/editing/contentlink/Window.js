@@ -8,8 +8,12 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Windo
 
 	newItemText: 'New Content Link',
 
-	getEditorConfig: function(record) {
+	getEditorConfig: function(outlineNode) {
+		return {
+			xtype: 'overview-editing-contentlink-editor'
+		};
 	}
+
 }, function() {
 	NextThought.app.windows.StateStore.register('edit-contentlink', this);
 });
