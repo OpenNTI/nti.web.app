@@ -18,6 +18,19 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 	],
 
 
+	fillInItems: function() {
+		var me = this,
+			items = me.get('Items');
+
+		if (items) {
+			items.forEach(function(item, index) {
+				item.parent = me;
+				item.listIndex = index;
+			});
+		}
+	},
+
+
 	getOutlineContents: function() {
 		var me = this,
 			link = me.getLink('contents'),

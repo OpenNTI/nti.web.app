@@ -39,6 +39,10 @@ Ext.define('NextThought.store.courseware.OutlineInterface', {
 			node._position = index;
 			node._depth = depth;
 
+			if (node.fillInItems) {
+				node.fillInItems();
+			}
+
 			index += 1;
 
 			records.push(node);

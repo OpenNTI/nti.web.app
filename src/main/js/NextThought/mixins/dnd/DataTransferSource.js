@@ -1,6 +1,8 @@
 /**
  * Things that use this mixins, need to implement a getDataForTransfer
  * method to return the value to store in the dataTransfer
+ *
+ * They can also implement a getKeyForTransfer if they want
  */
 Ext.define('NextThought.mixins.dnd.DataTransferSource', {
 	/**

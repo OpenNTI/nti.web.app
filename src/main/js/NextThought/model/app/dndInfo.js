@@ -52,6 +52,7 @@ Ext.define('NextThought.model.app.dndInfo', {
 
 	getDataForTransfer: function() {
 		return {
+			MimeType: this.mimeType,
 			SourceApp: this.get('SourceApp'),
 			DnDSession: this.get('DnDSession'),
 			Version: this.get('Version')

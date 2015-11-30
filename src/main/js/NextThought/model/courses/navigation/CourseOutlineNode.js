@@ -6,6 +6,10 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 		'NextThought.model.courses.navigation.CourseOutlineNodeProgress'
 	],
 
+	mixins: {
+		DataTransfer: 'NextThought.mixins.dnd.DataTransferSource'
+	},
+
 	isNode: true,
 
 	fields: [
@@ -82,19 +86,17 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 
 	constructor: function() {
 		this.callParent(arguments);
-
-		//wait a beat for the Items to get filled in through the mapping
-		wait().then(this.fillInParent.bind(this));
 	},
 
 
-	fillInParent: function() {
+	fillInItems: function() {
 		var me = this,
 			items = me.get('Items');
 
 		if (items) {
-			items.forEach(function(item) {
+			items.forEach(function(item, index) {
 				item.parent = me;
+				item.listIndex = index;
 			});
 		}
 	},
@@ -116,6 +118,15 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 
 	getTitle: function() {
 		return this.get('label');
+	},
+
+
+	getDataForTransfer: function() {
+		return {
+			MimeType: this.mimeType,
+			title: this.getTitle(),
+			NTIID: this.get('NTIID')
+		};
 	},
 
 
