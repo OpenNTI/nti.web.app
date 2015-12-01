@@ -44,23 +44,74 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 	},
 
 
-	getIndexForCoordinates: function(x, y) {
+	getInfoForCoordinates: function(x, y) {
 		var items = this.getOrderingItems(),
-			i, current;
+			dropzoneRect = this.getDropzoneBoundingClientRect(),
+			dropzoneWidth = dropzoneRect.width,
+			info, i, current, previous;
 
 		for (i = 0; i < items.length; i++) {
+			previous = i >= 0 ? items[i] : null;
 			current = items[i];
 
 			if (current.isPointBefore(x, y)) {
+				if (!previous) {
+					info = {
+						index: i,
+						type: 'row',
+						before: current.getDragTarget()
+					};
+				} else {
+					info = {
+						index: i,
+						type: current.isFullWidth(dropzoneWidth) || previous.isFullWidth(dropzoneWidth) ? 'row' : 'column',
+						before: current.getDragTarget()
+					};
+				}
+			}
+
+			if (info) {
 				break;
 			}
 		}
 
-		return i;
+		if (!info) {
+			info = {
+				append: true,
+				type: 'row'
+			};
+		}
+
+		return info;
 	},
 
 
+	__getPlacholder: function() {
+		if (this.placeholder) {
+			return this.placeholder;
+		}
+
+		this.placeholder = document.createElement('div');
+
+
+		this.placeholder.style.height = '2px';
+		this.placeholder.style.background = 'black';
+		this.placeholder.classList.add('drop-placeholder');
+
+		return this.placeholder;
+	},
+
+
+
 	onDragOver: function(e) {
-		var index = this.getIndexForCoordinates(e.screenX, e.screenY);
+		var target = this.getDropzoneTarget(),
+			placeholder = this.__getPlacholder(),
+			info = this.getInfoForCoordinates(e.clientX, e.clientY);
+
+		if (info.append) {
+			target.appendChild(placeholder);
+		} else if (info.before) {
+			target.insertBefore(placeholder, info.before);
+		}
 	}
 });

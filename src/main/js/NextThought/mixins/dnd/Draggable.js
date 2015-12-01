@@ -27,12 +27,15 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 	},
 
 
-	__getTarget: function() {
-		if (this.getDragTarget) {
-			return this.getDragTarget();
-		}
-
+	getDragTarget: function() {
 		return this.el && this.el.dom;
+	},
+
+
+	getDragBoundingClientRect: function() {
+		var target = this.getDragTarget();
+
+		return target.getBoundingClientRect();
 	},
 
 
@@ -44,7 +47,7 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 
 		this.initDragging();
 
-		var target = this.__getTarget(),
+		var target = this.getDragTarget(),
 			method = remove ? 'removeEventListener' : 'addEventListener',
 			handlers = this.DragHandlers;
 
@@ -101,7 +104,7 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 
 
 	__dragStart: function(e) {
-		var el = this.__getTarget(),
+		var el = this.getDragTarget(),
 			info = this.getDnDEventData();
 
 		if (el) {
@@ -120,7 +123,7 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 	},
 
 	__dragEnd: function() {
-		var el = this.__getTarget();
+		var el = this.getDragTarget();
 
 		if (el) {
 			el.classList.remove('dragging');

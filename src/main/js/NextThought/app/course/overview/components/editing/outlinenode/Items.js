@@ -28,6 +28,13 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Items
 	},
 
 
+	getDropzoneTarget: function() {
+		var body = this.getBodyContainer();
+
+		return body && body.el && body.el.dom;
+	},
+
+
 	getOrderingItems: function() {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;

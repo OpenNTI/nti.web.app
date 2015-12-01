@@ -38,7 +38,7 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 
 		this.initDropzone();
 
-		var target = this.getDropzoneEl(),
+		var target = this.getDropzoneTarget(),
 			method = remove ? 'removeEventListener' : 'addEventListener',
 			handlers = this.DropzoneHandlers;
 
@@ -101,17 +101,20 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 	},
 
 
-	getDropzoneEl: function() {
-		if (this.getDropzoneTarget) {
-			return this.getDropzoneTarget();
-		}
-
+	getDropzoneTarget: function() {
 		return this.el && this.el.dom;
 	},
 
 
-	__dragEnter: function() {
-		var el = this.getDropzoneEl();
+	getDropzoneBoundingClientRect: function() {
+		var target = this.getDropzoneTarget();
+
+		return target.getBoundingClientRect();
+	},
+
+
+	__dragEnter: function(e) {
+		var el = this.getDropzoneTarget();
 
 		if (el) {
 			el.classList.add('drag-over');
@@ -123,8 +126,8 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 	},
 
 
-	__dragLeave: function() {
-		var el = this.getDropzoneEl();
+	__dragLeave: function(e) {
+		var el = this.getDropzoneTarget();
 
 		if (el) {
 			el.classList.remove('drag-over');
@@ -166,7 +169,7 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 
 
 	__callHandlers: function(e, dataTransfer) {
-		var handlers = this.transferHandlers,
+		var handlers = this.transferHandlers || {},
 			keys = Object.keys(handlers);
 
 		keys.forEach(function(key) {
