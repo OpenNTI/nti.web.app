@@ -1,25 +1,21 @@
 Ext.define('NextThought.app.course.overview.components.editing.calendarnode.Index', {
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.app.course.overview.components.editing.outlinenode.Index',
 	alias: 'widget.overview-editing-calenarnode',
 
 	requires: [
 		'NextThought.app.course.overview.components.editing.calendarnode.Preview'
 	],
 
+	hasItems: true,
+	hasContents: false,
+
 	cls: 'outline-node-editing',
 
-	layout: 'none',
-	items: [],
-
-
-	initComponent: function() {
-		this.callParent(arguments);
-
-		this.add([
-			{
-				xtype: 'overview-editing-calendarnode-preview',
-				outlineNode: this.outlineNode
-			}
-		]);
+	getPreviewConfig: function(outlineNode, bundle) {
+		return {
+			xtype: 'overview-editing-calendarnode-preview',
+			outlineNode: outlineNode,
+			bundle: bundle
+		};
 	}
 });

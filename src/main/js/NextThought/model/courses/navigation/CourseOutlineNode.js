@@ -7,7 +7,8 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 	],
 
 	mixins: {
-		DataTransfer: 'NextThought.mixins.dnd.DataTransferSource'
+		DataTransfer: 'NextThought.mixins.dnd.DataTransferSource',
+		OrderedContents: 'NextThought.mixins.OrderedContents'
 	},
 
 	isNode: true,

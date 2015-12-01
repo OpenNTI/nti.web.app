@@ -2,6 +2,10 @@ Ext.define('NextThought.model.Video', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.ntivideo',
 
+	statics: {
+		mimeType: 'application/vnd.nextthought.ntivideo'
+	},
+
 	fields: [
 		{name: 'description', type: 'string'},
 		{name: 'poster', type: 'string'},

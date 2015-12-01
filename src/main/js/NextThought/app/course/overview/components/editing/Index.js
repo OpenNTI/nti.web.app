@@ -23,11 +23,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 		this.removeAll(true);
 
 		if (record instanceof NextThought.model.courses.navigation.CourseOutlineContentNode) {
-			this.add({xtype: 'overview-editing-contentnode', outlineNode: record});
+			this.add({xtype: 'overview-editing-contentnode', outlineNode: record, bundle: this.bundle});
 		} else if (record instanceof NextThought.model.courses.navigation.CourseOutlineCalendarNode) {
-			this.add({xtype: 'overview-editing-calendarnode', outlineNode: record});
+			this.add({xtype: 'overview-editing-calendarnode', outlineNode: record, bundle: this.bundle});
 		} else if (record instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
-			this.add({xtype: 'overview-editing-outlinenode', outlineNode: record});
+			this.add({xtype: 'overview-editing-outlinenode', outlineNode: record, bundle: this.bundle});
 		}
 
 		return Promise.resolve();

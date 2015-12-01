@@ -71,6 +71,15 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 	},
 
 
+	getInfo: function(record, course) {
+		return Promise.all([
+				course.getAssignments(),
+				course.getWrapper && course.getWrapper(),
+				ContentUtils.getLocation(record.getId(), course)
+			]);
+	},
+
+
 	renderLesson: function(record) {
 		var me = this,
 			course = me.bundle,
@@ -78,7 +87,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 		if (!record || !course) {
 			//show empty state?
-			cnosole.warn('Nothing?', record, course);
+			console.warn('Nothing?', record, course);
 			return;
 		}
 
@@ -103,11 +112,8 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 		me.removeAll(true);
 
-		return Promise.all([
-				course.getAssignments(),
-				course.getWrapper && course.getWrapper(),
-				ContentUtils.getLocation(record.getId(), course)
-			]).then(function(results) {
+		return this.getInfo(record, course)
+			.then(function(results) {
 				var assignments = results[0],
 					enrollment = results[1],
 					//Just use the first one for now

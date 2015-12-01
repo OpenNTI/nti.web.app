@@ -29,7 +29,8 @@ Ext.define('NextThought.model.RelatedWork', {
 		{name: 'target', type: 'string'},
 		{name: 'type', type: 'string'},
 		{name: 'visibility', type: 'string'},
-		{name: 'href', type: 'string'}
+		{name: 'href', type: 'string'},
+		{name: 'Target-NTIID', type: 'string'}	
 	],
 
 
