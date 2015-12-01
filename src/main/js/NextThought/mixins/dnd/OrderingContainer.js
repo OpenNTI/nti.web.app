@@ -32,7 +32,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 
 	enableDraggingOnItem: function(item, index) {
 		if (item && item.enableDragging) {
-			item.enableOrdering(index);
+			item.enableOrdering(index, this.onItemDragStart.bind(this), this.onItemDragEnd.bind(this));
 		}
 	},
 
@@ -86,19 +86,31 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 	},
 
 
-	__getPlacholder: function() {
-		if (this.placeholder) {
-			return this.placeholder;
+	__getPlacholder: function(doNotCreate) {
+		if (!this.placeholder && !doNotCreate) {
+			this.placeholder = document.createElement('div');
+			this.placeholder.style.height = '2px';
+			this.placeholder.style.background = 'black';
+			this.placeholder.classList.add('drop-placeholder');
 		}
 
-		this.placeholder = document.createElement('div');
-
-
-		this.placeholder.style.height = '2px';
-		this.placeholder.style.background = 'black';
-		this.placeholder.classList.add('drop-placeholder');
-
 		return this.placeholder;
+	},
+
+
+	onItemDragStart: function() {
+		this.__getPlacholder();
+	},
+
+
+	onItemDragEnd: function() {
+		var target = this.getDropzoneTarget(),
+			placeholder = this.__getPlacholder(true);
+
+		if (placeholder) {
+			target.removeChild(placeholder);
+			delete this.placeholder;
+		}
 	},
 
 

@@ -16,8 +16,10 @@ Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	TOLERANCE: 2,
 
 
-	enableOrdering: function(index) {
+	enableOrdering: function(index, onDragStart, onDragEnd) {
 		this.orderingIndex = index;
+		this.onDragStart = onDragStart;
+		this.onDragEnd = onDragEnd;
 		this.enableDragging();
 	},
 
