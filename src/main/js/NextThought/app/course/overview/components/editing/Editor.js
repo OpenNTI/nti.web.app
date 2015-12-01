@@ -30,7 +30,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 			xtype: 'common-form',
 			schema: this.FORM_SCHEMA,
 			defaultValues: values,
-			onChange: this.onFormChange.bind(this)
+			action: this.getFormAction(),
+			method: this.getFormMethod(),
+			onChange: this.onFormChange.bind(this),
+			onSuccess: this.onSaveSuccess.bind(this),
+			onFailure: this.onSaveFailure.bind(this)
 		});
 
 		this.footer = this.add({
@@ -57,6 +61,17 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	getDefaultValues: function() {},
 
 
+	getFormAction: function() {
+		if (this.record) { return this.record.getLink('edit'); }
+		return null;
+	},
+
+
+	getFormMethod: function() {
+		return this.record ? 'PUT' : 'POST';
+	},
+
+
 	onFormChange: function(values) {
 		if (this.preview && this.preview.update) {
 			this.preview.update(values);
@@ -68,7 +83,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		if (e.getTarget('.cancel')) {
 			this.onClose();
 		} else if (e.getTarget('.save')) {
-			this.onSave();
+			this.formCmp.onSubmit();
 		}
 	},
 
@@ -80,38 +95,17 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	},
 
 
-	onSave: function() {
-		var data = this.formCmp.getValues();
-
+	onSaveSuccess: function(response) {
 		if (this.record) {
-			this.updateRecord(data);
-		} else {
-			this.createNewRecord(data);
+			this.record.syncWithResponse(response);
 		}
 
+		this.onClose();
 	},
 
 
-	updateRecord: function(data) {
-		var me = this,
-			editLink = me.record.getLink('edit');
-
-		//TODO: if there is a file input this needs to be updated
-		//with multipart form data, preferably we could do that every
-		//time do simplify logic.
-
-		if (!editLink) {
-			console.warn('trying to update a record you dont have permission to');
-		} else {
-			Service.put(editLink, data)
-				.then(function(response) {
-					me.record.syncWithResponse(response);
-					me.onClose();
-				})
-				.fail(function(reason) {
-					//TODO: figure out how to handle this
-				});
-		}
+	onSaveFailure: function(reason){
+		console.log('Failed to save form: ' + reason);
 	},
 
 

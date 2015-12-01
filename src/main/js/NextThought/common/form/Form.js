@@ -111,6 +111,7 @@ Ext.define('NextThought.common.form.Form', {
 
 				cmp = Ext.widget('file-picker-field', {
 					thumbnail: name && me.defaultValues[name],
+					name: name,
 					renderTo: el,
 					formChanged: me.formChanged.bind(me)
 				});
@@ -170,10 +171,14 @@ Ext.define('NextThought.common.form.Form', {
 	 * @return {FormData} JS FormData object.
 	 */
 	getData: function() {
-		var formDom = document.querySelector('form');
+		var formDom = document.querySelector('form'),
+			formData;
+
 		if (formDom) {
-			return new FormData(formDom);
+			formData = new FormData(formDom);
+			return formData;
 		}
+
 		return null;
 	},
 
@@ -202,6 +207,149 @@ Ext.define('NextThought.common.form.Form', {
 					el.setValue(fieldName, fieldValue);
 				}
 			});
+	},
+
+
+	/**
+	 * Handle form submision
+	 *
+	 * NOTE: detects if we have file changes(i.e. a file upload) in order to
+	 * use the appropriate submission mechanism. If we have file changes, submit a form data.
+	 * Otherwise, submit a json object. For the json object, only pass the values that actually changed.
+	 * 
+	 */
+	onSubmit: function(){
+		var hasFileChanged = this.shouldSubmitFormData(); 
+
+		if (hasFileChanged) {
+			this.saveFormData(this.getData(), this.action, this.method);
+		}
+		else {
+			this.saveJsonObject(this.getChangedValues(), this.action, this.method);
+		}
+	},
+
+
+	/**
+	 * Checks for file inputs and returns true if any of file was uploaded.
+	 * @return {Boolean} Returns true if a file was uploaded, false otherwise. 
+	 */
+	shouldSubmitFormData: function(){
+		var fileInputs = document.querySelectorAll('form input[type=file]'),
+			changed = false;
+		for (var i = fileInputs.length - 1; i >= 0; i--) {
+			input = fileInputs[i];
+			if (input.files && input.files[0]) {
+				changed = true;
+			}
+		}
+
+		return changed;
+	},
+
+
+	/**
+	 * Saves a FormData object
+	 * 
+	 * @param  {FormData} data   FormData to be submitted.
+	 * @param  {String} action the URL to save the form data to.
+	 * @param  {String} method the action method to use (i.e POST or PUT)
+	 * @return {[type]} None.
+	 */
+	saveFormData: function(data, action, method) {
+		var xhr = new XMLHttpRequest(),
+			me = this;
+
+		if (!data) {
+			console.warn('Cannot save an empty form data.');
+			return;
+		}
+
+		if (!action || !method) {
+			console.error('The action (URL) and/or method (PUT, POST) of submission is missing.');
+			return;
+		}
+
+		xhr.open(method, action);
+		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState === 4 && xhr.status === 200) {
+		        // me.record.syncWithResponse(xhr.responseText);
+		        if (me.onSuccess) {
+				 	me.onSuccess(xhr.responseText);
+				}
+		    }
+		    else {
+		    	if (xhr.readyState === 4) {
+		    		if (me.onFailure) {
+						me.onFailure(xhr.responseText);
+					}	
+		    	}
+		    }
+		}
+
+		xhr.send(data);
+	},
+
+
+	/**
+	 * Saves a JSON object
+	 * 
+	 * @param  {Object} object [description]
+	 * @param  {String} action [description]
+	 * @param  {String} method [description]
+	 * @return {[type]}        [description]
+	 */
+	saveJsonObject: function(object, action, method) {
+		var me = this;
+		if (!action || !method) {
+			console.error('The action (URL) and/or method (PUT, POST) of submission is missing.');
+			return;
+		}
+
+		if (Object.keys(object).length === 0) {
+			return;
+		}
+
+		method = method.toLocaleLowerCase();
+
+		if (Service[method]) {
+			Service[method](action, object)
+				.then(function(response) {
+				 	if (me.onSuccess) {
+				 		me.onSuccess(response);
+				 	}
+				})
+				.fail(function(reason) {
+					//TODO: figure out how to handle this
+					if (me.onFailure) {
+						me.onFailure(reason);
+					}
+				});
+		}
+	},
+
+
+	/**
+	 * Compares the default values against the current values to check for fields that actualy changed.
+	 * Returns object of key-value pairs that changed.
+	 * 
+	 * @return {Object} Map for key-value pairs that changed.
+	 */
+	getChangedValues: function(){
+		var currentValues = this.getValues(),
+			changed = {},
+			key;
+
+		for (key in currentValues) {
+			if (currentValues.hasOwnProperty(key)) {
+				if (currentValues[key] !== this.defaultValues[key]) {
+					changed[key] = currentValues[key];
+				}
+			}
+		}
+
+		return changed;
 	},
 
 
