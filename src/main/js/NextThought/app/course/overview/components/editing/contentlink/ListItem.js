@@ -1,10 +1,6 @@
 Ext.define('NextThought.app.course.overview.components.editing.contentlink.ListItem', {
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.app.course.overview.components.editing.ListItem',
 	alias: 'widget.overview-editing-contentlink-listitem',
-
-	mixins: {
-		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
-	},
 
 	statics: {
 		getSupported: function() {
@@ -13,14 +9,12 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.ListI
 	},
 
 	requires: [
-		'NextThought.app.course.overview.components.editing.contentlink.Preview',
+		'NextThought.app.course.overview.components.parts.ContentLink',
 		'NextThought.model.RelatedWork'
 	],
 
 
-	layout: 'none',
-
-	items: [
-		{xtype: 'box', autoEl: {html: 'ContentLink'}}
-	]
+	getPreviewType: function(record) {
+		return 'course-overview-content';
+	}
 });

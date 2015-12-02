@@ -14,25 +14,29 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Previ
 		]}
 	]),
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent(arguments);
+
+		if (this.record) {
+			this.values = this.record.getData();
+		}
+
 		this.renderData = Ext.apply(this.renderData || {}, this.values);
 	},
 
 
-	update: function (values) {
+	update: function(values) {
 		var el;
 
-		console.log(values);
-		for(var k in values) {
-			if(values.hasOwnProperty(k)){
+		for (var k in values) {
+			if (values.hasOwnProperty(k)) {
 				el = this.el.down('.' + k);
 				if (el) {
 					if (k === 'icon') {
 						el.setStyle('backgroundImage', 'url(' + values[k] + ')');
 					}
 					else {
-						el.setHTML(values[k]);						
+						el.setHTML(values[k]);
 					}
 				}
 			}

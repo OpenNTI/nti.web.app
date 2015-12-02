@@ -1,10 +1,6 @@
 Ext.define('NextThought.app.course.overview.components.editing.survey.ListItem', {
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.app.course.overview.components.editing.ListItem',
 	alias: 'widget.overview-editing-survey-listitem',
-
-	mixins: {
-		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
-	},
 
 	statics: {
 		getSupported: function() {
@@ -13,14 +9,12 @@ Ext.define('NextThought.app.course.overview.components.editing.survey.ListItem',
 	},
 
 	requires: [
-		'NextThought.app.course.overview.components.editing.survey.Preview',
+		'NextThought.app.course.overview.components.parts.Survey',
 		'NextThought.model.SurveyRef'
 	],
 
 
-	layout: 'none',
-
-	items: [
-		{xtype: 'box', autoEl: {html: 'Survey'}}
-	]
+	getPreviewType: function() {
+		return 'course-overview-surveyref';
+	}
 });

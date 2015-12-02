@@ -1,10 +1,6 @@
 Ext.define('NextThought.app.course.overview.components.editing.discussion.ListItem', {
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.app.course.overview.components.editing.ListItem',
 	alias: 'widget.overview-editing-discussion-listitem',
-
-	mixins: {
-		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
-	},
 
 	statics: {
 		getSupported: function() {
@@ -13,14 +9,12 @@ Ext.define('NextThought.app.course.overview.components.editing.discussion.ListIt
 	},
 
 	requires: [
-		'NextThought.app.course.overview.components.editing.discussion.Preview',
+		'NextThought.app.course.overview.components.parts.Discussion',
 		'NextThought.model.DiscussionRef'
 	],
 
 
-	layout: 'none',
-
-	items: [
-		{xtype: 'box', autoEl: {html: 'Discussion'}}
-	]
+	getPreviewType: function() {
+		return 'course-overview-discussion';
+	}
 });

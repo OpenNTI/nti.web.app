@@ -1,10 +1,6 @@
 Ext.define('NextThought.app.course.overview.components.editing.poll.ListItem', {
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.app.course.overview.components.editing.ListItem',
 	alias: 'widget.overview-editing-poll-listitem',
-
-	mixins: {
-		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
-	},
 
 	statics: {
 		getSupported: function() {
@@ -13,13 +9,12 @@ Ext.define('NextThought.app.course.overview.components.editing.poll.ListItem', {
 	},
 
 	requires: [
-		'NextThought.app.course.overview.components.editing.contentlink.Preview',
+		'NextThought.app.course.overview.components.parts.Poll',
 		'NextThought.model.PollRef'
 	],
 
-	layout: 'none',
 
-	items: [
-		{xtype: 'box', autoEl: {html: 'Poll'}}
-	]
+	getPreviewType: function() {
+		// return 'widget.course-overview-pollref';//comment this out for now since we don't support it yet
+	}
 });

@@ -13,6 +13,10 @@ Ext.define('NextThought.app.course.overview.components.editing.lessonoverview.In
 	],
 
 
+	ui: 'course',
+	cls: 'course-overview course-overview-editing',
+
+
 	initComponent: function() {
 		this.callParent(arguments);
 

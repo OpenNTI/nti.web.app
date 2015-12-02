@@ -1,10 +1,6 @@
 Ext.define('NextThought.app.course.overview.components.editing.questionset.ListItem', {
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.app.course.overview.components.editing.ListItem',
 	alias: 'widget.overview-editing-questionset-listitem',
-
-	mixins: {
-		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
-	},
 
 	statics: {
 		isAssessmentWidget: true,
@@ -17,15 +13,13 @@ Ext.define('NextThought.app.course.overview.components.editing.questionset.ListI
 	},
 
 	requires: [
-		'NextThought.app.course.overview.components.editing.questionset.Preview',
+		'NextThought.app.course.overview.components.parts.QuestionSet',
 		'NextThought.model.QuestionSetRef',
 		'NextThought.model.AssignmentRef'
 	],
 
 
-	layout: 'none',
-
-	items: [
-		{xtype: 'box', autoEl: {html: 'QuestionSet'}}
-	]
+	getPreviewType: function() {
+		return this.assignment ? 'course-overview-assignment' : 'course-overview-naquestionset';
+	}
 });

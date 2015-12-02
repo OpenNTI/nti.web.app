@@ -19,6 +19,9 @@ Ext.define('NextThought.app.course.overview.components.editing.overviewgroup.Lis
 		'NextThought.app.course.overview.components.editing.videoroll.ListItem'
 	],
 
+
+	cls: 'overview-section overview-section-editing',
+
 	initComponent: function() {
 		this.callParent(arguments);
 

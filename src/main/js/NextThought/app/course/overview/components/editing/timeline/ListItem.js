@@ -1,10 +1,6 @@
 Ext.define('NextThought.app.course.overview.components.editing.timeline.ListItem', {
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.app.course.overview.components.editing.ListItem',
 	alias: 'widget.overview-editing-timeline-listitem',
-
-	mixins: {
-		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
-	},
 
 	statics: {
 		getSupported: function() {
@@ -13,14 +9,12 @@ Ext.define('NextThought.app.course.overview.components.editing.timeline.ListItem
 	},
 
 	requires: [
-		'NextThought.app.course.overview.components.editing.timeline.Preview',
+		'NextThought.app.course.overview.components.parts.Timeline',
 		'NextThought.model.Timeline'
 	],
 
 
-	layout: 'none',
-
-	items: [
-		{xtype: 'box', autoEl: {html: 'Timeline'}}
-	]
+	getPreviewType: function() {
+		return 'course-overview-ntitimeline';
+	}
 });
