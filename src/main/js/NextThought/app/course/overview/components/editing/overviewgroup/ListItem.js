@@ -2,6 +2,11 @@ Ext.define('NextThought.app.course.overview.components.editing.overviewgroup.Lis
 	extend: 'NextThought.common.components.BoundCollection',
 	alias: 'widget.overview-editing-overviewgroup-listitem',
 
+	mixins: {
+		OrderingContainer: 'NextThought.mixins.dnd.OrderingContainer',
+		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
+	},
+
 	requires: [
 		'NextThought.app.course.overview.components.editing.overviewgroup.Preview',
 		'NextThought.app.course.overview.components.editing.contentlink.ListItem',
@@ -41,6 +46,8 @@ Ext.define('NextThought.app.course.overview.components.editing.overviewgroup.Lis
 			return acc;
 		}, {});
 
+		this.setDataTransfer(this.record);
+
 		this.setCollection(this.record);
 	},
 
@@ -50,7 +57,23 @@ Ext.define('NextThought.app.course.overview.components.editing.overviewgroup.Lis
 	},
 
 
+	getOrderingItems: function() {
+		var body = this.getBodyContainer(),
+			items = body && body.items && body.items.items;
+
+		return items || [];
+	},
+
+
+	getDropzoneTarget: function() {
+		var body = this.getBodyContainer();
+
+		return body && body.el && body.el.dom;
+	},
+
+
 	setCollection: function(collection) {
+		this.disableOrderingContainer();
 		this.removeAll(true);
 
 		this.add([
@@ -60,6 +83,7 @@ Ext.define('NextThought.app.course.overview.components.editing.overviewgroup.Lis
 
 
 		this.callParent(arguments);
+		this.enableOrderingContainer();
 	},
 
 

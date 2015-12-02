@@ -44,7 +44,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Items
 
 
 	setCollection: function(collection) {
-		this.disableOrdering();
+		this.disableOrderingContainer();
 		this.removeAll(true);
 
 		this.add([
@@ -85,7 +85,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Items
 
 		this.callParent(arguments);
 
-		this.enableOrdering();
+		this.enableOrderingContainer();
 	},
 
 

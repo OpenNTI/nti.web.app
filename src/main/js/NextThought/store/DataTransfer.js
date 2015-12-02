@@ -88,6 +88,8 @@ Ext.define('NextThought.store.DataTransfer', {
 	 * If we've been given dataTransfer from an event check if the key is on there.
 	 * If not check if its been set by setData.
 	 *
+	 * If the data is there, but we are not allowed to access it return true
+	 *
 	 * @param  {String} key the key to look for
 	 * @return {String}     the value on data transfer for that key
 	 */
@@ -96,6 +98,7 @@ Ext.define('NextThought.store.DataTransfer', {
 
 		if (this.dataTransfer) {
 			data = this.dataTransfer.getData(key);
+			data = data === '' ? true : data;
 		}
 
 		return data || this.transferData[key];
@@ -119,5 +122,16 @@ Ext.define('NextThought.store.DataTransfer', {
 		var data = this.getData(key);
 
 		return ParseUtils.parseItems(data)[0];
+	},
+
+
+	containsType: function(key) {
+		var types = this.dataTransfer && this.dataTransfer.types;
+
+		if (types) {
+			return types.indexOf(key) >= 0;
+		}
+
+		//TODO: maybe search things that have been set with setData
 	}
 });

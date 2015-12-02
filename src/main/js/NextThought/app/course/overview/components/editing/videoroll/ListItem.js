@@ -2,6 +2,10 @@ Ext.define('NextThought.app.course.overview.components.editing.videoroll.ListIte
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-videoroll-listitem',
 
+	mixins: {
+		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
+	},
+
 	statics: {
 		getSupported: function() {
 			return NextThought.model.VideoRoll.mimeType;

@@ -2,6 +2,10 @@ Ext.define('NextThought.app.course.overview.components.editing.timeline.ListItem
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-timeline-listitem',
 
+	mixins: {
+		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
+	},
+
 	statics: {
 		getSupported: function() {
 			return NextThought.model.Timeline.mimeType;

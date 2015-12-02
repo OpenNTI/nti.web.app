@@ -7,7 +7,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 	},
 
 
-	enableOrdering: function() {
+	enableOrderingContainer: function() {
 		this.enableDropzone();
 
 		var items = this.getOrderingItems();
@@ -16,7 +16,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 	},
 
 
-	disableOrdering: function() {
+	disableOrderingContainer: function() {
 		this.disableDropzone();
 
 		var items = this.getOrderingItems();
@@ -31,14 +31,14 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 
 
 	enableDraggingOnItem: function(item, index) {
-		if (item && item.enableDragging) {
+		if (item && item.enableOrdering) {
 			item.enableOrdering(index, this.onItemDragStart.bind(this), this.onItemDragEnd.bind(this));
 		}
 	},
 
 
 	disableDraggingOnItem: function(item) {
-		if (item && item.disableDragging) {
+		if (item && item.disableOrdering) {
 			item.disableOrdering();
 		}
 	},
@@ -86,15 +86,25 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 	},
 
 
-	__getPlacholder: function(doNotCreate) {
-		if (!this.placeholder && !doNotCreate) {
-			this.placeholder = document.createElement('div');
-			this.placeholder.style.height = '2px';
-			this.placeholder.style.background = 'black';
-			this.placeholder.classList.add('drop-placeholder');
+	__getPlacholder: function() {
+		var placeholder = document.querySelector('.dnd-drop-placeholder');
+
+		if (!placeholder) {
+			placeholder = document.createElement('div');
+			placeholder.style.height = '2px';
+			placeholder.style.background = 'black';
+			placeholder.classList.add('dnd-drop-placeholder');
 		}
 
-		return this.placeholder;
+		return placeholder;
+	},
+
+	__removePlaceholder: function() {
+		var placeholder = document.querySelector('.dnd-drop-placeholder');
+
+		if (placeholder) {
+			placeholder.remove();
+		}
 	},
 
 
@@ -104,18 +114,21 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 
 
 	onItemDragEnd: function() {
-		var target = this.getDropzoneTarget(),
-			placeholder = this.__getPlacholder(true);
-
-		if (placeholder) {
-			target.removeChild(placeholder);
-			delete this.placeholder;
-		}
+		this.__removePlaceholder();
 	},
 
 
+	onDragLeave: function() {
+		this.__removePlaceholder();
+	},
 
-	onDragOver: function(e) {
+
+	onDragOver: function(e, dataTransfer) {
+		if (!this.hasHandlerForDataTransfer(dataTransfer)) {
+			this.__removePlaceholder();
+			return;
+		}
+
 		var target = this.getDropzoneTarget(),
 			placeholder = this.__getPlacholder(),
 			info = this.getInfoForCoordinates(e.clientX, e.clientY);

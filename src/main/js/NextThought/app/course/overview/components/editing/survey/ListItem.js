@@ -2,6 +2,10 @@ Ext.define('NextThought.app.course.overview.components.editing.survey.ListItem',
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-survey-listitem',
 
+	mixins: {
+		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
+	},
+
 	statics: {
 		getSupported: function() {
 			return NextThought.model.SurveyRef.mimeType;

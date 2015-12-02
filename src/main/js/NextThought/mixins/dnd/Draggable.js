@@ -39,9 +39,9 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 	},
 
 
-	__setOrRemoveListeners: function(remove) {
+	__setOrRemoveDragListeners: function(remove) {
 		if (!this.rendered) {
-			this.on('afterrender', this.__setOrRemoveListeners.bind(this, remove));
+			this.on('afterrender', this.__setOrRemoveDragListeners.bind(this, remove));
 			return;
 		}
 
@@ -76,7 +76,7 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 	 * Add all the listeners to the target
 	 */
 	enableDragging: function() {
-		this.__setOrRemoveListeners();
+		this.__setOrRemoveDragListeners();
 	},
 
 
@@ -84,7 +84,7 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 	 * Add all the listeners to the target
 	 */
 	disableDragging: function() {
-		this.__setOrRemoveListeners(true);
+		this.__setOrRemoveDragListeners(true);
 	},
 
 
@@ -113,9 +113,11 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 
 		e.dataTransfer.setData(info.mimeType, info.getDataTransferValue());
 
-		this.transferData.forEach(function(key, value) {
-			e.dataTransfer.setData(key, value);
-		});
+		if (this.transferData) {
+			this.transferData.forEach(function(key, value) {
+				e.dataTransfer.setData(key, value);
+			});
+		}
 
 		if (this.onDragStart) {
 			this.onDragStart();

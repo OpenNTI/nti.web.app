@@ -2,6 +2,10 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.ListI
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-contentlink-listitem',
 
+	mixins: {
+		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
+	},
+
 	statics: {
 		getSupported: function() {
 			return NextThought.model.RelatedWork.mimeType;

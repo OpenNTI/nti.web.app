@@ -2,6 +2,10 @@ Ext.define('NextThought.app.course.overview.components.editing.discussion.ListIt
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-discussion-listitem',
 
+	mixins: {
+		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
+	},
+
 	statics: {
 		getSupported: function() {
 			return NextThought.model.DiscussionRef.mimeType;

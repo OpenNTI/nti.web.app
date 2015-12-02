@@ -30,9 +30,9 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 	},
 
 
-	__setOrRemoveListeners: function(remove) {
+	__setOrRemoveDropListeners: function(remove) {
 		if (!this.rendered) {
-			this.on('afterrender', this.__setOrRemoveListeners.bind(this, remove));
+			this.on('afterrender', this.__setOrRemoveDropListeners.bind(this, remove));
 			return;
 		}
 
@@ -68,7 +68,7 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 	 * Add all the listeners to the target
 	 */
 	enableDropzone: function() {
-		this.__setOrRemoveListeners();
+		this.__setOrRemoveDropListeners();
 	},
 
 
@@ -76,7 +76,7 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 	 * Remove all the listeners on the target
 	 */
 	disableDropzone: function() {
-		this.__setOrRemoveListeners(true);
+		this.__setOrRemoveDropListeners(true);
 	},
 
 
@@ -116,6 +116,10 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 	__dragEnter: function(e) {
 		var el = this.getDropzoneTarget();
 
+		this.dragEnterCounter = this.dragEnterCounter || 0;
+
+		this.dragEnterCounter += 1;
+
 		if (el) {
 			el.classList.add('drag-over');
 		}
@@ -129,37 +133,66 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 	__dragLeave: function(e) {
 		var el = this.getDropzoneTarget();
 
-		if (el) {
-			el.classList.remove('drag-over');
-		}
+		this.dragEnterCounter = this.dragEnterCounter || 1;
 
-		if (this.onDragLeave) {
-			this.onDragLeave(e);
+		this.dragEnterCounter -= 1;
+
+		if (this.dragEnterCounter === 0) {
+			if (el) {
+				el.classList.remove('drag-over');
+			}
+
+			if (this.onDragLeave) {
+				this.onDragLeave(e);
+			}
 		}
 	},
 
 
 	__dragOver: function(e) {
 		e.preventDefault();
+		e.stopPropagation();
 
-		if (this.onDragOver) {
-			this.onDragOver(e);
+		var dataTransfer = new NextThought.store.DataTransfer({dataTransfer: e.dataTransfer});
+
+		if (!dataTransfer.containsType(NextThought.model.app.dndInfo.mimeType)) {
+			console.warn('Invalid drop event: ', e);
+		} else if (this.onDragOver) {
+			this.onDragOver(e, dataTransfer);
 		}
 	},
 
 
 	__dragDrop: function(e) {
 		e.preventDefault();
+		e.stopPropagation();
 
 		var dataTransfer = new NextThought.store.DataTransfer({dataTransfer: e.dataTransfer});
 
-		if (this.__isValidDrop(dataTransfer.getData(NextThought.model.app.dndInfo))) {
+		if (this.__isValidDrop(dataTransfer.getData(NextThought.model.app.dndInfo.mimeType))) {
 			console.warn('Invalid drop event: ', e);
 		} else if (this.onDragDrop) {
 			this.onDragDrop(e, dataTransfer);
 		} else {
 			this.__callHandlers(e, dataTransfer);
 		}
+	},
+
+
+	hasHandlerForDataTransfer: function(dataTransfer) {
+		var handlers = this.transferHandlers,
+			keys = handlers && Object.keys(handlers),
+			i;
+
+		keys = keys || [];
+
+		for (i = 0; i < keys.length; i++) {
+			if (dataTransfer.containsType(keys[i])) {
+				return true;
+			}
+		}
+
+		return false;
 	},
 
 

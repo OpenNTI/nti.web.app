@@ -2,6 +2,10 @@ Ext.define('NextThought.app.course.overview.components.editing.questionset.ListI
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-questionset-listitem',
 
+	mixins: {
+		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
+	},
+
 	statics: {
 		isAssessmentWidget: true,
 		getSupported: function() {
