@@ -304,7 +304,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 		(this.activeStores || []).forEach(function(store) {
 			//if we are grouped by lessons we will have an ntiid here
-			var name = store.groupName.split('|').last;
+			var name = store.groupName.split('|').last();
 
 			name = name.toLowerCase();
 			val = val.toLowerCase();
