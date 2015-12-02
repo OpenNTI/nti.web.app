@@ -36,6 +36,19 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Index
 	},
 
 
+	onceLoaded: function() {
+		var items = this.items.items || [];
+
+		return Promise.all(items.map(function(item) {
+			if (item.onceLoaded) {
+				return item.onceLoaded();
+			}
+
+			return Promise.resolve();
+		}));
+	},
+
+
 	getPreviewConfig: function(outlineNode, bundle) {
 		return {
 			xtype: 'overview-editing-outlinenode-preview',

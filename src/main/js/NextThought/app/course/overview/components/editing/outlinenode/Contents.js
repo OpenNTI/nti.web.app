@@ -6,6 +6,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Conte
 		'NextThought.app.course.overview.components.editing.lessonoverview.Index'
 	],
 
+	cls: 'outline-node-editing-contents',
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -14,7 +15,13 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Conte
 	},
 
 
-	cls: 'outline-node-editing-contents',
+	onceLoaded: function() {
+		if (this.loadLesson) {
+			return this.loadLesson;
+		}
+
+		return Promise.resolve();
+	},
 
 
 	renderLesson: function(record) {
@@ -31,7 +38,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Conte
 		me.buildingOverview = true;
 		me.maybeMask();
 
-		return me.getInfo(record, course)
+		me.loadLesson = me.getInfo(record, course)
 			.then(function(results) {
 				var assignments = results[0],
 					enrollment = results[1],
@@ -53,5 +60,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Conte
 				console.error(reason);
 			})
 			.then(me.maybeUnmask.bind(me));
+
+		return me.loadLesson;
 	}
 });

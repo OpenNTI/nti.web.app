@@ -22,14 +22,16 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 	editOutlineNode: function(record) {
 		this.removeAll(true);
 
+		var record;
+
 		if (record instanceof NextThought.model.courses.navigation.CourseOutlineContentNode) {
-			this.add({xtype: 'overview-editing-contentnode', outlineNode: record, bundle: this.bundle});
+			record = this.add({xtype: 'overview-editing-contentnode', outlineNode: record, bundle: this.bundle});
 		} else if (record instanceof NextThought.model.courses.navigation.CourseOutlineCalendarNode) {
-			this.add({xtype: 'overview-editing-calendarnode', outlineNode: record, bundle: this.bundle});
+			record = this.add({xtype: 'overview-editing-calendarnode', outlineNode: record, bundle: this.bundle});
 		} else if (record instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
-			this.add({xtype: 'overview-editing-outlinenode', outlineNode: record, bundle: this.bundle});
+			record = this.add({xtype: 'overview-editing-outlinenode', outlineNode: record, bundle: this.bundle});
 		}
 
-		return Promise.resolve();
+		return record.onceLoaded();
 	}
 });
