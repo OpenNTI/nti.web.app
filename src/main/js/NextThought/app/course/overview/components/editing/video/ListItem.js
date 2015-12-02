@@ -1,10 +1,6 @@
 Ext.define('NextThought.app.course.overview.components.editing.video.ListItem', {
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.app.course.overview.components.editing.ListItem',
 	alias: 'widget.overview-editing-video-listitem',
-
-	mixins: {
-		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
-	},
 
 	statics: {
 		getSupported: function() {
@@ -13,14 +9,12 @@ Ext.define('NextThought.app.course.overview.components.editing.video.ListItem', 
 	},
 
 	requires: [
-		'NextThought.app.course.overview.components.editing.video.Preview',
+		'NextThought.app.course.overview.components.parts.Video',
 		'NextThought.model.Video'
 	],
 
 
-	layout: 'none',
-
-	items: [
-		{xtype: 'box', autoEl: {html: 'Video'}}
-	]
+	getPreviewType: function(record) {
+		return 'course-overview-video';
+	}
 });

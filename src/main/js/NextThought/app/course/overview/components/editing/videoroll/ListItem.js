@@ -1,10 +1,6 @@
 Ext.define('NextThought.app.course.overview.components.editing.videoroll.ListItem', {
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.app.course.overview.components.editing.ListItem',
 	alias: 'widget.overview-editing-videoroll-listitem',
-
-	mixins: {
-		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
-	},
 
 	statics: {
 		getSupported: function() {
@@ -13,14 +9,12 @@ Ext.define('NextThought.app.course.overview.components.editing.videoroll.ListIte
 	},
 
 	requires: [
-		'NextThought.app.course.overview.components.editing.videoroll.Preview',
+		'NextThought.app.course.overview.components.parts.VideoRoll',
 		'NextThought.model.VideoRoll'
 	],
 
 
-	layout: 'none',
-
-	items: [
-		{xtype: 'box', autoEl: {html: 'VideoRoll'}}
-	]
+	getPreviewType: function(record) {
+		return 'course-overview-videoroll';
+	}
 });
