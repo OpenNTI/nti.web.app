@@ -5,7 +5,8 @@ Ext.define('NextThought.common.form.Form', {
 	cls: 'form-container',
 
 	requires: [
-		'NextThought.common.form.fields.FilePicker'
+		'NextThought.common.form.fields.FilePicker',
+		'NextThought.common.form.fields.DatePicker'
 	],
 
 	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup([
@@ -34,6 +35,13 @@ Ext.define('NextThought.common.form.Form', {
 					{cls: 'field {name} hidden', cn: [
 						{tag: 'input', type: 'hidden', value: '{[this.getDefaultValue(values.name)]}'}
 					]}
+				]},
+				{tag: 'tpl', 'if': 'this.isDate(type)', cn: [
+					{cls: 'field {name}', 'data-name': '{name}', 'data-type': '{type}', cn: [
+						{tag: 'tpl', 'if': 'displayName', cn: [
+							{tag: 'label', html: '{displayName}'}
+						]}
+					]}
 				]}
 			]}
 		]}
@@ -49,6 +57,9 @@ Ext.define('NextThought.common.form.Form', {
 		},
 		isHidden: function(type) {
 			return type === 'hidden';
+		},
+		isDate: function(type) {
+			return type === 'date';
 		},
 		getDefaultValue: function(name, defaultValues) {
 			return this.defaultValues[name];
@@ -82,6 +93,7 @@ Ext.define('NextThought.common.form.Form', {
 		this.callParent(arguments);
 		this.attachChangeListeners();
 		this.setupFilePickerFields();
+		this.setupDatePickerFields();
 	},
 
 
@@ -99,17 +111,27 @@ Ext.define('NextThought.common.form.Form', {
 
 
 	setupFilePickerFields: function(){
-		var fileFields = document.querySelectorAll('.field[data-type=file]'),
+		this.setupComponentFields('file', 'file-picker-field');
+	},
+
+
+	setupDatePickerFields: function(){
+		this.setupComponentFields('date', 'date-picker-field');
+	},
+
+
+	setupComponentFields: function(fieldName, cmpType) {
+		var fields = document.querySelectorAll('.field[data-type='+ fieldName +']'),
 			me = this, field, el, name, cmp;
 
-		for (var i = 0; i < fileFields.length; i++) {
-			field = fileFields[i];
+		for (var i = 0; i < fields.length; i++) {
+			field = fields[i];
 			el = Ext.get(field);
 
 			if (el) {
 				name = field.getAttribute && field.getAttribute('data-name');
 
-				cmp = Ext.widget('file-picker-field', {
+				cmp = Ext.widget(cmpType, {
 					thumbnail: name && me.defaultValues[name],
 					name: name,
 					renderTo: el,
