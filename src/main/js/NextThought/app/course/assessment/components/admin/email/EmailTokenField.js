@@ -131,6 +131,12 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.EmailTokenF
 			isLabel: true
 		}));
 
+		data.push(NextThought.model.UserSearch.create({
+			realname: 'Open Students',
+			studentFilter: 'Open',
+			isLabel: true
+		}));
+
 		store.loadRecords(data);
 		return store;
 	}

@@ -252,12 +252,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 	maybeShowEmailButton: function(filter){
 		var isAllowed = this.shouldAllowInstructorEmail() && this.currentBundle && this.currentBundle.getLink('Mail');
 		if (isAllowed && this.emailEl) {
-			if (filter === 'Open') {
-				this.emailEl.hide();
-			}
-			else {
-				this.emailEl.show();
-			}
+			this.emailEl.show();
 		}
 	},
 

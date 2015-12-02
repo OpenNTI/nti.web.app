@@ -281,8 +281,7 @@ extend: 'Ext.container.Container',
 	shouldAllowInstructorEmail: function(){
 		// Right now, we will only 
 		return isFeature('instructor-email') && 
-				this.currentBundle && this.currentBundle.getLink('Mail') && 
-				this.currentFilter !== 'Open';
+				this.currentBundle && this.currentBundle.getLink('Mail');
 	},
 
 
