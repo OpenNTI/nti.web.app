@@ -30,6 +30,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Actions', {
 			scope = null;
 		}
 
+		if (scope === 'Open' || scope === 'open') {
+			scope = 'Public';
+		}
+
 		return new Promise(function(fulfill, reject) {
 			Ext.Ajax.request({
 				url: postURL,

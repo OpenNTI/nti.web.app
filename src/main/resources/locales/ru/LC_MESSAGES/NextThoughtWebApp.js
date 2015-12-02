@@ -439,6 +439,10 @@ NTIStrings['NextThought.view.courseware.assessment.admin.performance.Root.open']
 NTIStrings['NextThought.view.courseware.assessment.admin.performance.Root.enrolled'] = 'Enrolled Students';
 NTIStrings['NextThought.view.courseware.assessment.admin.performance.Root.exportenrolled'] = 'Export Enrolled Students';
 NTIStrings['NextThought.view.courseware.assessment.admin.performance.Root.exportopen'] = 'Export Open Students';
+NTIStrings['NextThought.view.courseware.assessment.admin.performance.Root.exportopen'] = 'Export All Students';
+NTIStrings['NextThought.view.courseware.assessment.admin.performance.Root.emailenrolled'] = 'Email Enrolled Students';
+NTIStrings['NextThought.view.courseware.assessment.admin.performance.Root.emailopen'] = 'Email Open Students';
+NTIStrings['NextThought.view.courseware.assessment.admin.performance.Root.emailall'] = 'Email All Students';
 NTIStrings['NextThought.view.courseware.assessment.admin.performance.Root.alloption'] = 'Все элементы';
 NTIStrings['NextThought.view.courseware.assessment.admin.performance.Root.actionoption'] = 'Actionable Items';
 NTIStrings['NextThought.view.courseware.assessment.admin.performance.Root.overoption'] = 'Overdue Items';
