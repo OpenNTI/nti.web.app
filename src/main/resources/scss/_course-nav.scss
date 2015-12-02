@@ -378,7 +378,7 @@
 		}
 	}
 
-	&.overview-videos {
+	&.overview-videos, &.overview-video {
 		margin: 10px 0;
 		@extend .overview-group;
 
