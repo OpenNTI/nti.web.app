@@ -1,6 +1,6 @@
 Ext.define('NextThought.app.course.overview.components.editing.calendarnode.Index', {
 	extend: 'NextThought.app.course.overview.components.editing.outlinenode.Index',
-	alias: 'widget.overview-editing-calenarnode',
+	alias: 'widget.overview-editing-calendarnode',
 
 	requires: [
 		'NextThought.app.course.overview.components.editing.calendarnode.Preview'
