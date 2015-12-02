@@ -281,154 +281,6 @@
 		}
 	}
 
-	&.overview-videos {
-		margin: 10px 0;
-		@extend .overview-group;
-
-		&.singular{
-			position: relative;
-			width: 704px !important;
-
-			.body {
-				height: 396px;
-				margin: 0;
-				.screen,
-				.curtain {
-					width: 704px;
-				}
-				.curtain {
-					background-size: 704px auto;
-				}
-
-				.video-list {
-					display: none;
-				}
-			}
-
-			&.viewed {
-				@include icon('circle-check-white-small', $top: 7px, $left: auto, $right: 58px);
-
-				&::after {
-					z-index: 2;
-				}
-
-				&::before {
-					content: 'viewed';
-					text-transform: uppercase;
-					font: normal 500 0.6em/24px "Open Sans",sans-serif;
-					position: absolute;
-					top: 5px;
-					right: 5px;
-					padding: 0px 10px 0 30px;
-					color: white;
-					background-color: $secondary-green;
-					z-index: 1;
-					border-radius: 20px;
-				}
-			}
-		}
-
-		.body {
-			position: relative;
-			overflow: hidden;
-			height: 288px;
-			margin: 0 -31px 0 -29px;
-
-			.curtain {
-				position: absolute;
-				left: 0; top: 0; bottom: 0;
-				width: 512px;
-				cursor: pointer;
-				background: {
-					color: #ebebeb;
-					position: center center;
-					size: 512px auto;
-					repeat: no-repeat;
-				}
-
-
-				&.x-masked {
-					.ctr, .play {display: none;}
-				}
-			}
-
-			.screen {
-				position: absolute;
-				left: 0; top: 0; bottom: 0;
-				width: 512px;
-				overflow: hidden;
-				background: black;
-			}
-
-			.video-list{
-				@include scrollbar(#04232c, #0f2d35);
-				position: absolute;
-				left: 512px;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				overflow: {
-					x: hidden;
-					y: auto; //scroll;
-				}
-				background: #04232c;
-
-				.video-row {
-					position: relative;
-					cursor: pointer;
-					color: #ebebeb;
-					padding: 8px 10px;
-					font: normal 400 1.1em 'Open Sans Condensed', $font;
-					min-height: 53px;
-					border:{
-						color: #0f2d35;
-						style: solid;
-						width: 0 0 1px 0;
-					}
-					background-image: none !important;//prevent the inline-style from applying
-
-					.comments,.label{
-						@include ellipse();
-						overflow:hidden;
-					}
-
-					.comments, .viewed {
-						font: normal 700 0.6em/1.3em $font;
-						color: $secondary-grey;
-						text-transform: uppercase;
-					}
-
-					&.viewed{
-						padding-left: 35px;
-						@include icon('circle-check-white-small', $top: 10px, $left: 12px);
-					}
-
-					&.over{
-						$c: #113b46;
-						background: $c;
-						border-color: $c;
-						color: #ffffff;
-
-						.comments{
-							color: #aaeafc;
-						}
-					}
-
-					&.x-item-selected{
-						$c: #4699b0;
-						background: $c;
-						border-color: $c;
-						color: #ffffff;
-
-						.comments, .viewed{
-							color: #aaeafc;
-						}
-					}
-				}
-			}
-		}
-	}
-
 	&.overview-spacer {
 		clear: both;
 		position: relative;
@@ -526,6 +378,152 @@
 		}
 	}
 
+	&.overview-videos {
+		margin: 10px 0;
+		@extend .overview-group;
+
+		&.singular{
+			position: relative;
+			width: 704px !important;
+			height: 396px;
+			margin: 10px 0;
+
+			.screen,
+			.curtain {
+				width: 704px;
+			}
+			.curtain {
+				background-size: 704px auto;
+			}
+
+			.video-list {
+				display: none;
+			}
+
+			&.viewed {
+				@include icon('circle-check-white-small', $top: 7px, $left: auto, $right: 58px);
+
+				&::after {
+					z-index: 2;
+				}
+
+				&::before {
+					content: 'viewed';
+					text-transform: uppercase;
+					font: normal 500 0.6em/24px "Open Sans",sans-serif;
+					position: absolute;
+					top: 5px;
+					right: 5px;
+					padding: 0px 10px 0 30px;
+					color: white;
+					background-color: $secondary-green;
+					z-index: 1;
+					border-radius: 20px;
+				}
+			}
+		}
+		&.video-roll{
+			.body {
+				position: relative;
+				overflow: hidden;
+				height: 288px;
+				margin: 0 -31px 0 -29px;
+
+				.curtain {
+					position: absolute;
+					left: 0; top: 0; bottom: 0;
+					width: 512px;
+					cursor: pointer;
+					background: {
+						color: #ebebeb;
+						position: center center;
+						size: 512px auto;
+						repeat: no-repeat;
+					}
+
+
+					&.x-masked {
+						.ctr, .play {display: none;}
+					}
+				}
+
+				.screen {
+					position: absolute;
+					left: 0; top: 0; bottom: 0;
+					width: 512px;
+					overflow: hidden;
+					background: black;
+				}
+
+				.video-list{
+					@include scrollbar(#04232c, #0f2d35);
+					position: absolute;
+					left: 512px;
+					top: 0;
+					right: 0;
+					bottom: 0;
+					overflow: {
+						x: hidden;
+						y: auto; //scroll;
+					}
+					background: #04232c;
+
+					.selected{
+						$c: #4699b0;
+						background: $c;
+						border-color: $c;
+						color: #ffffff;
+
+						.comments, .viewed{
+							color: #aaeafc;
+						}
+					}
+
+					.video-row {
+						position: relative;
+						cursor: pointer;
+						color: #ebebeb;
+						padding: 8px 10px;
+						font: normal 400 1.1em 'Open Sans Condensed', $font;
+						min-height: 53px;
+						border:{
+							color: #0f2d35;
+							style: solid;
+							width: 0 0 1px 0;
+						}
+						background-image: none !important;//prevent the inline-style from applying
+
+						.comments,.label{
+							@include ellipse();
+							overflow:hidden;
+						}
+
+						.comments, .viewed {
+							font: normal 700 0.6em/1.3em $font;
+							color: $secondary-grey;
+							text-transform: uppercase;
+						}
+
+						&.viewed{
+							padding-left: 35px;
+							@include icon('circle-check-white-small', $top: 10px, $left: 12px);
+						}
+
+						&.over{
+							$c: #113b46;
+							background: $c;
+							border-color: $c;
+							color: #ffffff;
+
+							.comments{
+								color: #aaeafc;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 

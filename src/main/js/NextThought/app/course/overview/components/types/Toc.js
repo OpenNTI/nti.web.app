@@ -14,7 +14,7 @@ Ext.define('NextThought.app.course.overview.components.types.Toc', {
 		'NextThought.app.course.overview.components.parts.Survey',
 		'NextThought.app.course.overview.components.parts.Timeline',
 		'NextThought.app.course.overview.components.parts.Topic',
-		'NextThought.app.course.overview.components.parts.Videos'
+		'NextThought.app.course.overview.components.parts.Video'
 	],
 
 
