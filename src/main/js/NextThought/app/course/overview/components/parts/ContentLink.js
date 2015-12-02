@@ -35,7 +35,8 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 			i = config.locationInfo,
 			href = n.getAttribute('href'),
 			icon = n.getAttribute('icon'),
-			ntiid = n.getAttribute('ntiid');
+			ntiid = n.getAttribute('ntiid'),
+			root = i && i.root;
 
 		if (Globals.ROOT_URL_PATTERN.test(href)) {
 			href = getURL(href);
@@ -46,7 +47,7 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 		if (Globals.ROOT_URL_PATTERN.test(icon)) {
 			icon = getURL(icon);
 		} else {
-			icon = getURL(i.root + icon);
+			icon = getURL((root || '') + icon);
 		}
 
 		config.data = {
