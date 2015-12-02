@@ -151,5 +151,5 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 		}
 
 		return objectURL;
-	},
+	}
 });
