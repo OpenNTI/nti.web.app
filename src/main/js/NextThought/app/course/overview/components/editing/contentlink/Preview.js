@@ -9,7 +9,7 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Previ
 		{ cls: 'thumbnail icon', style: { backgroundImage: 'url({icon})'} },
 		{ cls: 'meta', cn: [
 			{ cls: 'title label', html: '{label}' },
-			{ cls: 'byline Creator', html: '{{{NextThought.view.cards.Card.by}}} {Creator}' },
+			{ cls: 'byline Creator', html: '{{{NextThought.view.cards.Card.by}}} {byline}' },
 			{ cls: 'description', html: '{description}' }
 		]}
 	]),
