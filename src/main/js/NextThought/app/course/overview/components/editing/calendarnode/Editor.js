@@ -14,7 +14,7 @@ Ext.define('NextThought.app.course.overview.components.editing.calendarnode.Edit
 
 	getDefaultValues: function() {
 		return {
-			MimeType: NextThought.model.courses.navigation.CourseOutlineContentCalendarNode.mimeType,
+			MimeType: NextThought.model.courses.navigation.CourseOutlineCalendarNode.mimeType,
 			title: (this.record && this.record.getTitle()) || ''
 		};
 	}
