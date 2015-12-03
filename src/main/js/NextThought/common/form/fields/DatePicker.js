@@ -6,7 +6,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'date-container part', cn: [
-			{ cls: 'date', html: 'date'}
+			{ cls: 'date', html: '{date}', 'data-value': '{date}'}
 		]},
 		{tag: 'tpl', 'if': 'timePicker', cn: [
 			{cls: 'hour-container part', cn: [
@@ -16,7 +16,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 				{ cls: 'minute', name: 'minute', html: 'Min'}
 			]},
 			{cls: 'meridiem-container part', cn: [
-				{ cls: 'meridiem', name: 'meridiem', html: 'AM'}
+				{ cls: 'meridiem', name: 'meridiem', html: 'AM', 'date-value': 'am'}
 			]}
 		]}
 	]),
@@ -26,45 +26,57 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	renderSelectors: {
 		dateContainerEl: '.date-container',
 		dateEl: '.date',
-		hourEl: '.part .hour',
-		minuteEl: '.part .minute',
-		meridiemEl: '.part .meridiem'
+		hourContainerEl: '.hour-container',
+		minuteContainerEl: '.minute-container',
+		meridiemContainerEl: '.meridiem-container',
+		hourEl: '.hour-container .hour',
+		minuteEl: '.minute-container .minute',
+		meridiemEl: '.meridiem-container .meridiem'
 	},
 
 	beforeRender: function(){
 		this.callParent(arguments);
 
+		this.defaultDate = this.defaultDate || Ext.Date.format(new Date(), 'F j, Y');
 		this.renderData = Ext.apply(this.renderData || {}, {
 			displayName: this.displayName,
-			timePicker: this.TimePicker
-		})
+			timePicker: this.TimePicker,
+			date: this.defaultDate
+		});
 	},
 
 	afterRender: function() {
 		this.callParent(arguments);
 		
-		if (this.dateEl) {
-			this.mon(this.dateEl, {
+		if (this.dateContainerEl) {
+			this.mon(this.dateContainerEl, {
 				'click': this.showDatePicker.bind(this)
 			});	
 		}
 		
-		if ( this.hourEl) {
-			this.mon(this.hourEl, {
+		if ( this.hourContainerEl) {
+			this.mon(this.hourContainerEl, {
 				'click': this.showHourPicker.bind(this)
 			});	
 		}
 
-		if (this.minuteEl) {
-			this.mon(this.minuteEl, {
+		if (this.minuteContainerEl) {
+			this.mon(this.minuteContainerEl, {
 				'click': this.showMinutePicker.bind(this)
 			});	
 		}
 
-		if (this.meridiemEl) {
-			this.mon(this.meridiemEl, {
+		if (this.meridiemContainerEl) {
+			this.mon(this.meridiemContainerEl, {
 				'click': this.showMeridiemPicker.bind(this)
 			});	
+		}
+
+		if (this.TimePicker) {
+			this.hourMenu = this.createHourMenu();
+			this.on('destroy', this.hourMenu.destroy.bind(this));	
+			this.minuteMenu = this.createMinuteMenu();
+			this.on('destroy', this.minuteMenu.destroy.bind(this));
 		}
 	},
 
@@ -94,7 +106,8 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 	dateChanged: function(picker, date){
 		if (this.dateEl) {
-			this.dateEl.dom.value = date;
+			this.dateEl.setHTML(Ext.Date.format(date, 'F j, Y'));
+			this.dateEl.dom.setAttribute('data-value', date);
 		}
 	},
 
@@ -109,7 +122,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 			this.hourMenu.hide();
 		}
 		else {
-			this.hourMenu.showBy(this.hourEl, 'tl-bl?');			
+			this.hourMenu.showBy(this.hourContainerEl, 'tl-bl?');			
 		}
 	},
 
@@ -148,7 +161,19 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 	
 	handleHourMenuClick: function(item, menu) {
-
+		var targetEl = this.hourEl, item;
+		if (targetEl) {
+			targetEl.setHTML(item.text);
+			targetEl.dom.setAttribute('data-value', item.value);
+			if (this.minuteMenu) {
+				item = this.minuteMenu.items.getAt(0);
+				// Set the first value of the first item of the minute (0 minutes)
+				if (item) {
+					item.setChecked(true);
+					this.handleMinuteMenuClick(item);
+				}
+			}
+		}
 	},
 
 
@@ -162,7 +187,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 			this.minuteMenu.hide();
 		}
 		else {
-			this.minuteMenu.showBy(this.minuteEl, 'tl-bl?');			
+			this.minuteMenu.showBy(this.minuteContainerEl, 'tl-bl?');			
 		}
 	},
 
@@ -201,7 +226,11 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 
 	handleMinuteMenuClick: function(item, menu) {
-
+		var targetEl = this.minuteEl;
+		if (targetEl) {
+			targetEl.setHTML(item.text);
+			targetEl.dom.setAttribute('data-value', item.value);
+		}
 	},
 
 
@@ -244,6 +273,69 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 
 	handleMeridiemMenuClick: function(item, menu) {
+		var targetEl = this.meridiemEl;
+		if (targetEl) {
+			targetEl.setHTML(item.text);
+			targetEl.dom.setAttribute('data-value', item.value);
+		}
+	},
 
+
+	getDateMilliseconds: function(){
+		var v, date;
+		if (this.dateEl) {
+			v = this.dateEl.dom.getAttribute('data-value');
+			date = v && new Date(v);
+			if (date) {
+				return date.getTime();
+			}
+		}
+
+		return 0;
+	},
+
+
+	getTimeMilliseconds: function(){
+		var v, time,
+			hourVal = this.hourEl && this.hourEl.dom.getAttribute('data-value'),
+			minuteVal = this.minuteEl && this.minuteEl.dom.getAttribute('data-value'),
+			meridiemVal = this.meridiemEl && this.meridiemEl.dom.getAttribute('data-value'),
+			hour = 0, minute = 0, t;
+
+		if (hourVal !== undefined) {
+			hour = parseInt(hourVal);
+		}
+
+		if (minuteVal !== undefined) {
+			minute = parseInt(minuteVal);
+		}
+
+		if (meridiemVal === 'pm') {
+			hour = hour * 2;
+		}
+
+		t = hour * 3600 * 1000 + minute * 60 * 1000;
+		return isNaN(t) ? 0 : t;
+	},
+
+
+	getValue: function() {
+		var millis = this.getMilliseconds(),
+			date = new Date(millis);
+
+		return date.toString();
+	},
+
+
+	/**
+	 * Get the timestamp value time.
+	 * @return {Number} timestamp in milliseconds.
+	 */
+	getMilliseconds: function(){
+		if (this.TimePicker) {
+			return this.getDateMilliseconds() + this.getTimeMilliseconds();
+		}
+
+		return this.getDateMilliseconds();
 	}
 });
