@@ -128,80 +128,74 @@
 		}
 	}
 
-	.content-editor {
+	.content-editor-footer {
+		@include experimental(transition, all 0.5s);
 		position: relative;
+		height: 45px;
+		white-space: nowrap;
+		background-color: #efefef;
+		border-top: 1px solid #dcdcdc;
 
-		.content-editor-footer {
-			@include experimental(transition, all 0.5s);
+		&::after{
+			content: '';
+			position: absolute;
+			top: -8px;
+			left: 0;
+			right: 0;
+			height: 8px;
+			box-shadow: 0 3px 8px -3px rgba(0, 0, 0, 0.25);
+			border-radius: 90px;
+		}
+
+		.left .action {float: left;}
+		.right .action {float: right;}
+
+		.action {
 			position: relative;
-			bottom: 0;
-			left: 0; right: 0;
 			height: 45px;
-			white-space: nowrap;
-			background-color: #efefef;
-			border-top: 1px solid #dcdcdc;
+			width: 45px;
+			line-height: 45px;
+			font-size: 14px;
+			text-align: center;
+			color: $secondary-grey;
+			margin: -1px;
+			cursor: pointer;
+			@include experimental(transition, all 0.5s);
 
-			&::after{
-				content: '';
-				position: absolute;
-				top: -8px;
-				left: 0;
-				right: 0;
-				height: 8px;
-				box-shadow: 0 3px 8px -3px rgba(0, 0, 0, 0.25);
-				border-radius: 90px;
+			&.cancel {
+				width: 85px;
 			}
 
-			.left .action {float: left;}
-			.right .action {float: right;}
-
-			.action {
+			&.save {
+				width: 95px;
+				line-height: 44px;
+				font-weight: bold;
+				font-style: italic;
+				color: #ffffff;
+				border: 1px solid $border-blue;
+				padding: 0 0 0 24px;
+				background: $primary-blue;
 				position: relative;
-				height: 45px;
-				width: 45px;
-				line-height: 45px;
-				font-size: 14px;
-				text-align: center;
-				color: $secondary-grey;
-				margin: -1px;
-				cursor: pointer;
-				@include experimental(transition, all 0.5s);
 
-				&.cancel {
-					width: 85px;
+
+				&::after {
+					content: ' ';
+					overflow: hidden;
+					position: absolute;
+					top: 8px; left: 15px;
+					background: $icons no-repeat;
+					@include sprite($icons,'comment_white',$dimensions: true);
+					outline: 0;
 				}
 
-				&.save {
-					width: 95px;
-					line-height: 44px;
-					font-weight: bold;
-					font-style: italic;
-					color: #ffffff;
-					border: 1px solid $border-blue;
-					padding: 0 0 0 24px;
-					background: $primary-blue;
-					position: relative;
-
-
-					&::after {
-						content: ' ';
-						overflow: hidden;
-						position: absolute;
-						top: 8px; left: 15px;
-						background: $icons no-repeat;
-						@include sprite($icons,'comment_white',$dimensions: true);
-						outline: 0;
-					}
-
-					&.disabled{
-						cursor: default;
-						border: 1px solid #d0d0d0;
-						background: rgba(184,184,184,0.5);
-						color: rgba(255,255,255,0.7);
-						margin: -1px;
-					}
-
+				&.disabled{
+					cursor: default;
+					border: 1px solid #d0d0d0;
+					background: rgba(184,184,184,0.5);
+					color: rgba(255,255,255,0.7);
+					margin: -1px;
 				}
+
 			}
 		}
 	}
@@ -252,16 +246,16 @@
 	}
 
 	.edit {
-		@include icon('edit-15_hover', $top: 5px, $left: 5px);
+		@include icon('edit-12', $top: 4px, $left: 4px);
 	}
 
 	.publish {
 		&.published {
-			@include icon('publishing-visible', $top: 5px, $left: 5px);
+			@include icon('publishing-visible', $top: 4px, $left: 4px);
 		}
 
 		&.unpublished {
-			@include icon('publishing-invisible', $top: 5px, $left: 5px);
+			@include icon('publishing-invisible', $top: 4px, $left: 4px);
 		}
 	}
 }
