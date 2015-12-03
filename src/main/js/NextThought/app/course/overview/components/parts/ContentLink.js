@@ -19,9 +19,6 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
-    		{ cls: 'controls', cn: [
-    			{ cls: 'edit', html: 'Edit'}
-    		]},
 		{ cls: 'meta', cn: [
 			{ cls: 'title', html: '{title}' },
 			{ cls: 'byline', html: '{{{NextThought.view.cards.Card.by}}}' },
@@ -162,11 +159,6 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 		if (e && e.getTarget('.comment')) {
 			e.stopEvent();
 			this.bypassEvent = false;
-		}
-
-		if (e && e.getTarget('.edit')) {
-			this.WindowActions.showWindow('edit-contentlink', null, null, {}, {record: this.record});
-			return;
 		}
 
 		if (this.bypassEvent) {

@@ -5,11 +5,14 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Index
 	requires: [
 		'NextThought.app.course.overview.components.editing.outlinenode.Preview',
 		'NextThought.app.course.overview.components.editing.outlinenode.Items',
-		'NextThought.app.course.overview.components.editing.outlinenode.Contents'
+		'NextThought.app.course.overview.components.editing.outlinenode.Contents',
+		'NextThought.app.windows.Actions'
 	],
 
 	hasItems: true,
 	hasContents: false,
+
+	windowName: 'edit-outlinenode',
 
 	cls: 'outline-node-editing',
 
@@ -20,7 +23,10 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Index
 	initComponent: function() {
 		this.callParent(arguments);
 
+		this.WindowActions = NextThought.app.windows.Actions.create();
+
 		var items = [
+				this.getControls(this.outlineNode),
 				this.getPreviewConfig(this.outlineNode, this.bundle)
 			];
 
@@ -49,6 +55,34 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Index
 	},
 
 
+	getControls: function(outlineNode) {
+		var controls = {};
+
+		if (this.showEdit) {
+			controls.edit = this.showEdit.bind(this);
+		}
+
+		if (this.showPublish) {
+			controls.publish = {};
+			controls.publish.visible = true;
+			controls.publish.fn = this.showPublish.bind(this);
+		}
+
+		if (this.showRemove) {
+			controls.remove = this.showRemove.bind(this);
+		}
+
+		if (this.showHistory) {
+			controls.history = this.showHistory.bind(this);
+		}
+
+		return {
+			xtype: 'overview-editing-controls',
+			controls: controls
+		};
+	},
+
+
 	getPreviewConfig: function(outlineNode, bundle) {
 		return {
 			xtype: 'overview-editing-outlinenode-preview',
@@ -73,5 +107,14 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Index
 			outlineNode: outlineNode,
 			bundle: bundle
 		};
-	}
+	},
+
+
+	showEdit: function() {
+
+	},
+
+
+
+	showPublish: function() {}
 });

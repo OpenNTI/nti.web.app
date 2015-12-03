@@ -16,5 +16,10 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.ListI
 
 	getPreviewType: function(record) {
 		return 'course-overview-content';
+	},
+
+
+	showEdit: function() {
+		this.WindowActions.showWindow('edit-contentlink', null, null, {}, {record: this.record});
 	}
 });

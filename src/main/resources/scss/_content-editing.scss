@@ -209,6 +209,13 @@
 
 .outline-node-editing {
 	background: white;
+	position: relative;
+
+	& > .overview-editing-controls {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+	}
 }
 
 .outline-node-preview {
@@ -224,5 +231,34 @@
 		position: absolute;
 		top: 10px;
 		right: 10px;
+	}
+}
+
+
+.overview-editing-controls {
+	.control {
+		display: inline-block;
+		width: 20px; height: 20px;
+		text-indent: -999px;
+		opacity: 0.7;
+		cursor: pointer;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.edit {
+		@include icon('edit-15_hover', $top: 5px, $left: 5px);
+	}
+
+	.publish {
+		&.published {
+			@include icon('publishing-visible', $top: 5px, $left: 5px);
+		}
+
+		&.unpublished {
+			@include icon('publishing-invisible', $top: 5px, $left: 5px);
+		}
 	}
 }
