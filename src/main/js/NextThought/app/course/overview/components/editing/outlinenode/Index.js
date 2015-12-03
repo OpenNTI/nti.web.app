@@ -111,9 +111,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Index
 
 
 	showEdit: function() {
-
+		this.WindowActions.showWindow(this.windowName, null, null, {}, {record: this.outlineNode});
 	},
-
 
 
 	showPublish: function() {}

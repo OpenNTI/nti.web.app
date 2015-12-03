@@ -6,8 +6,6 @@ Ext.define('NextThought.app.course.overview.components.editing.calendarnode.Prev
 		'NextThought.app.course.overview.components.editing.calendarnode.Window'
 	],
 
-	windowName: 'edit-calendarnode',
-
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'controls'},
 		{cls: 'outline-node', cn: [

@@ -6,6 +6,8 @@ Ext.define('NextThought.app.course.overview.components.editing.calendarnode.Inde
 		'NextThought.app.course.overview.components.editing.calendarnode.Preview'
 	],
 
+	windowName: 'edit-calendarnode',
+
 	hasItems: true,
 	hasContents: false,
 

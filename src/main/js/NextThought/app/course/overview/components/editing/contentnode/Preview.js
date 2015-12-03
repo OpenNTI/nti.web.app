@@ -4,7 +4,5 @@ Ext.define('NextThought.app.course.overview.components.editing.contentnode.Previ
 
 	requires: [
 		'NextThought.app.course.overview.components.editing.contentnode.Window'
-	],
-
-	windowName: 'edit-contentnode'
+	]
 });

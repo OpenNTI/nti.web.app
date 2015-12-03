@@ -6,6 +6,8 @@ Ext.define('NextThought.app.course.overview.components.editing.contentnode.Index
 		'NextThought.app.course.overview.components.editing.contentnode.Preview'
 	],
 
+	windowName: 'edit-contentnode',
+
 	hasItems: false,
 	hasContents: true,
 
