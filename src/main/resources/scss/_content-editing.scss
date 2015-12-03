@@ -93,13 +93,14 @@
 
 					.date-picker-field {
 						@include flex(1 auto);
+						margin-top: 5px;
 
 						.part{
 							width: 75px;
 							cursor: pointer;
 							background-color: white;
 							font-weight: 400;
-							font-size: 0.875em;
+							font: normal 500 14px/30px $font;
 							color: $secondary-grey;
 							padding: 3px 25px 3px 10px;
 							position: relative;
@@ -110,11 +111,11 @@
 								display: none;
 							}
 
-							@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 10px, $left: auto, $right: 7px);
+							@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 15px, $left: auto, $right: 7px);
 
 							&:hover {
 								color: $primary-grey;
-								@include icon('mv-dropdown-arrow', $position: relative, $side: after, $top: 10px, $left: auto, $right: 7px);
+								@include icon('mv-dropdown-arrow', $position: relative, $side: after, $top: 15px, $left: auto, $right: 7px);
 							}
 
 							&.date-container {

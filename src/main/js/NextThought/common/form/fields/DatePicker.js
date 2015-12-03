@@ -6,7 +6,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'date-container part', cn: [
-			{ tag: 'input', type: 'text', name: 'date'}
+			{ cls: 'date', html: 'date'}
 		]},
 		{tag: 'tpl', 'if': 'timePicker', cn: [
 			{cls: 'hour-container part', cn: [
@@ -25,7 +25,10 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 	renderSelectors: {
 		dateContainerEl: '.date-container',
-		dateEl: 'input[name=date]'
+		dateEl: '.date',
+		hourEl: '.part .hour',
+		minuteEl: '.part .minute',
+		meridiemEl: '.part .meridiem'
 	},
 
 	beforeRender: function(){
@@ -39,30 +42,77 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		this.picker = Ext.widget({
-			xtype: 'datepicker',
-	        minDate: new Date(),
-	        renderTo: Ext.getBody(),
-	        handler: this.dateChanged.bind(this),
-	        floating: true
-		});
+		
+		if (this.dateEl) {
+			this.mon(this.dateEl, {
+				'click': this.showDatePicker.bind(this)
+			});	
+		}
+		
+		if ( this.hourEl) {
+			this.mon(this.hourEl, {
+				'click': this.showHourPicker.bind(this)
+			});	
+		}
 
-		this.on('destroy', this.picker.destroy.bind(this));
+		if (this.minuteEl) {
+			this.mon(this.minuteEl, {
+				'click': this.showMinutePicker.bind(this)
+			});	
+		}
 
-		this.picker.hide();
-
-		this.addInputListeners();
+		if (this.meridiemEl) {
+			this.mon(this.meridiemEl, {
+				'click': this.showMeridiemPicker.bind(this)
+			});	
+		}
 	},
 
 
-	addInputListeners: function() {
-		if (!this.dateEl) { return; }
-		this.mon(this.dateEl, {
-			'keydown': this.onKeyDown.bind(this),
-			'click': this.showPicker.bind(this),
-			'blur': this.onInputBlur.bind(this)
-		});
+	showDatePicker: function(){
+		if (!this.datepicker) {
+			this.datepicker = Ext.widget({
+				xtype: 'datepicker',
+		        minDate: new Date(),
+		        renderTo: Ext.getBody(),
+		        handler: this.dateChanged.bind(this),
+		        floating: true
+			});
+
+			this.on('destroy', this.datepicker.destroy.bind(this));
+			this.datepicker.hide();
+		}
+		
+		if (!this.datepicker.isVisible()) {
+			this.datepicker.showBy(this.dateEl, 'tl-bl?');
+		}
+		else {
+			this.datepicker.hide();
+		}
 	},
+
+
+	dateChanged: function(picker, date){
+		if (this.dateEl) {
+			this.dateEl.dom.value = date;
+		}
+	},
+
+
+	showHourPicker: function(){
+		if (!this.hourMenu) {
+			this.hourMenu = this.createHourMenu();
+			this.on('destroy', this.hourMenu.destroy.bind(this));
+		}
+
+		if (this.hourMenu.isVisible()) {
+			this.hourMenu.hide();
+		}
+		else {
+			this.hourMenu.showBy(this.hourEl, 'tl-bl?');			
+		}
+	},
+
 
 	createHourMenu: function(){
 		var me = this,
@@ -99,6 +149,21 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	
 	handleHourMenuClick: function(item, menu) {
 
+	},
+
+
+	showMinutePicker: function(){
+		if (!this.minuteMenu) {
+			this.minuteMenu = this.createMinuteMenu();
+			this.on('destroy', this.minuteMenu.destroy.bind(this));
+		}
+
+		if (this.minuteMenu.isVisible()) {
+			this.minuteMenu.hide();
+		}
+		else {
+			this.minuteMenu.showBy(this.minuteEl, 'tl-bl?');			
+		}
 	},
 
 
@@ -140,6 +205,21 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	},
 
 
+	showMeridiemPicker: function(){
+		if (!this.meridiemMenu) {
+			this.meridiemMenu = this.createMeridiemMenu();
+			this.on('destroy', this.meridiemMenu.destroy.bind(this));
+		}
+
+		if (this.meridiemMenu.isVisible()) {
+			this.meridiemMenu.hide();
+		}
+		else {
+			this.meridiemMenu.showBy(this.meridiemEl, 'tl-bl?');			
+		}
+	},	
+
+
 	createMeridiemMenu: function(){
 		var me = this,
 			menu = 
@@ -165,28 +245,5 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 	handleMeridiemMenuClick: function(item, menu) {
 
-	},
-
-
-	onKeyDown: function(e) {
-		this.showPicker();
-	},
-
-
-	onInputBlur: function(e) {
-		//
-	},
-
-
-	showPicker: function(){
-		if (this.picker) {
-			this.picker.showBy(this.dateEl, 'tl-bl?');
-		}
-	},
-
-	dateChanged: function(picker, date){
-		if (this.dateEl) {
-			this.dateEl.dom.value = date;
-		}
 	}
 });
