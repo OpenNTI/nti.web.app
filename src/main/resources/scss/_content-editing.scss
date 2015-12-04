@@ -61,6 +61,7 @@
 		            font-size: 2rem;
 		            border: 0;
 		            opacity: 0;
+		            z-index: 10;
 		        }
 
 				&[data-name=icon] {
@@ -88,6 +89,16 @@
     				}
 				}
 
+				.placeholder {
+					background: transparent $icons no-repeat;
+					margin: 0 auto;
+					cursor: pointer;
+					position: absolute;
+    				top: 35px;
+    				left: 43%;
+					@include sprite($icons,'download_hover',$dimensions: true);
+				}
+
 				&[data-name=href] {
 					.img {
 					    position: relative;
@@ -96,8 +107,51 @@
 					    background-position: center;
 					    box-shadow: 0px 0px 3px 0 rgba(0,0,0,0.35);
 					    margin: 15px;
-					    height: 75px;
+					    min-height: 75px;
+					    padding: 20px;
 					    @include experimental-value(width, calc(100% - 30px));
+
+					    .placeholder {
+					    	left: 50%;
+					    	top: 30px;
+					    }
+
+					    .meta-data {
+					    	display: none;
+					    	box-shadow: 0px 0px 3px 0 rgba(0,0,0,0.35);
+					    	width: 200px;
+					    	border-radius: 5px;
+					    	height: 180px;
+					    	font: normal 600 14px/24px $font;
+					    	padding: 10px;
+
+					    	.thumb{
+					    		margin: 10px auto 25px auto;
+					    		width: 64px;
+					    		height: 64px;
+					    		background: url(../images/file-types/unknown-64.png) 0 0 no-repeat;
+					    		background-size: cover;
+					    	}
+
+					    	&.visible {
+					    		display: block;
+					    	}
+
+					    	.name {
+				    			overflow: hidden;
+								@include ellipse;
+				    		}
+
+					    	.item {
+					    		width: 50%;
+					    		float: left;
+					    		text-align: left;
+
+					    		&.right {
+					    			text-align: right;
+					    		}
+					    	}
+					    }
 					}
 				}
 

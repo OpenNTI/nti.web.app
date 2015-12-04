@@ -8,15 +8,16 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 			style: { backgroundImage: 'url({thumbnail})'},
 			cn: [
 				{tag: 'input', type: 'file', name: '{name}', 'data-value': '{thumbnail}'},
-				{cls: 'placeholder', html: '{placeholder}'}
-			]
-		},
-		{
-			cls: 'meta-data',
-			cn: [
-				{cls: 'name'},
-				{cls: 'size'},
-				{cls: 'type'}
+				{cls: 'placeholder', html: '{placeholder}'},
+				{
+					cls: 'meta-data',
+					cn: [
+						{cls: 'thumb'},
+						{cls: 'name'},
+						{cls: 'type item'},
+						{cls: 'size item right'}
+					]
+				}
 			]
 		}
 	]),
@@ -32,7 +33,9 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	renderSelectors: {
 		nameEl: '.name',
 		sizeEl: '.size',
-		typeEl: '.type'
+		typeEl: '.type',
+		metaEl: '.meta-data',
+		placeholderEl: '.placeholder'
 	},
 
 	beforeRender: function() {
@@ -68,15 +71,20 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	onFileChanged: function(e) {
 		var i = e.target,
 			f = i && i.files && i.files[0],
-			thumb, img;
+			thumb, img, type;
 
 		console.log('File Uploaded: event=', e, ' input=', i, ' files=', i.files);
 
 		if (f) {
+			this.placeholderEl.hide();
+
 			if (this.name === 'href') {
-				this.nameEl.update(f.name);
-				this.typeEl.update(f.type);
-				this.sizeEl.update(f.size);
+				type = f.type.split('/').last();
+				size = f.size / 1000;
+				this.nameEl.update('Name: ' + f.name);
+				this.typeEl.update('Type: ' + type.toUpperCase());
+				this.sizeEl.update(size + 'kb');
+				this.metaEl.addCls('visible');
 			}
 
 			thumb = this.resolveFileThumbnail(f);
