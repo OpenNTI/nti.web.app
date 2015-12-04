@@ -74,10 +74,8 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 		this.createDatePicker();
 		if (this.TimePicker) {
-			this.hourMenu = this.createHourMenu();
-			this.on('destroy', this.hourMenu.destroy.bind(this));	
+			this.hourMenu = this.createHourMenu();	
 			this.minuteMenu = this.createMinuteMenu();
-			this.on('destroy', this.minuteMenu.destroy.bind(this));
 		}
 
 		this.setValue(this.defaultValue);
@@ -107,7 +105,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	        floating: true
 		});
 
-		this.on('destroy', this.datepicker.destroy.bind(this));
+		this.on('destroy', this.datepicker.destroy.bind(this.datepicker));
 		this.datepicker.hide();
 	},
 
@@ -128,7 +126,6 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	showHourPicker: function(){
 		if (!this.hourMenu) {
 			this.hourMenu = this.createHourMenu();
-			this.on('destroy', this.hourMenu.destroy.bind(this));
 		}
 
 		if (this.hourMenu.isVisible()) {
@@ -169,6 +166,8 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 						{ text: '12', value: 12}
 					]
 				});
+
+		this.on('destroy', menu.destroy.bind(menu));
 		return menu;
 	},
 
@@ -198,7 +197,6 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	showMinutePicker: function(){
 		if (!this.minuteMenu) {
 			this.minuteMenu = this.createMinuteMenu();
-			this.on('destroy', this.minuteMenu.destroy.bind(this));
 		}
 
 		if (this.minuteMenu.isVisible()) {
@@ -239,6 +237,8 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 						{ text: '55', value: 55}
 					]
 				});
+
+		this.on('destroy', menu.destroy.bind(menu));
 		return menu;
 	},
 
@@ -260,7 +260,6 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	showMeridiemPicker: function(){
 		if (!this.meridiemMenu) {
 			this.meridiemMenu = this.createMeridiemMenu();
-			this.on('destroy', this.meridiemMenu.destroy.bind(this));
 		}
 
 		if (this.meridiemMenu.isVisible()) {
@@ -291,6 +290,8 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 						{ text: 'PM', value: 'pm'}
 					]
 				});
+
+		this.on('destroy', menu.destroy.bind(menu));
 		return menu;
 	},
 
