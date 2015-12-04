@@ -286,7 +286,7 @@ Ext.define('NextThought.common.form.Form', {
 	 * @param  {FormData} data   FormData to be submitted.
 	 * @param  {String} action the URL to save the form data to.
 	 * @param  {String} method the action method to use (i.e POST or PUT)
-	 * @return {[type]} None.
+	 * @return {Promise} fulfills or rejects with the save
 	 */
 	saveFormData: function(data, action, method) {
 		var xhr = new XMLHttpRequest(),
@@ -306,7 +306,8 @@ Ext.define('NextThought.common.form.Form', {
 			xhr.open(method, action);
 			xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 			xhr.onreadystatechange = function() {
-				if (xhr.readyState === 4 && xhr.status === 200) {
+				//TODO: clean up this logic to not have potentially unhandled cases
+				if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 201)) {
 			        // me.record.syncWithResponse(xhr.responseText);
 			        fulfill();
 			        if (me.onSuccess) {
@@ -330,10 +331,10 @@ Ext.define('NextThought.common.form.Form', {
 	/**
 	 * Saves a JSON object
 	 *
-	 * @param  {Object} object [description]
-	 * @param  {String} action [description]
-	 * @param  {String} method [description]
-	 * @return {[type]}        [description]
+	 * @param  {Object} object the data to save
+	 * @param  {String} action the url to save to
+	 * @param  {String} method POST or PUT
+	 * @return {Promise} fulfills or rejects with the save
 	 */
 	saveJsonObject: function(object, action, method) {
 		var me = this;
