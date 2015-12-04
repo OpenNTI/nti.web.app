@@ -7,15 +7,19 @@ Ext.define('NextThought.app.course.overview.components.editing.contentnode.Edito
 	],
 
 	FORM_SCHEMA: [
-		{type: 'hidden', name: 'MimeType'},
-		{type: 'text', name: 'title', displayName: 'Title'}
+		{type: 'text', name: 'title', displayName: 'Title'},
+		{type: 'date', name: 'AvailableBeginning', displayName: 'Available Beginning'},
+		{type: 'date', name: 'AvailableEnding', displayName: 'Available Ending'},
+		{type: 'hidden', name: 'MimeType'}
 	],
 
 
 	getDefaultValues: function() {
 		return {
 			MimeType: NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType,
-			title: (this.record && this.record.getTitle()) || ''
+			title: (this.record && this.record.getTitle()) || '',
+			AvailableBeginning: this.record && this.record.get('AvailableBeginning'),
+			AvailableEnding: this.record && this.record.get('AvailableEnding')
 		};
 	}
 });

@@ -135,6 +135,7 @@
 		white-space: nowrap;
 		background-color: #efefef;
 		border-top: 1px solid #dcdcdc;
+		overflow: hidden;
 
 		&::after{
 			content: '';

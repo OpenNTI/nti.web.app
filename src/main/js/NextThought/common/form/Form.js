@@ -71,6 +71,7 @@ Ext.define('NextThought.common.form.Form', {
 		'title': 'title'
 	},
 
+	COMPONENT_MAP: {},
 
 	renderSelectors: {
 		formEl: 'form'
@@ -132,11 +133,13 @@ Ext.define('NextThought.common.form.Form', {
 				name = field.getAttribute && field.getAttribute('data-name');
 
 				cmp = Ext.widget(cmpType, {
-					thumbnail: name && me.defaultValues[name],
+					defaultValue: name && me.defaultValues[name],
 					name: name,
 					renderTo: el,
 					formChanged: me.formChanged.bind(me)
 				});
+
+				this.COMPONENT_MAP[name] = cmp;
 
 				// cleanup the file picker.
 				me.on('destroy', cmp.destroy.bind(cmp));
@@ -168,15 +171,17 @@ Ext.define('NextThought.common.form.Form', {
 	 * @return {[type]} [description]
 	 */
 	getValues: function() {
-		var vals = {}, me = this;
+		var vals = {}, me = this, cmp;
 
 		(this.schema || []).forEach(function(entry) {
 			var dom = document.querySelector('.field.' + entry.name + ' [type=' + entry.type + ']');
-			if (dom) {
-				if (entry.type === 'file') {
-					vals[entry.name] = dom.getAttribute('data-value');
-				}
-				else {
+
+			cmp = me.COMPONENT_MAP[entry.name];
+			if (cmp && cmp.getValue) {
+				vals[entry.name] = cmp.getValue();
+			}
+			else {
+				if (dom) {
 					vals[entry.name] = dom.value;
 				}
 			}

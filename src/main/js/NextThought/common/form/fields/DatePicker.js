@@ -37,11 +37,11 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	beforeRender: function(){
 		this.callParent(arguments);
 
-		this.defaultDate = this.defaultDate || Ext.Date.format(new Date(), 'F j, Y');
+		var today = Ext.Date.format(new Date(), 'F j, Y');
 		this.renderData = Ext.apply(this.renderData || {}, {
 			displayName: this.displayName,
 			timePicker: this.TimePicker,
-			date: this.defaultDate
+			date: today
 		});
 	},
 
@@ -72,27 +72,21 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 			});	
 		}
 
+		this.createDatePicker();
 		if (this.TimePicker) {
 			this.hourMenu = this.createHourMenu();
 			this.on('destroy', this.hourMenu.destroy.bind(this));	
 			this.minuteMenu = this.createMinuteMenu();
 			this.on('destroy', this.minuteMenu.destroy.bind(this));
 		}
+
+		this.setValue(this.defaultValue);
 	},
 
 
 	showDatePicker: function(){
 		if (!this.datepicker) {
-			this.datepicker = Ext.widget({
-				xtype: 'datepicker',
-		        minDate: new Date(),
-		        renderTo: Ext.getBody(),
-		        handler: this.dateChanged.bind(this),
-		        floating: true
-			});
-
-			this.on('destroy', this.datepicker.destroy.bind(this));
-			this.datepicker.hide();
+			this.createDatePicker();
 		}
 		
 		if (!this.datepicker.isVisible()) {
@@ -104,10 +98,29 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	},
 
 
+	createDatePicker: function(){
+		this.datepicker = Ext.widget({
+			xtype: 'datepicker',
+	        minDate: new Date(),
+	        renderTo: Ext.getBody(),
+	        handler: this.dateChanged.bind(this),
+	        floating: true
+		});
+
+		this.on('destroy', this.datepicker.destroy.bind(this));
+		this.datepicker.hide();
+	},
+
+
 	dateChanged: function(picker, date){
 		if (this.dateEl) {
 			this.dateEl.setHTML(Ext.Date.format(date, 'F j, Y'));
 			this.dateEl.dom.setAttribute('data-value', date);
+		}
+
+		// Broadcast the change.
+		if (this.formChanged){
+			this.formChanged();
 		}
 	},
 
@@ -174,6 +187,11 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 				}
 			}
 		}
+
+		// Broadcast the change.
+		if (this.formChanged){
+			this.formChanged();
+		}
 	},
 
 
@@ -231,6 +249,11 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 			targetEl.setHTML(item.text);
 			targetEl.dom.setAttribute('data-value', item.value);
 		}
+
+		// Broadcast the change.
+		if (this.formChanged){
+			this.formChanged();
+		}
 	},
 
 
@@ -278,6 +301,86 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 			targetEl.setHTML(item.text);
 			targetEl.dom.setAttribute('data-value', item.value);
 		}
+
+		// Broadcast the change.
+		if (this.formChanged){
+			this.formChanged();
+		}
+	},
+
+	setValue: function(value){
+		var date = new Date(value),
+			me = this, dateString, hour, minute, m = 'am';
+
+		if (isNaN(date)) { return; }
+
+		dateString = Ext.Date.format(date, 'F j, Y');
+		hour = date.getHours();
+		minute = date.getMinutes();
+
+		if (hour > 12) {
+			hour = hour % 12;
+			m = 'pm';
+		}
+
+		this.onceRendered
+			.then(function() {
+				var b = Ext.Date.format(date, "n/j/Y"), 
+					dateOnly = new Date(b);
+
+				me.dateEl.setHTML(dateString);
+				me.dateEl.dom.setAttribute('data-value', dateOnly);
+				if (me.datepicker) {
+					me.datepicker.setValue(dateOnly);
+				}
+
+				if (hour !== undefined && me.hourEl) {
+					me.hourEl.dom.setAttribute('data-value', hour);
+					// We don't want to set the displayed hour to 0. 
+					// Change what the user sees. 
+					// FIXME: This is a short term fix.
+					if (hour < 12 && hour === 0) {
+						hour = 12;
+					}
+					me.hourEl.setHTML(hour);
+				}
+				if (minute !== undefined && me.minuteEl) {
+					me.minuteEl.dom.setAttribute('data-value', minute);
+					if (minute === 0) {
+						minute = '00';
+					}
+					me.minuteEl.setHTML(minute);
+				}
+
+				if (me.meridiemEl && m) {
+					me.meridiemEl.dom.setAttribute('data-value', m);
+					me.meridiemEl.setHTML(m.toUpperCase());
+				}
+			});
+
+	},
+
+
+	/**
+	 * Get the timestamp in seconds.
+	 * @return {Number} Timestamp in seconds.
+	 */
+	getValue: function() {
+		var millis = this.getMilliseconds();
+		return millis / 1000;
+	},
+
+
+	/**
+	 * Get the timestamp value time.
+	 * @return {Number} timestamp in milliseconds.
+	 */
+	getMilliseconds: function(){
+		if (this.TimePicker) {
+			return this.getDateMilliseconds() + this.getTimeMilliseconds();
+		}
+
+		return this.getDateMilliseconds();
 	},
 
 
@@ -311,31 +414,12 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		}
 
 		if (meridiemVal === 'pm') {
-			hour = hour * 2;
+			hour = hour + 12;
 		}
 
 		t = hour * 3600 * 1000 + minute * 60 * 1000;
 		return isNaN(t) ? 0 : t;
-	},
-
-
-	getValue: function() {
-		var millis = this.getMilliseconds(),
-			date = new Date(millis);
-
-		return date.toString();
-	},
-
-
-	/**
-	 * Get the timestamp value time.
-	 * @return {Number} timestamp in milliseconds.
-	 */
-	getMilliseconds: function(){
-		if (this.TimePicker) {
-			return this.getDateMilliseconds() + this.getTimeMilliseconds();
-		}
-
-		return this.getDateMilliseconds();
 	}
+
+
 });
