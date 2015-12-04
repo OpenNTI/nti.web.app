@@ -1,6 +1,10 @@
 Ext.define('NextThought.model.courses.overview.Group', {
 	extend: 'NextThought.model.Base',
 
+	mixins: {
+		OrderedContents: 'NextThought.mixins.OrderedContents'
+	},
+
 	statics: {
 		mimeType: 'application/vnd.nextthought.nticourseoverviewgroup'
 	},

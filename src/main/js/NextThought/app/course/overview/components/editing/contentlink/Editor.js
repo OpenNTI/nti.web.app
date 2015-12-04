@@ -36,6 +36,7 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Edito
 
 	getFormSchema: function() {
 		var schema = [
+				{name: 'MimeType', type: 'hidden'},
 				{name: 'icon', displayName: 'Icon', type: 'file'},
 				{name: 'label', displayName: 'Title', type: 'text', placeholder: 'Title....'},
 				{name: 'byline', displayName: 'Author', type: 'text', placeholder: 'Author...'},
@@ -54,6 +55,60 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Edito
 	},
 
 
+	addToolbar: function() {
+		if (this.record) { return; }
+
+		var me = this,
+			groups = me.parentRecord.get('Items'),
+			toolbar;
+
+		toolbar = this.add({
+			xtype: 'box',
+			autoEl: {
+				cls: 'group-selection',
+				cn: [
+					{tag: 'span', html: 'Group'},
+					{
+						tag: 'select',
+						cn: groups.map(function(group, index) {
+							var config = {
+								tag: 'option',
+								html: group.get('title'),
+								'data-label': group.get('title'),
+								'data-link': group.getAppendLink()
+							};
+
+							if (index === 0) {
+								config.selected = true;
+							}
+
+							return config;
+						})
+					}
+				]
+			},
+			afterRender: function() {
+				var select = this.el.dom.querySelector('select');
+
+				function selectActiveOption() {
+					var selected = select.querySelector('[data-label="' + select.value + '"]'),
+						url = selected && selected.getAttribute('data-link');
+
+					if (url) {
+						me.formCmp.setAction(url);
+					}
+
+					console.log(select, me);
+				}
+
+				select.addEventListener('change', selectActiveOption);
+
+				selectActiveOption();
+			}
+		});
+	},
+
+
 	addPreview: function(values) {
 		return this.add({
 			xtype: 'overview-editing-contentlink-preview',
@@ -63,6 +118,12 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Edito
 
 
 	getDefaultValues: function() {
-		return this.record && this.record.isModel && this.record.getData();
+		if (this.record) {
+			return this.record.isModel && this.record.getData();
+		}
+
+		return {
+			MimeType: NextThought.model.RelatedWork.mimeType
+		};
 	}
 });

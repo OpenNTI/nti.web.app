@@ -24,6 +24,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 		var values = this.getDefaultValues();
 
+		this.toolbar = this.addToolbar();
+
 		// this.preview = this.addPreview(values);
 
 		this.formCmp = this.add({
@@ -43,7 +45,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		return this.FORM_SCHEMA;
 	},
 
-
+	addToolbar: function() {},
 	addPreview: function() {},
 
 
@@ -51,7 +53,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 
 	getFormAction: function() {
-		if (this.record) { return this.record.getLink('edit'); }
+		if (this.record) {
+			return this.record.getLink('edit');
+		} else if (this.parentRecord && this.parentRecord.getAppendLink) {
+			return this.parentRecord.getAppendLink();
+		}
 		return null;
 	},
 

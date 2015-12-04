@@ -33,7 +33,7 @@ Ext.define('NextThought.common.form.Form', {
 				]},
 				{tag: 'tpl', 'if': 'this.isHidden(type)', cn: [
 					{cls: 'field {name} hidden', cn: [
-						{tag: 'input', type: 'hidden', value: '{[this.getDefaultValue(values.name)]}'}
+						{tag: 'input', type: 'hidden', 'name': '{name}', value: '{[this.getDefaultValue(values.name)]}'}
 					]}
 				]},
 				{tag: 'tpl', 'if': 'this.isDate(type)', cn: [
@@ -237,6 +237,11 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
+	setAction: function(action) {
+		this.action = action;
+	},
+
+
 	/**
 	 * Handle form submision
 	 *
@@ -366,7 +371,8 @@ Ext.define('NextThought.common.form.Form', {
 
 
 	/**
-	 * Compares the default values against the current values to check for fields that actualy changed.
+	 * Compares the default values against the current values to check for fields that actually changed.
+	 * We also add in hidden values, since it's an easier way to pass necessary date (i.e. MimeTypes)
 	 * Returns object of key-value pairs that changed.
 	 *
 	 * @return {Object} Map for key-value pairs that changed.
@@ -383,6 +389,13 @@ Ext.define('NextThought.common.form.Form', {
 				}
 			}
 		}
+
+		(this.schema || []).forEach(function(entry) {
+			var key = entry && entry.name;
+			if (entry && entry.type === 'hidden') {
+				changed[key] = currentValues[key];
+			}
+		});
 
 		return changed;
 	},
