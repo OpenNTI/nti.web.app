@@ -6,6 +6,22 @@ Ext.define('NextThought.app.course.overview.components.editing.contentnode.Edito
 		'NextThought.model.courses.navigation.CourseOutlineContentNode'
 	],
 
+	statics: {
+		getTypes: function() {
+			return {
+				mimeType: NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType,
+				types: [
+					{
+						title: 'Lesson',
+						iconCls: 'lesson',
+						type: 'lesson',
+						description: 'Lesson is good for...'	
+					}
+				]
+			}
+		}
+	},
+
 	FORM_SCHEMA: [
 		{type: 'text', name: 'title', displayName: 'Title'},
 		{type: 'date', name: 'AvailableBeginning', displayName: 'Available Beginning'},

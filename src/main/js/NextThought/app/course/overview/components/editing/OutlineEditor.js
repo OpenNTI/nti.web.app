@@ -3,7 +3,9 @@ Ext.define('NextThought.app.course.overview.components.editing.OutlineEditor', {
 	alias: 'widget.overview-editing-outlineeditor',
 
 	requires: [
-		'NextThought.model.courses.CourseOutline'
+		'NextThought.model.courses.CourseOutline',
+		'NextThought.app.course.overview.components.editing.outlinenode.Editor',
+		'NextThought.app.course.overview.components.editing.contentnode.Editor'
 	],
 
 	inheritableStatics: {
@@ -22,7 +24,10 @@ Ext.define('NextThought.app.course.overview.components.editing.OutlineEditor', {
 
 
 		getTypeEditors: function() {
-
+			return [
+				NextThought.app.course.overview.components.editing.outlinenode.Editor,
+				NextThought.app.course.overview.components.editing.contentnode.Editor
+			];
 		},
 
 
@@ -83,7 +88,6 @@ Ext.define('NextThought.app.course.overview.components.editing.OutlineEditor', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-
 		this.add([
 			{xtype: 'box', cls: 'controls'},
 			{xtype: 'container', cls: 'new-child', newChildContainer: true, layout: 'none', items: []},

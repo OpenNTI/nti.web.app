@@ -12,7 +12,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Index
 	hasItems: true,
 	hasContents: false,
 
-	windowName: 'edit-outlinenode',
+	windowName: 'overview-editing',
 
 	cls: 'outline-node-editing',
 

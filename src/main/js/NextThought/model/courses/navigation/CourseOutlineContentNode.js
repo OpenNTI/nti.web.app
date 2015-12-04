@@ -5,6 +5,9 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineContentNode', {
 		{name: 'NTIID', type: 'string', mapping: 'ContentNTIID'}
 	],
 
+	statics: {
+		mimeType: 'application/vnd.nextthought.courses.courseoutlinecontentnode'
+	},
 
 	getFirstContentNode: function() {
 		return this;

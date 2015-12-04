@@ -11,6 +11,22 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Edito
 		{type: 'text', name: 'title', displayName: 'Title'}
 	],
 
+	statics: {
+		getTypes: function() {
+			return {
+				mimeType: NextThought.model.courses.navigation.CourseOutlineNode.mimeType,
+				types: [
+					{
+						title: 'Unit',
+						iconCls: 'unit',
+						type: 'unit',
+						description: 'Unit is good for...'	
+					}
+				]
+			}
+		}
+	},
+
 
 	getDefaultValues: function() {
 		return {

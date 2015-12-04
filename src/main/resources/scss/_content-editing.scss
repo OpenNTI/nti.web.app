@@ -13,7 +13,7 @@
 				display: block;
 				border-bottom: 1px solid #e1e1e1;
 
-				&:last-of-type {
+				&:last-of-type, &.hidden {
 					border-bottom: 0;
 				}
 
