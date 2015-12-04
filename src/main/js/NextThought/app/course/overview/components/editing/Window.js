@@ -25,7 +25,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Window', {
 
 		this.headerCmp = this.add({
 			xtype: 'window-header',
-			doClose: this.doClose.bind(this)
+			doClose: this.onCancel.bind(this)
 		});
 
 		this.setPath(this.record, this.parentRecord);
@@ -128,7 +128,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Window', {
 
 
 	onCancel: function() {
-
+		//TODO: ask the active editor if it can close
+		this.doClose();
 	},
 
 
