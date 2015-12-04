@@ -10,7 +10,7 @@ Ext.define('NextThought.common.form.Form', {
 	],
 
 	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{tag: 'form', enctype: 'multipart/form-data', method: 'post', name: 'form', cn: [
+		{tag: 'form', enctype: 'multipart/form-data', 'autocomplete': 'off', method: 'post', name: 'form', cn: [
 			{tag: 'tpl', 'for': 'schema', cn: [
 				{tag: 'tpl', 'if': 'this.isText(type)', cn: [
 					{cls: 'field {name}', cn: [
