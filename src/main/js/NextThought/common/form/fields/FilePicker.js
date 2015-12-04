@@ -7,11 +7,17 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 			cls: 'img',
 			style: { backgroundImage: 'url({thumbnail})'},
 			cn: [
-				{tag: 'input', type: 'file', name: '{name}', 'data-value': '{thumbnail}'}
+				{tag: 'input', type: 'file', name: '{name}', 'data-value': '{thumbnail}'},
+				{cls: 'placeholder', html: '{placeholder}'}
 			]
 		},
 		{
-			cls: 'img-name'
+			cls: 'meta-data',
+			cn: [
+				{cls: 'name'},
+				{cls: 'size'},
+				{cls: 'type'}
+			]
 		}
 	]),
 
@@ -21,11 +27,20 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 
 	DEFAULT_THUMBNAIL: '',
 
+	placeholder: '',
+
+	renderSelectors: {
+		nameEl: '.name',
+		sizeEl: '.size',
+		typeEl: '.type'
+	},
+
 	beforeRender: function () {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
 			thumbnail: this.thumbnail,
-			name: this.name
+			name: this.name,
+			placeholder: this.placeholder
 		});
 	},
 
@@ -36,9 +51,12 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 
 
 	attachChangeListeners: function(){
-		var input = document.querySelector('input[type=file]');
-		if (input){
-			input.addEventListener('change', this.onFileChanged.bind(this));
+		var inputs = document.querySelectorAll('input[type=file]'),
+			me = this;
+
+		for (var i = inputs.length - 1; i >= 0; i--) {
+			input = inputs[i];
+			input.addEventListener('change', me.onFileChanged.bind(me));
 		}
 	},
 
@@ -58,7 +76,14 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 			if (thumb) {
 				img = Ext.fly(i).up('.img');
 				if (img && img.setStyle) {
-					img.setStyle('backgroundImage', 'url(' + thumb + ')');
+					if (this.name === 'icon') {
+						img.setStyle('backgroundImage', 'url(' + thumb + ')');	
+					}
+					if (this.name === 'href') {
+						this.nameEl.update(f.name);
+						this.typeEl.update(f.type);
+						this.sizeEl.update(f.size);
+					}
 
 					// set the thumbnail url name on the input file field.
 					i.setAttribute('data-value', thumb);
