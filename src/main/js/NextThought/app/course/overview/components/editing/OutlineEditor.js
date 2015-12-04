@@ -111,6 +111,8 @@ Ext.define('NextThought.app.course.overview.components.editing.OutlineEditor', {
 		}
 
 		this.editRecordContainer.add(editor.create({record: record}));
+
+		this.updateButtons({save: true});
 	},
 
 

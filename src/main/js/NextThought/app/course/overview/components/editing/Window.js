@@ -5,6 +5,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Window', {
 	requires: [
 		'NextThought.app.course.overview.components.editing.OutlineEditor',
 		'NextThought.app.course.overview.components.editing.ContentsEditor',
+		'NextThought.app.course.overview.components.editing.WindowFooter',
 		'NextThought.app.windows.StateStore',
 		'NextThought.app.windows.components.Header',
 		'NextThought.app.windows.components.Loading'
@@ -36,19 +37,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Window', {
 		}
 
 		this.footer = this.add({
-			xtype: 'box',
-			autoEl: {cls: 'content-editor-footer', cn: [
-				{cls: 'right save-controls', cn: [
-					{cls: 'button action save', html: 'Save'},
-					{cls: 'button action cancel', html: 'Close'}
-				]}
-			]},
-			listeners: {
-				click: {
-					element: 'el',
-					fn: this.onFooterClick.bind(this)
-				}
-			}
+			xtype: 'overview-editing-windowfooter',
+			onCancel: this.onCancel.bind(this),
+			onNext: this.onNext.bind(this),
+			onSave: this.onSave.bind(this),
+			controlConfig: this.footerConfig
 		});
 	},
 
@@ -87,8 +80,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Window', {
 				record: record,
 				parentRecord: parentRecord,
 				doClose: this.doClose.bind(this),
-				enableSave: this.enableSave.bind(this),
-				disableSave: this.disableSave.bind(this)
+				updateButtons: this.updateButtons.bind(this)
 			};
 
 		if (Contents.canEdit(record.mimeType)) {
@@ -108,8 +100,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Window', {
 			config = {
 				parentRecord: parentRecord,
 				doClose: this.doClose.bind(this),
-				enableSave: this.enableSave.bind(this),
-				disableSave: this.disableSave.bind(this)
+				updateButtons: this.updateButtons.bind(this)
 			};
 
 		if (Contents.canAddChildren(parentRecord.mimeType)) {
@@ -123,21 +114,30 @@ Ext.define('NextThought.app.course.overview.components.editing.Window', {
 	},
 
 
-	onFooterClick: function(e) {
-		if (e.getTarget('.cancel')) {
-			this.doClose();
-		} else if (e.getTarget('.save')) {
-			//TODO: fill this in
+	updateButtons: function(config) {
+		config = config || {};
+
+		config.cancel = true;
+
+		this.footerConfig = config;
+
+		if (this.footer) {
+			this.footer.setControls(config);
 		}
 	},
 
 
-	enableSave: function() {
+	onCancel: function() {
 
 	},
 
 
-	disableSave: function() {
+	onNext: function() {
+
+	},
+
+
+	onSave: function() {
 
 	}
 }, function() {

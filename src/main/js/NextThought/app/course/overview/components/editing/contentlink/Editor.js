@@ -10,7 +10,8 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Edito
 					{
 						title: 'External Link',
 						iconCls: 'link',
-						type: 'hyperlink'
+						type: 'hyperlink',
+						description: 'blah blah blah'
 					},
 					{
 						title: 'Internal PDF',
