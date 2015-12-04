@@ -233,12 +233,23 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 								me.handleNoReplyMenuClick(item, item.up('.menu'));
 							}
 						},
-						width: 140,
+						width: 220,
 						items: [
 							{
-								text: 'Allow Reply',
-								NoReply: false,
-								checked: true
+								text: 'Allow Reply to All',
+								scope: 'All',
+								checked: true,
+								NoReply: false
+							},
+							{
+								text: 'Open Students Only',
+								scope: 'Open',
+								NoReply: false
+							},
+							{
+								text: 'Enrolled Students Only',
+								scope: 'ForCredit',
+								NoReply: false
 							},
 							{
 								text: 'No Reply',
@@ -250,10 +261,21 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 	},
 
 
+	/**
+	 * Handle the reply-picker selection.
+	 *
+	 * Note: If a user chooses to allow reply, make sure we set both the reply option 
+	 * as well as the intended scope (Open, ForCredit...). 
+	 * When the no-reply is set to true, it will override everyhing else.
+	 * 
+	 * @param  {Ext.MenuItem} item [description]
+	 * @param  {Ext.Menu} menu [description]
+	 */
 	handleNoReplyMenuClick: function(item, menu){
 		var t = this.noreplyPickerEl.down('.noreply');
 
 		this.record.set('NoReply', item.NoReply);
+		this.record.set('replyScope', item.scope);
 		if (t) {
 			t.setHTML(item.text);
 		}
@@ -308,8 +330,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		if (this.record) {
 			this.record.set({
 				'Body': v.body,
-				'Subject': v.title,
-				'NoReply': v.NoReply 
+				'Subject': v.title 
 			});
 
 			this.EmailActions.sendEmail(this.record)

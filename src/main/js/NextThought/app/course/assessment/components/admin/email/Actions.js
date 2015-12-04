@@ -9,7 +9,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Actions', {
 
 	sendEmail: function(record, postURL, scope) {
 		var me = this, 
-			data = record && record.asJSON();
+			data = record && record.asJSON(),
+			params = {};
 
 		delete data.ContainerId;
 		delete data.NTIID;
@@ -34,12 +35,20 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Actions', {
 			scope = 'Public';
 		}
 
+		if (scope) {
+			params['scope'] = scope;
+		}
+
+		if (!record.get('NoReply')) {
+			params['replyToScope'] = record.get('replyScope');
+		}
+
 		return new Promise(function(fulfill, reject) {
 			Ext.Ajax.request({
 				url: postURL,
 				scope: this,
 				jsonData: data,
-				params: {scope: scope || ""},
+				params: params,
 				method: 'POST',
 				headers: {
 					Accept: 'application/json'
