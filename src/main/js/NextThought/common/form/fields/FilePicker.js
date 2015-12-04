@@ -71,7 +71,14 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 			thumb, img;
 
 		console.log('File Uploaded: event=', e, ' input=', i, ' files=', i.files);
+
 		if (f) {
+			if (this.name === 'href') {
+				this.nameEl.update(f.name);
+				this.typeEl.update(f.type);
+				this.sizeEl.update(f.size);
+			}
+
 			thumb = this.resolveFileThumbnail(f);
 			if (thumb) {
 				img = Ext.fly(i).up('.img');
@@ -79,12 +86,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 					if (this.name === 'icon') {
 						img.setStyle('backgroundImage', 'url(' + thumb + ')');	
 					}
-					if (this.name === 'href') {
-						this.nameEl.update(f.name);
-						this.typeEl.update(f.type);
-						this.sizeEl.update(f.size);
-					}
-
+					
 					// set the thumbnail url name on the input file field.
 					i.setAttribute('data-value', thumb);
 
