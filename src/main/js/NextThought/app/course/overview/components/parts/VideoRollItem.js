@@ -4,16 +4,17 @@ Ext.define('NextThought.app.course.overview.components.parts.VideoRollItem', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{
-			cls: 'video-row {viewedCls}',
+			cls: 'video-row',
 			cn: [
 				{ cls: 'label', html: '{label}', 'data-qtip': '{label:htmlEncode}' },
-				{tag: 'tpl', 'if': 'viewed', cn: [
-					{cls: 'viewed', html: 'viewed'}
-				]}
+				{ cls: 'viewed', html: 'viewed' }
 			]
 		}
 	]),
 
+	renderSelectors: {
+		'viewedEl': '.viewed'
+	},
 
 	beforeRender: function(){
 		this.callParent(arguments);
@@ -34,6 +35,12 @@ Ext.define('NextThought.app.course.overview.components.parts.VideoRollItem', {
 	handleClick: function() {
 		if (this.selectVideo) {
 			this.selectVideo(this.video);
+		}
+	},
+
+	setProgress: function(progress){
+		if (progress.hasBeenViewed(this.video.ntiid)) {
+			this.addCls('hasBeenViewed');
 		}
 	}
 });

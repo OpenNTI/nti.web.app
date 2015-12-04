@@ -379,7 +379,9 @@
 	}
 
 	&.overview-videos, &.overview-video {
-		margin: 10px 0;
+		&.video-roll{
+			margin: 10px 0;
+		}
 		@extend .overview-group;
 
 		&.singular{
@@ -479,6 +481,19 @@
 						}
 					}
 
+					.hasBeenViewed {
+						.video-row {
+						    padding-left: 35px;
+						    position: relative;
+							@include icon('circle-check-white-small', $top: 10px, $left: 12px);
+							.viewed {
+							    display: block;
+								color: #aaeafc;
+							}
+						}
+
+					}
+
 					.video-row {
 						position: relative;
 						cursor: pointer;
@@ -504,9 +519,8 @@
 							text-transform: uppercase;
 						}
 
-						&.viewed{
-							padding-left: 35px;
-							@include icon('circle-check-white-small', $top: 10px, $left: 12px);
+						.viewed {
+						    display: none;
 						}
 
 						&.over{
