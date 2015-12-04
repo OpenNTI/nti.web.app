@@ -61,6 +61,8 @@ Ext.define('NextThought.app.course.overview.components.parts.VideoRoll', {
 	constructor: function(config) {
 		this.callParent([config]);
 
+		this.locationInfo = this.videoRoll.locationInfo;
+
 		this.createVideoList();
 		this.selectVideo(this.videoRoll.Items[0]);
 	},
@@ -97,6 +99,9 @@ Ext.define('NextThought.app.course.overview.components.parts.VideoRoll', {
 		this.videoContainer.add({
 			xtype: 'course-overview-video',
 			record: video,
+			course: this.course,
+			locationInfo: this.locationInfo,
+			navigate: this.navigate,
 			isVideoRoll: true
 		});
 	}

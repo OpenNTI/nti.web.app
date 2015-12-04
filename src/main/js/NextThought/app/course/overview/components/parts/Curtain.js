@@ -48,8 +48,11 @@ Ext.define('NextThought.app.course.overview.components.parts.Curtain', {
 
 	afterRender: function() {
 		this.selectVideo();
+		this.mon(this.curtainEl, 'click', this.onCurtainClicked.bind(this));
 	},
 
+
+	// Adds a videos attributes to the curtain
 	selectVideo: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.selectVideo.bind(this));
@@ -103,5 +106,10 @@ Ext.define('NextThought.app.course.overview.components.parts.Curtain', {
 			}
 		});
 
-	}
+	},
+
+	onCurtainClicked: function(e) {
+		e.stopEvent();
+		this.curtainClicked(e);
+	},
 });
