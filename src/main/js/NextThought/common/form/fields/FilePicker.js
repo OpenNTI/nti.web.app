@@ -35,7 +35,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 		typeEl: '.type'
 	},
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
 			thumbnail: this.thumbnail,
@@ -44,13 +44,13 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 		});
 	},
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 		this.attachChangeListeners();
 	},
 
 
-	attachChangeListeners: function(){
+	attachChangeListeners: function() {
 		var inputs = document.querySelectorAll('input[type=file]'),
 			me = this;
 
@@ -84,14 +84,14 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 				img = Ext.fly(i).up('.img');
 				if (img && img.setStyle) {
 					if (this.name === 'icon') {
-						img.setStyle('backgroundImage', 'url(' + thumb + ')');	
+						img.setStyle('backgroundImage', 'url(' + thumb + ')');
 					}
-					
+
 					// set the thumbnail url name on the input file field.
 					i.setAttribute('data-value', thumb);
 
 					// Broadcast the change.
-					if (this.formChanged){
+					if (this.formChanged) {
 						this.formChanged();
 					}
 				}
@@ -100,9 +100,13 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	},
 
 
-	getValue: function(){
-		var t = document.querySelector('input[type=file]');
-		return t && t.getAttribute && t.getAttribute('data-value');
+	getValue: function() {
+		var t = document.querySelector('input[type=file]'),
+			value = t && t.getAttribute && t.getAttribute('data-value');
+
+		//TODO: does this need to return anything on get value?
+		//Since file upload can only be done through form data
+		return value || null;
 	},
 
 
@@ -120,7 +124,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 
 		// cleanup previous object URL.
 		this.cleanupObjectURL();
-		
+
 		if (type.indexOf('image') >= 0) {
 			return this.getFileThumbnail(fileObj);
 		}
@@ -138,11 +142,11 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	},
 
 
-	onDestroy: function(){
+	onDestroy: function() {
 		this.cleanupObjectURL();
 	},
 
-	cleanupObjectURL: function(){
+	cleanupObjectURL: function() {
 		var url = this.getGlobalURL();
 		if (this.currentObjectURL && url && url.revokeObjectURL) {
 			url.revokeObjectURL(this.currentObjectURL);
@@ -150,7 +154,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	},
 
 
-	getGlobalURL: function(){
+	getGlobalURL: function() {
 		var url = null;
 		if (URL && URL.createObjectURL) {
 			url = URL;
@@ -171,7 +175,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	getFileThumbnail: function(fileObj) {
 		var url = this.getGlobalURL(),
 			objectURL = null;
-		
+
 		if (url && url.createObjectURL && fileObj) {
 			objectURL = url.createObjectURL(fileObj);
 			this.currentObjectURL = objectURL;

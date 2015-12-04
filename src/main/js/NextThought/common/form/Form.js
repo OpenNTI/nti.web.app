@@ -171,19 +171,17 @@ Ext.define('NextThought.common.form.Form', {
 	 * @return {[type]} [description]
 	 */
 	getValues: function() {
-		var vals = {}, me = this, cmp;
+		var vals = {}, me = this;
 
 		(this.schema || []).forEach(function(entry) {
-			var dom = document.querySelector('.field.' + entry.name + ' [type=' + entry.type + ']');
+			var dom = document.querySelector('.field.' + entry.name + ' [type=' + entry.type + ']'),
+				cmp = me.COMPONENT_MAP[entry.name],
+				value = cmp && cmp.getValue ? cmp.getValue() : dom.value;
 
-			cmp = me.COMPONENT_MAP[entry.name];
-			if (cmp && cmp.getValue) {
-				vals[entry.name] = cmp.getValue();
-			}
-			else {
-				if (dom) {
-					vals[entry.name] = dom.value;
-				}
+			//If we don't have a cmp, set the value
+			//if we do have a cmp, only set it if the value isn't null
+			if (!cmp || value !== null) {
+				vals[entry.name] = value;
 			}
 		});
 
