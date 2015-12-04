@@ -3,8 +3,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Previ
 	alias: 'widget.overview-editing-outlinenode-preview',
 
 	requires: [
-		'NextThought.app.windows.Actions',
-		'NextThought.app.course.overview.components.editing.outlinenode.Window'
+		'NextThought.app.windows.Actions'
 	],
 
 	cls: 'outline-node-preview',

@@ -3,6 +3,7 @@ Ext.define('NextThought.app.course.overview.components.editing.calendarnode.Edit
 	alias: 'widget.overview-editing-contentnode-editor',
 
 	requires: [
+		'NextThought.app.course.overview.components.editing.OutlineEditor',
 		'NextThought.model.courses.navigation.CourseOutlineCalendarNode'
 	],
 

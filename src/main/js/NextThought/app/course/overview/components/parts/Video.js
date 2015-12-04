@@ -16,7 +16,6 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 		'NextThought.app.video.Video',
 		'Ext.data.reader.Json',
 		'NextThought.app.library.Actions',
-		'NextThought.app.course.overview.components.editing.video.Window',
 		'NextThought.app.course.overview.components.parts.Curtain'
 	],
 

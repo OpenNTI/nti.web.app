@@ -5,8 +5,7 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 		'NextThought.model.Note',
 		'NextThought.model.RelatedWork',
 		'NextThought.app.contentviewer.Actions',
-		'NextThought.util.Parsing',
-		'NextThought.app.course.overview.components.editing.contentlink.Window'
+		'NextThought.util.Parsing'
 	],
 
 	alias: [

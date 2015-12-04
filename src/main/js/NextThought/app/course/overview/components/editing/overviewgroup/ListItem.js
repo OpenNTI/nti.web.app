@@ -16,7 +16,8 @@ Ext.define('NextThought.app.course.overview.components.editing.overviewgroup.Lis
 		'NextThought.app.course.overview.components.editing.survey.ListItem',
 		'NextThought.app.course.overview.components.editing.timeline.ListItem',
 		'NextThought.app.course.overview.components.editing.video.ListItem',
-		'NextThought.app.course.overview.components.editing.videoroll.ListItem'
+		'NextThought.app.course.overview.components.editing.videoroll.ListItem',
+		'NextThought.app.windows.Actions'
 	],
 
 
@@ -24,6 +25,8 @@ Ext.define('NextThought.app.course.overview.components.editing.overviewgroup.Lis
 
 	initComponent: function() {
 		this.callParent(arguments);
+
+		this.WindowActions = NextThought.app.windows.Actions.create();
 
 		var base = NextThought.app.course.overview.components.editing,
 			items = [

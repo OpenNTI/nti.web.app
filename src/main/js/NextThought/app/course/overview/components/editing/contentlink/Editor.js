@@ -2,9 +2,36 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Edito
 	extend: 'NextThought.app.course.overview.components.editing.Editor',
 	alias: 'widget.overview-editing-contentlink-editor',
 
+	statics: {
+		getTypes: function() {
+			return {
+				mimeType: NextThought.model.RelatedWork.mimeType,
+				types: [
+					{
+						title: 'External Link',
+						iconCls: 'link',
+						type: 'hyperlink'
+					},
+					{
+						title: 'Internal PDF',
+						iconCls: 'pdf',
+						type: 'internaldoc'
+					},
+					{
+						title: 'External Doc',
+						iconCl: 'doc',
+						type: 'externaldoc'
+					}
+				]
+			};
+		}
+	},
+
 	requires: [
-		'NextThought.app.course.overview.components.editing.contentlink.Preview'
+		'NextThought.app.course.overview.components.editing.contentlink.Preview',
+		'NextThought.model.RelatedWork'
 	],
+
 
 	FORM_SCHEMA: [
 		{name: 'icon', displayName: 'Icon', type: 'file'},

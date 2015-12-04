@@ -1,6 +1,10 @@
 Ext.define('NextThought.model.courses.overview.Lesson', {
 	extend: 'NextThought.model.Base',
 
+	statics: {
+		mimeType: 'application/vnd.nextthought.ntilessonoverview'
+	},
+
 	mimeType: 'application/vnd.nextthought.ntilessonoverview',
 
 	fields: [

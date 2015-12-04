@@ -24,11 +24,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 		var values = this.getDefaultValues();
 
-		this.preview = this.addPreview(values);
+		// this.preview = this.addPreview(values);
 
 		this.formCmp = this.add({
 			xtype: 'common-form',
-			schema: this.FORM_SCHEMA,
+			schema: this.getFormSchema(),
 			defaultValues: values,
 			action: this.getFormAction(),
 			method: this.getFormMethod(),
@@ -36,22 +36,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 			onSuccess: this.onSaveSuccess.bind(this),
 			onFailure: this.onSaveFailure.bind(this)
 		});
+	},
 
-		this.footer = this.add({
-			xtype: 'box',
-			autoEl: {cls: 'content-editor-footer', cn: [
-				{cls: 'right save-controls', cn: [
-					{cls: 'button action save', html: 'Save'},
-					{cls: 'button action cancel', html: 'Close'}
-				]}
-			]},
-			listeners: {
-				click: {
-					element: 'el',
-					fn: this.onFooterClick.bind(this)
-				}
-			}
-		});
+
+	getFormSchema: function() {
+		return this.FORM_SCHEMA;
 	},
 
 
@@ -79,20 +68,14 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	},
 
 
-	onFooterClick: function(e) {
-		if (e.getTarget('.cancel')) {
-			this.onClose();
-		} else if (e.getTarget('.save')) {
-			this.formCmp.onSubmit();
-		}
-	},
-
-
 	onClose: function() {
 		if (this.doClose) {
 			this.doClose();
 		}
 	},
+
+
+	onSave: function() {},
 
 
 	onSaveSuccess: function(response) {
@@ -104,7 +87,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	},
 
 
-	onSaveFailure: function(reason){
+	onSaveFailure: function(reason) {
+		//TODO: show the error to the use
 		console.log('Failed to save form: ' + reason);
 	},
 

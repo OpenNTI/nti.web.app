@@ -8,7 +8,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 		'NextThought.model.courses.navigation.CourseOutlineContentNode',
 		'NextThought.app.course.overview.components.editing.outlinenode.Index',
 		'NextThought.app.course.overview.components.editing.calendarnode.Index',
-		'NextThought.app.course.overview.components.editing.contentnode.Index'
+		'NextThought.app.course.overview.components.editing.contentnode.Index',
+		'NextThought.app.course.overview.components.editing.Window'
 	],
 
 	mixins: {
