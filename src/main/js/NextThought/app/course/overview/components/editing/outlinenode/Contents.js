@@ -59,6 +59,9 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Conte
 			.fail(function(reason) {
 				console.error(reason);
 			})
+			.then(function() {
+				me.setContentsRecord(me.currentOverview.lessonOverview);
+			})
 			.then(me.maybeUnmask.bind(me));
 
 		return me.loadLesson;

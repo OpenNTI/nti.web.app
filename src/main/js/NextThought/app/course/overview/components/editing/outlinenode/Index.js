@@ -76,6 +76,11 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Index
 			controls.history = this.showHistory.bind(this);
 		}
 
+
+		if (this.showAdd) {
+			controls.add = this.showAdd.bind(this);
+		}
+
 		return {
 			xtype: 'overview-editing-controls',
 			controls: controls
@@ -100,12 +105,18 @@ Ext.define('NextThought.app.course.overview.components.editing.outlinenode.Index
 		};
 	},
 
+	//TODO: see if there is a better way to do this
+	setContentsRecord: function(record) {
+		this.contentRecord = record;
+	},
+
 
 	getContentsConfig: function(outlineNode, bundle) {
 		return {
 			xtype: 'overview-editing-outlinenode-contents',
 			outlineNode: outlineNode,
-			bundle: bundle
+			bundle: bundle,
+			setContentsRecord: this.setContentsRecord.bind(this)
 		};
 	},
 

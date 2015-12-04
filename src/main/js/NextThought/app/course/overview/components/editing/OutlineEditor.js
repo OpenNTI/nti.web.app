@@ -5,7 +5,8 @@ Ext.define('NextThought.app.course.overview.components.editing.OutlineEditor', {
 	requires: [
 		'NextThought.model.courses.CourseOutline',
 		'NextThought.app.course.overview.components.editing.outlinenode.Editor',
-		'NextThought.app.course.overview.components.editing.contentnode.Editor'
+		'NextThought.app.course.overview.components.editing.contentnode.Editor',
+		'NextThought.app.course.overview.components.editing.NewChild'
 	],
 
 	inheritableStatics: {
@@ -114,14 +115,67 @@ Ext.define('NextThought.app.course.overview.components.editing.OutlineEditor', {
 			return;
 		}
 
-		this.editRecordContainer.add(editor.create({record: record}));
+		this.newChildContainer.hide();
+		this.editRecordContainer.show();
+
+		this.activeEditor = this.editRecordContainer.add(editor.create({record: record}));
 
 		this.updateButtons({save: true});
 	},
 
 
-	addRecord: function(parentRecord) {
+	getTypes: function() {
+		var editors = this.self.EDITORS,
+			keys = Object.keys(editors);
 
+		return keys.reduce(function(acc, key) {
+			var editor = editors[key];
+
+			editor.types.forEach(function(type) {
+				type.editor = editor.editor;
+
+				acc.push(type);
+			});
+
+			return acc;
+		}, []);
+	},
+
+
+	addRecord: function(parentRecord) {
+		var types = this.getTypes();
+
+		this.newChildContainer.show();
+		this.editRecordContainer.hide();
+
+		this.newChildContainer.add({
+			xtype: 'overview-editing-newchild',
+			types: types,
+			parentRecord: parentRecord,
+			showEditor: this.showNewRecordEditor.bind(this)
+		});
+	},
+
+
+	showNewRecordEditor: function(editor, type, parentRecord) {
+		this.newChildContainer.hide();
+		this.editRecordContainer.show();
+
+		this.activeEditor = this.editRecordContainer.add(editor.create({
+			type: type,
+			parentRecord: parentRecord
+		}));
+
+		this.updateButtons({save: true});
+	},
+
+
+	doSave: function() {
+		if (this.activeEditor) {
+			return this.activeEditor.doSave();
+		}
+
+		return Promise.reject();
 	}
 }, function() {
 	this.initRegistry();

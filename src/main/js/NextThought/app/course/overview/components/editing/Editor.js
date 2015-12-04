@@ -75,7 +75,9 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	},
 
 
-	onSave: function() {},
+	doSave: function() {
+		return this.formCmp.onSubmit();
+	},
 
 
 	onSaveSuccess: function(response) {

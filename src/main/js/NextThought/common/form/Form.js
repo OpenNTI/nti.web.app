@@ -102,7 +102,7 @@ Ext.define('NextThought.common.form.Form', {
 		var inputFields = document.querySelectorAll('.field input, .field textarea'),
 			me = this, field, el;
 
-		for (var i=0; i < inputFields.length; i++){
+		for (var i = 0; i < inputFields.length; i++) {
 			field = inputFields[i];
 			if (field) {
 				field.addEventListener('keyup', this.formChanged.bind(this));
@@ -111,18 +111,18 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
-	setupFilePickerFields: function(){
+	setupFilePickerFields: function() {
 		this.setupComponentFields('file', 'file-picker-field');
 	},
 
 
-	setupDatePickerFields: function(){
+	setupDatePickerFields: function() {
 		this.setupComponentFields('date', 'date-picker-field');
 	},
 
 
 	setupComponentFields: function(fieldName, cmpType) {
-		var fields = document.querySelectorAll('.field[data-type='+ fieldName +']'),
+		var fields = document.querySelectorAll('.field[data-type=' + fieldName + ']'),
 			me = this, field, el, name, cmp;
 
 		for (var i = 0; i < fields.length; i++) {
@@ -215,7 +215,7 @@ Ext.define('NextThought.common.form.Form', {
 	 *
 	 * @param {[type]} fieldName  [description]
 	 * @param {[type]} fieldValue [description]
-	 * 
+	 *
 	 * // TODO: Incomplete.
 	 */
 	setValue: function(fieldName, fieldValue) {
@@ -243,25 +243,27 @@ Ext.define('NextThought.common.form.Form', {
 	 * NOTE: detects if we have file changes(i.e. a file upload) in order to
 	 * use the appropriate submission mechanism. If we have file changes, submit a form data.
 	 * Otherwise, submit a json object. For the json object, only pass the values that actually changed.
-	 * 
+	 *
 	 */
-	onSubmit: function(){
-		var hasFileChanged = this.shouldSubmitFormData(); 
+	onSubmit: function() {
+		var hasFileChanged = this.shouldSubmitFormData(),
+			submit;
 
 		if (hasFileChanged) {
-			this.saveFormData(this.getData(), this.action, this.method);
+			submit = this.saveFormData(this.getData(), this.action, this.method);
+		} else {
+			submit = this.saveJsonObject(this.getChangedValues(), this.action, this.method);
 		}
-		else {
-			this.saveJsonObject(this.getChangedValues(), this.action, this.method);
-		}
+
+		return submit;
 	},
 
 
 	/**
 	 * Checks for file inputs and returns true if any of file was uploaded.
-	 * @return {Boolean} Returns true if a file was uploaded, false otherwise. 
+	 * @return {Boolean} Returns true if a file was uploaded, false otherwise.
 	 */
-	shouldSubmitFormData: function(){
+	shouldSubmitFormData: function() {
 		var fileInputs = document.querySelectorAll('form input[type=file]'),
 			changed = false;
 		for (var i = fileInputs.length - 1; i >= 0; i--) {
@@ -277,7 +279,7 @@ Ext.define('NextThought.common.form.Form', {
 
 	/**
 	 * Saves a FormData object
-	 * 
+	 *
 	 * @param  {FormData} data   FormData to be submitted.
 	 * @param  {String} action the URL to save the form data to.
 	 * @param  {String} method the action method to use (i.e POST or PUT)
@@ -289,39 +291,42 @@ Ext.define('NextThought.common.form.Form', {
 
 		if (!data) {
 			console.warn('Cannot save an empty form data.');
-			return;
+			return Promise.reject();
 		}
 
 		if (!action || !method) {
 			console.error('The action (URL) and/or method (PUT, POST) of submission is missing.');
-			return;
+			return Promise.reject();
 		}
 
-		xhr.open(method, action);
-		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-		xhr.onreadystatechange = function(){
-			if(xhr.readyState === 4 && xhr.status === 200) {
-		        // me.record.syncWithResponse(xhr.responseText);
-		        if (me.onSuccess) {
-				 	me.onSuccess(xhr.responseText);
-				}
-		    }
-		    else {
-		    	if (xhr.readyState === 4) {
-		    		if (me.onFailure) {
-						me.onFailure(xhr.responseText);
-					}	
-		    	}
-		    }
-		}
+		return new Promise(function(fulfill, reject) {
+			xhr.open(method, action);
+			xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+			        // me.record.syncWithResponse(xhr.responseText);
+			        fulfill();
+			        if (me.onSuccess) {
+					 	me.onSuccess(xhr.responseText);
+					}
+			    } else {
+			    	if (xhr.readyState === 4) {
+			    		reject();
+			    		if (me.onFailure) {
+							me.onFailure(xhr.responseText);
+						}
+			    	}
+			    }
+			};
 
-		xhr.send(data);
+			xhr.send(data);
+		});
 	},
 
 
 	/**
 	 * Saves a JSON object
-	 * 
+	 *
 	 * @param  {Object} object [description]
 	 * @param  {String} action [description]
 	 * @param  {String} method [description]
@@ -341,7 +346,7 @@ Ext.define('NextThought.common.form.Form', {
 		method = method.toLocaleLowerCase();
 
 		if (Service[method]) {
-			Service[method](action, object)
+			return Service[method](action, object)
 				.then(function(response) {
 				 	if (me.onSuccess) {
 				 		me.onSuccess(response);
@@ -354,16 +359,19 @@ Ext.define('NextThought.common.form.Form', {
 					}
 				});
 		}
+
+		//TODO: have a reasonable reason
+		return Promise.reject();
 	},
 
 
 	/**
 	 * Compares the default values against the current values to check for fields that actualy changed.
 	 * Returns object of key-value pairs that changed.
-	 * 
+	 *
 	 * @return {Object} Map for key-value pairs that changed.
 	 */
-	getChangedValues: function(){
+	getChangedValues: function() {
 		var currentValues = this.getValues(),
 			changed = {},
 			key;

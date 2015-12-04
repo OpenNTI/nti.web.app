@@ -265,6 +265,10 @@
 		@include icon('edit-12', $top: 4px, $left: 4px);
 	}
 
+	.add {
+		@include icon('editor-attach_hover', $top: 4px, $left: 4px);
+	}
+
 	.publish {
 		&.published {
 			@include icon('publishing-visible', $top: 4px, $left: 4px);

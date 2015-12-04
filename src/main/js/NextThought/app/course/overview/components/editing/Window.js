@@ -138,7 +138,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Window', {
 
 
 	onSave: function() {
-
+		this.editor.doSave()
+			.then(this.doClose.bind(this));
 	}
 }, function() {
 	NextThought.app.windows.StateStore.register('overview-editing', this);

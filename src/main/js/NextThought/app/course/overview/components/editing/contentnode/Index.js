@@ -18,5 +18,14 @@ Ext.define('NextThought.app.course.overview.components.editing.contentnode.Index
 			outlineNode: outlineNode,
 			bundle: bundle
 		};
+	},
+
+
+	showAdd: function() {
+		var record = this.contentRecord;
+
+		if (record) {
+			this.WindowActions.showWindow('overview-editing', null, null, {}, {parent: record});
+		}
 	}
 });

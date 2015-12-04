@@ -7,7 +7,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 	controlTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'control {cls}',
 		'data-qtip': '{title}',
-		'data-handler': '{handler}',
+		'data-action': '{handler}',
 		html: '{title}'
 	})),
 
@@ -40,6 +40,10 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 			this.addPublishControl(controls.publish.visible, controls.publish.fn);
 		}
 
+		if (controls.add) {
+			this.addAddControl(controls.add);
+		}
+
 		if (controls.edit) {
 			this.addEditControl(controls.edit);
 		}
@@ -48,7 +52,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 
 	onControlClick: function(e) {
 		var control = e.getTarget('.control'),
-			handler = control && control.getAttribute('data-handler');
+			handler = control && control.getAttribute('data-action');
 
 		if (handler && this[handler]) {
 			this[handler](e);
@@ -68,6 +72,17 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 			cls: 'edit',
 			title: 'Edit',
 			handler: 'editHandler'
+		});
+	},
+
+
+	addAddControl: function(fn) {
+		this.addHandler = fn;
+
+		this.addControl({
+			cls: 'add',
+			title: 'Add',
+			handler: 'addHandler'
 		});
 	},
 

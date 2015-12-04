@@ -14,14 +14,14 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Edito
 						description: 'blah blah blah'
 					},
 					{
-						title: 'Internal PDF',
+						title: 'Embed PDF',
 						iconCls: 'pdf',
-						type: 'internaldoc'
+						type: 'internalpdf'
 					},
 					{
-						title: 'External Doc',
+						title: 'Reading',
 						iconCl: 'doc',
-						type: 'externaldoc'
+						type: 'reading'
 					}
 				]
 			};
@@ -34,12 +34,24 @@ Ext.define('NextThought.app.course.overview.components.editing.contentlink.Edito
 	],
 
 
-	FORM_SCHEMA: [
-		{name: 'icon', displayName: 'Icon', type: 'file'},
-		{name: 'label', displayName: 'Title', type: 'text', placeholder: 'Title....'},
-		{name: 'byline', displayName: 'Author', type: 'text', placeholder: 'Author...'},
-		{name: 'description', displayName: 'Description', type: 'textarea', placeholder: 'Description goes here...'}
-	],
+	getFormSchema: function() {
+		var schema = [
+				{name: 'icon', displayName: 'Icon', type: 'file'},
+				{name: 'label', displayName: 'Title', type: 'text', placeholder: 'Title....'},
+				{name: 'byline', displayName: 'Author', type: 'text', placeholder: 'Author...'},
+				{name: 'description', displayName: 'Description', type: 'textarea', placeholder: 'Description goes here...'}
+			];
+
+		if (this.type === 'hyperlink') {
+			schema.push({name: 'href', displayName: 'Link', type: 'text', placeholder: 'Link...'});
+		} else if (this.type === 'internalpdf') {
+			schema.push({name: 'href', displayName: 'PDF', type: 'file'});
+		} else if (this.type === 'reading') {
+			schema.push({name: 'href', displayName: 'Reading', type: 'text', placeholder: 'Reading...'});
+		}
+
+		return schema;
+	},
 
 
 	addPreview: function(values) {
