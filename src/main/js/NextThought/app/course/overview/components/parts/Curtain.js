@@ -111,5 +111,5 @@ Ext.define('NextThought.app.course.overview.components.parts.Curtain', {
 	onCurtainClicked: function(e) {
 		e.stopEvent();
 		this.curtainClicked(e);
-	},
+	}
 });

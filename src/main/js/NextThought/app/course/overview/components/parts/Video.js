@@ -20,7 +20,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 	],
 
 	renderSelectors: {
-		screenEl: '.video-player',
+		screenEl: '.video-player'
 	},
 
 	initComponent: function() {
