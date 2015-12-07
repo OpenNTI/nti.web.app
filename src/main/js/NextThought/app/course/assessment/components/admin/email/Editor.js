@@ -19,6 +19,12 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		'Open': 'Open Students'
 	},
 
+	REPLY_DEFAULTS: {
+		'ForCredit': 'ForCredit',
+		'All': 'ForCredit',
+		'Open': 'NoReply'
+	},
+
 	toolbarTpl: Ext.DomHelper.markup(
 		[
 			{
@@ -29,7 +35,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 						{cls: 'field'},
 						{cls: 'action reply-option', cn: [
 							{cls: 'no-reply-picker', cn: [
-								{cls: 'noreply', html: 'Allow Reply'}
+								{tag: 'span', cls:'desc', html: 'Reply Option'},
+								{tag: 'span', cls: 'noreply', html: 'Allow Reply'}
 							]}
 						]}
 					]
@@ -54,7 +61,14 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		footerEl: '.footer',
 		receiverEl: '.row.receiver .field',
 		copiedEl: '.row.cc-ed .field',
-		noreplyPickerEl: '.action.reply-option'
+		noreplyPickerEl: '.action.reply-option',
+		noReplyEl: '.reply-option .noreply'
+	},
+
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.isIndividualEmail = !!(this.record && this.record.get('Receiver'));	
 	},
 
 	
@@ -69,6 +83,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		this.setReceiverField();
 		this.setupCopiedField();
 		this.setupTitleField();
+		this.setReplyToField();
+
 		this.saveButtonEl.setHTML(' Send Email');
 		this.mon(this.noreplyPickerEl, 'click', this.replyPickerClicked.bind(this));
 	},
@@ -82,10 +98,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 
 	setReceiverField: function() {
-		var to = this.record.get('Receiver'),
-			isIndividualEmail = !Ext.isEmpty(to), scope;
+		var scope;
 
-		if (isIndividualEmail) {
+		if (this.isIndividualEmail) {
 			this.receiverEl.setHTML(to);
 		}
 		else {
@@ -106,7 +121,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 						ui: 'nt-menuitem',
 						xtype: 'menucheckitem',
 						plain: true,
-						group: 'no-reply',
+						group: 'receiver-scope',
 						handler: function(item) {
 							me.receiverScopeChanged(item, item.up('.menu'));
 						}
@@ -141,7 +156,14 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 
 	showReceiverScopePicker: function(){
-		this.receiverScopeMenu.showBy(this.receiverEl, 'tl-bl?');
+		if (!this.receiverScopeMenu) { return; }
+
+		if (!this.receiverScopeMenu.isVisible()) {
+			this.receiverScopeMenu.showBy(this.receiverEl, 'tl-bl?');
+		}
+		else {
+			this.receiverScopeMenu.hide();
+		}
 	},
 
 
@@ -150,6 +172,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		if (this.record) {
 			this.record.set('scope', item && item.studentFilter);
 			this.currentScope = this.record.get('scope');
+			wait().then(this.filterReplyOptions.bind(this));
 		}
 	},
 
@@ -230,6 +253,12 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 	},
 
 
+	setReplyToField: function(){
+		this.noReplyPicker = this.createNoReplyMenu();
+		this.filterReplyOptions();
+	},
+
+
 	replyPickerClicked: function(e) {
 		var target = Ext.get(e.getTarget());
 
@@ -249,31 +278,30 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 	createNoReplyMenu: function(){
 		var me = this,
-			to = this.record.get('Receiver'),
-			isIndividualEmail = !Ext.isEmpty(to),
 			menu, items = [], width;
 
-		if (!isIndividualEmail) {
+		if (!this.isIndividualEmail) {
 			width = 220;
 			items = [{
-					text: 'Allow Reply to All',
+					text: 'All Students',
 					scope: 'All',
 					checked: true,
 					NoReply: false
 				},
 				{
-					text: 'Open Students Only',
+					text: 'Open Students',
 					scope: 'Open',
 					NoReply: false
 				},
 				{
-					text: 'Enrolled Students Only',
+					text: 'Enrolled Students',
 					scope: 'ForCredit',
 					NoReply: false
 				},
 				{
 					text: 'No Reply',
-					NoReply: true
+					NoReply: true,
+					scope: 'NoReply'
 				}
 			];
 		}
@@ -306,6 +334,38 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 					items: items
 				});
 		return menu;
+	},
+
+
+	filterReplyOptions: function(){
+		var menu = this.noReplyPicker,
+			me = this,
+			selectedItem;
+		if (!this.isIndividualEmail && menu) {
+			menu.items.each(function(item){
+				// Make it the default
+				if (item.scope === me.REPLY_DEFAULTS[me.currentScope]) {
+					item.setChecked(true);
+					selectedItem = item;
+				}
+
+				if (me.currentScope === 'All') {
+					item.setDisabled(false);
+				}
+				else {
+					if (item.scope !== me.currentScope && item.NoReply === false) {
+						item.setDisabled(true);
+					}
+					else {
+						item.setDisabled(false);
+					}
+				}
+			});
+
+			if (selectedItem && selectedItem.text !== this.noReplyEl) {
+				this.noReplyEl.setHTML(selectedItem.text);
+			}
+		}
 	},
 
 

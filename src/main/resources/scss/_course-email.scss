@@ -62,13 +62,19 @@
 								background-color: white;
 								font-weight: 400;
 								font-size: 0.775em;
-								color: $secondary-grey;
-								padding: 3px 25px 3px 10px;
+								color: $primary-blue;
+								padding: 5px 25px 3px 10px;
 								position: relative;
 								text-align: right;
 
 								.empty {
 									display: none;
+								}
+
+								.desc {
+									font: normal italic 16px/30px $font;
+									color: $tertiary-grey;
+									padding-right: 10px;
 								}
 
 								@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 10px, $left: auto, $right: 7px);
@@ -83,8 +89,17 @@
 						&.receiver {
 							.field {
 								top: 10px;
- 							    color: #3fb3f6;
+ 							    color: $primary-blue;
     							text-transform: capitalize;
+    							width: 160px;
+    							position: relative;
+
+    							@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 7px, $left: auto, $right: 7px);
+
+								&:hover {
+									color: $primary-grey;
+									@include icon('mv-dropdown-arrow', $position: relative, $side: after, $top: 7px, $left: auto, $right: 7px);
+								}
 							}
 						}
 					}
