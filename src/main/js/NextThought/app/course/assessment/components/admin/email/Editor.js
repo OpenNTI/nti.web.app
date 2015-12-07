@@ -66,7 +66,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 		this.EmailActions = NextThought.app.course.assessment.components.admin.email.Actions.create();
 
-		this.setupReceiverField();
+		this.setReceiverField();
 		this.setupCopiedField();
 		this.setupTitleField();
 		this.saveButtonEl.setHTML(' Send Email');
@@ -81,50 +81,76 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 	},
 
 
-	setupReceiverField: function() {
-		if (!this.receiverEl) {
-			return;
-		}
+	setReceiverField: function() {
+		var to = this.record.get('Receiver'),
+			isIndividualEmail = !Ext.isEmpty(to), scope;
 
-		var tabTracker = new NextThought.util.TabIndexTracker(),
-			el = this.el, me = this, t, scope, 
-			to = this.record.get('Receiver'),
-			isIndividualEmail = !Ext.isEmpty(to);
-
-		this.receiverCmp = Ext.widget('course-scope-list', {renderTo: this.receiverEl, tabIndex: tabTracker.next()});
-		this.on('destroy', function () {
-			me.receiverCmp.destroy();
-			delete me.receiverCmp;
-		});
-		this.mon(this.receiverCmp, {
-			'blur': function() {
-				var e = el.down('.content');
-				Ext.defer(e.focus, 10, e);
-			},
-			'selection-changed': this.updateScope.bind(this)
-		});
-
-		this.receiverCmp.onceRendered
-			.then(function() {
-				var e = me.receiverCmp.el.down('input');
-				if (e) {
-					e.dom.setAttribute('placeholder', "");
-				}
-			});
-
-		if (!isIndividualEmail) {
-			scope = this.record && this.record.get('scope');
-			scope = this.RECEIVER_MAP[scope];
-			if (this.receiverCmp.setInitialToken) {
-				this.receiverCmp.setInitialToken(scope);				
-			}	
+		if (isIndividualEmail) {
+			this.receiverEl.setHTML(to);
 		}
 		else {
-			if (this.receiverCmp.setNonEditableToken) {
-				this.receiverCmp.setNonEditableToken(to);				
-			}
+			scope = this.record && this.record.get('scope');
+			this.receiverEl.setHTML(this.RECEIVER_MAP[scope]);
+
+			this.currentScope = scope;
+			// TODO: Create the menu picker
+			this.createReceiverScopePicker();
 		}
-			
+	},
+
+	createReceiverScopePicker: function(){
+		var me = this,
+			menu = 
+				Ext.widget('menu', {
+					defaults: {
+						ui: 'nt-menuitem',
+						xtype: 'menucheckitem',
+						plain: true,
+						group: 'no-reply',
+						handler: function(item) {
+							me.receiverScopeChanged(item, item.up('.menu'));
+						}
+					},
+					width: 220,
+					items: [
+						{
+							text: 'All Students',
+							studentFilter: 'All',
+							isLabel: true,
+							checked: me.currentScope === 'All'
+						},
+						{
+							text: 'Enrolled Students',
+							studentFilter: 'ForCredit',
+							isLabel: true,
+							checked: me.currentScope === 'ForCredit'
+						},
+						{
+							text: 'Open Students',
+							studentFilter: 'Open',
+							isLabel: true,
+							checked: me.currentScope === 'Open'
+						}
+					]
+				});
+
+		this.on('destroy', menu.destroy.bind(menu));
+		this.mon(this.receiverEl, 'click', this.showReceiverScopePicker.bind(this));
+		this.receiverScopeMenu = menu;
+	},
+
+
+	showReceiverScopePicker: function(){
+		this.receiverScopeMenu.showBy(this.receiverEl, 'tl-bl?');
+	},
+
+
+	receiverScopeChanged: function(item, menu){
+		this.receiverEl.setHTML(item && item.text);
+		if (this.record) {
+			this.record.set('scope', item && item.studentFilter);
+			this.currentScope = this.record.get('scope');
+		}
 	},
 
 
@@ -223,40 +249,62 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 	createNoReplyMenu: function(){
 		var me = this,
-			menu = Ext.widget('menu', {
-						defaults: {
-							ui: 'nt-menuitem',
-							xtype: 'menucheckitem',
-							plain: true,
-							group: 'no-reply',
-							handler: function(item) {
-								me.handleNoReplyMenuClick(item, item.up('.menu'));
-							}
-						},
-						width: 220,
-						items: [
-							{
-								text: 'Allow Reply to All',
-								scope: 'All',
-								checked: true,
-								NoReply: false
-							},
-							{
-								text: 'Open Students Only',
-								scope: 'Open',
-								NoReply: false
-							},
-							{
-								text: 'Enrolled Students Only',
-								scope: 'ForCredit',
-								NoReply: false
-							},
-							{
-								text: 'No Reply',
-								NoReply: true
-							}
-						]
-					});
+			to = this.record.get('Receiver'),
+			isIndividualEmail = !Ext.isEmpty(to),
+			menu, items = [], width;
+
+		if (!isIndividualEmail) {
+			width = 220;
+			items = [{
+					text: 'Allow Reply to All',
+					scope: 'All',
+					checked: true,
+					NoReply: false
+				},
+				{
+					text: 'Open Students Only',
+					scope: 'Open',
+					NoReply: false
+				},
+				{
+					text: 'Enrolled Students Only',
+					scope: 'ForCredit',
+					NoReply: false
+				},
+				{
+					text: 'No Reply',
+					NoReply: true
+				}
+			];
+		}
+		else {
+			width = 140; 
+			items = [
+				{
+					text: 'Allow Reply',
+					checked: true,
+					NoReply: false
+				},
+				{
+					text: 'No Reply',
+					NoReply: true
+				}
+			]
+		}
+
+		menu = Ext.widget('menu', {
+					defaults: {
+						ui: 'nt-menuitem',
+						xtype: 'menucheckitem',
+						plain: true,
+						group: 'no-reply',
+						handler: function(item) {
+							me.handleNoReplyMenuClick(item, item.up('.menu'));
+						}
+					},
+					width: width,
+					items: items
+				});
 		return menu;
 	},
 

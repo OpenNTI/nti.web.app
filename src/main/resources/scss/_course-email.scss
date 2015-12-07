@@ -79,6 +79,14 @@
 								}
 							}
 						}
+
+						&.receiver {
+							.field {
+								top: 10px;
+ 							    color: #3fb3f6;
+    							text-transform: capitalize;
+							}
+						}
 					}
 				}
 
