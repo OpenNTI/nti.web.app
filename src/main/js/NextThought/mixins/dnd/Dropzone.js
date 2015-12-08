@@ -9,7 +9,7 @@
 Ext.define('NextThought.mixins.dnd.Dropzone', {
 
 	requires: [
-		'NextThought.model.app.dndInfo',
+		'NextThought.model.app.DndInfo',
 		'NextThought.store.DataTransfer'
 	],
 
@@ -155,7 +155,7 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 
 		var dataTransfer = new NextThought.store.DataTransfer({dataTransfer: e.dataTransfer});
 
-		if (!dataTransfer.containsType(NextThought.model.app.dndInfo.mimeType)) {
+		if (!dataTransfer.containsType(NextThought.model.app.DndInfo.mimeType)) {
 			console.warn('Invalid drop event: ', e);
 		} else if (this.onDragOver) {
 			this.onDragOver(e, dataTransfer);
@@ -169,7 +169,7 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 
 		var dataTransfer = new NextThought.store.DataTransfer({dataTransfer: e.dataTransfer});
 
-		if (this.__isValidDrop(dataTransfer.getData(NextThought.model.app.dndInfo.mimeType))) {
+		if (this.__isValidDrop(dataTransfer.getData(NextThought.model.app.DndInfo.mimeType))) {
 			console.warn('Invalid drop event: ', e);
 		} else if (this.onDragDrop) {
 			this.onDragDrop(e, dataTransfer);

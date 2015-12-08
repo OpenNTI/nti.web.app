@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.app.moveInfo', {
+Ext.define('NextThought.model.app.MoveInfo', {
 	extend: 'NextThought.model.Base',
 
 	mimeType: 'application/vnd.nextthought.app.moveinfo',

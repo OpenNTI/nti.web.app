@@ -9,7 +9,7 @@
 Ext.define('NextThought.mixins.dnd.Draggable', {
 
 	requires: [
-		'NextThought.model.app.dndInfo',
+		'NextThought.model.app.DndInfo',
 		'NextThought.store.DataTransfer'
 	],
 
@@ -99,7 +99,7 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 
 
 	getDnDEventData: function() {
-		return new NextThought.model.app.dndInfo();
+		return new NextThought.model.app.DndInfo();
 	},
 
 

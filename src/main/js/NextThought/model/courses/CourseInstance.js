@@ -26,7 +26,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	mixins: {
 		'BundleLike': 'NextThought.mixins.BundleLike',
 		'PresentationResources': 'NextThought.mixins.PresentationResources',
-	'DurationCache': 'NextThought.mixins.DurationCache'
+		'DurationCache': 'NextThought.mixins.DurationCache'
 	},
 
 	fields: [

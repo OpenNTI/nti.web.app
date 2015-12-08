@@ -1,19 +1,21 @@
 Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.courses.courseoutlinenode',
-	
+
 	statics: {
 		mimeType: 'application/vnd.nextthought.courses.courseoutlinenode'
 	},
 
 	requires: [
 		'NextThought.model.converters.Date',
+		'NextThought.model.courses.overview.Lesson',
 		'NextThought.model.courses.navigation.CourseOutlineNodeProgress'
 	],
 
 	mixins: {
 		DataTransfer: 'NextThought.mixins.dnd.DataTransferSource',
-		OrderedContents: 'NextThought.mixins.OrderedContents'
+		OrderedContents: 'NextThought.mixins.OrderedContents',
+		DurationCache: 'NextThought.mixins.DurationCache'
 	},
 
 	isNode: true,
@@ -194,5 +196,30 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 			.then(function(response) {
 				return ParseUtils.parseItems(response)[0];
 			});
+	},
+
+
+	getContents: function() {
+		var key = 'contents',
+			link = this.getLink('overview-content'),
+			contents;
+
+		contents = this.getFromCache(key);
+
+		if (!contents) {
+			if (!link) {
+				contents = Promise.resolve(null);
+			} else {
+				contents = Service.request(link)
+							.then(function(response) {
+								return ParseUtils.parseItems(response)[0];
+							});
+			}
+
+
+			this.cacheForShortPeriod(key, contents);
+		}
+
+		return contents;
 	}
 });

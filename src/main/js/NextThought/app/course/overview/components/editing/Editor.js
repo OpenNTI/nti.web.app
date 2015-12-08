@@ -24,7 +24,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 		var values = this.getDefaultValues();
 
-		this.toolbar = this.addToolbar();
+		this.addParentSelection(this.record, this.parentRecord);
 
 		// this.preview = this.addPreview(values);
 
@@ -45,9 +45,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		return this.FORM_SCHEMA;
 	},
 
-	addToolbar: function() {},
 	addPreview: function() {},
-
+	addParentSelection: function() {},
 
 	getDefaultValues: function() {},
 
@@ -60,6 +59,10 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		}
 		return null;
 	},
+
+	//TODO: once the parent selection stuff is up, we'll need to
+	//figure out how to get the href for creating, or moving to a new spot
+	updateFormAction: function() {},
 
 
 	getFormMethod: function() {

@@ -3,14 +3,10 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 	alias: 'widget.overview-editing',
 
 	requires: [
-		'NextThought.model.courses.navigation.CourseOutlineNode',
-		'NextThought.model.courses.navigation.CourseOutlineCalendarNode',
-		'NextThought.model.courses.navigation.CourseOutlineContentNode',
-		'NextThought.app.course.overview.components.editing.outlinenode.Index',
-		'NextThought.app.course.overview.components.editing.calendarnode.Index',
-		'NextThought.app.course.overview.components.editing.contentnode.Index',
-		'NextThought.app.course.overview.components.editing.Window'
+		'NextThought.app.course.overview.components.editing.outline.Index',
+		'NextThought.app.course.overview.components.editing.window.Window'
 	],
+
 
 	mixins: {
 		Router: 'NextThought.mixins.Router'
@@ -23,16 +19,17 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 	editOutlineNode: function(record) {
 		this.removeAll(true);
 
-		var record;
+		var Outline = NextThought.app.course.overview.components.editing.outline.Index,
+			cmp;
 
-		if (record instanceof NextThought.model.courses.navigation.CourseOutlineContentNode) {
-			record = this.add({xtype: 'overview-editing-contentnode', outlineNode: record, bundle: this.bundle});
-		} else if (record instanceof NextThought.model.courses.navigation.CourseOutlineCalendarNode) {
-			record = this.add({xtype: 'overview-editing-calendarnode', outlineNode: record, bundle: this.bundle});
-		} else if (record instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
-			record = this.add({xtype: 'overview-editing-outlinenode', outlineNode: record, bundle: this.bundle});
+		if (Outline.canHandle(record.mimeType)) {
+			cmp = this.add({xtype: 'overview-editing-outline', record: record, bundle: this.bundle});
 		}
 
-		return record.onceLoaded();
+		if (cmp) {
+			return cmp.onceLoaded ? cmp.onceLoaded() : Promise.resolve();
+		}
+
+		return Promise.reject('No cmp to handle record');
 	}
 });
