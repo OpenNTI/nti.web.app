@@ -411,17 +411,19 @@
 							padding-left: 0.4em;
 							vertical-align: middle;
 							right: auto;
+							top: 2px;
 						}
 					}
 
 					&.title-filter {
-						font: normal 300 1.3em/1.7 $font;
+						font: normal 300 1.8em/2.1 $font;
+						text-transform: capitalize;
 					}
 
 					&.email {
 						position: absolute;
 						right: 20px;
-						top: 7px;
+						top: 15px;
 						left: auto;
 						vertical-align: middle;
 						height: 35px;
