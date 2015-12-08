@@ -39,7 +39,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Actions', {
 			params['scope'] = scope;
 		}
 
-		if (!record.get('NoReply')) {
+		// NOTE: The reply to scope is only applicable for when the user selects All as the target scope.
+		// The may choose to only allow reply from a subset of the All group (open, enrolled...). 
+		// That's why we set it here.
+		if (!record.get('NoReply') && record.get('scope') === 'All') {
 			params['replyToScope'] = record.get('replyScope');
 		}
 

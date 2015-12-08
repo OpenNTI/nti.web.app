@@ -54,10 +54,10 @@
 							right: 10px;
 							left: auto;
 							bottom: auto;
-							width: 250px;
+							width: 280px;
 							height: 26px;
 
-							.no-reply-picker {
+							.reply-option {
 								cursor: pointer;
 								background-color: white;
 								font-weight: 400;
@@ -71,17 +71,21 @@
 									display: none;
 								}
 
-								.desc {
-									font: normal italic 16px/30px $font;
-									color: $tertiary-grey;
+								.toggle {
+									color: $secondary-grey;
 									padding-right: 10px;
+
+									span {
+										padding-left: 5px;
+									}
 								}
 
-								@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 10px, $left: auto, $right: 7px);
+								&.picker {
+									@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 10px, $left: auto, $right: 7px);
 
-								&:hover {
-									color: $primary-grey;
-									@include icon('mv-dropdown-arrow', $position: relative, $side: after, $top: 10px, $left: auto, $right: 7px);
+									&:hover {
+										@include icon('mv-dropdown-arrow', $position: relative, $side: after, $top: 10px, $left: auto, $right: 7px);
+									}
 								}
 							}
 						}
@@ -94,12 +98,13 @@
     							width: 160px;
     							position: relative;
 
-    							@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 7px, $left: auto, $right: 7px);
-
-								&:hover {
-									color: $primary-grey;
-									@include icon('mv-dropdown-arrow', $position: relative, $side: after, $top: 7px, $left: auto, $right: 7px);
-								}
+    							&.group {
+    								@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 7px, $left: auto, $right: 7px);
+									
+									&:hover {
+										@include icon('mv-dropdown-arrow', $position: relative, $side: after, $top: 7px, $left: auto, $right: 7px);
+									}
+    							}
 							}
 						}
 					}
