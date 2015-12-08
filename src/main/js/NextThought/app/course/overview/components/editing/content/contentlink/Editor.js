@@ -71,10 +71,11 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	addParentSelection: function(record, parentRecord) {
 		var items = parentRecord.get('Items');
 
-		this.add(new NextThought.app.course.overview.components.editing.content.ParentSelection({
+		return this.add(new NextThought.app.course.overview.components.editing.content.ParentSelection({
 			selectionItems: items,
 			parentRecord: parentRecord,
-			editingRecord: record
+			editingRecord: record,
+			scrollingParent: this.scrollingParent
 		}));
 	}
 });

@@ -72,7 +72,8 @@ Ext.define('NextThought.app.course.overview.components.editing.window.Window', {
 				parentRecord: parentRecord,
 				doClose: this.doClose.bind(this),
 				disableSave: this.disableSave.bind(this),
-				enableSave: this.enableSave.bind(this)
+				enableSave: this.enableSave.bind(this),
+				scrollingParent: this.scrollingParent
 			};
 
 		if (Contents.canEdit(record.mimeType)) {
@@ -93,7 +94,8 @@ Ext.define('NextThought.app.course.overview.components.editing.window.Window', {
 				parentRecord: parentRecord,
 				doClose: this.doClose.bind(this),
 				disableSave: this.disableSave.bind(this),
-				enableSave: this.enableSave.bind(this)
+				enableSave: this.enableSave.bind(this),
+				scrollingParent: this.scrollingParent
 			};
 
 		if (Contents.canAddChildren(parentRecord.mimeType)) {

@@ -2,9 +2,14 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ParentSel
 	extend: 'NextThought.app.course.overview.components.editing.parentselection.Index',
 	alias: 'widget.overview-editing-content-parentselection',
 
+	requires: [
+		'NextThought.app.course.overview.components.editing.content.overviewgroup.InlineEditor'
+	],
+
+	label: 'Group: ',
 
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'item {cls}',
+		cls: 'item group-item {cls}',
 		'data-ntiid': '{ntiid}',
 		cn: [
 			{cls: 'label', html: '{label}'},
@@ -20,5 +25,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ParentSel
 			label: item.get('title'),
 			color: item.get('accentColor')
 		};
+	},
+
+
+	getEditor: function() {
+		return NextThought.app.course.overview.components.editing.content.overviewgroup.InlineEditor;
 	}
 });

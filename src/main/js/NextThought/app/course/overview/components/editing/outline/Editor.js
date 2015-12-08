@@ -92,8 +92,6 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.callParent(arguments);
-
 		this.add([
 			{xtype: 'container', cls: 'new-child', newChildContainer: true, layout: 'none', items: []},
 			{xtype: 'container', cls: 'edit-record', editRecordContainer: true, layout: 'none', items: []}
@@ -122,7 +120,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 		this.showEditor(editor.create({
 			record: record,
 			enableSave: this.enableSave.bind(this),
-			disableSave: this.disableSave.bind(this)
+			disableSave: this.disableSave.bind(this),
+			scrollingParent: this.scrollingParent
 		}));
 	},
 
@@ -182,7 +181,10 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 	showNewRecordEditor: function(editor, type, parentRecord) {
 		this.showEditor(editor.create({
 			type: type,
-			parentRecord: parentRecord
+			parentRecord: parentRecord,
+			scrollingParent: this.scrollingParent,
+			enableSave: this.enableSave.bind(this),
+			disableSave: this.disableSave.bind(this)
 		}));
 	}
 }, function() {

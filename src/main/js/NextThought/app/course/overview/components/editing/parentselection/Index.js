@@ -18,23 +18,29 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'label', html: '{label}'},
-		{cls: 'selection'}
+		{cls: 'selection closed', cn: [
+			{cls: 'active'},
+			{cls: 'menu'}
+		]}
 	]),
 
 
 	renderSelectors: {
-		selectionEl: '.selection'
+		selectionEl: '.selection',
+		activeEl: '.selection .active',
+		menuEl: '.selection .menu'
 	},
 
 
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.originalSelection = this.getSelectionFor(this.editingRecord);
+		this.onParentScroll = this.onParentScroll.bind(this);
+		this.onBodyClick = this.onBodyClick.bind(this);
 
-		this.menu = this.buildMenu(this.selectionItems, this.editor);
-
-		this.selectRecord(this.originalSelection);
+		this.on({
+			destroy: this.unalignMenu.bind(this)
+		});
 	},
 
 
@@ -47,9 +53,25 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 	},
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.originalSelection = this.getSelectionFor(this.editingRecord);
+
+		this.menu = this.buildMenu(this.selectionItems, this.getEditor(), this.parentRecord);
+
+		this.selectRecord(this.originalSelection);
+
+		this.mon(this.activeEl, 'click', this.toggleMenu.bind(this));
+	},
+
+
 	parseItemData: function(item) {
 		return item.getData();
 	},
+
+
+	getEditor: function() {},
 
 
 	getSelectionFor: function(record) {
@@ -59,16 +81,24 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 	},
 
 
-	buildMenu: function(items, editor, selectedRecord) {
-		var me = this;
+	buildMenu: function(items, editor, parentRecord) {
+		var me = this,
+			menu;
 
-		return new NextThought.app.course.overview.components.editing.parentselection.Menu({
+		menu = new NextThought.app.course.overview.components.editing.parentselection.Menu({
 			selectionItems: items,
-			activeSelection: selectedRecord,
+			parentRecord: parentRecord,
 			itemTpl: this.itemTpl,
 			parseItemData: this.parseItemData.bind(this),
-			selectRecord: this.selectRecord.bind(this)
+			doSelectRecord: this.selectRecord.bind(this),
+			renderTo: this.menuEl,
+			editor: editor,
+			scrollingParent: this.scrollingParent
 		});
+
+		this.on('destroy', menu.destroy.bind(menu));
+
+		return menu;
 	},
 
 
@@ -78,9 +108,78 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 			return;
 		}
 
-		this.selectionEl.dom.innerHTML = '';
+		this.activeEl.dom.innerHTML = '';
 
-		this.itemTpl.append(this.selectionEl, this.parseItemData(record));
+		this.itemTpl.append(this.activeEl, this.parseItemData(record));
+
+		this.menu.selectRecord(record);
+	},
+
+
+	toggleMenu: function(e) {
+		if (this.selectionEl.hasCls('closed')) {
+			this.showMenu();
+		} else {
+			this.hideMenu();
+		}
+	},
+
+
+	showMenu: function() {
+		this.selectionEl.removeCls('closed');
+
+		this.alignMenuTo(this.activeEl.dom);
+	},
+
+
+	hideMenu: function() {
+		this.selectionEl.addCls('closed');
+
+		this.unalignMenu();
+	},
+
+
+	onBodyClick: function(e) {
+		var onSelection = e.getTarget('.overview-editing-parentselection') && e.getTarget('.selection');
+
+		if (!onSelection) {
+			this.hideMenu();
+		}
+	},
+
+
+	onParentScroll: function() {
+		this.alignMenuTo(this.menuAlignedTo);
+	},
+
+
+	alignMenuTo: function(el) {
+		this.unalignMenu();
+
+		var menuDom = this.menuEl.dom,
+			viewportHeight = Ext.Element.getViewportHeight(),
+			rect = el.getBoundingClientRect(),
+			maxHeight = viewportHeight - rect.bottom - 5;
+
+		menuDom.style.top = rect.bottom + 'px';
+		menuDom.style.left = rect.left + 'px';
+		menuDom.style.width = rect.width + 'px';
+		menuDom.style.maxHeight = maxHeight + 'px';
+
+		this.menuAlignedTo = el;
+
+		this.scrollingParent.dom.addEventListener('scroll', this.onParentScroll);
+		Ext.EventManager.onWindowResize(this.onParentScroll);
+		this.bodyClickListener = this.mon(Ext.getBody(), {
+			destroyable: true,
+			click: this.onBodyClick
+		});
+	},
+
+
+	unalignMenu: function() {
+		Ext.EventManager.removeResizeListener(this.onParentScroll);
+		this.scrollingParent.dom.removeEventListener('scroll', this.onParentScroll);
+		Ext.destroy(this.bodyClickListener);
 	}
-
 });
