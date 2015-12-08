@@ -54,7 +54,7 @@
 							right: 10px;
 							left: auto;
 							bottom: auto;
-							width: 280px;
+							width: 300px;
 							height: 26px;
 
 							.reply-option {
@@ -81,10 +81,16 @@
 								}
 
 								&.picker {
-									@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 10px, $left: auto, $right: 7px);
-
-									&:hover {
-										@include icon('mv-dropdown-arrow', $position: relative, $side: after, $top: 10px, $left: auto, $right: 7px);
+									.arrow {
+										&::after {
+											display: inline-block;
+											position: relative;
+											height: auto;
+											padding-left: 0.4em;
+											vertical-align: middle;
+											right: auto;
+											top: 6px;
+										}
 									}
 								}
 							}
@@ -95,14 +101,20 @@
 								top: 10px;
  							    color: $primary-blue;
     							text-transform: capitalize;
-    							width: 160px;
+    							width: 170px;
     							position: relative;
 
     							&.group {
-    								@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 7px, $left: auto, $right: 7px);
-									
-									&:hover {
-										@include icon('mv-dropdown-arrow', $position: relative, $side: after, $top: 7px, $left: auto, $right: 7px);
+    								&.arrow {
+										&::after {
+											display: inline-block;
+											position: relative;
+											height: auto;
+											padding-left: 0.4em;
+											vertical-align: middle;
+											right: auto;
+											top: 2px;
+										}
 									}
     							}
 							}

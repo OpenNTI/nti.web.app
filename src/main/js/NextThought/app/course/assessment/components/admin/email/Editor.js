@@ -39,7 +39,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 									{tag: 'input', type: 'checkbox', cls: 'reply-check'},
 									{tag: 'span', html: 'Allow Replies'}
 								]},
-								{tag: 'span', cls: 'reply-scope', html: ''}
+								{tag: 'span', cls: 'reply-scope link arrow', html: ''}
 							]}
 						]}
 					]
@@ -113,6 +113,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 			scope = this.record && this.record.get('scope');
 			this.receiverEl.setHTML(this.RECEIVER_MAP[scope]);
 			this.receiverEl.addCls('group');
+			this.receiverEl.addCls('link');
+			this.receiverEl.addCls('arrow');
 
 			this.currentScope = scope;
 			// TODO: Create the menu picker
