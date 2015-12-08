@@ -450,6 +450,29 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 	},
 
 
+	allowNavigation: function(){
+		var msg = 'You are currently creating an email. Would you like to leave without sending it?';
+
+		return new Promise(function(fulfill, reject) {
+			Ext.Msg.show({
+				title: 'Attention!',
+				msg: msg,
+				buttons: {
+					primary: {
+						text: 'Leave',
+						cls: 'caution',
+						handler: fulfill
+					},
+					secondary: {
+						text: 'Stay',
+						handler: reject
+					}
+				}
+			});
+		});
+	},
+
+
 	presentSuccessMessage: function(){
 		alert({
 			icon: 'success',

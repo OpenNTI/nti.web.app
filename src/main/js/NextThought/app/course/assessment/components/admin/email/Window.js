@@ -33,6 +33,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 	},
 
 
+	allowNavigation: function(){
+		return this.editor && this.editor.allowNavigation();
+	},
+
+
 	showEditor: function() {
 		var me = this,
 			editor;
