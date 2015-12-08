@@ -77,7 +77,7 @@ Ext.define('NextThought.app.contentviewer.components.EmbededWidget', {
 		var data = this.data;
 		var defer = /^false$/i.test(data.defer) ? false : (Boolean(data.splash) || /^true$/i.test(data.defer));
 
-		rd.splash = data.splash ? this.resolveSplashURL(data.spash) : 'data:,';
+		rd.splash = data.splash ? this.resolveSplashURL(data.splash) : 'data:,';
 		rd.src = defer ? '' : data.source;
 		rd.height = data.height || 0;
 
@@ -109,7 +109,7 @@ Ext.define('NextThought.app.contentviewer.components.EmbededWidget', {
 
 		this.splash.remove();
 		if (this.frameDeferred) {
-			this.frame.src = this.data.source;
+			this.frame.set({src: this.data.source});
 		}
 	},
 
@@ -140,7 +140,9 @@ Ext.define('NextThought.app.contentviewer.components.EmbededWidget', {
 		var value = data.value;
 
 		if (this.sourceName === this.NO_SOURCE_ID || this.sourceName !== id) {
-			console.debug('Ignoring event, %s != %s %o', sourceName, id, e.data);
+			if (this.self.debug) {
+				console.debug('Ignoring event, %s != %s %o', this.sourceName, id, e.data);
+			}
 			return;
 		}
 
