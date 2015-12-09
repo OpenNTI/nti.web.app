@@ -86,9 +86,9 @@ Ext.define('NextThought.app.course.overview.components.parts.Curtain', {
 				return !!result;
 			})[0];
 		}).then(function(data) {
-			if (data.poster) {
-				var p = 'url(' + data.poster + ')';
-			}
+			if (!data || !data.poster) { return; }
+
+			var p = 'url(' + data.poster + ')';
 
 			if (me.curtainEl) {
 				// me.showCurtain();
