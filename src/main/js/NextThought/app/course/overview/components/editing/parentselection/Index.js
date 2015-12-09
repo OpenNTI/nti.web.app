@@ -56,7 +56,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.originalSelection = this.getSelectionFor(this.editingRecord);
+		this.originalSelection = this.selectedItem;
 
 		this.menu = this.buildMenu(this.selectionItems, this.getEditor(), this.parentRecord);
 
@@ -73,13 +73,6 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 
 
 	getEditor: function() {},
-
-
-	getSelectionFor: function(record) {
-		if (!record) { return null; }
-
-		//TODO: figure out how to select the right one when given a record
-	},
 
 
 	buildMenu: function(items, editor, parentRecord) {

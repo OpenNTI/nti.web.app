@@ -110,6 +110,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 		return cmp.create({
 			record: record,
+			parentRecord: this.record,
+			lessonOverview: this.lessonOverview,
 			locationInfo: this.locInfo,
 			outlineNode: this.outlineNode,
 			assignment: assignment,

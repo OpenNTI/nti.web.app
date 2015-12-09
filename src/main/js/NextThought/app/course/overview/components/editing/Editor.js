@@ -27,7 +27,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 		this.EditingActions = NextThought.app.course.overview.components.editing.Actions.create();
 
-		this.parentSelection = this.addParentSelection(this.record, this.parentRecord);
+		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord);
 
 		// this.preview = this.addPreview(values);
 
@@ -49,7 +49,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	},
 
 	addPreview: function() {},
-	addParentSelection: function() {},
+	addParentSelection: function(record, parent, root) {},
 
 	getDefaultValues: function() {},
 

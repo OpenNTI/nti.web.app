@@ -128,7 +128,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 
 
 	doEdit: function() {
-		this.WindowActions.showWindow('overview-editing', null, null, {}, {record: this.record, root: this.root});
+		this.WindowActions.showWindow('overview-editing', null, null, {}, {record: this.record, parent: this.parentRecord, root: this.root});
 	},
 
 

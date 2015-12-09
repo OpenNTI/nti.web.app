@@ -59,10 +59,11 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 
 
 	getControls: function(record, bundle) {
-
 		return {
 			xtype: 'overview-editing-controls',
 			record: record,
+			parentRecord: this.parentRecord,
+			root: this.lessonOverview,
 			bundle: bundle,
 			optionsConfig: {
 				order: this.canEdit ? ['audit', 'edit'] : []

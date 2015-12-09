@@ -68,12 +68,16 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	},
 
 
-	addParentSelection: function(record, parentRecord) {
-		var items = parentRecord.get('Items');
+	addParentSelection: function(record, parentRecord, rootRecord) {
+		if (!rootRecord) { return null; }
+
+		var items = rootRecord.get('Items');
 
 		return this.add(new NextThought.app.course.overview.components.editing.content.ParentSelection({
 			selectionItems: items,
+			selectedItem: parentRecord !== rootRecord ? parentRecord : null,
 			parentRecord: parentRecord,
+			rootRecord: rootRecord,
 			editingRecord: record,
 			scrollingParent: this.scrollingParent
 		}));
