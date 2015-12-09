@@ -61,7 +61,8 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 		this.playlist = [NextThought.model.PlaylistItem.create({
 			'mediaId': this.video.title || this.video.get('title'),
 			'sources': this.video.sources || this.video.get('sources'),
-			'NTIID': this.video.ntiid || this.video.get('NTIID')
+			'NTIID': this.video.ntiid || this.video.get('NTIID'),
+			'slidedeck': this.video.slidedeck || (this.video.get && this.video.get('slidedeck')) || ''
 		})];
 
 		this.curtain.removeAll(true);
@@ -73,8 +74,17 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 	},
 
 	getVideo: function(){
-		if(this.record){
-			return Promise.resolve(this.record);
+		var me = this;
+
+		if(me.record){
+			return me.course.getSlidedeckForVideo(me.record.ntiid || me.record.get('NTIID'))
+				.then(function(slidedeck){
+					me.record.slidedeck = slidedeck;
+					return Promise.resolve(me.record);
+				})
+				.fail(function(){
+					return Promise.resolve(me.record);
+				});
 		}
 
 		// TODO: Get the video from the video index
@@ -84,7 +94,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 		e.stopEvent();
 
 		var video = this.playlist[0],
-			slidedeck = video.get('slidedeck'),
+			slidedeck =  video.get('slidedeck'),
 			slideActions;
 
 		if (!Ext.isEmpty(slidedeck)) {
@@ -203,6 +213,16 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 				video.basePath = basePath;
 				me.navigate.call(null, video);
 			});
+	},
+
+	navigateToSlidedeck: function(slidedeckId) {
+		var me = this;
+		if (slidedeckId) {
+			Service.getObject(slidedeckId)
+				.then(function(slidedeck) {
+					me.navigate.call(null, slidedeck);
+				});
+		}
 	},
 
 	setProgress: function(progress) {

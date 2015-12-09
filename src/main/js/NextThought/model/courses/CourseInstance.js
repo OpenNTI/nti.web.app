@@ -868,6 +868,20 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				});
 	},
 
+	/**
+	/*	Check if a video belongs to a slidedeck
+	*/
+	getSlidedeckForVideo: function(vid){
+		return this.getVideoIndex()
+				.then(function(index) {
+					var i = index[vid];
+					if (i && i.slidedeck) {
+						return Promise.resolve(i.slidedeck);
+					}
+					return Promise.reject();
+				});
+	},
+
 
 	/**
 	*Takes two arrays of forums and bins then
