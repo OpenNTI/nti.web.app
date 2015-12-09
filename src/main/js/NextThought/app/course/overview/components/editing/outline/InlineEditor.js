@@ -48,12 +48,10 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 			'keyup': this.onKeyup.bind(this)
 		});
 
-		if (this.defaultValue) {
-			wait()
-				.then(function(){
-					me.inputEl.dom.select().focus();
-				});
-		}
+		wait()
+			.then(function(){
+				me.inputEl.dom.select();
+			});
 	},
 
 
@@ -83,6 +81,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 				// Update the suggest node name.
 				wait().then(function() {
 					me.inputEl.dom.value = me.getSuggestedNodeTitle();
+					me.inputEl.dom.select();
 				});
 			});
 	}
