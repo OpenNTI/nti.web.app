@@ -434,6 +434,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 			this.EmailActions.sendEmail(this.record)
 				.then(function() {
 					console.log(arguments);
+					me.emailSent = true;
 					me.presentSuccessMessage();
 					me.fireEvent('after-save');
 				})
@@ -452,6 +453,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 	allowNavigation: function(){
 		var msg = 'You are currently creating an email. Would you like to leave without sending it?';
+
+		if (this.emailSent) {
+			return Promise.resolve();
+		}
 
 		return new Promise(function(fulfill, reject) {
 			Ext.Msg.show({
@@ -484,6 +489,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 	onCancel: function(e) {
 		e.stopEvent();
+		this.emailSent = true;
 		this.fireEvent('cancel');
 		this.destroy();
 	}
