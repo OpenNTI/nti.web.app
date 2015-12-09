@@ -60,7 +60,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Curtain', {
 		}
 
 		var me = this,
-			sources = me.video.sources || me.video.get('sources'),
+			sources = me.video.sources || me.video.get('sources') || [],
 			resolver = NextThought.model.resolvers.VideoPosters;
 
 		Promise.all(
