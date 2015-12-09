@@ -41,10 +41,23 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 	},
 
 
-	doSelectRecord: function() {},
+	onHide: function() {
+		this.showItems();
+	},
+
+
+	doSelection: function(record) {
+		if (this.doSelectRecord) {
+			this.doSelectRecord(record);
+		}
+
+		this.close();
+	},
 
 
 	selectRecord: function(record) {
+		this.selectedRecord = record;
+
 		this.itemListContainer.items.each(function(item) {
 			if (item.selectRecord) {
 				item.selectRecord(record);
@@ -57,7 +70,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 		this.itemListContainer.removeAll(true);
 
 		var itemTpl = this.itemTpl,
-			doSelectRecord = this.doSelectRecord.bind(this),
+			doSelection = this.doSelection.bind(this),
 			parseItemData = this.parseItemData,
 			items;
 
@@ -67,7 +80,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 				selectionRecord: item,
 				itemTpl: itemTpl,
 				parseItemData: parseItemData,
-				doSelectRecord: doSelectRecord
+				doSelection: doSelection
 			};
 		});
 
@@ -87,6 +100,10 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 		}
 
 		this.itemListContainer.add(items);
+
+		if (this.selectedRecord) {
+			this.selectRecord(this.selectedRecord);
+		}
 
 		this.itemListContainer.show();
 		this.newItemContainer.hide();
@@ -109,5 +126,9 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 	},
 
 
-	afterCreation: function() {}
+	afterCreation: function(record) {
+		this.selectionItems.push(record);
+		this.showItems();
+		this.doSelection(record);
+	}
 });

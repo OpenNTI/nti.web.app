@@ -59,9 +59,47 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.N
 	},
 
 
-	onSave: function() {
-		var value = this.editorCmp.getValue();
+	addMask: function() {
+		this.el.mask('Saving...');
+	},
 
-		//TODO: save the values to the parenRecord
+
+	unMask: function() {
+		this.el.unmask();
+	},
+
+
+	onSave: function() {
+		var value = this.editorCmp.getValue(),
+			minWait = 300,
+			start = new Date();
+
+		if (!this.parentRecord || !this.parentRecord.appendContent) { return; }
+
+		this.addMask();
+
+		this.parentRecord.appendContent(value)
+			.then(function(result) {
+				var end = new Date(),
+					duration = end - start;
+
+				if (duration < wait) {
+					return wait(wait - duration)
+						.then(function() {
+							return result;
+						});
+				}
+
+				return result;
+			})
+			.then(this.addNewItem.bind(this))
+			.then(this.unMask.bind(this));
+	},
+
+
+	addNewItem: function(record) {
+		if (this.afterCreation) {
+			this.afterCreation(record);
+		}
 	}
 });

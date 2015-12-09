@@ -7,10 +7,13 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	appendContent: function(content) {
 		var link = this.getAppendLink();
 
-		if (!this.link) {
+		if (!link) {
 			return Promise.reject('No link');
 		}
 
-		return Service.post(link, content);
+		return Service.post(link, content)
+			.then(function(response) {
+				return ParseUtils.parseItems(response)[0];
+			});
 	}
 });

@@ -9,7 +9,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 
 		this.itemTpl.append(this.el, this.parseItemData(this.selectionRecord));
 
-		//this.mon(this.el, 'click', this.handleClick.bind(this))
+		this.mon(this.el, 'click', this.handleClick.bind(this));
 	},
 
 
@@ -23,6 +23,14 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 			this.addCls('selected');
 		} else {
 			this.removeCls('selected');
+		}
+	},
+
+
+	handleClick: function(e) {
+		if (this.doSelection) {
+			e.stopPropagation();
+			this.doSelection(this.selectionRecord);
 		}
 	}
 });

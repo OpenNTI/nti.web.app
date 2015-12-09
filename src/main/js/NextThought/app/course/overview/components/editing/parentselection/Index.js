@@ -89,6 +89,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 			selectionItems: items,
 			parentRecord: parentRecord,
 			itemTpl: this.itemTpl,
+			close: this.hideMenu.bind(this),
 			parseItemData: this.parseItemData.bind(this),
 			doSelectRecord: this.selectRecord.bind(this),
 			renderTo: this.menuEl,
@@ -135,12 +136,19 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 	hideMenu: function() {
 		this.selectionEl.addCls('closed');
 
+		if (this.menu.onHide) {
+			this.menu.onHide();
+		}
+
 		this.unalignMenu();
 	},
 
 
 	onBodyClick: function(e) {
-		var onSelection = e.getTarget('.overview-editing-parentselection') && e.getTarget('.selection');
+		var onSelection = e.getTarget('.overview-editing-parentselection');
+
+		onSelection = onSelection && e.getTarget('.selection');
+		onSelection = onSelection && (e.getTarget('.active') || e.getTarget('.menu'));
 
 		if (!onSelection) {
 			this.hideMenu();
