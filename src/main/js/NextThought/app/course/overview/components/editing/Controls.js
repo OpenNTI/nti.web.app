@@ -128,11 +128,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 
 
 	doEdit: function() {
-		this.WindowActions.showWindow('overview-editing', null, null, {}, {record: this.record});
+		this.WindowActions.showWindow('overview-editing', null, null, {}, {record: this.record, root: this.root});
 	},
 
 
 	doAdd: function() {
-		this.WindowActions.showWindow('overview-editing', null, null, {}, {parent: this.contents || this.record});
+		this.WindowActions.showWindow('overview-editing', null, null, {}, {parent: this.contents || this.record, root: this.root});
 	}
 });

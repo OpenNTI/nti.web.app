@@ -165,6 +165,13 @@ Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
+
+	isValid: function() {
+		//TODO: See if we can use html5 validation for this
+		return true;
+	},
+
+
 	/**
 	 * This function returns an object of key-value pairs for each field of the schema.
 	 *
@@ -262,6 +269,12 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
+	submitTo: function(url) {
+		this.setAction(url);
+		return this.onSubmit();
+	},
+
+
 	/**
 	 * Checks for file inputs and returns true if any of file was uploaded.
 	 * @return {Boolean} Returns true if a file was uploaded, false otherwise.
@@ -355,12 +368,16 @@ Ext.define('NextThought.common.form.Form', {
 				 	if (me.onSuccess) {
 				 		me.onSuccess(response);
 				 	}
+
+				 	return response;
 				})
 				.fail(function(reason) {
 					//TODO: figure out how to handle this
 					if (me.onFailure) {
 						me.onFailure(reason);
 					}
+
+					return reason;
 				});
 		}
 

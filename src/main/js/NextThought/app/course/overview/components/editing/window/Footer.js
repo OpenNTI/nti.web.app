@@ -29,7 +29,7 @@ Ext.define('NextThought.app.course.overview.components.editing.window.Footer', {
 	handleClick: function(e) {
 		if (e.getTarget('.disabled')) { return; }
 
-		if (e.getTarget('.saved')) {
+		if (e.getTarget('.save')) {
 			this.handleSave();
 		} else if (e.getTarget('.cancel')) {
 			this.handleCancel();
@@ -38,12 +38,16 @@ Ext.define('NextThought.app.course.overview.components.editing.window.Footer', {
 
 
 	handleSave: function() {
-
+		if (this.onSave) {
+			this.onSave();
+		}
 	},
 
 
 	handleCancel: function() {
-
+		if (this.onCancel) {
+			this.onCancel();
+		}
 	},
 
 

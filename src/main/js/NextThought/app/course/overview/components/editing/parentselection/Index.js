@@ -60,7 +60,8 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 
 		this.menu = this.buildMenu(this.selectionItems, this.getEditor(), this.parentRecord);
 
-		this.selectRecord(this.originalSelection);
+		//If there is no original selection (ie we aren't editing a record), just pick the first one
+		this.selectRecord(this.originalSelection || this.selectionItems[0]);
 
 		this.mon(this.activeEl, 'click', this.toggleMenu.bind(this));
 	},
@@ -75,7 +76,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 
 
 	getSelectionFor: function(record) {
-		if (!record) { return this.selectionItems[0]; }
+		if (!record) { return null; }
 
 		//TODO: figure out how to select the right one when given a record
 	},
@@ -189,5 +190,15 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 		Ext.EventManager.removeResizeListener(this.onParentScroll);
 		this.scrollingParent.dom.removeEventListener('scroll', this.onParentScroll);
 		Ext.destroy(this.bodyClickListener);
+	},
+
+
+	getOriginalSelection: function() {
+		return this.originalSelection;
+	},
+
+
+	getCurrentSelection: function() {
+		return this.menu.getSelection();
 	}
 });

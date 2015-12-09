@@ -3,7 +3,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	//this is only extended, never should need to be instantiated
 
 	requires: [
-		'NextThought.common.form.Form'
+		'NextThought.common.form.Form',
+		'NextThought.app.course.overview.components.editing.Actions'
 	],
 
 	cls: 'content-editor',
@@ -24,7 +25,9 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 		var values = this.getDefaultValues();
 
-		this.addParentSelection(this.record, this.parentRecord);
+		this.EditingActions = NextThought.app.course.overview.components.editing.Actions.create();
+
+		this.parentSelection = this.addParentSelection(this.record, this.parentRecord);
 
 		// this.preview = this.addPreview(values);
 
@@ -74,6 +77,26 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		if (this.preview && this.preview.update) {
 			this.preview.update(values);
 		}
+
+		if (this.formCmp.isValid()) {
+			this.allowSubmission();
+		} else {
+			this.disallowSumbission();
+		}
+	},
+
+
+	allowSubmission: function() {
+		if (this.enableSave) {
+			this.enableSave();
+		}
+	},
+
+
+	disallowsubmission: function() {
+		if (this.disableSave) {
+			this.disableSave();
+		}
 	},
 
 
@@ -85,7 +108,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 
 	doSave: function() {
-		return this.formCmp.onSubmit();
+		var parentSelection = this.parentSelection,
+			originalParent = parentSelection && parentSelection.getOriginalSelection(),
+			currentParent = parentSelection && parentSelection.getCurrentSelection();
+
+		return this.EditingActions.saveEditorForm(this.formCmp, this.record, originalParent, currentParent, this.rootRecord);
 	},
 
 

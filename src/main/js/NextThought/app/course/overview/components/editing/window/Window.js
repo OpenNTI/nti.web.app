@@ -20,6 +20,7 @@ Ext.define('NextThought.app.course.overview.components.editing.window.Window', {
 
 		this.record = this.precache.record;
 		this.parentRecord = this.precache.parent || (this.record && this.record.parent);
+		this.rootRecord = this.precache.root;
 
 		this.headerCmp = this.add({
 			xtype: 'window-header',
@@ -29,9 +30,9 @@ Ext.define('NextThought.app.course.overview.components.editing.window.Window', {
 		this.setPath(this.record, this.parentRecord);
 
 		if (this.record) {
-			this.editRecord(this.record, this.parentRecord);
+			this.editRecord(this.record, this.parentRecord, this.rootRecord);
 		} else if (this.parentRecord) {
-			this.addRecord(this.parentRecord);
+			this.addRecord(this.parentRecord, this.rootRecord);
 		}
 
 		this.footer = this.add({
@@ -64,12 +65,13 @@ Ext.define('NextThought.app.course.overview.components.editing.window.Window', {
 	},
 
 
-	editRecord: function(record, parentRecord) {
+	editRecord: function(record, parentRecord, rootRecord) {
 		var Outline = NextThought.app.course.overview.components.editing.outline.Editor,
 			Contents = NextThought.app.course.overview.components.editing.content.Editor,
 			config = {
 				record: record,
 				parentRecord: parentRecord,
+				rootRecord: rootRecord,
 				doClose: this.doClose.bind(this),
 				disableSave: this.disableSave.bind(this),
 				enableSave: this.enableSave.bind(this),
@@ -87,11 +89,12 @@ Ext.define('NextThought.app.course.overview.components.editing.window.Window', {
 	},
 
 
-	addRecord: function(parentRecord) {
+	addRecord: function(parentRecord, rootRecord) {
 		var Outline = NextThought.app.course.overview.components.editing.outline.Editor,
 			Contents = NextThought.app.course.overview.components.editing.content.Editor,
 			config = {
 				parentRecord: parentRecord,
+				rootRecord: rootRecord,
 				doClose: this.doClose.bind(this),
 				disableSave: this.disableSave.bind(this),
 				enableSave: this.enableSave.bind(this),
@@ -110,7 +113,10 @@ Ext.define('NextThought.app.course.overview.components.editing.window.Window', {
 
 
 	onSave: function() {
-
+		if (this.editor) {
+			this.editor.doSave()
+				.then(this.doClose.bind(this));
+		}
 	},
 
 
@@ -121,12 +127,12 @@ Ext.define('NextThought.app.course.overview.components.editing.window.Window', {
 
 
 	disableSave: function() {
-
+		this.footer.disableSave();
 	},
 
 
 	enableSave: function() {
-
+		this.footer.enableSave();
 	}
 }, function() {
 	NextThought.app.windows.StateStore.register('overview-editing', this);

@@ -94,6 +94,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 		return {
 			xtype: 'overview-editing-controls',
 			record: record,
+			root: contents,//For editing stuff under a lesson node, the lesson overview is the root
 			contents: contents,
 			bundle: bundle
 		};

@@ -66,6 +66,11 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 	},
 
 
+	getSelection: function() {
+		return this.selectedRecord;
+	},
+
+
 	showItems: function() {
 		this.itemListContainer.removeAll(true);
 
@@ -127,7 +132,6 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 
 
 	afterCreation: function(record) {
-		this.selectionItems.push(record);
 		this.showItems();
 		this.doSelection(record);
 	}
