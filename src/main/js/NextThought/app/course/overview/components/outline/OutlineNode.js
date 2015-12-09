@@ -5,7 +5,9 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	requires: [
 		'NextThought.model.courses.navigation.CourseOutlineNode',
 		'NextThought.model.courses.navigation.CourseOutlineContentNode',
-		'NextThought.model.courses.navigation.CourseOutlineCalendarNode'
+		'NextThought.model.courses.navigation.CourseOutlineCalendarNode',
+		'NextThought.app.course.overview.components.editing.creation.AddNode',
+		'NextThought.app.course.overview.components.editing.outline.Editor'
 	],
 
 	mixins: {
@@ -120,6 +122,10 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 		this.nodeCmp = this.down('[isNode]');
 
 		this.callParent(arguments);
+
+		if (this.isEditing) {
+			this.startEditing();
+		}
 	},
 
 
@@ -159,8 +165,46 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 		}
 
 		body.items.each(function(item) {
-			item.selectRecord(record);
+			if (item && item.selectRecord) {
+				item.selectRecord(record);
+			}
 		});
+	},
+
+
+	startEditing: function(){		
+		var me = this, OutlineEditor, mimeType, body;
+
+		if (this.outlineNode && this.outlineNode._depth === 1) {
+			OutlineEditor = NextThought.app.course.overview.components.editing.outline.Editor;
+			mimeType = NextThought.model.courses.navigation.CourseOutlineNode.mimeType;
+			body = this.getBodyContainer();
+
+			this.addNodeCmp = this.add({
+				xtype: 'overview-editing-new-node',
+				title: 'Add Lesson',
+				onAddClick: function(){
+					var inlineEditor = OutlineEditor.getInlineEditor(mimeType),
+						suggestedTitle = me.getSuggestedNodeTitle(), editor;
+
+					if (inlineEditor && inlineEditor.editor) {
+						editor = inlineEditor.editor.create();
+						editor.parentRecord = me.outlineNode;
+						body.add(editor);
+					}
+				}
+			});	
+		}
+	},
+
+
+	stopEditing: function(){
+		var body = this.getBodyContainer();
+		if (this.addNodeCmp) {
+			this.remove(this.addNodeCmp, true);
+		}
+		delete this.addNodeCmp;
+		delete this.isEditing;
 	},
 
 

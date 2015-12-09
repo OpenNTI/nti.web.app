@@ -77,7 +77,8 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 			return NextThought.app.course.overview.components.outline.OutlineNode.create({
 				outlineNode: record,
 				shouldShowDates: this.shouldShowDates,
-				doSelectNode: this.doSelectNode.bind(this)
+				doSelectNode: this.doSelectNode.bind(this),
+				isEditing: this.isEditing
 			});
 		}
 

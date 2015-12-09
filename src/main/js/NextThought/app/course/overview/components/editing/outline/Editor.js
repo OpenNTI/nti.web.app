@@ -7,7 +7,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 		'NextThought.app.course.overview.components.editing.outline.calendarnode.Editor',
 		'NextThought.app.course.overview.components.editing.outline.contentnode.Editor',
 		'NextThought.app.course.overview.components.editing.creation.TypeList',
-		'NextThought.model.courses.CourseOutline'
+		'NextThought.model.courses.CourseOutline',
+		'NextThought.app.course.overview.components.editing.outline.InlineEditor'
 	],
 
 
@@ -32,6 +33,11 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 		},
 
 
+		getInlineEditor: function(mimeType) {
+			return this.INLINE_EDITORS[mimeType];
+		},
+
+
 		getParents: function() {
 			return [
 				NextThought.model.courses.CourseOutline.mimeType
@@ -50,9 +56,17 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 		},
 
 
+		getInlineEditors: function(){
+			return [
+				NextThought.app.course.overview.components.editing.outline.InlineEditor
+			];
+		},
+
+
 		initRegistry: function() {
 			this.setUpParents();
 			this.setUpEditors();
+			this.setUpInlineEditors();
 		},
 
 
@@ -71,6 +85,23 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 			var editors = this.getTypeEditors() || [];
 
 			this.EDITORS = editors.reduce(function(acc, item) {
+				var type = item.getTypes ? item.getTypes() : null;
+
+				if (type) {
+					type.editor = item;
+
+					acc[type.mimeType] = type;
+				}
+
+				return acc;
+			}, {});
+		},
+
+
+		setUpInlineEditors: function() {
+			var editors = this.getInlineEditors() || [];
+
+			this.INLINE_EDITORS = editors.reduce(function(acc, item) {
 				var type = item.getTypes ? item.getTypes() : null;
 
 				if (type) {
