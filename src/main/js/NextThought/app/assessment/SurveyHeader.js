@@ -33,13 +33,15 @@ Ext.define('NextThought.app.assessment.SurveyHeader', {
 
 
 	onSurveySubmit: function(results) {
-		this.survey.setResults(results.get('Aggregated'));
+		var aggregated = results.get('Aggregated');
 
-		this.updateSurvey(this.survey, true);
+		this.survey.setResults(aggregated);
+
+		this.updateSurvey(this.survey, true, aggregated);
 	},
 
 
-	updateSurvey: function(survey, fromSubmit) {
+	updateSurvey: function(survey, fromSubmit, results) {
 		var	items = [],
 			reportLink = survey.getReportLink();
 
@@ -71,7 +73,7 @@ Ext.define('NextThought.app.assessment.SurveyHeader', {
 			});
 		}
 
-		if (survey.getLink('Aggregated') || fromSubmit) {
+		if (survey.getLink('Aggregated') || (fromSubmit && results)) {
 			items.push({
 				xtype: 'box',
 				cls: 'survey-results',
