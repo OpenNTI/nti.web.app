@@ -1,10 +1,6 @@
 Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEditor', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-inline-editor',
-
-	mixins: {
-		OrderedContents: 'NextThought.mixins.OrderedContents'
-	},
 	
 	statics: {
 		getTypes: function(){
@@ -55,7 +51,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 		if (this.defaultValue) {
 			wait()
 				.then(function(){
-					me.inputEl.dom.select();
+					me.inputEl.dom.select().focus();
 				});
 		}
 	},
@@ -65,18 +61,30 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 		var record;
 		if (e.getKey() === e.ENTER) {
 			if (this.onSave) {
-				record = new NextThought.model.courses.navigation.CourseOutlineNode();
-				record.set('title', this.inputEl.getValue());
+				record = new NextThought.model.courses.navigation.CourseOutlineContentNode({
+					'title': this.inputEl.getValue(),
+					'ContentNTIID': null
+				});	
 				this.onSave(record);
 			}
 		}
-	}
+	},
 
 
 	onSave: function(record){
- 		// TODO 
- 		console.log(arguments);
-	},
-	
+		var me = this;
+		this.parentRecord.appendContent(record && record.getData())
+			.then(function(rec) {
+				rec._depth = me.parentRecord._depth + 1;
+				if (me.afterSave) {
+					me.afterSave(rec);
+				}
+
+				// Update the suggest node name.
+				wait().then(function() {
+					me.inputEl.dom.value = me.getSuggestedNodeTitle();
+				});
+			});
+	}
 
 });
