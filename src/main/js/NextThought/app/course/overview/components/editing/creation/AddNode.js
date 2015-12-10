@@ -55,6 +55,7 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.AddNode'
 		var me = this;
 		if (!this.inlineEditorEl.isVisible()) {
 			this.inlineEditorEl.show();
+			this.el.addCls('editor-open');
 			if (this.editor.setSuggestTitle) {
 				this.editor.setSuggestTitle();
 			}
@@ -71,11 +72,8 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.AddNode'
 
 
 	onSave: function(e){
-		var me = this,
-			record = new NextThought.model.courses.navigation.CourseOutlineContentNode({
-						'title': this.editor.getValue(),
-						'ContentNTIID': null
-					});
+		var record = this.getNewRecord(),
+			me = this;
 
 		if (!this.parentRecord) {
 			return Promise.reject();
@@ -101,6 +99,21 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.AddNode'
 
 					return rec;
 				});
+	},
+
+
+	getNewRecord: function(){
+		var data = {
+				'title': this.editor.getValue(),
+				'ContentNTIID': null
+			};
+		
+		if (this.parentRecord instanceof NextThought.model.courses.CourseOutline) {
+			return new NextThought.model.courses.navigation.CourseOutlineNode(data);
+		}
+		else if (this.parentRecord instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
+			return new NextThought.model.courses.navigation.CourseOutlineContentNode(data);
+		}
 	}
 
 });

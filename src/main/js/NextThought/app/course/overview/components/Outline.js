@@ -15,7 +15,9 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 	items: [
 		{xtype: 'overview-outline-header'},
-		{xtype: 'container', cls: 'outline-list', bodyContainer: true, layout: 'none', items: []}
+		{xtype: 'container', cls: 'outline-list', layout: 'none', items: [
+			{xtype: 'container', cls: 'body', bodyContainer: true, layout: 'none', items: []}
+		]}
 	],
 
 
@@ -59,15 +61,64 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 
 	setOutline: function(bundle, outline) {
-		var catalog = bundle.getCourseCatalogEntry();
+		var catalog = bundle.getCourseCatalogEntry(),
+			bodyListEl = this.el && this.el.down('.outline-list'),
+			body = this.getBodyContainer();
 
 		this.activeBundle = bundle;
+		this.outline = outline;
 		this.shouldShowDates = !catalog.get('DisableOverviewCalendar');
+
+		// NOTE: We need to keep the height in order to make sure the scroll position 
+		// doesn't get affected when we refresh the outline by removing all items first and then re-adding them.
+		body.el.dom.style.height = body.getHeight() + 'px';
+		this.el.mask();
+		
 		this.clearCollection();
 		this.setCollection(outline);
 
+		body.el.dom.style.height = 'auto';
+		this.el.unmask();
+
 		if (this.selectedRecord) {
 			this.selectRecord(this.selectedRecord);
+		}
+
+		if (this.isEditing) {
+			this.createAddUnitNode();
+		}
+	},
+
+
+	createAddUnitNode: function(){
+		var OutlineEditor = NextThought.app.course.overview.components.editing.outline.Editor,
+			mimeType = NextThought.model.courses.navigation.CourseOutlineNode.mimeType,
+			inlineEditor = OutlineEditor.getInlineEditor(mimeType);
+
+		if (inlineEditor && !this.addNodeCmp) {
+			this.addNodeCmp = this.add({
+				xtype: 'overview-editing-new-node',
+				title: 'Add Unit',
+				InlineEditor: inlineEditor && inlineEditor.editor,
+				afterSave: this.onAddRecord.bind(this),
+				parentRecord: this.outline,
+				doSelectNode: this.doSelectNode
+			});	
+		}
+	},
+
+
+	onAddRecord: function(record){
+		var body = this.getBodyContainer(),
+			cmp  = this.getCmpForRecord(record), newCmp,
+			bodyListEl = this.el.down('.outline-list');
+		
+		if (cmp && body) {
+			newCmp = body.add(cmp);
+			wait()
+				.then(function(){
+					newCmp.el.scrollIntoView(bodyListEl);
+				});
 		}
 	},
 

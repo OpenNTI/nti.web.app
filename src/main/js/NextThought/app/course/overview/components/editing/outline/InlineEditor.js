@@ -5,7 +5,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 	statics: {
 		getTypes: function(){
 			return {
-				mimeType: NextThought.model.courses.navigation.CourseOutlineNode.mimeType,
+				mimeType: NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType,
 				types: []
 			}
 		}
@@ -35,8 +35,22 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 
 
 	getSuggestedNodeTitle: function(){
-		var childrenCount = (this.parentRecord.get('Items') || []).length;
-		return 'Lesson ' + (childrenCount + 1);
+		var childrenCount = (this.parentRecord.get('Items') || []).length, childType;
+
+		if (this.parentRecord) {
+			if (this.parentRecord._depth === 0) {
+				childType = 'Unit';
+			}
+			else if (this.parentRecord._depth === 1){
+				childType = 'Lesson';
+			}
+			
+			if (childType) {
+				return childType + (childrenCount + 1);
+			}
+		}
+
+		return "";
 	},
 
 

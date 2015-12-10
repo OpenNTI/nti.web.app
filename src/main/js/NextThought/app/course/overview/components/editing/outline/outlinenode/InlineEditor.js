@@ -1,0 +1,13 @@
+Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.InlineEditor', {
+	extend: 'NextThought.app.course.overview.components.editing.outline.InlineEditor',
+	alias: 'widget.overview-editing-outlinenode-inline-editor',
+	
+	statics: {
+		getTypes: function(){
+			return {
+				mimeType: NextThought.model.courses.navigation.CourseOutlineNode.mimeType,
+				types: []
+			}
+		}
+	}
+});

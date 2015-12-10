@@ -3,7 +3,8 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 	mimeType: 'application/vnd.nextthought.courses.courseoutline',
 
 	mixins: {
-		DurationCache: 'NextThought.mixins.DurationCache'
+		DurationCache: 'NextThought.mixins.DurationCache',
+		OrderedContents: 'NextThought.mixins.OrderedContents'
 	},
 
 

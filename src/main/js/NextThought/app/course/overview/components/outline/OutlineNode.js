@@ -173,12 +173,11 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 
 
 	startEditing: function(){		
-		var me = this, OutlineEditor, mimeType, body;
+		var me = this, OutlineEditor, mimeType;
 
 		if (this.outlineNode && this.outlineNode._depth === 1) {
 			OutlineEditor = NextThought.app.course.overview.components.editing.outline.Editor;
 			mimeType = NextThought.model.courses.navigation.CourseOutlineNode.mimeType;
-			body = this.getBodyContainer();
 			inlineEditor = OutlineEditor.getInlineEditor(mimeType);
 
 			this.addNodeCmp = this.add({
