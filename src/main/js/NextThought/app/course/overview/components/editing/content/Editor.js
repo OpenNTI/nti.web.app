@@ -3,17 +3,17 @@ Ext.define('NextThought.app.course.overview.components.editing.content.Editor', 
 	alias: 'widget.overview-editing-content-editor',
 
 	requires: [
-		'NextThought.model.courses.overview.Lesson',
-		'NextThought.model.courses.overview.Group',
+		'NextThought.app.course.overview.components.editing.content.lessonoverview.ChildCreation',
 		'NextThought.app.course.overview.components.editing.content.contentlink.Editor'
 	],
 
 	statics: {
 
-		getParents: function() {
+		getCreators: function() {
+			var base = NextThought.app.course.overview.components.editing.content;
+
 			return [
-				NextThought.model.courses.overview.Lesson.mimeType,
-				NextThought.model.courses.overview.Group.mimeType
+				base.lessonoverview.ChildCreation
 			];
 		},
 

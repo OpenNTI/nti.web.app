@@ -9,6 +9,57 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 	cls: 'content-editor',
 
+
+	inheritableStatics: {
+		/**
+		 * Return a list of mimeTypes that this editor can
+		 * handle editing or creating.
+		 *
+		 * @override
+		 * @return {[String]} list of mimeTypes
+		 */
+		getHandledMimeTypes: function() { return []; },
+
+
+		handlesMimeType: function(mimeType) {
+			var handled = this.getHandledMimeTypes();
+
+			return handled.indexOf(mimeType) >= 0;
+		},
+
+
+		/**
+		 * Returns the type this editor handles
+		 *
+		 * A type looks like:
+		 *
+		 * {
+		 * 	title: String, //The name of the type
+		 * 	description: String, // A short description
+		 * 	iconCls: String, // A class to apply so css can pick an icon
+		 * 	editor: Class //The component to instantiate to create the editor
+		 * }
+		 *
+		 * @override
+		 * @return {[Object]} the types this editor handles
+		 */
+		getTypes: function() {},
+
+
+		/**
+		 * Get the editor to instantiate for a record.
+		 *
+		 * @override
+		 * @param  {Object} record the record to edit
+		 * @return {Object}       	Null or the Class for the editor
+		 */
+		getEditorForRecord: function(record) {
+			if (this.handlesMimeType(record.mimeType)) {
+				return this;
+			}
+		}
+	},
+
 	/**
 	 * The Schema used to set up the fields
 	 * @override

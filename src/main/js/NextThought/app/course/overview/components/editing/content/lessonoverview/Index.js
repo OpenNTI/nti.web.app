@@ -9,6 +9,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 
 	requires: [
 		'NextThought.model.courses.overview.Group',
+		'NextThought.app.course.overview.components.editing.Controls',
 		'NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem'
 	],
 
@@ -61,6 +62,18 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 		this.removeAll();
 
 		this.lessonOverview = collection;
+
+		this.add([
+			{xtype: 'box', isBodyContainer: true, layout: 'none', items: []},
+			{
+				xtype: 'overview-editing-controls',
+				record: this.lessonOverview,
+				root: this.lessonOverview,
+				optionsConfig: {
+					order: ['add']
+				}
+			}
+		]);
 
 		this.callParent(arguments);
 

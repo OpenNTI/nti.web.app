@@ -14,7 +14,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 
 	inheritableStatics: {
 		canAddChildren: function(mimeType) {
-			return !!this.PARENTS[mimeType];
+			return !!this.CREATORS[mimeType];
 		},
 
 
@@ -23,8 +23,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 		},
 
 
-		getParent: function(mimeType) {
-			return this.PARENTS[mimeType];
+		getChildCreator: function(mimeType) {
+			return this.CREATORS[mimeType];
 		},
 
 
@@ -38,7 +38,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 		},
 
 
-		getParents: function() {
+		getCreators: function() {
 			return [
 				NextThought.model.courses.CourseOutline.mimeType
 			];
@@ -56,7 +56,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 		},
 
 
-		getInlineEditors: function(){
+		getInlineEditors: function() {
 			return [
 				NextThought.app.course.overview.components.editing.outline.InlineEditor
 			];
@@ -64,17 +64,25 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 
 
 		initRegistry: function() {
-			this.setUpParents();
+			this.setUpChildCreators();
 			this.setUpEditors();
 			this.setUpInlineEditors();
 		},
 
 
-		setUpParents: function() {
-			var parents = this.getParents() || [];
+		setUpChildCreators: function() {
+			var creators = this.getCreators() || [];
 
-			this.PARENTS = parents.reduce(function(acc, item) {
-				acc[item] = true;
+			this.CREATORS = creators.reduce(function(acc, item) {
+				var handled = item.getHandledMimeTypes ? item.getHandledMimeTypes() : [];
+
+				handled.forEach(function(type) {
+					if (acc[type]) {
+						console.warn('Overriding type picker form mimetype: ', type);
+					}
+
+					acc[type] = item;
+				});
 
 				return acc;
 			}, {});
@@ -84,14 +92,15 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 		setUpEditors: function() {
 			var editors = this.getTypeEditors() || [];
 
-			this.EDITORS = editors.reduce(function(acc, item) {
-				var type = item.getTypes ? item.getTypes() : null;
+			this.EDITORS = editors.reduce(function(acc, editor) {
+				var handled = editor.getHandledMimeTypes ? editor.getHandledMimeTypes() : [];
 
-				if (type) {
-					type.editor = item;
-
-					acc[type.mimeType] = type;
-				}
+				handled.forEach(function(type) {
+					if (acc[type]) {
+						console.warn('Overriding editor for mimetype: ', type);
+					}
+					acc[type] = editor;
+				});
 
 				return acc;
 			}, {});
@@ -123,105 +132,61 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.add([
-			{xtype: 'container', cls: 'new-child', newChildContainer: true, layout: 'none', items: []},
-			{xtype: 'container', cls: 'edit-record', editRecordContainer: true, layout: 'none', items: []}
-		]);
-
-		this.newChildContainer = this.down('[newChildContainer]');
-		this.editRecordContainer = this.down('[editRecordContainer]');
-
 		if (this.record) {
-			this.editRecord(this.record, this.parentRecord);
+			this.editRecord(this.record, this.parentRecord, this.rootRecord);
 		} else if (this.parentRecord) {
-			this.addRecord(this.parentRecord);
+			this.addRecord(this.parentRecord, this.rootRecord);
 		}
 	},
 
 
-	editRecord: function(record, parentRecord) {
-		var type = this.self.getEditor(record.mimeType),
-			editor = type && type.editor;
+	getConfig: function(record, parentRecord, rootRecord) {
+		return {
+			record: record,
+			parentRecord: parentRecord,
+			rootRecord: rootRecord,
+			enableSave: this.enableSave.bind(this),
+			disableSave: this.disableSave.bind(this),
+			setTitle: this.setHeaderTitle.bind(this),
+			enableBack: this.enableHeaderBack.bind(this),
+			disableBack: this.disableHeaderBack.bind(this),
+			scrollingParent: this.scrollingParent
+		};
+	},
 
-		if (!editor) {
-			console.error('No editor for type: ', record);
+
+	editRecord: function(record, parentRecord, rootRecord) {
+		var editor = this.self.getEditor(record.mimeType),
+			cmp = editor && editor.getEditorForRecord(record);
+
+		if (!cmp) {
+			console.error('No editor to edit record: ', record.mimeType);
 			return;
 		}
 
-		this.showEditor(editor.create({
-			record: record,
-			parentRecord: parentRecord,
-			rootRecord: this.rootRecord,
-			enableSave: this.enableSave.bind(this),
-			disableSave: this.disableSave.bind(this),
-			scrollingParent: this.scrollingParent
-		}));
+		this.activeEditor = this.add(cmp.create(this.getConfig(record, parentRecord, rootRecord)));
 	},
 
 
-	showEditor: function(editor) {
-		this.editRecordContainer.removeAll(true);
+	addRecord: function(parentRecord, rootRecord) {
+		var editor = this.self.getChildCreator(parentRecord.mimeType),
+			cmp = editor && editor.getChildCreatorForRecord(parentRecord);
 
-		delete this.activeTypeList;
-		this.activeEditor = this.editRecordContainer.add(editor);
+		if (!cmp) {
+			console.error('No editor to add child to: ', parentRecord.mimeType);
+			return;
+		}
 
-		this.newChildContainer.hide();
-		this.editRecordContainer.show();
+		this.activeEditor = this.add(cmp.create(this.getConfig(null, parentRecord, rootRecord)));
 	},
 
 
-	showTypes: function(typelist) {
-		this.newChildContainer.removeAll(true);
+	enableSave: function() {},
+	disableSave: function() {},
 
-		delete this.activeEditor;
-		this.activeTypeList = this.newChildContainer.add(typelist);
-
-		this.editRecordContainer.hide();
-		this.newChildContainer.show();
-	},
-
-
-	getTypes: function() {
-		var editors = this.self.EDITORS,
-			keys = Object.keys(editors);
-
-		return keys.reduce(function(acc, key) {
-			var editor = editors[key];
-
-			editor.types.forEach(function(type) {
-				type.editor = editor.editor;
-
-				acc.push(type);
-			});
-
-			return acc;
-		}, []);
-	},
-
-
-	addRecord: function(parentRecord) {
-		var types = this.getTypes();
-
-		this.showTypes({
-			xtype: 'overview-editing-typelist',
-			types: types,
-			parentRecord: parentRecord,
-			showNewRecordEditor: this.showNewRecordEditor.bind(this)
-		});
-	},
-
-
-	showNewRecordEditor: function(editor, type, parentRecord) {
-		this.showEditor(editor.create({
-			type: type,
-			parentRecord: parentRecord,
-			rootRecord: this.rootRecord,
-			scrollingParent: this.scrollingParent,
-			enableSave: this.enableSave.bind(this),
-			disableSave: this.disableSave.bind(this)
-		}));
-	},
-
+	setHeaderTitle: function() {},
+	enableHeaderBack: function() {},
+	disableHeaderBack: function() {},
 
 	doSave: function() {
 		if (this.activeEditor) {

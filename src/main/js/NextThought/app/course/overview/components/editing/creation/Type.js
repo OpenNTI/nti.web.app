@@ -13,6 +13,7 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.Type', {
 
 
 	beforeRender: function() {
+
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -32,7 +33,7 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.Type', {
 
 	handleClick: function(e) {
 		if (!e.getTarget('.disabled')) {
-			this.showEditor(this.typeConfig.editor, this.typeConfig.type, this.parentRecord);
+			this.showEditor(this.typeConfig);
 		}
 	}
 });
