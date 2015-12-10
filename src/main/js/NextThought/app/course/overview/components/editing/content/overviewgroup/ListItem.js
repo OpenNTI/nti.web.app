@@ -8,6 +8,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 	},
 
 	requires: [
+		'NextThought.app.course.overview.components.editing.Controls',
 		'NextThought.app.course.overview.components.editing.content.overviewgroup.Preview',
 		'NextThought.app.course.overview.components.editing.content.contentlink.ListItem',
 		'NextThought.app.course.overview.components.editing.content.discussion.ListItem',
@@ -82,10 +83,17 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 		this.disableOrderingContainer();
 		this.removeAll(true);
 
-		//TODO: add controls to edit
 		this.add([
 			{xtype: 'overview-editing-overviewgroup-preview', group: collection},
-			{xtype: 'container', layout: 'none', isBodyContainer: true, items: []}
+			{xtype: 'container', layout: 'none', isBodyContainer: true, items: []},
+			{
+				xtype: 'overview-editing-controls',
+				record: this.record,
+				root: this.lessonOverview,
+				optionsConfig: {
+					order: ['add']
+				}
+			}
 		]);
 
 

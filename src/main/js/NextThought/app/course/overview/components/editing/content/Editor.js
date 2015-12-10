@@ -4,6 +4,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.Editor', 
 
 	requires: [
 		'NextThought.model.courses.overview.Lesson',
+		'NextThought.model.courses.overview.Group',
 		'NextThought.app.course.overview.components.editing.content.contentlink.Editor'
 	],
 
@@ -11,7 +12,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.Editor', 
 
 		getParents: function() {
 			return [
-				NextThought.model.courses.overview.Lesson.mimeType
+				NextThought.model.courses.overview.Lesson.mimeType,
+				NextThought.model.courses.overview.Group.mimeType
 			];
 		},
 
