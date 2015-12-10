@@ -15,7 +15,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'field', cn: [
-			{tag: 'input', cls: 'title', name: 'title', value: '{defaultValue}'}
+			{tag: 'input', name: 'title', value: '{defaultValue}'}
 		]}
 	]),
 
@@ -59,31 +59,19 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 		var record;
 		if (e.getKey() === e.ENTER) {
 			if (this.onSave) {
-				record = new NextThought.model.courses.navigation.CourseOutlineContentNode({
-					'title': this.inputEl.getValue(),
-					'ContentNTIID': null
-				});	
-				this.onSave(record);
+				this.onSave(e);	
 			}
 		}
 	},
 
 
-	onSave: function(record){
-		var me = this;
-		this.parentRecord.appendContent(record && record.getData())
-			.then(function(rec) {
-				rec._depth = me.parentRecord._depth + 1;
-				if (me.afterSave) {
-					me.afterSave(rec);
-				}
+	getValue: function(){
+		return this.inputEl.getValue();
+	},
 
-				// Update the suggest node name.
-				wait().then(function() {
-					me.inputEl.dom.value = me.getSuggestedNodeTitle();
-					me.inputEl.dom.select();
-				});
-			});
+
+	setSuggestTitle: function(){
+		this.inputEl.dom.value = this.getSuggestedNodeTitle();
+		this.inputEl.dom.select();
 	}
-
 });

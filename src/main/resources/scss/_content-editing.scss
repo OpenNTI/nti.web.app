@@ -413,7 +413,7 @@
 }
 
 .new-node {
-	.title {
+	> .title {
 		text-align: center;
 		font: normal 600 16px/42px $font;
 		color: $primary-blue;

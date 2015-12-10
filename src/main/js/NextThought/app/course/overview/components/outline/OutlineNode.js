@@ -179,21 +179,15 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 			OutlineEditor = NextThought.app.course.overview.components.editing.outline.Editor;
 			mimeType = NextThought.model.courses.navigation.CourseOutlineNode.mimeType;
 			body = this.getBodyContainer();
+			inlineEditor = OutlineEditor.getInlineEditor(mimeType);
 
 			this.addNodeCmp = this.add({
 				xtype: 'overview-editing-new-node',
 				title: 'Add Lesson',
-				onAddClick: function(){
-					var inlineEditor = OutlineEditor.getInlineEditor(mimeType),
-						editor;
-
-					if (inlineEditor && inlineEditor.editor) {
-						editor = inlineEditor.editor.create();
-						editor.parentRecord = me.outlineNode;
-						editor.afterSave = me.onAddRecord.bind(me);
-						body.add(editor);
-					}
-				}
+				InlineEditor: inlineEditor && inlineEditor.editor,
+				afterSave: this.onAddRecord.bind(this),
+				parentRecord: this.outlineNode,
+				doSelectNode: this.doSelectNode
 			});	
 		}
 	},
@@ -212,7 +206,7 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	onAddRecord: function(record) {
 		var body = this.getBodyContainer(),
 			cmp  = this.getCmpForRecord(record),
-			d = this.el.dom,
+			d = this.el.dom, me = this,
 			insertPosition = d.querySelectorAll('.lesson').length;
 		
 		if (insertPosition >= 0) {
