@@ -18,5 +18,14 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 		//TODO: override getEditorForRecord to check if the related work ref
 		//is pointing to a doc
+	},
+
+
+	getFormSchema: function() {
+		var base = this.callParent(arguments);
+
+		base.push({type: 'file', name: 'href', displayName: 'Document'});
+
+		return base;
 	}
 });
