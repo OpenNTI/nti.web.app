@@ -2,7 +2,8 @@ Ext.define('NextThought.model.courses.overview.Lesson', {
 	extend: 'NextThought.model.Base',
 
 	mixins: {
-		OrderedContents: 'NextThought.mixins.OrderedContents'
+		OrderedContents: 'NextThought.mixins.OrderedContents',
+		MovingRoot: 'NextThought.mixins.MovingRoot'
 	},
 
 	statics: {

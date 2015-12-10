@@ -13,8 +13,45 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	},
 
 
-	__updateRecord: function(form, record, originalParent, newParent, root) {
+	__saveRecord: function(form, record) {
+		if (!form.submitToRecord) {
+			return Promise.reject({
+				msg: 'Unable to update record.',
+				err: 'Invalid form element'
+			});
+		}
 
+		return form.submitToRecord(record)
+			.fail(function(reason) {
+				return Promise.reject({
+					msg: 'Unable to update record.',
+					err: reason
+				});
+			});
+	},
+
+
+	__moveRecord: function(record, originalParent, newParent, root) {
+		if (!newParent.appendFromContainer) {
+			return Promise.reject({
+				msg: 'Unable to move record.',
+				err: 'Invalid target parent'
+			});
+		}
+
+		return newParent.appendFromContainer(record, originalParent, root)
+			.fail(function(reason) {
+				return Promise.reject({
+					msg: 'Unable to move record.',
+					err: reason
+				});
+			});
+	},
+
+
+	__updateRecord: function(form, record, originalParent, newParent, root) {
+		return this.__saveRecord(form, record)
+			.then(this.__moveRecord.bind(this, record, originalParent, newParent, root));
 	},
 
 

@@ -275,6 +275,26 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
+	submitToRecord: function(record) {
+		var link = record.getLink('edit'),
+			values = this.getChangedValues();
+
+		if (!link) {
+			return Promise.reject('No Edit Link');
+		}
+
+		this.setAction(link);
+
+		return this.onSubmit()
+			.then(function(response) {
+				record.set(values);
+				record.syncWithResponse(response);
+
+				return record;
+			});
+	},
+
+
 	/**
 	 * Checks for file inputs and returns true if any of file was uploaded.
 	 * @return {Boolean} Returns true if a file was uploaded, false otherwise.
