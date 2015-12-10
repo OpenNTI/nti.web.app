@@ -55,6 +55,20 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	},
 
 
+	/**
+	 * Handle the logic for creating a new record, updating an existing one
+	 * and maybe moving it to new parent.
+	 *
+	 * Both the originalParent and the newParent need to mixin the OrderedContents
+	 * The root needs to mixin the MovingRoot
+	 *
+	 * @param  {NextThought.common.form.Form} form           the form component with the inputs
+	 * @param  {Object} record         the record we are editing, null if creating
+	 * @param  {Object} originalParent the parent the record started at
+	 * @param  {Object} newParent      the parent the record is moving to
+	 * @param  {Object} root           the root of both parents
+	 * @return {Promise}               fulfill when successful, reject when fail
+	 */
 	saveEditorForm: function(form, record, originalParent, newParent, root) {
 		if (record) {
 			return this.__updateRecord(form, record, originalParent, newParent, root);

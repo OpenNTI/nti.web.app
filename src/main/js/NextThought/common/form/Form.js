@@ -269,12 +269,23 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
+	/**
+	 * Given a url, submit the form values
+	 * @param  {String} url where to submit
+	 * @return {Promise}
+	 */
 	submitTo: function(url) {
 		this.setAction(url);
 		return this.onSubmit();
 	},
 
 
+	/**
+	 * Update a given record with the values in the form.
+	 * On success sync the record with the response values from the server
+	 * @param  {Object} record model to save to
+	 * @return {Promise}
+	 */
 	submitToRecord: function(record) {
 		var link = record.getLink('edit'),
 			values = this.getChangedValues();
