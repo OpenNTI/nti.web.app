@@ -6,18 +6,6 @@ Ext.define('NextThought.app.course.overview.components.parts.VideoRoll', {
 	cls: 'overview-videos video-roll scrollable',
 	// preserveScrollOnRefresh: true,
 
-
-	statics: {
-		buildConfig: function(item) {
-			return {
-				xtype: this.xtype,
-				videoRoll: item,
-				course: item.course,
-				navigate: item.navigate
-			};
-		}
-	},
-
 	layout: 'none',
 
 	requires: [
@@ -58,17 +46,19 @@ Ext.define('NextThought.app.course.overview.components.parts.VideoRoll', {
 		});
 	},
 
-	constructor: function(config) {
-		this.callParent([config]);
+	constructor: function() {
+		this.callParent(arguments);
+		this.videoRoll = this.record;
 
-		this.locationInfo = this.videoRoll.locationInfo;
+		this.locationInfo = this.locationInfo;
 
 		this.createVideoList();
-		this.selectVideo(this.videoRoll.Items[0]);
+		var firstVideo = this.videoRoll.getItems()[0];
+		this.selectVideo(firstVideo);
 	},
 
 	createVideoList: function() {
-		var videoRollItems = this.videoRoll && this.videoRoll.Items,
+		var videoRollItems = this.videoRoll && this.videoRoll.getItems(),
 			selectVideo = this.selectVideo.bind(this);
 
 		this.videoList.add(videoRollItems.map(function(videoRollItem) {
@@ -86,7 +76,7 @@ Ext.define('NextThought.app.course.overview.components.parts.VideoRoll', {
 		videoListItems.forEach(function(item, index){
 			if(item.hasCls('selected')){
 				item.removeCls('selected');
-			}else if(video.ntiid === item.video.ntiid){
+			}else if((video.ntiid || video.get('NTIID')) === (item.video.ntiid || item.video.get('NTIID'))){
 				item.addCls('selected');
 			}
 		});

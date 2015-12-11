@@ -74,11 +74,12 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 	},
 
 
-	getInfo: function(record, course) {
+	getInfo: function(record, course, overviewsrc) {
 		return Promise.all([
 				course.getAssignments(),
 				course.getWrapper && course.getWrapper(),
-				ContentUtils.getLocation(record.getId(), course)
+				ContentUtils.getLocation(record.getId(), course),
+				overviewsrc ? null : course.getVideoIndex()
 			]);
 	},
 
@@ -115,12 +116,13 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 		me.removeAll(true);
 
-		return this.getInfo(record, course)
+		return this.getInfo(record, course, overviewsrc)
 			.then(function(results) {
 				var assignments = results[0],
 					enrollment = results[1],
 					//Just use the first one for now
-					locInfo = results[2][0];
+					locInfo = results[2][0],
+					videoIndex = results[3];
 
 				//Make sure we haven't changed what record to show before
 				//this finished
@@ -136,6 +138,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 						assignments: assignments,
 						enrollment: enrollment,
 						course: course,
+						videoIndex: videoIndex,
 						navigate: me.navigate.bind(me)
 					});
 

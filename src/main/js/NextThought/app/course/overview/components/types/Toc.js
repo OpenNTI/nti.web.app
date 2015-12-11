@@ -14,7 +14,9 @@ Ext.define('NextThought.app.course.overview.components.types.Toc', {
 		'NextThought.app.course.overview.components.parts.Survey',
 		'NextThought.app.course.overview.components.parts.Timeline',
 		'NextThought.app.course.overview.components.parts.Topic',
-		'NextThought.app.course.overview.components.parts.Video'
+		'NextThought.app.course.overview.components.parts.Video',
+		'NextThought.model.Video',
+		'NextThought.model.VideoRoll'
 	],
 
 
@@ -72,48 +74,56 @@ Ext.define('NextThought.app.course.overview.components.types.Toc', {
 			SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,
 			SECTION_TITLE_MAP = me.SECTION_TITLE_MAP,
 			sections = {},
+			videoIndex = me.videoIndex || {},
+			children = this.collapseVideos(node.getChildren()),
 			items = [];
 
-		Ext.each(node.getChildren(), function(i) {
+		Ext.each(children, function(i) {
 			var c, t, p;
 
-			if (i.getAttribute('suppressed') === 'true') {
-				return;
-			}
+			if(i.isModel){
+				items.push(me.getComponentForRecord(i));
+			}else{
+				if (i.getAttribute('suppressed') === 'true') {
+					return;
+				}
 
-			if (/^object$/i.test(i.tagName) && i.getAttribute('mimeType') === 'application/vnd.nextthought.relatedworkref') {
-				return;
-			}
+				if (/^object$/i.test(i.tagName) && i.getAttribute('mimeType') === 'application/vnd.nextthought.relatedworkref') {
+					return;
+				}
 
-			i = me.getComponentForNode(i, locInfo, node, assignments, course);
-			t = i && (i.sectionOverride || SECTION_TYPE_MAP[i.xtype] || 'Unknown');
 
-			if (t) {
-				if (i.xtype !== 'course-overview-topic') {
-					c = sections[t];
-					if (!c) {
-						c = sections[t] = {
-							xtype: SECTION_CONTAINER_MAP[t] || 'course-overview-section',
-							type: t,
-							title: SECTION_TITLE_MAP[t] || 'Section ' + t,
-							items: []
-						};
-						items.push(c);
-					}
 
-					if (t === 'video') {
-						if (c.items.length === 0) {
-							c.items.push({xtype: 'course-overview-video', items: [], course: course});
+				i = me.getComponentForNode(i, locInfo, node, assignments, course);
+				t = i && (i.sectionOverride || SECTION_TYPE_MAP[i.xtype] || 'Unknown');
+
+				if (t) {
+					if (i.xtype !== 'course-overview-topic') {
+						c = sections[t];
+						if (!c) {
+							c = sections[t] = {
+								xtype: SECTION_CONTAINER_MAP[t] || 'course-overview-section',
+								type: t,
+								title: SECTION_TITLE_MAP[t] || 'Section ' + t,
+								items: []
+							};
+							items.push(c);
 						}
-						c = c.items[0];
+
+						if (t === 'video') {
+							if (c.items.length === 0) {
+								c.items.push({xtype: 'course-overview-video', items: [], course: course});
+							}
+							c = c.items[0];
+						}
+
+						c.items.push(i);
+					}
+					else {
+						items.push(i);
 					}
 
-					c.items.push(i);
 				}
-				else {
-					items.push(i);
-				}
-
 			}
 		});
 
@@ -157,5 +167,80 @@ Ext.define('NextThought.app.course.overview.components.types.Toc', {
 			console.warn('Unknown overview type:', type, node);
 		}
 		return null;
+	},
+
+
+	getComponentForRecord: function(rec) {
+		var config;
+
+		if (rec instanceof NextThought.model.VideoRoll) {
+			config = {
+				xtype: 'course-overview-videoroll',
+				record: rec,
+				course: this.course,
+				navigate: this.navigate,
+				locationInfo: this.locInfo
+			};
+		} else if (rec instanceof NextThought.model.Video) {
+			config = {
+				xtype: 'course-overview-video',
+				record: rec,
+				course: this.course,
+				locationInfo: this.locInfo,
+				navigate: this.navigate
+			};
+		}
+
+		return config;
+	},
+
+
+	collapseVideos: function(nodes){
+		var me = this,
+			children;
+
+		children = nodes.reduce(function(acc, item, index, arr) {
+			var last = acc.last(),
+				next = index < (arr.length - 1) ? arr[index + 1] : null;
+
+			if (item.getAttribute('mimeType') === 'application/vnd.nextthought.ntivideo') {
+				if (last && last.mimeType === 'application/vnd.nextthought.videoroll') {
+					var video = me.createVideo(item);
+
+					last.addVideo(video);
+				} else if (next && next.getAttribute('mimeType') === 'application/vnd.nextthought.ntivideo') {
+					var video = me.createVideo(item);
+
+					acc.push(NextThought.model.VideoRoll.create({
+						Items: [video]
+					}));
+				} else {
+					var video = me.createVideo(item);
+					acc.push(video);
+				}
+			} else {
+				acc.push(item);
+			}
+
+			return acc;
+		}, []);
+
+		return children;
+	},
+
+	createVideo: function(node){
+		var ntiid = node.getAttribute('ntiid'),
+			item = this.videoIndex[ntiid];
+
+		return NextThought.model.Video.create({
+			'label': node.getAttribute('label'),
+			'title': item.title || node.getAttribute('label'),
+			'mediaId': item.title || node.getAttribute('label'),
+			'sources': item.sources || [],
+			'NTIID': ntiid,
+			'slidedeck': item.slidedeck || '',
+			'poster': item.poster || node.getAttribute('poster'),
+			'transcripts': item.transcripts
+		});
 	}
 });

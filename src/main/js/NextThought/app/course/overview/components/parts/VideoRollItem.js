@@ -21,7 +21,7 @@ Ext.define('NextThought.app.course.overview.components.parts.VideoRollItem', {
 		this.renderData = Ext.apply(this.renderData || {}, this.video);
 
 		this.renderData = Ext.applyIf(this.renderData, {
-			label: this.video.label || this.video.title
+			label: this.video.label || this.video.get('label') || this.video.get('title')
 		});
 	},
 
