@@ -1,6 +1,8 @@
 Ext.define('NextThought.common.components.BoundCollection', {
 	extend: 'Ext.container.Container',
 
+	emptyText: '',
+
 	layout: 'none',
 	items: [],
 
@@ -33,6 +35,17 @@ Ext.define('NextThought.common.components.BoundCollection', {
 	},
 
 
+	getEmptyState: function() {
+		return {
+			xtype: 'box',
+			autoEl: {
+				cls: 'empty-state',
+				html: this.emptyText
+			}
+		};
+	},
+
+
 	getItems: function(collection) {
 		return collection.get('Items') || [];
 	},
@@ -53,9 +66,13 @@ Ext.define('NextThought.common.components.BoundCollection', {
 			'update': this.setCollection.bind(this)
 		});
 
-		items = items.map(function(item) {
-			return me.getCmpForRecord(item);
-		}).filter(function(item) { return !!item; });
+		if (items.length) {
+			items = items.map(function(item) {
+				return me.getCmpForRecord(item);
+			}).filter(function(item) { return !!item; });
+		} else if (me.emptyText) {
+			items.push(me.getEmptyState());
+		}
 
 		body.add(items);
 	},

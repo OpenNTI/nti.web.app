@@ -13,6 +13,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 		'NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem'
 	],
 
+	emptyText: 'No content here yet. Click add content below to get started.',
 
 	ui: 'course',
 	cls: 'course-overview course-overview-editing',
@@ -75,7 +76,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 				record: this.lessonOverview,
 				root: this.lessonOverview,
 				optionsConfig: {
-					order: ['add']
+					order: ['add'],
+					add: {
+						label: 'Add Content'
+					}
 				}
 			}
 		]);
