@@ -99,7 +99,7 @@ Ext.define('NextThought.common.form.Form', {
 
 
 	attachChangeListeners: function() {
-		var inputFields = document.querySelectorAll('.field input, .field textarea'),
+		var inputFields = document.querySelectorAll('form .field input, form .field textarea'),
 			me = this, field, el;
 
 		for (var i = 0; i < inputFields.length; i++) {
@@ -122,7 +122,7 @@ Ext.define('NextThought.common.form.Form', {
 
 
 	setupComponentFields: function(fieldName, cmpType) {
-		var fields = document.querySelectorAll('.field[data-type=' + fieldName + ']'),
+		var fields = document.querySelectorAll('form .field[data-type=' + fieldName + ']'),
 			me = this, field, el, name, cmp;
 
 		for (var i = 0; i < fields.length; i++) {

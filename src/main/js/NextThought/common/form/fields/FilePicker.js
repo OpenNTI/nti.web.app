@@ -54,7 +54,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 
 
 	attachChangeListeners: function() {
-		var inputs = document.querySelectorAll('input[type=file]'),
+		var inputs = this.el.query('input[type=file]'),
 			me = this;
 
 		for (var i = inputs.length - 1; i >= 0; i--) {
