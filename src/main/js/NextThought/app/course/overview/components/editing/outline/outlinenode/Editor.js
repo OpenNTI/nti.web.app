@@ -8,18 +8,23 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 
 	statics: {
+		getHandledMimeTypes: function() {
+			return [
+				NextThought.model.courses.navigation.CourseOutlineNode.mimeType
+			];
+		},
+
+
 		getTypes: function() {
-			return {
-				mimeType: NextThought.model.courses.navigation.CourseOutlineNode.mimeType,
-				types: [
-					{
-						title: 'Unit',
-						iconCls: 'unit',
-						type: 'unit',
-						description: 'A unit is good for...'
-					}
-				]
-			};
+			return [
+				{
+					title: 'Unit',
+					iconCls: 'unit',
+					type: 'unit',
+					description: 'A unit is good for...',
+					editor: this
+				}
+			];
 		}
 	},
 

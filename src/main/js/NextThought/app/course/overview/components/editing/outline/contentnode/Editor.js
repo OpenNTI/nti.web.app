@@ -8,18 +8,22 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.contentno
 
 
 	statics: {
+		getHandledMimeTypes: function() {
+			return [
+				NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType
+			];
+		},
+
 		getTypes: function() {
-			return {
-				mimeType: NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType,
-				types: [
-					{
-						title: 'Lesson',
-						iconCls: 'lesson',
-						type: 'lesson',
-						desciption: 'A Lesson is good for...'
-					}
-				]
-			};
+			return [
+				{
+					title: 'Lesson',
+					iconCls: 'lesson',
+					type: 'lesson',
+					desciption: 'A Lesson is good for...',
+					editor: this
+				}
+			];
 		}
 	},
 

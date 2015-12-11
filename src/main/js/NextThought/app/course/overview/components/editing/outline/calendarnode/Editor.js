@@ -8,10 +8,14 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.calendarn
 
 
 	statics: {
+		getHandledMimeTypes: function() {
+			return [
+				NextThought.model.courses.navigation.CourseOutlineCalendarNode.mimeType
+			];
+		},
+
 		getTypes: function() {
-			return {
-				mimeType: NextThought.model.courses.navigation.CourseOutlineCalendarNode.mimeType
-			};
+			return [];
 		}
 	},
 
