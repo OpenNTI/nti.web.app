@@ -61,7 +61,13 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	__appendRecord: function(record) {
 		var items = this.get('Items');
 
-		items.push(record);
+		if (items !== null) {
+			items.push(record);	
+		}
+		else {
+			items = [record];
+			this.set('Items', items);
+		}
 
 		return record;
 	},

@@ -7,7 +7,8 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		'NextThought.app.course.overview.components.outline.OutlineNode',
 		'NextThought.model.courses.navigation.CourseOutlineNode',
 		'NextThought.model.courses.navigation.CourseOutlineCalendarNode',
-		'NextThought.model.courses.navigation.CourseOutlineContentNode'
+		'NextThought.model.courses.navigation.CourseOutlineContentNode',
+		'NextThought.app.course.overview.components.editing.outline.outlinenode.AddNode'
 	],
 
 	ui: 'course',
@@ -97,12 +98,12 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 		if (inlineEditor && !this.addNodeCmp) {
 			this.addNodeCmp = this.add({
-				xtype: 'overview-editing-new-node',
+				xtype: 'overview-editing-new-unit-node',
 				title: 'Add Unit',
 				InlineEditor: inlineEditor && inlineEditor.editor,
 				afterSave: this.onAddRecord.bind(this),
 				parentRecord: this.outline,
-				doSelectNode: this.doSelectNode
+				doSelectNode: this.doSelectNode.bind(this)
 			});	
 		}
 	},

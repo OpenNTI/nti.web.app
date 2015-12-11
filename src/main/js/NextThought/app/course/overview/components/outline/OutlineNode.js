@@ -6,7 +6,7 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 		'NextThought.model.courses.navigation.CourseOutlineNode',
 		'NextThought.model.courses.navigation.CourseOutlineContentNode',
 		'NextThought.model.courses.navigation.CourseOutlineCalendarNode',
-		'NextThought.app.course.overview.components.editing.creation.AddNode',
+		'NextThought.app.course.overview.components.editing.outline.contentnode.AddNode',
 		'NextThought.app.course.overview.components.editing.outline.Editor'
 	],
 
@@ -155,10 +155,12 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 
 
 	selectRecord: function(record) {
-		var body = this.getBodyContainer();
+		var body = this.getBodyContainer(),
+			bodyListEl = this.el.up('.outline-list');
 
 		if (record.getId() === this.outlineNode.getId()) {
 			this.nodeCmp.addCls('selected');
+			this.el.scrollIntoView(bodyListEl);
 		} else {
 			this.nodeCmp.removeCls('selected');
 			this.nodeCmp.removeCls('out-of-view');

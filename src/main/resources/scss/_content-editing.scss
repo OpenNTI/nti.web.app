@@ -481,12 +481,12 @@
     			background-color: $primary-blue;
     			color: #ffffff;
     		}
+		}
 
-    		&.editor-open {
-    			& ~ .outline-list{
-	    			bottom: 95px;
-	    		}
-    		}
+		&.editor-open {
+			.outline-list {
+				bottom: 95px;
+			}
 		}
 	}
 }

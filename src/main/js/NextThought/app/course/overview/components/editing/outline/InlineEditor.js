@@ -76,6 +76,11 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 				this.onSave(e);	
 			}
 		}
+		if (e.getKey() === e.ESC) {
+			if (this.onCancel) {
+				this.onCancel(e);
+			}
+		}
 	},
 
 
