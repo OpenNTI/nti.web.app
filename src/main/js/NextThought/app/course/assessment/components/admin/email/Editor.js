@@ -120,7 +120,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 				copyCheckboxEl.dom.checked = !this.isIndividualEmail;
 				this.mon(copyCheckboxEl, 'click', this.emailCopyClicked.bind(this));
 				if (this.record) {
-					this.record.set('EmailCopy', !this.isIndividualEmail);
+					this.record.set('copy', !this.isIndividualEmail);
 				}
 			}
 		}
@@ -130,7 +130,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 	emailCopyClicked: function(e){
 		var i = e.target;
 		if (this.record) {
-			this.record.set('EmailCopy', i.checked);	
+			this.record.set('copy', i.checked);	
 		}
 	},
 
