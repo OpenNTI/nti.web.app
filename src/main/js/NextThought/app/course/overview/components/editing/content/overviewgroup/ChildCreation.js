@@ -1,9 +1,9 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.lessonoverview.ChildCreation', {
+Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ChildCreation', {
 	extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
-	alias: 'widget.overview-editing-lessonoverview-childcreation',
+	alias: 'widget.overview-editing-overviewgroup-childcreation',
 
 	requires: [
-		'NextThought.model.courses.overview.Lesson',
+		'NextThought.model.courses.overview.Group',
 		'NextThought.app.course.overview.components.editing.content.contentlink.Editor'
 	],
 
@@ -11,7 +11,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 	statics: {
 		getHandledMimeTypes: function() {
 			return [
-				NextThought.model.courses.overview.Lesson.mimeType
+				NextThought.model.courses.overview.Group.mimeType
 			];
 		},
 

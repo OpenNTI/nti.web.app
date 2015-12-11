@@ -4,6 +4,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.Editor', 
 
 	requires: [
 		'NextThought.app.course.overview.components.editing.content.lessonoverview.ChildCreation',
+		'NextThought.app.course.overview.components.editing.content.overviewgroup.ChildCreation',
 		'NextThought.app.course.overview.components.editing.content.contentlink.Editor'
 	],
 
@@ -13,7 +14,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.Editor', 
 			var base = NextThought.app.course.overview.components.editing.content;
 
 			return [
-				base.lessonoverview.ChildCreation
+				base.lessonoverview.ChildCreation,
+				base.overviewgroup.ChildCreation
 			];
 		},
 
