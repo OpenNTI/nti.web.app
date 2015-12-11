@@ -353,7 +353,7 @@ Ext.define('NextThought.common.form.Form', {
 				//TODO: clean up this logic to not have potentially unhandled cases
 				if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 201)) {
 			        // me.record.syncWithResponse(xhr.responseText);
-			        fulfill();
+			        fulfill(xhr.responseText);
 			        if (me.onSuccess) {
 					 	me.onSuccess(xhr.responseText);
 					}
