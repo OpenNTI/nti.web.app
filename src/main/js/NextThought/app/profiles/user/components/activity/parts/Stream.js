@@ -33,6 +33,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
 		return {
 			xtype: 'profile-stream-page',
 			records: items,
+			user: this.user,
 			navigateToObject: this.navigateToObject.bind(this)
 		};
 	},
