@@ -86,8 +86,6 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 					return Promise.resolve(me.record);
 				});
 		}
-
-		// TODO: Get the video from the video index
 	},
 
 	curtainClicked: function(e){

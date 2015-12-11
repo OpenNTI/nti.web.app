@@ -79,10 +79,16 @@ Ext.define('NextThought.app.mediaviewer.Index', {
 				.then(function(video) {
 					me.video = video;
 					me.videoId = me.mediaId;
-					delete me.slidedeck;
-					delete me.slidedeckId;
+					me.slidedeckId = me.video.get('slidedeck') || '';
 
-					me.__presentVideo(me.mediaId, basePath, options);
+					if(me.slidedeckId){
+						me.__presentSlidedeck(me.slidedeckId, null, options);
+					} else {
+						delete me.slidedeck;
+						delete me.slidedeckId;
+
+						me.__presentVideo(me.mediaId, basePath, options);
+					}
 				})
 				.fail(function() {
 					me.__presentSlidedeck(me.mediaId, null, options);
