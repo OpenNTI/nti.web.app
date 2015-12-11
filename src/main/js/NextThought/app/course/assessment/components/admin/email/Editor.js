@@ -53,6 +53,13 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 			]}
 		]),
 
+	footerControlsTpl: new Ext.XTemplate(Ext.DomHelper.markup(
+		{tag: 'label', cls:'toggle', cn: [
+			{tag: 'input', type: 'checkbox', cls: 'email-copy'},
+			{tag: 'span', html: 'Send me a copy of the email'}
+		]}
+	)),
+
 	headerTplOrder: '{toolbar}{title}',
 
 	cls: 'email-editor scrollable',
@@ -88,6 +95,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		this.setupCopiedField();
 		this.setupTitleField();
 		this.setReplyToField();
+		this.setupFooterControls();
 
 		this.saveButtonEl.setHTML(' Send Email');
 		this.mon(this.replyScopeEl, 'click', this.replyPickerClicked.bind(this));
@@ -99,6 +107,31 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		if (!this.titleEl) { return; }
 
 		this.titleEl.dom.setAttribute('placeholder', 'Subject');
+	},
+
+
+	setupFooterControls: function(){
+		var left = this.footerEl.down('.left'), copyCheckboxEl;
+		if (left) {
+			this.footerControlsTpl.append(left);
+			copyCheckboxEl = this.footerEl.down('.email-copy');
+			if (copyCheckboxEl) {
+				// On by default for Group emails.
+				copyCheckboxEl.dom.checked = !this.isIndividualEmail;
+				this.mon(copyCheckboxEl, 'click', this.emailCopyClicked.bind(this));
+				if (this.record) {
+					this.record.set('EmailCopy', !this.isIndividualEmail);
+				}
+			}
+		}
+	},
+
+
+	emailCopyClicked: function(e){
+		var i = e.target;
+		if (this.record) {
+			this.record.set('EmailCopy', i.checked);	
+		}
 	},
 
 
@@ -271,6 +304,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 	replyPickerClicked: function(e) {
 		var target = Ext.get(e.getTarget());
 
+		if (this.replyScopeEl.hasCls('disabled')) {
+			return;
+		}
+
 		target = target.up('.reply-option') || target;
 		if (!this.noReplyPicker) {
 			this.noReplyPicker = this.createNoReplyMenu();
@@ -286,10 +323,12 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 
 	replyCheckboxClicked: function(e){
-		var i = e.target;
+		var i = e.target, 
+		action = i.checked ? 'removeCls' : 'addCls';
 		if (this.record) {
 			this.record.set('NoReply', !i.checked);	
 		}
+		this.replyScopeEl[action]('disabled');
 	},
 
 
@@ -358,6 +397,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 			this.replyScopeEl.hide();
 		}
 
+		if (!this.replyScopeEl.dom.checked) {
+			this.replyScopeEl.addCls('disabled');
+		}
 	},
 
 

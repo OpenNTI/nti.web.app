@@ -93,6 +93,13 @@
 										}
 									}
 								}
+
+								.reply-scope{
+									&.disabled {
+										opacity: 0.5;
+										cursor: default;
+									}
+								}
 							}
 						}
 
@@ -131,10 +138,27 @@
 			}
 
 			.footer {
+				overflow: hidden;
 				.save {
 					width: 140px;	
 				}
 				
+				.left {
+					float: left;
+
+					.toggle {
+						color: $secondary-grey;
+					    padding-right: 10px;
+					    font-weight: 400;
+					    font-size: 0.875em;
+					    margin: 0px 10px;
+					    line-height: 42px;
+
+					    > span {
+					    	padding-left: 3px;
+					    }
+					}
+				}
 			}
 		}
 	}

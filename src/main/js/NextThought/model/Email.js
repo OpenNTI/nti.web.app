@@ -14,6 +14,7 @@ Ext.define('NextThought.model.Email', {
 		{ name: 'NoReply', type: 'boolean', defaultValue: false},
 		{ name: 'url', type: 'string', persist: false},
 		{ name: 'scope', type: 'string', persist: false},
-		{ name: 'replyScope', type: 'string', persist: false}
+		{ name: 'replyScope', type: 'string', persist: false},
+		{ name: 'EmailCopy', type: 'boolean'}
 	]
 });
