@@ -154,7 +154,6 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 
 	editOutlineNode: function(record) {
-		debugger;
 		var editor = this.getEditor(true),
 			lesson = this.getLesson();
 
