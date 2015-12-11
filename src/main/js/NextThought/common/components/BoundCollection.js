@@ -68,9 +68,15 @@ Ext.define('NextThought.common.components.BoundCollection', {
 		});
 
 		if (items.length) {
-			cmps = items.map(function(item) {
-				return me.getCmpForRecord(item);
-			}).filter(function(item) { return !!item; });
+			cmps = items.reduce(function(acc, item) {
+				var cmp = item && me.getCmpForRecord(item);
+
+				if (cmp) {
+					acc.push(cmp);
+				}
+
+				return acc;
+			}, []);
 		} else if (me.emptyText) {
 			cmps.push(me.getEmptyState());
 		}
