@@ -12,6 +12,9 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 		Router: 'NextThought.mixins.Router'
 	},
 
+
+	isLessonView: true,
+
 	layout: 'none',
 	cls: 'course-overview',
 

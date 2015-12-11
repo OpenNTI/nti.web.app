@@ -82,7 +82,7 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 
 	getLesson: function(addIfNotThere) {
-		var lesson = this.down('course-overview-lesson');
+		var lesson = this.down('course-overview-lesson[isLessonView]');
 
 		if (!lesson && addIfNotThere) {
 			lesson = this.add({
@@ -154,6 +154,7 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 
 	editOutlineNode: function(record) {
+		debugger;
 		var editor = this.getEditor(true),
 			lesson = this.getLesson();
 

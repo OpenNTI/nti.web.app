@@ -8,6 +8,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.Index', {
 
 	cls: '',
 
+	isLessonView: false,
+
 	initComponent: function() {
 		this.callParent(arguments);
 

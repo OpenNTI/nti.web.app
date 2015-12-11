@@ -17,6 +17,9 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 		'NextThought.app.course.overview.components.editing.outline.outlinenode.Preview'
 	],
 
+	layout: 'none',
+	items: [],
+
 
 	initComponent: function() {
 		this.callParent(arguments);

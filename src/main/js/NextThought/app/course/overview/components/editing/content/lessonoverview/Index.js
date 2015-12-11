@@ -42,6 +42,11 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 	},
 
 
+	getBodyContainer: function() {
+		return this.down('[isBodyContainer]');
+	},
+
+
 	getOrderingItems: function() {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
@@ -59,12 +64,12 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 
 	setCollection: function(collection) {
 		this.disableOrderingContainer();
-		this.removeAll();
+		this.removeAll(true);
 
 		this.lessonOverview = collection;
 
 		this.add([
-			{xtype: 'box', isBodyContainer: true, layout: 'none', items: []},
+			{xtype: 'container', isBodyContainer: true, layout: 'none', items: []},
 			{
 				xtype: 'overview-editing-controls',
 				record: this.lessonOverview,
