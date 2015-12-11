@@ -180,11 +180,18 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 	startEditing: function() {
 		this.isEditing = true;
 		this.addCls('editing');
+
+		if (this.addNodeCmp) {
+			this.addNodeCmp.show();
+		}
 	},
 
 
 	stopEditing: function() {
 		delete this.isEditing;
-		this.addCls('editing');
+		this.removeCls('editing');
+		if (this.addNodeCmp) {
+			this.addNodeCmp.hide();
+		}
 	}
 });
