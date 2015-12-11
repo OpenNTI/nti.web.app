@@ -54,7 +54,8 @@ Ext.define('NextThought.common.components.BoundCollection', {
 	setCollection: function(collection) {
 		var me = this,
 			body = me.getBodyContainer(),
-			items = me.getItems(collection);
+			items = me.getItems(collection),
+			cmps = [];
 
 		if (me.updateMonitor) {
 			Ext.destroy(me.updateMonitor);
@@ -67,14 +68,14 @@ Ext.define('NextThought.common.components.BoundCollection', {
 		});
 
 		if (items.length) {
-			items = items.map(function(item) {
+			cmps = items.map(function(item) {
 				return me.getCmpForRecord(item);
 			}).filter(function(item) { return !!item; });
 		} else if (me.emptyText) {
-			items.push(me.getEmptyState());
+			cmps.push(me.getEmptyState());
 		}
 
-		body.add(items);
+		body.add(cmps);
 	},
 
 
