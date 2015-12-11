@@ -99,7 +99,10 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 			record: record,
 			root: contents,//For editing stuff under a lesson node, the lesson overview is the root
 			contents: contents,
-			bundle: bundle
+			bundle: bundle,
+			optionsConfig: {
+				order: ['audit', 'publish', 'edit']
+			}
 		};
 	},
 
