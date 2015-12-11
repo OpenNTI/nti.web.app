@@ -37,7 +37,11 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 		this.itemListContainer = this.down('[isItemList]');
 		this.newItemContainer = this.down('[isNewItem]');
 
-		this.showItems();
+		if (this.selectionItems.length) {
+			this.showItems();
+		} else {
+			this.showAddNewItem();
+		}
 	},
 
 
@@ -121,6 +125,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 		this.newItemContainer.add({
 			xtype: 'overview-editing-parentselection-newitem',
 			editor: this.editor,
+			hasOtherItems: this.selectionItems.length > 0,
 			parentRecord: this.parentRecord,
 			afterCreation: this.afterCreation.bind(this),
 			onBack: this.showItems.bind(this)

@@ -10,6 +10,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 	label: 'Parent: ',
 	cls: 'overview-editing-parentselection',
 
+	emptyText: 'Create New Parent',
 
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'item {cls}', 'data-ntiid': '{id}', html: '{label}'
@@ -105,9 +106,12 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 
 		this.activeEl.dom.innerHTML = '';
 
-		this.itemTpl.append(this.activeEl, this.parseItemData(record));
-
-		this.menu.selectRecord(record);
+		if (!record) {
+			this.activeEl.update(this.emptyText);
+		} else {
+			this.itemTpl.append(this.activeEl, this.parseItemData(record));
+			this.menu.selectRecord(record);
+		}
 	},
 
 

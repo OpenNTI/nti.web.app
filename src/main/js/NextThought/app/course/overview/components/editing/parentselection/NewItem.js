@@ -15,8 +15,10 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.N
 			return;
 		}
 
-		this.add([
-			{
+		var items = [];
+
+		if (this.hasOtherItems) {
+			items.push({
 				xtype: 'box',
 				autoEl: {
 					cls: 'back',
@@ -28,25 +30,26 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.N
 						fn: this.onBackClick.bind(this)
 					}
 				}
+			});
+		}
+
+		items.push(this.editor.create({isEditor: true}));
+
+		items.push({
+			xtype: 'box',
+			autoEl: {
+				cls: 'save',
+				html: 'Save'
 			},
-			this.editor.create({
-				isEditor: true
-			}),
-			{
-				xtype: 'box',
-				autoEl: {
-					cls: 'save',
-					html: 'Save'
-				},
-				listeners: {
-					click: {
-						element: 'el',
-						fn: this.onSave.bind(this)
-					}
+			listeners: {
+				click: {
+					element: 'el',
+					fn: this.onSave.bind(this)
 				}
 			}
-		]);
+		});
 
+		this.add(items);
 
 		this.editorCmp = this.down('[isEditor]');
 	},
