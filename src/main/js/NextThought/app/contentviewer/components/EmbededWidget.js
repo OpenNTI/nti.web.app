@@ -17,7 +17,8 @@ Ext.define('NextThought.app.contentviewer.components.EmbededWidgetPanel', {
 			layout: 'fit',
 			items: [{
 				xtype: 'overlay-content-embeded-widget-frame',
-				data: DomUtils.parseDomObject(config.contentElement)
+				data: DomUtils.parseDomObject(config.contentElement),
+				basePath: config.reader.basePath
 			}]
 		});
 
@@ -76,7 +77,7 @@ Ext.define('NextThought.app.contentviewer.components.EmbededWidget', {
 		var data = this.data;
 		var defer = /^false$/i.test(data.defer) ? false : (Boolean(data.splash) || /^true$/i.test(data.defer));
 
-		rd.splash = data.splash || 'data:,';
+		rd.splash = data.splash ? this.resolveSplashURL(data.splash) : 'data:,';
 		rd.src = defer ? '' : data.source;
 		rd.height = data.height || 0;
 
@@ -108,13 +109,28 @@ Ext.define('NextThought.app.contentviewer.components.EmbededWidget', {
 
 		this.splash.remove();
 		if (this.frameDeferred) {
-			this.frame.src = this.data.source;
+			this.frame.set({src: this.data.source});
 		}
 	},
+
+
+	resolveSplashURL: function (url) {
+		//ensure ends with a slash.
+		var base = this.basePath.replace(/\/$/, '') + '/';
+		var ABSOLUTE_URL = /^(([a-z]+\:)|\/\/|\/)/i;
+
+		if (ABSOLUTE_URL.test(url)) {
+			return url;
+		}
+
+		return base + url;
+	},
+
 
 	getIdKey: function () {
 		return this.data['uid-name'] || 'id';
 	},
+
 
 	onMessage: function (e) {
 		var me = this;
@@ -124,7 +140,9 @@ Ext.define('NextThought.app.contentviewer.components.EmbededWidget', {
 		var value = data.value;
 
 		if (this.sourceName === this.NO_SOURCE_ID || this.sourceName !== id) {
-			console.debug('Ignoring event, %s != %s %o', sourceName, id, e.data);
+			if (this.self.debug) {
+				console.debug('Ignoring event, %s != %s %o', this.sourceName, id, e.data);
+			}
 			return;
 		}
 
