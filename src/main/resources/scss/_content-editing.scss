@@ -490,3 +490,24 @@
 		}
 	}
 }
+
+
+.outline-editing-controls {
+	.button {
+		position: relative;
+
+		&.closed {
+			.menu-container {
+				display: none;
+			}
+		}
+
+		.menu-container {
+			position: absolute;
+			top: 100%;
+			background: white;
+			z-index: 1;
+			border: 1px solid black;
+		}
+	}
+}
