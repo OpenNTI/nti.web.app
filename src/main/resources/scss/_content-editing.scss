@@ -11,6 +11,7 @@
 
 			.field {
 				display: block;
+				position: relative;
 				border-bottom: 1px solid #e1e1e1;
 
 				&:last-of-type, &.hidden {
@@ -61,7 +62,7 @@
 		            font-size: 2rem;
 		            border: 0;
 		            opacity: 0;
-		            z-index: 10;
+		            z-index: 1;
 		        }
 
 				&[data-name=icon] {
@@ -342,7 +343,7 @@
 		position: fixed;
 		background: white;
 		box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3);
-		z-index: 1;
+		z-index: 10;
 		overflow: auto;
 	}
 

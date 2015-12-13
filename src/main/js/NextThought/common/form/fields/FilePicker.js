@@ -35,6 +35,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 		sizeEl: '.size',
 		typeEl: '.type',
 		metaEl: '.meta-data',
+		inputEl: 'input[type=file]',
 		placeholderEl: '.placeholder'
 	},
 
@@ -105,6 +106,16 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 				}
 			}
 		}
+	},
+
+
+	hasFile: function() {
+		return this.inputEl && this.inputEl.dom.files.length > 0;
+	},
+
+
+	appendToFormData: function(formData) {
+		//TODO: fill this out
 	},
 
 

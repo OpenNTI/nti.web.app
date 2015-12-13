@@ -19,10 +19,12 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	getFormSchema: function() {
 		var schema = [
 				{name: 'MimeType', type: 'hidden'},
-				{name: 'icon', displayName: 'Icon', type: 'file'},
-				{name: 'label', displayName: 'Title', type: 'text', placeholder: 'Title....'},
-				{name: 'byline', displayName: 'Author', type: 'text', placeholder: 'Author...'},
-				{name: 'description', displayName: 'Description', type: 'textarea', placeholder: 'Description goes here...'}
+				{type: 'group', name: 'card', inputs: [
+					{name: 'icon', displayName: 'Icon', type: 'file'},
+					{name: 'label', displayName: 'Title', type: 'text', placeholder: 'Title....'},
+					{name: 'byline', displayName: 'Author', type: 'text', placeholder: 'Author...'},
+					{name: 'description', displayName: 'Description', type: 'textarea', placeholder: 'Description goes here...'}
+				]}
 			];
 
 		return schema;
