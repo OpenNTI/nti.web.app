@@ -4,7 +4,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 
 	requires: [
 		'NextThought.app.course.overview.components.editing.outline.Index',
-		'NextThought.app.course.overview.components.editing.window.Window'
+		'NextThought.app.course.overview.components.editing.Prompt'
 	],
 
 

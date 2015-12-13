@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', {
+Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-outline-editor',
 
@@ -147,12 +147,13 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 			record: record,
 			parentRecord: parentRecord,
 			rootRecord: rootRecord,
+			setSaveText: this.setSaveText.bind(this),
 			enableSave: this.enableSave.bind(this),
 			disableSave: this.disableSave.bind(this),
 			setTitle: this.setHeaderTitle.bind(this),
+			setSubTitle: this.setSubTitle.bind(this),
 			enableBack: this.enableHeaderBack.bind(this),
-			disableBack: this.disableHeaderBack.bind(this),
-			scrollingParent: this.scrollingParent
+			disableBack: this.disableHeaderBack.bind(this)
 		};
 	},
 
@@ -183,19 +184,63 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Editor', 
 	},
 
 
-	enableSave: function() {},
-	disableSave: function() {},
+	setSaveText: function(text) {
+		this.Prompt.Footer.setSaveText(text);
+	},
 
-	setHeaderTitle: function() {},
-	enableHeaderBack: function() {},
-	disableHeaderBack: function() {},
 
-	doSave: function() {
+	enableSave: function() {
+		this.Prompt.Footer.enableSave();
+	},
+
+
+	disableSave: function() {
+		this.Prompt.Footer.disableSave();
+	},
+
+
+	setHeaderTitle: function(title) {
+		this.Prompt.Header.setTitle(title);
+	},
+
+
+	setSubTitle: function(subTitle) {
+		this.Prompt.Header.setSubTitle(subTitle);
+	},
+
+
+	enableHeaderBack: function(text) {
+		this.Prompt.Header.enableBack(text);
+	},
+
+
+	disableHeaderBack: function() {
+		this.Prompt.Header.disableBack();
+	},
+
+
+	onBack: function() {
+		if (this.activeEditor && this.activeEditor.onBack) {
+			this.activeEditor.onBack();
+		}
+	},
+
+
+	onSave: function() {
 		if (this.activeEditor) {
-			return this.activeEditor.doSave();
+			return this.activeEditor.onSave();
 		}
 
 		return Promise.reject();
+	},
+
+
+	allowCancel: function() {
+		if (this.activeEditor && this.activeEditor.allowCancel) {
+			return this.activeEditor.allowCancel();
+		}
+
+		return Promise.resolve();
 	}
 }, function() {
 	this.initRegistry();

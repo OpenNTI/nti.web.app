@@ -1,5 +1,5 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.Editor', {
-	extend: 'NextThought.app.course.overview.components.editing.outline.Editor',
+Ext.define('NextThought.app.course.overview.components.editing.content.Prompt', {
+	extend: 'NextThought.app.course.overview.components.editing.outline.Prompt',
 	alias: 'widget.overview-editing-content-editor',
 
 	requires: [

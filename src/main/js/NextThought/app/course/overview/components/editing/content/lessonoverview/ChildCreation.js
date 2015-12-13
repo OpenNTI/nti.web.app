@@ -7,6 +7,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 		'NextThought.app.course.overview.components.editing.content.contentlink.Editor'
 	],
 
+	title: 'Content Types',
+	saveText: 'Add to Lesson',
 
 	statics: {
 		getHandledMimeTypes: function() {
@@ -22,5 +24,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 				base.contentlink.Editor
 			];
 		}
+	},
+
+
+	setUpTypeList: function() {
+		this.callParent(arguments);
 	}
 });

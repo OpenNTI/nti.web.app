@@ -15,5 +15,10 @@ Ext.define('NextThought.model.courses.overview.Lesson', {
 	fields: [
 		{name: 'title', type: 'String'},
 		{name: 'Items', type: 'arrayItem'}
-	]
+	],
+
+
+	getTitle: function() {
+		return this.get('title');
+	}
 });

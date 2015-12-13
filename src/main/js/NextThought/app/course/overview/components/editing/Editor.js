@@ -151,6 +151,12 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	},
 
 
+	allowCancel: function() {
+		//TODO: fill this out
+		return Promise.resolve();
+	},
+
+
 	onClose: function() {
 		if (this.doClose) {
 			this.doClose();

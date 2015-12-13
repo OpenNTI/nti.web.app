@@ -7,7 +7,7 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 		'NextThought.model.courses.navigation.CourseOutlineContentNode',
 		'NextThought.model.courses.navigation.CourseOutlineCalendarNode',
 		'NextThought.app.course.overview.components.editing.outline.contentnode.AddNode',
-		'NextThought.app.course.overview.components.editing.outline.Editor'
+		'NextThought.app.course.overview.components.editing.outline.Prompt'
 	],
 
 	mixins: {
@@ -174,13 +174,13 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	},
 
 
-	startEditing: function(){		
-		var me = this, OutlineEditor, mimeType;
+	startEditing: function() {
+		var me = this, OutlinePrompt, mimeType;
 
 		if (this.outlineNode && this.outlineNode._depth === 1) {
-			OutlineEditor = NextThought.app.course.overview.components.editing.outline.Editor;
+			OutlinePrompt = NextThought.app.course.overview.components.editing.outline.Prompt;
 			mimeType = NextThought.model.courses.navigation.CourseOutlineNode.mimeType;
-			inlineEditor = OutlineEditor.getInlineEditor(mimeType);
+			inlineEditor = OutlinePrompt.getInlineEditor(mimeType);
 
 			this.addNodeCmp = this.add({
 				xtype: 'overview-editing-new-node',
@@ -189,12 +189,12 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 				afterSave: this.onAddRecord.bind(this),
 				parentRecord: this.outlineNode,
 				doSelectNode: this.doSelectNode
-			});	
+			});
 		}
 	},
 
 
-	stopEditing: function(){
+	stopEditing: function() {
 		var body = this.getBodyContainer();
 		if (this.addNodeCmp) {
 			this.remove(this.addNodeCmp, true);
@@ -206,13 +206,13 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 
 	onAddRecord: function(record) {
 		var body = this.getBodyContainer(),
-			cmp  = this.getCmpForRecord(record),
+			cmp = this.getCmpForRecord(record),
 			d = this.el.dom, me = this,
 			insertPosition = d.querySelectorAll('.lesson').length;
-		
+
 		if (insertPosition >= 0) {
 			body.insert(insertPosition, cmp);
-		} 
+		}
 	},
 
 

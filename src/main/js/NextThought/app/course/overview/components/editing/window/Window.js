@@ -5,9 +5,7 @@ Ext.define('NextThought.app.course.overview.components.editing.window.Window', {
 
 	requires: [
 		'NextThought.app.windows.StateStore',
-		'NextThought.app.windows.components.Header',
-		'NextThought.app.course.overview.components.editing.outline.Editor',
-		'NextThought.app.course.overview.components.editing.content.Editor'
+		'NextThought.app.windows.components.Header'
 	],
 
 	cls: 'editing-window',

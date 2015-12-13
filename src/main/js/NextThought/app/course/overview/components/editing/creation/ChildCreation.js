@@ -7,6 +7,7 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 	],
 
 	title: 'Create New Item',
+	saveText: 'Save',
 
 	cls: 'child-creation',
 
@@ -49,6 +50,8 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 
 		var types = this.self.getTypes();
 
+		this.types = types;
+
 		this.hasSingleType = types.length === 1;
 
 		if (types.length === 0) {
@@ -61,7 +64,52 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 	},
 
 
+	setUpTypeList: function() {
+		if (this.disableBack) {
+			this.disableBack();
+		}
+
+		if (this.setTitle) {
+			this.setTitle(this.title);
+		}
+
+		if (this.setSaveText) {
+			this.setSaveText(this.saveText);
+		}
+	},
+
+
+	setUpTypeEditor: function(type) {
+		if (!this.hasSingleType && this.enableBack) {
+			this.enableBack(this.title);
+		}
+
+		if (this.setTitle) {
+			this.setTitle(type.title);
+		}
+
+		if (this.setSaveText) {
+			this.setSaveText(this.saveText);
+		}
+	},
+
+
+	switchToTypeList: function() {
+		if (this.activeEditor) {
+			this.activeEditor.hide();
+		}
+
+		if (this.activeTypeList) {
+			this.activeTypeList.show();
+		}
+
+		this.setUpTypeList();
+	},
+
+
 	showTypeList: function(types) {
+		types = types || this.types;
+
 		this.activeTypeList = this.add({
 			xtype: 'overview-editing-typelist',
 			types: types,
@@ -70,8 +118,7 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 			showEditorForType: this.showEditorForType.bind(this)
 		});
 
-		this.disableBack();
-		this.setTitle(this.title);
+		this.setUpTypeList();
 	},
 
 
@@ -94,19 +141,29 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 			disableSave: this.enableSave.bind(this)
 		}));
 
-		if (!this.hasSingleType) {
-			this.enableBack();
-		}
-
-		this.setTitle(type.title);
+		this.setUpTypeEditor(type);
 	},
 
 
-	doSave: function() {
+	onBack: function() {
+		this.switchToTypeList();
+	},
+
+
+	onSave: function() {
 		if (this.activeEditor.doSave) {
 			return this.activeEditor.doSave();
 		}
 
 		return Promise.reject();
+	},
+
+
+	allowCancel: function() {
+		if (this.activeEditor && this.activeEditor.isVisible() && this.activeEditor.allowCancel()) {
+			return this.activeEditor.allowCancel();
+		}
+
+		return Promise.resolve();
 	}
 });

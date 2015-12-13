@@ -174,7 +174,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 
 		this.menuAlignedTo = el;
 
-		this.scrollingParent.dom.addEventListener('scroll', this.onParentScroll);
+		// this.scrollingParent.dom.addEventListener('scroll', this.onParentScroll);
 		Ext.EventManager.onWindowResize(this.onParentScroll);
 		this.bodyClickListener = this.mon(Ext.getBody(), {
 			destroyable: true,
@@ -185,7 +185,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 
 	unalignMenu: function() {
 		Ext.EventManager.removeResizeListener(this.onParentScroll);
-		this.scrollingParent.dom.removeEventListener('scroll', this.onParentScroll);
+		// this.scrollingParent.dom.removeEventListener('scroll', this.onParentScroll);
 		Ext.destroy(this.bodyClickListener);
 	},
 

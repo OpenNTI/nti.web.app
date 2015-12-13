@@ -7,6 +7,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 		'NextThought.app.course.overview.components.editing.content.contentlink.Editor'
 	],
 
+	title: 'Content Types',
+	saveText: 'Add to Lesson',
 
 	statics: {
 		getHandledMimeTypes: function() {
@@ -21,6 +23,28 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 			return [
 				base.contentlink.Editor
 			];
+		}
+	},
+
+
+	setUpTypeList: function() {
+		this.callParent(arguments);
+
+		var subTitle = this.rootRecord && this.rootRecord.getTitle && this.rootRecord.getTitle();
+
+		if (this.setSubTitle && subTitle) {
+			this.setSubTitle(subTitle);
+		}
+	},
+
+
+	setUpTypeEditor: function() {
+		this.callParent(arguments);
+
+		var subTitle = this.rootRecord && this.rootRecord.getTitle && this.rootRecord.getTitle();
+
+		if (this.setSubTitle && subTitle) {
+			this.setSubTitle(subTitle);
 		}
 	}
 });

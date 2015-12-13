@@ -1,0 +1,119 @@
+.prompt-container {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	@include experimental(transform, translate(-50%, -50%));
+
+	background: white;
+
+	.body-container {
+		//Don't let the prompt be bigger than the window, leave
+		//room for the header, footer and some padding
+		max-height: calc(100vh - 60px - 45px - 40px);
+		max-width: calc(100vw - 40px);
+		min-width: 300px;
+
+		background: #d5d5d5;
+	}
+
+	.prompt-header {
+		padding: 0 20px;
+		height: 60px;
+		background: white;
+		border-bottom: 1px solid #d9d9d9;
+		@include flexContainer();
+		@include experimental(align-items, center);
+
+		&.back-disabled {
+			.back {
+				display: none;
+			}
+
+			.title {
+				text-align: left;
+			}
+
+			.close {
+				@include flexBasis(auto);
+			}
+		}
+
+		.back {
+			height: 40px;
+			line-height: 40px;
+			padding-left: 20px;
+			color: $primary-blue;
+
+			@include flexItem(0 0 150px);
+
+			@include icon('arrow-left', $top: 9px);
+		}
+
+		.title {
+			text-align: center;
+			@include flexItem(1 1 auto);
+
+			.main {
+				color: $primary-grey;
+				font: normal 400 1.5em/1.5 $font;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			.sub {
+				color: $tertiary-grey;
+				font: normal 600 0.625em/1 $font;
+				text-transform: uppercase;
+			}
+		}
+
+		.close {
+			text-align: right;
+			padding: 10px 0;
+			@include flexItem(0 0 150px);
+
+			.icon {
+				display: inline-block;
+				cursor: pointer;
+				width: 40px;
+				height: 40px;
+
+				@include icon('note-window-x', $top: 8px, $left: 8px);
+
+				&:hover {
+					@include icon('note-window-x_hover', $top: 8px, $left: 8px);
+				}
+			}
+		}
+	}
+
+	.prompt-footer {
+		text-align: right;
+		background: white;
+
+		.save, .cancel {
+			display: inline-block;
+			line-height: 45px;
+			font-size: 0.875em;
+			padding: 0 1.5em;
+			cursor: pointer;
+
+			&.disabled {
+				cursor: default;
+			}
+		}
+
+		.cancel {
+			display: inline-block;
+		}
+
+		.save {
+			background-color: $primary-blue;
+			color: white;
+
+			&.disabled {
+				opacity: 0.4;
+			}
+		}
+	}
+}

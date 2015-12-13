@@ -200,7 +200,8 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 
 
 	getContents: function() {
-		var key = 'contents',
+		var me = this,
+			key = 'contents',
 			link = this.getLink('overview-content'),
 			contents;
 
@@ -213,6 +214,11 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 				contents = Service.request(link)
 							.then(function(response) {
 								return ParseUtils.parseItems(response)[0];
+							})
+							.then(function(contents) {
+								contents.outlineNode = me;
+
+								return contents;
 							});
 			}
 
