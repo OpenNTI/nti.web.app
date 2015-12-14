@@ -13,6 +13,11 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 	setProgress: function(progress) {
 		var body = this.getBodyContainer();
 
+		if (!body) {
+			this.progress = progress;
+			return;
+		}
+
 		body.items.each(function(item) {
 			if (item.setProgress) {
 				item.setProgress(progress);
@@ -74,6 +79,10 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 		]);
 
 		this.callParent(arguments);
+
+		if (this.progress) {
+			this.setProgress(this.progress);
+		}
 	},
 
 
