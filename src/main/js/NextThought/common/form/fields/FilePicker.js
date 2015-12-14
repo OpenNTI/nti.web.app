@@ -28,7 +28,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 			{cls: 'preview', cn: [
 				{cls: 'name', html: ''},
 				{cls: 'size', html: ''},
-				{tag: 'a', cls: 'preview-link', href: '', html: 'Preview'}
+				{tag: 'a', cls: 'preview-link', href: '', target: '_blank', html: 'Preview'}
 			]},
 			{cls: 'input-container', cn: [
 				{cls: 'no-file', cn: [
@@ -50,6 +50,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 		fileContainer: '.file-picker',
 		nameEl: '.preview .name',
 		sizeEl: '.preview .size',
+		previewLink: '.preview .preview-link',
 		inputContainer: '.input-container',
 		inputEl: 'input[type=file]'
 	},
@@ -75,6 +76,13 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 		this.callParent(arguments);
 
 		this.attachInputListeners();
+	},
+
+
+	hasFile: function() {
+		var input = this.inputEl && this.inputEl.dom;
+
+		return input && input.files.length > 0;
 	},
 
 
@@ -138,12 +146,13 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 			return;
 		}
 
-		var size = this.self.getHumanReadableFileSize(file.size, 1);
+		var size = this.self.getHumanReadableFileSize(file.size, 1),
+			href = this.createObjectURL(file);
 
 		this.nameEl.update(file.name);
 		this.sizeEl.update('(' + size + ')');
 
-		//TODO: fill in preview link
+		this.previewLink.dom.setAttribute('href', href);
 	},
 
 

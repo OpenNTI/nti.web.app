@@ -2,7 +2,6 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	extend: 'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
 	alias: 'widget.overview-editing-contentlink-doc',
 
-
 	statics: {
 		getTypes: function() {
 			return [
@@ -41,6 +40,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 
 	onFileAdded: function(type) {
+		this.formCmp.setPlaceholder('icon', NextThought.model.RelatedWork.getIconForType(type));
 		this.removeCls('file-only');
 	}
 });

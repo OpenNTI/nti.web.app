@@ -24,6 +24,8 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 	beforeRender: function() {
 		this.callParent(arguments);
 
+		this.placeholder = this.schema.placeholder;
+
 		//TODO: figure out how to show a placeholder, or
 		//an existing value
 
@@ -53,6 +55,22 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 		this.callParent(arguments);
 
 		this.mon(this.clearEl, 'click', this.onClearImage.bind(this));
+	},
+
+
+	setPlaceholder: function(value) {
+		this.fileContainer.removeCls('has-file');
+		this.fileContainer.addCls('no-file');
+
+		this.placeholder = value;
+
+		if (!this.hasFile()) {
+			if (value) {
+				this.previewEl.setStyle({backgroundImage: 'url(' + value + ')'});
+			} else {
+				this.previewEl.setStyle({backgroundImage: ''});
+			}
+		}
 	},
 
 

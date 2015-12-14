@@ -18,6 +18,29 @@ Ext.define('NextThought.model.RelatedWork', {
 				NTIID: data.ntiid,
 				href: data.href
 			});
+		},
+
+		FILE_ICON_BASE: '/app/resources/images/file-icons/',
+
+		MIMETYPE_TO_ICON: {
+			'application/msword': 'icon-doc.png',
+			'application/vnd.openxmlformats-officedocument.wordprocessingml.template': 'icon-docx.png',
+			'application/pdf': 'icon-pdf.png',
+			'application/x-pdf': 'icon-pdf.png',
+			'application/vnd.ms-powerpoint': 'icon-ppt.png',
+			'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'icon-pptx.png',
+			'application/vnd.ms-excel': 'icon-xls.png',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'icon-xlsx.png',
+			'application/zip': 'icon-zip.png',
+			'unknown': 'generic.png'
+		},
+
+
+		getIconForType: function(mimeType) {
+			var base = this.FILE_ICON_BASE,
+				icon = this.MIMETYPE_TO_ICON[mimeType] || this.MIMETYPE_TO_ICON['unknown'];
+
+			return base + icon;
 		}
 	},
 

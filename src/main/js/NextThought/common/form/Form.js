@@ -423,5 +423,32 @@ Ext.define('NextThought.common.form.Form', {
 
 				return record;
 			});
+	},
+
+
+	setPlaceholder: function(name, value) {
+		var imagePicker = this.imagePickers[name],
+			filePicker = this.filePickers[name],
+			datePicker = this.datePickers[name],
+			inputEl = this.el.dom.querySelector('input[name="' + name + '"]'),
+			textarea = this.el.dom.querySelector('textarea[name="' + name + '"]');
+
+		if (imagePicker) {
+			if (imagePicker.setPlaceholder) {
+				imagePicker.setPlaceholder(value);
+			}
+		} else if (filePicker) {
+			if (filePicker.setPlaceholder) {
+				filePicker.setPlaceholder(value);
+			}
+		} else if (datePicker) {
+			if (datePicker.setPlaceholder) {
+				datePicker.setPlaceholder(value);
+			}
+		} else if (inputEl) {
+			inputEl.setAttribute('placeholder', value);
+		} else if (textarea) {
+			textarea.setAttribute('placeholder', value);
+		}
 	}
 });
