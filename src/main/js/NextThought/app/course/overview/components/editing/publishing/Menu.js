@@ -11,11 +11,11 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'option publish', cn: [
 			{cls: 'text', html: 'Publish'},
-			{cls: 'subtext', html: ''}
+			{cls: 'subtext', html: 'Lesson contents are visible to students.'}
 		]},
 		{cls: 'option publish-on-date', cn: [
 			{cls: 'text', html: 'Publish on Date'},
-			{cls: 'subtext', html: ''}
+			{cls: 'subtext', html: 'When do you want students to have access to this lesson?'}
 		]},
 		{cls: 'option unpublish selected', cn: [
 			{cls: 'text', html: 'Unpublish'},
@@ -59,7 +59,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		e.stopEvent();
 		this.toggleOptionSelection(el);
 		if (!this.datepicker) {
-			this.createDatePicker(this.publishOnDateEl);
+			this.createDatePicker(this.publishOnDateEl.down('.subtext'));
 		}
 
 		this.datepicker.show();
@@ -95,12 +95,12 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 
 
 	toggleOptionSelection: function(el){
-		if (!el) { return;}
+		var t = el && el.hasCls('option') ? el : el && el.up('.option'),
+			selectedEl = this.el.down('.selected');
 
-		if (el.hasCls('selected')) {
-			el.removeCls('selected');
-		} else {
-			el.addCls('selected');
-		}
+		if (!t || !selectedEl) { return; }
+
+		selectedEl.removeCls('selected');
+		t.addCls('selected'); 	
 	}
 });

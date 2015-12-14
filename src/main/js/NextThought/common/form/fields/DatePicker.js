@@ -67,7 +67,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 			xtype: 'datepicker',
 	        minDate: new Date(),
 	        handler: this.onDateChange.bind(this),
-	        layout: 'none'
+	        handleMouseWheel: function(){}	// Override ExtJS mousewheel callbacks. 
 		});
 
 		this.on('destroy', picker.destroy.bind(picker));

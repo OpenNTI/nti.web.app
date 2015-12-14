@@ -615,25 +615,82 @@
 			}
 		}
 
+		&.publish, &.published {
+			width: 220px;
+
+			.label {
+				width: 200px;
+			    padding: 9px 10px 9px 26px;
+			    margin: 10px;
+			    border-radius: 5px;
+			    background: #f8f8f8;
+			    box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
+			    color: $primary-blue;
+			    font-size: 14px;
+			    position: relative;
+			    font-weight: 600;
+			    cursor: pointer;
+
+			    @include icon('dropdown-blue', $side: after, $top: 10px, $left: auto, $right: 10px);
+			    @include icon('publish-icon-blue', $side: before, $top: 12px, $left: 11px, $right: auto);
+			}
+		}
+
+		&.published {
+			.label {
+				color: #ffffff;
+				background: $primary-blue;
+				@include icon('dropdown-white', $side: after, $top: 10px, $left: auto, $right: 10px);
+			    @include icon('publish-icon-white', $side: before, $top: 12px, $left: 11px, $right: auto);
+			}
+		}
+
 		.menu-container {
-			position: absolute;
+			position: relative;
 			top: 100%;
 			background: white;
 			z-index: 1;
-			border: 1px solid black;
+
+			&::before {
+				content: ' ';
+				position: absolute;
+				right: 18px;
+    			top: -3px;
+				width: 0;
+				height: 0;
+				border-style: solid;
+				border-width: 0 9px 10px 9px;
+				border-color: transparent transparent rgba(0,0,0,0.3) transparent;
+
+			}
+
+			&::after {
+				content: ' ';
+				position: absolute;
+				right: 19px;
+    			top: -2px;
+				width: 0;
+				height: 0;
+				border-style: solid;
+				border-width: 0 8.5px 9px 8.5px;
+				border-color: transparent transparent #ffffff transparent;
+			}
 
 			.editing-publishing-menu {
 				padding: 10px;
 				background-color: #ffffff;
-				position: fixed;
     			width: 355px;
+    			box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
+    			position: fixed;
+    			overflow-x: hidden;
+    			overflow-y: auto;
 
 				.option {
-					border-bottom: 1px solid $tertiary-grey-alt;
+					border-bottom: 1px solid $quad-grey;
 					color: $secondary-grey;
 
 					.text {
-						padding: 7px 10px 7px 30px;
+						padding: 10px 10px 10px 37px;
 						font-size: 14px;
 						position: relative;
 
@@ -643,14 +700,20 @@
 					&.selected {
 						.text {
 							position: relative;
+							padding-bottom: 0;
 							@include icon('radio-filled', $side: after, $top: 12px, $left: 10px);
+						}
+
+						.subtext {
+							display: block;
 						}
 					}
 
 					.subtext {
 						font-size: 12px;
 						color: $tertiary-grey;
-						padding-left: 30px;
+						padding: 0 0 10px 37px;
+						display: none;
 					}
 
 
@@ -691,7 +754,7 @@
 	.x-datepicker {
 		width: 268px;
 		border: none;
-		margin: 10px auto;
+		margin: 10px 0;
 
 		.x-datepicker-header {
 			background-color: #ffffff;
@@ -815,6 +878,7 @@
 		    padding: 7px 16px 7px 7px;
 		    border: 1px solid $tertiary-grey-alt;
 		    position: relative;
+		    color: $secondary-grey;
 
     		@include icon('dropdown-am-pm-icon', $side: after, $top: 14px, $left: auto, $right: 6px);
 		}

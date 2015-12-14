@@ -15,7 +15,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': 'buttons', cn: [
 			{cls: 'button {cls}', 'data-action': '{name}', cn: [
-				{tag: 'span', cls: 'label', html: '{label}'},
+				{tag: 'div', cls: 'label', html: '{label}'},
 				{tag: 'tpl', 'if': 'hasMenu', cn: [
 					{cls: 'menu-container'}
 				]}
@@ -160,7 +160,29 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 			}
 		});
 
+		wait(10)
+			.then(this.alignPublishingMenu.bind(this, menuContainer));
+
 		this.on('destroy', this.publishMenu.destroy.bind(this.publishMenu));
+	},
+
+
+	alignPublishingMenu: function(menuContainer){
+		var box = menuContainer.getBox(),
+			me = this,
+			menu = this.publishMenu,
+			top = menuContainer.getBottom() + 15,
+			right = menuContainer.getRight() + 70,
+			viewportHeight = Ext.Element.getViewportHeight(),
+			maxHeight = viewportHeight - top - 10;
+
+		menu.onceRendered
+			.then(function() {
+				menu.el.setStyle('top', top + 'px');
+				menu.el.setStyle('right', right + 'px');
+				menu.el.setStyle('left', 'auto');
+				menu.el.setStyle('maxHeight', maxHeight + 'px');
+			});
 	},
 
 
@@ -186,6 +208,9 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 
 	togglePublishMenu: function() {
 		if (this.publishEl) {
+			if (this.publishEl.hasCls('closed')) {
+				this.alignPublishingMenu(this.publishEl);
+			}
 			this.publishEl.toggleCls('closed');
 		}
 	},
