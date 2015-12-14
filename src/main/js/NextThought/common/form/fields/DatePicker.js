@@ -12,7 +12,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 				{ tag: 'span', cls: 'divider', html: ':'},
 				{ tag: 'input', cls: 'minute', value: '59'},
 				{ tag: 'span', cls: 'meridiem', name: 'meridiem', html: 'PM', 'date-value': 'pm'}
-			]},
+			]}
 		]}
 	]),
 
@@ -26,7 +26,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		meridiemEl: '.meridiem'
 	},
 
-	beforeRender: function(){
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		var today = Ext.Date.format(new Date(), 'F j, Y');
@@ -39,16 +39,16 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		
+
 		if (this.dateContainerEl) {
 			this.datepicker = this.createDatePicker();
-			this.datepicker.render(this.dateContainerEl);		
+			this.datepicker.render(this.dateContainerEl);
 		}
 
 		if (this.meridiemContainerEl) {
 			this.mon(this.meridiemContainerEl, {
 				'click': this.showMeridiemPicker.bind(this)
-			});	
+			});
 		}
 
 		if (this.hourEl) {
@@ -62,7 +62,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	},
 
 
-	createDatePicker: function(){
+	createDatePicker: function() {
 		var picker = Ext.widget({
 			xtype: 'datepicker',
 	        minDate: new Date(),
@@ -75,23 +75,23 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	},
 
 
-	onDateChange: function(picker, date){
+	onDateChange: function(picker, date) {
 		// Broadcast the change.
-		if (this.dateChanged){
+		if (this.dateChanged) {
 			this.dateChanged();
 		}
 	},
 
 
-	timeChanged: function(){
+	timeChanged: function() {
 		// Broadcast the change.
-		if (this.formChanged){
+		if (this.formChanged) {
 			this.formChanged();
 		}
 	},
 
 
-	showMeridiemPicker: function(){
+	showMeridiemPicker: function() {
 		if (!this.meridiemMenu) {
 			this.meridiemMenu = this.createMeridiemMenu();
 		}
@@ -100,15 +100,14 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 			this.meridiemMenu.hide();
 		}
 		else {
-			this.meridiemMenu.showBy(this.meridiemEl, 'tl-bl?');			
+			this.meridiemMenu.showBy(this.meridiemEl, 'tl-bl?');
 		}
-	},	
+	},
 
 
-	createMeridiemMenu: function(){
+	createMeridiemMenu: function() {
 		var me = this,
-			menu = 
-				Ext.widget('menu', {
+			menu = Ext.widget('menu', {
 					defaults: {
 						ui: 'nt-menuitem',
 						xtype: 'menucheckitem',
@@ -138,12 +137,12 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		}
 
 		// Broadcast the change.
-		if (this.formChanged){
+		if (this.formChanged) {
 			this.formChanged();
 		}
 	},
 
-	setValue: function(value){
+	setValue: function(value) {
 		var date = new Date(value),
 			me = this, dateString, hour, minute, m = 'am';
 
@@ -159,12 +158,12 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		}
 
 		// Get two digit format
-		hour = ("0" + hour).slice(-2);
-		minute = ("0" + minute).slice(-2);
+		hour = ('0' + hour).slice(-2);
+		minute = ('0' + minute).slice(-2);
 
 		this.onceRendered
 			.then(function() {
-				var b = Ext.Date.format(date, "n/j/Y"), 
+				var b = Ext.Date.format(date, 'n/j/Y'),
 					dateOnly = new Date(b);
 
 				// Set date
@@ -198,7 +197,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	 * Get the timestamp value time.
 	 * @return {Number} timestamp in milliseconds.
 	 */
-	getMilliseconds: function(){
+	getMilliseconds: function() {
 		if (this.TimePicker) {
 			return this.getDateMilliseconds() + this.getTimeMilliseconds();
 		}
@@ -207,7 +206,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	},
 
 
-	getDateMilliseconds: function(){
+	getDateMilliseconds: function() {
 		var v, date;
 		if (this.dateEl) {
 			v = this.dateEl.dom.getAttribute('data-value');
@@ -221,14 +220,14 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	},
 
 
-	getTimeMilliseconds: function(){
+	getTimeMilliseconds: function() {
 		var v, time,
 			timeVal = this.timeEl && this.timeEl.dom.value,
 			meridiemVal = this.meridiemEl && this.meridiemEl.dom.getAttribute('data-value'),
 			hour = 0, minute = 0, t, parts;
 
-		parts = (timeVal || "").split(':');
-		hour = parts[0];	
+		parts = (timeVal || '').split(':');
+		hour = parts[0];
 		hour = parseInt(hour);
 
 		minute = parts[1];
