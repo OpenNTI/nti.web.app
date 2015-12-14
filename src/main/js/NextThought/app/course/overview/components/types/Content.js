@@ -57,9 +57,10 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 
 
 	parseCollection: function(response) {
-		var json = JSON.parse(response);
+		var json = JSON.parse(response),
+			items = json.Items || [];
 
-		json.Items = json.Items.map(this.__collapseGroup);
+		json.Items = items.map(this.__collapseGroup);
 
 		return ParseUtils.parseItems([json])[0];
 	},
