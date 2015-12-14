@@ -1,6 +1,42 @@
 .overview-editing-prompt {
 	.content-editor {
 		padding: 20px;
+
+		.overview-editing-parentselection {
+			margin-bottom: 20px;
+		}
+	}
+}
+
+.content-editor.content-link {
+	.overview-editing-parentselection {
+		position: relative;
+		top: 0;
+		opacity: 1;
+		height: auto;
+		transition: top 0.5s, opacity 0.3s;
+	}
+
+	.group.card {
+		position: relative;
+		top: 0;
+		opacity: 1;
+		height: auto;
+		transition: top 0.5s, opacity 0.3s;
+	}
+
+	&.file-only {
+		.overview-editing-parentselection {
+			top: -10px;
+			opacity: 0;
+			height: 0;
+		}
+
+		.group.card {
+			top: 10px;
+			opacity: 0;
+			height: 0;
+		}
 	}
 }
 
@@ -318,8 +354,6 @@
 }
 
 .overview-editing-parentselection {
-	padding: 0.5em;
-
 	 & > .label {
 		color: $tertiary-grey;
 		font: normal 600 0.625em/1 $font;

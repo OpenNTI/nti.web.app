@@ -329,7 +329,136 @@ span.nti-radiobutton {
 	}
 }
 
+.file-picker {
+	&.no-file {
+		.preview {
+			display: none;
+		}
 
+		.input-container {
+			.has-file {
+				display: none;
+			}
+		}
+	}
+
+	&.has-file {
+		background: white;
+		line-height: 2em;
+		padding: 0 0.5em;
+
+		.input-container {
+			display: inline-block;
+			.no-file {
+				display: none;
+			}
+		}
+	}
+
+	.preview {
+		display: inline-block;
+		font-size: 0.874em;
+
+		.name, .size, .preview-link {
+			display: inline-block;
+			margin-right: 0.5em;
+			vertical-align: middle;
+		}
+
+		.name {
+			font-weight: 700;
+			max-width: 300px;
+			overflow: hidden;
+			@include ellipse();
+		}
+
+		.size {
+			font-weight: 600;
+			color: $secondary-grey;
+		}
+
+		.preview-link {
+			font-weight: 600;
+			color: $primary-blue;
+		}
+
+		&::after {
+			content: '';
+			display: inline-block;
+			vertical-align: middle;
+			margin-right: 0.5em;
+			width: 1px;
+			height: 20px;
+			background: $tertiary-grey;
+		}
+	}
+
+	.input-container {
+		position: relative;
+
+		&.file-over {
+			.no-file {
+				background: #d9d9d9;
+			}
+		}
+
+		.has-file {
+			.change {
+				display: inline-block;
+				vertical-align: middle;
+				font-size: 0.875em;
+				font-weight: 600;
+				color: $primary-blue;
+				text-decoration: underline;
+			}
+		}
+
+		.no-file {
+			padding: 100px 0;
+			border: 2px dashed #b8b8b8;
+			border-radius: 5px;
+
+			.drop {
+				text-align: center;
+				color: $secondary-grey-alt;
+				font-weight: 600;
+				font-size: 0.875em;
+				margin-bottom: 0.7em;
+
+				@include icon('search-reading', $side: before);
+
+				&::before {
+					position: static;
+					display: block;
+					margin: 0 auto 0.3em;
+				}
+			}
+
+			.choose {
+				width: 100px;
+				margin: auto;
+				text-align: center;
+				font-size: 0.875em;
+				line-height: 2em;
+				color: white;
+				border-radius: 5px;
+				background: $primary-blue;
+			}
+		}
+
+		input[type=file] {
+			position: absolute;
+			top: 0; bottom: 0;
+			left: 0; right: 0;
+			opacity: 0;
+			margin: 0;
+			border: 0;
+			padding: 0;
+			cursor: pointer;
+			width: 100%;
+		}
+	}
+}
 
 
 

@@ -21,11 +21,26 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	},
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+
+		if (!this.record) {
+			this.addCls('file-only');
+		}
+	},
+
+
 	getFormSchema: function() {
 		var base = this.callParent(arguments);
 
-		base.unshift({type: 'file', name: 'href', displayName: 'Document'});
+		//TODO: fill info about the existing file
+		base.unshift({type: 'file', name: 'href', onFileAdded: this.onFileAdded.bind(this)});
 
 		return base;
+	},
+
+
+	onFileAdded: function(type) {
+		this.removeCls('file-only');
 	}
 });

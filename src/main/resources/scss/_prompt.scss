@@ -13,8 +13,9 @@
 		max-height: calc(100vh - 60px - 45px - 40px);
 		max-width: calc(100vw - 40px);
 		min-width: 300px;
-
 		background: #ededed;
+		overflow-y: auto;
+		overflow-x: hidden;
 	}
 
 	.prompt-header {

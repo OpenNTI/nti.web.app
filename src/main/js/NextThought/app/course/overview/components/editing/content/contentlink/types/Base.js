@@ -15,15 +15,18 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		}
 	},
 
+	cls: 'content-editor content-link',
 
 	getFormSchema: function() {
 		var schema = [
 				{name: 'MimeType', type: 'hidden'},
 				{type: 'group', name: 'card', inputs: [
-					{name: 'icon', displayName: 'Icon', type: 'file'},
-					{name: 'label', displayName: 'Title', type: 'text', placeholder: 'Title....'},
-					{name: 'byline', displayName: 'Author', type: 'text', placeholder: 'Author...'},
-					{name: 'description', displayName: 'Description', type: 'textarea', placeholder: 'Description goes here...'}
+					{name: 'icon', type: 'image', height: 125, width: 100},
+					{type: 'group', name: 'meta', inputs: [
+						{name: 'label', type: 'text', placeholder: 'Title'},
+						{name: 'byline', type: 'text', placeholder: 'Author'},
+						{name: 'description', type: 'textarea', placeholder: 'Write something...'}
+					]}
 				]}
 			];
 

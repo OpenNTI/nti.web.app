@@ -4,6 +4,7 @@ Ext.define('NextThought.common.form.Form', {
 
 	requires: [
 		'NextThought.common.form.fields.FilePicker',
+		'NextThought.common.form.fields.ImagePicker',
 		'NextThought.common.form.fields.DatePicker'
 	],
 
@@ -38,6 +39,14 @@ Ext.define('NextThought.common.form.Form', {
 				]},
 				{tag: 'tpl', 'if': '!required', cn: [
 					{tag: 'textarea', type: '{type}', name: '{name}', placeholder: '{placeholder}', html: '{value}'}
+				]}
+			]
+		})),
+
+		image: new Ext.XTemplate(Ext.DomHelper.markup({
+			cls: 'field {name} image', cn: [
+				{tag: 'tpl', 'if': 'displayName', cn: [
+					{tag: 'label', 'for': '{name}', html: '{displayName}'}
 				]}
 			]
 		})),
@@ -78,6 +87,7 @@ Ext.define('NextThought.common.form.Form', {
 		this.callParent(arguments);
 
 		this.filePickers = {};
+		this.imagePickers = {};
 		this.datePickers = {};
 		this.defaultValues = this.defaultValues || {};
 
@@ -123,11 +133,27 @@ Ext.define('NextThought.common.form.Form', {
 
 		if (type === 'group') {
 			this.buildInputs(schema.inputs, inputEl);
+		} else if (type === 'image') {
+			this.buildImageInput(schema, inputEl);
 		} else if (type == 'file') {
 			this.buildFileInput(schema, inputEl);
 		} else if (type === 'date') {
 			this.buildDateInput(schema, inputEl);
 		}
+	},
+
+
+	buildImageInput: function(schema, inputEl) {
+		var cmp = new NextThought.common.form.fields.FilePicker({
+			defaultValue: schema.value,
+			schema: schema,
+			renderTo: inputEl,
+			onChange: this.onFormChange.bind(this)
+		});
+
+		this.on('destroy', cmp.destroy.bind(this));
+
+		this.imagePickers[schema.name] = cmp;
 	},
 
 
