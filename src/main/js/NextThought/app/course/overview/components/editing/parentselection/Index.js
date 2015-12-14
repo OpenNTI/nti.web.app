@@ -20,16 +20,14 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'label', html: '{label}'},
 		{cls: 'selection closed', cn: [
-			{cls: 'active'},
-			{cls: 'menu'}
+			{cls: 'active'}
 		]}
 	]),
 
 
 	renderSelectors: {
 		selectionEl: '.selection',
-		activeEl: '.selection .active',
-		menuEl: '.selection .menu'
+		activeEl: '.selection .active'
 	},
 
 
@@ -87,7 +85,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 			close: this.hideMenu.bind(this),
 			parseItemData: this.parseItemData.bind(this),
 			doSelectRecord: this.selectRecord.bind(this),
-			renderTo: this.menuEl,
+			renderTo: Ext.getBody(),
 			editor: editor,
 			scrollingParent: this.scrollingParent
 		});
@@ -126,6 +124,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 
 	showMenu: function() {
 		this.selectionEl.removeCls('closed');
+		this.menu.show();
 
 		this.alignMenuTo(this.activeEl.dom);
 	},
@@ -133,6 +132,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 
 	hideMenu: function() {
 		this.selectionEl.addCls('closed');
+		this.menu.hide();
 
 		if (this.menu.onHide) {
 			this.menu.onHide();
@@ -143,12 +143,13 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 
 
 	onBodyClick: function(e) {
-		var onSelection = e.getTarget('.overview-editing-parentselection');
+		var onSelection = e.getTarget('.overview-editing-parentselection'),
+			onMenu = e.getTarget('.overview-editing-parentselection-menu');
 
 		onSelection = onSelection && e.getTarget('.selection');
 		onSelection = onSelection && (e.getTarget('.active') || e.getTarget('.menu'));
 
-		if (!onSelection) {
+		if (!onSelection && !onMenu) {
 			this.hideMenu();
 		}
 	},
@@ -162,18 +163,21 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 	alignMenuTo: function(el) {
 		this.unalignMenu();
 
-		var menuDom = this.menuEl.dom,
+		var menuDom = this.menu && this.menu.el && this.menu.el.dom,
 			viewportHeight = Ext.Element.getViewportHeight(),
 			rect = el.getBoundingClientRect(),
 			maxHeight = viewportHeight - rect.bottom - 5;
 
-		menuDom.style.top = rect.bottom + 'px';
-		menuDom.style.left = rect.left + 'px';
-		menuDom.style.width = rect.width + 'px';
-		menuDom.style.maxHeight = maxHeight + 'px';
+		if (menuDom) {
+			menuDom.style.top = rect.bottom + 'px';
+			menuDom.style.left = rect.left + 'px';
+			menuDom.style.width = rect.width + 'px';
+			menuDom.style.maxHeight = maxHeight + 'px';
+		}
 
 		this.menuAlignedTo = el;
 
+		//TODO: figure out where to listen to scroll to keep it aligned
 		// this.scrollingParent.dom.addEventListener('scroll', this.onParentScroll);
 		Ext.EventManager.onWindowResize(this.onParentScroll);
 		this.bodyClickListener = this.mon(Ext.getBody(), {

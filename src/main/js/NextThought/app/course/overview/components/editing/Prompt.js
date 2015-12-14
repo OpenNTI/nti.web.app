@@ -8,6 +8,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
 		'NextThought.app.course.overview.components.editing.outline.Prompt'
 	],
 
+	cls: 'overview-editing-prompt',
+
 	layout: 'none',
 	items: [],
 

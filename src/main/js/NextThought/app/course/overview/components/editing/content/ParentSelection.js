@@ -6,14 +6,14 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ParentSel
 		'NextThought.app.course.overview.components.editing.content.overviewgroup.InlineEditor'
 	],
 
-	label: 'Group: ',
+	label: 'Group',
 
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'item group-item {cls}',
 		'data-ntiid': '{ntiid}',
 		cn: [
-			{cls: 'label', html: '{label}'},
-			{cls: 'color', style: {background: '#{color}'}}
+			{cls: 'color', style: {background: '#{color}'}},
+			{cls: 'label', html: '{label}'}
 		]
 	})),
 

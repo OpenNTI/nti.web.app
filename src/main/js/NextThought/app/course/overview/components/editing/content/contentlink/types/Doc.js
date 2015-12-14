@@ -24,7 +24,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	getFormSchema: function() {
 		var base = this.callParent(arguments);
 
-		base.push({type: 'file', name: 'href', displayName: 'Document'});
+		base.unshift({type: 'file', name: 'href', displayName: 'Document'});
 
 		return base;
 	}
