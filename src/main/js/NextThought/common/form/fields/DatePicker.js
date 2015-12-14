@@ -2,19 +2,17 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	extend: 'Ext.Component',
 	alias: 'widget.date-picker-field',
 
-	cls: 'date-picker-field',
+	cls: 'nti-date-picker',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'date-container part', cn: [
-			{ cls: 'date', html: '{date}', 'data-value': '{date}'}
-		]},
+		{cls: 'date-container'},
 		{tag: 'tpl', 'if': 'timePicker', cn: [
 			{cls: 'time-container', cn: [
-				{ tag: 'input', cls: 'time', html: '12 : 00'}
+				{ tag: 'input', cls: 'hour', value: '11'},
+				{ tag: 'span', cls: 'divider', html: ':'},
+				{ tag: 'input', cls: 'minute', value: '59'},
+				{ tag: 'span', cls: 'meridiem', name: 'meridiem', html: 'PM', 'date-value': 'pm'}
 			]},
-			{cls: 'meridiem-container part', cn: [
-				{ cls: 'meridiem', name: 'meridiem', html: 'AM', 'date-value': 'am'}
-			]}
 		]}
 	]),
 
@@ -23,10 +21,9 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	renderSelectors: {
 		dateContainerEl: '.date-container',
 		dateEl: '.date',
-		timeContainerEl: '.time-container',
-		timeEl: '.time',
-		meridiemContainerEl: '.meridiem-container',
-		meridiemEl: '.meridiem-container .meridiem'
+		hourEL: 'input.hour',
+		minuteEl: 'input.minute',
+		meridiemEl: '.meridiem'
 	},
 
 	beforeRender: function(){
@@ -44,9 +41,8 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		this.callParent(arguments);
 		
 		if (this.dateContainerEl) {
-			this.mon(this.dateContainerEl, {
-				'click': this.showDatePicker.bind(this)
-			});	
+			this.datepicker = this.createDatePicker();
+			this.datepicker.render(this.dateContainerEl);		
 		}
 
 		if (this.meridiemContainerEl) {
@@ -55,51 +51,34 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 			});	
 		}
 
-		this.createDatePicker();
-		if (this.timeEl) {
-			this.timeEl.dom.addEventListener('keyup', this.timeChanged.bind(this));
+		if (this.hourEl) {
+			this.hourEl.dom.addEventListener('keyup', this.timeChanged.bind(this));
 		}
+		if (this.minuteEl) {
+			this.minuteEl.dom.addEventListener('keyup', this.timeChanged.bind(this));
+		}
+
 		this.setValue(this.defaultValue);
 	},
 
 
-	showDatePicker: function(){
-		if (!this.datepicker) {
-			this.createDatePicker();
-		}
-		
-		if (!this.datepicker.isVisible()) {
-			this.datepicker.showBy(this.dateEl, 'tl-bl?');
-		}
-		else {
-			this.datepicker.hide();
-		}
-	},
-
-
 	createDatePicker: function(){
-		this.datepicker = Ext.widget({
+		var picker = Ext.widget({
 			xtype: 'datepicker',
 	        minDate: new Date(),
-	        renderTo: Ext.getBody(),
-	        handler: this.dateChanged.bind(this),
-	        floating: true
+	        handler: this.onDateChange.bind(this),
+	        layout: 'none'
 		});
 
-		this.on('destroy', this.datepicker.destroy.bind(this.datepicker));
-		this.datepicker.hide();
+		this.on('destroy', picker.destroy.bind(picker));
+		return picker;
 	},
 
 
-	dateChanged: function(picker, date){
-		if (this.dateEl) {
-			this.dateEl.setHTML(Ext.Date.format(date, 'F j, Y'));
-			this.dateEl.dom.setAttribute('data-value', date);
-		}
-
+	onDateChange: function(picker, date){
 		// Broadcast the change.
-		if (this.formChanged){
-			this.formChanged();
+		if (this.dateChanged){
+			this.dateChanged();
 		}
 	},
 
@@ -189,14 +168,11 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 					dateOnly = new Date(b);
 
 				// Set date
-				me.dateEl.setHTML(dateString);
-				me.dateEl.dom.setAttribute('data-value', dateOnly);
 				if (me.datepicker) {
 					me.datepicker.setValue(dateOnly);
 				}
 
-				// Set time
-				me.timeEl.dom.value = hour + ':' + minute;
+				// TODO: Set Hour and Minute
 
 				// Set AM/PM
 				if (me.meridiemEl && m) {
