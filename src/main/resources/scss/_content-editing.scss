@@ -37,6 +37,75 @@
 			opacity: 0;
 			height: 0;
 		}
+
+		form {
+			box-shadow: none;
+		}
+	}
+
+
+	form {
+		box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
+
+		.group.card {
+			background: white;
+			padding: 15px;
+			border-top: 1px solid #d8d8d8;
+			@include flexContainer();
+
+			.field.icon {
+				@include flexItem(0 0 auto);
+				box-shadow: inset 1px 0 0 0 #d8d8d8,
+								0 1px 0 0 #d8d8d8,
+								0 -1px 0 0 #d8d8d8;
+			}
+
+			.meta {
+				@include flexItem(1 1 auto);
+				padding: 11px;
+				background-color: #f5fbff;
+				box-shadow: inset -1px 0 0 0 #d8d8d8,
+								inset 1px 0 0 0 #d8d8d8,
+								0 1px 0 0 #d8d8d8,
+								0 -1px 0 0 #d8d8d8;
+			}
+
+			.field.byline input, .field.label input, .field.description textarea {
+				&:focus {
+					background: white;
+					box-shadow: 0 0 3px 0 $primary-blue, 0 0 0 1px #d8d8d8;
+				}
+			}
+
+			.field.byline, .field.label {
+				input {
+					padding: 0 0.5em;
+					display: block;
+					line-height: 22px;
+					margin: 0 0 5px;
+					font-size: 0.75em;
+					font-weight: 300;
+					border: none;
+					box-shadow: 0 0 0 1px #d8d8d8;
+					width: 100%;
+				}
+			}
+
+			.field.description {
+				textarea {
+					margin: 0;
+					padding: 2px 0.5em;
+					resize: none;
+					width: 100%;
+					font-size: 0.75em;
+					line-height: 22px;
+					font-weight: 300;
+					height: 43px;
+					border: none;
+					box-shadow: 0 0 0 1px #d8d8d8;
+				}
+			}
+		}
 	}
 }
 

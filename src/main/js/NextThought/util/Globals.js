@@ -695,6 +695,19 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 
+	getURLObject: function() {
+		var url;
+
+		if (window.URL && window.URL.createObjectURL) {
+			url = window.URL;
+		} else if (window.webkitURL && window.webkitURL.createObjectURL) {
+			url = window.webkitURL;
+		}
+
+		return url;
+	},
+
+
 	getURLParts: function(url) {
 		var hash, search, pathname,
 			parts = url.split('#');
