@@ -447,17 +447,40 @@
 
 	& > .selection {
 		background: white;
+		position: relative;
 		display: inline-block;
+
+		&::after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			right: 0.8em;
+			width: 0;
+			height: 0;
+			margin-top: -2px;
+			border-style: solid;
+			border-width: 0 4px 5px 4px;
+			border-color: transparent transparent #bfbfbf transparent;
+		}
+
+
 		&.closed {
+			&::after {
+				transform: rotate(180deg);
+			}
+
 			.menu {
 				display: none;
 			}
 		}
 
 		.active {
-			padding: 0 10px;
+			line-height: 40px;
+			font-size: 0.875rem;
+			padding: 0 1em 0 10px;
 			box-shadow: 0 0 3px 0px rgba(0, 0, 0, 0.3);
 			width: 260px;
+			cursor: pointer;
 		}
 	}
 }
@@ -469,7 +492,7 @@
 			display: inline-block;
 			vertical-align: middle;
 			width: 200px;
-			font: normal 400 0.875em/40px $font;
+			font: normal 400 0.875rem/40px $font;
 			overflow: hidden;
 			@include ellipse();
 		}
@@ -501,6 +524,13 @@
 
 		&:last-of-type {
 			border-bottom: none;
+		}
+
+		&.new-item {
+			cursor: pointer;
+			font-size: 0.875em;
+			text-align: center;
+			color: $primary-blue;
 		}
 	}
 }

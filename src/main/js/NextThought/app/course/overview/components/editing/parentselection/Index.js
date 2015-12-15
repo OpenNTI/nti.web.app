@@ -36,6 +36,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 
 		this.onParentScroll = this.onParentScroll.bind(this);
 		this.onBodyClick = this.onBodyClick.bind(this);
+		this.selectionItems = this.selectionItems || [];
 
 		this.on({
 			destroy: this.unalignMenu.bind(this)
@@ -58,6 +59,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 		this.originalSelection = this.selectedItem;
 
 		this.menu = this.buildMenu(this.selectionItems, this.getEditor(), this.parentRecord);
+		this.hideMenu();
 
 		//If there is no original selection (ie we aren't editing a record), just pick the first one
 		this.selectRecord(this.originalSelection || this.selectionItems[0]);

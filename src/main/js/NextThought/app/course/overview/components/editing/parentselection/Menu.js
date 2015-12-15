@@ -46,7 +46,11 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 
 
 	onHide: function() {
-		this.showItems();
+		if (this.selectionItems.length) {
+			this.showItems();
+		} else {
+			this.showAddNewItem();
+		}
 	},
 
 
@@ -67,11 +71,6 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 				item.selectRecord(record);
 			}
 		});
-	},
-
-
-	getSelection: function() {
-		return this.selectedRecord;
 	},
 
 
