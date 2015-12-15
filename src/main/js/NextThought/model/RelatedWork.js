@@ -35,10 +35,20 @@ Ext.define('NextThought.model.RelatedWork', {
 			'unknown': 'generic.png'
 		},
 
+		URL_ICON: 'icon-www.png',
 
-		getIconForType: function(mimeType) {
+
+		getIconForMimeType: function(mimeType) {
 			var base = this.FILE_ICON_BASE,
 				icon = this.MIMETYPE_TO_ICON[mimeType] || this.MIMETYPE_TO_ICON['unknown'];
+
+			return base + icon;
+		},
+
+
+		getIconForURL: function() {
+			var base = this.FILE_ICON_BASE,
+				icon = this.URL_ICON;
 
 			return base + icon;
 		}

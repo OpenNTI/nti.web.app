@@ -5,7 +5,8 @@ Ext.define('NextThought.common.form.Form', {
 	requires: [
 		'NextThought.common.form.fields.FilePicker',
 		'NextThought.common.form.fields.ImagePicker',
-		'NextThought.common.form.fields.DatePicker'
+		'NextThought.common.form.fields.DatePicker',
+		'NextThought.common.form.fields.URL'
 	],
 
 	cls: 'form-container',
@@ -39,6 +40,14 @@ Ext.define('NextThought.common.form.Form', {
 				]},
 				{tag: 'tpl', 'if': '!required', cn: [
 					{tag: 'textarea', type: '{type}', name: '{name}', placeholder: '{placeholder}', html: '{value}'}
+				]}
+			]
+		})),
+
+		url: new Ext.XTemplate(Ext.DomHelper.markup({
+			cls: 'field {name} url', cn: [
+				{tag: 'tpl', 'if': 'displayName', cn: [
+					{tag: 'label', 'for': '{name}', html: '{displayName}'}
 				]}
 			]
 		})),
@@ -86,9 +95,10 @@ Ext.define('NextThought.common.form.Form', {
 	beforeRender: function() {
 		this.callParent(arguments);
 
-		this.filePickers = {};
-		this.imagePickers = {};
-		this.datePickers = {};
+		this.componentMap = {};
+
+		this.on('destroy', this.onDestroy.bind(this));
+
 		this.defaultValues = this.defaultValues || {};
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -105,6 +115,18 @@ Ext.define('NextThought.common.form.Form', {
 		this.buildInputs(this.schema, this.formEl);
 
 		this.setUpChangeListeners();
+	},
+
+
+	onDestroy: function() {
+		var componentMap = this.componentMap,
+			keys = Object.keys(componentMap);
+
+		keys.forEach(function(key) {
+			var cmp = componentMap[key];
+
+			cmp.destroy();
+		});
 	},
 
 
@@ -139,49 +161,41 @@ Ext.define('NextThought.common.form.Form', {
 			this.buildFileInput(schema, inputEl);
 		} else if (type === 'date') {
 			this.buildDateInput(schema, inputEl);
+		} else if (type === 'url') {
+			this.buildUrlInput(schema, inputEl);
 		}
 	},
 
 
-	buildImageInput: function(schema, inputEl) {
-		var cmp = new NextThought.common.form.fields.ImagePicker({
+	__buildComponent: function(cls, schema, inputEl) {
+		var cmp = cls.create({
 			defaultValue: schema.value,
 			schema: schema,
 			renderTo: inputEl,
 			onChange: this.onFormChange.bind(this)
 		});
 
-		this.on('destroy', cmp.destroy.bind(this));
+		this.componentMap[schema.name] = cmp;
+	},
 
-		this.imagePickers[schema.name] = cmp;
+
+	buildImageInput: function(schema, inputEl) {
+		this.__buildComponent(NextThought.common.form.fields.ImagePicker, schema, inputEl);
 	},
 
 
 	buildFileInput: function(schema, inputEl) {
-		var cmp = new NextThought.common.form.fields.FilePicker({
-			defaultValue: schema.value,
-			schema: schema,
-			renderTo: inputEl,
-			onChange: this.onFormChange.bind(this)
-		});
-
-		this.on('destroy', cmp.destroy.bind(cmp));
-
-		this.filePickers[schema.name] = cmp;
+		this.__buildComponent(NextThought.common.form.fields.FilePicker, schema, inputEl);
 	},
 
 
 	buildDateInput: function(schema, inputEl) {
-		var cmp = new NextThought.common.form.fields.DatePicker({
-			defaultValue: schema.value,
-			schema: schema,
-			renderTo: inputEl,
-			onChange: this.onFormChange.bind(this)
-		});
+		this.__buildComponent(NextThought.common.form.fields.DatePicker, schema, inputEl);
+	},
 
-		this.on('destroy', cmp.destroy.bind(cmp));
 
-		this.datePickers[schema.name] = cmp;
+	buildUrlInput: function(schema, inputEl) {
+		this.__buildComponent(NextThought.common.form.fields.URL, schema, inputEl);
 	},
 
 
@@ -261,16 +275,15 @@ Ext.define('NextThought.common.form.Form', {
 
 
 	getValueOf: function(name) {
-		var filePicker = this.filePickers[name],
-			datePicker = this.datePickers[name],
+		var cmp = this.componentMap[name],
 			inputEl = this.el.dom.querySelector('input[name="' + name + '"]'),
 			textarea = this.el.dom.querySelector('textarea[name="' + name + '"]'),
 			value;
 
-		if (filePicker) {
-			value = filePicker.getValue();
-		} else if (datePicker) {
-			value = datePicker.getValue();
+		if (cmp) {
+			if (cmp.getValue) {
+				cmp.getValue();
+			}
 		} else if (inputEl) {
 			value = inputEl.value;
 		} else if (textarea) {
@@ -283,19 +296,19 @@ Ext.define('NextThought.common.form.Form', {
 
 	getFormData: function() {
 		var form = this.formEl.dom,
-			filePickers = this.filePickers,
+			imagePickers = this.imagePickers,
 			keys, formData;
 
 		if (!form) { return; }
 
 		formData = new FormData(form);
 
-		keys = Object.keys(filePickers);
+		keys = Object.keys(imagePickers);
 
 		keys.forEach(function(key) {
-			var picker = filePickers[key];
+			var picker = imagePickers[key];
 
-			formData.append(picker.name, picker.getFile(), picker.getFileName());
+			picker.appendToFormData(formData);
 		});
 
 
@@ -304,14 +317,14 @@ Ext.define('NextThought.common.form.Form', {
 
 
 	hasFiles: function() {
-		var filePickers = this.filePickers,
-			keys = Object.keys(filePickers),
-			hasFile = false;
+		var componentMap = this.componentMap,
+			keys = Object.keys(componentMap),
+			hasFile = true;
 
 		keys.forEach(function(key) {
-			var picker = filePickers[key];
+			var cmp = componentMap[key];
 
-			if (picker.hasFile()) {
+			if (cmp.hasFile && cmp.hasFile()) {
 				hasFile = true;
 			}
 		});
@@ -427,23 +440,13 @@ Ext.define('NextThought.common.form.Form', {
 
 
 	setPlaceholder: function(name, value) {
-		var imagePicker = this.imagePickers[name],
-			filePicker = this.filePickers[name],
-			datePicker = this.datePickers[name],
+		var cmp = this.componentMap[name],
 			inputEl = this.el.dom.querySelector('input[name="' + name + '"]'),
 			textarea = this.el.dom.querySelector('textarea[name="' + name + '"]');
 
-		if (imagePicker) {
-			if (imagePicker.setPlaceholder) {
-				imagePicker.setPlaceholder(value);
-			}
-		} else if (filePicker) {
-			if (filePicker.setPlaceholder) {
-				filePicker.setPlaceholder(value);
-			}
-		} else if (datePicker) {
-			if (datePicker.setPlaceholder) {
-				datePicker.setPlaceholder(value);
+		if (cmp) {
+			if (cmp.setPlaceholder) {
+				cmp.setPlaceholder(value);
 			}
 		} else if (inputEl) {
 			inputEl.setAttribute('placeholder', value);

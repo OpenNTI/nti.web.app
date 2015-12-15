@@ -82,7 +82,23 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	hasFile: function() {
 		var input = this.inputEl && this.inputEl.dom;
 
-		return input && input.files.length > 0;
+		return input && input.files && input.files.length > 0;
+	},
+
+
+	getValue: function() {
+		var input = this.inputEl && this.inputEl.dom;
+
+		return input && input.files && input.files[0];
+	},
+
+
+	appendToFormData: function(data) {
+		var value = this.getValue();
+
+		if (value) {
+			data.append(this.schema.name, value, value.name);
+		}
 	},
 
 
@@ -123,6 +139,10 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 
 		if (this.schema.onFileAdded) {
 			this.schema.onFileAdded(file.type);
+		}
+
+		if (this.onChange) {
+			this.onChange();
 		}
 
 		this.fileContainer.removeCls('no-file');

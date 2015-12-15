@@ -535,3 +535,51 @@ span.nti-radiobutton {
 	}
 }
 
+
+.url-field {
+	@include flexContainer();
+
+	&.valid {
+		a {
+			color: $primary-blue;
+
+			@include icon('preview-blue', $side: after, $top: 50%, $left: auto, $right: 1em);
+		}
+	}
+
+	input {
+		@include flexItem(1 1 auto);
+		line-height: 35px;
+		font-size: 1em;
+		box-shadow: inset 0 0 0 1px #d8d8d8;
+		border: none;
+		padding: 0 0.5em;
+	}
+
+	a {
+		@include flexItem(0 0 auto);
+		width: 93px;
+		color: $primary-grey;
+		font-size: 0.75em;
+		font-weight: 700;
+		line-height: 35px;
+		padding-right: 1.5em;
+		text-align: center;
+		text-decoration: none;
+		box-shadow: inset -1px 0 0 #d8d8d8, inset 0 1px 0 #d8d8d8, inset 0 -1px 0 #d8d8d8;
+		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f2f2f2+100 */
+		background: #ffffff; /* Old browsers */
+		background: -moz-linear-gradient(top,  #ffffff 0%, #f2f2f2 100%); /* FF3.6-15 */
+		background: -webkit-linear-gradient(top,  #ffffff 0%,#f2f2f2 100%); /* Chrome10-25,Safari5.1-6 */
+		background: linear-gradient(to bottom,  #ffffff 0%,#f2f2f2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f2f2f2',GradientType=0 ); /* IE6-9 */
+
+
+		@include icon('preview-gray', $side: after, $top: 50%, $left: auto, $right: 1em);
+
+		&::after {
+			margin-top: -4px;
+		}
+	}
+}
+

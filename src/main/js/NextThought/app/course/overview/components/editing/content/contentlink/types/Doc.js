@@ -19,6 +19,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		//is pointing to a doc
 	},
 
+	cls: 'content-editor content-link document',
+
 
 	afterRender: function() {
 		this.callParent(arguments);
@@ -40,7 +42,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 
 	onFileAdded: function(type) {
-		this.formCmp.setPlaceholder('icon', NextThought.model.RelatedWork.getIconForType(type));
+		this.formCmp.setPlaceholder('icon', NextThought.model.RelatedWork.getIconForMimeType(type));
 		this.removeCls('file-only');
 	}
 });

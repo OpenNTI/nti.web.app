@@ -19,11 +19,20 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		//is pointing to a url
 	},
 
+	cls: 'content-editor content-link url',
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.formCmp.setPlaceholder('icon', NextThought.model.RelatedWork.getIconForURL());
+	},
+
 
 	getFormSchema: function() {
 		var base = this.callParent(arguments);
 
-		base.push({type: 'text', name: 'href', displayName: 'Link'});
+		base.unshift({type: 'url', name: 'href', placeholder: 'Link', required: true});
 
 		return base;
 	}
