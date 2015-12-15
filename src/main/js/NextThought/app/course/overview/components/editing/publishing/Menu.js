@@ -16,7 +16,11 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		]},
 		{cls: 'option publish-on-date', cn: [
 			{cls: 'text', html: 'Publish on Date'},
-			{cls: 'subtext', html: 'When do you want students to have access to this lesson?'}
+			{cls: 'subtext', cn: [
+				{tag: 'span', cls: 'description', html: 'When do you want students to have access to this lesson?'},
+				{cls: 'date-picker-container'},
+				{cls: 'save', html: 'Save'}
+			]}
 		]},
 		{cls: 'option unpublish selected', cn: [
 			{cls: 'text', html: 'Unpublish'},
@@ -28,7 +32,8 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	renderSelectors: {
 		publishEl: '.publish',
 		publishOnDateEl: '.publish-on-date',
-		unpublishEl: '.unpublish'
+		unpublishEl: '.unpublish',
+		publishOnDateSaveEl: '.publish-on-date .save'
 	},
 
 
@@ -44,18 +49,23 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		this.mon(this.publishEl, 'click', this.onPublishClick.bind(this));
 		this.mon(this.publishOnDateEl, 'click', this.onPublishOnDateClick.bind(this));
 		this.mon(this.unpublishEl, 'click', this.onUnpublishClick.bind(this));
+		this.mon(this.publishOnDateSaveEl, 'click', this.onPublishOnDateSave.bind(this));
 	},
 
 
 	onPublishClick: function(e) {
-		var el = Ext.get(e.target);
+		var el = Ext.get(e.target),
+			me = this;
 
 		e.stopEvent();
 		this.toggleOptionSelection(el);
 		if (this.record) {
 			this.EditingActions.publish(this.record)
-				.then(function() {
-					console.log(arguments);
+				.then(function(rec) {
+					// TODO: should we change the record?
+					if (me.setPublished) {
+						me.setPublished(rec);
+					}
 				})
 				.fail(function(){
 					console.log(arguments);
@@ -70,10 +80,24 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		e.stopEvent();
 		this.toggleOptionSelection(el);
 		if (!this.datepicker) {
-			this.createDatePicker(this.publishOnDateEl.down('.subtext'));
+			this.createDatePicker(this.publishOnDateEl.down('.date-picker-container'));
 		}
 
 		this.datepicker.show();
+	},
+
+
+	onPublishOnDateSave: function(){
+		var dateValue = this.datepicker && this.datepicker.getValue()
+			me = this;
+		if (dateValue && this.record) {
+			this.EditingActions.publishOnDate(this.record, dateValue)
+				.then(function(rec) {
+					if (me.setWillPublishOn) {
+						me.setWillPublishOn(rec);
+					}
+				});
+		}	
 	},
 
 
@@ -83,7 +107,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 			xtype: 'date-picker-field',
 	        defaultValue: new Date(),
 	        renderTo: parentEl,
-	        handler: this.dateChanged.bind(this)
+	        dateChanged: this.dateChanged.bind(this)
 		});
 
 		this.on('destroy', this.datepicker.destroy.bind(this.datepicker));
@@ -92,19 +116,47 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 
 
 	dateChanged: function(){
+		var time  = this.datepicker.getValue(),
+			date = new Date(time * 1000),
+			targetEl = this.publishOnDateEl.down('.description');
 
+		time  = this.getDisplayDateValue(date);
+		if (targetEl) {
+			targetEl.update('Lesson contents will be visible to students on ' + time);
+		}
+	},
+
+
+	getDisplayDateValue: function(date) {
+		var hour, minutes,
+			meridiemVal, date;
+
+		if (date instanceof Date) {
+			hour = date.getHours();
+			minutes = date.getMinutes();
+			meridiemVal = hour > 12 ? 'PM' : 'AM';
+			hour = hour > 12 ? hour - 12 : hour;
+
+			date = Ext.Date.format(date, 'F d');
+			return date + ' at ' + hour + ':' + minutes + ' ' + meridiemVal;	
+		}
+
+		return null;
 	},
 
 
 	onUnpublishClick: function(e){
-		var el = Ext.get(e.target);
+		var el = Ext.get(e.target),
+			me = this;
 
 		e.stopEvent();
 		this.toggleOptionSelection(el);
 		if (this.record) {
 			this.EditingActions.unpublish(this.record)
-				.then(function() {
-					console.log(arguments);
+				.then(function(rec) {
+					if (me.setNotPublished) {
+						me.setNotPublished(rec);
+					}
 				})
 				.fail(function(){
 					console.log(arguments);

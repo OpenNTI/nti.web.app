@@ -94,32 +94,32 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 		if (!link) {
 			return Promise.reject('No link');
 		}
+		
+		return Service.post(link, {'publishBeginning': date})
+			.then(function(response) {
+				return ParseUtils.parseItems(response)[0];
+			})
+			.then(function(rec){
+				record.syncWith(rec);
+				return record;
+			});
+	},
+
+
+	publish: function(record) {
+		var link = record && record.getLink('publish');
+		if (!link) {
+			return Promise.reject('No link');
+		}
 
 		return Service.post(link)
 			.then(function(response) {
 				return ParseUtils.parseItems(response)[0];
 			})
-			.then(function(rec) {
-				var editLink;
-				if (date) {
-					rec.set('AvailableBeginning', date);
-					editLink = rec.getLink('edit');
-
-					if (editLink) {
-						return Service.post(editLink)
-							.then(function(resp) {
-								return ParseUtils.parseItems(resp)[0];
-							});
-					}
-				}
-
-				return rec;
-			})
-	},
-
-
-	publish: function(record) {
-		return this.publishOnDate(record);
+			.then(function(rec){
+				record.syncWith(rec);
+				return record;
+			});
 	},
 
 

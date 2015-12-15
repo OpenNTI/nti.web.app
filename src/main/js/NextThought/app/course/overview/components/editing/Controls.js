@@ -141,7 +141,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 
 
 	initPublishMenu: function(el) {
-		var menuContainer = el && el.down('.menu-container');
+		var menuContainer = el && el.down('.menu-container'), me = this;
 
 		if (!menuContainer) { return; }
 
@@ -150,20 +150,59 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 			contents: this.contents,
 			renderTo: menuContainer,
 			setPublished: function() {
+				var label = me.publishEl && me.publishEl.down('.label');
 
+				if (me.publishEl) {
+					me.publishEl.removeCls('publish');
+					me.publishEl.addCls('published');
+					if (label) {
+						label.update('Published');
+					}
+				}
 			},
-			setWillPublishOn: function() {
+			setWillPublishOn: function(rec) {
+				var label = me.publishEl && me.publishEl.down('.label'),
+					value = rec && rec.get('publishBeginning'),
+					date = new Date(value);
 
+				if (me.publishEl && date) {
+					date = Ext.Date.format(date, 'F d');
+					me.publishEl.removeCls('publish');
+					me.publishEl.addCls('published');
+					if (label) {
+						label.update('Publish on ' + date);
+					}
+				}
 			},
 			setNotPublished: function() {
+				var label = me.publishEl && me.publishEl.down('.label');
 
+				if (me.publishEl) {
+					me.publishEl.removeCls('published');
+					me.publishEl.addCls('publish');
+					if (label) {
+						label.update('Publish');
+					}
+				}
 			}
 		});
 
-		wait(10)
-			.then(this.alignPublishingMenu.bind(this, menuContainer));
-
+		// wait(10)
+			// .then(this.alignPublishingMenu.bind(this, menuContainer));
+		
+   		Ext.EventManager.onWindowResize(this.onWindowResize, this);
 		this.on('destroy', this.publishMenu.destroy.bind(this.publishMenu));
+   		this.on('destroy', function(){
+   			Ext.EventManager.removeResizeListener(me.onWindowResize, me);
+   		})
+	},
+
+
+	onWindowResize: function(){
+		var menuContainer = this.publishEl;
+		if (menuContainer) {
+			this.alignPublishingMenu(menuContainer);
+		}
 	},
 
 
@@ -172,7 +211,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 			me = this,
 			menu = this.publishMenu,
 			top = menuContainer.getBottom() + 15,
-			right = menuContainer.getRight() + 70,
+			right = menuContainer.getRight(),
 			viewportHeight = Ext.Element.getViewportHeight(),
 			maxHeight = viewportHeight - top - 10;
 
