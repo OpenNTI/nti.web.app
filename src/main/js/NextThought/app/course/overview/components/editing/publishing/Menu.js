@@ -3,7 +3,8 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	alias: 'widget.overview-editing-publishing-menu',
 
 	requires: [
-		'NextThought.common.form.fields.DatePicker'
+		'NextThought.common.form.fields.DatePicker',
+		'NextThought.app.course.overview.components.editing.Actions'
 	],
 
 	cls: 'editing-publishing-menu',
@@ -33,6 +34,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 
 	initComponent: function() {
 		this.callParent(arguments);
+		this.EditingActions = new NextThought.app.course.overview.components.editing.Actions();
 	},
 
 
@@ -50,6 +52,15 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 
 		e.stopEvent();
 		this.toggleOptionSelection(el);
+		if (this.record) {
+			this.EditingActions.publish(this.record)
+				.then(function() {
+					console.log(arguments);
+				})
+				.fail(function(){
+					console.log(arguments);
+				});
+		}
 	},
 
 
@@ -90,7 +101,15 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 
 		e.stopEvent();
 		this.toggleOptionSelection(el);
-
+		if (this.record) {
+			this.EditingActions.unpublish(this.record)
+				.then(function() {
+					console.log(arguments);
+				})
+				.fail(function(){
+					console.log(arguments);
+				});
+		}
 	},
 
 

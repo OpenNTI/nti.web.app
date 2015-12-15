@@ -75,5 +75,71 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 		}
 
 		return this.__createRecord(form, newParent);
+	},
+
+
+	/**
+	 * Handle publishing a record (i.e. CourseOutlineNode, CourseOutlineContentNode)
+	 * When given a date to published on, we make two request. 
+	 * The first one we, post to the publish link to make it publish
+	 * and then we edit the AvailableBeginning date and then post to the edit link.
+	 *
+	 * @param  {CourseOutlineNode} record       A record with a publish link.
+	 * @param  {TimeStamp} optionalDate Optional date to publish a date on
+	 * @return {Promise}  fulfills when successfully published, reject when it failed.
+	 */
+	publishOnDate: function(record, date) {
+		var link = record && record.getLink('publish');
+
+		if (!link) {
+			return Promise.reject('No link');
+		}
+
+		return Service.post(link)
+			.then(function(response) {
+				return ParseUtils.parseItems(response)[0];
+			})
+			.then(function(rec) {
+				var editLink;
+				if (date) {
+					rec.set('AvailableBeginning', date);
+					editLink = rec.getLink('edit');
+
+					if (editLink) {
+						return Service.post(editLink)
+							.then(function(resp) {
+								return ParseUtils.parseItems(resp)[0];
+							});
+					}
+				}
+
+				return rec;
+			})
+	},
+
+
+	publish: function(record) {
+		return this.publishOnDate(record);
+	},
+
+
+	/**
+	 * Handle un-publishing a record (i.e. CourseOutlineNode, CourseOutlineContentNode)
+	 *
+	 * @param  {CourseOutlineNode} record       A record with a publish link.
+	 * @return {Promise}  fulfills when successfully published, reject when it failed.
+	 */
+	unpublish: function(record) {
+		var link = record && record.getLink('unpublish');
+
+		if (!link) {
+			return Promise.reject('No link');
+		}
+		
+		return Service.post(link)
+			.then(function(response) {
+				return ParseUtils.parseItems(response)[0];
+			});	
 	}
+
 });
