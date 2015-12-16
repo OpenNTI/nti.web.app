@@ -25,7 +25,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 			{cls: 'text', html: 'Unpublish'},
 			{cls: 'subtext', html: 'Currently not visible to any students'}
 		]},
-		{cls: 'save', html: 'Save'}
+		{cls: 'save disabled', html: 'Save'}
 	]),
 
 
@@ -33,7 +33,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		publishEl: '.publish',
 		publishOnDateEl: '.publish-on-date',
 		unpublishEl: '.unpublish',
-		publishOnDateSaveEl: '.save'
+		saveBtnEl: '.save'
 	},
 
 
@@ -49,7 +49,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		this.mon(this.publishEl, 'click', this.handleSelectionClick.bind(this));
 		this.mon(this.publishOnDateEl, 'click', this.onPublishOnDateClick.bind(this));
 		this.mon(this.unpublishEl, 'click', this.handleSelectionClick.bind(this));
-		this.mon(this.publishOnDateSaveEl, 'click', this.onSave.bind(this));
+		this.mon(this.saveBtnEl, 'click', this.onSave.bind(this));
 
 		this.setInitialState();
 	},
@@ -65,9 +65,11 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 
 		if (isNodePublished && isLessonPublished) {
 			this.select(this.publishEl);
+			this.initialState = this.publishEl;
 		}
 		else if (!isNodePublished && !isLessonPublished) {
 			this.select(this.unpublishEl);
+			this.initialState = this.unpublishEl;
 		}
 		else if (isNodePublished && !isLessonPublished) {
 			if (isLessonPublished === false) {
@@ -77,12 +79,14 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 					this.setPublishOnDateText(date);
 				}
 
-				this.select(this.publishOnDateEl);	
+				this.select(this.publishOnDateEl);
+				this.initialState = this.publishOnDateEl;
 				this.createDatePicker(this.publishOnDateEl.down('.date-picker-container'));
 			}
 		}
 		else {
 			this.select(this.unpublishEl);
+			this.initialState = this.unpublishEl;
 		}
 	},
 
@@ -182,6 +186,9 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 
 		if (!defaultValue) {
 			defaultValue = new Date();
+
+			// Set it to tomorrow.
+			defaultValue.setDate(defaultValue.getDate() + 1);
 		}
 
 		this.datepicker = Ext.widget({
@@ -234,6 +241,11 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	select: function(el){
 		var t = el && el.hasCls('option') ? el : el && el.up('.option'),
 			selectedEl = this.el.down('.selected');
+
+		if (!Ext.isEmpty(this.initialState) && t !== this.initialState) {
+			this.saveBtnEl.removeCls('disabled');
+			delete this.initialState;
+		}
 
 		if (!t || !selectedEl) { return; }
 

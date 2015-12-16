@@ -64,6 +64,6 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 			.then(function(rec){
 				return me.EditorActions.publish(rec);
 			});
-	},
+	}
 
 });
