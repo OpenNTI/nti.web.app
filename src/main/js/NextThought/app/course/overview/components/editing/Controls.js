@@ -72,8 +72,6 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 		this.PromptActions = NextThought.app.prompt.Actions.create();
 		this.WindowActions = NextThought.app.windows.Actions.create();
 
-		//If the record we are given is published, change the publish button
-		//TODO: revisit this once we set up the publish controls
 		if (this.record && this.record.isPublished && this.record.isPublished()) {
 			this.BUTTONS.publish.iconCls = 'unpublish';
 			this.BUTTOND.publish.label = 'Unpublish';
@@ -141,7 +139,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 
 
 	initPublishMenu: function(el) {
-		var menuContainer = el && el.down('.menu-container'), me = this;
+		var menuContainer = el && el.down('.menu-container'), me = this,
+			html = Ext.query('.x-viewport')[0];
 
 		if (!menuContainer) { return; }
 
@@ -190,11 +189,15 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 		// wait(10)
 			// .then(this.alignPublishingMenu.bind(this, menuContainer));
 		
-   		Ext.EventManager.onWindowResize(this.onWindowResize, this);
+		this.onWindowResizeBuffer = Ext.Function.createBuffered(this.onWindowResize, 10, this);
+   		Ext.EventManager.onWindowResize(this.onWindowResizeBuffer, this);
+   		window.addEventListener('scroll', this.onWindowResizeBuffer.bind(this));
+
 		this.on('destroy', this.publishMenu.destroy.bind(this.publishMenu));
    		this.on('destroy', function(){
-   			Ext.EventManager.removeResizeListener(me.onWindowResize, me);
-   		})
+   			Ext.EventManager.removeResizeListener(me.onWindowResizeBuffer, me);
+   			window.removeEventListener(me.onWindowResizeBuffer, me);
+   		});
 	},
 
 
@@ -207,11 +210,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 
 
 	alignPublishingMenu: function(menuContainer){
-		var box = menuContainer.getBox(),
+		var box = menuContainer && menuContainer.dom.getBoundingClientRect() || {},
 			me = this,
 			menu = this.publishMenu,
-			top = menuContainer.getBottom() + 15,
-			right = menuContainer.getRight(),
+			top = box.bottom + 15,
+			right = box.right + 25,
 			viewportHeight = Ext.Element.getViewportHeight(),
 			maxHeight = viewportHeight - top - 10;
 

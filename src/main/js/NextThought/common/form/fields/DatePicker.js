@@ -217,7 +217,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		hour = parseInt(hour);
 		minutes = parseInt(minutes);
 
-		if (isNaN(hour) || hour > 23 || hour < 1) {
+		if (isNaN(hour) || hour > 12 || hour < 1) {
 			this.hourEl.addCls('error');
 		}
 

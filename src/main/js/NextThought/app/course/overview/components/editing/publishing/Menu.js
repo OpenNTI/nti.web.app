@@ -10,22 +10,22 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	cls: 'editing-publishing-menu',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'option publish', cn: [
+		{cls: 'option publish', 'data-action': 'publish', cn: [
 			{cls: 'text', html: 'Publish'},
 			{cls: 'subtext', html: 'Lesson contents are visible to students.'}
 		]},
-		{cls: 'option publish-on-date', cn: [
+		{cls: 'option publish-on-date', 'data-action': 'publish-date', cn: [
 			{cls: 'text', html: 'Publish on Date'},
 			{cls: 'subtext', cn: [
 				{tag: 'span', cls: 'description', html: 'When do you want students to have access to this lesson?'},
-				{cls: 'date-picker-container'},
-				{cls: 'save', html: 'Save'}
+				{cls: 'date-picker-container'}
 			]}
 		]},
-		{cls: 'option unpublish selected', cn: [
+		{cls: 'option unpublish selected', 'data-action': 'unpublish', cn: [
 			{cls: 'text', html: 'Unpublish'},
 			{cls: 'subtext', html: 'Currently not visible to any students'}
-		]}
+		]},
+		{cls: 'save', html: 'Save'}
 	]),
 
 
@@ -33,7 +33,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		publishEl: '.publish',
 		publishOnDateEl: '.publish-on-date',
 		unpublishEl: '.unpublish',
-		publishOnDateSaveEl: '.publish-on-date .save'
+		publishOnDateSaveEl: '.save'
 	},
 
 
@@ -46,31 +46,19 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	afterRender: function(){
 		this.callParent(arguments);
 
-		this.mon(this.publishEl, 'click', this.onPublishClick.bind(this));
+		this.mon(this.publishEl, 'click', this.handleSelectionClick.bind(this));
 		this.mon(this.publishOnDateEl, 'click', this.onPublishOnDateClick.bind(this));
-		this.mon(this.unpublishEl, 'click', this.onUnpublishClick.bind(this));
-		this.mon(this.publishOnDateSaveEl, 'click', this.onPublishOnDateSave.bind(this));
+		this.mon(this.unpublishEl, 'click', this.handleSelectionClick.bind(this));
+		this.mon(this.publishOnDateSaveEl, 'click', this.onSave.bind(this));
 	},
 
 
-	onPublishClick: function(e) {
+	handleSelectionClick: function(e) {
 		var el = Ext.get(e.target),
 			me = this;
 
 		e.stopEvent();
 		this.toggleOptionSelection(el);
-		if (this.record) {
-			this.EditingActions.publish(this.record)
-				.then(function(rec) {
-					// TODO: should we change the record?
-					if (me.setPublished) {
-						me.setPublished(rec);
-					}
-				})
-				.fail(function(){
-					console.log(arguments);
-				});
-		}
 	},
 
 
@@ -87,17 +75,71 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	},
 
 
-	onPublishOnDateSave: function(){
+	onSave: function(){
+		var selectedEl = this.el.down('.option.selected');
+			action = selectedEl && selectedEl.getAttribute('data-action');
+
+		if (action === 'publish') {
+			this.publishSave();
+		}
+		else if (action === 'publish-date') {
+			this.publishOnDateSave();
+		}
+		else {
+			this.unpublishSave();
+		}
+	},
+
+
+	publishSave: function(){
+		var me = this;
+
+		Promise.all([
+			me.EditingActions.publish(me.record),
+			me.EditingActions.publish(me.contents)
+		])
+		.then(function(o) {
+			var node = o[0], lesson = o[1];
+			if (me.setPublished) {
+				me.setPublished(lesson);
+			}
+		});
+	},
+
+
+	publishOnDateSave: function(){
 		var dateValue = this.datepicker && this.datepicker.getValue()
 			me = this;
-		if (dateValue && this.record) {
-			this.EditingActions.publishOnDate(this.record, dateValue)
-				.then(function(rec) {
-					if (me.setWillPublishOn) {
-						me.setWillPublishOn(rec);
-					}
-				});
-		}	
+		
+		if (dateValue) { return; }
+
+		Promise.all([
+			me.EditingActions.publish(me.record),
+			me.EditingActions.publishOnDate(me.contents, dateValue)
+		])
+		.then(function(o) {
+			var node = o[0], lesson = o[1];
+
+			if (me.setWillPublishOn) {
+				me.setWillPublishOn(lesson);
+			}
+		});
+	},
+
+
+	unpublishSave: function() {
+		var me = this;
+
+		Promise.all([
+			me.EditingActions.unpublish(me.record),
+			me.EditingActions.unpublish(me.contents)
+		])
+		.then(function(o) {
+			var node = o[0], lesson = o[1];
+			if (me.setNotPublished) {
+				me.setNotPublished(lesson);
+			}
+		});
 	},
 
 
@@ -142,26 +184,6 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		}
 
 		return null;
-	},
-
-
-	onUnpublishClick: function(e){
-		var el = Ext.get(e.target),
-			me = this;
-
-		e.stopEvent();
-		this.toggleOptionSelection(el);
-		if (this.record) {
-			this.EditingActions.unpublish(this.record)
-				.then(function(rec) {
-					if (me.setNotPublished) {
-						me.setNotPublished(rec);
-					}
-				})
-				.fail(function(){
-					console.log(arguments);
-				});
-		}
 	},
 
 

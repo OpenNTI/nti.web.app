@@ -14,7 +14,9 @@ Ext.define('NextThought.model.courses.overview.Lesson', {
 
 	fields: [
 		{name: 'title', type: 'String'},
-		{name: 'Items', type: 'arrayItem'}
+		{name: 'Items', type: 'arrayItem'},
+		{name: 'publishBeginning', type: 'auto'},
+		{name: 'publishEnding', type: 'auto'}
 	],
 
 

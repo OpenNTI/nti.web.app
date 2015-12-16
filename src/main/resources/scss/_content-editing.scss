@@ -661,7 +661,7 @@
 		}
 
 		&.publish, &.published {
-			width: 220px;
+			width: 245px;
 
 			.label {
 				width: 225px;
@@ -759,23 +759,24 @@
 						color: $tertiary-grey;
 						padding: 0 0 10px 37px;
 						display: none;
-
-						.save {
-							display: block;
-    						line-height: 40px;
-						    text-align: center;
-						    padding: 0 1.5em;
-						    border-radius: 3px;
-						    color: white;
-						    background-color: $primary-blue;
-						    cursor: pointer;
-						}
 					}
 
 
 					&:last-of-type {
 						border-bottom: none;
 					}	
+				}
+
+				.save {
+					margin: 5px 0;
+					display: block;
+					line-height: 40px;
+				    text-align: center;
+				    padding: 0 1.5em;
+				    border-radius: 3px;
+				    color: white;
+				    background-color: $primary-blue;
+				    cursor: pointer;
 				}
 			}
 		}
@@ -853,13 +854,13 @@
 			.x-datepicker-cell {
 				.x-datepicker-date {
 					color: $secondary-grey;
-				    padding: 7px;
+				    padding: 3px;
 				    background: none;
-				    font-size: 14px;
+				    font-size: 13px;
 				    font-weight: 300;
 				    text-align: center;
-				    margin: 8px 6px;
-				    width: 32px;
+				    margin: 4px 3px;
+				    width: 26px;
 				}
 
 				&:first-of-type {
@@ -906,29 +907,23 @@
 	}
 	
 	.time-container {
-		margin: 20px auto;
-		font-size: 14px;
+		margin: 14px auto;
+		font-size: 13px;
 		text-align: center;
 
 		input {
-			font-size: 14px;
+			font-size: 13px;
 			color: $secondary-grey;	
 		}
 		
-		.hour {
-			width: 42px;
-    		padding: 8px 0;
+		.hour, .minute {
+			width: 38px;
+    		padding: 5px 0;
     		text-align: center;
 		}
 
 		.divider {
 			margin: 0 5px;
-		}
-
-		.minute {
-			width: 42px;
-    		padding: 8px 0;
-    		text-align: center;
 		}
 
 		.error {
@@ -937,12 +932,12 @@
 
 		.meridiem {
 		    margin-left: 15px;
-		    padding: 7px 16px 7px 7px;
+		    padding: 5px 15px 5px 5px;
 		    border: 1px solid $tertiary-grey-alt;
 		    position: relative;
 		    color: $secondary-grey;
 
-    		@include icon('dropdown-am-pm-icon', $side: after, $top: 14px, $left: auto, $right: 6px);
+    		@include icon('dropdown-am-pm-icon', $side: after, $top: 11px, $left: auto, $right: 5px);
 		}
 	}
 }
