@@ -64,7 +64,7 @@ Ext.define('NextThought.common.components.BoundCollection', {
 		me.mon(collection, {
 			single: true,
 			destroyable: true,
-			'update': this.setCollection.bind(this)
+			'update': this.setCollection.bind(this, collection)
 		});
 
 		if (items.length) {

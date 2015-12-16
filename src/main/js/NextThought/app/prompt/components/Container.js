@@ -85,7 +85,9 @@ Ext.define('NextThought.app.prompt.components.Container', {
 
 
 	onSaveSuccess: function(value) {
-		//TODO: figure this out
+		if (this.onSubmit) {
+			this.onSubmit(value);
+		}
 	},
 
 

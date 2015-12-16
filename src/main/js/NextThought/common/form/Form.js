@@ -423,19 +423,22 @@ Ext.define('NextThought.common.form.Form', {
 	getChangedValues: function() {
 		var schema = this.schema,
 			newValues = this.getValues(),
-			oldValues = this.defaultValues,
-			changed = {};
+			oldValues = this.defaultValues;
 
-		schema.forEach(function(part) {
+		function reducer(acc, part) {
 			var oldValue = oldValues[part.name],
 				newValue = newValues[part.name];
 
-			if (oldValue !== newValue || part.type === 'hidden') {
-				changed[part.name] = newValue;
+			if (part.type === 'group') {
+				part.inputs.reduce(reducer, acc);
+			} else if (oldValue !== newValue || part.type === 'hidden') {
+				acc[part.name] = newValue;
 			}
-		});
 
-		return changed;
+			return acc;
+		}
+
+		return schema.reduce(reducer, {});
 	},
 
 

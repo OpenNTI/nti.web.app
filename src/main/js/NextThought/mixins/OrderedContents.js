@@ -68,6 +68,7 @@ Ext.define('NextThought.mixins.OrderedContents', {
 			this.set('Items', items);
 		}
 
+		this.fireEvent('update');
 		return record;
 	},
 

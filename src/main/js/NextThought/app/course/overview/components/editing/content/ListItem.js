@@ -3,6 +3,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 	//This should only be extended, not instantiated
 
 	requires: [
+		'NextThought.app.course.overview.components.editing.controls.Edit',
 		'NextThought.app.course.overview.components.editing.Controls'
 	],
 
@@ -24,18 +25,20 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 			controls = this.getControls(this.record, this.course),
 			items = [];
 
-		if (preview) {
-			items.push(preview);
-		}
-
 		if (controls) {
 			items.push(controls);
+		}
+
+		if (preview) {
+			items.push(preview);
 		}
 
 		this.add(items);
 	},
 
+
 	getPreviewType: function(record) {},
+
 
 	getPreview: function(record) {
 		var item = record.toJSON(),
@@ -60,14 +63,18 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 
 	getControls: function(record, bundle) {
 		return {
-			xtype: 'overview-editing-controls',
-			record: record,
-			parentRecord: this.parentRecord,
-			root: this.lessonOverview,
-			bundle: bundle,
-			optionsConfig: {
-				order: this.canEdit ? ['audit', 'edit'] : []
-			}
+			xtype: 'container',
+			cls: 'controls',
+			layout: 'none',
+			items: [
+				{
+					xtype: 'overview-editing-controls-edit',
+					record: record,
+					parentRecord: this.parentRecord,
+					root: this.lessonOverview,
+					bundle: bundle
+				}
+			]
 		};
 	}
 });
