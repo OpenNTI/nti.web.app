@@ -71,11 +71,6 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 
 		this.PromptActions = NextThought.app.prompt.Actions.create();
 		this.WindowActions = NextThought.app.windows.Actions.create();
-
-		if (this.record && this.record.isPublished && this.record.isPublished()) {
-			this.BUTTONS.publish.iconCls = 'unpublish';
-			this.BUTTOND.publish.label = 'Unpublish';
-		}
 	},
 
 
@@ -135,6 +130,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 		this.mon(this.el, 'click', this.handleClick.bind(this));
 
 		this.initPublishMenu(this.publishEl);
+		this.setPublishState();
 	},
 
 
@@ -148,46 +144,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 			record: this.record,
 			contents: this.contents,
 			renderTo: menuContainer,
-			setPublished: function() {
-				var label = me.publishEl && me.publishEl.down('.label');
-
-				if (me.publishEl) {
-					me.publishEl.removeCls('publish');
-					me.publishEl.addCls('published');
-					if (label) {
-						label.update('Published');
-					}
-				}
-			},
-			setWillPublishOn: function(rec) {
-				var label = me.publishEl && me.publishEl.down('.label'),
-					value = rec && rec.get('publishBeginning'),
-					date = new Date(value);
-
-				if (me.publishEl && date) {
-					date = Ext.Date.format(date, 'F d');
-					me.publishEl.removeCls('publish');
-					me.publishEl.addCls('published');
-					if (label) {
-						label.update('Publish on ' + date);
-					}
-				}
-			},
-			setNotPublished: function() {
-				var label = me.publishEl && me.publishEl.down('.label');
-
-				if (me.publishEl) {
-					me.publishEl.removeCls('published');
-					me.publishEl.addCls('publish');
-					if (label) {
-						label.update('Publish');
-					}
-				}
-			}
+			setPublished: this.setPublishState.bind(this),
+			setWillPublishOn: this.setPublishState.bind(this),
+			setNotPublished: this.setPublishState.bind(this)
 		});
 
-		// wait(10)
-			// .then(this.alignPublishingMenu.bind(this, menuContainer));
 		
 		this.onWindowResizeBuffer = Ext.Function.createBuffered(this.onWindowResize, 10, this);
    		Ext.EventManager.onWindowResize(this.onWindowResizeBuffer, this);
@@ -198,6 +159,79 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
    			Ext.EventManager.removeResizeListener(me.onWindowResizeBuffer, me);
    			window.removeEventListener(me.onWindowResizeBuffer, me);
    		});
+	},
+
+
+	/**
+	 * Set the initial publication state of the lesson control.
+	 * Since publishing affects both the outline node and the lesson overview,
+	 * we will take into account both to make sure they follow the intended business logic.
+	 * 
+	 */
+	setPublishState: function(){
+		var node = this.record,
+			isNodePublished = node && node.isPublished && node.isPublished(),
+			lesson = this.contents,
+			isLessonPublished = lesson && lesson.isPublished && lesson.isPublished();
+
+
+		if (isNodePublished && isLessonPublished) {
+			this.setPublished();
+		}
+		else if (!isNodePublished && !isLessonPublished) {
+			this.setNotPublished();
+		}
+		else if (isNodePublished && !isLessonPublished) {
+			if (isLessonPublished === false) {
+				this.setWillPublishOn();
+			}
+		}
+		else {
+			console.warn('Not expected. The node should be published if its lesson is published. ', node, lesson);
+		}
+	},
+
+
+	setPublished: function() {
+		var label = this.publishEl && this.publishEl.down('.label');
+
+		if (this.publishEl) {
+			this.publishEl.removeCls('publish');
+			this.publishEl.addCls('published');
+			if (label) {
+				label.update('Published');
+			}
+		}
+	},
+
+
+	setWillPublishOn: function() {
+		var label = this.publishEl && this.publishEl.down('.label'),
+			rec = this.contents,
+			value = rec && rec.get('publishBeginning'),
+			date = new Date(value);
+
+		if (this.publishEl && value) {
+			date = Ext.Date.format(date, 'F d');
+			this.publishEl.removeCls('publish');
+			this.publishEl.addCls('published');
+			if (label) {
+				label.update('Publish on ' + date);
+			}
+		}
+	},
+
+
+	setNotPublished: function() {
+		var label = this.publishEl && this.publishEl.down('.label');
+
+		if (this.publishEl) {
+			this.publishEl.removeCls('published');
+			this.publishEl.addCls('publish');
+			if (label) {
+				label.update('Publish');
+			}
+		}
 	},
 
 
@@ -220,10 +254,12 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 
 		menu.onceRendered
 			.then(function() {
-				menu.el.setStyle('top', top + 'px');
-				menu.el.setStyle('right', right + 'px');
-				menu.el.setStyle('left', 'auto');
-				menu.el.setStyle('maxHeight', maxHeight + 'px');
+				if (menu.el) {
+					menu.el.setStyle('top', top + 'px');
+					menu.el.setStyle('right', right + 'px');
+					menu.el.setStyle('left', 'auto');
+					menu.el.setStyle('maxHeight', maxHeight + 'px');	
+				}
 			});
 	},
 

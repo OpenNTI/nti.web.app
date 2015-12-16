@@ -4,14 +4,22 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineContentNode', {
 	fields: [
 		{name: 'NTIID', type: 'string', mapping: 'ContentNTIID'},
 		{name: 'publishBeginning', type: 'auto'},
-		{name: 'publishEnding', type: 'number'}
+		{name: 'publishEnding', type: 'number'},
+		{name: 'PublicationState', type: 'string'}
 	],
 
 	statics: {
 		mimeType: 'application/vnd.nextthought.courses.courseoutlinecontentnode'
 	},
 
+	
 	getFirstContentNode: function() {
 		return this;
+	},
+
+
+	isPublished: function(){
+		var state = this.get('PublicationState') || "";
+		return state.toLowerCase() === 'DefaultPublished'.toLowerCase();
 	}
 });

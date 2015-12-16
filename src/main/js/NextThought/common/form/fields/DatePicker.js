@@ -165,6 +165,13 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 				}
 
 				// TODO: Set Hour and Minute
+				if (me.hourEl) {
+					me.hourEl.dom.value = hour;
+				}
+
+				if (me.minuteEl) {
+					me.minuteEl.dom.value = minute;
+				}
 
 				// Set AM/PM
 				if (me.meridiemEl && m) {

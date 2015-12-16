@@ -777,6 +777,11 @@
 				    color: white;
 				    background-color: $primary-blue;
 				    cursor: pointer;
+
+				    &.disabled {
+    					background-color: $tertiary-grey-alt;
+	   					box-shadow: inset 1px 0 0 0 $border-grey;
+	   				}
 				}
 			}
 		}

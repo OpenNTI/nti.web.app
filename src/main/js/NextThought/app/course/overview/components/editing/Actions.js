@@ -139,7 +139,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 		return Service.post(link)
 			.then(function(response) {
 				return ParseUtils.parseItems(response)[0];
-			});	
+			})
+			.then(function(rec){
+				record.syncWith(rec);
+				return record;
+			});
 	}
 
 });

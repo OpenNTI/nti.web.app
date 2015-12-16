@@ -50,6 +50,40 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		this.mon(this.publishOnDateEl, 'click', this.onPublishOnDateClick.bind(this));
 		this.mon(this.unpublishEl, 'click', this.handleSelectionClick.bind(this));
 		this.mon(this.publishOnDateSaveEl, 'click', this.onSave.bind(this));
+
+		this.setInitialState();
+	},
+
+
+	setInitialState: function(){
+		var node = this.record,
+			isNodePublished = node && node.isPublished && node.isPublished(),
+			lesson = this.contents,
+			isLessonPublished = lesson && lesson.isPublished && lesson.isPublished(),
+			date;
+
+
+		if (isNodePublished && isLessonPublished) {
+			this.select(this.publishEl);
+		}
+		else if (!isNodePublished && !isLessonPublished) {
+			this.select(this.unpublishEl);
+		}
+		else if (isNodePublished && !isLessonPublished) {
+			if (isLessonPublished === false) {
+				date = lesson && lesson.get('publishBeginning');
+				if (date) {
+					date = new Date(date);
+					this.setPublishOnDateText(date);
+				}
+
+				this.select(this.publishOnDateEl);	
+				this.createDatePicker(this.publishOnDateEl.down('.date-picker-container'));
+			}
+		}
+		else {
+			this.select(this.unpublishEl);
+		}
 	},
 
 
@@ -58,7 +92,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 			me = this;
 
 		e.stopEvent();
-		this.toggleOptionSelection(el);
+		this.select(el);
 	},
 
 
@@ -66,12 +100,10 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		var el = Ext.get(e.target);
 
 		e.stopEvent();
-		this.toggleOptionSelection(el);
+		this.select(el);
 		if (!this.datepicker) {
 			this.createDatePicker(this.publishOnDateEl.down('.date-picker-container'));
 		}
-
-		this.datepicker.show();
 	},
 
 
@@ -111,7 +143,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		var dateValue = this.datepicker && this.datepicker.getValue()
 			me = this;
 		
-		if (dateValue) { return; }
+		if (!dateValue) { return; }
 
 		Promise.all([
 			me.EditingActions.publish(me.record),
@@ -144,28 +176,40 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 
 
 	createDatePicker: function(dateContainer){
-		var parentEl = dateContainer || Ext.getBody();
+		var parentEl = dateContainer || Ext.getBody(),
+			begin = this.contents && this.contents.get('publishBeginning'),
+			defaultValue = begin && new Date(begin);
+
+		if (!defaultValue) {
+			defaultValue = new Date();
+		}
+
 		this.datepicker = Ext.widget({
 			xtype: 'date-picker-field',
-	        defaultValue: new Date(),
+	        defaultValue: defaultValue,
 	        renderTo: parentEl,
 	        dateChanged: this.dateChanged.bind(this)
 		});
 
 		this.on('destroy', this.datepicker.destroy.bind(this.datepicker));
-		this.datepicker.hide();
 	},
 
 
 	dateChanged: function(){
 		var time  = this.datepicker.getValue(),
-			date = new Date(time * 1000),
-			targetEl = this.publishOnDateEl.down('.description');
+			date = new Date(time * 1000);
 
-		time  = this.getDisplayDateValue(date);
+		this.setPublishOnDateText(date);
+	},
+
+
+	setPublishOnDateText: function(date){
+		var	targetEl = this.publishOnDateEl.down('.description'),
+			time = this.getDisplayDateValue(date);
+
 		if (targetEl) {
 			targetEl.update('Lesson contents will be visible to students on ' + time);
-		}
+		}	
 	},
 
 
@@ -187,7 +231,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	},
 
 
-	toggleOptionSelection: function(el){
+	select: function(el){
 		var t = el && el.hasCls('option') ? el : el && el.up('.option'),
 			selectedEl = this.el.down('.selected');
 
