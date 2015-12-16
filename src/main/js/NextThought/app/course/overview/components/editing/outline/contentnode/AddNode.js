@@ -78,17 +78,25 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.contentno
 
 	onSave: function(e){
 		var record = this.getNewRecord(),
+			shouldNavigate = e.getKey() === e.ENTER,
 			me = this;
 
 		if (!this.parentRecord) {
 			return Promise.reject();
 		}
 
+		return this.doSave(record, shouldNavigate);
+	},
+
+
+	doSave: function(record, navigate) {
+		var me = this;
+
 		return this.parentRecord.appendContent(record && record.getData())
 				.then(function(rec) {
 					rec._depth = me.parentRecord._depth + 1;
 				
-					if (e.getKey() === e.ENTER) {
+					if (navigate) {
 						me.hideEditor();
 						if (me.doSelectNode) {
 							me.doSelectNode(rec);
@@ -103,6 +111,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.contentno
 						});	
 					}
 
+					record.syncWith(rec);
 					return rec;
 				});
 	},
