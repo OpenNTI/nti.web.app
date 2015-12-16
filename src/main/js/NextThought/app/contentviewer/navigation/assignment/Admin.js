@@ -18,7 +18,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 
 	headerTpl: Ext.DomHelper.markup([
 		{cls: 'predicted hidden', cn: [
-			{cls: 'label', 'data-qtip': 'Estimated from the grading policy in the Syllabus', html: 'Course Grade'},
+			{cls: 'label', 'data-qtip': 'Estimated from the grading policy in the Syllabus', html: 'Projected Grade'},
 			{cls: 'value', html: '{predicted}'}
 		]},
 		{ cls: 'grade', cn: [

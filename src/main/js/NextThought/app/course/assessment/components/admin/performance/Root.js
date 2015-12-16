@@ -104,7 +104,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 					sortOn: 'PredictedGrade',
 					width: 120,
 					text: Ext.DomHelper.markup({
-						cls: 'disclaimer-header', 'data-qtip': 'Estimated from the grading policy in the Syllabus', html: 'Course Grade'
+						cls: 'disclaimer-header', 'data-qtip': 'Estimated from the grading policy in the Syllabus', html: 'Projected Grade'
 					}),
 					renderer: function(val) {
 						return NextThought.model.courseware.Grade.getDisplay(val);
