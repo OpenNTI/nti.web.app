@@ -37,7 +37,7 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 		if (Globals.ROOT_URL_PATTERN.test(href)) {
 			href = getURL(href);
 		} else if (!ParseUtils.isNTIID(href) && !Globals.HOST_PREFIX_PATTERN.test(href)) {
-			href = getURL(i.root + href);
+			href = getURL((root || '') + href);
 		}
 
 		if (Globals.ROOT_URL_PATTERN.test(icon)) {
