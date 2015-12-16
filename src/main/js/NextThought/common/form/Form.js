@@ -115,6 +115,8 @@ Ext.define('NextThought.common.form.Form', {
 		this.buildInputs(this.schema, this.formEl);
 
 		this.setUpChangeListeners();
+
+		this.onFormChange();
 	},
 
 
@@ -240,6 +242,48 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
+	__componentsEmpty: function() {
+		var components = this.componentMap,
+			keys = Object.keys(components),
+			isEmpty = true;
+
+		keys.forEach(function(key) {
+			var cmp = components[key];
+
+			if (cmp.isEmpty && !cmp.isEmpty()) {
+				isEmpty = false;
+			}
+		});
+
+		return isEmpty;
+	},
+
+
+	__inputsEmpty: function() {
+		var inputs = this.el.dom.querySelectorAll('input[type=text], textarea'),
+			isEmpty = true;
+
+		inputs = Array.prototype.slice.call(inputs);
+
+		inputs.forEach(function(input) {
+			if (input.value) {
+				isEmpty = false;
+			}
+		});
+
+		return isEmpty;
+	},
+
+
+	isEmpty: function() {
+		if (!this.rendered) {
+			return true;
+		}
+
+		return this.__componentsEmpty() && this.__inputsEmpty();
+	},
+
+
 	getValues: function() {
 		var me = this,
 			values = {},
@@ -296,21 +340,21 @@ Ext.define('NextThought.common.form.Form', {
 
 	getFormData: function() {
 		var form = this.formEl.dom,
-			imagePickers = this.imagePickers,
-			keys, formData;
+			components = this.componentMap,
+			keys = Object.keys(components),
+			formData;
 
 		if (!form) { return; }
 
 		formData = new FormData(form);
 
-		keys = Object.keys(imagePickers);
-
 		keys.forEach(function(key) {
-			var picker = imagePickers[key];
+			var cmp = components[key];
 
-			picker.appendToFormData(formData);
+			if (cmp.appedToFormData) {
+				cmp.appendToFormData(data);
+			}
 		});
-
 
 		return formData;
 	},
@@ -319,7 +363,7 @@ Ext.define('NextThought.common.form.Form', {
 	hasFiles: function() {
 		var componentMap = this.componentMap,
 			keys = Object.keys(componentMap),
-			hasFile = true;
+			hasFile = false;
 
 		keys.forEach(function(key) {
 			var cmp = componentMap[key];
@@ -353,6 +397,7 @@ Ext.define('NextThought.common.form.Form', {
 				}
 			};
 
+			xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 			xhr.send(formData);
 		});
 	},
@@ -376,6 +421,7 @@ Ext.define('NextThought.common.form.Form', {
 			};
 
 			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 			xhr.send(JSON.stringify(values));
 		});
 
