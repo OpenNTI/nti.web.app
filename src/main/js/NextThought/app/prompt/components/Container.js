@@ -18,8 +18,6 @@ Ext.define('NextThought.app.prompt.components.Container', {
 
 		this.onWindowResize = this.onWindowResize.bind(this);
 
-		this.bodyCmp = this.cmp.create(this.getBodyConfig());
-
 		this.header = this.add({
 			xtype: 'prompt-header',
 			doCancel: this.doCancel.bind(this),
@@ -30,7 +28,7 @@ Ext.define('NextThought.app.prompt.components.Container', {
 			xtype: 'container',
 			cls: 'body-container',
 			layout: 'none',
-			items: [this.bodyCmp]
+			items: []
 		});
 
 		this.footer = this.add({
@@ -38,6 +36,10 @@ Ext.define('NextThought.app.prompt.components.Container', {
 			doSave: this.doSave.bind(this),
 			doCancel: this.doCancel.bind(this)
 		});
+
+		this.bodyCmp = this.cmp.create(this.getBodyConfig());
+
+		this.bodyContainer.add(this.bodyCmp);
 
 		this.isSetUp = true;
 		this.fireEvent('setup-complete');
@@ -55,100 +57,23 @@ Ext.define('NextThought.app.prompt.components.Container', {
 				data: this.data,
 				type: this.promptType,
 				Header: {
-					enableBack: this.enableBack.bind(this),
-					disableBack: this.disableBack.bind(this),
-					setTitle: this.setTitle.bind(this),
-					setSubTitle: this.setSubTitle.bind(this)
+					enableBack: this.header.enableBack.bind(this.header),
+					disableBack: this.header.disableBack.bind(this.header),
+					setTitle: this.header.setTitle.bind(this.header),
+					setSubTitle: this.header.setSubTitle.bind(this.header),
+					showError: this.header.showError.bind(this.header),
+					showWarning: this.header.showWarning.bind(this.header),
+					showMessage: this.header.showMessage.bind(this.header)
 				},
 				Footer: {
-					enableSave: this.enableSave.bind(this),
-					disableSave: this.disableSave.bind(this),
-					setSaveText: this.setSaveText.bind(this),
-					setCancelText: this.setCancelText.bind(this)
+					enableSave: this.footer.enableSave.bind(this.footer),
+					disableSave: this.footer.disableSave.bind(this.footer),
+					setSaveText: this.footer.setSaveText.bind(this.footer),
+					setCancelText: this.footer.setCancelText.bind(this.footer)
 				}
 			}
 		};
 
-	},
-
-
-	enableBack: function(text) {
-		if (!this.isSetUp) {
-			this.on('setup-complete', this.enableBack.bind(this, text));
-			return;
-		}
-
-		this.header.enableBack(text);
-	},
-
-
-	disableBack: function() {
-		if (!this.isSetUp) {
-			this.on('setup-complete', this.disableBack.bind(this));
-			return;
-		}
-
-		this.header.disableBack();
-	},
-
-
-	setTitle: function(title) {
-		if (!this.isSetUp) {
-			this.on('setup-complete', this.setTitle.bind(this, title));
-			return;
-		}
-
-		this.header.setTitle(title);
-	},
-
-
-	setSubTitle: function(subTitle) {
-		if (!this.isSetUp) {
-			this.on('setup-complete', this.setSubTitle.bind(this, subTitle));
-			return;
-		}
-
-		this.header.setSubTitle(subTitle);
-	},
-
-
-	enableSave: function() {
-		if (!this.isSetUp) {
-			this.on('setup-complete', this.enablesave.bind(this));
-			return;
-		}
-
-		this.footer.enableSave();
-	},
-
-
-	disableSave: function() {
-		if (!this.isSetUp) {
-			this.on('setup-complete', this.disableSave.bind(this));
-			return;
-		}
-
-		this.footer.disableSave();
-	},
-
-
-	setSaveText: function(text) {
-		if (!this.isSetUp) {
-			this.on('setup-complete', this.setSaveText.bind(this, text));
-			return;
-		}
-
-		this.footer.setSaveText(text);
-	},
-
-
-	setCancelText: function(text) {
-		if (!this.isSetUp) {
-			this.on('setup-complete', this.setCancelText.bind(this, text));
-			return;
-		}
-
-		this.footer.setCancelText(text);
 	},
 
 
@@ -159,10 +84,37 @@ Ext.define('NextThought.app.prompt.components.Container', {
 	},
 
 
-	doSave: function() {
-		if (this.bodyCmp.onSave) {
-			this.bodyCmp.onSave();
+	onSaveSuccess: function(value) {
+		//TODO: figure this out
+	},
+
+
+	onSaveFailure: function(reason) {
+		this.header.showError(reason);
+	},
+
+
+	__validate: function() {
+		if (this.bodyCmp.doValidation) {
+			return this.bodyCmp.doValidation();
 		}
+
+		return Promise.resolve();
+	},
+
+
+	__save: function() {
+		if (this.bodyCmp.onSave) {
+			this.bodyCmp.onSave()
+				.then(this.onSaveSuccess.bind(this))
+				.fail(this.onSaveFailure.bind(this));
+		}
+	},
+
+
+	doSave: function() {
+		this.__validate()
+			.then(this.__save.bind(this));
 	},
 
 

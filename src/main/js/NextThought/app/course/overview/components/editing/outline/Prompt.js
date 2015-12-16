@@ -153,7 +153,10 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 			setTitle: this.setHeaderTitle.bind(this),
 			setSubTitle: this.setSubTitle.bind(this),
 			enableBack: this.enableHeaderBack.bind(this),
-			disableBack: this.disableHeaderBack.bind(this)
+			disableBack: this.disableHeaderBack.bind(this),
+			showError: this.showError.bind(this),
+			showWarning: this.showWarning.bind(this),
+			showMessage: this.showMessage.bind(this)
 		};
 	},
 
@@ -185,37 +188,52 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 
 
 	setSaveText: function(text) {
-		this.Prompt.Footer.setSaveText(text);
+		return this.Prompt.Footer.setSaveText(text);
 	},
 
 
 	enableSave: function() {
-		this.Prompt.Footer.enableSave();
+		return this.Prompt.Footer.enableSave();
 	},
 
 
 	disableSave: function() {
-		this.Prompt.Footer.disableSave();
+		return this.Prompt.Footer.disableSave();
 	},
 
 
 	setHeaderTitle: function(title) {
-		this.Prompt.Header.setTitle(title);
+		return this.Prompt.Header.setTitle(title);
 	},
 
 
 	setSubTitle: function(subTitle) {
-		this.Prompt.Header.setSubTitle(subTitle);
+		return this.Prompt.Header.setSubTitle(subTitle);
 	},
 
 
 	enableHeaderBack: function(text) {
-		this.Prompt.Header.enableBack(text);
+		return this.Prompt.Header.enableBack(text);
 	},
 
 
 	disableHeaderBack: function() {
-		this.Prompt.Header.disableBack();
+		return this.Prompt.Header.disableBack();
+	},
+
+
+	showError: function(err) {
+		return this.Prompt.Header.showError(err);
+	},
+
+
+	showWarning: function(warn) {
+		return this.Prompt.Header.showWarning(warn);
+	},
+
+
+	showMessage: function(msg) {
+		return this.Prompt.Header.showMessage(msg);
 	},
 
 
@@ -223,6 +241,15 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 		if (this.activeEditor && this.activeEditor.onBack) {
 			this.activeEditor.onBack();
 		}
+	},
+
+
+	doValidation: function() {
+		if (this.activeEditor && this.activeEditor.doValidation) {
+			return this.activeEditor && this.activeEditor.doValidation();
+		}
+
+		return Promise.resolve();
 	},
 
 

@@ -112,6 +112,10 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 			this.itemTpl.append(this.activeEl, this.parseItemData(record));
 			this.menu.selectRecord(record);
 		}
+
+		if (this.onChange) {
+			this.onChange(record);
+		}
 	},
 
 

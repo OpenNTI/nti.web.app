@@ -79,24 +79,64 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	},
 
 
+	getInput: function() {
+		return this.inputEl && this.inputEl.dom;
+	},
+
+
+	isEmpty: function() {
+		return !this.hasFile();
+	},
+
+
+	isValid: function() {
+		var input = this.getInput();
+
+		return input && input.checkValidity() ? input.checkValidity() : true;
+	},
+
+
+	showError: function() {
+		this.fileContainer.addCls('error');
+	},
+
+
+	removeError: function() {
+		this.fileContainer.removeCls('error');
+	},
+
+
 	hasFile: function() {
-		var input = this.inputEl && this.inputEl.dom;
+		var input = this.getInput();
 
 		return input && input.files && input.files.length > 0;
 	},
 
 
+	getErrors: function() {
+		var input = this.getInput();
+
+		return {
+			missing: input.validity && input.validity.missingValue
+		};
+	},
+
+
 	getValue: function() {
-		var input = this.inputEl && this.inputEl.dom;
+		var input = this.getInput();
 
 		return input && input.files && input.files[0];
 	},
 
 
 	appendToFormData: function(data) {
-		var value = this.getValue();
+		var value = this.getValue(),
+			input = this.getInput(),
+			name = input && input.getAttribute('name');
 
-		if (value) {
+		//Only append if my input doesn't have a name,
+		//so we don't override the default
+		if (value && name !== this.schema.name) {
 			data.append(this.schema.name, value, value.name);
 		}
 	},
@@ -128,7 +168,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 
 
 	onFileChange: function() {
-		var input = this.inputEl && this.inputEl.dom,
+		var input = this.getInput(),
 			file = input && input.files && input.files[0];
 
 		if (!file) { return; }

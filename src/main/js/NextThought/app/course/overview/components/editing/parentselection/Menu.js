@@ -74,6 +74,11 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 	},
 
 
+	getSelection: function() {
+		return this.selectedRecord;
+	},
+
+
 	showItems: function() {
 		this.itemListContainer.removeAll(true);
 

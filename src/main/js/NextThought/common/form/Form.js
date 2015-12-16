@@ -6,8 +6,27 @@ Ext.define('NextThought.common.form.Form', {
 		'NextThought.common.form.fields.FilePicker',
 		'NextThought.common.form.fields.ImagePicker',
 		'NextThought.common.form.fields.DatePicker',
-		'NextThought.common.form.fields.URL'
+		'NextThought.common.form.fields.URL',
+		'NextThought.common.form.ErrorMessages'
 	],
+
+
+	statics: {
+
+		__getMessages: function() {
+			this.__errorMessages = this.__errorMessages || new NextThought.common.form.ErrorMessages();
+
+			return this.__errorMessages;
+		},
+
+
+		getMessageForError: function(errors) {
+			var message = this.__getMessages();
+
+			return message.getMessageForErrors(errors);
+		}
+	},
+
 
 	cls: 'form-container',
 
@@ -213,6 +232,21 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
+	__getComponent: function(name) {
+		return this.componentMap[name];
+	},
+
+
+	__getInput: function(name) {
+		return this.el && this.el.dom.querySelector('input[name="' + name + '"]');
+	},
+
+
+	__getTextarea: function(name) {
+		return this.el && this.el.dom.querySelector('textarea[name="' + name + '"]');
+	},
+
+
 	/**
 	 * When a field is edited, call the onChange listener if it's provided.
 	 * This allows the creator of the form to act on form change events.
@@ -238,7 +272,68 @@ Ext.define('NextThought.common.form.Form', {
 	 * @return {Boolean}
 	 */
 	isValid: function() {
-		return true;
+		var form = this.formEl.dom;
+
+		return form.checkValidity ? form.checkValidity() : true;
+	},
+
+
+	getErrors: function(schema, errors) {
+		var me = this;
+
+		schema = schema || this.schema;
+		errors = errors || {};
+
+		schema.forEach(function(entry) {
+			var name = entry.name,
+				error;
+
+			if (entry.type === 'group') {
+				me.getErrors(entry.inputs, errors);
+				return;
+			}
+
+			error = me.getErrorsFor(name);
+
+			if (error) {
+				errors[name] = error;
+			}
+		});
+
+		return errors;
+	},
+
+
+	getErrorsFor: function(name) {
+		var cmp = this.__getComponent(name),
+			inputEl = this.__getInput(name),
+			textarea = this.__getTextarea(name),
+			error, hasErrors = false, keys;
+
+		if (cmp) {
+			if (cmp.getErrors) {
+				error = cmp.getErrors();
+			}
+		} else if (inputEl) {
+			error = {
+				missing: inputEl.validity && inputEl.validity.valueMissing
+			};
+		} else if (textarea) {
+			error = {
+				missing: textarea.valdity && textarea.validity.valueMissing
+			};
+		}
+
+		(Object.keys(error || {}) || []).forEach(function(key) {
+			var type = error[key];
+
+			if (type) {
+				hasErrors = true;
+			}
+		});
+
+
+		return hasErrors && error;
 	},
 
 
@@ -284,18 +379,44 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
-	getValues: function() {
-		var me = this,
-			values = {},
-			schema = me.schema || [];
+	getValues: function(schema, values) {
+		var me = this;
+
+		schema = schema || me.schema || [];
+
+		values = values || {};
 
 		schema.forEach(function(entry) {
 			var name = entry.name;
 
-			values[name] = me.getValueOf(name);
+			if (entry.type === 'group') {
+				me.getValues(entry.inputs, values);
+			} else {
+				values[name] = me.getValueOf(name);
+			}
 		});
 
 		return values;
+	},
+
+
+	getValueOf: function(name) {
+		var cmp = this.__getComponent(name),
+			inputEl = this.__getInput(name),
+			textarea = this.__getTextarea(name),
+			value;
+
+		if (cmp) {
+			if (cmp.getValue) {
+				value = cmp.getValue();
+			}
+		} else if (inputEl) {
+			value = inputEl.value;
+		} else if (textarea) {
+			value = textarea.value;
+		}
+
+		return value;
 	},
 
 
@@ -315,26 +436,6 @@ Ext.define('NextThought.common.form.Form', {
 		});
 
 		return changed;
-	},
-
-
-	getValueOf: function(name) {
-		var cmp = this.componentMap[name],
-			inputEl = this.el.dom.querySelector('input[name="' + name + '"]'),
-			textarea = this.el.dom.querySelector('textarea[name="' + name + '"]'),
-			value;
-
-		if (cmp) {
-			if (cmp.getValue) {
-				cmp.getValue();
-			}
-		} else if (inputEl) {
-			value = inputEl.value;
-		} else if (textarea) {
-			value = textarea.value;
-		}
-
-		return value;
 	},
 
 
@@ -485,10 +586,44 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
+	showErrorOn: function(name, reason) {
+		var cmp = this.__getComponent(name),
+			inputEl = this.__getInput(name),
+			textarea = this.__getTextarea(name);
+
+		if (cmp) {
+			if (cmp.showError) {
+				cmp.showError(name, reason);
+			}
+		} else if (inputEl) {
+			inputEl.classList.add('error');
+		} else if (textarea) {
+			textarea.classList.add('error');
+		}
+	},
+
+
+	removeErrorOn: function(name) {
+		var cmp = this.__getComponent(name),
+			inputEl = this.__getInput(name),
+			textarea = this.__getTextarea(name);
+
+		if (cmp) {
+			if (cmp.removeError) {
+				cmp.removeError(name);
+			}
+		} else if (inputEl) {
+			inputEl.classList.remove('error');
+		} else if (textarea) {
+			textarea.classList.remove('error');
+		}
+	},
+
+
 	setPlaceholder: function(name, value) {
-		var cmp = this.componentMap[name],
-			inputEl = this.el.dom.querySelector('input[name="' + name + '"]'),
-			textarea = this.el.dom.querySelector('textarea[name="' + name + '"]');
+		var cmp = this.__getComponent(name),
+			inputEl = this.__getInput(name),
+			textarea = this.__getTextarea(name);
 
 		if (cmp) {
 			if (cmp.setPlaceholder) {

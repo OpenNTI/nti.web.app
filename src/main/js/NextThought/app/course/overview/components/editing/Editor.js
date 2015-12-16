@@ -78,7 +78,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 		this.EditingActions = NextThought.app.course.overview.components.editing.Actions.create();
 
-		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord);
+		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord, this.onFormChange.bind(this));
 
 		// this.preview = this.addPreview(values);
 
@@ -88,9 +88,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 			defaultValues: values,
 			action: this.getFormAction(),
 			method: this.getFormMethod(),
-			onChange: this.onFormChange.bind(this),
-			onSuccess: this.onSaveSuccess.bind(this),
-			onFailure: this.onSaveFailure.bind(this)
+			onChange: this.onFormChange.bind(this)
 		});
 	},
 
@@ -124,27 +122,49 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	},
 
 
-	onFormChange: function(values) {
-		if (this.preview && this.preview.update) {
-			this.preview.update(values);
+	isValid: function() {
+		var valid = true;
+
+		//If we have a parent selection menu, it has to have a selection to be valid
+		if (this.parentSelection && !this.parentSelection.getCurrentSelection()) {
+			valid = false;
 		}
 
-		if (this.formCmp.isValid()) {
-			this.allowSubmission();
+		//Make sure the form is valid
+		if (valid && this.formCmp && !this.formCmp.isValid()) {
+			valid = false;
+		}
+
+		return valid;
+	},
+
+
+	isEmpty: function() {
+		return this.formCmp && this.formCmp.isEmpty();
+	},
+
+
+	onFormChange: function(values) {
+		if (!this.isEmpty()) {
+			this.enableSubmission();
 		} else {
-			this.disallowSumbission();
+			this.disableSubmission();
+		}
+
+		if (this.activeErrors) {
+			this.maybeClearErrors();
 		}
 	},
 
 
-	allowSubmission: function() {
+	enableSubmission: function() {
 		if (this.enableSave) {
 			this.enableSave();
 		}
 	},
 
 
-	disallowsubmission: function() {
+	disableSubmission: function() {
 		if (this.disableSave) {
 			this.disableSave();
 		}
@@ -157,10 +177,90 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	},
 
 
-	onClose: function() {
-		if (this.doClose) {
-			this.doClose();
-		}
+	getFormErrors: function() {
+		var errors = this.formCmp && this.formCmp.getErrors(),
+			fields = Object.keys(errors),
+			msgs = [], required;
+
+		fields.forEach(function(field) {
+			var error = errors[field];
+
+			if (error.missing) {
+				if (required) {
+					required.fields.push(field);
+				} else {
+					required = {
+						msg: NextThought.common.form.Form.getMessageForError(error),
+						error: error,
+						fields: [field]
+					};
+
+					msgs.push(required);
+				}
+			} else {
+				msgs.push({
+					msg: NextThought.common.form.Form.getMessageForError(error),
+					error: error,
+					key: field,
+					fields: [field]
+				});
+			}
+		});
+
+		return msgs;
+	},
+
+
+	getErrors: function() {
+		return this.getFormErrors();
+	},
+
+
+	maybeClearErrors: function() {
+		var form = this.formCmp;
+
+
+		this.activeErrors = (this.activeErrors || []).reduce(function(acc, error) {
+			error.fields = error.fields.reduce(function(acc, field) {
+				var error = form.getErrorsFor(field);
+
+				if (!form.getErrorsFor(field)) {
+					form.removeErrorOn(field);
+				} else {
+					acc.push(field);
+				}
+
+				return acc;
+			}, []);
+
+			if (error.fields.length > 0) {
+				acc.push(error);
+			}
+
+			if (error.headerBar && error.headerBar.remove) {
+				error.headerBar.remove();
+			}
+
+			return acc;
+		}, []);
+	},
+
+
+	doValidation: function() {
+		var me = this,
+			form = me.formCmp,
+			errors = me.getErrors();
+
+		if (!form) { return Promise.reject(); }
+
+		me.activeErrors = errors.map(function(error) {
+			error.fields.forEach(form.showErrorOn.bind(form));
+			error.headerBar = me.showError(error.msg);
+
+			return error;
+		});
+
+		return errors.length > 0 ? Promise.reject() : Promise.resolve();
 	},
 
 
@@ -170,23 +270,5 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 			currentParent = parentSelection && parentSelection.getCurrentSelection();
 
 		return this.EditingActions.saveEditorForm(this.formCmp, this.record, originalParent, currentParent, this.rootRecord);
-	},
-
-
-	onSaveSuccess: function(response) {
-		if (this.record) {
-			this.record.syncWithResponse(response);
-		}
-
-		this.onClose();
-	},
-
-
-	onSaveFailure: function(reason) {
-		//TODO: show the error to the use
-		console.log('Failed to save form: ' + reason);
-	},
-
-
-	createNewRecord: function(data) {}
+	}
 });

@@ -295,6 +295,14 @@ span.nti-radiobutton {
 	}
 }
 
+form.common-form {
+	input, textarea {
+		&.error {
+			box-shadow: 0 0 0 1px $primary-red;
+		}
+	}
+}
+
 .datefield {
 	height: auto;
 	overflow: hidden;
@@ -544,6 +552,16 @@ span.nti-radiobutton {
 			color: $primary-blue;
 
 			@include icon('preview-blue', $side: after, $top: 50%, $left: auto, $right: 1em);
+		}
+	}
+
+	&.error {
+		input {
+			box-shadow: inset 0 0 0 1px $primary-red;
+		}
+
+		a {
+			box-shadow: inset -1px 0 0 $primary-red, inset 0 1px 0 $primary-red, inset 0 -1px 0 $primary-red;
 		}
 	}
 

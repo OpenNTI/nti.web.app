@@ -138,7 +138,10 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 			rootRecord: this.rootRecord,
 			scrollingParent: this.scrollingParent,
 			enableSave: this.enableSave.bind(this),
-			disableSave: this.enableSave.bind(this)
+			disableSave: this.disableSave.bind(this),
+			showError: this.showError.bind(this),
+			showWarning: this.showWarning.bind(this),
+			showMessage: this.showMessage.bind(this)
 		}));
 
 		this.setUpTypeEditor(type);
@@ -148,6 +151,16 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 	onBack: function() {
 		this.switchToTypeList();
 	},
+
+
+	doValidation: function() {
+		if (this.activeEditor && this.activeEditor.doValidation) {
+			return this.activeEditor.doValidation();
+		}
+
+		return Promise.resolve();
+	},
+
 
 
 	onSave: function() {

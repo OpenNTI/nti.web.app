@@ -23,7 +23,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 				{type: 'group', name: 'card', inputs: [
 					{name: 'icon', type: 'image', height: 125, width: 100},
 					{type: 'group', name: 'meta', inputs: [
-						{name: 'label', type: 'text', placeholder: 'Title'},
+						{name: 'label', type: 'text', placeholder: 'Title', required: true},
 						{name: 'byline', type: 'text', placeholder: 'Author'},
 						{name: 'description', type: 'textarea', placeholder: 'Write something...'}
 					]}
@@ -45,7 +45,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	},
 
 
-	addParentSelection: function(record, parentRecord, rootRecord) {
+	addParentSelection: function(record, parentRecord, rootRecord, onChange) {
 		if (!rootRecord) { return null; }
 
 		var items = rootRecord.get('Items');
@@ -56,7 +56,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 			parentRecord: parentRecord,
 			rootRecord: rootRecord,
 			editingRecord: record,
-			scrollingParent: this.scrollingParent
+			scrollingParent: this.scrollingParent,
+			onChange: onChange
 		}));
 	}
 });

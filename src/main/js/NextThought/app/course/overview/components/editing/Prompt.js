@@ -29,7 +29,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
 	},
 
 
-	showError: function() {
+	showUnkownTypeError: function() {
 		//TODO: fill this out
 	},
 
@@ -45,13 +45,13 @@ Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
 			};
 
 		if (!record) {
-			this.showError();
+			this.showUnkownTypeError();
 		} else if (Contents.canEdit(record.mimeType)) {
 			this.editor = this.add(Contents.create(config));
 		} else if (Outline.canEdit(record.mimeType)) {
 			this.editor = this.add(Outline.create(config));
 		} else {
-			this.showError();
+			this.showUnkownTypeError();
 		}
 	},
 
@@ -66,13 +66,13 @@ Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
 			};
 
 		if (!parentRecord) {
-			this.showError();
+			this.showUnkownTypeError();
 		} else if (Contents.canAddChildren(parentRecord.mimeType)) {
 			this.editor = this.add(Contents.create(config));
 		} else if (Outline.canAddChildren(parentRecord.mimeType)) {
 			this.editor = this.add(Outline.create(config));
 		} else {
-			this.showError();
+			this.showUnkownTypeError();
 		}
 	},
 
@@ -84,10 +84,21 @@ Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
 	},
 
 
+	doValidation: function() {
+		if (this.editor && this.editor.doValidation) {
+			return this.editor.doValidation();
+		}
+
+		return Promise.resolve();
+	},
+
+
 	onSave: function() {
 		if (this.editor && this.editor.onSave) {
-			this.editor.onSave();
+			return this.editor.onSave();
 		}
+
+		return Promise.reject('Nothing to submit.');
 	},
 
 
