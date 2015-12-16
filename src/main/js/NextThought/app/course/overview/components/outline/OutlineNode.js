@@ -156,11 +156,13 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 
 	selectRecord: function(record) {
 		var body = this.getBodyContainer(),
-			bodyListEl = this.el.up('.outline-list');
+			bodyListEl = this.el && this.el.up('.outline-list');
 
 		if (record.getId() === this.outlineNode.getId()) {
 			this.nodeCmp.addCls('selected');
-			this.el.scrollIntoView(bodyListEl);
+			if (bodyListEl) {
+				this.el.scrollIntoView(bodyListEl);
+			}
 		} else {
 			this.nodeCmp.removeCls('selected');
 			this.nodeCmp.removeCls('out-of-view');
