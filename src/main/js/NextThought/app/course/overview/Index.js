@@ -96,7 +96,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 			lessons = this.getLessons();
 
 		this.currentBundle = bundle;
-		this.store = bundle.getNavigationStore();
+		this.store = bundle.getOutlineInterface();
 
 		if (lessons === item) {
 			return lessons.bundleChanged(bundle);
@@ -176,10 +176,12 @@ Ext.define('NextThought.app.course.overview.Index', {
 				var siblings = [];
 
 				if (lessonId && (!lesson || lesson.getId() !== lessonId)) {
-					lesson = me.store.findRecord('NTIID', lessonId, false, true, true);
+					lesson = me.store.getNode(lessonId);
 				}
 
 				//For now don't make the lessons have a menu
+				//XXX me.store is no longer the navigation store, it is now the bundle's
+				//XXX OutlineInterface
 				// siblings = me.store.getRange().reduce(function(c, item) {
 				// 	var id;
 
