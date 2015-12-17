@@ -455,8 +455,8 @@ Ext.define('NextThought.common.form.Form', {
 		keys.forEach(function(key) {
 			var cmp = components[key];
 
-			if (cmp.appedToFormData) {
-				cmp.appendToFormData(data);
+			if (cmp.appendToFormData) {
+				cmp.appendToFormData(formData);
 			}
 		});
 

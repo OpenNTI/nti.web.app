@@ -39,7 +39,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 					{cls: 'change', html: 'Change'}
 				]},
 				{tag: 'tpl', 'if': '!readonly', cn: [
-					{tag: 'input', type: 'file', name: '{name}'}
+					{tag: 'input', type: 'file'}
 				]}
 			]}
 		]
@@ -135,7 +135,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 			name = input && input.getAttribute('name');
 
 		//Only append if my input doesn't have a name,
-		//so we don't override the default
+		//so we don't override the default behavior
 		if (value && name !== this.schema.name) {
 			data.append(this.schema.name, value, value.name);
 		}
