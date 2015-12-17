@@ -16,10 +16,11 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.calendarn
 	],
 
 
-	getPreviewConfig: function(record, bundle) {
+	getPreviewConfig: function(record, contents, bundle) {
 		return {
 			xtype: 'overview-editing-outline-calendarnode-preview',
 			record: record,
+			contents: contents,
 			bundle: bundle
 		};
 	}

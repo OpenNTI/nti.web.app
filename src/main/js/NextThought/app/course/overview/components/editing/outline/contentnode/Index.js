@@ -17,10 +17,11 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.contentno
 	],
 
 
-	getPreviewConfig: function(record, bundle) {
+	getPreviewConfig: function(record, contents, bundle) {
 		return {
 			xtype: 'overview-editing-outline-contentnode-preview',
 			record: record,
+			contents: contents,
 			bundle: bundle
 		};
 	}
