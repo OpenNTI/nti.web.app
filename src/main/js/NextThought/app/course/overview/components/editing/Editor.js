@@ -7,6 +7,9 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		'NextThought.app.course.overview.components.editing.Actions'
 	],
 
+	saveText: 'Save',
+	headerTitle: 'Edit',
+
 	cls: 'content-editor',
 
 
@@ -82,6 +85,14 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 		// this.preview = this.addPreview(values);
 
+		if (this.setSaveText) {
+			this.setSaveText(this.getSaveText());
+		}
+
+		if (this.setTitle) {
+			this.setTitle(this.getHeaderTitle());
+		}
+
 		this.formCmp = this.add({
 			xtype: 'common-form',
 			schema: this.getFormSchema(),
@@ -90,6 +101,19 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 			method: this.getFormMethod(),
 			onChange: this.onFormChange.bind(this)
 		});
+	},
+
+
+	getSaveText: function() {
+		return this.saveText;
+	},
+
+
+	getHeaderTitle: function() {
+		var types = this.self.getTypes(),
+			type = types && types[0];
+
+		return type ? type.title : this.headerTitle;
 	},
 
 

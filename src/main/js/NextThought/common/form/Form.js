@@ -140,7 +140,7 @@ Ext.define('NextThought.common.form.Form', {
 
 
 	onDestroy: function() {
-		var componentMap = this.componentMap,
+		var componentMap = this.componentMap || {},
 			keys = Object.keys(componentMap);
 
 		keys.forEach(function(key) {

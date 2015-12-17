@@ -21,9 +21,22 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var preview = this.getPreview(this.record),
-			controls = this.getControls(this.record, this.course),
+		this.setRecord(this.record);
+	},
+
+
+	setRecord: function(record) {
+		this.removeAll(true);
+
+		var preview = this.getPreview(record),
+			controls = this.getControls(record, this.course),
 			items = [];
+
+		this.mon(record, {
+			single: true,
+			destroyable: true,
+			'update': this.setRecord.bind(this, record)
+		});
 
 		if (controls) {
 			items.push(controls);

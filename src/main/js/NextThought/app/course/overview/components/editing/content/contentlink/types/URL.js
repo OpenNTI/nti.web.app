@@ -13,10 +13,15 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 					editor: this
 				}
 			];
-		}
+		},
 
 		//TODO: override getEditorForRecord to check if the related work ref
 		//is pointing to a url
+		getEditorForRecord: function(record) {
+			if (record.isExternalLink()) {
+				return this;
+			}
+		}
 	},
 
 	cls: 'content-editor content-link url',
@@ -29,9 +34,19 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	},
 
 
+	getDefaultValues: function() {
+		var base = this.callParent(arguments);
+
+		base.targetMimeType = NextThought.model.RelatedWork.EXTERNAL_TYPE;
+
+		return base;
+	},
+
+
 	getFormSchema: function() {
 		var base = this.callParent(arguments);
 
+		base.push({type: 'hidden', name: 'targetMimeType'});
 		base.unshift({type: 'url', name: 'href', placeholder: 'Link', required: true});
 
 		return base;

@@ -163,7 +163,7 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 
 
 
-	onSave: function() {
+	doSave: function() {
 		if (this.activeEditor.doSave) {
 			return this.activeEditor.doSave();
 		}

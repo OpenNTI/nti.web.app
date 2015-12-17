@@ -60,6 +60,9 @@ Ext.define('NextThought.app.course.overview.components.editing.EditorGroup', {
 		},
 
 
+		getDefaultEditor: function() {},
+
+
 		/**
 		 * Return the editor in this group that can handle a record
 		 * @return {Editor} the Class to instantiate to edit the record
@@ -80,6 +83,8 @@ Ext.define('NextThought.app.course.overview.components.editing.EditorGroup', {
 
 			if (canHandle.length > 1) {
 				console.warn('More than one editor for record, picking the first one.');
+			} else if (canHandle.length === 0) {
+				canHandle = this.getDefaultEditor();
 			}
 
 			return canHandle[0] || null;

@@ -254,8 +254,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 
 
 	onSave: function() {
-		if (this.activeEditor) {
-			return this.activeEditor.onSave();
+		if (this.activeEditor && this.activeEditor.doSave) {
+			return this.activeEditor.doSave();
 		}
 
 		return Promise.reject();

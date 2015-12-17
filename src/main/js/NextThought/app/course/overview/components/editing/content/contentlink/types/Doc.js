@@ -13,10 +13,15 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 					editor: this
 				}
 			];
-		}
+		},
 
 		//TODO: override getEditorForRecord to check if the related work ref
 		//is pointing to a doc
+		getEditorForRecord: function(record) {
+			if (record.isDocument()) {
+				return this;
+			}
+		}
 	},
 
 	cls: 'content-editor content-link document',

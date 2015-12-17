@@ -14,9 +14,14 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 					editor: this
 				}
 			];
-		}
+		},
 
 		//TODO: override getEditorForRecord to check if the related work ref
 		//is pointing to a reading
+		getEditorForRecord: function(record) {
+			if (record.isContent()) {
+				return this;
+			}
+		}
 	}
 });

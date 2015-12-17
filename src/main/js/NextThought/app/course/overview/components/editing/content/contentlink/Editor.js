@@ -15,7 +15,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 			return [
 				base.Doc,
-				base.EmbeddedPDF,
+				// base.EmbeddedPDF,
 				base.Reading,
 				base.URL
 			];

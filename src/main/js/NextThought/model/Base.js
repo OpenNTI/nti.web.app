@@ -209,7 +209,7 @@ Ext.define('NextThought.model.Base', {
 		});
 
 		this.set(newData);
-		this.fireEvent('updated', this);
+		this.fireEvent('update', this);
 	},
 
 	/**

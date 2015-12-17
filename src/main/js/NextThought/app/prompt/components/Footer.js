@@ -27,16 +27,32 @@ Ext.define('NextThought.app.prompt.components.Footer', {
 			this.setCancelText(this.cancelText);
 		}
 
+		if (this.saveEnabled) {
+			this.enableSave();
+		} else {
+			this.disableSave();
+		}
+
 		this.mon(this.el, 'click', this.handleClick.bind(this));
 	},
 
 
 	enableSave: function() {
+		if (!this.rendered) {
+			this.saveEnabled = true;
+			return;
+		}
+
 		this.saveEl.removeCls('disabled');
 	},
 
 
 	disableSave: function() {
+		if (!this.rendered) {
+			delete this.saveEnabled;
+			return;
+		}
+
 		this.saveEl.addCls('disabled');
 	},
 

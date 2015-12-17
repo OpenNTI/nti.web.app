@@ -709,22 +709,7 @@ Ext.define('NextThought.util.Globals', {
 
 
 	getURLParts: function(url) {
-		var hash, search, pathname,
-			parts = url.split('#');
-
-		hash = parts[1] ? '#' + parts[1] : '';
-
-		parts = parts[0].split('?');
-
-		search = parts[1] ? '?' + parts[1] : '';
-
-		pathname = parts[0];
-
-		return {
-			pathname: pathname,
-			search: search,
-			hash: hash
-		};
+		return Url.parse(url);
 	},
 
 

@@ -248,7 +248,7 @@ Ext.define('NextThought.controller.Application', {
 
 		this.maybeMarkReturn(title, location.pathname);
 
-		this.currentRoute = location.pathname + location.search + location.hash;
+		this.currentRoute = location.pathname + (location.search || '') + (location.hash || '');
 
 		return handleRoute(this.currentRoute, precache)
 			.then(this.onRoute.bind(this, title, route));

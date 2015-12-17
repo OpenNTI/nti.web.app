@@ -4,7 +4,6 @@ Ext.define('NextThought.model.RelatedWork', {
 
 	isPage: true,
 
-	CONTENT_TYPE: 'application/vnd.nextthought.content',
 
 	statics: {
 		mimeType: 'application/vnd.nextthought.relatedworkref',
@@ -18,6 +17,13 @@ Ext.define('NextThought.model.RelatedWork', {
 				NTIID: data.ntiid,
 				href: data.href
 			});
+		},
+
+		CONTENT_TYPE: 'application/vnd.nextthought.content',
+		EXTERNAL_TYPE: 'application/vnd.nextthought.externallink',
+		EMBEDABLE_TYPES: {
+			'application/pdf': true,
+			'application/x-pdf': true
 		},
 
 		FILE_ICON_BASE: '/app/resources/images/file-icons/',
@@ -86,8 +92,63 @@ Ext.define('NextThought.model.RelatedWork', {
 	},
 
 
-	isContentRef: function() {
-		return this.CONTENT_TYPE === this.get('type');
+	/**
+	 * If the ref is pointing to content.
+	 *
+	 * Consider it content if:
+	 *
+	 * 1.) If the Target-MimeType is application/vnd.nextthought.content
+	 *
+	 * @return {Boolean} true if content link
+	 */
+	isContent: function() {
+		return this.self.CONTENT_TYPE === this.get('type');
+	},
+
+
+	/**
+	 * If the ref is pointing to an external link.
+	 *
+	 * Consider it an external link if:
+	 *
+	 * 1.) If the Target-MimeType is application/vnd.nextthought.externallink
+	 *
+	 * @return {Boolean} true if external link
+	 */
+	isExternalLink: function() {
+		return this.self.EXTERNAL_TYPE === this.get('type');
+	},
+
+
+	/**
+	 * If the ref is pointing to a document that can be embedded in the app
+	 *
+	 * Consider it an embeddable document if:
+	 *
+	 * 1.) It is a document
+	 * 2.) Its a type we recognize as embeddable
+	 *
+	 * @return {Boolean} [description]
+	 */
+	isEmbeddableDocument: function() {
+		var type = this.get('type');
+
+		return this.isDocument() && this.self.EMBEDABLE_TYPES[type];
+	},
+
+
+	/**
+	 * If the ref is pointing to a document.
+	 *
+	 * Consider it a document if:
+	 *
+	 * 1.) It is not a content link
+	 * 2.) It is not an external link
+	 *
+	 * @return {Boolean} [description]
+	 */
+	isDocument: function() {
+		return !this.isContent() && !this.isExternalLink();
 	},
 
 

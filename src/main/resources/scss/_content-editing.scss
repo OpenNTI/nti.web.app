@@ -1,4 +1,7 @@
 .overview-editing-prompt {
+	width: 90vw;
+	max-width: 810px;
+
 	.content-editor {
 		padding: 20px;
 
@@ -534,8 +537,6 @@
 }
 
 .child-creation {
-	width: 810px;
-
 	.new-type-list {
 		padding: 20px;
 
