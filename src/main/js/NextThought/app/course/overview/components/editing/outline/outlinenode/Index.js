@@ -57,8 +57,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 				var items = results[0],
 					contents = results[1],
 					cmps = [
-						me.getPreviewConfig(record, bundle),
-						me.getControlsConfig(record, contents, bundle)
+						me.getPreviewConfig(record, contents, bundle)
 					];
 
 				if (items && items.length) {
@@ -84,11 +83,13 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	},
 
 
-	getPreviewConfig: function(record, bundle) {
+	getPreviewConfig: function(record, contents, bundle) {
 		return {
 			xtype: 'overview-editing-outline-outlinenode-preview',
 			record: record,
-			bundle: bundle
+			bundle: bundle,
+			contents: contents,
+			root: contents  //For editing stuff under a lesson node, the lesson overview is the root
 		};
 	},
 

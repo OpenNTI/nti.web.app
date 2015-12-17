@@ -141,8 +141,10 @@
 }
 
 .outline-node-preview {
-	padding: 1.5em 1.87em;
-	position: relative;
+    padding: 1.0em 1.7em;
+    position: relative;
+    box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
+
 
 	.title {
 		color: $primary-grey;
@@ -153,6 +155,30 @@
 		position: absolute;
 		top: 10px;
 		right: 10px;
+	}
+
+	.toolbar {
+		position: relative;
+		display: block;
+    	height: 60px;
+    	clear: both;
+
+		.left {
+			float: left;
+		}
+
+		.right {
+			float: right;
+		}
+	}
+
+	.footer {
+		margin: 10px 0;
+		height: 30px;
+
+		.edit {
+			float: right;
+		}
 	}
 }
 
@@ -369,7 +395,7 @@
 }
 
 
-.outline-editing-controls {
+.outline-editing-controls, .outline-node-preview {
 	.button {
 		position: relative;
 
