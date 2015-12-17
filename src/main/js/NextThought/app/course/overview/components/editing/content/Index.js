@@ -24,7 +24,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.Index', {
 
 	renderLesson: function(outlineNode, contents) {
 		var me = this,
-			course = me.bundle;
+			course = me.bundle,
+			overviewsrc = (outlineNode && outlineNode.getLink('overview-content')) || null;
 
 		if (!outlineNode || !course || !contents) {
 			//show empty state?
@@ -35,7 +36,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.Index', {
 		me.buildingOverview = true;
 		me.maybeMask();
 
-		return me.getInfo(outlineNode, course)
+		return me.getInfo(outlineNode, course, overviewsrc)
 			.then(function(results) {
 				var assignments = results[0],
 					enrollment = results[1],
