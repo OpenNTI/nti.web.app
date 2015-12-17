@@ -21,6 +21,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 
 		this.mon(this.el, 'click', this.togglePublishMenu.bind(this));
 
+		this.el.addCls('closed');
 		this.initPublishMenu();
 		this.setPublishState();
 	},
@@ -128,19 +129,16 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 			me = this,
 			menu = this.publishMenu,
 			top = box.bottom + 15,
-			right = box.right + 25,
-			viewportHeight = Ext.Element.getViewportHeight(),
-			maxHeight = viewportHeight - top - 10;
+			vh = Ext.Element.getViewportHeight(),
+			vw = Ext.Element.getViewportWidth(),
+			right = vw - box.right + 10,
+			maxHeight = vh - top - 10;
 
-		menu.onceRendered
-			.then(function() {
-				if (menu.el) {
-					menu.el.setStyle('top', top + 'px');
-					menu.el.setStyle('right', right + 'px');
-					menu.el.setStyle('left', 'auto');
-					menu.el.setStyle('maxHeight', maxHeight + 'px');	
-				}
-			});
+		if (menu.el) {
+			menu.el.setStyle('top', top + 'px');
+			menu.el.setStyle('right', right + 'px');
+			menu.el.setStyle('maxHeight', maxHeight + 'px');	
+		}
 	},
 
 
