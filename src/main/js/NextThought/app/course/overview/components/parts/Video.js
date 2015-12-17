@@ -41,11 +41,11 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 		});
 	},
 
-	constructor: function(){
+	constructor: function() {
 		this.callParent(arguments);
 		this.playerWidth = 512;
 
-		if(!this.isVideoRoll){
+		if (!this.isVideoRoll) {
 			this.addCls('singular');
 			this.playerWidth = 704;
 		}
@@ -54,7 +54,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 			.then(this.addVideo.bind(this));
 	},
 
-	addVideo: function(video){
+	addVideo: function(video) {
 		this.video = video;
 		var curtainClicked = this.curtainClicked.bind(this);
 
@@ -73,34 +73,31 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 		});
 	},
 
-	getVideo: function(){
+	getVideo: function() {
 		var me = this;
 
-		if(me.record){
+		if (me.record) {
 			return me.course.getSlidedeckForVideo(me.record.ntiid || me.record.get('NTIID'))
-				.then(function(slidedeck){
+				.then(function(slidedeck) {
 					me.record.slidedeck = slidedeck;
 					return Promise.resolve(me.record);
 				})
-				.fail(function(){
+				.fail(function() {
 					return Promise.resolve(me.record);
 				});
 		}
 	},
 
-	curtainClicked: function(e){
+	curtainClicked: function(e) {
 		e.stopEvent();
 
 		var video = this.playlist[0],
-			slidedeck =  video.get('slidedeck'),
+			slidedeck = video.get('slidedeck'),
 			slideActions;
 
 		if (!Ext.isEmpty(slidedeck)) {
 			this.maybePauseCurrentVideo();
 			this.navigateToSlidedeck(slidedeck);
-		} else if (e && e.getTarget('.edit')) {
-			// TODO: Open Editing Video
-			// this.WindowActions.showWindow('edit-video', null, null, {});
 		} else if (!e.getTarget('.launch-player') && e.getTarget('.transcripts')) {
 			this.maybePauseCurrentVideo();
 			this.navigateToTarget(video, this.locationInfo.root);
@@ -122,16 +119,16 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 		}
 	},
 
-	hideCurtain: function(){
+	hideCurtain: function() {
 		this.curtain.hide();
 	},
 
-	showCurtain: function(){
+	showCurtain: function() {
 		this.curtain.show();
 		wait().then(this.setProgress.bind(this));
 	},
 
-	maybeCreatePlayer: function(){
+	maybeCreatePlayer: function() {
 		var single = this.isVideoRoll !== true;
 
 		if (!this.rendered) {
@@ -184,7 +181,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 		]);
 	},
 
-	maybePauseCurrentVideo: function(){
+	maybePauseCurrentVideo: function() {
 		if (!this.player) { return; }
 
 		if (this.player.isPlaying()) {

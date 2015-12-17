@@ -9,6 +9,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 	requires: [
 		'NextThought.app.course.overview.components.editing.controls.Add',
+		'NextThought.app.course.overview.components.editing.controls.Edit',
 		'NextThought.app.course.overview.components.editing.content.overviewgroup.Preview',
 		'NextThought.app.course.overview.components.editing.content.contentlink.ListItem',
 		'NextThought.app.course.overview.components.editing.content.discussion.ListItem',
@@ -59,6 +60,26 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 	},
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+
+		if (this.activeGroup) {
+			this.setActiveGroup(this.activeGroup);
+		}
+	},
+
+
+	setActiveGroup: function(group) {
+		var color = group && group.get('accentColor');
+
+		if (color) {
+			this.el.setStyle({backgroundColor: '#' + color});
+		} else {
+			this.el.setStyle({backgroundColor: ''});
+		}
+	},
+
+
 	getBodyContainer: function() {
 		return this.down('[isBodyContainer]');
 	},
@@ -83,14 +104,35 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 		this.disableOrderingContainer();
 		this.removeAll(true);
 
+		this.activeGroup = collection;
+
+		if (this.rendered) {
+			this.setActiveGroup(this.activeGroup);
+		}
+
 		this.add([
-			{xtype: 'overview-editing-overviewgroup-preview', group: collection},
-			{xtype: 'container', layout: 'none', isBodyContainer: true, items: []},
 			{
-				xtype: 'overview-editing-controls-add',
-				name: 'Add Content',
-				parentRecord: this.record,
-				root: this.lessonOverview
+				xtype: 'container',
+				cls: 'overview-group-header',
+				layout: 'none',
+				items: [
+					{xtype: 'overview-editing-overviewgroup-preview', group: collection},
+					{xtype: 'overview-editing-controls-edit', color: 'white', record: collection, parentRecord: this.lessonOverview, rootRecord: this.lessonOverview}
+				]
+			},
+			{xtype: 'container', cls: 'overview-group-body', layout: 'none', isBodyContainer: true, items: []},
+			{
+				xtype: 'container',
+				cls: 'overview-group-footer',
+				layout: 'none',
+				items: [
+					{
+						xtype: 'overview-editing-controls-add',
+						name: 'Add Content',
+						parentRecord: this.record,
+						root: this.lessonOverview
+					}
+				]
 			}
 		]);
 

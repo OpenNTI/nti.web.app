@@ -128,291 +128,6 @@
 	}
 }
 
-// .editing-window {
-
-
-// 	.form-container {
-// 		border-top: 1px solid #e1e1e1;
-
-// 		form {
-// 			padding: 20px;
-
-// 			.field {
-// 				display: block;
-// 				position: relative;
-// 				border-bottom: 1px solid #e1e1e1;
-
-// 				&:last-of-type, &.hidden {
-// 					border-bottom: 0;
-// 				}
-
-// 				input, textarea {
-// 					display: block;
-//     				font: normal 300 14px/30px $font;
-//     				border: 0;
-//     				margin: 5px 0;
-//     				width: 100%;
-//     				color: $primary-grey;
-// 				}
-
-// 				textarea {
-// 					padding: 1px 7px 0;
-//     				font-family: $font;
-//     				font-size: 12px;
-//     				line-height: 2em;
-//     				resize: none;
-// 				}
-
-// 				label {
-// 					font: normal 500 14px/30px $font;
-// 					color: $primary-grey;
-// 					display: inline-block;
-// 					margin-right: 20px;
-// 					vertical-align: top;
-//     				margin-top: 5px;
-
-// 					& + input, & + textarea {
-// 						display: inline-block;
-//     					width: auto;
-//     					min-width: 80%;
-// 					}
-// 				}
-
-// 				input[type=file] {
-// 		            position: absolute;
-// 		            cursor: pointer;
-// 		            right: 0;
-// 		            bottom: 0;
-// 		            left: 0;
-//     				top: 0;
-// 		            padding: 0;
-// 		            margin: 0;
-// 		            font-size: 2rem;
-// 		            border: 0;
-// 		            opacity: 0;
-// 		            z-index: 1;
-// 		        }
-
-// 				&[data-name=icon] {
-// 					width: 80px;
-// 	    			float: left;
-
-// 					.img {
-// 						background-size: cover;
-// 	    				background-repeat: no-repeat;
-// 	    				background-position: center;
-// 	    				box-shadow: 0px 0px 3px 0 rgba(0,0,0,0.35);
-// 	    				width: 80px;
-// 	    				height: 100px;
-// 	    				position: relative;	
-// 					}
-
-// 					.img-name {
-// 						font: normal 500 14px/30px $font;
-// 						color: $primary-grey;
-// 					}
-
-//     				& ~ .field {
-//     					margin-left: 100px; 
-//     					@include experimental-value(width, calc(100% - 100px));
-//     				}
-// 				}
-
-// 				.placeholder {
-// 					background: transparent $icons no-repeat;
-// 					margin: 0 auto;
-// 					cursor: pointer;
-// 					position: absolute;
-//     				top: 35px;
-//     				left: 43%;
-// 					@include sprite($icons,'download_hover',$dimensions: true);
-// 				}
-
-// 				&[data-name=href] {
-// 					.img {
-// 					    position: relative;
-// 						background-size: cover;
-// 					    background-repeat: no-repeat;
-// 					    background-position: center;
-// 					    box-shadow: 0px 0px 3px 0 rgba(0,0,0,0.35);
-// 					    margin: 15px;
-// 					    min-height: 75px;
-// 					    padding: 20px;
-// 					    @include experimental-value(width, calc(100% - 30px));
-
-// 					    .placeholder {
-// 					    	left: 50%;
-// 					    	top: 30px;
-// 					    }
-
-// 					    .meta-data {
-// 					    	display: none;
-// 					    	box-shadow: 0px 0px 3px 0 rgba(0,0,0,0.35);
-// 					    	width: 200px;
-// 					    	border-radius: 5px;
-// 					    	height: 180px;
-// 					    	font: normal 600 14px/24px $font;
-// 					    	padding: 10px;
-
-// 					    	.thumb{
-// 					    		margin: 10px auto 25px auto;
-// 					    		width: 64px;
-// 					    		height: 64px;
-// 					    		background: url(../images/file-types/unknown-64.png) 0 0 no-repeat;
-// 					    		background-size: cover;
-// 					    	}
-
-// 					    	&.visible {
-// 					    		display: block;
-// 					    	}
-
-// 					    	.name {
-// 				    			overflow: hidden;
-// 								@include ellipse;
-// 				    		}
-
-// 					    	.item {
-// 					    		width: 50%;
-// 					    		float: left;
-// 					    		text-align: left;
-
-// 					    		&.right {
-// 					    			text-align: right;
-// 					    		}
-// 					    	}
-// 					    }
-// 					}
-// 				}
-
-// 				&[data-type=date] {
-// 					@include flexContainer();
-
-// 					.date-picker-field {
-// 						@include flex(1 auto);
-// 						margin-top: 5px;
-
-// 						.part{
-// 							width: 50px;
-// 							cursor: pointer;
-// 							background-color: white;
-// 							font-weight: 400;
-// 							font: normal 500 14px/30px $font;
-// 							color: $secondary-grey;
-// 							padding: 3px 25px 3px 0px;
-// 							position: relative;
-// 							text-align: right;
-// 							float: left;
-
-// 							.empty {
-// 								display: none;
-// 							}
-
-// 							@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 15px, $left: auto, $right: 7px);
-
-// 							&:hover {
-// 								color: $primary-grey;
-// 								@include icon('mv-dropdown-arrow', $position: relative, $side: after, $top: 15px, $left: auto, $right: 7px);
-// 							}
-
-// 							&.date-container {
-// 								width: 175px;
-// 							}
-// 						}
-
-// 						.time-container {
-// 							width: 40px;
-// 							cursor: pointer;
-// 							background-color: white;
-// 							font-weight: 400;
-// 							margin-left: 10px;
-// 							font: normal 500 14px/30px $font;
-// 							color: $secondary-grey;
-// 							float: left;
-
-// 							input {
-// 								margin-top: 3px;
-// 							}
-// 						}
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
-
-// 	.content-editor-footer {
-// 		@include experimental(transition, all 0.5s);
-// 		position: relative;
-// 		height: 45px;
-// 		white-space: nowrap;
-// 		background-color: #efefef;
-// 		border-top: 1px solid #dcdcdc;
-// 		overflow: hidden;
-
-// 		&::after{
-// 			content: '';
-// 			position: absolute;
-// 			top: -8px;
-// 			left: 0;
-// 			right: 0;
-// 			height: 8px;
-// 			box-shadow: 0 3px 8px -3px rgba(0, 0, 0, 0.25);
-// 			border-radius: 90px;
-// 		}
-
-// 		.left .action {float: left;}
-// 		.right .action {float: right;}
-
-// 		.action {
-// 			position: relative;
-// 			height: 45px;
-// 			width: 45px;
-// 			line-height: 45px;
-// 			font-size: 14px;
-// 			text-align: center;
-// 			color: $secondary-grey;
-// 			margin: -1px;
-// 			cursor: pointer;
-// 			@include experimental(transition, all 0.5s);
-
-// 			&.cancel {
-// 				width: 85px;
-// 			}
-
-// 			&.save {
-// 				width: 95px;
-// 				line-height: 44px;
-// 				font-weight: bold;
-// 				font-style: italic;
-// 				color: #ffffff;
-// 				border: 1px solid $border-blue;
-// 				padding: 0 0 0 24px;
-// 				background: $primary-blue;
-// 				position: relative;
-
-
-// 				&::after {
-// 					content: ' ';
-// 					overflow: hidden;
-// 					position: absolute;
-// 					top: 8px; left: 15px;
-// 					background: $icons no-repeat;
-// 					@include sprite($icons,'comment_white',$dimensions: true);
-// 					outline: 0;
-// 				}
-
-// 				&.disabled{
-// 					cursor: default;
-// 					border: 1px solid #d0d0d0;
-// 					background: rgba(184,184,184,0.5);
-// 					color: rgba(255,255,255,0.7);
-// 					margin: -1px;
-// 				}
-
-// 			}
-// 		}
-// 	}
-// }
-
 .outline-node-editing {
 	background: white;
 	position: relative;
@@ -947,6 +662,113 @@
 		    color: $secondary-grey;
 
     		@include icon('dropdown-am-pm-icon', $side: after, $top: 11px, $left: auto, $right: 5px);
+		}
+	}
+}
+
+
+.course-overview.course-overview-editing {
+	padding: 15px 10px;
+	background-color: #fafafa;
+
+	.overview-section {
+		margin-bottom: 10px;
+		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+	}
+
+	.overview-group-header {
+		padding: 0 22px 0 12px;
+
+		@include flexContainer();
+		@include experimental(align-items, center);
+		
+		.overview-group-title {
+			@include flexItem(1 1 auto);
+		}
+
+		.button.edit {
+			@include flexItem(0 0 auto);
+		}
+	}
+
+	.overview-group-body, .overview-group-footer {
+		background: rgba(255, 255, 255, 0.8);
+	}
+
+	.overview-group-body {
+		padding: 13px 12px;
+		overflow: hidden;
+	}
+
+	.overview-group-title {
+		font: normal 400 1.5rem/2.8rem $condensed-font;
+		color: white;
+	}
+
+	.overview-editing-listitem {
+		background: white;
+		margin-bottom: 10px;
+		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+
+		&:last-of-type {
+			margin-bottom: 0;
+		}
+
+		&.discussion {
+			width: 230px;
+			margin: 5px 5px 5px;
+			float: left;
+
+			.overview-discussion {
+				width: 210px;
+				margin: 0;
+				box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+			}
+		}
+
+		.controls {
+			padding: 8px 10px;
+			text-align: right;
+			border-bottom: 1px solid #e3e3e3;
+
+			.nt-button.edit {
+				display: inline-block;
+			}
+		}
+
+		.body {
+			padding: 12px 10px;
+			overflow: hidden;
+
+			& > .overview-video {
+				width: auto !important;
+				overflow: hidden;
+			}
+		}
+	}
+
+	.overview-group-footer {
+		text-align: center;
+		height: 55px;
+		padding: 15px;
+
+		.nt-button.add {
+			display: inline-block;
+			line-height: 30px;
+			font-size: 0.875em;
+			font-weight: 600;
+			color: $primary-blue;
+		}
+	}
+
+	.course-overview-footer {
+		.nt-button.add {
+			background: $primary-blue;
+			line-height: 46px;
+			font-size: 0.875em;
+			font-weight: 600;
+			color: white;
+			text-align: center;
 		}
 	}
 }

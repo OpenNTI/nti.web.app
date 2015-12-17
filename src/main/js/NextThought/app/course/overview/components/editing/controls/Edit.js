@@ -10,7 +10,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Edit', {
 
 	name: 'Edit',
 
-	cls: 'button edit',
+	cls: 'nt-button edit',
 
 	renderTpl: '{name}',
 
@@ -27,6 +27,10 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Edit', {
 
 	afterRender: function() {
 		this.callParent(arguments);
+
+		if (this.color) {
+			this.addCls(this.color);
+		}
 
 		this.mon(this.el, 'click', this.handleClick.bind(this));
 	},

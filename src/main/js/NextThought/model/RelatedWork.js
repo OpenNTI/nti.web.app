@@ -58,6 +58,7 @@ Ext.define('NextThought.model.RelatedWork', {
 		{name: 'description', type: 'string'},
 		{name: 'icon', type: 'string'},
 		{name: 'label', type: 'string'},
+		{name: 'title', type: 'string'},
 		{name: 'section', type: 'string'},
 		{name: 'target', type: 'string'},
 		{name: 'type', type: 'string'},

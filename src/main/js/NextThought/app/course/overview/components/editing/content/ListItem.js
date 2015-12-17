@@ -30,7 +30,12 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 		}
 
 		if (preview) {
-			items.push(preview);
+			items.push({
+				xtype: 'container',
+				cls: 'body',
+				layout: 'none',
+				items: [preview]
+			});
 		}
 
 		this.add(items);

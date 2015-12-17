@@ -9,7 +9,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 
 	requires: [
 		'NextThought.model.courses.overview.Group',
-		'NextThought.app.course.overview.components.editing.Controls',
+		'NextThought.app.course.overview.components.editing.controls.Add',
 		'NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem'
 	],
 
@@ -72,15 +72,17 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 		this.add([
 			{xtype: 'container', isBodyContainer: true, layout: 'none', items: []},
 			{
-				xtype: 'overview-editing-controls',
-				record: this.lessonOverview,
-				root: this.lessonOverview,
-				optionsConfig: {
-					order: ['add'],
-					add: {
-						label: 'Add Content'
+				xtype: 'container',
+				cls: 'course-overview-footer',
+				layout: 'none',
+				items: [
+					{
+						xtype: 'overview-editing-controls-add',
+						name: 'Add Section Break',
+						parentRecord: this.lessonOverview,
+						root: this.lessonOverview
 					}
-				}
+				]
 			}
 		]);
 

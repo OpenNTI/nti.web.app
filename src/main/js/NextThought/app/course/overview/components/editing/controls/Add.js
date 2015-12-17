@@ -6,7 +6,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Add', {
 
 	name: 'Add',
 
-	cls: 'button add',
+	cls: 'nt-button add',
 
 	renderTpl: '{name}'
 });

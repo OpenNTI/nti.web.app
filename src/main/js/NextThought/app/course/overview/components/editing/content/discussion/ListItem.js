@@ -8,6 +8,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 		}
 	},
 
+	cls: 'overview-editing-listitem discussion',
+
 	requires: [
 		'NextThought.app.course.overview.components.parts.Discussion',
 		'NextThought.model.DiscussionRef'

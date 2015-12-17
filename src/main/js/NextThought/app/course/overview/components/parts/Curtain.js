@@ -24,12 +24,6 @@ Ext.define('NextThought.app.course.overview.components.parts.Curtain', {
 					cls: 'launch-player',
 					'data-qtip': '{{{NextThought.view.courseware.overview.parts.Videos.play}}}'
 				}]
-			}, {
-				cls: 'controls',
-				cn: [{
-					cls: 'edit',
-					html: 'Edit'
-				}]
 			}]
 		}]
 	}]),
