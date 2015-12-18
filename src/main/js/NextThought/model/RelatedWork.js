@@ -30,7 +30,7 @@ Ext.define('NextThought.model.RelatedWork', {
 
 		MIMETYPE_TO_ICON: {
 			'application/msword': 'icon-doc.png',
-			'application/vnd.openxmlformats-officedocument.wordprocessingml.template': 'icon-docx.png',
+			'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'icon-docx.png',
 			'application/pdf': 'icon-pdf.png',
 			'application/x-pdf': 'icon-pdf.png',
 			'application/vnd.ms-powerpoint': 'icon-ppt.png',
@@ -38,8 +38,10 @@ Ext.define('NextThought.model.RelatedWork', {
 			'application/vnd.ms-excel': 'icon-xls.png',
 			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'icon-xlsx.png',
 			'application/zip': 'icon-zip.png',
+			'application/vnd.nextthought.externallink': 'icon-www.png',
 			'unknown': 'generic.png'
 		},
+
 
 		URL_ICON: 'icon-www.png',
 
@@ -153,8 +155,19 @@ Ext.define('NextThought.model.RelatedWork', {
 	},
 
 
-	getIcon: function() {
-		return this.get('icon');
+	getIcon: function(root) {
+		var icon = this.get('icon'),
+			targetMimeType = this.get('targetMimeType');
+
+		if (icon && Globals.ROOT_URL_PATTERN.test(icon)) {
+			icon = getURL(icon);
+		} else if (icon) {
+			icon = getURL(root || '', icon);
+		} else {
+			icon = this.self.getIconForMimeType(targetMimeType);
+		}
+
+		return icon;
 	},
 
 

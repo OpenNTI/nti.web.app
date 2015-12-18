@@ -40,7 +40,10 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 			href = getURL((root || '') + href);
 		}
 
-		if (Globals.ROOT_URL_PATTERN.test(icon)) {
+		if (config.record && config.record.getIcon) {
+			debugger;
+			icon = config.record.getIcon(root || '');
+		} else if (Globals.ROOT_URL_PATTERN.test(icon)) {
 			icon = getURL(icon);
 		} else {
 			icon = getURL((root || '') + icon);
