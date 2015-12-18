@@ -41,7 +41,6 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 		}
 
 		if (config.record && config.record.getIcon) {
-			debugger;
 			icon = config.record.getIcon(root || '');
 		} else if (Globals.ROOT_URL_PATTERN.test(icon)) {
 			icon = getURL(icon);
