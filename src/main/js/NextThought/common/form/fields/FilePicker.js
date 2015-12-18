@@ -2,6 +2,10 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	extend: 'Ext.Component',
 	alias: 'widget.file-picker-field',
 
+	requires: [
+		'NextThought.model.ContentBlobFile'
+	],
+
 	statics: {
 		/**
 		 * Convert bytes to a human readable form
@@ -59,6 +63,10 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	beforeRender: function() {
 		this.callParent(arguments);
 
+		if (this.defaultValue) {
+			this.setPreviewFromValue(this.defaultValue);
+		}
+
 		//TODO: figure out how to show a preview, when
 		//editing
 
@@ -107,9 +115,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 
 
 	hasFile: function() {
-		var input = this.getInput();
-
-		return input && input.files && input.files.length > 0;
+		return !!this.currentFile;
 	},
 
 
@@ -123,21 +129,19 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 
 
 	getValue: function() {
-		var input = this.getInput();
-
-		return input && input.files && input.files[0];
+		return this.currentFile || this.defaultValue;
 	},
 
 
 	appendToFormData: function(data) {
-		var value = this.getValue(),
-			input = this.getInput(),
-			name = input && input.getAttribute('name');
+		var value = this.getValue();
 
-		//Only append if my input doesn't have a name,
-		//so we don't override the default behavior
-		if (value && name !== this.schema.name) {
+		if (value) {
 			data.append(this.schema.name, value, value.name);
+		//If there is no value, but we have a value; send back an empty string
+		//to null it out
+		} else if (this.defaultValue) {
+			data.append(this.schema.name, '');
 		}
 	},
 
@@ -167,9 +171,16 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	},
 
 
-	onFileChange: function() {
+	onFileChange: function(e) {
 		var input = this.getInput(),
 			file = input && input.files && input.files[0];
+
+		//Since you can't null out a file input
+		//keep track of the file locally, cancel
+		//default to prevent the input from getting the value
+		this.currentFile = file;
+
+		e.preventDefault();
 
 		if (!file) { return; }
 
@@ -197,6 +208,38 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 
 	onDragLeave: function() {
 		this.inputContainer.removeCls('file-over');
+	},
+
+
+	setPreviewFromValue: function(value) {
+		if (!ParseUtils.isNTIID(value)) { return; }
+
+
+		Service.getObject(value)
+			.then(this.setPreviewFromBlob.bind(this))
+			.fail(this.onFailToLoadPreview.bind(this));
+	},
+
+
+	setPreviewFromBlob: function(blob) {
+		if (!this.rendered) {
+			this.on(('afterrender'), this.setPreviewFromBlob.bind(this, blob));
+			return;
+		}
+
+		var size = this.self.getHumanReadableFileSize(blob.get('size') || 0, 1),
+			href = blob.get('url');
+
+		this.nameEl.update(blob.get('filename'));
+		this.sizeEl.update('(' + size + ')');
+
+		this.previewLink.dom.setAttribute('href', blob.get('url'));
+	},
+
+
+	onFailToLoadPreview: function(reason) {
+		//TODO: Show some error state
+		console.error('Failed to load file preview: ', reason);
 	},
 
 
@@ -236,6 +279,10 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 			url.revokeObjectURL(this.objectURL);
 			delete this.objectURL;
 		}
-	}
+	},
 
+
+	clearInput: function() {
+		delete this.currentFile;
+	}
 });

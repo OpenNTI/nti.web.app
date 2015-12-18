@@ -26,9 +26,6 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 
 		this.placeholder = this.schema.placeholder;
 
-		//TODO: figure out how to show a placeholder, or
-		//an existing value
-
 		var width = this.schema.width,
 			height = this.schema.height;
 
@@ -59,18 +56,25 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 
 
 	setPlaceholder: function(value) {
-		this.fileContainer.removeCls('has-file');
-		this.fileContainer.addCls('no-file');
-
 		this.placeholder = value;
 
-		if (!this.hasFile()) {
+		if (!this.hasFile() && !this.defaultValue) {
 			if (value) {
 				this.previewEl.setStyle({backgroundImage: 'url(' + value + ')'});
 			} else {
 				this.previewEl.setStyle({backgroundImage: ''});
 			}
 		}
+	},
+
+
+	setPreviewFromValue: function(value) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setPreviewFromValue.bind(this, value));
+			return;
+		}
+
+		this.previewEl.setStyle({backgroundImage: 'url(' + value + ')'});
 	},
 
 
@@ -84,18 +88,20 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 
 
 	showPreviewFromSchema: function() {
-		var url = this.schema.placeholder || '';
+		var url = this.placeholder || this.schema.placeholder || '';
 
-		this.previewEl.setStyle({backgroundImage: url});
+		this.previewEl.setStyle({backgroundImage: 'url(' + url + ')'});
 	},
 
 
-
 	onClearImage: function() {
+		delete this.defaultValue;
+		this.clearInput();
+
 		this.showPreviewFromSchema();
 
 		this.cleanUpObjectURL();
-		this.fileContainer.dom.replaceChild(this.inputEl.dom.cloneNode(true), this.inputEl.dom);
+
 		this.fileContainer.removeCls('has-file');
 		this.fileContainer.addCls('no-file');
 	}

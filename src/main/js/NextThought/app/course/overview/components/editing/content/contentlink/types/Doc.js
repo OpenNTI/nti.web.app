@@ -32,7 +32,20 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 		if (!this.record) {
 			this.addCls('file-only');
+		} else {
+			this.onFileAdded(this.record.get('targetMimeType'));
 		}
+	},
+
+
+	getDefaultValues: function() {
+		var base = this.callParent(arguments);
+
+		//For documents, set the target has the href so
+		//we can get info about it
+		base.href = base.target;
+
+		return base;
 	},
 
 

@@ -71,6 +71,7 @@ Ext.define('NextThought.model.RelatedWork', {
 		{name: 'visibility', type: 'string'},
 		{name: 'href', type: 'string'},
 		{name: 'Target-NTIID', type: 'string'},
+		{name: 'targetMimeType', type: 'string'},
 		{name: 'byline', type: 'string'}
 	],
 

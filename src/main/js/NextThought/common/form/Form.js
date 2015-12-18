@@ -191,6 +191,7 @@ Ext.define('NextThought.common.form.Form', {
 	__buildComponent: function(cls, schema, inputEl) {
 		var cmp = cls.create({
 			defaultValue: schema.value,
+			defaultValues: this.defaultValues,
 			schema: schema,
 			renderTo: inputEl,
 			onChange: this.onFormChange.bind(this)
@@ -432,7 +433,9 @@ Ext.define('NextThought.common.form.Form', {
 			if (part.type === 'group') {
 				part.inputs.reduce(reducer, acc);
 			} else if (oldValue !== newValue || part.type === 'hidden') {
-				acc[part.name] = newValue;
+				//If the newValue is undefined assume that means null it out,
+				//so set it explicitly to null so the value makes it to the server
+				acc[part.name] = newValue === undefined ? null : newValue;
 			}
 
 			return acc;
