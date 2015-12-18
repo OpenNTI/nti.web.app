@@ -99,10 +99,16 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 			rec = this.contents,
 			value = rec && rec.get('publishBeginning'),
 			date = new Date(value),
-			el = this.el;
+			el = this.el, parts, m;
 
 		if (value) {
+			// Format i.e. December 12
 			date = Ext.Date.format(date, 'F d');
+			parts = date.split(' ');
+			m = parts[0].substring(0,3);
+
+			// Format i.e. Dec 12
+			date = m + ' ' + parts[1];
 			el.removeCls('publish');
 			el.addCls('published');
 			if (label) {

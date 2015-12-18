@@ -409,10 +409,10 @@
 		}
 
 		&.publish, &.published {
-			width: 245px;
+			width: 220px;
 
 			.label {
-				width: 225px;
+				width: 200px;
 			    padding: 9px 10px 9px 26px;
 			    margin: 10px;
 			    border-radius: 5px;
@@ -435,6 +435,23 @@
 				background: $primary-blue;
 				@include icon('dropdown-white', $side: after, $top: 10px, $left: auto, $right: 10px);
 			    @include icon('publish-icon-white', $side: before, $top: 12px, $left: 11px, $right: auto);
+			}
+		}
+
+		.save {
+			margin: 5px 0;
+			display: block;
+			line-height: 40px;
+		    text-align: center;
+		    padding: 0 1.5em;
+		    border-radius: 3px;
+		    color: white;
+		    background-color: $primary-blue;
+		    cursor: pointer;
+
+		    &.disabled {
+				background-color: $tertiary-grey-alt;
+				box-shadow: inset 1px 0 0 0 $border-grey;
 			}
 		}
 
@@ -469,7 +486,7 @@
 				border-color: transparent transparent #ffffff transparent;
 			}
 
-			.editing-publishing-menu {
+			.editing-publishing-menu, .calendar-menu {
 				padding: 10px;
 				background-color: #ffffff;
     			width: 355px;
@@ -514,22 +531,113 @@
 						border-bottom: none;
 					}	
 				}
+			}
+		}
+
+		&.calendar {
+			position: relative;
+
+			.date-selected {
+				position: absolute !important;
+			    left: 0;
+			    top: -5px;
+				cursor: pointer;
+				width: 51px;
+			    height: 40px;
+			    display: block;
+			    
+				@include icon('dropdown-am-pm-icon', $side: after, $top: 20px, $left: auto, $right: 3px);
+
+				.date {
+					cursor: pointer;
+					display: block;
+					opacity: 0.3;
+					min-width: 25px;
+					position: absolute;
+					left: 0px;
+					top: 7px;
+					text-transform: uppercase;
+					border-radius: 2px;
+					box-shadow: 0 0 0 1px $primary-grey, inset 0 0 0 1px $primary-grey;
+					text-align: center;
+
+					div:first-child {
+						background: $primary-grey;
+						color: white;
+						border-radius: 0;
+						font: normal 700 0.7em/1.1em $font;
+						padding: 2px 6px;
+					}
+
+					div:last-child {
+						color: $primary-grey;
+						font: normal 500 0.8em/1.3em $font;
+						border-radius: 0;
+					}
+				}
+			}
+
+			.main {
+				position: relative;
+				display: block;
+			    color: $tertiary-grey;
+			    margin-left: 60px;
+			    margin-top: 10px;
+
+				.text {
+					display: inline-block;
+			    	border: 2px solid #d1d1d1;
+			    	font-style: italic;
+			    	padding: 5px 10px;
+			    	font-weight: 300;
+					cursor: pointer;
+				}
 
 				.save {
-					margin: 5px 0;
-					display: block;
-					line-height: 40px;
-				    text-align: center;
-				    padding: 0 1.5em;
-				    border-radius: 3px;
-				    color: white;
-				    background-color: $primary-blue;
-				    cursor: pointer;
+				    display: none;
+				    line-height: 32px;
+				    padding: 0 12px;
+				    margin: 0 0 0 12px;
 
-				    &.disabled {
-    					background-color: $tertiary-grey-alt;
-	   					box-shadow: inset 1px 0 0 0 $border-grey;
-	   				}
+					&.active {
+						display: inline-block;
+					}
+				}
+			}
+
+
+
+			.menu-container {
+				margin-top: 10px;
+
+				&::before {
+					left: 9px;
+					right: auto;
+				}
+
+				&::after {
+					left: 10px;
+					right: auto;
+				}
+
+
+				.calendar-menu {
+					margin-top: 7px;
+					width: auto;
+				}
+
+				&.text-clicked {
+					&::before {
+						left: 200px;
+					}
+
+					&::after {
+						left: 201px;
+					}
+
+					.calendar-menu {
+						margin-left: 60px;
+					}
 				}
 			}
 		}

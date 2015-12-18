@@ -2,5 +2,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.contentno
 	extend: 'NextThought.app.course.overview.components.editing.outline.calendarnode.Preview',
 	alias: 'widget.overview-editing-outline-contentnode-preview',
 
-	enablePublishControls: true
+	enablePublishControls: true,
+
+	enableCalendarControls: true
 });

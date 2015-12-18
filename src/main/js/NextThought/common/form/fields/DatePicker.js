@@ -219,7 +219,11 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 			hour = this.hourEl && this.hourEl.dom.value,
 			minutes = this.minuteEl && this.minuteEl.dom.value,
 			meridiemVal = this.meridiemEl && this.meridiemEl.dom.getAttribute('data-value'),
-			date;		
+			date;
+
+		if (!this.TimePicker) {
+			return;
+		}		
 
 		hour = parseInt(hour);
 		minutes = parseInt(minutes);

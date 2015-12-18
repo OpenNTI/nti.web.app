@@ -6,14 +6,15 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 	requires: [
 		'NextThought.app.course.overview.components.editing.controls.Edit',
-		'NextThought.app.course.overview.components.editing.controls.Publish'
+		'NextThought.app.course.overview.components.editing.controls.Publish',
+		'NextThought.app.course.overview.components.editing.controls.Calendar'
 	],
 
 	toolbarTpl: Ext.DomHelper.markup([
 		{cls: 'toolbar', cn: [
 			{cls: 'left', cn: [
 				{tag: 'tpl', 'if': 'enableCalendarControls', cn: [
-					{cls: 'date-container'}
+					{cls: 'calendar-container'}
 				]}
 			]},
 			{cls: 'right', cn: [
@@ -115,7 +116,15 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 
 	addCalendarControls: function(){
+		var container = this.el.down('.calendar-container');
 
+		if (container) {
+			this.publishCmp = Ext.widget('overview-editing-controls-calendar', {
+				record: this.record,
+				contents: this.contents,
+				renderTo: container
+			});		
+		}
 	}
 
 });

@@ -212,13 +212,25 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 			date = new Date(value);
 
 		if (this.publishEl && value) {
-			date = Ext.Date.format(date, 'F d');
+			date = this.getDayAndMonth(date);
 			this.publishEl.removeCls('publish');
 			this.publishEl.addCls('published');
 			if (label) {
 				label.update('Publish on ' + date);
 			}
 		}
+	},
+
+	getDayAndMonth: function(date){
+		var parts, m;
+
+		if (!date) { return ''; }
+
+		// Format i.e. December 12
+		date = Ext.Date.format(date, 'F d');
+		parts = date.split(' ');
+		m = parts[0].substring(0,3);
+		return m + ' ' + parts[1];
 	},
 
 
@@ -252,15 +264,12 @@ Ext.define('NextThought.app.course.overview.components.editing.Controls', {
 			viewportHeight = Ext.Element.getViewportHeight(),
 			maxHeight = viewportHeight - top - 10;
 
-		menu.onceRendered
-			.then(function() {
-				if (menu.el) {
-					menu.el.setStyle('top', top + 'px');
-					menu.el.setStyle('right', right + 'px');
-					menu.el.setStyle('left', 'auto');
-					menu.el.setStyle('maxHeight', maxHeight + 'px');	
-				}
-			});
+		if (menu.el) {
+			menu.el.setStyle('top', top + 'px');
+			menu.el.setStyle('right', right + 'px');
+			menu.el.setStyle('left', 'auto');
+			menu.el.setStyle('maxHeight', maxHeight + 'px');	
+		}
 	},
 
 
