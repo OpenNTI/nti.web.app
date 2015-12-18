@@ -16,6 +16,7 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 		'NextThought.store.DataTransfer'
 	],
 
+
 	/**
 	 * If we haven't yet, set up the handlers. So we
 	 * have the same function to add and remove
@@ -23,8 +24,10 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 	initDragging: function(data) {
 		if (!this.Draggable) {
 			this.Draggable = {
+				className: this.$className,
 				hasHandle: false,
-				inHandle: true,
+				inHandle: false,
+				transferData: new NextThought.store.DataTransfer(),
 				handlers: {
 					dragStart: this.__dragStart.bind(this),
 					dragEnd: this.__dragEnd.bind(this),
@@ -133,9 +136,9 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 	 * Add values to be set on the dataTransfer object.
 	 */
 	setDataTransfer: function(key, value) {
-		this.transferData = this.transferData || new NextThought.store.DataTransfer();
+		this.initDragging();
 
-		this.transferData.setData(key, value);
+		this.Draggable.transferData.setData(key, value);
 	},
 
 
@@ -145,11 +148,13 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 
 
 	__handleMouseDown: function() {
+		console.log('Mouse down called on: ', this.Draggable.className);
 		this.Draggable.inHandle = true;
 	},
 
 
 	__handleMouseUp: function() {
+		console.log('Mouse up called on: ', this.Draggable.className);
 		this.Draggable.inHandle = false;
 	},
 
@@ -172,11 +177,12 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 		e.dataTransfer.effectAllowd = 'all';
 		e.dataTransfer.setData(info.mimeType, info.getDataTransferValue());
 
-		if (this.transferData) {
-			this.transferData.forEach(function(key, value) {
+		if (this.Draggable.transferData) {
+			this.Draggable.transferData.forEach(function(key, value) {
 				e.dataTransfer.setData(key, value);
 			});
 		}
+
 
 		if (this.onDragStart) {
 			this.onDragStart();
@@ -191,6 +197,7 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 		if (el) {
 			el.classList.remove('dragging');
 		}
+
 
 		if (this.onDragEnd) {
 			this.onDragEnd();

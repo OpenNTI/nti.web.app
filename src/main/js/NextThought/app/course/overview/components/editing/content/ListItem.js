@@ -21,6 +21,13 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 	initComponent: function() {
 		this.callParent(arguments);
 
+		this.setDataTransfer(new NextThought.model.app.MoveInfo({
+			OriginContainer: this.record.parent.getId(),
+			OriginIndex: this.record.listIndex
+		}));
+
+		this.setDataTransfer(this.record);
+
 		this.setRecord(this.record);
 	},
 
@@ -52,6 +59,11 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 		}
 
 		this.add(items);
+	},
+
+
+	getDragHandle: function() {
+		return this.el && this.el.dom && this.el.dom.querySelector('.controls');
 	},
 
 

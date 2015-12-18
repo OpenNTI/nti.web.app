@@ -31,7 +31,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
 
-		var base = NextThought.app.course.overview.components.editing.content,
+		var onDrop = this.onCardDrop.bind(this),
+			setDataTransferHandler = this.setDataTransferHandler.bind(this),
+			base = NextThought.app.course.overview.components.editing.content,
 			items = [
 				base.contentlink.ListItem,
 				base.discussion.ListItem,
@@ -61,6 +63,14 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 		}));
 
 		this.setDataTransfer(this.record);
+
+		(Object.keys(this.MIME_TO_CMP) || []).forEach(function(key) {
+			setDataTransferHandler(key, {
+				onDrop: onDrop,
+				isValid: NextThought.mixins.dnd.OrderingContainer.hasMoveInfo,
+				effect: 'move'
+			});
+		});
 
 		this.setCollection(this.record);
 	},
@@ -177,5 +187,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 			course: this.course
 		});
 
+	},
+
+
+	onCardDrop: function(card, newIndex, moveInfo) {
+		this.record.moveToFromContainer(card, newIndex, moveInfo.get('OriginContainer'), this.lessonOverview);
 	}
 });

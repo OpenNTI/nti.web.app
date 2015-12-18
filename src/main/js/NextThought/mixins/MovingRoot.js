@@ -8,7 +8,7 @@ Ext.define('NextThought.mixins.MovingRoot', {
 
 
 	getIdForMove: function(record) {
-		return record.getId ? record.getId() : '';
+		return record.getId ? record.getId() : record;
 	},
 
 	/**

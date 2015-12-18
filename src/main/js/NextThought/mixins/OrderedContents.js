@@ -112,6 +112,7 @@ Ext.define('NextThought.mixins.OrderedContents', {
 			this.set('Items', items);
 		}
 
+		this.fillInItems();
 		this.fireEvent('update');
 		return record;
 	},
@@ -126,6 +127,7 @@ Ext.define('NextThought.mixins.OrderedContents', {
 		});
 
 		this.set('Items', items);
+		this.fillInItems();
 		this.fireEvent('update');
 	},
 
@@ -145,6 +147,8 @@ Ext.define('NextThought.mixins.OrderedContents', {
 			move = Promise.resolve(record);
 		} else if (!root || !root.isMovingRoot) {
 			move = Promise.reject('No moving root provided');
+		} else if (!oldParent) {
+			move = Promise.reject('No old parent to move from');
 		} else {
 			move = root.doAppendRecordFrom(record, oldParent, this);
 		}
@@ -171,6 +175,8 @@ Ext.define('NextThought.mixins.OrderedContents', {
 			move = Promise.resolve(record);
 		} else if (!root || !root.isMovingRoot) {
 			move = Promise.reject('No moving root provided');
+		} else if (!oldParent) {
+			move = Promise.reject('No old parent to move from');
 		} else {
 			move = root.doMoveRecordFrom(record, index, oldParent, this);
 		}
