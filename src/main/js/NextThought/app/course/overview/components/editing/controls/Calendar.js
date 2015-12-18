@@ -3,8 +3,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 	alias: 'widget.overview-editing-controls-calendar',
 
 	requires: [
-		'NextThought.common.form.fields.DatePicker',
-		'NextThought.common.menus.DatePickerMenu'
+		'NextThought.common.form.fields.DatePicker'
 	],
 
 	cls: 'button calendar',
