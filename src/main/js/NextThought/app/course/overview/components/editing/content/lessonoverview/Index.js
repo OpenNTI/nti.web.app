@@ -21,7 +21,11 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 	initComponent: function() {
 		this.callParent(arguments);
 
-		//TODO: set drop handlers
+		this.setDataTransferHandler(NextThought.model.courses.overview.Group.mimeType, {
+			onDrop: this.onGroupDrop.bind(this),
+			isValid: NextThought.mixins.dnd.OrderingContainer.hasMoveInfo,
+			effect: 'move'
+		});
 
 		this.setCollection(this.contents);
 	},
@@ -63,8 +67,27 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 	},
 
 
+	cacheHeight: function() {
+		var dom = this.el && this.el.dom;
+
+		if (dom) {
+			dom.style.height = dom.offsetHeight + 'px';
+		}
+	},
+
+
+	uncacheHeight: function() {
+		var dom = this.el && this.el.dom;
+
+		if (dom) {
+			dom.style.height = 'auto';
+		}
+	},
+
+
 	setCollection: function(collection) {
 		this.disableOrderingContainer();
+		this.cacheHeight();
 		this.removeAll(true);
 
 		this.lessonOverview = collection;
@@ -88,6 +111,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 
 		this.callParent(arguments);
 
+		this.uncacheHeight();
 		this.enableOrderingContainer();
 	},
 
@@ -106,5 +130,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 		}
 
 		console.warn('Unknown type: ', record);
+	},
+
+
+	onGroupDrop: function(group, newIndex, moveInfo) {
+		this.contents.moveToFromContainer(group, newIndex, moveInfo.get('OriginContainer'), this.contents);
 	}
 });

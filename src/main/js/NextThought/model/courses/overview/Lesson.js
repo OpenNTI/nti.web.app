@@ -21,13 +21,21 @@ Ext.define('NextThought.model.courses.overview.Lesson', {
 	],
 
 
+	constructor: function() {
+		this.callParent(arguments);
+
+		wait()
+			.then(this.fillInItems.bind(this));
+	},
+
+
 	getTitle: function() {
 		return this.get('title');
 	},
 
 
-	isPublished: function(){
-		var state = this.get('PublicationState') || "";
+	isPublished: function() {
+		var state = this.get('PublicationState') || '';
 		return state.toLowerCase() === 'DefaultPublished'.toLowerCase();
 	}
 });

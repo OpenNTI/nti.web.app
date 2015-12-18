@@ -1,7 +1,21 @@
 Ext.define('NextThought.mixins.dnd.OrderingContainer', {
+
+	requires: [
+		'NextThought.model.app.MoveInfo'
+	],
+
+
 	mixins: {
 		Dropzone: 'NextThought.mixins.dnd.Dropzone'
 	},
+
+
+	statics: {
+		hasMoveInfo: function(dataTransfer) {
+			return dataTransfer.containsType(NextThought.model.app.MoveInfo.mimeType);
+		}
+	},
+
 
 	initOrdering: function() {
 	},
@@ -48,7 +62,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		var items = this.getOrderingItems(),
 			dropzoneRect = this.getDropzoneBoundingClientRect(),
 			dropzoneWidth = dropzoneRect.width,
-			info, i, current, previous;
+			info, i, current, previous, height;
 
 		for (i = 0; i < items.length; i++) {
 			previous = i >= 0 ? items[i] : null;
@@ -62,9 +76,13 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 						before: current.getDragTarget()
 					};
 				} else {
+
+					height = current.isFullWidth(dropzoneWidth) || previous.isFullWidth(dropzoneWidth) ? current.getPlaceholderBeforeHeight() : null;
+
 					info = {
 						index: i,
-						type: current.isFullWidth(dropzoneWidth) || previous.isFullWidth(dropzoneWidth) ? 'row' : 'column',
+						type: height ? 'column' : 'row',
+						height: height,
 						before: current.getDragTarget()
 					};
 				}
@@ -77,6 +95,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 
 		if (!info) {
 			info = {
+				index: Infinity,
 				append: true,
 				type: 'row'
 			};
@@ -137,6 +156,19 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 			target.appendChild(placeholder);
 		} else if (info.before) {
 			target.insertBefore(placeholder, info.before);
+		}
+	},
+
+
+	onDragDrop: function(e, dataTransfer) {
+		var info = this.getInfoForCoordinates(e.clientX, e.clientY),
+			handlers = this.getHandlersForDataTransfer(dataTransfer),
+			handler = handlers[0], //TODO: think about what to do if there is more than one
+			data = handler && dataTransfer.findDataFor(handler.key),
+			moveInfo = dataTransfer.findDataFor(NextThought.model.app.MoveInfo.mimeType);
+
+		if (info && handler && handler.onDrop && data) {
+			handler.onDrop(data, info.index, moveInfo);
 		}
 	}
 });

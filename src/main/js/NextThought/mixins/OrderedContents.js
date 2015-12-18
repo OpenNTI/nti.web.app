@@ -2,6 +2,50 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	hasOrderedContents: true,
 
 
+	isSameContainer: function(record) {
+		var myId = this.getId(),
+			theirId = record.getId ? record.getId() : record;
+
+		return myId === theirId;
+	},
+
+
+	getItems: function() {
+		return this.get('Items');
+	},
+
+
+	fillInItems: function() {
+		var me = this,
+			items = me.getItems();
+
+		if (items) {
+			items.forEach(function(item, index) {
+				item.parent = me;
+				item.listIndex = index;
+
+				if (item.hasOrderedContents) {
+					item.fillInItems();
+				}
+			});
+		}
+	},
+
+
+	indexOfId: function(id) {
+		var items = this.getItems(),
+			i;
+
+		for (i = 0; i < items.length; i++) {
+			if (items[i].getId() === id) {
+				return i;
+			}
+		}
+
+		return -1;
+	},
+
+
 	hasAppendLink: function() {
 		return !!this.getAppendLink();
 	},
@@ -89,7 +133,7 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	/**
 	 * Move a record from a given container to the end of my ordered contents
 	 * @param  {Object} record    record to move
-	 * @param  {Object} oldParent the current parent
+	 * @param  {Object|String} oldParent the current parent
 	 * @param  {Object} root      the root of me and the oldParent
 	 * @return {Promise}
 	 */
@@ -102,7 +146,33 @@ Ext.define('NextThought.mixins.OrderedContents', {
 		} else if (!root || !root.isMovingRoot) {
 			move = Promise.reject('No moving root provided');
 		} else {
-			move = root.doMoveRecordFrom(record, oldParent, this);
+			move = root.doAppendRecordFrom(record, oldParent, this);
+		}
+
+		return move;
+	},
+
+	/**
+	 * Move a record from a given container to the given index in my ordered contents
+	 *
+	 * @param  {Object|String} record    record or ntiid of record
+	 * @param  {Number} index     the position to move it to
+	 * @param  {Object|String} oldParent old parent or ntiid
+	 * @param  {Object} root      the root of me and the oldParent
+	 * @return {Promise}
+	 */
+	moveToFromContainer: function(record, index, oldParent, root) {
+		var currentIndex = this.indexOfId(record.getId ? record.getId() : record),
+			move;
+
+		//If the old parent is me and its in the same index, there's no
+		//need to do anything
+		if (currentIndex === index && this.isSameContainer(oldParent)) {
+			move = Promise.resolve(record);
+		} else if (!root || !root.isMovingRoot) {
+			move = Promise.reject('No moving root provided');
+		} else {
+			move = root.doMoveRecordFrom(record, index, oldParent, this);
 		}
 
 		return move;

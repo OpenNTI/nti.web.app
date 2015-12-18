@@ -97,19 +97,6 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 	},
 
 
-	fillInItems: function() {
-		var me = this,
-			items = me.get('Items');
-
-		if (items) {
-			items.forEach(function(item, index) {
-				item.parent = me;
-				item.listIndex = index;
-			});
-		}
-	},
-
-
 	findNode: function(id) {
 		if (this.getId() === id) { return this; }
 		return (this.get('Items') || []).reduce(function(a, o) {

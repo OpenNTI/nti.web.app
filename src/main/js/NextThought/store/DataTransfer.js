@@ -125,6 +125,11 @@ Ext.define('NextThought.store.DataTransfer', {
 	},
 
 
+	findDataFor: function(key) {
+		return this.getModel(key) || this.getJSON(key) || this.getData(key);
+	},
+
+
 	containsType: function(key) {
 		var types = this.dataTransfer && this.dataTransfer.types;
 

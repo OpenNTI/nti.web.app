@@ -209,6 +209,11 @@ Ext.define('NextThought.model.Base', {
 		});
 
 		this.set(newData);
+
+		if (this.fillInItems) {
+			this.fillInItems();
+		}
+
 		this.fireEvent('update', this);
 	},
 

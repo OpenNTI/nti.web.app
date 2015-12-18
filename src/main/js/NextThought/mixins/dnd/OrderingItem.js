@@ -60,6 +60,19 @@ Ext.define('NextThought.mixins.dnd.OrderingItem', {
 		return side;
 	},
 
+	getPlaceholderBeforeHeight: function() {
+		var rect = this.getDragBoundingClientRect();
+
+		return rect.height;
+	},
+
+
+	getPlaceholderAfterHeight: function() {
+		var rect = this.getDragBoundingClientRect();
+
+		return rect.height;
+	},
+
 
 	isFullWidth: function(fullWidth) {
 		var rect = this.getDragBoundingClientRect();

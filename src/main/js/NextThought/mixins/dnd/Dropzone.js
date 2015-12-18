@@ -19,12 +19,15 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 	 * have the same function to add and remove
 	 */
 	initDropzone: function() {
-		if (!this.DropzoneHandlers) {
-			this.DropzoneHandlers = {
-				dragEnter: this.__dragEnter.bind(this),
-				dragLeave: this.__dragLeave.bind(this),
-				dragOver: this.__dragOver.bind(this),
-				drop: this.__dragDrop.bind(this)
+		if (!this.Dropzone) {
+			this.Dropzone = {
+				transferHandlers: {},
+				handlers: {
+					dragEnter: this.__dragEnter.bind(this),
+					dragLeave: this.__dragLeave.bind(this),
+					dragOver: this.__dragOver.bind(this),
+					drop: this.__dragDrop.bind(this)
+				}
 			};
 		}
 	},
@@ -40,7 +43,7 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 
 		var target = this.getDropzoneTarget(),
 			method = remove ? 'removeEventListener' : 'addEventListener',
-			handlers = this.DropzoneHandlers;
+			handlers = this.Dropzone.handlers;
 
 		if (!target || !target[method]) {
 			console.error('No Valid Drag Target');
@@ -81,23 +84,29 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 
 
 	/**
-	 * Add a method to be called when there is a drop event with
-	 * dataTransfer for the key.
+	 * The handler is be a group of functions that looks like:
+	 *
+	 * {
+	 * 	onDrop: fn, //call to handle the drop event
+	 * 	isValid: fn, //returns a boolean value, if the given data transfer is valid
+	 * 	effect: String //returns a string of the drop effect to use (copy, move, link, copyMove, copyLink, linkMove, all)
+	 * }
 	 *
 	 * NOTE: the data from the event will only be available in the same
 	 * event pump as the handler
 	 *
 	 * @param {String}   key the key to look in the data transfer for
-	 * @param {Function} fn  the method to call with the data
+	 * @param {Object} fn  the methods
 	 */
-	setDataTransferHandler: function(key, fn) {
-		this.transferHandlers = this.transferHandlers || {};
+	setDataTransferHandler: function(key, handler) {
+		this.initDropzone();
 
-		if (this.transferHandlers[key]) {
+		if (this.Dropzone.transferHandlers[key]) {
 			console.warn('Overriding transfer handler: ', key);
 		}
 
-		this.transferHandlers[key] = fn;
+		handler.key = key;
+		this.Dropzone.transferHandlers[key] = handler;
 	},
 
 
@@ -114,18 +123,34 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 
 
 	__dragEnter: function(e) {
-		var el = this.getDropzoneTarget();
+		var el = this.getDropzoneTarget(),
+			dataTransfer = new NextThought.store.DataTransfer({dataTransfer: e.dataTransfer}),
+			handlers = this.getHandlersForDataTransfer(dataTransfer),
+			effect, handler;
 
-		this.dragEnterCounter = this.dragEnterCounter || 0;
+		handler = handlers[0];
 
-		this.dragEnterCounter += 1;
-
-		if (el) {
-			el.classList.add('drag-over');
+		//Get the first handler to have an effect defined
+		while (!effect && handler) {
+			effect = handler.effect;
 		}
 
-		if (this.onDragEnter) {
-			this.onDragEnter(e);
+		if (effect) {
+			e.dataTransfer.dropEffect = effect;
+		}
+
+		this.Dropzone.dragEnterCounter = this.Dropzone.dragEnterCounter || 0;
+
+		this.Dropzone.dragEnterCounter += 1;
+
+		if (handlers.length > 0 && this.__isValidTransfer(dataTransfer)) {
+			if (el) {
+				el.classList.add('drag-over');
+			}
+
+			if (this.onDragEnter) {
+				this.onDragEnter(e);
+			}
 		}
 	},
 
@@ -133,9 +158,9 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 	__dragLeave: function(e) {
 		var el = this.getDropzoneTarget();
 
-		this.dragEnterCounter = this.dragEnterCounter || 1;
+		this.Dropzone.dragEnterCounter = this.Dropzone.dragEnterCounter || 1;
 
-		this.dragEnterCounter -= 1;
+		this.Dropzone.dragEnterCounter -= 1;
 
 		if (this.dragEnterCounter === 0) {
 			if (el) {
@@ -153,10 +178,17 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 		e.preventDefault();
 		e.stopPropagation();
 
-		var dataTransfer = new NextThought.store.DataTransfer({dataTransfer: e.dataTransfer});
+		var dataTransfer = new NextThought.store.DataTransfer({dataTransfer: e.dataTransfer}),
+			handlers = this.getHandlersForDataTransfer(dataTransfer);
 
-		if (!dataTransfer.containsType(NextThought.model.app.DndInfo.mimeType)) {
-			console.warn('Invalid drop event: ', e);
+		if (!this.__isValidTransfer(dataTransfer)) {
+			if (this.onInvalidOver) {
+				this.onInvalidOver();
+			}
+		} else if (handlers.length === 0) {
+			if (this.onNoHandlers) {
+				this.onNoHandlers();
+			}
 		} else if (this.onDragOver) {
 			this.onDragOver(e, dataTransfer);
 		}
@@ -169,8 +201,10 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 
 		var dataTransfer = new NextThought.store.DataTransfer({dataTransfer: e.dataTransfer});
 
-		if (this.__isValidDrop(dataTransfer.getData(NextThought.model.app.DndInfo.mimeType))) {
-			console.warn('Invalid drop event: ', e);
+		if (!this.__isValidDrop(dataTransfer)) {
+			if (this.onInvalidDrop) {
+				this.onInvalidDrop();
+			}
 		} else if (this.onDragDrop) {
 			this.onDragDrop(e, dataTransfer);
 		} else {
@@ -179,25 +213,41 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 	},
 
 
-	hasHandlerForDataTransfer: function(dataTransfer) {
-		var handlers = this.transferHandlers,
-			keys = handlers && Object.keys(handlers),
-			i;
+	getHandlersForDataTransfer: function(dataTransfer) {
+		var handlers = this.Dropzone.transferHandlers,
+			keys = handlers && Object.keys(handlers);
 
-		keys = keys || [];
+		return keys.reduce(function(acc, key) {
+			var handler = handlers[key];
 
-		for (i = 0; i < keys.length; i++) {
-			if (dataTransfer.containsType(keys[i])) {
-				return true;
+			//If there is no data for this handler
+			if (!dataTransfer.containsType(key)) { return acc; }
+
+			if (!handler.isValid || handler.isValid(dataTransfer)) {
+				acc.push(handler);
 			}
-		}
 
-		return false;
+			return acc;
+		}, []);
 	},
 
 
-	__isValidDrop: function(dndInfo) {
-		return !!dndInfo; //For now its a valid drop if we have NT drop info
+	hasHandlerForDataTransfer: function(dataTransfer) {
+		var handlers = this.getHandlersForDataTransfer(dataTransfer);
+
+		return handlers.length > 0;
+	},
+
+
+	__isValidTransfer: function(dataTransfer) {
+		return !!dataTransfer.containsType(NextThought.model.app.DndInfo.mimeType);
+	},
+
+
+	__isValidDrop: function(dataTransfer) {
+		var dndInfo = dataTransfer.getData(NextThought.model.app.DndInfo.mimeType);
+
+		return !!dndInfo;//TODO: maybe check the source and version number
 	},
 
 
@@ -205,8 +255,9 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 		var handlers = this.transferHandlers || {},
 			keys = Object.keys(handlers);
 
+		//TODO: look at that to do when there is more than one handler for a drop...
 		keys.forEach(function(key) {
-			var data = dataTransfer.getModel() || dataTransfer.getJSON() || dataTransfer.getData();
+			var data = dataTransfer.getModel(key) || dataTransfer.getJSON(key) || dataTransfer.getData(key);
 
 			if (data) {
 				handlers[key](data, dataTransfer, e);

@@ -8,6 +8,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 	},
 
 	requires: [
+		'NextThought.model.app.MoveInfo',
 		'NextThought.app.course.overview.components.editing.controls.Add',
 		'NextThought.app.course.overview.components.editing.controls.Edit',
 		'NextThought.app.course.overview.components.editing.content.overviewgroup.Preview',
@@ -53,6 +54,11 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 			return acc;
 		}, {});
+
+		this.setDataTransfer(NextThought.model.app.MoveInfo.create({
+			OriginContainer: this.record.parent.getId(),
+			OriginIndex: this.record.listIndex
+		}));
 
 		this.setDataTransfer(this.record);
 
@@ -100,6 +106,11 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 	},
 
 
+	getDragHandle: function() {
+		return this.el && this.el.dom && this.el.dom.querySelector('.overview-group-header');
+	},
+
+
 	setCollection: function(collection) {
 		this.disableOrderingContainer();
 		this.removeAll(true);
@@ -113,7 +124,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 		this.add([
 			{
 				xtype: 'container',
-				cls: 'overview-group-header',
+				cls: 'overview-group-header drag-handle',
 				layout: 'none',
 				items: [
 					{xtype: 'overview-editing-overviewgroup-preview', group: collection},
