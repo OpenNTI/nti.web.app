@@ -138,7 +138,7 @@
 			@include icon('reports-gray-card_hover', $top: 12px, $left: 12px);
 		}
 
-		.nav-outline:not(.editing) &.disabled {
+		&.disabled {
 			cursor: default;
 			color: $tertiary-grey;
 		}
@@ -161,6 +161,15 @@
 					// To compute max height, multiply min-height by 2 (2 lines) 
 					max-height: 2.6em;
 				}
+			}
+		}
+	}
+
+	&.editing {
+		.outline-row {
+			&.disabled {
+				cursor: pointer;
+				color: $primary-grey;
 			}
 		}
 	}

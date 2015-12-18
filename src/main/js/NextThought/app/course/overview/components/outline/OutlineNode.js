@@ -130,7 +130,8 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 
 
 	onClick: function(e) {
-		if (e.getTarget('.outline-row')) {
+		var isDisabled = Boolean(e.getTarget('.disabled'));
+		if (e.getTarget('.outline-row') && (!isDisabled || this.isEditing)) {
 			this.doSelectNode(this.outlineNode);
 		}
 	},
