@@ -3,6 +3,7 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	alias: 'widget.course-outline-group',
 
 	requires: [
+		'NextThought.model.app.MoveInfo',
 		'NextThought.model.courses.navigation.CourseOutlineNode',
 		'NextThought.model.courses.navigation.CourseOutlineContentNode',
 		'NextThought.model.courses.navigation.CourseOutlineCalendarNode',
@@ -11,7 +12,9 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	],
 
 	mixins: {
-		'EllipsisText': 'NextThought.mixins.EllipsisText'
+		'EllipsisText': 'NextThought.mixins.EllipsisText',
+		'OrderingItem': 'NextThought.mixins.dnd.OrderingItem',
+		'OrderingContainer': 'NextThought.mixins.dnd.OrderingContainer'
 	},
 
 	cls: 'outline-group',
@@ -21,50 +24,20 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var node = this.outlineNode,
-			startDate = node.get('startDate'),
-			classes = ['outline-row', node.get('type')],
-			items = [];
+		this.setDataTransfer(new NextThought.model.app.MoveInfo({
+			OriginContainer: this.outlineNode.parent.getId(),
+			OriginIndex: this.outlineNode.listIndex
+		}));
 
-		if (!node.get('isAvailable')) {
-			classes.push('disabled');
-		}
+		this.setDataTransfer(this.outlineNode);
 
-		items.push({cls: 'label', html: node.getTitle()});
+		this.setDataTransferHandler(NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType, {
+			onDrop: this.onDrop.bind(this),
+			isValid: NextThought.mixins.dnd.OrderingContainer.hasMoveInfo,
+			effect: 'move'
+		});
 
-		if (this.shouldShowDates && startDate) {
-			items.push({
-				cls: 'date',
-				cn: [
-					{html: Ext.Date.format(startDate, 'M')},
-					{html: Ext.Date.format(startDate, 'j')}
-				]
-			});
-		}
-
-
-		this.add([
-			{
-				xtype: 'box',
-				isNode: true,
-				autoEl: {
-					cls: classes.join(' '),
-					'data-qtip': node.getTitle(),
-					cn: items
-				}
-			},
-			{
-				xtype: 'container',
-				bodyContainer: true,
-				cls: 'items',
-				layout: 'none',
-				items: []
-			}
-		]);
-
-		this.nodeCmp = this.down('[isNode]');
-
-		this.setCollection(node);
+		this.setCollection(this.outlineNode);
 	},
 
 
@@ -77,7 +50,28 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	},
 
 
+	getOrderingItems: function() {
+		var body = this.getBodyContainer(),
+			items = body && body.items && body.items.items;
+
+		return items || [];
+	},
+
+
+	getDropzoneTarget: function() {
+		var body = this.getBodyContainer();
+
+		return body && body.el && body.el.dom;
+	},
+
+
+	getDragHandle: function() {
+		return this.el && this.el.dom && this.el.dom.querySelector('.outline-row');
+	},
+
+
 	setCollection: function(collection) {
+		this.disableOrderingContainer();
 		this.removeAll(true);
 
 		var startDate = collection.get('startDate'),
@@ -178,12 +172,12 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 
 
 	startEditing: function() {
-		var me = this, OutlinePrompt, mimeType;
-
-		if (this.outlineNode && this.outlineNode._depth === 1) {
+		var me = this, inlineEditor,
 			OutlinePrompt = NextThought.app.course.overview.components.editing.outline.Prompt;
-			mimeType = NextThought.model.courses.navigation.CourseOutlineNode.mimeType;
-			inlineEditor = OutlinePrompt.getInlineEditor(mimeType);
+
+		//TODO: make this more general to support more complicated outline structures
+		if (this.outlineNode && this.outlineNode.isTopLevel()) {
+			inlineEditor = OutlinePrompt.getInlineEditor(this.outlineNode.mimeType);
 
 			this.addNodeCmp = this.add({
 				xtype: 'overview-editing-new-node',
@@ -193,6 +187,8 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 				parentRecord: this.outlineNode,
 				doSelectNode: this.doSelectNode
 			});
+
+			this.enableOrderingContainer();
 		}
 	},
 
@@ -229,10 +225,16 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 			return NextThought.app.course.overview.components.outline.OutlineNode.create({
 				outlineNode: record,
 				shouldShowDates: this.shouldShowDates,
-				doSelectNode: this.doSelectNode
+				doSelectNode: this.doSelectNode,
+				isEditing: this.isEditing
 			});
 		}
 
 		console.warn('Unknown type: ', record);
+	},
+
+
+	onDrop: function(record, newIndex, moveInfo) {
+		return this.outlineNode.moveToFromContainer(record, newIndex, moveInfo.get('OriginContainer'), this.outline);
 	}
 });

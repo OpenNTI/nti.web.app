@@ -13,7 +13,7 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 	],
 
 	mixins: {
-		DataTransfer: 'NextThought.mixins.dnd.DataTransferSource',
+		// DataTransfer: 'NextThought.mixins.dnd.DataTransferSource',
 		OrderedContents: 'NextThought.mixins.OrderedContents',
 		DurationCache: 'NextThought.mixins.DurationCache'
 	},
@@ -122,6 +122,21 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 			title: this.getTitle(),
 			NTIID: this.get('NTIID')
 		};
+	},
+
+
+	isLeaf: function() {
+		var depth = this._depth,
+			maxDepth = this._max_depth;
+
+		return depth === maxDepth;
+	},
+
+
+	isTopLevel: function() {
+		var depth = this._depth;
+
+		return depth === 1;
 	},
 
 

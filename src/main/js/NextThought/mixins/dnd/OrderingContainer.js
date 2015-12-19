@@ -105,13 +105,11 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 	},
 
 
-	__getPlacholder: function() {
+	__getPlaceholder: function() {
 		var placeholder = document.querySelector('.dnd-drop-placeholder');
 
 		if (!placeholder) {
 			placeholder = document.createElement('div');
-			placeholder.style.height = '2px';
-			placeholder.style.background = 'black';
 			placeholder.classList.add('dnd-drop-placeholder');
 		}
 
@@ -128,7 +126,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 
 
 	onItemDragStart: function() {
-		this.__getPlacholder();
+		this.__getPlaceholder();
 	},
 
 
@@ -142,26 +140,34 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 	},
 
 
-	onDragOver: function(e, dataTransfer) {
-		if (!this.hasHandlerForDataTransfer(dataTransfer)) {
-			this.__removePlaceholder();
-			return;
-		}
-
+	__showPlaceholderByInfo: function(info) {
 		var target = this.getDropzoneTarget(),
-			placeholder = this.__getPlacholder(),
-			info = this.getInfoForCoordinates(e.clientX, e.clientY);
+			placeholder = this.__getPlaceholder();
 
 		if (info.append) {
 			target.appendChild(placeholder);
 		} else if (info.before) {
 			target.insertBefore(placeholder, info.before);
 		}
+
+		return placeholder;
+	},
+
+
+	onDragOver: function(e, dataTransfer) {
+		if (!this.hasHandlerForDataTransfer(dataTransfer)) {
+			this.__removePlaceholder();
+			return;
+		}
+
+		var info = this.getInfoForCoordinates(e.clientX, e.clientY),
+			placeholder = this.__showPlaceholderByInfo(info);
 	},
 
 
 	onDragDrop: function(e, dataTransfer) {
 		var info = this.getInfoForCoordinates(e.clientX, e.clientY),
+			placeholder = this.__showPlaceholderByInfo(info),
 			handlers = this.getHandlersForDataTransfer(dataTransfer),
 			handler = handlers[0], //TODO: think about what to do if there is more than one
 			data = handler && dataTransfer.findDataFor(handler.key),

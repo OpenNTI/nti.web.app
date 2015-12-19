@@ -1,5 +1,48 @@
 Ext.define('NextThought.store.courseware.OutlineInterface', {
 
+	statics: {
+		fillInDepths: function(outline) {
+			this.flattenOutline(outline);
+		},
+
+
+		flattenOutline: function(outline) {
+			var records = [], maxDepth,
+			index = 0, depth = 0;
+
+			function itr(node) {
+				node._max_depth = maxDepth;
+				node._position = index;
+				node._depth = depth;
+
+				if (node.fillInItems) {
+					node.fillInItems();
+				}
+
+				index += 1;
+
+				records.push(node);
+
+				depth += 1;
+				(node.get('Items') || []).forEach(itr);
+				depth -= 1;
+			}
+
+			function getDepth(n) {
+				var i = ((n && n.get('Items')) || [])[0];
+
+				return i ? (getDepth(i) + 1) : 0;
+			}
+
+			maxDepth = getDepth(outline);
+
+			itr(outline);
+
+			return records;
+		}
+	},
+
+
 	constructor: function(config) {
 		this.callParent(arguments);
 
@@ -22,47 +65,11 @@ Ext.define('NextThought.store.courseware.OutlineInterface', {
 	__build: function(results) {
 		this.outline = results[0];
 		this.tocStore = results[1];
-		this.__flatContents = this.__flatten(this.outline);
+		this.__flatContents = this.self.flattenOutline(this.outline);
 
 		this.isBuilt = true;
 
 		return this;
-	},
-
-
-	__flatten: function(outline) {
-		var records = [], maxDepth,
-			index = 0, depth = 0;
-
-		function itr(node) {
-			node._max_depth = maxDepth;
-			node._position = index;
-			node._depth = depth;
-
-			if (node.fillInItems) {
-				node.fillInItems();
-			}
-
-			index += 1;
-
-			records.push(node);
-
-			depth += 1;
-			(node.get('Items') || []).forEach(itr);
-			depth -= 1;
-		}
-
-		function getDepth(n) {
-			var i = ((n && n.get('Items')) || [])[0];
-
-			return i ? (getDepth(i) + 1) : 0;
-		}
-
-		maxDepth = getDepth(outline);
-
-		itr(outline);
-
-		return records;
 	},
 
 

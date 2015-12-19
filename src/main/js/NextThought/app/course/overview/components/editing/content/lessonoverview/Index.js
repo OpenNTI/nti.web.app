@@ -134,6 +134,6 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 
 
 	onGroupDrop: function(group, newIndex, moveInfo) {
-		this.contents.moveToFromContainer(group, newIndex, moveInfo.get('OriginContainer'), this.contents);
+		return this.contents.moveToFromContainer(group, newIndex, moveInfo.get('OriginContainer'), this.contents);
 	}
 });

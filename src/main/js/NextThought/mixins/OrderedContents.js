@@ -10,6 +10,11 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
+	onSync: function() {
+		this.fillInItems();
+	},
+
+
 	getItems: function() {
 		return this.get('Items');
 	},
@@ -113,6 +118,11 @@ Ext.define('NextThought.mixins.OrderedContents', {
 		}
 
 		this.fillInItems();
+
+		if (this.onItemAdded) {
+			this.onItemAdded();
+		}
+
 		this.fireEvent('update');
 		return record;
 	},
@@ -128,6 +138,11 @@ Ext.define('NextThought.mixins.OrderedContents', {
 
 		this.set('Items', items);
 		this.fillInItems();
+
+		if (this.onItemRemoved) {
+			this.onItemRemoved();
+		}
+
 		this.fireEvent('update');
 	},
 

@@ -12,6 +12,10 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		'NextThought.app.course.overview.components.editing.outline.Prompt'
 	],
 
+	mixins: {
+		OrderedContaienr: 'NextThought.mixins.dnd.OrderingContainer'
+	},
+
 	ui: 'course',
 	cls: 'nav-outline course scrollable',
 
@@ -25,6 +29,12 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 	initComponent: function() {
 		this.callParent(arguments);
+
+		this.setDataTransferHandler(NextThought.model.courses.navigation.CourseOutlineNode.mimeType, {
+			onDrop: this.onDrop.bind(this),
+			isValid: NextThought.mixins.dnd.OrderingContainer.hasMoveInfo,
+			effect: 'moe'
+		});
 
 		this.headerCmp = this.down('overview-outline-header');
 	},
@@ -62,7 +72,29 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 	},
 
 
+		getOrderingItems: function() {
+		var body = this.getBodyContainer(),
+			items = body && body.items && body.items.items;
+
+		return items || [];
+	},
+
+
+	getDropzoneTarget: function() {
+		var body = this.getBodyContainer();
+
+		return body && body.el && body.el.dom;
+	},
+
+
+	onCollectionUpdate: function(outline) {
+		this.setOutline(this.activeBundle, outline);
+	},
+
+
 	setOutline: function(bundle, outline) {
+		this.disableOrderingContainer();
+
 		var catalog = bundle.getCourseCatalogEntry(),
 			bodyListEl = this.el && this.el.down('.outline-list'),
 			body = this.getBodyContainer();
@@ -87,6 +119,7 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		}
 
 		if (this.isEditing) {
+			this.enableOrderingContainer();
 			this.createAddUnitNode();
 		}
 	},
@@ -129,6 +162,7 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		if (record instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
 			return NextThought.app.course.overview.components.outline.OutlineNode.create({
 				outlineNode: record,
+				outline: this.outline,
 				shouldShowDates: this.shouldShowDates,
 				doSelectNode: this.doSelectNode.bind(this),
 				isEditing: this.isEditing
@@ -194,5 +228,10 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		if (this.addNodeCmp) {
 			this.addNodeCmp.hide();
 		}
+	},
+
+
+	onDrop: function(record, newIndex, moveInfo) {
+		this.outline.moveToFromContainer(record, newIndex, moveInfo.get('OriginContainer'), this.outline);
 	}
 });

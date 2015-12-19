@@ -4,32 +4,22 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 
 	mixins: {
 		DurationCache: 'NextThought.mixins.DurationCache',
-		OrderedContents: 'NextThought.mixins.OrderedContents'
+		OrderedContents: 'NextThought.mixins.OrderedContents',
+		MovingRoot: 'NextThought.mixins.MovingRoot'
 	},
 
 
 	requires: [
+		'NextThought.store.courseware.OutlineInterface',
 		'NextThought.model.courses.navigation.CourseOutlineNode',
 		'NextThought.model.courses.navigation.CourseOutlineContentNode',
 		'NextThought.model.courses.navigation.CourseOutlineCalendarNode'
 	],
 
+
 	fields: [
 		{name: 'Items', type: 'auto', persist: false}
 	],
-
-
-	fillInItems: function() {
-		var me = this,
-			items = me.get('Items');
-
-		if (items) {
-			items.forEach(function(item, index) {
-				item.parent = me;
-				item.listIndex = index;
-			});
-		}
-	},
 
 
 	getOutlineContents: function() {
@@ -147,5 +137,21 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 
 				return false;
 			});
+	},
+
+
+	onItemAdded: function() {
+		NextThought.store.courseware.OutlineInterface.fillInDepths(this);
+	},
+
+
+	__onMoveOperation: function(response) {
+		var json = JSON.parse(response),
+			items = ParseUtils.parseItems(json);
+
+		this.set('Items', items);
+		this.fillInItems();
+		NextThought.store.courseware.OutlineInterface.fillInDepths(this);
+		this.fireEvent('update');
 	}
 });

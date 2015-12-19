@@ -210,8 +210,8 @@ Ext.define('NextThought.model.Base', {
 
 		this.set(newData);
 
-		if (this.fillInItems) {
-			this.fillInItems();
+		if (this.onSync) {
+			this.onSync();
 		}
 
 		this.fireEvent('update', this);

@@ -1,8 +1,8 @@
 Ext.define('NextThought.model.courses.navigation.CourseOutlineContentNode', {
 	extend: 'NextThought.model.courses.navigation.CourseOutlineNode',
 	mimeType: 'application/vnd.nextthought.courses.courseoutlinecontentnode',
+
 	fields: [
-		{name: 'NTIID', type: 'string', mapping: 'ContentNTIID'},
 		{name: 'publishBeginning', type: 'auto'},
 		{name: 'publishEnding', type: 'number'},
 		{name: 'PublicationState', type: 'string'}
@@ -12,14 +12,15 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineContentNode', {
 		mimeType: 'application/vnd.nextthought.courses.courseoutlinecontentnode'
 	},
 
-	
+
 	getFirstContentNode: function() {
 		return this;
 	},
 
 
-	isPublished: function(){
-		var state = this.get('PublicationState') || "";
+	isPublished: function() {
+		var state = this.get('PublicationState') || '';
+
 		return state.toLowerCase() === 'DefaultPublished'.toLowerCase();
 	}
 });

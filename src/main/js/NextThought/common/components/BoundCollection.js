@@ -51,6 +51,11 @@ Ext.define('NextThought.common.components.BoundCollection', {
 	},
 
 
+	onCollectionUpdate: function(collection) {
+		this.setCollection(collection);
+	},
+
+
 	setCollection: function(collection) {
 		var me = this,
 			body = me.getBodyContainer(),
@@ -64,7 +69,7 @@ Ext.define('NextThought.common.components.BoundCollection', {
 		me.mon(collection, {
 			single: true,
 			destroyable: true,
-			'update': this.setCollection.bind(this, collection)
+			'update': this.onCollectionUpdate.bind(this, collection)
 		});
 
 		if (items.length) {
