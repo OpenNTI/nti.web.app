@@ -74,7 +74,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.N
 
 	onSave: function() {
 		var value = this.editorCmp.getValue(),
-			minWait = 300,
+			minWait = Globals.WAIT_TIMES.SHORT,
 			start = new Date();
 
 		if (!this.parentRecord || !this.parentRecord.appendContent) { return; }

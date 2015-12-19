@@ -51,6 +51,12 @@ Ext.define('NextThought.util.Globals', {
 		}
 	},
 
+	WAIT_TIMES: {
+		SHORT: 300,
+		LONG: 5000
+	},
+
+
 	//A utility wrapper around JSON.parse to catch errors
 	parseJSON: function(s, safe) {
 		try {

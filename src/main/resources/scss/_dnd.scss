@@ -3,3 +3,23 @@
 	background-color: rgba(0, 0, 0, 0.3);
 	box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
 }
+
+.dnd-save-placeholder {
+	line-height: 2em;
+	text-align: center;
+	background: white;
+	padding: 5px;
+	box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+	
+	span {
+		display: inline-block;
+		vertical-align: middle;
+
+		&::before {
+			@include loadingSpinner();
+			position: static;
+			display: inline-block;
+			vertical-align: middle;
+		}
+	}
+}

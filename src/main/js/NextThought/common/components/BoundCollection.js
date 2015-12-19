@@ -51,8 +51,27 @@ Ext.define('NextThought.common.components.BoundCollection', {
 	},
 
 
+	suspendUpdates: function() {
+		this.__suspendUpdates = true;
+	},
+
+
+	resumeUpdates: function() {
+		this.__suspendUpdates = false;
+
+		if (this.__latestUpdate) {
+			this.setCollection(this.__latestUpdate);
+			delete this.__latestUpdate;
+		}
+	},
+
+
 	onCollectionUpdate: function(collection) {
-		this.setCollection(collection);
+		if (this.__suspendUpdates) {
+			this.__latestUpdate = collection;
+		} else {
+			this.setCollection(collection);
+		}
 	},
 
 

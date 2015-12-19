@@ -18,7 +18,7 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 
 
 	fields: [
-		{name: 'Items', type: 'auto', persist: false}
+		{name: 'Items', type: 'arrayItem', persist: false}
 	],
 
 
@@ -145,13 +145,7 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 	},
 
 
-	__onMoveOperation: function(response) {
-		var json = JSON.parse(response),
-			items = ParseUtils.parseItems(json);
-
-		this.set('Items', items);
-		this.fillInItems();
+	onSync: function() {
 		NextThought.store.courseware.OutlineInterface.fillInDepths(this);
-		this.fireEvent('update');
 	}
 });

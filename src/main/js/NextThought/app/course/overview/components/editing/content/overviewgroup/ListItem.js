@@ -191,6 +191,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 
 	onCardDrop: function(card, newIndex, moveInfo) {
-		return this.record.moveToFromContainer(card, newIndex, moveInfo.get('OriginContainer'), this.lessonOverview);
+		this.movedCard = card;
+
+		return this.addCardToGroup(this.record, card, newIndex, moveInfo);
 	}
 });

@@ -105,7 +105,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 	},
 
 
-	__getPlaceholder: function() {
+	__getDropPlaceholder: function() {
 		var placeholder = document.querySelector('.dnd-drop-placeholder');
 
 		if (!placeholder) {
@@ -116,7 +116,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		return placeholder;
 	},
 
-	__removePlaceholder: function() {
+	__removeDropPlaceholder: function() {
 		var placeholder = document.querySelector('.dnd-drop-placeholder');
 
 		if (placeholder) {
@@ -125,24 +125,45 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 	},
 
 
+	__getSavePlaceholder: function() {
+		var placeholder = document.querySelector('.dnd-save-placeholder');
+
+		if (!placeholder) {
+			placeholder = document.createElement('div');
+			placeholder.classList.add('dnd-save-placeholder');
+			placeholder.innerHTML = '<span>Saving</span>';
+		}
+
+		return placeholder;
+	},
+
+
+	__removeSavePlaceholder: function() {
+		var placeholder = document.querySelector('.dnd-save-placeholder');
+
+		if (placeholder) {
+			placeholder.remove();
+		}
+	},
+
+
 	onItemDragStart: function() {
-		this.__getPlaceholder();
+		this.__getDropPlaceholder();
 	},
 
 
 	onItemDragEnd: function() {
-		this.__removePlaceholder();
+		this.__removeDropPlaceholder();
 	},
 
 
 	onDragLeave: function() {
-		this.__removePlaceholder();
+		this.__removeDropPlaceholder();
 	},
 
 
-	__showPlaceholderByInfo: function(info) {
-		var target = this.getDropzoneTarget(),
-			placeholder = this.__getPlaceholder();
+	__showPlaceholderByInfo: function(placeholder, info) {
+		var target = this.getDropzoneTarget();
 
 		if (info.append) {
 			target.appendChild(placeholder);
@@ -161,20 +182,43 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		}
 
 		var info = this.getInfoForCoordinates(e.clientX, e.clientY),
-			placeholder = this.__showPlaceholderByInfo(info);
+			placeholder = this.__getDropPlaceholder();
+
+		this.__showPlaceholderByInfo(placeholder, info);
 	},
 
 
 	onDragDrop: function(e, dataTransfer) {
 		var info = this.getInfoForCoordinates(e.clientX, e.clientY),
-			placeholder = this.__showPlaceholderByInfo(info),
+			placeholder, minWait = Globals.WAIT_TIMES.SHORT,
 			handlers = this.getHandlersForDataTransfer(dataTransfer),
 			handler = handlers[0], //TODO: think about what to do if there is more than one
 			data = handler && dataTransfer.findDataFor(handler.key),
 			moveInfo = dataTransfer.findDataFor(NextThought.model.app.MoveInfo.mimeType);
 
-		if (info && handler && handler.onDrop && data) {
-			handler.onDrop(data, info.index, moveInfo);
+		if (!info || !handler || !handler.onDrop || !data) { return; }
+
+		placeholder = this.__getSavePlaceholder();
+		this.__showPlaceholderByInfo(placeholder, info);
+
+		move = handler.onDrop(data, info.index, moveInfo);
+
+		if (!(move instanceof Promise)) {
+			move = wait(minWait)
+				.then(function() {
+					return move;
+				});
 		}
+
+		move
+			.fail(function(reason) {
+				console.error('Failed to move: ', reason);
+
+				placeholder.innerHTML = '<span>Error</span>';
+				placeholder.classList.add('error');
+
+				return wait(Globals.LONG);
+			})
+			.then(this.__removeSavePlaceholder.bind(this));
 	}
 });
