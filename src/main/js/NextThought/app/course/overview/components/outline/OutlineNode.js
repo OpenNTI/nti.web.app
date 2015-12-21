@@ -222,6 +222,6 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 
 
 	onDrop: function(record, newIndex, moveInfo) {
-		return this.outlineNode.moveToFromContainer(record, newIndex, moveInfo.get('OriginContainer'), this.outline);
+		return this.outlineNode.moveToFromContainer(record, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.outline);
 	}
 });

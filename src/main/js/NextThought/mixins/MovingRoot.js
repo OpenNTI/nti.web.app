@@ -28,11 +28,12 @@ Ext.define('NextThought.mixins.MovingRoot', {
 	 *
 	 * @param  {Object|String} record  the record to move
 	 * @param  {Number} index          the index to move to
+	 * @param  {Number} oldIndex       the old index
 	 * @param  {Object|String} originalParent the current parent
 	 * @param  {Object|String} newParent      the desired parent
 	 * @return {Promise}
 	 */
-	doMoveRecordFrom: function(record, index, originalParent, newParent) {
+	doMoveRecordFrom: function(record, index, oldIndex, originalParent, newParent) {
 		var link = this.getMoveLink(),
 			data, move;
 
@@ -54,6 +55,8 @@ Ext.define('NextThought.mixins.MovingRoot', {
 			move = Promise.reject('No new parent to move to');
 		} else if (!originalParent) {
 			move = Promise.reject('No old parent to move from');
+		} else if (data.ParentNTIID === data.OldParentNTIID && index === oldIndex) {
+			move = Promise.resolve();
 		} else {
 			move = Service.post(link, data)
 				.then(this.__onMoveOperation.bind(this));

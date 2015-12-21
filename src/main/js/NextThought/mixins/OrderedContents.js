@@ -176,11 +176,12 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	 *
 	 * @param  {Object|String} record    record or ntiid of record
 	 * @param  {Number} index     the position to move it to
+	 * @param {Number} oldIndex the old position
 	 * @param  {Object|String} oldParent old parent or ntiid
 	 * @param  {Object} root      the root of me and the oldParent
 	 * @return {Promise}
 	 */
-	moveToFromContainer: function(record, index, oldParent, root) {
+	moveToFromContainer: function(record, index, oldIndex, oldParent, root) {
 		var currentIndex = this.indexOfId(record.getId ? record.getId() : record),
 			move;
 
@@ -193,7 +194,7 @@ Ext.define('NextThought.mixins.OrderedContents', {
 		} else if (!oldParent) {
 			move = Promise.reject('No old parent to move from');
 		} else {
-			move = root.doMoveRecordFrom(record, index, oldParent, this);
+			move = root.doMoveRecordFrom(record, index, oldIndex, this, oldParent);
 		}
 
 		return move;

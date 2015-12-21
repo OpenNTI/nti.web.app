@@ -200,6 +200,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 
 		placeholder = this.__getSavePlaceholder();
 		this.__showPlaceholderByInfo(placeholder, info);
+		this.__removeDropPlaceholder();
 
 		move = handler.onDrop(data, info.index, moveInfo);
 
@@ -219,6 +220,6 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 
 				return wait(Globals.LONG);
 			})
-			.then(this.__removeSavePlaceholder.bind(this));
+			.always(this.__removeSavePlaceholder.bind(this));
 	}
 });

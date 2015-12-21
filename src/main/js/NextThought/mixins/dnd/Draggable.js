@@ -26,7 +26,6 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 			this.Draggable = {
 				className: this.$className,
 				hasHandle: false,
-				inHandle: false,
 				transferData: new NextThought.store.DataTransfer(),
 				handlers: {
 					dragStart: this.__dragStart.bind(this),
@@ -52,6 +51,62 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 	},
 
 
+	__addTargetListeners: function() {
+		this.initDragging();
+
+		var target = this.getDragTarget(),
+			handlers = this.Draggable.handlers;
+
+		if (target && target.addEventListener) {
+			target.setAttribute('draggable', 'true');
+
+			if (handlers.dragStart) {
+				target.addEventListener('dragstart', handlers.dragStart);
+			}
+
+			if (handlers.dragStop) {
+				target.addEventListener('dragend', handlers.dragStop);
+			}
+		} else {
+			console.error('No valid drag target');
+		}
+	},
+
+
+	__removeTargetListeners: function() {
+		this.initDragging();
+
+		var target = this.getDragTarget(),
+			handlers = this.Draggable.handlers;
+
+		if (target && target.removeEventListener) {
+			target.removeAttribute('draggable');
+
+			if (handlers.dragStart) {
+				target.removeEventListener('dragstart', handlers.dragStart);
+			}
+
+			if (handlers.dragStop) {
+				target.removeEventListener('dragend', handlers.dragStop);
+			}
+		} else {
+			console.error('No valid drag target');
+		}
+	},
+
+
+	__handleMouseDown: function() {
+		console.log('Mouse down called on: ', this.$className);
+		this.__addTargetListeners();
+	},
+
+
+	__handleMouseUp: function() {
+		console.log('Mouse up called on: ', this.$className);
+		this.__removeTargetListeners();
+	},
+
+
 	__setOrRemoveDragListeners: function(remove) {
 		if (!this.rendered) {
 			this.on('afterrender', this.__setOrRemoveDragListeners.bind(this, remove));
@@ -60,56 +115,26 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 
 		this.initDragging();
 
-		var target = this.getDragTarget(),
+		var handle = this.getDragHandle && this.getDragHandle(),
 			method = remove ? 'removeEventListener' : 'addEventListener',
 			handlers = this.Draggable.handlers;
 
-		if (!target || !target[method]) {
-			console.error('No Valid Drag Target');
-			return;
-		}
+		if (handle && handle.addEventListener) {
+			this.Draggable.hasHandle = true;
 
-		if (handlers.dragStart) {
-			target[method]('dragstart', handlers.dragStart);
-		}
+			if (handlers.handleMouseDown) {
+				handle[method]('mousedown', handlers.handleMouseDown);
+			}
 
-		if (handlers.dragEnd) {
-			target[method]('dragend', handlers.dragEnd);
-		}
-
-		if (remove) {
-			target.removeAttribute('draggable');
+			if (handlers.handleMouseUp) {
+				handle[method]('mouseup', handlers.handleMouseUp);
+			}
+		} else if (handle) {
+ 			console.error('Invalid drag handle.');
+		} else if (remove) {
+			this.__removeTargetListeners();
 		} else {
-			target.setAttribute('draggable', 'true');
-		}
-	},
-
-
-	__setOrRemoveDragHandleListeners: function(remove) {
-		if (!this.rendered) {
-			this.on('afterrender', this.__setOrRemoveDragHandleListeners.bind(this, remove));
-			return;
-		}
-
-		this.initDragging();
-
-		var handle = this.getDragHandle && this.getDragHandle(),
-			handlers = this.Draggable.handlers,
-			method = remove ? 'removeEventListener' : 'addEventListener';
-
-		if (!handle || !handle[method]) {
-			this.Draggable.hasHandle = false;
-			return;
-		}
-
-		this.Draggable.hasHandle = true;
-
-		if (handlers.handleMouseDown) {
-			handle[method]('mousedown', handlers.handleMouseDown);
-		}
-
-		if (handlers.handleMouseUp) {
-			handle[method]('mouseup', handlers.handleMouseUp);
+			this.__addTargetListeners();
 		}
 	},
 
@@ -119,7 +144,6 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 	 */
 	enableDragging: function() {
 		this.__setOrRemoveDragListeners();
-		this.__setOrRemoveDragHandleListeners();
 	},
 
 
@@ -128,7 +152,6 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 	 */
 	disableDragging: function() {
 		this.__setOrRemoveDragListeners(true);
-		this.__setOrRemoveDragHandleListeners(true);
 	},
 
 
@@ -147,26 +170,7 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 	},
 
 
-	__handleMouseDown: function() {
-		console.log('Mouse down called on: ', this.Draggable.className);
-		this.Draggable.inHandle = true;
-	},
-
-
-	__handleMouseUp: function() {
-		console.log('Mouse up called on: ', this.Draggable.className);
-		this.Draggable.inHandle = false;
-	},
-
-
-	__isValidDrag: function() {
-		return !this.Draggable.hasHandle || this.Draggable.inHandle;
-	},
-
-
 	__dragStart: function(e) {
-		if (!this.__isValidDrag()) { return; }
-
 		var el = this.getDragTarget(),
 			info = this.getDnDEventData();
 
@@ -190,9 +194,12 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 	},
 
 	__dragEnd: function() {
-		var el = this.getDragTarget();
+		var el = this.getDragTarget(),
+			handle = this.getDragHandle();
 
-		this.Draggable.inHandle = false;
+		if (handle) {
+			this.__handleMouseUp();
+		}
 
 		if (el) {
 			el.classList.remove('dragging');

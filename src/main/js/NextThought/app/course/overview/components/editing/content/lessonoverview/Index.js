@@ -137,7 +137,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 	onGroupDrop: function(group, newIndex, moveInfo) {
 		this.suspendUpdates();
 
-		return this.contents.moveToFromContainer(group, newIndex, moveInfo.get('OriginContainer'), this.contents)
+		return this.contents.moveToFromContainer(group, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.contents)
 			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
 			.then(this.resumeUpdates.bind(this));
 	},
@@ -146,7 +146,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 	addCardToGroup: function(group, card, newIndex, moveInfo) {
 		this.suspendUpdates();
 
-		return group.moveToFromContainer(card, newIndex, moveInfo.get('OriginContainer'), this.contents)
+		return group.moveToFromContainer(card, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.contents)
 			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
 			.then(this.resumeUpdates.bind(this));
 	}
