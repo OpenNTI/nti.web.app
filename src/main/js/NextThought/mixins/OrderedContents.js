@@ -120,7 +120,7 @@ Ext.define('NextThought.mixins.OrderedContents', {
 		this.fillInItems();
 
 		if (this.onItemAdded) {
-			this.onItemAdded();
+			this.onItemAdded(record);
 		}
 
 		this.fireEvent('update');

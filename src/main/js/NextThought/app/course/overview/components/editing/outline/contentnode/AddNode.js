@@ -93,9 +93,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.contentno
 		var me = this;
 
 		return this.parentRecord.appendContent(record && record.getData())
-				.then(function(rec) {
-					rec._depth = me.parentRecord._depth + 1;
-				
+				.then(function(rec) {				
 					if (navigate) {
 						me.hideEditor();
 						if (me.doSelectNode) {
@@ -123,7 +121,9 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.contentno
 
 
 	hideEditor: function(){
-		this.inlineEditorEl.hide();
+		if (this.inlineEditorEl) {
+			this.inlineEditorEl.hide();
+		}
 	},
 
 

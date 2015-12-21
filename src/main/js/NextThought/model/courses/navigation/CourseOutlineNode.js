@@ -229,5 +229,17 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 		}
 
 		return contents;
+	},
+
+
+	onItemAdded: function(record){
+		this.fillInDepths(record);
+	},
+
+
+	fillInDepths: function(record) {
+		if (!record) { return; }
+
+		record._depth = this._depth + 1;
 	}
 });

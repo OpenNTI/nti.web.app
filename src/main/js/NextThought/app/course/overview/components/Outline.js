@@ -135,25 +135,9 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 				xtype: 'overview-editing-new-unit-node',
 				title: 'Add Unit',
 				InlineEditor: inlineEditor && inlineEditor.editor,
-				afterSave: this.onAddRecord.bind(this),
 				parentRecord: this.outline,
 				doSelectNode: this.doSelectNode.bind(this)
 			});
-		}
-	},
-
-
-	onAddRecord: function(record) {
-		var body = this.getBodyContainer(),
-			cmp = this.getCmpForRecord(record), newCmp,
-			bodyListEl = this.el.down('.outline-list');
-
-		if (cmp && body) {
-			newCmp = body.add(cmp);
-			wait()
-				.then(function() {
-					newCmp.el.scrollIntoView(bodyListEl);
-				});
 		}
 	},
 
