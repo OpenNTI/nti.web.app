@@ -35,6 +35,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
 
 
 	editRecord: function(record, parentRecord, rootRecord) {
+		debugger;
 		var Outline = NextThought.app.course.overview.components.editing.outline.Prompt,
 			Contents = NextThought.app.course.overview.components.editing.content.Prompt,
 			config = {

@@ -12,7 +12,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'label', html: 'Create A Group'},
-		{tag: 'input', cls: 'title', placeholder: 'Title', type: 'text'},
+		{tag: 'input', cls: 'title', placeholder: 'Title', type: 'text', value: '{title}'},
 		{cls: 'sub-label', html: 'Pick a Color'},
 		{tag: 'ul', cls: 'colors', cn: [
 			{tag: 'tpl', 'for': 'colors', cn: [
@@ -31,15 +31,27 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 	beforeRender: function() {
 		this.callParent(arguments);
 
-		var colors = NextThought.model.courses.overview.Group.COLOR_CHOICES;
+		var colors = NextThought.model.courses.overview.Group.COLOR_CHOICES,
+			title = this.record ? this.record.get('title') : '',
+			accent = this.record ? this.record.get('accentColor') : '';
+
+		function isSelectedColor(hex, index) {
+			if (accent) {
+				return hex === accent;
+			}
+
+			return index === 0;
+		}
+
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			colors: colors.map(function(hex, index) {
 				return {
-					cls: index === 0 ? 'selected' : '',
+					cls: isSelectedColor(hex, index) ? 'selected' : '',
 					hex: hex
 				};
-			})
+			}),
+			title: title
 		});
 	},
 
@@ -48,6 +60,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 		this.callParent(arguments);
 
 		this.mon(this.colorsEl, 'click', this.maybeSelectColor.bind(this));
+		this.mon(this.inputEl, 'keyup', this.onInputChange.bind(this));
+
+		this.onInputChange();
 	},
 
 
@@ -68,6 +83,20 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 	},
 
 
+	isEmpty: function() {
+		var values = this.getValue();
+
+		return !values.title && !values.accentColor;
+	},
+
+
+	onInputChange: function() {
+		if (this.onChange) {
+			this.onChange(this.getValue());
+		}
+	},
+
+
 	maybeSelectColor: function(e) {
 		var color = e.getTarget('[data-value]'),
 			current = this.getSelectedColorEl();
@@ -79,6 +108,43 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 			color.classList.add('selected');
 		}
 
+		if (this.onChange) {
+			this.onChange(this.getValue());
+		}
+	},
+
+
+	getErrors: function() {
+		var values = this.getValue();
+
+		if (!values.title) {
+			return {
+				title: {
+					missing: true
+				}
+			};
+		}
+
+		return {};
+	},
+
+
+	showErrorOn: function(name) {
+		if (name === 'title') {
+			this.inputEl.addCls('error');
+		}
+	},
+
+
+	removeErrorOn: function(name) {
+		this.inputEl.removeCls('error');
+	},
+
+
+	getErrorsFor: function(name) {
+		var errors = this.getErrors();
+
+		return errors[name];
 	},
 
 

@@ -13,6 +13,18 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	},
 
 
+	__createRecordValues: function(values, parent) {
+		if (!parent.appendContent) {
+			return Promise.reject({
+				msg: 'Unable to create record.',
+				err: 'Invalid parent'
+			});
+		}
+
+		return parent.appendContent(values);
+	},
+
+
 	__saveRecord: function(form, record) {
 		if (!form.submitToRecord) {
 			return Promise.reject({
@@ -27,6 +39,26 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 					msg: 'Unable to update record.',
 					err: reason
 				});
+			});
+	},
+
+
+	__saveRecordValues: function(values, record) {
+		var link = record.getLink('edit');
+
+		if (!link) {
+			return Promise.reject({
+				msg: 'Unable to update record',
+				err: 'No edit link'
+			});
+		}
+
+		return Service.put(link, values)
+			.then(function(response) {
+				record.set(values);
+				record.syncWithResponse(response);
+
+				return record;
 			});
 	},
 
@@ -55,6 +87,12 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	},
 
 
+	__updateRecordValues: function(values, record, originalParent, newParent, root) {
+		return this.__saveRecordValues(values, record)
+			.then(this.__moveRecord.bind(this, record, originalParent, newParent, root));
+	},
+
+
 	/**
 	 * Handle the logic for creating a new record, updating an existing one
 	 * and maybe moving it to new parent.
@@ -78,9 +116,18 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	},
 
 
+	saveValues: function(values, record, originalParent, newParent, root) {
+		if (record) {
+			return this.__updateRecordValues(values, record, originalParent, newParent, root);
+		}
+
+		return this.__createRecordValues(values, newParent);
+	},
+
+
 	/**
 	 * Handle publishing a record (i.e. CourseOutlineNode, CourseOutlineContentNode)
-	 * When given a date to published on, we make two request. 
+	 * When given a date to published on, we make two request.
 	 * The first one we, post to the publish link to make it publish
 	 * and then we edit the AvailableBeginning date and then post to the edit link.
 	 *
@@ -94,12 +141,12 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 		if (!link) {
 			return Promise.reject('No link');
 		}
-		
+
 		return Service.post(link, {'publishBeginning': date})
 			.then(function(response) {
 				return ParseUtils.parseItems(response)[0];
 			})
-			.then(function(rec){
+			.then(function(rec) {
 				record.syncWith(rec);
 				return record;
 			});
@@ -116,7 +163,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 			.then(function(response) {
 				return ParseUtils.parseItems(response)[0];
 			})
-			.then(function(rec){
+			.then(function(rec) {
 				record.syncWith(rec);
 				return record;
 			});
@@ -135,12 +182,12 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 		if (!link) {
 			return Promise.reject('No link');
 		}
-		
+
 		return Service.post(link)
 			.then(function(response) {
 				return ParseUtils.parseItems(response)[0];
 			})
-			.then(function(rec){
+			.then(function(rec) {
 				record.syncWith(rec);
 				return record;
 			});

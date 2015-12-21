@@ -4,7 +4,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 
 	requires: [
 		'NextThought.model.courses.overview.Lesson',
-		'NextThought.app.course.overview.components.editing.content.contentlink.Editor'
+		'NextThought.app.course.overview.components.editing.content.overviewgroup.Editor'
 	],
 
 	title: 'Content Types',
@@ -21,7 +21,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 			var base = NextThought.app.course.overview.components.editing.content;
 
 			return [
-				base.contentlink.Editor
+				base.overviewgroup.Editor
 			];
 		}
 	},

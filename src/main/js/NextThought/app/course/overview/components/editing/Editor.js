@@ -77,13 +77,10 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var values = this.getDefaultValues();
 
 		this.EditingActions = NextThought.app.course.overview.components.editing.Actions.create();
 
 		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord, this.onFormChange.bind(this));
-
-		// this.preview = this.addPreview(values);
 
 		if (this.setSaveText) {
 			this.setSaveText(this.getSaveText());
@@ -93,14 +90,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 			this.setTitle(this.getHeaderTitle());
 		}
 
-		this.formCmp = this.add({
-			xtype: 'common-form',
-			schema: this.getFormSchema(),
-			defaultValues: values,
-			action: this.getFormAction(),
-			method: this.getFormMethod(),
-			onChange: this.onFormChange.bind(this)
-		});
+		this.formCmp = this.addFormCmp();
 	},
 
 
@@ -123,6 +113,21 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 	addPreview: function() {},
 	addParentSelection: function(record, parent, root) {},
+
+
+	addFormCmp: function() {
+		var value = this.getDefaultValues();
+
+		return this.add({
+			xtype: 'common-form',
+			schema: this.getFormSchema(),
+			defaultValues: values,
+			action: this.getFormAction(),
+			method: this.getFormMethod(),
+			onChange: this.onFormChange.bind(this)
+		});
+	},
+
 
 	getDefaultValues: function() {},
 

@@ -24,7 +24,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.Prompt', 
 			var base = NextThought.app.course.overview.components.editing.content;
 
 			return [
-				base.contentlink.Editor
+				base.contentlink.Editor,
+				base.overviewgroup.Editor
 			];
 		}
 	}
