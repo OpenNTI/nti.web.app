@@ -373,6 +373,41 @@
 
 			.body {
 				background: #ffffff;
+
+				> .outline-group {
+					> .items {
+						padding: 5px;
+						background-color: #e2e2e2;
+
+						> .outline-group {
+							> .outline-row {
+								border-bottom: 1px solid $tertiary-grey-alt;
+								.label {
+									color: $primary-grey;
+								}
+
+								&.lesson:not(.heading) {
+									font: normal 600 14px/27px $font;
+								}
+
+								&.selected {
+									.label {
+										color: $quad-grey;
+									}
+								}
+							}
+						}
+					}
+
+					.new-node {
+						&.lesson {
+							.title {
+								font: normal 600 16px/42px $font;
+								background-color: #e2e2e2;
+							}
+						}
+					}
+				}
 			}
 		}
 

@@ -11,7 +11,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Timeline', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var root = this.locationInfo.root,
+		var root = this.locationInfo && this.locationInfo.root,
 			width = this['suggested-width'],
 			height = this['suggested-height'],
 			thumbURL = this.icon.indexOf(root) === -1 ? root + this.icon : this.icon,
