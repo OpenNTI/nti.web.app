@@ -165,6 +165,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 				.then(function(response){
 					me.record.syncWithResponse(response);
 					me.saveEl.removeCls('active');
+					me.el.toggleCls('closed');
 				});
 		}
 	}
