@@ -172,11 +172,11 @@ Ext.define('NextThought.model.RelatedWork', {
 
 
 	getTitle: function() {
-		return this.isContentRef() ? '' : this.get('label');
+		return this.isContent() ? '' : this.get('label');
 	},
 
 
 	shouldBeRoot: function() {
-		return !this.isContentRef();
+		return !this.isContent();
 	}
 });
