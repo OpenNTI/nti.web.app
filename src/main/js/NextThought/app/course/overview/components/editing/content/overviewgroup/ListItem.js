@@ -122,7 +122,6 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 
 	setCollection: function(collection) {
-		debugger;
 		this.disableOrderingContainer();
 		this.removeAll(true);
 
