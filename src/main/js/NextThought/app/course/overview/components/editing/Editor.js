@@ -116,7 +116,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 
 	addFormCmp: function() {
-		var value = this.getDefaultValues();
+		var values = this.getDefaultValues();
 
 		return this.add({
 			xtype: 'common-form',
