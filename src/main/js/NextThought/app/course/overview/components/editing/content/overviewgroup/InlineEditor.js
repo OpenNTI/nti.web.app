@@ -6,13 +6,15 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 		'NextThought.model.courses.overview.Group'
 	],
 
+	statics: {
+		creationText: 'New Group'
+	},
 
 	cls: 'overviewgroup-editor inline',
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'label', html: 'Create A Group'},
-		{tag: 'input', cls: 'title', placeholder: 'Title', type: 'text', value: '{title}'},
+		{tag: 'input', cls: 'title', placeholder: 'Title', type: 'text'},
 		{cls: 'sub-label', html: 'Pick a Color'},
 		{tag: 'ul', cls: 'colors', cn: [
 			{tag: 'tpl', 'for': 'colors', cn: [
@@ -27,9 +29,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 		colorsEl: '.colors'
 	},
 
-
 	beforeRender: function() {
 		this.callParent(arguments);
+		this.creationText = 'New Group';
 
 		var colors = NextThought.model.courses.overview.Group.COLOR_CHOICES,
 			title = this.record ? this.record.get('title') : '',

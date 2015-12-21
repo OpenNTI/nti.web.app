@@ -2,7 +2,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.N
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-parentselection-newitem',
 
-	cls: 'over-editit-parentseleciton-newitem',
+	cls: 'over-editit-parentselection-newitem',
 	layout: 'none',
 	items: [],
 
@@ -16,6 +16,8 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.N
 		}
 
 		var items = [];
+
+		items.push(this.editor.create({isEditor: true}));
 
 		if (this.hasOtherItems) {
 			items.push({
@@ -33,13 +35,11 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.N
 			});
 		}
 
-		items.push(this.editor.create({isEditor: true}));
-
 		items.push({
 			xtype: 'box',
 			autoEl: {
 				cls: 'save',
-				html: 'Save'
+				html: 'Create'
 			},
 			listeners: {
 				click: {

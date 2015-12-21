@@ -233,7 +233,7 @@
 	}
 }
 
-.overview-editing-parentselection-menu, 
+.overview-editing-parentselection-menu,
 .overview-editing-parentselection {
 	.group-item {
 		.label {
@@ -267,18 +267,44 @@
 
 
 	.parentselection-menuitem {
-		padding: 3px;
-		border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-
-		&:last-of-type {
-			border-bottom: none;
-		}
+		padding: 8px;
 
 		&.new-item {
 			cursor: pointer;
 			font-size: 0.875em;
 			text-align: center;
 			color: $primary-blue;
+
+			&:before {
+			    content: "+";
+			    padding-right: .5em;
+			}
+		}
+
+		&:last-child, &:first-child {
+    		border-top: .75px solid rgba(0, 0, 0, 0.08);
+		}
+	}
+
+	.over-editit-parentselection-newitem {
+		text-align: right;
+
+		.sub-label {
+		    font-size: 0.625em;
+		    text-transform: uppercase;
+			color: #757474;
+		}
+
+		.save {
+		    background-color: #3fb3f6;
+		    color: white;
+		}
+		.back, .save {
+		    display: inline-block;
+		    line-height: 35px;
+		    font-size: 0.875em;
+		    padding: 0 1em;
+		    cursor: pointer;
 		}
 	}
 }
@@ -342,6 +368,17 @@
 }
 
 .overviewgroup-editor {
+
+    text-align: left;
+    border-bottom: 1px solid #ededed;
+    padding: 0.7em;
+
+	.title {
+	    width: 100%;
+	    font-size: 1em;
+	    margin-bottom: 0.5em;
+	}
+
 	ul.colors {
 		list-style: none;
 		margin: 0;
@@ -355,6 +392,19 @@
 
 			&.selected {
 				opacity: 0.7;
+
+				&:after {
+				    content: '';
+				    display: block;
+				    width: 4px;
+				    height: 8px;
+				    border: solid #000;
+				    border-width: 0 2px 2px 0;
+				    transform: rotate(45deg);
+				    position: relative;
+				    bottom: 5px;
+				    right: 1px;
+				}
 			}
 		}
 	}
@@ -564,7 +614,7 @@
 
 					&:last-of-type {
 						border-bottom: none;
-					}	
+					}
 				}
 			}
 		}
@@ -580,7 +630,7 @@
 				width: 51px;
 			    height: 40px;
 			    display: block;
-			    
+
 				@include icon('dropdown-am-pm-icon', $side: after, $top: 20px, $left: auto, $right: 3px);
 
 				.date {
@@ -768,7 +818,7 @@
 					.x-datepicker-date {
 						padding-right: 0;
 						margin-right: 0;
-					}	
+					}
 				}
 
 				&.x-datepicker-disabled {
@@ -784,7 +834,7 @@
 					.x-datepicker-date {
 						background-color: $primary-blue;
 						color: #ffffff;
-						border-radius: 90px;							
+						border-radius: 90px;
 					}
 				}
 
@@ -797,9 +847,9 @@
 
 		.x-datepicker-footer {
 			display: none;
-		}	
+		}
 	}
-	
+
 	.time-container {
 		margin: 14px auto;
 		font-size: 13px;
@@ -807,9 +857,9 @@
 
 		input {
 			font-size: 13px;
-			color: $secondary-grey;	
+			color: $secondary-grey;
 		}
-		
+
 		.hour, .minute {
 			width: 38px;
     		padding: 5px 0;
@@ -855,7 +905,7 @@
 
 		@include flexContainer();
 		@include experimental(align-items, center);
-		
+
 		.overview-group-title {
 			@include flexItem(1 1 auto);
 		}
