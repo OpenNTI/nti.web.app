@@ -559,7 +559,6 @@ Ext.define('NextThought.model.Base', {
 			if (s) {
 				//put "me" in the bookmark view?
 				me.set('favoriteState', currentValue ? 'on' : 'off');
-				NextThought.model.events.Bus.fireEvent('favorite-changed', me);
 			}
 			else {
 				Ext.callback(widget.markAsFavorited, widget, [currentValue]);
