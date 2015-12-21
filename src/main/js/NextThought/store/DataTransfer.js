@@ -134,7 +134,14 @@ Ext.define('NextThought.store.DataTransfer', {
 		var types = this.dataTransfer && this.dataTransfer.types;
 
 		if (types) {
-			return types.indexOf(key) >= 0;
+			//Firefox returns a DomStringList which doesn't have
+			//an indexOf
+			if(types.contains){
+				return types.contains(key);
+			}
+			else if(types.indexOf){
+				return types.indexOf(key) >= 0;
+			}
 		}
 
 		//TODO: maybe search things that have been set with setData
