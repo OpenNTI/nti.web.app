@@ -13,8 +13,9 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 	setProgress: function(progress) {
 		var body = this.getBodyContainer();
 
+		this.progress = progress;
+
 		if (!body) {
-			this.progress = progress;
 			return;
 		}
 
@@ -66,21 +67,17 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 	},
 
 
-	getBodyContainer: function() {
-		return this.down('[bodyContainer]');
+	buildHeader: function(collection) {
+		return {
+			xtype: 'course-overview-header',
+			record: this.record,
+			title: collection.title,
+			onEdit: this.onEdit
+		};
 	},
 
 
-	setCollection: function(collection) {
-		this.removeAll(true);
-
-		this.add([
-			{xtype: 'course-overview-header', record: this.record, title: collection.title, onEdit: this.onEdit},
-			{xtype: 'container', layout: 'none', bodyContainer: true, items: []}
-		]);
-
-		this.callParent(arguments);
-
+	afterSetCollection: function() {
 		if (this.progress) {
 			this.setProgress(this.progress);
 		}

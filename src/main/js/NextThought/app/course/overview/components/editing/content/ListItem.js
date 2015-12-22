@@ -102,7 +102,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 					record: record,
 					parentRecord: this.parentRecord,
 					root: this.lessonOverview,
-					bundle: bundle
+					bundle: bundle,
+					onPromptOpen: function() {},
+					onPromptClose: function() {}
 				}
 			]
 		};

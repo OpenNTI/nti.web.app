@@ -47,11 +47,6 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 	},
 
 
-	getBodyContainer: function() {
-		return this.down('[isBodyContainer]');
-	},
-
-
 	getOrderingItems: function() {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
@@ -85,7 +80,36 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 	},
 
 
-	setCollection: function(collection) {
+	beforeSetCollection: function() {
+		this.disableOrderingContainer();
+		this.cacheHeight();
+	},
+
+
+	afterSetCollection: function() {
+		this.uncacheHeight();
+		this.enableOrderingContainer();
+	},
+
+
+	buildFooter: function() {
+		return {
+			xtype: 'container',
+			cls: 'course-overview-footer',
+			layout: 'none',
+			items: [
+				{
+					xtype: 'overview-editing-controls-add',
+					name: 'Add Section Break',
+					parentRecord: this.lessonOverview,
+					root: this.lessonOverview
+				}
+			]
+		};
+	},
+
+
+	xsetCollection: function(collection) {
 		this.disableOrderingContainer();
 		this.cacheHeight();
 		this.removeAll(true);

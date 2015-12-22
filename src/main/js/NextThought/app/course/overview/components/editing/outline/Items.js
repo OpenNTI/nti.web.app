@@ -42,11 +42,6 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 	},
 
 
-	getBodyContainer: function() {
-		return this.down('[isBodyContainer]');
-	},
-
-
 	getDropzoneTarget: function() {
 		var body = this.getBodyContainer();
 
@@ -62,31 +57,26 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 	},
 
 
-	setCollection: function(collection) {
+	beforeSetCollection: function() {
 		this.disableOrderingContainer();
-		this.removeAll(true);
+	},
 
-		this.add([
-			{
-				xtype: 'box',
-				autoEl: {
-					cls: 'header',
-					cn: [
-						{cls: 'title', html: 'Title'}
-					]
-				}
-			},
-			{
-				xtype: 'container',
-				isBodyContainer: true,
-				layout: 'none',
-				items: []
-			}
-		]);
 
-		this.callParent(arguments);
-
+	afterSetCollection: function() {
 		this.enableOrderingContainer();
+	},
+
+
+	buildHeader: function() {
+		return {
+			xtype: 'box',
+			autoEl: {
+				cls: 'header',
+				cn: [
+					{cls: 'title', html: 'Title'}
+				]
+			}
+		};
 	},
 
 

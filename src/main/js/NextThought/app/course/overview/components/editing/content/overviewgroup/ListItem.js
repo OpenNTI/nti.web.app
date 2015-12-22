@@ -23,8 +23,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 		'NextThought.app.windows.Actions'
 	],
 
+	transitionStates: true,
 
 	cls: 'overview-section overview-section-editing',
+	bodyCls: 'overview-group-body',
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -96,11 +98,6 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 	},
 
 
-	getBodyContainer: function() {
-		return this.down('[isBodyContainer]');
-	},
-
-
 	getOrderingItems: function() {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
@@ -121,15 +118,55 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 	},
 
 
-	setCollection: function(collection) {
+	beforeSetCollection: function(collection) {
 		this.disableOrderingContainer();
-		this.removeAll(true);
 
 		this.activeGroup = collection;
 
 		if (this.rendered) {
 			this.setActiveGroup(this.activeGroup);
 		}
+	},
+
+
+	afterSetCollection: function() {
+		this.enableOrderingContainer();
+	},
+
+
+	buildHeader: function(collection) {
+		return {
+			xtype: 'container',
+			cls: 'overview-group-header drag-handle',
+			layout: 'none',
+			items: [
+				{xtype: 'overview-editing-overviewgroup-preview', group: collection},
+				{xtype: 'overview-editing-controls-edit', color: 'white', record: collection, parentRecord: this.lessonOverview, rootRecord: this.lessonOverview}
+			]
+		};
+	},
+
+
+	buildFooter: function() {
+		return {
+			xtype: 'container',
+			cls: 'overview-group-footer',
+			layout: 'none',
+			items: [
+				{
+					xtype: 'overview-editing-controls-add',
+					name: 'Add Content',
+					parentRecord: this.record,
+					root: this.lessonOverview
+				}
+			]
+		};
+	},
+
+
+	xsetCollection: function(collection) {
+		this.disableOrderingContainer();
+		this.removeAll(true);
 
 		this.add([
 			{

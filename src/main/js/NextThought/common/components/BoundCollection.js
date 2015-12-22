@@ -2,12 +2,43 @@ Ext.define('NextThought.common.components.BoundCollection', {
 	extend: 'Ext.container.Container',
 
 	emptyText: '',
+	transitionStates: false,
 
 	layout: 'none',
 	items: [],
 
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.addBodyConfig();
+	},
+
+
+	addBodyConfig: function() {
+		this.add(this.getBodyConfig());
+	},
+
+
+	getBodyConfig: function() {
+		var cls = ['collection-body'];
+
+		if (this.bodyCls) {
+			cls.push(this.bodyCls);
+		}
+
+		return {
+			xtype: 'container',
+			cls: cls.join(' '),
+			isCollectionBody: true,
+			layout: 'none',
+			items: []
+		};
+	},
+
+
 	getBodyContainer: function() {
-		return this;
+		return this.down('[isCollectionBody]');
 	},
 
 
@@ -66,6 +97,10 @@ Ext.define('NextThought.common.components.BoundCollection', {
 	},
 
 
+	beforeSetCollection: function() {},
+	afterSetCollection: function() {},
+
+
 	onCollectionUpdate: function(collection) {
 		if (this.__suspendUpdates) {
 			this.__latestUpdate = collection;
@@ -75,41 +110,92 @@ Ext.define('NextThought.common.components.BoundCollection', {
 	},
 
 
-	setCollection: function(collection) {
-		var me = this,
-			body = me.getBodyContainer(),
-			items = me.getItems(collection),
-			cmps = [];
+	setHeaderForCollection: function(collection) {
+		var header = this.buildHeader && this.buildHeader(collection);
 
-		if (me.updateMonitor) {
-			Ext.destroy(me.updateMonitor);
+		if (this.currentHeader) {
+			this.currentHeader.destroy();
 		}
 
-		me.mon(collection, {
+		if (header) {
+			this.currentHeader = this.insert(0, header);
+		}
+	},
+
+
+	setFooterForCollection: function(collection) {
+		var footer = this.buildFooter && this.buildFooter(collection);
+
+		if (this.currentFooter) {
+			this.currentFooter.destroy();
+		}
+
+		if (footer) {
+			this.currentFooter = this.insert(2, footer);
+		}
+	},
+
+
+	setCollection: function(collection) {
+		this.beforeSetCollection(collection);
+
+		var items = this.getItems(collection);
+
+		this.setHeaderForCollection(collection);
+		this.setFooterForCollection(collection);
+
+		if (this.updateMonitor) {
+			Ext.destroy(this.updateMonitor);
+		}
+
+		this.updateMonitor = this.mon(collection, {
 			single: true,
 			destroyable: true,
 			'update': this.onCollectionUpdate.bind(this, collection)
 		});
 
-		if (items.length) {
-			cmps = items.reduce(function(acc, item) {
-				var cmp = item && me.getCmpForRecord(item);
-
-				if (cmp) {
-					acc.push(cmp);
-				}
-
-				return acc;
-			}, []);
-		} else if (me.emptyText) {
-			cmps.push(me.getEmptyState());
+		if (this.__activeState && this.transitionStates) {
+			this.__transitionTo(items);
+		} else {
+			this.__showItems(items);
 		}
 
-		body.add(cmps);
+		this.afterSetCollection(collection);
 	},
 
 
-	getCmpForRecord: function(record) {
+	__transitionTo: function(items) {},
+
+
+	__showItems: function(items) {
+		var me = this, state,
+			body = me.getBodyContainer();
+
+		this.clearCollection();
+
+		state = items.reduce(function(acc, item) {
+			var cmp = item && me.getCmpForRecord(item);
+
+			if (cmp) {
+				acc.cmps.push(cmp);
+				acc.items.push(item);
+				acc.map[item.getId()] = cmp;
+			}
+
+			return acc;
+		}, {cmps: [], items: [], map: {}});
+
+		if (!state.cmps.length && this.emptyText) {
+			state.cmps.push(me.getEmptyState());
+		}
+
+		this.__activeState = state;
+
+		body.add(state.cmps);
+	},
+
+
+	getCmpForRecord: function(record, transition) {
 
 	},
 

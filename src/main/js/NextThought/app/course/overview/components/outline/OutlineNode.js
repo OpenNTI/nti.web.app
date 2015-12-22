@@ -18,6 +18,7 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	},
 
 	cls: 'outline-group',
+	bodyCls: 'items',
 
 	items: [],
 
@@ -45,8 +46,24 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 		this.callParent(arguments);
 
 		this.truncateLabels();
+	},
 
-		this.mon(this.nodeCmp.el, 'click', this.onClick.bind(this));
+
+	truncateLabels: function() {
+		var me = this;
+
+		if (!me.el) {
+			me.onceRendered.then(me.truncateLabels.bind(me));
+			return;
+		}
+
+		wait(100).then(function() {
+			var label = me.currentHeader && me.currentHeader.el && me.currentHeader.el.dom.querySelector('.label');
+
+			if (label) {
+				me.truncateText(label, null, true);
+			}
+		});
 	},
 
 
@@ -70,7 +87,76 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	},
 
 
-	setCollection: function(collection) {
+	beforeSetCollection: function() {
+		this.disableOrderingContainer();
+	},
+
+
+	afterSetCollection: function() {
+		if (this.isEditing) {
+			this.enableOrderingContainer();
+		}
+	},
+
+
+	buildHeader: function(collection) {
+		var startDate = collection.get('startDate'),
+			classes = ['outline-row', collection.get('type')],
+			items = [];
+
+		if (!collection.get('isAvailable')) {
+			classes.push('disabled');
+		}
+
+		items.push({cls: 'label', html: collection.getTitle()});
+
+		if (this.shouldShowDates && startDate) {
+			items.push({
+				cls: 'date',
+				cn: [
+					{html: Ext.Date.format(startDate, 'M')},
+					{html: Ext.Date.format(startDate, 'j')}
+				]
+			});
+		}
+
+		return {
+			xtype: 'box',
+			isNode: true,
+			autoEl: {
+				cls: classes.join(' '),
+				'data-qtip': collection.getTitle(),
+				cn: items
+			},
+			listeners: {
+				click: {
+					element: 'el',
+					fn: this.onClick.bind(this)
+				}
+			}
+		};
+	},
+
+
+	buildFooter: function(collection) {
+		var me = this,
+			OutlinePrompt = NextThought.app.course.overview.components.editing.outline.Prompt,
+			inlineEditor = OutlinePrompt.getInlineEditor(this.outlineNode.mimeType);
+
+		//TODO: make this more general to support more complicated outline structures
+		if (this.isEditing && collection && collection.isTopLevel()) {
+			return {
+				xtype: 'overview-editing-new-node',
+				title: 'Add Lesson',
+				InlineEditor: inlineEditor && inlineEditor.editor,
+				parentRecord: collection,
+				doSelectNode: this.doSelectNode
+			};
+		}
+	},
+
+
+	xsetCollection: function(collection) {
 		this.disableOrderingContainer();
 		this.removeAll(true);
 
@@ -125,42 +211,27 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 
 	onClick: function(e) {
 		var isDisabled = Boolean(e.getTarget('.disabled'));
+
 		if (e.getTarget('.outline-row') && (!isDisabled || this.isEditing)) {
 			this.doSelectNode(this.outlineNode);
 		}
 	},
 
 
-	truncateLabels: function() {
-		var me = this;
-
-		if (!me.el) {
-			me.onceRendered.then(me.truncateLabels.bind(me));
-			return;
-		}
-
-		wait(100).then(function() {
-			var label = me.nodeCmp && me.nodeCmp.el && me.nodeCmp.el.dom.querySelector('.label');
-
-			if (label) {
-				me.truncateText(label, null, true);
-			}
-		});
-	},
-
-
 	selectRecord: function(record) {
 		var body = this.getBodyContainer(),
+			header = this.currentHeader,
 			bodyListEl = this.el && this.el.up('.outline-list');
 
 		if (record.getId() === this.outlineNode.getId()) {
-			this.nodeCmp.addCls('selected');
+			header.addCls('selected');
+
 			if (bodyListEl) {
 				this.el.scrollIntoView(bodyListEl);
 			}
 		} else {
-			this.nodeCmp.removeCls('selected');
-			this.nodeCmp.removeCls('out-of-view');
+			header.removeCls('selected');
+			header.removeCls('out-of-view');
 		}
 
 		body.items.each(function(item) {
@@ -171,27 +242,6 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	},
 
 
-	startEditing: function() {
-		var me = this, inlineEditor,
-			OutlinePrompt = NextThought.app.course.overview.components.editing.outline.Prompt;
-
-		//TODO: make this more general to support more complicated outline structures
-		if (this.outlineNode && this.outlineNode.isTopLevel()) {
-			inlineEditor = OutlinePrompt.getInlineEditor(this.outlineNode.mimeType);
-
-			this.addNodeCmp = this.add({
-				xtype: 'overview-editing-new-node',
-				title: 'Add Lesson',
-				InlineEditor: inlineEditor && inlineEditor.editor,
-				parentRecord: this.outlineNode,
-				doSelectNode: this.doSelectNode
-			});
-
-			this.enableOrderingContainer();
-		}
-	},
-
-
 	stopEditing: function() {
 		var body = this.getBodyContainer();
 		if (this.addNodeCmp) {
@@ -199,11 +249,6 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 		}
 		delete this.addNodeCmp;
 		delete this.isEditing;
-	},
-
-
-	getBodyContainer: function() {
-		return this.down('[bodyContainer]');
 	},
 
 

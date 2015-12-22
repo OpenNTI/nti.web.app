@@ -33,11 +33,14 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		this.setDataTransferHandler(NextThought.model.courses.navigation.CourseOutlineNode.mimeType, {
 			onDrop: this.onDrop.bind(this),
 			isValid: NextThought.mixins.dnd.OrderingContainer.hasMoveInfo,
-			effect: 'moe'
+			effect: 'move'
 		});
 
 		this.headerCmp = this.down('overview-outline-header');
 	},
+
+
+	addBodyConfig: function() {},
 
 
 	afterRender: function() {
@@ -72,7 +75,7 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 	},
 
 
-		getOrderingItems: function() {
+	getOrderingItems: function() {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
 
