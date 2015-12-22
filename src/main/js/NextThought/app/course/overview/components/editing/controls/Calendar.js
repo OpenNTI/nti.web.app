@@ -3,7 +3,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 	alias: 'widget.overview-editing-controls-calendar',
 
 	requires: [
-		'NextThought.common.form.fields.DatePicker'
+		'NextThought.app.course.overview.components.editing.controls.AvailableDateMenu'
 	],
 
 	cls: 'button calendar',
@@ -25,16 +25,13 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			]},
 			{cls: 'save', html: 'Save'}
 		]},
-		{cls: 'menu-container', cn: [
-			{cls: 'calendar-menu'}
-		]}
+		{cls: 'menu-container'}
 	]),
 
 
 	renderSelectors: {
 		monthEl: '.month',
 		dayEl: '.day',
-		calendarMenuEl: '.calendar-menu',
 		menuContainerEl: '.menu-container',
 		textEl: '.text',
 		dateEl: '.date',
@@ -96,22 +93,22 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 
 
 	createPicker: function () {
-		this.datepicker = Ext.widget('date-picker-field', {
+		this.picker = Ext.widget('overview-editing-available-date-menu', {
 			record: this.record,
 			defaultValue: this.defaultValue,
-			renderTo: this.calendarMenuEl,
-			TimePicker: false,
-			dateChanged: this.onDateChange.bind(this)
+			renderTo: this.menuContainerEl,
+			dateChanged: this.onDateChange.bind(this),
+			onSave: this.saveClicked.bind(this)
 		});
 
-		this.on('destroy', this.datepicker.destroy.bind(this));
+		this.on('destroy', this.picker.destroy.bind(this));
 	},
 
 
 	alignCalendarMenu: function(){
 		var box = this.el && this.el.dom.getBoundingClientRect() || {},
 			me = this,
-			menu = this.calendarMenuEl,
+			menu = this.picker,
 			top = box.bottom + 10,
 			vh = Ext.Element.getViewportHeight(),
 			vw = Ext.Element.getViewportWidth(),
@@ -125,15 +122,40 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 
 
 	onDateChange: function(){
-		var value = this.datepicker && this.datepicker.getValue(),
-			date;
+		var values = this.picker && this.picker.getValue(),
+			startDate = values && values.AvailableBeginning,
+			endDate = values && values.AvailableEnding, date;
 
-		if (value) {
-			date = new Date(value * 1000);
-			this.textEl.update(Ext.Date.format(date, 'l, F d, Y'));
+		if (startDate) {
+			date = new Date(startDate * 1000);
+			// Set the start date;
 			this.setDayAndMonth(date);
 		}
-		this.saveEl.addCls('active');
+
+		if (endDate) {
+			date = new Date(endDate * 1000);
+		}
+
+		if (startDate && endDate) {
+			date = new Date(startDate * 1000);
+			startDate = Ext.Date.format(date, 'F d');
+
+			date = new Date(endDate * 1000);
+			endDate = Ext.Date.format(date, 'F d');
+
+			this.textEl.update(startDate + ' - ' + endDate);
+		}
+		else if (startDate && !endDate) {
+			startDate = Ext.Date.format(date, 'l, F d, Y');
+			this.textEl.update(startDate);
+		}
+		else if (!startDate && endDate) {
+			endDate = Ext.Date.format(date, 'l, F d, Y');
+			this.textEl.update(endDate);
+		}
+		else {
+			this.textEl.update(this.placeholder);
+		}
 	},
 
 
@@ -158,10 +180,10 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 	saveClicked: function(e){
 		var me = this,
 			link = this.record && this.record.getLink('edit'),
-			value = this.datepicker && this.datepicker.getValue();
+			values = this.picker && this.picker.getValue();
 
-		if (value && link) {
-			Service.put(link, {'AvailableBeginning': value})
+		if (values && link) {
+			Service.put(link, values)
 				.then(function(response){
 					me.record.syncWithResponse(response);
 					me.saveEl.removeCls('active');

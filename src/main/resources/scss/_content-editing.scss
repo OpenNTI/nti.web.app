@@ -571,7 +571,7 @@
 				border-color: transparent transparent #ffffff transparent;
 			}
 
-			.editing-publishing-menu, .calendar-menu {
+			.editing-publishing-menu, .editing-available-date-menu {
 				padding: 10px;
 				background-color: #ffffff;
     			width: 355px;
@@ -616,6 +616,10 @@
 						border-bottom: none;
 					}
 				}
+			}
+
+			.editing-available-date-menu {
+				margin-top: 7px;
 			}
 		}
 
