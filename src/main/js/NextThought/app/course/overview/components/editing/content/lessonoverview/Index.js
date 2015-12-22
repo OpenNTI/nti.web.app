@@ -14,6 +14,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 	],
 
 	emptyText: 'No content here yet. Click add content below to get started.',
+	transitionStates: true,
 
 	ui: 'course',
 	cls: 'course-overview course-overview-editing',
@@ -110,7 +111,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 	},
 
 
-	getCmpForRecord: function(record) {
+	getCmpForRecord: function(record, transition, initialState) {
 		if (record instanceof NextThought.model.courses.overview.Group) {
 			return NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem.create({
 				record: record,
@@ -120,7 +121,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 				locInfo: this.locInfo,
 				assignments: this.assignments,
 				course: this.bundle,
-				addCardToGroup: this.addCardToGroup.bind(this)
+				addCardToGroup: this.addCardToGroup.bind(this),
+				initialState: initialState,
+				transition: transition
 			});
 		}
 

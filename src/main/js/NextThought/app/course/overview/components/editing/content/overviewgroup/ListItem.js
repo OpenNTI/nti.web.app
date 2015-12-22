@@ -4,7 +4,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 	mixins: {
 		OrderingContainer: 'NextThought.mixins.dnd.OrderingContainer',
-		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
+		OrderingItem: 'NextThought.mixins.dnd.OrderingItem',
+		Transition: 'NextThought.mixins.Transition'
 	},
 
 	requires: [
@@ -75,6 +76,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 		});
 
 		this.setCollection(this.record);
+
+		if (this.transition) {
+			this.applyTransition(this.transition);
+		}
 	},
 
 
@@ -118,6 +123,25 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 	},
 
 
+	cacheHeight: function() {
+		var el = this.el && this.el.dom,
+			height = el && el.offsetHeight;
+
+		if (height) {
+			el.style.height = height + 'px';
+		}
+	},
+
+
+	uncacheHeight: function() {
+		var el = this.el && this.el.dom;
+
+		if (el) {
+			el.style.height = 'auto';
+		}
+	},
+
+
 	beforeSetCollection: function(collection) {
 		this.disableOrderingContainer();
 
@@ -125,12 +149,14 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 		if (this.rendered) {
 			this.setActiveGroup(this.activeGroup);
+			this.cacheHeight();
 		}
 	},
 
 
 	afterSetCollection: function() {
 		this.enableOrderingContainer();
+		this.uncacheHeight();
 	},
 
 
@@ -157,50 +183,16 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 					xtype: 'overview-editing-controls-add',
 					name: 'Add Content',
 					parentRecord: this.record,
-					root: this.lessonOverview
+					root: this.lessonOverview,
+					onPromptOpen: this.suspendUpdates.bind(this),
+					onPromptClose: this.resumeUpdates.bind(this)
 				}
 			]
 		};
 	},
 
 
-	xsetCollection: function(collection) {
-		this.disableOrderingContainer();
-		this.removeAll(true);
-
-		this.add([
-			{
-				xtype: 'container',
-				cls: 'overview-group-header drag-handle',
-				layout: 'none',
-				items: [
-					{xtype: 'overview-editing-overviewgroup-preview', group: collection},
-					{xtype: 'overview-editing-controls-edit', color: 'white', record: collection, parentRecord: this.lessonOverview, rootRecord: this.lessonOverview}
-				]
-			},
-			{xtype: 'container', cls: 'overview-group-body', layout: 'none', isBodyContainer: true, items: []},
-			{
-				xtype: 'container',
-				cls: 'overview-group-footer',
-				layout: 'none',
-				items: [
-					{
-						xtype: 'overview-editing-controls-add',
-						name: 'Add Content',
-						parentRecord: this.record,
-						root: this.lessonOverview
-					}
-				]
-			}
-		]);
-
-
-		this.callParent(arguments);
-		this.enableOrderingContainer();
-	},
-
-
-	getCmpForRecord: function(record) {
+	getCmpForRecord: function(record, transition, initialState) {
 		var mimeType = record.mimeType,
 			cmp = this.MIME_TO_CMP[mimeType],
 			assignment;
@@ -221,7 +213,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 			locationInfo: this.locInfo,
 			outlineNode: this.outlineNode,
 			assignment: assignment,
-			course: this.course
+			course: this.course,
+			transition: transition,
+			initialState: initialState
 		});
 
 	},

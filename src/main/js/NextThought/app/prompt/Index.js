@@ -57,12 +57,16 @@ Ext.define('NextThought.app.prompt.Index', {
 			cmp: cmp,
 			data: data,
 			onSubmit: function(value) {
-				close();
-				fulfill(value);
+				close()
+					.then(function() {
+						fulfill(value);
+					});
 			},
 			onCancel: function(reason) {
-				close();
-				reject(reason);
+				close()
+					.then(function() {
+						reject(reason);
+					});
 			}
 		});
 
@@ -75,7 +79,8 @@ Ext.define('NextThought.app.prompt.Index', {
 	closePrompt: function(index) {
 		var stack = this.promptStack,
 			removeOpenCls = this.removeOpenCls.bind(this),
-			prompt = stack.peek();
+			prompt = stack.peek(),
+			allow;
 
 		function close() {
 			prompt.destroy();
@@ -92,10 +97,12 @@ Ext.define('NextThought.app.prompt.Index', {
 		}
 
 		if (prompt.allowCancel) {
-			prompt.allowCancel()
-				.then(close);
+			allow = prompt.allowCancel();
 		} else {
-			close();
+			allow = Promise.resolve();
 		}
+
+		return allow
+			.then(close);
 	}
 });

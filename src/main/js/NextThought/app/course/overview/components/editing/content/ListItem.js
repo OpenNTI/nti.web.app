@@ -8,7 +8,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 	],
 
 	mixins: {
-		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
+		OrderingItem: 'NextThought.mixins.dnd.OrderingItem',
+		Transition: 'NextThought.mixins.Transition'
 	},
 
 	cls: 'overview-editing-listitem',
@@ -29,6 +30,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 		this.setDataTransfer(this.record);
 
 		this.setRecord(this.record);
+
+		if (this.transition) {
+			this.applyTransition(this.transition);
+		}
 	},
 
 
