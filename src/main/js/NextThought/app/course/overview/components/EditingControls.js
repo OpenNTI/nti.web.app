@@ -48,7 +48,9 @@ Ext.define('NextThought.app.course.overview.components.EditingControls', {
 
 
 	clearButtons: function() {
-		this.buttonsEl.dom.innerHTML = '';
+		if (this.buttonsEl) {
+			this.buttonsEl.dom.innerHTML = '';
+		}
 	},
 
 
