@@ -14,7 +14,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{tag: 'input', cls: 'title', placeholder: 'Title', type: 'text'},
+		{tag: 'input', cls: 'title', placeholder: 'Title', type: 'text', value: '{title}'},
 		{cls: 'sub-label', html: 'Pick a Color'},
 		{tag: 'ul', cls: 'colors', cn: [
 			{tag: 'tpl', 'for': 'colors', cn: [
