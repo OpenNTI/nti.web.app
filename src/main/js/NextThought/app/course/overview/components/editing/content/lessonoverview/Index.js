@@ -80,7 +80,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 	},
 
 
-	beforeSetCollection: function() {
+	beforeSetCollection: function(collection) {
+		this.lessonOverview = collection;
 		this.disableOrderingContainer();
 		this.cacheHeight();
 	},
@@ -106,37 +107,6 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 				}
 			]
 		};
-	},
-
-
-	xsetCollection: function(collection) {
-		this.disableOrderingContainer();
-		this.cacheHeight();
-		this.removeAll(true);
-
-		this.lessonOverview = collection;
-
-		this.add([
-			{xtype: 'container', isBodyContainer: true, layout: 'none', items: []},
-			{
-				xtype: 'container',
-				cls: 'course-overview-footer',
-				layout: 'none',
-				items: [
-					{
-						xtype: 'overview-editing-controls-add',
-						name: 'Add Section Break',
-						parentRecord: this.lessonOverview,
-						root: this.lessonOverview
-					}
-				]
-			}
-		]);
-
-		this.callParent(arguments);
-
-		this.uncacheHeight();
-		this.enableOrderingContainer();
 	},
 
 
