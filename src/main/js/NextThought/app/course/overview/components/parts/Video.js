@@ -100,7 +100,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 			this.navigateToSlidedeck(slidedeck);
 		} else if (!e.getTarget('.launch-player') && e.getTarget('.transcripts')) {
 			this.maybePauseCurrentVideo();
-			this.navigateToTarget(video, this.locationInfo.root);
+			this.navigateToTarget(video, this.locationInfo && this.locationInfo.root);
 		} else {
 			this.maybeCreatePlayer();
 
