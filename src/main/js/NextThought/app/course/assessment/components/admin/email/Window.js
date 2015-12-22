@@ -22,7 +22,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 			xtype: 'window-header',
 			doClose: this.onClose.bind(this)
 		});
-		this.headerCmp.setTitle('Email');
+		this.headerCmp.setTitle('New Message');
 		this.record = this.record || this.precache && this.precache.record;
 		this.showEditor();
 	},

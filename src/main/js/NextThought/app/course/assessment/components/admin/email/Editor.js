@@ -35,9 +35,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 						{cls: 'field'},
 						{cls: 'action', cn: [
 							{cls: 'reply-option', cn: [
-								{tag: 'label', cls:'toggle', cn: [
-									{tag: 'input', type: 'checkbox', cls: 'reply-check'},
-									{tag: 'span', html: 'Allow Replies'}
+								{tag: 'span', cls:'toggle', cn: [
+									{tag: 'input', type: 'checkbox', id: 'reply-check-toggle', cls: 'reply-check'},
+									{tag: 'label', 'for': 'reply-check-toggle', html: 'Allow Replies'}
 								]},
 								{tag: 'span', cls: 'reply-scope link arrow', html: ''}
 							]}
@@ -54,9 +54,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		]),
 
 	footerControlsTpl: new Ext.XTemplate(Ext.DomHelper.markup(
-		{tag: 'label', cls:'toggle', cn: [
-			{tag: 'input', type: 'checkbox', cls: 'email-copy'},
-			{tag: 'span', html: 'Send me a copy of the email'}
+		{tag: 'div', cls:'toggle', cn: [
+			{tag: 'input', type: 'checkbox', id: 'email-copy-toggle', cls: 'email-copy'},
+			{tag: 'label', 'for': 'email-copy-toggle', html: 'Send me a copy of the email'}
 		]}
 	)),
 
@@ -296,8 +296,20 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 
 	setReplyToField: function(){
+		var scope;
+		
 		this.noReplyPicker = this.createNoReplyMenu();
 		this.filterReplyOptions();
+		
+		if (this.isIndividualEmail) {
+			this.replyCheckBoxEl.dom.checked = true;
+		}
+		else {
+			scope = this.record && this.record.get('scope');
+			if (scope === 'ForCredit') {
+				this.replyCheckBoxEl.dom.checked = true;
+			}
+		}
 	},
 
 
@@ -350,20 +362,20 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 						me.handleNoReplyMenuClick(item, item.up('.menu'));
 					}
 				},
-				width: 220,
+				width: 120,
 				items: [{
-						text: 'All Students',
+						text: 'All',
 						scope: 'All',
 						checked: true,
 						NoReply: false
 					},
 					{
-						text: 'Open Students',
+						text: 'Open',
 						scope: 'Open',
 						NoReply: false
 					},
 					{
-						text: 'Enrolled Students',
+						text: 'Enrolled',
 						scope: 'ForCredit',
 						NoReply: false
 					}
@@ -397,9 +409,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 			this.replyScopeEl.hide();
 		}
 
-		if (!this.replyScopeEl.dom.checked) {
-			this.replyScopeEl.addCls('disabled');
-		}
+		// if (!this.replyScopeEl.dom.checked) {
+		// 	this.replyScopeEl.addCls('disabled');
+		// }
 	},
 
 
@@ -435,7 +447,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		e.stopEvent();
 		var me = this,
 			v = this.getValue(),
-			t, trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l, rec;
+			t, trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l, rec,
+			isAllowReply = this.replyCheckBoxEl && this.replyCheckBoxEl.dom.checked;
 
 		if (DomUtils.isEmpty(v.body)) {
 			me.markError(me.editorBodyEl, getString('NextThought.view.profiles.parts.BlogEditor.emptybody'));
@@ -470,7 +483,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		if (this.record) {
 			this.record.set({
 				'Body': v.body,
-				'Subject': v.title 
+				'Subject': v.title,
+				'NoReply': !Boolean(isAllowReply) 
 			});
 
 			this.EmailActions.sendEmail(this.record)
