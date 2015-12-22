@@ -58,7 +58,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 
 		this.originalSelection = this.selectedItem;
 
-		this.menu = this.buildMenu(this.selectionItems, this.getEditor(), this.parentRecord);
+		this.menu = this.buildMenu(this.selectionItems, this.getEditor(), this.rootRecord);
 		this.hideMenu();
 
 		//If there is no original selection (ie we aren't editing a record), just pick the first one
@@ -76,6 +76,17 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 	getEditor: function() {},
 
 
+	/**
+	 * Build the menu components to choose parents from.
+	 *
+	 * NOTE: for now we are assuming that the max depth of the tree is 2
+	 * so the root is the parent of the parents.
+	 *
+	 * @param  {Array} items        the parents to choose from
+	 * @param  {Component} editor       the editor to create a new parent
+	 * @param  {Object} parentRecord the parent record of the parents
+	 * @return {Component}              the menu component
+	 */
 	buildMenu: function(items, editor, parentRecord) {
 		var me = this,
 			menu;

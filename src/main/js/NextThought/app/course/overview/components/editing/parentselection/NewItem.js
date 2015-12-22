@@ -81,6 +81,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.N
 
 		this.addMask();
 
+		//TODO: handle errors
 		this.parentRecord.appendContent(value)
 			.then(function(result) {
 				var end = new Date(),
