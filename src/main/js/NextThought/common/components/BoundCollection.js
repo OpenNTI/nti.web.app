@@ -14,6 +14,10 @@ Ext.define('NextThought.common.components.BoundCollection', {
 		this.callParent(arguments);
 
 		this.addBodyConfig();
+
+		if (this.initialState) {
+			this.__activeState = {items: this.getItems(this.initialState)};
+		}
 	},
 
 
@@ -247,8 +251,8 @@ Ext.define('NextThought.common.components.BoundCollection', {
 			return acc;
 		}, {cmps: [], items: []});
 
-		if (!state.cmps.length && this.emptyText) {
-			state.cmps.push(me.getEmptyState());
+		if (!newState.cmps.length && this.emptyText) {
+			newState.cmps.push(me.getEmptyState());
 		}
 
 		body.add(newState.cmps);

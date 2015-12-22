@@ -29,11 +29,11 @@ Ext.define('NextThought.mixins.MovingRoot', {
 	 * @param  {Object|String} record  the record to move
 	 * @param  {Number} index          the index to move to
 	 * @param  {Number} oldIndex       the old index
-	 * @param  {Object|String} originalParent the current parent
 	 * @param  {Object|String} newParent      the desired parent
+	 * @param  {Object|String} originalParent the current parent
 	 * @return {Promise}
 	 */
-	doMoveRecordFrom: function(record, index, oldIndex, originalParent, newParent) {
+	doMoveRecordFrom: function(record, index, oldIndex, newParent, originalParent) {
 		var link = this.getMoveLink(),
 			data, move;
 
