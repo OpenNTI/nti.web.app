@@ -14,7 +14,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 			{cls: 'part', 'data-action': 'AvailableEnding', html: 'Finish Date'}
 		]},
 		{cls: 'date-picker-container'},
-		{cls: 'save disabled', html: 'Save'}
+		{cls: 'save disabled', html: 'Save Changes'}
 	]),
 
 
