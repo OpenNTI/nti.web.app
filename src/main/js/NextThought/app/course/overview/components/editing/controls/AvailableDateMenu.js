@@ -9,30 +9,19 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 	cls: 'editing-available-date-menu',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'option available-beginning', 'data-action': 'available-beginning', cn: [
-			{cls: 'text', html: 'Available Beginning'},
-			{cls: 'subtext', cn: [
-				{tag: 'span', cls: 'description', html: 'When should students start this lesson?'},
-				{cls: 'date-picker-container'}
-			]}
+		{cls: 'toggle', cn: [
+			{cls: 'part selected', 'data-action': 'AvailableBeginning', html: 'Begin Date'},
+			{cls: 'part', 'data-action': 'AvailableEnding', html: 'Finish Date'}
 		]},
-		{cls: 'option available-ending', 'data-action': 'available-ending', cn: [
-			{cls: 'text', html: 'Available Ending'},
-			{cls: 'subtext', cn: [
-				{tag: 'span', cls: 'description', html: 'When should students end this lesson?'},
-				{cls: 'date-picker-container'}
-			]}
-		]},
+		{cls: 'date-picker-container'},
 		{cls: 'save disabled', html: 'Save'}
 	]),
 
 
 	renderSelectors: {
-		startPickerEl: '.available-beginning .date-picker-container',
-		endPickerEl: '.available-ending .date-picker-container',
-		startEl: '.available-beginning',
-		endEl: '.available-ending',
-		saveEl: '.save'
+		pickerEl: '.date-picker-container',
+		saveEl: '.save',
+		toggleEl: '.toggle'
 	},
 
 	initComponent: function() {
@@ -42,10 +31,8 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.startPicker = this.createDatePicker(this.startPickerEl);
-		this.endPicker = this.createDatePicker(this.endPickerEl);
-		this.mon(this.startEl, 'click', this.handleSelectionClick.bind(this));
-		this.mon(this.endEl, 'click', this.handleSelectionClick.bind(this));
+		this.picker = this.createDatePicker(this.pickerEl);
+		this.mon(this.toggleEl, 'click', this.handleSelectionClick.bind(this));
 		this.mon(this.saveEl, 'click', this.doSave.bind(this));
 		this.setInitialState();
 	},
@@ -55,22 +42,24 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 		var startDate = this.record && this.record.get('AvailableBeginning'),
 			endDate = this.record && this.record.get('AvailableEnding');
 
-		if (this.startPicker) {
-			startDate = startDate ? new Date(startDate) : new Date();
-			this.startPicker.setValue(startDate);
-		}
+		// the available beginning and ending are in seconds.
+		this.values = {
+			AvailableBeginning: startDate ? startDate.getTime && (startDate.getTime()/1000) : null,
+			AvailableEnding: endDate ? endDate.getTime && (endDate.getTime()/1000) : null
+		};
 
-		if (this.endPicker) {
-			// Default to tomorrow.
-			if (!endDate) {
-				endDate = new Date();
-				endDate.setDate(endDate.getDate() + 1);
-			}
-			else {
-				endDate = new Date(endDate);
-			}
+		this.updateDates();
+	},
 
-			this.endPicker.setValue(endDate);
+
+	updateDates: function(){
+		var selectedEl = this.toggleEl.down('.selected'),
+			field = selectedEl && selectedEl.dom && selectedEl.dom.getAttribute('data-action'),
+			value = this.values && this.values[field], date;
+
+		if (this.picker && field) {
+			date = value ? new Date(value * 1000) : new Date();
+			this.picker.setValue(date);
 		}
 	},
 
@@ -91,15 +80,16 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 
 
 	dateChanged: function(datepicker){
-		var time  = datepicker && datepicker.getValue(),
-			date = new Date(time * 1000);
+		var seconds  = datepicker && datepicker.getValue(),
+			selected = this.toggleEl.down('.selected'),
+			key = selected && selected.dom && selected.dom.getAttribute('data-action');
 
-		this.setAvailableDateText(date);
-	},
-
-
-	setAvailableDateText: function(date){
-
+		if (key) {
+			this.values[key] = seconds; 
+		}
+		if (this.saveEl.hasCls('disabled')) {
+			this.saveEl.removeCls('disabled');
+		}
 	},
 
 
@@ -108,38 +98,40 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 			me = this;
 
 		e.stopEvent();
+
 		this.select(el);
-
-		// Update the parent node
-		if (this.dateChanged) {
-			this.dateChanged();
+		this.updateDates();
+		
+		if (this.saveEl.hasCls('disabled')) {
+			this.saveEl.removeCls('disabled');
 		}
-
-		this.saveEl.removeCls('disabled');
 	},
 
 
 	select: function(el){
-		var t = el && el.hasCls('option') ? el : el && el.up('.option');
+		var t = el && el.hasCls('part') ? el : el && el.up('.part'),
+			selectedEl = this.el.down('.selected');
 
-		if (t) { 
-			t.toggleCls('selected');
+		if (t && selectedEl && t !== selectedEl) { 
+			selectedEl.removeCls('selected');
+			t.addCls('selected');
 		}
 	},
 
 
 	getValue: function(){
-		var isStartChecked = this.startEl.hasCls('selected') || null,
-			isEndChecked = this.endEl.hasCls('selected') || null;
-
 		return {
-			AvailableBeginning: isStartChecked && this.startPicker && this.startPicker.getValue(),
-			AvailableEnding: isEndChecked && this.endPicker && this.endPicker.getValue()
+			AvailableBeginning: this.values && this.values.AvailableBeginning,
+			AvailableEnding: this.values && this.values.AvailableEnding
 		}
 	},
 
 
-	doSave: function(){
+	doSave: function(e){
+		var target = Ext.get(e.target);
+
+		if (target && target.hasCls('disabled')) { return; }
+
 		if (this.onSave) {
 			this.onSave();
 		}

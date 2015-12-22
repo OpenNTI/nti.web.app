@@ -620,6 +620,39 @@
 
 			.editing-available-date-menu {
 				margin-top: 7px;
+
+				.toggle {
+   					@include experimental-value(display, flex);
+    				flex-direction: row;
+    				border-radius: 3px;
+    				overflow: hidden;
+
+    				.part {
+    					@include experimental(flex, 1 1 auto);
+    					background: #ffffff; /* Old browsers */
+						background: -moz-linear-gradient(top,  #ffffff 0%, #f2f2f2 100%); /* FF3.6-15 */
+						background: -webkit-linear-gradient(top,  #ffffff 0%,#f2f2f2 100%); /* Chrome10-25,Safari5.1-6 */
+						background: linear-gradient(to bottom,  #ffffff 0%,#f2f2f2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+						filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f2f2f2',GradientType=0 ); /* IE6-9 */
+
+						border: 1px solid rgba(150,150,150,0.3);
+    					text-align: center;
+    					line-height: 36px;
+    					color: $secondary-grey;
+
+    					&.selected {
+    						color: #ffffff;
+    						background: #A0A0A0;
+    						box-shadow: inset 0 2px 5px 0 rgba(0,0,0,0.4);
+    					}
+    				}
+				}
+
+				.date-picker-container {
+					.nti-date-picker .x-datepicker {
+						margin: 20px auto;
+					}
+				}
 			}
 		}
 
@@ -680,6 +713,33 @@
 			    	padding: 5px 10px;
 			    	font-weight: 300;
 					cursor: pointer;
+				}
+
+				.clear {
+					position: absolute;
+					top: 0px;
+					right: 6px;
+					color: $tertiary-grey;
+					text-transform: uppercase;
+					font: normal 600 11px/36px $font;
+					z-index: 10;
+					cursor: pointer;
+					display: none;
+
+					&:hover {
+						color: $secondary-grey;
+					}
+				}
+
+				&.has-date {
+					.text {
+						position: relative;
+						padding-right: 50px;	
+					}
+					
+					.clear {
+						display: block;
+					}
 				}
 
 				.save {

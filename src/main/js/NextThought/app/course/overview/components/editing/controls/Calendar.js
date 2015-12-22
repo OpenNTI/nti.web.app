@@ -8,9 +8,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 
 	cls: 'button calendar',
 
-	placeholder: 'When should students start this lesson?',
-
-	enableText: true,
+	placeholder: 'When should students begin this lesson?',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'date-selected', cn: [
@@ -20,10 +18,8 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			]}
 		]},
 		{cls: 'main', cn: [
-			{tag: 'tpl', 'if': 'enableText', cn: [
-				{cls: 'text', html: '{placeholder}'}
-			]},
-			{cls: 'save', html: 'Save'}
+			{cls: 'text', html: '{placeholder}'},
+			{cls: 'clear', html: 'clear'}
 		]},
 		{cls: 'menu-container'}
 	]),
@@ -33,9 +29,10 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 		monthEl: '.month',
 		dayEl: '.day',
 		menuContainerEl: '.menu-container',
-		textEl: '.text',
+		mainEl: '.main',
+		textEl: '.main .text',
 		dateEl: '.date',
-		saveEl: '.save'
+		clearEl: '.clear'
 	},
 
 
@@ -53,10 +50,8 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 		this.createPicker();
 
 		this.mon(this.dateEl, 'click', this.dateClicked.bind(this));
-		this.mon(this.saveEl, 'click', this.saveClicked.bind(this));
-		if (this.textEl) {
-			this.mon(this.textEl, 'click', this.textLabelClicked.bind(this));
-		}
+		this.mon(this.textEl, 'click', this.textLabelClicked.bind(this));
+		this.mon(this.clearEl, 'click', this.clearDates.bind(this));
 
 		this.el.addCls('closed');
 		this.onWindowResizeBuffer = Ext.Function.createBuffered(this.alignCalendarMenu, 5, this);
@@ -75,6 +70,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			date  = startDate ? new Date(startDate) : new Date(), m;
 
 		this.setDayAndMonth(date);
+		this.updateDateText();
 	},
 
 
@@ -97,7 +93,6 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			record: this.record,
 			defaultValue: this.defaultValue,
 			renderTo: this.menuContainerEl,
-			dateChanged: this.onDateChange.bind(this),
 			onSave: this.saveClicked.bind(this)
 		});
 
@@ -121,39 +116,43 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 	},
 
 
-	onDateChange: function(){
-		var values = this.picker && this.picker.getValue(),
-			startDate = values && values.AvailableBeginning,
-			endDate = values && values.AvailableEnding, date;
+	updateDateText: function(){
+		var startDate = this.record && this.record.get('AvailableBeginning'),
+			endDate = this.record && this.record.get('AvailableEnding'), 
+			date;
 
 		if (startDate) {
-			date = new Date(startDate * 1000);
+			date = new Date(startDate);
 			// Set the start date;
 			this.setDayAndMonth(date);
 		}
 
 		if (endDate) {
-			date = new Date(endDate * 1000);
+			date = new Date(endDate);
 		}
 
 		if (startDate && endDate) {
-			date = new Date(startDate * 1000);
+			date = new Date(startDate);
 			startDate = Ext.Date.format(date, 'F d');
 
-			date = new Date(endDate * 1000);
+			date = new Date(endDate);
 			endDate = Ext.Date.format(date, 'F d');
 
 			this.textEl.update(startDate + ' - ' + endDate);
+			this.mainEl.addCls('has-date');
 		}
 		else if (startDate && !endDate) {
 			startDate = Ext.Date.format(date, 'l, F d, Y');
 			this.textEl.update(startDate);
+			this.mainEl.addCls('has-date');
 		}
 		else if (!startDate && endDate) {
 			endDate = Ext.Date.format(date, 'l, F d, Y');
 			this.textEl.update(endDate);
+			this.mainEl.addCls('has-date');
 		}
 		else {
+			this.mainEl.removeCls('has-date');
 			this.textEl.update(this.placeholder);
 		}
 	},
@@ -186,8 +185,25 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			Service.put(link, values)
 				.then(function(response){
 					me.record.syncWithResponse(response);
-					me.saveEl.removeCls('active');
-					me.el.toggleCls('closed');
+					me.updateDateText();
+					me.el.addCls('closed');
+				});
+		}
+	},
+
+
+	clearDates: function(e){
+		var link = this.record && this.record.getLink('edit'),
+			me = this;
+
+		e.stopEvent();
+
+		if (link) {
+			Service.put(link, {AvailableBeginning: null, AvailableEnding: null})
+				.then(function(response){
+					me.record.syncWithResponse(response);
+					me.updateDateText();
+					me.el.addCls('closed');
 				});
 		}
 	}
