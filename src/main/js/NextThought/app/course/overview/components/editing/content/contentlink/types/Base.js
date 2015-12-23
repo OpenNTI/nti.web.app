@@ -26,7 +26,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 						{name: 'label', type: 'text', placeholder: 'Title', required: true},
 						{name: 'byline', type: 'text', placeholder: 'Author'},
 						{name: 'description', type: 'textarea', placeholder: 'Write something...'}
-					]}
+					]},
+					{type: 'saveprogress'}
 				]}
 			];
 

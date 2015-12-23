@@ -6,7 +6,10 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 		'NextThought.model.ContentBlobFile'
 	],
 
+
 	statics: {
+		UNITS: ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+
 		/**
 		 * Convert bytes to a human readable form
 		 *
@@ -14,13 +17,36 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 		 *
 		 * @param  {Number} bytes    the size to convert
 		 * @param  {Number} decimals how many decimals
+		 * @param {String} unit force the result to be in a certain unit
 		 * @return {String}          human readable version
 		 */
-		getHumanReadableFileSize: function(bytes, decimals) {
-			var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+		getHumanReadableFileSize: function(bytes, decimals, unit) {
+			if (!bytes) {
+				return '0 ' + (unit || this.UNITS[2]);
+			}
+
+			var sizes = this.UNITS,
+				i;
+
+			if (unit) {
+				i = sizes.indexOf(unit);
+			} else {
 				i = Math.floor(Math.log(bytes) / Math.log(1024));
+			}
 
 			return (bytes / Math.pow(1024, i)).toFixed(decimals).replace(/[\.0]+$/, '') + ' ' + sizes[i];
+		},
+
+
+		getUnit: function(bytes) {
+			if (!bytes) {
+				return this.UNITS[2];
+			}
+
+			var sizes = this.UNITS,
+				i = Math.floor(Math.log(bytes) / Math.log(1024));
+
+			return sizes[i];
 		}
 	},
 

@@ -74,6 +74,7 @@
 			padding: 15px;
 			border-top: 1px solid #d8d8d8;
 			@include flexContainer();
+			@include experimental(flex-wrap, wrap);
 
 			.field.icon {
 				@include flexItem(0 0 auto);
@@ -92,6 +93,11 @@
 								inset 1px 0 0 0 #d8d8d8,
 								0 1px 0 0 #d8d8d8,
 								0 -1px 0 0 #d8d8d8;
+			}
+
+			.save-progress {
+				margin-top: 10px;
+				width: 100%;
 			}
 
 			.field.byline input, .field.label input, .field.description textarea {

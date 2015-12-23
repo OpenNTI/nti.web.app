@@ -7,7 +7,8 @@ Ext.define('NextThought.common.form.Form', {
 		'NextThought.common.form.fields.ImagePicker',
 		'NextThought.common.form.fields.DatePicker',
 		'NextThought.common.form.fields.URL',
-		'NextThought.common.form.ErrorMessages'
+		'NextThought.common.form.ErrorMessages',
+		'NextThought.common.form.fields.Progress'
 	],
 
 
@@ -93,6 +94,10 @@ Ext.define('NextThought.common.form.Form', {
 					{tag: 'label', 'for': '{name}', html: '{displayName}'}
 				]}
 			]
+		})),
+
+		saveprogress: new Ext.XTemplate(Ext.DomHelper.markup({
+			cls: 'save-progress'
 		})),
 
 		hidden: new Ext.XTemplate(Ext.DomHelper.markup([
@@ -184,6 +189,8 @@ Ext.define('NextThought.common.form.Form', {
 			this.buildDateInput(schema, inputEl);
 		} else if (type === 'url') {
 			this.buildUrlInput(schema, inputEl);
+		} else if (type === 'saveprogress') {
+			this.buildSaveProgress(schema, inputEl);
 		}
 	},
 
@@ -218,6 +225,16 @@ Ext.define('NextThought.common.form.Form', {
 
 	buildUrlInput: function(schema, inputEl) {
 		this.__buildComponent(NextThought.common.form.fields.URL, schema, inputEl);
+	},
+
+
+	buildSaveProgress: function(schema, inputEl) {
+		this.saveProgressCmp = NextThought.common.form.fields.Progress.create({
+			schema: schema,
+			renderTo: inputEl
+		});
+
+		this.saveProgressCmp.hide();
 	},
 
 
@@ -484,54 +501,58 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
-	onSubmitProgress: function() {},
+	onSubmitProgress: function(e) {
+		if (!this.saveProgressCmp) { return; }
+
+		this.saveProgressCmp.setProgress(e.loaded, e.total);
+	},
+
+
+	__buildXHR: function(url, method, success, failure) {
+		var xhr = new XMLHttpRequest(),
+			progress = this.onSubmitProgress.bind(this);
+
+		xhr.open(method || 'POST', url, true);
+
+		xhr.upload.addEventListener('progress', progress);
+		xhr.upload.addEventListener('load', progress);
+
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4) {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					success(xhr.responseText);
+				} else {
+					failure(xhr.responseText);
+				}
+			}
+		};
+
+		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+		return xhr;
+	},
 
 
 	__submitFormData: function(formData, url, method) {
-		var me = this,
-			xhr = new XMLHttpRequest();
+		var me = this;
 
 		return new Promise(function(fulfill, reject) {
-			xhr.open(method || 'POST', url, true);
-			xhr.onprogress = me.onSubmitProgress.bind(me);
-			xhr.onreadystatechange = function() {
-				if (xhr.readyState === 4) {
-					if (xhr.status >= 200 && xhr.status < 300) {
-						fulfill(xhr.responseText);
-					} else {
-						reject(xhr.responseText);
-					}
-				}
-			};
+			var xhr = me.__buildXHR(url, method, fulfill, reject);
 
-			xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 			xhr.send(formData);
 		});
 	},
 
 
 	__submitJSON: function(values, url, method) {
-		var me = this,
-			xhr = new XMLHttpRequest();
+		var me = this;
 
 		return new Promise(function(fulfill, reject) {
-			xhr.open(method || 'POST', url, true);
-			xhr.onprogress = me.onSubmitProgress.bind(me);
-			xhr.onreadystatechange = function() {
-				if (xhr.readyState === 4) {
-					if (xhr.status >= 200 && xhr.status < 300) {
-						fulfill(xhr.responseText);
-					} else {
-						reject(xhr.responseText);
-					}
-				}
-			};
+			var xhr = me.__buildXHR(url, method, fulfill, reject);
 
 			xhr.setRequestHeader('Content-Type', 'application/json');
-			xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 			xhr.send(JSON.stringify(values));
 		});
-
 	},
 
 
@@ -544,20 +565,53 @@ Ext.define('NextThought.common.form.Form', {
 	 *
 	 */
 	submitTo: function(url) {
-		var hasFiles = this.hasFiles(),
+		var me = this,
+			hasFiles = me.hasFiles(),
+			progress = me.saveProgressCmp,
 			submit;
 
 		if (!url) {
 			return Promise.reject('No Link Provided');
 		}
 
-		if (hasFiles) {
-			submit = this.__submitFormData(this.getFormData(), url, this.method || 'POST');
+		if (progress) {
+			me.addCls('saving');
+			progress.show();
+			progress.start();
 		} else {
-			submit = this.__submitJSON(this.getChangedValues(), url, this.method || 'POST');
+			me.el.mask('Saving...');
 		}
 
-		return submit;
+		if (hasFiles) {
+			submit = me.__submitFormData(me.getFormData(), url, me.method || 'POST');
+		} else {
+			submit = me.__submitJSON(me.getChangedValues(), url, me.method || 'POST');
+		}
+
+
+		return submit
+			.then(function(results) {
+				if (progress) {
+					return progress.stop()
+						.then(function() {
+							me.removeCls('saving');
+							return results;
+						});
+				}
+
+				me.el.unmask();
+				return results;
+			})
+			.fail(function(reason) {
+				if (progress) {
+					progress.showError();
+					me.removeCls('saving');
+				} else {
+					me.el.unmask();
+				}
+
+				return Promise.reject(reason);
+			});
 	},
 
 

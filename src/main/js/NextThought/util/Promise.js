@@ -157,8 +157,8 @@ Ext.applyIf(Promise, {
 	 * will return a promise that fulfills with its first arg after
 	 * at least the duration given has passed.
 	 *
-	 * @param  {Number} minWait [description]
-	 * @return {[type]}         [description]
+	 * @param  {Number} minWait the min time to wait
+	 * @return {Function}
 	 */
 	minWait: function(minWait) {
 		var start = new Date();

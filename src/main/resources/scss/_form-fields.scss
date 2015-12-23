@@ -301,6 +301,16 @@ form.common-form {
 			box-shadow: 0 0 0 1px $primary-red;
 		}
 	}
+
+	&.saving {
+		position: relative;
+
+		&::before {
+			position: absolute;
+			top: 0; bottom: 0;
+			left: 0; right: 0;
+		}
+	}
 }
 
 .datefield {
@@ -601,3 +611,27 @@ form.common-form {
 	}
 }
 
+
+.save-progress {
+	.progress-bar {
+		height: 10px;
+		background: #e5e5e5;
+		margin-bottom: 10px;
+
+		.bar {
+			height: 10px;
+			background-color: $primary-blue;
+			width: 0;
+			transition: width 0.3s;
+		}
+	}
+
+	.out-of {
+		font-size: 0.625rem;
+		color: $tertiary-grey;
+
+		span {
+			margin-right: 0.3em;
+		}
+	}
+}
