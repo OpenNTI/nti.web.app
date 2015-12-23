@@ -184,20 +184,24 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 
 		if (!file) { return; }
 
-		this.maybeWarnForSize(file);
+		if(!(this.accepts) || file.type.match(this.accepts))){
 
-		this.setPreviewFromInput(file);
+			this.maybeWarnForSize(file);
 
-		if (this.schema.onFileAdded) {
-			this.schema.onFileAdded(file.type);
+			this.setPreviewFromInput(file);
+
+			if (this.schema.onFileAdded) {
+				this.schema.onFileAdded(file.type);
+			}
+
+			if (this.onChange) {
+				this.onChange();
+			}
+
+			this.fileContainer.removeCls('no-file');
+			this.fileContainer.addCls('has-file');
 		}
 
-		if (this.onChange) {
-			this.onChange();
-		}
-
-		this.fileContainer.removeCls('no-file');
-		this.fileContainer.addCls('has-file');
 	},
 
 

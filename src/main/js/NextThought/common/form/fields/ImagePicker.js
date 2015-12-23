@@ -11,6 +11,7 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 		]
 	}),
 
+	accepts: 'image/*',
 
 	renderSelectors: {
 		fileContainer: '.image-picker',
