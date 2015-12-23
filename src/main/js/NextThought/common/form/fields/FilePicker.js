@@ -210,7 +210,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 
 		if (!file) { return; }
 
-		if(!(this.accepts) || file.type.match(this.accepts))){
+		if(!(this.accepts) || file.type.match(this.accepts)){
 
 			this.maybeWarnForSize(file);
 
