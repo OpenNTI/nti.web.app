@@ -296,10 +296,16 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 
 	setReplyToField: function(){
-		var scope;
+		var scope, selected;
 		
 		this.noReplyPicker = this.createNoReplyMenu();
 		this.filterReplyOptions();
+
+		// Initial state.
+		selected = this.noReplyPicker.down('[checked]');
+		if (selected) {
+			this.record.set('replyScope', selected.scope);
+		}
 		
 		if (this.isIndividualEmail) {
 			this.replyCheckBoxEl.dom.checked = true;
