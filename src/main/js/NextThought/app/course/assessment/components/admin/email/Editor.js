@@ -329,7 +329,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 			this.noReplyPicker.hide();
 		}
 		else {
-			this.noReplyPicker.showBy(target, 'tr-br?');
+			this.noReplyPicker.showBy(target, 'tr-br?', [0, -10]);
 		}
 	},
 

@@ -105,7 +105,9 @@
 										padding-right: 0px;
 
 										&::after {
-											right: -16px;
+											position: relative;
+											display: inline-block;
+											right: -3px;
 											top: 6px;
 										}
 									}
