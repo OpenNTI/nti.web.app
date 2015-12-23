@@ -11,7 +11,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 	placeholder: 'When should students begin this lesson?',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'date-selected', cn: [
+		{cls: 'date-calendar', cn: [
 			{cls: 'date', cn: [
 				{cls: 'month'},
 				{cls: 'day'}

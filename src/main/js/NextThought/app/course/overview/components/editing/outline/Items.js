@@ -73,7 +73,9 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 			autoEl: {
 				cls: 'header',
 				cn: [
-					{cls: 'title', html: 'Title'}
+					{cls: 'date-column', html: 'Date'},
+					{cls: 'title-column', html: 'Title'},
+					{cls: 'controls-column', html: 'Publish Status'}
 				]
 			}
 		};

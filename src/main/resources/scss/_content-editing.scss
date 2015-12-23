@@ -382,6 +382,73 @@
 	}
 }
 
+.outline-items {
+	background: $quad-grey;
+	padding: 30px 20px;
+
+	.header {
+		display: table-row;
+
+		> * {
+			display: table-cell;
+			color: $secondary-grey;
+			text-transform: uppercase;
+			font-weight: 300;
+			font-size: 12px;
+			padding: 10px 0;
+		}
+
+		.date-column {
+			width: 75px;
+		}
+
+		.controls-column {
+			width: 230px;
+		}
+
+		.title-column {
+			width: 415px;
+		}		
+	}
+	.collection-body {
+		border: 1px solid $tertiary-grey-alt;
+		display: table;
+		background: #ffffff;
+
+		.outline-node-listitem {
+			display: table-row;
+			border-bottom: 1px solid $tertiary-grey-alt;
+
+			> * {
+				display: table-cell;
+			}
+
+			.date-container {
+				width: 75px;
+				text-align: center;
+				position: relative;
+
+				.date-calendar {
+					top: 6px;
+    				margin-left: 15px;
+				}
+			}
+
+			.controls {
+				width: 230px;
+			}
+
+			.title {
+				width: 415px;
+				color: $primary-grey;
+				font-size: 14px;	
+				font-weight: 600;
+			}
+		}	
+	}	
+}
+
+
 .overviewgroup-editor {
 
     text-align: left;
@@ -497,8 +564,48 @@
 	}
 }
 
+.date-calendar {
+	position: absolute !important;
+    left: 0;
+    top: -5px;
+	cursor: pointer;
+	width: 51px;
+    height: 40px;
+    display: block;
 
-.outline-editing-controls, .outline-node-preview {
+	@include icon('dropdown-am-pm-icon', $side: after, $top: 20px, $left: auto, $right: 3px);
+
+	.date {
+		cursor: pointer;
+		display: block;
+		opacity: 0.3;
+		min-width: 25px;
+		position: absolute;
+		left: 0px;
+		top: 7px;
+		text-transform: uppercase;
+		border-radius: 2px;
+		box-shadow: 0 0 0 1px $primary-grey, inset 0 0 0 1px $primary-grey;
+		text-align: center;
+
+		.month {
+			background: $primary-grey;
+			color: white;
+			border-radius: 0;
+			font: normal 700 0.7em/1.1em $font;
+			padding: 2px 6px;
+		}
+
+		.day {
+			color: $primary-grey;
+			font: normal 500 0.8em/1.3em $font;
+			border-radius: 0;
+		}
+	}
+}
+
+
+.outline-editing-controls, .outline-node-preview, .outline-node-listitem {
 	.button {
 		position: relative;
 
@@ -673,46 +780,6 @@
 
 		&.calendar {
 			position: relative;
-
-			.date-selected {
-				position: absolute !important;
-			    left: 0;
-			    top: -5px;
-				cursor: pointer;
-				width: 51px;
-			    height: 40px;
-			    display: block;
-
-				@include icon('dropdown-am-pm-icon', $side: after, $top: 20px, $left: auto, $right: 3px);
-
-				.date {
-					cursor: pointer;
-					display: block;
-					opacity: 0.3;
-					min-width: 25px;
-					position: absolute;
-					left: 0px;
-					top: 7px;
-					text-transform: uppercase;
-					border-radius: 2px;
-					box-shadow: 0 0 0 1px $primary-grey, inset 0 0 0 1px $primary-grey;
-					text-align: center;
-
-					div:first-child {
-						background: $primary-grey;
-						color: white;
-						border-radius: 0;
-						font: normal 700 0.7em/1.1em $font;
-						padding: 2px 6px;
-					}
-
-					div:last-child {
-						color: $primary-grey;
-						font: normal 500 0.8em/1.3em $font;
-						border-radius: 0;
-					}
-				}
-			}
 
 			.main {
 				position: relative;
