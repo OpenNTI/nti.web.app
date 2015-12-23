@@ -3,7 +3,7 @@ Ext.define('NextThought.model.VideoRoll', {
 	mimeType: 'application/vnd.nextthought.videoroll',
 
 	fields: [
-		{name: 'Items', type: 'auto'}
+		{name: 'Items', type: 'arrayItem'}
 	],
 
 	getItems: function(){

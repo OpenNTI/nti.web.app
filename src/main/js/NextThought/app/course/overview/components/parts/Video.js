@@ -59,9 +59,9 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 		var curtainClicked = this.curtainClicked.bind(this);
 
 		this.playlist = [NextThought.model.PlaylistItem.create({
-			'mediaId': this.video.title || this.video.get('title'),
+			'mediaId': this.video.title || this.video.get('title') || this.video.get('label'),
 			'sources': this.video.sources || this.video.get('sources'),
-			'NTIID': this.video.ntiid || this.video.get('NTIID'),
+			'NTIID': this.video.ntiid || this.video.getId(),
 			'slidedeck': this.video.slidedeck || (this.video.get && this.video.get('slidedeck')) || ''
 		})];
 
@@ -77,12 +77,18 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 		var me = this;
 
 		if (me.record) {
-			return me.course.getSlidedeckForVideo(me.record.ntiid || me.record.get('NTIID'))
-				.then(function(slidedeck) {
-					me.record.slidedeck = slidedeck;
+			return me.course.getVideoForId(me.record.ntiid || me.record.getId())
+				.then(function(video){
+					if(video.slidedeck){
+						me.record.slidedeck = video.slidedeck;
+					}
+					if(!(me.record.sources || me.record.get('sources'))){
+						me.record.sources = video.sources;
+					}
 					return Promise.resolve(me.record);
 				})
-				.fail(function() {
+				.fail(function(error) {
+					console.error("Unable to Resolve Video: " + error);
 					return Promise.resolve(me.record);
 				});
 		}

@@ -76,7 +76,7 @@ Ext.define('NextThought.app.course.overview.components.parts.VideoRoll', {
 		videoListItems.forEach(function(item, index){
 			if(item.hasCls('selected')){
 				item.removeCls('selected');
-			}else if((video.ntiid || video.get('NTIID')) === (item.video.ntiid || item.video.get('NTIID'))){
+			}else if(video.getId() === item.video.getId()){
 				item.addCls('selected');
 			}
 		});
