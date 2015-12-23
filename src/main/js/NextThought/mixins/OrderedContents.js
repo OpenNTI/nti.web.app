@@ -20,6 +20,13 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
+	getItemsCount: function() {
+		var items = this.getItems();
+
+		return items.length;
+	},
+
+
 	fillInItems: function() {
 		var me = this,
 			items = me.getItems();
@@ -51,12 +58,12 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	hasAppendLink: function() {
-		return !!this.getAppendLink();
+	hasContentsLink: function() {
+		return !!this.getContentsLink();
 	},
 
 
-	getAppendLink: function() {
+	getContentsLink: function() {
 		return this.getLink('ordered-contents');
 	},
 
@@ -73,7 +80,7 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	 * @return {Promise}
 	 */
 	appendContent: function(content) {
-		var link = this.getAppendLink();
+		var link = this.getContentsLink();
 
 		if (!link) {
 			return Promise.reject('No link');
@@ -93,7 +100,7 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	 * @return {Promise}
 	 */
 	appendForm: function(form) {
-		var link = this.getAppendLink();
+		var link = this.getContentsLink();
 
 		if (!link) {
 			return Promise.reject('No Link');
@@ -198,5 +205,37 @@ Ext.define('NextThought.mixins.OrderedContents', {
 		}
 
 		return move;
+	},
+
+
+
+	removeRecord: function(record) {
+		var items = this.getItems(),
+			i;
+
+		for (i = 0; i < items.length; i++) {
+			if (items[i].getId() === record.getId()) {
+				return this.removeAtIndex(i);
+			}
+		}
+
+		return Promise.reject('Unable to find record to remove');
+	},
+
+
+	removeAtIndex: function(index) {
+		var link = this.getContentsLink();
+
+		if (!link) {
+			return Promise.reject('No Link');
+		}
+
+		if (index < 0 || index >= this.getItemsCount()) {
+			return Promise.reject('Inavlid index');
+		}
+
+		link = Globals.trimRoute(link) + '/index/' + index;
+
+		return Service.requestDelete(link);
 	}
 });

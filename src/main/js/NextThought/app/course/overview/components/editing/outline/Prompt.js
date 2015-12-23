@@ -156,7 +156,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 			disableBack: this.disableHeaderBack.bind(this),
 			showError: this.showError.bind(this),
 			showWarning: this.showWarning.bind(this),
-			showMessage: this.showMessage.bind(this)
+			showMessage: this.showMessage.bind(this),
+			doClose: this.doClose.bind(this)
 		};
 	},
 
@@ -234,6 +235,11 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 
 	showMessage: function(msg) {
 		return this.Prompt.Header.showMessage(msg);
+	},
+
+
+	doClose: function() {
+		return this.Prompt.doClose();
 	},
 
 

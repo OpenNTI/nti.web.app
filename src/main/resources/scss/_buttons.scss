@@ -181,5 +181,22 @@ $button-text-weights: 500,500,600,500;
 			content: '+';
 		}
 	}
+
+	&.delete {
+		display: inline-block;
+		cursor: pointer;
+		background-color: $primary-red;
+		color: white;
+		border-radius: 3px;
+		text-align: center;
+		line-height: 40px;
+		padding: 0 1em 0 32px;
+
+		@include icon('redactions-trashcan_hover', $top: 50%, $left: 1em, $side: before);
+
+		&::before {
+			margin-top: -7px;
+		}
+	}
 }
 

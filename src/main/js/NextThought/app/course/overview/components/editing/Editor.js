@@ -4,7 +4,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 	requires: [
 		'NextThought.common.form.Form',
-		'NextThought.app.course.overview.components.editing.Actions'
+		'NextThought.app.course.overview.components.editing.Actions',
+		'NextThought.app.course.overview.components.editing.controls.Delete'
 	],
 
 	saveText: 'Save',
@@ -91,6 +92,10 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		}
 
 		this.formCmp = this.addFormCmp();
+
+		if (this.record) {
+			this.deleteBtn = this.addDeleteButton();
+		}
 	},
 
 
@@ -126,6 +131,39 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 			method: this.getFormMethod(),
 			onChange: this.onFormChange.bind(this)
 		});
+	},
+
+
+	addDeleteButton: function() {
+		if (this.record.getLink('edit')) {
+			return this.add({
+				xtype: 'overview-editing-controls-delete',
+				record: this.record,
+				parentRecord: this.parentRecord,
+				onDelete: this.onDelete.bind(this),
+				afterDelete: this.afterDelete.bind(this)
+			});
+		}
+	},
+
+
+	onDelete: function() {
+		if (this.el) {
+			this.el.mask('Deleting...');
+		}
+	},
+
+
+	afterDelete: function(success) {
+		if (this.el) {
+			this.el.unmask();
+		}
+
+		if (success) {
+			this.doClose();
+		} else {
+			this.showError('Unable to delete record.');
+		}
 	},
 
 

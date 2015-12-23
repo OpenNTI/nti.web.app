@@ -141,7 +141,8 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 			disableSave: this.disableSave.bind(this),
 			showError: this.showError.bind(this),
 			showWarning: this.showWarning.bind(this),
-			showMessage: this.showMessage.bind(this)
+			showMessage: this.showMessage.bind(this),
+			doClsoe: this.doClose.bind(this)
 		}));
 
 		this.setUpTypeEditor(type);

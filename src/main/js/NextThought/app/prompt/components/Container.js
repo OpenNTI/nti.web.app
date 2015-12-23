@@ -56,6 +56,7 @@ Ext.define('NextThought.app.prompt.components.Container', {
 			Prompt: {
 				data: this.data,
 				type: this.promptType,
+				doClose: this.doCancel.bind(this),
 				Header: {
 					enableBack: this.header.enableBack.bind(this.header),
 					disableBack: this.header.disableBack.bind(this.header),
