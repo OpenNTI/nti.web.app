@@ -177,10 +177,13 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 
 	getFirstContentNode: function() {
 		var items = this.get('Items'), index = 0,
-			contentNode;
+			contentNode, item;
 
 		while (!contentNode) {
-			contentNode = items[index].getFirstContentNode();
+			item = items[index];
+			if (item && item.getFirstContentNode) {
+				contentNode = item.getFirstContentNode();
+			}
 		}
 
 		return contentNode;
