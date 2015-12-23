@@ -52,6 +52,10 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 			shouldNavigate = e.getKey() === e.ENTER,
 			me = this;
 
+		if (!this.isValid()) {
+			return Promise.reject();
+		}
+
 		if (!this.EditorActions) {
 			this.EditorActions = new NextThought.app.course.overview.components.editing.Actions();
 		}

@@ -81,11 +81,26 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.contentno
 			shouldNavigate = e.getKey() === e.ENTER,
 			me = this;
 
+		if (!this.isValid()) {
+			return Promise.reject();
+		}
+
 		if (!this.parentRecord) {
 			return Promise.reject();
 		}
 
 		return this.doSave(record, shouldNavigate);
+	},
+
+
+	isValid: function() {
+		if (this.editor.isValid && !this.editor.isValid()) {
+			if (this.editor.showError) {
+				this.editor.showError();
+			}
+			return false;
+		}
+		return true;
 	},
 
 

@@ -15,7 +15,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'field', cn: [
-			{tag: 'input', name: 'title', value: '{defaultValue}'}
+			{tag: 'input', name: 'title', value: '{defaultValue}', autocomplete: '{autocomplete}'}
 		]}
 	]),
 
@@ -29,7 +29,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			defaultValue: this.getSuggestedNodeTitle()
+			defaultValue: this.getSuggestedNodeTitle(),
+			autocomplete: this.autocomplete || 'off'
 		});
 	},
 
@@ -81,6 +82,9 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 				this.onCancel(e);
 			}
 		}
+		if (this.inputEl.dom.value !== null && this.inputEl.dom.value.length > 0) {
+			this.clearError();
+		}
 	},
 
 
@@ -92,5 +96,22 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 	setSuggestTitle: function(){
 		this.inputEl.dom.value = this.getSuggestedNodeTitle();
 		this.inputEl.dom.select();
+	},
+
+
+	isValid: function() {
+		return !Ext.isEmpty(this.getValue());
+	},
+
+
+	showError: function() {
+		this.inputEl.addCls('error');
+	},
+
+
+	clearError: function() {
+		if (this.inputEl.hasCls('error')) {
+			this.inputEl.removeCls('error');
+		}
 	}
 });

@@ -367,8 +367,11 @@
 			padding: 5px 10px;
     		font: normal 400 0.9em/1.5em $font;
     		color: $secondary-grey;
-
 			@include experimental-value(width, calc(100% - 20px));
+
+			&.error {
+				border: 1px solid $primary-red;
+			}
 		}
 	}
 }
