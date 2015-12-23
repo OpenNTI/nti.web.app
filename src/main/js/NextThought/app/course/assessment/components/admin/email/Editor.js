@@ -409,9 +409,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 			this.replyScopeEl.hide();
 		}
 
-		// if (!this.replyScopeEl.dom.checked) {
-		// 	this.replyScopeEl.addCls('disabled');
-		// }
+		if (!this.replyCheckBoxEl.dom.checked) {
+			this.replyScopeEl.addCls('disabled');
+		}
 	},
 
 
