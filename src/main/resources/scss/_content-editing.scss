@@ -414,6 +414,7 @@
 		border: 1px solid $tertiary-grey-alt;
 		display: table;
 		background: #ffffff;
+		border-collapse: collapse;
 
 		.outline-node-listitem {
 			display: table-row;
@@ -431,6 +432,16 @@
 				.date-calendar {
 					top: 6px;
     				margin-left: 15px;
+    				cursor: default;
+
+    				&::after {
+    					top: 19px;
+    					right: 8px;
+    				}
+
+    				.month {
+    					font: normal 700 0.6em/1.0em $font;
+    				}
 				}
 			}
 
@@ -443,6 +454,9 @@
 				color: $primary-grey;
 				font-size: 14px;	
 				font-weight: 600;
+				vertical-align: middle;
+    			padding: 5px 0;
+    			cursor: pointer;
 			}
 		}	
 	}	

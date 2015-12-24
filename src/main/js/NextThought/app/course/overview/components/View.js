@@ -33,6 +33,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 		this.body.closeEditing = this.closeEditing.bind(this);
 
 		this.navigation.selectOutlineNode = this.selectOutlineNode.bind(this);
+		this.body.navigateToOutlineNode = this.selectOutlineNode.bind(this);
 
 		this.addChildRouter(this.body);
 

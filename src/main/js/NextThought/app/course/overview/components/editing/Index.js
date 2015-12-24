@@ -67,7 +67,12 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 			cmp, loaded;
 
 		if (Outline.canHandle(record.mimeType)) {
-			cmp = this.add({xtype: 'overview-editing-outline', record: record, bundle: this.bundle});
+			cmp = this.add({
+				xtype: 'overview-editing-outline', 
+				record: record, 
+				bundle: this.bundle, 
+				navigateToOutlineNode: this.navigateToOutlineNode
+			});
 		}
 
 		if (cmp && cmp.onceLoaded) {

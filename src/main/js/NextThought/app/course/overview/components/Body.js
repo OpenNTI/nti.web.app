@@ -103,7 +103,8 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 		if (!editor && addIfNotThere) {
 			editor = this.add({
 				xtype: 'overview-editing',
-				bundle: this.currentBundle
+				bundle: this.currentBundle,
+				navigateToOutlineNode: this.navigateToOutlineNode
 			});
 
 			this.addChildRouter(editor);

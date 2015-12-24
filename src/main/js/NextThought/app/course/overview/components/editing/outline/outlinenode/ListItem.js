@@ -61,6 +61,13 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	},
 
 
+	afterRender: function(){
+		this.callParent(arguments);
+
+		this.mon(this.titleEl, 'click', this.handleClick.bind(this));
+	},
+
+
 	addParts: function(o) {
 		var me = this, 
 			controls = o[1] || [];
@@ -74,8 +81,9 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 				var start = me.record && me.record.get('AvailableBeginning'),
 				 	config;
 				
-				// Set dates	
-				me.setDayAndMonth(start);
+				// Set dates
+				me.getStartDate()
+					.then(me.setDayAndMonth.bind(me));
 
 				// Set title
 				me.titleEl.update(me.record.getTitle());
@@ -90,6 +98,21 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	},
 
 
+	getStartDate: function(){
+		var start = this.record && this.record.get('AvailableBeginning'),
+			catalog;
+
+		if (start) {
+			return Promise.resolve(start);
+		}
+
+		if (!this.bundle) { return Promise.reject(); }
+
+		catalog = this.bundle.__courseCatalogEntry;
+		return Promise.resolve(catalog.get('StartDate'));
+	},
+
+
 	setDayAndMonth: function(date){
 		var parts, m;
 		if (date) {
@@ -101,6 +124,13 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 			this.monthEl.update(m);
 			this.dayEl.update(parts[1]);
 		}	
+	},
+
+
+	handleClick: function(e){
+		if (this.navigateToOutlineNode) {
+			this.navigateToOutlineNode(this.record);
+		}
 	},
 
 

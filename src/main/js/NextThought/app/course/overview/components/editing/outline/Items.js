@@ -74,7 +74,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 				cls: 'header',
 				cn: [
 					{cls: 'date-column', html: 'Date'},
-					{cls: 'title-column', html: 'Title'},
+					{cls: 'title-column', html: 'Lesson Name'},
 					{cls: 'controls-column', html: 'Publish Status'}
 				]
 			}
@@ -84,20 +84,27 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 
 	getCmpForRecord: function(record) {
 		var cmp,
-			base = NextThought.app.course.overview.components.editing.outline;
+			base = NextThought.app.course.overview.components.editing.outline,
+			bundle = this.bundle;
 
 
 		if (record instanceof NextThought.model.courses.navigation.CourseOutlineContentNode) {
 			cmp = base.contentnode.ListItem.create({
-				record: record
+				record: record,
+				bundle: bundle,
+				navigateToOutlineNode: this.navigateToOutlineNode
 			});
 		} else if (record instanceof NextThought.model.courses.navigation.CourseOutlineCalendarNode) {
 			cmp = base.calendarnode.ListItem.create({
-				record: record
+				record: record,
+				bundle: bundle,
+				navigateToOutlineNode: this.navigateToOutlineNode
 			});
 		} else if (record instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
 			cmp = base.outlinenode.ListItem.create({
-				record: record
+				record: record,
+				bundle: bundle,
+				navigateToOutlineNode: this.navigateToOutlineNode
 			});
 		} else {
 			console.warn('Unknown type: ', record);
