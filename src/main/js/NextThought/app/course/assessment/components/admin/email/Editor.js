@@ -301,16 +301,15 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		this.noReplyPicker = this.createNoReplyMenu();
 		this.filterReplyOptions();
 
-		// Initial state.
-		selected = this.noReplyPicker.down('[checked]');
-		if (selected) {
-			this.record.set('replyScope', selected.scope);
-		}
-		
 		if (this.isIndividualEmail) {
 			this.replyCheckBoxEl.dom.checked = true;
 		}
 		else {
+			selected = this.noReplyPicker && this.noReplyPicker.down('[checked]');
+			if (selected) {
+				this.record.set('replyScope', selected.scope);
+			}
+			
 			scope = this.record && this.record.get('scope');
 			if (scope === 'ForCredit') {
 				this.replyCheckBoxEl.dom.checked = true;
@@ -387,6 +386,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 					}
 				]
 			});
+
+		this.on('destroy', menu.destroy.bind(this));
 		return menu;
 	},
 
