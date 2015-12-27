@@ -93,8 +93,6 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 			this.setPreviewFromValue(this.defaultValue);
 		}
 
-		//TODO: figure out how to show a preview, when
-		//editing
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			fileCls: this.defaultValue ? 'has-file' : 'no-file',
@@ -163,10 +161,10 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 		var value = this.getValue();
 
 		if (value) {
-			data.append(this.schema.name, value, value.name);
-		//If there is no value, but we have a value; send back an empty string
-		//to null it out
-		} else if (this.defaultValue) {
+			if (value !== this.defaultValue) {
+				data.append(this.schema.name, value, value.name);
+			}
+		} else {
 			data.append(this.schema.name, '');
 		}
 	},
@@ -210,7 +208,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 
 		if (!file) { return; }
 
-		if(!(this.accepts) || file.type.match(this.accepts)){
+		if (!(this.accepts) || file.type.match(this.accepts)) {
 
 			this.maybeWarnForSize(file);
 
