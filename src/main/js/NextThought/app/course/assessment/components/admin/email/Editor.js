@@ -85,8 +85,13 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 	
 	afterRender: function() {
 		this.callParent(arguments);
-		
-		Ext.EventManager.onWindowResize(this.syncHeight.bind(this));
+		var me = this;
+
+		Ext.EventManager.onWindowResize(this.syncHeight, this);
+		this.on('destroy', function(){
+			Ext.EventManager.removeResizeListener(me.syncHeight, me);
+		});
+
 		wait(500).then(this.syncHeight.bind(this)); //let the animation finish
 
 		this.EmailActions = NextThought.app.course.assessment.components.admin.email.Actions.create();
@@ -228,7 +233,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 			el = this.el, me = this;
 
 		this.copiedCmp = Ext.widget('tags', {renderTo: this.copiedEl, tabIndex: tabTracker.next()});
-		this.on('destroy', 'destroy', this.copiedCmp);
+		this.on('destroy', this.copiedCmp.destroy.bind(this.copiedCmp));
 		this.mon(this.copiedCmp, 'blur', function() {
 			var e = el.down('.content');
 			Ext.defer(e.focus, 10, e);
@@ -254,12 +259,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		if (scope) {
 			this.record.set('scope', scope);
 		}
-	},
-
-
-	destroy: function() {
-		Ext.EventManager.removeResizeListener(this.syncHeight, this);
-		return this.callParent(arguments);
 	},
 
 
@@ -387,7 +386,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 				]
 			});
 
-		this.on('destroy', menu.destroy.bind(this));
+		this.on('destroy', menu.destroy.bind(menu));
 		return menu;
 	},
 
@@ -496,18 +495,19 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 			this.EmailActions.sendEmail(this.record)
 				.then(function() {
-					console.log(arguments);
 					me.emailSent = true;
 					me.presentSuccessMessage();
 					me.fireEvent('after-save');
 				})
 				.fail(function(e) {
-					me.el.unmask();
+					if (me.el) {
+						me.el.unmask();
+					}
+
 					alert({
 						title: 'Error',
 						msg: 'There was an error sending your email. Please try again later.'
 					});
-					console.error(arguments);
 				});
 		}
 		
@@ -554,7 +554,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		e.stopEvent();
 		this.emailSent = true;
 		this.fireEvent('cancel');
-		this.destroy();
 	}
 
 });
