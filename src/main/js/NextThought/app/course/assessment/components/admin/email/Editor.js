@@ -155,7 +155,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 			this.receiverEl.addCls('arrow');
 
 			this.currentScope = scope;
-			// TODO: Create the menu picker
 			this.createReceiverScopePicker();
 		}
 	},
@@ -298,7 +297,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		var scope, selected;
 		
 		this.noReplyPicker = this.createNoReplyMenu();
-		this.filterReplyOptions();
 
 		if (this.isIndividualEmail) {
 			this.replyCheckBoxEl.dom.checked = true;
@@ -314,6 +312,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 				this.replyCheckBoxEl.dom.checked = true;
 			}
 		}
+
+		// Set the right options.
+		this.filterReplyOptions();
 	},
 
 
