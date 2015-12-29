@@ -17,6 +17,13 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.N
 
 		var items = [];
 
+		items.push({
+			xtype: 'box',
+			autoEl: {
+				cls: 'error-msg'
+			}
+		});
+
 		items.push(this.editor.create({isEditor: true}));
 
 		if (this.hasOtherItems) {
@@ -24,7 +31,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.N
 				xtype: 'box',
 				autoEl: {
 					cls: 'back',
-					html: 'Back'
+					html: 'Cancel'
 				},
 				listeners: {
 					click: {
@@ -54,6 +61,9 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.N
 		this.editorCmp = this.down('[isEditor]');
 	},
 
+	renderSelectors: {
+		errorEl: '.error-msg'
+	},
 
 	onBackClick: function() {
 		if (this.onBack) {
@@ -75,13 +85,13 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.N
 	onSave: function() {
 		var value = this.editorCmp.getValue(),
 			minWait = Globals.WAIT_TIMES.SHORT,
-			start = new Date();
+			start = new Date(),
+			me = this;
 
 		if (!this.parentRecord || !this.parentRecord.appendContent) { return; }
 
 		this.addMask();
 
-		//TODO: handle errors
 		this.parentRecord.appendContent(value)
 			.then(function(result) {
 				var end = new Date(),
@@ -97,7 +107,12 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.N
 				return result;
 			})
 			.then(this.addNewItem.bind(this))
-			.then(this.unMask.bind(this));
+			.then(this.unMask.bind(this))
+			.fail(function(error){
+				me.unMask();
+				me.errorEl.setHTML("Unable to create section");
+				if(error){ console.error("Unable to create section because: " + error); }
+			});
 	},
 
 

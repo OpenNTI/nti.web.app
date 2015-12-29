@@ -280,11 +280,10 @@
 
 	.parentselection-menuitem {
 		padding: 8px;
-
+		border-bottom: 1px solid rgb(234, 233, 233);
 		&.new-item {
 			cursor: pointer;
 			font-size: 0.875em;
-			text-align: center;
 			color: $primary-blue;
 
 			&:before {
@@ -293,7 +292,7 @@
 			}
 		}
 
-		&:last-child, &:first-child {
+		&:first-child {
     		border-top: .75px solid rgba(0, 0, 0, 0.08);
 		}
 	}
@@ -317,6 +316,16 @@
 		    font-size: 0.875em;
 		    padding: 0 1em;
 		    cursor: pointer;
+		}
+
+		.error-msg{
+		    font-size: 0.875rem;
+			line-height: 1.5rem;
+			color: white;
+			z-index: 1;
+			background-color: #f35252;
+			text-align: left;
+			padding: 0 0.5rem;
 		}
 	}
 }
@@ -408,7 +417,7 @@
 
 		.title-column {
 			width: 415px;
-		}		
+		}
 	}
 	.collection-body {
 		border: 1px solid $tertiary-grey-alt;
@@ -452,54 +461,62 @@
 			.title {
 				width: 415px;
 				color: $primary-grey;
-				font-size: 14px;	
+				font-size: 14px;
 				font-weight: 600;
 				vertical-align: middle;
     			padding: 5px 0;
     			cursor: pointer;
 			}
-		}	
-	}	
+		}
+	}
 }
 
 
 .overviewgroup-editor {
 
     text-align: left;
-    border-bottom: 1px solid #ededed;
+    border: 1px solid #ededed;
     padding: 0.7em;
+    background: #FAFAFA;
 
 	.title {
-	    width: 100%;
-	    font-size: 1em;
-	    margin-bottom: 0.5em;
+		width: 100%;
+		font-size: 0.875em;
+		margin-bottom: 1.25em;
+		padding: 0.35em;
+		font-family: Open Sans;
+		font-style: italic;
+		color: #B8B8B8;
 	}
 
 	ul.colors {
 		list-style: none;
 		margin: 0;
 		padding: 0;
+		margin-top: 0.5em;
+		margin-bottom: 2em;
 
 		li.color {
 			display: inline-block;
 			width: 20px;
 			height: 20px;
-			margin-right: 5px;
+			margin-right: 10px;
+			cursor: pointer;
 
 			&.selected {
 				opacity: 0.7;
+				position: relative;
 
 				&:after {
-				    content: '';
-				    display: block;
-				    width: 4px;
-				    height: 8px;
-				    border: solid #000;
-				    border-width: 0 2px 2px 0;
-				    transform: rotate(45deg);
-				    position: relative;
-				    bottom: 5px;
-				    right: 1px;
+				        content: '';
+					    display: block;
+					    position: absolute;
+					    top: -4px;
+					    left: -4px;
+					    right: -4px;
+					    bottom: -4px;
+					    box-shadow: 0 0 0 1px #979797;
+					    border-radius: 4px;
 				}
 			}
 		}
@@ -830,9 +847,9 @@
 				&.has-date {
 					.text {
 						position: relative;
-						padding-right: 50px;	
+						padding-right: 50px;
 					}
-					
+
 					.clear {
 						display: block;
 					}
