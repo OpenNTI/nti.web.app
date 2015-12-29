@@ -127,8 +127,9 @@
 								top: 10px;
  							    color: $primary-blue;
     							text-transform: capitalize;
-    							width: 170px;
+    							width: 350px;
     							position: relative;
+ 								@include ellipsis;
 
     							&.group {
     								&.arrow {
