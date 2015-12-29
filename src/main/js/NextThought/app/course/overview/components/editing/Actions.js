@@ -64,7 +64,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 
 
 	__moveRecord: function(record, originalParent, newParent, root) {
-		if (!newParent.appendFromContainer) {
+		if (!newParent && !originalParent) {
+			return Promise.resolve();
+		}
+		
+		if (!newParent || !newParent.appendFromContainer) {
 			return Promise.reject({
 				msg: 'Unable to move record.',
 				err: 'Invalid target parent'

@@ -42,7 +42,11 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 		{cls: 'outline-node', cn: [
 			'{toolbar}',
 			{cls: 'title', html: '{title}'},
-			'{footer}'
+			{cls: 'footer', cn: [
+				{tag: 'tpl', 'if': 'enableEditControls', cn: [
+					{cls: 'edit-container'}
+				]}
+			]}
 		]}
 	]),
 
@@ -52,9 +56,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 		data.footerTpl = data.footerTpl || cls.superclass.footerTpl || false;
 
 		var tpl = this.prototype.renderTpl.replace('{toolbar}', data.toolbarTpl || '');
-		tpl = tpl.replace('{footer}', data.footerTpl || '');
 
-		if (!data.renderTpl) {
+		if (!data.renderTpl || data.renderTpl.indexOf('{super}') === -1) {
 			data.renderTpl = tpl;
 		}
 		else {
