@@ -65,7 +65,7 @@ Ext.define('NextThought.app.contentviewer.components.EmbededWidget', {
 
 			query.split('&').forEach(function(param) {
 				var p = param.split('=');
-				out[p[0]] = p[1];
+				out[p[0]] = decodeURIComponent(p[1]);
 			});
 
 			return out;
@@ -82,7 +82,10 @@ Ext.define('NextThought.app.contentviewer.components.EmbededWidget', {
 		rd.height = data.height || 0;
 
 		this.frameDeferred = defer;
-		this.sourceName = data.uid || parse(data.source)[this.getIdKey()] || NO_SOURCE_ID
+		this.sourceName = data.uid || parse(data.source)[this.getIdKey()] || NO_SOURCE_ID;
+		if (data.source.indexOf(this.getIdKey()) === -1) {
+			data.source += (data.source.indexOf('?') === -1 ? '?' : '&') + this.getIdKey() + '=' + encodeURIComponent(this.sourceName);
+		}
 	},
 
 
