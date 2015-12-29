@@ -57,6 +57,12 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 
+	INTERNAL_MIMETYPES: {
+		'application/pdf': true,
+		'application/x-pdf': true
+	},
+
+
 	//A utility wrapper around JSON.parse to catch errors
 	parseJSON: function(s, safe) {
 		try {
@@ -89,25 +95,27 @@ Ext.define('NextThought.util.Globals', {
 		};
 	},
 
-
-	shouldOpenInApp: function(ntiid, url, basePath) {
+	/**
+	 * Should the given ntiid, url, and targetMimeType be opened in the app
+	 * or in another window.
+	 * @param  {String} ntiid          the ntiid of the thing
+	 * @param  {Srring} url            the url to the thing
+	 * @param  {String} basePath
+	 * @param  {String} targetMimeType the mimeType of the thing to open
+	 * @return {Boolean}               if we can show this in the app
+	 */
+	shouldOpenInApp: function(ntiid, url, basePath, targetMimeType) {
 		var isTargetAnNTIID = ParseUtils.isNTIID(url),
-			//isLocal = (new RegExp('^'+RegExp.escape(basePath),'i')).test(url),
-			pdf = (/\.pdf$/i).test((url || '').split('?')[0]),
-			anchor = document.createElement('a'),
+			canHandleTypeInternally = this.INTERNAL_MIMETYPES[targetMimeType] || (/\.pdf$/i).test((url || '').split('?')[0]),
+			parts = this.getURLParts(url),
 			internal = true;
 
 		if ($AppConfig.openExternalPDFsInNewWindow) {
-			anchor.setAttribute('href', url);
-			internal = location.protocol === anchor.protocol && location.hostname === anchor.hostname;
+			internal = (!parts.protocol || parts.protocol === location.protocol) && (!parts.hostname || parts.hostname === location.hostname);
 		}
 
-		//if the target is an NTIID, must open in the app. OR
-		//if we have an NTIID AND the target is a PDF open in the app.
-		// otherwise it cannot open in the app.
-		// HOWEVER: (if enabled)
-		// If the url's origin is not our origin, (protocol & domain) then we must open it out of the app.
-		return isTargetAnNTIID || (ntiid && pdf && internal);
+
+		return isTargetAnNTIID || (ntiid && canHandleTypeInternally && internal);
 	},
 
 

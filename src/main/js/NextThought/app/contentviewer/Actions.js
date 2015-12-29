@@ -15,13 +15,13 @@ Ext.define('NextThought.app.contentviewer.Actions', {
 		return ContentUtils.getLocation(ntiid, bundle)
 			.then(function(locations) {
 				var location = locations[0],
-					root = location.root,
+					root = location && location.root,
 					postfix, pageInfo,
 					pageURI = encodeURIComponent('Pages(' + ntiid + ')'),
 					userURI = encodeURIComponent($AppConfig.username);
 
 				if (data.asDomData) {
-					data = data.asDomData(root);
+					data = data.asDomData(root || '');
 				}
 
 				postfix = data.noTarget ? '' : '-target';

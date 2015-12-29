@@ -33,7 +33,7 @@ Ext.define('NextThought.common.components.cards.Card', {
 
 	constructor: function(config) {
 		var d = (config && config.data) || {};
-		if (!this.shouldOpenInApp(d.ntiid, d.href, d.basePath)) {
+		if (!this.shouldOpenInApp(d.ntiid, d.href, d.basePath, d.targetMimeType)) {
 			this.renderTpl = Ext.DomHelper.markup({tag: 'a', target: '_blank', href: d.href, html: this.renderTpl.html || this.renderTpl});
 			this.bypassEvent = true;
 		}
@@ -43,8 +43,8 @@ Ext.define('NextThought.common.components.cards.Card', {
 	},
 
 
-	shouldOpenInApp: function(ntiid, url, basePath) {
-		return Globals.shouldOpenInApp(ntiid, url, basePath);
+	shouldOpenInApp: function(ntiid, url, basePath, targetMimeType) {
+		return Globals.shouldOpenInApp(ntiid, url, basePath, targetMimeType);
 	},
 
 

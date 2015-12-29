@@ -15,7 +15,9 @@ Ext.define('NextThought.model.RelatedWork', {
 				label: data.title,
 				Creator: data.creator,
 				NTIID: data.ntiid,
-				href: data.href
+				href: data.href,
+				byline: data.byline,
+				targetMimeType: data.targetMimeType
 			});
 		},
 
@@ -84,11 +86,12 @@ Ext.define('NextThought.model.RelatedWork', {
 				href: this.get('href'),
 				icon: this.get('icon'),
 				label: this.get('label'),
-				description: this.get('description')
+				description: this.get('description'),
+				targetMimeType: this.get('targetMimeType')
 			};
 
 		data['attribute-data-href'] = Globals.getURLRooted(data.href, root);
-		data.noTarget = !Globals.shouldOpenInApp(data.ntiid, data.href);
+		data.noTarget = !Globals.shouldOpenInApp(data.ntiid, data.href, null, data.targetMimeType);
 		data.domSpec = DomUtils.asDomSpec.call(data);
 
 		return data;

@@ -55,6 +55,7 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 			thumbnail: icon,
 			ntiid: ntiid,
 			title: n.getAttribute('label'),
+			targetMimeType: n.getAttribute('targetMimeType'),
 			notTarget: !Globals.shouldOpenInApp(ntiid, href),
 			asDomSpec: DomUtils.asDomSpec
 		};
