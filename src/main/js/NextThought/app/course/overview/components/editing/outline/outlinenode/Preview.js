@@ -43,6 +43,11 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	]),
 
 
+	renderSelectors: {
+		titleEl: '.title'
+	},
+
+
 	onClassExtended: function(cls, data){
 		data.toolbarTpl = data.toolbarTpl || cls.superclass.toolbarTpl || false;
 
@@ -92,10 +97,18 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 			record: this.record,
 			parentRecord: this.parentRecord,
 			root: this.root,
-			renderTo: container
+			renderTo: container,
+			afterSave: this.updateTitle.bind(this)
 		});
 
 		this.on('destroy', this.editCmp.destroy.bind(this.editCmp));
+	},
+
+
+	updateTitle: function(){
+		if (this.titleEl) {
+			this.titleEl.update(this.record.getTitle());
+		}
 	},
 
 

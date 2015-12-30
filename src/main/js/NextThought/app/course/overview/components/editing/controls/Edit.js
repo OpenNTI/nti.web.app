@@ -50,6 +50,10 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Edit', {
 
 
 	onPromptSuccess: function() {
+		if (this.afterSave) {
+			this.afterSave();
+		}
+		
 		if (this.onPromptClose) {
 			this.onPromptClose(true);
 		}
