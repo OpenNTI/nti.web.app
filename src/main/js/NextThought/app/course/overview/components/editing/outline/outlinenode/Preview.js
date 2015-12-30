@@ -25,14 +25,6 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 		]}
 	]),
 
-	footerTpl: Ext.DomHelper.markup([
-		{cls: 'footer', cn: [
-			{tag: 'tpl', 'if': 'enableEditControls', cn: [
-				{cls: 'edit-container'}
-			]}
-		]}
-	]),
-
 	enableCalendarControls: false,
 	enablePublishControls: false,
 	enableEditControls: true,
@@ -53,7 +45,6 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 	onClassExtended: function(cls, data){
 		data.toolbarTpl = data.toolbarTpl || cls.superclass.toolbarTpl || false;
-		data.footerTpl = data.footerTpl || cls.superclass.footerTpl || false;
 
 		var tpl = this.prototype.renderTpl.replace('{toolbar}', data.toolbarTpl || '');
 
@@ -103,6 +94,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 			root: this.root,
 			renderTo: container
 		});
+
+		this.on('destroy', this.editCmp.destroy.bind(this.editCmp));
 	},
 
 
@@ -115,6 +108,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 			contents: this.contents,
 			renderTo: container
 		});
+
+		this.on('destroy', this.publishCmp.destroy.bind(this.publishCmp));
 	},
 
 
@@ -122,11 +117,13 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 		var container = this.el.down('.calendar-container');
 
 		if (container) {
-			this.publishCmp = Ext.widget('overview-editing-controls-calendar', {
+			this.dateCmp = Ext.widget('overview-editing-controls-calendar', {
 				record: this.record,
 				contents: this.contents,
 				renderTo: container
-			});		
+			});
+
+			this.on('destroy', this.dateCmp.destroy.bind(this.dateCmp));
 		}
 	}
 

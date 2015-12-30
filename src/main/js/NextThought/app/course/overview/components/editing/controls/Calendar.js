@@ -10,6 +10,8 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 
 	placeholder: 'When should students begin this lesson?',
 
+	enableText: true,
+
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'date-calendar', cn: [
 			{cls: 'date', cn: [
@@ -17,9 +19,11 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 				{cls: 'day'}
 			]}
 		]},
-		{cls: 'main', cn: [
-			{cls: 'text', html: '{placeholder}'},
-			{cls: 'clear', html: 'clear'}
+		{tag: 'tpl', 'if': 'enableText', cn: [
+			{cls: 'main', cn: [
+				{cls: 'text', html: '{placeholder}'},
+				{cls: 'clear', html: 'clear'}
+			]}
 		]},
 		{cls: 'menu-container'}
 	]),
@@ -31,7 +35,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 		menuContainerEl: '.menu-container',
 		mainEl: '.main',
 		textEl: '.main .text',
-		dateEl: '.date',
+		dateEl: '.date-calendar',
 		clearEl: '.clear'
 	},
 
@@ -46,12 +50,19 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 
 	afterRender: function () {
 		this.callParent(arguments);
+		var me = this;
+		
 		this.setDefaultDate();
-		this.createPicker();
 
-		this.mon(this.dateEl, 'click', this.dateClicked.bind(this));
-		this.mon(this.textEl, 'click', this.textLabelClicked.bind(this));
-		this.mon(this.clearEl, 'click', this.clearDates.bind(this));
+		if (this.dateEl) {
+			this.mon(this.dateEl, 'click', this.dateClicked.bind(this));			
+		}
+		if (this.textEl) {
+			this.mon(this.textEl, 'click', this.textLabelClicked.bind(this));			
+		}
+		if (this.clearEl) {
+			this.mon(this.clearEl, 'click', this.clearDates.bind(this));	
+		}
 
 		this.el.addCls('closed');
 		this.onWindowResizeBuffer = Ext.Function.createBuffered(this.alignCalendarMenu, 5, this);
@@ -70,7 +81,9 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			date  = startDate ? new Date(startDate) : new Date(), m;
 
 		this.setDayAndMonth(date);
-		this.updateDateText();
+		if (this.enableText) {
+			this.updateDateText();
+		}
 	},
 
 
@@ -82,7 +95,10 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			parts = date.split(' ');
 			m = parts[0].substring(0,3);
 			
-			this.monthEl.update(m);
+			if (this.monthEl) {
+				this.monthEl.update(m);				
+			}
+
 			this.dayEl.update(parts[1]);
 		}	
 	},
@@ -96,7 +112,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			onSave: this.saveClicked.bind(this)
 		});
 
-		this.on('destroy', this.picker.destroy.bind(this));
+		this.on('destroy', this.picker.destroy.bind(this.picker));
 	},
 
 
@@ -109,7 +125,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			vw = Ext.Element.getViewportWidth(),
 			maxHeight = vh - top - 20;
 
-		if (menu.el) {
+		if (menu && menu.el) {
 			menu.el.setStyle('top', top + 'px');
 			menu.el.setStyle('maxHeight', maxHeight + 'px');	
 		}
@@ -159,6 +175,10 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 
 
 	dateClicked: function(){
+		if (!this.picker) {
+			this.createPicker();
+		}
+
 		if (this.menuContainerEl.hasCls('text-clicked')) {
 			this.menuContainerEl.removeCls('text-clicked');
 		}
@@ -168,6 +188,10 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 
 
 	textLabelClicked: function(){
+		if (!this.picker) {
+			this.createPicker();
+		}
+
 		if (!this.menuContainerEl.hasCls('text-clicked')) {
 			this.menuContainerEl.addCls('text-clicked');
 		}
@@ -185,7 +209,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			Service.put(link, values)
 				.then(function(response){
 					me.record.syncWithResponse(response);
-					me.updateDateText();
+					me.setDefaultDate();
 					me.el.addCls('closed');
 				});
 		}
@@ -202,7 +226,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			Service.put(link, {AvailableBeginning: null, AvailableEnding: null})
 				.then(function(response){
 					me.record.syncWithResponse(response);
-					me.updateDateText();
+					me.setDefaultDate();
 					me.el.addCls('closed');
 				});
 		}

@@ -17,14 +17,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'date-container', cn: [
-			{cls: 'date-calendar', cn: [
-				{cls: 'date', cn: [
-					{cls: 'month'},
-					{cls: 'day'}
-				]}
-			]}
-		]},
+		{cls: 'calendar-container'},
 		{cls: 'title'},
 		{cls: 'controls'}
 	]),
@@ -33,8 +26,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	renderSelectors: {
 		titleEl: '.title',
 		controlsEl: '.controls',
-		monthEl: '.date .month',
-		dayEl: '.date .day'
+		dateContainerEl: '.date-container'
 	},
 
 
@@ -65,6 +57,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 		this.callParent(arguments);
 
 		this.mon(this.titleEl, 'click', this.handleClick.bind(this));
+		this.addCalendarPicker();
 	},
 
 
@@ -98,6 +91,22 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	},
 
 
+	addCalendarPicker: function(){
+		var container = this.el.down('.calendar-container');
+
+		if (container) {
+			this.editCmp = Ext.widget('overview-editing-controls-calendar', {
+				record: this.record,
+				contents: this.contents,
+				renderTo: container,
+				enableText: false
+			});
+
+			this.on('destroy', this.editCmp.destroy.bind(this.editCmp));
+		}
+	},
+
+
 	getStartDate: function(){
 		var start = this.record && this.record.get('AvailableBeginning'),
 			catalog;
@@ -115,14 +124,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 	setDayAndMonth: function(date){
 		var parts, m;
-		if (date) {
-			// Format i.e. December 12
-			date = Ext.Date.format(date, 'F d');
-			parts = date.split(' ');
-			m = parts[0].substring(0,3);
-			
-			this.monthEl.update(m);
-			this.dayEl.update(parts[1]);
+		if (this.dateCmp && this.dateCmp.setDayAndMonth) {
+			this.dateCmp.setDayAndMonth(date);
 		}	
 	},
 

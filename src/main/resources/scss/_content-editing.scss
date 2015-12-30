@@ -433,15 +433,15 @@
 				display: table-cell;
 			}
 
-			.date-container {
+			.calendar-container {
 				width: 75px;
 				text-align: center;
 				position: relative;
 
 				.date-calendar {
-					top: 6px;
+					top: 10px;
     				margin-left: 15px;
-    				cursor: default;
+    				position: relative !important;
 
     				&::after {
     					top: 19px;
@@ -451,6 +451,24 @@
     				.month {
     					font: normal 700 0.6em/1.0em $font;
     				}
+				}
+
+				.menu-container {
+					position: absolute;
+
+					&::before{
+						left: 21px;
+					}
+
+					&::after {
+						left: 22px;
+					}
+
+					.editing-available-date-menu {
+						position: relative;
+						top: 0 !important;
+						margin-left: 15px;
+					}
 				}
 			}
 
