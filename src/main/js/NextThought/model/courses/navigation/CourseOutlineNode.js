@@ -98,7 +98,7 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 
 
 	findNode: function(id) {
-		if (this.getId() === id) { return this; }
+		if ((this.getId() === id) || (this.get('ContentNTIID') === id)) { return this; }
 		return (this.get('Items') || []).reduce(function(a, o) {
 			return a || (o.findNode && o.findNode(id));
 		}, null);
