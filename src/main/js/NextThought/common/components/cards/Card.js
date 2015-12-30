@@ -3,6 +3,7 @@ Ext.define('NextThought.common.components.cards.Card', {
 	alias: 'widget.content-card',
 
 	mixins: {
+			'EllipsisText': 'NextThought.mixins.EllipsisText'
     //		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
     //		profileLinks: 'NextThought.mixins.ProfileLinks' // For future, maybe?
 	},
@@ -26,6 +27,7 @@ Ext.define('NextThought.common.components.cards.Card', {
 
 	renderSelectors: {
 		meta: '.meta',
+		titleEl: '.meta .title',
 		liked: '.controls .like',
 		favorites: '.controls .favorite'
 	},
@@ -76,6 +78,11 @@ Ext.define('NextThought.common.components.cards.Card', {
 		}
 		catch (er) {
 			console.error(er.message);
+		}
+
+
+		if (this.titleEl) {
+			this.truncateText(this.titleEl.dom, null, true);
 		}
 	},
 
