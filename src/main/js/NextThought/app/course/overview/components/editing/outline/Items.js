@@ -26,6 +26,11 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 		this.callParent(arguments);
 
 		this.setCollection(this.record);
+
+		// Keeps track of the selected item for each control
+		// This is handy since when we are about to show the same control on a different listitem,
+		// we have access to the previously active control for each type and hide or destroy it if necessary.
+		this.activeControls = {};
 	},
 
 
@@ -82,6 +87,17 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 	},
 
 
+	beforeShowMenuControl: function(control, menu, type) {
+		var prevControl = this.activeControls[type];
+		if (prevControl !== control) {
+			if (prevControl && prevControl.hideMenu) {
+				prevControl.hideMenu();
+			}
+			this.activeControls[type] = control;
+		}
+	},
+
+
 	getCmpForRecord: function(record) {
 		var cmp,
 			base = NextThought.app.course.overview.components.editing.outline,
@@ -92,19 +108,22 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 			cmp = base.contentnode.ListItem.create({
 				record: record,
 				bundle: bundle,
-				navigateToOutlineNode: this.navigateToOutlineNode
+				navigateToOutlineNode: this.navigateToOutlineNode,
+				beforeShowMenuControl: this.beforeShowMenuControl.bind(this)
 			});
 		} else if (record instanceof NextThought.model.courses.navigation.CourseOutlineCalendarNode) {
 			cmp = base.calendarnode.ListItem.create({
 				record: record,
 				bundle: bundle,
-				navigateToOutlineNode: this.navigateToOutlineNode
+				navigateToOutlineNode: this.navigateToOutlineNode,
+				beforeShowMenuControl: this.beforeShowMenuControl.bind(this)
 			});
 		} else if (record instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
 			cmp = base.outlinenode.ListItem.create({
 				record: record,
 				bundle: bundle,
-				navigateToOutlineNode: this.navigateToOutlineNode
+				navigateToOutlineNode: this.navigateToOutlineNode,
+				beforeShowMenuControl: this.beforeShowMenuControl.bind(this)
 			});
 		} else {
 			console.warn('Unknown type: ', record);

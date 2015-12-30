@@ -183,7 +183,21 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			this.menuContainerEl.removeCls('text-clicked');
 		}
 
+		if (this.el.hasCls('closed') && this.beforeShowMenu) {
+			this.beforeShowMenu(this, this.picker, 'calendar');
+		}
+
 		this.el.toggleCls('closed');
+	},
+
+
+	hideMenu: function(){
+		this.el.addCls('closed');
+	},
+
+
+	showMenu: function() {
+		this.el.removeCls('closed');
 	},
 
 

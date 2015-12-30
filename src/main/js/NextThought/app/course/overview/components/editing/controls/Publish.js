@@ -152,9 +152,27 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 		var el = this.el;
 
 		if (el.hasCls('closed')) {
-			this.alignPublishingMenu();
-		}
+			if (this.beforeShowMenu) {
+				this.beforeShowMenu(this, this.publishMenu, 'publish');
+			}
 
-		el.toggleCls('closed');
+			this.alignPublishingMenu();
+			this.showMenu();
+		}
+		else {
+			this.hideMenu();
+		}
+	},
+
+
+	hideMenu: function(){
+		this.el.addCls('closed');
+	},
+
+
+	showMenu: function(){
+		this.el.removeCls('closed');
 	}
+
+
 });

@@ -99,7 +99,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 				record: this.record,
 				contents: this.contents,
 				renderTo: container,
-				enableText: false
+				enableText: false,
+				beforeShowMenu: this.beforeShowMenuControl
 			});
 
 			this.on('destroy', this.editCmp.destroy.bind(this.editCmp));
@@ -148,13 +149,16 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 
 	getControls: function(record, bundle) {
+		var me = this;
+
 		return record.getContents()
 			.then(function(contents) {
 				return {
 					xtype: 'overview-editing-controls-publish',
 					contents: contents,
 					record: record,
-					bundle: bundle
+					bundle: bundle,
+					beforeShowMenu: me.beforeShowMenuControl
 				};
 			});
 	}
