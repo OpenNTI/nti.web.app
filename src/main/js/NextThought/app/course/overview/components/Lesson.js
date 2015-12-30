@@ -78,7 +78,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 		return Promise.all([
 				course.getAssignments(),
 				course.getWrapper && course.getWrapper(),
-				ContentUtils.getLocation(record.getId(), course),
+				ContentUtils.getLocation(record.get('ContentNTIID'), course),
 				overviewsrc ? null : course.getVideoIndex()
 			]);
 	},
