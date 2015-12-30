@@ -17,6 +17,7 @@ Ext.define('NextThought.model.RelatedWork', {
 				NTIID: data.ntiid,
 				href: data.href,
 				byline: data.byline,
+				'Target-NTIID': data['Target-NTIID'],
 				targetMimeType: data.targetMimeType
 			});
 		},
@@ -75,6 +76,7 @@ Ext.define('NextThought.model.RelatedWork', {
 		{name: 'visibility', type: 'string'},
 		{name: 'href', type: 'string'},
 		{name: 'Target-NTIID', type: 'string'},
+		{name: 'target-NTIID', type: 'string'},
 		{name: 'targetMimeType', type: 'string'},
 		{name: 'byline', type: 'string'}
 	],
@@ -87,6 +89,7 @@ Ext.define('NextThought.model.RelatedWork', {
 				icon: this.get('icon'),
 				label: this.get('label'),
 				description: this.get('description'),
+				targetNTIID: this.get('target-NTIID'),
 				targetMimeType: this.get('targetMimeType')
 			};
 
