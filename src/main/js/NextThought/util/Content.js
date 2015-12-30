@@ -353,6 +353,19 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
+	getBlankNavInfo: function(suppressed) {
+		return {
+			isSupressed: suppressed,
+			currentIndex: 0,
+			totalNodes: 1,
+			previous: null,
+			next: null,
+			previousTitle: '',
+			nextTitle: ''
+		};
+	},
+
+
 	__getNavInfoFromToc: function(node, toc, rootId) {
 		var root = toc && toc.firstChild,
 			onSuppressed = false,
@@ -444,15 +457,7 @@ Ext.define('NextThought.util.Content', {
 		//If the current index is not in the visible nodes, just show it as 1 page
 		//with not next or previous
 		if (currentIndex < 0) {
-			return {
-				isSupressed: onSuppressed,
-				currentIndex: 0,
-				totalNodes: 1,
-				previous: null,
-				next: null,
-				previousTitle: '',
-				nextTitle: ''
-			};
+			return this.getBlankNavInfo(onSuppressed);
 		}
 
 		return {
@@ -490,8 +495,12 @@ Ext.define('NextThought.util.Content', {
 				return nodes[0];
 			})
 			.then(function(info) {
-				if (bundleOrToc.canGetToContent) {
-					return Promise.all([
+				var result;
+
+				if (!info) {
+					 result = me.getBlankNavInfo(false);
+				} else if (bundleOrToc.canGetToContent) {
+					result = Promise.all([
 						bundleOrToc.canGetToContent(info.previous, rootId),
 						bundleOrToc.canGetToContent(info.next, rootId)
 					]).then(function(result) {
@@ -500,9 +509,11 @@ Ext.define('NextThought.util.Content', {
 
 						return info;
 					});
+				} else {
+					result = info;
 				}
 
-				return info;
+				return result;
 			});
 	},
 

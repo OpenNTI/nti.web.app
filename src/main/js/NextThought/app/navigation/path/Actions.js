@@ -203,7 +203,8 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 
 					if (item.getTitle && item.getTitle() != '') {
 						titles.push({
-							label: item.getTitle()
+							label: item.getTitle(),
+							ntiid: item.getId()
 						});
 					}
 

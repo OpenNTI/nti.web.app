@@ -71,6 +71,8 @@ Ext.define('NextThought.app.contentviewer.reader.Location', {
 
 
 	getRelated: function(givenNtiid) {
+		if (!givenNtiid) { return Promise.resolve([]); }
+
 		var me = this,
 			location = me.getLocation(),
 			ntiid = givenNtiid || (location && location.NTIID),
