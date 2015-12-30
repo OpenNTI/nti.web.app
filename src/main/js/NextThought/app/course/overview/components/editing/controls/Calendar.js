@@ -112,6 +112,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			onSave: this.saveClicked.bind(this)
 		});
 
+		this.alignCalendarMenu();
 		this.on('destroy', this.picker.destroy.bind(this.picker));
 	},
 

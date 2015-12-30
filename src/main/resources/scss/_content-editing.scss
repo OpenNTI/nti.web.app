@@ -454,19 +454,20 @@
 				}
 
 				.menu-container {
-					position: absolute;
+					position: relative;
+					margin-top: 0;
 
 					&::before{
 						left: 21px;
+						top: 9px;
 					}
 
 					&::after {
 						left: 22px;
+						top: 10px;
 					}
 
 					.editing-available-date-menu {
-						position: relative;
-						top: 0 !important;
 						margin-left: 15px;
 					}
 				}
