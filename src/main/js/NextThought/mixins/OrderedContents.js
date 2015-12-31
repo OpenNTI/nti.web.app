@@ -195,7 +195,7 @@ Ext.define('NextThought.mixins.OrderedContents', {
 		//If the old parent is me and its in the same index, there's no
 		//need to do anything
 		if (currentIndex === index && this.isSameContainer(oldParent)) {
-			move = Promise.resolve(record);
+			move = Promise.reject('Nothing to do');
 		} else if (!root || !root.isMovingRoot) {
 			move = Promise.reject('No moving root provided');
 		} else if (!oldParent) {

@@ -219,6 +219,6 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 
 	onDrop: function(record, newIndex, moveInfo) {
-		this.outline.moveToFromContainer(record, newIndex, moveInfo.get('OriginContainer'), this.outline);
+		return this.outline.moveToFromContainer(record, newIndex, moveInfo.get('OriginContainer'), this.outline);
 	}
 });

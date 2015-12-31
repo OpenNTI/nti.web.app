@@ -45,6 +45,16 @@
 
 		& .outline-group {
 			padding-top: 0;
+			transition: max-height 0.15s ease-out;
+
+			&[draggable="true"]{
+				max-height: 50px;
+			}
+			
+			&.dragging{
+				overflow: hidden;
+				max-height: 0;
+			}
 			&::before {
 				display: none;
 			}
@@ -120,7 +130,7 @@
 	  			font: normal 400 0.9em/1.5em $font;
 
 	  			.label {
-	  				// To compute max height, multiply min-height by 2 (2 lines) 
+	  				// To compute max height, multiply min-height by 2 (2 lines)
 	  				max-height: 3em;
 	  				min-height: 1.5em;
 	  			}
@@ -155,10 +165,10 @@
 			font: normal 400 0.6em/2 $font;
 			box-shadow: 0 -1px 0 0 #f2f2f2, 0 1px 0 0 #f2f2f2;
 			//z-index: 1;
-			
+
 			&.heading {
 				.label {
-					// To compute max height, multiply min-height by 2 (2 lines) 
+					// To compute max height, multiply min-height by 2 (2 lines)
 					max-height: 2.6em;
 				}
 			}

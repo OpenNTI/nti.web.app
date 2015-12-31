@@ -16,6 +16,25 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 		'NextThought.store.DataTransfer'
 	],
 
+	statics: {
+
+		setActiveDragItem: function(activeItem) {
+			this.activeDragItem = activeItem;
+		},
+
+		onNoDropHandler: function() {
+			if (this.activeDragItem) {
+				this.activeDragItem.onNoDrop();
+			}
+		},
+
+		onDropFail: function() {
+			if (this.activeDragItem) {
+				this.activeDragItem.onNoDrop();
+			}
+		}
+	},
+
 
 	/**
 	 * If we haven't yet, set up the handlers. So we
@@ -64,8 +83,8 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 				target.addEventListener('dragstart', handlers.dragStart);
 			}
 
-			if (handlers.dragStop) {
-				target.addEventListener('dragend', handlers.dragStop);
+			if (handlers.dragEnd) {
+				target.addEventListener('dragend', handlers.dragEnd);
 			}
 		} else {
 			console.error('No valid drag target');
@@ -86,8 +105,8 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 				target.removeEventListener('dragstart', handlers.dragStart);
 			}
 
-			if (handlers.dragStop) {
-				target.removeEventListener('dragend', handlers.dragStop);
+			if (handlers.dragEnd) {
+				target.removeEventListener('dragend', handlers.dragEnd);
 			}
 		} else {
 			console.error('No valid drag target');
@@ -130,7 +149,7 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 				handle[method]('mouseup', handlers.handleMouseUp);
 			}
 		} else if (handle) {
- 			console.error('Invalid drag handle.');
+			console.error('Invalid drag handle.');
 		} else if (remove) {
 			this.__removeTargetListeners();
 		} else {
@@ -175,12 +194,17 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 			info = this.getDnDEventData();
 
 		if (el) {
-			el.classList.add('dragging');
+			wait(100)
+				.then(function() {
+					el.classList.add('dragging');
+				});
 		}
+
+		NextThought.mixins.dnd.Draggable.setActiveDragItem(this);
 
 		e.dataTransfer.effectAllowd = 'all';
 		e.dataTransfer.setData(info.mimeType, info.getDataTransferValue());
-
+		this.Draggable.isDragging = true;
 		if (this.Draggable.transferData) {
 			this.Draggable.transferData.forEach(function(key, value) {
 				e.dataTransfer.setData(key, value);
@@ -193,9 +217,32 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 		}
 	},
 
-	__dragEnd: function() {
+	__dragEnd: function(e) {
+		var el = this.getDragTarget(),
+			handle = this.getDragHandle(),
+			dropEffect = e.dataTransfer && e.dataTransfer.dropEffect;
+
+		delete this.Draggable.isDragging;
+
+		if (handle) {
+			this.__handleMouseUp();
+		}
+
+		if (el && dropEffect === 'none') {
+			el.classList.remove('dragging');
+		}
+
+
+		if (this.onDragEnd) {
+			this.onDragEnd();
+		}
+	},
+
+	onNoDrop: function(){
 		var el = this.getDragTarget(),
 			handle = this.getDragHandle();
+
+		delete this.Draggable.isDragging;
 
 		if (handle) {
 			this.__handleMouseUp();
@@ -203,11 +250,6 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 
 		if (el) {
 			el.classList.remove('dragging');
-		}
-
-
-		if (this.onDragEnd) {
-			this.onDragEnd();
 		}
 	}
 });
