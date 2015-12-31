@@ -452,6 +452,7 @@
     				&::after {
     					top: 19px;
     					right: 8px;
+    					display: block;
     				}
 
     				.month {
@@ -837,11 +838,17 @@
 		&.calendar {
 			position: relative;
 
+			.date-calendar {
+				&::after {
+					display: none;
+				}
+			}
+
 			.main {
 				position: relative;
 				display: block;
 			    color: $tertiary-grey;
-			    margin-left: 60px;
+			    margin-left: 40px;
 			    margin-top: 10px;
 
 				.text {
@@ -851,6 +858,8 @@
 			    	padding: 5px 10px;
 			    	font-weight: 300;
 					cursor: pointer;
+
+					@include icon('dropdown-am-pm-icon', $side: after, $top: 14px, $left: auto, $right: -13px);
 				}
 
 				.clear {
@@ -909,22 +918,8 @@
 
 
 				.calendar-menu {
-					margin-top: 7px;
+					margin-top: 6px;
 					width: auto;
-				}
-
-				&.text-clicked {
-					&::before {
-						left: 200px;
-					}
-
-					&::after {
-						left: 201px;
-					}
-
-					.calendar-menu {
-						margin-left: 60px;
-					}
 				}
 			}
 		}

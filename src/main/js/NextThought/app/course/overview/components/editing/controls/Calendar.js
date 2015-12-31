@@ -180,10 +180,6 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			this.createPicker();
 		}
 
-		if (this.menuContainerEl.hasCls('text-clicked')) {
-			this.menuContainerEl.removeCls('text-clicked');
-		}
-
 		if (this.el.hasCls('closed') && this.beforeShowMenu) {
 			this.beforeShowMenu(this, this.picker, 'calendar');
 		}
@@ -205,10 +201,6 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 	textLabelClicked: function(){
 		if (!this.picker) {
 			this.createPicker();
-		}
-
-		if (!this.menuContainerEl.hasCls('text-clicked')) {
-			this.menuContainerEl.addCls('text-clicked');
 		}
 
 		this.el.toggleCls('closed');
