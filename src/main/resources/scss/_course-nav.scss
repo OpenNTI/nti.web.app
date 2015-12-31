@@ -555,6 +555,9 @@
 			display: inline-block;
 			background: #ce78e0;//additional/default
 			padding: 0 1em 0 4.15em;
+			overflow: hidden;
+			max-width: 100%;
+			@include ellipse;
 
 			&::after {
 				content: '';

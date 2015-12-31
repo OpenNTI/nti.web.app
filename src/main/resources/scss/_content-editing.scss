@@ -1105,6 +1105,9 @@
 
 		.overview-group-title {
 			@include flexItem(1 1 auto);
+			padding-right: 5px;
+			overflow: hidden;
+			@include ellipse;
 		}
 
 		.button.edit {
