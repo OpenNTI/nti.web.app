@@ -350,7 +350,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 
 	createNoReplyMenu: function(){
-		var me = this, menu;
+		var me = this, menu,
+			initialScope = this.record && this.record.get('scope') || 'All';
 
 		if (this.isIndividualEmail) {
 			return;
@@ -371,17 +372,19 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 				items: [{
 						text: 'All',
 						scope: 'All',
-						checked: true,
+						checked: initialScope === 'All',
 						NoReply: false
 					},
 					{
 						text: 'Open',
 						scope: 'Open',
+						checked: initialScope === 'Open',
 						NoReply: false
 					},
 					{
 						text: 'Enrolled',
 						scope: 'ForCredit',
+						checked: initialScope === 'ForCredit',
 						NoReply: false
 					}
 				]
