@@ -22,10 +22,8 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 	],
 
 
-	getOutlineContents: function() {
+	__loadContents: function(link, key) {
 		var me = this,
-			link = me.getLink('contents'),
-			key = 'LoadContents',
 			load;
 
 		load = me.getFromCache(key);
@@ -46,6 +44,27 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 		}
 
 		return load;
+	},
+
+
+	getOutlineContents: function() {
+		var link = this.getLink('contents');
+
+		return this.__loadContents(link, 'LoadContents');
+	},
+
+
+	getAdminOutlineContents: function() {
+		var link = this.getLink('contents'),
+			parts = Url.parse(link),
+			query = Ext.Object.fromQueryString(parts.search);
+
+		delete query['omit_unpublished'];
+
+		parts.search = '?' + Ext.Object.toQueryString(query);
+		link = Url.format(parts);
+
+		return this.__loadContents(link, 'AdminLoadContents');
 	},
 
 

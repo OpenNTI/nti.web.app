@@ -48,17 +48,10 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 
 	onRouteActivate: function() {
-		this.outline = this.currentBundle.getOutlineInterface();
-
-		this.isActive = true;
-
-		this.outline.onceBuilt()
-			.then(function(outline) {
-				return outline.getOutline();
-			})
-			.then(this.navigation.setOutline.bind(this.navigation, this.currentBundle));
+		this.updateOutline(this.isEditing);
 
 		this.alignNavigation();
+		this.isActive = true;
 
 		if (this.hasEditControls) {
 			this.addScrollListener();
@@ -159,22 +152,12 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	},
 
 
-	bundleChanged: function(bundle) {
-		if (this.currentBundle === bundle) { return; }
+	updateOutline: function(editing) {
+		var me = this,
+			bundle = me.currentBundle,
+			outlineInterface = editing ? bundle.getAdminOutlineInterface() : bundle.getOutlineInterface();
 
-		var me = this;
-
-		me.clear();
-		me.currentBundle = bundle;
-
-		if (!bundle || !bundle.getOutlineInterface) {
-			delete me.currentBundle;
-			return;
-		}
-
-		me.outline = bundle.getOutlineInterface();
-
-		me.outline.onceBuilt()
+		outlineInterface.onceBuilt()
 			.then(function(outlineInterface) {
 				var outline = outlineInterface.getOutline();
 
@@ -187,6 +170,23 @@ Ext.define('NextThought.app.course.overview.components.View', {
 				return outline;
 			})
 			.then(me.navigation.setOutline.bind(me.navigation, bundle));
+
+		return outlineInterface;
+	},
+
+
+	bundleChanged: function(bundle) {
+		if (this.currentBundle === bundle) { return; }
+
+		var me = this;
+
+		me.clear();
+		me.currentBundle = bundle;
+
+		if (!bundle || !bundle.getOutlineInterface) {
+			delete me.currentBundle;
+			return;
+		}
 
 		me.body.setActiveBundle(bundle);
 	},
@@ -226,9 +226,10 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 
 	__getRecord: function(id, record, editing) {
-		var me = this, rIndex;
+		var me = this, rIndex,
+			outline = this.updateOutline(editing);
 
-		return me.outline.onceBuilt()
+		return outline.onceBuilt()
 			.then(function(outline) {
 				if (id && (!record || record.getId() !== id)) {
 					record = outline.getNode(id);

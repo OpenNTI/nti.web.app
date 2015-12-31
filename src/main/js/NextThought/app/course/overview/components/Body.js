@@ -43,6 +43,8 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 
 	showEditControls: function() {
+		if (this.hasEditingControls) { return; }
+
 		this.addCls('has-editing-controls');
 		this.hasEditingControls = true;
 		this.editingControlsCmp.show();

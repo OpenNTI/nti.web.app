@@ -604,9 +604,25 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	getAdminOutlineContents: function() {
+		var outline = this.get('Outline');
+
+		return outline.getAdminOutlineContents();
+	},
+
+
 	getOutlineInterface: function() {
 		return new NextThought.store.courseware.OutlineInterface({
 			outlineContentsPromise: this.getOutlineContents(),
+			tocPromise: this.__getTocOutline(),
+			courseInstance: this
+		});
+	},
+
+
+	getAdminOutlineInterface: function() {
+		return new NextThought.store.courseware.OutlineInterface({
+			outlineContentsPromise: this.getAdminOutlineContents(),
 			tocPromise: this.__getTocOutline(),
 			courseInstance: this
 		});
