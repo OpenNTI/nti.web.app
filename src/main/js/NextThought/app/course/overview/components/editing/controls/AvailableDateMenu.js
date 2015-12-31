@@ -10,8 +10,8 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'toggle', cn: [
-			{cls: 'part selected', 'data-action': 'AvailableBeginning', html: 'Begin Date'},
-			{cls: 'part', 'data-action': 'AvailableEnding', html: 'Finish Date'}
+			{cls: 'part selected beginning', 'data-action': 'AvailableBeginning', html: 'Begin Date'},
+			{cls: 'part ending', 'data-action': 'AvailableEnding', html: 'Finish Date'}
 		]},
 		{cls: 'date-picker-container'},
 		{cls: 'save disabled', html: 'Save Changes'}
@@ -21,7 +21,9 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 	renderSelectors: {
 		pickerEl: '.date-picker-container',
 		saveEl: '.save',
-		toggleEl: '.toggle'
+		toggleEl: '.toggle',
+		beginEl: '.beginning',
+		endEl: '.ending',
 	},
 
 	initComponent: function() {
@@ -65,7 +67,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 
 
 	createDatePicker: function(dateContainer){
-		var defaultValue = new Date();
+		var defaultValue = new Date(),
 			datepicker = Ext.widget({
 				xtype: 'date-picker-field',
 		        defaultValue: defaultValue,
@@ -123,7 +125,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 		return {
 			AvailableBeginning: this.values && this.values.AvailableBeginning,
 			AvailableEnding: this.values && this.values.AvailableEnding
-		}
+		};
 	},
 
 
@@ -134,6 +136,14 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 
 		if (this.onSave) {
 			this.onSave();
+		}
+	},
+
+	toggleTab: function(){
+		if(this.beginEl.hasCls('selected')){
+			this.select(this.endEl);
+		}else {
+			this.select(this.beginEl);
 		}
 	}
 

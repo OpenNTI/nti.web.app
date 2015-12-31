@@ -184,6 +184,10 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			this.beforeShowMenu(this, this.picker, 'calendar');
 		}
 
+		if (this.picker.endEl && this.picker.endEl.hasCls('selected')) {
+			this.picker.toggleTab();
+		}
+		this.picker.setInitialState();
 		this.el.toggleCls('closed');
 	},
 
@@ -203,6 +207,10 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			this.createPicker();
 		}
 
+		if (this.picker.endEl && this.picker.endEl.hasCls('selected')) {
+			this.picker.toggleTab();
+		}
+		this.picker.setInitialState();
 		this.el.toggleCls('closed');
 	},
 
