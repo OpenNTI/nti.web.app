@@ -18,6 +18,8 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 	TimePicker: true,
 
+	minDate: null,
+
 	renderSelectors: {
 		dateContainerEl: '.date-container',
 		dateEl: '.date',
@@ -65,7 +67,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	createDatePicker: function() {
 		var picker = Ext.widget({
 			xtype: 'datepicker',
-	        minDate: new Date(),
+	        minDate: this.minDate,
 	        handler: this.onDateChange.bind(this),
 	        handleMouseWheel: function(){}	// Override ExtJS mousewheel callbacks. 
 		});

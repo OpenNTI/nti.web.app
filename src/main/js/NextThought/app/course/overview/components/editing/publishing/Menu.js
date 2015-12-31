@@ -195,7 +195,8 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 			xtype: 'date-picker-field',
 	        defaultValue: defaultValue,
 	        renderTo: parentEl,
-	        dateChanged: this.dateChanged.bind(this)
+	        dateChanged: this.dateChanged.bind(this),
+	        minDate: new Date()
 		});
 
 		this.on('destroy', this.datepicker.destroy.bind(this.datepicker));
