@@ -23,7 +23,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 		saveEl: '.save',
 		toggleEl: '.toggle',
 		beginEl: '.beginning',
-		endEl: '.ending',
+		endEl: '.ending'
 	},
 
 	initComponent: function() {
