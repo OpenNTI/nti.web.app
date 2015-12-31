@@ -31,38 +31,123 @@ Ext.define('NextThought.common.form.Form', {
 
 	cls: 'form-container',
 
+
 	INPUT_TYPES: {
 		group: new Ext.XTemplate(Ext.DomHelper.markup({
 			cls: 'group {name}'
 		})),
 
-		text: new Ext.XTemplate(Ext.DomHelper.markup({
-			cls: 'field {name}', cn: [
-				{tag: 'tpl', 'if': 'displayName', cn: [
-					{tag: 'label', 'for': '{name}', html: '{displayName}'}
-				]},
-				{tag: 'tpl', 'if': 'required', cn: [
-					{tag: 'input', type: '{type}', name: '{name}', placeholder: '{placeholder}', required: true, value: '{value}'}
-				]},
-				{tag: 'tpl', 'if': '!required', cn: [
-					{tag: 'input', type: '{type}', name: '{name}', placeholder: '{placeholder}', value: '{value}'}
-				]}
-			]
-		})),
 
-		textarea: new Ext.XTemplate(Ext.DomHelper.markup({
-			cls: 'field {name}', cn: [
-				{tag: 'tpl', 'if': 'displayName', cn: [
-					{tag: 'label', 'for': '{name}', html: '{displayName}'}
-				]},
-				{tag: 'tpl', 'if': 'required', cn: [
-					{tag: 'textarea', type: '{type}', name: '{name}', placeholder: '{placeholder}', required: true, html: '{value}'}
-				]},
-				{tag: 'tpl', 'if': '!required', cn: [
-					{tag: 'textarea', type: '{type}', name: '{name}', placeholder: '{placeholder}', html: '{value}'}
-				]}
-			]
-		})),
+		text: {
+			append: function(el, data, returnEl) {
+				var tpl,
+					config = {
+						cls: 'field {name}', cn: []
+					},
+					input = {
+						tag: 'input',
+						type: '{type}',
+						name: '{name}',
+						placeholder: '{placeholder}',
+						value: '{value}'
+					};
+
+				if (data.displayName) {
+					config.cn.push({
+						tag: 'label',
+						'for': '{name}',
+						html: '{displayName}'
+					});
+				}
+
+				if (data.required) {
+					input.required = true;
+				}
+
+				if (data.maxlength) {
+					input.maxlength = data.maxlength;
+				}
+
+				config.cn.push(input);
+
+				config.cn.push({
+					cls: 'msg'
+				});
+
+				tpl = new Ext.XTemplate(Ext.DomHelper.markup(config));
+
+				return tpl.append(el, data, returnEl);
+			}
+		},
+		// text: new Ext.XTemplate(Ext.DomHelper.markup({
+		// 	cls: 'field {name}', cn: [
+		// 		{tag: 'tpl', 'if': 'displayName', cn: [
+		// 			{tag: 'label', 'for': '{name}', html: '{displayName}'}
+		// 		]},
+		// 		{tag: 'tpl', 'if': 'required', cn: [
+		// 			{tag: 'input', type: '{type}', name: '{name}', placeholder: '{placeholder}', required: true, value: '{value}'}
+		// 		]},
+		// 		{tag: 'tpl', 'if': '!required', cn: [
+		// 			{tag: 'input', type: '{type}', name: '{name}', placeholder: '{placeholder}', value: '{value}'}
+		// 		]}
+		// 	]
+		// })),
+		//
+		textarea: {
+			append: function(el, data, returnEl) {
+				var tpl,
+					config = {
+						cls: 'field {name}', cn: []
+					},
+					input = {
+						tag: 'textarea',
+						type: '{type}',
+						name: '{name}',
+						placeholder: '{placeholder}',
+						value: '{value}'
+					};
+
+				if (data.displayName) {
+					config.cn.push({
+						tag: 'label',
+						'for': '{name}',
+						html: '{displayName}'
+					});
+				}
+
+				if (data.required) {
+					input.required = true;
+				}
+
+				if (data.maxlength) {
+					input.maxlength = data.maxlength;
+				}
+
+				config.cn.push(input);
+
+				config.cn.push({
+					cls: 'msg'
+				});
+
+				tpl = new Ext.XTemplate(Ext.DomHelper.markup(config));
+
+				return tpl.append(el, data, returnEl);
+			}
+		},
+
+		// textarea: new Ext.XTemplate(Ext.DomHelper.markup({
+		// 	cls: 'field {name}', cn: [
+		// 		{tag: 'tpl', 'if': 'displayName', cn: [
+		// 			{tag: 'label', 'for': '{name}', html: '{displayName}'}
+		// 		]},
+		// 		{tag: 'tpl', 'if': 'required', cn: [
+		// 			{tag: 'textarea', type: '{type}', name: '{name}', placeholder: '{placeholder}', required: true, html: '{value}'}
+		// 		]},
+		// 		{tag: 'tpl', 'if': '!required', cn: [
+		// 			{tag: 'textarea', type: '{type}', name: '{name}', placeholder: '{placeholder}', html: '{value}'}
+		// 		]}
+		// 	]
+		// })),
 
 		url: new Ext.XTemplate(Ext.DomHelper.markup({
 			cls: 'field {name} url', cn: [
@@ -138,8 +223,6 @@ Ext.define('NextThought.common.form.Form', {
 
 		this.buildInputs(this.schema, this.formEl);
 
-		this.setUpChangeListeners();
-
 		this.onFormChange();
 	},
 
@@ -191,7 +274,20 @@ Ext.define('NextThought.common.form.Form', {
 			this.buildUrlInput(schema, inputEl);
 		} else if (type === 'saveprogress') {
 			this.buildSaveProgress(schema, inputEl);
+		} else {
+			this.addFieldListeners(schema, inputEl);
 		}
+	},
+
+
+	addFieldListeners: function(schema, inputEl) {
+		var dom = inputEl.dom;
+
+		if (schema.maxlength) {
+			dom.addEventListener('keyup', this.checkMaxLength.bind(this, schema, dom));
+		}
+
+		dom.addEventListener('keyup', this.onFormChange.bind(this));
 	},
 
 
@@ -238,18 +334,6 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
-	setUpChangeListeners: function() {
-		var me = this,
-			inputs = this.el.dom.querySelectorAll('.field input[type=text], .field textarea');
-
-		inputs = Array.prototype.slice.call(inputs);
-
-		inputs.forEach(function(input) {
-			input.addEventListener('keyup', me.onFormChange.bind(me));
-		});
-	},
-
-
 	__getComponent: function(name) {
 		return this.componentMap[name];
 	},
@@ -282,6 +366,16 @@ Ext.define('NextThought.common.form.Form', {
 		if (this.onChange) {
 			this.onChange(vals);
 		}
+	},
+
+
+	checkMaxLength: function(schema, field) {
+		var input = field.querySelector('input, textarea'),
+			value = input && input.value,
+			length = value && value.length,
+			maxLength = schema.maxlength,
+			warnThreshold = schema.warnThreshold || 20,
+			errorThreshold = schema.errorThreshold || 5;
 	},
 
 	/**
@@ -326,19 +420,16 @@ Ext.define('NextThought.common.form.Form', {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
 			textarea = this.__getTextarea(name),
+			field = inputEl || textarea,
 			error, hasErrors = false, keys;
 
 		if (cmp) {
 			if (cmp.getErrors) {
 				error = cmp.getErrors();
 			}
-		} else if (inputEl) {
+		} else if (field) {
 			error = {
-				missing: inputEl.validity && inputEl.validity.valueMissing
-			};
-		} else if (textarea) {
-			error = {
-				missing: textarea.valdity && textarea.validity.valueMissing
+				missing: field.validity && field.validity.valueMissing
 			};
 		}
 
