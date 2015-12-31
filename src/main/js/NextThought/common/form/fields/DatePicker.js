@@ -69,7 +69,9 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 			xtype: 'datepicker',
 	        minDate: this.minDate,
 	        handler: this.onDateChange.bind(this),
-	        handleMouseWheel: function(){}	// Override ExtJS mousewheel callbacks. 
+	        monthYearText: '',
+	        showMonthPicker: function() {}, //Override this to not show anything
+	        handleMouseWheel: function() {}	// Override ExtJS mousewheel callbacks.
 		});
 
 		this.on('destroy', picker.destroy.bind(picker));
@@ -216,7 +218,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	},
 
 
-	validateDate: function(){
+	validateDate: function() {
 		var p = this.datepicker,
 			hour = this.hourEl && this.hourEl.dom.value,
 			minutes = this.minuteEl && this.minuteEl.dom.value,
@@ -225,7 +227,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 		if (!this.TimePicker) {
 			return;
-		}		
+		}
 
 		hour = parseInt(hour);
 		minutes = parseInt(minutes);
