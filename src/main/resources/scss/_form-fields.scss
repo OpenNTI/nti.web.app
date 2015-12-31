@@ -516,6 +516,8 @@ form.common-form {
 		left: 0; right: 0;
 		z-index: 1;
 		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
 	}
 
 	input[type=file] {
