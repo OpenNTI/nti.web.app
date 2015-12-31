@@ -2,7 +2,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-controls-publish',
 
-	cls: 'button publish',
+	cls: 'button publish pub',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'label', html: 'Publish'},
@@ -169,11 +169,23 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 		this.el.addCls('closed');
 		this.setPublishState();
 		this.publishMenu.reset();
+		Ext.destroy(this.bodyListeners);
 	},
 
 
 	showMenu: function(){
 		this.el.removeCls('closed');
+		this.bodyListeners = this.mon(Ext.getBody(), {
+			destroyable: true,
+			click: this.onBodyClick.bind(this)
+		});
+	},
+
+	onBodyClick: function(e) {
+		if (e.getTarget('.pub')) { return; }
+		if(!this.el.hasCls('closed')){
+			this.hideMenu();
+		}
 	}
 
 
