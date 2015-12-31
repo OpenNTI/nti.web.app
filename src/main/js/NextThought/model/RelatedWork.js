@@ -168,7 +168,7 @@ Ext.define('NextThought.model.RelatedWork', {
 		if (icon && Globals.ROOT_URL_PATTERN.test(icon)) {
 			icon = getURL(icon);
 		} else if (icon) {
-			icon = getURL(root || '', icon);
+			icon = getURL(icon, root || '');
 		} else if (this.self.getIconForMimeType) {
 			icon = this.self.getIconForMimeType(targetMimeType);
 		}
