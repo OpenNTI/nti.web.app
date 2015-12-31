@@ -91,6 +91,11 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	},
 
 
+	reset: function(){
+		this.setInitialState();
+	},
+
+
 	handleSelectionClick: function(e) {
 		var el = Ext.get(e.target),
 			me = this;

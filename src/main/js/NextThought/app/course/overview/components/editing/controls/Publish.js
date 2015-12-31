@@ -167,6 +167,8 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 
 	hideMenu: function(){
 		this.el.addCls('closed');
+		this.setPublishState();
+		this.publishMenu.reset();
 	},
 
 
