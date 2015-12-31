@@ -184,21 +184,35 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			this.beforeShowMenu(this, this.picker, 'calendar');
 		}
 
-		if (this.picker.endEl && this.picker.endEl.hasCls('selected')) {
-			this.picker.toggleTab();
+		if (this.el.hasCls('closed')){
+			this.showMenu();
+		} else {
+			this.hideMenu();
 		}
-		this.picker.setInitialState();
-		this.el.toggleCls('closed');
 	},
 
 
 	hideMenu: function(){
 		this.el.addCls('closed');
+		Ext.destroy(this.bodyListeners);
 	},
 
 
 	showMenu: function() {
 		this.el.removeCls('closed');
+		this.bodyListeners = this.mon(Ext.getBody(), {
+			destroyable: true,
+			click: this.onBodyClick.bind(this)
+		});
+		this.resetMenu();
+	},
+
+
+	resetMenu: function(){
+		if (this.picker.endEl && this.picker.endEl.hasCls('selected')) {
+			this.picker.toggleTab();
+		}
+		this.picker.setInitialState();
 	},
 
 
@@ -207,11 +221,11 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			this.createPicker();
 		}
 
-		if (this.picker.endEl && this.picker.endEl.hasCls('selected')) {
-			this.picker.toggleTab();
+		if (this.el.hasCls('closed')){
+			this.showMenu();
+		} else {
+			this.hideMenu();
 		}
-		this.picker.setInitialState();
-		this.el.toggleCls('closed');
 	},
 
 
@@ -244,6 +258,13 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 					me.setDefaultDate();
 					me.el.addCls('closed');
 				});
+		}
+	},
+
+	onBodyClick: function(e) {
+		if (e.getTarget('.calendar')) { return; }
+		if(!this.el.hasCls('closed')){
+			this.hideMenu();
 		}
 	}
 
