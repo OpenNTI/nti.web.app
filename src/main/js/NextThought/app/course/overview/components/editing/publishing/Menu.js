@@ -192,8 +192,11 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		if (!defaultValue) {
 			defaultValue = new Date();
 
-			// Set it to tomorrow.
+			// Set it to tomorrow at mid night.
 			defaultValue.setDate(defaultValue.getDate() + 1);
+			defaultValue.setHours(23);
+			defaultValue.setMinutes(59);
+			defaultValue.setSeconds(0);
 		}
 
 		this.datepicker = Ext.widget({
