@@ -127,12 +127,12 @@
 			}
 
 			&:not(.heading) {
-	  			font: normal 400 0.9em/1.5em $font;
+	  			font: normal 400 0.9rem/1.5rem $font;
 
 	  			.label {
 	  				// To compute max height, multiply min-height by 2 (2 lines)
-	  				max-height: 3em;
-	  				min-height: 1.5em;
+	  				max-height: 3rem;
+	  				min-height: 1.5rem;
 	  			}
 			}
 		}

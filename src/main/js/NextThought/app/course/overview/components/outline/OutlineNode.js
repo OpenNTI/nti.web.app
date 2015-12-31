@@ -50,20 +50,17 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 
 
 	truncateLabels: function() {
-		var me = this;
+		var me = this,
+			label = me.currentHeader && me.currentHeader.el && me.currentHeader.el.dom.querySelector('.label');
 
 		if (!me.el) {
 			me.onceRendered.then(me.truncateLabels.bind(me));
 			return;
 		}
 
-		wait(100).then(function() {
-			var label = me.currentHeader && me.currentHeader.el && me.currentHeader.el.dom.querySelector('.label');
-
-			if (label) {
-				me.truncateText(label, null, true);
-			}
-		});
+		if (label) {
+			me.truncateText(label, null, true);
+		}
 	},
 
 

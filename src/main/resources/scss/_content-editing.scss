@@ -162,7 +162,7 @@
 }
 
 .outline-node-preview {
-    padding: 1.0em 1.7em;
+    padding: 1.0em 2rem;
     position: relative;
     box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
 
@@ -576,7 +576,7 @@
 								}
 
 								&.lesson:not(.heading) {
-									font: normal 600 14px/27px $font;
+									font-weight: 600;
 								}
 
 								&.selected {
