@@ -19,7 +19,9 @@ Ext.define('NextThought.mixins.MovingRoot', {
 	 * @return {Promise}
 	 */
 	doAppendRecordFrom: function(record, originalParent, newParent) {
-		return this.doMoveRecordFrom(record, Infinity, originalParent, newParent);
+		var index = newParent.getItemsCount ? newParent.getItemsCount() : Infinity;
+
+		return this.doMoveRecordFrom(record, index, -1, newParent, originalParent);
 	},
 
 
