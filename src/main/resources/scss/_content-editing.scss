@@ -8,6 +8,13 @@
 		.overview-editing-parentselection {
 			margin-bottom: 20px;
 		}
+		&.outline-editor{
+			input[name="title"] {
+			    width: 100%;
+			    font-size: 1em;
+			    padding: .5em;
+			}
+		}
 	}
 }
 

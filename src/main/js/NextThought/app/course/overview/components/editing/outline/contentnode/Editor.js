@@ -25,15 +25,5 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.contentno
 				}
 			];
 		}
-	},
-
-
-	getDefaultValues: function() {
-		return {
-			MimeType: NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType,
-			title: (this.record && this.record.getTitle()) || '',
-			AvailableBeginning: this.record && this.record.get('AvailableBeginning'),
-			AvailableEnding: this.record && this.record.get('AvailableEnding')
-		};
 	}
 });

@@ -6,6 +6,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 		'NextThought.model.courses.navigation.CourseOutlineNode'
 	],
 
+	cls: 'content-editor outline-editor',
+
 
 	statics: {
 		getHandledMimeTypes: function() {
@@ -31,7 +33,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 	FORM_SCHEMA: [
 		{type: 'hidden', name: 'MimeType'},
-		{type: 'text', name: 'title', displayName: 'Title'}
+		{type: 'text', name: 'title', placeholder: 'Title'}
 	],
 
 
