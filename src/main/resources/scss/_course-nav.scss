@@ -109,6 +109,15 @@
 			}
 			font: normal 700 0.6em/1.2em $font;
 			text-transform: uppercase;
+
+			&.start, &.course {
+				display: inline-block;
+				padding: 0.2em;
+			}
+
+			&.end {
+				display: inline-block;
+			}
 		}
 		.title {
 			color: $primary-grey;
