@@ -169,9 +169,9 @@
 }
 
 .outline-node-preview {
-    padding: 1.0em 2rem;
-    position: relative;
-    box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
+	padding: 1.0em 2rem;
+	position: relative;
+	box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
 
 
 	.title {
@@ -188,8 +188,8 @@
 	.toolbar {
 		position: relative;
 		display: block;
-    	height: 60px;
-    	clear: both;
+		height: 60px;
+		clear: both;
 
 		.left {
 			float: left;
@@ -300,13 +300,13 @@
 			color: $primary-blue;
 
 			&:before {
-			    content: "+";
-			    padding-right: .5em;
+				content: "+";
+				padding-right: .5em;
 			}
 		}
 
 		&:first-child {
-    		border-top: .75px solid rgba(0, 0, 0, 0.08);
+			border-top: .75px solid rgba(0, 0, 0, 0.08);
 		}
 	}
 
@@ -314,25 +314,25 @@
 		text-align: right;
 
 		.sub-label {
-		    font-size: 0.625em;
-		    text-transform: uppercase;
+			font-size: 0.625em;
+			text-transform: uppercase;
 			color: #757474;
 		}
 
 		.save {
-		    background-color: #3fb3f6;
-		    color: white;
+			background-color: #3fb3f6;
+			color: white;
 		}
 		.back, .save {
-		    display: inline-block;
-		    line-height: 35px;
-		    font-size: 0.875em;
-		    padding: 0 1em;
-		    cursor: pointer;
+			display: inline-block;
+			line-height: 35px;
+			font-size: 0.875em;
+			padding: 0 1em;
+			cursor: pointer;
 		}
 
 		.error-msg{
-		    font-size: 0.875rem;
+			font-size: 0.875rem;
 			line-height: 1.5rem;
 			color: white;
 			z-index: 1;
@@ -393,8 +393,8 @@
 		input {
 			margin: 5px 10px;
 			padding: 5px 10px;
-    		font: normal 400 0.9em/1.5em $font;
-    		color: $secondary-grey;
+			font: normal 400 0.9em/1.5em $font;
+			color: $secondary-grey;
 			@include experimental-value(width, calc(100% - 20px));
 
 			&.error {
@@ -453,18 +453,18 @@
 
 				.date-calendar {
 					top: 10px;
-    				margin-left: 15px;
-    				position: relative !important;
+					margin-left: 15px;
+					position: relative !important;
 
-    				&::after {
-    					top: 19px;
-    					right: 8px;
-    					display: block;
-    				}
+					&::after {
+						top: 19px;
+						right: 8px;
+						display: block;
+					}
 
-    				.month {
-    					font: normal 700 0.6em/1.0em $font;
-    				}
+					.month {
+						font: normal 700 0.6em/1.0em $font;
+					}
 				}
 
 				.menu-container {
@@ -497,8 +497,8 @@
 				font-size: 14px;
 				font-weight: 600;
 				vertical-align: middle;
-    			padding: 5px 0;
-    			cursor: pointer;
+				padding: 5px 0;
+				cursor: pointer;
 			}
 		}
 	}
@@ -507,10 +507,10 @@
 
 .overviewgroup-editor {
 
-    text-align: left;
-    border: 1px solid #ededed;
-    padding: 0.7em;
-    background: #FAFAFA;
+	text-align: left;
+	border: 1px solid #ededed;
+	padding: 0.7em;
+	background: #FAFAFA;
 
 	.title {
 		width: 100%;
@@ -547,15 +547,15 @@
 				position: relative;
 
 				&:after {
-				        content: '';
-					    display: block;
-					    position: absolute;
-					    top: -4px;
-					    left: -4px;
-					    right: -4px;
-					    bottom: -4px;
-					    box-shadow: 0 0 0 1px #979797;
-					    border-radius: 4px;
+						content: '';
+						display: block;
+						position: absolute;
+						top: -4px;
+						left: -4px;
+						right: -4px;
+						bottom: -4px;
+						box-shadow: 0 0 0 1px #979797;
+						border-radius: 4px;
 				}
 			}
 		}
@@ -615,15 +615,15 @@
 
 		> .new-node {
 			position: absolute;
-    		bottom: 0;
-    		right: 0;
-    		left: 0;
-    		background-color: #ffffff;
+			bottom: 0;
+			right: 0;
+			left: 0;
+			background-color: #ffffff;
 
-    		.title {
-    			background-color: $primary-blue;
-    			color: #ffffff;
-    		}
+			.title {
+				background-color: $primary-blue;
+				color: #ffffff;
+			}
 		}
 
 		&.editor-open {
@@ -636,12 +636,12 @@
 
 .date-calendar {
 	position: absolute !important;
-    left: 0;
-    top: -5px;
+	left: 0;
+	top: -5px;
 	cursor: pointer;
 	width: 51px;
-    height: 40px;
-    display: block;
+	height: 40px;
+	display: block;
 
 	@include icon('dropdown-am-pm-icon', $side: after, $top: 20px, $left: auto, $right: 3px);
 
@@ -690,19 +690,19 @@
 
 			.label {
 				width: 200px;
-			    padding: 9px 10px 9px 26px;
-			    margin: 10px;
-			    border-radius: 5px;
-			    background: #f8f8f8;
-			    box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
-			    color: $primary-blue;
-			    font-size: 14px;
-			    position: relative;
-			    font-weight: 600;
-			    cursor: pointer;
+				padding: 9px 10px 9px 26px;
+				margin: 10px;
+				border-radius: 5px;
+				background: #f8f8f8;
+				box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
+				color: $primary-blue;
+				font-size: 14px;
+				position: relative;
+				font-weight: 600;
+				cursor: pointer;
 
-			    @include icon('dropdown-blue', $side: after, $top: 10px, $left: auto, $right: 10px);
-			    @include icon('publish-icon-blue', $side: before, $top: 12px, $left: 11px, $right: auto);
+				@include icon('dropdown-blue', $side: after, $top: 10px, $left: auto, $right: 10px);
+				@include icon('publish-icon-blue', $side: before, $top: 12px, $left: 11px, $right: auto);
 			}
 		}
 
@@ -711,7 +711,7 @@
 				color: #ffffff;
 				background: $primary-blue;
 				@include icon('dropdown-white', $side: after, $top: 10px, $left: auto, $right: 10px);
-			    @include icon('publish-icon-white', $side: before, $top: 12px, $left: 11px, $right: auto);
+				@include icon('publish-icon-white', $side: before, $top: 12px, $left: 11px, $right: auto);
 			}
 		}
 
@@ -719,14 +719,14 @@
 			margin: 5px 0;
 			display: block;
 			line-height: 40px;
-		    text-align: center;
-		    padding: 0 1.5em;
-		    border-radius: 3px;
-		    color: white;
-		    background-color: $primary-blue;
-		    cursor: pointer;
+			text-align: center;
+			padding: 0 1.5em;
+			border-radius: 3px;
+			color: white;
+			background-color: $primary-blue;
+			cursor: pointer;
 
-		    &.disabled {
+			&.disabled {
 				background-color: $tertiary-grey-alt;
 				box-shadow: inset 1px 0 0 0 $border-grey;
 			}
@@ -738,39 +738,12 @@
 			background: white;
 			z-index: 1;
 
-			&::before {
-				content: ' ';
-				position: absolute;
-				right: 18px;
-    			top: -3px;
-				width: 0;
-				height: 0;
-				border-style: solid;
-				border-width: 0 9px 10px 9px;
-				border-color: transparent transparent rgba(0,0,0,0.3) transparent;
-
-			}
-
-			&::after {
-				content: ' ';
-				position: absolute;
-				right: 19px;
-    			top: -2px;
-				width: 0;
-				height: 0;
-				border-style: solid;
-				border-width: 0 8.5px 9px 8.5px;
-				border-color: transparent transparent #ffffff transparent;
-			}
-
 			.editing-publishing-menu, .editing-available-date-menu {
 				padding: 10px;
 				background-color: #ffffff;
-    			width: 355px;
-    			box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
-    			position: fixed;
-    			overflow-x: hidden;
-    			overflow-y: auto;
+				width: 355px;
+				box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
+				position: fixed;
 
 				.option {
 					border-bottom: 1px solid $quad-grey;
@@ -808,36 +781,67 @@
 						border-bottom: none;
 					}
 				}
+
+				.arrow {
+					position: absolute;
+					right: 18px;
+					top: -10px;
+					width: 0;
+					height: 0;
+					border-style: solid;
+					border-width: 0 9px 10px 9px;
+					border-color: transparent transparent rgba(0, 0, 0, 0.3) transparent;
+
+					&::after {
+						content: '';
+						position: absolute;
+						left: -8px;
+						top: 1px;
+						width: 0;
+						height: 0;
+						border-style: solid;
+						border-width: 0 8px 9px 8px;
+						border-color: transparent transparent #fff transparent;
+					}
+				}
+
+				&.above {
+					.arrow {
+						top: auto;
+						bottom: -10px;
+						transform: rotate(180deg);
+					}
+				}
 			}
 
 			.editing-available-date-menu {
 				margin-top: 7px;
 
 				.toggle {
-   					@include experimental-value(display, flex);
-    				flex-direction: row;
-    				border-radius: 3px;
-    				overflow: hidden;
+					@include experimental-value(display, flex);
+					flex-direction: row;
+					border-radius: 3px;
+					overflow: hidden;
 
-    				.part {
-    					@include experimental(flex, 1 1 auto);
-    					background: #ffffff; /* Old browsers */
+					.part {
+						@include experimental(flex, 1 1 auto);
+						background: #ffffff; /* Old browsers */
 						background: -moz-linear-gradient(top,  #ffffff 0%, #f2f2f2 100%); /* FF3.6-15 */
 						background: -webkit-linear-gradient(top,  #ffffff 0%,#f2f2f2 100%); /* Chrome10-25,Safari5.1-6 */
 						background: linear-gradient(to bottom,  #ffffff 0%,#f2f2f2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 						filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f2f2f2',GradientType=0 ); /* IE6-9 */
 
 						border: 1px solid rgba(150,150,150,0.3);
-    					text-align: center;
-    					line-height: 36px;
-    					color: $secondary-grey;
+						text-align: center;
+						line-height: 36px;
+						color: $secondary-grey;
 
-    					&.selected {
-    						color: #ffffff;
-    						background: #A0A0A0;
-    						box-shadow: inset 0 2px 5px 0 rgba(0,0,0,0.4);
-    					}
-    				}
+						&.selected {
+							color: #ffffff;
+							background: #A0A0A0;
+							box-shadow: inset 0 2px 5px 0 rgba(0,0,0,0.4);
+						}
+					}
 				}
 
 				.date-picker-container {
@@ -860,16 +864,16 @@
 			.main {
 				position: relative;
 				display: block;
-			    color: $tertiary-grey;
-			    margin-left: 40px;
-			    margin-top: 10px;
+				color: $tertiary-grey;
+				margin-left: 40px;
+				margin-top: 10px;
 
 				.text {
 					display: inline-block;
-			    	border: 1px solid #d1d1d1;
-			    	font-style: italic;
-			    	padding: 5px 10px;
-			    	font-weight: 300;
+					border: 1px solid #d1d1d1;
+					font-style: italic;
+					padding: 5px 10px;
+					font-weight: 300;
 					cursor: pointer;
 
 					@include icon('dropdown-am-pm-icon', $side: after, $top: 14px, $left: auto, $right: -13px);
@@ -903,10 +907,10 @@
 				}
 
 				.save {
-				    display: none;
-				    line-height: 32px;
-				    padding: 0 12px;
-				    margin: 0 0 0 12px;
+					display: none;
+					line-height: 32px;
+					padding: 0 12px;
+					margin: 0 0 0 12px;
 
 					&.active {
 						display: inline-block;
@@ -1008,13 +1012,13 @@
 			.x-datepicker-cell {
 				.x-datepicker-date {
 					color: $secondary-grey;
-				    padding: 3px;
-				    background: none;
-				    font-size: 13px;
-				    font-weight: 300;
-				    text-align: center;
-				    margin: 4px 3px;
-				    width: 26px;
+					padding: 3px;
+					background: none;
+					font-size: 13px;
+					font-weight: 300;
+					text-align: center;
+					margin: 4px 3px;
+					width: 26px;
 				}
 
 				&:first-of-type {
@@ -1072,8 +1076,8 @@
 
 		.hour, .minute {
 			width: 38px;
-    		padding: 5px 0;
-    		text-align: center;
+			padding: 5px 0;
+			text-align: center;
 		}
 
 		.divider {
@@ -1085,13 +1089,13 @@
 		}
 
 		.meridiem {
-		    margin-left: 15px;
-		    padding: 5px 15px 5px 5px;
-		    border: 1px solid $tertiary-grey-alt;
-		    position: relative;
-		    color: $secondary-grey;
+			margin-left: 15px;
+			padding: 5px 15px 5px 5px;
+			border: 1px solid $tertiary-grey-alt;
+			position: relative;
+			color: $secondary-grey;
 
-    		@include icon('dropdown-am-pm-icon', $side: after, $top: 11px, $left: auto, $right: 5px);
+			@include icon('dropdown-am-pm-icon', $side: after, $top: 11px, $left: auto, $right: 5px);
 		}
 	}
 }

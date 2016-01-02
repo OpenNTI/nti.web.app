@@ -28,27 +28,18 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 
 
 	initPublishMenu: function() {
-		var me = this, html = this.scrollingEl || Ext.query('.x-viewport')[0];
+		if (!this.publishMenu) {
+			this.publishMenu = NextThought.app.course.overview.components.editing.publishing.Menu.create({
+				record: this.record,
+				contents: this.contents,
+				renderTo: this.menuContainerEl,
+				setPublished: this.setPublishState.bind(this),
+				setWillPublishOn: this.setPublishState.bind(this),
+				setNotPublished: this.setPublishState.bind(this)
+			});
 
-		this.publishMenu = NextThought.app.course.overview.components.editing.publishing.Menu.create({
-			record: this.record,
-			contents: this.contents,
-			renderTo: this.menuContainerEl,
-			setPublished: this.setPublishState.bind(this),
-			setWillPublishOn: this.setPublishState.bind(this),
-			setNotPublished: this.setPublishState.bind(this)
-		});
-
-		
-		this.onWindowResizeBuffer = Ext.Function.createBuffered(this.alignPublishingMenu, 10, this);
-   		Ext.EventManager.onWindowResize(this.onWindowResizeBuffer, this);
-   		window.addEventListener('scroll', this.onWindowResizeBuffer.bind(this));
-
-		this.on('destroy', this.publishMenu.destroy.bind(this.publishMenu));
-   		this.on('destroy', function(){
-   			Ext.EventManager.removeResizeListener(me.onWindowResizeBuffer, me);
-   			window.removeEventListener(me.onWindowResizeBuffer, me);
-   		});
+			this.on('destroy', this.publishMenu.destroy.bind(this.publishMenu));
+		}
 	},
 
 
@@ -56,9 +47,8 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 	 * Set the initial publication state of the lesson control.
 	 * Since publishing affects both the outline node and the lesson overview,
 	 * we will take into account both to make sure they follow the intended business logic.
-	 * 
 	 */
-	setPublishState: function(){
+	setPublishState: function() {
 		var node = this.record,
 			isNodePublished = node && node.isPublished && node.isPublished(),
 			lesson = this.contents,
@@ -102,15 +92,12 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 			el = this.el, parts, m;
 
 		if (value) {
-			// Format i.e. December 12
-			date = Ext.Date.format(date, 'F d');
-			parts = date.split(' ');
-			m = parts[0].substring(0,3);
-
 			// Format i.e. Dec 12
-			date = m + ' ' + parts[1];
+			date = Ext.Date.format(date, 'M j');
+
 			el.removeCls('publish');
 			el.addCls('published');
+
 			if (label) {
 				label.update('Publish on ' + date);
 			}
@@ -130,21 +117,10 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 	},
 
 
-	alignPublishingMenu: function(){
-		var box = this.el && this.el.dom.getBoundingClientRect() || {},
-			me = this,
-			menu = this.publishMenu,
-			top = box.bottom + 15,
-			vh = Ext.Element.getViewportHeight(),
-			vw = Ext.Element.getViewportWidth(),
-			right = vw - box.right + 10,
-			maxHeight = vh - top - 10;
+	alignPublishingMenu: function() {
+		if (!this.rendered) { return; }
 
-		if (menu.el) {
-			menu.el.setStyle('top', top + 'px');
-			menu.el.setStyle('right', right + 'px');
-			menu.el.setStyle('maxHeight', maxHeight + 'px');	
-		}
+		this.publishMenu.alignTo(this.el.dom);
 	},
 
 
@@ -156,8 +132,8 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 				this.beforeShowMenu(this, this.publishMenu, 'publish');
 			}
 
-			this.alignPublishingMenu();
 			this.showMenu();
+			this.alignPublishingMenu();
 		}
 		else {
 			this.hideMenu();
@@ -165,25 +141,31 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 	},
 
 
-	hideMenu: function(){
+	hideMenu: function() {
 		this.el.addCls('closed');
 		this.setPublishState();
 		this.publishMenu.reset();
 		Ext.destroy(this.bodyListeners);
+		this.publishMenu.close();
 	},
 
 
-	showMenu: function(){
+	showMenu: function() {
+		this.initPublishMenu();
+
 		this.el.removeCls('closed');
+
 		this.bodyListeners = this.mon(Ext.getBody(), {
 			destroyable: true,
 			click: this.onBodyClick.bind(this)
 		});
+
+		this.publishMenu.open();
 	},
 
 	onBodyClick: function(e) {
 		if (e.getTarget('.pub')) { return; }
-		if(!this.el.hasCls('closed')){
+		if (!this.el.hasCls('closed')) {
 			this.hideMenu();
 		}
 	}

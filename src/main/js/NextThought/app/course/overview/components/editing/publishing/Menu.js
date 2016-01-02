@@ -7,9 +7,12 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		'NextThought.app.course.overview.components.editing.Actions'
 	],
 
+	MAX_HEIGHT: 550,
+
 	cls: 'editing-publishing-menu',
 
 	renderTpl: Ext.DomHelper.markup([
+		{cls: 'arrow'},
 		{cls: 'option publish', 'data-action': 'publish', cn: [
 			{cls: 'text', html: 'Publish'},
 			{cls: 'subtext', html: 'Lesson contents are visible to students.'}
@@ -39,11 +42,18 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 
 	initComponent: function() {
 		this.callParent(arguments);
+
 		this.EditingActions = new NextThought.app.course.overview.components.editing.Actions();
+
+		this.realign = this.realign.bind(this);
+
+		this.onWindowResizeBuffer = Ext.Function.createBuffered(this.realign, 10, this);
+
+   		this.on('destroy', this.close.bind(this));
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.publishEl, 'click', this.handleSelectionClick.bind(this));
@@ -55,7 +65,131 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	},
 
 
-	setInitialState: function(){
+	open: function() {
+		Ext.EventManager.onWindowResize(this.onWindowResizeBuffer, this);
+		window.addEventListener('scroll', this.realign);
+		this.realign(true);
+	},
+
+
+	close: function() {
+		Ext.EventManager.removeResizeListener(this.onWindowResizeBuffer, this);
+		window.removeEventListener('scroll', this.realign);
+	},
+
+
+	alignTo: function(domNode) {
+		this.alignedTo = domNode;
+
+		this.realign();
+	},
+
+	realign: function(unlockSide) {
+		if (!this.alignedTo || !this.rendered) { return; }
+
+		var menu = this.el,
+			menuHeight = this.el.dom.clientHeight,
+			maxMenuHeight = this.MAX_HEIGHT,
+			body = Ext.getBody(),
+			bodyRect = body && body.el && body.el.dom && body.el.dom.getBoundingClientRect(),
+			bodyHeight = body.getHeight(),
+			button = this.alignedTo,
+			buttonRect = button && button.getBoundingClientRect(),
+			buttonRelativeTop = buttonRect.top - bodyRect.top,
+			buttonRelativeBottom = buttonRelativeTop + buttonRect.height,
+			viewHeight = Ext.Element.getViewportHeight(),
+			viewWidth = Ext.Element.getViewportWidth(),
+			positions = {
+				below: {
+					cls: 'below',
+					top: buttonRect.bottom + 12,
+					maxHeight: bodyHeight - buttonRelativeBottom - 12,
+					right: viewWidth - buttonRect.right - 10
+				},
+				above: {
+					cls: 'above',
+					top: buttonRect.top - menuHeight - 12,
+					maxHeight: buttonRelativeTop - 12,
+					right: viewWidth - buttonRect.right - 10
+				}
+			};
+
+		function applyPositioning(position) {
+			if (menu) {
+				menu.removeCls(['below', 'above']);
+				menu.addCls(position.cls);
+				menu.setStyle({
+					top: position.top + 'px',
+					right: position.right + 'px',
+					maxHeight: position.maxHeight + 'px'
+				});
+			}
+		}
+
+		if (menuHeight === 0) { return; }
+
+		if (this.lockedToSide && unlockSide !== true) {
+			applyPositioning(positions[this.lockedToSide]);
+		} else if (positions.below.maxHeight >= maxMenuHeight || positions.below.maxHeight >= positions.above.maxHeight) {
+			this.lockedToSide = 'below';
+			applyPositioning(positions.below);
+		} else {
+			this.lockedToSide = 'above';
+			applyPositioning(positions.above);
+		}
+	},
+
+
+	xrealign: function(unlockSide) {
+		if (!this.alignedTo || !this.rendered) { return; }
+
+		var menu = this.el,
+			menuHeight = this.el.dom.scrollHeight,
+			buttonRect = this.alignedTo.getBoundingClientRect(),
+			viewHeight = Ext.Element.getViewportHeight(),
+			viewWidth = Ext.Element.getViewportWidth(),
+			positions = {
+				below: {
+					cls: 'below',
+					top: buttonRect.bottom + 10,
+					maxHeight: viewHeight,
+					right: viewWidth - buttonRect.right - 10
+				},
+				above: {
+					cls: 'above',
+					top: buttonRect.top > 80 ? Math.max(buttonRect.top - menuHeight - 10, 80) : 0,
+					maxHeight: viewHeight,
+					right: viewWidth - buttonRect.right - 10
+				}
+			};
+
+		function applyPositioning(position) {
+			if (menu) {
+				menu.removeCls(['below', 'above']);
+				menu.addCls(position.cls);
+				menu.setStyle({
+					top: position.top + 'px',
+					right: position.right + 'px',
+					maxHeight: position.maxHeight + 'px'
+				});
+			}
+		}
+
+		if (menuHeight === 0) { return; }
+
+		if (this.lockedToSide && unlockSide !== true) {
+			applyPositioning(positions[this.lockedToSide]);
+		} else if (positions.below.maxHeight >= menuHeight || positions.below.maxHeight >= positions.above.maxHeight) {
+			this.lockedToSide = 'below';
+			applyPositioning(positions.below);
+		} else {
+			this.lockedToSide = 'above';
+			applyPositioning(positions.above);
+		}
+	},
+
+
+	setInitialState: function() {
 		var node = this.record,
 			isNodePublished = node && node.isPublished && node.isPublished(),
 			lesson = this.contents,
@@ -91,7 +225,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	},
 
 
-	reset: function(){
+	reset: function() {
 		this.setInitialState();
 	},
 
@@ -105,18 +239,20 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	},
 
 
-	onPublishOnDateClick: function(e){
+	onPublishOnDateClick: function(e) {
 		var el = Ext.get(e.target);
 
 		e.stopEvent();
-		this.select(el);
+
 		if (!this.datepicker) {
 			this.createDatePicker(this.publishOnDateEl.down('.date-picker-container'));
 		}
+
+		this.select(el);
 	},
 
 
-	onSave: function(){
+	onSave: function() {
 		var selectedEl = this.el.down('.option.selected');
 			action = selectedEl && selectedEl.getAttribute('data-action');
 
@@ -132,7 +268,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	},
 
 
-	publishSave: function(){
+	publishSave: function() {
 		var me = this;
 
 		Promise.all([
@@ -148,10 +284,10 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	},
 
 
-	publishOnDateSave: function(){
-		var dateValue = this.datepicker && this.datepicker.getValue()
+	publishOnDateSave: function() {
+		var dateValue = this.datepicker && this.datepicker.getValue(),
 			me = this;
-		
+
 		if (!dateValue) { return; }
 
 		Promise.all([
@@ -184,7 +320,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	},
 
 
-	createDatePicker: function(dateContainer){
+	createDatePicker: function(dateContainer) {
 		var parentEl = dateContainer || Ext.getBody(),
 			begin = this.contents && this.contents.get('publishBeginning'),
 			defaultValue = begin && new Date(begin);
@@ -211,21 +347,21 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	},
 
 
-	dateChanged: function(){
-		var time  = this.datepicker.getValue(),
+	dateChanged: function() {
+		var time = this.datepicker.getValue(),
 			date = new Date(time * 1000);
 
 		this.setPublishOnDateText(date);
 	},
 
 
-	setPublishOnDateText: function(date){
+	setPublishOnDateText: function(date) {
 		var	targetEl = this.publishOnDateEl.down('.description'),
 			time = this.getDisplayDateValue(date);
 
 		if (targetEl) {
 			targetEl.update('Lesson contents will be visible to students on ' + time);
-		}	
+		}
 	},
 
 
@@ -240,14 +376,14 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 			hour = hour > 12 ? hour - 12 : hour;
 
 			date = Ext.Date.format(date, 'F d');
-			return date + ' at ' + hour + ':' + minutes + ' ' + meridiemVal;	
+			return date + ' at ' + hour + ':' + minutes + ' ' + meridiemVal;
 		}
 
 		return null;
 	},
 
 
-	select: function(el){
+	select: function(el) {
 		var t = el && el.hasCls('option') ? el : el && el.up('.option'),
 			selectedEl = this.el.down('.selected');
 
@@ -259,6 +395,8 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		if (!t || !selectedEl) { return; }
 
 		selectedEl.removeCls('selected');
-		t.addCls('selected'); 	
+		t.addCls('selected');
+
+		this.realign();
 	}
 });
