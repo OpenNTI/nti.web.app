@@ -152,10 +152,10 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	},
 
 
-	updateOutline: function(editing) {
+	updateOutline: function(editing, doNotCache) {
 		var me = this,
 			bundle = me.currentBundle,
-			outlineInterface = editing ? bundle.getAdminOutlineInterface() : bundle.getOutlineInterface();
+			outlineInterface = editing ? bundle.getAdminOutlineInterface(doNotCache) : bundle.getOutlineInterface(doNotCache);
 
 		outlineInterface.onceBuilt()
 			.then(function(outlineInterface) {
@@ -225,9 +225,9 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	},
 
 
-	__getRecord: function(id, record, editing) {
+	__getRecord: function(id, record, editing, doNotCache) {
 		var me = this, rIndex,
-			outline = this.updateOutline(editing);
+			outline = this.updateOutline(editing, doNotCache);
 
 		return outline.onceBuilt()
 			.then(function(outline) {
@@ -254,6 +254,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	showOutlineNode: function(route, subRoute) {
 		var me = this,
 			id = route.params && route.params.node && ParseUtils.decodeFromURI(route.params.node),
+			changedEditing = me.isEditing,
 			record = route.precache.outlineNode;
 
 		me.alignNavigation();
@@ -262,7 +263,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 		delete me.isEditing;
 
-		return me.__getRecord(id, record)
+		return me.__getRecord(id, record, false, changedEditing)
 			.then(function(record) {
 				if (!record) {
 					console.error('No valid lesson to show');
@@ -286,6 +287,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	showEditOutlineNode: function(route, subRoute) {
 		var me = this,
 			id = route.params && route.params.node && ParseUtils.decodeFromURI(route.params.node),
+			changedEditing = !me.isEditing,
 			record = route.precache.outlineNode;
 
 		me.alignNavigation();
@@ -294,7 +296,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 		me.isEditing = true;
 
-		return me.__getRecord(id, record, true)
+		return me.__getRecord(id, record, true, changedEditing)
 			.then(function(record) {
 				if (!record) {
 					console.error('No valid outline node to edit');

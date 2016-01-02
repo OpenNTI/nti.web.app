@@ -597,32 +597,32 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-	getOutlineContents: function() {
+	getOutlineContents: function(doNotCache) {
 		var outline = this.get('Outline');
 
-		return outline.getOutlineContents();
+		return outline.getOutlineContents(doNotCache);
 	},
 
 
-	getAdminOutlineContents: function() {
+	getAdminOutlineContents: function(doNotCache) {
 		var outline = this.get('Outline');
 
-		return outline.getAdminOutlineContents();
+		return outline.getAdminOutlineContents(doNotCache);
 	},
 
 
-	getOutlineInterface: function() {
+	getOutlineInterface: function(doNotCache) {
 		return new NextThought.store.courseware.OutlineInterface({
-			outlineContentsPromise: this.getOutlineContents(),
+			outlineContentsPromise: this.getOutlineContents(doNotCache),
 			tocPromise: this.__getTocOutline(),
 			courseInstance: this
 		});
 	},
 
 
-	getAdminOutlineInterface: function() {
+	getAdminOutlineInterface: function(doNotCache) {
 		return new NextThought.store.courseware.OutlineInterface({
-			outlineContentsPromise: this.getAdminOutlineContents(),
+			outlineContentsPromise: this.getAdminOutlineContents(doNotCache),
 			tocPromise: this.__getTocOutline(),
 			courseInstance: this
 		});
@@ -887,7 +887,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	/**
 	/*	Check if a video belongs to a slidedeck
 	*/
-	getSlidedeckForVideo: function(vid){
+	getSlidedeckForVideo: function(vid) {
 		return this.getVideoIndex()
 				.then(function(index) {
 					var i = index[vid];

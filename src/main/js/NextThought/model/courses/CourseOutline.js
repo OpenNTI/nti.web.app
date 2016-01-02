@@ -22,13 +22,13 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 	],
 
 
-	__loadContents: function(link, key) {
+	__loadContents: function(link, key, doNotCache) {
 		var me = this,
 			load;
 
 		load = me.getFromCache(key);
 
-		if (!load) {
+		if (!load || doNotCache) {
 			load = Service.request(link)
 				.then(function(text) { return Ext.decode(text); })
 				.then(function(json) { return ParseUtils.parseItems(json); })
@@ -47,14 +47,14 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 	},
 
 
-	getOutlineContents: function() {
+	getOutlineContents: function(doNotCache) {
 		var link = this.getLink('contents');
 
-		return this.__loadContents(link, 'LoadContents');
+		return this.__loadContents(link, 'LoadContents', doNotCache);
 	},
 
 
-	getAdminOutlineContents: function() {
+	getAdminOutlineContents: function(doNotCache) {
 		var link = this.getLink('contents'),
 			parts = Url.parse(link),
 			query = Ext.Object.fromQueryString(parts.search);
@@ -64,7 +64,7 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 		parts.search = '?' + Ext.Object.toQueryString(query);
 		link = Url.format(parts);
 
-		return this.__loadContents(link, 'AdminLoadContents');
+		return this.__loadContents(link, 'AdminLoadContents', doNotCache);
 	},
 
 
