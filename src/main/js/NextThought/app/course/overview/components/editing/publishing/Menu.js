@@ -140,55 +140,6 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	},
 
 
-	xrealign: function(unlockSide) {
-		if (!this.alignedTo || !this.rendered) { return; }
-
-		var menu = this.el,
-			menuHeight = this.el.dom.scrollHeight,
-			buttonRect = this.alignedTo.getBoundingClientRect(),
-			viewHeight = Ext.Element.getViewportHeight(),
-			viewWidth = Ext.Element.getViewportWidth(),
-			positions = {
-				below: {
-					cls: 'below',
-					top: buttonRect.bottom + 10,
-					maxHeight: viewHeight,
-					right: viewWidth - buttonRect.right - 10
-				},
-				above: {
-					cls: 'above',
-					top: buttonRect.top > 80 ? Math.max(buttonRect.top - menuHeight - 10, 80) : 0,
-					maxHeight: viewHeight,
-					right: viewWidth - buttonRect.right - 10
-				}
-			};
-
-		function applyPositioning(position) {
-			if (menu) {
-				menu.removeCls(['below', 'above']);
-				menu.addCls(position.cls);
-				menu.setStyle({
-					top: position.top + 'px',
-					right: position.right + 'px',
-					maxHeight: position.maxHeight + 'px'
-				});
-			}
-		}
-
-		if (menuHeight === 0) { return; }
-
-		if (this.lockedToSide && unlockSide !== true) {
-			applyPositioning(positions[this.lockedToSide]);
-		} else if (positions.below.maxHeight >= menuHeight || positions.below.maxHeight >= positions.above.maxHeight) {
-			this.lockedToSide = 'below';
-			applyPositioning(positions.below);
-		} else {
-			this.lockedToSide = 'above';
-			applyPositioning(positions.above);
-		}
-	},
-
-
 	setInitialState: function() {
 		var node = this.record,
 			isNodePublished = node && node.isPublished && node.isPublished(),
@@ -321,6 +272,9 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 
 
 	createDatePicker: function(dateContainer) {
+		//If we've already set on up, no need to create a new one
+		if (this.datepicker) { return; }
+
 		var parentEl = dateContainer || Ext.getBody(),
 			begin = this.contents && this.contents.get('publishBeginning'),
 			defaultValue = begin && new Date(begin);
@@ -352,7 +306,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 			date = new Date(time * 1000);
 
 		this.setPublishOnDateText(date);
-		if(this.saveBtnEl.hasCls('disabled')){
+		if (this.saveBtnEl.hasCls('disabled')) {
 			this.saveBtnEl.removeCls('disabled');
 		}
 	},
