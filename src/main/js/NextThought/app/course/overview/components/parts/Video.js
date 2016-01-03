@@ -58,6 +58,10 @@ Ext.define('NextThought.app.course.overview.components.parts.Video', {
 		this.video = video;
 		var curtainClicked = this.curtainClicked.bind(this);
 
+		if(this.progress){
+			this.setProgress(this.progress);
+		}
+
 		this.playlist = [NextThought.model.PlaylistItem.create({
 			'mediaId': this.video.title || this.video.get('title') || this.video.get('label'),
 			'sources': this.video.sources || this.video.get('sources'),
