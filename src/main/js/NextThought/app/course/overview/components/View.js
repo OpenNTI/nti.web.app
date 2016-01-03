@@ -110,7 +110,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 		var node = this.activeNode && this.activeNode.getFirstContentNode(),
 			id = node && node.getId();
 
-		id = ParseUtils.encodeForURI(id);
+		id = id && ParseUtils.encodeForURI(id);
 
 		if (id) {
 			this.pushRoute('', id);
