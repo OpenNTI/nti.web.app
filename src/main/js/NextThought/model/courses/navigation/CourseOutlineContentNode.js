@@ -14,13 +14,13 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineContentNode', {
 
 
 	getFirstContentNode: function() {
-		return this;
+		return this.isPublished() ? this : null;
 	},
 
 
 	isPublished: function() {
 		var state = this.get('PublicationState') || '';
 
-		return state.toLowerCase() === 'DefaultPublished'.toLowerCase();
+		return state.toLowerCase() === ('DefaultPublished').toLowerCase();
 	}
 });

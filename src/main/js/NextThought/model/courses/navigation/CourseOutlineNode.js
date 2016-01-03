@@ -177,13 +177,16 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 
 	getFirstContentNode: function() {
 		var items = this.get('Items'), index = 0,
-			contentNode, item;
+			contentNode, item = items[0];
 
-		while (!contentNode) {
-			item = items[index];
-			if (item && item.getFirstContentNode) {
+		while (!contentNode && item) {
+			if (item.getFirstContentNode) {
 				contentNode = item.getFirstContentNode();
 			}
+
+			index += 1;
+
+			item = items[index];
 		}
 
 		return contentNode;
@@ -235,7 +238,7 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 	},
 
 
-	onItemAdded: function(record){
+	onItemAdded: function(record) {
 		this.fillInDepths(record);
 	},
 
