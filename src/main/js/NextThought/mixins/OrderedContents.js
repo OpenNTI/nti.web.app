@@ -35,6 +35,8 @@ Ext.define('NextThought.mixins.OrderedContents', {
 			items.forEach(function(item, index) {
 				item.parent = me;
 				item.listIndex = index;
+				item.previousSibling = items[index - 1];
+				item.nextSibling = items[index + 1];
 
 				if (item.hasOrderedContents) {
 					item.fillInItems();
@@ -151,6 +153,7 @@ Ext.define('NextThought.mixins.OrderedContents', {
 		}
 
 		this.fireEvent('update');
+		this.fireEvent('item-deleted');
 	},
 
 

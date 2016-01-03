@@ -238,8 +238,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 	},
 
 
-	doClose: function() {
-		return this.Prompt.doClose();
+	doClose: function(reason) {
+		return this.Prompt.doClose(reason);
 	},
 
 

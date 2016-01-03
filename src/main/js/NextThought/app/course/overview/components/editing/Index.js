@@ -63,14 +63,18 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 		this.showLoadingMask();
 		this.removeAll(true);
 
+		this.activeRecord = record;
+
 		var Outline = NextThought.app.course.overview.components.editing.outline.Index,
 			cmp, loaded;
 
 		if (Outline.canHandle(record.mimeType)) {
 			cmp = this.add({
-				xtype: 'overview-editing-outline', 
-				record: record, 
-				bundle: this.bundle, 
+				xtype: 'overview-editing-outline',
+				record: record,
+				bundle: this.bundle,
+				afterDelete: this.doDelete.bind(this),
+				parentRecord: record.parent,
 				navigateToOutlineNode: this.navigateToOutlineNode
 			});
 		}
@@ -85,5 +89,22 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 
 
 		return loaded;
+	},
+
+
+	doDelete: function() {
+		var navigateTo;
+
+		if (!this.activeRecord) { return; }
+
+		if (this.activeRecord.isTopLevel()) {
+			navigateTo = this.activeRecord.previousSibling || this.activeRecord.nextSibling;
+		} else {
+			navigateTo = this.activeRecord.parent;
+		}
+
+		if (navigateTo) {
+			this.navigateToOutlineNode(navigateTo);
+		}
 	}
 });

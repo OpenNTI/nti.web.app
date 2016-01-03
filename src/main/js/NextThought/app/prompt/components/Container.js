@@ -130,7 +130,7 @@ Ext.define('NextThought.app.prompt.components.Container', {
 	},
 
 
-	doCancel: function() {
-		this.onCancel();
+	doCancel: function(action) {
+		this.onCancel(action);
 	}
 });

@@ -6,6 +6,11 @@ Ext.define('NextThought.app.prompt.Actions', {
 	],
 
 
+	statics: {
+		DELETED: 'deleted'
+	},
+
+
 	constructor: function() {
 		this.callParent(arguments);
 

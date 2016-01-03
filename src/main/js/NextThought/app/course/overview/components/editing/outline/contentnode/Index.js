@@ -8,21 +8,13 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.contentno
 		}
 	},
 
+	PREVIEW_TYPE: 'overview-editing-outline-contentnode-preview',
+
 	hasItems: false,
 	hasContents: true,
 
 	requires: [
 		'NextThought.model.courses.navigation.CourseOutlineContentNode',
 		'NextThought.app.course.overview.components.editing.outline.contentnode.Preview'
-	],
-
-
-	getPreviewConfig: function(record, contents, bundle) {
-		return {
-			xtype: 'overview-editing-outline-contentnode-preview',
-			record: record,
-			contents: contents,
-			bundle: bundle
-		};
-	}
+	]
 });

@@ -4,6 +4,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 	requires: [
 		'NextThought.common.form.Form',
+		'NextThought.app.prompt.Actions',
 		'NextThought.app.course.overview.components.editing.Actions',
 		'NextThought.app.course.overview.components.editing.controls.Delete'
 	],
@@ -160,7 +161,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		}
 
 		if (success) {
-			this.doClose();
+			this.doClose(NextThought.app.prompt.Actions.DELETED);
 		} else {
 			this.showError('Unable to delete record.');
 		}

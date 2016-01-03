@@ -48,7 +48,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	},
 
 
-	onClassExtended: function(cls, data){
+	onClassExtended: function(cls, data) {
 		data.toolbarTpl = data.toolbarTpl || cls.superclass.toolbarTpl || false;
 
 		var tpl = this.prototype.renderTpl.replace('{toolbar}', data.toolbarTpl || '');
@@ -90,12 +90,13 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	},
 
 
-	addEditControls: function () {
+	addEditControls: function() {
 		var container = this.el.down('.edit-container');
-		
+
 		this.editCmp = Ext.widget('overview-editing-controls-edit', {
 			record: this.record,
 			parentRecord: this.parentRecord,
+			onDelete: this.onDelete.bind(this),
 			root: this.root,
 			renderTo: container,
 			afterSave: this.updateTitle.bind(this)
@@ -105,14 +106,14 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	},
 
 
-	updateTitle: function(){
+	updateTitle: function() {
 		if (this.titleEl) {
 			this.titleEl.update(this.record.getTitle());
 		}
 	},
 
 
-	addPublishControls: function(){
+	addPublishControls: function() {
 		var container = this.el.down('.publish-container');
 
 		this.publishCmp = Ext.widget('overview-editing-controls-publish', {
@@ -126,7 +127,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	},
 
 
-	addCalendarControls: function(){
+	addCalendarControls: function() {
 		var container = this.el.down('.calendar-container');
 
 		if (container) {
@@ -138,6 +139,12 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 			this.on('destroy', this.dateCmp.destroy.bind(this.dateCmp));
 		}
-	}
+	},
 
+
+	onDelete: function() {
+		if (this.afterDelete) {
+			this.afterDelete();
+		}
+	}
 });

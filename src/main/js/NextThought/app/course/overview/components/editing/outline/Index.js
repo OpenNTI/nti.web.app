@@ -64,8 +64,11 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Index', {
 
 		this.activeComponent = this.add(cmp.create({
 			record: record,
+			parentRecord: this.parentRecord,
 			bundle: this.bundle,
-			navigateToOutlineNode: this.navigateToOutlineNode
+			afterDelete: this.onDelete.bind(this),
+			navigateToOutlineNode: this.navigateToOutlineNode,
+			afterDelete: this.onDelete.bind(this)
 		}));
 	},
 
@@ -76,6 +79,13 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Index', {
 		}
 
 		return Promise.resolve();
+	},
+
+
+	onDelete: function() {
+		if (this.afterDelete) {
+			this.afterDelete();
+		}
 	}
 }, function() {
 	this.initRegistry();

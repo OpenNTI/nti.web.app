@@ -9,19 +9,10 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.calendarn
 		}
 	},
 
+	PREVIEW_TYPE: 'overview-editing-outline-calendarnode-preview',
 
 	requires: [
 		'NextThought.model.courses.navigation.CourseOutlineCalendarNode',
 		'NextThought.app.course.overview.components.editing.outline.calendarnode.Preview'
-	],
-
-
-	getPreviewConfig: function(record, contents, bundle) {
-		return {
-			xtype: 'overview-editing-outline-calendarnode-preview',
-			record: record,
-			contents: contents,
-			bundle: bundle
-		};
-	}
+	]
 });

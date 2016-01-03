@@ -49,20 +49,24 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Edit', {
 	},
 
 
-	onPromptSuccess: function() {
+	onPromptSuccess: function(action) {
 		if (this.afterSave) {
 			this.afterSave();
 		}
-		
+
 		if (this.onPromptClose) {
 			this.onPromptClose(true);
 		}
 	},
 
 
-	onPromptCancel: function() {
+	onPromptCancel: function(reason) {
 		if (this.onPromptClose) {
 			this.onPromptClose(false);
+		}
+
+		if (reason === NextThought.app.prompt.Actions.DELETED && this.onDelete) {
+			this.onDelete();
 		}
 	}
 });

@@ -17,6 +17,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 		'NextThought.app.course.overview.components.editing.outline.outlinenode.Preview'
 	],
 
+	PREVIEW_TYPE: 'overview-editing-outline-outlinenode-preview',
+
 	layout: 'none',
 	items: [],
 
@@ -24,7 +26,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.loadContents = this.showOutlineNode(this.record);
+		this.loadContents = this.showOutlineNode(this.record, this.parentRecord);
 	},
 
 
@@ -46,7 +48,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	},
 
 
-	showOutlineNode: function(record) {
+	showOutlineNode: function(record, parentRecord) {
 		var me = this,
 			bundle = me.bundle;
 
@@ -57,7 +59,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 				var items = results[0],
 					contents = results[1],
 					cmps = [
-						me.getPreviewConfig(record, contents, bundle)
+						me.getPreviewConfig(record, parentRecord, contents, bundle)
 					];
 
 				if (items && items.length) {
@@ -83,10 +85,12 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	},
 
 
-	getPreviewConfig: function(record, contents, bundle) {
+	getPreviewConfig: function(record, parentRecord, contents, bundle) {
 		return {
-			xtype: 'overview-editing-outline-outlinenode-preview',
+			xtype: this.PREVIEW_TYPE,
 			record: record,
+			parentRecord: parentRecord,
+			afterDelete: this.onDelete.bind(this),
 			bundle: bundle,
 			contents: contents,
 			root: contents  //For editing stuff under a lesson node, the lesson overview is the root
@@ -126,5 +130,12 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 			outlineNode: record,
 			bundle: bundle
 		};
+	},
+
+
+	onDelete: function() {
+		if (this.afterDelete) {
+			this.afterDelete();
+		}
 	}
 });
