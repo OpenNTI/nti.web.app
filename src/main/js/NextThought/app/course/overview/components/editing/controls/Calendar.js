@@ -65,14 +65,6 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 		}
 
 		this.el.addCls('closed');
-		this.onWindowResizeBuffer = Ext.Function.createBuffered(this.alignCalendarMenu, 5, this);
-   		Ext.EventManager.onWindowResize(this.onWindowResizeBuffer, this);
-   		window.addEventListener('scroll', this.onWindowResizeBuffer.bind(this));
-
-   		this.on('destroy', function(){
-   			Ext.EventManager.removeResizeListener(me.onWindowResizeBuffer, me);
-   			window.removeEventListener(me.onWindowResizeBuffer, me);
-   		});
 	},
 
 
@@ -112,23 +104,13 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			onSave: this.saveClicked.bind(this)
 		});
 
-		this.alignCalendarMenu();
 		this.on('destroy', this.picker.destroy.bind(this.picker));
 	},
 
 
 	alignCalendarMenu: function(){
-		var box = this.el && this.el.dom.getBoundingClientRect() || {},
-			me = this,
-			menu = this.picker,
-			top = box.bottom + 10,
-			vh = Ext.Element.getViewportHeight(),
-			vw = Ext.Element.getViewportWidth(),
-			maxHeight = vh - top - 20;
-
-		if (menu && menu.el) {
-			menu.el.setStyle('top', top + 'px');
-			menu.el.setStyle('maxHeight', maxHeight + 'px');	
+		if (this.picker) {
+			this.picker.alignTo(this.el.dom);
 		}
 	},
 
@@ -195,6 +177,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 	hideMenu: function(){
 		this.el.addCls('closed');
 		Ext.destroy(this.bodyListeners);
+		this.picker.close();
 	},
 
 
@@ -205,6 +188,8 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 			click: this.onBodyClick.bind(this)
 		});
 		this.resetMenu();
+		this.alignCalendarMenu();
+		this.picker.open();
 	},
 
 

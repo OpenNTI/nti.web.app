@@ -831,6 +831,11 @@
 			.editing-available-date-menu {
 				margin-top: 7px;
 
+				.arrow {
+					left: 10px;
+					right: auto;
+				}
+
 				.toggle {
 					@include experimental-value(display, flex);
 					flex-direction: row;
