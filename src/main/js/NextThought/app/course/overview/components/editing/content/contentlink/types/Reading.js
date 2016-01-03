@@ -7,10 +7,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		getTypes: function() {
 			return [
 				{
-					title: 'Reading',
+					title: 'From Catalog',
 					category: 'content',
 					iconCls: 'reading',
-					description: 'Readings are used for',
+					description: '',
 					editor: this
 				}
 			];

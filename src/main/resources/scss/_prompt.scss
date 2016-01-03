@@ -122,6 +122,10 @@
 		text-align: right;
 		background: white;
 
+		&.hidden {
+			display: none;
+		}
+
 		.save, .cancel {
 			display: inline-block;
 			line-height: 45px;

@@ -6,10 +6,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		getTypes: function() {
 			return [
 				{
-					title: 'Document',
+					title: 'Upload a File',
 					category: 'content',
 					iconCls: 'document',
-					description: 'Documents are used for',
+					description: '',
 					editor: this
 				}
 			];

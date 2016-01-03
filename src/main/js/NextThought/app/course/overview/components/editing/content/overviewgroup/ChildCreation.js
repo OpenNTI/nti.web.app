@@ -7,7 +7,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 		'NextThought.app.course.overview.components.editing.content.contentlink.Editor'
 	],
 
-	title: 'Content Types',
+	title: 'Choose a content type',
+	backText: 'Content Types',
 	saveText: 'Add to Lesson',
 
 	statics: {

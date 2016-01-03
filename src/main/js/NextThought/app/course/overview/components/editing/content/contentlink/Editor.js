@@ -4,7 +4,6 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 	requires: [
 		'NextThought.app.course.overview.components.editing.content.contentlink.types.Doc',
-		'NextThought.app.course.overview.components.editing.content.contentlink.types.EmbeddedPDF',
 		'NextThought.app.course.overview.components.editing.content.contentlink.types.Reading',
 		'NextThought.app.course.overview.components.editing.content.contentlink.types.URL'
 	],

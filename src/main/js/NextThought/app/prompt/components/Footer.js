@@ -19,7 +19,7 @@ Ext.define('NextThought.app.prompt.components.Footer', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		if (this.saveText) {
+		if (this.saveText !== undefined) {
 			this.setSaveText(this.saveText);
 		}
 
@@ -63,7 +63,9 @@ Ext.define('NextThought.app.prompt.components.Footer', {
 			return;
 		}
 
-		this.saveEl.update(text);
+		this[text ? 'removeCls' : 'addCls']('hidden');
+
+		this.saveEl.update(text || '');
 	},
 
 

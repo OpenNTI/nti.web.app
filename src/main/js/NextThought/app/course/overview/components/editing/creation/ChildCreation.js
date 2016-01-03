@@ -9,7 +9,7 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 	title: 'Create New Item',
 	saveText: 'Save',
 
-	cls: 'child-creation',
+	cls: 'overview-editing child-creation',
 
 	layout: 'none',
 	items: [],
@@ -74,14 +74,14 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 		}
 
 		if (this.setSaveText) {
-			this.setSaveText(this.saveText);
+			this.setSaveText('');
 		}
 	},
 
 
 	setUpTypeEditor: function(type) {
 		if (!this.hasSingleType && this.enableBack) {
-			this.enableBack(this.title);
+			this.enableBack(this.backText || this.title);
 		}
 
 		if (this.setTitle) {
