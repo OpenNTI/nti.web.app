@@ -47,7 +47,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 			}
 			
 			if (childType) {
-				return childType + (childrenCount + 1);
+				return childType + ' ' + (childrenCount + 1);
 			}
 		}
 
