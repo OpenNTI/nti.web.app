@@ -13,26 +13,29 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'arrow'},
-		{cls: 'option publish', 'data-action': 'publish', cn: [
-			{cls: 'text', html: 'Publish'},
-			{cls: 'subtext', html: 'Lesson contents are visible to students.'}
-		]},
-		{cls: 'option publish-on-date', 'data-action': 'publish-date', cn: [
-			{cls: 'text', html: 'Publish on Date'},
-			{cls: 'subtext', cn: [
-				{tag: 'span', cls: 'description', html: 'When do you want students to have access to this lesson?'},
-				{cls: 'date-picker-container'}
-			]}
-		]},
-		{cls: 'option unpublish selected', 'data-action': 'unpublish', cn: [
-			{cls: 'text', html: 'Unpublish'},
-			{cls: 'subtext', html: 'Currently not visible to any students'}
-		]},
-		{cls: 'save disabled', html: 'Save'}
+		{cls: 'container', cn: [
+			{cls: 'option publish', 'data-action': 'publish', cn: [
+				{cls: 'text', html: 'Publish'},
+				{cls: 'subtext', html: 'Lesson contents are visible to students.'}
+			]},
+			{cls: 'option publish-on-date', 'data-action': 'publish-date', cn: [
+				{cls: 'text', html: 'Publish on Date'},
+				{cls: 'subtext', cn: [
+					{tag: 'span', cls: 'description', html: 'When do you want students to have access to this lesson?'},
+					{cls: 'date-picker-container'}
+				]}
+			]},
+			{cls: 'option unpublish selected', 'data-action': 'unpublish', cn: [
+				{cls: 'text', html: 'Unpublish'},
+				{cls: 'subtext', html: 'Currently not visible to any students'}
+			]},
+			{cls: 'save disabled', html: 'Save'}
+		]}
 	]),
 
 
 	renderSelectors: {
+		containerEl: '.container',
 		publishEl: '.publish',
 		publishOnDateEl: '.publish-on-date',
 		unpublishEl: '.unpublish',
@@ -88,6 +91,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		if (!this.alignedTo || !this.rendered) { return; }
 
 		var menu = this.el,
+			container = this.containerEl,
 			menuHeight = this.el.dom.clientHeight,
 			maxMenuHeight = this.MAX_HEIGHT,
 			body = Ext.getBody(),
@@ -123,6 +127,10 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 					right: position.right + 'px',
 					maxHeight: position.maxHeight + 'px'
 				});
+			}
+
+			if (container) {
+				container.setStyle('maxHeight', position.maxHeight + 'px');
 			}
 		}
 

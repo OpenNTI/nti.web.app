@@ -748,11 +748,16 @@
 			z-index: 1;
 
 			.editing-publishing-menu, .editing-available-date-menu {
-				padding: 10px;
 				background-color: #ffffff;
 				width: 355px;
 				box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
 				position: fixed;
+
+				.container {
+					padding: 10px;
+					overflow-y: auto;
+					overflow-x: hidden;
+				}
 
 				.option {
 					border-bottom: 1px solid $quad-grey;
