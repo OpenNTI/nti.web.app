@@ -49,6 +49,12 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 		this.hasEditingControls = true;
 		this.editingControlsCmp.show();
 		this.editingControlsCmp.showNotEditing();
+
+		if (this.isEditing) {
+			this.showEditing();
+		} else {
+			this.showNotEditing();
+		}
 	},
 
 
@@ -61,6 +67,8 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 
 	showEditing: function() {
+		this.isEditing = true;
+
 		if (this.hasEditingControls) {
 			this.editingControlsCmp.showEditing();
 		}
@@ -68,6 +76,8 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 
 	showNotEditing: function() {
+		delete this.isEditing;
+
 		if (this.hasEditingControls) {
 			this.editingControlsCmp.showNotEditing();
 		}
