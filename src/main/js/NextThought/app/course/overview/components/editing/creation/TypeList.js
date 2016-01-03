@@ -25,14 +25,18 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.TypeList
 			return;
 		}
 
-		this.add(this.types.map(function(type) {
-			return {
-				xtype: 'overview-editing-type',
-				showEditor: showEditor,
-				typeConfig: type,
-				parentRecord: parentRecord,
-				rootRecord: rootRecord
-			};
-		}));
+		this.add(this.types.reduce(function(acc, type) {
+			if (!type.advanced || Service.canDoAdvancedEditing()) {
+				acc.push({
+					xtype: 'overview-editing-type',
+					showEditor: showEditor,
+					typeConfig: type,
+					parentRecord: parentRecord,
+					rootRecord: rootRecord
+				});
+			}
+
+			return acc;
+		}, []));
 	}
 });

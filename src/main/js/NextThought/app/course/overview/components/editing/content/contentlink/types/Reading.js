@@ -8,6 +8,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 			return [
 				{
 					title: 'From Catalog',
+					advanced: true,
 					category: 'content',
 					iconCls: 'reading',
 					description: '',
