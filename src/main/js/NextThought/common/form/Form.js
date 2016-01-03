@@ -104,7 +104,8 @@ Ext.define('NextThought.common.form.Form', {
 						type: '{type}',
 						name: '{name}',
 						placeholder: '{placeholder}',
-						value: '{value}'
+						value: '{value}',
+						html: '{value}'
 					};
 
 				if (data.displayName) {
