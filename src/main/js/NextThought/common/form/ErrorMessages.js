@@ -3,10 +3,11 @@ Ext.define('NextThought.common.form.ErrorMessages', {
 	MESSAGES: {
 		missing: 'Please fill out all required fields.',
 		invalidUrl: 'Please enter a valid url.',
+		invalidColor: 'Please enter a valid color.',
 		noError: 'Valid'
 	},
 
-	PRIORITY: ['missing', 'invalidUrl'],
+	PRIORITY: ['missing', 'invalidUrl', 'invalidColor'],
 
 	getMessageForErrors: function(errors) {
 		var priority = this.PRIORITY, i;

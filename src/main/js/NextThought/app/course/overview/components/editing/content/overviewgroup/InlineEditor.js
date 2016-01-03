@@ -16,6 +16,12 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'input', cls: 'title', placeholder: 'Section name', type: 'text', value: '{title}'},
 		{cls: 'sub-label', html: 'Choose a Color'},
+		{tag: 'tpl', 'if': 'advanced', cn: [
+			{tag: 'label', cn: [
+				'#',
+				{tag: 'input', cls: 'color-input', placeholder: 'Enter a Hex Code', value: '{currentColor}'}
+			]}
+		]},
 		{tag: 'ul', cls: 'colors', cn: [
 			{tag: 'tpl', 'for': 'colors', cn: [
 				{tag: 'li', cls: 'color {cls}', 'data-value': '{hex}', style: {background: '#{hex}'}}
@@ -26,7 +32,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 	renderSelectors: {
 		inputEl: '.title',
-		colorsEl: '.colors'
+		colorsEl: '.colors',
+		colorInput: '.color-input'
 	},
 
 	beforeRender: function() {
@@ -44,7 +51,6 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 			return index === 0;
 		}
 
-
 		this.renderData = Ext.apply(this.renderData || {}, {
 			colors: colors.map(function(hex, index) {
 				return {
@@ -52,6 +58,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 					hex: hex
 				};
 			}),
+			currentColor: accent || colors[0],
+			advanced: Service.canDoAdvancedEditing(),
 			title: title
 		});
 	},
@@ -63,6 +71,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 		this.mon(this.colorsEl, 'click', this.maybeSelectColor.bind(this));
 		this.mon(this.inputEl, 'keyup', this.onInputChange.bind(this));
 
+		if (this.colorInput) {
+			this.mon(this.colorInput, 'keyup', this.onInputChange.bind(this));
+		}
+
 		this.onInputChange();
 	},
 
@@ -73,9 +85,16 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 
 	getSelectedColor: function() {
-		var selectedEl = this.getSelectedColorEl();
+		var selectedEl = this.getSelectedColorEl(),
+			value;
 
-		return selectedEl && selectedEl.getAttribute('data-value');
+		if (this.colorInput) {
+			value = this.colorInput && this.colorInput.dom.value;
+		} else if (selectedEl) {
+			value = selectedEl.getAttribute('data-value');
+		}
+
+		return value;
 	},
 
 
@@ -100,13 +119,19 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 	maybeSelectColor: function(e) {
 		var color = e.getTarget('[data-value]'),
+			value = color && color.getAttribute('data-value'),
 			current = this.getSelectedColorEl();
 
 		if (color) {
 			if (current) {
 				current.classList.remove('selected');
 			}
+
 			color.classList.add('selected');
+
+			if (this.colorInput) {
+				this.colorInput.dom.value = value;
+			}
 		}
 
 		if (this.onChange) {
@@ -116,17 +141,28 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 
 	getErrors: function() {
-		var values = this.getValue();
+		var values = this.getValue(),
+			errors = {};
 
 		if (!values.title) {
-			return {
-				title: {
+			errors.title = {
 					missing: true
-				}
 			};
 		}
 
-		return {};
+		if (!values.accentColor) {
+			errors.color = {
+				missing: true
+			};
+		}
+
+		if (!Color.isValidHexColor(values.accentColor)) {
+			errors.color = {
+				invalidColor: true
+			};
+		}
+
+		return errors;
 	},
 
 
