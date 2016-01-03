@@ -9,7 +9,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
+		Scrolling: 'NextThought.mixins.Scrolling'
 	},
 
 	layout: 'none',
@@ -22,8 +23,6 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 		if (this.isLoading) {
 			this.showLoadingMask();
 		}
-
-
 	},
 
 
@@ -60,6 +59,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 
 
 	editOutlineNode: function(record) {
+		//If we are switching outline nodes scroll the page to the top
+		if (!this.activeRecord || this.activeRecord.getId() !== record.getId()) {
+			this.scrollPageToTop();
+		}
+
 		this.showLoadingMask();
 		this.removeAll(true);
 

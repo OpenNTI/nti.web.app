@@ -13,7 +13,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 
 
 	mixins: {
-		OrderingContainer: 'NextThought.mixins.dnd.OrderingContainer'
+		OrderingContainer: 'NextThought.mixins.dnd.OrderingContainer',
+		FillScreen: 'NextThought.mixins.FillScreen'
 	},
 
 	cls: 'outline-items',
@@ -31,6 +32,13 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 		// This is handy since when we are about to show the same control on a different listitem,
 		// we have access to the previously active control for each type and hide or destroy it if necessary.
 		this.activeControls = {};
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.fillScreen(this.el.dom, 20);
 	},
 
 

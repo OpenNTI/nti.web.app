@@ -3,7 +3,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 	alias: 'widget.overview-editing-lessonoverview',
 
 	mixins: {
-		OrderingContainer: 'NextThought.mixins.dnd.OrderingContainer'
+		OrderingContainer: 'NextThought.mixins.dnd.OrderingContainer',
+		FillScreen: 'NextThought.mixins.FillScreen'
 	},
 
 
@@ -29,6 +30,13 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 		});
 
 		this.setCollection(this.contents);
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.fillScreen(this.el.dom, 20);
 	},
 
 
