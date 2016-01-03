@@ -9,7 +9,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 			});
 		}
 
-		return parent.appendForm(form);
+		return parent.appendForm(form)
+			.fail(this.parseError.bind(this));
 	},
 
 
@@ -22,12 +23,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 		}
 
 		return parent.appendContent(values)
-			.fail(function(reason) {
-				var response = reason.responseText,
-					json = response && JSON.parse(response);
-
-				return Promise.reject(json || {msg: 'Unable to update record.'});
-			});
+			.fail(this.parseError.bind(this));
 	},
 
 
@@ -94,18 +90,14 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	__updateRecord: function(form, record, originalParent, newParent, root) {
 		return this.__saveRecord(form, record)
 			.then(this.__moveRecord.bind(this, record, originalParent, newParent, root))
-			.fail(function(reason) {
-				var response = reason.responseText,
-					json = response && JSON.parse(response);
-
-				return Promise.reject(json || {msg: 'Unable to update record.'});
-			});
+			.fail(this.parseError.bind(this));
 	},
 
 
 	__updateRecordValues: function(values, record, originalParent, newParent, root) {
 		return this.__saveRecordValues(values, record)
-			.then(this.__moveRecord.bind(this, record, originalParent, newParent, root));
+			.then(this.__moveRecord.bind(this, record, originalParent, newParent, root))
+			.fail(this.parseError.bind(this));
 	},
 
 
@@ -207,6 +199,14 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 				record.syncWith(rec);
 				return record;
 			});
+	},
+
+
+	parseError: function(reason){
+		var response = reason.responseText,
+			json = (response && JSON.parse(response)) || (reason && JSON.parse(reason));
+
+		return Promise.reject(json || {msg: 'Unable to update record.'});
 	}
 
 });

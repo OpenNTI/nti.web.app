@@ -69,8 +69,10 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 	ERRORS: {
 		TooLong: '{field} is too long.',
+		ConstraintNotSatisfied: '{field} is exceeded.',
 		fieldNames: {
-			title: 'Title'
+			title: 'Title',
+			max_file_size: 'Max File Size'
 		}
 	},
 
