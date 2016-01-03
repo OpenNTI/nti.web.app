@@ -285,6 +285,14 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 		t = hour * 3600 * 1000 + minutes * 60 * 1000;
 		return isNaN(t) ? 0 : t;
+	},
+
+	setMaxDate: function(date){
+		this.datepicker.setMaxDate(date);
+	},
+
+	setMinDate: function(date){
+		this.datepicker.setMinDate(date);
 	}
 
 });

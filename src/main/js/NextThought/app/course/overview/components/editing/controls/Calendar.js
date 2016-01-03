@@ -257,6 +257,8 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 					me.record.syncWithResponse(response);
 					me.setDefaultDate();
 					me.el.addCls('closed');
+					me.picker.setMaxDate(null);
+					me.picker.setMinDate(null);
 				});
 		}
 	},

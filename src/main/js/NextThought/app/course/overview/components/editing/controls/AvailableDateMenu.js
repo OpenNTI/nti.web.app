@@ -57,11 +57,21 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 	updateDates: function(){
 		var selectedEl = this.toggleEl.down('.selected'),
 			field = selectedEl && selectedEl.dom && selectedEl.dom.getAttribute('data-action'),
-			value = this.values && this.values[field], date;
+			value = this.values && this.values[field], date,
+			availableEnding = this.values['AvailableEnding'] ? new Date(this.values['AvailableEnding']* 1000) : null;
+			availableBeginning = this.values['AvailableBeginning'] ? new Date(this.values['AvailableBeginning']* 1000) : null;
 
 		if (this.picker && field) {
 			date = value ? new Date(value * 1000) : new Date();
 			this.picker.setValue(date);
+
+			if (field === 'AvailableBeginning') {
+				this.picker.setMaxDate(availableEnding);
+				this.picker.setMinDate(null);
+			} else if (field === 'AvailableEnding'){
+				this.picker.setMinDate(availableBeginning);
+				this.picker.setMaxDate(null);
+			}
 		}
 	},
 
@@ -145,6 +155,14 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 		}else {
 			this.select(this.beginEl);
 		}
+	},
+
+	setMaxDate: function(date){
+		this.picker.setMaxDate(date);
+	},
+
+	setMinDate: function(date){
+		this.picker.setMinDate(date);
 	}
 
 });
