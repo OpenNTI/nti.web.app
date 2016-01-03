@@ -208,6 +208,28 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
+	__doRemove: function(record, index) {
+		var link = this.getContentsLink(),
+			ntiid = record && record.getId(),
+			remove;
+
+		if (!link) {
+			remove = Promise.reject('No link');
+		} else if (index < 0 || index >= this.getItemsCount()) {
+			remove = Promise.reject('Invalid index');
+		} else if (!ntiid) {
+			remove = Promise.reject('No NTIID');
+		} else {
+			// ntiid = encodeURIComponent(ntiid);
+			link = Globals.trimRoute(link) + '/ntiid/' + ntiid + '?index=' + index;
+
+			remove = Service.requestDelete(link)
+				.then(this.__removeRecord.bind(this, record));
+		}
+
+		return remove;
+	},
+
 
 	removeRecord: function(record) {
 		var items = this.getItems(),
@@ -215,7 +237,7 @@ Ext.define('NextThought.mixins.OrderedContents', {
 
 		for (i = 0; i < items.length; i++) {
 			if (items[i].getId() === record.getId()) {
-				return this.removeAtIndex(i);
+				return this.__doRemove(record, i);
 			}
 		}
 
@@ -224,18 +246,9 @@ Ext.define('NextThought.mixins.OrderedContents', {
 
 
 	removeAtIndex: function(index) {
-		var link = this.getContentsLink();
+		var items = this.getItems(),
+			record = items[index];
 
-		if (!link) {
-			return Promise.reject('No Link');
-		}
-
-		if (index < 0 || index >= this.getItemsCount()) {
-			return Promise.reject('Inavlid index');
-		}
-
-		link = Globals.trimRoute(link) + '/index/' + index;
-
-		return Service.requestDelete(link);
+		return this.__doRemove(record, index);
 	}
 });
