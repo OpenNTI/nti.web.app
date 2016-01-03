@@ -234,10 +234,14 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 		if (isNaN(hour) || hour > 12 || hour < 1) {
 			this.hourEl.addCls('error');
+		} else {
+			this.hourEl.removeCls('error');
 		}
 
 		if (isNaN(minutes) || minutes > 59 || minutes < 0) {
 			this.minuteEl.addCls('error');
+		} else {
+			this.minuteEl.removeCls('error');
 		}
 	},
 
