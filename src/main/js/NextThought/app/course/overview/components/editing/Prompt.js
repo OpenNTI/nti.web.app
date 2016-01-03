@@ -93,6 +93,15 @@ Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
 	},
 
 
+	onSaveFailure: function(reason) {
+		if (this.editor && this.editor.onSaveFailure) {
+			return this.editor.onSaveFailure(reason);
+		}
+
+		return Promise.reject('Nothing to handle failure');
+	},
+
+
 	onSave: function() {
 		if (this.editor && this.editor.onSave) {
 			return this.editor.onSave();

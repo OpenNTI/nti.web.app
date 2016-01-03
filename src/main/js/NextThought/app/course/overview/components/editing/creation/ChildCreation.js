@@ -163,9 +163,18 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 	},
 
 
+	onSaveFailure: function(reason) {
+		if (this.activeEditor && this.activeEditor.onSaveFailure) {
+			return this.activeEditor.onSaveFailure(reason);
+		}
+
+		return Promise.reject();
+	},
+
+
 
 	doSave: function() {
-		if (this.activeEditor.doSave) {
+		if (this.activeEditor && this.activeEditor.doSave) {
 			return this.activeEditor.doSave();
 		}
 

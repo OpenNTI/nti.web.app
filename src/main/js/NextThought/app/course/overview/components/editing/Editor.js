@@ -65,6 +65,15 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		}
 	},
 
+	UNKNOWN_ERROR: 'Unable to save record.',
+
+	ERRORS: {
+		TooLong: '{field} is too long.',
+		fieldNames: {
+			title: 'Title'
+		}
+	},
+
 	/**
 	 * The Schema used to set up the fields
 	 * @override
@@ -283,7 +292,6 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		return this.getFormErrors();
 	},
 
-
 	maybeClearErrors: function() {
 		var form = this.formCmp;
 
@@ -314,6 +322,25 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	},
 
 
+	setErrorOn: function(field, msg) {
+		var	form = this.formCmp,
+			activeErrors = this.activeErrors || [];
+
+		if (!field) {
+			this.showError(msg);
+		} else if (form) {
+			form.showErrorOn(field);
+
+			activeErrors.push({
+				headerBar: this.showError(msg),
+				fields: [field]
+			});
+
+			this.activeErrors = activeErrors;
+		}
+	},
+
+
 	doValidation: function() {
 		var me = this,
 			form = me.formCmp,
@@ -329,6 +356,22 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		});
 
 		return errors.length > 0 ? Promise.reject() : Promise.resolve();
+	},
+
+
+	onSaveFailure: function(reason) {
+		if (!reason || typeof reason === 'string') { return this.setErrorOn(null, this.UNKNOWN_ERROR); }
+
+		var field = reason.field,
+			fieldName = this.ERRORS.fieldNames[field] || field,
+			code = reason.code,
+			msg = reason.message || reason.msg;
+
+		msg = this.ERRORS[code] || msg;
+
+		msg = getFormattedString(msg, {field: fieldName});
+
+		return this.setErrorOn(field, msg);
 	},
 
 

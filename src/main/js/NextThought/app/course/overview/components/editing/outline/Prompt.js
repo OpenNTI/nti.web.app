@@ -259,6 +259,15 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 	},
 
 
+	onSaveFailure: function(reason) {
+		if (this.activeEditor && this.activeEditor.onSaveFailure) {
+			return this.activeEditor.onSaveFailure(reason);
+		}
+
+		return Promise.reject();
+	},
+
+
 	onSave: function() {
 		if (this.activeEditor && this.activeEditor.doSave) {
 			return this.activeEditor.doSave();

@@ -21,7 +21,13 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 			});
 		}
 
-		return parent.appendContent(values);
+		return parent.appendContent(values)
+			.fail(function(reason) {
+				var response = reason.responseText,
+					json = response && JSON.parse(response);
+
+				return Promise.reject(json || {msg: 'Unable to update record.'});
+			});
 	},
 
 
@@ -67,7 +73,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 		if (!newParent && !originalParent) {
 			return Promise.resolve();
 		}
-		
+
 		if (!newParent || !newParent.appendFromContainer) {
 			return Promise.reject({
 				msg: 'Unable to move record.',
@@ -87,7 +93,13 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 
 	__updateRecord: function(form, record, originalParent, newParent, root) {
 		return this.__saveRecord(form, record)
-			.then(this.__moveRecord.bind(this, record, originalParent, newParent, root));
+			.then(this.__moveRecord.bind(this, record, originalParent, newParent, root))
+			.fail(function(reason) {
+				var response = reason.responseText,
+					json = response && JSON.parse(response);
+
+				return Promise.reject(json || {msg: 'Unable to update record.'});
+			});
 	},
 
 

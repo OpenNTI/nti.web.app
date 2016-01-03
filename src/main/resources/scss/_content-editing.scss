@@ -519,7 +519,13 @@
 		padding: 0.35em;
 		font-family: Open Sans;
 		font-style: italic;
-		color: #B8B8B8;
+		color: $primary-grey;
+		border: none;
+		box-shadow: 0 0 0 1px #d8d8d8;
+
+		&.error {
+			box-shadow: 0 0 0 1px $primary-red;
+		}
 	}
 
 	ul.colors {

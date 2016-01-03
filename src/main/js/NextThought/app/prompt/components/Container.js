@@ -93,7 +93,7 @@ Ext.define('NextThought.app.prompt.components.Container', {
 
 
 	onSaveFailure: function(reason) {
-		this.header.showError(reason);
+		this.bodyCmp.onSaveFailure(reason);
 	},
 
 
