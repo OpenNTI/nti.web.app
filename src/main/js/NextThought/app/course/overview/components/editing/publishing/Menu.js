@@ -253,7 +253,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 
 
 	onSave: function() {
-		var selectedEl = this.el.down('.option.selected');
+		var selectedEl = this.el.down('.option.selected'),
 			action = selectedEl && selectedEl.getAttribute('data-action');
 
 		if (action === 'publish') {
@@ -352,6 +352,9 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 			date = new Date(time * 1000);
 
 		this.setPublishOnDateText(date);
+		if(this.saveBtnEl.hasCls('disabled')){
+			this.saveBtnEl.removeCls('disabled');
+		}
 	},
 
 
