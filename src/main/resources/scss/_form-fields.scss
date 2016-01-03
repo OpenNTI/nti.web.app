@@ -561,6 +561,7 @@ form.common-form {
 
 	&.valid {
 		a {
+			pointer-events: all;
 			color: $primary-blue;
 
 			@include icon('preview-blue', $side: after, $top: 50%, $left: auto, $right: 1em);
@@ -588,6 +589,7 @@ form.common-form {
 
 	a {
 		@include flexItem(0 0 auto);
+		pointer-events: none;
 		width: 93px;
 		color: $primary-grey;
 		font-size: 0.75em;
