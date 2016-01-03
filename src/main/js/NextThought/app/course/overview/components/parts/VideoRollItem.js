@@ -39,7 +39,7 @@ Ext.define('NextThought.app.course.overview.components.parts.VideoRollItem', {
 	},
 
 	setProgress: function(progress){
-		if (progress.hasBeenViewed(this.video.ntiid)) {
+		if (progress.hasBeenViewed(this.video.getId())) {
 			this.addCls('hasBeenViewed');
 		}
 	}
