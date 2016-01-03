@@ -376,10 +376,18 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 
 	doSave: function() {
-		var parentSelection = this.parentSelection,
+		var me = this,
+			parentSelection = me.parentSelection,
 			originalParent = parentSelection && parentSelection.getOriginalSelection(),
 			currentParent = parentSelection && parentSelection.getCurrentSelection();
 
-		return this.EditingActions.saveEditorForm(this.formCmp, this.record, originalParent, currentParent, this.rootRecord);
+		me.disableSubmission();
+
+		return me.EditingActions.saveEditorForm(me.formCmp, me.record, originalParent, currentParent, me.rootRecord)
+			.fail(function(reason) {
+				me.enableSubmission();
+
+				return Promise.reject(reason);
+			});
 	}
 });

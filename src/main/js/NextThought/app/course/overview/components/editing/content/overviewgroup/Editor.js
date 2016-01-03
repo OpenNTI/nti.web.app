@@ -40,6 +40,15 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 
 	doSave: function() {
-		return this.EditingActions.saveValues(this.formCmp.getValue(), this.record, this.parentRecord, this.parentRecord, this.rootRecord);
+		var me = this;
+
+		me.disableSubmission();
+
+		return me.EditingActions.saveValues(me.formCmp.getValue(), me.record, me.parentRecord, me.parentRecord, me.rootRecord)
+			.fail(function(reason) {
+				me.enableSubmission();
+
+				return Promise.reject(reason);
+			});
 	}
 });
