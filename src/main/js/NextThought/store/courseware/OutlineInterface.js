@@ -28,11 +28,22 @@ Ext.define('NextThought.store.courseware.OutlineInterface', {
 				depth -= 1;
 			}
 
-			function getDepth(n) {
-				var i = ((n && n.get('Items')) || [])[0];
+            function getDepth(n) {
+                var items = ((n && n.get('Items')) || []),
+                    depth;
 
-				return i ? (getDepth(i) + 1) : 0;
-			}
+                depth = items.reduce(function(max, item) {
+                    var depth = getDepth(item);
+
+                    if (depth > max) {
+                        max = depth;
+                    }
+
+                    return max;
+                }, 0);
+
+                return items.length ? depth + 1 : 0;
+            }
 
 			maxDepth = getDepth(outline);
 
