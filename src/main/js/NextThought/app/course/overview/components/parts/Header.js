@@ -6,9 +6,9 @@ Ext.define('NextThought.app.course.overview.components.parts.Header', {
 	cls: 'overview-header',
 
 	renderTpl: Ext.DomHelper.markup([
-		{tag: 'tpl', 'if': 'date', cn: {cls: 'start date {expired}', html: '{startDate:date("l, F jS")}'}},
-		{tag: 'tpl', 'if': '!date', cn: {cls: 'course date {expired}', html: '{courseStartDate:date("l, F jS")}'}},
-		{tag: 'tpl', 'if': '(date || courseStartDate) && AvailableEnding', cn: {cls: 'end date {expired}', html: '- {AvailableEnding:date("l, F jS")}'}},
+		{tag: 'tpl', 'if': 'AvailableBeginning', cn: {cls: 'start date {expired}', html: '{AvailableBeginning:date("l, F jS")}'}},
+		{tag: 'tpl', 'if': '!AvailableBeginning && AvailableEnding', cn: {cls: 'course date {expired}', html: '{courseStartDate:date("l, F jS")}'}},
+		{tag: 'tpl', 'if': '(AvailableBeginning || courseStartDate) && AvailableEnding', cn: {cls: 'end date {expired}', html: '- {AvailableEnding:date("l, F jS")}'}},
 		{cls: 'title', html: '{label}'}
 	]),
 
