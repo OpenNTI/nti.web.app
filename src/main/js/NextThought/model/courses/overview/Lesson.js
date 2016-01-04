@@ -37,5 +37,16 @@ Ext.define('NextThought.model.courses.overview.Lesson', {
 	isPublished: function() {
 		var state = this.get('PublicationState') || '';
 		return state.toLowerCase() === 'DefaultPublished'.toLowerCase();
+	},
+
+
+	hasPublishDatePassed: function(){
+		var publishBeginning = this.get('publishBeginning'),
+			now = new Date();
+		if (publishBeginning) {
+			return new Date(publishBeginning) < now;
+		}
+
+		return false;
 	}
 });

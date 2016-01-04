@@ -53,10 +53,11 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 			isNodePublished = node && node.isPublished && node.isPublished(),
 			lesson = this.contents,
 			isLessonPublished = lesson && lesson.isPublished && lesson.isPublished(),
-			lessonPublishDate = lesson && lesson.get('publishBeginning');
+			lessonPublishDate = lesson && lesson.get('publishBeginning'),
+			hasPublishDatePassed = lesson && lesson.hasPublishDatePassed && lesson.hasPublishDatePassed();
 
 
-		if (isNodePublished && isLessonPublished && !lessonPublishDate) {
+		if (isNodePublished && ((isLessonPublished && !lessonPublishDate) || hasPublishDatePassed))  {
 			this.setPublished();
 		}
 		else if (!isNodePublished && !isLessonPublished) {

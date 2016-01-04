@@ -153,10 +153,13 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 			lesson = this.contents,
 			isLessonPublished = lesson && lesson.isPublished && lesson.isPublished(),
 			lessonPublishDate = lesson && lesson.get('publishBeginning'),
+			hasPublishDatePassed = lesson && lesson.hasPublishDatePassed && lesson.hasPublishDatePassed(),
 			date;
 
-
-		if (isNodePublished && isLessonPublished && !lessonPublishDate) {
+		// TODO: Needs simplification, once the server fixes the publicationState issue.
+		// The first case should check if both the outlinenode and the lesson are published or
+		// if the lesson node has a publish on date, that has already passed.
+		if (isNodePublished && ((isLessonPublished && !lessonPublishDate) || hasPublishDatePassed)) {
 			this.select(this.publishEl);
 			this.initialState = this.publishEl;
 		}

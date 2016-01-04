@@ -466,7 +466,7 @@
 					}
 
 					.month {
-						font: normal 700 0.6em/1.0em $font;
+						font: normal 700 10px/1.0em $font;
 					}
 				}
 
@@ -658,12 +658,13 @@
 		cursor: pointer;
 		display: block;
 		opacity: 0.3;
-		min-width: 25px;
+		min-width: 31px;
+		min-height: 31px;
 		position: absolute;
 		left: 0px;
 		top: 7px;
 		text-transform: uppercase;
-		border-radius: 2px;
+		border-radius: 4px;
 		box-shadow: 0 0 0 1px $primary-grey, inset 0 0 0 1px $primary-grey;
 		text-align: center;
 
@@ -671,14 +672,25 @@
 			background: $primary-grey;
 			color: white;
 			border-radius: 0;
-			font: normal 700 0.7em/1.1em $font;
-			padding: 2px 6px;
+			font: normal 700 10px/13px $font;
+			padding: 0 6px;
 		}
 
 		.day {
 			color: $primary-grey;
-			font: normal 500 0.8em/1.3em $font;
+			font: normal 600 12px/18px $font;
 			border-radius: 0;
+		}
+
+		&.empty {
+			.month {
+				background: $primary-grey;
+				height: 13px;
+			}
+
+			.day {
+				@include icon('empty-calendar', $side: after, $top: 2px, $left: 4px);
+			}
 		}
 	}
 }
@@ -863,6 +875,12 @@
 					}
 				}
 
+				.error {
+					color: $primary-red;
+					font: italic 500 12px/17px $font;
+					margin: 5px;
+				}
+
 				.date-picker-container {
 					.nti-date-picker .x-datepicker {
 						margin: 20px auto;
@@ -890,10 +908,9 @@
 				.text {
 					display: inline-block;
 					border: 1px solid #d1d1d1;
-					font-style: italic;
-					padding: 5px 10px;
-					font-weight: 300;
+					padding: 0 10px;
 					cursor: pointer;
+					font: italic 500 12px/32px $font;
 
 					@include icon('dropdown-am-pm-icon', $side: after, $top: 14px, $left: auto, $right: -13px);
 				}
@@ -901,10 +918,10 @@
 				.clear {
 					position: absolute;
 					top: 0px;
-					right: 6px;
+					right: 10px;
 					color: $tertiary-grey;
 					text-transform: uppercase;
-					font: normal 600 11px/36px $font;
+					font: normal 700 10px/34px $font;
 					z-index: 10;
 					cursor: pointer;
 					display: none;
@@ -918,6 +935,8 @@
 					.text {
 						position: relative;
 						padding-right: 50px;
+					    color: #494949;
+					    font-style: normal;
 					}
 
 					.clear {
