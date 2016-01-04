@@ -39,7 +39,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 	},
 
 
-	doSave: function() {
+	onSave: function() {
 		var me = this;
 
 		me.disableSubmission();
