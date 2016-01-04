@@ -125,6 +125,17 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 	},
 
 
+	getAllowedTypes: function() {
+		var allowed = [];
+
+		if (this._depth === 1) {
+			allowed.push(NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType);
+		}
+
+		return allowed;
+	},
+
+
 	isLeaf: function() {
 		var depth = this._depth,
 			maxDepth = this._max_depth;

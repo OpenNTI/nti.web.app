@@ -24,7 +24,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.N
 			}
 		});
 
-		items.push(this.editor.create({isEditor: true}));
+		items.push(this.editor.create({isEditor: true, parentRecord: this.parentRecord}));
 
 		if (this.hasOtherItems) {
 			items.push({
@@ -108,10 +108,12 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.N
 			})
 			.then(this.addNewItem.bind(this))
 			.then(this.unMask.bind(this))
-			.fail(function(error){
+			.fail(function(error) {
 				me.unMask();
-				me.errorEl.setHTML("Unable to create section");
-				if(error){ console.error("Unable to create section because: " + error); }
+				me.errorEl.setHTML('Unable to create section');
+				if (error) {
+					console.error('Unable to create section because: ' + error);
+				}
 			});
 	},
 

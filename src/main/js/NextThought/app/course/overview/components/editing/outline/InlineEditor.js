@@ -1,14 +1,9 @@
 Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEditor', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-inline-editor',
-	
-	statics: {
-		getTypes: function(){
-			return {
-				mimeType: NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType,
-				types: []
-			}
-		}
+
+	inheritableStatics: {
+		getTypes: function() {}
 	},
 
 	cls: 'inline-editor',
@@ -25,8 +20,12 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 	},
 
 
-	beforeRender: function(){
+	beforeRender: function() {
 		this.callParent(arguments);
+
+		var type = this.self.getTypes();
+
+		this.mimeType = type && type.mimeType;
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			defaultValue: this.getSuggestedNodeTitle(),
@@ -35,27 +34,26 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 	},
 
 
-	getSuggestedNodeTitle: function(){
+	getSuggestedNodeTitle: function() {
 		var childrenCount = (this.parentRecord.get('Items') || []).length, childType;
 
 		if (this.parentRecord) {
 			if (this.parentRecord._depth === 0) {
 				childType = 'Unit';
-			}
-			else if (this.parentRecord._depth === 1){
+			} else if (this.parentRecord._depth === 1) {
 				childType = 'Lesson';
 			}
-			
+
 			if (childType) {
 				return childType + ' ' + (childrenCount + 1);
 			}
 		}
 
-		return "";
+		return '';
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 		var me = this;
 
@@ -64,43 +62,61 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 		});
 
 		wait()
-			.then(function(){
+			.then(function() {
 				me.inputEl.dom.select();
 			});
 	},
 
 
-	onKeyup: function(e){
+	onKeyup: function(e) {
 		var record;
+
 		if (e.getKey() === e.ENTER) {
 			if (this.onSave) {
-				this.onSave(e);	
+				this.onSave(e);
 			}
 		}
+
 		if (e.getKey() === e.ESC) {
 			if (this.onCancel) {
 				this.onCancel(e);
 			}
 		}
+
 		if (this.inputEl.dom.value !== null && this.inputEl.dom.value.length > 0) {
 			this.clearError();
 		}
 	},
 
 
-	getValue: function(){
-		return this.inputEl.getValue();
+	getValue: function() {
+		return {
+			MimeType: this.mimeType,
+			ContentNTIID: null,
+			title: this.inputEl.getValue()
+		};
 	},
 
 
-	setSuggestTitle: function(){
+	setSuggestTitle: function() {
 		this.inputEl.dom.value = this.getSuggestedNodeTitle();
 		this.inputEl.dom.select();
 	},
 
 
 	isValid: function() {
-		return !Ext.isEmpty(this.getValue());
+		var value = this.getValue();
+
+		if (!value.MimeType) {
+			console.warn('No mimeType');
+			return false;
+		}
+
+		if (!value.title) {
+			return false;
+		}
+
+		return true;
 	},
 
 

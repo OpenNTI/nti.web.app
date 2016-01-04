@@ -129,19 +129,33 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 
 	createAddUnitNode: function() {
-		var OutlinePrompt = NextThought.app.course.overview.components.editing.outline.Prompt,
-			mimeType = NextThought.model.courses.navigation.CourseOutlineNode.mimeType,
-			inlineEditor = OutlinePrompt.getInlineEditor(mimeType);
+		var me = this,
+			OutlinePrompt = NextThought.app.course.overview.components.editing.outline.Prompt,
+			allowedTypes = me.outline && me.outline.getAllowedTypes(),
+			button;
 
-		if (inlineEditor && !this.addNodeCmp) {
-			this.addNodeCmp = this.add({
-				xtype: 'overview-editing-new-unit-node',
-				title: 'Add Unit',
-				InlineEditor: inlineEditor && inlineEditor.editor,
-				parentRecord: this.outline,
-				doSelectNode: this.doSelectNode.bind(this),
-				outlineCmp: this
-			});
+		if (allowedTypes && !me.addNodeCmp) {
+			//TODO: May need to be able to handle more than one type here...
+			button = allowedTypes.reduce(function(acc, type) {
+				var inlineEditor = OutlinePrompt.getInlineEditor(type);
+
+				inlineEditor = inlineEditor && inlineEditor.editor;
+
+				if (!inlineEditor) { return acc; }
+
+				return {
+					xtype: 'overview-editing-new-unit-node',
+					title: inlineEditor.creationText,
+					InlineEditor: inlineEditor,
+					parentRecord: me.outline,
+					doSelectNode: me.doSelectNode.bind(me),
+					outlineCmp: me
+				};
+			}, null);
+
+			if (button) {
+				this.addNodeCmp = this.add(button);
+			}
 		}
 	},
 

@@ -8,8 +8,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 		'NextThought.app.course.overview.components.editing.outline.contentnode.Editor',
 		'NextThought.app.course.overview.components.editing.creation.TypeList',
 		'NextThought.model.courses.CourseOutline',
-		'NextThought.app.course.overview.components.editing.outline.InlineEditor',
-		'NextThought.app.course.overview.components.editing.outline.outlinenode.InlineEditor'
+		'NextThought.app.course.overview.components.editing.outline.outlinenode.InlineEditor',
+		'NextThought.app.course.overview.components.editing.outline.contentnode.InlineEditor'
 	],
 
 
@@ -59,8 +59,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 
 		getInlineEditors: function() {
 			return [
-				NextThought.app.course.overview.components.editing.outline.InlineEditor,
-				NextThought.app.course.overview.components.editing.outline.outlinenode.InlineEditor
+				NextThought.app.course.overview.components.editing.outline.outlinenode.InlineEditor,
+				NextThought.app.course.overview.components.editing.outline.contentnode.InlineEditor
 			];
 		},
 

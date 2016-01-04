@@ -32,6 +32,13 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 	},
 
 
+	getAllowedTypes: function() {
+		return [
+			NextThought.model.courses.navigation.CourseOutlineNode.mimeType
+		];
+	},
+
+
 	__loadContents: function(link, key, doNotCache) {
 		var me = this,
 			load;

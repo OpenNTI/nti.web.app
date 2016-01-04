@@ -34,7 +34,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.contentno
 
 		var items = rootRecord.get('Items');
 
-		return this.add(new NextThought.app.course.overview.components.editing.content.ParentSelection({
+		return this.add(new NextThought.app.course.overview.components.editing.outline.ParentSelection({
 			selectionItems: items,
 			selectedItem: parentRecord !== rootRecord ? parentRecord : null,
 			parentRecord: parentRecord,

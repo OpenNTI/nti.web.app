@@ -147,70 +147,36 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	buildFooter: function(collection) {
 		var me = this,
 			OutlinePrompt = NextThought.app.course.overview.components.editing.outline.Prompt,
-			inlineEditor = OutlinePrompt.getInlineEditor(this.outlineNode.mimeType);
-
-		//TODO: make this more general to support more complicated outline structures
-		if (this.isEditing && collection && collection.isTopLevel()) {
-			return {
-				xtype: 'overview-editing-new-node',
-				title: 'Add Lesson',
-				InlineEditor: inlineEditor && inlineEditor.editor,
-				parentRecord: collection,
-				doSelectNode: this.doSelectNode
-			};
-		}
-	},
-
-
-	xsetCollection: function(collection) {
-		this.disableOrderingContainer();
-		this.removeAll(true);
-
-		var startDate = collection.get('startDate'),
-			classes = ['outline-row', collection.get('type')],
-			items = [];
-
-		if (!collection.get('isAvailable')) {
-			classes.push('disabled');
-		}
-
-		items.push({cls: 'label', html: collection.getTitle()});
-
-		if (this.shouldShowDates && startDate) {
-			items.push({
-				cls: 'date',
-				cn: [
-					{html: Ext.Date.format(startDate, 'M')},
-					{html: Ext.Date.format(startDate, 'j')}
-				]
-			});
-		}
-
-		this.add([
-			{
-				xtype: 'box',
-				isNode: true,
-				autoEl: {
-					cls: classes.join(' '),
-					'data-qtip': collection.getTitle(),
-					cn: items
-				}
-			},
-			{
-				xtype: 'container',
-				bodyContainer: true,
-				cls: 'items',
-				layout: 'none',
-				items: []
-			}
-		]);
-
-		this.nodeCmp = this.down('[isNode]');
-
-		this.callParent(arguments);
+			allowedTypes = this.outlineNode.getAllowedTypes();
 
 		if (this.isEditing) {
-			this.startEditing();
+			return allowedTypes.reduce(function(acc, type) {
+				var inlineEditor = OutlinePrompt.getInlineEditor(type),
+					button;
+
+				inlineEditor = inlineEditor && inlineEditor.editor;
+
+				if (!inlineEditor) { return acc; }
+
+				button = {
+					xtype: 'overview-editing-new-node',
+					title: inlineEditor.creationText,
+					InlineEditor: inlineEditor,
+					parentRecord: collection,
+					doSelectNode: me.doSelectNode
+				};
+
+
+				if (!acc) {
+					acc = button;
+				} else if (Array.isArray(acc)) {
+					acc.push(button);
+				} else {
+					acc = [acc, button];
+				}
+
+				return acc;
+			}, null);
 		}
 	},
 
