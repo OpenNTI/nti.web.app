@@ -50,6 +50,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 	showOutlineNode: function(record, parentRecord) {
 		var me = this,
+			outline = me.outline,
 			bundle = me.bundle;
 
 		return Promise.all([
@@ -59,7 +60,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 				var items = results[0],
 					contents = results[1],
 					cmps = [
-						me.getPreviewConfig(record, parentRecord, contents, bundle)
+						me.getPreviewConfig(record, parentRecord, contents, outline, bundle)
 					];
 
 				if (items && items.length) {
@@ -85,7 +86,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	},
 
 
-	getPreviewConfig: function(record, parentRecord, contents, bundle) {
+	getPreviewConfig: function(record, parentRecord, contents, outline, bundle) {
 		return {
 			xtype: this.PREVIEW_TYPE,
 			record: record,
@@ -93,7 +94,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 			afterDelete: this.onDelete.bind(this),
 			bundle: bundle,
 			contents: contents,
-			root: contents  //For editing stuff under a lesson node, the lesson overview is the root
+			root: outline  //For editing stuff under a lesson node, the lesson overview is the root
 		};
 	},
 

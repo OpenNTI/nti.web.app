@@ -3,7 +3,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.contentno
 	alias: 'widget.overview-editing-contentnode-editor',
 
 	requires: [
-		'NextThought.model.courses.navigation.CourseOutlineNode'
+		'NextThought.model.courses.navigation.CourseOutlineNode',
+		'NextThought.app.course.overview.components.editing.outline.ParentSelection'
 	],
 
 
@@ -25,5 +26,22 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.contentno
 				}
 			];
 		}
+	},
+
+
+	addParentSelection: function(record, parentRecord, rootRecord, onChange) {
+		if (!rootRecord) { return null; }
+
+		var items = rootRecord.get('Items');
+
+		return this.add(new NextThought.app.course.overview.components.editing.content.ParentSelection({
+			selectionItems: items,
+			selectedItem: parentRecord !== rootRecord ? parentRecord : null,
+			parentRecord: parentRecord,
+			rootRecord: rootRecord,
+			editingRecord: record,
+			scrollingParent: this.scrollingParent,
+			onChange: onChange
+		}));
 	}
 });

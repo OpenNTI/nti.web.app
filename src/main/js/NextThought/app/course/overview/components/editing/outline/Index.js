@@ -65,6 +65,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Index', {
 		this.activeComponent = this.add(cmp.create({
 			record: record,
 			parentRecord: this.parentRecord,
+			outline: this.outline,
 			bundle: this.bundle,
 			afterDelete: this.onDelete.bind(this),
 			navigateToOutlineNode: this.navigateToOutlineNode,

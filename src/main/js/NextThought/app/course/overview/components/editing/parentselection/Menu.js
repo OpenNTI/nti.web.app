@@ -39,7 +39,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 		me.newItemContainer = me.down('[isNewItem]');
 
 		if (me.selectionItems.length === 1) {
-			wait()
+			me.onceRendered
 				.then(function() {
 					me.disable();
 					me.doSelection(me.selectionItems[0]);

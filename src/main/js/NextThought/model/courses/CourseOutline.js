@@ -22,6 +22,16 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 	],
 
 
+	setBundle: function(bundle) {
+		this.bundle = bundle;
+	},
+
+
+	getTitle: function() {
+		return this.bundle && this.bundle.getTitle();
+	},
+
+
 	__loadContents: function(link, key, doNotCache) {
 		var me = this,
 			load;
@@ -37,6 +47,11 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 					var clone = me.self.create(me.getData());
 
 					clone.set('Items', items);
+
+					if (me.bundle) {
+						clone.setBundle(me.bundle);
+					}
+
 					return clone;
 				});
 

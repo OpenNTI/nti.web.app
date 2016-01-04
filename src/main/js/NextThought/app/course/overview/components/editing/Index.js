@@ -58,7 +58,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 	},
 
 
-	editOutlineNode: function(record) {
+	editOutlineNode: function(record, outline) {
 		//If we are switching outline nodes scroll the page to the top
 		if (!this.activeRecord || this.activeRecord.getId() !== record.getId()) {
 			this.scrollPageToTop();
@@ -76,6 +76,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 			cmp = this.add({
 				xtype: 'overview-editing-outline',
 				record: record,
+				outline: outline,
 				bundle: this.bundle,
 				afterDelete: this.doDelete.bind(this),
 				parentRecord: record.parent,

@@ -16,7 +16,7 @@ Ext.define('NextThought.mixins.OrderedContents', {
 
 
 	getItems: function() {
-		return this.get('Items');
+		return this.get('Items') || [];
 	},
 
 

@@ -119,6 +119,10 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				Cls.load(null, {
 					url: url,
 					callback: function(rec) {
+						var outline = me.get('Outline');
+
+						outline.setBundle(me);
+
 						me.__courseCatalogEntry = rec;
 						if (rec) {
 							rec.get('Links').getRelLink('CourseInstance').href = me.get('href');

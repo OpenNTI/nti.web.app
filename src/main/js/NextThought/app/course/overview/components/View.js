@@ -167,6 +167,8 @@ Ext.define('NextThought.app.course.overview.components.View', {
 					me.hideEditControls();
 				}
 
+				me.body.setOutline(outline);
+
 				return outline;
 			})
 			.then(me.navigation.setOutline.bind(me.navigation, bundle));

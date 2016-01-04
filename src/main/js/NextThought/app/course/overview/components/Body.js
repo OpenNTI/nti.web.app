@@ -152,6 +152,11 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 	},
 
 
+	setOutline: function(outline) {
+		this.currentOutline = outline;
+	},
+
+
 	showOutlineNode: function(record) {
 		var lesson = this.getLesson(true),
 			editor = this.getEditor();
@@ -176,6 +181,6 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 		editor.show();
 
-		return editor.editOutlineNode(record);
+		return editor.editOutlineNode(record, this.currentOutline);
 	}
 });
