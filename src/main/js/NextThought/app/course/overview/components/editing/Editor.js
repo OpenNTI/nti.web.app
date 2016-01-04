@@ -69,7 +69,18 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 	ERRORS: {
 		TooLong: '{field} is too long.',
-		ConstraintNotSatisfied: '{field} is exceeded.',
+		MaxFileSizeUploadLimitError: function(reason){
+			var msg = 'The uploaded file is to large.',
+				fileSize = reason && reason.max_bytes;
+
+			fileSize = fileSize && NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(fileSize);
+
+			if (fileSize) {
+				msg += ' The max file size is ' + fileSize + '.';
+			}
+
+			return msg;
+		},
 		fieldNames: {
 			title: 'Title',
 			max_file_size: 'Max File Size'
@@ -374,6 +385,10 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 			msg = reason.message || reason.msg;
 
 		msg = this.ERRORS[code] || msg;
+
+		if (typeof msg === 'function') {
+			msg = msg(reason);
+		}
 
 		msg = getFormattedString(msg, {field: fieldName});
 
