@@ -1,5 +1,5 @@
 Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.Base', {
-	extend: 'NextThought.app.course.overview.components.editing.Editor',
+	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 
 	requires: [
 		'NextThought.model.RelatedWork',
@@ -43,22 +43,5 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		return {
 			MimeType: NextThought.model.RelatedWork.mimeType
 		};
-	},
-
-
-	addParentSelection: function(record, parentRecord, rootRecord, onChange) {
-		if (!rootRecord) { return null; }
-
-		var items = rootRecord.get('Items');
-
-		return this.add(new NextThought.app.course.overview.components.editing.content.ParentSelection({
-			selectionItems: items,
-			selectedItem: parentRecord !== rootRecord ? parentRecord : null,
-			parentRecord: parentRecord,
-			rootRecord: rootRecord,
-			editingRecord: record,
-			scrollingParent: this.scrollingParent,
-			onChange: onChange
-		}));
 	}
 });

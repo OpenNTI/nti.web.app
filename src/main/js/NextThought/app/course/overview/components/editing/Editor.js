@@ -128,8 +128,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		return this.FORM_SCHEMA;
 	},
 
+
 	addPreview: function() {},
-	addParentSelection: function(record, parent, root) {},
+
+
+	addParentSelection: function(record, parentRecord, rootRecord, onChange) {},
 
 
 	addFormCmp: function() {
@@ -381,12 +384,12 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	onSave: function() {
 		var me = this,
 			parentSelection = me.parentSelection,
-			originalParent = parentSelection && parentSelection.getOriginalSelection(),
-			currentParent = parentSelection && parentSelection.getCurrentSelection();
+			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
+			currentPosition = parentSelection && parentSelection.getCurrentPosition();
 
 		me.disableSubmission();
 
-		return me.EditingActions.saveEditorForm(me.formCmp, me.record, originalParent, currentParent, me.rootRecord)
+		return me.EditingActions.saveEditorForm(me.formCmp, me.record, originalPosition, currentPosition, me.rootRecord)
 			.fail(function(reason) {
 				me.enableSubmission();
 

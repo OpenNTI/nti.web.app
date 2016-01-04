@@ -77,6 +77,13 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
+	getInsertLink: function(index) {
+		var link = this.getLink('ordered-contents');
+
+		return Globals.trimRoute(link) + '/index/' + index;
+	},
+
+
 	/**
 	 * Append json content to my ordered contents
 	 *
@@ -103,6 +110,18 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
+	__submitFormTo: function(form, link) {
+		if (!link) {
+			return Promise.reject('No Link');
+		}
+
+		return form.submitTo(link)
+			.then(function(response) {
+				return ParseUtils.parseItems(response)[0];
+			});
+	},
+
+
 	/**
 	 * Append the values form a form component
 	 * @param  {NextThought.common.form.Form} form the form component
@@ -111,15 +130,45 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	appendForm: function(form) {
 		var link = this.getContentsLink();
 
-		if (!link) {
-			return Promise.reject('No Link');
+		return this.__submitFormTo(form, link)
+			.then(this.__appendRecord.bind(this));
+	},
+
+
+	insertForm: function(form, index) {
+		if (index === undefined) {
+			return this.appendForm(form);
 		}
 
-		return form.submitTo(link)
-			.then(function(response) {
-				return ParseUtils.parseItems(response)[0];
-			})
-			.then(this.__appendRecord.bind(this));
+		var link = this.getInsertLink(index);
+
+		return this.__submitFormTo(form, link)
+			.then(this.__insertRecord.bind(this, index));
+	},
+
+
+	__insertRecord: function(index, record) {
+		if (index === undefined) {
+			return this.__appendRecord;
+		}
+
+		var items = this.get('Items');
+
+		if (!items) {
+			items = [record];
+			this.set('Items', items);
+		} else {
+			items.splice(index, 0, record);
+		}
+
+		this.fillInItems();
+
+		if (this.onItemAdded) {
+			this.onItemAdded(record);
+		}
+
+		this.fireEvent('update');
+		return record;
 	},
 
 
@@ -199,6 +248,10 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	 * @return {Promise}
 	 */
 	moveToFromContainer: function(record, index, oldIndex, oldParent, root) {
+		if (index === undefined) {
+			return this.appendFromContainer(record, oldParent, root);
+		}
+
 		var currentIndex = this.indexOfId(record.getId ? record.getId() : record),
 			move;
 

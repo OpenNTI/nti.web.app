@@ -1,15 +1,17 @@
 Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	__createRecord: function(form, parent) {
+	__createRecord: function(form, position) {
+		var parent = position && position.parent;
+
 		if (!parent.appendForm) {
 			return Promise.reject({
 				msg: 'Unable to create record.',
-				err: 'Invalid parent'
+				err: 'Invalid position'
 			});
 		}
 
-		return parent.appendForm(form)
+		return parent.insertForm(form, position.index)
 			.fail(this.parseError.bind(this));
 	},
 
@@ -65,39 +67,56 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	},
 
 
-	__moveRecord: function(record, originalParent, newParent, root) {
-		if (!newParent && !originalParent) {
+	__moveRecord: function(record, originalPosition, newPosition, root) {
+		if (!newPosition && !originalPosition) {
 			return Promise.resolve();
 		}
 
-		if (!newParent || !newParent.appendFromContainer) {
+		var newParent = newPosition.parent,
+			originalParent = originalPosition.parent;
+
+		if (!newParent || !newParent.moveToFromContainer) {
 			return Promise.reject({
 				msg: 'Unable to move record.',
 				err: 'Invalid target parent'
 			});
 		}
 
-		return newParent.appendFromContainer(record, originalParent, root)
+		if (newPosition.index === originalPosition.index && newParent.isSameContainer && newParent.isSameContainer(originalParent)) {
+			return Promise.resolve(record);
+		}
+
+		return newParent.moveToFromContainer(record, newPosition.index, originalPosition.index, originalParent, root)
 			.fail(function(reason) {
 				return Promise.reject({
 					msg: 'Unable to move record.',
-					err: reason
+					error: reason
 				});
 			});
 	},
 
 
-	__updateRecord: function(form, record, originalParent, newParent, root) {
+	__updateRecord: function(form, record, originalPosition, newPosition, root) {
 		return this.__saveRecord(form, record)
-			.then(this.__moveRecord.bind(this, record, originalParent, newParent, root))
+			.then(this.__moveRecord.bind(this, record, originalPosition, newPosition, root))
 			.fail(this.parseError.bind(this));
 	},
 
 
-	__updateRecordValues: function(values, record, originalParent, newParent, root) {
+	__updateRecordValues: function(values, record, originalPosition, newPosition, root) {
 		return this.__saveRecordValues(values, record)
-			.then(this.__moveRecord.bind(this, record, originalParent, newParent, root))
+			.then(this.__moveRecord.bind(this, record, originalPosition, newPosition, root))
 			.fail(this.parseError.bind(this));
+	},
+
+
+	__getPosition: function(position, record) {
+		if (!position.isModel) { return position; }
+
+		return {
+			parent: position,
+			index: position.getItemsCount()
+		};
 	},
 
 
@@ -105,22 +124,31 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	 * Handle the logic for creating a new record, updating an existing one
 	 * and maybe moving it to new parent.
 	 *
-	 * Both the originalParent and the newParent need to mixin the OrderedContents
-	 * The root needs to mixin the MovingRoot
+	 * This originalPosition and newPosition both look like:
+	 *
+	 * {
+	 * 	parent: Model, //something that mixins the OrderedContents
+	 * 	index: Number, //the position in that parent
+	 * }
+	 *
+	 * If the originalPosition and newPosition are records, treat it as an append
 	 *
 	 * @param  {NextThought.common.form.Form} form           the form component with the inputs
 	 * @param  {Object} record         the record we are editing, null if creating
-	 * @param  {Object} originalParent the parent the record started at
-	 * @param  {Object} newParent      the parent the record is moving to
+	 * @param  {Object} originalPosition the parent and index the record started at
+	 * @param  {Object} newPosition      the parent and index the record is moving to
 	 * @param  {Object} root           the root of both parents
 	 * @return {Promise}               fulfill when successful, reject when fail
 	 */
-	saveEditorForm: function(form, record, originalParent, newParent, root) {
+	saveEditorForm: function(form, record, originalPosition, newPosition, root) {
+		originalPosition = this.__getPosition(originalPosition);
+		newPosition = this.__getPosition(newPosition);
+
 		if (record) {
-			return this.__updateRecord(form, record, originalParent, newParent, root);
+			return this.__updateRecord(form, record, originalPosition, newPosition, root);
 		}
 
-		return this.__createRecord(form, newParent);
+		return this.__createRecord(form, newPosition);
 	},
 
 
@@ -202,7 +230,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	},
 
 
-	parseError: function(reason){
+	parseError: function(reason) {
 		var response = reason.responseText,
 			item;
 
