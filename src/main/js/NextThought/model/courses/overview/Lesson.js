@@ -30,7 +30,7 @@ Ext.define('NextThought.model.courses.overview.Lesson', {
 
 
 	getTitle: function() {
-		return this.get('title');
+		return this.outlineNode ? this.outlineNode.getTitle() : this.get('title');
 	},
 
 
