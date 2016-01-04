@@ -81,6 +81,10 @@ Ext.define('NextThought.app.course.overview.components.parts.VideoRoll', {
 			}
 		});
 
+		if(this.progress){
+			this.setProgress(this.progress);
+		}
+		
 		this.setVideo(video);
 	},
 

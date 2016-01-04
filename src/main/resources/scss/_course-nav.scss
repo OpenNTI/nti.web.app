@@ -484,9 +484,10 @@
 						background: $c;
 						border-color: $c;
 						color: #ffffff;
-
-						.comments, .viewed{
-							color: #aaeafc;
+						.video-row{
+							.comments, .viewed{
+								color: #aaeafc;
+							}
 						}
 					}
 
@@ -497,7 +498,6 @@
 							@include icon('circle-check-white-small', $top: 10px, $left: 12px);
 							.viewed {
 							    display: block;
-								color: #aaeafc;
 							}
 						}
 
