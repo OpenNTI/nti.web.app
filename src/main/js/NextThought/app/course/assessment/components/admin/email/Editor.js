@@ -9,7 +9,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 	],
 
 	enableTitle: true,
-	enableCopied: false,
 	enableObjectControls: false,
 	enableTextControls: false,
 
@@ -43,13 +42,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 							]}
 						]}
 					]
-				},
-				{tag: 'tpl', 'if': 'enableCopied', cn: [
-					{ cls: 'row cc-ed', cn: [
-						{cls: 'label', html: 'cc'},
-						{cls: 'field'}
-					]}
-				]}
+				}
 			]}
 		]),
 
@@ -70,7 +63,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		titleEl: '.title',
 		footerEl: '.footer',
 		receiverEl: '.row.receiver .field',
-		copiedEl: '.row.cc-ed .field',
 		replyOptionEl: '.reply-option',
 		replyScopeEl: '.reply-option .reply-scope',
 		replyCheckBoxEl: '.reply-option .reply-check'
@@ -97,7 +89,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		this.EmailActions = NextThought.app.course.assessment.components.admin.email.Actions.create();
 		this.replyScopeEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.setReceiverField();
-		this.setupCopiedField();
 		this.setupTitleField();
 		this.setReplyToField();
 		this.setupFooterControls();
@@ -223,35 +214,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 	},
 
 
-	setupCopiedField: function() {
-		if (!this.copiedEl) {
-			return;
-		}
-
-		var tabTracker = new NextThought.util.TabIndexTracker(),
-			el = this.el, me = this;
-
-		this.copiedCmp = Ext.widget('tags', {renderTo: this.copiedEl, tabIndex: tabTracker.next()});
-		this.on('destroy', this.copiedCmp.destroy.bind(this.copiedCmp));
-		this.mon(this.copiedCmp, 'blur', function() {
-			var e = el.down('.content');
-			Ext.defer(e.focus, 10, e);
-		});
-
-		this.copiedCmp.onceRendered
-			.then(function() {
-				var e = me.copiedCmp.el.down('input');
-				if (e) {
-					e.dom.setAttribute('placeholder', "");
-				}
-			});
-
-		if ($AppConfig.userObject.get('email')) {
-			this.copiedCmp.addTag($AppConfig.userObject.get('email'));
-		}
-	},
-
-
 	updateScope: function(record){
 		var scope = record && record.raw && record.raw.studentFilter;
 
@@ -351,7 +313,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 	createNoReplyMenu: function(){
 		var me = this, menu,
-			initialScope = this.record && this.record.get('scope') || 'All';
+			initialScope = this.record && this.record.get('scope') || 'All',
+			defaults = this.REPLY_DEFAULTS;
 
 		if (this.isIndividualEmail) {
 			return;
@@ -372,19 +335,19 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 				items: [{
 						text: 'All',
 						scope: 'All',
-						checked: initialScope === 'All',
+						checked: defaults[initialScope] === 'All',
 						NoReply: false
 					},
 					{
 						text: 'Open',
 						scope: 'Open',
-						checked: initialScope === 'Open',
+						checked: defaults[initialScope] === 'Open',
 						NoReply: false
 					},
 					{
 						text: 'Enrolled',
 						scope: 'ForCredit',
-						checked: initialScope === 'ForCredit',
+						checked: defaults[initialScope] === 'ForCredit',
 						NoReply: false
 					}
 				]
