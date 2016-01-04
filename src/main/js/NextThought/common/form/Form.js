@@ -224,6 +224,7 @@ Ext.define('NextThought.common.form.Form', {
 
 		this.buildInputs(this.schema, this.formEl);
 
+		this.formEl.on('submit', this.formSubmit.bind(this));
 		this.onFormChange();
 	},
 
@@ -786,5 +787,15 @@ Ext.define('NextThought.common.form.Form', {
 		} else if (textarea) {
 			textarea.setAttribute('placeholder', value);
 		}
+	},
+
+
+	formSubmit: function(e){
+		e.preventDefault();
+
+		if (this.onSubmit) {
+			this.onSubmit();
+		}
 	}
+	
 });

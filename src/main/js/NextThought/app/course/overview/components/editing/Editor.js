@@ -141,7 +141,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 			defaultValues: values,
 			action: this.getFormAction(),
 			method: this.getFormMethod(),
-			onChange: this.onFormChange.bind(this)
+			onChange: this.onFormChange.bind(this),
+			onSubmit: this.onFormSubmit.bind(this)
 		});
 	},
 
@@ -391,5 +392,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 				return Promise.reject(reason);
 			});
+	},
+
+	onFormSubmit: function() {
+		if (this.doSave) {
+			this.doSave();
+		}
 	}
 });
