@@ -525,7 +525,6 @@
 	.date {
 		cursor: pointer;
 		display: block;
-		opacity: 0.3;
 		min-width: 31px;
 		min-height: 31px;
 		position: absolute;
@@ -533,27 +532,28 @@
 		top: 7px;
 		text-transform: uppercase;
 		border-radius: 4px;
-		box-shadow: 0 0 0 1px $primary-grey, inset 0 0 0 1px $primary-grey;
+		box-shadow: 0 0 0 1px #AFAFAF, inset 0 0 0 1px #AFAFAF;
 		text-align: center;
+		padding: 1px;
 
 		.month {
-			background: $primary-grey;
+			background: #AFAFAF;
 			color: white;
 			border-radius: 0;
-			font: normal 700 10px/13px $font;
-			padding: 0 6px;
+			font: normal 700 10px/12px $font;
+			padding: 0 2px;
 		}
 
 		.day {
-			color: $primary-grey;
+			color: #AFAFAF;
 			font: normal 600 12px/18px $font;
 			border-radius: 0;
 		}
 
 		&.empty {
 			.month {
-				background: $primary-grey;
-				height: 13px;
+				background: #AFAFAF;
+				height: 12px;
 			}
 
 			.day {
