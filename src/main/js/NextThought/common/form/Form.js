@@ -615,7 +615,10 @@ Ext.define('NextThought.common.form.Form', {
 				if (xhr.status >= 200 && xhr.status < 300) {
 					success(xhr.responseText);
 				} else {
-					failure(xhr.responseText);
+					failure({
+						status: xhr.status,
+						responseText: xhr.responseText
+					});
 				}
 			}
 		};

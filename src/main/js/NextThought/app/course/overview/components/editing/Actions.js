@@ -204,9 +204,15 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 
 	parseError: function(reason){
 		var response = reason.responseText,
-			json = (response && JSON.parse(response)) || (reason && JSON.parse(reason));
+			item;
 
-		return Promise.reject(json || {msg: 'Unable to update record.'});
+		try {
+			item = response && JSON.parse(response);
+		} catch (err) {
+			console.error('Error' + reason.err);
+		}
+
+		return Promise.reject(item || {msg: 'Unable to update record.'});
 	}
 
 });
