@@ -32,10 +32,11 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 	renderSelectors: {
 		monthEl: '.month',
 		dayEl: '.day',
+		dateEl: '.date',
 		menuContainerEl: '.menu-container',
 		mainEl: '.main',
 		textEl: '.main .text',
-		dateEl: '.date-calendar',
+		dateContainerEl: '.date-calendar',
 		clearEl: '.clear'
 	},
 
@@ -54,8 +55,8 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 		
 		this.setDefaultDate();
 
-		if (this.dateEl) {
-			this.mon(this.dateEl, 'click', this.dateClicked.bind(this));			
+		if (this.dateContainerEl) {
+			this.mon(this.dateContainerEl, 'click', this.dateClicked.bind(this));			
 		}
 		if (this.textEl) {
 			this.mon(this.textEl, 'click', this.textLabelClicked.bind(this));			
@@ -70,7 +71,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 
 	setDefaultDate: function () {
 		var startDate = this.record && this.record.get('AvailableBeginning'),
-			date  = startDate ? new Date(startDate) : new Date(), m;
+			date  = startDate ? new Date(startDate) : null, m;
 
 		this.setDayAndMonth(date);
 		if (this.enableText) {
@@ -82,16 +83,23 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar
 	setDayAndMonth: function(date){
 		var parts, m;
 		if (date) {
-			// Format i.e. December 12
-			date = Ext.Date.format(date, 'F d');
+			this.dateEl.removeCls('empty');
+
+			// Format i.e. Dec 12
+			date = Ext.Date.format(date, 'M j');
 			parts = date.split(' ');
-			m = parts[0].substring(0,3);
+			m = parts[0];
 			
 			if (this.monthEl) {
 				this.monthEl.update(m);				
 			}
 
 			this.dayEl.update(parts[1]);
+		}
+		else {
+			this.monthEl.update("");
+			this.dayEl.update("");
+			this.dateEl.addCls('empty');
 		}	
 	},
 
