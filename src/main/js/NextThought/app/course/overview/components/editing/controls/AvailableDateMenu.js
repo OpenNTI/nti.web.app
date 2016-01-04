@@ -15,6 +15,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 				{cls: 'part selected beginning', 'data-action': 'AvailableBeginning', html: 'Begin Date'},
 				{cls: 'part ending', 'data-action': 'AvailableEnding', html: 'Finish Date'}
 			]},
+			{cls: 'error'},
 			{cls: 'date-picker-container'},
 			{cls: 'save disabled', html: 'Save Changes'}
 		]}
@@ -27,7 +28,8 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 		toggleEl: '.toggle',
 		beginEl: '.beginning',
 		endEl: '.ending',
-		containerEl: '.container'
+		containerEl: '.container',
+		errorEl: '.error'
 	},
 
 	initComponent: function() {
@@ -44,6 +46,9 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 		this.picker = this.createDatePicker(this.pickerEl);
 		this.mon(this.toggleEl, 'click', this.handleSelectionClick.bind(this));
 		this.mon(this.saveEl, 'click', this.doSave.bind(this));
+		this.errorEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		this.errorEl.hide();
+
 		this.setInitialState();
 	},
 
@@ -137,6 +142,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 			AvailableEnding: endDate ? endDate.getTime && (endDate.getTime()/1000) : null
 		};
 
+		this.saveEl.addCls('disabled');
 		this.updateDates();
 	},
 
@@ -149,7 +155,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 			availableBeginning = this.values['AvailableBeginning'] ? new Date(this.values['AvailableBeginning']* 1000) : null;
 
 		if (this.picker && field) {
-			date = value ? new Date(value * 1000) : new Date();
+			date = value ? new Date(value * 1000) : this.getDefaultTimeForField(field);
 			this.picker.setValue(date);
 
 			if (field === 'AvailableBeginning') {
@@ -160,6 +166,25 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 				this.picker.setMaxDate(null);
 			}
 		}
+	},
+
+
+	getDefaultTimeForField: function(field){
+		var defaultValue = new Date();
+		if (field === 'AvailableBeginning') {
+			defaultValue.setDate(defaultValue.getDate() + 1);
+			defaultValue.setHours(0);
+			defaultValue.setMinutes(0);
+			defaultValue.setSeconds(0);
+		}
+		else {
+			defaultValue.setDate(defaultValue.getDate() + 1);
+			defaultValue.setHours(23);
+			defaultValue.setMinutes(59);
+			defaultValue.setSeconds(0);
+		}
+
+		return defaultValue; 
 	},
 
 
@@ -189,6 +214,8 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 		if (this.saveEl.hasCls('disabled')) {
 			this.saveEl.removeCls('disabled');
 		}
+
+		this.clearError();
 	},
 
 
@@ -200,10 +227,6 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 
 		this.select(el);
 		this.updateDates();
-		
-		if (this.saveEl.hasCls('disabled')) {
-			this.saveEl.removeCls('disabled');
-		}
 	},
 
 
@@ -226,10 +249,44 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 	},
 
 
+	showError: function(error){
+		var errorMessage = (error || {}).msg;
+		this.errorEl.update(errorMessage);
+		this.saveEl.addCls('disabled');
+		this.errorEl.show();
+	},
+
+
+	clearError: function(){
+		this.errorEl.update("");
+		this.errorEl.hide();
+	},
+
+
+	isValid: function(){
+		var values = this.getValue(),
+			error;
+
+		// TODO: Do more validations. Check if each date is valid for instance.
+		if (!values.AvailableBeginning && values.AvailableEnding) {
+			error = {
+				msg: 'The begin date is required when the finish date is set.',
+				field: 'AvailableBeginning'
+			};
+
+			this.showError(error);
+			return false;
+		}
+
+		return true;
+	},
+
+
 	doSave: function(e){
 		var target = Ext.get(e.target);
 
 		if (target && target.hasCls('disabled')) { return; }
+		if (!this.isValid()) { return; }
 
 		if (this.onSave) {
 			this.onSave();

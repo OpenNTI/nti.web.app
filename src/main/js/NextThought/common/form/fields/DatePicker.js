@@ -154,6 +154,11 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 			m = 'pm';
 		}
 
+		// 0 hour is equivalent to 12 when we have AM/PM.
+		if (hour === 0) {
+			hour = 12;
+		}
+
 		// Get two digit format
 		hour = ('0' + hour).slice(-2);
 		minute = ('0' + minute).slice(-2);
