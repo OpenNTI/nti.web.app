@@ -64,6 +64,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 		}
 
 		this.add(items);
+
+		if (this.Draggable && this.Draggable.isEnabled) {
+			this.enableDragging();
+		}
 	},
 
 

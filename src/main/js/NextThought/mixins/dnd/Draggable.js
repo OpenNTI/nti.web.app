@@ -45,6 +45,7 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 			this.Draggable = {
 				className: this.$className,
 				hasHandle: false,
+				isEnabled: false,
 				transferData: new NextThought.store.DataTransfer(),
 				handlers: {
 					dragStart: this.__dragStart.bind(this),
@@ -133,6 +134,8 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 		}
 
 		this.initDragging();
+
+		this.Draggable.isEnabled = !remove;
 
 		var handle = this.getDragHandle && this.getDragHandle(),
 			method = remove ? 'removeEventListener' : 'addEventListener',
