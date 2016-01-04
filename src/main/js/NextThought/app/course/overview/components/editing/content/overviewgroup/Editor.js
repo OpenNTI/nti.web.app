@@ -20,10 +20,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 		getTypes: function() {
 			return [
 				{
-					title: 'Group',
+					title: 'Section',
 					category: 'content',
 					iconCls: 'group',
-					description: 'Groups are used for',
+					description: 'Section are used for',
 					editor: this
 				}
 			];

@@ -110,7 +110,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 			items: [
 				{
 					xtype: 'overview-editing-controls-add',
-					name: 'Add Section Break',
+					name: 'Add Section',
 					parentRecord: this.lessonOverview,
 					root: this.lessonOverview
 				}

@@ -6,7 +6,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ParentSel
 		'NextThought.app.course.overview.components.editing.content.overviewgroup.InlineEditor'
 	],
 
-	label: 'Group',
+	label: 'Section',
 
 	parseItemData: function(item) {
 		return {
