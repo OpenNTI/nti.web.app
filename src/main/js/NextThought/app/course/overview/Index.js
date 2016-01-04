@@ -96,7 +96,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 			lessons = this.getLessons();
 
 		this.currentBundle = bundle;
-		this.store = bundle.getOutlineInterface();
+		this.store = bundle.getAdminOutlineInterface();
 
 		if (lessons === item) {
 			return lessons.bundleChanged(bundle);
