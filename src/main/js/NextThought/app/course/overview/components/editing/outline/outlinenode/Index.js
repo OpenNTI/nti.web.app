@@ -129,7 +129,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 			xtype: 'overview-editing-content',
 			record: contents,
 			outlineNode: record,
-			bundle: bundle
+			bundle: bundle,
+			navigate: this.navigate
 		};
 	},
 

@@ -50,7 +50,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.Index', {
 					assignments: assignments,
 					enrollment: enrollment,
 					bundle: course,
-					contents: contents
+					contents: contents,
+					navigate: me.navigate
 				});
 
 				return me.currentOverview.onceLoaded();

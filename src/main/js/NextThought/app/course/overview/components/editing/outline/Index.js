@@ -69,7 +69,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Index', {
 			bundle: this.bundle,
 			afterDelete: this.onDelete.bind(this),
 			navigateToOutlineNode: this.navigateToOutlineNode,
-			afterDelete: this.onDelete.bind(this)
+			afterDelete: this.onDelete.bind(this),
+			navigate: this.navigate
 		}));
 	},
 

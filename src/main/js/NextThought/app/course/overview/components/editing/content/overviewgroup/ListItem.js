@@ -215,7 +215,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 			assignment: assignment,
 			course: this.course,
 			transition: transition,
-			initialState: initialState
+			initialState: initialState,
+			navigate: this.navigate
 		});
 
 	},

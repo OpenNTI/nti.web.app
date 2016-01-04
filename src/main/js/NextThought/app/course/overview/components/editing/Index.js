@@ -80,7 +80,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 				bundle: this.bundle,
 				afterDelete: this.doDelete.bind(this),
 				parentRecord: record.parent,
-				navigateToOutlineNode: this.navigateToOutlineNode
+				navigateToOutlineNode: this.navigateToOutlineNode,
+				navigate: this.navigate.bind(this)
 			});
 		}
 
@@ -111,5 +112,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 		if (navigateTo) {
 			this.navigateToOutlineNode(navigateTo);
 		}
+	},
+
+
+	navigate: function(obj) {
+		obj.parent = this.currentNode;
+		this.navigateToObject(obj);
 	}
 });

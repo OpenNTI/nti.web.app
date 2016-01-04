@@ -131,7 +131,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 				course: this.bundle,
 				addCardToGroup: this.addCardToGroup.bind(this),
 				initialState: initialState,
-				transition: transition
+				transition: transition,
+				navigate: this.navigate
 			});
 		}
 
