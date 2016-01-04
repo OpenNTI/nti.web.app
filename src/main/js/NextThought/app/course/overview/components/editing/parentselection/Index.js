@@ -14,7 +14,14 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 	emptyText: 'Create New Parent',
 
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'item {cls}', 'data-ntiid': '{id}', html: '{label}'
+		cls: 'item {cls}',
+		'data-ntiid': '{ntiid}',
+		cn: [
+			{tag: 'tpl', 'if': 'color', cn: [
+				{cls: 'color', style: {background: '#{color}'}}
+			]},
+			{cls: 'label', html: '{label}'}
+		]
 	})),
 
 
@@ -106,6 +113,8 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 			parentRecord: parentRecord,
 			itemTpl: this.itemTpl,
 			close: this.hideSelectionMenu.bind(this),
+			enable: this.enableSelectionMenu.bind(this),
+			disable: this.disableSelectionMenu.bind(this),
 			parseItemData: this.parseItemData.bind(this),
 			doSelectRecord: this.selectRecord.bind(this),
 			renderTo: Ext.getBody(),
@@ -125,6 +134,8 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 		menu = new NextThought.app.course.overview.components.editing.parentselection.PositionMenu({
 			renderTo: Ext.getBody(),
 			close: this.hidePositionMenu.bind(this),
+			enable: this.enablePositionMenu.bind(this),
+			disable: this.disablePositionMenu.bind(this),
 			doSelectPosition: this.selectPosition.bind(this),
 			scrollingParent: this.scrollingParent
 		});
@@ -205,6 +216,17 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 	},
 
 
+	enableSelectionMenu: function() {
+		this.selectionEl.removeCls('disabled');
+	},
+
+
+	disableSelectionMenu: function() {
+		this.hideSelectionMenu();
+		this.selectionEl.addCls('disabled');
+	},
+
+
 	togglePositionMenu: function() {
 		if (this.positionEl.hasCls('closed')) {
 			this.showPositionMenu();
@@ -233,6 +255,17 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 		}
 
 		this.unalignMenu();
+	},
+
+
+	enablePositionMenu: function() {
+		this.positionEl.removeCls('disabled');
+	},
+
+
+	disablePositionMenu: function() {
+		this.hidePositionMenu();
+		this.positionEl.addCls('disabled');
 	},
 
 

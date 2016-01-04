@@ -16,7 +16,9 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.add([
+		var me = this;
+
+		me.add([
 			{
 				xtype: 'container',
 				cls: 'item-list',
@@ -33,14 +35,19 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 			}
 		]);
 
+		me.itemListContainer = me.down('[isItemList]');
+		me.newItemContainer = me.down('[isNewItem]');
 
-		this.itemListContainer = this.down('[isItemList]');
-		this.newItemContainer = this.down('[isNewItem]');
-
-		if (this.selectionItems.length) {
-			this.showItems();
-		} else {
-			this.showAddNewItem();
+		if (me.selectionItems.length === 1) {
+			wait()
+				.then(function() {
+					me.disable();
+					me.doSelection(me.selectionItems[0]);
+				});
+		} if (me.selectionItems.length) {
+			me.showItems();
+		} else if (me.editor) {
+			me.showAddNewItem();
 		}
 	},
 

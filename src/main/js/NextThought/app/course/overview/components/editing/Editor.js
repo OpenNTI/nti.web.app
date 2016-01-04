@@ -380,7 +380,6 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		return this.setErrorOn(field, msg);
 	},
 
-
 	onSave: function() {
 		var me = this,
 			parentSelection = me.parentSelection,

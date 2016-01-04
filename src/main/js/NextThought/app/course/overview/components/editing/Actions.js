@@ -4,7 +4,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	__createRecord: function(form, position) {
 		var parent = position && position.parent;
 
-		if (!parent.appendForm) {
+		if (!parent.insertForm) {
 			return Promise.reject({
 				msg: 'Unable to create record.',
 				err: 'Invalid position'
@@ -16,15 +16,17 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	},
 
 
-	__createRecordValues: function(values, parent) {
-		if (!parent.appendContent) {
+	__createRecordValues: function(values, position) {
+		var parent = position && position.parent;
+
+		if (!parent.insertContent) {
 			return Promise.reject({
 				msg: 'Unable to create record.',
 				err: 'Invalid parent'
 			});
 		}
 
-		return parent.appendContent(values)
+		return parent.insertContent(values, position.index)
 			.fail(this.parseError.bind(this));
 	},
 

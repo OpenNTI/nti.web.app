@@ -1,9 +1,10 @@
 Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.Editor',
-	alias: 'widget.overview-editing-overviewgroup-editog',
+	alias: 'widget.overview-editing-overviewgroup-editor',
 
 	requires: [
 		'NextThought.model.courses.overview.Group',
+		'NextThought.app.course.overview.components.editing.content.overviewgroup.ParentSelection',
 		'NextThought.app.course.overview.components.editing.content.overviewgroup.InlineEditor'
 	],
 
@@ -40,15 +41,35 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 
 	onSave: function() {
-		var me = this;
+		var me = this,
+			parentSelection = me.parentSelection,
+			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
+			currentPosition = parentSelection && parentSelection.getCurrentPosition();
 
 		me.disableSubmission();
 
-		return me.EditingActions.saveValues(me.formCmp.getValue(), me.record, me.parentRecord, me.parentRecord, me.rootRecord)
+		return me.EditingActions.saveValues(me.formCmp.getValue(), me.record, originalPosition, currentPosition, me.rootRecord)
 			.fail(function(reason) {
 				me.enableSubmission();
 
 				return Promise.reject(reason);
 			});
+	},
+
+
+	addParentSelection: function(record, parentRecord, rootRecord, onChange) {
+		if (!rootRecord) { return null; }
+
+		var items = rootRecord.get('Items');
+
+		return this.add(new NextThought.app.course.overview.components.editing.content.overviewgroup.ParentSelection({
+			selectionItems: [rootRecord],
+			selectedItem: rootRecord,
+			parentRecord: parentRecord,
+			rootRecord: rootRecord,
+			editingRecord: record,
+			scrollingParent: this.scrollingParent,
+			onChange: onChange
+		}));
 	}
 });

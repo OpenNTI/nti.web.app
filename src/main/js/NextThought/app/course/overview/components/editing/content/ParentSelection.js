@@ -8,19 +8,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ParentSel
 
 	label: 'Group',
 
-	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'item group-item {cls}',
-		'data-ntiid': '{ntiid}',
-		cn: [
-			{cls: 'color', style: {background: '#{color}'}},
-			{cls: 'label', html: '{label}'}
-		]
-	})),
-
-
 	parseItemData: function(item) {
 		return {
-			cls: '',
+			cls: 'group-item',
 			ntiid: item.getId(),
 			label: item.get('title'),
 			color: item.get('accentColor')

@@ -84,6 +84,18 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
+	__submitContent: function(content, link) {
+		if (!link) {
+			return Proimse.reject('No Link');
+		}
+
+		return Service.post(link, content)
+			.then(function(response) {
+				return ParseUtils.parseItems(response)[0];
+			});
+	},
+
+
 	/**
 	 * Append json content to my ordered contents
 	 *
@@ -98,15 +110,20 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	appendContent: function(content) {
 		var link = this.getContentsLink();
 
-		if (!link) {
-			return Promise.reject('No link');
+		return this.__submitContent(content, link)
+			.then(this.__appendRecord.bind(this));
+	},
+
+
+	insertContent: function(content, index) {
+		if (index === undefined) {
+			return this.appendContent(content);
 		}
 
-		return Service.post(link, content)
-			.then(function(response) {
-				return ParseUtils.parseItems(response)[0];
-			})
-			.then(this.__appendRecord.bind(this));
+		var link = this.getInsertLink(index);
+
+		return this.__submitContent(content, link)
+			.then(this.__insertRecord.bind(this, index));
 	},
 
 

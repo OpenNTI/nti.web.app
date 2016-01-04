@@ -57,6 +57,12 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.P
 
 		this.el.dom.innerHTML = '';
 
+		if (total === 1) {
+			this.disable();
+		} else {
+			this.enable();
+		}
+
 		for (i = 0; i < total; i++) {
 			this.itemTpl.append(this.el, {
 				index: i,

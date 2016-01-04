@@ -167,7 +167,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 			layout: 'none',
 			items: [
 				{xtype: 'overview-editing-overviewgroup-preview', group: collection},
-				{xtype: 'overview-editing-controls-edit', color: 'white', record: collection, parentRecord: this.lessonOverview, rootRecord: this.lessonOverview}
+				{xtype: 'overview-editing-controls-edit', color: 'white', record: collection, parentRecord: this.lessonOverview, root: this.lessonOverview}
 			]
 		};
 	},
