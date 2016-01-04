@@ -272,17 +272,17 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 	onBodyClick: function(e) {
 		var onSelection = e.getTarget('.overview-editing-parentselection'),
 			onSelectionMenu = e.getTarget('.overview-editing-parentselection-menu'),
-			onPosition = e.getTarget('.overview-editing-parentselection-position-menu');
+			onPositionMenu = e.getTarget('.overview-editing-parentselection-position-menu');
 
 		onSelection = onSelection && (e.getTarget('.selection') || e.getTarget('.position'));
 		onSelection = onSelection && (e.getTarget('.active') || e.getTarget('.menu'));
 
 		if (!onSelection) {
-			if (!onSelection) {
+			if (!onSelectionMenu) {
 				this.hideSelectionMenu();
 			}
 
-			if (!onPosition) {
+			if (!onPositionMenu) {
 				this.hidePositionMenu();
 			}
 		}
