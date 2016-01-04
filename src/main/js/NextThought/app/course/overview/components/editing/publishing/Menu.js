@@ -63,14 +63,13 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		this.mon(this.publishOnDateEl, 'click', this.onPublishOnDateClick.bind(this));
 		this.mon(this.unpublishEl, 'click', this.handleSelectionClick.bind(this));
 		this.mon(this.saveBtnEl, 'click', this.onSave.bind(this));
-
-		this.setInitialState();
 	},
 
 
 	open: function() {
 		Ext.EventManager.onWindowResize(this.onWindowResizeBuffer, this);
 		window.addEventListener('scroll', this.realign);
+		this.setInitialState();
 		this.realign(true);
 	},
 
@@ -153,10 +152,11 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 			isNodePublished = node && node.isPublished && node.isPublished(),
 			lesson = this.contents,
 			isLessonPublished = lesson && lesson.isPublished && lesson.isPublished(),
+			lessonPublishDate = lesson && lesson.get('publishBeginning'),
 			date;
 
 
-		if (isNodePublished && isLessonPublished) {
+		if (isNodePublished && isLessonPublished && !lessonPublishDate) {
 			this.select(this.publishEl);
 			this.initialState = this.publishEl;
 		}
@@ -164,18 +164,16 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 			this.select(this.unpublishEl);
 			this.initialState = this.unpublishEl;
 		}
-		else if (isNodePublished && !isLessonPublished) {
-			if (isLessonPublished === false) {
-				date = lesson && lesson.get('publishBeginning');
-				if (date) {
-					date = new Date(date);
-					this.setPublishOnDateText(date);
-				}
-
-				this.select(this.publishOnDateEl);
-				this.initialState = this.publishOnDateEl;
-				this.createDatePicker(this.publishOnDateEl.down('.date-picker-container'));
+		else if (isNodePublished && lessonPublishDate) {
+			date = lesson && lesson.get('publishBeginning');
+			if (date) {
+				date = new Date(date);
+				this.setPublishOnDateText(date);
 			}
+
+			this.select(this.publishOnDateEl);
+			this.initialState = this.publishOnDateEl;
+			this.createDatePicker(this.publishOnDateEl.down('.date-picker-container'));
 		}
 		else {
 			this.select(this.unpublishEl);

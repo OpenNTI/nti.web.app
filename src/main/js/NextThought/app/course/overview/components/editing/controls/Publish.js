@@ -52,19 +52,18 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 		var node = this.record,
 			isNodePublished = node && node.isPublished && node.isPublished(),
 			lesson = this.contents,
-			isLessonPublished = lesson && lesson.isPublished && lesson.isPublished();
+			isLessonPublished = lesson && lesson.isPublished && lesson.isPublished(),
+			lessonPublishDate = lesson && lesson.get('publishBeginning');
 
 
-		if (isNodePublished && isLessonPublished) {
+		if (isNodePublished && isLessonPublished && !lessonPublishDate) {
 			this.setPublished();
 		}
 		else if (!isNodePublished && !isLessonPublished) {
 			this.setNotPublished();
 		}
-		else if (isNodePublished && !isLessonPublished) {
-			if (isLessonPublished === false) {
-				this.setWillPublishOn();
-			}
+		else if (isNodePublished && lessonPublishDate) {
+			this.setWillPublishOn();
 		}
 		else {
 			console.warn('Not expected. The node should be published if its lesson is published. ', node, lesson);
