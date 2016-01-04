@@ -34,7 +34,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 				i = Math.floor(Math.log(bytes) / Math.log(1024));
 			}
 
-			return (bytes / Math.pow(1024, i)).toFixed(decimals).replace(/[\.0]+$/, '') + ' ' + sizes[i];
+			return (bytes / Math.pow(1024, i)).toFixed(decimals).replace(/\.0+$/, '') + ' ' + sizes[i];
 		},
 
 
