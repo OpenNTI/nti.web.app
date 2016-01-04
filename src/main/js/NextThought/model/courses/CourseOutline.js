@@ -159,6 +159,11 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 	},
 
 
+	onItemUpdated: function() {
+		NextThought.store.courseware.OutlineInterface.fillInDepths(this);
+	},
+
+
 	onItemAdded: function() {
 		NextThought.store.courseware.OutlineInterface.fillInDepths(this);
 	},

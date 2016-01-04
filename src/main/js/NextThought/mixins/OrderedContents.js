@@ -41,8 +41,15 @@ Ext.define('NextThought.mixins.OrderedContents', {
 				if (item.hasOrderedContents) {
 					item.fillInItems();
 				}
+
+				me.mon(item, 'update', me.onItemUpdated.bind(me));
 			});
 		}
+	},
+
+
+	onItemUpdated: function() {
+		this.fireEvent('updated');
 	},
 
 
