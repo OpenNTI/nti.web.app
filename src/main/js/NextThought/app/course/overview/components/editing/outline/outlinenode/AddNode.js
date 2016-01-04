@@ -50,6 +50,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	onSave: function(e){
 		var record = this.getNewRecord(),
 			shouldNavigate = e.getKey() === e.ENTER,
+			outline = this.outlineCmp && this.outlineCmp.outline,
 			me = this;
 
 		if (!this.isValid()) {
@@ -62,6 +63,12 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 		if (!this.parentRecord) {
 			return Promise.reject();
+		}
+
+		// In case the outline node changed, reset it.
+		// This is ensure that we have the right listeners set. 
+		if (outline && this.parentRecord !== outline && this.parentRecord.getId() === outline.getId()) {
+			this.parentRecord = outline;
 		}
 
 		return this.doSave(record, shouldNavigate)

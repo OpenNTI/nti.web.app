@@ -139,7 +139,8 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 				title: 'Add Unit',
 				InlineEditor: inlineEditor && inlineEditor.editor,
 				parentRecord: this.outline,
-				doSelectNode: this.doSelectNode.bind(this)
+				doSelectNode: this.doSelectNode.bind(this),
+				outlineCmp: this
 			});
 		}
 	},
