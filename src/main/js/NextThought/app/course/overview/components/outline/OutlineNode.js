@@ -96,6 +96,15 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	},
 
 
+	setHeaderForCollection: function(){
+		this.callParent(arguments);
+
+		if (this.selectedRecord) {
+			this.selectRecord(this.selectedRecord);
+		}
+	},
+
+
 	buildHeader: function(collection) {
 		var startDate = collection.get('startDate'),
 			classes = ['outline-row', collection.get('type')],
@@ -219,6 +228,8 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 		var body = this.getBodyContainer(),
 			header = this.currentHeader,
 			bodyListEl = this.el && this.el.up('.outline-list');
+
+		this.selectedRecord = record;
 
 		if (record.getId() === this.outlineNode.getId()) {
 			header.addCls('selected');
