@@ -7,7 +7,6 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 
 	parseItemData: function(item) {
-		debugger;
 		return {
 			cls: 'outline-item',
 			ntiid: item.getId(),

@@ -91,7 +91,6 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 
 	addEditControls: function() {
-		debugger;
 		var container = this.el.down('.edit-container');
 
 		this.editCmp = Ext.widget('overview-editing-controls-edit', {
