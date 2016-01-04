@@ -157,7 +157,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 			showError: this.showError.bind(this),
 			showWarning: this.showWarning.bind(this),
 			showMessage: this.showMessage.bind(this),
-			doClose: this.doClose.bind(this)
+			doClose: this.doClose.bind(this),
+			doSave: this.doSave.bind(this)
 		};
 	},
 
@@ -243,6 +244,11 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 	},
 
 
+	doSave: function() {
+		return this.Prompt.doSave();
+	},
+
+
 	onBack: function() {
 		if (this.activeEditor && this.activeEditor.onBack) {
 			this.activeEditor.onBack();
@@ -269,8 +275,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 
 
 	onSave: function() {
-		if (this.activeEditor && this.activeEditor.doSave) {
-			return this.activeEditor.doSave();
+		if (this.activeEditor && this.activeEditor.onSave) {
+			return this.activeEditor.onSave();
 		}
 
 		return Promise.reject();

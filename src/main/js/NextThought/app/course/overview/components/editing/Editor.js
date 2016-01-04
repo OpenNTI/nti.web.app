@@ -377,7 +377,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	},
 
 
-	doSave: function() {
+	onSave: function() {
 		var me = this,
 			parentSelection = me.parentSelection,
 			originalParent = parentSelection && parentSelection.getOriginalSelection(),

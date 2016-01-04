@@ -142,7 +142,8 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 			showError: this.showError.bind(this),
 			showWarning: this.showWarning.bind(this),
 			showMessage: this.showMessage.bind(this),
-			doClsoe: this.doClose.bind(this)
+			doClose: this.doClose.bind(this),
+			doSave: this.doSave.bind(this)
 		}));
 
 		this.setUpTypeEditor(type);
@@ -173,9 +174,9 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 
 
 
-	doSave: function() {
-		if (this.activeEditor && this.activeEditor.doSave) {
-			return this.activeEditor.doSave();
+	onSave: function() {
+		if (this.activeEditor && this.activeEditor.onSave) {
+			return this.activeEditor.onSave();
 		}
 
 		return Promise.reject();
