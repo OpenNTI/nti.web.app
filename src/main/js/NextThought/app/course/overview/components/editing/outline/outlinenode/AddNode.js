@@ -148,7 +148,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 		if (outline && this.parentRecord !== outline && this.parentRecord.getId() === outline.getId()) {
 			parent = outline;
 		} else {
-			parent = this.oparentRecord;
+			parent = this.parentRecord;
 		}
 
 		return parent.appendContent(values)
