@@ -14,7 +14,7 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineContentNode', {
 
 
 	getFirstContentNode: function() {
-		return this.isPublished() ? this : null;
+		return this.isPublished() && this.get('isAvailable') ? this : null;
 	},
 
 
