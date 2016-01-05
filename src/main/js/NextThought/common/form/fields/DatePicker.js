@@ -9,9 +9,9 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		{tag: 'tpl', 'if': 'timePicker', cn: [
 			{cls: 'time-container', cn: [
 				{cls: 'error'},
-				{ tag: 'input', cls: 'hour', name: 'hour', value: '11', type: 'number', min: 0, max: 24},
+				{ tag: 'input', cls: 'hour', name: 'hour', value: '11', min: 0, max: 24},
 				{ tag: 'span', cls: 'divider', html: ':'},
-				{ tag: 'input', cls: 'minute', name: 'minute', value: '59', type: 'number', min: 0, max: 59},
+				{ tag: 'input', cls: 'minute', name: 'minute', value: '59', min: 0, max: 59},
 				{ tag: 'span', cls: 'meridiem', name: 'meridiem', html: 'PM', 'date-value': 'pm'}
 			]}
 		]}
@@ -59,6 +59,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 			this.hourEl.dom.addEventListener('blur', this.onDateChange.bind(this));
 			this.hourEl.dom.addEventListener('focus', this.clearError.bind(this));
 			this.hourEl.dom.addEventListener('mousewheel', function(e){ e.preventDefault(); });
+			this.hourEl.dom.addEventListener('keydown', this.onKeyDown.bind(this));
 		}
 
 		if (this.minuteEl) {
@@ -84,6 +85,29 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 		this.on('destroy', picker.destroy.bind(picker));
 		return picker;
+	},
+
+
+	onKeyDown: function(e){
+		var key = e.keyCode,
+			target = e.target,
+			el = Ext.get(target),
+			name = target && target.getAttribute('name')
+			nextEl = this.minuteEl;
+
+		if (key === e.ENTER || key === e.TAB || this.isDelimiter(key)) {
+			if (key !== e.TAB) {
+				wait().then(nextEl.focus.bind(nextEl));
+				e.preventDefault();
+				e.stopPropagation();
+				return false;
+			}
+		}
+	},
+
+
+	isDelimiter: function(key) {
+		return key === 188 || key === 186;
 	},
 
 
@@ -275,12 +299,17 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 	isValid: function() {
 		var fields = [this.hourEl.dom, this.minuteEl.dom],
-			field, isValid = true;
+			field, isValid = true, min, max, val;
 
 		for (var i = 0; i < fields.length && isValid; i++) {
 			field = fields[i];
-			if (field && field.checkValidity) {
-				isValid = field.checkValidity();
+			min = field.getAttribute('min');
+			max = field.getAttribute('max');
+			val = field.value;
+
+			val = parseInt(val);
+			if (isNaN(val) || val > max || val < min) {
+				isValid = false;
 			}
 		}
 
@@ -290,19 +319,22 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 	getErrors: function() {
 		var fields = [this.hourEl.dom, this.minuteEl.dom],
-			field, validity, errors = [], name, d;
+			field, isValid = true, min, max, val,
+			validity, errors = [], name, d;
 			
 		for (var i = 0; i < fields.length; i++) {
 			field = fields[i];
-			validity = field.validity;
-			name = field.getAttribute && field.getAttribute('name');
+			min = field.getAttribute('min');
+			max = field.getAttribute('max');
+			name = field.getAttribute('name');
+			val = field.value;
 
-			if (validity && !validity.valid) {
-				d = {name: name};
-				if (validity.rangeOverflow === true || validity.rangeUnderflow === true) {
-					d['error'] = 'The value for ' + name + ' is out of range';
-				}
-				errors.push(d);
+			val = parseInt(val);
+			if (isNaN(val)) {
+				errors.push({name: name, error: 'Invalid number for ' + name});
+			}
+			if (val > max || val < min) {
+				errors.push({name: name, error: 'The value for ' + name + ' is out of range'});
 			}
 		}
 
