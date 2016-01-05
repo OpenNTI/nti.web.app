@@ -443,7 +443,7 @@ form.common-form {
 				font-size: 0.875em;
 				margin-bottom: 0.7em;
 
-				@include icon('search-reading', $side: before);
+				@include icon('file-drop', $side: before);
 
 				&::before {
 					position: static;
@@ -461,6 +461,7 @@ form.common-form {
 				color: white;
 				border-radius: 5px;
 				background: $primary-blue;
+				text-transform: capitalize;
 			}
 		}
 
