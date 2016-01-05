@@ -81,6 +81,8 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 		if (label) {
 			label.update('Published');
 		}
+
+		this.hideMenu();
 	},
 
 
@@ -99,9 +101,11 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 			el.addCls('published');
 
 			if (label) {
-				label.update('Publish on ' + date);
+				label.update('Scheduled for ' + date);
 			}
 		}
+
+		this.hideMenu();
 	},
 
 
@@ -112,8 +116,10 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 		el.removeCls('published');
 		el.addCls('publish');
 		if (label) {
-			label.update('Publish');
+			label.update('Publish Lesson');
 		}
+
+		this.hideMenu();
 	},
 
 
@@ -142,6 +148,10 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Publish'
 
 
 	hideMenu: function() {
+		if (this.el.hasCls('closed')) {
+			return;
+		}
+		
 		this.el.addCls('closed');
 		this.setPublishState();
 		this.publishMenu.reset();

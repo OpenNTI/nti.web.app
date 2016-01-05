@@ -15,18 +15,18 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		{cls: 'arrow'},
 		{cls: 'container', cn: [
 			{cls: 'option publish', 'data-action': 'publish', cn: [
-				{cls: 'text', html: 'Publish'},
+				{cls: 'text', html: 'Publish Now'},
 				{cls: 'subtext', html: 'Lesson contents are visible to students.'}
 			]},
 			{cls: 'option publish-on-date', 'data-action': 'publish-date', cn: [
-				{cls: 'text', html: 'Publish on Date'},
+				{cls: 'text', html: 'Schedule'},
 				{cls: 'subtext', cn: [
 					{tag: 'span', cls: 'description', html: 'When do you want students to have access to this lesson?'},
 					{cls: 'date-picker-container'}
 				]}
 			]},
 			{cls: 'option unpublish selected', 'data-action': 'unpublish', cn: [
-				{cls: 'text', html: 'Unpublish'},
+				{cls: 'text', html: 'Draft'},
 				{cls: 'subtext', html: 'Currently not visible to any students'}
 			]},
 			{cls: 'save disabled', html: 'Save'}
@@ -182,6 +182,13 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 			this.select(this.unpublishEl);
 			this.initialState = this.unpublishEl;
 		}
+
+		// Make sure we set the default date properly.
+		if (!lessonPublishDate && this.datepicker) {
+			date = this.getDefaultDate();
+			this.datepicker.setValue(date);
+			this.setPublishOnDateText(date);
+		}
 	},
 
 
@@ -294,13 +301,7 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 			defaultValue = begin && new Date(begin);
 
 		if (!defaultValue) {
-			defaultValue = new Date();
-
-			// Set it to tomorrow at mid night.
-			defaultValue.setDate(defaultValue.getDate() + 1);
-			defaultValue.setHours(23);
-			defaultValue.setMinutes(59);
-			defaultValue.setSeconds(0);
+			defaultValue = this.getDefaultDate();
 		}
 
 		this.datepicker = Ext.widget({
@@ -312,6 +313,19 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		});
 
 		this.on('destroy', this.datepicker.destroy.bind(this.datepicker));
+	},
+
+
+	getDefaultDate: function(){
+		var defaultValue = new Date();
+
+		// Set it to tomorrow at mid night.
+		defaultValue.setDate(defaultValue.getDate() + 1);
+		defaultValue.setHours(23);
+		defaultValue.setMinutes(59);
+		defaultValue.setSeconds(0);
+
+		return defaultValue;
 	},
 
 

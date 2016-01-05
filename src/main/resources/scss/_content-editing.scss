@@ -249,11 +249,11 @@ input[type=number]{
 	}
 
 	.publish {
-		&.published {
+		&.unpublished {
 			@include icon('publishing-visible', $top: 4px, $left: 4px);
 		}
 
-		&.unpublished {
+		&.published {
 			@include icon('publishing-invisible', $top: 4px, $left: 4px);
 		}
 	}
@@ -591,28 +591,27 @@ input[type=number]{
 
 			.label {
 				width: 200px;
-				padding: 9px 10px 9px 26px;
+				padding: 9px 10px;
 				margin: 10px;
 				border-radius: 5px;
-				background: #f8f8f8;
-				box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
-				color: $primary-blue;
+				background: $primary-blue;
+				box-shadow: 0 0 1px 0 rgba(0,0,0,0.3);
+				color: #ffffff;
 				font-size: 14px;
 				position: relative;
 				font-weight: 600;
 				cursor: pointer;
+				border: 1px solid $tertiary-grey-alt;
 
-				@include icon('dropdown-blue', $side: after, $top: 10px, $left: auto, $right: 10px);
-				@include icon('publish-icon-blue', $side: before, $top: 12px, $left: 11px, $right: auto);
+				@include icon('dropdown-white', $side: after, $top: 10px, $left: auto, $right: 10px);				
 			}
 		}
 
 		&.published {
 			.label {
-				color: #ffffff;
-				background: $primary-blue;
-				@include icon('dropdown-white', $side: after, $top: 10px, $left: auto, $right: 10px);
-				@include icon('publish-icon-white', $side: before, $top: 12px, $left: 11px, $right: auto);
+				color: $primary-blue;
+				background: #f8f8f8;
+				@include icon('dropdown-blue', $side: after, $top: 10px, $left: auto, $right: 10px);
 			}
 		}
 
