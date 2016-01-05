@@ -13,7 +13,7 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 	],
 
 	mixins: {
-		OrderedContaienr: 'NextThought.mixins.dnd.OrderingContainer'
+		OrderedContainer: 'NextThought.mixins.dnd.OrderingContainer'
 	},
 
 	ui: 'course',
