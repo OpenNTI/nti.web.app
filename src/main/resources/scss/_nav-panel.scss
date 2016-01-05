@@ -4,14 +4,22 @@
 
 	.navigation-view.floating {
 		position: fixed;
-		top: 90px;//$header-height + 20;
+		top: 90px !important;//$header-height + 20;
 		bottom: 20px;
 		height: auto !important;
 		transition: left 0.5s, right 0.5s;
 		z-index: 1;
 		
 		html.msg-bar-open & {
-			top: 132px; // $header-height + $msg-bar-height + 20
+			top: 130px !important; // $header-height + $msg-bar-height + 20
+		}
+	}
+
+	&.has-editing-controls {
+		> .navigation-view {
+			html.msg-bar-open & {
+				top: 190px !important;
+			}
 		}
 	}
 
