@@ -75,7 +75,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 					];
 
 				if (items && items.length) {
-					cmps.push(me.getItemsConfig(items, record, bundle));
+					cmps.push(me.getItemsConfig(items, record, outline, bundle));
 				}
 
 				if (contents) {
@@ -124,12 +124,13 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	},
 
 
-	getItemsConfig: function(items, record, bundle) {
+	getItemsConfig: function(items, record, outline, bundle) {
 		return {
 			xtype: 'overview-editing-outline-items',
 			record: record,
 			recordItems: items,
 			bundle: bundle,
+			outline: outline,
 			navigateToOutlineNode: this.navigateToOutlineNode
 		};
 	},

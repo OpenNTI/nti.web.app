@@ -48,6 +48,28 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
+	findOrderedContentsItem: function(id) {
+		var items = this.getItems(), i,
+			item, record;
+
+		if (this.getId && this.getId() === id) { return this; }
+
+		for (i = 0; i < items.length; i++) {
+			item = items[i];
+
+			if (item.getId && item.getId() === id) {
+				record = item;
+			} else if (item && item.findOrderedContentsItem) {
+				record = item.findOrderedContentsItem(id);
+			}
+
+			if (record) { break; }
+		}
+
+		return record;
+	},
+
+
 	onItemUpdated: function() {
 		this.fireEvent('updated');
 	},

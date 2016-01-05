@@ -28,6 +28,12 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 
 		this.setCollection(this.record);
 
+		this.setDataTransferHandler(NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType, {
+			onDrop: this.onDrop.bind(this),
+			isValid: NextThought.mixins.dnd.OrderingContainer.hasMoveInfo,
+			effect: 'move'
+		});
+
 		// Keeps track of the selected item for each control
 		// This is handy since when we are about to show the same control on a different listitem,
 		// we have access to the previously active control for each type and hide or destroy it if necessary.
@@ -138,5 +144,10 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 		}
 
 		return cmp;
+	},
+
+
+	onDrop: function(record, newIndex, moveInfo) {
+		return this.record.moveToFromContainer(record, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.outline);
 	}
 });

@@ -61,7 +61,7 @@ Ext.define('NextThought.mixins.MovingRoot', {
 			move = Promise.resolve();
 		} else {
 			move = Service.post(link, data)
-				.then(this.__onMoveOperation.bind(this, record));
+				.then(this.__onMoveOperation.bind(this, record, newParent, originalParent));
 		}
 
 		return move;
@@ -78,11 +78,29 @@ Ext.define('NextThought.mixins.MovingRoot', {
 	 *
 	 * @param  {String} response the response from the server
 	 */
-	__onMoveOperation: function(record, response) {
+	__onMoveOperation: function(record, newParent, originalParent, response) {
+		var updatedNewParent, updatedOriginalParent;
+
+		newParent = newParent.isModel && newParent;
+		originalParent = originalParent.isModel && originalParent;
+
 		if (record.fireEvent) {
 			record.fireEvent('moved');
 		}
 
 		this.syncWithResponse(response);
+
+		if (this.findOrderedContentsItem) {
+			updatedNewParent = newParent && this.findOrderedContentsItem(newParent.getId());
+			updatedOriginalParent = originalParent && this.findOrderedContentsItem(originalParent.getId());
+		}
+
+		if (updatedOriginalParent) {
+			originalParent.syncWith(updatedOriginalParent);
+		}
+
+		if (updatedNewParent) {
+			newParent.syncWith(updatedNewParent);
+		}
 	}
 });

@@ -222,7 +222,7 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 
 	__dragEnd: function(e) {
 		var el = this.getDragTarget(),
-			handle = this.getDragHandle(),
+			handle = this.getDragHandle && this.getDragHandle(),
 			dropEffect = e.dataTransfer && e.dataTransfer.dropEffect;
 
 		delete this.Draggable.isDragging;
