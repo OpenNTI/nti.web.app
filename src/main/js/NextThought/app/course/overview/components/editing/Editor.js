@@ -69,7 +69,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 	ERRORS: {
 		TooLong: '{field} is too long.',
-		MaxFileSizeUploadLimitError: function(reason){
+		MaxFileSizeUploadLimitError: function(reason) {
 			var msg = 'The uploaded file is too large.',
 				fileSize = reason && reason.max_bytes;
 
@@ -339,12 +339,30 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	},
 
 
+	clearErrors: function() {
+		var form = this.formCmp;
+
+		this.activeErrors = (this.activeErrors || []).reduce(function(acc, error) {
+			error.fields = error.fields.reduce(function(acc, field) {
+				form.removeErrorOn(field);
+			}, []);
+
+			if (error.headerBar && error.headerBar.remove) {
+				error.headerBar.remove();
+			}
+		}, []);
+	},
+
+
 	setErrorOn: function(field, msg) {
 		var	form = this.formCmp,
 			activeErrors = this.activeErrors || [];
 
 		if (!field) {
-			this.showError(msg);
+			activeErrors.push({
+				headerBar: this.showError(msg),
+				fields: []
+			});
 		} else if (form) {
 			form.showErrorOn(field);
 
@@ -352,9 +370,9 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 				headerBar: this.showError(msg),
 				fields: [field]
 			});
-
-			this.activeErrors = activeErrors;
 		}
+
+		this.activeErrors = activeErrors;
 	},
 
 
@@ -365,12 +383,13 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 		if (!form) { return Promise.reject(); }
 
-		me.activeErrors = errors.map(function(error) {
+		me.activeErrors = errors.reduce(function(acc, error) {
 			error.fields.forEach(form.showErrorOn.bind(form));
 			error.headerBar = me.showError(error.msg);
 
-			return error;
-		});
+			acc.push(error);
+			return acc;
+		}, me.activeErrors || []);
 
 		return errors.length > 0 ? Promise.reject() : Promise.resolve();
 	},
@@ -401,6 +420,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
 			currentPosition = parentSelection && parentSelection.getCurrentPosition();
 
+		me.clearErrors();
 		me.disableSubmission();
 
 		return me.EditingActions.saveEditorForm(me.formCmp, me.record, originalPosition, currentPosition, me.rootRecord)
