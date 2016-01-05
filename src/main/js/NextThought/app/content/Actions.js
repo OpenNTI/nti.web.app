@@ -3,7 +3,8 @@ Ext.define('NextThought.app.content.Actions', {
 	requires: [
 		'NextThought.util.Content',
 		'NextThought.util.PageSource',
-		'NextThought.model.TopicNode'
+		'NextThought.model.TopicNode',
+		'NextThought.app.navigation.path.Actions'
 	],
 
 	levelLabels: {
@@ -14,17 +15,52 @@ Ext.define('NextThought.app.content.Actions', {
 
 	MAX_PATH_LENGTH: 2,
 
+
 	getContentPath: function(ntiid, bundle, parent, rootPageId, rootRoute) {
 		var me = this;
 
 		return ContentUtils.getPageID(ntiid, bundle)
 			.then(function(page) {
-				return Promise.all([
-					ContentUtils.getLocation(page, bundle),
-					ContentUtils.getLineage(page, bundle),
-					ContentUtils.getRootForLocation(ntiid, bundle)
-				]);
+				if (!page) {
+					return me.__getContentPathFromLineage(ntiid, bundle, parent, rootPageId, rootRoute);
+				}
+
+				return me.__getContentPathFromTOC(page, ntiid, bundle, parent, rootPageId, rootRoute);
+			});
+	},
+
+
+	__getContentPathFromLineage: function(ntiid, bundle, parent, rootPageId, rootRoute) {
+		var PathActions = NextThought.app.navigation.path.Actions.create();
+
+		return PathActions.getBreadCrumb(ntiid)
+			.then(function(path) {
+				return path.map(function(part) {
+					var route = part.ntiid ? ParseUtils.encodeForURI(part.ntiid) : '';
+
+					part.route = Globals.trimRoute(rootRoute) + '/' + route;
+
+					return part;
+				});
 			})
+			.then(function(path) {
+				if (bundle && bundle.getContentBreadCrumb) {
+					return bundle.getContentBreadCrumb(path, ntiid, rootPageId, parent);
+				}
+
+				return path;
+			});
+	},
+
+
+	__getContentPathFromTOC: function(page, ntiid, bundle, parent, rootPageId, rootRoute) {
+		var me = this;
+
+		return Promise.all([
+				ContentUtils.getLocation(page, bundle),
+				ContentUtils.getLineage(page, bundle),
+				ContentUtils.getRootForLocation(ntiid, bundle)
+			])
 			.then(function(results) {
 				var location = results[0] && results[0][0],
 					lineage = results[1] && results[1][0],
@@ -106,19 +142,21 @@ Ext.define('NextThought.app.content.Actions', {
 			i = 0, pathLength = 0,
 			presentation = this.__getPresentationProps(parentNode, bundle),
 			MaxLevel = presentation && presentation.maxLevel || this.MAX_PATH_LENGTH,
-			levelName;
+			levelName, levelLabel;
 
 
 		if ((lineage.length + leftOvers.length) <= 1) {
 			if (ContentUtils.hasChildren(topic)) {
 				levelName = ContentUtils.getFirstTopic(topic).getAttribute('level');
-				path.push(this.buildContentPathPart(this.__getLevelLabel(lineage.length, levelName, presentation.useTocLevelName), this.__getFirstTopic(topic), parentNode, true, bundle, rootPageId, rootRoute));
+				levelLabel = this.__getLevelLabel(lineage.length, levelName, presentation.useTocLevelName);
+				path.push(this.buildContentPathPart(levelLabel, this.__getFirstTopic(topic), parentNode, true, bundle, rootPageId, rootRoute));
 			} else {
 				path.push(this.buildContentPathPart(this.__getLevelLabel(NaN), topic.getAttribute('ntiid'), null, false, bundle, rootPageId, rootRoute));
 			}
 		} else if (!bundle.isCourse && ContentUtils.hasChildren(topic)) {
 			levelName = ContentUtils.getFirstTopic(topic).getAttribute('level');
-			path.push(this.buildContentPathPart(this.__getLevelLabel(lineage.length, levelName, presentation.useTocLevelName), this.__getFirstTopic(topic), parentNode, true, bundle, rootPageId, rootRoute));
+			levelLabel = this.__getLevelLabel(lineage.length, levelName, presentation.useTocLevelName);
+			path.push(this.buildContentPathPart(levelLabel, this.__getFirstTopic(topic), parentNode, true, bundle, rootPageId, rootRoute));
 		}
 
 		for (i; i < MaxLevel && i < lineage.length; i++) {

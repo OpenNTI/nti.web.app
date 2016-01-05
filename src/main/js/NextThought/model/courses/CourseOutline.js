@@ -2,15 +2,104 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.courses.courseoutline',
 
+	mixins: {
+		DurationCache: 'NextThought.mixins.DurationCache',
+		MovingRoot: 'NextThought.mixins.MovingRoot'
+	},
+
+
 	requires: [
+		'NextThought.store.courseware.OutlineInterface',
 		'NextThought.model.courses.navigation.CourseOutlineNode',
 		'NextThought.model.courses.navigation.CourseOutlineContentNode',
 		'NextThought.model.courses.navigation.CourseOutlineCalendarNode'
 	],
 
+
 	fields: [
-		{name: 'Items', type: 'auto', persist: false}
+		{name: 'Items', type: 'arrayItem', persist: false}
 	],
+
+
+	setBundle: function(bundle) {
+		this.bundle = bundle;
+	},
+
+
+	getTitle: function() {
+		return this.bundle && this.bundle.getTitle();
+	},
+
+
+	getAllowedTypes: function() {
+		return [
+			NextThought.model.courses.navigation.CourseOutlineNode.mimeType
+		];
+	},
+
+
+	__loadContents: function(link, key, doNotCache) {
+		var me = this,
+			load;
+
+		load = me.getFromCache(key);
+
+		if (!load || doNotCache) {
+			load = Service.request(link)
+				.then(function(text) { return Ext.decode(text); })
+				.then(function(json) { return ParseUtils.parseItems(json); })
+				.then(function(items) {
+					//create a clone of this model
+					var clone = me.self.create(me.getData());
+
+					clone.set('Items', items);
+
+					if (me.bundle) {
+						clone.setBundle(me.bundle);
+					}
+
+					return clone;
+				});
+
+			me.cacheForShortPeriod(key, load);
+		}
+
+		return load;
+	},
+
+
+	getOutlineContents: function(doNotCache) {
+		var link = this.getLink('contents');
+
+		return this.__loadContents(link, 'LoadContents', doNotCache);
+	},
+
+
+	getAdminOutlineContents: function(doNotCache) {
+		var link = this.getLink('contents'),
+			parts = Url.parse(link),
+			query = Ext.Object.fromQueryString(parts.search);
+
+		delete query['omit_unpublished'];
+
+		parts.search = '?' + Ext.Object.toQueryString(query);
+		link = Url.format(parts);
+
+		return this.__loadContents(link, 'AdminLoadContents', doNotCache);
+	},
+
+
+	findOutlineNode: function(id) {
+		return this.getOutlineContents()
+			.then(function(outline) {
+				var items = outline.get('Items'),
+					node = (items || []).reduce(function(acc, o) {
+						return acc || (o.findNode && o.findNode(id));
+					}, null);
+
+				return node;
+			});
+	},
 
 	getContents: function() {
 		var me = this, l;
@@ -88,5 +177,21 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 
 				return false;
 			});
+	},
+
+
+	onItemUpdated: function() {
+		NextThought.store.courseware.OutlineInterface.fillInDepths(this);
+	},
+
+
+	onItemAdded: function() {
+		NextThought.store.courseware.OutlineInterface.fillInDepths(this);
+	},
+
+
+	onSync: function() {
+		NextThought.store.courseware.OutlineInterface.fillInDepths(this);
+		this.fillInItems();
 	}
 });

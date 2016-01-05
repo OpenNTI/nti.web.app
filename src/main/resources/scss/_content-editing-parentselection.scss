@@ -1,0 +1,218 @@
+.overview-editing-parentselection {
+	 & > .label {
+		color: $tertiary-grey;
+		font: normal 600 0.625em/1 $font;
+		text-transform: uppercase;
+		margin-bottom: 0.5em;
+	}
+
+	& > .selection, & > .position {
+		position: relative;
+		display: inline-block;
+		vertical-align: middle;
+
+		&::before {
+			content: attr(data-label);
+			display: block;
+			color: $tertiary-grey;
+			font: normal 600 0.625em/1 $font;
+			text-transform: uppercase;
+			margin-bottom: 0.5em;
+		}
+
+		&.closed {
+			.active::after {
+				transform: rotate(180deg);
+			}
+		}
+
+		.active {
+			background: white;
+			line-height: 40px;
+			font-size: 0.875rem;
+			padding: 0 1em 0 10px;
+			box-shadow: 0 0 3px 0px rgba(0, 0, 0, 0.3);
+			cursor: pointer;
+			position: relative;
+
+			&::after {
+				content: '';
+				position: absolute;
+				pointer-events: none;
+				top: 50%;
+				right: 0.8em;
+				width: 0;
+				height: 0;
+				margin-top: -2px;
+				border-style: solid;
+				border-width: 0 4px 5px 4px;
+				border-color: transparent transparent #bfbfbf transparent;
+			}
+
+		}
+	}
+
+	& > .selection {
+		margin-right: 1em;
+
+		.active {
+			width: 260px;
+		}
+
+		&.disabled {
+			display: none;
+		}
+	}
+
+	& > .position {
+		.active {
+			width: 55px;
+			line-height: 41px;
+		}
+
+		&.disabled {
+			.active {
+				opacity: 0.7;
+				pointer-events: none;
+			}
+		}
+	}
+
+	.active {
+		.label {
+			display: inline-block;
+			vertical-align: middle;
+			width: 200px;
+			font: normal 400 0.875rem/40px $font;
+			overflow: hidden;
+			@include ellipse();
+		}
+
+		.color {
+			display: inline-block;
+			vertical-align: middle;
+			width: 20px;
+			height: 20px;
+			border-radius: 3px;
+			padding: 0;
+			margin-right: 0.5em;
+		}
+	}
+}
+
+
+.overview-editing-parentselection-menu,
+.overview-editing-parentselection-position-menu {
+	position: fixed;
+	background: white;
+	box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3);
+	z-index: 300;
+	overflow: auto;
+}
+
+
+.overview-editing-parentselection-position-menu {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	&.has-current {
+		min-width: 75px;
+	}
+
+	li {
+		font: normal 400 0.875em/40px $font;
+		padding: 8px;
+
+		&.current {
+			&::after {
+				content: '(current)';
+				font-size: 0.625rem;
+				font-weight: 600;
+				margin-left: 0.5em;
+			}
+		}
+
+		&.selected {
+			color: $primary-blue;
+		}
+	}
+}
+
+
+.overview-editing-parentselection-menu {
+	.parentselection-menuitem {
+		padding: 8px;
+		border-bottom: 1px solid rgb(234, 233, 233);
+
+		&.selected {
+			color: $primary-blue;
+		}
+
+		&.new-item {
+			cursor: pointer;
+			font-size: 0.875em;
+			color: $primary-blue;
+
+			&:before {
+				content: "+";
+				padding-right: .5em;
+			}
+		}
+
+		&:first-child {
+			border-top: .75px solid rgba(0, 0, 0, 0.08);
+		}
+
+		.label {
+			display: inline-block;
+			vertical-align: middle;
+			width: 200px;
+			font: normal 400 0.875rem/40px $font;
+			overflow: hidden;
+			@include ellipse();
+		}
+
+		.color {
+			display: inline-block;
+			vertical-align: middle;
+			width: 20px;
+			height: 20px;
+			border-radius: 3px;
+			padding: 0;
+			margin-right: 0.5em;
+		}
+	}
+
+	.over-editit-parentselection-newitem {
+		text-align: right;
+
+		.sub-label {
+			font-size: 0.625em;
+			text-transform: uppercase;
+			color: #757474;
+		}
+
+		.save {
+			background-color: #3fb3f6;
+			color: white;
+		}
+		.back, .save {
+			display: inline-block;
+			line-height: 35px;
+			font-size: 0.875em;
+			padding: 0 1em;
+			cursor: pointer;
+		}
+
+		.error-msg{
+			font-size: 0.875rem;
+			line-height: 1.5rem;
+			color: white;
+			z-index: 1;
+			background-color: #f35252;
+			text-align: left;
+			padding: 0 0.5rem;
+		}
+	}
+}

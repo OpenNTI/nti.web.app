@@ -8,6 +8,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		'NextThought.model.courses.AssignmentCollection',
 		'NextThought.model.courses.CourseInstanceBoard',
 		'NextThought.model.assessment.UsersCourseAssignmentSavepoint',
+		'NextThought.store.courseware.OutlineInterface',
 		'NextThought.store.courseware.Navigation',
 		'NextThought.store.courseware.ToCBasedOutline',
 		'NextThought.store.courseware.Stream',
@@ -24,7 +25,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 	mixins: {
 		'BundleLike': 'NextThought.mixins.BundleLike',
-		'PresentationResources': 'NextThought.mixins.PresentationResources'
+		'PresentationResources': 'NextThought.mixins.PresentationResources',
+		'DurationCache': 'NextThought.mixins.DurationCache'
 	},
 
 	fields: [
@@ -117,6 +119,10 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				Cls.load(null, {
 					url: url,
 					callback: function(rec) {
+						var outline = me.get('Outline');
+
+						outline.setBundle(me);
+
 						me.__courseCatalogEntry = rec;
 						if (rec) {
 							rec.get('Links').getRelLink('CourseInstance').href = me.get('href');
@@ -344,26 +350,6 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	getCompletionStatus: function() {},
 
 
-	getNavigationStore: function() {
-		var me = this;
-
-		if (!me.navStore) {
-			me.navStore = new NextThought.store.courseware.Navigation({
-				outlinePromise: me.getOutline(),
-				tocPromise: this.getLocationInfo()
-					.then(function(location) {
-						return new NextThought.store.courseware.ToCBasedOutline({data: location.toc});
-					})
-			});
-
-			me.navStore.courseInstance = this;
-		}
-
-		return this.navStore;
-	},
-
-
-
 	getTocs: function() {
 		var bundle = this.get('Bundle');
 
@@ -449,8 +435,9 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 			//TODO: Need to simplfy logic of this entire canGetToContent function
 
 			(lineages || []).forEach(function(lineage) {
-				if (store.getById(lineage[Math.max(0, lineage.length - 2)]) // ick, bad logic testing for the existence of the node in the Outline. (Need LibraryPath for this)
-				|| (rootId && lineage.indexOf(rootId) >= 0)) { //root is in the path of the lineage, we're good to go.
+				// ick, bad logic testing for the existence of the node in the Outline. (Need LibraryPath for this)
+				if (store.getById(lineage[Math.max(0, lineage.length - 2)]) || (rootId && lineage.indexOf(rootId) >= 0)) {
+					//root is in the path of the lineage, we're good to go.
 					canGetTo = true;
 				}
 			});
@@ -607,6 +594,45 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	findOutlineNode: function(id) {
+		var outline = this.get('Outline');
+
+		return outline.findOutlineNode(id);
+	},
+
+
+	getOutlineContents: function(doNotCache) {
+		var outline = this.get('Outline');
+
+		return outline.getOutlineContents(doNotCache);
+	},
+
+
+	getAdminOutlineContents: function(doNotCache) {
+		var outline = this.get('Outline');
+
+		return outline.getAdminOutlineContents(doNotCache);
+	},
+
+
+	getOutlineInterface: function(doNotCache) {
+		return new NextThought.store.courseware.OutlineInterface({
+			outlineContentsPromise: this.getOutlineContents(doNotCache),
+			tocPromise: this.__getTocOutline(),
+			courseInstance: this
+		});
+	},
+
+
+	getAdminOutlineInterface: function(doNotCache) {
+		return new NextThought.store.courseware.OutlineInterface({
+			outlineContentsPromise: this.getAdminOutlineContents(doNotCache),
+			tocPromise: this.__getTocOutline(),
+			courseInstance: this
+		});
+	},
+
+
 	getOutline: function() {
 		//cache outline
 		if (!this._outlinePromise) {
@@ -623,6 +649,44 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		}
 
 		return this._outlinePromise;
+	},
+
+	/**
+	 * Return an outline store based on the first toc,
+	 * cache these results for now.
+	 * TODO: don't keep these cached for the lifetime of the app
+	 * @return {[type]} [description]
+	 */
+	__getTocOutline: function() {
+		if (!this.tocOutline) {
+			this.tocOutline = this.getLocationInfo()
+				.then(function(location) {
+					return new NextThought.store.courseware.ToCBasedOutline({data: location.toc});
+				});
+		}
+
+		return this.tocOutline;
+	},
+
+
+	getNavigationStore: function() {
+		var key = 'NavStore',
+			navStore;
+
+		navStore = this.getFromCache(key);
+
+		if (!navStore) {
+			navStore = new NextThought.store.courseware.Navigation({
+				outlineContentsPromise: this.getOutlineContents(),
+				tocPromise: this.__getTocOutline()
+			});
+
+			navStore.courseInstance = this;
+
+			this.cacheForShortPeriod(key, navStore);
+		}
+
+		return navStore;
 	},
 
 
@@ -819,6 +883,20 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 					// to be a video if it has a class it has to be Video, if not, default to video.
 					if (i && (i.Class === undefined || i.Class === 'Video')) {
 						return Promise.resolve(i);
+					}
+					return Promise.reject();
+				});
+	},
+
+	/**
+	/*	Check if a video belongs to a slidedeck
+	*/
+	getSlidedeckForVideo: function(vid) {
+		return this.getVideoIndex()
+				.then(function(index) {
+					var i = index[vid];
+					if (i && i.slidedeck) {
+						return Promise.resolve(i.slidedeck);
 					}
 					return Promise.reject();
 				});

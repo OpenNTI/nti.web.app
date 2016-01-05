@@ -201,7 +201,7 @@ extend: 'Ext.container.Container',
 
 
 	onFilterClicked: function() {
-		this.filterMenu.showBy(this.filterLink.el, 'tl-tl', [0, 20]);
+		this.filterMenu.showBy(this.filterLink.el, 'tl-tl', [0, 30]);
 	},
 
 

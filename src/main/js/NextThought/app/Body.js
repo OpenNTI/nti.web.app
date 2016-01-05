@@ -218,7 +218,7 @@ Ext.define('NextThought.app.Body', {
 			location.hash = location.hash || hash;
 		}
 
-		route = location.pathname + location.search + location.hash;
+		route = location.pathname + (location.search || '') + (location.hash || '');
 
 		this.pushRoute(title, route, precache, state);
 	},

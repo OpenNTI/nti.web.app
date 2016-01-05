@@ -268,7 +268,11 @@ Ext.define('NextThought.app.course.Index', {
 				'bundle-forum',
 				'course-reports',
 				'course-info'
-			]);
+			]).then(function(item) {
+				if (item.handleRoute) {
+					return item.handleRoute(subRoute, route.precache);
+				}
+			});
 	},
 
 

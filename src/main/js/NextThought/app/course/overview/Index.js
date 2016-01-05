@@ -48,11 +48,6 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		this.addChildRouter(this.lessons);
 
-		this.on({
-			'activate': this.onActivate.bind(this),
-			'deactivate': this.onDeactivate.bind(this)
-		});
-
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
@@ -63,18 +58,12 @@ Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 
-	onActivate: function() {
-		var item = this.getLayout().getActiveItem();
-
+	onRouteActivate: function() {
 		this.setTitle(this.title);
-
-		if (item.onActivate) {
-			item.onActivate();
-		}
 	},
 
 
-	onDeactivate: function() {
+	onRouteDeactivate: function() {
 		if (this.activeMediaWindow) {
 			Ext.destroy(this.activeMediaWindow);
 			delete this.activeMediaWindow;
@@ -107,7 +96,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 			lessons = this.getLessons();
 
 		this.currentBundle = bundle;
-		this.store = bundle.getNavigationStore();
+		this.store = bundle.getAdminOutlineInterface();
 
 		if (lessons === item) {
 			return lessons.bundleChanged(bundle);
@@ -175,7 +164,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 		}
 
 		return me.store.onceBuilt()
-			.then(function () {
+			.then(function() {
 				if (route.object.id) {
 					return Service.getObject(ParseUtils.decodeFromURI(route.object.id))
 						.fail(function(reason) {
@@ -187,10 +176,12 @@ Ext.define('NextThought.app.course.overview.Index', {
 				var siblings = [];
 
 				if (lessonId && (!lesson || lesson.getId() !== lessonId)) {
-					lesson = me.store.findRecord('NTIID', lessonId, false, true, true);
+					lesson = me.store.getNode(lessonId);
 				}
 
 				//For now don't make the lessons have a menu
+				//XXX me.store is no longer the navigation store, it is now the bundle's
+				//XXX OutlineInterface
 				// siblings = me.store.getRange().reduce(function(c, item) {
 				// 	var id;
 

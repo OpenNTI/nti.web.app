@@ -1,12 +1,10 @@
 Ext.define('NextThought.app.navigation.path.parts.Content', {
 	requires: [
-		'NextThought.app.library.Actions',
-		'NextThought.app.content.Actions'
+		'NextThought.app.library.Actions'
 	],
 
 	constructor: function() {
 		this.LibraryActions = NextThought.app.library.Actions.create();
-		this.ContentActions = NextThought.app.content.Actions.create();
 	},
 
 
@@ -18,8 +16,6 @@ Ext.define('NextThought.app.navigation.path.parts.Content', {
 
 
 	getPathToPageInfo: function(pageInfo, getPathTo) {
-		var contentActions = this.ContentActions;
-
 		return this.LibraryActions.findBundleByPriority(function(bundle) {
 			var contentPackages = bundle.getContentPackages() || [],
 				containerId = pageInfo.get('ContentPackageNTIID'),

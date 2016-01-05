@@ -12,6 +12,8 @@ $accessibility_mode: false;
 
 @import "nav-panel";
 @import "navbar";
+@import "dnd";
+@import "transitions";
 
 @import "branding-defaults";
 @import "containers";
@@ -30,6 +32,7 @@ $accessibility_mode: false;
 @import "profiles";
 @import "forums";
 @import "blog";
+@import "prompt";
 
 @import "notifications";
 @import "stream";
@@ -83,6 +86,7 @@ $accessibility_mode: false;
 @import "course-reports";
 @import "course-admission";
 @import "course-email";
+@import "content-editing";
 
 @import "pointer";
 

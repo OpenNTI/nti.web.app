@@ -22,7 +22,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 			xtype: 'window-header',
 			doClose: this.onClose.bind(this)
 		});
-		this.headerCmp.setTitle('Email');
+		this.headerCmp.setTitle('New Message');
 		this.record = this.record || this.precache && this.precache.record;
 		this.showEditor();
 	},
@@ -30,6 +30,15 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 
 	onClose: function(){
 		this.doClose();
+	},
+
+
+	allowNavigation: function(){
+		if (!this.editor) {
+			return true;
+		}
+
+		return this.editor.allowNavigation();
 	},
 
 
@@ -41,20 +50,15 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 
 		me.mon(editor, {
 			'cancel': function(rec) {
-				me.remove(editor);
 				me.doClose();
 			},
 			'after-save': function(rec) {
-				me.remove(editor);
 				me.record = rec;
-
 				if (me.monitors && me.monitors.afterSave) {
 					me.monitors.afterSave(rec);
 				}
 
-				if(me.doClose) {
-					me.doClose();	
-				}
+				me.doClose();
 			}
 		});
 

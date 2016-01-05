@@ -13,6 +13,8 @@ Ext.define('NextThought.model.Email', {
 		{ name: 'Receiver', type: 'auto', persist: false},
 		{ name: 'NoReply', type: 'boolean', defaultValue: false},
 		{ name: 'url', type: 'string', persist: false},
-		{ name: 'scope', type: 'string', persist: false}
+		{ name: 'scope', type: 'string', persist: false},
+		{ name: 'replyScope', type: 'string', persist: false},
+		{ name: 'Copy', type: 'boolean'}
 	]
 });

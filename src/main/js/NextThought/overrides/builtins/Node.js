@@ -47,7 +47,17 @@ Ext.define('NextThought.overrides.builtins.Node', {});
 		}
 	});
 
+
 	NodeList.prototype.toArray = function() {
 		return Array.prototype.slice.call(this);
 	};
+
+
+	if (!('remove' in Element.prototype)) {
+		Element.prototype.remove = function() {
+			if (this.parentNode) {
+				this.parentNode.removeChild(this);
+			}
+		};
+	}
 }());

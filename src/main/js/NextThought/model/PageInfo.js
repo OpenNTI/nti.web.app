@@ -34,11 +34,13 @@ Ext.define('NextThought.model.PageInfo', {
 	isPageInfo: true,
 
 	getSubContainerURL: function(rel, id) {
-		var url = this.getLink(rel),
-			enCi = encodeURIComponent(this.get('NTIID')),
-			enId = encodeURIComponent(id);
+		var pagesCollection = Service.getCollection('Pages') || {};
 
-		return url.replace(enCi, enId);
+		if(!pagesCollection.href){
+			return null;
+		}
+
+		return pagesCollection.href + encodeURIComponent('('+id+')')+'/UserGeneratedData';
 	},
 
 

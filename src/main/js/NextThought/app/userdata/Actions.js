@@ -254,6 +254,10 @@ Ext.define('NextThought.app.userdata.Actions', {
 				return store.getPreference(id) || Service.getPageInfo.bind(Service, id);
 			});
 
+		if (preferenceOrPageInfo.length === 0) {
+			return Promise.resolve(null);
+		}
+
 		return Promise.first(preferenceOrPageInfo)
 			.then(function(p) {
 				if (p.isPageInfo) {

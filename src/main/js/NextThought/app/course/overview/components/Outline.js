@@ -1,265 +1,239 @@
 Ext.define('NextThought.app.course.overview.components.Outline', {
-	extend: 'Ext.view.View',
+	extend: 'NextThought.common.components.BoundCollection',
 	alias: 'widget.course-outline',
 
+	requires: [
+		'NextThought.app.course.overview.components.outline.Header',
+		'NextThought.app.course.overview.components.outline.OutlineNode',
+		'NextThought.model.courses.navigation.CourseOutlineNode',
+		'NextThought.model.courses.navigation.CourseOutlineCalendarNode',
+		'NextThought.model.courses.navigation.CourseOutlineContentNode',
+		'NextThought.app.course.overview.components.editing.outline.outlinenode.AddNode',
+		'NextThought.app.course.overview.components.editing.outline.Prompt'
+	],
+
 	mixins: {
-		'EllipsisText': 'NextThought.mixins.EllipsisText'
+		OrderedContainer: 'NextThought.mixins.dnd.OrderingContainer'
 	},
 
 	ui: 'course',
-	cls: 'nav-outline scrollable',
-	preserveScrollOnRefresh: true,
+	cls: 'nav-outline course scrollable',
 
-	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'header', cn: [
-			'Outline'
-		]},
-		{ cls: 'outline-list'}
-	]),
-
-	renderSelectors: {
-		frameBodyEl: '.outline-list'
-	},
-
-
-	getTargetEl: function() {
-		return this.frameBodyEl;
-	},
-
-
-	overItemCls: 'over',
-	itemSelector: '.outline-row',
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
-		{ cls: 'outline-row {type} {isAvailable:boolStr("","disabled")}', 'data-qtip': '{label:htmlEncode}', cn: [
-			{cls: 'label', html: '{label}'},
-			{tag: 'tpl', 'if': 'this.shouldShowDate(values)', cn: {cls: 'date', cn: [
-				{html: '{startDate:date("M")}'},
-				{html: '{startDate:date("j")}'}
-			]}}
+	items: [
+		{xtype: 'overview-outline-header'},
+		{xtype: 'container', cls: 'outline-list', layout: 'none', items: [
+			{xtype: 'container', cls: 'body', bodyContainer: true, layout: 'none', items: []}
 		]}
-	]}), {
-		shouldShowDate: function(values) {
-			return this.allowDates && values.startDate;
-		}
-	}),
+	],
 
-
-	listeners: {
-		itemclick: function() {
-			this.fromClick = true;
-		},
-		beforeselect: function(s, r) {
-			var pass = r && (r.get('type') !== 'unit' && Boolean(r.get('isAvailable'))),
-				store = s.getStore(),
-				last = s.lastSelected || store.first(), next;
-
-			if (this.fromKey && !pass) {
-				last = store.indexOf(last);
-				next = store.indexOf(r);
-				next += ((next - last) || 1);
-
-				//do the in the next event pump
-				wait()
-					.then(s.select.bind(s, next));
-			}
-			return pass;
-
-		},
-		select: function(s, r) {
-			this.fireEvent('select-lesson', r);
-
-			// if (this.fromClick || this.fromKey) {
-			// 	this.fireEvent('select-lesson', r);
-			// }
-			// delete this.fromClick;
-			// delete this.fromKey;
-		}
-	},
 
 	initComponent: function() {
 		this.callParent(arguments);
-		this.on('refresh', 'truncateLabels', this);
-		this.on('select', 'truncateLabels', this);
-	},
 
-
-	beforeRender: function() {
-		this.callParent();
-		var me = this, s = this.getSelectionModel();
-		if (!s) {
-			Ext.log.error('No selection model!');
-			return;
-		}
-		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey, function() {
-			me.fromKey = true;
+		this.setDataTransferHandler(NextThought.model.courses.navigation.CourseOutlineNode.mimeType, {
+			onDrop: this.onDrop.bind(this),
+			isValid: NextThought.mixins.dnd.OrderingContainer.hasMoveInfo,
+			effect: 'move'
 		});
+
+		this.headerCmp = this.down('overview-outline-header');
 	},
+
+
+	addBodyConfig: function() {},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
-		this.mon(this.frameBodyEl, 'scroll', 'handleScrolling');
-		if (Ext.is.iOS) {
-			Ext.apply(this, {overItemCls: ''});
+
+		var body = this.getBodyContainer();
+
+		this.mon(body.el, 'scroll', this.onScroll.bind(this));
+
+		if (this.SYNCED_TOP) { this.syncTop(this.SYNCED_TOP); }
+	},
+
+
+	onScroll: function() {
+		var body = this.getBodyContainer(),
+			bodyRect = body && body.el && body.el.dom && body.el.dom.getBoundingClientRect(),
+			selected = this.el.dom.querySelector('.outline-row.selected'),
+			selectedRect = selected && selected.getBoundingClientRect();
+
+		if (!selectedRect) { return; }
+
+		if (selectedRect.top < bodyRect.top || selectedRect.bottom > bodyRect.bottom) {
+			selected.classList.add('out-of-view');
+		} else {
+			selected.classList.remove('out-of-view');
 		}
 	},
 
 
-	truncateLabels: function() {
-		var me = this;
-
-		if (!me.el) {
-			me.onceRendered.then(me.truncateLabels.bind(me));
-			return;
-		}
-
-		wait(100).then(function() {
-			var labels = me.el.select('.outline-row .label');
-			labels.each(function(label) {
-				me.truncateText(label.dom, null, true);
-			});
-		});
+	getBodyContainer: function() {
+		return this.down('[bodyContainer]');
 	},
 
 
-	handleScrolling: function() {
-		var selected = this.getSelectedNodes()[0],
-			selectedEl = Ext.get(selected);
+	getOrderingItems: function() {
+		var body = this.getBodyContainer(),
+			items = body && body.items && body.items.items;
 
-		if (selectedEl && this.frameBodyEl) {
-			if (selectedEl.getY() < this.frameBodyEl.getY()) {
-				selectedEl.addCls('out-of-view');
-			} else {
-				selectedEl.removeCls('out-of-view');
-			}
+		return items || [];
+	},
+
+
+	getDropzoneTarget: function() {
+		var body = this.getBodyContainer();
+
+		return body && body.el && body.el.dom;
+	},
+
+
+	onCollectionUpdate: function(outline) {
+		this.setOutline(this.activeBundle, outline);
+	},
+
+
+	setOutline: function(bundle, outline) {
+		this.disableOrderingContainer();
+
+		var catalog = bundle.getCourseCatalogEntry(),
+			bodyListEl = this.el && this.el.down('.outline-list'),
+			body = this.getBodyContainer();
+
+		this.activeBundle = bundle;
+		this.outline = outline;
+		this.shouldShowDates = !catalog.get('DisableOverviewCalendar');
+
+		// NOTE: We need to keep the height in order to make sure the scroll position
+		// doesn't get affected when we refresh the outline by removing all items first and then re-adding them.
+		body.el.dom.style.height = body.getHeight() + 'px';
+		this.el.mask();
+
+		this.clearCollection();
+		this.setCollection(outline);
+
+		body.el.dom.style.height = 'auto';
+		this.el.unmask();
+
+		if (this.selectedRecord) {
+			this.selectRecord(this.selectedRecord);
+		}
+
+		if (this.isEditing) {
+			this.enableOrderingContainer();
+			this.createAddUnitNode();
 		}
 	},
 
 
-	clear: function() {
-		this.bindStore('ext-empty-store');
-	},
-
-
-	maybeChangeSelection: function(ntiid, fromEvent) {
-		var me = this, store = me.store;
-		//prevent asynchronous calls that finish late from messing with us.
-		if (fromEvent && fromEvent !== store) {
-			return;
-		}
-
-		if (store.onceBuilt) {
-			store.onceBuilt().then(function() {
-				me.doChangeSelection(ntiid, store);
-			});
-		}
-	},
-
-
-	doChangeSelection: function(ntiid, fromEvent) {
-		//prevent asynchronous calls that finish late from messing with us.
-		if (fromEvent && fromEvent !== this.store) {
-			return;
-		}
-
-
+	createAddUnitNode: function() {
 		var me = this,
-			store = me.store,
-			selectionModel = me.getSelectionModel();
+			OutlinePrompt = NextThought.app.course.overview.components.editing.outline.Prompt,
+			allowedTypes = me.outline && me.outline.getAllowedTypes(),
+			button;
 
-		function findRecordFromLineage(lineage) {
-			var record;
+		if (allowedTypes && !me.addNodeCmp) {
+			//TODO: May need to be able to handle more than one type here...
+			button = allowedTypes.reduce(function(acc, type) {
+				var inlineEditor = OutlinePrompt.getInlineEditor(type);
 
-			while (!record && lineage.length) {
-				record = store.findRecord('NTIID', lineage.shift(), false, true, true);
+				inlineEditor = inlineEditor && inlineEditor.editor;
+
+				if (!inlineEditor) { return acc; }
+
+				return {
+					xtype: 'overview-editing-new-unit-node',
+					title: inlineEditor.creationText,
+					InlineEditor: inlineEditor,
+					parentRecord: me.outline,
+					doSelectNode: me.doSelectNode.bind(me),
+					outlineCmp: me
+				};
+			}, null);
+
+			if (button) {
+				this.addNodeCmp = this.add(button);
 			}
-
-			return record;
 		}
-
-		ContentUtils.getLineage(ntiid, me.currentBundle)
-			.then(function(lineages) {
-				var record;
-
-				while (!record && lineages.length) {
-					record = findRecordFromLineage(lineages.shift());
-				}
-
-				if (!record) {
-					return Promise.reject('No record found');
-				}
-
-				return record;
-			})
-			.fail(function() {
-				var index;
-
-				record = store.findBy(function(rec) {
-					return rec.get('type') === 'lesson' && rec.get('NTIID');
-				});
-
-				if (!record) {
-					return Promise.reject('No record found');
-				}
-
-				return record;
-			})
-			.then(function(record) {
-				selectionModel.select(record);
-			})
-			.fail(function(reason) {
-				selectionModel.deselectAll();
-
-				if (!store.getCount()) {
-					me.fireEvent('empty-outline');
-				}
-			});
 	},
 
 
-	setNavigationStore: function(bundle, store) {
-		if (bundle === this.currentBundle && store === this.store) {
-			return;
+	getCmpForRecord: function(record) {
+		if (record instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
+			return NextThought.app.course.overview.components.outline.OutlineNode.create({
+				outlineNode: record,
+				outline: this.outline,
+				shouldShowDates: this.shouldShowDates,
+				doSelectNode: this.doSelectNode.bind(this),
+				isEditing: this.isEditing
+			});
 		}
 
-		var me = this,
-			catalog = bundle.getCourseCatalogEntry(),
-			shouldShowDates = catalog && !catalog.get('DisableOverviewCalendar');
+		console.warn('Unknown type: ', record);
+	},
 
-		function bindStore() {
-			me.bindStore(store);
 
-			wait().then(me.refresh.bind(me));
-		}
-
-		this.currentBundle = bundle;
-
-		if (me.store !== store) {
-			me.tpl.allowDates = shouldShowDates;
-
-			me.clear();
-
-			if (!store.onceBuilt) {
-				bindStore();
-			} else {
-				store.onceBuilt().then(bindStore);
-			}
+	doSelectNode: function(record) {
+		if (this.isEditing || record instanceof NextThought.model.courses.navigation.CourseOutlineContentNode) {
+			this.selectOutlineNode(record);
 		}
 	},
 
 
 	selectRecord: function(record) {
-		if (typeof record === 'number' && isFinite(record)) {
-			record = this.store.getAt(record);
-		}
+		var body = this.getBodyContainer();
 
-		this.getSelectionModel().select(record, false, true);
+		this.selectedRecord = record;
+
+		body.items.each(function(item) {
+			item.selectRecord(record);
+		});
 
 		return record;
 	},
 
 
 	getActiveItem: function() {
-		return this.getSelectionModel().getSelection()[0];
+		return this.selectedRecord;
+	},
+
+	MIN_TOP: 90,
+	MAX_TOP: 150,
+
+	syncTop: function(top) {
+		top = Math.max(top, this.MIN_TOP);
+		top = Math.min(top, this.MAX_TOP);
+
+		this.SYNCED_TOP = top;
+
+		if (this.rendered) {
+			this.el.dom.style.top = top + 'px';
+		}
+	},
+
+
+	startEditing: function() {
+		this.isEditing = true;
+		this.addCls('editing');
+
+		if (this.addNodeCmp) {
+			this.addNodeCmp.show();
+		}
+	},
+
+
+	stopEditing: function() {
+		delete this.isEditing;
+		this.removeCls('editing');
+		if (this.addNodeCmp) {
+			this.addNodeCmp.hide();
+		}
+	},
+
+
+	onDrop: function(record, newIndex, moveInfo) {
+		return this.outline.moveToFromContainer(record, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.outline);
 	}
 });

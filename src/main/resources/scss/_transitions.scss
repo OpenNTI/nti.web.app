@@ -1,0 +1,25 @@
+.transition {
+	&.list-add {
+		opacity: 0;
+		max-height: 0;
+		overflow-y: hidden;
+		transition: max-height 0.6s, opacity 0.3s;
+
+		&.after {
+			opacity: 1;
+			max-height: 9999px;
+		}
+	}
+
+	&.list-remove {
+		max-height: 9999px;
+		opacity: 1;
+		overflow-y: hidden;
+		transition: max-height 0.6s, opacity 0.3s;
+
+		&.after {
+			max-height: 0;
+			opacity: 0;
+		}
+	}
+}

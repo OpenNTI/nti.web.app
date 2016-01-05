@@ -185,6 +185,53 @@ Ext.define('NextThought.model.Base', {
 		return false;
 	},
 
+	/**
+	 * A list of keys to not include when syncing a record
+	 * @type {Array}
+	 */
+	SYNC_BLACKLIST: [],
+
+	/**
+	 * Given another instance of the same class, update this values.
+	 *
+	 * @param  {Model} record the instance to update with
+	 */
+	syncWith: function(record) {
+		if (!this.self.isInstanceOf(record)) {
+			consle.error('Trying to sync records or two different classes');
+			return;
+		}
+
+		var newData = record.getData();
+
+		this.SYNC_BLACKLIST.forEach(function(key) {
+			delete newData[key];
+		});
+
+		this.set(newData);
+
+		if (this.onSync) {
+			this.onSync();
+		}
+
+		this.fireEvent('update', this);
+	},
+
+	/**
+	 * Given a response from the server, update my values
+	 * @param  {String} response server response
+	 */
+	syncWithResponse: function(response) {
+		var json = JSON.parse(response),
+			newRecord;
+
+		json = Ext.applyIf(json, this.getRaw());
+
+		newRecord = ParseUtils.parseItems([json])[0];
+
+		return this.syncWith(newRecord);
+	},
+
 
 	constructor: function(data, id, raw) {
 		var fs = this.fields,
@@ -512,7 +559,6 @@ Ext.define('NextThought.model.Base', {
 			if (s) {
 				//put "me" in the bookmark view?
 				me.set('favoriteState', currentValue ? 'on' : 'off');
-				NextThought.model.events.Bus.fireEvent('favorite-changed', me);
 			}
 			else {
 				Ext.callback(widget.markAsFavorited, widget, [currentValue]);
@@ -790,6 +836,11 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+	toJSON: function() {
+		return this.asJSON();
+	},
+
+
 	asJSON: function() {
 		var data = {},
 			me = this;
@@ -814,6 +865,34 @@ Ext.define('NextThought.model.Base', {
 					data[f.name] = Ext.clone(x);
 				}
 		);
+		return data;
+	},
+
+
+	getRaw: function() {
+		var data = {},
+			me = this;
+
+		this.fields.each(function(f) {
+			if (!f.persist) { return; }
+
+			var x = me.get(f.name);
+
+			if (Ext.isDate(x)) {
+				x = x.getTime() / 1000;
+			} else if (x && x.getRaw) {
+				x = x.getRaw();
+			} else if (x && Ext.isArray(x)) {
+				x = x.slice();
+
+				Ext.each(x, function(o, i) {
+					x[i] = o && o.getRaw ? o.getRaw() : o;
+				});
+			}
+
+			data[f.mapping || f.name] = Ext.clone(x);
+		});
+
 		return data;
 	},
 

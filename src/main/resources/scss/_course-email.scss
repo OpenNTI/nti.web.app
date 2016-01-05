@@ -6,6 +6,24 @@
 		}
 	}
 
+	input[type=checkbox] {
+		opacity: 0;
+		position: relative;
+	}
+
+	input[type=checkbox] + label {
+		min-height: 40px;
+		padding: 1px 15px 1px 40px;
+		display: inline-block;
+		cursor: pointer;
+
+		@include icon('checkbox-14', $top: 13px, $left: 18px);
+	}
+
+	input[type=checkbox]:checked + label {
+		@include icon('checkbox-14_active', $top: 13px, $left: 18px);
+	}
+
 	.email-editor {
 		.editor {
 			.main {
@@ -50,20 +68,21 @@
 
 						.action {
 							position: absolute;
-							top: 7px;
+							top: 0px;
 							right: 10px;
 							left: auto;
 							bottom: auto;
-							width: 112px;
-							height: 26px;
+							width: 300px;
+							height: 38px;
+							overflow: hidden;
 
-							.no-reply-picker {
+							.reply-option {
 								cursor: pointer;
 								background-color: white;
 								font-weight: 400;
-								font-size: 0.875em;
-								color: $secondary-grey;
-								padding: 3px 25px 3px 10px;
+								font-size: 0.775em;
+								color: $primary-blue;
+								padding: 0px 25px 0px 10px;
 								position: relative;
 								text-align: right;
 
@@ -71,12 +90,60 @@
 									display: none;
 								}
 
-								@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 10px, $left: auto, $right: 7px);
+								.toggle {
+									color: $secondary-grey;
 
-								&:hover {
-									color: $primary-grey;
-									@include icon('mv-dropdown-arrow', $position: relative, $side: after, $top: 10px, $left: auto, $right: 7px);
+									input[type=checkbox]+label {
+										min-height: 38px;
+										line-height: 38px;
+										padding-right: 7px;
+									}
 								}
+
+								&.picker {
+									.arrow {
+										padding-right: 0px;
+
+										&::after {
+											position: relative;
+											display: inline-block;
+											right: -3px;
+											top: 6px;
+										}
+									}
+								}
+
+								.reply-scope{
+									&.disabled {
+										opacity: 0.5;
+										cursor: default;
+									}
+								}
+							}
+						}
+
+						&.receiver {
+							.field {
+								top: 10px;
+ 							    color: $primary-blue;
+    							text-transform: capitalize;
+    							width: 350px;
+    							position: relative;
+ 								@include ellipsis;
+
+    							&.group {
+    								&.arrow {
+										&::after {
+											display: inline-block;
+											position: relative;
+											height: auto;
+											padding-left: 0.4em;
+											vertical-align: middle;
+											right: auto;
+											top: 2px;
+										}
+									}
+    							}
 							}
 						}
 					}
@@ -91,10 +158,36 @@
 			}
 
 			.footer {
+				overflow: hidden;
 				.save {
 					width: 140px;	
 				}
 				
+				.left {
+					float: left;
+
+					.toggle {
+						color: $secondary-grey;
+					    padding-right: 10px;
+					    font-weight: 400;
+					    font-size: 0.875em;
+					    line-height: 40px;
+
+					    input[type=checkbox] + label {
+							padding: 1px 15px 1px 20px;
+
+							&::after {
+								left: 0;
+							}
+
+							&:hover {
+								&::after {
+									left: 0;
+								}
+							}
+					    }
+					}
+				}
 			}
 		}
 	}

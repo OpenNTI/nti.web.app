@@ -3,6 +3,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 	alias: 'widget.course-overview-surveyref',
 
 	requires: [
+		'NextThought.model.SurveyRef',
 		'NextThought.model.assessment.Survey',
 		'NextThought.model.PageInfo'
 	],
