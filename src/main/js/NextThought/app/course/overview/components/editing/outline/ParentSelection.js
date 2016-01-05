@@ -7,7 +7,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.ParentSel
 	],
 
 
-	label: 'Unit',
+	label: 'Unit: ',
 
 
 	parseItemData: function(item) {

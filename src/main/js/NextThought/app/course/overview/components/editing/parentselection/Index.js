@@ -9,6 +9,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 
 
 	label: 'Parent: ',
+	positionLabel: 'Position: ',
 	cls: 'overview-editing-parentselection',
 
 	emptyText: 'Create New Parent',
@@ -26,11 +27,10 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'label', html: '{label}'},
-		{cls: 'selection closed', cn: [
+		{cls: 'selection closed disabled', 'data-label': '{selectionLabel}', cn: [
 			{cls: 'active'}
 		]},
-		{cls: 'position', cn: [
+		{cls: 'position closed disabled', 'data-label': '{positionLabel}', cn: [
 			{cls: 'active'}
 		]}
 	]),
@@ -61,7 +61,8 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.I
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			label: this.label
+			selectionLabel: this.label,
+			positionLabel: this.positionLabel
 		});
 	},
 

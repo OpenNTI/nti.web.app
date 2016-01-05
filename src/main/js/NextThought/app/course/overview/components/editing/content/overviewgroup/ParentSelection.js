@@ -6,7 +6,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 		'NextThought.app.course.overview.components.editing.content.overviewgroup.InlineEditor'
 	],
 
-	label: 'Lesson',
+	label: 'Lesson:',
 
 	parseItemData: function(item) {
 		return {

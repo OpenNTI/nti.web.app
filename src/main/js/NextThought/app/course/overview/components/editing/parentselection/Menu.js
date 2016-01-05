@@ -18,6 +18,11 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 
 		var me = this;
 
+		function enable() {
+			me.onceRendered
+				.then(me.enable.bind(me));
+		}
+
 		me.add([
 			{
 				xtype: 'container',
@@ -44,10 +49,12 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 					me.disable();
 					me.doSelection(me.selectionItems[0]);
 				});
-		} if (me.selectionItems.length) {
+		} else if (me.selectionItems.length) {
 			me.showItems();
+			enable();
 		} else if (me.editor) {
 			me.showAddNewItem();
+			enable();
 		}
 	},
 

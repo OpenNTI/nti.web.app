@@ -2,9 +2,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	extend: 'NextThought.app.course.overview.components.editing.parentselection.Index',
 	alias: 'widget.overview-editing-outlinenode-parentselection',
 
-
-	label: 'Outline',
-
+	label: 'Outline:',
 
 	parseItemData: function(item) {
 		return {
