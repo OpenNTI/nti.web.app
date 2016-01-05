@@ -47,7 +47,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		var base = this.callParent(arguments);
 
 		base.push({type: 'hidden', name: 'targetMimeType'});
-		base.unshift({type: 'url', name: 'href', placeholder: 'http://', required: true});
+		base.unshift({type: 'url', name: 'href', placeholder: 'https://', required: true});
 
 		return base;
 	}
