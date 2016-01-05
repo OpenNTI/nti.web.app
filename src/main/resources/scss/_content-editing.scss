@@ -342,10 +342,6 @@ input[type=number]{
 						right: 8px;
 						display: block;
 					}
-
-					.month {
-						font: normal 700 10px/1.0em $font;
-					}
 				}
 
 				.menu-container {
@@ -552,13 +548,13 @@ input[type=number]{
 			background: #AFAFAF;
 			color: white;
 			border-radius: 0;
-			font: normal 700 10px/12px $font;
+			font: normal 700 10px/14px $font;
 			padding: 0 2px;
 		}
 
 		.day {
 			color: #AFAFAF;
-			font: normal 600 12px/18px $font;
+			font: normal 600 12px/15px $font;
 			border-radius: 0;
 		}
 
@@ -595,7 +591,6 @@ input[type=number]{
 				margin: 10px;
 				border-radius: 5px;
 				background: $primary-blue;
-				box-shadow: 0 0 1px 0 rgba(0,0,0,0.3);
 				color: #ffffff;
 				font-size: 14px;
 				position: relative;

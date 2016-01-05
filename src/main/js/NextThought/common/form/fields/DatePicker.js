@@ -58,11 +58,13 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		if (this.hourEl) {
 			this.hourEl.dom.addEventListener('blur', this.onDateChange.bind(this));
 			this.hourEl.dom.addEventListener('focus', this.clearError.bind(this));
+			this.hourEl.dom.addEventListener('mousewheel', function(e){ e.preventDefault(); });
 		}
 
 		if (this.minuteEl) {
 			this.minuteEl.dom.addEventListener('blur', this.onDateChange.bind(this));
 			this.minuteEl.dom.addEventListener('focus', this.clearError.bind(this));
+			this.minuteEl.dom.addEventListener('mousewheel', function(e){ e.preventDefault(); });
 		}
 
 		this.setValue(this.defaultValue);
