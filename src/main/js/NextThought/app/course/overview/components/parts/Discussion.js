@@ -6,6 +6,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
 	],
 
 	requires: [
+		'NextThought.model.Discussion',
 		'NextThought.model.DiscussionRef'
 	],
 
