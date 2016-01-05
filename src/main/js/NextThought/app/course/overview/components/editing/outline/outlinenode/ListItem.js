@@ -91,6 +91,15 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	},
 
 
+	/**
+	 * For now, restrict the drag and drop to only the title.
+	 * We don't want drag the controls.
+	 */
+	getDragHandle: function(){
+		return this.titleEl.dom;
+	},
+
+
 	addCalendarPicker: function(){
 		var container = this.el.down('.calendar-container');
 
