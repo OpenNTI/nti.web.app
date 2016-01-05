@@ -227,6 +227,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 
 		this.select(el);
 		this.updateDates();
+		this.picker.clearAllErrors();
 	},
 
 
@@ -267,7 +268,10 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 		var values = this.getValue(),
 			error;
 
-		// TODO: Do more validations. Check if each date is valid for instance.
+		if (this.picker && this.picker.isValid && this.picker.isValid() === false) {
+			return false;
+		} 
+
 		if (!values.AvailableBeginning && values.AvailableEnding) {
 			error = {
 				msg: 'The begin date is required when the finish date is set.',

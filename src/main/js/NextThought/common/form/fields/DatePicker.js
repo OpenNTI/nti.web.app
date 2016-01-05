@@ -8,9 +8,10 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		{cls: 'date-container'},
 		{tag: 'tpl', 'if': 'timePicker', cn: [
 			{cls: 'time-container', cn: [
-				{ tag: 'input', cls: 'hour', value: '11'},
+				{cls: 'error'},
+				{ tag: 'input', cls: 'hour', name: 'hour', value: '11', type: 'number', min: 0, max: 24},
 				{ tag: 'span', cls: 'divider', html: ':'},
-				{ tag: 'input', cls: 'minute', value: '59'},
+				{ tag: 'input', cls: 'minute', name: 'minute', value: '59', type: 'number', min: 0, max: 59},
 				{ tag: 'span', cls: 'meridiem', name: 'meridiem', html: 'PM', 'date-value': 'pm'}
 			]}
 		]}
@@ -25,7 +26,8 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		dateEl: '.date',
 		hourEl: '.hour',
 		minuteEl: '.minute',
-		meridiemEl: '.meridiem'
+		meridiemEl: '.meridiem',
+		errorEl: '.error'
 	},
 
 	beforeRender: function() {
@@ -54,13 +56,17 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		}
 
 		if (this.hourEl) {
-			this.hourEl.dom.addEventListener('keyup', this.onDateChange.bind(this));
+			this.hourEl.dom.addEventListener('blur', this.onDateChange.bind(this));
+			this.hourEl.dom.addEventListener('focus', this.clearError.bind(this));
 		}
+
 		if (this.minuteEl) {
-			this.minuteEl.dom.addEventListener('keyup', this.onDateChange.bind(this));
+			this.minuteEl.dom.addEventListener('blur', this.onDateChange.bind(this));
+			this.minuteEl.dom.addEventListener('focus', this.clearError.bind(this));
 		}
 
 		this.setValue(this.defaultValue);
+		this.errorEl.hide();
 	},
 
 
@@ -80,10 +86,19 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 
 	onDateChange: function(picker, date) {
-		this.validateDate();
-		// Broadcast the change.
-		if (this.dateChanged) {
-			this.dateChanged();
+
+		if (this.isValid()) {
+			if (this.TimePicker) {
+				this.onTimeChange();
+			}
+
+			// Broadcast the change.
+			if (this.dateChanged) {
+				this.dateChanged();
+			}	
+		}
+		else {
+			this.showErrors();
 		}
 	},
 
@@ -183,12 +198,16 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 				}
 
 				// Set AM/PM
-				if (me.meridiemEl && m) {
-					me.meridiemEl.dom.setAttribute('data-value', m);
-					me.meridiemEl.setHTML(m.toUpperCase());
-				}
+				me.setMeridiem(m);
 			});
+	},
 
+
+	setMeridiem: function(value) {
+		if (this.meridiemEl && value) {
+			this.meridiemEl.dom.setAttribute('data-value', value);
+			this.meridiemEl.setHTML(value.toUpperCase());	
+		}
 	},
 
 
@@ -213,7 +232,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 			meridiemVal = this.meridiemEl && this.meridiemEl.dom.getAttribute('data-value'),
 			date;
 
-		this.validateDate();
+		// this.onTimeChange();
 		hour = parseInt(hour);
 		minutes = parseInt(minutes);
 		meridiemVal = meridiemVal && meridiemVal.toUpperCase();
@@ -223,31 +242,104 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	},
 
 
-	validateDate: function() {
+	onTimeChange: function() {
 		var p = this.datepicker,
 			hour = this.hourEl && this.hourEl.dom.value,
 			minutes = this.minuteEl && this.minuteEl.dom.value,
 			meridiemVal = this.meridiemEl && this.meridiemEl.dom.getAttribute('data-value'),
 			date;
 
-		if (!this.TimePicker) {
-			return;
-		}
-
 		hour = parseInt(hour);
 		minutes = parseInt(minutes);
 
-		if (isNaN(hour) || hour > 12 || hour < 1) {
-			this.hourEl.addCls('error');
-		} else {
-			this.hourEl.removeCls('error');
+		if (hour > 12) {
+			hour = hour % 12;
+			this.setMeridiem('pm');
+		}
+		
+		if (hour === 0) {
+			hour = 12;
+			this.setMeridiem('am');
 		}
 
-		if (isNaN(minutes) || minutes > 59 || minutes < 0) {
-			this.minuteEl.addCls('error');
-		} else {
-			this.minuteEl.removeCls('error');
+		// Get two digit format
+		hour = ('0' + hour).slice(-2);
+		minutes = ('0' + minutes).slice(-2);
+
+		this.hourEl.dom.value = hour;
+		this.minuteEl.dom.value = minutes;
+	},
+
+
+	isValid: function() {
+		var fields = [this.hourEl.dom, this.minuteEl.dom],
+			field, isValid = true;
+
+		for (var i = 0; i < fields.length && isValid; i++) {
+			field = fields[i];
+			if (field && field.checkValidity) {
+				isValid = field.checkValidity();
+			}
 		}
+
+		return isValid;
+	},
+
+
+	getErrors: function() {
+		var fields = [this.hourEl.dom, this.minuteEl.dom],
+			field, validity, errors = [], name, d;
+			
+		for (var i = 0; i < fields.length; i++) {
+			field = fields[i];
+			validity = field.validity;
+			name = field.getAttribute && field.getAttribute('name');
+
+			if (validity && !validity.valid) {
+				d = {name: name};
+				if (validity.rangeOverflow === true || validity.rangeUnderflow === true) {
+					d['error'] = 'The value for ' + name + ' is out of range';
+				}
+				errors.push(d);
+			}
+		}
+
+		return errors;
+	},
+
+
+	showErrors: function(){
+		var errors = this.getErrors(), name, el;
+		for (var i = 0; i < errors.length; i++) {
+			name = errors[i].name;
+			el = this.el.down('input[name='+name+']');
+			if (el) {
+				el.addCls('has-error');
+			}
+
+			if (errors[i].error) {
+				this.errorEl.update(errors[i].error);
+				this.errorEl.show();
+			}
+		}
+	},
+
+
+	clearError: function(e){
+		var dom = e && e.target;
+		if (Ext.fly(dom).hasCls('has-error')) {
+			Ext.fly(dom).removeCls('has-error');
+			this.errorEl.update('');
+			this.errorEl.hide();
+		}		
+	},
+
+
+	clearAllErrors: function(){
+		this.hourEl.removeCls('has-error');
+		this.minuteEl.removeCls('has-error');
+		this.errorEl.update('');
+		this.errorEl.hide();
 	},
 
 

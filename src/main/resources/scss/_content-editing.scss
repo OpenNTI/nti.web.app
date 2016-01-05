@@ -27,6 +27,16 @@
 	}
 }
 
+input[type=number]{ 
+	&::-webkit-inner-spin-button,
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none; 
+		-moz-appearance: none;
+    	appearance: none;
+  		margin: 0;		
+	}
+}
+
 .content-editor.content-link {
 
 	&.document {
@@ -745,10 +755,13 @@
 					}
 				}
 
-				.error {
-					color: $primary-red;
-					font: italic 500 12px/17px $font;
-					margin: 5px;
+				.container {
+					> .error {
+						color: $primary-red;
+						font: italic 500 12px/17px $font;
+						margin: 5px;
+						text-align: center;
+					}	
 				}
 
 				.date-picker-container {
@@ -868,6 +881,7 @@
 				.x-btn-inner {
 					color: $secondary-grey;
 					font-size: 14px;
+					font-family: $font;
 				}
 			}
 
@@ -893,6 +907,7 @@
 				font-weight: 500;
 				font-size: 14px;
 				text-align: center;
+				font-family: $font;
 			}
 
 			.x-datepicker-cell {
@@ -901,10 +916,11 @@
 					padding: 3px;
 					background: none;
 					font-size: 13px;
-					font-weight: 300;
+					font-weight: 500;
 					text-align: center;
 					margin: 4px 3px;
 					width: 26px;
+					font-family: $font;
 				}
 
 				&:first-of-type {
@@ -951,13 +967,17 @@
 	}
 
 	.time-container {
-		margin: 14px auto;
+		margin: -12px auto 12px;
 		font-size: 13px;
 		text-align: center;
 
 		input {
 			font-size: 13px;
 			color: $secondary-grey;
+
+			&.has-error {
+				border: 1px solid $primary-red;
+			}
 		}
 
 		.hour, .minute {
@@ -966,12 +986,15 @@
 			text-align: center;
 		}
 
-		.divider {
-			margin: 0 5px;
+		.error {
+			color: $primary-red;
+			font: italic 500 12px $font;
+			min-height: 12px;
+			margin-bottom: 5px;
 		}
 
-		.error {
-			border: 1px solid $primary-red;
+		.divider {
+			margin: 0 5px;
 		}
 
 		.meridiem {

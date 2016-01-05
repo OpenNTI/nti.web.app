@@ -212,9 +212,14 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 	},
 
 
-	onSave: function() {
+	onSave: function(e) {
 		var selectedEl = this.el.down('.option.selected'),
 			action = selectedEl && selectedEl.getAttribute('data-action');
+
+		e.stopEvent();
+		if (this.datepicker && this.datepicker.isValid && this.datepicker.isValid() === false) {
+			return;
+		}
 
 		if (action === 'publish') {
 			this.publishSave();
