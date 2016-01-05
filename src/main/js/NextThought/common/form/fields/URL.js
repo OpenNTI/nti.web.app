@@ -27,7 +27,7 @@ Ext.define('NextThought.common.form.fields.URL', {
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			name: this.schema.name,
-			placeholer: this.schema.placeholder,
+			placeholder: this.schema.placeholder,
 			value: this.defaultValue,
 			required: this.schema.required
 		});
