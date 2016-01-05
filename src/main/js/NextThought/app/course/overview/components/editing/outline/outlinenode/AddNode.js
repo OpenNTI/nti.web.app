@@ -132,7 +132,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	onSave: function(e) {
 		var me = this,
 			values = me.editor.getValue(),
-			outline = me.outlineCmp,
+			outline = me.outlineCmp && me.outlineCmp.outline,
 			parent,	shouldNavigate = e.getKey() === e.ENTER;
 
 		if (!me.isValid()) {
