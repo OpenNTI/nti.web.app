@@ -177,9 +177,46 @@
 
 	&.editing {
 		.outline-row {
+			&.unit {
+				box-shadow: none;
+			}
+
+			&.lesson{
+			    padding: 0.73em 0.35em 0.73em 1em;
+				&:not(.heading){
+			    	font: normal 400 0.875rem/1.5rem "Open Sans",sans-serif;
+				}
+			}
+
 			&.disabled {
 				cursor: pointer;
 				color: $primary-grey;
+			}
+		}
+	}
+
+	&.editing:not(.multi-level) {
+		.outline-row {
+			&.heading {
+				&.unit{
+					padding: 2em 0.42em .39em 0.84em;
+					min-height: 0px;
+
+					&:first-of-type {
+					    padding-top: 0.396em;
+					}
+				}
+			}
+		}
+	}
+
+	&:not(.multi-level):not(.editing) {
+		.outline-row {
+			&.unit, &.heading {
+				&:not(.selected) {
+				background: none !important;
+				box-shadow: none;
+				}
 			}
 		}
 	}
@@ -189,10 +226,10 @@
 		&:not(.editing) {
 			.outline-row {
 				&.unit, &.heading {
-					background: none !important;
 					box-shadow: none;
 				}
 			}
+
 		}
 
 		.outline-row {
@@ -202,13 +239,6 @@
 
 			&.unit.heading + .unit:not(.heading) {
 				margin-top: 0;
-			}
-
-			&.unit, &.heading {
-				&:not(.selected) {
-					background: none !important;
-					box-shadow: none;
-				}
 			}
 
 			&.unit:not(.heading) {

@@ -453,17 +453,20 @@ input[type=number]{
 
 		.outline-header {
 			background: #ffffff;
+			box-shadow: none;
 		}
 
 		.outline-list {
-			bottom: 50px;
+			bottom: 47px;
 
 			.body {
-				background: #ffffff;
 
 				> .outline-group {
+				    padding-top: 0.313em;
+
 					> .items {
 						padding: 5px;
+						padding-bottom: 2px;
 						background-color: #e2e2e2;
 
 						> .outline-group {
@@ -491,6 +494,11 @@ input[type=number]{
 							.title {
 								font: normal 600 16px/42px $font;
 								background-color: #e2e2e2;
+							    padding-bottom: 3px;
+
+								&:before {
+								    content: '+';
+								}
 							}
 						}
 					}
@@ -508,6 +516,10 @@ input[type=number]{
 			.title {
 				background-color: $primary-blue;
 				color: #ffffff;
+
+				&:before {
+					content: '+';
+				}
 			}
 		}
 
