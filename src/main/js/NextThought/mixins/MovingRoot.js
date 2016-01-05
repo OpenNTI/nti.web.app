@@ -1,6 +1,10 @@
 Ext.define('NextThought.mixins.MovingRoot', {
 	isMovingRoot: true,
 
+	mixins: {
+		OrderedContents: 'NextThought.mixins.OrderedContents'
+	},
+
 
 	getMoveLink: function() {
 		return this.getLink('move');
@@ -67,6 +71,7 @@ Ext.define('NextThought.mixins.MovingRoot', {
 		return move;
 	},
 
+
 	/**
 	 * Currently move operations are responding with the object we get the move link from.
 	 * So just sync with the response to get the new items.
@@ -79,20 +84,29 @@ Ext.define('NextThought.mixins.MovingRoot', {
 	 * @param  {String} response the response from the server
 	 */
 	__onMoveOperation: function(record, newParent, originalParent, response) {
-		var updatedNewParent, updatedOriginalParent;
+		var updatedNewParent, updatedOriginalParent, updatedRecord;
 
-		newParent = newParent.isModel && newParent;
-		originalParent = originalParent.isModel && originalParent;
-
-		if (record.fireEvent) {
-			record.fireEvent('moved');
+		//TODO: figure out a better way to do this...
+		if (!originalParent.isModel) {
+			originalParent = this.findOrderedContentsItem(originalParent);
 		}
+
+		this.__fireMoveOnParent(record, originalParent);
 
 		this.syncWithResponse(response);
 
+		newParent = newParent.isModel && newParent;
+		originalParent = originalParent.isModel && originalParent;
+		record = record.isModel && record;
+
 		if (this.findOrderedContentsItem) {
+			updatedRecord = record && this.findOrderedContentsItem(record.getId());
 			updatedNewParent = newParent && this.findOrderedContentsItem(newParent.getId());
 			updatedOriginalParent = originalParent && this.findOrderedContentsItem(originalParent.getId());
+		}
+
+		if (updatedRecord.fireEvent) {
+			updatedRecord.fireEvent('moved');
 		}
 
 		if (updatedOriginalParent) {
@@ -101,6 +115,19 @@ Ext.define('NextThought.mixins.MovingRoot', {
 
 		if (updatedNewParent) {
 			newParent.syncWith(updatedNewParent);
+		}
+	},
+
+
+	__fireMoveOnParent: function(record, parent) {
+		var originalRecord;
+
+		if (parent && parent.findOrderedContentsItem && record) {
+			originalRecord = parent.findOrderedContentsItem(record.getId ? record.getId() : record);
+		}
+
+		if (originalRecord) {
+			originalRecord.fireEvent('moved');
 		}
 	}
 });

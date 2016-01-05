@@ -4,7 +4,6 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 
 	mixins: {
 		DurationCache: 'NextThought.mixins.DurationCache',
-		OrderedContents: 'NextThought.mixins.OrderedContents',
 		MovingRoot: 'NextThought.mixins.MovingRoot'
 	},
 
