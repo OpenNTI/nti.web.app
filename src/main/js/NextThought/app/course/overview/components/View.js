@@ -236,7 +236,8 @@ Ext.define('NextThought.app.course.overview.components.View', {
 				if (id && (!record || record.getId() !== id)) {
 					record = outline.getNode(id);
 				} else if (record) {
-					record = outline.fillInNode(record);
+					//get the record that is in the outline in case it has updated
+					record = outline.getNode(record.getId());
 				} else {
 					record = outline.findNodeBy(function(rec) {
 						return rec.get('type') === 'lesson' && rec.get('NTIID') && rec.get('isAvailable');

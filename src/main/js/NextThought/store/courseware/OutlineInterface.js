@@ -28,22 +28,22 @@ Ext.define('NextThought.store.courseware.OutlineInterface', {
 				depth -= 1;
 			}
 
-            function getDepth(n) {
-                var items = ((n && n.get('Items')) || []),
-                    depth;
+			function getDepth(n) {
+				var items = ((n && n.get('Items')) || []),
+					depth;
 
-                depth = items.reduce(function(max, item) {
-                    var depth = getDepth(item);
+				depth = items.reduce(function(max, item) {
+					var depth = getDepth(item);
 
-                    if (depth > max) {
-                        max = depth;
-                    }
+					if (depth > max) {
+						max = depth;
+					}
 
-                    return max;
-                }, 0);
+					return max;
+				}, 0);
 
-                return items.length ? depth + 1 : 0;
-            }
+				return items.length ? depth + 1 : 0;
+			}
 
 			maxDepth = getDepth(outline);
 
@@ -51,6 +51,11 @@ Ext.define('NextThought.store.courseware.OutlineInterface', {
 
 			return records;
 		}
+	},
+
+
+	mixins: {
+		observable: 'Ext.util.Observable'
 	},
 
 
@@ -65,6 +70,8 @@ Ext.define('NextThought.store.courseware.OutlineInterface', {
 				this.outlineContentsPromise,
 				this.tocPromise
 			]).then(this.__build.bind(this));
+
+		this.mixins.observable.constructor.call(this, config);
 	},
 
 
@@ -76,11 +83,19 @@ Ext.define('NextThought.store.courseware.OutlineInterface', {
 	__build: function(results) {
 		this.outline = results[0];
 		this.tocStore = results[1];
-		this.__flatContents = this.self.flattenOutline(this.outline);
+
+		this.__flattenOutline(this.outline);
+
+		this.mon(this.outline, 'update', this.__flattenOutline.bind(this, this.outline));
 
 		this.isBuilt = true;
 
 		return this;
+	},
+
+
+	__flattenOutline: function(outline) {
+		this.__flatContents = this.self.flattenOutline(outline);
 	},
 
 

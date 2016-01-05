@@ -26,7 +26,18 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.loadContents = this.showOutlineNode(this.record, this.parentRecord);
+		var me = this;
+
+		me.loadContents = me.showOutlineNode(me.record, me.parentRecord);
+
+		me.mon(me.record, 'moved', function() {
+			if (me.navigateToOutlineNode) {
+				wait()
+					.then(function() {
+						me.navigateToOutlineNode(me.record);
+					});
+			}
+		});
 	},
 
 

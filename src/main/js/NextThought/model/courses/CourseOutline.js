@@ -193,5 +193,6 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 
 	onSync: function() {
 		NextThought.store.courseware.OutlineInterface.fillInDepths(this);
+		this.fillInItems();
 	}
 });

@@ -61,7 +61,7 @@ Ext.define('NextThought.mixins.MovingRoot', {
 			move = Promise.resolve();
 		} else {
 			move = Service.post(link, data)
-				.then(this.__onMoveOperation.bind(this));
+				.then(this.__onMoveOperation.bind(this, record));
 		}
 
 		return move;
@@ -78,7 +78,11 @@ Ext.define('NextThought.mixins.MovingRoot', {
 	 *
 	 * @param  {String} response the response from the server
 	 */
-	__onMoveOperation: function(response) {
+	__onMoveOperation: function(record, response) {
+		if (record.fireEvent) {
+			record.fireEvent('moved');
+		}
+
 		this.syncWithResponse(response);
 	}
 });
