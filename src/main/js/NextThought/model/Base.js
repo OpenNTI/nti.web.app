@@ -225,7 +225,7 @@ Ext.define('NextThought.model.Base', {
 		var json = JSON.parse(response),
 			newRecord;
 
-		json = Ext.applyIf(json, this.raw);
+		json = Ext.applyIf(json, this.getRaw());
 
 		newRecord = ParseUtils.parseItems([json])[0];
 
@@ -865,6 +865,34 @@ Ext.define('NextThought.model.Base', {
 					data[f.name] = Ext.clone(x);
 				}
 		);
+		return data;
+	},
+
+
+	getRaw: function() {
+		var data = {},
+			me = this;
+
+		this.fields.each(function(f) {
+			if (!f.persist) { return; }
+
+			var x = me.get(f.name);
+
+			if (Ext.isDate(x)) {
+				x = x.getTime() / 1000;
+			} else if (x && x.getRaw) {
+				x = x.getRaw();
+			} else if (x && Ext.isArray(x)) {
+				x = x.slice();
+
+				Ext.each(x, function(o, i) {
+					x[i] = o && o.getRaw ? o.getRaw() : o;
+				});
+			}
+
+			data[f.mapping || f.name] = Ext.clone(x);
+		});
+
 		return data;
 	},
 
