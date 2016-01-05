@@ -182,7 +182,7 @@ Ext.define('NextThought.app.Body', {
 		}
 
 		if (!route) {
-			route = this.ContextStore.getCurrentRoute();
+			route = this.ContextStore.getCurrentRoute() || '';
 		}
 
 		var location = Globals.getURLParts(route),
