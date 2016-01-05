@@ -184,7 +184,8 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		}
 
 		// Make sure we set the default date properly.
-		if (!lessonPublishDate && this.datepicker) {
+		// In the case where we have a publish date and it has passed, set it to the default value.
+		if (this.datepicker && (!lessonPublishDate || (lessonPublishDate && hasPublishDatePassed))) {
 			date = this.getDefaultDate();
 			this.datepicker.setValue(date);
 			this.setPublishOnDateText(date);
@@ -296,11 +297,13 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		//If we've already set on up, no need to create a new one
 		if (this.datepicker) { return; }
 
-		var parentEl = dateContainer || Ext.getBody(),
+		var c = this.contents, parentEl = dateContainer || Ext.getBody(),
 			begin = this.contents && this.contents.get('publishBeginning'),
+			hasPublishDatePassed = c && c.hasPublishDatePassed && c.hasPublishDatePassed(),
 			defaultValue = begin && new Date(begin);
 
-		if (!defaultValue) {
+		// If the publish date has already passed, don't show it. Use the default date.
+		if (!defaultValue || (begin && hasPublishDatePassed)) {
 			defaultValue = this.getDefaultDate();
 		}
 
