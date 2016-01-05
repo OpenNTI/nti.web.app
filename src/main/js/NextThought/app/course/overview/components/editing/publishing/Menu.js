@@ -357,8 +357,13 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 		if (date instanceof Date) {
 			hour = date.getHours();
 			minutes = date.getMinutes();
-			meridiemVal = hour > 12 ? 'PM' : 'AM';
+			meridiemVal = hour >= 12 ? 'PM' : 'AM';
 			hour = hour > 12 ? hour - 12 : hour;
+
+			// Since we're in the AM/PM, 0 hour == 12 hour
+			if (hour === 0) {
+				hour = 12;
+			}
 
 			date = Ext.Date.format(date, 'F d');
 			return date + ' at ' + hour + ':' + minutes + ' ' + meridiemVal;

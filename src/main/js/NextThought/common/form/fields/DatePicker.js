@@ -378,9 +378,14 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		hour = parseInt(hour);
 		minutes = parseInt(minutes);
 
-		if (meridiemVal === 'pm') {
+		// Handling the am/pm intrication. 
+		if (meridiemVal === 'pm' && hour < 12) {
 			hour = hour + 12;
 		}
+
+		if (meridiemVal === 'am' && hour === 12) {
+			hour = 0;
+		} 
 
 		t = hour * 3600 * 1000 + minutes * 60 * 1000;
 		return isNaN(t) ? 0 : t;
