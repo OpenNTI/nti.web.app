@@ -206,7 +206,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 		wait()
 			.then(function() {
 				if (me.el && me.el.dom) {
-					me.el.mask('NextThought.view.courseware.View.loading', 'loading');
+					me.el.mask(getString('NextThought.view.courseware.View.loading'), 'loading');
 				}
 			});
 
