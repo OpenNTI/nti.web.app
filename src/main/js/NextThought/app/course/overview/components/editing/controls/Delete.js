@@ -50,7 +50,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Delete',
 		return new Promise(function(fulfill, reject) {
 			Ext.Msg.show({
 				title: 'Are you sure?',
-				msg: 'Deleting this could have some consequences you might not like.',
+				msg: 'Deleted items cannot be recovered.',
 				icon: 'warning-red',
 				buttons: {
 					primary: {
