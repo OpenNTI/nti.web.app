@@ -569,14 +569,14 @@ input[type=number]{
 		border-radius: 4px;
 		box-shadow: 0 0 0 1px #AFAFAF, inset 0 0 0 1px #AFAFAF;
 		text-align: center;
-		padding: 1px;
+		padding: 0;
 
 		.month {
 			background: #AFAFAF;
 			color: white;
 			border-radius: 0;
 			font: normal 700 10px/14px $font;
-			padding: 0 2px;
+			padding: 1px 2px;
 		}
 
 		.day {
