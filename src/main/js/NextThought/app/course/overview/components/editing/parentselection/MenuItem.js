@@ -15,7 +15,7 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.M
 
 	selectRecord: function(record) {
 		if (!this.rendered) {
-			this.on('afterrender', this.selectRecord.bind(this));
+			this.on('afterrender', this.selectRecord.bind(this, record));
 			return;
 		}
 

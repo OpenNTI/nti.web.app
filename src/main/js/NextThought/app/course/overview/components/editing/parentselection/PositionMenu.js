@@ -81,6 +81,9 @@ Ext.define('NextThought.app.course.overview.components.editing.parentselection.P
 
 		if (item) {
 			item.classList.add('current');
+			this.el.addCls('has-current');
+		} else {
+			this.el.removeCls('has-current');
 		}
 	},
 
