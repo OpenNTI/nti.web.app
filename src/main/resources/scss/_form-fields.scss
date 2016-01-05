@@ -297,6 +297,9 @@ span.nti-radiobutton {
 
 form.common-form {
 	input, textarea {
+		outline: none;
+		border: none;
+
 		&.error {
 			box-shadow: 0 0 0 1px $primary-red;
 		}

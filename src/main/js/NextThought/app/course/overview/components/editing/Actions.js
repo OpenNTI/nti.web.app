@@ -39,13 +39,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 			});
 		}
 
-		return form.submitToRecord(record)
-			.fail(function(reason) {
-				return Promise.reject({
-					msg: 'Unable to update record.',
-					err: reason
-				});
-			});
+		return form.submitToRecord(record);
 	},
 
 
@@ -233,7 +227,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 
 
 	parseError: function(reason) {
-		var response = reason.responseText,
+		var response = reason && reason.responseText,
 			item;
 
 		try {
