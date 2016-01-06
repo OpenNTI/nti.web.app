@@ -6,7 +6,7 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'image-picker {fileCls}', style: {width: '{width}', height: '{height}'}, cn: [
 			{cls: 'preview'},
-			{tag: 'input', type: 'file', accept: 'image/*'},
+			{tag: 'input', type: 'file', 'data-qtip': 'Add Cover Image', accept: 'image/*'},
 			{cls: 'clear has-file', html: 'Clear Image'}
 		]
 	}),
@@ -66,6 +66,9 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 				this.previewEl.setStyle({backgroundImage: ''});
 			}
 		}
+		else {
+			this.updateTooltip(true);
+		}
 	},
 
 
@@ -76,6 +79,7 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 		}
 
 		this.previewEl.setStyle({backgroundImage: 'url(' + value + ')'});
+		this.updateTooltip(true);
 	},
 
 
@@ -85,6 +89,17 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 		//TODO: open up the resize and crop controls
 
 		this.previewEl.setStyle({backgroundImage: 'url(' + url + ')'});
+		this.updateTooltip(true);
+	},
+
+
+	updateTooltip: function(hasImage){
+		if (hasImage) {
+			this.inputEl.set({'data-qtip': 'Cover Image'});
+		}
+		else {
+			this.inputEl.set({'data-qtip': 'Add Cover Image'});
+		}
 	},
 
 
@@ -105,5 +120,6 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 
 		this.fileContainer.removeCls('has-file');
 		this.fileContainer.addCls('no-file');
+		this.updateTooltip();
 	}
 });
