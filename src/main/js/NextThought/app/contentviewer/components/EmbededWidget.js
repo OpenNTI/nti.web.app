@@ -76,16 +76,18 @@ Ext.define('NextThought.app.contentviewer.components.EmbededWidget', {
 		var rd = this.renderData = this.renderData || {};
 		var data = this.data;
 		var defer = /^false$/i.test(data.defer) ? false : (Boolean(data.splash) || /^true$/i.test(data.defer));
+		var query = Ext.Object.fromQueryString(data.source.split('?')[1] || '');
 
 		rd.splash = data.splash ? this.resolveSplashURL(data.splash) : 'data:,';
-		rd.src = defer ? '' : data.source;
 		rd.height = data.height || 0;
 
 		this.frameDeferred = defer;
 		this.sourceName = data.uid || parse(data.source)[this.getIdKey()] || NO_SOURCE_ID;
-		if (data.source.indexOf(this.getIdKey()) === -1) {
+		if (Ext.isEmpty(query[this.getIdKey()])) {
 			data.source += (data.source.indexOf('?') === -1 ? '?' : '&') + this.getIdKey() + '=' + encodeURIComponent(this.sourceName);
 		}
+
+		rd.src = defer ? '' : data.source;
 	},
 
 
