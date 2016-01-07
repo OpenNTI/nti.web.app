@@ -67,7 +67,7 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'ID', type: 'string', persist: false },
 		{ name: 'Last Modified', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date(0) },
 		{ name: 'LikeCount', type: 'int', persist: false },
-		{ name: 'Links', type: 'links', persist: false, defaultValue: [] },
+		{ name: 'Links', type: 'links', persist: false, defaultValue: [], useInRaw: true},
 		{ name: 'MimeType', type: 'string', useNull: true },
 		{ name: 'NTIID', type: 'string', useNull: true },
 		{ name: 'OID', type: 'string', persist: false },
@@ -874,7 +874,7 @@ Ext.define('NextThought.model.Base', {
 			me = this;
 
 		this.fields.each(function(f) {
-			if (!f.persist) { return; }
+			if (!f.persist && !f.useInRaw) { return; }
 
 			var x = me.get(f.name);
 
