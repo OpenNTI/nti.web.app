@@ -383,6 +383,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 		if (!form) { return Promise.reject(); }
 
+		me.clearErrors();
+
 		me.activeErrors = errors.reduce(function(acc, error) {
 			error.fields.forEach(form.showErrorOn.bind(form));
 			error.headerBar = me.showError(error.msg);
