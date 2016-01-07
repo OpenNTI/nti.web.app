@@ -31,7 +31,7 @@ Ext.define('NextThought.app.context.components.cards.RelatedWork', {
 
 		this.renderData = Ext.applyIf(this.renderData || {}, {
 			title: this.content && this.content.get('label'),
-			author: this.content && this.content.get('Creator')
+			author: this.content && this.content.get('byline')
 		});
 	},
 
