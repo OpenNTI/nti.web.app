@@ -361,7 +361,6 @@ Ext.define('NextThought.app.image.cropping.Canvas', {
 			selection = this.selection,
 			rect = this.el.dom.getBoundingClientRect(),
 			origin = {x: rect.left, y: rect.top},
-			mask = this.getMask(0, 0, imageInfo, selection),
 			operation, cornerSize = this.CORNER_SIZE,
 			nearTop, nearRight, nearBottom, nearLeft;
 
@@ -369,9 +368,13 @@ Ext.define('NextThought.app.image.cropping.Canvas', {
 		x -= origin.x;
 		y -= origin.y;
 
-		//Get position relative to mask
-		x -= mask[0];
-		y -= mask[1];
+		//Get position relative to image
+		x -= imageInfo.x;
+		y -= imageInfo.y;
+
+		//Get position relative to selection
+		x -= selection.x;
+		y -= selection.y;
 
 		//Detect if we are near the edges
 		nearLeft = x >= -cornerSize.overhang && x <= cornerSize.length;
@@ -566,11 +569,14 @@ Ext.define('NextThought.app.image.cropping.Canvas', {
 
 
 	onMouseDown: function(e) {
-		var xy = e.getXY(),
-			operation = this.__getOperationAt(xy[0], xy[1]);
+		e = e.browserEvent;
+
+		var x = e.clientX,
+			y = e.clientY,
+			operation = this.__getOperationAt(x, y);
 
 		this.currentOperation = operation;
-		this.lastPoint = {x: xy[0], y: xy[1]};
+		this.lastPoint = {x: x, y: y};
 	},
 
 
@@ -580,12 +586,15 @@ Ext.define('NextThought.app.image.cropping.Canvas', {
 
 
 	onMouseMove: function(e) {
-		var xy = e.getXY(),
-			operation = this.__getOperationAt(xy[0], xy[1]);
+		e = e.browserEvent;
+
+		var x = e.clientX,
+			y = e.clientY,
+			operation = this.__getOperationAt(x, y);
 
 		if (this.currentOperation) {
 			operation = this.currentOperation;
-			this.__doOperation(operation, xy[0], xy[1], this.imageInfo, this.selection);
+			this.__doOperation(operation, x, y, this.imageInfo, this.selection);
 		}
 
 		if (this.potentialOperation !== operation) {
