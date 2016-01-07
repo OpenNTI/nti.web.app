@@ -42,7 +42,12 @@ Ext.define('NextThought.mixins.OrderedContents', {
 					item.fillInItems();
 				}
 
-				me.mon(item, 'update', me.onItemUpdated.bind(me));
+				if (!item.parentUpdateListener) {
+					item.parentUpdateListener = me.mon(item, {
+						destroyable: true,
+						'update': me.onItemUpdated.bind(me)
+					});
+				}
 			});
 		}
 	},
