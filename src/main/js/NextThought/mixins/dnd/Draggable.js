@@ -141,6 +141,8 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 			method = remove ? 'removeEventListener' : 'addEventListener',
 			handlers = this.Draggable.handlers;
 
+		handle = handle || this.getDragTarget();
+
 		if (handle && handle.addEventListener) {
 			this.Draggable.hasHandle = true;
 
@@ -151,12 +153,8 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 			if (handlers.handleMouseUp) {
 				handle[method]('mouseup', handlers.handleMouseUp);
 			}
-		} else if (handle) {
-			console.error('Invalid drag handle.');
-		} else if (remove) {
-			this.__removeTargetListeners();
 		} else {
-			this.__addTargetListeners();
+			console.error('Invalid drag handle.');
 		}
 	},
 
@@ -220,6 +218,7 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 		}
 	},
 
+
 	__dragEnd: function(e) {
 		var el = this.getDragTarget(),
 			handle = this.getDragHandle && this.getDragHandle(),
@@ -241,7 +240,8 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 		}
 	},
 
-	onNoDrop: function(){
+
+	onNoDrop: function() {
 		var el = this.getDragTarget(),
 			handle = this.getDragHandle();
 
