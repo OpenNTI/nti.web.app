@@ -174,7 +174,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 		var input = this.inputEl && this.inputEl.dom;
 
 		if (input) {
-			input.addEventListener('change', this.onFileChange.bind(this));
+			input.addEventListener('change', this.onFileInputChange.bind(this));
 			input.addEventListener('dragenter', this.onDragEnter.bind(this));
 			input.addEventListener('dragleave', this.onDragLeave.bind(this));
 			input.addEventListener('drop', this.onDragLeave.bind(this));
@@ -195,7 +195,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	},
 
 
-	onFileChange: function(e) {
+	onFileInputChange: function(e) {
 		var input = this.getInput(),
 			file = input && input.files && input.files[0];
 
@@ -203,29 +203,29 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 		//keep track of the file locally, cancel
 		//default to prevent the input from getting the value
 		this.currentFile = file;
-
 		e.preventDefault();
 
-		if (!file) { return; }
+		if (!this.accepts || file.type.match(this.accepts)) {
+			this.onFileChange(file);
+		}
+	},
 
-		if (!(this.accepts) || file.type.match(this.accepts)) {
 
-			this.maybeWarnForSize(file);
+	onFileChange: function(file) {
+		this.maybeWarnForSize(file);
 
-			this.setPreviewFromInput(file);
+		this.setPreviewFromInput(file);
 
-			if (this.schema.onFileAdded) {
-				this.schema.onFileAdded(file.type);
-			}
-
-			if (this.onChange) {
-				this.onChange();
-			}
-
-			this.fileContainer.removeCls('no-file');
-			this.fileContainer.addCls('has-file');
+		if (this.schema.onFileAdded) {
+			this.schema.onFileAdded(file.type);
 		}
 
+		if (this.onChange) {
+			this.onChange();
+		}
+
+		this.fileContainer.removeCls('no-file');
+		this.fileContainer.addCls('has-file');
 	},
 
 
