@@ -238,15 +238,19 @@ Ext.define('NextThought.app.course.overview.components.View', {
 				} else if (record) {
 					//get the record that is in the outline in case it has updated
 					record = outline.getNode(record.getId());
-				} else {
-					record = outline.findNodeBy(function(rec) {
-						return rec.get('type') === 'lesson' && rec.get('NTIID') && rec.get('isAvailable');
-					});
 				}
 
 				//With editing the record may or may not be a content node
 				if (!editing && record) {
 					record = record.getFirstContentNode();
+				}
+
+				// In case, we have no record, get the first available record.
+				// TODO: should we check if it's not in edit mode?
+				if (!record) {
+					record = outline.findNodeBy(function(rec) {
+						return rec.get('type') === 'lesson' && rec.get('NTIID') && rec.get('isAvailable');
+					});
 				}
 
 				return record;
