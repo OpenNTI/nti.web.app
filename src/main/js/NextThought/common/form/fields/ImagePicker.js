@@ -82,8 +82,6 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 		var me = this,
 			url = me.createObjectURL(file);
 
-		debugger;
-
 		me.PromptActions.prompt('image-cropping', {
 			src: url,
 			crop: {
