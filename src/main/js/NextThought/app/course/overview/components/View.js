@@ -107,16 +107,35 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 
 	closeEditing: function() {
-		var node = this.activeNode && this.activeNode.getFirstContentNode(),
-			id = node && node.getId();
+		var me = this,
+			bundle = me.currentBundle,
+			outlineInterface = bundle && bundle.getOutlineInterface(true);
 
-		id = id && ParseUtils.encodeForURI(id);
+		outlineInterface.onceBuilt()
+			.then(function(outlineInterface) {
+				var outline = outlineInterface && outlineInterface.getOutline(),
+					nodeId = me.activeNode && me.activeNode.getId();
 
-		if (id) {
-			this.pushRoute('', id);
-		} else {
-			this.pushRoute('', '');
-		}
+					return outline.findOutlineNode(nodeId);
+			})
+			.then(function(outlineNode){
+					var node = outlineNode && outlineNode.getFirstContentNode(),
+					id;
+
+					if(node){
+						id = node && node.getId();
+					}
+
+					if (id) {
+						id = ParseUtils.encodeForURI(id);
+						me.pushRoute('', id);
+					} else {
+						me.pushRoute('', '');
+					}
+			})
+			.fail(function(reason){
+				console.error('Unable to stop editing because: ' + reason);
+			});
 	},
 
 
