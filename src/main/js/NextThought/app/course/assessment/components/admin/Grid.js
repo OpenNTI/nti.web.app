@@ -145,34 +145,57 @@ Ext.define('NextThought.app.course.assessment.components.admin.Grid', {
 
 						},
 						doSort: function(state) {
-							function get(o) {
+							function getGrade(o) {
 								var grade = o.get('Grade'),
 									values = grade && grade.getValues(),
 									value = values && values.value,
-									completed = o.get('completed');
+									g = value && parseFloat(value, 10);
 
-								if (!completed) {
-									value = -2;
-								} else if (!value) {
-									value = -1;
-								} else {
-									value = parseFloat(value, 10);
+								if (value && isNaN(g)) {
+									g = value;
 								}
 
-								return value;
+								return g;
 							}
 
+
 							var store = this.up('grid').getStore(),
+								less = -1, more = 1, same = 0,
 								sorter = new Ext.util.Sorter({
 									direction: state,
 									property: store.remoteSort ? 'gradeValue' : 'Grade',
 									//the transform and root are ignored on remote sort
 									root: 'data',
-									sorterFn: function(a, b) {
-										var vA = get(a),
-											vB = get(b);
+									sorterFn: function(oA, oB) {
+										var a = getGrade(oA),
+											b = getGrade(oB),
+											cA = oA.get('completed'),
+											cB = oB.get('completed'),
+											tA = typeof a,
+											tB = typeof b,
+											direction;
 
-										return vA > vB ? 1 : (vA < vB ? -1 : 0);
+										if (cA && !cB) {
+											direction = more;
+										} else if (!cA && cB) {
+											direction = less;
+										//these are intentionally == and not ===
+										} else if (a == null && b != null) {
+											diection = less;
+										} else if (a != null && b == null) {
+											direction = more;
+										} else if (tA === 'string' && tB === 'string') {
+											direction = -a.localeCompare(b);
+											direction = direction === 0 ? same : (direction < 0) ? less : more;
+										} else if (tA === 'string' && tB !== 'string') {
+											direction = less;
+										} else if (tA !== 'string' && tB === 'string') {
+											direction = more;
+										} else {
+											direction = a === b ? same : a < b ? less : more;
+										}
+
+										return direction;
 									}
 								});
 
@@ -357,17 +380,17 @@ Ext.define('NextThought.app.course.assessment.components.admin.Grid', {
 
 	/**
 	 * This function sets the table layout to fixed.
-	 * We've observed that some browsers(i.e. Safari) 
-	 * end up mixing our styles and Ext Js table styles. 
+	 * We've observed that some browsers(i.e. Safari)
+	 * end up mixing our styles and Ext Js table styles.
 	 * In this method, we add the necessary class to override Ext Js styles.
 	 */
-	adjustTableLayout: function(){
+	adjustTableLayout: function() {
 		var me = this;
 		this.onceRendered
-			.then(function(){
+			.then(function() {
 				me.el.removeCls('fixed-table');
 				wait(100)
-					.then(function(){
+					.then(function() {
 						me.el.addCls('fixed-table');
 					});
 			});
