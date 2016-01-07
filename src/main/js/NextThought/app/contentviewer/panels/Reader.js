@@ -95,9 +95,10 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 
 
 		var r = this.body.down('reader-content'),
-			readerScroll = r && r.getScroll && r.getScroll();
+			readerScroll = r && r.getScroll && r.getScroll(),
+			isInFullScreenMode = readerScroll && readerScroll.isInFullScreenMode && readerScroll.isInFullScreenMode();
 
-		if (r && r.scrollBeforeFullscreen !== undefined) {
+		if (r && r.scrollBeforeFullscreen !== undefined && !isInFullScreenMode) {
 			readerScroll.to(r.scrollBeforeFullscreen);
 			delete r.scrollBeforeFullscreen;
 		}
