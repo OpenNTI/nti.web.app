@@ -46,11 +46,8 @@
 		& .outline-group {
 			padding-top: 0;
 			transition: max-height 0.15s ease-out;
+			max-height: 76px;
 
-			&[draggable="true"]{
-				max-height: 50px;
-			}
-			
 			&.dragging{
 				overflow: hidden;
 				max-height: 0;
