@@ -93,6 +93,9 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 		if (this.isEditing) {
 			this.enableOrderingContainer();
 		}
+		if (this.Draggable && this.Draggable.isEnabled) {
+			this.enableDragging();
+		}
 	},
 
 
