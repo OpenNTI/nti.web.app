@@ -193,7 +193,7 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	},
 
 
-	selectRecord: function(record) {
+	selectRecord: function(record, scrollTo) {
 		var body = this.getBodyContainer(),
 			header = this.currentHeader,
 			bodyListEl = this.el && this.el.up('.outline-list');
@@ -203,7 +203,7 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 		if (record.getId() === this.outlineNode.getId()) {
 			header.addCls('selected');
 
-			if (bodyListEl) {
+			if (bodyListEl && scrollTo) {
 				this.el.scrollIntoView(bodyListEl);
 			}
 		} else {
@@ -213,7 +213,7 @@ Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 
 		body.items.each(function(item) {
 			if (item && item.selectRecord) {
-				item.selectRecord(record);
+				item.selectRecord(record, scrollTo);
 			}
 		});
 	},

@@ -118,7 +118,8 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		this.el.unmask();
 
 		if (this.selectedRecord) {
-			this.selectRecord(this.selectedRecord);
+			this.selectRecord(this.selectedRecord, this.scrollToSelected);
+			delete this.scrollToSelected;
 		}
 
 		if (this.isEditing) {
@@ -182,13 +183,14 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 	},
 
 
-	selectRecord: function(record) {
+	selectRecord: function(record, scrollTo) {
 		var body = this.getBodyContainer();
 
 		this.selectedRecord = record;
+		this.scrollToSelected = scrollTo;
 
 		body.items.each(function(item) {
-			item.selectRecord(record);
+			item.selectRecord(record, scrollTo);
 		});
 
 		return record;
