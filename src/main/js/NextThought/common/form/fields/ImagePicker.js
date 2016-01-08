@@ -143,6 +143,9 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 
 		this.previewEl.setStyle({backgroundImage: 'url(' + url + ')'});
 		this.updateTooltip(true);
+
+		this.fileContainer.removeCls('no-file');
+		this.fileContainer.addCls('has-file');
 	},
 
 

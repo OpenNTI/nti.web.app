@@ -230,7 +230,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 		this.currentFile = file;
 		e.preventDefault();
 
-		if (!this.accepts || file.type.match(this.accepts)) {
+		if (file && (!this.accepts || file.type.match(this.accepts))) {
 			this.onFileChange(file);
 		}
 	},
