@@ -9,11 +9,12 @@ Ext.define('NextThought.app.context.components.cards.RelatedWork', {
 	cls: 'context-card',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'context-image related-context', cn: [
+		{cls: 'context-image related-context content-card', cn: [
 			{cls: 'thumbnail'},
 			{cls: 'meta', cn: [
 				{cls: 'title', html: '{title}'},
-				{cls: 'author', html: 'by {author}'}
+				{cls: 'byline', html: 'by {author}'},
+				{cls: 'description', html: '{description}'}
 			]}
 		]},
 		{cls: 'see-more hidden', html: 'Read More'}
@@ -31,7 +32,8 @@ Ext.define('NextThought.app.context.components.cards.RelatedWork', {
 
 		this.renderData = Ext.applyIf(this.renderData || {}, {
 			title: this.content && this.content.get('label'),
-			author: this.content && this.content.get('byline')
+			author: this.content && this.content.get('byline'),
+			description: this.content && this.content.get('description')
 		});
 	},
 
@@ -59,15 +61,9 @@ Ext.define('NextThought.app.context.components.cards.RelatedWork', {
 	 * Override this if you want to set content after the component's been rendered.
 	 */
 	setContent: function() {
-		var href = this.content && this.content.get('icon'),
-			root = this.course && this.course.getContentRoots && this.course.getContentRoots()[0],
-			url;
+		var root = this.course && this.course.getContentRoots && this.course.getContentRoots()[0],
+			url = this.content.getIcon(root);
 
-		if (Globals.ROOT_URL_PATTERN.test(href)) {
-			url = getURL(href);
-		} else if (!ParseUtils.isNTIID(href) && !Globals.HOST_PREFIX_PATTERN.test(href)) {
-			url = getURL(root + href);
-		}
 
 		if (this.iconEl && url) {
 			this.iconEl.setStyle({'backgroundImage': 'url(' + url + ')'});

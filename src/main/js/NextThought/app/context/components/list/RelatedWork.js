@@ -10,15 +10,31 @@ Ext.define('NextThought.app.context.components.list.RelatedWork', {
 	},
 
 
+	getContentRootFor: function(path) {
+		var root, i = 0, part;
+
+		while (!root) {
+			part = path[i];
+
+			if (part.getContentRoots) {
+				root = part.getContentRoots()[0];
+			}
+
+			i += 1;
+		}
+
+		return root;
+	},
+
+
 	setIcon: function(path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setIcon.bind(this, path));
 			return;
 		}
 
-		var iconUrl = this.content.get('icon'),
-
-		iconUrl = iconUrl && 'url(' + getURL(iconUrl) + ')';
+		var root = this.getContentRootFor(path),
+			iconUrl = this.content.getIcon(root);
 
 		if (!this.iconEl) {
 			return;
@@ -26,7 +42,7 @@ Ext.define('NextThought.app.context.components.list.RelatedWork', {
 
 		if (iconUrl) {
 			this.iconEl.setStyle({
-				backgroundImage: iconUrl
+				backgroundImage: 'url(' + iconUrl + ')'
 			});
 		} else {
 			this.iconEl.hide();
