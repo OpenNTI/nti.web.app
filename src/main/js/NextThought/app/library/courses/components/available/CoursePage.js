@@ -43,7 +43,7 @@ Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 		var me = this;
 
 		this.setPageHeight();
-		this.bufferedScroll = Ext.Function.createBuffered(this.onScroll, 500);
+		this.bufferedScroll = Ext.Function.createBuffered(this.onScroll, 100);
 		this.mon(this.getTargetEl(), 'scroll', this.bufferedScroll.bind(this));
 		this.mon(this.tabsEl, 'click', this.onTabClick.bind(this));
 		Ext.EventManager.onWindowResize(this.setPageHeight, this);
@@ -149,9 +149,11 @@ Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 
 
 	onScroll: function (e) {
-		var target = e.getTarget(),
-			scrollTop = target && target.scrollTop, key, selectTab, 
-			activeTabEl = this.tabsEl.down('.active');
+		var target = this.getTargetEl().dom,
+			scrollTop = target && target.scrollTop,
+			activeTabEl = this.tabsEl.down('.active'),
+			key,
+			selectTab;
 
 		if (!this.scrollTops) {
 			this.scrollTops = {};
