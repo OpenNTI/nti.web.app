@@ -249,7 +249,6 @@ Ext.define('NextThought.common.form.Form', {
 
 
 	focusField: function(name) {
-		debugger;
 		var field = name ? {name: name} : this.getFirstField(),
 			input = field && this.getInputForField(field.name);
 
