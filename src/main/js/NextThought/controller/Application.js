@@ -64,6 +64,9 @@ Ext.define('NextThought.controller.Application', {
 
 
 	load: function() {
+		if(window.NextThought){
+			window.NextThought.isInitialized = true;
+		}
 		this.mon(this.LoginStore, 'login-ready', 'onLogin');
 
 		this.LoginActions.login();
