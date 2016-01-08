@@ -116,12 +116,37 @@ Ext.define('NextThought.app.course.overview.components.View', {
 				var outline = outlineInterface && outlineInterface.getOutline(),
 					nodeId = me.activeNode && me.activeNode.getId();
 
-					return outline.findOutlineNode(nodeId);
+					outline.fillInItems();
+
+					return outline.findOrderedContentsItem(nodeId);
 			})
 			.then(function(outlineNode){
-					var node = outlineNode && outlineNode.getFirstContentNode(),
-					id;
+					var node,
+						next = outlineNode && outlineNode.nextSibling,
+						previous = outlineNode && outlineNode.previousSibling,
+						id;
 
+					if(outlineNode && outlineNode.getFirstContentNode()){
+						node = outlineNode.getFirstContentNode();
+					}
+
+					while((next || previous) && !node){
+						if(next && next.getFirstContentNode()){
+							node = next.getFirstContentNode();
+							break;
+						} else {
+							next = next && next.nextSibling;
+						}
+
+						if(previous && previous.getFirstContentNode()){
+							node = previous.getFirstContentNode();
+							break;
+						} else {
+							previous = previous && previous.previousSibling;
+						}
+					}
+
+					// node be firstContent, next sibling, previous sibling,
 					if(node){
 						id = node && node.getId();
 					}

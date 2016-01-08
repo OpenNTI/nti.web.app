@@ -103,11 +103,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 
 		if (!this.activeRecord) { return; }
 
-		if (this.activeRecord.isTopLevel()) {
-			navigateTo = this.activeRecord.previousSibling || this.activeRecord.nextSibling;
-		} else {
-			navigateTo = this.activeRecord.parent;
-		}
+		navigateTo = this.activeRecord.nextSibling || this.activeRecord.previousSibling || this.activeRecord.parent;
 
 		if (navigateTo) {
 			this.navigateToOutlineNode(navigateTo);
