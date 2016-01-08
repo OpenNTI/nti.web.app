@@ -635,7 +635,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 		var me = this,
 			store = me.store,
 			filters = [],
-			params = store.proxy.extraParams,
+			params = store.proxy.extraParams || {},
 			studentFilter;
 
 		me.applyingState = true;
@@ -661,12 +661,13 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			store.sort(state.sort.prop, state.sort.direction, null, false);
 		}
 
-		if (me.student) {
-			params.batchContainingUsernameFilterByScope = me.student;
-		}
-
-		if (state.student) {
-			params.batchContainingUsernameFilterByScope = state.student;
+		if (me.student || state.student) {
+			if (params.filter === 'All') {
+				params.batchContaining = me.student || state.student;
+			}
+			else {
+				params.batchContainingUsernameFilterByScope = me.student || state.student;
+			}
 		}
 
 		if (state.pageSize) {
