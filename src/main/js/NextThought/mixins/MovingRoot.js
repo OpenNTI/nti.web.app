@@ -76,38 +76,21 @@ Ext.define('NextThought.mixins.MovingRoot', {
 	 * Currently move operations are responding with the object we get the move link from.
 	 * So just sync with the response to get the new items.
 	 *
-	 * TODO: Since for now the success of this action is closing a window, and triggering the
-	 * backing view to reload its not a huge issue atm. But any existing instances of the parents
-	 * the record was moved between would not have their Items updated... So we may need to
-	 * get the records for the parents from the response, and sync the existing instances.
-	 *
 	 * @param  {String} response the response from the server
 	 */
 	__onMoveOperation: function(record, newParent, originalParent, response) {
 		var updatedNewParent, updatedOriginalParent, updatedRecord;
 
-		//TODO: figure out a better way to do this...
 		if (!originalParent.isModel) {
 			originalParent = this.findOrderedContentsItem(originalParent);
 		}
 
-		this.__fireMoveOnParent(record, originalParent);
-
 		this.syncWithResponse(response);
 
-		newParent = newParent.isModel && newParent;
-		originalParent = originalParent.isModel && originalParent;
-		record = record.isModel && record;
+		this.fireEvent('record-moved', record.isModel ? record.getId() : record);
 
-		if (this.findOrderedContentsItem) {
-			updatedRecord = record && this.findOrderedContentsItem(record.getId());
-			updatedNewParent = newParent && this.findOrderedContentsItem(newParent.getId());
-			updatedOriginalParent = originalParent && this.findOrderedContentsItem(originalParent.getId());
-		}
-
-		if (updatedRecord.fireEvent) {
-			updatedRecord.fireEvent('moved');
-		}
+		updatedNewParent = newParent && this.findOrderedContentsItem(newParent.getId());
+		updatedOriginalParent = originalParent && this.findOrderedContentsItem(originalParent.getId());
 
 		if (updatedOriginalParent) {
 			originalParent.syncWith(updatedOriginalParent);
@@ -115,19 +98,6 @@ Ext.define('NextThought.mixins.MovingRoot', {
 
 		if (updatedNewParent) {
 			newParent.syncWith(updatedNewParent);
-		}
-	},
-
-
-	__fireMoveOnParent: function(record, parent) {
-		var originalRecord;
-
-		if (parent && parent.findOrderedContentsItem && record) {
-			originalRecord = parent.findOrderedContentsItem(record.getId ? record.getId() : record);
-		}
-
-		if (originalRecord) {
-			originalRecord.fireEvent('moved');
 		}
 	}
 });

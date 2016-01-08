@@ -5,6 +5,7 @@ Ext.define('NextThought.common.components.BoundCollection', {
 
 	emptyText: '',
 	transitionStates: false,
+	autoUpdate: true,
 
 	layout: 'none',
 	items: [],
@@ -154,11 +155,13 @@ Ext.define('NextThought.common.components.BoundCollection', {
 			Ext.destroy(this.updateMonitor);
 		}
 
-		this.updateMonitor = this.mon(collection, {
-			single: true,
-			destroyable: true,
-			'update': this.onCollectionUpdate.bind(this, collection)
-		});
+		if (this.autoUpdate) {
+			this.updateMonitor = this.mon(collection, {
+				single: true,
+				destroyable: true,
+				'update': this.onCollectionUpdate.bind(this, collection)
+			});
+		}
 
 		if (this.__activeState && this.transitionStates) {
 			this.__activeState = this.__transitionTo(items, this.__activeState);

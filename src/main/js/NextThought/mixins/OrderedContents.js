@@ -53,6 +53,17 @@ Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
+	getOrderedContentsRoot: function() {
+		var parent = this.parent;
+
+		if (parent && parent.getRoot) {
+			return parent.getOrderedContentsRoot();
+		}
+
+		return this;
+	},
+
+
 	findOrderedContentsItem: function(id) {
 		var items = this.getItems(), i,
 			item, record;

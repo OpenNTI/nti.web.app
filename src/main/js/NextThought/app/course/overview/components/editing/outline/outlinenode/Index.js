@@ -26,16 +26,22 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var me = this;
+		var me = this,
+			root = me.record.getOrderedContentsRoot();
 
 		me.loadContents = me.showOutlineNode(me.record, me.parentRecord);
 
-		me.mon(me.record, 'moved', function() {
+		if (root) {
+			me.mon(root, 'record-moved', function(id) {
+				if (id === me.record.getId() && me.navigateToOutlineNode) {
+					me.navigateToOutlineNode(me.record);
+				}
+			});
+		}
+
+		me.mon(me.record, 'update', function() {
 			if (me.navigateToOutlineNode) {
-				wait()
-					.then(function() {
-						me.navigateToOutlineNode(me.record);
-					});
+				me.navigateToOutlineNode(me.record);
 			}
 		});
 	},
