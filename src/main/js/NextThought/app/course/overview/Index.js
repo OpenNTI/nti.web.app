@@ -418,7 +418,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 			relatedWorkId = relatedWork && relatedWork.get('target'),
 			path = '';
 
-		if (pageId === lesson.getId() || !pageId) {
+		if (pageId === lesson.getId() || pageId === lesson.get('ContentNTIID') || !pageId) {
 			pageId = null;
 			relatedWorkId = relatedWork && relatedWork.getId();
 		}
