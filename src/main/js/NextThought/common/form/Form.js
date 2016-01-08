@@ -46,10 +46,12 @@ Ext.define('NextThought.common.form.Form', {
 					},
 					input = {
 						tag: 'input',
+						cls: 'simple',
 						type: '{type}',
 						name: '{name}',
 						placeholder: '{placeholder}',
-						value: '{value}'
+						value: '{value}',
+						tabindex: '1'
 					};
 
 				if (data.displayName) {
@@ -101,11 +103,13 @@ Ext.define('NextThought.common.form.Form', {
 					},
 					input = {
 						tag: 'textarea',
+						cls: 'simple',
 						type: '{type}',
 						name: '{name}',
 						placeholder: '{placeholder}',
 						value: '{value}',
-						html: '{value}'
+						html: '{value}',
+						tabindex: '1'
 					};
 
 				if (data.displayName) {
@@ -226,6 +230,9 @@ Ext.define('NextThought.common.form.Form', {
 
 		this.formEl.on('submit', this.formSubmit.bind(this));
 		this.onFormChange();
+
+		wait()
+			.then(this.focusField.bind(this));
 	},
 
 
@@ -239,6 +246,17 @@ Ext.define('NextThought.common.form.Form', {
 			cmp.destroy();
 		});
 	},
+
+
+	focusField: function(name) {
+		debugger;
+		var field = name ? {name: name} : this.getFirstField(),
+			input = field && this.getInputForField(field.name);
+
+		if (input.focus) { input.focus(); }
+	},
+
+
 
 
 	buildInputs: function(schema, el) {
@@ -333,6 +351,28 @@ Ext.define('NextThought.common.form.Form', {
 		});
 
 		this.saveProgressCmp.hide();
+	},
+
+
+	getFirstField: function() {
+		var first, field, i = 0, schema = this.schema;
+
+		while (schema[i] && !first) {
+			field = schema[i];
+
+			if (field.type !== 'hidden') {
+				first = field;
+			}
+
+			i += 1;
+		}
+
+		return first;
+	},
+
+
+	getInputForField: function(name) {
+		return this.__getComponent(name) || this.__getInput(name) || this.__getTextarea();
 	},
 
 
@@ -793,12 +833,12 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
-	formSubmit: function(e){
+	formSubmit: function(e) {
 		e.preventDefault();
 
 		if (this.onSubmit) {
 			this.onSubmit();
 		}
 	}
-	
+
 });

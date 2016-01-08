@@ -4,7 +4,7 @@ Ext.define('NextThought.common.form.fields.URL', {
 
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'url-field', cn: [
-			{tag: 'input', type: 'text', placeholder: '{placeholder}', value: '{value}'},
+			{tag: 'input', type: 'text', placeholder: '{placeholder}', value: '{value}', tabindex: '1'},
 			{tag: 'tpl', 'if': 'required', cn: [
 				{tag: 'input', type: 'url', name: '{name}', value: '{value}', required: true}
 			]},
@@ -43,6 +43,20 @@ Ext.define('NextThought.common.form.fields.URL', {
 
 		this.attachInputListeners();
 		this.onInputChange();
+
+		if (this.focusOnRender) {
+			this.focus();
+		}
+	},
+
+
+	focus: function() {
+		if (!this.rendered) {
+			this.focusOnRender = true;
+			return;
+		}
+
+		return this.inputEl && this.inputEl.dom.focus();
 	},
 
 
@@ -114,7 +128,19 @@ Ext.define('NextThought.common.form.fields.URL', {
 
 		if (input) {
 			input.addEventListener('keyup', this.onInputChange.bind(this));
+			input.addEventListener('focus', this.onInputFocus.bind(this));
+			input.addEventListener('blur', this.onInputBlur.bind(this));
 		}
+	},
+
+
+	onInputFocus: function() {
+		this.urlField.addCls('focused');
+	},
+
+
+	onInputBlur: function() {
+		this.urlField.removeCls('focused');
 	},
 
 

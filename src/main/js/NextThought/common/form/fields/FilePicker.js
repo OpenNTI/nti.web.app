@@ -69,7 +69,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 					{cls: 'change', html: 'Change'}
 				]},
 				{tag: 'tpl', 'if': '!readonly', cn: [
-					{tag: 'input', type: 'file'}
+					{tag: 'input', type: 'file', tabindex: '1'}
 				]}
 			]}
 		]
@@ -108,6 +108,19 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 		this.callParent(arguments);
 
 		this.attachInputListeners();
+
+		if (this.focusOnRender) {
+			this.focus();
+		}
+	},
+
+	focus: function() {
+		if (!this.rendered) {
+			this.focusOnRender = true;
+			return;
+		}
+
+		return this.inputEl && this.inputEl.dom.focus();
 	},
 
 
@@ -178,6 +191,8 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 			input.addEventListener('dragenter', this.onDragEnter.bind(this));
 			input.addEventListener('dragleave', this.onDragLeave.bind(this));
 			input.addEventListener('drop', this.onDragLeave.bind(this));
+			input.addEventListener('focus', this.onInputFocus.bind(this));
+			input.addEventListener('blue', this.onInputBlur.bind(this));
 		}
 	},
 
@@ -192,6 +207,16 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 				this.schema.showWarning();
 			}
 		}
+	},
+
+
+	onInputFocus: function() {
+		this.fileContainer.addCls('focused');
+	},
+
+
+	onInputBlur: function() {
+		this.fileContainer.removeCls('focused');
 	},
 
 

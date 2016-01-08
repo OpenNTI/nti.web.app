@@ -107,7 +107,7 @@ input[type=number]{
 
 			.meta {
 				@include flexItem(1 1 auto);
-				padding: 11px;
+				padding: 10px 11px;
 				background-color: #f5fbff;
 				box-shadow: inset -1px 0 0 0 #d8d8d8,
 								inset 1px 0 0 0 #d8d8d8,

@@ -10,7 +10,7 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'image-picker {fileCls}', style: {width: '{width}', height: '{height}'}, cn: [
 			{cls: 'preview'},
-			{tag: 'input', type: 'file', 'data-qtip': 'Add Cover Image', accept: 'image/*'},
+			{tag: 'input', type: 'file', 'data-qtip': 'Add Cover Image', accept: 'image/*', tabindex: '1'},
 			{cls: 'clear has-file', html: 'Clear Image'}
 		]
 	}),

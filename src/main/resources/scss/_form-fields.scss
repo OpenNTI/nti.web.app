@@ -300,8 +300,15 @@ form.common-form {
 		outline: none;
 		border: none;
 
-		&.error {
-			box-shadow: 0 0 0 1px $primary-red;
+		&.simple {
+			&:focus {
+				background: white;
+				box-shadow: 0 0 3px 0 $primary-blue, 0 0 0 1px #d8d8d8;
+			}
+
+			&.error {
+				box-shadow: 0 0 0 1px $primary-red;
+			}
 		}
 	}
 
@@ -491,6 +498,10 @@ form.common-form {
 		z-index: 2;
 	}
 
+	&.focused {
+		box-shadow: 0 0 1px 0 $primary-blue;
+	}
+
 	&.no-file {
 		.has-file {
 			display: none;
@@ -574,13 +585,17 @@ form.common-form {
 	}
 
 	&.error {
-		input {
+		input[type=text] {
 			box-shadow: inset 0 0 0 1px $primary-red;
 		}
 
 		a {
 			box-shadow: inset -1px 0 0 $primary-red, inset 0 1px 0 $primary-red, inset 0 -1px 0 $primary-red;
 		}
+	}
+
+	&.focused {
+		box-shadow: 0 0 1px 0 $primary-blue;
 	}
 
 	input[type=url] { display: none; }
