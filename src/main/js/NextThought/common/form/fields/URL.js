@@ -4,21 +4,25 @@ Ext.define('NextThought.common.form.fields.URL', {
 
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'url-field', cn: [
+			{tag: 'input', type: 'text', placeholder: '{placeholder}', value: '{value}'},
 			{tag: 'tpl', 'if': 'required', cn: [
-				{tag: 'input', type: 'url', name: '{name}', placeholder: '{placeholder}', value: '{value}', required: true}
+				{tag: 'input', type: 'url', name: '{name}', value: '{value}', required: true}
 			]},
 			{tag: 'tpl', 'if': '!required', cn: [
-				{tag: 'input', type: 'url', name: '{name}', placeholder: '{placeholder}', value: '{value}'}
+				{tag: 'input', type: 'url', name: '{name}', value: '{value}'}
 			]},
 			{tag: 'a', href: '', target: '_blank', html: 'Preview'}
 		]
 	}),
 
+	defaultProtocol: 'http://',
+	placeholder: 'Enter a link',
 
 	renderSelectors: {
 		urlField: '.url-field',
 		previewEl: 'a',
-		inputEl: 'input'
+		inputEl: 'input[type=text]',
+		validationInput: 'input[type=url]'
 	},
 
 
@@ -27,7 +31,7 @@ Ext.define('NextThought.common.form.fields.URL', {
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			name: this.schema.name,
-			placeholder: this.schema.placeholder,
+			placeholder: this.schema.placeholder || this.placeholder,
 			value: this.defaultValue,
 			required: this.schema.required
 		});
@@ -47,15 +51,20 @@ Ext.define('NextThought.common.form.fields.URL', {
 	},
 
 
+	getValidator: function() {
+		return this.validationInput && this.validationInput.dom;
+	},
+
+
 	getValue: function() {
-		var input = this.getInput();
+		var input = this.getValidator();
 
 		return input && input.value;
 	},
 
 
 	getErrors: function() {
-		var input = this.getInput();
+		var input = this.getValidator();
 
 		return {
 			missing: input.validity && input.validity.valueMissing,
@@ -80,9 +89,23 @@ Ext.define('NextThought.common.form.fields.URL', {
 
 
 	isValid: function() {
-		var input = this.getInput();
+		var input = this.getValidator();
 
 		return !input.validity || input.validity.valid;
+	},
+
+
+	syncValidator: function(value) {
+		var parts = Globals.getURLParts(value),
+			validator = this.getValidator();
+
+		if (!parts.protocol) {
+			value = this.defaultProtocol + value;
+		}
+
+		validator.value = value;
+
+		return value;
 	},
 
 
@@ -97,14 +120,13 @@ Ext.define('NextThought.common.form.fields.URL', {
 
 	onInputChange: function() {
 		var input = this.getInput(),
-			isValid = this.isValid(),
-			value = input.value;
+			value = this.syncValidator(input.value);
 
 		if (this.onChange) {
 			this.onChange();
 		}
 
-		if (isValid) {
+		if (this.isValid()) {
 			this.urlField.addCls('valid');
 			this.previewEl.dom.setAttribute('href', value);
 		} else {
