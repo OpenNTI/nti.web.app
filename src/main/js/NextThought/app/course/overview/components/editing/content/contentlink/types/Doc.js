@@ -62,5 +62,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	onFileAdded: function(type) {
 		this.formCmp.setPlaceholder('icon', NextThought.model.RelatedWork.getIconForMimeType(type));
 		this.removeCls('file-only');
+
+		this.formCmp.focusField('label');
 	}
 });
