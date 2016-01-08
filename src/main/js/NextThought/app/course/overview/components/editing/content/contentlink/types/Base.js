@@ -3,6 +3,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 	requires: [
 		'NextThought.model.RelatedWork',
+		'NextThought.app.course.overview.components.editing.Actions',
 		'NextThought.app.course.overview.components.editing.content.ParentSelection'
 	],
 
@@ -23,7 +24,13 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 				{type: 'group', name: 'card', inputs: [
 					{name: 'icon', type: 'image', height: 125, width: 100},
 					{type: 'group', name: 'meta', inputs: [
-						{name: 'label', type: 'text', placeholder: 'Title', required: true},
+						{
+							name: 'label',
+							type: 'text',
+							placeholder: 'Title',
+							required: true,
+							maxlength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
+						},
 						{name: 'byline', type: 'text', placeholder: 'Author'},
 						{name: 'description', type: 'textarea', placeholder: 'Description'}
 					]},

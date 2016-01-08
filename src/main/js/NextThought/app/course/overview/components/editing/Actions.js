@@ -1,6 +1,10 @@
 Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	extend: 'NextThought.common.Actions',
 
+	statics: {
+		MAX_TITLE_LENGTH: 300
+	},
+
 	__createRecord: function(form, position) {
 		var parent = position && position.parent;
 

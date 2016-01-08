@@ -382,6 +382,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 
 	getRouteForPath: function(path, lesson) {
+		debugger;
 		var root = path[0],
 			subPath = path.slice(1),
 			route,

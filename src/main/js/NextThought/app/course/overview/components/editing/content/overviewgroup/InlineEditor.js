@@ -3,6 +3,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 	alias: 'widget.overview-editing-overviewgroup-inlineeditor',
 
 	requires: [
+		'NextThought.app.course.overview.components.editing.Actions',
 		'NextThought.model.courses.overview.Group'
 	],
 
@@ -14,7 +15,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{tag: 'input', cls: 'title', placeholder: 'Section name', type: 'text', value: '{title}'},
+		{tag: 'input', cls: 'title', placeholder: 'Section name', type: 'text', value: '{title}', maxlength: '{maxLength}'},
 		{cls: 'sub-label', html: 'Choose a Color'},
 		{tag: 'tpl', 'if': 'advanced', cn: [
 			{tag: 'label', cn: [
@@ -60,7 +61,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 			}),
 			currentColor: accent || colors[0],
 			advanced: Service.canDoAdvancedEditing(),
-			title: title
+			title: title,
+			maxLength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
 		});
 	},
 

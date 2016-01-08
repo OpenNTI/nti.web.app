@@ -4,6 +4,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 	requires: [
 		'NextThought.model.courses.navigation.CourseOutlineNode',
+		'NextThought.app.course.overview.components.editing.Actions',
 		'NextThought.app.course.overview.components.editing.outline.outlinenode.ParentSelection'
 	],
 
@@ -36,6 +37,21 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 		{type: 'hidden', name: 'MimeType'},
 		{type: 'text', name: 'title', placeholder: 'Title'}
 	],
+
+	getFormSchema: function() {
+		var schema = [
+				{name: 'MimeType', type: 'hidden'},
+				{
+					type: 'text',
+					name: 'title',
+					placeholder: 'Title',
+					maxlength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
+				}
+			];
+
+		return schema;
+	},
+
 
 
 	getDefaultValues: function() {

@@ -6,11 +6,15 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 		getTypes: function() {}
 	},
 
+	requires: [
+		'NextThought.app.course.overview.components.editing.Actions'
+	],
+
 	cls: 'inline-editor',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'field', cn: [
-			{tag: 'input', name: 'title', value: '{defaultValue}', autocomplete: '{autocomplete}'}
+			{tag: 'input', name: 'title', value: '{defaultValue}', autocomplete: '{autocomplete}', maxlength: '{maxLength}'}
 		]}
 	]),
 
@@ -29,7 +33,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEdi
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			defaultValue: this.getSuggestedNodeTitle(),
-			autocomplete: this.autocomplete || 'off'
+			autocomplete: this.autocomplete || 'off',
+			maxLength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
 		});
 	},
 
