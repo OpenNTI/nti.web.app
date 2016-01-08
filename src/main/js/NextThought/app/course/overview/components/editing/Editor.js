@@ -68,7 +68,6 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	UNKNOWN_ERROR: 'Unable to save record.',
 
 	ERRORS: {
-		TooLong: '{field} is too long.',
 		MaxFileSizeUploadLimitError: function(reason) {
 			var msg = 'The uploaded file is too large.',
 				fileSize = reason && reason.max_bytes;
