@@ -492,12 +492,11 @@ input[type=number]{
 					.new-node {
 						&.lesson {
 							background-color: #E2E2E2;
-							.inline-editor-container{
-								padding-left: 5px;
-							}
+						    padding-left: 5px;
+    						padding-right: 5px;
+
 							.inline-editor {
 								    background: #FFFFFF;
-	    							width: 237px;
 									.field {
 										.input {
 										    margin: 5px 5px;
