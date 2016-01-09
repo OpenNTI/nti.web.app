@@ -391,11 +391,11 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		lessonId = ParseUtils.encodeForURI(lessonId);
 
-		if (root instanceof NextThought.model.RelatedWork) {
-			route = this.getRouteForRelatedWorkPath(root, subPath, lesson);
-			route.path = 'content/' + Globals.trimRoute(route.path);
-		} else if (root instanceof NextThought.model.QuestionSetRef) {
+		if (root instanceof NextThought.model.QuestionSetRef) {
 			route = this.getRouteForQuestionSetPath(root, subPath, lesson);
+			route.path = 'content/' + Globals.trimRoute(route.path);
+		} else if (root instanceof NextThought.model.RelatedWork) {
+			route = this.getRouteForRelatedWorkPath(root, subPath, lesson);
 			route.path = 'content/' + Globals.trimRoute(route.path);
 		} else if (root instanceof NextThought.model.PageInfo) {
 			route = this.getRouteForPageInfoPath(root, subPath);
