@@ -192,7 +192,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 			input.addEventListener('dragleave', this.onDragLeave.bind(this));
 			input.addEventListener('drop', this.onDragLeave.bind(this));
 			input.addEventListener('focus', this.onInputFocus.bind(this));
-			input.addEventListener('blue', this.onInputBlur.bind(this));
+			input.addEventListener('blur', this.onInputBlur.bind(this));
 		}
 	},
 
