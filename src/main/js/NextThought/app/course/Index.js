@@ -444,7 +444,6 @@ Ext.define('NextThought.app.course.Index', {
 
 
 	getRouteForPath: function(path, course) {
-		debugger;
 		var root = path[0] || {},
 			subPath = path.slice(1),
 			page, i,
