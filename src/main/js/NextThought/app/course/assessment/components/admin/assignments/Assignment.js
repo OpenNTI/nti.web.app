@@ -572,7 +572,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 		if (this.student) {
 			if (params.filter === 'All') {
-				params.batchContaining = this.student;
+				params.batchContainingUsername = this.student;
 			}
 			else {
 				params.batchContainingUsernameFilterByScope = this.student;
@@ -584,7 +584,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 				single: true,
 				'records-filled-in': function() {
 					delete store.proxy.extraParams.batchContainingUsernameFilterByScope;
-					delete store.proxy.extraParams.batchContaining;
+					delete store.proxy.extraParams.batchContainingUsername;
 					delete me.student;
 
 					me.currentPage = store.getCurrentPage();
@@ -605,7 +605,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 				}
 			});
 
-			if (params.batchContainingUsernameFilterByScope || params.batchContaining) {
+			if (params.batchContainingUsernameFilterByScope || params.batchContainingUsername) {
 				store.load();
 			} else if (state.currentPage) {
 				store.loadPage(parseInt(state.currentPage, 10));
