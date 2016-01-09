@@ -9,7 +9,9 @@ Ext.define('NextThought.app.course.overview.Index', {
 	requires: [
 		'NextThought.app.course.overview.components.View',
 		'NextThought.app.content.content.Index',
-		'NextThought.app.mediaviewer.Index'
+		'NextThought.app.mediaviewer.Index',
+		'NextThought.model.RelatedWork',
+		'NextThought.model.QuestionSetRef'
 	],
 
 	statics: {
@@ -392,6 +394,9 @@ Ext.define('NextThought.app.course.overview.Index', {
 		if (root instanceof NextThought.model.RelatedWork) {
 			route = this.getRouteForRelatedWorkPath(root, subPath, lesson);
 			route.path = 'content/' + Globals.trimRoute(route.path);
+		} else if (root instanceof NextThought.model.QuestionSetRef) {
+			route = this.getRouteForQuestionSetPath(root, subPath, lesson);
+			route.path = 'content/' + Globals.trimRoute(route.path);
 		} else if (root instanceof NextThought.model.PageInfo) {
 			route = this.getRouteForPageInfoPath(root, subPath);
 			route.path = 'content/' + Globals.trimRoute(route.path);
@@ -436,6 +441,19 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		return {
 			path: path,
+			isFull: true
+		};
+	},
+
+
+	getRouteForQuestionSetPath: function(questionSetRef, path, lesson) {
+		var page = path[0],
+			pageId = page && page.getId();
+
+		pageId = pageId && ParseUtils.encodeForURI(pageId);
+
+		return {
+			path: pageId,
 			isFull: true
 		};
 	},
