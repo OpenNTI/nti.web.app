@@ -17,6 +17,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 		FillScreen: 'NextThought.mixins.FillScreen'
 	},
 
+	autoUpdate: false,
+
 	cls: 'outline-items',
 
 	layout: 'none',
