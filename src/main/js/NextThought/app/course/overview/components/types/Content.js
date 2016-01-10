@@ -71,7 +71,7 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 		return {
 			xtype: 'course-overview-header',
 			record: this.record,
-			title: collection.title,
+			title: collection.title || collection.getTitle && collection.getTitle(),
 			onEdit: this.onEdit,
 			course: this.course
 		};
