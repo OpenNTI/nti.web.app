@@ -499,7 +499,7 @@ form.common-form {
 	}
 
 	&.focused {
-		box-shadow: 0 0 1px 0 $primary-blue;
+		box-shadow: 0 0 0 1px $primary-blue;
 	}
 
 	&.no-file {

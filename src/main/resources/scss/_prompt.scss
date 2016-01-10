@@ -166,6 +166,10 @@
 			background-color: $primary-blue;
 			color: white;
 
+			&:focus {
+				background-color: #35A0DD;
+			}
+
 			&.disabled {
 				opacity: 0.4;
 				background-color: $secondary-grey;

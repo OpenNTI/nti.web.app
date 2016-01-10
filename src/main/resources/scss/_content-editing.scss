@@ -123,7 +123,7 @@ input[type=number]{
 			.field.byline input, .field.label input, .field.description textarea {
 				&:focus {
 					background: white;
-					box-shadow: 0 0 3px 0 $primary-blue, 0 0 0 1px #d8d8d8;
+					box-shadow: 0 0 0 1px $primary-blue;
 				}
 
 				&.error {

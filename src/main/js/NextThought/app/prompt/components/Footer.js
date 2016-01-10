@@ -5,8 +5,8 @@ Ext.define('NextThought.app.prompt.components.Footer', {
 	cls: 'prompt-footer',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'cancel', html: 'Cancel'},
-		{cls: 'save disabled', html: 'Ok'}
+		{tag: 'a', cls: 'cancel', html: 'Cancel'},
+		{tag: 'a', cls: 'save disabled', tabindex: '1', html: 'Ok'}
 	]),
 
 
@@ -33,6 +33,7 @@ Ext.define('NextThought.app.prompt.components.Footer', {
 			this.disableSave();
 		}
 
+		this.mon(this.saveEl, 'keypress', this.handleKeyPress.bind(this));
 		this.mon(this.el, 'click', this.handleClick.bind(this));
 	},
 
@@ -76,6 +77,15 @@ Ext.define('NextThought.app.prompt.components.Footer', {
 		}
 
 		this.cancelEl.update(text);
+	},
+
+
+	handleKeyPress: function(e) {
+		if (e.getTarget('.disabled')) { return; }
+
+		if (e.charCode === e.ENTER && e.getTarget('.save')) {
+			this.onSave();
+		}
 	},
 
 
