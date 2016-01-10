@@ -11,7 +11,8 @@ Ext.define('NextThought.app.course.overview.Index', {
 		'NextThought.app.content.content.Index',
 		'NextThought.app.mediaviewer.Index',
 		'NextThought.model.RelatedWork',
-		'NextThought.model.QuestionSetRef'
+		'NextThought.model.QuestionSetRef',
+		'NextThought.model.SurveyRef'
 	],
 
 	statics: {
@@ -394,6 +395,9 @@ Ext.define('NextThought.app.course.overview.Index', {
 		if (root instanceof NextThought.model.QuestionSetRef) {
 			route = this.getRouteForQuestionSetPath(root, subPath, lesson);
 			route.path = 'content/' + Globals.trimRoute(route.path);
+		} else if (root instanceof NextThought.model.SurveyRef) {
+			route = this.getRouteForSurveyPath(root, subPath, lesson);
+			route.path = 'content/' + Globals.trimRoute(route.path);
 		} else if (root instanceof NextThought.model.RelatedWork) {
 			route = this.getRouteForRelatedWorkPath(root, subPath, lesson);
 			route.path = 'content/' + Globals.trimRoute(route.path);
@@ -454,6 +458,18 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		return {
 			path: pageId,
+			isFull: true
+		};
+	},
+
+
+	getRouteForSurveyPath: function(survey, path, lesson) {
+		var surveyId = survey.get('Target-NTIID');
+
+		surveyId = surveyId && ParseUtils.encodeForURI(surveyId);
+
+		return {
+			path: surveyId,
 			isFull: true
 		};
 	},
