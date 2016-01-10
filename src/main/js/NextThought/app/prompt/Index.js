@@ -42,6 +42,20 @@ Ext.define('NextThought.app.prompt.Index', {
 	},
 
 
+	addStackClasses: function() {
+		var stack = this.promptStack,
+			lastIndex = stack.length - 1;
+
+		stack.forEach(function(prompt, index) {
+			if (index < lastIndex) {
+				prompt.onCovered();
+			} else {
+				prompt.onUncovered();
+			}
+		});
+	},
+
+
 	openPrompt: function(cmp, type, fulfill, reject, data) {
 		if (!cmp) {	return;	}
 
@@ -73,12 +87,14 @@ Ext.define('NextThought.app.prompt.Index', {
 		this.promptStack.push(prompt);
 
 		this.addOpenCls();
+		this.addStackClasses();
 	},
 
 
 	closePrompt: function(index) {
 		var stack = this.promptStack,
 			removeOpenCls = this.removeOpenCls.bind(this),
+			addStackClasses = this.addStackClasses.bind(this),
 			prompt = stack.peek(),
 			allow;
 
@@ -88,6 +104,8 @@ Ext.define('NextThought.app.prompt.Index', {
 
 			if (stack.length === 0) {
 				removeOpenCls();
+			} else {
+				addStackClasses();
 			}
 		}
 

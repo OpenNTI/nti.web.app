@@ -16,22 +16,27 @@ Ext.define('NextThought.app.prompt.components.Container', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.onWindowResize = this.onWindowResize.bind(this);
+		this.prompt = this.add({
+			xtype: 'container',
+			layout: 'none',
+			cls: 'prompt',
+			items: []
+		});
 
-		this.header = this.add({
+		this.header = this.prompt.add({
 			xtype: 'prompt-header',
 			doCancel: this.doCancel.bind(this),
 			doBack: this.doBack.bind(this)
 		});
 
-		this.bodyContainer = this.add({
+		this.bodyContainer = this.prompt.add({
 			xtype: 'container',
 			cls: 'body-container',
 			layout: 'none',
 			items: []
 		});
 
-		this.footer = this.add({
+		this.footer = this.prompt.add({
 			xtype: 'prompt-footer',
 			doSave: this.doSave.bind(this),
 			doCancel: this.doCancel.bind(this)
@@ -46,8 +51,21 @@ Ext.define('NextThought.app.prompt.components.Container', {
 	},
 
 
-	onWindowResize: function() {
-		this.center();
+	onCovered: function() {
+		this.addCls('covered');
+
+		if (this.bodyCmp && this.bodyCmp.onCovered) {
+			this.bodyCmp.onCovered();
+		}
+	},
+
+
+	onUncovered: function() {
+		this.removeCls('covered');
+
+		if (this.bodyCmp && this.bodyCmp.onUncovered) {
+			this.bodyCmp.onUncovered();
+		}
 	},
 
 
