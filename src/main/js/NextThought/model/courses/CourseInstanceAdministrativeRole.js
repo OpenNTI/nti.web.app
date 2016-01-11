@@ -26,5 +26,19 @@ Ext.define('NextThought.model.courses.CourseInstanceAdministrativeRole', {
 	//return false since admins are enrolled for credit
 	isOpen: function() {
 		return false;
+	},
+
+
+	/**
+	 * A content editor has less access compared to an admin (i.e. course instructor)
+	 * Right now, since we don't have any clear way of telling whether or not we have a content editor
+	 * We will use the check for the GradeBook variable to determine that, 
+	 * given that content editors shouldn't have access to the GradeBook.
+	 * 
+	 * @return {Boolean} whether or not this is a content editor
+	 */
+	isContentEditor: function(){
+		var instance = this.get('CourseInstance');
+		return !(instance && instance.get('GradeBook'));
 	}
 });

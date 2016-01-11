@@ -112,10 +112,18 @@ Ext.define('NextThought.app.course.assessment.components.Navigation', {
 	},
 
 
+	disabledItem: function(xtype){
+		var item = this.cmp_map[xtype];
+		if (item) {
+			item.addCls('disabled');
+		}
+	},
+
+
 	onClick: function(e) {
 		var item = e.getTarget('.outline-row');
 
-		if (!item) { return; }
+		if (!item || Ext.fly(item).hasCls('disabled')) { return; }
 
 		var route = item.getAttribute('data-route'),
 			root = item.getAttribute('data-root'),
