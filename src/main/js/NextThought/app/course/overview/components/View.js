@@ -93,16 +93,41 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 
 	openEditing: function() {
-		var node = this.activeNode,
+		var me = this,
+			node = me.activeNode,
+			outline = me.activeOutline,
 			id = node && node.getId();
 
-		id = ParseUtils.encodeForURI(id);
+		return new Promise(function(fulfill, reject) {
+			if (!outline.hasSharedEntries()) {
+				fulfill();
+				return;
+			}
 
-		if (id) {
-			this.pushRoute('Editing', id + '/edit');
-		} else {
-			this.pushRoute('Editing', 'edit');
-		}
+			Ext.Msg.show({
+				title: 'Are you sure?',
+				msg: 'Changes are synced between all sections of your course.',
+				doNotShowAgainKey: 'editing-shared-outline',
+				buttons: {
+					primary: {
+						text: 'OK',
+						handler: fulfill
+					},
+					secondary: {
+						text: 'Cancel',
+						handler: reject
+					}
+				}
+			});
+		}).then(function() {
+			id = ParseUtils.encodeForURI(id);
+
+			if (id) {
+				me.pushRoute('Editing', id + '/edit');
+			} else {
+				me.pushRoute('Editing', 'edit');
+			}
+		});
 	},
 
 
@@ -120,25 +145,25 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 					return outline.findOrderedContentsItem(nodeId);
 			})
-			.then(function(outlineNode){
+			.then(function(outlineNode) {
 					var node,
 						next = outlineNode && outlineNode.nextSibling,
 						previous = outlineNode && outlineNode.previousSibling,
 						id;
 
-					if(outlineNode && outlineNode.getFirstContentNode()){
+					if (outlineNode && outlineNode.getFirstContentNode) {
 						node = outlineNode.getFirstContentNode();
 					}
 
-					while((next || previous) && !node){
-						if(next && next.getFirstContentNode()){
+					while ((next || previous) && !node) {
+						if (next && next.getFirstContentNode()) {
 							node = next.getFirstContentNode();
 							break;
 						} else {
 							next = next && next.nextSibling;
 						}
 
-						if(previous && previous.getFirstContentNode()){
+						if (previous && previous.getFirstContentNode()) {
 							node = previous.getFirstContentNode();
 							break;
 						} else {
@@ -147,7 +172,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 					}
 
 					// node be firstContent, next sibling, previous sibling,
-					if(node){
+					if (node) {
 						id = node && node.getId();
 					}
 
@@ -158,7 +183,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 						me.pushRoute('', '');
 					}
 			})
-			.fail(function(reason){
+			.fail(function(reason) {
 				console.error('Unable to stop editing because: ' + reason);
 			});
 	},
@@ -211,6 +236,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 					me.hideEditControls();
 				}
 
+				me.activeOutline = outline;
 				me.body.setOutline(outline);
 
 				return outline;

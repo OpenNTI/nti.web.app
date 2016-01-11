@@ -17,6 +17,7 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 
 
 	fields: [
+		{name: 'CourseOutlineSharedEntries', type: 'auto', persist: false},
 		{name: 'Items', type: 'arrayItem', persist: false}
 	],
 
@@ -86,6 +87,13 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 		link = Url.format(parts);
 
 		return this.__loadContents(link, 'AdminLoadContents', doNotCache);
+	},
+
+
+	hasSharedEntries: function() {
+		var entries = this.get('CourseOutlineSharedEntries');
+
+		return entries && entries.length;
 	},
 
 

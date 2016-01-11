@@ -1,6 +1,12 @@
 Ext.define('NextThought.app.MessageBox', {
 	extend: 'NextThought.common.window.Window',
 
+	mixins: {
+		State: 'NextThought.mixins.State'
+	},
+
+	state_key: 'MessageBox',
+
 	ui: 'nti-alert',
 	cls: 'nti-alert',
 
@@ -56,6 +62,8 @@ Ext.define('NextThought.app.MessageBox', {
 	QUESTION: 'question',
 	ERROR: 'error',
 
+	layout: 'none',
+
 	items: [],
 
 	childEls: ['body'],
@@ -104,6 +112,8 @@ Ext.define('NextThought.app.MessageBox', {
 			secondary: getString('NextThought.view.MessageBox.cancel')
 		};
 
+		this.DO_NOT_SHOW = this.getCurrentState() || {};
+
 		//make the execution of show take place in the next event loop
 		this.show = Ext.Function.createBuffered(this.show, 1);
 	},
@@ -114,6 +124,9 @@ Ext.define('NextThought.app.MessageBox', {
 
 		this.mon(this.el, 'click', 'handleClick', this);
 	},
+
+
+	applyState: function() {},
 
 
 	startClose: function() {
@@ -186,6 +199,22 @@ Ext.define('NextThought.app.MessageBox', {
 	},
 
 
+	__maybeDoNotShowAgain: function(cfg) {
+		var key = cfg.doNotShowAgainKey;
+
+		return key && this.DO_NOT_SHOW[key];
+	},
+
+
+	doNotShowAgain: function(cfg) {
+		var primaryHandler = cfg.buttons && cfg.buttons.primary && cfg.buttons.primary.handler;
+
+		if (primaryHandler) {
+			primaryHandler.call();
+		}
+	},
+
+
 	alert: function(cfg) {
 		this.show(cfg);
 	},
@@ -194,6 +223,11 @@ Ext.define('NextThought.app.MessageBox', {
 	show: function(cfg) {
 		if (!this.rendered) {
 			this.render(Ext.getBody());
+		}
+
+		if (this.__maybeDoNotShowAgain(cfg)) {
+			this.doNotShowAgain(cfg);
+			return;
 		}
 
 		var me = this,
@@ -219,11 +253,17 @@ Ext.define('NextThought.app.MessageBox', {
 			me.isClosable = false;
 		}
 
+		if (cfg.doNotShowAgainKey) {
+			me.addDoNotShowAgain(cfg);
+		} else {
+			delete this.doNotShowCheckbox;
+		}
+
 		me.buttonOrder.forEach(function(btn) {
 			var btnCfg = buttons[btn];
 
 			if (btnCfg) {
-				me.addButton(btn, buttons[btn], cfg.fn);
+				me.addButton(btn, buttons[btn], cfg.fn, cfg);
 			}
 		});
 
@@ -233,9 +273,6 @@ Ext.define('NextThought.app.MessageBox', {
 
 		me.callParent(arguments);
 		me.addCls('showing');
-
-		// Make sure this is always up front
-		this.toFront();
 	},
 
 
@@ -265,7 +302,32 @@ Ext.define('NextThought.app.MessageBox', {
 	},
 
 
-	addButton: function(name, cfg, closeHandler) {
+	getDoNotShowAgainCheckState: function() {
+		if (!this.doNotShowCheckbox) { return false; }
+
+		var dom = this.doNotShowCheckbox && this.doNotShowCheckbox.el && this.doNotShowCheckbox.el.dom,
+			input = dom && dom.querySelector('input');
+
+		return input && input.checked;
+	},
+
+
+	addDoNotShowAgain: function(config) {
+		this.doNotShowCheckbox = this.add({
+			xtype: 'box',
+			autoEl: {
+				tag: 'label',
+				cls: 'do-not-show',
+				cn: [
+					{tag: 'input', type: 'checkbox', name: 'do-not-show'},
+					{tag: 'span', html: 'Don\'t show again.'}
+				]
+			}
+		});
+	},
+
+
+	addButton: function(name, cfg, closeHandler, alertConfig) {
 		var me = this,
 			cls = 'button ' + name;
 
@@ -300,6 +362,8 @@ Ext.define('NextThought.app.MessageBox', {
 							}
 						}
 
+						me.onClose(alertConfig);
+
 						if (cfg.handler) {
 							cfg.handler.call();
 						}
@@ -307,6 +371,21 @@ Ext.define('NextThought.app.MessageBox', {
 				}
 			}
 		});
+	},
+
+
+	onClose: function(cfg) {
+		if (!cfg.doNotShowAgainKey) { return; }
+
+		var checked = this.getDoNotShowAgainCheckState();
+
+		if (checked) {
+			this.DO_NOT_SHOW[cfg.doNotShowAgainKey] = true;
+		} else {
+			delete this.DO_NOT_SHOW[cfg.doNotShowAgainKey];
+		}
+
+		this.setState(this.DO_NOT_SHOW);
 	}
 }, function() {
 	//This needs to be come lazy! create on first use, not at define time. (the current constructor seems to trigger an early Ext.isReady)
