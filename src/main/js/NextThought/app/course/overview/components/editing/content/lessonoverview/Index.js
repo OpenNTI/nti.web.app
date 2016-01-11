@@ -14,7 +14,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 		'NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem'
 	],
 
-	emptyText: 'No content here yet. Click add content below to get started.',
+	emptyText: 'Add a section to get started.',
 	transitionStates: true,
 
 	ui: 'course',
