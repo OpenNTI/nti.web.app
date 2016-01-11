@@ -110,6 +110,7 @@ Ext.define('NextThought.app.contentviewer.Index', {
 
 				me.reader = me.add(me.readerConfig);
 				me.reader.fireEvent('activate');
+				me.fireEvent('reader-set');
 
 				me.mon(me.reader, {
 					'assignment-submitted': me.fireEvent.bind(me, 'assignment-submitted'),
@@ -163,7 +164,17 @@ Ext.define('NextThought.app.contentviewer.Index', {
 
 
 	onceReadyForSearch: function() {
-		return this.reader ? this.reader.onceReadyForSearch() : Promise.resolve();
+		var me = this;
+
+		if (me.reader) {
+			return me.reader.onceReadyForSearch();
+		}
+
+		return new Promise(function(fulfill, reject) {
+			me.on('reader-set', fulfill);
+		}).then(function() {
+			return me.reader.onceReadyForSearch();
+		});
 	},
 
 
