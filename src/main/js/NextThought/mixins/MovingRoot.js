@@ -96,7 +96,7 @@ Ext.define('NextThought.mixins.MovingRoot', {
 			originalParent.syncWith(updatedOriginalParent);
 		}
 
-		if (updatedNewParent && updatedOriginaParent !== updatedNewParent) {
+		if (updatedNewParent && updatedOriginalParent !== updatedNewParent) {
 			newParent.syncWith(updatedNewParent);
 		}
 	}
