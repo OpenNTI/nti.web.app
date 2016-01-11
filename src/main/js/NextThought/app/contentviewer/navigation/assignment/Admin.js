@@ -71,6 +71,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 		this.callParent(arguments);
 
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
+		this.WindowActions = NextThought.app.windows.Actions.create();
 	},
 
 
@@ -143,10 +144,8 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 			me.usernameEl.show();
 		}
 
-		if (!me.user.get('email')) {
-			me.emailEl.hide();
-		}
-
+		me.emailEl.hide();
+		me.setupEmail();
 		me.maybeShowChat(me.chatEl);
 
 		this.mon(this.ChatStore, 'presence-changed', function(username, presence) {
@@ -160,6 +159,42 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 		if (!this.showingUsername) {
 			this.usernameEl.hide();
 		}
+	},
+
+
+	setupEmail: function(){
+		var me = this;
+		this.getStudentEnrollment(this.student)
+			.then(function(enrollment) {
+				var emailLink = enrollment && enrollment.getLink('Mail');
+				if (emailLink) {
+					me.emailEl.show();
+				}
+
+				me.studentEnrollment = enrollment;
+			});
+	},
+
+
+	getStudentEnrollment: function(studentRecord) {
+		var roster = this.currentBundle && this.currentBundle.getLink('CourseEnrollmentRoster'),
+			username = studentRecord && studentRecord.get('Username'),
+			smallRequestURLToGetCounts = roster && !Ext.isEmpty(roster) && Ext.String.urlAppend(
+					roster,
+					Ext.Object.toQueryString({
+						batchSize: 1,
+						batchStart: 0,
+						usernameSearchTerm: username
+					}));
+
+		if (!isFeature('instructor-email') || !username) { return Promise.reject(); }
+
+		return Service.request(smallRequestURLToGetCounts)
+					.then(JSON.parse)
+					.then(function(obj) {
+						var enrollment = obj.Items && obj.Items[0];
+						return Promise.resolve(ParseUtils.parseItems(enrollment)[0]);
+					});
 	},
 
 
@@ -369,11 +404,17 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 	},
 
 
-	openEmail: function() {
-		var email = this.student.get('email');
+	openEmail: function(e) {
+		var emailRecord = new NextThought.model.Email(),
+			mailLink = this.studentEnrollment && this.studentEnrollment.getLink('Mail');
 
-		if (email) {
-			Globals.sendEmailTo(email);
-		}
+		if (!mailLink) { return; }
+
+		emailRecord.set('url', this.studentEnrollment.getLink('Mail'));
+		emailRecord.set('Receiver', this.student);
+
+		this.WindowActions.showWindow('new-email', null, e.getTarget(), null, {
+			record: emailRecord
+		});
 	}
 });
