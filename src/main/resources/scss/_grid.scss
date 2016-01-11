@@ -322,6 +322,21 @@
 					@include ellipse;
 				}
 			}
+
+			.controls {
+				position: absolute;
+    			top: 17px;
+    			left: 75px;
+    			font-weight: 400;
+    			cursor: pointer;
+    			display: none;
+			}
+
+			&:hover {
+				.controls {
+    				display: block;
+				}
+    		}
 		}
 	}
 }

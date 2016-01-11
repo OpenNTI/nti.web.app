@@ -6,7 +6,8 @@ extend: 'Ext.container.Container',
 		'NextThought.common.ux.FilterMenu',
 		'NextThought.common.chart.Pie',
 		'NextThought.proxy.courseware.Roster',
-		'NextThought.common.menus.Reports'
+		'NextThought.common.menus.Reports',
+		'NextThought.model.courses.CourseInstanceEnrollment'
 	],
 
 	ui: 'course-assessment',
@@ -56,11 +57,19 @@ extend: 'Ext.container.Container',
 							padding: '0 0 0 30',
 							flex: 1,
 							possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
-							tpl: Ext.DomHelper.markup({
+							tpl: new Ext.XTemplate(Ext.DomHelper.markup({
 								cls: 'padded-cell user-cell', cn: [
 									'{Creator:avatar}',
-									{ cls: 'name', html: '{Creator:displayName}'}
+									{ cls: 'name', html: '{Creator:displayName}'},
+									{ cls: 'controls', cn: [
+										{tag: 'span', cls: 'link email', 'data-user':'{[this.getUsername(values)]}', html: 'Email'}
+									]}
 								]
+							}), {
+								getUsername: function(values) {
+									var user = values && values.Creator;
+									return user && user.get && user.get('Username');
+								}
 							})
 						},
 						{ text: getString('NextThought.view.courseware.info.Roster.username'),
@@ -134,7 +143,7 @@ extend: 'Ext.container.Container',
 			}
 		});
 
-		this.mon(this.grid, 'itemClick', 'maybeShowDisclosureMenu');
+		this.mon(this.grid, 'itemClick', 'handleClick');
 		Ext.EventManager.onWindowResize(this.onWindowResize, this, false);
 		me.on('destroy', function() {
 			Ext.EventManager.removeResizeListener(me.onWindowResize, me);
@@ -238,14 +247,7 @@ extend: 'Ext.container.Container',
 
 	buildStore: function(url) {
 		this.store = Ext.data.Store.create({
-			fields: [
-				{name: 'id', type: 'string', mapping: 'Username'},
-				{name: 'username', type: 'string', mapping: 'Username', convert: function(v, r) {
-					return (r.raw.LegacyEnrollmentStatus === 'ForCredit' && v) || ''; }},
-				{name: 'Creator', type: 'singleItem', mapping: 'UserProfile' },
-				{name: 'LegacyEnrollmentStatus', type: 'string'},
-				{name: 'Links', type: 'auto'}
-			],
+			model: NextThought.model.courses.CourseInstanceEnrollment,
 			proxy: {
 				type: 'nti.roster',
 				url: url,
@@ -311,8 +313,6 @@ extend: 'Ext.container.Container',
 		emailRecord.set('url', this.currentBundle && this.currentBundle.getLink('Mail'));
 		emailRecord.set('scope', scope);
 
-		// Cache the email record
-		// this.WindowStore.cacheObject('new-email', emailRecord);
 		this.WindowActions.showWindow('new-email', null, e.getTarget(), null, {
 			record: emailRecord
 		});
@@ -377,16 +377,52 @@ extend: 'Ext.container.Container',
 	},
 
 
-	maybeShowDisclosureMenu: function(grid, record, node, i, e) {
-		var disclosure = e.getTarget('.disclosure'), menu;
+	handleClick: function(grid, record, node, i, e) {
+		var menu;
 
-		if (!disclosure) {
-			return;
+		if (e.getTarget('.disclosure')) {
+			menu = Ext.widget('report-menu', {
+				links: record.get('Links'),
+				showByEl: disclosure
+			});
+
+			this.on('destroy', menu.destroy.bind(menu));
+		}
+		else if(e.getTarget('.email')) {
+			this.openIndividualEmail(e);
+		}
+	},
+
+	openIndividualEmail: function(e) {
+		var target = e && e.getTarget('.email'),
+			user = target && target.getAttribute('data-user'),
+			index, rec, mailLink, emailRecord, r, creator;
+
+		if (!user) { return; }
+
+		// NOTE: normally, it's better to use store.findBy but 
+		// since the store is a buffered store, the above fails.
+		// Do it the brutal force way.		
+		for (var i=0; i < this.store.getCount() && !rec; i++) {
+			r = this.store.getAt(i);
+			creator = r && r.get('Creator');
+			if (creator && creator.get('Username') === user) {
+				rec = r;
+			}
 		}
 
-		menu = Ext.widget('report-menu', {
-			links: record.get('Links'),
-			showByEl: disclosure
-		});
+		if (rec && rec.getLink('Mail')) {
+			mailLink = rec.getLink('Mail');
+
+			emailRecord = new NextThought.model.Email();
+			
+			// Set the link to post the email to
+			emailRecord.set('url', mailLink);
+			emailRecord.set('Receiver', rec.get('Creator'));
+
+			this.WindowActions.showWindow('new-email', null, target, null, {
+				record: emailRecord
+			});
+		}
 	}
 });
