@@ -264,7 +264,15 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 
 
 	onceReadyForSearch: function() {
-		return this.getIframe().onceSettled();
+		var me = this;
+
+		return new Promise(function(fulfill, reject) {
+			if (me.isReadyForSearch) {
+				return fulfill();
+			} else {
+				me.on('ready-for-search', fulfill);
+			}
+		});
 	},
 
 
@@ -282,9 +290,9 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 	goToNote: function(note) {
 		var me = this;
 
-		if(note) {
+		if (note) {
 			me.getIframe().onceSettled()
-				.then(function(){
+				.then(function() {
 					me.getScroll().toNote(note);
 				});
 		}
@@ -316,7 +324,6 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 				me.splash.removeCls('initial');
 
 				me.isReadyForSearch = true;
-				me.fireEvent('ready-for-search');
 				me.fireEvent('sync-overlays');
 
 				me.getIframe().onceSettled()
@@ -336,6 +343,8 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 						}
 
 						me.fireEvent('sync-overlays');
+
+						me.fireEvent('ready-for-search');
 					});
 			});
 	},

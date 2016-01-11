@@ -180,7 +180,9 @@ Ext.define('NextThought.app.contentviewer.Index', {
 
 	showSearchHit: function(hit, fragment) {
 		this.clearSearchHit();
-		this.reader.showSearchHit(hit, fragment);
+
+		wait()
+			.then(this.reader.showSearchHit.bind(this.reader, hit, fragment));
 	},
 
 	goToFragment: function(fragment) {

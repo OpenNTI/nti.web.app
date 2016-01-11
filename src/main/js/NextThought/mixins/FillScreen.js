@@ -1,6 +1,8 @@
 Ext.define('NextThought.mixins.FillScreen', {
 
 	fillScreen: function(node, paddingBottom) {
+		if (!node) { return; }
+
 		var me = this,
 			resizeHandler = me.sizeNode.bind(me, node, paddingBottom);
 

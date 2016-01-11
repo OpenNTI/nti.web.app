@@ -23,7 +23,7 @@ html.x-viewport {
 		padding-top: $header-height-withbar;
 
 		body {
-			min-height: calc(100vh - $header-height-withbar);
+			min-height: calc(100vh - #{$header-height-withbar});
 		}
 		
 		.main-navigation {
@@ -43,7 +43,7 @@ html.x-viewport {
 
 
 body.x-body {
-	min-height: calc(100vh - $header-height);
+	min-height: calc(100vh - #{$header-height});
 	height: auto !important;
 	overflow: hidden !important;
 	background: white;

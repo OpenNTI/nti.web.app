@@ -3,7 +3,8 @@ Ext.define('NextThought.app.course.overview.Index', {
 	alias: 'widget.course-overview',
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
+		FillScreen: 'NextThought.mixins.FillScreen'
 	},
 
 	requires: [
@@ -140,6 +141,11 @@ Ext.define('NextThought.app.course.overview.Index', {
 			lesson = route.precache.lesson,
 			readerRoute;
 
+		if (me.rendered) {
+			me.fillScreen(me.el.dom, 10);
+			me.el.mask('Loading...');
+		}
+
 		lessonId = ParseUtils.decodeFromURI(lessonId);
 		rootId = ParseUtils.decodeFromURI(rootId);
 		pageId = pageId && ParseUtils.decodeFromURI(pageId);
@@ -248,6 +254,10 @@ Ext.define('NextThought.app.course.overview.Index', {
 				}
 
 				return me.reader.handleRoute(readerRoute, route.precache);
+			}).then(function() {
+				if (me.el) {
+					me.el.unmask();
+				}
 			});
 	},
 
@@ -423,7 +433,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 	getRouteForRelatedWorkPath: function(relatedWork, path, lesson) {
 		var page = path[0],
-			pageId = page && page.getId(),
+			pageId = page && page instanceof NextThought.model.PageInfo ? page.getId() : null,
 			relatedWorkId = relatedWork && relatedWork.get('target'),
 			path = '';
 
