@@ -28,6 +28,7 @@ Ext.define('NextThought.app.assessment.AssignmentFeedback', {
 		},
 		{
 			xtype: 'dataview',
+			loadMask: false,
 			ui: 'feedback-box',
 			itemSelector: '.feedback-item',
 			tpl: Ext.DomHelper.markup([
@@ -107,6 +108,7 @@ Ext.define('NextThought.app.assessment.AssignmentFeedback', {
 	addFeedback: function(editor) {
 		var item = new NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback(
 						{body: editor.getValue().body}),
+			me = this,
 			feedback = this.history.get('Feedback'),
 			store = this.store;
 
@@ -118,7 +120,9 @@ Ext.define('NextThought.app.assessment.AssignmentFeedback', {
 			console.log('Saved feedback');
 			editor.deactivate();
 			editor.setValue('');
+			me.addMask();
 			store.load();
+			me.removeMask();
 		}).fail(function(reason) {
 			console.error('faild to save feedback', reason);
 		});
@@ -159,11 +163,8 @@ Ext.define('NextThought.app.assessment.AssignmentFeedback', {
 			this.mon(this.store, 'load', 'updateFeedback');
 		}
 
-		this.feedbackList.loadMask.disable();
 		this.feedbackList.bindStore(this.store);
 		this.store.load();
-
-		this.feedbackList.loadMask.enable();
 
 		this.mon(this.feedbackList, 'itemclick', 'onFeedbackClick');
 
@@ -296,6 +297,20 @@ Ext.define('NextThought.app.assessment.AssignmentFeedback', {
 			record.destroy({callback: function() {
 				store.load();
 			}});
+		}
+	},
+
+
+	addMask: function(){
+		if(this.feedbackList) {
+			this.feedbackList.el.mask('Loading...');
+		}
+	},
+
+
+	removeMask: function(){
+		if(this.feedbackList) {
+			this.feedbackList.el.unmask();
 		}
 	}
 });
