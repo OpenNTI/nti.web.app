@@ -116,13 +116,11 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 
 
 	__handleMouseDown: function() {
-		console.log('Mouse down called on: ', this.$className);
 		this.__addTargetListeners();
 	},
 
 
 	__handleMouseUp: function() {
-		console.log('Mouse up called on: ', this.$className);
 		this.__removeTargetListeners();
 	},
 

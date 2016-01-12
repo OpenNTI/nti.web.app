@@ -305,5 +305,20 @@ Ext.define('NextThought.model.ContentBundle', {
 		return p;
 	},
 
-	represents: function(catalogEntry) {return false;}
+	represents: function(catalogEntry) {return false;},
+
+
+	getVideosByContentPackage: function() {
+		var contentPackages = this.get('ContentPackages'),
+			videoMap = {};
+
+		return Promise.all(contentPackages.map(function(contentPackage) {
+			return contentPackage.getVideos()
+				.then(function(videos) {
+					videoMap[contentPackage.get('NTIID')] = videos;
+				});
+		})).then(function() {
+			return videoMap;
+		});
+	}
 });

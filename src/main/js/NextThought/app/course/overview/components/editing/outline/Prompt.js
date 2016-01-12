@@ -135,18 +135,19 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 		this.callParent(arguments);
 
 		if (this.record) {
-			this.editRecord(this.record, this.parentRecord, this.rootRecord);
+			this.editRecord(this.record, this.parentRecord, this.rootRecord, this.bundle);
 		} else if (this.parentRecord) {
-			this.addRecord(this.parentRecord, this.rootRecord);
+			this.addRecord(this.parentRecord, this.rootRecord, this.bundle);
 		}
 	},
 
 
-	getConfig: function(record, parentRecord, rootRecord) {
+	getConfig: function(record, parentRecord, rootRecord, bundle) {
 		return {
 			record: record,
 			parentRecord: parentRecord,
 			rootRecord: rootRecord,
+			bundle: bundle,
 			setSaveText: this.setSaveText.bind(this),
 			enableSave: this.enableSave.bind(this),
 			disableSave: this.disableSave.bind(this),
@@ -163,7 +164,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 	},
 
 
-	editRecord: function(record, parentRecord, rootRecord) {
+	editRecord: function(record, parentRecord, rootRecord, bundle) {
 		var editor = this.self.getEditor(record.mimeType),
 			cmp = editor && editor.getEditorForRecord(record);
 
@@ -172,11 +173,11 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 			return;
 		}
 
-		this.activeEditor = this.add(cmp.create(this.getConfig(record, parentRecord, rootRecord)));
+		this.activeEditor = this.add(cmp.create(this.getConfig(record, parentRecord, rootRecord, bundle)));
 	},
 
 
-	addRecord: function(parentRecord, rootRecord) {
+	addRecord: function(parentRecord, rootRecord, bundle) {
 		var editor = this.self.getChildCreator(parentRecord.mimeType),
 			cmp = editor && editor.getChildCreatorForRecord(parentRecord);
 
@@ -185,7 +186,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 			return;
 		}
 
-		this.activeEditor = this.add(cmp.create(this.getConfig(null, parentRecord, rootRecord)));
+		this.activeEditor = this.add(cmp.create(this.getConfig(null, parentRecord, rootRecord, bundle)));
 	},
 
 

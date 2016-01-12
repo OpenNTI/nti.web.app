@@ -1,5 +1,6 @@
 @import 'content-editing-type-list';
 @import 'content-editing-parentselection';
+@import 'content-editing-itemselection';
 
 .overview-editing-prompt {
 	width: 90vw;
@@ -11,6 +12,11 @@
 		.overview-editing-parentselection {
 			margin-bottom: 20px;
 		}
+
+		&.video-editor {
+			padding: 20px 10px;
+		}
+
 		&.outline-editor{
 			input[name="title"] {
 			    width: 100%;
@@ -1144,6 +1150,71 @@ input[type=number]{
 			font-weight: 600;
 			color: white;
 			text-align: center;
+		}
+	}
+}
+
+
+.video-items {
+	.video-items-header {
+		margin-bottom: 20px;
+
+		.reorder {
+			font-size: 1.125rem;
+		}
+
+		.add {
+			float: right;
+			color: $primary-blue;
+			text-decoration: underline;
+			cursor: pointer;
+			font-size: 0.875rem;
+		}
+	}
+
+	.video-items-item {
+		overflow: hidden;
+		background-color: white;
+		margin-bottom: 10px;
+		position: relative;
+		border-radius: 3px;
+		overflow: hidden;
+		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+
+		.close {
+			top: 10px;
+			right: 10px;
+			cursor: pointer;
+			width: 16px; height: 16px;
+			@include icon('message_box_close', $top: 3px, $left: 3px, $position: absolute);
+		}
+
+		.thumbnail {
+			float: left;
+			width: 180px;
+			height: 100px;
+			background-size: contain;
+		}
+
+		.meta {
+			height: 100px;
+			padding: 15px 15px 15px 195px;
+
+			.title {
+				font-size: 0.875em;
+			}
+
+			.providers {
+				font-size: 0.625em;
+				font-weight: 700;
+				text-transform: uppercase;
+				color: $tertiary-grey;
+
+				&:not(:first-of-type)::after {
+					content: ',';
+					margin-right: 0.5em;
+				}
+			}
 		}
 	}
 }

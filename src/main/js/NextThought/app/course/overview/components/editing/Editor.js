@@ -103,15 +103,20 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 		this.EditingActions = NextThought.app.course.overview.components.editing.Actions.create();
 
-		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord, this.onFormChange.bind(this));
-
-		if (this.setSaveText) {
+		if (this.setSaveText && this.record) {
 			this.setSaveText(this.getSaveText());
 		}
 
 		if (this.setTitle) {
 			this.setTitle(this.getHeaderTitle());
 		}
+
+		this.showEditor();
+	},
+
+
+	showEditor: function() {
+		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord, this.onFormChange.bind(this));
 
 		this.formCmp = this.addFormCmp();
 

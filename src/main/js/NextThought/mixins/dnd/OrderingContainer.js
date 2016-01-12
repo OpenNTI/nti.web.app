@@ -65,7 +65,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 			dropzoneWidth = dropzoneRect.width,
 			info, i, current, previous, height;
 
-		items = items.filter(function(item){
+		items = items.filter(function(item) {
 			return (!item.Draggable || !item.Draggable.isDragging) && item.isOrderingItem;
 		});
 

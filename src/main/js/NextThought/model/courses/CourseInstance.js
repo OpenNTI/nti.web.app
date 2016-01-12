@@ -838,6 +838,11 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	getVideosByContentPackage: function() {
+		return this.get('Bundle').getVideosByContentPackage();
+	},
+
+
 	getMediaByOutline: function() {
 		return this.__getList('MediaByOutlineNode');
 	},

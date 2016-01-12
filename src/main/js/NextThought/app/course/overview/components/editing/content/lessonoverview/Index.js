@@ -128,6 +128,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.lessonove
 				enrollment: this.enrollment,
 				locInfo: this.locInfo,
 				assignments: this.assignments,
+				bundle: this.bundle,
 				course: this.bundle,
 				addCardToGroup: this.addCardToGroup.bind(this),
 				initialState: initialState,

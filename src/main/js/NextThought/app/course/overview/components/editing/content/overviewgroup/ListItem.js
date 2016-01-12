@@ -161,13 +161,21 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 
 	buildHeader: function(collection) {
+
 		return {
 			xtype: 'container',
 			cls: 'overview-group-header drag-handle',
 			layout: 'none',
 			items: [
 				{xtype: 'overview-editing-overviewgroup-preview', group: collection},
-				{xtype: 'overview-editing-controls-edit', color: 'white', record: collection, parentRecord: this.lessonOverview, root: this.lessonOverview}
+				{
+					xtype: 'overview-editing-controls-edit',
+					color: 'white',
+					record: collection,
+					parentRecord: this.lessonOverview,
+					root: this.lessonOverview,
+					bundle: this.bundle
+				}
 			]
 		};
 	},
@@ -184,6 +192,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 					name: 'Add Content',
 					parentRecord: this.record,
 					root: this.lessonOverview,
+					bundle: this.bundle,
 					onPromptOpen: this.suspendUpdates.bind(this),
 					onPromptClose: this.resumeUpdates.bind(this)
 				}

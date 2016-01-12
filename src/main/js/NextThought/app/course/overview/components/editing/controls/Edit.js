@@ -43,7 +43,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Edit', {
 			this.onPromptOpen();
 		}
 
-		this.PromptActions.prompt(this.promptName, {record: this.record, parent: this.parentRecord, root: this.root})
+		this.PromptActions.prompt(this.promptName, {record: this.record, parent: this.parentRecord, root: this.root, bundle: this.bundle})
 			.then(this.onPromptSuccess.bind(this))
 			.fail(this.onPromptCancel.bind(this));
 	},

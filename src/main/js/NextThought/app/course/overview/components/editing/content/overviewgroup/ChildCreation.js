@@ -4,7 +4,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 	requires: [
 		'NextThought.model.courses.overview.Group',
-		'NextThought.app.course.overview.components.editing.content.contentlink.Editor'
+		'NextThought.app.course.overview.components.editing.content.contentlink.Editor',
+		'NextThought.app.course.overview.components.editing.content.video.Editor'
 	],
 
 	title: 'Choose a content type',
@@ -22,7 +23,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 			var base = NextThought.app.course.overview.components.editing.content;
 
 			return [
-				base.contentlink.Editor
+				base.contentlink.Editor,
+				base.video.Editor
 			];
 		}
 	},

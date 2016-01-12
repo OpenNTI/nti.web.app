@@ -5,8 +5,10 @@ Ext.define('NextThought.mixins.DurationCache', {
 		if (duration && duration > 0) {
 			this.__durationCache[key] = value;
 
-			wait(duration)
-				.then(this.removeFromCache.bind(this, key));
+			if (duration < Infinity) {
+				wait(duration)
+					.then(this.removeFromCache.bind(this, key));
+			}
 		}
 
 		return value;
@@ -14,6 +16,10 @@ Ext.define('NextThought.mixins.DurationCache', {
 
 	cacheForShortPeriod: function(key, value) {
 		return this.cacheFor(key, value, 300000);//300 seconds
+	},
+
+	cacheForever: function(key, value) {
+		return this.cacheFor(key, value, Infinity);
 	},
 
 

@@ -133,12 +133,17 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 			this.activeTypeList.hide();
 		}
 
+		this.setUpTypeEditor(type);
+
+
 		this.activeEditor = this.add(type.editor.create({
 			parentRecord: this.parentRecord,
 			rootRecord: this.rootRecord,
+			bundle: this.bundle,
 			scrollingParent: this.scrollingParent,
 			enableSave: this.enableSave.bind(this),
 			disableSave: this.disableSave.bind(this),
+			setSaveText: this.setSaveText.bind(this),
 			showError: this.showError.bind(this),
 			showWarning: this.showWarning.bind(this),
 			showMessage: this.showMessage.bind(this),
@@ -146,7 +151,6 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 			doSave: this.doSave.bind(this)
 		}));
 
-		this.setUpTypeEditor(type);
 	},
 
 

@@ -18,13 +18,14 @@ Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
 
 		var record = this.Prompt.data.record,
 			parentRecord = this.Prompt.data.parent || (this.record && this.record.parent),
-			rootRecord = this.Prompt.data.root;
+			rootRecord = this.Prompt.data.root,
+			bundle = this.Prompt.data.bundle;
 
 
 		if (this.Prompt.type === 'overview-editing') {
-			this.editRecord(record, parentRecord, rootRecord);
+			this.editRecord(record, parentRecord, rootRecord, bundle);
 		} else if (this.Prompt.type === 'overview-creation') {
-			this.addRecord(parentRecord, rootRecord);
+			this.addRecord(parentRecord, rootRecord, bundle);
 		}
 	},
 
@@ -34,13 +35,14 @@ Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
 	},
 
 
-	editRecord: function(record, parentRecord, rootRecord) {
+	editRecord: function(record, parentRecord, rootRecord, bundle) {
 		var Outline = NextThought.app.course.overview.components.editing.outline.Prompt,
 			Contents = NextThought.app.course.overview.components.editing.content.Prompt,
 			config = {
 				record: record,
 				parentRecord: parentRecord,
 				rootRecord: rootRecord,
+				bundle: bundle,
 				Prompt: this.Prompt
 			};
 
@@ -56,12 +58,13 @@ Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
 	},
 
 
-	addRecord: function(parentRecord, rootRecord) {
+	addRecord: function(parentRecord, rootRecord, bundle) {
 		var Outline = NextThought.app.course.overview.components.editing.outline.Prompt,
 			Contents = NextThought.app.course.overview.components.editing.content.Prompt,
 			config = {
 				parentRecord: parentRecord,
 				rootRecord: rootRecord,
+				bundle: bundle,
 				Prompt: this.Prompt
 			};
 
