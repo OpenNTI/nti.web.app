@@ -25,7 +25,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.Prompt', 
 
 			return [
 				base.contentlink.Editor,
-				base.overviewgroup.Editor
+				base.overviewgroup.Editor,
+				base.video.Editor
 			];
 		}
 	}

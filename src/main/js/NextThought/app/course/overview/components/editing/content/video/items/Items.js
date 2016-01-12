@@ -42,13 +42,16 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.ite
 			}
 		});
 
-
 		me.itemsCmp = me.add({
 			xtype: 'container',
 			cls: 'items-container',
 			layout: 'none',
 			items: []
 		});
+
+		if (this.record && !this.selectedItems) {
+			this.selectedItems = this.getItemsFromRecord(this.record);
+		}
 
 		me.addItems(me.getItems());
 
@@ -72,13 +75,23 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.ite
 	},
 
 
+	getItemsFromRecord: function(record) {
+		if (record instanceof NextThought.model.VideoRoll) {
+			return record.get('Items');
+		}
+
+		return [record];
+	},
+
+
 	getItems: function() {
 		return this.selectedItems;
 	},
 
 
 	addItems: function(items) {
-		var me = this;
+		var me = this,
+			single = items.length === 1;
 
 		me.disableOrderingContainer();
 
@@ -97,11 +110,13 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.ite
 				xtype: 'overview-editing-video-items-item',
 				item: item,
 				index: index,
-				removeItem: removeItems.bind(me, item)
+				removeItem: !single && removeItems.bind(me, item)
 			};
 		}));
 
-		me.enableOrderingContainer();
+		if (!single) {
+			me.enableOrderingContainer();
+		}
 	},
 
 

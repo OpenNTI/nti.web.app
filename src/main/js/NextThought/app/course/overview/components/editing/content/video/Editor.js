@@ -4,6 +4,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Edi
 
 	requires: [
 		'NextThought.model.Video',
+		'NextThought.model.VideoRoll',
 		'NextThought.app.course.overview.components.editing.content.video.ItemSelection',
 		'NextThought.app.course.overview.components.editing.content.video.VideoEditor'
 	],
@@ -15,7 +16,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Edi
 	statics: {
 		getHandledMimeTypes: function() {
 			return [
-				NextThought.model.Video.mimeType
+				NextThought.model.Video.mimeType,
+				NextThought.model.VideoRoll.mimeType
 			];
 		},
 
@@ -47,7 +49,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Edi
 
 	showEditor: function() {
 		if (this.record) {
-			//TODO: jump to the record editor
+			this.showVideoEditor();
 		} else {
 			this.showVideoList();
 		}
@@ -111,13 +113,18 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Edi
 			parentRecord: this.parentRecord,
 			rootRecord: this.rootRecord,
 			selectedItems: this.videoSelectionCmp && this.videoSelectionCmp.getSelection(),
-			onAddVideos: this.showVideoList.bind(this)
+			onAddVideos: this.showVideoList.bind(this),
+			doClose: this.doClose,
+			showError: this.showError
 		});
 
 		if (this.videoSelectionCmp) {
 			this.videoSelectionCmp.destroy();
 			delete this.videoSelectionCmp;
 		}
+
+		this.enableSave();
+		this.setSaveText(this.record ? 'Save' : 'Add to Lesson');
 	},
 
 
@@ -147,12 +154,18 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Edi
 
 
 	onSave: function() {
-		if (!this.videoEditorCmp) {
-			this.showVideoEditor();
-			return Promise.reject(this.SWITCHED);
+		var me = this;
+
+		if (!me.videoEditorCmp) {
+			me.showVideoEditor();
+			return Promise.reject(me.SWITCHED);
 		}
 
-
-		return this.videoEditorCmp.onSave();
+		me.disableSubmission();
+		return me.videoEditorCmp.onSave()
+			.fail(function(reason) {
+				me.enableSubmission();
+				return Promise.reject(reason);
+			});
 	}
 });

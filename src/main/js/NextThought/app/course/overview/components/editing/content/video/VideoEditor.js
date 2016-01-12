@@ -25,6 +25,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Vid
 			record: this.record,
 			onAddVideos: this.onAddVideos
 		});
+
+		if (this.record) {
+			this.addDeleteButton();
+		}
 	},
 
 
