@@ -133,8 +133,8 @@ Ext.define('NextThought.app.contentviewer.Index', {
 
 		if (config.xtype === 'reader' && assignment) {
 			config.xtype = 'assignment-reader';
-			config.assignment = assignment;
-			config.assignmentId = assignment.getId();
+			config.assignment = config.assignment || assignment;
+			config.assignmentId = config.assignmentId || assignment.getId();
 			config.student = $AppConfig.userObject;
 			config.instructorProspective = false;
 		}

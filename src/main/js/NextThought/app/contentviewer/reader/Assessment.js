@@ -600,6 +600,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		var result = [],
 			questionsInSets = [],
 			push = Array.prototype.push,
+			injectedAssignment = this.injectedAssignment,
 			sets = {},
 			assignments = [],
 			usedQuestions = {};
@@ -628,8 +629,8 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			if (i.isSet) { push.apply(questionsInSets, i.get('questions')); }
 		}
 
-		if (this.injectedAssignment) {
-			assignments.push(this.injectedAssignment);
+		if (injectedAssignment) {
+			assignments.push(injectedAssignment);
 		}
 
 
@@ -638,7 +639,13 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 
 		items.forEach(function(i) {
 			if (i.isAssignment) {
-				assignments.push(i);
+				//If the assignment is the injectedAssignment, don't add it twice
+				//and override the associatedAssignment on the questionset with
+				//a different instance
+				if (i.getId() !== injectedAssignment.getId()) {
+						assignments.push(i);
+				}
+
 				(i.get('parts') || []).forEach(function(qset) {
 					qset = qset.get('question_set');
 					sets[qset.getId()] = qset;

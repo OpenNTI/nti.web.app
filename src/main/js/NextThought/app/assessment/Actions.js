@@ -154,6 +154,8 @@ Ext.define('NextThought.app.assessment.Actions', {
 						result = pendingAssessment.get('parts').first(),
 						itemLink = pendingAssessment.getLink('AssignmentHistoryItem');
 
+					questionSet.associatedAssignment.setHistoryLink(itemLink);
+
 					fulfill({
 						result: result,
 						itemLink: itemLink,
