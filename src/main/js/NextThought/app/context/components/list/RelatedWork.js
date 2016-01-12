@@ -2,6 +2,8 @@ Ext.define('NextThought.app.context.components.list.RelatedWork', {
 	extend: 'NextThought.app.context.components.list.Content',
 	alias: 'widget.context-relatedwork-list',
 
+	requires: ['NextThought.model.PageInfo'],
+
 
 	afterRender: function() {
 		this.callParent(arguments);
@@ -47,5 +49,40 @@ Ext.define('NextThought.app.context.components.list.RelatedWork', {
 		} else {
 			this.iconEl.hide();
 		}
+	},
+
+	setLineage: function(path){
+		if (!this.rendered) {
+			this.on('afterrender', this.setLineage.bind(this, path));
+			return;
+		}
+
+		var rootIdx = 0,
+			root = path[rootIdx],
+			leafIdx = path.length - 1,
+			leaf = path[leafIdx];
+
+		if (leaf instanceof NextThought.model.PageInfo) {
+			leafIdx -= 1;
+			leaf = path[leafIdx];
+		}
+
+		while ((!root.getTitle || !leaf.getTitle) && rootIdx < leafIdx) {
+			if (!root.getTitle) {
+				rootIdx += 1;
+				root = path[rootIdx];
+			}
+
+			if (!leaf.getTitle) {
+				leafIdx -= 1;
+				leaf = path[leafIdx];
+			}
+		}
+
+		this.pathTpl.append(this.locationEl, {
+			leaf: leaf && leaf.getTitle(),
+			root: root && root.getTitle(),
+			extra: leafIdx - rootIdx > 1
+		});
 	}
 });
