@@ -31,6 +31,11 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.ite
 	initComponent: function() {
 		this.callParent(arguments);
 
+		this.setDataTransfer(new NextThought.model.app.MoveInfo({
+			OriginContainer: null,
+			OriginIndex: this.index
+		}));
+
 		this.setDataTransfer(item);
 	},
 

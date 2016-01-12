@@ -126,13 +126,15 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 		var el = this.getDropzoneTarget(),
 			dataTransfer = new NextThought.store.DataTransfer({dataTransfer: e.dataTransfer}),
 			handlers = this.getHandlersForDataTransfer(dataTransfer),
-			effect, handler;
+			effect, handler, i = 0;
 
-		handler = handlers[0];
+		handler = handlers[i];
 
 		//Get the first handler to have an effect defined
 		while (!effect && handler) {
 			effect = handler.effect;
+			i += 1;
+			handler = handlers[i];
 		}
 
 		if (effect) {

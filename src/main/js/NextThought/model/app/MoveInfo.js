@@ -20,5 +20,12 @@ Ext.define('NextThought.model.app.MoveInfo', {
 			OriginContainer: this.get('OriginContainer'),
 			OriginIndex: this.get('OriginIndex')
 		};
+	},
+
+
+	getIndex: function() {
+		var index = this.get('OriginIndex');
+
+		return parseInt(index, 10);
 	}
 });

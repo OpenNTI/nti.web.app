@@ -1180,6 +1180,13 @@ input[type=number]{
 		border-radius: 3px;
 		overflow: hidden;
 		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+		max-height: 100px;
+		transition: max-height 0.5s;
+
+		&.dragging {
+			box-shadow: none;
+			max-height: 0;
+		}
 
 		.close {
 			top: 10px;

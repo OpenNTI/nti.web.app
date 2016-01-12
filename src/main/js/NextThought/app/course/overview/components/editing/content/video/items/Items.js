@@ -52,11 +52,15 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.ite
 
 		me.addItems(me.getItems());
 
-		me.setDataTransferHandler(NextThought.model.Video.mimeType, me.reorderVideo.bind(me));
+		me.setDataTransferHandler(NextThought.model.Video.mimeType, {
+			onDrop: this.reorderVideo.bind(this),
+			isValid: NextThought.mixins.dnd.OrderingContainer.hasMoveInfo,
+			effect: 'move'
+		});
 	},
 
 
-	getDropTarget: function() {
+	getDropzoneTarget: function() {
 		return this.itemsCmp && this.itemsCmp.el && this.itemsCmp.el.dom;
 	},
 
@@ -76,7 +80,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.ite
 	addItems: function(items) {
 		var me = this;
 
-		// me.disableOrderingContainer();
+		me.disableOrderingContainer();
 
 		function removeItems(remove) {
 			me.addItems(items.filter(function(item) {
@@ -88,17 +92,30 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.ite
 
 		me.itemsCmp.removeAll(true);
 
-		me.itemsCmp.add(items.map(function(item) {
+		me.itemsCmp.add(items.map(function(item, index) {
 			return {
 				xtype: 'overview-editing-video-items-item',
 				item: item,
+				index: index,
 				removeItem: removeItems.bind(me, item)
 			};
 		}));
 
-		// me.enableOrderingContainer();
+		me.enableOrderingContainer();
 	},
 
 
-	reorderVideo: function(video, newIndex, moveInfo) {}
+	reorderVideo: function(video, newIndex, moveInfo) {
+		var items = this.getItems(),
+			contains = items.filter(function(item) { return item.getId() === video.getId(); }),
+			oldIndex = moveInfo.getIndex();
+
+		if (!contains) { return Promise.resolve(); }
+
+		items.splice(newIndex, 0, items.splice(oldIndex, 1)[0]);
+
+		this.addItems(items);
+
+		return Promise.resolve();
+	}
 });

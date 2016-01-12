@@ -241,7 +241,7 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 
 	onNoDrop: function() {
 		var el = this.getDragTarget(),
-			handle = this.getDragHandle();
+			handle = this.getDragHandle && this.getDragHandle();
 
 		delete this.Draggable.isDragging;
 
