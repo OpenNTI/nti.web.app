@@ -60,6 +60,11 @@ Ext.define('NextThought.app.course.assessment.Index', {
 		this.on('deactivate', this.closeAssignment.bind(this));
 	},
 
+	getRouteStateKey: function(){
+		if(this.currentBundle){
+			return this.currentBundle.getId() + '-assessment';
+		}
+	},
 
 	onActivate: function() {
 		this.setTitle(this.title);

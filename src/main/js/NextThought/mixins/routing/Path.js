@@ -288,16 +288,15 @@ Ext.define('NextThought.mixins.routing.Path', {
 			return;
 		}
 
-		var key = cmp.state_key || cmp.xtype,
-			state = this.getRouteState() || {};
+		var state = this.getRouteState() || {};
 
 		cmp.pushRoute = this.__pushChildRoute.bind(this);
 		cmp.replaceRoute = this.__replaceChildRoute.bind(this);
 		cmp.pushRootRoute = this.pushRootRoute.bind(this);
 		cmp.replaceRootRoute = this.replaceRootRoute.bind(this);
-		cmp.pushRouteState = this.__pushChildState.bind(this, key);
-		cmp.replaceRouteState = this.__replaceChildState.bind(this, key);
-		cmp.getRouteState = this.__getChildState.bind(this, key);
+		cmp.pushRouteState = this.__pushChildState.bind(this, cmp);
+		cmp.replaceRouteState = this.__replaceChildState.bind(this, cmp);
+		cmp.getRouteState = this.__getChildState.bind(this, cmp);
 		cmp.setTitle = this.__setChildTitle.bind(this);
 
 		if (cmp.onAddedToParentRouter) {
@@ -320,14 +319,15 @@ Ext.define('NextThought.mixins.routing.Path', {
 
 
 	getRouteState: function() {
-		var key = this.state_key || this.xtype;
+		var key = this.getRouteStateKey ? this.getRouteStateKey() : this.state_key || this.xtype;
 
 		return (history.state || {})[key] || {};
 	},
 
 
-	__getChildState: function(key) {
-		var state = this.getRouteState() || {};
+	__getChildState: function(cmp) {
+		var key = this.__getStateForCmp(cmp),
+			state = this.getRouteState() || {};
 
 		return state[key] || {};
 	},
@@ -419,6 +419,11 @@ Ext.define('NextThought.mixins.routing.Path', {
 	},
 
 
+	__getStateForCmp: function(cmp) {
+		return cmp.getRouteStateKey ? cmp.getRouteStateKey() : cmp.state_key || cmp.xtype;
+	},
+
+
 	/**
 	 * Merge the childs route with mine and push it
 	 * @param {String} key key of the cmp
@@ -427,7 +432,9 @@ Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	__pushChildState: function(key, obj, title, subRoute, precache) {
+	__pushChildState: function(cmp, obj, title, subRoute, precache) {
+		var key = this.__getStateForCmp(cmp);
+
 		this.__doState('pushRouteState', key, obj, title, subRoute, precache);
 	},
 
@@ -440,7 +447,9 @@ Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	__replaceChildState: function(key, obj, title, subRoute, precache) {
+	__replaceChildState: function(cmp, obj, title, subRoute, precache) {
+		var key = this.__getStateForCmp(cmp);
+
 		this.__doState('replaceRouteState', key, obj, title, subRoute, precache);
 	},
 

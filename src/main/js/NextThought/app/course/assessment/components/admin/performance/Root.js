@@ -525,6 +525,14 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 	},
 
 
+	clearState: function() {
+		this.stateDisabled = true;
+		this.clearSearch();
+		this.stateDisabled = false;
+		this.current_state = {};
+	},
+
+
 	setSearch: function(val) {
 		this.searchKey = val;
 
