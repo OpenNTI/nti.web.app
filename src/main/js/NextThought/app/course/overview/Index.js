@@ -141,10 +141,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 			lesson = route.precache.lesson,
 			readerRoute;
 
-		if (me.rendered) {
-			me.fillScreen(me.el.dom, 10);
-			me.el.mask('Loading...');
-		}
+
 
 		lessonId = ParseUtils.decodeFromURI(lessonId);
 		rootId = ParseUtils.decodeFromURI(rootId);
@@ -170,6 +167,11 @@ Ext.define('NextThought.app.course.overview.Index', {
 					return Promise.resolve();
 				}
 			}
+		}
+
+		if (me.rendered) {
+			me.fillScreen(me.el.dom, 10);
+			me.el.mask('Loading...');
 		}
 
 		return me.store.onceBuilt()
