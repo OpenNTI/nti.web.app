@@ -35,7 +35,28 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Ite
 	},
 
 
-	itemMatchesSearch: function(item, searchTerm) {},
+	itemMatchesSearch: function(item, searchTerm) {
+		var title = item.get('title'),
+			ntiid = item.getId(),
+			sources = item.get('sources'),
+			matches = false;
+
+		searchTerm = searchTerm.toLowerCase();
+
+		if (title && title.toLowerCase().indexOf(searchTerm) >= 0) {
+			matches = true;
+		} else if (ntiid && ntiid.toLowerCase() === searchTerm) {
+			matches = true;
+		} else if (sources && sources.length) {
+			matches = sources.reduce(function(acc, source) {
+				var provider = source.service;
+
+				return provider.toLowerCase() === searchTerm;
+			}, false);
+		}
+
+		return matches;
+	},
 
 
 	onSelectItem: function(el) {

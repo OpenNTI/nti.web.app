@@ -69,5 +69,14 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ite
 			this.isSelected = false;
 			this.onUnselectItem(this.itemCmp.el.dom);
 		}
+	},
+
+
+	applySearchTerm: function(term) {
+		if (!term || !this.itemMatchesSearch || this.itemMatchesSearch(this.selectionItem, term)) {
+			this.itemCmp.removeCls('filtered');
+		} else {
+			this.itemCmp.addCls('filtered');
+		}
 	}
 });

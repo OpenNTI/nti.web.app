@@ -26,9 +26,19 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 				autoEl: {
 					cls: 'search',
 					cn: [
-						{tag: 'input', type: 'text', placeholder: 'Search or enter NTIID'},
-						{tag: 'span', cls: 'do-search'}
+						{tag: 'span', cls: 'has-search', html: 'Search Results'},
+						{cls: 'input-container', cn: [
+							{tag: 'input', type: 'text', placeholder: 'Search or enter NTIID'},
+							{tag: 'span', cls: 'clear', html: 'clear'},
+							{tag: 'span', cls: 'do-search'}
+						]}
 					]
+				},
+				listeners: {
+					click: {
+						element: 'el',
+						fn: this.onSearchClicked.bind(this)
+					}
 				}
 			});
 		}
@@ -49,11 +59,43 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.el.mask('Loading...');
+		var search = this.searchCmp;
+
+		this.searchInput = search && search.el && search.el.dom && search.el.dom.querySelector('input');
+
+		if (!this.itemSet) {
+			this.el.mask('Loading...');
+		}
 
 		if (this.onSelectionChanged) {
 			this.onSelectionChanged(this.selection);
 		}
+
+		this.searchInput.addEventListener('keyup', this.onSearchKeyUp.bind(this));
+	},
+
+
+	onSearchClicked: function(e) {
+		if (e.getTarget('.clear')) {
+			this.searchInput.value = '';
+			this.searchForTerm('');
+		} else if (e.getTarget('.do-search')) {
+			this.onSearchKeyUp();
+		}
+	},
+
+
+	onSearchKeyUp: function() {
+		this.searchForTerm(this.searchInput.value);
+	},
+
+
+	searchForTerm: function(term) {
+		this.itemsContainer.items.each(function(item) {
+			item.applySearchTerm(term);
+		});
+
+		this.searchCmp[term ? 'addCls' : 'removeCls']('has-search-term');
 	},
 
 
@@ -61,6 +103,7 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 		var me = this;
 
 		me.selectionItems = items;
+		me.itemsSet = true;
 
 		me.itemsContainer.add(items.map(function(item) {
 			return {
