@@ -94,6 +94,22 @@ input[type=number]{
 	form {
 		box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
 
+		// Style the place holder
+		textarea {
+		    font-family: $font;
+		}
+		::-webkit-input-placeholder {
+		    font-family: $font;
+		}
+		:-moz-placeholder {
+		    font-family: $font;
+		}
+		::-moz-placeholder {
+		    font-family: $font;
+		}
+		:-ms-input-placeholder {
+		    font-family: $font;
+		}
 
 		.group.card {
 			background: white;
@@ -196,7 +212,7 @@ input[type=number]{
 
 	.title {
 		color: $primary-grey;
-		font: normal 300 2.25em/1.15em "Open Sans",sans-serif;
+		font: normal 300 2.25em/1.15em $font;
 	}
 
 	.controls {
@@ -402,7 +418,7 @@ input[type=number]{
 		font-size: 0.875em;
 		margin-bottom: 1.25em;
 		padding: 0.35em;
-		font-family: Open Sans;
+		font-family: $font;
 		font-style: italic;
 		color: $primary-grey;
 		border: none;
