@@ -36,7 +36,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.ite
 			OriginIndex: this.index
 		}));
 
-		this.setDataTransfer(item);
+		this.setDataTransfer(this.item);
 	},
 
 

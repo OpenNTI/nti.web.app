@@ -33,13 +33,19 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 	},
 
 
-	__setOrRemoveDropListeners: function(remove) {
-		if (!this.rendered) {
-			this.on('afterrender', this.__setOrRemoveDropListeners.bind(this, remove));
-			return;
+	__setOrRemoveDropListeners: function(remove, fromAfterRender) {
+		this.initDropzone();
+
+		if (fromAfterRender) {
+			remove = !this.Dropzone.isEnabled;
 		}
 
-		this.initDropzone();
+		this.Dropzone.isEnabled = !remove;
+
+		if (!this.rendered) {
+			this.on('afterrender', this.__setOrRemoveDropListeners.bind(this, null, fromAfterRender));
+			return;
+		}
 
 		var target = this.getDropzoneTarget(),
 			method = remove ? 'removeEventListener' : 'addEventListener',
@@ -122,24 +128,31 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 	},
 
 
-	__dragEnter: function(e) {
-		var el = this.getDropzoneTarget(),
-			dataTransfer = new NextThought.store.DataTransfer({dataTransfer: e.dataTransfer}),
-			handlers = this.getHandlersForDataTransfer(dataTransfer),
-			effect, handler, i = 0;
+	__getEffectForHandlers: function(handlers) {
+		var effect, handler, i = 0;
 
 		handler = handlers[i];
 
-		//Get the first handler to have an effect defined
 		while (!effect && handler) {
 			effect = handler.effect;
 			i += 1;
 			handler = handlers[i];
 		}
 
-		if (effect) {
-			e.dataTransfer.dropEffect = effect;
-		}
+		return effect;
+	},
+
+
+	__dragEnter: function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		if (!e.dataTransfer) { return; }
+
+		var el = this.getDropzoneTarget(),
+			dataTransfer = new NextThought.store.DataTransfer({dataTransfer: e.dataTransfer}),
+			handlers = this.getHandlersForDataTransfer(dataTransfer),
+			effect = this.__getEffectForHandlers(handlers);
 
 		this.Dropzone.dragEnterCounter = this.Dropzone.dragEnterCounter || 0;
 
@@ -179,6 +192,8 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 	__dragOver: function(e) {
 		e.preventDefault();
 		e.stopPropagation();
+
+		if (!e.dataTransfer) { return; }
 
 		var dataTransfer = new NextThought.store.DataTransfer({dataTransfer: e.dataTransfer}),
 			handlers = this.getHandlersForDataTransfer(dataTransfer);

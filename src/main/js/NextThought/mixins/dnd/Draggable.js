@@ -125,15 +125,19 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 	},
 
 
-	__setOrRemoveDragListeners: function(remove) {
-		if (!this.rendered) {
-			this.on('afterrender', this.__setOrRemoveDragListeners.bind(this, remove));
-			return;
-		}
-
+	__setOrRemoveDragListeners: function(remove, fromAfterRender) {
 		this.initDragging();
 
+		if (fromAfterRender) {
+			remove = !this.Draggable.isEnabled;
+		}
+
 		this.Draggable.isEnabled = !remove;
+
+		if (!this.rendered) {
+			this.on('afterrender', this.__setOrRemoveDragListeners.bind(this, null, true));
+			return;
+		}
 
 		var handle = this.getDragHandle && this.getDragHandle(),
 			method = remove ? 'removeEventListener' : 'addEventListener',
@@ -201,7 +205,8 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 
 		NextThought.mixins.dnd.Draggable.setActiveDragItem(this);
 
-		e.dataTransfer.effectAllowd = 'all';
+		e.dataTransfer.effectAllowed = 'all';
+		e.dataTransfer.dropEffect = 'move';
 		e.dataTransfer.setData(info.mimeType, info.getDataTransferValue());
 		this.Draggable.isDragging = true;
 		if (this.Draggable.transferData) {

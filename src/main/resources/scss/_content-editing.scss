@@ -312,10 +312,8 @@ input[type=number]{
 	padding: 30px 20px;
 
 	.header {
-		display: table-row;
-
 		> * {
-			display: table-cell;
+			display: inline-block;
 			color: $secondary-grey;
 			text-transform: uppercase;
 			font-weight: 300;
@@ -337,16 +335,19 @@ input[type=number]{
 	}
 	.collection-body {
 		border: 1px solid $tertiary-grey-alt;
-		display: table;
 		background: #ffffff;
 		border-collapse: collapse;
 
 		.outline-node-listitem {
-			display: table-row;
 			border-bottom: 1px solid $tertiary-grey-alt;
 
+			&:last-of-type {
+				border-bottom: none;
+			}
+
 			> * {
-				display: table-cell;
+				display: inline-block;
+				vertical-align: middle;
 			}
 
 			.calendar-container {
@@ -355,7 +356,6 @@ input[type=number]{
 				position: relative;
 
 				.date-calendar {
-					top: 10px;
 					margin-left: 15px;
 					position: relative !important;
 
