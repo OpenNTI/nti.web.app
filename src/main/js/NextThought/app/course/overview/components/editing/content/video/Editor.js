@@ -57,14 +57,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Edi
 	},
 
 
-	__flattenVideos: function(videos) {
-		var keys = Object.keys(videos);
-
-		return keys.reduce(function(acc, key) {
-			var video = videos[key];
-
-			return acc.concat(video);
-		}, []).sort(function(a, b) {
+	__sortVideos: function(videos) {
+		return videos.sort(function(a, b) {
 			var vA = a.get('title'),
 				vB = b.get('title');
 
@@ -94,8 +88,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Edi
 			selectedItems: selectedItems
 		});
 
-		me.bundle.getVideosByContentPackage()
-			.then(me.__flattenVideos.bind(me))
+		me.bundle.getVideoAssets()
+			.then(me.__sortVideos.bind(me))
 			.then(function(videos) {
 				me.videoSelectionCmp.setSelectionItems(videos);
 			});

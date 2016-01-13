@@ -20,7 +20,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		'NextThought.model.ContentBundle',
 		'NextThought.model.forums.CommunityBoard',
 		'NextThought.model.forums.CommunityForum',
-		'NextThought.model.UserSearch'
+		'NextThought.model.UserSearch',
+		'NextThought.model.Video'
 	],
 
 	mixins: {
@@ -835,6 +836,31 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				fulfill();
 			});
 		});
+	},
+
+
+	getVideoAssets: function() {
+		var link = this.getLink('assets');
+
+		if (!link) {
+			return Promise.reject('No assets link');
+		}
+
+		return Service.request({
+				url: link,
+				method: 'GET',
+				params: {
+					accept: NextThought.model.Video.mimeType
+				}
+			}).then(function(resp) {
+				var json = JSON.parse(resp);
+
+				return ParseUtils.parseItems(json.Items);
+			}).fail(function(reason) {
+				console.error('Failed to load Videos: ', reason);
+
+				return [];
+			});
 	},
 
 
