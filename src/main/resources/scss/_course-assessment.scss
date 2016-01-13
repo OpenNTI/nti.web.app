@@ -482,6 +482,21 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.assignment-list {
+	&.admin {
+		.x-container.grouping {
+			& > .header {
+				.title {
+				    width: 85%;
+				    text-overflow: ellipsis;
+				    white-space: nowrap;
+				    overflow: hidden;
+				}
+			}
+		}
+	}
+}
+
 .pager-settings {
 	.x-menu-item.x-menu-item-separator.labeled-separator {
 		background: none !important;
