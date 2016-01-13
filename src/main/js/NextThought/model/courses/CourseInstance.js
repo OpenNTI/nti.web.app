@@ -1144,7 +1144,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		var board = this.get('Discussions'),
 			parentBoard = this.get('ParentDiscussions');
 
-		return !!(board.getLink('contents') || parentBoard.getLink('contents'));
+		return !!((board && board.getLink('contents')) || (parentBoard && parentBoard.getLink('contents')));
 	},
 
 
