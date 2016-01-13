@@ -183,6 +183,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 				if (str === 'ok') {
 					me.record.destroy();
 					me.adjustRootsReferenceCount(me.record);
+					me.destroy();
 				}
 			}
 		});
