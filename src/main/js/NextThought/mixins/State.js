@@ -6,6 +6,9 @@ Ext.define('NextThought.mixins.State', {
 		'NextThought.common.state.Actions'
 	],
 
+	getStateKey: function() {
+		return this.state_key;
+	},
 
 	__getStateActions: function() {
 		this.__StateActions = this.__StateActions || NextThought.common.state.Actions.create();
@@ -26,9 +29,10 @@ Ext.define('NextThought.mixins.State', {
 	 */
 	getCurrentState: function() {
 		var actions = this.__getStateActions(),
-			store = this.__getStateStore();
+			store = this.__getStateStore(),
+			key = this.getStateKey();
 
-		return store.getState(this.state_key);
+		return store.getState(key);
 	},
 
 	/**
@@ -36,9 +40,10 @@ Ext.define('NextThought.mixins.State', {
 	 * @param {Object} state state to store
 	 */
 	setState: function(state) {
-		var actions = this.__getStateActions();
+		var actions = this.__getStateActions(),
+			key = this.getStateKey();
 
-		actions.setState(this.state_key, state);
+		actions.setState(key, state);
 
 		return this.applyState(state);
 	},

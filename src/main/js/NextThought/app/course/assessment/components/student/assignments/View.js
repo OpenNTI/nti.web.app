@@ -507,6 +507,11 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 			bar.selectGroupBy(state.groupBy);
 		}
 
+		if (state && state.search) {
+			this.filterSearchValue(state.search);
+			bar.setSearch(state.search);
+		}
+
 		return this.applyState(state);
 	},
 
@@ -533,5 +538,12 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 		} else {
 			console.error('No Assignment to navigate to');
 		}
+	},
+
+
+	getStateKey: function() {
+		var bundle = this.data.instance;
+
+		return bundle && bundle.getId() + '-course-assessment';
 	}
 });
