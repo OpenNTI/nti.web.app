@@ -864,6 +864,31 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	getDisucssionAssets: function() {
+		var link = this.getLink('assets');
+
+		if (!link) {
+			return Promise.reject('No assets link');
+		}
+
+		return Service.request({
+				url: link,
+				method: 'GET',
+				params: {
+					accept: NextThought.model.DiscussionRef.mimeType
+				}
+			}).then(function(resp) {
+				var json = JSON.parse(resp);
+
+				return ParseUtils.parseItems(json.Items);
+			}).fail(function(reason) {
+				console.error('Failed to load Discussions: ', reason);
+
+				return [];
+			});
+	},
+
+
 	getVideosByContentPackage: function() {
 		return this.get('Bundle').getVideosByContentPackage();
 	},
