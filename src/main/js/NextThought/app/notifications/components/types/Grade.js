@@ -20,7 +20,9 @@ Ext.define('NextThought.app.notifications.components.types.Grade', {
 
 		return Service.getObject(assignmentId)
 			.then(function(assignment) {
-				me.wordingEl.dom.innerHTML = me.wording.replace('{assignment}', me.titleTpl.apply({name: assignment.get('title')}));
+				if (me.wordingEl && me.wordingEl.dom) {
+					me.wordingEl.dom.innerHTML = me.wording.replace('{assignment}', me.titleTpl.apply({name: assignment.get('title')}));
+				}
 			});
 	}
 });
