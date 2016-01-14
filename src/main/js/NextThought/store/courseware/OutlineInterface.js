@@ -113,6 +113,17 @@ Ext.define('NextThought.store.courseware.OutlineInterface', {
 		return this.outline.get('Items');
 	},
 
+	findOutlineNode: function(id) {
+		if (!this.isBuilt) {
+			console.warn('Calling getOutlineNode before it is finisehd building');
+			return null;
+		}
+
+		return this.findNodeBy(function(n) {
+			return n.getId() === id || n.get('ContentNTIID') === id;
+		});
+	},
+
 
 	getNode: function(id) {
 		if (!this.isBuilt) {

@@ -31,7 +31,27 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 
 	grouperMap: {
-		'lesson': 'lesson',
+		'lesson': {
+			 'property': 'lesson',
+			 'sorterFn': function(a, b) {
+			 	var aVal = a.get('outlineNode'),
+			 		bVal = b.get('outlineNode');
+
+			 	if (aVal) {
+			 		aVal = aVal._position;
+			 	} else {
+			 		aVal = Infinity;
+			 	}
+
+			 	if (bVal) {
+			 		bVal = bVal._position;
+			 	} else {
+			 		bVal = Infinity;
+			 	}
+
+			 	return aVal < bVal ? -1 : aVal === bVal ? 0 : 1;
+			 }
+		},
 		'completion': {
 			'property': 'completed',
 			'getGroupString': function(val) {
@@ -349,7 +369,8 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 	 * @param {Bundle} instance    the bundle we are in
 	 */
 	setAssignmentsData: function(assignments, instance, silent) {
-		var me = this;
+		var me = this,
+			outlineInterface = instance.getOutlineInterface();
 
 
 		if (me.data && me.data.instance === instance && silent) {
@@ -365,22 +386,23 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 		me.data = {
 			assignments: assignments,
-			instance: instance
+			instance: instance,
+			outlineInterface: outlineInterface
 		};
 
-		function finish(outline) {
-			me.data.outline = outline;
+		function finish(outlineInterface) {
+			me.data.outline = outlineInterface.getOutline();
 			//Becasue this view has special derived fields, we must just listen for changes on the
 			// assignments collection itself and trigger a refresh. This cannot simply be a store
 			// of HistoryItems.
 			return me.applyAssignmentsData();
 		}
 
-		return instance.getOutline()
-				.done(finish)
-				.fail(function(reason) {
-					console.error('Failed to get course outline!', reason);
-				});
+		return	outlineInterface.onceBuilt()
+			.then(finish)
+			.fail(function(reason) {
+				console.error('Failed to get course outline!', reason);
+			});
 	},
 
 
@@ -388,7 +410,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 		var me = this,
 			lesson, raw = [], waitsOn = [],
 			bundle = me.data.instance,
-			outline = me.data.outline,
+			outlineInterface = me.data.outlineInterface,
 			assignments = me.data.assignments;
 
 		function collect(assignment) {
@@ -404,7 +426,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 						var lineage = lineages[0];
 
 						return Promise.all(lineage.map(function(ntiid) {
-							return outline.findOutlineNode(ntiid);
+							return outlineInterface.findOutlineNode(ntiid);
 						})).then(function(results) {
 							results = results.filter(function(x) { return !!x; });
 
