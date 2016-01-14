@@ -212,7 +212,9 @@ Ext.define('NextThought.mixins.routing.Path', {
 
 		subRoute = parts.slice(i).join('/');
 
-		if(objectParts) {subRoute +=  '/' + objectParts.join('/')};
+		if (objectParts) {
+			subRoute += '/' + objectParts.join('/');
+		}
 		//add the object data back to the subroute
 
 		if (query) {

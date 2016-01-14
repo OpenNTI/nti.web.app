@@ -152,7 +152,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 		//1.) we aren't trying to set a page and the reader doesn't have a page
 		//2.) we are trying to set a page and its the reader's current page
 		//then don't on set the reader to prevent it from flashing.
-		if (me.reader) {
+		if (me.reader && me.reader.hasReader()) {
 			if (me.reader.root === rootId) {
 				if (me.reader.isShowingPage(pageId || rootId)) {
 					if (me.activeMediaWindow) {

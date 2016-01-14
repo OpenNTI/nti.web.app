@@ -32,12 +32,9 @@ Ext.define('NextThought.app.content.content.Index', {
 		this.addDefaultRoute('/');
 
 		this.on({
-			'beforedeactivate': this.onBeforeDeactivate.bind(this),
 			'activate': this.onActivate.bind(this),
 			'deactivate': this.onDeactivate.bind(this)
 		});
-
-		this.on('beforedeactivate', this.onBeforeDeactivate.bind(this));
 	},
 
 
@@ -72,6 +69,11 @@ Ext.define('NextThought.app.content.content.Index', {
 	},
 
 
+	hasReader: function() {
+		return this.reader && !this.reader.isDestroyed();
+	},
+
+
 	isShowingPage: function(ntiid) {
 		var isShowing, assessmentItems;
 
@@ -91,12 +93,13 @@ Ext.define('NextThought.app.content.content.Index', {
 	},
 
 
-	onBeforeDeactivate: function() {
+	onRouteDeactivate: function() {
 		if (!this.reader) { return; }
 
 		this.reader.hide();
 
 		this.reader.destroy();
+		delete this.reader;
 	},
 
 
@@ -236,8 +239,8 @@ Ext.define('NextThought.app.content.content.Index', {
 	 		return this.__loadContent(root, obj)
 				.then(function(page) {
 					me.showReader(page, route.precache.parent, route.hash, route.precache.note);
-					var p = video ? Promise.resolve(video)
-								  : Service.getObject(vid).then(function(v){
+					var p = video ? Promise.resolve(video) :
+									Service.getObject(vid).then(function(v) {
 								  		var o = v.isModel ? v.raw : v,
 								  			video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
 
@@ -280,7 +283,7 @@ Ext.define('NextThought.app.content.content.Index', {
 			.fail(this.__onFail.bind(this));
 	},
 
-	showNote: function(note){
+	showNote: function(note) {
 		this.reader.goToNote(note);
 	},
 
