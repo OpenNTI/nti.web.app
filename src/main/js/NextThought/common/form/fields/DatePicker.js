@@ -212,6 +212,9 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 				// Set date
 				if (me.datepicker) {
 					me.datepicker.setValue(dateOnly);
+					
+					// Fire a change event
+					me.onDateChange(me.datepicker, me.datepicker.value);
 				}
 
 				// TODO: Set Hour and Minute

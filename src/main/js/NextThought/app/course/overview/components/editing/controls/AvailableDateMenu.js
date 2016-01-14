@@ -157,14 +157,6 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 		if (this.picker && field) {
 			date = value ? new Date(value * 1000) : this.getDefaultTimeForField(field);
 			this.picker.setValue(date);
-
-			if (field === 'AvailableBeginning') {
-				this.picker.setMaxDate(availableEnding);
-				this.picker.setMinDate(null);
-			} else if (field === 'AvailableEnding'){
-				this.picker.setMinDate(availableBeginning);
-				this.picker.setMaxDate(null);
-			}
 		}
 	},
 
@@ -265,16 +257,28 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 
 
 	isValid: function(){
-		var values = this.getValue(),
+		var values = this.getValue() || {},
+			start = values.AvailableBeginning,
+			end = values.AvailableEnding,
 			error;
 
 		if (this.picker && this.picker.isValid && this.picker.isValid() === false) {
 			return false;
 		} 
 
-		if (!values.AvailableBeginning && values.AvailableEnding) {
+		if (!start && end) {
 			error = {
 				msg: 'The begin date is required when the finish date is set.',
+				field: 'AvailableBeginning'
+			};
+
+			this.showError(error);
+			return false;
+		}
+
+		if (start && end && start > end) {
+			error = {
+				msg: 'The begin date cannot be set after the finish date.',
 				field: 'AvailableBeginning'
 			};
 
