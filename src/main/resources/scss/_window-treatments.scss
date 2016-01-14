@@ -384,6 +384,7 @@
     	font: normal 600 14px/42px $font;
     	position: relative;
     	margin-top: 10px; 
+    	overflow: hidden;
 
     	&::after {
     		content: '';

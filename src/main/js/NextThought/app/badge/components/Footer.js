@@ -24,6 +24,10 @@ Ext.define('NextThought.app.badge.components.Footer', {
 
 		this.mon(this.exportEl, 'click', this.onExportClick.bind(this));
 		this.mon(this.closeEl, 'click', this.onCloseClick.bind(this));
+
+		if (!isFeature('badges')) {
+			this.exportEl.hide();
+		}
 	},
 
 
