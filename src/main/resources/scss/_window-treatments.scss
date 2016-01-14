@@ -332,6 +332,8 @@
 
 .badge-window {
 	.badge-preview {
+		min-height: 150px;
+
 		.img{
 			width: 128px;
 			height: 128px;
@@ -371,6 +373,60 @@
 			font-weight: 600;
 			color: $tertiary-grey;
 		}
+	}
+
+	.footer {
+    	height: 45px;
+    	white-space: nowrap;
+    	background-color: #efefef;
+    	border-top: 1px solid #dcdcdc;
+    	color: $secondary-grey;
+    	font: normal 600 14px/42px $font;
+    	position: relative;
+    	margin-top: 10px; 
+
+    	&::after {
+    		content: '';
+    		position: absolute;
+		    top: -8px;
+		    left: 0;
+		    right: 0;
+		    height: 8px;
+		    box-shadow: 0 3px 8px -3px rgba(0,0,0,0.25);
+    	}
+
+    	.btn {
+    		position: relative;
+    		height: 45px;
+    		width: 45px;
+    		line-height: 45px;
+    		font-size: 14px;
+    		text-align: center;
+    		color: $secondary-grey;
+    		cursor: pointer;
+    	}
+
+    	.left {
+    		float: left;
+
+    		.export {
+				@include icon('download_hover', $top: 10px, $left: 25px);
+
+				&:active, &:hover {
+					@include icon('download_active', $top: 10px, $left: 25px);
+				}
+    		}
+    	}
+
+    	.right {
+    		float: right;
+
+    		.btn {
+    			width: 85px;
+    			margin: -1px;
+    			border-left: 1px solid #d0d0d0;
+    		}
+    	}
 	}
 }
 

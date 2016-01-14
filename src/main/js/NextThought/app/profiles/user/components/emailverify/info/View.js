@@ -2,6 +2,8 @@ Ext.define('NextThought.app.profiles.user.components.emailverify.info.View', {
 	extend: 'Ext.Component',
 	alias: 'widget.email-verify-info-view',
 
+	cls: 'email-verify-view',
+
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header', cn: [
 			{

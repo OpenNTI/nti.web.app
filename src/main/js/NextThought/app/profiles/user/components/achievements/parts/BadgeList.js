@@ -188,7 +188,7 @@ Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeLis
 		if (e.getTarget('.export')) {
 			this.showExportMenu(record, Ext.get(item));
 		} else {
-			this.WindowActions.pushWindow(record);
+			this.WindowActions.pushWindow(record, null, null, null, {record: record});
 		}
 	},
 
