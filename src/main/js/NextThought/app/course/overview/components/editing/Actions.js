@@ -36,6 +36,9 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 
 
 	__saveRecord: function(form, record) {
+		//if we aren't passed a form, there is nothing to update
+		if (!form) { return Promise.resolve(); }
+
 		if (!form.submitToRecord) {
 			return Promise.reject({
 				msg: 'Unable to update record.',

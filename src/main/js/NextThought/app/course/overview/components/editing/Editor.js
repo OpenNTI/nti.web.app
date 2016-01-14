@@ -277,10 +277,10 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 
 	getFormErrors: function() {
 		var errors = this.formCmp && this.formCmp.getErrors(),
-			fields = Object.keys(errors),
+			fields = errors && Object.keys(errors),
 			msgs = [], required;
 
-		fields.forEach(function(field) {
+		(fields || []).forEach(function(field) {
 			var error = errors[field];
 
 			if (error.missing) {
@@ -385,7 +385,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 			form = me.formCmp,
 			errors = me.getErrors();
 
-		if (!form) { return Promise.reject(); }
+		if (!form) { return Promise.resolve(); }
 
 		me.clearErrors();
 

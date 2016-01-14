@@ -80,7 +80,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 
 
 	getPreview: function(record) {
-		var item = record.toJSON(),
+		var item = record.getRaw(),
 			type = this.getPreviewType(record);
 
 		if (!type) {
