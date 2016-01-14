@@ -92,6 +92,7 @@ Ext.define('NextThought.app.windows.components.Header', {
 
 				titles = titles.map(function(title) {
 					title.noLink = false;
+					return title;
 				});
 
 				if (container.dom) {
