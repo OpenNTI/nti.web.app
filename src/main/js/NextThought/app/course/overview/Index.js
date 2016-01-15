@@ -119,6 +119,10 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		this.setShadowRoot(route.path);
 
+		if (this.rendered) {
+			this.fillScreen(this.el.dom, 10);
+		}
+
 		if (this.reader) {
 			Ext.destroy(this.reader);
 			delete this.reader;

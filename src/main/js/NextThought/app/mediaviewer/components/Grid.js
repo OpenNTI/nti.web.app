@@ -249,8 +249,8 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 					videoObject = outline.Items || {},
 					videos = [];
 
-				function addContainerVideos(cid) {
-					var videoIds = containers[cid],
+				function addContainerVideos(cid, contentNTIID) {
+					var videoIds = containers[cid] || containers[contentNTIID],
 						node = outlineInterface && outlineInterface.findOutlineNode(cid);
 
 					if (node && videoIds && videoIds.length) {
@@ -278,7 +278,7 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 				}
 				else {
 					outlineInterface.forEach(function(node) {
-						addContainerVideos(node.getId());
+						addContainerVideos(node.getId(), node.get('ContentNTIID'));
 					});
 				}
 

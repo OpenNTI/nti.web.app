@@ -18,8 +18,9 @@ Ext.define('NextThought.mixins.FillScreen', {
 
 	sizeNode: function(node, paddingBottom) {
 		var rect = node.getBoundingClientRect(),
+			scrollTop = Ext.getBody().getScrollTop(),
 			viewHeight = Ext.Element.getViewportHeight(),
-			height = viewHeight - rect.top - (paddingBottom || 0);
+			height = viewHeight - (rect.top + scrollTop) - (paddingBottom || 0);
 
 		if (height >= 0) {
 			node.style.minHeight = height + 'px';
