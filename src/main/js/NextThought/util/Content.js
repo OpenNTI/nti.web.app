@@ -804,6 +804,41 @@ Ext.define('NextThought.util.Content', {
 
 		//wasn't long enough to split
 		return html;
+	},
+
+
+	getReadings: function(bundle) {
+		function buildNavigationMap(toc) {
+			var nodes = toc.querySelectorAll('course, course unit, course lesson');
+
+			nodes = Array.prototype.slice.call(nodes);
+
+			return nodes.reduce(function(acc, node) {
+				var ntiid = node.getAttribute('ntiid') || node.getAttribute('topic-ntiid');
+
+				acc[ntiid] = true;
+
+				return acc;
+			}, {});
+		}
+
+		function findReadings(toc) {
+			var navigation = buildNavigationMap(toc),
+				topLevel = toc.querySelectorAll('toc > topic');
+
+			topLevel = Array.prototype.slice.call(topLevel);
+
+			return topLevel.filter(function(node) {
+				var ntiid = node.getAttribute('ntiid');
+
+				return !navigation[ntiid];
+			});
+		}
+
+		return this.__resolveTocs(bundle)
+			.then(function(tocs) {
+				return tocs.map(findReadings);
+			});
 	}
 
 }, function() {

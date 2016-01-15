@@ -111,7 +111,8 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 				selectionItem: item,
 				itemTpl: me.itemTpl,
 				getItemData: me.getItemData.bind(me),
-				getItemChildren: me.getItemChildren.bind(me),
+				getItemChildren: me.getItemChildren && me.getItemChildren.bind(me),
+				getSelectionItemId: me.getSelectionItemId.bind(me),
 				itemMatchesSearch: me.itemMatchesSearch.bind(me),
 				multiSelect: me.multiSelect,
 				selectItem: me.selectItem.bind(me),
@@ -154,11 +155,6 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 	},
 
 
-	getItemChildren: function(item) {
-		return [];
-	},
-
-
 	clearSelection: function() {
 		this.selection.forEach(this.unselectItem.bind(this));
 	},
@@ -168,6 +164,11 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 		var title = item.getTitle && item.getTitle();
 
 		return title && title.indexOf(searchTerm) >= 0;
+	},
+
+
+	getSelectionItemId: function(item) {
+		return item.getId();
 	},
 
 
@@ -189,18 +190,20 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 
 
 	unselectItem: function(selectionItem) {
-		this.itemsContainer.items.each(function(item) {
+		var me = this;
+
+		me.itemsContainer.items.each(function(item) {
 			if (item && item.maybeUnselectItem) {
 				item.maybeUnselectItem(selectionItem);
 			}
 		});
 
-		this.selection = this.selection.filter(function(item) {
-			return item.getId() !== selectionItem.getId();
+		me.selection = me.selection.filter(function(item) {
+			return me.getSelectionItemId(item) !== me.getSelectionItemId(selectionItem);
 		});
 
-		if (this.onSelectionChanged) {
-			this.onSelectionChanged(this.selection);
+		if (me.onSelectionChanged) {
+			me.onSelectionChanged(this.selection);
 		}
 	},
 
