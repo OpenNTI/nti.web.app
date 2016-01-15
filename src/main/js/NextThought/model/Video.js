@@ -25,6 +25,11 @@ Ext.define('NextThought.model.Video', {
 	],
 
 
+	getId: function() {
+		return this.get('ntiid') || this.get('NTIID');
+	},
+
+
 	getTitle: function() {
 		return this.get('label');
 	},

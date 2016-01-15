@@ -423,7 +423,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 				assignments.getGradeBookEntry(id),
 				ContentUtils.getLineage(id, bundle)
 					.then(function(lineages) {
-						var lineage = lineages[0];
+						var lineage = lineages[0] || [];
 
 						return Promise.all(lineage.map(function(ntiid) {
 							return outlineInterface.findOutlineNode(ntiid);

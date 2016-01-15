@@ -39,8 +39,8 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 					{ cls: 'meta', cn: [
 						{ cls: 'title', html: '{title}' },
 						{ cls: 'info', cn: [
-            //							{ tag: 'span', html: '{duration}'},
-            //							{ tag: 'span', html: '{comments:plural("Comment")}'}
+			//							{ tag: 'span', html: '{duration}'},
+			//							{ tag: 'span', html: '{comments:plural("Comment")}'}
 						] }
 					] }
 				] }
@@ -119,11 +119,11 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 		});
 	},
 
-	setContent: function(source, bundle){
+	setContent: function(source, bundle) {
 		var me = this;
 
 		me.source = source;
-		if(me.currentBundle !== bundle) {
+		if (me.currentBundle !== bundle) {
 			me.__bundleChanged(bundle);
 		}
 		else {
@@ -131,7 +131,7 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 				.then(function(lineages) {
 					var lineage = lineages[0];
 					ContentUtils.getLocation(lineage.last(), bundle)
-						.then(function (location) {
+						.then(function(location) {
 							me.setLocationInfo(location);
 						});
 				});
@@ -155,15 +155,15 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 			.then(function(lineages) {
 				var lineage = lineages[0];
 				ContentUtils.getLocation(lineage.last(), bundle)
-					.then(function (location) {
+					.then(function(location) {
 						me.setLocationInfo(location);
 					});
-			});		
+			});
 	},
 
 
 	__scrollSelectedIntoView: function() {
-		if(!this.rendered) { return; }
+		if (!this.rendered) { return; }
 
 		var r = this.getSelectionModel().getLastSelected(),
 			node = r && this.getNodeByRecord(r),
@@ -175,35 +175,9 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 	},
 
 
-	getBundleOutline: function() {
-		var catalog, load;
-
-		//if we were passed a bundle to use
-		if (this.currentBundle) {
-			load = this.currentBundle.getNavigationStore().building;
-		//else if we can find a course for the source
-		} else {
-			catalog = CourseWareUtils.courseForNtiid(this.source.getId());
-
-			if (!catalog) {
-				load = Promise.reject();
-			} else {
-				load = CourseWareUtils.findCourseBy(catalog.findByMyCourseInstance())
-						.then(function(course) {
-							course = course.get('CourseInstance') || course;
-
-							return course.getNavigationStore().building;
-						});
-			}
-		}
-
-		return load;
+	__getCurrentProgress: function() {
+		return this._currentProgress || Promise.reject();
 	},
-
-
-    __getCurrentProgress: function(){
-        return this._currentProgress || Promise.reject();
-    },
 
 
 	processSpecialEvent: function(e) {
@@ -226,11 +200,11 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 	},
 
 
-    afterRender: function(){
-        this.callParent(arguments);
+	afterRender: function() {
+		this.callParent(arguments);
 
-        this.on('refresh', this.__updateProgress, this);
-    },
+		this.on('refresh', this.__updateProgress, this);
+	},
 
 
 	getThumbnail: function(video) {
@@ -261,13 +235,15 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 			return this.__getVideosPromise;
 		}
 
+		var outlineInterface = bundle.getOutlineInterface();
+
 		this.__getVideosPromise = Promise.all([
-				bundle.getMediaByOutline(),	
-				bundle.getNavigationStore().building
+				bundle.getMediaByOutline(),
+				outlineInterface.onceBuilt()
 			])
 			.then(function(results) {
 				var outline = results[0],
-					navStore = results[1],
+					outlineInterface = results[1],
 					orderedContainers = outline.ContainerOrder || [],
 					containers = outline.Containers || {},
 					videoObject = outline.Items || {},
@@ -275,9 +251,9 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 
 				function addContainerVideos(cid) {
 					var videoIds = containers[cid],
-						node = navStore && navStore.findRecord('NTIID', cid);
+						node = outlineInterface && outlineInterface.findOutlineNode(cid);
 
-					if (node) {
+					if (node && videoIds && videoIds.length) {
 						videos.push(NextThought.model.PlaylistItem({
 							section: node.get('label'),
 							sources: []
@@ -292,19 +268,19 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 							v = NextThought.model.PlaylistItem(v);
 							v.NTIID = v.ntiid;
 							v.section = cid;
-							videos.push(v);	
+							videos.push(v);
 						}
 					});
 				}
 
 				if (orderedContainers.length > 0) {
-					Ext.each(orderedContainers, addContainerVideos);	
+					Ext.each(orderedContainers, addContainerVideos);
 				}
 				else {
-					navStore.each(function(node) {
+					outlineInterface.forEach(function(node) {
 						addContainerVideos(node.getId());
 					});
-				}	
+				}
 
 				return Promise.resolve(videos);
 			});
@@ -326,14 +302,14 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 					proxy: 'memory',
 					data: videos
 				});
-				
+
 				me.store.each(function(record) {
-			         me.getThumbnail(record);
-		        });
+					 me.getThumbnail(record);
+				});
 
 				me.bindStore(me.store);
 
-                me.__updateProgress();
+				me.__updateProgress();
 
 				me.fireEvent('store-set', me.store);
 				if (!Ext.isString(selected)) {
@@ -343,21 +319,21 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 	},
 
 
-    __updateProgress: function(){
-        var me = this;
+	__updateProgress: function() {
+		var me = this;
 
-        this.__getCurrentProgress()
-            .then(function(progress){
-                me.store.each(function(r){
-                    if(r.get('NTIID') && progress.hasBeenViewed(r.get('NTIID'))){
-                        r.set("progress", "viewed");
-                    }
-                });
-            })
-            .fail(function(reason){
-                console.log("Could not load the video progress: " + reason);
-            });
-    },
+		this.__getCurrentProgress()
+			.then(function(progress) {
+				me.store.each(function(r) {
+					if (r.get('NTIID') && progress.hasBeenViewed(r.get('NTIID'))) {
+						r.set('progress', 'viewed');
+					}
+				});
+			})
+			.fail(function(reason) {
+				console.log('Could not load the video progress: ' + reason);
+			});
+	},
 
 
 	fireSelection: function() {
@@ -381,5 +357,5 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 	},
 
 
-    adjustOnResize: function(availableWidth, availableHeight){}
+	adjustOnResize: function(availableWidth, availableHeight) {}
 });
