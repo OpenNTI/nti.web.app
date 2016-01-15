@@ -54,6 +54,7 @@ Ext.define('NextThought.app.course.Index', {
 		},
 		{
 			xtype: 'bundle-content',
+			courseLevel: true,
 			id: 'course-content',
 			hideHeader: true
 		}
@@ -363,7 +364,7 @@ Ext.define('NextThought.app.course.Index', {
 
 
 	showContent: function(route, subRoute) {
-		return this.setActiveView('bundle-content', [
+		return this.setActiveView('bundle-content[courseLevel]', [
 				'course-dashboard',
 				'course-overview',
 				'course-assessment-container',
@@ -371,7 +372,7 @@ Ext.define('NextThought.app.course.Index', {
 				'course-reports',
 				'course-info'
 			], 'course-overview').then(function(item) {
-				item.handleRoute(subRoute, route.precache);
+				return item.handleRoute(subRoute, route.precache);
 			});
 	},
 

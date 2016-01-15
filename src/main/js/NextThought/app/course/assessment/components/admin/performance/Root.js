@@ -727,7 +727,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 					delete store.proxy.extraParams.batchContainingUsernameFilterByScope;
 					delete store.proxy.extraParams.batchContainingUsername;
 					delete me.student;
-
+					delete me.applyingState;
+					me.setEnabled();
+					
 					me.currentPage = store.getCurrentPage();
 					me.maybeSwitchStudents();
 					me.updateUIFromState();
@@ -736,9 +738,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 					if (state.searchKey) {
 						me.setSearch(state.searchKey);
 					}
-
-					delete me.applyingState;
-					me.setEnabled();
 
 					fulfill();
 				}

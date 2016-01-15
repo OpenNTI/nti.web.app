@@ -33,7 +33,8 @@ Ext.define('NextThought.app.content.content.Index', {
 
 		this.on({
 			'activate': this.onActivate.bind(this),
-			'deactivate': this.onDeactivate.bind(this)
+			'deactivate': this.onDeactivate.bind(this),
+			'beforedeactivate': this.onBeforeDeactivate.bind(this)
 		});
 	},
 
@@ -70,7 +71,7 @@ Ext.define('NextThought.app.content.content.Index', {
 
 
 	hasReader: function() {
-		return this.reader && !this.reader.isDestroyed();
+		return this.reader && !this.reader.isDestroyed;
 	},
 
 
@@ -93,7 +94,7 @@ Ext.define('NextThought.app.content.content.Index', {
 	},
 
 
-	onRouteDeactivate: function() {
+	onBeforeDeactivate: function() {
 		if (!this.reader) { return; }
 
 		this.reader.hide();

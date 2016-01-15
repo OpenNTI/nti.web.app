@@ -204,6 +204,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 
 		if (!info || !handler || !handler.onDrop || !data) {
 			NextThought.mixins.dnd.Draggable.onNoDropHandler();
+			this.__removeDropPlaceholder();
 			return;
 		}
 
