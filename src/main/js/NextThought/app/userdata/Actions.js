@@ -835,9 +835,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 		return new Promise(function(fulfill, reject) {
 			replyRecord.save({scope: me, callback: me.getSaveCallback(fulfill, reject)});
 		}).then(function(record) {
-			if (!root.store) {
-				recordRepliedTo.fireEvent('child-added', record);
-			}
+			recordRepliedTo.fireEvent('child-added', record);
 
 			return record;
 		});
