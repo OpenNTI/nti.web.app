@@ -473,6 +473,18 @@ input[type=number]{
 	&.editing {
 		background: none;
 
+		.outline-group {
+			& .outline-group {
+				transition: max-height 0.15s ease-out;
+				max-height: 76px;
+
+				&.dragging{
+					overflow: hidden;
+					max-height: 0;
+				}
+			}
+		}
+
 		.outline-header {
 			background: #ffffff;
 			box-shadow: none;
