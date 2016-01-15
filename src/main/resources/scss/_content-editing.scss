@@ -201,6 +201,20 @@ input[type=number]{
 		right: 5px;
 		z-index: 1;
 	}
+
+	.outline-overview-footer {
+	    text-align: center;
+	    height: 55px;
+	    padding: 15px;
+
+		.add.nt-button {
+		    display: inline-block;
+		    line-height: 30px;
+		    font-size: 0.875em;
+		    font-weight: 600;
+		    color: #3fb3f6;
+		}	
+	}
 }
 
 .outline-node-preview {

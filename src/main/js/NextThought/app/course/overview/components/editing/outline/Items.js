@@ -103,6 +103,23 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 	},
 
 
+	buildFooter: function() {
+		return {
+			xtype: 'container',
+			cls: 'outline-overview-footer',
+			layout: 'none',
+			items: [
+				{
+					xtype: 'overview-editing-controls-add',
+					name: 'Add Lesson',
+					parentRecord: this.record,
+					root: this.outline
+				}
+			]
+		};
+	},
+
+
 	beforeShowMenuControl: function(control, menu, type) {
 		var prevControl = this.activeControls[type];
 		if (prevControl !== control) {
