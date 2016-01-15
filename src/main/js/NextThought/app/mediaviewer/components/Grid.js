@@ -175,32 +175,6 @@ Ext.define('NextThought.app.mediaviewer.components.Grid', {
 	},
 
 
-	getBundleOutline: function() {
-		var catalog, load;
-
-		//if we were passed a bundle to use
-		if (this.currentBundle) {
-			load = this.currentBundle.getNavigationStore().building;
-		//else if we can find a course for the source
-		} else {
-			catalog = CourseWareUtils.courseForNtiid(this.source.getId());
-
-			if (!catalog) {
-				load = Promise.reject();
-			} else {
-				load = CourseWareUtils.findCourseBy(catalog.findByMyCourseInstance())
-						.then(function(course) {
-							course = course.get('CourseInstance') || course;
-
-							return course.getNavigationStore().building;
-						});
-			}
-		}
-
-		return load;
-	},
-
-
 	__getCurrentProgress: function() {
 		return this._currentProgress || Promise.reject();
 	},
