@@ -721,6 +721,9 @@
 			border: 0;
 			margin: 0;
 			padding: 0;
+
+			//iOS sucks... these two rules are needed for the iframe to be responsive.
+			width: 1px; min-width: 100%;
 		}
 
 		.splash {
