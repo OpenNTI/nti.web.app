@@ -143,14 +143,42 @@
 		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 		position: relative;
 		overflow: hidden;
+		padding-bottom: 75px;
 	}
 
 	.selection-children {
-		padding-left: 2rem;
+		.reading-item {
+			padding-left: 1rem;
+		}
 
-		.selection-item {
-			margin-left: -12rem;
-			padding-left: 12rem;
+		.selection-children {
+			.reading-item {
+				padding-left: 2rem;
+			}
+
+			.selection-children {
+				.reading-item {
+					padding-left: 3rem;
+				}
+
+				.selection-children {
+					.reading-item {
+						padding-left: 4rem;
+					}
+
+					.selection-children {
+						.reading-item {
+							padding-left: 5rem;
+						}
+
+						.selection-children {
+							.reading-item {
+								padding-left: 6rem;
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -171,11 +199,12 @@
 	}
 
 	.selection-item {
-		box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
+		padding: 0 10px;
 	}
 
 	.reading-item {
-		line-height: 50px;
+		box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.15);
+		line-height: 40px;
 		font-size: 0.875rem;
 		color: $primary-grey;
 		padding: 0 1em;
@@ -186,7 +215,7 @@
 		}
 
 		.expand {
-			height: 50px;
+			height: 40px;
 			width: 20px;
 			position: relative;
 
@@ -197,7 +226,7 @@
 			&::before {
 				content: '';
 				position: absolute;
-				top: 22px;//50/2 - 9/2
+				top: 17px;//40/2 - 9/2
 				left: 5px;//15/2 - 9/2
 				width: 0;
 				height: 0;
@@ -209,15 +238,15 @@
 
 		.icon {
 			width: 20px;
-			height: 50px;
+			height: 40px;
 			margin-right: 5px;
 
 			&.folder {
-				@include icon('library-folder', $top: 18px, $left: 2px);
+				@include icon('library-folder', $top: 13px, $left: 2px);
 			}
 
 			&.file {
-				@include icon('file-icon', $top: 16px, $left: 4px);
+				@include icon('file-icon', $top: 11px, $left: 4px);
 			}
 		}
 	}
@@ -227,6 +256,7 @@
 
 		.reading-item {
 			color: white;
+			box-shadow: none;
 
 			.expand::before {
 				border-color: transparent transparent transparent white;
@@ -234,11 +264,11 @@
 
 			.icon {
 				&.folder {
-					@include icon('library-folder-white', $top: 18px, $left: 2px);
+					@include icon('library-folder-white', $top: 13px, $left: 2px);
 				}
 
 				&.file {
-					@include icon('file-icon-white', $top: 16px, $left: 4px);
+					@include icon('file-icon-white', $top: 11px, $left: 4px);
 				}
 			}
 		}

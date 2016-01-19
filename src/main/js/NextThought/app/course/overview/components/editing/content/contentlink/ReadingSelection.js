@@ -61,5 +61,24 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 	getSelectionItemId: function(item) {
 		return item.getAttribute('ntiid');
+	},
+
+
+	onItemCollapse: function(item) {
+		this.unselectChildren(item);
+	},
+
+
+	unselectChildren: function(item) {
+		var me = this,
+			children = me.getItemChildren(item);
+
+		children.forEach(function(child) {
+			if (me.isSelected(child)) {
+				me.unselectItem(child);
+			}
+
+			me.unselectChildren(child);
+		});
 	}
 });

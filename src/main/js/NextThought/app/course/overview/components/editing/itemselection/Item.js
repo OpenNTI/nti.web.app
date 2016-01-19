@@ -65,7 +65,9 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ite
 						selectItem: me.selectItem.bind(me),
 						unselectItem: me.unselectItem.bind(me),
 						onSelectItem: me.onSelectItem.bind(me),
-						onUnselectItem: me.onUnselectItem.bind(me)
+						onUnselectItem: me.onUnselectItem.bind(me),
+						onItemCollapse: me.onItemCollapse,
+						onItemExpand: me.onItemExpand
 					};
 				})
 			});
@@ -78,12 +80,30 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ite
 	},
 
 
+	doExpand: function() {
+		this.addCls('expanded');
+
+		if (this.onItemExpand) {
+			this.onItemExpand(this.selectionItem);
+		}
+	},
+
+
+	doCollapse: function() {
+		this.removeCls('expanded');
+
+		if (this.onItemCollapse) {
+			this.onItemCollapse(this.selectionItem);
+		}
+	},
+
+
 	onItemClick: function(e) {
 		if (e.getTarget('.expand')) {
 			if (this.hasCls('expanded')) {
-				this.removeCls('expanded');
+				this.doCollapse();
 			} else {
-				this.addCls('expanded');
+				this.doExpand();
 			}
 
 			return;

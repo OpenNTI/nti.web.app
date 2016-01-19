@@ -118,7 +118,9 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 				selectItem: me.selectItem.bind(me),
 				unselectItem: me.unselectItem.bind(me),
 				onSelectItem: me.onSelectItem.bind(me),
-				onUnselectItem: me.onUnselectItem.bind(me)
+				onUnselectItem: me.onUnselectItem.bind(me),
+				onItemExpand: me.onItemExpand.bind(me),
+				onItemCollapse: me.onItemCollapse.bind(me)
 			};
 		}));
 
@@ -145,6 +147,21 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 
 	getSelection: function() {
 		return this.selection;
+	},
+
+
+	isSelected: function(item) {
+		var me = this,
+			itemId = me.getSelectionItemId(item),
+			selection = me.getSelection();
+
+		return selection.reduce(function(acc, item) {
+			if (me.getSelectionItemId(item) === itemId) {
+				acc = true;
+			}
+
+			return acc;
+		}, false);
 	},
 
 
@@ -209,5 +226,8 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 
 
 	onSelectItem: function(el) {},
-	onUnselectItem: function(el) {}
+	onUnselectItem: function(el) {},
+
+	onItemExpand: function(item) {},
+	onItemCollapse: function(item) {}
 });
