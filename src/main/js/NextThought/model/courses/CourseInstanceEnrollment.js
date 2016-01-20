@@ -10,8 +10,10 @@ Ext.define('NextThought.model.courses.CourseInstanceEnrollment', {
 	fields: [
 		{name: 'id', type: 'string', mapping: 'Username'},
 		{name: 'username', type: 'string', mapping: 'Username', convert: function(v, r) {
-			return (r.raw.LegacyEnrollmentStatus === 'ForCredit' && v) || ''; }},
+			return (r.raw.LegacyEnrollmentStatus === 'ForCredit' && v) || '';
+		}},
 		{name: 'Creator', type: 'singleItem', mapping: 'UserProfile' },
-		{name: 'LegacyEnrollmentStatus', type: 'string'}
+		{name: 'LegacyEnrollmentStatus', type: 'string'},
+		{name: 'Links', type: 'auto'}
 	]
-})
+});
