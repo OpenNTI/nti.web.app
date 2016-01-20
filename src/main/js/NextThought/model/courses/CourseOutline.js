@@ -22,6 +22,11 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 	],
 
 
+	hasContentsLink: function() {
+		return !!this.getLink('contents');
+	},
+
+
 	setBundle: function(bundle) {
 		this.bundle = bundle;
 	},
