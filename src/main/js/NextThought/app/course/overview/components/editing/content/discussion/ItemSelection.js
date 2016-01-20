@@ -53,5 +53,21 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 		if (el) {
 			el.classList.remove('selected');
 		}
-	}
+	},
+
+	itemMatchesSearch: function(item, searchTerm) {
+		var title = item.get('title'),
+			ntiid = item.getId(),
+			matches = false;
+
+		searchTerm = searchTerm.toLowerCase();
+
+		if (title && title.toLowerCase().indexOf(searchTerm) >= 0) {
+			matches = true;
+		} else if (ntiid && ntiid.toLowerCase() === searchTerm) {
+			matches = true;
+		}
+
+		return matches;
+	},
 });
