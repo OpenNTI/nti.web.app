@@ -69,5 +69,5 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 		}
 
 		return matches;
-	},
+	}
 });
