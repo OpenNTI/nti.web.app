@@ -48,7 +48,8 @@ Ext.define('NextThought.app.course.info.components.Reports', {
 
 		var me = this;
 
-		me.fillScreen(me.el.dom);
+		wait()
+			.then(me.fillScreen.bind(me, me.el.dom));
 
 		me.mon(me.el, 'click', function(e) {
 			var win;
