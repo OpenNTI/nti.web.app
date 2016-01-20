@@ -17,8 +17,8 @@ Ext.define('NextThought.app.course.overview.Index', {
 	],
 
 	statics: {
-	    showTab: function(bundle) {
-			return bundle && !bundle.get('Preview');
+		showTab: function(bundle) {
+			return bundle && bundle.hasOutline();
 		}
 	},
 
@@ -248,7 +248,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 				});
 
 				 if (me.activeMediaWindow) {
-				 	me.activeMediaWindow.destroy();
+					me.activeMediaWindow.destroy();
 				}
 
 				me.getLayout().setActiveItem(me.reader);

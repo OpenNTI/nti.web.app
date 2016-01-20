@@ -251,12 +251,37 @@ Ext.define('NextThought.app.course.Index', {
 	},
 
 
-	setActiveView: function() {
-		if (this.activeBundle.get('Preview')) {
-			return this.callParent(['course-info', []]);
+	setActiveView: function(active, inactive, tab) {
+		var bundle = this.activeBundle,
+			base = NextThought.app.course,
+			tabs = [
+				base.dashboard.Index,
+				base.overview.Index,
+				base.assessment.Index,
+				NextThought.app.content.forum.Index,
+				base.reports.Index,
+				base.info.Index
+			], activeCmp;
+
+		tabs = tabs.reduce(function(acc, cmp) {
+			acc[cmp.xtype] = cmp;
+
+			return acc;
+		}, {});
+
+		inactive = inactive.filter(function(xtype) {
+			var cmp = tabs[xtype];
+
+			return cmp && (!cmp.showTab || cmp.showTab(bundle));
+		});
+
+		activeCmp = tabs[tab || active];
+
+		if (!activeCmp || (activeCmp.showTab && !activeCmp.showTab(bundle))) {
+			active = inactive.shift();
 		}
 
-		return this.callParent(arguments);
+		return this.callParent([active, inactive, tab]);
 	},
 
 
@@ -270,7 +295,7 @@ Ext.define('NextThought.app.course.Index', {
 				'course-reports',
 				'course-info'
 			]).then(function(item) {
-				if (item.handleRoute) {
+				if (item && item.handleRoute) {
 					return item.handleRoute(subRoute, route.precache);
 				}
 			});
@@ -287,7 +312,7 @@ Ext.define('NextThought.app.course.Index', {
 				'course-reports',
 				'course-info'
 			]).then(function(item) {
-				if (item.handleRoute) {
+				if (item && item.handleRoute) {
 					return item.handleRoute(subRoute, route.precache)
 						.then();
 				}
@@ -309,7 +334,7 @@ Ext.define('NextThought.app.course.Index', {
 				'course-reports',
 				'course-info'
 			]).then(function(item) {
-				if (item.handleRoute) {
+				if (item && item.handleRoute) {
 					return item.handleRoute(subRoute, route.precache);
 				}
 			});
@@ -326,7 +351,7 @@ Ext.define('NextThought.app.course.Index', {
 				'course-reports',
 				'course-info'
 			]).then(function(item) {
-				if (item.handleRoute) {
+				if (item && item.handleRoute) {
 					return item.handleRoute(subRoute, route.precache);
 				}
 			});

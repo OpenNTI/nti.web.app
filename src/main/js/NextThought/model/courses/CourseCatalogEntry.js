@@ -203,7 +203,10 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 			isOpen = open;
 
 		//assume the option option isn't enrolled in
-		openOption.IsEnrolled = false;
+		if (openOption) {
+			openOption.IsEnrolled = false;
+		}
+
 		if ((status === 'Open' || status === 'Public') && open && openOption) {
 			openOption.IsEnrolled = true;
 		//stripe and fmaep enrollment will both be in the forcreditnondegree scope
@@ -224,9 +227,11 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 			}
 		}
 
-		options.setType('OpenEnrollment', openOption);
-		options.setType('FiveminuteEnrollment', fmaepOption);
-		options.setType('StoreEnrollment', storeOption);
+		if (options) {
+			options.setType('OpenEnrollment', openOption);
+			options.setType('FiveminuteEnrollment', fmaepOption);
+			options.setType('StoreEnrollment', storeOption);
+		}
 
 		this.set({
 			'isOpen': isOpen,
