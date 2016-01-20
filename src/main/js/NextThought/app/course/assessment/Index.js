@@ -19,11 +19,7 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 	statics: {
 		showTab: function(bundle) {
-			if (!bundle || !bundle.getWrapper || !bundle.shouldShowAssignments()) {
-				return false;
-			}
-
-			return !bundle.get('Preview');
+			return bundle && bundle.getWrapper && bundle.shouldShowAssignments();
 		}
 	},
 
@@ -60,8 +56,8 @@ Ext.define('NextThought.app.course.assessment.Index', {
 		this.on('deactivate', this.closeAssignment.bind(this));
 	},
 
-	getRouteStateKey: function(){
-		if(this.currentBundle){
+	getRouteStateKey: function() {
+		if (this.currentBundle) {
 			return this.currentBundle.getId() + '-assessment';
 		}
 	},

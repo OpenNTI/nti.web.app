@@ -634,6 +634,13 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	hasOutline: function() {
+		var outline = this.get('Outline');
+
+		return outline && outline.hasContentsLink();
+	},
+
+
 	getOutline: function() {
 		//cache outline
 		if (!this._outlinePromise) {
