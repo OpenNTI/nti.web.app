@@ -581,7 +581,7 @@ Ext.define('NextThought.common.form.Form', {
 
 			if (part.type === 'group') {
 				part.inputs.reduce(reducer, acc);
-			} else if (oldValue !== newValue || part.type === 'hidden') {
+			} else if (oldValue !== newValue || part.type === 'hidden' || part.keep === true) {
 				//If the newValue is undefined assume that means null it out,
 				//so set it explicitly to null so the value makes it to the server
 				acc[part.name] = newValue === undefined ? null : newValue;

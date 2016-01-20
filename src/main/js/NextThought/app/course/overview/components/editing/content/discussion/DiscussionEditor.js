@@ -17,10 +17,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 							type: 'text',
 							placeholder: 'Title',
 							required: true,
+							keep: true,
 							maxlength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
-						},
-						{name: 'byline', type: 'text', placeholder: 'Author'},
-						{name: 'description', type: 'textarea', placeholder: 'Description'}
+						}
 					]},
 					{type: 'saveprogress'}
 				]}
