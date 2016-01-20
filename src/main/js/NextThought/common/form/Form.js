@@ -252,7 +252,7 @@ Ext.define('NextThought.common.form.Form', {
 		var field = name ? {name: name} : this.getFirstField(),
 			input = field && this.getInputForField(field.name);
 
-		if (input.focus) { input.focus(); }
+		if (input && input.focus) { input.focus(); }
 	},
 
 
@@ -353,14 +353,18 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
-	getFirstField: function() {
-		var first, field, i = 0, schema = this.schema;
+	getFirstField: function(schema) {
+		var first, field, i = 0;
+
+		schema = schema || this.schema;
 
 		while (schema[i] && !first) {
 			field = schema[i];
 
-			if (field.type !== 'hidden') {
+			if (field.type !== 'hidden' && field.type !== 'group') {
 				first = field;
+			} else if (field.inputs) {
+				first = this.getFirstField(field.inputs);
 			}
 
 			i += 1;

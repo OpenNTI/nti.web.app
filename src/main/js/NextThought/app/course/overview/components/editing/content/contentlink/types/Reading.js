@@ -124,6 +124,13 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	},
 
 
+	onSaveFailure: function(reason) {
+		if (reason === this.SWITCHED) { return; }
+
+		this.callParent(arguments);
+	},
+
+
 	doValidation: function() {
 		return Promise.resolve();
 	},
