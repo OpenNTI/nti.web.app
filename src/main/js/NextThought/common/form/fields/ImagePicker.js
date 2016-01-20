@@ -78,12 +78,22 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 	},
 
 
+	getValueName: function() {
+		if (this.croppedImage) {
+			return this.croppedImage.getName();
+		}
+
+		return this.callParent(arguments);
+	},
+
+
 	onFileChange: function(file) {
 		var me = this,
 			url = me.createObjectURL(file);
 
 		me.PromptActions.prompt('image-cropping', {
 			src: url,
+			name: file.name,
 			crop: {
 				minWidth: me.schema.width,
 				minHeight: me.schema.height,

@@ -53,6 +53,7 @@ Ext.define('NextThought.app.image.cropping.Canvas', {
 	getValue: function() {
 		var imageInfo = this.imageInfo,
 			selection = this.selection,
+			name = this.name,
 			c = document.createElement('canvas'),
 			ctx;
 
@@ -65,7 +66,8 @@ Ext.define('NextThought.app.image.cropping.Canvas', {
 			c.toBlob(fulfill, 'image/png');
 		}).then(function(blob) {
 			return new NextThought.app.image.cropping.CroppedImage({
-				blob: blob
+				blob: blob,
+				name: name
 			});
 		});
 	},
