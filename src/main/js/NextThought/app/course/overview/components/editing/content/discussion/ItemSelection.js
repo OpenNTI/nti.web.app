@@ -2,7 +2,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 	extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
 	alias: 'widget.overview-editing-discussion-item-selection',
 
-	multiSelect: true,
+	multiSelect: false,
 
 	cls: 'video-item-selection item-selection',
 

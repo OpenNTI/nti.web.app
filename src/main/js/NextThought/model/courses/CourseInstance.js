@@ -864,8 +864,9 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-	getDisucssionAssets: function() {
-		var link = this.getLink('assets');
+	getDiscussionAssets: function() {
+		var link = this.getLink('CourseDiscussions');
+		debugger;
 
 		if (!link) {
 			return Promise.reject('No assets link');
@@ -873,14 +874,18 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 		return Service.request({
 				url: link,
-				method: 'GET',
-				params: {
-					accept: NextThought.model.DiscussionRef.mimeType
-				}
+				method: 'GET'
 			}).then(function(resp) {
-				var json = JSON.parse(resp);
+				var json = JSON.parse(resp)
+					items = [];
 
-				return ParseUtils.parseItems(json.Items);
+				for (var k in json.Items) {
+					if (json.Items.hasOwnProperty(k)) {
+						items.push(json.Items[k]);
+					}
+				}
+
+				return ParseUtils.parseItems(items);
 			}).fail(function(reason) {
 				console.error('Failed to load Discussions: ', reason);
 
