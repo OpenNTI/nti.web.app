@@ -2,7 +2,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 	alias: 'widget.overview-editing-discussion-editor',
 
-	cls: 'content-editor content-link', 
+	cls: 'content-editor content-link',
 
 
 	getFormSchema: function() {
@@ -52,7 +52,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 		return 'POST';
 	},
 
-	getThumbnailURL: function(){
+	getThumbnailURL: function() {
 		var iconURL = this.record && this.record.get('icon');
 		if (iconURL) {
 			iconURL = (this.basePath || '') + iconURL;
@@ -74,7 +74,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 
 		return me.EditingActions.saveEditorForm(me.formCmp, null, originalPosition, currentPosition, me.rootRecord)
 			.then(function(rec) {
-				debugger;
+
 			})
 			.fail(function(reason) {
 				me.enableSubmission();

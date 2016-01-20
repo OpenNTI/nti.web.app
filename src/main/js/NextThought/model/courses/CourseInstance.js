@@ -866,7 +866,6 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 	getDiscussionAssets: function() {
 		var link = this.getLink('CourseDiscussions');
-		debugger;
 
 		if (!link) {
 			return Promise.reject('No assets link');
@@ -876,7 +875,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				url: link,
 				method: 'GET'
 			}).then(function(resp) {
-				var json = JSON.parse(resp)
+				var json = JSON.parse(resp),
 					items = [];
 
 				for (var k in json.Items) {
