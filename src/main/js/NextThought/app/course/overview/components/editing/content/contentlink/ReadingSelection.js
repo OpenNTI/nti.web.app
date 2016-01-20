@@ -45,7 +45,14 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 
 	itemMatchesSearch: function(item, searchTerm) {
-		//TODO fill this out
+		var label = item.getAttribute('label'),
+			ntiid = item.getAttribute('ntiid');
+
+		searchTerm = searchTerm.toLowerCase();
+		label = label.toLowerCase();
+		ntiid = ntiid.toLowerCase();
+
+		return label.indexOf(searchTerm) >= 0 || searchTerm === ntiid;
 	},
 
 
@@ -79,6 +86,100 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 			}
 
 			me.unselectChildren(child);
+		});
+	},
+
+
+	selectItem: function(item) {
+		this.callParent(arguments);
+
+		var path = [], node;
+
+		path.push(item);
+
+		node = item.parentNode;
+
+		while (node && (node.tagName === 'topic' || node.tagName === 'toc')) {
+			path.push(node);
+			node = node.parentNode;
+		}
+
+		this.showBreadCrumb(path.reverse());
+	},
+
+
+	showBreadCrumb: function(path) {
+		var me = this;
+
+		if (me.breadcrumbCmp) {
+			me.breadcrumbCmp.destroy();
+		}
+
+		me.breadcrumbCmp = me.add({
+			xtype: 'container',
+			layout: 'none',
+			cls: 'reading-selection-breadcrumb',
+			items: []
+		});
+
+		me.breadcrumbCmp.add(path.map(function(part) {
+			var hasChildren, label, cls = [];
+
+			label = part.getAttribute('label');
+
+			if (part.tagName === 'toc') {
+				hasChildren = true;
+				cls.push('root');
+			} else {
+				hasChildren = (me.getItemChildren(part) || []).length > 0;
+			}
+
+			cls.push(hasChildren ? 'folder' : 'file');
+
+			return {
+				xtype: 'box',
+				autoEl: {
+					cls: cls.join(' '),
+					html: label
+				},
+				listeners: {
+					click: {
+						element: 'el',
+						fn: function(e) {
+							if (part.tagName !== 'toc') {
+								me.clearSearch();
+								me.selectItem(part);
+							}
+						}
+					}
+				}
+			};
+		}));
+	},
+
+
+	onSearchCleared: function() {
+		var me = this,
+			selection = me.getSelection(),
+			selectedItem = selection && selection[0],
+			expand = {}, node;
+
+		node = selectedItem;
+
+		while (node && node.tagName === 'topic') {
+			expand[me.getSelectionItemId(node)] = true;
+			node = node.parentNode;
+		}
+
+		me.itemsContainer.items.each(function(item) {
+			var selectionItem = item.selectionItem,
+				selectionId = selectedItem && me.getSelectionItemId(selectionItem);
+
+			if (expand[selectionId]) {
+				item.doExpand();
+			} else {
+				item.doCollapse();
+			}
 		});
 	}
 });

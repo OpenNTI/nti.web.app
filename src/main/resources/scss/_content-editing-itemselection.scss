@@ -1,10 +1,7 @@
 .item-selection {
-	.search {
-		padding: 0 10px;
-		margin-bottom: 20px;
-		@include flexContainer();
 
-		&.has-search-term {
+	&.has-search-term {
+		.search {
 			.has-search {
 				visibility: visible;
 			}
@@ -15,6 +12,14 @@
 				}
 			}
 		}
+
+		
+	}
+
+	.search {
+		padding: 0 10px;
+		margin-bottom: 20px;
+		@include flexContainer();
 		
 		.has-search {
 			visibility: hidden;
@@ -137,7 +142,6 @@
 }
 
 .reading-item-selection {
-
 	.items {
 		background: white;
 		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
@@ -146,34 +150,54 @@
 		padding-bottom: 75px;
 	}
 
+	&.has-search-term {
+		.reading-item {
+			padding-left: 1.5rem !important;
+
+			.expand {
+				display: none;
+			}
+		}
+
+		.selection-item-container {
+			.selection-children {
+				display: block !important;
+			}
+		}
+
+		.reading-selection-breadcrumb {
+			@include flexContainer();
+		}
+	}
+
 	.selection-children {
 		.reading-item {
-			padding-left: 1rem;
+			padding-left: 1.5rem;
 		}
 
 		.selection-children {
 			.reading-item {
-				padding-left: 2rem;
+				padding-left: 3rem;
 			}
 
 			.selection-children {
 				.reading-item {
-					padding-left: 3rem;
+					padding-left: 4.5rem;
 				}
 
 				.selection-children {
 					.reading-item {
-						padding-left: 4rem;
+						padding-left: 6rem;
 					}
 
 					.selection-children {
 						.reading-item {
-							padding-left: 5rem;
+							padding-left: 7.5rem;
 						}
 
 						.selection-children {
 							.reading-item {
-								padding-left: 6rem;
+								padding-left: 9rem;
 							}
 						}
 					}
@@ -200,6 +224,10 @@
 
 	.selection-item {
 		padding: 0 10px;
+
+		&.filtered {
+			display: none;
+		}
 	}
 
 	.reading-item {
@@ -270,6 +298,48 @@
 				&.file {
 					@include icon('file-icon-white', $top: 11px, $left: 4px);
 				}
+			}
+		}
+	}
+
+
+	.reading-selection-breadcrumb {
+		display: none;
+		position: absolute;
+		line-height: 35px;
+		bottom: 46px;
+		left: 0; right: 0;
+		background-color: #f8f8f8;
+		border-top: 1px solid #d9d9d9;
+		padding: 0 10px;
+
+		div {
+			padding-right: 18px;
+			margin-right: 5px;
+			font-size: 0.875em;
+
+			@include flexItem(0 0 auto);
+
+			&:not(.root) {
+				cursor: pointer;
+			}
+
+			&:not(:last-of-type) {
+				@include icon('mv-dropdown-arrow_hover', $side: 'after', $top: 13px, $left: auto, $right: 0);
+
+				&::after {
+					@include experimental(transform, rotate(270deg));
+				}
+			}
+
+			&.file {
+				padding-left: 18px;
+				@include icon('file-icon', $side: before, $top: 9px, $left: 0);
+			}
+
+			&.folder {
+				padding-left: 22px;
+				@include icon('library-folder', $side: before, $top: 11px, $left: 0);
 			}
 		}
 	}

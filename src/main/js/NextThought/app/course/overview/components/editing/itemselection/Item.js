@@ -165,5 +165,13 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ite
 		} else {
 			this.itemCmp.addCls('filtered');
 		}
+
+		if (this.childContainer) {
+			this.childContainer.items.each(function(child) {
+				if (child && child.applySearchTerm) {
+					child.applySearchTerm(term);
+				}
+			});
+		}
 	}
 });

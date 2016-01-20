@@ -77,11 +77,18 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 
 	onSearchClicked: function(e) {
 		if (e.getTarget('.clear')) {
-			this.searchInput.value = '';
-			this.searchForTerm('');
+			this.clearSearch();
 		} else if (e.getTarget('.do-search')) {
 			this.onSearchKeyUp();
 		}
+	},
+
+
+	clearSearch: function() {
+		if (!this.rendered) { return; }
+
+		this.searchInput.value = '';
+		this.searchForTerm('');
 	},
 
 
@@ -95,7 +102,12 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 			item.applySearchTerm(term);
 		});
 
-		this.searchCmp[term ? 'addCls' : 'removeCls']('has-search-term');
+		if (this.onSearchCleared && !term && this.hasCls('has-search-term')) {
+			this.onSearchCleared();
+		}
+
+
+		this[term ? 'addCls' : 'removeCls']('has-search-term');
 	},
 
 
