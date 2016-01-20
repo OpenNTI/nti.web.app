@@ -56,6 +56,11 @@ Ext.define('NextThought.app.navigation.Actions', {
 						}
 						//the first item with a cmp that implements navigateToObject
 						//Ext.getBody().el.unmask()
+					})
+					.fail(function(reason) {
+						console.error('Failed to navigate to href: ', href, reason);
+						alert('Unable to navigate to link.');
+						Ext.getBody().el.unmask();
 					});
 			} else {
 				//if we aren't an ntiid, just open the href in a new tab.
