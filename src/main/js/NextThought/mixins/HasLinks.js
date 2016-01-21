@@ -35,7 +35,8 @@ Ext.define('NextThought.mixins.HasLinks', {
 
 
 	getReportLinks: function() {
-		var links = this.get('Links').links || (this.raw && this.raw.Links),
+		var linksObj = this.get('Links'),
+			links = (linksObj && linksObj.links) || (this.raw && this.raw.Links),
 			reports = [];
 
 		(links || []).forEach(function(link) {

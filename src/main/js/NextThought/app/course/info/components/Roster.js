@@ -382,7 +382,7 @@ Ext.define('NextThought.app.course.info.components.Roster', {
 
 		if (disclosure) {
 			menu = Ext.widget('report-menu', {
-				links: record.get('Links'),
+				links: record.getReportLinks(),
 				showByEl: disclosure
 			});
 
