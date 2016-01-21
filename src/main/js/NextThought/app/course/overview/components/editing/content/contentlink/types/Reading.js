@@ -42,9 +42,18 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	},
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+
+		if (this.loading) {
+			this.el.mask('Loading...');
+		}
+	},
+
+
 	showEditor: function() {
 		if (this.record) {
-			//TODO: fill this out
+			this.showReadingEditor();
 		} else {
 			this.showReadingList();
 		}
@@ -85,29 +94,63 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	},
 
 
+	getSelection: function() {
+		var getReading;
+
+		if (this.readingSelectionCmp) {
+			getReading = Promise.resolve(this.readingSelectionCmp.getSelection()[0]);
+		} else if (this.record) {
+			getReading = ContentUtils.getReading(this.record.get('href'), this.bundle);
+		} else {
+			getReading = Promise.resolve(null);
+		}
+
+		return getReading;
+	},
+
+
 	showReadingEditor: function() {
 		if (this.readingEditorCmp) {
 			this.viedoEditorCmp.destroy();
 			delete this.readingEditorCmp;
 		}
 
-		this.readingEditorCmp = this.add({
-			xtype: 'overview-editing-reading-editor',
-			record: this.record,
-			parentRecord: this.parentRecord,
-			rootRecord: this.rootRecord,
-			selectedItems: this.readingSelectionCmp && this.readingSelectionCmp.getSelection(),
-			doClose: this.doClose,
-			showError: this.showError,
-			enableSave: this.enableSave,
-			disableSave: this.disableSave,
-			setSaveText: this.setSaveText
-		});
+		var me = this;
 
-		if (this.readingSelectionCmp) {
-			this.readingSelectionCmp.destroy();
-			delete this.readingSelectionCmp;
+		me.loading = true;
+
+		if (me.rendered) {
+			me.el.mask('Loading...');
 		}
+
+		me.getSelection()
+			.then(function(selection) {
+				me.readingEditorCmp = me.add({
+					xtype: 'overview-editing-reading-editor',
+					record: me.record,
+					parentRecord: me.parentRecord,
+					rootRecord: me.rootRecord,
+					selectedItem: selection,
+					doClose: me.doClose,
+					onChangeReading: me.showReadingList.bind(me, [selection]),
+					showError: me.showError,
+					enableSave: me.enableSave,
+					disableSave: me.disableSave,
+					setSaveText: me.setSaveText
+				});
+
+				me.setSaveText(me.record ? 'Save' : 'Add to Lesson');
+			})
+			.then(function() {
+				if (me.readingSelectionCmp) {
+					me.readingSelectionCmp.destroy();
+					delete me.readingSelectionCmp;
+				}
+			})
+			.then(function() {
+				delete me.loading;
+				me.el.unmask();
+			});
 	},
 
 

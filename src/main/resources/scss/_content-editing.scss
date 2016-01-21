@@ -31,6 +31,60 @@
 	}
 }
 
+.reading-editor .content-editor.content-link {
+	.reading-preview {
+		background: white;
+		padding: 10px 15px;
+		box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3);
+
+		.path {
+			font-size: 0.625rem;
+			font-weight: 600;
+			text-transform: uppercase;
+			color: $tertiary-grey;
+
+			span::after {
+				content: '/';
+				margin: 0 0.5em;
+			}
+
+			span:last-of-type::after {
+				display: none;
+			}
+		}
+
+		.label, .page-count, .change {
+			font-size: 0.875rem;
+			font-weight: 600;
+			margin-right: 0.5rem;
+		}
+
+		.label {
+			color: $primary-grey;
+		}
+
+		.page-count {
+			color: $secondary-grey;
+		}
+
+		.change {
+			border-left: 1px solid $tertiary-grey;
+			color: $primary-blue;
+			text-decoration: underline;
+			padding-left: 0.5rem;
+			cursor: pointer;
+		}
+	}
+
+	form {
+		
+
+		.group.card {
+			border-top: none;
+		}
+	}
+}
+
 .content-editor {
 	.nt-button.delete {
 		margin-top: 10px;
@@ -96,7 +150,7 @@ input[type=number]{
 
 
 	form {
-		box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
+		box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3);
 
 		// Style the place holder
 		textarea {

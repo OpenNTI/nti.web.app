@@ -156,6 +156,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		return this.add({
 			xtype: 'common-form',
 			schema: this.getFormSchema(),
+			sendAllValues: !this.record,//if we dont' have a record don't exclude any values
 			defaultValues: values,
 			action: this.getFormAction(),
 			method: this.getFormMethod(),

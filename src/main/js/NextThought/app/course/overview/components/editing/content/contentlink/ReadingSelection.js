@@ -30,17 +30,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 
 	getItemChildren: function(item) {
-		var children = item.children;
-
-		children = Array.prototype.slice.call(children);
-
-		return children.filter(function(node) {
-			var tagName = node.tagName,
-				href = node.getAttribute('href'),
-				parts = Globals.getURLParts(href);
-
-			return tagName === 'topic' && !parts.hash;
-		});
+		return ContentUtils.getReadingPages(item);
 	},
 
 
@@ -93,18 +83,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	selectItem: function(item) {
 		this.callParent(arguments);
 
-		var path = [], node;
+		var path = ContentUtils.getReadingPath(item);
 
-		path.push(item);
-
-		node = item.parentNode;
-
-		while (node && (node.tagName === 'topic' || node.tagName === 'toc')) {
-			path.push(node);
-			node = node.parentNode;
-		}
-
-		this.showBreadCrumb(path.reverse());
+		this.showBreadCrumb(path);
 	},
 
 
