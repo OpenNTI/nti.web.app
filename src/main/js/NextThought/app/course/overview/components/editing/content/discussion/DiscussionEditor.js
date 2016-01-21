@@ -54,6 +54,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 	getThumbnailURL: function() {
 		var iconURL = this.record && this.record.get('icon');
 		if (iconURL) {
+			if (Globals.ROOT_URL_PATTERN.test(iconURL)) {
+				return getURL(iconURL);
+			}
+
 			iconURL = (this.basePath || '') + iconURL;
 			return getURL(iconURL);
 		}
