@@ -58,7 +58,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 			rootRecord: this.rootRecord,
 			doClose: this.doClose,
 			showError: this.showError,
-			basePath: this.bundle && this.bundle.getContentRoots()[0] 
+			basePath: this.bundle && this.bundle.getContentRoots()[0],
+			enableSave: this.enableSave,
+			disableSave: this.disableSave 
 		});
 	},
 

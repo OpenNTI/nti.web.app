@@ -47,7 +47,22 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 		};
 	},
 
+
+	isDiscussionRef: function(record) {
+		if (record && record.get('MimeType') === NextThought.model.DiscussionRef.mimeType) {
+			return true;
+		}
+
+		return false;		
+	},
+
+
 	getFormMethod: function() {
+		var isDiscussionRef = this.isDiscussionRef(this.record);
+		if (isDiscussionRef) {
+			return 'PUT';
+		}
+
 		return 'POST';
 	},
 
@@ -70,12 +85,14 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 		var me = this,
 			parentSelection = me.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
-			currentPosition = parentSelection && parentSelection.getCurrentPosition();
+			currentPosition = parentSelection && parentSelection.getCurrentPosition(),
+			isDiscussionRef = this.isDiscussionRef(this.record),
+			rec = isDiscussionRef ? this.record : null;
 
 		me.clearErrors();
 		me.disableSubmission();
 
-		return me.EditingActions.saveEditorForm(me.formCmp, null, originalPosition, currentPosition, me.rootRecord)
+		return me.EditingActions.saveEditorForm(me.formCmp, rec, originalPosition, currentPosition, me.rootRecord)
 			.then(function(rec) {
 
 			})
