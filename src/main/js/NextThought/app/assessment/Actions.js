@@ -162,7 +162,7 @@ Ext.define('NextThought.app.assessment.Actions', {
 						assignmentId: assignmentId
 					});
 				},
-				fail: function() {
+				failure: function() {
 					console.error('FAIL', arguments);
 					alert('There was a problem submitting your assignment.');
 					reject();
