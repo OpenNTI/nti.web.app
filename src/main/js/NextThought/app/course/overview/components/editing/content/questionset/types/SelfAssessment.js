@@ -27,7 +27,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 		},
 
 		getEditorForRecord: function(record) {
-			return this;
+			if (record instanceof NextThought.model.QuestionSetRef) {
+				return this;
+			}
 		}
 	},
 

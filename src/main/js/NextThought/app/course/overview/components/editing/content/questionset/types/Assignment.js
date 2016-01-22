@@ -28,7 +28,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 		},
 
 		getEditorForRecord: function(record) {
-			return this;
+			if (record instanceof NextThought.model.AssignmentRef) {
+				return this;
+			}
 		}
 	},
 
@@ -48,7 +50,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 
 	showEditor: function() {
 		if (this.record) {
-			//TODO fill this out
+			this.showAssignmentEditor();
 		} else {
 			this.showAssignmentList();
 		}
@@ -94,7 +96,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 		} else if (record) {
 			getAssignment = this.bundle.getAssignments()
 				.then(function(assignments) {
-					//TODO find the assignment
+					return assignments.getItem(record.get('Target-NTIID'));
 				});
 		} else {
 			getAssignment = Promise.resolve(null);
