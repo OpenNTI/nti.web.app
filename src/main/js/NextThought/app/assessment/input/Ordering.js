@@ -142,7 +142,12 @@ Ext.define('NextThought.app.assessment.input.Ordering', {
 
 	editAnswer: function() {
 		if (this.submitted && !this.isAssignment) {
-			this.up('assessment-question').reset();
+			if (this.questionSet) {
+				this.questionSet.fireEvent('reset');
+			} else {
+				this.up('assessment-question').reset();
+			}
+
 			this.disableSubmission();
 		}
 	},
@@ -198,25 +203,43 @@ Ext.define('NextThought.app.assessment.input.Ordering', {
 	},
 
 
+	lockDnD: function() {
+		if (this.dropZone && this.dropZone.lock) {
+			this.dropZone.lock();
+		}
+
+		if (this.dragZone && this.dragZone.lock) {
+			this.dragZone.lock();
+		}
+	},
+
+
+	unlockDnD: function() {
+		if (this.dropZone && this.dropZone.unlock) {
+			this.dropZone.unlock();
+		}
+
+		if (this.dragZone && this.dragZone.unlock) {
+			this.dragZone.unlock();
+		}
+	},
+
+
 	reset: function() {
 		this.el.select('.ordinal .draggable-area').removeCls(['correct', 'incorrect']);
 	//		this.resetOrder();
+		this.unlockDnD();
 		this.callParent();
 	},
 
 	/**
-	 * Set the ordering question to submitted state. 
+	 * Set the ordering question to submitted state.
 	 * Once an ordering question has been submitted, we disable drag and drop.
 	 */
-	setSubmitted: function(){
+	setSubmitted: function() {
 		this.callParent(arguments);
 
-		if(this.dropZone && this.dropZone.lock) {
-			this.dropZone.lock();
-		}
-		if(this.dragZone && this.dragZone.lock) {
-			this.dragZone.lock();
-		}
+		this.lockDnD();
 	},
 
 
@@ -306,14 +329,14 @@ Ext.define('NextThought.app.assessment.input.Ordering', {
 	},
 
 
-    onNodeDropEnd: function(target, dd){
-        if (this.submissionDisabled) {
-            this.enableSubmission();
-            return;
-        }
+	onNodeDropEnd: function(target, dd) {
+		if (this.submissionDisabled) {
+			this.enableSubmission();
+			return;
+		}
 
-        this.saveProgress();
-    },
+		this.saveProgress();
+	},
 
 
 	initializeDragZone: function() {
@@ -412,7 +435,7 @@ Ext.define('NextThought.app.assessment.input.Ordering', {
 				if (p) { Ext.fly(p).removeCls('target-hover'); }
 			},
 
-            onNodeOver: function(target, dd, e, data) { me.swapNodes(target, dd); },
+			onNodeOver: function(target, dd, e, data) { me.swapNodes(target, dd); },
 
 			onNodeDrop: me.onNodeDropEnd.bind(me)
 		});
