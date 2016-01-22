@@ -20,18 +20,10 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 
 
 		canEdit: function(record) {
-			//TODO: check if all of the options are advanced only...
 			var editor = this.EDITORS[record.mimeType],
-				types = editor && editor.getTypes(),
 				typeEditor = editor && editor.getEditorForRecord(record);
 
-			return (types || []).reduce(function(acc, type) {
-				if (type.editor === typeEditor) {
-					acc = !type.advanced || Service.canDoAdvancedEditing();
-				}
-
-				return acc;
-			}, false);
+			return !!typeEditor;
 		},
 
 
