@@ -175,7 +175,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Act
 	__updateVideos: function(videos, record, originalPosition, newPosition, root) {
 		var save;
 
-		if (record instanceof NextThought.model.VideoRoll) {
+		if (!videos) {
+			save = this.__moveRecord(record, originalPosition, newPosition, root);
+		} else if (record instanceof NextThought.model.VideoRoll) {
 			save = this.__updateVideoRoll(videos, record, originalPosition, newPosition, root);
 		} else if (record instanceof NextThought.model.Video) {
 			save = this.__updateSingleVideo(videos, record, originalPosition, newPosition, root);
