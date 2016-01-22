@@ -84,7 +84,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 	},
 
 
-	renderLesson: function(record) {
+	renderLesson: function(record, doNotCache) {
 		var me = this,
 			course = me.bundle,
 			overviewsrc = (record && record.getLink('overview-content')) || null;
@@ -102,7 +102,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 		me.__getCurrentProgress = record.getProgress ? record.getProgress.bind(record) : null;
 
-		if (me.currentOverview && me.currentOverview.record.getId() === record.getId()) {
+		if (me.currentOverview && me.currentOverview.record.getId() === record.getId() && !doNotCache) {
 			if (me.currentOverview.refresh) {
 				 return me.currentOverview.refresh()
 				 			.then(me.__updateProgress.bind(me))
