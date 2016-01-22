@@ -48,9 +48,9 @@ Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
 
 		if (!record) {
 			this.showUnkownTypeError();
-		} else if (Contents.canEdit(record.mimeType)) {
+		} else if (Contents.canEdit(record)) {
 			this.editor = this.add(Contents.create(config));
-		} else if (Outline.canEdit(record.mimeType)) {
+		} else if (Outline.canEdit(record)) {
 			this.editor = this.add(Outline.create(config));
 		} else {
 			this.showUnkownTypeError();

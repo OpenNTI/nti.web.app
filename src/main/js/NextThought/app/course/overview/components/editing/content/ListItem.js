@@ -4,7 +4,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 
 	requires: [
 		'NextThought.app.course.overview.components.editing.controls.Edit',
-		'NextThought.app.course.overview.components.editing.Controls'
+		'NextThought.app.course.overview.components.editing.Controls',
+		'NextThought.app.course.overview.components.editing.content.Prompt'
 	],
 
 	mixins: {
@@ -102,21 +103,25 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 
 
 	getControls: function(record, bundle) {
+		var controls = [];
+
+		if (NextThought.app.course.overview.components.editing.content.Prompt.canEdit(record)) {
+			controls.push({
+				xtype: 'overview-editing-controls-edit',
+				record: record,
+				parentRecord: this.parentRecord,
+				root: this.lessonOverview,
+				bundle: bundle,
+				onPromptOpen: function() {},
+				onPromptClose: function() {}
+			});
+		}
+
 		return {
 			xtype: 'container',
 			cls: 'controls',
 			layout: 'none',
-			items: [
-				{
-					xtype: 'overview-editing-controls-edit',
-					record: record,
-					parentRecord: this.parentRecord,
-					root: this.lessonOverview,
-					bundle: bundle,
-					onPromptOpen: function() {},
-					onPromptClose: function() {}
-				}
-			]
+			items: controls
 		};
 	}
 });
