@@ -19,8 +19,11 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Prompt', 
 		},
 
 
-		canEdit: function(mimeType) {
-			return !!this.EDITORS[mimeType];
+		canEdit: function(record) {
+			var editor = this.EDITORS[record.mimeType],
+				typeEditor = editor && editor.getEditorForRecord(record);
+
+			return !!typeEditor;
 		},
 
 
