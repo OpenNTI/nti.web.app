@@ -344,3 +344,46 @@
 		}
 	}
 }
+
+
+.assignment-item-selection {
+	.selected {
+		.reading-item {
+			background-color: $primary-blue;
+			color: white;
+
+			&.overdue .due-date {
+				color: white;
+			}
+		}
+	}
+
+	.filtered {
+		display: none;
+	}
+
+	.reading-item {
+		cursor: pointer;
+		background: white;
+		margin-bottom: 10px;
+		padding: 10px;
+		border-radius: 3px;
+		box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
+
+		&.overdue {
+			.due-date {
+				color: $primary-red;
+			}
+		}
+
+		.title {
+			font-size: 1.125rem;
+			font-style: italic;
+		}
+
+		.due-date {
+			font-size: 0.75rem;
+			font-style: italic;
+		}
+	}
+}

@@ -147,9 +147,11 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 					delete me.readingSelectionCmp;
 				}
 			})
-			.then(function() {
+			.always(function() {
 				delete me.loading;
-				me.el.unmask();
+				if (me.rendered) {
+					me.el.unmask();
+				}
 			});
 	},
 

@@ -21,7 +21,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		'NextThought.model.forums.CommunityBoard',
 		'NextThought.model.forums.CommunityForum',
 		'NextThought.model.UserSearch',
-		'NextThought.model.Video'
+		'NextThought.model.Video',
+		'NextThought.model.assessment.Assignment'
 	],
 
 	mixins: {
@@ -846,28 +847,41 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-	getVideoAssets: function() {
-		var link = this.getLink('assets');
+	__getAssets: function(type) {
+		var link = this.getLink('assets'),
+			config;
 
 		if (!link) {
-			return Promise.reject('No assets link');
+			return Promise.reject('No asseets link');
 		}
 
-		return Service.request({
-				url: link,
-				method: 'GET',
-				params: {
-					accept: NextThought.model.Video.mimeType
-				}
-			}).then(function(resp) {
+		config = {
+			url: link,
+			method: 'GET'
+		};
+
+		if (type) {
+			config.params = {
+				accept: type
+			};
+		}
+
+		return Service.request(config)
+			.then(function(resp) {
 				var json = JSON.parse(resp);
 
 				return ParseUtils.parseItems(json.Items);
-			}).fail(function(reason) {
-				console.error('Failed to load Videos: ', reason);
+			})
+			.fail(function(reason) {
+				console.error('Failed to load assets: ', reason, type);
 
 				return [];
 			});
+	},
+
+
+	getVideoAssets: function() {
+		return this.__getAssets(NextThought.model.Video.mimeType);
 	},
 
 
