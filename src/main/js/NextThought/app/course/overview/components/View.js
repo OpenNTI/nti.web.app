@@ -352,7 +352,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 				me.setTitle(record.get('label'));
 				me.activeNode = record;
 
-				return me.body.showOutlineNode(record)
+				return me.body.showOutlineNode(record, changedEditing)
 					.then(me.alignNavigation.bind(me))
 					.then(function() {
 						return record;
@@ -385,7 +385,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 				me.setTitle('Editing | ' + record.get('label'));
 				me.activeNode = record;
 
-				return me.body.editOutlineNode(record)
+				return me.body.editOutlineNode(record, changedEditing)
 					.then(me.alignNavigation.bind(me))
 					.then(function() {
 						return record;

@@ -157,7 +157,7 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 	},
 
 
-	showOutlineNode: function(record) {
+	showOutlineNode: function(record, doNotCache) {
 		var lesson = this.getLesson(true),
 			editor = this.getEditor();
 
@@ -167,7 +167,7 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 		lesson.show();
 
-		return lesson.renderLesson(record);
+		return lesson.renderLesson(record, doNotCache);
 	},
 
 
