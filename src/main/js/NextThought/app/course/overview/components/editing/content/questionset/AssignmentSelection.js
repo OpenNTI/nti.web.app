@@ -5,7 +5,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 	cls: 'assignment-item-selection item-selection',
 
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
-		{cls: 'reading-item {cls}', cn: [
+		{cls: 'assignment-item {cls}', cn: [
 			{cls: 'title', html: '{title}'},
 			{cls: 'due-date', html: 'Due {dueDate}'}
 		]}

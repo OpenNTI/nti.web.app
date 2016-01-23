@@ -11,7 +11,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord, this.onFormChange.bind(this));
 
 		if (this.selectedItem) {
-			this.addAssignmentPreview(this.selectedItem);
+			this.addPreview(this.selectedItem);
 		}
 
 		if (this.record) {
@@ -20,7 +20,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 	},
 
 
-	addAssignmentPreview: function(item) {
+	addPreview: function(item) {
 		var me = this,
 			now = new Date(),
 			dueDate = item.getDueDate();
@@ -40,7 +40,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 					element: 'el',
 					fn: function(e) {
 						if (e.getTarget('.remove')) {
-							me.onChangeAssignment();
+							me.onChangeItem();
 						}
 					}
 				}

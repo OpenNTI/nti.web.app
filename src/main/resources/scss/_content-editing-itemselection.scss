@@ -348,7 +348,7 @@
 
 .assignment-item-selection {
 	.selected {
-		.reading-item {
+		.assignment-item {
 			background-color: $primary-blue;
 			color: white;
 
@@ -362,7 +362,7 @@
 		display: none;
 	}
 
-	.reading-item {
+	.assignment-item {
 		cursor: pointer;
 		background: white;
 		margin-bottom: 10px;

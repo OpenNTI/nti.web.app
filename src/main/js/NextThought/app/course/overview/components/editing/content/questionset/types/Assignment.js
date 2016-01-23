@@ -34,6 +34,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 		}
 	},
 
+	LIST_XTYPE: 'overview-editing-assignment-selection',
+	EDITOR_XTYPE: 'overview-editing-assignment-editor',
+
 	SWITCHED: 'switched',
 
 	cls: 'content-editor questionset assignment',
@@ -50,39 +53,54 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 
 	showEditor: function() {
 		if (this.record) {
-			this.showAssignmentEditor();
+			this.showItemEditor();
 		} else {
-			this.showAssignmentList();
+			this.showItemList();
 		}
 	},
 
 
-	showAssignmentList: function(selectedItems) {
+	getItemList: function() {
+		return this.bundle.getAssignments()
+			.then(function(assignments) {
+				return assignments.get('Assignments');
+			});
+	},
+
+
+	showItemList: function(selectedItems) {
 		var me = this;
 
-		if (me.assignmentSelectionCmp) {
-			me.assignmentSelectionCmp.destroy();
-			delete me.assignmentSelectionCmp;
+		if (me.itemSelectionCmp) {
+			me.itemSelectionCmp.destroy();
+			delete me.itemSelectionCmp;
 		}
 
-		if (me.assignmentEditorCmp) {
-			me.assignmentEditorCmp.destroy();
-			delete me.assignmentEditorCmp;
+		if (me.itemEditorCmp) {
+			me.itemEditorCmp.destroy();
+			delete me.itemEditorCmp;
 		}
 
 		me.removeAll(true);
 
-		me.assignmentSelectionCmp = me.add({
-			xtype: 'overview-editing-assignment-selection',
-			onSelectionChanged: this.onAssignmentListSelectionChange.bind(this),
+		me.itemSelectionCmp = me.add({
+			xtype: this.LIST_XTYPE,
+			onSelectionChanged: this.onItemListSelectionChange.bind(this),
 			selectedItems: selectedItems
 		});
 
-		me.bundle.getAssignments()
-			.then(function(assignmentCollection) {
-				var assignments = assignmentCollection.get('Assignments');
 
-				me.assignmentSelectionCmp.setSelectionItems(assignments);
+		me.getItemList()
+			.then(function(items) {
+				me.itemSelectionCmp.setSelectionItems(items);
+			});
+	},
+
+
+	getSelectionFromRecord: function(record) {
+		return this.bundle.getAssignments()
+			.then(function(assignments) {
+				return assignments.getItem(record.get('Target-NTIID'));
 			});
 	},
 
@@ -91,13 +109,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 		var getAssignment,
 			record = this.record;
 
-		if (this.assignmentSelectionCmp) {
-			getAssignment = Promise.resolve(this.assignmentSelectionCmp.getSelection()[0]);
+		if (this.itemSelectionCmp) {
+			getAssignment = Promise.resolve(this.itemSelectionCmp.getSelection()[0]);
 		} else if (record) {
-			getAssignment = this.bundle.getAssignments()
-				.then(function(assignments) {
-					return assignments.getItem(record.get('Target-NTIID'));
-				});
+			getAssignment = this.getSelectionFromRecord(record);
 		} else {
 			getAssignment = Promise.resolve(null);
 		}
@@ -106,10 +121,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 	},
 
 
-	showAssignmentEditor: function() {
-		if (this.assignmentEditorCmp) {
-			this.assignmentEditorCmp.destroy();
-			delete this.assignmentEditorCmp;
+	showItemEditor: function() {
+		if (this.itemEditorCmp) {
+			this.itemEditorCmp.destroy();
+			delete this.itemEditorCmp;
 		}
 
 		var me = this;
@@ -122,14 +137,14 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 
 		me.getSelection()
 			.then(function(selection) {
-				me.assignmentEditorCmp = me.add({
-					xtype: 'overview-editing-assignment-editor',
+				me.itemEditorCmp = me.add({
+					xtype: me.EDITOR_XTYPE,
 					record: me.record,
 					parentRecord: me.parentRecord,
 					rootRecord: me.rootRecord,
 					selectedItem: selection,
 					doClose: me.doClose,
-					onChangeAssignment: me.showAssignmentList.bind(me, [selection]),
+					onChangeItem: me.showItemList.bind(me, [selection]),
 					showError: me.showError,
 					enableSave: me.enableSave,
 					disableSave: me.disableSave,
@@ -139,9 +154,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 				me.setSaveText(me.record ? 'Save' : 'Add to Lesson');
 			})
 			.then(function() {
-				if (me.assignmentSelectionCmp) {
-					me.assignmentSelectionCmp.destroy();
-					delete me.assignmentSelectionCmp;
+				if (me.itemSelectionCmp) {
+					me.itemSelectionCmp.destroy();
+					delete me.itemSelectionCmp;
 				}
 			})
 			.always(function() {
@@ -153,7 +168,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 	},
 
 
-	onAssignmentListSelectionChange: function(selection) {
+	onItemListSelectionChange: function(selection) {
 		var length = selection.length;
 
 		this.setSaveText('Select');
@@ -176,13 +191,13 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 	onSave: function() {
 		var me = this;
 
-		if (!me.assignmentEditorCmp) {
-			me.showAssignmentEditor();
+		if (!me.itemEditorCmp) {
+			me.showItemEditor();
 			return Promise.reject(me.SWITCHED);
 		}
 
 		me.disableSubmission();
-		return me.assignmentEditorCmp.onSave()
+		return me.itemEditorCmp.onSave()
 			.fail(function(reason) {
 				me.enableSubmission();
 				return Promise.reject(reason);

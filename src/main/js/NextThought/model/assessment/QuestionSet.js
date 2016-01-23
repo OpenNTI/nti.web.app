@@ -10,7 +10,8 @@ Ext.define('NextThought.model.assessment.QuestionSet', {
 
 	isSet: true,
 	fields: [
-		{ name: 'questions', type: 'arrayItem' }
+		{ name: 'questions', type: 'arrayItem' },
+		{name: 'title', type: 'String'}
 	],
 
 
