@@ -122,8 +122,46 @@
 }
 
 .content-editor {
-	.nt-button.delete {
-		margin-top: 10px;
+	.nt-button {
+		&.delete {
+			margin-top: 10px;	
+		}
+		
+		&.visibility {
+			width: 90px;
+		    height: 38px;
+		    background: white;
+		    box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
+		    margin-left: 10px;
+		    display: inline-block;
+		    margin-top: 10px;
+		    float: right;
+		    position: relative;
+
+		    .scope {
+		    	width: 100%;
+		    	height: 100%;
+		    }
+
+		    &::after {
+		    	content: '';
+			    position: absolute;
+			    pointer-events: none;
+			    top: 50%;
+			    right: 0.8em;
+			    width: 0;
+			    height: 0;
+			    margin-top: -2px;
+			    border-style: solid;
+			    border-width: 0 4px 5px 4px;
+			    border-color: transparent transparent #bfbfbf transparent;
+			    transform: rotate(180deg);
+		    }
+
+		    &:active, &.open {
+		    	transform: none;
+		    }
+		}
 	}
 }
 

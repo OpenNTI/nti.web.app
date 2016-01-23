@@ -4,7 +4,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	requires: [
 		'NextThought.model.RelatedWork',
 		'NextThought.app.course.overview.components.editing.Actions',
-		'NextThought.app.course.overview.components.editing.content.ParentSelection'
+		'NextThought.app.course.overview.components.editing.content.ParentSelection',
+		'NextThought.app.course.overview.components.editing.controls.Visibility'
 	],
 
 
@@ -50,5 +51,28 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		return {
 			MimeType: NextThought.model.RelatedWork.mimeType
 		};
+	},
+
+
+	showEditor: function(){
+		this.callParent(arguments);
+
+		if (this.record) {
+			this.addVisibilityButton();
+		}
+	},
+
+
+	addVisibilityButton: function(){
+		var visibility = this.record && this.record.get('visibility');
+
+		if (this.record.getLink('edit')) {
+			return this.add({
+				xtype: 'overview-editing-controls-visibility',
+				record: this.record,
+				parentRecord: this.parentRecord,
+				defaultValue: visibility
+			});
+		}
 	}
 });
