@@ -38,7 +38,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Vid
 		var parentSelection = this.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
 			currentPosition = parentSelection && parentSelection.getCurrentPosition(),
-			values = this.videoItems.getItems();
+			values = this.videoItems && this.videoItems.getItems();
 
 		return this.VideoEditingActions.saveVideo(values, this.record, originalPosition, currentPosition, this.rootRecord);
 	}
