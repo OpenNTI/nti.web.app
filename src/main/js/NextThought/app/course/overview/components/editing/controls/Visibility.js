@@ -5,26 +5,29 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Visibili
 	cls: 'nt-button visibility',
 
 	renderTpl: Ext.DomHelper.markup([
+		{cls: 'title', html: 'Visibility:'},
 		{cls: 'scope', cn: [
-			{cls: 'text'},
-			{cls: 'arrow'}
+			{cls: 'text'}
 		]}
 	]),
 
 
 	renderSelectors: {
-		scopeEl: '.scope'
+		scopeEl: '.scope',
+		textEl: '.scope .text'
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.scopeEl, 'click', this.showMenu.bind(this));
+		this.textEl.update(this.getDefaultValue());
+		this.selected = this.defaultValue;
 	},
 
 
 	createVisibilityMenu: function(){
-		var defaultValue = this.defaultValue || 'All',
+		var defaultValue = this.getDefaultValue(),
 			menu = 
 				Ext.widget('menu', {
 					defaults: {
@@ -34,21 +37,21 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Visibili
 						group: 'visibility',
 						handler: this.onVisibilityChange.bind(this)
 					},
-					width: 120,
+					width: 125,
 					items: [{
-							text: 'All',
-							scope: 'All',
-							checked: defaultValue === 'All',
+							text: 'Everyone',
+							scope: 'everyone',
+							checked: defaultValue === 'everyone',
 							NoReply: false
 						},
 						{
 							text: 'OU',
 							scope: 'OU',
-							checked: defaultValue === 'Open',
+							checked: defaultValue === 'OU',
 							NoReply: false
 						},
 						{
-							text: 'Enrolled',
+							text: 'ForCredit',
 							scope: 'ForCredit',
 							checked: defaultValue === 'ForCredit',
 							NoReply: false
@@ -61,19 +64,32 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Visibili
 	},
 
 
-	onVisibilityChange: function(){
-		
+	onVisibilityChange: function(item, e){
+		this.scopeEl.update(item.scope);
+		this.selected = item.scope;
+		if (this.onChange) {
+			this.onChange(this);
+		}
+	},
+
+
+	getDefaultValue: function() {
+		return this.defaultValue || 'everyone';
+	},
+
+
+	getValue: function(){
+		return {visibility: this.selected};
 	},
 
 
 	showMenu: function(e) {
-		var target = e.target || e.getTarget();
 		if (!this.menu) {
 			this.menu = this.createVisibilityMenu();
 		}
 
 		if (this.menu && !this.menu.isVisible()) {
-			this.menu.showBy(target, 'tr-br?', [0, 2]);	
+			this.menu.showBy(this.scopeEl, 'tr-br?', [0, 1]);	
 		}
 		else {
 			this.menu.hide();

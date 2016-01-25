@@ -539,6 +539,14 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
+	updateHiddenField: function(field, value){
+		var input = this.el.dom.querySelector('input[name='+ field +']');
+		if (input) {
+			input.value = value;
+		}
+	},
+
+
 	getValues: function(schema, values) {
 		var me = this;
 

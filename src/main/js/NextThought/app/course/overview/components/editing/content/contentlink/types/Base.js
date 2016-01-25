@@ -22,6 +22,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	getFormSchema: function() {
 		var schema = [
 				{name: 'MimeType', type: 'hidden'},
+				{name: 'visibility', type: 'hidden'},
 				{type: 'group', name: 'card', inputs: [
 					{name: 'icon', type: 'image', height: 125, width: 100},
 					{type: 'group', name: 'meta', inputs: [
@@ -71,8 +72,18 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 				xtype: 'overview-editing-controls-visibility',
 				record: this.record,
 				parentRecord: this.parentRecord,
-				defaultValue: visibility
+				defaultValue: visibility,
+				onChange: this.onVisibilityChange.bind(this)
 			});
+		}
+	},
+
+
+	onVisibilityChange: function(cmp){
+		var value = cmp && cmp.getValue();
+
+		if (this.formCmp && this.formCmp.updateHiddenField) {
+			this.formCmp.updateHiddenField('visibility', value.visibility);
 		}
 	}
 });
