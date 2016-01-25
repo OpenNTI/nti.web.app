@@ -50,7 +50,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		}
 
 		return {
-			MimeType: NextThought.model.RelatedWork.mimeType
+			MimeType: NextThought.model.RelatedWork.mimeType,
+			visibility: 'everyone'
 		};
 	},
 
@@ -59,23 +60,21 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		this.callParent(arguments);
 
 		if (this.record) {
-			this.addVisibilityButton();
-		}
+			this.visibilityBtn = this.addVisibilityButton();	
+		}	
 	},
 
 
 	addVisibilityButton: function(){
 		var visibility = this.record && this.record.get('visibility');
 
-		if (this.record.getLink('edit')) {
-			return this.add({
-				xtype: 'overview-editing-controls-visibility',
-				record: this.record,
-				parentRecord: this.parentRecord,
-				defaultValue: visibility,
-				onChange: this.onVisibilityChange.bind(this)
-			});
-		}
+		return this.add({
+			xtype: 'overview-editing-controls-visibility',
+			record: this.record,
+			parentRecord: this.parentRecord,
+			defaultValue: visibility,
+			onChange: this.onVisibilityChange.bind(this)
+		});
 	},
 
 

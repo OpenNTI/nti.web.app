@@ -18,12 +18,14 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 		if (this.selectedItem) {
 			this.addReadingPreview(this.selectedItem);
+			this.addVisibilityButton();
 		}
 
 		this.formCmp = this.addFormCmp();
 
 		if (this.record) {
 			this.deleteBtn = this.addDeleteButton();
+			this.addVisibilityButton();
 		}
 	},
 
