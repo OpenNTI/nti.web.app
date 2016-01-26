@@ -187,8 +187,9 @@ Ext.define('NextThought.util.Line', {
 	//webkit mostly
 	rangeForLineByPoint: function(y, doc) {
 		var n = doc.querySelector('#NTIContent .page-contents'),
-			xStart = 0,
-			xEnd = n && n.getBoundingClientRect().width,
+			rect = n && n.getBoundingClientRect(),
+			xStart = rect ? rect.left : 0,
+			xEnd = rect && (rect.left + rect.width),
 			range = doc.caretRangeFromPoint(xStart, y),
 			rangeEnd = doc.caretRangeFromPoint(xEnd, y);
 
