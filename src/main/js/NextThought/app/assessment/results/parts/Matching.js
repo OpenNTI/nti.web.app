@@ -166,7 +166,7 @@ Ext.define('NextThought.app.assessment.results.parts.Matching', {
 
 
 	getTable: function() {
-		var resultParts = this.resultPart.Results,
+		var resultParts = this.getResults(),
 			total = this.resultPart.Total,
 			rowLabels = this.getRowLabels(),
 			seriesLabels = this.getSeriesLabels(),
