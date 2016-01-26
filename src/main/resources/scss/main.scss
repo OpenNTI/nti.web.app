@@ -186,16 +186,3 @@ input:-ms-input-placeholder{ @include placeholder-style(); }
 	font-weight: 600;
 	color: $primary-red;
 }
-
-
-@media print {
-
-    body > * {display: none;}
-    body::before {
-        display: block;
-        text-align: center;
-        font-size: 3rem;
-        content: 'Printing not supported';
-    }
-
-}
