@@ -9,7 +9,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 		'NextThought.app.course.assessment.components.admin.email.Editor',
 		'NextThought.app.windows.StateStore',
 		'NextThought.app.windows.components.Header',
-		'NextThought.app.windows.components.Loading'
+		'NextThought.app.windows.components.Loading',
+		'NextThought.app.windows.Actions'
 	],
 
 	items: [],
@@ -25,11 +26,30 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 		this.headerCmp.setTitle('New Message');
 		this.record = this.record || this.precache && this.precache.record;
 		this.showEditor();
+
+		this.WindowActions = NextThought.app.windows.Actions.create();
+
+		// NOTE: Override the default behavior of the doClose function 
+		// since we would like to avoid a refresh of the page.
+		if (this.doClose) {
+			this.doClose = this.onClose.bind(this);
+		}
 	},
 
 
 	onClose: function(){
-		this.doClose();
+		var win = this.allowNavigation(),
+			me = this;
+
+		if (win === false) { return; }
+		if (win instanceof Promise) {
+			return win
+					.then(function() {
+						me.WindowActions.closeActiveWindow();				
+					});
+		}
+
+		this.WindowActions.closeActiveWindow();
 	},
 
 
@@ -50,7 +70,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 
 		me.mon(editor, {
 			'cancel': function(rec) {
-				me.doClose();
+				me.WindowActions.closeActiveWindow();
 			},
 			'after-save': function(rec) {
 				me.record = rec;
@@ -58,7 +78,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 					me.monitors.afterSave(rec);
 				}
 
-				me.doClose();
+				me.WindowActions.closeActiveWindow();
 			}
 		});
 
