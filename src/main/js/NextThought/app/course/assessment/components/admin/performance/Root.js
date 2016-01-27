@@ -435,11 +435,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			return;
 		}
 
-		if (type === 'All'){
+		if (type === 'All') {
 			url = base;
 			this.pageHeader.setExportURL(url, getString('NextThought.view.courseware.assessment.admin.performance.Root.exportall'));
-		}
-		else if (type === 'Open') {
+		} else if (type === 'Open') {
 			url = base + '?LegacyEnrollmentStatus=Open';
 			this.pageHeader.setExportURL(url, getString('NextThought.view.courseware.assessment.admin.performance.Root.exportopen'));
 		} else {
@@ -651,9 +650,18 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 	setDisabled: function() {
 		this.stateDisabled = true;
-		this.header.addCls('disabled');
-		this.pageHeader.setDisabled();
-		this.grid.setDisabled();
+
+		if (this.header) {
+			this.header.addCls('disabled');
+		}
+
+		if (this.pageHeader) {
+			this.pageHeader.setDisabled();
+		}
+
+		if (this.grid) {
+			this.grid.setDisabled();
+		}
 	},
 
 
@@ -729,7 +737,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 					delete me.student;
 					delete me.applyingState;
 					me.setEnabled();
-					
+
 					me.currentPage = store.getCurrentPage();
 					me.maybeSwitchStudents();
 					me.updateUIFromState();
