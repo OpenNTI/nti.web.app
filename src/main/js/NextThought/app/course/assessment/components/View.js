@@ -87,7 +87,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 							me.addContentEditorViews();
 						}
 						else {
-							me.addAdminViews(function(rel) { return getLink(rel, enrollment); });	
+							me.addAdminViews(function(rel) { return getLink(rel, enrollment); });
 						}
 					} else {
 						me.addStudentViews();
@@ -292,16 +292,15 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 	},
 
 
-	addContentEditorViews: function(){
+	addContentEditorViews: function() {
 		var me = this;
 
 		this.addStudentViews();
-		
+
 		this.navigation.onceRendered
 			.then(function() {
-				me.navigation.disabledItem(me.performanceView.xtype);		
+				me.navigation.disabledItem(me.performanceView.xtype);
 			});
-		
 	},
 
 
