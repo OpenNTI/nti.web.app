@@ -61,6 +61,8 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Assignment', {
 	getFooter: function() {
 		var due = this.record.getDueDate();
 
+		if (!due) { return ''; }
+
 		due = moment(due);
 
 		return this.getHistory()
@@ -80,7 +82,8 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Assignment', {
 				return Promise.reject();
 			})
 			.fail(function() {
-				if (due.isSame(new Date(), 'day')) {
+				var now = new Date();
+				if (due.isSame(now, 'day') && due.isSame(now, 'month') && due.isSame(now, 'year')) {
 					return 'Due Today';
 				}
 

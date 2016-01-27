@@ -264,6 +264,14 @@ Ext.define('NextThought.app.course.overview.Index', {
 				if (me.el) {
 					me.el.unmask();
 				}
+			}).fail(function(reason) {
+				alert('Failed to load reading.');
+
+				if (me.el) {
+					me.el.unmask();
+				}
+
+				return Promise.reject(reason);
 			});
 	},
 

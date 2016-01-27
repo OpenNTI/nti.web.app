@@ -384,10 +384,13 @@ Ext.define('NextThought.util.Globals', {
 				return;
 			}
 
-			//if we are given an id, remove the old one
+			//If we are given an id, reuse that link
 			if (id) {
 				old = doc.getElementById(id);
-				head.removeChild(old);
+			}
+
+			if (old) {
+				old.id = '';
 			}
 
 			link = doc.createElement('link');
@@ -396,7 +399,13 @@ Ext.define('NextThought.util.Globals', {
 			link.id = id;
 			link.href = url;
 
-			head.appendChild(link);
+			if (old) {
+				head.insertBefore(link, old);
+				head.removeChild(old);
+			} else {
+				head.appendChild(link);
+			}
+
 
 			/**
 			 * Check all the style sheets of the link to see if the it has rules

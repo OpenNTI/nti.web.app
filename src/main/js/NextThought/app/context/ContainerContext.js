@@ -86,17 +86,35 @@ Ext.define('NextThought.app.context.ContainerContext', {
 	__handle403Response: function(response) {
 		var o = Ext.decode(response.responseText, true),
 			status = response.status,
-			catalogEntry = o && ParseUtils.parseItems(o)[0], cmp;
+			req = response && response.request,
+			originalURL = req && req.options && req.options.url;
 
-
-		if (status === 403 && catalogEntry) {
-			cmp = Ext.widget('context-authorization', {
-						catalogEntry: catalogEntry
-					});
-
-			return Promise.resolve(cmp);
+		if (status === 403 && originalURL) {
+			return this.requestForbiddenContext(originalURL);
 		}
 
 		return Promise.resolve();
+	},
+
+
+	requestForbiddenContext: function(url){
+		if (!url) { return Promise.resolve(); }
+
+		// Forbidden Context URL.
+		url = url + '/@@forbidden_related_context';
+
+		return Service.request(url)
+					.then(function(resp) {
+						var p = Ext.decode(resp, true);
+							catalogEntry = p.Items && ParseUtils.parseItems(p.Items)[0];
+
+						if (catalogEntry) {
+							cmp = Ext.widget('context-authorization', {
+										catalogEntry: catalogEntry
+									});
+
+							return cmp;
+						}
+					});
 	}
 });

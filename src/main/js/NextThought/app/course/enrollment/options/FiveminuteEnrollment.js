@@ -4,7 +4,7 @@ Ext.define('NextThought.app.course.enrollment.options.FiveminuteEnrollment', {
 	singleton: true,
 
 	NAME: 'FiveminuteEnrollment',
-	display: 'For Credit',
+	displayKey: 'course-info.pricing-widget.enrolled',
 	isBase: true,
 
 	RV_REGEX: /rv:(\d+\.?\d*)/,

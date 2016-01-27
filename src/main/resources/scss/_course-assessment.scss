@@ -1836,7 +1836,8 @@ canvas.x-component-course-assessment {
 				width: 100px;
 
 				.label {
-					@include icon('info', $left: auto, $right: 0, $top: 7px);
+					padding-right: 5px;
+					@include icon('info', $left: auto, $right: -12px, $top: 7px);
 				}
 
 				&.hidden {

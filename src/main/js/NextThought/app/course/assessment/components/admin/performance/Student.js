@@ -145,7 +145,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Stude
 		this.courseEnrollment = enrollment;
 		if (mailLink) {
 			this.header.onceRendered
-				.then(function(){
+				.then(function() {
 					if (me.header.setupCourseEmail) {
 						me.header.setupCourseEmail(mailLink);
 					}
@@ -162,21 +162,27 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Stude
 
 		me.applyingState = true;
 
-		if (state.sort && state.sort.prop) {
-			store.sort(state.sort.prop, state.sort.direction, null, false);
-		}
-
 		return new Promise(function(fulfill, reject) {
-			me.mon(store, {
-				single: true,
-				load: function() {
-					delete me.applyingState;
+			function finish() {
+				delete me.applyingState;
 
-					fulfill();
+				if (state.sort && state.sort.prop) {
+					store.sort(state.sort.prop, state.sort.direction, null, false);
 				}
-			});
 
-			me.store.load();
+				fulfill();
+			}
+
+			if (!me.store.recordsFilledIn) {
+				me.mon(store, {
+					single: true,
+					'records-filled-in': finish
+				});
+
+				me.store.load();
+			} else {
+				finish();
+			}
 		});
 	},
 
