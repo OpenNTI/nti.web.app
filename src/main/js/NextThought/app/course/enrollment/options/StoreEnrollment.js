@@ -9,12 +9,11 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 	singleton: true,
 
 	NAME: 'StoreEnrollment',
-	display: 'Lifelong Learner',
+	displayKey: 'course-info.pricing-widget.store-enrolled',
 	isBase: true,
 
 	//set it to true so the getEnrolledWording won't short circuit
-	EnrolledWordingKey: true,
-	EnrolledWording: 'You are enrolled as a Lifelong Learner',
+	EnrolledWordingKey: 'course-info.description-widget.store-enrolled',
 
 	DefaultStrings: {
 		notEnrolled: {
@@ -185,7 +184,8 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 
 
 	__addGiftSteps: function(course, option, steps) {
-		var me = this;
+		var me = this,
+			redemptionText = getString('RedemptionConfirmation') || {};
 
 		me.__addStep({
 			xtype: 'enrollment-gift-purchase',
@@ -281,7 +281,7 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 			xtype: 'enrollment-confirmation',
 			name: 'Confirmation',
 			enrollmentOption: option,
-			heading: 'You\'re Enrolled as a Lifelong Learner',
+			heading: redemptionText.heading || 'You\'re Enrolled as a Lifelong Learner',
 			hasPricingCard: false,
 			isComplete: function() { return Promise.resolve(); }
 		}, steps);
