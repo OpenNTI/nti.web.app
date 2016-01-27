@@ -254,6 +254,10 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 				return store.getPreference(id) || Service.getPageInfo.bind(Service, id);
 			});
 
+		if (preferenceOrPageInfo.length === 0) {
+			return Promise.resolve(null);
+		}
+
 		return Promise.first(preferenceOrPageInfo)
 			.then(function(p) {
 				if (p.isPageInfo) {
@@ -831,9 +835,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		return new Promise(function(fulfill, reject) {
 			replyRecord.save({scope: me, callback: me.getSaveCallback(fulfill, reject)});
 		}).then(function(record) {
-			if (!root.store) {
-				recordRepliedTo.fireEvent('child-added', record);
-			}
+			recordRepliedTo.fireEvent('child-added', record);
 
 			return record;
 		});

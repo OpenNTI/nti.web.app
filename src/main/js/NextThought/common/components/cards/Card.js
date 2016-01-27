@@ -3,6 +3,7 @@ export default Ext.define('NextThought.common.components.cards.Card', {
 	alias: 'widget.content-card',
 
 	mixins: {
+			'EllipsisText': 'NextThought.mixins.EllipsisText'
     //		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
     //		profileLinks: 'NextThought.mixins.ProfileLinks' // For future, maybe?
 	},
@@ -26,6 +27,7 @@ export default Ext.define('NextThought.common.components.cards.Card', {
 
 	renderSelectors: {
 		meta: '.meta',
+		titleEl: '.meta .title',
 		liked: '.controls .like',
 		favorites: '.controls .favorite'
 	},
@@ -33,7 +35,7 @@ export default Ext.define('NextThought.common.components.cards.Card', {
 
 	constructor: function(config) {
 		var d = (config && config.data) || {};
-		if (!this.shouldOpenInApp(d.ntiid, d.href, d.basePath)) {
+		if (!this.shouldOpenInApp(d.ntiid, d.href, d.basePath, d.targetMimeType)) {
 			this.renderTpl = Ext.DomHelper.markup({tag: 'a', target: '_blank', href: d.href, html: this.renderTpl.html || this.renderTpl});
 			this.bypassEvent = true;
 		}
@@ -43,8 +45,8 @@ export default Ext.define('NextThought.common.components.cards.Card', {
 	},
 
 
-	shouldOpenInApp: function(ntiid, url, basePath) {
-		return Globals.shouldOpenInApp(ntiid, url, basePath);
+	shouldOpenInApp: function(ntiid, url, basePath, targetMimeType) {
+		return Globals.shouldOpenInApp(ntiid, url, basePath, targetMimeType);
 	},
 
 
@@ -76,6 +78,11 @@ export default Ext.define('NextThought.common.components.cards.Card', {
 		}
 		catch (er) {
 			console.error(er.message);
+		}
+
+
+		if (this.titleEl) {
+			this.truncateText(this.titleEl.dom, null, true);
 		}
 	},
 

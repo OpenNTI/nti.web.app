@@ -1,12 +1,13 @@
 export default Ext.define('NextThought.app.course.info.components.Roster', {
-extend: 'Ext.container.Container',
+	extend: 'Ext.container.Container',
 	alias: 'widget.course-info-roster',
 
 	requires: [
 		'NextThought.common.ux.FilterMenu',
 		'NextThought.common.chart.Pie',
 		'NextThought.proxy.courseware.Roster',
-		'NextThought.common.menus.Reports'
+		'NextThought.common.menus.Reports',
+		'NextThought.model.courses.CourseInstanceEnrollment'
 	],
 
 	ui: 'course-assessment',
@@ -25,13 +26,15 @@ extend: 'Ext.container.Container',
 			]
 		}, {
 			xtype: 'grouping',
-			title: 'Roster',
 			anchor: '0 -200',
 			layout: 'fit',
 			cls: 'roster',
 			tools: [{
 				itemId: 'filtermenu',
-				autoEl: { tag: 'span', cls: 'tool link arrow'}
+				autoEl: { tag: 'div', cls: 'tool link arrow title-filter'}
+			},{
+				itemId: 'email',
+				autoEl: {tag: 'div', cls: 'tool link email', html: 'Email'}
 			}],
 			items: [
 				{
@@ -54,11 +57,19 @@ extend: 'Ext.container.Container',
 							padding: '0 0 0 30',
 							flex: 1,
 							possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
-							tpl: Ext.DomHelper.markup({
+							tpl: new Ext.XTemplate(Ext.DomHelper.markup({
 								cls: 'padded-cell user-cell', cn: [
 									'{Creator:avatar}',
-									{ cls: 'name', html: '{Creator:displayName}'}
+									{ cls: 'name', html: '{Creator:displayName}'},
+									{ cls: 'controls', cn: [
+										{tag: 'span', cls: 'link email', 'data-user': '{[this.getUsername(values)]}', html: 'Email'}
+									]}
 								]
+							}), {
+								getUsername: function(values) {
+									var user = values && values.Creator;
+									return user && user.get && user.get('Username');
+								}
 							})
 						},
 						{ text: getString('NextThought.view.courseware.info.Roster.username'),
@@ -66,12 +77,12 @@ extend: 'Ext.container.Container',
 								return rec.get('OU4x4') || v;
 							}
 						},
-						{ text: getString('NextThought.view.courseware.info.Roster.status'), sortable: false, 
+						{ text: getString('NextThought.view.courseware.info.Roster.status'), sortable: false,
 							xtype: 'templatecolumn',
 							dataIndex: 'LegacyEnrollmentStatus',
 							tpl: Ext.DomHelper.markup({
-								cls: 'right-aligned status', html: '{LegacyEnrollmentStatus}'
-							}) 
+								cls: 'status', html: '{LegacyEnrollmentStatus}'
+							})
 						},
 						{
 							//disclosure column
@@ -99,6 +110,10 @@ extend: 'Ext.container.Container',
 		}
 	],
 
+	renderSelectors: {
+		emailEl: '.tools .email'
+	},
+
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -111,6 +126,8 @@ extend: 'Ext.container.Container',
 		});
 
 		this.on('activate', this.onActivate.bind(this));
+		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 	},
 
 
@@ -126,7 +143,7 @@ extend: 'Ext.container.Container',
 			}
 		});
 
-		this.mon(this.grid, 'itemClick', 'maybeShowDisclosureMenu');
+		this.mon(this.grid, 'itemClick', 'handleClick');
 		Ext.EventManager.onWindowResize(this.onWindowResize, this, false);
 		me.on('destroy', function() {
 			Ext.EventManager.removeResizeListener(me.onWindowResize, me);
@@ -134,9 +151,9 @@ extend: 'Ext.container.Container',
 	},
 
 
-	onActivate: function(){
+	onActivate: function() {
 		var grid = this.down('grid');
-		if(grid && grid.store){
+		if (grid && grid.store) {
 			grid.getView().refresh();
 			wait().then(this.adjustHeight.bind(this));
 		}
@@ -160,7 +177,7 @@ extend: 'Ext.container.Container',
 
 
 	__getGridMaxHeight: function() {
-		// deduct in order Top NavBar, paddingtop, roster header, roster grouping, column header. 
+		// deduct in order Top NavBar, paddingtop, roster header, roster grouping, column header.
 		// TODO: Find a better way to do this.
 		return Ext.Element.getViewportHeight() - 70 - 40 - 200 - 72 - 30;
 	},
@@ -193,7 +210,7 @@ extend: 'Ext.container.Container',
 
 
 	onFilterClicked: function() {
-		this.filterMenu.showBy(this.filterLink.el, 'tl-tl', [0, -39]);
+		this.filterMenu.showBy(this.filterLink.el, 'tl-tl', [0, 30]);
 	},
 
 
@@ -211,6 +228,9 @@ extend: 'Ext.container.Container',
 
 		this.filterMenu.setState('*');
 
+		this.currentBundle = instance;
+		this.setupEmail();
+
 		if (Ext.isEmpty(roster) || !roster) {
 			if (this.store) {this.store.destroyStore();}
 			return;
@@ -227,14 +247,7 @@ extend: 'Ext.container.Container',
 
 	buildStore: function(url) {
 		this.store = Ext.data.Store.create({
-			fields: [
-				{name: 'id', type: 'string', mapping: 'Username'},
-				{name: 'username', type: 'string', mapping: 'Username', convert: function(v, r) {
-					return (r.raw.LegacyEnrollmentStatus === 'ForCredit' && v) || ''; }},
-				{name: 'Creator', type: 'singleItem', mapping: 'UserProfile' },
-				{name: 'LegacyEnrollmentStatus', type: 'string'},
-				{name: 'Links', type: 'auto'}
-			],
+			model: NextThought.model.courses.CourseInstanceEnrollment,
 			proxy: {
 				type: 'nti.roster',
 				url: url,
@@ -246,11 +259,62 @@ extend: 'Ext.container.Container',
 			remoteFilter: true
 		});
 
-		
+
 		//TODO: only load if we're visible!
 		this.store.load();
 		Ext.destroy(this.storeMonitors);
 		this.storeMonitors = this.mon(this.store, {destroyable: true, load: 'updateFilterCount'});
+	},
+
+
+	setupEmail: function() {
+		var me = this;
+		this.onceRendered
+			.then(function() {
+				me.emailEl = me.emailEl || me.el.down('.tools .email');
+				if (!me.emailListenerSet && me.emailEl && me.shouldAllowInstructorEmail()) {
+					me.emailListenerSet = true;
+					me.mon(me.emailEl, 'click', 'showEmailEditor');
+				}
+				me.maybeShowEmailButton();
+			});
+	},
+
+	shouldAllowInstructorEmail: function() {
+		// Right now, we will only
+		return isFeature('instructor-email') && this.currentBundle && this.currentBundle.getLink('Mail');
+	},
+
+
+	maybeShowEmailButton: function() {
+		if (!this.emailEl) {return; }
+
+		if (this.shouldAllowInstructorEmail()) {
+			this.emailEl.show();
+		}
+		else {
+			this.emailEl.hide();
+		}
+	},
+
+
+	showEmailEditor: function(e) {
+		var me = this,
+			editor,
+			emailRecord = new NextThought.model.Email(),
+			scope = this.currentFilter || 'All';
+
+		if (scope === '*') {
+			scope = 'All';
+		}
+
+		// Set the link to post the email to
+		emailRecord.set('url', this.currentBundle && this.currentBundle.getLink('Mail'));
+		emailRecord.set('scope', scope);
+
+		this.WindowActions.showWindow('new-email', null, e.getTarget(), null, {
+			record: emailRecord
+		});
 	},
 
 
@@ -267,6 +331,7 @@ extend: 'Ext.container.Container',
 			this.store.filter([
 				{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: filter}
 			]);
+			this.maybeShowEmailButton();
 		} catch (e) {
 			console.log('Meh');
 		}
@@ -311,16 +376,52 @@ extend: 'Ext.container.Container',
 	},
 
 
-	maybeShowDisclosureMenu: function(grid, record, node, i, e) {
-		var disclosure = e.getTarget('.disclosure'), menu;
+	handleClick: function(grid, record, node, i, e) {
+		var menu,
+			disclosure = e.getTarget('.disclosure');
 
-		if (!disclosure) {
-			return;
+		if (disclosure) {
+			menu = Ext.widget('report-menu', {
+				links: record.getReportLinks(),
+				showByEl: disclosure
+			});
+
+			this.on('destroy', menu.destroy.bind(menu));
+		} else if (e.getTarget('.email')) {
+			this.openIndividualEmail(e);
+		}
+	},
+
+	openIndividualEmail: function(e) {
+		var target = e && e.getTarget('.email'),
+			user = target && target.getAttribute('data-user'),
+			index, rec, mailLink, emailRecord, r, creator;
+
+		if (!user) { return; }
+
+		// NOTE: normally, it's better to use store.findBy but
+		// since the store is a buffered store, the above fails.
+		// Do it the brutal force way.
+		for (var i = 0; i < this.store.getCount() && !rec; i++) {
+			r = this.store.getAt(i);
+			creator = r && r.get('Creator');
+			if (creator && creator.get('Username') === user) {
+				rec = r;
+			}
 		}
 
-		menu = Ext.widget('report-menu', {
-			links: record.get('Links'),
-			showByEl: disclosure
-		});
+		if (rec && rec.getLink('Mail')) {
+			mailLink = rec.getLink('Mail');
+
+			emailRecord = new NextThought.model.Email();
+
+			// Set the link to post the email to
+			emailRecord.set('url', mailLink);
+			emailRecord.set('Receiver', rec.get('Creator'));
+
+			this.WindowActions.showWindow('new-email', null, target, null, {
+				record: emailRecord
+			});
+		}
 	}
 });

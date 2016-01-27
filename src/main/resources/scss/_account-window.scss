@@ -405,6 +405,54 @@
 		box-shadow: rgba(0, 0, 0, 0.137255) 0px 2px 4px 1px, rgba(255, 255, 255, 0.498039) 0px 2px inset;
 	}
 
+	.email-verify-wrapper {
+		position: absolute;
+		top: 1px;
+		right: 0;
+		left: 0;
+		bottom: 40px;
+		background: #fff;
+
+		.header {
+			margin: 16px 26px 5px 26px;
+			color: $secondary-grey;
+
+			.title {
+				font: normal 300 19px/normal $font;
+			}
+
+			.sub{
+				font: normal 300 14px/normal $font;
+			}
+		}
+
+		.meta {
+			margin: 20px 34px;
+			color: $secondary-grey;
+			font: normal 300 18px/24px $font;
+
+			.link {
+				color: $primary-blue;
+				padding: 0 7px;
+				cursor: pointer;
+			}
+
+			.info {
+				width: 40px;
+				height: 30px;
+				@include icon('info_active', $top: 3px, $left: 0);
+			}
+		}
+	}
+
+	background-color: rgba(1,1,1,0); // Make it clear.
+	border: none;
+	box-shadow: none; 
+}
+
+.email-verify-view {
+	width: 450px;
+
 	.header {
 		margin: 10px 15px;
 		color: $secondary-grey;
@@ -639,94 +687,76 @@
 		}
 	}
 
-	.email-verify-wrapper {
-		position: absolute;
-		top: 1px;
-		right: 0;
-		left: 0;
-		bottom: 40px;
-		background: #fff;
-
-		.header {
-			margin: 16px 26px 5px 26px;
-			color: $secondary-grey;
-
-			.title {
-				font: normal 300 19px/normal $font;
-			}
-
-			.sub{
-				font: normal 300 14px/normal $font;
-			}
-		}
-
-		.meta {
-			margin: 20px 34px;
-			color: $secondary-grey;
-			font: normal 300 18px/24px $font;
-
-			.link {
-				color: $primary-blue;
-				padding: 0 7px;
-				cursor: pointer;
-			}
-
-			.info {
-				width: 40px;
-				height: 30px;
-				@include icon('info_active', $top: 3px, $left: 0);
-			}
-		}
-	}
-
-	background-color: rgba(1,1,1,0); // Make it clear.
-	border: none;
-	box-shadow: none; 
-
-	.email-verify-view {
-		width: 450px;
-
-		&.has-time-error{
-			.card {
-				min-height: 270px;
-			}
-		}	
-		@include experimental(perspective, 800);
-
+	&.has-time-error{
 		.card {
+			min-height: 270px;
+		}
+	}	
+	@include experimental(perspective, 800);
+
+	.card {
+		width: 100%;
+		height: 100%;
+		min-height: 215px;
+		@include experimental(transform-style, preserve-3d);
+		@include experimental(transition, 0.7s);
+
+		&.flipped {
+			@include experimental(transform, rotateY(180deg));
+		}
+
+		.face {
 			width: 100%;
 			height: 100%;
-			min-height: 215px;
-			@include experimental(transform-style, preserve-3d);
-			@include experimental(transition, 0.7s);
+			position: absolute;
+			z-index: 2;
+			background-color: #fcfcfc;
+			border: 1px solid rgb(206, 206, 206);			
+			box-shadow: rgba(0, 0, 0, 0.137255) 0px 2px 4px 1px, rgba(255, 255, 255, 0.498039) 0px 2px inset;
+			@include experimental(backface-visibility, hidden);
 
-			&.flipped {
+			&.front {
+				position: absolute;
+				z-index: 1;
+			}
+
+			&.back {
 				@include experimental(transform, rotateY(180deg));
 			}
 
-			.face {
-				width: 100%;
-				height: 100%;
+			.footer {
 				position: absolute;
-				z-index: 2;
-				background-color: #fcfcfc;
-				border: 1px solid rgb(206, 206, 206);			
-				box-shadow: rgba(0, 0, 0, 0.137255) 0px 2px 4px 1px, rgba(255, 255, 255, 0.498039) 0px 2px inset;
-				@include experimental(backface-visibility, hidden);
-
-				&.front {
-					position: absolute;
-					z-index: 1;
-				}
-
-				&.back {
-					@include experimental(transform, rotateY(180deg));
-				}
-
-				.footer {
-					position: absolute;
-				}
-			}	
-		}
+			}
+		}	
 	}
 }
+
+.badge-prompt {
+	.email-verify-view {
+		width: inherit;
+
+		.card {
+			.face {
+				box-shadow: none;
+				border: none;
+			}
+		}
+	}
+
+	.badge-lock {
+		padding: 20px;
+    	background: white;
+    	border-bottom: 1px solid #d9d9d9;
+
+    	.msg {
+    		color: $secondary-grey;
+    	}
+
+    	.email {
+    		color: $primary-grey;
+    		padding: 5px 0;
+    		font-style: italic;
+    	}
+	}
+}
+

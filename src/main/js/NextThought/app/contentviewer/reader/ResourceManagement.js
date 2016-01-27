@@ -6,6 +6,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.ResourceManageme
 		'NextThought.common.ux.SlideDeck',
 		'NextThought.common.components.cards.CardTarget',
 		'NextThought.common.components.cards.OverlayedPanel',
+		'NextThought.app.contentviewer.components.EmbededWidget',
 		'NextThought.app.mediaviewer.content.deck.OverlayedPanel',
 		'NextThought.app.mediaviewer.content.OverlayedPanel',
 		'NextThought.app.video.OverlayedPanel',
@@ -143,6 +144,9 @@ export default Ext.define('NextThought.app.contentviewer.reader.ResourceManageme
 		'object[type$=ntivideo][itemprop=presentation-video]': 'overlay-video',
 		'object[type$=videoroll]': 'overlay-video-roll',
 		'object[type$=image-collection]': 'overlay-image-roll',
+
+		'object[type$=embeded\\2e widget]': 'overlay-content-embeded-widget',
+
 		'object[class=ntirelatedworkref]': 'overlay-card'
 	},
 

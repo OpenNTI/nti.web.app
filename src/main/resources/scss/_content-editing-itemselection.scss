@@ -1,0 +1,137 @@
+.item-selection {
+	.search {
+		padding: 0 10px;
+		margin-bottom: 20px;
+		@include flexContainer();
+
+		&.has-search-term {
+			.has-search {
+				visibility: visible;
+			}
+
+			.input-container {
+				.clear {
+					display: block;
+				}
+			}
+		}
+		
+		.has-search {
+			visibility: hidden;
+			line-height: 35px;
+			font-size: 1.125rem;
+			font-weight: 700;
+			color: $secondary-grey;
+			@include flexItem(1 1 auto);
+		}
+
+		.input-container {
+			width: 375px;
+			position: relative;
+			border-radius: 3px;
+			overflow: hidden;
+			box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+			@include flexItem(0 0 auto);
+			
+
+			input {
+				line-height: 35px;
+				font-size: 0.875rem;
+				margin: 0;
+				padding: 0 35px 0 5px;
+				border: none;
+				width: 100%;
+			}
+
+			.clear {
+				display: none;
+				font-size: 0.635em;
+				font-weight: 700;
+				text-transform: uppercase;
+				color: $primary-blue;
+				line-height: 35px;
+				position: absolute;
+				top: 0; right: 40px;
+				cursor: pointer;
+			}
+
+			.do-search {
+				position: absolute;
+				height: 35px;
+				width: 35px;
+				background-color: $panel-background;
+				box-shadow: -1px 0 0 0 rgba(0, 0, 0, 0.3);
+				top: 0; right: 0;
+				cursor: pointer;
+
+				@include icon('rhp-search', $top: 8px, $left: 9px, $position: absolute);
+			}
+		}
+	}
+}
+
+.video-item-selection {
+	.items {
+		overflow: hidden;
+
+
+		.selection-item {
+			position: relative;
+			margin: 10px;
+			width: 175px;
+			height: 200px;
+			background: white;
+			float: left;
+			border-radius: 3px;
+			box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+			overflow: hidden;
+			cursor: pointer;
+
+			&.selected {
+				box-shadow: 0 0 0 3px $primary-blue;
+			}
+
+			&.filtered {
+				display: none;
+			}
+		}
+
+		.video-item {
+			cursor: pointer;
+			overflow: hidden;
+			display: block;
+
+			input[type=checkbox] {
+				position: absolute;
+				top: 8px;
+				left: 8px;
+				cursor: pointer;
+			}
+
+			.thumbnail {
+				width: 100%;
+				height: 100px;
+				background-size: contain;
+			}
+
+			.title {
+				font-size: 0.75em;
+				margin: 8px 8px 15px;
+				height: 3rem;
+			}
+
+			.providers {
+				padding: 0 8px;
+				font-size: 0.625em;
+				font-weight: 700;
+				text-transform: uppercase;
+				color: $tertiary-grey;
+
+				span:not(:first-of-type) {
+					content: ',';
+					margin-right: 0.5em;
+				}
+			}
+		}
+	}
+}

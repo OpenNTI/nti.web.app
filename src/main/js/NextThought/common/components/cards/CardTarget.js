@@ -72,51 +72,91 @@ export default Ext.define('NextThought.common.components.cards.CardTarget', {
 		}
 
 		if ((version && version <= 18) || (!nativeSupport && !Ext.isGecko)) {
-				this.add({
-					xtype: 'box',
-					renderTpl: Ext.DomHelper.markup({
-						cls: 'no-support', cn: [
-							{cls: 'message', html: 'Your browser does not currently support viewing PDF files.'},
-							{cls: '', cn: [
-								{tag: 'a', cls: 'link', href: 'https://get.adobe.com/reader/', target: '_blank', html: 'Install Adobe Acrobat Reader '},
-								'or try the latest version of one of the following browsers:<br>',
-								chrome,
-								' ',
-								safari,
-								' ',
-								ff,
-								' ',
-								ie
-							]},
-							'<br>',
-							{cls: '', cn: [
-								{tag: 'a', cls: 'link', href: data.href, html: 'Download the PDF'}
-							]}
-						]
-					})
-				});
+			this.addUnsupported(data);
 			return;
 		}
 
-		//If we are FF 19+ or we detect a native viewer show it
-		this.add({
-			xtype: 'box',
-			autoEl: {
-				tag: Ext.isIE10m ? 'object' : 'iframe',
-				src: data.href,
-				data: data.href,
-				type: 'application/pdf',//TODO: figure out mimeType
-				border: 0,
-				frameborder: 0
-        //scrolling: 'no',
-				//allowTransparency:true,
-				//seamless:true
-			}
-		});
+		this.addIframe(data);
 
 		this.mon(this.reader, 'allow-custom-scrolling', function() {
 			return false;
 		}, this);
+	},
+
+
+	resolveHref: function(data) {
+		return Promise.resolve(data.href);
+	},
+
+
+	resolveTargetMimeType: function(data) {
+		return Promise.resolve(data.targetMimeType);
+	},
+
+
+	addIframe: function(data) {
+		var me = this;
+
+		return Promise.all([
+				this.resolveHref(data),
+				this.resolveTargetMimeType(data)
+			]).then(function(results) {
+				me.addIframeFromHref(results[0], results[1]);
+			});
+	},
+
+
+	addIframeFromHref: function(href, targetMimeType) {
+		this.add({
+			xtype: 'box',
+			autoEl: {
+				tag: Ext.isIE10m ? 'object' : 'iframe',
+				src: href,
+				data: href,
+				type: targetMimeType || 'application/pdf',
+				border: 0,
+				frameBorder: 0
+			}
+		});
+	},
+
+
+	addUnsupported: function(data) {
+		return this.resolveHref(data)
+			.then(this.addUnsupportedForHref.bind(this));
+	},
+
+
+	addUnsupportedForHref: function(href) {
+		var chrome = '<a ' + anchorAttr + ' href=\'http://www.google.com/chrome\'>Chrome,</a>',
+			safari = '<a ' + anchorAttr + ' href=\'http://www.apple.com/safari/download/\'>Safari,</a>',
+			ff = '<a ' + anchorAttr + ' href=\'http://www.getfirefox.com\'>Firefox,</a>',
+			ie = '<a ' + anchorAttr + ' href=\'http://www.microsoft.com/ie\'>Internet Explorer.</a>';
+
+
+		this.add({
+			xtype: 'box',
+			renderTpl: Ext.DomHelper.markup({
+				cls: 'no-support', cn: [
+					{cls: 'message', html: 'Your browser does not currently support viewing PDF files.'},
+					{cls: '', cn: [
+						{tag: 'a', cls: 'link', href: 'https://get.adobe.com/reader/', target: '_blank', html: 'Install Adobe Acrobat Reader '},
+						'or try the latest version of one of the following browsers:<br>',
+						chrome,
+						' ',
+						safari,
+						' ',
+						ff,
+						' ',
+						ie
+					]},
+					'<br>',
+					{cls: '', cn: [
+						{tag: 'a', cls: 'link', href: href, html: 'Download the PDF'}
+					]}
+				]
+			})
+		});
 	},
 
 

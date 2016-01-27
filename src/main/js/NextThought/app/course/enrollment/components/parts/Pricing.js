@@ -103,7 +103,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Pr
 			number: course.get('ProviderUniqueID'),
 			title: course.get('title'),
 			author: course.getAuthorLine(),
-			enrollmentType: this.enrollmentOption.display,
+			enrollmentType: this.enrollmentOption.display || getString(this.enrollmentOption.displayKey),
 			credit: hours && this.enrollmentOption.hasCredit ? Ext.util.Format.plural(hours, 'Credit Hour') : 'No College Credit',
 			begins: Ext.Date.format(begins, format),
 			ends: Ext.Date.format(ends, format),

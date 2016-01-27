@@ -482,6 +482,21 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.assignment-list {
+	&.admin {
+		.x-container.grouping {
+			& > .header {
+				.title {
+				    width: 85%;
+				    text-overflow: ellipsis;
+				    white-space: nowrap;
+				    overflow: hidden;
+				}
+			}
+		}
+	}
+}
+
 .pager-settings {
 	.x-menu-item.x-menu-item-separator.labeled-separator {
 		background: none !important;
@@ -1821,7 +1836,8 @@ canvas.x-component-course-assessment {
 				width: 100px;
 
 				.label {
-					@include icon('info', $left: auto, $right: 0, $top: 7px);
+					padding-right: 5px;
+					@include icon('info', $left: auto, $right: -12px, $top: 7px);
 				}
 
 				&.hidden {
@@ -1966,8 +1982,12 @@ canvas.x-component-course-assessment {
 		top: 0 !important;
 	}
 
-	table {
-		table-layout: fixed !important;
+	.x-grid {
+		&.fixed-table{
+			table {
+				table-layout: fixed !important;
+			}	
+		}	
 	}
 }
 

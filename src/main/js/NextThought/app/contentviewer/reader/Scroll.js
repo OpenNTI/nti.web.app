@@ -31,8 +31,27 @@ export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 
 
 	menuHideOnScroll: function() {
+		var scrollPosition = Math.abs(this.top());
+
 		Ext.menu.Manager.hideAll();
 		Ext.tip.QuickTipManager.getQuickTip().hide();
+
+		// Track and cache the last scroll position prior to going into fullscreen mode.
+		if (!this.isInFullScreenMode()) {
+			this.reader.lastScroll = scrollPosition;
+		}
+		else {
+			this.reader.scrollBeforeFullscreen = this.reader.lastScroll;
+		}
+	},
+
+
+	isInFullScreenMode: function() {
+		var el = document.fullscreenElement ||
+        		 document.webkitFullscreenElement ||
+        		 document.mozFullScreenElement ||
+        		 document.msFullscreenElement;
+        return Boolean(el);
 	},
 
 
@@ -205,6 +224,16 @@ export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 			return;
 		}
 		this.scrollingEl.scrollTo('top', top, animate !== false);
+	},
+
+	toNote: function(note) {
+		var applicableRange = note.get('applicableRange'),
+			containerId = note.get('ContainerId'),
+			doc = this.reader.getIframe().getDocumentElement(),
+			cleanContent = this.reader.getCleanContent(),
+			range = Anchors.toDomRange(applicableRange, doc, cleanContent, containerId);
+
+		this.toNode(range.startContainer);
 	},
 
 	toSearchHit: function(hit, fragment) {

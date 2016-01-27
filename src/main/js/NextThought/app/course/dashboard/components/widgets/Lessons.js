@@ -41,11 +41,12 @@ export default Ext.define('NextThought.app.course.dashboard.components.widgets.L
 						});
 			}
 
-			return course.getNavigationStore().building
+			// Get Outlien Interface
+			return course.getOutlineInterface().building
 				.then(function(store) {
 					var lessons = [];
 
-					store.each(function(node, i, total) {
+					store.forEach(function(node, i, total) {
 						var nodeStart = node.get('startDate');
 
 						//the node has a start date, is a lesson and starts in the range of the week

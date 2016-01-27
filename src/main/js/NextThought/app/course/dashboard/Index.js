@@ -59,10 +59,7 @@ export default Ext.define('NextThought.app.course.dashboard.Index', {
 				if (visible) {
 					AnalyticsUtil.addContext('dashboard', true);
 				}
-			},
-			'activate': this.onActivate.bind(this),
-			'deactivate': this.onDeactivate.bind(this),
-			'destroy': this.onDeactivate.bind(this)
+			}
 		});
 	},
 
@@ -88,17 +85,29 @@ export default Ext.define('NextThought.app.course.dashboard.Index', {
 		this.lastScrollTop = el.scrollTop;
 	},
 
-
-	onDeactivate: function() {
+	onRouteDeactivate: function(){
 		window.removeEventListener('scroll', this.onScroll);
 	},
 
-
-	onActivate: function() {
+	onRouteActivate: function(){
+		var me = this;
 		this.setTitle(this.title);
 
+		// Cache the scroll position before we reload the tiles.
+		// This will help us to make we scroll again to that last position.
+		// We can not use lastScrollTop since it changes when the the tiles are removed 
+		// and added back.
+		if (this.lastScrollTop > 0) {
+			this.lastScrollCache = this.lastScrollTop;
+		}
+		
+		this.reloadTiles()
+			.then(function() {
+				wait().then(me.onScrollToLastScroll.bind(me));
+			});
+
 		if (!this.rendered) {
-			this.on('afterrender', this.onActivate.bind(this));
+			this.on('afterrender', this.onRouteActivate.bind(this));
 			return;
 		}
 
@@ -106,8 +115,17 @@ export default Ext.define('NextThought.app.course.dashboard.Index', {
 	},
 
 
+	onScrollToLastScroll: function(){
+		if (this.lastScrollCache > 0) {
+			window.scrollTo(0, this.lastScrollCache);
+			delete this.lastScrollCache;
+		}
+	},
+
+
 	getScrollTarget: function() {
-		return document.body;
+		//TODO: figure out how to not have to do a user agent check for this
+  		return Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body;
 	},
 
 
@@ -400,6 +418,22 @@ export default Ext.define('NextThought.app.course.dashboard.Index', {
 		}
 	},
 
+
+	reloadTiles: function(){
+		var tileContainers = this.query('dashboard-tile-container'),
+			loadedContainers = [], p;
+
+		Ext.each(tileContainers, function(tileContainer) {
+			if(tileContainer.reloadTiles){
+				p = tileContainer.reloadTiles();
+				if (p instanceof Promise) {
+					loadedContainers.push(p);
+				}
+			}
+		});
+
+		return Promise.all(loadedContainers);
+	},
 
 	__emptyContainer: function(cmp) {
 		var index = cmp.number,

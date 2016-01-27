@@ -57,10 +57,12 @@ export default Ext.define('NextThought.app.profiles.user.components.emailverify.
 					{tag: 'span', cls: 'clear'}
 				]},
 				{cls: 'error-msg', html: ''},
-				{cls: 'footer', cn: [
-					{cls: 'controls', cn: [
-						{tag: 'a', cls: 'button confirm disabled', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Submit}}}'},
-						{tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Cancel}}}'}
+				{tag: 'tpl', 'if': 'enableFooter', cn: [
+					{cls: 'footer', cn: [
+						{cls: 'controls', cn: [
+							{tag: 'a', cls: 'button confirm disabled', role: 'button', html: '{save}'},
+							{tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Cancel}}}'}
+						]}
 					]}
 				]}
 			]},
@@ -78,16 +80,21 @@ export default Ext.define('NextThought.app.profiles.user.components.emailverify.
 					{tag: 'span', cls: 'clear'}
 				]},
 				{cls: 'error-msg', html: ''},
-				{cls: 'footer', cn: [
-					{cls: 'controls', cn: [
-						{tag: 'a', cls: 'button confirm', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Submit}}}'},
-						{tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Cancel}}}'}
+				{tag: 'tpl', 'if': 'enableFooter', cn: [
+					{cls: 'footer', cn: [
+						{cls: 'controls', cn: [
+							{tag: 'a', cls: 'button confirm', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Submit}}}'},
+							{tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Cancel}}}'}
+						]}
 					]}
 				]}
 			]}
 		]}
 	]),
 
+	enableFooter: true,
+
+	saveText: getString('NextThought.view.account.verification.EmailToken.Submit'),
 
 	renderSelectors: {
 		tokenEl: '.front .input-box input',
@@ -111,7 +118,9 @@ export default Ext.define('NextThought.app.profiles.user.components.emailverify.
 	beforeRender: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.applyIf(this.renderData || {}, {
-			email: this.user && this.user.get('email')
+			email: this.user && this.user.get('email'),
+			enableFooter: this.enableFooter,
+			save: this.saveText
 		});
 	},
 
@@ -121,14 +130,14 @@ export default Ext.define('NextThought.app.profiles.user.components.emailverify.
 
 		var me = this;
 		this.mon(this.submitEl, 'click', 'submitClicked', this);
-		this.mon(this.cancelEl, 'click', 'close', this);
+		this.mon(this.cancelEl, 'click', 'onClose', this);
 		this.mon(this.tokenEl, 'keyup', 'maybeEnableSubmit', this);
 		this.mon(this.requestLinkEl, 'click', this.handleVerificationRequest.bind(this));
 		this.mon(this.clearEl, 'click', this.reset.bind(this));
 		this.mon(this.changeLinkEl, 'click', this.showEmailCard.bind(this));
 		this.mon(this.gotoVerifyEl, 'click', this.showVerifyCard.bind(this));
 		this.mon(this.confirmEditEl, 'click', this.submitEmailClicked.bind(this));
-		this.mon(this.cancelEditEl, 'click', this.close.bind(this));
+		this.mon(this.cancelEditEl, 'click', this.onClose.bind(this));
 		this.mon(this.clearEmailEl, 'click', this.resetEmail.bind(this));
 
 		this.on('show', function() {
@@ -159,14 +168,24 @@ export default Ext.define('NextThought.app.profiles.user.components.emailverify.
 
 
 	submitClicked: function(e) {
-		var tokenVal = this.tokenEl.getValue(),
-			me = this;
-
 		if (e.getTarget('.done')) {
-			this.close();
+			this.onClose();
 			return;
 		}
 
+		this.onSave();
+	},
+
+
+	getValue: function(){
+		return this.tokenEl.getValue();
+	},
+
+
+	onSave: function(){
+		var tokenVal = this.getValue(), 
+			me = this;
+		
 		me.saveToken(tokenVal)
 			.fail(function (){
 				me.showError();
@@ -174,7 +193,7 @@ export default Ext.define('NextThought.app.profiles.user.components.emailverify.
 	},
 
 
-	close: function() {
+	onClose: function() {
 		if(this.ownerCt && this.ownerCt.close) {
 			this.ownerCt.close();
 		}
@@ -242,7 +261,7 @@ export default Ext.define('NextThought.app.profiles.user.components.emailverify.
 			targetEl = Ext.get(e.target);
 
 		if (targetEl && targetEl.hasCls('done')) {
-			this.close();
+			this.onClose();
 		}
 
 		this.saveEmail()
@@ -387,7 +406,7 @@ export default Ext.define('NextThought.app.profiles.user.components.emailverify.
 		if (me.isVerifyingEmail) { return; }
 
 		if (targetEl && targetEl.hasCls('done')) {
-			this.close();
+			this.onClose();
 		}
 
 		// Per Design request, we would like to simulate the sending and sent states for email verification,

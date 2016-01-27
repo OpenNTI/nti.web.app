@@ -8,7 +8,15 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 
 
 	userChanged: function(user) {
+		var joined;
+
 		this.user = user;
+		if (this.hasInitialWidget() && this.rendered) {
+			joined = this.down('joined-event');
+			if (joined && joined.setUser) {
+				joined.setUser(this.user);	
+			}
+		}
 	},
 
 
@@ -25,6 +33,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		return {
 			xtype: 'profile-stream-page',
 			records: items,
+			user: this.user,
 			navigateToObject: this.navigateToObject.bind(this)
 		};
 	},

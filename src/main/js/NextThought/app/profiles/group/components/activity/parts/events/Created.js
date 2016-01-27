@@ -15,11 +15,25 @@ export default Ext.define('NextThought.app.profiles.group.components.activity.pa
 
 
 	beforeRender: function() {
-		var me = this;
-		me.callParent(arguments);
-		var rd = me.renderData = Ext.apply(this.renderData || {},me.entity.getData());
-		rd.entity = me.entity;
-	    rd.name = me.entity.getName();
-		rd.date = Ext.Date.format(me.entity.get('CreatedTime'), 'F j, Y');
+		this.callParent(arguments);
+		this.setEntity(this.entity);
+	},
+
+
+	setEntity: function(entity){
+		var rd = this.renderData = Ext.apply(this.renderData || {}, entity && entity.getData());
+
+		// Update the entity if it's different. This method can be used to update an existing cmp.
+		if (entity !== this.entity) {
+			this.entity = entity;
+		}
+
+		rd.entity = this.entity;
+	    rd.name = this.entity && this.entity.getName();
+		rd.date = this.entity && Ext.Date.format(this.entity.get('CreatedTime'), 'F j, Y');	
+
+		if (this.rendered) {
+			this.renderTpl.overwrite(this.el, rd);
+		}
 	}
 });

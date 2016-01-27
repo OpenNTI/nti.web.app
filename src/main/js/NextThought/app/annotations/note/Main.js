@@ -111,6 +111,7 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 		catch (e) {
 			console.error(Globals.getError(e));
 		}
+
 		this.initSearch();
 	},
 
@@ -139,7 +140,7 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 							.then(function() {
 								me.record.notifyObserversOfFieldChange('AdjustedReferenceCount');
 								return Promise.resolve();
-							});			
+							});
 				});
 	},
 

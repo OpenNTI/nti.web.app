@@ -160,5 +160,10 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 
 	getSearch: function() {
 		return this.searchKey || '';
+	},
+
+	setSearch: function(value) {
+		this.searchEl.dom.value = value;
+		this.searchkey = value;
 	}
 });

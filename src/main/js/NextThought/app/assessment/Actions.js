@@ -154,13 +154,15 @@ export default Ext.define('NextThought.app.assessment.Actions', {
 						result = pendingAssessment.get('parts').first(),
 						itemLink = pendingAssessment.getLink('AssignmentHistoryItem');
 
+					questionSet.associatedAssignment.setHistoryLink(itemLink);
+
 					fulfill({
 						result: result,
 						itemLink: itemLink,
 						assignmentId: assignmentId
 					});
 				},
-				fail: function() {
+				failure: function() {
 					console.error('FAIL', arguments);
 					alert('There was a problem submitting your assignment.');
 					reject();

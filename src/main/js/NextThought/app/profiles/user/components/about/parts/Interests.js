@@ -58,7 +58,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.parts.
 
 
 	onEditorKeyPress: function(e) {
-		if (e.key === Ext.EventObject.ENTER || e.charCode === Ext.EventObject.ENTER) {
+		if (e.keyCode === Ext.EventObject.ENTER || e.charCode === Ext.EventObject.ENTER) {
 			this.saveNewInterest();
 			e.preventDefault();
 		}

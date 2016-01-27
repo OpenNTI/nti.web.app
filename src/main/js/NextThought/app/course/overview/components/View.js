@@ -8,7 +8,8 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 
 	requires: [
 		'NextThought.app.course.overview.components.Outline',
-		'NextThought.app.course.overview.components.Body'
+		'NextThought.app.course.overview.components.Body',
+		'NextThought.app.windows.Actions'
 	],
 
 	cls: 'course-overview',
@@ -24,35 +25,65 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var me = this;
+		this.WindowActions = NextThought.app.windows.Actions.create();
 
 		this.initRouter();
 
+		this.body.openEditing = this.openEditing.bind(this);
+		this.body.closeEditing = this.closeEditing.bind(this);
+
+		this.navigation.selectOutlineNode = this.selectOutlineNode.bind(this);
+		this.body.navigateToOutlineNode = this.selectOutlineNode.bind(this);
+
 		this.addChildRouter(this.body);
 
+		this.addRoute('/edit', this.showEditOutlineNode.bind(this));
+		this.addRoute('/:node', this.showOutlineNode.bind(this));
+		this.addRoute('/:node/edit', this.showEditOutlineNode.bind(this));
 
-		this.addRoute('/:lesson', this.showLesson.bind(this));
+		this.addDefaultRoute(this.showOutlineNode.bind(this));
 
-		this.addDefaultRoute(this.showLesson.bind(this));
-
-		me.on('activate', me.onActivate.bind(me));
-
-		me.mon(me.navigation, {
-			'empty-outline': function() {
-				me.unmask();
-			},
-			'select-lesson': function(record) {
-				var id = ParseUtils.encodeForURI(record.getId());
-
-				me.pushRoute(record.get('label'), id, {lesson: record});
-			}
-		});
+		this.onScroll = this.onScroll.bind(this);
 	},
 
 
-	onActivate: function() {
-		this.navigation.refresh();
+	onRouteActivate: function() {
+		this.updateOutline(this.isEditing);
+
 		this.alignNavigation();
+		this.isActive = true;
+
+		if (this.hasEditControls) {
+			this.addScrollListener();
+		}
+	},
+
+
+	onRouteDeactivate: function() {
+		delete this.isActive;
+		this.removeScrollListener();
+	},
+
+	alignNavigation: function() {
+		this.callParent(arguments);
+
+		this.onScroll();
+	},
+
+
+	addScrollListener: function() {
+		this.removeScrollListener();
+		window.addEventListener('scroll', this.onScroll);
+	},
+
+
+	removeScrollListener: function() {
+		window.removeEventListener('scroll', this.onScroll);
+	},
+
+
+	onScroll: function() {
+		this.navigation.syncTop(this.body.getLessonTop());
 	},
 
 
@@ -61,21 +92,175 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 	},
 
 
+	openEditing: function() {
+		var me = this,
+			node = me.activeNode,
+			outline = me.activeOutline,
+			id = node && node.getId();
+
+		return new Promise(function(fulfill, reject) {
+			if (!outline.hasSharedEntries()) {
+				fulfill();
+				return;
+			}
+
+			Ext.Msg.show({
+				title: 'Are you sure?',
+				msg: 'Changes are synced between all sections of your course.',
+				doNotShowAgainKey: 'editing-shared-outline',
+				buttons: {
+					primary: {
+						text: 'OK',
+						handler: fulfill
+					},
+					secondary: {
+						text: 'Cancel',
+						handler: reject
+					}
+				}
+			});
+		}).then(function() {
+			id = ParseUtils.encodeForURI(id);
+
+			if (id) {
+				me.pushRoute('Editing', id + '/edit');
+			} else {
+				me.pushRoute('Editing', 'edit');
+			}
+		});
+	},
+
+
+	closeEditing: function() {
+		var me = this,
+			bundle = me.currentBundle,
+			outlineInterface = bundle && bundle.getOutlineInterface(true);
+
+		outlineInterface.onceBuilt()
+			.then(function(outlineInterface) {
+				var outline = outlineInterface && outlineInterface.getOutline(),
+					nodeId = me.activeNode && me.activeNode.getId();
+
+					outline.fillInItems();
+
+					return outline.findOrderedContentsItem(nodeId);
+			})
+			.then(function(outlineNode) {
+					var node,
+						next = outlineNode && outlineNode.nextSibling,
+						previous = outlineNode && outlineNode.previousSibling,
+						id;
+
+					if (outlineNode && outlineNode.getFirstContentNode) {
+						node = outlineNode.getFirstContentNode();
+					}
+
+					while ((next || previous) && !node) {
+						if (next && next.getFirstContentNode()) {
+							node = next.getFirstContentNode();
+							break;
+						} else {
+							next = next && next.nextSibling;
+						}
+
+						if (previous && previous.getFirstContentNode()) {
+							node = previous.getFirstContentNode();
+							break;
+						} else {
+							previous = previous && previous.previousSibling;
+						}
+					}
+
+					// node be firstContent, next sibling, previous sibling,
+					if (node) {
+						id = node && node.getId();
+					}
+
+					if (id) {
+						id = ParseUtils.encodeForURI(id);
+						me.pushRoute('', id);
+					} else {
+						me.pushRoute('', '');
+					}
+			})
+			.fail(function(reason) {
+				console.error('Unable to stop editing because: ' + reason);
+			});
+	},
+
+
+	selectOutlineNode: function(record) {
+		var id = ParseUtils.encodeForURI(record.getId()),
+			route = id;
+
+		if (this.isEditing) {
+			route = Globals.trimRoute(route) + '/edit';
+		}
+
+		this.pushRoute(record.get('label'), route, {outlineNode: record});
+	},
+
+
+	showEditControls: function() {
+		this.hasEditControls = true;
+
+		if (this.isActive) {
+			this.addScrollListener();
+		}
+
+		this.addCls('has-editing-controls');
+		this.body.showEditControls();
+	},
+
+
+	hideEditControls: function() {
+		delete this.hasEditControls;
+		this.removeScrollListener();
+		this.removeCls('has-editing-controls');
+		this.body.hideEditControls();
+	},
+
+
+	updateOutline: function(editing, doNotCache) {
+		var me = this,
+			bundle = me.currentBundle,
+			outlineInterface = editing ? bundle.getAdminOutlineInterface(doNotCache) : bundle.getOutlineInterface(doNotCache);
+
+		outlineInterface.onceBuilt()
+			.then(function(outlineInterface) {
+				var outline = outlineInterface.getOutline();
+
+				if (outline.getLink('edit')) {
+					me.showEditControls();
+				} else {
+					me.hideEditControls();
+				}
+
+				me.activeOutline = outline;
+				me.body.setOutline(outline);
+
+				return outline;
+			})
+			.then(me.navigation.setOutline.bind(me.navigation, bundle));
+
+		return outlineInterface;
+	},
+
+
 	bundleChanged: function(bundle) {
 		if (this.currentBundle === bundle) { return; }
 
-		this.clear();
-		this.currentBundle = bundle;
+		var me = this;
 
-		if (!bundle || !bundle.getNavigationStore) {
-			delete this.currentBundle;
+		me.clear();
+		me.currentBundle = bundle;
+
+		if (!bundle || !bundle.getOutlineInterface) {
+			delete me.currentBundle;
 			return;
 		}
 
-		this.store = bundle.getNavigationStore();
-
-		this.navigation.setNavigationStore(bundle, this.store);
-		this.body.setActiveBundle(bundle);
+		me.body.setActiveBundle(bundle);
 	},
 
 
@@ -91,11 +276,11 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 		wait()
 			.then(function() {
 				if (me.el && me.el.dom) {
-					me.el.mask('NextThought.view.courseware.View.loading', 'loading');
+					me.el.mask(getString('NextThought.view.courseware.View.loading'), 'loading');
 				}
 			});
 
-		me.navigation.clear();
+		me.navigation.clearCollection();
 		me.body.clear();
 	},
 
@@ -112,39 +297,99 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 	},
 
 
-	showLesson: function(route, subRoute) {
-		var me = this,
-			id = route.params && route.params.lesson && ParseUtils.decodeFromURI(route.params.lesson),
-			record = route.precache.lesson, rIndex;
+	__getRecord: function(id, record, editing, doNotCache) {
+		var me = this, rIndex,
+			outline = this.updateOutline(editing, doNotCache);
 
-		return this.store.onceBuilt()
-			.then(function() {
+		return outline.onceBuilt()
+			.then(function(outline) {
 				if (id && (!record || record.getId() !== id)) {
-					record = me.store.findRecord('NTIID', id, false, true, true);
+					record = outline.getNode(id);
+				} else if (record) {
+					//get the record that is in the outline in case it has updated
+					record = outline.getNode(record.getId());
 				}
 
-				if (!record || record.get('type') !== 'lesson' || !record.get('NTIID')) {
-					rIndex = me.store.findBy(function(rec) {
-						return rec.get('type') === 'lesson' && rec.get('NTIID');
+				//With editing the record may or may not be a content node
+				if (!editing && record) {
+					record = record.getFirstContentNode();
+				}
+
+				// In case, we have no record, get the first available record.
+				// TODO: should we check if it's not in edit mode?
+				if (!record) {
+					record = outline.findNodeBy(function(rec) {
+						return rec.get('type') === 'lesson' && rec.get('NTIID') && rec.get('isAvailable');
 					});
-
-					if (rIndex > -1) {
-						record = me.store.getAt(rIndex);
-					}
 				}
 
+				return record;
+			});
+	},
+
+
+	showOutlineNode: function(route, subRoute) {
+		var me = this,
+			id = route.params && route.params.node && ParseUtils.decodeFromURI(route.params.node),
+			changedEditing = me.isEditing,
+			record = route.precache.outlineNode;
+
+		me.alignNavigation();
+		me.navigation.stopEditing();
+		me.body.showNotEditing();
+
+		delete me.isEditing;
+
+		return me.__getRecord(id, record, false, changedEditing)
+			.then(function(record) {
 				if (!record) {
 					console.error('No valid lesson to show');
 					return;
 				}
 
-				record = me.navigation.selectRecord(record);
+				record = me.navigation.selectRecord(record, true);
 				me.unmask();
 				me.setTitle(record.get('label'));
-				me.activeLesson = record;
+				me.activeNode = record;
 
-				return me.body.showLesson(record)
-					.then(me.alignNavigation.bind(me));
+				return me.body.showOutlineNode(record, changedEditing)
+					.then(me.alignNavigation.bind(me))
+					.then(function() {
+						return record;
+					});
+			});
+	},
+
+
+	showEditOutlineNode: function(route, subRoute) {
+		var me = this,
+			id = route.params && route.params.node && ParseUtils.decodeFromURI(route.params.node),
+			changedEditing = !me.isEditing,
+			record = route.precache.outlineNode;
+
+		me.alignNavigation();
+		me.navigation.startEditing();
+		me.body.showEditing();
+
+		me.isEditing = true;
+
+		return me.__getRecord(id, record, true, changedEditing)
+			.then(function(record) {
+				if (!record) {
+					console.error('No valid outline node to edit');
+					return;
+				}
+
+				record = me.navigation.selectRecord(record, true);
+				me.unmask();
+				me.setTitle('Editing | ' + record.get('label'));
+				me.activeNode = record;
+
+				return me.body.editOutlineNode(record, changedEditing)
+					.then(me.alignNavigation.bind(me))
+					.then(function() {
+						return record;
+					});
 			});
 	}
 });

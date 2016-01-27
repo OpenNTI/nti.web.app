@@ -152,7 +152,32 @@ Ext.applyIf(Promise.prototype, {
 Ext.applyIf(Promise, {
 	resolve: function(v) { return v instanceof Promise ? v : new Promise(function(f) {f.call(this, v);}); },
 	reject: function(v) { return new Promise(function(f, r) {r.call(this, v);}); },
-	wait: function(t) { return new Promise(function(f) {setTimeout(f, t || 1);});}
+	wait: function(t) { return new Promise(function(f) {setTimeout(f, t || 1);});},
+	/**
+	 * Given a minimum duration, return a function that when called
+	 * will return a promise that fulfills with its first arg after
+	 * at least the duration given has passed.
+	 *
+	 * @param  {Number} minWait the min time to wait
+	 * @return {Function}
+	 */
+	minWait: function(minWait) {
+		var start = new Date();
+
+		return function(result) {
+			var end = new Date(),
+				duration = end - start;
+
+			if (duration < minWait) {
+				return wait(minWait - duration)
+					.then(function() {
+						return result;
+					});
+			}
+
+			return Promise.resolve(wait);
+		}
+	}
 });
 
 wait = Promise.wait;

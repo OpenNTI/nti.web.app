@@ -17,7 +17,9 @@ export default Ext.define('NextThought.app.notifications.components.types.Feedba
 			.then(function(assignment) {
 				var wording = me.wording.replace('{assignment}', me.titleTpl.apply({name: assignment.get('title')}));
 
-				me.wordingEl.dom.innerHTML = wording;
+				if (me.wordingEl && me.wordingEl.dom) {
+					me.wordingEl.dom.innerHTML = wording;
+				}
 			});
 	}
 });

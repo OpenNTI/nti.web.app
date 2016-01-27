@@ -264,7 +264,15 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 
 
 	onceReadyForSearch: function() {
-		return this.getIframe().onceSettled();
+		var me = this;
+
+		return new Promise(function(fulfill, reject) {
+			if (me.isReadyForSearch) {
+				return fulfill();
+			} else {
+				me.on('ready-for-search', fulfill);
+			}
+		});
 	},
 
 
@@ -279,15 +287,26 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 		}
 	},
 
+	goToNote: function(note) {
+		var me = this;
 
-	setPageInfo: function(pageInfo, bundle, fragment) {
+		if (note) {
+			me.getIframe().onceSettled()
+				.then(function() {
+					me.getScroll().toNote(note);
+				});
+		}
+	},
+
+
+	setPageInfo: function(pageInfo, bundle, fragment, note) {
 		if (!this.rendered) {
-			this.on('afterrender', this.setPageInfo.bind(this, pageInfo, bundle, fragment));
+			this.on('afterrender', this.setPageInfo.bind(this, pageInfo, bundle, fragment, note));
 			return;
 		}
 
 		if (!this.iframeReady) {
-			this.getIframe().on('iframe-ready', this.setPageInfo.bind(this, pageInfo, bundle, fragment), this, {single: true});
+			this.getIframe().on('iframe-ready', this.setPageInfo.bind(this, pageInfo, bundle, fragment, note), this, {single: true});
 			return;
 		}
 
@@ -305,7 +324,6 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 				me.splash.removeCls('initial');
 
 				me.isReadyForSearch = true;
-				me.fireEvent('ready-for-search');
 				me.fireEvent('sync-overlays');
 
 				me.getIframe().onceSettled()
@@ -320,9 +338,13 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 							}
 						} else if (fragment) {
 							me.getScroll().toTarget(fragment);
+						} else if (note) {
+							me.getScroll().toNote(note);
 						}
 
 						me.fireEvent('sync-overlays');
+
+						me.fireEvent('ready-for-search');
 					});
 			});
 	},

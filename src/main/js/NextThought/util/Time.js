@@ -51,6 +51,11 @@ export default Ext.define('NextThought.util.Time', {
 			elapsed = current - previous,
 			result;
 
+		// We are interested in the time interval.
+		if (elapsed < 0) {
+			elapsed = Math.abs(elapsed);
+		}
+
 		if (elapsed < msPerMinute) {
 			result = Math.round(elapsed / 1000) + ' seconds ago';
 		}

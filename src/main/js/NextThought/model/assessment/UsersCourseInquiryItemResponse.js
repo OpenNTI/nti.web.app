@@ -5,6 +5,7 @@ export default Ext.define('NextThought.model.assessment.UsersCourseInquiryItemRe
 	requires: ['NextThought.model.assessment.SurveySubmission'],
 
 	fields: [
+		{name: 'Aggregated', type: 'auto'},
 		{name: 'Submission', type: 'singleItem'}
 	]
 });

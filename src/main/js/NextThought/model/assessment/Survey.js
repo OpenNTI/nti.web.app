@@ -20,6 +20,13 @@ export default Ext.define('NextThought.model.assessment.Survey', {
 	},
 
 
+	setResults: function(results) {
+		//Don't delete this promise since we don't have a link
+		//to the results on the survey yet.
+		this.__loadResultsPromise = Promise.resolve(results);
+	},
+
+
 	__loadResults: function() {
 		var me = this,
 			link = me.getResultsLink(),

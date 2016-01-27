@@ -1,10 +1,22 @@
 export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.courses.courseoutlinenode',
+
+	statics: {
+		mimeType: 'application/vnd.nextthought.courses.courseoutlinenode'
+	},
+
 	requires: [
 		'NextThought.model.converters.Date',
+		'NextThought.model.courses.overview.Lesson',
 		'NextThought.model.courses.navigation.CourseOutlineNodeProgress'
 	],
+
+	mixins: {
+		// DataTransfer: 'NextThought.mixins.dnd.DataTransferSource',
+		OrderedContents: 'NextThought.mixins.OrderedContents',
+		DurationCache: 'NextThought.mixins.DurationCache'
+	},
 
 	isNode: true,
 
@@ -16,12 +28,18 @@ export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNod
 		{ name: 'title', type: 'string'},
 		{ name: 'src', type: 'string'},
 
+		{ name: 'ContentNTIID', type: 'string'},
+
 		{ name: 'AvailableBeginning', type: 'ISODate'},
 		{ name: 'AvailableEnding', type: 'ISODate'},
 
 		{ name: 'label', type: 'string', mapping: 'title'},
 
 		{ name: 'position', type: 'int' },
+
+		{ name: 'isAvailable', type: 'Synthetic', persis: false, fn: function(r) {
+			return !!this.get('ContentNTIID');
+		}},
 
 		{ name: 'type', type: 'Synthetic', persist: false, fn: function(r) {
 			var d = r._max_depth || 2,
@@ -69,13 +87,18 @@ export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNod
 		{ name: 'tocNode', type: 'Synthetic', persist: false, fn: function(r) {
 			var t = r.get('tocOutlineNode');
 
-			return t & t.get && t.get('tocNode');
+			return t && t.get && t.get('tocNode');
 		}}
 	],
 
 
+	constructor: function() {
+		this.callParent(arguments);
+	},
+
+
 	findNode: function(id) {
-		if (this.getId() === id) { return this; }
+		if ((this.getId() === id) || (this.get('ContentNTIID') === id)) { return this; }
 		return (this.get('Items') || []).reduce(function(a, o) {
 			return a || (o.findNode && o.findNode(id));
 		}, null);
@@ -90,6 +113,41 @@ export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNod
 
 	getTitle: function() {
 		return this.get('label');
+	},
+
+
+	getDataForTransfer: function() {
+		return {
+			MimeType: this.mimeType,
+			title: this.getTitle(),
+			NTIID: this.get('NTIID')
+		};
+	},
+
+
+	getAllowedTypes: function() {
+		var allowed = [];
+
+		if (this._depth === 1) {
+			allowed.push(NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType);
+		}
+
+		return allowed;
+	},
+
+
+	isLeaf: function() {
+		var depth = this._depth,
+			maxDepth = this._max_depth;
+
+		return depth === maxDepth;
+	},
+
+
+	isTopLevel: function() {
+		var depth = this._depth;
+
+		return depth === 1;
 	},
 
 
@@ -128,6 +186,24 @@ export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNod
 	},
 
 
+	getFirstContentNode: function() {
+		var items = this.get('Items'), index = 0,
+			contentNode, item = items && items[0];
+
+		while (!contentNode && item) {
+			if (item.getFirstContentNode) {
+				contentNode = item.getFirstContentNode();
+			}
+
+			index += 1;
+
+			item = items[index];
+		}
+
+		return contentNode;
+	},
+
+
 	getProgress: function() {
 		var link = this.getLink('Progress');
 
@@ -139,5 +215,48 @@ export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNod
 			.then(function(response) {
 				return ParseUtils.parseItems(response)[0];
 			});
+	},
+
+
+	getContents: function() {
+		var me = this,
+			key = 'contents',
+			link = this.getLink('overview-content'),
+			contents;
+
+		contents = this.getFromCache(key);
+
+		if (!contents) {
+			if (!link) {
+				contents = Promise.resolve(null);
+			} else {
+				contents = Service.request(link)
+							.then(function(response) {
+								return ParseUtils.parseItems(response)[0];
+							})
+							.then(function(contents) {
+								contents.outlineNode = me;
+
+								return contents;
+							});
+			}
+
+
+			this.cacheForShortPeriod(key, contents);
+		}
+
+		return contents;
+	},
+
+
+	onItemAdded: function(record) {
+		this.fillInDepths(record);
+	},
+
+
+	fillInDepths: function(record) {
+		if (!record) { return; }
+
+		record._depth = this._depth + 1;
 	}
 });

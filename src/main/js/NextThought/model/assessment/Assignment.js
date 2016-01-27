@@ -58,8 +58,13 @@ export default Ext.define('NextThought.model.assessment.Assignment', {
 			});
 	},
 
-  getHistory: function() {
-	  var link = this.getLink('History');
+
+	setHistoryLink: function(link) {
+		this.historyLink = link;
+	},
+
+	getHistory: function() {
+	  var link = this.historyLink ||  this.getLink('History');
 
 		if (!link) { return Promise.reject(); }
 

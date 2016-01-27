@@ -52,7 +52,15 @@ export default Ext.define('NextThought.app.content.components.ContentSwitcher', 
 						]}
 					]
 				}
-			]}
+			]},
+			{
+				tag: 'li',
+				cls: 'item library meta',
+				'data-root-route': '/',
+				'data-id': 'library',
+				'data-route': '',
+				html: 'See All'
+			}
 		]
 	})),
 
@@ -77,8 +85,6 @@ export default Ext.define('NextThought.app.content.components.ContentSwitcher', 
 		this.CourseActions = NextThought.app.course.Actions.create();
 		this.CourseStateStore = NextThought.app.course.StateStore.getInstance();
 		this.LibraryCourseStateStore = NextThought.app.library.courses.StateStore.getInstance();
-
-		this.onBodyClick = this.onBodyClick.bind(this);
 	},
 
 
@@ -115,33 +121,12 @@ export default Ext.define('NextThought.app.content.components.ContentSwitcher', 
 		this.el.dom.style.top = top + 'px';
 
 		this.pointerEl.dom.style.left = (x - left) + 'px';
-
-		wait()
-			.then(this.mon.bind(this, Ext.getBody(), 'click', this.onBodyClick));
-	},
-
-
-	addBodyClickListener: function() {
-
-	},
-
-
-	onBodyClick: function(e) {
-		if (!e.getTarget('.content-switcher')) {
-			this.doHide();
-		}
-	},
-
-
-	doHide: function() {
-		this.mun(Ext.getBody(), 'click', this.onBodyClick);
-
-		this.hide();
 	},
 
 
 	getBundleData: function(bundle, route, cls) {
-		var uiData = bundle.asUIData();
+		var me = this,
+			uiData = bundle.asUIData();
 
 		return bundle.getThumbnail()
 			.then(function(thumb) {
@@ -252,7 +237,7 @@ export default Ext.define('NextThought.app.content.components.ContentSwitcher', 
 				}
 
 				recent.unshift(data);
-				recent = recent.slice(0, 5);
+				state.recent = recent.slice(0, 5);
 
 				return state;
 			})
@@ -309,7 +294,7 @@ export default Ext.define('NextThought.app.content.components.ContentSwitcher', 
 			root = item.getAttribute('data-root-route');
 			route = item.getAttribute('data-route') || '';
 
-			this.doHide();
+			this.hide();
 			this.switchContent(Globals.trimRoute(root) + '/' + Globals.trimRoute(route));
 		}
 	}

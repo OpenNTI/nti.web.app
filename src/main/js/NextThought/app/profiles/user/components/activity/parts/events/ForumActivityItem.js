@@ -218,7 +218,9 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 			title: 'Are you sure?',
 			fn: function(str) {
 				if (str === 'ok') {
-					me.ForumActions.deleteObject(me.record);
+					me.ForumActions.deleteObject(me.record, me, function(){
+						me.destroy();
+					});
 				}
 			}
 		});

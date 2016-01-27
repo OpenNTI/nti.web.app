@@ -11,6 +11,11 @@ export default Ext.define('NextThought.util.Color', {
 
 	sources: [],
 
+	isValidHexColor: function(code) {
+		return this.hex16Re.test(code) || this.hex8Re.test(code);
+	},
+
+
 	toRGBA: function(color, alpha) {
 		if (typeof color === 'string') {
 			if (!(color = Ext.draw.Color.fromString(color))) {

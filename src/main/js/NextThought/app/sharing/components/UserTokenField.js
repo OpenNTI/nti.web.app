@@ -50,16 +50,10 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 			spEl = this.scrollParentEl,
 			editorEl = this.el.up('.editor');
 
-		this.searchStore = new NextThought.store.UserSearch();
-		this.suggestionStore = this.SharingActions.getSuggestionStore();
-
-		this.pickerView = Ext.widget('search-sharesearch', {
-			ownerCls: this.ownerCls,
-			focusOnToFront: false,
-			renderTo: spEl || Ext.getBody(),
-			selectItem: this.searchItemSelected.bind(this),
-			stopHide: this.stopPickerHide()
-		});
+		this.searchStore = this.buildSearchStore();
+		this.suggestionStore = this.buildSuggestionStore();
+		this.setupPickerView();
+		
 
 		this.mon(this.searchStore, {
 			scope: this,
@@ -111,6 +105,29 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 				}
 			});
 		}
+	},
+
+
+	setupPickerView: function(){
+		var spEl = this.scrollParentEl;
+		
+		this.pickerView = Ext.widget('search-sharesearch', {
+			ownerCls: this.ownerCls,
+			focusOnToFront: false,
+			renderTo: spEl || Ext.getBody(),
+			selectItem: this.searchItemSelected.bind(this),
+			stopHide: this.stopPickerHide()
+		});
+	},
+
+
+	buildSearchStore: function() {
+		return new NextThought.store.UserSearch();
+	},
+
+
+	buildSuggestionStore: function() {
+		return this.SharingActions.getSuggestionStore();
 	},
 
 
@@ -185,7 +202,7 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 
 
 	resetPlaceholderLabel: function() {
-		this.setPlaceholderText(getString('NextThought.view.form.fields.UserTokenField.resetplaceholder'));
+		this.setPlaceholderText(this.placeholder);
 	},
 
 

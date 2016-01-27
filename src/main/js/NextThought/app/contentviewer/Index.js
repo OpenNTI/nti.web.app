@@ -75,6 +75,7 @@ export default Ext.define('NextThought.app.contentviewer.Index', {
 			handleNavigation: config.handleNavigation,
 			navigateToObject: config.navigateToObject,
 			fragment: config.fragment,
+			note: config.note,
 			rootRoute: config.rootRoute
 		};
 
@@ -109,6 +110,7 @@ export default Ext.define('NextThought.app.contentviewer.Index', {
 
 				me.reader = me.add(me.readerConfig);
 				me.reader.fireEvent('activate');
+				me.fireEvent('reader-set');
 
 				me.mon(me.reader, {
 					'assignment-submitted': me.fireEvent.bind(me, 'assignment-submitted'),
@@ -131,8 +133,8 @@ export default Ext.define('NextThought.app.contentviewer.Index', {
 
 		if (config.xtype === 'reader' && assignment) {
 			config.xtype = 'assignment-reader';
-			config.assignment = assignment;
-			config.assignmentId = assignment.getId();
+			config.assignment = config.assignment || assignment;
+			config.assignmentId = config.assignmentId || assignment.getId();
 			config.student = $AppConfig.userObject;
 			config.instructorProspective = false;
 		}
@@ -162,17 +164,33 @@ export default Ext.define('NextThought.app.contentviewer.Index', {
 
 
 	onceReadyForSearch: function() {
-		return this.reader ? this.reader.onceReadyForSearch() : Promise.resolve();
+		var me = this;
+
+		if (me.reader) {
+			return me.reader.onceReadyForSearch();
+		}
+
+		return new Promise(function(fulfill, reject) {
+			me.on('reader-set', fulfill);
+		}).then(function() {
+			return me.reader.onceReadyForSearch();
+		});
 	},
 
 
 	showSearchHit: function(hit, fragment) {
 		this.clearSearchHit();
-		this.reader.showSearchHit(hit, fragment);
+
+		wait()
+			.then(this.reader.showSearchHit.bind(this.reader, hit, fragment));
 	},
 
 	goToFragment: function(fragment) {
 		this.reader.goToFragment(fragment);
+	},
+
+	goToNote: function(note) {
+		this.reader.goToNote(note);
 	},
 
 	resolvePageInfo: function() {

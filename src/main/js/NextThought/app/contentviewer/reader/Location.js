@@ -52,7 +52,9 @@ export default Ext.define('NextThought.app.contentviewer.reader.Location', {
 
 		return ContentUtils.getLocation(ntiid, bundle)
 				.then(function(locations) {
-					var location = locations[0] || {};
+					var location = locations[0] || {
+						NTIID: ntiid
+					};
 
 					location.pageInfo = pageInfo;
 					location.currentBundle = bundle;
@@ -71,6 +73,8 @@ export default Ext.define('NextThought.app.contentviewer.reader.Location', {
 
 
 	getRelated: function(givenNtiid) {
+		if (!givenNtiid) { return Promise.resolve([]); }
+
 		var me = this,
 			location = me.getLocation(),
 			ntiid = givenNtiid || (location && location.NTIID),

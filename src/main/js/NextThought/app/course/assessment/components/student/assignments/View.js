@@ -11,6 +11,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 
 	requires: [
 		'NextThought.common.ux.Grouping',
+		'NextThought.app.navigation.path.Actions',
 		'NextThought.app.course.assessment.components.student.assignments.FilterBar',
 		'NextThought.app.course.assessment.components.student.assignments.List'
 	],
@@ -30,7 +31,27 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 
 
 	grouperMap: {
-		'lesson': 'lesson',
+		'lesson': {
+			 'property': 'lesson',
+			 'sorterFn': function(a, b) {
+			 	var aVal = a.get('outlineNode'),
+			 		bVal = b.get('outlineNode');
+
+			 	if (aVal) {
+			 		aVal = aVal._position;
+			 	} else {
+			 		aVal = Infinity;
+			 	}
+
+			 	if (bVal) {
+			 		bVal = bVal._position;
+			 	} else {
+			 		bVal = Infinity;
+			 	}
+
+			 	return aVal < bVal ? -1 : aVal === bVal ? 0 : 1;
+			 }
+		},
 		'completion': {
 			'property': 'completed',
 			'getGroupString': function(val) {
@@ -136,35 +157,32 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 
 				store.getGroups(false).forEach(function(g) {
 					//add a group cmp for each group
-					var name = g.name.split('|').last(),
+					var name = g.name,
+						proto = g.children[0],
+						node = proto.get('outlineNode'),
 						store = new Ext.data.Store({fields: me.getFields(), data: g.children, groupName: name}),
 						group = Ext.widget(me.newGroupUIConfig({
 							store: store
 						}));
 
-					groups.push(group);
-
-					function fill(node) {
-						store.groupName = node.get('title');
-						group.setTitle(node.get('title'));
+					function fill(n) {
+						store.groupName = n.getTitle();
+						group.setTitle(n.get('title'));
 						group.setSubTitle(Ext.Date.format(
 								node.get('AvailableBeginning') || node.get('AvailableEnding'),
 								'F j, Y'
-						));
+							));
 					}
 
-					function drop() {}
 
-					function resolve(o) { o.findNode(name).done(fill).fail(drop); }
+					groups.push(group);
 
 					me.mon(group.down('course-assessment-assignment-list'), 'itemclick', 'onItemClicked');
-
 
 					me.activeStores.push(store);
 
 					if (groupBy === 'lesson') {
-						group.setTitle('');//lets never show the NTIID
-						resolve(me.data.outline);
+						if (node) { fill(node); }
 					} else {
 						group.setTitle(name);
 					}
@@ -210,6 +228,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 	getFields: function() {
 		return [
 			{name: 'lesson', type: 'string'},
+			{name: 'outlineNode', type: 'auto'},
 			{name: 'id', type: 'string'},
 			{name: 'containerId', type: 'string'},
 			{name: 'name', type: 'string'},
@@ -234,6 +253,8 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		this.subviewBackingStores = [];
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment', 'update-assignment-view', 'close-reader']);
+
+		this.PathActions = NextThought.app.navigation.path.Actions.create();
 
 		this.on('filters-changed', this.updateFilters.bind(this));
 		this.on('search-changed', 'filterSearchValue');
@@ -348,7 +369,8 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 	 * @param {Bundle} instance    the bundle we are in
 	 */
 	setAssignmentsData: function(assignments, instance, silent) {
-		var me = this;
+		var me = this,
+			outlineInterface = instance.getOutlineInterface();
 
 
 		if (me.data && me.data.instance === instance && silent) {
@@ -364,30 +386,32 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 
 		me.data = {
 			assignments: assignments,
-			instance: instance
+			instance: instance,
+			outlineInterface: outlineInterface
 		};
 
-		function finish(outline) {
-			me.data.outline = outline;
+		function finish(outlineInterface) {
+			me.data.outline = outlineInterface.getOutline();
 			//Becasue this view has special derived fields, we must just listen for changes on the
 			// assignments collection itself and trigger a refresh. This cannot simply be a store
 			// of HistoryItems.
 			return me.applyAssignmentsData();
 		}
 
-		return instance.getOutline()
-				.done(finish)
-				.fail(function(reason) {
-					console.error('Failed to get course outline!', reason);
-				});
+		return	outlineInterface.onceBuilt()
+			.then(finish)
+			.fail(function(reason) {
+				console.error('Failed to get course outline!', reason);
+			});
 	},
 
 
 	applyAssignmentsData: function(silent) {
-		var lesson, raw = [], waitsOn = [],
-			bundle = this.data.instance,
-			outline = this.data.outline,
-			assignments = this.data.assignments;
+		var me = this,
+			lesson, raw = [], waitsOn = [],
+			bundle = me.data.instance,
+			outlineInterface = me.data.outlineInterface,
+			assignments = me.data.assignments;
 
 		function collect(assignment) {
 			if (assignment.doNotShow()) { return; }
@@ -397,42 +421,29 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 			waitsOn.push(Promise.all([
 				assignments.getHistoryItem(id, true).fail(function() { return; }),
 				assignments.getGradeBookEntry(id),
-				ContentUtils.getLineage(assignment.get('containerId'), bundle)
+				ContentUtils.getLineage(id, bundle)
+					.then(function(lineages) {
+						var lineage = lineages[0] || [];
+
+						return Promise.all(lineage.map(function(ntiid) {
+							return outlineInterface.findOutlineNode(ntiid);
+						})).then(function(results) {
+							results = results.filter(function(x) { return !!x; });
+
+							return results[0];
+						});
+					})
 			])
 				.then(function(results) {
 					var history = results[0],//history item
 						grade = results[1],//gradebook entry
-						lesson = results[2][0],//lineage
-						node;
-
-					lesson.pop(); //discard the root
-
-					//search through the entire lineage to find an outline node for the assignment
-					while (!node) {
-						//doing this the first time through is alright because
-						//it is discarding the leaf page
-						lesson.shift();
-
-						//if there are no lessons in the lineage we can't find a node
-						//do don't keep looping 'ZZZ', will be placed at the bottom
-						if (lesson.length === 0) {
-							node = 'ZZZ';
-						} else {
-							node = outline.getNode(lesson[0]);
-						}
-					}
-
-					if (node.get) {
-						node = node.index;
-						node = (node && node.pad && node.pad(3)) || 'ZZZ';
-					}
-
-					lesson = node + '|' + lesson.reverse().join('|');
+						node = results[2];//outline node
 
 					return {
 						id: id,
 						containerId: assignment.get('containerId'),
-						lesson: lesson,
+						lesson: node && node.getTitle(),
+						outlineNode: node,
 						item: assignment,
 						name: assignment.get('title'),
 						opens: assignment.get('availableBeginning'),
@@ -456,8 +467,8 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		assignments.each(collect);
 
 		return Promise.all(waitsOn)
-			.then(this.store.loadRawData.bind(this.store))
-			.then(this.restoreState.bind(this));
+			.then(me.store.loadRawData.bind(me.store))
+			.then(me.restoreState.bind(me));
 	},
 
 
@@ -496,6 +507,11 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 			bar.selectGroupBy(state.groupBy);
 		}
 
+		if (state && state.search) {
+			this.filterSearchValue(state.search);
+			bar.setSearch(state.search);
+		}
+
 		return this.applyState(state);
 	},
 
@@ -522,5 +538,12 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		} else {
 			console.error('No Assignment to navigate to');
 		}
+	},
+
+
+	getStateKey: function() {
+		var bundle = this.data.instance;
+
+		return bundle && bundle.getId() + '-course-assessment';
 	}
 });

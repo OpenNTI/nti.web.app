@@ -15,14 +15,16 @@ export default Ext.define('NextThought.app.library.courses.components.settings.C
 		//{cls: 'contact', html: 'Contact the Instructor'},
 		{ tag: 'a', cls: 'support', href: '{supportLink}', html: 'Request Support'},
 		//{ tag: 'a', cls: 'report', html: 'Report an Issue'},
-		{cls: 'drop', html: 'Drop Course'}
+		{ tag: 'tpl', 'if': 'isDroppable', cn: {cls: 'drop', html: 'Drop Course'}}
 	]),
 
 	beforeRender: function() {
 		this.callParent(arguments);
 
 		var isOpen = this.course.isOpen(),
-			registered;
+			registered,
+			catalog = this.course.getCourseCatalogEntry(),
+			isDroppable = catalog && catalog.isDroppable();
 
 		this.CourseEnrollmentStore = NextThought.app.course.enrollment.StateStore.getInstance();
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -33,7 +35,8 @@ export default Ext.define('NextThought.app.library.courses.components.settings.C
 			enrollCls: isOpen ? 'open' : 'enrolled',
 			enrollText: registered,// || isOpen ? 'You are taking the Open Course.' : 'You are taking the Credit Course.',
 			supportLink: 'mailto:support@nextthought.com?subject=Support%20Request',
-			reportLink: ''
+			reportLink: '',
+			isDroppable: isDroppable
 		});
 	},
 

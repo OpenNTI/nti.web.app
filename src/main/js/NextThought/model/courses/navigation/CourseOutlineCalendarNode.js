@@ -1,4 +1,8 @@
 export default Ext.define('NextThought.model.courses.navigation.CourseOutlineCalendarNode', {
 	extend: 'NextThought.model.courses.navigation.CourseOutlineNode',
-	mimeType: 'application/vnd.nextthought.courses.courseoutlinecalendarnode'
+	mimeType: 'application/vnd.nextthought.courses.courseoutlinecalendarnode',
+
+	statics: {
+		mimeType: 'application/vnd.nextthought.courses.courseoutlinecalendarnode'
+	}
 });

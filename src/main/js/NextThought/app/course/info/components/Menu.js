@@ -38,7 +38,7 @@ export default Ext.define('NextThought.app.course.info.components.Menu', {
 
 	addMenuItems: function() {
 		var me = this, items = [],
-			i = this.info && this.info.get('Instructors');
+			i = ( this.info && this.info.get('Instructors')) || [] ;
 		if (!this.rendered) {
 			this.onceRendered.then(me.addMenuItems.bind(me));
 			return;

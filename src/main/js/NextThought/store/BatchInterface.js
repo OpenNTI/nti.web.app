@@ -23,7 +23,7 @@ export default Ext.define('NextThought.store.BatchInterface', {
 		}
 
 		this.url = config.url;
-		this.params = config.params;
+		this.params = config.params || {};
 
 		this.batchSize = this.params.batchSize;
 

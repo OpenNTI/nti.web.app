@@ -47,7 +47,33 @@ export default Ext.define('NextThought.overrides.builtins.Node', {});
 		}
 	});
 
+
 	NodeList.prototype.toArray = function() {
 		return Array.prototype.slice.call(this);
 	};
+
+
+	if (!('remove' in Element.prototype)) {
+		Element.prototype.remove = function() {
+			if (this.parentNode) {
+				this.parentNode.removeChild(this);
+			}
+		};
+	}
+
+	if (!HTMLCanvasElement.prototype.toBlob) {
+		Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
+	  		value: function(callback, type, quality) {
+				var binStr = atob(this.toDataURL(type, quality).split(',')[1]),
+					len = binStr.length,
+					arr = new Uint8Array(len);
+
+				for (var i = 0; i < len; i++) {
+					 arr[i] = binStr.charCodeAt(i);
+				}
+
+				callback(new Blob([arr], {type: type || 'image/png'}));
+	  		}
+	 	});
+	}
 }());

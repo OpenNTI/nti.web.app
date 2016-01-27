@@ -764,6 +764,11 @@ export default Ext.define('NextThought.model.Service', {
 	},
 
 
+	canDoAdvancedEditing: function() {
+		return this.hasCapability('nti.platform.courseware.advanced_editing');
+	},
+
+
 	hasCapability: function(c) {
 		var caps = this.get('CapabilityList') || [];
 		return Ext.Array.contains(caps, c);

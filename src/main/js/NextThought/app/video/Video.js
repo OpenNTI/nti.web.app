@@ -172,7 +172,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		};
 
 		this.players = {};
-		Ext.applyIf(this.self, {playerBlacklist: []});
+		Ext.applyIf(this, {playerBlacklist: []});
 
 		this.playlistIndex = this.playlistIndex || 0;
 
@@ -285,7 +285,7 @@ export default Ext.define('NextThought.app.video.Video', {
 	playerSetup: function() {
 		this.log('Initializing the players.');
 		var me = this,
-			blacklist = this.self.playerBlacklist;
+			blacklist = this.playerBlacklist || [];
 
 		Ext.Object.each(NextThought.util.media, function(name, cls) {
 			if (cls.kind !== 'video') {return;}
@@ -325,7 +325,7 @@ export default Ext.define('NextThought.app.video.Video', {
 
 
 	unrecoverablePlayerError: function(player) {
-		this.self.playerBlacklist.push(player);
+		this.playerBlacklist.push(player);
 		this.playlistSeek(this.playlistIndex);
 	},
 
@@ -699,7 +699,7 @@ export default Ext.define('NextThought.app.video.Video', {
 				item = this.playlist[this.playlistIndex];
 				service = item && item.activeSource().service;
 				this.log('Playlist seek setting active service to ', this.activeVideoService);
-				while (item && Ext.Array.contains(this.self.playerBlacklist, this.activeVideoService)) {
+				while (item && Ext.Array.contains(this.playerBlacklist, this.activeVideoService)) {
 					if (!item.useNextSource()) {
 						service = 'none';
 						this.log('Active service is none');

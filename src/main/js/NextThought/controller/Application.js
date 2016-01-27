@@ -61,6 +61,9 @@ export default Ext.define('NextThought.controller.Application', {
 
 
 	load: function() {
+		if(window.NextThought){
+			window.NextThought.isInitialized = true;
+		}
 		this.mon(this.LoginStore, 'login-ready', 'onLogin');
 
 		this.LoginActions.login();
@@ -236,16 +239,16 @@ export default Ext.define('NextThought.controller.Application', {
 		//so any handlers that have a variable at the end won't accidentally
 		//get 'object'
 		//object/mimeType/id
-		if (parts[parts.length - 3] === 'object') {
-			location.pathname = parts.slice(0, -3).join('/');
-		//object/id
-		} else if (parts[parts.length - 2] === 'object') {
-			location.pathname = parts.slice(0, -2).join('/');
-		}
+		// if (parts[parts.length - 3] === 'object') {
+		// 	location.pathname = parts.slice(0, -3).join('/');
+		// //object/id
+		// } else if (parts[parts.length - 2] === 'object') {
+		// 	location.pathname = parts.slice(0, -2).join('/');
+		// }
 
 		this.maybeMarkReturn(title, location.pathname);
 
-		this.currentRoute = location.pathname + location.search + location.hash;
+		this.currentRoute = location.pathname + (location.search || '') + (location.hash || '');
 
 		return handleRoute(this.currentRoute, precache)
 			.then(this.onRoute.bind(this, title, route));

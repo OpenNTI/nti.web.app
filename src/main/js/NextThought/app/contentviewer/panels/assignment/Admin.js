@@ -17,7 +17,8 @@ export default Ext.define('NextThought.app.contentviewer.panels.assignment.Admin
 			pageSource: this.pageSource,
 			assignment: this.assignment,
 			assignmentHistory: this.assignmentHistory,
-			doNavigation: this.doNavigation.bind(this)
+			doNavigation: this.doNavigation.bind(this),
+			currentBundle: this.bundle
 		};
 	},
 

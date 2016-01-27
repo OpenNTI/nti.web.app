@@ -10,6 +10,8 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Ques
 	],
 
 	requires: [
+		'NextThought.model.QuestionSetRef',
+		'NextThought.model.AssignmentRef',
 		'NextThought.common.chart.Score',
 		'NextThought.app.assessment.ScoreboardHeader',
 		'NextThought.app.assessment.ScoreboardTally'

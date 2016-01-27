@@ -11,8 +11,20 @@ html.x-viewport {
 		}
 	}
 
+	&.prompt-open {
+		overflow: hidden !important;
+
+		.prompt-layer {
+			display: block;
+		}
+	}
+
 	&.msg-bar-open {
 		padding-top: $header-height-withbar;
+
+		body {
+			min-height: calc(100vh - #{$header-height-withbar});
+		}
 		
 		.main-navigation {
 			top: $msg-bar-height;
@@ -31,7 +43,7 @@ html.x-viewport {
 
 
 body.x-body {
-	min-height: 100%;
+	min-height: calc(100vh - #{$header-height});
 	height: auto !important;
 	overflow: hidden !important;
 	background: white;
@@ -130,6 +142,16 @@ body.x-body {
 		box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
 		clip: rect(10px, auto, 20px, auto);
 	}
+}
+
+.prompt-layer {
+	position: fixed;
+	top: 0; bottom: 0;
+	left: 0; right: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 201;
+	overflow: auto;
+	display: none;
 }
 
 

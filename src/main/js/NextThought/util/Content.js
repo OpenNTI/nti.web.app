@@ -109,14 +109,24 @@ export default Ext.define('NextThought.util.Content', {
 	/** @private */
 	externalUriRegex: /^((\/\/)|([a-z][a-z0-9\+\-\.]*):)/i,
 
+
+	/**
+	 * Detect whether or not a uri is pointing out of the site
+	 * @param  {String}  r uri to check
+	 * @return {Boolean}   true if its outside of the side
+	 */
 	isExternalUri: function(r) {
-		var targetURL = new URL(r),
-			targetHost = targetURL && targetURL.host,
-			currentHost = window.location && window.location.host;
-		
-		// return this.externalUriRegex.test(r);
+		var anchor = document.createElement('a'),
+			currentHost = window.location && window.location.host,
+			targetHost;
+
+		anchor.href = r;
+
+		targetHost = anchor.host;
+
 		return targetHost !== currentHost;
 	},
+
 
 	/**
 	 * Resolve the node for a ntiid with in a bundle or toc
@@ -343,6 +353,19 @@ export default Ext.define('NextThought.util.Content', {
 	},
 
 
+	getBlankNavInfo: function(suppressed) {
+		return {
+			isSupressed: suppressed,
+			currentIndex: 0,
+			totalNodes: 1,
+			previous: null,
+			next: null,
+			previousTitle: '',
+			nextTitle: ''
+		};
+	},
+
+
 	__getNavInfoFromToc: function(node, toc, rootId) {
 		var root = toc && toc.firstChild,
 			onSuppressed = false,
@@ -434,15 +457,7 @@ export default Ext.define('NextThought.util.Content', {
 		//If the current index is not in the visible nodes, just show it as 1 page
 		//with not next or previous
 		if (currentIndex < 0) {
-			return {
-				isSupressed: onSuppressed,
-				currentIndex: 0,
-				totalNodes: 1,
-				previous: null,
-				next: null,
-				previousTitle: '',
-				nextTitle: ''
-			};
+			return this.getBlankNavInfo(onSuppressed);
 		}
 
 		return {
@@ -480,8 +495,12 @@ export default Ext.define('NextThought.util.Content', {
 				return nodes[0];
 			})
 			.then(function(info) {
-				if (bundleOrToc.canGetToContent) {
-					return Promise.all([
+				var result;
+
+				if (!info) {
+					 result = me.getBlankNavInfo(false);
+				} else if (bundleOrToc.canGetToContent) {
+					result = Promise.all([
 						bundleOrToc.canGetToContent(info.previous, rootId),
 						bundleOrToc.canGetToContent(info.next, rootId)
 					]).then(function(result) {
@@ -490,9 +509,11 @@ export default Ext.define('NextThought.util.Content', {
 
 						return info;
 					});
+				} else {
+					result = info;
 				}
 
-				return info;
+				return result;
 			});
 	},
 

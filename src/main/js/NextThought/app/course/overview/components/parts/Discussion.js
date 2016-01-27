@@ -1,8 +1,13 @@
 export default Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
 	extend: 'Ext.Component',
 	alias: [
-		'widget.course-overview-discussion', 
+		'widget.course-overview-discussion',
 		'widget.course-overview-discussionref'
+	],
+
+	requires: [
+		'NextThought.model.Discussion',
+		'NextThought.model.DiscussionRef'
 	],
 
 	mixins: {
@@ -34,11 +39,11 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Disc
 
 	constructor: function(config) {
 		var n = config.node || {getAttribute: function(a) { return config[a];} },
-			i = config.locationInfo;
+			i = config.locationInfo || {};
 
 		config.data = {
 			title: n.getAttribute('title'),
-			icon: getURL(i.root + n.getAttribute('icon')),
+			icon: getURL((i.root || '') + n.getAttribute('icon')),
 			ntiid: n.getAttribute('ntiid').split(' '),
 			label: n.getAttribute('label'),
 			comments: 0,

@@ -74,7 +74,9 @@ export default Ext.define('NextThought.app.notifications.components.types.Base',
 			creator = me.record.get('Creator');
 
 		function updateAvatar(user) {
-			me.iconEl.update(NTIFormat.avatar(user));
+			if (me.iconEl) {
+				me.iconEl.update(NTIFormat.avatar(user));
+			}
 		}
 
 		UserRepository.getUser(creator)
@@ -82,13 +84,17 @@ export default Ext.define('NextThought.app.notifications.components.types.Base',
 				updateAvatar(user);
 				me.mon(user, 'avatarChanged', updateAvatar.bind(me, user));
 
-				me.usernameEl.update(user.getName());
+				if (me.usernameEl) {
+					me.usernameEl.update(user.getName());
+				}
 			});
 	},
 
 
 	fillInWording: function() {
-		this.wordingEl.dom.innerHTML = this.wording;
+		if (this.wordingEl && this.wordingEl.dom) {
+			this.wordingEl.dom.innerHTML = this.wording;
+		}
 	},
 
 

@@ -123,6 +123,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Not
 			return this.getNavigationPath();
 		}
 
+		//XXX: This doesn't look like its "caching" anything...
 		this.CACHE.loadLineage = ContentUtils.getLineageLabels(rec.get('ContainerId'), true, this.course);
 
 		return this.CACHE.loadLineage

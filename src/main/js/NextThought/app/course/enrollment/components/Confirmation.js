@@ -57,10 +57,15 @@ export default Ext.define('NextThought.app.course.enrollment.components.Confirma
 		var c = this.course,
 			start = c.get('StartDate'),
 			helplinks = [], i, labelprefix,
+			confirmationText = getString('EnrollmentConfirmation') || {},
+			prompt = confirmationText.subtitle && getFormattedString(confirmationText.subtitle, {course: c.get('Title')});
+
+		if (!prompt) {
 			prompt = getFormattedString('NextThought.view.courseware.enrollment.Confirmation.ClassStartInfo', {
                 date: Ext.Date.format(start, 'F j, Y'),
                 course: c.get('Title')
-            });
+            });	
+		}
 
 		for (i = 1; i <= 3; i++) {
 			labelprefix = 'course-info.course-supoprt.link' + i;
@@ -131,8 +136,15 @@ export default Ext.define('NextThought.app.course.enrollment.components.Confirma
 	beforeShow: function() {
 		var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
 			transactionId = purchaseAttempt && purchaseAttempt.get('TransactionID'),
-			enrollment = this.CourseStore.findEnrollmentForCourse(this.course),
-			thankYou = enrollment && enrollment.get('VendorThankYouPage');
+			family = this.course.getCatalogFamily(),
+			enrollment = this.CourseStore.findEnrollmentForCourse(this.course) || this.CourseStore.findForCatalogFamily(family),
+			thankYou;
+
+		if (Array.isArray(enrollment)) {
+			enrollment = enrollment[0];
+		}
+
+		thankYou = enrollment && enrollment.get('VendorThankYouPage');
 
 		if (transactionId) {
 			this.transactionInput.update(transactionId);

@@ -184,8 +184,9 @@ export default Ext.define('NextThought.app.video.OverlayedPanel', {
 
 		this.down('box').getEl().setStyle({
 			backgroundImage: 'url(' + src + ')',
-			backgroundSize: '640px',
-			backgroundPosition: '0 0'
+			backgroundSize: 'contain',
+			backgroundColor: 'black',
+			backgroundPosition: 'center center'
 		});
 
 		if (!src) {
@@ -202,7 +203,7 @@ export default Ext.define('NextThought.app.video.OverlayedPanel', {
 		if (e.getTarget('.launch-player')) {
 			this.fromClick = true;
 			this.addCls('playing');
-			this.down('content-video').resumePlayback(true);	
+			this.down('content-video').resumePlayback(true);
 		}
 		if (!e.getTarget('.launch-player') && e.getTarget('.label')) {
 			this.openMediaViewer();

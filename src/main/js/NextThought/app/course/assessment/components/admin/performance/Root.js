@@ -104,7 +104,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 					sortOn: 'PredictedGrade',
 					width: 120,
 					text: Ext.DomHelper.markup({
-						cls: 'disclaimer-header', 'data-qtip': 'Estimated from the grading policy in the Syllabus', html: 'Course Grade'
+						cls: 'disclaimer-header', 'data-qtip': 'Estimated from the grading policy in the Syllabus', html: 'Projected Grade'
 					}),
 					renderer: function(val) {
 						return NextThought.model.courseware.Grade.getDisplay(val);
@@ -132,6 +132,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 
 		me.grid.bindStore(this.store);
 		me.pageHeader.bindStore(this.store);
+		me.pageHeader.currentBundle = me.currentBundle;
 
 		me.mon(me.grid, {
 			'load-page': me.loadPage.bind(me),
@@ -303,13 +304,19 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 	},
 
 
+	STUDENT_FILTERS: [
+		{ text: 'All Students', type: 'All'},
+		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.open'), type: 'Open'},
+		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.enrolled'), type: 'ForCredit'}
+	],
+
+
 	createStudentMenu: function() {
 		var type = this.studentFilter || (isFeature('show-open-students-first') ? 'Open' : 'ForCredit'),
-			items = [
-				//{ text: 'All Students', type: 'all', checked: type === 'all'},
-				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.open'), type: 'Open', checked: type === 'Open'},
-				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.enrolled'), type: 'ForCredit', checked: type === 'ForCredit'}
-			];
+			items = this.STUDENT_FILTERS.map(function(filter) {
+				filter.checked = type === filter.type;
+				return filter;
+			});
 
 		this.studentMenu = Ext.widget('menu', {
 			cls: 'group-by-menu',
@@ -369,6 +376,9 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 
 		this.maybeSwitch(noEmpty);
 		this.updateFilter();
+		if (this.pageHeader.onStudentFilterChange) {
+			this.pageHeader.onStudentFilterChange(this.studentFilter);
+		}
 	},
 
 
@@ -425,7 +435,10 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 			return;
 		}
 
-		if (type === 'Open') {
+		if (type === 'All') {
+			url = base;
+			this.pageHeader.setExportURL(url, getString('NextThought.view.courseware.assessment.admin.performance.Root.exportall'));
+		} else if (type === 'Open') {
 			url = base + '?LegacyEnrollmentStatus=Open';
 			this.pageHeader.setExportURL(url, getString('NextThought.view.courseware.assessment.admin.performance.Root.exportopen'));
 		} else {
@@ -435,14 +448,20 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 	},
 
 
+	ITEM_FILTERS: [
+		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.alloption'), type: 'all'},
+		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.actionoption'), type: 'actionable'},
+		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.overoption'), type: 'overdue'},
+		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.unoption'), type: 'ungraded'}
+	],
+
+
 	createItemMenu: function() {
 		var type = this.itemFilter,
-			items = [
-				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.alloption'), type: 'all', checked: type === 'all'},
-				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.actionoption'), type: 'actionable', checked: type === 'actionable'},
-				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.overoption'), type: 'overdue', checked: type === 'overdue'},
-				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.unoption'), type: 'ungraded', checked: type === 'ungraded'}
-			];
+			items = this.ITEM_FILTERS.map(function(filter) {
+				filter.checked = type === filter.type;
+				return filter;
+			});
 
 		this.itemMenu = Ext.widget('menu', {
 			cls: 'group-by-menu',
@@ -517,6 +536,14 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 	},
 
 
+	clearState: function() {
+		this.stateDisabled = true;
+		this.clearSearch();
+		this.stateDisabled = false;
+		this.current_state = {};
+	},
+
+
 	setSearch: function(val) {
 		this.searchKey = val;
 
@@ -560,13 +587,35 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		var store = this.store,
 			sorters = this.store.sorters && this.store.sorters.items,
 			sorter = (sorters && sorters[0]) || {},
-			params = store.proxy.extraParams;
+			params = store.proxy.extraParams,
+			filters = params.filter ? params.filter.split(',') : [],
+			studentFilters, itemFilters, studentFilter, itemFilter;
+
+		studentFilters = this.STUDENT_FILTERS.reduce(function(acc, filter) {
+			acc[filter.type] = true;
+			return acc;
+		}, {});
+
+		itemFilters = this.ITEM_FILTERS.reduce(function(acc, filter) {
+			acc[filter.type] = true;
+			return acc;
+		}, {});
+
+		studentFilters = filters.filter(function(filter) {
+			return studentFilters[filter];
+		});
+
+		itemFilters = filters.filter(function(filter) {
+			return itemFilters[filter];
+		});
 
 		return {
 			currentPage: store.currentPage,
 			pageSize: store.pageSize,
 			searchKey: params.search || '',
 			filters: params.filter ? params.filter.split(',') : [],
+			itemFilter: itemFilters[0],
+			studentFilter: studentFilters[0],
 			sort: {
 				prop: sorter.property || '',
 				direction: sorter.direction || ''
@@ -585,9 +634,9 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 			isEqual = false;
 		} else if ((state.searchKey || '') !== storeState.searchKey) {
 			isEqual = false;
-		} else if (storeState.filters.indexOf(state.studentFilter) < 0) {
+		} else if (storeState.studentFilter !== state.studentFilter) {
 			isEqual = false;
-		} else if (state.itemFilter !== 'all' && storeState.filters.indexOf(state.itemFilter) < 0) {
+		} else if (storeState.itemFilter !== state.itemFilter) {
 			isEqual = false;
 		} else if (state.sort && (state.sort.prop !== storeState.sort.prop || state.sort.direction !== storeState.sort.direction)) {
 			isEqual = false;
@@ -601,9 +650,18 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 
 	setDisabled: function() {
 		this.stateDisabled = true;
-		this.header.addCls('disabled');
-		this.pageHeader.setDisabled();
-		this.grid.setDisabled();
+
+		if (this.header) {
+			this.header.addCls('disabled');
+		}
+
+		if (this.pageHeader) {
+			this.pageHeader.setDisabled();
+		}
+
+		if (this.grid) {
+			this.grid.setDisabled();
+		}
 	},
 
 
@@ -627,13 +685,15 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		var me = this,
 			store = me.store,
 			filters = [],
-			params = store.proxy.extraParams;
+			params = store.proxy.extraParams || {},
+			studentFilter;
 
 		me.applyingState = true;
 		me.setDisabled();
 		state = state || {};
+		studentFilter = state.studentFilter || this.studentFilter || 'ForCredit';
 
-		filters.push(state.studentFilter || this.studentFilter || 'ForCredit');
+		filters.push(studentFilter);
 
 		if (state.itemFilter && !/all/i.test(state.itemFilter)) {
 			filters.push(state.itemFilter);
@@ -651,12 +711,13 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 			store.sort(state.sort.prop, state.sort.direction, null, false);
 		}
 
-		if (me.student) {
-			params.batchContainingUsernameFilterByScope = me.student;
-		}
-
-		if (state.student) {
-			params.batchContainingUsernameFilterByScope = state.student;
+		if (me.student || state.student) {
+			if (params.filter === 'All') {
+				params.batchContainingUsername = me.student || state.student;
+			}
+			else {
+				params.batchContainingUsernameFilterByScope = me.student || state.student;
+			}
 		}
 
 		if (state.pageSize) {
@@ -672,7 +733,10 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 				single: true,
 				'records-filled-in': function() {
 					delete store.proxy.extraParams.batchContainingUsernameFilterByScope;
+					delete store.proxy.extraParams.batchContainingUsername;
 					delete me.student;
+					delete me.applyingState;
+					me.setEnabled();
 
 					me.currentPage = store.getCurrentPage();
 					me.maybeSwitchStudents();
@@ -683,14 +747,11 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 						me.setSearch(state.searchKey);
 					}
 
-					delete me.applyingState;
-					me.setEnabled();
-
 					fulfill();
 				}
 			});
 
-			if (params.batchContainingUsernameFilterByScope) {
+			if (params.batchContainingUsernameFilterByScope || params.batchContainingUsername) {
 				store.load();
 			} else if (state.currentPage) {
 				store.loadPage(parseInt(state.currentPage, 10));

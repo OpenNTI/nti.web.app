@@ -81,12 +81,10 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			historyLink = survey.getLink('History'),
 			reportLink = survey.getReportLink();
 
-		if (historyLink || survey.get('isClosed') || reportLink) {
-			this.surveyHeader = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessent-survey-header', {
-				reader: r, renderTo: c, survey: survey,
-				tabIndexTracker: o.tabIndexer
-			}));
-		}
+		this.surveyHeader = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessent-survey-header', {
+			reader: r, renderTo: c, survey: survey,
+			tabIndexTracker: o.tabIndexer
+		}));
 
 		questions.forEach(function(poll) {
 			me.makeAssessmentPoll(poll, survey);
@@ -602,6 +600,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		var result = [],
 			questionsInSets = [],
 			push = Array.prototype.push,
+			injectedAssignment = this.injectedAssignment,
 			sets = {},
 			assignments = [],
 			usedQuestions = {};
@@ -630,8 +629,8 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			if (i.isSet) { push.apply(questionsInSets, i.get('questions')); }
 		}
 
-		if (this.injectedAssignment) {
-			assignments.push(this.injectedAssignment);
+		if (injectedAssignment) {
+			assignments.push(injectedAssignment);
 		}
 
 
@@ -641,6 +640,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		items.forEach(function(i) {
 			if (i.isAssignment) {
 				assignments.push(i);
+
 				(i.get('parts') || []).forEach(function(qset) {
 					qset = qset.get('question_set');
 					sets[qset.getId()] = qset;
@@ -664,6 +664,13 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			(a.get('parts') || []).forEach(function(p) {
 				var s = p.get('question_set');
 				s = (s && sets[s.getId()]);
+
+				//Try to keep the instance of the injectedAssignment the
+				//same between all the views
+				if (a.getId() === injectedAssignment.getId()) {
+					a = injectedAssignment;
+				}
+
 				if (s) {
 					s.associatedAssignment = a;
 				}

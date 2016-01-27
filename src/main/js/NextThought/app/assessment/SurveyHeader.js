@@ -20,6 +20,8 @@ export default Ext.define('NextThought.app.assessment.SurveyHeader', {
 		});
 
 		me.updateSurvey(me.survey);
+
+		me.mon(me.reader, 'survey-submitted', this.onSurveySubmit.bind(this));
 	},
 
 
@@ -30,7 +32,16 @@ export default Ext.define('NextThought.app.assessment.SurveyHeader', {
 	},
 
 
-	updateSurvey: function(survey) {
+	onSurveySubmit: function(results) {
+		var aggregated = results.get('Aggregated');
+
+		this.survey.setResults(aggregated);
+
+		this.updateSurvey(this.survey, true, aggregated);
+	},
+
+
+	updateSurvey: function(survey, fromSubmit, results) {
 		var	items = [],
 			reportLink = survey.getReportLink();
 
@@ -40,7 +51,7 @@ export default Ext.define('NextThought.app.assessment.SurveyHeader', {
 
 		this.surveyCmp.removeAll(true);
 
-		if (survey.getLink('History')) {
+		if (survey.getLink('History') || fromSubmit) {
 			items.push({
 				xtype: 'box',
 				cls: 'survey-history',
@@ -62,7 +73,7 @@ export default Ext.define('NextThought.app.assessment.SurveyHeader', {
 			});
 		}
 
-		if (survey.getLink('Aggregated')) {
+		if (survey.getLink('Aggregated') || (fromSubmit && results)) {
 			items.push({
 				xtype: 'box',
 				cls: 'survey-results',
@@ -105,6 +116,28 @@ export default Ext.define('NextThought.app.assessment.SurveyHeader', {
 			button.textContent = 'Hide Results';
 			button.classList.add('hidden');
 			this.survey.fireEvent('show-results');
+		}
+	},
+
+
+	showResults: function(button) {
+		button = button || this.el.dom.querySelector('.survey-results');
+
+		if (button) {
+			button.textContent = 'Hide Results';
+			button.classList.add('hidden');
+			this.survey.fireEvent('show-results');
+		}
+	},
+
+
+	hideResults: function(button) {
+		 button = button || this.el.dom.querySelector('.survey-results');
+
+		if (button) {
+			button.textContent = 'View Results';
+			button.classList.remove('hidden');
+			this.survey.fireEvent('hide-results');
 		}
 	}
 });

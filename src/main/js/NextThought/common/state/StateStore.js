@@ -16,7 +16,7 @@ export default Ext.define('NextThought.common.state.StateStore', {
 	getCurrentState: function() {
 		if (!this.state_key) {
 			console.error('No key to get current state from');
-			return  {};
+			return {};
 		}
 
 		if (this.current_state) {
@@ -25,8 +25,8 @@ export default Ext.define('NextThought.common.state.StateStore', {
 
 		//attempt to parse the current state in the local storage
 		try {
-			this.current_state = JSON.parse(localStorage.getItem(this.state_key))
-		} catch(e) {
+			this.current_state = JSON.parse(localStorage.getItem(this.state_key));
+		} catch (e) {
 			swallow(e);
 		} finally {
 			//if its still null set it to the empty object

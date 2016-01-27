@@ -22,8 +22,8 @@ export default Ext.define('NextThought.app.stream.List', {
 		var config = this.getPageConfig(items);
 
 		// NOTE: Insert instead of add make sure the join-event is always at the last item.
-		// Alternatively, when we clearPages, we would delete the join-event cmp and 
+		// Alternatively, when we clearPages, we would delete the join-event cmp and
 		// we could just continue using add in this case.
-		this.PAGES.push(this.insert(0, config));
+		this.PAGES.push(this.insert(this.PAGES.length, config));
 	}
 });

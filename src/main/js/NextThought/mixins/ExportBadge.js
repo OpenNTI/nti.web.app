@@ -27,58 +27,124 @@ export default Ext.define('NextThought.mixins.ExportBadge', {
 			}));
 		}
 
-		this.exportMenu.showBy(itemEl, 'tl-bl?');
+		this.exportMenu.showBy(itemEl, 'tl-bl?', [0, -2]);
+		this.PromptActions = NextThought.app.prompt.Actions.create();
 	},
 
+
 	downloadItemClicked: function(record, targetEl, menuItem, e) {
-		if ($AppConfig.userObject.isEmailVerified() && !record.get('Locked')) {
-			this.askForEmailLock('downloadBadge', record, targetEl);
+		if (record.get('Locked')) {
+			this.downloadBadge(record, targetEl);			
 		}
 		else {
-			this.downloadBadge(record, targetEl);
+			if ($AppConfig.userObject.isEmailVerified()) {
+				this.askForEmailLock('downloadBadge', record, targetEl);
+			}
+			else {
+				this.askForEmailVerification('downloadBadge', record, targetEl);
+			}
 		}
 	},
 
 
 	exportItemClicked: function(record, targetEl, menuItem, e) {
-		if ($AppConfig.userObject.isEmailVerified() && !record.get('Locked')) {
-			this.askForEmailLock('exportToBackPack', record, targetEl);
+		if (record.get('Locked')) {
+			this.exportToBackPack(record, targetEl);
 		}
 		else {
-			this.exportToBackPack(record, targetEl);
+			if ($AppConfig.userObject.isEmailVerified()) {
+				this.askForEmailLock('exportToBackPack', record, targetEl);
+			}
+			else {
+				this.askForEmailVerification('exportToBackPack', record, targetEl);
+			}
 		}
 	},
 
 
 	downloadBadge: function(record, targetEl) {
 		var me = this;
-		record.lockBadge()
-			.then(function() {
-				me.triggerFileDownload(record);
-			})
-			.fail(function() {
-				console.warn('Failed to lock badge...', arguments);
-				me.askForEmailVerification('downloadBadge', record, targetEl);
-			});
+		return record.lockBadge()
+				.then(function() {
+					me.triggerFileDownload(record);
+				})
+				.fail(function() {
+					console.warn('Failed to lock badge...', arguments);
+					me.askForEmailVerification('downloadBadge', record, targetEl);
+				});
 	},
 
 
 	exportToBackPack: function(record, targetEl) {
 		var me = this;
-		record.lockBadge()
-			.then(function() {
-				return record.pushToMozillaBackpack()
-					.then(function(successes) {
-						console.log('Congratulations, your badge was sent to backpack: ' + successes);
-					})
-					.fail(function(errors) {
-						Ext.each(errors, function(err) {
-							console.warn('Failed Assertion: ' + err.assertion + ' Reason: ' + err.reason);
+
+		return record.lockBadge()
+				.then(function() {
+					return record.pushToMozillaBackpack()
+						.then(function(successes) {
+							console.log('Congratulations, your badge was sent to backpack: ' + successes);
+						})
+						.fail(function(errors) {
+							Ext.each(errors, function(err) {
+								console.warn('Failed Assertion: ' + err.assertion + ' Reason: ' + err.reason);
+							});
 						});
-					});
+				})
+				.fail(function() {
+					me.askForEmailVerification('exportToBackPack', record, targetEl);
+				});
+	},
+
+
+	askForEmailVerification: function(nextActionName, record, targetEl) {
+		if ($AppConfig.userObject.isEmailVerified()) { return; }
+
+		var action;
+		if (!this.possibleExportActions) {
+			this.addAllExportActions(record);
+		}
+
+		action = this.possibleExportActions[nextActionName] || {};
+
+		this.emailVerificationPrompt = this.PromptActions.prompt('badge-exporting', {
+				user: $AppConfig.userObject,
+				badge: record,
+				title: 'Email Verification',
+				subTitle: 'Verifying your email allows you to export your completion badge',
+				saveText: action.buttonTitle
+			}).then(function(rec){
+				if (action && action.onSubmit) {
+					action.onSubmit();
+				}
+			});
+	},
+
+
+	askForEmailLock: function(nextActionName, record, targetEl) {
+		if (record.get('Locked')) { return; }
+
+		var u = $AppConfig.userObject,
+			emailActionOption, 
+			me = this,
+			action;
+
+		if (!this.possibleExportActions) {
+			this.addAllExportActions(record);
+		}
+
+		action = this.possibleExportActions['lock_' + nextActionName] || {};
+
+		this.emailVerificationPrompt = this.PromptActions.prompt('badge-exporting', {
+				user: u,
+				badge: record,
+				title: getString('NextThought.mixins.ExportBadge.LockEmail.Title'),
+				subTitle: getString('NextThought.mixins.ExportBadge.LockEmail.SubTitle'),
+				saveText: action.buttonTitle
 			})
-			.fail(function() {
-				me.askForEmailVerification('exportToBackPack', record, targetEl);
+			.then(function(){
+				if (action && action.onSubmit) {
+					action.onSubmit();
+				}
 			});
 	},
 
@@ -104,6 +170,9 @@ export default Ext.define('NextThought.mixins.ExportBadge', {
 	    else {
 	        dom.click();
 	    }
+
+	    // cleanup
+	    Ext.fly(dom).remove();
 	},
 
 
@@ -123,12 +192,8 @@ export default Ext.define('NextThought.mixins.ExportBadge', {
 			action = {
 				name: 'downloadBadge',
 				buttonTitle: 'Verify and Download',
-				done: function() {
-					me.downloadBadge(record);
-					return Promise.resolve();
-				},
-				done: function() {
-					return Promise.reject();
+				onSubmit: function() {
+					return me.downloadBadge(record);
 				}
 			};
 
@@ -141,12 +206,8 @@ export default Ext.define('NextThought.mixins.ExportBadge', {
 			action = {
 				name: 'exportToBackPack',
 				buttonTitle: 'Verify and Export',
-				done: function() {
-					me.exportToBackPack(record);
-					return Promise.resolve();
-				},
-				failed: function() {
-					return Promise.reject();
+				onSubmit: function() {
+					return me.exportToBackPack(record);
 				}
 			};
 
@@ -159,10 +220,8 @@ export default Ext.define('NextThought.mixins.ExportBadge', {
 			action = {
 				name: 'lock_downloadBadge',
 				buttonTitle: 'Lock and Download',
-				onSubmitClick: function(e) {
-					e.stopEvent();
-					me.downloadBadge(record);
-					return Promise.resolve();
+				onSubmit: function() {
+					return me.downloadBadge(record);
 				}
 			};
 		me.possibleExportActions[action.name] = action;
@@ -174,10 +233,8 @@ export default Ext.define('NextThought.mixins.ExportBadge', {
 			action = {
 				name: 'lock_exportToBackPack',
 				buttonTitle: 'Lock and Export',
-				onSubmitClick: function(e) {
-					e.stopEvent();
-					me.exportToBackPack(record);
-					return Promise.resolve();
+				onSubmit: function() {
+					return me.exportToBackPack(record);
 				}
 			};
 
@@ -191,62 +248,5 @@ export default Ext.define('NextThought.mixins.ExportBadge', {
 		this.buildMozillaBackpackAction(record);
 		this.buildLockDownloadAction(record);
 		this.buildLockMozillaBackpackAction(record);
-	},
-
-
-	askForEmailVerification: function(nextActionName, record, targetEl) {
-		if ($AppConfig.userObject.isEmailVerified()) { return; }
-
-		if (!this.possibleExportActions) {
-			this.addAllExportActions(record);
-		}
-
-		this.emailVerificationWin = Ext.widget('email-verify-window', {
-			user: $AppConfig.userObject,
-			autoShow: true,
-			emailActionOption: this.possibleExportActions[nextActionName]
-		});
-
-		this.showWindow(this.emailVerificationWin, targetEl);
-	},
-
-
-	askForEmailLock: function(nextActionName, record, targetEl) {
-		if (record.get('Locked')) { return; }
-
-		var u = $AppConfig.userObject,
-			emailActionOption, me = this;
-
-		if (!this.possibleExportActions) { this.addAllExportActions(record); }
-		emailActionOption = this.possibleExportActions['lock_' + nextActionName];
-
-		this.emailVerificationWin = Ext.widget('email-verify-window', {
-			user: u,
-			autoShow: true,
-			title: getString('NextThought.mixins.ExportBadge.LockEmail.Title'),
-			subTitle: getString('NextThought.mixins.ExportBadge.LockEmail.SubTitle'),
-			emailActionOption: emailActionOption
-		});
-
-		this.emailVerificationWin.onceRendered
-			.then(function() {
-				me.emailVerificationWin.askForEmailLock(u);
-			});
-
-		this.showWindow(this.emailVerificationWin, targetEl);
-	},
-
-
-	showWindow: function(win, targetEl) {
-		if (!targetEl) {
-			win.show();
-			return;
-		}
-
-		wait()
-			.then(function() {
-				win.showBy(targetEl, 'tl-bl?');
-				win.toFront();
-			});
 	}
 });

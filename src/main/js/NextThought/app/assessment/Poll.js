@@ -90,6 +90,7 @@ export default Ext.define('NextThought.app.assessment.Poll', {
 
 		me.AssessmentActions.submitPoll(me.poll, col[me.poll.getId()], me.startTimeStamp, me.canSubmitIndividually())
 			.then(function(result) {
+				me.poll.setResults(result.get('Aggregated'));
 				me.updateWithResults(result.get('Submission').get('Submission'));
 			})
 			.fail(function() {

@@ -1,5 +1,6 @@
 .library-view {
 	margin: 2em 0 2.5em;
+	max-width: 100%;
 
 	.empty-text {
 		color: $tertiary-grey;
@@ -765,6 +766,7 @@ li.library-grid-item {
 
 			.author {
 				color: $primary-blue;
+				@include ellipse();
 			}
 
 			.author:not(:empty):not(.provider-id)::before{content: 'By ';}
@@ -1193,6 +1195,7 @@ li.library-grid-item {
 .library-page {
 	position: relative;
 	min-height: 200px;
+	max-width: 100%;
 
 	.empty-text {
 		color: $tertiary-grey;

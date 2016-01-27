@@ -30,11 +30,12 @@ export default Ext.define('NextThought.model.PlaylistItem', {
 		{name: 'poster', type: 'VideoPoster'},
 		{name: 'thumbnail', type: 'VideoPoster'},
         {name: 'progress', type: 'string', persist: false},
-        {name: 'slidedeck', type: 'string', persist: false}
+        {name: 'slidedeck', type: 'string', persist: false},
+		{name: 'label', type: 'string', persist: false}
 	],
 
 	statics: {
-		// FIXME: This is a Hack since a playlistItem doesn't have to be a video. 
+		// FIXME: This is a Hack since a playlistItem doesn't have to be a video.
 		// So far we're using like so and we need to use this mimeType for routing
 		mimeType: "application/vnd.nextthought.ntivideo",
 

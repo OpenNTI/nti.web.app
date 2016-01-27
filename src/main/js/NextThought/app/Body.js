@@ -182,7 +182,7 @@ export default Ext.define('NextThought.app.Body', {
 		}
 
 		if (!route) {
-			route = this.ContextStore.getCurrentRoute();
+			route = this.ContextStore.getCurrentRoute() || '';
 		}
 
 		var location = Globals.getURLParts(route),
@@ -218,7 +218,7 @@ export default Ext.define('NextThought.app.Body', {
 			location.hash = location.hash || hash;
 		}
 
-		route = location.pathname + location.search + location.hash;
+		route = location.pathname + (location.search || '') + (location.hash || '');
 
 		this.pushRoute(title, route, precache, state);
 	},

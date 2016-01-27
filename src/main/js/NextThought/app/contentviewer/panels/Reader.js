@@ -79,10 +79,28 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	},
 
 
+	/**
+	 * Handles resize event on the reader
+	 *
+	 * NOTE: Since most video APIs do not provide events for when the browser goes into fullscreen mode,
+	 * we are caching the lastScroll zone before we're in fullscreen mode. And when they exist fullscreen mode,
+	 * it will fire a resize event. When the resize event is fired, we go ahead and scroll to the last scroll position.
+	 *
+	 */
 	onWindowResize: function() {
 		if (this.navigation && this.navigation.setWidth) {
 			this.navigation.setWidth('100%');
 			this.alignNavigation();
+		}
+
+
+		var r = this.body.down('reader-content'),
+			readerScroll = r && r.getScroll && r.getScroll(),
+			isInFullScreenMode = readerScroll && readerScroll.isInFullScreenMode && readerScroll.isInFullScreenMode();
+
+		if (r && r.scrollBeforeFullscreen !== undefined && !isInFullScreenMode) {
+			readerScroll.to(r.scrollBeforeFullscreen);
+			delete r.scrollBeforeFullscreen;
 		}
 	},
 
@@ -269,7 +287,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 
 		//the reader might not be defined if we are in a timed assignment
 		if (reader) {
-			reader.setPageInfo(pageInfo, bundle, this.fragment);
+			reader.setPageInfo(pageInfo, bundle, this.fragment, this.note);
 		}
 
 		this.onceReadyForSearch()
@@ -287,6 +305,15 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		}
 	},
 
+
+	goToNote: function(note) {
+		var reader = this.getReaderContent();
+
+		this.note = note;
+		if (reader) {
+			reader.goToNote(note);
+		}
+	},
 
 	beforeDeactivate: function() {
 		var reader = this.down('reader-content');

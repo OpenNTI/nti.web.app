@@ -9,8 +9,11 @@ export default Ext.define('NextThought.model.ContentPackage', {
 	},
 
 	mixins: {
-		'PresentationResources': 'NextThought.mixins.PresentationResources'
+		'PresentationResources': 'NextThought.mixins.PresentationResources',
+		'DurationCache': 'NextThought.mixins.DurationCache'
 	},
+
+	VIDEO_INDEX_TYPE: 'application/vnd.nextthought.videoindex',
 
 	idProperty: 'index',
 	fields: [
@@ -157,5 +160,67 @@ export default Ext.define('NextThought.model.ContentPackage', {
 	},
 
 
-	represents: function(catalogEntry) {return false;}
+	represents: function(catalogEntry) {return false;},
+
+
+	getReferenceSelector: function(type) {
+		type = ParseUtils.escapeId(type);
+
+		return 'reference[type="' + type + '"]';
+	},
+
+
+	getReference: function(type) {
+		var selector = this.getReferenceSelector(type),
+			root = this.get('root'),
+			key = 'reference-' + type,
+			load;
+
+		load = this.getFromCache(key);
+
+		if (!load) {
+			load = this.getToc()
+					.then(function(toc) {
+						var reference = toc.querySelector(selector),
+						link = reference && reference.getAttribute('href');
+
+						if (!link) {
+							return Promise.reject('No link');
+						}
+
+						link = Globals.getURL(link, root || '');
+
+						return Service.request(link);
+					})
+					.then(function(response) {
+						var json = Globals.parseJSON(response, true);
+
+						return json || response;
+					});
+
+			this.cacheForever(key, load);
+		}
+
+		return load;
+	},
+
+
+	getVideos: function() {
+		return this.getReference(this.VIDEO_INDEX_TYPE)
+			.then(function(videoIndex) {
+				var items = videoIndex.Items,
+					keys = Object.keys(items);
+
+				return keys.map(function(key) {
+					var item = items[key];
+
+					return ParseUtils.parseItems(item)[0];
+				});
+			})
+			.fail(function(reason) {
+				console.error('Failed to get videos: ', reason);
+
+				return [];
+			});
+	}
 });

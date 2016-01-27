@@ -1,9 +1,11 @@
 export default Ext.define('NextThought.mixins.Scrolling', {
 
 	initScrolling: function() {
-		this.Scrolling = this.Scrolling || {};
-
-		this.Scrolling.scrollingEl = Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body;
+		if (!this.Scrolling) {
+			this.Scrolling = {
+				scrollingEl: Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body
+			};
+		}
 	},
 
 
@@ -68,5 +70,25 @@ export default Ext.define('NextThought.mixins.Scrolling', {
 			target.scrollTop = 0;
 			return prevent();
 		}
+	},
+
+
+	scrollPageTo: function(position) {
+		this.initScrolling();
+
+		var page = this.getPageScrollingEl();
+
+		if (position < 0) {
+			position = 0;
+		} else if (position > page.scrollHeight) {
+			position = page.scrollHeight;
+		}
+
+		page.scrollTop = position;
+	},
+
+
+	scrollPageToTop: function() {
+		this.scrollPageTo(0);
 	}
 });

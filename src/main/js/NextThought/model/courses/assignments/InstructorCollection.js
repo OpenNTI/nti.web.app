@@ -134,7 +134,7 @@ export default Ext.define('NextThought.model.courses.assignments.InstructorColle
 		var gradeBook = this.get('GradeBook');
 
 		return NextThought.store.courseware.GradeBookSummaries.create({
-			url: gradeBook.getLink('GradeBookSummary'),
+			url: gradeBook && gradeBook.getLink('GradeBookSummary'),
 			GradeCache: this.GradeCache,
 			HistoryItemCache: this.HistoryItemCache,
 			assignments: this

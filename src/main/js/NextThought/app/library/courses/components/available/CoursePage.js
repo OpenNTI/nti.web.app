@@ -43,7 +43,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		var me = this;
 
 		this.setPageHeight();
-		this.bufferedScroll = Ext.Function.createBuffered(this.onScroll, 500);
+		this.bufferedScroll = Ext.Function.createBuffered(this.onScroll, 100);
 		this.mon(this.getTargetEl(), 'scroll', this.bufferedScroll.bind(this));
 		this.mon(this.tabsEl, 'click', this.onTabClick.bind(this));
 		Ext.EventManager.onWindowResize(this.setPageHeight, this);
@@ -76,7 +76,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 
 		if (archived && archived.length) {
 			this.addBinnedCourses(this.binCourses(archived), 'Archived Courses', {category: 'archived'});
-			this.addTab({label: 'Archived', category: 'archived', active: Ext.isEmpty(current)});
+			this.addTab({label: 'Archived', category: 'archived', active: Ext.isEmpty(current) && Ext.isEmpty(upcoming)});
 		}
 
 		this.onceRendered
@@ -149,9 +149,11 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 
 
 	onScroll: function (e) {
-		var target = e.getTarget(),
-			scrollTop = target && target.scrollTop, key, selectTab, 
-			activeTabEl = this.tabsEl.down('.active');
+		var target = this.getTargetEl().dom,
+			scrollTop = target && target.scrollTop,
+			activeTabEl = this.tabsEl.down('.active'),
+			key,
+			selectTab;
 
 		if (!this.scrollTops) {
 			this.scrollTops = {};

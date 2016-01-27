@@ -278,7 +278,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 				r = this.reader,
 				el = r && r.el;
 
-		if (el && el.isVisible(true)) {
+		if (el && !el.isVisible(true)) {
 			Ext.defer(this.syncHeight, 10, this);
 			return;
 		}

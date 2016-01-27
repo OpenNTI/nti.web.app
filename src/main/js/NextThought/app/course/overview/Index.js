@@ -3,18 +3,22 @@ export default Ext.define('NextThought.app.course.overview.Index', {
 	alias: 'widget.course-overview',
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
+		FillScreen: 'NextThought.mixins.FillScreen'
 	},
 
 	requires: [
 		'NextThought.app.course.overview.components.View',
 		'NextThought.app.content.content.Index',
-		'NextThought.app.mediaviewer.Index'
+		'NextThought.app.mediaviewer.Index',
+		'NextThought.model.RelatedWork',
+		'NextThought.model.QuestionSetRef',
+		'NextThought.model.SurveyRef'
 	],
 
 	statics: {
-	    showTab: function(bundle) {
-			return bundle && !bundle.get('Preview');
+		showTab: function(bundle) {
+			return bundle && bundle.hasOutline();
 		}
 	},
 
@@ -48,11 +52,6 @@ export default Ext.define('NextThought.app.course.overview.Index', {
 
 		this.addChildRouter(this.lessons);
 
-		this.on({
-			'activate': this.onActivate.bind(this),
-			'deactivate': this.onDeactivate.bind(this)
-		});
-
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
@@ -63,18 +62,12 @@ export default Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 
-	onActivate: function() {
-		var item = this.getLayout().getActiveItem();
-
+	onRouteActivate: function() {
 		this.setTitle(this.title);
-
-		if (item.onActivate) {
-			item.onActivate();
-		}
 	},
 
 
-	onDeactivate: function() {
+	onRouteDeactivate: function() {
 		if (this.activeMediaWindow) {
 			Ext.destroy(this.activeMediaWindow);
 			delete this.activeMediaWindow;
@@ -107,7 +100,7 @@ export default Ext.define('NextThought.app.course.overview.Index', {
 			lessons = this.getLessons();
 
 		this.currentBundle = bundle;
-		this.store = bundle.getNavigationStore();
+		this.store = bundle.getAdminOutlineInterface();
 
 		if (lessons === item) {
 			return lessons.bundleChanged(bundle);
@@ -125,6 +118,10 @@ export default Ext.define('NextThought.app.course.overview.Index', {
 		this.getLayout().setActiveItem(lessons);
 
 		this.setShadowRoot(route.path);
+
+		if (this.rendered) {
+			this.fillScreen(this.el.dom, 10);
+		}
 
 		if (this.reader) {
 			Ext.destroy(this.reader);
@@ -145,7 +142,10 @@ export default Ext.define('NextThought.app.course.overview.Index', {
 			rootId = route.params.id,
 			pageId = route.params.page,
 			lessonId = route.params.lesson,
-			lesson = route.precache.lesson;
+			lesson = route.precache.lesson,
+			readerRoute;
+
+
 
 		lessonId = ParseUtils.decodeFromURI(lessonId);
 		rootId = ParseUtils.decodeFromURI(rootId);
@@ -156,11 +156,16 @@ export default Ext.define('NextThought.app.course.overview.Index', {
 		//1.) we aren't trying to set a page and the reader doesn't have a page
 		//2.) we are trying to set a page and its the reader's current page
 		//then don't on set the reader to prevent it from flashing.
-		if (me.reader) {
+		if (me.reader && me.reader.hasReader()) {
 			if (me.reader.root === rootId) {
 				if (me.reader.isShowingPage(pageId || rootId)) {
 					if (me.activeMediaWindow) {
 						me.activeMediaWindow.destroy();
+					}
+
+					if (route.object.id) {
+						return Service.getObject(ParseUtils.decodeFromURI(route.object.id))
+									.then(me.reader.showNote.bind(me.reader));
 					}
 
 					return Promise.resolve();
@@ -168,15 +173,30 @@ export default Ext.define('NextThought.app.course.overview.Index', {
 			}
 		}
 
+		if (me.rendered) {
+			me.fillScreen(me.el.dom, 10);
+			me.el.mask('Loading...');
+		}
+
 		return me.store.onceBuilt()
 			.then(function() {
+				if (route.object.id) {
+					return Service.getObject(ParseUtils.decodeFromURI(route.object.id))
+						.fail(function(reason) {
+							console.log('Failed to resolve note: ', reason);
+						});
+				}
+			})
+			.then(function(note) {
 				var siblings = [];
 
 				if (lessonId && (!lesson || lesson.getId() !== lessonId)) {
-					lesson = me.store.findRecord('NTIID', lessonId, false, true, true);
+					lesson = me.store.getNode(lessonId);
 				}
 
 				//For now don't make the lessons have a menu
+				//XXX me.store is no longer the navigation store, it is now the bundle's
+				//XXX OutlineInterface
 				// siblings = me.store.getRange().reduce(function(c, item) {
 				// 	var id;
 
@@ -210,6 +230,10 @@ export default Ext.define('NextThought.app.course.overview.Index', {
 					siblings: siblings
 				};
 
+				if (note) {
+					route.precache.note = note;
+				}
+
 				if (me.reader) {
 					me.reader.destroy();
 				}
@@ -224,12 +248,30 @@ export default Ext.define('NextThought.app.course.overview.Index', {
 				});
 
 				 if (me.activeMediaWindow) {
-				 	me.activeMediaWindow.destroy();
+					me.activeMediaWindow.destroy();
 				}
 
 				me.getLayout().setActiveItem(me.reader);
 
-				return me.reader.handleRoute(route.params.id + '/' + (route.params.page || ''), route.precache);
+				readerRoute = route.params.id;
+
+				if (route.params.page) {
+					readerRoute = readerRoute + '/' + route.params.page;
+				}
+
+				return me.reader.handleRoute(readerRoute, route.precache);
+			}).then(function() {
+				if (me.el) {
+					me.el.unmask();
+				}
+			}).fail(function(reason) {
+				alert('Failed to load reading.');
+
+				if (me.el) {
+					me.el.unmask();
+				}
+
+				return Promise.reject(reason);
 			});
 	},
 
@@ -374,7 +416,13 @@ export default Ext.define('NextThought.app.course.overview.Index', {
 
 		lessonId = ParseUtils.encodeForURI(lessonId);
 
-		if (root instanceof NextThought.model.RelatedWork) {
+		if (root instanceof NextThought.model.QuestionSetRef) {
+			route = this.getRouteForQuestionSetPath(root, subPath, lesson);
+			route.path = 'content/' + Globals.trimRoute(route.path);
+		} else if (root instanceof NextThought.model.SurveyRef) {
+			route = this.getRouteForSurveyPath(root, subPath, lesson);
+			route.path = 'content/' + Globals.trimRoute(route.path);
+		} else if (root instanceof NextThought.model.RelatedWork) {
 			route = this.getRouteForRelatedWorkPath(root, subPath, lesson);
 			route.path = 'content/' + Globals.trimRoute(route.path);
 		} else if (root instanceof NextThought.model.PageInfo) {
@@ -399,11 +447,11 @@ export default Ext.define('NextThought.app.course.overview.Index', {
 
 	getRouteForRelatedWorkPath: function(relatedWork, path, lesson) {
 		var page = path[0],
-			pageId = page && page.getId(),
+			pageId = page && page instanceof NextThought.model.PageInfo ? page.getId() : null,
 			relatedWorkId = relatedWork && relatedWork.get('target'),
 			path = '';
 
-		if (pageId === lesson.getId() || !pageId) {
+		if (pageId === lesson.getId() || pageId === lesson.get('ContentNTIID') || !pageId) {
 			pageId = null;
 			relatedWorkId = relatedWork && relatedWork.getId();
 		}
@@ -415,12 +463,37 @@ export default Ext.define('NextThought.app.course.overview.Index', {
 			path = relatedWorkId;
 
 			if (pageId) {
-				page += '/' + pageId;
+				path += '/' + pageId;
 			}
 		}
 
 		return {
 			path: path,
+			isFull: true
+		};
+	},
+
+
+	getRouteForQuestionSetPath: function(questionSetRef, path, lesson) {
+		var page = path[0],
+			pageId = page && page.getId();
+
+		pageId = pageId && ParseUtils.encodeForURI(pageId);
+
+		return {
+			path: pageId,
+			isFull: true
+		};
+	},
+
+
+	getRouteForSurveyPath: function(survey, path, lesson) {
+		var surveyId = survey.get('Target-NTIID');
+
+		surveyId = surveyId && ParseUtils.encodeForURI(surveyId);
+
+		return {
+			path: surveyId,
 			isFull: true
 		};
 	},

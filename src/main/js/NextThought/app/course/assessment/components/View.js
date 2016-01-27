@@ -83,7 +83,12 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 				//if we get here and we already have views, don't push more
 				if (me.shouldPushViews()) {
 					if (enrollment && enrollment.isAdministrative) {
-						me.addAdminViews(function(rel) { return getLink(rel, enrollment); });
+						if (enrollment.isContentEditor && enrollment.isContentEditor()) {
+							me.addContentEditorViews();
+						}
+						else {
+							me.addAdminViews(function(rel) { return getLink(rel, enrollment); });
+						}
 					} else {
 						me.addStudentViews();
 					}
@@ -284,6 +289,18 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 			this.performanceView,
 			this.notificationsView
 		]);
+	},
+
+
+	addContentEditorViews: function() {
+		var me = this;
+
+		this.addStudentViews();
+
+		this.navigation.onceRendered
+			.then(function() {
+				me.navigation.disabledItem(me.performanceView.xtype);
+			});
 	},
 
 

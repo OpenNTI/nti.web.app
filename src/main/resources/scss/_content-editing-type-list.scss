@@ -1,0 +1,61 @@
+.overview-editing.child-creation {
+	.new-type-list {
+		padding: 35px 15px 0;
+		overflow: hidden;
+
+		.new-type {
+			cursor: pointer;
+			width: 100px;
+			height: 125px;
+			background: white;
+			margin: 0 15px 35px;
+			position: relative;
+			float: left;
+			border-radius: 2px;
+			box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);
+
+			.icon {
+				height: 100px;
+
+				&.document {
+					@include icon('upload-file', $side: after, $top: 50%, $left: 50%);
+
+					&::after {
+						margin-top: -15px;
+						margin-left: -15px;
+					}
+				}
+
+				&.reading {
+					@include icon('content', $side: after, $top: 50%, $left: 50%);
+
+					&::after {
+						margin-top: -15px;
+						margin-left: -16px;
+					}
+				}
+
+				&.link {
+					@include icon('link', $side: after, $top: 50%, $left: 50%);
+
+					&::after {
+						margin-top: -17px;
+						margin-left: -17px;
+					}
+				}
+			}
+
+			.title {
+				position: absolute;
+				bottom: 13px;
+				left: -10px;
+				padding: 0 8px;
+				font: normal 600 0.625em/20px $font;
+				color: white;
+				text-transform: uppercase;
+				border-radius: 2px;
+				background-color: $primary-blue;
+			}
+		}
+	}
+}

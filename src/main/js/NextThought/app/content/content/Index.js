@@ -32,12 +32,10 @@ export default Ext.define('NextThought.app.content.content.Index', {
 		this.addDefaultRoute('/');
 
 		this.on({
-			'beforedeactivate': this.onBeforeDeactivate.bind(this),
 			'activate': this.onActivate.bind(this),
-			'deactivate': this.onDeactivate.bind(this)
+			'deactivate': this.onDeactivate.bind(this),
+			'beforedeactivate': this.onBeforeDeactivate.bind(this)
 		});
-
-		this.on('beforedeactivate', this.onBeforeDeactivate.bind(this));
 	},
 
 
@@ -72,6 +70,11 @@ export default Ext.define('NextThought.app.content.content.Index', {
 	},
 
 
+	hasReader: function() {
+		return this.reader && !this.reader.isDestroyed;
+	},
+
+
 	isShowingPage: function(ntiid) {
 		var isShowing, assessmentItems;
 
@@ -97,6 +100,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 		this.reader.hide();
 
 		this.reader.destroy();
+		delete this.reader;
 	},
 
 
@@ -130,7 +134,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 	},
 
 
-	showReader: function(page, parent, hash) {
+	showReader: function(page, parent, hash, note) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showReader.bind(this, page));
 			return;
@@ -145,6 +149,10 @@ export default Ext.define('NextThought.app.content.content.Index', {
 			if ((this.reader.pageInfo && this.reader.pageInfo.getId() === pageId) || (this.reader.relatedWork && this.reader.relatedWork.getId() === pageId)) {
 				if (hash) {
 					this.reader.goToFragment(hash);
+				}
+
+				if (note) {
+					this.reader.goToNote(note);
 				}
 				return;
 			} else {
@@ -172,6 +180,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 			handleNavigation: this.handleNavigation.bind(this),
 			navigateToObject: this.navigateToObject && this.navigateToObject.bind(this),
 			fragment: hash,
+			note: note,
 			hideHeader: this.hideHeader
 		});
 
@@ -205,7 +214,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 
 		return this.__loadContent(ntiid, obj)
 			.then(function(page) {
-				me.showReader(page, route.precache.parent, route.hash);
+				me.showReader(page, route.precache.parent, route.hash, route.precache.note);
 				if (me.activeMediaWindow) {
 					me.activeMediaWindow.destroy();
 				}
@@ -227,12 +236,12 @@ export default Ext.define('NextThought.app.content.content.Index', {
 	 		vid = subRoute.split('/')[1];
 	 		vid = ParseUtils.decodeFromURI(vid);
 	 		video = precache.video || precache.precache && precache.precache.video;
-	 		
+
 	 		return this.__loadContent(root, obj)
 				.then(function(page) {
-					me.showReader(page, route.precache.parent, route.hash);
-					var p = video ? Promise.resolve(video) 
-								  : Service.getObject(vid).then(function(v){
+					me.showReader(page, route.precache.parent, route.hash, route.precache.note);
+					var p = video ? Promise.resolve(video) :
+									Service.getObject(vid).then(function(v) {
 								  		var o = v.isModel ? v.raw : v,
 								  			video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
 
@@ -241,7 +250,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 
 					p.then(function(video) {
 						route.precache.video = video;
-						me.showMediaView(route, subRoute);	
+						me.showMediaView(route, subRoute);
 					});
 				});
 	 	}
@@ -260,7 +269,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 
 	 	return this.__loadContent(page, obj)
 	 		.then(function(page) {
-	 			me.showReader(page, route.precache.parent);
+	 			me.showReader(page, route.precache.parent, route.hash, route.precache.note);
 	 		});
 	},
 
@@ -270,11 +279,14 @@ export default Ext.define('NextThought.app.content.content.Index', {
 
 		return Service.getPageInfo(this.root, null, null, null, me.currentBundle)
 			.then(function(pageInfo) {
-				me.showReader(pageInfo, null, route.hash);
+				me.showReader(pageInfo, null, route.hash, route.precache.note);
 			})
 			.fail(this.__onFail.bind(this));
 	},
 
+	showNote: function(note) {
+		this.reader.goToNote(note);
+	},
 
 	getVideoRouteForObject: function(obj) {
 		var page = obj.page,

@@ -114,6 +114,10 @@ export default Ext.define('NextThought.model.courses.assignments.BaseCollection'
 	getItem: function(id, field) {
 		var items = this.get(field || 'Assignments');
 
+		if (!id) {
+			return null;
+		}
+
 		items = items.filter(function(rec) {
 			return rec.getId().toLowerCase() === id.toLowerCase() || (rec.containsId && rec.containsId(id));
 		});

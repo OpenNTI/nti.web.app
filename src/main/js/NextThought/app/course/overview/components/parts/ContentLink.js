@@ -16,32 +16,46 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Cont
 
 	// requires: ['NextThought.view.contentviewer.View'],
 
+	renderTpl: Ext.DomHelper.markup([
+		{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
+		{ cls: 'meta', cn: [
+			{ cls: 'title', html: '{title}' },
+			{ cls: 'byline', html: '{{{NextThought.view.cards.Card.by}}}' },
+			{ cls: 'description', html: '{description}' }
+		]}
+	]),
+
+
 	constructor: function(config) {
 		var n = config.node || {getAttribute: function(a) { return config[a];} },
 			i = config.locationInfo,
 			href = n.getAttribute('href'),
 			icon = n.getAttribute('icon'),
-			ntiid = n.getAttribute('ntiid');
+			ntiid = n.getAttribute('ntiid'),
+			root = i && i.root;
 
 		if (Globals.ROOT_URL_PATTERN.test(href)) {
 			href = getURL(href);
 		} else if (!ParseUtils.isNTIID(href) && !Globals.HOST_PREFIX_PATTERN.test(href)) {
-			href = getURL(i.root + href);
+			href = getURL((root || '') + href);
 		}
 
-		if (Globals.ROOT_URL_PATTERN.test(icon)) {
+		if (config.record && config.record.getIcon) {
+			icon = config.record.getIcon(root || '');
+		} else if (Globals.ROOT_URL_PATTERN.test(icon)) {
 			icon = getURL(icon);
 		} else {
-			icon = getURL(i.root + icon);
+			icon = getURL((root || '') + icon);
 		}
 
 		config.data = {
 			'attribute-data-href': href, href: href,
-			creator: n.getAttribute('creator'),
-			description: Ext.String.ellipsis(n.getAttribute('desc'), 200, true),
+			creator: n.getAttribute('byline') || n.getAttribute('creator'),
+			description: Ext.String.ellipsis(n.getAttribute('desc') || n.getAttribute('description'), 200, true),
 			thumbnail: icon,
 			ntiid: ntiid,
 			title: n.getAttribute('label'),
+			targetMimeType: n.getAttribute('targetMimeType'),
 			notTarget: !Globals.shouldOpenInApp(ntiid, href),
 			asDomSpec: DomUtils.asDomSpec
 		};
@@ -49,6 +63,9 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Cont
 		this.ContentActions = NextThought.app.contentviewer.Actions.create();
 
 		this.callParent([config]);
+
+		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 	},
 
 

@@ -543,7 +543,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.as
 
 		var me = this,
 			store = me.store,
-			params = store.proxy.extraParams;
+			params = store.proxy.extraParams || {};
 
 		me.applyingState = true;
 		me.setDisabled();
@@ -571,7 +571,12 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.as
 		}
 
 		if (this.student) {
-			params.batchContainingUsernameFilterByScope = this.student;
+			if (params.filter === 'All') {
+				params.batchContainingUsername = this.student;
+			}
+			else {
+				params.batchContainingUsernameFilterByScope = this.student;
+			}
 		}
 
 		return new Promise(function(fulfill, reject) {
@@ -579,6 +584,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.as
 				single: true,
 				'records-filled-in': function() {
 					delete store.proxy.extraParams.batchContainingUsernameFilterByScope;
+					delete store.proxy.extraParams.batchContainingUsername;
 					delete me.student;
 
 					me.currentPage = store.getCurrentPage();
@@ -599,7 +605,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.as
 				}
 			});
 
-			if (params.batchContainingUsernameFilterByScope) {
+			if (params.batchContainingUsernameFilterByScope || params.batchContainingUsername) {
 				store.load();
 			} else if (state.currentPage) {
 				store.loadPage(parseInt(state.currentPage, 10));

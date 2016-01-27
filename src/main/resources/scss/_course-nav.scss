@@ -6,61 +6,98 @@
 	}
 }
 
+.nav-outline.course {
 
-.x-component-course{
+	.outline-header {
+		box-shadow: 0 1px 0 0 #eaeaea;
+		position: relative;
+		z-index: 2;
 
-	&.nav-outline{
-		.outline-list {
-			margin-left: -50px;
-			padding-left: 50px;
+		.header {
+			box-shadow: none;
+			display: inline-block;
+			padding: 0 0 0 3em;
 		}
 
-		.outline-row {
-			.date {
-				pointer-events: none;
-				cursor: default;
-				display: none;
-				opacity: 0.3;
-				min-width: 25px;
-				position: absolute;
-				left: -40px;
-				top: 7px;
-				text-transform: uppercase;
-				border-radius: 2px;
-				box-shadow: 0 0 0 1px white, inset 0 0 0 1px white;
-				text-align: center;
-
-				div:first-child {
-					background: white;
-					color: black;
-					border-radius: 0;
-					padding-bottom: 1px;
-					font: normal 700 0.7em/1.1em $font;
-				}
-
-				div:last-child {
-					color: white;
-					font: normal 500 0.8em/1.3em $font;
-					border-radius: 0;
-				}
-			}
-
-			&:not(.lesson),&.out-of-view{
-				.date{
-					display: none !important;
-				}
-			}
-
-			&.x-item-selected,&.over {
-				.date{
-					display: block;
-				}
-			}
+		.edit {
+			display: inline-block;
+			font-size: 0.875em;
+			line-height: 3.5em;
+			padding-right: 0.5em;
+			color: $primary-blue;
+			float: right;
+			cursor: pointer;
 		}
 	}
 
+	.outline-list {
+		margin-left: -50px;
+		padding-left: 50px;
+	}
+
+	.outline-row {
+		.date {
+			pointer-events: none;
+			cursor: default;
+			display: none;
+			opacity: 0.3;
+			min-width: 25px;
+			position: absolute;
+			left: -40px;
+			top: 7px;
+			text-transform: uppercase;
+			border-radius: 2px;
+			box-shadow: 0 0 0 1px white, inset 0 0 0 1px white;
+			text-align: center;
+
+			div:first-child {
+				background: white;
+				color: black;
+				border-radius: 0;
+				padding-bottom: 1px;
+				font: normal 700 0.7em/1.1em $font;
+			}
+
+			div:last-child {
+				color: white;
+				font: normal 500 0.8em/1.3em $font;
+				border-radius: 0;
+			}
+		}
+
+		&:not(.lesson),&.out-of-view{
+			.date{
+				display: none !important;
+			}
+		}
+
+		&.selected,&:hover {
+			.date{
+				display: block;
+			}
+		}
+	}
+}
+
+
+.x-component-course{
+
 	&.overview-header{
 		margin: 0 0 15px 0;
+		padding: 0 20px 0 0;
+		position: relative;
+
+		.controls {
+			position: absolute;
+			right: 0;
+			top: 0;
+
+			span {
+				font-size: 0.875em;
+				color: $primary-blue;
+				cursor: pointer;
+			}
+		}
 
 		.date {
 			color: $tertiary-grey;
@@ -72,6 +109,15 @@
 			}
 			font: normal 700 0.6em/1.2em $font;
 			text-transform: uppercase;
+
+			&.start, &.course {
+				display: inline-block;
+				padding: 0.2em;
+			}
+
+			&.end {
+				display: inline-block;
+			}
 		}
 		.title {
 			color: $primary-grey;
@@ -244,154 +290,6 @@
 		}
 	}
 
-	&.overview-videos {
-		margin: 10px 0;
-		@extend .overview-section;
-
-		&.singular{
-			position: relative;
-			width: 704px !important;
-
-			.body {
-				height: 396px;
-				margin: 0;
-				.screen,
-				.curtain {
-					width: 704px;
-				}
-				.curtain {
-					background-size: 704px auto;
-				}
-
-				.video-list {
-					display: none;
-				}
-			}
-
-			&.viewed {
-				@include icon('circle-check-white-small', $top: 7px, $left: auto, $right: 58px);
-
-				&::after {
-					z-index: 2;
-				}
-
-				&::before {
-					content: 'viewed';
-					text-transform: uppercase;
-					font: normal 500 0.6em/24px "Open Sans",sans-serif;
-					position: absolute;
-					top: 5px;
-					right: 5px;
-					padding: 0px 10px 0 30px;
-					color: white;
-					background-color: $secondary-green;
-					z-index: 1;
-					border-radius: 20px;
-				}
-			}
-		}
-
-		.body {
-			position: relative;
-			overflow: hidden;
-			height: 288px;
-			margin: 0 -31px 0 -29px;
-
-			.curtain {
-				position: absolute;
-				left: 0; top: 0; bottom: 0;
-				width: 512px;
-				cursor: pointer;
-				background: {
-					color: #ebebeb;
-					position: center center;
-					size: 512px auto;
-					repeat: no-repeat;
-				}
-
-
-				&.x-masked {
-					.ctr, .play {display: none;}
-				}
-			}
-
-			.screen {
-				position: absolute;
-				left: 0; top: 0; bottom: 0;
-				width: 512px;
-				overflow: hidden;
-				background: black;
-			}
-
-			.video-list{
-				@include scrollbar(#04232c, #0f2d35);
-				position: absolute;
-				left: 512px;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				overflow: {
-					x: hidden;
-					y: auto; //scroll;
-				}
-				background: #04232c;
-
-				.video-row {
-					position: relative;
-					cursor: pointer;
-					color: #ebebeb;
-					padding: 8px 10px;
-					font: normal 400 1.1em 'Open Sans Condensed', $font;
-					min-height: 53px;
-					border:{
-						color: #0f2d35;
-						style: solid;
-						width: 0 0 1px 0;
-					}
-					background-image: none !important;//prevent the inline-style from applying
-
-					.comments,.label{
-						@include ellipse();
-						overflow:hidden;
-					}
-
-					.comments, .viewed {
-						font: normal 700 0.6em/1.3em $font;
-						color: $secondary-grey;
-						text-transform: uppercase;
-					}
-
-					&.viewed{
-						padding-left: 35px;
-						@include icon('circle-check-white-small', $top: 10px, $left: 12px);
-					}
-
-					&.over{
-						$c: #113b46;
-						background: $c;
-						border-color: $c;
-						color: #ffffff;
-
-						.comments{
-							color: #aaeafc;
-						}
-					}
-
-					&.x-item-selected{
-						$c: #4699b0;
-						background: $c;
-						border-color: $c;
-						color: #ffffff;
-
-						.comments, .viewed{
-							color: #aaeafc;
-						}
-					}
-				}
-			}
-		}
-	}
-
 	&.overview-spacer {
 		clear: both;
 		position: relative;
@@ -401,11 +299,37 @@
 	}
 }
 
+.course-overview {
+	.editing-controls {
+		margin-bottom: 20px;
+		overflow: hidden;
+
+		.buttons {
+			float: right;
+
+			.button {
+				display: inline-block;
+				line-height: 40px;
+				text-align: center;
+				padding: 0 1.5em;
+				border-radius: 3px;
+				cursor: pointer;
+
+				&.edit {
+					color: white;
+					background-color: $primary-blue;
+				}
+			}
+		}
+	}
+}
+
 
 .x-container-course {
 	&.course-overview{
 		background: #ffffff;
 		padding: 1.5em 1.87em;//25px 30px;
+		overflow: hidden;
 		@include scrollbar(#ffffff, $tertiary-grey);
 	}
 
@@ -464,10 +388,172 @@
 		}
 	}
 
+	&.overview-videos, &.overview-video {
+		&.video-roll{
+			margin: 10px 0;
+		}
+		@extend .overview-group;
+
+		&.singular{
+			position: relative;
+			width: 704px !important;
+			height: 396px;
+			margin: 10px 0;
+
+			.screen,
+			.curtain {
+				width: 704px;
+			}
+			.curtain {
+				background-size: 704px auto;
+			}
+
+			.video-list {
+				display: none;
+			}
+
+			&.viewed {
+				@include icon('circle-check-white-small', $top: 7px, $left: auto, $right: 58px);
+
+				&::after {
+					z-index: 2;
+				}
+
+				&::before {
+					content: 'viewed';
+					text-transform: uppercase;
+					font: normal 500 0.6em/24px "Open Sans",sans-serif;
+					position: absolute;
+					top: 5px;
+					right: 5px;
+					padding: 0px 10px 0 30px;
+					color: white;
+					background-color: $secondary-green;
+					z-index: 1;
+					border-radius: 20px;
+				}
+			}
+		}
+		&.video-roll{
+			.body {
+				position: relative;
+				overflow: hidden;
+				height: 288px;
+				margin: 0 -31px 0 -29px;
+
+				.curtain {
+					position: absolute;
+					left: 0; top: 0; bottom: 0;
+					width: 512px;
+					cursor: pointer;
+					background: {
+						color: #ebebeb;
+						position: center center;
+						size: 512px auto;
+						repeat: no-repeat;
+					}
+
+
+					&.x-masked {
+						.ctr, .play {display: none;}
+					}
+				}
+
+				.screen {
+					position: absolute;
+					left: 0; top: 0; bottom: 0;
+					width: 512px;
+					overflow: hidden;
+					background: black;
+				}
+
+				.video-list{
+					@include scrollbar(#04232c, #0f2d35);
+					position: absolute;
+					left: 512px;
+					top: 0;
+					right: 0;
+					bottom: 0;
+					overflow: {
+						x: hidden;
+						y: auto; //scroll;
+					}
+					background: #04232c;
+
+					.selected{
+						$c: #4699b0;
+						background: $c;
+						border-color: $c;
+						color: #ffffff;
+						.video-row{
+							.comments, .viewed{
+								color: #aaeafc;
+							}
+						}
+					}
+
+					.hasBeenViewed {
+						.video-row {
+						    padding-left: 35px;
+						    position: relative;
+							@include icon('circle-check-white-small', $top: 10px, $left: 12px);
+							.viewed {
+							    display: block;
+							}
+						}
+
+					}
+
+					.video-row {
+						position: relative;
+						cursor: pointer;
+						color: #ebebeb;
+						padding: 8px 10px;
+						font: normal 400 1.1em 'Open Sans Condensed', $font;
+						min-height: 53px;
+						border:{
+							color: #0f2d35;
+							style: solid;
+							width: 0 0 1px 0;
+						}
+						background-image: none !important;//prevent the inline-style from applying
+
+						.comments,.label{
+							@include ellipse();
+							overflow:hidden;
+						}
+
+						.comments, .viewed {
+							font: normal 700 0.6em/1.3em $font;
+							color: $secondary-grey;
+							text-transform: uppercase;
+						}
+
+						.viewed {
+						    display: none;
+						}
+
+						&.over{
+							$c: #113b46;
+							background: $c;
+							border-color: $c;
+							color: #ffffff;
+
+							.comments{
+								color: #aaeafc;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 
-.overview-section{
+.overview-group, .overview-section{
+	clear: both;
+
 	h2 {
 		margin: 5em 0 0 -3.05em;
 		font: normal 600 0.6em/2em $font;
@@ -479,6 +565,9 @@
 			display: inline-block;
 			background: #ce78e0;//additional/default
 			padding: 0 1em 0 4.15em;
+			overflow: hidden;
+			max-width: 100%;
+			@include ellipse;
 
 			&::after {
 				content: '';
@@ -514,6 +603,10 @@
 
 	&.discussions{
 		margin-right: -20px;
+	}
+
+	.group-container {
+		clear: both;
 	}
 
 	.content-card {
