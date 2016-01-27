@@ -90,8 +90,21 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 	},
 
 	onRouteActivate: function(){
+		var me = this;
 		this.setTitle(this.title);
-		this.reloadTiles();
+
+		// Cache the scroll position before we reload the tiles.
+		// This will help us to make we scroll again to that last position.
+		// We can not use lastScrollTop since it changes when the the tiles are removed 
+		// and added back.
+		if (this.lastScrollTop > 0) {
+			this.lastScrollCache = this.lastScrollTop;
+		}
+		
+		this.reloadTiles()
+			.then(function() {
+				wait().then(me.onScrollToLastScroll.bind(me));
+			});
 
 		if (!this.rendered) {
 			this.on('afterrender', this.onRouteActivate.bind(this));
@@ -99,6 +112,14 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 		}
 
 		window.addEventListener('scroll', this.onScroll);
+	},
+
+
+	onScrollToLastScroll: function(){
+		if (this.lastScrollCache > 0) {
+			window.scrollTo(0, this.lastScrollCache);
+			delete this.lastScrollCache;
+		}
 	},
 
 
@@ -399,13 +420,19 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 
 
 	reloadTiles: function(){
-		var tileContainers = this.query('dashboard-tile-container');
+		var tileContainers = this.query('dashboard-tile-container'),
+			loadedContainers = [], p;
 
 		Ext.each(tileContainers, function(tileContainer) {
 			if(tileContainer.reloadTiles){
-				tileContainer.reloadTiles();
+				p = tileContainer.reloadTiles();
+				if (p instanceof Promise) {
+					loadedContainers.push(p);
+				}
 			}
 		});
+
+		return Promise.all(loadedContainers);
 	},
 
 	__emptyContainer: function(cmp) {
