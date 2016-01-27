@@ -90,7 +90,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		this.mon(this.viewAssignmentEl, 'click', this.fireEvent.bind(this, 'goToRawAssignment'));
 		this.emailEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		if (this.shouldAllowInstructorEmail() && this.currentBundle && this.currentBundle.getLink('Mail')) {
-			this.mon(this.emailEl, 'click', 'showEmailEditor');	
+			this.mon(this.emailEl, 'click', 'showEmailEditor');
 		}
 		else {
 			this.emailEl.hide();
@@ -228,7 +228,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 
 	onStudentFilterChange: function(filter) {
 		var q;
-		
+
 		if (!filter) {
 			filter = this.ownerCt && this.ownerCt.studentFilter;
 		}
@@ -249,7 +249,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		}
 	},
 
-	maybeShowEmailButton: function(filter){
+	maybeShowEmailButton: function(filter) {
 		var isAllowed = this.shouldAllowInstructorEmail() && this.currentBundle && this.currentBundle.getLink('Mail');
 		if (isAllowed && this.emailEl) {
 			this.emailEl.show();
@@ -257,11 +257,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 	},
 
 
-	shouldAllowInstructorEmail: function(){
+	shouldAllowInstructorEmail: function() {
 		return isFeature('instructor-email');
 	},
 
-	
+
 	showEmailEditor: function(e) {
 		var me = this,
 			editor,
@@ -279,7 +279,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 	},
 
 
-	onCourseEmailSent: function(){},
+	onCourseEmailSent: function() {},
 
 
 	showSettingsMenu: function() {
@@ -367,7 +367,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 
 		this.buildSettingsMenu();
 
-		this.toggleAvatars(!show);
+		this.toggleAvatars(null, !show);
 	},
 
 
