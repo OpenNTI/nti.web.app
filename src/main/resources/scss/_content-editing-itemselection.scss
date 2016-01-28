@@ -346,13 +346,13 @@
 }
 
 
-.assignment-item-selection {
+.assignment-item-selectionm, .assessment-item-selection {
 	.selected {
-		.assignment-item {
+		.assignment-item, .self-assessment-item {
 			background-color: $primary-blue;
 			color: white;
 
-			&.overdue .due-date {
+			&.overdue .due-date, .question-count {
 				color: white;
 			}
 		}
@@ -362,7 +362,7 @@
 		display: none;
 	}
 
-	.assignment-item {
+	.assignment-item, .self-assessment-item {
 		cursor: pointer;
 		background: white;
 		margin-bottom: 10px;
@@ -384,6 +384,11 @@
 		.due-date {
 			font-size: 0.75rem;
 			font-style: italic;
+		}
+
+		.question-count {
+			font-size: 0.75em;
+			color: $tertiary-grey;
 		}
 	}
 }

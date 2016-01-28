@@ -86,7 +86,7 @@
 }
 
 .content-editor.questionset {
-	.assignment-preview {
+	.assignment-preview, .self-assessment-preview {
 		background: white;
 		margin-bottom: 10px;
 		padding: 10px;
@@ -108,6 +108,11 @@
 		.due-date {
 			font-size: 0.75rem;
 			font-style: italic;
+		}
+
+		.question-count {
+			font-size: 0.75em;
+			color: $tertiary-grey;
 		}
 
 		.remove {

@@ -15,7 +15,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 		me.add({
 			xtype: 'box',
 			autoEl: {
-				cls: 'self-assessnment-preview',
+				cls: 'self-assessment-preview',
 				cn: [
 					{cls: 'title', html: item.get('title')},
 					{cls: 'question-count', html: Ext.util.Format.plural(questionCount, 'Question')},
