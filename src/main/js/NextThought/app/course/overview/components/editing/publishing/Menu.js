@@ -226,6 +226,9 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 
 		e.stopEvent();
 		if (this.datepicker && this.datepicker.isValid && this.datepicker.isValid() === false) {
+			if (this.datepicker && this.datepicker.showErrors) {
+				this.datepicker.showErrors();
+			}
 			return;
 		}
 

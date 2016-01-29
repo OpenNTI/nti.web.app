@@ -1002,9 +1002,15 @@ input[type=number]{
 					border: none;
 
 					.x-datepicker-date {
-						background-color: $primary-blue;
+						background-color: $tertiary-grey;
 						color: #ffffff;
 						border-radius: 90px;
+					}
+				}
+
+				&.x-datepicker-clicked {
+					.x-datepicker-date {
+						background-color: $primary-blue;
 					}
 				}
 
