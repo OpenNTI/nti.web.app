@@ -18,6 +18,7 @@ export default Ext.define('NextThought.app.forums.components.forum.Forum', {
 			filterBar = this.down('forums-forum-filterbar'),
 			header = this.down('forums-forum-header');
 
+		this.activeTopicList = null;
 		Ext.destroy(topicList, filterBar, header);
 	},
 

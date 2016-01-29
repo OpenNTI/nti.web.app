@@ -4,11 +4,14 @@ export default Ext.define('NextThought.app.context.types.Content', {
 		'NextThought.util.Ranges',
 		'NextThought.common.components.cards.OverlayedPanel',
 		'NextThought.common.components.cards.Card',
+		'NextThought.common.components.cards.Launcher',
 		'NextThought.app.library.Actions',
 		'NextThought.app.mediaviewer.content.deck.OverlayedPanel',
 		'NextThought.app.mediaviewer.content.Slidedeck',
 		'NextThought.app.mediaviewer.content.SlideVideo',
+		'NextThought.app.image.OverlayedPanel',
 		'NextThought.app.mediaviewer.content.OverlayedPanel',
+		'NextThought.app.video.roll.OverlayedPanel',
 		'NextThought.app.context.components.cards.*',
 		'NextThought.app.context.components.Default',
 		'NextThought.app.context.components.list.Content'
@@ -103,7 +106,7 @@ export default Ext.define('NextThought.app.context.types.Content', {
 			imgs = n && n.querySelectorAll('img'),
 			maxWidth = this.maxWidth, Slide, c;
 
-		if (!node){ return;}
+		if (!node) { return;}
 
 		node.select('.injected-related-items,.related,.anchor-magic').remove();
 
@@ -154,24 +157,28 @@ export default Ext.define('NextThought.app.context.types.Content', {
 			if (isExternalNTILink) {
 				url = root + url;
 				url = getURL(url);
-				a.setAttribute('href', url);	
+				a.setAttribute('href', url);
 			}
 		});
 
 
-		cardTpl = Ext.DomHelper.createTemplate({cls: 'content-card', html: NextThought.common.components.cards.Card.prototype.renderTpl.html});
-		Ext.each(node.query('object[type*=nticard]'), function(c) {
-			var d = NextThought.common.components.cards.OverlayedPanel.getData(c);
-			cardTpl.insertAfter(c, d, false);
-			Ext.fly(c).remove();
-		});
+		this.__fixCards(node, root);
 
-		slideDeckTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.app.mediaviewer.content.Slidedeck.prototype.renderTpl.html});
-		Ext.each(node.query('object[type*=ntislidedeck]'), function(c) {
-			var d = NextThought.app.mediaviewer.content.deck.OverlayedPanel.getData(c);
-			slideDeckTpl.insertAfter(c, d, false);
-			Ext.fly(c).remove();
-		});
+		// cardTpl = Ext.DomHelper.createTemplate({cls: 'content-card', html: NextThought.common.components.cards.Card.prototype.renderTpl.html});
+		// Ext.each(node.query('object[type*=nticard]'), function(c) {
+		// 	var d = NextThought.common.components.cards.OverlayedPanel.getData(c);
+		// 	cardTpl.insertAfter(c, d, false);
+		// 	Ext.fly(c).remove();
+		// });
+
+		// slideDeckTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.app.mediaviewer.content.Slidedeck.prototype.renderTpl.html});
+		// Ext.each(node.query('object[type*=ntislidedeck]'), function(c) {
+		// 	var d = NextThought.app.mediaviewer.content.deck.OverlayedPanel.getData(c);
+		// 	slideDeckTpl.insertAfter(c, d, false);
+		// 	Ext.fly(c).remove();
+		// });
+
+
 
 		if (node.query('object[type*=ntislidevideo][itemprop$=card]').length > 0) {
 			c = node.query('object[type*=ntislidevideo][itemprop$=card]')[0];
@@ -183,7 +190,7 @@ export default Ext.define('NextThought.app.context.types.Content', {
 
 		if (node.query('object[type$=slide]').length) {
 			data = NextThought.model.Slide.getParamFromDom(node.query('object[type$=slide]')[0], 'slideimage');
-			Slide = NextThought.app.mediaviewer.components.reader.parts.Slide; 
+			Slide = NextThought.app.mediaviewer.components.reader.parts.Slide;
 			dom = new Ext.XTemplate(Slide && Slide.prototype.contextTpl).apply({image: root + data});
 			dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
 			return dom;
@@ -210,5 +217,61 @@ export default Ext.define('NextThought.app.context.types.Content', {
 		});
 
 		return node.dom;
+	},
+
+
+	__fixCards: function(node, root) {
+		var cardTpl = new Ext.XTemplate(Ext.DomHelper.markup({
+				cls: 'content-card',
+				html: NextThought.common.components.cards.Card.prototype.renderTpl
+			})),
+			slideDeckTpl = Ext.DomHelper.createTemplate({
+				cls: 'content-launcher',
+				html: NextThought.app.mediaviewer.content.Slidedeck.prototype.renderTpl.html
+			}),
+			contentLauncherTpl = Ext.DomHelper.createTemplate({
+				cls: 'content-launcher',
+				html: NextThought.common.components.cards.Launcher.prototype.renderTpl.html
+			});
+
+		function fixLink(link) {
+			if (link && Globals.ROOT_URL_PATTERN.test(link)) {
+				link = getURL(link);
+			} else if (link) {
+				link = getURL(link, root || '');
+			}
+
+			return link;
+		}
+
+		Ext.each(node.query('object[type*=nticard]'), function(c) {
+			var d = NextThought.common.components.cards.OverlayedPanel.getData(c);
+
+			d.thumbnail = fixLink(d.thumbnail);
+
+			cardTpl.insertAfter(c, d, false);
+			Ext.fly(c).remove();
+		});
+
+		Ext.each(node.query('object[type*=ntislidedeck]'), function(c) {
+			var d = NextThought.app.mediaviewer.content.deck.OverlayedPanel.getData(c);
+			slideDeckTpl.insertAfter(c, d, false);
+			Ext.fly(c).remove();
+		});
+
+		Ext.each(node.query('object[type*=videoroll]'), function(c) {
+			var d = NextThought.app.video.roll.OverlayedPanel.getData(c);
+			contentLauncherTpl.insertAfter(c, d, false);
+			Ext.fly(c).remove();
+		});
+
+		Ext.each(node.query('object[type*=image-collection]'), function(c) {
+			var d = NextThought.app.image.OverlayedPanel.getData(c);
+
+			d.thumbnail = fixLink(d.thumbnail);
+
+			contentLauncherTpl.insertAfter(c, d, false);
+			Ext.fly(c).remove();
+		});
 	}
 });

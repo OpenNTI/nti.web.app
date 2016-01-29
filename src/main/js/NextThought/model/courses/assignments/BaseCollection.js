@@ -19,12 +19,38 @@ export default Ext.define('NextThought.model.courses.assignments.BaseCollection'
 		fromJson: function(assignments, nonAssignments, gradeBook, historyURL) {
 			if (!assignments) { return null; }
 
-			assignments = assignments.Items || assignments;
-			nonAssignments = nonAssignments && (nonAssignments.Items || nonAssignments);
+			// Flips the outline and builds assignment to outline nodes map.
+			function buildAssignmentsOutline(outline) {
+				var key, i, list, id, node,
+					idMap = {};
+
+				for (key in outline) {
+					if (outline.hasOwnProperty(key)) {
+						list = outline[key] || [];
+						for (i = 0; i < list.length; i++) {
+							id = list[i];
+							
+							if (idMap[id]) {
+								console.warn('This assignemnt is already assigned to another lesson node. Assignemnt:', id, ' Other Nodes: ', idMap[id]);
+								idMap[id].push(key);
+							} else {
+								idMap[id] = [key];
+							}
+						}
+					}
+				}
+
+				return idMap;
+			}
+
 
 			var assignmentMimeType = this.ASSIGNMENT,
 				timedAssignmentMimeType = this.TIMEDASSIGNMENT,
-				href = assignments.href, hitmap = {}, nodemap = {};
+				href = assignments.href, hitmap = {}, nodemap = {},
+				outline = assignments.Outline;
+
+			assignments = assignments.Items || assignments;
+			nonAssignments = nonAssignments && (nonAssignments.Items || nonAssignments);
 
 			//filter out items that aren't an assignment or don't have an ntiid
 			function filter(i) {
@@ -58,7 +84,8 @@ export default Ext.define('NextThought.model.courses.assignments.BaseCollection'
 				Assignments: build(assignments),
 				NonAssignments: build(nonAssignments),
 				HistoryURL: this.__parseHistoryURL(historyURL),
-				GradeBook: gradeBook
+				GradeBook: gradeBook,
+				AssignmentsOutline: buildAssignmentsOutline(outline)
 			});
 		}
 	},
@@ -69,7 +96,8 @@ export default Ext.define('NextThought.model.courses.assignments.BaseCollection'
 		{name: 'Assignments', type: 'arrayItem'},
 		{name: 'NonAssignments', type: 'arrayItem'},
 		{name: 'HistoryURL', type: 'String'},
-		{name: 'GradeBook', type: 'auto'}
+		{name: 'GradeBook', type: 'auto'},
+		{name: 'AssignmentsOutline', type: 'auto'}
 	],
 
 
@@ -149,6 +177,24 @@ export default Ext.define('NextThought.model.courses.assignments.BaseCollection'
 
 	getGradeBook: function() {
 		return this.get('GradeBook');
+	},
+
+
+	getOutlineNode: function(assignmentId, outlineInterface) {
+		var assignmentsOutline = this.get('AssignmentsOutline'),
+			nodeIds = assignmentsOutline && assignmentsOutline[assignmentId],
+			id, node = null;
+
+		// TODO: For simplicity, take the last one.
+		if (nodeIds instanceof Array) {
+			id = nodeIds.last();
+		}
+
+		if (outlineInterface && id) {
+			node = outlineInterface.findOutlineNode(id);
+		}
+
+		return Promise.resolve(node);
 	},
 
 

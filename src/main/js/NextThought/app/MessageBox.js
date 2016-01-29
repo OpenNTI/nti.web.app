@@ -272,6 +272,7 @@ export default Ext.define('NextThought.app.MessageBox', {
 		});
 
 		me.callParent(arguments);
+		me.toFront();
 		me.addCls('showing');
 	},
 
