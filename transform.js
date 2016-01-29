@@ -67,20 +67,79 @@ function getNameFromClassName(cls, length) {
 }
 
 
-function findRequires(root, j) {
-	var identifier = root.find(j.Identifier, {name: 'requires'});
-	var	imports = [];
+function isExtClassProperty(j, property) {
+	var valid = true;
 
-	identifier.forEach(function(i) {
-		var property = i.parent;
-		var elements = property && property.value.value.elements;
+	//If its not even a property declaration
+	if (property.value.type !== j.Property.name) {
+		valid = false;
+	}
+
+	//If its not a property on an ObjectExpression
+	if (property.parent.value.type !== j.ObjectExpression.name) {
+		valid = false;
+	}
+
+	var callExpression = property.parent.parent.value;
+
+	if (callExpression.type !== j.CallExpression.name) {
+		valid = false;
+	}
+
+	var callee = callExpression.callee;
+
+	if (callee.type !== j.MemberExpression.name) {
+		valid = false;
+	}
+
+	if (callee.object.name !== 'Ext') {
+		valid = false;
+	}
+
+	if (callee.property.name !== 'define') {
+		valid = false;
+	}
+
+	return valid;
+}
+
+
+function getRequiresProperty(root, j) {
+	var property = root.find(j.Property, {key: {name: 'requires'}, value: {type: j.ArrayExpression.name}});
+
+	return property.filter(isExtClassProperty.bind(this, j));
+}
+
+
+function getMixinsProperty(root, j) {
+	var property = root.find(j.Property, {key: {name: 'mixins'}, value: {type: j.ObjectExpression.name}});
+
+	return property.filter(isExtClassProperty.bind(this, j));
+}
+
+
+function getExtendsProperty(root, j) {
+	var property = root.find(j.Property, {key: {name: 'extend'}, value: {type: j.Literal.name}});
+
+	return property.filter(isExtClassProperty.bind(this, j));
+}
+
+
+function findRequires(root, j) {
+	var props = getRequiresProperty(root, j);
+	var imports = [];
+
+	if (props.__length > 0) {
+		console.warn('More than one requires property being applied');
+	}
+
+	props.forEach(function(prop) {
+		var elements = prop.value.value.elements;
 
 		elements = elements || [];
 
 		imports = imports.concat(elements.map(function(element) {
-			var cls = element.raw;
-
-			cls = cls.replace(/\'/g, '');
+			var cls = element.value;
 
 			return {
 				name: getNameFromClassName(cls),
@@ -88,8 +147,6 @@ function findRequires(root, j) {
 				path: getPathToClassName(cls)
 			};
 		}));
-
-		//TODO figure out how to remove the requires property...
 	});
 
 	return imports;
@@ -102,18 +159,18 @@ function removeRequires(fileSource) {
 
 
 function findMixins(root, j) {
-	var identifier = root.find(j.Identifier, {name: 'mixins'});
-	var	imports = [];
+	var props = getMixinsProperty(root, j);
+	var imports = [];
 
-	identifier.forEach(function(i) {
-		var property = i.parent;
-		var properties = property && property.value.value && property.value.value.properties;
+	props.forEach(function(prop) {
+		var properties = prop.value.value.properties;
 
 		properties = properties || [];
 
-		imports = imports.concat(properties.map(function(prop) {
-			var cls = prop.value.value;
+		imports = imports.concat(properties.map(function(p) {
+			var cls = p.value.value;
 
+			console.log(cls);
 			return {
 				name: getNameFromClassName(cls),
 				cls: cls,
@@ -127,15 +184,14 @@ function findMixins(root, j) {
 
 
 function findExtends(root, j) {
-	var identifier = root.find(j.Identifier, {name: 'extend'});
-	var	extend = [];
+	var props = getExtendsProperty(root, j);
+	var imports = [];
 
-	identifier.forEach(function(i) {
-		var property = i && i.parent && i.parent.value;
-		var value = property && property.value.value;
+	props.forEach(function(prop) {
+		var value = prop.value.value.value;
 
 		if (value) {
-			extend.push({
+			imports.push({
 				name: getNameFromClassName(value),
 				cls: value,
 				path: getPathToClassName(value)
@@ -143,7 +199,7 @@ function findExtends(root, j) {
 		}
 	});
 
-	return extend;
+	return imports;
 }
 
 
