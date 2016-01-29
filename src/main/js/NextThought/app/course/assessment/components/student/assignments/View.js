@@ -421,18 +421,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 			waitsOn.push(Promise.all([
 				assignments.getHistoryItem(id, true).fail(function() { return; }),
 				assignments.getGradeBookEntry(id),
-				ContentUtils.getLineage(id, bundle)
-					.then(function(lineages) {
-						var lineage = lineages[0] || [];
-
-						return Promise.all(lineage.map(function(ntiid) {
-							return outlineInterface.findOutlineNode(ntiid);
-						})).then(function(results) {
-							results = results.filter(function(x) { return !!x; });
-
-							return results[0];
-						});
-					})
+				assignments.getOutlineNode(id, outlineInterface)
 			])
 				.then(function(results) {
 					var history = results[0],//history item
@@ -442,7 +431,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 					return {
 						id: id,
 						containerId: assignment.get('containerId'),
-						lesson: node && node.getTitle(),
+						lesson: node ? node.getTitle() : 'Other Assignments',
 						outlineNode: node,
 						item: assignment,
 						name: assignment.get('title'),

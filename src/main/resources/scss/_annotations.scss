@@ -488,12 +488,20 @@
 	}
 }
 
-.note-window .main-view .context {
+.note-window .note.main-view .context {
 	[itemprop~="nti-data-markupenabled"],[itemprop~="nti-slide-video"]{
 		&:hover {
 			a.zoom {
 				display: none !important;
 			}
+		}
+	}
+
+	.content-launcher {
+		margin-bottom: 10px;
+
+		.meta .launcher-button {
+			display: none;
 		}
 	}
 
