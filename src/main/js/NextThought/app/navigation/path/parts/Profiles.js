@@ -16,6 +16,7 @@ Ext.define('NextThought.app.navigation.path.parts.Profiles', {
 	addHandlers: function(handlers) {
 		handlers[NextThought.model.User.mimeType] = this.getPathToUser.bind(this);
 		handlers[NextThought.model.openbadges.Badge.mimeType] = {doNotCache: true, fn: this.getPathToBadge.bind(this)};
+		handlers[NextThought.model.DynamicFriendsList.mimeType] = this.getPathToDynamicFriendsList.bind(this);
 
 		return handlers;
 	},
@@ -37,6 +38,11 @@ Ext.define('NextThought.app.navigation.path.parts.Profiles', {
 
 				return path;
 			});
+	},
+
+
+	getPathToDynamicFriendsList: function(dfl) {
+		return Promise.resolve([dfl]);
 	}
 
 });
