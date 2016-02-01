@@ -43,6 +43,30 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 	},
 
 
+	setSelectionItems: function(items){
+		if (!items || items.length === 0) {
+			this.showEmptyState();	
+		}
+
+		this.callParent(arguments);
+	},
+
+
+	showEmptyState: function(){
+		// Display empty state
+		this.itemsContainer.add({
+			xtype: 'box',
+			autoEl: {cls: 'empty', cn: [
+				{cls: 'text', html: 'There are no discsussions to pick from.'}
+			]}
+		});
+
+		if (this.searchCmp) {
+			this.searchCmp.hide();
+		}
+	},
+
+
 	onUnselectItem: function(el) {
 		var input = el && el.querySelector('input[type=checkbox]');
 

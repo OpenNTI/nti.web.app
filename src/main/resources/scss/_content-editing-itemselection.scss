@@ -73,6 +73,12 @@
 			}
 		}
 	}
+
+	.empty {
+		text-align: center;
+    	color: $secondary-grey;
+    	font-style: italic;
+	}
 }
 
 .video-item-selection {

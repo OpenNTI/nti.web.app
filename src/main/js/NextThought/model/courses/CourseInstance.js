@@ -889,7 +889,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		var link = this.getLink('CourseDiscussions');
 
 		if (!link) {
-			return Promise.reject('No assets link');
+			console.error('No discussions link');
+			return Promise.resolve([]);
 		}
 
 		return Service.request({
