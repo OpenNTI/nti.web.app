@@ -4,6 +4,13 @@ Ext.define('NextThought.model.RelatedWork', {
 
 	isPage: true,
 
+	requires: [
+		'NextThought.mixins.AuditLog'
+	],
+
+	mixins: {
+		auditLog: 'NextThought.mixins.AuditLog'
+	},
 
 	statics: {
 		mimeType: 'application/vnd.nextthought.relatedworkref',

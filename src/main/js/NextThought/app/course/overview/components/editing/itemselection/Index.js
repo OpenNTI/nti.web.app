@@ -77,11 +77,18 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 
 	onSearchClicked: function(e) {
 		if (e.getTarget('.clear')) {
-			this.searchInput.value = '';
-			this.searchForTerm('');
+			this.clearSearch();
 		} else if (e.getTarget('.do-search')) {
 			this.onSearchKeyUp();
 		}
+	},
+
+
+	clearSearch: function() {
+		if (!this.rendered) { return; }
+
+		this.searchInput.value = '';
+		this.searchForTerm('');
 	},
 
 
@@ -95,7 +102,12 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 			item.applySearchTerm(term);
 		});
 
-		this.searchCmp[term ? 'addCls' : 'removeCls']('has-search-term');
+		if (this.onSearchCleared && !term && this.hasCls('has-search-term')) {
+			this.onSearchCleared();
+		}
+
+
+		this[term ? 'addCls' : 'removeCls']('has-search-term');
 	},
 
 
@@ -111,13 +123,16 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 				selectionItem: item,
 				itemTpl: me.itemTpl,
 				getItemData: me.getItemData.bind(me),
-				getItemChildren: me.getItemChildren.bind(me),
+				getItemChildren: me.getItemChildren && me.getItemChildren.bind(me),
+				getSelectionItemId: me.getSelectionItemId.bind(me),
 				itemMatchesSearch: me.itemMatchesSearch.bind(me),
 				multiSelect: me.multiSelect,
 				selectItem: me.selectItem.bind(me),
 				unselectItem: me.unselectItem.bind(me),
 				onSelectItem: me.onSelectItem.bind(me),
-				onUnselectItem: me.onUnselectItem.bind(me)
+				onUnselectItem: me.onUnselectItem.bind(me),
+				onItemExpand: me.onItemExpand.bind(me),
+				onItemCollapse: me.onItemCollapse.bind(me)
 			};
 		}));
 
@@ -147,15 +162,25 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 	},
 
 
+	isSelected: function(item) {
+		var me = this,
+			itemId = me.getSelectionItemId(item),
+			selection = me.getSelection();
+
+		return selection.reduce(function(acc, item) {
+			if (me.getSelectionItemId(item) === itemId) {
+				acc = true;
+			}
+
+			return acc;
+		}, false);
+	},
+
+
 	getItemData: function(item) {
 		return {
 			title: item.getTitle && item.getTitle()
 		};
-	},
-
-
-	getItemChildren: function(item) {
-		return [];
 	},
 
 
@@ -168,6 +193,11 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 		var title = item.getTitle && item.getTitle();
 
 		return title && title.indexOf(searchTerm) >= 0;
+	},
+
+
+	getSelectionItemId: function(item) {
+		return item.getId();
 	},
 
 
@@ -189,22 +219,27 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 
 
 	unselectItem: function(selectionItem) {
-		this.itemsContainer.items.each(function(item) {
+		var me = this;
+
+		me.itemsContainer.items.each(function(item) {
 			if (item && item.maybeUnselectItem) {
 				item.maybeUnselectItem(selectionItem);
 			}
 		});
 
-		this.selection = this.selection.filter(function(item) {
-			return item.getId() !== selectionItem.getId();
+		me.selection = me.selection.filter(function(item) {
+			return me.getSelectionItemId(item) !== me.getSelectionItemId(selectionItem);
 		});
 
-		if (this.onSelectionChanged) {
-			this.onSelectionChanged(this.selection);
+		if (me.onSelectionChanged) {
+			me.onSelectionChanged(this.selection);
 		}
 	},
 
 
 	onSelectItem: function(el) {},
-	onUnselectItem: function(el) {}
+	onUnselectItem: function(el) {},
+
+	onItemExpand: function(item) {},
+	onItemCollapse: function(item) {}
 });

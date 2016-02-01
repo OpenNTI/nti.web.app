@@ -6,7 +6,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		'NextThought.common.form.Form',
 		'NextThought.app.prompt.Actions',
 		'NextThought.app.course.overview.components.editing.Actions',
-		'NextThought.app.course.overview.components.editing.controls.Delete'
+		'NextThought.app.course.overview.components.editing.controls.Delete',
+		'NextThought.app.course.overview.components.editing.auditlog.Index'
 	],
 
 	saveText: 'Save',
@@ -123,6 +124,10 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		if (this.record) {
 			this.deleteBtn = this.addDeleteButton();
 		}
+
+		if (this.record && this.record.hasAuditLog && this.record.hasAuditLog()) {
+			this.addAuditLog();
+		}
 	},
 
 
@@ -156,6 +161,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		return this.add({
 			xtype: 'common-form',
 			schema: this.getFormSchema(),
+			sendAllValues: !this.record,//if we dont' have a record don't exclude any values
 			defaultValues: values,
 			action: this.getFormAction(),
 			method: this.getFormMethod(),
@@ -175,6 +181,14 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 				afterDelete: this.afterDelete.bind(this)
 			});
 		}
+	},
+
+
+	addAuditLog: function() {
+		return this.add({
+			xtype: 'overview-editing-audit-log',
+			record: this.record
+		});
 	},
 
 

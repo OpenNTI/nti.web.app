@@ -5,6 +5,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.Prompt', 
 	requires: [
 		'NextThought.app.course.overview.components.editing.content.lessonoverview.ChildCreation',
 		'NextThought.app.course.overview.components.editing.content.overviewgroup.ChildCreation',
+		'NextThought.app.course.overview.components.editing.outline.outlinenode.ChildCreation',
 		'NextThought.app.course.overview.components.editing.content.contentlink.Editor',
 		'NextThought.app.course.overview.components.editing.content.video.Editor',
 		'NextThought.app.course.overview.components.editing.content.discussion.Editor',
@@ -17,11 +18,14 @@ Ext.define('NextThought.app.course.overview.components.editing.content.Prompt', 
 	statics: {
 
 		getCreators: function() {
-			var base = NextThought.app.course.overview.components.editing.content;
+			var base = NextThought.app.course.overview.components.editing.content,
+				outline = NextThought.app.course.overview.components.editing.outline;
+
 
 			return [
 				base.lessonoverview.ChildCreation,
-				base.overviewgroup.ChildCreation
+				base.overviewgroup.ChildCreation,
+				outline.outlinenode.ChildCreation
 			];
 		},
 

@@ -28,6 +28,12 @@ Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
+	/**
+	 * Whether or not to send all the values back when submitted,
+	 * or just the values that have changed
+	 * @type {Boolean}
+	 */
+	sendAllValues: false,
 
 	cls: 'form-container',
 
@@ -252,7 +258,7 @@ Ext.define('NextThought.common.form.Form', {
 		var field = name ? {name: name} : this.getFirstField(),
 			input = field && this.getInputForField(field.name);
 
-		if (input.focus) { input.focus(); }
+		if (input && input.focus) { input.focus(); }
 	},
 
 
@@ -353,14 +359,18 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
-	getFirstField: function() {
-		var first, field, i = 0, schema = this.schema;
+	getFirstField: function(schema) {
+		var first, field, i = 0;
+
+		schema = schema || this.schema;
 
 		while (schema[i] && !first) {
 			field = schema[i];
 
-			if (field.type !== 'hidden') {
+			if (field.type !== 'hidden' && field.type !== 'group') {
 				first = field;
+			} else if (field.inputs) {
+				first = this.getFirstField(field.inputs);
 			}
 
 			i += 1;
@@ -529,6 +539,14 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
+	updateHiddenField: function(field, value){
+		var input = this.el.dom.querySelector('input[name='+ field +']');
+		if (input) {
+			input.value = value;
+		}
+	},
+
+
 	getValues: function(schema, values) {
 		var me = this;
 
@@ -572,6 +590,7 @@ Ext.define('NextThought.common.form.Form', {
 
 	getChangedValues: function() {
 		var schema = this.schema,
+			sendAllValues = this.sendAllValues,
 			newValues = this.getValues(),
 			oldValues = this.defaultValues;
 
@@ -581,7 +600,7 @@ Ext.define('NextThought.common.form.Form', {
 
 			if (part.type === 'group') {
 				part.inputs.reduce(reducer, acc);
-			} else if (oldValue !== newValue || part.type === 'hidden') {
+			} else if (sendAllValues || oldValue !== newValue || part.type === 'hidden' || part.keep === true) {
 				//If the newValue is undefined assume that means null it out,
 				//so set it explicitly to null so the value makes it to the server
 				acc[part.name] = newValue === undefined ? null : newValue;

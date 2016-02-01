@@ -21,7 +21,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		'NextThought.model.forums.CommunityBoard',
 		'NextThought.model.forums.CommunityForum',
 		'NextThought.model.UserSearch',
-		'NextThought.model.Video'
+		'NextThought.model.Video',
+		'NextThought.model.assessment.Assignment'
 	],
 
 	mixins: {
@@ -846,8 +847,46 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	__getAssets: function(type) {
+		var link = this.getLink('assets'),
+			config;
+
+		if (!link) {
+			return Promise.reject('No asseets link');
+		}
+
+		config = {
+			url: link,
+			method: 'GET'
+		};
+
+		if (type) {
+			config.params = {
+				accept: type
+			};
+		}
+
+		return Service.request(config)
+			.then(function(resp) {
+				var json = JSON.parse(resp);
+
+				return ParseUtils.parseItems(json.Items);
+			})
+			.fail(function(reason) {
+				console.error('Failed to load assets: ', reason, type);
+
+				return [];
+			});
+	},
+
+
 	getVideoAssets: function() {
-		var link = this.getLink('assets');
+		return this.__getAssets(NextThought.model.Video.mimeType);
+	},
+
+
+	getDiscussionAssets: function() {
+		var link = this.getLink('CourseDiscussions');
 
 		if (!link) {
 			return Promise.reject('No assets link');
@@ -855,16 +894,20 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 		return Service.request({
 				url: link,
-				method: 'GET',
-				params: {
-					accept: NextThought.model.Video.mimeType
-				}
+				method: 'GET'
 			}).then(function(resp) {
-				var json = JSON.parse(resp);
+				var json = JSON.parse(resp),
+					items = [];
 
-				return ParseUtils.parseItems(json.Items);
+				for (var k in json.Items) {
+					if (json.Items.hasOwnProperty(k)) {
+						items.push(json.Items[k]);
+					}
+				}
+
+				return ParseUtils.parseItems(items);
 			}).fail(function(reason) {
-				console.error('Failed to load Videos: ', reason);
+				console.error('Failed to load Discussions: ', reason);
 
 				return [];
 			});

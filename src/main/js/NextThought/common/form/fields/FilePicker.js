@@ -170,12 +170,20 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	},
 
 
-	appendToFormData: function(data) {
+	getValueName: function() {
 		var value = this.getValue();
+
+		return value.name;
+	},
+
+
+	appendToFormData: function(data) {
+		var value = this.getValue(),
+			name = this.getValueName();
 
 		if (value) {
 			if (value !== this.defaultValue) {
-				data.append(this.schema.name, value, value.name);
+				data.append(this.schema.name, value, name);
 			}
 		} else {
 			data.append(this.schema.name, '');

@@ -16,7 +16,8 @@ Ext.define('NextThought.app.image.cropping.Editor', {
 
 		this.canvas = this.add({
 			xtype: 'image-cropping-canvas',
-			crop: this.crop
+			crop: this.crop,
+			name: this.name
 		});
 
 		this.add({

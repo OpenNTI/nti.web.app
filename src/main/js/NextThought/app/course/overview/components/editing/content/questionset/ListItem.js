@@ -19,6 +19,18 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 	],
 
 
+	updateRecord: function(record) {
+		var me = this;
+
+		me.course.getAssignments()
+			.then(function(assignments) {
+				me.assignment = assignments.getItem(record.get('Target-NTIID'));
+
+				me.setRecord(record);
+			});
+	},
+
+
 	getPreviewType: function() {
 		return this.assignment ? 'course-overview-assignment' : 'course-overview-naquestionset';
 	}

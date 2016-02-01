@@ -1,20 +1,21 @@
 Ext.define('NextThought.app.course.overview.components.editing.content.questionset.Editor', {
-	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-	alias: 'widget.overview-editing-questionset',
+	extend: 'NextThought.app.course.overview.components.editing.EditorGroup',
+	alias: 'widget.overview-editing-contentlink-editor',
 
 	requires: [
-		'NextThought.model.QuestionSetRef',
-		'NextThought.model.AssignmentRef'
+		'NextThought.app.course.overview.components.editing.content.questionset.types.SelfAssessment',
+		'NextThought.app.course.overview.components.editing.content.questionset.types.Assignment'
 	],
 
 	statics: {
-		getHandledMimeTypes: function() {
+		getSubEditors: function() {
+			var base = NextThought.app.course.overview.components.editing.content.questionset.types;
+
 			return [
-				NextThought.model.QuestionSetRef.mimeType,
-				NextThought.model.AssignmentRef.mimeType
+				base.SelfAssessment,
+				base.Assignment
 			];
 		}
-	},
+	}
 
-	addFormCmp: function() {}
 });

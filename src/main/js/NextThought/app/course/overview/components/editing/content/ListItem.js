@@ -38,6 +38,11 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 	},
 
 
+	updateRecord: function(record) {
+		this.setRecord(record);
+	},
+
+
 	setRecord: function(record) {
 		this.removeAll(true);
 
@@ -48,7 +53,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 		this.mon(record, {
 			single: true,
 			destroyable: true,
-			'update': this.setRecord.bind(this, record)
+			'update': this.updateRecord.bind(this, record)
 		});
 
 		if (controls) {
