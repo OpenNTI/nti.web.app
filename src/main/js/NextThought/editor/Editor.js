@@ -587,7 +587,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	isActive: function() {
-		return this.el.hasCls('active');
+		return this.el && this.el.hasCls('active');
 	},
 
 
@@ -889,7 +889,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.previousEditorHeight = h;
 
 		// NOTE: we check if the previousEditorHeight is greater than zero to avoid trying
-		// to update layout while in the middle of updating initial layout 
+		// to update layout while in the middle of updating initial layout
 		if (h !== p && p > 0) {
 			this.updateLayout();
 			this.fireEvent(h < p ? 'shrank' : 'grew');
