@@ -1,6 +1,16 @@
 Ext.define('NextThought.common.state.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
+	requires: [
+		'NextThought.cache.AbstractStorage'
+	],
+
+	constructor: function() {
+		this.callParent(arguments);
+
+		this.storage = NextThought.cache.AbstractStorage.getLocalStorage();
+	},
+
 	setStateKey: function(key) {
 		if (this.state_key) {
 			return;
@@ -25,7 +35,7 @@ Ext.define('NextThought.common.state.StateStore', {
 
 		//attempt to parse the current state in the local storage
 		try {
-			this.current_state = JSON.parse(localStorage.getItem(this.state_key));
+			this.current_state = JSON.parse(this.storage.getItem(this.state_key));
 		} catch (e) {
 			swallow(e);
 		} finally {
@@ -43,7 +53,7 @@ Ext.define('NextThought.common.state.StateStore', {
 			return;
 		}
 
-		localStorage.setItem(this.state_key, JSON.stringify(state));
+		this.storage.setItem(this.state_key, JSON.stringify(state));
 	},
 
 
