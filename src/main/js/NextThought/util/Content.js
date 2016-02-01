@@ -840,9 +840,9 @@ Ext.define('NextThought.util.Content', {
 		return children.filter(function(node) {
 			var tagName = node.tagName,
 				href = node.getAttribute('href'),
-				parts = Globals.getURLParts(href);
+				parts = href && Globals.getURLParts(href);
 
-			return tagName === 'topic' && !parts.hash;
+			return tagName === 'topic' && href && !parts.hash;
 		});
 	},
 
