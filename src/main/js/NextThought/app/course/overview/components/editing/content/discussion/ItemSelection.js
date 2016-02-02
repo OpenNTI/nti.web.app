@@ -4,16 +4,19 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 
 	multiSelect: false,
 
-	cls: 'video-item-selection item-selection',
+	cls: 'discussion-item-selection item-selection',
 
 
-	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		tag: 'label', cls: 'video-item', cn: [
-			{tag: 'input', type: 'checkbox'},
-			{cls: 'thumbnail', style: {backgroundImage: 'url({thumbnail})'}},
-			{cls: 'title', html: '{title}'}
-		]
-	})),
+	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
+		{ cls: 'overview-discussion', cn: [
+			{ tag: 'label', cls: 'discussion-item', cn: [
+					{tag: 'input', type: 'checkbox'},
+					{cls: 'thumbnail', style: {backgroundImage: 'url({thumbnail})'}},
+					{cls: 'title', html: '{title}'}
+				]
+			}
+		]}
+	)),
 
 
 	getItemData: function(item) {
