@@ -673,7 +673,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	processPaste: function(offScreenBuffer, savedRange, elem) {
-		Ext.fly(offScreenBuffer).select('script,meta').remove();
+		Ext.fly(offScreenBuffer).select('script,meta,iframe').remove();
 
 		var pasteData = offScreenBuffer.innerHTML, range, frag;
 
