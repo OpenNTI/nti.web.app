@@ -16,41 +16,35 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 			return url;
 		},
 
-		fromJson: function(assignments, nonAssignments, gradeBook, historyURL) {
-			if (!assignments) { return null; }
 
-			// Flips the outline and builds assignment to outline nodes map.
-			function buildAssignmentsOutline(outline) {
-				var key, i, list, id, node,
-					idMap = {};
+		parseOutline: function(json) {
+			var outline = json.Outline,
+				map = {}, key, i, list, id;
 
-				for (key in outline) {
-					if (outline.hasOwnProperty(key)) {
-						list = outline[key] || [];
-						for (i = 0; i < list.length; i++) {
-							id = list[i];
+			for (key in outline) {
+				if (outline.hasOwnProperty) {
+					list = outline[key] || [];
 
-							if (idMap[id]) {
-								console.warn('This assignemnt is already assigned to another lesson node. Assignemnt:', id, ' Other Nodes: ', idMap[id]);
-								idMap[id].push(key);
-							} else {
-								idMap[id] = [key];
-							}
+					for (i = 0; i < list.length; i++) {
+						id = list[i];
+
+						if (map[id]) {
+							map[id].push(key);
+						} else {
+							map[id] = [key];
 						}
 					}
 				}
-
-				return idMap;
 			}
 
+			return map;
+		},
 
+
+		parseData: function(assignments, nonAssignments) {
 			var assignmentMimeType = this.ASSIGNMENT,
 				timedAssignmentMimeType = this.TIMEDASSIGNMENT,
-				href = assignments.href, hitmap = {}, nodemap = {},
-				outline = assignments.Outline;
-
-			assignments = assignments.Items || assignments;
-			nonAssignments = nonAssignments && (nonAssignments.Items || nonAssignments);
+				hitmap = {}, nodemap = {};
 
 			//filter out items that aren't an assignment or don't have an ntiid
 			function filter(i) {
@@ -64,8 +58,6 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 			function build(json) {
 				var items = [], key;
 
-				delete json.href;
-
 				for (key in json) {
 					if (json.hasOwnProperty(key)) {
 						//json[key] should be an array so push all the items
@@ -78,14 +70,30 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 				return items;
 			}
 
-			return this.create({
+			return {
 				HitMap: hitmap,
 				NodeMap: nodemap,
 				Assignments: build(assignments),
-				NonAssignments: build(nonAssignments),
-				HistoryURL: this.__parseHistoryURL(historyURL),
-				GradeBook: gradeBook,
-				AssignmentsOutline: buildAssignmentsOutline(outline)
+				NonAssignments: build(nonAssignments)
+			};
+		},
+
+
+		fromJson: function(assignments, nonAssignments, gradeBook, historyURL) {
+			if (!assignments) { return null; }
+
+			var assignmentItems = assignments.Items || assignments,
+				nonAssignmentItems = nonAssignments && (nonAssignments.Items || nonAssignments),
+				itemData = this.parseData(assignmentItems, nonAssignmentItems);
+
+			return this.create({
+				HitMap: itemData.HitMap,
+				NodeMap: itemData.NodeMap,
+				Assignments: itemData.Assignments,
+				NonAssignments: itemData.NonAssignments,
+				AssignmentsLink: assignments.href,
+				NonAssignmentsLink: nonAssignments.href,
+				AssignmentToOutlineNodes: this.parseOutline(assignments)
 			});
 		}
 	},
@@ -97,7 +105,8 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 		{name: 'NonAssignments', type: 'arrayItem'},
 		{name: 'HistoryURL', type: 'String'},
 		{name: 'GradeBook', type: 'auto'},
-		{name: 'AssignmentsOutline', type: 'auto'}
+		{name: 'AssignmentToOutlineNodes', type: 'auto'},
+		{name: 'AssignmentsLink', type: 'string'}
 	],
 
 
@@ -191,21 +200,10 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 	},
 
 
-	getOutlineNode: function(assignmentId, outlineInterface) {
-		var assignmentsOutline = this.get('AssignmentsOutline'),
-			nodeIds = assignmentsOutline && assignmentsOutline[assignmentId],
-			id, node = null;
+	getOutlineNodesContaining: function(assignmentId) {
+		var assignmentToOutlineNodes = this.get('AssignmentToOutlineNodes');
 
-		// TODO: For simplicity, take the last one.
-		if (nodeIds instanceof Array) {
-			id = nodeIds.last();
-		}
-
-		if (outlineInterface && id) {
-			node = outlineInterface.findOutlineNode(id);
-		}
-
-		return Promise.resolve(node);
+		return assignmentToOutlineNodes[assignmentId];
 	},
 
 

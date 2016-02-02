@@ -413,6 +413,21 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 			outlineInterface = me.data.outlineInterface,
 			assignments = me.data.assignments;
 
+		function findOutlineNodes(id) {
+			var outlineNodes = assignments.getOutlineNodesContaining(id) || [];
+
+			if (outlineNodes.length > 1) {
+				//TODO: figure out how to show an entry in every lesson group
+				console.warn('Assignment is in more than one outline node, just taking the last.');
+			}
+
+			if (!outlineNodes.length) {
+				return null;
+			}
+
+			return outlineInterface.findOutlineNode(outlineNodes.last());
+		}
+
 		function collect(assignment) {
 			if (assignment.doNotShow()) { return; }
 
@@ -421,7 +436,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 			waitsOn.push(Promise.all([
 				assignments.getHistoryItem(id, true).fail(function() { return; }),
 				assignments.getGradeBookEntry(id),
-				assignments.getOutlineNode(id, outlineInterface)
+				findOutlineNodes(id)
 			])
 				.then(function(results) {
 					var history = results[0],//history item
