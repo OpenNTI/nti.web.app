@@ -233,6 +233,46 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+	/**
+	 * Get the link to request updated values from on the server
+	 *
+	 * @return {String} the link
+	 */
+	__getLinkForUpdate: function() {
+		return this.get('href');
+	},
+
+	/**
+	 * Update this record from the server.
+	 *
+	 * If we are unable to find a href or the update fails, just return
+	 * the record with the same values.
+	 *
+	 * @return {Promise} fulfills with the record after it is updated
+	 */
+	updateFromServer: function() {
+		var me = this,
+			link = this.__getLinkForUpdate();
+
+		if (!link) {
+			console.warn('No link to update record from server with. ', this);
+			return Promise.resolve(me);
+		}
+
+		return Service.request(link)
+			.then(function(response) {
+				me.syncWithResonse(response);
+
+				return me;
+			})
+			.fail(function(reason) {
+				console.error('Failed to update record from server.', reason);
+
+				return me;
+			});
+	},
+
+
 	constructor: function(data, id, raw) {
 		var fs = this.fields,
 			cName = this.self.getName().split('.').pop(),

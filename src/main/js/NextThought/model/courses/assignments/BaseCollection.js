@@ -29,7 +29,7 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 						list = outline[key] || [];
 						for (i = 0; i < list.length; i++) {
 							id = list[i];
-							
+
 							if (idMap[id]) {
 								console.warn('This assignemnt is already assigned to another lesson node. Assignemnt:', id, ' Other Nodes: ', idMap[id]);
 								idMap[id].push(key);
@@ -151,6 +151,17 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 		});
 
 		return items[0];
+	},
+
+
+	fetchAssignment: function(id) {
+		var assignment = this.getItem(id);
+
+		if (!assignment) {
+			return Promise.reject('No assignment found');
+		}
+
+		return assignment.updateFromServer();
 	},
 
 

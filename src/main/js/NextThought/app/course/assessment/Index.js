@@ -155,7 +155,7 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 		id = ParseUtils.decodeFromURI(id);
 
-		assignment = assignment || view.assignmentCollection.getItem(id);
+		assignment = assignment || view.assignmentCollection.fetchAssignment(id);
 
 		if (this.assignment && this.assignment.reader && this.assignment.reader.el) {
 			this.assignment.reader.el.mask('Loading...');
