@@ -438,12 +438,13 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 		var me = this,
 			parentSelection = me.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
-			currentPosition = parentSelection && parentSelection.getCurrentPosition();
+			currentPosition = parentSelection && parentSelection.getCurrentPosition(),
+			visibilityCmp = this.visibilityCmp;
 
 		me.clearErrors();
 		me.disableSubmission();
 
-		return me.EditingActions.saveEditorForm(me.formCmp, me.record, originalPosition, currentPosition, me.rootRecord)
+		return me.EditingActions.saveEditorForm(me.formCmp, me.record, originalPosition, currentPosition, me.rootRecord, visibilityCmp)
 			.fail(function(reason) {
 				me.enableSubmission();
 

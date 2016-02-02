@@ -36,7 +36,7 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 
 		var me = this,
 			record = me.item,
-			attributes = record.get('attributes'),
+			attributes = record.get('attributes') || [],
 			type = record.get('type');
 
 		var fields = attributes.filter(function(attr) {

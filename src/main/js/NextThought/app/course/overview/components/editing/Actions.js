@@ -106,6 +106,25 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	},
 
 
+	__updateRecordVisibility: function(record, visibilityCmp){
+		var link = record.getLink('edit'),
+			values = visibilityCmp && visibilityCmp.getChangedValues && visibilityCmp.getChangedValues();
+
+		if (!link) {
+			return Promise.reject('No Edit Link');
+		}
+
+		if (!values || Object.keys(values) === 0) {
+			return Promise.resolve();
+		}
+
+		return Service.put(link, values)
+				.then(function(response) {
+					return ParseUtils.parseItems(response)[0];
+				});
+	},
+
+
 	__updateRecordValues: function(values, record, originalPosition, newPosition, root) {
 		return this.__saveRecordValues(values, record)
 			.then(this.__moveRecord.bind(this, record, originalPosition, newPosition, root))
@@ -143,15 +162,31 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	 * @param  {Object} root           the root of both parents
 	 * @return {Promise}               fulfill when successful, reject when fail
 	 */
-	saveEditorForm: function(form, record, originalPosition, newPosition, root) {
+	saveEditorForm: function(form, record, originalPosition, newPosition, root, visibilityCmp) {
+		var me = this;
 		originalPosition = this.__getPosition(originalPosition);
 		newPosition = this.__getPosition(newPosition);
 
 		if (record) {
-			return this.__updateRecord(form, record, originalPosition, newPosition, root);
+			return this.__updateRecord(form, record, originalPosition, newPosition, root)
+					.then(function(record) {
+						if (visibilityCmp) {
+							return me.__updateRecordVisibility(record, visibilityCmp);
+						}
+
+						return record;
+					});
+
 		}
 
-		return this.__createRecord(form, newPosition);
+		return this.__createRecord(form, newPosition)
+				.then(function(record) {
+					if (visibilityCmp) {
+						return me.__updateRecordVisibility(record, visibilityCmp);
+					}
+
+					return record;
+				});
 	},
 
 

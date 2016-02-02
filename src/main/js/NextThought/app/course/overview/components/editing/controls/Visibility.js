@@ -83,6 +83,16 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Visibili
 	},
 
 
+	getChangedValues: function(){
+		if (this.defaultValue && this.defaultValue === this.selected) {
+			return {};
+		}
+		else {
+			return {visibility: this.selected};
+		}
+	},
+
+
 	showMenu: function(e) {
 		if (!this.menu) {
 			this.menu = this.createVisibilityMenu();
