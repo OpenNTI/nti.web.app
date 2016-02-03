@@ -51,4 +51,12 @@
 
 .audit-log-header {
     padding-bottom: 1rem;
+
+    @include icon('change-log', $top: 2px);
+    
+    .change-log {
+        font-weight: 600;
+        color: #757474;
+        margin-left: 25px;
+    }
 }
