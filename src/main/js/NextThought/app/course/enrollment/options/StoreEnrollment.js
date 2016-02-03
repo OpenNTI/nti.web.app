@@ -96,7 +96,7 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 			steps = [];
 
 		option.display = this.display;
-		option.displayKey = thid.displayKey;
+		option.displayKey = this.displayKey;
 		option.hasCredit = false;
 		//option.Refunds = false;
 
