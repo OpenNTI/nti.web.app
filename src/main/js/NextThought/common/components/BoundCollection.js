@@ -49,6 +49,14 @@ Ext.define('NextThought.common.components.BoundCollection', {
 	},
 
 
+	getComponents: function() {
+		var body = this.getBodyContainer(),
+			items = body && body.items && body.items.items;
+
+		return items || [];
+	},
+
+
 	parseCollection: function(response) {
 		var obj = ParseUtils.parseItems(response)[0];
 

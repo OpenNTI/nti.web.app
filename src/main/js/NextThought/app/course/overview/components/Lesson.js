@@ -156,7 +156,9 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 				});
 
 
-				return me.currentOverview.loadCollection(overviewsrc);
+				me.currentOverview.loadCollection(overviewsrc);
+
+				return me.currentOverview.onceLoaded();
 			})
 			.fail(function(reason) { console.error(reason); })
 			.then(me.__updateProgress.bind(me))
