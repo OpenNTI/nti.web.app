@@ -7,6 +7,12 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 	],
 
 
+	mixins: {
+		DurationCache: 'NextThought.mixins.DurationCache'
+	},
+
+	assignmentUpdateKey: 'update-assignments',
+
 	inheritableStatics: {
 		ASSIGNMENT: 'application/vnd.nextthought.assessment.assignment',
 		TIMEDASSIGNMENT: 'application/vnd.nextthought.assessment.timedassignment',
@@ -42,6 +48,10 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 
 
 		parseData: function(assignments, nonAssignments) {
+
+			assignments = assignments.Items || assignments;
+			nonAssignments = nonAssignments && (nonAssignments.Items || nonAssignments);
+
 			var assignmentMimeType = this.ASSIGNMENT,
 				timedAssignmentMimeType = this.TIMEDASSIGNMENT,
 				hitmap = {}, nodemap = {};
@@ -82,9 +92,7 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 		fromJson: function(assignments, nonAssignments, gradeBook, historyURL) {
 			if (!assignments) { return null; }
 
-			var assignmentItems = assignments.Items || assignments,
-				nonAssignmentItems = nonAssignments && (nonAssignments.Items || nonAssignments),
-				itemData = this.parseData(assignmentItems, nonAssignmentItems);
+			var itemData = this.parseData(assignments, nonAssignments);
 
 			return this.create({
 				HitMap: itemData.HitMap,
@@ -93,7 +101,9 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 				NonAssignments: itemData.NonAssignments,
 				AssignmentsLink: assignments.href,
 				NonAssignmentsLink: nonAssignments.href,
-				AssignmentToOutlineNodes: this.parseOutline(assignments)
+				AssignmentToOutlineNodes: this.parseOutline(assignments),
+				AssignmentsRaw: assignments,
+				NonAssignmentsRaw: nonAssignments
 			});
 		}
 	},
@@ -106,8 +116,17 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 		{name: 'HistoryURL', type: 'String'},
 		{name: 'GradeBook', type: 'auto'},
 		{name: 'AssignmentToOutlineNodes', type: 'auto'},
-		{name: 'AssignmentsLink', type: 'string'}
+		{name: 'AssignmentsLink', type: 'string'},
+		{name: 'AssignmentsRaw', type: 'auto'},
+		{name: 'NonAssignmentsRaw', type: 'auto'}
 	],
+
+
+	constructor: function() {
+		this.callParent(arguments);
+
+		this.cacheForShortPeriod(this.assignmentUpdateKey, Promise.resolve(this));
+	},
 
 
 	pageContainsAssignment: function(ntiid) {
@@ -122,6 +141,42 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 		}
 
 		return false;
+	},
+
+
+	__updateData: function(assignments, nonAssignments) {
+		assignments = assignments || this.get('AssignmentsRaw');
+		nonAssignments = nonAssignments || this.get('NonAssignmentsRaw');
+
+		var data = this.self.parseData(assignments, nonAssignments);
+
+		this.set(data);
+
+		return this;
+	},
+
+
+	updateAssignments: function() {
+		var me = this,
+			key = me.assignmentUpdateKey,
+			load, link = me.get('AssignmentsLink'),
+			cache;
+
+		load = me.getFromCache(key);
+
+		if (!load) {
+			load = Service.request(link)
+				.then(function(response) {
+					return Ext.decode(response, true);
+				})
+				.then(function(assignments) {
+					return me.__updateData(assignments, null);
+				});
+
+			me.cacheForShortPeriod(key, load);
+		}
+
+		return load;
 	},
 
 

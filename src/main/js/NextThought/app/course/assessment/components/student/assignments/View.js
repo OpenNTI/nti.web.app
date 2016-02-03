@@ -390,13 +390,23 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 			outlineInterface: outlineInterface
 		};
 
-		function finish(outlineInterface) {
+		function finish(results) {
+			var outlineInterface = results[1];
+
 			me.data.outline = outlineInterface.getOutline();
 			//Becasue this view has special derived fields, we must just listen for changes on the
 			// assignments collection itself and trigger a refresh. This cannot simply be a store
 			// of HistoryItems.
 			return me.applyAssignmentsData();
 		}
+
+		return Promise.all([
+				assignments.updateAssignments(),
+				outlineInterface.onceBuilt()
+			]).then(finish)
+			.fail(function(reason) {
+				console.error('Failed to get course outline!', reason);
+			});
 
 		return	outlineInterface.onceBuilt()
 			.then(finish)
