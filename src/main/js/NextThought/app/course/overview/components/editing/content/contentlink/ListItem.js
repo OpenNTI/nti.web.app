@@ -18,5 +18,25 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 	getPreviewType: function(record) {
 		return 'course-overview-content';
+	},
+
+
+	getControls: function(record, bundle) {
+		var config = this.callParent(arguments),
+			items = config.items || [],
+			visibility = record && record.get('visibility');
+
+		if (visibility !== 'everyone') {
+			items.unshift({
+				xtype: 'box',
+				record: record,
+				autoEl: {
+					cls: 'visibility', html: visibility
+				}
+			});
+		}
+		
+		config.items = items;
+		return config;
 	}
 });

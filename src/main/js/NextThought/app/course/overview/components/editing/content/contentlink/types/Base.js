@@ -5,7 +5,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		'NextThought.model.RelatedWork',
 		'NextThought.app.course.overview.components.editing.Actions',
 		'NextThought.app.course.overview.components.editing.content.ParentSelection',
-		'NextThought.app.course.overview.components.editing.controls.Visibility'
+		'NextThought.app.course.overview.components.editing.controls.Advanced'
 	],
 
 
@@ -69,7 +69,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		if (this.visibilityCmp) { return; }
 
 		this.visibilityCmp = this.add({
-			xtype: 'overview-editing-controls-visibility',
+			xtype: 'overview-editing-controls-advanced-settings',
 			record: this.record,
 			parentRecord: this.parentRecord,
 			defaultValue: visibility,

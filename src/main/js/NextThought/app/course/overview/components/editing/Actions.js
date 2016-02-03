@@ -106,7 +106,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	},
 
 
-	__updateRecordVisibility: function(record, visibilityCmp){
+	updateRecordVisibility: function(record, visibilityCmp){
 		var link = record.getLink('edit'),
 			values = visibilityCmp && visibilityCmp.getChangedValues && visibilityCmp.getChangedValues();
 
@@ -171,7 +171,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 			return this.__updateRecord(form, record, originalPosition, newPosition, root)
 					.then(function(record) {
 						if (visibilityCmp) {
-							return me.__updateRecordVisibility(record, visibilityCmp);
+							return me.updateRecordVisibility(record, visibilityCmp);
 						}
 
 						return record;
@@ -182,7 +182,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 		return this.__createRecord(form, newPosition)
 				.then(function(record) {
 					if (visibilityCmp) {
-						return me.__updateRecordVisibility(record, visibilityCmp);
+						return me.updateRecordVisibility(record, visibilityCmp);
 					}
 
 					return record;

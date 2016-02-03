@@ -133,25 +133,34 @@
 		&.delete {
 			margin-top: 10px;	
 		}
+
+		&.advanced {
+			position: absolute;
+			top: 37px;
+			right: 25px;
+			text-decoration: underline;
+			font: normal 600 14px/38px $font;
+			color: $primary-blue;
+			cursor: pointer;
+		}
 		
 		&.visibility {
-			position: absolute;
-			top: 23px;
-			right: 20px;
 
 			.title {
-		    	display: block;
-			    color: $tertiary-grey;
-			    font: normal 600 0.625em/1 $font;
-			    text-transform: uppercase;
+		    	display: inline-block;
+			    color: $secondary-grey;
+			    font: normal 500 16px/1 $font;
+			    text-transform: capitalize;
 			    margin-bottom: 0;
+
 		    }
 
 		    .scope {
+		    	display: inline-block;
 		    	line-height: 38px;
 			    background: white;
 			    box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
-			    margin: 5px 0 0 0;
+			    margin: 10px 15px;
 			    padding: 0 22px 0 10px;
 			    color: $primary-grey;
 			    text-transform: capitalize;
@@ -177,6 +186,21 @@
 			    	transform: none;
 			    }
 		    }
+		}
+	}
+}
+
+.prompt {
+	.body-container {
+		.content-editor {
+			background: white;
+			height: 100%;
+
+			.nt-button {
+				&.visibility {
+					padding: 5px 10px;	
+				}
+			}
 		}
 	}
 }
@@ -1307,6 +1331,14 @@ input[type=number]{
 
 			.nt-button.edit {
 				display: inline-block;
+			}
+
+			.visibility {
+				display: inline-block;
+				font-size: 0.85rem;
+		    	font-weight: 600;
+		    	color: $secondary-grey;
+		    	padding: 5px 11px 5px 22px;
 			}
 		}
 
