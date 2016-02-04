@@ -46,15 +46,6 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 	},
 
 
-	setSelectionItems: function(items){
-		if (!items || items.length === 0) {
-			this.showEmptyState();	
-		}
-
-		this.callParent(arguments);
-	},
-
-
 	showEmptyState: function(){
 		// Display empty state
 		this.itemsContainer.add({

@@ -114,6 +114,10 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 	setSelectionItems: function(items) {
 		var me = this;
 
+		if (!items || items.length === 0) {
+			this.showEmptyState();	
+		}
+
 		me.selectionItems = items;
 		me.itemsSet = true;
 
@@ -140,6 +144,9 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 
 		me.applySelection(me.selection);
 	},
+
+
+	showEmptyState: function(){},
 
 
 	applySelection: function(selection) {
