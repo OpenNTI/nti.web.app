@@ -10,7 +10,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.ite
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'thumbnail'},
-		{cls: 'close'},
+		{tag: 'tpl', 'if': 'isAdvanced', cn: [
+			{cls: 'close'}
+		]},
 		{cls: 'meta', cn: [
 			{cls: 'title', html: '{title}'},
 			{cls: 'providers', cn: [
@@ -49,7 +51,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.ite
 			title: this.item.get('title'),
 			providers: sources.map(function(source) {
 				return {label: source.service};
-			})
+			}),
+			isAdvanced: Service.canDoAdvancedEditing()
 		});
 	},
 
@@ -64,7 +67,9 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.ite
 				thumbnail.setStyle('backgroundImage', 'url(' + poster + ')');
 			});
 
-		this.mon(this.closeEl, 'click', this.onClose.bind(this));
+		if (this.closeEl) {
+			this.mon(this.closeEl, 'click', this.onClose.bind(this));
+		}
 	},
 
 
