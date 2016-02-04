@@ -23,17 +23,21 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 	addPreview: function(item) {
 		var me = this,
 			now = new Date(),
-			dueDate = item.getDueDate();
+			dueDate = item.getDueDate(),
+			parts = [
+				{cls: 'title', html: item.get('title')},
+				{cls: 'due-date', html: Ext.Date.format(dueDate, 'l, F j, g:i a T')}
+			];
+
+		if (Service.canDoAdvancedEditing()) {
+			parts.push({cls: 'remove'});
+		}
 
 		me.add({
 			xtype: 'box',
 			autoEl: {
 				cls: 'assignment-preview ' + (now < dueDate ? 'ontime' : 'overdue'),
-				cn: [
-					{cls: 'title', html: item.get('title')},
-					{cls: 'due-date', html: Ext.Date.format(dueDate, 'l, F j, g:i a T')},
-					{cls: 'remove'}
-				]
+				cn: parts
 			},
 			listeners: {
 				click: {

@@ -10,17 +10,21 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 	addPreview: function(item) {
 		var me = this,
 			questions = item.get('questions'),
-			questionCount = questions.length;
+			questionCount = questions.length,
+			parts = [
+				{cls: 'title', html: item.get('title')},
+				{cls: 'question-count', html: Ext.util.Format.plural(questionCount, 'Question')}
+			];
+
+		if (Service.canDoAdvancedEditing()) {
+			parts.push({cls: 'remove'});
+		}
 
 		me.add({
 			xtype: 'box',
 			autoEl: {
 				cls: 'self-assessment-preview',
-				cn: [
-					{cls: 'title', html: item.get('title')},
-					{cls: 'question-count', html: Ext.util.Format.plural(questionCount, 'Question')},
-					{cls: 'remove'}
-				]
+				cn: parts
 			},
 			listeners: {
 				click: {

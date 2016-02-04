@@ -29,7 +29,7 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 						list = outline[key] || [];
 						for (i = 0; i < list.length; i++) {
 							id = list[i];
-							
+
 							if (idMap[id]) {
 								console.warn('This assignemnt is already assigned to another lesson node. Assignemnt:', id, ' Other Nodes: ', idMap[id]);
 								idMap[id].push(key);
@@ -136,6 +136,19 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 	map: function() {
 		var a = this.get('Assignments') || [];
 		return a.map.apply(a, arguments);
+	},
+
+
+	/**
+	 * Search both the assignments and non-assignments for an item with an id
+	 * @param  {String} id the id to search for
+	 * @return {Object}    the item if there is one
+	 */
+	findItem: function(id) {
+		var assignment = this.getItem(id),
+			nonAssignment = !assignment && this.getItem(id, 'NonAssignments');
+
+		return assignment || nonAssignment;
 	},
 
 
