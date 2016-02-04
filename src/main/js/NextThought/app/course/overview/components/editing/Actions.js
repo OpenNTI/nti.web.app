@@ -53,6 +53,10 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	__saveRecordValues: function(values, record) {
 		var link = record.getLink('edit');
 
+		if (!values) {
+			return Promise.resolve();
+		}
+
 		if (!link) {
 			return Promise.reject({
 				msg: 'Unable to update record',
@@ -106,7 +110,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	},
 
 
-	updateRecordVisibility: function(record, visibilityCmp){
+	updateRecordVisibility: function(record, visibilityCmp) {
 		var link = record && record.getLink('edit'),
 			values = visibilityCmp && visibilityCmp.getChangedValues && visibilityCmp.getChangedValues();
 

@@ -49,5 +49,20 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 			title: item.get('title'),
 			'Target-NTIID': item.get('NTIID')
 		};
+	},
+
+
+	hasRecordChanged: function(values) {
+		var changed = false;
+
+		if (!this.record) {
+			changed = true;
+		} else if (this.record.get('label') !== values.label) {
+			changed = true;
+		} else if (this.record.get('Target-NTIID') !== values['Target-NTIID']) {
+			changed = true;
+		}
+
+		return changed;
 	}
 });

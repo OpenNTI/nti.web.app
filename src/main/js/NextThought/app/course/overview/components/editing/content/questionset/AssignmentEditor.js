@@ -66,6 +66,23 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 	},
 
 
+	hasRecordChanged: function(values) {
+		var changed = false;
+
+		if (!this.record) {
+			changed = true;
+		} else if (this.record.get('label') !== values.label) {
+			changed = true;
+		} else if (this.record.get('title') !== values.title) {
+			changed = true;
+		} else if (this.record.get('Target-NTIID') !== values['Target-NTIID']) {
+			changed = true;
+		}
+
+		return changed;
+	},
+
+
 	onSave: function() {
 		var me = this,
 			parentSelection = me.parentSelection,
@@ -75,6 +92,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 
 		me.clearErrors();
 		me.disableSubmission();
+
+		if (!this.hasRecordChanged(values)) {
+			values = null;
+		}
 
 		return me.EditingActions.saveValues(values, me.record, originalPosition, currentPosition, me.rootRecord)
 			.fail(function(reason) {
