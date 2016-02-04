@@ -14,7 +14,7 @@ Ext.define('NextThought.common.chart.Score', {
 		title: '',
 		colors: ['#a5c959','#d9d9d9'],
 		pixelDensity: 2,
-		score: 90
+		score: 0
 	},
 
 	getInitialState: function() {
