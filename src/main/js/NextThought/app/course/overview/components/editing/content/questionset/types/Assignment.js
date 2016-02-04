@@ -19,7 +19,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 				{
 					title: 'Assignment',
 					category: 'question-set',
-					isAdvanced: true,
+					advanced: true,
 					iconCls: 'assignment',
 					description: '',
 					editor: this

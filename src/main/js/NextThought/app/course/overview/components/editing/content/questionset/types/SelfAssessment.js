@@ -21,7 +21,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 				{
 					title: 'Self Assessment',
 					category: 'question-set',
-					isAdvanced: true,
+					advanced: true,
 					iconCls: 'assessment',
 					description: '',
 					editor: this
