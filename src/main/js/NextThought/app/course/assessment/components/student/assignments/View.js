@@ -181,8 +181,8 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 					me.activeStores.push(store);
 
-					if (groupBy === 'lesson') {
-						if (node) { fill(node); }
+					if (groupBy === 'lesson' && node) {
+						fill(node);
 					} else {
 						group.setTitle(name);
 					}
