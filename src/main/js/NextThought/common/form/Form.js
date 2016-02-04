@@ -843,6 +843,23 @@ Ext.define('NextThought.common.form.Form', {
 	},
 
 
+	setValue: function(name, value) {
+		var cmp = this.__getComponent(name),
+			inputEl = this.__getInput(name),
+			textarea = this.__getTextarea(name);
+
+		if (cmp) {
+			if (cmp.setValue) {
+				cmp.setValue(value);
+			}
+		} else if (inputEl) {
+			inputEl.value = value;
+		} else if (textarea) {
+			textarea.value = value;
+		}
+	},
+
+
 	formSubmit: function(e) {
 		e.preventDefault();
 

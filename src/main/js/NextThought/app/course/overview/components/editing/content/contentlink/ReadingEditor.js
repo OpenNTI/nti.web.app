@@ -10,6 +10,19 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		this.callParent(arguments);
 
 		this.formCmp.setPlaceholder('icon', NextThought.model.RelatedWork.getIconForMimeType('unknown'));
+
+		if (this.readingHasChanged()) {
+			this.formCmp.setValue('label', this.selectedItem.getAttribute('label'));
+			this.formCmp.setValue('href', this.selectedItem.getAttribute('ntiid'));
+		}
+	},
+
+
+	readingHasChanged: function() {
+		var href = this.record && this.record.get('href'),
+			selected = this.selectedItem && this.selectedItem.getAttribute('ntiid');
+
+		return href && selected && href !== selected;
 	},
 
 
