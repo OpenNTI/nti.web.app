@@ -107,7 +107,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 
 
 	updateRecordVisibility: function(record, visibilityCmp){
-		var link = record.getLink('edit'),
+		var link = record && record.getLink('edit'),
 			values = visibilityCmp && visibilityCmp.getChangedValues && visibilityCmp.getChangedValues();
 
 		if (!link) {
