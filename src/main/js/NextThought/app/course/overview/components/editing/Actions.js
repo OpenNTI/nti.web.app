@@ -162,31 +162,16 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	 * @param  {Object} root           the root of both parents
 	 * @return {Promise}               fulfill when successful, reject when fail
 	 */
-	saveEditorForm: function(form, record, originalPosition, newPosition, root, visibilityCmp) {
+	saveEditorForm: function(form, record, originalPosition, newPosition, root) {
 		var me = this;
 		originalPosition = this.__getPosition(originalPosition);
 		newPosition = this.__getPosition(newPosition);
 
 		if (record) {
-			return this.__updateRecord(form, record, originalPosition, newPosition, root)
-					.then(function(record) {
-						if (visibilityCmp) {
-							return me.updateRecordVisibility(record, visibilityCmp);
-						}
-
-						return record;
-					});
-
+			return this.__updateRecord(form, record, originalPosition, newPosition, root);
 		}
 
-		return this.__createRecord(form, newPosition)
-				.then(function(record) {
-					if (visibilityCmp) {
-						return me.updateRecordVisibility(record, visibilityCmp);
-					}
-
-					return record;
-				});
+		return this.__createRecord(form, newPosition);
 	},
 
 
