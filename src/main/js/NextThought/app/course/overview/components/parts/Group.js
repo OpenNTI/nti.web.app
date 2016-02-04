@@ -92,11 +92,12 @@ Ext.define('NextThought.app.course.overview.components.parts.Group', {
 				return items;
 			}
 
-			if (!ContentUtils.hasVisibilityForContent({
-							getAttribute: function(i) { return item[i]; }},
-							enrollment.get('Status'))) {
-				return items;
-			}
+			//The server should be taking care of this now...
+			// if (!ContentUtils.hasVisibilityForContent({
+			// 				getAttribute: function(i) { return item[i]; }},
+			// 				enrollment.get('Status'))) {
+			// 	return items;
+			// }
 
 			if (cls.isSection) {
 				items.push({
