@@ -105,11 +105,21 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 			store.clearGrouping();
 			store.removeFilter('dueFilter');
+			store.removeFilter('duplicateLessons');
 
 
 			if (groupBy) {
 				//clear the active stores
 				me.activeStores = [];
+
+				if (groupBy !== 'lesson') {
+					store.filter({
+						id: 'duplicateLessons',
+						filterFn: function(rec) {
+							return !rec.get('isDuplicate');
+						}
+					});
+				}
 
 				//Getting rid of the past due filter until we can better define the behavior
 				//if (groupBy === 'due' && !me.showOlder && !search) {
@@ -166,12 +176,17 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 						}));
 
 					function fill(n) {
-						store.groupName = n.getTitle();
-						group.setTitle(n.get('title'));
-						group.setSubTitle(Ext.Date.format(
-								node.get('AvailableBeginning') || node.get('AvailableEnding'),
-								'F j, Y'
-							));
+						if (n) {
+							store.groupName = n.getTitle();
+							group.setTitle(n.get('title'));
+							group.setSubTitle(Ext.Date.format(
+									node.get('AvailableBeginning') || node.get('AvailableEnding'),
+									'F j, Y'
+								));
+						} else {
+							store.groupName = 'Other Assignments';
+							group.setTitle('Other Assignments');
+						}
 					}
 
 
@@ -181,7 +196,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 					me.activeStores.push(store);
 
-					if (groupBy === 'lesson' && node) {
+					if (groupBy === 'lesson') {
 						fill(node);
 					} else {
 						group.setTitle(name);
@@ -229,6 +244,8 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 		return [
 			{name: 'lesson', type: 'string'},
 			{name: 'outlineNode', type: 'auto'},
+			{name: 'isDuplicate', type: 'bool'},
+			{name: 'actualId', type: 'string'},
 			{name: 'id', type: 'string'},
 			{name: 'containerId', type: 'string'},
 			{name: 'name', type: 'string'},
@@ -435,7 +452,35 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 				return null;
 			}
 
-			return outlineInterface.findOutlineNode(outlineNodes.last());
+			return outlineNodes;
+		}
+
+
+		function buildConfig(id, assignment, history, grade, node, actualId) {
+			return {
+				id: id,
+				containerId: assignment.get('containerId'),
+				lesson: node ? node.getId() : 'Other Assignments',
+				isDuplicate: !!actualId,
+				actualId: actualId,
+				outlineNode: node,
+				item: assignment,
+				name: assignment.get('title'),
+				opens: assignment.get('availableBeginning'),
+				due: assignment.get('availableEnding'),
+				maxTime: assignment.isTimed && assignment.getMaxTime(),
+				duration: assignment.isTimed && assignment.getDuration(),
+
+				completed: history && history.get('completed'),
+				correct: history && history.get('correct'),
+
+				history: history,
+
+				total: assignment.tallyParts(),
+				submittedCount: assignment.get('SubmittedCount') | 0,
+				enrolledCount: bundle.get('TotalEnrolledCount'),
+				reportLinks: assignment.getReportLinks()
+			};
 		}
 
 		function collect(assignment) {
@@ -451,36 +496,37 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 				.then(function(results) {
 					var history = results[0],//history item
 						grade = results[1],//gradebook entry
-						node = results[2];//outline node
+						nodes = results[2] || [];//outline node
 
-					return {
-						id: id,
-						containerId: assignment.get('containerId'),
-						lesson: node ? node.getTitle() : 'Other Assignments',
-						outlineNode: node,
-						item: assignment,
-						name: assignment.get('title'),
-						opens: assignment.get('availableBeginning'),
-						due: assignment.get('availableEnding'),
-						maxTime: assignment.isTimed && assignment.getMaxTime(),
-						duration: assignment.isTimed && assignment.getDuration(),
+					if (nodes.length === 0) {
+						return buildConfig(id, assignment, history, grade);
+					}
 
-						completed: history && history.get('completed'),
-						correct: history && history.get('correct'),
+					return nodes.reduce(function(acc, node, index) {
+						var node = outlineInterface.findOutlineNode(node),
+							actualId;
 
-						history: history,
+						if (index !== 0) {
+							actualId = id;
+							id = actualId + '#' + index;
+						}
 
-						total: assignment.tallyParts(),
-						submittedCount: assignment.get('SubmittedCount') | 0,
-						enrolledCount: bundle.get('TotalEnrolledCount'),
-						reportLinks: assignment.getReportLinks()
-					};
+						acc.push(buildConfig(id, assignment, history, grade, node, actualId));
+
+						console.log(outlineInterface);
+						return acc;
+					}, []);
 				}));
 		}
 
 		assignments.each(collect);
 
 		return Promise.all(waitsOn)
+			.then(function(items) {
+				return items.reduce(function(acc, item) {
+					return acc.concat(item);
+				}, []);
+			})
 			.then(me.store.loadRawData.bind(me.store))
 			.then(me.restoreState.bind(me));
 	},
