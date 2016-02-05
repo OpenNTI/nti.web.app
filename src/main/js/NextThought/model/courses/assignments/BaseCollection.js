@@ -203,6 +203,19 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 	},
 
 
+	/**
+	 * Search both the assignments and non-assignments for an item with an id
+	 * @param  {String} id the id to search for
+	 * @return {Object}    the item if there is one
+	 */
+	findItem: function(id) {
+		var assignment = this.getItem(id),
+			nonAssignment = !assignment && this.getItem(id, 'NonAssignments');
+
+		return assignment || nonAssignment;
+	},
+
+
 	getItem: function(id, field) {
 		var items = this.get(field || 'Assignments');
 

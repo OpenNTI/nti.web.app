@@ -53,6 +53,10 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	__saveRecordValues: function(values, record) {
 		var link = record.getLink('edit');
 
+		if (!values) {
+			return Promise.resolve();
+		}
+
 		if (!link) {
 			return Promise.reject({
 				msg: 'Unable to update record',
@@ -106,8 +110,8 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	},
 
 
-	__updateRecordVisibility: function(record, visibilityCmp){
-		var link = record.getLink('edit'),
+	updateRecordVisibility: function(record, visibilityCmp) {
+		var link = record && record.getLink('edit'),
 			values = visibilityCmp && visibilityCmp.getChangedValues && visibilityCmp.getChangedValues();
 
 		if (!link) {
@@ -162,31 +166,16 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	 * @param  {Object} root           the root of both parents
 	 * @return {Promise}               fulfill when successful, reject when fail
 	 */
-	saveEditorForm: function(form, record, originalPosition, newPosition, root, visibilityCmp) {
+	saveEditorForm: function(form, record, originalPosition, newPosition, root) {
 		var me = this;
 		originalPosition = this.__getPosition(originalPosition);
 		newPosition = this.__getPosition(newPosition);
 
 		if (record) {
-			return this.__updateRecord(form, record, originalPosition, newPosition, root)
-					.then(function(record) {
-						if (visibilityCmp) {
-							return me.__updateRecordVisibility(record, visibilityCmp);
-						}
-
-						return record;
-					});
-
+			return this.__updateRecord(form, record, originalPosition, newPosition, root);
 		}
 
-		return this.__createRecord(form, newPosition)
-				.then(function(record) {
-					if (visibilityCmp) {
-						return me.__updateRecordVisibility(record, visibilityCmp);
-					}
-
-					return record;
-				});
+		return this.__createRecord(form, newPosition);
 	},
 
 

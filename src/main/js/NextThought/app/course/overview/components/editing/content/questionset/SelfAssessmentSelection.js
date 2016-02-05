@@ -1,6 +1,6 @@
 Ext.define('NextThought.app.course.overview.components.editing.content.questionset.SelfAssessmentSelection', {
 	extend: 'NextThought.app.course.overview.components.editing.content.questionset.AssignmentSelection',
-	alias: 'widget.overview-editing-assignment-selection',
+	alias: 'widget.overview-editing-self-assessment-selection',
 
 	cls: 'assessment-item-selection item-selection',
 

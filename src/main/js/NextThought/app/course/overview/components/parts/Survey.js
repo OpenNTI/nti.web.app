@@ -20,7 +20,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 				{tag: 'span', cls: 'report', html: 'View Reports'}
 			]}
 		]},
-		{cls: 'button x-btn x-btn-primary-large{buttonCls}', html: '{buttonTxt}'}
+		{cls: 'button x-btn x-btn-primary-large', html: '{buttonTxt}'}
 	]),
 
 
@@ -57,7 +57,6 @@ Ext.define('NextThought.app.course.overview.components.parts.Survey', {
 			title: this.data.title,
 			questions: this.data.questionCount,
 			buttonTxt: this.data.isSubmitted ? 'Review' : this.data.isClosed ? 'Closed' : 'Take',
-			buttonCls: this.data.isClosed ? ' closed' : '',
 			hasReportLink: !!this.data.reportLink
 		});
 	},

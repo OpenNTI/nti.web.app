@@ -35,6 +35,21 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Ite
 	},
 
 
+	showEmptyState: function(){
+		// Display empty state
+		this.itemsContainer.add({
+			xtype: 'box',
+			autoEl: {cls: 'empty', cn: [
+				{cls: 'text', html: 'There are no videos to pick from.'}
+			]}
+		});
+
+		if (this.searchCmp) {
+			this.searchCmp.hide();
+		}
+	},
+
+
 	itemMatchesSearch: function(item, searchTerm) {
 		var title = item.get('title'),
 			ntiid = item.getId(),

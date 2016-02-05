@@ -19,14 +19,12 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Vid
 	showEditor: function() {
 		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord);
 
-		if (Service.canDoAdvancedEditing()) {
-			this.videoItems = this.add({
-				xtype: 'overview-editing-video-items',
-				selectedItems: this.selectedItems,
-				record: this.record,
-				onAddVideos: this.onAddVideos
-			});
-		}
+		this.videoItems = this.add({
+			xtype: 'overview-editing-video-items',
+			selectedItems: this.selectedItems,
+			record: this.record,
+			onAddVideos: this.onAddVideos
+		});
 
 		if (this.record) {
 			this.addDeleteButton();

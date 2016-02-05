@@ -24,7 +24,7 @@ describe("Instructor Email Tests", function () {
 			editor = emailWin.editor,
 			scopeEl;
 
-		scopeEl = editor.el.down('.receiver .token');
+		scopeEl = editor.el.down('.receiver .field');
 		expect(scopeEl && scopeEl.dom.innerText)
 			.toBe(editor.RECEIVER_MAP[scope]);
 	});
@@ -113,5 +113,45 @@ describe("Instructor Email Tests", function () {
 		editor.onSave(e);
 		expect(postRecord && postRecord.get('Body')).toBe(body);
 		expect(postRecord && postRecord.get('Subject')).toBe(title);
+	});
+
+	it('changes scope from Open to All students', function(){
+		var scope = 'Open',
+		 	emailRecord = NextThought.model.Email.create({
+				url: '/dataserver2/foo-bar-course/mail',
+				scope: scope
+			}),
+			emailWin = Ext.create('NextThought.app.course.assessment.components.admin.email.Window', {
+				record: emailRecord,
+				renderTo: testBody
+			}), 
+			editor = emailWin.editor, 
+			item = {text: 'All Students', studentFilter: 'All'};
+
+		expect(emailRecord.get('scope')).toBe('Open');
+		editor.receiverScopeChanged(item);
+		expect(emailRecord.get('scope')).toBe('All');
+	});
+
+	it('changes scope from Open to All students, then checks allow reply checkbox', function(){
+		var scope = 'Open',
+		 	emailRecord = NextThought.model.Email.create({
+				url: '/dataserver2/foo-bar-course/mail',
+				scope: scope
+			}),
+			emailWin = Ext.create('NextThought.app.course.assessment.components.admin.email.Window', {
+				record: emailRecord,
+				renderTo: testBody
+			}), 
+			editor = emailWin.editor, 
+			item = {text: 'All Students', studentFilter: 'All'},
+			e = {target: {checked: true}};
+
+		expect(emailRecord.get('replyScope')).toBeFalsy();
+		editor.receiverScopeChanged(item);
+
+		editor.replyCheckboxClicked(e);
+		expect(emailRecord.get('NoReply')).toBeFalsy();
+		expect(emailRecord.get('replyScope')).toBe('ForCredit');
 	});
 });

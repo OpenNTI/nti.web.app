@@ -19,7 +19,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 				{
 					title: 'Assignment',
 					category: 'question-set',
-					isAdvanced: true,
+					advanced: true,
 					iconCls: 'assignment',
 					description: '',
 					editor: this
@@ -100,7 +100,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 	getSelectionFromRecord: function(record) {
 		return this.bundle.getAssignments()
 			.then(function(assignments) {
-				return assignments.getItem(record.get('Target-NTIID'));
+				return assignments.findItem(record.get('Target-NTIID'));
 			});
 	},
 

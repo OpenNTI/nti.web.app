@@ -852,7 +852,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 			config;
 
 		if (!link) {
-			return Promise.reject('No asseets link');
+			console.error('No assets link');
+			return Promise.resolve([]);
 		}
 
 		config = {

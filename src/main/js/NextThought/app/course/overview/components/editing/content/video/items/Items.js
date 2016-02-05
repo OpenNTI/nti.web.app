@@ -19,16 +19,17 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.ite
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var me = this;
+		var me = this,
+			parts = [
+				{tag: 'span', cls: 'reorder', html: 'Drag to Reorder'},
+				{tag: 'span', cls: 'add', html: '+ Add Videos'}
+			];
 
 		me.headerCmp = me.add({
 			xtype: 'box',
 			autoEl: {
 				cls: 'video-items-header',
-				cn: [
-					{tag: 'span', cls: 'reorder', html: 'Drag to Reorder'},
-					{tag: 'span', cls: 'add', html: '+ Add Videos'}
-				]
+				cn: Service.canDoAdvancedEditing() ? parts : []
 			},
 			listeners: {
 				click: {
@@ -114,7 +115,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.ite
 			};
 		}));
 
-		if (!single) {
+		if (!single && Service.canDoAdvancedEditing()) {
 			me.enableOrderingContainer();
 		}
 	},

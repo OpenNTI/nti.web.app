@@ -4,6 +4,10 @@
 	top: 69px !important;
 	left: auto !important;
 
+	html.msg-bar-open & {
+		top: 109px !important;
+	}
+
 	&::after{
 		content: '';
 		position: absolute;

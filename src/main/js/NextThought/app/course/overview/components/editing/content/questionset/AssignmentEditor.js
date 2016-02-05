@@ -23,17 +23,21 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 	addPreview: function(item) {
 		var me = this,
 			now = new Date(),
-			dueDate = item.getDueDate();
+			dueDate = item.getDueDate(),
+			parts = [
+				{cls: 'title', html: item.get('title')},
+				{cls: 'due-date', html: Ext.Date.format(dueDate, 'l, F j, g:i a T')}
+			];
+
+		if (Service.canDoAdvancedEditing()) {
+			parts.push({cls: 'remove'});
+		}
 
 		me.add({
 			xtype: 'box',
 			autoEl: {
 				cls: 'assignment-preview ' + (now < dueDate ? 'ontime' : 'overdue'),
-				cn: [
-					{cls: 'title', html: item.get('title')},
-					{cls: 'due-date', html: Ext.Date.format(dueDate, 'l, F j, g:i a T')},
-					{cls: 'remove'}
-				]
+				cn: parts
 			},
 			listeners: {
 				click: {
@@ -62,6 +66,23 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 	},
 
 
+	hasRecordChanged: function(values) {
+		var changed = false;
+
+		if (!this.record) {
+			changed = true;
+		} else if (this.record.get('label') !== values.label) {
+			changed = true;
+		} else if (this.record.get('title') !== values.title) {
+			changed = true;
+		} else if (this.record.get('Target-NTIID') !== values['Target-NTIID']) {
+			changed = true;
+		}
+
+		return changed;
+	},
+
+
 	onSave: function() {
 		var me = this,
 			parentSelection = me.parentSelection,
@@ -71,6 +92,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 
 		me.clearErrors();
 		me.disableSubmission();
+
+		if (!this.hasRecordChanged(values)) {
+			values = null;
+		}
 
 		return me.EditingActions.saveValues(values, me.record, originalPosition, currentPosition, me.rootRecord)
 			.fail(function(reason) {

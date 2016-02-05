@@ -96,6 +96,7 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 			steps = [];
 
 		option.display = this.display;
+		option.displayKey = this.displayKey;
 		option.hasCredit = false;
 		//option.Refunds = false;
 
@@ -244,7 +245,8 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 			option.redeemToken = config[0];
 		}
 
-		var me = this;
+		var me = this,
+			redemptionText = getString('RedemptionConfirmation') || {};
 
 		me.__addStep({
 			xtype: 'enrollment-gift-redeem',

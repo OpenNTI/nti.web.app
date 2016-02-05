@@ -173,7 +173,7 @@ Ext.define('NextThought.common.form.fields.FilePicker', {
 	getValueName: function() {
 		var value = this.getValue();
 
-		return value.name;
+		return value ? value.name : '';
 	},
 
 
