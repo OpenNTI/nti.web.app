@@ -58,6 +58,11 @@ Ext.define('NextThought.app.course.overview.components.editing.Index', {
 	},
 
 
+	setActiveBundle: function(bundle) {
+		this.bundle = bundle;
+	},
+
+
 	editOutlineNode: function(record, outline) {
 		//If we are switching outline nodes scroll the page to the top
 		if (!this.activeRecord || this.activeRecord.getId() !== record.getId()) {
