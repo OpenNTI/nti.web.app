@@ -56,13 +56,6 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 
 
 	getItemList: function() {
-		return this.bundle.getAssignments()
-			.then(function(assignments) {
-				var nonAssignments = assignments.get('NonAssignments');
-
-				return (nonAssignments || []).filter(function(item) {
-					return item instanceof NextThought.model.assessment.QuestionSet;
-				});
-			});
+		return this.bundle.getAllAssessments();
 	}
 });

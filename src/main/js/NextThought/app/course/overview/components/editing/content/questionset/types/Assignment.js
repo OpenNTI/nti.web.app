@@ -79,10 +79,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 
 
 	getItemList: function() {
-		return this.bundle.getAssignments()
-			.then(function(assignments) {
-				return assignments.get('Assignments');
-			});
+		return this.bundle.getAllAssignments();
 	},
 
 

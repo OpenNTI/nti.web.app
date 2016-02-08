@@ -22,7 +22,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		'NextThought.model.forums.CommunityForum',
 		'NextThought.model.UserSearch',
 		'NextThought.model.Video',
-		'NextThought.model.assessment.Assignment'
+		'NextThought.model.assessment.Assignment',
+		'NextThought.model.assessment.QuestionSet'
 	],
 
 	mixins: {
@@ -832,6 +833,68 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		}
 
 		return p;
+	},
+
+
+	getAllAssignments: function() {
+		var link = this.getLink('Assignments'),
+			key = 'load-assignments', load;
+
+		load = this.getFromCache(key);
+
+		if (!load && !link) {
+			console.error('No Assignments link');
+			load = Promise.resolve([]);
+		} else if (!load) {
+			load = Service.request(link)
+				.then(function(response) {
+					var json = JSON.parse(response);
+
+					return ParseUtils.parseItems(json.Items);
+				})
+				.fail(function(reason) {
+					console.error('Failed to load assignments: ', reason);
+
+					return [];
+				});
+
+			this.cacheForShortPeriod(key, load);
+		}
+
+		return load;
+	},
+
+
+	getAllAssessments: function() {
+		var link = this.getLink('Assessments'),
+			key = 'load-assessments', load;
+
+		load = this.getFromCache(key);
+
+		if (!load && !link) {
+			console.error('No Assessments link');
+			load = Promise.resolve([]);
+		} else if (!load) {
+			load = Service.request({
+					url: link,
+					method: 'GET',
+					params: {
+						accept: NextThought.model.assessment.QuestionSet.mimeType
+					}
+				})
+				.then(function(response) {
+					var json = JSON.parse(response);
+
+					return ParseUtils.parseItems(json.Items);
+				})
+				.fail(function(reason) {
+					console.error('Failed to load assignments: ', reason);
+				});
+
+			this.cacheForShortPeriod(key, load);
+		}
+
+		return load;
 	},
 
 
