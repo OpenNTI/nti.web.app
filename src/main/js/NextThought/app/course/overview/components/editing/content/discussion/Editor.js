@@ -43,7 +43,24 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 		}
 	},
 
-	showDiscussionEditor: function(){
+
+	onBack: function() {
+		if (this.discussionEditorCmp) {
+			this.showDiscussionList();
+		} else if (this.doBack) {
+			this.doBack();
+		}
+	},
+
+
+	maybeEnableBack: function(text) {
+		if (!this.record && this.enableBack) {
+			this.enableBack(text);
+		}
+	},
+
+
+	showDiscussionEditor: function() {
 		if (this.discussionEditorCmp) {
 			this.discussionEditorCmp.destroy();
 			delete this.discussionEditorCmp;
@@ -60,12 +77,14 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 			showError: this.showError,
 			basePath: this.bundle && this.bundle.getContentRoots()[0],
 			enableSave: this.enableSave,
-			disableSave: this.disableSave 
+			disableSave: this.disableSave
 		});
+
+		this.maybeEnableBack('Discussions');
 	},
 
 
-	showDiscussionList: function(selectedItems){
+	showDiscussionList: function(selectedItems) {
 		var me = this;
 
 		if (this.discussionsListCmp) {
@@ -73,6 +92,12 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 			delete this.discussionsListCmp;
 		}
 
+		if (this.discussionEditorCmp) {
+			this.discussionEditorCmp.destroy();
+			delete this.discussionEditorCmp;
+		}
+
+		this.maybeEnableBack(this.backText);
 		this.removeAll(true);
 
 		this.discussionsListCmp = this.add({
@@ -85,12 +110,12 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 		me.bundle.getDiscussionAssets()
 			.then(me.__sortDiscussions.bind(me))
 			.then(function(discussions) {
-				me.discussionsListCmp.setSelectionItems(discussions);	
+				me.discussionsListCmp.setSelectionItems(discussions);
 			});
 	},
 
 
-	__sortDiscussions: function(discussions){
+	__sortDiscussions: function(discussions) {
 		return discussions;
 	},
 
@@ -107,7 +132,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 	},
 
 
-	onSave: function(){
+	onSave: function() {
 		var me = this;
 		if (!me.discussionEditorCmp) {
 			me.showDiscussionEditor();

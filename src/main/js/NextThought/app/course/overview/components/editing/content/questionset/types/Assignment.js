@@ -37,6 +37,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 	LIST_XTYPE: 'overview-editing-assignment-selection',
 	EDITOR_XTYPE: 'overview-editing-assignment-editor',
 
+	backToList: 'Assignments',
+
 	SWITCHED: 'switched',
 
 	cls: 'content-editor questionset assignment',
@@ -56,6 +58,22 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 			this.showItemEditor();
 		} else {
 			this.showItemList();
+		}
+	},
+
+
+	onBack: function() {
+		if (this.itemEditorCmp) {
+			this.showItemList([this.itemEditorCmp.selectedItem]);
+		} else if (this.doBack) {
+			this.doBack();
+		}
+	},
+
+
+	maybeEnableBack: function(text) {
+		if (!this.record && this.enableBack) {
+			this.enableBack(text);
 		}
 	},
 
@@ -82,6 +100,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 		}
 
 		me.removeAll(true);
+		me.maybeEnableBack(me.backText);
 
 		me.itemSelectionCmp = me.add({
 			xtype: this.LIST_XTYPE,
@@ -151,6 +170,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 					setSaveText: me.setSaveText
 				});
 
+				me.maybeEnableBack(me.backToList);
 				me.setSaveText(me.record ? 'Save' : 'Add to Lesson');
 			})
 			.then(function() {

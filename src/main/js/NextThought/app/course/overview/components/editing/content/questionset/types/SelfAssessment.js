@@ -39,6 +39,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.questions
 	EDITOR_XTYPE: 'overview-editing-self-assessment-editor',
 	LIST_XTYPE: 'overview-editing-self-assessment-selection',
 
+	backToList: 'Self Assessments',
+
 	SWITCHED: 'switched',
 
 	cls: 'content-editor questionset self-assessment',
