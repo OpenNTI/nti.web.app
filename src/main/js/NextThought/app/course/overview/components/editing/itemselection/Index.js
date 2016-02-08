@@ -115,7 +115,7 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 		var me = this;
 
 		if (!items || items.length === 0) {
-			this.showEmptyState();	
+			this.showEmptyState();
 		}
 
 		me.selectionItems = items;
@@ -146,7 +146,7 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 	},
 
 
-	showEmptyState: function(){},
+	showEmptyState: function() {},
 
 
 	applySelection: function(selection) {

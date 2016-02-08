@@ -58,8 +58,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		this.callParent(arguments);
 
 		if (this.record) {
-			this.addVisibilityButton();	
-		}	
+			this.addVisibilityButton();
+		}
 	},
 
 
