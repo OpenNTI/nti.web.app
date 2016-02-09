@@ -58,18 +58,14 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	showEditor: function(){
 		this.callParent(arguments);
 
-		if (this.record) {
-			this.addAdvancedDisclosure();	
-		}
+		this.addAdvancedDisclosure();	
 	},
 
 
 	addAdvancedDisclosure: function(){
-		var visibility = this.record && this.record.get('visibility'),
-			AdvancedWindow = NextThought.app.course.overview.components.editing.settings.Window,
-			canHaveAdvancedWindow = AdvancedWindow.canChangeVisibility(this.record);
+		var visibility = this.record && this.record.get('visibility');
 
-		if (!canHaveAdvancedWindow || this.visibilityCmp) { return; }
+		if (this.visibilityCmp) { return; }
 
 		this.visibilityCmp = this.add({
 			xtype: 'overview-editing-controls-advanced-settings',

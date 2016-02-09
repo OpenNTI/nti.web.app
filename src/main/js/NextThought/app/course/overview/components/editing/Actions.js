@@ -174,9 +174,9 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 		originalPosition = this.__getPosition(originalPosition);
 		newPosition = this.__getPosition(newPosition);
 
-		function visibilityPromise(){
+		function visibilityPromise(rec){
 			if (visibilityCmp) {
-				return me.updateRecordVisibility(record, visibilityCmp);
+				return me.updateRecordVisibility(rec, visibilityCmp);
 			}
 
 			return record;

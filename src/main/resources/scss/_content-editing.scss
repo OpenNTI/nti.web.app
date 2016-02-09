@@ -264,6 +264,12 @@ input[type=number]{
 			form {
 				box-shadow: none;
 			}
+
+			.nt-button {
+				&.advanced {
+					display: none;
+				}
+			}
 		}
 	}
 
