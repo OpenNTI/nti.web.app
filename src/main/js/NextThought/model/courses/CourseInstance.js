@@ -837,64 +837,22 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 
 	getAllAssignments: function() {
-		var link = this.getLink('Assignments'),
-			key = 'load-assignments', load;
-
-		load = this.getFromCache(key);
-
-		if (!load && !link) {
-			console.error('No Assignments link');
-			load = Promise.resolve([]);
-		} else if (!load) {
-			load = Service.request(link)
-				.then(function(response) {
-					var json = JSON.parse(response);
-
-					return ParseUtils.parseItems(json.Items);
-				})
-				.fail(function(reason) {
-					console.error('Failed to load assignments: ', reason);
-
-					return [];
+		return this.getAssignments()
+				.then(function(assignments) {
+					return assignments.get('Assignments');
 				});
-
-			this.cacheForShortPeriod(key, load);
-		}
-
-		return load;
 	},
 
 
 	getAllAssessments: function() {
-		var link = this.getLink('Assessments'),
-			key = 'load-assessments', load;
+		return this.getAssignments()
+				.then(function(assignments) {
+					var nonAssignments = assignments.get('NonAssignments');
 
-		load = this.getFromCache(key);
-
-		if (!load && !link) {
-			console.error('No Assessments link');
-			load = Promise.resolve([]);
-		} else if (!load) {
-			load = Service.request({
-					url: link,
-					method: 'GET',
-					params: {
-						accept: NextThought.model.assessment.QuestionSet.mimeType
-					}
-				})
-				.then(function(response) {
-					var json = JSON.parse(response);
-
-					return ParseUtils.parseItems(json.Items);
-				})
-				.fail(function(reason) {
-					console.error('Failed to load assignments: ', reason);
+					return (nonAssignments || []).filter(function(item) {
+						return item instanceof NextThought.model.assessment.QuestionSet;
+					});
 				});
-
-			this.cacheForShortPeriod(key, load);
-		}
-
-		return load;
 	},
 
 
