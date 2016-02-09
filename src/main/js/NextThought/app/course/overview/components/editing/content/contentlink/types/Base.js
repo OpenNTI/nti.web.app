@@ -5,7 +5,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		'NextThought.model.RelatedWork',
 		'NextThought.app.course.overview.components.editing.Actions',
 		'NextThought.app.course.overview.components.editing.content.ParentSelection',
-		'NextThought.app.course.overview.components.editing.controls.Advanced'
+		'NextThought.app.course.overview.components.editing.controls.Advanced',
+		'NextThought.app.course.overview.components.editing.settings.Window'
 	],
 
 
@@ -58,15 +59,17 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		this.callParent(arguments);
 
 		if (this.record) {
-			this.addVisibilityButton();
+			this.addAdvancedDisclosure();	
 		}
 	},
 
 
-	addVisibilityButton: function(){
-		var visibility = this.record && this.record.get('visibility');
+	addAdvancedDisclosure: function(){
+		var visibility = this.record && this.record.get('visibility'),
+			AdvancedWindow = NextThought.app.course.overview.components.editing.settings.Window,
+			canHaveAdvancedWindow = AdvancedWindow.canChangeVisibility(this.record);
 
-		if (this.visibilityCmp) { return; }
+		if (!canHaveAdvancedWindow || this.visibilityCmp) { return; }
 
 		this.visibilityCmp = this.add({
 			xtype: 'overview-editing-controls-advanced-settings',

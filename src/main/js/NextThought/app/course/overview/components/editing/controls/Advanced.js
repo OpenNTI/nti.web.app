@@ -3,7 +3,8 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Advanced
 	alias: 'widget.overview-editing-controls-advanced-settings',
 
 	requires: [
-		'NextThought.app.course.overview.components.editing.settings.Window'
+		'NextThought.app.course.overview.components.editing.settings.Window',
+		'NextThought.app.course.overview.components.editing.controls.Visibility'
 	],
 
 	name: 'Advanced Settings',
@@ -12,7 +13,16 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Advanced
 
 	promptName: 'overview-editing-settings',
 
-	renderTpl: '{name}',
+	renderTpl: Ext.DomHelper.markup([
+		{cls: 'text', html: '{name}'},
+		{cls: 'toggle'}
+	]),
+
+
+	renderSelectors: {
+		textEl: '.text',
+		contentEl: '.toggle'
+	},
 
 	beforeRender: function() {
 		this.callParent(arguments);
@@ -32,29 +42,45 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Advanced
 			this.addCls(this.color);
 		}
 
-		this.mon(this.el, 'click', this.handleClick.bind(this));
+		this.mon(this.textEl, 'click', this.handleClick.bind(this));
 	},
 
 
 	handleClick: function(e){
 		if (e.getTarget('.disabled')) { return; }
 
-		if (this.onPromptOpen) {
-			this.onPromptOpen();
+		if (!this.visibilityCmp) {
+			this.visibilityCmp = Ext.widget('overview-editing-controls-visibility', {
+				record: this.record,
+				parentRecord: this.parentRecord,
+				renderTo: this.contentEl,
+				defaultValue:  this.record && this.record.get('visibility'),
+				onChange: this.onChange.bind(this)
+			});
+
+			this.visibilityCmp.hide();
 		}
 
-		this.PromptActions.prompt(this.promptName, {record: this.record, parent: this.parentRecord})
-			.then(this.onPromptSuccess.bind(this))
-			.fail(this.onPromptCancel.bind(this));	
+		if (!this.visibilityCmp.isVisible()){
+			this.visibilityCmp.show();
+		}
+		else {
+			this.visibilityCmp.hide();
+		}	
 	},
 
 
-	onPromptSuccess: function(rec){
-		if (this.record.getId() === rec.getId()) {
-			this.record.syncWith(rec);
+	onChange: function(){},
+
+	getChangedValues: function(){
+		if (this.visibilityCmp) {
+			return this.visibilityCmp.getChangedValues();
 		}
 	},
 
-
-	onPromptCancel: function(){}
+	getValue: function(){
+		if (this.visibilityCmp) {
+			return this.visibilityCmp.getValue();
+		}
+	}
 });

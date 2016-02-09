@@ -124,7 +124,10 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 
 		return Service.put(link, values)
 				.then(function(response) {
-					return ParseUtils.parseItems(response)[0];
+					var rec = ParseUtils.parseItems(response)[0];
+					
+					record.syncWith(rec);
+					return record;
 				});
 	},
 
@@ -166,16 +169,26 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	 * @param  {Object} root           the root of both parents
 	 * @return {Promise}               fulfill when successful, reject when fail
 	 */
-	saveEditorForm: function(form, record, originalPosition, newPosition, root) {
+	saveEditorForm: function(form, record, originalPosition, newPosition, root, visibilityCmp) {
 		var me = this;
 		originalPosition = this.__getPosition(originalPosition);
 		newPosition = this.__getPosition(newPosition);
 
-		if (record) {
-			return this.__updateRecord(form, record, originalPosition, newPosition, root);
+		function visibilityPromise(){
+			if (visibilityCmp) {
+				return me.updateRecordVisibility(record, visibilityCmp);
+			}
+
+			return record;
 		}
 
-		return this.__createRecord(form, newPosition);
+		if (record) {
+			return this.__updateRecord(form, record, originalPosition, newPosition, root)
+					.then(visibilityPromise);
+		}
+
+		return this.__createRecord(form, newPosition)
+				.then(visibilityPromise);
 	},
 
 
