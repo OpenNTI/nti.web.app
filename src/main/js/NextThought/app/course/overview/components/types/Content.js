@@ -6,7 +6,8 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 		'NextThought.app.course.overview.components.parts.Header',
 		'NextThought.app.course.overview.components.parts.Group',
 		'NextThought.model.courses.overview.Lesson',
-		'NextThought.model.courses.overview.Group'
+		'NextThought.model.courses.overview.Group',
+		'NextThought.model.courses.LegacyCommunityBasedCourseInstance'
 	],
 
 
@@ -24,6 +25,48 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 				item.setProgress(progress);
 			}
 		});
+	},
+
+
+	__collapseGroup: function(group) {
+		var items = group.Items;
+
+		group.Items = items.reduce(function(acc, item, index, arr) {
+			var last = acc.last(),
+				next = index < (arr.length - 1) ? arr[index + 1] : null;
+
+			if (item.MimeType === 'application/vnd.nextthought.ntivideo') {
+				if (last && last.MimeType === 'application/vnd.nextthought.videoroll') {
+					last.Items.push(item);
+				} else if (next && next.MimeType === 'application/vnd.nextthought.ntivideo') {
+					acc.push({
+						MimeType: 'application/vnd.nextthought.videoroll',
+						Class: 'VideoRoll',
+						Items: [item]
+					});
+				} else {
+					acc.push(item);
+				}
+			} else {
+				acc.push(item);
+			}
+
+			return acc;
+		}, []);
+
+		return group;
+	},
+
+
+	parseCollection: function(response) {
+		var json = JSON.parse(response),
+			items = json.Items || [];
+
+		if (this.course instanceof NextThought.model.courses.LegacyCommunityBasedCourseInstance) {
+			json.Items = items.map(this.__collapseGroup);
+		}
+
+		return ParseUtils.parseItems([json])[0];
 	},
 
 
