@@ -27,46 +27,6 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 	},
 
 
-	__collapseGroup: function(group) {
-		var items = group.Items;
-
-		group.Items = items.reduce(function(acc, item, index, arr) {
-			var last = acc.last(),
-				next = index < (arr.length - 1) ? arr[index + 1] : null;
-
-			if (item.MimeType === 'application/vnd.nextthought.ntivideo') {
-				if (last && last.MimeType === 'application/vnd.nextthought.videoroll') {
-					last.Items.push(item);
-				} else if (next && next.MimeType === 'application/vnd.nextthought.ntivideo') {
-					acc.push({
-						MimeType: 'application/vnd.nextthought.videoroll',
-						Class: 'VideoRoll',
-						Items: [item]
-					});
-				} else {
-					acc.push(item);
-				}
-			} else {
-				acc.push(item);
-			}
-
-			return acc;
-		}, []);
-
-		return group;
-	},
-
-
-	parseCollection: function(response) {
-		var json = JSON.parse(response),
-			items = json.Items || [];
-
-		json.Items = items.map(this.__collapseGroup);
-
-		return ParseUtils.parseItems([json])[0];
-	},
-
-
 	buildHeader: function(collection) {
 		return {
 			xtype: 'course-overview-header',
