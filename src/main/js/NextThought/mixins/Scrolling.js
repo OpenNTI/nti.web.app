@@ -24,7 +24,7 @@ Ext.define('NextThought.mixins.Scrolling', {
 	},
 
 
-	__findScrollableParent: function(node) {
+	findScrollableParent: function(node) {
 		function isScrollable(node) {
 			var computed = node && getComputedStyle(node);
 
@@ -41,7 +41,7 @@ Ext.define('NextThought.mixins.Scrolling', {
 
 
 	maybeStopScrollBleed: function(e) {
-		var target = this.__findScrollableParent(e.target),
+		var target = this.findScrollableParent(e.target),
 			scrollTop = target && target.scrollTop,
 			scrollHeight = target && target.scrollHeight,
 			height = target && target.clientHeight,
