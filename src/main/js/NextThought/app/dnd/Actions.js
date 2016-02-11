@@ -2,7 +2,8 @@ Ext.define('NextThought.app.dnd.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	requires: [
-		'NextThought.app.dnd.StateStore'
+		'NextThought.app.dnd.StateStore',
+		'NextThought.util.Scrolling'
 	],
 
 
@@ -10,17 +11,27 @@ Ext.define('NextThought.app.dnd.Actions', {
 		this.callParent(arguments);
 
 		this.DnDStore = NextThought.app.dnd.StateStore.getInstance();
+
+		this.pageScrolling = NextThought.util.Scrolling.getPageScrolling();
 	},
 
 
 
-	setActiveDragItem: function(activeItem) {
-		this.DnDStore.setActiveDragItem(activeItem);
+	startDrag: function(activeItem) {
+		if (!this.DnDStore.getActiveDragItem()) {
+			this.addWindowScrollListeners();
+		}
+
+ 		this.DnDStore.setActiveDragItem(activeItem);
 	},
 
 
-	removeActiveDragItem: function(activeItem) {
+	endDrag: function(activeItem) {
 		this.DnDStore.removeActiveDragItem(activeItem);
+
+		if (!this.DnDStore.getActiveDragItem()) {
+			this.removeWindowScrollListeners();
+		}
 	},
 
 
@@ -35,5 +46,15 @@ Ext.define('NextThought.app.dnd.Actions', {
 		if (this.activeDragItem) {
 			this.activeDragItem.onNoDrop();
 		}
+	},
+
+
+	addWindowScrollListeners: function() {
+		this.pageScrolling.scrollWhenDragNearEdges();
+	},
+
+
+	removeWindowScrollListeners: function() {
+		this.pageScrollign.unscrollWhenDragNearEdges();
 	}
 });

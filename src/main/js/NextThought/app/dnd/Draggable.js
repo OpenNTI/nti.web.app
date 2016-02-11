@@ -141,7 +141,7 @@ Ext.define('NextThought.app.dnd.Draggable', {
 				});
 		}
 
-		this.DnDActions.setActiveDragItem(this);
+		this.DnDActions.startDrag(this);
 
 		e.dataTransfer.effectAllowed = 'all';
 		e.dataTransfer.dropEffect = 'move';
@@ -166,7 +166,7 @@ Ext.define('NextThought.app.dnd.Draggable', {
 			handle = this.getDragHandle(),
 			dropEffect = e.dataTransfer && e.dataTransfer.dropEffect;
 
-		this.DnDActions.removeActiveDragItem(this);
+		this.DnDActions.endDrag(this);
 
 		delete this.isDragging;
 

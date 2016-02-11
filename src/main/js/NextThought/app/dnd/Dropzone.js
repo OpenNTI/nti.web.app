@@ -2,16 +2,23 @@ Ext.define('NextThought.app.dnd.Dropzone', {
 
 	requires: [
 		'NextThought.model.app.DndInfo',
-		'NextThought.store.DataTransfer'
+		'NextThought.store.DataTransfer',
+		'NextThought.app.dnd.StateStore',
+		'NextThought.util.Scrolling'
 	],
 
 
 	mixins: {
-		Scrolling: 'NextThought.mixins.Scrolling'
+		Scrolling: 'NextThought.mixins.Scrolling',
+		observable: 'Ext.util.Observable'
 	},
 
 
 	constructor: function(config) {
+		this.mixins.observable.constructor.call(this, config);
+
+		this.DnDStore = NextThought.app.dnd.StateStore.getInstance();
+
 		if (config.getDropzoneTarget) {
 			this.getDropzoneTarget = config.getDropzoneTarget;
 		} else {
@@ -33,6 +40,11 @@ Ext.define('NextThought.app.dnd.Dropzone', {
 		};
 
 		this.transferHandlers = {};
+
+		this.mon(this.DnDStore, {
+			'drag-start': this.__onDragStart.bind(this),
+			'drag-stop': this.__onDragStop.bind(this)
+		});
 	},
 
 
@@ -121,6 +133,23 @@ Ext.define('NextThought.app.dnd.Dropzone', {
 	},
 
 
+	__onDragStart: function() {
+		var scrollingParent = this.findScrollableParent(this.getDropzoneTarget());
+
+		if (scrollingParent) {
+			this.scrollingParent = new NextThought.util.Scrolling({el: scrollingParent});
+			this.scrollingParent.scrollWhenDragNearEdges();
+		}
+	},
+
+
+	__onDragStop: function() {
+		if (this.scrollingParent) {
+			this.scrollingParent.unscrollWhenDragNearEdges();
+		}
+	},
+
+
 	__isValidTransfer: function(dataTransfer) {
 		return !!dataTransfer.containsType(NextThought.model.app.DndInfo.mimeType);
 	},
@@ -205,7 +234,6 @@ Ext.define('NextThought.app.dnd.Dropzone', {
 
 		var dataTransfer = new NextThought.store.DataTransfer({dataTransfer: e.dataTransfer}),
 			handlers = this.getHandlersForDataTransfer(dataTransfer);
-
 
 		if (!this.__isValidTransfer(dataTransfer)) {
 			if (this.onInvalidOver) {

@@ -1,30 +1,36 @@
 Ext.define('NextThought.mixins.Scrolling', {
 
+	requires: [
+		'NextThought.util.Scrolling'
+	],
+
 	initScrolling: function() {
 		if (!this.Scrolling) {
 			this.Scrolling = {
-				scrollingEl: Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body
+				scrollingEl: NextThought.util.Scrolling.getPageScrollingEl()
 			};
 		}
 	},
 
 
 	getPageScrollingEl: function() {
-		return this.Scrolling.scrollingEl;
+		return NextThought.util.Scrolling.getPageScrollingEl();
 	},
 
 
 	getPageScrollHeight: function() {
-		return this.getPageScrollingEl().scrollHeight;
+		return NextThought.util.Scrolling.getPageScrollingHeight();
 	},
 
 
 	getPageHeight: function() {
-		return document.documentElement.clientHeight;
+		return NextThought.util.Scrolling.getPageHeight();
 	},
 
 
 	findScrollableParent: function(node) {
+		this.initScrolling();
+
 		function isScrollable(node) {
 			var computed = node && getComputedStyle(node);
 
