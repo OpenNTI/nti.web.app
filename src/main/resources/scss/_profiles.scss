@@ -2794,6 +2794,8 @@
 }
 
 .activity-sidebar .stream-filter {
+	background-color: white;
+
 	ul {
 		list-style: none;
 		padding: 0;
@@ -2801,10 +2803,50 @@
 	}
 
 	.group {
-		background-color: #d5d4d3;
-		padding: 10px 15px;
+		padding: 10px 0;
 		position: relative;
 		margin-bottom: 5px;
+
+		.select-wrapper {
+			position: relative;
+
+			select {
+				-webkit-appearance: none; 
+				-moz-appearance: none;
+	    		appearance: none;
+	    		background-color: white;
+	    		width: 220px;
+	    		padding-left: 10px;
+	    		margin: 0 15px;
+			    font: normal 400 14px/36px $font;
+			    color: $primary-grey;
+			    border: 1px solid #dbdbdb;
+    			border-radius: 3px;
+    			cursor: pointer;
+			}
+
+    		@include icon('mv-dropdown-arrow_hover', $top: 14px, $right: 27px, $left: auto);
+
+    		&::after {
+    			pointer-events: none;
+    		}
+		}
+
+		label {
+			display: block;
+			border-top: 1px solid #dbdbdb;
+		    color: #494949;
+		    font: normal 400 14px/44px $font;
+		    cursor: pointer;
+
+			& > span {
+				padding-left: 10px;
+			}
+
+			& > input[type=checkbox] {
+				margin-left: 15px;
+			}
+		}
 
 		.group-details {
 			cursor: pointer;
@@ -2815,10 +2857,34 @@
 			font: normal 600 0.625em/1em $font;
 			text-transform: uppercase;
 			color: $secondary-grey;
+			margin: 10px 15px;
 		}
 
 		.active-text {
 			display: block;
+		}
+
+		&.modifier {
+			.option {
+				font: normal 400 14px/44px $font;
+    			padding-left: 10px;
+    			border-left: 5px solid white;
+    			cursor: pointer;
+
+    			&.selected {
+    				background: rgba(63,179,246, 0.15);
+    				border-left-color: #168FE7;
+    				color: $primary-blue;
+    				font-weight: 600;
+    			}
+
+    			&:hover {
+    				&:not(.selected) {
+						background-color: #f0f0f0;
+    					border-left-color: #cfcfcf;	
+    				}
+    			}
+			}
 		}
 	}
 
