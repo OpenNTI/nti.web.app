@@ -47,8 +47,7 @@ Ext.define('NextThought.util.Scrolling', {
 
 		this.handlers = {
 			dragover: this.__onDragOver.bind(this),
-			dragleave: this.__onDragLeave.bind(this),
-			dragenter: this.__onDragEnter.bind(this)
+			dragleave: this.__onDragLeave.bind(this)
 		};
 	},
 
