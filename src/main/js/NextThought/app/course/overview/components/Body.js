@@ -38,6 +38,12 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 			}
 		};
 
+		me.editingControlsCmp.openAuditLog = function() {
+			if(me.openAuditLog) {
+				me.openAuditLog();
+			}
+		};
+
 		me.editingControlsCmp.hide();
 	},
 

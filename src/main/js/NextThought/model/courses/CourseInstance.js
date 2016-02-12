@@ -23,13 +23,15 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		'NextThought.model.UserSearch',
 		'NextThought.model.Video',
 		'NextThought.model.assessment.Assignment',
-		'NextThought.model.assessment.QuestionSet'
+		'NextThought.model.assessment.QuestionSet',
+		'NextThought.mixins.AuditLog'
 	],
 
 	mixins: {
 		'BundleLike': 'NextThought.mixins.BundleLike',
 		'PresentationResources': 'NextThought.mixins.PresentationResources',
-		'DurationCache': 'NextThought.mixins.DurationCache'
+		'DurationCache': 'NextThought.mixins.DurationCache',
+		auditLog: 'NextThought.mixins.AuditLog'
 	},
 
 	fields: [

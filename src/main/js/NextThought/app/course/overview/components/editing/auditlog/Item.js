@@ -8,7 +8,7 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 		{cls: 'content', cn: [
 			{cls: 'avatar-wrapper', cn: ['{user:avatar}']},
 			{tag: 'span', cls: 'username', html: '{user:displayName}'},
-			{tag: 'span', cls: 'message', html: '{type} {fields}.'},
+			{tag: 'span', cls: 'message', html: '{msg}'},
 			{cls: 'date', html: '{date}'}
 		]}
 	]),
@@ -27,7 +27,10 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 		label: 'title',
 		title: 'title',
 		href: 'link',
+		items: 'children',
 		byline: 'author',
+		AvailableBeginning: 'Avaiable Date',
+		AvailableEnding: 'Avaiable End Date',
 		visability: 'visability'
 	},
 
@@ -37,24 +40,36 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 		var me = this,
 			record = me.item,
 			attributes = record.get('attributes') || [],
-			type = record.get('type');
+			type = record.get('type'),
+			recordable = record.get('Recordable'),
+			title = recordable && recordable.Title || '',
+			isChild = recordable.NTIID !== this.parentRecord.getId(),
+			message;
 
-		var fields = attributes.filter(function(attr) {
-			return attr !== 'MimeType' && attr !== 'targetMimeType';
-		}).map(function(attr) {
+		var fields = attributes.map(function(attr) {
 			return me.FIELDS[attr.toLowerCase()] || attr;
 		});
 
 		// Message will be: {user} created {title of item}.
-		if (type === 'create' && fields.length === 0) {
-			var title = me.parentRecord && ( me.parentRecord.getTitle());
+		if (type === 'create' && fields.length === 0 && title) {
 			fields.push('"' + title + '"');
 		}
 
+		type = me.TYPES[type] || type;
+
+		if(isChild) {
+			var ifOn = ' on ' + title;
+
+			if(type === 'created') { ifOn = ''; }
+
+			message = type + ' ' + fields.join(', ') + ifOn + '.';
+		} else {
+			message = type + ' ' + fields.join(', ') + '.';
+		}
+
 		me.renderData = Ext.apply(me.renderData || {}, {
-			type: me.TYPES[type] || type,
 			date: Ext.Date.format(record.get('CreatedTime'), 'F j, Y \\a\\t g:i A') || '',
-			fields: fields.join(', ')
+			msg: message || ''
 		});
 
 

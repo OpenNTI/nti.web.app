@@ -69,6 +69,12 @@ Ext.define('NextThought.app.course.overview.components.EditingControls', {
 		this.clearButtons();
 
 		this.addButton({
+			cls: 'auditLog',
+			action: 'showAuditLog',
+			label: 'Change Log'
+		});
+
+		this.addButton({
 			cls: 'edit',
 			action: 'stopEdit',
 			label: 'Stop Editing'
@@ -86,6 +92,13 @@ Ext.define('NextThought.app.course.overview.components.EditingControls', {
 	stopEdit: function() {
 		if (this.closeEditing) {
 			this.closeEditing();
+		}
+	},
+
+
+	showAuditLog: function() {
+		if(this.openAuditLog) {
+			this.openAuditLog();
 		}
 	}
 });

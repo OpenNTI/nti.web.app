@@ -2,6 +2,14 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineContentNode', {
 	extend: 'NextThought.model.courses.navigation.CourseOutlineNode',
 	mimeType: 'application/vnd.nextthought.courses.courseoutlinecontentnode',
 
+	requires: [
+		'NextThought.mixins.AuditLog'
+	],
+
+	mixins: {
+		auditLog: 'NextThought.mixins.AuditLog'
+	},
+
 	fields: [
 		{name: 'publishBeginning', type: 'auto'},
 		{name: 'publishEnding', type: 'number'},

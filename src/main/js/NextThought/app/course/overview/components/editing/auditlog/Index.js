@@ -16,26 +16,49 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Index', 
 		var me = this;
 
 		me.getItems()
-			.then(function(logs) {
-				me.addItems(logs);
+			.then(function(batch) {
+				me.addItems(batch.Items);
+
+				if(!batch.isLast) {
+					me.addNext();
+				}
 			});
+
 	},
 
 	getItems: function() {
-		return this.record.getLog();
+		this.currentBatch = this.record.getLog();
+
+		return this.currentBatch.getBatch();
+	},
+
+	getNextItems: function() {
+		var me = this;
+
+		if(!me.currentBatch) { return; }
+
+		return me.currentBatch.getNextBatch()
+			.then(function(batch) {
+				me.currentBatch = batch;
+				return me.currentBatch.getBatch();
+			});
 	},
 
 	addItems: function(items) {
 		var me = this;
 
 		me.removeAll(true);
-		me.add({
-			xtype: 'box',
-			autoEl: {
-				cls: 'audit-log-header',
-				cn: {tag: 'span', cls: 'change-log', html: 'Change Log'}
-			}
-		});
+
+		if(!this.hideHeader) {
+			me.add({
+				xtype: 'box',
+				autoEl: {
+					cls: 'audit-log-header',
+					cn: {tag: 'span', cls: 'change-log', html: 'Change Log'}
+				}
+			});
+		}
+
 
 		me.add(items.map(function(item, index) {
 			return {
@@ -46,5 +69,32 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Index', 
 			};
 		}));
 
+	},
+
+	addNext: function() {
+		var me = this;
+
+		me.nextBatchCmp = me.add({
+			xtype: 'box',
+			autoEl: {
+				cls: 'next-batch-record',
+				cn: {tag: 'div', cls: 'load-more', html: 'Show More'}
+			},
+			listeners: {
+				click: {
+					element: 'el',
+					fn: function(e) {
+						me.getNextItems()
+							.then(function(batch) {
+								me.addItems(batch.Items);
+
+								if(!batch.isLast) {
+									me.addNext();
+								}
+							});
+					}
+				}
+			}
+		});
 	}
 });

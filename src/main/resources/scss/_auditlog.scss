@@ -1,5 +1,18 @@
 .audit-log {
     padding-top: 2em;
+
+    .load-more{
+        background: #3fb3f6;
+        color: #fff;
+        cursor: pointer;
+        font-size: 0.875em;
+        font-weight: 600;
+        line-height: 1em;
+        text-transform: uppercase;
+        padding: 18px;
+        height: auto;
+        text-align: center;
+    }
 }
 
 .auditlog-item {
@@ -53,10 +66,26 @@
     padding-bottom: 1rem;
 
     @include icon('change-log', $top: 2px);
-    
+
     .change-log {
         font-weight: 600;
         color: #757474;
         margin-left: 25px;
     }
+}
+
+.audit-log-prompt {
+    .audit-log {
+        padding: 1em;
+    }
+}
+
+
+.course-overview .editing-controls .buttons .button.auditLog {
+    background-color: rgba(0,0,0,0.6);
+    margin-right: 10px;
+    color: white;
+    padding-left: 40px;
+    
+    @include icon('change-white', $top: 11px, $left: 15px);
 }

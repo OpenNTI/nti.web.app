@@ -2,20 +2,21 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	extend: 'NextThought.common.components.NavPanel',
 	alias: 'widget.course-overview-view',
 
-	mixins: {
-		Router: 'NextThought.mixins.Router'
-	},
 
 	requires: [
 		'NextThought.app.course.overview.components.Outline',
 		'NextThought.app.course.overview.components.Body',
-		'NextThought.app.windows.Actions'
+		'NextThought.app.course.overview.components.editing.auditlog.Prompt',
+		'NextThought.app.windows.Actions',
+		'NextThought.app.prompt.Actions',
+		'NextThought.mixins.AuditLog'
 	],
 
 	cls: 'course-overview',
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
+		auditLog: 'NextThought.mixins.AuditLog'
 	},
 
 	navigation: {xtype: 'course-outline'},
@@ -26,11 +27,13 @@ Ext.define('NextThought.app.course.overview.components.View', {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.PromptActions = NextThought.app.prompt.Actions.create();
 
 		this.initRouter();
 
 		this.body.openEditing = this.openEditing.bind(this);
 		this.body.closeEditing = this.closeEditing.bind(this);
+		this.body.openAuditLog = this.openAuditLog.bind(this);
 
 		this.navigation.selectOutlineNode = this.selectOutlineNode.bind(this);
 		this.body.navigateToOutlineNode = this.selectOutlineNode.bind(this);
@@ -186,6 +189,13 @@ Ext.define('NextThought.app.course.overview.components.View', {
 			.fail(function(reason) {
 				console.error('Unable to stop editing because: ' + reason);
 			});
+	},
+
+
+	openAuditLog: function() {
+		if(this.currentBundle && this.currentBundle.getLink('recursive_audit_log')) {
+			this.PromptActions.prompt('audit-log', {parent: this, record: this.currentBundle});
+		}
 	},
 
 
