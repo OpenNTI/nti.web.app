@@ -1,17 +1,14 @@
-export default Ext.define('NextThought.app.assessment.input.Matching', function() {
+function asInt(e, i) {
+	return e && parseInt(e.getAttribute(i), 10);
+}
 
-	function asInt(e, i) {
-		return e && parseInt(e.getAttribute(i), 10);
-	}
+function toMap(ar, attr) {
+	var m = {};
+	Ext.each(ar, function(e) { m[e.getAttribute(attr)] = e; });
+	return m;
+}
 
-	function toMap(ar, attr) {
-		var m = {};
-		Ext.each(ar, function(e) { m[e.getAttribute(attr)] = e; });
-		return m;
-	}
-
-	return {
-
+export default Ext.define('NextThought.app.assessment.input.Matching', {
 		extend: 'NextThought.app.assessment.input.Base',
 		alias: 'widget.question-input-matchingpart',
 
@@ -476,7 +473,4 @@ export default Ext.define('NextThought.app.assessment.input.Matching', function(
 
 
 		//</editor-fold>
-
-
-	};
 });

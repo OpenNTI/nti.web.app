@@ -1,9 +1,6 @@
-export default Ext.define('NextThought.store.PageItem', function() {
+var coordinator = new Ext.util.Observable();
 
-	//TODO: use event domains
-	var coordinator = new Ext.util.Observable();
-
-	return {
+export default Ext.define('NextThought.store.PageItem', {
 		extend: 'Ext.data.Store',
 		requires: [
 			'NextThought.proxy.reader.Json',
@@ -350,5 +347,4 @@ export default Ext.define('NextThought.store.PageItem', function() {
 
 			coordinator.resumeEvents();
 		}
-	};
 });

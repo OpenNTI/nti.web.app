@@ -1,73 +1,73 @@
-export default Ext.define('NextThought.mixins.ProfileLinks', function() {
-	var contactCardPopout, showCardTimer,
-			canShow;
-	//the scope is being set by the caller
-	function onUserNameClick(e) {
-		if (e) {
-			e.stopEvent();
-		}
+var contactCardPopout, showCardTimer,
+		canShow;
 
-		var u = this.userObject || this.user,
-			profileUrl = u.getProfileUrl && u.getProfileUrl();
-
-		if (profileUrl) {
-			if (this instanceof NextThought.app.account.contacts.management.Popout) {
-				wait()
-					.then(this.destroy.bind(this));
-			} else if (this instanceof NextThought.app.account.identity.components.MenuItem) {
-				wait()
-					.then(this.setMenuClosed.bind(this));
-			}
-
-			NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
-				user: u
-			});
-
-			return false;
-		}
+//the scope is being set by the caller
+function onUserNameClick(e) {
+	if (e) {
+		e.stopEvent();
 	}
 
+	var u = this.userObject || this.user,
+		profileUrl = u.getProfileUrl && u.getProfileUrl();
 
-	function showCard(e, el, position) {
-		var Popup = NextThought.app.account.contacts.management.Popout,
-				pop,
-				user = this.userObject || this.user;
-
-		if (!user || this instanceof Popup || (!el.parent('.activity-popout') && !Popup.beforeShowPopup(user, el))) {
-			return;
+	if (profileUrl) {
+		if (this instanceof NextThought.app.account.contacts.management.Popout) {
+			wait()
+				.then(this.destroy.bind(this));
+		} else if (this instanceof NextThought.app.account.identity.components.MenuItem) {
+			wait()
+				.then(this.setMenuClosed.bind(this));
 		}
 
-		pop = contactCardPopout;
+		NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
+			user: u
+		});
 
-		if (!pop || pop.isDestroyed) {
-			pop = Popup.create({
-								   renderTo: Ext.getBody(),
-								   record: user,
-								   refEl: el,
-								   hidden: true
-							   });
-		}
+		return false;
+	}
+}
 
-		pop.show();
-		if (el && el.dom) {
-			pop.alignTo(el, 'tl-bl?', [0, 0]);
-		} else {
-			pop.setPosition(position || {});
-		}
 
-		contactCardPopout = canShow ? null : pop;
+function showCard(e, el, position) {
+	var Popup = NextThought.app.account.contacts.management.Popout,
+			pop,
+			user = this.userObject || this.user;
+
+	if (!user || this instanceof Popup || (!el.parent('.activity-popout') && !Popup.beforeShowPopup(user, el))) {
+		return;
 	}
 
-	function startShowCard(e, el) {
-		var p = el.getAnchorXY('tl');
-		showCardTimer = Ext.defer(showCard, canShow ? 0 : 500, this, [e, el, p]);
+	pop = contactCardPopout;
+
+	if (!pop || pop.isDestroyed) {
+		pop = Popup.create({
+							   renderTo: Ext.getBody(),
+							   record: user,
+							   refEl: el,
+							   hidden: true
+						   });
 	}
 
-	function stopShowCard() {
-		clearTimeout(showCardTimer);
+	pop.show();
+	if (el && el.dom) {
+		pop.alignTo(el, 'tl-bl?', [0, 0]);
+	} else {
+		pop.setPosition(position || {});
 	}
 
-	return {
+	contactCardPopout = canShow ? null : pop;
+}
+
+function startShowCard(e, el) {
+	var p = el.getAnchorXY('tl');
+	showCardTimer = Ext.defer(showCard, canShow ? 0 : 500, this, [e, el, p]);
+}
+
+function stopShowCard() {
+	clearTimeout(showCardTimer);
+}
+
+export default Ext.define('NextThought.mixins.ProfileLinks', {
 		requires: ['NextThought.app.navigation.Actions'],
 
 		navigateToProfile: function(u) {
@@ -114,5 +114,4 @@ export default Ext.define('NextThought.mixins.ProfileLinks', function() {
 				}
 			});
 		}
-	};
 });
