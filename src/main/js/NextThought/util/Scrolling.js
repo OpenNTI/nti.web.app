@@ -46,7 +46,9 @@ Ext.define('NextThought.util.Scrolling', {
 		this.edgeScrollTolerance = config.edgeScrollTolerance || 30;
 
 		this.handlers = {
-			dragover: this.__onDragOver.bind(this)
+			dragover: this.__onDragOver.bind(this),
+			dragleave: this.__onDragLeave.bind(this),
+			dragenter: this.__onDragEnter.bind(this)
 		};
 	},
 
@@ -68,6 +70,7 @@ Ext.define('NextThought.util.Scrolling', {
 	scrollWhenDragNearEdges: function() {
 		if (this.targetEl && this.targetEl.addEventListener) {
 			this.targetEl.addEventListener('dragover', this.handlers.dragover, true);
+			this.targetEl.addEventListener('dragleave', this.handlers.dragleave, true);
 		} else {
 			console.error('Invalid targetEl');
 		}
@@ -77,6 +80,7 @@ Ext.define('NextThought.util.Scrolling', {
 	unscrollWhenDragNearEdges: function() {
 		if (this.targetEl && this.targetEl.removeEventListener) {
 			this.targetEl.removeEventListener('dragover', this.handlers.dragover, true);
+			this.targetEl.removeEventListener('dragleave', this.handlers.dragleave, true);
 		}
 
 		this.endDragOverScroll();
@@ -85,6 +89,11 @@ Ext.define('NextThought.util.Scrolling', {
 
 	__onDragOver: function(e) {
 		this.scrollIfNearEdge(e.clientX, e.clientY);
+	},
+
+
+	__onDragLeave: function() {
+		this.endDragOverScroll();
 	},
 
 

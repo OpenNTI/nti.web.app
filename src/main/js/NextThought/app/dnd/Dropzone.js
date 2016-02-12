@@ -255,6 +255,10 @@ Ext.define('NextThought.app.dnd.Dropzone', {
 
 		var dataTransfer = new NextThought.store.DataTransfer({dataTransfer: e.dataTransfer});
 
+		if (this.scrollingParent) {
+			this.scrollingParent.unscrollWhenDragNearEdges();
+		}
+
 		if (!this.__isValidDrop(dataTransfer)) {
 			if (this.onInvalidDrop) {
 				this.onInvalidDrop();
