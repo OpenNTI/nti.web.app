@@ -272,5 +272,5 @@ module.exports = function(fileInfo, api) {
 
 	removeRequires(root, j);
 
-	return imports.join(';\n') + root.toSource();
+	return imports.join(';\n') + root.toSource({useTabs: true});
 };
