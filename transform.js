@@ -260,13 +260,15 @@ module.exports = function(fileInfo, api) {
 	imports = imports.concat(findMixins(root, j));
 	imports = imports.concat(findRequires(root, j));
 
-	imports.filter(isExtComponent);
+	imports = imports.filter(isExtComponent);
 
 	imports = imports.map(function(imp) {
 		return buildImportStatement(imp, fileInfo.path);
 	});
 
-	imports.push('\n\n');
+	if (imports.length) {
+		imports.push('\n\n');
+	}
 
 	removeRequires(root, j);
 
