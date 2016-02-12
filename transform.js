@@ -153,8 +153,15 @@ function findRequires(root, j) {
 }
 
 
-function removeRequires(fileSource) {
+function removeRequires(root, j) {
+	var props = getRequiresProperty(root, j);
 
+	if (props.__length > 0) {
+		console.warn('More than one requires property being applied');
+		return;
+	}
+
+	props.remove();
 }
 
 
@@ -170,7 +177,6 @@ function findMixins(root, j) {
 		imports = imports.concat(properties.map(function(p) {
 			var cls = p.value.value;
 
-			console.log(cls);
 			return {
 				name: getNameFromClassName(cls),
 				cls: cls,
@@ -231,7 +237,7 @@ function isExtComponent(imp) {
 	return !isExt.test(imp.cls);
 }
 
-var importTpl = 'import {name} from "{path}"';
+var importTpl = 'import {name} from \'{path}\'';
 
 function buildImportStatement(imp, clsPath) {
 	return importTpl.replace('{name}', imp.name).replace('{path}', path.relative(clsPath, imp.path));
@@ -260,5 +266,9 @@ module.exports = function(fileInfo, api) {
 		return buildImportStatement(imp, fileInfo.path);
 	});
 
-	console.log(imports);
+	imports.push('\n\n');
+
+	removeRequires(root, j);
+
+	return imports.join(';\n') + root.toSource();
 };
