@@ -22,6 +22,47 @@ export default Ext.define('NextThought.app.stream.components.Filter', {
 		tag: 'ul', cls: 'groups'
 	}),
 
+	GROUP_TYPES: {
+		sort: new Ext.XTemplate(Ext.DomHelper.markup([
+			{cls: 'group {cls}', cn: [
+				{cls: 'name', html: '{displayText}'},
+				{cls: 'select-wrapper', cn: [
+					{tag: 'select', name: '{name}', cn: [
+						{tag: 'tpl', 'for': 'items', cn:[
+							{tag: 'tpl', 'if': 'active', cn: [{
+								tag: 'option', value: '{displayText}', html: '{displayText}', selected: true	
+							}]},
+							{tag: 'tpl', 'if': '!active', cn: [{
+								tag: 'option', value: '{displayText}', html: '{displayText}'
+							}]}
+						]}
+					]}
+				]}
+			]}
+		])),
+
+		activity: new Ext.XTemplate(Ext.DomHelper.markup([
+			{cls: 'group {cls}', cn: [
+				{cls: 'name', html: '{displayText}'},
+				{tag: 'tpl', 'for': 'items', cn: [
+					{tag: 'label', cn: [
+						{tag: 'input', type: 'checkbox'},
+						{tag: 'span', html: '{text}'}
+					]}
+				]}
+			]}
+		])),
+
+		modifier: new Ext.XTemplate(Ext.DomHelper.markup([
+			{cls: 'group {cls}', cn: [
+				{cls: 'name', html: '{text}'},
+				{tag: 'tpl', 'for': 'items', cn: [
+					{cls: '{cls}', html: '{text}'}
+				]}
+			]}
+		]))
+	},
+
 
 	renderSelectors: {
 		groupsEl: 'ul.groups'
@@ -32,6 +73,50 @@ export default Ext.define('NextThought.app.stream.components.Filter', {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', this.handleClick.bind(this));
+		if (isFeature('profile-activity-filters')) {
+			this.showFilters(this.filterGroups);	
+		}
+	},
+
+
+	showFilters: function(groups){
+		var me = this;
+		(groups || []).forEach(function(group) {
+			me.addFilterGroup(group);
+		});
+	},
+
+
+	addFilterGroup: function(group){
+		var type = group.type,
+			tpl = this.GROUP_TYPES[type],
+			me = this,
+			el = this.el;
+
+		if (tpl) {
+			tpl.append(el, group, true);
+		}
+
+		if (type === 'sort') {
+			this.__addModifierGroup(group);
+		}
+	},
+
+
+	__addModifierGroup: function(group){
+		var items = group.items || [],
+			el = this.el, modifier, tpl;
+
+		items.forEach(function(item){
+			if (item.active) {
+				modifier = item.modifier;
+			}
+		});
+
+		if (modifier) {
+			tpl = this.GROUP_TYPES['modifier'];
+			tpl.append(el, modifier, true);
+		}
 	},
 
 

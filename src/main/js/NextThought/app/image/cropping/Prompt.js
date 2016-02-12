@@ -20,9 +20,9 @@ Ext.define('NextThought.app.image.cropping.Prompt', {
 		var data = this.Prompt.data;
 
 		if (data.src) {
-			this.loadSrc(data.src);
+			this.loadSrc(data.src, data.name);
 		} else if (data.image) {
-			this.loadImage(data.image);
+			this.loadImage(data.image, data.name);
 		}
 
 		this.Prompt.Header.setTitle(data.title || this.title);
@@ -31,18 +31,20 @@ Ext.define('NextThought.app.image.cropping.Prompt', {
 	},
 
 
-	loadSrc: function(src) {
+	loadSrc: function(src, name) {
 		this.editor = this.add({
 			xtype: 'image-cropping-editor',
+			name: name,
 			src: src,
 			crop: this.Prompt.data.crop
 		});
 	},
 
 
-	loadImage: function(img) {
+	loadImage: function(img, name) {
 		this.editor = this.add({
 			xtype: 'image-cropping-editor',
+			name: name,
 			img: img,
 			crop: this.Prompt.data.crop
 		});

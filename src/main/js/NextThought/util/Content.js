@@ -804,6 +804,96 @@ export default Ext.define('NextThought.util.Content', {
 
 		//wasn't long enough to split
 		return html;
+	},
+
+
+	getReadingBreadCrumb: function(reading) {
+		var path = this.getReadingPath(reading);
+
+		return path.map(function(part) {
+			return part.getAttribute('label');
+		});
+	},
+
+
+	getReadingPath: function(reading) {
+		var path = [], node;
+
+		path.push(reading);
+
+		node = reading.parentNode;
+
+		while (node && (node.tagName === 'topic' || node.tagName === 'toc')) {
+			path.push(node);
+			node = node.parentNode;
+		}
+
+		return path.reverse();
+	},
+
+
+	getReadingPages: function(reading) {
+		var children = reading.children;
+
+		children = Array.prototype.slice.call(children);
+
+		return children.filter(function(node) {
+			var tagName = node.tagName,
+				href = node.getAttribute('href'),
+				parts = href && Globals.getURLParts(href);
+
+			return tagName === 'topic' && href && !parts.hash;
+		});
+	},
+
+
+	getReading: function(ntiid, bundle) {
+		function findReading(toc) {
+			var escaped = ParseUtils.escapeId(ntiid),
+				query = 'topic[ntiid="' + escaped + '"]';
+
+			return toc.querySelector(query);
+		}
+
+		return this.__resolveTocs(bundle)
+			.then(function(tocs) {
+				return tocs.map(findReading)[0];
+			});
+	},
+
+
+	getReadings: function(bundle) {
+		function buildNavigationMap(toc) {
+			var nodes = toc.querySelectorAll('course, course unit, course lesson');
+
+			nodes = Array.prototype.slice.call(nodes);
+
+			return nodes.reduce(function(acc, node) {
+				var ntiid = node.getAttribute('ntiid') || node.getAttribute('topic-ntiid');
+
+				acc[ntiid] = true;
+
+				return acc;
+			}, {});
+		}
+
+		function findReadings(toc) {
+			var navigation = buildNavigationMap(toc),
+				topLevel = toc.querySelectorAll('toc > topic');
+
+			topLevel = Array.prototype.slice.call(topLevel);
+
+			return topLevel.filter(function(node) {
+				var ntiid = node.getAttribute('ntiid');
+
+				return !navigation[ntiid];
+			});
+		}
+
+		return this.__resolveTocs(bundle)
+			.then(function(tocs) {
+				return tocs.map(findReadings);
+			});
 	}
 
 });

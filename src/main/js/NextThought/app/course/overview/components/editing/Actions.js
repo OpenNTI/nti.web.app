@@ -53,6 +53,10 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	__saveRecordValues: function(values, record) {
 		var link = record.getLink('edit');
 
+		if (!values) {
+			return Promise.resolve();
+		}
+
 		if (!link) {
 			return Promise.reject({
 				msg: 'Unable to update record',
@@ -106,6 +110,28 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	},
 
 
+	updateRecordVisibility: function(record, visibilityCmp) {
+		var link = record && record.getLink('edit'),
+			values = visibilityCmp && visibilityCmp.getChangedValues && visibilityCmp.getChangedValues();
+
+		if (!link) {
+			return Promise.reject('No Edit Link');
+		}
+
+		if (!values || Object.keys(values) === 0) {
+			return Promise.resolve();
+		}
+
+		return Service.put(link, values)
+				.then(function(response) {
+					var rec = ParseUtils.parseItems(response)[0];
+					
+					record.syncWith(rec);
+					return record;
+				});
+	},
+
+
 	__updateRecordValues: function(values, record, originalPosition, newPosition, root) {
 		return this.__saveRecordValues(values, record)
 			.then(this.__moveRecord.bind(this, record, originalPosition, newPosition, root))
@@ -143,15 +169,26 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	 * @param  {Object} root           the root of both parents
 	 * @return {Promise}               fulfill when successful, reject when fail
 	 */
-	saveEditorForm: function(form, record, originalPosition, newPosition, root) {
+	saveEditorForm: function(form, record, originalPosition, newPosition, root, visibilityCmp) {
+		var me = this;
 		originalPosition = this.__getPosition(originalPosition);
 		newPosition = this.__getPosition(newPosition);
 
-		if (record) {
-			return this.__updateRecord(form, record, originalPosition, newPosition, root);
+		function visibilityPromise(rec){
+			if (visibilityCmp) {
+				return me.updateRecordVisibility(rec, visibilityCmp);
+			}
+
+			return record;
 		}
 
-		return this.__createRecord(form, newPosition);
+		if (record) {
+			return this.__updateRecord(form, record, originalPosition, newPosition, root)
+					.then(visibilityPromise);
+		}
+
+		return this.__createRecord(form, newPosition)
+				.then(visibilityPromise);
 	},
 
 

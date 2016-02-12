@@ -30,6 +30,10 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		errorEl: '.error'
 	},
 
+
+	clickedCls: 'x-datepicker-clicked',
+
+
 	beforeRender: function() {
 		this.callParent(arguments);
 
@@ -84,7 +88,60 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		});
 
 		this.on('destroy', picker.destroy.bind(picker));
+		this.mon(picker, 'select', this.handleSelect.bind(this));
+		this.mon(picker, 'highlightitem', this.highlightDate.bind(this));
 		return picker;
+	},
+
+
+	handleSelect: function(datepicker, value) {
+		var newlySelectedEl = datepicker.el.down('.' + datepicker.selectedCls);
+
+		this.clearSelectedDate();
+
+		if (newlySelectedEl) {
+			newlySelectedEl.addCls(this.clickedCls);	
+		}
+
+		this.selectedDate = value;
+	},
+
+
+	highlightDate: function(picker, cell) {
+		var m = this.selectedDate && moment(this.selectedDate), me = this;
+
+		if (this.selectedDate && m.isSame(picker.value)) {
+			wait()
+				.then(function(){
+					if (cell) {
+						cell.className += ' ' + me.clickedCls;	
+					}
+				});
+		}
+	},
+
+
+	clearSelectedDate: function(){
+		var currentClickedEl = this.datepicker && this.datepicker.el.down('.' + this.clickedCls);
+
+		if (currentClickedEl) {
+			currentClickedEl.removeCls(this.clickedCls);
+		}
+
+		delete this.selectedDate;
+	},
+
+
+	showSelectedDate: function() {
+		var p = this.datepicker,
+			selected = p && p.el.down('.' + p.selectedCls);
+
+		if (this.selectedDate) {
+			this.clearSelectedDate();
+		}
+
+		this.selectedDate = p.value;
+		this.highlightDate(this.datepicker, selected && selected.dom);
 	},
 
 
@@ -92,7 +149,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		var key = e.keyCode,
 			target = e.target,
 			el = Ext.get(target),
-			name = target && target.getAttribute('name')
+			name = target && target.getAttribute('name'),
 			nextEl = this.minuteEl;
 
 		if (key === e.ENTER || key === e.TAB || this.isDelimiter(key)) {
@@ -117,11 +174,12 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 			if (this.TimePicker) {
 				this.onTimeChange();
 			}
+			this.clearAllErrors();
 
 			// Broadcast the change.
 			if (this.dateChanged) {
 				this.dateChanged();
-			}	
+			}
 		}
 		else {
 			this.showErrors();
@@ -180,7 +238,7 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		}
 	},
 
-	setValue: function(value) {
+	setValue: function(value, forceSelect) {
 		var date = new Date(value),
 			me = this, dateString, hour, minute, m = 'am';
 
@@ -211,10 +269,11 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 				// Set date
 				if (me.datepicker) {
-					me.datepicker.setValue(dateOnly);
-					
-					// Fire a change event
-					me.onDateChange(me.datepicker, me.datepicker.value);
+					me.datepicker.setValue(dateOnly);	
+
+					if (forceSelect) {
+						me.showSelectedDate();
+					}
 				}
 
 				// TODO: Set Hour and Minute
@@ -245,6 +304,8 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 	 * @return {Number} Timestamp in seconds.
 	 */
 	getValue: function() {
+		if (!this.selectedDate) { return null; }
+
 		var millis = this.getMilliseconds();
 		return millis / 1000;
 	},
@@ -304,6 +365,10 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		var fields = [this.hourEl.dom, this.minuteEl.dom],
 			field, isValid = true, min, max, val;
 
+		if (!this.selectedDate) {
+			return false;
+		}
+
 		for (var i = 0; i < fields.length && isValid; i++) {
 			field = fields[i];
 			min = field.getAttribute('min');
@@ -324,6 +389,10 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 		var fields = [this.hourEl.dom, this.minuteEl.dom],
 			field, isValid = true, min, max, val,
 			validity, errors = [], name, d;
+
+		if (!this.selectedDate) {
+			errors.push({name: 'date', error: 'Please select a date above.'});
+		}
 			
 		for (var i = 0; i < fields.length; i++) {
 			field = fields[i];
@@ -395,8 +464,8 @@ Ext.define('NextThought.common.form.fields.DatePicker', {
 
 	getDateMilliseconds: function() {
 		var v, date;
-		if (this.datepicker) {
-			return this.datepicker.getValue().getTime();
+		if (this.selectedDate) {
+			return this.selectedDate.getTime();
 		}
 
 		return 0;

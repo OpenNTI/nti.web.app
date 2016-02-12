@@ -19,6 +19,7 @@ export default Ext.define('NextThought.app.course.enrollment.options.FiveminuteE
 			steps = [];
 
 		enrollmentOption.display = this.display;
+		enrollmentOption.displayKey = this.displayKey;
 		enrollmentOption.hasCredit = true;
 		//enrollmentOption.refunds = true;
 		//enrollmentOption.refundDate = enrollmentOption.OU_RefundCutOffDate && Ext.Date.format(enrollmentOption.OU_RefundCutOffDate, this.DateFormat);

@@ -57,6 +57,22 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Edi
 	},
 
 
+	maybeEnableBack: function(text) {
+		if (!this.record && this.enableBack) {
+			this.enableBack(text);
+		}
+	},
+
+
+	onBack: function() {
+		if (this.videoEditorCmp) {
+			this.showVideoList(this.videoEditorCmp.selectedItems);
+		} else if (this.doBack) {
+			this.doBack();
+		}
+	},
+
+
 	__sortVideos: function(videos) {
 		return videos.sort(function(a, b) {
 			var vA = a.get('title'),
@@ -81,6 +97,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Edi
 		}
 
 		me.removeAll(true);
+
+		me.maybeEnableBack(this.backText);
 
 		me.videoSelectionCmp = me.add({
 			xtype: 'overview-editing-video-item-selection',
@@ -120,6 +138,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Edi
 
 		this.enableSave();
 		this.setSaveText(this.record ? 'Save' : 'Add to Lesson');
+		this.maybeEnableBack('Videos');
 	},
 
 

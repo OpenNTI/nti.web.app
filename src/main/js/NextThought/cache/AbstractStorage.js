@@ -8,6 +8,18 @@ export default Ext.define('NextThought.cache.AbstractStorage', function() {
 	};
 
 	return {
+
+		statics: {
+			getLocalStorage: function() {
+				return PersistentStorage;
+			},
+
+
+			getSessionStorage: function() {
+				return TemporaryStorage;
+			}
+		},
+
 		currentVersion: 2,
 
 		constructor: function(storage, noPrefix) {
@@ -34,6 +46,16 @@ export default Ext.define('NextThought.cache.AbstractStorage', function() {
 
 
 		prefix: function(v) {return v;},
+
+
+		setItem: function(key, value) {
+			return this.set(key, value);
+		},
+
+
+		getItem: function(key) {
+			return this.get(key);
+		},
 
 
 		set: function(key, value) {

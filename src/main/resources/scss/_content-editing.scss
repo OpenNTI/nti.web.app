@@ -13,6 +13,10 @@
 			margin-bottom: 20px;
 		}
 
+		&.reading-editor {
+			padding: 20px 0 0;
+		}
+
 		&.video-editor {
 			padding: 20px 15px;
 		}
@@ -27,9 +31,191 @@
 	}
 }
 
+.reading-editor .content-editor.content-link {
+	.reading-preview {
+		background: white;
+		padding: 10px 15px;
+		box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3);
+
+		.path {
+			font-size: 0.625rem;
+			font-weight: 600;
+			text-transform: uppercase;
+			color: $tertiary-grey;
+
+			span::after {
+				content: '/';
+				margin: 0 0.5em;
+			}
+
+			span:last-of-type::after {
+				display: none;
+			}
+		}
+
+		.label, .page-count, .change {
+			font-size: 0.875rem;
+			font-weight: 600;
+			margin-right: 0.5rem;
+		}
+
+		.label {
+			color: $primary-grey;
+		}
+
+		.page-count {
+			color: $secondary-grey;
+		}
+
+		.change {
+			border-left: 1px solid $tertiary-grey;
+			color: $primary-blue;
+			text-decoration: underline;
+			padding-left: 0.5rem;
+			cursor: pointer;
+		}
+	}
+
+	form {
+		
+
+		.group.card {
+			border-top: none;
+		}
+	}
+}
+
+.content-editor.questionset {
+	.assignment-preview, .self-assessment-preview {
+		background: white;
+		margin-bottom: 10px;
+		padding: 10px;
+		border-radius: 3px;
+		box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
+		position: relative;
+
+		&.overdue {
+			.due-date {
+				color: $primary-red;
+			}
+		}
+
+		.title {
+			font-size: 1.125rem;
+			font-style: italic;
+		}
+
+		.due-date {
+			font-size: 0.75rem;
+			font-style: italic;
+		}
+
+		.question-count {
+			font-size: 0.75em;
+			color: $tertiary-grey;
+		}
+
+		.remove {
+			cursor: pointer;
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			width: 16px; height: 16px;
+			@include icon('message_box_close', $top: 3px, $left: 3px, $position: absolute);
+		}
+	}
+}
+
 .content-editor {
-	.nt-button.delete {
-		margin-top: 10px;
+	position: relative;
+
+	.nt-button {
+		&.delete {
+			margin-top: 10px;	
+		}
+
+		&.advanced {
+			position: absolute;
+			top: 17px;
+			right: 25px;
+			font: normal 600 14px/20px $font;
+			color: $primary-blue;
+			cursor: pointer;
+			text-align: right;
+		}
+		
+		&.visibility {
+			padding: 2px 0;	
+			.title {
+		    	display: inline-block;
+			    color: $secondary-grey;
+			    font: normal 500 14px/1 $font;
+			    text-transform: capitalize;
+			    margin-bottom: 0;
+
+		    }
+
+		    .scope {
+		    	display: inline-block;
+		    	line-height: 34px;
+			    background: white;
+			    box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
+			    margin: 2px 0 2px 9px;
+			    padding: 0 22px 0 10px;
+			    color: $primary-grey;
+			    text-transform: capitalize;
+			    position: relative;
+			    cursor: pointer;
+
+			    &::after {
+			    	content: '';
+				    position: absolute;
+				    pointer-events: none;
+				    top: 50%;
+				    right: 10px;
+				    width: 0;
+				    height: 0;
+				    margin-top: -2px;
+				    border-style: solid;
+				    border-width: 0 4px 5px 4px;
+				    border-color: transparent transparent #bfbfbf transparent;
+				    transform: rotate(180deg);
+			    }
+
+			    &:active, &.open {
+			    	transform: none;
+			    }
+		    }
+
+		    .menu-container{
+		    	position: absolute;
+		    	top: 58px;
+		    	right: -1px;
+    			width: 97px;
+			    background-color: white;
+			    border: 1px solid #eae9e9;
+			    display: none;
+
+			    &.open {
+			    	display: block;
+			    }
+
+		    	.options {
+		    		.option {
+		    			line-height: 36px;
+    					color: $primary-grey;
+					    font-weight: 400;
+					    padding: 0 15px;
+					    text-align: left;
+					    border-bottom: 1px solid #eae9e9;
+
+					    &.selected {
+					    	color: $primary-blue;
+					    }
+		    		}
+		    	}
+		    }
+		}
 	}
 }
 
@@ -78,6 +264,12 @@ input[type=number]{
 			form {
 				box-shadow: none;
 			}
+
+			.nt-button {
+				&.advanced {
+					display: none;
+				}
+			}
 		}
 	}
 
@@ -92,7 +284,7 @@ input[type=number]{
 
 
 	form {
-		box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
+		box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3);
 
 		// Style the place holder
 		textarea {
@@ -153,7 +345,7 @@ input[type=number]{
 				}
 			}
 
-			.field.byline, .field.label {
+			.field.byline, .field.label, .field.title {
 				input {
 					padding: 0 0.5em;
 					display: block;
@@ -167,7 +359,7 @@ input[type=number]{
 				}
 			}
 
-			.field.label {
+			.field.label, .field.title {
 				input {
 					font: normal 600 0.9375rem/26px $font;
 				}
@@ -200,6 +392,20 @@ input[type=number]{
 		top: 5px;
 		right: 5px;
 		z-index: 1;
+	}
+
+	.outline-overview-footer {
+	    text-align: center;
+	    height: 55px;
+	    padding: 15px;
+
+		.add.nt-button {
+		    display: inline-block;
+		    line-height: 30px;
+		    font-size: 0.875em;
+		    font-weight: 600;
+		    color: #3fb3f6;
+		}	
 	}
 }
 
@@ -1002,9 +1208,15 @@ input[type=number]{
 					border: none;
 
 					.x-datepicker-date {
-						background-color: $primary-blue;
+						background-color: $tertiary-grey;
 						color: #ffffff;
 						border-radius: 90px;
+					}
+				}
+
+				&.x-datepicker-clicked {
+					.x-datepicker-date {
+						background-color: $primary-blue;
 					}
 				}
 
@@ -1139,6 +1351,14 @@ input[type=number]{
 
 			.nt-button.edit {
 				display: inline-block;
+			}
+
+			.visibility {
+				display: inline-block;
+				font-size: 0.85rem;
+		    	font-weight: 600;
+		    	color: $secondary-grey;
+		    	padding: 5px 11px 5px 22px;
 			}
 		}
 

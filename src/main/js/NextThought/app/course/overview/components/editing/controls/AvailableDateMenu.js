@@ -137,10 +137,12 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 			endDate = this.record && this.record.get('AvailableEnding');
 
 		// the available beginning and ending are in seconds.
-		this.values = {
-			AvailableBeginning: startDate ? startDate.getTime && (startDate.getTime()/1000) : null,
-			AvailableEnding: endDate ? endDate.getTime && (endDate.getTime()/1000) : null
+		this.defaultValues = {
+			AvailableBeginning: startDate ? startDate.getTime && (startDate.getTime()/1000) : this.getDefaultTimeForField('AvailableBeginning'),
+			AvailableEnding: endDate ? endDate.getTime && (endDate.getTime()/1000) : this.getDefaultTimeForField('AvailableEnding')
 		};
+
+		this.values = {};
 
 		this.saveEl.addCls('disabled');
 		this.updateDates();
@@ -150,13 +152,19 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 	updateDates: function(){
 		var selectedEl = this.toggleEl.down('.selected'),
 			field = selectedEl && selectedEl.dom && selectedEl.dom.getAttribute('data-action'),
-			value = this.values && this.values[field], date,
-			availableEnding = this.values['AvailableEnding'] ? new Date(this.values['AvailableEnding']* 1000) : null;
-			availableBeginning = this.values['AvailableBeginning'] ? new Date(this.values['AvailableBeginning']* 1000) : null;
+			value = this.values && this.values[field], date;
 
 		if (this.picker && field) {
-			date = value ? new Date(value * 1000) : this.getDefaultTimeForField(field);
-			this.picker.setValue(date);
+			if (this.values[field]) {
+				value = this.values[field];
+				date = new Date(value * 1000);
+				this.picker.setValue(date, true);
+			}
+			else if (this.defaultValues[field]){
+				value = this.defaultValues[field];
+				date = new Date(value * 1000);
+				this.picker.setValue(date);
+			}
 		}
 	},
 
@@ -176,7 +184,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Availabl
 			defaultValue.setSeconds(0);
 		}
 
-		return defaultValue; 
+		return defaultValue.getTime() / 1000; 
 	},
 
 

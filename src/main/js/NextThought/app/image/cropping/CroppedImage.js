@@ -1,8 +1,14 @@
 Ext.define('NextThought.app.image.cropping.CroppedImage', {
 	constructor: function(config) {
 		this.blob = config.blob;
+		this.name = config.name;
 
 		this.urlObject = Globals.getURLObject();
+	},
+
+
+	getName: function() {
+		return this.name;
 	},
 
 

@@ -21,7 +21,9 @@ export default Ext.define('NextThought.model.courses.CourseInstance', {
 		'NextThought.model.forums.CommunityBoard',
 		'NextThought.model.forums.CommunityForum',
 		'NextThought.model.UserSearch',
-		'NextThought.model.Video'
+		'NextThought.model.Video',
+		'NextThought.model.assessment.Assignment',
+		'NextThought.model.assessment.QuestionSet'
 	],
 
 	mixins: {
@@ -834,6 +836,26 @@ export default Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	getAllAssignments: function() {
+		return this.getAssignments()
+				.then(function(assignments) {
+					return assignments.get('Assignments');
+				});
+	},
+
+
+	getAllAssessments: function() {
+		return this.getAssignments()
+				.then(function(assignments) {
+					var nonAssignments = assignments.get('NonAssignments');
+
+					return (nonAssignments || []).filter(function(item) {
+						return item instanceof NextThought.model.assessment.QuestionSet;
+					});
+				});
+	},
+
+
 
 	fireNavigationEvent: function(eventSource) {
 		var me = this;
@@ -846,25 +868,69 @@ export default Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-	getVideoAssets: function() {
-		var link = this.getLink('assets');
+	__getAssets: function(type) {
+		var link = this.getLink('assets'),
+			config;
 
 		if (!link) {
-			return Promise.reject('No assets link');
+			console.error('No assets link');
+			return Promise.resolve([]);
+		}
+
+		config = {
+			url: link,
+			method: 'GET'
+		};
+
+		if (type) {
+			config.params = {
+				accept: type
+			};
+		}
+
+		return Service.request(config)
+			.then(function(resp) {
+				var json = JSON.parse(resp);
+
+				return ParseUtils.parseItems(json.Items);
+			})
+			.fail(function(reason) {
+				console.error('Failed to load assets: ', reason, type);
+
+				return [];
+			});
+	},
+
+
+	getVideoAssets: function() {
+		return this.__getAssets(NextThought.model.Video.mimeType);
+	},
+
+
+	getDiscussionAssets: function() {
+		var link = this.getLink('CourseDiscussions');
+
+		if (!link) {
+			console.error('No discussions link');
+			return Promise.resolve([]);
 		}
 
 		return Service.request({
 				url: link,
-				method: 'GET',
-				params: {
-					accept: NextThought.model.Video.mimeType
-				}
+				method: 'GET'
 			}).then(function(resp) {
-				var json = JSON.parse(resp);
+				var json = JSON.parse(resp),
+					items = [];
 
-				return ParseUtils.parseItems(json.Items);
+				for (var k in json.Items) {
+					if (json.Items.hasOwnProperty(k)) {
+						items.push(json.Items[k]);
+					}
+				}
+
+				return ParseUtils.parseItems(items);
 			}).fail(function(reason) {
-				console.error('Failed to load Videos: ', reason);
+				console.error('Failed to load Discussions: ', reason);
 
 				return [];
 			});

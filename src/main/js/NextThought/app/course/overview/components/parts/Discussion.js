@@ -43,7 +43,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Disc
 
 		config.data = {
 			title: n.getAttribute('title'),
-			icon: getURL((i.root || '') + n.getAttribute('icon')),
+			icon: this.getIcon(n.getAttribute('icon'), (i.root || '')),
 			ntiid: n.getAttribute('ntiid').split(' '),
 			label: n.getAttribute('label'),
 			comments: 0,
@@ -51,6 +51,16 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Disc
 		};
 
 		this.callParent([config]);
+	},
+
+
+	getIcon: function(icon, root) {
+		if (icon && Globals.ROOT_URL_PATTERN.test(icon)) {
+			return getURL(icon);
+		}
+		else {
+			return getURL(root + icon);
+		}
 	},
 
 

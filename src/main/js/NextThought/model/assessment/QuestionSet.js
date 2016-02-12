@@ -1,6 +1,12 @@
 export default Ext.define('NextThought.model.assessment.QuestionSet', {
 	extend: 'NextThought.model.Base',
+
+	statics: {
+		mimeType: 'application/vnd.nextthought.naquestionset'
+	},
+
 	mimeType: 'application/vnd.nextthought.naquestionset',
+
 	requires: [
 		'NextThought.model.converters.Items',
 		'NextThought.util.Parsing'
@@ -10,7 +16,8 @@ export default Ext.define('NextThought.model.assessment.QuestionSet', {
 
 	isSet: true,
 	fields: [
-		{ name: 'questions', type: 'arrayItem' }
+		{ name: 'questions', type: 'arrayItem' },
+		{name: 'title', type: 'String'}
 	],
 
 

@@ -209,7 +209,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		if (this.record) {
 			this.record.set('scope', item && item.studentFilter);
 			this.currentScope = this.record.get('scope');
-			wait().then(this.filterReplyOptions.bind(this));
+			this.filterReplyOptions();
 		}
 	},
 
@@ -256,7 +256,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 
 	setReplyToField: function(){
-		var scope, selected;
+		var scope;
 		
 		this.noReplyPicker = this.createNoReplyMenu();
 
@@ -264,11 +264,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 			this.replyCheckBoxEl.dom.checked = true;
 		}
 		else {
-			selected = this.noReplyPicker && this.noReplyPicker.down('[checked]');
-			if (selected) {
-				this.record.set('replyScope', selected.scope);
-			}
-			
+			this.updateReplyScope();
+
 			scope = this.record && this.record.get('scope');
 			if (scope === 'ForCredit') {
 				this.replyCheckBoxEl.dom.checked = true;
@@ -277,6 +274,14 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 
 		// Set the right options.
 		this.filterReplyOptions();
+	},
+
+
+	updateReplyScope: function(){
+		var selected = this.noReplyPicker && this.noReplyPicker.down('[checked]');
+		if (selected) {
+			this.record.set('replyScope', selected.scope);
+		}
 	},
 
 
@@ -307,6 +312,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 		if (this.record) {
 			this.record.set('NoReply', !i.checked);	
 		}
+
+		if (i.checked) {
+			this.updateReplyScope();
+		}
+		
 		this.replyScopeEl[action]('disabled');
 	},
 
