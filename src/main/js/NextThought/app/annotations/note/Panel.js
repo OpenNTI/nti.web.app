@@ -9,7 +9,11 @@ export default Ext.define('NextThought.app.annotations.note.Panel', {
 		'NextThought.app.userdata.Actions',
 		'NextThought.app.sharing.Window',
 		'NextThought.app.context.StateStore',
-		'NextThought.app.context.components.cards.*'
+		'NextThought.app.context.components.cards.Content',
+		'NextThought.app.context.components.cards.Question',
+		'NextThought.app.context.components.cards.RelatedWork',
+		'NextThought.app.context.components.cards.Slide',
+		'NextThought.app.context.components.cards.Video'
 	],
 
 	mixins: {

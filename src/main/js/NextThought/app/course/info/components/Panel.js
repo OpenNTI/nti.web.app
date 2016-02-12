@@ -7,7 +7,11 @@ export default Ext.define('NextThought.app.course.info.components.Panel', {
 
 	requires: [
 		'NextThought.proxy.JSONP',
-		'NextThought.app.course.info.components.parts.*'
+		'NextThought.app.course.info.components.parts.Description',
+		'NextThought.app.course.info.components.parts.Instructors',
+		'NextThought.app.course.info.components.parts.NotStarted',
+		'NextThought.app.course.info.components.parts.Support',
+		'NextThought.app.course.info.components.parts.Title'
 	],
 
 

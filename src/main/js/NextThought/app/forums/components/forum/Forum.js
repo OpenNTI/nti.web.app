@@ -4,7 +4,11 @@ export default Ext.define('NextThought.app.forums.components.forum.Forum', {
 
 	layout: 'none',
 
-	requires: ['NextThought.app.forums.components.forum.parts.*'],
+	requires: [
+		'NextThought.app.forums.components.forum.parts.FilterBar',
+		'NextThought.app.forums.components.forum.parts..Header',
+		'NextThought.app.forums.components.forum.parts.TopicListView'
+	],
 
 	cls: 'topic-list-body forum-body',
 

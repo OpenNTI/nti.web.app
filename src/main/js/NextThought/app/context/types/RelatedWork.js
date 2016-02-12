@@ -1,7 +1,11 @@
 export default Ext.define('NextThought.app.context.types.RelatedWork', {
 
 	requires: [
-		'NextThought.app.context.components.cards.*',
+		'NextThought.app.context.components.cards.Content',
+		'NextThought.app.context.components.cards.Question',
+		'NextThought.app.context.components.cards.RelatedWork',
+		'NextThought.app.context.components.cards.Slide',
+		'NextThought.app.context.components.cards.Video',
 		'NextThought.app.context.components.list.RelatedWork'
 	],
 

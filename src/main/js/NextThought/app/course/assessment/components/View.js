@@ -9,8 +9,13 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 	requires: [
 		'NextThought.app.course.assessment.components.Navigation',
 		'NextThought.app.course.assessment.components.Body',
-		'NextThought.app.course.assessment.components.admin.*',
-		'NextThought.app.course.assessment.components.student.*'
+		'NextThought.app.course.assessment.components.admin.Activit',
+		'NextThought.app.course.assessment.components.admin.assignments.View',
+		'NextThought.app.course.assessment.components.admin.email.Window',
+		'NextThought.app.course.assessment.components.admin.performance.View'
+		'NextThought.app.course.assessment.components.student.assignments.View',
+		'NextThought.app.course.assessment.components.student.Activity',
+		'NextThought.app.course.assessment.components.student.Performance'
 	],
 
 	navigation: {xtype: 'course-assessment-navigation'},

@@ -6,7 +6,11 @@ export default Ext.define('NextThought.app.context.types.Video', {
 		'NextThought.app.mediaviewer.components.reader.AnchorResolver',
 		'NextThought.app.context.components.Default',
 		'NextThought.app.context.components.VideoContext',
-		'NextThought.app.context.components.cards.*',
+		'NextThought.app.context.components.cards.Content',
+		'NextThought.app.context.components.cards.Question',
+		'NextThought.app.context.components.cards.RelatedWork',
+		'NextThought.app.context.components.cards.Slide',
+		'NextThought.app.context.components.cards.Video',
 		'NextThought.app.context.components.list.Video',
 		'NextThought.app.navigation.path.Actions'
 	],

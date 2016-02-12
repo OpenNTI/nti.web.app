@@ -12,7 +12,11 @@ export default Ext.define('NextThought.app.video.Video', {
 
 	requires: [
 		'NextThought.util.Globals',
-		'NextThought.util.media.*',
+		'NextThought.util.media.HTML5Player',
+		'NextThought.util.media.HTML5VideoPlayer',
+		'NextThought.util.media.KalturaPlayer',
+		'NextThought.util.media.VimeoPlayer',
+		'NextThought.util.media.YouTubePlayer',
 		'NextThought.model.PlaylistItem',
 		'NextThought.model.resolvers.VideoPosters'
 	],

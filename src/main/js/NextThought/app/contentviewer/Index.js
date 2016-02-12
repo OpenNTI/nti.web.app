@@ -53,7 +53,9 @@ export default Ext.define('NextThought.app.contentviewer.Index', {
 		// 'NextThought.view.contentviewer.Header'
 		// 'NextThought.view.reader.Panel',
 		'NextThought.app.contentviewer.Actions',
-		'NextThought.app.contentviewer.panels.*'
+		'NextThought.app.contentviewer.panels.Reader',
+		'NextThought.app.contentviewer.panels.assignment.Admin',
+		'NextThought.app.contentviewer.panels.assignment.Student'
 	],
 
 

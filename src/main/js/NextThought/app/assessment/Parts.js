@@ -5,7 +5,19 @@ export default Ext.define('NextThought.app.assessment.Parts', {
 	requires: [
 		'NextThought.app.assessment.PartContent',
 		'NextThought.app.assessment.MultiPartSubmission',
-		'NextThought.app.assessment.input.*'
+		'NextThought.app.assessment.input.Base',
+		'NextThought.app.assessment.input.FileSubmission',
+		'NextThought.app.assessment.input.FreeResponse',
+		'NextThought.app.assessment.input.Matching',
+		'NextThought.app.assessment.input.ModeledContent',
+		'NextThought.app.assessment.input.MultipleChoice',
+		'NextThought.app.assessment.input.NumericMath',
+		'NextThought.app.assessment.input.Ordering',
+		'NextThought.app.assessment.input.Short',
+		'NextThought.app.assessment.input.SingleChoice',
+		'NextThought.app.assessment.input.SymbolicMath',
+		'NextThought.app.assessment.input.Unsupported',
+		'NextThought.app.assessment.input.WordBank'
 	],
 
 	plain: true,

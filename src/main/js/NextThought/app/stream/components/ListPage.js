@@ -3,7 +3,7 @@ export default Ext.define('NextThought.app.stream.components.ListPage', {
 	alias: 'widget.stream-list-page',
 
 	requires: [
-		'NextThought.app.stream.components.listTiles.*'
+		'NextThought.app.stream.components.listTiles.Note'
 	],
 
 

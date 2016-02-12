@@ -14,7 +14,10 @@ export default Ext.define('NextThought.app.forums.components.topic.Window', {
 		'NextThought.model.forums.CommunityHeadlineTopic',
 		'NextThought.model.forums.ContentHeadlineTopic',
 		'NextThought.model.forums.CommunityHeadlinePost',
-		'NextThought.app.forums.components.topic.parts.*'
+		'NextThought.app.forums.components.topic.parts.Comment',
+		'NextThought.app.forums.components.topic.parts.Editor',
+		'NextThought.app.forums.components.topic.parts.Pager',
+		'NextThought.app.forums.components.topic.parts.Topic'
 	],
 
 

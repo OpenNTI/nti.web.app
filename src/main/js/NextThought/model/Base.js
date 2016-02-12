@@ -2,7 +2,17 @@ export default Ext.define('NextThought.model.Base', {
 	extend: 'Ext.data.Model',
 	requires: [
 		'NextThought.mixins.HasLinks',
-		'NextThought.model.converters.*',
+		'NextThought.model.converters.ContentRangeDescription',
+		'NextThought.model.converters.DCCreatorToAuthor',
+		'NextThought.model.converters.Date',
+		'NextThought.model.converters.Future',
+		'NextThought.model.converters.GroupByTime',
+		'NextThought.model.converters.Items',
+		'NextThought.model.converters.Links',
+		'NextThought.model.converters.PresenceInfo',
+		'NextThought.model.converters.Synthetic',
+		'NextThought.model.converters.Users',
+		'NextThought.model.converters.VideoSources',
 		'NextThought.util.Time',
 		'NextThought.util.Parsing',
 		'NextThought.proxy.Rest'

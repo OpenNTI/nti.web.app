@@ -2,7 +2,26 @@ export default Ext.define('NextThought.app.course.enrollment.components.Purchase
 	extend: 'Ext.container.Container',
 	alias: 'widget.enrollment-purchase',
 
-	requires: ['NextThought.app.course.enrollment.components.parts.*'],
+	requires: [
+		'NextThought.app.course.enrollment.components.parts.BaseInput',
+		'NextThought.app.course.enrollment.components.parts.Checkbox',
+		'NextThought.app.course.enrollment.components.parts.CheckboxGroup',
+		'NextThought.app.course.enrollment.components.parts.DateInput',
+		'NextThought.app.course.enrollment.components.parts.Description',
+		'NextThought.app.course.enrollment.components.parts.Description',
+		'NextThought.app.course.enrollment.components.parts.DetailsTable',
+		'NextThought.app.course.enrollment.components.parts.DropDown',
+		'NextThought.app.course.enrollment.components.parts.Group',
+		'NextThought.app.course.enrollment.components.parts.GroupedSet',
+		'NextThought.app.course.enrollment.components.parts.Links',
+		'NextThought.app.course.enrollment.components.parts.Pricing',
+		'NextThought.app.course.enrollment.components.parts.RaioGroup',
+		'NextThought.app.course.enrollment.components.parts.Set',
+		'NextThought.app.course.enrollment.components.parts.SplitRadio',
+		'NextThought.app.course.enrollment.components.parts.SubmitButton',
+		'NextThought.app.course.enrollment.components.parts.Textarea',
+		'NextThought.app.course.enrollment.components.parts.TextInput'
+	],
 
 	mixins: {
 		form: 'NextThought.mixins.enrollment-feature.Form'

@@ -24,8 +24,23 @@ export default Ext.define('NextThought.app.course.dashboard.Index', {
 	bufferThreshold: 1000,
 
 	requires: [
-		'NextThought.app.course.dashboard.components.tiles.*',
-		'NextThought.app.course.dashboard.components.widgets.*',
+		'NextThought.app.course.dashboard.components.tiles.Assignment',
+		'NextThought.app.course.dashboard.components.tiles.AssignmentList',
+		'NextThought.app.course.dashboard.components.tiles.BaseCmp',
+		'NextThought.app.course.dashboard.components.tiles.BaseContainer',
+		'NextThought.app.course.dashboard.components.tiles.Blog',
+		'NextThought.app.course.dashboard.components.tiles.Header',
+		'NextThought.app.course.dashboard.components.tiles.Item',
+		'NextThought.app.course.dashboard.components.tiles.Lesson',
+		'NextThought.app.course.dashboard.components.tiles.Note',
+		'NextThought.app.course.dashboard.components.tiles.Post',
+		'NextThought.app.course.dashboard.components.tiles.Topic',
+		'NextThought.app.course.dashboard.components.tiles.TopicComment'
+		'NextThought.app.course.dashboard.components.widgets.Announcements',
+		'NextThought.app.course.dashboard.components.widgets.Assignments',
+		'NextThought.app.course.dashboard.components.widgets.Base',
+		'NextThought.app.course.dashboard.components.widgets.Lesson',
+		'NextThought.app.course.dashboard.components.widgets.Stream',
 		'NextThought.app.course.dashboard.components.TileContainer'
 	],
 

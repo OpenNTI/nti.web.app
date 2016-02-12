@@ -2,7 +2,22 @@ export default Ext.define('NextThought.preference.Manager', {
 
 	requires: [
 		'NextThought.proxy.Preference',
-		'NextThought.model.preference.*'
+		'NextThought.model.preference.badges.Base',
+		'NextThought.model.preference.badges.Course',
+		'NextThought.model.preference.chatpresence.Active',
+		'NextThought.model.preference.chatpresence.Available',
+		'NextThought.model.preference.chatpresence.Away',
+		'NextThought.model.preference.chatpresence.Base',
+		'NextThought.model.preference.chatpresence.DND',
+		'NextThought.model.preference.pushnotifications.Base',
+		'NextThought.model.preference.pushnotifications.Email',
+		'NextThought.model.preference.Badges',
+		'NextThought.model.preference.Base',
+		'NextThought.model.preference.ChatPresence',
+		'NextThought.model.preference.Gradebook',
+		'NextThought.model.preference.PushNotifications',
+		'NextThought.model.preference.Root',
+		'NextThought.model.preference.WebApp'
 	],
 
 	constructor: function(config) {

@@ -33,7 +33,16 @@ export default Ext.define('NextThought.app.notifications.components.Group', {
 	},
 
 	requires: [
-		'NextThought.app.notifications.components.types.*'
+		'NextThought.app.notifications.components.types.Badge',
+		'NextThought.app.notifications.components.types.Base',
+		'NextThought.app.notifications.components.types.BlogComment',
+		'NextThought.app.notifications.components.types.BlogEntryPost',
+		'NextThought.app.notifications.components.types.Contact',
+		'NextThought.app.notifications.components.types.Feedback',
+		'NextThought.app.notifications.components.types.ForumComment',
+		'NextThought.app.notifications.components.types.ForumTopic',
+		'NextThought.app.notifications.components.types.Grade',
+		'NextThought.app.notifications.components.types.Note'
 	],
 
 	items: [],

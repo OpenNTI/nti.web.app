@@ -1,6 +1,16 @@
 export default Ext.define('NextThought.app.mediaviewer.components.reader.AnchorResolver', {
 	requires: [
-		'NextThought.model.anchorables.*'
+		'NextThought.model.anchorables.ContentPointer',
+		'NextThought.model.anchorables.ContentRangeDescription',
+		'NextThought.model.anchorables.DomContentPointer',
+		'NextThought.model.anchorables.DomContentRangeDescription',
+		'NextThought.model.anchorables.ElementDomContentPointer',
+		'NextThought.model.anchorables.TextContext',
+		'NextThought.model.anchorables.TextDomContentPointer',
+		'NextThought.model.anchorables.TimeContentPointer',
+		'NextThought.model.anchorables.TimeRangeDescription',
+		'NextThought.model.anchorables.TranscripContentPointer',
+		'NextThought.model.anchorables.TranscriptRangeDescription'
 	],
 	singleton: true,
 

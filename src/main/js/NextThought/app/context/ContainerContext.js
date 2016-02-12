@@ -1,6 +1,10 @@
 export default Ext.define('NextThought.app.context.ContainerContext', {
 	requires: [
-		'NextThought.app.context.types.*',
+		'NextThought.app.context.types.Content',
+		'NextThought.app.context.types.Question',
+		'NextThought.app.context.types.RelatedWork',
+		'NextThought.app.context.types.Slide',
+		'NextThought.app.context.types.Video',
 		'NextThought.app.context.components.AuthorizationContext'
 	],
 
