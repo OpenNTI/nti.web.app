@@ -81,14 +81,16 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			type: 'sort',
 			name: 'sort-filters',
 			cls: 'sort-group',
-			items: [
-				{
+			paramName: 's',
+			streamParam: 'sort',
+			items: {
+				created: {
 					displayText: 'Date Created',
 					cls: 'sort',
 					active: true,
-					params: {
-						sortOn: 'CreatedTime',
-						sortOrder: 'DESC'
+					streamValue: {
+						on: 'CreatedTime',
+						order: 'DESC'
 					},
 					modifier: {
 						text: 'Date Range',
@@ -102,12 +104,12 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 						]
 					}
 				},
-				{
+				recent: {
 					displayText: 'Recent Activity',
 					cls: 'sort',
-					params: {
-						sortOn: 'Last Modified',
-						sortOrder: 'DESC'
+					streamValue: {
+						on: 'Last Modified',
+						order: 'DESC'
 					},
 					active: false,
 					modifier: {
@@ -121,12 +123,12 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 						]
 					}
 				},
-				{
+				commented: {
 					displayText: 'Most Commented',
 					cls: 'sort',
-					params: {
-						sortOn: 'Last Modified',
-						sortOrder: 'DESC'
+					streamValue: {
+						on: 'Last Modified',
+						order: 'DESC'
 					},
 					active: false,
 					modifier: {
@@ -140,12 +142,12 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 						]
 					}
 				},
-				{
+				liked: {
 					displayText: 'Most Liked',
 					cls: 'sort',
-					params: {
-						sortOn: 'Last Modified',
-						sortOrder: 'DESC'
+					streamValue: {
+						on: 'Last Modified',
+						order: 'DESC'
 					},
 					active: false,
 					modifier: {
@@ -159,7 +161,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 						]
 					}
 				}
-			]
+			}
 		}, {
 			displayText: 'Activity Type',
 			type: 'activity',
@@ -233,7 +235,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 		this.callParent(arguments);
 
 		if (!isFeature('profile-activity-filters')) {
-			this.BASE_FILTERS = {};
+			this.BASE_FILTERS = [];
 		}
 
 		this.filterCmp = this.down('stream-filter');
@@ -398,7 +400,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 				active;
 
 			if (filter.multiselect) {
-				active = filter.activeItems;
+				active = filter.activeItems || [];
 
 				if (active.length) {
 					params[filter.paramName] = filter.activeItems.join(',');
@@ -460,7 +462,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 
 		function addSingleSelectValue(filter) {
 			var activeItem = filter.activeItem,
-				value = activeItem && filter.items[activeItem].streamValue;
+				filterItem = activeItem && filter.items[activeItem],
+				value = filterItem && filterItem.streamValue;
 
 			if (value) {
 				params[filter.streamParam] = value;
