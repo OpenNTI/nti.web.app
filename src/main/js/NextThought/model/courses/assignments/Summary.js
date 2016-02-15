@@ -12,6 +12,8 @@ Ext.define('NextThought.model.courses.assignments.Summary', {
 		{name: 'PredictedGrade', type: 'auto'},
 		{name: 'OverdueAssignmentCount', type: 'int'},
 		{name: 'UngradedAssignmentCount', type: 'int'},
-		{name: 'User', type: 'auto'}
+		{name: 'User', type: 'auto'},
+		{name: 'AvailableAssignmentNTIIDs', type: 'auto'},
+		{name: 'AvailableFinalGrade', type: 'bool'}
 	]
 });

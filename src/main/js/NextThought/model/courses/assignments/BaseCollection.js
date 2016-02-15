@@ -103,7 +103,8 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 				NonAssignmentsLink: nonAssignments.href,
 				AssignmentToOutlineNodes: this.parseOutline(assignments),
 				AssignmentsRaw: assignments,
-				NonAssignmentsRaw: nonAssignments
+				NonAssignmentsRaw: nonAssignments,
+				GradeBook: gradeBook
 			});
 		}
 	},

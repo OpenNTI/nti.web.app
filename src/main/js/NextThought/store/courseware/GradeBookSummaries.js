@@ -24,6 +24,7 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 					list = (data && data.records) || [],
 					i = list.length - 1, o, u;
 
+				this.availableFinalGrade = resp.AvailableFinalGrade;
 				this.currentPage = resp.BatchPage;
 				this.EnrollmentScope = resp.EnrollmentScope;
 
@@ -197,6 +198,11 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 
 	getAssignment: function() {
 		return this.assignments.getFinalGradeAssignment();
+	},
+
+
+	hasFinalGrade: function() {
+		return this.proxy.reader.availableFinalGrade;
 	},
 
 
