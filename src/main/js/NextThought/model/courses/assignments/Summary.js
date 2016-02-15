@@ -15,5 +15,10 @@ Ext.define('NextThought.model.courses.assignments.Summary', {
 		{name: 'User', type: 'auto'},
 		{name: 'AvailableAssignmentNTIIDs', type: 'auto'},
 		{name: 'AvailableFinalGrade', type: 'bool'}
-	]
+	],
+
+
+	hasFinalGrade: function() {
+		return this.get('AvailableFinalGrade');
+	}
 });

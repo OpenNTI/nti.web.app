@@ -161,6 +161,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 		view = me.add({
 			xtype: 'course-assessment-admin-performance-student',
 			student: user,
+			summary: record,
 			historiesURL: historyURL,
 			FinalGradeHistoryItem: record.get('HistoryItemSummary'),
 			predictedGrade: record.get('PredictedGrade'),
@@ -171,7 +172,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 		});
 
 		me.getStudentEnrollment(record)
-			.then(function(enrollment){	
+			.then(function(enrollment) {
 				if (enrollment && view.setEnrollmentData) {
 					view.setEnrollmentData(enrollment);
 				}

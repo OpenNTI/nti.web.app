@@ -56,6 +56,11 @@ Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 	},
 
 
+	__hasAccessTo: function(assignment) {
+		return !this.available || (this.available.indexOf(assignment.getId()) >= 0);
+	},
+
+
 	fillInHistories: function() {
 		var me = this;
 
@@ -76,7 +81,7 @@ Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 				});
 
 				me.__replaceWithCachedInstance(entry);
-			} else if (!assignment.doNotShow()) {
+			} else if (!assignment.doNotShow() && me.__hasAccessTo(assignment)) {
 				me.add(me.assignments.createPlaceholderHistoryItem(assignment, me.student));
 			}
 		});
