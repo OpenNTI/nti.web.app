@@ -2,7 +2,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 
 	requires: [
 		'NextThought.model.app.MoveInfo',
-		'NextThought.mixins.dnd.Draggable'
+		'NextThought.app.dnd.Actions'
 	],
 
 
@@ -200,10 +200,10 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 			handler = handlers[0], //TODO: think about what to do if there is more than one
 			data = handler && dataTransfer.findDataFor(handler.key),
 			moveInfo = dataTransfer.findDataFor(NextThought.model.app.MoveInfo.mimeType),
-			move;
+			move, dndActions = NextThought.app.dnd.Actions.create();
 
 		if (!info || !handler || !handler.onDrop || !data) {
-			NextThought.mixins.dnd.Draggable.onNoDropHandler();
+			dndActions.onNoDropHandler();
 			this.__removeDropPlaceholder();
 			return;
 		}
@@ -228,7 +228,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 				placeholder.innerHTML = '<span>Error</span>';
 				placeholder.classList.add('error');
 
-				NextThought.mixins.dnd.Draggable.onDropFail();
+				dndActions.onDropFail();
 
 				return wait(Globals.LONG);
 			})

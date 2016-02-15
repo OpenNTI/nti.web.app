@@ -22,13 +22,16 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		'NextThought.model.forums.CommunityForum',
 		'NextThought.model.UserSearch',
 		'NextThought.model.Video',
-		'NextThought.model.assessment.Assignment'
+		'NextThought.model.assessment.Assignment',
+		'NextThought.model.assessment.QuestionSet',
+		'NextThought.mixins.AuditLog'
 	],
 
 	mixins: {
 		'BundleLike': 'NextThought.mixins.BundleLike',
 		'PresentationResources': 'NextThought.mixins.PresentationResources',
-		'DurationCache': 'NextThought.mixins.DurationCache'
+		'DurationCache': 'NextThought.mixins.DurationCache',
+		auditLog: 'NextThought.mixins.AuditLog'
 	},
 
 	fields: [
@@ -832,6 +835,26 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		}
 
 		return p;
+	},
+
+
+	getAllAssignments: function() {
+		return this.getAssignments()
+				.then(function(assignments) {
+					return assignments.get('Assignments');
+				});
+	},
+
+
+	getAllAssessments: function() {
+		return this.getAssignments()
+				.then(function(assignments) {
+					var nonAssignments = assignments.get('NonAssignments');
+
+					return (nonAssignments || []).filter(function(item) {
+						return item instanceof NextThought.model.assessment.QuestionSet;
+					});
+				});
 	},
 
 

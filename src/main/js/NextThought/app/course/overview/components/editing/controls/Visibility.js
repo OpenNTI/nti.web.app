@@ -8,67 +8,67 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Visibili
 		{cls: 'title', html: 'Visibility:'},
 		{cls: 'scope', cn: [
 			{cls: 'text'}
+		]},
+		{cls: 'menu-container', cn: [{
+			cls: 'options', cn: [
+				{cls: 'option', html: 'Everyone', 'data-scope': 'everyone'},
+				{cls: 'option', html: 'OU', 'data-scope': 'OU'},
+				{cls: 'option', html: 'ForCredit', 'data-scope': 'ForCredit'}
+			]}
 		]}
 	]),
 
 
 	renderSelectors: {
 		scopeEl: '.scope',
-		textEl: '.scope .text'
+		textEl: '.scope .text',
+		menuContainer: '.menu-container',
+		optionEl: '.options .option'
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.mon(this.scopeEl, 'click', this.showMenu.bind(this));
+		var selection;
+
+		this.mon(this.scopeEl, 'click', this.toggleMenu.bind(this));
 		this.textEl.update(this.getDefaultValue());
-		this.selected = this.defaultValue;
+		
+		if (this.defaultValue) {
+			this.selected = this.defaultValue;
+			selection = this.el.down('.option[data-scope='+ this.defaultValue +']');	
+			this.selectOption(selection);
+		}
+
+		this.mon(this.el.select('.option'), 'click', this.onVisibilityChange.bind(this));
 	},
 
 
-	createVisibilityMenu: function(){
-		var defaultValue = this.getDefaultValue(),
-			menu = 
-				Ext.widget('menu', {
-					defaults: {
-						ui: 'nt-menuitem',
-						xtype: 'menucheckitem',
-						plain: true,
-						group: 'visibility',
-						handler: this.onVisibilityChange.bind(this)
-					},
-					width: 125,
-					items: [{
-							text: 'Everyone',
-							scope: 'everyone',
-							checked: defaultValue === 'everyone',
-							NoReply: false
-						},
-						{
-							text: 'OU',
-							scope: 'OU',
-							checked: defaultValue === 'OU',
-							NoReply: false
-						},
-						{
-							text: 'ForCredit',
-							scope: 'ForCredit',
-							checked: defaultValue === 'ForCredit',
-							NoReply: false
-						}
-					]
-				});
+	onVisibilityChange: function(e){
+		var target = e.target,
+		 	scope = target && target.getAttribute('data-scope');
 
-		this.on('destroy', menu.destroy.bind(menu));
-		return menu;
-	},
-
-
-	onVisibilityChange: function(item, e){
-		this.scopeEl.update(item.scope);
-		this.selected = item.scope;
+		this.selectOption(target);
+		this.scopeEl.update(scope);
+		this.selected = scope;
 		if (this.onChange) {
 			this.onChange(this);
+		}
+
+		this.toggleMenu();
+	},
+
+
+	selectOption: function(item){
+		var current = this.el.down('.option.selected'),
+			newItem = item && Ext.fly(item);
+
+		if (current) {
+			current.removeCls('selected');
+		}
+
+		if (newItem) {
+			Ext.fly(newItem).addCls('selected');	
 		}
 	},
 
@@ -93,16 +93,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Visibili
 	},
 
 
-	showMenu: function(e) {
-		if (!this.menu) {
-			this.menu = this.createVisibilityMenu();
-		}
-
-		if (this.menu && !this.menu.isVisible()) {
-			this.menu.showBy(this.scopeEl, 'tr-br?', [0, 1]);	
-		}
-		else {
-			this.menu.hide();
-		}
+	toggleMenu: function(e) {		
+		this.menuContainer.toggleCls('open');
 	}
 })

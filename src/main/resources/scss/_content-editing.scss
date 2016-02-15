@@ -136,20 +136,20 @@
 
 		&.advanced {
 			position: absolute;
-			top: 37px;
+			top: 17px;
 			right: 25px;
-			text-decoration: underline;
-			font: normal 600 14px/38px $font;
+			font: normal 600 14px/20px $font;
 			color: $primary-blue;
 			cursor: pointer;
+			text-align: right;
 		}
 		
 		&.visibility {
-
+			padding: 2px 0;	
 			.title {
 		    	display: inline-block;
 			    color: $secondary-grey;
-			    font: normal 500 16px/1 $font;
+			    font: normal 500 14px/1 $font;
 			    text-transform: capitalize;
 			    margin-bottom: 0;
 
@@ -157,10 +157,10 @@
 
 		    .scope {
 		    	display: inline-block;
-		    	line-height: 38px;
+		    	line-height: 34px;
 			    background: white;
 			    box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
-			    margin: 10px 15px;
+			    margin: 2px 0 2px 9px;
 			    padding: 0 22px 0 10px;
 			    color: $primary-grey;
 			    text-transform: capitalize;
@@ -186,20 +186,35 @@
 			    	transform: none;
 			    }
 		    }
-		}
-	}
-}
 
-.prompt {
-	.body-container {
-		.content-editor {
-			height: 100%;
+		    .menu-container{
+		    	position: absolute;
+		    	top: 58px;
+		    	right: -1px;
+    			width: 97px;
+			    background-color: white;
+			    border: 1px solid #eae9e9;
+			    display: none;
 
-			.nt-button {
-				&.visibility {
-					padding: 5px 10px;	
-				}
-			}
+			    &.open {
+			    	display: block;
+			    }
+
+		    	.options {
+		    		.option {
+		    			line-height: 36px;
+    					color: $primary-grey;
+					    font-weight: 400;
+					    padding: 0 15px;
+					    text-align: left;
+					    border-bottom: 1px solid #eae9e9;
+
+					    &.selected {
+					    	color: $primary-blue;
+					    }
+		    		}
+		    	}
+		    }
 		}
 	}
 }
@@ -248,6 +263,12 @@ input[type=number]{
 
 			form {
 				box-shadow: none;
+			}
+
+			.nt-button {
+				&.advanced {
+					display: none;
+				}
 			}
 		}
 	}

@@ -6,7 +6,8 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 		'NextThought.app.course.overview.components.parts.Header',
 		'NextThought.app.course.overview.components.parts.Group',
 		'NextThought.model.courses.overview.Lesson',
-		'NextThought.model.courses.overview.Group'
+		'NextThought.model.courses.overview.Group',
+		'NextThought.model.courses.LegacyCommunityBasedCourseInstance'
 	],
 
 
@@ -87,7 +88,9 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 		var json = JSON.parse(response),
 			items = json.Items || [];
 
-		json.Items = items.map(this.__collapseGroup);
+		if (this.course instanceof NextThought.model.courses.LegacyCommunityBasedCourseInstance) {
+			json.Items = items.map(this.__collapseGroup);
+		}
 
 		return ParseUtils.parseItems([json])[0];
 	},

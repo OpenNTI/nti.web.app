@@ -5,7 +5,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 		'NextThought.model.RelatedWork',
 		'NextThought.app.course.overview.components.editing.Actions',
 		'NextThought.app.course.overview.components.editing.content.ParentSelection',
-		'NextThought.app.course.overview.components.editing.controls.Advanced'
+		'NextThought.app.course.overview.components.editing.controls.Advanced',
+		'NextThought.app.course.overview.components.editing.settings.Window'
 	],
 
 
@@ -57,13 +58,11 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	showEditor: function(){
 		this.callParent(arguments);
 
-		if (this.record) {
-			this.addVisibilityButton();	
-		}	
+		this.addAdvancedDisclosure();	
 	},
 
 
-	addVisibilityButton: function(){
+	addAdvancedDisclosure: function(){
 		var visibility = this.record && this.record.get('visibility');
 
 		if (this.visibilityCmp) { return; }

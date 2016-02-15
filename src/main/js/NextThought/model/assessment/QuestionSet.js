@@ -1,6 +1,12 @@
 Ext.define('NextThought.model.assessment.QuestionSet', {
 	extend: 'NextThought.model.Base',
+
+	statics: {
+		mimeType: 'application/vnd.nextthought.naquestionset'
+	},
+
 	mimeType: 'application/vnd.nextthought.naquestionset',
+
 	requires: [
 		'NextThought.model.converters.Items',
 		'NextThought.util.Parsing'

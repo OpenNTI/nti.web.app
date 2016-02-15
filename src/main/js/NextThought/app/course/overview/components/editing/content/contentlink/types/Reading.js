@@ -60,6 +60,22 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	},
 
 
+	onBack: function() {
+		if (this.readingEditorCmp) {
+			this.showReadingList(this.readingEditorCmp.selectedItem);
+		} else if (this.doBack) {
+			this.doBack();
+		}
+	},
+
+
+	maybeEnableBack: function(text) {
+		if (!this.record && this.enableBack) {
+			this.enableBack(text);
+		}
+	},
+
+
 	showReadingList: function(selectedItems) {
 		var me = this;
 
@@ -73,6 +89,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 			delete this.readingEditorCmp;
 		}
 
+		me.maybeEnableBack(me.backText);
 		me.removeAll(true);
 
 		me.readingSelectionCmp = me.add({
@@ -111,7 +128,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 	showReadingEditor: function() {
 		if (this.readingEditorCmp) {
-			this.viedoEditorCmp.destroy();
+			this.readingEditorCmp.destroy();
 			delete this.readingEditorCmp;
 		}
 
@@ -139,6 +156,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 					setSaveText: me.setSaveText
 				});
 
+				me.maybeEnableBack('Catalog');
 				me.setSaveText(me.record ? 'Save' : 'Add to Lesson');
 			})
 			.then(function() {

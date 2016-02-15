@@ -75,7 +75,137 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 	layout: 'none',
 	cls: 'activity-sidebar',
 
-	items: [{xtype: 'stream-filter'}],
+	items: [{
+		xtype: 'stream-filter',
+		filterGroups: [
+			{
+				displayText: 'Sort By',
+				type: 'sort',
+				name: 'sort-filters',
+				cls: 'sort-group',
+				items: [
+					{
+						displayText: 'Date Created',
+						cls: 'sort',
+						active: true,
+						params: {
+							sortOn: 'CreatedTime',
+							sortOrder: 'DESC'
+						},
+						modifier: {
+							text: 'Date Range',
+							cls: 'modifier',
+							items: [
+								{ text: 'Anytime', value: '', cls: 'option selected'},
+								{ text: 'Past Week', value: 'week=1', cls: 'option' },
+								{ text: 'Past Month', value: 'month=1', cls: 'option' },
+								{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
+								{ text: 'Past Year', value: 'year=1', cls: 'option' }
+							]
+						}
+					},
+					{
+						displayText: 'Recent Activity',
+						cls: 'sort',
+						params: {
+							sortOn: 'Last Modified',
+							sortOrder: 'DESC'
+						},
+						active: false,
+						modifier: {
+							text: 'Date Range',
+							items: [
+								{ text: 'Anytime', value: '', cls: 'option' },
+								{ text: 'Past Week', value: 'week=1', cls: 'option' },
+								{ text: 'Past Month', value: 'month=1', cls: 'option' },
+								{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
+								{ text: 'Past Year', value: 'year=1', cls: 'option' }
+							]
+						}
+					},
+					{
+						displayText: 'Most Commented',
+						cls: 'sort',
+						params: {
+							sortOn: 'Last Modified',
+							sortOrder: 'DESC'
+						},
+						active: false,
+						modifier: {
+							text: 'Date Range',
+							items: [
+								{ text: 'Anytime', value: '', cls: 'option' },
+								{ text: 'Past Week', value: 'week=1', cls: 'option' },
+								{ text: 'Past Month', value: 'month=1', cls: 'option' },
+								{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
+								{ text: 'Past Year', value: 'year=1', cls: 'option' }
+							]
+						}
+					},
+					{
+						displayText: 'Most Liked',
+						cls: 'sort',
+						params: {
+							sortOn: 'Last Modified',
+							sortOrder: 'DESC'
+						},
+						active: false,
+						modifier: {
+							text: 'Date Range',
+							items: [
+								{ text: 'Anytime', value: '', cls: 'option' },
+								{ text: 'Past Week', value: 'week=1', cls: 'option' },
+								{ text: 'Past Month', value: 'month=1', cls: 'option' },
+								{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
+								{ text: 'Past Year', value: 'year=1', cls: 'option' }
+							]
+						}
+					}
+				]
+			}, {
+				displayText: 'Activity Type',
+				type: 'activity',
+				cls: 'activities',
+				items: [
+					{
+						type: 'discussions',
+						text: 'Discussions',
+						params: {
+							name: 'accepts',
+							queryName: 'a',
+							value: [
+								'application/vnd.nextthought.forums.dflheadlinetopic',
+								'application/vnd.nextthought.forums.communityheadlinetopic',
+								'application/vnd.nextthought.forums.generalforumcomment',
+								'application/vnd.nextthought.forums.communityheadlinetopic'
+							]
+						}
+					},
+					{
+						type: 'thoughts',
+						text: 'Thoughts',
+						params: {
+							name: 'accepts',
+							queryName: 'a',
+							value: [
+								'application/vnd.nextthought.forums.personalblogentry',
+								'application/vnd.nextthought.forums.personalblogcomment'
+							]
+						}
+					},
+					{
+						type: 'chat',
+						text: 'Chat',
+						params: {
+							name: 'accepts',
+							queryName: 'a',
+							value: ['application/vnd.nextthought.transcriptsummary']
+						}
+					}
+				] 
+			} 
+		]
+	}],
 
 	initComponent: function() {
 		this.callParent(arguments);

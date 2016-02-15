@@ -96,7 +96,8 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 
 	switchToTypeList: function() {
 		if (this.activeEditor) {
-			this.activeEditor.hide();
+			this.activeEditor.destroy();
+			delete this.activeEditor;
 		}
 
 		if (this.activeTypeList) {
@@ -141,6 +142,7 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 			rootRecord: this.rootRecord,
 			bundle: this.bundle,
 			scrollingParent: this.scrollingParent,
+			enableBack: this.enableBack.bind(this),
 			enableSave: this.enableSave.bind(this),
 			disableSave: this.disableSave.bind(this),
 			setSaveText: this.setSaveText.bind(this),
@@ -148,14 +150,20 @@ Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCre
 			showWarning: this.showWarning.bind(this),
 			showMessage: this.showMessage.bind(this),
 			doClose: this.doClose.bind(this),
-			doSave: this.doSave.bind(this)
+			doSave: this.doSave.bind(this),
+			backText: this.backText || this.title,
+			doBack: this.switchToTypeList.bind(this)
 		}));
 
 	},
 
 
 	onBack: function() {
-		this.switchToTypeList();
+		if (this.activeEditor && this.activeEditor.onBack) {
+			this.activeEditor.onBack();
+		} else {
+			this.switchToTypeList();
+		}
 	},
 
 

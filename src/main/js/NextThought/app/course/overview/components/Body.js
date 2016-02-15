@@ -38,6 +38,12 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 			}
 		};
 
+		me.editingControlsCmp.openAuditLog = function() {
+			if(me.openAuditLog) {
+				me.openAuditLog();
+			}
+		};
+
 		me.editingControlsCmp.hide();
 	},
 
@@ -142,10 +148,15 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 
 	setActiveBundle: function(bundle) {
-		var lesson = this.getLesson();
+		var lesson = this.getLesson(),
+			editor = this.getEditor();
 
 		if (lesson) {
 			lesson.setActiveBundle(bundle);
+		}
+
+		if (editor) {
+			editor.setActiveBundle(bundle);
 		}
 
 		this.currentBundle = bundle;

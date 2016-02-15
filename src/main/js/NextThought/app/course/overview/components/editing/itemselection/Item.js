@@ -77,6 +77,9 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ite
 
 	setItemData: function(data) {
 		this.itemTpl.append(this.itemCmp.el, data);
+
+		this.hasItemData = true;
+		this.fireEvent('item-data-set');
 	},
 
 
@@ -122,6 +125,15 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ite
 
 
 	maybeSelectItem: function(item) {
+		if (!this.hasItemData) {
+			this.on({
+				single: true,
+				'item-data-set': this.maybeSelectItem.bind(this, item)
+			});
+
+			return;
+		}
+
 		var selectionItemId = this.getSelectionItemId(this.selectionItem),
 			itemId = this.getSelectionItemId(item);
 
@@ -141,6 +153,15 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ite
 
 
 	maybeUnselectItem: function(item) {
+		if (!this.hasItemData) {
+			this.on({
+				single: true,
+				'item-data-set': this.maybeUnselectItem.bind(this, item)
+			});
+
+			return;
+		}
+
 		var selectionItemId = this.getSelectionItemId(this.selectionItem),
 			itemId = this.getSelectionItemId(item);
 
