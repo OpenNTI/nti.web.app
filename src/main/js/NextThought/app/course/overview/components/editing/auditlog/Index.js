@@ -13,44 +13,23 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Index', 
 
 	initComponent: function() {
 		this.callParent(arguments);
-		var me = this;
 
-		me.getItems()
-			.then(function(batch) {
-				me.addItems(batch.Items);
+		if (!this.record || !this.record.getLog) {
+			console.error('Invalid record passed');
 
-				if(!batch.isLast) {
-					me.addNext();
+			this.add({
+				xtype: 'box',
+				autoEl: {
+					cls: 'error-msg',
+					html: 'No log to show.'
 				}
 			});
 
-	},
+			return;
+		}
 
-	getItems: function() {
-		this.currentBatch = this.record.getLog();
-
-		return this.currentBatch.getBatch();
-	},
-
-	getNextItems: function() {
-		var me = this;
-
-		if(!me.currentBatch) { return; }
-
-		return me.currentBatch.getNextBatch()
-			.then(function(batch) {
-				me.currentBatch = batch;
-				return me.currentBatch.getBatch();
-			});
-	},
-
-	addItems: function(items) {
-		var me = this;
-
-		me.removeAll(true);
-
-		if(!this.hideHeader) {
-			me.add({
+		if (!this.hideHeader) {
+			this.add({
 				xtype: 'box',
 				autoEl: {
 					cls: 'audit-log-header',
@@ -60,21 +39,69 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Index', 
 		}
 
 
-		me.add(items.map(function(item, index) {
+		this.loadBatch(this.record.getLog());
+	},
+
+
+	loadBatch: function(batchInterface) {
+		this.currentBatch = batchInterface;
+
+		if (batchInterface.getBatch) {
+			this.showLoading();
+			batchInterface.getBatch()
+				.then(this.__addBatch.bind(this))
+				.always(this.hideLoading.bind(this));
+		}
+	},
+
+
+	loadNextBatch: function() {
+		this.removeNext();
+		this.showLoading();
+
+		if (this.currentBatch && this.currentBatch.getNextBatch) {
+			this.currentBatch.getNextBatch()
+				.then(this.loadBatch.bind(this));
+		}
+	},
+
+
+	__addBatch: function(batch) {
+		this.removeNext();
+
+		this.addItems(batch.Items);
+
+		if (!batch.isLast) {
+			this.addNext();
+		}
+	},
+
+
+	addItems: function(items) {
+		var parentRecord = this.record;
+
+		this.add(items.map(function(item, index) {
 			return {
 				xtype: 'overview-editing-auditlog-item',
 				item: item,
 				index: index,
-				parentRecord: me.record
+				parentRecord: parentRecord
 			};
 		}));
 
 	},
 
-	addNext: function() {
-		var me = this;
 
-		me.nextBatchCmp = me.add({
+	removeNext: function() {
+		if (this.nextBatchCmp) {
+			this.remove(this.nextBatchCmp);
+			this.nextBatchCmp = null;
+		}
+	},
+
+
+	addNext: function() {
+		this.nextBatchCmp = this.add({
 			xtype: 'box',
 			autoEl: {
 				cls: 'next-batch-record',
@@ -83,18 +110,27 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Index', 
 			listeners: {
 				click: {
 					element: 'el',
-					fn: function(e) {
-						me.getNextItems()
-							.then(function(batch) {
-								me.addItems(batch.Items);
-
-								if(!batch.isLast) {
-									me.addNext();
-								}
-							});
-					}
+					fn: this.loadNextBatch.bind(this)
 				}
 			}
 		});
+	},
+
+
+	showLoading: function() {
+		if (!this.loadingCmp) {
+			this.loadingCmp = this.add({
+				xtype: 'box',
+				autoEl: {cls: 'loading-container control-item', cn: {cls: 'loading', html: 'Loading...'}}
+			});
+		}
+	},
+
+
+	hideLoading: function() {
+		if (this.loadingCmp) {
+			this.remove(this.loadingCmp);
+			this.loadingCmp = null;
+		}
 	}
 });

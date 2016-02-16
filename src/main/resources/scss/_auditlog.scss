@@ -13,6 +13,27 @@
         height: auto;
         text-align: center;
     }
+
+    .loading-container {
+    	height: 75px;
+		line-height: 75px;
+		text-align: center;
+		position: relative;
+
+		.loading {
+			position: absolute;
+			color: $primary-grey;
+			line-height: 24px;//height of the spinner
+			padding-left: 30px;//width of the spinner + 6px
+			top: 50%; left: 50%;
+			margin-top: -12px;
+			margin-left: -51px;
+
+			&::before {
+				@include loadingSpinner($top: 0, $left: 0);
+			}
+		}
+	}
 }
 
 .auditlog-item {
@@ -23,42 +44,49 @@
 	    margin-bottom: 10px;
 	    padding: 15px 14px;
 	    box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
+
+	    @include flexContainer();
 	}
 
-	.avatar-container {
-	    width: 40px;
-	    height: 40px;
-	    float: left;
-	    flex: 0 0 auto;
-	    margin-right: 14px;
+	.avatar-wrapper {
+		width: 40px;
+		height: 40px;
+		margin-right: 14px;
+		@include flexItem(0 0 auto);
+		
+		.avatar-container {
+			width: 40px;
+			height: 40px;
 
-		.avatar-pic {
-		    border-radius: 4px;
+			.avatar-pic {
+				border-radius: 4px;
+			}
 		}
 	}
 
-	.username {
-	    float: left;
-	    font: normal 400 0.875em/1.36 "Open Sans",sans-serif;
-	    color: #3FB3F6;
-	    margin-right: 5px;
-	    white-space: nowrap;
-	    -webkit-text-overflow: ellipsis;
-	    -moz-text-overflow: ellipsis;
-	    -ms-text-overflow: ellipsis;
-	    -o-text-overflow: ellipsis;
-	    text-overflow: ellipsis;
-	    overflow: hidden;
+	.meta {
+		@include flexItem(1 1 auto);
 	}
 
-	.date {
-		font: normal 600 0.625em/1 "Open Sans", sans-serif;
-		text-transform: uppercase;
-		color: #b8b8b8;
+	.username, .message {
+		font: normal 400 0.875em/1.36 $font;
+	}
+
+
+	.username {
+		color: $primary-blue;
+		margin-right: 5px;
 	}
 
 	.message {
 	    color: grey;
+	}
+
+	.date {
+		font: normal 600 0.625em/1 "Open Sans", sans-serif;
+		margin-top: 0.6em;
+		text-transform: uppercase;
+		color: $tertiary-grey;
 	}
 }
 
@@ -77,6 +105,7 @@
 .audit-log-prompt {
     .audit-log {
         padding: 1em;
+        width: 807px;//1em + 775px + 1em
     }
 }
 

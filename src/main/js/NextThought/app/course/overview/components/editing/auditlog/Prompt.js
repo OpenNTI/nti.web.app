@@ -3,6 +3,7 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Prompt',
 	alias: 'widget.audit-log-prompt',
 
 	requires: [
+		'NextThought.app.course.overview.components.editing.auditlog.Index',
 		'NextThought.app.prompt.StateStore'
 	],
 

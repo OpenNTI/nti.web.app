@@ -7,9 +7,11 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'content', cn: [
 			{cls: 'avatar-wrapper', cn: ['{user:avatar}']},
-			{tag: 'span', cls: 'username', html: '{user:displayName}'},
-			{tag: 'span', cls: 'message', html: '{msg}'},
-			{cls: 'date', html: '{date}'}
+			{cls: 'meta', cn: [
+				{tag: 'span', cls: 'username', html: '{user:displayName}'},
+				{tag: 'span', cls: 'message', html: '{msg}'},
+				{cls: 'date', html: '{date}'}
+			]}
 		]}
 	]),
 

@@ -97,7 +97,7 @@ Ext.define('NextThought.app.course.overview.components.EditingControls', {
 
 
 	showAuditLog: function() {
-		if(this.openAuditLog) {
+		if (this.openAuditLog) {
 			this.openAuditLog();
 		}
 	}
