@@ -125,7 +125,7 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 			this.deleteBtn = this.addDeleteButton();
 		}
 
-		if (this.record && this.record.hasAuditLog && this.record.hasAuditLog()) {
+		if (this.record && this.record.hasAuditLog && this.record.hasAuditLog() && Service.canDoAdvancedEditing()) {
 			this.addAuditLog();
 		}
 	},

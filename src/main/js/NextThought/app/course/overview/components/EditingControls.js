@@ -68,11 +68,13 @@ Ext.define('NextThought.app.course.overview.components.EditingControls', {
 	showEditing: function() {
 		this.clearButtons();
 
-		this.addButton({
-			cls: 'auditLog',
-			action: 'showAuditLog',
-			label: 'Change Log'
-		});
+		if (Service.canDoAdvancedEditing()) {
+			this.addButton({
+				cls: 'auditLog',
+				action: 'showAuditLog',
+				label: 'Change Log'
+			});
+		}
 
 		this.addButton({
 			cls: 'edit',
