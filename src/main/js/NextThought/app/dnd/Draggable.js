@@ -188,9 +188,9 @@ Ext.define('NextThought.app.dnd.Draggable', {
 		var el = this.getDragTarget(),
 			handle = this.getDragHandle && this.getDragHandle();
 
-		delete this.Draggable.isDragging;
+		delete this.isDragging;
 
-		this.DnDActions.removeActiveDragItem(this);
+		this.DnDActions.endDrag(this);
 
 		if (handle) {
 			this.__handleMouseUp();

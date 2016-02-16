@@ -3,6 +3,10 @@
 	background-color: rgba(0, 0, 0, 0.3);
 	box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
 	pointer-events: none;
+
+	&:not(.column) {
+		clear: both;
+	}
 }
 
 .dnd-save-placeholder {
@@ -11,6 +15,10 @@
 	background: white;
 	padding: 5px;
 	box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+
+	&:not(.column) {
+		clear: both;
+	}
 	
 	span {
 		display: inline-block;
