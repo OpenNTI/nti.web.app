@@ -112,6 +112,10 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ite
 			return;
 		}
 
+		if (e.getTarget('excluded')) {
+			return false;
+		}
+
 		if (this.isSelected) {
 			this.unselectItem(this.selectionItem);
 		} else {
@@ -121,6 +125,40 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ite
 		e.preventDefault();
 		e.stopPropagation();
 		return false;
+	},
+
+
+	unexclude: function(item) {
+		if (this.hasItemData) {
+			this.itemCmp.removeCls('excluded');
+			this.itemCmp.el.dom.removeAttribute('data-qtip');
+		}
+	},
+
+
+	maybeExclude: function(item) {
+		if (!this.hasItemData) {
+			this.on({
+				single: true,
+				'item-data-set': this.maybeExclude.bind(this, item)
+			});
+
+			return;
+		}
+
+		var id = typeof item === 'string' ? item : item.id,
+			msg = item.msg,
+			selectionItemId = this.getSelectionItemId(this.selectionItem);
+
+		if (id === selectionItemId) {
+			this.itemCmp.addCls('excluded');
+
+			if (msg) {
+				this.itemCmp.el.dom.setAttribute('data-qtip', msg);
+			} else {
+				this.itemCmp.el.dom.removeAttribute('data-qtip');
+			}
+		}
 	},
 
 

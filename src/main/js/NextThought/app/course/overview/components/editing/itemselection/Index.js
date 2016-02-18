@@ -146,6 +146,19 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 	},
 
 
+	excludeItems: function(exclude) {
+		if (!Array.isArray(exclude)) {
+			exclude = [exclude];
+		}
+
+		this.itemsContainer.items.each(function(item) {
+			if (item && item.maybeExclude) {
+				exclude.forEach(item.maybeExclude.bind(item));
+			}
+		});
+	},
+
+
 	showEmptyState: function() {},
 
 

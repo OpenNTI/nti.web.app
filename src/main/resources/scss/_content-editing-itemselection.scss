@@ -98,6 +98,15 @@
 			overflow: hidden;
 			cursor: pointer;
 
+			&.excluded {
+				opacity: 0.4;
+				cursor: default;
+
+				.video-item, .discussion-item {
+					cursor: default;
+				}
+			}
+
 			&.selected {
 				box-shadow: 0 0 0 3px $primary-blue;
 			}
