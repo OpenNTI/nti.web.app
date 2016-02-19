@@ -112,14 +112,12 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ite
 			return;
 		}
 
-		if (e.getTarget('excluded')) {
-			return false;
-		}
-
-		if (this.isSelected) {
-			this.unselectItem(this.selectionItem);
-		} else {
-			this.selectItem(this.selectionItem);
+		if (!e.getTarget('.excluded')) {
+			if (this.isSelected) {
+				this.unselectItem(this.selectionItem);
+			} else {
+				this.selectItem(this.selectionItem);
+			}
 		}
 
 		e.preventDefault();
