@@ -13,7 +13,8 @@ Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	},
 
 
-	TOLERANCE: 2,
+	VERTICAL_TOLERANCE: 2,
+	HORIZONTAL_TOLERANCE: 20,
 	isOrderingItem: true,
 
 
@@ -30,11 +31,22 @@ Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	},
 
 
-	__getTopOrBottom: function(x, y) {
-		var rect = this.getDragBoundingClientRect(),
-			midpoint, side;
+	getVerticalMidpoint: function() {
+		var rect = this.getDragBoundingClientRect();
 
-		midpoint = rect.top + (rect.height / 2);
+		return rect.top + (rect.height / 2);
+	},
+
+
+	getHorizontalMidpoint: function() {
+		var rect = this.getDragBoundingClientRect();
+
+		return rect.left + (rect.width / 2);
+	},
+
+
+	__getTopOrBottom: function(x, y) {
+		var midpoint = this.getVerticalMidpoint(), side;
 
 		if (y < midpoint) {
 			side = NextThought.mixins.dnd.OrderingItem.SIDES.TOP;
@@ -47,10 +59,7 @@ Ext.define('NextThought.mixins.dnd.OrderingItem', {
 
 
 	__getLeftOrRight: function(x, y) {
-		var rect = this.getDragBoundingClientRect(),
-			midpoint, side;
-
-		midpoint = rect.left + (rect.width / 2);
+		var midpoint = this.getHorizontalMidpoint(), side;
 
 		if (x < midpoint) {
 			side = NextThought.mixins.dnd.OrderingItem.SIDES.LEFT;
@@ -78,15 +87,15 @@ Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	isFullWidth: function(fullWidth) {
 		var rect = this.getDragBoundingClientRect();
 
-		return Math.abs(fullWidth - rect.width) <= this.TOLERANCE;
+		return Math.abs(fullWidth - rect.width) <= (this.HORIZONTAL_TOLERANCE * 2);
 	},
 
 
 	isPointContainedVertically: function(x, y) {
 		var rect = this.getDragBoundingClientRect(),
-			tol = this.TOLERANCE;
+			tol = this.VERTICAL_TOLERANCE;
 
-		return Math.abs(rect.top - y) <= tol && Math.abs(rect.bottom - y <= tol);
+		return y >= (rect.top - tol) && y <= (rect.bottom - tol);
 	},
 
 
@@ -123,7 +132,17 @@ Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	},
 
 
-	isPointAfter: function(x, y) {
+	isPointAfter: function(x, y, isFullWidth) {
 		return this.isPointBelow(x, y) || this.isPointRight(x, y);
+	},
+
+
+	isSameRow: function(orderingItem) {
+		if (!orderingItem.getVerticalMidpoint) {
+			console.error('Invalid Ordering Item');
+			return false;
+		}
+
+		return (this.getVerticalMidpoint() - orderingItem.getVerticalMidpoint()) <= this.VERTICAL_TOLERANCE;
 	}
 });
