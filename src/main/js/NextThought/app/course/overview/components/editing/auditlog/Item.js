@@ -22,7 +22,10 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 
 	TYPES: {
 		create: 'created',
-		update: 'changed the'
+		update: 'changed the',
+		overviewgroupmoved: 'moved',
+		outlinenodemove: 'moved',
+		assetremovedfromitemcontainer: 'removed'
 	},
 
 	FIELDS: {
@@ -31,9 +34,10 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 		href: 'link',
 		items: 'children',
 		byline: 'author',
-		AvailableBeginning: 'Avaiable Date',
-		AvailableEnding: 'Avaiable End Date',
-		visability: 'visability'
+		availablebeginning: 'Avaiable Date',
+		availableending: 'Avaiable End Date',
+		visability: 'visability',
+		accentcolor: 'section color'
 	},
 
 	beforeRender: function() {
@@ -42,7 +46,8 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 		var me = this,
 			record = me.item,
 			attributes = record.get('attributes') || [],
-			type = record.get('type'),
+			changeType = record.get('type'),
+			type = changeType && (me.TYPES[changeType] || changeType),
 			recordable = record.get('Recordable'),
 			title = recordable && recordable.Title || '',
 			isChild = recordable.NTIID !== this.parentRecord.getId(),
@@ -53,16 +58,15 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 		});
 
 		// Message will be: {user} created {title of item}.
-		if (type === 'create' && fields.length === 0 && title) {
+		if (type === 'created' && fields.length === 0 && title) {
 			fields.push('"' + title + '"');
 		}
-
-		type = me.TYPES[type] || type;
 
 		if(isChild) {
 			var ifOn = ' on ' + title;
 
 			if(type === 'created') { ifOn = ''; }
+			else if(type === 'moved') { ifOn = title; }
 
 			message = type + ' ' + fields.join(', ') + ifOn + '.';
 		} else {
