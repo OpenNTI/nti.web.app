@@ -32,16 +32,44 @@ Ext.define('NextThought.mixins.dnd.OrderingItem', {
 
 
 	getVerticalMidpoint: function() {
-		var rect = this.getDragBoundingClientRect();
+		var rect = this.__getRect();
 
 		return rect.top + (rect.height / 2);
 	},
 
 
 	getHorizontalMidpoint: function() {
-		var rect = this.getDragBoundingClientRect();
+		var rect = this.__getRect();
 
 		return rect.left + (rect.width / 2);
+	},
+
+
+	__getRect: function() {
+		return this.lockedRect || this.getDragBoundingClientRect();
+	},
+
+
+	lockRectRelative: function(parent) {
+		var rect = this.getDragBoundingClientRect(),
+			top = rect.top - parent.top,
+			left = rect.left - parent.left,
+			width = rect.width,
+			height = rect.height;
+
+		this.lockedRect = {
+			top: top,
+			left: left,
+			right: left + width,
+			bottom: top + height,
+			width: width,
+			height: height
+		};
+	},
+
+
+	unlockRect: function() {
+		// this.lockedRect = null;
 	},
 
 
@@ -71,28 +99,28 @@ Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	},
 
 	getPlaceholderBeforeHeight: function() {
-		var rect = this.getDragBoundingClientRect();
+		var rect = this.__getRect();
 
 		return rect.height;
 	},
 
 
 	getPlaceholderAfterHeight: function() {
-		var rect = this.getDragBoundingClientRect();
+		var rect = this.__getRect();
 
 		return rect.height;
 	},
 
 
 	isFullWidth: function(fullWidth) {
-		var rect = this.getDragBoundingClientRect();
+		var rect = this.__getRect();
 
 		return Math.abs(fullWidth - rect.width) <= (this.HORIZONTAL_TOLERANCE * 2);
 	},
 
 
 	isPointContainedVertically: function(x, y) {
-		var rect = this.getDragBoundingClientRect(),
+		var rect = this.__getRect(),
 			tol = this.VERTICAL_TOLERANCE;
 
 		return y >= (rect.top - tol) && y <= (rect.bottom - tol);

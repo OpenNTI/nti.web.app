@@ -65,6 +65,9 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 			dropzoneWidth = dropzoneRect.width,
 			info, i, current, previous, isBefore;
 
+		x = x - dropzoneRect.left;
+		y = y - dropzoneRect.top;
+
 		items = items.filter(function(item) {
 			return (!item.Draggable || !item.Draggable.isDragging) && item.isOrderingItem;
 		});
@@ -73,7 +76,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 			previous = items[i - 1];
 			current = items[i];
 
-			if (styles.float) {
+			if (styles && styles.float) {
 				if (current.isFullWidth(dropzoneWidth)) {
 					isBefore = current.isPointAbove(x, y);
 				} else {
@@ -163,6 +166,29 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 	},
 
 
+	onDragStart: function() {
+		var items = this.getOrderingItems(),
+			rect = this.getDropzoneBoundingClientRect();
+
+		items.forEach(function(item) {
+			if (item.lockRectRelative) {
+				item.lockRectRelative(rect);
+			}
+		});
+	},
+
+
+	onDragEnd: function() {
+		var items = this.getOrderingItems();
+
+		items.forEach(function(item) {
+			if (item.unlockRect) {
+				item.unlockRect();
+			}
+		});
+	},
+
+
 	onDragLeave: function() {
 		this.__removeDropPlaceholder();
 	},
@@ -197,6 +223,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		if (!this.hasHandlerForDataTransfer(dataTransfer)) {
 			this.__removePlaceholder();
 			return;
+
 		}
 
 		var dndActions = NextThought.app.dnd.Actions.create(),
@@ -204,18 +231,20 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 			info = this.getInfoForCoordinates(e.clientX, e.clientY, placeholderStyles),
 			placeholder = this.__getDropPlaceholder();
 
+
 		this.__showPlaceholderByInfo(placeholder, info, placeholderStyles);
 	},
 
 
 	onDragDrop: function(e, dataTransfer) {
-		var info = this.getInfoForCoordinates(e.clientX, e.clientY),
-			placeholder, minWait = Globals.WAIT_TIMES.SHORT,
+		var dndActions = NextThought.app.dnd.Actions.create(),
+			placeholderStyles = dndActions.getPlaceholderStyles(),
+			info = this.getInfoForCoordinates(e.clientX, e.clientY, placeholderStyles),
 			handlers = this.getHandlersForDataTransfer(dataTransfer),
 			handler = handlers[0], //TODO: think about what to do if there is more than one
 			data = handler && dataTransfer.findDataFor(handler.key),
 			moveInfo = dataTransfer.findDataFor(NextThought.model.app.MoveInfo.mimeType),
-			move, dndActions = NextThought.app.dnd.Actions.create();
+			move, placeholder, minWait = Globals.WAIT_TIMES.SHORT;
 
 		if (!info || !handler || !handler.onDrop || !data) {
 			dndActions.onNoDropHandler();
@@ -224,7 +253,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		}
 
 		placeholder = this.__getSavePlaceholder();
-		this.__showPlaceholderByInfo(placeholder, info);
+		this.__showPlaceholderByInfo(placeholder, info, placeholderStyles);
 		this.__removeDropPlaceholder();
 
 		move = handler.onDrop(data, info.index, moveInfo);
