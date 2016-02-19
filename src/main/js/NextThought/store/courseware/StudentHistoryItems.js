@@ -56,8 +56,15 @@ Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 	},
 
 
+	getAvailableAssignments: function() {
+		return this.proxy.reader.AvailableAssignmentNTIIDs;
+	},
+
+
 	__hasAccessTo: function(assignment) {
-		return !this.available || (this.available.indexOf(assignment.getId()) >= 0);
+		var available = this.getAvailableAssignments();
+
+		return !available || (available.indexOf(assignment.getId()) >= 0);
 	},
 
 

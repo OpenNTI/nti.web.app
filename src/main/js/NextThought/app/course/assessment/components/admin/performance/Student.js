@@ -126,7 +126,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Stude
 
 		this.header.setPredictedGrade(this.predictedGrade);
 
-		this.store = assignments.getStudentHistory(this.historiesURL, this.student.getId(), this.summary.get('AvailableAssignmentNTIIDs'));
+		this.store = assignments.getStudentHistory(this.historiesURL, this.student.getId());
 
 		this.store.on({
 			beforeload: this.mask.bind(this),

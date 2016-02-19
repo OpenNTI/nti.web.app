@@ -85,10 +85,9 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 	 * @param {[String]} available the list of ntiids for the assignments this student has
 	 * @return {Store}      store proxied to load the summaries
 	 */
-	getStudentHistory: function(historyLink, studentId, available) {
+	getStudentHistory: function(historyLink, studentId) {
 		return NextThought.store.courseware.StudentHistoryItems.create({
 			url: historyLink,
-			available: available,
 			GradeCache: this.GradeCache,
 			HistoryItemCache: this.HistoryItemCache,
 			assignments: this,
