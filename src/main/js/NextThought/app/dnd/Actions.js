@@ -36,15 +36,15 @@ Ext.define('NextThought.app.dnd.Actions', {
 
 
 	onNoDropHandler: function() {
-		if (this.activeDragItem) {
-			this.activeDragItem.onNoDrop();
-		}
+		this.onDropFail();
 	},
 
 
 	onDropFail: function() {
-		if (this.activeDragItem) {
-			this.activeDragItem.onNoDrop();
+		var activeDragItem = this.DnDStore.getActiveDragItem();
+
+		if (activeDragItem) {
+			activeDragItem.onNoDrop();
 		}
 	},
 

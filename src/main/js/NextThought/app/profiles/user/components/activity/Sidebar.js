@@ -4,25 +4,175 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 
 	requires: ['NextThought.app.stream.components.Filter'],
 
-	BASE_FILTERS: {
-		activity: {
-			cls: 'activity', //class to apply to the item
-			name: 'Activity Type', //the text to display for the user
-			defaultItem: 'all', //the key of the item to show when nothing is selected
-			activeItem: null, //the key of whatever item is selected
-			active: false, //whether or not to expand this group
-			paramName: 'a', //the name to key off the query param
-			streamParam: 'accepts', //the name of the param to pass to the stream
+	// BASE_FILTERS: {
+	// 	activity: {
+	// 		cls: 'activity', //class to apply to the item
+	// 		name: 'Activity Type', //the text to display for the user
+	// 		defaultItem: 'all', //the key of the item to show when nothing is selected
+	// 		activeItem: null, //the key of whatever item is selected
+	// 		active: false, //whether or not to expand this group
+	// 		paramName: 'a', //the name to key off the query param
+	// 		streamParam: 'accepts', //the name of the param to pass to the stream
+	// 		items: {
+	// 			all: {//the key is what is put in the query param
+	// 				text: 'All Activity',//the text to display to the user for this option
+	// 				streamValue: ['*']//the value to pass to the stream
+	// 			},
+	// 			notes: {
+	// 				text: 'Notes',
+	// 				streamValue: ['application/vnd.nextthought.note']
+	// 			},
+	// 			disscussions: {
+	// 				text: 'Discussions',
+	// 				streamValue: [
+	// 					'application/vnd.nextthought.forums.dflheadlinetopic',
+	// 					'application/vnd.nextthought.forums.communityheadlinetopic',
+	// 					'application/vnd.nextthought.forums.generalforumcomment',
+	// 					'application/vnd.nextthought.forums.communityheadlinetopic'
+	// 				]
+	// 			},
+	// 			blogs: {
+	// 				text: 'Thoughts',
+	// 				streamValue: [
+	// 					'application/vnd.nextthought.forums.personalblogentry',
+	// 					'application/vnd.nextthought.forums.personalblogcomment'
+	// 				]
+	// 			},
+	// 			chat: {
+	// 				text: 'Chat',
+	// 				streamValue: ['application/vnd.nextthought.transcriptsummary']
+	// 			}
+
+	// 		}
+	// 	},
+	// 	sort: {
+	// 		cls: 'sort',
+	// 		name: 'Sort By',
+	// 		defaultItem: 'recent',
+	// 		activeItem: null,
+	// 		active: false,
+	// 		paramName: 's',
+	// 		streamParam: 'sort',
+	// 		items: {
+	// 			recent: {
+	// 				text: 'Most Recent',
+	// 				streamValue: {
+	// 					on: 'CreatedTime',
+	// 					order: 'DESC'
+	// 				}
+	// 			},
+	// 			activity: {
+	// 				text: 'Recent Activity',
+	// 				streamValue: {
+	// 					on: 'Last Modified',
+	// 					order: 'DESC'
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// },
+
+	layout: 'none',
+	cls: 'activity-sidebar',
+
+	BASE_FILTERS:[
+		{
+			displayText: 'Sort By',
+			type: 'sort',
+			name: 'sort-filters',
+			cls: 'sort-group',
+			paramName: 's',
+			streamParam: 'sort',
 			items: {
-				all: {//the key is what is put in the query param
-					text: 'All Activity',//the text to display to the user for this option
-					streamValue: ['*']//the value to pass to the stream
+				created: {
+					displayText: 'Date Created',
+					cls: 'sort',
+					active: true,
+					streamValue: {
+						on: 'CreatedTime',
+						order: 'DESC'
+					},
+					modifier: {
+						text: 'Date Range',
+						cls: 'modifier',
+						items: [
+							{ text: 'Anytime', value: '', cls: 'option selected'},
+							{ text: 'Past Week', value: 'week=1', cls: 'option' },
+							{ text: 'Past Month', value: 'month=1', cls: 'option' },
+							{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
+							{ text: 'Past Year', value: 'year=1', cls: 'option' }
+						]
+					}
 				},
-				notes: {
-					text: 'Notes',
-					streamValue: ['application/vnd.nextthought.note']
+				recent: {
+					displayText: 'Recent Activity',
+					cls: 'sort',
+					streamValue: {
+						on: 'Last Modified',
+						order: 'DESC'
+					},
+					active: false,
+					modifier: {
+						text: 'Date Range',
+						items: [
+							{ text: 'Anytime', value: '', cls: 'option' },
+							{ text: 'Past Week', value: 'week=1', cls: 'option' },
+							{ text: 'Past Month', value: 'month=1', cls: 'option' },
+							{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
+							{ text: 'Past Year', value: 'year=1', cls: 'option' }
+						]
+					}
 				},
-				disscussions: {
+				commented: {
+					displayText: 'Most Commented',
+					cls: 'sort',
+					streamValue: {
+						on: 'Last Modified',
+						order: 'DESC'
+					},
+					active: false,
+					modifier: {
+						text: 'Date Range',
+						items: [
+							{ text: 'Anytime', value: '', cls: 'option' },
+							{ text: 'Past Week', value: 'week=1', cls: 'option' },
+							{ text: 'Past Month', value: 'month=1', cls: 'option' },
+							{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
+							{ text: 'Past Year', value: 'year=1', cls: 'option' }
+						]
+					}
+				},
+				liked: {
+					displayText: 'Most Liked',
+					cls: 'sort',
+					streamValue: {
+						on: 'Last Modified',
+						order: 'DESC'
+					},
+					active: false,
+					modifier: {
+						text: 'Date Range',
+						items: [
+							{ text: 'Anytime', value: '', cls: 'option' },
+							{ text: 'Past Week', value: 'week=1', cls: 'option' },
+							{ text: 'Past Month', value: 'month=1', cls: 'option' },
+							{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
+							{ text: 'Past Year', value: 'year=1', cls: 'option' }
+						]
+					}
+				}
+			}
+		}, {
+			displayText: 'Activity Type',
+			type: 'activity',
+			cls: 'activities',
+			multiselect: true,
+			activeItems: [],
+			paramName: 'a',
+			streamParam: 'accepts',
+			items: {
+				discussions: {
+					type: 'discussions',
 					text: 'Discussions',
 					streamValue: [
 						'application/vnd.nextthought.forums.dflheadlinetopic',
@@ -31,190 +181,65 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 						'application/vnd.nextthought.forums.communityheadlinetopic'
 					]
 				},
-				blogs: {
-					text: 'Thoughts',
+				notes: {
+					type: 'notes',
+					text: 'Notes',
 					streamValue: [
+						'application/vnd.nextthought.note'
+					]
+				},
+				thoughts: {
+					type: 'thoughts',
+					text: 'Thoughts',
+					streamValue:[
 						'application/vnd.nextthought.forums.personalblogentry',
 						'application/vnd.nextthought.forums.personalblogcomment'
 					]
 				},
 				chat: {
+					type: 'chat',
 					text: 'Chat',
-					streamValue: ['application/vnd.nextthought.transcriptsummary']
+					streamValue:['application/vnd.nextthought.transcriptsummary']
 				}
+			},
 
-			}
-		},
-		sort: {
-			cls: 'sort',
-			name: 'Sort By',
-			defaultItem: 'recent',
-			activeItem: null,
-			active: false,
-			paramName: 's',
-			streamParam: 'sort',
-			items: {
-				recent: {
-					text: 'Most Recent',
-					streamValue: {
-						on: 'CreatedTime',
-						order: 'DESC'
+			setActiveItem: function(el, activeItems) {
+				if (!el) { return; }
+
+				var items = el.querySelectorAll('.group-item'),
+					item, type, input, i;
+
+				for (i=0; i < items.length; i++) {
+					item = items[i];
+					type = item.getAttribute('data-value');
+					input = item.querySelector('input');
+
+					if (!input) { return; }
+
+					if ((activeItems ||[]).indexOf(type) !== -1) {
+						input.checked = true;
 					}
-				},
-				activity: {
-					text: 'Recent Activity',
-					streamValue: {
-						on: 'Last Modified',
-						order: 'DESC'
+					else {
+						input.checked = false;
 					}
 				}
 			}
-		}
-	},
-
-	layout: 'none',
-	cls: 'activity-sidebar',
+		} 
+	],
 
 	items: [{
-		xtype: 'stream-filter',
-		filterGroups: [
-			{
-				displayText: 'Sort By',
-				type: 'sort',
-				name: 'sort-filters',
-				cls: 'sort-group',
-				items: [
-					{
-						displayText: 'Date Created',
-						cls: 'sort',
-						active: true,
-						params: {
-							sortOn: 'CreatedTime',
-							sortOrder: 'DESC'
-						},
-						modifier: {
-							text: 'Date Range',
-							cls: 'modifier',
-							items: [
-								{ text: 'Anytime', value: '', cls: 'option selected'},
-								{ text: 'Past Week', value: 'week=1', cls: 'option' },
-								{ text: 'Past Month', value: 'month=1', cls: 'option' },
-								{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
-								{ text: 'Past Year', value: 'year=1', cls: 'option' }
-							]
-						}
-					},
-					{
-						displayText: 'Recent Activity',
-						cls: 'sort',
-						params: {
-							sortOn: 'Last Modified',
-							sortOrder: 'DESC'
-						},
-						active: false,
-						modifier: {
-							text: 'Date Range',
-							items: [
-								{ text: 'Anytime', value: '', cls: 'option' },
-								{ text: 'Past Week', value: 'week=1', cls: 'option' },
-								{ text: 'Past Month', value: 'month=1', cls: 'option' },
-								{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
-								{ text: 'Past Year', value: 'year=1', cls: 'option' }
-							]
-						}
-					},
-					{
-						displayText: 'Most Commented',
-						cls: 'sort',
-						params: {
-							sortOn: 'Last Modified',
-							sortOrder: 'DESC'
-						},
-						active: false,
-						modifier: {
-							text: 'Date Range',
-							items: [
-								{ text: 'Anytime', value: '', cls: 'option' },
-								{ text: 'Past Week', value: 'week=1', cls: 'option' },
-								{ text: 'Past Month', value: 'month=1', cls: 'option' },
-								{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
-								{ text: 'Past Year', value: 'year=1', cls: 'option' }
-							]
-						}
-					},
-					{
-						displayText: 'Most Liked',
-						cls: 'sort',
-						params: {
-							sortOn: 'Last Modified',
-							sortOrder: 'DESC'
-						},
-						active: false,
-						modifier: {
-							text: 'Date Range',
-							items: [
-								{ text: 'Anytime', value: '', cls: 'option' },
-								{ text: 'Past Week', value: 'week=1', cls: 'option' },
-								{ text: 'Past Month', value: 'month=1', cls: 'option' },
-								{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
-								{ text: 'Past Year', value: 'year=1', cls: 'option' }
-							]
-						}
-					}
-				]
-			}, {
-				displayText: 'Activity Type',
-				type: 'activity',
-				cls: 'activities',
-				items: [
-					{
-						type: 'discussions',
-						text: 'Discussions',
-						params: {
-							name: 'accepts',
-							queryName: 'a',
-							value: [
-								'application/vnd.nextthought.forums.dflheadlinetopic',
-								'application/vnd.nextthought.forums.communityheadlinetopic',
-								'application/vnd.nextthought.forums.generalforumcomment',
-								'application/vnd.nextthought.forums.communityheadlinetopic'
-							]
-						}
-					},
-					{
-						type: 'thoughts',
-						text: 'Thoughts',
-						params: {
-							name: 'accepts',
-							queryName: 'a',
-							value: [
-								'application/vnd.nextthought.forums.personalblogentry',
-								'application/vnd.nextthought.forums.personalblogcomment'
-							]
-						}
-					},
-					{
-						type: 'chat',
-						text: 'Chat',
-						params: {
-							name: 'accepts',
-							queryName: 'a',
-							value: ['application/vnd.nextthought.transcriptsummary']
-						}
-					}
-				] 
-			} 
-		]
+		xtype: 'stream-filter'
 	}],
 
 	initComponent: function() {
 		this.callParent(arguments);
 
 		if (!isFeature('profile-activity-filters')) {
-			this.BASE_FILTERS = {};
+			this.BASE_FILTERS = [];
 		}
 
 		this.filterCmp = this.down('stream-filter');
+		this.filterCmp.filterGroups = this.BASE_FILTERS;
 		this.filterCmp.onGroupSelect = this.onGroupSelect.bind(this);
 		this.filterCmp.onItemSelect = this.onItemSelect.bind(this);
 
@@ -282,40 +307,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 	},
 
 
-	__mapGroupForUI: function(key) {
-		var group = this.filters[key],
-			items = group.items,
-			itemKeys = Object.keys(items),
-			activeText = '',
-			cls = group.cls;
-
-		if (group.multiselect) {
-			cls = cls + ' multiselect';
-		}
-
-		if (group.multiselect) {
-			activeText = (group.activeItems || group.defaultItems).map(function(active) {
-				return items[active].text;
-			}).join(', ');
-		} else {
-			activeText = items[group.activeItem || group.defaultItem].text;
-		}
-
-		return {
-			cls: cls,
-			name: group.name,
-			activeText: activeText,
-			active: group.active,
-			key: key,
-			items: itemKeys.map(this.__mapItemForUI.bind(this, group))
-		};
-	},
-
-
 	updateFilterUI: function() {
-		var filterKeys = Object.keys(this.filters);
-
-		this.filterCmp.setOptions(filterKeys.map(this.__mapGroupForUI.bind(this)));
+		this.filterCmp.setActiveFilters(this.filters);
 	},
 
 
@@ -347,7 +340,13 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 
 
 	__toggleMultiSelect: function(items, key) {
-		var filtered = items.filter(function(item) {
+		var filtered;
+
+		if (!items) {
+			items = [];
+		}
+
+		filtered = (items || []).filter(function(item) {
 			return item !== key;
 		});
 
@@ -359,8 +358,23 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 	},
 
 
+	getGroup: function(groupKey) {
+		var i, found = false, g;
+		for (i=0; i < this.filters.length && !found; i++) {
+			g = this.filters[i];
+			if (g.type === groupKey) {
+				found = true;
+			}
+		}
+
+		return g;
+	},
+
+
 	onItemSelect: function(itemKey, groupKey) {
-		var group = this.filters[groupKey];
+		var group = this.getGroup(groupKey);
+
+		if (!group) { return; }
 
 		if (group.multiselect) {
 			group.activeItems = this.__toggleMultiSelect(group.activeItems, itemKey);
@@ -386,7 +400,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 				active;
 
 			if (filter.multiselect) {
-				active = filter.activeItems;
+				active = filter.activeItems || [];
 
 				if (active.length) {
 					params[filter.paramName] = filter.activeItems.join(',');
@@ -435,17 +449,21 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 				value = [];
 
 			activeItems.forEach(function(item) {
-				value.push(filter.items[item].streamValue);
+				var v = filter.items[item].streamValue;
+				if (v) {
+					value.push(v);	
+				}
 			});
 
 			if (value.length) {
-				params[filter.streamParam] = value.join(',');
+				params[filter.streamParam] = value;
 			}
 		}
 
 		function addSingleSelectValue(filter) {
 			var activeItem = filter.activeItem,
-				value = activeItem && filter.items[activeItem].streamValue;
+				filterItem = activeItem && filter.items[activeItem],
+				value = filterItem && filterItem.streamValue;
 
 			if (value) {
 				params[filter.streamParam] = value;

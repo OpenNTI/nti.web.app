@@ -66,6 +66,10 @@ Ext.define('NextThought.common.form.fields.ImagePicker', {
 		this.callParent(arguments);
 
 		this.mon(this.clearEl, 'click', this.onClearImage.bind(this));
+
+		if (this.placeholder) {
+			this.setPlaceholder(this.placeholder);
+		}
 	},
 
 

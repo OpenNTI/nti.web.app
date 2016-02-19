@@ -74,5 +74,10 @@ Ext.define('NextThought.model.Video', {
 
 				return poster.thumbnail || poster.poster;
 			});
+	},
+
+
+	shouldBeRoot: function() {
+		return true;
 	}
 });

@@ -2,6 +2,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 	alias: 'widget.overview-editing-discussion-editor',
 
+	requires: [
+		'NextThought.model.DiscussionRef'
+	],
+
 	cls: 'content-editor content-link',
 
 
@@ -10,17 +14,27 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 				{name: 'MimeType', type: 'hidden'},
 				{name: 'target', type: 'hidden'},
 				{type: 'group', name: 'card', inputs: [
-					{name: 'icon', type: 'image', height: 125, width: 100},
-					{type: 'group', name: 'meta', inputs: [
-						{
-							name: 'title',
-							type: 'text',
-							placeholder: 'Title',
-							required: true,
-							keep: true,
-							maxlength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
-						}
-					]},
+					{
+						name: 'icon',
+						type: 'image',
+						height: 125,
+						width: 100,
+						placeholder: NextThought.model.DiscussionRef.defaultIcon
+					},
+					{
+						type: 'group',
+						name: 'meta',
+						inputs: [
+							{
+								name: 'title',
+								type: 'text',
+								placeholder: 'Title',
+								required: true,
+								keep: true,
+								maxlength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
+							}
+						]
+					},
 					{type: 'saveprogress'}
 				]}
 			];
@@ -53,7 +67,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 			return true;
 		}
 
-		return false;		
+		return false;
 	},
 
 

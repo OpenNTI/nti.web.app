@@ -240,5 +240,9 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 		if (current > 1) {
 			this.loadPage(current - 1);
 		}
-	}
+	},
+
+	//Override this, sorting should only take place
+	//from state updating and calling load
+	doSort: function() {}
 });

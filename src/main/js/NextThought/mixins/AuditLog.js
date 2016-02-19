@@ -8,6 +8,7 @@ Ext.define('NextThought.mixins.AuditLog', {
 		return !!this.getLink('audit_log');
 	},
 
+
 	hasRecursiveLog: function() {
 		return !!this.getLink('recursive_audit_log');
 	},
@@ -15,7 +16,8 @@ Ext.define('NextThought.mixins.AuditLog', {
 
 	getLog: function() {
 		var auditLink = this.getLink('recursive_audit_log') || this.getLink('audit_log');
-		if(auditLink) {
+
+		if (auditLink) {
 			return this.getCurrentBatch(auditLink);
 		}
 	},
@@ -24,9 +26,12 @@ Ext.define('NextThought.mixins.AuditLog', {
 		this.currentBatch = new NextThought.store.BatchInterface({
 			url: link,
 			params: {
-				batchSize: this.BATCH_SIZE
+				batchSize: this.BATCH_SIZE,
+				sortOn: 'CreatedTime',
+				sortOrder: 'descending'
 			}
 		});
+
 		return this.currentBatch;
 	}
 });

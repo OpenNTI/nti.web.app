@@ -24,7 +24,7 @@ Ext.define('NextThought.app.stream.components.Filter', {
 
 	GROUP_TYPES: {
 		sort: new Ext.XTemplate(Ext.DomHelper.markup([
-			{cls: 'group {cls}', cn: [
+			{cls: 'group {cls} ', 'data-key': '{type}', cn: [
 				{cls: 'name', html: '{displayText}'},
 				{cls: 'select-wrapper', cn: [
 					{tag: 'select', name: '{name}', cn: [
@@ -42,10 +42,10 @@ Ext.define('NextThought.app.stream.components.Filter', {
 		])),
 
 		activity: new Ext.XTemplate(Ext.DomHelper.markup([
-			{cls: 'group {cls}', cn: [
+			{cls: 'group {cls}', 'data-key': '{type}', cn: [
 				{cls: 'name', html: '{displayText}'},
 				{tag: 'tpl', 'for': 'items', cn: [
-					{tag: 'label', cn: [
+					{tag: 'label', cls: 'group-item', 'data-value': '{type}', cn: [
 						{tag: 'input', type: 'checkbox'},
 						{tag: 'span', html: '{text}'}
 					]}
@@ -54,10 +54,10 @@ Ext.define('NextThought.app.stream.components.Filter', {
 		])),
 
 		modifier: new Ext.XTemplate(Ext.DomHelper.markup([
-			{cls: 'group {cls}', cn: [
+			{cls: 'group {cls}', 'data-key': '{type}', cn: [
 				{cls: 'name', html: '{text}'},
 				{tag: 'tpl', 'for': 'items', cn: [
-					{cls: '{cls}', html: '{text}'}
+					{cls: 'group-item {cls}', 'data-value': '{value}', html: '{text}'}
 				]}
 			]}
 		]))
@@ -72,7 +72,6 @@ Ext.define('NextThought.app.stream.components.Filter', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.mon(this.el, 'click', this.handleClick.bind(this));
 		if (isFeature('profile-activity-filters')) {
 			this.showFilters(this.filterGroups);	
 		}
@@ -90,22 +89,54 @@ Ext.define('NextThought.app.stream.components.Filter', {
 	addFilterGroup: function(group){
 		var type = group.type,
 			tpl = this.GROUP_TYPES[type],
-			me = this,
-			el = this.el;
+			items = group.items, 
+			g = Ext.clone(group), el;
+
+		// Change the items to an array, if it's not.
+		if (group.items && !(group.items instanceof Array)) {
+			items = Object.keys(group.items).map(function(k){return group.items[k]});
+		}
 
 		if (tpl) {
-			tpl.append(el, group, true);
+			el = tpl.append(this.el, Ext.apply(g, {items: items}), true);
 		}
 
 		if (type === 'sort') {
 			this.__addModifierGroup(group);
+			this.mon(el, 'change', this.handleClick.bind(this));
 		}
+		else {
+			this.mon(el, 'click', this.handleClick.bind(this));
+		}
+	},
+
+
+	setActiveFilters: function(filters) {
+		if (!this.rendered) { return; }
+
+		var me = this, dom = this.el.dom;
+
+		//Update the filterGroup
+		this.filterGroups = filters || [];
+
+		this.filterGroups.forEach(function(group) {
+			var type = group.type,
+				g = dom.querySelector('[data-key='+type+']');
+
+			if (group.setActiveItem) {
+				group.setActiveItem(g, group.activeItems);
+			}
+		});
 	},
 
 
 	__addModifierGroup: function(group){
 		var items = group.items || [],
 			el = this.el, modifier, tpl;
+
+		if (group.items && !(group.items instanceof Array)) {
+			items = Object.keys(group.items).map(function(k){return group.items[k]});
+		}
 
 		items.forEach(function(item){
 			if (item.active) {
@@ -169,12 +200,15 @@ Ext.define('NextThought.app.stream.components.Filter', {
 		var group = e.getTarget('.group'),
 			item = e.getTarget('.group-item');
 
+		e.stopEvent();
+
 		group = group && group.getAttribute('data-key');
-		item = item && item.getAttribute('data-value');
+		item = item && item.getAttribute('data-value') || e.target.value;
 
 		if (item) {
 			this.onItemSelect(item, group);
-		} else if (group) {
+		} 
+		else if (group) {
 			this.onGroupSelect(group);
 		}
 	}
