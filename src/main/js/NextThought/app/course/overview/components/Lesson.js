@@ -74,6 +74,25 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 	},
 
 
+	__updateCounts: function() {
+		if (!this.currentNode || !this.currentNode.getCommentCounts) { return; }
+
+		var me = this;
+
+		return me.currentNode.getCommentCounts()
+			.then(function(counts) {
+				me.items.each(function(item) {
+					if (item.setCommentCounts) {
+						item.setCommentCounts(counts);
+					}
+				});
+			})
+			.fail(function(reason) {
+				console.error('Failed to load comment counts: ', reason);
+			});
+	},
+
+
 	getInfo: function(record, course, overviewsrc) {
 		return Promise.all([
 				course.getAssignments(),
@@ -101,11 +120,13 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 		me.maybeMask();
 
 		me.__getCurrentProgress = record.getProgress ? record.getProgress.bind(record) : null;
+		me.__getCurrentCounts = record.getCommentCounts ? record.getCommentCounts.bind(record) : null;
 
 		if (me.currentOverview && me.currentOverview.record.getId() === record.getId() && !doNotCache) {
 			if (me.currentOverview.refresh) {
 				 return me.currentOverview.refresh()
 				 			.then(me.__updateProgress.bind(me))
+				 			.then(me.__updateCounts.bind(me))
 							.always(me.maybeUnmask.bind(me));
 			}
 
@@ -160,6 +181,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 			})
 			.fail(function(reason) { console.error(reason); })
 			.then(me.__updateProgress.bind(me))
+			.then(me.__updateCounts.bind(me))
 			.then(me.maybeUnmask.bind(me));
 	},
 
