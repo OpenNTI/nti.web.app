@@ -20,6 +20,8 @@ Ext.define('NextThought.mixins.dnd.Draggable', {
 	initDragging: function() {
 		if (!this.Draggable) {
 			this.Draggable = new NextThought.app.dnd.Draggable({
+				ghostImageScale: this.ghostImageScale,
+				dropPlaceholderStyles: this.dropPlaceholderStyles,
 				getDragTarget: this.getDragTarget.bind(this),
 				getDragBoundingClientRect: this.getDragBoundingClientRect.bind(this),
 				getDragHandle: this.getDragHandle && this.getDragHandle.bind(this),

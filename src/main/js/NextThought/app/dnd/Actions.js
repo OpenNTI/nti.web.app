@@ -35,6 +35,11 @@ Ext.define('NextThought.app.dnd.Actions', {
 	},
 
 
+	getPlaceholderStyles: function() {
+		return this.DnDStore.getPlaceholderStyles();
+	},
+
+
 	onNoDropHandler: function() {
 		this.onDropFail();
 	},

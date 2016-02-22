@@ -14,9 +14,14 @@ Ext.define('NextThought.app.dnd.Draggable', {
 			throw 'No getDragTarget passed!';
 		}
 
+		this.getDragBoundingClientRect = config.getDragBoundingClientRect;
+
 		this.getDragHandle = config.getDragHandle;
 		this.onDragStart = config.onDragStart;
 		this.onDragEnd = config.onDragEnd;
+
+		this.dropPlaceholderStyles = config.dropPlaceholderStyles;
+		this.ghostImageScale = config.ghostImageScale !== undefined ? config.ghostImageScale : 1;
 
 		this.transferData = new NextThought.store.DataTransfer();
 
@@ -127,6 +132,19 @@ Ext.define('NextThought.app.dnd.Draggable', {
 
 	getDnDEventData: function() {
 		return new NextThought.model.app.DndInfo();
+	},
+
+
+	getPlaceholderStyles: function() {
+		var styles = this.dropPlaceholderStyles || {},
+			rect = this.getDragBoundingClientRect && this.getDragBoundingClientRect();
+
+		if (rect) {
+			styles.width = styles.width || (rect.width * this.ghostImageScale);
+			styles.height = styles.height || (rect.height * this.ghostImageScale);
+		}
+
+		return styles;
 	},
 
 

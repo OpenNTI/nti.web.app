@@ -5,6 +5,10 @@ Ext.define('NextThought.app.dnd.StateStore', {
 	setActiveDragItem: function(activeItem) {
 		this.activeDragItem = activeItem;
 
+		if (activeItem && activeItem.getPlaceholderStyles) {
+			this.placeholderStyles = activeItem.getPlaceholderStyles();
+		}
+
 		this.fireEvent('drag-start');
 	},
 
@@ -19,5 +23,18 @@ Ext.define('NextThought.app.dnd.StateStore', {
 
 	getActiveDragItem: function() {
 		return this.activeDragItem;
+	},
+
+
+	getPlaceholderStyles: function() {
+		var styles;
+
+		if (this.placeholderStyles) {
+			styles = this.placeholderStyles;
+		} else if (this.activeDragItem && this.activeDragItem.getPlaceholderStyles()) {
+			styles = this.activeDragItem.getPlaceholderStyles();
+		}
+
+		return styles || {};
 	}
 });

@@ -31,6 +31,8 @@ Ext.define('NextThought.app.dnd.Dropzone', {
 		this.onDragDrop = config.onDragDrop;
 		this.onInvalidDrop = config.onInvalidDrop;
 		this.onInvalidOver = config.onInvalidOver;
+		this.onDragStart = config.onDragStart;
+		this.onDragStop = config.onDragStop;
 
 		this.handlers = {
 			dragEnter: this.__dragEnter.bind(this),
@@ -140,12 +142,20 @@ Ext.define('NextThought.app.dnd.Dropzone', {
 			this.scrollingParent = new NextThought.util.Scrolling({el: scrollingParent});
 			this.scrollingParent.scrollWhenDragNearEdges();
 		}
+
+		if (this.onDragStart) {
+			this.onDragStart();
+		}
 	},
 
 
 	__onDragStop: function() {
 		if (this.scrollingParent) {
 			this.scrollingParent.unscrollWhenDragNearEdges();
+		}
+
+		if (this.onDragStop) {
+			this.onDragStop();
 		}
 	},
 
