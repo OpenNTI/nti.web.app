@@ -17,7 +17,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 
 
 	dropPlaceholderStyles: {
-		float: 'left'
+		side: 'left'
 	},
 
 

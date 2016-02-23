@@ -76,7 +76,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 			previous = items[i - 1];
 			current = items[i];
 
-			if (styles && styles.float) {
+			if (styles && styles.side) {
 				if (current.isFullWidth(dropzoneWidth)) {
 					isBefore = current.isPointAbove(x, y);
 				} else {
@@ -206,9 +206,9 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		if (styles) {
 			placeholder.style.height = styles.height ? styles.height + 'px' : null;
 			placeholder.style.width = styles.width ? styles.width + 'px' : null;
-			placeholder.style.float = styles.float ? styles.float : null;
+			placeholder.style['float'] = styles.side ? styles.side : null;
 
-			if (styles.float) {
+			if (styles.side) {
 				placeholder.classList.add('column');
 			} else {
 				placeholder.classList.remove('column');
