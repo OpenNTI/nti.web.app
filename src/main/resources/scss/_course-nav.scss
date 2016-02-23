@@ -607,7 +607,12 @@
 
 	.group-container {
 		clear: both;
-		overflow: hidden;
+	
+		&::after {
+			content: '';
+			display: block;
+			clear: both;
+		}
 	}
 
 	.content-card {
