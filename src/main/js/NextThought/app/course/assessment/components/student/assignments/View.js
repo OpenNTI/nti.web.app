@@ -192,8 +192,6 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 					groups.push(group);
 
-					me.mon(group.down('course-assessment-assignment-list'), 'itemclick', 'onItemClicked');
-
 					me.activeStores.push(store);
 
 					if (groupBy === 'lesson') {
@@ -227,7 +225,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 	},
 
 
-	onItemClicked: function(s, record, dom) {
+	navigateToItem: function(assignment) {
 		var date = Ext.Date.format(record.get('opens'), 'l F j \\a\\t g:i A'),
 			item = record && record.get('item'),
 			parts = item && item.get('parts');
@@ -543,7 +541,11 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 
 	newAssignmentList: function(grouper) {
-		return { xtype: 'course-assessment-assignment-list', store: grouper.store };
+		return {
+			xtype: 'course-assessment-assignment-list',
+			store: grouper.store,
+			navigateToItem: this.navigateToItem.bind(this)
+		};
 	},
 
 

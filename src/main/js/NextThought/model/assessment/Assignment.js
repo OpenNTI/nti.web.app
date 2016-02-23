@@ -64,7 +64,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	},
 
 	getHistory: function() {
-	  var link = this.historyLink ||  this.getLink('History');
+	  var link = this.historyLink || this.getLink('History');
 
 		if (!link) { return Promise.reject(); }
 
@@ -84,6 +84,13 @@ Ext.define('NextThought.model.assessment.Assignment', {
 			return agg + (r.tallyParts ? r.tallyParts() : 1);
 		}
 		return (this.get('parts') || []).reduce(sum, 0);
+	},
+
+
+	isOpen: function() {
+		var start = this.get('availableBeginning');
+
+		return !start || start < new Date();
 	},
 
 

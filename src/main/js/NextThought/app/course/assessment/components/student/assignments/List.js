@@ -1,7 +1,44 @@
-/*globals getFormattedString:false*/
 Ext.define('NextThought.app.course.assessment.components.student.assignments.List', {
-	extend: 'Ext.view.View',
+	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-assignment-list',
+	ui: 'course-assessment',
+	cls: 'assignment-list',
+
+	requires: ['NextThought.app.course.assessment.components.student.assignments.ListItem'],
+
+	layout: 'none',
+
+	itemType: 'course-assessment-assignment-list-item',
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		var items = this.store ? this.store.getRange() : [],
+			itemType = this.itemType,
+			navigateToItem = this.navigateToItem,
+			container = this.getItemsContainer();
+
+		container.add(items.map(function(item) {
+			return {
+				xtype: itemType,
+				assignment: item.get('item'),
+				history: item.get('history'),
+				item: item,
+				navigateToItem: navigateToItem
+			};
+		}));
+	},
+
+
+	getItemsContainer: function() {
+		return this;
+	}
+});
+
+/*globals getFormattedString:false*/
+Ext.define('aNextThought.app.course.assessment.components.student.assignments.List', {
+	extend: 'Ext.view.View',
+	alias: 'widget.course-assessment-assignment-listx',
 	ui: 'course-assessment',
 	cls: 'assignment-list',
 

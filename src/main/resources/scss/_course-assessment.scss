@@ -348,142 +348,12 @@ canvas.x-component-course-assessment {
 			cursor: pointer;
 		}
 	}
-
-
-	&.assignment-list {
-		&.admin {
-			position: relative;
-
-			.header {
-				position: absolute;
-				text-transform: uppercase;
-				right: 0;
-				top: -2.5em;
-				font-size: 0.6em;
-				font-weight: 600;
-				color: $tertiary-grey;
-				width: 10.77em;
-			}
-
-			.item {
-				@include icon('assignment_due_small', $top: 17px, $left: 16px);
-
-				&.late {
-					&::after {
-						@include sprite($icons,'assignment_late_small');
-					}
-				}
-				&.nosubmit {
-					&::after {
-						@include sprite($icons, 'assignment_due_small');
-					}
-				}
-
-				.score .completed:not(.c0) {
-					color: $primary-green;
-				}
-			}
-		}
-
-		.item {
-			position: relative;
-			overflow: hidden;
-			padding: 10px 0 10px 60px;
-			box-shadow: 0 1px 0 0 #f7f7f7;
-			cursor: pointer;
-
-			&:first-of-type {
-				box-shadow: 0 -1px 0 0 #f2f2f2, 0 1px 0 0 #f7f7f7;
-			}
-
-			@include icon('check_gray', $top: 22px, $left: 25px);
-
-			&.no_submit {
-				&, &.over, &.selected { cursor: default !important; }
-			}
-
-			&.closed {
-				&, &.over, &.selected {
-					cursor: default !important;
-					opacity: 0.5;
-					background: none;
-				}
-			}
-
-			&.over, &.selected {
-				background: #fafafa;
-
-				.report{
-					display: block;
-				}
-			}
-
-			&.completed {
-				.status time.completed { display: block; }
-				.status time.due { display: none; }
-
-				&::after {
-					@include sprite($icons,'check_green');
-				}
-
-			}
-
-			.name {
-				font: normal 500 0.9em/2 $font;
-				color: $primary-grey;
-				margin-right: 8em;
-			}
-
-			.status {
-				text-transform: uppercase;
-				font: normal 600 0.6em/1 $font;
-				color: $tertiary-grey;
-				float: left;
-
-				&.due {
-					color: $primary-red;
-				}
-
-				.completed { display: none; }
-				.due { display: block; }
-			}
-
-			.timed {
-				margin-left: 0.5em;
-				text-transform: uppercase;
-				font: normal 600 0.6em/1 $font;
-				color: $primary-blue;
-				float: left;
-			}
-
-			.score {
-				white-space: nowrap;
-				font: normal 400 0.8em/3 $font;
-				color: $tertiary-grey;
-				width: 8em;
-				float: right;
-
-				.correct {
-					color: $primary-green;
-				}
-			}
-
-			.report {
-				display: none;
-				top: 22px;//60/2 - 16/2
-				right: 31px;
-				@include icon('reports-gray_hover', $position:absolute);
-
-				&:hover {
-					@include icon('reports-blue_hover', $position:absolute);
-				}
-			}
-		}
-	}
 }
 
 .assignment-list {
 	&.admin {
+		position: relative;
+
 		.x-container.grouping {
 			& > .header {
 				.title {
@@ -492,6 +362,131 @@ canvas.x-component-course-assessment {
 				    white-space: nowrap;
 				    overflow: hidden;
 				}
+			}
+		}
+
+		.group-header {
+			position: absolute;
+			text-transform: uppercase;
+			right: 0;
+			top: -2.5em;
+			font-size: 0.6em;
+			font-weight: 600;
+			color: $tertiary-grey;
+			width: 10.77em;
+		}
+
+		.item {
+			@include icon('assignment_due_small', $top: 17px, $left: 16px);
+
+			&.late {
+				&::after {
+					@include sprite($icons,'assignment_late_small');
+				}
+			}
+			&.nosubmit {
+				&::after {
+					@include sprite($icons, 'assignment_due_small');
+				}
+			}
+
+			.score .completed:not(.c0) {
+				color: $primary-green;
+			}
+		}
+	}
+
+	.item {
+		position: relative;
+		overflow: hidden;
+		padding: 10px 0 10px 60px;
+		box-shadow: 0 1px 0 0 #f7f7f7;
+		cursor: pointer;
+
+		&:first-of-type {
+			box-shadow: 0 -1px 0 0 #f2f2f2, 0 1px 0 0 #f7f7f7;
+		}
+
+		@include icon('check_gray', $top: 22px, $left: 25px);
+
+		&.no_submit {
+			&, &:hover, &.selected { cursor: default !important; }
+		}
+
+		&.closed {
+			&, &:hover, &.selected {
+				cursor: default !important;
+				opacity: 0.5;
+				background: none;
+			}
+		}
+
+		&:hover, &.selected {
+			background: #fafafa;
+
+			.report{
+				display: block;
+			}
+		}
+
+		&.completed {
+			.status time.completed { display: block; }
+			.status time.due { display: none; }
+
+			&::after {
+				@include sprite($icons,'check_green');
+			}
+
+		}
+
+		.name {
+			font: normal 500 0.9em/2 $font;
+			color: $primary-grey;
+			margin-right: 8em;
+		}
+
+		.status {
+			text-transform: uppercase;
+			font: normal 600 0.6em/1 $font;
+			color: $tertiary-grey;
+			float: left;
+
+			&.due {
+				color: $primary-red;
+			}
+
+			.completed { display: none; }
+			.due { display: block; }
+		}
+
+		.timed {
+			margin-left: 0.5em;
+			text-transform: uppercase;
+			font: normal 600 0.6em/1 $font;
+			color: $primary-blue;
+			float: left;
+		}
+
+		.score {
+			white-space: nowrap;
+			font: normal 400 0.8em/3 $font;
+			color: $tertiary-grey;
+			width: 8em;
+			float: right;
+
+			.correct {
+				color: $primary-green;
+			}
+		}
+
+		.report {
+			display: none;
+			top: 22px;//60/2 - 16/2
+			right: 31px;
+			@include icon('reports-gray_hover', $position:absolute);
+
+			&:hover {
+				@include icon('reports-blue_hover', $position:absolute);
 			}
 		}
 	}
