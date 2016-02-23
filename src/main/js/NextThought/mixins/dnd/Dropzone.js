@@ -26,7 +26,9 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 				onDragOver: this.onDragOver && this.onDragOver.bind(this),
 				onDragDrop: this.onDragDrop && this.onDragDrop.bind(this),
 				onInvalidDrop: this.onInvalidDrop && this.onInvalidDrop.bind(this),
-				onInvalidOver: this.onInvalidOver && this.onInvalidOver.bind(this)
+				onInvalidOver: this.onInvalidOver && this.onInvalidOver.bind(this),
+				onDragStart: this.onDragStart && this.onDragStart.bind(this),
+				onDragEnd: this.onDragEnd && this.onDragEnd.bind(this)
 			});
 		}
 	},
@@ -38,9 +40,16 @@ Ext.define('NextThought.mixins.dnd.Dropzone', {
 
 
 	getDropzoneBoundingClientRect: function() {
-		var target = this.getDropzoneTarget();
+		var target = this.getDropzoneTarget(),
+			rect;
 
-		return target.getBoundingClientRect();
+		if (target) {
+			rect = target.getBoundingClientRect();
+		} else {
+			rect = {top: 0, left: 0, right: 0, bottom: 0, width: 0, height: 0};
+		}
+
+		return rect;
 	},
 
 

@@ -13,7 +13,8 @@ Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	},
 
 
-	TOLERANCE: 2,
+	VERTICAL_TOLERANCE: 2,
+	HORIZONTAL_TOLERANCE: 20,
 	isOrderingItem: true,
 
 
@@ -30,11 +31,50 @@ Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	},
 
 
-	__getTopOrBottom: function(x, y) {
-		var rect = this.getDragBoundingClientRect(),
-			midpoint, side;
+	getVerticalMidpoint: function() {
+		var rect = this.__getRect();
 
-		midpoint = rect.top + (rect.height / 2);
+		return rect.top + (rect.height / 2);
+	},
+
+
+	getHorizontalMidpoint: function() {
+		var rect = this.__getRect();
+
+		return rect.left + (rect.width / 2);
+	},
+
+
+	__getRect: function() {
+		return this.lockedRect || this.getDragBoundingClientRect();
+	},
+
+
+	lockRectRelative: function(parent) {
+		var rect = this.getDragBoundingClientRect(),
+			top = rect.top - parent.top,
+			left = rect.left - parent.left,
+			width = rect.width,
+			height = rect.height;
+
+		this.lockedRect = {
+			top: top,
+			left: left,
+			right: left + width,
+			bottom: top + height,
+			width: width,
+			height: height
+		};
+	},
+
+
+	unlockRect: function() {
+		// this.lockedRect = null;
+	},
+
+
+	__getTopOrBottom: function(x, y) {
+		var midpoint = this.getVerticalMidpoint(), side;
 
 		if (y < midpoint) {
 			side = NextThought.mixins.dnd.OrderingItem.SIDES.TOP;
@@ -47,10 +87,7 @@ Ext.define('NextThought.mixins.dnd.OrderingItem', {
 
 
 	__getLeftOrRight: function(x, y) {
-		var rect = this.getDragBoundingClientRect(),
-			midpoint, side;
-
-		midpoint = rect.left + (rect.width / 2);
+		var midpoint = this.getHorizontalMidpoint(), side;
 
 		if (x < midpoint) {
 			side = NextThought.mixins.dnd.OrderingItem.SIDES.LEFT;
@@ -62,31 +99,31 @@ Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	},
 
 	getPlaceholderBeforeHeight: function() {
-		var rect = this.getDragBoundingClientRect();
+		var rect = this.__getRect();
 
 		return rect.height;
 	},
 
 
 	getPlaceholderAfterHeight: function() {
-		var rect = this.getDragBoundingClientRect();
+		var rect = this.__getRect();
 
 		return rect.height;
 	},
 
 
 	isFullWidth: function(fullWidth) {
-		var rect = this.getDragBoundingClientRect();
+		var rect = this.__getRect();
 
-		return Math.abs(fullWidth - rect.width) <= this.TOLERANCE;
+		return Math.abs(fullWidth - rect.width) <= (this.HORIZONTAL_TOLERANCE * 2);
 	},
 
 
 	isPointContainedVertically: function(x, y) {
-		var rect = this.getDragBoundingClientRect(),
-			tol = this.TOLERANCE;
+		var rect = this.__getRect(),
+			tol = this.VERTICAL_TOLERANCE;
 
-		return Math.abs(rect.top - y) <= tol && Math.abs(rect.bottom - y <= tol);
+		return y >= (rect.top - tol) && y <= (rect.bottom - tol);
 	},
 
 
@@ -123,7 +160,17 @@ Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	},
 
 
-	isPointAfter: function(x, y) {
+	isPointAfter: function(x, y, isFullWidth) {
 		return this.isPointBelow(x, y) || this.isPointRight(x, y);
+	},
+
+
+	isSameRow: function(orderingItem) {
+		if (!orderingItem.getVerticalMidpoint) {
+			console.error('Invalid Ordering Item');
+			return false;
+		}
+
+		return (this.getVerticalMidpoint() - orderingItem.getVerticalMidpoint()) <= this.VERTICAL_TOLERANCE;
 	}
 });

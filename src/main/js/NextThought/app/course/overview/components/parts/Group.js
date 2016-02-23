@@ -74,6 +74,17 @@ Ext.define('NextThought.app.course.overview.components.parts.Group', {
 	},
 
 
+	setCommentCounts: function(commentCounts) {
+		var body = this.getBodyContainer();
+
+		body.items.each(function(item) {
+			if (item.setCommentCounts) {
+				item.setCommentCounts(commentCounts);
+			}
+		});
+	},
+
+
 	getBodyContainer: function() {
 		return this.down('[bodyContainer]');
 	},

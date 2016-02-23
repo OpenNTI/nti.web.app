@@ -842,7 +842,7 @@ Ext.define('NextThought.util.Content', {
 				href = node.getAttribute('href'),
 				parts = href && Globals.getURLParts(href);
 
-			return tagName === 'topic' && href && !parts.hash;
+			return tagName === 'topic' && href && !parts.hash && !node.querySelector('object[mimeType$=assignment], object[mimeType$=naquestionset]');
 		});
 	},
 

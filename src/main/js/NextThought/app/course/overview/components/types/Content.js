@@ -28,6 +28,23 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 	},
 
 
+	setCommentCounts: function(commentCounts) {
+		var body = this.getBodyContainer();
+
+		this.commentCounts = commentCounts;
+
+		if (!body) {
+			return;
+		}
+
+		body.items.each(function(item) {
+			if (item.setCommentCounts) {
+				item.setCommentCounts(commentCounts);
+			}
+		});
+	},
+
+
 	onceLoaded: function() {
 		var me = this;
 
@@ -114,6 +131,10 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 
 		this.collectionSet = true;
 		this.fireEvent('collection-set');
+
+		if (this.commentsCounts) {
+			this.setCommentCounts(this.commentsCounts);
+		}
 	},
 
 
