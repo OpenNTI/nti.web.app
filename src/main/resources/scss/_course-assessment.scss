@@ -398,7 +398,6 @@ canvas.x-component-course-assessment {
 
 	.item {
 		position: relative;
-		overflow: hidden;
 		padding: 10px 0 10px 60px;
 		box-shadow: 0 1px 0 0 #f7f7f7;
 		cursor: pointer;
@@ -491,6 +490,28 @@ canvas.x-component-course-assessment {
 		}
 	}
 }
+
+
+.assignment-status-container {
+	position: relative;
+
+	&.menu-open {
+		.menu-container {
+			display: block;
+		}
+	}
+
+	.menu-container {
+		display: none;
+		position: absolute;
+		top: 100%;
+		width: 200px;
+		background: white;
+		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+		z-index: 1;
+	}
+}
+
 
 .pager-settings {
 	.x-menu-item.x-menu-item-separator.labeled-separator {
