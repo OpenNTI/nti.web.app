@@ -336,9 +336,11 @@
 	.overview-naquestionset {
 		margin-top: 5px;
 		position: relative;
+		min-height: 76px;
 
 		.x-panel-body-assessment {
 			padding: 0 15px 0 90px;
+			min-height: 76px;
 		}
 
 		canvas.score {
@@ -348,7 +350,7 @@
 			margin-top: -37px;//75/2
 		}
 
-		.tally-box {
+		.tally-box, .assignment-box {
 			display: inline-block;
 			vertical-align: middle;
 			min-height: 75px;
@@ -358,6 +360,20 @@
 			.message {
 				max-height: 2.8em;
 				overflow: hidden;
+			}
+		}
+
+		.assignment-box {
+			.title {
+				font-size: 1.125em;
+			}
+
+			.assignment-status-container {
+				margin-top: 5px;
+
+				.assignment-status .assignment-status {
+					font-size: 1.125em;
+				}
 			}
 		}
 

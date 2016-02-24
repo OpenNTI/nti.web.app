@@ -52,11 +52,28 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 	},
 
 
+	setAssignment: function(assignment) {
+		this.assignment = assignment;
+		this.updateStatus();
+	},
+
+
+	setHistory: function(history) {
+		this.history = history;
+		this.updateStatus();
+	},
+
+
+	setStatus: function(status) {
+		this.status = status;
+	},
+
+
 	updateStatus: function() {
 		var assignment = this.assignment,
 			history = this.history,
 			grade = history && history.get && history.get('Grade'),
-			status = NextThought.app.course.assessment.AssignmentStatus.getStatusHTML({
+			status = this.status || NextThought.app.course.assessment.AssignmentStatus.getStatusHTML({
 				due: assignment.getDueDate(),
 				completed: history && history.get('completed'),
 				maxTime: assignment.isTimed && assignment.getMaxTime(),

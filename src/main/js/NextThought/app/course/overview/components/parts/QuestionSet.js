@@ -14,7 +14,8 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 		'NextThought.model.AssignmentRef',
 		'NextThought.common.chart.Score',
 		'NextThought.app.assessment.ScoreboardHeader',
-		'NextThought.app.assessment.ScoreboardTally'
+		'NextThought.app.assessment.ScoreboardTally',
+		'NextThought.app.course.assessment.components.AssignmentStatus'
 	],
 
 	statics: {
@@ -28,17 +29,7 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 
 	layout: 'none',
 
-	items: [
-		{ xtype: 'chart-score' },
-		{ xtype: 'assessment-tally', flex: 1, ellipseMessage: true },
-		{ xtype: 'button',
-			text: getString('NextThought.view.courseware.overview.parts.QuestionSet.review'),
-			ui: 'secondary',
-			scale: 'large',
-			handler: function(b) {b.up('course-overview-naquestionset').reviewClicked();}
-		}
-	],
-
+	items: [],
 
 	config: {
 		assignment: null,
@@ -65,45 +56,80 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 
 		me.callParent([config]);
 
+
 		if (config.xtype !== 'course-overview-assignment') {
-			req = {
-				scope: me,
-				method: 'GET',
-				params: {
-					accept: NextThought.model.assessment.AssessedQuestionSet.mimeType,
-					batchStart: 0,
-					batchSize: 1,
-					sortOn: 'lastModified',
-					sortOrder: 'descending',
-					filter: 'TopLevel'
-				},
-				callback: me.containerLoaded.bind(me)
-			};
-
-			ContentUtils.getLineage(ntiid, me.course)
-				.then(function(lineages) {
-					var lineage = lineages[0],
-						containerId = lineage && lineage[1];
-
-					me.setContainerId(containerId);
-					req.url = Service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA);
-
-					return req;
-				})
-				.then(function(r) {
-					Ext.Ajax.request(r);
-				});
+			me.buildForAssessment();
+		} else if (me.assignment) {
+			me.buildForAssignment();
 		} else {
-			if (me.assignment) {
-				me.setAsAssignment(me.assignment);
-				me.assignmentId = me.assignment.getId();
-				//TODO: Figure me out
-				me.fireEvent('has-been-submitted', me);
-			} else {
-				console.warn('Hidding Assignment widget. Assignmet was null. %o', config);
-				me.hide();
-			}
+			console.warn('Hidding Assignment widget. Assignmet was null. %o', config);
+			me.hide();
 		}
+
+		this.add({
+			xtype: 'button',
+			text: getString('NextThought.view.courseware.overview.parts.QuestionSet.review'),
+			ui: 'secondary',
+			scale: 'large',
+			handler: function() {
+				me.reviewClicked();
+			}
+		});
+	},
+
+
+	buildForAssessment: function() {
+		var me = this,
+			req, ntiid = this.getNtiid();
+
+		me.add([
+			{xtype: 'chart-score'},
+			{xtype: 'assessment-tally', flex: 1, ellipseMessage: true}
+		]);
+
+		req = {
+			scope: me,
+			method: 'GET',
+			params: {
+				accept: NextThought.model.assessment.AssessedQuestionSet.mimeType,
+				batchStart: 0,
+				batchSize: 1,
+				sortOn: 'lastModified',
+				sortOrder: 'descending',
+				filter: 'TopLevel'
+			},
+			callback: me.containerLoaded.bind(me)
+		};
+
+		ContentUtils.getLineage(ntiid, me.course)
+			.then(function(lineages) {
+				var lineage = lineages[0],
+					containerId = lineage && lineage[1];
+
+				me.setContainerId(containerId);
+				req.url = Service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA);
+
+				return req;
+			})
+			.then(function(r) {
+				Ext.Ajax.request(r);
+			});
+	},
+
+
+	buildForAssignment: function() {
+		this.add({
+			xtype: 'container',
+			flex: 1,
+			layout: 'none',
+			cls: 'assignment-box',
+			items: [
+				{xtype: 'box', autoEl: {cls: 'title', html: this.assignment.get('title')}},
+				{xtype: 'course-assignment-status', assignment: this.assignment}
+			]
+		});
+
+		this.setAsAssignment(this.assignment);
 	},
 
 
@@ -115,69 +141,73 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 
 		this.setQuetionSetContainerTitle(assignment.get('title'));
 
-		var parts = assignment.get('parts') || [],
-			//added to determine whether or not assignment is a no-submit
+		var status = this.down('course-assignment-status'),
+			parts = assignment.get('parts') || [],
 			isNoSubmit = assignment.isNoSubmit(),
-			score = this.down('chart-score'),
-			tally = this.down('assessment-tally'),
-			format = 'l, F j, g:i a T',
+			now = new Date(),
 			opens = assignment.get('availableBeginning'),
-			date = assignment.get('availableEnding'),
-			day = date && (new Date(date.getTime())).setHours(0, 0, 0, 0),
-			today = (new Date()).setHours(0, 0, 0, 0),
-			html = date && (getString('NextThought.view.courseware.overview.parts.QuestionSet.due') + ' ');
-
-
-
-		if (date) {
-			if (day === today) {
-				html += getString('NextThought.view.courseware.overview.parts.QuestionSet.today');
-				html += ' at ' + Ext.Date.format(date, 'g:i a T');
-			}
-			else {
-				html += Ext.Date.format(date, format);
-			}
-		}
-
-		if (score) { score.destroy(); }
+			dueDate = assignment.get('availableEnding');
 
 		this.addCls('assignment');
 		this.setAsNotStarted();
-		this.updateWithScore();
-		tally.setGreyText(html || '');
 
 		assignment.getHistory()
 			.then(this.setHistory.bind(this));
 
-		if (date && date < today) {
+		if (dueDate && dueDate < now) {
 			//if assignment is a no-submit, don't make it late
-			if (isNoSubmit === true) {
-					this.addCls('nosubmit');
-					tally.setGreyText(html);
-			}
-			else {
+			if (isNoSubmit) {
+				this.addCls('nosubmit');
+			} else {
 				this.addCls('late');
-				tally.setRedText(html);
 			}
-
-		}
-		else if (opens && opens > new Date()) {
+		} else if (opens && opens > now) {
 			this.down('button').destroy();
-			tally.setGreyText(getFormattedString('NextThought.view.courseware.overview.parts.QuestionSet.available', {
-				date: Ext.Date.format(opens, format)
-			}));
-		}
-		else if (parts.length === 0 && !this.assignment.isTimed && !isNoSubmit) {
+
+			if (status) {
+				status.setStatus(getFormattedString('NextThought.view.courseware.overview.parts.QuestionSet.available', {
+					date: Ext.Date.format(opens, format)
+				}));
+			}
+		} else if (parts.length === 0 && !assignment.isTimed && !isNoSubmit) {
 			this.down('button').setText(getString('NextThought.view.courseware.overview.parts.QuestionSet.review'));
 		}
 	},
 
 
-	setAsNotStarted: function() {
-		var b = this.down('button');
-		b.setUI('primary');
-		b.setText(getString('NextThought.view.courseware.overview.parts.QuestionSet.start'));
-		this.addCls('not-started');
+	setHistory: function(history) {
+		if (!history) {
+			console.warn('No history');
+			return;
+		}
+
+		if (!this.rendered) {
+			this.on('afterrender', Ext.bind(this.setHistory, this, arguments), this, {single: true});
+			return;
+		}
+
+		var status = this.down('course-assignment-status'),
+			button = this.down('button'),
+			submission = history.get('Submission'),
+			completed = (submission && submission.get('CreatedTime')) || new Date(),
+			due = this.assignment && this.assignment.get('availableEnding'),
+			late = completed > due,
+			isNoSubmit = this.assignment && this.assignment.isNoSubmit();
+
+		if (this.status) {
+			this.status.setHistory(history);
+		}
+
+		if (button) {
+			button.setText('Review');
+		}
+
+		if (isNoSubmit) {
+			this.addCls('nosubmit');
+		} else {
+			this.addCls('turned-in-assignment');
+			this[late ? 'addCls' : 'removeCls']('late');
+		}
 	},
 
 
@@ -205,56 +235,11 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 	},
 
 
-	fillInAssessmentAttempt: function(questionSet) {
-		if (!questionSet || questionSet.get('questionSetId') !== this.ntiid) { return; }
-
+	setAsNotStarted: function() {
 		var b = this.down('button');
-
-		b.setUI('secondary');
-		b.setText(getString('NextThought.view.courseware.overview.parts.QuestionSet.review'));
-		this.removeCls('not-started');
-
-		this.updateWithScore(questionSet.getCorrectCount());
-	},
-
-
-	setHistory: function(history) {
-		if (!history) {
-			console.warn('No history');
-			return;
-		}
-
-		if (!this.rendered) {
-			this.on('afterrender', Ext.bind(this.setHistory, this, arguments), this, {single: true});
-			return;
-		}
-
-		var submission = history.get('Submission'),
-			completed = (submission && submission.get('CreatedTime')) || new Date(),
-			due = this.assignment && this.assignment.get('availableEnding'),
-			isNoSubmit = this.assignment && this.assignment.isNoSubmit();
-
-		this.markAssignmentTurnedIn(completed, completed > due, isNoSubmit);
-	},
-
-
-	markAssignmentTurnedIn: function(completed, late, noSubmit) {
-		var button = this.down('button'),
-			tally = this.down('assessment-tally');
-
-		if (button) {
-			button.setText('Review');
-		}
-
-		if (noSubmit === true) {
-			this.addCls('nosubmit');
-		} else {
-			this.addCls('turned-in-assignment');
-			this[late ? 'addCls' : 'removeCls']('late');
-			tally[late ? 'setRedText' : 'setGreyText'](getFormattedString('NextThought.view.courseware.overview.parts.QuestionSet.completed', {
-				date: Ext.Date.format(completed, 'l, F j g:i a T')
-			}));
-		}
+		b.setUI('primary');
+		b.setText(getString('NextThought.view.courseware.overview.parts.QuestionSet.start'));
+		this.addCls('not-started');
 	},
 
 
@@ -262,15 +247,16 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 		var tally = this.down('assessment-tally'),
 			score = this.down('chart-score');
 
-		tally.setTally(correct || 0, this.getTotal(), isNaN(correct));
-		tally.setMessage(this.getQuetionSetContainerTitle());
+		if (tally) {
+			tally.setTally(correct || 0, this.getTotal(), isNaN(correct));
+			tally.setMessage(this.getQuetionSetContainerTitle());
+		}
 
 		if (score) {
 			score.setValue(Math.floor(100 * correct / this.getTotal()) || 0);
 		}
 		this.updateLayout();
 	},
-
 
 	reviewClicked: function() {
 		if (this.assignment) {
