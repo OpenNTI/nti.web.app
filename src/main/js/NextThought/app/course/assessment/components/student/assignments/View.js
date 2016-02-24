@@ -226,15 +226,15 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 
 	navigateToItem: function(assignment) {
-		var date = Ext.Date.format(record.get('opens'), 'l F j \\a\\t g:i A'),
-			item = record && record.get('item'),
-			parts = item && item.get('parts');
+		var openDate = assignment.get('availableBeginning'),
+			date = Ext.Date.format(openDate, 'l F j \\a\\t g:i A');
 
-		if (Ext.fly(dom).hasCls('closed')) {
+		if (!assignment.isOpen()) {
 			alert(getFormattedString('NextThought.view.courseware.assessment.assignments.View.available', { date: date}));
 			return;
 		}
-		this._showAssignment(record);
+
+		this.showAssignment(assignment);
 	},
 
 
@@ -580,23 +580,8 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 
 	showAssignment: function(assignment) {
-		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
-			x = this.store.getById(id);
-
-		if (!x) {
-			console.warn('Assignment not found:', id);
-			return;
-		}
-
-		return this._showAssignment(x);
-	},
-
-
-	_showAssignment: function(record) {
-		var item = record.get('item');
-
-		if (item) {
-			this.navigateToObject(item);
+		if (assignment) {
+			this.navigateToObject(assignment);
 		} else {
 			console.error('No Assignment to navigate to');
 		}
