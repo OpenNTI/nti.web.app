@@ -83,10 +83,12 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			cls: 'sort-group',
 			paramName: 's',
 			streamParam: 'sort',
+			modifierName: 'b',
+			modifierParam: 'batchBefore',
 			items: {
 				created: {
 					displayText: 'Date Created',
-					cls: 'sort',
+					value: 'created',
 					active: true,
 					streamValue: {
 						on: 'CreatedTime',
@@ -95,18 +97,19 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 					modifier: {
 						text: 'Date Range',
 						cls: 'modifier',
+						type: 'days',
 						items: [
-							{ text: 'Anytime', value: '', cls: 'option selected'},
-							{ text: 'Past Week', value: 'week=1', cls: 'option' },
-							{ text: 'Past Month', value: 'month=1', cls: 'option' },
-							{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
-							{ text: 'Past Year', value: 'year=1', cls: 'option' }
+							{ text: 'Anytime', value: '0', cls: 'option' },
+							{ text: 'Past Week', value: '7', cls: 'option' },
+							{ text: 'Past Month', value: '30', cls: 'option' },
+							{ text: 'Past 3 months', value: '90', cls: 'option' },
+							{ text: 'Past Year', value: '360', cls: 'option' }
 						]
 					}
 				},
 				recent: {
 					displayText: 'Recent Activity',
-					cls: 'sort',
+					value: 'recent',
 					streamValue: {
 						on: 'Last Modified',
 						order: 'DESC'
@@ -114,18 +117,20 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 					active: false,
 					modifier: {
 						text: 'Date Range',
+						cls: 'modifier',
+						type: 'days',
 						items: [
-							{ text: 'Anytime', value: '', cls: 'option' },
-							{ text: 'Past Week', value: 'week=1', cls: 'option' },
-							{ text: 'Past Month', value: 'month=1', cls: 'option' },
-							{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
-							{ text: 'Past Year', value: 'year=1', cls: 'option' }
+							{ text: 'Anytime', value: '0', cls: 'option' },
+							{ text: 'Past Week', value: '7', cls: 'option' },
+							{ text: 'Past Month', value: '30', cls: 'option' },
+							{ text: 'Past 3 months', value: '90', cls: 'option' },
+							{ text: 'Past Year', value: '360', cls: 'option' }
 						]
 					}
 				},
 				commented: {
 					displayText: 'Most Commented',
-					cls: 'sort',
+					value: 'commented',
 					streamValue: {
 						on: 'Last Modified',
 						order: 'DESC'
@@ -133,18 +138,20 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 					active: false,
 					modifier: {
 						text: 'Date Range',
+						cls: 'modifier',
+						type: 'days',
 						items: [
-							{ text: 'Anytime', value: '', cls: 'option' },
-							{ text: 'Past Week', value: 'week=1', cls: 'option' },
-							{ text: 'Past Month', value: 'month=1', cls: 'option' },
-							{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
-							{ text: 'Past Year', value: 'year=1', cls: 'option' }
+							{ text: 'Anytime', value: '0', cls: 'option' },
+							{ text: 'Past Week', value: '7', cls: 'option' },
+							{ text: 'Past Month', value: '30', cls: 'option' },
+							{ text: 'Past 3 months', value: '90', cls: 'option' },
+							{ text: 'Past Year', value: '360', cls: 'option' }
 						]
 					}
 				},
 				liked: {
 					displayText: 'Most Liked',
-					cls: 'sort',
+					value: 'liked',
 					streamValue: {
 						on: 'Last Modified',
 						order: 'DESC'
@@ -152,12 +159,14 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 					active: false,
 					modifier: {
 						text: 'Date Range',
+						cls: 'modifier',
+						type: 'days',
 						items: [
-							{ text: 'Anytime', value: '', cls: 'option' },
-							{ text: 'Past Week', value: 'week=1', cls: 'option' },
-							{ text: 'Past Month', value: 'month=1', cls: 'option' },
-							{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
-							{ text: 'Past Year', value: 'year=1', cls: 'option' }
+							{ text: 'Anytime', value: '0', cls: 'option' },
+							{ text: 'Past Week', value: '7', cls: 'option' },
+							{ text: 'Past Month', value: '30', cls: 'option' },
+							{ text: 'Past 3 months', value: '90', cls: 'option' },
+							{ text: 'Past Year', value: '360', cls: 'option' }
 						]
 					}
 				}
@@ -371,8 +380,9 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 	},
 
 
-	onItemSelect: function(itemKey, groupKey) {
-		var group = this.getGroup(groupKey);
+	onItemSelect: function(itemKey, groupKey, modifierValue) {
+		var group = this.getGroup(groupKey),
+			modifier;
 
 		if (!group) { return; }
 
@@ -382,10 +392,18 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			group.activeItem = itemKey;
 		}
 
+		if (modifierValue) {
+			modifier = this.__getModifier(group);
+			if (modifier) {
+				modifier.activeItem = modifierValue;
+			}
+		}
+
 		group.active = false;
 
 		this.replaceFilter();
 	},
+
 
 	/**
 	 * Update the filter, should trigger the filter to be pushed to state i.e. queryParams
@@ -393,10 +411,11 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 	replaceFilter: function() {
 		var filters = this.filters,
 			keys = Object.keys(filters),
-			params = {};
+			params = {}, me = this;
 
 		keys.forEach(function(key) {
 			var filter = filters[key],
+				m = me.__getModifier(filter),
 				active;
 
 			if (filter.multiselect) {
@@ -408,6 +427,10 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			} else if (filter.activeItem && filter.activeItem !== filter.defaultItem) {
 				params[filter.paramName] = filter.activeItem;
 			}
+
+			if (m && m.activeItem) {
+				params[filter.modifierName] = m.activeItem;
+			}
 		});
 
 		this.updateFilter(params);
@@ -418,23 +441,49 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 	 */
 	setFilterFromQueryParams: function(params) {
 		var filters = this.filters,
-			keys = Object.keys(filters);
+			keys = Object.keys(filters), 
+			me = this;
 
 		keys.forEach(function(key) {
 			var filter = filters[key],
-				paramValue = params[filter.paramName];
-
+				paramValue = params[filter.paramName],
+				modifierValue = params[filter.modifierName], m;
 
 			if (filter.multiselect) {
 				filter.activeItems = paramValue && paramValue.split(',');
 			} else {
 				filter.activeItem = paramValue;
 			}
+
+			if (modifierValue) {
+				m = me.__getModifier(filter);
+				if (m) {
+					m.activeItem = modifierValue;
+				}
+			}
 		});
 
 		this.updateFilterUI();
 	},
 
+
+	__getModifier: function(filter) {
+		var activeItem = filter && filter.activeItem,
+			item = filter.items && filter.items[activeItem],
+			modifier = item && item.modifier;
+
+		return modifier;	
+	},
+
+	__getModifierValue: function(value, type) {
+		var m = value && type && moment().subtract(value, type),
+			date = m && m.toDate();
+
+		if (date) {
+			return date.getTime();
+		}
+		return null;
+	},
 	/**
 	 * Convert the current filters to params to pass to the stream
 	 * @return {Object} config to pass to the stream
@@ -442,7 +491,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 	getStreamParams: function() {
 		var params = {},
 			filters = this.filters,
-			keys = Object.keys(this.filters);
+			keys = Object.keys(this.filters), 
+			me = this;
 
 		function addMutliSelectValue(filter) {
 			var activeItems = filter.activeItems || [],
@@ -463,10 +513,16 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 		function addSingleSelectValue(filter) {
 			var activeItem = filter.activeItem,
 				filterItem = activeItem && filter.items[activeItem],
-				value = filterItem && filterItem.streamValue;
+				value = filterItem && filterItem.streamValue,
+				modifier = filterItem && filterItem.modifier,
+				m = {};
 
 			if (value) {
 				params[filter.streamParam] = value;
+			}
+			if (modifier && modifier.activeItem) {
+				m[filter.modifierParam] = me.__getModifierValue(modifier.activeItem, modifier.type);
+				params['modifier'] = m;
 			}
 		}
 

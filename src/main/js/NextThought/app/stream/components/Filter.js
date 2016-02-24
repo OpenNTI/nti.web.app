@@ -29,12 +29,7 @@ Ext.define('NextThought.app.stream.components.Filter', {
 				{cls: 'select-wrapper', cn: [
 					{tag: 'select', name: '{name}', cn: [
 						{tag: 'tpl', 'for': 'items', cn:[
-							{tag: 'tpl', 'if': 'active', cn: [{
-								tag: 'option', value: '{displayText}', html: '{displayText}', selected: true	
-							}]},
-							{tag: 'tpl', 'if': '!active', cn: [{
-								tag: 'option', value: '{displayText}', html: '{displayText}'
-							}]}
+							{tag: 'option', value: '{value}', 'data-value': '{value}', html: '{displayText}'}
 						]}
 					]}
 				]}
@@ -54,7 +49,7 @@ Ext.define('NextThought.app.stream.components.Filter', {
 		])),
 
 		modifier: new Ext.XTemplate(Ext.DomHelper.markup([
-			{cls: 'group {cls}', 'data-key': '{type}', cn: [
+			{cls: 'group {cls}', 'data-key': 'modifier', 'data-group': '{group}', 'data-item': '{item}', cn: [
 				{cls: 'name', html: '{text}'},
 				{tag: 'tpl', 'for': 'items', cn: [
 					{cls: 'group-item {cls}', 'data-value': '{value}', html: '{text}'}
@@ -94,7 +89,7 @@ Ext.define('NextThought.app.stream.components.Filter', {
 
 		// Change the items to an array, if it's not.
 		if (group.items && !(group.items instanceof Array)) {
-			items = Object.keys(group.items).map(function(k){return group.items[k]});
+			items = Object.keys(group.items).map(function(k){ return group.items[k]; });
 		}
 
 		if (tpl) {
@@ -102,8 +97,8 @@ Ext.define('NextThought.app.stream.components.Filter', {
 		}
 
 		if (type === 'sort') {
-			this.__addModifierGroup(group);
 			this.mon(el, 'change', this.handleClick.bind(this));
+			this.__addModifierGroup(group);
 		}
 		else {
 			this.mon(el, 'click', this.handleClick.bind(this));
@@ -126,13 +121,16 @@ Ext.define('NextThought.app.stream.components.Filter', {
 			if (group.setActiveItem) {
 				group.setActiveItem(g, group.activeItems);
 			}
+			else {
+				me.__updateGroup(group, g);
+			}
 		});
 	},
 
 
 	__addModifierGroup: function(group){
 		var items = group.items || [],
-			el = this.el, modifier, tpl;
+			el = this.el, modifier, tpl, groupEl;
 
 		if (group.items && !(group.items instanceof Array)) {
 			items = Object.keys(group.items).map(function(k){return group.items[k]});
@@ -141,12 +139,15 @@ Ext.define('NextThought.app.stream.components.Filter', {
 		items.forEach(function(item){
 			if (item.active) {
 				modifier = item.modifier;
+				modifier.group = group.type;
+				modifier.item = item.value;
 			}
 		});
 
 		if (modifier) {
 			tpl = this.GROUP_TYPES['modifier'];
-			tpl.append(el, modifier, true);
+			groupEl = tpl.append(el, modifier, true);
+			this.mon(groupEl, 'click', this.onTimeFilterClick.bind(this));
 		}
 	},
 
@@ -156,23 +157,42 @@ Ext.define('NextThought.app.stream.components.Filter', {
 	},
 
 
-	__updateGroup: function(option, dom) {
+	__updateGroup: function(group, dom) {
 		var me = this,
-			activeText = dom.querySelector('.active-text');
+			activeItem = group && group.activeItem,
+			item = group && group.items && group.items[activeItem],
+			hasModifier = Boolean(group && group.modifierParam),
+			d;
 
-		dom.classList[option.active ? 'add' : 'remove']('active');
-
-		activeText.innerText = option.activeText || '';
-
-		option.items.forEach(function(item) {
-			var itemDom = dom.querySelector('[data-value="' + item.value + '"]');
-
-			if (itemDom) {
-				me.__updateItem(item, itemDom);
-			} else {
-				console.warn('Updating an option that isnt there');
+		if (activeItem && dom) {
+			d = dom.querySelector('[data-value=' + activeItem + ']');
+			if (d) {
+				d.selected = true;
 			}
-		});
+		}
+
+		if (hasModifier && item) {
+			d = dom.querySelector('[data-item' + item.type + ']'),
+			all = dom.querySelectorAll('[data-item]');
+
+			if (d) {
+				d.classList.add('selected');
+			}
+		}
+
+		// dom.classList[option.active ? 'add' : 'remove']('active');
+
+		// activeText.innerText = option.activeText || '';
+
+		// option.items.forEach(function(item) {
+		// 	var itemDom = dom.querySelector('[data-value="' + item.value + '"]');
+
+		// 	if (itemDom) {
+		// 		me.__updateItem(item, itemDom);
+		// 	} else {
+		// 		console.warn('Updating an option that isnt there');
+		// 	}
+		// });
 	},
 
 
@@ -210,6 +230,22 @@ Ext.define('NextThought.app.stream.components.Filter', {
 		} 
 		else if (group) {
 			this.onGroupSelect(group);
+		}
+	},
+
+
+	onTimeFilterClick: function(e) {
+		var target = e.target,
+			group = e.getTarget('.group'),
+			value = target.getAttribute('data-value'),
+			itemKey = group && group.getAttribute('data-item');
+
+		if (value) {
+			group = group && group.getAttribute('data-group');
+
+			if (this.onItemSelect) {
+				this.onItemSelect(itemKey, group, value);
+			}
 		}
 	}
 });
