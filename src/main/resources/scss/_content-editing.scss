@@ -1397,6 +1397,12 @@ input[type=number]{
 				width: auto !important;
 				overflow: hidden;
 			}
+
+			& > .overview-videos {
+				.body {
+					margin: 0;
+				}
+			}
 		}
 	}
 
