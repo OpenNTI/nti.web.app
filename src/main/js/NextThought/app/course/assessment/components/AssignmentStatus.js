@@ -69,6 +69,16 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 	},
 
 
+	disableEditing: function() {
+		this.addCls('disabled');
+	},
+
+
+	enableEditing: function() {
+		this.removeCls('disabled');
+	},
+
+
 	updateStatus: function() {
 		var assignment = this.assignment,
 			history = this.history,
@@ -129,6 +139,8 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 
 
 	toggleDueDateEditor: function(e) {
+		if (e.getTarget('.disabled')) { return; }
+
 		e.stopEvent();
 
 		if (this.el.hasCls('menu-open')) {

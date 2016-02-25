@@ -1315,7 +1315,7 @@ input[type=number]{
 
 	.overview-group-body {
 		padding: 13px 12px;
-		overflow: hidden;
+		@include containFloats();
 	}
 
 	.overview-group-title {
@@ -1332,8 +1332,9 @@ input[type=number]{
 		&:not(.transition) {
 			max-height: 500px;
 			max-width: 800px;
-			overflow: hidden;
 			transition: max-height 0.1s;
+
+			@include containFloats();
 		}
 
 		&.dragging {
@@ -1390,7 +1391,7 @@ input[type=number]{
 
 		.body {
 			padding: 12px 10px;
-			overflow: hidden;
+			@include containFloats();
 
 			& > .overview-video {
 				width: auto !important;

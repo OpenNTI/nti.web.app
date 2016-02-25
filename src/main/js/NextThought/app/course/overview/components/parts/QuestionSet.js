@@ -71,6 +71,7 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 			text: getString('NextThought.view.courseware.overview.parts.QuestionSet.review'),
 			ui: 'secondary',
 			scale: 'large',
+			cls: 'review-btn',
 			handler: function() {
 				me.reviewClicked();
 			}
@@ -150,6 +151,12 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 
 		this.addCls('assignment');
 		this.setAsNotStarted();
+
+		if (this.inEditMode) {
+			status.enableEditing();
+		} else {
+			status.disableEditing();
+		}
 
 		assignment.getHistory()
 			.then(this.setHistory.bind(this));

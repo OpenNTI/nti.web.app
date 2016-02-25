@@ -337,10 +337,12 @@
 		margin-top: 5px;
 		position: relative;
 		min-height: 76px;
+		overflow: visible;
 
 		.x-panel-body-assessment {
 			padding: 0 15px 0 90px;
 			min-height: 76px;
+			overflow: visible;
 		}
 
 		canvas.score {
@@ -377,7 +379,7 @@
 			}
 		}
 
-		.x-btn {
+		.x-btn.review-btn {
 			position: absolute;
 			right: 15px;
 			top: 50%;
