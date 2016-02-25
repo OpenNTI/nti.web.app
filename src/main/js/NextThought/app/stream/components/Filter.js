@@ -162,7 +162,7 @@ Ext.define('NextThought.app.stream.components.Filter', {
 
 	__updateGroup: function(group, dom) {
 		var me = this,
-			activeItem = group && group.activeItem,
+			activeItem = group && (group.activeItem || group.defaultItem),
 			item = group && group.items && group.items[activeItem],
 			hasModifier = Boolean(group && group.modifierParam),
 			d, el = this.el.dom;
@@ -195,7 +195,7 @@ Ext.define('NextThought.app.stream.components.Filter', {
 		}
 
 		if (modifier) {
-			v = modifier.activeItem || '0';
+			v = modifier.activeItem || modifier.defaultItem || '0';
 			option = current.querySelector('.option[data-value="' + v + '"]');
 			old = current.querySelector('.option.selected');
 

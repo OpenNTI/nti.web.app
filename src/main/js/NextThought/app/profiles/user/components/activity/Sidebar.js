@@ -85,6 +85,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			streamParam: 'sort',
 			modifierName: 'b',
 			modifierParam: 'batchBefore',
+			defaultItem: 'recent',
 			items: {
 				created: {
 					displayText: 'Date Created',
@@ -98,8 +99,9 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 						text: 'Date Range',
 						cls: 'modifier',
 						type: 'days',
+						defaultItem: '0',
 						items: [
-							{ text: 'Anytime', value: '0', cls: 'option' },
+							{ text: 'Anytime', value: '0', cls: 'option'},
 							{ text: 'Past Week', value: '7', cls: 'option' },
 							{ text: 'Past Month', value: '30', cls: 'option' },
 							{ text: 'Past 3 months', value: '90', cls: 'option' },
@@ -511,7 +513,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 		}
 
 		function addSingleSelectValue(filter) {
-			var activeItem = filter.activeItem,
+			var activeItem = filter.activeItem || filter.defaultItem, 
 				filterItem = activeItem && filter.items[activeItem],
 				value = filterItem && filterItem.streamValue,
 				modifier = filterItem && filterItem.modifier,
