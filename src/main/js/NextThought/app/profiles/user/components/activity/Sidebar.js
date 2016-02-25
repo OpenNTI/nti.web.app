@@ -480,7 +480,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			date = m && m.toDate();
 
 		if (date) {
-			return date.getTime();
+			return date.getTime() / 1000;
 		}
 		return null;
 	},

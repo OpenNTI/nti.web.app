@@ -130,25 +130,28 @@ Ext.define('NextThought.app.stream.components.Filter', {
 
 	__addModifierGroup: function(group){
 		var items = group.items || [],
-			el = this.el, modifier, tpl, groupEl;
+			el = this.el, modifier, tpl, groupEl, me = this;
 
 		if (group.items && !(group.items instanceof Array)) {
 			items = Object.keys(group.items).map(function(k){return group.items[k]});
 		}
 
 		items.forEach(function(item){
-			if (item.active) {
-				modifier = item.modifier;
+			modifier = item.modifier;
+	
+			if (modifier) {
 				modifier.group = group.type;
 				modifier.item = item.value;
+
+				tpl = me.GROUP_TYPES['modifier'];
+				groupEl = tpl.append(el, modifier, true);
+				me.mon(groupEl, 'click', me.onTimeFilterClick.bind(me));
+
+				if (item.active) {
+					groupEl.addCls('active');
+				}
 			}
 		});
-
-		if (modifier) {
-			tpl = this.GROUP_TYPES['modifier'];
-			groupEl = tpl.append(el, modifier, true);
-			this.mon(groupEl, 'click', this.onTimeFilterClick.bind(this));
-		}
 	},
 
 
@@ -162,7 +165,7 @@ Ext.define('NextThought.app.stream.components.Filter', {
 			activeItem = group && group.activeItem,
 			item = group && group.items && group.items[activeItem],
 			hasModifier = Boolean(group && group.modifierParam),
-			d;
+			d, el = this.el.dom;
 
 		if (activeItem && dom) {
 			d = dom.querySelector('[data-value=' + activeItem + ']');
@@ -172,27 +175,37 @@ Ext.define('NextThought.app.stream.components.Filter', {
 		}
 
 		if (hasModifier && item) {
-			d = dom.querySelector('[data-item' + item.type + ']'),
-			all = dom.querySelectorAll('[data-item]');
+			this.__updateModifier(item, group);
+		}
+	},
 
-			if (d) {
-				d.classList.add('selected');
-			}
+
+	__updateModifier: function(item, group){
+		var dom = this.el.dom,
+			current = dom.querySelector('[data-item=' + item.value + ']'),
+			prev = dom.querySelector('.active[data-item]'),
+			modifier = item && item.modifier, option, old, v;
+
+		if (prev) {
+			prev.classList.remove('active');
 		}
 
-		// dom.classList[option.active ? 'add' : 'remove']('active');
+		if (current) {
+			current.classList.add('active');
+		}
 
-		// activeText.innerText = option.activeText || '';
+		if (modifier) {
+			v = modifier.activeItem || '0';
+			option = current.querySelector('.option[data-value="' + v + '"]');
+			old = current.querySelector('.option.selected');
 
-		// option.items.forEach(function(item) {
-		// 	var itemDom = dom.querySelector('[data-value="' + item.value + '"]');
-
-		// 	if (itemDom) {
-		// 		me.__updateItem(item, itemDom);
-		// 	} else {
-		// 		console.warn('Updating an option that isnt there');
-		// 	}
-		// });
+			if (old) {
+				old.classList.remove('selected');
+			}
+			if (option) {
+				option.classList.add('selected');
+			}
+		}
 	},
 
 
