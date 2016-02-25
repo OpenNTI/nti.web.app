@@ -85,7 +85,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			streamParam: 'sort',
 			modifierName: 'b',
 			modifierParam: 'batchBefore',
-			defaultItem: 'recent',
+			defaultItem: 'created',
 			items: {
 				created: {
 					displayText: 'Date Created',
@@ -93,7 +93,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 					active: true,
 					streamValue: {
 						on: 'CreatedTime',
-						order: 'DESC'
+						order: 'descending'
 					},
 					modifier: {
 						text: 'Date Range',
@@ -114,7 +114,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 					value: 'recent',
 					streamValue: {
 						on: 'Last Modified',
-						order: 'DESC'
+						order: 'descending'
 					},
 					active: false,
 					modifier: {
@@ -135,7 +135,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 					value: 'commented',
 					streamValue: {
 						on: 'Last Modified',
-						order: 'DESC'
+						order: 'descending'
 					},
 					active: false,
 					modifier: {
@@ -156,7 +156,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 					value: 'liked',
 					streamValue: {
 						on: 'Last Modified',
-						order: 'DESC'
+						order: 'descending'
 					},
 					active: false,
 					modifier: {
