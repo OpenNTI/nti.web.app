@@ -352,13 +352,15 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 		return me.__getRecord(id, record, false, changedEditing)
 			.then(function(record) {
+				me.unmask();
+
 				if (!record) {
 					console.error('No valid lesson to show');
 					return;
 				}
 
 				record = me.navigation.selectRecord(record, true);
-				me.unmask();
+
 				me.setTitle(record.get('label'));
 				me.activeNode = record;
 
