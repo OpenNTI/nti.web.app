@@ -610,7 +610,11 @@ canvas.x-component-course-assessment {
 				@include ellipsis();
 			}
 
-			.meta, .extras {
+			.extras {
+				margin-top: 0.125em;
+			}
+
+			.meta {
 				font: normal 600 0.6em/1 $font;
 				text-transform: uppercase;
 				color: $tertiary-grey;

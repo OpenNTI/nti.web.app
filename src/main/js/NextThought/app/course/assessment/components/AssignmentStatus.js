@@ -28,13 +28,13 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 	cls: 'assignment-status-container',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'assignment-status'},
+		{cls: 'status-container'},
 		{cls: 'menu-container'}
 	]),
 
 
 	renderSelectors: {
-		statusEl: '.assignment-status',
+		statusEl: '.status-container',
 		menuContainer: '.menu-container'
 	},
 
