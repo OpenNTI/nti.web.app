@@ -300,6 +300,16 @@
 }
 
 .course-overview {
+	.empty-state {
+		background: #ffffff;
+	    padding: 2em;
+	    margin-top: 0;
+
+		a.edit {
+			color: $primary-blue;
+			cursor: pointer;
+		}
+	}
 	.editing-controls {
 		margin-bottom: 20px;
 		overflow: hidden;

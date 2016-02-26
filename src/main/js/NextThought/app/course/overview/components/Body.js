@@ -132,6 +132,49 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 	},
 
 
+	getEmptyState: function(addIfNotThere) {
+		var emptyState = this.down('[isEmptyState]'),
+			me = this;
+
+		if (!emptyState && addIfNotThere) {
+
+			var cmps = [
+					{ html: 'There is no lesson to display.'}
+				];
+
+			if (this.hasEditingControls) {
+				cmps.push({ tag: 'a', cls: 'edit', html: 'Get started editing here.'});
+			}
+
+			emptyState = this.add({
+				isEmptyState: true,
+				cls: 'empty-state',
+				xtype: 'container',
+				layout: 'none',
+				items: [{
+					xtype: 'box',
+					autoEl: {
+						cls: 'empty-text',
+						cn: cmps
+					},
+					listeners: {
+						click: {
+							element: 'el',
+							fn: function(e) {
+								if (e.getTarget('.edit') && me.openEditing) {
+									me.openEditing();
+								}
+							}
+						}
+					}
+				}]
+			});
+		}
+
+		return emptyState;
+	},
+
+
 	getLessonTop: function() {
 		var lesson = this.getLesson(),
 			editor = this.getEditor(),
@@ -170,10 +213,15 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 	showOutlineNode: function(record, doNotCache) {
 		var lesson = this.getLesson(true),
-			editor = this.getEditor();
+			editor = this.getEditor(),
+			emptyState = this.getEmptyState();
 
 		if (editor) {
 			editor.hide();
+		}
+
+		if (emptyState) {
+			emptyState.hide();
 		}
 
 		lesson.show();
@@ -184,14 +232,38 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 
 	editOutlineNode: function(record) {
 		var editor = this.getEditor(true),
-			lesson = this.getLesson();
+			lesson = this.getLesson(),
+			emptyState = this.getEmptyState();
 
 		if (lesson) {
 			lesson.hide();
 		}
 
+		if (emptyState) {
+			emptyState.hide();
+		}
+
 		editor.show();
 
 		return editor.editOutlineNode(record, this.currentOutline);
+	},
+
+
+	showEmptyState: function() {
+		var emptyState = this.getEmptyState(true),
+			editor = this.getEditor(),
+			lesson = this.getLesson();
+
+		if (editor) {
+			editor.hide();
+		}
+
+		if (lesson) {
+			lesson.hide();
+		}
+
+		emptyState.show();
+
+		return Promise.resolve();
 	}
 });
