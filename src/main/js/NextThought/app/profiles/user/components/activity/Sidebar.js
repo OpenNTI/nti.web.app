@@ -66,7 +66,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 					displayText: 'Most Commented',
 					value: 'commented',
 					streamValue: {
-						on: 'Last Modified',
+						on: 'ReferencedByCount',
 						order: 'descending'
 					},
 					active: false,
@@ -87,7 +87,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 					displayText: 'Most Liked',
 					value: 'liked',
 					streamValue: {
-						on: 'Last Modified',
+						on: 'RecursiveLikeCount',
 						order: 'descending'
 					},
 					active: false,
