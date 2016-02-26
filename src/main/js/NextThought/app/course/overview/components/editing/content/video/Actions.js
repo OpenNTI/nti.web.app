@@ -130,10 +130,13 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Act
 		});
 
 		return Service.put(link, values)
-			.then(this.__moveRecord.bind(this, record, originalPosition, newPosition, root))
-			.then(function() {
-				record.fireEvent('update');
-			});
+			.then(function(response) {
+				record.syncWithResponse(response);
+
+				return record;
+			})
+			.then(this.__moveRecord.bind(this, record, originalPosition, newPosition, root));
+
 	},
 
 

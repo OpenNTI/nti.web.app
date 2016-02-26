@@ -55,14 +55,16 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	},
 
 
-	showEditor: function(){
+	showEditor: function() {
 		this.callParent(arguments);
 
-		this.addAdvancedDisclosure();	
+		if (Service.canDoAdvancedEditing()) {
+			this.addAdvancedDisclosure();
+		}
 	},
 
 
-	addAdvancedDisclosure: function(){
+	addAdvancedDisclosure: function() {
 		var visibility = this.record && this.record.get('visibility');
 
 		if (this.visibilityCmp) { return; }
@@ -77,7 +79,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	},
 
 
-	onVisibilityChange: function(cmp){
+	onVisibilityChange: function(cmp) {
 		var value = cmp && cmp.getValue();
 
 		console.log('changed visibility to: ', value.visibility);

@@ -4,74 +4,6 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 
 	requires: ['NextThought.app.stream.components.Filter'],
 
-	// BASE_FILTERS: {
-	// 	activity: {
-	// 		cls: 'activity', //class to apply to the item
-	// 		name: 'Activity Type', //the text to display for the user
-	// 		defaultItem: 'all', //the key of the item to show when nothing is selected
-	// 		activeItem: null, //the key of whatever item is selected
-	// 		active: false, //whether or not to expand this group
-	// 		paramName: 'a', //the name to key off the query param
-	// 		streamParam: 'accepts', //the name of the param to pass to the stream
-	// 		items: {
-	// 			all: {//the key is what is put in the query param
-	// 				text: 'All Activity',//the text to display to the user for this option
-	// 				streamValue: ['*']//the value to pass to the stream
-	// 			},
-	// 			notes: {
-	// 				text: 'Notes',
-	// 				streamValue: ['application/vnd.nextthought.note']
-	// 			},
-	// 			disscussions: {
-	// 				text: 'Discussions',
-	// 				streamValue: [
-	// 					'application/vnd.nextthought.forums.dflheadlinetopic',
-	// 					'application/vnd.nextthought.forums.communityheadlinetopic',
-	// 					'application/vnd.nextthought.forums.generalforumcomment',
-	// 					'application/vnd.nextthought.forums.communityheadlinetopic'
-	// 				]
-	// 			},
-	// 			blogs: {
-	// 				text: 'Thoughts',
-	// 				streamValue: [
-	// 					'application/vnd.nextthought.forums.personalblogentry',
-	// 					'application/vnd.nextthought.forums.personalblogcomment'
-	// 				]
-	// 			},
-	// 			chat: {
-	// 				text: 'Chat',
-	// 				streamValue: ['application/vnd.nextthought.transcriptsummary']
-	// 			}
-
-	// 		}
-	// 	},
-	// 	sort: {
-	// 		cls: 'sort',
-	// 		name: 'Sort By',
-	// 		defaultItem: 'recent',
-	// 		activeItem: null,
-	// 		active: false,
-	// 		paramName: 's',
-	// 		streamParam: 'sort',
-	// 		items: {
-	// 			recent: {
-	// 				text: 'Most Recent',
-	// 				streamValue: {
-	// 					on: 'CreatedTime',
-	// 					order: 'DESC'
-	// 				}
-	// 			},
-	// 			activity: {
-	// 				text: 'Recent Activity',
-	// 				streamValue: {
-	// 					on: 'Last Modified',
-	// 					order: 'DESC'
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// },
-
 	layout: 'none',
 	cls: 'activity-sidebar',
 
@@ -83,81 +15,92 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			cls: 'sort-group',
 			paramName: 's',
 			streamParam: 'sort',
+			modifierName: 'b',
+			modifierParam: 'batchBefore',
+			defaultItem: 'created',
 			items: {
 				created: {
 					displayText: 'Date Created',
-					cls: 'sort',
+					value: 'created',
 					active: true,
 					streamValue: {
 						on: 'CreatedTime',
-						order: 'DESC'
+						order: 'descending'
 					},
 					modifier: {
 						text: 'Date Range',
 						cls: 'modifier',
+						type: 'days',
+						defaultItem: '0',
 						items: [
-							{ text: 'Anytime', value: '', cls: 'option selected'},
-							{ text: 'Past Week', value: 'week=1', cls: 'option' },
-							{ text: 'Past Month', value: 'month=1', cls: 'option' },
-							{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
-							{ text: 'Past Year', value: 'year=1', cls: 'option' }
+							{ text: 'Anytime', value: '0', cls: 'option'},
+							{ text: 'Past Week', value: '7', cls: 'option' },
+							{ text: 'Past Month', value: '30', cls: 'option' },
+							{ text: 'Past 3 months', value: '90', cls: 'option' },
+							{ text: 'Past Year', value: '360', cls: 'option' }
 						]
 					}
 				},
 				recent: {
 					displayText: 'Recent Activity',
-					cls: 'sort',
+					value: 'recent',
 					streamValue: {
 						on: 'Last Modified',
-						order: 'DESC'
+						order: 'descending'
 					},
 					active: false,
 					modifier: {
 						text: 'Date Range',
+						cls: 'modifier',
+						type: 'days',
 						items: [
-							{ text: 'Anytime', value: '', cls: 'option' },
-							{ text: 'Past Week', value: 'week=1', cls: 'option' },
-							{ text: 'Past Month', value: 'month=1', cls: 'option' },
-							{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
-							{ text: 'Past Year', value: 'year=1', cls: 'option' }
+							{ text: 'Anytime', value: '0', cls: 'option' },
+							{ text: 'Past Week', value: '7', cls: 'option' },
+							{ text: 'Past Month', value: '30', cls: 'option' },
+							{ text: 'Past 3 months', value: '90', cls: 'option' },
+							{ text: 'Past Year', value: '360', cls: 'option' }
 						]
 					}
 				},
 				commented: {
 					displayText: 'Most Commented',
-					cls: 'sort',
+					value: 'commented',
 					streamValue: {
-						on: 'Last Modified',
-						order: 'DESC'
+						on: 'ReferencedByCount',
+						order: 'descending'
 					},
 					active: false,
 					modifier: {
 						text: 'Date Range',
+						cls: 'modifier',
+						type: 'days',
 						items: [
-							{ text: 'Anytime', value: '', cls: 'option' },
-							{ text: 'Past Week', value: 'week=1', cls: 'option' },
-							{ text: 'Past Month', value: 'month=1', cls: 'option' },
-							{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
-							{ text: 'Past Year', value: 'year=1', cls: 'option' }
+							{ text: 'Anytime', value: '0', cls: 'option' },
+							{ text: 'Past Week', value: '7', cls: 'option' },
+							{ text: 'Past Month', value: '30', cls: 'option' },
+							{ text: 'Past 3 months', value: '90', cls: 'option' },
+							{ text: 'Past Year', value: '360', cls: 'option' }
 						]
 					}
 				},
 				liked: {
 					displayText: 'Most Liked',
-					cls: 'sort',
+					value: 'liked',
 					streamValue: {
-						on: 'Last Modified',
-						order: 'DESC'
+						on: 'RecursiveLikeCount',
+						order: 'descending'
 					},
 					active: false,
 					modifier: {
 						text: 'Date Range',
+						cls: 'modifier',
+						type: 'days',
 						items: [
-							{ text: 'Anytime', value: '', cls: 'option' },
-							{ text: 'Past Week', value: 'week=1', cls: 'option' },
-							{ text: 'Past Month', value: 'month=1', cls: 'option' },
-							{ text: 'Past 3 months', value: 'month=3', cls: 'option' },
-							{ text: 'Past Year', value: 'year=1', cls: 'option' }
+							{ text: 'Anytime', value: '0', cls: 'option' },
+							{ text: 'Past Week', value: '7', cls: 'option' },
+							{ text: 'Past Month', value: '30', cls: 'option' },
+							{ text: 'Past 3 months', value: '90', cls: 'option' },
+							{ text: 'Past Year', value: '360', cls: 'option' }
 						]
 					}
 				}
@@ -371,8 +314,9 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 	},
 
 
-	onItemSelect: function(itemKey, groupKey) {
-		var group = this.getGroup(groupKey);
+	onItemSelect: function(itemKey, groupKey, modifierValue) {
+		var group = this.getGroup(groupKey),
+			modifier;
 
 		if (!group) { return; }
 
@@ -382,10 +326,18 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			group.activeItem = itemKey;
 		}
 
+		if (modifierValue) {
+			modifier = this.__getModifier(group);
+			if (modifier) {
+				modifier.activeItem = modifierValue;
+			}
+		}
+
 		group.active = false;
 
 		this.replaceFilter();
 	},
+
 
 	/**
 	 * Update the filter, should trigger the filter to be pushed to state i.e. queryParams
@@ -393,10 +345,11 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 	replaceFilter: function() {
 		var filters = this.filters,
 			keys = Object.keys(filters),
-			params = {};
+			params = {}, me = this;
 
 		keys.forEach(function(key) {
 			var filter = filters[key],
+				m = me.__getModifier(filter),
 				active;
 
 			if (filter.multiselect) {
@@ -408,6 +361,10 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			} else if (filter.activeItem && filter.activeItem !== filter.defaultItem) {
 				params[filter.paramName] = filter.activeItem;
 			}
+
+			if (m && m.activeItem) {
+				params[filter.modifierName] = m.activeItem;
+			}
 		});
 
 		this.updateFilter(params);
@@ -418,23 +375,49 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 	 */
 	setFilterFromQueryParams: function(params) {
 		var filters = this.filters,
-			keys = Object.keys(filters);
+			keys = Object.keys(filters), 
+			me = this;
 
 		keys.forEach(function(key) {
 			var filter = filters[key],
-				paramValue = params[filter.paramName];
-
+				paramValue = params[filter.paramName],
+				modifierValue = params[filter.modifierName], m;
 
 			if (filter.multiselect) {
 				filter.activeItems = paramValue && paramValue.split(',');
 			} else {
 				filter.activeItem = paramValue;
 			}
+
+			if (modifierValue) {
+				m = me.__getModifier(filter);
+				if (m) {
+					m.activeItem = modifierValue;
+				}
+			}
 		});
 
 		this.updateFilterUI();
 	},
 
+
+	__getModifier: function(filter) {
+		var activeItem = filter && filter.activeItem,
+			item = filter.items && filter.items[activeItem],
+			modifier = item && item.modifier;
+
+		return modifier;	
+	},
+
+	__getModifierValue: function(value, type) {
+		var m = value && type && moment().subtract(value, type),
+			date = m && m.toDate();
+
+		if (date) {
+			return date.getTime() / 1000;
+		}
+		return null;
+	},
 	/**
 	 * Convert the current filters to params to pass to the stream
 	 * @return {Object} config to pass to the stream
@@ -442,7 +425,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 	getStreamParams: function() {
 		var params = {},
 			filters = this.filters,
-			keys = Object.keys(this.filters);
+			keys = Object.keys(this.filters), 
+			me = this;
 
 		function addMutliSelectValue(filter) {
 			var activeItems = filter.activeItems || [],
@@ -461,12 +445,18 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 		}
 
 		function addSingleSelectValue(filter) {
-			var activeItem = filter.activeItem,
+			var activeItem = filter.activeItem || filter.defaultItem, 
 				filterItem = activeItem && filter.items[activeItem],
-				value = filterItem && filterItem.streamValue;
+				value = filterItem && filterItem.streamValue,
+				modifier = filterItem && filterItem.modifier,
+				m = {};
 
 			if (value) {
 				params[filter.streamParam] = value;
+			}
+			if (modifier && modifier.activeItem) {
+				m[filter.modifierParam] = me.__getModifierValue(modifier.activeItem, modifier.type);
+				params['modifier'] = m;
 			}
 		}
 
