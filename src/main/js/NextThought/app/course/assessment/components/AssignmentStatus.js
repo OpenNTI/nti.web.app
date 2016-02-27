@@ -126,14 +126,14 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 			var el = e.getTarget('assignment-status-container');
 
 			if (!el || el !== me.el.dom) {
-				me.closeDueDateEditor();
+				// me.closeDueDateEditor();
 			}
 		});
 	},
 
 
 	closeDueDateEditor: function() {
-		this.el.removeCls('menu-open');
+		// this.el.removeCls('menu-open');
 		Ext.destroy(this.bodyClickMon);
 	},
 
@@ -151,7 +151,5 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 	},
 
 
-	onDueDateChanged: function() {
-		debugger;
-	}
+	onDueDateChanged: function() {}
 });

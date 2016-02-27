@@ -7,7 +7,7 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 	listTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		tag: 'ul', cn: [
 			{tag: 'tpl', 'for': 'options', cn: [
-				{tag: 'li', 'data-value': '{value}', html: '{text}'}
+				{tag: 'li', 'data-value': '{value}', 'data-index': '{index}', html: '{text}'}
 			]}
 		]
 	})),
@@ -51,7 +51,9 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.filterOptions();
+		if (this.options) {
+			this.filterOptions();
+		}
 
 		this.mon(this.optionsEl, 'click', 'selectOptionClick');
 
@@ -82,9 +84,10 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 
 
 	addOptions: function(options) {
-		function convert(o) {
-			o = o.hasOwnProperty('value') ? Ext.clone(o) : {value: o, text: o};
+		function convert(o, index) {
+			o = o.hasOwnProperty('value') ? Ext.clone(o) : {value: o, text: o.toString()};
 			o.toString = function() {return this.text;};
+			o.index = index;
 			return o;
 		}
 
@@ -204,11 +207,16 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 
 	/**
 	 * Set the current option and update the input
-	 * @param  {Node} option the li to select
+	 * @param  {Node} el the li to select
 	 * @param  {Boolean} silent don't fire an event
 	 */
-	selectOption: function(option, silent) {
-		this.__setValue(option.textContent, option.getAttribute('data-value'), silent);
+	selectOption: function(el, silent) {
+		var index = el.getAttribute('data-index'),
+			option = this.options[index],
+			value = option && option.value,
+			text = option && option.text;
+
+		this.__setValue(text || el.textContent, value || el.getAttribute('data-value'), silent);
 	},
 
 	__setValue: function(text, value, silent) {
@@ -219,6 +227,10 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 
 		if (!silent) {
 			this.fireEvent('select', this.currentValue);
+		}
+
+		if (this.onSelect) {
+			this.onSelect(value);
 		}
 	},
 
@@ -418,5 +430,12 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 
 	getValue: function() {
 		return this.currentValue || this.currentText;
+	},
+
+
+	getOptions: function() {
+		return (this.options || []).map(function(option) {
+			return option.value;
+		});
 	}
 });

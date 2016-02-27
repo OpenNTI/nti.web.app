@@ -347,7 +347,7 @@
 		margin-top: 5px;
 		position: relative;
 		min-height: 76px;
-		overflow: visible;
+		overflow: hidden;
 
 		.x-panel-body-assessment {
 			padding: 0 15px 0 90px;
@@ -362,7 +362,7 @@
 			margin-top: -37px;//75/2
 		}
 
-		.tally-box, .assignment-box {
+		.tally-box {
 			display: inline-block;
 			vertical-align: middle;
 			min-height: 75px;
@@ -376,16 +376,25 @@
 		}
 
 		.assignment-box {
+			position: relative;
+			min-height: 76px;
+			padding: 15px 90px 0 25px;
+
 			.title {
+				display: inline-block;
+				vertical-align: middle;
 				font-size: 1.125em;
+				max-width: 515px;
+				margin-bottom: 1em;
 			}
+		}
 
-			.assignment-status-container {
-				margin-top: 5px;
+		.assignment-status-container {
+			margin-top: -30px;
 
-				.assignment-status .assignment-status {
-					font-size: 1.125em;
-				}
+			.status-container {
+				margin-left: 90px; //25 + 40 + 25
+				margin-bottom: 10px;
 			}
 		}
 
@@ -397,20 +406,30 @@
 		}
 
 		&.assignment{
-			@include icon('assignment_due', $side:'before', $top:50%, $left: 25px);
-
-			&::before {
-				margin-top: -20px;//40/2
+			.x-panel-body-assessment {
+				padding: 0;
 			}
 
-			&.ontime::before{
+			.assignment-box {
+				@include icon('assignment_due', $side:'before');
+
+				&::before {
+					position: static;
+					display: inline-block;
+					vertical-align: middle;
+					margin-right: 25px;
+				}
+
+			}
+
+			&.ontime .assignment-box::before{
 				@include sprite($icons, 'assignment_ontime');
 			}
 
-			&.late::before{
+			&.late .assignment-box::before{
 				@include sprite($icons, 'assignment_late');
 			}
-			&.nosubmit::before{
+			&.nosubmit .assignment-box::before{
 				@include sprite($icons, 'assignment_due');
 			}
 		}

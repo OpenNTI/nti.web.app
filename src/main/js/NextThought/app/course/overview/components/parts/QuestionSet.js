@@ -65,8 +65,13 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 			console.warn('Hidding Assignment widget. Assignmet was null. %o', config);
 			me.hide();
 		}
+	},
 
-		this.add({
+
+	getButton: function() {
+		var me = this;
+
+		return {
 			xtype: 'button',
 			text: getString('NextThought.view.courseware.overview.parts.QuestionSet.review'),
 			ui: 'secondary',
@@ -75,7 +80,7 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 			handler: function() {
 				me.reviewClicked();
 			}
-		});
+		};
 	},
 
 
@@ -85,7 +90,8 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 
 		me.add([
 			{xtype: 'chart-score'},
-			{xtype: 'assessment-tally', flex: 1, ellipseMessage: true}
+			{xtype: 'assessment-tally', flex: 1, ellipseMessage: true},
+			me.getButton()
 		]);
 
 		req = {
@@ -119,16 +125,19 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 
 
 	buildForAssignment: function() {
-		this.add({
-			xtype: 'container',
-			flex: 1,
-			layout: 'none',
-			cls: 'assignment-box',
-			items: [
-				{xtype: 'box', autoEl: {cls: 'title', html: this.assignment.get('title')}},
-				{xtype: 'course-assignment-status', assignment: this.assignment}
-			]
-		});
+		this.add([
+			{
+				xtype: 'container',
+				flex: 1,
+				layout: 'none',
+				cls: 'assignment-box',
+				items: [
+					{xtype: 'box', autoEl: {cls: 'title', html: this.assignment.get('title')}},
+					this.getButton()
+				]
+			},
+			{xtype: 'course-assignment-status', assignment: this.assignment}
+		]);
 
 		this.setAsAssignment(this.assignment);
 	},
