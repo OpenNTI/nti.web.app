@@ -167,6 +167,18 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.assignment-due-date-editor {
+	& > .label {
+		font-size: 1.125em;
+		color: $primary-grey;
+		margin: 0.5em 0;
+	}
+
+	.inline-date-field {
+		margin-bottom: 0.5em;
+	}
+}
+
 .assignment-status {
 	font: normal 600 0.6em/1 $font;
 	text-transform: uppercase;
@@ -497,14 +509,14 @@ canvas.x-component-course-assessment {
 
 	&.menu-open {
 		.menu-container {
-			height: 200px;
+			max-height: 500px;
 		}
 	}
 
 	.menu-container {
-		height: 0;
+		max-height: 0;
 		background: white;
-		transition: height 0.5s;
+		transition: max-height 0.5s;
 		overflow: hidden;
 	}
 }

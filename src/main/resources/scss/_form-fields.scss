@@ -661,3 +661,63 @@ form.common-form {
 		}
 	}
 }
+
+
+.inline-date-field {
+	.date .container, .time .container {
+		@include flexContainer();
+		-webkit-justify-content: space-between;
+		-ms-flex-pack: justify;
+		justify-content: space-between;
+	}
+
+	.date {
+		display: inline-block;
+		vertical-align: middle;
+		width: 60%;
+		margin-right: 7%;
+	}
+
+	.time {
+		display: inline-block;
+		vertical-align: middle;
+		width: 33%;
+	}
+
+	.month {
+		@include flexItem(0 0 170px);
+	}
+
+	.day {
+		@include flexItem(0 0 55px);
+	}
+
+	.year {
+		@include flexItem(0 0 70px);
+	}
+
+	.hour-input {
+		@include flexItem(0 0 40px);
+		width: 40px;
+	}
+
+	.seperator {
+		@include flexItem(0 0 6px);
+	}
+
+	.minute-input {
+		@include flexItem(0 0 40px);
+		width: 40px;
+	}
+
+	.meridiem-input {
+		@include flexItem(0 0 60px);
+	}
+
+	.label {
+		text-transform: uppercase;
+		font-size: 0.625rem;
+		font-weight: 600;
+		color: $secondary-grey;
+	}
+}

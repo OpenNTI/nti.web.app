@@ -7,6 +7,7 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 	],
 
 
+	cls: 'assignment-due-date-editor',
 	layout: 'none',
 
 	items: [],

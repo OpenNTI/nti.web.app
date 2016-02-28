@@ -31,27 +31,33 @@ Ext.define('NextThought.common.form.fields.InlineDateField', {
 		{longLabel: 'December', shortLabel: 'DEC', value: 11, days: 31}
 	],
 
-	cls: 'inlinde-date-field',
+	cls: 'inline-date-field',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'month', cn: [
-			{tag: 'span', cls: 'label', html: 'Month'},
-			{cls: 'month-input'}
-		]},
-		{cls: 'day', cn: [
-			{tag: 'span', cls: 'label', html: 'Day'},
-			{cls: 'day-input'}
-		]},
-		{cls: 'year', cn: [
-			{tag: 'span', cls: 'label', html: 'Year'},
-			{cls: 'year-input'}
+		{cls: 'date', cn: [
+			{cls: 'container', cn: [
+				{cls: 'month', cn: [
+					{tag: 'span', cls: 'label', html: 'Month'},
+					{cls: 'month-input'}
+				]},
+				{cls: 'day', cn: [
+					{tag: 'span', cls: 'label', html: 'Day'},
+					{cls: 'day-input'}
+				]},
+				{cls: 'year', cn: [
+					{tag: 'span', cls: 'label', html: 'Year'},
+					{cls: 'year-input'}
+				]}
+			]}
 		]},
 		{cls: 'time', cn: [
 			{tag: 'span', cls: 'label', html: 'Local Time'},
-			{tag: 'input', type: 'text', cls: 'hour-input'},
-			{tag: 'span', html: ':'},
-			{tag: 'input', type: 'test', cls: 'minute-input'},
-			{cls: 'meridiem-input'}
+			{cls: 'container', cn: [
+				{tag: 'input', type: 'text', cls: 'hour-input'},
+				{tag: 'span', cls: 'seperator', html: ':'},
+				{tag: 'input', type: 'test', cls: 'minute-input'},
+				{cls: 'meridiem-input'}
+			]}
 		]}
 	]),
 
