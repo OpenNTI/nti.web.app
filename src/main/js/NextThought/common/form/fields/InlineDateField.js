@@ -10,7 +10,8 @@ Ext.define('NextThought.common.form.fields.InlineDateField', {
 	},
 
 	requires: [
-		'NextThought.common.form.fields.SearchComboBox'
+		'NextThought.common.form.fields.SearchComboBox',
+		'NextThought.common.form.Utils'
 	],
 
 	AM: 'AM',
@@ -83,6 +84,8 @@ Ext.define('NextThought.common.form.fields.InlineDateField', {
 		this.currentDate = this.currentDate || new Date();
 		this.lowerBound = this.lowerBound || new Date(0);
 		this.upperBound = this.upperBound || upperBound;
+
+		this.FormUtils = new NextThought.common.form.Utils();
 	},
 
 
@@ -112,14 +115,15 @@ Ext.define('NextThought.common.form.fields.InlineDateField', {
 			renderTo: this.meridiemContainer
 		});
 
+		this.FormUtils.limitInputToNumeric(this.hourInput.dom);
+		this.FormUtils.limitInputToNumeric(this.minuteInput.dom);
+
 		this.mon(this.hourInput, {
-			onKeyDown: this.onHourKeyDown.bind(this),
-			onBlur: this.onHourBlur.bind(this)
+			change: this.onHourChanged.bind(this)
 		});
 
 		this.mon(this.minuteInput, {
-			onKeyDown: this.onMinuteKeyDown.bind(this),
-			onBlur: this.onMinuteBlur.bind(this)
+			change: this.onMinuteChanged.bind(this)
 		});
 
 		this.selectDate(selectedDate);
@@ -210,6 +214,9 @@ Ext.define('NextThought.common.form.fields.InlineDateField', {
 		this.selectYear(year);
 		this.selectMonth(month);
 		this.selectDay(day);
+
+		this.selectHour(date.getHours());
+		this.selectMinute(date.getMinutes());
 	},
 
 
@@ -300,13 +307,20 @@ Ext.define('NextThought.common.form.fields.InlineDateField', {
 	},
 
 
-	__selectHour: function(date) {
+	selectHour: function(hour) {
+		if (hour < 12) {
+			this.meridiemSelect.setValue(this.AM);
+		} else {
+			hour = hour - 12;
+			this.meridiemSelect.setValue(this.PM);
+		}
 
+		this.hourInput.dom.value = hour === 0 ? '12' : hour;
 	},
 
 
-	__selectMinute: function(date) {
-
+	selectMinute: function(minute) {
+		this.minuteInput.dom.value = minute;
 	},
 
 
@@ -353,37 +367,17 @@ Ext.define('NextThought.common.form.fields.InlineDateField', {
 	},
 
 
-	onHourKeyDown: function() {
-		debugger;
+	onHourChanged: function() {
+
 	},
 
 
-	onMinuteKeyDown: function() {
-		debugger;
+	onMinuteChanged: function() {
+
 	},
 
 
 	onMeridiemChanged: function() {
-		debugger;
-	},
 
-
-	onHourKeyDown: function() {
-		debugger;
-	},
-
-
-	onHourBlur: function() {
-		debugger;
-	},
-
-
-	onMinuteKeyDown: function() {
-		debugger;
-	},
-
-
-	onMinuteBlur: function() {
-		debugger;
 	}
 });
