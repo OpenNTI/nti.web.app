@@ -149,6 +149,35 @@ Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	},
 
 
+	getSchema: function(){
+		var me = this;
+
+		if (!this.record || !this.record.getLink('schema')) {
+			return Promise.resolve();
+		}
+
+		if (this.schema) {
+			return Promise.resolve(this.schema);
+		}
+
+		return this.EditingActions.getSchema(this.record)
+			.then(function(schema) {
+				me.schema = schema;
+				return schema;
+			});
+	},
+
+
+	applySchema: function(schema){
+		var defaultSchema = this.getFormSchema();
+
+		this.schema = schema;
+		// TODO: Apply schema data from the server 
+		
+		return defaultSchema;
+	},
+
+
 	addPreview: function() {},
 
 
