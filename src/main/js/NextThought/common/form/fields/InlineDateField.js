@@ -49,7 +49,8 @@ Ext.define('NextThought.common.form.fields.InlineDateField', {
 					{tag: 'span', cls: 'label', html: 'Year'},
 					{cls: 'year-input'}
 				]}
-			]}
+			]},
+			{tag: 'span', cls: 'error'}
 		]},
 		{cls: 'time', cn: [
 			{tag: 'span', cls: 'label', html: 'Local Time'},
@@ -58,7 +59,8 @@ Ext.define('NextThought.common.form.fields.InlineDateField', {
 				{tag: 'span', cls: 'seperator', html: ':'},
 				{tag: 'input', type: 'test', cls: 'minute-input'},
 				{cls: 'meridiem-input'}
-			]}
+			]},
+			{tag: 'span', cls: 'error'}
 		]}
 	]),
 
@@ -69,7 +71,9 @@ Ext.define('NextThought.common.form.fields.InlineDateField', {
 		yearContainer: '.year-input',
 		hourInput: '.hour-input',
 		minuteInput: '.minute-input',
-		meridiemContainer: '.meridiem-input'
+		meridiemContainer: '.meridiem-input',
+		dateError: '.date .error',
+		timeError: '.time .error'
 	},
 
 
@@ -127,6 +131,51 @@ Ext.define('NextThought.common.form.fields.InlineDateField', {
 		});
 
 		this.selectDate(selectedDate);
+	},
+
+
+	maybeShowDateError: function() {
+
+	},
+
+
+	maybeShowTimeError: function() {
+		var hour = this.hourInput.dom.value,
+			minute = this.minuteInput.dom.value,
+			error;
+
+		hour = parseInt(hour, 10);
+		minute = parseInt(minute, 10);
+
+		if (hour < 0 || hour > 24) {
+			error = 'Invalid Hour';
+			this.hourInput.addCls('error');
+		} else {
+			this.hourInput.removeCls('error');
+		}
+
+		if (minute < 0 || minute > 59) {
+			error = 'Invalid Minute';
+			this.minuteInput.addCls('error');
+		} else {
+			this.minuteInput.removeCls('error');
+		}
+
+		if (error) {
+			this.timeError.update(error);
+		} else {
+			this.timeError.update('');
+		}
+
+		return !!error;
+	},
+
+
+	validate: function() {
+		var timeError = this.maybeShowTimeError(),
+			dateError = this.maybeShoeDateError();
+
+		return timeError || dateError;
 	},
 
 
@@ -368,16 +417,63 @@ Ext.define('NextThought.common.form.fields.InlineDateField', {
 
 
 	onHourChanged: function() {
+		var value = this.hourInput.dom.value,
+			currentDate = this.getSelectedDate(),
+			newDate = new Date(currentDate.getTime()),
+			meridiem = this.meridiemSelect.getValue();
 
+		value = parseInt(value, 10);
+
+		if (!value) { return; }
+
+		if (this.maybeShowTimeError()) {
+			return;
+		}
+
+		if (!meridiem) {
+			meridiem.setValue(this.AM);
+			meridiem = this.AM;
+		}
+
+
+		if (value > 12) {
+			this.meridiemSelect.setValue(this.PM, true);
+			this.meridiemSelect.disable();
+		} else if (value === 0) {
+			this.meridiemSelect.setValue(this.AM, true);
+			this.meridiemSelect.disable();
+		} else {
+			if (meridiem === this.PM) {
+				value = value + 12;
+			} else if (value === 12) {
+				value = 0;
+			}
+
+			this.meridiemSelect.enable();
+		}
+
+		newDate.setHours(value);
+		this.currentDate = newDate;
 	},
 
 
 	onMinuteChanged: function() {
+		var value = this.minuteInput.dom.value,
+			currentDate = this.getSelectedDate(),
+			newDate = new Date(currentDate.getTime());
 
+		value = parseInt(value, 10);
+
+		if (this.maybeShowTimeError()) {
+			return;
+		}
+
+		newDate.setMinutes(value);
+		this.currentDate = newDate;
 	},
 
 
 	onMeridiemChanged: function() {
-
+		this.onHourChanged();
 	}
 });

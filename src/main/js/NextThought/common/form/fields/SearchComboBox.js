@@ -67,11 +67,44 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 			'click': 'showOptions'
 		});
 
+		if (this.hasBeenDisabled) {
+			this.disable();
+		}
+
 		//this.mon(Ext.getBody(), 'click', function(e) {if (!e.getTarget('.searchcombobox')) { this.hideOptions(); }}, this);
 	},
 
 
+	enable: function() {
+		this.hasBeenDisabled = null;
+
+		if (!this.rendered) {
+			return;
+		}
+
+		this.removeCls('disabled');
+		this.inputEl.dom.removeAttribute('disabled', true);
+	},
+
+
+	disable: function() {
+		this.hasBeenDisabled = true;
+
+		if (!this.rendered) {
+			return;
+		}
+
+		this.addCls('disabled');
+		this.inputEl.dom.setAttribute('disabled', true);
+		this.hideOptions();
+	},
+
+
 	toggleOptions: function(e) {
+		if (e.getTarget('.disabled')) {
+			return;
+		}
+
 		if (e.getTarget('.down')) {
 			e.stopEvent();
 			this.inputEl.focus();
@@ -79,6 +112,7 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 			this.showOptions();
 			return;
 		}
+
 		this.hideOptions();
 	},
 
@@ -153,7 +187,7 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 			this.activeValue = options[0].value;
 
 			//if the value is the whole text of the option make it the current one
-			if (value.toLowerCase() === options[0].text.toLowerCase()) {
+			if (value && value.toLowerCase() === options[0].text.toLowerCase()) {
 				this.currentValue = options[0].value;
 				this.currentText = options[0].text;
 			}
@@ -229,7 +263,7 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 			this.fireEvent('select', this.currentValue);
 		}
 
-		if (this.onSelect) {
+		if (!silent && this.onSelect) {
 			this.onSelect(value);
 		}
 	},
@@ -413,7 +447,7 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 		this.__setValue('', null);
 	},
 
-	setValue: function(value) {
+	setValue: function(value, silent) {
 		var li;
 
 		this.currentValue = value;
@@ -422,7 +456,7 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 			li = this.el.down('li[data-value="' + value + '"]');
 
 			if (li) {
-				this.selectOption(li.dom);
+				this.selectOption(li.dom, silent);
 			}
 		}
 	},
