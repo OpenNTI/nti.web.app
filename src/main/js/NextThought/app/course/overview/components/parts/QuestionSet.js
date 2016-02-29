@@ -182,7 +182,7 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 
 			if (status) {
 				status.setStatus(getFormattedString('NextThought.view.courseware.overview.parts.QuestionSet.available', {
-					date: Ext.Date.format(opens, format)
+					date: Ext.Date.format(opens, 'l, F j, g:i a T')
 				}));
 			}
 		} else if (parts.length === 0 && !assignment.isTimed && !isNoSubmit) {
