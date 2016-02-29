@@ -3,7 +3,7 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 	alias: 'widget.course-assessment-duedate-editor',
 
 	requires: [
-		'NextThought.common.form.fields.InlineDateField',
+		'NextThought.common.form.fields.DateTimeField',
 		'NextThought.app.course.editing.Actions'
 	],
 
@@ -33,7 +33,7 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 				}
 			},
 			{
-				xtype: 'inline-date-field',
+				xtype: 'date-time-field',
 				isAvailableEditor: true,
 				currentDate: available,
 				lowerBound: now
@@ -46,7 +46,7 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 				}
 			},
 			{
-				xtype: 'inline-date-field',
+				xtype: 'date-time-field',
 				isDueEditor: true,
 				currentDate: due,
 				lowerBound: now

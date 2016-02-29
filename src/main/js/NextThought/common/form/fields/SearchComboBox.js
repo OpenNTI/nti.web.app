@@ -339,7 +339,6 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 		}
 
 		if (open) {
-
 			if (charCode === e.ESC) {
 				e.stopEvent();
 				this.hideOptions();
@@ -401,7 +400,7 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 
 		if (this.editable) {
 			if (!this.IGNORE_KEY_CODES[e.getCharCode()]) {
-				this.deselect();
+				// this.deselect();
 				//filter the options and show the options menu unless we are from an enter
 				this.filterOptions(value, true);
 			}

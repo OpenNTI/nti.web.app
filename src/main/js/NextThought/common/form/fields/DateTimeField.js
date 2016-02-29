@@ -1,6 +1,6 @@
-Ext.define('NextThought.common.form.fields.InlineDateField', {
+Ext.define('NextThought.common.form.fields.DateTimeField', {
 	extend: 'Ext.Component',
-	alias: 'widget.inline-date-field',
+	alias: 'widget.date-time-field',
 
 	statics: {
 		//http://stackoverflow.com/questions/16353211/check-if-year-is-leap-year-in-javascript
@@ -32,7 +32,7 @@ Ext.define('NextThought.common.form.fields.InlineDateField', {
 		{longLabel: 'December', shortLabel: 'DEC', value: 11, days: 31}
 	],
 
-	cls: 'inline-date-field',
+	cls: 'date-time-field',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'date', cn: [

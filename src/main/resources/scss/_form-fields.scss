@@ -663,12 +663,27 @@ form.common-form {
 }
 
 
-.inline-date-field {
+.date-time-field {
 	.date .container, .time .container {
 		@include flexContainer();
 		-webkit-justify-content: space-between;
 		-ms-flex-pack: justify;
 		justify-content: space-between;
+	}
+
+	.hour-input, .minute-input {
+		font-size: 0.875rem;
+		font-weight: 500;
+		border-radius: 0;
+		line-height: 25px;
+		padding: 6px;
+		box-shadow: none;
+		border: 1px solid $tertiary-grey;
+		background: #ffffff;
+
+		&.error {
+			border-color: $primary-red;
+		}
 	}
 
 	.date {
@@ -703,6 +718,8 @@ form.common-form {
 
 	.seperator {
 		@include flexItem(0 0 6px);
+		line-height: 40px;
+		text-align: center;
 	}
 
 	.minute-input {
