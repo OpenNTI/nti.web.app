@@ -149,6 +149,20 @@ Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	},
 
 
+	getSchema: function(record) {
+		var url = record && record.getLink('schema');
+
+		if (!url) {
+			return Promise.resolve();
+		}
+
+		return Service.request(url)
+				.then(function(response) {
+					return JSON.parse(response);
+				});
+	},
+
+
 	/**
 	 * Handle the logic for creating a new record, updating an existing one
 	 * and maybe moving it to new parent.

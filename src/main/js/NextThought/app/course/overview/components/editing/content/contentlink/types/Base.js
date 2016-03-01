@@ -65,17 +65,22 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 
 	addAdvancedDisclosure: function() {
-		var visibility = this.record && this.record.get('visibility');
+		var visibility = this.record && this.record.get('visibility'),
+			me = this;
 
 		if (this.visibilityCmp) { return; }
 
-		this.visibilityCmp = this.add({
-			xtype: 'overview-editing-controls-advanced-settings',
-			record: this.record,
-			parentRecord: this.parentRecord,
-			defaultValue: visibility,
-			onChange: this.onVisibilityChange.bind(this)
-		});
+		this.getSchema()
+			.then(function(schema) {
+				me.visibilityCmp = me.add({
+					xtype: 'overview-editing-controls-advanced-settings',
+					record: me.record,
+					parentRecord: me.parentRecord,
+					defaultValue: visibility,
+					schema: schema && schema.Fields && schema.Fields.visibility,
+					onChange: me.onVisibilityChange.bind(me)
+				});
+			});
 	},
 
 

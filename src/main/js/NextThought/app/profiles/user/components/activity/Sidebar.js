@@ -16,7 +16,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			paramName: 's',
 			streamParam: 'sort',
 			modifierName: 'b',
-			modifierParam: 'batchBefore',
+			modifierParam: 'batchAfter',
 			defaultItem: 'created',
 			items: {
 				created: {
@@ -402,7 +402,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 
 
 	__getModifier: function(filter) {
-		var activeItem = filter && filter.activeItem,
+		var activeItem = filter && (filter.activeItem || filter.defaultItem),
 			item = filter.items && filter.items[activeItem],
 			modifier = item && item.modifier;
 
@@ -414,7 +414,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 			date = m && m.toDate();
 
 		if (date) {
-			return date.getTime() / 1000;
+			return Math.round(date.getTime() / 1000);
 		}
 		return null;
 	},

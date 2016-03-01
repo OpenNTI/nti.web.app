@@ -54,6 +54,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Advanced
 				record: this.record,
 				parentRecord: this.parentRecord,
 				renderTo: this.contentEl,
+				schema: this.schema,
 				defaultValue:  this.record && this.record.get('visibility'),
 				onChange: this.onChange.bind(this)
 			});
