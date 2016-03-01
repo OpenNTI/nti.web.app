@@ -128,7 +128,8 @@ Ext.define('NextThought.common.components.cards.CardTarget', {
 
 
 	addUnsupportedForHref: function(href) {
-		var chrome = '<a ' + anchorAttr + ' href=\'http://www.google.com/chrome\'>Chrome,</a>',
+		var	anchorAttr = 'class=\'link\' target=\'_blank\'',
+			chrome = '<a ' + anchorAttr + ' href=\'http://www.google.com/chrome\'>Chrome,</a>',
 			safari = '<a ' + anchorAttr + ' href=\'http://www.apple.com/safari/download/\'>Safari,</a>',
 			ff = '<a ' + anchorAttr + ' href=\'http://www.getfirefox.com\'>Firefox,</a>',
 			ie = '<a ' + anchorAttr + ' href=\'http://www.microsoft.com/ie\'>Internet Explorer.</a>';
