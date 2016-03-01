@@ -273,7 +273,7 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		var range = this.getYearRange(),
 			current = this.yearSelect.getValue();
 
-		this.yearSelect.addOptions(range);
+		this.yearSelect.setOptions(range);
 
 		if (current) {
 			this.selectYear(current);
@@ -285,7 +285,7 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		var range = this.getMonthRange(year),
 			current = this.monthSelect.getValue();
 
-		this.monthSelect.addOptions(range);
+		this.monthSelect.setOptions(range);
 
 		if (current) {
 			this.selectMonth(current);
@@ -297,7 +297,7 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		var range = this.getDayRange(month, year),
 			current = this.daySelect.getValue();
 
-		this.daySelect.addOptions(range);
+		this.daySelect.setOptions(range);
 
 		if (current) {
 			this.selectDay(current);

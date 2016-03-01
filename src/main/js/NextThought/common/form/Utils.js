@@ -18,7 +18,13 @@ Ext.define('NextThought.common.form.Utils', {
 
 
 	unlimitInputToNumeric: function(input) {
+		if (!input.removeEventListener) {
+			console.error('Invalid input');
 
+			return;
+		}
+
+		input.removeEventListener('keypress', this.handlers.limitToNumeric);
 	},
 
 

@@ -2,7 +2,7 @@ Ext.define('NextThought.common.form.fields.DateField', {
 	extend: 'Ext.Component',
 	alias: 'widget.datefield',
 
-	requires: ['NextThought.common.form.fields.SearchComboBox'],
+	requires: ['NextThought.common.form.fields.LegacySearchComboBox'],
 
 	cls: 'datefield',
 
@@ -23,7 +23,7 @@ Ext.define('NextThought.common.form.fields.DateField', {
 		this.callParent(arguments);
 
 
-		this.monthInput = Ext.widget('searchcombobox', {
+		this.monthInput = Ext.widget('legacysearchcombobox', {
 			options: [
 				{value: '0', text: 'January'},
 				{value: '1', text: 'February'},
