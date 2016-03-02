@@ -12,7 +12,7 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Visibili
 		{cls: 'menu-container', cn: [{
 			cls: 'options', cn: [
 				{tag: 'tpl', 'for': 'options', cn: [
-					{cls: 'option', html: '{.}', 'data-scope': '{.}'},
+					{cls: 'option', html: '{.}', 'data-scope': '{.}'}
 				]}
 			]}
 		]}
