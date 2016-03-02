@@ -174,8 +174,27 @@ canvas.x-component-course-assessment {
 		margin: 0.5em 0;
 	}
 
-	.inline-date-field {
-		margin-bottom: 0.5em;
+	.date-time-field {
+		margin-bottom: 1.5em;
+	}
+
+	.footer {
+		background-color: white;
+		border-top: 1px solid #d9d9d9;
+
+		.save, .cancel {
+			float: right;
+			line-height: 40px;
+			padding: 0 1.75em;
+			font-size: 0.875em;
+			color: $secondary-grey;
+			cursor: pointer;
+		}
+
+		.save {
+			background-color: $primary-blue;
+			color: white;
+		}
 	}
 }
 
@@ -515,7 +534,6 @@ canvas.x-component-course-assessment {
 
 	.menu-container {
 		max-height: 0;
-		background: white;
 		transition: max-height 0.5s;
 		overflow: hidden;
 	}

@@ -390,6 +390,7 @@
 		}
 
 		.assignment-status-container {
+			background-color: #fcfcfc;
 			margin-top: -30px;
 
 			.status-container {
@@ -398,7 +399,9 @@
 			}
 			
 			.assignment-due-date-editor {
-				padding: 0 90px;
+				& > .label, & > .date-time-field {
+					padding: 0 90px;
+				}
 			}
 		}
 
@@ -407,6 +410,7 @@
 			right: 15px;
 			top: 50%;
 			margin-top: -18px;//37 / 2
+			z-index: 1;
 		}
 
 		&.assignment{
@@ -418,10 +422,11 @@
 				@include icon('assignment_due', $side:'before');
 
 				&::before {
-					position: static;
+					position: relative;
 					display: inline-block;
 					vertical-align: middle;
 					margin-right: 25px;
+					z-index: 1;
 				}
 
 			}

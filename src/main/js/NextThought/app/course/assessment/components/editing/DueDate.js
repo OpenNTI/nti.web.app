@@ -60,8 +60,8 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 				autoEl: {
 					cls: 'footer',
 					cn: [
-						{cls: 'cancel', html: 'Cancel'},
-						{cls: 'save', html: 'Save'}
+						{cls: 'save', html: 'Save'},
+						{cls: 'cancel', html: 'Cancel'}
 					]
 				},
 				listeners: {
