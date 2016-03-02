@@ -233,10 +233,10 @@ span.nti-radiobutton {
 		box-shadow: none;
 		border: 1px solid $tertiary-grey;
 		background: #ffffff;
+	}
 
-		&.error {
-			border-color: $primary-red;
-		}
+	&.error input, input.error {
+		border-color: $primary-red;
 	}
 
 	.options {
@@ -690,16 +690,22 @@ form.common-form {
 		}
 	}
 
-	.date {
+	.date, .time {
 		display: inline-block;
-		vertical-align: middle;
+		vertical-align: top;
+
+		& > .error {
+			font-size: 0.875rem;
+			color: $primary-red;
+		}
+	}
+
+	.date {
 		width: 60%;
 		margin-right: 7%;
 	}
 
 	.time {
-		display: inline-block;
-		vertical-align: middle;
 		width: 33%;
 	}
 
@@ -740,5 +746,10 @@ form.common-form {
 		font-size: 0.625rem;
 		font-weight: 600;
 		color: $secondary-grey;
+
+		&.error {
+			font-size: 0.625rem;
+			color: $primary-red;
+		}
 	}
 }

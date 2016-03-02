@@ -15,6 +15,9 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		'NextThought.common.form.Utils'
 	],
 
+	INVALID_DATE: 'Please enter a valid date.',
+	INVALID_TIME: 'Please enter a valid time.',
+
 	YEARS_IN_PAST: 5,
 	YEARS_IN_FUTURE: 5,
 
@@ -73,9 +76,13 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 
 
 	renderSelectors: {
+		monthLabel: '.month .label',
 		monthContainer: '.month-input',
+		dayLabel: '.day .label',
 		dayContainer: '.day-input',
+		yearLabel: '.year .label',
 		yearContainer: '.year-input',
+		timeLabel: '.time .label',
 		hourInput: '.hour-input',
 		minuteInput: '.minute-input',
 		meridiemContainer: '.meridiem-input',
@@ -91,16 +98,19 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 			lowerBound;
 
 		lowerBound = new Date();
-		lowerBound.setFullYear(lowerBound.getFullYear() - this.YEARS_IN_PAST);
+		lowerBound.setFullYear(lowerBound.getFullYear() - this.YEARS_IN_PAST, 0, 1);
 
 		upperBound = new Date();
-		upperBound.setFullYear(upperBound.getFullYear() + this.YEARS_IN_FUTURE);
+		upperBound.setFullYear(upperBound.getFullYear() + this.YEARS_IN_FUTURE, 0, 1);
 
 		this.currentDate = this.currentDate;
 		this.lowerBound = this.lowerBound || lowerBound;
 		this.upperBound = this.upperBound || upperBound;
 
 		this.FormUtils = new NextThought.common.form.Utils();
+
+		this.invalidDateMsg = this.invalidDateMsg || this.INVALID_DATE;
+		this.invalidTimeMsg = this.invalidTimeMsg || this.INVALID_TIME;
 	},
 
 
@@ -111,17 +121,35 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 
 		me.yearSelect = new NextThought.common.form.fields.SearchComboBox({
 			onSelect: me.onYearChanged.bind(me),
-			renderTo: me.yearContainer
+			renderTo: me.yearContainer,
+			onError: function() {
+				me.yearLabel.addCls('error');
+			},
+			onRemoveError: function() {
+				me.yearLabel.removeCls('error');
+			}
 		});
 
 		me.monthSelect = new NextThought.common.form.fields.SearchComboBox({
 			onSelect: me.onMonthChanged.bind(me),
-			renderTo: me.monthContainer
+			renderTo: me.monthContainer,
+			onError: function() {
+				me.monthLabel.addCls('error');
+			},
+			onRemoveError: function() {
+				me.monthLabel.removeCls('error');
+			}
 		});
 
 		me.daySelect = new NextThought.common.form.fields.SearchComboBox({
 			onSelect: me.onDayChanged.bind(me),
-			renderTo: me.dayContainer
+			renderTo: me.dayContainer,
+			onError: function() {
+				me.dayLabel.addCls('error');
+			},
+			onRemoveError: function() {
+				me.dayLabel.removeCls('error');
+			}
 		});
 
 		me.meridiemSelect = new NextThought.common.form.fields.SearchComboBox({
@@ -134,10 +162,18 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		me.FormUtils.limitInputToNumeric(me.minuteInput.dom);
 
 		me.mon(me.hourInput, {
+			keydown: function() {
+				me.hourInput.removeCls('error');
+				me.clearTimeError();
+			},
 			change: me.onHourChanged.bind(me)
 		});
 
 		me.mon(me.minuteInput, {
+			keydown: function() {
+				me.minuteInput.removeCls('error');
+				me.clearTimeError();
+			},
 			change: me.onMinuteChanged.bind(me)
 		});
 
@@ -156,15 +192,11 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		var year = this.getYear(),
 			month = this.getMonth(),
 			day = this.getDay(),
-			hour = this.getHour(),
-			minutes = this.getMinutes();
+			hour = this.getHours() || 0,
+			minutes = this.getMinutes() || 0;
 
-		function isDefined(v) {
-			return v !== undefined && v !== null;
-		}
-
-		if (isDefined(year) && isDefined(month) && isDefined(day)) {
-			return new Date(year, month, day, hour || 0, minutes || 0);
+		if (year != null && month != null && day != null && hour < 24 && minutes < 59) {
+			return new Date(year, month, day, hour, minutes);
 		}
 
 		return null;
@@ -186,11 +218,11 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 	},
 
 
-	getHour: function() {
+	getHours: function() {
 		var value = this.hourInput && this.hourInput.dom && this.hourInput.dom.value,
 			meridiem = this.meridiemSelect.getValue() || this.AM;
 
-		if (value === undefined || value === null) {
+		if (value == null || value === '') {
 			return null;
 		}
 
@@ -205,7 +237,13 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 
 
 	getMinutes: function() {
-		return this.minuteInput && this.minuteInput.dom && this.minuteInput.dom.value;
+		var value = this.minuteInput && this.minuteInput.dom && this.minuteInput.dom.value;
+
+		if (value == null || value === '') {
+			return null;
+		}
+
+		return value;
 	},
 
 
@@ -230,7 +268,7 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		year = year === undefined || year === null ? this.getYear() : year;
 		month = month === undefined || month === null ? this.getMonth() : month;
 		day = day === undefined || day === null ? this.getDay() : day;
-		hour = hour === undefined || hour === null ? this.getHour() : hour;
+		hour = hour === undefined || hour === null ? this.getHours() : hour;
 		minute = minute === undefined || minute === null ? this.getMinutes() : minute;
 
 		this.updateYearRange(year, month, day);
@@ -368,15 +406,21 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 	onYearChanged: function(year) {
 		this.setMonth(this.getMonth());
 		this.setDay(this.getDay());
+
+		this.clearDateError();
 	},
 
 
 	onMonthChanged: function(month) {
 		this.setDay(this.getDay());
+
+		this.clearDateError();
 	},
 
 
-	onDayChanged: function(day) {},
+	onDayChanged: function(day) {
+		this.clearDateError();
+	},
 
 
 	onHourChanged: function(hour) {
@@ -403,5 +447,120 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 	onMinuteChanged: function(minute) {},
 
 
-	onMeridiemChanged: function(meridiem) {}
+	onMeridiemChanged: function(meridiem) {},
+
+
+	showDateError: function(error) {
+		this.dateError.update(error);
+	},
+
+
+	clearDateError: function() {
+		this.dateError.update('');
+	},
+
+
+	showTimeError: function(error) {
+		this.timeError.update(error);
+		this.timeLabel.addCls('error');
+	},
+
+
+	clearTimeError: function() {
+		this.timeError.update('');
+		this.timeLabel.removeCls('error');
+	},
+
+
+	onInvalidDate: function() {
+		this.showDateError(this.invalidDateMsg);
+	},
+
+
+	onInvalidTime: function() {
+		this.showTimeError(this.invalidTimeMsg);
+	},
+
+
+	onDateToLow: function() {
+		this.showDateError(this.dateToLowMsg || 'Please enter a date after ' + Ext.Date.format(this.lowerBound, 'F n, Y g:i A'));
+	},
+
+
+	onDateToHigh: function() {
+		this.showDateError(this.dateToHighMsg || 'Please enter a date before ' + Ext.Date.format(this.upperBound, 'F n, Y g:i A'));
+	},
+
+
+	__validateValue: function(value) {
+		var isValid = true;
+
+		if (this.lowerBound && value < this.lowerBound) {
+			isValid = false;
+			this.onDateToLow();
+		} else if (this.upperBound && value > this.upperBound) {
+			isValid = false;
+			this.onDateToHigh();
+		}
+
+		return isValid;
+	},
+
+
+	__validateNoValue: function(year, month, day, hour, minute) {
+		//If all the values are null, then the value is null and its valid
+		if (year == null && month == null && day == null && hour == null && minute == null) {
+			return true;
+		}
+
+		if (year == null || month == null || day == null) {
+			this.onInvalidDate();
+		}
+
+		if (year == null) {
+			this.yearSelect.showError();
+		}
+
+		if (month == null) {
+			this.monthSelect.showError();
+		}
+
+		if (day == null) {
+			this.daySelect.showError();
+		}
+
+		if (hour > 24 || minute > 59) {
+			this.onInvalidTime();
+		}
+
+		if (hour > 24) {
+			this.hourInput.addCls('error');
+		}
+
+		if (minute > 59) {
+			this.minuteInput.addCls('error');
+		}
+
+
+		return false;
+	},
+
+
+	validate: function() {
+		var year = this.getYear(),
+			month = this.getMonth(),
+			day = this.getDay(),
+			hour = this.getHours(),
+			minute = this.getMinutes(),
+			value = this.getSelectedDate(),
+			isValid;
+
+		if (value) {
+			isValid = this.__validateValue(value);
+		} else {
+			isValid = this.__validateNoValue(year, month, day, hour, minute);
+		}
+
+		return isValid;
+	}
 });

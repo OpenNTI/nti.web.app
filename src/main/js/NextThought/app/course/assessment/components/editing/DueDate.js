@@ -20,7 +20,9 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 		var me = this,
 			available = me.assignment.get('availableBeginning'),
 			due = me.assignment.get('availableEnding'),
-			now = new Date();
+			now = new Date(), later = new Date();
+
+		later.setFullYear(later.getFullYear() + 1);
 
 		this.EditingActions = NextThought.app.course.editing.Actions.create();
 
@@ -36,7 +38,8 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 				xtype: 'date-time-field',
 				isAvailableEditor: true,
 				// currentDate: available,
-				lowerBound: now
+				lowerBound: now,
+				upperBound: later
 			},
 			{
 				xtype: 'box',
@@ -49,7 +52,8 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 				xtype: 'date-time-field',
 				isDueEditor: true,
 				currentDate: due,
-				lowerBound: now
+				lowerBound: now,
+				upperBound: later
 			},
 			{
 				xtype: 'box',
@@ -76,17 +80,14 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 		]);
 	},
 
-	getAvailable: function() {
-		var editor = this.down('[isAvailableEditor]');
 
-		return editor.getSelectedDate();
+	getAvailableEditor: function() {
+		return this.down('[isAvailableEditor]');
 	},
 
 
-	getDue: function() {
-		var editor = this.down('[isDueEditor]');
-
-		return editor.getSelectedDate();
+	getDueEditor: function() {
+		return this.down('[isDueEditor]');
 	},
 
 
@@ -96,6 +97,15 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 
 
 	doSave: function() {
+		var available = this.getAvailableEditor(),
+			due = this.getDueEditor(),
+			availableValid = available.validate(),
+			dueValid = due.validate();
+
+		if (!availableValid || !dueValid) {
+			return;
+		}
+
 		this.EditingActions.updateAssignmentDates(this.assignment, this.getAvailable(), this.getDue())
 			.then(function() {
 				//TODO: update stuff

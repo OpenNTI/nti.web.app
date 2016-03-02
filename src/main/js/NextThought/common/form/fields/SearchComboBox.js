@@ -102,6 +102,24 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 	},
 
 
+	showError: function() {
+		this.addCls('error');
+
+		if (this.onError) {
+			this.onError();
+		}
+	},
+
+
+	removeError: function() {
+		this.removeCls('error');
+
+		if (this.onRemoveError) {
+			this.onRemoveError();
+		}
+	},
+
+
 	enable: function() {
 		this.hasBeenDisabled = null;
 
@@ -323,6 +341,8 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 			unfilteredOptions = this.filterOptions(value),
 			autoComplete;
 
+		this.removeError();
+
 		if (open && charCode === e.ESC) {
 			e.stopEvent();
 			this.hideOptions();
@@ -394,6 +414,7 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 
 	onInputFocus: function() {
 		// this.inputEl.dom.value = '';
+		this.removeError();
 		this.filterOptions('');
 		this.showOptions();
 	},
