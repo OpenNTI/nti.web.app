@@ -907,7 +907,12 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	getVideoAssets: function() {
 		return this.__getAssets(NextThought.model.Video.mimeType);
 	},
-
+	
+	
+	getTimelineAssets: function() {
+		return this.__getAssets(NextThought.model.Timeline.mimeType);	
+	},
+	
 
 	getDiscussionAssets: function() {
 		var link = this.getLink('CourseDiscussions');

@@ -7,7 +7,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 		'NextThought.app.course.overview.components.editing.content.contentlink.Editor',
 		'NextThought.app.course.overview.components.editing.content.video.Editor',
 		'NextThought.app.course.overview.components.editing.content.discussion.Editor',
-		'NextThought.app.course.overview.components.editing.content.questionset.Editor'
+		'NextThought.app.course.overview.components.editing.content.questionset.Editor',
+		'NextThought.app.course.overview.components.editing.content.timeline.Editor'
 	],
 
 	title: 'Choose a content type',
@@ -28,7 +29,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 				base.contentlink.Editor,
 				base.video.Editor,
 				base.discussion.Editor,
-				base.questionset.Editor
+				base.questionset.Editor,
+				base.timeline.Editor
 			];
 		}
 	},

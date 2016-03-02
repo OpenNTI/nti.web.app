@@ -25,22 +25,24 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 
 	getItemData: function(item) {
 		return {
-			thumbnail: this.getThumbnail(item),
+			thumbnail: this.getThumbnailURL(item),
 			title: item.get('title')
 		};
 	},
 
 
-	getThumbnail: function(item) {
-		var icon = item.get('icon');
+	getThumbnailURL: function(item) {
+		var iconURL = item && item.get('icon');
+		if (iconURL) {
+			if (Globals.ROOT_URL_PATTERN.test(iconURL)) {
+				return getURL(iconURL);
+			}
 
-		if (icon) {
-			icon = getURL((this.basePath || '') + icon);
-		} else {
-			icon = NextThought.model.DiscussionRef.defaultIcon;
+			iconURL = (this.basePath || '') + iconURL;
+			return getURL(iconURL);
 		}
 
-		return icon;
+		return '';
 	},
 
 

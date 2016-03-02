@@ -446,3 +446,61 @@
 		}
 	}
 }
+
+.timeline-item-selection{
+	.selection-item {
+		&.selected {
+			box-shadow: 0 0 0 3px $primary-blue;
+		}
+	}
+	.overview-timeline {
+		.timeline-item {
+			display: block;
+			background: #fff;
+			position: relative;
+			
+			input[type=checkbox] {
+				position: absolute;
+				top: 8px;
+				left: 8px;
+				cursor: pointer;
+				pointer-events: none;
+			}
+			
+			.thumbnail {
+				width: 100px;
+				height: 125px;
+				background-size: cover;
+				background-repeat: no-repeat;
+				background-position: center;
+				box-shadow: 0px 0px 3px 0 rgba(0,0,0,0.35);
+				float: left;
+				cursor: pointer;
+			}
+			
+			.meta {
+				padding-top: 16px;
+				margin-left: 120px;
+				height: 125px;
+				padding: 10px 45px 10px 0;
+				
+				.title {
+					font: normal 600 15px/20px $font;
+					max-height: 40px;
+					overflow: hidden;
+					margin-bottom: 5px;
+					color: $primary-grey;
+				}
+				
+				.description {
+					margin-bottom: 20px;
+					max-height: 3em;
+					overflow: hidden;
+					margin-top: 5px;
+					font: normal normal 12px/normal $font;
+					color: $primary-grey;
+				}
+			}	
+		}
+	}
+}
