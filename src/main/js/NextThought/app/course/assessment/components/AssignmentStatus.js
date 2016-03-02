@@ -44,10 +44,12 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 
 		this.updateStatus();
 
+		this.mon(this.assignment, 'update', this.updateStatus.bind(this));
+
 		if (this.assignment.getLink('edit')) {
 			this.addCls(['editable']);
 
-			this.mon(this.el, 'click', this.toggleDueDateEditor.bind(this));
+			this.mon(this.statusEl, 'click', this.toggleDueDateEditor.bind(this));
 		}
 	},
 
@@ -99,7 +101,8 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 	addDueDateEditor: function() {
 		this.dueDateEditor = new NextThought.app.course.assessment.components.editing.DueDate({
 			assignment: this.assignment,
-			onSave: this.onDueDateChanged.bind(this),
+			onSave: this.closeDueDateEditor.bind(this),
+			onCancel: this.closeDueDateEditor.bind(this),
 			renderTo: this.menuContainer
 		});
 
@@ -121,20 +124,11 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 		}
 
 		me.el.addCls('menu-open');
-
-		me.bodyClickMon = me.mon(Ext.getBody(), 'click', function(e) {
-			var el = e.getTarget('assignment-status-container');
-
-			if (!el || el !== me.el.dom) {
-				// me.closeDueDateEditor();
-			}
-		});
 	},
 
 
 	closeDueDateEditor: function() {
-		// this.el.removeCls('menu-open');
-		Ext.destroy(this.bodyClickMon);
+		this.el.removeCls('menu-open');
 	},
 
 
@@ -148,8 +142,5 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 		} else {
 			this.showDueDateEditor();
 		}
-	},
-
-
-	onDueDateChanged: function() {}
+	}
 });

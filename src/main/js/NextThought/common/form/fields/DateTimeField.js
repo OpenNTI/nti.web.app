@@ -226,9 +226,13 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 			return null;
 		}
 
-		if (meridiem === this.AM && value === 12) {
+		value = parseInt(value, 10);
+
+		if (this.meridiemSelect.isDisabled()) {
+			value = value;
+		} else if (meridiem === this.AM && value === 12) {
 			value = 0;
-		} else if (value > 12) {
+		} else if (meridiem === this.PM && value <= 12) {
 			value = value + 12;
 		}
 
@@ -242,6 +246,8 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		if (value == null || value === '') {
 			return null;
 		}
+
+		value = parseInt(value, 10);
 
 		return value;
 	},

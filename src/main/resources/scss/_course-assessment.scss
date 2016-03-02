@@ -526,6 +526,40 @@ canvas.x-component-course-assessment {
 .assignment-status-container {
 	position: relative;
 
+	&.editable {
+		.assignment-status {
+			.status-item {
+				cursor: pointer;
+				position: relative;
+				padding-right: 12px;
+
+				&::hover {
+					background-color: $tertiary-grey;
+					color: $secondary-grey;
+
+					&::after {
+						border-top-color: $secondary-grey;
+					}
+				}
+
+				&::after {
+					content: '';
+					@include arrow($pointFrom: top, $color: $tertiary-grey);
+					position: absolute;
+					top: 50%;
+					margin-top: -2px;
+					right: 3px;
+				}
+
+				&.late {
+					&::after {
+					    border-top-color: $primary-red;
+					}
+				}
+			}
+		}
+	}
+
 	&.menu-open {
 		.menu-container {
 			max-height: 500px;

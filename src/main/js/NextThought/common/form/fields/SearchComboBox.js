@@ -120,6 +120,11 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 	},
 
 
+	isDisabled: function() {
+		return this.hasBeenDisabled;
+	},
+
+
 	enable: function() {
 		this.hasBeenDisabled = null;
 
