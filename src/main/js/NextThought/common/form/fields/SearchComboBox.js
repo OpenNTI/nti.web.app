@@ -122,7 +122,7 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 		}
 
 		this.addCls('disabled');
-		this.inputEl.dom.setAttribute('disabled');
+		this.inputEl.dom.setAttribute('disabled', true);
 	},
 
 
@@ -344,7 +344,10 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 		//If the value isn't a match and there are still unfiltered options, try to auto complete it
 		} else if (exactMatch && autoComplete) {
 			this.__selectOption(exactMatch);
-		} else if (autoComplete && unfilteredOptions.length > 0 && open) {
+		} else if (charCode === e.ENTER && unfilteredOptions.length > 0 && open) {
+			this.__autoCompleteSelectedItem(unfilteredOptions);
+			e.stopEvent();
+		} else if (value !== '' && autoComplete && unfilteredOptions.length > 0 && open) {
 			//Auto complete the selected item
 			if (this.__autoCompleteSelectedItem(unfilteredOptions)) {
 				e.stopEvent();
@@ -374,7 +377,9 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 			selectedOption = this.selectedOption,
 			exactMatch = this.__getExactMatch(value);
 
-		if (exactMatch) {
+		if (value === '') {
+			this.__selectOption(null);
+		} else if (exactMatch) {
 			this.__selectOption(exactMatch);
 		} else if (value && selectedOption) {
 			this.__selectOption(selectedOption);
@@ -388,7 +393,7 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 
 
 	onInputFocus: function() {
-		this.inputEl.dom.value = '';
+		// this.inputEl.dom.value = '';
 		this.filterOptions('');
 		this.showOptions();
 	},

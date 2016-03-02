@@ -9,10 +9,15 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		}
 	},
 
+
 	requires: [
 		'NextThought.common.form.fields.SearchComboBox',
 		'NextThought.common.form.Utils'
 	],
+
+	YEARS_IN_PAST: 5,
+	YEARS_IN_FUTURE: 5,
+
 
 	AM: 'AM',
 	PM: 'PM',
@@ -32,7 +37,9 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		{longLabel: 'December', shortLabel: 'DEC', value: 11, days: 31}
 	],
 
+
 	cls: 'date-time-field',
+
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'date', cn: [
@@ -80,13 +87,17 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var upperBound;
+		var upperBound,
+			lowerBound;
+
+		lowerBound = new Date();
+		lowerBound.setFullYear(lowerBound.getFullYear() - this.YEARS_IN_PAST);
 
 		upperBound = new Date();
-		upperBound.setFullYear(upperBound.getFullYear() + 5);
+		upperBound.setFullYear(upperBound.getFullYear() + this.YEARS_IN_FUTURE);
 
-		this.currentDate = this.currentDate || new Date();
-		this.lowerBound = this.lowerBound || new Date(0);
+		this.currentDate = this.currentDate;
+		this.lowerBound = this.lowerBound || lowerBound;
 		this.upperBound = this.upperBound || upperBound;
 
 		this.FormUtils = new NextThought.common.form.Utils();
@@ -96,267 +107,248 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		var selectedDate = this.getSelectedDate();
+		var me = this;
 
-		this.yearSelect = new NextThought.common.form.fields.SearchComboBox({
-			onSelect: this.onYearChanged.bind(this),
-			renderTo: this.yearContainer
+		me.yearSelect = new NextThought.common.form.fields.SearchComboBox({
+			onSelect: me.onYearChanged.bind(me),
+			renderTo: me.yearContainer
 		});
 
-		this.monthSelect = new NextThought.common.form.fields.SearchComboBox({
-			onSelect: this.onMonthChanged.bind(this),
-			renderTo: this.monthContainer
+		me.monthSelect = new NextThought.common.form.fields.SearchComboBox({
+			onSelect: me.onMonthChanged.bind(me),
+			renderTo: me.monthContainer
 		});
 
-		this.daySelect = new NextThought.common.form.fields.SearchComboBox({
-			onSelect: this.onDayChanged.bind(this),
-			renderTo: this.dayContainer
+		me.daySelect = new NextThought.common.form.fields.SearchComboBox({
+			onSelect: me.onDayChanged.bind(me),
+			renderTo: me.dayContainer
 		});
 
-		this.meridiemSelect = new NextThought.common.form.fields.SearchComboBox({
-			options: this.getMeridiemRange(),
-			onSelect: this.onMeridiemChanged.bind(this),
-			renderTo: this.meridiemContainer
+		me.meridiemSelect = new NextThought.common.form.fields.SearchComboBox({
+			options: [this.AM, this.PM],
+			onSelect: me.onMeridiemChanged.bind(me),
+			renderTo: me.meridiemContainer
 		});
 
-		this.FormUtils.limitInputToNumeric(this.hourInput.dom);
-		this.FormUtils.limitInputToNumeric(this.minuteInput.dom);
+		me.FormUtils.limitInputToNumeric(me.hourInput.dom);
+		me.FormUtils.limitInputToNumeric(me.minuteInput.dom);
 
-		this.mon(this.hourInput, {
-			change: this.onHourChanged.bind(this)
+		me.mon(me.hourInput, {
+			change: me.onHourChanged.bind(me)
 		});
 
-		this.mon(this.minuteInput, {
-			change: this.onMinuteChanged.bind(this)
+		me.mon(me.minuteInput, {
+			change: me.onMinuteChanged.bind(me)
 		});
 
-		this.selectDate(selectedDate);
-	},
+		me.on('destroy', function() {
+			me.yearSelect.destroy();
+			me.monthSelect.destroy();
+			me.daySelect.destroy();
+			me.meridiemSelect.destroy();
+		});
 
-
-	maybeShowDateError: function() {
-
-	},
-
-
-	maybeShowTimeError: function() {
-		var hour = this.hourInput.dom.value,
-			minute = this.minuteInput.dom.value,
-			error;
-
-		hour = parseInt(hour, 10);
-		minute = parseInt(minute, 10);
-
-		if (hour < 0 || hour > 24) {
-			error = 'Invalid Hour';
-			this.hourInput.addCls('error');
-		} else {
-			this.hourInput.removeCls('error');
-		}
-
-		if (minute < 0 || minute > 59) {
-			error = 'Invalid Minute';
-			this.minuteInput.addCls('error');
-		} else {
-			this.minuteInput.removeCls('error');
-		}
-
-		if (error) {
-			this.timeError.update(error);
-		} else {
-			this.timeError.update('');
-		}
-
-		return !!error;
-	},
-
-
-	validate: function() {
-		var timeError = this.maybeShowTimeError(),
-			dateError = this.maybeShoeDateError();
-
-		return timeError || dateError;
+		me.selectDate(me.currentDate);
 	},
 
 
 	getSelectedDate: function() {
-		return new Date(this.currentDate.getTime());
+		var year = this.getYear(),
+			month = this.getMonth(),
+			day = this.getDay(),
+			hour = this.getHour(),
+			minutes = this.getMinutes();
+
+		function isDefined(v) {
+			return v !== undefined && v !== null;
+		}
+
+		if (isDefined(year) && isDefined(month) && isDefined(day)) {
+			return new Date(year, month, day, hour || 0, minutes || 0);
+		}
+
+		return null;
 	},
 
 
-	getYearRange: function() {
+	getYear: function() {
+		return this.yearSelect && this.yearSelect.getValue();
+	},
+
+
+	getMonth: function() {
+		return this.monthSelect && this.monthSelect.getValue();
+	},
+
+
+	getDay: function() {
+		return this.daySelect && this.daySelect.getValue();
+	},
+
+
+	getHour: function() {
+		var value = this.hourInput && this.hourInput.dom && this.hourInput.dom.value,
+			meridiem = this.meridiemSelect.getValue() || this.AM;
+
+		if (value === undefined || value === null) {
+			return null;
+		}
+
+		if (meridiem === this.AM && value === 12) {
+			value = 0;
+		} else if (value > 12) {
+			value = value + 12;
+		}
+
+		return value;
+	},
+
+
+	getMinutes: function() {
+		return this.minuteInput && this.minuteInput.dom && this.minuteInput.dom.value;
+	},
+
+
+	selectDate: function(date) {
+		if (date && date < this.lowerBound) {
+			date = this.lowerBound;
+		} else if (date && date > this.upperBound) {
+			date = this.upperBound;
+		}
+
+		var year = date && date.getFullYear(),
+			month = date && date.getMonth(),
+			day = date && date.getDate(),
+			hour = date && date.getHours(),
+			minute = date && date.getMinutes();
+
+		this.setValues(year, month, day, hour, minute);
+	},
+
+
+	setValues: function(year, month, day, hour, minute) {
+		year = year === undefined || year === null ? this.getYear() : year;
+		month = month === undefined || month === null ? this.getMonth() : month;
+		day = day === undefined || day === null ? this.getDay() : day;
+		hour = hour === undefined || hour === null ? this.getHour() : hour;
+		minute = minute === undefined || minute === null ? this.getMinutes() : minute;
+
+		this.updateYearRange(year, month, day);
+		this.updateMonthRange(year, month, day);
+		this.updateDayRange(year, month, day);
+
+		this.setMinute(minute);
+		this.setHour(hour);
+		this.setDay(day);
+		this.setMonth(month);
+		this.setYear(year);
+	},
+
+
+	updateYearRange: function(year, month, day) {
 		var lower = this.lowerBound.getFullYear(),
 			upper = this.upperBound.getFullYear(),
-			years = [], i;
+			i, years = [];
 
 		for (i = lower; i <= upper; i++) {
 			years.push(i);
 		}
 
-		return years;
+		this.yearSelect.setOptions(years);
 	},
 
 
-	getMonthRange: function(year) {
-		var useShort = this.shortDates,
-			lower = 0, upper = 11;
+	updateMonthRange: function(year, month, day) {
+		var useShort = this.useShortDates,
+			months;
 
-		//If the year is on the boundary, don't let the month go past it
-		if (this.lowerBound.getFullYear() === year) {
-			lower = this.lowerBound.getMonth();
-		} else if (this.upperBound.getFullYear() === year) {
-			upper = this.upperBound.getMonth();
-		}
-
-		return this.MONTHS.slice(lower, upper + 1).map(function(month) {
+		months = this.MONTHS.map(function(month) {
 			return {
 				value: month.value,
 				text: useShort ? month.shortLabel : month.longLabel
 			};
 		});
+
+		this.monthSelect.setOptions(months);
 	},
 
 
-	getDayRange: function(month, year) {
-		month = this.MONTHS[month];
+	updateDayRange: function(year, month, day) {
+		month = this.MONTHS[month || 0];
 
 		var lower = 1,
 			upper = this.self.isLeapYear(year) && month.leapDays ? month.leapDays : month.days,
 			days = [], i;
 
-		if (this.lowerBound.getFullYear() === year && this.lowerBound.getMonth() === month.value) {
-			lower = this.lowerBound.getDate();
-		} else if (this.upperBound.getFullYear() === year && thhis.upperBound.getMonth() === month.value) {
-			upper = this.upperBound.getDate();
-		}
-
 		for (i = lower; i <= upper; i++) {
 			days.push(i);
 		}
 
-		return days;
+		this.daySelect.setOptions(days);
 	},
 
 
-	getMeridiemRange: function() {
-		return [this.AM, this.PM];
-	},
-
-
-	selectDate: function(date) {
-		if (date < this.lowerBound) {
-			date = this.lowerBound;
-		} else if (date > this.upperBound) {
-			date = this.upperBound;
-		}
-
-		var year = date.getFullYear(),
-			month = date.getMonth(),
-			day = date.getDate();
-
-		this.currentDate = date;
-
-		this.updateYearRange();
-		this.updateMonthRange(year);
-		this.updateDayRange(month, year);
-
-		this.selectYear(year);
-		this.selectMonth(month);
-		this.selectDay(day);
-
-		this.selectHour(date.getHours());
-		this.selectMinute(date.getMinutes());
-	},
-
-
-	updateYearRange: function() {
-		var range = this.getYearRange(),
-			current = this.yearSelect.getValue();
-
-		this.yearSelect.setOptions(range);
-
-		if (current) {
-			this.selectYear(current);
-		}
-	},
-
-
-	updateMonthRange: function(year) {
-		var range = this.getMonthRange(year),
-			current = this.monthSelect.getValue();
-
-		this.monthSelect.setOptions(range);
-
-		if (current) {
-			this.selectMonth(current);
-		}
-	},
-
-
-	updateDayRange: function(month, year) {
-		var range = this.getDayRange(month, year),
-			current = this.daySelect.getValue();
-
-		this.daySelect.setOptions(range);
-
-		if (current) {
-			this.selectDay(current);
-		}
-	},
-
-
-	selectYear: function(year) {
-		var options = this.yearSelect.getOptions();
-
+	setYear: function(year) {
 		if (!year) {
-			year = options[0];
-		} else if (options.indexOf(year) >= 0) {
+			this.yearSelect.setValue('');
+			return;
+		}
+
+		var range = this.yearSelect.getOptions();
+
+		if (range.indexOf(year)) {
 			year = year;
-		} else if (year < options[0]) {
-			year = options[0];
-		} else if (year > options.last()) {
-			year = options.last();
+		} else if (range[0] > year) {
+			year = range[0];
+		} else if (range.last() < year) {
+			year = range.last();
 		}
 
 		this.yearSelect.setValue(year);
 	},
 
 
-	selectMonth: function(month) {
-		var options = this.monthSelect.getOptions();
+	setMonth: function(month) {
+		if (month === undefined) {
+			this.monthSelect.setValue('');
+			return;
+		}
 
-		if (!month) {
-			month = options[0];
-		} else if (options.indexOf(month) >= 0) {
+		var range = this.monthSelect.getOptions();
+
+		if (range.indexOf(month)) {
 			month = month;
-		} else if (month < options[0]) {
-			month = options[0];
-		} else if (month > options.last()) {
-			year = options.last();
+		} else if (range[0] > month) {
+			month = range[0];
+		} else if (range.last() < month) {
+			month = range.last();
 		}
 
 		this.monthSelect.setValue(month);
 	},
 
 
-	selectDay: function(day) {
-		var options = this.daySelect.getOptions();
-
+	setDay: function(day) {
 		if (!day) {
-			day = options[0];
-		} else if (options.indexOf(day) >= 0) {
+			this.daySelect.setValue('');
+			return;
+		}
+
+		var range = this.daySelect.getOptions();
+
+		if (range.indexOf(day)) {
 			day = day;
-		} else if (day < options[0]) {
-			day = options[0];
-		} else if (day > options.last()) {
-			day = options.last();
+		} else if (range[0] > day) {
+			day = range[0];
+		} else if (range.last() < day) {
+			day = range.last();
 		}
 
 		this.daySelect.setValue(day);
 	},
 
 
-	selectHour: function(hour) {
+	setHour: function(hour) {
 		if (hour < 12) {
 			this.meridiemSelect.setValue(this.AM);
 		} else {
@@ -368,112 +360,48 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 	},
 
 
-	selectMinute: function(minute) {
+	setMinute: function(minute) {
 		this.minuteInput.dom.value = minute;
 	},
 
 
-	__selectMeridiem: function(date) {
-
-	},
-
-
 	onYearChanged: function(year) {
-		var currentDate = this.getSelectedDate(),
-			newDate = new Date(currentDate.getTime());
-
-		//If the year hasn't changed don't do anything
-		if (newDate.getFullYear() !== year) {
-			newDate.setFullYear(year, 0, 1);
-			this.currentDate = newDate;
-			this.updateMonthRange(newDate.getFullYear());
-			// this.updateDayRange(newDate.getMonth(), newDate.getFullYear());
-		}
+		this.setMonth(this.getMonth());
+		this.setDay(this.getDay());
 	},
+
 
 	onMonthChanged: function(month) {
-		var currentDate = this.getSelectedDate(),
-			newDate = new Date(currentDate.getTime());
-
-		//If the month hasn't changed don't do anything
-		if (newDate.getMonth() !== month) {
-			newDate.setMonth(month, 1);
-			this.currentDate = newDate;
-			this.updateDayRange(newDate.getMonth(), newDate.getFullYear());
-		}
+		this.setDay(this.getDay());
 	},
 
 
-	onDayChanged: function(day) {
-		var currentDate = this.getSelectedDate(),
-			newDate = new Date(currentDate.getTime());
-
-		//If the month hasn't changed dont' do anything
-		if (newDate.getDate() !== day) {
-			newDate.setDate(day);
-			this.currentDate = newDate;
-		}
-	},
+	onDayChanged: function(day) {},
 
 
-	onHourChanged: function() {
-		var value = this.hourInput.dom.value,
-			currentDate = this.getSelectedDate(),
-			newDate = new Date(currentDate.getTime()),
+	onHourChanged: function(hour) {
+		var hour = this.hourInput.dom.value,
 			meridiem = this.meridiemSelect.getValue();
 
-		value = parseInt(value, 10);
-
-		if (!value) { return; }
-
-		if (this.maybeShowTimeError()) {
-			return;
-		}
-
 		if (!meridiem) {
-			meridiem.setValue(this.AM);
+			this.meridiemSelect.setValue(this.AM);
 			meridiem = this.AM;
 		}
 
-
-		if (value > 12) {
-			this.meridiemSelect.setValue(this.PM, true);
+		if (hour > 12) {
+			this.meridiemSelect.setValue(this.PM);
 			this.meridiemSelect.disable();
-		} else if (value === 0) {
-			this.meridiemSelect.setValue(this.AM, true);
+		} else if (hour === 0) {
+			this.meridiemSelect.setValue(this.AM);
 			this.meridiemSelect.disable();
 		} else {
-			if (meridiem === this.PM) {
-				value = value + 12;
-			} else if (value === 12) {
-				value = 0;
-			}
-
 			this.meridiemSelect.enable();
 		}
-
-		newDate.setHours(value);
-		this.currentDate = newDate;
 	},
 
 
-	onMinuteChanged: function() {
-		var value = this.minuteInput.dom.value,
-			currentDate = this.getSelectedDate(),
-			newDate = new Date(currentDate.getTime());
-
-		value = parseInt(value, 10);
-
-		if (this.maybeShowTimeError()) {
-			return;
-		}
-
-		newDate.setMinutes(value);
-		this.currentDate = newDate;
-	},
+	onMinuteChanged: function(minute) {},
 
 
-	onMeridiemChanged: function() {
-		this.onHourChanged();
-	}
+	onMeridiemChanged: function(meridiem) {}
 });

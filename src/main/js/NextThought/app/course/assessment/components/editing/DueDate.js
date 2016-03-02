@@ -35,7 +35,7 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 			{
 				xtype: 'date-time-field',
 				isAvailableEditor: true,
-				currentDate: available,
+				// currentDate: available,
 				lowerBound: now
 			},
 			{
