@@ -4,6 +4,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 
 	requires: [
 		'NextThought.common.menus.LabeledSeparator',
+		'NextThought.app.course.assessment.AssignmentStatus',
 		'NextThought.app.course.assessment.components.admin.email.Window',
 		'NextThought.app.course.assessment.components.AssignmentStatus',
 		'NextThought.model.Email',
@@ -29,12 +30,12 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		{cls: 'header-container', cn: [
 			{cls: 'assignment', cn: [
 				{cls: 'title', html: '{assignmentTitle}'},
-				{cls: 'meta', cn: [
-					{tag: 'span', cls: 'link raw', html: '{{{NextThought.view.courseware.assessment.admin.ListHeader.rawAssignment}}}'},
-					{tag: 'span', cls: 'filter link arrow', html: ''}
+				{cls: 'extras meta', cn: [
+					{tag: 'span', cls: 'link raw', html: '{{{NextThought.view.courseware.assessment.admin.ListHeader.rawAssignment}}}'}
 				]},
-				{cls: 'extras', cn: [
-					{cls: 'due link'}
+				{cls: 'meta', cn: [
+					{tag: 'span', cls: 'due link', html: ''},
+					{tag: 'span', cls: 'filter link arrow', html: ''}
 				]}
 			]},
 			{cls: 'controls', cn: [
@@ -55,7 +56,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 						'0 of 0'
 					]}
 				]}
-			]}
+			]},
+			{cls: 'editor-container'}
 		]}
 	]),
 
@@ -64,6 +66,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		assignmentEl: '.assignment',
 		assignmentTitleEl: '.assignment .title',
 		assignmentDueEl: '.assignment .due',
+		editorContainer: '.editor-container',
 		filterEl: '.assignment .filter',
 		exportEl: '.controls .export',
 		settingsEl: '.controls .settings',
@@ -89,6 +92,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		this.mon(this.viewingEl, 'click', 'showPageMenu');
 		this.mon(this.filterEl, 'click', this.fireEvent.bind(this, 'showFilters', this.filterEl));
 		this.mon(this.viewAssignmentEl, 'click', this.fireEvent.bind(this, 'goToRawAssignment'));
+		this.mon(this.assignmentDueEl, 'click', this.toggleDateEditor.bind(this));
 		this.emailEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		if (this.shouldAllowInstructorEmail() && this.currentBundle && this.currentBundle.getLink('Mail')) {
 			this.mon(this.emailEl, 'click', 'showEmailEditor');
@@ -397,12 +401,34 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		this.assignmentTitleEl.update(assignment.get('title'));
 		this.assignmentTitleEl.dom.setAttribute('data-qtip', assignment.get('title'));
 
+		this.assignmentDueEl.update(NextThought.app.course.assessment.AssignmentStatus.getStatusHTML({
+			due: assignment.getDueDate(),
+			maxTime: assignment.isTimed && assignment.getMaxTime(),
+			duration: assignment.isTimed && assignment.getDuration(),
+			isNoSubmitAssignment: assignment.isNoSubmit()
+		}));
+
+		if (assignment.getLink('edit')) {
+			this.assignmentDueEl.addCls('arrow');
+		} else {
+			this.assignmentDueEl.removeCls('arrow');
+		}
+
 		this.assignmentStatusCmp = new NextThought.app.course.assessment.components.AssignmentStatus({
 			assignment: assignment,
-			renderTo: this.assignmentDueEl
+			renderTo: this.editorContainer
 		});
 
 		this.on('destroy', this.assignmentStatusCmp.destroy.bind(this.assignmentStatusCmp));
+	},
+
+
+	toggleDateEditor: function() {
+		if (this.assignmentStatusCmp && this.assignmentStatusCmp.dueDateEditorVisible()) {
+			this.assignmentStatusCmp.closeDueDateEditor();
+		} else if (this.assignmentStatusCmp) {
+			this.assignmentStatusCmp.showDueDateEditor();
+		}
 	},
 
 

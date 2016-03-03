@@ -200,7 +200,7 @@ canvas.x-component-course-assessment {
 }
 
 .assignment-status {
-	font: normal 600 0.6em/1 $font;
+	font: normal 600 0.6rem/1 $font;
 	text-transform: uppercase;
 	color: $tertiary-grey;
 
@@ -666,7 +666,7 @@ canvas.x-component-course-assessment {
 		border-bottom: 1px solid #dddddd;
 
 		.header-container {
-			overflow: hidden;
+			@include containFloats();
 		}
 
 		&.disabled {
@@ -737,10 +737,40 @@ canvas.x-component-course-assessment {
 				.arrow::after {
 					top: -0.1em;
 				}
+
+				.due.arrow {
+					padding-right: 13px;
+
+					&::after {
+						right: 0;
+					}
+				}
+
+				.status-item {
+					color: $primary-blue;
+				}
 			}
 
 			&.hidden {
 				display: none;
+			}
+		}
+
+		.editor-container {
+			clear: both;
+		}
+
+		.assignment-status-container {
+			margin: 0 -150px -0.5em -2em;
+
+			.status-container {
+				display: none;
+			}
+
+			.assignment-due-date-editor {
+				& > .label, & > .date-time-field {
+					padding: 0 150px 0 2em;
+				}
 			}
 		}
 

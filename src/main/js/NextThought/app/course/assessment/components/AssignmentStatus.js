@@ -110,6 +110,15 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 	},
 
 
+	dueDateEditorVisible: function() {
+		if (!this.el) {
+			return false;
+		}
+
+		return this.el.hasCls('menu-open');
+	},
+
+
 	showDueDateEditor: function() {
 		var me = this;
 
@@ -123,7 +132,9 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 			me.addDueDateEditor();
 		}
 
-		me.el.addCls('menu-open');
+		if (me.el) {
+			me.el.addCls('menu-open');
+		}
 
 		if (me.onEditorOpen) {
 			me.onEditorOpen();
@@ -132,7 +143,9 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 
 
 	closeDueDateEditor: function() {
-		this.el.removeCls('menu-open');
+		if (this.el) {
+			this.el.removeCls('menu-open');
+		}
 
 		if (this.onEditorClose) {
 			this.onEditorClose();
