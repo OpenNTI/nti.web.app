@@ -405,6 +405,10 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 
 
 	setMinute: function(minute) {
+		if (minute < 10) {
+			minute = '0' + minute;
+		}
+
 		this.minuteInput.dom.value = minute;
 	},
 
