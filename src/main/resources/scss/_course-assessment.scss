@@ -554,7 +554,7 @@ canvas.x-component-course-assessment {
 .assignment-status-container {
 	position: relative;
 
-	&.editable {
+	&.editable:not(.disabled) {
 		.assignment-status {
 			.status-item.due {
 				cursor: pointer;
