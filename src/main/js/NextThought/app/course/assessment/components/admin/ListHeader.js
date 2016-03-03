@@ -5,6 +5,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 	requires: [
 		'NextThought.common.menus.LabeledSeparator',
 		'NextThought.app.course.assessment.components.admin.email.Window',
+		'NextThought.app.course.assessment.components.AssignmentStatus',
 		'NextThought.model.Email',
 		'NextThought.app.windows.StateStore'
 	],
@@ -29,11 +30,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 			{cls: 'assignment', cn: [
 				{cls: 'title', html: '{assignmentTitle}'},
 				{cls: 'meta', cn: [
-					{tag: 'span', cls: 'due link', html: '{assignmentDue}'},
+					{tag: 'span', cls: 'link raw', html: '{{{NextThought.view.courseware.assessment.admin.ListHeader.rawAssignment}}}'},
 					{tag: 'span', cls: 'filter link arrow', html: ''}
 				]},
 				{cls: 'extras', cn: [
-					{tag: 'span', cls: 'link raw', html: '{{{NextThought.view.courseware.assessment.admin.ListHeader.rawAssignment}}}'}
+					{cls: 'due link'}
 				]}
 			]},
 			{cls: 'controls', cn: [
@@ -71,7 +72,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		startIndexEl: '.page .viewing .startIndex',
 		endIndexEl: '.page .viewing .endIndex',
 		totalEl: '.page .viewing .total',
-		viewAssignmentEl: '.extras .raw'
+		viewAssignmentEl: '.assignment .raw'
 	},
 
 
@@ -385,8 +386,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 			return;
 		}
 
-		due = assignment.getDueDate();
-
 		this.assignmentEl.removeCls('hidden');
 
 		exportLink = assignment.getLink('ExportFiles');
@@ -398,9 +397,12 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		this.assignmentTitleEl.update(assignment.get('title'));
 		this.assignmentTitleEl.dom.setAttribute('data-qtip', assignment.get('title'));
 
-		if (due) {
-			this.assignmentDueEl.update(Ext.Date.format(due, 'l, g:i A, F j, Y'));
-		}
+		this.assignmentStatusCmp = new NextThought.app.course.assessment.components.AssignmentStatus({
+			assignment: assignment,
+			renderTo: this.assignmentDueEl
+		});
+
+		this.on('destroy', this.assignmentStatusCmp.destroy.bind(this.assignmentStatusCmp));
 	},
 
 

@@ -346,9 +346,13 @@
 	.overview-naquestionset {
 		margin-top: 5px;
 		position: relative;
+		min-height: 76px;
+		overflow: hidden;
 
 		.x-panel-body-assessment {
 			padding: 0 15px 0 90px;
+			min-height: 76px;
+			overflow: visible;
 		}
 
 		canvas.score {
@@ -371,28 +375,70 @@
 			}
 		}
 
-		.x-btn {
+		.assignment-box {
+			position: relative;
+			min-height: 76px;
+			padding: 15px 90px 0 25px;
+
+			.title {
+				display: inline-block;
+				vertical-align: middle;
+				font-size: 1.125em;
+				max-width: 515px;
+				margin-bottom: 1em;
+			}
+		}
+
+		.assignment-status-container {
+			background-color: #fcfcfc;
+			margin-top: -30px;
+
+			.status-container {
+				margin-left: 90px; //25 + 40 + 25
+				margin-bottom: 10px;
+			}
+			
+			.assignment-due-date-editor {
+				& > .label, & > .date-time-field {
+					padding: 0 90px;
+				}
+			}
+		}
+
+		.x-btn.review-btn {
 			position: absolute;
 			right: 15px;
 			top: 50%;
 			margin-top: -18px;//37 / 2
+			z-index: 1;
 		}
 
 		&.assignment{
-			@include icon('assignment_due', $side:'before', $top:50%, $left: 25px);
-
-			&::before {
-				margin-top: -20px;//40/2
+			.x-panel-body-assessment {
+				padding: 0;
 			}
 
-			&.ontime::before{
+			.assignment-box {
+				@include icon('assignment_due', $side:'before');
+
+				&::before {
+					position: relative;
+					display: inline-block;
+					vertical-align: middle;
+					margin-right: 25px;
+					z-index: 1;
+				}
+
+			}
+
+			&.ontime .assignment-box::before{
 				@include sprite($icons, 'assignment_ontime');
 			}
 
-			&.late::before{
+			&.late .assignment-box::before{
 				@include sprite($icons, 'assignment_late');
 			}
-			&.nosubmit::before{
+			&.nosubmit .assignment-box::before{
 				@include sprite($icons, 'assignment_due');
 			}
 		}

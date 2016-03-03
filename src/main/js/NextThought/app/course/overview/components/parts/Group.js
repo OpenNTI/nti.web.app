@@ -47,6 +47,22 @@ Ext.define('NextThought.app.course.overview.components.parts.Group', {
 	},
 
 
+	onceLoaded: function() {
+		var me = this;
+
+		return new Promise(function(fulfill, reject) {
+			if (me.collectionSet) {
+				fulfill();
+			} else {
+				me.on({
+					single: true,
+					'collection-set': fulfill
+				});
+			}
+		});
+	},
+
+
 	setProgress: function(progress) {
 		var body = this.getBodyContainer();
 
@@ -96,7 +112,8 @@ Ext.define('NextThought.app.course.overview.components.parts.Group', {
 			var item = record.raw,
 				type = getType(item),
 				cls = getClass(type),
-				assignment, prev;
+				assignment;
+
 
 			if (!cls) {
 				console.debug('No component found for:', item);
@@ -128,10 +145,8 @@ Ext.define('NextThought.app.course.overview.components.parts.Group', {
 				if (cls.isAssessmentWidget) {
 					assignment = assignments.isAssignment(item['target-ntiid']);
 					type = assignment ? 'course-overview-assignment' : type;
-					assignment = assignments.getItem(item['target-ntiid']);
 				}
 
-				prev = items.last();
 				item = Ext.applyIf({
 					xtype: type,
 					locationInfo: locInfo,
@@ -142,11 +157,13 @@ Ext.define('NextThought.app.course.overview.components.parts.Group', {
 					record: record
 				}, item);
 
-				if (cls.buildConfig) {
-					item = cls.buildConfig(item, prev);
-				}
+				if (item && item.assignment) {
+					items.push(assignments.fetchAssignment(item['target-ntiid']).then(function(assignment) {
+						item.assignment = assignment;
 
-				if (item) {
+						return item;
+					}));
+				} else if (item) {
 					items.push(item);
 				}
 			}
@@ -154,7 +171,13 @@ Ext.define('NextThought.app.course.overview.components.parts.Group', {
 			return items;
 		}, []);
 
-		body.add(items);
+		Promise.all(items)
+			.then(function(items) {
+				body.add(items);
+
+				me.collectionSet = true;
+				me.fireEvent('collection-set');
+			});
 	},
 
 	navigate: function() {}

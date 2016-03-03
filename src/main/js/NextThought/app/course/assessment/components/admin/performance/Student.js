@@ -122,7 +122,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Stude
 
 		var state = this.getCurrentState() || {};
 
-		this.header.setGradeBook(this.FinalGradeHistoryItem);
+		this.header.setGradeBook(this.summary.hasFinalGrade() && this.FinalGradeHistoryItem);
+
 		this.header.setPredictedGrade(this.predictedGrade);
 
 		this.store = assignments.getStudentHistory(this.historiesURL, this.student.getId());

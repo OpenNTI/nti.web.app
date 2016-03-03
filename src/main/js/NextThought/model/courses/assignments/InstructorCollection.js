@@ -82,6 +82,7 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 	 *
 	 * @param {String} historyLink link to the assignment histories for a user
 	 * @param {User} [] [description]
+	 * @param {[String]} available the list of ntiids for the assignments this student has
 	 * @return {Store}      store proxied to load the summaries
 	 */
 	getStudentHistory: function(historyLink, studentId) {

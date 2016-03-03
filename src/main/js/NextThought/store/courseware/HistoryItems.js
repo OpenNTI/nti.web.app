@@ -17,6 +17,15 @@ Ext.define('NextThought.store.courseware.HistoryItems', {
 				'application/vnd.nextthought.assessment.userscourseassignmenthistory': 1
 			},
 
+
+			readRecords: function(resp) {
+				var data = this.self.prototype.readRecords.apply(this, arguments);
+
+				this.AvailableAssignmentNTIIDs = resp.AvailableAssignmentNTIIDs;
+
+				return data;
+			},
+
 			onItemRead: function(item, key) {
 				if (Ext.isArray(item)) {
 					if (item[1] !== null) {

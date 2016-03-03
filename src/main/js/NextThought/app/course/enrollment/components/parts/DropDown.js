@@ -2,7 +2,7 @@ Ext.define('NextThought.app.course.enrollment.components.parts.DropDown', {
 	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
 	alias: 'widget.enrollment-dropdown',
 
-	requires: ['NextThought.common.form.fields.SearchComboBox'],
+	requires: ['NextThought.common.form.fields.LegacySearchComboBox'],
 
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'enrollment-input select {required} {size}'
@@ -32,7 +32,7 @@ Ext.define('NextThought.app.course.enrollment.components.parts.DropDown', {
 		var me = this,
 			scrollParent = this.el.parent('.enrollment-container');
 
-		me.combobox = Ext.widget('searchcombobox', {
+		me.combobox = Ext.widget('legacysearchcombobox', {
 			options: me.options,
 			emptyText: me.placeholder,
 			renderTo: me.selectEl,

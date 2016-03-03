@@ -233,10 +233,10 @@ span.nti-radiobutton {
 		box-shadow: none;
 		border: 1px solid $tertiary-grey;
 		background: #ffffff;
+	}
 
-		&.error {
-			border-color: $primary-red;
-		}
+	&.error input, input.error {
+		border-color: $primary-red;
 	}
 
 	.options {
@@ -258,6 +258,10 @@ span.nti-radiobutton {
 			li {
 				padding: 0 10px;
 				cursor: pointer;
+
+				&.filtered {
+					display: none;
+				}
 
 				&.active, &:hover {
 					background-color: #efefef
@@ -658,6 +662,94 @@ form.common-form {
 
 		span {
 			margin-right: 0.3em;
+		}
+	}
+}
+
+
+.date-time-field {
+	.date .container, .time .container {
+		@include flexContainer();
+		-webkit-justify-content: space-between;
+		-ms-flex-pack: justify;
+		justify-content: space-between;
+	}
+
+	.hour-input, .minute-input {
+		font-size: 0.875rem;
+		font-weight: 500;
+		border-radius: 0;
+		line-height: 25px;
+		padding: 6px;
+		box-shadow: none;
+		border: 1px solid $tertiary-grey;
+		background: #ffffff;
+
+		&.error {
+			border-color: $primary-red;
+		}
+	}
+
+	.date, .time {
+		display: inline-block;
+		vertical-align: top;
+
+		& > .error {
+			font-size: 0.875rem;
+			color: $primary-red;
+		}
+	}
+
+	.date {
+		width: 60%;
+		margin-right: 7%;
+	}
+
+	.time {
+		width: 33%;
+	}
+
+	.month {
+		@include flexItem(0 0 170px);
+	}
+
+	.day {
+		@include flexItem(0 0 55px);
+	}
+
+	.year {
+		@include flexItem(0 0 70px);
+	}
+
+	.hour-input {
+		@include flexItem(0 0 40px);
+		width: 40px;
+	}
+
+	.seperator {
+		@include flexItem(0 0 6px);
+		line-height: 40px;
+		text-align: center;
+	}
+
+	.minute-input {
+		@include flexItem(0 0 40px);
+		width: 40px;
+	}
+
+	.meridiem-input {
+		@include flexItem(0 0 60px);
+	}
+
+	.label {
+		text-transform: uppercase;
+		font-size: 0.625rem;
+		font-weight: 600;
+		color: $secondary-grey;
+
+		&.error {
+			font-size: 0.625rem;
+			color: $primary-red;
 		}
 	}
 }

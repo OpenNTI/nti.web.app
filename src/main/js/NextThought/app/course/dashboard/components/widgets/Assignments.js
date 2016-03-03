@@ -39,6 +39,9 @@ Ext.define('NextThought.app.course.dashboard.components.widgets.Assignments', {
 
 			return course.getAssignments()
 						.then(function(assignmentCollection) {
+							return assignmentCollection.updateAssignments();
+						})
+						.then(function(assignmentCollection) {
 							var assignments = [];
 
 							assignmentCollection.each(function(assignment) {

@@ -775,3 +775,11 @@
   -webkit-order: $val;
   order: $val;
 }
+
+@mixin containFloats() {
+	&::after {
+		content: '';
+		display: block;
+		clear: both;
+	}
+}

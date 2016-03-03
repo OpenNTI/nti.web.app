@@ -102,7 +102,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.ListItem'
 			record: record,
 			'target-ntiid': item['Target-NTIID'],
 			ntiid: item.NTIID,
-			navigate: this.navigate
+			navigate: this.navigate,
+			inEditMode: true
 		}, item);
 	},
 

@@ -11,7 +11,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Heade
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -69,7 +69,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Heade
 	},
 
 
-	setupCourseEmail: function(emailLink){	
+	setupCourseEmail: function(emailLink) {
 		var emailEl = this.el.down('.email');
 		this.emailLink = emailLink;
 

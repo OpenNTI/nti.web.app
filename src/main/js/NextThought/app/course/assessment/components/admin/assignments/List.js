@@ -5,25 +5,27 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.List'
 	cls: 'assignment-list admin',
 
 	requires: [
+		'NextThought.app.course.assessment.components.admin.assignments.ListItem',
 		'NextThought.common.menus.Reports',
 		'NextThought.app.course.assessment.AssignmentStatus'
 	],
 
 	view: 'admin',
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'header', html: 'Completion'},
-		{cls: 'list'}
-	]),
+	itemType: 'course-assessment-assignment-admin-list-item',
+
+	items: [
+		{xtype: 'box', autoEl: {cls: 'group-header', html: 'Completion'}},
+		{xtype: 'container', layout: 'none', itemContainer: true}
+	],
 
 
-	renderSelectors: {
-		titleEl: '.header', 
-		frameBodyEl: '.list'
+	getItemsContainer: function() {
+		return this.down('[itemContainer]');
 	},
 
-	getTargetEl: function() { return this.frameBodyEl; },
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup(
+
+	xadsftpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{ tag: 'tpl', 'for': '.', cn: [
 			{ cls: 'item {[this.getStatusCls(values)]}', cn: [
 				{ cls: 'score', cn: [
@@ -67,7 +69,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.List'
 		}
 	),
 
-	
+
 	onItemClick: function(record, node, index, e) {
 		var link = e.getTarget('.report');
 
