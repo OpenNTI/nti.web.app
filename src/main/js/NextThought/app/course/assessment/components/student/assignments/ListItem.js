@@ -57,18 +57,26 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Lis
 
 
 	addStatusCmp: function() {
-		this.statusCmp = new NextThought.app.course.assessment.components.AssignmentStatus({
-			renderTo: this.statusEl,
-			assignment: this.assignment,
-			history: this.history
+		var me = this;
+
+		me.statusCmp = new NextThought.app.course.assessment.components.AssignmentStatus({
+			renderTo: me.statusEl,
+			assignment: me.assignment,
+			history: me.history,
+			onEditorOpen: function() {
+				me.addCls('editor-open');
+			},
+			onEditorClose: function() {
+				me.removeCls('editor-open');
+			}
 		});
 
-		this.on('destroy', this.statusCmp.destroy.bind(this.statusCmp));
+		me.on('destroy', me.statusCmp.destroy.bind(me.statusCmp));
 	},
 
 
-	onItemClick: function() {
-		if (this.navigateToItem && this.assignment) {
+	onItemClick: function(e) {
+		if (this.navigateToItem && this.assignment && !e.getTarget('.status-container')) {
 			this.navigateToItem(this.assignment);
 		}
 	}

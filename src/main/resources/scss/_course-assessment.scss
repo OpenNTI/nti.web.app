@@ -181,6 +181,7 @@ canvas.x-component-course-assessment {
 	.footer {
 		background-color: white;
 		border-top: 1px solid #d9d9d9;
+		overflow: hidden;
 
 		.save, .cancel {
 			float: right;
@@ -209,11 +210,11 @@ canvas.x-component-course-assessment {
 
 	.status-item{
 
-		&:first-of-type::before {
+		&:last-of-type::after {
 			display: none;
 		}
 
-		&::before {
+		&::after {
 			content: '\b7';
 			font-size: 1.2em;
 			vertical-align: middle;
@@ -428,8 +429,9 @@ canvas.x-component-course-assessment {
 	}
 
 	.item {
+		min-height: 39px;
 		position: relative;
-		padding: 10px 0 10px 60px;
+		padding: 10px 0 0 60px;
 		box-shadow: 0 1px 0 0 #f7f7f7;
 		cursor: pointer;
 
@@ -451,7 +453,7 @@ canvas.x-component-course-assessment {
 			}
 		}
 
-		&:hover, &.selected {
+		&:not(.editor-open):hover, &.selected {
 			background: #fafafa;
 
 			.report{
@@ -467,6 +469,11 @@ canvas.x-component-course-assessment {
 				@include sprite($icons,'check_green');
 			}
 
+		}
+
+		&.editor-open {
+			box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
+			z-index: 1;
 		}
 
 		.name {
@@ -519,6 +526,27 @@ canvas.x-component-course-assessment {
 				@include icon('reports-blue_hover', $position:absolute);
 			}
 		}
+
+		.assignment-status-container {
+			margin-left: -60px;
+
+			.status-container {
+				padding: 0 8em 10px 60px;
+			}
+
+			.assignment-due-date-editor > .label, .assignment-due-date-editor > .date-time-field {
+				padding: 0 8em 0 60px;
+			}
+
+			.menu-container {
+				width: 100%;
+				background: #fafafa;
+
+				.assignment-due-date-editor {
+					border-top: 1px solid #d9d9d9;
+				}
+			}
+		}
 	}
 }
 
@@ -528,7 +556,7 @@ canvas.x-component-course-assessment {
 
 	&.editable {
 		.assignment-status {
-			.status-item {
+			.status-item.due {
 				cursor: pointer;
 				position: relative;
 				margin: -2px 0 -2px -9px;

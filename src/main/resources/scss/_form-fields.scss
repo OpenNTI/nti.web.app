@@ -668,6 +668,10 @@ form.common-form {
 
 
 .date-time-field {
+	input {
+		font-family: $font;
+	}
+
 	.date .container, .time .container {
 		@include flexContainer();
 		-webkit-justify-content: space-between;

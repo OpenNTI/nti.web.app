@@ -124,11 +124,19 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 		}
 
 		me.el.addCls('menu-open');
+
+		if (me.onEditorOpen) {
+			me.onEditorOpen();
+		}
 	},
 
 
 	closeDueDateEditor: function() {
 		this.el.removeCls('menu-open');
+
+		if (this.onEditorClose) {
+			this.onEditorClose();
+		}
 	},
 
 
