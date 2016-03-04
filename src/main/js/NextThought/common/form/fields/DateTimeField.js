@@ -418,6 +418,10 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		this.setDay(this.getDay());
 
 		this.clearDateError();
+
+		if (this.onChange) {
+			this.onChange();
+		}
 	},
 
 
@@ -425,11 +429,19 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		this.setDay(this.getDay());
 
 		this.clearDateError();
+
+		if (this.onChange) {
+			this.onChange();
+		}
 	},
 
 
 	onDayChanged: function(day) {
 		this.clearDateError();
+
+		if (this.onChange) {
+			this.onChange();
+		}
 	},
 
 
@@ -451,13 +463,25 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		} else {
 			this.meridiemSelect.enable();
 		}
+
+		if (this.onChanged) {
+			this.onChanged();
+		}
 	},
 
 
-	onMinuteChanged: function(minute) {},
+	onMinuteChanged: function(minute) {
+		if (this.onChanged) {
+			this.onChanged();
+		}
+	},
 
 
-	onMeridiemChanged: function(meridiem) {},
+	onMeridiemChanged: function(meridiem) {
+		if (this.onChanged) {
+			this.onChanged();
+		}
+	},
 
 
 	showDateError: function(error) {

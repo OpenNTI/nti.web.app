@@ -38,7 +38,8 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 				{
 					xtype: 'date-time-field',
 					isAvailableEditor: true,
-					currentDate: available
+					currentDate: available,
+					onChange: this.clearError.bind(this)
 				},
 				{
 					xtype: 'box',
@@ -50,7 +51,15 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 				{
 					xtype: 'date-time-field',
 					isDueEditor: true,
-					currentDate: due
+					currentDate: due,
+					onChange: this.clearError.bind(this)
+				},
+				{
+					xtype: 'box',
+					isError: true,
+					autoEl: {
+						cls: 'error'
+					}
 				}
 			]},
 			{
@@ -105,6 +114,24 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 	},
 
 
+	showError: function(msg) {
+		var cmp = this.down('[isError]');
+
+		if (cmp && cmp.el) {
+			cmp.el.update(msg || 'Unable to update dates');
+		}
+	},
+
+
+	clearError: function() {
+		var cmp = this.down('[isError]');
+
+		if (cmp && cmp.el) {
+			cmp.el.update('');
+		}
+	},
+
+
 	addSavingMask: function() {
 		if (this.el) {
 			this.el.mask('Saving...');
@@ -140,8 +167,12 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 					me.onSave();
 				}
 			})
-			.fail(function() {
+			.fail(function(response) {
 				//Show an error
+				var error = Globals.parseError(response);
+
+				me.showError(error);
+
 			})
 			.always(me.removeSavingMask.bind(me));
 	}

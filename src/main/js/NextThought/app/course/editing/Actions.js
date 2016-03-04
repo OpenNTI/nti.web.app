@@ -20,6 +20,9 @@ Ext.define('NextThought.app.course.editing.Actions', {
 
 
 	updateAssignmentDates: function(assignment, available, due) {
+		available = 'asdasdf';
+		due = 'xzcvcvxz';
+
 		var me = this,
 			link = assignment.getLink('edit'),
 			data = {
@@ -37,9 +40,9 @@ Ext.define('NextThought.app.course.editing.Actions', {
 
 				return assignment;
 			}).fail(function(response) {
-				var conflict = response.responseText && ParseUtils.parseItems(response.responseText)[0];
+				var conflict = response && response.status === 409 && response.responseText && ParseUtils.parseItems(response.responseText)[0];
 
-				if (conflict && response.status === 409) {
+				if (conflict) {
 					return me.__resolveConflict(conflict, data)
 						.then(function(response) {
 							if (response) {

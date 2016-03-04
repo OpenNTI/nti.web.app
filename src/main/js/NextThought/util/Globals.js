@@ -76,6 +76,19 @@ Ext.define('NextThought.util.Globals', {
 		}
 	},
 
+
+	parseError: function(response) {
+		var error,
+			status = response.status;
+
+		if (status === 422) {
+			response = this.parseJSON(response.responseText, true);
+		}
+
+		return;
+	},
+
+
 	//Remove leading and trailing /'s from a route
 	trimRoute: function(route) {
 		route = route || '';
