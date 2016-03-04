@@ -27,30 +27,32 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 		this.EditingActions = NextThought.app.course.editing.Actions.create();
 
 		me.add([
-			{
-				xtype: 'box',
-				autoEl: {
-					cls: 'label',
-					html: 'When should this assignment be available?'
+			{xtype: 'container', isContents: true, layout: 'none', cls: 'contents', items: [
+				{
+					xtype: 'box',
+					autoEl: {
+						cls: 'label',
+						html: 'When should this assignment be available?'
+					}
+				},
+				{
+					xtype: 'date-time-field',
+					isAvailableEditor: true,
+					currentDate: available
+				},
+				{
+					xtype: 'box',
+					autoEl: {
+						cls: 'label',
+						html: 'When should this assignment be due?'
+					}
+				},
+				{
+					xtype: 'date-time-field',
+					isDueEditor: true,
+					currentDate: due
 				}
-			},
-			{
-				xtype: 'date-time-field',
-				isAvailableEditor: true,
-				currentDate: available
-			},
-			{
-				xtype: 'box',
-				autoEl: {
-					cls: 'label',
-					html: 'When should this assignment be due?'
-				}
-			},
-			{
-				xtype: 'date-time-field',
-				isDueEditor: true,
-				currentDate: due
-			},
+			]},
 			{
 				xtype: 'box',
 				autoEl: {
@@ -103,18 +105,36 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 	},
 
 
+	addSavingMask: function() {
+		if (this.el) {
+			this.el.mask('Saving...');
+		}
+	},
+
+
+	removeSavingMask: function() {
+		if (this.el) {
+			this.el.unmask();
+		}
+	},
+
+
 	doSave: function() {
 		var me = this,
-			available = this.getAvailableEditor(),
-			due = this.getDueEditor(),
+			available = me.getAvailableEditor(),
+			due = me.getDueEditor(),
 			availableValid = available.validate(),
-			dueValid = due.validate();
+			dueValid = due.validate(),
+			success;
 
 		if (!availableValid || !dueValid) {
 			return;
 		}
 
-		this.EditingActions.updateAssignmentDates(this.assignment, available.getSelectedDate(), due.getSelectedDate())
+		me.addSavingMask();
+
+		me.EditingActions.updateAssignmentDates(me.assignment, available.getSelectedDate(), due.getSelectedDate())
+			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
 			.then(function(response) {
 				if (response && me.onSave) {
 					me.onSave();
@@ -122,6 +142,7 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 			})
 			.fail(function() {
 				//Show an error
-			});
+			})
+			.always(me.removeSavingMask.bind(me));
 	}
 });

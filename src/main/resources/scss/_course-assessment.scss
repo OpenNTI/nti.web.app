@@ -168,7 +168,7 @@ canvas.x-component-course-assessment {
 }
 
 .assignment-due-date-editor {
-	& > .label {
+	& .contents > .label {
 		font-size: 1.125em;
 		color: $primary-grey;
 		margin: 0.5em 0;
@@ -534,7 +534,7 @@ canvas.x-component-course-assessment {
 				padding: 0 8em 10px 60px;
 			}
 
-			.assignment-due-date-editor > .label, .assignment-due-date-editor > .date-time-field {
+			.assignment-due-date-editor > .contents {
 				padding: 0 8em 0 60px;
 			}
 
@@ -768,7 +768,7 @@ canvas.x-component-course-assessment {
 			}
 
 			.assignment-due-date-editor {
-				& > .label, & > .date-time-field {
+				& > .contents {
 					padding: 0 150px 0 2em;
 				}
 			}
