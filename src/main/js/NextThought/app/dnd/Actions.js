@@ -61,5 +61,17 @@ Ext.define('NextThought.app.dnd.Actions', {
 
 	removeWindowScrollListeners: function() {
 		this.pageScrollign.unscrollWhenDragNearEdges();
+	},
+
+	removeAllPlaceholders: function() {
+		var placeholders = document.querySelector('.dnd-drop-placeholder, .dnd-save-placeholder');
+
+		if(placeholders instanceof Array) {
+			placeholders.forEach(function(placeholder) {
+				placeholder.remove();
+			});
+		} else if(placeholders) {
+			placeholders.remove();
+		}
 	}
 });
