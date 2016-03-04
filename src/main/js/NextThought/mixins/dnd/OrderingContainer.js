@@ -92,7 +92,7 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 
 			if (isBefore) {
 				info = {
-					index: 1,
+					index: i,
 					before: current.getDragTarget()
 				};
 			}
