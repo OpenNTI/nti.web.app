@@ -115,8 +115,8 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 		}
 
 		this.EditingActions.updateAssignmentDates(this.assignment, available.getSelectedDate(), due.getSelectedDate())
-			.then(function() {
-				if (me.onSave) {
+			.then(function(response) {
+				if (response && me.onSave) {
 					me.onSave();
 				}
 			})

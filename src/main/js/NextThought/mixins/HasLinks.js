@@ -12,6 +12,14 @@ Ext.define('NextThought.mixins.HasLinks', {
 	},
 
 
+	getLinkMethod: function(rel) {
+		var links = this.get('Links'),
+			link = links && links.getRelLink(rel);
+
+		return link && link.method;
+	},
+
+
 	hasLink: function(rel) {
 		return !!this.getLink(rel);
 	},
