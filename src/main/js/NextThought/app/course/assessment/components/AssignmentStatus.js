@@ -67,8 +67,18 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 
 
 	setStatus: function(status) {
-		this.status = status;
+		this.status = Ext.DomHelper.markup({
+			cls: 'assignment-status', cn: [
+				{cls: 'status-item due', html: status}
+			]
+		});
+
+		if (this.rendered) {
+			this.updateStatus();
+		}
 	},
+
+
 
 
 	disableEditing: function() {
@@ -82,10 +92,11 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 
 
 	updateStatus: function() {
-		var assignment = this.assignment,
-			history = this.history,
+		var me = this,
+			assignment = me.assignment,
+			history = me.history,
 			grade = history && history.get && history.get('Grade'),
-			status = this.status || NextThought.app.course.assessment.AssignmentStatus.getStatusHTML({
+			status = me.status || NextThought.app.course.assessment.AssignmentStatus.getStatusHTML({
 				due: assignment.getDueDate(),
 				completed: history && history.get('completed'),
 				maxTime: assignment.isTimed && assignment.getMaxTime(),
@@ -94,7 +105,12 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 				isNoSubmitAssignment: assignment.isNoSubmit()
 			});
 
-		this.statusEl.dom.innerHTML = status;
+		me.statusEl.dom.innerHTML = status;
+
+		wait(100)
+			.then(function() {
+				delete me.status;
+			});
 	},
 
 

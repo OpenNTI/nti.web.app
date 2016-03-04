@@ -40,7 +40,14 @@ Ext.define('NextThought.app.course.editing.Actions', {
 				var conflict = response.responseText && ParseUtils.parseItems(response.responseText)[0];
 
 				if (conflict && response.status === 409) {
-					return me.__resolveConflict(conflict, data);
+					return me.__resolveConflict(conflict, data)
+						.then(function(response) {
+							if (response) {
+								assignment.syncWithResponse(response);
+							}
+
+							return assignment;
+						});
 				}
 
 				return Promise.reject(response);

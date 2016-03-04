@@ -139,6 +139,8 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 			{xtype: 'course-assignment-status', assignment: this.assignment}
 		]);
 
+		this.mon(this.assignment, 'update', this.setAsAssignment.bind(this, this.assignment));
+
 		this.setAsAssignment(this.assignment);
 	},
 
@@ -149,6 +151,7 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 			return;
 		}
 
+
 		this.setQuetionSetContainerTitle(assignment.get('title'));
 
 		var status = this.down('course-assignment-status'),
@@ -156,7 +159,8 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 			isNoSubmit = assignment.isNoSubmit(),
 			now = new Date(),
 			opens = assignment.get('availableBeginning'),
-			dueDate = assignment.get('availableEnding');
+			dueDate = assignment.get('availableEnding'),
+			button = this.down('button');
 
 		this.addCls('assignment');
 		this.setAsNotStarted();
@@ -178,7 +182,9 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 				this.addCls('late');
 			}
 		} else if (opens && opens > now) {
-			this.down('button').destroy();
+			if (button) {
+				button.destroy();
+			}
 
 			if (status) {
 				status.setStatus(getFormattedString('NextThought.view.courseware.overview.parts.QuestionSet.available', {
@@ -253,8 +259,12 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 
 	setAsNotStarted: function() {
 		var b = this.down('button');
-		b.setUI('primary');
-		b.setText(getString('NextThought.view.courseware.overview.parts.QuestionSet.start'));
+
+		if (b) {
+			b.setUI('primary');
+			b.setText(getString('NextThought.view.courseware.overview.parts.QuestionSet.start'));
+		}
+
 		this.addCls('not-started');
 	},
 
