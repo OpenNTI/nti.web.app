@@ -79,13 +79,14 @@ Ext.define('NextThought.util.Globals', {
 
 	parseError: function(response) {
 		var error,
-			status = response.status;
+			status = response.status,
+			error;
 
 		if (status === 422) {
-			response = this.parseJSON(response.responseText, true);
+			error = this.parseJSON(response.responseText, true);
 		}
 
-		return;
+		return error;
 	},
 
 

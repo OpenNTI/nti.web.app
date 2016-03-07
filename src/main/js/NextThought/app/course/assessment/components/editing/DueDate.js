@@ -171,7 +171,7 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 				//Show an error
 				var error = Globals.parseError(response);
 
-				me.showError(error);
+				me.showError(error && error.message);
 
 			})
 			.always(me.removeSavingMask.bind(me));
