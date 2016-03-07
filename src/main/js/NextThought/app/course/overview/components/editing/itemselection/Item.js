@@ -173,7 +173,7 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ite
 		var selectionItemId = this.getSelectionItemId(this.selectionItem),
 			itemId = this.getSelectionItemId(item);
 
-		if (selectionItemId === itemId) {
+		if (selectionItemId && selectionItemId === itemId) {
 			this.isSelected = true;
 			this.onSelectItem(this.itemCmp.el.dom);
 		}
@@ -201,7 +201,7 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ite
 		var selectionItemId = this.getSelectionItemId(this.selectionItem),
 			itemId = this.getSelectionItemId(item);
 
-		if (selectionItemId === itemId) {
+		if (selectionItemId && selectionItemId === itemId) {
 			this.isSelected = false;
 			this.onUnselectItem(this.itemCmp.el.dom);
 		}

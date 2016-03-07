@@ -24,13 +24,13 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 		return {
 			hasChildren: children.length > 0,
-			title: item.getAttribute('label')
+			title: item.getAttribute && item.getAttribute('label') || item.title
 		};
 	},
 
 
 	getItemChildren: function(item) {
-		return ContentUtils.getReadingPages(item);
+		return item && item.items  || ContentUtils.getReadingPages(item);
 	},
 
 
@@ -44,7 +44,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 		return label.indexOf(searchTerm) >= 0 || searchTerm === ntiid;
 	},
-
+	
 
 	onSelectItem: function(el) {
 		el.classList.add('selected');
@@ -57,7 +57,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 
 	getSelectionItemId: function(item) {
-		return item.getAttribute('ntiid');
+		return item.getAttribute && item.getAttribute('ntiid');
 	},
 
 
