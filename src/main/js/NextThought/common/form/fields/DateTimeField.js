@@ -11,8 +11,8 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 
 
 	requires: [
-		'NextThought.common.form.fields.SearchComboBox',
-		'NextThought.common.form.Utils'
+		'NextThought.common.form.fields.LegacySearchComboBox',
+		'NextThought.util.Scrolling'
 	],
 
 	INVALID_DATE: 'Please enter a valid date.',
@@ -65,9 +65,9 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		{cls: 'time', cn: [
 			{tag: 'span', cls: 'label', html: 'Local Time'},
 			{cls: 'container', cn: [
-				{tag: 'input', type: 'text', cls: 'hour-input'},
+				{tag: 'input', type: 'number', cls: 'hour-input', min: '0', max: '24'},
 				{tag: 'span', cls: 'seperator', html: ':'},
-				{tag: 'input', type: 'test', cls: 'minute-input'},
+				{tag: 'input', type: 'number', cls: 'minute-input', min: '0', max: '59'},
 				{cls: 'meridiem-input'}
 			]},
 			{tag: 'span', cls: 'error'}
@@ -107,10 +107,11 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		this.lowerBound = this.lowerBound || lowerBound;
 		this.upperBound = this.upperBound || upperBound;
 
-		this.FormUtils = new NextThought.common.form.Utils();
-
 		this.invalidDateMsg = this.invalidDateMsg || this.INVALID_DATE;
 		this.invalidTimeMsg = this.invalidTimeMsg || this.INVALID_TIME;
+
+		this.onParentScroll = this.closeSelects.bind(this);
+		this.onResize = this.closeSelects.bind(this);
 	},
 
 
@@ -119,7 +120,8 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 
 		var me = this;
 
-		me.yearSelect = new NextThought.common.form.fields.SearchComboBox({
+		me.yearSelect = new NextThought.common.form.fields.LegacySearchComboBox({
+			editable: false,
 			onSelect: me.onYearChanged.bind(me),
 			renderTo: me.yearContainer,
 			onError: function() {
@@ -130,7 +132,8 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 			}
 		});
 
-		me.monthSelect = new NextThought.common.form.fields.SearchComboBox({
+		me.monthSelect = new NextThought.common.form.fields.LegacySearchComboBox({
+			editable: false,
 			onSelect: me.onMonthChanged.bind(me),
 			renderTo: me.monthContainer,
 			onError: function() {
@@ -141,7 +144,8 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 			}
 		});
 
-		me.daySelect = new NextThought.common.form.fields.SearchComboBox({
+		me.daySelect = new NextThought.common.form.fields.LegacySearchComboBox({
+			editable: false,
 			onSelect: me.onDayChanged.bind(me),
 			renderTo: me.dayContainer,
 			onError: function() {
@@ -152,14 +156,12 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 			}
 		});
 
-		me.meridiemSelect = new NextThought.common.form.fields.SearchComboBox({
+		me.meridiemSelect = new NextThought.common.form.fields.LegacySearchComboBox({
+			editable: false,
 			options: [this.AM, this.PM],
 			onSelect: me.onMeridiemChanged.bind(me),
 			renderTo: me.meridiemContainer
 		});
-
-		me.FormUtils.limitInputToNumeric(me.hourInput.dom);
-		me.FormUtils.limitInputToNumeric(me.minuteInput.dom);
 
 		me.mon(me.hourInput, {
 			keydown: function() {
@@ -182,9 +184,47 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 			me.monthSelect.destroy();
 			me.daySelect.destroy();
 			me.meridiemSelect.destroy();
+
+			me.removeScrollListener();
+			me.removeResizeListener();
 		});
 
+		me.addScrollListener();
+		me.addResizeListener();
+
 		me.selectDate(me.currentDate);
+	},
+
+
+	closeSelects: function() {
+		this.yearSelect.hideOptions();
+		this.monthSelect.hideOptions();
+		this.daySelect.hideOptions();
+		this.meridiemSelect.hideOptions();
+	},
+
+
+	addScrollListener: function() {
+		var parent = this.scrollParent || window;
+
+		parent.addEventListener('scroll', this.onParentScroll, true);
+	},
+
+
+	addResizeListener: function() {
+		Ext.EventManager.onWindowResize(this.onResize);
+	},
+
+
+	removeScrollListener: function() {
+		var parent = this.scrollParent || window;
+
+		parent.removeEventListener('scroll', this.onParentScroll);
+	},
+
+
+	removeResizeListener: function() {
+		Ext.EventManager.removeResizeListener(this.onResize);
 	},
 
 
@@ -298,7 +338,7 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 			years.push(i);
 		}
 
-		this.yearSelect.setOptions(years);
+		this.yearSelect.addOptions(years);
 	},
 
 
@@ -313,7 +353,7 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 			};
 		});
 
-		this.monthSelect.setOptions(months);
+		this.monthSelect.addOptions(months);
 	},
 
 
@@ -328,7 +368,7 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 			days.push(i);
 		}
 
-		this.daySelect.setOptions(days);
+		this.daySelect.addOptions(days);
 	},
 
 

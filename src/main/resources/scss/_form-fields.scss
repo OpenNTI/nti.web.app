@@ -691,6 +691,11 @@ form.common-form {
 .date-time-field {
 	input {
 		font-family: $font;
+		
+		&:focus {
+			box-shadow: inset 0 0 1px 0 $primary-blue;
+			border: 1px solid $primary-blue;
+		}
 	}
 
 	.date .container, .time .container {
