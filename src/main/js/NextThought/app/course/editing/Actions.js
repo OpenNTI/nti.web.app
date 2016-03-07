@@ -20,9 +20,6 @@ Ext.define('NextThought.app.course.editing.Actions', {
 
 
 	updateAssignmentDates: function(assignment, available, due) {
-		available = 'asdasdf';
-		due = 'xzcvcvxz';
-
 		var me = this,
 			link = assignment.getLink('edit'),
 			data = {
