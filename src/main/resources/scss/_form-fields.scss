@@ -232,7 +232,28 @@ span.nti-radiobutton {
 		height: 100%;
 		box-shadow: none;
 		border: 1px solid $tertiary-grey;
-		background: #ffffff;
+		background: none;
+		position: relative;
+		z-index: 1;
+	}
+
+	.preview {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		font-size: 14px;
+		font-weight: 500;
+		line-height: 25px;
+		padding: 6px 10px;
+		background: #fff;
+		border: 1px solid white;
+		color: $tertiary-grey;
+
+		.hidden {
+			visibility: hidden;
+		}
 	}
 
 	&.error input, input.error {
@@ -246,7 +267,7 @@ span.nti-radiobutton {
 		background-color: white;
 		border: 1px solid $tertiary-grey;
 		border-top-width: 0;
-		z-index: 1;
+		z-index: 2;
 		overflow: auto;
 		color: $primary-grey;
 		

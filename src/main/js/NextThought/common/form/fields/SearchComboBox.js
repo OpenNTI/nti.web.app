@@ -15,6 +15,7 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 
 
 	renderTpl: Ext.DomHelper.markup([
+		{cls: 'preview'},
 		{tag: 'input', type: 'text', placeholder: '{placeholder}', tabindex: '0'},
 		{cls: 'arrow down'},
 		{cls: 'options hidden'}
@@ -22,6 +23,7 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 
 
 	renderSelectors: {
+		previewEl: '.preview',
 		inputEl: 'input',
 		optionsEl: '.options',
 		arrowEl: '.arrow'
@@ -268,6 +270,20 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 	},
 
 
+	__fillInPreview: function(option) {
+		var preview = option && option.text,
+			value = this.inputEl.dom.value,
+			regex = new RegExp(value, 'i');
+
+		if (preview && preview.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+			preview = preview.replace(regex, '<span class="hidden">' + value + '</span>');
+			this.previewEl.dom.innerHTML = preview;
+		} else {
+			this.previewEl.dom.innerHTML = '';
+		}
+	},
+
+
 	__selectSibling: function(options, direction) {
 		var currentIndex, item;
 
@@ -299,6 +315,9 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 
 		if (item) {
 			item.classList.add('active');
+			this.__fillInPreview(this.options[item.getAttribute('data-index')]);
+		} else {
+			this.__fillInPreview();
 		}
 	},
 
@@ -358,13 +377,13 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 
 		if (charCode === e.DOWN) {
 			if (open) {
-				this.__selectSibling(unfilteredOptions, 1);
+				this.__selectSibling(unfilteredOptions, 1, value);
 				e.stopEvent();
 			} else {
 				this.showOptions();
 			}
 		} else if (charCode === e.UP) {
-			this.__selectSibling(unfilteredOptions, -1);
+			this.__selectSibling(unfilteredOptions, -1, value);
 			e.stopEvent();
 		//If the value isn't a match and there are still unfiltered options, try to auto complete it
 		} else if (exactMatch && autoComplete) {
@@ -382,17 +401,26 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 
 
 	onInputKeyUp: function() {
-		var value = this.inputEl.getValue(),
-			unfilteredOptions = this.filterOptions(value),
+		var me = this,
+			value = me.inputEl.getValue(),
+			unfilteredOptions = me.filterOptions(value),
 			hasSelected;
 
 		hasSelected = unfilteredOptions.reduce(function(acc, option) {
-			return option.classList.contains('active') || acc;
+			var active = option.classList.contains('active');
+
+			if (active) {
+				me.__fillInPreview(me.options[option.getAttribute('data-index')]);
+			}
+			return active || acc;
 		}, false);
 
 
 		if (!hasSelected && unfilteredOptions[0]) {
 			unfilteredOptions[0].classList.add('active');
+			me.__fillInPreview(me.options[unfilteredOptions[0].getAttribute('data-index')]);
+		} else if (!hasSelected) {
+			me.__fillInPreview();
 		}
 	},
 
@@ -411,6 +439,8 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 		} else {
 			this.__selectOption(null);
 		}
+
+		this.__fillInPreview();
 
 		wait(100)
 			.then(this.hideOptions.bind(this));
