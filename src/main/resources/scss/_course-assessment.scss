@@ -203,6 +203,10 @@ canvas.x-component-course-assessment {
 			color: white;
 		}
 	}
+
+	.x-mask-msg {
+		z-index: 1;
+	}
 }
 
 .assignment-status {
