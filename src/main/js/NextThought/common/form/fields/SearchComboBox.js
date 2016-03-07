@@ -209,7 +209,7 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 		if (e.getTarget('.down')) {
 			e.stopEvent();
 			this.inputEl.focus();
-			this.filterOptions(this.inputEl.dom.value);
+			// this.filterOptions(this.inputEl.dom.value);
 			this.showOptions();
 		} else {
 			this.hideOptions();
