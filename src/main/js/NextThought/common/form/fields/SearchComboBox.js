@@ -53,7 +53,7 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 			this.setOptions(this.options);
 		}
 
-		this.mon(this.optionsEl, 'click', this.selectItem.bind(this));
+		this.mon(this.optionsEl, 'mousedown', this.selectItem.bind(this));
 		this.mon(this.arrowEl, 'click', this.toggleOptions.bind(this));
 
 		this.mon(this.inputEl, {
@@ -386,9 +386,9 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 			this.__selectSibling(unfilteredOptions, -1, value);
 			e.stopEvent();
 		//If the value isn't a match and there are still unfiltered options, try to auto complete it
-		} else if (exactMatch && autoComplete) {
+		} else if (exactMatch && autoComplete && unfilteredOptions.length === 1) {
 			this.__selectOption(exactMatch);
-		} else if (charCode === e.ENTER && unfilteredOptions.length > 0 && open) {
+		} else if ((charCode === e.ENTER || charCode === e.RIGHT) && unfilteredOptions.length > 0 && open) {
 			this.__autoCompleteSelectedItem(unfilteredOptions);
 			e.stopEvent();
 		} else if (value !== '' && autoComplete && unfilteredOptions.length > 0 && open) {
