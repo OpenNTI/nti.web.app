@@ -218,7 +218,7 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 			.fail(function(error) {
 				//if we fail to get the path to the item, try to get the container
 				//and show its title
-				var containerId = record.get('ContainerId');
+				var containerId = record && record.get('ContainerId');
 
 				if (!containerId) {
 					return Promise.reject();
