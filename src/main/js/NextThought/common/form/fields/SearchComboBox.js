@@ -273,7 +273,7 @@ Ext.define('NextThought.common.form.fields.SearchComboBox', {
 	__fillInPreview: function(option) {
 		var preview = option && option.text,
 			value = this.inputEl.dom.value,
-			regex = new RegExp(value, 'i');
+			regex = new RegExp(Globals.escapeForRegex(value), 'i');
 
 		if (preview && preview.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
 			preview = preview.replace(regex, '<span class="hidden">' + value + '</span>');

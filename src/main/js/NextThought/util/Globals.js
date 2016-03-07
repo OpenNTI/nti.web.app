@@ -18,6 +18,7 @@ Ext.define('NextThought.util.Globals', {
 	HOST_PREFIX_PATTERN: /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i,
 	FILE_EXTENSION_PATTERN: /\..+$/,
 	INVALID_CHARACTERS_PATTERN: /^[^\/\\";=?<>#%'\{\}\|\^\[\]\-]+$/,
+	ESCAPE_REGEX_PATTERN: /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,
 
 
 	CANVAS_URL_SHAPE_BROKEN_IMAGE: 'whiteboard-error-image',
@@ -60,6 +61,11 @@ Ext.define('NextThought.util.Globals', {
 	INTERNAL_MIMETYPES: {
 		'application/pdf': true,
 		'application/x-pdf': true
+	},
+
+
+	escapeForRegex: function(str) {
+		return str.replace(this.ESCAPE_REGEX_PATTERN, '\\$&');
 	},
 
 
