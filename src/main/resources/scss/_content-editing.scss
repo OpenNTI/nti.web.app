@@ -1404,37 +1404,6 @@ input[type=number]{
 					margin: 0;
 				}
 			}
-			
-			& > .overview-naquestionset {
-				.x-btn {
-					&.review-btn {
-						z-index: 0;
-					}
-				}
-				
-				.assignment-status-container {
-					margin-right: 100px;
-					margin-left: 90px; //25 + 40 + 25
-					
-					.status-container {
-						margin-left: 0;
-					}
-					
-					.assignment-due-date-editor {
-						& > .contents {
-							padding: 0 20px 0 0;
-						}	
-					}
-				}
-				
-				&.assignment {
-					.assignment-box {
-						&::before {
-							z-index: 0;
-						}
-					}
-				}
-			}
 		}
 	}
 
