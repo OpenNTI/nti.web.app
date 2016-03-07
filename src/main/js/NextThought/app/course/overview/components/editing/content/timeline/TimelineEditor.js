@@ -12,13 +12,14 @@ Ext.define('NextThought.app.course.overview.components.editing.content.timeline.
 	getFormSchema: function() {
 		var schema = [
 				{name: 'MimeType', type: 'hidden'},
-				{name: 'target', type: 'hidden'},
+				{name: 'ntiid', type: 'hidden'},
 				{type: 'group', name: 'card', inputs: [
 					{
 						name: 'icon',
 						type: 'image',
 						height: 125,
 						width: 100,
+						keep: true,
 						placeholder: NextThought.model.TimelineRef.defaultIcon
 					},
 					{
@@ -49,8 +50,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.timeline.
 
 			data = Ext.apply(data, {
 				'icon': this.getThumbnailURL(),
-				'target': this.record.get('ID') || this.record.getId(),
-				MimeType: NextThought.model.TimelineRef.mimeType
+				'ntiid': this.record.get('ID') || this.record.getId(),
+				MimeType: NextThought.model.Timeline.mimeType
 			});
 
 			return data;
