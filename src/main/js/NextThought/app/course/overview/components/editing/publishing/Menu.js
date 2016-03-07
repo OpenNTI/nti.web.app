@@ -225,18 +225,18 @@ Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu',
 			action = selectedEl && selectedEl.getAttribute('data-action');
 
 		e.stopEvent();
-		if (this.datepicker && this.datepicker.isValid && this.datepicker.isValid() === false) {
-			if (this.datepicker && this.datepicker.showErrors) {
-				this.datepicker.showErrors();
+		if (action === 'publish-date') {
+			if (this.datepicker && this.datepicker.isValid && this.datepicker.isValid() === false) {
+				if (this.datepicker.showErrors) {
+					this.datepicker.showErrors();
+				}	
 			}
-			return;
+			else {
+				this.publishOnDateSave();
+			}
 		}
-
-		if (action === 'publish') {
+		else if (action === 'publish') {
 			this.publishSave();
-		}
-		else if (action === 'publish-date') {
-			this.publishOnDateSave();
 		}
 		else {
 			this.unpublishSave();
