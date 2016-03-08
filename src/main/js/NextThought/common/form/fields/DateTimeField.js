@@ -287,7 +287,7 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 			hour = this.getHours() || 0,
 			minutes = this.getMinutes() || 0;
 
-		if (year != null && month != null && day != null && hour < 24 && minutes < 60) {
+		if (year != null && month != null && day != null && hour <= 24 && minutes < 60) {
 			return new Date(year, month, day, hour, minutes);
 		}
 
