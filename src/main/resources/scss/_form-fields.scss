@@ -297,7 +297,7 @@ span.nti-radiobutton {
 		background-color: white;
 		border: 1px solid $tertiary-grey;
 		border-top-width: 0;
-		z-index: 2;
+		z-index: 3;
 		overflow: auto;
 		color: $primary-grey;
 		
@@ -722,8 +722,12 @@ form.common-form {
 .date-time-field {
 
 	&.disabled {
-		opacity: 0.2;
+		opacity: 0.5;
 		pointer-events: none;
+
+		input {
+			color: $secondary-grey;
+		}
 	}
 
 	input {
