@@ -218,6 +218,36 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 	},
 
 
+	disable: function() {
+		this.hasBeenDisabled = true;
+
+		if (this.rendered) {
+			this.addCls('disabled');
+			// this.yearSelect.disable();
+			// this.monthSelect.disable();
+			// this.daySelect.disable();
+			// this.meridiemSelect.disable();
+			// this.hourInput.addCls('disabled');
+			// this.minuteInput.addCls('disabled');
+		}
+	},
+
+
+	enable: function() {
+		this.hasBeenDisabled = null;
+
+		if (this.rendered) {
+			this.removeCls('disabled');
+			// this.yearSelect.enable();
+			// this.monthSelect.enable();
+			// this.daySelect.enable();
+			// this.meridiemSelect.enable();
+			// this.hourInput.removeCls('disabled');
+			// this.minuteInput.removeCls('disabled');
+		}
+	},
+
+
 	closeSelects: function() {
 		this.yearSelect.hideOptions();
 		this.monthSelect.hideOptions();

@@ -169,9 +169,20 @@ canvas.x-component-course-assessment {
 
 .assignment-due-date-editor {
 	& .contents > .label {
-		font-size: 1.125em;
+		font-size: 0.875em;
+		line-height: 14px;
 		color: $primary-grey;
-		margin: 0.5em 0;
+		margin: 0.5em 0 0 -25px;
+
+		.nti-checkbox {
+			display: inline-block;
+			vertical-align: middle;
+			margin-right: 11px;
+		}
+
+		span {
+			vertical-align: middle;
+		}
 	}
 
 	.date-time-field {

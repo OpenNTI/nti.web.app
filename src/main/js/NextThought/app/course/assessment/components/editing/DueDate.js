@@ -26,13 +26,23 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 
 		this.EditingActions = NextThought.app.course.editing.Actions.create();
 
+		this.onStartCheckChanged = this.onStartCheckChanged.bind(this);
+		this.onEndCheckChanged = this.onEndCheckChanged.bind(this);
+
 		me.add([
 			{xtype: 'container', isContents: true, layout: 'none', cls: 'contents', items: [
 				{
 					xtype: 'box',
+					isStartLabel: true,
 					autoEl: {
 						cls: 'label',
-						html: 'When should this assignment be available?'
+						cn: [
+							{cls: 'nti-checkbox', cn: [
+								{tag: 'input', type: 'checkbox', name: 'start-date', id: 'start-date-checkbox-' + me.id},
+								{tag: 'label', 'for': 'start-date-checkbox-' + me.id}
+							]},
+							{tag: 'span', html: 'Start Date'}
+						]
 					}
 				},
 				{
@@ -43,9 +53,16 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 				},
 				{
 					xtype: 'box',
+					isDueLabel: true,
 					autoEl: {
 						cls: 'label',
-						html: 'When should this assignment be due?'
+						cn: [
+							{cls: 'nti-checkbox', cn: [
+								{tag: 'input', type: 'checkbox', name: 'end-date', id: 'end-date-checkbox-' + me.id},
+								{tag: 'label', 'for': 'end-date-checkbox-' + me.id}
+							]},
+							{tag: 'span', html: 'End Date'}
+						]
 					}
 				},
 				{
@@ -85,6 +102,61 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 				}
 			}
 		]);
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.startCheckbox = this.el.dom.querySelector('input[name="start-date"]');
+		this.endCheckbox = this.el.dom.querySelector('input[name="end-date"]');
+
+		var me = this,
+			assignment = me.assignment,
+			available = assignment && assignment.get('availableBeginning'),
+			due = assignment && assignment.get('availableEnding');
+
+		me.startCheckbox.addEventListener('change', me.onStartCheckChanged);
+		me.endCheckbox.addEventListener('change', me.onEndCheckChanged);
+
+		me.startCheckbox.checked = !!available;
+		me.endCheckbox.checked = !!due;
+
+		me.on('destroy', function() {
+			if (me.startCheckbox && me.startCheckbox.removeEventListener) {
+				me.startCheckbox.removeEventListener('change', me.onStartCheckChanged);
+			}
+
+			if (me.endCheckbox && me.endCheckbox.removeEventListener) {
+				me.endCheckbox.removeEventListener('change', me.onEndCheckChanged);
+			}
+		});
+
+
+		me.onStartCheckChanged();
+		me.onEndCheckChanged();
+	},
+
+
+	onStartCheckChanged: function(e) {
+		var editor = this.getAvailableEditor();
+
+		if (this.startCheckbox.checked) {
+			editor.enable();
+		} else {
+			editor.disable();
+		}
+	},
+
+
+	onEndCheckChanged: function(e) {
+		var editor = this.getDueEditor();
+
+		if (this.endCheckbox.checked) {
+			editor.enable();
+		} else {
+			editor.disable();
+		}
 	},
 
 
@@ -152,15 +224,24 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 			due = me.getDueEditor(),
 			availableValid = available.validate(),
 			dueValid = due.validate(),
+			availableDate = null, dueDate = null,
 			success;
 
 		if (!availableValid || !dueValid) {
 			return;
 		}
 
+		if (this.startCheckbox.checked) {
+			availableDate = available.getSelectedDate();
+		}
+
+		if (this.endCheckbox.checked) {
+			dueDate = due.getSelectedDate();
+		}
+
 		me.addSavingMask();
 
-		me.EditingActions.updateAssignmentDates(me.assignment, available.getSelectedDate(), due.getSelectedDate())
+		me.EditingActions.updateAssignmentDates(me.assignment, availableDate, dueDate)
 			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
 			.then(function(response) {
 				if (response && me.onSave) {
