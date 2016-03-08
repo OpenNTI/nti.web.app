@@ -33,7 +33,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.timeline.
 	
 	
 	showEditor: function() {
-		if (this.record) {
+		if (this.selectedItems || this.record) {
 			this.showTimelineEditor();
 		} else {
 			this.showTimelineList();
@@ -53,6 +53,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.timeline.
 			xtype: 'overview-editing-timeline-editor',
 			parentRecord: this.parentRecord,
 			record: this.record,
+			selectedItems: this.selectedItems,
 			rootRecord: this.rootRecord,
 			doClose: this.doClose,
 			showError: this.showError,
@@ -65,7 +66,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.timeline.
 	},
 	
 	
-	showTimelineList: function(selectedItems) {
+	showTimelineList: function() {
 		var me = this;
 
 		if (this.listCmp) {
@@ -83,7 +84,6 @@ Ext.define('NextThought.app.course.overview.components.editing.content.timeline.
 
 		this.listCmp = this.add({
 			xtype: 'overview-editing-timeline-item-selection',
-			selectedItems: selectedItems,
 			basePath: this.bundle && this.bundle.getContentRoots()[0],
 			onSelectionChanged: this.onDiscussionSelectionChange.bind(this)
 		});
@@ -107,7 +107,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.timeline.
 		if (length === 0) {
 			this.disableSave();
 		} else {
-			this.record = selection[0];
+			this.selectedItems = selection;
 			this.enableSave();
 		}
 	},
