@@ -332,6 +332,7 @@ span.nti-radiobutton {
 		width: 21px;
 		cursor: pointer;
 		position: absolute;
+		z-index: 2;
 
 		//@include icon('arrow-course-dropdown-light', $side: 'after', $position: absolute, $left: 4px, $top: 50%);
 
@@ -727,6 +728,7 @@ form.common-form {
 
 	input {
 		font-family: $font;
+		background: white;
 		
 		&:focus {
 			box-shadow: inset 0 0 1px 0 $primary-blue;
