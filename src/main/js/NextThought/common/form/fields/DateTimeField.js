@@ -259,7 +259,7 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 	addScrollListener: function() {
 		var parent = this.scrollParent || window;
 
-		parent.addEventListener('scroll', this.onParentScroll, true);
+		parent.addEventListener('scroll', this.onParentScroll);
 	},
 
 
@@ -437,7 +437,7 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 
 		var range = this.yearSelect.getOptions();
 
-		if (range.indexOf(year)) {
+		if (range.indexOf(year) >= 0) {
 			year = year;
 		} else if (range[0] > year) {
 			year = range[0];
@@ -457,7 +457,7 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 
 		var range = this.monthSelect.getOptions();
 
-		if (range.indexOf(month)) {
+		if (range.indexOf(month) >= 0) {
 			month = month;
 		} else if (range[0] > month) {
 			month = range[0];
@@ -477,7 +477,7 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 
 		var range = this.daySelect.getOptions();
 
-		if (range.indexOf(day)) {
+		if (range.indexOf(day) >= 0) {
 			day = day;
 		} else if (range[0] > day) {
 			day = range[0];
@@ -511,6 +511,8 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 
 
 	onYearChanged: function(year) {
+
+
 		this.setMonth(this.getMonth());
 		this.setDay(this.getDay());
 
@@ -523,6 +525,8 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 
 
 	onMonthChanged: function(month) {
+		this.updateDayRange(this.getYear(), month, this.getDay());
+
 		this.setDay(this.getDay());
 
 		this.clearDateError();

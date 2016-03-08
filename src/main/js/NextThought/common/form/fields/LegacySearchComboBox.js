@@ -2,6 +2,10 @@ Ext.define('NextThought.common.form.fields.LegacySearchComboBox', {
 	extend: 'Ext.Component',
 	alias: 'widget.legacysearchcombobox',
 
+	mixins: {
+		Scrolling: 'NextThought.mixins.Scrolling'
+	},
+
 	editable: true,
 
 	listTpl: new Ext.XTemplate(Ext.DomHelper.markup({
@@ -55,7 +59,10 @@ Ext.define('NextThought.common.form.fields.LegacySearchComboBox', {
 			this.filterOptions();
 		}
 
-		this.mon(this.optionsEl, 'click', 'selectOptionClick');
+		this.mon(this.optionsEl, {
+			'click': 'selectOptionClick',
+			'scroll': 'onOptionsScroll'
+		});
 
 		this.mon(this.arrowEl, 'click', 'toggleOptions');
 
@@ -68,6 +75,13 @@ Ext.define('NextThought.common.form.fields.LegacySearchComboBox', {
 		});
 
 		//this.mon(Ext.getBody(), 'click', function(e) {if (!e.getTarget('.searchcombobox')) { this.hideOptions(); }}, this);
+	},
+
+
+	onOptionsScroll: function(e) {
+		e.stopPropagation();
+
+		this.maybeStopScrollBleed(e);
 	},
 
 
