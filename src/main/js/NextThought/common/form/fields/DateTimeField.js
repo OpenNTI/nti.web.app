@@ -25,6 +25,8 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 	AM: 'AM',
 	PM: 'PM',
 
+	showCurrentDateSelect: true,
+
 	MONTHS: [
 		{longLabel: 'January', shortLabel: 'JAN', value: 0, days: 31},
 		{longLabel: 'February', shortLabel: 'FEB', value: 1, days: 28, leapDays: 29},
@@ -71,6 +73,12 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 				{cls: 'meridiem-input'}
 			]},
 			{tag: 'span', cls: 'error'}
+		]},
+		{tag: 'tpl', 'if': 'currentDate', cn: [
+			{cls: 'select-current-date', cn: [
+				{tag: 'span', html: 'or '},
+				{tag: 'span', cls: 'link', html: 'Current Date/Time'}
+			]}
 		]}
 	]),
 
@@ -87,7 +95,8 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		minuteInput: '.minute-input',
 		meridiemContainer: '.meridiem-input',
 		dateError: '.date .error',
-		timeError: '.time .error'
+		timeError: '.time .error',
+		selectCurrentEl: '.select-current-date .link'
 	},
 
 
@@ -112,6 +121,15 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 
 		this.onParentScroll = this.closeSelects.bind(this);
 		this.onResize = this.closeSelects.bind(this);
+	},
+
+
+	beforeRender: function() {
+		this.callParent(arguments);
+
+		this.renderData = Ext.apply(this.renderData || {}, {
+			currentDate: this.showCurrentDateSelect
+		});
 	},
 
 
@@ -178,6 +196,10 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 			},
 			change: me.onMinuteChanged.bind(me)
 		});
+
+		if (me.selectCurrentEl) {
+			me.mon(me.selectCurrentEl, 'click', me.selectCurrentDate.bind(me));
+		}
 
 		me.on('destroy', function() {
 			me.yearSelect.destroy();
@@ -290,6 +312,11 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 		value = parseInt(value, 10);
 
 		return value;
+	},
+
+
+	selectCurrentDate: function(date) {
+		this.selectDate(new Date());
 	},
 
 

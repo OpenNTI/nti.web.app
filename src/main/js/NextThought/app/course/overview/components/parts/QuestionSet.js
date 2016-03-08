@@ -136,12 +136,35 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 					this.getButton()
 				]
 			},
-			{xtype: 'course-assignment-status', assignment: this.assignment}
+			{
+				xtype: 'course-assignment-status',
+				assignment: this.assignment,
+				onEditorOpen: this.disableButton.bind(this),
+				onEditorClose: this.enableButton.bind(this)
+			}
 		]);
 
 		this.mon(this.assignment, 'update', this.setAsAssignment.bind(this, this.assignment));
 
 		this.setAsAssignment(this.assignment);
+	},
+
+
+	disableButton: function() {
+		var button = this.down('button');
+
+		if (button) {
+			button.disable();
+		}
+	},
+
+
+	enableButton: function() {
+		var button = this.down('button');
+
+		if (button) {
+			button.enable();
+		}
 	},
 
 

@@ -107,6 +107,8 @@ Ext.define('NextThought.common.form.fields.LegacySearchComboBox', {
 
 
 	showOptions: function() {
+		if (!this.rendered) { return; }
+
 		if (!this.optionsEl.hasCls('hidden')) { return; }
 
 		this.arrowEl.removeCls('down');
@@ -123,6 +125,8 @@ Ext.define('NextThought.common.form.fields.LegacySearchComboBox', {
 
 
 	hideOptions: function() {
+		if (!this.rendered) { return; }
+
 		var active = this.optionsEl.down('li.active');
 
 		this.arrowEl.removeCls('up');

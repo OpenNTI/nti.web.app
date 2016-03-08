@@ -398,10 +398,23 @@
 				margin-left: 90px; //25 + 40 + 25
 				margin-bottom: 10px;
 			}
+
+			.menu-container {
+				position: relative;
+
+				&::before {
+					content: '';
+					display: block;
+					position: absolute;
+					top: 0;
+					left: 10px; right: 10px;
+					border-top: 1px solid #e3e3e3;
+				}
+			}
 			
 			.assignment-due-date-editor {
 				& > .contents {
-					padding: 0 90px;
+					padding: 0 0 0 90px;
 				}
 			}
 		}

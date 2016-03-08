@@ -705,6 +705,29 @@ form.common-form {
 		justify-content: space-between;
 	}
 
+	.date .container {
+		max-width: 265px;
+	}
+
+	.time .container {
+		max-width: 165px;
+	}
+
+
+	.select-current-date {
+		display: inline-block;
+		margin-top: 21px;
+		line-height: 40px;
+		font-size: 0.75em;
+		font-weight: 600;
+		padding-left: 0.5em;
+
+		.link {
+			color: $primary-blue;
+			cursor: pointer;
+		}
+	}
+
 	.hour-input, .minute-input {
 		font-size: 0.875rem;
 		font-weight: 500;
@@ -731,16 +754,15 @@ form.common-form {
 	}
 
 	.date {
-		width: 60%;
-		margin-right: 7%;
-	}
-
-	.time {
-		width: 33%;
+		margin-right: 3%;
 	}
 
 	.month {
-		@include flexItem(0 0 170px);
+		@include flexItem(0 0 140px);
+
+		input {
+			border-right: none;
+		}
 	}
 
 	.day {
@@ -749,6 +771,10 @@ form.common-form {
 
 	.year {
 		@include flexItem(0 0 70px);
+
+		input {
+			border-left: none;
+		}
 	}
 
 	.hour-input {
