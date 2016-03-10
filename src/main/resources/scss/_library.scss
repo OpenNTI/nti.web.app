@@ -265,28 +265,39 @@ li.library-grid-item {
 		border-radius: 3px;
 		display: none;
 	}
-
-	.badge {
-		position: absolute;
-		top: 10px;
-		height: 27px;
-		color: white;
-		text-transform: uppercase;
-		font: normal 600 0.625em/27px $font;
-		padding: 0 7px;
-		display: none;
-	}
 	
-	.preview {
+	.controls {
 		position: absolute;
 		top: 10px;
 		left: 10px;
-		background-color: #FFA500;
-		color: #fff;
-		padding: 0 7px;
-		border-radius: 3px;
-		text-transform: uppercase;
-		font: normal 600 10px/24px $font;
+		
+		.badge {
+			height: 27px;
+			color: white;
+			text-transform: uppercase;
+			font: normal 600 0.625em/27px $font;
+			padding: 0 7px;
+			display: none;
+			display: inline-block;
+			
+			& + .preview {
+				margin-left: 10px;
+			}
+		}
+		
+		.preview {
+			background-color: #FFA500;
+			color: #fff;
+			padding: 0 7px;
+			border-radius: 3px;
+			text-transform: uppercase;
+			font: normal 600 10px/27px $font;
+			display: inline-block;
+			
+			& + .badge {
+				margin-left: 7px;
+			}
+		}
 	}
 
 
@@ -303,10 +314,10 @@ li.library-grid-item {
 
 	&.archived {
 		.badge {
-			left: 10px;
 			background: rgba(0, 0, 0, 0.6);
 			border-radius: 4px;
 			padding-left: 25px;
+			position: relative !important;
 
 			@include icon('archived-library', $side: after, $top: 50%, $left: 7px, $position: absolute);
 
@@ -318,10 +329,8 @@ li.library-grid-item {
 
 	&.upcoming {
 		.badge {
-			left: 5px;
 			background: rgba(63, 179, 246, 0.95);
 			letter-spacing: 0.06em;
-			display: block;
 
 			&::after {
 				content: '';
@@ -1355,14 +1364,6 @@ li.library-grid-item {
 				color: white;
 				font: normal 300 0.875em/2em $font;
 				cursor: pointer;
-			}
-		}
-
-		.library-grid-item {
-			&.archived {
-				.badge {
-					display: block;
-				}
 			}
 		}
 	}
