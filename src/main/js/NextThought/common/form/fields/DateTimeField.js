@@ -332,7 +332,7 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 			value = value;
 		} else if (meridiem === this.AM && value === 12) {
 			value = 0;
-		} else if (meridiem === this.PM && value <= 12) {
+		} else if (meridiem === this.PM && value < 12) {
 			value = value + 12;
 		}
 
