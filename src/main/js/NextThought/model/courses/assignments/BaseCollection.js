@@ -104,7 +104,8 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 				AssignmentToOutlineNodes: this.parseOutline(assignments),
 				AssignmentsRaw: assignments,
 				NonAssignmentsRaw: nonAssignments,
-				GradeBook: gradeBook
+				GradeBook: gradeBook,
+				HistoryURL: historyURL
 			});
 		}
 	},
