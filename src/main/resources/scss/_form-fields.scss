@@ -167,6 +167,36 @@
 	}
 }
 
+.nti-radio {
+	position: relative;
+
+	input[type='radio'] {
+		visibility: hidden;
+		position: absolute;
+	}
+
+	input[type='radio']:checked + label {
+		@include icon('radio-button-16_active', $side: 'after', $top: 50%, $left: 0);
+	}
+
+	input[type='radio']:not(:checked) + label:hover {
+		@include icon('radio-button-16_hover', $side: 'after', $top: 50%, $left: 0);
+	}
+
+	label {
+		min-width: 16px;
+		min-height: 16px;
+		display: inline-block;
+		cursor: pointer;
+
+		@include icon('radio-button-16', $side: 'after', $top: 50%, $left: 0);
+
+		&::after {
+			margin-top: -8px;
+		}
+	}
+}
+
 .nti-checkbox {
 	position: relative;
 

@@ -33,15 +33,39 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 			{xtype: 'container', isContents: true, layout: 'none', cls: 'contents', items: [
 				{
 					xtype: 'box',
+					isAvailableNow: true,
+					autoEl: {
+						cls: 'label available-now',
+						cn: [
+							{cls: 'nti-radio', cn: [
+								{
+									tag: 'input',
+									type: 'radio',
+									cls: 'start-now',
+									name: 'start-date-' + me.id,
+									'id': 'start-now-radio-' + me.id
+								},
+								{tag: 'label', 'for': 'start-now-radio-' + me.id, html: 'Available Now'}
+							]}
+						]
+					}
+				},
+				{
+					xtype: 'box',
 					isStartLabel: true,
 					autoEl: {
 						cls: 'label',
 						cn: [
-							{cls: 'nti-checkbox', cn: [
-								{tag: 'input', type: 'checkbox', name: 'start-date', id: 'start-date-checkbox-' + me.id},
-								{tag: 'label', 'for': 'start-date-checkbox-' + me.id}
-							]},
-							{tag: 'span', html: 'Start Date'}
+							{cls: 'nti-radio', cn: [
+								{
+									tag: 'input',
+									type: 'radio',
+									cls: 'start-on',
+									name: 'start-date-' + me.id,
+									id: 'start-date-radio-' + me.id
+								},
+								{tag: 'label', 'for': 'start-date-radio-' + me.id, html: 'Schedule to be available on:'}
+							]}
 						]
 					}
 				},
@@ -59,9 +83,8 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 						cn: [
 							{cls: 'nti-checkbox', cn: [
 								{tag: 'input', type: 'checkbox', name: 'end-date', id: 'end-date-checkbox-' + me.id},
-								{tag: 'label', 'for': 'end-date-checkbox-' + me.id}
-							]},
-							{tag: 'span', html: 'End Date'}
+								{tag: 'label', 'for': 'end-date-checkbox-' + me.id, html: 'Due Date'}
+							]}
 						]
 					}
 				},
@@ -108,7 +131,8 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.startCheckbox = this.el.dom.querySelector('input[name="start-date"]');
+		this.startNowRadio = this.el.dom.querySelector('input.start-now');
+		this.startOnRadio = this.el.dom.querySelector('input.start-on');
 		this.endCheckbox = this.el.dom.querySelector('input[name="end-date"]');
 
 		var me = this,
@@ -116,10 +140,13 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 			available = assignment && assignment.get('availableBeginning'),
 			due = assignment && assignment.get('availableEnding');
 
-		me.startCheckbox.addEventListener('change', me.onStartCheckChanged);
+		me.startNowRadio.addEventListener('change', me.onStartCheckChanged);
+		me.startOnRadio.addEventListener('change', me.onStartCheckChanged);
 		me.endCheckbox.addEventListener('change', me.onEndCheckChanged);
 
-		me.startCheckbox.checked = !!available;
+
+		me.startNowRadio.checked = !available;
+		me.startOnRadio.checked = !!available;
 		me.endCheckbox.checked = !!due;
 
 		me.on('destroy', function() {
@@ -141,7 +168,7 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 	onStartCheckChanged: function(e) {
 		var editor = this.getAvailableEditor();
 
-		if (this.startCheckbox.checked) {
+		if (this.startOnRadio.checked) {
 			editor.enable();
 		} else {
 			editor.disable();
@@ -231,7 +258,7 @@ Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 			return;
 		}
 
-		if (this.startCheckbox.checked) {
+		if (this.startOnRadio.checked) {
 			availableDate = available.getSelectedDate();
 		}
 

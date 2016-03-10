@@ -174,14 +174,25 @@ canvas.x-component-course-assessment {
 		color: $primary-grey;
 		margin: 0.5em 0 0 -25px;
 
+		&.available-now {
+			margin-bottom: 1em;
+		}
+
 		.nti-checkbox {
 			display: inline-block;
 			vertical-align: middle;
 			margin-right: 11px;
 		}
 
-		span {
+		.nti-radio {
+			display: inline-block;
 			vertical-align: middle;
+			margin-right: 9px;
+		}
+
+		label {
+			padding-left: 25px;
+			font-weight: 600;
 		}
 	}
 
