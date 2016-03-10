@@ -57,7 +57,10 @@ Ext.define('NextThought.common.components.Navigation', {
 			]}
 		]}
 	]),
-
+	
+	previewTagTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{tag: 'span', cls: 'preview', html: '{preview}'}
+	])),
 
 	renderSelectors: {
 		activeContentEl: '.content .active-content',

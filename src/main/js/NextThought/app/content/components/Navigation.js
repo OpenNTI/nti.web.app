@@ -46,7 +46,9 @@ Ext.define('NextThought.app.content.components.Navigation', {
 		this.ContentSwitcher.addBundle(bundle, activeRoute);
 
 		var cls = 'is-book',
-			data = bundle.asUIData();
+			data = bundle.asUIData(),
+			catalog = bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry(),
+			isPreview = catalog && catalog.get('Preview');
 
 		this.titleEl.update(data.title);
 
@@ -56,6 +58,13 @@ Ext.define('NextThought.app.content.components.Navigation', {
 		} else {
 			this.labelEl.update('');
 			this.labelEl.addCls('hidden');
+		}
+		if (isPreview) {
+			data.preview = 'in preview';
+			if (data.startDate) {
+				data.preview += '--Course starts on ' + Ext.Date.format(data.startDate, 'l, F j');
+			}
+			this.previewTagTpl.append(this.labelEl, {'preview': data.preview});
 		}
 	},
 
