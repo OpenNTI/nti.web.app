@@ -185,6 +185,10 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 			keydown: function() {
 				me.hourInput.removeCls('error');
 				me.clearTimeError();
+
+				if (me.onChange) {
+					me.onChange();
+				}
 			},
 			change: me.onHourChanged.bind(me)
 		});
@@ -193,6 +197,10 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 			keydown: function() {
 				me.minuteInput.removeCls('error');
 				me.clearTimeError();
+
+				if (me.onChange) {
+					me.onChange();
+				}
 			},
 			change: me.onMinuteChanged.bind(me)
 		});
@@ -565,22 +573,22 @@ Ext.define('NextThought.common.form.fields.DateTimeField', {
 			this.meridiemSelect.enable();
 		}
 
-		if (this.onChanged) {
-			this.onChanged();
+		if (this.onChange) {
+			this.onChange();
 		}
 	},
 
 
 	onMinuteChanged: function(minute) {
-		if (this.onChanged) {
-			this.onChanged();
+		if (this.onChange) {
+			this.onChange();
 		}
 	},
 
 
 	onMeridiemChanged: function(meridiem) {
-		if (this.onChanged) {
-			this.onChanged();
+		if (this.onChange) {
+			this.onChange();
 		}
 	},
 
