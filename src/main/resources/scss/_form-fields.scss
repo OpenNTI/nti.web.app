@@ -822,6 +822,7 @@ form.common-form {
 	.hour-input {
 		@include flexItem(0 0 40px);
 		width: 40px;
+		max-width: 40px;
 	}
 
 	.seperator {
@@ -833,6 +834,7 @@ form.common-form {
 	.minute-input {
 		@include flexItem(0 0 40px);
 		width: 40px;
+		max-width: 40px;
 	}
 
 	.meridiem-input {
