@@ -43,5 +43,23 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.ListI
 		}
 
 		this.addCls(cls);
+	},
+
+
+	onItemClick: function(e) {
+		var link = e.getTarget('.report');
+
+		if (link) {
+			e.stopEvent();
+			Ext.widget('report-menu', {
+				links: this.assignment.getReportLinks(),
+				showIfOne: true,
+				showByEl: link
+			});
+
+			return false;
+		}
+
+		this.callParent(arguments);
 	}
 });
