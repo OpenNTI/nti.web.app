@@ -17,11 +17,15 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Edit', {
 	beforeRender: function() {
 		this.callParent(arguments);
 
-		this.PromptActions = NextThought.app.prompt.Actions.create();
+		if (this.record && !this.record.getLink('edit')) {
+			this.hide();
+		} else {
+			this.PromptActions = NextThought.app.prompt.Actions.create();
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			name: this.name
-		});
+			this.renderData = Ext.apply(this.renderData || {}, {
+				name: this.name
+			});
+		}
 	},
 
 
