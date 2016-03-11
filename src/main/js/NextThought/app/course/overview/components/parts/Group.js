@@ -158,11 +158,20 @@ Ext.define('NextThought.app.course.overview.components.parts.Group', {
 				}, item);
 
 				if (item && item.assignment) {
-					items.push(assignments.fetchAssignment(item['target-ntiid']).then(function(assignment) {
-						item.assignment = assignment;
+					items.push(assignments.fetchAssignment(item['target-ntiid'])
+								.then(function(assignment) {
+									item.assignment = assignment;
 
-						return item;
-					}));
+									return item;
+								})
+								.fail(function(reason) {
+									console.error('Unable to update assignment: ', reason);
+
+									item.assignment = assignments.getItem(item['target-ntiid']);
+
+									return item;
+								})
+							);
 				} else if (item) {
 					items.push(item);
 				}
