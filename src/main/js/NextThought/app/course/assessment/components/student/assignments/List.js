@@ -13,6 +13,14 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Lis
 	initComponent: function() {
 		this.callParent(arguments);
 
+		this.addItems(this.store);
+		if (this.store) {
+			this.store.on('refresh', 'onRefresh', this);
+		}
+	},
+	
+	
+	addItems: function(store){
 		var items = this.store ? this.store.getRange() : [],
 			itemType = this.itemType,
 			navigateToItem = this.navigateToItem,
@@ -28,11 +36,21 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Lis
 				item: item,
 				navigateToItem: navigateToItem
 			};
-		}));
+		}));	
 	},
 
 
 	getItemsContainer: function() {
 		return this;
+	},
+
+	
+	onRefresh: function(store){
+		var container = this.getItemsContainer();
+		if (container) {
+			container.removeAll(true);
+		}
+		
+		this.addItems(store);	
 	}
 });

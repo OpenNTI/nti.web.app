@@ -212,7 +212,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 			} else {
 				groupPromise = Promise.resolve();
 			}
-
+			
 			if (state && state.search) {
 				this.filterSearchValue(state.search);
 			}
@@ -272,7 +272,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 
 		this.on('filters-changed', this.updateFilters.bind(this));
-		this.on('search-changed', 'filterSearchValue');
+		this.on('search-changed', this.updateFilters.bind(this));
 
 		this.store = new Ext.data.Store({
 			fields: this.getFields(),
