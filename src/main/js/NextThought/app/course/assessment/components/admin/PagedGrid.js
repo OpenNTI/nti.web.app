@@ -32,6 +32,40 @@ Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
 
 			getSortParam: function() {
 				return this.sortOn || this.dataIndex;
+			},
+
+			setSortState: function(state, skipClear, initial) {
+				var ownerHeaderCt = this.getOwnerHeaderCt(),
+					ascCls = this.ascSortCls,
+					descCls = this.descSortCls,
+					oldSortState = this.sortState;
+
+				state = state || null;
+
+				if (!this.sorting && oldSortState !== state && this.getSortParam()) {
+					switch (state) {
+						case 'DESC':
+							this.addCls(descCls);
+							this.removeCls(ascCls);
+							break;
+						case 'ASC':
+							this.addCls(ascCls);
+							this.removeCls(descCls);
+							break;
+						default:
+							this.removeCls([ascCls, descCls]);
+					}
+
+					if (ownerHeaderCt && !this.triStateSort && !skipClear) {
+						ownerHeaderCt.clearOtherSortStates(this);
+					}
+
+					this.sortState = state;
+
+					if (this.triStateSort || state != null) {
+						ownerHeaderCt.fireEvent('sortchange', ownerHeaderCt, this, state);
+					}
+				}
 			}
 		},
 
