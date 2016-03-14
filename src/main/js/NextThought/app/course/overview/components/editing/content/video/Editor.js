@@ -27,7 +27,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Edi
 					title: 'Pick a Video',
 					advanced: true,
 					category: 'Video',
-					iconCls: 'Video',
+					iconCls: 'video',
 					description: '',
 					editor: this
 				}
