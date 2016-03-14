@@ -239,8 +239,8 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 			late = completed > due,
 			isNoSubmit = this.assignment && this.assignment.isNoSubmit();
 
-		if (this.status) {
-			this.status.setHistory(history);
+		if (status) {
+			status.setHistory(history);
 		}
 
 		if (button) {
