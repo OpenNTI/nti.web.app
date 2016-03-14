@@ -413,7 +413,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 		var m = value && type && moment().subtract(value, type),
 			date = m && m.toDate();
 
-		if (date) {
+		if (date && value !== "0") {
 			return Math.round(date.getTime() / 1000);
 		}
 		return null;

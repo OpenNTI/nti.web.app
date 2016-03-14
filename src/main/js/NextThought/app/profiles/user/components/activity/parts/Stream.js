@@ -3,7 +3,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
 	alias: 'widget.profile-user-activity-stream',
 
 	requires: [
-		'NextThought.app.profiles.user.components.activity.parts.Page'
+		'NextThought.app.profiles.user.components.activity.parts.Page',
+		'NextThought.app.profiles.user.components.activity.parts.events.Empty'
 	],
 
 
@@ -37,19 +38,80 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
 			navigateToObject: this.navigateToObject.bind(this)
 		};
 	},
+	
+
+	loadBatch: function(batch) {
+ 		if (batch.isFirst && !batch.Items.length) {
+			this.onEmpty(batch);
+ 		} else {
+ 			this.removeEmpty();
+ 			this.fillInItems(batch.Items);
+ 		}
+ 
+ 		if (batch.isLast) {
+			this.onDone(this.StreamSource);
+ 			this.isOnLastBatch = true;
+ 		}
+ 	},
 
 
-	hasInitialWidget: function() {
-		return !!this.down('joined-event');
+	onDone: function(streamSource) {
+		var config = this.initialWidgetConfig();
+
+		if (this.shouldAddJoinedEvent(streamSource)) {
+			if (!this.hasInitialWidget()) {
+				this.joinedCmp = this.add(config);
+			}	
+		}
+		else {
+			if (this.joinedCmp) {
+				this.joinedCmp.destroy();
+			}
+		}
+		
+	},
+	
+
+	onEmpty: function(batch) {
+		var cmp = this.getGroupContainer(),
+			hasFilters = this.hasFiltersApplied(batch),
+			title, subtitle;
+
+		if (!this.emptyCmp) {
+			this.emptyCmp = cmp.add({
+				xtype: 'profile-activity-part-empty',
+				hasFilters: hasFilters
+			});
+		}
+	},
+	
+	
+	hasFiltersApplied: function(batch) {
+		var s = this.StreamSource;
+		
+		if (batch && batch.FilteredTotalItemCount !== batch.TotalItemCount) {
+			return true;
+		}
+		if (!batch && s) {
+			return (s.extraParams && s.extraParams.value) || (s.accepts && s.accepts.value) || (s.filters && s.filters.value);
+		}
+		
+		return false;
 	},
 
 
-	onDone: function() {
-		var config = this.initialWidgetConfig();
-
-		if (!this.hasInitialWidget()) {
-			this.add(config);
+	shouldAddJoinedEvent: function(source) {
+		var extra = source && source.extraParams,
+			createdTime = this.user && this.user.get('CreatedTime'),
+			inSeconds = (createdTime && createdTime.getTime()) / 1000;
+		if (extra && extra.batchAfter && !isNaN(inSeconds)) {
+			return inSeconds > extra.batchAfter;
 		}
+		if (source.accepts && source.accepts.value) {
+			return false;
+		}
+		
+		return true;
 	}
 });
 
