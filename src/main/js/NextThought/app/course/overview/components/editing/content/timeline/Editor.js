@@ -14,14 +14,14 @@ Ext.define('NextThought.app.course.overview.components.editing.content.timeline.
 				NextThought.model.Timeline.mimeType
 			];
 		},
-		
+
 		getTypes: function() {
 			return [
 				{
 					title: 'Pick a Timeline',
 					advanced: true,
 					category: 'Timeline',
-					iconCls: 'Timeline',
+					iconCls: 'timeline',
 					description: '',
 					editor: this
 				}
@@ -29,9 +29,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.timeline.
 		}
 	},
 
+
 	addFormCmp: function() {},
-	
-	
+
+
 	showEditor: function() {
 		if (this.selectedItems || this.record) {
 			this.showTimelineEditor();
@@ -39,16 +40,16 @@ Ext.define('NextThought.app.course.overview.components.editing.content.timeline.
 			this.showTimelineList();
 		}
 	},
-	
-	
+
+
 	showTimelineEditor: function() {
 		if (this.timelineEditorCmp) {
 			this.timelineEditorCmp.destroy();
 			delete this.timelineEditorCmp;
 		}
-		
+
 		this.removeAll(true);
-		
+
 		this.editorCmp = this.add({
 			xtype: 'overview-editing-timeline-editor',
 			parentRecord: this.parentRecord,
@@ -61,11 +62,11 @@ Ext.define('NextThought.app.course.overview.components.editing.content.timeline.
 			enableSave: this.enableSave,
 			disableSave: this.disableSave
 		});
-		
+
 		this.maybeEnableBack('Timeline');
 	},
-	
-	
+
+
 	showTimelineList: function() {
 		var me = this;
 
@@ -111,8 +112,8 @@ Ext.define('NextThought.app.course.overview.components.editing.content.timeline.
 			this.enableSave();
 		}
 	},
-	
-	
+
+
 	maybeEnableBack: function(text) {
 		if (!this.record && this.enableBack) {
 			this.enableBack(text);
