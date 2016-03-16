@@ -207,7 +207,7 @@ Ext.define('NextThought.app.stream.Base', {
 
 
 	loadNextPage: function() {
-		if (!this.isOnLastBatch) {
+		if (!this.isOnLastBatch && !this.isLoading) {
 			this.showLoading();
 			this.StreamSource.getNextBatch()
 				.then(this.loadBatch.bind(this))
@@ -220,6 +220,8 @@ Ext.define('NextThought.app.stream.Base', {
 
 	showLoading: function() {
 		var cmp = this.getGroupContainer();
+
+		this.isLoading = true;
 
 		if (!this.loadingCmp) {
 			this.loadingCmp = cmp.add({
@@ -236,6 +238,8 @@ Ext.define('NextThought.app.stream.Base', {
 
 	removeLoading: function() {
 		var cmp = this.getGroupContainer();
+
+		this.isLoading = null;
 
 		if (this.loadingCmp) {
 			cmp.remove(this.loadingCmp, true);

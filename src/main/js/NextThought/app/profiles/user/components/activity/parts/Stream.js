@@ -15,7 +15,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
 		if (this.hasInitialWidget() && this.rendered) {
 			joined = this.down('joined-event');
 			if (joined && joined.setUser) {
-				joined.setUser(this.user);	
+				joined.setUser(this.user);
 			}
 		}
 	},
@@ -38,16 +38,16 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
 			navigateToObject: this.navigateToObject.bind(this)
 		};
 	},
-	
+
 
 	loadBatch: function(batch) {
- 		if (batch.isFirst && !batch.Items.length) {
+		if (batch.Items.length) {
+			this.removeEmpty();
+			this.fillInItems(batch.Items);
+		} else if (batch.isFirst && this.getPageCount() === 0) {
 			this.onEmpty(batch);
- 		} else {
- 			this.removeEmpty();
- 			this.fillInItems(batch.Items);
- 		}
- 
+		}
+
  		if (batch.isLast) {
 			this.onDone(this.StreamSource);
  			this.isOnLastBatch = true;
@@ -61,16 +61,12 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
 		if (this.shouldAddJoinedEvent(streamSource)) {
 			if (!this.hasInitialWidget()) {
 				this.joinedCmp = this.add(config);
-			}	
-		}
-		else {
-			if (this.joinedCmp) {
-				this.joinedCmp.destroy();
 			}
+		} else if (this.joinedCmp) {
+			this.joinedCmp.destroy();
 		}
-		
 	},
-	
+
 
 	onEmpty: function(batch) {
 		var cmp = this.getGroupContainer(),
@@ -84,18 +80,19 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
 			});
 		}
 	},
-	
-	
+
+
 	hasFiltersApplied: function(batch) {
 		var s = this.StreamSource;
-		
+
 		if (batch && batch.FilteredTotalItemCount !== batch.TotalItemCount) {
 			return true;
 		}
+
 		if (!batch && s) {
 			return (s.extraParams && s.extraParams.value) || (s.accepts && s.accepts.value) || (s.filters && s.filters.value);
 		}
-		
+
 		return false;
 	},
 
@@ -104,13 +101,15 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
 		var extra = source && source.extraParams,
 			createdTime = this.user && this.user.get('CreatedTime'),
 			inSeconds = (createdTime && createdTime.getTime()) / 1000;
+
 		if (extra && extra.batchAfter && !isNaN(inSeconds)) {
 			return inSeconds > extra.batchAfter;
 		}
+
 		if (source.accepts && source.accepts.value) {
 			return false;
 		}
-		
+
 		return true;
 	}
 });

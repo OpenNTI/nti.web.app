@@ -18,6 +18,11 @@ Ext.define('NextThought.app.stream.List', {
 	},
 
 
+	getPageCount: function() {
+		return this.PAGES.length;
+	},
+
+
 	fillInItems: function(items) {
 		var config = this.getPageConfig(items);
 
