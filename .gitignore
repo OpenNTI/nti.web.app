@@ -12,7 +12,7 @@ app.min.js*
 
 #ext source and byproducts
 ext-4.2
-javascript
+
 src/main/app
 src/main/javascript
 src/main/bootstrap.js
