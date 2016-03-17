@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "test": "karma start --single-run --reporters dots,html,junit,coverage",
-    "start": "make check; webpack-dev-server -d --content-base src/main/ --host 0.0.0.0 --port 8090 --info false --watch --progress --inline",
+    "start": "make check; web-service --config ./src/server/config/env.json.example",
     "prepublish": "not-in-install && make || in-install"
   },
   "main": "./dist/server/index.js",
@@ -69,6 +69,8 @@
   },
   "devDependencies": {
     "nti-unittesting-clientside": "^1.0.0",
+    "nti-util-logger": "^1.0.2",
+    "nti-web-service": "^1.0.0",
     "webpack-dev-server": "^1.8.2"
   }
 }
