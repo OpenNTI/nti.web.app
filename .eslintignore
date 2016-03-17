@@ -1,0 +1,5 @@
+dist/*
+doc/*
+node_modules/*
+src/main/querybrowser/*
+stage/*
