@@ -229,6 +229,13 @@ function findGlobals(fileSource) {
 	return g;
 }
 
+function findExtReference(fileSource) {
+	var regex = /Ext/g;
+	var matches = fileSource.match(regex);
+
+	return matches;
+}
+
 
 var isExt = /^Ext/;
 
@@ -265,6 +272,10 @@ module.exports = function(fileInfo, api) {
 	imports = imports.map(function(imp) {
 		return buildImportStatement(imp, fileInfo.path);
 	});
+
+	if (findExtReference(fileInfo.source)) {
+		imports.unshift('import Ext from \'extjs\'');
+	}
 
 	if (imports.length) {
 		imports.push('\n\n');
