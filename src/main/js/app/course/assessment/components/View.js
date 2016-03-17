@@ -12,7 +12,7 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 		'NextThought.app.course.assessment.components.admin.Activit',
 		'NextThought.app.course.assessment.components.admin.assignments.View',
 		'NextThought.app.course.assessment.components.admin.email.Window',
-		'NextThought.app.course.assessment.components.admin.performance.View'
+		'NextThought.app.course.assessment.components.admin.performance.View',
 		'NextThought.app.course.assessment.components.student.assignments.View',
 		'NextThought.app.course.assessment.components.student.Activity',
 		'NextThought.app.course.assessment.components.student.Performance'

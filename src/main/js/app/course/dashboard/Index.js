@@ -35,7 +35,7 @@ export default Ext.define('NextThought.app.course.dashboard.Index', {
 		'NextThought.app.course.dashboard.components.tiles.Note',
 		'NextThought.app.course.dashboard.components.tiles.Post',
 		'NextThought.app.course.dashboard.components.tiles.Topic',
-		'NextThought.app.course.dashboard.components.tiles.TopicComment'
+		'NextThought.app.course.dashboard.components.tiles.TopicComment',
 		'NextThought.app.course.dashboard.components.widgets.Announcements',
 		'NextThought.app.course.dashboard.components.widgets.Assignments',
 		'NextThought.app.course.dashboard.components.widgets.Base',
