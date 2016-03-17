@@ -54,7 +54,7 @@ exports = module.exports =
 
 	externals: [
 		{
-			'Ext': 'Ext',
+			'extjs': 'Ext',
 			'react' : 'React',
 			'react-dom': 'ReactDOM'
 		}
@@ -67,11 +67,11 @@ exports = module.exports =
 
 	module: {
 		preLoaders: [
-			{
-				test: /src.main.js.+jsx?$/,
-				loader: 'eslint',
-				exclude: /node_modules/
-			},
+			// {
+			// 	test: /src.main.js.+jsx?$/,
+			// 	loader: 'eslint',
+			// 	exclude: /node_modules/
+			// },
 			{
 				test: /src.main.js.+jsx?$/,
 				loader: 'baggage?[file].scss'
