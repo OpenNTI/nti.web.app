@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "test": "karma start --single-run --reporters dots,html,junit,coverage",
-    "start": "make check; node src/server",
+    "start": "make check; webpack-dev-server -d --content-base src/main/ --host 0.0.0.0 --port 8090 --info false --watch --progress --inline",
     "prepublish": "not-in-install && make || in-install"
   },
   "main": "./dist/server/index.js",
