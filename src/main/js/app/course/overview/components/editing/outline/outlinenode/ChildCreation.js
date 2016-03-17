@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.ChildCreation', {
+export default Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.ChildCreation', {
 	extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
 	alias: 'widget.overview-editing-outlinenode-childcreation',
 

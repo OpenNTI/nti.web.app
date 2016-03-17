@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.prompt.components.Container', {
+export default Ext.define('NextThought.app.prompt.components.Container', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.prompt-container',
 

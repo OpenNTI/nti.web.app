@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.assessment.components.admin.email.Actions', {
+export default Ext.define('NextThought.app.course.assessment.components.admin.email.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	requires: [

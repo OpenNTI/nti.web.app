@@ -441,7 +441,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 
 
 
-export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItemReply', {
+Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItemReply', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-forum-activity-item-reply',
 

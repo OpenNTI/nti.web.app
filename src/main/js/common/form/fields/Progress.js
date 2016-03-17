@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.form.fields.Progress', {
+export default Ext.define('NextThought.common.form.fields.Progress', {
 	extend: 'Ext.Component',
 	alias: 'widget.form-progress',
 

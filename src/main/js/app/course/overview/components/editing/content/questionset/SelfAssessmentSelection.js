@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.questionset.SelfAssessmentSelection', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.questionset.SelfAssessmentSelection', {
 	extend: 'NextThought.app.course.overview.components.editing.content.questionset.AssignmentSelection',
 	alias: 'widget.overview-editing-self-assessment-selection',
 

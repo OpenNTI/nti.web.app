@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.Transition', {
+export default Ext.define('NextThought.mixins.Transition', {
 
 	statics: {
 		LIST_ADD: {

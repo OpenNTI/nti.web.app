@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.components.BoundCollection', {
+export default Ext.define('NextThought.common.components.BoundCollection', {
 	extend: 'Ext.container.Container',
 
 	requires: ['NextThought.mixins.Transition'],

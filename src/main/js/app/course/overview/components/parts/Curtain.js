@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.parts.Curtain', {
+export default Ext.define('NextThought.app.course.overview.components.parts.Curtain', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-overview-curtain',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.form.Form', {
+export default Ext.define('NextThought.common.form.Form', {
 	extend: 'Ext.Component',
 	alias: 'widget.common-form',
 

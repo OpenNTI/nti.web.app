@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.prompt.Index', {
+export default Ext.define('NextThought.app.prompt.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.prompt-view',
 

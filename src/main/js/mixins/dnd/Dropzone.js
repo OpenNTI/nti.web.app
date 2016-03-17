@@ -6,7 +6,7 @@
  *
  * It can also implement a getDropTarget method, otherwise this.el.dom will be used
  */
-Ext.define('NextThought.mixins.dnd.Dropzone', {
+export default Ext.define('NextThought.mixins.dnd.Dropzone', {
 
 	requires: [
 		'NextThought.app.dnd.Dropzone'

@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.form.fields.URL', {
+export default Ext.define('NextThought.common.form.fields.URL', {
 	extend: 'Ext.Component',
 	alias: 'widget.url-field',
 

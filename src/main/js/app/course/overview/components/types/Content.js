@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.types.Content', {
+export default Ext.define('NextThought.app.course.overview.components.types.Content', {
 	extend: 'NextThought.common.components.BoundCollection',
 	alias: 'widget.overview-types-content',
 

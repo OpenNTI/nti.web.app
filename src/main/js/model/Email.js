@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Email', {
+export default Ext.define('NextThought.model.Email', {
 	extend: 'NextThought.model.Base',
 
 	mixins: {

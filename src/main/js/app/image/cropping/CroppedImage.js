@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.image.cropping.CroppedImage', {
+export default Ext.define('NextThought.app.image.cropping.CroppedImage', {
 	constructor: function(config) {
 		this.blob = config.blob;
 		this.name = config.name;

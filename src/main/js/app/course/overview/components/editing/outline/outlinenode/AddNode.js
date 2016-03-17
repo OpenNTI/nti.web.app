@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.AddNode', {
+export default Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.AddNode', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-new-unit-node',
 

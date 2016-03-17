@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
+export default Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-email-window',
 

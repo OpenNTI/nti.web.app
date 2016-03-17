@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.Index', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.Index', {
 	extend: 'NextThought.app.course.overview.components.Lesson',
 	alias: 'widget.overview-editing-content',
 

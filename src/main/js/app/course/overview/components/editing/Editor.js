@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.Editor', {
+export default Ext.define('NextThought.app.course.overview.components.editing.Editor', {
 	extend: 'Ext.container.Container',
 	//this is only extended, never should need to be instantiated
 

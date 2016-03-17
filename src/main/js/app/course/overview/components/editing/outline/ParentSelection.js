@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.outline.ParentSelection', {
+export default Ext.define('NextThought.app.course.overview.components.editing.outline.ParentSelection', {
 	extend: 'NextThought.app.course.overview.components.editing.parentselection.Index',
 	alias: 'widget.overview-editing-outline-parentselection',
 

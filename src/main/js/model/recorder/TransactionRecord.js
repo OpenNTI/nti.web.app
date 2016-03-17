@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.recorder.TransactionRecord', {
+export default Ext.define('NextThought.model.recorder.TransactionRecord', {
 	extend: 'NextThought.model.Base',
 
 	mimeType: 'application/vnd.nextthought.recorder.transactionrecord',

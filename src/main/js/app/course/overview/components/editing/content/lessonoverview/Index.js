@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.lessonoverview.Index', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.lessonoverview.Index', {
 	extend: 'NextThought.common.components.BoundCollection',
 	alias: 'widget.overview-editing-lessonoverview',
 

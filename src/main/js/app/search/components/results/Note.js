@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.search.components.results.Note', {
+export default Ext.define('NextThought.app.search.components.results.Note', {
 	extend: 'NextThought.app.search.components.results.Base',
 	alias: 'widget.search-result-note',
 

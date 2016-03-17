@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.ReadingSelection', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.ReadingSelection', {
 	extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
 	alias: 'widget.overview-editing-reading-selection',
 

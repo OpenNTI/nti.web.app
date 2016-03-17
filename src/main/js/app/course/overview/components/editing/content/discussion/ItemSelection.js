@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.discussion.ItemSelection', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.discussion.ItemSelection', {
 	extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
 	alias: 'widget.overview-editing-discussion-item-selection',
 

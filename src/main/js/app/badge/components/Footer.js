@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.badge.components.Footer', {
+export default Ext.define('NextThought.app.badge.components.Footer', {
 	extend: 'Ext.Component',
 	alias: 'widget.badge-window-footer',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.form.fields.DateTimeField', {
+export default Ext.define('NextThought.common.form.fields.DateTimeField', {
 	extend: 'Ext.Component',
 	alias: 'widget.date-time-field',
 

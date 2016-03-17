@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.creation.TypeList', {
+export default Ext.define('NextThought.app.course.overview.components.editing.creation.TypeList', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-typelist',
 

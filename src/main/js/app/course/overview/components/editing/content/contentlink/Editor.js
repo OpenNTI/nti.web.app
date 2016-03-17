@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.Editor', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.EditorGroup',
 	alias: 'widget.overview-editing-contentlink-editor',
 

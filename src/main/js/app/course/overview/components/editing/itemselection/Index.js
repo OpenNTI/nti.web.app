@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.itemselection.Index', {
+export default Ext.define('NextThought.app.course.overview.components.editing.itemselection.Index', {
 	extend: 'Ext.container.Container',
 	//Shouldn't be instantiated, only extended
 

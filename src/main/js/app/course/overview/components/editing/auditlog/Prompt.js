@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.auditlog.Prompt', {
+export default Ext.define('NextThought.app.course.overview.components.editing.auditlog.Prompt', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.audit-log-prompt',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.timeline.ItemSelection', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.timeline.ItemSelection', {
 	extend: 'NextThought.app.course.overview.components.editing.content.discussion.ItemSelection',
 	alias: 'widget.overview-editing-timeline-item-selection',
 

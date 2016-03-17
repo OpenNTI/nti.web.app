@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.Preview', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.Preview', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-overviewgroup-preview',
 

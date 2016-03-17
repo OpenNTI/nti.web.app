@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.DiscussionRef', {
+export default Ext.define('NextThought.model.DiscussionRef', {
 	extend: 'NextThought.model.RelatedWork',
 
 	statics: {

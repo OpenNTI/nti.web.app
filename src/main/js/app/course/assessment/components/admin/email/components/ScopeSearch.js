@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.assessment.components.admin.email.components.ScopeSearch', {
+export default Ext.define('NextThought.app.course.assessment.components.admin.email.components.ScopeSearch', {
 	extend: 'NextThought.app.sharing.components.ShareSearch',
 	alias: 'widget.scope-sharesearch',
 

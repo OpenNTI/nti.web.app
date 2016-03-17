@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
+export default Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-duedate-editor',
 

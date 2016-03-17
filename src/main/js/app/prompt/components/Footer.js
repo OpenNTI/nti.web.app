@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.prompt.components.Footer', {
+export default Ext.define('NextThought.app.prompt.components.Footer', {
 	extend: 'Ext.Component',
 	alias: 'widget.prompt-footer',
 

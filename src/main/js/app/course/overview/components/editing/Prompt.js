@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
+export default Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-prompt',
 

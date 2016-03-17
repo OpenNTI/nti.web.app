@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.form.ErrorMessages', {
+export default Ext.define('NextThought.common.form.ErrorMessages', {
 
 	MESSAGES: {
 		missing: 'Please fill out all required fields.',

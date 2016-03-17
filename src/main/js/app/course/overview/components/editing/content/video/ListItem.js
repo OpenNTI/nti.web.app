@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.video.ListItem', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.video.ListItem', {
 	extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
 	alias: 'widget.overview-editing-video-listitem',
 

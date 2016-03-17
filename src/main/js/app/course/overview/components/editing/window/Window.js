@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.window.Window', {
+export default Ext.define('NextThought.app.course.overview.components.editing.window.Window', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-window',
 

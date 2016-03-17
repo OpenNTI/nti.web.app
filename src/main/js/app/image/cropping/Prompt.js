@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.image.cropping.Prompt', {
+export default Ext.define('NextThought.app.image.cropping.Prompt', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.image-cropping-prompt',
 

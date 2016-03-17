@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.Index', {
+export default Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-outlinenode',
 

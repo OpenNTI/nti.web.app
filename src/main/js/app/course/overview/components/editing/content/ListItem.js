@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.ListItem', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.ListItem', {
 	extend: 'Ext.container.Container',
 	//This should only be extended, not instantiated
 

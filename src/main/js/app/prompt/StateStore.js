@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.prompt.StateStore', {
+export default Ext.define('NextThought.app.prompt.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	statics: {

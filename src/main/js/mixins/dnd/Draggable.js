@@ -9,7 +9,7 @@
  *
  * It can also implement a getDragTarget method, otherwise this.el.dom will be used
  */
-Ext.define('NextThought.mixins.dnd.Draggable', {
+export default Ext.define('NextThought.mixins.dnd.Draggable', {
 	requires: [
 		'NextThought.app.dnd.Draggable'
 	],

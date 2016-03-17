@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.builtins.Window', {});
+export default Ext.define('NextThought.overrides.builtins.Window', {});
 
 (function() {
 	function getRequestAnimationFrame() {

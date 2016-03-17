@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.conflict.DestructiveChallenge', {
+export default Ext.define('NextThought.model.conflict.DestructiveChallenge', {
 	extend: 'NextThought.model.Base',
 
 	statics: {

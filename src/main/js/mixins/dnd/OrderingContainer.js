@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.dnd.OrderingContainer', {
+export default Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 
 	requires: [
 		'NextThought.model.app.MoveInfo',

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
+export default Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
 	extend: 'NextThought.editor.Editor',
 	alias: 'widget.course-email-editor',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.types.Toc', {
+export default Ext.define('NextThought.app.course.overview.components.types.Toc', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-types-toc',
 

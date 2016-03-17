@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.parentselection.NewItem', {
+export default Ext.define('NextThought.app.course.overview.components.editing.parentselection.NewItem', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-parentselection-newitem',
 

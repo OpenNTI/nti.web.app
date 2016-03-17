@@ -1,3 +1,3 @@
-Ext.define('NextThought.model.AssignmentRef', {
+export default Ext.define('NextThought.model.AssignmentRef', {
 	extend: 'NextThought.model.RelatedWork'
 });

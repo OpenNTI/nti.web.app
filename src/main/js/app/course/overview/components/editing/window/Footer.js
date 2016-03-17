@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.window.Footer', {
+export default Ext.define('NextThought.app.course.overview.components.editing.window.Footer', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-window-footer',
 

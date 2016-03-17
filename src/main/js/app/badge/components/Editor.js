@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.badge.components.Editor', {
+export default Ext.define('NextThought.app.badge.components.Editor', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.badge-export-editor',
 

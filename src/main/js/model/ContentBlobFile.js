@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.ContentBlobFile', {
+export default Ext.define('NextThought.model.ContentBlobFile', {
 	extend: 'NextThought.model.Base',
 
 	fields: [

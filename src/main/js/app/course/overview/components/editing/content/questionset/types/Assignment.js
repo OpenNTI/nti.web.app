@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.questionset.types.Assignment', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.questionset.types.Assignment', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 	alias: 'widget.overview-editing-questionset-assignment',
 

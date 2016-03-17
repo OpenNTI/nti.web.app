@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.parentselection.Menu', {
+export default Ext.define('NextThought.app.course.overview.components.editing.parentselection.Menu', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-parentselection-menu',
 

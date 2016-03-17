@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.controls.Advanced', {
+export default Ext.define('NextThought.app.course.overview.components.editing.controls.Advanced', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-controls-advanced-settings',
 

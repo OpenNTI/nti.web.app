@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.AuditLog', {
+export default Ext.define('NextThought.mixins.AuditLog', {
 
 	requires: ['NextThought.store.BatchInterface'],
 

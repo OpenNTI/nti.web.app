@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar', {
+export default Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-controls-calendar',
 

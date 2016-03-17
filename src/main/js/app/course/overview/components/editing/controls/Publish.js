@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.controls.Publish', {
+export default Ext.define('NextThought.app.course.overview.components.editing.controls.Publish', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-controls-publish',
 

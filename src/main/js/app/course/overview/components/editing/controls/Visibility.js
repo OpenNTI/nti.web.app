@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.controls.Visibility', {
+export default Ext.define('NextThought.app.course.overview.components.editing.controls.Visibility', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-controls-visibility',
 

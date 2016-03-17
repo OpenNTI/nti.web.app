@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
+export default Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
 	extend: 'NextThought.common.components.BoundCollection',
 	alias: 'widget.course-outline-group',
 

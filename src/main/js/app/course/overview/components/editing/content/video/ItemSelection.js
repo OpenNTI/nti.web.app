@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.video.ItemSelection', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.video.ItemSelection', {
 	extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
 	alias: 'widget.overview-editing-video-item-selection',
 

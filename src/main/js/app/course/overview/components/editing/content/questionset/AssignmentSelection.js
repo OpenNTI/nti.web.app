@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.questionset.AssignmentSelection', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.questionset.AssignmentSelection', {
 	extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
 	alias: 'widget.overview-editing-assignment-selection',
 

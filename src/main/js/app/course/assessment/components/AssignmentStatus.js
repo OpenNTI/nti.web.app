@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
+export default Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-assignment-status',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.AnimationFrame', {
+export default Ext.define('NextThought.util.AnimationFrame', {
 
 	statics: {
 		getRequestAnimationFrame: function() {

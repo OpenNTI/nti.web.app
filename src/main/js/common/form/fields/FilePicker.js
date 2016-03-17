@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.form.fields.FilePicker', {
+export default Ext.define('NextThought.common.form.fields.FilePicker', {
 	extend: 'Ext.Component',
 	alias: 'widget.file-picker-field',
 

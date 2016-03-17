@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.controls.Delete', {
+export default Ext.define('NextThought.app.course.overview.components.editing.controls.Delete', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-controls-delete',
 

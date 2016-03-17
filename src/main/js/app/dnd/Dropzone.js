@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.dnd.Dropzone', {
+export default Ext.define('NextThought.app.dnd.Dropzone', {
 
 	requires: [
 		'NextThought.model.app.DndInfo',

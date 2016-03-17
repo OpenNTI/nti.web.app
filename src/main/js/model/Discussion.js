@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Discussion', {
+export default Ext.define('NextThought.model.Discussion', {
 	extend: 'NextThought.model.Base',
 
 	fields: [

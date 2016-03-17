@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.DurationCache', {
+export default Ext.define('NextThought.mixins.DurationCache', {
 	cacheFor: function(key, value, duration) {
 		this.__durationCache = this.__durationCache || {};
 

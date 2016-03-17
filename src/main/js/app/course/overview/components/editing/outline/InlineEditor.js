@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEditor', {
+export default Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEditor', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-inline-editor',
 

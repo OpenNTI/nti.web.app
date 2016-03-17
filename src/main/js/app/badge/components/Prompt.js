@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.badge.components.Prompt', {
+export default Ext.define('NextThought.app.badge.components.Prompt', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.badge-exporting-prompt',
 

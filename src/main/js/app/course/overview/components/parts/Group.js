@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.parts.Group', {
+export default Ext.define('NextThought.app.course.overview.components.parts.Group', {
 	extend: 'NextThought.common.components.BoundCollection',
 	alias: 'widget.overview-group',
 

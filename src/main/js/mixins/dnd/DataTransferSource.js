@@ -4,7 +4,7 @@
  *
  * They can also implement a getKeyForTransfer if they want
  */
-Ext.define('NextThought.mixins.dnd.DataTransferSource', {
+export default Ext.define('NextThought.mixins.dnd.DataTransferSource', {
 	/**
 	 * Stringify the value of getDataForTransfer
 	 * @return {String} value for the data transfer

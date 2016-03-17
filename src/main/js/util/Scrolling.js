@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Scrolling', {
+export default Ext.define('NextThought.util.Scrolling', {
 
 	requires: [
 		'NextThought.util.AnimationFrame'

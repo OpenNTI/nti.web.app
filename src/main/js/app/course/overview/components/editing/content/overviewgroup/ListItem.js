@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem', {
 	extend: 'NextThought.common.components.BoundCollection',
 	alias: 'widget.overview-editing-overviewgroup-listitem',
 

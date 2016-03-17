@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.dnd.Draggable', {
+export default Ext.define('NextThought.app.dnd.Draggable', {
 
 	requires: [
 		'NextThought.app.dnd.Actions',

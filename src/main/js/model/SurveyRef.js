@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.SurveyRef', {
+export default Ext.define('NextThought.model.SurveyRef', {
 	extend: 'NextThought.model.Base',
 
 	fields: [

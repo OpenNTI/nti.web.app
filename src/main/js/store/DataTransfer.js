@@ -4,7 +4,7 @@
  * NOTE: if using this wrapper around data from a browser drag/drop event, the data will only be available
  * for that event pump. Afterwards the browser will not let us access it.
  */
-Ext.define('NextThought.store.DataTransfer', {
+export default Ext.define('NextThought.store.DataTransfer', {
 
 	constructor: function(config) {
 		this.dataTransfer = config && config.dataTransfer;

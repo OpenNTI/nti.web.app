@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCreation', {
+export default Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCreation', {
 	extend: 'Ext.container.Container',
 	//this shouldn't be instantiated, only extended
 

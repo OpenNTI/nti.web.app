@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.Prompt', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.Prompt', {
 	extend: 'NextThought.app.course.overview.components.editing.outline.Prompt',
 	alias: 'widget.overview-editing-content-editor',
 

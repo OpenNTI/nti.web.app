@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.MovingRoot', {
+export default Ext.define('NextThought.mixins.MovingRoot', {
 	isMovingRoot: true,
 
 

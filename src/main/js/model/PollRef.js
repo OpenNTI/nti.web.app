@@ -1,3 +1,3 @@
-Ext.define('NextThought.model.PollRef', {
+export default Ext.define('NextThought.model.PollRef', {
 	extend: 'NextThought.model.RelatedWork'
 });

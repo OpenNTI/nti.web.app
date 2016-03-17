@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.prompt.Actions', {
+export default Ext.define('NextThought.app.prompt.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	requires: [

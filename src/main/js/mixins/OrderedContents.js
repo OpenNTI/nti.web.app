@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.OrderedContents', {
+export default Ext.define('NextThought.mixins.OrderedContents', {
 	hasOrderedContents: true,
 
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.creation.Type', {
+export default Ext.define('NextThought.app.course.overview.components.editing.creation.Type', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-type',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.conflict.Actions', {
+export default Ext.define('NextThought.app.conflict.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	requires: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.discussion.DiscussionEditor', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.discussion.DiscussionEditor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 	alias: 'widget.overview-editing-discussion-editor',
 

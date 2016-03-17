@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.EditorGroup', {
+export default Ext.define('NextThought.app.course.overview.components.editing.EditorGroup', {
 
 	inheritableStatics: {
 		/**

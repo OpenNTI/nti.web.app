@@ -4,7 +4,7 @@
  * moving forward.
  * 
  */
-Ext.define('NextThought.model.courses.CourseInstanceEnrollment', {
+export default Ext.define('NextThought.model.courses.CourseInstanceEnrollment', {
 	extend: 'Ext.data.Model',
 
 	idProperty: 'id',

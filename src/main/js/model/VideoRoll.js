@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.VideoRoll', {
+export default Ext.define('NextThought.model.VideoRoll', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.videoroll',
 

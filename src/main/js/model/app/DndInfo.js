@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.app.DndInfo', {
+export default Ext.define('NextThought.model.app.DndInfo', {
 	extend: 'NextThought.model.Base',
 
 	statics: {

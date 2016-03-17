@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.timeline.Actions', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.timeline.Actions', {
 	extend: 'NextThought.app.course.overview.components.editing.Actions',
 	
 	requires: [

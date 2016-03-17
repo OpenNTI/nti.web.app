@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.conflict.types.DestructiveChallenge', {
+export default Ext.define('NextThought.app.conflict.types.DestructiveChallenge', {
 	getType: function() {
 		return NextThought.model.conflict.DestructiveChallenge.mimeType;
 	},

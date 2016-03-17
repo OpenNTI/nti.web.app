@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.image.cropping.Editor', {
+export default Ext.define('NextThought.app.image.cropping.Editor', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.image-cropping-editor',
 

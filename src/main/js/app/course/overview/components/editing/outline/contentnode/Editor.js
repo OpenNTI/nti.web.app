@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.outline.contentnode.Editor', {
+export default Ext.define('NextThought.app.course.overview.components.editing.outline.contentnode.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.outline.calendarnode.Editor',
 	alias: 'widget.overview-editing-contentnode-editor',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.timeline.items.Items', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.timeline.items.Items', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-timeline-items',
 	

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.controls.AvailableDateMenu', {
+export default Ext.define('NextThought.app.course.overview.components.editing.controls.AvailableDateMenu', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-available-date-menu',
 

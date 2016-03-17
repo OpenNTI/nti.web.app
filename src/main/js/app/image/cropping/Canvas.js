@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.image.cropping.Canvas', {
+export default Ext.define('NextThought.app.image.cropping.Canvas', {
 	extend: 'Ext.Component',
 	alias: 'widget.image-cropping-canvas',
 

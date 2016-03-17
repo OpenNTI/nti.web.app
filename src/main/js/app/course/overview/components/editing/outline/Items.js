@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
+export default Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 	extend: 'NextThought.common.components.BoundCollection',
 	alias: 'widget.overview-editing-outline-items',
 

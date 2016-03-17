@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.discussion.ListItem', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.discussion.ListItem', {
 	extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
 	alias: 'widget.overview-editing-discussion-listitem',
 

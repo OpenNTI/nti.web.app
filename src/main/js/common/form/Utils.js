@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.form.Utils', {
+export default Ext.define('NextThought.common.form.Utils', {
 	constructor: function(config) {
 
 		this.handlers = {

@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.assessment.components.admin.email.EmailTokenField', {
+export default Ext.define('NextThought.app.course.assessment.components.admin.email.EmailTokenField', {
 	extend: 'NextThought.app.sharing.components.UserTokenField',
 	alias: ['widget.course-scope-list'],
 	requires: [

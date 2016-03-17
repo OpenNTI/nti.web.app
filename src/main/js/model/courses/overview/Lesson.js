@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courses.overview.Lesson', {
+export default Ext.define('NextThought.model.courses.overview.Lesson', {
 	extend: 'NextThought.model.Base',
 
 	mixins: {

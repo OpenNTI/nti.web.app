@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.parts.VideoRollItem', {
+export default Ext.define('NextThought.app.course.overview.components.parts.VideoRollItem', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-overview-videoroll-item',
 

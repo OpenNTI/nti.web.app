@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.form.fields.LegacySearchComboBox', {
+export default Ext.define('NextThought.common.form.fields.LegacySearchComboBox', {
 	extend: 'Ext.Component',
 	alias: 'widget.legacysearchcombobox',
 

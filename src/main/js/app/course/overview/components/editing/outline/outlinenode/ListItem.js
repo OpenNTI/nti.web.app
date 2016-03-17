@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.ListItem', {
+export default Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.ListItem', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-outlinenode-listitem',
 

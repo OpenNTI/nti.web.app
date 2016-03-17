@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.auditlog.Index', {
+export default Ext.define('NextThought.app.course.overview.components.editing.auditlog.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-audit-log',
 

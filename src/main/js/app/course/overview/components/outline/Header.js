@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.outline.Header', {
+export default Ext.define('NextThought.app.course.overview.components.outline.Header', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-outline-header',
 

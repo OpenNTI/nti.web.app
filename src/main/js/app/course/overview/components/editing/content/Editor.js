@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.Editor', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.Editor',
 
 

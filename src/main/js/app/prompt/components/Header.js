@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.prompt.components.Header', {
+export default Ext.define('NextThought.app.prompt.components.Header', {
 	extend: 'Ext.Component',
 	alias: 'widget.prompt-header',
 

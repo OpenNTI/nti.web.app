@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.itemselection.Item', {
+export default Ext.define('NextThought.app.course.overview.components.editing.itemselection.Item', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-item-selection-item',
 

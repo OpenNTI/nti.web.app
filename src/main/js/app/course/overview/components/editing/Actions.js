@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.Actions', {
+export default Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	statics: {

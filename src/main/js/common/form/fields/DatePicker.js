@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.form.fields.DatePicker', {
+export default Ext.define('NextThought.common.form.fields.DatePicker', {
 	extend: 'Ext.Component',
 	alias: 'widget.date-picker-field',
 

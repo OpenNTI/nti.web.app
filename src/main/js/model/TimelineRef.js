@@ -1,3 +1,3 @@
-Ext.define('NextThought.model.TimelineRef', {
+export default Ext.define('NextThought.model.TimelineRef', {
 	extend: 'NextThought.model.RelatedWork'
 });

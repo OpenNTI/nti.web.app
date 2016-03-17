@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.parts.Video', {
+export default Ext.define('NextThought.app.course.overview.components.parts.Video', {
 	extend: 'Ext.container.Container',
 	alias: ['widget.course-overview-video', 'widget.course-overview-ntivideo'],
 

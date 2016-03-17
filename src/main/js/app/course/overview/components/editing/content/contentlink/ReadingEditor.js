@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.ReadingEditor', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.ReadingEditor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
 	alias: 'widget.overview-editing-reading-editor',
 

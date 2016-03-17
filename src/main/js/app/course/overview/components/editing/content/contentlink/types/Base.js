@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.Base', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.Base', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 
 	requires: [

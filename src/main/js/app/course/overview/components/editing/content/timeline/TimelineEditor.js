@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.overview.components.editing.content.timeline.TimelineEditor', {
+export default Ext.define('NextThought.app.course.overview.components.editing.content.timeline.TimelineEditor', {
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 	alias: 'widget.overview-editing-timeline-editor',
 	

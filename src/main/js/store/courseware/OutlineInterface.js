@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.courseware.OutlineInterface', {
+export default Ext.define('NextThought.store.courseware.OutlineInterface', {
 
 	statics: {
 		fillInDepths: function(outline) {

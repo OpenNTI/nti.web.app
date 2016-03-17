@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.course.assessment.components.admin.assignments.ListItem', {
+export default Ext.define('NextThought.app.course.assessment.components.admin.assignments.ListItem', {
 	extend: 'NextThought.app.course.assessment.components.student.assignments.ListItem',
 	alias: 'widget.course-assessment-assignment-admin-list-item',
 
