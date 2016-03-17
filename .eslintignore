@@ -1,5 +1,8 @@
 dist/*
 doc/*
 node_modules/*
-src/main/querybrowser/*
+src/main/resources/lib/*
+src/main/resources/locales/*
+src/main/resources/strings/*
+src/main/resources/vendor/*
 stage/*
