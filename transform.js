@@ -48,7 +48,7 @@ function getPathToClassName(cls) {
 
 	parts = parts.filter(function(part) { return part !== 'NextThought'; });
 
-	return 'src/main/js/' + parts.join('/');
+	return path.join(__dirname, 'src/main/js/' + parts.join('/'));
 }
 
 
@@ -249,7 +249,13 @@ function isExtComponent(imp) {
 var importTpl = 'import {name} from \'{path}\'';
 
 function buildImportStatement(imp, clsPath) {
-	return importTpl.replace('{name}', imp.name).replace('{path}', path.relative(clsPath, imp.path));
+	var p = path.relative(path.dirname(clsPath), imp.path);
+
+	if (!/^\./.test(p)) {
+		p = './' + p;
+	}
+
+	return importTpl.replace('{name}', imp.name).replace('{path}', p);
 }
 
 //Useful links:
@@ -272,7 +278,7 @@ module.exports = function(fileInfo, api) {
 	imports = imports.filter(isExtComponent);
 
 	imports = imports.map(function(imp) {
-		return buildImportStatement(imp, fileInfo.path);
+		return buildImportStatement(imp, path.join(__dirname, fileInfo.path));
 	});
 
 	if (findExtReference(fileInfo.source)) {
