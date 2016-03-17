@@ -2865,6 +2865,12 @@
 		}
 
 		&.modifier {
+			display: none;
+
+			&.active {
+				display: block;
+			}
+			
 			.option {
 				font: normal 400 14px/44px $font;
     			padding-left: 10px;

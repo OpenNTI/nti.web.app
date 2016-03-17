@@ -9,6 +9,7 @@ export default Ext.define('NextThought.model.courseware.UsersCourseAssignmentHis
 	],
 
 	fields: [
+		{name: 'UsersCourseAssignmentHistory', type: 'auto'},
 		{name: 'Items', type: 'collectionItem', persist: false},
 		{name: 'lastViewed', type: 'date', dateFormat: 'timestamp'}
 	],

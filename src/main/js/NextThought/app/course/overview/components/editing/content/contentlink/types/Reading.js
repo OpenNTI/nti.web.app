@@ -100,11 +100,13 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 		ContentUtils.getReadings(this.bundle)
 			.then(function(readings) {
-				if (readings.length > 1) {
-					console.warn('Dont know how to handle more than one set of readings, just picking the first.');
+				// NOTE: When we have one content package,
+				// Simplify this and only return the list of items.
+				// However, in other cases, 
+				// we need to pass the title and items for each content package.
+				if (readings.length == 1) {
+					readings = readings[0] && readings[0].items;
 				}
-
-				readings = readings[0];
 
 				me.readingSelectionCmp.setSelectionItems(readings);
 			});

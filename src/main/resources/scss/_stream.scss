@@ -1,5 +1,6 @@
 .stream {
 	-webkit-font-smoothing: antialiased;
+	position: relative;
 	
 	.item {
 		&.loading, &.empty, &.done, &.error {
@@ -25,6 +26,26 @@
 				text-align: center;
 				line-height: 50px;
 				color: $primary-red;
+			}
+		}
+		
+		&.empty {
+			height: 345px;
+			
+			.container-empty {
+				color: $secondary-grey;
+				text-align: center;
+				top: 50%;
+				transform: translateY(-50%);
+				position: relative;
+				
+				.title {
+					font: normal 300 1.75em/35px $font;
+				}
+				
+				.subtitle {
+					font: normal 300 1em/35px $font;
+				}
 			}
 		}
 	}

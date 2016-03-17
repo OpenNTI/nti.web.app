@@ -11,9 +11,9 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Visibili
 		]},
 		{cls: 'menu-container', cn: [{
 			cls: 'options', cn: [
-				{cls: 'option', html: 'Everyone', 'data-scope': 'everyone'},
-				{cls: 'option', html: 'OU', 'data-scope': 'OU'},
-				{cls: 'option', html: 'ForCredit', 'data-scope': 'ForCredit'}
+				{tag: 'tpl', 'for': 'options', cn: [
+					{cls: 'option', html: '{.}', 'data-scope': '{.}'}
+				]}
 			]}
 		]}
 	]),
@@ -24,6 +24,15 @@ Ext.define('NextThought.app.course.overview.components.editing.controls.Visibili
 		textEl: '.scope .text',
 		menuContainer: '.menu-container',
 		optionEl: '.options .option'
+	},
+
+
+	beforeRender: function(){
+		this.callParent(arguments);
+
+		this.renderData = Ext.apply(this.renderData || {}, {
+			options: this.schema ? this.schema.choices : []
+		});
 	},
 
 

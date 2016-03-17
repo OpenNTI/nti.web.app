@@ -55,29 +55,36 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	},
 
 
-	showEditor: function(){
+	showEditor: function() {
 		this.callParent(arguments);
 
-		this.addAdvancedDisclosure();	
+		if (Service.canDoAdvancedEditing()) {
+			this.addAdvancedDisclosure();
+		}
 	},
 
 
-	addAdvancedDisclosure: function(){
-		var visibility = this.record && this.record.get('visibility');
+	addAdvancedDisclosure: function() {
+		var visibility = this.record && this.record.get('visibility'),
+			me = this;
 
 		if (this.visibilityCmp) { return; }
 
-		this.visibilityCmp = this.add({
-			xtype: 'overview-editing-controls-advanced-settings',
-			record: this.record,
-			parentRecord: this.parentRecord,
-			defaultValue: visibility,
-			onChange: this.onVisibilityChange.bind(this)
-		});
+		this.getSchema()
+			.then(function(schema) {
+				me.visibilityCmp = me.add({
+					xtype: 'overview-editing-controls-advanced-settings',
+					record: me.record,
+					parentRecord: me.parentRecord,
+					defaultValue: visibility,
+					schema: schema && schema.Fields && schema.Fields.visibility,
+					onChange: me.onVisibilityChange.bind(me)
+				});
+			});
 	},
 
 
-	onVisibilityChange: function(cmp){
+	onVisibilityChange: function(cmp) {
 		var value = cmp && cmp.getValue();
 
 		console.log('changed visibility to: ', value.visibility);

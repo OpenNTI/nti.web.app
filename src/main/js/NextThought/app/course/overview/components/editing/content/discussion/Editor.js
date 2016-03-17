@@ -22,7 +22,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 					title: 'Pick a Discussion',
 					advanced: true,
 					category: 'Discussion',
-					iconCls: 'Discussion',
+					iconCls: 'discussion',
 					description: '',
 					editor: this
 				}

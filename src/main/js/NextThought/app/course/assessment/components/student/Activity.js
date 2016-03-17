@@ -245,9 +245,9 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 	deriveEvents: function(assignment, historyItem) {
 		var me = this,
 			now = new Date(),
-			submission = historyItem && historyItem.get('Submission'),
-			feedback = historyItem && historyItem.get('Feedback'),
-			grade = historyItem && historyItem.get('Grade'),
+			submission = historyItem && historyItem.get && historyItem.get('Submission'),
+			feedback = historyItem && historyItem.get && historyItem.get('Feedback'),
+			grade = historyItem && historyItem.get && historyItem.get('Grade'),
 			dateCompleted = submission && submission.get('CreatedTime'),
 			dateOpens = assignment && assignment.get('availableBeginning'),
 			dateDue = (assignment && assignment.get('availableEnding')) || now,

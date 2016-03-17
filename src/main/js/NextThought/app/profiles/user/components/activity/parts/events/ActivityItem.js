@@ -140,7 +140,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		if (this.commentsEl) {
 			var c = this.record.getReplyCount() || 0;
 			console.log('count was update to: ', c);
-			this.commentsEl.update(Ext.Format.plural(c, 'comment'));
+			this.commentsEl.update(Ext.util.Format.plural(c, 'comment'));
 		}
 	},
 

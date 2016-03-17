@@ -27,7 +27,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Edi
 					title: 'Pick a Video',
 					advanced: true,
 					category: 'Video',
-					iconCls: 'Video',
+					iconCls: 'video',
 					description: '',
 					editor: this
 				}
@@ -83,8 +83,31 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Edi
 	},
 
 
+	__getExcludedVideos: function(videos) {
+		var siblings = this.parentRecord ? this.parentRecord.get('Items') : [];
+
+		return siblings.reduce(function getVideoIds(acc, item) {
+				if (item instanceof NextThought.model.Video) {
+					acc.push(item.getId());
+				} else if (item instanceof NextThought.model.VideoRoll) {
+					acc = item.get('Items').reduce(getVideoIds, acc);
+				}
+
+				return acc;
+			}, []).reduce(function(acc, item) {
+				acc.push({
+					id: item,
+					msg: 'Videos can not be in the same section more than once'
+				});
+
+				return acc;
+			}, []);
+	},
+
+
 	showVideoList: function(selectedItems) {
-		var me = this;
+		var me = this,
+			exclude = me.__getExcludedVideos();
 
 		if (this.videoSelectionCmp) {
 			this.videoSelectionCmp.destroy();
@@ -110,6 +133,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.video.Edi
 			.then(me.__sortVideos.bind(me))
 			.then(function(videos) {
 				me.videoSelectionCmp.setSelectionItems(videos);
+				me.videoSelectionCmp.excludeItems(exclude);
 			});
 	},
 

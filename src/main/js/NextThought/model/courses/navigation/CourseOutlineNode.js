@@ -9,7 +9,8 @@ export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNod
 	requires: [
 		'NextThought.model.converters.Date',
 		'NextThought.model.courses.overview.Lesson',
-		'NextThought.model.courses.navigation.CourseOutlineNodeProgress'
+		'NextThought.model.courses.navigation.CourseOutlineNodeProgress',
+		'NextThought.model.Note'
 	],
 
 	mixins: {
@@ -201,6 +202,28 @@ export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNod
 		}
 
 		return contentNode;
+	},
+
+
+	getCommentCounts: function() {
+		var link = this.getLink('overview-summary');
+
+		if (!link) {
+			return Promise.resolve({});
+		}
+
+		return Service.request({
+			url: link,
+			method: 'GET',
+			params: {
+				accept: NextThought.model.Note.mimeType,
+				filter: 'TopLevel'
+			}
+		}).then(function(resp) {
+			return JSON.parse(resp);
+		}).fail(function(reason) {
+			console.error('Failed to load overview summary: ', reason);
+		});
 	},
 
 

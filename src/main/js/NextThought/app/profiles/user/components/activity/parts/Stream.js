@@ -3,7 +3,8 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 	alias: 'widget.profile-user-activity-stream',
 
 	requires: [
-		'NextThought.app.profiles.user.components.activity.parts.Page'
+		'NextThought.app.profiles.user.components.activity.parts.Page',
+		'NextThought.app.profiles.user.components.activity.parts.events.Empty'
 	],
 
 
@@ -14,7 +15,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		if (this.hasInitialWidget() && this.rendered) {
 			joined = this.down('joined-event');
 			if (joined && joined.setUser) {
-				joined.setUser(this.user);	
+				joined.setUser(this.user);
 			}
 		}
 	},
@@ -39,17 +40,77 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 	},
 
 
-	hasInitialWidget: function() {
-		return !!this.down('joined-event');
+	loadBatch: function(batch) {
+		if (batch.Items.length) {
+			this.removeEmpty();
+			this.fillInItems(batch.Items);
+		} else if (batch.isFirst && this.getPageCount() === 0) {
+			this.onEmpty(batch);
+		}
+
+ 		if (batch.isLast) {
+			this.onDone(this.StreamSource);
+ 			this.isOnLastBatch = true;
+ 		}
+ 	},
+
+
+	onDone: function(streamSource) {
+		var config = this.initialWidgetConfig();
+
+		if (this.shouldAddJoinedEvent(streamSource)) {
+			if (!this.hasInitialWidget()) {
+				this.joinedCmp = this.add(config);
+			}
+		} else if (this.joinedCmp) {
+			this.joinedCmp.destroy();
+		}
 	},
 
 
-	onDone: function() {
-		var config = this.initialWidgetConfig();
+	onEmpty: function(batch) {
+		var cmp = this.getGroupContainer(),
+			hasFilters = this.hasFiltersApplied(batch),
+			title, subtitle;
 
-		if (!this.hasInitialWidget()) {
-			this.add(config);
+		if (!this.emptyCmp) {
+			this.emptyCmp = cmp.add({
+				xtype: 'profile-activity-part-empty',
+				hasFilters: hasFilters
+			});
 		}
+	},
+
+
+	hasFiltersApplied: function(batch) {
+		var s = this.StreamSource;
+
+		if (batch && batch.FilteredTotalItemCount !== batch.TotalItemCount) {
+			return true;
+		}
+
+		if (!batch && s) {
+			return (s.extraParams && s.extraParams.value) || (s.accepts && s.accepts.value) || (s.filters && s.filters.value);
+		}
+
+		return false;
+	},
+
+
+	shouldAddJoinedEvent: function(source) {
+		var extra = source && source.extraParams,
+			createdTime = this.user && this.user.get('CreatedTime'),
+			inSeconds = (createdTime && createdTime.getTime()) / 1000;
+
+		if (extra && extra.batchAfter && !isNaN(inSeconds)) {
+			return inSeconds > extra.batchAfter;
+		}
+
+		if (source.accepts && source.accepts.value) {
+			return false;
+		}
+
+		return true;
 	}
 });
 

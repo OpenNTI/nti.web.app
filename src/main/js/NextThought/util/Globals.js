@@ -18,6 +18,7 @@ export default Ext.define('NextThought.util.Globals', {
 	HOST_PREFIX_PATTERN: /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i,
 	FILE_EXTENSION_PATTERN: /\..+$/,
 	INVALID_CHARACTERS_PATTERN: /^[^\/\\";=?<>#%'\{\}\|\^\[\]\-]+$/,
+	ESCAPE_REGEX_PATTERN: /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,
 
 
 	CANVAS_URL_SHAPE_BROKEN_IMAGE: 'whiteboard-error-image',
@@ -63,6 +64,11 @@ export default Ext.define('NextThought.util.Globals', {
 	},
 
 
+	escapeForRegex: function(str) {
+		return str.replace(this.ESCAPE_REGEX_PATTERN, '\\$&');
+	},
+
+
 	//A utility wrapper around JSON.parse to catch errors
 	parseJSON: function(s, safe) {
 		try {
@@ -75,6 +81,20 @@ export default Ext.define('NextThought.util.Globals', {
 			throw e;
 		}
 	},
+
+
+	parseError: function(response) {
+		var error,
+			status = response.status,
+			error;
+
+		if (status === 422) {
+			error = this.parseJSON(response.responseText, true);
+		}
+
+		return error;
+	},
+
 
 	//Remove leading and trailing /'s from a route
 	trimRoute: function(route) {

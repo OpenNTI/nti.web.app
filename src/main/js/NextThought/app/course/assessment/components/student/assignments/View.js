@@ -105,11 +105,21 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 
 			store.clearGrouping();
 			store.removeFilter('dueFilter');
+			store.removeFilter('duplicateLessons');
 
 
 			if (groupBy) {
 				//clear the active stores
 				me.activeStores = [];
+
+				if (groupBy !== 'lesson') {
+					store.filter({
+						id: 'duplicateLessons',
+						filterFn: function(rec) {
+							return !rec.get('isDuplicate');
+						}
+					});
+				}
 
 				//Getting rid of the past due filter until we can better define the behavior
 				//if (groupBy === 'due' && !me.showOlder && !search) {
@@ -166,22 +176,25 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 						}));
 
 					function fill(n) {
-						store.groupName = n.getTitle();
-						group.setTitle(n.get('title'));
-						group.setSubTitle(Ext.Date.format(
-								node.get('AvailableBeginning') || node.get('AvailableEnding'),
-								'F j, Y'
-							));
+						if (n) {
+							store.groupName = n.getTitle();
+							group.setTitle(n.get('title'));
+							group.setSubTitle(Ext.Date.format(
+									node.get('AvailableBeginning') || node.get('AvailableEnding'),
+									'F j, Y'
+								));
+						} else {
+							store.groupName = 'Other Assignments';
+							group.setTitle('Other Assignments');
+						}
 					}
 
 
 					groups.push(group);
 
-					me.mon(group.down('course-assessment-assignment-list'), 'itemclick', 'onItemClicked');
-
 					me.activeStores.push(store);
 
-					if (groupBy === 'lesson' && node) {
+					if (groupBy === 'lesson') {
 						fill(node);
 					} else {
 						group.setTitle(name);
@@ -199,7 +212,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 			} else {
 				groupPromise = Promise.resolve();
 			}
-
+			
 			if (state && state.search) {
 				this.filterSearchValue(state.search);
 			}
@@ -212,16 +225,16 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 	},
 
 
-	onItemClicked: function(s, record, dom) {
-		var date = Ext.Date.format(record.get('opens'), 'l F j \\a\\t g:i A'),
-			item = record && record.get('item'),
-			parts = item && item.get('parts');
+	navigateToItem: function(assignment) {
+		var openDate = assignment.get('availableBeginning'),
+			date = Ext.Date.format(openDate, 'l F j \\a\\t g:i A');
 
-		if (Ext.fly(dom).hasCls('closed')) {
+		if (!assignment.isOpen()) {
 			alert(getFormattedString('NextThought.view.courseware.assessment.assignments.View.available', { date: date}));
 			return;
 		}
-		this._showAssignment(record);
+
+		this.showAssignment(assignment);
 	},
 
 
@@ -229,6 +242,8 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		return [
 			{name: 'lesson', type: 'string'},
 			{name: 'outlineNode', type: 'auto'},
+			{name: 'isDuplicate', type: 'bool'},
+			{name: 'actualId', type: 'string'},
 			{name: 'id', type: 'string'},
 			{name: 'containerId', type: 'string'},
 			{name: 'name', type: 'string'},
@@ -257,7 +272,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 
 		this.on('filters-changed', this.updateFilters.bind(this));
-		this.on('search-changed', 'filterSearchValue');
+		this.on('search-changed', this.updateFilters.bind(this));
 
 		this.store = new Ext.data.Store({
 			fields: this.getFields(),
@@ -390,13 +405,23 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 			outlineInterface: outlineInterface
 		};
 
-		function finish(outlineInterface) {
+		function finish(results) {
+			var outlineInterface = results[1];
+
 			me.data.outline = outlineInterface.getOutline();
 			//Becasue this view has special derived fields, we must just listen for changes on the
 			// assignments collection itself and trigger a refresh. This cannot simply be a store
 			// of HistoryItems.
 			return me.applyAssignmentsData();
 		}
+
+		return Promise.all([
+				assignments.updateAssignments(),
+				outlineInterface.onceBuilt()
+			]).then(finish)
+			.fail(function(reason) {
+				console.error('Failed to get course outline!', reason);
+			});
 
 		return	outlineInterface.onceBuilt()
 			.then(finish)
@@ -413,6 +438,49 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 			outlineInterface = me.data.outlineInterface,
 			assignments = me.data.assignments;
 
+		function findOutlineNodes(id) {
+			var outlineNodes = assignments.getOutlineNodesContaining(id) || [];
+
+			if (outlineNodes.length > 1) {
+				//TODO: figure out how to show an entry in every lesson group
+				console.warn('Assignment is in more than one outline node, just taking the last.');
+			}
+
+			if (!outlineNodes.length) {
+				return null;
+			}
+
+			return outlineNodes;
+		}
+
+
+		function buildConfig(id, assignment, history, grade, node, actualId) {
+			return {
+				id: id,
+				containerId: assignment.get('containerId'),
+				lesson: node ? node.getId() : 'Other Assignments',
+				isDuplicate: !!actualId,
+				actualId: actualId,
+				outlineNode: node,
+				item: assignment,
+				name: assignment.get('title'),
+				opens: assignment.get('availableBeginning'),
+				due: assignment.get('availableEnding'),
+				maxTime: assignment.isTimed && assignment.getMaxTime(),
+				duration: assignment.isTimed && assignment.getDuration(),
+
+				completed: history && history.get('completed'),
+				correct: history && history.get('correct'),
+
+				history: history,
+
+				total: assignment.tallyParts(),
+				submittedCount: assignment.get('SubmittedCount') | 0,
+				enrolledCount: bundle.get('TotalEnrolledCount'),
+				reportLinks: assignment.getReportLinks()
+			};
+		}
+
 		function collect(assignment) {
 			if (assignment.doNotShow()) { return; }
 
@@ -421,41 +489,42 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 			waitsOn.push(Promise.all([
 				assignments.getHistoryItem(id, true).fail(function() { return; }),
 				assignments.getGradeBookEntry(id),
-				assignments.getOutlineNode(id, outlineInterface)
+				findOutlineNodes(id)
 			])
 				.then(function(results) {
 					var history = results[0],//history item
 						grade = results[1],//gradebook entry
-						node = results[2];//outline node
+						nodes = results[2] || [];//outline node
 
-					return {
-						id: id,
-						containerId: assignment.get('containerId'),
-						lesson: node ? node.getTitle() : 'Other Assignments',
-						outlineNode: node,
-						item: assignment,
-						name: assignment.get('title'),
-						opens: assignment.get('availableBeginning'),
-						due: assignment.get('availableEnding'),
-						maxTime: assignment.isTimed && assignment.getMaxTime(),
-						duration: assignment.isTimed && assignment.getDuration(),
+					if (nodes.length === 0) {
+						return buildConfig(id, assignment, history, grade);
+					}
 
-						completed: history && history.get('completed'),
-						correct: history && history.get('correct'),
+					return nodes.reduce(function(acc, node, index) {
+						var node = outlineInterface.findOutlineNode(node),
+							actualId;
 
-						history: history,
+						if (index !== 0) {
+							actualId = id;
+							id = actualId + '#' + index;
+						}
 
-						total: assignment.tallyParts(),
-						submittedCount: assignment.get('SubmittedCount') | 0,
-						enrolledCount: bundle.get('TotalEnrolledCount'),
-						reportLinks: assignment.getReportLinks()
-					};
+						acc.push(buildConfig(id, assignment, history, grade, node, actualId));
+
+						console.log(outlineInterface);
+						return acc;
+					}, []);
 				}));
 		}
 
 		assignments.each(collect);
 
 		return Promise.all(waitsOn)
+			.then(function(items) {
+				return items.reduce(function(acc, item) {
+					return acc.concat(item);
+				}, []);
+			})
 			.then(me.store.loadRawData.bind(me.store))
 			.then(me.restoreState.bind(me));
 	},
@@ -472,7 +541,11 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 
 
 	newAssignmentList: function(grouper) {
-		return { xtype: 'course-assessment-assignment-list', store: grouper.store };
+		return {
+			xtype: 'course-assessment-assignment-list',
+			store: grouper.store,
+			navigateToItem: this.navigateToItem.bind(this)
+		};
 	},
 
 
@@ -507,23 +580,8 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 
 
 	showAssignment: function(assignment) {
-		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
-			x = this.store.getById(id);
-
-		if (!x) {
-			console.warn('Assignment not found:', id);
-			return;
-		}
-
-		return this._showAssignment(x);
-	},
-
-
-	_showAssignment: function(record) {
-		var item = record.get('item');
-
-		if (item) {
-			this.navigateToObject(item);
+		if (assignment) {
+			this.navigateToObject(assignment);
 		} else {
 			console.error('No Assignment to navigate to');
 		}

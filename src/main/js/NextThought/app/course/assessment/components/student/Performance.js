@@ -331,6 +331,10 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 
 			waitsOn.push(assignments.getHistoryItem(o.getId(), true)
 				.always(function(h) {
+					if (typeof h === 'string') {
+						h = null;
+					}
+
 					var submission = h && h.get('Submission'),
 						feedback = h && h.get('Feedback'),
 						grade = h && h.get('Grade'),

@@ -15,33 +15,40 @@
 			box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);
 
 			.icon {
-				height: 100px;
+				height: 80px;
+				width: 80px;
+				margin: 10px;
 
 				&.document {
-					@include icon('upload-file', $side: after, $top: 50%, $left: 50%);
-
-					&::after {
-						margin-top: -15px;
-						margin-left: -15px;
-					}
+					@include icon('upload-file', $side: after, $top: 0, $left: 0);
 				}
 
 				&.reading {
-					@include icon('content', $side: after, $top: 50%, $left: 50%);
-
-					&::after {
-						margin-top: -15px;
-						margin-left: -16px;
-					}
+					@include icon('content', $side: after, $top: 0, $left: 0);
 				}
 
 				&.link {
-					@include icon('link', $side: after, $top: 50%, $left: 50%);
+					@include icon('link', $side: after, $top: 0, $left: 0);
+				}
 
-					&::after {
-						margin-top: -17px;
-						margin-left: -17px;
-					}
+				&.video {
+					@include icon('video-content', $side: after, $top: 0, $left: 0);
+				}
+
+				&.discussion {
+					@include icon('discussion-content', $side: after, $top: 0, $left: 0);
+				}
+
+				&.assessment {
+					@include icon('self-assessment-content', $side: after, $top: 0, $left: 0);
+				}
+
+				&.assignment {
+					@include icon('assignment-content', $side: after, $top: 0, $left: 0);
+				}
+
+				&.timeline {
+					@include icon('timeline-content', $side: after, $top: 0, $left: 0);
 				}
 			}
 

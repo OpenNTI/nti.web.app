@@ -39,11 +39,18 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Disc
 
 	constructor: function(config) {
 		var n = config.node || {getAttribute: function(a) { return config[a];} },
-			i = config.locationInfo || {};
+			i = config.locationInfo || {},
+			icon = n.getAttribute('icon');
+
+		if (icon) {
+			icon = this.getIcon(icon, i.root || '');
+		} else {
+			icon = NextThought.model.DiscussionRef.defaultIcon;
+		}
 
 		config.data = {
 			title: n.getAttribute('title'),
-			icon: this.getIcon(n.getAttribute('icon'), (i.root || '')),
+			icon: icon,
 			ntiid: n.getAttribute('ntiid').split(' '),
 			label: n.getAttribute('label'),
 			comments: 0,

@@ -96,7 +96,38 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 						}
 					})
 				},
-				Grade: { dataIndex: 'FinalGrade', sortOn: 'Grade', width: 150}
+				Grade: {
+					dataIndex: 'FinalGrade',
+					sortOn: 'Grade',
+					width: 150,
+					tpl: new Ext.XTemplate(Ext.DomHelper.markup([
+						{tag: 'tpl', 'if': 'this.showGradebox(values)', cn: [
+							{cls: 'gradebox', cn: [
+								{tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{[this.getGrade(values)]}'},
+								{cls: 'dropdown letter grade', tabindex: '1', html: '{[this.getLetter(values)]}'}
+							]}
+						]}
+					]), {
+						showGradebox: function(values) {
+							return values.AvailableFinalGrade;
+						},
+						getGrade: function(values) {
+							var historyItem = values.HistoryItemSummary,
+								grade = historyItem && historyItem.get('Grade'),
+								gradeVals = (grade && grade.getValues()) || {};
+
+							return gradeVals.value || '';
+						},
+
+						getLetter: function(values) {
+							var historyItem = values.HistoryItemSummary,
+								grade = historyItem && historyItem.get('Grade'),
+								gradeVals = (grade && grade.getValues()) || {};
+
+							return gradeVals.letter || '';
+						}
+					})
+				}
 			},
 			extraColumns: {
 				PredictedGrade: {
@@ -745,6 +776,12 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 
 					if (state.searchKey) {
 						me.setSearch(state.searchKey);
+					}
+
+					if (store.hasFinalGrade()) {
+						me.grid.showColumn('Grade');
+					} else {
+						me.grid.hideColumn('Grade');
 					}
 
 					fulfill();

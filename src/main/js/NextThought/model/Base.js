@@ -83,6 +83,8 @@ export default Ext.define('NextThought.model.Base', {
 		{ name: 'OID', type: 'string', persist: false },
 		{ name: 'accepts', type: 'auto', persist: false, defaultValue: [] },
 		{ name: 'href', type: 'string', persist: false, convert: function(v) {
+			if (!v) { return ''; }
+
 			var a = NextThought.model.Base.getLocationInterfaceAt(v), q;
 
 			if (a.search) {
@@ -240,6 +242,54 @@ export default Ext.define('NextThought.model.Base', {
 		newRecord = ParseUtils.parseItems([json])[0];
 
 		return this.syncWith(newRecord);
+	},
+
+
+	/**
+	 * Get the link to request updated values from on the server
+	 *
+	 * @return {String} the link
+	 */
+	__getLinkForUpdate: function() {
+		return this.get('href');
+	},
+
+	/**
+	 * Update this record from the server.
+	 *
+	 * If we are unable to find a href or the update fails, just return
+	 * the record with the same values.
+	 *
+	 * @return {Promise} fulfills with the record after it is updated
+	 */
+	updateFromServer: function() {
+		var me = this,
+			link = this.__getLinkForUpdate(),
+			update;
+
+		if (link) {
+			update = Service.request(link)
+				.then(function(response) {
+					me.syncWithResponse(response);
+
+					return me;
+				});
+		} else {
+			console.warn('No link to update record from server with. ', this);
+			update = Service.getObject(this.getId())
+				.then(function(object) {
+					me.syncWith(object);
+
+					return me;
+				});
+		}
+
+		return update
+			.fail(function(reason) {
+				console.error('Failed to update record from server.', reason);
+
+				return me;
+			});
 	},
 
 

@@ -23,13 +23,15 @@ export default Ext.define('NextThought.model.courses.CourseInstance', {
 		'NextThought.model.UserSearch',
 		'NextThought.model.Video',
 		'NextThought.model.assessment.Assignment',
-		'NextThought.model.assessment.QuestionSet'
+		'NextThought.model.assessment.QuestionSet',
+		'NextThought.mixins.AuditLog'
 	],
 
 	mixins: {
 		'BundleLike': 'NextThought.mixins.BundleLike',
 		'PresentationResources': 'NextThought.mixins.PresentationResources',
-		'DurationCache': 'NextThought.mixins.DurationCache'
+		'DurationCache': 'NextThought.mixins.DurationCache',
+		auditLog: 'NextThought.mixins.AuditLog'
 	},
 
 	fields: [
@@ -905,7 +907,12 @@ export default Ext.define('NextThought.model.courses.CourseInstance', {
 	getVideoAssets: function() {
 		return this.__getAssets(NextThought.model.Video.mimeType);
 	},
-
+	
+	
+	getTimelineAssets: function() {
+		return this.__getAssets(NextThought.model.Timeline.mimeType);	
+	},
+	
 
 	getDiscussionAssets: function() {
 		var link = this.getLink('CourseDiscussions');

@@ -4,7 +4,7 @@ export default Ext.define('NextThought.app.course.assessment.AssignmentStatus', 
 
 	statics: {
 		statusTpl: new Ext.XTemplate(
-			Ext.DomHelper.markup({cls: 'assignment-status', cn: [
+			Ext.DomHelper.markup({cls: 'assignment-status {cls}', cn: [
 				{tag: 'tpl', 'if': 'maxTime', cn: [
 					{cls: 'status-item maxTime {maxTime.cls}', html: '{maxTime.html}'}
 				]},
@@ -176,6 +176,8 @@ export default Ext.define('NextThought.app.course.assessment.AssignmentStatus', 
 		 */
 		getStatusHTML: function(data) {
 			var renderData = this.getRenderData(data);
+
+			renderData.cls = renderData.due ? renderData.due.cls : '';
 
 			return this.statusTpl.apply(renderData);
 		},

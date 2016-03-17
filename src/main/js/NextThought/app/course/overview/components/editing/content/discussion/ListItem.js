@@ -16,6 +16,11 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 	],
 
 
+	dropPlaceholderStyles: {
+		side: 'left'
+	},
+
+
 	getPreviewType: function() {
 		return 'course-overview-discussion';
 	}

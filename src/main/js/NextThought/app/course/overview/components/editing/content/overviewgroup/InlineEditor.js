@@ -88,12 +88,15 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 	getSelectedColor: function() {
 		var selectedEl = this.getSelectedColorEl(),
+			recordColor = this.record && this.record.get('accentColor'),
 			value;
 
 		if (this.colorInput) {
 			value = this.colorInput && this.colorInput.dom.value;
 		} else if (selectedEl) {
 			value = selectedEl.getAttribute('data-value');
+		} else if (recordColor) {
+			value = recordColor;
 		}
 
 		return value;

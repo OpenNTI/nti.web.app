@@ -14,9 +14,14 @@ Ext.define('NextThought.app.dnd.Draggable', {
 			throw 'No getDragTarget passed!';
 		}
 
+		this.getDragBoundingClientRect = config.getDragBoundingClientRect;
+
 		this.getDragHandle = config.getDragHandle;
 		this.onDragStart = config.onDragStart;
 		this.onDragEnd = config.onDragEnd;
+
+		this.dropPlaceholderStyles = config.dropPlaceholderStyles;
+		this.ghostImageScale = config.ghostImageScale !== undefined ? config.ghostImageScale : 1;
 
 		this.transferData = new NextThought.store.DataTransfer();
 
@@ -130,6 +135,19 @@ Ext.define('NextThought.app.dnd.Draggable', {
 	},
 
 
+	getPlaceholderStyles: function() {
+		var styles = this.dropPlaceholderStyles || {},
+			rect = this.getDragBoundingClientRect && this.getDragBoundingClientRect();
+
+		if (rect) {
+			styles.width = styles.width || (rect.width * this.ghostImageScale);
+			styles.height = styles.height || (rect.height * this.ghostImageScale);
+		}
+
+		return styles;
+	},
+
+
 	__dragStart: function(e) {
 		var el = this.getDragTarget(),
 			info = this.getDnDEventData();
@@ -163,7 +181,7 @@ Ext.define('NextThought.app.dnd.Draggable', {
 
 	__dragEnd: function(e) {
 		var el = this.getDragTarget(),
-			handle = this.getDragHandle(),
+			handle = this.getDragHandle && this.getDragHandle(),
 			dropEffect = e.dataTransfer && e.dataTransfer.dropEffect;
 
 		this.DnDActions.endDrag(this);
@@ -188,9 +206,9 @@ Ext.define('NextThought.app.dnd.Draggable', {
 		var el = this.getDragTarget(),
 			handle = this.getDragHandle && this.getDragHandle();
 
-		delete this.Draggable.isDragging;
+		delete this.isDragging;
 
-		this.DnDActions.removeActiveDragItem(this);
+		this.DnDActions.endDrag(this);
 
 		if (handle) {
 			this.__handleMouseUp();

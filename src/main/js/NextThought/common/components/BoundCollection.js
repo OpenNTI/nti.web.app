@@ -49,6 +49,14 @@ Ext.define('NextThought.common.components.BoundCollection', {
 	},
 
 
+	getComponents: function() {
+		var body = this.getBodyContainer(),
+			items = body && body.items && body.items.items;
+
+		return items || [];
+	},
+
+
 	parseCollection: function(response) {
 		var obj = ParseUtils.parseItems(response)[0];
 
@@ -218,7 +226,7 @@ Ext.define('NextThought.common.components.BoundCollection', {
 		 		merge.push({record: newItem, type: '', oldRecord: oldItem});
 		 	} else {
 		 		if (oldRecords[newItem.getId()]) {
-		 			merge.push({record: newItem, type: NextThought.mixins.Transition.LIST_MOVE, oldRecord: oldItem});
+		 			merge.push({record: newItem, type: NextThought.mixins.Transition.LIST_MOVE, oldRecord: newItem});
 		 		} else {
 		 			merge.push({record: newItem, type: NextThought.mixins.Transition.LIST_ADD, oldRecord: oldItem});
 		 		}

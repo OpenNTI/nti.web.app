@@ -68,6 +68,15 @@ Ext.define('NextThought.app.course.overview.components.types.Toc', {
 	},
 
 
+	setCommentCounts: function(commentCounts) {
+		this.items.each(function(item) {
+			if (item.setCommentCounts) {
+				item.setCommentCounts(commentCounts);
+			}
+		});
+	},
+
+
 	buildFromToc: function(node, locInfo, assignments, course) {
 		var me = this,
 			SECTION_CONTAINER_MAP = me.SECTION_CONTAINER_MAP,
@@ -81,9 +90,9 @@ Ext.define('NextThought.app.course.overview.components.types.Toc', {
 		Ext.each(children, function(i) {
 			var c, t, p;
 
-			if(i.isModel){
+			if (i.isModel) {
 				items.push(me.getComponentForRecord(i));
-			}else{
+			} else {
 				if (i.getAttribute('suppressed') === 'true') {
 					return;
 				}
@@ -195,7 +204,7 @@ Ext.define('NextThought.app.course.overview.components.types.Toc', {
 	},
 
 
-	collapseVideos: function(nodes){
+	collapseVideos: function(nodes) {
 		var me = this,
 			children;
 
@@ -228,7 +237,7 @@ Ext.define('NextThought.app.course.overview.components.types.Toc', {
 		return children;
 	},
 
-	createVideo: function(node){
+	createVideo: function(node) {
 		var ntiid = node.getAttribute('ntiid'),
 			item = this.videoIndex[ntiid];
 

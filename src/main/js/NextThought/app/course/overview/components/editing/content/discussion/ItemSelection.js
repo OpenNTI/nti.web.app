@@ -2,6 +2,10 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 	extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
 	alias: 'widget.overview-editing-discussion-item-selection',
 
+	requires: [
+		'NextThought.model.DiscussionRef'
+	],
+
 	multiSelect: false,
 
 	cls: 'discussion-item-selection item-selection',
@@ -21,15 +25,24 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 
 	getItemData: function(item) {
 		return {
-			thumbnail: this.getThumbnail(item),
+			thumbnail: this.getThumbnailURL(item),
 			title: item.get('title')
 		};
 	},
 
 
-	getThumbnail: function(item){
-		var url = (this.basePath || '') + item.get('icon');
-		return getURL(url);
+	getThumbnailURL: function(item) {
+		var iconURL = item && item.get('icon');
+		if (iconURL) {
+			if (Globals.ROOT_URL_PATTERN.test(iconURL)) {
+				return getURL(iconURL);
+			}
+
+			iconURL = (this.basePath || '') + iconURL;
+			return getURL(iconURL);
+		}
+
+		return '';
 	},
 
 
@@ -46,7 +59,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.discussio
 	},
 
 
-	showEmptyState: function(){
+	showEmptyState: function() {
 		// Display empty state
 		this.itemsContainer.add({
 			xtype: 'box',

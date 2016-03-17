@@ -40,6 +40,10 @@ export default Ext.define('NextThought.app.stream.util.StreamSource', {
 		this.url = config.url;
 		this.extraParams = config.extraParams || {};
 
+		if (config.modifier) {
+			this.extraParams = Ext.apply(this.extraParams, config.modifier);
+		}
+
 		this.batch = {
 			param: config.batchParam || 'batchStart',
 			value: config.batch

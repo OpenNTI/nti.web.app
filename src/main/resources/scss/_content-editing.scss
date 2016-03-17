@@ -208,6 +208,7 @@
 					    padding: 0 15px;
 					    text-align: left;
 					    border-bottom: 1px solid #eae9e9;
+					    text-transform: capitalize;
 
 					    &.selected {
 					    	color: $primary-blue;
@@ -413,7 +414,7 @@ input[type=number]{
 	padding: 1.0em 2rem;
 	position: relative;
 	box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
-	z-index: 1;
+	z-index: 2;
 
 
 	.title {
@@ -687,6 +688,7 @@ input[type=number]{
 				&.dragging{
 					overflow: hidden;
 					max-height: 0;
+					opacity: 0;
 				}
 			}
 		}
@@ -1314,7 +1316,7 @@ input[type=number]{
 
 	.overview-group-body {
 		padding: 13px 12px;
-		overflow: hidden;
+		@include containFloats();
 	}
 
 	.overview-group-title {
@@ -1326,15 +1328,41 @@ input[type=number]{
 		background: white;
 		margin-bottom: 10px;
 		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+		clear: both;
+
+		&:not(.transition) {
+			max-height: 500px;
+			max-width: 800px;
+			transition: max-height 0.1s;
+
+			@include containFloats();
+		}
+
+		&.dragging {
+			opacity: 0;
+			max-height: 0;
+			max-width: 0;
+			float: left;
+			clear: none;
+		}
 
 		&:last-of-type {
 			margin-bottom: 0;
 		}
 
+
 		&.discussion {
 			width: 230px;
 			margin: 5px 5px 5px;
 			float: left;
+			transition: max-width 0.1s;
+			clear: none;
+
+			&.dragging {
+				max-width: 0;
+				max-height: 500px;
+				margin: 0;
+			}
 
 			.overview-discussion {
 				width: 210px;
@@ -1364,11 +1392,17 @@ input[type=number]{
 
 		.body {
 			padding: 12px 10px;
-			overflow: hidden;
+			@include containFloats();
 
 			& > .overview-video {
 				width: auto !important;
 				overflow: hidden;
+			}
+
+			& > .overview-videos {
+				.body {
+					margin: 0;
+				}
 			}
 		}
 	}
@@ -1435,6 +1469,7 @@ input[type=number]{
 		&.dragging {
 			box-shadow: none;
 			max-height: 0;
+			opacity: 0;
 		}
 
 		.close {

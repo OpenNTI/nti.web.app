@@ -28,6 +28,49 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 	},
 
 
+	setCommentCounts: function(commentCounts) {
+		var body = this.getBodyContainer();
+
+		this.commentCounts = commentCounts;
+
+		if (!body) {
+			return;
+		}
+
+		body.items.each(function(item) {
+			if (item.setCommentCounts) {
+				item.setCommentCounts(commentCounts);
+			}
+		});
+	},
+
+
+	onceLoaded: function() {
+		var me = this;
+
+		return new Promise(function(fulfill, reject) {
+			if (me.collectionSet) {
+				fulfill();
+			} else {
+				me.on({
+					single: true,
+					'collection-set': fulfill
+				});
+			}
+		}).then(function() {
+			var cmps = me.getComponents();
+
+			return Promise.all(cmps.map(function(cmp) {
+				if (cmp.onceLoaded) {
+					return cmp.onceLoaded();
+				}
+
+				return Promise.resolve();
+			}));
+		});
+	},
+
+
 	__collapseGroup: function(group) {
 		var items = group.Items;
 
@@ -84,6 +127,13 @@ Ext.define('NextThought.app.course.overview.components.types.Content', {
 	afterSetCollection: function() {
 		if (this.progress) {
 			this.setProgress(this.progress);
+		}
+
+		this.collectionSet = true;
+		this.fireEvent('collection-set');
+
+		if (this.commentsCounts) {
+			this.setCommentCounts(this.commentsCounts);
 		}
 	},
 

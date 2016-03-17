@@ -11,11 +11,15 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.as
 
 
 	newAssignmentList: function(grouper) {
-		return {xtype: 'course-assessment-assignment-admin-list', store: grouper.store };
+		return {
+			xtype: 'course-assessment-assignment-admin-list',
+			store: grouper.store,
+			navigateToItem: this.navigateToItem.bind(this)
+		};
 	},
 
 
-	onItemClicked: function(view, rec) {
+	navigateToItem: function(rec) {
 		if (!rec) {
 			console.error('Ignoring click because no record was passed', arguments);
 			return;
@@ -36,9 +40,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.as
 	},
 
 
-	goToRecord: function(rec) {
-		var assignment = rec.get('item');
-
+	goToRecord: function(assignment) {
 		if (assignment) {
 			this.showStudentsForAssignment(assignment);
 		}

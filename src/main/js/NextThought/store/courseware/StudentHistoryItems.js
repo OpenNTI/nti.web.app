@@ -56,6 +56,18 @@ export default Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 	},
 
 
+	getAvailableAssignments: function() {
+		return this.proxy.reader.AvailableAssignmentNTIIDs;
+	},
+
+
+	__hasAccessTo: function(assignment) {
+		var available = this.getAvailableAssignments();
+
+		return !available || (available.indexOf(assignment.getId()) >= 0);
+	},
+
+
 	fillInHistories: function() {
 		var me = this;
 
@@ -76,7 +88,7 @@ export default Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 				});
 
 				me.__replaceWithCachedInstance(entry);
-			} else if (!assignment.doNotShow()) {
+			} else if (!assignment.doNotShow() && me.__hasAccessTo(assignment)) {
 				me.add(me.assignments.createPlaceholderHistoryItem(assignment, me.student));
 			}
 		});

@@ -300,6 +300,16 @@
 }
 
 .course-overview {
+	.empty-state {
+		background: #ffffff;
+	    padding: 2em;
+	    margin-top: 0;
+
+		a.edit {
+			color: $primary-blue;
+			cursor: pointer;
+		}
+	}
 	.editing-controls {
 		margin-bottom: 20px;
 		overflow: hidden;
@@ -336,9 +346,13 @@
 	.overview-naquestionset {
 		margin-top: 5px;
 		position: relative;
+		min-height: 76px;
+		overflow: hidden;
 
 		.x-panel-body-assessment {
 			padding: 0 15px 0 90px;
+			min-height: 76px;
+			overflow: visible;
 		}
 
 		canvas.score {
@@ -361,28 +375,83 @@
 			}
 		}
 
-		.x-btn {
+		.assignment-box {
+			position: relative;
+			min-height: 76px;
+			padding: 15px 90px 0 25px;
+
+			.title {
+				display: inline-block;
+				vertical-align: middle;
+				font-size: 1.125em;
+				max-width: 515px;
+				margin-bottom: 1em;
+			}
+		}
+
+		.assignment-status-container {
+			background-color: #fcfcfc;
+			margin-top: -30px;
+
+			.status-container {
+				margin-left: 90px; //25 + 40 + 25
+				margin-bottom: 10px;
+			}
+
+			.menu-container {
+				position: relative;
+
+				&::before {
+					content: '';
+					display: block;
+					position: absolute;
+					top: 0;
+					left: 10px; right: 10px;
+					border-top: 1px solid #e3e3e3;
+				}
+			}
+			
+			.assignment-due-date-editor {
+				& > .contents {
+					padding: 25px 0 0 90px;
+				}
+			}
+		}
+
+		.x-btn.review-btn {
 			position: absolute;
 			right: 15px;
 			top: 50%;
 			margin-top: -18px;//37 / 2
+			z-index: 1;
 		}
 
 		&.assignment{
-			@include icon('assignment_due', $side:'before', $top:50%, $left: 25px);
-
-			&::before {
-				margin-top: -20px;//40/2
+			.x-panel-body-assessment {
+				padding: 0;
 			}
 
-			&.ontime::before{
+			.assignment-box {
+				@include icon('assignment_due', $side:'before');
+
+				&::before {
+					position: relative;
+					display: inline-block;
+					vertical-align: middle;
+					margin-right: 25px;
+					z-index: 1;
+				}
+
+			}
+
+			&.ontime .assignment-box::before{
 				@include sprite($icons, 'assignment_ontime');
 			}
 
-			&.late::before{
+			&.late .assignment-box::before{
 				@include sprite($icons, 'assignment_late');
 			}
-			&.nosubmit::before{
+			&.nosubmit .assignment-box::before{
 				@include sprite($icons, 'assignment_due');
 			}
 		}
@@ -607,6 +676,12 @@
 
 	.group-container {
 		clear: both;
+	
+		&::after {
+			content: '';
+			display: block;
+			clear: both;
+		}
 	}
 
 	.content-card {

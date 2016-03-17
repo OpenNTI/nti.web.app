@@ -1,6 +1,11 @@
 Ext.define('NextThought.mixins.MovingRoot', {
 	isMovingRoot: true,
 
+
+	requires: [
+		'NextThought.app.dnd.Actions'
+	],
+
 	mixins: {
 		OrderedContents: 'NextThought.mixins.OrderedContents'
 	},
@@ -79,7 +84,8 @@ Ext.define('NextThought.mixins.MovingRoot', {
 	 * @param  {String} response the response from the server
 	 */
 	__onMoveOperation: function(record, newParent, originalParent, response) {
-		var updatedNewParent, updatedOriginalParent, updatedRecord;
+		var updatedNewParent, updatedOriginalParent, updatedRecord,
+			dndActions = NextThought.app.dnd.Actions.create();
 
 		if (!originalParent.isModel) {
 			originalParent = this.findOrderedContentsItem(originalParent);
@@ -91,6 +97,10 @@ Ext.define('NextThought.mixins.MovingRoot', {
 
 		updatedNewParent = newParent && this.findOrderedContentsItem(newParent.getId());
 		updatedOriginalParent = originalParent && this.findOrderedContentsItem(originalParent.getId());
+
+		if (dndActions) {
+			dndActions.removeAllPlaceholders();
+		}
 
 		if (updatedOriginalParent) {
 			originalParent.syncWith(updatedOriginalParent);

@@ -11,7 +11,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -69,7 +69,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 	},
 
 
-	setupCourseEmail: function(emailLink){	
+	setupCourseEmail: function(emailLink) {
 		var emailEl = this.el.down('.email');
 		this.emailLink = emailLink;
 

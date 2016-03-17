@@ -24,6 +24,7 @@ export default Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 					list = (data && data.records) || [],
 					i = list.length - 1, o, u;
 
+				this.availableFinalGrade = resp.AvailableFinalGrade;
 				this.currentPage = resp.BatchPage;
 				this.EnrollmentScope = resp.EnrollmentScope;
 
@@ -200,6 +201,11 @@ export default Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 	},
 
 
+	hasFinalGrade: function() {
+		return this.proxy.reader.availableFinalGrade;
+	},
+
+
 	getCurrentPage: function() {
 		return this.proxy.reader.currentPage || 1;
 	},
@@ -234,5 +240,9 @@ export default Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 		if (current > 1) {
 			this.loadPage(current - 1);
 		}
-	}
+	},
+
+	//Override this, sorting should only take place
+	//from state updating and calling load
+	doSort: function() {}
 });

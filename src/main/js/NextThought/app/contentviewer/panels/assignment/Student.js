@@ -95,7 +95,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.assignment.Stude
 			readerAssessment = reader && reader.getAssessment(),
 			assignment = me.assignment,
 			savepoint = assignment && assignment.getSavePoint(),
-			assignmentHistory = me.assignmentHistory;
+			assignmentHistory = assignment ? assignment.getHistory() : me.assignmentHistory;
 
 		if (!reader) {
 			return;

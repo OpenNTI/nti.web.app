@@ -14,8 +14,8 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Time
 		var root = this.locationInfo && this.locationInfo.root,
 			width = this['suggested-width'],
 			height = this['suggested-height'],
-			thumbURL = root && this.icon.indexOf(root) === -1 ? root + this.icon : this.icon,
-			jsonURL = root && this.href.indexOf(root) === -1 ? root + this.href : this.href;
+			thumbURL = root && this.icon && this.icon.indexOf(root) === -1 ? root + this.icon : this.icon,
+			jsonURL = root && this.href && this.href.indexOf(root) === -1 ? root + this.href : this.href;
 
 		height = height ? parseInt(height, 10) : -1;
 		width = width ? parseInt(width, 10) : -1;

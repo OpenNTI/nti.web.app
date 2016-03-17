@@ -842,7 +842,7 @@ export default Ext.define('NextThought.util.Content', {
 				href = node.getAttribute('href'),
 				parts = href && Globals.getURLParts(href);
 
-			return tagName === 'topic' && href && !parts.hash;
+			return tagName === 'topic' && href && !parts.hash && !node.querySelector('object[mimeType$=assignment], object[mimeType$=naquestionset]');
 		});
 	},
 
@@ -879,15 +879,18 @@ export default Ext.define('NextThought.util.Content', {
 
 		function findReadings(toc) {
 			var navigation = buildNavigationMap(toc),
-				topLevel = toc.querySelectorAll('toc > topic');
+				topLevel = toc.querySelectorAll('toc > topic'),
+				t = toc.querySelector('toc'),
+				title = t && t.getAttribute('title'), filtered;
 
 			topLevel = Array.prototype.slice.call(topLevel);
 
-			return topLevel.filter(function(node) {
-				var ntiid = node.getAttribute('ntiid');
+			filtered = topLevel.filter(function(node) {
+							var ntiid = node.getAttribute('ntiid');
 
-				return !navigation[ntiid];
-			});
+							return !navigation[ntiid];
+						});
+			return {title: title, items: filtered};
 		}
 
 		return this.__resolveTocs(bundle)

@@ -78,7 +78,6 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Cont
 
 	afterRender: function() {
 		this.callParent(arguments);
-		this.loadContainer();
     //		console.log('Loading:',ntiid);
 	},
 
@@ -187,5 +186,13 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Cont
 		if (beenViewed) {
 			this.addCls('viewed');
 		}
+	},
+
+
+	setCommentCounts: function(commentCounts) {
+		var summary = commentCounts[this.record.getId()],
+			count = summary ? summary.ItemCount : 0;
+
+		this.appendTotal(count);
 	}
 });

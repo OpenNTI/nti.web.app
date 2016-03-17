@@ -115,6 +115,7 @@ export default Ext.define('NextThought.app.assessment.Poll', {
 		parts.hide();
 
 		this.addCls('showing-results');
+		this.removeCls('no-data');
 
 		this.add(Ext.widget('assessment-result', {
 			poll: this.poll,
@@ -130,9 +131,15 @@ export default Ext.define('NextThought.app.assessment.Poll', {
 	hideResults: function() {
 		var parts = this.down('question-parts'),
 			results = this.down('assessment-result'),
-			header = this.down('question-header');
+			header = this.down('question-header'),
+			surveyClosed = this.survey && this.survey.get('isClosed'),
+			pollClosed = this.poll.get('isClosed');
 
 		this.removeCls('showing-results');
+
+		if (!this.hasSubmission && (surveyClosed || pollClosed)) {
+			this.addCls('no-data');
+		}
 
 		parts.show();
 		header.maybeShow();

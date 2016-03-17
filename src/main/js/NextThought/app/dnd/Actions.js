@@ -35,16 +35,21 @@ Ext.define('NextThought.app.dnd.Actions', {
 	},
 
 
+	getPlaceholderStyles: function() {
+		return this.DnDStore.getPlaceholderStyles();
+	},
+
+
 	onNoDropHandler: function() {
-		if (this.activeDragItem) {
-			this.activeDragItem.onNoDrop();
-		}
+		this.onDropFail();
 	},
 
 
 	onDropFail: function() {
-		if (this.activeDragItem) {
-			this.activeDragItem.onNoDrop();
+		var activeDragItem = this.DnDStore.getActiveDragItem();
+
+		if (activeDragItem) {
+			activeDragItem.onNoDrop();
 		}
 	},
 
@@ -56,5 +61,17 @@ Ext.define('NextThought.app.dnd.Actions', {
 
 	removeWindowScrollListeners: function() {
 		this.pageScrollign.unscrollWhenDragNearEdges();
+	},
+
+	removeAllPlaceholders: function() {
+		var placeholders = document.querySelector('.dnd-drop-placeholder, .dnd-save-placeholder');
+
+		if(placeholders instanceof Array) {
+			placeholders.forEach(function(placeholder) {
+				placeholder.remove();
+			});
+		} else if(placeholders) {
+			placeholders.remove();
+		}
 	}
 });

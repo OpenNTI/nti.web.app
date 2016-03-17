@@ -78,7 +78,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Ra
 		if (option) {
 			dropdownContainer = me.el.down('.input-container.dropdown');
 
-			me.dropdown = Ext.widget('searchcombobox', {
+			me.dropdown = Ext.widget('legacysearchcombobox', {
 				options: me.dropdownoptions || option.options,
 				emptyText: option.placeholder,
 				renderTo: dropdownContainer

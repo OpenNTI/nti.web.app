@@ -192,7 +192,7 @@ export default Ext.define('NextThought.app.forums.components.topic.parts.Comment
 
 
 	allowNavigation: function() {
-		if (!this.editor.isActive()) {
+		if (!this.editor || !this.editor.isActive()) {
 			return true;
 		}
 

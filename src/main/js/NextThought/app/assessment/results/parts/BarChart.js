@@ -102,7 +102,7 @@ export default Ext.define('NextThought.app.assessment.results.parts.BarChart', {
 			legend = [];
 
 		rows.forEach(function(row) {
-			if (row.series.length <= 1) { return; }
+			if (row.series.length < 1) { return; }
 
 			row.series.forEach(function(item) {
 				if (item.label) {

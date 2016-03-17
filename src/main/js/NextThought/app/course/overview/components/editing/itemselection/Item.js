@@ -112,15 +112,51 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ite
 			return;
 		}
 
-		if (this.isSelected) {
-			this.unselectItem(this.selectionItem);
-		} else {
-			this.selectItem(this.selectionItem);
+		if (!e.getTarget('.excluded')) {
+			if (this.isSelected) {
+				this.unselectItem(this.selectionItem);
+			} else {
+				this.selectItem(this.selectionItem);
+			}
 		}
 
 		e.preventDefault();
 		e.stopPropagation();
 		return false;
+	},
+
+
+	unexclude: function(item) {
+		if (this.hasItemData) {
+			this.itemCmp.removeCls('excluded');
+			this.itemCmp.el.dom.removeAttribute('data-qtip');
+		}
+	},
+
+
+	maybeExclude: function(item) {
+		if (!this.hasItemData) {
+			this.on({
+				single: true,
+				'item-data-set': this.maybeExclude.bind(this, item)
+			});
+
+			return;
+		}
+
+		var id = typeof item === 'string' ? item : item.id,
+			msg = item.msg,
+			selectionItemId = this.getSelectionItemId(this.selectionItem);
+
+		if (id === selectionItemId) {
+			this.itemCmp.addCls('excluded');
+
+			if (msg) {
+				this.itemCmp.el.dom.setAttribute('data-qtip', msg);
+			} else {
+				this.itemCmp.el.dom.removeAttribute('data-qtip');
+			}
+		}
 	},
 
 
@@ -137,7 +173,7 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ite
 		var selectionItemId = this.getSelectionItemId(this.selectionItem),
 			itemId = this.getSelectionItemId(item);
 
-		if (selectionItemId === itemId) {
+		if (selectionItemId && selectionItemId === itemId) {
 			this.isSelected = true;
 			this.onSelectItem(this.itemCmp.el.dom);
 		}
@@ -165,7 +201,7 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ite
 		var selectionItemId = this.getSelectionItemId(this.selectionItem),
 			itemId = this.getSelectionItemId(item);
 
-		if (selectionItemId === itemId) {
+		if (selectionItemId && selectionItemId === itemId) {
 			this.isSelected = false;
 			this.onUnselectItem(this.itemCmp.el.dom);
 		}

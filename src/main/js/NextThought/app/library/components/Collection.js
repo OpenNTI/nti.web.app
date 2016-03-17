@@ -27,7 +27,10 @@ export default Ext.define('NextThought.app.library.components.Collection', {
 			{ cls: 'cover', cn: [
 				{tag: 'img', src: '{icon}'}
 			]},
-			{ tag: 'tpl', 'if': 'badge', cn: {cls: 'badge', html: '{badge}'}},
+			{ cls: 'controls', cn: [
+				{ tag: 'tpl', 'if': 'preview', cn: {cls: 'preview', html: '{preview}'}},
+				{ tag: 'tpl', 'if': 'badge', cn: {cls: 'badge', html: '{badge}'}}
+			]},
 			{ tag: 'tpl', 'if': 'enableSettings', cn: { cls: 'settings'}},
 			{ tag: 'tpl', 'if': 'sample', cn: { cls: 'sample', 'data-qtip': 'Sample' }}, //store - sample flag
 			{ cls: 'meta', 'aria-hidden': 'true', cn: [
@@ -64,10 +67,14 @@ export default Ext.define('NextThought.app.library.components.Collection', {
 	},
 
 	prepareData: function(data, index, record) {
-		var i = this.callParent(arguments);
-
+		var i = this.callParent(arguments),
+			catalog = record.getCourseCatalogEntry && record.getCourseCatalogEntry();
+		
 		if (record.getIconImage) {
 			record.getIconImage();
+		}
+		if (catalog && catalog.get('Preview')) {
+			i.preview = 'preview';
 		}
 
 		return i;
