@@ -46,6 +46,8 @@ var path = require('path');
 function getPathToClassName(cls) {
 	var parts = cls.split('.');
 
+	parts = parts.filter(function(part) { return part !== 'NextThought'; });
+
 	return 'src/main/js/' + parts.join('/');
 }
 
