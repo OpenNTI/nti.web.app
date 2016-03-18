@@ -23,7 +23,11 @@
 	},
 
 	"globals": {
-		"NextThought": true
+		"$AppConfig": true,
+		"NextThought": true,
+		"Service": true,
+
+		"getString": true
 	},
 
 	"rules": {

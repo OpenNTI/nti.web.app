@@ -5,14 +5,8 @@ src/main/resources/images/elements-*png
 src/main/resources/images/icons-*png
 
 #ignore minification byproducts
-app.min.js*
-
-#ext source and byproducts
-ext-4.2
-
-src/main/app
-src/main/javascript
-src/main/bootstrap.js
-node_modules
+stage
 dist
+
+node_modules
 npm-debug.log
