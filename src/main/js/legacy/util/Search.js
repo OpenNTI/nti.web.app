@@ -1,5 +1,5 @@
 var Ext = require('extjs');
-
+var XRegExp = require('xregexp');
 
 module.exports = exports = Ext.define('NextThought.util.Search', {
 

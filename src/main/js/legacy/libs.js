@@ -1,5 +1,4 @@
 loadExternalLibraries([
-	{'XRegExp': 'resources/lib/xregexp-all-min.js'},//https://github.com/slevithan/xregexp
 	{'Flash API': 'resources/lib/swfobject.js'},
 
 	{'jQuery': 'resources/lib/jQuery-1.8.0min.js'},

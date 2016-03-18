@@ -71,7 +71,8 @@
     "url": "^0.11.0",
     "url-loader": "^0.5.5",
     "webpack": "^1.8.9",
-    "whatwg-fetch": "^0.11.0"
+    "whatwg-fetch": "^0.11.0",
+    "xregexp": "^3.1.0"
   },
   "devDependencies": {
     "nti-unittesting-clientside": "^1.0.0",
