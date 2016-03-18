@@ -6,7 +6,6 @@ var ParseUtils = require('../util/Parsing');
 
 var LoginStore = require('../login/StateStore');
 var LoginActions = require('../login/Actions');
-var Index = require('../app/Index');
 var LibraryActions = require('../app/library/Actions');
 var StoreActions = require('../app/store/Actions');
 var ChatActions = require('../app/chat/Actions');
@@ -17,6 +16,8 @@ var StateActions = require('../common/state/Actions');
 var UserActions = require('../app/profiles/user/Actions');
 var NavigationActions = require('../app/navigation/Actions');
 var Globals = require('../util/Globals');
+
+var Index = require('../app/Index');
 
 module.exports = exports = Ext.define('NextThought.controller.Application', {
 	extend: 'Ext.app.Controller',

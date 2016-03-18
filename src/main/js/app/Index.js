@@ -7,6 +7,7 @@ var AppBody = require('./Body');
 var WindowsIndex = require('./windows/Index');
 var ChatIndex = require('./chat/Index');
 var PromptIndex = require('./prompt/Index');
+require('../layout/container/None');
 
 
 module.exports = exports = Ext.define('NextThought.app.Index', {
