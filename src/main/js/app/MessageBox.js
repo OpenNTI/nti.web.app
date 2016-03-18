@@ -1,4 +1,10 @@
-export default Ext.define('NextThought.app.MessageBox', {
+var Ext = require('extjs');
+var Globals = require('../util/Globals');
+var WindowWindow = require('../common/window/Window');
+var MixinsState = require('../mixins/State');
+
+
+module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	extend: 'NextThought.common.window.Window',
 
 	mixins: {

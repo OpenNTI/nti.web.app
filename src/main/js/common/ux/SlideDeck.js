@@ -1,17 +1,17 @@
+var Ext = require('extjs');
+var ContentUtils = require('../../util/Content');
+var UtilContent = require('../../util/Content');
+var ModelPlaylistItem = require('../../model/PlaylistItem');
+var ModelSlide = require('../../model/Slide');
+var ContentOverlay = require('../../app/mediaviewer/content/Overlay');
+
+
 /*JSLint */
 /*globals ContentUtils, Library, NextThought */
-export default Ext.define('NextThought.common.ux.SlideDeck', {
-	singleton: true,
+module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {
+    singleton: true,
 
-	requires: [
-		'NextThought.util.Content',
-		'NextThought.model.PlaylistItem',
-		'NextThought.model.Slide',
-		'NextThought.app.mediaviewer.content.Overlay'
-	],
-
-
-	openFromDom: function(el, reader) {
+    openFromDom: function(el, reader) {
 		var DQ = Ext.DomQuery, dom,
 			ntiid = reader.getLocation().NTIID,
 			selector = 'object[type$=nextthought.slide]',
@@ -40,8 +40,7 @@ export default Ext.define('NextThought.common.ux.SlideDeck', {
 		this.open(ntiid, slidedeckId, startingVideo, startingSlide);
 	},
 
-
-	open: function(ntiidInContent, slidedeckId, startingVideo, startingSlide) {
+    open: function(ntiidInContent, slidedeckId, startingVideo, startingSlide) {
 		slidedeckId = slidedeckId || 'default';
 
 		var root = ContentUtils.getLineage(ntiidInContent).last(),
@@ -125,6 +124,4 @@ export default Ext.define('NextThought.common.ux.SlideDeck', {
 			ContentUtils.spider(ids, finish, parse);
 		});
 	}
-
-
 });

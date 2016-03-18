@@ -1,18 +1,16 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.controls.Delete', {
-	extend: 'Ext.Component',
-	alias: 'widget.overview-editing-controls-delete',
+var Ext = require('extjs');
+var Globals = require('../../../../../../util/Globals');
+var AppMessageBox = require('../../../../../MessageBox');
 
-	requires: [
-		'NextThought.app.MessageBox'
-	],
 
-	name: 'Delete',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Delete', {
+    extend: 'Ext.Component',
+    alias: 'widget.overview-editing-controls-delete',
+    name: 'Delete',
+    cls: 'nt-button delete',
+    renderTpl: '{name}',
 
-	cls: 'nt-button delete',
-
-	renderTpl: '{name}',
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		this.PromptActions = NextThought.app.prompt.Actions.create();
@@ -22,8 +20,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.color) {
@@ -33,8 +30,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		this.mon(this.el, 'click', this.handleClick.bind(this));
 	},
 
-
-	handleClick: function(e) {
+    handleClick: function(e) {
 		if (e.getTarget('.disabled') || !this.parentRecord || !this.parentRecord.removeRecord) { return; }
 
 		if (this.beforeDelete) {
@@ -45,8 +41,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			.then(this.doDelete.bind(this));
 	},
 
-
-	confirm: function() {
+    confirm: function() {
 		return new Promise(function(fulfill, reject) {
 			Ext.Msg.show({
 				title: 'Are you sure?',
@@ -67,8 +62,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		});
 	},
 
-
-	doDelete: function() {
+    doDelete: function() {
 		if (this.onDelete) {
 			this.onDelete();
 		}

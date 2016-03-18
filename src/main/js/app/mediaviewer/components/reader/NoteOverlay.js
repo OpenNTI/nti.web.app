@@ -1,23 +1,29 @@
-export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOverlay', {
+var Ext = require('extjs');
+var LocationMeta = require('../../../../cache/LocationMeta');
+var ContentUtils = require('../../../../util/Content');
+var DomUtils = require('../../../../util/Dom');
+var Globals = require('../../../../util/Globals');
+var RangeUtils = require('../../../../util/Ranges');
+var SharingUtils = require('../../../../util/Sharing');
+var UtilLine = require('../../../../util/Line');
+var WhiteboardUtils = require('../../../whiteboard/Utils');
+var EditorEditor = require('../../../../editor/Editor');
+var UserdataActions = require('../../../userdata/Actions');
+var MediaviewerStateStore = require('../../StateStore');
 
-	requires: [
-		'NextThought.util.Line',
-		'NextThought.app.whiteboard.Utils',
-		'NextThought.editor.Editor',
-		'NextThought.app.userdata.Actions',
-		'NextThought.app.mediaviewer.StateStore'
-	],
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.NoteOverlay', {
+    mixins: {
 		'observable': 'Ext.util.Observable'
 	},
 
-	annotationManager: new Ext.util.MixedCollection(),
+    annotationManager: new Ext.util.MixedCollection(),
 
-	controlTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+    controlTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'span', cls: 'count', 'data-line': '{line}', 'data-count': '{count}', html: '{count}'}
 	])),
 
-	constructor: function(config) {
+    constructor: function(config) {
 		Ext.apply(this, config);
 		this.mixins.observable.constructor.call(this);
 
@@ -100,10 +106,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
         me.on('beforedeactivate', 'beforeDeactivate');
 	},
 
-
-
-
-	registerReaderView: function(view) {
+    registerReaderView: function(view) {
 		this.noteOverlayManager.push(view);
 		this.mon(view, {
 			scope: this,
@@ -117,12 +120,11 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 		view.noteOverlay = this;
 	},
 
-
     beforeDeactivate: function(){
         return this.reader && this.reader.fireEvent('beforedeactivate');
     },
 
-	allowNavigation: function(){
+    allowNavigation: function(){
 		var me = this,
 			title = 'Are you sure?',
 			msg = 'You haven’t finished your comment. Do you want to leave without finishing?';
@@ -152,22 +154,20 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
         }
 	},
 
-	destroy: function() {
+    destroy: function() {
 		this.callParent(arguments);
 		if (this.annotationManager.length > 0) {
 			this.annotationManager.removeAll();
 		}
 	},
 
-
-	insertOverlay: function() {
+    insertOverlay: function() {
 		this.annotationOverlay = Ext.DomHelper.insertAfter(this.reader.getTargetEl().first(), {cls: 'note-gutter'}, true);
 
 		this.mon(this.annotationOverlay, 'click', 'showAnnotationsAtLine', this);
 	},
 
-
-	adjustAnnotationOverlayPosition: function() {
+    adjustAnnotationOverlayPosition: function() {
 		if (!this.reader.rendered || !this.annotationOverlay) { return; }
 
 		var cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [],
@@ -192,8 +192,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 		this.realignNotes();
 	},
 
-
-	realignNotes: function() {
+    realignNotes: function() {
 
 		//This is  not the right way to be plumbing this.  I'm not sure I have any better ideas though,
 		//the overlay needs component specific data to render a note.
@@ -207,8 +206,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 		}
 	},
 
-
-	editorSaved: function(editor, r, v) {
+    editorSaved: function(editor, r, v) {
 		function onError(error) {
 			console.error('Error saving note - ' + (error ? Globals.getError(error) : ''));
 			alert('There was an error saving your note.');
@@ -261,19 +259,17 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 		return false;
 	},
 
-	editorCanceled: function() {
+    editorCanceled: function() {
 		if (this.editor.closeCallback) {
 			Ext.callback(this.editor.closeCallback);
 		}
 	},
 
-
-	noteHere: function() {
+    noteHere: function() {
 		console.log('To Be Implemented');
 	},
 
-
-	syncHeight: function() {
+    syncHeight: function() {
 		var cmps,
 				r = this.reader,
 				el = r && r.el;
@@ -286,13 +282,11 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 		this.realignNotes();
 	},
 
-
-	getFrameHeight: function() {
+    getFrameHeight: function() {
 		return this.readerHeight + 'px';
 	},
 
-
-	activateEditor: function(info, cb) {
+    activateEditor: function(info, cb) {
 		if (this.editor) {
 			this.data = info; //Ext.apply(this.data || {}, cueInfo);
 			this.editor.reset();
@@ -306,7 +300,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 		}
 	},
 
-	deactivateEditor: function() {
+    deactivateEditor: function() {
 		if (this.editor.closeCallback) {
 			Ext.callback(this.editor.closeCallback);
 			delete this.editor.closeCallback;
@@ -314,8 +308,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 		this.editor.deactivate();
 	},
 
-
-	showEditorByEl: function(cueInfo, el, cb) {
+    showEditorByEl: function(cueInfo, el, cb) {
 		this.activateEditor(cueInfo, cb);
 		this.editor.alignTo(el, 'tl-tr?');
 		this.editor.show();
@@ -323,14 +316,12 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 		this.editor.focus();
 	},
 
-
-	showEditorAtPosition: function(cueInfo, xy) {
+    showEditorAtPosition: function(cueInfo, xy) {
 		this.activateEditor(cueInfo);
 		this.editor.showAt(xy);
 	},
 
-
-	setDefaultSharingFor: function(ntiid) {
+    setDefaultSharingFor: function(ntiid) {
 		var me = this,
 			pageInfo;
 
@@ -346,8 +337,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 			});
 	},
 
-
-	registerGutterRecords: function(noteStore, records, view) {
+    registerGutterRecords: function(noteStore, records, view) {
 		if (Ext.isEmpty(noteStore)) { return;}
 
 		var me = this,
@@ -370,8 +360,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 		});
 	},
 
-
-	rangeForDescription: function(rec, cmp, recStore) {
+    rangeForDescription: function(rec, cmp, recStore) {
 		var anchorResolver = cmp && cmp.getAnchorResolver && cmp.getAnchorResolver(),
 			cueStore = cmp.getCueStore && cmp.getCueStore(),
 			domRange, rect, line, domFrag, b, d;
@@ -390,8 +379,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 		return domRange;
 	},
 
-
-	registerNoteRecord: function(rec, cmp, recStore) {
+    registerNoteRecord: function(rec, cmp, recStore) {
 
 		if (this.isRecordAlreadyAdded(rec)) {return;}
 
@@ -419,24 +407,21 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 		});
 	},
 
-
-	unRegisterGutterRecords: function(store, records, view) {
+    unRegisterGutterRecords: function(store, records, view) {
 		var me = this;
 		Ext.each(records, function(rec) {
 			me.unRegisterNoteRecord(rec);
 		});
 	},
 
-
-	unRegisterNoteRecord: function(rec) {
+    unRegisterNoteRecord: function(rec) {
 		var r = this.annotationManager.findBy(function(item) { return item.id === rec.getId();});
 		if (r) {
 			this.annotationManager.remove(r);
 		}
 	},
 
-
-	isRecordAlreadyAdded: function(rec) {
+    isRecordAlreadyAdded: function(rec) {
 		var b = this.annotationManager.filterBy(function(item) {
 			return item.id === rec.getId();
 		});
@@ -444,8 +429,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 		return b.getCount() > 0;
 	},
 
-
-	updateAnnotationCountAtLine: function(line, count) {
+    updateAnnotationCountAtLine: function(line, count) {
         var tpl = this.controlTpl,
 			el = this.getAnnotationEl(line);
 
@@ -461,7 +445,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
         }
     },
 
-	getAnnotationEl: function(line) {
+    getAnnotationEl: function(line) {
 		var annotations = this.annotationOverlay.query('.count[data-line]'),
 			result = this.annotationOverlay.down('.count[data-line=' + line + ']');
 
@@ -478,22 +462,19 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 		return result;
 	},
 
-
-	onAnnotationAdded: function(i, o) {
+    onAnnotationAdded: function(i, o) {
 		var count = this.getAnnotationsAtLine(o.line).getCount();
 		if (count > 0) {
 			this.updateAnnotationCountAtLine(o.line, count);
 		}
 	},
 
-
-	onAnnotationRemoved: function(o) {
+    onAnnotationRemoved: function(o) {
 		var count = this.getAnnotationsAtLine(o.line).getCount();
         this.updateAnnotationCountAtLine(o.line, count);
 	},
 
-
-	showAnnotationsAtLine: function(e) {
+    showAnnotationsAtLine: function(e) {
 		var t = e && e.getTarget('.count', null, true),
 			line = t && t.getAttribute('data-line'), annotations;
 
@@ -504,8 +485,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 		this.reader.showAnnotations(annotations, line);
 	},
 
-
-	getAnnotationsAtLine: function(line) {
+    getAnnotationsAtLine: function(line) {
 		var fudgeFactor = 2;
 		return this.annotationManager.filterBy(function(item) {
 			var rec = item.record,
@@ -517,8 +497,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.NoteOve
 		});
 	},
 
-
-	resolveRootPageInfoFor: function(ntiid) {
+    resolveRootPageInfoFor: function(ntiid) {
 		return ContentUtils.getLineage(ntiid, this.reader.currentBundle)
 			.then(function(rootId) {
 				rootId = rootId && rootId.last();

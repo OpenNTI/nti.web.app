@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.reports.Index', {
+var Ext = require('extjs');
+var MixinsRouter = require('../../../mixins/Router');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.reports.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-reports',
 

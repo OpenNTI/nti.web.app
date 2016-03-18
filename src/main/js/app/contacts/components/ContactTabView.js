@@ -1,21 +1,23 @@
-export default Ext.define('NextThought.app.contacts.components.ContactTabView', {
-	extend: 'NextThought.app.contacts.components.TabView',
-	alias: 'widget.contacts-tab-view',
+var Ext = require('extjs');
+var StoreUtils = require('../../../util/Store');
+var ComponentsTabView = require('./TabView');
+var GroupsStateStore = require('../../groups/StateStore');
+var UtilStore = require('../../../util/Store');
+var ModelUser = require('../../../model/User');
 
-	requires: [
-		'NextThought.app.groups.StateStore',
-		'NextThought.util.Store',
-		'NextThought.model.User'
-	],
 
-	navigation: {
+module.exports = exports = Ext.define('NextThought.app.contacts.components.ContactTabView', {
+    extend: 'NextThought.app.contacts.components.TabView',
+    alias: 'widget.contacts-tab-view',
+
+    navigation: {
 		xtype: 'contacts-outline',
 		cls: 'contact',
 		subType: 'contact',
 		outlineLabel: getString('NextThought.view.contacts.View.contact-tab')
 	},
 
-	body: {
+    body: {
 		xtype: 'data-bound-panel',
 		defaultType: 'contacts-tabs-card',
 		items: [],
@@ -32,17 +34,16 @@ export default Ext.define('NextThought.app.contacts.components.ContactTabView', 
 		}
 	},
 
-	subType: 'contact',
+    subType: 'contact',
 
-	initComponent: function () {
+    initComponent: function () {
 		this.callParent(arguments);
 
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.buildStore();
 	},
 
-
-	buildStore: function() {
+    buildStore: function() {
 		var s = this.GroupStore.getAllContactsStore(),
 			store = StoreUtils.newView(s), me = this;
 

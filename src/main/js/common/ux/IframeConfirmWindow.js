@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.common.ux.IframeConfirmWindow', {
+var Ext = require('extjs');
+var UxIframeWindow = require('./IframeWindow');
+
+
+module.exports = exports = Ext.define('NextThought.common.ux.IframeConfirmWindow', {
 	extend: 'NextThought.common.ux.IframeWindow',
 	alias: 'widget.iframe-confirm-window',
 

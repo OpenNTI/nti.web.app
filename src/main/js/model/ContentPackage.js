@@ -1,22 +1,28 @@
-export default Ext.define('NextThought.model.ContentPackage', {
-	extend: 'NextThought.model.Base',
-	requires: [
-		'NextThought.model.converters.DCCreatorToAuthor'
-	],
+var Ext = require('extjs');
+var Globals = require('../util/Globals');
+var ParseUtils = require('../util/Parsing');
+var ModelBase = require('./Base');
+var MixinsPresentationResources = require('../mixins/PresentationResources');
+var MixinsDurationCache = require('../mixins/DurationCache');
+var ConvertersDCCreatorToAuthor = require('./converters/DCCreatorToAuthor');
 
-	statics: {
+
+module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
+    extend: 'NextThought.model.Base',
+
+    statics: {
 		TOC_REQUESTS: {}
 	},
 
-	mixins: {
+    mixins: {
 		'PresentationResources': 'NextThought.mixins.PresentationResources',
 		'DurationCache': 'NextThought.mixins.DurationCache'
 	},
 
-	VIDEO_INDEX_TYPE: 'application/vnd.nextthought.videoindex',
+    VIDEO_INDEX_TYPE: 'application/vnd.nextthought.videoindex',
+    idProperty: 'index',
 
-	idProperty: 'index',
-	fields: [
+    fields: [
 		{ name: 'Archive Last Modified', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'archive', type: 'string' },
 		{ name: 'index', type: 'string' },
@@ -38,8 +44,7 @@ export default Ext.define('NextThought.model.ContentPackage', {
 		{ name: 'thumb', type: 'string' }
 	],
 
-
-	constructor: function() {
+    constructor: function() {
 		this.callParent(arguments);
 
 		wait()
@@ -49,17 +54,15 @@ export default Ext.define('NextThought.model.ContentPackage', {
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
-
-	getTitle: function() {
+    getTitle: function() {
 		return this.get('title');
 	},
 
-	getIcon: function() {
+    getIcon: function() {
 		return this.get('icon');
 	},
 
-
-	getToc: function(status) {
+    getToc: function(status) {
 		var me = this,
 			library = me.LibraryActions;
 			index = me.get('index');
@@ -100,9 +103,7 @@ export default Ext.define('NextThought.model.ContentPackage', {
 		return me.tocPromise;
 	},
 
-
-
-	asUIData: function() {
+    asUIData: function() {
 		return {
 			id: this.getId(),
 			isCourse: this.get('isCourse'),
@@ -113,8 +114,7 @@ export default Ext.define('NextThought.model.ContentPackage', {
 		};
 	},
 
-
-	fireNavigationEvent: function(eventSource) {
+    fireNavigationEvent: function(eventSource) {
 		var id = this.get('NTIID');
 		return new Promise(function(fulfill, reject) {
 			var txn = history.beginTransaction('book-navigation-transaction-' + guidGenerator());
@@ -132,8 +132,7 @@ export default Ext.define('NextThought.model.ContentPackage', {
 		});
 	},
 
-
-	getDefaultAssetRoot: function() {
+    getDefaultAssetRoot: function() {
 		var root = this.get('root');
 
 		if (!root) {
@@ -144,33 +143,27 @@ export default Ext.define('NextThought.model.ContentPackage', {
 		return getURL(root).concatPath('/presentation-assets/webapp/v1/');
 	},
 
-
-
-	__cacheContentPreferences: function() {
+    __cacheContentPreferences: function() {
 		var c = console;
 		Service.getPageInfo(this.get('NTIID'))
 				.then(undefined, c.error.bind(c));
 	},
 
-
-	__setImage: function() {
+    __setImage: function() {
 		var me = this;
 		me.getImgAsset('landing').then(function(url) { me.set('icon', url); });
 		me.getImgAsset('thumb').then(function(url) { me.set('thumb', url); });
 	},
 
+    represents: function(catalogEntry) {return false;},
 
-	represents: function(catalogEntry) {return false;},
-
-
-	getReferenceSelector: function(type) {
+    getReferenceSelector: function(type) {
 		type = ParseUtils.escapeId(type);
 
 		return 'reference[type="' + type + '"]';
 	},
 
-
-	getReference: function(type) {
+    getReference: function(type) {
 		var selector = this.getReferenceSelector(type),
 			root = this.get('root'),
 			key = 'reference-' + type,
@@ -204,8 +197,7 @@ export default Ext.define('NextThought.model.ContentPackage', {
 		return load;
 	},
 
-
-	getVideos: function() {
+    getVideos: function() {
 		return this.getReference(this.VIDEO_INDEX_TYPE)
 			.then(function(videoIndex) {
 				var items = videoIndex.Items,

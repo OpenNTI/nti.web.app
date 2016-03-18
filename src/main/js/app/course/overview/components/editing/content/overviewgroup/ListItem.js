@@ -1,35 +1,38 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem', {
-	extend: 'NextThought.common.components.BoundCollection',
-	alias: 'widget.overview-editing-overviewgroup-listitem',
+var Ext = require('extjs');
+var ComponentsBoundCollection = require('../../../../../../../common/components/BoundCollection');
+var DndOrderingContainer = require('../../../../../../../mixins/dnd/OrderingContainer');
+var DndOrderingItem = require('../../../../../../../mixins/dnd/OrderingItem');
+var MixinsTransition = require('../../../../../../../mixins/Transition');
+var AppMoveInfo = require('../../../../../../../model/app/MoveInfo');
+var ControlsAdd = require('../../controls/Add');
+var ControlsEdit = require('../../controls/Edit');
+var OverviewgroupPreview = require('./Preview');
+var ContentlinkListItem = require('../contentlink/ListItem');
+var DiscussionListItem = require('../discussion/ListItem');
+var PollListItem = require('../poll/ListItem');
+var QuestionsetListItem = require('../questionset/ListItem');
+var SurveyListItem = require('../survey/ListItem');
+var TimelineListItem = require('../timeline/ListItem');
+var VideoListItem = require('../video/ListItem');
+var VideorollListItem = require('../videoroll/ListItem');
+var WindowsActions = require('../../../../../../windows/Actions');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem', {
+    extend: 'NextThought.common.components.BoundCollection',
+    alias: 'widget.overview-editing-overviewgroup-listitem',
+
+    mixins: {
 		OrderingContainer: 'NextThought.mixins.dnd.OrderingContainer',
 		OrderingItem: 'NextThought.mixins.dnd.OrderingItem',
 		Transition: 'NextThought.mixins.Transition'
 	},
 
-	requires: [
-		'NextThought.model.app.MoveInfo',
-		'NextThought.app.course.overview.components.editing.controls.Add',
-		'NextThought.app.course.overview.components.editing.controls.Edit',
-		'NextThought.app.course.overview.components.editing.content.overviewgroup.Preview',
-		'NextThought.app.course.overview.components.editing.content.contentlink.ListItem',
-		'NextThought.app.course.overview.components.editing.content.discussion.ListItem',
-		'NextThought.app.course.overview.components.editing.content.poll.ListItem',
-		'NextThought.app.course.overview.components.editing.content.questionset.ListItem',
-		'NextThought.app.course.overview.components.editing.content.survey.ListItem',
-		'NextThought.app.course.overview.components.editing.content.timeline.ListItem',
-		'NextThought.app.course.overview.components.editing.content.video.ListItem',
-		'NextThought.app.course.overview.components.editing.content.videoroll.ListItem',
-		'NextThought.app.windows.Actions'
-	],
+    transitionStates: true,
+    cls: 'overview-section overview-section-editing',
+    bodyCls: 'overview-group-body',
 
-	transitionStates: true,
-
-	cls: 'overview-section overview-section-editing',
-	bodyCls: 'overview-group-body',
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -82,8 +85,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.activeGroup) {
@@ -91,8 +93,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	setActiveGroup: function(group) {
+    setActiveGroup: function(group) {
 		var color = group && group.get('accentColor');
 
 		if (color) {
@@ -102,28 +103,24 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	getOrderingItems: function() {
+    getOrderingItems: function() {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
 
 		return items || [];
 	},
 
-
-	getDropzoneTarget: function() {
+    getDropzoneTarget: function() {
 		var body = this.getBodyContainer();
 
 		return body && body.el && body.el.dom;
 	},
 
-
-	getDragHandle: function() {
+    getDragHandle: function() {
 		return this.el && this.el.dom && this.el.dom.querySelector('.overview-group-header');
 	},
 
-
-	cacheHeight: function() {
+    cacheHeight: function() {
 		var el = this.el && this.el.dom,
 			height = el && el.offsetHeight;
 
@@ -132,8 +129,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	uncacheHeight: function() {
+    uncacheHeight: function() {
 		var el = this.el && this.el.dom;
 
 		if (el) {
@@ -141,8 +137,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	beforeSetCollection: function(collection) {
+    beforeSetCollection: function(collection) {
 		this.disableOrderingContainer();
 
 		this.activeGroup = collection;
@@ -153,14 +148,12 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	afterSetCollection: function() {
+    afterSetCollection: function() {
 		this.enableOrderingContainer();
 		this.uncacheHeight();
 	},
 
-
-	buildHeader: function(collection) {
+    buildHeader: function(collection) {
 
 		return {
 			xtype: 'container',
@@ -180,8 +173,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		};
 	},
 
-
-	buildFooter: function() {
+    buildFooter: function() {
 		return {
 			xtype: 'container',
 			cls: 'overview-group-footer',
@@ -200,8 +192,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		};
 	},
 
-
-	getCmpForRecord: function(record, transition, initialState) {
+    getCmpForRecord: function(record, transition, initialState) {
 		var mimeType = record.mimeType,
 			cmp = this.MIME_TO_CMP[mimeType],
 			assignment;
@@ -230,8 +221,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 
 	},
 
-
-	onCardDrop: function(card, newIndex, moveInfo) {
+    onCardDrop: function(card, newIndex, moveInfo) {
 		this.movedCard = card;
 
 		return this.addCardToGroup(this.record, card, newIndex, moveInfo);

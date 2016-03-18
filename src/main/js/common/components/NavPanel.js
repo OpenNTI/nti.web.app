@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.components.NavPanel', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.components.NavPanel', {
 	extend: 'Ext.container.Container',
 	//alias: Extend, do not use this directly
 

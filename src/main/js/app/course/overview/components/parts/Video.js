@@ -1,29 +1,28 @@
-export default Ext.define('NextThought.app.course.overview.components.parts.Video', {
-	extend: 'Ext.container.Container',
-	alias: ['widget.course-overview-video', 'widget.course-overview-ntivideo'],
+var Ext = require('extjs');
+var ModelPlaylistItem = require('../../../../../model/PlaylistItem');
+var VideoVideo = require('../../../../video/Video');
+var LibraryActions = require('../../../../library/Actions');
+var PartsCurtain = require('./Curtain');
 
-	statics: {
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Video', {
+    extend: 'Ext.container.Container',
+    alias: ['widget.course-overview-video', 'widget.course-overview-ntivideo'],
+
+    statics: {
 		isVideo: true
 	},
 
-	cls: 'overview-video',
-	ui: 'course',
-	layout: 'none',
-	items: [],
+    cls: 'overview-video',
+    ui: 'course',
+    layout: 'none',
+    items: [],
 
-	requires: [
-		'NextThought.model.PlaylistItem',
-		'NextThought.app.video.Video',
-		'Ext.data.reader.Json',
-		'NextThought.app.library.Actions',
-		'NextThought.app.course.overview.components.parts.Curtain'
-	],
-
-	renderSelectors: {
+    renderSelectors: {
 		screenEl: '.video-player'
 	},
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.videoPlayer = this.add({
@@ -41,7 +40,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Vide
 		});
 	},
 
-	constructor: function() {
+    constructor: function() {
 		this.callParent(arguments);
 		this.playerWidth = 512;
 
@@ -54,7 +53,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Vide
 			.then(this.addVideo.bind(this));
 	},
 
-	addVideo: function(video) {
+    addVideo: function(video) {
 		this.video = video;
 		var curtainClicked = this.curtainClicked.bind(this);
 
@@ -77,7 +76,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Vide
 		});
 	},
 
-	getVideo: function() {
+    getVideo: function() {
 		var me = this;
 
 		if (me.record) {
@@ -98,7 +97,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Vide
 		}
 	},
 
-	curtainClicked: function(e) {
+    curtainClicked: function(e) {
 		e.stopEvent();
 
 		var video = this.playlist[0],
@@ -129,16 +128,16 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Vide
 		}
 	},
 
-	hideCurtain: function() {
+    hideCurtain: function() {
 		this.curtain.hide();
 	},
 
-	showCurtain: function() {
+    showCurtain: function() {
 		this.curtain.show();
 		wait().then(this.setProgress.bind(this));
 	},
 
-	maybeCreatePlayer: function() {
+    maybeCreatePlayer: function() {
 		var single = this.isVideoRoll !== true;
 
 		if (!this.rendered) {
@@ -191,7 +190,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Vide
 		]);
 	},
 
-	maybePauseCurrentVideo: function() {
+    maybePauseCurrentVideo: function() {
 		if (!this.player) { return; }
 
 		if (this.player.isPlaying()) {
@@ -204,7 +203,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Vide
 		if (this.hasCls('playing')) { return; }
 	},
 
-	navigateToTarget: function(videoItem, basePath) {
+    navigateToTarget: function(videoItem, basePath) {
 		if (!this.navigate) {
 			console.error('No navigate set on content link');
 			return;
@@ -220,7 +219,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Vide
 			});
 	},
 
-	navigateToSlidedeck: function(slidedeckId) {
+    navigateToSlidedeck: function(slidedeckId) {
 		var me = this;
 		if (slidedeckId) {
 			Service.getObject(slidedeckId)
@@ -230,7 +229,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Vide
 		}
 	},
 
-	setProgress: function(progress) {
+    setProgress: function(progress) {
 		progress = progress || this.progress;
 
 		this.progress = progress;

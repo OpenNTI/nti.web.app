@@ -1,28 +1,25 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.AddNode', {
-	extend: 'Ext.Component',
-	alias: 'widget.overview-editing-new-unit-node',
+var Ext = require('extjs');
+var EditingActions = require('../../Actions');
 
-	requires: [
-		'NextThought.app.course.overview.components.editing.Actions'
-	],
 
-	autoPublish: true,
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.AddNode', {
+    extend: 'Ext.Component',
+    alias: 'widget.overview-editing-new-unit-node',
+    autoPublish: true,
+    cls: 'new-node unit',
 
-	cls: 'new-node unit',
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'inline-editor-container'},
 		{cls: 'icon {iconCls}'},
 		{cls: 'title', html: '{title}'}
 	]),
 
-	renderSelectors: {
+    renderSelectors: {
 		inlineEditorEl: '.inline-editor-container',
 		addLessonEl: '.title'
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		this.EditingActions = NextThought.app.course.overview.components.editing.Actions.create();
@@ -33,8 +30,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.addLessonEl, 'click', this.onClick.bind(this));
@@ -51,8 +47,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		}
 	},
 
-
-	/**
+    /**
 	 * handles a click on the addLesson Button
 	 *
 	 * Note: If the inline editor is visible, the click action implies that we should save the new node.
@@ -75,8 +70,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		}
 	},
 
-
-	showEditor: function() {
+    showEditor: function() {
 		this.inlineEditorEl.show();
 
 		//TODO: instead of checking the owner ct, have the owner pass
@@ -90,8 +84,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		}
 	},
 
-
-	hideEditor: function() {
+    hideEditor: function() {
 		if (!this.rendered) { return; }
 
 		this.inlineEditorEl.hide();
@@ -103,8 +96,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		}
 	},
 
-
-	isValid: function() {
+    isValid: function() {
 		if (this.editor.isValid && !this.editor.isValid()) {
 			if (this.editor.showError) {
 				this.editor.showError();
@@ -114,13 +106,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		return true;
 	},
 
-
-	onCancel: function(e) {
+    onCancel: function(e) {
 		this.hideEditor();
 	},
 
-
-	/**
+    /**
 	 * Handle saving a new unit node.
 	 * On top of save new unit node, we would also like to publish them right away.
 	 * That's what we're doing after successfully creating a new unit node.

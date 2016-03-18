@@ -1,21 +1,22 @@
-export default Ext.define('NextThought.app.blog.Actions', {
-	extend: 'NextThought.common.Actions',
+var Ext = require('extjs');
+var UserRepository = require('../../cache/UserRepository');
+var ParseUtils = require('../../util/Parsing');
+var CommonActions = require('../../common/Actions');
+var ForumsPersonalBlogComment = require('../../model/forums/PersonalBlogComment');
+var ForumsPersonalBlogEntryPost = require('../../model/forums/PersonalBlogEntryPost');
+var UserdataActions = require('../userdata/Actions');
 
-	requires: [
-		'NextThought.model.forums.PersonalBlogComment',
-		'NextThought.model.forums.PersonalBlogEntryPost',
-		'NextThought.app.userdata.Actions'
-	],
 
+module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
+    extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
 	},
 
-
-	__parseSharingInfo: function(sharingInfo) {
+    __parseSharingInfo: function(sharingInfo) {
 		var entities = sharingInfo.entities,
 			newEntities = [], i,
 			isPublic = false;
@@ -34,8 +35,7 @@ export default Ext.define('NextThought.app.blog.Actions', {
 		};
 	},
 
-
-	savePost: function(record, blog, title, tags, body, sharingInfo) {
+    savePost: function(record, blog, title, tags, body, sharingInfo) {
 		var isEdit = Boolean(record),
 			post = isEdit ? record.get('headline') : NextThought.model.forums.PersonalBlogEntryPost.create(),
 			me = this;
@@ -86,9 +86,7 @@ export default Ext.define('NextThought.app.blog.Actions', {
 		});
 	},
 
-
-
-	/**
+    /**
 	 * There are four distinct states:
 	 *	1) Private, no entities
 	 *	2) Public, no entities
@@ -111,57 +109,56 @@ export default Ext.define('NextThought.app.blog.Actions', {
 	 * @param {Ext.Component} cmp
 	 * @param {Boolean} resolved
 	 */
-	 handleShareAndPublishState: function(blogEntry, sharingInfo, resolved) {
-		if (!blogEntry) {
-			return Promise.resolve();
-		}
+	handleShareAndPublishState: function(blogEntry, sharingInfo, resolved) {
+	   if (!blogEntry) {
+		   return Promise.resolve();
+	   }
 
-		var isPublic = sharingInfo.isPublic,
-			resolveEntities, publish;
+	   var isPublic = sharingInfo.isPublic,
+		   resolveEntities, publish;
 
-		if (isPublic) {
-			resolveEntities = UserRepository.getUser(sharingInfo.entities)
-				.then(function(users) {
-					return users.map(function(u) { return u.get('NTIID'); });
-				});
-		} else {
-			resolveEntities = Promise.resolve(sharingInfo.entities);
-		}
-
-
-		if (blogEntry.isPublished() !== isPublic) {
-			publish = new Promise(function(fulfill, reject) {
-				//This function (publish) is poorly named. It toggles.
-				blogEntry.publish(null, fulfill, this);
-			});
-		} else {
-			publish = Promise.resolve();
-		}
+	   if (isPublic) {
+		   resolveEntities = UserRepository.getUser(sharingInfo.entities)
+			   .then(function(users) {
+				   return users.map(function(u) { return u.get('NTIID'); });
+			   });
+	   } else {
+		   resolveEntities = Promise.resolve(sharingInfo.entities);
+	   }
 
 
-		return Promise.all([
-			resolveEntities,
-			publish
-		]).then(function(results) {
-			return results[0];
-		}).then(function(entities) {
-			var name = isPublic ? 'tags' : 'sharedWith',
-				object = isPublic ? blogEntry.get('headline') : blogEntry,
-				action = isPublic ? Ext.Array.merge : function(a) { return a; };
-
-			object.set(name, action(entities, object.get(name)));
-
-			return new Promise(function(fulfill, reject) {
-				object.save({callback: fulfill});
-			});
-		}).then(function() {
-			return blogEntry;
-		});
-
-	},
+	   if (blogEntry.isPublished() !== isPublic) {
+		   publish = new Promise(function(fulfill, reject) {
+			   //This function (publish) is poorly named. It toggles.
+			   blogEntry.publish(null, fulfill, this);
+		   });
+	   } else {
+		   publish = Promise.resolve();
+	   }
 
 
-	saveBlogComment: function(record, blogPost, valueObject) {
+	   return Promise.all([
+		   resolveEntities,
+		   publish
+	   ]).then(function(results) {
+		   return results[0];
+	   }).then(function(entities) {
+		   var name = isPublic ? 'tags' : 'sharedWith',
+			   object = isPublic ? blogEntry.get('headline') : blogEntry,
+			   action = isPublic ? Ext.Array.merge : function(a) { return a; };
+
+		   object.set(name, action(entities, object.get(name)));
+
+		   return new Promise(function(fulfill, reject) {
+			   object.save({callback: fulfill});
+		   });
+	   }).then(function() {
+		   return blogEntry;
+	   });
+
+   },
+
+    saveBlogComment: function(record, blogPost, valueObject) {
 		var isEdit = Boolean(record && !record.phantom),
 			commentPost = record || NextThought.model.forums.PersonalBlogComment.create();
 
@@ -186,8 +183,7 @@ export default Ext.define('NextThought.app.blog.Actions', {
 		});
 	},
 
-
-	deleteBlogPost: function(record) {
+    deleteBlogPost: function(record) {
 		var idToDestroy, me = this;
 
 		function maybeDeleteFromStore(id, store) {

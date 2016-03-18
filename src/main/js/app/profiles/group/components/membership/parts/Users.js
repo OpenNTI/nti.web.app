@@ -1,4 +1,10 @@
-export default Ext.define('NextThought.app.profiles.group.components.membership.parts.Users', {
+var Ext = require('extjs');
+var UserRepository = require('../../../../../../cache/UserRepository');
+var ParseUtils = require('../../../../../../util/Parsing');
+var PartsMembership = require('../../../../user/components/membership/parts/Membership');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.group.components.membership.parts.Users', {
 	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
 	alias: 'widget.profile-group-membership-users',
 

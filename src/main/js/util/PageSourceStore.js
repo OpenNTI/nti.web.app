@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.util.PageSourceStore', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.util.PageSourceStore', {
 
 	isPageSource: true,
 

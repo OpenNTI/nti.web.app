@@ -1,27 +1,26 @@
-export default Ext.define('NextThought.app.forums.components.topic.Window', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.topic-window',
-
-	layout: 'none',
-	cls: 'topic-window',
-
-	requires: [
-		'NextThought.model.forums.DFLHeadlineTopic',
-		'NextThought.app.windows.StateStore',
-		'NextThought.app.windows.components.Header',
-		'NextThought.app.windows.components.Loading',
-		'NextThought.app.windows.Actions',
-		'NextThought.model.forums.CommunityHeadlineTopic',
-		'NextThought.model.forums.ContentHeadlineTopic',
-		'NextThought.model.forums.CommunityHeadlinePost',
-		'NextThought.app.forums.components.topic.parts.Comment',
-		'NextThought.app.forums.components.topic.parts.Editor',
-		'NextThought.app.forums.components.topic.parts.Pager',
-		'NextThought.app.forums.components.topic.parts.Topic'
-	],
+var Ext = require('extjs');
+var AnalyticsUtil = require('../../../../util/Analytics');
+var ForumsDFLHeadlineTopic = require('../../../../model/forums/DFLHeadlineTopic');
+var WindowsStateStore = require('../../../windows/StateStore');
+var ComponentsHeader = require('../../../windows/components/Header');
+var ComponentsLoading = require('../../../windows/components/Loading');
+var WindowsActions = require('../../../windows/Actions');
+var ForumsCommunityHeadlineTopic = require('../../../../model/forums/CommunityHeadlineTopic');
+var ForumsContentHeadlineTopic = require('../../../../model/forums/ContentHeadlineTopic');
+var ForumsCommunityHeadlinePost = require('../../../../model/forums/CommunityHeadlinePost');
+var PartsComment = require('./parts/Comments');
+var PartsEditor = require('./parts/Editor');
+var PartsPager = require('./parts/Pager');
+var PartsTopic = require('./parts/Topic');
 
 
-	initComponent: function() {
+module.exports = exports = Ext.define('NextThought.app.forums.components.topic.Window', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.topic-window',
+    layout: 'none',
+    cls: 'topic-window',
+
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -45,13 +44,11 @@ export default Ext.define('NextThought.app.forums.components.topic.Window', {
 		}
 	},
 
-
-	onClose: function() {
+    onClose: function() {
 		this.doClose(this.activeTopic);
 	},
 
-
-	loadForum: function(topic) {
+    loadForum: function(topic) {
 		if (this.precache.forum) {
 			return Promise.resolve(this.precache.forum);
 		}
@@ -59,8 +56,7 @@ export default Ext.define('NextThought.app.forums.components.topic.Window', {
 		return Service.getObject(topic.get('ContainerId'));
 	},
 
-
-	loadTopic: function() {
+    loadTopic: function() {
 		var me = this;
 
 		me.loadForum(me.record)
@@ -73,8 +69,7 @@ export default Ext.define('NextThought.app.forums.components.topic.Window', {
 			});
 	},
 
-
-	loadComment: function() {
+    loadComment: function() {
 		var me = this,
 			topic;
 
@@ -93,8 +88,7 @@ export default Ext.define('NextThought.app.forums.components.topic.Window', {
 			});
 	},
 
-
-	loadPost: function() {
+    loadPost: function() {
 		var me = this,
 			topic;
 
@@ -113,8 +107,7 @@ export default Ext.define('NextThought.app.forums.components.topic.Window', {
 			});
 	},
 
-
-	loadEditor: function() {
+    loadEditor: function() {
 		var me = this;
 
 		me.loadForum(me.record)
@@ -127,8 +120,7 @@ export default Ext.define('NextThought.app.forums.components.topic.Window', {
 			});
 	},
 
-
-	allowNavigation: function() {
+    allowNavigation: function() {
 		var editor = this.down('forums-topic-editor'),
 			comment = this.down('forums-topic-comment-thread');
 
@@ -139,8 +131,7 @@ export default Ext.define('NextThought.app.forums.components.topic.Window', {
 		return (editor && editor.allowNavigation()) || (comment && comment.allowNavigation());
 	},
 
-
-	showTopic: function(topic, forum, activeComment) {
+    showTopic: function(topic, forum, activeComment) {
 		var topicCmp = this.down('forums-topic-topic'),
 			commentCmp = this.down('forums-topic-comment-thread'),
 			me = this;
@@ -217,8 +208,7 @@ export default Ext.define('NextThought.app.forums.components.topic.Window', {
 		});
 	},
 
-
-	showEditor: function(topic, forum) {
+    showEditor: function(topic, forum) {
 		var me = this,
 			topicCmp = this.down('forums-topic-topic'),
 			commentCmp = this.down('forums-topic-comment-thread'),
@@ -252,7 +242,6 @@ export default Ext.define('NextThought.app.forums.components.topic.Window', {
 			}
 		});
 	}
-
 }, function() {
 	NextThought.app.windows.StateStore.register('application/vnd.nextthought.forums.generalforumcomment', this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.ContentHeadlineTopic.mimeType, this);

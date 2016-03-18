@@ -1,22 +1,24 @@
-export default Ext.define('NextThought.app.bundle.Index', {
-	extend: 'NextThought.app.content.Index',
-	alias: 'widget.bundle-view-container',
+var Ext = require('extjs');
+var ContentIndex = require('../content/Index');
+var MixinsState = require('../../mixins/State');
+var MixinsRouter = require('../../mixins/Router');
+var BundleStateStore = require('./StateStore');
+var ContentStateStore = require('../library/content/StateStore');
+var ContentIndex = require('../content/content/Index');
+var ForumIndex = require('../content/forum/Index');
 
-	state_key: 'bundle_index',
 
-	requires: [
-		'NextThought.app.bundle.StateStore',
-		'NextThought.app.library.content.StateStore',
-		'NextThought.app.content.content.Index',
-		'NextThought.app.content.forum.Index'
-	],
+module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
+    extend: 'NextThought.app.content.Index',
+    alias: 'widget.bundle-view-container',
+    state_key: 'bundle_index',
 
-	mixins: {
+    mixins: {
 		State: 'NextThought.mixins.State',
 		Router: 'NextThought.mixins.Router'
 	},
 
-	items: [
+    items: [
 		{
 			xtype: 'bundle-forum',
 			id: 'bundle-forum'
@@ -27,8 +29,7 @@ export default Ext.define('NextThought.app.bundle.Index', {
 		}
 	],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
@@ -44,13 +45,11 @@ export default Ext.define('NextThought.app.bundle.Index', {
 		this.addDefaultRoute('/content');
 	},
 
-
-	afterRoute: function(route) {
+    afterRoute: function(route) {
 		this.BundleViewStore.markRouteFor(this.activeBundle.getId(), route);
 	},
 
-
-	setActiveBundle: function(ntiid, bundle) {
+    setActiveBundle: function(ntiid, bundle) {
 		var me = this;
 
 		ntiid = ntiid.toLowerCase();
@@ -84,8 +83,7 @@ export default Ext.define('NextThought.app.bundle.Index', {
 		return me.getActiveBundle;
 	},
 
-
-	applyState: function(state) {
+    applyState: function(state) {
 		var bundle = this.activeBundle,
 			active = state.active,
 			content = NextThought.app.content,
@@ -124,8 +122,7 @@ export default Ext.define('NextThought.app.bundle.Index', {
 		this.navigation.setTabs(tabs);
 	},
 
-
-	showContent: function(route, subRoute) {
+    showContent: function(route, subRoute) {
 		this.contentRoute = subRoute;
 
 		return this.setActiveView('bundle-content', [
@@ -137,8 +134,7 @@ export default Ext.define('NextThought.app.bundle.Index', {
 			});
 	},
 
-
-	showDiscussions: function(route, subRoute) {
+    showDiscussions: function(route, subRoute) {
 		this.discussionsRoute = subRoute;
 
 		return this.setActiveView('bundle-forum', [
@@ -150,8 +146,7 @@ export default Ext.define('NextThought.app.bundle.Index', {
 			});
 	},
 
-
-	getRouteForPath: function(path, bundle) {
+    getRouteForPath: function(path, bundle) {
 		var root = path[0] || {},
 			isAccessible = this.ContentStore.hasContent(bundle),
 			subPath = path.slice[1],

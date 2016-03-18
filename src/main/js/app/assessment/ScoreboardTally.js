@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.assessment.ScoreboardTally', {
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var MixinsEllipsisText = require('../../mixins/EllipsisText');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.ScoreboardTally', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-tally',
 

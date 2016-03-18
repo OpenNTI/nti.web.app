@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.mediaviewer.content.Slidedeck', {
+var Ext = require('extjs');
+var SlideDeck = require('../../../common/ux/SlideDeck');
+
+
+module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.Slidedeck', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-slidedeck',
 

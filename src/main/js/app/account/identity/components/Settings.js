@@ -1,32 +1,30 @@
-export default Ext.define('NextThought.app.account.identity.components.Settings', {
-	extend: 'Ext.menu.Menu',
-	alias: 'widget.settings-menu',
+var Ext = require('extjs');
+var User = require('../../../../model/User');
+var ComponentsMenuItem = require('./MenuItem');
+var ComponentsPresence = require('./Presence');
+var AccountActions = require('../../Actions');
+var LoginActions = require('../../../../login/Actions');
 
-	requires: [
-		'NextThought.app.account.identity.components.MenuItem',
-		'NextThought.app.account.identity.components.Presence',
-		'NextThought.app.account.Actions',
-		'NextThought.login.Actions'
-	],
 
-	cls: 'user-settings-menu',
-	width: 260,
+module.exports = exports = Ext.define('NextThought.app.account.identity.components.Settings', {
+    extend: 'Ext.menu.Menu',
+    alias: 'widget.settings-menu',
+    cls: 'user-settings-menu',
+    width: 260,
 
-	defaults: {
+    defaults: {
 		ui: 'nt-menuitem',
 		xtype: 'menuitem',
 		plain: true
 	},
 
-
-	listeners: {
+    listeners: {
 		//TODO: do we want these to hide on mouse out or just clicking outside?
 		// 'mouseenter': 'cancelHide',
 		// 'mouseleave': 'startHide'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var items = [],
@@ -93,8 +91,7 @@ export default Ext.define('NextThought.app.account.identity.components.Settings'
 		this.add(items);
 	},
 
-
-	startHide: function() {
+    startHide: function() {
 		var me = this;
 
 		me.cancelHide();
@@ -104,23 +101,19 @@ export default Ext.define('NextThought.app.account.identity.components.Settings'
 		}, 500);
 	},
 
-
-	cancelHide: function() {
+    cancelHide: function() {
 		clearTimeout(this.hideTimeout);
 	},
 
-
-	showWelcome: function(item) {
+    showWelcome: function(item) {
 		this.AccountActions.showWelcomePage(item.link);
 	},
 
-
-	showAbout: function(item) {
+    showAbout: function(item) {
 		this.AccountActions.showHref(item.href, item.target);
 	},
 
-
-	showPrivacy: function() {
+    showPrivacy: function() {
 		var link = $AppConfig.userObject.getLink('content.permanent_general_privacy_page');
 
 		if (link) {
@@ -128,8 +121,7 @@ export default Ext.define('NextThought.app.account.identity.components.Settings'
 		}
 	},
 
-
-	showChildPrivacy: function() {
+    showChildPrivacy: function() {
 		var link = $AppConfig.userObject.getLink('childrens-privacy');
 
 		if (link) {
@@ -137,25 +129,21 @@ export default Ext.define('NextThought.app.account.identity.components.Settings'
 		}
 	},
 
-
-	showTerms: function(item) {
+    showTerms: function(item) {
 		var link = Service.getSupportLinks().termsOfService;
 
 		this.AccountActions.showTermsOfService(link);
 	},
 
-
-	contactUs: function() {
+    contactUs: function() {
 		this.AccountActions.showContactUs();
 	},
 
-
-	impersonate: function() {
+    impersonate: function() {
 		this.LoginActions.handleImpersonate();
 	},
 
-
-	logout: function() {
+    logout: function() {
 		this.LoginActions.handleLogout();
 	}
 });

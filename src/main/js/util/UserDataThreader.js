@@ -1,9 +1,11 @@
-export default Ext.define('NextThought.util.UserDataThreader', {
-	singleton: true,
-	requires: [
-	],
+var Ext = require('extjs');
+var AnnotationUtils = require('./Annotations');
 
-	GETTERS: {
+
+module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
+    singleton: true,
+
+    GETTERS: {
 		'Highlight': function(r) {return r;},
 		'Note': function(r) {return r;},
 		'TranscriptSummary': function(r) {return r.get('RoomInfo');},
@@ -14,7 +16,7 @@ export default Ext.define('NextThought.util.UserDataThreader', {
 		'ContentCommentPost': function(r) { return r;}
 	},
 
-	//TODO unify this function with buildThreads
+    //TODO unify this function with buildThreads
 	//into one function taking a list of userdata
 	//and returning a new list where the threadable objects
 	//have been threaded.
@@ -31,7 +33,7 @@ export default Ext.define('NextThought.util.UserDataThreader', {
 		return Ext.Object.getValues(tree);
 	},
 
-	buildThreads: function(bins) {
+    buildThreads: function(bins) {
 		var tree = {};
 
 		if (bins) {
@@ -47,7 +49,7 @@ export default Ext.define('NextThought.util.UserDataThreader', {
 		return tree;
 	},
 
-	cleanupTree: function(tree) {
+    cleanupTree: function(tree) {
 		//take all children off the main collection... make them accessible only by following the children pointers.
 		Ext.Object.each(tree, function(k, o, a) {
 			//turn children object into array
@@ -58,7 +60,7 @@ export default Ext.define('NextThought.util.UserDataThreader', {
 		this.prune(tree);
 	},
 
-	buildItemTree: function(rawList, tree) {
+    buildItemTree: function(rawList, tree) {
 		var me = this, threadables = {}, list;
 	//	console.group("Build Tree");
 		//console.log('Using list of objects', rawList);
@@ -143,16 +145,14 @@ export default Ext.define('NextThought.util.UserDataThreader', {
 	//	console.groupEnd("Build Tree");
 	},
 
-
-	prune: function(tree) {
+    prune: function(tree) {
 		//until we decide we want to prune from the root down... this is a non-desired function. (we cannot have leaf
 		// placeholders with the current threading algorithm.)
 
 	},
 
-	tearDownThreadingLinks: function(o) {
+    tearDownThreadingLinks: function(o) {
 		delete o.parent;
 		delete o.children;
 	}
-
 },function() {});

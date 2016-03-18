@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.DiscussionRef', {
+var Ext = require('extjs');
+var ModelRelatedWork = require('./RelatedWork');
+
+
+module.exports = exports = Ext.define('NextThought.model.DiscussionRef', {
 	extend: 'NextThought.model.RelatedWork',
 
 	statics: {

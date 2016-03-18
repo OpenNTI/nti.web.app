@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.dd.DragDropManager', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.dd.DragDropManager', {
 	override: 'Ext.dd.DragDropManager',
 
 

@@ -1,32 +1,31 @@
-export default Ext.define('NextThought.app.library.Home', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.library-home',
+var Ext = require('extjs');
+var MixinsRouter = require('../../mixins/Router');
+var AdminCurrent = require('./admin/Current');
+var CommunitiesCurrent = require('./communities/Current');
+var ContentCurrent = require('./content/Current');
+var CoursesCurrent = require('./courses/Current');
+var BundleActions = require('../bundle/Actions');
+var CourseActions = require('../course/Actions');
 
-	requires: [
-		'NextThought.app.library.admin.Current',
-		'NextThought.app.library.communities.Current',
-		'NextThought.app.library.content.Current',
-		'NextThought.app.library.courses.Current',
-		'NextThought.app.bundle.Actions',
-		'NextThought.app.course.Actions'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.library.Home', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.library-home',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	layout: 'none',
+    layout: 'none',
+    cls: 'library-homepage library-page',
 
-	cls: 'library-homepage library-page',
-
-	items: [{
+    items: [{
 		xtype: 'box',
 		loadingCmp: true,
 		autoEl: {cls: 'loading-mask', cn: {cls: 'load-text', html: 'Loading...'}}
 	}],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -69,7 +68,7 @@ export default Ext.define('NextThought.app.library.Home', {
 		me.BundleViewActions = NextThought.app.bundle.Actions.create();
 	},
 
-	navigateToBundle: function(bundle, el) {
+    navigateToBundle: function(bundle, el) {
 		var me = this;
 
 		me.BundleViewActions.transitionToBundle(bundle, el)
@@ -78,8 +77,7 @@ export default Ext.define('NextThought.app.library.Home', {
 			});
 	},
 
-
-	navigateToCourse: function(enrollment, el) {
+    navigateToCourse: function(enrollment, el) {
 		var me = this,
 			instance = enrollment.get('CourseInstance');
 
@@ -89,8 +87,7 @@ export default Ext.define('NextThought.app.library.Home', {
 			});
 	},
 
-
-	navigateToCommunity: function(community, el) {
+    navigateToCommunity: function(community, el) {
 		var route = community.getProfileUrl();
 
 		if (route) {
@@ -98,8 +95,7 @@ export default Ext.define('NextThought.app.library.Home', {
 		}
 	},
 
-
-	navigateToAllCourses: function() {
+    navigateToAllCourses: function() {
 		this.pushRoute('All Courses', '/courses/available', {
 			closeURL: '/'
 		});

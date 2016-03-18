@@ -1,18 +1,18 @@
-export default Ext.define('NextThought.app.profiles.group.Index', {
-	extend: 'NextThought.app.profiles.user.Index',
-	alias: 'widget.profile-group',
+var Ext = require('extjs');
+var UserIndex = require('../user/Index');
+var ComponentsHeader = require('./components/Header');
+var MembershipIndex = require('../user/components/membership/Index');
+var ActivityIndex = require('./components/activity/Index');
+var MembershipIndex = require('./components/membership/Index');
+var GroupsActions = require('../../groups/Actions');
 
-	requires: [
-		'NextThought.app.profiles.group.components.Header',
-		'NextThought.app.profiles.user.components.membership.Index',
-		'NextThought.app.profiles.group.components.activity.Index',
-		'NextThought.app.profiles.group.components.membership.Index',
-		'NextThought.app.groups.Actions'
-	],
 
-	cls: 'group-profile profile',
+module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {
+    extend: 'NextThought.app.profiles.user.Index',
+    alias: 'widget.profile-group',
+    cls: 'group-profile profile',
 
-	initRoutes: function() {
+    initRoutes: function() {
 	   this.addRoute('/activity', this.showActivity.bind(this));
 	   this.addRoute('/members', this.showMembership.bind(this));
 
@@ -21,16 +21,16 @@ export default Ext.define('NextThought.app.profiles.group.Index', {
 	   this.GroupActions = NextThought.app.groups.Actions.create();
 	},
 
-	buildHeaderComponent: function() {
+    buildHeaderComponent: function() {
 		return {
 		   xtype: 'profile-group-header',
 		   doLeaveGroup: this.leaveGroup.bind(this)
 		};
 	},
 
-	finalizeInit: Ext.emptyFn,
+    finalizeInit: Ext.emptyFn,
 
-	setState: function(active) {
+    setState: function(active) {
 		var tabs = [];
 
 		this.activeTab = active;
@@ -56,7 +56,7 @@ export default Ext.define('NextThought.app.profiles.group.Index', {
 		this.NavActions.setActiveContent(this.activeEntity);
 	},
 
-	resolveEntity: function(id, entity) {
+    resolveEntity: function(id, entity) {
 	   var me = this;
 	   return Service.getObject(id)
 		   .then(function(user) {
@@ -68,7 +68,7 @@ export default Ext.define('NextThought.app.profiles.group.Index', {
 				 });
 	},
 
-	showMembership: function(route, subRoute) {
+    showMembership: function(route, subRoute) {
 		   var membershipCmp = this.setActiveItem('group-profile-membership'),
 		   headerCmp = this.headerCmp;
 
@@ -79,7 +79,7 @@ export default Ext.define('NextThought.app.profiles.group.Index', {
 		   .then(membershipCmp.handleRoute.bind(membershipCmp, subRoute, route.params));
 	},
 
-	showActivity: function(route, subRoute) {
+    showActivity: function(route, subRoute) {
 		var activityCmp = this.setActiveItem('profile-group-activity'),
 		    headerCmp = this.headerCmp;
 
@@ -90,8 +90,7 @@ export default Ext.define('NextThought.app.profiles.group.Index', {
 		   .then(activityCmp.handleRoute.bind(activityCmp, subRoute, route.params));
 	},
 
-
-	leaveGroup: function() {
+    leaveGroup: function() {
 		var me = this,
 			user = $AppConfig.userObject;
 

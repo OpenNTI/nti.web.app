@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.EventManager', function() {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.EventManager', function() {
 
 	var EM = Ext.EventManager,
 		normalizeEventExt = EM.normalizeEvent;

@@ -1,5 +1,8 @@
+var Ext = require('extjs');
+
+
 //See Working preview at http://jsfiddle.net/jsg2021/7gaU2/
-export default Ext.define('NextThought.common.chart.Pie', {
+module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 	extend: 'Ext.Component',
 	alias: 'widget.pie-chart',
 	ui: 'chart',

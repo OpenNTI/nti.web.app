@@ -1,6 +1,7 @@
-export default Ext.define('NextThought.model.converters.GroupByTime', {
-	requires: ['Ext.data.SortTypes']
-}, function() {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.model.converters.GroupByTime', {}, function() {
 	Ext.data.Types.GROUPBYTIME = {
 		type: 'groupByTime',
 		sortType: Ext.data.SortTypes.asUCString,

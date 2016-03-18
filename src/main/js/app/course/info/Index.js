@@ -1,24 +1,25 @@
-export default Ext.define('NextThought.app.course.info.Index', {
-	extend: 'NextThought.common.components.NavPanel',
-	alias: 'widget.course-info',
+var Ext = require('extjs');
+var ComponentsNavPanel = require('../../../common/components/NavPanel');
+var MixinsRouter = require('../../../mixins/Router');
+var ComponentsOutline = require('./components/Outline');
+var ComponentsBody = require('./components/Body');
+var WindowsActions = require('../../windows/Actions');
+var AvailableCourseDetailWindow = require('../../library/courses/components/available/CourseDetailWindow');
 
-	title: '',
 
-	requires: [
-		'NextThought.app.course.info.components.Outline',
-		'NextThought.app.course.info.components.Body',
-		'NextThought.app.windows.Actions',
-		'NextThought.app.library.courses.components.available.CourseDetailWindow'
-	],
+module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
+    extend: 'NextThought.common.components.NavPanel',
+    alias: 'widget.course-info',
+    title: '',
 
-	mixins: {
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	navigation: {xtype: 'course-info-outline'},
-	body: {xtype: 'course-info-body'},
+    navigation: {xtype: 'course-info-outline'},
+    body: {xtype: 'course-info-body'},
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -42,14 +43,14 @@ export default Ext.define('NextThought.app.course.info.Index', {
 		me.on('show-enrollment', me.showEnrollment.bind(me));
 	},
 
-	onActivate: function() {
+    onActivate: function() {
 		if (!this.rendered) { return; }
 
 		this.setTitle(this.title);
 		this.alignNavigation();
 	},
 
-	bundleChanged: function(bundle) {
+    bundleChanged: function(bundle) {
 		var me = this,
 			catalogEntry = bundle && bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry();
 
@@ -81,7 +82,7 @@ export default Ext.define('NextThought.app.course.info.Index', {
 		return Promise.resolve();
 	},
 
-	showInfo: function(route, subRoute) {
+    showInfo: function(route, subRoute) {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
@@ -90,7 +91,7 @@ export default Ext.define('NextThought.app.course.info.Index', {
 		});
 	},
 
-	showInstructors: function(route, subRoute) {
+    showInstructors: function(route, subRoute) {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
@@ -99,7 +100,7 @@ export default Ext.define('NextThought.app.course.info.Index', {
 		});
 	},
 
-	showSupport: function(route, subRoute) {
+    showSupport: function(route, subRoute) {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
@@ -108,7 +109,7 @@ export default Ext.define('NextThought.app.course.info.Index', {
 		});
 	},
 
-	showRoster: function(route, subRoute) {
+    showRoster: function(route, subRoute) {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
@@ -117,7 +118,7 @@ export default Ext.define('NextThought.app.course.info.Index', {
 		});
 	},
 
-	showReports: function(route, subRoute) {
+    showReports: function(route, subRoute) {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
@@ -127,15 +128,15 @@ export default Ext.define('NextThought.app.course.info.Index', {
 		});
 	},
 
-	changeRoute: function(title, route) {
+    changeRoute: function(title, route) {
 		this.pushRoute(title, route || '/');
 	},
 
-	showEnrollment: function(catalogEntry) {
+    showEnrollment: function(catalogEntry) {
 		this.WindowActions.pushWindow(catalogEntry, null, null, {afterClose: this.onWindowClose.bind(this, catalogEntry)});
 	},
 
-	onWindowClose: function(catalogEntry) {
+    onWindowClose: function(catalogEntry) {
 		var catalogEntryID = catalogEntry.getId();
 
 		if (catalogEntryID && !this.CourseStore.findEnrollmentForCourse(catalogEntryID)) {

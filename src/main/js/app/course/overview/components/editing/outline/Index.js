@@ -1,20 +1,19 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.outline.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.overview-editing-outline',
-
-	requires: [
-		'NextThought.app.course.overview.components.editing.outline.outlinenode.Index',
-		'NextThought.app.course.overview.components.editing.outline.calendarnode.Index',
-		'NextThought.app.course.overview.components.editing.outline.contentnode.Index'
-	],
+var Ext = require('extjs');
+var MixinsRouter = require('../../../../../../mixins/Router');
+var OutlinenodeIndex = require('./outlinenode/Index');
+var CalendarnodeIndex = require('./calendarnode/Index');
+var ContentnodeIndex = require('./contentnode/Index');
 
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.overview-editing-outline',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-
-	statics: {
+    statics: {
 		canHandle: function(mimeType) {
 			return !!this.HANDLES[mimeType];
 		},
@@ -49,12 +48,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		}
 	},
 
-	cls: 'outline-node-editing',
-	layout: 'none',
-	items: [],
+    cls: 'outline-node-editing',
+    layout: 'none',
+    items: [],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var record = this.record,
@@ -74,8 +72,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		}));
 	},
 
-
-	onceLoaded: function() {
+    onceLoaded: function() {
 		if (this.activeComponent && this.activeComponent.onceLoaded) {
 			return this.activeComponent.onceLoaded();
 		}
@@ -83,8 +80,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		return Promise.resolve();
 	},
 
-
-	onDelete: function() {
+    onDelete: function() {
 		if (this.afterDelete) {
 			this.afterDelete();
 		}

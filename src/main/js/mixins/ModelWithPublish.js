@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.mixins.ModelWithPublish', {
+var Ext = require('extjs');
+var ParseUtils = require('../util/Parsing');
+var SharingUtils = require('../util/Sharing');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {
 
 	getPublishState: function() {
 		return this.isPublished() ? 'Public' : 'Only Me';

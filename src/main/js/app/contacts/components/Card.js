@@ -1,19 +1,23 @@
-export default Ext.define('NextThought.app.contacts.components.Card', {
-	extend: 'Ext.Component',
-	alias: 'widget.contacts-tabs-card',
+var Ext = require('extjs');
+var MixinsProfileLinks = require('../../../mixins/ProfileLinks');
+var MixinsChatLinks = require('../../../mixins/ChatLinks');
+var ManagementPopout = require('../../account/contacts/management/Popout');
 
-	requires: ['NextThought.app.account.contacts.management.Popout'],
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.contacts.components.Card', {
+    extend: 'Ext.Component',
+    alias: 'widget.contacts-tabs-card',
+
+    mixins: {
 		profileLink: 'NextThought.mixins.ProfileLinks',
 		chatLink: 'NextThought.mixins.ChatLinks'
 	},
 
-	profileLinkCard: false,
+    profileLinkCard: false,
+    ui: 'contacts-tabs-card',
+    cls: 'contact-card-container',
 
-	ui: 'contacts-tabs-card',
-	cls: 'contact-card-container',
-
-	renderTpl: Ext.DomHelper.markup({
+    renderTpl: Ext.DomHelper.markup({
 		cls: 'contact-card',
 		cn: [
 			{cls: 'user-avatar-container', 'data-qtip': '{user:displayName}', cn: [
@@ -59,13 +63,13 @@ export default Ext.define('NextThought.app.contacts.components.Card', {
 		]
 	}),
 
-	renderSelectors: {
+    renderSelectors: {
 		cardEl: '.contact-card',
 		chatEl: '.actions .chat',
 		avatarContainerEl: '.user-avatar-container'
 	},
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.enableBubble('presence-changed');
 		this.userObject = this.record;
@@ -73,7 +77,7 @@ export default Ext.define('NextThought.app.contacts.components.Card', {
 		this.userObject.addObserverForField(this, 'Presence', this.presenceChanged, this);
 	},
 
-	beforeRender: function() {
+    beforeRender: function() {
 		var u = this.record;
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, u.getData());
@@ -82,7 +86,7 @@ export default Ext.define('NextThought.app.contacts.components.Card', {
 		this.renderData.user = this.userObject;
 	},
 
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.enableProfileClicks(this.el.down('.avatar'), this.el.down('.name'));
 		this.maybeShowChat(this.chatEl);
@@ -98,15 +102,13 @@ export default Ext.define('NextThought.app.contacts.components.Card', {
 		this.updatePresenceState();
 	},
 
-
-	setAvatar: function(record){
+    setAvatar: function(record){
 		if (this.rendered) {
 			this.avatarContainerEl.update(Ext.util.Format.avatar(record));
 		}
 	},
 
-
-	mouseup: function(e) {
+    mouseup: function(e) {
 		var nib = e.getTarget('.nib'),
 			input = Ext.get('my-contacts').down('input');
 		if (nib && window.innerHeight < 600) {
@@ -114,7 +116,7 @@ export default Ext.define('NextThought.app.contacts.components.Card', {
 		}
 	},
 
-	clicked: function(e) {
+    clicked: function(e) {
 		var nib = e.getTarget('.nib');
 		try {
 			if (nib) {
@@ -129,7 +131,7 @@ export default Ext.define('NextThought.app.contacts.components.Card', {
 		}
 	},
 
-	addToContactsClicked: function(e) {
+    addToContactsClicked: function(e) {
 		var me = this;
 		console.log('Should add to contacts');
 		var pop,
@@ -170,11 +172,11 @@ export default Ext.define('NextThought.app.contacts.components.Card', {
 
 	},
 
-	isOnline: function(val) {
+    isOnline: function(val) {
 		return (val || (this.userObject.getPresence && this.userObject.getPresence().toString())) === 'Online';
 	},
 
-	updatePresenceState: function(value) {
+    updatePresenceState: function(value) {
 		if (!this.cardEl) {
 			return;
 		}
@@ -188,12 +190,12 @@ export default Ext.define('NextThought.app.contacts.components.Card', {
 		this.maybeShowChat(this.chatEl);
 	},
 
-	presenceChanged: function(key, value) {
+    presenceChanged: function(key, value) {
 		this.updatePresenceState(value);
 		this.fireEvent('presence-changed', this);
 	},
 
-	getUserObject: function() {
+    getUserObject: function() {
 		return this.userObject;
 	}
 });

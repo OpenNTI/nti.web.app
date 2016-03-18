@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.anchorables.TranscriptContentPointer', {
+var Ext = require('extjs');
+var AnchorablesTimeContentPointer = require('./TimeContentPointer');
+
+
+module.exports = exports = Ext.define('NextThought.model.anchorables.TranscriptContentPointer', {
 	extend: 'NextThought.model.anchorables.TimeContentPointer',
 
 

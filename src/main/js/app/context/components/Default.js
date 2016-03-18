@@ -1,33 +1,28 @@
-export default Ext.define('NextThought.app.context.components.Default', {
-	extend: 'Ext.Component',
-	alias: 'widget.context-default',
-
-	requires: [
-		'NextThought.app.context.StateStore'
-	],
-
-	cls: 'context-content',
+var Ext = require('extjs');
+var ContextStateStore = require('../StateStore');
 
 
-	renderTpl: Ext.DomHelper.markup([
+module.exports = exports = Ext.define('NextThought.app.context.components.Default', {
+    extend: 'Ext.Component',
+    alias: 'widget.context-default',
+    cls: 'context-content',
+
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'content'},
 		{cls: 'see-more hidden', html: 'Read More'}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		targetEl: '.content',
 		seeMoreEl: '.see-more'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
-
-	isInContext: function() {
+    isInContext: function() {
 		var context = this.ContextStore.getContext(),
 			currentContext = context.last(),
 			contextRecord = currentContext && currentContext.obj,
@@ -43,8 +38,7 @@ export default Ext.define('NextThought.app.context.components.Default', {
 		return inContext || contextRecord && contextRecord.get('NTIID') === this.containerId;
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.__setContent();
@@ -56,8 +50,7 @@ export default Ext.define('NextThought.app.context.components.Default', {
 		}
 	},
 
-
-	__setContent: function() {
+    __setContent: function() {
 		var div = document.createElement('div');
 
 		// If we are within the current context, so just render the simpler version of context.

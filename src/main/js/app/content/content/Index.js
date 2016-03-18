@@ -1,24 +1,23 @@
-export default Ext.define('NextThought.app.content.content.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.bundle-content',
+var Ext = require('extjs');
+var ParseUtils = require('../../../util/Parsing');
+var MixinsRouter = require('../../../mixins/Router');
+var ContentActions = require('../Actions');
+var ContentviewerStateStore = require('../../contentviewer/StateStore');
+var ComponentsResourceNotFound = require('../../../common/components/ResourceNotFound');
 
-	requires: [
-		'NextThought.app.content.Actions',
-		'NextThought.app.contentviewer.StateStore',
-		'NextThought.common.components.ResourceNotFound'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.bundle-content',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
+    layout: 'none',
+    cls: 'bundle-content',
 
-	layout: 'none',
-
-	cls: 'bundle-content',
-
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.ContentActions = NextThought.app.content.Actions.create();
@@ -38,44 +37,37 @@ export default Ext.define('NextThought.app.content.content.Index', {
 		});
 	},
 
-
-	onActivate: function() {
+    onActivate: function() {
 		if (this.reader) {
 			this.reader.fireEvent('activate');
 		}
 	},
 
-
-	onDeactivate: function() {
+    onDeactivate: function() {
 		if (this.reader) {
 			this.reader.fireEvent('deactivate');
 		}
 	},
 
-
-	getContext: function() {
+    getContext: function() {
 		if (this.reader) {
 			return this.reader.pageInfo || this.reader.relatedWork;
 		}
 	},
 
-
-	getActiveItem: function() {
+    getActiveItem: function() {
 		return this.reader;
 	},
 
-
-	getLocation: function() {
+    getLocation: function() {
 		return this.reader.getLocation();
 	},
 
-
-	hasReader: function() {
+    hasReader: function() {
 		return this.reader && !this.reader.isDestroyed;
 	},
 
-
-	isShowingPage: function(ntiid) {
+    isShowingPage: function(ntiid) {
 		var isShowing, assessmentItems;
 
 		if (!this.page) {
@@ -93,8 +85,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 		}, false);
 	},
 
-
-	onBeforeDeactivate: function() {
+    onBeforeDeactivate: function() {
 		if (!this.reader) { return; }
 
 		this.reader.hide();
@@ -103,8 +94,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 		delete this.reader;
 	},
 
-
-	bundleChanged: function(bundle) {
+    bundleChanged: function(bundle) {
 		if (bundle === this.currentBundle) { return; }
 
 		if (this.reader) {
@@ -115,8 +105,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 		this.currentBundle = bundle;
 	},
 
-
-	__loadContent: function(id, obj) {
+    __loadContent: function(id, obj) {
 		if (obj && obj.getId() === id) {
 			return Promise.resolve(obj);
 		}
@@ -133,8 +122,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 			});
 	},
 
-
-	showReader: function(page, parent, hash, note) {
+    showReader: function(page, parent, hash, note) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showReader.bind(this, page));
 			return;
@@ -190,8 +178,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 		this.reader.fireEvent('activate');
 	},
 
-
-	__onFail: function(reason) {
+    __onFail: function(reason) {
 		console.error('Failed to load page:', reason);
 		this.setTitle('Not Found');
 
@@ -203,9 +190,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 		}
 	},
 
-
-
-	showContent: function(route, subRoute) {
+    showContent: function(route, subRoute) {
 		var me = this,
 			ntiid = route.params.id,
 			obj = route.precache.pageInfo || route.precache.relatedWork;
@@ -221,8 +206,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 			});
 	},
 
-
-	showPage: function(route, subRoute) {
+    showPage: function(route, subRoute) {
 	 	var me = this,
 	 		root = route.params.id,
 	 		page = route.params.page,
@@ -273,8 +257,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 	 		});
 	},
 
-
-	showRoot: function(route, subRoute) {
+    showRoot: function(route, subRoute) {
 		var me = this;
 
 		return Service.getPageInfo(this.root, null, null, null, me.currentBundle)
@@ -284,11 +267,11 @@ export default Ext.define('NextThought.app.content.content.Index', {
 			.fail(this.__onFail.bind(this));
 	},
 
-	showNote: function(note) {
+    showNote: function(note) {
 		this.reader.goToNote(note);
 	},
 
-	getVideoRouteForObject: function(obj) {
+    getVideoRouteForObject: function(obj) {
 		var page = obj.page,
 			pageId = page && page.isModel ? page.getId() : page,
 			videoId = obj.get && obj.getId();
@@ -307,8 +290,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 		};
 	},
 
-
-	showMediaView: function(route, subRoute) {
+    showMediaView: function(route, subRoute) {
 		var me = this,
 			root = route.params.id;
 
@@ -342,8 +324,7 @@ export default Ext.define('NextThought.app.content.content.Index', {
 		return me.activeMediaWindow.handleRoute(subRoute, route.precache);
 	},
 
-
-	handleNavigation: function(title, route, precache) {
+    handleNavigation: function(title, route, precache) {
 		this.pushRoute(title, route, precache);
 	}
 });

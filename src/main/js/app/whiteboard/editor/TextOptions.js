@@ -1,17 +1,16 @@
-export default Ext.define('NextThought.app.whiteboard.editor.TextOptions', {
-	alias: 'widget.wb-tool-text-options',
-	extend: 'Ext.toolbar.Toolbar',
-	requires: [
-		'Ext.data.Store',
-		'NextThought.common.form.fields.ComboBox',
-		'NextThought.app.whiteboard.editor.ColorPickerButton'
-	],
-	ui: 'options',
-	cls: 'text-options',
+var Ext = require('extjs');
+var FieldsComboBox = require('../../../common/form/fields/ComboBox');
+var EditorColorPickerButton = require('./ColorPickerButton');
 
-	layout: 'none',
 
-	items: [
+module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.TextOptions', {
+    alias: 'widget.wb-tool-text-options',
+    extend: 'Ext.toolbar.Toolbar',
+    ui: 'options',
+    cls: 'text-options',
+    layout: 'none',
+
+    items: [
 		{
 			ui: 'font-size-select',
 			xtype: 'nt-combobox',

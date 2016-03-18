@@ -1,17 +1,20 @@
-export default Ext.define('NextThought.app.mediaviewer.Actions', {
-	extend: 'NextThought.common.Actions',
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var ContentProxy = require('../../proxy/JSONP');
+var CommonActions = require('../../common/Actions');
+var MediaviewerStateStore = require('./StateStore');
+var WebvttTranscript = require('../../webvtt/Transcript');
+var UserdataActions = require('../userdata/Actions');
+var UserdataStateStore = require('../userdata/StateStore');
+var PathActions = require('../navigation/path/Actions');
+var ModelSlidedeck = require('../../model/Slidedeck');
+var LibraryActions = require('../library/Actions');
 
-	requires: [
-		'NextThought.app.mediaviewer.StateStore',
-		'NextThought.webvtt.Transcript',
-		'NextThought.app.userdata.Actions',
-		'NextThought.app.userdata.StateStore',
-		'NextThought.app.navigation.path.Actions',
-		'NextThought.model.Slidedeck',
-		'NextThought.app.library.Actions'
-	],
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.MediaUserDataStore = NextThought.app.mediaviewer.StateStore.getInstance();
@@ -21,14 +24,12 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
-
-	initPageStores: function(cmp, cid) {
+    initPageStores: function(cmp, cid) {
 		var context = this.MediaUserDataStore.getContext(cmp);
 		context.currentPageStores = {};
 	},
 
-
-	hasPageStore: function(id, ctx) {
+    hasPageStore: function(id, ctx) {
 		if (!ctx || !id) {
 			return false;
 		}
@@ -36,15 +37,13 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 		return !!ctx.currentPageStores[id];
 	},
 
-
-	getPageStore: function(id, ctx) {
+    getPageStore: function(id, ctx) {
 		if (!ctx || !id) { return false; }
 
 		return ctx.currentPageStores[id];
 	},
 
-
-	addPageStore: function(id, store, ctx) {
+    addPageStore: function(id, store, ctx) {
 		if (this.hasPageStore(id, ctx)) {
 			console.warn('replacing an existing store??');
 		}
@@ -52,8 +51,7 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 		ctx.currentPageStores[id] = store;
 	},
 
-
-	loadUserData: function(cmps, reader) {
+    loadUserData: function(cmps, reader) {
 		var cid, me = this, loaded;
 
 		loaded = Ext.Array.map(cmps, function(cmp) {
@@ -86,8 +84,7 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 		return loaded;
 	},
 
-
-	loadAnnotations: function(cmp, containerId) {
+    loadAnnotations: function(cmp, containerId) {
 		var context = this.MediaUserDataStore.getContext(cmp),
 			store, me = this, parentContext = this.UserDataStore.getContext(cmp.ownerCt);
 
@@ -115,8 +112,7 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-
-	__buildPageStore: function(containerId) {
+    __buildPageStore: function(containerId) {
 		var props = {}, object;
 
 		if (Ext.isObject(containerId)) {
@@ -142,8 +138,7 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 		return store;
 	},
 
-
-	loadTranscript: function(transcript) {
+    loadTranscript: function(transcript) {
 		var me = this;
 
 		if (!transcript) {
@@ -170,8 +165,7 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-
-	loadRawTranscript: function(transcript) {
+    loadRawTranscript: function(transcript) {
 		var me = this,
 			content = me.MediaUserDataStore.getTranscriptObject(transcript && transcript.get('associatedVideoId')),
 			base = transcript.get('basePath'),
@@ -208,13 +202,11 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-
-	loadSlidedeck: function(slidedeckId) {
+    loadSlidedeck: function(slidedeckId) {
 		return Service.getObject(slidedeckId);
 	},
 
-
-	getBasePath: function(obj) {
+    getBasePath: function(obj) {
 		var me = this;
 		return new Promise(function(fulfill, reject) {
 			me.PathActions.getPathToObject(obj)
@@ -229,8 +221,7 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-
-	fixSlideImagesPath: function(slides, basePath, fullPath) {
+    fixSlideImagesPath: function(slides, basePath, fullPath) {
 		var pageInfo = (fullPath || []).last(),
 			courseBundle = (fullPath || []).first();
 
@@ -245,8 +236,7 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-
-	buildSlidedeckPlaylist: function(slidedeck) {
+    buildSlidedeckPlaylist: function(slidedeck) {
 		var videos = {},
 			transcripts = {}, me = this, promises,
 			slideStore;
@@ -308,8 +298,7 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-
-	__fixSlideContainer: function(slidedeck, slideStore) {
+    __fixSlideContainer: function(slidedeck, slideStore) {
 		var me = this;
 
 		return new Promise(function(fulfill) {
@@ -323,8 +312,7 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-
-	__getSlidedeckContainer: function(slidedeck) {
+    __getSlidedeckContainer: function(slidedeck) {
 		var me = this;
 		return new Promise(function(fulfill){
 			me.PathActions.getPathToObject(slidedeck)
@@ -337,8 +325,7 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-
-	setSlideDocContent: function(slidedeck, slideStore) {
+    setSlideDocContent: function(slidedeck, slideStore) {
 		var me = this,
 			cid;
 
@@ -351,8 +338,7 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 			});
 	},
 
-
-	loadPageContent: function(pageInfo) {
+    loadPageContent: function(pageInfo) {
 		var me = this,
 			link = pageInfo.getLink('content'),
 			contentPackage = pageInfo.get('ContentPackageNTIID');
@@ -373,8 +359,7 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 			});
 	},
 
-
-	parseSlideDocFragments: function(containerId, slideStore, doc) {
+    parseSlideDocFragments: function(containerId, slideStore, doc) {
 		var slideFrags = Ext.DomQuery.select('object[type="application/vnd.nextthought.slide"]', doc),
 			fragsMap = {};
 
@@ -392,8 +377,7 @@ export default Ext.define('NextThought.app.mediaviewer.Actions', {
 		return Promise.resolve();
 	},
 
-
-	buildSlidedeckComponents: function(slideStore, videosMap, transcriptsMap){
+    buildSlidedeckComponents: function(slideStore, videosMap, transcriptsMap){
 		var isTitle = true, items = [];
 
         slideStore.each(function(slide) {

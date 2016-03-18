@@ -1,3 +1,7 @@
+var Ext = require('extjs');
+var NavigationActions = require('../app/navigation/Actions');
+
+
 var contactCardPopout, showCardTimer,
 		canShow;
 
@@ -67,51 +71,49 @@ function stopShowCard() {
 	clearTimeout(showCardTimer);
 }
 
-export default Ext.define('NextThought.mixins.ProfileLinks', {
-		requires: ['NextThought.app.navigation.Actions'],
+module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
+    navigateToProfile: function(u) {
+		var profileUrl = u.getProfileUrl && u.getProfileUrl();
 
-		navigateToProfile: function(u) {
-			var profileUrl = u.getProfileUrl && u.getProfileUrl();
-
-			if (profileUrl) {
-				NextThought.app.navigation.Actions.pushRootRoute(u.getName(), profileUrl, {
-					user: u
-				});
-			}
-		},
-
-		/**
-		 * Pass in Dom Nodes or Ext.Elements (var arg style) and this will make them clickable and add the css class "over"
-		 * when the mouse is hovering over these elements. (it will also remove the class as the mouse leaves)
-		 *
-		 * This mixin method assumes we are mixed into a class thta is Observable, and has a userObject property (or a user
-		 * property), where the object is an instance of {NextThought.model.User}.
-		 */
-		enableProfileClicks: function() {
-			var me = this,
-					events = {
-						scope: me,
-						click: onUserNameClick
-					};
-
-			Ext.each(arguments, function(el) {
-				var user = me.userObject || me.user;
-				el = Ext.get(el);
-
-				if (!Ext.isEmpty(el)) {
-					//el.addClsOnOver('over');
-					// if ((user && !isMe(user)) && me.profileLinkCard !== false) {
-					// 	events.mouseover = function(e) {
-					// 		return startShowCard.call(me, e, el);
-					// 	};
-
-					// 	events.mouseout = function(e) {
-					// 		return stopShowCard.call(me, e, el);
-					// 	};
-					// }
-
-					me.mon(el, events);
-				}
+		if (profileUrl) {
+			NextThought.app.navigation.Actions.pushRootRoute(u.getName(), profileUrl, {
+				user: u
 			});
 		}
+	},
+
+    /**
+	 * Pass in Dom Nodes or Ext.Elements (var arg style) and this will make them clickable and add the css class "over"
+	 * when the mouse is hovering over these elements. (it will also remove the class as the mouse leaves)
+	 *
+	 * This mixin method assumes we are mixed into a class thta is Observable, and has a userObject property (or a user
+	 * property), where the object is an instance of {NextThought.model.User}.
+	 */
+	enableProfileClicks: function() {
+		var me = this,
+				events = {
+					scope: me,
+					click: onUserNameClick
+				};
+
+		Ext.each(arguments, function(el) {
+			var user = me.userObject || me.user;
+			el = Ext.get(el);
+
+			if (!Ext.isEmpty(el)) {
+				//el.addClsOnOver('over');
+				// if ((user && !isMe(user)) && me.profileLinkCard !== false) {
+				// 	events.mouseover = function(e) {
+				// 		return startShowCard.call(me, e, el);
+				// 	};
+
+				// 	events.mouseout = function(e) {
+				// 		return stopShowCard.call(me, e, el);
+				// 	};
+				// }
+
+				me.mon(el, events);
+			}
+		});
+	}
 });

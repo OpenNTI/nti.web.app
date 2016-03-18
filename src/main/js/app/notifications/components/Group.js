@@ -1,14 +1,24 @@
-export default Ext.define('NextThought.app.notifications.components.Group', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.notification-group',
+var Ext = require('extjs');
+var TypesBadge = require('./types/Badge');
+var TypesBase = require('./types/Base');
+var TypesBlogComment = require('./types/BlogComment');
+var TypesBlogEntryPost = require('./types/BlogEntryPost');
+var TypesContact = require('./types/Contact');
+var TypesFeedback = require('./types/Feedback');
+var TypesForumComment = require('./types/ForumComment');
+var TypesForumTopic = require('./types/ForumTopic');
+var TypesGrade = require('./types/Grade');
+var TypesNote = require('./types/Note');
 
-	layout: 'none',
 
-	cls: 'notification-group',
+module.exports = exports = Ext.define('NextThought.app.notifications.components.Group', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.notification-group',
+    layout: 'none',
+    cls: 'notification-group',
+    ISCHANGE: /change$/,
 
-	ISCHANGE: /change$/,
-
-	statics: {
+    statics: {
 		MIME_TO_COMPONENT: {},
 
 		fillInMimeTypeComponent: function(cmps) {
@@ -32,22 +42,9 @@ export default Ext.define('NextThought.app.notifications.components.Group', {
 		}
 	},
 
-	requires: [
-		'NextThought.app.notifications.components.types.Badge',
-		'NextThought.app.notifications.components.types.Base',
-		'NextThought.app.notifications.components.types.BlogComment',
-		'NextThought.app.notifications.components.types.BlogEntryPost',
-		'NextThought.app.notifications.components.types.Contact',
-		'NextThought.app.notifications.components.types.Feedback',
-		'NextThought.app.notifications.components.types.ForumComment',
-		'NextThought.app.notifications.components.types.ForumTopic',
-		'NextThought.app.notifications.components.types.Grade',
-		'NextThought.app.notifications.components.types.Note'
-	],
+    items: [],
 
-	items: [],
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var groupLabel = this.group && Ext.data.Types.GROUPBYTIME.groupTitle(this.group, 'Today'),
@@ -74,13 +71,11 @@ export default Ext.define('NextThought.app.notifications.components.Group', {
 		}
 	},
 
-
-	unwrap: function(item) {
+    unwrap: function(item) {
 		return this.ISCHANGE.test(item.mimeType) ? item.getItem() : item;
 	},
 
-
-	addItem: function(item, prepend) {
+    addItem: function(item, prepend) {
 		item = this.unwrap(item);
 
 		var cmp = this.self.MIME_TO_COMPONENT[item.mimeType],
@@ -101,8 +96,7 @@ export default Ext.define('NextThought.app.notifications.components.Group', {
 		}
 	},
 
-
-	deleteRecord: function(record) {
+    deleteRecord: function(record) {
 		record = this.unwrap(record);
 
 		var me = this;

@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.video.items.Item', {
+var Ext = require('extjs');
+var DndOrderingItem = require('../../../../../../../../mixins/dnd/OrderingItem');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.items.Item', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-video-items-item',
 

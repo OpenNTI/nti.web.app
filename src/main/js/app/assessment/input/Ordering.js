@@ -1,14 +1,12 @@
-export default Ext.define('NextThought.app.assessment.input.Ordering', {
-	extend: 'NextThought.app.assessment.input.Base',
-	alias: 'widget.question-input-orderingpart',
+var Ext = require('extjs');
+var InputBase = require('./Base');
 
-	requires: [
-		'Ext.dd.DragZone',
-		'Ext.dd.DropZone',
-		'Ext.dd.StatusProxy'
-	],
 
-	inputTpl: Ext.DomHelper.markup({ cls: 'ordering-dd-zone', cn: [
+module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering', {
+    extend: 'NextThought.app.assessment.input.Base',
+    alias: 'widget.question-input-orderingpart',
+
+    inputTpl: Ext.DomHelper.markup({ cls: 'ordering-dd-zone', cn: [
 		{'tag': 'tpl', 'for': 'ordinals', cn: [{
 			cls: 'ordinal', cn: [
 				{ cls: 'label', 'data-part': '{[xindex-1]}', html: '{label}' },
@@ -23,20 +21,17 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		]}
 	]}),
 
-
-	solTpl: Ext.DomHelper.createTemplate({
+    solTpl: Ext.DomHelper.createTemplate({
 		cls: 'ordering-solution',
 		cn: [{ tag: 'span', html: '{0}'},{tag: 'span', cls: 'solution-ordering-text', html: '{1}'}]
 	}).compile(),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		draggableEl: '.ordinal .draggable-area',
 		dragzoneEl: '.ordering-dd-zone'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var values = Ext.clone(this.part.get('values')),
@@ -55,8 +50,7 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -73,13 +67,11 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		me.dragzoneEl.dom.id = Ext.id();
 	},
 
-
-	getAnsweredCount: function() {
+    getAnsweredCount: function() {
 		return 1;
 	},
 
-
-	setValue: function(val) {
+    setValue: function(val) {
 		if (!this.rendered) {
 			this.on({
 				single: true,
@@ -102,8 +94,7 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		}
 	},
 
-
-	getValue: function() {
+    getValue: function() {
 		var val = {};
 
 		this.el.select('.ordinal').each(function(e) {
@@ -118,8 +109,7 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		return val;
 	},
 
-
-	getSolutionContent: function(part) {
+    getSolutionContent: function(part) {
 		var values = Ext.clone(this.part.get('values')),
 			labels = Ext.clone(this.part.get('labels')),
 			out = [], tpl = this.solTpl;
@@ -139,8 +129,7 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		return this.filterHTML(out.join(''));
 	},
 
-
-	editAnswer: function() {
+    editAnswer: function() {
 		if (this.submitted && !this.isAssignment) {
 			if (this.questionSet) {
 				this.questionSet.fireEvent('reset');
@@ -152,8 +141,7 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		}
 	},
 
-
-	mark: function() {
+    mark: function() {
 		var s = (this.part.get('solutions') || [])[0],
 			c = (s && s.get('value')) || {}, i = 0, me = this,
 			values = Ext.clone(this.part.get('values')),
@@ -183,8 +171,7 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		}, 1);
 	},
 
-
-	markCorrect: function() {
+    markCorrect: function() {
 		//NOTE: The dragZoneEl has a display property of 'table' which allows its child elements to flex the box.
 		// Since marking a question alters the dom, we want to only set the width to 100% only after we've updated the layout.
 		// Otherwise, it will force its child elements to be each have a width of 50%, which alters the flex layout. --Pacifique M.
@@ -194,16 +181,14 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		this.mark();
 	},
 
-
-	markIncorrect: function() {
+    markIncorrect: function() {
 		this.dragzoneEl.setStyle({'width': undefined});
 		this.callParent();
 		this.dragzoneEl.setStyle({'width': '100%'});
 		this.mark();
 	},
 
-
-	lockDnD: function() {
+    lockDnD: function() {
 		if (this.dropZone && this.dropZone.lock) {
 			this.dropZone.lock();
 		}
@@ -213,8 +198,7 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		}
 	},
 
-
-	unlockDnD: function() {
+    unlockDnD: function() {
 		if (this.dropZone && this.dropZone.unlock) {
 			this.dropZone.unlock();
 		}
@@ -224,15 +208,14 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		}
 	},
 
-
-	reset: function() {
+    reset: function() {
 		this.el.select('.ordinal .draggable-area').removeCls(['correct', 'incorrect']);
 	//		this.resetOrder();
 		this.unlockDnD();
 		this.callParent();
 	},
 
-	/**
+    /**
 	 * Set the ordering question to submitted state.
 	 * Once an ordering question has been submitted, we disable drag and drop.
 	 */
@@ -242,22 +225,19 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		this.lockDnD();
 	},
 
-
-	resetOrder: function() {
+    resetOrder: function() {
 		var draggableParts = this.el.select('.ordinal .draggable-area');
 		this.quickSort(draggableParts.elements);
 	},
 
-
-	hideSolution: function() {
+    hideSolution: function() {
 		var me = this;
 		this.dragzoneEl.setStyle({'width': undefined});
 		this.callParent();
 		me.dragzoneEl.setStyle({'width': '100%'});
 	},
 
-
-	quickSort: function(a) {
+    quickSort: function(a) {
 		/**
 		 * adaptation of the quick sort algorithm found at http://en.literateprograms.org/Quicksort_(JavaScript)
 		 * While  we could easily do the swapping with a basic sort algorithm or remove all the items
@@ -298,8 +278,7 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		qsort(a, 0, a.length);
 	},
 
-
-	swap: function(a, b) {
+    swap: function(a, b) {
 		if (a === b) { return; }
 		var ad = this.el.down('.draggable-area[data-ordinal=' + a + ']'),
 			bd = this.el.down('.draggable-area[data-ordinal=' + b + ']'),
@@ -313,8 +292,7 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		bp.dom.appendChild(ad.dom);
 	},
 
-
-	swapNodes: function(target, dd) {
+    swapNodes: function(target, dd) {
 		var sourceDom = dd.dragData.ddel,
 			targetParent = target.up('.ordinal', null, true),
 			a = sourceDom.getAttribute('data-ordinal'),
@@ -328,8 +306,7 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		return true;
 	},
 
-
-	onNodeDropEnd: function(target, dd) {
+    onNodeDropEnd: function(target, dd) {
 		if (this.submissionDisabled) {
 			this.enableSubmission();
 			return;
@@ -338,8 +315,7 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		this.saveProgress();
 	},
 
-
-	initializeDragZone: function() {
+    initializeDragZone: function() {
 		var me = this,
 			proxy = new Ext.dd.StatusProxy({
 			id: me.el.id + '-drag-status-proxy',
@@ -403,7 +379,7 @@ export default Ext.define('NextThought.app.assessment.input.Ordering', {
 		});
 	},
 
-	initializeDropZone: function() {
+    initializeDropZone: function() {
 		var me = this;
 		this.dropZone = new Ext.dd.DropZone(this.getEl(), {
 			getTargetFromEvent: function(e) {

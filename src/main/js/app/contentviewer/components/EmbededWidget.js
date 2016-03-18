@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.contentviewer.components.EmbededWidget', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.contentviewer.components.EmbededWidget', {
 	extend: 'Ext.Component',
 	alias: 'widget.overlay-content-embeded-widget-frame',
 

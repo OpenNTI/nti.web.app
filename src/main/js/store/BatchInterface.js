@@ -1,3 +1,8 @@
+var Ext = require('extjs');
+var StoreUtils = require('../util/Store');
+var UtilStore = require('../util/Store');
+
+
 /**
  * An interface to interact with batches that come back from the server,
  * specifically around paging using the links provided.
@@ -5,10 +10,8 @@
  * @class NextThought.store.BatchInterface
  * @author andrew.ligon@nextthought.com (Andrew Ligon)
  */
-export default Ext.define('NextThought.store.BatchInterface', {
-	requires: ['NextThought.util.Store'],
-
-	/**
+module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
+    /**
 	 * @memberOf NextThought.store.BatchInterface#
 	 *
 	 * @param {Object} config - values to set up the batch interface with
@@ -39,7 +42,7 @@ export default Ext.define('NextThought.store.BatchInterface', {
 		}
 	},
 
-	/**
+    /**
 	 * Given a url and params, get a batch from the server
 	 *
 	 * @memberOf NextThought.store.BatchInterface#
@@ -60,8 +63,7 @@ export default Ext.define('NextThought.store.BatchInterface', {
 		return StoreUtils.loadBatch(url, params);
 	},
 
-
-	getBatch: function(force) {
+    getBatch: function(force) {
 		var me = this,
 			url = me.getUrl(),
 			params = me.getParams();
@@ -87,8 +89,7 @@ export default Ext.define('NextThought.store.BatchInterface', {
 			});
 	},
 
-
-	getItems: function(force) {
+    getItems: function(force) {
 		var me = this;
 
 		return me.getBatch(force)
@@ -97,8 +98,7 @@ export default Ext.define('NextThought.store.BatchInterface', {
 			});
 	},
 
-
-	getParams: function() {
+    getParams: function() {
 		var params = this.params;
 
 		params = params || {};
@@ -106,35 +106,30 @@ export default Ext.define('NextThought.store.BatchInterface', {
 		return params;
 	},
 
-
-	getUrl: function() {
+    getUrl: function() {
 		return this.url;
 	},
 
-
-	getNextConfig: function(current) {
+    getNextConfig: function(current) {
 		var link = Service.getLinkFrom(current.Links || [], 'batch-next');
 
 		return link && {url: link};
 	},
 
-
-	getPreviousConfig: function(current) {
+    getPreviousConfig: function(current) {
 		var link = Service.getLinkFrom(current.Links || [], 'batch-previous');
 
 		return link && {url: link};
 	},
 
-
-	__buildBatch: function(config) {
+    __buildBatch: function(config) {
 		config.getNextConfig = this.getNextConfig;
 		config.getPreviousConfig = this.getPreviousConfig;
 
 		return NextThought.store.BatchInterface.create(config);
 	},
 
-
-	getNextBatch: function() {
+    getNextBatch: function() {
 		var me = this;
 
 		return me.getBatch()
@@ -151,8 +146,7 @@ export default Ext.define('NextThought.store.BatchInterface', {
 			});
 	},
 
-
-	getPreviousBatch: function() {
+    getPreviousBatch: function() {
 		var me = this;
 
 		return me.getBatch()

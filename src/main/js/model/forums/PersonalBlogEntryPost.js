@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.forums.PersonalBlogEntryPost', {
+var Ext = require('extjs');
+var ForumsHeadlinePost = require('./HeadlinePost');
+
+
+module.exports = exports = Ext.define('NextThought.model.forums.PersonalBlogEntryPost', {
 	extend: 'NextThought.model.forums.HeadlinePost',
 
 	fields: [

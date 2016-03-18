@@ -1,23 +1,23 @@
-export default Ext.define('NextThought.app.course.assessment.components.admin.assignments.View', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-assessment-admin-assignments',
+var Ext = require('extjs');
+var ParseUtils = require('../../../../../../util/Parsing');
+var MixinsRouter = require('../../../../../../mixins/Router');
+var UtilPageSource = require('../../../../../../util/PageSource');
+var AssignmentsRoot = require('./Root');
+var AssignmentsAssignment = require('./Assignment');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.View', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.course-assessment-admin-assignments',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	requires: [
-		'NextThought.util.PageSource',
-		'NextThought.app.course.assessment.components.admin.assignments.Root',
-		'NextThought.app.course.assessment.components.admin.assignments.Assignment'
-	],
+    handlesAssignment: true,
+    layout: 'card',
 
-	handlesAssignment: true,
-
-	layout: 'card',
-
-
-	setAssignmentsData: function(assignments) {
+    setAssignmentsData: function(assignments) {
 		var root = this.add({
 				xtype: 'course-assessment-admin-assignments-root',
 				pushState: this.pushState,
@@ -35,22 +35,19 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.as
 		return p;
 	},
 
-	clearAssignmentsData: function() {
+    clearAssignmentsData: function() {
 		this.removeAll(true);
 	},
 
-
-	getRoot: function() {
+    getRoot: function() {
 		return this.items.first();
 	},
 
-
-	getAssignmentView: function() {
+    getAssignmentView: function() {
 		return this.down('course-assessment-admin-assignments-item');
 	},
 
-
-	showRoot: function() {
+    showRoot: function() {
 		var root = this.getRoot(),
 			layout = this.getLayout(),
 			active = layout.getActiveItem();
@@ -61,8 +58,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.as
 		}
 	},
 
-
-	showAssignment: function(assignment, student) {
+    showAssignment: function(assignment, student) {
 		if (!assignment) {
 			console.error('No assignment passed, showing root');
 			this.showRoot();
@@ -113,8 +109,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.as
 		return view.restoreState(this.getRouteState());
 	},
 
-
-	showStudentsForAssignment: function(rec) {
+    showStudentsForAssignment: function(rec) {
 		var id = rec.getId();
 
 		id = ParseUtils.encodeForURI(id);
@@ -124,8 +119,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.as
 		});
 	},
 
-
-	showStudentForAssignment: function(student, assignment, historyItem) {
+    showStudentForAssignment: function(student, assignment, historyItem) {
 		var assignmentId = assignment.getId(),
 			assignmentTitle = assignment.get('title'),
 			studentTitle = student.getName(),

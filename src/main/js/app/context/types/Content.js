@@ -1,28 +1,28 @@
-export default Ext.define('NextThought.app.context.types.Content', {
+var Ext = require('extjs');
+var Globals = require('../../../util/Globals');
+var RangeUtils = require('../../../util/Ranges');
+var UtilRanges = require('../../../util/Ranges');
+var CardsOverlayedPanel = require('../../../common/components/cards/OverlayedPanel');
+var CardsCard = require('../../../common/components/cards/Card');
+var CardsLauncher = require('../../../common/components/cards/Launcher');
+var LibraryActions = require('../../library/Actions');
+var DeckOverlayedPanel = require('../../mediaviewer/content/deck/OverlayedPanel');
+var ContentSlidedeck = require('../../mediaviewer/content/Slidedeck');
+var ContentSlideVideo = require('../../mediaviewer/content/SlideVideo');
+var ImageOverlayedPanel = require('../../image/OverlayedPanel');
+var ContentOverlayedPanel = require('../../mediaviewer/content/OverlayedPanel');
+var RollOverlayedPanel = require('../../video/roll/OverlayedPanel');
+var CardsContent = require('../components/cards/Content');
+var CardsQuestion = require('../components/cards/Question');
+var CardsRelatedWork = require('../components/cards/RelatedWork');
+var CardsSlide = require('../components/cards/Slide');
+var CardsVideo = require('../components/cards/Video');
+var ComponentsDefault = require('../components/Default');
+var ListContent = require('../components/list/Content');
 
-	requires: [
-		'NextThought.util.Ranges',
-		'NextThought.common.components.cards.OverlayedPanel',
-		'NextThought.common.components.cards.Card',
-		'NextThought.common.components.cards.Launcher',
-		'NextThought.app.library.Actions',
-		'NextThought.app.mediaviewer.content.deck.OverlayedPanel',
-		'NextThought.app.mediaviewer.content.Slidedeck',
-		'NextThought.app.mediaviewer.content.SlideVideo',
-		'NextThought.app.image.OverlayedPanel',
-		'NextThought.app.mediaviewer.content.OverlayedPanel',
-		'NextThought.app.video.roll.OverlayedPanel',
-		'NextThought.app.context.components.cards.Content',
-		'NextThought.app.context.components.cards.Question',
-		'NextThought.app.context.components.cards.RelatedWork',
-		'NextThought.app.context.components.cards.Slide',
-		'NextThought.app.context.components.cards.Video',
-		'NextThought.app.context.components.Default',
-		'NextThought.app.context.components.list.Content'
-	],
 
-
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
+    statics: {
 		type: 'content',
 
 		canHandle: function(obj) {
@@ -30,8 +30,7 @@ export default Ext.define('NextThought.app.context.types.Content', {
 		}
 	},
 
-
-	constructor: function(config) {
+    constructor: function(config) {
 		this.callParent(arguments);
 
 		this.LibraryActions = NextThought.app.library.Actions.create();
@@ -43,8 +42,7 @@ export default Ext.define('NextThought.app.context.types.Content', {
 		this.maxWidth = config.maxWidth || 574;
 	},
 
-
-	parse: function(pageInfo, contextKind) {
+    parse: function(pageInfo, contextKind) {
 		var me = this,
 			link = pageInfo.getLink('content'),
 			contentPackage = pageInfo.get('ContentPackageNTIID');
@@ -66,8 +64,7 @@ export default Ext.define('NextThought.app.context.types.Content', {
 			});
 	},
 
-
-	__parseNode: function(doc, root, contextKind) {
+    __parseNode: function(doc, root, contextKind) {
 		var page = doc && doc.querySelector('#NTIContent'),
 			context,
 			range = this.range,
@@ -104,7 +101,7 @@ export default Ext.define('NextThought.app.context.types.Content', {
 		}
 	},
 
-	//TODO: clean this up to not rely on ext so much.
+    //TODO: clean this up to not rely on ext so much.
 	__fixUpContext: function(n, root) {
 		var node = Ext.get(n), cardTpl, slideDeckTpl, slideVideoTpl, dom, data,
 			imgs = n && n.querySelectorAll('img'),
@@ -223,8 +220,7 @@ export default Ext.define('NextThought.app.context.types.Content', {
 		return node.dom;
 	},
 
-
-	__fixCards: function(node, root) {
+    __fixCards: function(node, root) {
 		var cardTpl = new Ext.XTemplate(Ext.DomHelper.markup({
 				cls: 'content-card',
 				html: NextThought.common.components.cards.Card.prototype.renderTpl

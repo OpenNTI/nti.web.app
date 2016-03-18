@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.assessment.input.SingleChoice', {
+var Ext = require('extjs');
+var InputMultipleChoice = require('./MultipleChoice');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.input.SingleChoice', {
 	extend: 'NextThought.app.assessment.input.MultipleChoice',
 	alias: 'widget.question-input-multiplechoicepart',
 

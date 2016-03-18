@@ -1,20 +1,25 @@
-export default Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
-	extend: 'NextThought.common.components.cards.Card',
+var Ext = require('extjs');
+var AnalyticsUtil = require('../../../../../util/Analytics');
+var DomUtils = require('../../../../../util/Dom');
+var Globals = require('../../../../../util/Globals');
+var ParseUtils = require('../../../../../util/Parsing');
+var CardsCard = require('../../../../../common/components/cards/Card');
+var ModelNote = require('../../../../../model/Note');
+var ModelRelatedWork = require('../../../../../model/RelatedWork');
+var ContentviewerActions = require('../../../../contentviewer/Actions');
+var UtilParsing = require('../../../../../util/Parsing');
 
-	requires: [
-		'NextThought.model.Note',
-		'NextThought.model.RelatedWork',
-		'NextThought.app.contentviewer.Actions',
-		'NextThought.util.Parsing'
-	],
 
-	alias: [
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
+    extend: 'NextThought.common.components.cards.Card',
+
+    alias: [
 		'widget.course-overview-content',
 		'widget.course-overview-relatedworkref',
 		'widget.course-overview-externallink'
 	],
 
-	// requires: ['NextThought.view.contentviewer.View'],
+    // requires: ['NextThought.view.contentviewer.View'],
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
@@ -25,8 +30,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Cont
 		]}
 	]),
 
-
-	constructor: function(config) {
+    constructor: function(config) {
 		var n = config.node || {getAttribute: function(a) { return config[a];} },
 			i = config.locationInfo,
 			href = n.getAttribute('href'),
@@ -68,21 +72,18 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Cont
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 	},
 
-
-	commentTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+    commentTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'comment', cn: [
 			{ html: '{count:plural("Comment")}'}
 		]
 	})),
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
     //		console.log('Loading:',ntiid);
 	},
 
-
-	loadContainer: function() {
+    loadContainer: function() {
 		var ntiid = this.data.href,
 			req;
 
@@ -109,8 +110,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Cont
 		Ext.Ajax.request(req);
 	},
 
-
-	appendTotal: function(total) {
+    appendTotal: function(total) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.appendTotal, this, arguments), this, {single: true});
 			return;
@@ -121,8 +121,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Cont
 		}
 	},
 
-
-	containerLoaded: function(q, s, r) {
+    containerLoaded: function(q, s, r) {
 		var total = 0,
 			json = Ext.decode(r && r.responseText, true);
 		if (s && json) {
@@ -132,13 +131,11 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Cont
 		this.appendTotal(total);
 	},
 
-
-	getCurrentBundle: function() {
+    getCurrentBundle: function() {
 		return this.course;
 	},
 
-
-	navigateToTarget: function() {
+    navigateToTarget: function() {
 		if (!this.navigate) {
 			console.error('No navigate set on content link');
 			return;
@@ -155,8 +152,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Cont
 		this.navigate.call(null, config);
 	},
 
-
-	onCardClicked: function(e) {
+    onCardClicked: function(e) {
 		if (e && e.getTarget('.comment')) {
 			e.stopEvent();
 			this.bypassEvent = false;
@@ -173,8 +169,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Cont
 		return this.callParent(arguments);
 	},
 
-
-	setProgress: function(progress) {
+    setProgress: function(progress) {
 		progress = progress || this.progress;
 
 		this.progress = progress;
@@ -188,8 +183,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Cont
 		}
 	},
 
-
-	setCommentCounts: function(commentCounts) {
+    setCommentCounts: function(commentCounts) {
 		var summary = commentCounts[this.record.getId()],
 			count = summary ? summary.ItemCount : 0;
 

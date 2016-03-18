@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.model.resolvers.videoservices.Youtube', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices.Youtube', {
 	statics: {
 		TYPE: 'youtube',
 

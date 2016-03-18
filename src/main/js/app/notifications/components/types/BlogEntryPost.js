@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.notifications.components.types.BlogEntryPost', {
+var Ext = require('extjs');
+var TypesBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.app.notifications.components.types.BlogEntryPost', {
 	extend: 'NextThought.app.notifications.components.types.Base',
 	alias: 'widget.notifications-item-blog-entry-post',
 

@@ -1,19 +1,20 @@
-export default Ext.define('NextThought.app.course.enrollment.components.Confirmation', {
-	extend: 'Ext.Component',
-	alias: 'widget.enrollment-confirmation',
+var Ext = require('extjs');
+var MixinsProfileLinks = require('../../../../mixins/ProfileLinks');
+var AccountActions = require('../../../account/Actions');
+var CoursesStateStore = require('../../../library/courses/StateStore');
 
-	requires: [
-		'NextThought.app.account.Actions',
-		'NextThought.app.library.courses.StateStore'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.Confirmation', {
+    extend: 'Ext.Component',
+    alias: 'widget.enrollment-confirmation',
+
+    mixins: {
 		ProfileLinks: 'NextThought.mixins.ProfileLinks'
 	},
 
-	cls: 'enrollment-credit-purchase',
+    cls: 'enrollment-credit-purchase',
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'title', html: '{heading}'},
 		{cls: 'things-to-do', cn: [
 			{cls: 'prompt', html: '{prompt}'},
@@ -35,23 +36,20 @@ export default Ext.define('NextThought.app.course.enrollment.components.Confirma
 		{cls: 'iframe-container'}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		transactionContainerEl: '.transaction',
 		transactionEl: '.transaction .transaction-id',
 		iframeEl: '.iframe-container'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.AccountActions = NextThought.app.account.Actions.create();
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		var c = this.course,
@@ -90,8 +88,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.Confirma
 
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -128,12 +125,11 @@ export default Ext.define('NextThought.app.course.enrollment.components.Confirma
 		me.on('destroy', 'destroy', me.transactionInput);
 	},
 
-	stopClose: function() {
+    stopClose: function() {
 		return Promise.resolve();
 	},
 
-
-	beforeShow: function() {
+    beforeShow: function() {
 		var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
 			transactionId = purchaseAttempt && purchaseAttempt.get('TransactionID'),
 			family = this.course.getCatalogFamily(),
@@ -157,8 +153,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.Confirma
 		}
 	},
 
-
-	addThankYouPage: function(url) {
+    addThankYouPage: function(url) {
 		var container = this.iframeEl.dom,
 			existing = container.querySelector('iframe'),
 			iframe;

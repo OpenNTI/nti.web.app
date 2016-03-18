@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.courses.CourseInstanceAdministrativeRole', {
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.courses.CourseInstanceAdministrativeRole', {
 	extend: 'NextThought.model.Base',
 
 	isAdministrative: true,

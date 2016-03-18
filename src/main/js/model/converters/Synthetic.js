@@ -1,11 +1,10 @@
-export default Ext.define('NextThought.model.converters.Synthetic', {
-	requires: [
-		'Ext.data.Types',
-		'Ext.data.SortTypes',
-		'NextThought.util.Object'
-	],
+var Ext = require('extjs');
+var ObjectUtils = require('../../util/Object');
+var UtilObject = require('../../util/Object');
 
-	SYNTHETIC: {
+
+module.exports = exports = Ext.define('NextThought.model.converters.Synthetic', {
+    SYNTHETIC: {
 		type: 'Synthetic',
 		persist: false,
 
@@ -27,7 +26,6 @@ export default Ext.define('NextThought.model.converters.Synthetic', {
 			ObjectUtils.defineAttributes(data, config);
 		}
 	}
-
 },function() {
 	Ext.data.Types.SYNTHETIC = this.prototype.SYNTHETIC;
 });

@@ -1,14 +1,15 @@
-export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
-	requires: [
-		'NextThought.util.Color',
-		'NextThought.app.whiteboard.Matrix',
-		'NextThought.app.whiteboard.Utils'
-	],
+var Ext = require('extjs');
+var Color = require('../../../util/Color');
+var UtilColor = require('../../../util/Color');
+var WhiteboardMatrix = require('../Matrix');
+var WhiteboardUtils = require('../Utils');
 
-	STOP_NIB: {},
-	IDENTITY: { 'Class': 'CanvasAffineTransform', 'a': 1, 'b': 0, 'c': 0, 'd': 1, 'tx': 0, 'ty': 0 },
 
-	constructor: function(config) {
+module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', {
+    STOP_NIB: {},
+    IDENTITY: { 'Class': 'CanvasAffineTransform', 'a': 1, 'b': 0, 'c': 0, 'd': 1, 'tx': 0, 'ty': 0 },
+
+    constructor: function(config) {
 		this.calculatedAttributes = ['fill', 'stroke'].concat(this.calculatedAttributes || []);
 		this.defineCacheAttributes();
 
@@ -26,8 +27,7 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 		}
 	},
 
-
-	defineCacheAttributes: function() {
+    defineCacheAttributes: function() {
 		var me = this,
 			defineSetter = '__defineSetter__',
 			defineGetter = '__defineGetter__',
@@ -59,8 +59,7 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 		});
 	},
 
-
-	getShapeName: function() {
+    getShapeName: function() {
 		try {
 			return (/^Canvas(.+?)Shape$/i).exec(this.Class)[1];
 		}
@@ -69,8 +68,7 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 		}
 	},
 
-
-	draw: function(ctx,renderCallback) {
+    draw: function(ctx,renderCallback) {
 		var m = new NTMatrix(Ext.clone(this.transform)),
 			w = ctx.canvas.width,
 			scale;
@@ -102,8 +100,7 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 		}
 	},
 
-
-	cacheColor: function(name) {
+    cacheColor: function(name) {
 		var cache = this.cache[name],
 			value;
 
@@ -127,8 +124,7 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 		return '#000000';
 	},
 
-
-	getJSON: function() {
+    getJSON: function() {
 		var data = {},
 			colorRe = /rgba\((.+?),(.+?),(.+?),(.+?)\)/im,
 			keys = ['bbox', 'selected', 'nibData', 'cache', 'tracked'],
@@ -163,8 +159,7 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 		return data;
 	},
 
-
-	performFillAndStroke: function(ctx) {
+    performFillAndStroke: function(ctx) {
 		if (this.cache.fill) { ctx.fill(); }
 		if (this.cache.stroke && ctx.lineWidth) { ctx.stroke(); }
 
@@ -173,15 +168,13 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 		}
 	},
 
-
-	translate: function(dx, dy) {
+    translate: function(dx, dy) {
 		var t = this.transform;
 		t.tx += dx;
 		t.ty += dy;
 	},
 
-
-	/**
+    /**
 	 *
 	 * @param m - the current matrix
 	 * @param x - the mouse's X cordinate on the canvas
@@ -235,7 +228,7 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 		return m.toTransform();
 	},
 
-	/**
+    /**
      * For resizing from the conrners we constrain the aspect ratio of the shape.
 	 * We model the interaction off of google docs constrained image resizing.
 	 * We look only at the change in y value (corrected for any current rotation)
@@ -289,7 +282,7 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 		this.transform = m.toTransform();
 	},
 
-	nibRotate: function(m, x,y) {
+    nibRotate: function(m, x,y) {
 		var t = m.getTranslation(),
 			s = m.getScale();
 
@@ -303,8 +296,7 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 		return m.toTransform();
 	},
 
-
-	modify: function(nib,	x1,y1,	x2,y2,	dx,dy) {
+    modify: function(nib,	x1,y1,	x2,y2,	dx,dy) {
 		var m = new NTMatrix(this.transform),
 			map = {
 				'l'	: function() { return this.nibUpdate(m, x1, y1, dx, dy, -1, 0);},
@@ -332,8 +324,7 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 		}
 	},
 
-
-	drawNib: function(ctx,r,x,y, drawMatrix, m, name, s, a) {
+    drawNib: function(ctx,r,x,y, drawMatrix, m, name, s, a) {
 
 		s = s || 0;
 		a = a || Math.PI * 2;
@@ -372,12 +363,11 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 		};
 	},
 
-	shouldEnableRotation: function() {
+    shouldEnableRotation: function() {
 		return true;
 	},
 
-
-	showNibs: function(ctx) {
+    showNibs: function(ctx) {
 		if (!this.bbox) {
 			return;
 		}
@@ -446,8 +436,7 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 		ctx.restore();
 	},
 
-
-	/**
+    /**
 	 *
 	 * @param x - Integer or Array of [X,Y] in canvas coordinate space
 	 * @param [y] - Integer in canvas coordinate space
@@ -482,8 +471,7 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 		return false;
 	},
 
-
-	/**
+    /**
 	 *
 	 * @param x - unit coordinate space
 	 * @param y - unit coordinate space
@@ -519,8 +507,7 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 		return this.pointInPolygon(x, y, [[x1, y1], [x4, y4], [x3, y3], [x2, y2]]);
 	},
 
-
-	/**
+    /**
 	 *  Globals which should be set before calling this function:
 	 *
 	 *  @param x - point to be tested
@@ -550,5 +537,4 @@ export default Ext.define('NextThought.app.whiteboard.shapes.Base', {
 
 
 	}
-
 });

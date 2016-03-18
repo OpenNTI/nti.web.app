@@ -1,19 +1,21 @@
-export default Ext.define('NextThought.app.course.enrollment.Actions', {
-	extend: 'NextThought.common.Actions',
-	requires: [
-		'NextThought.app.library.courses.StateStore',
-		'NextThought.app.library.courses.Actions',
-		'NextThought.app.navigation.path.Actions'
-	],
+var Ext = require('extjs');
+var ParseUtils = require('../../../util/Parsing');
+var CommonActions = require('../../../common/Actions');
+var CoursesStateStore = require('../../library/courses/StateStore');
+var CoursesActions = require('../../library/courses/Actions');
+var PathActions = require('../../navigation/path/Actions');
 
-	constructor: function() {
+
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    constructor: function() {
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 		this.CourseActions = NextThought.app.library.courses.Actions.create();
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
-
-	/**
+    /**
 	 * Drops a course
 	 * @param  {CourseCatalogEntry}   course   the course to enroll or drop
 	 * @param  {boolean}   enrolled   true to enroll false to drop
@@ -62,7 +64,7 @@ export default Ext.define('NextThought.app.course.enrollment.Actions', {
 
 	},
 
-	/**
+    /**
 	 * Enrolls in a course
 	 * @param  {CourseCatalogEntry}   course   the course to enroll or drop
 	 * @param  {boolean}   enrolled   true to enroll false to drop
@@ -120,8 +122,7 @@ export default Ext.define('NextThought.app.course.enrollment.Actions', {
 			});
 	},
 
-
-	__toggleEnrollmentStatus: function(catelogEntry, enrollement) {
+    __toggleEnrollmentStatus: function(catelogEntry, enrollement) {
 		var collection = (Service.getCollection('EnrolledCourses', 'Courses') || {}).href;
 		if (enrollement) {
 			return Service.requestDelete(enrollement.get('href'));
@@ -132,8 +133,7 @@ export default Ext.define('NextThought.app.course.enrollment.Actions', {
 		});
 	},
 
-
-	refreshEnrolledCourses: function(fulfill, reject) {
+    refreshEnrolledCourses: function(fulfill, reject) {
 		var me = this,
 			collection = (Service.getCollection('EnrolledCourses', 'Courses') || {}).href;
 
@@ -144,8 +144,7 @@ export default Ext.define('NextThought.app.course.enrollment.Actions', {
 			.fail(reject);
 	},
 
-
-	courseDropped: function(catalogEntry) {
+    courseDropped: function(catalogEntry) {
 		// this.enrollmentChanged();
 		this.fireEvent('content-dropped', catalogEntry);
 	}

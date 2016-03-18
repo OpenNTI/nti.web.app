@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.filter.Filter', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.filter.Filter', {
 	alternateClassName: 'NextThought.Filter',
 
 	inheritableStatics: {

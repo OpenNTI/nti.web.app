@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.assessment.components.Sequence', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.components.Sequence', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-components-sequence',
 

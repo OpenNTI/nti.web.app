@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.cache.AbstractStorage', function() {
+var Ext = require('extjs');
+var B64 = require('../util/Base64');
+
+
+module.exports = exports = Ext.define('NextThought.cache.AbstractStorage', function() {
 
 	var prefix = function prefix(v) {
 		if (!prefix.val) {

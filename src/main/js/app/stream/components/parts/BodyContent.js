@@ -1,3 +1,10 @@
+var Ext = require('extjs');
+var UserRepository = require('../../../../cache/UserRepository');
+var User = require('../../../../model/User');
+var DomUtils = require('../../../../util/Dom');
+var MixinsLikeFavoriteActions = require('../../../../mixins/LikeFavoriteActions');
+
+
 /**
  * Render the body of a record (namely notes and forums), expects
  *
@@ -15,7 +22,7 @@
  * fires: show-object, edit, report, delete
  * @type {String}
  */
-export default Ext.define('NextThought.app.stream.components.parts.BodyContent', {
+module.exports = exports = Ext.define('NextThought.app.stream.components.parts.BodyContent', {
 	extend: 'Ext.Component',
 	alias: 'widget.stream-parts-bodycontent',
 

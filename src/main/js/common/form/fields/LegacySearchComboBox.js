@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.common.form.fields.LegacySearchComboBox', {
+var Ext = require('extjs');
+var MixinsScrolling = require('../../../mixins/Scrolling');
+
+
+module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySearchComboBox', {
 	extend: 'Ext.Component',
 	alias: 'widget.legacysearchcombobox',
 

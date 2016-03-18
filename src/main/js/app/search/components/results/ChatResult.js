@@ -1,17 +1,22 @@
-export default Ext.define('NextThought.app.search.components.results.ChatResult', {
-	extend: 'NextThought.app.search.components.results.Base',
-	alias: 'widget.search-result-messageinfo',
+var Ext = require('extjs');
+var UserRepository = require('../../../../cache/UserRepository');
+var NTIFormat = require('../../../../util/Format');
+var ParseUtils = require('../../../../util/Parsing');
+var ResultsBase = require('./Base');
+var ChatActions = require('../../../chat/Actions');
 
-	requires: ['NextThought.app.chat.Actions'],
 
+module.exports = exports = Ext.define('NextThought.app.search.components.results.ChatResult', {
+    extend: 'NextThought.app.search.components.results.Base',
+    alias: 'widget.search-result-messageinfo',
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.ChatActions = NextThought.app.chat.Actions.create();
 	},
 
-	setCreator: function(user) {
+    setCreator: function(user) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setCreator.bind(this, user));
 			return;
@@ -32,7 +37,7 @@ export default Ext.define('NextThought.app.search.components.results.ChatResult'
 		}
 	},
 
-	setTitle: function(record) {
+    setTitle: function(record) {
 		var me = this,
 			sharedWith = record.get('sharedWith');
 
@@ -65,8 +70,7 @@ export default Ext.define('NextThought.app.search.components.results.ChatResult'
 		me.onLoadTranscript = me.ChatActions.loadTranscript(record.get('ContainerId'));
 	},
 
-
-	clicked: function(e) {
+    clicked: function(e) {
 		var me = this,
 			hitId = this.hit.get('NTIID');
 

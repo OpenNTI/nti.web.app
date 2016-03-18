@@ -1,15 +1,14 @@
-export default Ext.define('NextThought.app.context.types.RelatedWork', {
+var Ext = require('extjs');
+var CardsContent = require('../components/cards/Content');
+var CardsQuestion = require('../components/cards/Question');
+var CardsRelatedWork = require('../components/cards/RelatedWork');
+var CardsSlide = require('../components/cards/Slide');
+var CardsVideo = require('../components/cards/Video');
+var ListRelatedWork = require('../components/list/RelatedWork');
 
-	requires: [
-		'NextThought.app.context.components.cards.Content',
-		'NextThought.app.context.components.cards.Question',
-		'NextThought.app.context.components.cards.RelatedWork',
-		'NextThought.app.context.components.cards.Slide',
-		'NextThought.app.context.components.cards.Video',
-		'NextThought.app.context.components.list.RelatedWork'
-	],
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.context.types.RelatedWork', {
+    statics: {
 		type: 'relatedwork',
 
 		canHandle: function(obj) {
@@ -17,14 +16,12 @@ export default Ext.define('NextThought.app.context.types.RelatedWork', {
 		}
 	},
 
-
-	constructor: function(config) {
+    constructor: function(config) {
 		this.callParent(arguments);
 		Ext.applyIf(this, config || {});
 	},
 
-
-	parse: function(obj, kind) {
+    parse: function(obj, kind) {
 		var cmp;
 		if (kind === 'card') {
 			cmp = {

@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.common.form.fields.SearchComboBox', {
+var Ext = require('extjs');
+var Globals = require('../../../util/Globals');
+
+
+module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComboBox', {
 	extend: 'Ext.Component',
 	alias: 'searchcombobox',
 

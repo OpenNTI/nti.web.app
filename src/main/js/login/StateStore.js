@@ -1,16 +1,19 @@
-export default Ext.define('NextThought.login.StateStore', {
-	extend: 'NextThought.common.StateStore',
+var Ext = require('extjs');
+var UserRepository = require('../cache/UserRepository');
+var Socket = require('../proxy/Socket');
+var ObjectUtils = require('../util/Object');
+var CommonStateStore = require('../common/StateStore');
+var PreferenceManager = require('../preference/Manager');
+var ProxySocket = require('../proxy/Socket');
+var AccountActions = require('../app/account/Actions');
 
-	requires: [
-		'NextThought.preference.Manager',
-		'NextThought.proxy.Socket',
-		'NextThought.app.account.Actions'
-	],
 
-	sessionTrackerKey: 'sidt',
-	actions: {},
+module.exports = exports = Ext.define('NextThought.login.StateStore', {
+    extend: 'NextThought.common.StateStore',
+    sessionTrackerKey: 'sidt',
+    actions: {},
 
-	constructor: function() {
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.onLoginActions = [];
@@ -24,8 +27,7 @@ export default Ext.define('NextThought.login.StateStore', {
 		});
 	},
 
-
-	registerLoginAction: function(fn, name) {
+    registerLoginAction: function(fn, name) {
 		if (name && !this.loginActionsNames[name]) {
 			this.onLoginActions.push(fn);
 			this.loginActionsNames[name] = true;
@@ -34,12 +36,11 @@ export default Ext.define('NextThought.login.StateStore', {
 		}
 	},
 
-
-	setupSocket: function() {
+    setupSocket: function() {
 		Socket.setup();
 	},
 
-	__validateSession: function() {
+    __validateSession: function() {
 		console.log('Validating Session');
 
 		var v = this.sessionStarted && TemporaryStorage.get(this.sessionTrackerKey);
@@ -56,25 +57,21 @@ export default Ext.define('NextThought.login.StateStore', {
 		}
 	},
 
-
-	setSessionId: function(id) {
+    setSessionId: function(id) {
 		this.sessionId = id;
 		TemporaryStorage.set(this.sessionTrackerKey, this.sessionId);
 		this.sessionStarted = true;
 	},
 
-
-	setLogoutURL: function(url) {
+    setLogoutURL: function(url) {
 		this.logOutURL = url;
 	},
 
-
-	getLogoutURL: function() {
+    getLogoutURL: function() {
 		return this.logOutURL;
 	},
 
-
-	maybeAddImmediateAction: function(handshake) {
+    maybeAddImmediateAction: function(handshake) {
 		var fakeService = window.Service || NextThought.model.Service.create({}),
 			links = handshake.Links;
 
@@ -89,13 +86,11 @@ export default Ext.define('NextThought.login.StateStore', {
 		}
 	},
 
-
-	__shouldShowContentFor: function(linkRel) {
+    __shouldShowContentFor: function(linkRel) {
 		return !Ext.isEmpty($AppConfig.userObject.getLink(linkRel));
 	},
 
-
-	//TODO: Fill this in from controller/Session
+    //TODO: Fill this in from controller/Session
 	takeImmediateAction: function() {
 		var user = $AppConfig.userObject;
 
@@ -127,13 +122,11 @@ export default Ext.define('NextThought.login.StateStore', {
 		}
 	},
 
-
-	willLogout: function(callback) {
+    willLogout: function(callback) {
 		this.fireEvent('will-logout', callback);
 	},
 
-
-	onLogin: function() {
+    onLogin: function() {
 		var me = this;
 
 		Promise.all(this.onLoginActions.map(function(action) { action.call(null); }))
@@ -144,13 +137,11 @@ export default Ext.define('NextThought.login.StateStore', {
 			});
 	},
 
-
-	onSessionReady: function() {
+    onSessionReady: function() {
 		this.fireEvent('session-ready');
 	},
 
-
-	setActiveUser: function(user) {
+    setActiveUser: function(user) {
 		$AppConfig.userObject = UserRepository.cacheUser(user, true);
 
 		$AppConfig.Preferences = NextThought.preference.Manager.create({

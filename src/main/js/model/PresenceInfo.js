@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.model.PresenceInfo', {
+var Ext = require('extjs');
+var ObjectUtils = require('../util/Object');
+var ModelBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.PresenceInfo', {
 	extend: 'NextThought.model.Base',
 	idProperty: 'username',
 	fields: [

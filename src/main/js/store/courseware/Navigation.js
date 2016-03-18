@@ -1,10 +1,13 @@
-export default Ext.define('NextThought.store.courseware.Navigation', {
-	extend: 'Ext.data.Store',
-	requires: [
-		'NextThought.model.courses.navigation.CourseOutlineNode'
-	],
-	model: 'NextThought.model.courses.navigation.Node',
-	sorters: [
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var NavigationCourseOutlineNode = require('../../model/courses/navigation/CourseOutlineNode');
+
+
+module.exports = exports = Ext.define('NextThought.store.courseware.Navigation', {
+    extend: 'Ext.data.Store',
+    model: 'NextThought.model.courses.navigation.Node',
+
+    sorters: [
 		{
 			fn: function(a, b) {
 				var sa = a.get('position'), sb = b.get('position');
@@ -13,8 +16,7 @@ export default Ext.define('NextThought.store.courseware.Navigation', {
 		}//We are assuming the dates are in order?
 	],
 
-
-	constructor: function(config) {
+    constructor: function(config) {
 		if (!config.outlinePromise) {
 			config.outlinePromise = Promise.reject('Not Given');
 		}
@@ -33,18 +35,16 @@ export default Ext.define('NextThought.store.courseware.Navigation', {
 		this.callParent(arguments);
 	},
 
-
-	onceBuilt: function() {
+    onceBuilt: function() {
 		return this.building;
 	},
 
-
-	failedToBuild: function(reason) {
+    failedToBuild: function(reason) {
 		console.error('Could not build outline store:', reason);
 		return this;
 	},
 
-	fillFromOutline: function(results) {
+    fillFromOutline: function(results) {
 		var outline = results[0],
 			tocNodes = results[1],
 			index = 0, r = [], t,
@@ -102,8 +102,7 @@ export default Ext.define('NextThought.store.courseware.Navigation', {
 		return this;
 	},
 
-
-	findByDate: function(date) {
+    findByDate: function(date) {
 		var recs = this.getRange() || [];
 		return recs.filter(function(o) {
 			var open = o.get('AvailableBeginning') || date,

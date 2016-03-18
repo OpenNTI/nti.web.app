@@ -1,36 +1,36 @@
-export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVideo', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.media-transcript-viewer',
-	requires: [
-		'NextThought.app.mediaviewer.components.reader.View',
-		'NextThought.app.video.Video'
-	],
+var Ext = require('extjs');
+var ContentUtils = require('../../../../util/Content');
+var ParseUtils = require('../../../../util/Parsing');
+var MixinsSearchable = require('../../../../mixins/Searchable');
+var ReaderView = require('../reader/View');
+var VideoVideo = require('../../../video/Video');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mode.SmallVideo', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.media-transcript-viewer',
+
+    mixins: {
 		Searchable: 'NextThought.mixins.Searchable'
 	},
 
-	ui: 'media-viewer',
-	viewerType: 'transcript-focus',
+    ui: 'media-viewer',
+    viewerType: 'transcript-focus',
+    border: false,
+    plain: true,
+    frame: false,
 
-	border: false,
-	plain: true,
-	frame: false,
-
-
-	statics: {
+    statics: {
 		getTargetVideoWidth: function(el, transcriptRatio) {
 			return 512;
 		}
 	},
 
-	transcriptRatio: 0.55,
+    transcriptRatio: 0.55,
+    videoWidth: 512,
+    cls: 'small-video-player',
 
-	videoWidth: 512,
-
-	cls: 'small-video-player',
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'sync-button', cn: [
 			{tag: 'span', html: 'sync with video', role: 'button'}
 		]},
@@ -38,21 +38,18 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		{id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out, values)%}']}
 	]),
 
-	layout: 'none',
+    layout: 'none',
+    childEls: ['body'],
+    getTargetEl: function() { return this.body; },
 
-	childEls: ['body'],
-	getTargetEl: function() { return this.body; },
-
-
-	renderSelectors: {
+    renderSelectors: {
 		headerEl: '.header',
 		gridViewEl: '.grid-view-body',
 		videoPlayerEl: '.video-player',
 		syncEl: '.sync-button'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.buildResourceView();
 		this.enableBubble(['jump-video-to']);
@@ -60,19 +57,15 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		this.initSearch();
 	},
 
-
-	getContainerIdForSearch: function() {
+    getContainerIdForSearch: function() {
 		return this.video.getId();
 	},
 
-
-	showSearch: function(hit, fragIdx) {
+    showSearch: function(hit, fragIdx) {
 		this.startAtMillis = hit.get('StartMilliSecs');
 	},
 
-
-
-	buildResourceView: function() {
+    buildResourceView: function() {
 		var me = this;
 
 		this.resourceView = this.add({
@@ -102,8 +95,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 			});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.syncVideo();
 		this.mon(this.syncEl, 'click', 'syncVideo');
@@ -111,8 +103,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		Ext.defer(this.configureVideoPlayer, 300, this);
 	},
 
-
-	beforeDeactivate: function() {
+    beforeDeactivate: function() {
 		var shouldDeactivate = true;
 		if (this.resourceView && this.resourceView.beforeDeactivate) {
 			shouldDeactivate = this.resourceView.beforeDeactivate();
@@ -122,7 +113,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		}
 	},
 
-	allowNavigation: function() {
+    allowNavigation: function() {
 		if (this.videoplayer.isPlaying()) {
 			this.videoplayer.pausePlayback();
 			this.didPauseVideoPlayer = true;
@@ -135,8 +126,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		}
 	},
 
-
-	setNext: function(video) {
+    setNext: function(video) {
 		this.nextVideo = video;
 
 		if (this.videoPlayer) {
@@ -144,8 +134,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		}
 	},
 
-
-	setPrev: function(video) {
+    setPrev: function(video) {
 		this.prevVideo = video;
 
 		if (this.videoPlayer) {
@@ -153,8 +142,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		}
 	},
 
-
-	configureVideoPlayer: function() {
+    configureVideoPlayer: function() {
 		var width = this.self.getTargetVideoWidth(this.getEl(), this.transcriptRatio),
 			startTimeSeconds = (this.startAtMillis || 0) / 1000,
 			range, pointer;
@@ -194,7 +182,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		this.on('jump-video-to', Ext.bind(this.videoplayer.jumpToVideoLocation, this.videoplayer), this);
 	},
 
-	adjustOnResize: function(availableHeight, availableWidth) {
+    adjustOnResize: function(availableHeight, availableWidth) {
 		if (!this.resourceView) { return; }
 
 		var videoWidth = this.videoPlayerEl.getWidth(),
@@ -209,8 +197,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		this.videoPlayerEl.setStyle('-ms-flex-basis', videoWidth + 'px');
 	},
 
-
-	alignResourceViewNextToVideo: function(left, top) {
+    alignResourceViewNextToVideo: function(left, top) {
 		var padding = 20,
 			targetEl = this.getTargetEl();
 
@@ -220,13 +207,11 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		targetEl.setStyle('marginLeft', left + padding + 'px');
 	},
 
-
-	onPresentationPartsReady: function() {
+    onPresentationPartsReady: function() {
 		this.fireEvent('media-viewer-ready', this);
 	},
 
-
-	willShowAnnotation: function(annotationView) {
+    willShowAnnotation: function(annotationView) {
 		if (!this.resourceView) { return;}
 
 		var nWidth = annotationView.getWidth(),
@@ -241,14 +226,12 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		}
 	},
 
-
-	willHideAnnotation: function(annotationView) {
+    willHideAnnotation: function(annotationView) {
 		this.videoPlayerEl.setStyle('left', '10px');
 		this.getTargetEl().setStyle('left', '0px');
 	},
 
-
-	unSyncVideo: function() {
+    unSyncVideo: function() {
 		var transcript = this.resourceView;
 		this.syncWithTranscript = false;
 
@@ -259,8 +242,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		}
 	},
 
-
-	actOnMediaHeartBeat: function() {
+    actOnMediaHeartBeat: function() {
 		var state = this.videoplayer.queryPlayer(),
 			time = state && state.time;
 
@@ -272,8 +254,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		}
 	},
 
-
-	startAtSpecificTime: function(time, isSeconds) {
+    startAtSpecificTime: function(time, isSeconds) {
 		var startTimeSeconds = !isSeconds ? (time || 0) / 1000 : time;
 
 		console.debug('Should scroll cmps to time: ', startTimeSeconds);
@@ -286,8 +267,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		}
 	},
 
-
-	syncVideo: function() {
+    syncVideo: function() {
 		this.syncWithTranscript = true;
 
 		if (this.syncEl) {
@@ -295,8 +275,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		}
 	},
 
-
-	getLocationInfo: function() {
+    getLocationInfo: function() {
 		var me = this;
 
 		return new Promise(function(fufill, reject) {
@@ -313,8 +292,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		});
 	},
 
-
-	videoNavigation: function(video) {
+    videoNavigation: function(video) {
 		if (!video) {
 			return;
 		}
@@ -333,20 +311,17 @@ export default Ext.define('NextThought.app.mediaviewer.components.mode.SmallVide
 		}
 	},
 
-
-	beforeGridViewerShow: function() {
+    beforeGridViewerShow: function() {
 		if (this.videoplayer.isPlaying()) {
 			this.videoplayer.pausePlayback();
 			this.didPauseVideoPlayer = true;
 		}
 	},
 
-
-	afterGridViewerHide: function() {
+    afterGridViewerHide: function() {
 		if (this.didPauseVideoPlayer) {
 			this.videoplayer.resumePlayback();
 			delete this.didPauseVideoPlayer;
 		}
 	}
-
 });

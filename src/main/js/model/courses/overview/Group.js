@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.model.courses.overview.Group', {
+var Ext = require('extjs');
+var ModelBase = require('../../Base');
+var MixinsOrderedContents = require('../../../mixins/OrderedContents');
+
+
+module.exports = exports = Ext.define('NextThought.model.courses.overview.Group', {
 	extend: 'NextThought.model.Base',
 
 	mixins: {

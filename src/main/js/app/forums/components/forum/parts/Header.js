@@ -1,14 +1,13 @@
-export default Ext.define('NextThought.app.forums.components.forum.parts.Header', {
-	extend: 'Ext.Component',
-	alias: 'widget.forums-forum-header',
+var Ext = require('extjs');
+var MenusReports = require('../../../../../common/menus/Reports');
 
-	requires: [
-		'NextThought.common.menus.Reports'
-	],
 
-	cls: 'topic-list-header',
+module.exports = exports = Ext.define('NextThought.app.forums.components.forum.parts.Header', {
+    extend: 'Ext.Component',
+    alias: 'widget.forums-forum-header',
+    cls: 'topic-list-header',
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'new-topic', html: '{{{NextThought.view.forums.forum.parts.Header.new}}}'},
 		{cls: 'controls', cn: [
 			{cls: 'position', cn: [
@@ -24,7 +23,7 @@ export default Ext.define('NextThought.app.forums.components.forum.parts.Header'
 		]}
 	]),
 
-	renderSelectors: {
+    renderSelectors: {
 		newTopicEl: '.new-topic',
 		currentEl: '.controls .position .current',
 		totalEl: '.controls .position .total',
@@ -32,8 +31,7 @@ export default Ext.define('NextThought.app.forums.components.forum.parts.Header'
 		nextEl: '.controls .pager .next'
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		var me = this, total;
 
 		if (!me.record.getLink('add')) {
@@ -51,8 +49,7 @@ export default Ext.define('NextThought.app.forums.components.forum.parts.Header'
 		me.mon(me.nextEl, 'click', 'nextPage');
 	},
 
-
-	updatePosition: function() {
+    updatePosition: function() {
 		var total = Math.ceil(this.store.getTotalCount() / this.store.pageSize),
 			currentPage = total ? this.store.currentPage : 0;
 
@@ -63,8 +60,7 @@ export default Ext.define('NextThought.app.forums.components.forum.parts.Header'
 		this.totalEl.update(total || '0');
 	},
 
-
-	previousPage: function() {
+    previousPage: function() {
 		var current = this.store.currentPage;
 
 		if (current - 1 > 0) {
@@ -72,8 +68,7 @@ export default Ext.define('NextThought.app.forums.components.forum.parts.Header'
 		}
 	},
 
-
-	nextPage: function() {
+    nextPage: function() {
 		var total = Math.ceil(this.store.getTotalCount() / this.store.pageSize),
 			current = this.store.currentPage;
 

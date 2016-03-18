@@ -1,30 +1,30 @@
-export default Ext.define('NextThought.app.course.overview.components.parts.Group', {
-	extend: 'NextThought.common.components.BoundCollection',
-	alias: 'widget.overview-group',
-
-	requires: [
-		'NextThought.app.course.overview.components.parts.ContentLink',
-		'NextThought.app.course.overview.components.parts.Discussion',
-		'NextThought.app.course.overview.components.parts.Header',
-		'NextThought.app.course.overview.components.parts.IframeWindow',
-		'NextThought.app.course.overview.components.parts.Poll',
-		'NextThought.app.course.overview.components.parts.QuestionSet',
-		'NextThought.app.course.overview.components.parts.SectionHeader',
-		'NextThought.app.course.overview.components.parts.Spacer',
-		'NextThought.app.course.overview.components.parts.Survey',
-		'NextThought.app.course.overview.components.parts.Timeline',
-		'NextThought.app.course.overview.components.parts.Topic',
-		'NextThought.app.course.overview.components.parts.Video',
-		'NextThought.app.course.overview.components.parts.VideoRoll',
-		'NextThought.model.VideoRoll',
-		'NextThought.model.Video'
-	],
-
-	ui: 'course',
-	cls: 'overview-group',
+var Ext = require('extjs');
+var ContentUtils = require('../../../../../util/Content');
+var ComponentsBoundCollection = require('../../../../../common/components/BoundCollection');
+var PartsContentLink = require('./ContentLink');
+var PartsDiscussion = require('./Discussion');
+var PartsHeader = require('./Header');
+var PartsIframeWindow = require('./IframeWindow');
+var PartsPoll = require('./Poll');
+var PartsQuestionSet = require('./QuestionSet');
+var PartsSectionHeader = require('./SectionHeader');
+var PartsSpacer = require('./Spacer');
+var PartsSurvey = require('./Survey');
+var PartsTimeline = require('./Timeline');
+var PartsTopic = require('./Topic');
+var PartsVideo = require('./Video');
+var PartsVideoRoll = require('./VideoRoll');
+var ModelVideoRoll = require('../../../../../model/VideoRoll');
+var ModelVideo = require('../../../../../model/Video');
 
 
-	initComponent: function() {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Group', {
+    extend: 'NextThought.common.components.BoundCollection',
+    alias: 'widget.overview-group',
+    ui: 'course',
+    cls: 'overview-group',
+
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.add([
@@ -46,8 +46,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Grou
 		this.setCollection(this.record);
 	},
 
-
-	onceLoaded: function() {
+    onceLoaded: function() {
 		var me = this;
 
 		return new Promise(function(fulfill, reject) {
@@ -62,8 +61,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Grou
 		});
 	},
 
-
-	setProgress: function(progress) {
+    setProgress: function(progress) {
 		var body = this.getBodyContainer();
 
 		body.items.each(function(item) {
@@ -73,8 +71,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Grou
 		});
 	},
 
-
-	setCommentCounts: function(commentCounts) {
+    setCommentCounts: function(commentCounts) {
 		var body = this.getBodyContainer();
 
 		body.items.each(function(item) {
@@ -84,13 +81,11 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Grou
 		});
 	},
 
-
-	getBodyContainer: function() {
+    getBodyContainer: function() {
 		return this.down('[bodyContainer]');
 	},
 
-
-	setCollection: function(collection) {
+    setCollection: function(collection) {
 		var me = this,
 			items = me.getItems(collection),
 			body = me.getBodyContainer(),
@@ -189,5 +184,5 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Grou
 			});
 	},
 
-	navigate: function() {}
+    navigate: function() {}
 });

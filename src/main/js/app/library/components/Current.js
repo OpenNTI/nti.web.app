@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.library.components.Current', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.library.components.Current', {
 	extend: 'Ext.container.Container',
 
 	layout: 'none',

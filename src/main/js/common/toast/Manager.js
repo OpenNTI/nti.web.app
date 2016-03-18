@@ -1,4 +1,8 @@
-export default new Ext.define('NextThought.common.toast.Manager', {
+var Ext = require('extjs');
+var Toaster = require('./Manager');
+
+
+module.exports = exports = new Ext.define('NextThought.common.toast.Manager', {
 	requires: [
 		'NextThought.common.toast.Window'
 	],

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.window.Footer', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.window.Footer', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-window-footer',
 

@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.InlineEditor', {
+var Ext = require('extjs');
+var OutlineInlineEditor = require('../InlineEditor');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.InlineEditor', {
 	extend: 'NextThought.app.course.overview.components.editing.outline.InlineEditor',
 	alias: 'widget.overview-editing-outlinenode-inline-editor',
 

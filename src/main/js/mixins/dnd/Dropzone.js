@@ -1,3 +1,7 @@
+var Ext = require('extjs');
+var DndDropzone = require('../../app/dnd/Dropzone');
+
+
 /**
  * Handle adding and removing listeners for dropping actions
  *
@@ -6,14 +10,8 @@
  *
  * It can also implement a getDropTarget method, otherwise this.el.dom will be used
  */
-export default Ext.define('NextThought.mixins.dnd.Dropzone', {
-
-	requires: [
-		'NextThought.app.dnd.Dropzone'
-	],
-
-
-	/**
+module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
+    /**
 	 * If we haven't yet, set up the dropzone wrapper
 	 */
 	initDropzone: function() {
@@ -33,13 +31,11 @@ export default Ext.define('NextThought.mixins.dnd.Dropzone', {
 		}
 	},
 
-
-	getDropzoneTarget: function() {
+    getDropzoneTarget: function() {
 		return this.el && this.el.dom;
 	},
 
-
-	getDropzoneBoundingClientRect: function() {
+    getDropzoneBoundingClientRect: function() {
 		var target = this.getDropzoneTarget(),
 			rect;
 
@@ -52,8 +48,7 @@ export default Ext.define('NextThought.mixins.dnd.Dropzone', {
 		return rect;
 	},
 
-
-	/**
+    /**
 	 * Add all the listeners to the target
 	 */
 	enableDropzone: function() {
@@ -66,8 +61,7 @@ export default Ext.define('NextThought.mixins.dnd.Dropzone', {
 		}
 	},
 
-
-	/**
+    /**
 	 * Remove all the listeners on the target
 	 */
 	disableDropzone: function() {
@@ -80,8 +74,7 @@ export default Ext.define('NextThought.mixins.dnd.Dropzone', {
 		}
 	},
 
-
-	/**
+    /**
 	 * Set a data transfer handler on the dropzone wrapper
 	 * @param {Strins} key     key to look up data on
 	 * @param {Object} handler the handlers, see NextThought.app.dnd.Dropzone
@@ -92,15 +85,13 @@ export default Ext.define('NextThought.mixins.dnd.Dropzone', {
 		this.Dropzone.setDataTransferHandler(key, handler);
 	},
 
-
-	getHandlersForDataTransfer: function(dataTransfer) {
+    getHandlersForDataTransfer: function(dataTransfer) {
 		this.initDropzone();
 
 		return this.Dropzone.getHandlersForDataTransfer(dataTransfer);
 	},
 
-
-	hasHandlerForDataTransfer: function(dataTransfer) {
+    hasHandlerForDataTransfer: function(dataTransfer) {
 		var handlers = this.getHandlersForDataTransfer(dataTransfer);
 
 		return handlers.length > 0;

@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.util.Store', {
+var Ext = require('extjs');
+var UserRepository = require('../cache/UserRepository');
+var ParseUtils = require('./Parsing');
+
+
+module.exports = exports = Ext.define('NextThought.util.Store', {
 	singleton: true,
 
 	fillInUsers: function fillIn(store, records) {

@@ -1,28 +1,26 @@
-export default Ext.define('NextThought.app.whiteboard.Window', {
-	extend: 'NextThought.common.window.Window',
-	alias: 'widget.wb-window',
-	requires: [
-		'NextThought.app.whiteboard.Editor'
-	],
+var Ext = require('extjs');
+var WindowWindow = require('../../common/window/Window');
+var WhiteboardEditor = require('./Editor');
 
-	hideMode: 'display',
 
-	title: 'Whiteboard',
+module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
+    extend: 'NextThought.common.window.Window',
+    alias: 'widget.wb-window',
+    hideMode: 'display',
+    title: 'Whiteboard',
+    cls: 'wb-window',
+    ui: 'wb-window',
+    minWidth: 750,
+    maxWidth: 750,
+    minHeight: 400,
+    TARGET_HEIGHT: 662,
+    resizable: true,
+    maximizable: false,
+    draggable: true,
+    modal: true,
+    layout: 'none',
 
-	cls: 'wb-window',
-	ui: 'wb-window',
-	minWidth: 750,
-	maxWidth: 750,
-	minHeight: 400,
-	TARGET_HEIGHT: 662,
-
-	resizable: true,
-	maximizable: false,
-	draggable: true,
-
-	modal: true,
-	layout: 'none',
-	items: [
+    items: [
 		{ xtype: 'whiteboard-editor' },
 		{
 			xtype: 'container',
@@ -72,9 +70,9 @@ export default Ext.define('NextThought.app.whiteboard.Window', {
 		}
 	],
 
-	isWhiteboardWindow: true,
+    isWhiteboardWindow: true,
 
-	constructor: function(config) {
+    constructor: function(config) {
 		var vpHeight = Ext.Element.getViewportHeight();
 
 		//ensure the max height is not bigger than the viewport
@@ -110,8 +108,7 @@ export default Ext.define('NextThought.app.whiteboard.Window', {
         }
 	},
 
-
-	absorbeClick: function(e) {
+    absorbeClick: function(e) {
 		if (this.isVisible()) {
 			e.stopEvent();
 			return false;
@@ -119,8 +116,7 @@ export default Ext.define('NextThought.app.whiteboard.Window', {
 		return true;
 	},
 
-
-	save: function(btn) {
+    save: function(btn) {
 		var win = btn.up('window').hide(),
 			wb = win.down('whiteboard-editor');
 
@@ -130,14 +126,14 @@ export default Ext.define('NextThought.app.whiteboard.Window', {
 		win.close();
 	},
 
-	close: function() {
+    close: function() {
 		this.close = function() {
 		};
 		this.cancel();
 		return this.callParent(arguments);
 	},
 
-	cancel: function() {
+    cancel: function() {
 		this.hide();
 		var e = this.down('whiteboard-editor');
 		if (e) {
@@ -152,18 +148,15 @@ export default Ext.define('NextThought.app.whiteboard.Window', {
 		this.fireEvent('cancel', this);
 	},
 
-
-	getEditor: function() {
+    getEditor: function() {
 		return this.down('whiteboard-editor');
 	},
 
-
-	getValue: function() {
+    getValue: function() {
 		return this.down('whiteboard-editor').getValue();
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		var me = this;
 
@@ -179,8 +172,7 @@ export default Ext.define('NextThought.app.whiteboard.Window', {
 		Ext.EventManager.onWindowResize(this.onWindowResize, this);
 	},
 
-
-	onWindowResize: function() {
+    onWindowResize: function() {
 		var viewportHeight = Ext.Element.getViewportHeight(),
 			targetH = this.readonly ? this.TARGET_HEIGHT - 142 : this.TARGET_HEIGHT;
 
@@ -196,8 +188,7 @@ export default Ext.define('NextThought.app.whiteboard.Window', {
 		}
 	},
 
-
-	clearAll: function() {
+    clearAll: function() {
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
@@ -212,5 +203,4 @@ export default Ext.define('NextThought.app.whiteboard.Window', {
 			}
 		});
 	}
-
 });

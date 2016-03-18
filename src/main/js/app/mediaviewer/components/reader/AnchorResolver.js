@@ -1,20 +1,22 @@
-export default Ext.define('NextThought.app.mediaviewer.components.reader.AnchorResolver', {
-	requires: [
-		'NextThought.model.anchorables.ContentPointer',
-		'NextThought.model.anchorables.ContentRangeDescription',
-		'NextThought.model.anchorables.DomContentPointer',
-		'NextThought.model.anchorables.DomContentRangeDescription',
-		'NextThought.model.anchorables.ElementDomContentPointer',
-		'NextThought.model.anchorables.TextContext',
-		'NextThought.model.anchorables.TextDomContentPointer',
-		'NextThought.model.anchorables.TimeContentPointer',
-		'NextThought.model.anchorables.TimeRangeDescription',
-		'NextThought.model.anchorables.TranscripContentPointer',
-		'NextThought.model.anchorables.TranscriptRangeDescription'
-	],
-	singleton: true,
+var Ext = require('extjs');
+var Anchors = require('../../../../util/Anchors');
+var AnchorablesContentPointer = require('../../../../model/anchorables/ContentPointer');
+var AnchorablesContentRangeDescription = require('../../../../model/anchorables/ContentRangeDescription');
+var AnchorablesDomContentPointer = require('../../../../model/anchorables/DomContentPointer');
+var AnchorablesDomContentRangeDescription = require('../../../../model/anchorables/DomContentRangeDescription');
+var AnchorablesElementDomContentPointer = require('../../../../model/anchorables/ElementDomContentPointer');
+var AnchorablesTextContext = require('../../../../model/anchorables/TextContext');
+var AnchorablesTextDomContentPointer = require('../../../../model/anchorables/TextDomContentPointer');
+var AnchorablesTimeContentPointer = require('../../../../model/anchorables/TimeContentPointer');
+var AnchorablesTimeRangeDescription = require('../../../../model/anchorables/TimeRangeDescription');
+var AnchorablesTranscripContentPointer = require('../../../../model/anchorables/TranscriptContentPointer');
+var AnchorablesTranscriptRangeDescription = require('../../../../model/anchorables/TranscriptRangeDescription');
 
-	// TODO: While most of these could be just added to Anchors.js,
+
+module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.AnchorResolver', {
+    singleton: true,
+
+    // TODO: While most of these could be just added to Anchors.js,
 	// we think in the future, each type of anchor should have information about how to resolve its range.
 	// These utils deal with time range resolution. This is just a first step.
 
@@ -41,8 +43,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.AnchorR
 		})};
 	},
 
-
-	//TODO: this function is too customized for resolving time range to dom range in transcript.
+    //TODO: this function is too customized for resolving time range to dom range in transcript.
 	// It needs to be reworked to handle more of a general case( any time of time range to dom Range.)
 	toDomRange: function(description, doc, cleanRoot, containerId) {
 		if (!description || description.isEmpty) {
@@ -70,8 +71,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.AnchorR
 		return range;
 	},
 
-
-	/**
+    /**
 	 * Get the dom element given a timeRange description
 	 * This function filters the cueStore to find cues at a given time
 	 * given by the timeRange description. 
@@ -112,8 +112,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.AnchorR
 		return context;
 	},
 
-
-	//TODO: this function is too customized for resolving time range to dom range in transcript.
+    //TODO: this function is too customized for resolving time range to dom range in transcript.
 	// It needs to be reworked to handle more of a general case( any time of time range to dom Range.)
 	fromTimeRangeToDomRange: function(description, cueStore, container, docElement) {
 		if (!description || description.isEmpty) {
@@ -147,14 +146,14 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.AnchorR
 		return resultRange;
 	},
 
-	getCuesWithinRange: function(store, start, end) {
+    getCuesWithinRange: function(store, start, end) {
 		function fn(item) {
 			return (item.get('endTime') > 0) && (start.isFloatLessThanOrEqual(item.get('startTime')) && end.isFloatGreaterThanOrEqual(item.get('endTime')));
 		}
 		return store ? store.queryBy(fn, this) : null;
 	},
 
-	createRangeDescriptionFromTimeRange: function(cueInfo) {
+    createRangeDescriptionFromTimeRange: function(cueInfo) {
 		var desc = NextThought.model.anchorables.TimeRangeDescription.create({
 			start: this.createTimePointer('start', cueInfo.startTime),
 			end: this.createTimePointer('end', cueInfo.endTime),
@@ -164,8 +163,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.AnchorR
 		return {description: desc};
 	},
 
-
-	createTranscriptPointer: function(rangePointer, role, cueId, time) {
+    createTranscriptPointer: function(rangePointer, role, cueId, time) {
 		return NextThought.model.anchorables.TranscriptContentPointer.create({
 			pointer: rangePointer,
 			cueid: cueId,
@@ -174,18 +172,18 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.AnchorR
 		});
 	},
 
-	createTimePointer: function(role, time) {
+    createTimePointer: function(role, time) {
 		return NextThought.model.anchorables.TimeContentPointer.create({
 			seconds: this.toMillSecond(time),
 			role: role
 		});
 	},
 
-	fromMillSecondToSecond: function(millsec) {
+    fromMillSecondToSecond: function(millsec) {
 		return millsec / 1000;
 	},
 
-	toMillSecond: function(seconds) {
+    toMillSecond: function(seconds) {
 		return seconds * 1000;
 	}
 });

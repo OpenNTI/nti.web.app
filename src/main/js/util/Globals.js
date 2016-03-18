@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.util.Globals', {
+var Ext = require('extjs');
+var Globals = require('./Globals');
+var ParseUtils = require('./Parsing');
+
+
+module.exports = exports = Ext.define('NextThought.util.Globals', {
 	singleton: true,
 
 

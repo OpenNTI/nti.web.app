@@ -1,15 +1,14 @@
-export default Ext.define('NextThought.app.course.enrollment.components.GiftConfirmation', {
-	extend: 'Ext.Component',
-	alias: 'widget.enrollment-gift-confirmation',
+var Ext = require('extjs');
+var FieldsSimpleTextField = require('../../../../common/form/fields/SimpleTextField');
+var StoreStateStore = require('../../../store/StateStore');
 
-	requires: [
-		'NextThought.common.form.fields.SimpleTextField',
-		'NextThought.app.store.StateStore'
-	],
 
-	cls: 'enrollment-gift-confirmation',
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.GiftConfirmation', {
+    extend: 'Ext.Component',
+    alias: 'widget.enrollment-gift-confirmation',
+    cls: 'enrollment-gift-confirmation',
 
-	giftInfoTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+    giftInfoTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cn: [
 			'{{{NextThought.view.courseware.enrollment.GiftConfirmation.EmailReceipt}}} ',
 			{tag: 'tpl', 'if': 'receiverEmail', cn: [
@@ -23,7 +22,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.GiftConf
 		]}
 	])),
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'title', html: '{heading}'},
 		{cls: 'gift-info', html: '{gift-info}'},
 		{cls: 'prompt', html: '{prompt}'},
@@ -43,7 +42,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.GiftConf
 		{cls: 'iframe-container'}
 	]),
 
-	renderSelectors: {
+    renderSelectors: {
 		tokenEl: '.token .token-text',
 		transactionEl: '.transaction .transaction-id',
 		giftEl: '.gift-info',
@@ -51,7 +50,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.GiftConf
 		iframeEl: '.iframe-container'
 	},
 
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		var prompt = this.getPrompt();
@@ -63,8 +62,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.GiftConf
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -89,8 +87,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.GiftConf
 		});
 	},
 
-
-	getPrompt: function(hasReceiver) {
+    getPrompt: function(hasReceiver) {
 		var c = this.course,
 			start = c.get('StartDate'),
 			prompt;
@@ -109,8 +106,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.GiftConf
 		return prompt;
 	},
 
-
-	beforeShow: function() {
+    beforeShow: function() {
 		var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
 			receiverEmail = purchaseAttempt && purchaseAttempt.get('Receiver'),
 			transactionId = purchaseAttempt && purchaseAttempt.get('TransactionID'),
@@ -141,8 +137,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.GiftConf
 		}
 	},
 
-
-	addThankYouPage: function(url) {
+    addThankYouPage: function(url) {
 		var container = this.iframeEl.dom,
 			existing = container.querySelector('iframe'),
 			iframe;

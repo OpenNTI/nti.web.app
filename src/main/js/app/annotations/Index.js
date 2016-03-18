@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.annotations.Index', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 	extend: 'Ext.view.View',
 	alias: 'widget.annotation-view',
 

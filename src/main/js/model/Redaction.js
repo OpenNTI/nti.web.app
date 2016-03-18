@@ -1,17 +1,19 @@
-export default Ext.define('NextThought.model.Redaction', {
-	extend: 'NextThought.model.Base',
+var Ext = require('extjs');
+var ModelBase = require('./Base');
+var MixinsModelWithBodyContent = require('../mixins/ModelWithBodyContent');
+var AnchorablesDomContentRangeDescription = require('./anchorables/DomContentRangeDescription');
+var ConvertersContentRangeDescription = require('./converters/ContentRangeDescription');
+var ModelHighlight = require('./Highlight');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.model.Redaction', {
+    extend: 'NextThought.model.Base',
+
+    mixins: {
 		bodyContent: 'NextThought.mixins.ModelWithBodyContent'
 	},
 
-	requires: [
-		'NextThought.model.anchorables.DomContentRangeDescription',
-		'NextThought.model.converters.ContentRangeDescription',
-		'NextThought.model.Highlight'
-	],
-
-	statics: {
+    statics: {
 
 		DEFAULT_TEXT: '<big>***</big>',
 
@@ -30,7 +32,7 @@ export default Ext.define('NextThought.model.Redaction', {
 		}
 	},
 
-	fields: [
+    fields: [
 		{ name: 'AutoTags', type: 'Auto'},
 		{ name: 'applicableRange', type: 'ContentRangeDescription'},
 		{ name: 'prohibitReSharing', type: 'boolean' },

@@ -1,12 +1,13 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.video.Actions', {
-	extend: 'NextThought.app.course.overview.components.editing.Actions',
+var Ext = require('extjs');
+var EditingActions = require('../../Actions');
+var ModelVideoRoll = require('../../../../../../../model/VideoRoll');
+var ModelVideo = require('../../../../../../../model/Video');
 
-	requires: [
-		'NextThought.model.VideoRoll',
-		'NextThought.model.Video'
-	],
 
-	__getVideoRollData: function(videos) {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.Actions', {
+    extend: 'NextThought.app.course.overview.components.editing.Actions',
+
+    __getVideoRollData: function(videos) {
 		var data = {
 				MimeType: NextThought.model.VideoRoll.mimeType
 			};
@@ -18,30 +19,26 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return data;
 	},
 
-
-	__getVideoData: function(video) {
+    __getVideoData: function(video) {
 		return {
 			MimeType: NextThought.model.Video.mimeType,
 			NTIID: video.getId()
 		};
 	},
 
-
-	__createVideoRollValue: function(videos, position) {
+    __createVideoRollValue: function(videos, position) {
 		var values = this.__getVideoRollData(videos);
 
 		return this.__createRecordValues(values, position);
 	},
 
-
-	__createSingleVideo: function(video, position) {
+    __createSingleVideo: function(video, position) {
 		var values = this.__getVideoData(video);
 
 		return this.__createRecordValues(values, position);
 	},
 
-
-	__createVideos: function(videos, position) {
+    __createVideos: function(videos, position) {
 		var create;
 
 		//If there is more than one create a video roll, otherwise create a single video
@@ -58,8 +55,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return create;
 	},
 
-
-	/**
+    /**
 	 * Remove a record from the oldPosition and add it to the new one
 	 * @param  {Model} oldRecord   the record to remove
 	 * @param  {Object} oldPosition the parent and position of the old position
@@ -95,22 +91,19 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return save;
 	},
 
-
-	__convertRollToSingle: function(videos, record, originalPosition, newPosition, root) {
+    __convertRollToSingle: function(videos, record, originalPosition, newPosition, root) {
 		var newVideo = this.__getVideoData(videos[0]);
 
 		return this.__removeAndAdd(record, originalPosition, newVideo, newPosition, root);
 	},
 
-
-	__convertSingleToRoll: function(videos, record, originalPosition, newPosition, root) {
+    __convertSingleToRoll: function(videos, record, originalPosition, newPosition, root) {
 		var newVideos = this.__getVideoRollData(videos);
 
 		return this.__removeAndAdd(record, originalPosition, newVideos, newPosition, root);
 	},
 
-
-	__updateVideoRoll: function(videos, record, originalPosition, newPosition, root) {
+    __updateVideoRoll: function(videos, record, originalPosition, newPosition, root) {
 		if (videos.length === 1) {
 			return this.__convertRollToSingle(videos, record, originalPosition, newPosition, root);
 		}
@@ -139,8 +132,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 
 	},
 
-
-	__updateSingleVideo: function(videos, record, originalPosition, newPosition, root) {
+    __updateSingleVideo: function(videos, record, originalPosition, newPosition, root) {
 		if (videos.length > 1) {
 			return this.__convertSingleToRoll(videos, record, originalPosition, newPosition, root);
 		}
@@ -174,8 +166,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return save;
 	},
 
-
-	__updateVideos: function(videos, record, originalPosition, newPosition, root) {
+    __updateVideos: function(videos, record, originalPosition, newPosition, root) {
 		var save;
 
 		if (!videos) {
@@ -189,13 +180,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return save;
 	},
 
-
-	saveVideo: function(videos, record, originalParent, newParent, root) {
+    saveVideo: function(videos, record, originalParent, newParent, root) {
 		if (record) {
 			return this.__updateVideos(videos, record, originalParent, newParent, root);
 		}
 
 		return this.__createVideos(videos, newParent);
 	}
-
 });

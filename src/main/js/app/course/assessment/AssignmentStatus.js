@@ -1,8 +1,9 @@
-export default Ext.define('NextThought.app.course.assessment.AssignmentStatus', {
+var Ext = require('extjs');
+var TimeUtils = require('../../../util/Time');
 
-	requires: ['Ext.Action'],
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.course.assessment.AssignmentStatus', {
+    statics: {
 		statusTpl: new Ext.XTemplate(
 			Ext.DomHelper.markup({cls: 'assignment-status {cls}', cn: [
 				{tag: 'tpl', 'if': 'maxTime', cn: [

@@ -1,17 +1,19 @@
-export default Ext.define('NextThought.app.navigation.path.Actions', {
-	extend: 'NextThought.common.Actions',
+var Ext = require('extjs');
+var Globals = require('../../../util/Globals');
+var ParseUtils = require('../../../util/Parsing');
+var CommonActions = require('../../../common/Actions');
+var PathStateStore = require('./StateStore');
+var PartsAssignment = require('./parts/Assignment');
+var PartsContent = require('./parts/Content');
+var ContextStateStore = require('../../context/StateStore');
+var PartsForums = require('./parts/Forums');
+var PartsProfiles = require('./parts/Profiles');
 
-	requires: [
-		'NextThought.app.navigation.path.StateStore',
-		'NextThought.app.navigation.path.parts.Assignment',
-		'NextThought.app.navigation.path.parts.Content',
-		'NextThought.app.context.StateStore',
-		'NextThought.app.navigation.path.parts.Forums',
-		'NextThought.app.navigation.path.parts.Profiles'
-	],
 
+module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions', {
+    extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.PathStore = NextThought.app.navigation.path.StateStore.getInstance();
@@ -20,13 +22,11 @@ export default Ext.define('NextThought.app.navigation.path.Actions', {
 		this.buildHandlerMap();
 	},
 
-
-	clearCache: function() {
+    clearCache: function() {
 		this.PathStore.clearCache();
 	},
 
-
-	buildHandlerMap: function() {
+    buildHandlerMap: function() {
 		var parts = NextThought.app.navigation.path.parts,
 			keys = Object.keys(parts), handlers = {};
 
@@ -41,8 +41,7 @@ export default Ext.define('NextThought.app.navigation.path.Actions', {
 		this.mimeToHandlers = handlers;
 	},
 
-
-	__doNTIIDRequest: function(ntiid) {
+    __doNTIIDRequest: function(ntiid) {
 		var link = Service.getPathToObjectLink(ntiid);
 
 		if (!link) {
@@ -52,8 +51,7 @@ export default Ext.define('NextThought.app.navigation.path.Actions', {
 		return this.__doRequestForLink(link);
 	},
 
-
-	/**
+    /**
 	 * Given an object, built the link to get its path, call it, and fulfill with the path
 	 *
 	 * @param  {Object} obj object to get the link for
@@ -80,7 +78,7 @@ export default Ext.define('NextThought.app.navigation.path.Actions', {
 			});
 	},
 
-	/**
+    /**
 	 * Given a link return the path it returns
 	 *
 	 * We are caching on the link, because this call will sometimes
@@ -110,8 +108,7 @@ export default Ext.define('NextThought.app.navigation.path.Actions', {
 		return this.PathStore.setInCache(link, cache);
 	},
 
-
-	__doHandledRequest: function(obj, handler) {
+    __doHandledRequest: function(obj, handler) {
 		var id = obj.getId(),
 			cache = this.PathStore.getFromCache(id),
 			doNotCache = Ext.isObject(handler) && handler.doNotCache,
@@ -132,7 +129,7 @@ export default Ext.define('NextThought.app.navigation.path.Actions', {
 		return this.PathStore.setInCache(id, cache);
 	},
 
-	/**
+    /**
 	 * Given an object (ntiid), return an array of objects that make up the path
 	 * to it.
 	 *
@@ -164,8 +161,7 @@ export default Ext.define('NextThought.app.navigation.path.Actions', {
 			});
 	},
 
-
-	__resolveForbiddenBreadCrumb: function(resp) {
+    __resolveForbiddenBreadCrumb: function(resp) {
 		var json = Globals.parseJSON(resp, true),
 			items = json && json.Items,
 			obj = items && items[0];
@@ -181,8 +177,7 @@ export default Ext.define('NextThought.app.navigation.path.Actions', {
 		return Promise.reject();
 	},
 
-
-	getBreadCrumb: function(record) {
+    getBreadCrumb: function(record) {
 		var me = this,
 			rootObject = me.ContextStore.getRootBundle() || me.ContextStore.getRootProfile(),
 			path,
@@ -248,5 +243,4 @@ export default Ext.define('NextThought.app.navigation.path.Actions', {
 					});
 			});
 	}
-
 });

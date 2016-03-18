@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.dashboard.components.tiles.Item', {
+var Ext = require('extjs');
+var TilesBaseCmp = require('./BaseCmp');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Item', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.BaseCmp',
 
 	inheritableStatics: {

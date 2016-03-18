@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.profiles.group.components.activity.parts.Users', {
+var Ext = require('extjs');
+var PartsUsers = require('../../membership/parts/Users');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.group.components.activity.parts.Users', {
 	extend: 'NextThought.app.profiles.group.components.membership.parts.Users',
 	alias: 'widget.profile-group-membership-condensed',
 

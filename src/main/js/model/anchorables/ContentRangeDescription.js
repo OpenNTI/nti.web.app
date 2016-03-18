@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.anchorables.ContentRangeDescription', {
+var Ext = require('extjs');
+var MixinsJSONValue = require('../../mixins/JSONValue');
+
+
+module.exports = exports = Ext.define('NextThought.model.anchorables.ContentRangeDescription', {
 	mixins: {
 		JSONValue: 'NextThought.mixins.JSONValue'
 	},

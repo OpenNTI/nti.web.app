@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.outline.contentnode.AddNode', {
+var Ext = require('extjs');
+var OutlinenodeAddNode = require('../outlinenode/AddNode');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.contentnode.AddNode', {
 	extend: 'NextThought.app.course.overview.components.editing.outline.outlinenode.AddNode',
 	alias: 'widget.overview-editing-new-node',
 

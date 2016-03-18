@@ -1,21 +1,25 @@
-export default Ext.define('NextThought.app.chat.components.log.Moderated', {
-	extend: 'Ext.form.field.Checkbox',
-	alias: 'widget.chat-log-entry-moderated',
-	mixins: {
+var Ext = require('extjs');
+var IdCache = require('../../../../cache/IdCache');
+var UserRepository = require('../../../../cache/UserRepository');
+var UtilAnnotations = require('../../../../util/Annotations');
+var CacheIdCache = require('../../../../cache/IdCache');
+
+
+module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moderated', {
+    extend: 'Ext.form.field.Checkbox',
+    alias: 'widget.chat-log-entry-moderated',
+
+    mixins: {
 		abstractContainer: 'Ext.container.AbstractContainer',
 		contains: 'Ext.container.Container'
 	},
-	requires: [
-		'NextThought.util.Annotations',
-		'NextThought.cache.IdCache'
-	],
 
-	preventMark: true,
-	anchor: '100%',
-	layout: 'anchor',
-	cls: 'chat-entry',
+    preventMark: true,
+    anchor: '100%',
+    layout: 'anchor',
+    cls: 'chat-entry',
 
-	labelableRenderTpl: [
+    labelableRenderTpl: [
 		'<tpl if="!hideLabel && !(!fieldLabel && hideEmptyLabel)">',
 			'<label<tpl if="inputId"> for="{inputId}"</tpl> class="{labelCls}"<tpl if="labelStyle"> style="{labelStyle}"</tpl>>',
 				'<tpl if="fieldLabel">{fieldLabel}{labelSeparator}</tpl>',
@@ -45,7 +49,7 @@ export default Ext.define('NextThought.app.chat.components.log.Moderated', {
 		}
 	],
 
-	renderSelectors: {
+    renderSelectors: {
 		box: 'div.x-chat-log-entry',
 		name: '.x-chat-log-entry span.name',
 		text: 'span.body-text',
@@ -56,7 +60,7 @@ export default Ext.define('NextThought.app.chat.components.log.Moderated', {
 		bodyEl: 'div.x-chat-log-entry'
 	},
 
-	initComponent: function() {
+    initComponent: function() {
 		Ext.container.Container.prototype.initComponent.apply(this, arguments);
 		this.callParent(arguments);
 		this.update(this.message);
@@ -79,7 +83,7 @@ export default Ext.define('NextThought.app.chat.components.log.Moderated', {
 		};
 	},
 
-	update: function(m) {
+    update: function(m) {
 		var me = this,
 			s = m.get('Creator');
 
@@ -113,7 +117,7 @@ export default Ext.define('NextThought.app.chat.components.log.Moderated', {
 		me.addCls(m.getId() ? '' : ' nooid');
 	},
 
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.initializeDragZone(this);
 
@@ -127,7 +131,7 @@ export default Ext.define('NextThought.app.chat.components.log.Moderated', {
 		this.box.on('click', this.click, this);
 	},
 
-	click: function(event, target, eOpts) {
+    click: function(event, target, eOpts) {
 		target = Ext.get(target);
 		var inBox = target && this.box.contains(target),
 			tag = target ? target.tagName : '';
@@ -158,7 +162,7 @@ export default Ext.define('NextThought.app.chat.components.log.Moderated', {
 		}
 	},
 
-	fillInUser: function(u) {
+    fillInUser: function(u) {
 		var name = u.get('alias') || u.get('Username'),
 			i = u.get('avatarURL');
 
@@ -172,7 +176,7 @@ export default Ext.define('NextThought.app.chat.components.log.Moderated', {
 		}
 	},
 
-	initializeDragZone: function(v) {
+    initializeDragZone: function(v) {
 		v.dragZone = Ext.dd.DragZone.create(v.getEl(), {
 
 			getDragData: function(e) {
@@ -196,13 +200,10 @@ export default Ext.define('NextThought.app.chat.components.log.Moderated', {
 		});
 	},
 
-	showReplyToComponent: function() {
+    showReplyToComponent: function() {
 		return this.add({
 			xtype: 'chat-reply-to',
 			replyTo: this.message.getId()
 		});
 	}
-
-
-
 });

@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.model.forums.Post', {
+var Ext = require('extjs');
+var ForumsBase = require('./Base');
+var MixinsModelWithBodyContent = require('../../mixins/ModelWithBodyContent');
+
+
+module.exports = exports = Ext.define('NextThought.model.forums.Post', {
 	extend: 'NextThought.model.forums.Base',
 	mixins: {
 		bodyContent: 'NextThought.mixins.ModelWithBodyContent'

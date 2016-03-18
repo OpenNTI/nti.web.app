@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.profiles.user.components.about.parts.Empty', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.about.parts.Empty', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-user-empty',
 

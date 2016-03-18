@@ -1,40 +1,39 @@
-export default Ext.define('NextThought.app.contentviewer.notepad.View', {
-	extend: 'Ext.Component',
-	alias: 'widget.content-notepad',
+var Ext = require('extjs');
+var Globals = require('../../../util/Globals');
+var UxComponentReferencing = require('../../../common/ux/ComponentReferencing');
+var NotepadContainer = require('./Container');
+var NotepadItem = require('./Item');
+var NotepadEditor = require('./Editor');
 
-	//<editor-fold desc="Config">
-	requires: [
-		'NextThought.common.ux.ComponentReferencing',
-		'NextThought.app.contentviewer.notepad.Container',
-		'NextThought.app.contentviewer.notepad.Item',
-		'NextThought.app.contentviewer.notepad.Editor'
-	],
 
-	plugins: [
+module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.View', {
+    extend: 'Ext.Component',
+    alias: 'widget.content-notepad',
+
+    plugins: [
 		'component-referencing'
 	],
 
-	ui: 'reader-notepad',
+    ui: 'reader-notepad',
 
-	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+    renderTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ cls: 'scroller', cn: [
 			{ cls: 'note-here', html: '{{{NextThought.view.content.notepad.View.addnote}}}' }
 		] }
 	])),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		scroller: '.scroller',
 		boxEl: '.note-here'
 	},
 
-
-	//reference functions will not exist until after the constructor returns. #initComponent() is called in the middle
+    //reference functions will not exist until after the constructor returns. #initComponent() is called in the middle
 	// of the constructor, so we cannot us that. AfterRender maybe the best place to setup, or subclass constructor.
 	refs: [
 		{ ref: 'readerRef', selector: '' }//set this in config.
 	],
-	//</editor-fold>
+
+    //</editor-fold>
 
 
 	//<editor-fold desc="Setup & Init">
@@ -66,14 +65,12 @@ export default Ext.define('NextThought.app.contentviewer.notepad.View', {
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.boxEl.setVisibilityMode(Ext.Element.ASCLASS).visibilityCls = 'hidden';
 	},
 
-
-	setupBindsToReaderRef: function() {
+    setupBindsToReaderRef: function() {
 		var ref = this.getReaderRef();
 
 		try {
@@ -95,7 +92,8 @@ export default Ext.define('NextThought.app.contentviewer.notepad.View', {
 			Ext.defer(this.setupBindsToReaderRef, 1, this);
 		}
 	},
-	//</editor-fold>
+
+    //</editor-fold>
 
 
 	//<editor-fold desc="Editor">
@@ -107,8 +105,7 @@ export default Ext.define('NextThought.app.contentviewer.notepad.View', {
 		delete this.editor;
 	},
 
-
-	openEditor: function(lineInfo) {
+    openEditor: function(lineInfo) {
 		if (this.editor && !this.editor.isDestroyed) {
 			return false;
 		}
@@ -136,14 +133,12 @@ export default Ext.define('NextThought.app.contentviewer.notepad.View', {
 		return true;
 	},
 
-
-	commitEditor: function(editor) {
+    commitEditor: function(editor) {
 		this.savingNewNote = true;
 		this.saveNewNote(editor);
 	},
 
-
-	saveNewNote: function(editor) {
+    saveNewNote: function(editor) {
 		var me = this,
 			note = editor.getValue(),
 			reader = me.getReaderRef(),
@@ -179,7 +174,8 @@ export default Ext.define('NextThought.app.contentviewer.notepad.View', {
 		}
 		return false;
 	},
-	//</editor-fold>
+
+    //</editor-fold>
 
 
 	//<editor-fold desc="Mouse Event Handlers">
@@ -188,39 +184,33 @@ export default Ext.define('NextThought.app.contentviewer.notepad.View', {
 		delete this.lastLine;
 	},
 
-
-	lock: function() {
+    lock: function() {
 		this.suspendMoveEvents = true;
 		Ext.defer(this.boxEl.hide, 1, this.boxEl);
 	},
 
-
-	unlock: function() {
+    unlock: function() {
 		delete this.suspendMoveEvents;
 	},
 
-
-	eat: function(e) {
+    eat: function(e) {
 		clearTimeout(this.hideTimer);
 		e.stopEvent();
 		return false;
 	},
 
-
-	onClick: function() {
+    onClick: function() {
 		if (this.suspendMoveEvents) {return;}
 		this.openEditor(this.lastLine);
 	},
 
-
-	onMouseOut: function() {
+    onMouseOut: function() {
 		if (this.suspendMoveEvents) {return;}
 		clearTimeout(this.hideTimer);
 		this.hideTimer = Ext.defer(this.cleanupLine, 500, this);
 	},
 
-
-	onMouseTrack: function(e) {
+    onMouseTrack: function(e) {
 		if (this.suspendMoveEvents) {return;}
 
 		var lineY = this.getContentY(e),
@@ -232,7 +222,8 @@ export default Ext.define('NextThought.app.contentviewer.notepad.View', {
 			this.lastLine = lineInfo;
 		}
 	},
-	//</editor-fold>
+
+    //</editor-fold>
 
 
 	//<editor-fold desc="Synchronizing Handlers">
@@ -245,8 +236,7 @@ export default Ext.define('NextThought.app.contentviewer.notepad.View', {
 		}
 	},
 
-
-	syncScroll: function() {
+    syncScroll: function() {
 		if (!this.rendered) {
 			return;
 		}
@@ -258,11 +248,9 @@ export default Ext.define('NextThought.app.contentviewer.notepad.View', {
 		}
 	},
 
+    onSyncScroll: function() {},
 
-	onSyncScroll: function() {},
-
-
-	onPushScroll: function pushScroll(e) {
+    onPushScroll: function pushScroll(e) {
 		var d = e.getWheelDelta(),
 			h = (this.scroller.getHeight() / this.getHeight()) / 2,//make sure the scale kinda matches
 			reader = this.getReaderRef();
@@ -271,7 +259,8 @@ export default Ext.define('NextThought.app.contentviewer.notepad.View', {
 			reader.getScroll().by(d * h);
 		}
 	},
-	//</editor-fold>
+
+    //</editor-fold>
 
 
 	//<editor-fold desc="Line Resolving">
@@ -281,13 +270,13 @@ export default Ext.define('NextThought.app.contentviewer.notepad.View', {
 		return e.getY() - (t || 0);
 	},
 
-
-	getLineInfo: function(y) {
+    getLineInfo: function(y) {
 		var reader = this.getReaderRef();
 
 		return reader.getNoteOverlay().lineInfoForY(y);
 	},
-	//</editor-fold>
+
+    //</editor-fold>
 
 
 	clearItems: function() {
@@ -317,13 +306,11 @@ export default Ext.define('NextThought.app.contentviewer.notepad.View', {
 		this.scroller.select('div:not(.note-here)').remove();
 	},
 
-
-	noteHereMenu: function(e) {
+    noteHereMenu: function(e) {
 		return this.eat(e);//maybe show a context menu?
 	},
 
-
-	detectOverflow: function() {
+    detectOverflow: function() {
 		console.log('overflow detection');
 
 		var collided = {}, els, resort = false;
@@ -404,8 +391,7 @@ export default Ext.define('NextThought.app.contentviewer.notepad.View', {
 		});
 	},
 
-
-	addOrUpdate: function(annotation, yPlacement) {
+    addOrUpdate: function(annotation, yPlacement) {
 		yPlacement = Math.round(yPlacement);
 		if (yPlacement < 5) {
 			yPlacement = 5;
@@ -457,8 +443,7 @@ export default Ext.define('NextThought.app.contentviewer.notepad.View', {
 		o.updateWith({ annotation: annotation, record: annotation.getRecord(), placement: y });
 	},
 
-
-	getItemsReferenced: function(itemRefs) {
+    getItemsReferenced: function(itemRefs) {
 		var m = this.notepadItems;
 
 		return Ext.Array.map(itemRefs, function(v) {
@@ -466,8 +451,7 @@ export default Ext.define('NextThought.app.contentviewer.notepad.View', {
 		});
 	},
 
-
-	groupContains: function(group, value) {
+    groupContains: function(group, value) {
 		if (Ext.isArray(group)) {
 			return Ext.Array.contains(group, value);
 		}

@@ -1,14 +1,14 @@
-export default Ext.define('NextThought.app.context.components.list.Question', {
-	extend: 'NextThought.app.context.components.Question',
-	alias: 'widget.question-context-list',
-
-	requires: ['NextThought.app.navigation.path.Actions'],
+var Ext = require('extjs');
+var ComponentsQuestion = require('../Question');
+var PathActions = require('../../../navigation/path/Actions');
 
 
-	cls: 'context-content question-context list-context',
+module.exports = exports = Ext.define('NextThought.app.context.components.list.Question', {
+    extend: 'NextThought.app.context.components.Question',
+    alias: 'widget.question-context-list',
+    cls: 'context-content question-context list-context',
 
-
-	pathTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+    pathTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'if': 'root', cn: [
 			{tag: 'span', html: '{root}'}
 		]},
@@ -20,22 +20,19 @@ export default Ext.define('NextThought.app.context.components.list.Question', {
 		]}
 	])),
 
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'location'},
 		{cls: 'content', cn: [
 			{cls: 'snippet text', html: '{content}'}
 		]}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		locationEl: '.location',
 		snippetEl: '.snippet'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
@@ -44,8 +41,7 @@ export default Ext.define('NextThought.app.context.components.list.Question', {
 			.then(this.setLineage.bind(this));
 	},
 
-
-	setLineage: function(path) {
+    setLineage: function(path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setLineage.bind(this, path));
 			return;

@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
+var Ext = require('extjs');
+var UserRepository = require('../../../../../../cache/UserRepository');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-auditlog-item',
 

@@ -1,12 +1,12 @@
-export default Ext.define('NextThought.app.conflict.Actions', {
-	extend: 'NextThought.common.Actions',
-
-	requires: [
-		'NextThought.app.conflict.types.DestructiveChallenge'
-	],
+var Ext = require('extjs');
+var CommonActions = require('../../common/Actions');
+var TypesDestructiveChallenge = require('./types/DestructiveChallenge');
 
 
-	getTypes: function() {
+module.exports = exports = Ext.define('NextThought.app.conflict.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    getTypes: function() {
 		if (!this.types) {
 			this.types = [
 				new NextThought.app.conflict.types.DestructiveChallenge()
@@ -16,8 +16,7 @@ export default Ext.define('NextThought.app.conflict.Actions', {
 		return this.types;
 	},
 
-
-	resolveConflict: function(conflict, data) {
+    resolveConflict: function(conflict, data) {
 		var types = this.getTypes(),
 			handler;
 
@@ -33,9 +32,7 @@ export default Ext.define('NextThought.app.conflict.Actions', {
 		return handler ? handler.resolve(conflict, data) : this.defaultHandler(conflict, data);
 	},
 
-
-
-	defaultHandler: function(conflict, data) {
+    defaultHandler: function(conflict, data) {
 		//TODO: fill this out
 	}
 });

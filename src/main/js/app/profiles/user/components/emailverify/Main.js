@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
+var Ext = require('extjs');
+var User = require('../../../../../model/User');
+var ParseUtils = require('../../../../../util/Parsing');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
 	extend: 'Ext.Component',
 	alias: 'widget.email-verify-view',
 

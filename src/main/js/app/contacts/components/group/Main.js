@@ -1,14 +1,14 @@
-export default Ext.define('NextThought.app.contacts.components.group.Main', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.codecreation-main-view',
-	requires: [
-		'NextThought.common.form.fields.SimpleTextField',
-		'NextThought.app.groups.Actions'
-	],
+var Ext = require('extjs');
+var FieldsSimpleTextField = require('../../../../common/form/fields/SimpleTextField');
+var GroupsActions = require('../../../groups/Actions');
 
-	cls: 'codecreation-main-view',
 
-	items: [
+module.exports = exports = Ext.define('NextThought.app.contacts.components.group.Main', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.codecreation-main-view',
+    cls: 'codecreation-main-view',
+
+    items: [
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
 			{xtype: 'box', name: 'namelabel', cls: 'label', html: 'Group Name'},
 			{
@@ -53,7 +53,7 @@ export default Ext.define('NextThought.app.contacts.components.group.Main', {
 		]}
 	],
 
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.down('[name=groupname]'), {
 			scope: this,
@@ -64,7 +64,7 @@ export default Ext.define('NextThought.app.contacts.components.group.Main', {
 		this.GroupActions = NextThought.app.groups.Actions.create();
 	},
 
-	specialkey: function(el, event) {
+    specialkey: function(el, event) {
 		var val = el.lastValue,
 			empty = Ext.isEmpty(val);
 
@@ -74,7 +74,7 @@ export default Ext.define('NextThought.app.contacts.components.group.Main', {
 		}
 	},
 
-	changed: function(value, t) {
+    changed: function(value, t) {
 		var val = value.trim(),
 			empty = Ext.isEmpty(val),
 			btn = this.query('[name=submit]', this)[0];
@@ -87,7 +87,7 @@ export default Ext.define('NextThought.app.contacts.components.group.Main', {
 		}
 	},
 
-	setGroupCode: function(c) {
+    setGroupCode: function(c) {
 		var code = this.query('[name=code]')[0];
 		code.update(c || null);
 		code.setVisible(!!c);
@@ -98,12 +98,12 @@ export default Ext.define('NextThought.app.contacts.components.group.Main', {
 		this.query('[name=cancel]')[0].setVisible(false);
 	},
 
-	getGroupName: function() {
+    getGroupName: function() {
 		var name = this.down('[name=groupname]').getValue();
 		return name ? name.trim() : name;
 	},
 
-	showError: function(errorText) {
+    showError: function(errorText) {
 		var box = this.down('[name=error]');
 
 		errorText = errorText || getString('NextThought.view.account.codecreation.Main.unknown-error');
@@ -113,8 +113,7 @@ export default Ext.define('NextThought.app.contacts.components.group.Main', {
 		box.show();
 	},
 
-
-	submitClicked: function() {
+    submitClicked: function() {
 		var me = this,
 			btn = this.down('[name=submit]'),
 			w = this.up('window');
@@ -137,9 +136,8 @@ export default Ext.define('NextThought.app.contacts.components.group.Main', {
 			});
 	},
 
-	clearError: function() {
+    clearError: function() {
 		var box = this.down('[name=error]');
 		box.hide();
 	}
-
 });

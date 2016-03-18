@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.whiteboard.shapes.Url', {
+var Ext = require('extjs');
+var Globals = require('../../../util/Globals');
+var ShapesBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Url', {
 	extend:	'NextThought.app.whiteboard.shapes.Base',
 
 	constructor: function() {

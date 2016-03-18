@@ -1,12 +1,14 @@
-export default Ext.define('NextThought.common.state.Actions', {
-	extend: 'NextThought.common.Actions',
+var Ext = require('extjs');
+var B64 = require('../../util/Base64');
+var CommonActions = require('../Actions');
+var LoginStateStore = require('../../login/StateStore');
+var StateStateStore = require('./StateStore');
 
-	requires: [
-		'NextThought.login.StateStore',
-		'NextThought.common.state.StateStore'
-	],
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.common.state.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.LoginStore = NextThought.login.StateStore.getInstance();
@@ -21,15 +23,13 @@ export default Ext.define('NextThought.common.state.Actions', {
 		}
 	},
 
-
-	onLogin: function() {
+    onLogin: function() {
 		var user = $AppConfig.username;
 
 		this.StateStore.setStateKey(B64.encode($AppConfig.username));
 	},
 
-
-	setState: function(key, state) {
+    setState: function(key, state) {
 		this.StateStore.setState(key, state);
 	}
 });

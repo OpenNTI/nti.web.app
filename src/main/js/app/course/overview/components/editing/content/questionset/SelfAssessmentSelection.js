@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.questionset.SelfAssessmentSelection', {
+var Ext = require('extjs');
+var QuestionsetAssignmentSelection = require('./AssignmentSelection');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.SelfAssessmentSelection', {
 	extend: 'NextThought.app.course.overview.components.editing.content.questionset.AssignmentSelection',
 	alias: 'widget.overview-editing-self-assessment-selection',
 

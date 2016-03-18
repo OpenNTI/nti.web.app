@@ -1,4 +1,10 @@
-export default Ext.define('NextThought.model.app.DndInfo', {
+var Ext = require('extjs');
+var B64 = require('../../util/Base64');
+var ModelBase = require('../Base');
+var DndDataTransferSource = require('../../mixins/dnd/DataTransferSource');
+
+
+module.exports = exports = Ext.define('NextThought.model.app.DndInfo', {
 	extend: 'NextThought.model.Base',
 
 	statics: {

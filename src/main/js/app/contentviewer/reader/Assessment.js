@@ -1,26 +1,29 @@
-/*globals isMe:false, Toaster:false, swallow:false*/
-export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
-	alias: 'reader.assessment',
-	requires: [
-		'NextThought.app.assessment.Scoreboard',
-		'NextThought.app.assessment.Question',
-		'NextThought.app.assessment.Poll',
-		'NextThought.app.assessment.QuizSubmission',
-		'NextThought.app.assessment.AssignmentFeedback',
-		'NextThought.app.course.assessment.AssignmentStatus'
-	],
+var Ext = require('extjs');
+var DomUtils = require('../../../util/Dom');
+var ParseUtils = require('../../../util/Parsing');
+var TimeUtils = require('../../../util/Time');
+var AssessmentScoreboard = require('../../assessment/Scoreboard');
+var AssessmentQuestion = require('../../assessment/Question');
+var AssessmentPoll = require('../../assessment/Poll');
+var AssessmentQuizSubmission = require('../../assessment/QuizSubmission');
+var AssessmentAssignmentFeedback = require('../../assessment/AssignmentFeedback');
+var AssessmentAssignmentStatus = require('../../course/assessment/AssignmentStatus');
 
-	uses: [
+
+/*globals isMe:false, Toaster:false, swallow:false*/
+module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Assessment', {
+    alias: 'reader.assessment',
+
+    uses: [
 		'NextThought.app.contentviewer.reader.ComponentOverlay'
 	],
 
-	constructor: function(config) {
+    constructor: function(config) {
 		Ext.apply(this, config);
 		this.reader.on('set-content', 'injectAssessments', this);
 	},
 
-
-	makeAssessmentPoll: function(p, set) {
+    makeAssessmentPoll: function(p, set) {
 		var contentElement = this.getContentElement('object', 'data-ntiid', p.getId()),
 			o = this.reader.getComponentOverlay();
 
@@ -45,8 +48,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		}
 	},
 
-
-	makeAssessmentQuestion: function(q, set) {
+    makeAssessmentQuestion: function(q, set) {
 		var contentElement = this.getContentElement('object', 'data-ntiid', q.getId()),
 			o = this.reader.getComponentOverlay();
 
@@ -71,8 +73,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		}
 	},
 
-
-	makeAssessmentSurvey: function(survey, guid) {
+    makeAssessmentSurvey: function(survey, guid) {
 		var me = this,
 			o = me.reader.getComponentOverlay(),
 			c = o.componentOverlayEl,
@@ -107,8 +108,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		}
 	},
 
-
-	makeAssessmentQuiz: function(set, guid) {
+    makeAssessmentQuiz: function(set, guid) {
 		var me = this,
 			isInstructor = this.isInstructorProspective,
 			completed,
@@ -173,8 +173,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		}
 	},
 
-
-	updateAssessmentHistory: function(history) {
+    updateAssessmentHistory: function(history) {
 		var setId = this.injectedAssignment.getId(),
 			historyItem = setId && history.getItem(setId);
 
@@ -192,8 +191,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		}
 	},
 
-
-	updateAssignmentHistoryItem: function(historyItem) {
+    updateAssignmentHistoryItem: function(historyItem) {
 		//Check history item is for injectedAssignment
 		var assignmentId = this.injectedAssignment.getId(),
 			grade = historyItem.get('Grade'),
@@ -217,8 +215,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 
 	},
 
-
-	showAssignmentTimer: function(submitFn) {
+    showAssignmentTimer: function(submitFn) {
 		var me = this,
 			max = me.injectedAssignment.getMaxTime(),
 			remaining = me.injectedAssignment.getTimeRemaining();
@@ -226,8 +223,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		me.reader.showRemainingTime(remaining, max, submitFn);
 	},
 
-
-	__goBackToAssignment: function(assignment) {
+    __goBackToAssignment: function(assignment) {
 		var me = this;
 
 		CourseWareUtils.findCourseBy(assignment.findMyCourse())
@@ -244,8 +240,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			});
 	},
 
-
-	notSubmittedTimed: function() {
+    notSubmittedTimed: function() {
 		var me = this,
 			assignment = me.injectedAssignment,
 			remaining = assignment.getTimeRemaining(),
@@ -279,8 +274,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		});
 	},
 
-
-	notSubmitted: function() {
+    notSubmitted: function() {
 		var me = this,
 			assignment = me.injectedAssignment,
 			title = (assignment && assignment.get('title')),
@@ -307,8 +301,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		});
 	},
 
-
-	progressLostAlert: function() {
+    progressLostAlert: function() {
 		var assignment = this.injectedAssignment,
 			title = (assignment && assignment.get('title')),
 			progress = ' Your progress will be lost.',
@@ -333,8 +326,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		});
 	},
 
-
-	allowNavigation: function() {
+    allowNavigation: function() {
 		//If there is no submission or we have no assignment (self-assessment)
 		//don't prevent navigation.  TODO what if we are opening a note on something
 		//like an assignment.  We would probably want to allowNavigation in that case.
@@ -369,15 +361,13 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		return Promise.resolve();
 	},
 
-
-	beforeRouteChange: function() {
+    beforeRouteChange: function() {
 		if (this.submission) {
 			this.submission.beforeRouteChange();
 		}
 	},
 
-
-	showSavingProgress: function() {
+    showSavingProgress: function() {
 		if (this.progressToast && !this.progressToast.el.isDestroyed) {
 			console.warn('Toast already open');
 		} else {
@@ -389,8 +379,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		}
 	},
 
-
-	showProgressSaved: function() {
+    showProgressSaved: function() {
 		var toast = this.progressToast;
 
 		if (!toast) { return; }
@@ -411,8 +400,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			});
 	},
 
-
-	showProgressFailed: function() {
+    showProgressFailed: function() {
 		var toast = this.progressToast;
 
 		if (!toast) { return; }
@@ -433,8 +421,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			});
 	},
 
-
-	shouldStudentAllowReset: function() {
+    shouldStudentAllowReset: function() {
 		var history,
 			injectedHistory = this.injectedAssignmentHistory,
 			allow = true;
@@ -454,8 +441,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		return allow;
 	},
 
-
-	resetAssignment: function() {
+    resetAssignment: function() {
 		var me = this,
 			history = me.injectedAssignmentHistory.get('history') || me.injectedAssignmentHistory,
 			reset = history && history.resetAssignment ? history.resetAssignment(isMe(history.get('Creator'))) : Promise.reject();
@@ -470,22 +456,19 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			});
 	},
 
-
-	wasReset: function() {
+    wasReset: function() {
 		if (this.feedback) {
 			this.feedback.hide();
 		}
 	},
 
-
-	forceSubmitted: function() {
+    forceSubmitted: function() {
 		var history = this.injectedAssignmentHistory;
 
 		this.feedback.setHistory(history);
 	},
 
-
-	injectAssignmentSavePoint: function(point) {
+    injectAssignmentSavePoint: function(point) {
 		this.injectedSavePoint = point;
 
 		if (this.submission) {
@@ -493,8 +476,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		}
 	},
 
-
-	injectAssessments: function(reader, doc, items) {
+    injectAssessments: function(reader, doc, items) {
 		var me = this,
 			slice = Array.prototype.slice,
 			questionObjs, pollObjs,
@@ -569,26 +551,22 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		}
 	},
 
-
-	isAssignment: function() {
+    isAssignment: function() {
 		return !!this.injectedAssignment;
 	},
 
-
-	setAssignmentFromInstructorProspective: function(assignment, history) {
+    setAssignmentFromInstructorProspective: function(assignment, history) {
 		this.isInstructorProspective = true;
 		this.injectedAssignment = assignment;
 		this.injectedAssignmentHistory = history;
 	},
 
-
-	setAssignmentFromStudentProspective: function(assignment, history) {
+    setAssignmentFromStudentProspective: function(assignment, history) {
 		this.injectedAssignment = assignment;
 		this.injectedAssignmentHistory = history;
 	},
 
-
-	cleanQuestionsThatAreInQuestionSets: function(items, objects) {
+    cleanQuestionsThatAreInQuestionSets: function(items, objects) {
 		items = items.slice();
 		//move assignments to the front.
 		items.sort(function(a, b) {
@@ -680,10 +658,9 @@ export default Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		return result;
 	},
 
-	getFeedbackContentEl: function() {
+    getFeedbackContentEl: function() {
 		return this.feedback && this.feedback.contentElement;
 	}
-
 }, function() {
 	var c = NextThought.app.contentviewer.reader.ComponentOverlay.prototype;
 	Ext.copyTo(this.prototype, c, ['getRelatedElement', 'getContentElement']);

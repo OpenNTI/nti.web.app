@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.profiles.community.components.sidebar.parts.Topics', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.community.components.sidebar.parts.Topics', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-community-topics',
 

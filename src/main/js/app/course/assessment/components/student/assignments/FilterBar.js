@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.assessment.components.student.assignments.FilterBar', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.assignments.FilterBar', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-assessment-assignments-filterbar',
 	ui: 'course-assessment',

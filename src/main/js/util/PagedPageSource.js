@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.util.PagedPageSource', {
+var Ext = require('extjs');
+var StoreUtils = require('./Store');
+
+
+module.exports = exports = Ext.define('NextThought.util.PagedPageSource', {
 
 	requires: 'NextThought.util.Store',
 

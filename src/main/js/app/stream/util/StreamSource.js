@@ -1,3 +1,7 @@
+var Ext = require('extjs');
+var StoreBatchInterface = require('../../../store/BatchInterface');
+
+
 /**
  * An interface for the BatchInterface to handle paging through a stream of activity.
  * Keeps track of the batch you are on, so you only have to call getNextBatch repeatedly.
@@ -6,10 +10,8 @@
  * @author andrew.ligon@nexthought.com (Andrew Ligon)
  */
 
-export default Ext.define('NextThought.app.stream.util.StreamSource', {
-	requires: ['NextThought.store.BatchInterface'],
-
-	/**
+module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource', {
+    /**
 	 * Construct an instance of a StreamSource
 	 *
 	 * @memberOf NextThought.app.stream.util.StreamSource#
@@ -81,12 +83,11 @@ export default Ext.define('NextThought.app.stream.util.StreamSource', {
 		};
 	},
 
-
-	getURL: function() {
+    getURL: function() {
 		return this.url;
 	},
 
-	/**
+    /**
 	 * Build the params to send back with the request
 	 *
 	 * @memberOf  NextThought.app.stream.util.StreamSource#
@@ -115,13 +116,11 @@ export default Ext.define('NextThought.app.stream.util.StreamSource', {
 		return params;
 	},
 
-
-	__getBatch: function() {
+    __getBatch: function() {
 		return this.currentBatch;
 	},
 
-
-	getCurrentBatch: function() {
+    getCurrentBatch: function() {
 		if (!this.currentBatch) {
 			this.currentBatch = new NextThought.store.BatchInterface({
 				url: this.getURL(),
@@ -132,8 +131,7 @@ export default Ext.define('NextThought.app.stream.util.StreamSource', {
 		return this.currentBatch.getBatch();
 	},
 
-
-	getNextBatch: function() {
+    getNextBatch: function() {
 		var me = this,
 			batch = me.__getBatch();
 
@@ -145,8 +143,7 @@ export default Ext.define('NextThought.app.stream.util.StreamSource', {
 			});
 	},
 
-
-	getPreviousBatch: function() {
+    getPreviousBatch: function() {
 		var me = this,
 			batch = me.__getBatch();
 
@@ -158,8 +155,7 @@ export default Ext.define('NextThought.app.stream.util.StreamSource', {
 			});
 	},
 
-
-	reset: function() {
+    reset: function() {
 		delete this.currentBatch;
 	}
 });

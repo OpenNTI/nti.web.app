@@ -1,12 +1,11 @@
-export default Ext.define('NextThought.app.dnd.Draggable', {
+var Ext = require('extjs');
+var DndActions = require('./Actions');
+var AppDndInfo = require('../../model/app/DndInfo');
+var StoreDataTransfer = require('../../store/DataTransfer');
 
-	requires: [
-		'NextThought.app.dnd.Actions',
-		'NextThought.model.app.DndInfo',
-		'NextThought.store.DataTransfer'
-	],
 
-	constructor: function(config) {
+module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
+    constructor: function(config) {
 
 		if (config.getDragTarget) {
 			this.getDragTarget = config.getDragTarget;
@@ -35,8 +34,7 @@ export default Ext.define('NextThought.app.dnd.Draggable', {
 		this.DnDActions = NextThought.app.dnd.Actions.create();
 	},
 
-
-	__addTargetListeners: function() {
+    __addTargetListeners: function() {
 		var target = this.getDragTarget(),
 			handlers = this.handlers;
 
@@ -55,8 +53,7 @@ export default Ext.define('NextThought.app.dnd.Draggable', {
 		}
 	},
 
-
-	__removeTargetListeners: function() {
+    __removeTargetListeners: function() {
 		var target = this.getDragTarget(),
 			handlers = this.handlers;
 
@@ -75,18 +72,15 @@ export default Ext.define('NextThought.app.dnd.Draggable', {
 		}
 	},
 
-
-	__handleMouseDown: function() {
+    __handleMouseDown: function() {
 		this.__addTargetListeners();
 	},
 
-
-	__handleMouseUp: function() {
+    __handleMouseUp: function() {
 		this.__removeTargetListeners();
 	},
 
-
-	__setOrRemoveDragListeners: function(remove) {
+    __setOrRemoveDragListeners: function(remove) {
 		//if we've already added the listeners and are trying
 		//to add them twice, don't
 		if (this.isEnabled === !remove) {
@@ -114,28 +108,23 @@ export default Ext.define('NextThought.app.dnd.Draggable', {
 		}
 	},
 
-
-	enableDragging: function() {
+    enableDragging: function() {
 		this.__setOrRemoveDragListeners();
 	},
 
-
-	disableDragging: function() {
+    disableDragging: function() {
 		this.__setOrRemoveDragListeners(true);
 	},
 
-
-	setDataTransfer: function(key, value) {
+    setDataTransfer: function(key, value) {
 		this.transferData.setData(key, value);
 	},
 
-
-	getDnDEventData: function() {
+    getDnDEventData: function() {
 		return new NextThought.model.app.DndInfo();
 	},
 
-
-	getPlaceholderStyles: function() {
+    getPlaceholderStyles: function() {
 		var styles = this.dropPlaceholderStyles || {},
 			rect = this.getDragBoundingClientRect && this.getDragBoundingClientRect();
 
@@ -147,8 +136,7 @@ export default Ext.define('NextThought.app.dnd.Draggable', {
 		return styles;
 	},
 
-
-	__dragStart: function(e) {
+    __dragStart: function(e) {
 		var el = this.getDragTarget(),
 			info = this.getDnDEventData();
 
@@ -178,8 +166,7 @@ export default Ext.define('NextThought.app.dnd.Draggable', {
 		}
 	},
 
-
-	__dragEnd: function(e) {
+    __dragEnd: function(e) {
 		var el = this.getDragTarget(),
 			handle = this.getDragHandle && this.getDragHandle(),
 			dropEffect = e.dataTransfer && e.dataTransfer.dropEffect;
@@ -201,8 +188,7 @@ export default Ext.define('NextThought.app.dnd.Draggable', {
 		}
 	},
 
-
-	onNoDrop: function() {
+    onNoDrop: function() {
 		var el = this.getDragTarget(),
 			handle = this.getDragHandle && this.getDragHandle();
 

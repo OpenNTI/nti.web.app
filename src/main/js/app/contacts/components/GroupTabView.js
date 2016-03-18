@@ -1,22 +1,23 @@
-export default Ext.define('NextThought.app.contacts.components.GroupTabView', {
-	extend: 'NextThought.app.contacts.components.TabView',
-	alias: 'widget.groups-tab-view',
+var Ext = require('extjs');
+var StoreUtils = require('../../../util/Store');
+var ComponentsTabView = require('./TabView');
+var GroupsStateStore = require('../../groups/StateStore');
+var UtilStore = require('../../../util/Store');
+var ModelUser = require('../../../model/User');
 
-	requires: [
-		'NextThought.app.groups.StateStore',
-		'NextThought.util.Store',
-		'NextThought.model.User'
-	],
 
-	navigation: {
+module.exports = exports = Ext.define('NextThought.app.contacts.components.GroupTabView', {
+    extend: 'NextThought.app.contacts.components.TabView',
+    alias: 'widget.groups-tab-view',
+
+    navigation: {
 		xtype: 'contacts-outline',
 		cls: 'group',
 		subType: 'group',
 		outlineLabel: getString('contacts_all_group')
 	},
 
-
-	body: {
+    body: {
 		xtype: 'data-bound-panel',
 		defaultType: 'contacts-tabs-grouping',
 		items: [],
@@ -34,19 +35,17 @@ export default Ext.define('NextThought.app.contacts.components.GroupTabView', {
 		}
 	},
 
-	filter: function(group) { return group.hidden !== true && group.isDFL; },
+    filter: function(group) { return group.hidden !== true && group.isDFL; },
+    subType: 'group',
 
-	subType: 'group',
-
-	initComponent: function () {
+    initComponent: function () {
 		this.callParent(arguments);
 
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.buildStore();
 	},
 
-
-	buildStore: function() {
+    buildStore: function() {
 		var s = this.GroupStore.getGroupsList(),
 			store = StoreUtils.newView(s);
 

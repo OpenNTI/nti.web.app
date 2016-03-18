@@ -1,23 +1,20 @@
-export default Ext.define('NextThought.app.forums.components.forum.Forum', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.forums-forum-body',
+var Ext = require('extjs');
+var PartsFilterBar = require('./parts/FilterBar');
+var Header = require('./parts/Header');
+var PartsTopicListView = require('./parts/TopicListView');
 
-	layout: 'none',
 
-	requires: [
-		'NextThought.app.forums.components.forum.parts.FilterBar',
-		'NextThought.app.forums.components.forum.parts..Header',
-		'NextThought.app.forums.components.forum.parts.TopicListView'
-	],
+module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Forum', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.forums-forum-body',
+    layout: 'none',
+    cls: 'topic-list-body forum-body',
 
-	cls: 'topic-list-body forum-body',
-
-	storeCfg: {
+    storeCfg: {
 		pageSize: 10
 	},
 
-
-	clearForum: function() {
+    clearForum: function() {
 		var topicList = this.down('forums-forum-topic-list-view'),
 			filterBar = this.down('forums-forum-filterbar'),
 			header = this.down('forums-forum-header');
@@ -26,8 +23,7 @@ export default Ext.define('NextThought.app.forums.components.forum.Forum', {
 		Ext.destroy(topicList, filterBar, header);
 	},
 
-
-	setForum: function(record) {
+    setForum: function(record) {
 		var topicList = this.down('forums-forum-topic-list-view'),
 			filterBar = this.down('forums-forum-filterbar'),
 			header = this.down('forums-forum-header'),
@@ -64,8 +60,7 @@ export default Ext.define('NextThought.app.forums.components.forum.Forum', {
 		return topicList.restoreState(this.getRouteState());
 	},
 
-
-	updateForum: function() {
+    updateForum: function() {
 		var topicList = this.down('forums-forum-topic-list-view');
 
 		if (!topicList) {

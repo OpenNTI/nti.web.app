@@ -1,9 +1,14 @@
-export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
-	alias: 'reader.scroll',
-	requires: ['NextThought.util.Search'],
+var Ext = require('extjs');
+var Anchors = require('../../../util/Anchors');
+var TextRangeFinderUtils = require('../../../util/TextRangeFinder');
+var SearchUtils = require('../../../util/Search');
+var UtilSearch = require('../../../util/Search');
 
 
-	constructor: function(config) {
+module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scroll', {
+    alias: 'reader.scroll',
+
+    constructor: function(config) {
 		Ext.apply(this, config);
 		var me = this, reader = me.reader,
 			scroll = me.menuHideOnScroll.bind(me);
@@ -29,8 +34,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 		});
 	},
 
-
-	menuHideOnScroll: function() {
+    menuHideOnScroll: function() {
 		var scrollPosition = Math.abs(this.top());
 
 		Ext.menu.Manager.hideAll();
@@ -45,8 +49,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 		}
 	},
 
-
-	isInFullScreenMode: function() {
+    isInFullScreenMode: function() {
 		var el = document.fullscreenElement ||
         		 document.webkitFullscreenElement ||
         		 document.mozFullScreenElement ||
@@ -54,8 +57,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
         return Boolean(el);
 	},
 
-
-	lock: function() {
+    lock: function() {
 		if (!Ext.getDom(this.scrollingEl)) {
 			return;
 		}
@@ -63,34 +65,29 @@ export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 		this.scrollingEl.setStyle({overflowY: 'hidden'});
 	},
 
-
-	unlock: function() {
+    unlock: function() {
 		if (!Ext.getDom(this.scrollingEl)) {
 			return;
 		}
 		this.scrollingEl.setStyle({overflowY: 'auto'});
 	},
 
-
-	get: function() {
+    get: function() {
 		if (!this.scrollingEl) {
 			return;
 		}
 		return this.scrollingEl.getScroll();
 	},
 
-
-	up: function() {
+    up: function() {
 		this.by(50);
 	},
 
-
-	down: function() {
+    down: function() {
 		this.by(-50);
 	},
 
-
-	by: function(delta) {
+    by: function(delta) {
 		if (!this.scrollingEl) {
 			return;
 		}
@@ -99,12 +96,12 @@ export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 		s.setScrollTop(t - delta);
 	},
 
-	top: function() {
+    top: function() {
 		var s = this.scrollingEl;
 		return s && s.getScrollTop();
 	},
 
-	toId: function(id) {
+    toId: function(id) {
 		var n = Ext.getCmp(id),
 			m,
 			offset = this.reader.getPosition(),
@@ -131,8 +128,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 		}
 	},
 
-
-	//Scrolls the reader to the first element matching the provided
+    //Scrolls the reader to the first element matching the provided
 	//selector.
 	toSelector: function(selector) {
 		var de = this.reader.getDocumentElement(),
@@ -142,8 +138,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 		}
 	},
 
-
-	toTarget: function(target) {
+    toTarget: function(target) {
 		function getNode(t) {
 			return document.getElementById(t) || de.getElementById(t) || de.getElementsByName(t)[0];
 		}
@@ -170,8 +165,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 		}
 	},
 
-
-	toContainer: function(containerId) {
+    toContainer: function(containerId) {
 		var de = this.reader.getDocumentElement(),
 			e = de.getElementById(containerId) || de.getElementsByName(containerId)[0];
 
@@ -189,8 +183,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 		this.toNode(e, true, 0);
 	},
 
-
-	/**
+    /**
 	 * Scroll to some element, but allow options to decide whether or not to scroll.
 	 *
 	 * @param {Node} n - the node you want to scroll to
@@ -218,15 +211,14 @@ export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 		this.to(o - (verticalOffset || 0) - 10);
 	},
 
-
-	to: function(top, animate) {
+    to: function(top, animate) {
 		if (!this.scrollingEl || !this.scrollingEl.dom) {
 			return;
 		}
 		this.scrollingEl.scrollTo('top', top, animate !== false);
 	},
 
-	toNote: function(note) {
+    toNote: function(note) {
 		var applicableRange = note.get('applicableRange'),
 			containerId = note.get('ContainerId'),
 			doc = this.reader.getIframe().getDocumentElement(),
@@ -236,7 +228,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 		this.toNode(range.startContainer);
 	},
 
-	toSearchHit: function(hit, fragment) {
+    toSearchHit: function(hit, fragment) {
 		var me = this, pos;
 
 		this.reader.getAnnotations().clearSearchHit();
@@ -261,8 +253,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 		}
 	},
 
-
-	/** @private */
+    /** @private */
 	getFragmentLocation: function(fragment, phrase) {
 		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase, true),
 				doc = this.reader.getDocumentElement(),

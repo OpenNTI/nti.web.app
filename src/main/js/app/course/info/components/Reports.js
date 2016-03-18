@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.info.components.Reports', {
+var Ext = require('extjs');
+var MixinsFillScreen = require('../../../../mixins/FillScreen');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.info.components.Reports', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info-reports',
 

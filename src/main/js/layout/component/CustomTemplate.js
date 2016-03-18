@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.layout.component.CustomTemplate', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.layout.component.CustomTemplate', {
 	extend: 'Ext.layout.component.Body',
 	alias: 'layout.customtemplate',
 	type: 'customtemplate',

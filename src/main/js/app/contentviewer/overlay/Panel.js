@@ -1,14 +1,15 @@
-export default Ext.define('NextThought.app.contentviewer.overlay.Panel', {
-	extend: 'Ext.panel.Panel',
-	alias: 'widget.overlayed-panel',
+var Ext = require('extjs');
+var DomUtils = require('../../../util/Dom');
+var UtilAnchors = require('../../../util/Anchors');
 
-	requires: ['NextThought.util.Anchors'],
 
-	OBJECT_QUERY: 'object[type*=naquestion],object[type*=napoll]',
+module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Panel', {
+    extend: 'Ext.panel.Panel',
+    alias: 'widget.overlayed-panel',
+    OBJECT_QUERY: 'object[type*=naquestion],object[type*=napoll]',
+    placementHolderTpl: Ext.DomHelper.createTemplate({type: 'application/vnd.nextthought.placeholder'}),
 
-	placementHolderTpl: Ext.DomHelper.createTemplate({type: 'application/vnd.nextthought.placeholder'}),
-
-	inheritableStatics: {
+    inheritableStatics: {
 		relayout: Ext.Function.createBuffered(function() {
 			Ext.each(Ext.ComponentQuery.query('overlayed-panel'), function(p) {p.updateLayout();}); },10),
 
@@ -22,25 +23,22 @@ export default Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 		}, 10)
 	},
 
-	representsUserDataContainer: false,
-	appendPlaceholder: false,
-	plain: true,
-	autoRender: true,
-	ui: 'overlayed',
+    representsUserDataContainer: false,
+    appendPlaceholder: false,
+    plain: true,
+    autoRender: true,
+    ui: 'overlayed',
 
-
-	constructor: function() {
+    constructor: function() {
 		this.callParent(arguments);
 		Ext.defer(this.setupContentElement, 1, this);
 	},
 
-
-	getRefOwner: function() {
+    getRefOwner: function() {
 		return this.reader;
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		var d, el, insert = 'insertBefore', ix = 0;
 		if (!this.contentElement) {
 			try {
@@ -75,8 +73,7 @@ export default Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 		this.callParent(arguments);
 	},
 
-
-	destroy: function() {
+    destroy: function() {
 		if (this.insertedElement) {
 			Ext.fly(this.contentElement).remove();
 		}
@@ -84,30 +81,27 @@ export default Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 		this.callParent(arguments);
 	},
 
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.syncTopTillStable();
 	},
 
-
-	hide: function() {
+    hide: function() {
 		if (this.contentElement) {
 			Ext.fly(this.contentElement).setStyle({display: 'none'});
 		}
 		this.callParent(arguments);
 	},
 
-
-	show: function() {
+    show: function() {
 		if (this.contentElement) {
 			Ext.fly(this.contentElement).setStyle({display: 'block'});
 		}
 		this.callParent(arguments);
 	},
 
-
-	removeContent: function(selector) {
+    removeContent: function(selector) {
 		if (!this.contentElement) {return;}
 		var el = Ext.get(this.contentElement);
 		el.select(selector)
@@ -116,8 +110,7 @@ export default Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 				.setStyle({display: 'none'});
 	},
 
-
-	setupContentElement: function() {
+    setupContentElement: function() {
 		if (!this.contentElement) {return;}
 		this.removeContent('.hidden,INPUT,object,param');
 		Ext.fly(this.contentElement).setStyle({
@@ -130,8 +123,7 @@ export default Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 
 	},
 
-
-	syncTopTillStable: function() {
+    syncTopTillStable: function() {
 		if (this.interval || !this.rendered) { return; }
 
 		var me = this, lastTop = 0, sameCount = 0;
@@ -154,8 +146,7 @@ export default Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 		}, 200);
 	},
 
-
-	syncTop: function() {
+    syncTop: function() {
 		if (!this.contentElement) {return 0;}
 
 		var top = this.contentElement.getBoundingClientRect().top;
@@ -178,8 +169,7 @@ export default Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 		return top;
 	},
 
-
-	maybeScrollIntoView: Ext.Function.createBuffered(function() {
+    maybeScrollIntoView: Ext.Function.createBuffered(function() {
 		try {
 			var offset = this.getHeight(),
 				reader = this.reader;
@@ -193,14 +183,12 @@ export default Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 		}
 	}, 250),
 
-
-	afterLayout: function() {
+    afterLayout: function() {
 		this.syncElementHeight();
 		this.callParent(arguments);
 	},
 
-
-	syncElementHeight: function() {
+    syncElementHeight: function() {
 		if (!this.rendered) {return;}
 		try {
 			var h = this.getHeight();

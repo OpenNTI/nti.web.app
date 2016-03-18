@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.mixins.GroupLike', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.GroupLike', {
   //must be mixed into a model
 
 	EVERYONE_USERNAME: 'everyone',

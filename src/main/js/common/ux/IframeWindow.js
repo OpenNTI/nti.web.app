@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.common.ux.IframeWindow', {
+var Ext = require('extjs');
+var WindowWindow = require('../window/Window');
+
+
+module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.iframe-window',
 

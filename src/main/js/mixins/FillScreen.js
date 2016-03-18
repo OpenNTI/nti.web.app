@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.mixins.FillScreen', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.FillScreen', {
 
 	fillScreen: function(node, paddingBottom) {
 		if (!node) { return; }

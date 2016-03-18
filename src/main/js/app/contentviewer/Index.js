@@ -1,3 +1,11 @@
+var Ext = require('extjs');
+var MixinsSearchable = require('../../mixins/Searchable');
+var ContentviewerActions = require('./Actions');
+var PanelsReader = require('./panels/Reader');
+var AssignmentAdmin = require('./panels/assignment/Admin');
+var AssignmentStudent = require('./panels/assignment/Student');
+
+
 /**
  * Renders a piece of content
  *
@@ -41,31 +49,18 @@
  * 			}
  *
  */
-export default Ext.define('NextThought.app.contentviewer.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.content-viewer',
+module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.content-viewer',
+    cls: 'content-viewer',
 
-	cls: 'content-viewer',
-
-	requires: [
-		// 'NextThought.view.contentviewer.Readers',
-		// 'NextThought.view.contentviewer.Annotations',
-		// 'NextThought.view.contentviewer.Header'
-		// 'NextThought.view.reader.Panel',
-		'NextThought.app.contentviewer.Actions',
-		'NextThought.app.contentviewer.panels.Reader',
-		'NextThought.app.contentviewer.panels.assignment.Admin',
-		'NextThought.app.contentviewer.panels.assignment.Student'
-	],
-
-
-	mixins: {
+    mixins: {
 		Searchable: 'NextThought.mixins.Searchable'
 	},
 
-	layout: 'none',
+    layout: 'none',
 
-	constructor: function(config) {
+    constructor: function(config) {
 		var readerConfig = {
 			xtype: 'reader',
 			height: '100%',
@@ -96,8 +91,7 @@ export default Ext.define('NextThought.app.contentviewer.Index', {
 		this.callParent(arguments);
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -129,8 +123,7 @@ export default Ext.define('NextThought.app.contentviewer.Index', {
 		});
 	},
 
-
-	__fixConfigForPageInfo: function(config, pageInfo) {
+    __fixConfigForPageInfo: function(config, pageInfo) {
 		var assignment = pageInfo.getAssignment();
 
 		if (config.xtype === 'reader' && assignment) {
@@ -144,28 +137,24 @@ export default Ext.define('NextThought.app.contentviewer.Index', {
 		return config;
 	},
 
-
-	onActivate: function() {
+    onActivate: function() {
 		this.initSearch();
 		if (this.reader) {
 			this.reader.fireEvent('activate');
 		}
 	},
 
-
-	onDeactivate: function() {
+    onDeactivate: function() {
 		if (this.reader) {
 			this.reader.fireEvent('deactivate');
 		}
 	},
 
-
-	getContainerIdForSearch: function() {
+    getContainerIdForSearch: function() {
 		return this.pageInfo && this.pageInfo.getId();
 	},
 
-
-	onceReadyForSearch: function() {
+    onceReadyForSearch: function() {
 		var me = this;
 
 		if (me.reader) {
@@ -179,23 +168,22 @@ export default Ext.define('NextThought.app.contentviewer.Index', {
 		});
 	},
 
-
-	showSearchHit: function(hit, fragment) {
+    showSearchHit: function(hit, fragment) {
 		this.clearSearchHit();
 
 		wait()
 			.then(this.reader.showSearchHit.bind(this.reader, hit, fragment));
 	},
 
-	goToFragment: function(fragment) {
+    goToFragment: function(fragment) {
 		this.reader.goToFragment(fragment);
 	},
 
-	goToNote: function(note) {
+    goToNote: function(note) {
 		this.reader.goToNote(note);
 	},
 
-	resolvePageInfo: function() {
+    resolvePageInfo: function() {
 		var p;
 
 		if (this.pageInfo) {
@@ -211,23 +199,19 @@ export default Ext.define('NextThought.app.contentviewer.Index', {
 		return p;
 	},
 
-
-	allowNavigation: function() {
+    allowNavigation: function() {
 		return this.reader ? this.reader.allowNavigation() : true;
 	},
 
-
-	beforeRouteChange: function() {
+    beforeRouteChange: function() {
 		return this.reader && this.reader.beforeRouteChange();
 	},
 
-
-	getLocation: function() {
+    getLocation: function() {
 		return this.reader.getLocation();
 	},
 
-
-	updateHistory: function(h) {
+    updateHistory: function(h) {
 		var reader = this.reader;
 
 		if (reader && reader.updateHistory) {

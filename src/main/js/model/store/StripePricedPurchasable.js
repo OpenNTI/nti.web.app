@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.store.StripePricedPurchasable', {
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.store.StripePricedPurchasable', {
 	extend: 'NextThought.model.Base',
 
 	fields: [

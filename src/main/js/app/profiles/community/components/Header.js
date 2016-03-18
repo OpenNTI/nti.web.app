@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.profiles.community.components.Header', {
+var Ext = require('extjs');
+var ComponentsHeader = require('../../components/Header');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.community.components.Header', {
 	extend: 'NextThought.app.profiles.components.Header',
 	alias: 'widget.profile-community-header',
 

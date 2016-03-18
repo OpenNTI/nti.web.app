@@ -1,4 +1,10 @@
-export default new Ext.define('NextThought.proxy.JSONP', {
+var Ext = require('extjs');
+var B64 = require('../util/Base64');
+var Globals = require('../util/Globals');
+var JSONP = require('./JSONP');
+
+
+module.exports = exports = new Ext.define('NextThought.proxy.JSONP', {
 	bufferedContent: {},
 
 

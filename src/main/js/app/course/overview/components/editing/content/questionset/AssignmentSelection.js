@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.questionset.AssignmentSelection', {
+var Ext = require('extjs');
+var ItemselectionIndex = require('../../itemselection/Index');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.AssignmentSelection', {
 	extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
 	alias: 'widget.overview-editing-assignment-selection',
 

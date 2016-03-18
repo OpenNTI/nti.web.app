@@ -1,13 +1,13 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.questionset.AssignmentEditor', {
-	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-	alias: 'widget.overview-editing-assignment-editor',
-
-	requires: [
-		'NextThought.model.AssignmentRef'
-	],
+var Ext = require('extjs');
+var ContentEditor = require('../Editor');
+var ModelAssignmentRef = require('../../../../../../../model/AssignmentRef');
 
 
-	showEditor: function() {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.AssignmentEditor', {
+    extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+    alias: 'widget.overview-editing-assignment-editor',
+
+    showEditor: function() {
 		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord, this.onFormChange.bind(this));
 
 		if (this.selectedItem) {
@@ -19,8 +19,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	addPreview: function(item) {
+    addPreview: function(item) {
 		var me = this,
 			now = new Date(),
 			dueDate = item.getDueDate(),
@@ -52,8 +51,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		});
 	},
 
-
-	getValues: function() {
+    getValues: function() {
 		var item = this.selectedItem;
 
 		return {
@@ -65,8 +63,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 
 	},
 
-
-	hasRecordChanged: function(values) {
+    hasRecordChanged: function(values) {
 		var changed = false;
 
 		if (!this.record) {
@@ -82,8 +79,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return changed;
 	},
 
-
-	onSave: function() {
+    onSave: function() {
 		var me = this,
 			parentSelection = me.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),

@@ -1,14 +1,15 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.discussion.Editor', {
-	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-	alias: 'widget.overview-editing-discussion',
+var Ext = require('extjs');
+var ContentEditor = require('../Editor');
+var ModelDiscussionRef = require('../../../../../../../model/DiscussionRef');
+var DiscussionItemSelection = require('./ItemSelection');
+var DiscussionDiscussionEditor = require('./DiscussionEditor');
 
-	requires: [
-		'NextThought.model.DiscussionRef',
-		'NextThought.app.course.overview.components.editing.content.discussion.ItemSelection',
-		'NextThought.app.course.overview.components.editing.content.discussion.DiscussionEditor'
-	],
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.discussion.Editor', {
+    extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+    alias: 'widget.overview-editing-discussion',
+
+    statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.DiscussionRef.mimeType,
@@ -30,12 +31,10 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-	SWITCHED: 'switched-items',
+    SWITCHED: 'switched-items',
+    addFormCmp: function() {},
 
-	addFormCmp: function() {},
-
-
-	showEditor: function() {
+    showEditor: function() {
 		if (this.record) {
 			this.showDiscussionEditor();
 		} else {
@@ -43,8 +42,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	onBack: function() {
+    onBack: function() {
 		if (this.discussionEditorCmp) {
 			this.showDiscussionList();
 		} else if (this.doBack) {
@@ -52,15 +50,13 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	maybeEnableBack: function(text) {
+    maybeEnableBack: function(text) {
 		if (!this.record && this.enableBack) {
 			this.enableBack(text);
 		}
 	},
 
-
-	showDiscussionEditor: function() {
+    showDiscussionEditor: function() {
 		if (this.discussionEditorCmp) {
 			this.discussionEditorCmp.destroy();
 			delete this.discussionEditorCmp;
@@ -83,8 +79,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		this.maybeEnableBack('Discussions');
 	},
 
-
-	showDiscussionList: function(selectedItems) {
+    showDiscussionList: function(selectedItems) {
 		var me = this;
 
 		if (this.discussionsListCmp) {
@@ -114,13 +109,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			});
 	},
 
-
-	__sortDiscussions: function(discussions) {
+    __sortDiscussions: function(discussions) {
 		return discussions;
 	},
 
-
-	onDiscussionSelectionChange: function(selection) {
+    onDiscussionSelectionChange: function(selection) {
 		var length = selection.length;
 
 		if (length === 0) {
@@ -131,8 +124,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	onSave: function() {
+    onSave: function() {
 		var me = this;
 		if (!me.discussionEditorCmp) {
 			me.showDiscussionEditor();
@@ -147,8 +139,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			});
 	},
 
-
-	onSaveFailure: function(reason) {
+    onSaveFailure: function(reason) {
 		if (reason === this.SWITCHED) { return; }
 
 		this.callParent(arguments);

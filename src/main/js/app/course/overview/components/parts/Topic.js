@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.overview.components.parts.Topic', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Topic', {
 	extend: 'Ext.Component',
 	alias: ['widget.course-overview-topic', 'widget.course-overview-unit'],
 	ui: 'course',

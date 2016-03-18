@@ -1,13 +1,13 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.questionset.SelfAssessmentEditor', {
-	extend: 'NextThought.app.course.overview.components.editing.content.questionset.AssignmentEditor',
-	alias: 'widget.overview-editing-self-assessment-editor',
-
-	requires: [
-		'NextThought.model.QuestionSetRef'
-	],
+var Ext = require('extjs');
+var QuestionsetAssignmentEditor = require('./AssignmentEditor');
+var ModelQuestionSetRef = require('../../../../../../../model/QuestionSetRef');
 
 
-	addPreview: function(item) {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.SelfAssessmentEditor', {
+    extend: 'NextThought.app.course.overview.components.editing.content.questionset.AssignmentEditor',
+    alias: 'widget.overview-editing-self-assessment-editor',
+
+    addPreview: function(item) {
 		var me = this,
 			questions = item.get('questions'),
 			questionCount = questions.length,
@@ -39,8 +39,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		});
 	},
 
-
-	getValues: function() {
+    getValues: function() {
 		var item = this.selectedItem;
 
 		return {
@@ -51,8 +50,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		};
 	},
 
-
-	hasRecordChanged: function(values) {
+    hasRecordChanged: function(values) {
 		var changed = false;
 
 		if (!this.record) {

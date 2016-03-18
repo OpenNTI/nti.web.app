@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Empty', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Empty', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-activity-part-empty',
 	

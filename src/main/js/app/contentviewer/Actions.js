@@ -1,14 +1,15 @@
-export default Ext.define('NextThought.app.contentviewer.Actions', {
-	extend: 'NextThought.common.Actions',
-
-	requires: [
-		'NextThought.model.PageInfo',
-		'NextThought.model.RelatedWork',
-		'NextThought.util.Content'
-	],
+var Ext = require('extjs');
+var ContentUtils = require('../../util/Content');
+var CommonActions = require('../../common/Actions');
+var ModelPageInfo = require('../../model/PageInfo');
+var ModelRelatedWork = require('../../model/RelatedWork');
+var UtilContent = require('../../util/Content');
 
 
-	getRelatedWorkPageInfo: function(data, bundle) {
+module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    getRelatedWorkPageInfo: function(data, bundle) {
 		var ntiid = data.get ? data.get('NTIID') : data.NTIID,
 			DH = Ext.DomHelper;
 

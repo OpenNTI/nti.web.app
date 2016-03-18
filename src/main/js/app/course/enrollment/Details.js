@@ -1,21 +1,19 @@
+var Ext = require('extjs');
+var AnalyticsUtil = require('../../../util/Analytics');
+var ComponentsPanel = require('../info/components/Panel');
+var EnrollmentStateStore = require('./StateStore');
+var EnrollmentActions = require('./Actions');
+var CoursesStateStore = require('../../library/courses/StateStore');
+var AccountActions = require('../../account/Actions');
+
+
 /*globals getFormattedString*/
-export default Ext.define('NextThought.app.course.enrollment.Details', {
-	extend: 'Ext.Component',
-	alias: 'widget.course-enrollment-details',
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details', {
+    extend: 'Ext.Component',
+    alias: 'widget.course-enrollment-details',
+    cls: 'course-details',
 
-	requires: [
-		'NextThought.app.course.info.components.Panel',
-		'NextThought.app.course.enrollment.StateStore',
-		'NextThought.app.course.enrollment.Actions',
-		'NextThought.app.library.courses.StateStore',
-		'NextThought.app.account.Actions'
-		// 'NextThought.view.contacts.suggestions.Window',
-		// 'NextThought.view.profiles.create.Window'
-	],
-
-	cls: 'course-details',
-
-	enrollmentCardTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+    enrollmentCardTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cls: 'enroll-card', cn: [
 			{cls: 'enroll-option base {base.cls}', 'data-name': '{base.name}', cn: [
 				{cls: 'enrolled', html: '{{{NextThought.view.courseware.enrollment.Details.Enrolled}}}'},
@@ -62,8 +60,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		]}
 	])),
 
-
-	enrollmentConfirmationTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+    enrollmentConfirmationTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cls: 'complete-enrollment-layer', cn: [
 			{cls: 'congrats-container', cn: [
 				{cls: 'congrats', cn: [
@@ -92,8 +89,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		]}
 	])),
 
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'header', cn: [
 			{cls: 'sub', html: '{number}'},
 			{cls: 'title', html: '{title}'}
@@ -104,15 +100,13 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		]}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		detailsEl: '.left',
 		cardsEl: '.enrollment',
 		cardsContainerEl: '.enrollment-container'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.enableBubble(['enrolled-action', 'show-msg', 'go-back']);
@@ -131,8 +125,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		window.EnrollInOption = this.enrollInOption.bind(this);
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -141,13 +134,11 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		});
 	},
 
-
-	stopClose: function() {
+    stopClose: function() {
 		return this.changingEnrollment ? Promise.reject() : Promise.resolve();
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -174,7 +165,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 			});
 	},
 
-	/**
+    /**
 	 * Restore to an enrollment option
 	 * @param  {String} type   name of the enrollment option
 	 * @param  {Array} config  array of configs for the option to parse
@@ -214,20 +205,17 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		}
 	},
 
-
-	onDestroy: function() {
+    onDestroy: function() {
 		this.callParent(arguments);
 
 		AnalyticsUtil.stopResourceTimer(this.course.getId(), 'course-catalog-viewed');
 	},
 
-
-	onBeforeDeactivate: function() {
+    onBeforeDeactivate: function() {
 		return !this.changingEnrollment;
 	},
 
-
-	addMask: function() {
+    addMask: function() {
 		try {
 			var maskEl = this.el && this.el.up('.body-container');
 			if (maskEl) {
@@ -238,8 +226,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		}
 	},
 
-
-	removeMask: function() {
+    removeMask: function() {
 		var maskEl = this.el.up('.body-container'),
 			mask = maskEl && maskEl.down('.x-mask'),
 			maskMsg = maskEl && maskEl.down('.x-mask-msg');
@@ -257,13 +244,11 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		}
 	},
 
-
-	__getOptionText: function(details, option) {
+    __getOptionText: function(details, option) {
 		return option.Wording;
 	},
 
-
-	__addBaseOption: function(details, option) {
+    __addBaseOption: function(details, option) {
 		if (this.state.base) {
 			console.error('More than one base', details, option);
 			return;
@@ -272,8 +257,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		this.state.base = this.__getOptionText(details, option);
 	},
 
-
-	__addAddOnOption: function(details, option) {
+    __addAddOnOption: function(details, option) {
 		var data = this.__getOptionText(details, option);
 
 		if (option.Enrolled) {
@@ -289,7 +273,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		this.__maybeUpdateCard(this.state);
 	},
 
-	/**
+    /**
 	 * Given a base enrollment option, fetch all the data
 	 * @param  {Object} option option to load
 	 * @return {Promise}       fulfills when its loaded
@@ -311,8 +295,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		return loading;
 	},
 
-
-	/**
+    /**
 	 * Given an enrollment option, fetch all the data for the option given
 	 * @param  {Object} option the enrollment details
 	 * @return {Promise}         resolved if the option is available, reject if not;
@@ -333,8 +316,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		return loading;
 	},
 
-
-	/**
+    /**
 	 * Takes the enrollment details for the course and build the
 	 * data necessary to make the enrollment card
 	 * @param  {Object} details enrollment details
@@ -412,8 +394,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		return loading;
 	},
 
-
-	__maybeUpdateCard: function(state) {
+    __maybeUpdateCard: function(state) {
 		var me = this,
 			card = me.cardsContainerEl,
 			addOns = Object.keys(state.addOns || {});
@@ -467,8 +448,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		});
 	},
 
-
-	__buildCard: function(state) {
+    __buildCard: function(state) {
 		var data = {
 				base: state.base,
 				addOns: [],
@@ -497,8 +477,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 
 	},
 
-
-	__buildCongratsCard: function() {
+    __buildCongratsCard: function() {
 		var isFirstTimer = $AppConfig.userObject.hasLink('first_time_logon'),
 			data = {
 				firstName: Ext.String.capitalize($AppConfig.userObject.get('FirstName') || $AppConfig.userObject.getName()),
@@ -515,12 +494,11 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		me.updateWindowButtons(me.requiredActions.first());
 	},
 
-
-	__showError: function() {
+    __showError: function() {
 
 	},
 
-	/**
+    /**
 	 * Updates the enrollment card to match the options available
 	 * to the user for this course
 	 *
@@ -581,7 +559,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 			});
 	},
 
-	/**
+    /**
 	 * takes the prices and returns the string we should show to the user
 	 *
 	 * @param  {Number} base  the price of the base option
@@ -624,8 +602,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		return price;
 	},
 
-
-	getButtonCls: function(option) {
+    getButtonCls: function(option) {
 		var cls = 'free';
 
 		if (option.cls === 'enrolled') {
@@ -639,7 +616,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		return cls;
 	},
 
-	showMessage: function(msg, isError, cursor) {
+    showMessage: function(msg, isError, cursor) {
 		var me = this,
 			win = me.up('[showMsg]'),
 			guid = guidGenerator();
@@ -660,8 +637,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		});
 	},
 
-
-	clearMessage: function() {
+    clearMessage: function() {
 		var win = this.up('[closeMsg]');
 
 		if (win) {
@@ -670,7 +646,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		}
 	},
 
-	/**
+    /**
 	 * Handles a click on the enrollment card and calls the appropriate handler
 	 * @param  {Event} e the click event
 	 * @return {Boolean}   if the event was stopped
@@ -694,7 +670,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		return r;
 	},
 
-	/**
+    /**
 	 * Updates the cards and button toggling a addon
 	 * @param  {Ext.element} checkbox the addon element
 	 * @param  {Event} e        the click event
@@ -748,7 +724,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		}
 	},
 
-	/**
+    /**
 	 * Handles anchors with hrefs that we are looking for
 	 * @param  {Ext.element} link the anchor that was clicked
 	 * @param  {Event} e    the click event
@@ -783,7 +759,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		return r;
 	},
 
-	/**
+    /**
 	 * Handles the button being clicked for enrolling/dropping
 	 * @param  {Ext.element} button the button element
 	 * @param  {Event} e      the click event
@@ -934,8 +910,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 
 	},
 
-
-	giftClicked: function(el, e) {
+    giftClicked: function(el, e) {
 		var give = e.getTarget('.give'),
 			redeem = e.getTarget('.redeem'),
 			option = this.enrollmentOptions.GiftOption;
@@ -947,8 +922,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		}
 	},
 
-
-	enrollInOption: function(name) {
+    enrollInOption: function(name) {
 		var option = this.enrollmentOptions[name];
 
 		if (option) {
@@ -956,8 +930,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		}
 	},
 
-
-	congratsLayerClicked: function(el) {
+    congratsLayerClicked: function(el) {
 		var nextSelectionEl = el.getTarget('.add-course');
 
 		if (nextSelectionEl) {
@@ -965,8 +938,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		}
 	},
 
-
-	suggestContacts: function(onComplete) {
+    suggestContacts: function(onComplete) {
 		var me = this, peersStore, c;
 
 		c = this.CourseStore.findCourseBy(me.course.findByMyCourseInstance());
@@ -1002,16 +974,14 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 			});
 	},
 
-
-	showCreateProfile: function(onComplete) {
+    showCreateProfile: function(onComplete) {
 		var me = this;
 		me.createProfileWin = Ext.widget('profile-create-window');
 		me.createProfileWin.show();
 		me.mon(me.createProfileWin, 'destroy', onComplete);
 	},
 
-
-	onActionComplete: function(actionName) {
+    onActionComplete: function(actionName) {
 		var me = this,
 			el = me.congratsLayerEl && me.congratsLayerEl.down('.' + actionName), nextAction;
 
@@ -1028,8 +998,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		}
 	},
 
-
-	updateWindowButtons: function(action, name) {
+    updateWindowButtons: function(action, name) {
 		if (!action) { return; }
 
 		var me = this;
@@ -1045,8 +1014,7 @@ export default Ext.define('NextThought.app.course.enrollment.Details', {
 		}
 	},
 
-
-	buttonClick: function(action) {
+    buttonClick: function(action) {
 		if (action === 'suggestContacts') {
 			this.suggestContacts(this.onActionComplete.bind(this, action));
 		}

@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
+var Ext = require('extjs');
+var ComponentsPage = require('../Page');
+
+
+module.exports = exports = Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
 	extend: 'NextThought.app.library.courses.components.Page',
 	alias: ['widget.library-availalble-courses-page'],
 

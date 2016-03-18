@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.model.forums.PersonalBlogEntry', {
+var Ext = require('extjs');
+var ForumsHeadlineTopic = require('./HeadlineTopic');
+var MixinsModelWithPublish = require('../../mixins/ModelWithPublish');
+
+
+module.exports = exports = Ext.define('NextThought.model.forums.PersonalBlogEntry', {
 	extend: 'NextThought.model.forums.HeadlineTopic',
 
 	isBlogEntry: true,

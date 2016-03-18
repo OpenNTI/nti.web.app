@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.app.Controller', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.app.Controller', {
 	override: 'Ext.app.Controller',
 
 	callOnAllControllersWith: function(functionName) {

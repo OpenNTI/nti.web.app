@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.assessment.DateMenu', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.DateMenu', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.assessment-date-menu',
 	ui: 'nt',

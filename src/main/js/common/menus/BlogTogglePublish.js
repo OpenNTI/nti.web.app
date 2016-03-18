@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.menus.BlogTogglePublish', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.menus.BlogTogglePublish', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.blog-toggle-publish',
 

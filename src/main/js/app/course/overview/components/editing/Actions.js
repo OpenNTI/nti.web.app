@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.Actions', {
+var Ext = require('extjs');
+var ParseUtils = require('../../../../../util/Parsing');
+var CommonActions = require('../../../../../common/Actions');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	statics: {

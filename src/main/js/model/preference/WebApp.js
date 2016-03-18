@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.preference.WebApp', {
+var Ext = require('extjs');
+var PreferenceBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.preference.WebApp', {
 	extend: 'NextThought.model.preference.Base',
 
 	fields: [

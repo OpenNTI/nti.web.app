@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.profiles.user.components.about.parts.Membership', {
+var Ext = require('extjs');
+var PartsMembership = require('../../membership/parts/Membership');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.about.parts.Membership', {
 	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
 
 

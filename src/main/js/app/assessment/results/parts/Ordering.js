@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.assessment.results.parts.Ordering', {
+var Ext = require('extjs');
+var PartsMatching = require('./Matching');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.Ordering', {
 	extend: 'NextThought.app.assessment.results.parts.Matching',
 	alias: 'widget.assessment-results-ordering',
 

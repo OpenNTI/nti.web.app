@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.assessment.components.admin.assignments.ListItem', {
+var Ext = require('extjs');
+var AssignmentsListItem = require('../../student/assignments/ListItem');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.ListItem', {
 	extend: 'NextThought.app.course.assessment.components.student.assignments.ListItem',
 	alias: 'widget.course-assessment-assignment-admin-list-item',
 

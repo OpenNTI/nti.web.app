@@ -1,18 +1,20 @@
-export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
-	extend: 'NextThought.common.form.fields.TagField',
-	alias: ['widget.user-sharing-list'],
-	requires: [
-		'NextThought.app.sharing.components.ShareSearch',
-		'NextThought.app.sharing.Actions',
-		'NextThought.util.Search',
-		'NextThought.store.UserSearch',
-		'Ext.view.BoundListKeyNav'
-	],
+var Ext = require('extjs');
+var UserRepository = require('../../../cache/UserRepository');
+var SearchUtils = require('../../../util/Search');
+var FieldsTagField = require('../../../common/form/fields/TagField');
+var ComponentsShareSearch = require('./ShareSearch');
+var SharingActions = require('../Actions');
+var UtilSearch = require('../../../util/Search');
+var StoreUserSearch = require('../../../store/UserSearch');
 
-	cls: 'user-token-field',
-	placeholder: 'Add people to the discussion',
 
-	renderTpl: Ext.DomHelper.markup([
+module.exports = exports = Ext.define('NextThought.app.sharing.components.UserTokenField', {
+    extend: 'NextThought.common.form.fields.TagField',
+    alias: ['widget.user-sharing-list'],
+    cls: 'user-token-field',
+    placeholder: 'Add people to the discussion',
+
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'tokens', cn: [
 			{tag: 'span', cls: 'inputArea', cn: [
 				{tag: 'span', cls: 'plus'},
@@ -24,26 +26,22 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		]}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		plusEl: '.plus'
 	},
 
-
-	getType: function(modelData) {
+    getType: function(modelData) {
 		return NextThought.model.UserSearch.getType(modelData);
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.selections = [];
 
 		this.SharingActions = NextThought.app.sharing.Actions.create();
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -107,8 +105,7 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		}
 	},
 
-
-	setupPickerView: function(){
+    setupPickerView: function(){
 		var spEl = this.scrollParentEl;
 		
 		this.pickerView = Ext.widget('search-sharesearch', {
@@ -120,18 +117,15 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		});
 	},
 
-
-	buildSearchStore: function() {
+    buildSearchStore: function() {
 		return new NextThought.store.UserSearch();
 	},
 
-
-	buildSuggestionStore: function() {
+    buildSuggestionStore: function() {
 		return this.SharingActions.getSuggestionStore();
 	},
 
-
-	setupKeyMap: function() {
+    setupKeyMap: function() {
 		var me = this,
 			selectOnTab = true,
 			picker = me.getPicker(),
@@ -160,8 +154,7 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		}
 	},
 
-
-	addInputListeners: function() {
+    addInputListeners: function() {
 		this.mon(this.inputEl, {
 			'keydown': this.onKeyDown.bind(this),
 			'focus': this.onInputFocus.bind(this),
@@ -169,15 +162,13 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		});
 	},
 
-
-	updateSize: function() {
+    updateSize: function() {
 		var i = this.inputEl,
 			v = i.getValue();
 		i[v ? 'removeCls' : 'addCls']('empty');
 	},
 
-
-	maybeHideSearchListMenu: function(e) {
+    maybeHideSearchListMenu: function(e) {
 		var me = this;
 		if (e.type === 'mouseover' || e.getTarget('.x-menu') || e.getTarget('.user-token-field')) {
 			clearTimeout(this.hideTimer);
@@ -188,30 +179,25 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		}
 	},
 
-
-	setPlaceholderText: function(text) {
+    setPlaceholderText: function(text) {
 		this.placeholder = text;
 		this.inputEl.set({'placeholder': text});
 		this.sizerEl.update(text + '##');
 	},
 
-
-	updatePlaceholderLabel: function(e) {
+    updatePlaceholderLabel: function(e) {
 		this.setPlaceholderText('Add');
 	},
 
-
-	resetPlaceholderLabel: function() {
+    resetPlaceholderLabel: function() {
 		this.setPlaceholderText(this.placeholder);
 	},
 
-
-	getInsertionPoint: function() {
+    getInsertionPoint: function() {
 		return this.el.down('.inputArea');
 	},
 
-
-	addSelection: function(users) {
+    addSelection: function(users) {
 		var m = this;
 
 		if (!Ext.isArray(users)) {
@@ -230,8 +216,7 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		m.onSearchLoaded();
 	},
 
-
-	containsToken: function(model) {
+    containsToken: function(model) {
 		if (!model) {return true;}
 
 		var id = model.getId(), c;
@@ -239,18 +224,17 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		return c.length > 0;
 	},
 
-	containsUnresolved: function() {
+    containsUnresolved: function() {
 		c = Ext.Array.filter(this.selections, function(o, i) { return o.Unresolved === true; });
 		return c.length > 0;
 	},
 
-	getSnippet: function(value) {
+    getSnippet: function(value) {
 		//Truncate long names.
 		return Ext.String.ellipsis(value, 20);
 	},
 
-
-	addToken: function(record) {
+    addToken: function(record) {
 		var value = record && record.get('displayName'),
 			type = this.getType(record.getData());
 
@@ -265,11 +249,9 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		this.fireEvent('sync-height', this);
 	},
 
+    isToken: function(text) { return !Ext.isEmpty(text); },
 
-	isToken: function(text) { return !Ext.isEmpty(text); },
-
-
-	searchItemSelected: function(record) {
+    searchItemSelected: function(record) {
 		var	el = this.inputEl;
 
 		this.addSelection(record);
@@ -285,13 +267,11 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		return true;
 	},
 
-
-	collapse: function() {
+    collapse: function() {
 		this.searchStore.removeAll();
 	},
 
-
-	clearResults: function(showSuggestions) {
+    clearResults: function(showSuggestions) {
 		this.collapse();
 
 		if (showSuggestions) {
@@ -299,8 +279,7 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		}
 	},
 
-
-	getValue: function() {
+    getValue: function() {
 		var m = this, r = [];
 		Ext.each(m.selections, function(u) {
 			r.push(u.get('Username'));
@@ -311,8 +290,7 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		};
 	},
 
-
-	setValue: function(sharingInfo) {
+    setValue: function(sharingInfo) {
 		if (!this.rendered) {
 			if (this.setValueAfterRenderListener) {
 				Ext.destroy(this.setValueAfterRenderListener);
@@ -339,11 +317,9 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		});
 	},
 
+    setDisabled: function(value) {},
 
-	setDisabled: function(value) {},
-
-
-	handledSpecialKey: function(e) {
+    handledSpecialKey: function(e) {
 		var key = e.getKey(),
 			val = this.inputEl.getValue(),
 			sel = window.getSelection().toString();
@@ -396,8 +372,7 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		return key === e.DOWN || key === e.UP || key === e.RIGHT || key === e.LEFT || key === e.TAB || this.isDelimiter(key);
 	},
 
-
-	onKeyDown: function(e) {
+    onKeyDown: function(e) {
 		e.stopPropagation();
 
 		if (Ext.is.iOS) {
@@ -414,15 +389,13 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		this.searchTimeout = Ext.defer(this.search, 250, this);
 	},
 
-
-	onInputFocus: function() {
+    onInputFocus: function() {
 		this.search();
 		this.alignPicker();
 		clearTimeout(this.hideOnBlurTimeout);
 	},
 
-
-	onInputBlur: function(e) {
+    onInputBlur: function(e) {
 		e.stopPropagation();
 
 		var me = this;
@@ -435,8 +408,7 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		}, 500);
 	},
 
-
-	search: function() {
+    search: function() {
 		if (!this.inputEl) {
 			return;
 		}
@@ -458,8 +430,7 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		}
 	},
 
-
-	showSearch: function(value) {
+    showSearch: function(value) {
 		this.pickerView.bindStore(this.searchStore);
 		this.pickerView.refresh();
 
@@ -468,19 +439,16 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		this.searchStore.search(value);
 	},
 
-
-	showSuggestions: function() {
+    showSuggestions: function() {
 		this.pickerView.bindStore(this.suggestionStore);
 		this.pickerView.refresh();
 	},
 
-
-	getPicker: function() {
+    getPicker: function() {
 		return this.pickerView;
 	},
 
-
-	onSearchLoaded: function() {
+    onSearchLoaded: function() {
 		var me = this;
 
 		function mark(record) {
@@ -496,15 +464,13 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		this.maybeAlignPicker();
 	},
 
-
-	maybeAlignPicker: function() {
+    maybeAlignPicker: function() {
 		if (this.pickerView.isVisible()) {
 			this.alignPicker();
 		}
 	},
 
-
-	alignPicker: function() {
+    alignPicker: function() {
 		if (!this.el || !this.el.isVisible(true)) {
 			return;
 		}
@@ -553,19 +519,17 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		});
 	},
 
-	stopPickerHide: function() {
+    stopPickerHide: function() {
 		clearTimeout(this.hideOnBlurTimeout);
 	},
 
-
-	hidePicker: function() {
+    hidePicker: function() {
 		console.log('Picker hidden');
 		this.pickerView.unselectItem();
 		this.pickerView.hide().setHeight(null);
 	},
 
-
-	clear: function() {
+    clear: function() {
 		Ext.each(this.el.query('.token'), function(t) { Ext.fly(t).remove(); }, this);
 		this.selections = [];
 		this.inputEl.dom.value = '';
@@ -573,11 +537,11 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		this.clearResults();
 	},
 
-	reset: function() {
+    reset: function() {
 		this.setValue(this.initialConfig.value);
 	},
 
-	removeToken: function(tokenName, tokenEl) {
+    removeToken: function(tokenName, tokenEl) {
 		var	s = [];
 
 		// Remove the element and remove it from the list of selections.
@@ -595,8 +559,7 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		this.onSearchLoaded();
 	},
 
-
-	removeTokenForUser: function(user) {
+    removeTokenForUser: function(user) {
 		var name = user.get('displayName'),
 			tokenEl = this.el.down('[data-value=' + name + ']');
 
@@ -607,8 +570,7 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		}
 	},
 
-
-	removeLastToken: function() {
+    removeLastToken: function() {
 		var lastSelection, tkEl, tkName;
 		if (this.selections.length > 0) {
 			lastSelection = this.selections.last();
@@ -619,8 +581,7 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		}
 	},
 
-
-	onClick: function(e) {
+    onClick: function(e) {
 		if (e.getTarget('.readOnly')) {
 			e.stopEvent();
 			return;
@@ -638,8 +599,7 @@ export default Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		}
 	},
 
-
-	destroy: function() {
+    destroy: function() {
 		this.callParent(arguments);
 		window.removeEventListener('scroll', this.windowScrollHandler);
 		//console.warn('token field destroyed.');

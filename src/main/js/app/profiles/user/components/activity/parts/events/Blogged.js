@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Blogged', {
+var Ext = require('extjs');
+var UserRepository = require('../../../../../../../cache/UserRepository');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Blogged', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-activity-personalblogentry-item',
 

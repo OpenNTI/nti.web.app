@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.mixins.SearchHitHighlighting', {
+var Ext = require('extjs');
+var TextRangeFinderUtils = require('../util/TextRangeFinder');
+var SearchUtils = require('../util/Search');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.SearchHitHighlighting', {
 
 	showSearchHit: function(hit, scrollToFragment) {
 		this.clearSearchHit();

@@ -1,10 +1,14 @@
+var Ext = require('extjs');
+var Globals = require('../Globals');
+var UtilGlobals = require('../Globals');
+
+
 /*jslint */
 /*globals Globals, mw, NextThought, kWidget */
-export default Ext.define('NextThought.util.media.KalturaPlayer', {
+module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
+    reqruies: ['NextThought.util.Globals'],
 
-	reqruies: ['NextThought.util.Globals'],
-
-	statics: {
+    statics: {
 		PARTNER_ID: '1500101',
 		UICONF_ID: $AppConfig.kalturaUIID || '15491291',
 		kind: 'video',
@@ -43,17 +47,13 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		}
 	},
 
-	requires: [
-		'NextThought.util.Globals'
-	],
-
-	mixins: {
+    mixins: {
 		observable: 'Ext.util.Observable'
 	},
 
-	CONTROL_HEIGHT: 30,
+    CONTROL_HEIGHT: 30,
 
-	PLAYER_TPL: Ext.DomHelper.createTemplate({
+    PLAYER_TPL: Ext.DomHelper.createTemplate({
 		name: '{id}',
 		id: '{id}',
 		style: {
@@ -85,8 +85,7 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		]
 	}),
 
-
-	PLAYER_BODY_TPL: Ext.DomHelper.createTemplate([
+    PLAYER_BODY_TPL: Ext.DomHelper.createTemplate([
 		'<!DOCTYPE html>',
 		{tag: 'html', lang: 'en', cn: [
 			{tag: 'head', cn: [
@@ -117,23 +116,24 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		}
 	]),
 
-	//INITIAL_VIDEO: '0_nmgd4bvw',//This is a 1-frame bogus video to load the player w/ an initial video.
-	LEAD_HTML5: (!Ext.isIE9).toString(), //Note: reset in the constructor
+    //INITIAL_VIDEO: '0_nmgd4bvw',//This is a 1-frame bogus video to load the player w/ an initial video.
+	LEAD_HTML5: (!Ext.isIE9).toString(),
+
+    //Note: reset in the constructor
 
 	//A queue of commands that need to be invoked when the source is actually ready
 	commandQueue: [],
 
-	//A flag that indicates if we are waiting on a changeMedia to finish
+    //A flag that indicates if we are waiting on a changeMedia to finish
 	changingMediaSource: false,
 
-	changeMediaAttempt: 0,
-	maxChangeMediaAttempts: 3,
-	changeMediaAttemptIntervalMillis: 100,
-	changeMediaTimeoutMillis: 1000,
+    changeMediaAttempt: 0,
+    maxChangeMediaAttempts: 3,
+    changeMediaAttemptIntervalMillis: 100,
+    changeMediaTimeoutMillis: 1000,
+    neverQueue: ['getPlayerState', 'getCurrentTime'],
 
-	neverQueue: ['getPlayerState', 'getCurrentTime'],
-
-	constructor: function(config) {
+    constructor: function(config) {
 		var me = this;
 
 		this.mixins.observable.constructor.call(this);
@@ -163,8 +163,7 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		});
 	},
 
-
-	playerSetup: function() {
+    playerSetup: function() {
 
 		if (this.settingUp) {
 			return;
@@ -231,8 +230,7 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		window.addEventListener('message', this.handleMessage, false);
 	},
 
-
-	handleMessage: function(event) {
+    handleMessage: function(event) {
 		//console.debug('Message:',event);
 
 		var filter = /^kalturaplayer\./i,
@@ -263,11 +261,11 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		this[handlerName](eventData);
 	},
 
-	setCurrentState: function(s) {
+    setCurrentState: function(s) {
 		this.currentState = s;
 	},
 
-	sendMessage: function(type, name, data) {
+    sendMessage: function(type, name, data) {
 		var context = this.getPlayerContext();
 		if (!context) {
 			console.warn(this.id, ' No Kaltura Player Context!');
@@ -279,8 +277,7 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		context.postMessage(Ext.encode({ type: type, name: name, data: data }), '*');
 	},
 
-
-	sendCommand: function(name, data, force) {
+    sendCommand: function(name, data, force) {
 		var buffer = !force && !Ext.Array.contains(this.neverQueue, name);
 		if (this.changingMediaSource && buffer) {
 			console.log('Enqueing command ', name, ' because we are chaining sources and it wasnt forced');
@@ -291,8 +288,7 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.sendMessage('command', name, data);
 	},
 
-
-	buildWrapperCode: function() {
+    buildWrapperCode: function() {
 		var code = [],
 			me = this;
 
@@ -308,14 +304,12 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		return code.join('\n').replace(/%([^%]+)%/gm, resolve);
 	},
 
-
-	getPlayerContext: function() {
+    getPlayerContext: function() {
 		var iframe = Ext.getDom(this.iframe);
 		return iframe && (iframe.contentWindow || window.frames[iframe.name]);
 	},
 
-
-	getPlayerContextDocument: function() {
+    getPlayerContextDocument: function() {
 		var f = Ext.getDom(this.iframe),
 			w = this.getPlayerContext();
 
@@ -326,14 +320,10 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		}
 	},
 
+    getCurrentTime: function() { return this.currentPosition; },
+    getPlayerState: function() { return this.currentState; },
 
-	getCurrentTime: function() { return this.currentPosition; },
-
-
-	getPlayerState: function() { return this.currentState; },
-
-
-	load: function(src, offset, force) {
+    load: function(src, offset, force) {
 		console.log(this.id, ' Kaltura load called with source', src);
 		var source = src,
 			kalturaData, me = this, sourceActuallyChanging = source !== this.currentSource;
@@ -417,8 +407,7 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 
 	},
 
-
-	play: function(/*autoPlay*/) {
+    play: function(/*autoPlay*/) {
 		if (this.dieOnPlay && !this.changingMediaSource) {
 			console.error(this.id, ' No video id provided with source');
 			this.fireEvent('player-error', 'kaltura');
@@ -431,21 +420,18 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.sendCommand('doPlay');
 	},
 
-
-	pause: function() {
+    pause: function() {
 		console.log('Firing pause event');
 		console.log('Triggered pause unblocks pause blocker');
 		delete this.blockPause;
 		this.sendCommand('doPause');
 	},
 
-
-	stop: function() {
+    stop: function() {
 		this.sendCommand('doStop');
 	},
 
-
-	deactivate: function() {
+    deactivate: function() {
 		if (this.playerDeactivated) {
 			console.warn('Attempting to deactivate a deactivated player');
 			return;
@@ -457,8 +443,7 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.cleanup();
 	},
 
-
-	activate: function(sourceId) {
+    activate: function(sourceId) {
 		if (!this.playerDeactivated) {
 			console.log('Ignoring activate');
 			return;
@@ -479,14 +464,12 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		}
 	},
 
-
-	seek: function(offset) {
+    seek: function(offset) {
 		this.currentStartAt = offset;
 		this.sendCommand('doSeek', offset);
 	},
 
-
-	cleanup: function() {
+    cleanup: function() {
 		window.removeEventListener('message', this.handleMessage, false);
 		var el = Ext.get(this.id);
 		this.makeNotReady();
@@ -497,8 +480,7 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		}
 	},
 
-
-	playerStateChangeHandler: function(event) {
+    playerStateChangeHandler: function(event) {
 		var state = event.data[0],
 			stateMap = {
 				'playbackError': 'onPlaybackError',
@@ -527,14 +509,12 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		}
 	},
 
-
-	makeNotReady: function() {
+    makeNotReady: function() {
 		console.log(this.id, ' KALTURA player is making self not ready');
 		this.isReady = false;
 	},
 
-
-	readyHandler: (function() {
+    readyHandler: (function() {
 		return Ext.Function.createBuffered(function() {
 			if (this.onReadyLoadSource) {
 				this.load(this.onReadyLoadSource);
@@ -548,8 +528,7 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		}, 250, null, null);
 	}()),
 
-
-	playerUpdatePlayheadHandler: function(event) {
+    playerUpdatePlayheadHandler: function(event) {
 		var position = event.data[0];
 
 		if (this.seekingStart && this.seekingStop) {
@@ -562,8 +541,7 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.currentPosition = event.data[0];
 	},
 
-
-	doPlayHandler: function() {
+    doPlayHandler: function() {
 		var me = this;
 		console.log(this.id, ' Blocking pause');
 		me.blockPause = true;
@@ -576,8 +554,7 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.fireEvent('player-event-play', 'kaltura');
 	},
 
-
-	doPauseHandler: function() {
+    doPauseHandler: function() {
 		console.warn(this.id, ' kaltura fired paused', this.currentState);
 
 		if (this.blockPause) {
@@ -592,8 +569,7 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.fireEvent('player-event-pause', 'kaltura');
 	},
 
-
-	durationChangeHandler: function(message) {
+    durationChangeHandler: function(message) {
 		var data = message && message.data,
 			obj = data && data[0],
 			duration = (obj && obj.newValue) || 0;
@@ -603,8 +579,7 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.video_duration = duration * 1000;
 	},
 
-
-	updatedPlaybackRateHandler: function(message) {
+    updatedPlaybackRateHandler: function(message) {
 		var data = message && message.data,
 			rate = data && data[0];
 
@@ -615,18 +590,15 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.playbackSpeed = rate;
 	},
 
-
-	getDuration: function() {
+    getDuration: function() {
 		return this.video_duration;
 	},
 
-
-	getPlaybackSpeed: function() {
+    getPlaybackSpeed: function() {
 		return this.playbackSpeed || 1;
 	},
 
-
-	playerPlayEndHandler: function() {
+    playerPlayEndHandler: function() {
 		if (this.isFullScreenMode) {
 			this.deferDeactivateTillExit = true;
 			return;
@@ -641,14 +613,12 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		Ext.defer(this.activate, 1, this, [this.currentSource]);
 	},
 
-
-	openFullScreenHandler: function() {
+    openFullScreenHandler: function() {
 		this.isFullScreenMode = true;
 		console.log('Entered full screen mode: ', arguments);
 	},
 
-
-	closeFullScreenHandler: function() {
+    closeFullScreenHandler: function() {
 		console.log('Exited fullscreen mode: ', arguments);
 
 		// Do the deactivation we deferred at the end of the video,
@@ -659,23 +629,20 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		delete this.isFullScreenMode;
 	},
 
-
-	dequeueCommands: function() {
+    dequeueCommands: function() {
 		while (this.commandQueue && !Ext.isEmpty(this.commandQueue)) {
 			var args = this.commandQueue.shift();
 			this.sendMessage.apply(this, args);
 		}
 	},
 
-
-	playerErrorHandler: function() {
+    playerErrorHandler: function() {
 		console.error(this.id, ' kaltura error ', arguments);
 		this.fireEvent('player-error', 'kaltura');
 		//this.onPlaybackError();
 	},
 
-
-	onPlaybackError: function() {
+    onPlaybackError: function() {
 		var me = this,
 			ctx = me.getPlayerContext(),
 			playerMode = ctx && ctx.playerMode;
@@ -691,16 +658,15 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 			});
 	},
 
-
-	entryFailedHandler: function() {
+    entryFailedHandler: function() {
 		this.onPlaybackError();
 	},
 
-	entryNotAvailable: function() {
+    entryNotAvailable: function() {
 		this.onPlaybackError();
 	},
 
-	maybeDoBufferedLoad: function(force) {
+    maybeDoBufferedLoad: function(force) {
 		if (!Ext.isEmpty(this.bufferedLoad)) {
 			console.log('Performing bufferedLoad', this.bufferedLoad);
 			var args = this.bufferedLoad;
@@ -711,18 +677,15 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		return false;
 	},
 
-
-	playerSeekStartHandler: function() {
+    playerSeekStartHandler: function() {
 		this.seekingStart = this.currentPosition;
 	},
 
-
-	doSeekHandler: function(event) {
+    doSeekHandler: function(event) {
 		this.seekingStop = event.data[0];
 	},
 
-
-	changeMediaHandler: function() {
+    changeMediaHandler: function() {
 		console.debug(this.id + ' ****** CHANGE MEDIA HANDLER *****');
 		this.changingMediaSource = false;
 		this.changeMediaAttempt = 0;
@@ -734,54 +697,45 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		//happens at some time in the future
 	},
 
-
-	kdpReadyHandler: function() {
+    kdpReadyHandler: function() {
 		console.log(this.id, 'KDP ready handler fired');
 		this.readyHandler();
 	},
 
-
-	kdpEmptyHandler: function() {
+    kdpEmptyHandler: function() {
 		this.readyHandler();
 	},
 
-
-	mediaErrorHandler: function() {
+    mediaErrorHandler: function() {
 		console.log(this.id, ' MEDIA ERROR', arguments);
 	},
 
-
-	sourceReadyHandler: function() {
+    sourceReadyHandler: function() {
 		console.log(this.id, ' SOURCE READY', arguments);
 	},
 
-
-	readyToPlayHandler: function() {
+    readyToPlayHandler: function() {
 		console.log(this.id, ' This is ready to play');
 		this.readyHandler();
 	},
 
-
-	entryReadyHandler: function(obj) {
+    entryReadyHandler: function(obj) {
 		var data = obj.data || [],
 				vid = data[0] || {};
 		console.log(this.id, ' This entry is ready with id', vid.id);
 		this.readyHandler();
 	},
 
-
-	entryFailedHander: function() {
+    entryFailedHander: function() {
 		console.log('ENTRY Failed handler');
 	},
 
-
-	mediaLoadedHandler: function() {
+    mediaLoadedHandler: function() {
 		console.log(this.id, ' This media is loaded');
 		this.readyHandler();
 	},
 
-
-	mediaReadyHandler: function() {
+    mediaReadyHandler: function() {
 		console.log(this.id, ' MEDIA Ready', arguments);
 		if (!this.changingMediaSource) {
 			this.dequeueCommands();
@@ -789,8 +743,7 @@ export default Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.readyHandler();
 	},
 
-
-	playerCode: {
+    playerCode: {
 
 
 		inject: function inject() {

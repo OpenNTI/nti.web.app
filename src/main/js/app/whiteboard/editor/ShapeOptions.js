@@ -1,16 +1,16 @@
-export default Ext.define('NextThought.app.whiteboard.editor.ShapeOptions', {
-	alias: 'widget.wb-tool-shape-options',
-	extend: 'Ext.container.Container',
-	requires: [
-		'NextThought.app.whiteboard.editor.ColorPickerButton',
-		'NextThought.app.whiteboard.editor.StrokeWidthSelector',
-		'NextThought.app.whiteboard.editor.ToolOption'
-	],
+var Ext = require('extjs');
+var EditorColorPickerButton = require('./ColorPickerButton');
+var EditorStrokeWidthSelector = require('./StrokeWidthSelector');
+var EditorToolOption = require('./ToolOption');
 
-	ui: 'options',
-	layout: 'none',
 
-	items: [{
+module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ShapeOptions', {
+    alias: 'widget.wb-tool-shape-options',
+    extend: 'Ext.container.Container',
+    ui: 'options',
+    layout: 'none',
+
+    items: [{
 		xtype: 'toolbar',
 		ui: 'options',
 		layout: 'none',
@@ -58,20 +58,19 @@ export default Ext.define('NextThought.app.whiteboard.editor.ShapeOptions', {
 		]
 	}],
 
-
-	constructor: function() {
+    constructor: function() {
 		this.items = Ext.clone(this.items);//copy onto instance from prototype
 		this.items[0].defaults.toggleGroup += guidGenerator();
 		this.callParent(arguments);
 	},
 
-	initComponent: function() {
+    initComponent: function() {
 		this.addEvents({'wb-options-change': true });
 		this.enableBubble(['wb-options-change']);
 		this.callParent(arguments);
 	},
 
-	afterRender: function() {
+    afterRender: function() {
 		var me = this;
 		me.callParent(arguments);
 
@@ -98,8 +97,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.ShapeOptions', {
 		});
 	},
 
-
-	getToolType: function() {
+    getToolType: function() {
 		var shapeFull = this.down('toolbar[cls=shape-picker]').down('[pressed]').option;
 		shapeFull = shapeFull.replace('shape', '').trim();
 		if (shapeFull === 'square' || shapeFull === 'triangle' || shapeFull === 'poly') {
@@ -108,8 +106,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.ShapeOptions', {
 		return shapeFull;
 	},
 
-
-	setOptions: function(options) {
+    setOptions: function(options) {
 		var shapePicker = this.down('toolbar[cls=shape-picker]'),
 			button;
 
@@ -137,8 +134,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.ShapeOptions', {
 		}
 	},
 
-
-	getOptions: function() {
+    getOptions: function() {
 		var toolbar = this.down('toolbar[cls=shape-options]'),
 			fillButton = toolbar.down('[fillSelect]'),
 			strokeButton = toolbar.down('[strokeSelect]'),

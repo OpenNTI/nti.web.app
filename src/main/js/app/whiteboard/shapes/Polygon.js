@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.whiteboard.shapes.Polygon', {
+var Ext = require('extjs');
+var ShapesBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Polygon', {
 	extend:	'NextThought.app.whiteboard.shapes.Base',
 
 

@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.contentviewer.components.assignment.TimedPlaceholder', {
+var Ext = require('extjs');
+var TimeUtils = require('../../../../util/Time');
+
+
+module.exports = exports = Ext.define('NextThought.app.contentviewer.components.assignment.TimedPlaceholder', {
 	extend: 'Ext.Component',
 	alias: 'widget.assignment-timedplaceholder',
 

@@ -1,9 +1,12 @@
-export default Ext.define('NextThought.model.assessment.UsersCourseInquiryItem', {
-	extend: 'NextThought.model.Base',
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+var AssessmentPollSubmission = require('./PollSubmission');
 
-	requires: ['NextThought.model.assessment.PollSubmission'],
 
-	fields: [
+module.exports = exports = Ext.define('NextThought.model.assessment.UsersCourseInquiryItem', {
+    extend: 'NextThought.model.Base',
+
+    fields: [
 		{name: 'Submission', type: 'singleItem'}
 	]
 });

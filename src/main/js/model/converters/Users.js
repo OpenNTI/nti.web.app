@@ -1,10 +1,11 @@
-export default Ext.define('NextThought.model.converters.Users', {
-	override: 'Ext.data.Types',
-	requires: [
-		'Ext.data.SortTypes'
-	],
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
 
-	USERLIST: {
+
+module.exports = exports = Ext.define('NextThought.model.converters.Users', {
+    override: 'Ext.data.Types',
+
+    USERLIST: {
 		type: 'UserList',
 		convert: function(v, record) {
 			var a = arguments,
@@ -32,8 +33,7 @@ export default Ext.define('NextThought.model.converters.Users', {
 		sortType: 'none'
 	},
 
-
-	AVATARURL: {
+    AVATARURL: {
 		type: 'AvatarURL',
 		sortType: 'asUCString',
 		convert: function convert(v, rec) {
@@ -86,8 +86,7 @@ export default Ext.define('NextThought.model.converters.Users', {
 		}
 	},
 
-
-	AVATARURLLIST: {
+    AVATARURLLIST: {
 		type: 'AvatarURLList',
 		sortType: 'asUCString',
 		convert: function convert(v, rec) {

@@ -1,20 +1,21 @@
-export default Ext.define('NextThought.app.contacts.components.outline.Search', {
-	extend: 'Ext.view.View',
-	alias: 'widget.contact-search-overlay',
+var Ext = require('extjs');
+var NTIFormat = require('../../../../util/Format');
+var GroupsStateStore = require('../../../groups/StateStore');
+var StoreUserSearch = require('../../../../store/UserSearch');
+var ChatStateStore = require('../../../chat/StateStore');
+var ManagementPopout = require('../../../account/contacts/management/Popout');
+var GroupsActions = require('../../../groups/Actions');
 
-	requires: [
-		'NextThought.app.groups.StateStore',
-		'NextThought.store.UserSearch',
-		'NextThought.app.chat.StateStore',
-		'NextThought.app.account.contacts.management.Popout',
-		'NextThought.app.groups.Actions'
-	],
 
-	preserveScrollOnRefresh: true,
-	overItemCls: 'over',
-	loadMask: false,
-	itemSelector: '.contact-row',
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
+module.exports = exports = Ext.define('NextThought.app.contacts.components.outline.Search', {
+    extend: 'Ext.view.View',
+    alias: 'widget.contact-search-overlay',
+    preserveScrollOnRefresh: true,
+    overItemCls: 'over',
+    loadMask: false,
+    itemSelector: '.contact-row',
+
+    tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 		{ cls: 'contact-row {[this.isContact(values)]}', cn: [
 			{ tag: 'tpl', 'if': 'values.Presence', cn: { cls: 'presence {Presence.name}' }},
 			{ tag: 'tpl', 'if': '!values.Presence', cn: { cls: 'presence' }},
@@ -36,9 +37,10 @@ export default Ext.define('NextThought.app.contacts.components.outline.Search', 
 		}
 	}),
 
-	emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: getString('NextThought.view.contacts.outline.search.View.empty')}),
-	cls: 'contact-search',
-	listeners: {
+    emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: getString('NextThought.view.contacts.outline.search.View.empty')}),
+    cls: 'contact-search',
+
+    listeners: {
 		itemclick: 'rowClicked',
 		// itemmouseenter: 'rowHover',
 		select: function(s, record) {
@@ -46,8 +48,7 @@ export default Ext.define('NextThought.app.contacts.components.outline.Search', 
 		}
 	},
 
-
-	constructor: function(config) {
+    constructor: function(config) {
 		var me = this;
 
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
@@ -74,13 +75,13 @@ export default Ext.define('NextThought.app.contacts.components.outline.Search', 
 		});
 	},
 
-	rowClicked: function(view, record, item, index, e) {
+    rowClicked: function(view, record, item, index, e) {
 		if(e && e.getTarget().classList.contains('nib')){
 			this.GroupActions.addContact(record.get('Username') );
 		}
 	},
 
-	// Old Logic for the popup
+    // Old Logic for the popup
 	// rowHover: function(view, record, item, wait) {
 	// 	// this.startPopupTimeout(view, record, item, 500);
 	// },
@@ -155,5 +156,4 @@ export default Ext.define('NextThought.app.contacts.components.outline.Search', 
 			]
 		});
 	}
-
 });

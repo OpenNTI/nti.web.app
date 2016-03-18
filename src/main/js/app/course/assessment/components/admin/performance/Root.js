@@ -1,27 +1,27 @@
-export default Ext.define('NextThought.app.course.assessment.components.admin.performance.Root', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-assessment-admin-performance-root',
+var Ext = require('extjs');
+var User = require('../../../../../../model/User');
+var GridFeatureGradeInputs = require('../../../../../../mixins/grid-feature/GradeInputs');
+var MixinsState = require('../../../../../../mixins/State');
+var AdminPagedGrid = require('../PagedGrid');
+var AdminListHeader = require('../ListHeader');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.Root', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.course-assessment-admin-performance-root',
+
+    mixins: {
 		gridGrades: 'NextThought.mixins.grid-feature.GradeInputs',
 		State: 'NextThought.mixins.State'
 	},
 
+    __inputSelector: '.gradebox input',
+    ui: 'course-assessment',
+    cls: 'course-assessment-admin performance',
+    layout: 'none',
+    viewRoot: true,
 
-	requires: [
-		'NextThought.app.course.assessment.components.admin.PagedGrid',
-		'NextThought.app.course.assessment.components.admin.ListHeader'
-	],
-
-	__inputSelector: '.gradebox input',
-
-	ui: 'course-assessment',
-	cls: 'course-assessment-admin performance',
-
-	layout: 'none',
-	viewRoot: true,
-
-	items: [
+    items: [
 		{
 			xtype: 'box',
 			autoEl: { cls: 'header', cn: [
@@ -145,8 +145,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -190,8 +189,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 			});
 	},
 
-
-	restoreState: function(state, fromAfterRender) {
+    restoreState: function(state, fromAfterRender) {
 		//if this is coming form after render and we've already restored
 		//a state don't overwrite it. The main reason this is here is so
 		//if they hit the back button the component is already rendered with
@@ -211,8 +209,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		return this.applyState(state || {});
 	},
 
-
-	/**
+    /**
 	 * If the store has already loaded and the record for the students is there don't do anything
 	 * otherwise load the store to that student
 	 *
@@ -243,13 +240,11 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		return Promise.resolve();
 	},
 
-
-	hidePredicted: function() {
+    hidePredicted: function() {
 		this.grid.hideColumn('PredictedGrade');
 	},
 
-
-	maybeShowPredicted: function() {
+    maybeShowPredicted: function() {
 		var rec = this.store.getRange()[0],
 			column = this.grid.down('[dataIndex=PredictedGrade]');
 
@@ -258,8 +253,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var grid = this.grid, me = this;
@@ -300,22 +294,19 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	},
 
-
-	maybeMask: function() {
+    maybeMask: function() {
 		if (this.grid && this.grid.el) {
 			this.grid.el.mask('Loading...');
 		}
 	},
 
-
-	maybeUnmask: function() {
+    maybeUnmask: function() {
 		if (this.grid && this.grid.el) {
 			this.grid.el.unmask();
 		}
 	},
 
-
-	toggleAvatars: function(show) {
+    toggleAvatars: function(show) {
 		if (!this.rendered) {
 			this.on('afterrender', this.toggleAvatars.bind(this, show));
 			return;
@@ -334,15 +325,13 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 			});
 	},
 
-
-	STUDENT_FILTERS: [
+    STUDENT_FILTERS: [
 		{ text: 'All Students', type: 'All'},
 		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.open'), type: 'Open'},
 		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.enrolled'), type: 'ForCredit'}
 	],
 
-
-	createStudentMenu: function() {
+    createStudentMenu: function() {
 		var type = this.studentFilter || (isFeature('show-open-students-first') ? 'Open' : 'ForCredit'),
 			items = this.STUDENT_FILTERS.map(function(filter) {
 				filter.checked = type === filter.type;
@@ -373,15 +362,13 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		this.studentMenu.initialType = type;
 	},
 
-
-	showStudentMenu: function() {
+    showStudentMenu: function() {
 		if (this.applyingState || this.stateDisabled) { return; }
 
 		this.studentMenu.showBy(this.header.studentEl, 'tl-tl?', this.studentMenu.offset);
 	},
 
-
-	updateStudentUI: function(item) {
+    updateStudentUI: function(item) {
 		var offset, x;
 
 		try {
@@ -399,8 +386,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		this.updateExportEl(item.type);
 	},
 
-
-	switchStudent: function(item, status, opts, noEmpty) {
+    switchStudent: function(item, status, opts, noEmpty) {
 		if (!status) { return; }
 
 		this.studentFilter = item.type;
@@ -412,8 +398,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	},
 
-
-	maybeSwitchStudents: function() {
+    maybeSwitchStudents: function() {
 		if (this.initialLoad || this.store.getCount() > 0) { return; }
 
 		if (!this.rendered) {
@@ -433,8 +418,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	},
 
-
-	maybeSwitch: function(noEmpty) {
+    maybeSwitch: function(noEmpty) {
 		var menu = this.studentMenu,
 			item = menu.down('[checked]'),
 			initial = menu.initialType;
@@ -454,8 +438,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	},
 
-
-	updateExportEl: function(type) {
+    updateExportEl: function(type) {
 
 		var gradebook = this.assignments.getGradeBook(),
 			url,
@@ -478,16 +461,14 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	},
 
-
-	ITEM_FILTERS: [
+    ITEM_FILTERS: [
 		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.alloption'), type: 'all'},
 		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.actionoption'), type: 'actionable'},
 		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.overoption'), type: 'overdue'},
 		{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.unoption'), type: 'ungraded'}
 	],
 
-
-	createItemMenu: function() {
+    createItemMenu: function() {
 		var type = this.itemFilter,
 			items = this.ITEM_FILTERS.map(function(filter) {
 				filter.checked = type === filter.type;
@@ -518,15 +499,13 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		this.itemMenu.show().hide();
 	},
 
-
-	showItemMenu: function() {
+    showItemMenu: function() {
 		if (this.applyingState || this.stateDisabled) { return; }
 
 		this.itemMenu.showBy(this.header.itemEl, 'tl-tl?', this.itemMenu.offset);
 	},
 
-
-	updateItemUI: function(item) {
+    updateItemUI: function(item) {
 		var offset = item && item.getOffsetsTo(this.itemMenu),
 			x = offset ? offset[1] : 1;
 
@@ -535,8 +514,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		this.itemMenu.offset = [0, x ? -x : 0];
 	},
 
-
-	switchItem: function(item, status) {
+    switchItem: function(item, status) {
 		if (!status) { return; }
 
 		this.itemFilter = item.type;
@@ -544,38 +522,33 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		this.updateFilter();
 	},
 
-
-	maybeStopFilter: function(e) {
+    maybeStopFilter: function(e) {
 		if (this.applyingState || this.stateDisabled) {
 			e.stopEvent();
 		}
 	},
 
-
-	changeNameFilter: function() {
+    changeNameFilter: function() {
 		if (this.applyingState || this.stateDisabled) { return; }
 
 		this.searchKey = this.header.inputEl.getValue();
 		this.updateFilter();
 	},
 
-
-	clearSearch: function() {
+    clearSearch: function() {
 		this.searchKey = '';
 		this.header.inputEl.dom.value = '';
 		this.updateFilter();
 	},
 
-
-	clearState: function() {
+    clearState: function() {
 		this.stateDisabled = true;
 		this.clearSearch();
 		this.stateDisabled = false;
 		this.current_state = {};
 	},
 
-
-	setSearch: function(val) {
+    setSearch: function(val) {
 		this.searchKey = val;
 
 		if (this.header && this.header.inputEl && this.header.inputEl.dom) {
@@ -583,8 +556,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	},
 
-
-	updateUIFromState: function() {
+    updateUIFromState: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateUIFromState.bind(this));
 			return;
@@ -606,15 +578,13 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		this.header.inputEl.dom.value = this.searchKey || '';
 	},
 
-
-	refresh: function() {
+    refresh: function() {
 		var view = this.grid.view;
 
 		view.refresh();
 	},
 
-
-	getStoreState: function() {
+    getStoreState: function() {
 		var store = this.store,
 			sorters = this.store.sorters && this.store.sorters.items,
 			sorter = (sorters && sorters[0]) || {},
@@ -654,8 +624,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		};
 	},
 
-
-	isSameState: function(state) {
+    isSameState: function(state) {
 		var storeState = this.getStoreState(),
 			isEqual = true;
 
@@ -678,8 +647,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		return isEqual;
 	},
 
-
-	setDisabled: function() {
+    setDisabled: function() {
 		this.stateDisabled = true;
 
 		if (this.header) {
@@ -695,16 +663,14 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	},
 
-
-	setEnabled: function() {
+    setEnabled: function() {
 		delete this.stateDisabled;
 		this.header.removeCls('disabled');
 		this.pageHeader.setEnabled();
 		this.grid.setEnabled();
 	},
 
-
-	applyState: function(state) {
+    applyState: function(state) {
 		//if we are already applying state or the state hasn't changed and the store has loaded don't do anything
 		if (this.applyingState) { return Promise.resolve(); }
 
@@ -798,8 +764,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		});
 	},
 
-
-	updateFilter: function() {
+    updateFilter: function() {
 		var state = Ext.clone(this.current_state) || {},
 			newPage = state.currentPage !== this.currentPage,
 			header = this.pageHeader;
@@ -852,15 +817,13 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	},
 
-
-	loadPage: function(page) {
+    loadPage: function(page) {
 		this.currentPage = page;
 
 		this.updateFilter();
 	},
 
-
-	changeSort: function(ct, column, direction) {
+    changeSort: function(ct, column, direction) {
 		if (this.stateDisabled || this.applyingState) {
 			return false;
 		}
@@ -883,38 +846,30 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		return false;
 	},
 
-
-	setPageSize: function(pageSize) {
+    setPageSize: function(pageSize) {
 		this.pageSize = pageSize;
 
 		this.updateFilter();
 	},
 
-
-	clear: function() {
+    clear: function() {
 		//this.store.removeAll();
 	},
 
+    clearAssignmentsData: function() { this.clear(); },
+    updateActionables: function(username) {},
 
-	clearAssignmentsData: function() { this.clear(); },
-
-
-	updateActionables: function(username) {},
-
-
-	getNode: function(record) {
+    getNode: function(record) {
 		var v = this.grid.getView();
 		return v.getNode.apply(v, arguments);
 	},
 
-
-	getRecord: function(node) {
+    getRecord: function(node) {
 		var v = this.grid.getView();
 		return v.getRecord.apply(v, arguments);
 	},
 
-
-	getFocusedInput: function() {
+    getFocusedInput: function() {
 		var input = document.querySelector(':focus');
 
 		function toSelector(tag) {
@@ -926,8 +881,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		return input && {record: this.getRecord(Ext.fly(input).up(this.__getGridView().itemSelector)), tag: toSelector(input)};
 	},
 
-
-	setFocusedInput: function(info) {
+    setFocusedInput: function(info) {
 		var record = info && info.record,
 			tag = info && info.tag,
 			n = record && this.__getGridView().getNode(record);
@@ -938,7 +892,8 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 			}
 		});
 	},
-	//</editor-fold>
+
+    //</editor-fold>
 
 
 	//<editor-fold desc="Event Handlers">
@@ -946,8 +901,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		return this.grid.getView();
 	},
 
-
-	onCellClick: function(me, td, cellIndex, record, tr, rowIndex, e) {
+    onCellClick: function(me, td, cellIndex, record, tr, rowIndex, e) {
 		var isControl = !!e.getTarget('.gradebox'), user;
 
 		if (isControl && e.type === 'click') {
@@ -967,8 +921,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		this.showAssignmentsForStudent(user);
 	},
 
-
-	createGradeMenu: function() {
+    createGradeMenu: function() {
 		this.gradeMenu = Ext.widget('menu', {
 			cls: 'letter-grade-menu',
 			width: 67,
@@ -992,8 +945,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		});
 	},
 
-
-	onDropDown: function(node, record) {
+    onDropDown: function(node, record) {
 		var me = this,
 			rec = record || me.grid.getRecord(node),
 			el = Ext.get(node),
@@ -1018,8 +970,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	},
 
-
-	changeLetterGrade: function(item, status) {
+    changeLetterGrade: function(item, status) {
 		if (!this.activeGradeRecord || !status) { return; }
 		var g = this.activeGradeRecord.get('grade'),
 			n = this.getNode(this.activeGradeRecord);
@@ -1033,8 +984,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		this.editGrade(this.activeGradeRecord, g, item.text);
 	},
 
-
-	editGrade: function(record, value, letter) {
+    editGrade: function(record, value, letter) {
 		var me = this,
 			view = me.__getGridView(),
 			node = view.getNode(record),

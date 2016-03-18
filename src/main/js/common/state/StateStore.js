@@ -1,17 +1,18 @@
-export default Ext.define('NextThought.common.state.StateStore', {
-	extend: 'NextThought.common.StateStore',
+var Ext = require('extjs');
+var CommonStateStore = require('../StateStore');
+var CacheAbstractStorage = require('../../cache/AbstractStorage');
 
-	requires: [
-		'NextThought.cache.AbstractStorage'
-	],
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.common.state.StateStore', {
+    extend: 'NextThought.common.StateStore',
+
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.storage = NextThought.cache.AbstractStorage.getLocalStorage();
 	},
 
-	setStateKey: function(key) {
+    setStateKey: function(key) {
 		if (this.state_key) {
 			return;
 		}
@@ -22,8 +23,7 @@ export default Ext.define('NextThought.common.state.StateStore', {
 		this.getCurrentState();
 	},
 
-
-	getCurrentState: function() {
+    getCurrentState: function() {
 		if (!this.state_key) {
 			console.error('No key to get current state from');
 			return {};
@@ -46,8 +46,7 @@ export default Ext.define('NextThought.common.state.StateStore', {
 		return this.current_state;
 	},
 
-
-	__saveState: function(state) {
+    __saveState: function(state) {
 		if (!this.state_key) {
 			console.error('No key to set state to', state);
 			return;
@@ -56,8 +55,7 @@ export default Ext.define('NextThought.common.state.StateStore', {
 		this.storage.setItem(this.state_key, JSON.stringify(state));
 	},
 
-
-	setState: function(key, state) {
+    setState: function(key, state) {
 		if (!this.state_key) {
 			console.error('No state keys set, dropping set state', key, state);
 			return;
@@ -70,8 +68,7 @@ export default Ext.define('NextThought.common.state.StateStore', {
 		this.__saveState(current);
 	},
 
-
-	getState: function(key) {
+    getState: function(key) {
 		if (!this.state_key) {
 			console.error('No state keys set, returning empty state', key);
 			return;

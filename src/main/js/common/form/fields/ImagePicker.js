@@ -1,13 +1,14 @@
-export default Ext.define('NextThought.common.form.fields.ImagePicker', {
-	extend: 'NextThought.common.form.fields.FilePicker',
-	alias: 'widget.image-picker-field',
+var Ext = require('extjs');
+var FieldsFilePicker = require('./FilePicker');
+var PromptActions = require('../../../app/prompt/Actions');
+var CroppingPrompt = require('../../../app/image/cropping/Prompt');
 
-	requires: [
-		'NextThought.app.prompt.Actions',
-		'NextThought.app.image.cropping.Prompt'
-	],
 
-	renderTpl: Ext.DomHelper.markup({
+module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicker', {
+    extend: 'NextThought.common.form.fields.FilePicker',
+    alias: 'widget.image-picker-field',
+
+    renderTpl: Ext.DomHelper.markup({
 		cls: 'image-picker {fileCls}', style: {width: '{width}', height: '{height}'}, cn: [
 			{cls: 'preview'},
 			{tag: 'input', type: 'file', 'data-qtip': 'Add Cover Image', accept: 'image/*', tabindex: '1'},
@@ -15,9 +16,9 @@ export default Ext.define('NextThought.common.form.fields.ImagePicker', {
 		]
 	}),
 
-	accepts: 'image/*',
+    accepts: 'image/*',
 
-	renderSelectors: {
+    renderSelectors: {
 		fileContainer: '.image-picker',
 		inputContainer: '.image-picker',
 		previewEl: '.preview',
@@ -25,15 +26,13 @@ export default Ext.define('NextThought.common.form.fields.ImagePicker', {
 		clearEl: '.clear'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.on('destroy', this.cleanUpCroppedImage.bind(this));
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		this.PromptActions = NextThought.app.prompt.Actions.create();
@@ -61,8 +60,7 @@ export default Ext.define('NextThought.common.form.fields.ImagePicker', {
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.clearEl, 'click', this.onClearImage.bind(this));
@@ -72,8 +70,7 @@ export default Ext.define('NextThought.common.form.fields.ImagePicker', {
 		}
 	},
 
-
-	getValue: function() {
+    getValue: function() {
 		if (this.croppedImage) {
 			return this.croppedImage.getBlob();
 		}
@@ -81,8 +78,7 @@ export default Ext.define('NextThought.common.form.fields.ImagePicker', {
 		return this.callParent(arguments);
 	},
 
-
-	getValueName: function() {
+    getValueName: function() {
 		if (this.croppedImage) {
 			return this.croppedImage.getName();
 		}
@@ -90,8 +86,7 @@ export default Ext.define('NextThought.common.form.fields.ImagePicker', {
 		return this.callParent(arguments);
 	},
 
-
-	onFileChange: function(file) {
+    onFileChange: function(file) {
 		var me = this,
 			url = me.createObjectURL(file);
 
@@ -116,8 +111,7 @@ export default Ext.define('NextThought.common.form.fields.ImagePicker', {
 			});
 	},
 
-
-	setPlaceholder: function(value) {
+    setPlaceholder: function(value) {
 		this.placeholder = value;
 
 		if (!this.hasFile() && !this.defaultValue) {
@@ -132,8 +126,7 @@ export default Ext.define('NextThought.common.form.fields.ImagePicker', {
 		}
 	},
 
-
-	setPreviewFromValue: function(value) {
+    setPreviewFromValue: function(value) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setPreviewFromValue.bind(this, value));
 			return;
@@ -143,16 +136,14 @@ export default Ext.define('NextThought.common.form.fields.ImagePicker', {
 		this.updateTooltip(true);
 	},
 
-
-	setPreviewFromInput: function(file) {
+    setPreviewFromInput: function(file) {
 		var url = this.createObjectURL(file);
 
 		this.previewEl.setStyle({backgroundImage: 'url(' + url + ')'});
 		this.updateTooltip(true);
 	},
 
-
-	setPreviewFromCrop: function(crop) {
+    setPreviewFromCrop: function(crop) {
 		var url = crop.getURL();
 
 		this.previewEl.setStyle({backgroundImage: 'url(' + url + ')'});
@@ -162,8 +153,7 @@ export default Ext.define('NextThought.common.form.fields.ImagePicker', {
 		this.fileContainer.addCls('has-file');
 	},
 
-
-	updateTooltip: function(hasImage) {
+    updateTooltip: function(hasImage) {
 		if (hasImage) {
 			this.inputEl.set({'data-qtip': 'Cover Image'});
 		}
@@ -172,15 +162,13 @@ export default Ext.define('NextThought.common.form.fields.ImagePicker', {
 		}
 	},
 
-
-	showPreviewFromSchema: function() {
+    showPreviewFromSchema: function() {
 		var url = this.placeholder || this.schema.placeholder || '';
 
 		this.previewEl.setStyle({backgroundImage: 'url(' + url + ')'});
 	},
 
-
-	onClearImage: function() {
+    onClearImage: function() {
 		delete this.defaultValue;
 		this.clearInput();
 
@@ -193,8 +181,7 @@ export default Ext.define('NextThought.common.form.fields.ImagePicker', {
 		this.updateTooltip();
 	},
 
-
-	cleanUpCroppedImage: function() {
+    cleanUpCroppedImage: function() {
 		if (this.croppedImage) {
 			this.croppedImage.cleanUp();
 		}

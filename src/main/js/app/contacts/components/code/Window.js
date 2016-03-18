@@ -1,30 +1,29 @@
-export default Ext.define('NextThought.app.contacts.components.code.Window', {
-	extend: 'NextThought.common.window.Window',
-	alias: 'widget.code-window',
+var Ext = require('extjs');
+var WindowWindow = require('../../../../common/window/Window');
+var AccountHeader = require('../../../account/Header');
+var CodeMain = require('./Main');
 
-	requires: [
-		'NextThought.app.account.Header',
-		'NextThought.app.contacts.components.code.Main'
-	],
 
-	cls: 'code-window',
-	ui: 'nt-window',
-	minimizable: false,
-	constrain: true,
-	modal: true,
-	closable: true,
-	resizable: false,
-	dialog: true,
-	closeAction: 'destroy',
+module.exports = exports = Ext.define('NextThought.app.contacts.components.code.Window', {
+    extend: 'NextThought.common.window.Window',
+    alias: 'widget.code-window',
+    cls: 'code-window',
+    ui: 'nt-window',
+    minimizable: false,
+    constrain: true,
+    modal: true,
+    closable: true,
+    resizable: false,
+    dialog: true,
+    closeAction: 'destroy',
+    width: 480,
 
-	width: 480,
-
-	layout: {
+    layout: {
 		type: 'vbox',
 		align: 'stretch'
 	},
 
-	items: [
+    items: [
 		{xtype: 'container', layout: {type: 'absolute'}, items: [
 			{
 				anchor: '100% 100%',
@@ -38,7 +37,7 @@ export default Ext.define('NextThought.app.contacts.components.code.Window', {
 		{xtype: 'code-main-view'}
 	],
 
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.el.down('.close'), 'click', this.close, this);
 		this.el.down('input').focus(200);

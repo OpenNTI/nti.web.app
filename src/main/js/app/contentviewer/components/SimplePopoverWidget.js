@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.contentviewer.components.SimplePopoverWidget', {
+var Ext = require('extjs');
+var ParseUtils = require('../../../util/Parsing');
+
+
+module.exports = exports = Ext.define('NextThought.app.contentviewer.components.SimplePopoverWidget', {
 	extend: 'Ext.container.Container',
 
 	alias: 'widget.simple-popover-widget',

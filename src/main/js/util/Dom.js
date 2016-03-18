@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.util.Dom', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.util.Dom', {
 	singleton: true,
 
 

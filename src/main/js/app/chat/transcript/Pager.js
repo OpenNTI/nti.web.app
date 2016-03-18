@@ -1,21 +1,20 @@
-export default Ext.define('NextThought.app.chat.transcript.Pager', {
-
-	requires: [
-		'NextThought.app.chat.Actions',
-		'NextThought.app.chat.StateStore',
-		'NextThought.model.TranscriptSummary',
-		'NextThought.model.Transcript',
-		'NextThought.app.chat.components.log.PagerEntry'
-	],
+var Ext = require('extjs');
+var Globals = require('../../../util/Globals');
+var ChatActions = require('../Actions');
+var ChatStateStore = require('../StateStore');
+var ModelTranscriptSummary = require('../../../model/TranscriptSummary');
+var ModelTranscript = require('../../../model/Transcript');
+var LogPagerEntry = require('../components/log/PagerEntry');
 
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.chat.transcript.Pager', {
+    mixins: {
      	observable: 'Ext.util.Observable'
     },
 
-	PAGE_SIZE: 3,
+    PAGE_SIZE: 3,
 
-	constructor: function (cfg) {
+    constructor: function (cfg) {
 		this.initConfig(cfg || {});
 		this.ChatActions = NextThought.app.chat.Actions.create();
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
@@ -23,8 +22,7 @@ export default Ext.define('NextThought.app.chat.transcript.Pager', {
 		this.mixins.observable.constructor.apply(this);
 	},
 
-
-	buildTranscriptStore: function(occupants) {
+    buildTranscriptStore: function(occupants) {
 		var user = Ext.Array.remove(occupants.slice(), $AppConfig.username)[0],
 			url = Service.getContainerUrl(Globals.CONTENT_ROOT, Globals.RECURSIVE_USER_GENERATED_DATA),
 			s = NextThought.store.PageItem.make(url, Globals.CONTENT_ROOT, true);
@@ -49,14 +47,12 @@ export default Ext.define('NextThought.app.chat.transcript.Pager', {
 		s.load();
 	},
 
-
-	bindWindow: function(win) {
+    bindWindow: function(win) {
 		this.chatWindow = win;
 		this.pages = [];
 	},
 
-
-	pageLoaded: function(store, records) {
+    pageLoaded: function(store, records) {
 		var win = this.chatWindow;
 
 		win.maskWindow();
@@ -67,8 +63,7 @@ export default Ext.define('NextThought.app.chat.transcript.Pager', {
 			.fail(win.unmaskWindow.bind(win));
 	},
 
-
-	loadTranscripts: function(records) {
+    loadTranscripts: function(records) {
 		var toAdd = [], p, me = this;
 		Ext.each(records || [], function(record) {
 			p = me.getMessages(record);
@@ -88,8 +83,7 @@ export default Ext.define('NextThought.app.chat.transcript.Pager', {
 		});
 	},
 
-
-	getMessages: function(transcript) {
+    getMessages: function(transcript) {
 		var me = this;
 
 		return me.ChatActions.loadTranscript(transcript.get('RoomInfo'))
@@ -99,8 +93,7 @@ export default Ext.define('NextThought.app.chat.transcript.Pager', {
 				});
 	},
 
-
-	sortMessages: function(messages) {
+    sortMessages: function(messages) {
 		function timeSort(a, b) {
 			var aRaw = a.raw || {CreatedTime: 0},
 					bRaw = b.raw || {CreatedTime: 0};
@@ -112,8 +105,7 @@ export default Ext.define('NextThought.app.chat.transcript.Pager', {
 		return messages;
 	},
 
-
-	addBulkMessages: function(records) {
+    addBulkMessages: function(records) {
 		this.clearPaging();
 
 		records = this.sortMessages(records);
@@ -123,8 +115,7 @@ export default Ext.define('NextThought.app.chat.transcript.Pager', {
 		return Promise.resolve();
 	},
 
-
-	insertBulkMessages: function(records) {
+    insertBulkMessages: function(records) {
 		this.clearPaging();
 
 		records = this.sortMessages(records);
@@ -134,8 +125,7 @@ export default Ext.define('NextThought.app.chat.transcript.Pager', {
 		return Promise.resolve();
 	},
 
-
-	clearPaging: function() {
+    clearPaging: function() {
 		var logView = this.chatWindow && this.chatWindow.logView;
 		if (this.pagingCmp && logView) {
 			logView.remove(this.pagingCmp);
@@ -143,8 +133,7 @@ export default Ext.define('NextThought.app.chat.transcript.Pager', {
 		}
 	},
 
-
-	maybeAddMoreEntry: function(lastLoadRecords) {
+    maybeAddMoreEntry: function(lastLoadRecords) {
 		var pageCount = Math.ceil(this.transcriptStore.getTotalCount() / this.PAGE_SIZE),
 			hasMore = pageCount > 0 ? this.transcriptStore.currentPage < pageCount : false,
 			logView = this.chatWindow && this.chatWindow.logView, me = this;
@@ -163,8 +152,7 @@ export default Ext.define('NextThought.app.chat.transcript.Pager', {
 		return Promise.resolve();
 	},
 
-
-	loadNext: function() {
+    loadNext: function() {
 		var currentPage = this.transcriptStore.currentPage,
 			nextPage = currentPage + 1,
 			param = {

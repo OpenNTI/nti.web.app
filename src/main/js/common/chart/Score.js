@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.chart.Score', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.chart.Score', {
 	extend:	'Ext.Component',
 	alias: 'widget.chart-score',
 	ui: 'course-assessment',

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.whiteboard.editor.mixins.ToolOptionsState', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.ToolOptionsState', {
 
 	constructor: function() {
 		this.toolOptionsState = NextThought.app.whiteboard.editor.mixins.ToolOptionsState;

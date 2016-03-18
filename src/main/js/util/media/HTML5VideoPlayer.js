@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.util.media.HTML5VideoPlayer', {
+var Ext = require('extjs');
+var MediaHTML5Player = require('./HTML5Player');
+
+
+module.exports = exports = Ext.define('NextThought.util.media.HTML5VideoPlayer', {
 	extend: 'NextThought.util.media.HTML5Player',
 
 	statics: {

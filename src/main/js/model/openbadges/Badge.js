@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.model.openbadges.Badge', {
+var Ext = require('extjs');
+var ParseUtils = require('../../util/Parsing');
+var ModelBase = require('../Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.openbadges.Badge', {
 	extend: 'NextThought.model.Base',
 
 	addMimeTypeToRoute: true,

@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.forums.CommentPost', {
+var Ext = require('extjs');
+var ForumsPost = require('./Post');
+
+
+module.exports = exports = Ext.define('NextThought.model.forums.CommentPost', {
 	extend: 'NextThought.model.forums.Post',
 	mimeType: 'application/vnd.nextthought.forums.generalforumcomment',
 

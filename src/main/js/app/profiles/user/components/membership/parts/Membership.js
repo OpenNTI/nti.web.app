@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.profiles.user.components.membership.parts.Membership', {
+var Ext = require('extjs');
+var NTIFormat = require('../../../../../../util/Format');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.membership.parts.Membership', {
 	extend: 'Ext.Component',
 
 	title: '',

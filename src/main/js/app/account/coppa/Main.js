@@ -1,15 +1,15 @@
-export default Ext.define('NextThought.app.account.coppa.Main', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.coppa-main-view',
-	requires: [
-		'NextThought.util.Localization'
-	],
+var Ext = require('extjs');
+var Globals = require('../../../util/Globals');
+var UtilLocalization = require('../../../util/Localization');
 
-	cls: 'coppa-main-view',
 
-	layout: 'none',
+module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.coppa-main-view',
+    cls: 'coppa-main-view',
+    layout: 'none',
 
-	items: [
+    items: [
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
 			{xtype: 'container', name: 'realname', layout: 'hbox',
 				defaults: {
@@ -104,7 +104,7 @@ export default Ext.define('NextThought.app.account.coppa.Main', {
 		]}
 	],
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		//we need to setup the combo box with a store:
@@ -126,11 +126,9 @@ export default Ext.define('NextThought.app.account.coppa.Main', {
 		this.down('combobox').bindStore(this.store);
 	},
 
+    setSchema: function() {},
 
-	setSchema: function() {},
-
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var u = $AppConfig.userObject,
@@ -149,8 +147,7 @@ export default Ext.define('NextThought.app.account.coppa.Main', {
 		this.getEl().down('.privacyLink').on('click', this.openChildPrivacyWindow, this);
 	},
 
-
-	getValues: function() {
+    getValues: function() {
 		var email = this.down('[name=email]').getValue(),
 				firstname = this.down('[name=firstname]').getValue(),
 				lastname = this.down('[name=lastname]').getValue(),
@@ -168,7 +165,7 @@ export default Ext.define('NextThought.app.account.coppa.Main', {
 
 	},
 
-	setError: function(error) {
+    setError: function(error) {
 		var box = this.down('[name=error]'),
 				field = this.down('[name=' + error.field + ']'),
 				allFields = this.query('[name]');
@@ -189,7 +186,7 @@ export default Ext.define('NextThought.app.account.coppa.Main', {
 		this.up('window').updateLayout();
 	},
 
-	openChildPrivacyWindow: function(e) {
+    openChildPrivacyWindow: function(e) {
 		e.stopEvent();
 
 		var w = Ext.widget('nti-window', {
@@ -219,8 +216,7 @@ export default Ext.define('NextThought.app.account.coppa.Main', {
 		w.show();
 	},
 
-
-	submit: function() {
+    submit: function() {
 		var win = this.up('window'),
 			values = this.getValues();
 

@@ -1,12 +1,12 @@
-export default Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay', {
-	alias: 'reader.componentOverlay',
+var Ext = require('extjs');
+var UtilDom = require('../../../util/Dom');
+var UtilTabIndexTracker = require('../../../util/TabIndexTracker');
 
-	requires: [
-		'NextThought.util.Dom',
-		'NextThought.util.TabIndexTracker'
-	],
 
-	constructor: function(config) {
+module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay', {
+    alias: 'reader.componentOverlay',
+
+    constructor: function(config) {
 		Ext.apply(this, config);
 
 		function sync() {
@@ -31,15 +31,13 @@ export default Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay
 		this.activeOverlayedPanels = {};
 	},
 
-
-	insertComponentOverlay: function() {
+    insertComponentOverlay: function() {
 		var container = Ext.DomHelper.append(this.reader.getInsertionPoint('innerCt'), { cls: 'component-overlay' }, true);
 		this.reader.on('destroy' , function() { container.remove(); });
 		this.componentOverlayEl = container;
 	},
 
-
-	overlayedPanelAtY: function(y) {
+    overlayedPanelAtY: function(y) {
 		var panel = null,
 			offsets = this.reader.getAnnotationOffsets();
 
@@ -60,8 +58,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay
 		return panel;
 	},
 
-
-	/**
+    /**
 	 *
 	 * @param {String|Object} key
 	 * @param {Object} [panel]
@@ -85,12 +82,11 @@ export default Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay
 		return panel;
 	},
 
-	adjustOverlayedPanels: function() {
+    adjustOverlayedPanels: function() {
 		NextThought.app.contentviewer.overlay.Panel.syncPositioning();
 	},
 
-
-	clearOverlayedPanels: function() {
+    clearOverlayedPanels: function() {
 		var active = this.activeOverlayedPanels,
 			myReader = this.reader;
 
@@ -112,8 +108,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay
 			});
 	},
 
-
-	getRelatedElement: function(ntiid, objectEls) {
+    getRelatedElement: function(ntiid, objectEls) {
 		var i;
 		for (i = 0; i < objectEls.length; i++) {
 			if (!(objectEls[i].getAttribute)) { continue; }
@@ -124,8 +119,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay
 		return undefined;
 	},
 
-
-	getContentElement: function(tagName, attribute, value) {
+    getContentElement: function(tagName, attribute, value) {
 		try {
 		var doc = this.reader.getDocumentElement(),
 			tags = doc.getElementsByTagName(tagName),
@@ -143,5 +137,4 @@ export default Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay
 		}
 		return null;
 	}
-
 });

@@ -1,45 +1,45 @@
-export default Ext.define('NextThought.app.contacts.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.contacts-index',
+var Ext = require('extjs');
+var MixinsRouter = require('../../mixins/Router');
+var MixinsState = require('../../mixins/State');
+var ComponentsTabView = require('./components/TabView');
+var ContactsActions = require('./Actions');
+var ContactsStateStore = require('./StateStore');
+var ComponentsContactTabView = require('./components/ContactTabView');
+var ComponentsGroupTabView = require('./components/GroupTabView');
+var ComponentsListView = require('./components/ListView');
+var ComponentsNavigation = require('../../common/components/Navigation');
+var NavigationActions = require('../navigation/Actions');
 
-	requires: [
-		'NextThought.app.contacts.components.TabView',
-		'NextThought.app.contacts.Actions',
-		'NextThought.app.contacts.StateStore',
-		'NextThought.app.contacts.components.ContactTabView',
-		'NextThought.app.contacts.components.GroupTabView',
-		'NextThought.app.contacts.components.ListView',
-		'NextThought.common.components.Navigation',
-		'NextThought.app.navigation.Actions'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.contacts-index',
+
+    mixins: {
 		Route: 'NextThought.mixins.Router',
 		State: 'NextThought.mixins.State'
 	},
 
-	title: 'Contacts',
-	defaultTab: 'my-contacts',
+    title: 'Contacts',
+    defaultTab: 'my-contacts',
+    id: 'contacts',
 
-	id: 'contacts',
-
-	items: [
+    items: [
 		{ xtype: 'contacts-tab-view', id: 'my-contacts' },
 		{ xtype: 'groups-tab-view', id: 'my-groups'},
 		{ xtype: 'lists-tab-view', id: 'my-lists'}
 	],
 
-	layout: {
+    layout: {
 		type: 'card',
 		deferredRender: true
 	},
 
-	defaultType: 'box',
-	activeItem: 0,
+    defaultType: 'box',
+    activeItem: 0,
+    cmp_map: {},
 
-	cmp_map: {},
-
-	initComponent: function() {
+    initComponent: function() {
 		var me = this;
 
 		me.callParent(arguments);
@@ -58,15 +58,14 @@ export default Ext.define('NextThought.app.contacts.Index', {
 		this.addDefaultRoute('/');
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		if (Ext.is.iOS) {
 			this.__adjustmentForiOS();
 		}
 	},
 
-	applyState: function(state) {
+    applyState: function(state) {
 		var active = state.active,
 			tabs = [];
 
@@ -94,8 +93,7 @@ export default Ext.define('NextThought.app.contacts.Index', {
 		this.navigation.setTabs(tabs);
 	},
 
-
-	showContacts: function(route, subRoute) {
+    showContacts: function(route, subRoute) {
 		this.contactsRoute = subRoute;
 
 		this.setTitle('Contacts');
@@ -109,8 +107,7 @@ export default Ext.define('NextThought.app.contacts.Index', {
 		});
 	},
 
-
-	showGroups: function(route, subRoute) {
+    showGroups: function(route, subRoute) {
 		this.groupsRoute = subRoute;
 
 		this.setTitle('Groups');
@@ -120,8 +117,7 @@ export default Ext.define('NextThought.app.contacts.Index', {
 		);
 	},
 
-
-	showLists: function(route, subRoute) {
+    showLists: function(route, subRoute) {
 		this.listsRoute = subRoute;
 
 		this.setTitle('Distribution List');
@@ -131,8 +127,7 @@ export default Ext.define('NextThought.app.contacts.Index', {
 		);
 	},
 
-
-	setActiveView: function(active, inactive, tab) {
+    setActiveView: function(active, inactive, tab) {
 		var me = this, item;
 
 		me.prepareNavigation();
@@ -146,8 +141,7 @@ export default Ext.define('NextThought.app.contacts.Index', {
 		});
 	},
 
-
-	setActiveItem: function(xtype) {
+    setActiveItem: function(xtype) {
 		var layout = this.getLayout(),
 			item = this.getItem(xtype),
 			current = layout.getActiveItem();
@@ -161,8 +155,7 @@ export default Ext.define('NextThought.app.contacts.Index', {
 		return item;
 	},
 
-
-	getItem: function(xtype) {
+    getItem: function(xtype) {
 		var cmp = this.cmp_map[xtype];
 
 		if (!cmp) {
@@ -176,8 +169,7 @@ export default Ext.define('NextThought.app.contacts.Index', {
 		return cmp;
 	},
 
-
-	prepareNavigation: function() {
+    prepareNavigation: function() {
 		this.NavigationActions.updateNavBar({
 			cmp: this.getNavigation(),
 			hideBranding: true
@@ -186,8 +178,7 @@ export default Ext.define('NextThought.app.contacts.Index', {
 		this.NavigationActions.setActiveContent(null);
 	},
 
-
-	getNavigation: function() {
+    getNavigation: function() {
 		if (!this.navigation || this.navigation.isDestroyed) {
 			this.navigation = NextThought.common.components.Navigation.create({
 				bodyView: this
@@ -197,21 +188,18 @@ export default Ext.define('NextThought.app.contacts.Index', {
 		return this.navigation;
 	},
 
-
-	onTabChange: function(title, route, tab) {
+    onTabChange: function(title, route, tab) {
 		this.pushRoute('', route);
 	},
 
-
-	restore: function(state) {
+    restore: function(state) {
 		return new Promise(function(fulfill) {
 			this.setActiveTab(((state || {}).contacts || {}).activeTab);
 			fulfill();
 		}.bind(this));
 	},
 
-
-	__adjustmentForiOS: function() {
+    __adjustmentForiOS: function() {
 		var outline = this.el.down('.contact:nth-child(1)'),
 			list = this.el.down('.contact:nth-child(2)'),
 			input = this.el.down('input'),

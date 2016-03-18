@@ -1,14 +1,14 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.outline.contentnode.Editor', {
-	extend: 'NextThought.app.course.overview.components.editing.outline.calendarnode.Editor',
-	alias: 'widget.overview-editing-contentnode-editor',
-
-	requires: [
-		'NextThought.model.courses.navigation.CourseOutlineNode',
-		'NextThought.app.course.overview.components.editing.outline.ParentSelection'
-	],
+var Ext = require('extjs');
+var CalendarnodeEditor = require('../calendarnode/Editor');
+var NavigationCourseOutlineNode = require('../../../../../../../model/courses/navigation/CourseOutlineNode');
+var OutlineParentSelection = require('../ParentSelection');
 
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.contentnode.Editor', {
+    extend: 'NextThought.app.course.overview.components.editing.outline.calendarnode.Editor',
+    alias: 'widget.overview-editing-contentnode-editor',
+
+    statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType
@@ -28,8 +28,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		}
 	},
 
-
-	addParentSelection: function(record, parentRecord, rootRecord, onChange) {
+    addParentSelection: function(record, parentRecord, rootRecord, onChange) {
 		if (!rootRecord) { return null; }
 
 		var items = rootRecord.get('Items');

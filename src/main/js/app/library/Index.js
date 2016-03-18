@@ -1,27 +1,26 @@
-export default Ext.define('NextThought.app.library.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.library-view-container',
+var Ext = require('extjs');
+var MixinsRouter = require('../../mixins/Router');
+var NavigationActions = require('../navigation/Actions');
+var CommunitiesIndex = require('./communities/Index');
+var AdminIndex = require('./admin/Index');
+var ContentIndex = require('./content/Index');
+var CoursesIndex = require('./courses/Index');
+var LibraryHome = require('./Home');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.library.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.library-view-container',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	requires: [
-		'NextThought.app.navigation.Actions',
-		'NextThought.app.library.communities.Index',
-		'NextThought.app.library.admin.Index',
-		'NextThought.app.library.content.Index',
-		'NextThought.app.library.courses.Index',
-		'NextThought.app.library.Home'
-	],
+    layout: 'card',
+    cls: 'library-view',
+    items: [],
 
-	layout: 'card',
-	cls: 'library-view',
-
-	items: [],
-
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.NavActions = NextThought.app.navigation.Actions.create();
@@ -38,15 +37,13 @@ export default Ext.define('NextThought.app.library.Index', {
 		});
 	},
 
-
-	onDeactivate: function() {
+    onDeactivate: function() {
 		var activeItem = this.getLayout().getActiveItem();
 
 		activeItem.fireEvent('deactivate');
 	},
 
-
-	setActiveView: function(xtype, selector) {
+    setActiveView: function(xtype, selector) {
 		var old = this.getLayout().getActiveItem(),
 			cmp = this.down(selector || xtype);
 
@@ -75,8 +72,7 @@ export default Ext.define('NextThought.app.library.Index', {
 		return cmp;
 	},
 
-
-	showHome: function(route, subRoute) {
+    showHome: function(route, subRoute) {
 		var cmp = this.setActiveView('library-home');
 
 		this.setTitle('Home');
@@ -84,29 +80,25 @@ export default Ext.define('NextThought.app.library.Index', {
 		return cmp.handleRoute(subRoute, route.precache);
 	},
 
-
-	showCourses: function(route, subRoute) {
+    showCourses: function(route, subRoute) {
 		var cmp = this.setActiveView('library-courses', '[isCoursePage]');
 
 		return cmp.handleRoute(subRoute, route.precache);
 	},
 
-
-	showAdminCourses: function(route, subRoute) {
+    showAdminCourses: function(route, subRoute) {
 		var cmp = this.setActiveView('library-admin');
 
 		return cmp.handleRoute(subRoute, route.precache);
 	},
 
-
-	showBooks: function(route, subRoute) {
+    showBooks: function(route, subRoute) {
 		var cmp = this.setActiveView('library-content');
 
 		return cmp.handleRoute(subRoute, route.precache);
 	},
 
-
-	showCommunities: function(route, subRoute) {
+    showCommunities: function(route, subRoute) {
 		var cmp = this.setActiveView('library-communities');
 
 		return cmp.handleRoute(subRoute, route.precache);

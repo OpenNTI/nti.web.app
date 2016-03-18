@@ -1,19 +1,16 @@
-export default Ext.define('NextThought.app.prompt.components.Container', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.prompt-container',
-
-	requires: [
-		'NextThought.app.prompt.components.Header',
-		'NextThought.app.prompt.components.Footer'
-	],
-
-	cls: 'prompt-container',
-
-	layout: 'none',
-	items: [],
+var Ext = require('extjs');
+var ComponentsHeader = require('./Header');
+var ComponentsFooter = require('./Footer');
 
 
-	initComponent: function() {
+module.exports = exports = Ext.define('NextThought.app.prompt.components.Container', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.prompt-container',
+    cls: 'prompt-container',
+    layout: 'none',
+    items: [],
+
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.prompt = this.add({
@@ -50,8 +47,7 @@ export default Ext.define('NextThought.app.prompt.components.Container', {
 		this.fireEvent('setup-complete');
 	},
 
-
-	onCovered: function() {
+    onCovered: function() {
 		this.addCls('covered');
 
 		if (this.bodyCmp && this.bodyCmp.onCovered) {
@@ -59,8 +55,7 @@ export default Ext.define('NextThought.app.prompt.components.Container', {
 		}
 	},
 
-
-	onUncovered: function() {
+    onUncovered: function() {
 		this.removeCls('covered');
 
 		if (this.bodyCmp && this.bodyCmp.onUncovered) {
@@ -68,8 +63,7 @@ export default Ext.define('NextThought.app.prompt.components.Container', {
 		}
 	},
 
-
-	getBodyConfig: function() {
+    getBodyConfig: function() {
 		return {
 			Prompt: {
 				data: this.data,
@@ -96,27 +90,23 @@ export default Ext.define('NextThought.app.prompt.components.Container', {
 
 	},
 
-
-	doBack: function() {
+    doBack: function() {
 		if (this.bodyCmp.onBack) {
 			this.bodyCmp.onBack();
 		}
 	},
 
-
-	onSaveSuccess: function(value) {
+    onSaveSuccess: function(value) {
 		if (this.onSubmit) {
 			this.onSubmit(value);
 		}
 	},
 
-
-	onSaveFailure: function(reason) {
+    onSaveFailure: function(reason) {
 		this.bodyCmp.onSaveFailure(reason);
 	},
 
-
-	__validate: function() {
+    __validate: function() {
 		if (this.bodyCmp.doValidation) {
 			return this.bodyCmp.doValidation();
 		}
@@ -124,8 +114,7 @@ export default Ext.define('NextThought.app.prompt.components.Container', {
 		return Promise.resolve();
 	},
 
-
-	__save: function() {
+    __save: function() {
 		if (this.bodyCmp.onSave) {
 			this.bodyCmp.onSave()
 				.then(this.onSaveSuccess.bind(this))
@@ -133,14 +122,12 @@ export default Ext.define('NextThought.app.prompt.components.Container', {
 		}
 	},
 
-
-	doSave: function() {
+    doSave: function() {
 		this.__validate()
 			.then(this.__save.bind(this));
 	},
 
-
-	allowCancel: function() {
+    allowCancel: function() {
 		if (this.bodyCmp.allowCancel) {
 			return this.bodyCmp.allowCancel();
 		}
@@ -148,8 +135,7 @@ export default Ext.define('NextThought.app.prompt.components.Container', {
 		return Promise.resolve();
 	},
 
-
-	doCancel: function(action) {
+    doCancel: function(action) {
 		this.onCancel(action);
 	}
 });

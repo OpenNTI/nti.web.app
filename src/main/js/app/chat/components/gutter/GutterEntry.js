@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.chat.components.gutter.GutterEntry', {
+var Ext = require('extjs');
+var ParseUtils = require('../../../../util/Parsing');
+
+
+module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.GutterEntry', {
 	extend: 'Ext.Component',
 	alias: 'widget.chat-gutter-entry',
 

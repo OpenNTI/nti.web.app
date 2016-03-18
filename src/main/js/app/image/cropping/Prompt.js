@@ -1,20 +1,18 @@
-export default Ext.define('NextThought.app.image.cropping.Prompt', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.image-cropping-prompt',
+var Ext = require('extjs');
+var PromptStateStore = require('../../prompt/StateStore');
+var CroppingEditor = require('./Editor');
 
-	requires: [
-		'NextThought.app.prompt.StateStore',
-		'NextThought.app.image.cropping.Editor'
-	],
 
-	layout: 'none',
-	cls: 'image-cropping-prompt',
-	items: [],
+module.exports = exports = Ext.define('NextThought.app.image.cropping.Prompt', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.image-cropping-prompt',
+    layout: 'none',
+    cls: 'image-cropping-prompt',
+    items: [],
+    title: 'Crop & Rotate',
+    saveText: 'Save',
 
-	title: 'Crop & Rotate',
-	saveText: 'Save',
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var data = this.Prompt.data;
@@ -30,8 +28,7 @@ export default Ext.define('NextThought.app.image.cropping.Prompt', {
 		this.Prompt.Footer.enableSave();
 	},
 
-
-	loadSrc: function(src, name) {
+    loadSrc: function(src, name) {
 		this.editor = this.add({
 			xtype: 'image-cropping-editor',
 			name: name,
@@ -40,8 +37,7 @@ export default Ext.define('NextThought.app.image.cropping.Prompt', {
 		});
 	},
 
-
-	loadImage: function(img, name) {
+    loadImage: function(img, name) {
 		this.editor = this.add({
 			xtype: 'image-cropping-editor',
 			name: name,
@@ -50,8 +46,7 @@ export default Ext.define('NextThought.app.image.cropping.Prompt', {
 		});
 	},
 
-
-	showError: function() {
+    showError: function() {
 		this.add({
 			xtype: 'box',
 			autoEl: {cls: 'error', html: 'Failed to load image.'}
@@ -60,8 +55,7 @@ export default Ext.define('NextThought.app.image.cropping.Prompt', {
 		this.Prompt.Footer.disableSave();
 	},
 
-
-	onSave: function() {
+    onSave: function() {
 		if (this.editor && this.editor.onSave) {
 			return this.editor.onSave();
 		}

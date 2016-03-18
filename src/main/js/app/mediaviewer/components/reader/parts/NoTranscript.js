@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.NoTranscript', {
+var Ext = require('extjs');
+var PartsVideoTitle = require('./VideoTitle');
+
+
+module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.parts.NoTranscript', {
     extend: 'NextThought.app.mediaviewer.components.reader.parts.VideoTitle',
     alias: 'widget.no-video-transcript',
 

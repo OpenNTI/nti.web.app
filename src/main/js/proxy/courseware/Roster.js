@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.proxy.courseware.Roster', {
+var Ext = require('extjs');
+var UserRepository = require('../../cache/UserRepository');
+var User = require('../../model/User');
+
+
+module.exports = exports = Ext.define('NextThought.proxy.courseware.Roster', {
 	extend: 'Ext.data.proxy.Rest',
 	alias: 'proxy.nti.roster',
 

@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.model.forums.HeadlineTopic', {
+var Ext = require('extjs');
+var ForumsTopic = require('./Topic');
+var MixinsModelWithPublish = require('../../mixins/ModelWithPublish');
+
+
+module.exports = exports = Ext.define('NextThought.model.forums.HeadlineTopic', {
 	extend: 'NextThought.model.forums.Topic',
 
 	mixins: {

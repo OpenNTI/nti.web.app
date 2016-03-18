@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.menus.SymbolicMathMenuItem', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.menus.SymbolicMathMenuItem', {
 	extend: 'Ext.menu.Item',
 	alias: 'widget.symbolicmath-menuitem',
 

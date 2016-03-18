@@ -1,3 +1,6 @@
+var Ext = require('extjs');
+
+
 /**
  * Add dataset support to elements
  * No globals, no overriding prototype with non-standard methods,
@@ -215,4 +218,4 @@ if (!document.documentElement.dataset &&
 }
 
 
-export default Ext.define('NextThought.overrides.builtins.Element', {});
+module.exports = exports = Ext.define('NextThought.overrides.builtins.Element', {});

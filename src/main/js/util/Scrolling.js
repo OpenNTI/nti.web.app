@@ -1,11 +1,9 @@
-export default Ext.define('NextThought.util.Scrolling', {
-
-	requires: [
-		'NextThought.util.AnimationFrame'
-	],
+var Ext = require('extjs');
+var UtilAnimationFrame = require('./AnimationFrame');
 
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.util.Scrolling', {
+    statics: {
 		getPageScrollingEl: function() {
 			return Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body;
 		},
@@ -34,8 +32,7 @@ export default Ext.define('NextThought.util.Scrolling', {
 		}
 	},
 
-
-	constructor: function(config) {
+    constructor: function(config) {
 		this.targetEl = config.el;
 
 		this.heightOverride = config.heightOverride;
@@ -51,22 +48,19 @@ export default Ext.define('NextThought.util.Scrolling', {
 		};
 	},
 
-
-	__getTop: function() {
+    __getTop: function() {
 		var rect = this.targetEl && this.targetEl.getBoundingClientRect();
 
 		return this.topOverride !== undefined ? this.topOverride : (rect && rect.top);
 	},
 
-
-	__getHeight: function() {
+    __getHeight: function() {
 		var rect = this.targetEl && this.targetEl.getBoundingClientRect();
 
 		return this.heightOverride !== undefined ? this.heightOverride : (rect && rect.height);
 	},
 
-
-	scrollWhenDragNearEdges: function() {
+    scrollWhenDragNearEdges: function() {
 		if (this.targetEl && this.targetEl.addEventListener) {
 			this.targetEl.addEventListener('dragover', this.handlers.dragover, true);
 			this.targetEl.addEventListener('dragleave', this.handlers.dragleave, true);
@@ -75,8 +69,7 @@ export default Ext.define('NextThought.util.Scrolling', {
 		}
 	},
 
-
-	unscrollWhenDragNearEdges: function() {
+    unscrollWhenDragNearEdges: function() {
 		if (this.targetEl && this.targetEl.removeEventListener) {
 			this.targetEl.removeEventListener('dragover', this.handlers.dragover, true);
 			this.targetEl.removeEventListener('dragleave', this.handlers.dragleave, true);
@@ -85,18 +78,15 @@ export default Ext.define('NextThought.util.Scrolling', {
 		this.endDragOverScroll();
 	},
 
-
-	__onDragOver: function(e) {
+    __onDragOver: function(e) {
 		this.scrollIfNearEdge(e.clientX, e.clientY);
 	},
 
-
-	__onDragLeave: function() {
+    __onDragLeave: function() {
 		this.endDragOverScroll();
 	},
 
-
-	getScrollAnimationFn: function(direction) {
+    getScrollAnimationFn: function(direction) {
 		var velocity = this.scrollingVelocity,
 			targetEl = this.targetEl,
 			getTop = this.__getTop.bind(this),
@@ -126,8 +116,7 @@ export default Ext.define('NextThought.util.Scrolling', {
 		}
 	},
 
-
-	endDragOverScroll: function() {
+    endDragOverScroll: function() {
 		if (this.scrollingAnimation) {
 			this.scrollingAnimation.stop();
 		}
@@ -137,8 +126,7 @@ export default Ext.define('NextThought.util.Scrolling', {
 		}
 	},
 
-
-	scrollIfNearEdge: function(x, y) {
+    scrollIfNearEdge: function(x, y) {
 		var me = this,
 			top = me.__getTop(),
 			height = me.__getHeight(),

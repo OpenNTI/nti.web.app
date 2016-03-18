@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.common.ux.SearchItem', {
+var Ext = require('extjs');
+var FieldsSimpleTextField = require('../form/fields/SimpleTextField');
+
+
+module.exports = exports = Ext.define('NextThought.common.ux.SearchItem', {
 	extend: 'NextThought.common.form.fields.SimpleTextField',
 	alias: 'widget.search-menu-item',
 

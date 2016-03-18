@@ -1,20 +1,18 @@
-export default Ext.define('NextThought.app.contentviewer.notepad.Item', {
-	extend: 'Ext.Component',
-	alias: 'widget.notepad-item',
+var Ext = require('extjs');
+var NotepadEditor = require('./Editor');
 
-	requires: [
-		'NextThought.app.contentviewer.notepad.Editor'
-	],
 
-	ui: 'notepad-item',
-	cls: 'note notepad-item',
+module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Item', {
+    extend: 'Ext.Component',
+    alias: 'widget.notepad-item',
+    ui: 'notepad-item',
+    cls: 'note notepad-item',
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		'{body}'
 	]),
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.enableBubble(['detect-overflow', 'editor-closed', 'editor-open']);
 		this.on({
@@ -30,19 +28,16 @@ export default Ext.define('NextThought.app.contentviewer.notepad.Item', {
 		this.notepadCmp = this.floatParent;
 	},
 
-
-	destroy: function() {
+    destroy: function() {
 		return this.callParent(arguments);
 	},
 
-
-	eat: function(e) {
+    eat: function(e) {
 		e.stopEvent();
 		return false;
 	},
 
-
-	updateAnnotationMonitors: function(annotation) {
+    updateAnnotationMonitors: function(annotation) {
 		Ext.destroy(this.annotationMonitors);
 		this.annotation = annotation;
 		this.annotationMonitors = this.mon(annotation, {
@@ -52,8 +47,7 @@ export default Ext.define('NextThought.app.contentviewer.notepad.Item', {
 		});
 	},
 
-
-	updateRecordMonitors: function(record) {
+    updateRecordMonitors: function(record) {
 		Ext.destroy(this.recordMonitors);
 		this.record = record;
 		this.recordMonitors = this.mon(record, {
@@ -63,8 +57,7 @@ export default Ext.define('NextThought.app.contentviewer.notepad.Item', {
 		});
 	},
 
-
-	disableFloating: function(me, ct) {
+    disableFloating: function(me, ct) {
 		this.setLocalY(null);
 		this.getEl().addCls('grouped').removeCls('collide');
 		delete this.floatParent;
@@ -72,8 +65,7 @@ export default Ext.define('NextThought.app.contentviewer.notepad.Item', {
 		this.el.appendTo(ct.getLayout().getContentTarget());
 	},
 
-
-	updateWith: function(data) {
+    updateWith: function(data) {
 		var me = this, el = me.getEl(),
 			p = el.hasCls('grouped') ? null : (data.placement || 0);
 
@@ -99,8 +91,7 @@ export default Ext.define('NextThought.app.contentviewer.notepad.Item', {
 		});
 	},
 
-
-	refresh: function() {
+    refresh: function() {
 		this.updateWith({
 			placement: this.getLocalY(),
 			record: this.record,
@@ -108,18 +99,15 @@ export default Ext.define('NextThought.app.contentviewer.notepad.Item', {
 		});
 	},
 
-
-	contextMenu: function(e) {
+    contextMenu: function(e) {
 		console.log('context menu?');
 	},
 
-
-	checkOverflow: function() {
+    checkOverflow: function() {
 		this.fireEvent('detect-overflow');
 	},
 
-
-	openEditor: function() {
+    openEditor: function() {
 		if (this.notepadCmp && this.notepadCmp.savingNewNote) {
 			return;
 		}
@@ -147,8 +135,7 @@ export default Ext.define('NextThought.app.contentviewer.notepad.Item', {
 		Ext.defer(this.editor.focus, 1, this.editor);
 	},
 
-
-	isEditorDead: function() {
+    isEditorDead: function() {
 		var o = this,
 			e = ['parentNode', 'dom', 'el', 'editor'];
 
@@ -159,15 +146,13 @@ export default Ext.define('NextThought.app.contentviewer.notepad.Item', {
 		return !o;
 	},
 
-
-	edit: function(e) {
+    edit: function(e) {
 		clearTimeout(this.openingEditor);
 		this.openingEditor = Ext.defer(this.openEditor, 10, this);
 		return this.eat(e);
 	},
 
-
-	cleanupEditor: function() {
+    cleanupEditor: function() {
 		this.removeCls('edit');
 		if (this.ownerCt) {
 			this.ownerCt.removeCls('edit');
@@ -178,13 +163,11 @@ export default Ext.define('NextThought.app.contentviewer.notepad.Item', {
 		this.fireEvent('editor-closed');
 	},
 
-
-	cancelEdit: function() {
+    cancelEdit: function() {
 		this.cleanupEditor();
 	},
 
-
-	commitEdit: function() {
+    commitEdit: function() {
 		var me = this, r = me.record,
 			dom = Ext.getDom(me.getEl()),
 			nextDom = Ext.getDom(me.getEl()).nextSibling,

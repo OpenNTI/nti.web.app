@@ -1,14 +1,15 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.Editor', {
-	extend: 'NextThought.app.course.overview.components.editing.EditorGroup',
-	alias: 'widget.overview-editing-contentlink-editor',
+var Ext = require('extjs');
+var EditingEditorGroup = require('../../EditorGroup');
+var TypesDoc = require('./types/Doc');
+var TypesReading = require('./types/Reading');
+var TypesURL = require('./types/URL');
 
-	requires: [
-		'NextThought.app.course.overview.components.editing.content.contentlink.types.Doc',
-		'NextThought.app.course.overview.components.editing.content.contentlink.types.Reading',
-		'NextThought.app.course.overview.components.editing.content.contentlink.types.URL'
-	],
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.Editor', {
+    extend: 'NextThought.app.course.overview.components.editing.EditorGroup',
+    alias: 'widget.overview-editing-contentlink-editor',
+
+    statics: {
 		getSubEditors: function() {
 			var base = NextThought.app.course.overview.components.editing.content.contentlink.types;
 
@@ -20,5 +21,4 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			];
 		}
 	}
-
 });

@@ -1,29 +1,27 @@
-export default Ext.define('NextThought.app.course.enrollment.components.Process', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.enrollment-process',
+var Ext = require('extjs');
+var ComponentsConfirmation = require('./Confirmation');
+var ComponentsEnroll = require('./Enroll');
+var ComponentsAdmission = require('./Admission');
+var ComponentsPaymentConfirmation = require('./PaymentConfirmation');
+var ComponentsGift = require('./Gift');
+var ComponentsRedeem = require('./Redeem');
+var ComponentsGiftConfirmation = require('./GiftConfirmation');
 
-	requires: [
-		'NextThought.app.course.enrollment.components.Confirmation',
-		'NextThought.app.course.enrollment.components.Enroll',
-		'NextThought.app.course.enrollment.components.Admission',
-		'NextThought.app.course.enrollment.components.PaymentConfirmation',
-		'NextThought.app.course.enrollment.components.Gift',
-		'NextThought.app.course.enrollment.components.Redeem',
-		'NextThought.app.course.enrollment.components.GiftConfirmation'
-	],
 
-	layout: 'card',
-	cls: 'enrollment-credit',
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.Process', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.enrollment-process',
+    layout: 'card',
+    cls: 'enrollment-credit',
 
-	getTargetEl: function() {
+    getTargetEl: function() {
 		return this.body;
 	},
 
-	childEls: ['body'],
+    childEls: ['body'],
+    btnTpl: new Ext.XTemplate(Ext.DomHelper.markup({cls: 'number {enabled} {active}', 'data-number': '{index}', html: '{text}'})),
 
-	btnTpl: new Ext.XTemplate(Ext.DomHelper.markup({cls: 'number {enabled} {active}', 'data-number': '{index}', html: '{text}'})),
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'header', cn: [
 			{cls: 'enabled', html: 'Course Details'}
 			// {cls: 'number enabled active admission', 'data-number': '1', html: 'Admissions'},
@@ -34,15 +32,14 @@ export default Ext.define('NextThought.app.course.enrollment.components.Process'
 		{ id: '{id}-body', cls: 'body-container enrollment-container', cn: ['{%this.renderContainer(out,values)%}'] }
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		headerEl: '.header'
 	},
 
-	tabsToAdd: [],
-	numberOfSteps: 0,
+    tabsToAdd: [],
+    numberOfSteps: 0,
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.tabsToAdd = [];
 		this.enableBubble([
@@ -60,8 +57,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.Process'
 		this.on('beforedeactivate', 'beforeDeactivate', this);
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.addTabs(this.tabsToAdd);
@@ -69,8 +65,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.Process'
 		this.activateStep(0);
 	},
 
-
-	beforeDeactivate: function() {
+    beforeDeactivate: function() {
 		if (this.pricingInfo) {
 			this.pricingInfo.removePricingInfo();
 		}
@@ -78,8 +73,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.Process'
 		this.clearStorage();
 	},
 
-
-	clearStorage: function(all) {
+    clearStorage: function(all) {
 		this.items.each(function(item) {
 			if (item.clearStorage) {
 				item.clearStorage();
@@ -87,8 +81,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.Process'
 		});
 	},
 
-
-	showPricingInfo: function(course, enrollmentOption, hidePrice) {
+    showPricingInfo: function(course, enrollmentOption, hidePrice) {
 		if (!this.rendered) { return; }
 
 		var container = this.el.down('.enrollment-container');
@@ -111,20 +104,17 @@ export default Ext.define('NextThought.app.course.enrollment.components.Process'
 		this.on('destroy', 'destroy', this.pricingInfo);
 	},
 
-
-	hidePricingInfo: function(course, enrollmentOption) {
+    hidePricingInfo: function(course, enrollmentOption) {
 		if (this.pricingInfo) {
 			this.pricingInfo.hide();
 		}
 	},
 
-
-	getCoupon: function() {
+    getCoupon: function() {
 		return this.pricingInfo && this.pricingInfo.getCoupon();
 	},
 
-
-	lockProcess: function() {
+    lockProcess: function() {
 		var item = this.getLayout().getActiveItem();
 
 		if (item.lock && !item.locked) {
@@ -133,8 +123,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.Process'
 		}
 	},
 
-
-	unlockProcess: function() {
+    unlockProcess: function() {
 		var item = this.getLayout().getActiveItem();
 
 		if (item && item.unlock) {
@@ -143,23 +132,20 @@ export default Ext.define('NextThought.app.course.enrollment.components.Process'
 		}
 	},
 
-
-	getButtonCfg: function() {
+    getButtonCfg: function() {
 		var active = this.getLayout().getActiveItem(),
 			btnCfg = active && active.getButtonCfg && active.getButtonCfg();
 
 		return btnCfg;
 	},
 
-
-	buttonClick: function(action) {
+    buttonClick: function(action) {
 		var active = this.getLayout().getActiveItem();
 
 		active.buttonClick(action);
 	},
 
-
-	stopClose: function() {
+    stopClose: function() {
 		var active = this.getLayout().getActiveItem(),
 			stop;
 
@@ -177,8 +163,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.Process'
 		return stop;
 	},
 
-
-	addMask: function(msg, cls) {
+    addMask: function(msg, cls) {
 		if (!this.el) { return; }
 
 		var isMasked = this.el.isMasked(),
@@ -191,8 +176,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.Process'
 		}
 	},
 
-
-	removeMask: function() {
+    removeMask: function() {
 		if (!this.el) { return; }
 		var mask = this.el.down('.x-mask'),
 			maskMsg = this.el.down('.x-mask-msg');
@@ -204,13 +188,11 @@ export default Ext.define('NextThought.app.course.enrollment.components.Process'
 		wait(1000).then(this.el.unmask.bind(this.el));
 	},
 
-
-	hasMask: function() {
+    hasMask: function() {
 		return this.el.isMasked();
 	},
 
-
-	addTabs: function(cfgs) {
+    addTabs: function(cfgs) {
 		if (!this.rendered) {
 			this.tabsToAdd.push(cfgs);
 			return;
@@ -227,8 +209,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.Process'
 		this.tabsToAdd = [];
 	},
 
-
-	addStep: function(step, i) {
+    addStep: function(step, i) {
 		var cmp, me = this,
 			tabCfg = {
 				text: step.name,
@@ -260,7 +241,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.Process'
 		this.numberOfSteps += 1;
 	},
 
-	/**
+    /**
 	 * Set the bread crumb to show the active item note that data-index is 1 based
 	 * @param {Number} index the item to activate
 	 */
@@ -285,7 +266,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.Process'
 		}
 	},
 
-	/**
+    /**
 	 * Starting at index step through the steps and activate the first one that is not completed
 	 * or stop on the last one
 	 * @param  {Number} index the step to start looking from
@@ -363,15 +344,13 @@ export default Ext.define('NextThought.app.course.enrollment.components.Process'
 			});
 	},
 
-
-	stepCompleted: function(cmp) {
+    stepCompleted: function(cmp) {
 		var index = cmp.index;
 
 		this.activateStep(index + 1);
 	},
 
-
-	stepError: function(cmp) {
+    stepError: function(cmp) {
 		var index = cmp.index + 1,
 			btn = this.headerEl.down('[data-number="' + index + '"]');
 

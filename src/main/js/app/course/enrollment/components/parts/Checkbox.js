@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.enrollment.components.parts.Checkbox', {
+var Ext = require('extjs');
+var PartsBaseInput = require('./BaseInput');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.Checkbox', {
 	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
 	alias: 'widget.enrollment-checkbox',
 

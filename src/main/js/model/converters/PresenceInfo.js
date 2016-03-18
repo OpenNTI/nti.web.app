@@ -1,8 +1,10 @@
-export default Ext.define('NextThought.model.converters.PresenceInfo', {
-	override: 'Ext.data.Types',
-	requires: ['Ext.data.SortTypes'],
+var Ext = require('extjs');
 
-	PRESENCEINFO: {
+
+module.exports = exports = Ext.define('NextThought.model.converters.PresenceInfo', {
+    override: 'Ext.data.Types',
+
+    PRESENCEINFO: {
 		type: 'PresenceInfo',
 		sortType: 'none',
 		convert: function(v, record) {
@@ -13,7 +15,6 @@ export default Ext.define('NextThought.model.converters.PresenceInfo', {
 			return v;
 		}
 	}
-
 }, function() {
 	function set(o) { o.sortType = Ext.data.SortTypes[o.sortType]; }
 	set(this.PRESENCEINFO);

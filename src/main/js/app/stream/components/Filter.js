@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.stream.components.Filter', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.stream.components.Filter', {
 	extend: 'Ext.Component',
 	alias: 'widget.stream-filter',
 

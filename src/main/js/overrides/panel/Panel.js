@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.panel.Panel', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.panel.Panel', {
 	override: 'Ext.panel.Panel',
 
 	render: function() {

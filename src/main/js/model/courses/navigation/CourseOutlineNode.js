@@ -1,27 +1,31 @@
-export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
-	extend: 'NextThought.model.Base',
-	mimeType: 'application/vnd.nextthought.courses.courseoutlinenode',
+var Ext = require('extjs');
+var ParseUtils = require('../../../util/Parsing');
+var ModelBase = require('../../Base');
+var MixinsOrderedContents = require('../../../mixins/OrderedContents');
+var MixinsDurationCache = require('../../../mixins/DurationCache');
+var ConvertersDate = require('../../converters/Date');
+var OverviewLesson = require('../overview/Lesson');
+var NavigationCourseOutlineNodeProgress = require('./CourseOutlineNodeProgress');
+var ModelNote = require('../../Note');
 
-	statics: {
+
+module.exports = exports = Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
+    extend: 'NextThought.model.Base',
+    mimeType: 'application/vnd.nextthought.courses.courseoutlinenode',
+
+    statics: {
 		mimeType: 'application/vnd.nextthought.courses.courseoutlinenode'
 	},
 
-	requires: [
-		'NextThought.model.converters.Date',
-		'NextThought.model.courses.overview.Lesson',
-		'NextThought.model.courses.navigation.CourseOutlineNodeProgress',
-		'NextThought.model.Note'
-	],
-
-	mixins: {
+    mixins: {
 		// DataTransfer: 'NextThought.mixins.dnd.DataTransferSource',
 		OrderedContents: 'NextThought.mixins.OrderedContents',
 		DurationCache: 'NextThought.mixins.DurationCache'
 	},
 
-	isNode: true,
+    isNode: true,
 
-	fields: [
+    fields: [
 		{ name: 'DCDescription', type: 'string'},
 		{ name: 'DCTitle', type: 'string'},
 		{ name: 'Items', type: 'arrayItem', mapping: 'contents'},
@@ -92,32 +96,27 @@ export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNod
 		}}
 	],
 
-
-	constructor: function() {
+    constructor: function() {
 		this.callParent(arguments);
 	},
 
-
-	findNode: function(id) {
+    findNode: function(id) {
 		if ((this.getId() === id) || (this.get('ContentNTIID') === id)) { return this; }
 		return (this.get('Items') || []).reduce(function(a, o) {
 			return a || (o.findNode && o.findNode(id));
 		}, null);
 	},
 
-
-	getChildren: function() {
+    getChildren: function() {
 		var c = this.get('tocOutlineNode');
 		return (c && c.getChildren()) || [];
 	},
 
-
-	getTitle: function() {
+    getTitle: function() {
 		return this.get('label');
 	},
 
-
-	getDataForTransfer: function() {
+    getDataForTransfer: function() {
 		return {
 			MimeType: this.mimeType,
 			title: this.getTitle(),
@@ -125,8 +124,7 @@ export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNod
 		};
 	},
 
-
-	getAllowedTypes: function() {
+    getAllowedTypes: function() {
 		var allowed = [];
 
 		if (this._depth === 1) {
@@ -136,23 +134,20 @@ export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNod
 		return allowed;
 	},
 
-
-	isLeaf: function() {
+    isLeaf: function() {
 		var depth = this._depth,
 			maxDepth = this._max_depth;
 
 		return depth === maxDepth;
 	},
 
-
-	isTopLevel: function() {
+    isTopLevel: function() {
 		var depth = this._depth;
 
 		return depth === 1;
 	},
 
-
-	listenForFieldChange: function(field, fn, scope, single) {
+    listenForFieldChange: function(field, fn, scope, single) {
 		var monitor;
 
 		function update(store, record, type, modifiedFieldNames) {
@@ -186,8 +181,7 @@ export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNod
 		return monitor;
 	},
 
-
-	getFirstContentNode: function() {
+    getFirstContentNode: function() {
 		var items = this.get('Items'), index = 0,
 			contentNode, item = items && items[0];
 
@@ -204,8 +198,7 @@ export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNod
 		return contentNode;
 	},
 
-
-	getCommentCounts: function() {
+    getCommentCounts: function() {
 		var link = this.getLink('overview-summary');
 
 		if (!link) {
@@ -226,8 +219,7 @@ export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNod
 		});
 	},
 
-
-	getProgress: function() {
+    getProgress: function() {
 		var link = this.getLink('Progress');
 
 		if (!link) {
@@ -240,8 +232,7 @@ export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNod
 			});
 	},
 
-
-	getContents: function() {
+    getContents: function() {
 		var me = this,
 			key = 'contents',
 			link = this.getLink('overview-content'),
@@ -271,13 +262,11 @@ export default Ext.define('NextThought.model.courses.navigation.CourseOutlineNod
 		return contents;
 	},
 
-
-	onItemAdded: function(record) {
+    onItemAdded: function(record) {
 		this.fillInDepths(record);
 	},
 
-
-	fillInDepths: function(record) {
+    fillInDepths: function(record) {
 		if (!record) { return; }
 
 		record._depth = this._depth + 1;

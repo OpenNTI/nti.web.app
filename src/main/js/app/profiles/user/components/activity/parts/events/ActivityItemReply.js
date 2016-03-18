@@ -1,12 +1,14 @@
-export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ActivityItemReply', {
-	extend: 'NextThought.app.annotations.note.Panel',
-	requires: [
-		'NextThought.util.Content'
-	],
-	alias: 'widget.profile-activity-item-reply',
-	defaultType: 'profile-activity-item-reply',
+var Ext = require('extjs');
+var NotePanel = require('../../../../../../annotations/note/Panel');
+var UtilContent = require('../../../../../../../util/Content');
 
-	renderTpl: Ext.DomHelper.markup([
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ActivityItemReply', {
+    extend: 'NextThought.app.annotations.note.Panel',
+    alias: 'widget.profile-activity-item-reply',
+    defaultType: 'profile-activity-item-reply',
+
+    renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'reply profile-activity-reply-item',
 			cn: [
@@ -43,15 +45,14 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		}
 	]),
 
-	renderSelectors: {
+    renderSelectors: {
 		noteBody: '.reply',
 		editEl: '.reply-options .edit',
 		flagEl: '.reply-options .flag',
 		deleteEl: '.reply-options .delete'
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -59,8 +60,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		var D = Ext.dom.Element.DISPLAY;
 		this.flagEl.setVisibilityMode(D);
 		this.editEl.setVisibilityMode(D);
@@ -80,14 +80,14 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		this.mon(this.editEl, 'click', this.onEdit, this);
 	},
 
-	onEdit: function() {
+    onEdit: function() {
 		var parent = this.up('profile-activity-item');
 
 		if (this.replyMode || parent.replyMode) { return; }
 		this.callParent(arguments);
 	},
 
-	shouldRevealReplies: function() {
+    shouldRevealReplies: function() {
 		this.mun(this.replyButton, 'click', this.shouldRevealReplies, this);
 
 		var activityItem = this.up('profile-activity-item');
@@ -98,7 +98,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		activityItem.fireEvent('reveal-replies');
 	},
 
-	setRecord: function() {
+    setRecord: function() {
 		this.callParent(arguments);
 
 		if (!this.rendered) {
@@ -114,5 +114,4 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 			this.flagEl.addCls('last');
 		}
 	}
-
 });

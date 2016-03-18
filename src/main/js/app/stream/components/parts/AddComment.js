@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.stream.components.parts.AddComment', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.stream.components.parts.AddComment', {
 	extend: 'Ext.Component',
 	alias: 'widget.stream-parts-addcomment',
 

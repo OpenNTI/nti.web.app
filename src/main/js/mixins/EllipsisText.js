@@ -1,7 +1,10 @@
+var Ext = require('extjs');
+
+
 /**
 * Use this mixin to truncate text and add ellipsis depending on its parent node or itself
 */
-export default Ext.define('NextThought.mixins.EllipsisText', {
+module.exports = exports = Ext.define('NextThought.mixins.EllipsisText', {
 
 	/**
 	 * Goal: Group dom reads/writes into single passes.

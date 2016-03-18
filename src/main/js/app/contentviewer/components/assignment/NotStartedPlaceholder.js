@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.contentviewer.components.assignment.NotStartedPlaceholder', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.contentviewer.components.assignment.NotStartedPlaceholder', {
 	extend: 'Ext.Component',
 	alias: 'widget.assignment-notstarted-placeholder',
 

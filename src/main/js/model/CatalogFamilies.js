@@ -1,15 +1,16 @@
-export default Ext.define('NextThought.model.CatalogFamilies', {
-	extend: 'NextThought.model.Base',
+var Ext = require('extjs');
+var ModelBase = require('./Base');
+var ModelCatalogFamily = require('./CatalogFamily');
 
-	requires: [
-		'NextThought.model.CatalogFamily'
-	],
 
-	fields: [
+module.exports = exports = Ext.define('NextThought.model.CatalogFamilies', {
+    extend: 'NextThought.model.Base',
+
+    fields: [
 		{name: 'Items', type: 'arrayItem'}
 	],
 
-	/**
+    /**
 	 * Whether or not a family is in the Items
 	 * @param  {CatalogFamily|String} familyOrId id or or the CatalogFamily itself
 	 * @return {Boolean}              whether or not the family is in my list
@@ -29,8 +30,7 @@ export default Ext.define('NextThought.model.CatalogFamilies', {
 		}, false);
 	},
 
-
-	hasInstersectionWith: function(families) {
+    hasInstersectionWith: function(families) {
 		if (!families) { return false; }
 
 		var me = this;
@@ -45,8 +45,7 @@ export default Ext.define('NextThought.model.CatalogFamilies', {
 		}, false);
 	},
 
-
-	getFamilyIds: function() {
+    getFamilyIds: function() {
 		var items = this.get('Items');
 
 		return items.map(function(family) {

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.builtins.Function', function() {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.builtins.Function', function() {
 
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility
 	if (!Function.prototype.bind) {

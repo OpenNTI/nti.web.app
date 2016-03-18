@@ -1,32 +1,29 @@
-export default Ext.define('NextThought.app.context.components.Question', {
-	extend: 'Ext.Component',
-	alias: 'widget.question-context',
+var Ext = require('extjs');
+var ContentUtils = require('../../../util/Content');
+var ContextStateStore = require('../StateStore');
 
-	requires: [
-		'NextThought.app.context.StateStore'
-	],
 
-	cls: 'context-content question-context',
+module.exports = exports = Ext.define('NextThought.app.context.components.Question', {
+    extend: 'Ext.Component',
+    alias: 'widget.question-context',
+    cls: 'context-content question-context',
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'snippet cls'},
 		{cls: 'see-more hidden', html: 'Read More'}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		snippetEl: '.snippet',
 		seeMoreEl: '.see-more'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.__setContent();
@@ -38,8 +35,7 @@ export default Ext.define('NextThought.app.context.components.Question', {
 		}
 	},
 
-
-	isInContent: function() {
+    isInContent: function() {
 		var context = this.ContextStore.getContext(),
 			currentContext = context && context.last(),
 			contextRecord = currentContext && currentContext.obj;
@@ -47,8 +43,7 @@ export default Ext.define('NextThought.app.context.components.Question', {
 		return contextRecord && contextRecord.getId() === this.question.get('containerId');
 	},
 
-
-	__setContent: function() {
+    __setContent: function() {
 		var me = this,
 			content = me.question && me.question.get('content'),
 			root = me.question && me.question.get('ContentRoot'),

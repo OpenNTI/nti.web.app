@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.assessment.results.parts.BarChart', {
+var Ext = require('extjs');
+var Color = require('../../../../util/Color');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.BarChart', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-barchart-results',
 

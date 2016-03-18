@@ -1,17 +1,15 @@
-export default Ext.define('NextThought.app.course.enrollment.components.parts.Pricing', {
-	extend: 'Ext.Component',
-	alias: 'widget.enrollment-pricing',
+var Ext = require('extjs');
+var FieldsSimpleTextField = require('../../../../../common/form/fields/SimpleTextField');
+var StoreActions = require('../../../../store/Actions');
 
-	requires: [
-		'NextThought.common.form.fields.SimpleTextField',
-		'NextThought.app.store.Actions'
-	],
 
-	base_top: 50,
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.Pricing', {
+    extend: 'Ext.Component',
+    alias: 'widget.enrollment-pricing',
+    base_top: 50,
+    cls: 'enrollment-pricing',
 
-	cls: 'enrollment-pricing',
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'info', style: {backgroundImage: 'url({icon})'}, cn: [
 			{cls: 'meta', cn: [
 				{cls: 'number', html: '{number}'},
@@ -57,8 +55,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Pr
 		]}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		priceEl: '.amount',
 		couponLabelEl: '.coupon .label',
 		couponContainerEl: '.coupon-container',
@@ -68,8 +65,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Pr
 		amountEl: '.price .amount'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.enableBubble(['show-msg']);
@@ -79,8 +75,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Pr
 		this.update = Ext.Function.createBuffered(this.update.bind(this), 2000);
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		var course = this.course, hours,
@@ -113,8 +108,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Pr
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.el.setTop(this.base_top);
@@ -149,13 +143,11 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Pr
 		Ext.EventManager.onWindowResize(this.onContainerScroll.bind(this));
 	},
 
-
-	removePricingInfo: function() {
+    removePricingInfo: function() {
 		delete this.enrollmentOption.pricing;
 	},
 
-
-	onContainerScroll: function() {
+    onContainerScroll: function() {
 		if (!this.scrollTarget || !this.scrollTarget.dom) {
 			return;
 		}
@@ -180,8 +172,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Pr
 
 	},
 
-
-	getPrice: function(pricing) {
+    getPrice: function(pricing) {
 		pricing = pricing || this.enrollmentOption.pricing;
 
 		var price;
@@ -195,8 +186,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Pr
 		return (price || 0).toFixed(2);
 	},
 
-
-	couponChanged: function(coupon) {
+    couponChanged: function(coupon) {
 		this.lockProcess();
 
 		this.couponLabelEl.update('Checking Coupon');
@@ -206,8 +196,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Pr
 		this.update(coupon);
 	},
 
-
-	updatePricing: function(pricing) {
+    updatePricing: function(pricing) {
 		pricing = pricing || this.enrollmentOption.pricing;
 
 		var oldPrice = this.enrollmentOption.Price || 0,
@@ -224,8 +213,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Pr
 		this.amountEl.update('$' + newPrice);
 	},
 
-
-	update: function(coupon) {
+    update: function(coupon) {
 		var me = this,
 			desc = { Purchasable: me.enrollmentOption.Purchasable };
 
@@ -281,8 +269,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Pr
 		}
 	},
 
-
-	getCoupon: function() {
+    getCoupon: function() {
 		var pricing = this.enrollmentOption.pricing,
 			coupon = pricing && pricing.get('Coupon'),
 			id = coupon && coupon.ID;
@@ -290,8 +277,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Pr
 		return id || '';
 	},
 
-
-	lockCoupon: function() {
+    lockCoupon: function() {
 		//if we don't have a coupon container we aren't allowing copupons
 		if (!this.couponContainerEl) { return; }
 
@@ -312,7 +298,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Pr
 
 	},
 
-	unlockCoupon: function() {
+    unlockCoupon: function() {
 		//if we don't have a coupon container we aren't allowing coupons
 		if (!this.couponContainerEl) { return; }
 

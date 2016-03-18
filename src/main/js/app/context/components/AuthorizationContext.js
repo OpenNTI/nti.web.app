@@ -1,15 +1,14 @@
-export default Ext.define('NextThought.app.context.components.AuthorizationContext', {
-	extend: 'Ext.Component',
-	alias: 'widget.context-authorization',
+var Ext = require('extjs');
+var ContextStateStore = require('../StateStore');
+var WindowsActions = require('../../windows/Actions');
 
-	requires: [
-		'NextThought.app.context.StateStore',
-		'NextThought.app.windows.Actions'
-	],
 
-	cls: 'context-authorization',
+module.exports = exports = Ext.define('NextThought.app.context.components.AuthorizationContext', {
+    extend: 'Ext.Component',
+    alias: 'widget.context-authorization',
+    cls: 'context-authorization',
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'context-image image-context', cn: [
 			{cls: 'thumbnail'},
 			{cls: 'meta', cn: [
@@ -20,12 +19,12 @@ export default Ext.define('NextThought.app.context.components.AuthorizationConte
 		]}
 	]),
 
-	renderSelectors: {
+    renderSelectors: {
 		iconEl: '.thumbnail',
 		enrollButtonEl: '.action'
 	},
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -36,15 +35,13 @@ export default Ext.define('NextThought.app.context.components.AuthorizationConte
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.__setContent();
 		this.mon(this.enrollButtonEl, 'click', this.onEnrollClick.bind(this));
 	},
 
-
-	__setContent: function() {
+    __setContent: function() {
 		var href = this.catalogEntry && this.catalogEntry.get('thumb'),
 			url = getURL(href);
 
@@ -53,8 +50,7 @@ export default Ext.define('NextThought.app.context.components.AuthorizationConte
 		}
 	},
 
-
-	onEnrollClick: function(e) {
+    onEnrollClick: function(e) {
 		this.WindowActions.pushWindow(this.catalogEntry, null, e);
 	}
 });

@@ -1,17 +1,18 @@
+var Ext = require('extjs');
+var DomUtils = require('../../../util/Dom');
+var OverlayPanel = require('../../contentviewer/overlay/Panel');
+var UtilDom = require('../../../util/Dom');
+var CardsLauncher = require('../../../common/components/cards/Launcher');
+
+
 /*global DomUtils, NextThought */
-export default Ext.define('NextThought.app.video.roll.OverlayedPanel', {
-	extend: 'NextThought.app.contentviewer.overlay.Panel',
-	alias: 'widget.overlay-video-roll',
+module.exports = exports = Ext.define('NextThought.app.video.roll.OverlayedPanel', {
+    extend: 'NextThought.app.contentviewer.overlay.Panel',
+    alias: 'widget.overlay-video-roll',
+    ui: 'content-launcher',
+    cls: 'content-launcher-container',
 
-	requires: [
-		'NextThought.util.Dom',
-		'NextThought.common.components.cards.Launcher'
-	],
-
-	ui: 'content-launcher',
-	cls: 'content-launcher-container',
-
-	statics: {
+    statics: {
 		getData: function(dom, reader) {
 			var videos = DomUtils.getVideosFromDom(dom);
 			return NextThought.common.components.cards.Launcher.getData(dom, reader, videos, function() {
@@ -22,7 +23,7 @@ export default Ext.define('NextThought.app.video.roll.OverlayedPanel', {
 		}
 	},
 
-	constructor: function(config) {
+    constructor: function(config) {
 		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
@@ -42,8 +43,7 @@ export default Ext.define('NextThought.app.video.roll.OverlayedPanel', {
 		this.callParent([config]);
 	},
 
-
-	showVideoRole: function(data) {
+    showVideoRole: function(data) {
 		var videos = [];
 
 		Ext.each((data && data.items) || [], function(v) {

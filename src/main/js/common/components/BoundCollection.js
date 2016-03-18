@@ -1,17 +1,17 @@
-export default Ext.define('NextThought.common.components.BoundCollection', {
-	extend: 'Ext.container.Container',
-
-	requires: ['NextThought.mixins.Transition'],
-
-	emptyText: '',
-	transitionStates: false,
-	autoUpdate: true,
-
-	layout: 'none',
-	items: [],
+var Ext = require('extjs');
+var ParseUtils = require('../../util/Parsing');
+var MixinsTransition = require('../../mixins/Transition');
 
 
-	initComponent: function() {
+module.exports = exports = Ext.define('NextThought.common.components.BoundCollection', {
+    extend: 'Ext.container.Container',
+    emptyText: '',
+    transitionStates: false,
+    autoUpdate: true,
+    layout: 'none',
+    items: [],
+
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.addBodyConfig();
@@ -21,13 +21,11 @@ export default Ext.define('NextThought.common.components.BoundCollection', {
 		}
 	},
 
-
-	addBodyConfig: function() {
+    addBodyConfig: function() {
 		this.add(this.getBodyConfig());
 	},
 
-
-	getBodyConfig: function() {
+    getBodyConfig: function() {
 		var cls = ['collection-body'];
 
 		if (this.bodyCls) {
@@ -43,28 +41,24 @@ export default Ext.define('NextThought.common.components.BoundCollection', {
 		};
 	},
 
-
-	getBodyContainer: function() {
+    getBodyContainer: function() {
 		return this.down('[isCollectionBody]');
 	},
 
-
-	getComponents: function() {
+    getComponents: function() {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
 
 		return items || [];
 	},
 
-
-	parseCollection: function(response) {
+    parseCollection: function(response) {
 		var obj = ParseUtils.parseItems(response)[0];
 
 		return obj || JSON.parse(response);
 	},
 
-
-	loadCollection: function(url) {
+    loadCollection: function(url) {
 		var me = this;
 
 		me.activeUrl = url;
@@ -80,8 +74,7 @@ export default Ext.define('NextThought.common.components.BoundCollection', {
 			});
 	},
 
-
-	getEmptyState: function() {
+    getEmptyState: function() {
 		return {
 			xtype: 'box',
 			autoEl: {
@@ -91,18 +84,15 @@ export default Ext.define('NextThought.common.components.BoundCollection', {
 		};
 	},
 
-
-	getItems: function(collection) {
+    getItems: function(collection) {
 		return collection.get('Items') || [];
 	},
 
-
-	suspendUpdates: function() {
+    suspendUpdates: function() {
 		this.__suspendUpdates = true;
 	},
 
-
-	resumeUpdates: function() {
+    resumeUpdates: function() {
 		this.__suspendUpdates = false;
 
 		if (this.__latestUpdate) {
@@ -111,12 +101,10 @@ export default Ext.define('NextThought.common.components.BoundCollection', {
 		}
 	},
 
+    beforeSetCollection: function() {},
+    afterSetCollection: function() {},
 
-	beforeSetCollection: function() {},
-	afterSetCollection: function() {},
-
-
-	onCollectionUpdate: function(collection) {
+    onCollectionUpdate: function(collection) {
 		if (this.__suspendUpdates) {
 			this.__latestUpdate = collection;
 		} else {
@@ -124,8 +112,7 @@ export default Ext.define('NextThought.common.components.BoundCollection', {
 		}
 	},
 
-
-	setHeaderForCollection: function(collection) {
+    setHeaderForCollection: function(collection) {
 		var header = this.buildHeader && this.buildHeader(collection);
 
 		if (this.currentHeader) {
@@ -137,8 +124,7 @@ export default Ext.define('NextThought.common.components.BoundCollection', {
 		}
 	},
 
-
-	setFooterForCollection: function(collection) {
+    setFooterForCollection: function(collection) {
 		var footer = this.buildFooter && this.buildFooter(collection);
 
 		if (this.currentFooter) {
@@ -150,8 +136,7 @@ export default Ext.define('NextThought.common.components.BoundCollection', {
 		}
 	},
 
-
-	setCollection: function(collection) {
+    setCollection: function(collection) {
 		this.beforeSetCollection(collection);
 
 		var items = this.getItems(collection);
@@ -180,8 +165,7 @@ export default Ext.define('NextThought.common.components.BoundCollection', {
 		this.afterSetCollection(collection);
 	},
 
-
-	mergeItems: function(oldItems, newItems) {
+    mergeItems: function(oldItems, newItems) {
 		var oldIndex = 0, newIndex = 0,
 			oldRecords, newRecords,
 			newItem, oldItem,
@@ -243,8 +227,7 @@ export default Ext.define('NextThought.common.components.BoundCollection', {
 		return merge;
 	},
 
-
-	__transitionTo: function(items, state) {
+    __transitionTo: function(items, state) {
 		var me = this, newState,
 			merged = this.mergeItems(state.items, items),
 			body = this.getBodyContainer();
@@ -271,8 +254,7 @@ export default Ext.define('NextThought.common.components.BoundCollection', {
 		return newState;
 	},
 
-
-	__showItems: function(items) {
+    __showItems: function(items) {
 		var me = this, state,
 			body = me.getBodyContainer();
 
@@ -298,8 +280,7 @@ export default Ext.define('NextThought.common.components.BoundCollection', {
 		return state;
 	},
 
-
-	/**
+    /**
 	 * Return a cmp to add to the body for a given record.
 	 *
 	 * A transition can be given to trigger an animation for adding or removing.
@@ -318,15 +299,13 @@ export default Ext.define('NextThought.common.components.BoundCollection', {
 
 	},
 
-
-	clearCollection: function() {
+    clearCollection: function() {
 		var body = this.getBodyContainer();
 
 		body.removeAll(true);
 	},
 
-
-	refresh: function() {
+    refresh: function() {
 		this.clearCollection();
 
 		return this.loadCollection(this.activeUrl);

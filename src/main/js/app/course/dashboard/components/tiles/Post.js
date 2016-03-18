@@ -1,25 +1,29 @@
-export default Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
-	extend: 'NextThought.app.course.dashboard.components.tiles.BaseContainer',
+var Ext = require('extjs');
+var UserRepository = require('../../../../../cache/UserRepository');
+var Globals = require('../../../../../util/Globals');
+var SharingUtils = require('../../../../../util/Sharing');
+var TilesBaseContainer = require('./BaseContainer');
+var MixinsLikeFavoriteActions = require('../../../../../mixins/LikeFavoriteActions');
+var ResolversVideoPosters = require('../../../../../model/resolvers/VideoPosters');
+var WindowsActions = require('../../../../windows/Actions');
 
-	requires: [
-		'NextThought.model.resolvers.VideoPosters',
-		'NextThought.app.windows.Actions'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
+    extend: 'NextThought.app.course.dashboard.components.tiles.BaseContainer',
+
+    mixins: {
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
 	},
 
-	getTargetEl: function() {
+    getTargetEl: function() {
 		return this.body;
 	},
 
-	childEls: ['body'],
-	getDockedItems: function() { return []; },
+    childEls: ['body'],
+    getDockedItems: function() { return []; },
+    layout: 'none',
 
-	layout: 'none',
-
-	inheritableStatics: {
+    inheritableStatics: {
 		WHITEBOARD_SIZE: 300,
 
 		COMMENT_PARAMS: {
@@ -27,10 +31,9 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Pos
 		}
 	},
 
+    cls: 'dashboard-post',
 
-	cls: 'dashboard-post',
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'location', cn: [
 			{cls: 'path', html: '{Path}'},
 			{cls: 'current', html: '{Current}'}
@@ -61,7 +64,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Pos
 		{cls: 'add-comment', html: 'Add a comment'}
 	]),
 
-	renderSelectors: {
+    renderSelectors: {
 		locationEl: '.location',
 		pathEl: '.location .path',
 		currentEl: '.location .current',
@@ -80,8 +83,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Pos
 		addCommentEl: '.add-comment'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -95,13 +97,11 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Pos
 		}
 	},
 
-
-	onDelete: function() {
+    onDelete: function() {
 		this.destroy();
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		var me = this, renderData = {},
@@ -130,8 +130,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Pos
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -146,15 +145,13 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Pos
 		this.mon(this.el, 'click', 'itemClicked');
 	},
 
-
-	itemClicked: function(e) {
+    itemClicked: function(e) {
 		if (!e.getTarget('.body-container') && !e.getTarget('.controls') && this.handleNavigation) {
 			this.handleNavigation(e);
 		}
 	},
 
-
-	callWhenRendered: function(name, value) {
+    callWhenRendered: function(name, value) {
 		if (!this.rendered) {
 			this.on('afterrender', this[name].bind(this, value));
 			return;
@@ -163,25 +160,26 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Pos
 		this[name].call(this, value);
 	},
 
-	//getters that the sub types should override
+    //getters that the sub types should override
 	//either return a string to put in the tpl or a Promise
 	//that fulfills with a value to call the setter with
 	getPath: function() { return ''; },
-	getCurrent: function() { return ''; },
-	getSharedWith: function() { return ''; },
-	getTitle: function() { return ''; },
-	getBody: function() { return Promise.resolve(''); },
-	getCommentCount: function() { return 0; },
-	getContext: function() { return Promise.resolve({}); },
 
-	//this should be the same for all sub instances
+    getCurrent: function() { return ''; },
+    getSharedWith: function() { return ''; },
+    getTitle: function() { return ''; },
+    getBody: function() { return Promise.resolve(''); },
+    getCommentCount: function() { return 0; },
+    getContext: function() { return Promise.resolve({}); },
+
+    //this should be the same for all sub instances
 	getCreatedTime: function() {
 		var created = this.record.get('CreatedTime');
 
 		return moment(created).format('MMM Do h:mm A');
 	},
 
-	//this should be the same for all sub instances
+    //this should be the same for all sub instances
 	getCreator: function() {
 		var rec = this.record,
 			creator = rec.get('Creator'),
@@ -197,8 +195,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Pos
 			});
 	},
 
-
-	setPath: function(value) {
+    setPath: function(value) {
 		value = Ext.clone(value);
 		this.setCurrent(value.shift(), value.length);
 
@@ -207,16 +204,14 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Pos
 		this.pathEl.update(value.join(' / '));
 	},
 
-
-	setCurrent: function(value, otherParts) {
+    setCurrent: function(value, otherParts) {
 		if (value && otherParts) {
 			this.pathEl.addCls('has-current');
 		}
 		this.currentEl.update(value);
 	},
 
-
-	setCreator: function(value) {
+    setCreator: function(value) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setCreator.bind(this, value));
 			return;
@@ -228,8 +223,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Pos
 		this.avatarEl.setHTML(Ext.DomHelper.createTemplate('{user:avatar}').apply({user: value}));
 	},
 
-
-	setSharedWith: function(value) {
+    setSharedWith: function(value) {
 		var me = this,
 			sharingInfo = SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(value));
 
@@ -241,37 +235,32 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Pos
 			});
 	},
 
-
-	setCreatedTime: function(value) {
+    setCreatedTime: function(value) {
 		this.createdEl.update(value);
 	},
 
-
-	setTitle: function(value) {
+    setTitle: function(value) {
 		if (this.titleEl) {
 			this.titleEl.update(value);	
 		}
 	},
 
-
-	updateBody: function() {
+    updateBody: function() {
 		this.getBody()
 			.then(this.setBody.bind(this));
 	},
 
-
-	setBody: function(value) {
+    setBody: function(value) {
 		if (this.bodyEl) {
 			this.bodyEl.update(value);	
 		}
 	},
 
-	setCommentCount: function(value) {
+    setCommentCount: function(value) {
 		this.commentCountEl.update(Ext.util.Format.plural(value, 'Comment'));
 	},
 
-
-	setContext: function(context) {
+    setContext: function(context) {
 		if (Ext.isEmpty(context) || Ext.Object.isEmpty(context)) { return; }
 
 		var me = this,
@@ -295,16 +284,17 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Pos
 		}
 	},
 
-	showComments: function() {
+    showComments: function() {
 		this.loadComments()
 			.then(this.addComments.bind(this))
 			.fail(this.showCommentError.bind(this));
 	},
-	hasComments: function() {},
-	loadComments: function() {},
-	getCmpForComment: function() {},
 
-	addComments: function(items) {
+    hasComments: function() {},
+    loadComments: function() {},
+    getCmpForComment: function() {},
+
+    addComments: function(items) {
 		var me = this;
 
 		items = items.slice(0, 2);
@@ -318,5 +308,5 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Pos
 		me.add(items);
 	},
 
-	showCommentError: function() {}
+    showCommentError: function() {}
 });

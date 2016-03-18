@@ -1,13 +1,14 @@
-export default Ext.define('NextThought.app.profiles.group.components.Header', {
-	extend: 'NextThought.app.profiles.components.Header',
-	alias: 'widget.profile-group-header',
+var Ext = require('extjs');
+var User = require('../../../../model/User');
+var ComponentsHeader = require('../../components/Header');
 
-	requires: [
-	],
 
-	cls: 'profile-header group-header',
+module.exports = exports = Ext.define('NextThought.app.profiles.group.components.Header', {
+    extend: 'NextThought.app.profiles.components.Header',
+    alias: 'widget.profile-group-header',
+    cls: 'profile-header group-header',
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'buttons'},
 		{cls: 'outline', cn: [
 			{cls: 'avatar-container'},
@@ -23,8 +24,7 @@ export default Ext.define('NextThought.app.profiles.group.components.Header', {
 		]}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		avatarContainerEl: '.avatar-container',
 		usernameEl: '.about .username',
 		aboutFieldEl: '.about .field.about',
@@ -32,9 +32,7 @@ export default Ext.define('NextThought.app.profiles.group.components.Header', {
 		buttonsEl: '.buttons'
 	},
 
-
-
-	updateEntity: function(entity, tabs) {
+    updateEntity: function(entity, tabs) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateUser.bind(this, entity, tabs));
 			return;
@@ -62,8 +60,7 @@ export default Ext.define('NextThought.app.profiles.group.components.Header', {
 		}
 	},
 
-
-	fillInEntity: function(entity) {
+    fillInEntity: function(entity) {
 		var data = entity.getAboutData();
 
 		this.avatarContainerEl.dom.innerHTML = Ext.util.Format.avatar(entity);
@@ -72,17 +69,15 @@ export default Ext.define('NextThought.app.profiles.group.components.Header', {
 	    this.aboutFieldEl.dom.innerHTML = data.about || '';
 	},
 
-	setSchema: function(schema) {},
+    setSchema: function(schema) {},
 
-
-	__updateTabs: function(tabs) {
+    __updateTabs: function(tabs) {
 		this.clearTabs();
 
 		tabs.forEach(this.addTab.bind(this));
 	},
 
-
-	leaveGroup: function() {
+    leaveGroup: function() {
 		if (this.doLeaveGroup) {
 			this.doLeaveGroup();
 		}

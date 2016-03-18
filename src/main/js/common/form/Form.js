@@ -1,18 +1,17 @@
-export default Ext.define('NextThought.common.form.Form', {
-	extend: 'Ext.Component',
-	alias: 'widget.common-form',
-
-	requires: [
-		'NextThought.common.form.fields.FilePicker',
-		'NextThought.common.form.fields.ImagePicker',
-		'NextThought.common.form.fields.DatePicker',
-		'NextThought.common.form.fields.URL',
-		'NextThought.common.form.ErrorMessages',
-		'NextThought.common.form.fields.Progress'
-	],
+var Ext = require('extjs');
+var FieldsFilePicker = require('./fields/FilePicker');
+var FieldsImagePicker = require('./fields/ImagePicker');
+var FieldsDatePicker = require('./fields/DatePicker');
+var FieldsURL = require('./fields/URL');
+var FormErrorMessages = require('./ErrorMessages');
+var FieldsProgress = require('./fields/Progress');
 
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.common.form.Form', {
+    extend: 'Ext.Component',
+    alias: 'widget.common-form',
+
+    statics: {
 
 		__getMessages: function() {
 			this.__errorMessages = this.__errorMessages || new NextThought.common.form.ErrorMessages();
@@ -28,17 +27,16 @@ export default Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-	/**
+    /**
 	 * Whether or not to send all the values back when submitted,
 	 * or just the values that have changed
 	 * @type {Boolean}
 	 */
 	sendAllValues: false,
 
-	cls: 'form-container',
+    cls: 'form-container',
 
-
-	INPUT_TYPES: {
+    INPUT_TYPES: {
 		group: new Ext.XTemplate(Ext.DomHelper.markup({
 			cls: 'group {name}'
 		})),
@@ -201,18 +199,15 @@ export default Ext.define('NextThought.common.form.Form', {
 		]))
 	},
 
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{tag: 'form', cls: 'common-form', enctype: '{enctype}', autocomplete: '{autocomplete}', name: '{name}'}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		formEl: 'form'
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		this.componentMap = {};
@@ -228,8 +223,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.buildInputs(this.schema, this.formEl);
@@ -241,8 +235,7 @@ export default Ext.define('NextThought.common.form.Form', {
 			.then(this.focusField.bind(this));
 	},
 
-
-	onDestroy: function() {
+    onDestroy: function() {
 		var componentMap = this.componentMap || {},
 			keys = Object.keys(componentMap);
 
@@ -253,18 +246,14 @@ export default Ext.define('NextThought.common.form.Form', {
 		});
 	},
 
-
-	focusField: function(name) {
+    focusField: function(name) {
 		var field = name ? {name: name} : this.getFirstField(),
 			input = field && this.getInputForField(field.name);
 
 		if (input && input.focus) { input.focus(); }
 	},
 
-
-
-
-	buildInputs: function(schema, el) {
+    buildInputs: function(schema, el) {
 		var me = this;
 
 		schema.forEach(function(inputSchema) {
@@ -272,8 +261,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		});
 	},
 
-
-	addInput: function(schema, el) {
+    addInput: function(schema, el) {
 		var type = schema.type,
 			tpl = this.INPUT_TYPES[type],
 			inputEl;
@@ -304,8 +292,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-
-	addFieldListeners: function(schema, inputEl) {
+    addFieldListeners: function(schema, inputEl) {
 		var dom = inputEl.dom;
 
 		if (schema.maxlength) {
@@ -315,8 +302,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		dom.addEventListener('keyup', this.onFormChange.bind(this));
 	},
 
-
-	__buildComponent: function(cls, schema, inputEl) {
+    __buildComponent: function(cls, schema, inputEl) {
 		var cmp = cls.create({
 			defaultValue: schema.value,
 			defaultValues: this.defaultValues,
@@ -328,28 +314,23 @@ export default Ext.define('NextThought.common.form.Form', {
 		this.componentMap[schema.name] = cmp;
 	},
 
-
-	buildImageInput: function(schema, inputEl) {
+    buildImageInput: function(schema, inputEl) {
 		this.__buildComponent(NextThought.common.form.fields.ImagePicker, schema, inputEl);
 	},
 
-
-	buildFileInput: function(schema, inputEl) {
+    buildFileInput: function(schema, inputEl) {
 		this.__buildComponent(NextThought.common.form.fields.FilePicker, schema, inputEl);
 	},
 
-
-	buildDateInput: function(schema, inputEl) {
+    buildDateInput: function(schema, inputEl) {
 		this.__buildComponent(NextThought.common.form.fields.DatePicker, schema, inputEl);
 	},
 
-
-	buildUrlInput: function(schema, inputEl) {
+    buildUrlInput: function(schema, inputEl) {
 		this.__buildComponent(NextThought.common.form.fields.URL, schema, inputEl);
 	},
 
-
-	buildSaveProgress: function(schema, inputEl) {
+    buildSaveProgress: function(schema, inputEl) {
 		this.saveProgressCmp = NextThought.common.form.fields.Progress.create({
 			schema: schema,
 			renderTo: inputEl
@@ -358,8 +339,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		this.saveProgressCmp.hide();
 	},
 
-
-	getFirstField: function(schema) {
+    getFirstField: function(schema) {
 		var first, field, i = 0;
 
 		schema = schema || this.schema;
@@ -379,28 +359,23 @@ export default Ext.define('NextThought.common.form.Form', {
 		return first;
 	},
 
-
-	getInputForField: function(name) {
+    getInputForField: function(name) {
 		return this.__getComponent(name) || this.__getInput(name) || this.__getTextarea();
 	},
 
-
-	__getComponent: function(name) {
+    __getComponent: function(name) {
 		return this.componentMap[name];
 	},
 
-
-	__getInput: function(name) {
+    __getInput: function(name) {
 		return this.el && this.el.dom.querySelector('input[name="' + name + '"]');
 	},
 
-
-	__getTextarea: function(name) {
+    __getTextarea: function(name) {
 		return this.el && this.el.dom.querySelector('textarea[name="' + name + '"]');
 	},
 
-
-	/**
+    /**
 	 * When a field is edited, call the onChange listener if it's provided.
 	 * This allows the creator of the form to act on form change events.
 	 * The onChange function is passed a key-value object for the schema fields of the form.
@@ -419,8 +394,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-
-	checkMaxLength: function(schema, field) {
+    checkMaxLength: function(schema, field) {
 		var input = field.querySelector('input, textarea'),
 			value = input && input.value,
 			length = value && value.length,
@@ -429,7 +403,7 @@ export default Ext.define('NextThought.common.form.Form', {
 			errorThreshold = schema.errorThreshold || 5;
 	},
 
-	/**
+    /**
 	 * Whether or not all the validation has been met
 	 *
 	 * @return {Boolean}
@@ -440,8 +414,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		return form.checkValidity ? form.checkValidity() : true;
 	},
 
-
-	getErrors: function(schema, errors) {
+    getErrors: function(schema, errors) {
 		var me = this;
 
 		schema = schema || this.schema;
@@ -466,8 +439,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		return errors;
 	},
 
-
-	getErrorsFor: function(name) {
+    getErrorsFor: function(name) {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
 			textarea = this.__getTextarea(name),
@@ -496,8 +468,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		return hasErrors && error;
 	},
 
-
-	__componentsEmpty: function() {
+    __componentsEmpty: function() {
 		var components = this.componentMap,
 			keys = Object.keys(components),
 			isEmpty = true;
@@ -513,8 +484,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		return isEmpty;
 	},
 
-
-	__inputsEmpty: function() {
+    __inputsEmpty: function() {
 		var inputs = this.el.dom.querySelectorAll('input[type=text], textarea'),
 			isEmpty = true;
 
@@ -529,8 +499,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		return isEmpty;
 	},
 
-
-	isEmpty: function() {
+    isEmpty: function() {
 		if (!this.rendered) {
 			return true;
 		}
@@ -538,8 +507,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		return this.__componentsEmpty() && this.__inputsEmpty();
 	},
 
-
-	getValues: function(schema, values) {
+    getValues: function(schema, values) {
 		var me = this;
 
 		schema = schema || me.schema || [];
@@ -559,8 +527,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		return values;
 	},
 
-
-	getValueOf: function(name) {
+    getValueOf: function(name) {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
 			textarea = this.__getTextarea(name),
@@ -579,8 +546,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		return value;
 	},
 
-
-	getChangedValues: function() {
+    getChangedValues: function() {
 		var schema = this.schema,
 			sendAllValues = this.sendAllValues,
 			newValues = this.getValues(),
@@ -604,8 +570,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		return schema.reduce(reducer, {});
 	},
 
-
-	getFormData: function() {
+    getFormData: function() {
 		var form = this.formEl.dom,
 			components = this.componentMap,
 			keys = Object.keys(components),
@@ -626,8 +591,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		return formData;
 	},
 
-
-	hasFiles: function() {
+    hasFiles: function() {
 		var componentMap = this.componentMap,
 			keys = Object.keys(componentMap),
 			hasFile = false;
@@ -643,15 +607,13 @@ export default Ext.define('NextThought.common.form.Form', {
 		return hasFile;
 	},
 
-
-	onSubmitProgress: function(e) {
+    onSubmitProgress: function(e) {
 		if (!this.saveProgressCmp) { return; }
 
 		this.saveProgressCmp.setProgress(e.loaded, e.total);
 	},
 
-
-	__buildXHR: function(url, method, success, failure) {
+    __buildXHR: function(url, method, success, failure) {
 		var xhr = new XMLHttpRequest(),
 			progress = this.onSubmitProgress.bind(this);
 
@@ -678,8 +640,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		return xhr;
 	},
 
-
-	__submitFormData: function(formData, url, method) {
+    __submitFormData: function(formData, url, method) {
 		var me = this;
 
 		return new Promise(function(fulfill, reject) {
@@ -689,8 +650,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		});
 	},
 
-
-	__submitJSON: function(values, url, method) {
+    __submitJSON: function(values, url, method) {
 		var me = this;
 
 		return new Promise(function(fulfill, reject) {
@@ -701,8 +661,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		});
 	},
 
-
-	/**
+    /**
 	 * Handle form submision
 	 *
 	 * NOTE: detects if we have file changes(i.e. a file upload) in order to
@@ -760,8 +719,7 @@ export default Ext.define('NextThought.common.form.Form', {
 			});
 	},
 
-
-	doSubmit: function() {
+    doSubmit: function() {
 		var submit;
 
 		if (this.action) {
@@ -773,8 +731,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		return submit;
 	},
 
-
-	submitToRecord: function(record) {
+    submitToRecord: function(record) {
 		var link = record.getLink('edit'),
 			values = this.getChangedValues();
 
@@ -791,8 +748,7 @@ export default Ext.define('NextThought.common.form.Form', {
 			});
 	},
 
-
-	showErrorOn: function(name, reason) {
+    showErrorOn: function(name, reason) {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
 			textarea = this.__getTextarea(name);
@@ -808,8 +764,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-
-	removeErrorOn: function(name) {
+    removeErrorOn: function(name) {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
 			textarea = this.__getTextarea(name);
@@ -825,8 +780,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-
-	setPlaceholder: function(name, value) {
+    setPlaceholder: function(name, value) {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
 			textarea = this.__getTextarea(name);
@@ -842,8 +796,7 @@ export default Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-
-	setValue: function(name, value) {
+    setValue: function(name, value) {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
 			textarea = this.__getTextarea(name);
@@ -859,13 +812,11 @@ export default Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-
-	formSubmit: function(e) {
+    formSubmit: function(e) {
 		e.preventDefault();
 
 		if (this.onSubmit) {
 			this.onSubmit();
 		}
 	}
-
 });

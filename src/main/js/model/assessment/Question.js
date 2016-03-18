@@ -1,13 +1,15 @@
-export default Ext.define('NextThought.model.assessment.Question', {
-	extend: 'NextThought.model.Base',
-	mimeType: 'application/vnd.nextthought.naquestion',
-	requires: [
-		'NextThought.model.converters.Items',
-		'NextThought.util.Parsing',
-		'NextThought.model.assessment.WordBank'
-	],
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+var ConvertersItems = require('../converters/Items');
+var UtilParsing = require('../../util/Parsing');
+var AssessmentWordBank = require('./WordBank');
 
-	fields: [
+
+module.exports = exports = Ext.define('NextThought.model.assessment.Question', {
+    extend: 'NextThought.model.Base',
+    mimeType: 'application/vnd.nextthought.naquestion',
+
+    fields: [
 		{ name: 'content', type: 'auto' },
 		{ name: 'parts', type: 'arrayItem' },
 		{ name: 'wordbank', type: 'singleItem' },
@@ -15,7 +17,7 @@ export default Ext.define('NextThought.model.assessment.Question', {
 		{ name: 'ContentRoot', type: 'string'}
 	],
 
-	getVideos: function() {
+    getVideos: function() {
 		var all = NextThought.model.assessment.Part.prototype.getVideos.call(this);
 		Ext.each(this.get('parts'), function(p) {
 			all.push.apply(all, p.getVideos());
@@ -23,8 +25,7 @@ export default Ext.define('NextThought.model.assessment.Question', {
 		return all;
 	},
 
-
-	tallyParts: function() {
+    tallyParts: function() {
 		return 1;
 		//function sum(agg, r) {
 		//return agg + (r.tallyParts ? r.tallyParts() : 1);

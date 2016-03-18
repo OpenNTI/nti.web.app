@@ -1,24 +1,24 @@
-export default Ext.define('NextThought.model.assessment.AssessedQuestionSet', {
-	extend: 'NextThought.model.Base',
-	requires: [
-		'NextThought.model.converters.Items',
-		'NextThought.util.Parsing'
-	],
-	idProperty: 'questionSetId',
-	isSet: true,
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+var ConvertersItems = require('../converters/Items');
+var UtilParsing = require('../../util/Parsing');
 
-	fields: [
+
+module.exports = exports = Ext.define('NextThought.model.assessment.AssessedQuestionSet', {
+    extend: 'NextThought.model.Base',
+    idProperty: 'questionSetId',
+    isSet: true,
+
+    fields: [
 		{ name: 'questions', type: 'arrayItem' },
 		{ name: 'questionSetId', type: 'string' }
 	],
 
-
-	getTotalCount: function() {
+    getTotalCount: function() {
 		return (this.get('questions') || []).length;
 	},
 
-
-	getCorrectCount: function() {
+    getCorrectCount: function() {
 
 		var correct = 0;
 		Ext.each(this.get('questions'), function(q) {
@@ -28,8 +28,7 @@ export default Ext.define('NextThought.model.assessment.AssessedQuestionSet', {
 		return correct;
 	},
 
-
-	statics: {
+    statics: {
 
 		from: function(set) {
 			var out, raw = {

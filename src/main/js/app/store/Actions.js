@@ -1,14 +1,17 @@
-export default Ext.define('NextThought.app.store.Actions', {
-	extend: 'NextThought.common.Actions',
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var ParseUtils = require('../../util/Parsing');
+var StoreUtils = require('../../util/Store');
+var CommonActions = require('../../common/Actions');
+var LibraryStateStore = require('../library/StateStore');
+var StoreStateStore = require('./StateStore');
+var LoginStateStore = require('../../login/StateStore');
 
-	requires: [
-		'NextThought.app.library.StateStore',
-		'NextThought.app.store.StateStore',
-		'NextThought.login.StateStore'
-	],
 
+module.exports = exports = Ext.define('NextThought.app.store.Actions', {
+    extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.LibraryStore = NextThought.app.library.StateStore.getInstance();
@@ -22,8 +25,7 @@ export default Ext.define('NextThought.app.store.Actions', {
 		}
 	},
 
-
-	onLogin: function() {
+    onLogin: function() {
 		if (this.LibraryStore.hasLoaded()) {
 			this.loadPurchasables();
 		} else {
@@ -31,8 +33,7 @@ export default Ext.define('NextThought.app.store.Actions', {
 		}
 	},
 
-
-	loadPurchasables: function() {
+    loadPurchasables: function() {
 		var service = window.Service,
 			collection = service && service.getCollection('store', 'store'),
 			link = collection && service.getLinkFrom(collection.Links, 'get_purchasables'),
@@ -49,8 +50,7 @@ export default Ext.define('NextThought.app.store.Actions', {
 			.then(store.setLoaded.bind(store));
 	},
 
-
-	__updateLibraryWithPurchasables: function(items) {
+    __updateLibraryWithPurchasables: function(items) {
 		var library = this.LibraryStore;
 
 		(items || []).forEach(function(p) {
@@ -69,7 +69,7 @@ export default Ext.define('NextThought.app.store.Actions', {
 		return items;
 	},
 
-	/**
+    /**
 	 * Called to generate a stripe payment token from purchase information
 	 *
 	 * @param {NextThought.view.store.purchase.Form} cmp the owner cmp
@@ -140,7 +140,7 @@ export default Ext.define('NextThought.app.store.Actions', {
 		}
 	},
 
-	/**
+    /**
 	 * validates a coupon code or figures the cost for activation keys
 	 * @param {Component} sender  the form that is sending the request
 	 * @param {Object} desc an object containing the Purchasable, Quantity, and Coupon.  Ommitted quantity is assumed 1, Coupon is optional.
@@ -212,7 +212,7 @@ export default Ext.define('NextThought.app.store.Actions', {
 		}
 	},
 
-	doPricingRequest: function(url, data, callback) {
+    doPricingRequest: function(url, data, callback) {
 		Ext.Ajax.request({
 			url: url,
 			jsonData: data,
@@ -222,13 +222,11 @@ export default Ext.define('NextThought.app.store.Actions', {
 		});
 	},
 
-
-	doEnrollmentPricingRequest: function(url, data) {
+    doEnrollmentPricingRequest: function(url, data) {
 		return Service.post(url, data);
 	},
 
-
-	__attemptPurchase: function(purchaseDescription, tokenObject, expectedPrice, linkName) {
+    __attemptPurchase: function(purchaseDescription, tokenObject, expectedPrice, linkName) {
 		var purchasable = purchaseDescription.Purchasable,
 			tokenId = tokenObject.id,
 			url = purchasable && purchasable.getLink(linkName),
@@ -292,7 +290,7 @@ export default Ext.define('NextThought.app.store.Actions', {
 				.then(this.__parsePurchaseAttempt.bind(this));
 	},
 
-	__parsePurchaseAttempt: function(response) {
+    __parsePurchaseAttempt: function(response) {
 		var result = Ext.JSON.decode(response, true);
 
 		if (result) {
@@ -308,8 +306,7 @@ export default Ext.define('NextThought.app.store.Actions', {
 		return result;
 	},
 
-
-	__pollPurchaseAttempt: function(purchaseAttempt) {
+    __pollPurchaseAttempt: function(purchaseAttempt) {
 		var me = this,
 			startedPollingAt = (new Date()).getTime(),
 			maxWaitInMillis = 2 * 60 * 1000, //2 minutes
@@ -352,8 +349,7 @@ export default Ext.define('NextThought.app.store.Actions', {
 		});
 	},
 
-
-	/**
+    /**
 	 * Make the purchase for purchasable using tokenObject
 	 *
 	 * @param {Component} cmp the owner cmp
@@ -407,7 +403,7 @@ export default Ext.define('NextThought.app.store.Actions', {
 			});
 	},
 
-	/**
+    /**
 	 * Make the purchase for purchasable using tokenObject
 	 *
 	 * @param {Component} cmp the owner cmp
@@ -461,7 +457,7 @@ export default Ext.define('NextThought.app.store.Actions', {
 			});
 	},
 
-	/**
+    /**
 	 * Submit a redeem token for a purchasable
 	 * @param  {Ext.Component} sender      the component sending the request
 	 * @param  {NextThought.model.store.Purchasable} purchasable the purchasable the token is for

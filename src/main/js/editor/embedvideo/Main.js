@@ -1,17 +1,16 @@
-export default Ext.define('NextThought.editor.embedvideo.Main', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.embedvideo-main-view',
-	requires: [
-		'Ext.form.field.TextArea',
-		'NextThought.model.resolvers.videoservices.Kaltura',
-		'NextThought.model.resolvers.videoservices.Vimeo',
-		'NextThought.model.resolvers.videoservices.Youtube',
-		'NextThought.model.resolvers.videoservices.HTML'
-	],
+var Ext = require('extjs');
+var VideoservicesKaltura = require('../../model/resolvers/videoservices/Kaltura');
+var VideoservicesVimeo = require('../../model/resolvers/videoservices/Vimeo');
+var VideoservicesYoutube = require('../../model/resolvers/videoservices/Youtube');
+var VideoservicesHTML = require('../../model/resolvers/videoservices/HTML');
 
-	cls: 'embedvideo-main-view',
 
-	items: [
+module.exports = exports = Ext.define('NextThought.editor.embedvideo.Main', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.embedvideo-main-view',
+    cls: 'embedvideo-main-view',
+
+    items: [
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
 			{xtype: 'box', autoEl: {tag: 'textarea', name: 'embed', placeholder: 'Video URL...'}, name: 'embed', cls: 'input-box textarea', emptyText: 'Video URL...'}
 		]},
@@ -31,8 +30,7 @@ export default Ext.define('NextThought.editor.embedvideo.Main', {
 		]}
 	],
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var url = this.up('window').getUrl(),
@@ -47,7 +45,7 @@ export default Ext.define('NextThought.editor.embedvideo.Main', {
 		}
 	},
 
-	getValues: function() {
+    getValues: function() {
 		var raw = this.down('[name=embed]').getEl().getValue(), matches,
 			iframeRegex = /<iframe.*src="(.*?)".*?><\/iframe>/i,
 			Videos = NextThought.model.resolvers.videoservices,
@@ -90,8 +88,7 @@ export default Ext.define('NextThought.editor.embedvideo.Main', {
 		// return type;
 	},
 
-
-	setError: function(error) {
+    setError: function(error) {
 		var box = this.down('[name=error]'),
 			field = this.down('[name=' + error.field + ']'),
 			allFields = this.query('[name]');

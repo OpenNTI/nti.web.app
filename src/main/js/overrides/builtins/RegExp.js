@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.builtins.RegExp', {});
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.builtins.RegExp', {});
 (function() {
 	Ext.applyIf(RegExp, {
 		escape: function me(text) {

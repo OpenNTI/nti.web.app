@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.mixins.ShareEntity', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.ShareEntity', {
 
 	isDynamicSharing: function() {
 		return NextThought.mixins.ShareEntity.isDynamicSharing(this.data);

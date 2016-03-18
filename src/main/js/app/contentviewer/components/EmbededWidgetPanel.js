@@ -1,14 +1,15 @@
-export default Ext.define('NextThought.app.contentviewer.components.EmbededWidgetPanel', {
-	extend: 'NextThought.app.contentviewer.overlay.Panel',
-	alias: 'widget.overlay-content-embeded-widget',
+var Ext = require('extjs');
+var DomUtils = require('../../../util/Dom');
+var OverlayPanel = require('../overlay/Panel');
+var UtilDom = require('../../../util/Dom');
 
-	requires: [
-		'NextThought.util.Dom'
-	],
 
-	cls: 'content-embeded-widget-frame',
+module.exports = exports = Ext.define('NextThought.app.contentviewer.components.EmbededWidgetPanel', {
+    extend: 'NextThought.app.contentviewer.overlay.Panel',
+    alias: 'widget.overlay-content-embeded-widget',
+    cls: 'content-embeded-widget-frame',
 
-	constructor: function(config) {
+    constructor: function(config) {
 		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}

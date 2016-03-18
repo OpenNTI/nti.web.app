@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.whiteboard.editor.ToolOption', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ToolOption', {
 	alias: 'widget.wb-tool-option',
 	extend: 'Ext.button.Split',
 

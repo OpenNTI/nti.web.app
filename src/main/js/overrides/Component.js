@@ -1,9 +1,12 @@
-export default Ext.define('NextThought.overrides.Component', {
-	override: 'Ext.Component',
-	requires: ['NextThought.mixins.Delegation', 'NextThought.util.Promise'],
+var Ext = require('extjs');
+var MixinsDelegation = require('../mixins/Delegation');
+var UtilPromise = require('../util/Promise');
 
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.overrides.Component', {
+    override: 'Ext.Component',
+
+    constructor: function() {
 		var me = this;
 
 		me.shadow = false;
@@ -45,7 +48,7 @@ export default Ext.define('NextThought.overrides.Component', {
 		});
 	},
 
-	maybeFireVisibilityChange: function() {
+    maybeFireVisibilityChange: function() {
 		var v = this.isVisible(true);
 		if (v !== this.___visibility) {
 			this.fireEvent('visibility-changed-' + (v ? 'visible' : 'hidden'), this);
@@ -54,8 +57,7 @@ export default Ext.define('NextThought.overrides.Component', {
 		this.___visibility = v;
 	},
 
-
-	setNTTooltip: function() {
+    setNTTooltip: function() {
 		if (!this.rendered) {
 			this.on('afterrender', 'setNTTooltip', this, {single: true});
 			return;
@@ -72,26 +74,21 @@ export default Ext.define('NextThought.overrides.Component', {
 		}
 	},
 
-
-	rtlSetLocalX: function(x) {
+    rtlSetLocalX: function(x) {
 		var style = this.el.dom.style;
 		style.left = 'auto';
 		style.right = (x === null) ? 'auto' : x + 'px';
 	},
 
-
-	isOwnerLayout: function(type) {
+    isOwnerLayout: function(type) {
 		var o = this.ownerLayout;
 		return o && o.type === type;
 	},
 
-
-	isLayout: function(type) {
+    isLayout: function(type) {
 		var o = this.layout;
 		return o && o.type === type;
 	}
-
-
 },function() {
 	Ext.Component.mixin('delegation', NextThought.mixins.Delegation);
 });

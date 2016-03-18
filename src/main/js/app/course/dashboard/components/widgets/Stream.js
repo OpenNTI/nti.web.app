@@ -1,13 +1,14 @@
-export default Ext.define('NextThought.app.course.dashboard.components.widgets.Stream', {
-	extend: 'NextThought.app.course.dashboard.components.widgets.Base',
+var Ext = require('extjs');
+var WidgetsBase = require('./Base');
+var TilesNote = require('../tiles/Note');
+var TilesTopic = require('../tiles/Topic');
+var TilesTopicComment = require('../tiles/TopicComment');
 
-	requires: [
-		'NextThought.app.course.dashboard.components.tiles.Note',
-		'NextThought.app.course.dashboard.components.tiles.Topic',
-		'NextThought.app.course.dashboard.components.tiles.TopicComment'
-	],
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.widgets.Stream', {
+    extend: 'NextThought.app.course.dashboard.components.widgets.Base',
+
+    statics: {
 		__CLASS_TO_TILE: {
 			'Note': 'Note',
 			'CommunityHeadlineTopic': 'Topic'

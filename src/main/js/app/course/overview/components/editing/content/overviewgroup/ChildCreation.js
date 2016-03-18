@@ -1,21 +1,21 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ChildCreation', {
-	extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
-	alias: 'widget.overview-editing-overviewgroup-childcreation',
+var Ext = require('extjs');
+var CreationChildCreation = require('../../creation/ChildCreation');
+var OverviewGroup = require('../../../../../../../model/courses/overview/Group');
+var ContentlinkEditor = require('../contentlink/Editor');
+var VideoEditor = require('../video/Editor');
+var DiscussionEditor = require('../discussion/Editor');
+var QuestionsetEditor = require('../questionset/Editor');
+var TimelineEditor = require('../timeline/Editor');
 
-	requires: [
-		'NextThought.model.courses.overview.Group',
-		'NextThought.app.course.overview.components.editing.content.contentlink.Editor',
-		'NextThought.app.course.overview.components.editing.content.video.Editor',
-		'NextThought.app.course.overview.components.editing.content.discussion.Editor',
-		'NextThought.app.course.overview.components.editing.content.questionset.Editor',
-		'NextThought.app.course.overview.components.editing.content.timeline.Editor'
-	],
 
-	title: 'Choose a content type',
-	backText: 'Content Types',
-	saveText: 'Add to Lesson',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ChildCreation', {
+    extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
+    alias: 'widget.overview-editing-overviewgroup-childcreation',
+    title: 'Choose a content type',
+    backText: 'Content Types',
+    saveText: 'Add to Lesson',
 
-	statics: {
+    statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.courses.overview.Group.mimeType
@@ -35,8 +35,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	setUpTypeList: function() {
+    setUpTypeList: function() {
 		this.callParent(arguments);
 
 		var subTitle = this.rootRecord && this.rootRecord.getTitle && this.rootRecord.getTitle();
@@ -46,8 +45,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	setUpTypeEditor: function() {
+    setUpTypeEditor: function() {
 		this.callParent(arguments);
 
 		var subTitle = this.rootRecord && this.rootRecord.getTitle && this.rootRecord.getTitle();

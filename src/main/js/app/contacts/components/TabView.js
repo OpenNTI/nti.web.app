@@ -1,32 +1,32 @@
-export default Ext.define('NextThought.app.contacts.components.TabView', {
-	extend: 'NextThought.common.components.NavPanel',
-	alias: 'widget.contact-tab-view',
+var Ext = require('extjs');
+var User = require('../../../model/User');
+var ParseUtils = require('../../../util/Parsing');
+var ComponentsNavPanel = require('../../../common/components/NavPanel');
+var ComponentsGrouping = require('./Grouping');
+var OutlineView = require('./outline/View');
+var ComponentsBoundPanel = require('../../../common/components/BoundPanel');
 
-	requires: [
-		'NextThought.app.contacts.components.Grouping',
-		'NextThought.app.contacts.components.outline.View',
-		'NextThought.common.components.BoundPanel'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.contacts.components.TabView', {
+    extend: 'NextThought.common.components.NavPanel',
+    alias: 'widget.contact-tab-view',
+
+    mixins: {
 		// Route: 'NextThought.mixins.Router'
 	},
 
+    navigation: { xtype: 'contacts-outline' },
+    body: { xtype: 'data-bound-panel' },
+    ui: 'contacts',
+    cls: 'contact-sub-view',
 
-	navigation: { xtype: 'contacts-outline' },
-	body: { xtype: 'data-bound-panel' },
-
-	ui: 'contacts',
-	cls: 'contact-sub-view',
-
-	constructor: function(config) {
+    constructor: function(config) {
 		this.callParent(arguments);
 		this.mon(this.navigation, 'contact-row-selected', 'scrollIntoView');
 		this.on('activate', this.onActivate.bind(this));
 	},
 
-
-	scrollIntoView: function(rec) {
+    scrollIntoView: function(rec) {
 		var query = Ext.String.format('[recordId="{0}"]', ParseUtils.escapeId(rec.getId())),
 			cmp = this.body.down(query);
 
@@ -36,8 +36,7 @@ export default Ext.define('NextThought.app.contacts.components.TabView', {
 		}
 	},
 
-
-	injectLetterDividers: function(store) {
+    injectLetterDividers: function(store) {
 		var User = NextThought.model.User,
 			pluck = Ext.Array.pluck,
 			letters = {}, toAdd = [];
@@ -65,11 +64,9 @@ export default Ext.define('NextThought.app.contacts.components.TabView', {
 		store.resumeEvents();
 	},
 
-
-	onActivate: function() {
+    onActivate: function() {
 		if (!this.rendered) { return; }
 		this.alignNavigation();
 		this.navigation.refresh();
 	}
-
 });

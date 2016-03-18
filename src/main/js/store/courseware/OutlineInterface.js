@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.store.courseware.OutlineInterface', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInterface', {
 
 	statics: {
 		fillInDepths: function(outline) {

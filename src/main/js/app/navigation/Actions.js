@@ -1,15 +1,17 @@
-export default Ext.define('NextThought.app.navigation.Actions', {
-	extend: 'NextThought.common.Actions',
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var ParseUtils = require('../../util/Parsing');
+var CommonActions = require('../../common/Actions');
+var NavigationStateStore = require('./StateStore');
+var UtilContent = require('../../util/Content');
+var ContextStateStore = require('../context/StateStore');
+var ModelPageInfo = require('../../model/PageInfo');
 
-	requires: [
-		'NextThought.app.navigation.StateStore',
-		'NextThought.util.Content',
-		'NextThought.app.context.StateStore',
-		'NextThought.model.PageInfo'
-	],
 
+module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
+    extend: 'NextThought.common.Actions',
 
-	statics: {
+    statics: {
 		getContext: function() {
 			if (!this.NavStateStore) {
 				this.NavStateStore = NextThought.app.context.StateStore.getInstance();
@@ -123,13 +125,11 @@ export default Ext.define('NextThought.app.navigation.Actions', {
 		}
 	},
 
-
-	constructor: function() {
+    constructor: function() {
 		this.store = NextThought.app.navigation.StateStore.getInstance();
 	},
 
-
-	/**
+    /**
 	 * Takes an object config
 	 *
 	 * cmp: Ext.Component, //a component to render in the header, tabs are ignored if this is present
@@ -143,8 +143,7 @@ export default Ext.define('NextThought.app.navigation.Actions', {
 		this.store.updateNavBar(config);
 	},
 
-
-	/**
+    /**
 	 * the active object to set the background from
 	 *
 	 * @param {Object} obj the thins to set active
@@ -153,14 +152,11 @@ export default Ext.define('NextThought.app.navigation.Actions', {
 		this.store.fireEvent('set-active-content', obj, masked);
 	},
 
-
-
-	markReturnPoint: function(route) {
+    markReturnPoint: function(route) {
 		this.store.markReturnPoint(route);
 	},
 
-
-	/**
+    /**
 	 * Present a message in the main message bar
 	 *
 	 * Takes a config object:

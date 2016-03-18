@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.forums.PersonalBlogComment', {
+var Ext = require('extjs');
+var ForumsCommentPost = require('./CommentPost');
+
+
+module.exports = exports = Ext.define('NextThought.model.forums.PersonalBlogComment', {
 	extend: 'NextThought.model.forums.CommentPost',
 
 	isBlogComment: true,

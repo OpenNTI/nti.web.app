@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.notifications.components.types.Base', {
+var Ext = require('extjs');
+var UserRepository = require('../../../../cache/UserRepository');
+var NTIFormat = require('../../../../util/Format');
+
+
+module.exports = exports = Ext.define('NextThought.app.notifications.components.types.Base', {
 	extend: 'Ext.Component',
 
 	//the mime type this item renders

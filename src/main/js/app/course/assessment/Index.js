@@ -1,30 +1,32 @@
-export default Ext.define('NextThought.app.course.assessment.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-assessment-container',
+var Ext = require('extjs');
+var UserRepository = require('../../../cache/UserRepository');
+var User = require('../../../model/User');
+var ParseUtils = require('../../../util/Parsing');
+var MixinsRouter = require('../../../mixins/Router');
+var ComponentsView = require('./components/View');
+var ComponentsAssignment = require('./components/Assignment');
+var UtilPageSource = require('../../../util/PageSource');
+var UtilPagedPageSource = require('../../../util/PagedPageSource');
 
-	requires: [
-		'NextThought.app.course.assessment.components.View',
-		'NextThought.app.course.assessment.components.Assignment',
-		'NextThought.util.PageSource',
-		'NextThought.util.PagedPageSource'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.course.assessment.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.course-assessment-container',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	layout: 'card',
+    layout: 'card',
+    title: 'Assignments',
 
-	title: 'Assignments',
-
-	statics: {
+    statics: {
 		showTab: function(bundle) {
 			return bundle && bundle.getWrapper && bundle.shouldShowAssignments();
 		}
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -56,18 +58,17 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 		this.on('deactivate', this.closeAssignment.bind(this));
 	},
 
-	getRouteStateKey: function() {
+    getRouteStateKey: function() {
 		if (this.currentBundle) {
 			return this.currentBundle.getId() + '-assessment';
 		}
 	},
 
-	onActivate: function() {
+    onActivate: function() {
 		this.setTitle(this.title);
 	},
 
-
-	closeAssignment: function() {
+    closeAssignment: function() {
 		var view = this.getView();
 
 		this.getLayout().setActiveItem(view);
@@ -77,18 +78,15 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 		}
 	},
 
-
-	getRouteTitle: function() {
+    getRouteTitle: function() {
 		return this.title;
 	},
 
-
-	getView: function() {
+    getView: function() {
 		return this.down('course-assessment');
 	},
 
-
-	bundleChanged: function(bundle) {
+    bundleChanged: function(bundle) {
 		var view = this.getView();
 
 		this.currentBundle = bundle;
@@ -96,8 +94,7 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 		return view.bundleChanged(bundle);
 	},
 
-
-	showReader: function(config) {
+    showReader: function(config) {
 		if (this.assignment) {
 			if (this.assignment.reader && this.assignment.reader.el) {
 				this.assignment.reader.el.unmask();
@@ -121,8 +118,7 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 		this.getLayout().setActiveItem(this.assignment);
 	},
 
-
-	onAssignmentSubmission: function(assignmentId, historyItemLink) {
+    onAssignmentSubmission: function(assignmentId, historyItemLink) {
 		var me = this,
 			view = me.getView(),
 			assignmentCollection = view.assignmentCollection;
@@ -145,8 +141,7 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 			.always(this.bundleChanged.bind(this, this.currentBundle));
 	},
 
-
-	showAssignment: function(route, subRoute) {
+    showAssignment: function(route, subRoute) {
 		var me = this,
 			id = route.params.assignment,
 			assignment = route.precache.assignment,
@@ -242,8 +237,7 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 		});
 	},
 
-
-	showAssignments: function(route, subRoute) {
+    showAssignments: function(route, subRoute) {
 		var view = this.getView();
 
 		this.getLayout().setActiveItem(view);
@@ -253,8 +247,7 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 		return view.showAssignments(route, subRoute);
 	},
 
-
-	showNotifications: function(route, subRoute) {
+    showNotifications: function(route, subRoute) {
 		var view = this.getView();
 
 		this.getLayout().setActiveItem(view);
@@ -264,8 +257,7 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 		return view.showNotifications(route, subRoute);
 	},
 
-
-	showPerformance: function(route, subRoute) {
+    showPerformance: function(route, subRoute) {
 		var view = this.getView();
 
 		this.getLayout().setActiveItem(view);
@@ -275,8 +267,7 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 		return view.showPerformance(route, subRoute);
 	},
 
-
-	showStudentsForAssignment: function(route, subRoute) {
+    showStudentsForAssignment: function(route, subRoute) {
 		var view = this.getView();
 
 		this.getLayout().setActiveItem(view);
@@ -286,8 +277,7 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 		return view.showStudentsForAssignment(route, subRoute);
 	},
 
-
-	showAssignmentsForStudent: function(route, subRoute) {
+    showAssignmentsForStudent: function(route, subRoute) {
 		var view = this.getView();
 
 		this.getLayout().setActiveItem(view);
@@ -297,8 +287,7 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 		return view.showAssignmentsForStudent(route, subRoute);
 	},
 
-
-	__getHistoryItem: function(historyItem) {
+    __getHistoryItem: function(historyItem) {
 		var link = historyItem && historyItem.getLink('UsersCourseAssignmentHistoryItem'),
 			load;
 
@@ -325,8 +314,7 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 		return load;
 	},
 
-
-	showStudentForAssignment: function(route, subRoute) {
+    showStudentForAssignment: function(route, subRoute) {
 		var me = this,
 			view = this.getView(),
 			assignmentId = route.params.assignment,
@@ -465,8 +453,7 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 			});
 	},
 
-
-	showAssignmentForStudent: function(route, subRoute) {
+    showAssignmentForStudent: function(route, subRoute) {
 		var me = this,
 			view = this.getView(),
 			assignmentId = route.params.assignment,
@@ -572,8 +559,7 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 			});
 	},
 
-
-	onRoute: function(route, subRoute) {
+    onRoute: function(route, subRoute) {
 		var view = this.getView();
 
 		this.getLayout().setActiveItem(view);
@@ -581,8 +567,7 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 		return view.handleRoute(route.path, route.precache);
 	},
 
-
-	getAssignmentRoute: function(obj) {
+    getAssignmentRoute: function(obj) {
 		var id = obj.getId();
 
 		id = ParseUtils.encodeForURI(id);
@@ -596,18 +581,15 @@ export default Ext.define('NextThought.app.course.assessment.Index', {
 		};
 	},
 
-
-	changeRoute: function(title, route, precache) {
+    changeRoute: function(title, route, precache) {
 		this.pushRoute(title, route || '/', precache);
 	},
 
-
-	handleNavigation: function(title, route, precache) {
+    handleNavigation: function(title, route, precache) {
 		this.pushRoute(title, route, precache);
 	},
 
-
-	getRouteForPath: function(path, assignment) {
+    getRouteForPath: function(path, assignment) {
 		var assignmentId = assignment.getId(),
 			root = path[0],
 			route;

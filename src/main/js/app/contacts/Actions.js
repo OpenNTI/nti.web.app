@@ -1,16 +1,16 @@
-export default Ext.define('NextThought.app.contacts.Actions', {
-	extend: 'NextThought.common.Actions',
-
-	requires: [
-		'NextThought.app.groups.StateStore',
-		'NextThought.app.chat.StateStore',
-		'NextThought.app.contacts.components.code.Window',
-		'NextThought.app.contacts.components.group.Window',
-		'NextThought.app.contacts.components.list.Window'
-	],
+var Ext = require('extjs');
+var CommonActions = require('../../common/Actions');
+var GroupsStateStore = require('../groups/StateStore');
+var ChatStateStore = require('../chat/StateStore');
+var CodeWindow = require('./components/code/Window');
+var GroupWindow = require('./components/group/Window');
+var ListWindow = require('./components/list/Window');
 
 
-	groupButtonClicked: function(btn) {
+module.exports = exports = Ext.define('NextThought.app.contacts.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    groupButtonClicked: function(btn) {
 		var flyBtn = Ext.fly(btn);
 		if (flyBtn.hasCls('join-group')) {
 			this.codeWin = Ext.widget('code-window');

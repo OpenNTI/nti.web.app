@@ -1,79 +1,79 @@
-export default Ext.define('NextThought.mixins.QuestionContent', {
-	requires: [
-		'NextThought.app.assessment.components.AudioClip',
-		'NextThought.app.assessment.components.Sequence',
-		'NextThought.app.assessment.components.WordBank',
-		'NextThought.model.assessment.wordbank.WordEntry',
-		'NextThought.model.assessment.AssessedPart',
-		'NextThought.model.assessment.AssessedQuestion',
-		'NextThought.model.assessment.AssessedQuestionSet',
-		'NextThought.model.assessment.AssessmentItemContainer',
-		'NextThought.model.assessment.Assignment',
-		'NextThought.model.assessment.AssignmentPart',
-		'NextThought.model.assessment.AssignmentSubmission',
-		'NextThought.model.assessment.AssignmentSubmissionPendingAssessment',
-		'NextThought.model.assessment.DictResponse',
-		'NextThought.model.assessment.FilePart',
-		'NextThought.model.assessment.FillInTheBlankShortAnswerPart',
-		'NextThought.model.assessment.FillInTheBlankShortAnswerSolution',
-		'NextThought.model.assessment.FillInTheBlankWithWordBankPart',
-		'NextThought.model.assessment.FillInTheBlankWithWordBankQuestion',
-		'NextThought.model.assessment.FillInTheBlankWithWordBankSolution',
-		'NextThought.model.assessment.FreeResponsePart',
-		'NextThought.model.assessment.FreeResponseSolution',
-		'NextThought.model.assessment.HTMLHint',
-		'NextThought.model.assessment.Hint',
-		'NextThought.model.assessment.LatexSymbolicMathSolution',
-		'NextThought.model.assessment.MatchingPart',
-		'NextThought.model.assessment.MatchingSolution',
-		'NextThought.model.assessment.MathPart',
-		'NextThought.model.assessment.MathSolution',
-		'NextThought.model.assessment.ModeledContentPart',
-		'NextThought.model.assessment.MultipleChoiceMultipleAnswerPart',
-		'NextThought.model.assessment.MultipleChoiceMultipleAnswerSolution',
-		'NextThought.model.assessment.MultipleChoicePart',
-		'NextThought.model.assessment.MultipleChoiceSolution',
-		'NextThought.model.assessment.NumericMathPart',
-		'NextThought.model.assessment.NumericMathSolution',
-		'NextThought.model.assessment.OrderingPart',
-		'NextThought.model.assessment.OrderingSolution',
-		'NextThought.model.assessment.Part',
-		'NextThought.model.assessment.Poll',
-		'NextThought.model.assessment.PollSubmission',
-		'NextThought.model.assessment.Question',
-		'NextThought.model.assessment.QuestionBank',
-		'NextThought.model.assessment.QuestionMap',
-		'NextThought.model.assessment.QuestionSet',
-		'NextThought.model.assessment.QuestionSetSubmission',
-		'NextThought.model.assessment.QuestionSubmission',
-		'NextThought.model.assessment.RandomizedQuestionSet',
-		'NextThought.model.assessment.Response',
-		'NextThought.model.assessment.SingleValuedSolution',
-		'NextThought.model.assessment.Solution',
-		'NextThought.model.assessment.Survey',
-		'NextThought.model.assessment.SurveySubmission',
-		'NextThought.model.assessment.SymbolicMathPart',
-		'NextThought.model.assessment.SymbolicMathSolution',
-		'NextThought.model.assessment.TextHint',
-		'NextThought.model.assessment.TextResponse',
-		'NextThought.model.assessment.TimedAssignment',
-		'NextThought.model.assessment.UsersCourseAssignmentSavepoint',
-		'NextThought.model.assessment.UsersCourseAssignmentSavepointItem',
-		'NextThought.model.assessment.UsersCourseInquiryItem',
-		'NextThought.model.assessment.UsersCourseInquiryItemResponse',
-	],
+var Ext = require('extjs');
+var ComponentsAudioClip = require('../app/assessment/components/AudioClip');
+var ComponentsSequence = require('../app/assessment/components/Sequence');
+var ComponentsWordBank = require('../app/assessment/components/WordBank');
+var WordbankWordEntry = require('../model/assessment/wordbank/WordEntry');
+var AssessmentAssessedPart = require('../model/assessment/AssessedPart');
+var AssessmentAssessedQuestion = require('../model/assessment/AssessedQuestion');
+var AssessmentAssessedQuestionSet = require('../model/assessment/AssessedQuestionSet');
+var AssessmentAssessmentItemContainer = require('../model/assessment/AssessmentItemContainer');
+var AssessmentAssignment = require('../model/assessment/Assignment');
+var AssessmentAssignmentPart = require('../model/assessment/AssignmentPart');
+var AssessmentAssignmentSubmission = require('../model/assessment/AssignmentSubmission');
+var AssessmentAssignmentSubmissionPendingAssessment = require('../model/assessment/AssignmentSubmissionPendingAssessment');
+var AssessmentDictResponse = require('../model/assessment/DictResponse');
+var AssessmentFilePart = require('../model/assessment/FilePart');
+var AssessmentFillInTheBlankShortAnswerPart = require('../model/assessment/FillInTheBlankShortAnswerPart');
+var AssessmentFillInTheBlankShortAnswerSolution = require('../model/assessment/FillInTheBlankShortAnswerSolution');
+var AssessmentFillInTheBlankWithWordBankPart = require('../model/assessment/FillInTheBlankWithWordBankPart');
+var AssessmentFillInTheBlankWithWordBankQuestion = require('../model/assessment/FillInTheBlankWithWordBankQuestion');
+var AssessmentFillInTheBlankWithWordBankSolution = require('../model/assessment/FillInTheBlankWithWordBankSolution');
+var AssessmentFreeResponsePart = require('../model/assessment/FreeResponsePart');
+var AssessmentFreeResponseSolution = require('../model/assessment/FreeResponseSolution');
+var AssessmentHTMLHint = require('../model/assessment/HTMLHint');
+var AssessmentHint = require('../model/assessment/Hint');
+var AssessmentLatexSymbolicMathSolution = require('../model/assessment/LatexSymbolicMathSolution');
+var AssessmentMatchingPart = require('../model/assessment/MatchingPart');
+var AssessmentMatchingSolution = require('../model/assessment/MatchingSolution');
+var AssessmentMathPart = require('../model/assessment/MathPart');
+var AssessmentMathSolution = require('../model/assessment/MathSolution');
+var AssessmentModeledContentPart = require('../model/assessment/ModeledContentPart');
+var AssessmentMultipleChoiceMultipleAnswerPart = require('../model/assessment/MultipleChoiceMultipleAnswerPart');
+var AssessmentMultipleChoiceMultipleAnswerSolution = require('../model/assessment/MultipleChoiceMultipleAnswerSolution');
+var AssessmentMultipleChoicePart = require('../model/assessment/MultipleChoicePart');
+var AssessmentMultipleChoiceSolution = require('../model/assessment/MultipleChoiceSolution');
+var AssessmentNumericMathPart = require('../model/assessment/NumericMathPart');
+var AssessmentNumericMathSolution = require('../model/assessment/NumericMathSolution');
+var AssessmentOrderingPart = require('../model/assessment/OrderingPart');
+var AssessmentOrderingSolution = require('../model/assessment/OrderingSolution');
+var AssessmentPart = require('../model/assessment/Part');
+var AssessmentPoll = require('../model/assessment/Poll');
+var AssessmentPollSubmission = require('../model/assessment/PollSubmission');
+var AssessmentQuestion = require('../model/assessment/Question');
+var AssessmentQuestionBank = require('../model/assessment/QuestionBank');
+var AssessmentQuestionMap = require('../model/assessment/QuestionMap');
+var AssessmentQuestionSet = require('../model/assessment/QuestionSet');
+var AssessmentQuestionSetSubmission = require('../model/assessment/QuestionSetSubmission');
+var AssessmentQuestionSubmission = require('../model/assessment/QuestionSubmission');
+var AssessmentRandomizedQuestionSet = require('../model/assessment/RandomizedQuestionSet');
+var AssessmentResponse = require('../model/assessment/Response');
+var AssessmentSingleValuedSolution = require('../model/assessment/SingleValuedSolution');
+var AssessmentSolution = require('../model/assessment/Solution');
+var AssessmentSurvey = require('../model/assessment/Survey');
+var AssessmentSurveySubmission = require('../model/assessment/SurveySubmission');
+var AssessmentSymbolicMathPart = require('../model/assessment/SymbolicMathPart');
+var AssessmentSymbolicMathSolution = require('../model/assessment/SymbolicMathSolution');
+var AssessmentTextHint = require('../model/assessment/TextHint');
+var AssessmentTextResponse = require('../model/assessment/TextResponse');
+var AssessmentTimedAssignment = require('../model/assessment/TimedAssignment');
+var AssessmentUsersCourseAssignmentSavepoint = require('../model/assessment/UsersCourseAssignmentSavepoint');
+var AssessmentUsersCourseAssignmentSavepointItem = require('../model/assessment/UsersCourseAssignmentSavepointItem');
+var AssessmentUsersCourseInquiryItem = require('../model/assessment/UsersCourseInquiryItem');
+var AssessmentUsersCourseInquiryItemResponse = require('../model/assessment/UsersCourseInquiryItemResponse');
 
-	typeToComponent: {
+
+module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
+    typeToComponent: {
 		//'text/html': 'NextThought.view.assessment.components.Base',
 		'application/vnd.nextthought.ntiaudio': 'assessment-components-audio-clip',
 		'application/vnd.nextthought.contentsequence': 'assessment-components-sequence',
 		'application/vnd.nextthought.naqwordbank': 'assessment-components-wordbank'
 	},
 
-	contentComponents: [],
-	contentComponentsToRender: [],
+    contentComponents: [],
+    contentComponentsToRender: [],
 
-	parseDomString: function(dom) {
+    parseDomString: function(dom) {
 		var a = document.createElement('div');
 
 		a.id = 'tempdom';
@@ -82,7 +82,7 @@ export default Ext.define('NextThought.mixins.QuestionContent', {
 		return a;
 	},
 
-	/**
+    /**
 	 * Takes the content of a question/part and returns the string to be inserted into the dom
 	 * @param  {String|Element} dom the string or element of the question content
 	 * @param  {bool} dontRender the element mixing in will hanldle it
@@ -146,8 +146,7 @@ export default Ext.define('NextThought.mixins.QuestionContent', {
 		return dom.innerHTML;
 	},
 
-
-	/**
+    /**
 	 * Takes the configs for the components we need to render and creates them
 	 * @return {Undefined}	no return value
 	 */
@@ -161,8 +160,7 @@ export default Ext.define('NextThought.mixins.QuestionContent', {
 		me.contentComponentsToRender = [];
 	},
 
-
-	/**
+    /**
 	 * Takes the config for a component and either creates it or adds it to a a list to be created.
 	 * @param {String}	type	the data-type attribute of the object element
 	 * @param {Object} config	the config to pass to the component
@@ -198,8 +196,7 @@ export default Ext.define('NextThought.mixins.QuestionContent', {
 		return true;
 	},
 
-
-	destroyContent: function() {
+    destroyContent: function() {
 		Ext.destroy(this.contentComponents);
 	}
 });

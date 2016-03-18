@@ -1,3 +1,6 @@
+var Ext = require('extjs');
+
+
 /**
  * This plugin extracts the concepts of ExtJS's Controllers ability to reference any component and makes them available
  * to any component to plugin.
@@ -8,7 +11,7 @@
  * {@see Ext.app.Controller#getRef()}
  * {@see Ext.app.Controller#hasRef()}
  */
-export default Ext.define('NextThought.common.ux.ComponentReferencing', {
+module.exports = exports = Ext.define('NextThought.common.ux.ComponentReferencing', {
 	extend: 'Ext.AbstractPlugin',
 	alias: 'plugin.component-referencing',
 

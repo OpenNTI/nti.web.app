@@ -1,40 +1,37 @@
-export default Ext.define('NextThought.app.mediaviewer.components.reader.View', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.slidedeck-transcript',
-	requires: [
-		'NextThought.layout.component.Natural',
-		'NextThought.util.Store',
-		'NextThought.app.contentviewer.reader.NoteOverlay',
-		'NextThought.app.mediaviewer.components.reader.NoteOverlay',
-		'NextThought.app.mediaviewer.components.reader.parts.Transcript',
-		'NextThought.app.mediaviewer.components.reader.parts.Slide',
-		'NextThought.app.mediaviewer.components.reader.parts.VideoTitle',
-		'NextThought.app.mediaviewer.components.reader.parts.NoTranscript',
-		'NextThought.app.mediaviewer.Actions',
-		'NextThought.app.mediaviewer.StateStore',
-		'NextThought.app.annotations.renderer.Manager',
-		'NextThought.app.annotations.Index',
-		'NextThought.app.userdata.Actions',
-		'NextThought.app.windows.Actions'
-	],
+var Ext = require('extjs');
+var MixinsSearchable = require('../../../../mixins/Searchable');
+var ComponentNatural = require('../../../../layout/component/Natural');
+var UtilStore = require('../../../../util/Store');
+var ReaderNoteOverlay = require('../../../contentviewer/reader/NoteOverlay');
+var ReaderNoteOverlay = require('./NoteOverlay');
+var PartsTranscript = require('./parts/Transcript');
+var PartsSlide = require('./parts/Slide');
+var PartsVideoTitle = require('./parts/VideoTitle');
+var PartsNoTranscript = require('./parts/NoTranscript');
+var MediaviewerActions = require('../../Actions');
+var MediaviewerStateStore = require('../../StateStore');
+var RendererManager = require('../../../annotations/renderer/Manager');
+var AnnotationsIndex = require('../../../annotations/Index');
+var UserdataActions = require('../../../userdata/Actions');
+var WindowsActions = require('../../../windows/Actions');
 
-	ui: 'transcript',
-	cls: 'transcript-view scrollable',
-	items: [],
 
-	layout: 'none',
+module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.View', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.slidedeck-transcript',
+    ui: 'transcript',
+    cls: 'transcript-view scrollable',
+    items: [],
+    layout: 'none',
+    desiredTop: 0,
+    lineFilterId: 'plinefilter',
+    bubbleEvents: ['add', 'remove', 'editor-open', 'editorActivated', 'editorDeactivated'],
 
-	desiredTop: 0,
-
-	lineFilterId: 'plinefilter',
-
-	bubbleEvents: ['add', 'remove', 'editor-open', 'editorActivated', 'editorDeactivated'],
-
-	mixins: {
+    mixins: {
 		Searchable: 'NextThought.mixins.Searchable'
 	},
 
-	initComponent: function() {
+    initComponent: function() {
 		this.enableBubble(['presentation-parts-ready', 'no-presentation-parts', 'jump-video-to']);
 
 		this.buildComponents();
@@ -73,13 +70,11 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		}, this);
 	},
 
-
-	getContainerIdForSearch: function() {
+    getContainerIdForSearch: function() {
 		return this.video.getId();
 	},
 
-
-	onceReadyForSearch: function() {
+    onceReadyForSearch: function() {
 		var transcript = this.down('video-transcript');
 
 		return new Promise(function(fulfill, reject) {
@@ -93,8 +88,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		});
 	},
 
-
-	buildComponents: function() {
+    buildComponents: function() {
 		var items = [];
 		if (this.transcript) {
 			items = [{
@@ -122,16 +116,14 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		this.items = items;
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 		if (this.hasNoPresentationParts) {
 			this.fireEvent('no-presentation-parts', this);
 		}
 	},
 
-
-	onStoreEventsAdd: function(store, records) {
+    onStoreEventsAdd: function(store, records) {
 		var cmps = this.MediaViewerStore.getComponentsForStore(store.containerId);
 		Ext.each(cmps, function(c) {
 			if (c.isVisible(true)) {
@@ -140,8 +132,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		});
 	},
 
-
-	onStoreEventsRemove: function(store, records) {
+    onStoreEventsRemove: function(store, records) {
 		var cmps = this.MediaViewerStore.getComponentsForStore(store.containerId);
 		Ext.each(cmps, function(c) {
 			if (c.isVisible(true)) {
@@ -150,8 +141,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		});
 	},
 
-
-	setupNoteOverlay: function() {
+    setupNoteOverlay: function() {
 		var me = this;
 
 		this.noteOverlay = Ext.create('NextThought.app.mediaviewer.components.reader.NoteOverlay', {
@@ -166,8 +156,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.setupNoteOverlay();
@@ -191,15 +180,13 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		}, this);
 	},
 
-
-	getPartComponents: function() {
+    getPartComponents: function() {
 		return Ext.Array.filter(this.items.items, function(p) {
 			return p !== undefined;
 		});
 	},
 
-
-	getMaskTarget: function() {
+    getMaskTarget: function() {
 		var root = this;
 		while (root.ownerCt) {
 			root = root.ownerCt;
@@ -208,25 +195,21 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		return root.el;
 	},
 
-
-	addMask: function() {
+    addMask: function() {
 		this.getMaskTarget().mask('Loading...');
 		this.isMasked = true;
 	},
 
-
-	removeMask: function() {
+    removeMask: function() {
 		this.getMaskTarget().unmask();
 		this.isMasked = false;
 	},
 
-
-	onAnimationEnd: function() {
+    onAnimationEnd: function() {
 		this.maybeLoadData();
 	},
 
-
-	maybeLoadData: function() {
+    maybeLoadData: function() {
 		var partCmps = this.getPartComponents(),
 			readyMap = {}, me = this;
 
@@ -281,8 +264,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		maybeDone();
 	},
 
-
-	highlightAtTime: function(seconds, allowScroll) {
+    highlightAtTime: function(seconds, allowScroll) {
 		var cmps = this.getPartComponents(),
 			me = this,
 			offset = 10;
@@ -317,8 +299,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		});
 	},
 
-
-	scrollToEl: function(el, offset) {
+    scrollToEl: function(el, offset) {
 		var scrollingEl = Ext.get(this.getScrollTarget()),
 			top, bottom, shouldScroll;
 
@@ -336,8 +317,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		}
 	},
 
-
-	onScroll: function(e, dom) {
+    onScroll: function(e, dom) {
 		//if the current scroll top is too far off were is should be the user initiated it.
 		var delta = Math.abs(dom.scrollTop - this.desiredTop);
 
@@ -346,8 +326,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		}
 	},
 
-
-	scrollToStartingTime: function(seconds) {
+    scrollToStartingTime: function(seconds) {
 		var cmps = this.getPartComponents(), tEl, scrollingEl;
 
 		// scroll the component that contains the given time into view.
@@ -368,16 +347,14 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		return tEl;
 	},
 
-
-	syncWithVideo: function(videoState, allowScroll) {
+    syncWithVideo: function(videoState, allowScroll) {
 		if (videoState && videoState.time) {
 			this.highlightAtTime(videoState.time, allowScroll);
 		}
 		//this.transcriptView.syncTranscriptWithVideo(videoState);
 	},
 
-
-	showAnnotations: function(annotations, line, store) {
+    showAnnotations: function(annotations, line, store) {
 		var s = store;
 
 		if (!annotations || annotations.getCount() === 0) {
@@ -411,8 +388,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		this.showAnnotationView(s);
 	},
 
-
-	showAnnotationView: function(store) {
+    showAnnotationView: function(store) {
 		var me = this, classList = 'presentation-note-slider annotation-view dark';
 		if (!this.annotationView) {
 			classList += (this.accountForScrollbars) ? ' scroll-margin-right' : '';
@@ -485,8 +461,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		// this.getLayout().setActiveItem(this.annotationView);
 	},
 
-
-	destroy: function() {
+    destroy: function() {
 		if (this.annotationView && this.annotationView.store) {
 			//Make sure we clear the line filter, since this store could be bound to another view.
 			this.annotationView.store.removeFilter(this.lineFilterId);
@@ -500,13 +475,13 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 
 	},
 
-	beforeDeactivate: function() {
+    beforeDeactivate: function() {
 		if (this.annotationView && this.annotationView.isVisible()) {
 			this.annotationView.hide();
 		}
 	},
 
-	allowNavigation: function() {
+    allowNavigation: function() {
 		if (this.noteOverlay && this.noteOverlay.editor.isActive()) {
 			return this.noteOverlay.allowNavigation();
 		} else {
@@ -514,8 +489,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		}
 	},
 
-
-	mayBeHideAnnotationView: function(e) {
+    mayBeHideAnnotationView: function(e) {
 		if (!this.annotationView || !this.annotationView.isVisible()) {
 			return true;
 		}
@@ -530,8 +504,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		return true;
 	},
 
-
-	getDomContextForRecord: function(r) {
+    getDomContextForRecord: function(r) {
 		//Find the cmp with our UGD store.
 		function fn(cmp) {
 			var s = cmp.userDataStore;
@@ -552,20 +525,20 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		return node;
 	},
 
-	//For compliance as a reader.
+    //For compliance as a reader.
 	getDocumentElement: Ext.emptyFn,
-	getCleanContent: Ext.emptyFn,
 
-	// NOTE: We don't need to scroll to a hit since when we open the media viewer we pass it the startMillis time,
+    getCleanContent: Ext.emptyFn,
+
+    // NOTE: We don't need to scroll to a hit since when we open the media viewer we pass it the startMillis time,
 	// By the time, this function gets called, we are already scrolled at the right location.
 	scrollToHit: function() {},
 
-	getScrollTarget: function() {
+    getScrollTarget: function() {
 		return this.getTargetEl().dom || this.el.dom;
 	},
 
-
-	getViewerHooks: function() {
+    getViewerHooks: function() {
 		return {
 			'resizeView': function() {
 				var reader = this.reader,
@@ -586,8 +559,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.View', 
 		};
 	},
 
-	showNote: function(record, el, monitors) {
+    showNote: function(record, el, monitors) {
 		this.WindowActions.pushWindow(record, null, el, monitors);
 	}
-
 });

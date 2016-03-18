@@ -1,16 +1,14 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.outline.ParentSelection', {
-	extend: 'NextThought.app.course.overview.components.editing.parentselection.Index',
-	alias: 'widget.overview-editing-outline-parentselection',
-
-	requires: [
-		'NextThought.app.course.overview.components.editing.outline.outlinenode.InlineEditor'
-	],
+var Ext = require('extjs');
+var ParentselectionIndex = require('../parentselection/Index');
+var OutlinenodeInlineEditor = require('./outlinenode/InlineEditor');
 
 
-	label: 'Unit: ',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.ParentSelection', {
+    extend: 'NextThought.app.course.overview.components.editing.parentselection.Index',
+    alias: 'widget.overview-editing-outline-parentselection',
+    label: 'Unit: ',
 
-
-	parseItemData: function(item) {
+    parseItemData: function(item) {
 		return {
 			cls: 'outline-item',
 			ntiid: item.getId(),
@@ -18,8 +16,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		};
 	},
 
-
-	getEditor: function() {
+    getEditor: function() {
 		return NextThought.app.course.overview.components.editing.outline.outlinenode.InlineEditor;
 	}
 });

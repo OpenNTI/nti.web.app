@@ -1,27 +1,26 @@
+var Ext = require('extjs');
+var UtilGlobals = require('./Globals');
+var UtilVisibility = require('./Visibility');
+var ContextStateStore = require('../app/context/StateStore');
+
+
 /*globals PageVisibility*/
-export default Ext.define('NextThought.util.Analytics', {
-	singleton: true,
+module.exports = exports = Ext.define('NextThought.util.Analytics', {
+    singleton: true,
 
-	requires: [
-		'NextThought.util.Globals',
-		'NextThought.util.Visibility',
-		'NextThought.app.context.StateStore',
-		'Ext.util.Cookies'
-	],
-
-	mixins: {
+    mixins: {
 		observable: 'Ext.util.Observable'
 	},
 
-	BATCH_TIME: 10000,
+    BATCH_TIME: 10000,
 
-	TYPES_TO_TRACK: {
+    TYPES_TO_TRACK: {
 		'video-watch': true,
 		'resource-viewed': true,
 		'discussion-viewed': true
 	},
 
-	//types we need to send an event when it starts
+    //types we need to send an event when it starts
 	START_EVENT_TYPES: {
 		'video-watch': true,
 		'resource-viewed': true,
@@ -36,7 +35,7 @@ export default Ext.define('NextThought.util.Analytics', {
 		'profile-membership-viewed': true
 	},
 
-	TYPE_TO_MIMETYPE: {
+    TYPE_TO_MIMETYPE: {
 		'video-watch': 'application/vnd.nextthought.analytics.watchvideoevent',
 		'video-skip': 'application/vnd.nextthought.analytics.skipvideoevent',
 		'video-speed-change': 'application/vnd.nextthought.analytics.videoplayspeedchange',
@@ -53,19 +52,17 @@ export default Ext.define('NextThought.util.Analytics', {
 		'profile-membership-viewed': 'application/vnd.nextthought.analytics.profilemembershipviewevent'
 	},
 
-	FILL_IN_MAP: {
+    FILL_IN_MAP: {
 		'video-watch': 'fillInVideo',
 		'video-skip': 'fillInVideo'
 	},
 
-	TIMER_MAP: {},
-	VIEWED_MAP: {},
+    TIMER_MAP: {},
+    VIEWED_MAP: {},
+    batch: [],
+    context: [],
 
-	batch: [],
-	context: [],
-
-
-	constructor: function(config) {
+    constructor: function(config) {
 		this.callParent(arguments);
 
 		this.mixins.observable.constructor.call(this, config);
@@ -77,16 +74,13 @@ export default Ext.define('NextThought.util.Analytics', {
 		}
 	},
 
+    addContext: function(context, isRoot) {},
 
-	addContext: function(context, isRoot) {},
-
-
-	getContextRoot: function() {
+    getContextRoot: function() {
 		return this.getContext().first();
 	},
 
-
-	getContext: function() {
+    getContext: function() {
 		var ContextSS = NextThought.app.context.StateStore.getInstance(),
 			contextObjects = ContextSS.getContext(),
 			contextStrings = [];
@@ -111,8 +105,7 @@ export default Ext.define('NextThought.util.Analytics', {
 		return contextStrings || [];
 	},
 
-
-	beginSession: function() {
+    beginSession: function() {
 		//if we've already started one don't start another
 		if (this.session_started) { return; }
 
@@ -139,8 +132,7 @@ export default Ext.define('NextThought.util.Analytics', {
 		}
 	},
 
-
-	endSession: function() {
+    endSession: function() {
 		this.closeOnGoing();
 
 		var collection = typeof Service === 'undefined' ? null : Service.getWorkspace('Analytics'),
@@ -163,8 +155,7 @@ export default Ext.define('NextThought.util.Analytics', {
 		this.session_started = false;
 	},
 
-
-	getResourceTimer: function(resourceId, data) {
+    getResourceTimer: function(resourceId, data) {
 		var now = new Date();
 
 		if (Ext.isString(data)) {
@@ -201,8 +192,7 @@ export default Ext.define('NextThought.util.Analytics', {
 		}
 	},
 
-
-	fillInData: function(resource, data) {
+    fillInData: function(resource, data) {
 		var now = new Date();
 
 		data.time_length = (now - resource.start) / 1000;//send seconds back
@@ -210,15 +200,13 @@ export default Ext.define('NextThought.util.Analytics', {
 		return data;
 	},
 
-
-	fillInVideo: function(resource, data) {
+    fillInVideo: function(resource, data) {
 		data.time_length = Math.abs(data.video_end_time - data.video_start_time);
 
 		return data;
 	},
 
-
-	maybePush: function(data) {
+    maybePush: function(data) {
 		//if the data isn't for an event that adds a resource when it
 		//is started, then we know its not going to be in the batch yet
 		if (!this.START_EVENT_TYPES[data.type]) {
@@ -239,8 +227,7 @@ export default Ext.define('NextThought.util.Analytics', {
 		}
 	},
 
-
-	stopResourceTimer: function(resourceId, type, data, doNotStartTimer) {
+    stopResourceTimer: function(resourceId, type, data, doNotStartTimer) {
 		var resource = this.TIMER_MAP[resourceId + type],
 			now = new Date();
 
@@ -269,8 +256,7 @@ export default Ext.define('NextThought.util.Analytics', {
 		delete this.TIMER_MAP[resourceId + type];
 	},
 
-
-	addResource: function(resourceId, data) {
+    addResource: function(resourceId, data) {
 		var now = new Date();
 
 		if (Ext.isString(data)) {
@@ -290,16 +276,14 @@ export default Ext.define('NextThought.util.Analytics', {
 
 	},
 
-
-	__maybeStartBatchTimer: function() {
+    __maybeStartBatchTimer: function() {
 		if (!this.batchTimer) {
 			this.batchTimer = wait(this.BATCH_TIME)
 				.then(this.sendBatch.bind(this));
 		}
 	},
 
-
-	__getURL: function() {
+    __getURL: function() {
 		if (this.url) { return this.url; }
 
 		var collection = Service.getWorkspace('Analytics'),
@@ -311,8 +295,7 @@ export default Ext.define('NextThought.util.Analytics', {
 		return this.url;
 	},
 
-
-	sendBatch: function() {
+    sendBatch: function() {
 		var me = this,
 			url = me.__getURL();
 
@@ -335,8 +318,7 @@ export default Ext.define('NextThought.util.Analytics', {
 			});
 	},
 
-
-	closeOnGoing: function() {
+    closeOnGoing: function() {
 		var key, resource;
 
 		for (key in this.TIMER_MAP) {
@@ -348,8 +330,7 @@ export default Ext.define('NextThought.util.Analytics', {
 		}
 	},
 
-
-	__SuperTopSecretFn: function(name) {
+    __SuperTopSecretFn: function(name) {
 		var cookieName = 'nti.auth_tkt',
 			cookieValue = Ext.util.Cookies.get(cookieName) || '';
 
@@ -362,7 +343,7 @@ export default Ext.define('NextThought.util.Analytics', {
 		}
 	},
 
-	/**
+    /**
 	 * Whether or not we have sent a view event for an ntiid
 	 * @param  {String}  id Ntiid to check
 	 * @return {Boolean}    [description]

@@ -1,12 +1,13 @@
-export default Ext.define('NextThought.model.Highlight', {
-	extend: 'NextThought.model.Base',
+var Ext = require('extjs');
+var ModelBase = require('./Base');
+var AnchorablesDomContentRangeDescription = require('./anchorables/DomContentRangeDescription');
+var ConvertersContentRangeDescription = require('./converters/ContentRangeDescription');
 
-	requires: [
-		'NextThought.model.anchorables.DomContentRangeDescription',
-		'NextThought.model.converters.ContentRangeDescription'
-	],
 
-	fields: [
+module.exports = exports = Ext.define('NextThought.model.Highlight', {
+    extend: 'NextThought.model.Base',
+
+    fields: [
 		{ name: 'sharedWith', type: 'UserList'},
 		{ name: 'prohibitReSharing', type: 'boolean' },
 		{ name: 'AutoTags', type: 'Auto'},
@@ -21,7 +22,7 @@ export default Ext.define('NextThought.model.Highlight', {
 		{ name: 'NotificationGroupingField', mapping: 'CreatedTime', type: 'groupByTime', persist: false, affectedBy: 'CreatedTime'}
 	],
 
-	getActivityItemConfig: function(type, cid) {
+    getActivityItemConfig: function(type, cid) {
 		var t = this.getModelName().toLowerCase();
 
 		console.error('does this branch (highlight and redaction) get called??');

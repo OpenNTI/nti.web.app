@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.forums.Topic', {
+var Ext = require('extjs');
+var ForumsBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.forums.Topic', {
 	extend: 'NextThought.model.forums.Base',
 
 	isTopic: true,

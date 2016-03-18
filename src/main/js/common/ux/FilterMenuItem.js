@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.ux.FilterMenuItem', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.ux.FilterMenuItem', {
 	extend: 'Ext.menu.CheckItem',
 	alias: 'widget.filter-menu-item',
 

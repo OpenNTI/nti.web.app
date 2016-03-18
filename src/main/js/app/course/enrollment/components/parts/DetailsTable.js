@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.enrollment.components.parts.DetailsTable', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.DetailsTable', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-details-table',
 

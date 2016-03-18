@@ -1,8 +1,10 @@
-export default Ext.define('NextThought.model.converters.DCCreatorToAuthor', {
-	override: 'Ext.data.Types',
-	requires: ['Ext.data.SortTypes'],
+var Ext = require('extjs');
 
-	DCCREATORTOAUTHOR: {
+
+module.exports = exports = Ext.define('NextThought.model.converters.DCCreatorToAuthor', {
+    override: 'Ext.data.Types',
+
+    DCCREATORTOAUTHOR: {
 		type: 'DCCreatorToAuthor',
 		convert: function(v) {
 			return v && v.join(', ');

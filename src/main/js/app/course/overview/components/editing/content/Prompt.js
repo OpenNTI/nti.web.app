@@ -1,21 +1,22 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.Prompt', {
-	extend: 'NextThought.app.course.overview.components.editing.outline.Prompt',
-	alias: 'widget.overview-editing-content-editor',
+var Ext = require('extjs');
+var OutlinePrompt = require('../outline/Prompt');
+var LessonoverviewChildCreation = require('./lessonoverview/ChildCreation');
+var OverviewgroupChildCreation = require('./overviewgroup/ChildCreation');
+var OutlinenodeChildCreation = require('../outline/outlinenode/ChildCreation');
+var ContentlinkEditor = require('./contentlink/Editor');
+var VideoEditor = require('./video/Editor');
+var DiscussionEditor = require('./discussion/Editor');
+var PollEditor = require('./poll/Editor');
+var QuestionsetEditor = require('./questionset/Editor');
+var SurveyEditor = require('./survey/Editor');
+var TimelineEditor = require('./timeline/Editor');
 
-	requires: [
-		'NextThought.app.course.overview.components.editing.content.lessonoverview.ChildCreation',
-		'NextThought.app.course.overview.components.editing.content.overviewgroup.ChildCreation',
-		'NextThought.app.course.overview.components.editing.outline.outlinenode.ChildCreation',
-		'NextThought.app.course.overview.components.editing.content.contentlink.Editor',
-		'NextThought.app.course.overview.components.editing.content.video.Editor',
-		'NextThought.app.course.overview.components.editing.content.discussion.Editor',
-		'NextThought.app.course.overview.components.editing.content.poll.Editor',
-		'NextThought.app.course.overview.components.editing.content.questionset.Editor',
-		'NextThought.app.course.overview.components.editing.content.survey.Editor',
-		'NextThought.app.course.overview.components.editing.content.timeline.Editor'
-	],
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.Prompt', {
+    extend: 'NextThought.app.course.overview.components.editing.outline.Prompt',
+    alias: 'widget.overview-editing-content-editor',
+
+    statics: {
 
 		getCreators: function() {
 			var base = NextThought.app.course.overview.components.editing.content,

@@ -1,19 +1,19 @@
-export default Ext.define('NextThought.app.library.content.Actions', {
-	extend: 'NextThought.common.Actions',
-
-	requires: [
-		'NextThought.app.library.content.StateStore'
-	],
+var Ext = require('extjs');
+var StoreUtils = require('../../../util/Store');
+var CommonActions = require('../../../common/Actions');
+var ContentStateStore = require('./StateStore');
 
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.app.library.content.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
 	},
 
-
-	loadContent: function(service) {
+    loadContent: function(service) {
 		var store = this.ContentStore;
 
 		if (!service) {
@@ -29,8 +29,7 @@ export default Ext.define('NextThought.app.library.content.Actions', {
 		]);
 	},
 
-
-	setUpContentPackages: function(link) {
+    setUpContentPackages: function(link) {
 		if (!link) {
 			this.ContentStore.setContentPackages([]);
 
@@ -41,8 +40,7 @@ export default Ext.define('NextThought.app.library.content.Actions', {
 			.then(this.ContentStore.setContentPackages.bind(this.ContentStore));
 	},
 
-
-	setUpContentBundles: function(link) {
+    setUpContentBundles: function(link) {
 		if (!link) {
 			this.ContentStore.setContentBundles([]);
 
@@ -53,20 +51,17 @@ export default Ext.define('NextThought.app.library.content.Actions', {
 			.then(this.ContentStore.setContentBundles.bind(this.ContentStore));
 	},
 
-
-	findContent: function(id) {
+    findContent: function(id) {
 		return this.ContentStore.onceLoaded()
 			.then(this.ContentStore.findContent.bind(this.ContentStore, id));
 	},
 
-
-	findContentByPriority: function(fn) {
+    findContentByPriority: function(fn) {
 		return this.ContentStore.onceLoaded()
 			.then(this.ContentStore.findContentByPriority.bind(this.ContentStore, fn));
 	},
 
-
-	findForNTIID: function(id) {
+    findForNTIID: function(id) {
 		return this.ContentStore.onceLoaded()
 			.then(this.ContentStore.findForNTIID.bind(this.ContentStore, id));
 	}

@@ -1,16 +1,16 @@
+var Ext = require('extjs');
+var ObjectUtils = require('./Object');
+var UtilObject = require('./Object');
+var ReaderJson = require('../proxy/reader/Json');
+
+
 /*jslint continue: true*/
 /*globals console, document, DOMParser */
-export default Ext.define('NextThought.util.Parsing', {
-	singleton: true,
+module.exports = exports = Ext.define('NextThought.util.Parsing', {
+    singleton: true,
+    COMMON_PREFIX: 'tag:nextthought.com,2011-10:',
 
-	requires: [
-		'NextThought.util.Object',
-		'NextThought.proxy.reader.Json'
-	],
-
-	COMMON_PREFIX: 'tag:nextthought.com,2011-10:',
-
-	/**
+    /**
 	 * @param {String|String[]|Object|Object[]} items
 	 * @param {Object} [supplemental] Properties to add to the parsed items (such as flags)
 	 */
@@ -49,8 +49,7 @@ export default Ext.define('NextThought.util.Parsing', {
 		return results;
 	},
 
-
-	findModel: function(data) {
+    findModel: function(data) {
 		function recurse(dir, modelName) {
 			var sub, o = dir[modelName];
 
@@ -91,8 +90,7 @@ export default Ext.define('NextThought.util.Parsing', {
 		return recurse(NextThought.model, name);
 	},
 
-
-	getReaderFor: function(item) {
+    getReaderFor: function(item) {
 		this.readers = this.readers || [];
 
 		var o = this.findModel(item);
@@ -111,11 +109,11 @@ export default Ext.define('NextThought.util.Parsing', {
 
 	},
 
-	isNTIID: function(id) {
+    isNTIID: function(id) {
 		return Boolean(this.parseNTIID(id));
 	},
 
-	/**
+    /**
 	 * Parses an id and returns an object containing the split portions
 	 * See http://excelsior.nextthought.com/server-docs/ntiid-structure/
 
@@ -207,8 +205,7 @@ export default Ext.define('NextThought.util.Parsing', {
 		return result;
 	},
 
-
-	/**
+    /**
 	 * CSS escape ids
 	 * @param {string} id
 	 * @return {string} CSS-friendly string to use in a selector
@@ -219,8 +216,7 @@ export default Ext.define('NextThought.util.Parsing', {
 				.replace(/\./g, '\\2e ');//no periods
 	},
 
-
-	/**
+    /**
 	 * Returns the prefix of the content ntiid we think this ntiid would reside beneath
 	 * @param {String} id
 	 * @return {String}
@@ -234,8 +230,7 @@ export default Ext.define('NextThought.util.Parsing', {
 		return ntiid && ntiid.toString();
 	},
 
-
-	parseNtiFragment: function(fragment) {
+    parseNtiFragment: function(fragment) {
 		var authority = 'nextthought.com,2011-10',
 			parts, type, provider, typeSpecific, s;
 
@@ -260,8 +255,7 @@ export default Ext.define('NextThought.util.Parsing', {
 		return ['tag', authority, s.join('-')].join(':');
 	},
 
-
-	parseQueryString: function(qStr) {
+    parseQueryString: function(qStr) {
 		if (Ext.isEmpty(qStr)) {
 			return null;
 		}
@@ -284,23 +278,20 @@ export default Ext.define('NextThought.util.Parsing', {
 		return r;
 	},
 
-
-	isEncodedNTIID: function(component) {
+    isEncodedNTIID: function(component) {
 		var decoded = this.decodeFromURI(component);
 
 		return this.isNTIID(decoded) && !this.isEncodedNTIIMimeType(component);
 	},
 
-
-	isEncodedNTIIMimeType: function(component) {
+    isEncodedNTIIMimeType: function(component) {
 		var decoded = decodeURIComponent(component),
 			index = decoded.indexOf('application/vnd.nextthought');
 
 		return index > -1;
 	},
 
-
-	encodeForURI: function(ntiid) {
+    encodeForURI: function(ntiid) {
 		var cut = this.COMMON_PREFIX.length;
 
 		if (ntiid && ntiid.substr(0, cut) === this.COMMON_PREFIX) {
@@ -310,7 +301,7 @@ export default Ext.define('NextThought.util.Parsing', {
 		return encodeURIComponent(ntiid);
 	},
 
-	decodeFromURI: function(component) {
+    decodeFromURI: function(component) {
 		var ntiid = decodeURIComponent(component);
 
 		if (!this.isNTIID(ntiid) && ntiid.substr(0,3) !== 'tag') {

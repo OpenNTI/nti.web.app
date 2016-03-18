@@ -1,24 +1,24 @@
-export default Ext.define('NextThought.app.navigation.Index', {
-	extend: 'Ext.Component',
-	alias: 'widget.main-navigation',
+var Ext = require('extjs');
+var MixinsState = require('../../mixins/State');
+var NavigationStateStore = require('./StateStore');
+var IdentityIndex = require('../account/identity/Index');
+var NotificationsTab = require('../notifications/Tab');
+var SearchSearchBar = require('../search/SearchBar');
+var GutterTab = require('../chat/components/gutter/Tab');
+var ChatIndex = require('../chat/Index');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
+    extend: 'Ext.Component',
+    alias: 'widget.main-navigation',
+
+    mixins: {
 		State: 'NextThought.mixins.State'
 	},
 
-	requires: [
-		'NextThought.app.navigation.StateStore',
-		'NextThought.app.account.identity.Index',
-		'NextThought.app.notifications.Tab',
-		'NextThought.app.search.SearchBar',
-		'NextThought.app.chat.components.gutter.Tab',
-		'NextThought.app.chat.Index'
-	],
+    cls: 'main-navigation',
 
-	cls: 'main-navigation',
-
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'back-container', cn: [
 			{cls: 'branding'},
 			{cls: 'back'}
@@ -32,8 +32,7 @@ export default Ext.define('NextThought.app.navigation.Index', {
 		]}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		brandingEl: '.back-container .branding',
 		backEl: '.back-container .back',
 		navContainerEl: '.nav-container',
@@ -43,8 +42,7 @@ export default Ext.define('NextThought.app.navigation.Index', {
 		chatNotifyEl: '.chat-notification-container'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.NavStore = NextThought.app.navigation.StateStore.getInstance();
@@ -55,8 +53,7 @@ export default Ext.define('NextThought.app.navigation.Index', {
 		});
 	},
 
-
-	__removeNavCmp: function() {
+    __removeNavCmp: function() {
 		if (!this.navCmp) {
 			return Promise.resolve();
 		}
@@ -72,8 +69,7 @@ export default Ext.define('NextThought.app.navigation.Index', {
 			});
 	},
 
-
-	__renderNavCmp: function(cmp) {
+    __renderNavCmp: function(cmp) {
 		var me = this;
 
 		function render(animate) {
@@ -98,7 +94,7 @@ export default Ext.define('NextThought.app.navigation.Index', {
 			.then(render.bind(null, true));
 	},
 
-	updateNav: function(config) {
+    updateNav: function(config) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateNav.bind(this));
 			return;
@@ -161,14 +157,12 @@ export default Ext.define('NextThought.app.navigation.Index', {
 		this.resizeNavCmp();
 	},
 
-
-	__removeVendorIcon: function() {
+    __removeVendorIcon: function() {
 		this.brandingEl.removeCls('custom-vendor');
 		this.brandingEl.setStyle({backgroundImage: undefined, width: undefined});
 	},
 
-
-	__setVendorIcon: function(url) {
+    __setVendorIcon: function(url) {
 		var img = new Image(),
 			brandingEl = this.brandingEl;
 
@@ -185,8 +179,7 @@ export default Ext.define('NextThought.app.navigation.Index', {
 		});
 	},
 
-
-	setActiveContent: function(bundle) {
+    setActiveContent: function(bundle) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setActiveContent.bind(this, bundle));
 			return;
@@ -201,8 +194,7 @@ export default Ext.define('NextThought.app.navigation.Index', {
 		}
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.identityCmp = NextThought.app.account.identity.Index.create({
@@ -248,13 +240,11 @@ export default Ext.define('NextThought.app.navigation.Index', {
 		Ext.EventManager.onWindowResize(this.onWindowResize.bind(this));
 	},
 
-
-	onWindowResize: function(height, width, fromExpandedSearch) {
+    onWindowResize: function(height, width, fromExpandedSearch) {
 		this.resizeNavCmp();
 	},
 
-
-	resizeNavCmp: function() {
+    resizeNavCmp: function() {
 		var width = this.navContainerEl.getWidth(),
 			bar = Ext.Element.getViewportWidth() - this.brandingEl.getWidth();
 
@@ -263,8 +253,7 @@ export default Ext.define('NextThought.app.navigation.Index', {
 		}
 	},
 
-
-	expandSearch: function(e) {
+    expandSearch: function(e) {
 		this.searchEl.removeCls('collapsed');
 		this.searchCmp.focusInput();
 
@@ -272,8 +261,7 @@ export default Ext.define('NextThought.app.navigation.Index', {
 			.then(this.resizeNavCmp.bind(this));
 	},
 
-
-	goBack: function() {
+    goBack: function() {
 		var returnPoint = this.NavStore.getReturnPoint();
 
 		if (returnPoint) {
@@ -283,30 +271,25 @@ export default Ext.define('NextThought.app.navigation.Index', {
 		}
 	},
 
-
-	pushRoute: function() {
+    pushRoute: function() {
 		this.pushRootRoute.apply(this, arguments);
 	},
 
-
-	gotoObject: function() {
+    gotoObject: function() {
 		this.attemptToNavigateToObject.apply(this, arguments);
 	},
 
-
-	gotoLibrary: function() {
+    gotoLibrary: function() {
 		if (!this.noLibraryLink) {
 			this.pushRootRoute('Library', '/library');
 		}
 	},
 
-
-	onSearchFocus: function() {
+    onSearchFocus: function() {
 		this.addCls('search-focused');
 	},
 
-
-	onSearchBlur: function() {
+    onSearchBlur: function() {
 		this.removeCls('search-focused');
 
 		if (!this.noRouteOnSearch && this.navCmp) {
@@ -314,8 +297,7 @@ export default Ext.define('NextThought.app.navigation.Index', {
 		}
 	},
 
-
-	/**
+    /**
 	 * Override this method in the state mixin so it doesn't
 	 * write the state to local storage. We only want this state
 	 * to persist in memory, not across refreshs.
@@ -325,8 +307,7 @@ export default Ext.define('NextThought.app.navigation.Index', {
 		return this.applyState(state);
 	},
 
-
-	applyState: function(state) {
+    applyState: function(state) {
 		var me = this,
 			hide = 'onMenuHide',
 			show = 'onMenuShow';

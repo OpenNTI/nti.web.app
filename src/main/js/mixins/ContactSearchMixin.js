@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.mixins.ContactSearchMixin', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.ContactSearchMixin', {
 
 	constructor: function() {
 		this.on('afterrender', 'attachContactSearch', this);

@@ -1,23 +1,26 @@
-export default Ext.define('NextThought.model.preference.Base', {
-	extend: 'Ext.data.Model',
-	requires: ['NextThought.model.converters.Future', 'NextThought.proxy.Preference', 'NextThought.model.Base'],
+var Ext = require('extjs');
+var ConvertersFuture = require('../converters/Future');
+var ProxyPreference = require('../../proxy/Preference');
+var ModelBase = require('../Base');
 
-	idProperty: 'Class',
 
-	fields: [
+module.exports = exports = Ext.define('NextThought.model.preference.Base', {
+    extend: 'Ext.data.Model',
+    idProperty: 'Class',
+
+    fields: [
 		{name: 'Class', type: 'String', persist: false},
 		{name: 'MimeType', type: 'String', useNull: false}
 	],
 
-	subPreferences: [],
+    subPreferences: [],
+    proxy: {type: 'preference', reader: 'json'},
 
-	proxy: {type: 'preference', reader: 'json'},
-
-	getResourceUrl: function() {
+    getResourceUrl: function() {
 		return $AppConfig.Preferences.baseUrl;
 	},
 
-	save: function(ops) {
+    save: function(ops) {
 		var request, me = this,
 			url = me.getResourceUrl();
 			request = Ext.apply({
@@ -33,7 +36,6 @@ export default Ext.define('NextThought.model.preference.Base', {
 
 		Ext.Ajax.request(request);
 	}
-
 }, function() {
 	this.borrow(NextThought.model.Base, ['asJSON']);
 });

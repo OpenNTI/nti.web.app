@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.form.fields.TagField', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.form.fields.TagField', {
 	alternateClassName: 'NextThought.common.form.fields.TokenField',
 	extend: 'Ext.Component',
 	alias: ['widget.tags', 'widget.tokens'],

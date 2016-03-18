@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.common.ux.TimelineWindow', {
+var Ext = require('extjs');
+var AnalyticsUtil = require('../../util/Analytics');
+var WindowWindow = require('../window/Window');
+
+
+module.exports = exports = Ext.define('NextThought.common.ux.TimelineWindow', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.timeline-window',
 

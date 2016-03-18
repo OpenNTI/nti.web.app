@@ -1,5 +1,8 @@
+var Ext = require('extjs');
+
+
 //See Working preview at http://jsfiddle.net/jsg2021/7gaU2/
-export default Ext.define('NextThought.common.chart.Grade', {
+module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 	extend: 'Ext.Component',
 	alias: 'widget.grade-chart',
 	ui: 'course-assessment',

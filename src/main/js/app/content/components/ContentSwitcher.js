@@ -1,27 +1,26 @@
-export default Ext.define('NextThought.app.content.components.ContentSwitcher', {
-	extend: 'Ext.Component',
-	alias: 'widget.content-switcher',
+var Ext = require('extjs');
+var Globals = require('../../../util/Globals');
+var MixinsState = require('../../../mixins/State');
+var BundleActions = require('../../bundle/Actions');
+var BundleStateStore = require('../../bundle/StateStore');
+var CourseActions = require('../../course/Actions');
+var CourseStateStore = require('../../course/StateStore');
+var CoursesStateStore = require('../../library/courses/StateStore');
 
-	state_key: 'content-switcher',
 
-	requires: [
-		'NextThought.app.bundle.Actions',
-		'NextThought.app.bundle.StateStore',
-		'NextThought.app.course.Actions',
-		'NextThought.app.course.StateStore',
-		'NextThought.app.library.courses.StateStore'
-	],
+module.exports = exports = Ext.define('NextThought.app.content.components.ContentSwitcher', {
+    extend: 'Ext.Component',
+    alias: 'widget.content-switcher',
+    state_key: 'content-switcher',
 
-	mixins: {
+    mixins: {
 		State: 'NextThought.mixins.State'
 	},
 
-	floating: true,
+    floating: true,
+    cls: 'content-switcher',
 
-	cls: 'content-switcher',
-
-
-	listTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+    listTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		tag: 'ul', cn: [
 			{tag: 'tpl', 'for': 'recent', cn: [
 				{
@@ -64,20 +63,17 @@ export default Ext.define('NextThought.app.content.components.ContentSwitcher', 
 		]
 	})),
 
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'pointer'},
 		{cls: 'list'}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		pointerEl: '.pointer',
 		listEl: '.list'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.BundleActions = NextThought.app.bundle.Actions.create();
@@ -87,8 +83,7 @@ export default Ext.define('NextThought.app.content.components.ContentSwitcher', 
 		this.LibraryCourseStateStore = NextThought.app.library.courses.StateStore.getInstance();
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.applyState(this.getCurrentState());
@@ -96,8 +91,7 @@ export default Ext.define('NextThought.app.content.components.ContentSwitcher', 
 		this.mon(this.el, 'click', this.onItemClicked.bind(this));
 	},
 
-
-	openAt: function(x, y) {
+    openAt: function(x, y) {
 		this.show();
 
 		var myWidth = this.getWidth(),
@@ -123,8 +117,7 @@ export default Ext.define('NextThought.app.content.components.ContentSwitcher', 
 		this.pointerEl.dom.style.left = (x - left) + 'px';
 	},
 
-
-	getBundleData: function(bundle, route, cls) {
+    getBundleData: function(bundle, route, cls) {
 		var me = this,
 			uiData = bundle.asUIData();
 
@@ -141,8 +134,7 @@ export default Ext.define('NextThought.app.content.components.ContentSwitcher', 
 			});
 	},
 
-
-	getCourseData: function(bundle, route, cls) {
+    getCourseData: function(bundle, route, cls) {
 		var me = this,
 			uiData = bundle.asUIData();
 
@@ -159,8 +151,7 @@ export default Ext.define('NextThought.app.content.components.ContentSwitcher', 
 			});
 	},
 
-
-	getFamilyData: function(family, bundle, route) {
+    getFamilyData: function(family, bundle, route) {
 		var me = this,
 			id = family.get('CatalogFamilyID'),
 			courses = this.LibraryCourseStateStore.findForCatalogFamily(id),
@@ -199,15 +190,13 @@ export default Ext.define('NextThought.app.content.components.ContentSwitcher', 
 			});
 	},
 
-
-	getCourseOrFamilyData: function(bundle, route) {
+    getCourseOrFamilyData: function(bundle, route) {
 		var family = bundle.getCatalogFamily();
 
 		return family ? this.getFamilyData(family, bundle, route) : this.getCourseData(bundle, route);
 	},
 
-
-	addBundle: function(bundle, route) {
+    addBundle: function(bundle, route) {
 		var state = this.getCurrentState() || {recent: []},
 			recent = state.recent || [],
 			getData = bundle.isCourse ? this.getCourseOrFamilyData(bundle, route) : this.getBundleData(bundle, route);
@@ -244,8 +233,7 @@ export default Ext.define('NextThought.app.content.components.ContentSwitcher', 
 			.then(this.setState.bind(this));
 	},
 
-
-	updateRouteFor: function(bundle, route) {
+    updateRouteFor: function(bundle, route) {
 		var id = bundle.getId(),
 			rootRoute = this[bundle.isCourse ? 'CourseActions' : 'BundleActions'].getRootRouteForId(id),
 			state = this.getCurrentState() || {recent: []};
@@ -269,8 +257,7 @@ export default Ext.define('NextThought.app.content.components.ContentSwitcher', 
 		this.setState(state);
 	},
 
-
-	applyState: function(state) {
+    applyState: function(state) {
 		if (!this.rendered) { return; }
 
 		this.listEl.dom.innerHTML = '';
@@ -278,9 +265,7 @@ export default Ext.define('NextThought.app.content.components.ContentSwitcher', 
 		this.listTpl.append(this.listEl, state);
 	},
 
-
-
-	onItemClicked: function(e) {
+    onItemClicked: function(e) {
 		if (!e.getTarget('li')) { return; }
 
 		var item = e.getTarget('li'),

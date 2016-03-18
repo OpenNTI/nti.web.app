@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.course.dashboard.components.widgets.Announcements', {
+var Ext = require('extjs');
+var StoreUtils = require('../../../../../util/Store');
+var WidgetsBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.widgets.Announcements', {
 	extend: 'NextThought.app.course.dashboard.components.widgets.Base',
 
 	//requires: ['NextThought.app.course.dashboard.components.tiles.AnnouncementsList'],

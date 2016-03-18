@@ -1,13 +1,13 @@
+var Ext = require('extjs');
+var VideoservicesVimeo = require('./videoservices/Vimeo');
+var VideoservicesYoutube = require('./videoservices/Youtube');
+
+
 /*
 	TODO: Does this need to be a model?
  */
-export default Ext.define('NextThought.model.resolvers.VideoPosters', {
-	requires: [
-		'NextThought.model.resolvers.videoservices.Vimeo',
-		'NextThought.model.resolvers.videoservices.Youtube'
-	],
-
-	statics: {
+module.exports = exports = Ext.define('NextThought.model.resolvers.VideoPosters', {
+    statics: {
 		YOUTUBE: 'youtube',
 		VIMEO: 'vimeo',
 

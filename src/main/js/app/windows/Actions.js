@@ -1,28 +1,27 @@
-export default Ext.define('NextThought.app.windows.Actions', {
-	extend: 'NextThought.common.Actions',
-
-	requires: [
-		'NextThought.app.windows.StateStore'
-	],
+var Ext = require('extjs');
+var ParseUtils = require('../../util/Parsing');
+var CommonActions = require('../../common/Actions');
+var WindowsStateStore = require('./StateStore');
 
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 	},
 
-
-	__resolveBeforeShow: function(ntiid) {
+    __resolveBeforeShow: function(ntiid) {
 		return Service.getObject(ntiid);
 	},
 
-
-	hasWindow: function(obj) {
+    hasWindow: function(obj) {
 		return this.WindowStore.hasComponentForMimeType(obj.mimeType);
 	},
 
-	/**
+    /**
 	 * Given an object return the object url
 	 *
 	 * TODO: unify this with the building of the url in Body.js
@@ -43,8 +42,7 @@ export default Ext.define('NextThought.app.windows.Actions', {
 		return '/object/' + id;
 	},
 
-
-	/**
+    /**
 	 * Push a window to the state
 	 * @param  {String|Model} objectOrNTIID the object or ntiid of the object to show
 	 * @param  {Array} path          the path to show for the model
@@ -69,18 +67,15 @@ export default Ext.define('NextThought.app.windows.Actions', {
 		this.WindowStore.firePushWindow(id, mimeType, state);
 	},
 
-
-	closeWindow: function() {
+    closeWindow: function() {
 		this.WindowStore.firePushWindow(null);
 	},
 
-
-	closeActiveWindow: function() {
+    closeActiveWindow: function() {
 		this.WindowStore.fireCloseWindow();
 	},
 
-
-	/**
+    /**
 	 * Given an object or NTIID show a modal for it, without pushing or replacing state
 	 *
 	 *
@@ -120,8 +115,7 @@ export default Ext.define('NextThought.app.windows.Actions', {
 		});
 	},
 
-
-	showWindowWithMimeType: function(id, mimeType, state, rawId) {
+    showWindowWithMimeType: function(id, mimeType, state, rawId) {
 		var me = this,
 			resolver = me.WindowStore.getResolverFor(mimeType);
 

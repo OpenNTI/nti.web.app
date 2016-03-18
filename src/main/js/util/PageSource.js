@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.util.PageSource', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.util.PageSource', {
 
 	mixins: {
 		observable: 'Ext.util.Observable'

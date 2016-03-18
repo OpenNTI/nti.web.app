@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.assessment.components.Navigation', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.Navigation', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-assessment-navigation',
 

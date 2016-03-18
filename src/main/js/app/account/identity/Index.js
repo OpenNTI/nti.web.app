@@ -1,29 +1,27 @@
-export default Ext.define('NextThought.app.account.identity.Index', {
-	extend: 'Ext.Component',
-	alias: 'widget.identity',
-
-	requires: ['NextThought.app.account.identity.components.Settings'],
+var Ext = require('extjs');
+var NTIFormat = require('../../../util/Format');
+var ComponentsSettings = require('./components/Settings');
 
 
-	cls: 'identity x-menu',
+module.exports = exports = Ext.define('NextThought.app.account.identity.Index', {
+    extend: 'Ext.Component',
+    alias: 'widget.identity',
+    cls: 'identity x-menu',
 
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'profile-pic', 'data-qtip': '{user:displayName}', cn: [
 			'{user:avatar}',
 			{cls: 'presence'}
 		]}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		avatar: '.profile-pic',
 		presence: '.profile-pic .presence',
 		name: '.name'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -36,8 +34,7 @@ export default Ext.define('NextThought.app.account.identity.Index', {
 		this.monitorUser($AppConfig.userObject);
 	},
 
-
-	monitorUser: function(user) {
+    monitorUser: function(user) {
 		var me = this,
 			m = {
 				scope: this,
@@ -67,8 +64,7 @@ export default Ext.define('NextThought.app.account.identity.Index', {
 		}
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		var me = this;
 
 		this.callParent(arguments);
@@ -100,23 +96,19 @@ export default Ext.define('NextThought.app.account.identity.Index', {
 		}
 	},
 
-
-	onMenuShow: function() {
+    onMenuShow: function() {
 		this.menu.show();
 	},
 
-
-	onMenuHide: function() {
+    onMenuHide: function() {
 		this.menu.hide();
 	},
 
-
-	cancelHideShowEvents: function() {
+    cancelHideShowEvents: function() {
 		clearTimeout(this.hideTimeout);
 	},
 
-
-	toggleMenu: function() {
+    toggleMenu: function() {
 		if (this.menu.isVisible()) {
 			this.setMenuClosed();
 		} else {
@@ -125,8 +117,7 @@ export default Ext.define('NextThought.app.account.identity.Index', {
 		}
 	},
 
-
-	startToHideMenu: function() {
+    startToHideMenu: function() {
 		var me = this;
 
 		this.cancelHideShowEvents();

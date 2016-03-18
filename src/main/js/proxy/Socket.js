@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.proxy.Socket', {
+var Ext = require('extjs');
+var Socket = require('./Socket');
+var Globals = require('../util/Globals');
+
+
+module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 	singleton: true,
 	isDebug: $AppConfig.debugSocket,
 	isVerbose: $AppConfig.debugSocketVerbosely,

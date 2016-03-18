@@ -1,14 +1,13 @@
-export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
-	extend: 'Ext.Component',
+var Ext = require('extjs');
+var MenusJumpTo = require('../../../common/menus/JumpTo');
+var NavigationTableOfContents = require('./TableOfContents');
 
-	requires: [
-		'NextThought.common.menus.JumpTo',
-		'NextThought.app.contentviewer.navigation.TableOfContents'
-	],
 
-	cls: 'content-toolbar',
+module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.Base', {
+    extend: 'Ext.Component',
+    cls: 'content-toolbar',
 
-	pagingTpl: Ext.DomHelper.markup(
+    pagingTpl: Ext.DomHelper.markup(
 		{tag: 'tpl', 'if': 'showPaging', cn: [
 			{cls: 'page', cn: [
 				{tag: 'span', cls: 'currentPage', html: '{page}'},
@@ -20,8 +19,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		]}
 	),
 
-
-	pathTpl: Ext.DomHelper.markup([
+    pathTpl: Ext.DomHelper.markup([
 		{cls: 'toc {tocCls}', cn: [
 			{cls: 'icon'},
 			{cls: 'label', html: '{{{NextThought.view.content.Navigation.toc}}}'}
@@ -38,22 +36,19 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		]}
 	]),
 
-
-	toolbarTpl: Ext.DomHelper.markup([
+    toolbarTpl: Ext.DomHelper.markup([
 		{cls: 'right controls', html: '{pagingContent}'},
 		{cls: 'path-items', html: '{pathContent}'}
 	]),
 
+    headerTpl: '',
 
-	headerTpl: '',
-
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'toolbar', html: '{toolbarContents}'},
 		{cls: 'header', html: '{headerContents}'}
 	]),
 
-	renderSelectors: {
+    renderSelectors: {
 		pagingEl: '.right.controls',
 		pathEl: '.path-items',
 		totalEl: '.page .total',
@@ -63,8 +58,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		tocEl: '.toc'
 	},
 
-
-	onClassExtended: function(cls, data) {
+    onClassExtended: function(cls, data) {
 		var tpl = cls.superclass.renderTpl,
 			superSelectors = Ext.clone(cls.superclass.renderSelectors);
 
@@ -107,8 +101,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		data.renderTpl = data.renderTpl.replace('{headerContents}', data.headerTpl || '');
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -163,8 +156,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		});
 	},
 
-
-	onPathLoad: function(path) {
+    onPathLoad: function(path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.onPathLoad.bind(this, path));
 			return;
@@ -183,8 +175,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		});
 	},
 
-
-	onPageSourceLoad: function(pageSource) {
+    onPageSourceLoad: function(pageSource) {
 		if (!this.rendered) {
 			this.on('afterrender', this.onPageSourceLoad.bind(this, pageSource));
 			return;
@@ -195,21 +186,18 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		this.onPagerUpdate();
 	},
 
-
-	__getPathFromEvent: function(e) {
+    __getPathFromEvent: function(e) {
 		var part = e.getTarget('.part');
 	},
 
-
-	__getPathPart: function(part) {
+    __getPathPart: function(part) {
 		var index = part && part.getAttribute('data-index');
 
 		index = parseInt(index, 10);
 		return this.path[index - 1];
 	},
 
-
-	onPathClicked: function(e) {
+    onPathClicked: function(e) {
 		var part = e.getTarget('.part'), path;
 
 		if (e.getTarget('.toc')) {
@@ -226,8 +214,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		}
 	},
 
-
-	onPathHover: function(e) {
+    onPathHover: function(e) {
 		var part = e.getTarget('.part'), path;
 
 		if (e.getTarget('.locked') || !part) { return; }
@@ -239,8 +226,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		}
 	},
 
-
-	startShowingPathMenu: function(el, path) {
+    startShowingPathMenu: function(el, path) {
 		var items = path.siblings,
 			rect = el.getBoundingClientRect();
 
@@ -273,22 +259,19 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		this.pathMenu.startShow(el, 'tl-bl', [-10, -20]);
 	},
 
-
-	onPathOut: function(e) {
+    onPathOut: function(e) {
 		if (this.pathMenu && (!Ext.is.iPad || !this.pathMenu.isVisible())) {
 			this.pathMenu.stopShow();
 		}
 	},
 
-
-	switchPath: function(menu, item) {
+    switchPath: function(menu, item) {
 		if (item) {
 			this.doNavigation(item.title || '', item.route, item.precache || {});
 		}
 	},
 
-
-	onPagerUpdate: function() {
+    onPagerUpdate: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.onPagerUpdate.bind(this));
 			return;
@@ -306,8 +289,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		this.previousEl.dom.setAttribute('title', ps.getPreviousTitle());
 	},
 
-
-	onPrevious: function(e) {
+    onPrevious: function(e) {
 		if (e.getTarget('.disabled')) {
 			return;
 		}
@@ -319,8 +301,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		this.doNavigation(title, previous);
 	},
 
-
-	onNext: function(e) {
+    onNext: function(e) {
 		if (e.getTarget('.disabled')) {
 			return;
 		}
@@ -332,8 +313,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		this.doNavigation(title, next, precache);
 	},
 
-
-	showToast: function(msgOrConfig) {
+    showToast: function(msgOrConfig) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showToast.bind(this, msgOrConfig));
 			return;
@@ -385,8 +365,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		};
 	},
 
-
-	setPageInfo: function(pageInfo) {
+    setPageInfo: function(pageInfo) {
 		this.activeNTIID = pageInfo.getId();
 
 		if (this.tocComponent) {
@@ -394,8 +373,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		}
 	},
 
-
-	buildTocComponent: function(store) {
+    buildTocComponent: function(store) {
 		this.tocComponent = Ext.widget({
 			xtype: 'table-of-contents-flyout',
 			store: store,
@@ -411,8 +389,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		}
 	},
 
-
-	onShowToc: function() {
+    onShowToc: function() {
 		if (!this.tocComponent) {
 			this.hasTocOpen = true;
 			return;

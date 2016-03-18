@@ -1,30 +1,28 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEditor', {
-	extend: 'Ext.Component',
-	alias: 'widget.overview-editing-inline-editor',
+var Ext = require('extjs');
+var EditingActions = require('../Actions');
 
-	inheritableStatics: {
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.InlineEditor', {
+    extend: 'Ext.Component',
+    alias: 'widget.overview-editing-inline-editor',
+
+    inheritableStatics: {
 		getTypes: function() {}
 	},
 
-	requires: [
-		'NextThought.app.course.overview.components.editing.Actions'
-	],
+    cls: 'inline-editor',
 
-	cls: 'inline-editor',
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'field', cn: [
 			{tag: 'input', name: 'title', value: '{defaultValue}', autocomplete: '{autocomplete}', maxlength: '{maxLength}'}
 		]}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		inputEl: '.field input[name=title]'
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		var type = this.self.getTypes();
@@ -38,8 +36,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		});
 	},
 
-
-	getSuggestedNodeTitle: function() {
+    getSuggestedNodeTitle: function() {
 		var childrenCount = (this.parentRecord.get('Items') || []).length, childType;
 
 		if (this.parentRecord) {
@@ -57,8 +54,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		return '';
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		var me = this;
 
@@ -72,8 +68,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 			});
 	},
 
-
-	onKeyup: function(e) {
+    onKeyup: function(e) {
 		var record;
 
 		if (e.getKey() === e.ENTER) {
@@ -93,8 +88,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		}
 	},
 
-
-	getValue: function() {
+    getValue: function() {
 		return {
 			MimeType: this.mimeType,
 			ContentNTIID: null,
@@ -102,14 +96,12 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		};
 	},
 
-
-	setSuggestTitle: function() {
+    setSuggestTitle: function() {
 		this.inputEl.dom.value = this.getSuggestedNodeTitle();
 		this.inputEl.dom.select();
 	},
 
-
-	isValid: function() {
+    isValid: function() {
 		var value = this.getValue();
 
 		if (!value.MimeType) {
@@ -124,13 +116,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		return true;
 	},
 
-
-	showError: function() {
+    showError: function() {
 		this.inputEl.addCls('error');
 	},
 
-
-	clearError: function() {
+    clearError: function() {
 		if (this.inputEl.hasCls('error')) {
 			this.inputEl.removeCls('error');
 		}

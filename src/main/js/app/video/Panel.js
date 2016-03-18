@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.video.Panel', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.video.Panel', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.video',
 

@@ -1,17 +1,15 @@
-export default Ext.define('NextThought.app.image.cropping.Editor', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.image-cropping-editor',
-
-	requires: [
-		'NextThought.app.image.cropping.Canvas'
-	],
-
-	layout: 'none',
-	cls: 'image-cropping-editor',
-	items: [],
+var Ext = require('extjs');
+var CroppingCanvas = require('./Canvas');
 
 
-	initComponent: function() {
+module.exports = exports = Ext.define('NextThought.app.image.cropping.Editor', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.image-cropping-editor',
+    layout: 'none',
+    cls: 'image-cropping-editor',
+    items: [],
+
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.canvas = this.add({
@@ -48,15 +46,13 @@ export default Ext.define('NextThought.app.image.cropping.Editor', {
 		}
 	},
 
-
-	doRotate: function() {
+    doRotate: function() {
 		if (this.canvas) {
 			this.canvas.rotate();
 		}
 	},
 
-
-	onSave: function() {
+    onSave: function() {
 		if (this.canvas) {
 			return this.canvas.getValue();
 		}

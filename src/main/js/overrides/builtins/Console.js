@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.builtins.Console', function() {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.builtins.Console', function() {
 
 	$AppConfig.maxLogCapture = $AppConfig.maxLogCapture || 20;
 

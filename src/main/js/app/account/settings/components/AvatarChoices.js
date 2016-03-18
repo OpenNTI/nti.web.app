@@ -1,13 +1,12 @@
-export default Ext.define('NextThought.app.account.settings.components.AvatarChoices', {
-	extend: 'Ext.Component',
-	alias: 'widget.avatar-choices',
-
-	requires: [
-		'NextThought.app.whiteboard.Utils'
-	],
+var Ext = require('extjs');
+var WhiteboardUtils = require('../../../whiteboard/Utils');
 
 
-	renderTpl: Ext.DomHelper.markup({
+module.exports = exports = Ext.define('NextThought.app.account.settings.components.AvatarChoices', {
+    extend: 'Ext.Component',
+    alias: 'widget.avatar-choices',
+
+    renderTpl: Ext.DomHelper.markup({
 		tag: 'ul',
 		cls: 'avatar-choices',
 		cn: [
@@ -40,8 +39,7 @@ export default Ext.define('NextThought.app.account.settings.components.AvatarCho
 		]
 	}),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		list: 'ul.avatar-choices',
 		avatarWrapper: 'li.avatar .avatar-wrapper',
 		editAvatarChoice: 'li.avatar span.editCustom',
@@ -49,8 +47,7 @@ export default Ext.define('NextThought.app.account.settings.components.AvatarCho
 		editBackgroundChoice: 'li.background span.editCustom'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		var me = this,
 			u = (me.user || $AppConfig.userObject),
 			url = u.get('avatarURL');
@@ -67,8 +64,7 @@ export default Ext.define('NextThought.app.account.settings.components.AvatarCho
 		me.callParent(arguments);
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -106,8 +102,7 @@ export default Ext.define('NextThought.app.account.settings.components.AvatarCho
 		});
 	},
 
-
-	clickHandler: function(e) {
+    clickHandler: function(e) {
 		e.stopEvent();
 
 		var item = e.getTarget('li', null, true),
@@ -124,7 +119,7 @@ export default Ext.define('NextThought.app.account.settings.components.AvatarCho
 		}
 	},
 
-	edit: function(field, src) {
+    edit: function(field, src) {
 		var w = this.up('account-window'),
 			picEditor = w.down('picture-editor');
 
@@ -137,8 +132,7 @@ export default Ext.define('NextThought.app.account.settings.components.AvatarCho
 		});
 	},
 
-
-	upload: function(field) {
+    upload: function(field) {
 		var w = this.up('account-window'),
 			picEditor = w.down('picture-editor');
 
@@ -151,23 +145,19 @@ export default Ext.define('NextThought.app.account.settings.components.AvatarCho
 		});
 	},
 
-
-	editAvatar: function() {
+    editAvatar: function() {
 		this.edit('avatarURL', $AppConfig.userObject.get('avatarURL'));
 	},
 
-
-	uploadAvatar: function() {
+    uploadAvatar: function() {
 		this.upload('avatarURL');
 	},
 
-
-	editBackground: function() {
+    editBackground: function() {
 		this.edit('backgroundURL', $AppConfig.userObject.get('backgroundURL'));
 	},
 
-
-	uploadBackground: function() {
+    uploadBackground: function() {
 		this.upload('backgroundURL');
 	}
 });

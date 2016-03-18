@@ -1,16 +1,16 @@
-export default Ext.define('NextThought.app.library.admin.Current', {
-	extend: 'NextThought.app.library.courses.Current',
-	alias: 'widget.library-current-admin',
+var Ext = require('extjs');
+var CoursesCurrent = require('../courses/Current');
+var CoursesStateStore = require('../courses/StateStore');
 
-	requires: [
-		'NextThought.app.library.courses.StateStore'
-	],
 
-	layout: 'none',
-	title: 'Administered Courses',
-	storeModel: 'NextThought.model.courses.CourseInstanceAdministrativeRole',
+module.exports = exports = Ext.define('NextThought.app.library.admin.Current', {
+    extend: 'NextThought.app.library.courses.Current',
+    alias: 'widget.library-current-admin',
+    layout: 'none',
+    title: 'Administered Courses',
+    storeModel: 'NextThought.model.courses.CourseInstanceAdministrativeRole',
 
-	statics: {
+    statics: {
 		shouldShow: function() {
 			var CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 
@@ -23,9 +23,9 @@ export default Ext.define('NextThought.app.library.admin.Current', {
 		}
 	},
 
-	items: [],
+    items: [],
 
-	showCurrentItems: function() {
+    showCurrentItems: function() {
 		var current = this.CourseStore.getCurrentAdminCourses(),
 			upcoming = this.CourseStore.getUpcomingAdminCourses(),
 			archived = this.CourseStore.getArchivedAdminCourses(),
@@ -57,11 +57,9 @@ export default Ext.define('NextThought.app.library.admin.Current', {
 		return this.showItems(current);
 	},
 
+    maybeShowAdd: function() {},
 
-	maybeShowAdd: function() {},
-
-
-	onSeeAllClick: function() {
+    onSeeAllClick: function() {
 		if (this.pushRoute) {
 			this.pushRoute('Administered Courses', '/admin');
 		}

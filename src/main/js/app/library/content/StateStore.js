@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.library.content.StateStore', {
+var Ext = require('extjs');
+var CommonStateStore = require('../../../common/StateStore');
+
+
+module.exports = exports = Ext.define('NextThought.app.library.content.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	CONTENT_PACKAGES: [],

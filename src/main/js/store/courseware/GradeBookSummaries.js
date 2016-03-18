@@ -1,5 +1,10 @@
+var Ext = require('extjs');
+var UserRepository = require('../../cache/UserRepository');
+var User = require('../../model/User');
+
+
 /*globals User, PersistentStorage*/
-export default Ext.define('NextThought.store.courseware.GradeBookSummaries', {
+module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 	extend: 'Ext.data.Store',
 
 	model: 'NextThought.model.courses.assignments.Summary',

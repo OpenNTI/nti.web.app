@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.proxy.writer.Json', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.proxy.writer.Json', {
 	extend: 'Ext.data.writer.Json',
 	alias: 'writer.nti',
 

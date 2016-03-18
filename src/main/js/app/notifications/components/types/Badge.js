@@ -1,4 +1,10 @@
-export default Ext.define('NextThought.app.notifications.components.types.Badge', {
+var Ext = require('extjs');
+var UserRepository = require('../../../../cache/UserRepository');
+var NTIFormat = require('../../../../util/Format');
+var TypesBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.app.notifications.components.types.Badge', {
 	extend: 'NextThought.app.notifications.components.types.Base',
 	alias: 'widget.notifications-item-badge',
 

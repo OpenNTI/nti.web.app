@@ -1,15 +1,16 @@
-export default Ext.define('NextThought.app.course.dashboard.components.tiles.Topic', {
-	extend: 'NextThought.app.course.dashboard.components.tiles.Post',
-	alias: 'widget.dashboard-topic',
+var Ext = require('extjs');
+var StoreUtils = require('../../../../../util/Store');
+var TilesPost = require('./Post');
+var PartsTopicComment = require('./parts/TopicComment');
+var PathActions = require('../../../../navigation/path/Actions');
 
-	requires: [
-		'NextThought.app.course.dashboard.components.tiles.parts.TopicComment',
-		'NextThought.app.navigation.path.Actions'
-	],
 
-	cls: 'dashboard-post topic',
+module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Topic', {
+    extend: 'NextThought.app.course.dashboard.components.tiles.Post',
+    alias: 'widget.dashboard-topic',
+    cls: 'dashboard-post topic',
 
-	statics: {
+    statics: {
 		HEIGHT: 200,
 		COMMENT_HEIGHT: 100,
 
@@ -26,15 +27,13 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Top
 		}
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.WindowActions = NextThought.app.windows.Actions.create();
 		this.NavigationActions = NextThought.app.navigation.path.Actions.create();
 	},
 
-
-	handleNavigation: function(e) {
+    handleNavigation: function(e) {
 		if (this.removeOnDelete) {
 			this.record.destroyDoesNotClearListeners = true;
 		}
@@ -42,14 +41,14 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Top
 		this.WindowActions.pushWindow(this.record, null, e, {afterClose: this.onWindowClose.bind(this)}, {course: this.course});
 	},
 
-	onWindowClose: function() {
+    onWindowClose: function() {
 		this.removeAll(true);
 		this.updateBody(); // Safe guard for now
 		this.setTitle(this.getTitle());
 		this.showComments();
 	},
 
-	containedIn: function(forums) {
+    containedIn: function(forums) {
 		forums = Ext.isArray(forums) ? forums : [forums];
 
 		var id = this.record.get('ContainerId'),
@@ -62,8 +61,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Top
 		return contained;
 	},
 
-
-	getPath: function() {
+    getPath: function() {
 		return this.NavigationActions.getBreadCrumb(this.record)
 			.then(function(path) {
 				return path.map(function(item) {
@@ -72,18 +70,15 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Top
 			});
 	},
 
-
-	getTitle: function() {
+    getTitle: function() {
 		return this.record.get('title');
 	},
 
-
-	getSharedWith: function() {
+    getSharedWith: function() {
 		return 'Public';
 	},
 
-
-	getBody: function() {
+    getBody: function() {
 		var headline = this.record.get('headline'),
 			whiteboardSize = this.self.WHITEBOARD_SIZE;
 
@@ -92,25 +87,21 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.Top
 		});
 	},
 
-
-	getCommentCount: function() {
+    getCommentCount: function() {
 		return this.record.get('PostCount');
 	},
 
-
-	hasComments: function() {
+    hasComments: function() {
 		return this.record.get('PostCount') > 0;
 	},
 
-
-	loadComments: function() {
+    loadComments: function() {
 		var link = this.record.getLink('contents');
 
 		return StoreUtils.loadItems(link, this.self.COMMENT_PARAMS);
 	},
 
-
-	getCmpForComment: function(comment) {
+    getCmpForComment: function(comment) {
 		return {
 			xtype: 'dashboard-topic-comment-part',
 			record: comment,

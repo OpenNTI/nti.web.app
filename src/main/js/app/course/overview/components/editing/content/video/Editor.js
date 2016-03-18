@@ -1,19 +1,17 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.video.Editor', {
-	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-	alias: 'widget.overview-editing-video',
-
-	requires: [
-		'NextThought.model.Video',
-		'NextThought.model.VideoRoll',
-		'NextThought.app.course.overview.components.editing.content.video.ItemSelection',
-		'NextThought.app.course.overview.components.editing.content.video.VideoEditor'
-	],
+var Ext = require('extjs');
+var ContentEditor = require('../Editor');
+var ModelVideo = require('../../../../../../../model/Video');
+var ModelVideoRoll = require('../../../../../../../model/VideoRoll');
+var VideoItemSelection = require('./ItemSelection');
+var VideoVideoEditor = require('./VideoEditor');
 
 
-	SWITCHED: 'switched-items',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.Editor', {
+    extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+    alias: 'widget.overview-editing-video',
+    SWITCHED: 'switched-items',
 
-
-	statics: {
+    statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.Video.mimeType,
@@ -41,14 +39,13 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-	cls: 'content-editor video-editor',
+    cls: 'content-editor video-editor',
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 	},
 
-
-	showEditor: function() {
+    showEditor: function() {
 		if (this.record) {
 			this.showVideoEditor();
 		} else {
@@ -56,15 +53,13 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	maybeEnableBack: function(text) {
+    maybeEnableBack: function(text) {
 		if (!this.record && this.enableBack) {
 			this.enableBack(text);
 		}
 	},
 
-
-	onBack: function() {
+    onBack: function() {
 		if (this.videoEditorCmp) {
 			this.showVideoList(this.videoEditorCmp.selectedItems);
 		} else if (this.doBack) {
@@ -72,8 +67,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	__sortVideos: function(videos) {
+    __sortVideos: function(videos) {
 		return videos.sort(function(a, b) {
 			var vA = a.get('title'),
 				vB = b.get('title');
@@ -82,8 +76,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		});
 	},
 
-
-	__getExcludedVideos: function(videos) {
+    __getExcludedVideos: function(videos) {
 		var siblings = this.parentRecord ? this.parentRecord.get('Items') : [];
 
 		return siblings.reduce(function getVideoIds(acc, item) {
@@ -104,8 +97,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			}, []);
 	},
 
-
-	showVideoList: function(selectedItems) {
+    showVideoList: function(selectedItems) {
 		var me = this,
 			exclude = me.__getExcludedVideos();
 
@@ -137,8 +129,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			});
 	},
 
-
-	showVideoEditor: function() {
+    showVideoEditor: function() {
 		if (this.videoEditorCmp) {
 			this.viedoEditorCmp.destroy();
 			delete this.videoEditorCmp;
@@ -165,8 +156,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		this.maybeEnableBack('Videos');
 	},
 
-
-	onVideoListSelectionChange: function(selection) {
+    onVideoListSelectionChange: function(selection) {
 		var length = selection.length;
 
 		if (length === 0) {
@@ -178,20 +168,17 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	onSaveFailure: function(reason) {
+    onSaveFailure: function(reason) {
 		if (reason === this.SWITCHED) { return; }
 
 		this.callParent(arguments);
 	},
 
-
-	doValidation: function() {
+    doValidation: function() {
 		return Promise.resolve();
 	},
 
-
-	onSave: function() {
+    onSave: function() {
 		var me = this;
 
 		if (!me.videoEditorCmp) {

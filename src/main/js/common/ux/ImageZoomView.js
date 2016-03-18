@@ -1,20 +1,21 @@
-export default Ext.define('NextThought.common.ux.ImageZoomView', {
-	alias: 'widget.image-zoom-view',
-	extend: 'Ext.Component',
+var Ext = require('extjs');
+var ReaderPanel = require('../../app/contentviewer/components/Reader');
+var SlideDeck = require('./SlideDeck');
+var UxSlideDeck = require('./SlideDeck');
 
-	requires: [
-		'NextThought.common.ux.SlideDeck'
-	],
 
-	ui: 'image-zoom-view',
-	cls: 'zoom',
-	floating: true,
-	modal: true,
-	plain: true,
-	width: 275,
-	height: 200,
+module.exports = exports = Ext.define('NextThought.common.ux.ImageZoomView', {
+    alias: 'widget.image-zoom-view',
+    extend: 'Ext.Component',
+    ui: 'image-zoom-view',
+    cls: 'zoom',
+    floating: true,
+    modal: true,
+    plain: true,
+    width: 275,
+    height: 200,
 
-	renderTpl: Ext.DomHelper.markup([{
+    renderTpl: Ext.DomHelper.markup([{
 		tag: 'a', href: '#unzoom', cls: 'close', 'data-qtip': 'Close'
 	},{
 		cls: 'wrapper',
@@ -67,7 +68,7 @@ export default Ext.define('NextThought.common.ux.ImageZoomView', {
 		}]
 	}]),
 
-	renderSelectors: {
+    renderSelectors: {
 		closeEl: 'a.close',
 		closeEl2: 'a.unzoom',
 		image: 'img',
@@ -76,7 +77,7 @@ export default Ext.define('NextThought.common.ux.ImageZoomView', {
 		presentationEl: 'a.slide'
 	},
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		function get(el, attr) { return el ? el.getAttribute(attr) : null; }
@@ -103,16 +104,14 @@ export default Ext.define('NextThought.common.ux.ImageZoomView', {
 		}
 	},
 
-
-	destroy: function() {
+    destroy: function() {
 		Ext.EventManager.removeResizeListener(this.viewportMonitor, this);
 		var n = Ext.query('.nav-helper').first();
 		if (n) { Ext.fly(n).show(); }
 		return this.callParent(arguments);
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.el.mask('Loading...');
 		this.el.set({tabindex: 1});
@@ -155,13 +154,13 @@ export default Ext.define('NextThought.common.ux.ImageZoomView', {
 		Ext.EventManager.onWindowResize(this.viewportMonitor, this, undefined);
 	},
 
-	viewportMonitor: function() {
+    viewportMonitor: function() {
 		var b = this.barEl.getHeight();
 		this.barHeightCache = b > this.barHeightCache ? b : this.barHeightCache;
 		this.syncSize();
 	},
 
-	syncSize: Ext.Function.createBuffered(function() {
+    syncSize: Ext.Function.createBuffered(function() {
 		var El = Ext.dom.Element,
 			me = this,
 			barH = me.barHeightCache,
@@ -189,8 +188,7 @@ export default Ext.define('NextThought.common.ux.ImageZoomView', {
 
 	}, 80),
 
-
-	center: function() {
+    center: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.center.bind(this));
 			return;
@@ -213,8 +211,7 @@ export default Ext.define('NextThought.common.ux.ImageZoomView', {
 		dom.style.left = left + 'px';
 	},
 
-
-	openPresentation: function(e) {
+    openPresentation: function(e) {
 		this.close();
 		var w = this.ownerCmp && this.ownerCmp.up('window');
 		if (w) {
@@ -225,16 +222,14 @@ export default Ext.define('NextThought.common.ux.ImageZoomView', {
 		return false;
 	},
 
-
-	commentOn: function(e) {
+    commentOn: function(e) {
 		this.close();
 		(this.ownerCmp || ReaderPanel.get()).fireEvent('markupenabled-action', this.refEl, 'mark');
 		e.stopEvent();
 		return false;
 	},
 
-
-	close: function(e) {
+    close: function(e) {
 		this.destroy();
 		if (e && e.stopEvent) {
 			e.stopEvent();
@@ -243,8 +238,7 @@ export default Ext.define('NextThought.common.ux.ImageZoomView', {
 		return true;
 	},
 
-
-	statics: {
+    statics: {
 		zoomImage: function(el, reader, ownerCmp) {
 			var span = Ext.fly(el).up('[itemprop*=nti-data-markup]'),
 				img = span.down('img[id]').dom,
@@ -280,5 +274,4 @@ export default Ext.define('NextThought.common.ux.ImageZoomView', {
 			}).show();
 		}
 	}
-
 });

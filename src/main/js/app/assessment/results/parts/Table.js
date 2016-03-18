@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.assessment.results.parts.Table', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.Table', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-table-results',
 

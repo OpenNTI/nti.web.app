@@ -1,25 +1,24 @@
-export default Ext.define('NextThought.app.course.editing.Actions', {
-	extend: 'NextThought.common.Actions',
-
-	requires: [
-		'NextThought.model.conflict.DestructiveChallenge',
-		'NextThought.app.conflict.Actions'
-	],
+var Ext = require('extjs');
+var ParseUtils = require('../../../util/Parsing');
+var CommonActions = require('../../../common/Actions');
+var ConflictDestructiveChallenge = require('../../../model/conflict/DestructiveChallenge');
+var ConflictActions = require('../../conflict/Actions');
 
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.ConflictActions = NextThought.app.conflict.Actions.create();
 	},
 
-
-	__resolveConflict: function(conflict, data) {
+    __resolveConflict: function(conflict, data) {
 		return this.ConflictActions.resolveConflict(conflict, data);
 	},
 
-
-	updateAssignmentDates: function(assignment, available, due) {
+    updateAssignmentDates: function(assignment, available, due) {
 		var me = this,
 			link = assignment.getLink('edit'),
 			data = {

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.mixins.JSONValue', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.JSONValue', {
 
 	ignoredKeyMap: {
 		config: true,

@@ -1,3 +1,6 @@
+var Ext = require('extjs');
+
+
 describe('All Classes Exist', function() {
 	var bootstrap = {
 			'NextThought.app.Body': [],

@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.enrollment.components.parts.GroupedSet', {
+var Ext = require('extjs');
+var PartsSet = require('./Set');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.GroupedSet', {
 	extend: 'NextThought.app.course.enrollment.components.parts.Set',
 	alias: 'widget.enrollment-grouped-set',
 

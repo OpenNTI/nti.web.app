@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.parentselection.NewItem', {
+var Ext = require('extjs');
+var Globals = require('../../../../../../util/Globals');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.parentselection.NewItem', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-parentselection-newitem',
 

@@ -1,13 +1,13 @@
-export default Ext.define('NextThought.app.course.assessment.components.admin.email.Actions', {
-	extend: 'NextThought.common.Actions',
-
-	requires: [
-		'NextThought.util.Parsing',
-		'NextThought.app.course.StateStore'
-	],
+var Ext = require('extjs');
+var CommonActions = require('../../../../../../common/Actions');
+var UtilParsing = require('../../../../../../util/Parsing');
+var CourseStateStore = require('../../../../StateStore');
 
 
-	sendEmail: function(record, postURL, scope) {
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.email.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    sendEmail: function(record, postURL, scope) {
 		var me = this, 
 			data = record && record.asJSON(),
 			params = {};

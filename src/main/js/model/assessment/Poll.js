@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.assessment.Poll', {
+var Ext = require('extjs');
+var AssessmentQuestion = require('./Question');
+
+
+module.exports = exports = Ext.define('NextThought.model.assessment.Poll', {
 	extend: 'NextThought.model.assessment.Question',
 	mimeType: 'application/vnd.nextthought.napoll',
 

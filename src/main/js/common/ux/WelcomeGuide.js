@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.common.ux.WelcomeGuide', {
+var Ext = require('extjs');
+var WindowWindow = require('../window/Window');
+
+
+module.exports = exports = Ext.define('NextThought.common.ux.WelcomeGuide', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.welcome-guide',
 

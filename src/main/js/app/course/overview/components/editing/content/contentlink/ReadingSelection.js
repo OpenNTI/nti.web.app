@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.ReadingSelection', {
+var Ext = require('extjs');
+var ContentUtils = require('../../../../../../../util/Content');
+var ItemselectionIndex = require('../../itemselection/Index');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.ReadingSelection', {
 	extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
 	alias: 'widget.overview-editing-reading-selection',
 

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.enrollment.components.parts.Links', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.Links', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-link',
 

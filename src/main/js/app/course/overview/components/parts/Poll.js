@@ -1,12 +1,12 @@
-export default Ext.define('NextThought.app.course.overview.components.parts.Poll', {
-	extend: 'NextThought.common.components.cards.Card',
-	// alias: 'widget.course-overview-pollref', //Comment this out for now since we don't support it yet
+var Ext = require('extjs');
+var CardsCard = require('../../../../../common/components/cards/Card');
+var ModelPollRef = require('../../../../../model/PollRef');
 
-	requires: [
-		'NextThought.model.PollRef'
-	],
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Poll', {
+    extend: 'NextThought.common.components.cards.Card',
+
+    constructor: function() {
 		this.callParent(arguments);
 	}
 });

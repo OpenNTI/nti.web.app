@@ -1,16 +1,15 @@
-export default Ext.define('NextThought.app.badge.components.Prompt', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.badge-exporting-prompt',
+var Ext = require('extjs');
+var ComponentsEditor = require('./Editor');
 
-	requires: [
-		'NextThought.app.badge.components.Editor'
-	],
 
-	layout: 'none',
-	cls: 'badge-prompt',
-	items: [],
+module.exports = exports = Ext.define('NextThought.app.badge.components.Prompt', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.badge-exporting-prompt',
+    layout: 'none',
+    cls: 'badge-prompt',
+    items: [],
 
-	initComponent: function(){
+    initComponent: function(){
 		this.callParent(arguments);
 
 		var data = this.Prompt.data;
@@ -37,74 +36,61 @@ export default Ext.define('NextThought.app.badge.components.Prompt', {
 		});
 	},
 
-	setSaveText: function(text) {
+    setSaveText: function(text) {
 		return this.Prompt.Footer.setSaveText(text);
 	},
 
-
-	enableSave: function() {
+    enableSave: function() {
 		return this.Prompt.Footer.enableSave();
 	},
 
-
-	disableSave: function() {
+    disableSave: function() {
 		return this.Prompt.Footer.disableSave();
 	},
 
-
-	setHeaderTitle: function(title) {
+    setHeaderTitle: function(title) {
 		return this.Prompt.Header.setTitle(title);
 	},
 
-
-	setSubTitle: function(subTitle) {
+    setSubTitle: function(subTitle) {
 		return this.Prompt.Header.setSubTitle(subTitle);
 	},
 
-
-	enableHeaderBack: function(text) {
+    enableHeaderBack: function(text) {
 		return this.Prompt.Header.enableBack(text);
 	},
 
-
-	disableHeaderBack: function() {
+    disableHeaderBack: function() {
 		return this.Prompt.Header.disableBack();
 	},
 
-
-	showError: function(err) {
+    showError: function(err) {
 		return this.Prompt.Header.showError(err);
 	},
 
-
-	showWarning: function(warn) {
+    showWarning: function(warn) {
 		return this.Prompt.Header.showWarning(warn);
 	},
 
-
-	showMessage: function(msg) {
+    showMessage: function(msg) {
 		return this.Prompt.Header.showMessage(msg);
 	},
 
-
-	doClose: function(reason) {
+    doClose: function(reason) {
 		return this.Prompt.doClose(reason);
 	},
 
-
-	doSave: function() {
+    doSave: function() {
 		return this.Prompt.doSave();
 	},
 
-
-	onBack: function() {
+    onBack: function() {
 		if (this.activeEditor && this.activeEditor.onBack) {
 			this.activeEditor.onBack();
 		}
 	},
 
-
-	doValidation: function() {
+    doValidation: function() {
 		if (this.activeEditor && this.activeEditor.doValidation) {
 			return this.activeEditor && this.activeEditor.doValidation();
 		}
@@ -112,8 +98,7 @@ export default Ext.define('NextThought.app.badge.components.Prompt', {
 		return Promise.resolve();
 	},
 
-
-	onSaveFailure: function(reason) {
+    onSaveFailure: function(reason) {
 		if (this.activeEditor && this.activeEditor.onSaveFailure) {
 			return this.activeEditor.onSaveFailure(reason);
 		}
@@ -121,8 +106,7 @@ export default Ext.define('NextThought.app.badge.components.Prompt', {
 		return Promise.reject();
 	},
 
-
-	onSave: function() {
+    onSave: function() {
 		if (this.activeEditor && this.activeEditor.onSave) {
 			return this.activeEditor.onSave();
 		}
@@ -130,17 +114,13 @@ export default Ext.define('NextThought.app.badge.components.Prompt', {
 		return Promise.reject();
 	},
 
-
-	allowCancel: function() {
+    allowCancel: function() {
 		if (this.activeEditor && this.activeEditor.allowCancel) {
 			return this.activeEditor.allowCancel();
 		}
 
 		return Promise.resolve();
 	}
-
-
-
 }, function() {
 	NextThought.app.prompt.StateStore.register('badge-exporting', this);
 });

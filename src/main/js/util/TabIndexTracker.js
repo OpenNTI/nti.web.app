@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.util.TabIndexTracker', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.util.TabIndexTracker', {
 
 	current: 1,
 

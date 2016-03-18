@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.context.components.list.Video', {
+var Ext = require('extjs');
+var ListContent = require('./Content');
+
+
+module.exports = exports = Ext.define('NextThought.app.context.components.list.Video', {
 	extend: 'NextThought.app.context.components.list.Content',
 	alias: 'widget.context-video-list',
 

@@ -1,20 +1,18 @@
-export default Ext.define('NextThought.app.assessment.results.parts.MultiChoice', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.assessment-multichoice-result',
-
-	requires: [
-		'NextThought.app.assessment.results.parts.BarChart'
-	],
+var Ext = require('extjs');
+var PartsBarChart = require('./BarChart');
 
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.MultiChoice', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.assessment-multichoice-result',
+
+    statics: {
 		mimeType: 'application/vnd.nextthought.assessment.aggregatedmultiplechoicepart'
 	},
 
-	cls: 'result-part',
+    cls: 'result-part',
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.barChart = this.add({
@@ -23,7 +21,7 @@ export default Ext.define('NextThought.app.assessment.results.parts.MultiChoice'
 		});
 	},
 
-	/**
+    /**
 	 * Get the rows to pass to the bar chart.
 	 *
 	 * The results we get back look like:

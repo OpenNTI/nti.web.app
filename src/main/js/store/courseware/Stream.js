@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.store.courseware.Stream', {
+var Ext = require('extjs');
+var ParseUtils = require('../../util/Parsing');
+var StoreUtils = require('../../util/Store');
+
+
+module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 
 	params: {
 		NonEmptyBucketCount: 2,

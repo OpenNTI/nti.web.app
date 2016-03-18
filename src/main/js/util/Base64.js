@@ -1,9 +1,12 @@
+var Ext = require('extjs');
+
+
 /**
  * original source: http://www.webtoolkit.info/javascript-base64.html
  *
  * TODO: de-lint
  */
-export default Ext.define('NextThought.util.Base64', {
+module.exports = exports = Ext.define('NextThought.util.Base64', {
 	alternateClassName: 'B64',
 	singleton: true,
 

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.form.fields.ComboBox', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.form.fields.ComboBox', {
 	extend: 'Ext.form.field.ComboBox',
 	alias: 'widget.nt-combobox',
 

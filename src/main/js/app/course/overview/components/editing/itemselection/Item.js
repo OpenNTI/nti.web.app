@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.itemselection.Item', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.itemselection.Item', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.overview-editing-item-selection-item',
 

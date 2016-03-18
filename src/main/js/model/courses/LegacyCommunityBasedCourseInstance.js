@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.courses.LegacyCommunityBasedCourseInstance', {
+var Ext = require('extjs');
+var CoursesCourseInstance = require('./CourseInstance');
+
+
+module.exports = exports = Ext.define('NextThought.model.courses.LegacyCommunityBasedCourseInstance', {
 	extend: 'NextThought.model.courses.CourseInstance',
 	mimeType: 'application/vnd.nextthought.courses.legacycommunitybasedcourseinstance',
 

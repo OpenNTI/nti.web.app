@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.common.menus.JumpTo', {
+var Ext = require('extjs');
+var MixinsMenuShowHideBehavior = require('../../mixins/MenuShowHideBehavior');
+
+
+module.exports = exports = Ext.define('NextThought.common.menus.JumpTo', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.jump-menu',
 	minWidth: 200,

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.info.components.parts.Support', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.info.components.parts.Support', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info-support',
 

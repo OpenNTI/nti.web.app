@@ -1,26 +1,24 @@
-export default Ext.define('NextThought.mixins.MovingRoot', {
-	isMovingRoot: true,
+var Ext = require('extjs');
+var MixinsOrderedContents = require('./OrderedContents');
+var DndActions = require('../app/dnd/Actions');
 
 
-	requires: [
-		'NextThought.app.dnd.Actions'
-	],
+module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
+    isMovingRoot: true,
 
-	mixins: {
+    mixins: {
 		OrderedContents: 'NextThought.mixins.OrderedContents'
 	},
 
-
-	getMoveLink: function() {
+    getMoveLink: function() {
 		return this.getLink('move');
 	},
 
-
-	getIdForMove: function(record) {
+    getIdForMove: function(record) {
 		return record.getId ? record.getId() : record;
 	},
 
-	/**
+    /**
 	 * Append a record from one parent to another
 	 * @param  {Object|String} record         the record to move
 	 * @param  {Object|String} originalParent the current parent of the record
@@ -33,8 +31,7 @@ export default Ext.define('NextThought.mixins.MovingRoot', {
 		return this.doMoveRecordFrom(record, index, -1, newParent, originalParent);
 	},
 
-
-	/**
+    /**
 	 * Move a record from one parent to another at an index
 	 *
 	 * @param  {Object|String} record  the record to move
@@ -76,8 +73,7 @@ export default Ext.define('NextThought.mixins.MovingRoot', {
 		return move;
 	},
 
-
-	/**
+    /**
 	 * Currently move operations are responding with the object we get the move link from.
 	 * So just sync with the response to get the new items.
 	 *

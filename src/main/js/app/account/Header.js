@@ -1,8 +1,9 @@
-export default Ext.define('NextThought.app.account.Header', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.account.Header', {
   extend: 'Ext.Component',
   alias: 'widget.account-header-view',
-  requires: [
-  ],
 
   renderTpl: Ext.DomHelper.markup([
     {
@@ -16,26 +17,25 @@ export default Ext.define('NextThought.app.account.Header', {
       ]
     }]),
 
-
   renderSelectors: {
     img: '.account-header-view .avatar img',
     title: '.text .title',
     detail: '.text .detail'
   },
 
-	updateRenderData: function() {
-		var iconURL;
-    /*
-        if (this.icon === 'alert'){
-            iconURL = Ext.BLANK_IMAGE_URL;
-        }
-        */
-		 this.renderData = Ext.apply(this.renderData || {},{
-      user: $AppConfig.userObject,
-      title: this.title || getString('NextThought.view.account.Header.title'),
-      detail: this.detail || getString('NextThought.view.account.Header.detail')
-    });
-	},
+  updateRenderData: function() {
+	  var iconURL;
+  /*
+	  if (this.icon === 'alert'){
+		  iconURL = Ext.BLANK_IMAGE_URL;
+	  }
+	  */
+	   this.renderData = Ext.apply(this.renderData || {},{
+	user: $AppConfig.userObject,
+	title: this.title || getString('NextThought.view.account.Header.title'),
+	detail: this.detail || getString('NextThought.view.account.Header.detail')
+  });
+  },
 
   initComponent: function() {
     this.callParent(arguments);
@@ -43,14 +43,14 @@ export default Ext.define('NextThought.app.account.Header', {
 		this.updateRenderData();
   },
 
-	updateHeaderText: function(t, d) {
-		this.title.dom.innerHTML = t;
-		this.detail.dom.innerHTML = d;
-	},
+  updateHeaderText: function(t, d) {
+	  this.title.dom.innerHTML = t;
+	  this.detail.dom.innerHTML = d;
+  },
 
-	updateTitle: function(t) {
-		this.title.dom.innerHTML = t;
-	},
+  updateTitle: function(t) {
+	  this.title.dom.innerHTML = t;
+  },
 
   afterRender: function() {
     this.callParent(arguments);
@@ -68,5 +68,4 @@ export default Ext.define('NextThought.app.account.Header', {
         }
         */
   }
-
 });

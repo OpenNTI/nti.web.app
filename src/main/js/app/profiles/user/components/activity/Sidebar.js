@@ -1,13 +1,14 @@
-export default Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.profile-user-activity-sidebar',
+var Ext = require('extjs');
+var ComponentsFilter = require('../../../../stream/components/Filter');
 
-	requires: ['NextThought.app.stream.components.Filter'],
 
-	layout: 'none',
-	cls: 'activity-sidebar',
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.profile-user-activity-sidebar',
+    layout: 'none',
+    cls: 'activity-sidebar',
 
-	BASE_FILTERS:[
+    BASE_FILTERS:[
 		{
 			displayText: 'Sort By',
 			type: 'sort',
@@ -170,11 +171,11 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Sid
 		} 
 	],
 
-	items: [{
+    items: [{
 		xtype: 'stream-filter'
 	}],
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		if (!isFeature('profile-activity-filters')) {
@@ -196,18 +197,15 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Sid
 		});
 	},
 
-
-	onActivate: function() {
+    onActivate: function() {
 		Ext.getBody().on('click', this.onBodyClick);
 	},
 
-
-	onDeactivate: function() {
+    onDeactivate: function() {
 		Ext.getBody().un('click', this.onBodyClick);
 	},
 
-
-	onBodyClick: function(e) {
+    onBodyClick: function(e) {
 		var filters = this.filters,
 			keys = Object.keys(filters);
 
@@ -220,13 +218,11 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Sid
 		}
 	},
 
-
-	resetFilters: function() {
+    resetFilters: function() {
 		this.filters = Ext.clone(this.BASE_FILTERS);
 	},
 
-
-	__mapItemForUI: function(group, key) {
+    __mapItemForUI: function(group, key) {
 		var isActive = false,
 			item = group.items[key],
 			active;
@@ -249,13 +245,11 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Sid
 		};
 	},
 
-
-	updateFilterUI: function() {
+    updateFilterUI: function() {
 		this.filterCmp.setActiveFilters(this.filters);
 	},
 
-
-	userChanged: function(entity) {
+    userChanged: function(entity) {
 		if (this.activeEntity !== entity) {
 			this.resetFilters();
 			this.updateFilterUI();
@@ -264,8 +258,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Sid
 		this.activeEntity = entity;
 	},
 
-
-	onGroupSelect: function(group) {
+    onGroupSelect: function(group) {
 		var filters = this.filters,
 			filterKeys = Object.keys(this.filters);
 
@@ -281,8 +274,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Sid
 		this.updateFilterUI();
 	},
 
-
-	__toggleMultiSelect: function(items, key) {
+    __toggleMultiSelect: function(items, key) {
 		var filtered;
 
 		if (!items) {
@@ -300,8 +292,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Sid
 		return filtered;
 	},
 
-
-	getGroup: function(groupKey) {
+    getGroup: function(groupKey) {
 		var i, found = false, g;
 		for (i=0; i < this.filters.length && !found; i++) {
 			g = this.filters[i];
@@ -313,8 +304,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Sid
 		return g;
 	},
 
-
-	onItemSelect: function(itemKey, groupKey, modifierValue) {
+    onItemSelect: function(itemKey, groupKey, modifierValue) {
 		var group = this.getGroup(groupKey),
 			modifier;
 
@@ -338,8 +328,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Sid
 		this.replaceFilter();
 	},
 
-
-	/**
+    /**
 	 * Update the filter, should trigger the filter to be pushed to state i.e. queryParams
 	 */
 	replaceFilter: function() {
@@ -370,7 +359,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Sid
 		this.updateFilter(params);
 	},
 
-	/**
+    /**
 	 * Apply the state set by replaceFilter
 	 */
 	setFilterFromQueryParams: function(params) {
@@ -400,8 +389,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Sid
 		this.updateFilterUI();
 	},
 
-
-	__getModifier: function(filter) {
+    __getModifier: function(filter) {
 		var activeItem = filter && (filter.activeItem || filter.defaultItem),
 			item = filter.items && filter.items[activeItem],
 			modifier = item && item.modifier;
@@ -409,7 +397,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Sid
 		return modifier;	
 	},
 
-	__getModifierValue: function(value, type) {
+    __getModifierValue: function(value, type) {
 		var m = value && type && moment().subtract(value, type),
 			date = m && m.toDate();
 
@@ -418,7 +406,8 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.Sid
 		}
 		return null;
 	},
-	/**
+
+    /**
 	 * Convert the current filters to params to pass to the stream
 	 * @return {Object} config to pass to the stream
 	 */

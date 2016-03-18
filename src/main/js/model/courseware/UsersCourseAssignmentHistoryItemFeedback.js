@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback', {
+var Ext = require('extjs');
+var ParseUtils = require('../../util/Parsing');
+var ModelBase = require('../Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback', {
 	extend: 'NextThought.model.Base',
 
 	mimeType: 'application/vnd.nextthought.assessment.userscourseassignmenthistoryitemfeedback',

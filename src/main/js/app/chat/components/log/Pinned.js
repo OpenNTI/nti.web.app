@@ -1,12 +1,13 @@
-export default Ext.define('NextThought.app.chat.components.log.Pinned', {
-	extend: 'Ext.Component',
-	alias: 'widget.chat-log-entry-pinned',
+var Ext = require('extjs');
+var UserRepository = require('../../../../cache/UserRepository');
+var UtilAnnotations = require('../../../../util/Annotations');
 
-	requires: [
-		'NextThought.util.Annotations'
-	],
 
-	renderTpl: new Ext.XTemplate(
+module.exports = exports = Ext.define('NextThought.app.chat.components.log.Pinned', {
+    extend: 'Ext.Component',
+    alias: 'widget.chat-log-entry-pinned',
+
+    renderTpl: new Ext.XTemplate(
 		'<div class="x-chat-log-entry-pinned">',
 			'<div class="icon">',
 				'<img src="{icon}" width=32 height=32"/>',
@@ -18,14 +19,14 @@ export default Ext.define('NextThought.app.chat.components.log.Pinned', {
 		'</div>'
 		),
 
-	renderSelectors: {
+    renderSelectors: {
 		box: 'div.x-chat-log-entry-pinned',
 		name: '.x-chat-log-entry-pinned span.name',
 		text: 'span.body-text',
 		icon: 'img'
 	},
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -56,7 +57,7 @@ export default Ext.define('NextThought.app.chat.components.log.Pinned', {
 		}
 	},
 
-	fillInUser: function(u) {
+    fillInUser: function(u) {
 		var name = u.get('alias') || u.get('Username'),
 			i = u.get('avatarURL');
 

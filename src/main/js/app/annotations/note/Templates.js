@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.annotations.note.Templates', {
+var Ext = require('extjs');
+var TemplatesForNotes = require('./Templates');
+
+
+module.exports = exports = Ext.define('NextThought.app.annotations.note.Templates', {
 	singleton: true,
 
 	//Merge these functions into note.Panel

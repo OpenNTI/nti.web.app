@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.model.UIViewHeader', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.model.UIViewHeader', {
 	extend: 'Ext.data.Model',
 
 	isHeader: true,

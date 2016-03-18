@@ -1,12 +1,14 @@
+var Ext = require('extjs');
+var TranscriptCue = require('../model/transcript/Cue');
+
+
 /*
  * Transcript.js
  * This class defines an array of headers and an array of cues which are parsed from a WebVTT file, as well as methods for parsing.
  * @author Bryan Hoke
  */
-export default Ext.define('NextThought.webvtt.Transcript', {
-	requires: ['NextThought.model.transcript.Cue'],
-
-	/*@private
+module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
+    /*@private
 	 * RegExps which are used throughout the program.
 	 */
 	regexp: {
@@ -41,7 +43,8 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		// Matches sequences which contain characters other than percents and digits
 		rePerDigits: /.*[^\u0025\d].*/
 	},
-	/*@private
+
+    /*@private
 	 * Used to store variables used for scratchwork and which are no longer needed after the Transcript is created
 	 */
 	scratch: {
@@ -65,8 +68,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		ignoreLFs: false
 	},
 
-
-	/*@private
+    /*@private
 	 * Used to signal that the parser is finished
 	 */
 	signalHalt: function() {
@@ -75,8 +77,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		return false;
 	},
 
-
-	/*@private
+    /*@private
 	 * Used to signal that an error has occurred
 	 */
 	signalError: function(msg) {
@@ -87,8 +88,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		});
 	},
 
-
-	/*@private
+    /*@private
 	 * Scans text matching a RegExp in fileContent starting at position and stores the result in line.<br>
 	 * Increases position by the length of the matched string.<br>
 	 * @param re The RegExp to match
@@ -110,8 +110,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		}
 	},
 
-
-	/*@private
+    /*@private
 	 * Skips text matching a RegExp in fileContent starting at position.<br>
 	 * Increases position by the length of the matched string.<br>
 	 * @param canBeEmpty If this is false, throw an error if there is no match
@@ -128,8 +127,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		}
 	},
 
-
-	/*@private
+    /*@private
 	 * Pre-processes the WebVTT file contents in the following way:<br>
 	 * - Replaces all NULL characters with REPLACEMENT CHARACTERs<br>
 	 * - Replaces each CARRIAGE RETURN LINE FEED pair with a LINE FEED<br>
@@ -150,8 +148,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		return output;
 	},
 
-
-	/*@private
+    /*@private
 	 * Verifies that the WebVTT file has a proper file signature.<br>
 	 * Throws an error if it does not.
 	 */
@@ -184,8 +181,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		}
 	},
 
-
-	/*@private
+    /*@private
 	 * Collects header string(s)
 	 * @return True if this should repeat, false if not
 	 */
@@ -218,8 +214,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		return true;
 	},
 
-
-	/*@private
+    /*@private
 	 * Collects all of the cues in the file
 	 * @return Whether cueLoop should be repeated
 	 */
@@ -273,33 +268,31 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		return !scratch.halt;
 	},
 
-
-	/*@private
+    /*@private
 	 * Collects a cue identifier or signals parsing to halt
 	 * @return Whether a cue identifier was collected successfully
 	 */
-	 collectIdentifier: function() {
-		var scratch = this.scratch,
-			regexp = this.regexp;
+	collectIdentifier: function() {
+	   var scratch = this.scratch,
+		   regexp = this.regexp;
 
-		// 30. Set the cue's identifier
-		scratch.cue.identifier = scratch.line;
-		// 31. Halt if at end of file
-		if (scratch.position >= scratch.fileContent.length) {
-			return this.signalHalt();
-		}
-		// 32. Skip line feed if at one
-		if (scratch.fileContent.charCodeAt(scratch.position) === 10) {
-			scratch.position++;
-		}
-		// 33. Read until the next LF
-		this.scan(regexp.reNotLF, true);
-		// 34. Discard and read another cue if we read an empty string
-		return (scratch.line !== '');
-	},
+	   // 30. Set the cue's identifier
+	   scratch.cue.identifier = scratch.line;
+	   // 31. Halt if at end of file
+	   if (scratch.position >= scratch.fileContent.length) {
+		   return this.signalHalt();
+	   }
+	   // 32. Skip line feed if at one
+	   if (scratch.fileContent.charCodeAt(scratch.position) === 10) {
+		   scratch.position++;
+	   }
+	   // 33. Read until the next LF
+	   this.scan(regexp.reNotLF, true);
+	   // 34. Discard and read another cue if we read an empty string
+	   return (scratch.line !== '');
+   },
 
-
-	/*@private
+    /*@private
 	 * Collects timings and settings for a given cue and a given input line.
 	 * @param cue The cue for which timings and settings are being collected.
 	 * @param input A sequence containing cue timing and setting information.
@@ -362,8 +355,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		return cue;
 	},
 
-
-	/*@private
+    /*@private
 	 * Parses a string of timestamp information
 	 * @param input 1. The string of timestamp information.
 	 * @param pos 1. The current position in input.
@@ -474,8 +466,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		};
 	},
 
-
-	/*@private
+    /*@private
 	 * Parses the settings for a given cue and a settings string
 	 */
 	parseSettings: function(cue, input) {
@@ -549,8 +540,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		}
 	},
 
-
-	/*@private
+    /*@private
 	 * Collects the text (payload) for the current cue
 	 * @return Whether this should be repeated
 	 */
@@ -592,8 +582,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		return false;
 	},
 
-
-	/*@private
+    /*@private
 	 * Processes a cue's text as necessary, e.g., by replacing <v> tags with <span> tags.<br>
 	 * Performs the role of the algorithm described at http://dev.w3.org/html5/webvtt/#webvtt-cue-text-parsing-rules
 	 * but with modifications and omissions as Ext JS handles the HTML parsing.<br>
@@ -706,8 +695,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		return output;
 	},
 
-
-	/*@private
+    /*@private
 	 * Skips over malformed cues
 	 * @return Whether badCueLoop should be repeated
 	 */
@@ -735,8 +723,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		return (scratch.line !== '');
 	},
 
-
-	/*@private
+    /*@private
 	 * Extracts the indices of section-title cues from the "sections" header, if specified
 	 */
 	findSections: function() {
@@ -752,8 +739,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		}
 	},
 
-
-	/*@private
+    /*@private
 	 * Constructs a tree of nested cues in cueTree, if cues are nested
 	 */
 	buildCueTree: function() {
@@ -764,8 +750,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		}
 	},
 
-
-	/*@private
+    /*@private
 	 * Recursively finds the string path into into cueTree where a cue should be inserted
 	 * @param cue The cue which is being inserted
 	 * @param tree The cueTree into which cue is currently fitting
@@ -782,7 +767,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		cue.cueTree.push();
 	},
 
-	/*
+    /*
 	 * Transcript constructor
 	 */
 	constructor: function(config) {
@@ -797,9 +782,7 @@ export default Ext.define('NextThought.webvtt.Transcript', {
 		return r;
 	},
 
-
-
-	/*
+    /*
 	 * Parses the WebVTT file contents<br>
 	 * Based on the algorithm described at http://dev.w3.org/html5/webvtt/#parsing<br>
 	 * Numbered comments refer to steps of that algorithm

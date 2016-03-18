@@ -1,33 +1,36 @@
-export default Ext.define('NextThought.app.chat.components.Log', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.chat-log-view',
-	requires: [
-		'NextThought.model.MessageInfo',
-		'NextThought.app.chat.components.log.Entry',
-		'NextThought.app.chat.components.log.NotificationEntry',
-		'NextThought.app.chat.components.log.NotificationStatus',
-		'NextThought.app.chat.components.log.Moderated',
-		'NextThought.app.chat.components.log.Content',
-		'NextThought.app.chat.components.log.Info',
-		'NextThought.cache.IdCache'
-	],
+var Ext = require('extjs');
+var IdCache = require('../../../cache/IdCache');
+var UserRepository = require('../../../cache/UserRepository');
+var Globals = require('../../../util/Globals');
+var ModelMessageInfo = require('../../../model/MessageInfo');
+var LogEntry = require('./log/Entry');
+var LogNotificationEntry = require('./log/NotificationEntry');
+var LogNotificationStatus = require('./log/NotificationStatus');
+var LogModerated = require('./log/Moderated');
+var LogContent = require('./log/Content');
+var LogInfo = require('./log/Info');
+var CacheIdCache = require('../../../cache/IdCache');
 
-	cls: 'chat-log-view',
-	overflowX: 'hidden',
-	overflowY: 'auto',
-	layout: {
+
+module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.chat-log-view',
+    cls: 'chat-log-view',
+    overflowX: 'hidden',
+    overflowY: 'auto',
+
+    layout: {
 		type: 'auto',
 		reserveScrollbar: false
 	},
-	defaults: {border: false},
 
+    defaults: {border: false},
 
-	getMessageQuery: function(id) {
+    getMessageQuery: function(id) {
 		return Ext.String.format('{0}[messageId={1}]', this.entryType, IdCache.getIdentifier(id));
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 
 		this.entryType = this.entryType || 'chat-log-entry';
 		this.moderated = !!this.moderated;
@@ -83,15 +86,13 @@ export default Ext.define('NextThought.app.chat.components.Log', {
 		this.callParent(arguments);
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.el, { scroll: this.onScroll, scope: this });
 		this.previousScroll = 0;
 	},
 
-
-	onScroll: function() {
+    onScroll: function() {
 		var me = this, scrollVal = Math.abs(me.el.dom.scrollHeight - me.el.dom.scrollTop - me.el.dom.offsetHeight),
 			minOffset = 50;
 
@@ -106,22 +107,19 @@ export default Ext.define('NextThought.app.chat.components.Log', {
 		me.previousScroll = me.el.dom.scrollTop;
 	},
 
-
-	selectall: function() {
+    selectall: function() {
 		Ext.each(this.query(this.entryType), function(f) {
 			f.setValue(true);
 		});
 	},
 
-
-	selectnone: function() {
+    selectnone: function() {
 		Ext.each(this.query(this.entryType), function(f) {
 			f.setValue(false);
 		});
 	},
 
-
-	approve: function() {
+    approve: function() {
 		var a = [];
 
 		Ext.each(this.query(this.entryType), function(f) {
@@ -133,15 +131,13 @@ export default Ext.define('NextThought.app.chat.components.Log', {
 		this.fireEvent('approve', a);
 	},
 
-
-	reject: function() {
+    reject: function() {
 		Ext.each(this.query(this.entryType), function(f) {
 			if (f.getValue()) {this.remove(f); }
 		}, this);
 	},
 
-
-	removeMessage: function(msg) {
+    removeMessage: function(msg) {
 		var c, m = this.down(this.getMessageQuery(msg.getId()));
 		if (m) {
 			c = m.ownerCt;
@@ -151,16 +147,14 @@ export default Ext.define('NextThought.app.chat.components.Log', {
 
 	},
 
-
-	addContentMessage: function(msg) {
+    addContentMessage: function(msg) {
 		this.add({
 			xtype: 'chat-content-log-entry',
 			message: msg
 		});
 	},
 
-
-	insertTranscript: function(m) {
+    insertTranscript: function(m) {
 		var messages = m.get('Messages');
 		messages.sort(Globals.SortModelsBy('Last Modified', null, null));
 		Ext.each(messages, function(msg) {
@@ -168,13 +162,11 @@ export default Ext.define('NextThought.app.chat.components.Log', {
 		}, this);
 	},
 
-
-	failedToLoadTranscript: function() {
+    failedToLoadTranscript: function() {
 		console.error('failed to load transcript', arguments);
 	},
 
-
-	addMessage: function(msg) {
+    addMessage: function(msg) {
 		var id = msg.getId(),
 			rid = msg.get('inReplyTo'),
 			m = id ? this.down(this.getMessageQuery(id)) : null,
@@ -231,8 +223,7 @@ export default Ext.define('NextThought.app.chat.components.Log', {
 		scrollChatLog();
 	},
 
-
-	prepareMessagesBeforeAdd: function(messages) {
+    prepareMessagesBeforeAdd: function(messages) {
 		var m = [], me = this, lastTimeStamp, lastItem;
 
 		
@@ -272,8 +263,7 @@ export default Ext.define('NextThought.app.chat.components.Log', {
 		return m;
 	},
 
-
-	addBulkMessages: function(messages) {
+    addBulkMessages: function(messages) {
 		var m, win, lastItem, me = this;
 
 		function scroll() {
@@ -300,8 +290,7 @@ export default Ext.define('NextThought.app.chat.components.Log', {
 		}
 	},
 
-
-	insertBulkMessages: function(index, messages) {
+    insertBulkMessages: function(index, messages) {
 		var m = this.prepareMessagesBeforeAdd(messages) || [],
 			lastItem, me = this, lastIndex;
 		if (!Ext.isEmpty(m)) {
@@ -326,14 +315,12 @@ export default Ext.define('NextThought.app.chat.components.Log', {
 		}
 	},
 
-
-	clearChatStatusNotifications: function() {
+    clearChatStatusNotifications: function() {
 		var ns = this.query('chat-notification-status'), me = this;
 		Ext.each(ns, function(n) { me.remove(n); });
 	},
 
-
-	shouldAddTimestampBeforeMessage: function(msg) {
+    shouldAddTimestampBeforeMessage: function(msg) {
 		var newMsgTime = msg.get('CreatedTime'),
 			lastTimeStamp, intervalTimeStamp,
 			stamp = Ext.Date.format(newMsgTime, 'F j, Y, g:i a'),//shouldn't this be the previous message's time?
@@ -356,8 +343,7 @@ export default Ext.define('NextThought.app.chat.components.Log', {
 		}
 	},
 
-
-	addStatusNotification: function(state) {
+    addStatusNotification: function(state) {
 		var o = this.add({
 			xtype: 'chat-notification-status',
 			message: state
@@ -368,8 +354,7 @@ export default Ext.define('NextThought.app.chat.components.Log', {
 		}
 	},
 
-
-	addNotification: function(msg) {
+    addNotification: function(msg) {
 		//we are going to add then scroll to
 		var o = this.add({
 			xtype: 'chat-notification-entry',
@@ -381,8 +366,7 @@ export default Ext.define('NextThought.app.chat.components.Log', {
 		}
 	},
 
-
-	showInputStateNotifications: function(changes) {
+    showInputStateNotifications: function(changes) {
 		if (!Ext.isArray(changes)) { return; }
 		var me = this;
 		Ext.each(changes, function(change) {
@@ -399,8 +383,7 @@ export default Ext.define('NextThought.app.chat.components.Log', {
 		});
 	},
 
-
-	scroll: function(entry) {
+    scroll: function(entry) {
 		var input = entry.nextSibling('chat-reply-to');
 
 		entry = input || entry;
@@ -410,22 +393,19 @@ export default Ext.define('NextThought.app.chat.components.Log', {
 		}
 	},
 
-
-	addMask: function() {
+    addMask: function() {
 		if (this.rendered) {
 			this.el.mask('loading chat history');
 		}
 	},
 
-
-	removeMask: function() {
+    removeMask: function() {
 		if (this.rendered) {
 			this.el.unmask();
 		}
 	},
 
-
-	getMessages: function() {
+    getMessages: function() {
 		var entryWidgets = this.query(this.entryType),
 			entries = [];
 
@@ -436,8 +416,7 @@ export default Ext.define('NextThought.app.chat.components.Log', {
 		return entries;
 	},
 
-
-	toggleModerationPanel: function() {
+    toggleModerationPanel: function() {
 		this.el.toggleCls('moderating');
 		Ext.each(this.el.query('.log-entry.flagged'), function(d) {
 			Ext.fly(d).removeCls('flagged');

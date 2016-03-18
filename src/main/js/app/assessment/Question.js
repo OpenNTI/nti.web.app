@@ -1,35 +1,34 @@
-export default Ext.define('NextThought.app.assessment.Question', {
-	extend: 'NextThought.app.contentviewer.overlay.Panel',
-	alias: 'widget.assessment-question',
-
-	requires: [
-		'NextThought.app.assessment.Header',
-		'NextThought.app.assessment.Parts',
-		'NextThought.app.assessment.Actions'
-	],
+var Ext = require('extjs');
+var ContentUtils = require('../../util/Content');
+var OverlayPanel = require('../contentviewer/overlay/Panel');
+var MixinsQuestionContent = require('../../mixins/QuestionContent');
+var AssessmentHeader = require('./Header');
+var AssessmentParts = require('./Parts');
+var AssessmentActions = require('./Actions');
 
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
+    extend: 'NextThought.app.contentviewer.overlay.Panel',
+    alias: 'widget.assessment-question',
+
+    mixins: {
 		questionContent: 'NextThought.mixins.QuestionContent'
 	},
 
+    representsUserDataContainer: true,
+    cls: 'question scrollable',
+    ui: 'assessment',
 
-	representsUserDataContainer: true,
-
-	cls: 'question scrollable',
-	ui: 'assessment',
-
-	items: [
+    items: [
 		{xtype: 'box', questionContainer: true}
 	],
 
-	dockedItems: [
+    dockedItems: [
 		{ dock: 'top', xtype: 'question-header'},
 		{ dock: 'bottom', xtype: 'question-parts'}
 	],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		var parts = this.question.get('parts'),
 				multiPart = (parts.length > 1);
@@ -67,14 +66,12 @@ export default Ext.define('NextThought.app.assessment.Question', {
 		this.AssessmentActions = NextThought.app.assessment.Actions.create();
 	},
 
-
-	getInsertionEl: function() {
+    getInsertionEl: function() {
 		var l = this.getLayout();
 		return (l && l.innerCt) || this.body;
 	},
 
-
-	findLine: function() {
+    findLine: function() {
 		var ce = this.contentElement,
 			doc = ce && ce.ownerDocument,
 			range = doc && doc.createRange();
@@ -85,14 +82,12 @@ export default Ext.define('NextThought.app.assessment.Question', {
 		return {range: range, rect: this.el.dom.getBoundingClientRect()};
 	},
 
-
-	setupContentElement: function() {
+    setupContentElement: function() {
 		this.callParent(arguments);
 		this.removeContent('.naqsolutions,.naqchoices,.rightwrongbox');
 	},
 
-
-	retrieveAnswerLabel: function() {
+    retrieveAnswerLabel: function() {
 		var sln = this.contentElement && Ext.get(this.contentElement).select('.naqsolution'),
 			firstSln = !Ext.isEmpty(sln) ? sln.elements.first() : null,
 			firstUnits;
@@ -109,8 +104,7 @@ export default Ext.define('NextThought.app.assessment.Question', {
 		return firstUnits;
 	},
 
-
-	determineSubmissionState: function() {
+    determineSubmissionState: function() {
 		var d = this.query('[submissionDisabled=true]'),
 				multi = this.down('assessment-multipart-submission');
 		this.submissionDisabled = (d.length !== 0);
@@ -120,12 +114,11 @@ export default Ext.define('NextThought.app.assessment.Question', {
 		}
 	},
 
-
-	reapplyProgress: function(questionSetSubmission) {
+    reapplyProgress: function(questionSetSubmission) {
 		this.updateWithProgress(questionSetSubmission, null, true);
 	},
 
-	/**
+    /**
 	 * Takes a question set submission and updates the inputs with those values, without triggering
 	 * it to be marked correct or incorrect
 	 * @param  {QuestionSetSubmission} questionSetSubmission the users last values they had
@@ -151,8 +144,7 @@ export default Ext.define('NextThought.app.assessment.Question', {
 		this.down('question-parts').updateWithProgress(q, reapplying);
 	},
 
-
-	updateWithResults: function(assessedQuestionSet) {
+    updateWithResults: function(assessedQuestionSet) {
 		var q, id = this.question.getId(),
 			correct,
 			fn = {
@@ -186,8 +178,7 @@ export default Ext.define('NextThought.app.assessment.Question', {
 		this.down('question-parts').updateWithResults(q);
 	},
 
-
-	gatherQuestionProgress: function(questionSet, collection) {
+    gatherQuestionProgress: function(questionSet, collection) {
 		var id = this.question.getId(), values = [];
 
 		Ext.each(this.query('abstract-question-input'), function(p) {
@@ -208,8 +199,7 @@ export default Ext.define('NextThought.app.assessment.Question', {
 		collection[id] = values;
 	},
 
-
-	gatherQuestionResponse: function(questionSet, collection) {
+    gatherQuestionResponse: function(questionSet, collection) {
 		var id = this.question.getId(), values = [];
 		Ext.each(this.query('abstract-question-input'), function(p) {
 			var v = p.getValue();
@@ -229,8 +219,7 @@ export default Ext.define('NextThought.app.assessment.Question', {
 		collection[id] = values;
 	},
 
-
-	canSubmitIndividually: function() {
+    canSubmitIndividually: function() {
 		var c = this.contentElement;
 
 		function resolve() {
@@ -246,8 +235,7 @@ export default Ext.define('NextThought.app.assessment.Question', {
 		return !c || resolve();
 	},
 
-
-	setQuestionContent: function(part) {
+    setQuestionContent: function(part) {
 		var me = this,
 			root = me.reader.getLocation().root, c, p;
 
@@ -281,8 +269,7 @@ export default Ext.define('NextThought.app.assessment.Question', {
 		}
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.getTargetEl().select('img').on('load', function() {
 			this.updateLayout();
@@ -292,8 +279,7 @@ export default Ext.define('NextThought.app.assessment.Question', {
 		this.syncTop();
 	},
 
-
-	markCorrect: function(noMark) {
+    markCorrect: function(noMark) {
 		if (!noMark) {
 			this.down('question-header').markCorrect();
 		}
@@ -301,8 +287,7 @@ export default Ext.define('NextThought.app.assessment.Question', {
 		this.markSubmitted();
 	},
 
-
-	markIncorrect: function(noMark) {
+    markIncorrect: function(noMark) {
 		if (!noMark) {
 			this.down('question-header').markIncorrect();
 		}
@@ -310,8 +295,7 @@ export default Ext.define('NextThought.app.assessment.Question', {
 		this.markSubmitted();
 	},
 
-
-	markSubmitted: function() {
+    markSubmitted: function() {
 		var sub = this.down('assessment-multipart-submission');
 		if (sub) {
 			sub.disableSubmission();
@@ -321,8 +305,7 @@ export default Ext.define('NextThought.app.assessment.Question', {
 		this.addCls('submitted');
 	},
 
-
-	reset: function(keepAnswers) {
+    reset: function(keepAnswers) {
 		this.down('question-header').reset();
 		this.down('question-parts').reset(keepAnswers);
 		delete this.submitted;
@@ -330,19 +313,16 @@ export default Ext.define('NextThought.app.assessment.Question', {
 		this.determineSubmissionState();
 	},
 
-
-	instructorReset: function() {
+    instructorReset: function() {
 		this.down('question-header').reset();
 		this.down('question-parts').instructorReset();
 	},
 
-
-	showInstructorSolutions: function() {
+    showInstructorSolutions: function() {
 		this.down('question-parts').showQuestionSetWithAnswers();
 	},
 
-
-	checkIt: function() {
+    checkIt: function() {
 		if (this.submissionDisabled) {
 			return;
 		}

@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.model.courses.assignments.StudentCollection', {
+var Ext = require('extjs');
+var ParseUtils = require('../../../util/Parsing');
+var AssignmentsBaseCollection = require('./BaseCollection');
+
+
+module.exports = exports = Ext.define('NextThought.model.courses.assignments.StudentCollection', {
 	extend: 'NextThought.model.courses.assignments.BaseCollection',
 
 

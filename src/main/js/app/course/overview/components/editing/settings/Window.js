@@ -1,28 +1,25 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.settings.Window', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.overview-editing-settings-window',
+var Ext = require('extjs');
+var PromptStateStore = require('../../../../../prompt/StateStore');
+var ControlsVisibility = require('../controls/Visibility');
+var EditingActions = require('../Actions');
 
-	requires: [
-		'NextThought.app.prompt.StateStore',
-		'NextThought.app.course.overview.components.editing.controls.Visibility',
-		'NextThought.app.course.overview.components.editing.Actions'
-	],
 
-	cls: 'content-editor',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.settings.Window', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.overview-editing-settings-window',
+    cls: 'content-editor',
+    layout: 'none',
+    items: [],
+    title: 'Advanced Settings',
 
-	layout: 'none',
-	items: [],
-
-	title: 'Advanced Settings',
-
-	statics: {
+    statics: {
 		canChangeVisibility: function(record) {
 			var r = record && record.raw || {};
 			return r.hasOwnProperty('visibility');
 		}
 	},
 
-	initComponent: function(){
+    initComponent: function(){
 		this.callParent(arguments);
 
 		var data = this.Prompt.data;
@@ -43,38 +40,31 @@ export default Ext.define('NextThought.app.course.overview.components.editing.se
 		}
 	},
 
-
-	afterRender: function(){
+    afterRender: function(){
 		this.callParent(arguments);
 
 		this.setHeaderTitle(this.title);
 	},
 
-
-	enableSave: function() {
+    enableSave: function() {
 		return this.Prompt.Footer.enableSave();
 	},
 
-
-	disableSave: function() {
+    disableSave: function() {
 		return this.Prompt.Footer.disableSave();
 	},
 
-
-	setHeaderTitle: function(title) {
+    setHeaderTitle: function(title) {
 		return this.Prompt.Header.setTitle(title);
 	},
 
-
-	onSave: function(){
+    onSave: function(){
 		return this.EditingActions.updateRecordVisibility(this.record, this.visibilityCmp);
 	},
 
-
-	onCancel: function(){
+    onCancel: function(){
 		return Promise.resolve();
 	}
-
 }, function() {
 	NextThought.app.prompt.StateStore.register('overview-editing-settings', this);
 });

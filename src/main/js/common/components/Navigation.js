@@ -1,13 +1,14 @@
-export default Ext.define('NextThought.common.components.Navigation', {
-	extend: 'Ext.Component',
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var MenusLabeledSeparator = require('../menus/LabeledSeparator');
 
-	requires: [
-		'NextThought.common.menus.LabeledSeparator'
-	],
 
-	cls: 'navigation content-navigation',
+module.exports = exports = Ext.define('NextThought.common.components.Navigation', {
+    extend: 'Ext.Component',
+    cls: 'navigation content-navigation',
+    TAB_MARGIN: 35,
 
-	TAB_MARGIN: 35, //TODO: figure out how to now have this hard coded
+    //TODO: figure out how to now have this hard coded
 
 	tabsTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'ul', cls: 'tabs', cn: [
@@ -28,7 +29,7 @@ export default Ext.define('NextThought.common.components.Navigation', {
 		{cls: 'show-more'}
 	])),
 
-	quickLinksTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+    quickLinksTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'ul', cn: [
 			{tag: 'tpl', 'for': 'links', cn: [
 				{
@@ -43,7 +44,7 @@ export default Ext.define('NextThought.common.components.Navigation', {
 		]}
 	])),
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'content-container', cn: [
 			{cls: 'content', cn: [
 				{cls: 'active-content', cn: [
@@ -57,12 +58,12 @@ export default Ext.define('NextThought.common.components.Navigation', {
 			]}
 		]}
 	]),
-	
-	previewTagTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+
+    previewTagTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'span', cls: 'preview', html: '{preview}'}
 	])),
 
-	renderSelectors: {
+    renderSelectors: {
 		activeContentEl: '.content .active-content',
 		titleContainerEl: '.content .active-content .title',
 		titleEl: '.content .active-content .title',
@@ -72,8 +73,7 @@ export default Ext.define('NextThought.common.components.Navigation', {
 		activeTabEl: '.content .active-tab'
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.tabContainerEl, 'click', this.onTabClick.bind(this));
@@ -88,8 +88,7 @@ export default Ext.define('NextThought.common.components.Navigation', {
 			.then(this.maybeCollapse.bind(this));
 	},
 
-
-	onMouseEnterTitle: function() {
+    onMouseEnterTitle: function() {
 		var el = this.titleContainerEl.dom,
 			span = el.querySelector('span'),
 			title = span && span.textContent;
@@ -102,16 +101,13 @@ export default Ext.define('NextThought.common.components.Navigation', {
 		el.style.textIndent = el.clientWidth - span.offsetWidth + 'px';
 	},
 
-
-	onMouseLeaveTitle: function() {
+    onMouseLeaveTitle: function() {
 		var el = this.titleContainerEl.dom;
 
 		el.style.textIndent = 0;
 	},
 
-
-
-	/**
+    /**
 	 * Take an array of tabs to render in the navigation
 	 * tab config: {
 	 * 		route: String, //the name of the route this tab activates
@@ -163,8 +159,7 @@ export default Ext.define('NextThought.common.components.Navigation', {
 		me.maybeCollapse();
 	},
 
-
-	updateRoute: function(route, subRoute) {
+    updateRoute: function(route, subRoute) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateRoute.bind(this, route, subRoute));
 			return;
@@ -184,8 +179,7 @@ export default Ext.define('NextThought.common.components.Navigation', {
 		}
 	},
 
-
-	maybeHideDropdown: function(e) {
+    maybeHideDropdown: function(e) {
 		if (!e.getTarget('.content-navigation')) {
 			this.hideDropdown();
 		}
@@ -193,18 +187,15 @@ export default Ext.define('NextThought.common.components.Navigation', {
 		this.onBodyClick(e);
 	},
 
-
-	toggleDropdown: function() {
+    toggleDropdown: function() {
 		this[this.hasCls('show-dropdown') ? 'removeCls' : 'addCls']('show-dropdown');
 	},
 
-
-	hideDropdown: function(e) {
+    hideDropdown: function(e) {
 		this.removeCls('show-dropdown');
 	},
 
-
-	onTabClick: function(e) {
+    onTabClick: function(e) {
 		if (e.getTarget('.show-more')) {
 			this.toggleDropdown();
 			return;
@@ -232,12 +223,10 @@ export default Ext.define('NextThought.common.components.Navigation', {
 		}
 	},
 
+    onActiveContentClicked: function(e) {},
+    onBodyClick: function(e) {},
 
-	onActiveContentClicked: function(e) {},
-	onBodyClick: function(e) {},
-
-
-	maybeCollapse: function(navWidth, barWidth) {
+    maybeCollapse: function(navWidth, barWidth) {
 		barWidth = barWidth || this.barWidth;
 		this.barWidth = barWidth;
 

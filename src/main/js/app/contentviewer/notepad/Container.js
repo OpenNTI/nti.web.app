@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.contentviewer.notepad.Container', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Container', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.notepad-item-container',
 

@@ -1,14 +1,13 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.controls.AvailableDateMenu', {
-	extend: 'Ext.Component',
-	alias: 'widget.overview-editing-available-date-menu',
+var Ext = require('extjs');
+var FieldsDatePicker = require('../../../../../../common/form/fields/DatePicker');
 
-	requires: [
-		'NextThought.common.form.fields.DatePicker'
-	],
 
-	cls: 'editing-available-date-menu',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.AvailableDateMenu', {
+    extend: 'Ext.Component',
+    alias: 'widget.overview-editing-available-date-menu',
+    cls: 'editing-available-date-menu',
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'arrow'},
 		{cls: 'container', cn: [
 			{cls: 'toggle', cn: [
@@ -21,8 +20,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		]}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		pickerEl: '.date-picker-container',
 		saveEl: '.save',
 		toggleEl: '.toggle',
@@ -32,7 +30,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		errorEl: '.error'
 	},
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.EditingActions = new NextThought.app.course.overview.components.editing.Actions();
 
@@ -41,7 +39,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
    		this.on('destroy', this.close.bind(this));
 	},
 
-	afterRender: function(){
+    afterRender: function(){
 		this.callParent(arguments);
 		this.picker = this.createDatePicker(this.pickerEl);
 		this.mon(this.toggleEl, 'click', this.handleSelectionClick.bind(this));
@@ -52,26 +50,23 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		this.setInitialState();
 	},
 
-	open: function(){
+    open: function(){
 		Ext.EventManager.onWindowResize(this.onWindowResizeBuffer, this);
 		window.addEventListener('scroll', this.realign);
 		this.realign(true);
 	},
 
-
-	close: function() {
+    close: function() {
 		Ext.EventManager.removeResizeListener(this.onWindowResizeBuffer, this);
 		window.removeEventListener('scroll', this.realign);
 	},
 
-
-	alignTo: function(domNode) {
+    alignTo: function(domNode) {
 		this.alignedTo = domNode;
 		this.realign();
 	},
 
-
-	realign: function(unlockSide) {
+    realign: function(unlockSide) {
 		if (!this.alignedTo || !this.rendered) { return; }
 
 		var menu = this.el,
@@ -131,8 +126,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	setInitialState: function(){
+    setInitialState: function(){
 		var startDate = this.record && this.record.get('AvailableBeginning'),
 			endDate = this.record && this.record.get('AvailableEnding');
 
@@ -148,8 +142,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		this.updateDates();
 	},
 
-
-	updateDates: function(){
+    updateDates: function(){
 		var selectedEl = this.toggleEl.down('.selected'),
 			field = selectedEl && selectedEl.dom && selectedEl.dom.getAttribute('data-action'),
 			value = this.values && this.values[field], date;
@@ -168,8 +161,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	getDefaultTimeForField: function(field){
+    getDefaultTimeForField: function(field){
 		var defaultValue = new Date();
 		if (field === 'AvailableBeginning') {
 			defaultValue.setDate(defaultValue.getDate() + 1);
@@ -187,8 +179,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return defaultValue.getTime() / 1000; 
 	},
 
-
-	createDatePicker: function(dateContainer){
+    createDatePicker: function(dateContainer){
 		var defaultValue = new Date(),
 			datepicker = Ext.widget({
 				xtype: 'date-picker-field',
@@ -202,8 +193,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return datepicker;
 	},
 
-
-	dateChanged: function(datepicker){
+    dateChanged: function(datepicker){
 		var seconds  = datepicker && datepicker.getValue(),
 			selected = this.toggleEl.down('.selected'),
 			key = selected && selected.dom && selected.dom.getAttribute('data-action');
@@ -218,8 +208,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		this.clearError();
 	},
 
-
-	handleSelectionClick: function(e) {
+    handleSelectionClick: function(e) {
 		var el = Ext.get(e.target),
 			me = this;
 
@@ -230,8 +219,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		this.picker.clearAllErrors();
 	},
 
-
-	select: function(el){
+    select: function(el){
 		var t = el && el.hasCls('part') ? el : el && el.up('.part'),
 			selectedEl = this.el.down('.selected');
 
@@ -241,30 +229,26 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	getValue: function(){
+    getValue: function(){
 		return {
 			AvailableBeginning: this.values && this.values.AvailableBeginning,
 			AvailableEnding: this.values && this.values.AvailableEnding
 		};
 	},
 
-
-	showError: function(error){
+    showError: function(error){
 		var errorMessage = (error || {}).msg;
 		this.errorEl.update(errorMessage);
 		this.saveEl.addCls('disabled');
 		this.errorEl.show();
 	},
 
-
-	clearError: function(){
+    clearError: function(){
 		this.errorEl.update("");
 		this.errorEl.hide();
 	},
 
-
-	isValid: function(){
+    isValid: function(){
 		var values = this.getValue() || {},
 			start = values.AvailableBeginning,
 			end = values.AvailableEnding,
@@ -297,8 +281,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return true;
 	},
 
-
-	doSave: function(e){
+    doSave: function(e){
 		var target = Ext.get(e.target);
 
 		if (target && target.hasCls('disabled')) { return; }
@@ -309,7 +292,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-	toggleTab: function(){
+    toggleTab: function(){
 		if(this.beginEl.hasCls('selected')){
 			this.select(this.endEl);
 		}else {
@@ -317,12 +300,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-	setMaxDate: function(date){
+    setMaxDate: function(date){
 		this.picker.setMaxDate(date);
 	},
 
-	setMinDate: function(date){
+    setMinDate: function(date){
 		this.picker.setMinDate(date);
 	}
-
 });

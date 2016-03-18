@@ -1,3 +1,6 @@
+var Ext = require('extjs');
+
+
 /*
  * WARNING: DO NOT mimic this file.  This is a very very special pattern where we are taking advantage Ext's
  * classloader.

@@ -1,11 +1,14 @@
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+var UtilBatchExecution = require('../../util/BatchExecution');
+
+
 /*globals Duration:false*/
-export default Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
-	alternateClassName: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItemSummary',
-	extend: 'NextThought.model.Base',
+module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
+    alternateClassName: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItemSummary',
+    extend: 'NextThought.model.Base',
 
-	requires: ['NextThought.util.BatchExecution'],
-
-	statics: {
+    statics: {
 		getBatchExecution: function() {
 			this.batchExecution = this.batchExecution || NextThought.util.BatchExecution.create();
 
@@ -13,8 +16,9 @@ export default Ext.define('NextThought.model.courseware.UsersCourseAssignmentHis
 		}
 	},
 
-	mimeType: 'application/vnd.nextthought.assessment.userscourseassignmenthistoryitem',
-	//application/vnd.nextthought.assessment.userscourseassignmenthistoryitemsummary
+    mimeType: 'application/vnd.nextthought.assessment.userscourseassignmenthistoryitem',
+
+    //application/vnd.nextthought.assessment.userscourseassignmenthistoryitemsummary
 
 	fields: [
 		{name: 'Feedback', type: 'singleItem', persist: false},
@@ -91,16 +95,14 @@ export default Ext.define('NextThought.model.courseware.UsersCourseAssignmentHis
 		//</editor-fold>
 	],
 
-
-	constructor: function() {
+    constructor: function() {
 		this.callParent(arguments);
 		if (this.raw && this.raw.Class === 'UsersCourseAssignmentHistoryItemSummary') {
 			this.isSummary = true;
 		}
 	},
 
-
-	onSynced: function() {
+    onSynced: function() {
 		var cls = this.get('Class');
 
 		if (cls === 'UsersCourseAssignmentHistoryItemSummary') {
@@ -110,8 +112,7 @@ export default Ext.define('NextThought.model.courseware.UsersCourseAssignmentHis
 		}
 	},
 
-
-	getAssignmentId: function() {
+    getAssignmentId: function() {
 		var r = this.raw,
 			g = r.Grade,
 			s = r.Submission,
@@ -121,24 +122,21 @@ export default Ext.define('NextThought.model.courseware.UsersCourseAssignmentHis
 		return (i && i.getId()) || (g && g.AssignmentId) || (s && s.assignmentId) || (p && p.assignmentId);
 	},
 
-
-	isSubmitted: function() {
+    isSubmitted: function() {
 		return this.get('pendingAssessment') || this.get('Submission');
 	},
 
-
-	getDuration: function() {
+    getDuration: function() {
 		var metaData = this.get('Metadata');
 
 		return metaData && ((metaData.Duration || 0) * 1000);
 	},
 
-
-	allowReset: function() {
+    allowReset: function() {
 		return !!this.getLink('edit');
 	},
 
-	/**
+    /**
 	 * Deletes the assignment history item if it can, returns a promise that either
 	 * 1.)	Fufill with false if they cancel the dialog
 	 * 2.)	Rejects if the request was unsuccessful
@@ -227,8 +225,7 @@ export default Ext.define('NextThought.model.courseware.UsersCourseAssignmentHis
 
 	},
 
-
-	beginReset: function() {
+    beginReset: function() {
 		var record = this,
 			store = record.store;
 
@@ -294,8 +291,7 @@ export default Ext.define('NextThought.model.courseware.UsersCourseAssignmentHis
 		});
 	},
 
-
-	handleExcuseGrade: function(menuItemEl) {
+    handleExcuseGrade: function(menuItemEl) {
 		var grade = this.get('Grade'), me = this;
 
 		if (grade && grade.excuseGrade) {
@@ -316,8 +312,7 @@ export default Ext.define('NextThought.model.courseware.UsersCourseAssignmentHis
 		}
 	},
 
-
-	getSubmissionStatus: function(due) {
+    getSubmissionStatus: function(due) {
 		due = due || this.get('due');
 
 		var completed = this.get('completed');
@@ -351,15 +346,13 @@ export default Ext.define('NextThought.model.courseware.UsersCourseAssignmentHis
 		return {cls: 'late', html: due + ' Late'};
 	},
 
-
-	shouldSaveGrade: function(value, letter) {
+    shouldSaveGrade: function(value, letter) {
 		var grade = this.get('Grade');
 
 		return grade.shouldSave(value, letter);
 	},
 
-
-	/**
+    /**
 	 * Given a value and letter for a grade, either create one or update an existing one
 	 * @param  {String} value  value of the grade
 	 * @param  {Char} letter letter of the grade

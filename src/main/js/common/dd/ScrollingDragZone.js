@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.dd.ScrollingDragZone', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.dd.ScrollingDragZone', {
 	extend: 'Ext.dd.DragZone',
 
 	constructor: function(el, cfg) {

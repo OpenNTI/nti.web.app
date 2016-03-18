@@ -1,16 +1,15 @@
-export default Ext.define('NextThought.app.notifications.components.TabView', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.notifications-tab-view',
-
-	floating: true,
-
-	requires: ['NextThought.app.notifications.components.MostRecent'],
-
-	layout: 'none',
-	cls: 'notifications-view',
+var Ext = require('extjs');
+var ComponentsMostRecent = require('./MostRecent');
 
 
-	initComponent: function() {
+module.exports = exports = Ext.define('NextThought.app.notifications.components.TabView', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.notifications-tab-view',
+    floating: true,
+    layout: 'none',
+    cls: 'notifications-view',
+
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.add([{
@@ -39,8 +38,7 @@ export default Ext.define('NextThought.app.notifications.components.TabView', {
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -54,18 +52,15 @@ export default Ext.define('NextThought.app.notifications.components.TabView', {
 		me.setMaxHeight();
 	},
 
-
-	onActivate: function() {
+    onActivate: function() {
 		this.list.onActivate();
 	},
 
-
-	onDeactivate: function() {
+    onDeactivate: function() {
 		this.list.onDeactivate();
 	},
 
-
-	setMaxHeight: function() {
+    setMaxHeight: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.setMaxHeight.bind(this));
 			return;
@@ -84,28 +79,24 @@ export default Ext.define('NextThought.app.notifications.components.TabView', {
 		}
 	},
 
-
-	onBodyClick: function(e) {
+    onBodyClick: function(e) {
 		if (!e.getTarget('.notifications-icon') && !e.getTarget('.notifications-view')) {
 			this.close();
 		}
 	},
 
-
-	addBodyListener: function() {
+    addBodyListener: function() {
 		var me = this;
 
 		Ext.getBody().on('click', this.onBodyClick);
 		this.list.onActivate();
 	},
 
-
-	removeBodyListener: function() {
+    removeBodyListener: function() {
 		Ext.getBody().un('click', this.onBodyClick);
 	},
 
-
-	showAll: function() {
+    showAll: function() {
 		this.onDeactivate();
 		this.hide();
 		this.pushRootRoute('Notifications', 'notifications');

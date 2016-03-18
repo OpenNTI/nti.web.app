@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.mixins.ModuleContainer', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.ModuleContainer', {
 
 	getterNameForModule: function(name) {
 		return 'get' + Ext.String.capitalize(name);

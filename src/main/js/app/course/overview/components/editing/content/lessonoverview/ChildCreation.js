@@ -1,16 +1,16 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.lessonoverview.ChildCreation', {
-	extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
-	alias: 'widget.overview-editing-lessonoverview-childcreation',
+var Ext = require('extjs');
+var CreationChildCreation = require('../../creation/ChildCreation');
+var OverviewLesson = require('../../../../../../../model/courses/overview/Lesson');
+var OverviewgroupEditor = require('../overviewgroup/Editor');
 
-	requires: [
-		'NextThought.model.courses.overview.Lesson',
-		'NextThought.app.course.overview.components.editing.content.overviewgroup.Editor'
-	],
 
-	title: 'Content Types',
-	saveText: 'Add to Lesson',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.lessonoverview.ChildCreation', {
+    extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
+    alias: 'widget.overview-editing-lessonoverview-childcreation',
+    title: 'Content Types',
+    saveText: 'Add to Lesson',
 
-	statics: {
+    statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.courses.overview.Lesson.mimeType
@@ -26,8 +26,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	setUpTypeList: function() {
+    setUpTypeList: function() {
 		this.callParent(arguments);
 	}
 });

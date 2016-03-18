@@ -1,17 +1,16 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.auditlog.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.overview-editing-audit-log',
+var Ext = require('extjs');
+var RecorderTransactionRecord = require('../../../../../../model/recorder/TransactionRecord');
+var AuditlogItem = require('./Item');
 
-	requires: [
-		'NextThought.model.recorder.TransactionRecord',
-		'NextThought.app.course.overview.components.editing.auditlog.Item'
-	],
 
-	cls: 'audit-log',
-	layout: 'none',
-	items: [],
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.auditlog.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.overview-editing-audit-log',
+    cls: 'audit-log',
+    layout: 'none',
+    items: [],
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		if (!this.record || !this.record.getLog) {
@@ -42,8 +41,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.au
 		this.loadBatch(this.record.getLog());
 	},
 
-
-	loadBatch: function(batchInterface) {
+    loadBatch: function(batchInterface) {
 		this.currentBatch = batchInterface;
 
 		if (batchInterface.getBatch) {
@@ -54,8 +52,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.au
 		}
 	},
 
-
-	loadNextBatch: function() {
+    loadNextBatch: function() {
 		this.removeNext();
 		this.showLoading();
 
@@ -65,8 +62,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.au
 		}
 	},
 
-
-	__addBatch: function(batch) {
+    __addBatch: function(batch) {
 		this.removeNext();
 
 		this.addItems(batch.Items);
@@ -76,8 +72,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.au
 		}
 	},
 
-
-	addItems: function(items) {
+    addItems: function(items) {
 		var parentRecord = this.record;
 
 		this.add(items.map(function(item, index) {
@@ -91,16 +86,14 @@ export default Ext.define('NextThought.app.course.overview.components.editing.au
 
 	},
 
-
-	removeNext: function() {
+    removeNext: function() {
 		if (this.nextBatchCmp) {
 			this.remove(this.nextBatchCmp);
 			this.nextBatchCmp = null;
 		}
 	},
 
-
-	addNext: function() {
+    addNext: function() {
 		this.nextBatchCmp = this.add({
 			xtype: 'box',
 			autoEl: {
@@ -116,8 +109,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.au
 		});
 	},
 
-
-	showLoading: function() {
+    showLoading: function() {
 		if (!this.loadingCmp) {
 			this.loadingCmp = this.add({
 				xtype: 'box',
@@ -126,8 +118,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.au
 		}
 	},
 
-
-	hideLoading: function() {
+    hideLoading: function() {
 		if (this.loadingCmp) {
 			this.remove(this.loadingCmp);
 			this.loadingCmp = null;

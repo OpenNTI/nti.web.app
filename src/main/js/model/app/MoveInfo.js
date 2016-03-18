@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.model.app.MoveInfo', {
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+var DndDataTransferSource = require('../../mixins/dnd/DataTransferSource');
+
+
+module.exports = exports = Ext.define('NextThought.model.app.MoveInfo', {
 	extend: 'NextThought.model.Base',
 
 	mimeType: 'application/vnd.nextthought.app.moveinfo',

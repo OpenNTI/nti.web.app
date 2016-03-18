@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.enrollment.components.parts.BaseInput', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.BaseInput', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-baseinput',
 

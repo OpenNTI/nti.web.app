@@ -1,30 +1,28 @@
-export default Ext.define('NextThought.app.windows.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.windows-view',
+var Ext = require('extjs');
+var MixinsRouter = require('../../mixins/Router');
+var ComponentsContainer = require('./components/Container');
+var WindowsStateStore = require('./StateStore');
+var WindowsActions = require('./Actions');
+var NoteWindow = require('../annotations/note/Window');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.windows.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.windows-view',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	activeWindows: [],
+    activeWindows: [],
+    layout: 'none',
+    cls: 'window-container',
 
-	layout: 'none',
-
-	requires: [
-		'NextThought.app.windows.components.Container',
-		'NextThought.app.windows.StateStore',
-		'NextThought.app.windows.Actions',
-		'NextThought.app.annotations.note.Window'
-	],
-
-	cls: 'window-container',
-
-	items: [{
+    items: [{
 		xtype: 'window-container'
 	}],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
@@ -43,14 +41,12 @@ export default Ext.define('NextThought.app.windows.Index', {
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.el, 'click', this.onClick.bind(this));
 	},
 
-
-	allowNavigation: function() {
+    allowNavigation: function() {
 		var allow = true;
 
 		this.viewContainer.items.each(function(item) {
@@ -64,8 +60,7 @@ export default Ext.define('NextThought.app.windows.Index', {
 		return allow;
 	},
 
-
-	showWindow: function(object, state, el, monitors, precache) {
+    showWindow: function(object, state, el, monitors, precache) {
 		var type = this.WindowStore.getComponentForMimeType(object && (object.mimeType || object)),
 			cmp;
 
@@ -103,22 +98,19 @@ export default Ext.define('NextThought.app.windows.Index', {
 		this.WindowStore.addOpenCls(cmp.isWindow);
 	},
 
-
-	onKeyPress: function(e) {
+    onKeyPress: function(e) {
 		var key = e.key || e.keyCode;
 		if (key === Ext.EventObject.ESC) {
 			this.closeAllWindows();
 		}
 	},
 
-
-	onClick: function(e) {
+    onClick: function(e) {
 		if (e.getTarget('.window-content')) { return; }
 		this.closeAllWindows();
 	},
 
-
-	closeWindow: function() {
+    closeWindow: function() {
 		this.activeWindows.forEach(function(win) {
 			Ext.destroy(win);
 		});
@@ -126,15 +118,13 @@ export default Ext.define('NextThought.app.windows.Index', {
 		this.WindowStore.removeOpenCls();
 	},
 
-
-	closeAllWindows: function() {
+    closeAllWindows: function() {
 		this.viewContainer.items.each(function(item) {
 			item.doClose();
 		});
 	},
 
-
-	doClose: function(doClose, afterClose, record) {
+    doClose: function(doClose, afterClose, record) {
 
 		if (doClose) {
 			doClose();
@@ -150,8 +140,7 @@ export default Ext.define('NextThought.app.windows.Index', {
 		}
 	},
 
-
-	doNavigate: function(beforeNavigate, record) {
+    doNavigate: function(beforeNavigate, record) {
 		this.WindowStore.navigateToObject(record);
 	}
 });

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.mixins.enrollment-feature.Form', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.Form', {
 	STATE_VALUES: {},
 
 	changeMonitors: {},

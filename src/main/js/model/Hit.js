@@ -1,11 +1,12 @@
-export default Ext.define('NextThought.model.Hit', {
-	extend: 'NextThought.model.Base',
+var Ext = require('extjs');
+var ModelBase = require('./Base');
 
-	requires: ['Ext.util.Inflector'],
 
-	idProperty: null,
+module.exports = exports = Ext.define('NextThought.model.Hit', {
+    extend: 'NextThought.model.Base',
+    idProperty: null,
 
-	statics: {
+    statics: {
 		mimeTypes: {
 			'bookcontent': 'Books',
 			'forums.personalblogentrypost': 'Thoughts',
@@ -17,7 +18,7 @@ export default Ext.define('NextThought.model.Hit', {
 		}
 	},
 
-	fields: [
+    fields: [
 		{ name: 'Snippet', type: 'string' },
 		{ name: 'Title', type: 'string' },
 		{ name: 'Type', type: 'string' },
@@ -49,14 +50,13 @@ export default Ext.define('NextThought.model.Hit', {
 		}}
 	],
 
-	//We don't use the idProperty because there isn't a unique id,
+    //We don't use the idProperty because there isn't a unique id,
 	//but for legacy reasons people expect to call getId and get the ntiid
 	getId: function() {
 		return this.get('NTIID');
 	},
 
-	isContent: function() {
+    isContent: function() {
 			return (/content/i).test(this.get('Type'));
 	}
-
 });

@@ -1,18 +1,19 @@
-export default Ext.define('NextThought.app.course.enrollment.components.parts.DropDown', {
-	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
-	alias: 'widget.enrollment-dropdown',
+var Ext = require('extjs');
+var PartsBaseInput = require('./BaseInput');
+var FieldsLegacySearchComboBox = require('../../../../../common/form/fields/LegacySearchComboBox');
 
-	requires: ['NextThought.common.form.fields.LegacySearchComboBox'],
 
-	renderTpl: Ext.DomHelper.markup({
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.DropDown', {
+    extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
+    alias: 'widget.enrollment-dropdown',
+
+    renderTpl: Ext.DomHelper.markup({
 		cls: 'enrollment-input select {required} {size}'
 	}),
 
+    editable: true,
 
-	editable: true,
-
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -21,12 +22,11 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Dr
 		});
 	},
 
-	renderSelectors: {
+    renderSelectors: {
 		selectEl: '.select'
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -56,8 +56,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Dr
 		me.on('destroy', 'destroy', me.combobox);
 	},
 
-
-	addOptions: function(options) {
+    addOptions: function(options) {
 		this.options = options;
 
 		if (this.combobox) {
@@ -65,22 +64,19 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Dr
 		}
 	},
 
-
-	addError: function() {
+    addError: function() {
 		this.selectEl.addCls('error');
 	},
 
-
-	removeError: function() {
+    removeError: function() {
 		this.selectEl.removeCls('error');
 	},
 
-
-	isEmpty: function() {
+    isEmpty: function() {
 		return !this.getValue()[this.name];
 	},
 
-	setValue: function(value) {
+    setValue: function(value) {
 		var me = this;
 
 		if (!me.rendered) {
@@ -96,8 +92,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Dr
 			});
 	},
 
-
-	getValue: function() {
+    getValue: function() {
 		var value = {};
 
 		value[this.name] = this.combobox.getValue();

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.window.Header', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.window.Header', {
   extend: 'Ext.Component',
   alias: 'widget.nti-window-header',
 

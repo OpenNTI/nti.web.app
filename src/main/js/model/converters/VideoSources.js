@@ -1,11 +1,11 @@
-export default Ext.define('NextThought.model.converters.VideoSources', {
-	override: 'Ext.data.Types',
-	requires: [
-		'Ext.data.SortTypes',
-		'NextThought.model.resolvers.VideoPosters'
-	],
+var Ext = require('extjs');
+var ResolversVideoPosters = require('../resolvers/VideoPosters');
 
-	VIDEOSOURCES: {
+
+module.exports = exports = Ext.define('NextThought.model.converters.VideoSources', {
+    override: 'Ext.data.Types',
+
+    VIDEOSOURCES: {
 		type: 'VideoSource',
 		sortType: null,
 
@@ -56,8 +56,7 @@ export default Ext.define('NextThought.model.converters.VideoSources', {
 		}
 	},
 
-
-	VIDEOPOSTER: {
+    VIDEOPOSTER: {
 		type: 'VideoPoster',
 		sortType: null,
 		convert: function(v, r, source) {
@@ -96,7 +95,6 @@ export default Ext.define('NextThought.model.converters.VideoSources', {
 			return v;
 		}
 	}
-
 },function() {
 	this.VIDEOSOURCES.sortType = Ext.data.SortTypes.none;
 	this.VIDEOPOSTER.sortType = Ext.data.SortTypes.none;

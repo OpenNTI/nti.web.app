@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.common.ux.UpdatedTos', {
+var Ext = require('extjs');
+var UxWelcomeGuide = require('./WelcomeGuide');
+
+
+module.exports = exports = Ext.define('NextThought.common.ux.UpdatedTos', {
 	extend: 'NextThought.common.ux.WelcomeGuide',
 	alias: 'widget.updated-tos',
 

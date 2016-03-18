@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.ux.Grouping', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.ux.Grouping', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.grouping',
 	ui: 'nt',

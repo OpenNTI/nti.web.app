@@ -1,18 +1,20 @@
-export default Ext.define('NextThought.app.course.Actions', {
-	extend: 'NextThought.common.Actions',
+var Ext = require('extjs');
+var ParseUtils = require('../../util/Parsing');
+var CommonActions = require('../../common/Actions');
+var UtilParsing = require('../../util/Parsing');
+var CourseStateStore = require('./StateStore');
 
-	requires: [
-		'NextThought.util.Parsing',
-		'NextThought.app.course.StateStore'
-	],
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.app.course.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.StateStore = NextThought.app.course.StateStore.getInstance();
 	},
 
-	/**
+    /**
 	 * Transition to a course, if passed an element from the library show the image expanding
 	 * @param  {CourseInstance} course     the course to navigate to
 	 * @param  {Element} libraryCars dom node of the image to expand
@@ -26,8 +28,7 @@ export default Ext.define('NextThought.app.course.Actions', {
 		return Promise.resolve(route);
 	},
 
-
-	getRootRouteForId: function(id) {
+    getRootRouteForId: function(id) {
 		return '/course/' + ParseUtils.encodeForURI(id);
 	}
 });

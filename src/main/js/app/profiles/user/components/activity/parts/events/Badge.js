@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Badge', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Badge', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-activity-badge-item',
 

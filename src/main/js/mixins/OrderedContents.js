@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.mixins.OrderedContents', {
+var Ext = require('extjs');
+var Globals = require('../util/Globals');
+var ParseUtils = require('../util/Parsing');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	hasOrderedContents: true,
 
 

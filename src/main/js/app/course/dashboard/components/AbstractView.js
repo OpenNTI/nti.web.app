@@ -1,19 +1,21 @@
-export default Ext.define('NextThought.app.course.dashboard.components.AbstractView', {
-	extend: 'Ext.container.Container',
+var Ext = require('extjs');
+var TilesHeader = require('./tiles/Header');
 
-	requires: [
-		'NextThought.app.course.dashboard.components.tiles.Header'
-	],
 
-	COLUMN_PADDING: 10,
-	COLUMN_COUNT: 3,
-	width: 1024 - 17, //17 to account for potential scrollbars
+module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.AbstractView', {
+    extend: 'Ext.container.Container',
+    COLUMN_PADDING: 10,
+    COLUMN_COUNT: 3,
+    width: 1024 - 17,
+
+    //17 to account for potential scrollbars
 
 	ui: 'course',
-	cls: 'course-dashboard-container scrollable',
-	layout: 'none',
 
-	items: [
+    cls: 'course-dashboard-container scrollable',
+    layout: 'none',
+
+    items: [
 		{xtype: 'dashboard-header'},
 		{
 			xtype: 'container',
@@ -23,8 +25,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.AbstractV
 		}
 	],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var i;
@@ -44,8 +45,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.AbstractV
 		}
 	},
 
-
-	getSortFn: function() {
+    getSortFn: function() {
 		return function(a, b) {
 			var wA = a.weight || 0,
 				wB = b.weight || 0;
@@ -54,8 +54,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.AbstractV
 		};
 	},
 
-
-	addToColumn: function(index, cmp) {
+    addToColumn: function(index, cmp) {
 		var column = this.COLUMN_MAP[index];
 
 		if (column) {
@@ -69,7 +68,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.AbstractV
 		}
 	},
 
-	/**
+    /**
 	 * Fit the tiles in to columns and try to get the columns height to be as
 	 * close to the same as possible. Set the top and left for the tiles,
 	 * the cmps need to have width and height on them.
@@ -121,7 +120,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.AbstractV
 		return tiles;
 	},
 
-	/**
+    /**
 	 * Add the tiles back, use the previous configs so the layout doesn't change any
 	 */
 	addTilesBack: function() {
@@ -136,8 +135,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.AbstractV
 		});
 	},
 
-
-	/**
+    /**
 	 * Add an array of tile components
 	 */
 	setTiles: function(tiles) {
@@ -146,8 +144,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.AbstractV
 		this.addTilesBack();
 	},
 
-
-	clearTiles: function() {
+    clearTiles: function() {
 		var i;
 
 		for (i = 0; i < this.COLUMN_COUNT; i++) {

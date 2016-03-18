@@ -1,7 +1,10 @@
+var Ext = require('extjs');
+
+
 /**
  * based on: http://jsfiddle.net/DRf9P/
  */
-export default Ext.define('NextThought.app.whiteboard.Matrix', {
+module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 	alternateClassName: 'NTMatrix',
 
 	constructor: function(transform) {

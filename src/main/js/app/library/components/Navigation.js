@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.library.components.Navigation', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.library.components.Navigation', {
 	extend: 'Ext.Component',
 	alias: 'widget.library-navigation',
 

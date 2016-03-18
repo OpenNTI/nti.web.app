@@ -1,35 +1,35 @@
-export default Ext.define('NextThought.app.course.assessment.components.admin.performance.Student', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-assessment-admin-performance-student',
+var Ext = require('extjs');
+var ParseUtils = require('../../../../../../util/Parsing');
+var MixinsState = require('../../../../../../mixins/State');
+var PerformanceHeader = require('./Header');
+var AdminGrid = require('../Grid');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.Student', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.course-assessment-admin-performance-student',
+
+    mixins: {
 		State: 'NextThought.mixins.State'
 	},
 
-	requires: [
-		'NextThought.app.course.assessment.components.admin.performance.Header',
-		'NextThought.app.course.assessment.components.admin.Grid'
-	],
+    layout: 'none',
+    ui: 'course-assessment',
+    cls: 'course-assessment-admin assignment-item',
 
-	layout: 'none',
-
-	ui: 'course-assessment',
-	cls: 'course-assessment-admin assignment-item',
-
-	pathRoot: {
+    pathRoot: {
 		label: 'Grades & Performance',
 		title: 'Grades & Performance',
 		route: 'performance'
 	},
 
-	items: [{
+    items: [{
 		xtype: 'course-admin-grid',
 		flex: 1,
 		cls: 'student-performance-overview'
 	}],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this._masked = 0;
 		this.callParent(arguments);
 
@@ -58,8 +58,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		if (this._masked) {
@@ -67,8 +66,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	},
 
-
-	_showMask: function() {
+    _showMask: function() {
 		var el = this.el;
 
 		this._maskIn = setTimeout(function() {
@@ -78,8 +76,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}, 1);
 	},
 
-
-	mask: function() {
+    mask: function() {
 		this._masked++;
 
 		if (!this.rendered) {
@@ -89,8 +86,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		this._showMask();
 	},
 
-
-	unmask: function() {
+    unmask: function() {
 		this._masked--;
 
 		if (this._masked <= 0) {
@@ -103,8 +99,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	},
 
-
-	refresh: function() {
+    refresh: function() {
 		var grid = this.down('grid'),
 			view = grid && grid.view;
 
@@ -113,8 +108,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		return Promise.resolve();
 	},
 
-
-	setAssignmentsData: function(assignments) {
+    setAssignmentsData: function(assignments) {
 		if (!assignments) {
 			console.error('No Assignments?');
 			return Promise.reject('no data?');
@@ -138,8 +132,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		return this.applyState(state);
 	},
 
-
-	setEnrollmentData: function(enrollment) {
+    setEnrollmentData: function(enrollment) {
 		var mailLink = enrollment && enrollment.getLink('Mail'),
 			me = this;
 
@@ -154,8 +147,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	},
 
-
-	applyState: function(state) {
+    applyState: function(state) {
 		if (this.applyingState) { return; }
 
 		var me = this,
@@ -187,8 +179,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		});
 	},
 
-
-	changeSort: function(ct, column, direction) {
+    changeSort: function(ct, column, direction) {
 		var prop = column.sortOn || column.dataIndex,
 			state = this.getCurrentState() || {};
 
@@ -206,8 +197,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	},
 
-
-	maybeShowAssignment: function(view, record, node, index, e) {
+    maybeShowAssignment: function(view, record, node, index, e) {
 		var selModel = view.getSelectionModel(),
 			selection = selModel && selModel.selection,
 			dataIndex = selection && selection.columnHeader.dataIndex;
@@ -217,8 +207,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		}
 	},
 
-
-	showAssignment: function(selModel, record) {
+    showAssignment: function(selModel, record) {
 		var userId = this.student.getURLPart(),
 			assignmentId = record.get('AssignmentId');
 
@@ -227,8 +216,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.pe
 		this.pushRoute('', '/performance/' + userId + '/' + assignmentId);
 	},
 
-
-	doNavigation: function(title, route, precache) {
+    doNavigation: function(title, route, precache) {
 		var userId = this.student.getId();
 
 		this.pushRoute(title, route, precache);

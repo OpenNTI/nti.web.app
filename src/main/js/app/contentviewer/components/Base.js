@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.contentviewer.components.Base', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.contentviewer.components.Base', {
 	extend: 'Ext.panel.Panel',
 
 	overflowX: 'hidden',

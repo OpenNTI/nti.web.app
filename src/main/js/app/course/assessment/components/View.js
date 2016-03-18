@@ -1,30 +1,33 @@
-export default Ext.define('NextThought.app.course.assessment.components.View', {
-	extend: 'NextThought.common.components.NavPanel',
-	alias: 'widget.course-assessment',
+var Ext = require('extjs');
+var UserRepository = require('../../../../cache/UserRepository');
+var User = require('../../../../model/User');
+var ParseUtils = require('../../../../util/Parsing');
+var ComponentsNavPanel = require('../../../../common/components/NavPanel');
+var MixinsRouter = require('../../../../mixins/Router');
+var ComponentsNavigation = require('./Navigation');
+var ComponentsBody = require('./Body');
+var AdminActivit = require('./admin/Activity');
+var AssignmentsView = require('./admin/assignments/View');
+var EmailWindow = require('./admin/email/Window');
+var PerformanceView = require('./admin/performance/View');
+var AssignmentsView = require('./student/assignments/View');
+var StudentActivity = require('./student/Activity');
+var StudentPerformance = require('./student/Performance');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.View', {
+    extend: 'NextThought.common.components.NavPanel',
+    alias: 'widget.course-assessment',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	requires: [
-		'NextThought.app.course.assessment.components.Navigation',
-		'NextThought.app.course.assessment.components.Body',
-		'NextThought.app.course.assessment.components.admin.Activit',
-		'NextThought.app.course.assessment.components.admin.assignments.View',
-		'NextThought.app.course.assessment.components.admin.email.Window',
-		'NextThought.app.course.assessment.components.admin.performance.View',
-		'NextThought.app.course.assessment.components.student.assignments.View',
-		'NextThought.app.course.assessment.components.student.Activity',
-		'NextThought.app.course.assessment.components.student.Performance'
-	],
+    navigation: {xtype: 'course-assessment-navigation'},
+    body: {xtype: 'course-assessment-body'},
+    cls: 'course-assessment-view',
 
-	navigation: {xtype: 'course-assessment-navigation'},
-	body: {xtype: 'course-assessment-body'},
-
-
-	cls: 'course-assessment-view',
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -38,8 +41,7 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 		this.on('activate', this.onActivate.bind(this));
 	},
 
-
-	bundleChanged: function(bundle) {
+    bundleChanged: function(bundle) {
 		var me = this,
 			isSync = (me.currentBundle && me.currentBundle.getId()) === (bundle && bundle.getId());
 
@@ -129,15 +131,13 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 			});
 	},
 
-
-	onActivate: function() {
+    onActivate: function() {
 		if (!this.rendered) { return; }
 
 		this.alignNavigation();
 	},
 
-
-	getAssignmentList: function() {
+    getAssignmentList: function() {
 		var me = this;
 
 		//apply the assignments data and let it restore state so we can get that order
@@ -154,8 +154,7 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 			});
 	},
 
-
-	getStudentListForAssignment: function(assignment, student) {
+    getStudentListForAssignment: function(assignment, student) {
 		var me = this;
 
 		//apply the assignments data and let it restore state so we can get that order
@@ -168,8 +167,7 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 			});
 	},
 
-
-	getAssignmentListForStudent: function(student) {
+    getAssignmentListForStudent: function(student) {
 		var me = this;
 
 		//apply the assignments data and let it restore state so we can get that order
@@ -192,8 +190,7 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 			});
 	},
 
-
-	maybeMask: function(cmp, isActive, path) {
+    maybeMask: function(cmp, isActive, path) {
 		var el = this.body.el;
 
 		//if passed an active cmp the want to try to mask itself, let it
@@ -208,8 +205,7 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 		}
 	},
 
-
-	maybeUnmask: function(cmp, isActive, path) {
+    maybeUnmask: function(cmp, isActive, path) {
 		this.finished = true;
 
 		var el = this.body.el;
@@ -223,20 +219,17 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 		}
 	},
 
-
-	shouldPushViews: function() {
+    shouldPushViews: function() {
 		return !this.body.items.getCount();
 	},
 
-
-	setActiveItem: function(item, route) {
+    setActiveItem: function(item, route) {
 		this.navigation.updateActive(item, route);
 
 		this.callParent(arguments);
 	},
 
-
-	clearViews: function() {
+    clearViews: function() {
 		var items = this.body.items.items || [];
 
 		items.forEach(function(item) {
@@ -253,14 +246,12 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 		delete this.performanceView;
 	},
 
-
-	addChildRouter: function(cmp) {
+    addChildRouter: function(cmp) {
 		this.mixins.Router.addChildRouter.call(this, cmp);
 		cmp.pushRoute = this.changeRoute.bind(this);
 	},
 
-
-	addAdminViews: function(getLink) {
+    addAdminViews: function(getLink) {
 		this.isAdmin = true;
 		this.notificationsView = this.body.add({
 			xtype: 'course-assessment-admin-activity',
@@ -296,8 +287,7 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 		]);
 	},
 
-
-	addContentEditorViews: function() {
+    addContentEditorViews: function() {
 		var me = this;
 
 		this.addStudentViews();
@@ -308,8 +298,7 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 			});
 	},
 
-
-	addStudentViews: function() {
+    addStudentViews: function() {
 		this.isAdmin = false;
 		this.notificationsView = this.body.add({
 			xtype: 'course-assessment-activity',
@@ -344,8 +333,7 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 		]);
 	},
 
-
-	showNotifications: function(route, subRoute) {
+    showNotifications: function(route, subRoute) {
 		if (!this.notificationsView) { return; }
 
 		var me = this;
@@ -360,8 +348,7 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 			.then(me.alignNavigation.bind(me));
 	},
 
-
-	showPerformance: function(route, subRoute) {
+    showPerformance: function(route, subRoute) {
 		if (!this.performanceView) { return; }
 
 		var me = this,
@@ -385,8 +372,7 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 			.then(me.alignNavigation.bind(me));
 	},
 
-
-	showAssignments: function(route, subRoute) {
+    showAssignments: function(route, subRoute) {
 		if (!this.assignmentsView) { return; }
 
 		var me = this;
@@ -406,8 +392,7 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 			.then(me.alignNavigation.bind(me));
 	},
 
-
-	showStudentsForAssignment: function(route, subRoute) {
+    showStudentsForAssignment: function(route, subRoute) {
 		if (!this.assignmentsView) { return; }
 
 		var me = this,
@@ -432,8 +417,7 @@ export default Ext.define('NextThought.app.course.assessment.components.View', {
 			.then(me.alignNavigation.bind(me));
 	},
 
-
-	showAssignmentsForStudent: function(route, subRoute) {
+    showAssignmentsForStudent: function(route, subRoute) {
 		if (!this.performanceView) { return; }
 
 		var me = this,

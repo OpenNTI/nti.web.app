@@ -1,12 +1,23 @@
-/*globals User*/
-export default Ext.define('NextThought.model.Note', {
-	extend: 'NextThought.model.Base',
+var Ext = require('extjs');
+var User = require('./User');
+var ContentUtils = require('../util/Content');
+var ModelBase = require('./Base');
+var MixinsModelWithBodyContent = require('../mixins/ModelWithBodyContent');
+var AnchorablesDomContentRangeDescription = require('./anchorables/DomContentRangeDescription');
+var AnchorablesTranscriptRangeDescription = require('./anchorables/TranscriptRangeDescription');
+var ConvertersContentRangeDescription = require('./converters/ContentRangeDescription');
+var ConvertersGroupByTime = require('./converters/GroupByTime');
 
-	mixins: {
+
+/*globals User*/
+module.exports = exports = Ext.define('NextThought.model.Note', {
+    extend: 'NextThought.model.Base',
+
+    mixins: {
 		bodyContent: 'NextThought.mixins.ModelWithBodyContent'
 	},
 
-	statics: {
+    statics: {
 		createFromHighlight: function(hl) {
 			return this.create({
 				ContainerId: hl.get('ContainerId'),
@@ -19,18 +30,10 @@ export default Ext.define('NextThought.model.Note', {
 		}
 	},
 
-	requires: [
-		'NextThought.model.anchorables.DomContentRangeDescription',
-		'NextThought.model.anchorables.TranscriptRangeDescription',
-		'NextThought.model.converters.ContentRangeDescription',
-		'NextThought.model.converters.GroupByTime'
-	],
+    isThreadable: true,
+    canReply: true,
 
-
-	isThreadable: true,
-	canReply: true,
-
-	fields: [
+    fields: [
 		{ name: 'ReferencedByCount', type: 'int'},
 		{ name: 'inReplyTo', type: 'string' },
 		{ name: 'references', type: 'auto', defaultValue: [] },
@@ -94,7 +97,7 @@ export default Ext.define('NextThought.model.Note', {
 		{ name: 'textBodyContent', type: 'auto', persist: false}
 	],
 
-	/*
+    /*
 	 * Retrieves the descendants for the given note.
 	 * If this is a placeholder that means aggregating
 	 * getDescendants on each of it's children.  If this
@@ -149,7 +152,7 @@ export default Ext.define('NextThought.model.Note', {
 		}
 	},
 
-	/**
+    /**
 	 * Asynchronously loads replies using the "replies" link type
 	 *
 	 * @param {Function} callback
@@ -180,7 +183,7 @@ export default Ext.define('NextThought.model.Note', {
 		store.load({});
 	},
 
-	/**
+    /**
 	 * From a note, build its reply
 	 * @return {NextThought.model.Note}
 	 */
@@ -200,20 +203,20 @@ export default Ext.define('NextThought.model.Note', {
 		return reply;
 	},
 
-	getReplyCount: function() {
+    getReplyCount: function() {
 		if (this.hasRepliesBeenLoaded(this)) {
 			return this.countChildren();
 		}
 		return this.sumReferenceByCount();
 	},
 
-	/**
+    /**
 	 * 'AdjustedReferenceCount' is a derived field. Thus, we need to implement at least a getter fn.
 	 * When it's triggered, things that are listening to it will update their replyCount.
 	 */
 	getAdjustedReferenceCount: Ext.emptyFn,
 
-	hasRepliesBeenLoaded: function(rec) {
+    hasRepliesBeenLoaded: function(rec) {
 		if (!rec.placeholder) {
 			return rec.get('ReferencedByCount') === 0 || ((rec.children || []).length > 0);
 		}
@@ -221,14 +224,14 @@ export default Ext.define('NextThought.model.Note', {
 		return Ext.Array.every((rec.children || []), rec.hasRepliesBeenLoaded, this);
 	},
 
-	isWhiteboardOnly: function(body) {
+    isWhiteboardOnly: function(body) {
 		if (Ext.isEmpty(body)) { return false;}
 		return Ext.Array.every(body, function(i) {
 			return typeof i !== 'string';
 		});
 	},
 
-	resolveNoteTitle: function(cb, max) {
+    resolveNoteTitle: function(cb, max) {
 		var t = this.get('title'),
 			body = this.get('body'),
 			snip;
@@ -249,7 +252,7 @@ export default Ext.define('NextThought.model.Note', {
 		Ext.callback(cb, null, [snip, t]);
 	},
 
-	resolveNotePreview: function(cb, max) {
+    resolveNotePreview: function(cb, max) {
 		var t = this.get('title'),
 			body = this.get('body'),
 			snip, onlyObject;
@@ -283,8 +286,7 @@ export default Ext.define('NextThought.model.Note', {
 		Ext.callback(cb, null, [snip, t]);
 	},
 
-
-	//get the simplified body and filter out all non string parts
+    //get the simplified body and filter out all non string parts
 	simplifyTitle: function(body) {
 		var text = this.simplifyBody(body) || [];
 
@@ -295,8 +297,7 @@ export default Ext.define('NextThought.model.Note', {
 		return text;
 	},
 
-
-	simplifyBody: function(body) {
+    simplifyBody: function(body) {
 		var text = [];
 
 		Ext.each(body, function(c) {
@@ -310,8 +311,7 @@ export default Ext.define('NextThought.model.Note', {
 		return text;
 	},
 
-
-	countChildren: function() {
+    countChildren: function() {
 		function allDescendants(rec) {
 			var i, child;
 			for (i = 0; i < (rec.children || []).length; i++) {
@@ -325,7 +325,7 @@ export default Ext.define('NextThought.model.Note', {
 		return sum;
 	},
 
-	sumReferenceByCount: function(rec) {
+    sumReferenceByCount: function(rec) {
 		var sum = 0;
 		if (!rec) {
 			rec = this;
@@ -342,7 +342,7 @@ export default Ext.define('NextThought.model.Note', {
 		return sum;
 	},
 
-	debugString: function() {
+    debugString: function() {
 		var bs = (this.get('body') || []).toString(), cs;
 
 		if (this.placeholder) {
@@ -358,7 +358,7 @@ export default Ext.define('NextThought.model.Note', {
 		return '[' + bs + ' (' + cs.join(',') + ') ]';
 	},
 
-	getTotalLikeCount: function() {
+    getTotalLikeCount: function() {
 		if (this.raw && this.raw.hasOwnProperty('RecursiveLikeCount')) {
 			return this.get('RecursiveLikeCount') || 0;
 		}
@@ -368,7 +368,7 @@ export default Ext.define('NextThought.model.Note', {
 		}, (this.isLiked() ? 1 : 0));
 	},
 
-	convertToPlaceholder: function() {
+    convertToPlaceholder: function() {
 		var me = this,
 			data = this.getData(false),
 			p = User.getUnresolved();
@@ -391,7 +391,7 @@ export default Ext.define('NextThought.model.Note', {
 		me.resumeEvents();
 	},
 
-	getActivityItemConfig: function() {
+    getActivityItemConfig: function() {
 		return Promise.resolve({
 			message: Ext.String.format('&ldquo;{0}&rdquo;', Ext.String.ellipsis(this.getBodyText(), 50, true)),
 			verb: this.get('inReplyTo') ? 'said' : 'shared a note'

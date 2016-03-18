@@ -1,20 +1,21 @@
-export default Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
-	extend: 'NextThought.model.anchorables.ContentRangeDescription',
-	requires: [
-		'NextThought.model.anchorables.DomContentPointer'
-	],
+var Ext = require('extjs');
+var AnchorablesContentRangeDescription = require('./ContentRangeDescription');
+var AnchorablesDomContentPointer = require('./DomContentPointer');
 
-	config: {
+
+module.exports = exports = Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
+    extend: 'NextThought.model.anchorables.ContentRangeDescription',
+
+    config: {
 		start: {},
 		end: {},
 		ancestor: {}
 	},
 
-	isEmpty: false,
+    isEmpty: false,
+    isDomContentRangeDescription: true,
 
-	isDomContentRangeDescription: true,
-
-	statics: {
+    statics: {
 		createFromObject: function(o) {
 			var cp = NextThought.model.anchorables.ContentPointer;
 			return NextThought.model.anchorables.DomContentRangeDescription.create({
@@ -25,7 +26,7 @@ export default Ext.define('NextThought.model.anchorables.DomContentRangeDescript
 		}
 	},
 
-	constructor: function(o) {
+    constructor: function(o) {
 		var start = o.start,
 			end = o.end,
 			ancestor = o.ancestor;
@@ -48,7 +49,7 @@ export default Ext.define('NextThought.model.anchorables.DomContentRangeDescript
 		this.Class = 'DomContentRangeDescription';
 	},
 
-	isDomContentPointer: function(o) {
+    isDomContentPointer: function(o) {
 		return (o instanceof NextThought.model.anchorables.DomContentPointer);
 	}
 });

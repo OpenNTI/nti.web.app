@@ -1,23 +1,27 @@
-export default Ext.define('NextThought.app.profiles.group.components.membership.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.group-profile-membership',
+var Ext = require('extjs');
+var User = require('../../../../../model/User');
+var AnalyticsUtil = require('../../../../../util/Analytics');
+var MixinsRouter = require('../../../../../mixins/Router');
+var PartsUsers = require('./parts/Users');
+var PartsAdmins = require('./parts/Admins');
 
-	requires: ['NextThought.app.profiles.group.components.membership.parts.Users',
-		   'NextThought.app.profiles.group.components.membership.parts.Admins'],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.profiles.group.components.membership.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.group-profile-membership',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	cls: 'memberships-container',
+    cls: 'memberships-container',
 
-	items: [
+    items: [
 		{xtype: 'profile-group-membership-administrators'},
 		{xtype: 'profile-group-membership-users'}
 	],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -35,8 +39,7 @@ export default Ext.define('NextThought.app.profiles.group.components.membership.
 		});
 	},
 
-
-	startResourceViewed: function() {
+    startResourceViewed: function() {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && !this.hasCurrentTimer) {
@@ -49,8 +52,7 @@ export default Ext.define('NextThought.app.profiles.group.components.membership.
 		}
 	},
 
-
-	stopResourceViewed: function() {
+    stopResourceViewed: function() {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && this.hasCurrentTimer) {
@@ -59,8 +61,7 @@ export default Ext.define('NextThought.app.profiles.group.components.membership.
 		}
 	},
 
-
-	userChanged: function(user, isMe) {
+    userChanged: function(user, isMe) {
 		if (this.activeUser !== user) {
 			this.stopResourceViewed();
 		}
@@ -75,8 +76,7 @@ export default Ext.define('NextThought.app.profiles.group.components.membership.
 			]);
 	},
 
-
-	onRoute: function() {
+    onRoute: function() {
 		this.setTitle('Members');
 	}
 });

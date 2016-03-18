@@ -1,18 +1,15 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.Controls', {
-	extend: 'Ext.Component',
-	alias: 'widget.overview-editing-controls',
-
-	requires: [
-		'NextThought.app.prompt.Actions',
-		'NextThought.app.windows.Actions',
-		'NextThought.app.course.overview.components.editing.publishing.Menu'
-	],
+var Ext = require('extjs');
+var PromptActions = require('../../../../prompt/Actions');
+var WindowsActions = require('../../../../windows/Actions');
+var PublishingMenu = require('./publishing/Menu');
 
 
-	cls: 'outline-editing-controls',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.Controls', {
+    extend: 'Ext.Component',
+    alias: 'widget.overview-editing-controls',
+    cls: 'outline-editing-controls',
 
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': 'buttons', cn: [
 			{cls: 'button {cls}', 'data-action': '{name}', cn: [
 				{tag: 'div', cls: 'label', html: '{label}'},
@@ -23,7 +20,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Co
 		]}
 	]),
 
-	BUTTONS: {
+    BUTTONS: {
 		audit: {
 			iconCls: 'audit',
 			label: 'Audit',
@@ -47,8 +44,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Co
 		}
 	},
 
-
-	/**
+    /**
 	 * How to configure the options audit, publish, edit, add add
 	 *
 	 * {
@@ -65,16 +61,14 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Co
 		order: ['audit', 'publish', 'edit', 'add']
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.PromptActions = NextThought.app.prompt.Actions.create();
 		this.WindowActions = NextThought.app.windows.Actions.create();
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		var config = this.optionsConfig,
@@ -118,8 +112,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Co
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.auditEl = this.el.down('[data-action=audit]');
@@ -133,8 +126,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Co
 		this.setPublishState();
 	},
 
-
-	initPublishMenu: function(el) {
+    initPublishMenu: function(el) {
 		var menuContainer = el && el.down('.menu-container'), me = this,
 			html = Ext.query('.x-viewport')[0];
 
@@ -161,8 +153,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Co
    		});
 	},
 
-
-	/**
+    /**
 	 * Set the initial publication state of the lesson control.
 	 * Since publishing affects both the outline node and the lesson overview,
 	 * we will take into account both to make sure they follow the intended business logic.
@@ -191,8 +182,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Co
 		}
 	},
 
-
-	setPublished: function() {
+    setPublished: function() {
 		var label = this.publishEl && this.publishEl.down('.label');
 
 		if (this.publishEl) {
@@ -204,8 +194,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Co
 		}
 	},
 
-
-	setWillPublishOn: function() {
+    setWillPublishOn: function() {
 		var label = this.publishEl && this.publishEl.down('.label'),
 			rec = this.contents,
 			value = rec && rec.get('publishBeginning'),
@@ -221,7 +210,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Co
 		}
 	},
 
-	getDayAndMonth: function(date){
+    getDayAndMonth: function(date){
 		var parts, m;
 
 		if (!date) { return ''; }
@@ -233,8 +222,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Co
 		return m + ' ' + parts[1];
 	},
 
-
-	setNotPublished: function() {
+    setNotPublished: function() {
 		var label = this.publishEl && this.publishEl.down('.label');
 
 		if (this.publishEl) {
@@ -246,16 +234,14 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Co
 		}
 	},
 
-
-	onWindowResize: function(){
+    onWindowResize: function(){
 		var menuContainer = this.publishEl;
 		if (menuContainer) {
 			this.alignPublishingMenu(menuContainer);
 		}
 	},
 
-
-	alignPublishingMenu: function(menuContainer){
+    alignPublishingMenu: function(menuContainer){
 		var box = menuContainer && menuContainer.dom.getBoundingClientRect() || {},
 			me = this,
 			menu = this.publishMenu,
@@ -272,8 +258,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Co
 		}
 	},
 
-
-	handleClick: function(e) {
+    handleClick: function(e) {
 		if (e.getTarget('.disabled')) { return; }
 
 		if (e.getTarget('[data-action=audit]')) {
@@ -287,13 +272,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Co
 		}
 	},
 
-
-	showAuditLog: function() {
+    showAuditLog: function() {
 		//TODO: fill this in
 	},
 
-
-	togglePublishMenu: function() {
+    togglePublishMenu: function() {
 		if (this.publishEl) {
 			if (this.publishEl.hasCls('closed')) {
 				this.alignPublishingMenu(this.publishEl);
@@ -302,13 +285,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Co
 		}
 	},
 
-
-	doEdit: function() {
+    doEdit: function() {
 		this.PromptActions.prompt('overview-editing', {record: this.record, parent: this.parentRecord, root: this.root});
 	},
 
-
-	doAdd: function() {
+    doAdd: function() {
 		this.PromptActions.prompt('overview-creation', {parent: this.contents || this.record, root: this.root});
 	}
 });

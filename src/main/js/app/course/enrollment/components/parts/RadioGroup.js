@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.enrollment.components.parts.RadioGroup', {
+var Ext = require('extjs');
+var PartsBaseInput = require('./BaseInput');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.RadioGroup', {
 	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
 	alias: 'widget.enrollment-radiogroup',
 

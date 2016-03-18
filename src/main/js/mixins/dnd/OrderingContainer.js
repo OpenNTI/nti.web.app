@@ -1,28 +1,25 @@
-export default Ext.define('NextThought.mixins.dnd.OrderingContainer', {
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var DndDropzone = require('./Dropzone');
+var AppMoveInfo = require('../../model/app/MoveInfo');
+var DndActions = require('../../app/dnd/Actions');
 
-	requires: [
-		'NextThought.model.app.MoveInfo',
-		'NextThought.app.dnd.Actions'
-	],
 
-
-	mixins: {
+module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingContainer', {
+    mixins: {
 		Dropzone: 'NextThought.mixins.dnd.Dropzone'
 	},
 
-
-	statics: {
+    statics: {
 		hasMoveInfo: function(dataTransfer) {
 			return dataTransfer.containsType(NextThought.model.app.MoveInfo.mimeType);
 		}
 	},
 
-
-	initOrdering: function() {
+    initOrdering: function() {
 	},
 
-
-	enableOrderingContainer: function() {
+    enableOrderingContainer: function() {
 		this.enableDropzone();
 
 		var items = this.getOrderingItems();
@@ -30,8 +27,7 @@ export default Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		items.forEach(this.enableDraggingOnItem.bind(this));
 	},
 
-
-	disableOrderingContainer: function() {
+    disableOrderingContainer: function() {
 		this.disableDropzone();
 
 		var items = this.getOrderingItems();
@@ -39,27 +35,23 @@ export default Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		items.forEach(this.disableDraggingOnItem.bind(this));
 	},
 
-
-	getOrderingItems: function() {
+    getOrderingItems: function() {
 		return [];
 	},
 
-
-	enableDraggingOnItem: function(item, index) {
+    enableDraggingOnItem: function(item, index) {
 		if (item && item.enableOrdering) {
 			item.enableOrdering(index, this.onItemDragStart.bind(this), this.onItemDragEnd.bind(this));
 		}
 	},
 
-
-	disableDraggingOnItem: function(item) {
+    disableDraggingOnItem: function(item) {
 		if (item && item.disableOrdering) {
 			item.disableOrdering();
 		}
 	},
 
-
-	getInfoForCoordinates: function(x, y, styles) {
+    getInfoForCoordinates: function(x, y, styles) {
 		var items = this.getOrderingItems(),
 			dropzoneRect = this.getDropzoneBoundingClientRect(),
 			dropzoneWidth = dropzoneRect.width,
@@ -113,8 +105,7 @@ export default Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		return info;
 	},
 
-
-	__getDropPlaceholder: function() {
+    __getDropPlaceholder: function() {
 		var placeholder = document.querySelector('.dnd-drop-placeholder');
 
 		if (!placeholder) {
@@ -125,7 +116,7 @@ export default Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		return placeholder;
 	},
 
-	__removeDropPlaceholder: function() {
+    __removeDropPlaceholder: function() {
 		var placeholder = document.querySelector('.dnd-drop-placeholder');
 
 		if (placeholder) {
@@ -133,8 +124,7 @@ export default Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		}
 	},
 
-
-	__getSavePlaceholder: function() {
+    __getSavePlaceholder: function() {
 		var placeholder = document.querySelector('.dnd-save-placeholder');
 
 		if (!placeholder) {
@@ -146,8 +136,7 @@ export default Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		return placeholder;
 	},
 
-
-	__removeSavePlaceholder: function() {
+    __removeSavePlaceholder: function() {
 		var placeholder = document.querySelector('.dnd-save-placeholder');
 
 		if (placeholder) {
@@ -155,18 +144,15 @@ export default Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		}
 	},
 
-
-	onItemDragStart: function() {
+    onItemDragStart: function() {
 		this.__getDropPlaceholder();
 	},
 
-
-	onItemDragEnd: function() {
+    onItemDragEnd: function() {
 		this.__removeDropPlaceholder();
 	},
 
-
-	onDragStart: function() {
+    onDragStart: function() {
 		var items = this.getOrderingItems(),
 			rect = this.getDropzoneBoundingClientRect();
 
@@ -177,8 +163,7 @@ export default Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		});
 	},
 
-
-	onDragEnd: function() {
+    onDragEnd: function() {
 		var items = this.getOrderingItems();
 
 		items.forEach(function(item) {
@@ -188,13 +173,11 @@ export default Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		});
 	},
 
-
-	onDragLeave: function() {
+    onDragLeave: function() {
 		this.__removeDropPlaceholder();
 	},
 
-
-	__showPlaceholderByInfo: function(placeholder, info, styles) {
+    __showPlaceholderByInfo: function(placeholder, info, styles) {
 		var target = this.getDropzoneTarget();
 
 		if (info.append) {
@@ -218,8 +201,7 @@ export default Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		return placeholder;
 	},
 
-
-	onDragOver: function(e, dataTransfer) {
+    onDragOver: function(e, dataTransfer) {
 		if (!this.hasHandlerForDataTransfer(dataTransfer)) {
 			this.__removePlaceholder();
 			return;
@@ -235,8 +217,7 @@ export default Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 		this.__showPlaceholderByInfo(placeholder, info, placeholderStyles);
 	},
 
-
-	onDragDrop: function(e, dataTransfer) {
+    onDragDrop: function(e, dataTransfer) {
 		var dndActions = NextThought.app.dnd.Actions.create(),
 			placeholderStyles = dndActions.getPlaceholderStyles(),
 			info = this.getInfoForCoordinates(e.clientX, e.clientY, placeholderStyles),

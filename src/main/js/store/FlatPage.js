@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.store.FlatPage', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 	extend: 'Ext.data.Store',
 	model: 'NextThought.model.Base',
 	proxy: 'memory',

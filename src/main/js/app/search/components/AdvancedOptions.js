@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.search.components.AdvancedOptions', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.search.components.AdvancedOptions', {
 	extend: 'Ext.Component',
 	alias: 'widget.search-advanced-menu',
 

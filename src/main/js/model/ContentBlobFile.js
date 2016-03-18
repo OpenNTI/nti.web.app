@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.ContentBlobFile', {
+var Ext = require('extjs');
+var ModelBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.ContentBlobFile', {
 	extend: 'NextThought.model.Base',
 
 	fields: [

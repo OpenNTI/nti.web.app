@@ -1,15 +1,15 @@
-export default Ext.define('NextThought.app.course.assessment.components.admin.email.EmailTokenField', {
-	extend: 'NextThought.app.sharing.components.UserTokenField',
-	alias: ['widget.course-scope-list'],
-	requires: [
-		'NextThought.app.course.assessment.components.admin.email.components.ScopeSearch'
-	],
-
-	cls: 'user-token-field email-token-field',
-	placeholder: 'Add a recipient',
+var Ext = require('extjs');
+var ComponentsUserTokenField = require('../../../../../sharing/components/UserTokenField');
+var ComponentsScopeSearch = require('./components/ScopeSearch');
 
 
-	setupPickerView: function(){
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.email.EmailTokenField', {
+    extend: 'NextThought.app.sharing.components.UserTokenField',
+    alias: ['widget.course-scope-list'],
+    cls: 'user-token-field email-token-field',
+    placeholder: 'Add a recipient',
+
+    setupPickerView: function(){
 		var spEl = this.scrollParentEl;
 
 		this.pickerView = Ext.widget('scope-sharesearch', {
@@ -21,8 +21,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		});
 	},
 
-
-	containsToken: function(model) {
+    containsToken: function(model) {
 		if (!model) {return true;}
 
 		var name = model.get('realname'), c;
@@ -30,8 +29,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		return c.length > 0;
 	},
 
-
-	setInitialToken: function(scope) {
+    setInitialToken: function(scope) {
 		var token = this.suggestionStore.findRecord('realname', scope);
 
 		if (token) {
@@ -39,16 +37,14 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		}
 	},
 
-
-	setNonEditableToken: function(token){
+    setNonEditableToken: function(token){
 		if(token) {
 			this.addSelection(token);
 			this.el.addCls('readOnly');
 		}
 	},
 
-
-	onBeforeAddToken: function(record) {
+    onBeforeAddToken: function(record) {
 		if (!Ext.isEmpty(this.selections) && !this.containsToken(record)) {
 			// NOTE: All Students and Enrolled Students are hieararchical scopes, 
 			// so for now, selecting one un-does the other, since it would cause a confusion otherwise.
@@ -56,8 +52,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		}
 	},
 
-
-	addToken: function(record) {
+    addToken: function(record) {
 		var value = record && record.get('displayName'),
 			type = this.getType(record.getData()),  t;
 
@@ -78,13 +73,11 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		this.fireEvent('selection-changed', record);
 	},
 
-
-	clearResults: function() {
+    clearResults: function() {
 		this.searchStore.clearFilter();
 	},
 
-
-	showSearch: function(value) {
+    showSearch: function(value) {
 		this.pickerView.bindStore(this.searchStore);
 
 		//Clear results right before making a search.
@@ -92,13 +85,11 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		this.searchStore.filter("realname", value);
 	},
 
-
-	getInsertionPoint: function() {
+    getInsertionPoint: function() {
 		return this.wrapEl;
 	},
 
-
-	buildSearchStore: function() {
+    buildSearchStore: function() {
 		/**
 		 * NOTE: Right now, there no way to add any user/entity to the email sender list. At the gradebook level, 
 		 * it's either All Students or Enrolled Students.
@@ -107,13 +98,11 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		return this.buildSuggestionStore();
 	},
 
-
-	getSnippet: function(value) {
+    getSnippet: function(value) {
 		return value;
 	},
 
-
-	buildSuggestionStore: function() {
+    buildSuggestionStore: function() {
 		var data = [],
 			store = new Ext.data.Store({
 				model: 'NextThought.model.UserSearch'

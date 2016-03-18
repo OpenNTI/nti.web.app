@@ -1,14 +1,15 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.timeline.Editor', {
-	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-	alias: 'widget.overview-editing-timeline',
+var Ext = require('extjs');
+var ContentEditor = require('../Editor');
+var TimelineItemSelection = require('./ItemSelection');
+var TimelineTimelineEditor = require('./TimelineEditor');
+var ModelTimeline = require('../../../../../../../model/Timeline');
 
-	requires: [
-		'NextThought.app.course.overview.components.editing.content.timeline.ItemSelection',
-		'NextThought.app.course.overview.components.editing.content.timeline.TimelineEditor',
-		'NextThought.model.Timeline'
-	],
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.Editor', {
+    extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+    alias: 'widget.overview-editing-timeline',
+
+    statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.Timeline.mimeType
@@ -29,11 +30,9 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
+    addFormCmp: function() {},
 
-	addFormCmp: function() {},
-
-
-	showEditor: function() {
+    showEditor: function() {
 		if (this.selectedItems || this.record) {
 			this.showTimelineEditor();
 		} else {
@@ -41,8 +40,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	showTimelineEditor: function() {
+    showTimelineEditor: function() {
 		if (this.timelineEditorCmp) {
 			this.timelineEditorCmp.destroy();
 			delete this.timelineEditorCmp;
@@ -66,8 +64,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		this.maybeEnableBack('Timeline');
 	},
 
-
-	showTimelineList: function() {
+    showTimelineList: function() {
 		var me = this;
 
 		if (this.listCmp) {
@@ -96,13 +93,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			});
 	},
 
-
-	__sortTimelines: function(items) {
+    __sortTimelines: function(items) {
 		return items;
 	},
 
-
-	onDiscussionSelectionChange: function(selection) {
+    onDiscussionSelectionChange: function(selection) {
 		var length = selection.length;
 
 		if (length === 0) {
@@ -113,15 +108,13 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	maybeEnableBack: function(text) {
+    maybeEnableBack: function(text) {
 		if (!this.record && this.enableBack) {
 			this.enableBack(text);
 		}
 	},
 
-
-	onSave: function() {
+    onSave: function() {
 		var me = this;
 		if (!me.editorCmp) {
 			me.showTimelineEditor();
@@ -136,8 +129,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			});
 	},
 
-
-	onSaveFailure: function(reason) {
+    onSaveFailure: function(reason) {
 		if (reason === this.SWITCHED) { return; }
 
 		this.callParent(arguments);

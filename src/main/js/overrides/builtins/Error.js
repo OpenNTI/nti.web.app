@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.builtins.Error', {});
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.builtins.Error', {});
 
 
 /**

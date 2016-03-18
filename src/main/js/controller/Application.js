@@ -1,17 +1,24 @@
-import LoginStore from '../login/StateStore';
-import LoginActions from '../login/Actions';
-import Index from '../app/Index';
-import LibraryActions from '../app/library/Actions';
-import StoreActions from '../app/store/Actions';
-import ChatActions from '../app/chat/Actions';
-import GroupActions from '../app/group/Actions';
-import ContextStore from '../app/context/StateStore';
-import NotificationActions from '../app/notifications/Actions';
-import StateActions from '../common/State/Actions';
-import UserActions from '../app/profiles/user/Actions';
-import Globals from '../util/Globals';
+var Ext = require('extjs');
+var B64 = require('../util/Base64');
+var Globals = require('../util/Globals');
+var ParseUtils = require('../util/Parsing');
 
-export default Ext.define('NextThought.controller.Application', {
+
+var LoginStore = require('../login/StateStore');
+var LoginActions = require('../login/Actions');
+var Index = require('../app/Index');
+var LibraryActions = require('../app/library/Actions');
+var StoreActions = require('../app/store/Actions');
+var ChatActions = require('../app/chat/Actions');
+var GroupActions = require('../app/groups/Actions');
+var ContextStore = require('../app/context/StateStore');
+var NotificationActions = require('../app/notifications/Actions');
+var StateActions = require('../common/state/Actions');
+var UserActions = require('../app/profiles/user/Actions');
+var NavigationActions = require('../app/navigation/Actions');
+var Globals = require('../util/Globals');
+
+module.exports = exports = Ext.define('NextThought.controller.Application', {
 	extend: 'Ext.app.Controller',
 
 	refs: [
@@ -48,9 +55,9 @@ export default Ext.define('NextThought.controller.Application', {
 		me.StoreActions = StoreActions.create();
 		me.StateActions = StateActions.create();
 		me.ChatActions = ChatActions.create();
-		me.GroupActions = GroupsActions.create();
-		me.ContextStore = ContextStateStore.getInstance();
-		me.NotificationActions = NotificationsActions.create();
+		me.GroupActions = GroupActions.create();
+		me.ContextStore = ContextStore.getInstance();
+		me.NotificationActions = NotificationActions.create();
 		me.NavigationActions = NavigationActions.create();
 		me.UserProfileActions = UserActions.create();
 

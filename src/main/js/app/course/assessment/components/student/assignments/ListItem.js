@@ -1,26 +1,22 @@
-export default Ext.define('NextThought.app.course.assessment.components.student.assignments.ListItem', {
-	extend: 'Ext.Component',
-	alias: 'widget.course-assessment-assignment-list-item',
-
-	requires: [
-		'NextThought.app.course.assessment.components.AssignmentStatus'
-	],
+var Ext = require('extjs');
+var ComponentsAssignmentStatus = require('../../AssignmentStatus');
 
 
-	cls: 'item',
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.assignments.ListItem', {
+    extend: 'Ext.Component',
+    alias: 'widget.course-assessment-assignment-list-item',
+    cls: 'item',
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{ cls: 'name', html: '{name:htmlEncode}'},
 		{ cls: 'status-container'}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		statusEl: '.status-container'
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		this.addClasses();
@@ -30,8 +26,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		});
 	},
 
-
-	addClasses: function() {
+    addClasses: function() {
 		var cls = [],
 			completed = this.history && this.history.get('completed');
 
@@ -46,8 +41,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		this.addCls(cls);
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.addStatusCmp();
@@ -55,8 +49,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		this.mon(this.el, 'click', this.onItemClick.bind(this));
 	},
 
-
-	addStatusCmp: function() {
+    addStatusCmp: function() {
 		var me = this;
 
 		me.statusCmp = new NextThought.app.course.assessment.components.AssignmentStatus({
@@ -74,8 +67,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		me.on('destroy', me.statusCmp.destroy.bind(me.statusCmp));
 	},
 
-
-	onItemClick: function(e) {
+    onItemClick: function(e) {
 		if (this.navigateToItem && this.assignment && !e.getTarget('.status-container')) {
 			this.navigateToItem(this.assignment);
 		}

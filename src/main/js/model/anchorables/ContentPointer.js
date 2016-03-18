@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.model.anchorables.ContentPointer', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.model.anchorables.ContentPointer', {
 	config: {},
 
 	statics: {

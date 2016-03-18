@@ -1,31 +1,30 @@
-export default Ext.define('NextThought.preference.Manager', {
+var Ext = require('extjs');
+var ProxyPreference = require('../proxy/Preference');
+var BadgesBase = require('../model/preference/badges/Base');
+var BadgesCourse = require('../model/preference/badges/Course');
+var ChatpresenceActive = require('../model/preference/chatpresence/Active');
+var ChatpresenceAvailable = require('../model/preference/chatpresence/Available');
+var ChatpresenceAway = require('../model/preference/chatpresence/Away');
+var ChatpresenceBase = require('../model/preference/chatpresence/Base');
+var ChatpresenceDND = require('../model/preference/chatpresence/DND');
+var PushnotificationsBase = require('../model/preference/pushnotifications/Base');
+var PushnotificationsEmail = require('../model/preference/pushnotifications/Email');
+var PreferenceBadges = require('../model/preference/Badges');
+var PreferenceBase = require('../model/preference/Base');
+var PreferenceChatPresence = require('../model/preference/ChatPresence');
+var PreferenceGradebook = require('../model/preference/Gradebook');
+var PreferencePushNotifications = require('../model/preference/PushNotifications');
+var PreferenceRoot = require('../model/preference/Root');
+var PreferenceWebApp = require('../model/preference/WebApp');
 
-	requires: [
-		'NextThought.proxy.Preference',
-		'NextThought.model.preference.badges.Base',
-		'NextThought.model.preference.badges.Course',
-		'NextThought.model.preference.chatpresence.Active',
-		'NextThought.model.preference.chatpresence.Available',
-		'NextThought.model.preference.chatpresence.Away',
-		'NextThought.model.preference.chatpresence.Base',
-		'NextThought.model.preference.chatpresence.DND',
-		'NextThought.model.preference.pushnotifications.Base',
-		'NextThought.model.preference.pushnotifications.Email',
-		'NextThought.model.preference.Badges',
-		'NextThought.model.preference.Base',
-		'NextThought.model.preference.ChatPresence',
-		'NextThought.model.preference.Gradebook',
-		'NextThought.model.preference.PushNotifications',
-		'NextThought.model.preference.Root',
-		'NextThought.model.preference.WebApp'
-	],
 
-	constructor: function(config) {
+module.exports = exports = Ext.define('NextThought.preference.Manager', {
+    constructor: function(config) {
 		this.baseUrl = config.href;
 		this.root = NextThought.model.preference.Root.create({Class: 'preference', href: this.baseUrl});
 	},
 
-	/*
+    /*
 	*	Loads the preference from the server or returns the value for it we alread have
 	* @param key {String} a / delimited list of which preference to get ex ChatPresence/Available
 	* @param cb {Function} what to do after we get the value, takes the value as a parameter
@@ -47,7 +46,7 @@ export default Ext.define('NextThought.preference.Manager', {
 		return Promise.resolve(value);
 	},
 
-	getSubPreference: function(key) {
+    getSubPreference: function(key) {
 		var i, keys = key.split('/'),
 			value = this.root;
 
@@ -66,7 +65,7 @@ export default Ext.define('NextThought.preference.Manager', {
 		return value;
 	},
 
-	hasFutures: function(value) {
+    hasFutures: function(value) {
 		var i, cur, hasFuture = false,
 			subs = value.subPreferences;
 
@@ -87,7 +86,7 @@ export default Ext.define('NextThought.preference.Manager', {
 		return hasFuture;
 	},
 
-	urlToClassName: function(url) {
+    urlToClassName: function(url) {
 		var i, className = 'NextThought.model.preference',
 			urls = url.split('/'),
 			startingIndex = Ext.Array.indexOf(urls, '++preferences++') + 1;
@@ -103,7 +102,7 @@ export default Ext.define('NextThought.preference.Manager', {
 		return className;
 	},
 
-	classNameToModel: function(className) {
+    classNameToModel: function(className) {
 		var i, model = NextThought,
 			names = className.split('.');
 
@@ -114,7 +113,7 @@ export default Ext.define('NextThought.preference.Manager', {
 		return model;
 	},
 
-	loadSubPreference: function(key, cb, scope) {
+    loadSubPreference: function(key, cb, scope) {
 		var me = this,
 			url = me.baseUrl + '/' + key;
 
@@ -140,7 +139,7 @@ export default Ext.define('NextThought.preference.Manager', {
 		});
 	},
 
-	setSubPreference: function(json) {
+    setSubPreference: function(json) {
 		var me = this, i, result, name = 'NextThought.model',
 			cls = json.Class,
 			path = cls.split('_'),

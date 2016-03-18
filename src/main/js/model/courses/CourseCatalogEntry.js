@@ -1,25 +1,27 @@
-export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
-	alternateClassName: 'NextThought.model.courses.CourseCatalogLegacyEntry',
-	extend: 'NextThought.model.Base',
-	mimeType: 'application/vnd.nextthought.courses.coursecataloglegacyentry',
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+var MixinsPresentationResources = require('../../mixins/PresentationResources');
+var ConvertersDate = require('../converters/Date');
+var CoursesEnrollmentOptions = require('./EnrollmentOptions');
+var CoursesCourseCreditLegacyInfo = require('./CourseCreditLegacyInfo');
+var CoursesCourseCatalogInstructorInfo = require('./CourseCatalogInstructorInfo');
+var ModelCatalogFamilies = require('../CatalogFamilies');
 
-	statics: {
+
+module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEntry', {
+    alternateClassName: 'NextThought.model.courses.CourseCatalogLegacyEntry',
+    extend: 'NextThought.model.Base',
+    mimeType: 'application/vnd.nextthought.courses.coursecataloglegacyentry',
+
+    statics: {
 		mimeType: 'application/vnd.nextthought.courses.coursecataloglegacyentry'
 	},
 
-	requires: [
-		'NextThought.model.converters.Date',
-		'NextThought.model.courses.EnrollmentOptions',
-		'NextThought.model.courses.CourseCreditLegacyInfo',
-		'NextThought.model.courses.CourseCatalogInstructorInfo',
-		'NextThought.model.CatalogFamilies'
-	],
-
-	mixins: {
+    mixins: {
 		PresentationResources: 'NextThought.mixins.PresentationResources'
 	},
 
-	fields: [
+    fields: [
 		{ name: 'ContentPackages', mapping: 'ContentPackageNTIID',
 			convert: function(v) { return [v]; } },
 		{ name: 'CatalogFamilies', type: 'singleItem', persist: false},
@@ -77,20 +79,19 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		{ name: 'Communities', type: 'auto', persist: false }
 	],
 
-
-	constructor: function() {
+    constructor: function() {
 		this.callParent(arguments);
 		//this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 	},
 
-	onceAssestsLoadedPromise: function() {
+    onceAssestsLoadedPromise: function() {
 		if (!this.onceAssetsLoaded) {
 			this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 		}
 		return this.onceAssetsLoaded;
 	},
 
-	getAuthorLine: function() {
+    getAuthorLine: function() {
 		function makeName(instructor) {
 			return instructor.get('Name');
 		}
@@ -107,31 +108,26 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		return creator || (instructors && instructors.filter(notTA).map(makeName).join(', ')) || '';
 	},
 
-
-	__setImage: function() {
+    __setImage: function() {
 		var me = this;
 		me.getBackgroundImage();
 		me.getThumbnail();
 		me.getIconImage();
 	},
 
-
-	getBackgroundImage: function() {
+    getBackgroundImage: function() {
 		return this.getAsset('background');
 	},
 
-
-	getThumbnail: function() {
+    getThumbnail: function() {
 		return this.getAsset('thumb');
 	},
 
-
-	getIconImage: function() {
+    getIconImage: function() {
 		return this.getAsset('icon', 'landing');
 	},
 
-
-	/**
+    /**
 	 * Get the catalog family for this catalog entry
 	 * @return {CatalogFamily}
 	 */
@@ -144,8 +140,7 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		return families[0];
 	},
 
-
-	/**
+    /**
 	 * Whether or not this catalog entry is in a given family id
 	 * @param  {String}  id FamilyId
 	 * @return {Boolean}    if it is in the family
@@ -156,8 +151,7 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		return catalogFamilies && catalogFamilies.containsFamily(id);
 	},
 
-
-	//update the enrollment scopes enrollment
+    //update the enrollment scopes enrollment
 	setEnrolled: function(enrolled) {
 		var options = this.get('EnrollmentOptions'),
 			open = options && options.getType('OpenEnrollment'),
@@ -189,7 +183,7 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		});
 	},
 
-	/**
+    /**
 	 * Mark the appropriate enrollment option as enrolled
 	 * @param  {String} status the scope they are enrolled in
 	 * @param  {Boolean} open   if they are open enrolled
@@ -240,20 +234,17 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		});
 	},
 
-
-	getTitle: function(isOnly) {
+    getTitle: function(isOnly) {
 		return isOnly ? this.get('title') : '';
 	},
 
-
-	getEnrollmentOption: function(name) {
+    getEnrollmentOption: function(name) {
 		var options = this.get('EnrollmentOptions');
 
 		return options && options.getType(name);
 	},
 
-
-	getEnrollmentType: function() {
+    getEnrollmentType: function() {
 		var isEnrolled = this.get('enrolled'),
 			isAdmin = this.get('isAdmin'),
 			isOpen = this.get('isOpen'),
@@ -272,7 +263,7 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		return enrollment;
 	},
 
-	/**
+    /**
 	 * Compare a given catalog entry to this one to see if they
 	 * are in the same family
 	 * @param  {CourseCatalogEntry} catalog entry to compare
@@ -286,24 +277,20 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		return families.hasInstersectionWith(catalog.get('CatalogFamilies'));
 	},
 
-
-	isActive: function() {
+    isActive: function() {
 		return Boolean(this.get('enrolled'));
 	},
 
-
-	isEnrolledForCredit: function() {
+    isEnrolledForCredit: function() {
 		return this.isActive() && !this.get('isOpen');
 	},
 
-
-	isDroppable: function() {
+    isDroppable: function() {
 		var enrollmentOptions = this.get('EnrollmentOptions');
 		return enrollmentOptions && enrollmentOptions.isDroppable && enrollmentOptions.isDroppable();
 	},
 
-
-	isExpired: function() {
+    isExpired: function() {
 		var d, s, duration, endDate, now;
 		try {
 			duration = this.get('Duration');
@@ -324,24 +311,24 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		return false;
 	},
 
-	isArchived: function() {
+    isArchived: function() {
 		var end = this.get('EndDate'),
 			now = new Date();
 		return end && end.getTime() < now.getTime();
 	},
 
-	isCurrent: function() {
+    isCurrent: function() {
 	   return !(this.isUpcoming() || this.isArchived());
 	},
 
-	isUpcoming: function() {
+    isUpcoming: function() {
 		var start = this.get('StartDate'),
 			now = new Date();
 
 		return start && start.getTime() > now.getTime();
 	},
 
-	findByMyCourseInstance: function() {
+    findByMyCourseInstance: function() {
 		//returns a string that can be compared. NOTE: not for use as a URL!
 		function nomnom(href) {
 			return (getURL(href) || '').split('/').map(decodeURIComponent).join('/');
@@ -355,13 +342,11 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		};
 	},
 
-
-	fireAcquisitionEvent: function(eventSource, callback) {
+    fireAcquisitionEvent: function(eventSource, callback) {
 		return eventSource.fireEvent('show-enrollment', this, callback);
 	},
 
-
-	getSemester: function() {
+    getSemester: function() {
 		var start = this.get('StartDate'),
 			month = start.getMonth(),
 			s = getString('months')[month + 1];
@@ -369,8 +354,7 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		return s;
 	},
 
-
-	getSemesterBadge: function() {
+    getSemesterBadge: function() {
 		var start = this.get('StartDate'),
 			year = start.getFullYear(),
 			semester = this.getSemester();
@@ -378,9 +362,7 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		return semester + ' ' + year;
 	},
 
-
-
-	setEnrollmentLinks: function(links) {
+    setEnrollmentLinks: function(links) {
 		var me = this;
 
 		(links || []).forEach(function(link) {
@@ -390,23 +372,19 @@ export default Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		});
 	},
 
-
-	getEnrollAndPayLink: function() {
+    getEnrollAndPayLink: function() {
 		return this.enrollandpayLink || this.getLink('fmaep.pay.and.enroll');
 	},
 
-
-	getEnrollForCreditLink: function() {
+    getEnrollForCreditLink: function() {
 		return this.creditenrolllink || this.getLink('fmaep.enroll');
 	},
 
-
-	getPaymentLink: function() {
+    getPaymentLink: function() {
 		return this.creditpaylink || this.getLink('fmaep.pay');
 	},
 
-
-	buildPaymentReturnURL: function() {
+    buildPaymentReturnURL: function() {
 		var id = this.get('NTIID'),
 			params = {
 				active: 'library',

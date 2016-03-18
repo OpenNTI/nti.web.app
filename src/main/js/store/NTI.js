@@ -1,12 +1,14 @@
-export default Ext.define('NextThought.store.NTI', {
-	extend: 'Ext.data.Store',
-	requires: [
-		'NextThought.proxy.reader.Json'
-	],
-	model: 'NextThought.model.Base',
-	autoLoad: false,
-	defaultPageSize: undefined,
-	proxy: {
+var Ext = require('extjs');
+var ReaderJson = require('../proxy/reader/Json');
+
+
+module.exports = exports = Ext.define('NextThought.store.NTI', {
+    extend: 'Ext.data.Store',
+    model: 'NextThought.model.Base',
+    autoLoad: false,
+    defaultPageSize: undefined,
+
+    proxy: {
 		type: 'rest',
 		noCache: false,
 		limitParam: 'batchSize',
@@ -22,8 +24,7 @@ export default Ext.define('NextThought.store.NTI', {
 		}
 	},
 
-
-	constructor: function(config) {
+    constructor: function(config) {
 		//Allow partial overriding the proxy.
 		if (config && config.proxyOverride) {
 			this.proxy = Ext.merge(Ext.clone(this.proxy), this.config.proxyOverride);
@@ -45,8 +46,7 @@ export default Ext.define('NextThought.store.NTI', {
 		}
 	},
 
-
-	onProxyLoad: function(operation) {
+    onProxyLoad: function(operation) {
     var resultSet = operation.getResultSet();
 		delete this.batchLinks;
 		if (resultSet && resultSet.links) {
@@ -56,8 +56,7 @@ export default Ext.define('NextThought.store.NTI', {
 		return this.callParent(arguments);
 	},
 
-
-	remove: function(records, m, silent) {
+    remove: function(records, m, silent) {
 		this.callParent(arguments);
 
 		if (silent) { return; }

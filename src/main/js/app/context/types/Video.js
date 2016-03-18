@@ -1,21 +1,20 @@
-export default Ext.define('NextThought.app.context.types.Video', {
+var Ext = require('extjs');
+var TranscriptTranscriptItem = require('../../../model/transcript/TranscriptItem');
+var MediaviewerActions = require('../../mediaviewer/Actions');
+var ReaderAnchorResolver = require('../../mediaviewer/components/reader/AnchorResolver');
+var ComponentsDefault = require('../components/Default');
+var ComponentsVideoContext = require('../components/VideoContext');
+var CardsContent = require('../components/cards/Content');
+var CardsQuestion = require('../components/cards/Question');
+var CardsRelatedWork = require('../components/cards/RelatedWork');
+var CardsSlide = require('../components/cards/Slide');
+var CardsVideo = require('../components/cards/Video');
+var ListVideo = require('../components/list/Video');
+var PathActions = require('../../navigation/path/Actions');
 
-	requires: [
-		'NextThought.model.transcript.TranscriptItem',
-		'NextThought.app.mediaviewer.Actions',
-		'NextThought.app.mediaviewer.components.reader.AnchorResolver',
-		'NextThought.app.context.components.Default',
-		'NextThought.app.context.components.VideoContext',
-		'NextThought.app.context.components.cards.Content',
-		'NextThought.app.context.components.cards.Question',
-		'NextThought.app.context.components.cards.RelatedWork',
-		'NextThought.app.context.components.cards.Slide',
-		'NextThought.app.context.components.cards.Video',
-		'NextThought.app.context.components.list.Video',
-		'NextThought.app.navigation.path.Actions'
-	],
 
-	videoPlayerTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
+    videoPlayerTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ cls: 'curtain content-video-curtain', cn: [
 			{ cls: 'ctr', cn: [
 				{ cls: 'play', cn: [
@@ -26,7 +25,7 @@ export default Ext.define('NextThought.app.context.types.Video', {
 		]}
 	])),
 
-	statics: {
+    statics: {
 		type: 'video',
 
 		canHandle: function(obj) {
@@ -34,14 +33,14 @@ export default Ext.define('NextThought.app.context.types.Video', {
 		}
 	},
 
-	constructor: function(config) {
+    constructor: function(config) {
 		this.callParent(arguments);
 		Ext.applyIf(this, config || {});
 		this.MediaActions = NextThought.app.mediaviewer.Actions.create();
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
-	__buildTranscriptStore: function(vttCueList) {
+    __buildTranscriptStore: function(vttCueList) {
 		var cuesList = [], s;
 
 		Ext.each(vttCueList, function(c) {
@@ -62,8 +61,7 @@ export default Ext.define('NextThought.app.context.types.Video', {
 		return s;
 	},
 
-
-	__getBasePath: function(obj) {
+    __getBasePath: function(obj) {
 		var me = this;
 
 		return new Promise(function(fulfill, reject) {
@@ -84,8 +82,7 @@ export default Ext.define('NextThought.app.context.types.Video', {
 		});
 	},
 
-
-	/**
+    /**
 	 * Parse a video object and build the context component
 	 * @param  {[Object]} obj [video object]
 	 *

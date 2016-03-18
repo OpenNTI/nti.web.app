@@ -1,25 +1,31 @@
-export default Ext.define('NextThought.model.FriendsList', {
-	extend: 'NextThought.model.Base',
+var Ext = require('extjs');
+var ObjectUtils = require('../util/Object');
+var ParseUtils = require('../util/Parsing');
+var ModelBase = require('./Base');
+var MixinsGroupLike = require('../mixins/GroupLike');
+var MixinsShareEntity = require('../mixins/ShareEntity');
+var MixinsAvatar = require('../mixins/Avatar');
+var UtilObject = require('../util/Object');
+var ForumsDFLBoard = require('./forums/DFLBoard');
+var ForumsDFLForum = require('./forums/DFLForum');
 
-	requires: [
-		'NextThought.util.Object',
-		'NextThought.model.forums.DFLBoard',
-		'NextThought.model.forums.DFLForum'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.model.FriendsList', {
+    extend: 'NextThought.model.Base',
+
+    mixins: {
 		groupLike: 'NextThought.mixins.GroupLike',
 		shareEntity: 'NextThought.mixins.ShareEntity',
 		Avatar: 'NextThought.mixins.Avatar'
 	},
 
-	statics: {
+    statics: {
 		BLANK_AVATAR: '/app/resources/images/icons/unresolved-group.png'
 	},
 
-	isFriendsList: true,
+    isFriendsList: true,
 
-	fields: [
+    fields: [
 		{ name: 'Username', type: 'string' },
 		{ name: 'alias', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' },
@@ -35,7 +41,7 @@ export default Ext.define('NextThought.model.FriendsList', {
 		{ name: 'avatarBGColor', type: 'string', persist: false}
 	],
 
-	constructor: function() {
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.initAvatar();
@@ -54,16 +60,14 @@ export default Ext.define('NextThought.model.FriendsList', {
 
 	},
 
-
-	getAboutData: function() {
+    getAboutData: function() {
 	   return {
 		   displayName: this.getName(),
 		   about: this.get('about')
 	   };
 	},
 
-
-	getProfileUrl: function() {
+    getProfileUrl: function() {
 		var id = this.get('Username');
 
 		if (id && this.getLink('Activity')) {
@@ -73,14 +77,12 @@ export default Ext.define('NextThought.model.FriendsList', {
 		return null;
 	},
 
-
-	destroy: function() {
+    destroy: function() {
 		this.set('friends', []);
 		this.callParent(arguments);
 	},
 
-
-	drawIcon: function(canvas) {
+    drawIcon: function(canvas) {
 		var ctx = canvas.getContext('2d'),
 			urls = this.get('CompositeGravatars').slice(),
 			grid = Math.ceil(Math.sqrt(urls.length)),
@@ -105,8 +107,7 @@ export default Ext.define('NextThought.model.FriendsList', {
 		});
 	},
 
-
-	getDefaultForum: function() {
+    getDefaultForum: function() {
 		return this.getForumList()
 			.then(function(forums) {
 				forums = forums.filter(function(forum) {
@@ -117,8 +118,7 @@ export default Ext.define('NextThought.model.FriendsList', {
 			});
 	},
 
-
-	getForumList: function(force) {
+    getForumList: function(force) {
 		if (this.loadForumList && !force) {
 			return this.loadForumList;
 		}

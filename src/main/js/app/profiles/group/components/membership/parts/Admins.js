@@ -1,4 +1,10 @@
-export default Ext.define('NextThought.app.profiles.group.components.membership.parts.Admins', {
+var Ext = require('extjs');
+var UserRepository = require('../../../../../../cache/UserRepository');
+var ParseUtils = require('../../../../../../util/Parsing');
+var PartsUsers = require('./Users');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.group.components.membership.parts.Admins', {
 	extend: 'NextThought.app.profiles.group.components.membership.parts.Users',
 	alias: 'widget.profile-group-membership-administrators',
 

@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.RoomInfo', {
+var Ext = require('extjs');
+var ModelBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.RoomInfo', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought._meeting',
 

@@ -1,19 +1,16 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.window.Window', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.overview-editing-window',
+var Ext = require('extjs');
+var WindowsStateStore = require('../../../../../windows/StateStore');
+var ComponentsHeader = require('../../../../../windows/components/Header');
 
 
-	requires: [
-		'NextThought.app.windows.StateStore',
-		'NextThought.app.windows.components.Header'
-	],
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.window.Window', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.overview-editing-window',
+    cls: 'editing-window',
+    layout: 'none',
+    items: [],
 
-	cls: 'editing-window',
-
-	layout: 'none',
-	items: [],
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.record = this.precache.record;
@@ -40,8 +37,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.wi
 		});
 	},
 
-
-	setPath: function(record, parentRecord) {
+    setPath: function(record, parentRecord) {
 		var titles = [], leaf,
 			parent = parentRecord;
 
@@ -62,8 +58,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.wi
 		this.headerCmp.showPath(titles, leaf);
 	},
 
-
-	editRecord: function(record, parentRecord, rootRecord) {
+    editRecord: function(record, parentRecord, rootRecord) {
 		var Outline = NextThought.app.course.overview.components.editing.outline.Editor,
 			Contents = NextThought.app.course.overview.components.editing.content.Editor,
 			config = {
@@ -86,8 +81,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.wi
 		}
 	},
 
-
-	addRecord: function(parentRecord, rootRecord) {
+    addRecord: function(parentRecord, rootRecord) {
 		var Outline = NextThought.app.course.overview.components.editing.outline.Editor,
 			Contents = NextThought.app.course.overview.components.editing.content.Editor,
 			config = {
@@ -109,27 +103,23 @@ export default Ext.define('NextThought.app.course.overview.components.editing.wi
 		}
 	},
 
-
-	onSave: function() {
+    onSave: function() {
 		if (this.editor) {
 			this.editor.doSave()
 				.then(this.doClose.bind(this));
 		}
 	},
 
-
-	onCancel: function() {
+    onCancel: function() {
 		//TODO: check if its already to close without
 		this.doClose();
 	},
 
-
-	disableSave: function() {
+    disableSave: function() {
 		this.footer.disableSave();
 	},
 
-
-	enableSave: function() {
+    enableSave: function() {
 		this.footer.enableSave();
 	}
 }, function() {

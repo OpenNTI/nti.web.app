@@ -1,15 +1,15 @@
-export default Ext.define('NextThought.app.whiteboard.editor.EraserOptions', {
-	alias: 'widget.wb-tool-eraser-options',
-	extend: 'Ext.container.Container',
-	requires: [
-		'NextThought.app.whiteboard.editor.ColorOption',
-		'NextThought.app.whiteboard.editor.ToolOption'
-	],
+var Ext = require('extjs');
+var EditorColorOption = require('./ColorOption');
+var EditorToolOption = require('./ToolOption');
 
-	ui: 'options',
-	layout: 'none',
 
-	items: [{
+module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.EraserOptions', {
+    alias: 'widget.wb-tool-eraser-options',
+    extend: 'Ext.container.Container',
+    ui: 'options',
+    layout: 'none',
+
+    items: [{
 		xtype: 'toolbar',
 		ui: 'options',
 		cls: 'pencil-stroke-options',
@@ -25,19 +25,17 @@ export default Ext.define('NextThought.app.whiteboard.editor.EraserOptions', {
 		]
 	}],
 
-	constructor: function() {
+    constructor: function() {
 		this.items = Ext.clone(this.items);//copy onto instance from prototype
 		this.items[0].defaults.toggleGroup += guidGenerator();
 		this.callParent(arguments);
 	},
 
-
-	getToolType: function() {
+    getToolType: function() {
 		return 'pencil';
 	},
 
-
-	setOptions: function(options) {
+    setOptions: function(options) {
 		if (options.strokeWidth) {
 			this.down('[strokeWidth=' + options.strokeWidth + ']').toggle(true);
 		}
@@ -46,8 +44,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.EraserOptions', {
 		}
 	},
 
-
-	getOptions: function() {
+    getOptions: function() {
 		var pressed = this.query('button[pressed]'),
 			strokeWidth;
 

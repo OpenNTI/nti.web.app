@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.mixins.ChatLinks', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.ChatLinks', {
 
 	/*
 	 * This mixin assumes we are mixed into a class that is Observable, and has a userObject property (or a user

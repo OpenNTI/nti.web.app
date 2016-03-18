@@ -1,28 +1,28 @@
-export default Ext.define('NextThought.app.contentviewer.reader.ResourceManagement', {
-	alias: 'reader.resourceManager',
+var Ext = require('extjs');
+var DomUtils = require('../../../util/Dom');
+var UxImageZoomView = require('../../../common/ux/ImageZoomView');
+var UxSlideDeck = require('../../../common/ux/SlideDeck');
+var CardsCardTarget = require('../../../common/components/cards/CardTarget');
+var CardsOverlayedPanel = require('../../../common/components/cards/OverlayedPanel');
+var ComponentsEmbededWidget = require('../components/EmbededWidget');
+var DeckOverlayedPanel = require('../../mediaviewer/content/deck/OverlayedPanel');
+var ContentOverlayedPanel = require('../../mediaviewer/content/OverlayedPanel');
+var VideoOverlayedPanel = require('../../video/OverlayedPanel');
+var RollOverlayedPanel = require('../../video/roll/OverlayedPanel');
+var ImageOverlayedPanel = require('../../image/OverlayedPanel');
 
-	requires: [
-		'NextThought.common.ux.ImageZoomView',
-		'NextThought.common.ux.SlideDeck',
-		'NextThought.common.components.cards.CardTarget',
-		'NextThought.common.components.cards.OverlayedPanel',
-		'NextThought.app.contentviewer.components.EmbededWidget',
-		'NextThought.app.mediaviewer.content.deck.OverlayedPanel',
-		'NextThought.app.mediaviewer.content.OverlayedPanel',
-		'NextThought.app.video.OverlayedPanel',
-		'NextThought.app.video.roll.OverlayedPanel',
-		'NextThought.app.image.OverlayedPanel'
-	],
 
-	YOU_TUBE_API_KEY: 'YT',
-	YOU_TUBE_IFRAME_QUERY: 'iframe[src*="youtube.com"]',
-	YOU_TUBE_BLOCKED_TPL: Ext.DomHelper.createTemplate({
+module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.ResourceManagement', {
+    alias: 'reader.resourceManager',
+    YOU_TUBE_API_KEY: 'YT',
+    YOU_TUBE_IFRAME_QUERY: 'iframe[src*="youtube.com"]',
+
+    YOU_TUBE_BLOCKED_TPL: Ext.DomHelper.createTemplate({
 		cls: 'youtube blocked video',
 		html: getString('NextThought.view.content.reader.ResourceManagement.youtubeblocked')
 	}),
 
-
-	IMAGE_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
+    IMAGE_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
 		{
 			cls: 'wrapper',
 			cn: [{
@@ -78,15 +78,13 @@ export default Ext.define('NextThought.app.contentviewer.reader.ResourceManageme
 		}
 	])),
 
-
-	AUDIO_SNIPPET_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
+    AUDIO_SNIPPET_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ tag: 'button', id: '{id}', cls: 'x-component-assessment audio-clip', cn: { tag: 'audio',
 				cn: { tag: 'tpl', 'for': 'sources', cn: [
 					{ tag: 'source', src: '{source}', type: '{type}'}]}}}
 	])),
 
-
-	AUDIO_SNIPPET_CODE_TEMPLATES: {
+    AUDIO_SNIPPET_CODE_TEMPLATES: {
 		init: function(document, id) {
 			var btn = document.getElementById(id),
 				audio = btn.querySelector('audio'),
@@ -135,8 +133,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.ResourceManageme
 
 	},
 
-
-	OVERLAY_DOM_QUERY_XTYPE_MAP: {
+    OVERLAY_DOM_QUERY_XTYPE_MAP: {
 		'object[type$=nticard]': 'overlay-card',
 		'object[type$=nticard-target]': 'overlay-card-target',
 		'object[type$=ntislidedeck]': 'overlay-slidedeck',
@@ -150,16 +147,14 @@ export default Ext.define('NextThought.app.contentviewer.reader.ResourceManageme
 		'object[class=ntirelatedworkref]': 'overlay-card'
 	},
 
-
-	constructor: function(config) {
+    constructor: function(config) {
 		Ext.apply(this, config);
 
 		this.reader.on('set-content', 'manage', this);//We can't defer this handler, otherwise the fireEvent completes before
 												// we update the dom with container flags
 	},
 
-
-	manage: function(reader) {
+    manage: function(reader) {
 		this.activateOverlays.apply(this, arguments);
 		this.activateAnnotatableItems.apply(this, arguments);
 		this.activateSequences.apply(this, arguments);
@@ -167,8 +162,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.ResourceManageme
 		this.manageYouTubeVideos();
 	},
 
-
-	manageYouTubeVideos: function() {
+    manageYouTubeVideos: function() {
 		var d, items, tpl = this.YOU_TUBE_BLOCKED_TPL;
 
 		if (window[this.YOU_TUBE_API_KEY] !== undefined) {
@@ -184,16 +178,14 @@ export default Ext.define('NextThought.app.contentviewer.reader.ResourceManageme
 		});
 	},
 
-
-	activateOverlays: function(reader, doc) {
+    activateOverlays: function(reader, doc) {
 		var me = this;
 		Ext.Object.each(me.OVERLAY_DOM_QUERY_XTYPE_MAP, function(query, xtype) {
 			me.activateOverlayedPanel(reader, doc, query, xtype);
 		});
 	},
 
-
-	activateOverlayedPanel: function(reader, doc, query, widgetXType) {
+    activateOverlayedPanel: function(reader, doc, query, widgetXType) {
 		var me = reader,
 			o = me.getComponentOverlay(),
 			els = doc.querySelectorAll(query);
@@ -210,8 +202,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.ResourceManageme
 		});
 	},
 
-
-	activateAudioSnippets: function(reader, doc) {
+    activateAudioSnippets: function(reader, doc) {
 		var tpl = this.AUDIO_SNIPPET_TEMPLATE,
 			code = this.AUDIO_SNIPPET_CODE_TEMPLATES;
 
@@ -250,8 +241,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.ResourceManageme
 		});
 	},
 
-
-	activateSequences: function(reader, doc) {
+    activateSequences: function(reader, doc) {
 		var me = this,
 			ob = new Ext.util.Observable(),
 			itemSelector = 'object[type$=ntisequenceitem]';
@@ -291,8 +281,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.ResourceManageme
 		});
 	},
 
-
-	activateAnnotatableItems: function(reader, doc) {
+    activateAnnotatableItems: function(reader, doc) {
 		var els = reader.isAssignment() ? [] : doc.querySelectorAll('[itemprop*=nti-data-markup],[itemprop~=nti-slide-video]'),
 			tpl = this.IMAGE_TEMPLATE,
 			activators = {
@@ -353,8 +342,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.ResourceManageme
 		});
 	},
 
-
-	activateZoomBox: function(containerEl, toolbarEl, basePath) {
+    activateZoomBox: function(containerEl, toolbarEl, basePath) {
 		try {
 			Ext.fly(containerEl.querySelector('a.zoom')).removeCls('disabled');
 			var img = containerEl.querySelector('img[id]:not([id^=ext])'),

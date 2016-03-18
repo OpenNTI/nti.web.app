@@ -1,21 +1,19 @@
-export default Ext.define('NextThought.app.navigation.path.parts.Content', {
-	requires: [
-		'NextThought.app.library.Actions'
-	],
+var Ext = require('extjs');
+var LibraryActions = require('../../../library/Actions');
 
-	constructor: function() {
+
+module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Content', {
+    constructor: function() {
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
-
-	addHandlers: function(handlers) {
+    addHandlers: function(handlers) {
 		// handlers[NextThought.model.Note.mimeType] = this.getPathToNote.bind(this);
 		// handlers[NextThought.model.PageInfo.mimeType] = this.getPathToPageInfo.bind(this);
 		return handlers;
 	},
 
-
-	getPathToPageInfo: function(pageInfo, getPathTo) {
+    getPathToPageInfo: function(pageInfo, getPathTo) {
 		return this.LibraryActions.findBundleByPriority(function(bundle) {
 			var contentPackages = bundle.getContentPackages() || [],
 				containerId = pageInfo.get('ContentPackageNTIID'),
@@ -35,8 +33,7 @@ export default Ext.define('NextThought.app.navigation.path.parts.Content', {
 		});
 	},
 
-
-	getPathToNote: function(note, getPathTo) {
+    getPathToNote: function(note, getPathTo) {
 		return Service.getPathToObject(note.get('NTIID'))
 			.then(function(path) {
 				return path.concat([note]);

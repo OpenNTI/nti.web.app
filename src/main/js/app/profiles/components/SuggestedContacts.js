@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.profiles.components.SuggestedContacts', {
+var Ext = require('extjs');
+var ParseUtils = require('../../../util/Parsing');
+var PartsMembership = require('../user/components/membership/parts/Membership');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.components.SuggestedContacts', {
 	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
 	alias: 'widget.profile-suggested-contacts',
 

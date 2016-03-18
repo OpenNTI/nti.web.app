@@ -1,4 +1,10 @@
-export default Ext.define('NextThought.proxy.reader.Json', {
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var ParseUtils = require('../../util/Parsing');
+var ReaderBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.proxy.reader.Json', {
 	extend: 'NextThought.proxy.reader.Base',
 	alias: 'reader.nti',
 	initialConfig: {root: 'Items'},

@@ -1,27 +1,29 @@
-export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ActivityItem', {
-	extend: 'NextThought.app.annotations.note.Panel',
-	requires: [
-		'NextThought.app.profiles.user.components.activity.parts.events.ActivityItemReply',
-		'NextThought.mixins.note-feature.GetLatestReply',
-		'NextThought.app.context.ContainerContext',
-		'NextThought.app.navigation.path.Actions'
-	],
+var Ext = require('extjs');
+var NotePanel = require('../../../../../../annotations/note/Panel');
+var NoteFeatureGetLatestReply = require('../../../../../../../mixins/note-feature/GetLatestReply');
+var EventsActivityItemReply = require('./ActivityItemReply');
+var NoteFeatureGetLatestReply = require('../../../../../../../mixins/note-feature/GetLatestReply');
+var ContextContainerContext = require('../../../../../../context/ContainerContext');
+var PathActions = require('../../../../../../navigation/path/Actions');
 
-	alias: [
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ActivityItem', {
+    extend: 'NextThought.app.annotations.note.Panel',
+
+    alias: [
 		'widget.profile-activity-item',
 		'widget.profile-activity-default-item',
 		'widget.profile-activity-note-item'
 	],
 
-	mixins: {
+    mixins: {
 		getLatestReply: 'NextThought.mixins.note-feature.GetLatestReply'
 	},
 
-	defaultType: 'profile-activity-item-reply',
-	autoFillInReplies: false,
+    defaultType: 'profile-activity-item-reply',
+    autoFillInReplies: false,
 
-
-	renderSelectors: {
+    renderSelectors: {
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
 		favoritesSpacer: '.controls .favorite-spacer',
@@ -41,8 +43,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		responseBox: '.respond > div'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		if (!this.record || !this.record.isModel) {
 			Ext.Error.raise('We need a record for this component');
 		}
@@ -50,19 +51,16 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		this.callParent(arguments);
 	},
 
-
-	setRecord: function(record) {
+    setRecord: function(record) {
 		this.callParent(arguments);
 		this.maybeFillIn();
 	},
 
-
-	updateFromRecord: function() {
+    updateFromRecord: function() {
 		this.callParent(arguments);
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -70,8 +68,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.commentsEl && this.commentsEl.dom) {
@@ -96,8 +93,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		});
 	},
 
-
-	createEditor: function() {
+    createEditor: function() {
 		if (this.xtype === 'profile-activity-note-item') {
 			this.enableTitle = true;
 		}
@@ -111,22 +107,19 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		}
 	},
 
-
-	addAdditionalRecordListeners: function(record) {
+    addAdditionalRecordListeners: function(record) {
 		this.callParent(arguments);
 		this.mon(record, 'convertedToPlaceholder', this.destroy, this);
 		this.mon(record, 'deleted', this.destroy, this);
 	},
 
-
-	removeAdditionalRecordListeners: function(record) {
+    removeAdditionalRecordListeners: function(record) {
 		this.callParent(arguments);
 		this.mun(record, 'convertedToPlaceholder', this.destroy, this);
 		this.mun(record, 'deleted', this.destroy, this);
 	},
 
-
-	onBeforeAdd: function(cmp) {
+    onBeforeAdd: function(cmp) {
 		this.callParent(arguments);
 		if (!this.isExpanded()) {
 			if (this.items.last()) {
@@ -135,8 +128,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		}
 	},
 
-
-	updateCount: function() {
+    updateCount: function() {
 		if (this.commentsEl) {
 			var c = this.record.getReplyCount() || 0;
 			console.log('count was update to: ', c);
@@ -144,8 +136,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		}
 	},
 
-
-	clickedRevealAllReplies: function() {
+    clickedRevealAllReplies: function() {
 		this.mun(this.replyButton, 'click', this.clickedRevealAllReplies, this);
 		if (!this.commentsEl) {
 			return;
@@ -155,8 +146,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		this.shouldShowReplies();
 	},
 
-
-	shouldShowReplies: function() {
+    shouldShowReplies: function() {
 		this.suspendLayouts();
 		this.removeAll();
 		this.resumeLayouts();
@@ -168,8 +158,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		}, 1, this);
 	},
 
-
-	onDelete: function() {
+    onDelete: function() {
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
@@ -189,13 +178,11 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		});
 	},
 
-
-	isExpanded: function() {
+    isExpanded: function() {
 		return !this.commentsEl;
 	},
 
-
-	setRecordTitle: function() {
+    setRecordTitle: function() {
 		function callback(snip, value) {
 			if (snip && snip !== value) {
 				me.subjectEl.set({'data-qtip': value});
@@ -211,11 +198,9 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		me.record.resolveNoteTitle(callback);
 	},
 
+    fillIn: function() {},
 
-	fillIn: function() {},
-
-
-	maybeFillIn: function() {
+    maybeFillIn: function() {
 		var me = this,
 			D = Ext.dom.Element.DISPLAY,
 			subject,
@@ -267,8 +252,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		}
 	},
 
-
-	onEdit: function() {
+    onEdit: function() {
 		this.callParent(arguments);
 
 		if (!this.replyMode) {
@@ -282,22 +266,19 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		this.editor.showTitle();
 	},
 
-
-	activateReplyEditor: function() {
+    activateReplyEditor: function() {
 		this.editor.hideTitle();
 		this.callParent(arguments);
 		this.addCls('has-active-editor');
 	},
 
-
-	deactivateReplyEditor: function() {
+    deactivateReplyEditor: function() {
 		this.callParent(arguments);
 		this.removeCls('has-active-editor');
 		this.footEl.show();
 	},
 
-
-	setContext: function() {
+    setContext: function() {
 		this.callParent(arguments);
 		if (this.context) {
 			this.context.select('iframe').remove();
@@ -305,8 +286,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		}
 	},
 
-
-	loadContext: function() {
+    loadContext: function() {
 		var context = NextThought.app.context.ContainerContext.create({
 			container: this.record.get('ContainerId'),
 			range: this.record.get('applicableRange'),
@@ -316,8 +296,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		return context.load('list');
 	},
 
-
-	goToObject: function(e) {
+    goToObject: function(e) {
 		var rec = this.record,
 			t = e && e.target,
 			externalLink = t && t.getAttribute('target');
@@ -329,8 +308,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		this.navigateToObject(rec);
 	},
 
-
-	setLocation: function(meta) {
+    setLocation: function(meta) {
 		if (!meta) {
 			return;
 		}
@@ -366,8 +344,6 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 			console.error(e.stack || e.message || e);
 		}
 	}
-
-
 }, function() {
 
 	this.prototype.renderTpl = Ext.DomHelper.markup([

@@ -1,23 +1,24 @@
-export default Ext.define('NextThought.app.library.courses.Actions', {
-	extend: 'NextThought.common.Actions',
-
-	requires: [
-		'NextThought.app.library.courses.StateStore',
-		'NextThought.model.courses.CourseInstance',
-		'NextThought.model.courses.CourseInstanceAdministrativeRole',
-		'NextThought.model.courseware.CourseInstanceEnrollment',
-		'NextThought.model.courses.LegacyCommunityBasedCourseInstance',
-		'NextThought.util.Store'
-	],
+var Ext = require('extjs');
+var StoreUtils = require('../../../util/Store');
+var CommonActions = require('../../../common/Actions');
+var CoursesStateStore = require('./StateStore');
+var CoursesCourseInstance = require('../../../model/courses/CourseInstance');
+var CoursesCourseInstanceAdministrativeRole = require('../../../model/courses/CourseInstanceAdministrativeRole');
+var CoursewareCourseInstanceEnrollment = require('../../../model/courseware/CourseInstanceEnrollment');
+var CoursesLegacyCommunityBasedCourseInstance = require('../../../model/courses/LegacyCommunityBasedCourseInstance');
+var UtilStore = require('../../../util/Store');
 
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.app.library.courses.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 	},
 
-	/**
+    /**
 	 * Load the admin and enrolled courses, set the link for all courses so it can be loaded when needed
 	 * @param  {Service} s the service doc to get the links from
 	 * @return {Promise}   fulfills when all the courses have been loaded
@@ -39,8 +40,7 @@ export default Ext.define('NextThought.app.library.courses.Actions', {
 		]);
 	},
 
-
-	/**
+    /**
 	 * Iterate the items and call __precacheEntry on those that have it
 	 * @param  {Array} items items to iterate
 	 * @return {Promise}       fulfills when all of the items precaches have finished
@@ -68,8 +68,7 @@ export default Ext.define('NextThought.app.library.courses.Actions', {
 				});
 	},
 
-
-	setUpAdministeredCourses: function(link) {
+    setUpAdministeredCourses: function(link) {
 		if (!link) {
 			this.CourseStore.setAdministeredCourses([]);
 
@@ -81,8 +80,7 @@ export default Ext.define('NextThought.app.library.courses.Actions', {
 			.then(this.CourseStore.setAdministeredCourses.bind(this.CourseStore));
 	},
 
-
-	setUpEnrolledCourses: function(link) {
+    setUpEnrolledCourses: function(link) {
 		if (!link) {
 			this.CourseStore.setEnrolledCourses([]);
 
@@ -94,13 +92,11 @@ export default Ext.define('NextThought.app.library.courses.Actions', {
 			.then(this.CourseStore.setEnrolledCourses.bind(this.CourseStore));
 	},
 
-
-	setUpAllCourses: function(link) {
+    setUpAllCourses: function(link) {
 		this.CourseStore.setAllCoursesLink(link);
 	},
 
-
-	loadAllCourses: function() {
+    loadAllCourses: function() {
 		var link = this.CourseStore.getAllCoursesLink();
 
 		if (!link) { return Promise.resolve(); }
@@ -109,20 +105,17 @@ export default Ext.define('NextThought.app.library.courses.Actions', {
 			.then(this.CourseStore.setAllCourses.bind(this.CourseStore));
 	},
 
-
-	findCourseInstance: function(id) {
+    findCourseInstance: function(id) {
 		return this.CourseStore.onceLoaded()
 			.then(this.CourseStore.findCourseInstance.bind(this.CourseStore, id));
 	},
 
-
-	findCourseByPriority: function(fn) {
+    findCourseByPriority: function(fn) {
 		return this.CourseStore.onceLoaded()
 			.then(this.CourseStore.findCourseInstanceByPriority.bind(this.CourseStore, fn));
 	},
 
-
-	findForNTIID: function(id) {
+    findForNTIID: function(id) {
 		return this.CourseStore.onceLoaded()
 			.then(this.CourseStore.findForNTIID.bind(this.CourseStore, id));
 	}

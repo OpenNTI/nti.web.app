@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.chat.transcript.Main', {
+var Ext = require('extjs');
+var IdCache = require('../../../cache/IdCache');
+var UserRepository = require('../../../cache/UserRepository');
+
+
+module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 	extend: 'Ext.Component',
 	alias: 'widget.chat-transcript',
 

@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.assessment.components.AudioClip', {
+var Ext = require('extjs');
+var DomUtils = require('../../../util/Dom');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.components.AudioClip', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-components-audio-clip',
 

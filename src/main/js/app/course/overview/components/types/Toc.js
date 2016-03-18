@@ -1,26 +1,25 @@
-export default Ext.define('NextThought.app.course.overview.components.types.Toc', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.overview-types-toc',
-
-	requires: [
-		'NextThought.app.course.overview.components.parts.ContentLink',
-		'NextThought.app.course.overview.components.parts.Discussion',
-		'NextThought.app.course.overview.components.parts.Header',
-		'NextThought.app.course.overview.components.parts.IframeWindow',
-		'NextThought.app.course.overview.components.parts.Poll',
-		'NextThought.app.course.overview.components.parts.QuestionSet',
-		'NextThought.app.course.overview.components.parts.Section',
-		'NextThought.app.course.overview.components.parts.Spacer',
-		'NextThought.app.course.overview.components.parts.Survey',
-		'NextThought.app.course.overview.components.parts.Timeline',
-		'NextThought.app.course.overview.components.parts.Topic',
-		'NextThought.app.course.overview.components.parts.Video',
-		'NextThought.model.Video',
-		'NextThought.model.VideoRoll'
-	],
+var Ext = require('extjs');
+var PartsContentLink = require('../parts/ContentLink');
+var PartsDiscussion = require('../parts/Discussion');
+var PartsHeader = require('../parts/Header');
+var PartsIframeWindow = require('../parts/IframeWindow');
+var PartsPoll = require('../parts/Poll');
+var PartsQuestionSet = require('../parts/QuestionSet');
+var PartsSection = require('../parts/Section');
+var PartsSpacer = require('../parts/Spacer');
+var PartsSurvey = require('../parts/Survey');
+var PartsTimeline = require('../parts/Timeline');
+var PartsTopic = require('../parts/Topic');
+var PartsVideo = require('../parts/Video');
+var ModelVideo = require('../../../../../model/Video');
+var ModelVideoRoll = require('../../../../../model/VideoRoll');
 
 
-	SECTION_TITLE_MAP: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.types.Toc', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.overview-types-toc',
+
+    SECTION_TITLE_MAP: {
 		'video': getString('NextThought.view.courseware.overview.View.video'),
 		'discussions': getString('NextThought.view.courseware.overview.View.discussion'),
 		'additional': getString('NextThought.view.courseware.overview.View.additional'),
@@ -30,8 +29,7 @@ export default Ext.define('NextThought.app.course.overview.components.types.Toc'
 		'assignments': getString('NextThought.view.courseware.overview.View.assignments')
 	},
 
-
-	SECTION_TYPE_MAP: {
+    SECTION_TYPE_MAP: {
 		'course-overview-ntivideo': 'video',
 		'course-overview-content': 'additional',
 		'course-overview-discussion': 'discussions',
@@ -40,8 +38,7 @@ export default Ext.define('NextThought.app.course.overview.components.types.Toc'
 		'course-overview-assignment': 'assignments'
 	},
 
-
-	SECTION_CONTAINER_MAP: {
+    SECTION_CONTAINER_MAP: {
 		'video': 'course-overview-section',
 		'discussions': 'course-overview-section',
 		'additional': 'course-overview-section',
@@ -51,15 +48,13 @@ export default Ext.define('NextThought.app.course.overview.components.types.Toc'
 		'assigments': 'course-overview-section'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.buildFromToc(this.record, this.locInfo, this.assignments, this.course);
 	},
 
-
-	setProgress: function(progress) {
+    setProgress: function(progress) {
 		this.items.each(function(item) {
 			if (item.setProgress) {
 				item.setProgress(progress);
@@ -67,8 +62,7 @@ export default Ext.define('NextThought.app.course.overview.components.types.Toc'
 		});
 	},
 
-
-	setCommentCounts: function(commentCounts) {
+    setCommentCounts: function(commentCounts) {
 		this.items.each(function(item) {
 			if (item.setCommentCounts) {
 				item.setCommentCounts(commentCounts);
@@ -76,8 +70,7 @@ export default Ext.define('NextThought.app.course.overview.components.types.Toc'
 		});
 	},
 
-
-	buildFromToc: function(node, locInfo, assignments, course) {
+    buildFromToc: function(node, locInfo, assignments, course) {
 		var me = this,
 			SECTION_CONTAINER_MAP = me.SECTION_CONTAINER_MAP,
 			SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,
@@ -139,8 +132,7 @@ export default Ext.define('NextThought.app.course.overview.components.types.Toc'
 		this.add([{xtype: 'course-overview-header', record: node}].concat(items));
 	},
 
-
-	getComponentForNode: function(node, info, rec, assignments, course) {
+    getComponentForNode: function(node, info, rec, assignments, course) {
 		var type = node && node.nodeName,
 			section = (node && node.getAttribute('section')) || null,
 			assignment, cls;
@@ -178,8 +170,7 @@ export default Ext.define('NextThought.app.course.overview.components.types.Toc'
 		return null;
 	},
 
-
-	getComponentForRecord: function(rec) {
+    getComponentForRecord: function(rec) {
 		var config;
 
 		if (rec instanceof NextThought.model.VideoRoll) {
@@ -203,8 +194,7 @@ export default Ext.define('NextThought.app.course.overview.components.types.Toc'
 		return config;
 	},
 
-
-	collapseVideos: function(nodes) {
+    collapseVideos: function(nodes) {
 		var me = this,
 			children;
 
@@ -237,7 +227,7 @@ export default Ext.define('NextThought.app.course.overview.components.types.Toc'
 		return children;
 	},
 
-	createVideo: function(node) {
+    createVideo: function(node) {
 		var ntiid = node.getAttribute('ntiid'),
 			item = this.videoIndex[ntiid];
 

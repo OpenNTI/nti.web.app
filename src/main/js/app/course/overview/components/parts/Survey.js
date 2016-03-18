@@ -1,17 +1,16 @@
-export default Ext.define('NextThought.app.course.overview.components.parts.Survey', {
-	extend: 'Ext.Component',
-	alias: 'widget.course-overview-surveyref',
+var Ext = require('extjs');
+var ModelSurveyRef = require('../../../../../model/SurveyRef');
+var AssessmentSurvey = require('../../../../../model/assessment/Survey');
+var ModelPageInfo = require('../../../../../model/PageInfo');
 
-	requires: [
-		'NextThought.model.SurveyRef',
-		'NextThought.model.assessment.Survey',
-		'NextThought.model.PageInfo'
-	],
 
-	ui: 'course',
-	cls: 'overview-survey',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Survey', {
+    extend: 'Ext.Component',
+    alias: 'widget.course-overview-surveyref',
+    ui: 'course',
+    cls: 'overview-survey',
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'meta', cn: [
 			{cls: 'title', html: '{title}'},
 			{tag: 'span', cls: 'question-count', html: '{questions:plural("Question")}'},
@@ -23,15 +22,13 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Surv
 		{cls: 'button x-btn x-btn-primary-large', html: '{buttonTxt}'}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		responsesEl: '.responses',
 		startEl: '.button',
 		reportEl: '.report'
 	},
 
-
-	constructor: function(config) {
+    constructor: function(config) {
 		var n = config.node || {getAttribute: function(a) { return config[a];} },
 			links = n.getAttribute('Links'),
 			ntiid = n.getAttribute('ntiid');
@@ -49,8 +46,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Surv
 		this.callParent([config]);
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -61,8 +57,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Surv
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.startEl, 'click', this.onStart.bind(this));
@@ -80,8 +75,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Surv
 		}
 	},
 
-
-	onStart: function(e) {
+    onStart: function(e) {
 		var ntiid = this.data.ntiid;
 
 		if (!e.getTarget('.closed')) {
@@ -91,8 +85,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Surv
 		}
 	},
 
-
-	showReport: function(e) {
+    showReport: function(e) {
 		var win = Ext.widget('iframe-window', {
 				width: 'max',
 				saveText: getString('NextThought.view.menus.Reports.savetext'),

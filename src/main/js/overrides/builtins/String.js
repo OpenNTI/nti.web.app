@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.builtins.String', function() {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.builtins.String', function() {
 
 	function hash(str) {
 		var h = 0, i, c;

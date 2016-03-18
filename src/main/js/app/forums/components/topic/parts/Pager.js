@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.forums.components.topic.parts.Pager', {
+var Ext = require('extjs');
+var AdminPager = require('../../../../course/assessment/components/admin/Pager');
+
+
+module.exports = exports = Ext.define('NextThought.app.forums.components.topic.parts.Pager', {
 	extend: 'NextThought.app.course.assessment.components.admin.Pager',
 	alias: 'widget.topic-comment-pager',
 

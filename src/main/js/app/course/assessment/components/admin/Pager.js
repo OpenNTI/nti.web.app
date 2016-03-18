@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.assessment.components.admin.Pager', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.Pager', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-assessment-admin-pager',
 

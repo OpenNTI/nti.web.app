@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.enrollment.options.OpenEnrollment', {
+var Ext = require('extjs');
+var OptionsBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.options.OpenEnrollment', {
 	extend: 'NextThought.app.course.enrollment.options.Base',
 
 	singleton: true,

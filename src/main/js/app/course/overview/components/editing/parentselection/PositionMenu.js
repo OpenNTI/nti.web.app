@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.parentselection.PositionMenu', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.parentselection.PositionMenu', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-parentselection-position-menu',
 

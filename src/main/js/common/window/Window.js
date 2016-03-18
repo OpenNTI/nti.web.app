@@ -1,39 +1,36 @@
-export default Ext.define('NextThought.common.window.Window', {
-	extend: 'Ext.window.Window',
-	alias: 'widget.nti-window',
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var RangeUtils = require('../../util/Ranges');
+var UtilRanges = require('../../util/Ranges');
+var WindowHeader = require('./Header');
+var WindowsStateStore = require('../../app/windows/StateStore');
 
-	requires: [
-		'NextThought.util.Ranges',
-		'NextThought.common.window.Header',
-		'NextThought.app.windows.StateStore'
-	],
 
-	cls: 'nti-window',
-	ui: 'nti-window',
-	plain: true,
-	shadow: false,
+module.exports = exports = Ext.define('NextThought.common.window.Window', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.nti-window',
+    cls: 'nti-window',
+    ui: 'nti-window',
+    plain: true,
+    shadow: false,
+    autoShow: false,
+    border: true,
+    frame: false,
+    header: false,
+    constrainHeader: false,
+    liveDrag: true,
+    dragStartTolerance: 5,
+    dialog: false,
+    modal: false,
+    isOverlay: true,
+    layout: 'none',
 
-	autoShow: false,
-	border: true,
-	frame: false,
-	header: false,
-	
-	constrainHeader: false,
-	liveDrag: true,
-	dragStartTolerance: 5,
-
-	dialog: false,
-	modal: false,
-	isOverlay: true,
-
-	layout: 'none',
-	items: [
+    items: [
 		{xtype: 'nti-window-header' },
 		{xtype: 'container', flex: 1, windowContentWrapper: true}
 	],
 
-
-	onClassExtended: function(cls, data, hooks) {
+    onClassExtended: function(cls, data, hooks) {
 		var onBeforeClassCreated = hooks.onBeforeCreated;
 
 		hooks.onBeforeCreated = function(cls, data) {
@@ -66,7 +63,7 @@ export default Ext.define('NextThought.common.window.Window', {
 		};
 	},
 
-	constructor: function(config) {
+    constructor: function(config) {
 		if (!this.dialog && !config.dialog) {
 
 			Ext.copyTo(this.items.last(), config, ['items', 'layout']);
@@ -85,8 +82,7 @@ export default Ext.define('NextThought.common.window.Window', {
 		this.callParent([config]);
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		var me = this,
 			closeCalled, windowStore,
@@ -137,8 +133,7 @@ export default Ext.define('NextThought.common.window.Window', {
 		}
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		var me = this;
 
@@ -161,8 +156,7 @@ export default Ext.define('NextThought.common.window.Window', {
 		}
 	},
 
-
-	fixScroll: function() {
+    fixScroll: function() {
 		if (!Ext.isWebKit) {
 			return;
 		}
@@ -216,8 +210,7 @@ export default Ext.define('NextThought.common.window.Window', {
 		});
 	},
 
-
-	show: function() {
+    show: function() {
 		var s = window.getSelection(), r,
 				c = Ext.WindowManager.getActive();
 		if (c) {
@@ -265,7 +258,7 @@ export default Ext.define('NextThought.common.window.Window', {
 		return this;
 	},
 
-	syncHeight: function() {
+    syncHeight: function() {
 		var height = this.getHeight(),
 				viewHeight = Ext.Element.getViewportHeight();
 
@@ -280,8 +273,7 @@ export default Ext.define('NextThought.common.window.Window', {
 		this.center();
 	},
 
-
-	syncSize: function() {
+    syncSize: function() {
 		var me = this,
 				h = Ext.Element.getViewportHeight() * me.heightPercent,
 				w = Ext.Element.getViewportWidth() * me.widthPercent,
@@ -295,8 +287,7 @@ export default Ext.define('NextThought.common.window.Window', {
 		return size;
 	},
 
-
-	initResizable: function() {
+    initResizable: function() {
 		this.callParent(arguments);
 
 		this.resizer.on({
@@ -307,8 +298,7 @@ export default Ext.define('NextThought.common.window.Window', {
 		});
 	},
 
-
-	initDraggable: function() {
+    initDraggable: function() {
 		if (!this.dialog) {
 			try {
 				this.dd = new Ext.util.ComponentDragger(this, {
@@ -331,16 +321,14 @@ export default Ext.define('NextThought.common.window.Window', {
 		}
 	},
 
-
-	setTitle: function(title) {
+    setTitle: function(title) {
 		if (this.titleBar) {
 			this.titleBar.update(title);
 			this.fireEvent('titleChange', this, title);
 		}
 	},
 
-
-	getTitle: function() {
+    getTitle: function() {
 		var title;
 		if (this.titleBar) {
 			title = this.titleBar.getTitle();
@@ -348,33 +336,30 @@ export default Ext.define('NextThought.common.window.Window', {
 		return title || 'Untitled';
 	},
 
-
-	getHeight: function() {
+    getHeight: function() {
 		return this.rendered ? this.callParent() : this.height || this.minHeight;
 	},
 
-
-	getWidth: function() {
+    getWidth: function() {
 		return this.rendered ? this.callParent() : this.width || this.minWidth;
 	},
 
-
-	addTools: function(tools) {
+    addTools: function(tools) {
 		if (this.titleBar) {
 			this.titleBar.addTools(tools);
 		}
 	},
 
-	resizeDragMaskOn: function() {
+    resizeDragMaskOn: function() {
 		this.dragMaskOn();
 		this.resizeDragTimeout = Ext.defer(this.dragMaskOff, 2000, this);
 	},
 
-	cancelResizeMaskTimeout: function() {
+    cancelResizeMaskTimeout: function() {
 		clearTimeout(this.resizeDragTimeout);
 	},
 
-	dragMaskOn: function() {
+    dragMaskOn: function() {
 		var e = Ext.getBody();
 		this.wasMasked = this.modal || Boolean(Ext.getBody().isMasked());
 		if (!this.wasMasked) {
@@ -389,8 +374,7 @@ export default Ext.define('NextThought.common.window.Window', {
 		}
 	},
 
-
-	dragMaskOff: function() {
+    dragMaskOff: function() {
 		if (this.wasMasked === false) {
 			Ext.getBody().unmask();
 		}

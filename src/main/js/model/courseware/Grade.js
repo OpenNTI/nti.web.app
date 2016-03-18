@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.courseware.Grade', {
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	extend: 'NextThought.model.Base',
 
 	ENDS_IN_LETTER_REGEX: /\s[a-zA-Z|\-]$/,

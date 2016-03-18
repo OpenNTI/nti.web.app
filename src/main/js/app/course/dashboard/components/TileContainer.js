@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.dashboard.components.TileContainer', {
+var Ext = require('extjs');
+var ComponentsAbstractView = require('./AbstractView');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.TileContainer', {
 	extend: 'NextThought.app.course.dashboard.components.AbstractView',
 	alias: 'widget.dashboard-tile-container',
 

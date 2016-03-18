@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.courses.CourseCatalogInstructorInfo', {
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogInstructorInfo', {
 	alternateClassName: 'NextThought.model.courses.CourseCatalogInstructorLegacyInfo',
 	mimeType: 'application/vnd.nextthought.courses.coursecataloginstructorlegacyinfo',
 	extend: 'NextThought.model.Base',

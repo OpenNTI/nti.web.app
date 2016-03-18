@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.forums.components.forum.parts.FilterBar', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.forums.components.forum.parts.FilterBar', {
 	extend: 'Ext.Component',
 	alias: 'widget.forums-forum-filterbar',
 	ui: 'course-assessment',

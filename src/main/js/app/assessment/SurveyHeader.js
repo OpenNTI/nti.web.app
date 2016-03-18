@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.assessment.SurveyHeader', {
+var Ext = require('extjs');
+var OverlayPanel = require('../contentviewer/overlay/Panel');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.SurveyHeader', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.assessent-survey-header',
 

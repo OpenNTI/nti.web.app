@@ -1,21 +1,20 @@
-export default Ext.define('NextThought.app.assessment.results.parts.Matching', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.assessment-matching-results',
+var Ext = require('extjs');
+var PartsBarChart = require('./BarChart');
+var PartsTable = require('./Table');
 
-	requires: [
-		'NextThought.app.assessment.results.parts.BarChart',
-		'NextThought.app.assessment.results.parts.Table'
-	],
 
-	cls: 'result-part',
+module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.Matching', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.assessment-matching-results',
+    cls: 'result-part',
 
-	statics: {
+    statics: {
 		mimeType: 'application/vnd.nextthought.assessment.aggregatedmatchingpart'
 	},
 
-	items: [],
+    items: [],
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.tabBar = this.add({
@@ -64,17 +63,15 @@ export default Ext.define('NextThought.app.assessment.results.parts.Matching', {
 		this.barChart.show();
 	},
 
-
-	getRowLabels: function() {
+    getRowLabels: function() {
 		return this.questionPart.get('values');
 	},
 
-
-	getSeriesLabels: function() {
+    getSeriesLabels: function() {
 		return this.questionPart.get('labels');
 	},
 
-	/**
+    /**
 	 * The Results coming back look like:
 	 *
 	 * {
@@ -117,7 +114,7 @@ export default Ext.define('NextThought.app.assessment.results.parts.Matching', {
 		return newResults;
 	},
 
-	/**
+    /**
 	 * Return an array of rows to pass to the bar chart.
 	 * See the comments in NextThought.app.assessment.results.parts.MultiChoice
 	 * for more explanation of why its structured this way.
@@ -164,8 +161,7 @@ export default Ext.define('NextThought.app.assessment.results.parts.Matching', {
 		return axis;
 	},
 
-
-	getTable: function() {
+    getTable: function() {
 		var resultParts = this.getResults(),
 			total = this.resultPart.Total,
 			rowLabels = this.getRowLabels(),
@@ -202,8 +198,7 @@ export default Ext.define('NextThought.app.assessment.results.parts.Matching', {
 		};
 	},
 
-
-	showTable: function() {
+    showTable: function() {
 		this.barChart.hide();
 		this.table.show();
 
@@ -211,8 +206,7 @@ export default Ext.define('NextThought.app.assessment.results.parts.Matching', {
 		this.chartTab.removeCls('active');
 	},
 
-
-	showChart: function() {
+    showChart: function() {
 		this.table.hide();
 		this.barChart.show();
 

@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.mixins.BundleLike', {
+var Ext = require('extjs');
+var ParseUtils = require('../util/Parsing');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.BundleLike', {
 
 
 	containsNTIID: function(id) {

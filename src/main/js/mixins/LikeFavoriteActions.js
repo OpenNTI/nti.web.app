@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.mixins.LikeFavoriteActions', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.LikeFavoriteActions', {
 
 	constructor: function() {
 		var me = this;

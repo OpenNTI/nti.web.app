@@ -1,17 +1,15 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.creation.TypeList', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.overview-editing-typelist',
+var Ext = require('extjs');
+var CreationType = require('./Type');
 
-	requires: [
-		'NextThought.app.course.overview.components.editing.creation.Type'
-	],
 
-	cls: 'new-type-list',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.creation.TypeList', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.overview-editing-typelist',
+    cls: 'new-type-list',
+    layout: 'none',
+    items: [],
 
-	layout: 'none',
-	items: [],
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var showEditor = this.showEditorForType.bind(this),

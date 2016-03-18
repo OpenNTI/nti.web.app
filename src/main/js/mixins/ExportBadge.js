@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.mixins.ExportBadge', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 
 	showExportMenu: function(record, itemEl) {
 		var me = this;

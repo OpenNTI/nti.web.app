@@ -1,23 +1,23 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.overview-editing',
-
-	requires: [
-		'NextThought.app.course.overview.components.editing.outline.Index',
-		'NextThought.app.course.overview.components.editing.Prompt'
-	],
+var Ext = require('extjs');
+var MixinsRouter = require('../../../../../mixins/Router');
+var MixinsScrolling = require('../../../../../mixins/Scrolling');
+var OutlineIndex = require('./outline/Index');
+var EditingPrompt = require('./Prompt');
 
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.overview-editing',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router',
 		Scrolling: 'NextThought.mixins.Scrolling'
 	},
 
-	layout: 'none',
-	items: [],
+    layout: 'none',
+    items: [],
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.isLoading) {
@@ -25,8 +25,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.In
 		}
 	},
 
-
-	showLoadingMask: function() {
+    showLoadingMask: function() {
 		this.isLoading = true;
 
 		if (!this.rendered) { return; }
@@ -40,8 +39,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.In
 		this.el.mask('Loading...');
 	},
 
-
-	hideLoadingMask: function() {
+    hideLoadingMask: function() {
 		delete this.isLoading;
 
 		if (!this.rendered) { return; }
@@ -57,13 +55,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.In
 		this.el.unmask();
 	},
 
-
-	setActiveBundle: function(bundle) {
+    setActiveBundle: function(bundle) {
 		this.bundle = bundle;
 	},
 
-
-	editOutlineNode: function(record, outline) {
+    editOutlineNode: function(record, outline) {
 		//If we are switching outline nodes scroll the page to the top
 		if (!this.activeRecord || this.activeRecord.getId() !== record.getId()) {
 			this.scrollPageToTop();
@@ -102,8 +98,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.In
 		return loaded;
 	},
 
-
-	doDelete: function() {
+    doDelete: function() {
 		var navigateTo;
 
 		if (!this.activeRecord) { return; }
@@ -115,8 +110,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.In
 		}
 	},
 
-
-	navigate: function(obj) {
+    navigate: function(obj) {
 		obj.parent = this.currentNode;
 		this.navigateToObject(obj);
 	}

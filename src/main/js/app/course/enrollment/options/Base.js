@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.enrollment.options.Base', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.options.Base', {
 	NAME: '', //the name of the option
 
 	EnrolledWordingKey: '',//key to pass to get string to get Enrolled wording

@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.anchorables.DomContentPointer', {
+var Ext = require('extjs');
+var AnchorablesContentPointer = require('./ContentPointer');
+
+
+module.exports = exports = Ext.define('NextThought.model.anchorables.DomContentPointer', {
 	extend: 'NextThought.model.anchorables.ContentPointer',
 
 	config: {

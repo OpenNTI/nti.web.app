@@ -1,13 +1,13 @@
-export default Ext.define('NextThought.model.TranscriptSummary', {
-	extend: 'NextThought.model.Base',
+var Ext = require('extjs');
+var ModelBase = require('./Base');
+var ConvertersGroupByTime = require('./converters/GroupByTime');
 
-	addMimeTypeToRoute: true,
 
-  requires: [
-    'NextThought.model.converters.GroupByTime'
-  ],
+module.exports = exports = Ext.define('NextThought.model.TranscriptSummary', {
+    extend: 'NextThought.model.Base',
+    addMimeTypeToRoute: true,
 
-	fields: [
+    fields: [
 		{ name: 'RoomInfo', type: 'singleItem'},
 		{ name: 'Contributors', type: 'auto' },
 
@@ -15,7 +15,7 @@ export default Ext.define('NextThought.model.TranscriptSummary', {
 		{ name: 'NotificationGroupingField', mapping: 'CreatedTime', type: 'groupByTime', persist: false, affectedBy: 'CreatedTime'}
 	],
 
-  //	isThreadable: true,
+    //	isThreadable: true,
 
 	getId: function() {
 		try {

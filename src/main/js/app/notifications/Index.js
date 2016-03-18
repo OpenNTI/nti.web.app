@@ -1,27 +1,24 @@
-export default Ext.define('NextThought.app.notifications.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.notifications-index',
+var Ext = require('extjs');
+var MixinsRouter = require('../../mixins/Router');
+var NavigationActions = require('../navigation/Actions');
+var NotificationsStateStore = require('./StateStore');
+var ComponentsStream = require('./components/Stream');
 
-	cls: 'notifications-index',
 
-	layout: 'none',
+module.exports = exports = Ext.define('NextThought.app.notifications.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.notifications-index',
+    cls: 'notifications-index',
+    layout: 'none',
+    fullwidth: true,
 
-	fullwidth: true,
-
-	requires: [
-		'NextThought.app.navigation.Actions',
-		'NextThought.app.notifications.StateStore',
-		'NextThought.app.notifications.components.Stream'
-	],
-
-	mixins: {
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	items: [],
+    items: [],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -39,8 +36,7 @@ export default Ext.define('NextThought.app.notifications.Index', {
 		});
 	},
 
-
-	onActivate: function() {
+    onActivate: function() {
 		if (this.stream) {
 			this.stream.onActivate();
 		}
@@ -48,8 +44,7 @@ export default Ext.define('NextThought.app.notifications.Index', {
 		this.isActive = true;
 	},
 
-
-	onDeactivate: function() {
+    onDeactivate: function() {
 		if (this.stream) {
 			this.stream.onDeactivate();
 		}
@@ -57,8 +52,7 @@ export default Ext.define('NextThought.app.notifications.Index', {
 		this.isActive = false;
 	},
 
-
-	showNotifications: function() {
+    showNotifications: function() {
 		var me = this;
 
 		me.NavActions.setActiveContent(null);
@@ -75,8 +69,7 @@ export default Ext.define('NextThought.app.notifications.Index', {
 		return Promise.resolve();
 	},
 
-
-	buildStream: function() {
+    buildStream: function() {
 		this.stream = this.add({
 			xtype: 'notifications-stream-list'
 		});

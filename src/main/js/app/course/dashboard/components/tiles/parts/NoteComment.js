@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.dashboard.components.tiles.parts.NoteComment', {
+var Ext = require('extjs');
+var PartsPostComment = require('./PostComment');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.parts.NoteComment', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.parts.PostComment',
 	alias: 'widget.dashboard-note-comment',
 

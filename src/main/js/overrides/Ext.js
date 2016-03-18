@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.overrides.Ext', {
+var Ext = require('extjs');
+var Globals = require('../util/Globals');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.Ext', {
 	override: 'Ext',
 
 

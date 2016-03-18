@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.profiles.community.components.activity.parts.NewPost', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.community.components.activity.parts.NewPost', {
 	extend: 'Ext.Component',
 	alias: 'widget.profiles-community-newpost',
 

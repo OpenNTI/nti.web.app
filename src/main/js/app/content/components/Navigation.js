@@ -1,15 +1,14 @@
-export default Ext.define('NextThought.app.content.components.Navigation', {
-	extend: 'NextThought.common.components.Navigation',
-	alias: 'widget.content-navigation',
-
-	requires: [
-		'NextThought.app.content.components.ContentSwitcher'
-	],
-
-	cls: 'content-navigation',
+var Ext = require('extjs');
+var ComponentsNavigation = require('../../../common/components/Navigation');
+var ComponentsContentSwitcher = require('./ContentSwitcher');
 
 
-	initComponent: function() {
+module.exports = exports = Ext.define('NextThought.app.content.components.Navigation', {
+    extend: 'NextThought.common.components.Navigation',
+    alias: 'widget.content-navigation',
+    cls: 'content-navigation',
+
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.ContentSwitcher = Ext.widget('content-switcher', {
@@ -18,8 +17,7 @@ export default Ext.define('NextThought.app.content.components.Navigation', {
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.activeContentEl.addCls('has-switcher');
@@ -29,8 +27,7 @@ export default Ext.define('NextThought.app.content.components.Navigation', {
 		}
 	},
 
-
-	bundleChanged: function(bundle, activeRoute) {
+    bundleChanged: function(bundle, activeRoute) {
 		if (!this.rendered) {
 			this.bundle = bundle;
 			return;
@@ -68,15 +65,13 @@ export default Ext.define('NextThought.app.content.components.Navigation', {
 		}
 	},
 
-
-	switchContent: function(route) {
+    switchContent: function(route) {
 		if (this.bodyView && this.bodyView.onContentChange) {
 			this.bodyView.onContentChange('', route);
 		}
 	},
 
-
-	onActiveContentClicked: function(e) {
+    onActiveContentClicked: function(e) {
 		var active = this.titleContainerEl.dom,
 			rect = active && active.getBoundingClientRect();
 
@@ -94,14 +89,13 @@ export default Ext.define('NextThought.app.content.components.Navigation', {
 		}
 	},
 
-
-	onBodyClick: function(e) {
+    onBodyClick: function(e) {
 		if (!e.getTarget('.content-switcher') && this.ContentSwitcher.isVisible()) {
 			this.ContentSwitcher.hide();
 		}
 	},
 
-	//when we are collapsing tabs from a resize, go ahead and
+    //when we are collapsing tabs from a resize, go ahead and
 	//realign the content switcher
 	maybeCollapse: function() {
 		var r = this.callParent(arguments);

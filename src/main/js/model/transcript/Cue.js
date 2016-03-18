@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.model.transcript.Cue', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.model.transcript.Cue', {
 	extend: 'Ext.data.Model',
 
 	fields: [

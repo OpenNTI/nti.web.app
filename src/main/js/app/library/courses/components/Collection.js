@@ -1,15 +1,19 @@
-export default Ext.define('NextThought.app.library.courses.components.Collection', {
-	extend: 'NextThought.app.library.components.Collection',
-	alias: 'widget.course-collection',
+var Ext = require('extjs');
+var ComponentsCollection = require('../../components/Collection');
+var SettingsCourseWindow = require('./settings/CourseWindow');
 
-	requires: ['NextThought.app.library.courses.components.settings.CourseWindow'],
 
-	//hidden: true, //don't show this component unless the courseware controller says it can show.
+module.exports = exports = Ext.define('NextThought.app.library.courses.components.Collection', {
+    extend: 'NextThought.app.library.components.Collection',
+    alias: 'widget.course-collection',
+
+    //hidden: true, //don't show this component unless the courseware controller says it can show.
 	courseList: true,
-	store: 'courseware.EnrolledCourses',
-	cls: 'courses',
 
-	tpl: Ext.DomHelper.markup([
+    store: 'courseware.EnrolledCourses',
+    cls: 'courses',
+
+    tpl: Ext.DomHelper.markup([
 		//{ cls: 'stratum collection-name', 'aria-label': '{name} {count} items', 'role': 'heading', cn: {
 		//	'aria-hidden': 'true', cn: [
 		//		'{name}', {cls: 'count', 'aria-hidden': 'true', html: '{count}'}
@@ -24,8 +28,7 @@ export default Ext.define('NextThought.app.library.courses.components.Collection
 		}
 	]),
 
-
-	prepareData: function(data, index, record) {
+    prepareData: function(data, index, record) {
 		var i = Ext.Object.chain(this.callParent(arguments)),
 			courseRecord = record.get('CourseInstance'),
 			course = courseRecord.asUIData(),
@@ -59,8 +62,7 @@ export default Ext.define('NextThought.app.library.courses.components.Collection
 		return i;
 	},
 
-
-	collectData: function() {
+    collectData: function() {
 		var data = this.callParent(arguments);
 
 		data.label = this.label;
@@ -69,8 +71,7 @@ export default Ext.define('NextThought.app.library.courses.components.Collection
 		return data;
 	},
 
-
-	onItemClick: function(record, node, index, e) {
+    onItemClick: function(record, node, index, e) {
 		var win;
 
 		if (e.getTarget('.settings')) {
@@ -86,8 +87,7 @@ export default Ext.define('NextThought.app.library.courses.components.Collection
 		}
 	},
 
-
-	handleSelect: function(selModel, record) {
+    handleSelect: function(selModel, record) {
 		selModel.deselect(record);
 
 		var node = this.getNodeByRecord(record);

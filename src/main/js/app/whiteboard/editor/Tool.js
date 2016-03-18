@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.whiteboard.editor.Tool', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.Tool', {
 	alias: 'widget.wb-tool',
 	extend: 'Ext.button.Button',
 

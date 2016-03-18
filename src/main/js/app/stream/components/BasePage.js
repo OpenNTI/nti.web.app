@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.stream.components.BasePage', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.stream.components.BasePage', {
 	extend: 'Ext.container.Container',
 
 	ISCHANGE: /change$/,

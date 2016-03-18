@@ -1,25 +1,27 @@
-export default Ext.define('NextThought.app.badge.Window', {
-	extend: 'Ext.container.Container',
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var ParseUtils = require('../../util/Parsing');
+var MixinsExportBadge = require('../../mixins/ExportBadge');
+var WindowsStateStore = require('../windows/StateStore');
+var OpenbadgesBadge = require('../../model/openbadges/Badge');
+var ComponentsBadge = require('./components/Badge');
+var ComponentsHeader = require('../windows/components/Header');
+var ComponentsFooter = require('./components/Footer');
+var ComponentsPrompt = require('./components/Prompt');
+var PromptActions = require('../prompt/Actions');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.badge.Window', {
+    extend: 'Ext.container.Container',
+
+    mixins: {
 		'exportBadge': 'NextThought.mixins.ExportBadge'
 	},
 
-	requires: [
-		'NextThought.app.windows.StateStore',
-		'NextThought.model.openbadges.Badge',
-		'NextThought.app.badge.components.Badge',
-		'NextThought.app.windows.components.Header',
-		'NextThought.app.badge.components.Footer',
-		'NextThought.app.badge.components.Prompt',
-		'NextThought.app.prompt.Actions'
-	],
+    layout: 'none',
+    cls: 'badge-window',
 
-	layout: 'none',
-
-	cls: 'badge-window',
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.add({xtype: 'window-header', doClose: this.doClose.bind(this)});
@@ -28,12 +30,10 @@ export default Ext.define('NextThought.app.badge.Window', {
 		this.add({xtype: 'badge-window-footer', doClose: this.doClose.bind(this), onExport: this.exportBadgeClicked.bind(this)});
 	},
 
-
-	exportBadgeClicked: function(e){
+    exportBadgeClicked: function(e){
 		var target = e && e.getTarget();
 		this.showExportMenu(this.record, Ext.get(target));
 	}
-
 }, function() {
 	NextThought.app.windows.StateStore.register(NextThought.model.openbadges.Badge.mimeType, this);
 	NextThought.app.windows.StateStore.registerCustomResolver(NextThought.model.openbadges.Badge.mimeType, function(id, raw) {

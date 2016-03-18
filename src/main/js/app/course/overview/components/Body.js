@@ -1,25 +1,25 @@
-export default Ext.define('NextThought.app.course.overview.components.Body', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-overview-body',
+var Ext = require('extjs');
+var MixinsRouter = require('../../../../mixins/Router');
+var ComponentsEditingControls = require('./EditingControls');
+var ComponentsLesson = require('./Lesson');
+var EditingIndex = require('./editing/Index');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.Body', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.course-overview-body',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	requires: [
-		'NextThought.app.course.overview.components.EditingControls',
-		'NextThought.app.course.overview.components.Lesson',
-		'NextThought.app.course.overview.components.editing.Index'
-	],
+    layout: 'none',
 
-	layout: 'none',
-
-	items: [
+    items: [
 		{xtype: 'course-overview-editing-controls'}
 	],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -47,8 +47,7 @@ export default Ext.define('NextThought.app.course.overview.components.Body', {
 		me.editingControlsCmp.hide();
 	},
 
-
-	showEditControls: function() {
+    showEditControls: function() {
 		if (this.hasEditingControls) { return; }
 
 		this.addCls('has-editing-controls');
@@ -63,16 +62,14 @@ export default Ext.define('NextThought.app.course.overview.components.Body', {
 		}
 	},
 
-
-	hideEditControls: function() {
+    hideEditControls: function() {
 		this.removeCls('has-editing-controls');
 		delete this.hasEditingControls;
 		this.editingControlsCmp.clearButtons();
 		this.editingControlsCmp.hide();
 	},
 
-
-	showEditing: function() {
+    showEditing: function() {
 		this.isEditing = true;
 
 		if (this.hasEditingControls) {
@@ -80,8 +77,7 @@ export default Ext.define('NextThought.app.course.overview.components.Body', {
 		}
 	},
 
-
-	showNotEditing: function() {
+    showNotEditing: function() {
 		delete this.isEditing;
 
 		if (this.hasEditingControls) {
@@ -89,8 +85,7 @@ export default Ext.define('NextThought.app.course.overview.components.Body', {
 		}
 	},
 
-
-	clear: function() {
+    clear: function() {
 		var lesson = this.down('course-overview-lesson');
 
 		if (lesson) {
@@ -98,8 +93,7 @@ export default Ext.define('NextThought.app.course.overview.components.Body', {
 		}
 	},
 
-
-	getLesson: function(addIfNotThere) {
+    getLesson: function(addIfNotThere) {
 		var lesson = this.down('course-overview-lesson[isLessonView]');
 
 		if (!lesson && addIfNotThere) {
@@ -114,8 +108,7 @@ export default Ext.define('NextThought.app.course.overview.components.Body', {
 		return lesson;
 	},
 
-
-	getEditor: function(addIfNotThere) {
+    getEditor: function(addIfNotThere) {
 		var editor = this.down('overview-editing');
 
 		if (!editor && addIfNotThere) {
@@ -131,8 +124,7 @@ export default Ext.define('NextThought.app.course.overview.components.Body', {
 		return editor;
 	},
 
-
-	getEmptyState: function(addIfNotThere) {
+    getEmptyState: function(addIfNotThere) {
 		var emptyState = this.down('[isEmptyState]'),
 			me = this;
 
@@ -174,8 +166,7 @@ export default Ext.define('NextThought.app.course.overview.components.Body', {
 		return emptyState;
 	},
 
-
-	getLessonTop: function() {
+    getLessonTop: function() {
 		var lesson = this.getLesson(),
 			editor = this.getEditor(),
 			rect;
@@ -189,8 +180,7 @@ export default Ext.define('NextThought.app.course.overview.components.Body', {
 		return rect ? rect.top : 0;
 	},
 
-
-	setActiveBundle: function(bundle) {
+    setActiveBundle: function(bundle) {
 		var lesson = this.getLesson(),
 			editor = this.getEditor();
 
@@ -205,13 +195,11 @@ export default Ext.define('NextThought.app.course.overview.components.Body', {
 		this.currentBundle = bundle;
 	},
 
-
-	setOutline: function(outline) {
+    setOutline: function(outline) {
 		this.currentOutline = outline;
 	},
 
-
-	showOutlineNode: function(record, doNotCache) {
+    showOutlineNode: function(record, doNotCache) {
 		var lesson = this.getLesson(true),
 			editor = this.getEditor(),
 			emptyState = this.getEmptyState();
@@ -229,8 +217,7 @@ export default Ext.define('NextThought.app.course.overview.components.Body', {
 		return lesson.renderLesson(record, doNotCache);
 	},
 
-
-	editOutlineNode: function(record) {
+    editOutlineNode: function(record) {
 		var editor = this.getEditor(true),
 			lesson = this.getLesson(),
 			emptyState = this.getEmptyState();
@@ -248,8 +235,7 @@ export default Ext.define('NextThought.app.course.overview.components.Body', {
 		return editor.editOutlineNode(record, this.currentOutline);
 	},
 
-
-	showEmptyState: function() {
+    showEmptyState: function() {
 		var emptyState = this.getEmptyState(true),
 			editor = this.getEditor(),
 			lesson = this.getLesson();

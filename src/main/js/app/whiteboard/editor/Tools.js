@@ -1,24 +1,25 @@
-export default Ext.define('NextThought.app.whiteboard.editor.Tools', {
-	alias: 'widget.whiteboard-tools',
-	extend: 'Ext.container.Container',
-	requires: [
-		'NextThought.app.whiteboard.editor.ImageOptions',
-		'NextThought.app.whiteboard.editor.MoveOptions',
-		'NextThought.app.whiteboard.editor.PencilOptions',
-		'NextThought.app.whiteboard.editor.ShapeOptions',
-		'NextThought.app.whiteboard.editor.TextOptions',
-		'NextThought.app.whiteboard.editor.EraserOptions',
-		'NextThought.app.whiteboard.editor.Tool'
-	],
+var Ext = require('extjs');
+var EditorImageOptions = require('./ImageOptions');
+var EditorMoveOptions = require('./MoveOptions');
+var EditorPencilOptions = require('./PencilOptions');
+var EditorShapeOptions = require('./ShapeOptions');
+var EditorTextOptions = require('./TextOptions');
+var EditorEraserOptions = require('./EraserOptions');
+var EditorTool = require('./Tool');
 
-	ui: 'container',
-	baseCls: 'whiteboard-tools',
 
-	layout: 'none',
-	defaults: {
+module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.Tools', {
+    alias: 'widget.whiteboard-tools',
+    extend: 'Ext.container.Container',
+    ui: 'container',
+    baseCls: 'whiteboard-tools',
+    layout: 'none',
+
+    defaults: {
 		baseCls: 'whiteboard-tools'
 	},
-	items: [{
+
+    items: [{
 		ui: 'primary',
 		xtype: 'toolbar',
 		defaults: { xtype: 'wb-tool' },
@@ -48,7 +49,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.Tools', {
 		]
 	}],
 
-	initComponent: function() {
+    initComponent: function() {
 		var me = this;
 		me.callParent(arguments);
 
@@ -61,8 +62,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.Tools', {
 		Ext.each(me.query('button[tool]'), function(b) {b.on('click', me.switchMenus, me);});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		var me = this;
 		me.callParent(arguments);
 		Ext.each(me.query('wb-tool'), function(i) {
@@ -74,7 +74,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.Tools', {
 		});
 	},
 
-	maybeRemoveImageFeature: function() {
+    maybeRemoveImageFeature: function() {
 		if (Service.canCanvasURL()) {
 			return; //images approved, no delete...
 		}
@@ -96,22 +96,19 @@ export default Ext.define('NextThought.app.whiteboard.editor.Tools', {
 		}
 	},
 
-
-	switchMenus: function(btn) {
+    switchMenus: function(btn) {
 		var q = Ext.String.format('[forTool={0}]', btn.tool);
 		delete this.currentTool;
 		this.down('container[ui=secondary]').getLayout().setActiveItem(this.down(q));
 	},
 
-
-	setCurrentTool: function(tool) {
+    setCurrentTool: function(tool) {
 		var b = this.down('wb-tool[tool=' + tool + ']');
 		b.fireEvent('click', b);
 		b.toggle(true);
 	},
 
-
-	getCurrentTool: function() {
+    getCurrentTool: function() {
 		if (!this.currentTool) {
 			this.currentTool = this.down('container[ui=secondary]').getLayout().getActiveItem();
 		}

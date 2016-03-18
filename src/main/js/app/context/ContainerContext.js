@@ -1,21 +1,22 @@
-export default Ext.define('NextThought.app.context.ContainerContext', {
-	requires: [
-		'NextThought.app.context.types.Content',
-		'NextThought.app.context.types.Question',
-		'NextThought.app.context.types.RelatedWork',
-		'NextThought.app.context.types.Slide',
-		'NextThought.app.context.types.Video',
-		'NextThought.app.context.components.AuthorizationContext'
-	],
+var Ext = require('extjs');
+var ParseUtils = require('../../util/Parsing');
+var TypesContent = require('./types/Content');
+var TypesQuestion = require('./types/Question');
+var TypesRelatedWork = require('./types/RelatedWork');
+var TypesSlide = require('./types/Slide');
+var TypesVideo = require('./types/Video');
+var ComponentsAuthorizationContext = require('./components/AuthorizationContext');
 
-	constructor: function(config) {
+
+module.exports = exports = Ext.define('NextThought.app.context.ContainerContext', {
+    constructor: function(config) {
 		this.callParent(arguments);
 
 		this.config = config;
 		this.container = config.container;
 	},
 
-	/**
+    /**
 	 * Load the context of UserData (i.e. note)
 	 * @param  {[string]} type [type of context: card, list, or leave empty.
 	 *                          Leave empty, in case of a note will be presented in a note window
@@ -38,8 +39,7 @@ export default Ext.define('NextThought.app.context.ContainerContext', {
 				.fail(this.__handle403Response.bind(this));
 	},
 
-
-	__parseResponse: function(response) {
+    __parseResponse: function(response) {
 		var parse;
 
 		return new Promise(function(fulfill) {
@@ -57,8 +57,7 @@ export default Ext.define('NextThought.app.context.ContainerContext', {
 		});
 	},
 
-
-	__parseContext: function(contextType, obj) {
+    __parseContext: function(contextType, obj) {
 		var typesPath = NextThought.app.context.types,
 			keys = Object.keys(typesPath), i, handler;
 
@@ -86,8 +85,7 @@ export default Ext.define('NextThought.app.context.ContainerContext', {
 		return Promise.resolve(null);
 	},
 
-
-	__handle403Response: function(response) {
+    __handle403Response: function(response) {
 		var o = Ext.decode(response.responseText, true),
 			status = response.status,
 			req = response && response.request,
@@ -100,8 +98,7 @@ export default Ext.define('NextThought.app.context.ContainerContext', {
 		return Promise.resolve();
 	},
 
-
-	requestForbiddenContext: function(url){
+    requestForbiddenContext: function(url){
 		if (!url) { return Promise.resolve(); }
 
 		// Forbidden Context URL.

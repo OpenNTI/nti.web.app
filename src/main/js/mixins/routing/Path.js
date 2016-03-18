@@ -1,7 +1,11 @@
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+
+
 /*
 	Inspired by https://github.com/chrisdavies/rlite/blob/master/rlite.js
  */
-export default Ext.define('NextThought.mixins.routing.Path', {
+module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	VARIABLE_KEY: '@var',
 
 	/*

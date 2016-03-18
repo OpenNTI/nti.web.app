@@ -1,16 +1,15 @@
-export default Ext.define('NextThought.app.library.courses.components.settings.CourseOptions', {
-	extend: 'Ext.Component',
-	alias: 'widget.library-course-options',
+var Ext = require('extjs');
+var EnrollmentStateStore = require('../../../../course/enrollment/StateStore');
+var WindowsActions = require('../../../../windows/Actions');
+var AvailableCourseDetailWindow = require('../available/CourseDetailWindow');
 
-	requires: [
-		'NextThought.app.course.enrollment.StateStore',
-		'NextThought.app.windows.Actions',
-		'NextThought.app.library.courses.components.available.CourseDetailWindow'
-	],
 
-	cls: 'course-setting-options',
+module.exports = exports = Ext.define('NextThought.app.library.courses.components.settings.CourseOptions', {
+    extend: 'Ext.Component',
+    alias: 'widget.library-course-options',
+    cls: 'course-setting-options',
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'enrollment {enrollCls}', html: '{enrollText}'},
 		//{cls: 'contact', html: 'Contact the Instructor'},
 		{ tag: 'a', cls: 'support', href: '{supportLink}', html: 'Request Support'},
@@ -18,7 +17,7 @@ export default Ext.define('NextThought.app.library.courses.components.settings.C
 		{ tag: 'tpl', 'if': 'isDroppable', cn: {cls: 'drop', html: 'Drop Course'}}
 	]),
 
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		var isOpen = this.course.isOpen(),
@@ -40,15 +39,13 @@ export default Ext.define('NextThought.app.library.courses.components.settings.C
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', 'onClick', this);
 	},
 
-
-	onClick: function(e) {
+    onClick: function(e) {
 		var instance = this.course.get('CourseInstance'),
 			catalog = instance.getCourseCatalogEntry();
 

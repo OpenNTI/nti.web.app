@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.proxy.courseware.PagedPageSource', {
+var Ext = require('extjs');
+var UtilPageSourceStore = require('../../util/PageSourceStore');
+
+
+module.exports = exports = Ext.define('NextThought.proxy.courseware.PagedPageSource', {
 	extend: 'NextThought.util.PageSourceStore',
 
 	constructor: function(cfg) {

@@ -1,29 +1,28 @@
-export default Ext.define('NextThought.app.Index', {
-	extend: 'Ext.container.Viewport',
-	alias: 'widget.master-view',
+var Ext = require('extjs');
+var AppMessageBox = require('./MessageBox');
+var AppMessageBar = require('./MessageBar');
+var NavigationIndex = require('./navigation/Index');
+var NavigationMessageBar = require('./navigation/MessageBar');
+var AppBody = require('./Body');
+var WindowsIndex = require('./windows/Index');
+var ChatIndex = require('./chat/Index');
+var PromptIndex = require('./prompt/Index');
 
-	requires: [
-		'NextThought.app.MessageBox',
-		'NextThought.app.MessageBar',
-		'NextThought.app.navigation.Index',
-		'NextThought.app.navigation.MessageBar',
-		'NextThought.app.Body',
-		'NextThought.app.windows.Index',
-		'NextThought.app.chat.Index',
-		'NextThought.app.prompt.Index'
-	],
 
-	border: false,
-	frame: false,
-	defaults: { border: false, frame: false },
-	layout: 'none',
-	id: 'viewport',
-	ui: 'nextthought',
-	cls: 'main-viewport',
-	minWidth: 1024,
-	touchStartTime: -1,
+module.exports = exports = Ext.define('NextThought.app.Index', {
+    extend: 'Ext.container.Viewport',
+    alias: 'widget.master-view',
+    border: false,
+    frame: false,
+    defaults: { border: false, frame: false },
+    layout: 'none',
+    id: 'viewport',
+    ui: 'nextthought',
+    cls: 'main-viewport',
+    minWidth: 1024,
+    touchStartTime: -1,
 
-	items: [
+    items: [
 		{xtype: 'navigation-message-bar', id: 'message-bar'},
 		{xtype: 'main-navigation', id: 'nav'},
 		{xtype: 'main-views', id: 'view'},
@@ -32,15 +31,13 @@ export default Ext.define('NextThought.app.Index', {
 		{xtype: 'chats-view', id: 'chat-window'}
 	],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent();
 		this.el = Ext.DomHelper.insertFirst(Ext.getBody(), { cls: 'viewport' }, true);
 		this.renderTo = this.el;
 	},
 
-
-	constructor: function() {
+    constructor: function() {
 		this.hidden = Boolean(NextThought.phantomRender);
 		this.callParent(arguments);
 
@@ -57,8 +54,7 @@ export default Ext.define('NextThought.app.Index', {
 		}
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		var me = this, map = {
 			width: 'right',
@@ -110,7 +106,7 @@ export default Ext.define('NextThought.app.Index', {
 		}
 	},
 
-	onTouchStart: function(e) {
+    onTouchStart: function(e) {
 		var touch = e.browserEvent.touches[0],
 			mouseEnterEvent,
 			mouseOverEvent,
@@ -148,8 +144,7 @@ export default Ext.define('NextThought.app.Index', {
 		touch.target.dispatchEvent(mouseDownEvent);
 	},
 
-
-	onTouchMove: function(e) {
+    onTouchMove: function(e) {
 		var touch = e.browserEvent.touches[0],
 			changedTouch = e.browserEvent.changedTouches[0],
 			currTarget,
@@ -234,8 +229,7 @@ export default Ext.define('NextThought.app.Index', {
 		}
 	},
 
-
-	onTouchEnd: function(e) {
+    onTouchEnd: function(e) {
 		var touch = e.browserEvent.changedTouches[0],
 			clickEvent,
 			mouseUpEvent,
@@ -288,8 +282,7 @@ export default Ext.define('NextThought.app.Index', {
 
 	},
 
-
-	lockOrientation: function() {
+    lockOrientation: function() {
 		var optWindow, iframe, me = this;
 
 		/*If user rotates to portrait, display screen saying to rotate it.
@@ -326,8 +319,7 @@ export default Ext.define('NextThought.app.Index', {
 		};
 	},
 
-
-	createPortraitOrientationScreen: function() {
+    createPortraitOrientationScreen: function() {
 		var optWindow = Ext.widget('nti-window', {
 			title: 'Portrait mode unavailabe',
 			closeAction: 'hide',
@@ -359,8 +351,7 @@ export default Ext.define('NextThought.app.Index', {
 		return optWindow;
 	},
 
-
-	onWindowResize: function onWindowResize() {
+    onWindowResize: function onWindowResize() {
 		var z = 1,
 			bodyEl = Ext.getBody(),
 			body = Ext.getDom(bodyEl),

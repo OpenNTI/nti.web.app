@@ -1,32 +1,28 @@
-export default Ext.define('NextThought.app.account.settings.Window', {
-	extend: 'NextThought.common.window.Window',
-	alias: 'widget.account-window',
+var Ext = require('extjs');
+var WindowWindow = require('../../../common/window/Window');
+var ComponentsPasswordResetForm = require('./components/PasswordResetForm');
+var ComponentsPreferences = require('./components/Preferences');
+var ComponentsAvatarChoices = require('./components/AvatarChoices');
+var ComponentsPictureEditor = require('./components/PictureEditor');
 
-	requires: [
-		'Ext.toolbar.Spacer',//not sure what below this class needs it, but it synchronously loads if not required. :/
-		'NextThought.app.account.settings.components.PasswordResetForm',
-		'NextThought.app.account.settings.components.Preferences',
-		'NextThought.app.account.settings.components.AvatarChoices',
-		'NextThought.app.account.settings.components.PictureEditor'
-	],
 
-	cls: 'account-window',
-	ui: 'account-window',
-	minimizable: false,
-	constrain: true,
-	closable: true,
-	modal: true,
-	dialog: true,
-	resizable: false,
+module.exports = exports = Ext.define('NextThought.app.account.settings.Window', {
+    extend: 'NextThought.common.window.Window',
+    alias: 'widget.account-window',
+    cls: 'account-window',
+    ui: 'account-window',
+    minimizable: false,
+    constrain: true,
+    closable: true,
+    modal: true,
+    dialog: true,
+    resizable: false,
+    width: 535,
+    y: 80,
+    layout: 'none',
+    items: [],
 
-	width: 535,
-	y: 80,
-
-	layout: 'none',
-
-	items: [],
-
-	constructor: function() {
+    constructor: function() {
 		var user = $AppConfig.userObject,
 			canUploadAvatar = Service.canUploadAvatar(),
 			availablePanels = [], tabs = [];
@@ -102,8 +98,7 @@ export default Ext.define('NextThought.app.account.settings.Window', {
 		this.callParent(arguments);
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		var me = this;
 
 		me.callParent(arguments);
@@ -122,11 +117,9 @@ export default Ext.define('NextThought.app.account.settings.Window', {
 		});
 	},
 
+    syncHeight: function() {},
 
-	syncHeight: function() {},
-
-
-	changeView: function(btn) {
+    changeView: function(btn) {
 		var c = this.down('[name=settings]'),
 			p = c.down(btn.associatedPanel);
 

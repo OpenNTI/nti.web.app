@@ -1,19 +1,18 @@
-export default Ext.define('NextThought.app.library.content.Current', {
-	extend: 'NextThought.app.library.components.Current',
-	alias: 'widget.library-current-content',
+var Ext = require('extjs');
+var ComponentsCurrent = require('../components/Current');
+var ContentStateStore = require('./StateStore');
+var StoreStateStore = require('../../store/StateStore');
+var ComponentsCollection = require('../components/Collection');
 
-	requires: [
-		'NextThought.app.library.content.StateStore',
-		'NextThought.app.store.StateStore',
-		'NextThought.app.library.components.Collection'
-	],
 
-	layout: 'none',
-	title: 'Books',
+module.exports = exports = Ext.define('NextThought.app.library.content.Current', {
+    extend: 'NextThought.app.library.components.Current',
+    alias: 'widget.library-current-content',
+    layout: 'none',
+    title: 'Books',
+    storeModel: 'NextThought.model.ContentBundle',
 
-	storeModel: 'NextThought.model.ContentBundle',
-
-	statics: {
+    statics: {
 		shouldShow: function() {
 			var ContentStore = NextThought.app.library.content.StateStore.getInstance(),
 				PurchaseStore = NextThought.app.store.StateStore.getInstance();
@@ -31,9 +30,9 @@ export default Ext.define('NextThought.app.library.content.Current', {
 		}
 	},
 
-	items: [],
+    items: [],
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
@@ -52,16 +51,14 @@ export default Ext.define('NextThought.app.library.content.Current', {
 		//TODO: add a listener to update when a bundle is added to the library
 	},
 
-
-	showCurrentItems: function() {
+    showCurrentItems: function() {
 		var bundles = this.ContentStore.getContentBundles(),
 			packages = this.ContentStore.getContentPackages();
 
 		this.showItems(bundles.concat(packages));
 	},
 
-
-	showItems: function(current) {
+    showItems: function(current) {
 		if (this.store) {
 			this.store.loadRecords(current);
 		} else {
@@ -83,15 +80,13 @@ export default Ext.define('NextThought.app.library.content.Current', {
 		});
 	},
 
-
-	onSeeAllClick: function() {
+    onSeeAllClick: function() {
 		if (this.pushRoute) {
 			this.pushRoute('Books', '/books');
 		}
 	},
 
-
-	navigate: function(bundle, el) {
+    navigate: function(bundle, el) {
 		if (this.navigateToBundle) {
 			this.navigateToBundle(bundle, el);
 		}

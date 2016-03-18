@@ -1,23 +1,20 @@
-export default Ext.define('NextThought.app.stream.components.ListPage', {
-	extend: 'NextThought.app.stream.components.BasePage',
-	alias: 'widget.stream-list-page',
-
-	requires: [
-		'NextThought.app.stream.components.listTiles.Note'
-	],
+var Ext = require('extjs');
+var ComponentsBasePage = require('./BasePage');
+var ListTilesNote = require('./listTiles/Note');
 
 
-	cls: 'list-page',
+module.exports = exports = Ext.define('NextThought.app.stream.components.ListPage', {
+    extend: 'NextThought.app.stream.components.BasePage',
+    alias: 'widget.stream-list-page',
+    cls: 'list-page',
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.streamItems.forEach(this.addItem.bind(this));
 	},
 
-
-	addItem: function(record) {
+    addItem: function(record) {
 		record = this.unwrapRecord(record);
 
 		var cmp = this.getForMimeType(record.mimeType);
@@ -31,7 +28,6 @@ export default Ext.define('NextThought.app.stream.components.ListPage', {
 			record: record
 		}));
 	}
-
 }, function() {
 	var me = this,
 		tiles = NextThought.app.stream.components.tiles,

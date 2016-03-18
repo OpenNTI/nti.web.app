@@ -1,16 +1,27 @@
-/*globals B64*/
-export default Ext.define('NextThought.model.User', {
-	extend: 'NextThought.model.Base',
-	requires: ['NextThought.model.PresenceInfo', 'NextThought.model.converters.PresenceInfo'],
-	idProperty: 'Username',
+var Ext = require('extjs');
+var UserRepository = require('../cache/UserRepository');
+var User = require('./User');
+var B64 = require('../util/Base64');
+var Globals = require('../util/Globals');
+var ParseUtils = require('../util/Parsing');
+var ModelBase = require('./Base');
+var MixinsAvatar = require('../mixins/Avatar');
+var ModelPresenceInfo = require('./PresenceInfo');
+var ConvertersPresenceInfo = require('./converters/PresenceInfo');
 
-	mixins: {
+
+/*globals B64*/
+module.exports = exports = Ext.define('NextThought.model.User', {
+    extend: 'NextThought.model.Base',
+    idProperty: 'Username',
+
+    mixins: {
 		Avatar: 'NextThought.mixins.Avatar'
 	},
 
-	isProfile: true,
+    isProfile: true,
 
-	fields: [
+    fields: [
 		{ name: 'lastLoginTime', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'NotificationCount', type: 'int' },
 		{ name: 'Username', type: 'string' },
@@ -83,26 +94,23 @@ export default Ext.define('NextThought.model.User', {
 		{ name: 'avatarBGColor', type: 'string', persist: false}
 	],
 
-	isUser: true,
-	summaryObject: true,
+    isUser: true,
+    summaryObject: true,
 
-
-	constructor: function() {
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.initAvatar();
 	},
 
-
-	equal: function(b) {
+    equal: function(b) {
 		if (Ext.isString(b) && this.getId() === b) {
 			return true;
 		}
 		return this.callParent(arguments);
 	},
 
-
-	getCommunities: function(excludeDFLs) {
+    getCommunities: function(excludeDFLs) {
 		var r = [], u;
 
 		Ext.each(this.get('Communities'), function(c) {
@@ -133,8 +141,7 @@ export default Ext.define('NextThought.model.User', {
 		return r;
 	},
 
-
-	getData: function() {
+    getData: function() {
 		var k, v, f = this.callParent(arguments);
 
 		for (k in f) {
@@ -149,23 +156,19 @@ export default Ext.define('NextThought.model.User', {
 		return f;
 	},
 
-
-	toString: function() {
+    toString: function() {
 		return this.getName();
 	},
 
-
-	shouldBeRoot: function() {
+    shouldBeRoot: function() {
 		return true;
 	},
 
-
-	getTitle: function() {
+    getTitle: function() {
 		return this.getName();
 	},
 
-
-	getName: function() {
+    getName: function() {
 		return this.get('alias') ||
 			   this.get('realname') ||
 			   //because this implementation is 'borrowed', we cannot assume 'this'
@@ -173,8 +176,7 @@ export default Ext.define('NextThought.model.User', {
 			   NextThought.model.User.getUsername(this.get('Username'));
 	},
 
-
-	getURLPart: function() {
+    getURLPart: function() {
 		var id = this.get('Username');
 
 		if ($AppConfig.obscureUsernames) {
@@ -184,8 +186,7 @@ export default Ext.define('NextThought.model.User', {
 		return encodeURIComponent(id);
 	},
 
-
-	getProfileUrl: function(tab) {
+    getProfileUrl: function(tab) {
 		if (!this.getLink('Activity')) {
 			return null;
 		}
@@ -199,25 +200,23 @@ export default Ext.define('NextThought.model.User', {
 		return tab ? '/user/' + id + '/' + Globals.trimRoute(tab) + '/' : '/user/' + id;
 	},
 
-
-	getPresence: function() {
+    getPresence: function() {
 		var presence = this.get('Presence');
 		return presence || NextThought.model.PresenceInfo.createFromPresenceString('Offline');
 	},
 
-
-	hasBlog: function() {
+    hasBlog: function() {
 		return Boolean(this.getLink('Blog'));
 	},
 
-	getAvatarInitials: function() {
+    getAvatarInitials: function() {
 		if (this.isUnresolved()) {
 			return null;
 		}
 		return NextThought.mixins.Avatar.getAvatarInitials(this.raw, this.get('FirstName'), this.get('LastName'), this.getName());
 	},
 
-	save: function(ops) {
+    save: function(ops) {
 		var data = this.asJSON();
 
 		//The avatar is saved in another place; don't try to do it here. Also custom avatar urls will cause a 422
@@ -230,13 +229,11 @@ export default Ext.define('NextThought.model.User', {
 	   }, ops));
 	},
 
-
-	isUnresolved: function() {
+    isUnresolved: function() {
 		return this.Unresolved === true;
 	},
 
-
-	getSchema: function() {
+    getSchema: function() {
 		if (this.loadSchema) {
 			return this.loadSchema;
 		}
@@ -255,8 +252,7 @@ export default Ext.define('NextThought.model.User', {
 		return this.loadSchema;
 	},
 
-
-	getAboutData: function() {
+    getAboutData: function() {
 		return {
 			displayName: this.getName(),
 			realname: this.get('realname'),
@@ -275,8 +271,7 @@ export default Ext.define('NextThought.model.User', {
 		};
 	},
 
-
-	getMemberships: function(force) {
+    getMemberships: function(force) {
 		if (this.loadMemberships && !force) {
 			return this.loadMemberships;
 		}
@@ -297,30 +292,26 @@ export default Ext.define('NextThought.model.User', {
 		return this.loadMemberships;
 	},
 
-
-	__filterMemberships: function(fn) {
+    __filterMemberships: function(fn) {
 		return this.getMemberships()
 			.then(function(memberships) {
 				return memberships.filter(fn);
 			});
 	},
 
-
-	getCommunityMembership: function() {
+    getCommunityMembership: function() {
 		return this.__filterMemberships(function(membership) {
 			return membership instanceof NextThought.model.Community;
 		});
 	},
 
-
-	getGroupMembership: function() {
+    getGroupMembership: function() {
 		return this.__filterMemberships(function(membership) {
 			return membership instanceof NextThought.model.FriendsList;
 		});
 	},
 
-
-	statics: {
+    statics: {
 
 		BLANK_AVATAR: '/app/resources/images/icons/unresolved-user.png',
 
@@ -390,13 +381,11 @@ export default Ext.define('NextThought.model.User', {
 
 	},
 
-
-	hasVisibilityField: function(field) {
+    hasVisibilityField: function(field) {
 		return Boolean(this.raw && this.raw[field]);
 	},
 
-
-	refresh: function() {
+    refresh: function() {
 		var req = {
 			url: getURL(this.get('href')),
 			callback: function(q, s, r) {
@@ -413,16 +402,14 @@ export default Ext.define('NextThought.model.User', {
 		Ext.Ajax.request(req);
 	},
 
-
-	getActivityItemConfig: function(type) {
+    getActivityItemConfig: function(type) {
 		return Promise.resolve({
 			name: this.getName(),
 			verb: ((/circled/i).test(type) ? ' added you as a contact.' : '?')
 		});
 	},
 
-
-	sendEmailVerification: function() {
+    sendEmailVerification: function() {
 		if (!this.hasLink('RequestEmailVerification')) {
 			return Promise.reject();
 		}
@@ -434,13 +421,11 @@ export default Ext.define('NextThought.model.User', {
 			});
 	},
 
-
-	isEmailVerified: function() {
+    isEmailVerified: function() {
 		return !this.hasLink('RequestEmailVerification');
 	},
 
-
-	verifyEmailToken: function(token) {
+    verifyEmailToken: function(token) {
 		if (!this.hasLink('VerifyEmailWithToken') || !token) {
 			return Promise.reject();
 		}
@@ -453,8 +438,7 @@ export default Ext.define('NextThought.model.User', {
 			});
 	},
 
-
-	getSuggestContacts: function() {
+    getSuggestContacts: function() {
 		if (!isFeature('suggest-contacts') || !(this.hasLink('SuggestContacts') || this.hasLink('Classmates'))) { return Promise.reject(); }
 
 		var link = this.getLink('SuggestContacts') || this.getLink('Classmates');
@@ -466,8 +450,7 @@ export default Ext.define('NextThought.model.User', {
 			});
 	},
 
-
-	removeFirstTimeLoginLink: function() {
+    removeFirstTimeLoginLink: function() {
 		var rel = 'first_time_logon',
 			link = this.getLink(rel), me = this;
 		if (!link) { return Promise.reject(); }
@@ -478,7 +461,6 @@ export default Ext.define('NextThought.model.User', {
 				return Promise.resolve();
 			});
 	}
-
 }, function() {
 	window.User = this;
 });

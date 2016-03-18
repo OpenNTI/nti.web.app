@@ -1,4 +1,10 @@
-export default Ext.define('NextThought.common.components.cards.Card', {
+var Ext = require('extjs');
+var Globals = require('../../../util/Globals');
+var ParseUtils = require('../../../util/Parsing');
+var MixinsEllipsisText = require('../../../mixins/EllipsisText');
+
+
+module.exports = exports = Ext.define('NextThought.common.components.cards.Card', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-card',
 

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.menus.file.BrowserItem', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.menus.file.BrowserItem', {
 	extend: 'Ext.menu.Item',
 	cls: 'file-browser-menu',
 	alias: 'widget.file-browser-menu-item',

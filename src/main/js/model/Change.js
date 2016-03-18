@@ -1,13 +1,14 @@
-export default Ext.define('NextThought.model.Change', {
-	extend: 'NextThought.model.Base',
-	requires: [
-		'NextThought.model.converters.GroupByTime',
-		'NextThought.model.openbadges.Badge'
-	],
+var Ext = require('extjs');
+var ModelBase = require('./Base');
+var ConvertersGroupByTime = require('./converters/GroupByTime');
+var OpenbadgesBadge = require('./openbadges/Badge');
 
-	NOTABLE_PROPERTY: 'RUGDByOthersThatIMightBeInterestedIn',
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.model.Change', {
+    extend: 'NextThought.model.Base',
+    NOTABLE_PROPERTY: 'RUGDByOthersThatIMightBeInterestedIn',
+
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.changeTypeToModel = {
@@ -15,8 +16,9 @@ export default Ext.define('NextThought.model.Change', {
 		};
 	},
 
-	idProperty: 'OID',
-	fields: [
+    idProperty: 'OID',
+
+    fields: [
 		{ name: 'ID', type: 'string' },
 		{ name: 'ChangeType', type: 'string' },
 		{ name: 'Item', type: 'singleItem' },
@@ -26,7 +28,7 @@ export default Ext.define('NextThought.model.Change', {
 		{ name: 'NotificationGroupingField', mapping: 'CreatedTime', type: 'groupByTime', persist: false, affectedBy: 'CreatedTime'}
 	],
 
-	getItemValue: function(field) {
+    getItemValue: function(field) {
 		var i = this.getItem();
 
 		if (!i) {
@@ -36,8 +38,7 @@ export default Ext.define('NextThought.model.Change', {
 		return i.get(field);
 	},
 
-
-	getItem: function() {
+    getItem: function() {
 		var e, item = this.get('Item'),
 			changeModel = this.changeTypeToModel[this.get('ChangeType')];
 
@@ -64,8 +65,7 @@ export default Ext.define('NextThought.model.Change', {
 		return item;
 	},
 
-
-	isNotable: function() {
+    isNotable: function() {
 		return !!(this.raw || {})[this.NOTABLE_PROPERTY];
 	}
 });

@@ -1,19 +1,16 @@
-export default Ext.define('NextThought.app.prompt.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.prompt-view',
-
-	requires: [
-		'NextThought.app.prompt.StateStore',
-		'NextThought.app.prompt.components.Container'
-	],
-
-	cls: 'prompt-layer',
-
-	layout: 'none',
-	items: [],
+var Ext = require('extjs');
+var PromptStateStore = require('./StateStore');
+var ComponentsContainer = require('./components/Container');
 
 
-	initComponent: function() {
+module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.prompt-view',
+    cls: 'prompt-layer',
+    layout: 'none',
+    items: [],
+
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.HTML_ELEMENT = document.getElementsByTagName('html')[0];
@@ -27,22 +24,19 @@ export default Ext.define('NextThought.app.prompt.Index', {
 		});
 	},
 
-
-	addOpenCls: function() {
+    addOpenCls: function() {
 		if (this.HTML_ELEMENT) {
 			this.HTML_ELEMENT.classList.add('prompt-open');
 		}
 	},
 
-
-	removeOpenCls: function() {
+    removeOpenCls: function() {
 		if (this.HTML_ELEMENT) {
 			this.HTML_ELEMENT.classList.remove('prompt-open');
 		}
 	},
 
-
-	addStackClasses: function() {
+    addStackClasses: function() {
 		var stack = this.promptStack,
 			lastIndex = stack.length - 1;
 
@@ -55,8 +49,7 @@ export default Ext.define('NextThought.app.prompt.Index', {
 		});
 	},
 
-
-	openPrompt: function(cmp, type, fulfill, reject, data) {
+    openPrompt: function(cmp, type, fulfill, reject, data) {
 		if (!cmp) {	return;	}
 
 		var index = this.promptStack.length,
@@ -90,8 +83,7 @@ export default Ext.define('NextThought.app.prompt.Index', {
 		this.addStackClasses();
 	},
 
-
-	closePrompt: function(index) {
+    closePrompt: function(index) {
 		var stack = this.promptStack,
 			removeOpenCls = this.removeOpenCls.bind(this),
 			addStackClasses = this.addStackClasses.bind(this),

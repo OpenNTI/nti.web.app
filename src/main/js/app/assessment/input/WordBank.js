@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.assessment.input.WordBank', {
+var Ext = require('extjs');
+var InputBase = require('./Base');
+var MixinsQuestionContent = require('../../../mixins/QuestionContent');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank', {
 	extend: 'NextThought.app.assessment.input.Base',
 	alias: [
 		'widget.question-input-fillintheblankwithwordbankpart'

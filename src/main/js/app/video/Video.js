@@ -1,45 +1,49 @@
+var Ext = require('extjs');
+var AnalyticsUtil = require('../../util/Analytics');
+var Globals = require('../../util/Globals');
+var ObjectUtils = require('../../util/Object');
+var PageVisibility = require('../../util/Visibility');
+var MixinsInstanceTracking = require('../../mixins/InstanceTracking');
+var UtilGlobals = require('../../util/Globals');
+var MediaHTML5Player = require('../../util/media/HTML5Player');
+var MediaHTML5VideoPlayer = require('../../util/media/HTML5VideoPlayer');
+var MediaKalturaPlayer = require('../../util/media/KalturaPlayer');
+var MediaVimeoPlayer = require('../../util/media/VimeoPlayer');
+var MediaYouTubePlayer = require('../../util/media/YouTubePlayer');
+var ModelPlaylistItem = require('../../model/PlaylistItem');
+var ResolversVideoPosters = require('../../model/resolvers/VideoPosters');
+
+
 /*jslint */
 /*globals Globals, NextThought, ObjectUtils, YT */
-export default Ext.define('NextThought.app.video.Video', {
-	alternateClassName: 'NextThought.Video',
-	extend: 'Ext.Component',
-	alias: 'widget.content-video',
+module.exports = exports = Ext.define('NextThought.app.video.Video', {
+    alternateClassName: 'NextThought.Video',
+    extend: 'Ext.Component',
+    alias: 'widget.content-video',
 
-	mixins: {
+    mixins: {
 		instanceTracking: 'NextThought.mixins.InstanceTracking'
 	},
 
+    ui: 'content-video',
+    cls: 'content-video',
 
-	requires: [
-		'NextThought.util.Globals',
-		'NextThought.util.media.HTML5Player',
-		'NextThought.util.media.HTML5VideoPlayer',
-		'NextThought.util.media.KalturaPlayer',
-		'NextThought.util.media.VimeoPlayer',
-		'NextThought.util.media.YouTubePlayer',
-		'NextThought.model.PlaylistItem',
-		'NextThought.model.resolvers.VideoPosters'
-	],
-
-	ui: 'content-video',
-	cls: 'content-video',
-
-	listeners: {
+    listeners: {
 		destroy: 'cleanup',
 		'player-ready': 'playerReady',
 		'player-error': 'playerError',
 		'unrecoverable-player-error': 'unrecoverablePlayerError'
 	},
 
-	ASPECT_RATIO: 0.5625,
+    ASPECT_RATIO: 0.5625,
+    loadFirstEntry: true,
+    playerWidth: 640,
 
-	loadFirstEntry: true,
-	playerWidth: 640,
-	playerHeight: function() {
+    playerHeight: function() {
 		return Math.round(this.playerWidth * this.ASPECT_RATIO) + this.getControlHight();
 	},
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		//		SAJ: Template lines are commented out because the video frame has not been styled yet.
 		//		{ cls: 'meta', cn: [
 		//			{ cls:'title', html:'{title}' },
@@ -53,8 +57,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		]}
 	]),
 
-
-	onClassExtended: function(cls, data, hooks) {
+    onClassExtended: function(cls, data, hooks) {
 		var onBeforeClassCreated = hooks.onBeforeCreated;
 
 		//merge with subclass's render selectors
@@ -72,8 +75,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		};
 	},
 
-
-	inheritableStatics: {
+    inheritableStatics: {
 		states: {
 			UNSTARTED: -1,
 			ENDED: 0,
@@ -84,8 +86,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		}
 	},
 
-
-	statics: {
+    statics: {
 		urlToPlaylist: function(url) {
 			var item = NextThought.model.PlaylistItem.fromURL(url);
 			return item && [item];
@@ -110,8 +111,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		}
 	},
 
-
-	refreshHeight: function() {
+    refreshHeight: function() {
 		this.height = this.playerHeight;
 		this.setHeight(this.height);
 		console.log(this.height);
@@ -120,8 +120,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		}
 	},
 
-
-	constructor: function(config) {
+    constructor: function(config) {
 
 		if (!Ext.isEmpty(config.url)) {
 			config.playlist = config.playlist || this.self.urlToPlaylist(config.url);
@@ -138,8 +137,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		this.trackThis();
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		Ext.applyIf(this, {playlist: []});
 
 		Ext.apply(this.playlist, {
@@ -211,16 +209,14 @@ export default Ext.define('NextThought.app.video.Video', {
 		//this.checkForFlash();
 	},
 
-
-	initRenderData: function() {
+    initRenderData: function() {
 		var ret;
 		ret = this.callParent(arguments);
 		this.storedRenderData = Ext.apply({}, ret);
 		return ret;
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		var item;
 		this.callParent(arguments);
 
@@ -260,8 +256,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		this.maybeActivatePlayer();
 	},
 
-
-	maybeActivatePlayer: function() {
+    maybeActivatePlayer: function() {
 		var me = this,
 			doActivate = me.isVisible(true);
 
@@ -282,11 +277,9 @@ export default Ext.define('NextThought.app.video.Video', {
 		me.activatePlayer();
 	},
 
+    playerConfigOverrides: function(name) { return {}; },
 
-	playerConfigOverrides: function(name) { return {}; },
-
-
-	playerSetup: function() {
+    playerSetup: function() {
 		this.log('Initializing the players.');
 		var me = this,
 			blacklist = this.playerBlacklist || [];
@@ -327,19 +320,16 @@ export default Ext.define('NextThought.app.video.Video', {
 		this.players.none = {isReady: false};
 	},
 
-
-	unrecoverablePlayerError: function(player) {
+    unrecoverablePlayerError: function(player) {
 		this.playerBlacklist.push(player);
 		this.playlistSeek(this.playlistIndex);
 	},
 
-
-	playerError: function() {
+    playerError: function() {
 		console.error('Player encountered an error', arguments);
 	},
 
-
-	playerReady: function(player) {
+    playerReady: function(player) {
 		var q = this.commandQueue[player],
 			p = this.players[player],
 			state = this.queryPlayer();
@@ -356,23 +346,20 @@ export default Ext.define('NextThought.app.video.Video', {
 		}
 	},
 
-
-	getPlayerState: function() {
+    getPlayerState: function() {
 		var status = this.queryPlayer();
 		if (!status) { return false; }
 
 		return status.state;
 	},
 
-
-	isPlaying: function() {
+    isPlaying: function() {
 		var state = this.getPlayerState();
 
 		return state === 1 || state === 3;
 	},
 
-
-	queryPlayer: function() {
+    queryPlayer: function() {
 		var target = this.activeVideoService,
 			t = this.players[target],
 			debug = this.self.debug;
@@ -397,8 +384,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		}
 	},
 
-
-	issueCommand: function(target, command, args, force/*Only to be used internally*/) {
+    issueCommand: function(target, command, args, force/*Only to be used internally*/) {
 		var t = this.players[target];
 		if (!t || (!t.isReady && !force)) {
 			if (!this.commandQueue[target]) {
@@ -418,8 +404,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		return call(t[command], t, args);
 	},
 
-
-	activatePlayer: function() {
+    activatePlayer: function() {
 		if (this.activeVideoService) {
 			try {
 				this.issueCommand(this.activeVideoService, 'activate', [this.currentVideoId], true);
@@ -432,8 +417,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		return false;
 	},
 
-
-	deactivatePlayer: function() {
+    deactivatePlayer: function() {
 		if (this.activeVideoService) {
 			try {
 				this.log('Clearing command queue for ', this.activeVideoService, ' as part of deactivate');
@@ -448,8 +432,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		return false;
 	},
 
-
-	playBackSpeedChanged: function(oldSpeed, newSpeed) {
+    playBackSpeedChanged: function(oldSpeed, newSpeed) {
 		var state = this.queryPlayer(),
 			time = state && state.time,
 			current = this.playlist[this.playlistIndex],
@@ -467,8 +450,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		});
 	},
 
-
-	onHeartBeat: function() {
+    onHeartBeat: function() {
 		var state = this.queryPlayer(),
 			time = state && state.time,
 			diff = this.lasttime ? time - this.lasttime : 0,
@@ -530,8 +512,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		this.lasttime = time;
 	},
 
-
-	stopPlayback: function() {
+    stopPlayback: function() {
 		var current, state = this.queryPlayer();
 
 		if (this.hasWatchEvent && !this.doNotCaptureAnalytics) {
@@ -551,8 +532,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		}
 	},
 
-
-	pausePlayback: function() {
+    pausePlayback: function() {
 		this.maybeActivatePlayer();
 		if (this.activeVideoService && this.isPlaying()) {
 			this.issueCommand(this.activeVideoService, 'pause');
@@ -561,8 +541,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		return false;
 	},
 
-
-	resumePlayback: function(force) {
+    resumePlayback: function(force) {
 		this.maybeActivatePlayer();
 
 		if (this.activeVideoService && (force || !this.isPlaying())) {
@@ -572,8 +551,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		return false;
 	},
 
-
-	activeClass: function() {
+    activeClass: function() {
 		var clazz;
 
 		if (!this.activeVideoService) {
@@ -590,8 +568,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		return clazz;
 	},
 
-
-	openExternally: function() {
+    openExternally: function() {
 		var cls = this.activeClass(),
 		//Potential BUG: assuming currentVideoId is an array that you can treat as Args. If its an array, you want to pass the entire array as ONE argument!
 			html = cls ? cls.contentForExternalViewer.apply(cls, this.currentVideoId) : '<body><h1>Unable to load video</h1></body>',
@@ -608,14 +585,12 @@ export default Ext.define('NextThought.app.video.Video', {
 		w.focus();
 	},
 
-
-	canOpenExternally: function() {
+    canOpenExternally: function() {
 		var cls = this.activeClass();
 		return cls && Ext.isFunction(cls.contentForExternalViewer);
 	},
 
-
-	setVideoAndPosition: function(videoId, startAt) {
+    setVideoAndPosition: function(videoId, startAt) {
 		var compareSources = NextThought.model.PlaylistItem.compareSources;
 
 		this.maybeActivatePlayer();
@@ -639,8 +614,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		}
 	},
 
-
-	jumpToVideoLocation: function(videoId, startAt) {
+    jumpToVideoLocation: function(videoId, startAt) {
 		var r = Ext.Array.findBy(this.playlist, function(item) {
 					return item.get('NTIID') === videoId;
 				}),
@@ -656,15 +630,14 @@ export default Ext.define('NextThought.app.video.Video', {
 		}
 	},
 
-
-	getControlHight: function() {
+    getControlHight: function() {
 		var l = this.players,
 			k = this.activeVideoService;
 
 		return (k && l && l[k] && l[k].CONTROL_HEIGHT) || 0;
 	},
 
-	maybeSwitchPlayers: function(service) {
+    maybeSwitchPlayers: function(service) {
 		var me = this;
 
 		service = service || 'none';
@@ -694,8 +667,7 @@ export default Ext.define('NextThought.app.video.Video', {
 		this.fireEvent('height-change');
 	},
 
-
-	playlistSeek: function(newIndex) {
+    playlistSeek: function(newIndex) {
 		var source, item, service;
 		if ((newIndex >= 0) && (newIndex < this.playlist.length)) {
 			if (this.playlistIndex !== newIndex || this.activeVideoService === 'none') {
@@ -722,18 +694,15 @@ export default Ext.define('NextThought.app.video.Video', {
 		return false;
 	},
 
-
-	playlistNext: function() {
+    playlistNext: function() {
 		this.playlistSeek(this.playlistIndex + 1);
 	},
 
-
-	playlistPrevious: function() {
+    playlistPrevious: function() {
 		this.playlistSeek(this.playlistIndex - 1);
 	},
 
-
-	cleanup: function() {
+    cleanup: function() {
 		var me = this;
 		Ext.each(me.initializedPlayers, function(service) {
 			me.issueCommand(service, 'pause');
@@ -741,20 +710,17 @@ export default Ext.define('NextThought.app.video.Video', {
 		});
 	},
 
-
-	debug: function() {
+    debug: function() {
 		if (this.self.debug) {
 			console.debug.apply(console, arguments);
 		}
 	},
 
-
-	log: function() {
+    log: function() {
 		if (this.self.debug) {
 			console.log.apply(console, arguments);
 		}
 	}
-
 }, function() {
 
 	window.swfobject = window.swfobject || {hasFlashPlayerVersion: function(v) {return false;}};

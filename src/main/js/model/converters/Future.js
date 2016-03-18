@@ -1,8 +1,10 @@
-export default Ext.define('NextThought.model.converters.Future', {
-	override: 'Ext.data.Types',
-	requires: ['Ext.data.SortTypes'],
+var Ext = require('extjs');
 
-	FUTURE: {
+
+module.exports = exports = Ext.define('NextThought.model.converters.Future', {
+    override: 'Ext.data.Types',
+
+    FUTURE: {
 		type: 'Future',
 		sortType: 'none',
 		convert: function(v) {

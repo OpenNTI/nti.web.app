@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.enrollment.components.Gift', {
+var Ext = require('extjs');
+var ComponentsPurchase = require('./Purchase');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.Gift', {
 	extend: 'NextThought.app.course.enrollment.components.Purchase',
 	alias: 'widget.enrollment-gift-purchase',
 

@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Joined', {
+var Ext = require('extjs');
+var UserRepository = require('../../../../../../../cache/UserRepository');
+var User = require('../../../../../../../model/User');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Joined', {
 	extend: 'Ext.Component',
 	alias: 'widget.joined-event',
 

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.picker.Color', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.picker.Color', {
 	override: 'Ext.picker.Color',
 
 	colorRe: /(?:^|\s)color-([^ ]*)(?:\s|$)/,

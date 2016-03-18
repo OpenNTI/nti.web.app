@@ -1,15 +1,15 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.timeline.TimelineEditor', {
-	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-	alias: 'widget.overview-editing-timeline-editor',
-	
-	cls: 'content-editor content-link',
-	
-	requires: [
-		'NextThought.app.course.overview.components.editing.content.timeline.items.Items',
-		'NextThought.app.course.overview.components.editing.content.timeline.Actions'
-	],
-	
-	showEditor: function() {
+var Ext = require('extjs');
+var ContentEditor = require('../Editor');
+var ItemsItems = require('./items/Items');
+var TimelineActions = require('./Actions');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.TimelineEditor', {
+    extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+    alias: 'widget.overview-editing-timeline-editor',
+    cls: 'content-editor content-link',
+
+    showEditor: function() {
 		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord);
 		this.TimelineEditorActions = NextThought.app.course.overview.components.editing.content.timeline.Actions.create();
 		
@@ -19,8 +19,8 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			this.addDeleteButton();
 		}
 	},
-	
-	addItems: function() {
+
+    addItems: function() {
 		this.itemsCmp = this.add({
 			xtype: 'overview-editing-timeline-items',
 			record: this.record,
@@ -29,8 +29,8 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			rootRecord: this.rootRecord
 		});
 	},
-	
-	onSave: function() {
+
+    onSave: function() {
 		var parentSelection = this.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
 			currentPosition = parentSelection && parentSelection.getCurrentPosition(),

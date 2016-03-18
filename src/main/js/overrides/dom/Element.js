@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.overrides.dom.Element', {
+var Ext = require('extjs');
+var RectUtils = require('../../util/Rects');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 	override: 'Ext.dom.Element',
   //	requires: ['NextThought.util.Rects'],
 

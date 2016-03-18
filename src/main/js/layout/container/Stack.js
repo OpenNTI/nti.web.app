@@ -1,21 +1,18 @@
+var Ext = require('extjs');
+
+
 /**
  * This layout is essentially a card layout based on the auto layout instead of the fit layout.
  * It also will enforce that the last item is always active.
  */
-export default Ext.define('NextThought.layout.container.Stack', {
-	extend: 'Ext.layout.container.Card',
-	alias: 'layout.stack',
-	type: 'stack',
+module.exports = exports = Ext.define('NextThought.layout.container.Stack', {
+    extend: 'Ext.layout.container.Card',
+    alias: 'layout.stack',
+    type: 'stack',
+    hideInactive: true,
+    deferredRender: true,
 
-	requires: [
-		'Ext.layout.container.Card'
-	],
-
-  hideInactive: true,
-  deferredRender: true,
-
-
-	calculate: function(ownerContext) {
+    calculate: function(ownerContext) {
 		var childItems = ownerContext.childItems;
 
 		Ext.each(childItems, function(i) {
@@ -28,8 +25,7 @@ export default Ext.define('NextThought.layout.container.Stack', {
 		this.done = true;
 	},
 
-
-	enforceStackActiveItem: function() {
+    enforceStackActiveItem: function() {
 		if (this.suspendStackActiveEvents === true) { return; }
 
 		var last = this.getLayoutItems().last();
@@ -38,17 +34,15 @@ export default Ext.define('NextThought.layout.container.Stack', {
 		}
 	},
 
-
-	initLayout: function() {
+    initLayout: function() {
 		this.callParent(arguments);
 		this.enforceStackActiveItem();
 	},
 
+    onAdd: function() { this.enforceStackActiveItem(); },
+    onRemove: function() { this.enforceStackActiveItem(); },
 
-	onAdd: function() { this.enforceStackActiveItem(); },
-	onRemove: function() { this.enforceStackActiveItem(); },
-
-	setOwner: function(owner) {
+    setOwner: function(owner) {
 		owner.isStackContainer = true;
 		this.callParent(arguments);
 
@@ -79,7 +73,33 @@ export default Ext.define('NextThought.layout.container.Stack', {
 		}
 	},
 
-
+    //}, function(){
+	//	return;
+	//	var me = this,
+	//		card = Ext.layout.container.Card.prototype;
+	//
+	//	var functions = [
+	//		'getRenderTree',
+	//		'renderChildren',
+	//		'isValidParent',
+	//		'getActiveItem',
+	//		'parseActiveItem',
+	//		'configureItem',
+	//		'onRemove',
+	//		'getAnimation',
+	//		'getNext',
+	//		'next',
+	//		'getPrev',
+	//		'prev',
+	//		'setActiveItem'
+	//	];
+	//
+	//	me.prototype.card = card;
+	//	Ext.each(functions,function(fn){
+	//		me.prototype[fn] = function(){
+	//			return card[fn].apply(this,arguments);
+	//		};
+	//	});
 	setActiveItem: function(item) {
 		if (!item) {
 			console.warn('You did something wrong. This should never be fasley');
@@ -91,33 +111,4 @@ export default Ext.define('NextThought.layout.container.Stack', {
 		return this.callParent(arguments);
     //		return this.card.setActiveItem.apply(this,arguments);
 	}
-
-
-  //}, function(){
-  //	return;
-  //	var me = this,
-  //		card = Ext.layout.container.Card.prototype;
-  //
-  //	var functions = [
-  //		'getRenderTree',
-  //		'renderChildren',
-  //		'isValidParent',
-  //		'getActiveItem',
-  //		'parseActiveItem',
-  //		'configureItem',
-  //		'onRemove',
-  //		'getAnimation',
-  //		'getNext',
-  //		'next',
-  //		'getPrev',
-  //		'prev',
-  //		'setActiveItem'
-  //	];
-  //
-  //	me.prototype.card = card;
-  //	Ext.each(functions,function(fn){
-  //		me.prototype[fn] = function(){
-  //			return card[fn].apply(this,arguments);
-  //		};
-  //	});
 });

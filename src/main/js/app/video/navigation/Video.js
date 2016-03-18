@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.video.navigation.Video', {
+var Ext = require('extjs');
+var VideoVideo = require('../Video');
+
+
+module.exports = exports = Ext.define('NextThought.app.video.navigation.Video', {
 	extend: 'NextThought.app.video.Video',
 	alias: 'widget.content-video-navigation',
 

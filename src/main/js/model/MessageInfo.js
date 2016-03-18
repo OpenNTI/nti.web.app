@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.model.MessageInfo', {
+var Ext = require('extjs');
+var ModelBase = require('./Base');
+var MixinsModelWithBodyContent = require('../mixins/ModelWithBodyContent');
+
+
+module.exports = exports = Ext.define('NextThought.model.MessageInfo', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.messageinfo',
 

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.model.anchorables.TextContext', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.model.anchorables.TextContext', {
 
 	config: {
 		contextText: '',

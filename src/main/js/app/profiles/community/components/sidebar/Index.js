@@ -1,18 +1,16 @@
-export default Ext.define('NextThought.app.profiles.community.components.sidebar.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.profile-community-sidebar',
+var Ext = require('extjs');
+var PartsAbout = require('./parts/About');
+var PartsTopics = require('./parts/Topics');
+var PartsMembership = require('./parts/Membership');
 
-	requires: [
-		'NextThought.app.profiles.community.components.sidebar.parts.About',
-		'NextThought.app.profiles.community.components.sidebar.parts.Topics',
-		'NextThought.app.profiles.community.components.sidebar.parts.Membership'
-	],
 
-	layout: 'none',
+module.exports = exports = Ext.define('NextThought.app.profiles.community.components.sidebar.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.profile-community-sidebar',
+    layout: 'none',
+    cls: 'community-sidebar',
 
-	cls: 'community-sidebar',
-
-	items: [
+    items: [
 		{
 			xtype: 'container',
 			layout: 'none',
@@ -32,8 +30,7 @@ export default Ext.define('NextThought.app.profiles.community.components.sidebar
 		}
 	],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.aboutCmp = this.down('profile-community-about');
@@ -46,8 +43,7 @@ export default Ext.define('NextThought.app.profiles.community.components.sidebar
 		this.membershipCmp.gotoMembership = this.gotoMembership.bind(this);
 	},
 
-
-	updateEntity: function(entity, activeTopic) {
+    updateEntity: function(entity, activeTopic) {
 		this.aboutCmp.updateEntity(entity);
 		this.topicsCmp.updateEntity(entity, activeTopic);
 		this.membershipCmp.updateEntity(entity);

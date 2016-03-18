@@ -1,18 +1,18 @@
-export default Ext.define('NextThought.common.components.cards.OverlayedPanel', {
-	extend: 'NextThought.app.contentviewer.overlay.Panel',
-	alias: 'widget.overlay-card',
-
-	requires: [
-		'NextThought.util.Dom',
-		'NextThought.common.components.cards.Card'
-	],
-
-	representsUserDataContainer: true,
-	ui: 'content-card',
-	cls: 'content-card-container',
+var Ext = require('extjs');
+var DomUtils = require('../../../util/Dom');
+var OverlayPanel = require('../../../app/contentviewer/overlay/Panel');
+var UtilDom = require('../../../util/Dom');
+var CardsCard = require('./Card');
 
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.common.components.cards.OverlayedPanel', {
+    extend: 'NextThought.app.contentviewer.overlay.Panel',
+    alias: 'widget.overlay-card',
+    representsUserDataContainer: true,
+    ui: 'content-card',
+    cls: 'content-card-container',
+
+    statics: {
 		getData: function(dom, reader) {
 			var el = Ext.get(dom),
 				data = DomUtils.parseDomObject(dom),
@@ -34,8 +34,7 @@ export default Ext.define('NextThought.common.components.cards.OverlayedPanel', 
 		}
 	},
 
-
-	constructor: function(config) {
+    constructor: function(config) {
 		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
@@ -52,8 +51,7 @@ export default Ext.define('NextThought.common.components.cards.OverlayedPanel', 
 		this.callParent([config]);
 	},
 
-
-	findLine: function() {
+    findLine: function() {
 		var doc = this.contentElement.ownerDocument,
 			range = doc.createRange();
 

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.account.identity.components.PresenceEditor', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.account.identity.components.PresenceEditor', {
 	extend: 'Ext.Editor',
 	alias: 'widget.presence-editor',
 

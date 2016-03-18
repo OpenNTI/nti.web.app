@@ -1,14 +1,14 @@
-export default Ext.define('NextThought.app.chat.components.log.Content', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.chat-content-log-entry',
+var Ext = require('extjs');
+var LocationMeta = require('../../../../cache/LocationMeta');
+var UserRepository = require('../../../../cache/UserRepository');
+var CacheLocationMeta = require('../../../../cache/LocationMeta');
 
 
-	requires: [
-	'NextThought.cache.LocationMeta'
-	],
+module.exports = exports = Ext.define('NextThought.app.chat.components.log.Content', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.chat-content-log-entry',
 
-
-	renderTpl: new Ext.XTemplate(
+    renderTpl: new Ext.XTemplate(
 		'<div class="x-chat-content-log-entry">',
 			'<div class="timestamp">{time}</div>',
 			'<img src="{icon}" width=16 height=16"/>',
@@ -20,8 +20,7 @@ export default Ext.define('NextThought.app.chat.components.log.Content', {
 		'</div>'
 		),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		box: 'div.x-chat-content-log-entry',
 		name: '.x-chat-content-log-entry span.name',
 		text: 'span.body-text',
@@ -31,8 +30,7 @@ export default Ext.define('NextThought.app.chat.components.log.Content', {
 
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		var me = this;
 		me.callParent(arguments);
 
@@ -46,7 +44,7 @@ export default Ext.define('NextThought.app.chat.components.log.Content', {
 		});
 	},
 
-	update: function() {
+    update: function() {
 		var me = this,
 			href,
 			icon, root, username;
@@ -85,20 +83,18 @@ export default Ext.define('NextThought.app.chat.components.log.Content', {
 		me.addCls('nooid');
 	},
 
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.attachClick();
 	},
 
-
-	attachClick: function() {
+    attachClick: function() {
 		if (this.clickable) {
 			this.el.on('click', function() {this.fireEvent('click', this);}, this);
 		}
 	},
 
-
-	fillInUser: function(u) {
+    fillInUser: function(u) {
 		var name = u.get('alias') || u.get('Username'),
 			i = u.get('avatarURL');
 

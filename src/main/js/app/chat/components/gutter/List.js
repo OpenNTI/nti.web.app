@@ -1,15 +1,15 @@
-export default Ext.define('NextThought.app.chat.components.gutter.List', {
-	extend: 'Ext.view.View',
-	alias: 'widget.chat-gutter-list-view',
+var Ext = require('extjs');
+var NTIFormat = require('../../../../util/Format');
+var ChatStateStore = require('../../StateStore');
+var ChatActions = require('../../Actions');
 
-	requires: [
-		'NextThought.app.chat.StateStore',
-		'NextThought.app.chat.Actions'
-	],
 
-	cls: 'chat-gutter-list-window',
+module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.List', {
+    extend: 'Ext.view.View',
+    alias: 'widget.chat-gutter-list-view',
+    cls: 'chat-gutter-list-window',
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'header', cn: [
 			{cls: 'title', html: 'Messenger'},
 			{cls: 'close'}
@@ -22,18 +22,17 @@ export default Ext.define('NextThought.app.chat.components.gutter.List', {
 		]}
 	]),
 
-	renderSelectors: {
+    renderSelectors: {
 		frameBodyEl: '.list',
 		header: '.header',
 		closeBtn: '.header .close',
 		contactsEl: '.footer .show-contacts'
 	},
 
-	getTargetEl: function() { return this.frameBodyEl; },
+    getTargetEl: function() { return this.frameBodyEl; },
+    itemSelector: '.presence-gutter-entry',
 
-	itemSelector: '.presence-gutter-entry',
-
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
+    tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': '.', cn: [
 			{cls: 'presence-gutter-entry', 'data-qtip': '{displayName}', cn: [
 				{cls: 'name', html: '{displayName}'},
@@ -59,14 +58,13 @@ export default Ext.define('NextThought.app.chat.components.gutter.List', {
 		}
 	}),
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.on('itemclick', this.onItemClicked.bind(this));
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.closeBtn, 'click', this.hideOtherContacts.bind(this));
@@ -77,8 +75,7 @@ export default Ext.define('NextThought.app.chat.components.gutter.List', {
 		});
 	},
 
-
-	addToggleListeners: function() {
+    addToggleListeners: function() {
 		var me = this;
 		// When this list is shown, hide the gutter and vice-versa.
 		this.on({
@@ -104,23 +101,19 @@ export default Ext.define('NextThought.app.chat.components.gutter.List', {
 			});
 	},
 
-
-	onItemClicked: function(view, user, item, index, e) {
+    onItemClicked: function(view, user, item, index, e) {
 		this.openChatWindow(user, Ext.get(item));
 	},
 
-
-	goToContacts: function(e) {
+    goToContacts: function(e) {
 		NextThought.app.navigation.Actions.pushRootRoute('Contacts', '/contacts/');
 	},
 
-
-	hideOtherContacts: function() {
+    hideOtherContacts: function() {
 		this.ChatStore.fireEvent('hide-all-gutter-contacts', this);
 	},
 
-
-	bindChatWindow: function(win, user) {
+    bindChatWindow: function(win, user) {
 		var roomInfo = win && win.roomInfo,
 			isGroupChat = roomInfo.isGroupChat(),
 			me = this;

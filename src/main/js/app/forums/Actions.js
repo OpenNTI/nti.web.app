@@ -1,17 +1,19 @@
-export default Ext.define('NextThought.app.forums.Actions', {
-	extend: 'NextThought.common.Actions',
+var Ext = require('extjs');
+var ParseUtils = require('../../util/Parsing');
+var CommonActions = require('../../common/Actions');
+var UserdataActions = require('../userdata/Actions');
+var UserdataStateStore = require('../userdata/StateStore');
 
-	requires: [
-		'NextThought.app.userdata.Actions',
-		'NextThought.app.userdata.StateStore'
-	],
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    constructor: function() {
 		this.callParent(arguments);
 		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
 	},
 
-	saveTopicComment: function(topic, comment, values) {
+    saveTopicComment: function(topic, comment, values) {
 		var isEdit = Boolean(comment) && !comment.phantom,
 			postLink = topic.getLink('add');
 
@@ -46,8 +48,7 @@ export default Ext.define('NextThought.app.forums.Actions', {
 		});
 	},
 
-
-	saveTopic: function(editorCmp, record, forum, title, tags, body, autoPublish) {
+    saveTopic: function(editorCmp, record, forum, title, tags, body, autoPublish) {
 		var isEdit = Boolean(record),
 			post = isEdit ? record.get('headline') : NextThought.model.forums.Post.create(),
 			me = this;
@@ -106,7 +107,7 @@ export default Ext.define('NextThought.app.forums.Actions', {
 		});
 	},
 
-	deleteObject: function(record, cmp, callback) {
+    deleteObject: function(record, cmp, callback) {
 		var idToDestroy, me = this;
 		if (!record.get('href')) {
 			record.set('href', record.getLink('contents').replace(/\/contents$/, '') || 'no-luck');
@@ -148,7 +149,7 @@ export default Ext.define('NextThought.app.forums.Actions', {
 		});
 	},
 
-	applyTopicToStores: function(topic) {
+    applyTopicToStores: function(topic) {
 		var actions = NextThought.app.userdata.Actions.create(),
 			headline = topic.get('headline'),
 			headlineJSON = headline.asJSON(),

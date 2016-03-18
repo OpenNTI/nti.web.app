@@ -1,28 +1,31 @@
-export default Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
-	extend: 'NextThought.common.components.BoundCollection',
-	alias: 'widget.course-outline-group',
+var Ext = require('extjs');
+var ComponentsBoundCollection = require('../../../../../common/components/BoundCollection');
+var MixinsEllipsisText = require('../../../../../mixins/EllipsisText');
+var DndOrderingItem = require('../../../../../mixins/dnd/OrderingItem');
+var DndOrderingContainer = require('../../../../../mixins/dnd/OrderingContainer');
+var AppMoveInfo = require('../../../../../model/app/MoveInfo');
+var NavigationCourseOutlineNode = require('../../../../../model/courses/navigation/CourseOutlineNode');
+var NavigationCourseOutlineContentNode = require('../../../../../model/courses/navigation/CourseOutlineContentNode');
+var NavigationCourseOutlineCalendarNode = require('../../../../../model/courses/navigation/CourseOutlineCalendarNode');
+var ContentnodeAddNode = require('../editing/outline/contentnode/AddNode');
+var OutlinePrompt = require('../editing/outline/Prompt');
 
-	requires: [
-		'NextThought.model.app.MoveInfo',
-		'NextThought.model.courses.navigation.CourseOutlineNode',
-		'NextThought.model.courses.navigation.CourseOutlineContentNode',
-		'NextThought.model.courses.navigation.CourseOutlineCalendarNode',
-		'NextThought.app.course.overview.components.editing.outline.contentnode.AddNode',
-		'NextThought.app.course.overview.components.editing.outline.Prompt'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.outline.OutlineNode', {
+    extend: 'NextThought.common.components.BoundCollection',
+    alias: 'widget.course-outline-group',
+
+    mixins: {
 		'EllipsisText': 'NextThought.mixins.EllipsisText',
 		'OrderingItem': 'NextThought.mixins.dnd.OrderingItem',
 		'OrderingContainer': 'NextThought.mixins.dnd.OrderingContainer'
 	},
 
-	cls: 'outline-group',
-	bodyCls: 'items',
+    cls: 'outline-group',
+    bodyCls: 'items',
+    items: [],
 
-	items: [],
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.setDataTransfer(new NextThought.model.app.MoveInfo({
@@ -41,15 +44,13 @@ export default Ext.define('NextThought.app.course.overview.components.outline.Ou
 		this.setCollection(this.outlineNode);
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.truncateLabels();
 	},
 
-
-	truncateLabels: function() {
+    truncateLabels: function() {
 		var me = this,
 			label = me.currentHeader && me.currentHeader.el && me.currentHeader.el.dom.querySelector('.label');
 
@@ -63,33 +64,28 @@ export default Ext.define('NextThought.app.course.overview.components.outline.Ou
 		}
 	},
 
-
-	getOrderingItems: function() {
+    getOrderingItems: function() {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
 
 		return items || [];
 	},
 
-
-	getDropzoneTarget: function() {
+    getDropzoneTarget: function() {
 		var body = this.getBodyContainer();
 
 		return body && body.el && body.el.dom;
 	},
 
-
-	getDragHandle: function() {
+    getDragHandle: function() {
 		return this.el && this.el.dom && this.el.dom.querySelector('.outline-row');
 	},
 
-
-	beforeSetCollection: function() {
+    beforeSetCollection: function() {
 		this.disableOrderingContainer();
 	},
 
-
-	afterSetCollection: function() {
+    afterSetCollection: function() {
 		if (this.isEditing) {
 			this.enableOrderingContainer();
 		}
@@ -98,8 +94,7 @@ export default Ext.define('NextThought.app.course.overview.components.outline.Ou
 		}
 	},
 
-
-	setHeaderForCollection: function(){
+    setHeaderForCollection: function(){
 		this.callParent(arguments);
 
 		if (this.selectedRecord) {
@@ -107,8 +102,7 @@ export default Ext.define('NextThought.app.course.overview.components.outline.Ou
 		}
 	},
 
-
-	buildHeader: function(collection) {
+    buildHeader: function(collection) {
 		var startDate = collection.get('startDate'),
 			classes = ['outline-row', collection.get('type')],
 			items = [];
@@ -146,8 +140,7 @@ export default Ext.define('NextThought.app.course.overview.components.outline.Ou
 		};
 	},
 
-
-	buildFooter: function(collection) {
+    buildFooter: function(collection) {
 		var me = this,
 			OutlinePrompt = NextThought.app.course.overview.components.editing.outline.Prompt,
 			allowedTypes = this.outlineNode.getAllowedTypes();
@@ -183,8 +176,7 @@ export default Ext.define('NextThought.app.course.overview.components.outline.Ou
 		}
 	},
 
-
-	onClick: function(e) {
+    onClick: function(e) {
 		var isDisabled = Boolean(e.getTarget('.disabled'));
 
 		if (e.getTarget('.outline-row') && (!isDisabled || this.isEditing)) {
@@ -192,8 +184,7 @@ export default Ext.define('NextThought.app.course.overview.components.outline.Ou
 		}
 	},
 
-
-	selectRecord: function(record, scrollTo) {
+    selectRecord: function(record, scrollTo) {
 		var body = this.getBodyContainer(),
 			header = this.currentHeader,
 			bodyListEl = this.el && this.el.up('.outline-list');
@@ -218,8 +209,7 @@ export default Ext.define('NextThought.app.course.overview.components.outline.Ou
 		});
 	},
 
-
-	stopEditing: function() {
+    stopEditing: function() {
 		var body = this.getBodyContainer();
 		if (this.addNodeCmp) {
 			this.remove(this.addNodeCmp, true);
@@ -228,8 +218,7 @@ export default Ext.define('NextThought.app.course.overview.components.outline.Ou
 		delete this.isEditing;
 	},
 
-
-	getCmpForRecord: function(record) {
+    getCmpForRecord: function(record) {
 		if (record instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
 			return NextThought.app.course.overview.components.outline.OutlineNode.create({
 				outlineNode: record,
@@ -242,8 +231,7 @@ export default Ext.define('NextThought.app.course.overview.components.outline.Ou
 		console.warn('Unknown type: ', record);
 	},
 
-
-	onDrop: function(record, newIndex, moveInfo) {
+    onDrop: function(record, newIndex, moveInfo) {
 		return this.outlineNode.moveToFromContainer(record, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.outline);
 	}
 });

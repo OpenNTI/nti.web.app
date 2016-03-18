@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.tab.Panel', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.tab.Panel', {
 	override: 'Ext.tab.Panel',
 
 	stateEvents: ['tabchange'],

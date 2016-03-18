@@ -1,19 +1,18 @@
-export default Ext.define('NextThought.app.course.info.components.Outline', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-info-outline',
+var Ext = require('extjs');
+var ComponentsMenu = require('./Menu');
+var ComponentsOpenCourseInfo = require('./OpenCourseInfo');
 
-	requires: [
-		'NextThought.app.course.info.components.Menu',
-		'NextThought.app.course.info.components.OpenCourseInfo'
-	],
 
-	layout: 'none',
+module.exports = exports = Ext.define('NextThought.app.course.info.components.Outline', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.course-info-outline',
+    layout: 'none',
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 	},
 
-	setContent: function(info, status, showRoster, courseMode) {
+    setContent: function(info, status, showRoster, courseMode) {
 		var startDate = Ext.util.Format.date(info.get('StartDate'), 'F j, Y');
 
 		this.removeAll(true);
@@ -59,7 +58,7 @@ export default Ext.define('NextThought.app.course.info.components.Outline', {
 		}
 	},
 
-	setActiveItem: function(route) {
+    setActiveItem: function(route) {
 		this.activePath = route.path;
 
 		if (this.menu) {
@@ -67,12 +66,11 @@ export default Ext.define('NextThought.app.course.info.components.Outline', {
 		}
 	},
 
-	getMenu: function() {
+    getMenu: function() {
 		return this.menu || this.down('course-info-outline-menu');
 	},
 
-	changeRoute: function(title, route) {
+    changeRoute: function(title, route) {
 		this.fireEvent('select-route', title, route);
 	}
-
 });

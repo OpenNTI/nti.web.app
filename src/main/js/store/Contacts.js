@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.store.Contacts', {
+var Ext = require('extjs');
+var UserRepository = require('../cache/UserRepository');
+
+
+module.exports = exports = Ext.define('NextThought.store.Contacts', {
 	extend: 'Ext.data.Store',
 	model: 'NextThought.model.User',
 

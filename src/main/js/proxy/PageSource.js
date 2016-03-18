@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.proxy.PageSource', {
+var Ext = require('extjs');
+var UtilPageSourceStore = require('../util/PageSourceStore');
+
+
+module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
 	extend: 'NextThought.util.PageSourceStore',
 
 	statics: {

@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.preference.badges.Course', {
+var Ext = require('extjs');
+var BadgesBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.preference.badges.Course', {
 	extend: 'NextThought.model.preference.badges.Base',
 
 	fields: [

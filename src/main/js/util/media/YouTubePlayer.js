@@ -1,8 +1,12 @@
+var Ext = require('extjs');
+var Globals = require('../Globals');
+var UtilGlobals = require('../Globals');
+
+
 /*jslint */
 /*globals Globals, NextThought, YT */
-export default Ext.define('NextThought.util.media.YouTubePlayer', {
-
-	statics: {
+module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
+    statics: {
 		kind: 'video',
 		type: 'youtube',
 		valid: function() {
@@ -10,20 +14,13 @@ export default Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-	requires: [
-		'NextThought.util.Globals'
-	],
-
-
-	mixins: {
+    mixins: {
 		observable: 'Ext.util.Observable'
 	},
 
+    playerTpl: Ext.DomHelper.createTemplate({ id: '{id}' }),
 
-	playerTpl: Ext.DomHelper.createTemplate({ id: '{id}' }),
-
-
-	constructor: function(config) {
+    constructor: function(config) {
 		this.mixins.observable.constructor.call(this);
 		this.parentEl = Ext.get(config.el);
 		this.id = config.parentId + '-youtube-video';
@@ -35,8 +32,7 @@ export default Ext.define('NextThought.util.media.YouTubePlayer', {
 		this.playerSetup();
 	},
 
-
-	playerSetup: function() {
+    playerSetup: function() {
 		this.isReady = false;
 
     //		Inject Youtube HTML
@@ -66,8 +62,7 @@ export default Ext.define('NextThought.util.media.YouTubePlayer', {
 		});
 	},
 
-
-	playerReady: function() {
+    playerReady: function() {
 		var me = this,
 			state = NaN;
 
@@ -94,8 +89,7 @@ export default Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-
-	playerError: function(error) {
+    playerError: function(error) {
 		var oldSource;
 		console.warn('YouTube player died with error: ' + error.data);
 
@@ -125,8 +119,7 @@ export default Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-
-	playerStatusChange: function(event) {
+    playerStatusChange: function(event) {
 		var type = '';
 		switch (event.data) {
 			case -1:
@@ -165,8 +158,7 @@ export default Ext.define('NextThought.util.media.YouTubePlayer', {
 		this.fireEvent('player-event-' + type, this.id, this);
 	},
 
-
-	playBackRateChange: function(event) {
+    playBackRateChange: function(event) {
 		var data = event.data,
 			rate = parseFloat(data, 10);
 
@@ -175,18 +167,15 @@ export default Ext.define('NextThought.util.media.YouTubePlayer', {
 		this.playbackspeed = rate;
 	},
 
-
-	getCurrentTime: function() {
+    getCurrentTime: function() {
 		return this.player && this.player.getCurrentTime();
 	},
 
-
-	getPlayerState: function() {
+    getPlayerState: function() {
 		return this.player && this.player.getPlayerState();
 	},
 
-
-	load: function(source, offset) {
+    load: function(source, offset) {
 		source = Ext.isArray(source) ? source[0] : source;
 		var current = this.currentSource;
 
@@ -207,8 +196,7 @@ export default Ext.define('NextThought.util.media.YouTubePlayer', {
 		//this.pause(); //-- pause has zero effect since "ready is false"
 	},
 
-
-	onPlay: function() {
+    onPlay: function() {
 		var me = this,
 			current = me.getCurrentTime;
 
@@ -233,13 +221,11 @@ export default Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-
-	onPause: function() {
+    onPause: function() {
 		clearInterval(this.seekInterval);
 	},
 
-
-	play: function() {
+    play: function() {
 		if (this.player && this.player.playVideo) {
 			if (Ext.is.iOS && !this.userActivatedPlayer) {//we have to wait for the player to have been touched, but after that, we can interact with it just as normal.
 				return;
@@ -248,13 +234,11 @@ export default Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-
-	deactivate: function() {
+    deactivate: function() {
 		return this.pause.apply(this, arguments);
 	},
 
-
-	activate: function(sourceId) {
+    activate: function(sourceId) {
 		console.log(this.id, 'Activate triggered');
 		// save the source id to be loaded whenever we are ready.
 		if (!this.isReady) {
@@ -262,8 +246,7 @@ export default Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-
-	pause: function() {
+    pause: function() {
 		if (!this.isReady || !this.player) { return; }
 		if (this.player.pauseVideo) {
 				try {
@@ -274,8 +257,7 @@ export default Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-
-	seek: function(offset, seekAhead) {
+    seek: function(offset, seekAhead) {
 		if (!this.isReady || !this.player) { return;}
 
 		var duration = this.player.getDuration();
@@ -300,8 +282,7 @@ export default Ext.define('NextThought.util.media.YouTubePlayer', {
 		//this.pause();
 	},
 
-
-	stop: function() {
+    stop: function() {
 		console.log('Youtube stop called:', arguments);
 		if (this.player && this.player.stopVideo) {
 			try {
@@ -314,8 +295,7 @@ export default Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-
-	cleanup: function() {
+    cleanup: function() {
 		var el = Ext.get(this.id);
 
 		this.stop();
@@ -329,13 +309,11 @@ export default Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-
-	getDuration: function() {
+    getDuration: function() {
 		var duration = this.player && this.player.getDuration();
 
 		return (duration || 0) * 1000;
 	}
-
 }, function() {
 	var me = this;
 

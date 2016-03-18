@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.util.media.VimeoPlayer', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 
 	statics: {
 		PLAYER_ORIGIN: 'https://player.vimeo.com',

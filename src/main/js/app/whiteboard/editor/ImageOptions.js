@@ -1,19 +1,21 @@
-export default Ext.define('NextThought.app.whiteboard.editor.ImageOptions', {
-	alias: 'widget.wb-tool-image-options',
-	extend: 'Ext.toolbar.Toolbar',
-	requires: [
-		'NextThought.app.whiteboard.Utils',
-		'NextThought.common.menus.file.BrowserItem'
-	],
-	ui: 'options',
-	cls: 'image-options',
+var Ext = require('extjs');
+var WhiteboardUtils = require('../Utils');
+var FileBrowserItem = require('../../../common/menus/file/BrowserItem');
 
-	defaults: {
+
+module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOptions', {
+    alias: 'widget.wb-tool-image-options',
+    extend: 'Ext.toolbar.Toolbar',
+    ui: 'options',
+    cls: 'image-options',
+
+    defaults: {
 		ui: 'option',
 		scale: 'large',
 		xtype: 'button'
 	},
-	items: [
+
+    items: [
 		{
 			text: 'Choose File',
 			menu: {
@@ -39,8 +41,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.ImageOptions', {
 		{ text: 'Take Picture', menu: [], disabled: true*/ }
 	],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		var file = this.down('file-browser-menu-item');
 
@@ -49,8 +50,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.ImageOptions', {
 		file[(window.FileReader === undefined) ? 'disable' : 'enable']();
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		//only enable canvas dropping if allowed...
@@ -59,8 +59,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.ImageOptions', {
 		}
 	},
 
-
-	enableImageDropping: function() {
+    enableImageDropping: function() {
 		var me = this,
 			el = me.up('whiteboard-editor').canvas.el,
 			t;
@@ -91,8 +90,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.ImageOptions', {
 		});
 	},
 
-
-	dropImage: function(e) {
+    dropImage: function(e) {
 		e.stopPropagation();
 		e.preventDefault();
 
@@ -108,16 +106,14 @@ export default Ext.define('NextThought.app.whiteboard.editor.ImageOptions', {
 
 	},
 
-
-	//TODO - should fire when menuitem is selected, override in initComponent of this toolbar
+    //TODO - should fire when menuitem is selected, override in initComponent of this toolbar
 	selectImage: function(inputField) {
 		var hasFileApi = Boolean(inputField.fileInputEl.dom.files),
 			files = hasFileApi ? inputField.extractFileInput().files : [];
 		this.readFile(files);
 	},
 
-
-	readFile: function(files) {
+    readFile: function(files) {
 		var me = this,
 			file = files[0],
 			reader;
@@ -144,9 +140,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.ImageOptions', {
 		}
 	},
 
-
-
-	handlePaste: function(event) {
+    handlePaste: function(event) {
 		var clipboardData = event.clipboardData || {},
 			me = this;
 
@@ -166,8 +160,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.ImageOptions', {
 
 	},
 
-
-	insertImage: function(dataUrl) {
+    insertImage: function(dataUrl) {
 		var image = new Image(),
 			e = this.up('whiteboard-editor'),
 			c = e.canvas,
@@ -248,16 +241,15 @@ export default Ext.define('NextThought.app.whiteboard.editor.ImageOptions', {
 		WBUtils.maybeProxyImage(dataUrl, image);
 	},
 
-	getOptions: function() {
+    getOptions: function() {
 		return {};
 	},
 
-	setOptions: function() {
+    setOptions: function() {
 		console.warn('no need to set options on image toolbar');
 	},
 
-	getToolType: function() {
+    getToolType: function() {
 		return 'image';
 	}
-
 });

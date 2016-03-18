@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.library.communities.components.Collection', {
+var Ext = require('extjs');
+var NTIFormat = require('../../../../util/Format');
+var MixinsEllipsisText = require('../../../../mixins/EllipsisText');
+
+
+module.exports = exports = Ext.define('NextThought.app.library.communities.components.Collection', {
 	extend: 'Ext.view.View',
 	alias: 'widget.library-communities-collection',
 

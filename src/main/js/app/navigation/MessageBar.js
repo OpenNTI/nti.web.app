@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.navigation.MessageBar', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 	extend: 'Ext.Component',
 	alias: 'widget.navigation-message-bar',
 

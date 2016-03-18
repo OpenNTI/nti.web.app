@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.mixins.routing.Object', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 
 	initRouter: function() {
 		this.__mimeMap = {};

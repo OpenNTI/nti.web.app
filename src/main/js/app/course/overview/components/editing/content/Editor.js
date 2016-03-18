@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.Editor', {
+var Ext = require('extjs');
+var EditingEditor = require('../Editor');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.Editor', {
 	extend: 'NextThought.app.course.overview.components.editing.Editor',
 
 

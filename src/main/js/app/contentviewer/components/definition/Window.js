@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.contentviewer.components.definition.Window', {
+var Ext = require('extjs');
+var WindowWindow = require('../../../../common/window/Window');
+
+
+module.exports = exports = Ext.define('NextThought.app.contentviewer.components.definition.Window', {
 	extend: 'NextThought.common.window.Window',
 	alias: 'widget.dictionary-window',
 

@@ -1,3 +1,5 @@
+var Ext = require('extjs');
+
 /**
  * Enables auto-magical delegation of methods.
  *
@@ -7,7 +9,7 @@
  * To attach delegate(s) to a component set the `delegate` config property to be either 'inherit' or a selector of the
  * component that will be delegated to. (It can also be an array if different components care about different aspects)
  */
-export default Ext.define('NextThought.mixins.Delegation', function() {
+module.exports = exports = Ext.define('NextThought.mixins.Delegation', function() {
 	var debug = $AppConfig.debugDelegation;
 
 	/** @private */
@@ -82,7 +84,7 @@ export default Ext.define('NextThought.mixins.Delegation', function() {
 			return function() {
 				if (debug) { console.debug('delegating...' + k); }
 				var v = askDelegate.apply(o, [o, k, fn.applyAll, arguments]);
-				if (v === DelegateFactory.PREVENT_DEFAULT) {return undefined;}
+				if (v === Factory.PREVENT_DEFAULT) {return undefined;}
 				return v || fn.apply(o, arguments);
 			};
 		}
@@ -124,9 +126,8 @@ export default Ext.define('NextThought.mixins.Delegation', function() {
 /**
  * Utility class to aid in defining delegated functions.
  */
-export default Ext.define('NextThought.mixins.Delegation.Factory', {
+var Factory = Ext.define('NextThought.mixins.Delegation.Factory', {
 	singleton: true,
-	alternateClassName: 'DelegateFactory',
 
 	/** @property This is a special value to return form a delegated function to prevent the default */
 	PREVENT_DEFAULT: {},

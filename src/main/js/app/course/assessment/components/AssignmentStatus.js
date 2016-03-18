@@ -1,8 +1,13 @@
-export default Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
-	extend: 'Ext.Component',
-	alias: 'widget.course-assignment-status',
+var Ext = require('extjs');
+var AssessmentAssignmentStatus = require('../AssignmentStatus');
+var EditingDueDate = require('./editing/DueDate');
 
-	statics: {
+
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
+    extend: 'Ext.Component',
+    alias: 'widget.course-assignment-status',
+
+    statics: {
 		setActiveMenu: function(menu) {
 			this.activeMenu = menu;
 		},
@@ -20,26 +25,19 @@ export default Ext.define('NextThought.app.course.assessment.components.Assignme
 		}
 	},
 
-	requires: [
-		'NextThought.app.course.assessment.AssignmentStatus',
-		'NextThought.app.course.assessment.components.editing.DueDate'
-	],
+    cls: 'assignment-status-container',
 
-	cls: 'assignment-status-container',
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'status-container'},
 		{cls: 'menu-container'}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		statusEl: '.status-container',
 		menuContainer: '.menu-container'
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.updateStatus();
@@ -53,20 +51,17 @@ export default Ext.define('NextThought.app.course.assessment.components.Assignme
 		}
 	},
 
-
-	setAssignment: function(assignment) {
+    setAssignment: function(assignment) {
 		this.assignment = assignment;
 		this.updateStatus();
 	},
 
-
-	setHistory: function(history) {
+    setHistory: function(history) {
 		this.history = history;
 		this.updateStatus();
 	},
 
-
-	setStatus: function(status) {
+    setStatus: function(status) {
 		this.status = Ext.DomHelper.markup({
 			cls: 'assignment-status', cn: [
 				{cls: 'status-item due', html: status}
@@ -78,20 +73,15 @@ export default Ext.define('NextThought.app.course.assessment.components.Assignme
 		}
 	},
 
-
-
-
-	disableEditing: function() {
+    disableEditing: function() {
 		this.addCls('disabled');
 	},
 
-
-	enableEditing: function() {
+    enableEditing: function() {
 		this.removeCls('disabled');
 	},
 
-
-	updateStatus: function() {
+    updateStatus: function() {
 		var me = this,
 			assignment = me.assignment,
 			history = me.history,
@@ -113,8 +103,7 @@ export default Ext.define('NextThought.app.course.assessment.components.Assignme
 			});
 	},
 
-
-	addDueDateEditor: function() {
+    addDueDateEditor: function() {
 		this.dueDateEditor = new NextThought.app.course.assessment.components.editing.DueDate({
 			assignment: this.assignment,
 			onSave: this.closeDueDateEditor.bind(this),
@@ -125,8 +114,7 @@ export default Ext.define('NextThought.app.course.assessment.components.Assignme
 		this.on('destroy', this.dueDateEditor.destroy.bind(this.dueDateEditor));
 	},
 
-
-	dueDateEditorVisible: function() {
+    dueDateEditorVisible: function() {
 		if (!this.el) {
 			return false;
 		}
@@ -134,8 +122,7 @@ export default Ext.define('NextThought.app.course.assessment.components.Assignme
 		return this.el.hasCls('menu-open');
 	},
 
-
-	showDueDateEditor: function() {
+    showDueDateEditor: function() {
 		var me = this;
 
 		if (me.self.getActiveMenu() !== me) {
@@ -157,8 +144,7 @@ export default Ext.define('NextThought.app.course.assessment.components.Assignme
 		}
 	},
 
-
-	closeDueDateEditor: function() {
+    closeDueDateEditor: function() {
 		if (this.el) {
 			this.el.removeCls('menu-open');
 		}
@@ -168,8 +154,7 @@ export default Ext.define('NextThought.app.course.assessment.components.Assignme
 		}
 	},
 
-
-	toggleDueDateEditor: function(e) {
+    toggleDueDateEditor: function(e) {
 		if (e.getTarget('.disabled')) { return; }
 
 		e.stopEvent();

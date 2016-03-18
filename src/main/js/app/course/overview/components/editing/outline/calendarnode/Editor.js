@@ -1,13 +1,13 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.outline.calendarnode.Editor', {
-	extend: 'NextThought.app.course.overview.components.editing.outline.outlinenode.Editor',
-	alias: 'widget.overview-editing-calendarnode-editor',
-
-	requires: [
-		'NextThought.model.courses.navigation.CourseOutlineCalendarNode'
-	],
+var Ext = require('extjs');
+var OutlinenodeEditor = require('../outlinenode/Editor');
+var NavigationCourseOutlineCalendarNode = require('../../../../../../../model/courses/navigation/CourseOutlineCalendarNode');
 
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.calendarnode.Editor', {
+    extend: 'NextThought.app.course.overview.components.editing.outline.outlinenode.Editor',
+    alias: 'widget.overview-editing-calendarnode-editor',
+
+    statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.courses.navigation.CourseOutlineCalendarNode.mimeType

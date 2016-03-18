@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.profiles.user.components.about.parts.EntrySet', {
+var Ext = require('extjs');
+var PartsFieldSet = require('./FieldSet');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.about.parts.EntrySet', {
 	extend: 'NextThought.app.profiles.user.components.about.parts.FieldSet',
 
 	title: '',

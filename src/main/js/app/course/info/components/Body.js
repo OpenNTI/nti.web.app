@@ -1,25 +1,25 @@
-export default Ext.define('NextThought.app.course.info.components.Body', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-info-body',
+var Ext = require('extjs');
+var ComponentsPanel = require('./Panel');
+var ComponentsRoster = require('./Roster');
+var ComponentsReports = require('./Reports');
 
-	requires: [
-		'NextThought.app.course.info.components.Panel',
-		'NextThought.app.course.info.components.Roster',
-		'NextThought.app.course.info.components.Reports'
-	],
 
-	layout: {
+module.exports = exports = Ext.define('NextThought.app.course.info.components.Body', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.course-info-body',
+
+    layout: {
 		type: 'card',
 		deferredRender: true
 	},
-	items: [
+
+    items: [
 		{ xtype: 'course-info-panel', itemId: 'info' },
 		{ xtype: 'course-info-roster', itemId: 'roster' },
 		{ xtype: 'course-info-reports', itemId: 'report'}
 	],
 
-
-	setContent: function(info, status, showRoster, bundle) {
+    setContent: function(info, status, showRoster, bundle) {
 		var me = this;
 		//always reset
 		me.setActiveItem('info');
@@ -28,7 +28,7 @@ export default Ext.define('NextThought.app.course.info.components.Body', {
 		me.getComponent('report').setContent(showRoster && bundle);
 	},
 
-	setActiveItem: function(itemId) {
+    setActiveItem: function(itemId) {
 		var targetItem = this.down('[itemId=' + itemId + ']'),
 		 	activeItem = this.getLayout().getActiveItem();
 
@@ -40,16 +40,16 @@ export default Ext.define('NextThought.app.course.info.components.Body', {
 		 return Promise.resolve();
 	},
 
-	scrollRosterIntoView: function(route, subRoute) {
+    scrollRosterIntoView: function(route, subRoute) {
 		// Set scroll to top. Maybe change scroll based on route and subroute??
 		window.scrollTo(0, 0);
 	},
 
-	scrollReportsIntoView: function(route, subRoute) {
+    scrollReportsIntoView: function(route, subRoute) {
 		window.scrollTo(0, 0);
 	},
 
-	scrollInfoSectionIntoView: function(route) {
+    scrollInfoSectionIntoView: function(route) {
 		var infoCmp = this.getComponent('info'),
 			scrollTarget, hash, scrollTargetY, brect;
 
@@ -75,5 +75,4 @@ export default Ext.define('NextThought.app.course.info.components.Body', {
 		brect = scrollTarget && scrollTarget.dom.getBoundingClientRect();
 		window.scrollTo(0, brect.top);
 	}
-
 });

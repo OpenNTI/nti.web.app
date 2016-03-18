@@ -1,20 +1,16 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.controls.Edit', {
-	extend: 'Ext.Component',
-	alias: 'widget.overview-editing-controls-edit',
+var Ext = require('extjs');
+var PromptActions = require('../../../../../prompt/Actions');
 
-	requires: [
-		'NextThought.app.prompt.Actions'
-	],
 
-	promptName: 'overview-editing',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Edit', {
+    extend: 'Ext.Component',
+    alias: 'widget.overview-editing-controls-edit',
+    promptName: 'overview-editing',
+    name: 'Edit',
+    cls: 'nt-button edit',
+    renderTpl: '{name}',
 
-	name: 'Edit',
-
-	cls: 'nt-button edit',
-
-	renderTpl: '{name}',
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		if (this.record && !this.record.getLink('edit')) {
@@ -28,8 +24,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.color) {
@@ -39,8 +34,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		this.mon(this.el, 'click', this.handleClick.bind(this));
 	},
 
-
-	handleClick: function(e) {
+    handleClick: function(e) {
 		if (e.getTarget('.disabled')) { return; }
 
 		if (this.onPromptOpen) {
@@ -52,8 +46,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			.fail(this.onPromptCancel.bind(this));
 	},
 
-
-	onPromptSuccess: function(action) {
+    onPromptSuccess: function(action) {
 		if (this.afterSave) {
 			this.afterSave();
 		}
@@ -63,8 +56,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	onPromptCancel: function(reason) {
+    onPromptCancel: function(reason) {
 		if (this.onPromptClose) {
 			this.onPromptClose(false);
 		}

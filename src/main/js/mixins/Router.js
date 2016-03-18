@@ -1,16 +1,19 @@
-export default Ext.define('NextThought.mixins.Router', {
+var Ext = require('extjs');
+var Globals = require('../util/Globals');
+var ParseUtils = require('../util/Parsing');
+var RoutingPath = require('./routing/Path');
+var RoutingObject = require('./routing/Object');
+var PathActions = require('../app/navigation/path/Actions');
+var WindowsActions = require('../app/windows/Actions');
 
-	requires: [
-		'NextThought.app.navigation.path.Actions',
-		'NextThought.app.windows.Actions'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.mixins.Router', {
+    mixins: {
 		Path: 'NextThought.mixins.routing.Path',
 		Object: 'NextThought.mixins.routing.Object'
 	},
 
-	initRouter: function() {
+    initRouter: function() {
 		if (this.__routerInitialized) {
 			return;
 		}
@@ -26,8 +29,7 @@ export default Ext.define('NextThought.mixins.Router', {
 		};
 	},
 
-
-	addChildRouter: function(cmp) {
+    addChildRouter: function(cmp) {
 		cmp.__parentRouter = this;
 
 
@@ -47,8 +49,7 @@ export default Ext.define('NextThought.mixins.Router', {
 		// this.mixins.Object.addChildRouter.call(this, cmp);
 	},
 
-
-	__handleObjectNav: function(fragment, result) {
+    __handleObjectNav: function(fragment, result) {
 		result = result || {};
 
 		if (typeof result === 'string') {
@@ -64,8 +65,7 @@ export default Ext.define('NextThought.mixins.Router', {
 		this.pushRoute(result.title || '', result.route, result.precache);
 	},
 
-
-	__handleObjectRoute: function(result) {
+    __handleObjectRoute: function(result) {
 		result = result || {};
 
 		if (typeof result === 'string') {
@@ -77,21 +77,19 @@ export default Ext.define('NextThought.mixins.Router', {
 		this.replaceRoute(result.title || '', result.route, result.precache);
 	},
 
-
-	__handleNoObjectNavigation: function(object, fragment) {
+    __handleNoObjectNavigation: function(object, fragment) {
 		if (this.__parentRouter) {
 			 return this.__parentRouter.navigateToObject(object, fragment);
 		}
 	},
 
-
-	navigateToObject: function(object, fragment) {
+    navigateToObject: function(object, fragment) {
 		return this.mixins.Object.handleObject.call(this, object)
 			.then(this.__handleObjectNav.bind(this, fragment))
 			.fail(this.__handleNoObjectNavigation.bind(this, object, fragment));
 	},
 
-	/**
+    /**
 	 * Try to figure out the path to an object, and if we can get a full path navigate to it
 	 * otherwise stay where you are and attempt to open the object as a window
 	 *
@@ -139,8 +137,7 @@ export default Ext.define('NextThought.mixins.Router', {
 			});
 	},
 
-
-	attemptToNavigateToPath: function(path) {
+    attemptToNavigateToPath: function(path) {
 		var route = this.getRouteForPath(path);
 
 		if (route.isAccessible === false) {
@@ -150,8 +147,7 @@ export default Ext.define('NextThought.mixins.Router', {
 		}
 	},
 
-
-	doNavigateToFullPath: function(obj, route) {
+    doNavigateToFullPath: function(obj, route) {
 		var path = route.path,
 			objId = obj && obj.getId(),
 			hasWindow = objId && this.Router.WindowActions.hasWindow(obj),
@@ -166,15 +162,13 @@ export default Ext.define('NextThought.mixins.Router', {
 		this.pushRootRoute('', path);
 	},
 
-
-	onFailedToGetFullPath: function(obj, route) {
+    onFailedToGetFullPath: function(obj, route) {
 		this.WindowActions.pushWindow(obj);
 
 		return Promise.reject();
 	},
 
-
-	__handleNoObjectRoute: function(object) {
+    __handleNoObjectRoute: function(object) {
 		var me = this,
 			children = me.__childRouters || [];
 
@@ -190,21 +184,20 @@ export default Ext.define('NextThought.mixins.Router', {
 			});
 	},
 
-
-	handleObject: function(object) {
+    handleObject: function(object) {
 		this.mixins.Object.handleObject.call(this, object)
 			.then(this.__handleObjectRoute.bind(this))
 			.then(this.__handleNoObjectRoute.bind(this, object));
 	},
 
-	/**
+    /**
 	 * Return the current context
 	 * @override
 	 * @return {Object|String}
 	 */
 	getContext: function() {},
 
-	/**
+    /**
 	 * Returns an array of the current context the view is in
 	 * @return {[type]} [description]
 	 */
@@ -251,7 +244,7 @@ export default Ext.define('NextThought.mixins.Router', {
 			});
 	},
 
-	/**
+    /**
 	 * Return the active cmp for this route
 	 * @override
 	 * @return {Object} the active cmp
@@ -263,8 +256,7 @@ export default Ext.define('NextThought.mixins.Router', {
 		return item || {};
 	},
 
-
-	/**
+    /**
 	 * Whether or not we need to stop route change before we go any further
 	 * can return a boolean or a promise if we need to confirm with the user first
 	 * @override
@@ -276,8 +268,7 @@ export default Ext.define('NextThought.mixins.Router', {
 		return activeItem && activeItem.allowNavigation ? activeItem.allowNavigation() : true;
 	},
 
-
-	/**
+    /**
 	 * Before changing routes, go down the active route and call onDeactivate
 	 * on any components that implement it. Handling it here is too late to
 	 * stop the route from changing

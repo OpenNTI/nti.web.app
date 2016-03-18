@@ -1,25 +1,25 @@
-export default Ext.define('NextThought.app.profiles.community.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.profile-community',
+var Ext = require('extjs');
+var ParseUtils = require('../../../util/Parsing');
+var MixinsRouter = require('../../../mixins/Router');
+var NavigationActions = require('../../navigation/Actions');
+var ActivityIndex = require('./components/activity/Index');
+var MembershipIndex = require('./components/membership/Index');
+var SidebarIndex = require('./components/sidebar/Index');
+var ComponentsHeader = require('./components/Header');
 
-	requires: [
-		'NextThought.app.navigation.Actions',
-		'NextThought.app.profiles.community.components.activity.Index',
-		'NextThought.app.profiles.community.components.membership.Index',
-		'NextThought.app.profiles.community.components.sidebar.Index',
-		'NextThought.app.profiles.community.components.Header'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.profiles.community.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.profile-community',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	cls: 'community-profile profile',
+    cls: 'community-profile profile',
+    layout: 'none',
 
-	layout: 'none',
-
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.NavActions = NextThought.app.navigation.Actions.create();
@@ -59,13 +59,11 @@ export default Ext.define('NextThought.app.profiles.community.Index', {
 		});
 	},
 
-
-	getContext: function() {
+    getContext: function() {
 		return this.activeCommunity;
 	},
 
-
-	onActivate: function() {
+    onActivate: function() {
 		var cmp = this.bodyCmp.getLayout().getActiveItem();
 
 		if (cmp) {
@@ -75,8 +73,7 @@ export default Ext.define('NextThought.app.profiles.community.Index', {
 		this.headerCmp.fireEvent('activate');
 	},
 
-
-	onDeactivate: function() {
+    onDeactivate: function() {
 		var cmp = this.bodyCmp.getLayout().getActiveItem();
 
 		if (cmp) {
@@ -86,13 +83,11 @@ export default Ext.define('NextThought.app.profiles.community.Index', {
 		this.headerCmp.fireEvent('deactivate');
 	},
 
-
-	getRouteTitle: function() {
+    getRouteTitle: function() {
 		return this.activeCommunity ? this.activeCommunity.getName() : '';
 	},
 
-
-	setActiveEntity: function(id, entity) {
+    setActiveEntity: function(id, entity) {
 		var me = this,
 			url = Service.getResolveUserURL(id);
 
@@ -115,8 +110,7 @@ export default Ext.define('NextThought.app.profiles.community.Index', {
 			});
 	},
 
-
-	setActiveItem: function(xtype) {
+    setActiveItem: function(xtype) {
 		var cmp = this.down(xtype),
 			current = this.bodyCmp.getLayout().getActiveItem();
 
@@ -135,8 +129,7 @@ export default Ext.define('NextThought.app.profiles.community.Index', {
 		return cmp;
 	},
 
-
-	setState: function(state) {
+    setState: function(state) {
 		state = state || {};
 
 		this.activeState = state;
@@ -151,8 +144,7 @@ export default Ext.define('NextThought.app.profiles.community.Index', {
 		this.NavActions.setActiveContent(this.activeCommunity);
 	},
 
-
-	showAllActivity: function(route, subRoute) {
+    showAllActivity: function(route, subRoute) {
 		var cmp = this.setActiveItem('profile-community-activity'),
 			link = this.activeCommunity.getLink('Activity');
 
@@ -169,8 +161,7 @@ export default Ext.define('NextThought.app.profiles.community.Index', {
 			.then(cmp.handleRoute.bind(cmp, subRoute, route.precache));
 	},
 
-
-	showTopicActivity: function(route, subRoute) {
+    showTopicActivity: function(route, subRoute) {
 		var me = this,
 			cmp = me.setActiveItem('profile-community-activity'),
 			entity = me.activeCommunity,
@@ -230,8 +221,7 @@ export default Ext.define('NextThought.app.profiles.community.Index', {
 			.then(cmp.handleRoute.bind(cmp, subRoute, route.precache));
 	},
 
-
-	showMembers: function(route, subRoute) {
+    showMembers: function(route, subRoute) {
 		var cmp = this.setActiveItem('profile-community-membership');
 
 		this.setState();
@@ -240,20 +230,17 @@ export default Ext.define('NextThought.app.profiles.community.Index', {
 		return cmp.handleRoute(subRoute, route.precache);
 	},
 
-
-	updateCommunity: function() {
+    updateCommunity: function() {
 		this.setState(this.activeState);
 
 		//TODO: reload what ever is active on the body
 	},
 
-
-	gotoMembership: function() {
+    gotoMembership: function() {
 		this.pushRoute('Members', '/members');
 	},
 
-
-	onShowForum: function(forum) {
+    onShowForum: function(forum) {
 		if (forum === 'all') {
 			this.pushRoute('Activity', '/');
 			return;
@@ -268,8 +255,7 @@ export default Ext.define('NextThought.app.profiles.community.Index', {
 		});
 	},
 
-
-	joinCommunity: function() {
+    joinCommunity: function() {
 		var me = this,
 			join, link = me.activeCommunity.getLink('join');
 
@@ -291,8 +277,7 @@ export default Ext.define('NextThought.app.profiles.community.Index', {
 
 	},
 
-
-	leaveCommunity: function() {
+    leaveCommunity: function() {
 		var me = this,
 			leave, link = me.activeCommunity.getLink('leave');
 
@@ -313,8 +298,7 @@ export default Ext.define('NextThought.app.profiles.community.Index', {
 			});
 	},
 
-
-	showCommunity: function() {
+    showCommunity: function() {
 		var me = this,
 			show, link = me.activeCommunity.getLink('unhide');
 
@@ -335,8 +319,7 @@ export default Ext.define('NextThought.app.profiles.community.Index', {
 			});
 	},
 
-
-	hideCommunity: function() {
+    hideCommunity: function() {
 		var me = this,
 			hide, link = me.activeCommunity.getLink('hide');
 
@@ -357,8 +340,7 @@ export default Ext.define('NextThought.app.profiles.community.Index', {
 			});
 	},
 
-
-	getRouteForPath: function(path, community) {
+    getRouteForPath: function(path, community) {
 		var forum = path[1],//the first one should be the index
 			forumId = forum.getId(),
 			path = '/';

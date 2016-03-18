@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.model.CatalogFamily', {
+var Ext = require('extjs');
+var ModelBase = require('./Base');
+var MixinsPresentationResources = require('../mixins/PresentationResources');
+
+
+module.exports = exports = Ext.define('NextThought.model.CatalogFamily', {
 	extend: 'NextThought.model.Base',
 
 	mixins: {

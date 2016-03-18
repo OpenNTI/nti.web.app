@@ -1,10 +1,14 @@
+var Ext = require('extjs');
+var ParseUtils = require('../util/Parsing');
+
+
 /**
  * Wrap some helper methods around setting and getting data from the dataTransfer object
  *
  * NOTE: if using this wrapper around data from a browser drag/drop event, the data will only be available
  * for that event pump. Afterwards the browser will not let us access it.
  */
-export default Ext.define('NextThought.store.DataTransfer', {
+module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 
 	constructor: function(config) {
 		this.dataTransfer = config && config.dataTransfer;

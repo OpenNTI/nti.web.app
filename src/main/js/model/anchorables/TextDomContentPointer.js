@@ -1,18 +1,20 @@
-export default Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
-	extend: 'NextThought.model.anchorables.DomContentPointer',
+var Ext = require('extjs');
+var Anchors = require('../../util/Anchors');
+var AnchorablesDomContentPointer = require('./DomContentPointer');
+var AnchorablesTextContext = require('./TextContext');
+var AnchorablesDomContentPointer = require('./DomContentPointer');
 
-	requires: [
-		'NextThought.model.anchorables.TextContext',
-		'NextThought.model.anchorables.DomContentPointer'
-	],
 
-	config: {
+module.exports = exports = Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
+    extend: 'NextThought.model.anchorables.DomContentPointer',
+
+    config: {
 		ancestor: {},
 		contexts: [],
 		edgeOffset: 0
 	},
 
-	statics: {
+    statics: {
 		createFromObject: function(o) {
 			var cp = NextThought.model.anchorables.ContentPointer;
 			return NextThought.model.anchorables.TextDomContentPointer.create({
@@ -24,7 +26,7 @@ export default Ext.define('NextThought.model.anchorables.TextDomContentPointer',
 		}
 	},
 
-	constructor: function(o) {
+    constructor: function(o) {
 		this.validateContexts(o.contexts);
 		this.validateEdgeOffset(o.edgeOffset);
 		this.validateAncestor(o.ancestor);
@@ -32,15 +34,14 @@ export default Ext.define('NextThought.model.anchorables.TextDomContentPointer',
 		this.Class = 'TextDomContentPointer';
 	},
 
-
-	primaryContext: function() {
+    primaryContext: function() {
 	   if (this.getContexts().length > 0) {
 			   return this.getContexts()[0];
 	   }
 	   return null;
 	},
 
-	validateAncestor: function(a) {
+    validateAncestor: function(a) {
 		if (!a || !(a instanceof NextThought.model.anchorables.DomContentPointer)) {
 			Ext.Error.raise('Ancestor must be supplied');
 		}
@@ -49,8 +50,7 @@ export default Ext.define('NextThought.model.anchorables.TextDomContentPointer',
 		}
 	},
 
-
-	validateContexts: function(contexts) {
+    validateContexts: function(contexts) {
 		if (!contexts) {
 			Ext.Error.raise('Must supply TextContexts');
 		}
@@ -59,8 +59,7 @@ export default Ext.define('NextThought.model.anchorables.TextDomContentPointer',
 		}
 	},
 
-
-	validateEdgeOffset: function(o) {
+    validateEdgeOffset: function(o) {
 		/*
 		if (!o || o < 0) {
 			Ext.Error.raise('Offset must exist and be 0 or more');
@@ -68,8 +67,7 @@ export default Ext.define('NextThought.model.anchorables.TextDomContentPointer',
 		*/
 	},
 
-
-	locateRangePointInAncestor: function(ancestorNode, startResult) {
+    locateRangePointInAncestor: function(ancestorNode, startResult) {
 		return Anchors.locateRangeEdgeForAnchor(this, ancestorNode, startResult);
 	}
 });

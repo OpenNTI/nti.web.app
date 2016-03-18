@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.account.settings.components.PictureCanvas', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.account.settings.components.PictureCanvas', {
 	extend: 'Ext.Component',
 	alias: 'widget.picture-canvas',
 

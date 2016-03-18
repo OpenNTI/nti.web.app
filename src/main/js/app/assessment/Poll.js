@@ -1,20 +1,19 @@
-export default Ext.define('NextThought.app.assessment.Poll', {
-	extend: 'NextThought.app.assessment.Question',
-	alias: 'widget.assessment-poll',
-
-	requires: [
-		'NextThought.model.assessment.UsersCourseInquiryItem',
-		'NextThought.model.assessment.UsersCourseInquiryItemResponse',
-		'NextThought.app.assessment.results.Poll'
-	],
-
-	cls: 'question scrollable poll',
-
-	NotSubmittedTextOverride: 'Submit',
-	SubmittedTextOverride: false,
+var Ext = require('extjs');
+var ParseUtils = require('../../util/Parsing');
+var AssessmentQuestion = require('./Question');
+var AssessmentUsersCourseInquiryItem = require('../../model/assessment/UsersCourseInquiryItem');
+var AssessmentUsersCourseInquiryItemResponse = require('../../model/assessment/UsersCourseInquiryItemResponse');
+var ResultsPoll = require('./results/Poll');
 
 
-	initComponent: function() {
+module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
+    extend: 'NextThought.app.assessment.Question',
+    alias: 'widget.assessment-poll',
+    cls: 'question scrollable poll',
+    NotSubmittedTextOverride: 'Submit',
+    SubmittedTextOverride: false,
+
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -36,8 +35,7 @@ export default Ext.define('NextThought.app.assessment.Poll', {
 		}
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var surveyClosed = this.survey && this.survey.get('isClosed'),
@@ -57,8 +55,7 @@ export default Ext.define('NextThought.app.assessment.Poll', {
 		}
 	},
 
-
-	updateWithResults: function() {
+    updateWithResults: function() {
 		this.callParent(arguments);
 
 		var parts = this.down('question-parts'),
@@ -73,8 +70,7 @@ export default Ext.define('NextThought.app.assessment.Poll', {
 		}
 	},
 
-
-	checkIt: function() {
+    checkIt: function() {
 		if (this.submissionDisabled) {
 			return;
 		}
@@ -101,13 +97,11 @@ export default Ext.define('NextThought.app.assessment.Poll', {
 			});
 	},
 
-
-	getResults: function() {
+    getResults: function() {
 		return this.survey ? this.survey.getResults(this.poll.getId()) : this.poll.getResults();
 	},
 
-
-	showResults: function() {
+    showResults: function() {
 		var parts = this.down('question-parts'),
 			header = this.down('question-header');
 
@@ -127,8 +121,7 @@ export default Ext.define('NextThought.app.assessment.Poll', {
 		}));
 	},
 
-
-	hideResults: function() {
+    hideResults: function() {
 		var parts = this.down('question-parts'),
 			results = this.down('assessment-result'),
 			header = this.down('question-header'),

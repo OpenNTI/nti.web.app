@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.mixins.Avatar', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 
 	statics: {
 		BAKCGROUND_CHOICE_COUNT: 13,

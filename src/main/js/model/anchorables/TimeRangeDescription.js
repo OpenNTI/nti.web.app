@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.anchorables.TimeRangeDescription', {
+var Ext = require('extjs');
+var AnchorablesContentRangeDescription = require('./ContentRangeDescription');
+
+
+module.exports = exports = Ext.define('NextThought.model.anchorables.TimeRangeDescription', {
 	extend: 'NextThought.model.anchorables.ContentRangeDescription',
 
 

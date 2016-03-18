@@ -1,8 +1,13 @@
-export default Ext.define('NextThought.model.courseware.GradeBookEntry', {
-	extend: 'NextThought.model.Base',
-	requires: ['NextThought.model.converters.Date'],
-	mimeType: 'application/vnd.nextthought.gradebookentry',
-	fields: [
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+var ConvertersDate = require('../converters/Date');
+
+
+module.exports = exports = Ext.define('NextThought.model.courseware.GradeBookEntry', {
+    extend: 'NextThought.model.Base',
+    mimeType: 'application/vnd.nextthought.gradebookentry',
+
+    fields: [
 		{name: 'AssignmentId', type: 'string'},
 		{name: 'DueDate', type: 'ISODate'},
 		{name: 'Items', type: 'collectionItem'},
@@ -12,7 +17,7 @@ export default Ext.define('NextThought.model.courseware.GradeBookEntry', {
 		{name: 'order', type: 'int'}
 	],
 
-	addItem: function(rec) {
+    addItem: function(rec) {
 		var items = this.get('Items'),
 			key = items.length;
 
@@ -25,7 +30,7 @@ export default Ext.define('NextThought.model.courseware.GradeBookEntry', {
 		this.afterEdit(['Items']);
 	},
 
-	updateHistoryItem: function(item) {
+    updateHistoryItem: function(item) {
 		var c = item.get('Creator'),
 			u = typeof c === 'string' ? c : c.getId(),
 			submissionGrade = item.get('Grade'),

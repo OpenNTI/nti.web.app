@@ -1,26 +1,23 @@
-export default Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
-	extend: 'NextThought.editor.Editor',
-	alias: 'widget.forums-topic-editor',
+var Ext = require('extjs');
+var EditorEditor = require('../../../../../editor/Editor');
+var ForumsActions = require('../../../Actions');
 
-	requires: [
-		'NextThought.app.forums.Actions'
-	],
 
-	cls: 'forums-topic-editor-box',
-	border: 1,
+module.exports = exports = Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
+    extend: 'NextThought.editor.Editor',
+    alias: 'widget.forums-topic-editor',
+    cls: 'forums-topic-editor-box',
+    border: 1,
+    enableTags: true,
+    enableTitle: true,
+    enableVideo: true,
+    headerTplOrder: '{title}{toolbar}',
 
-	enableTags: true,
-	enableTitle: true,
-	enableVideo: true,
-
-	headerTplOrder: '{title}{toolbar}',
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{ cls: 'forums-topic-editor', cn: { cls: 'editor active', html: '{super}' } }
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		editor: '.editor',
 		cancelEl: '.action.cancel',
 		saveEl: '.action.save',
@@ -29,15 +26,13 @@ export default Ext.define('NextThought.app.forums.components.topic.parts.Editor'
 		publishEl: '.action.publish'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.addEvents(['save-post']);
 		this.ForumActions = NextThought.app.forums.Actions.create();
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		var r = this.record,
 				me = this,
@@ -81,8 +76,7 @@ export default Ext.define('NextThought.app.forums.components.topic.parts.Editor'
 		}
 	},
 
-
-	allowNavigation: function() {
+    allowNavigation: function() {
 		var msg = 'You are currently creating a topic. Would you like to leave without saving?';
 
 		if (this.record) {
@@ -108,8 +102,7 @@ export default Ext.define('NextThought.app.forums.components.topic.parts.Editor'
 		});
 	},
 
-
-	// destroy: function() {
+    // destroy: function() {
 	//	var container = this.ownerCt.getEl();
 	//	container.removeCls('scroll-lock scroll-padding-right');
 	//	Ext.EventManager.onWindowResize(this.syncHeight, this, null);
@@ -131,16 +124,14 @@ export default Ext.define('NextThought.app.forums.components.topic.parts.Editor'
 		return true;
 	},
 
-
-	warnBeforeDismissingEditor: function() {
+    warnBeforeDismissingEditor: function() {
 		var msg = getString('NextThought.view.forums.topic.parts.Editor.dismisswarn');
 		Ext.defer(function() {
 			alert({msg: msg});
 		}, 1);
 	},
 
-
-	syncHeight: function() {
+    syncHeight: function() {
 		var el = this.contentEl,
 				p = this.ownerCt && Ext.getDom(this.ownerCt.getEl()),
 				top;
@@ -163,8 +154,7 @@ export default Ext.define('NextThought.app.forums.components.topic.parts.Editor'
 		Ext.defer(this.updateLayout, 700, this, []);
 	},
 
-
-	onSave: function(e) {
+    onSave: function(e) {
 		e.stopEvent();
 		var me = this,
 			v = me.getValue(),
@@ -226,15 +216,13 @@ export default Ext.define('NextThought.app.forums.components.topic.parts.Editor'
 			});
 	},
 
-
-	onSaveSuccess: function(record, isEdit) {
+    onSaveSuccess: function(record, isEdit) {
 		this.savedSuccess = true;
 		this.fireEvent(isEdit ? 'goto-record' : 'new-record', record);
 		this.destroy();
 	},
 
-
-	onSaveFailure: function(proxy, response, operation) {
+    onSaveFailure: function(proxy, response, operation) {
 		var msg = 'An unknown error occurred saving your Discussion.', error;
 
 		if (response && response.responseText) {
@@ -247,8 +235,7 @@ export default Ext.define('NextThought.app.forums.components.topic.parts.Editor'
 		console.debug(arguments);
 	},
 
-
-	onCancel: function(e) {
+    onCancel: function(e) {
 		e.stopEvent();
 
 		this.fireEvent('cancel');

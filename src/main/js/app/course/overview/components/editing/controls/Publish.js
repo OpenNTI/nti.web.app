@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.controls.Publish', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Publish', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-controls-publish',
 

@@ -1,27 +1,30 @@
-export default Ext.define('NextThought.app.profiles.user.components.about.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.profile-user-about',
+var Ext = require('extjs');
+var User = require('../../../../../model/User');
+var AnalyticsUtil = require('../../../../../util/Analytics');
+var ParseUtils = require('../../../../../util/Parsing');
+var MixinsRouter = require('../../../../../mixins/Router');
+var PartsEmpty = require('./parts/Empty');
+var PartsAbout = require('./parts/About');
+var PartsCommunities = require('./parts/Communities');
+var PartsEducation = require('./parts/Education');
+var PartsGroups = require('./parts/Groups');
+var PartsPositions = require('./parts/Positions');
+var PartsInterests = require('./parts/Interests');
+var ComponentsSuggestedContacts = require('../../../components/SuggestedContacts');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.about.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.profile-user-about',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	requires: [
-		'NextThought.app.profiles.user.components.about.parts.Empty',
-		'NextThought.app.profiles.user.components.about.parts.About',
-		'NextThought.app.profiles.user.components.about.parts.Communities',
-		'NextThought.app.profiles.user.components.about.parts.Education',
-		'NextThought.app.profiles.user.components.about.parts.Groups',
-		'NextThought.app.profiles.user.components.about.parts.Positions',
-		'NextThought.app.profiles.user.components.about.parts.Interests',
-		'NextThought.app.profiles.components.SuggestedContacts'
-	],
+    layout: 'none',
+    cls: 'profile-about user-about',
 
-
-	layout: 'none',
-	cls: 'profile-about user-about',
-
-	items: [
+    items: [
 		{
 			xtype: 'container',
 			layout: 'none',
@@ -46,8 +49,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		}
 	],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -91,8 +93,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		});
 	},
 
-
-	startResourceViewed: function() {
+    startResourceViewed: function() {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && !this.hasCurrentTimer) {
@@ -105,8 +106,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		}
 	},
 
-
-	stopResourceViewed: function() {
+    stopResourceViewed: function() {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && this.hasCurrentTimer) {
@@ -115,8 +115,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		}
 	},
 
-
-	onAddedToParentRouter: function() {
+    onAddedToParentRouter: function() {
 		var me = this;
 
 		this.communitiesCmp.gotoSeeAll = this.groupsCmp.gotoSeeAll = function() {
@@ -124,13 +123,11 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		};
 	},
 
-
-	doEdit: function() {
+    doEdit: function() {
 		this.pushRoute('Edit', '/edit');
 	},
 
-
-	isDataEmpty: function(user) {
+    isDataEmpty: function(user) {
 		var data = user.getAboutData(),
 			empty = true;
 
@@ -141,8 +138,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		return empty;
 	},
 
-
-	setEmpty: function(user) {
+    setEmpty: function(user) {
 		this.emptyCmp.show();
 
 		this.profileParts.forEach(function(part) {
@@ -154,8 +150,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		this.suggestedCmp.show();
 	},
 
-
-	removeEmpty: function() {
+    removeEmpty: function() {
 		this.emptyCmp.hide();
 
 		this.profileParts.forEach(function(part) {
@@ -163,8 +158,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		});
 	},
 
-
-	userChanged: function(user, isMe) {
+    userChanged: function(user, isMe) {
 		var cmps = this.profileParts;
 
 		if (this.activeUser !== user) {
@@ -197,8 +191,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		return Promise.all(cmps);
 	},
 
-
-	validate: function() {
+    validate: function() {
 		var msgs = [];
 
 		this.profileParts.forEach(function(part) {
@@ -217,8 +210,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		return !msgs.length;
 	},
 
-
-	removeErrors: function() {
+    removeErrors: function() {
 		var error = this.down('[errorName=this]');
 
 		if (error) {
@@ -232,8 +224,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		});
 	},
 
-
-	clearError: function(name) {
+    clearError: function(name) {
 		var error = this.down('[errorName="' + name + '"]');
 
 		if (error) {
@@ -241,8 +232,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		}
 	},
 
-
-	showError: function(error) {
+    showError: function(error) {
 		if (!this.down('[errorName="' + error.name + '"]')) {
 			this.insert(0, {
 				xtype: 'box',
@@ -252,8 +242,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		}
 	},
 
-
-	getValues: function() {
+    getValues: function() {
 		var values = this.aboutCmp.getValues();
 
 		values.education = this.educationCmp.getValues();
@@ -263,8 +252,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		return values;
 	},
 
-
-	saveEdits: function() {
+    saveEdits: function() {
 		var me = this,
 			user = me.activeUser,
 			hasChanged = false,
@@ -343,8 +331,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		});
 	},
 
-
-	saveProfile: function() {
+    saveProfile: function() {
 		var me = this;
 
 		if (!this.validate()) {
@@ -357,13 +344,11 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 			});
 	},
 
-
-	cancelEdit: function() {
+    cancelEdit: function() {
 		this.pushRoute('About', '/');
 	},
 
-
-	setSchema: function(schema) {
+    setSchema: function(schema) {
 		this.profileParts.forEach(function(part) {
 			if (part.setSchema) {
 				part.setSchema(schema);
@@ -371,13 +356,11 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		});
 	},
 
-
-	setHeaderCmp: function(header) {
+    setHeaderCmp: function(header) {
 		this.headerCmp = header;
 	},
 
-
-	allowNavigation: function() {
+    allowNavigation: function() {
 		if (!this.hasCls('editing') || this.successfulEdit) {
 			return true;
 		}
@@ -401,8 +384,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		});
 	},
 
-
-	showAbout: function() {
+    showAbout: function() {
 		this.setTitle('About');
 		this.removeErrors();
 		delete this.successfulEdit;
@@ -416,8 +398,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.Index'
 		this.removeCls('editing');
 	},
 
-
-	showEdit: function() {
+    showEdit: function() {
 		this.setTitle('About');
 
 		delete this.successfulEdit;

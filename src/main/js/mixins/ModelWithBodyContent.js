@@ -1,8 +1,10 @@
-export default Ext.define('NextThought.mixins.ModelWithBodyContent', {
+var Ext = require('extjs');
+var Globals = require('../util/Globals');
+var VideoVideo = require('../app/video/Video');
 
-	requires: ['NextThought.app.video.Video'],
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent', {
+    statics: {
 		/**
 		 * A naive model body content compiler that only shows styled text, will not include whiteboards etc...
 		 * DON'T USE UNLESS YOU ARE 100% SURE
@@ -28,21 +30,21 @@ export default Ext.define('NextThought.mixins.ModelWithBodyContent', {
 		}
 	},
 
-	textDescriptionForPartType: {
+    textDescriptionForPartType: {
 		'application/vnd.nextthought.canvas': '[image]',
 		'application/vnd.nextthought.embeddedvideo': '[video]'
 	},
 
-	rendererForPart: {
+    rendererForPart: {
 		'application/vnd.nextthought.canvas': 'whiteboardRenderer',
 		'application/vnd.nextthought.embeddedvideo': 'embeddedVideoRenderer'
 	},
 
-	componentRendererForPart: {
+    componentRendererForPart: {
 		'application/vnd.nextthought.embeddedvideo': 'renderVideoComponent'
 	},
 
-	getBodyText: function(hasNoPlaceholderForImage, bodyOverride) {
+    getBodyText: function(hasNoPlaceholderForImage, bodyOverride) {
 
 		var o = bodyOverride || this.get('body'), text = [];
 
@@ -59,10 +61,9 @@ export default Ext.define('NextThought.mixins.ModelWithBodyContent', {
 		return Ext.String.trim(text.join(''));
 	},
 
+    NOTE_BODY_DIVIDER_TPL: Ext.DomHelper.createTemplate({ id: '{0}', cls: 'body-divider', html: '{1}' }).compile(),
 
-	NOTE_BODY_DIVIDER_TPL: Ext.DomHelper.createTemplate({ id: '{0}', cls: 'body-divider', html: '{1}' }).compile(),
-
-	WHITEBOARD_THUMBNAIL_TPL: Ext.DomHelper.createTemplate({
+    WHITEBOARD_THUMBNAIL_TPL: Ext.DomHelper.createTemplate({
 		id: '{0}',
 		cls: 'body-divider',
 		cn: [
@@ -98,8 +99,7 @@ export default Ext.define('NextThought.mixins.ModelWithBodyContent', {
 		]
 	}).compile(),
 
-
-	VIDEO_THUMBNAIL_TPL: Ext.DomHelper.createTemplate({
+    VIDEO_THUMBNAIL_TPL: Ext.DomHelper.createTemplate({
 		id: '{0}',
 		cls: 'body-divider',
 		cn: [
@@ -121,8 +121,7 @@ export default Ext.define('NextThought.mixins.ModelWithBodyContent', {
 		]
 	}),
 
-
-	whiteboardRenderer: function(o, clickHandlerMaker, size, callback, scope) {
+    whiteboardRenderer: function(o, clickHandlerMaker, size, callback, scope) {
 		var id = guidGenerator(),
 				me = this,
 				Canvas = NextThought.app.whiteboard.Canvas;
@@ -137,8 +136,7 @@ export default Ext.define('NextThought.mixins.ModelWithBodyContent', {
 		});
 	},
 
-
-	__embeddedVideoNoPlaceholder: function(o, clickHandlerMaker, size, callback, scope) {
+    __embeddedVideoNoPlaceholder: function(o, clickHandlerMaker, size, callback, scope) {
 		var width = (size || 360), height = width / (4.0 / 3.0),
 				cfg = {
 					cls: 'data-component-placeholder',
@@ -153,8 +151,7 @@ export default Ext.define('NextThought.mixins.ModelWithBodyContent', {
 		Ext.callback(callback, scope, [Ext.DomHelper.markup(cfg)]);
 	},
 
-
-	__embeddedVideoWithPlaceholder: function(o, clickHandlerMaker, size, callback, scope) {
+    __embeddedVideoWithPlaceholder: function(o, clickHandlerMaker, size, callback, scope) {
 		var id = guidGenerator(),
 			me = this,
 			Video = NextThought.app.video.Video;
@@ -177,7 +174,7 @@ export default Ext.define('NextThought.mixins.ModelWithBodyContent', {
 			});
 	},
 
-	embeddedVideoRenderer: function(o, clickHandlerMaker, size, callback, scope, config) {
+    embeddedVideoRenderer: function(o, clickHandlerMaker, size, callback, scope, config) {
 		if (config && config.useVideoPlaceholder) {
 			return this.__embeddedVideoWithPlaceholder(o, clickHandlerMaker, size, callback, scope);
 		}
@@ -185,8 +182,7 @@ export default Ext.define('NextThought.mixins.ModelWithBodyContent', {
 		return this.__embeddedVideoNoPlaceholder(o, clickHandlerMaker, size, callback, scope);
 	},
 
-
-	renderVideoComponent: function(node, owner, config) {
+    renderVideoComponent: function(node, owner, config) {
 
 
 		var p, width = node.getAttribute('data-width'),
@@ -204,8 +200,7 @@ export default Ext.define('NextThought.mixins.ModelWithBodyContent', {
 		return p;
 	},
 
-
-	compileBodyContent: function(result, scope, clickHandlerMaker, size, bodyOverride, config) {
+    compileBodyContent: function(result, scope, clickHandlerMaker, size, bodyOverride, config) {
 		var me = this,
 				body = (bodyOverride || me.get('body') || []).slice().reverse(),
 				text = [];
@@ -258,8 +253,7 @@ export default Ext.define('NextThought.mixins.ModelWithBodyContent', {
 		render(body.length - 1);
 	},
 
-
-	hasTerm: function(term) {
+    hasTerm: function(term) {
 		var found = false,
 				c = this.children || [],
 				i = c.length - 1,

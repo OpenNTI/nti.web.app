@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.components.ResourceNotFound', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.components.ResourceNotFound', {
 	extend: 'Ext.Component',
 	alias: 'widget.notfound',
 

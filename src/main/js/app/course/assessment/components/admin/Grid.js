@@ -1,21 +1,25 @@
+var Ext = require('extjs');
+var TimeUtils = require('../../../../../util/Time');
+var GridFeatureGradeInputs = require('../../../../../mixins/grid-feature/GradeInputs');
+var AssessmentAssignmentStatus = require('../../AssignmentStatus');
+
+
 /*globals getFormattedString:false, Duration:false*/
-export default Ext.define('NextThought.app.course.assessment.components.admin.Grid', {
-	extend: 'Ext.grid.Panel',
-	alias: 'widget.course-admin-grid',
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.Grid', {
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.course-admin-grid',
 
-	requires: ['NextThought.app.course.assessment.AssignmentStatus'],
-
-	mixins: {
+    mixins: {
 		gridGrades: 'NextThought.mixins.grid-feature.GradeInputs'
 	},
 
-	scroll: 'vertical',
+    scroll: 'vertical',
 
-	viewConfig: {
+    viewConfig: {
 		loadMask: true
 	},
 
-	verticalScroller: {
+    verticalScroller: {
 		synchronousRender: !Ext.isGecko,
 		scrollToLoadBuffer: 100,
 		trailingBufferZone: 100,
@@ -23,9 +27,9 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Gr
 		leadingBufferZone: 150
 	},
 
-	selType: 'cellmodel',
+    selType: 'cellmodel',
 
-	columns: {
+    columns: {
 		defaults: {
 			//reverse the default state order (descending first)
 			possibleSortStates: ['DESC', 'ASC'],
@@ -244,11 +248,10 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Gr
 				]
 	},
 
-	tabIndex: 2,
+    tabIndex: 2,
+    nameOrder: ['name', 'completed', 'grade', 'feedback', 'submission'],
 
-	nameOrder: ['name', 'completed', 'grade', 'feedback', 'submission'],
-
-	markColumn: function(c) {
+    markColumn: function(c) {
 		var cls = 'sortedOn', el = this.getEl();
 		if (el) {
 			el.select('.' + cls).removeCls(cls);
@@ -259,8 +262,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Gr
 		}
 	},
 
-
-	constructor: function(config) {
+    constructor: function(config) {
 		var me = this, items = [];
 
 		me.columns = Ext.clone(me.self.prototype.columns);
@@ -322,8 +324,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Gr
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.monitorSubTree(arguments);
@@ -337,8 +338,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Gr
 		}
 	},
 
-
-	bindStore: function(store) {
+    bindStore: function(store) {
 		var res = this.callParent(arguments),
 			sorts = store.getSorters(), s, sort,
 			cols = this.columns, c, col;
@@ -377,8 +377,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Gr
 		return res;
 	},
 
-
-	/**
+    /**
 	 * This function sets the table layout to fixed.
 	 * We've observed that some browsers(i.e. Safari)
 	 * end up mixing our styles and Ext Js table styles.
@@ -396,8 +395,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Gr
 			});
 	},
 
-
-	onItemClicked: function(v, record, dom, ix, e) {
+    onItemClicked: function(v, record, dom, ix, e) {
 		var nib = e.getTarget('.actions');
 		if (nib) {
 			NextThought.app.course.assessment.AssignmentStatus.getActionsMenu(record).showBy(nib, 'tr-br');

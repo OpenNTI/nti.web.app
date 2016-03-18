@@ -1,30 +1,27 @@
-export default Ext.define('NextThought.app.profiles.group.components.activity.Body', {
-	extend: 'NextThought.app.profiles.user.components.activity.Body',
-	alias: 'widget.profile-group-activity-body',
+var Ext = require('extjs');
+var ActivityBody = require('../../../user/components/activity/Body');
+var PartsStream = require('./parts/Stream');
+var PartsNewPost = require('./parts/NewPost');
+var WindowsActions = require('../../../../windows/Actions');
 
-	requires: [
-		'NextThought.app.profiles.group.components.activity.parts.Stream',
-		'NextThought.app.profiles.group.components.activity.parts.NewPost',
-		'NextThought.app.windows.Actions'
-	],
 
-	layout: 'none',
+module.exports = exports = Ext.define('NextThought.app.profiles.group.components.activity.Body', {
+    extend: 'NextThought.app.profiles.user.components.activity.Body',
+    alias: 'widget.profile-group-activity-body',
+    layout: 'none',
+    cls: 'activity',
 
-	cls: 'activity',
-
-	items: [
+    items: [
 		{xtype: 'profile-group-newpost'},
 		{xtype: 'profile-group-activity-stream'}
 	],
 
-
-	setUpComponents: function() {
+    setUpComponents: function() {
 		this.newPostCmp = this.down('profile-group-newpost');
 		this.activityCmp = this.down('profile-group-activity-stream');
 	},
 
-
-	onNewPost: function() {
+    onNewPost: function() {
 		if (this.postContainer && this.postContainer.getLink('add')) {
 			this.WindowActions.showWindow('new-topic', null, this.newPostCmp.el.dom, {afterSave: this.onPostSaved.bind(this)}, {
 				forum: this.postContainer
@@ -32,8 +29,7 @@ export default Ext.define('NextThought.app.profiles.group.components.activity.Bo
 		}
 	},
 
-
-	onPostSaved: function(record) {
+    onPostSaved: function(record) {
 		var store = this.activityCmp && this.activityCmp.store;
 
 		if (store) {
@@ -41,8 +37,7 @@ export default Ext.define('NextThought.app.profiles.group.components.activity.Bo
 		}
 	},
 
-
-	userChanged: function(entity) {
+    userChanged: function(entity) {
 		var me = this;
 
 		delete me.postContainer;

@@ -1,36 +1,40 @@
-export default Ext.define('NextThought.app.contentviewer.components.Reader', {
-	extend: 'NextThought.app.contentviewer.components.Base',
-	alias: 'widget.reader-content',
+var Ext = require('extjs');
+var ContentAPIRegistry = require('../reader/ContentAPIRegistry');
+var RangeUtils = require('../../../util/Ranges');
+var ComponentsBase = require('./Base');
+var MixinsInstanceTracking = require('../../../mixins/InstanceTracking');
+var MixinsModuleContainer = require('../../../mixins/ModuleContainer');
+var ProxyJSONP = require('../../../proxy/JSONP');
+var ComponentsResourceNotFound = require('../../../common/components/ResourceNotFound');
+var ComponentsPageWidgets = require('./PageWidgets');
+var ReaderContent = require('../reader/Content');
+var ReaderIFrame = require('../reader/IFrame');
+var ReaderLocation = require('../reader/Location');
+var ReaderScroll = require('../reader/Scroll');
+var ReaderResourceManagement = require('../reader/ResourceManagement');
+var ReaderComponentOverlay = require('../reader/ComponentOverlay');
+var ReaderAssessment = require('../reader/Assessment');
+var ReaderAnnotations = require('../reader/Annotations');
+var ReaderNoteOverlay = require('../reader/NoteOverlay');
 
-	//region Config
-	requires: [
-		'NextThought.proxy.JSONP',
-		'NextThought.common.components.ResourceNotFound',
-		'NextThought.app.contentviewer.components.PageWidgets',
-		'NextThought.app.contentviewer.reader.Content',
-		'NextThought.app.contentviewer.reader.IFrame',
-		'NextThought.app.contentviewer.reader.Location',
-		'NextThought.app.contentviewer.reader.Scroll',
-		'NextThought.app.contentviewer.reader.ResourceManagement',
-		'NextThought.app.contentviewer.reader.ComponentOverlay',
-		'NextThought.app.contentviewer.reader.Assessment',
-		'NextThought.app.contentviewer.reader.Annotations',
-		'NextThought.app.contentviewer.reader.NoteOverlay'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.contentviewer.components.Reader', {
+    extend: 'NextThought.app.contentviewer.components.Base',
+    alias: 'widget.reader-content',
+
+    mixins: {
 		instanceTracking: 'NextThought.mixins.InstanceTracking',
 		moduleContainer: 'NextThought.mixins.ModuleContainer'
 	},
 
-	cls: 'x-reader-pane scrollable',
+    cls: 'x-reader-pane scrollable',
+    overflowX: 'hidden',
+    overflowY: 'visible',
+    ui: 'reader',
+    layout: 'auto',
+    prefix: 'default',
 
-	overflowX: 'hidden',
-	overflowY: 'visible',
-	ui: 'reader',
-	layout: 'auto',
-	prefix: 'default',
-	//endregion
+    //endregion
 
 
 	//region Setup & Init
@@ -67,8 +71,7 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		var DH = Ext.DomHelper,
 			items = this.floatingItems,
@@ -84,8 +87,7 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 				(this.notfound = Ext.widget({xtype: 'notfound', renderTo: this.splash, hideLibrary: true})));
 	},
 
-
-	hidePageWidgets: function() {
+    hidePageWidgets: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.hidePageWidgets.bind(this));
 			return;
@@ -94,8 +96,7 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 		this.pageWidgets.hide();
 	},
 
-
-	beforeDestroy: function() {
+    beforeDestroy: function() {
 		var items = this.floatingItems;
 		if (items) {
 			[this.notfound, this.pageWidgets].forEach(function(i) {
@@ -108,8 +109,7 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 		return this.callParent(arguments);
 	},
 
-
-	showRemainingTime: function() {
+    showRemainingTime: function() {
 		var panel = this.up('reader');
 
 		if (panel && panel.showRemainingTime) {
@@ -117,8 +117,7 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 		}
 	},
 
-
-	showHeaderToast: function() {
+    showHeaderToast: function() {
 		var panel = this.up('reader');
 
 		if (panel) {
@@ -126,8 +125,7 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 		}
 	},
 
-
-	showToast: function(msg, cls) {
+    showToast: function(msg, cls) {
 		var toast,
 			left = this.getX() + this.getWidth(),
 			viewWidth = Ext.Element.getViewportWidth(),
@@ -146,7 +144,8 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 
 		return toast;
 	},
-	//endregion
+
+    //endregion
 
 
 
@@ -155,8 +154,7 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 		return this.calculateNecessaryAnnotationOffsets();
 	},
 
-
-	// NOTE: Now that we may have more than one reader, each reader should know how
+    // NOTE: Now that we may have more than one reader, each reader should know how
 	// to resolve dom ranges/nodes of annotations inside it.
 	getDomContextForRecord: function(r, doc, cleanRoot) {
 		var rangeDesc = r.get('applicableRange'),
@@ -168,8 +166,7 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 		return RangeUtils.getContextAroundRange(rangeDesc, doc, cleanRoot, cid);
 	},
 
-
-	getContentMaskTarget: function() {
+    getContentMaskTarget: function() {
 		var target;
 
 		//if we have a mask target already return that
@@ -186,7 +183,8 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 
 		return target;
 	},
-	//endregion
+
+    //endregion
 
 
 	//region Actions
@@ -194,8 +192,7 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 		delete this.annotationOffsetsCache;
 	},
 
-
-	setSplash: function(hideNotFound) {
+    setSplash: function(hideNotFound) {
 		if (!this.rendered) {
 			return;
 		}
@@ -207,13 +204,11 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 		this.splash.show();
 	},
 
-
-	allowCustomScrolling: function() {
+    allowCustomScrolling: function() {
 		return this.fireEvent('allow-custom-scrolling');
 	},
 
-
-	calculateNecessaryAnnotationOffsets: function() {
+    calculateNecessaryAnnotationOffsets: function() {
 		var cache = this.annotationOffsetsCache || {},
 				windowSizeStatics = cache.windowSizeStatics || {},
 				scrollStatics = cache.scrollStatics || {},
@@ -253,7 +248,8 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 			rect: this.el && this.el.dom && this.el.dom.getBoundingClientRect()
 		};
 	},
-	//endregion
+
+    //endregion
 
 
 	//region Event Handlers
@@ -262,8 +258,7 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 		return o.onContextMenuHandler.apply(o, arguments);
 	},
 
-
-	onceReadyForSearch: function() {
+    onceReadyForSearch: function() {
 		var me = this;
 
 		return new Promise(function(fulfill, reject) {
@@ -275,8 +270,7 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 		});
 	},
 
-
-	goToFragment: function(fragment) {
+    goToFragment: function(fragment) {
 		var me = this;
 
 		if (fragment) {
@@ -287,7 +281,7 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 		}
 	},
 
-	goToNote: function(note) {
+    goToNote: function(note) {
 		var me = this;
 
 		if (note) {
@@ -298,8 +292,7 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 		}
 	},
 
-
-	setPageInfo: function(pageInfo, bundle, fragment, note) {
+    setPageInfo: function(pageInfo, bundle, fragment, note) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setPageInfo.bind(this, pageInfo, bundle, fragment, note));
 			return;
@@ -349,8 +342,7 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 			});
 	},
 
-
-	allowNavigation: function() {
+    allowNavigation: function() {
 		var note = this.getNoteOverlay(),
 			assessment = this.getAssessment();
 
@@ -358,25 +350,21 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 			.then(assessment.allowNavigation.bind(assessment));
 	},
 
-
-	beforeRouteChange: function() {
+    beforeRouteChange: function() {
 		var assessment = this.getAssessment();
 
 		return assessment.beforeRouteChange();
 	},
 
-
-	onNavigationAborted: function(resp, ntiid) {
+    onNavigationAborted: function(resp, ntiid) {
 		this.splash.removeCls('initial');
 	},
 
-
-	isAssignment: function() {
+    isAssignment: function() {
 		return this.getAssessment().isAssignment();
 	},
 
-
-	loadPageInfo: function(pageInfo) {
+    loadPageInfo: function(pageInfo) {
 		var me = this,
 			proxy = ContentProxy;
 
@@ -411,10 +399,11 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 		});
 	},
 
-	//endregion
+    //endregion
 
 
 	//region Statics
+	//endregion
 	statics: {
 		get: function(prefix) {
 			var instances = this.instances;
@@ -448,9 +437,6 @@ export default Ext.define('NextThought.app.contentviewer.components.Reader', {
 			}
 		}
 	}
-	//endregion
-
-
 }, function() {
 	//TODO: can we get rid of this?
 	ContentAPIRegistry.register('togglehint', function(e) {

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.ux.Pointer', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.ux.Pointer', {
 	extend: 'Ext.Component',
 	alias: 'widget.pointer',
 

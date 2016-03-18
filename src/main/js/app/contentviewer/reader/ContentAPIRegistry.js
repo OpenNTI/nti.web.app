@@ -1,3 +1,6 @@
+var Ext = require('extjs');
+
+
 /**
  * TODO: Explain this class.
  *
@@ -5,7 +8,7 @@
  * I don't think we use "ToggleHint" anymore...and if we do, that may need to be come "content" scripts...
  * what about previous page?? I would like to dump this concept.
  */
-export default Ext.define('NextThought.app.contentviewer.reader.ContentAPIRegistry', {
+module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.ContentAPIRegistry', {
 	singleton: true,
 	mixins: {
 		observable: 'Ext.util.Observable'

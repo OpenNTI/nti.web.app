@@ -1,3 +1,6 @@
+var Ext = require('extjs');
+
+
 /** force our implementation for now. */
 //TODO: don't use a custom promise
 window.Promise = null;
@@ -337,4 +340,4 @@ Promise.first = Promise.first || function(values) {
 };
 
 
-export default Ext.define('NextThought.util.Promise', {});
+module.exports = exports = Ext.define('NextThought.util.Promise', {});

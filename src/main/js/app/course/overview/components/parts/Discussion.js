@@ -1,25 +1,28 @@
-export default Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
-	extend: 'Ext.Component',
-	alias: [
+var Ext = require('extjs');
+var Globals = require('../../../../../util/Globals');
+var ParseUtils = require('../../../../../util/Parsing');
+var MixinsEllipsisText = require('../../../../../mixins/EllipsisText');
+var ModelDiscussion = require('../../../../../model/Discussion');
+var ModelDiscussionRef = require('../../../../../model/DiscussionRef');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
+    extend: 'Ext.Component',
+
+    alias: [
 		'widget.course-overview-discussion',
 		'widget.course-overview-discussionref'
 	],
 
-	requires: [
-		'NextThought.model.Discussion',
-		'NextThought.model.DiscussionRef'
-	],
-
-	mixins: {
+    mixins: {
 		EllipsisText: 'NextThought.mixins.EllipsisText'
 	},
 
-	ui: 'course',
-	cls: 'overview-discussion',
+    ui: 'course',
+    cls: 'overview-discussion',
+    containerCls: 'discussions',
 
-	containerCls: 'discussions',
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{ cls: 'image', style: {backgroundImage: 'url({icon})'}},
 		{ cls: 'meta', cn: [
 			{ cls: 'label', html: '{label}'},
@@ -28,16 +31,14 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Disc
 		]}
 	]),
 
-
-	listeners: {
+    listeners: {
 		click: {
 			element: 'el',
 			fn: 'onClick'
 		}
 	},
 
-
-	constructor: function(config) {
+    constructor: function(config) {
 		var n = config.node || {getAttribute: function(a) { return config[a];} },
 			i = config.locationInfo || {},
 			icon = n.getAttribute('icon');
@@ -60,8 +61,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Disc
 		this.callParent([config]);
 	},
 
-
-	getIcon: function(icon, root) {
+    getIcon: function(icon, root) {
 		if (icon && Globals.ROOT_URL_PATTERN.test(icon)) {
 			return getURL(icon);
 		}
@@ -70,14 +70,12 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Disc
 		}
 	},
 
-
-	getBundle: function() {
+    getBundle: function() {
 		var container = this.up('content-view-container');
 		return container && container.currentBundle;
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {},this.data);
 		this.idsToLookup = Ext.clone(this.data.ntiid) || [];
@@ -85,14 +83,13 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Disc
 		this.WindowActions = NextThought.app.windows.Actions.create();
 	},
 
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.ellipsisTitle();
 	},
 
-
-	ellipsisTitle: function() {
+    ellipsisTitle: function() {
 		var title = this.el.down('.title');
 
 		if (title && title.dom) {
@@ -100,8 +97,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Disc
 		}
 	},
 
-
-	loadTopic: function(ntiid) {
+    loadTopic: function(ntiid) {
 		var parsedId = ParseUtils.parseNTIID(ntiid),
 			bundle = this.getBundle(),
 			e;
@@ -134,8 +130,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Disc
 		Service.getObject(ntiid, this.onTopicResolved, this.onTopicResolveFailure, this, true);
 	},
 
-
-	onTopicResolved: function(topic) {
+    onTopicResolved: function(topic) {
 		if (!/topic$/i.test(topic.get('Class'))) {
 			console.warn('Got something other than what we were expecting. Was expecting a Topic, got:', topic);
 		}
@@ -156,8 +151,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Disc
 		}
 	},
 
-
-	onTopicResolveFailure: function() {
+    onTopicResolveFailure: function() {
 		console.warn('Could not load the topic object: ', arguments);
 
 		if (!Ext.isEmpty(this.idsToLookup)) {
@@ -165,8 +159,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Disc
 		}
 	},
 
-
-	onClick: function() {
+    onClick: function() {
 		if (!this.topic) {
 			alert('An error occurred showing this discussion.');
 		}

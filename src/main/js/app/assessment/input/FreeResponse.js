@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.assessment.input.FreeResponse', {
+var Ext = require('extjs');
+var InputBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.input.FreeResponse', {
 	extend: 'NextThought.app.assessment.input.Base',
 	alias: 'widget.question-input-freeresponsepart',
 

@@ -1,11 +1,12 @@
-export default Ext.define('NextThought.model.store.StripePurchaseOrder', {
-	extend: 'NextThought.model.Base',
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+var StoreStripePurchaseItem = require('./StripePurchaseItem');
 
-	requires: [
-		'NextThought.model.store.StripePurchaseItem'
-	],
 
-	fields: [
+module.exports = exports = Ext.define('NextThought.model.store.StripePurchaseOrder', {
+    extend: 'NextThought.model.Base',
+
+    fields: [
 		{ name: 'Amount', type: 'float', persist: false },
 		{ name: 'Coupon', type: 'auto', persist: false, defaultValue: undefined},
 		{ name: 'Currency', type: 'string', persist: false },

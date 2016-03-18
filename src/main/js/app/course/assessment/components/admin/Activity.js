@@ -1,21 +1,21 @@
-export default Ext.define('NextThought.app.course.assessment.components.admin.Activity', {
-	extend: 'NextThought.app.course.assessment.components.student.Activity',
-	alias: 'widget.course-assessment-admin-activity',
-
-	view: 'admin',
-
-	requires: [
-		'NextThought.model.courseware.CourseActivity'
-	],
+var Ext = require('extjs');
+var UserRepository = require('../../../../../cache/UserRepository');
+var ParseUtils = require('../../../../../util/Parsing');
+var StudentActivity = require('../student/Activity');
+var CoursewareCourseActivity = require('../../../../../model/courseware/CourseActivity');
 
 
-	MIME_TYPE_MAP: {
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.Activity', {
+    extend: 'NextThought.app.course.assessment.components.student.Activity',
+    alias: 'widget.course-assessment-admin-activity',
+    view: 'admin',
+
+    MIME_TYPE_MAP: {
 		'application/vnd.nextthought.assessment.userscourseassignmenthistoryitemfeedback': 'addFeedback',
 		'application/vnd.nextthought.assessment.assignmentsubmission': 'addStudentSubmission'
 	},
 
-
-	setAssignmentsData: function() {
+    setAssignmentsData: function() {
 		var me = this;
 		me.callParent(arguments);
 
@@ -32,25 +32,21 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Ac
 		return me.loadPage();
 	},
 
-
-	onLoadMore: function() {
+    onLoadMore: function() {
 		this.loadPage();
 	},
 
-
-	mask: function() {
+    mask: function() {
 		if (!this.rendered) {return;}
 		this.callParent(arguments);
 	},
 
-
-	unmask: function() {
+    unmask: function() {
 		if (!this.rendered || this.isDestroyed) {return;}
 		this.callParent(arguments);
 	},
 
-
-	setMoreLinkState: function(state) {
+    setMoreLinkState: function(state) {
 		if (!this.rendered) {
 			this.on({afterrender: this.setMoreLinkState.bind(this, state), single: true});
 			return;
@@ -58,8 +54,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Ac
 		this.loadMoreLink[state ? 'removeCls' : 'addCls']('hidden');
 	},
 
-
-	loadPage: function() {
+    loadPage: function() {
 		var me = this;
 		me.mask();
 		return Service.request(me.nextPageURL).done(function(json) {
@@ -96,11 +91,9 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Ac
 		});
 	},
 
+    deriveEvents: Ext.emptyFn,
 
-	deriveEvents: Ext.emptyFn,
-
-
-	addFeedback: function(f) {
+    addFeedback: function(f) {
 		var rec = this.callParent(arguments),
 			path = (f.get('href') || '').split('/').slice(0, -2).join('/');//EWWW... url nastyness
 
@@ -127,8 +120,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Ac
 		return rec;
 	},
 
-
-	addStudentSubmission: function(s) {
+    addStudentSubmission: function(s) {
 		var c = s.get('Creator'),
 			str = ' submitted',
 			r = this.addEvent(this.getEventConfig('--' + str, s.get('assignmentId'), s.get('CreatedTime')));
@@ -142,8 +134,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Ac
 		}
 	},
 
-
-	goToAssignment: function(s, record) {
+    goToAssignment: function(s, record) {
 		var user = record.get('user'),
 			userId,
 			me = this,

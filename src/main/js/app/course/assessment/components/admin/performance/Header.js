@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.assessment.components.admin.performance.Header', {
+var Ext = require('extjs');
+var AssignmentAdmin = require('../../../../../contentviewer/navigation/assignment/Admin');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.Header', {
 	extend: 'NextThought.app.contentviewer.navigation.assignment.Admin',
 	alias: 'widget.course-assessment-admin-performance-header',
 

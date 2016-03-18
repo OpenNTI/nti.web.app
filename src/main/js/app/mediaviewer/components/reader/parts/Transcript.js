@@ -1,27 +1,28 @@
-export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.Transcript', {
-	extend: 'Ext.view.View',
-	alias: 'widget.video-transcript',
+var Ext = require('extjs');
+var RangeUtils = require('../../../../../util/Ranges');
+var MixinsAnnotationsMixin = require('../mixins/AnnotationsMixin');
+var WebvttTranscript = require('../../../../../webvtt/Transcript');
+var WebvttCue = require('../../../../../webvtt/Cue');
+var TranscriptCue = require('../../../../../model/transcript/Cue');
+var MediaviewerActions = require('../../../Actions');
 
-	requires: [
-		'NextThought.webvtt.Transcript',
-		'NextThought.webvtt.Cue',
-		'NextThought.model.transcript.Cue',
-		'NextThought.app.mediaviewer.Actions'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.parts.Transcript', {
+    extend: 'Ext.view.View',
+    alias: 'widget.video-transcript',
+
+    mixins: {
 		transcriptItem: 'NextThought.app.mediaviewer.components.reader.mixins.AnnotationsMixin'
 	},
 
-
-	//	ui: 'content-launcher',
+    //	ui: 'content-launcher',
 	cls: 'content-video-transcript',
 
-	trackOver: true,
-	overItemCls: 'over',
-	isPresentationPartReady: false,
+    trackOver: true,
+    overItemCls: 'over',
+    isPresentationPartReady: false,
 
-	statics: {
+    statics: {
 		processTranscripts: function(c) {
 			var parser = new NextThought.webvtt.Transcript({
 					input: c,
@@ -32,13 +33,13 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		}
 	},
 
-
-	renderSelectors: {
+    renderSelectors: {
 		contentEl: '.text-content'
 	},
 
-	itemSelector: '.row-item',
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
+    itemSelector: '.row-item',
+
+    tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': '.', cn: [{
 			tag: 'tpl', 'if': '!type', cn: {
 				tag: 'span', cls: 'cue row-item', 'cue-start': '{startTime}', 'cue-end': '{endTime}', 'cue-id': '{identifier}', cn: [
@@ -66,8 +67,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		}
 	}),
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.mixins.transcriptItem.constructor.apply(this, arguments);
 		this.enableBubble(['jump-video-to', 'presentation-part-ready', 'register-records', 'unregister-records']);
@@ -76,8 +76,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		this.__setContent();
 	},
 
-
-	containerIdForData: function() {
+    containerIdForData: function() {
 		var cid = this.transcript && this.transcript.get('associatedVideoId');
 		if (!cid) {
 			return null;
@@ -85,8 +84,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		return {containerId: cid, doesNotParticipateWithFlattenedPage: true};
 	},
 
-
-	buildStore: function(cueList, filter) {
+    buildStore: function(cueList, filter) {
 		var cues = [], s;
 		Ext.each(cueList, function(c) {
 			var m = NextThought.model.transcript.Cue.fromParserCue(c);
@@ -111,8 +109,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		return s;
 	},
 
-
-	getUserDataTimeFilter: function() {
+    getUserDataTimeFilter: function() {
 		function fn(item) {
 			var range = item.get('applicableRange'),
 				startAnchorTime = range.start && range.start.seconds,
@@ -133,8 +130,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		return (start >= 0 && end > start) ? fn : null;
 	},
 
-
-	getTimeRangeFilter: function() {
+    getTimeRangeFilter: function() {
 		function fn(item) {
 			if (item.get('type') === 'section') {
 				// NOTE: For section cue, we may not have an endTime set. So just make sure that
@@ -155,8 +151,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		return (start >= 0 && end >= start) ? fn : null;
 	},
 
-
-	__setContent: function() {
+    __setContent: function() {
 		var me = this;
 		this.MediaViewerActions.loadTranscript(this.transcript)
 			.then(function(cueList) {
@@ -174,8 +169,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 			});
 	},
 
-
-	groupByTimeInterval: function(cueList, timeInterval) {
+    groupByTimeInterval: function(cueList, timeInterval) {
 		// TODO: Group by Sections defined in the parser. Right now we're only grouping by time Interval.
 		var list = [],
 			currentTime = this.transcript.get('desired-time-start') || (cueList[0] && cueList[0].startTime);
@@ -197,16 +191,14 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		return list;
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
 			content: this.content
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.el.unselectable();
 
@@ -229,8 +221,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		});
 	},
 
-
-	onViewReady: function() {
+    onViewReady: function() {
 		var me = this;
 		me.transcriptReady = true;
 
@@ -245,8 +236,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		});
 	},
 
-
-	positionAnnotationNibs: function(parentEl) {
+    positionAnnotationNibs: function(parentEl) {
 		var me = this;
 		// Set the top position of note widget nibs.
 		Ext.each(this.el.query('.cue .add-note-here'), function(nib) {
@@ -260,8 +250,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		});
 	},
 
-
-	cueSelected: function(view, record, item, index, e) {
+    cueSelected: function(view, record, item, index, e) {
 		if (!record) { return; }
 		if (e.getTarget('.add-note-here')) {
 			this.openEditor.apply(this, arguments);
@@ -275,7 +264,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		this.fireEvent('jump-video-to', videoId, start);
 	},
 
-	openEditor: function(view, record, item, index, e) {
+    openEditor: function(view, record, item, index, e) {
 		var cueEl = Ext.get(item),
 			cueStart = record.get('startTime'),
 			cueEnd = record.get('endTime'),
@@ -289,24 +278,20 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		});
 	},
 
-
-	getAnchorResolver: function() {
+    getAnchorResolver: function() {
 		return NextThought.app.mediaviewer.components.reader.AnchorResolver;
 	},
 
-
-	getCueStore: function() {
+    getCueStore: function() {
 		return this.store;
 	},
 
-
-	openEditorInline: function() {
+    openEditorInline: function() {
 		this.contextMenu.hide();
 		this.fireEvent('show-editor-inline', this.contextMenu.cueData, this.contextMenu.position);
 	},
 
-
-	buildContextMenu: function() {
+    buildContextMenu: function() {
 		var me = this,
 			menu = Ext.widget('menu', {
 			closeAction: 'destroy',
@@ -331,8 +316,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		this.contextMenu = menu;
 	},
 
-
-	showContextMenu: function(e) {
+    showContextMenu: function(e) {
 		e.stopEvent();
 
 		if (!this.contextMenu) {
@@ -358,8 +342,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		Ext.defer(function() { sel.addRange(range); }, 10, this);
 	},
 
-
-	getCueInfoFromRange: function(range) {
+    getCueInfoFromRange: function(range) {
 		if (!range || range.isCollapsed) { return null; }
 
 		var d = range.cloneContents(),
@@ -377,8 +360,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		return { startTime: startTime, endTime: endTime, range: range, startCueId: sid, endCueId: eid, containerId: cid, userDataStore: this.userDataStore };
 	},
 
-
-	mouseOver: function(view, record, item, index, e) {
+    mouseOver: function(view, record, item, index, e) {
 		var box = item && item.querySelector('.add-note-here'),
 			add = Ext.get(box),
 			currentDivs = this.el.query('.add-note-here:not(.hidden)');
@@ -398,8 +380,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		}, 100);
 	},
 
-
-	mouseOut: function(view, record, item, index, e) {
+    mouseOut: function(view, record, item, index, e) {
 		var box = item && item.querySelector('.add-note-here'),
 			add = Ext.get(box);
 
@@ -414,8 +395,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		}
 	},
 
-
-	timePointerClicked: function(e) {
+    timePointerClicked: function(e) {
 		var t = e.getTarget(),
 			b = parseFloat(Ext.fly(t).getAttribute('data-time')),
 			videoId = this.transcript.get('associatedVideoId');
@@ -424,8 +404,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		this.fireEvent('jump-video-to', videoId, b);
 	},
 
-
-	syncTranscriptWithVideo: function(videoState) {
+    syncTranscriptWithVideo: function(videoState) {
 		if (Ext.isEmpty(videoState)) { return; }
 
 		var currentTime = (videoState || {}).time, currentCue, s;
@@ -439,15 +418,12 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		this.selectNewCue(currentCue);
 	},
 
-
-	isTimeWithinTimeRange: function(time) {
+    isTimeWithinTimeRange: function(time) {
 		var tRange = this.getTimeRange();
 		return tRange.start <= time && time <= tRange.end;
 	},
 
-
-
-	getElementAtTime: function(seconds) {
+    getElementAtTime: function(seconds) {
 		var cueStore = this.getCueStore(),
 			cues = cueStore && cueStore.queryBy(function(rec) {
 				return rec.get('startTime') <= seconds && seconds <= rec.get('endTime');
@@ -461,8 +437,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		return sEl;
 	},
 
-
-	getTimeRange: function() {
+    getTimeRange: function() {
 		var t = this.transcript,
 			start = t.get('desired-time-start'),
 			end = t.get('desired-time-end'),
@@ -481,8 +456,7 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		return {start: start, end: end};
 	},
 
-
-	selectNewCue: function(newCue) {
+    selectNewCue: function(newCue) {
 		if (newCue === this.currentCue || Ext.isEmpty(newCue)) { return; }
 
 		var c = this.currentCue,
@@ -499,26 +473,22 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		this.currentCue = newCue;
 	},
 
-	getDocumentElement: function() {
+    getDocumentElement: function() {
 		return this.el.dom.ownerDocument;
 	},
 
-
-	getCleanContent: function() {
+    getCleanContent: function() {
 		return this.el.dom;
 	},
 
-
-	domRangeForRecord: function(rec) {
+    domRangeForRecord: function(rec) {
 		var cueStore = this.getCueStore(),
 			anchorResolver = NextThought.app.mediaviewer.components.reader.AnchorResolver;
 
 		return anchorResolver.fromTimeRangeToDomRange(rec.get('applicableRange'), cueStore, this.el);
 	},
 
-
-	getDomContextForRecord: function(r) {
+    getDomContextForRecord: function(r) {
 		return RangeUtils.getContextAroundRange(r.get('applicableRange'), this.getDocumentElement(), this.getCleanContent(), r.get('ContainerId'));
 	}
-
 });

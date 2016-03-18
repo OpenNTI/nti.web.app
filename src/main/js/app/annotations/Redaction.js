@@ -1,15 +1,16 @@
-export default Ext.define('NextThought.app.annotations.Redaction', {
-	extend: 'NextThought.app.annotations.Highlight',
-	alias: 'widget.redaction',
-	requires: [
-		'NextThought.cache.IdCache'
-	],
-
-	redactionCls: 'redaction',
-	cls: 'redacted',
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var AnnotationsHighlight = require('./Highlight');
+var CacheIdCache = require('../../cache/IdCache');
 
 
-	constructor: function(config) {
+module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
+    extend: 'NextThought.app.annotations.Highlight',
+    alias: 'widget.redaction',
+    redactionCls: 'redaction',
+    cls: 'redacted',
+
+    constructor: function(config) {
 		var r = config && config.record;
 		if (r && r.phantom) {
 			this.record = r;
@@ -25,8 +26,7 @@ export default Ext.define('NextThought.app.annotations.Redaction', {
 		}
 	},
 
-
-	buildMenu: function(items) {
+    buildMenu: function(items) {
 		var me = this;
 
 		items.push({
@@ -38,8 +38,7 @@ export default Ext.define('NextThought.app.annotations.Redaction', {
 		return this.callParent([items]);
 	},
 
-
-	makeEditableSpanEditable: function(e) {
+    makeEditableSpanEditable: function(e) {
 		e.stopEvent();
 		var s = this.editableSpan, range, save = this.masterSpan.down('.edit'),
 				sel = this.doc.parentWindow.getSelection();
@@ -69,8 +68,7 @@ export default Ext.define('NextThought.app.annotations.Redaction', {
 		return false;
 	},
 
-
-	makeEditableSpanNotEditable: function() {
+    makeEditableSpanNotEditable: function() {
 		var s = this.editableSpan, save = this.masterSpan.down('.edit');
 		if (!s || !this.record.isModifiable()) {
 			return;
@@ -83,8 +81,7 @@ export default Ext.define('NextThought.app.annotations.Redaction', {
 		s.set({'contenteditable': undefined});
 	},
 
-
-	render: function() {
+    render: function() {
 		var y = this.callParent(arguments),
 			isBlock = this.isBlockRedaction();
 
@@ -119,7 +116,7 @@ export default Ext.define('NextThought.app.annotations.Redaction', {
 		return y;
 	},
 
-	getRestrictedRange: function(annotationOffsets) {
+    getRestrictedRange: function(annotationOffsets) {
 		var rect, t, rtop, rr;
 		if (this.masterSpan.hasCls(this.cls)) {
 			t = this.actionSpan.getBoundingClientRect();
@@ -133,8 +130,7 @@ export default Ext.define('NextThought.app.annotations.Redaction', {
 		return null;
 	},
 
-
-	visibilityChanged: function(show) {
+    visibilityChanged: function(show) {
 		if (this.actionSpan) {
 			Ext.fly(this.actionSpan).setVisibilityMode(Ext.dom.Element.DISPLAY);
 			Ext.fly(this.actionSpan)[show ? 'show' : 'hide']();
@@ -142,16 +138,14 @@ export default Ext.define('NextThought.app.annotations.Redaction', {
 		return this.callParent(arguments);
 	},
 
-
-	isBlockRedaction: function() {
+    isBlockRedaction: function() {
 		return this.record && Boolean(this.record.get('redactionExplanation'));
 		//kind of hacky... as soon as you blank out this field, the redaction will become "inline" and there is no way
 		// to go back, nor is this obvious. TODO: expose a "style" much like highlights/notes. (I'm actually surprised
 		// style wasn't accepted already)
 	},
 
-
-	createActionHandle: function(before, block) {
+    createActionHandle: function(before, block) {
 
 		if (!before) {return null;}
 
@@ -182,16 +176,13 @@ export default Ext.define('NextThought.app.annotations.Redaction', {
 		return this.masterSpan.dom;
 	},
 
-
-	insertFooter: function(after) {
+    insertFooter: function(after) {
 
 	},
 
+    onClick: function() {},
 
-	onClick: function() {},
-
-
-	onControlClick: function(e) {
+    onControlClick: function(e) {
 		//stop event
 		e.stopEvent();
 
@@ -219,23 +210,20 @@ export default Ext.define('NextThought.app.annotations.Redaction', {
 		return false; //for ie
 	},
 
-
-	saveEditorContent: function() {
+    saveEditorContent: function() {
 		this.makeEditableSpanNotEditable();
 		this.record.set('replacementContent', this.editableSpan.dom.textContent);
 		this.record.save();
 		this.manager.resume(this.prefix);
 	},
 
-
-	resetEditorContent: function() {
+    resetEditorContent: function() {
 		this.makeEditableSpanNotEditable();
 		this.editableSpan.update(this.record.get('replacementContent'));
 		this.manager.resume(this.prefix);
 	},
 
-
-	editableSpanEditorKeyDown: function(e, span) {
+    editableSpanEditorKeyDown: function(e, span) {
 		var k = e.getKey();
 
 
@@ -259,8 +247,7 @@ export default Ext.define('NextThought.app.annotations.Redaction', {
 		return true;
 	},
 
-
-	cleanup: function() {
+    cleanup: function() {
 		console.debug('cleanup', this.record.phantom);
 		try {
 			if (this.actionSpan) {Ext.fly(this.actionSpan).remove();}
@@ -271,8 +258,7 @@ export default Ext.define('NextThought.app.annotations.Redaction', {
 		this.callParent(arguments);
 	},
 
-
-	toggleRedaction: function(e) {
+    toggleRedaction: function(e) {
 		var redactionCollapsed = !this.compElements.first().hasCls(this.cls),
 			me = this;
 
@@ -317,7 +303,7 @@ export default Ext.define('NextThought.app.annotations.Redaction', {
 		return false;
 	},
 
-	assureRedactedFootnoteText: function(footnotes) {
+    assureRedactedFootnoteText: function(footnotes) {
 		var me = this;
 
 		if (!footnotes) {
@@ -332,23 +318,22 @@ export default Ext.define('NextThought.app.annotations.Redaction', {
 		});
 	},
 
-  containedFootnotes: function() {
-    var me = this,
-            footnotes = [];
+    containedFootnotes: function() {
+	  var me = this,
+			  footnotes = [];
 
-		if (!this.compElements) {
-			return null;
-		}
+		  if (!this.compElements) {
+			  return null;
+		  }
 
-    this.compElements.each(function(e) {
-      var fns = e.query('a.footnote');
-      Ext.each(fns, function(fn) {
-        footnotes.push(Ext.DomQuery.select(fn.getAttribute('href'), me.doc)[0]);
-      });
-    });
-    return new Ext.dom.CompositeElement(footnotes);
-  }
-
+	  this.compElements.each(function(e) {
+		var fns = e.query('a.footnote');
+		Ext.each(fns, function(fn) {
+		  footnotes.push(Ext.DomQuery.select(fn.getAttribute('href'), me.doc)[0]);
+		});
+	  });
+	  return new Ext.dom.CompositeElement(footnotes);
+	}
 }, function() {
 
 	var p = this.prototype,

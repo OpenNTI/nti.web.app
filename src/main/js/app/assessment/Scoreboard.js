@@ -1,23 +1,24 @@
-export default Ext.define('NextThought.app.assessment.Scoreboard', {
-	extend: 'NextThought.app.contentviewer.overlay.Panel',
-	alias: 'widget.assessment-scoreboard',
-	requires: [
-		'NextThought.common.chart.Score',
-		'NextThought.app.assessment.ScoreboardHeader',
-		'NextThought.app.assessment.ScoreboardTally',
-		'NextThought.app.assessment.QuizSubmission'
-	],
+var Ext = require('extjs');
+var OverlayPanel = require('../contentviewer/overlay/Panel');
+var ChartScore = require('../../common/chart/Score');
+var AssessmentScoreboardHeader = require('./ScoreboardHeader');
+var AssessmentScoreboardTally = require('./ScoreboardTally');
+var AssessmentQuizSubmission = require('./QuizSubmission');
 
-	cls: 'scoreboard',
-	ui: 'assessment',
 
-	hidden: true,
-	layout: {
+module.exports = exports = Ext.define('NextThought.app.assessment.Scoreboard', {
+    extend: 'NextThought.app.contentviewer.overlay.Panel',
+    alias: 'widget.assessment-scoreboard',
+    cls: 'scoreboard',
+    ui: 'assessment',
+    hidden: true,
+
+    layout: {
 		type: 'hbox',
 		align: 'middle'
 	},
 
-	items: [
+    items: [
 		{ xtype: 'assessment-score' },
 		{ xtype: 'assessment-tally', flex: 1 },
 		{ xtype: 'button',
@@ -28,11 +29,9 @@ export default Ext.define('NextThought.app.assessment.Scoreboard', {
 		}
 	],
 
+    shouldShow: true,
 
-	shouldShow: true,
-
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.addDocked({ dock: 'top', xtype: 'assessment-scoreboard-header', questionSet: this.questionSet});
 
@@ -49,28 +48,25 @@ export default Ext.define('NextThought.app.assessment.Scoreboard', {
 		});
 	},
 
-
-	doReset: function() {
+    doReset: function() {
 		this.hide();
 
 		wait()
 			.then(this.realignAnnotations.bind(this));
 	},
 
-
-	realignAnnotations: function() {
+    realignAnnotations: function() {
 		var annotations = this.reader.getAnnotations();
 
 		annotations.realignAnnotations();
 	},
 
-
-	disableView: function() {
+    disableView: function() {
 		this.shouldShow = false;
 		this.hide();
 	},
 
-	updateWithResults: function(assessedQuestionSet) {
+    updateWithResults: function(assessedQuestionSet) {
 		if (!this.shouldShow || this.questionSet.associatedAssignment) {
 			return;
 		}
@@ -91,14 +87,12 @@ export default Ext.define('NextThought.app.assessment.Scoreboard', {
 			.then(this.realignAnnotations.bind(this));
 	},
 
-
-	updateWithScore: function(correct, total) {
+    updateWithScore: function(correct, total) {
 		this.down('assessment-tally').setTally(correct, total);
 		this.down('assessment-score').setValue(Math.floor(100 * correct / total) || 0);
 	},
 
-
-	setPriorResults: function(assessedQuestionSet) {
+    setPriorResults: function(assessedQuestionSet) {
 		if (!this.shouldShow) {return;}
 
 		//Sort by date, so that the latest is as 0, and the oldest is at N:
@@ -123,10 +117,9 @@ export default Ext.define('NextThought.app.assessment.Scoreboard', {
 		//}
 	},
 
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 	}
-
 }, function() {
 	this.borrow(NextThought.app.assessment.QuizSubmission, ['resetBasedOnButtonClick', 'maybeDoReset']);
 });

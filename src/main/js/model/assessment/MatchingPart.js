@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.assessment.MatchingPart', {
+var Ext = require('extjs');
+var AssessmentPart = require('./Part');
+
+
+module.exports = exports = Ext.define('NextThought.model.assessment.MatchingPart', {
 	extend: 'NextThought.model.assessment.Part',
 	fields: [
 		{ name: 'labels', type: 'auto' },

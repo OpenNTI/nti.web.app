@@ -1,14 +1,13 @@
-export default Ext.define('NextThought.app.context.components.cards.RelatedWork', {
-	extend: 'Ext.Component',
-	alias: 'widget.context-relatedwork-card',
+var Ext = require('extjs');
+var ContextStateStore = require('../../StateStore');
 
-	requires: [
-		'NextThought.app.context.StateStore'
-	],
 
-	cls: 'context-card',
+module.exports = exports = Ext.define('NextThought.app.context.components.cards.RelatedWork', {
+    extend: 'Ext.Component',
+    alias: 'widget.context-relatedwork-card',
+    cls: 'context-card',
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'context-image related-context content-card', cn: [
 			{cls: 'thumbnail'},
 			{cls: 'meta', cn: [
@@ -20,13 +19,12 @@ export default Ext.define('NextThought.app.context.components.cards.RelatedWork'
 		{cls: 'see-more hidden', html: 'Read More'}
 	]),
 
-	renderSelectors: {
+    renderSelectors: {
 		iconEl: '.thumbnail',
 		seeMoreEl: '.see-more'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 
@@ -37,8 +35,7 @@ export default Ext.define('NextThought.app.context.components.cards.RelatedWork'
 		});
 	},
 
-
-	isInContext: function() {
+    isInContext: function() {
 		var context = this.ContextStore.getContext(),
 			root = context && context.last(),
 			id = root && root.obj && root.obj.getId();
@@ -46,8 +43,7 @@ export default Ext.define('NextThought.app.context.components.cards.RelatedWork'
 		return this.record && id === this.record.get('ContainerId');
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.setContent();
 
@@ -57,7 +53,7 @@ export default Ext.define('NextThought.app.context.components.cards.RelatedWork'
 		}
 	},
 
-	/**
+    /**
 	 * Override this if you want to set content after the component's been rendered.
 	 */
 	setContent: function() {

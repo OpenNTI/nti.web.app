@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.form.Utils', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.form.Utils', {
 	constructor: function(config) {
 
 		this.handlers = {

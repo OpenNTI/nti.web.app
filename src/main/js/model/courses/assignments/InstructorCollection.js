@@ -1,27 +1,27 @@
-export default Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
-	extend: 'NextThought.model.courses.assignments.BaseCollection',
-
-	requires: [
-		'NextThought.cache.SharedInstance',
-		'NextThought.store.courseware.GradeBookSummaries',
-		'NextThought.store.courseware.StudentHistoryItems',
-		'NextThought.store.courseware.AssignmentHistoryItems'
-	],
+var Ext = require('extjs');
+var ParseUtils = require('../../../util/Parsing');
+var AssignmentsBaseCollection = require('./BaseCollection');
+var CacheSharedInstance = require('../../../cache/SharedInstance');
+var CoursewareGradeBookSummaries = require('../../../store/courseware/GradeBookSummaries');
+var CoursewareStudentHistoryItems = require('../../../store/courseware/StudentHistoryItems');
+var CoursewareAssignmentHistoryItems = require('../../../store/courseware/AssignmentHistoryItems');
 
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
+    extend: 'NextThought.model.courses.assignments.BaseCollection',
+
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.GradeCache = this.__createGradeCache();
 		this.HistoryItemCache = this.__createHistoryItemCache();
 	},
 
-	__getIdOf: function(obj) {
+    __getIdOf: function(obj) {
 		return Ext.isString(obj) ? obj : obj.getId();
 	},
 
-
-	__createGradeCache: function() {
+    __createGradeCache: function() {
 		return NextThought.cache.SharedInstance.create({
 			getKeyForRecord: function(record) {
 				var userName = record.get ? record.get('Username') : record.Username,
@@ -32,8 +32,7 @@ export default Ext.define('NextThought.model.courses.assignments.InstructorColle
 		});
 	},
 
-
-	__createHistoryItemCache: function() {
+    __createHistoryItemCache: function() {
 		var me = this;
 
 		return NextThought.cache.SharedInstance.create({
@@ -48,8 +47,7 @@ export default Ext.define('NextThought.model.courses.assignments.InstructorColle
 		});
 	},
 
-
-	/**
+    /**
 	 * Get the HistoryItem for an assignment, doesn't make sense for an instructor so reject
 	 * @param  {String} assignment NTIID of the assignment
 	 * @return {Promse}            fulfills with the history item
@@ -58,7 +56,7 @@ export default Ext.define('NextThought.model.courses.assignments.InstructorColle
 		return Promise.reject();
 	},
 
-	/**
+    /**
 	 * Get the HistoryItemSummaries for an assignment
 	 * returns a store that can be paged, filtered, and searched through
 	 *
@@ -75,8 +73,7 @@ export default Ext.define('NextThought.model.courses.assignments.InstructorColle
 		});
 	},
 
-
-	/**
+    /**
 	 * Get the HistoryItemSummaries for a user
 	 * returns a store that can be pages, filtered, and searched though
 	 *
@@ -96,8 +93,7 @@ export default Ext.define('NextThought.model.courses.assignments.InstructorColle
 		});
 	},
 
-
-	/**
+    /**
 	 * Returns the gradebook entry for an assignment
 	 * @param  {String} assignment NTIID of the assignment
 	 * @return {Promise}           fulfills with the gradebook entry
@@ -106,8 +102,7 @@ export default Ext.define('NextThought.model.courses.assignments.InstructorColle
 		return Promise.resolve();
 	},
 
-
-	/**
+    /**
 	 * Returns the grade for a user on an assignment
 	 * @param  {String} assignment NTIID of the assignment
 	 * @param  {String} user       Username of the user
@@ -126,8 +121,7 @@ export default Ext.define('NextThought.model.courses.assignments.InstructorColle
 		return Promise.resolve(this.createPlaceholderGrade(assignment, user));
 	},
 
-
-	/**
+    /**
 	 * Returns a store with summaries for all the users
 	 * @return {Store}		pageable, sortable, searchable list of user summaries
 	 */
@@ -142,8 +136,7 @@ export default Ext.define('NextThought.model.courses.assignments.InstructorColle
 		});
 	},
 
-
-	getHistory: function() {
+    getHistory: function() {
 		if (this.__loadHistoryRequest) { return this.__loadHistoryRequest; }
 
 		var link = this.get('HistoryURL');
@@ -167,15 +160,13 @@ export default Ext.define('NextThought.model.courses.assignments.InstructorColle
 		return this.__loadHistoryRequest;
 	},
 
-
-	getCreateGradeLink: function() {
+    getCreateGradeLink: function() {
 		var gradebook = this.getGradeBook();
 
 		return gradebook && gradebook.getLink('SetGrade');
 	},
 
-
-	createPlaceholderGrade: function(assignment, user) {
+    createPlaceholderGrade: function(assignment, user) {
 		var href = this.getCreateGradeLink(),
 			grade = NextThought.model.courseware.Grade.create({
 				href: href,
@@ -193,8 +184,7 @@ export default Ext.define('NextThought.model.courses.assignments.InstructorColle
 		return grade;
 	},
 
-
-	createPlaceholderHistoryItem: function(assignment, user) {
+    createPlaceholderHistoryItem: function(assignment, user) {
 		var grade = this.createPlaceholderGrade(assignment, user),
 			historyItem = NextThought.model.courseware.UsersCourseAssignmentHistoryItem.create({
 				Creator: user,

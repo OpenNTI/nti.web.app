@@ -1,19 +1,16 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.parentselection.Menu', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.overview-editing-parentselection-menu',
-
-	requires: [
-		'NextThought.app.course.overview.components.editing.parentselection.MenuItem',
-		'NextThought.app.course.overview.components.editing.parentselection.NewItem'
-	],
-
-	cls: 'overview-editing-parentselection-menu',
-
-	layout: 'none',
-	items: [],
+var Ext = require('extjs');
+var ParentselectionMenuItem = require('./MenuItem');
+var ParentselectionNewItem = require('./NewItem');
 
 
-	initComponent: function() {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.parentselection.Menu', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.overview-editing-parentselection-menu',
+    cls: 'overview-editing-parentselection-menu',
+    layout: 'none',
+    items: [],
+
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -58,8 +55,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		}
 	},
 
-
-	onHide: function() {
+    onHide: function() {
 		if (this.selectionItems.length) {
 			this.showItems();
 		} else {
@@ -67,8 +63,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		}
 	},
 
-
-	doSelection: function(record) {
+    doSelection: function(record) {
 		if (this.doSelectRecord) {
 			this.doSelectRecord(record);
 		}
@@ -76,8 +71,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		this.close();
 	},
 
-
-	selectRecord: function(record) {
+    selectRecord: function(record) {
 		this.selectedRecord = record;
 
 		this.itemListContainer.items.each(function(item) {
@@ -87,13 +81,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		});
 	},
 
-
-	getSelection: function() {
+    getSelection: function() {
 		return this.selectedRecord;
 	},
 
-
-	showItems: function() {
+    showItems: function() {
 		this.itemListContainer.removeAll(true);
 
 		var itemTpl = this.itemTpl,
@@ -136,8 +128,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		this.newItemContainer.hide();
 	},
 
-
-	showAddNewItem: function() {
+    showAddNewItem: function() {
 		this.newItemContainer.removeAll(true);
 
 		this.newItemContainer.add({
@@ -153,8 +144,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		this.itemListContainer.hide();
 	},
 
-
-	afterCreation: function(record) {
+    afterCreation: function(record) {
 		this.showItems();
 		this.doSelection(record);
 	}

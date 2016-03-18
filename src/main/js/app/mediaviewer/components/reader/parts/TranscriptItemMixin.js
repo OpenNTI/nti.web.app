@@ -1,9 +1,11 @@
-export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.TranscriptItemMixin', {
-	requires: ['NextThought.app.userdata.Actions'],
+var Ext = require('extjs');
+var UserdataActions = require('../../../../userdata/Actions');
 
-	isPresentationPartReady: false,
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.parts.TranscriptItemMixin', {
+    isPresentationPartReady: false,
+
+    constructor: function() {
 		var UserDataStore = NextThought.app.userdata.Actions.create();
 
 		this.on('added', function() {
@@ -11,15 +13,15 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		}, this);
 	},
 
-	getStore: function() {
+    getStore: function() {
 		return this.userDataStore;
 	},
 
-	bindToStore: function(store) {
+    bindToStore: function(store) {
 		this.userDataStore = store;
 	},
 
-	notifyReady: function() {
+    notifyReady: function() {
 		if (this.isPresentationPartReady) {
 			return;
 		}
@@ -27,11 +29,9 @@ export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.T
 		this.fireEvent('presentation-part-ready', this);
 	},
 
-
-	registerAnnotations: function() {
+    registerAnnotations: function() {
 		if (this.userDataStore) {
 			this.fireEvent('register-records', this.userDataStore, this.userDataStore.getRange(), this);
 		}
 	}
-
 });

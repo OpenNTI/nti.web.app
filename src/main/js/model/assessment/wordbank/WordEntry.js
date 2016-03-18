@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.assessment.wordbank.WordEntry', {
+var Ext = require('extjs');
+var ModelBase = require('../../Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.assessment.wordbank.WordEntry', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.naqwordentry',
 	fields: [

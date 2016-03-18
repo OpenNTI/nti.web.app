@@ -1,10 +1,13 @@
-export default Ext.define('NextThought.app.course.enrollment.components.parts.TextInput', {
-	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
-	alias: 'widget.enrollment-textinput',
+var Ext = require('extjs');
+var PartsBaseInput = require('./BaseInput');
+var FieldsSimpleTextField = require('../../../../../common/form/fields/SimpleTextField');
 
-	requires: ['NextThought.common.form.fields.SimpleTextField'],
 
-	renderTpl: Ext.DomHelper.markup([
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.TextInput', {
+    extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
+    alias: 'widget.enrollment-textinput',
+
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'input-container enrollment-input text {required} {size}'},
 		{tag: 'tpl', 'if': 'help', cn: [
 			{cls: 'help', cn: [
@@ -13,12 +16,11 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Te
 		]}
 	]),
 
-	renderSelectors: {
+    renderSelectors: {
 		inputEl: '.input-container'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		function asPatterns(v) {
@@ -32,8 +34,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Te
 		this.valuePattern = asPatterns(this.valuePattern);
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -43,8 +44,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Te
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var helpIcon = this.el.down('.help .icon'), helpText;
@@ -81,8 +81,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Te
 		//}
 	},
 
-
-	addFormatter: function(formatter) {
+    addFormatter: function(formatter) {
 		var input = this.input && this.input.inputEl && this.input.inputEl.dom;
 
 		if (input) {
@@ -90,15 +89,13 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Te
 		}
 	},
 
-
-	setUpChangeMonitors: function() {
+    setUpChangeMonitors: function() {
 		if (!this.input) { return; }
 
 		this.mon(this.input, 'changed', 'changed');
 	},
 
-
-	isValid: function() {
+    isValid: function() {
 		//if we are required and empty we aren't
 		var value = this.getValue()[this.name],
 			isValid = this.required ? !this.isEmpty() : true,
@@ -121,23 +118,19 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Te
 		return isValid;
 	},
 
-
-	isEmpty: function() {
+    isEmpty: function() {
 		return Ext.isEmpty(this.input.getValue().replace(/\W/ig, ''));
 	},
 
-
-	addError: function() {
+    addError: function() {
 		this.inputEl.addCls('error');
 	},
 
-
-	removeError: function() {
+    removeError: function() {
 		this.inputEl.removeCls('error');
 	},
 
-
-	setValue: function(value) {
+    setValue: function(value) {
 		var me = this;
 
 		if (!me.rendered) {
@@ -157,8 +150,7 @@ export default Ext.define('NextThought.app.course.enrollment.components.parts.Te
 		}
 	},
 
-
-	getValue: function(force) {
+    getValue: function(force) {
 		var value = {}, val = this.input.getValue();
 
 		if (this.getter && Ext.isFunction(this.getter)) {

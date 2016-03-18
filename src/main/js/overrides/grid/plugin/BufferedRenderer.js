@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.grid.plugin.BufferedRenderer', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.grid.plugin.BufferedRenderer', {
 	override: 'Ext.grid.plugin.BufferedRenderer',
 
 	/*onViewRefresh: function() {

@@ -1,4 +1,10 @@
-export default Ext.define('NextThought.model.assessment.TimedAssignment', {
+var Ext = require('extjs');
+var ParseUtils = require('../../util/Parsing');
+var TimeUtils = require('../../util/Time');
+var AssessmentAssignment = require('./Assignment');
+
+
+module.exports = exports = Ext.define('NextThought.model.assessment.TimedAssignment', {
 	extend: 'NextThought.model.assessment.Assignment',
 
 	isTimed: true,

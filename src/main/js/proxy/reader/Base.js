@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.proxy.reader.Base', {
+var Ext = require('extjs');
+var UserRepository = require('../../cache/UserRepository');
+
+
+module.exports = exports = Ext.define('NextThought.proxy.reader.Base', {
 	extend: 'Ext.data.reader.Json',
 	alias: 'reader.nti-base',
 

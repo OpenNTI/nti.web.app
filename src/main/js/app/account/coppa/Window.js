@@ -1,31 +1,29 @@
-export default Ext.define('NextThought.app.account.coppa.Window', {
-	extend: 'NextThought.common.window.Window',
-	alias: 'widget.coppa-window',
+var Ext = require('extjs');
+var WindowWindow = require('../../../common/window/Window');
+var AccountHeader = require('../Header');
+var CoppaMain = require('./Main');
 
-	requires: [
-		'NextThought.app.account.Header',
-		'NextThought.app.account.coppa.Main'
-	],
 
-	cls: 'coppa-window',
-	ui: 'nt-window',
-	minimizable: false,
-	constrain: true,
-	modal: true,
-	closable: false,
-	resizable: false,
-	dialog: true,
+module.exports = exports = Ext.define('NextThought.app.account.coppa.Window', {
+    extend: 'NextThought.common.window.Window',
+    alias: 'widget.coppa-window',
+    cls: 'coppa-window',
+    ui: 'nt-window',
+    minimizable: false,
+    constrain: true,
+    modal: true,
+    closable: false,
+    resizable: false,
+    dialog: true,
+    width: 480,
+    layout: 'none',
 
-	width: 480,
-
-	layout: 'none',
-
-	items: [
+    items: [
 		{xtype: 'account-header-view'},
 		{xtype: 'coppa-main-view'}
 	],
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var view = this.down('coppa-main-view');

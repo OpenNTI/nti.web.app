@@ -1,5 +1,9 @@
+var Ext = require('extjs');
+var CoursewareGradeBookSummaries = require('./GradeBookSummaries');
+
+
 /*globals User*/
-export default Ext.define('NextThought.store.courseware.AssignmentHistoryItems', {
+module.exports = exports = Ext.define('NextThought.store.courseware.AssignmentHistoryItems', {
 	extend: 'NextThought.store.courseware.GradeBookSummaries',
 
 	getAssignment: function() {

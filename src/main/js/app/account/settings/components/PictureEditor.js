@@ -1,17 +1,15 @@
-export default Ext.define('NextThought.app.account.settings.components.PictureEditor', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.picture-editor',
+var Ext = require('extjs');
+var ComponentsPictureCanvas = require('./PictureCanvas');
 
-	requires: [
-		'NextThought.app.account.settings.components.PictureCanvas'
-	],
 
-	cls: 'picture-editor',
-	ui: 'account',
+module.exports = exports = Ext.define('NextThought.app.account.settings.components.PictureEditor', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.picture-editor',
+    cls: 'picture-editor',
+    ui: 'account',
+    layout: 'none',
 
-	layout: 'none',
-
-	items: [
+    items: [
 		{ xtype: 'picture-canvas' },
 		{
 			xtype: 'container',
@@ -36,8 +34,7 @@ export default Ext.define('NextThought.app.account.settings.components.PictureEd
 		}
 	],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		var me = this;
 		me.callParent(arguments);
 		me.mon(me.down('picture-canvas'), {
@@ -55,29 +52,24 @@ export default Ext.define('NextThought.app.account.settings.components.PictureEd
 		});
 	},
 
-
-	rotate: function() {
+    rotate: function() {
 		this.down('picture-canvas').rotate();
 	},
 
-
-	reset: function() {
+    reset: function() {
 		this.down('picture-canvas').clear();
 	},
 
-
-	setField: function(field) {
+    setField: function(field) {
 		this.activeField = field;
 	},
 
-
-	editMode: function(url) {
+    editMode: function(url) {
 		this.reset();
 		this.down('picture-canvas').setImage(url || $AppConfig.userObject.get('avatarURL'));
 	},
 
-
-	buttonHandler: function(btn, isSave, event) {
+    buttonHandler: function(btn, isSave, event) {
 		var me = this,
 			u = $AppConfig.userObject,
 			c = me.down('picture-canvas'),
@@ -107,6 +99,4 @@ export default Ext.define('NextThought.app.account.settings.components.PictureEd
 			w.changeView({ associatedPanel: 'avatar-choices', pressed: true });
 		}
 	}
-
-
 });

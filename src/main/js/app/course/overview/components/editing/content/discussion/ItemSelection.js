@@ -1,17 +1,16 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.discussion.ItemSelection', {
-	extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
-	alias: 'widget.overview-editing-discussion-item-selection',
-
-	requires: [
-		'NextThought.model.DiscussionRef'
-	],
-
-	multiSelect: false,
-
-	cls: 'discussion-item-selection item-selection',
+var Ext = require('extjs');
+var Globals = require('../../../../../../../util/Globals');
+var ItemselectionIndex = require('../../itemselection/Index');
+var ModelDiscussionRef = require('../../../../../../../model/DiscussionRef');
 
 
-	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.discussion.ItemSelection', {
+    extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
+    alias: 'widget.overview-editing-discussion-item-selection',
+    multiSelect: false,
+    cls: 'discussion-item-selection item-selection',
+
+    itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{ cls: 'overview-discussion', cn: [
 			{ tag: 'label', cls: 'discussion-item', cn: [
 					{tag: 'input', type: 'checkbox'},
@@ -22,16 +21,14 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		]}
 	)),
 
-
-	getItemData: function(item) {
+    getItemData: function(item) {
 		return {
 			thumbnail: this.getThumbnailURL(item),
 			title: item.get('title')
 		};
 	},
 
-
-	getThumbnailURL: function(item) {
+    getThumbnailURL: function(item) {
 		var iconURL = item && item.get('icon');
 		if (iconURL) {
 			if (Globals.ROOT_URL_PATTERN.test(iconURL)) {
@@ -45,8 +42,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return '';
 	},
 
-
-	onSelectItem: function(el) {
+    onSelectItem: function(el) {
 		var	input = el && el.querySelector('input[type=checkbox]');
 
 		if (input) {
@@ -58,8 +54,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	showEmptyState: function() {
+    showEmptyState: function() {
 		// Display empty state
 		this.itemsContainer.add({
 			xtype: 'box',
@@ -73,8 +68,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	onUnselectItem: function(el) {
+    onUnselectItem: function(el) {
 		var input = el && el.querySelector('input[type=checkbox]');
 
 		if (input) {
@@ -86,7 +80,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-	itemMatchesSearch: function(item, searchTerm) {
+    itemMatchesSearch: function(item, searchTerm) {
 		var title = item.get('title'),
 			ntiid = item.getId(),
 			matches = false;

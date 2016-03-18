@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.menu.Menu', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.menu.Menu', {
 	override: 'Ext.menu.Menu',
 
 	ui: 'nt',

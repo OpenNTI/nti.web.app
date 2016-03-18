@@ -1,18 +1,16 @@
-export default Ext.define('NextThought.app.account.settings.components.PasswordResetForm', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.password-reset-form',
+var Ext = require('extjs');
+var AccountActions = require('../../Actions');
+var FieldsSimpleTextField = require('../../../../common/form/fields/SimpleTextField');
 
-	requires: [
-		'NextThought.app.account.Actions',
-		'NextThought.common.form.fields.SimpleTextField'
-  	],
 
-	cls: 'reset-password',
- 	ui: 'account',
+module.exports = exports = Ext.define('NextThought.app.account.settings.components.PasswordResetForm', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.password-reset-form',
+    cls: 'reset-password',
+    ui: 'account',
+    layout: 'none',
 
-	layout: 'none',
-
-	items: [{
+    items: [{
 		xtype: 'container',
 		layout: 'none',
 		items: [{
@@ -92,8 +90,7 @@ export default Ext.define('NextThought.app.account.settings.components.PasswordR
 		]
 	}],
 
-
-	constructor: function() {
+    constructor: function() {
 		if (!Service.canChangePassword()) {
 			console.warn('User can\'t change password');
 			this.items = [{
@@ -116,22 +113,20 @@ export default Ext.define('NextThought.app.account.settings.components.PasswordR
 		this.callParent(arguments);
 	},
 
-
-	setMessage: function(msg, error) {
+    setMessage: function(msg, error) {
 		var el = this.down('box[message]').getEl().down('.text');
 		el[error ? 'addCls' : 'removeCls']('error');
 		el.update(msg || '');
 	},
 
-	setError: function(errorJson) {
+    setError: function(errorJson) {
 		this.setMessage(errorJson.message, true);
 		if (errorJson.field === 'password') {
 			this.down('[name=old_password]').setError();
 		}
 	},
 
-
-	setSuccess: function() {
+    setSuccess: function() {
 		this.setMessage(getString('NextThought.view.form.PasswordResetForm.changed'));
 		Ext.each(this.query('simpletext'), function(t) {
 			t.suspendEvents();
@@ -144,15 +139,14 @@ export default Ext.define('NextThought.app.account.settings.components.PasswordR
 
 	},
 
-
-	getValues: function() {
+    getValues: function() {
 		return {
 			old_password: this.down('[name=old_password]').getValue(),
 			password: this.down('[name=password]').getValue()
 		};
 	},
 
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var button = this.down('button');
@@ -167,8 +161,7 @@ export default Ext.define('NextThought.app.account.settings.components.PasswordR
 		},this);
 	},
 
-
-	checkValidity: function(value, input) {
+    checkValidity: function(value, input) {
 
 		function val(i, s) {
 			try {
@@ -196,8 +189,7 @@ export default Ext.define('NextThought.app.account.settings.components.PasswordR
 		me.updateLayout();
 	},
 
-
-	onSaveClick: function() {
+    onSaveClick: function() {
 		var values = this.getValues();
 
 		this.AccountActions.changePassword(values)

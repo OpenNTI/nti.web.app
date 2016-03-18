@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.mixins.dnd.OrderingItem', {
+var Ext = require('extjs');
+var DndDraggable = require('./Draggable');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	statics: {
 		SIDES: {
 			TOP: 't',

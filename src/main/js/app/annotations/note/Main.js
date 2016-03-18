@@ -1,29 +1,35 @@
+var Ext = require('extjs');
+var UserRepository = require('../../../cache/UserRepository');
+var ImageZoomView = require('../../../common/ux/ImageZoomView');
+var SlideDeck = require('../../../common/ux/SlideDeck');
+var ContentUtils = require('../../../util/Content');
+var Globals = require('../../../util/Globals');
+var NotePanel = require('./Panel');
+var MixinsSearchable = require('../../../mixins/Searchable');
+var UxSlideDeck = require('../../../common/ux/SlideDeck');
+var ContentOverlayedPanel = require('../../mediaviewer/content/OverlayedPanel');
+var DeckOverlayedPanel = require('../../mediaviewer/content/deck/OverlayedPanel');
+var ContentSlideVideo = require('../../mediaviewer/content/SlideVideo');
+var CardsOverlayedPanel = require('../../../common/components/cards/OverlayedPanel');
+var ContentSlidedeck = require('../../mediaviewer/content/Slidedeck');
+var CardsCard = require('../../../common/components/cards/Card');
+
+
 /*jslint */
 /*global $AppConfig, Globals, ImageZoomView, NextThought, ReaderPanel, SlideDeck, TemplatesForNotes, UserRepository, WBUtils*/
-export default Ext.define('NextThought.app.annotations.note.Main', {
-	extend: 'NextThought.app.annotations.note.Panel',
-	alias: 'widget.note-main-view',
+module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
+    extend: 'NextThought.app.annotations.note.Panel',
+    alias: 'widget.note-main-view',
 
-	requires: [
-		'NextThought.common.ux.SlideDeck',
-		'NextThought.app.mediaviewer.content.OverlayedPanel',
-		'NextThought.app.mediaviewer.content.deck.OverlayedPanel',
-		'NextThought.app.mediaviewer.content.SlideVideo',
-		'NextThought.common.components.cards.OverlayedPanel',
-		'NextThought.app.mediaviewer.content.Slidedeck',
-		'NextThought.common.components.cards.Card'
-	],
-
-	mixins: {
+    mixins: {
 		Searchable: 'NextThought.mixins.Searchable'
 	},
 
-	root: true,
-	enableTitle: true,
+    root: true,
+    enableTitle: true,
+    highlightTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'highlight', html: '{0}'}),
 
-	highlightTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'highlight', html: '{0}'}),
-
-	purchasableTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+    purchasableTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cls: 'bookcover', style: {backgroundImage: 'url({img})'}},
 		{cls: 'meta', cn: [
 			{cls: 'title', html: '{title}'},
@@ -32,11 +38,11 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 		]}
 	])),
 
-	noAccessTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+    noAccessTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cls: 'no-access', html: 'You do not have access to this content.'}
 	])),
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'note main-view',
 			cn: [
@@ -86,14 +92,12 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 		}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		avatar: '.avatar-wrapper',
 		contextContainer: '.context'
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		var me = this;
 		me.callParent(arguments);
 
@@ -115,8 +119,7 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 		this.initSearch();
 	},
 
-
-	createEditor: function() {
+    createEditor: function() {
 		this.callParent();
 		this.editor.el.down('.title')
 			.setVisibilityMode(Ext.Element.DISPLAY)
@@ -124,8 +127,7 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 			.hide();
 	},
 
-
-	fillInReplies: function() {
+    fillInReplies: function() {
 		var r = this.record, me = this;
 		this.removeAll(true);
 
@@ -144,13 +146,12 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 				});
 	},
 
-	disable: function() {
+    disable: function() {
 		//don't call the parent, its destructive. This panel is meant to be reused.
 		this.replyOptions.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 	},
 
-
-	fixUpCopiedContext: function(n) {
+    fixUpCopiedContext: function(n) {
 		var node = Ext.get(n), cardTpl, slideDeckTpl, slideVideoTpl,
 			maxWidth = 574;//shortcut, probably should figure out how wide the context is...but that returns 0
 		// when queried at this point.
@@ -232,18 +233,15 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 		return node.dom;
 	},
 
-
-	addAdditionalRecordListeners: function(record) {
+    addAdditionalRecordListeners: function(record) {
 		record.addObserverForField(this, 'sharedWith', 'fillInShareFromFieldChange');
 	},
 
-
-	removeAdditionalRecordListeners: function(record) {
+    removeAdditionalRecordListeners: function(record) {
 		record.removeObserverForField(this, 'sharedWith', 'fillInShareFromFieldChange');
 	},
 
-
-	fillInShareFromFieldChange: function(field, value) {
+    fillInShareFromFieldChange: function(field, value) {
 		var me = this;
 
 		UserRepository.getUser(value)
@@ -252,8 +250,7 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 			});
 	},
 
-
-	setRecord: function(r) {
+    setRecord: function(r) {
 		//If we have an editor active for god sake don't blast it away
 		if (this.editorActive()) {
 			console.log('Need to buffer set record', r);
@@ -282,8 +279,7 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 		me.replyOptions.show();
 	},
 
-
-	onRemove: function(cmp) {
+    onRemove: function(cmp) {
 		var c = this.items.getCount();
 		console.log('removed child, it was deleting: ', cmp.deleting);
 		if (cmp.deleting && c === 0 && (!this.record || this.record.placeholder)) {
@@ -296,8 +292,7 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 		}
 	},
 
-
-	onDelete: function() {
+    onDelete: function() {
 		var c = this.items.getCount();
 
 		this.callParent(arguments);
@@ -306,8 +301,7 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 		}
 	},
 
-
-	onEdit: function() {
+    onEdit: function() {
 		this.text.hide();
 		this.editMode = true;
 		this.editor.editBody(this.record.get('body'));
@@ -316,16 +310,14 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 		this.editorEl.down('.title').show();
 	},
 
-
-	hideImageCommentLink: function() {
+    hideImageCommentLink: function() {
 		var aLink = this.context ? this.context.down('a[href=#mark]') : null;
 		if (aLink) {
 			aLink.hide();
 		}
 	},
 
-
-	setPurchasableContext: function(ntiid) {
+    setPurchasableContext: function(ntiid) {
 		var me = this, el,
 			course = CourseWareUtils.courseForNtiid(ntiid),
 			content = ContentUtils.purchasableForContentNTIID(ntiid);
@@ -359,8 +351,7 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 		});
 	},
 
-
-	contextAnnotationActions: function(e, dom) {
+    contextAnnotationActions: function(e, dom) {
 		e.stopEvent();
 		var action = (dom.getAttribute('href') || '').replace('#', ''),
 			d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('img'),
@@ -405,13 +396,11 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 		return false;
 	},
 
-
-	getContainerIdForSearch: function() {
+    getContainerIdForSearch: function() {
 		return this.record.get('NTIID');
 	},
 
-
-	onceReadyForSearch: function() {
+    onceReadyForSearch: function() {
 		var ps = [];
 
 		if (this.contextLoad) {
@@ -428,14 +417,12 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 					});
 	},
 
-
-	getSearchScrollTarget: function() {
+    getSearchScrollTarget: function() {
 		var targetEl = this.el && this.el.up('.window-container') || this.el;
 		return targetEl;
 	},
 
-
-	commentOnAnnototableImage: function(dom /*action*/) {
+    commentOnAnnototableImage: function(dom /*action*/) {
 		var me = this;
 		if (me.activateReplyEditor()) {
 			WBUtils.createFromImage(dom, function(data) {
@@ -444,14 +431,12 @@ export default Ext.define('NextThought.app.annotations.note.Main', {
 		}
 	},
 
-
-	resizeMathJax: function(/*node*/) {
+    resizeMathJax: function(/*node*/) {
 		var e = Ext.select('div.equation .mi').add(Ext.select('div.equation .mn')).add(Ext.select('div.equation .mo'));
 		e.setStyle('font-size', '13px');
 	},
 
-
-	allowNavigation: function() {
+    allowNavigation: function() {
 		var msg = 'You are currently creating a comment. Would you like to leave without saving?',
 			hasChildEditor = this.el.down('.note.editor-active');
 

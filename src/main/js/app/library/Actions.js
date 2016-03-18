@@ -1,18 +1,20 @@
-export default Ext.define('NextThought.app.library.Actions', {
-	extend: 'NextThought.common.Actions',
+var Ext = require('extjs');
+var ParseUtils = require('../../util/Parsing');
+var ContentProxy = require('../../proxy/JSONP');
+var CommonActions = require('../../common/Actions');
+var LibraryStateStore = require('./StateStore');
+var CoursesActions = require('./courses/Actions');
+var CoursesStateStore = require('./courses/StateStore');
+var ContentActions = require('./content/Actions');
+var ContentStateStore = require('./content/StateStore');
+var LoginStateStore = require('../../login/StateStore');
+var ProxyJSONP = require('../../proxy/JSONP');
 
-	requires: [
-		'NextThought.app.library.StateStore',
-		'NextThought.app.library.courses.Actions',
-		'NextThought.app.library.courses.StateStore',
-		'NextThought.app.library.content.Actions',
-		'NextThought.app.library.content.StateStore',
-		'NextThought.login.StateStore',
-		'NextThought.proxy.JSONP'
-	],
 
+module.exports = exports = Ext.define('NextThought.app.library.Actions', {
+    extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.CourseActions = NextThought.app.library.courses.Actions.create();
@@ -33,8 +35,7 @@ export default Ext.define('NextThought.app.library.Actions', {
 		}
 	},
 
-
-	onLogin: function() {
+    onLogin: function() {
 		var s = window.Service,
 			store = this.LibraryStore,
 			courseStore = this.CourseStore,
@@ -55,8 +56,7 @@ export default Ext.define('NextThought.app.library.Actions', {
 		});
 	},
 
-
-	/**
+    /**
 	 * Iterate the courses, admin courses, and content bundles, adding the content packages
 	 * they use to a list, then tell the content store to remove any content packages in that
 	 * list
@@ -92,8 +92,7 @@ export default Ext.define('NextThought.app.library.Actions', {
 		this.ContentStore.deDupContentPackages(used);
 	},
 
-
-	parseXML: function(xml) {
+    parseXML: function(xml) {
 		try {
 			return new DOMParser().parseFromString(xml, 'text/xml');
 		}
@@ -104,20 +103,17 @@ export default Ext.define('NextThought.app.library.Actions', {
 		return undefined;
 	},
 
-
-	findBundle: function(id) {
+    findBundle: function(id) {
 		return this.CourseActions.findCourseInstance(id)
 				.fail(this.ContentActions.findContent.bind(this.ContentActions, id));
 	},
 
-
-	findBundleForNTIID: function(id) {
+    findBundleForNTIID: function(id) {
 		return this.CourseActions.findForNTIID(id)
 			.fail(this.ContentActions.findForNTIID.bind(this.ContentActions, id));
 	},
 
-
-	findContentPackage: function(id) {
+    findContentPackage: function(id) {
 		return this.findBundleForNTIID(id)
 			.then(function(bundle) {
 				var packages = bundle && bundle.getContentPackages() || [],
@@ -133,13 +129,11 @@ export default Ext.define('NextThought.app.library.Actions', {
 			});
 	},
 
-
-	findBundleBy: function(fn) {
+    findBundleBy: function(fn) {
 
 	},
 
-
-	/**
+    /**
 	 * Takes a function that takes a course and returns a number priority
 	 * and returns an array of the courses ordered by their priority, excluding
 	 * courses that have zero or lower priority
@@ -158,8 +152,7 @@ export default Ext.define('NextThought.app.library.Actions', {
 			.fail(this.ContentActions.findContentByPriority.bind(this.ContentActions, fn));
 	},
 
-
-	getVideoIndex: function(bundle) {
+    getVideoIndex: function(bundle) {
 		console.warn('DEPCRECIATED: we should try to not rely on getVideoIndex');
 		var cache = this.LibraryStore.videoIndex = this.LibraryStore.videoIndex || {},
 			index = bundle.getId(), toc, root;

@@ -1,21 +1,21 @@
-export default Ext.define('NextThought.app.course.info.components.Panel', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-info-panel',
-	cls: 'course-info-panel scrollable',
-	ui: 'course',
-	layout: 'none',
-
-	requires: [
-		'NextThought.proxy.JSONP',
-		'NextThought.app.course.info.components.parts.Description',
-		'NextThought.app.course.info.components.parts.Instructors',
-		'NextThought.app.course.info.components.parts.NotStarted',
-		'NextThought.app.course.info.components.parts.Support',
-		'NextThought.app.course.info.components.parts.Title'
-	],
+var Ext = require('extjs');
+var ContentProxy = require('../../../../proxy/JSONP');
+var ProxyJSONP = require('../../../../proxy/JSONP');
+var PartsDescription = require('./parts/Description');
+var PartsInstructors = require('./parts/Instructors');
+var PartsNotStarted = require('./parts/NotStarted');
+var PartsSupport = require('./parts/Support');
+var PartsTitle = require('./parts/Title');
 
 
-	setContent: function(content, status) {
+module.exports = exports = Ext.define('NextThought.app.course.info.components.Panel', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.course-info-panel',
+    cls: 'course-info-panel scrollable',
+    ui: 'course',
+    layout: 'none',
+
+    setContent: function(content, status) {
 		this.removeAll(true);
 
 		var toAdd = [],
@@ -61,15 +61,13 @@ export default Ext.define('NextThought.app.course.info.components.Panel', {
 		this.add(toAdd);
 	},
 
-
-	getVideo: function() {
+    getVideo: function() {
 		var title = this.down('course-info-title');
 
 		return title && title.video;
 	},
 
-
-	//<editor-fold desc="Fallback Code">
+    //<editor-fold desc="Fallback Code">
 	fillInPage: function(html) {
 		var bodyTag = html.match(/<body.*?>(.*)<\/body>/i),
 			parent = this.up('course-info');
@@ -92,8 +90,7 @@ export default Ext.define('NextThought.app.course.info.components.Panel', {
 		}
 	},
 
-
-	loadPage: function(pageInfo) {
+    loadPage: function(pageInfo) {
 		this.activeRequest = pageInfo.getId();
 		ContentProxy.request({
 			pageInfo: pageInfo,
@@ -107,12 +104,11 @@ export default Ext.define('NextThought.app.course.info.components.Panel', {
 		});
 	},
 
-
-	loadPageFailed: function(r) {
+    loadPageFailed: function(r) {
 		console.error('server-side failure with status code ' + r.status + '. Message: ' + r.responseText);
 	},
 
-
+    //</editor-fold>
 	loadedPage: function(r, req) {
 		if (this.activeRequest !== req.pageInfo.getId()) {
 			return;
@@ -121,7 +117,4 @@ export default Ext.define('NextThought.app.course.info.components.Panel', {
 		this.fillInPage(r.responseText);
 		delete this.activeRequest;
 	}
-	//</editor-fold>
-
-
 });

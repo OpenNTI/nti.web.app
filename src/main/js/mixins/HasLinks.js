@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.mixins.HasLinks', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.HasLinks', {
 
 	getLink: function(rel, raw) {
 		var links = this.get('Links') || Ext.data.Types.LINKS.convert((this.raw && this.raw.Links) || []),

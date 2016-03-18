@@ -1,16 +1,19 @@
-export default Ext.define('NextThought.model.PageInfo', {
-	extend: 'NextThought.model.Base',
-	idProperty: 'ID', //TODO shouldn't this be the NTIID
-	requires: [
-		'NextThought.model.converters.Items',
-		'NextThought.util.Parsing',
-		'NextThought.model.assessment.Question',
-		'NextThought.model.assessment.Assignment'
-	],
+var Ext = require('extjs');
+var ContentUtils = require('../util/Content');
+var ParseUtils = require('../util/Parsing');
+var ModelBase = require('./Base');
+var ConvertersItems = require('./converters/Items');
+var UtilParsing = require('../util/Parsing');
+var AssessmentQuestion = require('./assessment/Question');
+var AssessmentAssignment = require('./assessment/Assignment');
 
-	isPage: true,
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.model.PageInfo', {
+    extend: 'NextThought.model.Base',
+    idProperty: 'ID',
+    isPage: true,
+
+    statics: {
 		fromOutlineNode: function(data) {
 			return {
 				mimeType: this.mimeType,
@@ -20,8 +23,7 @@ export default Ext.define('NextThought.model.PageInfo', {
 		}
 	},
 
-
-	fields: [
+    fields: [
 		{ name: 'ContentPackageNTIID', type: 'string'},
 		{ name: 'AssessmentItems', type: 'arrayItem' },
 		{ name: 'sharingPreference', type: 'auto' },
@@ -31,9 +33,9 @@ export default Ext.define('NextThought.model.PageInfo', {
 		{ name: 'Title', type: 'string'}
 	],
 
-	isPageInfo: true,
+    isPageInfo: true,
 
-	getSubContainerURL: function(rel, id) {
+    getSubContainerURL: function(rel, id) {
 		var pagesCollection = Service.getCollection('Pages') || {};
 
 		if(!pagesCollection.href){
@@ -43,24 +45,20 @@ export default Ext.define('NextThought.model.PageInfo', {
 		return pagesCollection.href + encodeURIComponent('('+id+')')+'/UserGeneratedData';
 	},
 
-
-	getTitle: function(defaultTitle) {
+    getTitle: function(defaultTitle) {
 		return this.get('Title');
 	},
 
-
-	getLocationInfo: function() {
+    getLocationInfo: function() {
 		this.locationInfo = this.locationInfo || ContentUtils.getLocation(this);
 		return this.locationInfo;
 	},
 
-
-	isPageRoot: function() {
+    isPageRoot: function() {
 		return !this.getLinkFragment('content');
 	},
 
-
-	getPageRootID: function() {
+    getPageRootID: function() {
 		if (this.isPageRoot()) {
 			return this.getId();
 		}
@@ -80,8 +78,7 @@ export default Ext.define('NextThought.model.PageInfo', {
 		return l && l.getAttribute('ntiid');
 	},
 
-
-	isPartOfCourse: function() {
+    isPartOfCourse: function() {
 		var maybe = this.isCourse;
 
 		if (!Ext.isDefined(maybe)) {
@@ -95,8 +92,7 @@ export default Ext.define('NextThought.model.PageInfo', {
 		return maybe;
 	},
 
-
-	isPartOfCourseNav: function() {
+    isPartOfCourseNav: function() {
 		var l = this.getLocationInfo(),
 			toc = l && l.toc,
 			ntiid = (l && l.NTIID) || '--';
@@ -111,8 +107,7 @@ export default Ext.define('NextThought.model.PageInfo', {
 				toc.querySelector('lesson' + ntiid.replace(/^\[/, '[topic-')));
 	},
 
-
-	getPublicScope: function() {
+    getPublicScope: function() {
 		var l = this.getLocationInfo(),
 			title = l && l.title;
 		console.error('[DEPRECATED] User CourseInstance');
@@ -120,23 +115,20 @@ export default Ext.define('NextThought.model.PageInfo', {
 		return (title && title.getScope('public')) || [];
 	},
 
-
-	getRestrictedScope: function() {//i don't think this is used
+    getRestrictedScope: function() {//i don't think this is used
 		var l = this.getLocationInfo(),
 			title = l && l.title;
 		console.error('[DEPRECATED] User CourseInstance');
 		return (title && title.getScope('restricted')) || [];
 	},
 
-
-	hasAssessmentItems: function() {
+    hasAssessmentItems: function() {
 		var items = this.get('AssessmentItems');
 
 		return !Ext.isEmpty(items);
 	},
 
-
-	getAssignment: function() {
+    getAssignment: function() {
 		var items = this.get('AssessmentItems') || [],
 			i;
 
@@ -149,8 +141,7 @@ export default Ext.define('NextThought.model.PageInfo', {
 		return null;
 	},
 
-
-	/**
+    /**
 	 * If the user has more than one section of the course the assessmentItems might
 	 * not be the correct one, so pull them off of the bundle and update our assessmentItems
 	 * @param  {Object} bundle the bundle to sync to
@@ -188,8 +179,7 @@ export default Ext.define('NextThought.model.PageInfo', {
 			});
 	},
 
-
-	replaceAssignment: function(assignment) {
+    replaceAssignment: function(assignment) {
 		var items = this.get('AssessmentItems') || [];
 
 		items = items.map(function(item) {

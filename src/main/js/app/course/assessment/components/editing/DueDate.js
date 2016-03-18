@@ -1,20 +1,17 @@
-export default Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-assessment-duedate-editor',
-
-	requires: [
-		'NextThought.common.form.fields.DateTimeField',
-		'NextThought.app.course.editing.Actions'
-	],
+var Ext = require('extjs');
+var Globals = require('../../../../../util/Globals');
+var FieldsDateTimeField = require('../../../../../common/form/fields/DateTimeField');
+var EditingActions = require('../../../editing/Actions');
 
 
-	cls: 'assignment-due-date-editor',
-	layout: 'none',
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.editing.DueDate', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.course-assessment-duedate-editor',
+    cls: 'assignment-due-date-editor',
+    layout: 'none',
+    items: [],
 
-	items: [],
-
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -127,8 +124,7 @@ export default Ext.define('NextThought.app.course.assessment.components.editing.
 		]);
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.startNowRadio = this.el.dom.querySelector('input.start-now');
@@ -164,8 +160,7 @@ export default Ext.define('NextThought.app.course.assessment.components.editing.
 		me.onEndCheckChanged();
 	},
 
-
-	onStartCheckChanged: function(e) {
+    onStartCheckChanged: function(e) {
 		var editor = this.getAvailableEditor();
 
 		if (this.startOnRadio.checked) {
@@ -175,8 +170,7 @@ export default Ext.define('NextThought.app.course.assessment.components.editing.
 		}
 	},
 
-
-	onEndCheckChanged: function(e) {
+    onEndCheckChanged: function(e) {
 		var editor = this.getDueEditor();
 
 		if (this.endCheckbox.checked) {
@@ -186,18 +180,15 @@ export default Ext.define('NextThought.app.course.assessment.components.editing.
 		}
 	},
 
-
-	getAvailableEditor: function() {
+    getAvailableEditor: function() {
 		return this.down('[isAvailableEditor]');
 	},
 
-
-	getDueEditor: function() {
+    getDueEditor: function() {
 		return this.down('[isDueEditor]');
 	},
 
-
-	doCancel: function() {
+    doCancel: function() {
 		var assignment = this.assignment,
 			available = assignment.get('availableBeginning'),
 			due = assignment.get('availableEnding'),
@@ -212,8 +203,7 @@ export default Ext.define('NextThought.app.course.assessment.components.editing.
 		}
 	},
 
-
-	showError: function(msg) {
+    showError: function(msg) {
 		var cmp = this.down('[isError]');
 
 		if (cmp && cmp.el) {
@@ -221,8 +211,7 @@ export default Ext.define('NextThought.app.course.assessment.components.editing.
 		}
 	},
 
-
-	clearError: function() {
+    clearError: function() {
 		var cmp = this.down('[isError]');
 
 		if (cmp && cmp.el) {
@@ -230,22 +219,19 @@ export default Ext.define('NextThought.app.course.assessment.components.editing.
 		}
 	},
 
-
-	addSavingMask: function() {
+    addSavingMask: function() {
 		if (this.el) {
 			this.el.mask('Saving...');
 		}
 	},
 
-
-	removeSavingMask: function() {
+    removeSavingMask: function() {
 		if (this.el) {
 			this.el.unmask();
 		}
 	},
 
-
-	doSave: function() {
+    doSave: function() {
 		var me = this,
 			available = me.getAvailableEditor(),
 			due = me.getDueEditor(),

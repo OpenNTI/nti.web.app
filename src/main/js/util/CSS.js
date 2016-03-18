@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.util.CSS', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.util.CSS', {
 	singleton: true,
 
 	getOrMakeSheet: function(id) {

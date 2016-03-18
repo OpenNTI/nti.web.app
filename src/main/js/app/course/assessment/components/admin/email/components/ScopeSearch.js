@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.assessment.components.admin.email.components.ScopeSearch', {
+var Ext = require('extjs');
+var ComponentsShareSearch = require('../../../../../../sharing/components/ShareSearch');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.email.components.ScopeSearch', {
 	extend: 'NextThought.app.sharing.components.ShareSearch',
 	alias: 'widget.scope-sharesearch',
 

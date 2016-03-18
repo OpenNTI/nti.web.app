@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.selection.CellModel', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.selection.CellModel', {
 	override: 'Ext.selection.CellModel',
 
 	onViewRefresh: function() {

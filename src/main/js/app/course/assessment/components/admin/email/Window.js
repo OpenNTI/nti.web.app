@@ -1,22 +1,19 @@
-export default Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-email-window',
-
-	layout: 'none',
-	cls: 'email-window',
-
-	requires: [
-		'NextThought.app.course.assessment.components.admin.email.Editor',
-		'NextThought.app.windows.StateStore',
-		'NextThought.app.windows.components.Header',
-		'NextThought.app.windows.components.Loading',
-		'NextThought.app.windows.Actions'
-	],
-
-	items: [],
+var Ext = require('extjs');
+var EmailEditor = require('./Editor');
+var WindowsStateStore = require('../../../../../windows/StateStore');
+var ComponentsHeader = require('../../../../../windows/components/Header');
+var ComponentsLoading = require('../../../../../windows/components/Loading');
+var WindowsActions = require('../../../../../windows/Actions');
 
 
-	initComponent: function(){
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.course-email-window',
+    layout: 'none',
+    cls: 'email-window',
+    items: [],
+
+    initComponent: function(){
 		this.callParent(arguments);
 
 		this.headerCmp = this.add({
@@ -36,8 +33,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		}
 	},
 
-
-	onClose: function(){
+    onClose: function(){
 		var win = this.allowNavigation(),
 			me = this;
 
@@ -52,8 +48,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		this.WindowActions.closeActiveWindow();
 	},
 
-
-	allowNavigation: function(){
+    allowNavigation: function(){
 		if (!this.editor) {
 			return true;
 		}
@@ -61,8 +56,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		return this.editor.allowNavigation();
 	},
 
-
-	showEditor: function() {
+    showEditor: function() {
 		var me = this,
 			editor;
 

@@ -1,20 +1,21 @@
-export default Ext.define('NextThought.app.bundle.Actions', {
-	extend: 'NextThought.common.Actions',
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var ParseUtils = require('../../util/Parsing');
+var CommonActions = require('../../common/Actions');
+var UtilParsing = require('../../util/Parsing');
+var BundleStateStore = require('./StateStore');
 
-	requires: [
-		'NextThought.util.Parsing',
-		'NextThought.app.bundle.StateStore'
-	],
 
+module.exports = exports = Ext.define('NextThought.app.bundle.Actions', {
+    extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+    constructor: function() {
 		this.StateStore = NextThought.app.bundle.StateStore.getInstance();
 
 		this.callParent(arguments);
 	},
 
-
-	/**
+    /**
 	 * Transition to a bundle, if passed an element from the library show the image expanding
 	 * @param  {ContentBundle|ContentPackage} bundle     the bundle to navigate to
 	 * @param  {Element} libraryCars dom node of the image to expand
@@ -32,8 +33,7 @@ export default Ext.define('NextThought.app.bundle.Actions', {
 		return Promise.resolve(route);
 	},
 
-
-	getRootRouteForId: function(id) {
+    getRootRouteForId: function(id) {
 		return '/bundle/' + ParseUtils.encodeForURI(id);
 	}
 });

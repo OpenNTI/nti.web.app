@@ -1,13 +1,13 @@
-export default Ext.define('NextThought.app.dnd.Actions', {
-	extend: 'NextThought.common.Actions',
-
-	requires: [
-		'NextThought.app.dnd.StateStore',
-		'NextThought.util.Scrolling'
-	],
+var Ext = require('extjs');
+var CommonActions = require('../../common/Actions');
+var DndStateStore = require('./StateStore');
+var UtilScrolling = require('../../util/Scrolling');
 
 
-	constructor: function(config) {
+module.exports = exports = Ext.define('NextThought.app.dnd.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    constructor: function(config) {
 		this.callParent(arguments);
 
 		this.DnDStore = NextThought.app.dnd.StateStore.getInstance();
@@ -15,9 +15,7 @@ export default Ext.define('NextThought.app.dnd.Actions', {
 		this.pageScrolling = NextThought.util.Scrolling.getPageScrolling();
 	},
 
-
-
-	startDrag: function(activeItem) {
+    startDrag: function(activeItem) {
 		if (!this.DnDStore.getActiveDragItem()) {
 			this.addWindowScrollListeners();
 		}
@@ -25,8 +23,7 @@ export default Ext.define('NextThought.app.dnd.Actions', {
  		this.DnDStore.setActiveDragItem(activeItem);
 	},
 
-
-	endDrag: function(activeItem) {
+    endDrag: function(activeItem) {
 		this.DnDStore.removeActiveDragItem(activeItem);
 
 		if (!this.DnDStore.getActiveDragItem()) {
@@ -34,18 +31,15 @@ export default Ext.define('NextThought.app.dnd.Actions', {
 		}
 	},
 
-
-	getPlaceholderStyles: function() {
+    getPlaceholderStyles: function() {
 		return this.DnDStore.getPlaceholderStyles();
 	},
 
-
-	onNoDropHandler: function() {
+    onNoDropHandler: function() {
 		this.onDropFail();
 	},
 
-
-	onDropFail: function() {
+    onDropFail: function() {
 		var activeDragItem = this.DnDStore.getActiveDragItem();
 
 		if (activeDragItem) {
@@ -53,17 +47,15 @@ export default Ext.define('NextThought.app.dnd.Actions', {
 		}
 	},
 
-
-	addWindowScrollListeners: function() {
+    addWindowScrollListeners: function() {
 		this.pageScrolling.scrollWhenDragNearEdges();
 	},
 
-
-	removeWindowScrollListeners: function() {
+    removeWindowScrollListeners: function() {
 		this.pageScrollign.unscrollWhenDragNearEdges();
 	},
 
-	removeAllPlaceholders: function() {
+    removeAllPlaceholders: function() {
 		var placeholders = document.querySelector('.dnd-drop-placeholder, .dnd-save-placeholder');
 
 		if(placeholders instanceof Array) {

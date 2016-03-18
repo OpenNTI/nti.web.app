@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.library.courses.components.available.CourseDetailWindow', {
+var Ext = require('extjs');
+var AvailableCourseWindow = require('./CourseWindow');
+
+
+module.exports = exports = Ext.define('NextThought.app.library.courses.components.available.CourseDetailWindow', {
 	extend: 'NextThought.app.library.courses.components.available.CourseWindow',
 
 	isSingle: true,

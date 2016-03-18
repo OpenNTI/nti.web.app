@@ -1,8 +1,10 @@
-export default Ext.define('NextThought.model.converters.ContentRangeDescription', {
-	override: 'Ext.data.Types',
-	requires: ['Ext.data.SortTypes'],
+var Ext = require('extjs');
 
-	CONTENTRANGEDESCRIPTION: {
+
+module.exports = exports = Ext.define('NextThought.model.converters.ContentRangeDescription', {
+    override: 'Ext.data.Types',
+
+    CONTENTRANGEDESCRIPTION: {
 		type: 'ContentRangeDescription',
 		convert: function(v, record) {
 			try {

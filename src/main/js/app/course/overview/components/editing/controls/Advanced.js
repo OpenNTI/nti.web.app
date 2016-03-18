@@ -1,30 +1,26 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.controls.Advanced', {
-	extend: 'Ext.Component',
-	alias: 'widget.overview-editing-controls-advanced-settings',
+var Ext = require('extjs');
+var SettingsWindow = require('../settings/Window');
+var ControlsVisibility = require('./Visibility');
 
-	requires: [
-		'NextThought.app.course.overview.components.editing.settings.Window',
-		'NextThought.app.course.overview.components.editing.controls.Visibility'
-	],
 
-	name: 'Advanced Settings',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Advanced', {
+    extend: 'Ext.Component',
+    alias: 'widget.overview-editing-controls-advanced-settings',
+    name: 'Advanced Settings',
+    cls: 'nt-button advanced',
+    promptName: 'overview-editing-settings',
 
-	cls: 'nt-button advanced',
-
-	promptName: 'overview-editing-settings',
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'text', html: '{name}'},
 		{cls: 'toggle'}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		textEl: '.text',
 		contentEl: '.toggle'
 	},
 
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		this.PromptActions = NextThought.app.prompt.Actions.create();
@@ -34,8 +30,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.color) {
@@ -45,8 +40,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		this.mon(this.textEl, 'click', this.handleClick.bind(this));
 	},
 
-
-	handleClick: function(e){
+    handleClick: function(e){
 		if (e.getTarget('.disabled')) { return; }
 
 		if (!this.visibilityCmp) {
@@ -70,16 +64,15 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}	
 	},
 
+    onChange: function(){},
 
-	onChange: function(){},
-
-	getChangedValues: function(){
+    getChangedValues: function(){
 		if (this.visibilityCmp) {
 			return this.visibilityCmp.getChangedValues();
 		}
 	},
 
-	getValue: function(){
+    getValue: function(){
 		if (this.visibilityCmp) {
 			return this.visibilityCmp.getValue();
 		}

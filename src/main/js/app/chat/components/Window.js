@@ -1,49 +1,46 @@
-export default Ext.define('NextThought.app.chat.components.Window', {
-	extend: 'Ext.window.Window',
-	alias: 'widget.chat-window',
+var Ext = require('extjs');
+var IdCache = require('../../../cache/IdCache');
+var UserRepository = require('../../../cache/UserRepository');
+var User = require('../../../model/User');
+var MixinsProfileLinks = require('../../../mixins/ProfileLinks');
+var ComponentsView = require('./View');
+var ComponentsEntry = require('./Entry');
+var ChatStateStore = require('../StateStore');
+var GroupsActions = require('../../groups/Actions');
+var GroupsStateStore = require('../../groups/StateStore');
+var TranscriptPager = require('../transcript/Pager');
 
-	requires: [
-		'NextThought.app.chat.components.View',
-		'NextThought.app.chat.components.Entry',
-		'NextThought.app.chat.StateStore',
-		'NextThought.app.groups.Actions',
-		'NextThought.app.groups.StateStore',
-		'NextThought.app.chat.transcript.Pager'
-		// 'NextThought.view.chat.Gutter' //,
-		// 'NextThought.view.chat.WindowManager'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.chat.components.Window', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.chat-window',
+
+    mixins: {
 		profileLinks: 'NextThought.mixins.ProfileLinks'
 	},
 
-	activeStates: ['active', 'composing', 'paused'],
+    activeStates: ['active', 'composing', 'paused'],
+    cls: 'chat-window no-gutter',
+    ui: 'chat-window',
+    focusOnToFront: false,
+    minimizable: true,
+    constrain: true,
+    width: 280,
+    minWidth: 250,
+    height: 425,
+    minHeight: 325,
+    header: false,
+    closeAction: 'hide',
+    title: 'chat',
 
-	cls: 'chat-window no-gutter',
-	ui: 'chat-window',
-	focusOnToFront: false,
-	minimizable: true,
-
-	constrain: true,
-	width: 280,
-	minWidth: 250,
-
-	height: 425,
-	minHeight: 325,
-	header: false,
-
-	closeAction: 'hide',
-
-	title: 'chat',
-
-	layout: {
+    layout: {
 		type: 'vbox',
 		align: 'stretch'
 	},
 
-	isOverlay: false,
+    isOverlay: false,
 
-	items: [
+    items: [
 		{
 			xtype: 'nti-window-header',
 			tools: {
@@ -57,7 +54,7 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		{xtype: 'chat-view', flex: 1}
 	],
 
-	// dockedItems: [
+    // dockedItems: [
 	// 	{xtype: 'chat-gutter', dock: 'left', hidden: true}
 	// ],
 
@@ -74,7 +71,9 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 	// },
 
 
-	syncHeight: Ext.emptyFn, //chat windows won't need this.
+	syncHeight: Ext.emptyFn,
+
+    //chat windows won't need this.
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -110,16 +109,14 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		this.roomInfoChanged(this.roomInfo);
 	},
 
-
-	setTitle: function(title) {
+    setTitle: function(title) {
 		if (this.titleBar) {
 			this.titleBar.update(title);
 			this.fireEvent('titleChange', this, title);
 		}
 	},
 
-
-	getTitle: function() {
+    getTitle: function() {
 		var title;
 		if (this.titleBar) {
 			title = this.titleBar.getTitle();
@@ -127,15 +124,13 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		return title || 'Untitled';
 	},
 
-
-	beforeWindowDestroy: function() {
+    beforeWindowDestroy: function() {
 		if (!this.disableExitRoom) {
 			this.ChatActions.leaveRoom(this.roomInfo);
 		}
 	},
 
-
-	onWindowShow: function() {
+    onWindowShow: function() {
 		var me = this;
 		me.updateChatViews();
 		wait(500)
@@ -146,8 +141,7 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 			});
 	},
 
-
-	beforeWindowShow: function(winToShow) {
+    beforeWindowShow: function(winToShow) {
 		var wins = this.ChatStore.getAllChatWindows() || [];
 
 		// Hide all other open chat windows
@@ -158,8 +152,9 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		});
 	},
 
+    fixScroll: Ext.emptyFn,
 
-	fixScroll: Ext.emptyFn,//don't "fixScroll" in chat windows.
+    //don't "fixScroll" in chat windows.
 
 	roomInfoChanged: function(roomInfo) {
 		if (!this.roomInfo) {
@@ -255,7 +250,7 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		});
 	},
 
-	updateChatViews: function() {
+    updateChatViews: function() {
 		var me = this,
 			onlineOccupants = [],
 			logView = me.down('chat-log-view'),
@@ -301,7 +296,7 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		});
 	},
 
-	presenceChanged: function(username, value) {
+    presenceChanged: function(username, value) {
 		var me = this,
 			logView = me.down('chat-log-view'),
 			entryView = me.down('chat-entry');
@@ -347,8 +342,7 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -371,14 +365,12 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		}
 	},
 
-
-	onEsc: function(k, e) {
+    onEsc: function(k, e) {
 		e.stopEvent();
 		this.minimize();
 	},
 
-
-	addPeople: function() {
+    addPeople: function() {
 		//this doesn't do what it should, its only toggling the gutter to play with the tool wiring.
 		var list = this.down('chat-gutter');
 		if (list.isHidden()) {
@@ -396,8 +388,7 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		//TODO: actually show an interface to add people to the conversation instead of playing with the gutter.
 	},
 
-
-	showSettings: function(e) {
+    showSettings: function(e) {
 		var target = Ext.get(e.getTarget()),
 			me = this,
 			isContact = this.GroupStore.isContact(this.user);
@@ -434,8 +425,7 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 			});
 	},
 
-
-	addOrDropContact: function(menuItem) {
+    addOrDropContact: function(menuItem) {
 		if (!this.user) {
 			return;
 		}
@@ -460,9 +450,7 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		}
 	},
 
-
-
-	areYouSure: function(msg) {
+    areYouSure: function(msg) {
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		return new Promise(function(fulfill) {
 			Ext.Msg.show({
@@ -476,14 +464,13 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		});
 	},
 
-
-	goToProfile: function() {
+    goToProfile: function() {
 		if (this.user) {
 			this.navigateToProfile(this.user);
 		}
 	},
 
-	handleMessageFromChannel: function(sender, msg, room, isGroupChat) {
+    handleMessageFromChannel: function(sender, msg, room, isGroupChat) {
 		var r = room || this.roomInfo;
 
 		isGroupChat = isGroupChat || r && r.isGroupChat();
@@ -491,18 +478,15 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		this.updateChatState(sender, 'active', r, isGroupChat);
 	},
 
-
-	addBulkMessages: function(messages) {
+    addBulkMessages: function(messages) {
 		this.logView.addBulkMessages(messages);
 	},
 
-
-	insertBulkMessages: function(index, messages) {
+    insertBulkMessages: function(index, messages) {
 		this.logView.insertBulkMessages(index, messages);
 	},
 
-
-	/**
+    /**
 	 *  We use this method to update the state of other chat participants.
 	 *  Thus, it is responsible for updating the appropriate view,
 	 *  but we don't keep track of other participants' state, because they manage it themselves.
@@ -525,8 +509,7 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		this.updateDisplayState(sender, Ext.Array.contains(this.activeStates, state) ? 'active' : state , isGroupChat);
 	},
 
-
-	onFlagToolClicked: function() {
+    onFlagToolClicked: function() {
 		var logView = this.down('chat-log-view'),
 				chatView = this.down('.chat-view'),
 				btn = this.el.down('.flag-for-moderation');
@@ -536,8 +519,7 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		btn.toggleCls('moderating');
 	},
 
-
-	setTitleInfo: function(users) {
+    setTitleInfo: function(users) {
 		var title = [];
 
 		Ext.each(users, function(u) {
@@ -556,8 +538,7 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		this.setTitle(title);
 	},
 
-
-	updateDisplayState: function(targetUser, state, isGroupChat) {
+    updateDisplayState: function(targetUser, state, isGroupChat) {
 		var me = this;
 		function done(u) {
 			var name = u.getName(), txt,
@@ -580,16 +561,15 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		}
 	},
 
-
-	notify: function(msg) {
+    notify: function(msg) {
 		this.fireEvent('notify', msg);
 	},
-	minimize: function() {
+
+    minimize: function() {
 		this.hide();
 	},
 
-
-	setChatStatesMap: function() {
+    setChatStatesMap: function() {
 		this.chatUserStatesMap = {
 			'composing': getString('NextThought.view.chat.Window.componsingstate'),
 			'inactive': getString('NextThought.view.chat.Window.inactivestate'),
@@ -598,34 +578,28 @@ export default Ext.define('NextThought.app.chat.components.Window', {
 		};
 	},
 
-
-	disableChat: function() {
+    disableChat: function() {
 		this.down('chat-log-view').setDisabled(true);
 		this.down('chat-entry').setDisabled(true);
 	},
 
-
-	left: function() {
+    left: function() {
 		this.down('chat-entry').destroy();
 	},
 
-
-	accept: function(b) {
+    accept: function(b) {
 		this.chatAccepted = b;
 	},
 
-
-	hasBeenAccepted: function() {
+    hasBeenAccepted: function() {
 		return this.chatAccepted;
 	},
 
-
-	maskWindow: function() {
+    maskWindow: function() {
 		this.logView.addMask();
 	},
 
-
-	unmaskWindow: function() {
+    unmaskWindow: function() {
 		this.logView.removeMask();
 	}
 });

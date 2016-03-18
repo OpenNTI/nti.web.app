@@ -1,22 +1,26 @@
-export default Ext.define('NextThought.app.blog.parts.Editor', {
-	extend: 'NextThought.editor.Editor',
-	alias: 'widget.profile-blog-editor',
+var Ext = require('extjs');
+var UserRepository = require('../../../cache/UserRepository');
+var DomUtils = require('../../../util/Dom');
+var EditorEditor = require('../../../editor/Editor');
+var BlogActions = require('../Actions');
 
-	requires: ['NextThought.app.blog.Actions'],
 
-	enableTags: true,
-	enableTitle: true,
-	enableVideo: true,
-	enableShareControls: true,
-	keyboardUp: false,
-	amountScrolled: 0,
+module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
+    extend: 'NextThought.editor.Editor',
+    alias: 'widget.profile-blog-editor',
+    enableTags: true,
+    enableTitle: true,
+    enableVideo: true,
+    enableShareControls: true,
+    keyboardUp: false,
+    amountScrolled: 0,
+    cls: 'blog-editor scrollable',
+    headerTplOrder: '{title}{toolbar}',
 
-	cls: 'blog-editor scrollable',
-	headerTplOrder: '{title}{toolbar}',
-	//TODO: update CSS to not require this nesting.
+    //TODO: update CSS to not require this nesting.
 	renderTpl: Ext.DomHelper.markup({ cls: 'editor active', html: '{super}' }),
 
-	renderSelectors: {
+    renderSelectors: {
 		cancelEl: '.action.cancel',
 		saveEl: '.action.save',
 		publishEl: '.action.publish',
@@ -26,15 +30,13 @@ export default Ext.define('NextThought.app.blog.parts.Editor', {
 		editorEl: '.editor'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.addEvents(['save-post']);
 		this.BlogActions = NextThought.app.blog.Actions.create();
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		var r = this.record,
 			me = this,
@@ -109,15 +111,13 @@ export default Ext.define('NextThought.app.blog.parts.Editor', {
 		}
 	},
 
-
-	destroy: function() {
+    destroy: function() {
 		Ext.EventManager.removeResizeListener(this.syncHeight, this);
 
 		return this.callParent(arguments);
 	},
 
-
-	syncHeight: function() {
+    syncHeight: function() {
 		var el = this.contentEl,
 			container = this.ownerCt && this.ownerCt.el && this.ownerCt.el.dom,
 			containerRect = container && container.getBoundingClientRect(),
@@ -147,8 +147,7 @@ export default Ext.define('NextThought.app.blog.parts.Editor', {
 			.then(this.updateLayout.bind(this));
 	},
 
-
-	onSave: function(e) {
+    onSave: function(e) {
 		e.stopEvent();
 		var me = this,
 			v = this.getValue(),
@@ -201,13 +200,11 @@ export default Ext.define('NextThought.app.blog.parts.Editor', {
 			});
 	},
 
-
-	onSaveSuccess: function() {
+    onSaveSuccess: function() {
 		this.destroy();
 	},
 
-
-	onSaveFailure: function(proxy, response, operation) {
+    onSaveFailure: function(proxy, response, operation) {
 		var msg = getString('NextThought.view.profiles.parts.BlogEditor.unknown'), error;
 
 		if (response && response.responseText) {
@@ -220,8 +217,7 @@ export default Ext.define('NextThought.app.blog.parts.Editor', {
 		console.debug(arguments);
 	},
 
-
-	onCancel: function(e) {
+    onCancel: function(e) {
 		e.stopEvent();
 
 		this.fireEvent('cancel');

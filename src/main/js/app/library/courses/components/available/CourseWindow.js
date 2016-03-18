@@ -1,52 +1,50 @@
-export default Ext.define('NextThought.app.library.courses.components.available.CourseWindow', {
-	extend: 'NextThought.common.window.Window',
-	alias: 'widget.library-available-courses-window',
+var Ext = require('extjs');
+var ParseUtils = require('../../../../../util/Parsing');
+var WindowWindow = require('../../../../../common/window/Window');
+var MixinsRouter = require('../../../../../mixins/Router');
+var CatalogCollection = require('../../../../course/catalog/Collection');
+var AvailableActions = require('./Actions');
+var CoursesStateStore = require('../../StateStore');
+var EnrollmentDetails = require('../../../../course/enrollment/Details');
+var EnrollmentStateStore = require('../../../../course/enrollment/StateStore');
+var EnrollmentDetails = require('../../../../course/enrollment/Details');
+var ComponentsProcess = require('../../../../course/enrollment/components/Process');
+var StoreActions = require('../../../../store/Actions');
 
-	requires: [
-		'NextThought.app.course.catalog.Collection',
-		'NextThought.app.library.courses.components.available.Actions',
-		// 'NextThought.app.library.courses.components.available.CoursePage',
-		'NextThought.app.library.courses.StateStore',
-		'NextThought.app.course.enrollment.Details',
-		'NextThought.app.course.enrollment.StateStore',
-		'NextThought.app.course.enrollment.Details',
-		'NextThought.app.course.enrollment.components.Process',
-		'NextThought.app.store.Actions'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.library.courses.components.available.CourseWindow', {
+    extend: 'NextThought.common.window.Window',
+    alias: 'widget.library-available-courses-window',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	floating: true,
+    floating: true,
+    label: 'Add Courses',
+    constrainTo: Ext.getBody(),
+    width: 1024,
+    height: '85%',
+    dialog: true,
+    header: false,
+    componentLayout: 'natural',
+    layout: 'card',
+    cls: 'available-courses',
 
-	label: 'Add Courses',
-
-	constrainTo: Ext.getBody(),
-	width: 1024,
-	height: '85%',
-	dialog: true,
-	header: false,
-	componentLayout: 'natural',
-	layout: 'card',
-
-	cls: 'available-courses',
-
-	getTargetEl: function() {
+    getTargetEl: function() {
 		return this.body;
 	},
 
-	childEls: ['body'],
-	getDockedItems: function() { return []; },
+    childEls: ['body'],
+    getDockedItems: function() { return []; },
 
-	/**
+    /**
 	 * Ext is shooting us in the foot when it tries to center it
 	 * so for now just don't let Ext do anything here.
 	 */
 	setPosition: function() {},
 
-
-	/**
+    /**
 	 * This is always going to be positioned  fixed, so don't
 	 * let Ext layout try to calculate according to parents.
 	 */
@@ -73,11 +71,11 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		dom.style.left = left + 'px';
 	},
 
-	buttonCfg: [
+    buttonCfg: [
 		{name: getString('NextThought.view.library.available.CourseWindow.Finished'), action: 'close'}
 	],
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'header', cn: [
 			{cls: 'name', html: '{label}'},
 			{cls: 'close'}
@@ -91,10 +89,9 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		{cls: 'footer'}
 	]),
 
-	btnTpl: new Ext.XTemplate(Ext.DomHelper.markup({cls: 'button {disabled} {secondary}', 'data-action': '{action}', html: '{name}'})),
+    btnTpl: new Ext.XTemplate(Ext.DomHelper.markup({cls: 'button {disabled} {secondary}', 'data-action': '{action}', html: '{name}'})),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		labelEl: '.header .name',
 		msgContainerEl: '.msg-container',
 		msgEl: '.msg-container .msg',
@@ -102,8 +99,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		footerEl: '.footer'
 	},
 
-
-	restore: function(state) {
+    restore: function(state) {
 		var me = this;
 
 		function finish(catalogEntry, fulfill) {
@@ -158,8 +154,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		});
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.CourseActions = NextThought.app.library.courses.Actions.create();
@@ -182,8 +177,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		this.mon(this.CourseStore, 'update-available-courses', this.updateCourses.bind(this));
 	},
 
-
-	setupCourses: function(courses) {
+    setupCourses: function(courses) {
 		var current = this.CourseStore.getAllCurrentCourses(),
 			archived = this.CourseStore.getAllArchivedCourses();
 			upcoming = this.CourseStore.getAllUpcomingCourses();
@@ -197,7 +191,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		this.removeMask();
 	},
 
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -205,8 +199,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.addMask();
 		var me = this;
@@ -265,20 +258,19 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		me.updateButtons();
 	},
 
-	handleClose: function() {
+    handleClose: function() {
 		if (this.doClose) {
 			this.doClose();
 		}
 	},
 
-	updateAvailableCourses: function(current, upcoming, archived) {
+    updateAvailableCourses: function(current, upcoming, archived) {
 		if (!this.tabpanel) { return; }
 
 		this.tabpanel.setItems(upcoming, current, archived);
 	},
 
-
-	allowNavigation: function() {
+    allowNavigation: function() {
 		var active = this.getLayout().getActiveItem();
 
 		if (active.stopClose) {
@@ -288,8 +280,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		return true;
 	},
 
-
-	//TODO: this needs to be needs to be allowNavigation
+    //TODO: this needs to be needs to be allowNavigation
 	onBeforeClose: function() {
 		var me = this,
 			active = me.getLayout().getActiveItem(),
@@ -308,8 +299,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		}
 	},
 
-
-	showPrevItem: function(xtype) {
+    showPrevItem: function(xtype) {
 		var current = this.getLayout().getActiveItem(),
 			course;
 
@@ -332,7 +322,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		}
 	},
 
-	/**
+    /**
 	 * show the message bar across the top of the window
 	 * @param  {string}  msg  the message to display
 	 * @param  {Boolean} isError  whether or not we are showing an error
@@ -368,23 +358,21 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		}
 	},
 
-	closeMsg: function() {
+    closeMsg: function() {
 		if (!this.rendered) { return; }
 		this.bodyEl.removeCls('has-msg');
 		this.msgContainerEl.removeCls(['show', 'link']);
 		this.msgEl.update('');
 	},
 
-
-	updateButtons: function() {
+    updateButtons: function() {
 		var active = this.getLayout().getActiveItem(),
 			btnCfg = active && active.getButtonCfg && active.getButtonCfg();
 
 		this.applyButtonCfg(btnCfg || this.buttonCfg);
 	},
 
-
-	applyButtonCfg: function(cfgs) {
+    applyButtonCfg: function(cfgs) {
 		var me = this;
 
 		//make sure its an array
@@ -403,8 +391,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		});
 	},
 
-
-	handleButtonClick: function(e) {
+    handleButtonClick: function(e) {
 		var btn = e.getTarget('.button'),
 			active, action;
 
@@ -426,8 +413,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 
 	},
 
-
-	updateCourses: function() {
+    updateCourses: function() {
 		var me = this,
 			current = me.CourseStore.getAllCurrentCourses(),
 			archived = me.CourseStore.getAllArchivedCourses(),
@@ -436,7 +422,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		me.updateAvailableCourses(current, upcoming, archived);
 	},
 
-	showTabpanel: function() {
+    showTabpanel: function() {
 		var me = this;
 
 		if (!me.tabpanel) {
@@ -472,8 +458,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		me.updateButtons();
 	},
 
-
-	showCourses: function(route, subRoute) {
+    showCourses: function(route, subRoute) {
 		this.mun(this.CourseStore, 'all-courses-set');
 		this.mon(this.CourseStore, 'all-courses-set', this.setupCourses.bind(this));
 		this.addMask();
@@ -481,8 +466,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		this.showTabpanel();
 	},
 
-
-	showCourseDetail: function(route, subRoute, notFoundMsg) {
+    showCourseDetail: function(route, subRoute, notFoundMsg) {
 		var ntiid = ParseUtils.decodeFromURI(route.params.id),
 			course = route.precache.course,
 			q = route.queryParams,
@@ -532,13 +516,11 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		});
 	},
 
-
-	onDrop: function() {
+    onDrop: function() {
 		this.pushRoute('', '/');
 	},
 
-
-	showCourse: function(course) {
+    showCourse: function(course) {
 		var me = this;
 
 		function addView() {
@@ -585,8 +567,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		});
 	},
 
-
-	showEnrollmentOption: function(course, name, type, config) {
+    showEnrollmentOption: function(course, name, type, config) {
 		var me = this;
 
 		function addView() {
@@ -630,8 +611,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		me.closeMsg();
 	},
 
-
-	showPaymenComplete: function(route, subRoute) {
+    showPaymenComplete: function(route, subRoute) {
 		var mostRecent = this.CourseStore.getMostRecentEnrollmentCourse();
 
 		this.showTabpanel();
@@ -644,8 +624,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 		return this.showCourseDetail(route, subRoute);
 	},
 
-
-	showRedeemToken: function(route, subRoute) {
+    showRedeemToken: function(route, subRoute) {
 		var me = this,
 			//TODO: a better system for getting this email
 			email = Service.getSupportLinks().email || 'support@nextthought.com';
@@ -658,8 +637,7 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 			});
 	},
 
-
-	showForCredit: function(route, subRoute) {
+    showForCredit: function(route, subRoute) {
 		var me = this;
 
 		return me.showCourseDetail(route, subRoute)
@@ -670,20 +648,19 @@ export default Ext.define('NextThought.app.library.courses.components.available.
 			});
 	},
 
-
-	addMask: function() {
+    addMask: function() {
 		if (this.rendered) {
 			this.el.mask('Loading...');
 		}
 	},
 
-	removeMask: function() {
+    removeMask: function() {
 		if (this.rendered) {
 			this.el.unmask();
 		}
 	},
 
-	updateLabelText: function(text) {
+    updateLabelText: function(text) {
 		if (Ext.isEmpty(text)) { return; }
 		this.labelEl.update(text);
 	}

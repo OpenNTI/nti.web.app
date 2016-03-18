@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.assessment.results.parts.MultiAnswer', {
+var Ext = require('extjs');
+var PartsMultiChoice = require('./MultiChoice');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.MultiAnswer', {
 	extend: 'NextThought.app.assessment.results.parts.MultiChoice',
 	alias: 'widget.assessment-multianswer-results',
 

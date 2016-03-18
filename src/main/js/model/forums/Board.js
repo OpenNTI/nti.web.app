@@ -1,14 +1,16 @@
-export default Ext.define('NextThought.model.forums.Board', {
-	extend: 'NextThought.model.forums.Base',
+var Ext = require('extjs');
+var ParseUtils = require('../../util/Parsing');
+var StoreUtils = require('../../util/Store');
+var ForumsBase = require('./Base');
+var StoreNTI = require('../../store/NTI');
+var ForumsCommentPost = require('./CommentPost');
 
-	requires: [
-		'NextThought.store.NTI',
-		'NextThought.model.forums.CommentPost'
-	],
 
-	isBoard: true,
+module.exports = exports = Ext.define('NextThought.model.forums.Board', {
+    extend: 'NextThought.model.forums.Base',
+    isBoard: true,
 
-	statics: {
+    statics: {
 		buildContentsStoreFromData: function(id, data) {
 			var store;
 
@@ -44,18 +46,16 @@ export default Ext.define('NextThought.model.forums.Board', {
 		}
 	},
 
-	fields: [
+    fields: [
 		{ name: 'ForumCount', type: 'int', persist: false },
 		{ name: 'title', type: 'auto', persist: false}
 	],
 
-
-	getTitle: function() {
+    getTitle: function() {
 		return this.get('title');
 	},
 
-
-	findBundle: function() {
+    findBundle: function() {
 		var me = this;
 
 		return ContentManagementUtils.findBundleBy(function(bundle) {
@@ -69,8 +69,7 @@ export default Ext.define('NextThought.model.forums.Board', {
 		});
 	},
 
-
-	findCourse: function() {
+    findCourse: function() {
 		var me = this,
 			id = me.getId();
 
@@ -109,10 +108,9 @@ export default Ext.define('NextThought.model.forums.Board', {
 		});
 	},
 
+    hasForumList: function() { return true; },
 
-	hasForumList: function() { return true; },
-
-	/**
+    /**
 	 * See CourseInstance getForumList for more details the structure this is returning
 	 * @return {Object} A forum list of the contents of this board
 	 */
@@ -139,5 +137,4 @@ export default Ext.define('NextThought.model.forums.Board', {
 				return {};
 			});
 	}
-
 });

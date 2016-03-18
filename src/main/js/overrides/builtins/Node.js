@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.builtins.Node', {});
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.builtins.Node', {});
 	//Patch-in features that might be missing.
 (function() {
 

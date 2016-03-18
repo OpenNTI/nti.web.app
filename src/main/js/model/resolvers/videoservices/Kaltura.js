@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.model.resolvers.videoservices.Kaltura', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices.Kaltura', {
 	statics: {
 		type: 'kaltura',
 

@@ -1,16 +1,16 @@
-export default Ext.define('NextThought.model.assessment.UsersCourseAssignmentSavepoint', {
-	extend: 'NextThought.model.Base',
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+var AssessmentUsersCourseAssignmentSavepointItem = require('./UsersCourseAssignmentSavepointItem');
 
-	requires: [
-		'NextThought.model.assessment.UsersCourseAssignmentSavepointItem'
-	],
 
-	fields: [
+module.exports = exports = Ext.define('NextThought.model.assessment.UsersCourseAssignmentSavepoint', {
+    extend: 'NextThought.model.Base',
+
+    fields: [
 		{name: 'Items', type: 'collectionItem'}
 	],
 
-
-	getSavePoint: function(assignmentId) {
+    getSavePoint: function(assignmentId) {
 		return this.getFieldItem('Items', assignmentId);
 	}
 });

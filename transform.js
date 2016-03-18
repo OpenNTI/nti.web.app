@@ -216,7 +216,7 @@ function findGlobals(fileSource) {
 	var g = [];
 
 	keys.forEach(function(key) {
-		var regex = RegExp(key + '\.', 'gm');
+		var regex = RegExp(key + '\\.', 'gm');
 		var	matches = fileSource.match(regex);
 
 		if (matches && matches.length) {
@@ -246,7 +246,7 @@ function isExtComponent(imp) {
 	return !isExt.test(imp.cls);
 }
 
-var importTpl = 'import {name} from \'{path}\'';
+var importTpl = 'var {name} = require(\'{path}\')';
 
 function buildImportStatement(imp, clsPath) {
 	var p = path.relative(path.dirname(clsPath), imp.path);
@@ -255,7 +255,9 @@ function buildImportStatement(imp, clsPath) {
 		p = './' + p;
 	}
 
-	return importTpl.replace('{name}', imp.name).replace('{path}', p);
+	var name = imp.name.replace(/\-([a-z0-9])/gm, (_, letter) => letter.toUpperCase());
+
+	return importTpl.replace('{name}', name).replace('{path}', p);
 }
 
 //Useful links:
@@ -282,7 +284,7 @@ module.exports = function(fileInfo, api) {
 	});
 
 	if (findExtReference(fileInfo.source)) {
-		imports.unshift('import Ext from \'extjs\'');
+		imports.unshift('var Ext = require(\'extjs\')');
 	}
 
 	if (imports.length) {

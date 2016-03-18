@@ -1,21 +1,20 @@
-export default Ext.define('NextThought.app.library.communities.components.Page', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.library-view-community-page',
-
-	requires: ['NextThought.app.library.communities.components.Collection'],
-
-	layout: 'none',
-	storeModel: 'NextThought.model.Community',
+var Ext = require('extjs');
+var ComponentsCollection = require('./Collection');
 
 
-	initComponent: function() {
+module.exports = exports = Ext.define('NextThought.app.library.communities.components.Page', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.library-view-community-page',
+    layout: 'none',
+    storeModel: 'NextThought.model.Community',
+
+    initComponent: function() {
 		this.callParent();
 
 		this.setItems(this.communities);
 	},
 
-
-	setItems: function(items) {
+    setItems: function(items) {
 		this.removeAll(true);
 
 		if (items && items.length) {
@@ -27,8 +26,7 @@ export default Ext.define('NextThought.app.library.communities.components.Page',
 		}
 	},
 
-
-	buildStore: function(items) {
+    buildStore: function(items) {
 		return new Ext.data.Store({
 			model: this.storeModel,
 			data: items,

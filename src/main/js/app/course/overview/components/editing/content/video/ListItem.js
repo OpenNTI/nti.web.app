@@ -1,20 +1,20 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.video.ListItem', {
-	extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
-	alias: 'widget.overview-editing-video-listitem',
+var Ext = require('extjs');
+var ContentListItem = require('../ListItem');
+var PartsVideo = require('../../../parts/Video');
+var ModelVideo = require('../../../../../../../model/Video');
 
-	statics: {
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.ListItem', {
+    extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
+    alias: 'widget.overview-editing-video-listitem',
+
+    statics: {
 		getSupported: function() {
 			return NextThought.model.Video.mimeType;
 		}
 	},
 
-	requires: [
-		'NextThought.app.course.overview.components.parts.Video',
-		'NextThought.model.Video'
-	],
-
-
-	getPreviewType: function(record) {
+    getPreviewType: function(record) {
 		return 'course-overview-video';
 	}
 });

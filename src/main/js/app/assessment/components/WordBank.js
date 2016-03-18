@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.assessment.components.WordBank', {
+var Ext = require('extjs');
+var DomUtils = require('../../../util/Dom');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.components.WordBank', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-components-wordbank',
 

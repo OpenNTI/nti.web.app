@@ -1,19 +1,17 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.overview-editing-prompt',
+var Ext = require('extjs');
+var PromptStateStore = require('../../../../prompt/StateStore');
+var ContentPrompt = require('./content/Prompt');
+var OutlinePrompt = require('./outline/Prompt');
 
-	requires: [
-		'NextThought.app.prompt.StateStore',
-		'NextThought.app.course.overview.components.editing.content.Prompt',
-		'NextThought.app.course.overview.components.editing.outline.Prompt'
-	],
 
-	cls: 'overview-editing-prompt',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.Prompt', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.overview-editing-prompt',
+    cls: 'overview-editing-prompt',
+    layout: 'none',
+    items: [],
 
-	layout: 'none',
-	items: [],
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var record = this.Prompt.data.record,
@@ -29,13 +27,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Pr
 		}
 	},
 
-
-	showUnkownTypeError: function() {
+    showUnkownTypeError: function() {
 		//TODO: fill this out
 	},
 
-
-	editRecord: function(record, parentRecord, rootRecord, bundle) {
+    editRecord: function(record, parentRecord, rootRecord, bundle) {
 		var Outline = NextThought.app.course.overview.components.editing.outline.Prompt,
 			Contents = NextThought.app.course.overview.components.editing.content.Prompt,
 			config = {
@@ -57,8 +53,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Pr
 		}
 	},
 
-
-	addRecord: function(parentRecord, rootRecord, bundle) {
+    addRecord: function(parentRecord, rootRecord, bundle) {
 		var Outline = NextThought.app.course.overview.components.editing.outline.Prompt,
 			Contents = NextThought.app.course.overview.components.editing.content.Prompt,
 			config = {
@@ -79,15 +74,13 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Pr
 		}
 	},
 
-
-	onBack: function() {
+    onBack: function() {
 		if (this.editor && this.editor.onBack) {
 			this.editor.onBack();
 		}
 	},
 
-
-	doValidation: function() {
+    doValidation: function() {
 		if (this.editor && this.editor.doValidation) {
 			return this.editor.doValidation();
 		}
@@ -95,8 +88,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Pr
 		return Promise.resolve();
 	},
 
-
-	onSaveFailure: function(reason) {
+    onSaveFailure: function(reason) {
 		if (this.editor && this.editor.onSaveFailure) {
 			return this.editor.onSaveFailure(reason);
 		}
@@ -104,8 +96,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Pr
 		return Promise.reject('Nothing to handle failure');
 	},
 
-
-	onSave: function() {
+    onSave: function() {
 		if (this.editor && this.editor.onSave) {
 			return this.editor.onSave();
 		}
@@ -113,8 +104,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.Pr
 		return Promise.reject('Nothing to submit.');
 	},
 
-
-	allowCancel: function() {
+    allowCancel: function() {
 		if (this.editor && this.editor.allowCancel) {
 			return this.editor.allowCancel();
 		}

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.account.contacts.management.Options', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.account.contacts.management.Options', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.person-options-menu',
 	cls: 'person-options-menu',

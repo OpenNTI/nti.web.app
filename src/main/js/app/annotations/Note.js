@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.annotations.Note', {
+var Ext = require('extjs');
+var AnnotationsHighlight = require('./Highlight');
+
+
+module.exports = exports = Ext.define('NextThought.app.annotations.Note', {
 	extend: 'NextThought.app.annotations.Highlight',
 	alias: 'widget.note',
 

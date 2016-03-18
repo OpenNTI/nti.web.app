@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.store.courseware.AssignmentView', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.store.courseware.AssignmentView', {
 	extend: 'Ext.data.Store',
 	model: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItem',
 	proxy: {

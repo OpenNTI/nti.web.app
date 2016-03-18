@@ -1,15 +1,17 @@
-export default Ext.define('NextThought.app.contentviewer.reader.Location', {
-	alias: 'reader.locationProvider',
-	mixins: { observable: 'Ext.util.Observable' },
-	requires: [
-		'NextThought.app.library.Actions',
-		'NextThought.cache.AbstractStorage',
-		'NextThought.app.video.Window',
-		'NextThought.util.Content',
-		'NextThought.app.userdata.Actions'
-	],
+var Ext = require('extjs');
+var ContentUtils = require('../../../util/Content');
+var LibraryActions = require('../../library/Actions');
+var CacheAbstractStorage = require('../../../cache/AbstractStorage');
+var VideoWindow = require('../../video/Window');
+var UtilContent = require('../../../util/Content');
+var UserdataActions = require('../../userdata/Actions');
 
-	constructor: function(config) {
+
+module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Location', {
+    alias: 'reader.locationProvider',
+    mixins: { observable: 'Ext.util.Observable' },
+
+    constructor: function(config) {
 		Ext.apply(this, config);
 
 		this.mixins.observable.constructor.call(this);
@@ -45,8 +47,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Location', {
 		this.callParent(arguments);
 	},
 
-
-	setLocation: function(pageInfo, bundle) {
+    setLocation: function(pageInfo, bundle) {
 		var me = this,
 			ntiid = pageInfo.get('NTIID');
 
@@ -65,14 +66,11 @@ export default Ext.define('NextThought.app.contentviewer.reader.Location', {
 				});
 	},
 
-
-	getLocation: function() {
+    getLocation: function() {
 		return this.currentLocation;
 	},
 
-
-
-	getRelated: function(givenNtiid) {
+    getRelated: function(givenNtiid) {
 		if (!givenNtiid) { return Promise.resolve([]); }
 
 		var me = this,
@@ -138,8 +136,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Location', {
 			});
 	},
 
-
-	relatedItemHandler: function(el) {
+    relatedItemHandler: function(el) {
 		var m = el.relatedInfo;
 
 		if (m.type === 'index' || m.type === 'link') {

@@ -1,19 +1,19 @@
+var Ext = require('extjs');
+var DomUtils = require('../../util/Dom');
+var OverlayPanel = require('../contentviewer/overlay/Panel');
+var UtilDom = require('../../util/Dom');
+var UxImagePopout = require('../../common/ux/ImagePopout');
+var CardsLauncher = require('../../common/components/cards/Launcher');
+
+
 /*global DomUtils, NextThought */
-export default Ext.define('NextThought.app.image.OverlayedPanel', {
-	extend: 'NextThought.app.contentviewer.overlay.Panel',
-	alias: 'widget.overlay-image-roll',
+module.exports = exports = Ext.define('NextThought.app.image.OverlayedPanel', {
+    extend: 'NextThought.app.contentviewer.overlay.Panel',
+    alias: 'widget.overlay-image-roll',
+    ui: 'content-launcher',
+    cls: 'content-launcher-container',
 
-	requires: [
-		'NextThought.util.Dom',
-		'NextThought.common.ux.ImagePopout',
-		'NextThought.common.components.cards.Launcher'
-	],
-
-	ui: 'content-launcher',
-	cls: 'content-launcher-container',
-
-
-	statics: {
+    statics: {
 		getData: function(dom, reader) {
 			var images = DomUtils.getImagesFromDom(dom);
 			return NextThought.common.components.cards.Launcher.getData(dom, reader, images, function() {
@@ -23,7 +23,7 @@ export default Ext.define('NextThought.app.image.OverlayedPanel', {
 		}
 	},
 
-	constructor: function(config) {
+    constructor: function(config) {
 		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
@@ -43,8 +43,7 @@ export default Ext.define('NextThought.app.image.OverlayedPanel', {
 		this.callParent([config]);
 	},
 
-
-	showImageRole: function(data) {
+    showImageRole: function(data) {
 		this.imagePopout = Ext.widget('image-lightbox', { data: data.items }).show();
 		this.on('destroy', this.imagePopout.destroy.bind(this.imagePopout));
 	}

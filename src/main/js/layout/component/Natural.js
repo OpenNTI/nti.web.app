@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.layout.component.Natural', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.layout.component.Natural', {
 	extend: 'Ext.layout.component.Body',
 	alias: 'layout.natural',
 	type: 'natural',

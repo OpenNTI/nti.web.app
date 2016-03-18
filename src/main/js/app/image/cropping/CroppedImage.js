@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.image.cropping.CroppedImage', {
+var Ext = require('extjs');
+var Globals = require('../../../util/Globals');
+
+
+module.exports = exports = Ext.define('NextThought.app.image.cropping.CroppedImage', {
 	constructor: function(config) {
 		this.blob = config.blob;
 		this.name = config.name;

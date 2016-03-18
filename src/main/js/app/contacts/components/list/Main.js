@@ -1,14 +1,14 @@
-export default Ext.define('NextThought.app.contacts.components.list.Main', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.createlist-main-view',
-	requires: [
-		'NextThought.common.form.fields.SimpleTextField',
-		'NextThought.app.groups.Actions'
-	],
+var Ext = require('extjs');
+var FieldsSimpleTextField = require('../../../../common/form/fields/SimpleTextField');
+var GroupsActions = require('../../../groups/Actions');
 
-	cls: 'createlist-main-view',
 
-	items: [
+module.exports = exports = Ext.define('NextThought.app.contacts.components.list.Main', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.createlist-main-view',
+    cls: 'createlist-main-view',
+
+    items: [
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
 			{xtype: 'box', name: 'namelabel', cls: 'label', html: 'List name'},
 			{
@@ -47,7 +47,7 @@ export default Ext.define('NextThought.app.contacts.components.list.Main', {
 		]}
 	],
 
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.down('[name=name]'), {
 			scope: this,
@@ -59,14 +59,12 @@ export default Ext.define('NextThought.app.contacts.components.list.Main', {
 		this.GroupActions = NextThought.app.groups.Actions.create();
 	},
 
-
-	getListName: function() {
+    getListName: function() {
 		var name = this.down('[name=name]').getValue();
 		return name ? name.trim() : name;
 	},
 
-
-	specialkey: function(el, event) {
+    specialkey: function(el, event) {
 		var val = el.lastValue,
 			empty = Ext.isEmpty(val);
 
@@ -75,8 +73,7 @@ export default Ext.define('NextThought.app.contacts.components.list.Main', {
 		}
 	},
 
-
-	changed: function(value, t) {
+    changed: function(value, t) {
 		var val = value.trim(),
 			empty = Ext.isEmpty(val),
 			btn = this.query('[name=submit]', this)[0];
@@ -89,8 +86,7 @@ export default Ext.define('NextThought.app.contacts.components.list.Main', {
 		}
 	},
 
-
-	showError: function(errorText) {
+    showError: function(errorText) {
 		var box = this.down('[name=error]');
 
 		errorText = errorText || getString('NextThought.view.account.contacts.createlist.Main.unknown-error');
@@ -100,8 +96,7 @@ export default Ext.define('NextThought.app.contacts.components.list.Main', {
 		box.show();
 	},
 
-
-	submitClicked: function() {
+    submitClicked: function() {
 		var w = this.up('window'),
 			btn = this.down('[name=submit]'),
 			me = this;
@@ -120,8 +115,7 @@ export default Ext.define('NextThought.app.contacts.components.list.Main', {
 			});
 	},
 
-
-	clearError: function() {
+    clearError: function() {
 		var box = this.down('[name=error]');
 		box.hide();
 	}

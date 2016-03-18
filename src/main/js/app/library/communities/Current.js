@@ -1,15 +1,16 @@
-export default Ext.define('NextThought.app.library.communities.Current', {
-	extend: 'NextThought.app.library.components.Current',
-	alias: 'widget.library-current-communities',
+var Ext = require('extjs');
+var ComponentsCurrent = require('../components/Current');
+var ComponentsCollection = require('./components/Collection');
 
-	requires: ['NextThought.app.library.communities.components.Collection'],
 
-	layout: 'none',
-	title: 'Communities',
+module.exports = exports = Ext.define('NextThought.app.library.communities.Current', {
+    extend: 'NextThought.app.library.components.Current',
+    alias: 'widget.library-current-communities',
+    layout: 'none',
+    title: 'Communities',
+    storeModel: 'NextThought.model.Community',
 
-	storeModel: 'NextThought.model.Community',
-
-	statics: {
+    statics: {
 		shouldShow: function() {
 			return Service.getCommunitiesList()
 				.then(function(communities) {
@@ -18,10 +19,9 @@ export default Ext.define('NextThought.app.library.communities.Current', {
 		}
 	},
 
-	items: [],
+    items: [],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var siteCommunity = Service.get('SiteCommunity');
@@ -43,8 +43,7 @@ export default Ext.define('NextThought.app.library.communities.Current', {
 			.then(this.showCurrentItems.bind(this));
 	},
 
-
-	showCurrentItems: function(communities) {
+    showCurrentItems: function(communities) {
 		if (communities.length > 8) {
 			this.showSeeAll();
 		} else {
@@ -56,8 +55,7 @@ export default Ext.define('NextThought.app.library.communities.Current', {
 		this.showItems(communities.slice(0, 8));
 	},
 
-
-	showItems: function(items) {
+    showItems: function(items) {
 		var siteCommunity = Service.get('SiteCommunity');
 
 		if (this.store) {
@@ -83,15 +81,13 @@ export default Ext.define('NextThought.app.library.communities.Current', {
 		});
 	},
 
-
-	onSeeAllClick: function() {
+    onSeeAllClick: function() {
 		if (this.pushRoute) {
 			this.pushRoute('Communities', '/communities');
 		}
 	},
 
-
-	navigate: function(community, el) {
+    navigate: function(community, el) {
 		if (this.navigateToCommunity) {
 			this.navigateToCommunity(community, el);
 		}

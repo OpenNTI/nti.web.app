@@ -1,33 +1,32 @@
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var ShapesCircle = require('./shapes/Circle');
+var ShapesLine = require('./shapes/Line');
+var ShapesPath = require('./shapes/Path');
+var ShapesPolygon = require('./shapes/Polygon');
+var ShapesText = require('./shapes/Text');
+var ShapesUrl = require('./shapes/Url');
+
+
 /*globals swallow*/
-export default Ext.define('NextThought.app.whiteboard.Canvas', {
-	extend: 'Ext.Component',
-	alias:	'widget.whiteboard-canvas',
-	requires: [
-		'NextThought.app.whiteboard.shapes.Circle',
-		'NextThought.app.whiteboard.shapes.Line',
-		'NextThought.app.whiteboard.shapes.Path',
-		'NextThought.app.whiteboard.shapes.Polygon',
-		'NextThought.app.whiteboard.shapes.Text',
-		'NextThought.app.whiteboard.shapes.Url'
-	],
+module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
+    extend: 'Ext.Component',
+    alias:	'widget.whiteboard-canvas',
+    autoEl: 'canvas',
 
-	autoEl: 'canvas',
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.updateData(this.drawData);
 	},
 
-
-	destroy: function() {
+    destroy: function() {
 		if (this.el) {
 			this.el.removeAllListeners();
 		}
 		this.callParent(arguments);
 	},
 
-
-	updateData: function(scene) {
+    updateData: function(scene) {
 		this.drawData = this.self.updateData(scene);
 
 		if (scene && scene.viewportRatio) {
@@ -38,8 +37,7 @@ export default Ext.define('NextThought.app.whiteboard.Canvas', {
 		}
 	},
 
-
-	getData: function() {
+    getData: function() {
 		if (!this.drawData) {
 			return null;
 		}
@@ -62,13 +60,12 @@ export default Ext.define('NextThought.app.whiteboard.Canvas', {
 		return data;
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent();
 		this.mon(this, 'resize', this.hasResized, this);
 	},
 
-	hasResized: function(cmp, width, height) {
+    hasResized: function(cmp, width, height) {
 		height = Math.round(width / (this.viewportRatio || 1));
 
 		this.el.setStyle({
@@ -88,8 +85,7 @@ export default Ext.define('NextThought.app.whiteboard.Canvas', {
 		},1);
 	},
 
-
-	drawScene: function(finished) {
+    drawScene: function(finished) {
 		if (!this.drawData) {
 			return;
 		}
@@ -111,17 +107,15 @@ export default Ext.define('NextThought.app.whiteboard.Canvas', {
 		this.self.drawScene(this.drawData, this.el, fin);
 	},
 
-
-	makeShape: function(data) {
+    makeShape: function(data) {
 		return this.self.makeShape(data);
 	},
 
-
-	addShape: function(shape) {
+    addShape: function(shape) {
 		this.drawData.shapeList.unshift(shape);
 	},
 
-	statics: {
+    statics: {
 		objectNameRe: (/^Canvas(.+?)Shape$/i),
 
 		updateData: function(scene) {

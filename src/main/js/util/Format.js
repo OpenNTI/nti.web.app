@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.util.Format', {
+var Ext = require('extjs');
+var User = require('../model/User');
+var NTIFormat = require('./Format');
+
+
+module.exports = exports = Ext.define('NextThought.util.Format', {
 	singleton: true,
 
 	currencyInfo: {

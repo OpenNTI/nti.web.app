@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.filter.ValueContainsFilter', {
+var Ext = require('extjs');
+var FilterFilter = require('./Filter');
+
+
+module.exports = exports = Ext.define('NextThought.filter.ValueContainsFilter', {
 	extend: 'NextThought.filter.Filter',
 	alternateClassName: 'NextThought.ValueContainsFilter',
 

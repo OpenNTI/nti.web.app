@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.dashboard.components.tiles.BaseCmp', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.BaseCmp', {
 	extend: 'Ext.Component',
 
 	cls: 'tile',

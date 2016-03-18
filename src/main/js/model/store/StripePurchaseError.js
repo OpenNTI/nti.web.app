@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.store.StripePurchaseError', {
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.store.StripePurchaseError', {
 	alternateClassName: 'NextThought.model.store.PurchaseError',
 	extend: 'NextThought.model.Base',
 

@@ -1,16 +1,15 @@
-export default Ext.define('NextThought.app.context.components.VideoContext', {
-	extend: 'Ext.Component',
-	alias: 'widget.context-video',
+var Ext = require('extjs');
+var ContextStateStore = require('../StateStore');
+var PathActions = require('../../navigation/path/Actions');
+var VideoVideo = require('../../video/Video');
 
-	requires: [
-		'NextThought.app.context.StateStore',
-		'NextThought.app.navigation.path.Actions',
-		'NextThought.app.video.Video'
-	],
 
-	cls: 'context-video',
+module.exports = exports = Ext.define('NextThought.app.context.components.VideoContext', {
+    extend: 'Ext.Component',
+    alias: 'widget.context-video',
+    cls: 'context-video',
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'video'},
 		{cls: 'content', cn: [
 			{cls: 'text'}
@@ -18,23 +17,21 @@ export default Ext.define('NextThought.app.context.components.VideoContext', {
 		{cls: 'see-more hidden', html: 'Read More'}
 	]),
 
-	WIDTH: 512,
+    WIDTH: 512,
 
-	renderSelectors: {
+    renderSelectors: {
 		videoEl: '.video',
 		textEl: '.content .text',
 		seeMoreEl: '.see-more'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
-
-	isInContext: function() {
+    isInContext: function() {
 		var context = this.ContextStore.getContext(),
 			currentContext = context && context.last(),
 			contextRecord = currentContext && currentContext.obj,
@@ -46,8 +43,7 @@ export default Ext.define('NextThought.app.context.components.VideoContext', {
 		return inContext || contextRecord && contextRecord.get('NTIID') === this.containerId;
 	},
 
-
-	isInPageContext: function() {
+    isInPageContext: function() {
 		var context = this.ContextStore.getContext(),
 			currentContext = context && context.last(),
 			contextRecord = currentContext && currentContext.obj;
@@ -75,8 +71,7 @@ export default Ext.define('NextThought.app.context.components.VideoContext', {
 			});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this,

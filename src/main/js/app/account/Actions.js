@@ -1,18 +1,20 @@
-export default Ext.define('NextThought.app.account.Actions', {
-	extend: 'NextThought.common.Actions',
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var CommonActions = require('../../common/Actions');
+var CoppaWindow = require('./coppa/Window');
+var RecoveryWindow = require('./recovery/Window');
+var UpgradedWindow = require('./coppa/upgraded/Window');
+var UxWelcomeGuide = require('../../common/ux/WelcomeGuide');
+var UxIframeConfirmWindow = require('../../common/ux/IframeConfirmWindow');
+var UxUpdatedTos = require('../../common/ux/UpdatedTos');
+var UxIframeWindow = require('../../common/ux/IframeWindow');
+var ModelUserPasswordSet = require('../../model/UserPasswordSet');
 
-	requires: [
-		'NextThought.app.account.coppa.Window',
-		'NextThought.app.account.recovery.Window',
-		'NextThought.app.account.coppa.upgraded.Window',
-		'NextThought.common.ux.WelcomeGuide',
-		'NextThought.common.ux.IframeConfirmWindow',
-		'NextThought.common.ux.UpdatedTos',
-		'NextThought.common.ux.IframeWindow',
-		'NextThought.model.UserPasswordSet'
-	],
 
-	maybeShowCoppaWindow: function() {
+module.exports = exports = Ext.define('NextThought.app.account.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    maybeShowCoppaWindow: function() {
 		var user = $AppConfig.userObject,
 			showWindow = user.getLink('account.profile.needs.updated'),
 			url = user.getLink('account.profile'),
@@ -48,8 +50,7 @@ export default Ext.define('NextThought.app.account.Actions', {
 		console.log('get data from ' + url + ' and show coppa window...');
 	},
 
-
-	showEmailRecoveryWindow: function(fieldName, linkName) {
+    showEmailRecoveryWindow: function(fieldName, linkName) {
 		Ext.widget('recovery-email-window', {
 			fieldName: fieldName,
 			linkName: linkName,
@@ -57,8 +58,7 @@ export default Ext.define('NextThought.app.account.Actions', {
 		}).show();
 	},
 
-
-	showCoppaConfirmWindow: function() {
+    showCoppaConfirmWindow: function() {
 		var link = $AppConfig.userObject.getLink('coppa.upgraded.rollbacked');
 
 		Ext.widget('coppa-confirm-window', {
@@ -67,13 +67,11 @@ export default Ext.define('NextThought.app.account.Actions', {
 		}).show();
 	},
 
-
-	showWelcomePage: function(link) {
+    showWelcomePage: function(link) {
 		Ext.widget('welcome-guide', {link: link, deleteOnDestroy: true}).show();
 	},
 
-
-	showResearchAgreement: function() {
+    showResearchAgreement: function() {
 		var user = $AppConfig.userObject,
 			html = user.getLink('irb_html'),
 			pdf = user.getLink('irb_pdf'),
@@ -99,12 +97,11 @@ export default Ext.define('NextThought.app.account.Actions', {
 		}).show();
 	},
 
-
-	showNewTermsOfService: function(link) {
+    showNewTermsOfService: function(link) {
 		Ext.widget('updated-tos', {link: link, deleteOnDestroy: true}).show();
 	},
 
-	__createWindow: function(link, title) {
+    __createWindow: function(link, title) {
 		var win = Ext.widget('nti-window', {
 			title: title,
 			closeAction: 'destroy',
@@ -140,28 +137,23 @@ export default Ext.define('NextThought.app.account.Actions', {
 		return win;
 	},
 
-
-	showTermsOfService: function(link) {
+    showTermsOfService: function(link) {
 		this.__createWindow(link, 'Terms of Service').show();
 	},
 
-
-	showChildrensPrivacy: function(link) {
+    showChildrensPrivacy: function(link) {
 		this.__createWindow(link, 'Children\'s Privacy').show();
 	},
 
-
-	showPrivacy: function(link) {
+    showPrivacy: function(link) {
 		this.__createWindow(link, 'Privacy').show();
 	},
 
-
-	showHref: function(href, target) {
+    showHref: function(href, target) {
 		window.open(href, target);
 	},
 
-
-	submitCoppaInfo: function(values) {
+    submitCoppaInfo: function(values) {
 		var linkToDelete = $AppConfig.userObject.getLink('account.profile.needs.updated'),
 			key;
 
@@ -208,8 +200,7 @@ export default Ext.define('NextThought.app.account.Actions', {
 		});
 	},
 
-
-	fixEmail: function(values) {
+    fixEmail: function(values) {
 		var linkToDelete = $AppConfig.userObject.getLink(values.linkName),
 			email = values.email,
 			fieldName = values.fieldName,
@@ -247,8 +238,7 @@ export default Ext.define('NextThought.app.account.Actions', {
 		}
 	},
 
-
-	showContactUs: function() {
+    showContactUs: function() {
 		var help = Service.getSupportLinks().supportEmail;
 
 		if (help) {
@@ -261,7 +251,7 @@ export default Ext.define('NextThought.app.account.Actions', {
 		}).show();
 	},
 
-	requestAliasChange: function() {
+    requestAliasChange: function() {
 		Ext.widget('contact-us-window', {
 			role: 'alias',
 			titleKey: 'alias_request_title',
@@ -270,16 +260,14 @@ export default Ext.define('NextThought.app.account.Actions', {
 		}).show();
 	},
 
-
-	__contactUsBodyForMessage: function(data) {
+    __contactUsBodyForMessage: function(data) {
 		var body = data.email || '[NO EMAIL SUPPLIED]';
 
 		body += (' wrote: ' + data.message);
 		return body;
 	},
 
-
-	__aliasBodyForMessage: function(data) {
+    __aliasBodyForMessage: function(data) {
 		var body = data.email || '[NO EMAIL SUPPLIED]';
 
 		body += (' has requested an alias change for account ' + $AppConfig.username);
@@ -288,8 +276,7 @@ export default Ext.define('NextThought.app.account.Actions', {
 		return body;
 	},
 
-
-	submitContactForm: function(values, role) {
+    submitContactForm: function(values, role) {
 		var feedbackLink = $AppConfig.userObject.getLink('send-feedback'),
 			url = getURL(feedbackLink),
 			body,
@@ -349,8 +336,7 @@ export default Ext.define('NextThought.app.account.Actions', {
 		});
 	},
 
-
-	changePassword: function(values) {
+    changePassword: function(values) {
 		var u = NextThought.model.UserPasswordSet.fromUser($AppConfig.userObject);
 
 		return new Promise(function(fulfill, reject) {

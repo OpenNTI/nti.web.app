@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.dashboard.components.tiles.AssignmentsList', {
+var Ext = require('extjs');
+var TilesBaseCmp = require('./BaseCmp');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.AssignmentsList', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.BaseCmp',
 	alias: 'widget.dashboard-assignments-list',
 

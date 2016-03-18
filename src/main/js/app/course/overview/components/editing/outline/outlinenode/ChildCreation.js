@@ -1,16 +1,16 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.ChildCreation', {
-	extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
-	alias: 'widget.overview-editing-outlinenode-childcreation',
+var Ext = require('extjs');
+var CreationChildCreation = require('../../creation/ChildCreation');
+var NavigationCourseOutlineNode = require('../../../../../../../model/courses/navigation/CourseOutlineNode');
+var OutlinenodeEditor = require('./Editor');
 
-	requires: [
-		'NextThought.model.courses.navigation.CourseOutlineNode',
-		'NextThought.app.course.overview.components.editing.outline.outlinenode.Editor'
-	],
 
-	title: 'Lesson',
-	saveText: 'Add to Unit',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.ChildCreation', {
+    extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
+    alias: 'widget.overview-editing-outlinenode-childcreation',
+    title: 'Lesson',
+    saveText: 'Add to Unit',
 
-	statics: {
+    statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.courses.navigation.CourseOutlineNode.mimeType
@@ -26,8 +26,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.ou
 		}
 	},
 
-	setUpTypeList: function() {
+    setUpTypeList: function() {
 		this.callParent(arguments);
 	}
-
 });

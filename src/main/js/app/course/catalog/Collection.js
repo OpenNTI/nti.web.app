@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.catalog.Collection', {
+var Ext = require('extjs');
+var StoreCollection = require('../../store/Collection');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.catalog.Collection', {
 	extend: 'NextThought.app.store.Collection',
 	alias: 'widget.course-catalog-collection',
 

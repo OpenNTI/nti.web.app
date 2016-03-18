@@ -1,30 +1,31 @@
-export default Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
-	extend: 'NextThought.editor.Editor',
-	alias: 'widget.course-email-editor',
+var Ext = require('extjs');
+var DomUtils = require('../../../../../../util/Dom');
+var EditorEditor = require('../../../../../../editor/Editor');
+var ModelEmail = require('../../../../../../model/Email');
+var EmailActions = require('./Actions');
+var EmailEmailTokenField = require('./EmailTokenField');
 
-	requires: [
-		'NextThought.model.Email',
-		'NextThought.app.course.assessment.components.admin.email.Actions',
-		'NextThought.app.course.assessment.components.admin.email.EmailTokenField'
-	],
 
-	enableTitle: true,
-	enableObjectControls: false,
-	enableTextControls: false,
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
+    extend: 'NextThought.editor.Editor',
+    alias: 'widget.course-email-editor',
+    enableTitle: true,
+    enableObjectControls: false,
+    enableTextControls: false,
 
-	RECEIVER_MAP: {
+    RECEIVER_MAP: {
 		'ForCredit': 'Enrolled Students',
 		'All': 'All Students',
 		'Open': 'Open Students'
 	},
 
-	REPLY_DEFAULTS: {
+    REPLY_DEFAULTS: {
 		'ForCredit': 'ForCredit',
 		'All': 'ForCredit',
 		'Open': 'NoReply'
 	},
 
-	toolbarTpl: Ext.DomHelper.markup(
+    toolbarTpl: Ext.DomHelper.markup(
 		[
 			{
 				cls: 'aux', cn: [
@@ -46,20 +47,18 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 			]}
 		]),
 
-	footerControlsTpl: new Ext.XTemplate(Ext.DomHelper.markup(
+    footerControlsTpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{tag: 'div', cls:'toggle', cn: [
 			{tag: 'input', type: 'checkbox', id: 'email-copy-toggle', cls: 'email-copy'},
 			{tag: 'label', 'for': 'email-copy-toggle', html: 'Send me a copy of the email'}
 		]}
 	)),
 
-	headerTplOrder: '{toolbar}{title}',
+    headerTplOrder: '{toolbar}{title}',
+    cls: 'email-editor scrollable',
+    renderTpl: Ext.DomHelper.markup({ cls: 'editor active', html: '{super}' }),
 
-	cls: 'email-editor scrollable',
-
-	renderTpl: Ext.DomHelper.markup({ cls: 'editor active', html: '{super}' }),
-
-	renderSelectors: {
+    renderSelectors: {
 		titleEl: '.title',
 		footerEl: '.footer',
 		receiverEl: '.row.receiver .field',
@@ -68,14 +67,12 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		replyCheckBoxEl: '.reply-option .reply-check'
 	},
 
-
-	initComponent: function(){
+    initComponent: function(){
 		this.callParent(arguments);
 		this.isIndividualEmail = !!(this.record && this.record.get('Receiver'));	
 	},
 
-	
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		var me = this;
 
@@ -98,15 +95,13 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		this.mon(this.replyCheckBoxEl, 'click', this.replyCheckboxClicked.bind(this));
 	},
 
-
-	setupTitleField: function() {
+    setupTitleField: function() {
 		if (!this.titleEl) { return; }
 
 		this.titleEl.dom.setAttribute('placeholder', 'Subject');
 	},
 
-
-	setupFooterControls: function(){
+    setupFooterControls: function(){
 		var left = this.footerEl.down('.left'), copyCheckboxEl;
 		if (left) {
 			this.footerControlsTpl.append(left);
@@ -122,16 +117,14 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		}
 	},
 
-
-	emailCopyClicked: function(e){
+    emailCopyClicked: function(e){
 		var i = e.target;
 		if (this.record) {
 			this.record.set('Copy', i.checked);	
 		}
 	},
 
-
-	setReceiverField: function() {
+    setReceiverField: function() {
 		var scope,
 			to = this.record && this.record.get('Receiver');
 
@@ -150,7 +143,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		}
 	},
 
-	createReceiverScopePicker: function(){
+    createReceiverScopePicker: function(){
 		var me = this,
 			menu = 
 				Ext.widget('menu', {
@@ -191,8 +184,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		this.receiverScopeMenu = menu;
 	},
 
-
-	showReceiverScopePicker: function(){
+    showReceiverScopePicker: function(){
 		if (!this.receiverScopeMenu) { return; }
 
 		if (!this.receiverScopeMenu.isVisible()) {
@@ -203,8 +195,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		}
 	},
 
-
-	receiverScopeChanged: function(item, menu){
+    receiverScopeChanged: function(item, menu){
 		this.receiverEl.setHTML(item && item.text);
 		if (this.record) {
 			this.record.set('scope', item && item.studentFilter);
@@ -213,8 +204,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		}
 	},
 
-
-	updateScope: function(record){
+    updateScope: function(record){
 		var scope = record && record.raw && record.raw.studentFilter;
 
 		if (scope) {
@@ -222,8 +212,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		}
 	},
 
-
-	syncHeight: function() {
+    syncHeight: function() {
 		var el = this.contentEl,
 			container = this.ownerCt && this.ownerCt.el && this.ownerCt.el.dom,
 			containerRect = container && container.getBoundingClientRect(),
@@ -254,8 +243,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 			.then(this.updateLayout.bind(this));
 	},
 
-
-	setReplyToField: function(){
+    setReplyToField: function(){
 		var scope;
 		
 		this.noReplyPicker = this.createNoReplyMenu();
@@ -276,16 +264,14 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		this.filterReplyOptions();
 	},
 
-
-	updateReplyScope: function(){
+    updateReplyScope: function(){
 		var selected = this.noReplyPicker && this.noReplyPicker.down('[checked]');
 		if (selected) {
 			this.record.set('replyScope', selected.scope);
 		}
 	},
 
-
-	replyPickerClicked: function(e) {
+    replyPickerClicked: function(e) {
 		var target = Ext.get(e.getTarget());
 
 		if (this.replyScopeEl.hasCls('disabled')) {
@@ -305,8 +291,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		}
 	},
 
-
-	replyCheckboxClicked: function(e){
+    replyCheckboxClicked: function(e){
 		var i = e.target, 
 		action = i.checked ? 'removeCls' : 'addCls';
 		if (this.record) {
@@ -320,8 +305,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		this.replyScopeEl[action]('disabled');
 	},
 
-
-	createNoReplyMenu: function(){
+    createNoReplyMenu: function(){
 		var me = this, menu,
 			initialScope = this.record && this.record.get('scope') || 'All',
 			defaults = this.REPLY_DEFAULTS;
@@ -367,8 +351,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		return menu;
 	},
 
-
-	filterReplyOptions: function(){
+    filterReplyOptions: function(){
 		var menu = this.noReplyPicker,
 			me = this, selectedItem;
 
@@ -397,8 +380,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		}
 	},
 
-
-	/**
+    /**
 	 * Handle the reply-picker selection.
 	 *
 	 * Note: If a user chooses to allow reply, make sure we set both the reply option 
@@ -416,8 +398,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		}
 	},
 
-
-	getValue: function() {
+    getValue: function() {
 		return {
 			body: this.getBody(this.getBodyValue()),
 			NoReply: this.record && this.record.get('NoReply'),
@@ -425,8 +406,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		}
 	},
 
-
-	onSave: function(e){
+    onSave: function(e){
 		e.stopEvent();
 		var me = this,
 			v = this.getValue(),
@@ -490,8 +470,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		
 	},
 
-
-	allowNavigation: function(){
+    allowNavigation: function(){
 		var msg = 'You are currently creating an email. Would you like to leave without sending it?';
 
 		if (this.emailSent) {
@@ -517,8 +496,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		});
 	},
 
-
-	presentSuccessMessage: function(){
+    presentSuccessMessage: function(){
 		alert({
 			icon: 'success',
 			title: 'Email Sent',
@@ -526,11 +504,9 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.em
 		});
 	},
 
-
-	onCancel: function(e) {
+    onCancel: function(e) {
 		e.stopEvent();
 		this.emailSent = true;
 		this.fireEvent('cancel');
 	}
-
 });

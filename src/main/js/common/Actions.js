@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.Actions', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.Actions', {
 	mixins: {
 		observable: 'Ext.util.Observable'
 	},

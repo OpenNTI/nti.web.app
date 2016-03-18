@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.assessment.input.Short', {
+var Ext = require('extjs');
+var InputBase = require('./Base');
+var MixinsQuestionContent = require('../../../mixins/QuestionContent');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', {
 	extend: 'NextThought.app.assessment.input.Base',
 	alias: [
 		'widget.question-input-fillintheblankshortanswerpart'

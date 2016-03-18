@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.recorder.TransactionRecord', {
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.recorder.TransactionRecord', {
 	extend: 'NextThought.model.Base',
 
 	mimeType: 'application/vnd.nextthought.recorder.transactionrecord',

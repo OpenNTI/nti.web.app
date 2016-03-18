@@ -1,17 +1,18 @@
-export default Ext.define('NextThought.app.whiteboard.editor.MoveOptions', {
-	alias: 'widget.wb-tool-move-options',
-	extend: 'Ext.toolbar.Toolbar',
-	requires: [
-		'NextThought.app.whiteboard.editor.ColorPickerButton',
-		'NextThought.app.whiteboard.editor.StrokeWidthSelector',
-		'NextThought.app.whiteboard.editor.ToolOption',
-		'NextThought.util.Color'
-	],
+var Ext = require('extjs');
+var Color = require('../../../util/Color');
+var EditorColorPickerButton = require('./ColorPickerButton');
+var EditorStrokeWidthSelector = require('./StrokeWidthSelector');
+var EditorToolOption = require('./ToolOption');
+var UtilColor = require('../../../util/Color');
 
-	ui: 'options',
-	layout: 'none',
 
-	items: [{
+module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.MoveOptions', {
+    alias: 'widget.wb-tool-move-options',
+    extend: 'Ext.toolbar.Toolbar',
+    ui: 'options',
+    layout: 'none',
+
+    items: [{
 		xtype: 'toolbar',
 		ui: 'options',
 		cls: 'move-action-picker',
@@ -62,13 +63,13 @@ export default Ext.define('NextThought.app.whiteboard.editor.MoveOptions', {
 		}
 	],
 
-	initComponent: function() {
+    initComponent: function() {
 		this.addEvents({'wb-options-change': true });
 		this.enableBubble(['wb-options-change']);
 		this.callParent(arguments);
 	},
 
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		var me = this;
 
@@ -86,17 +87,17 @@ export default Ext.define('NextThought.app.whiteboard.editor.MoveOptions', {
 		this.down('toolbar[cls=pencil-stroke-options]').hide();
 	},
 
-	getToolType: function() {
+    getToolType: function() {
 		return 'move';
 	},
 
-	getActionType: function() {
+    getActionType: function() {
 		var b = Ext.Array.filter(this.query('[isEditAction]'), function(x) { return x.pressed; });
 		if (!b || b.length === 0) { return; }
 		return b[0].option.replace('move', '').trim();
 	},
 
-	setOptions: function(options) {
+    setOptions: function(options) {
 		var toolbar = this.down('toolbar[cls=shape-options]'),
 			fillButton = toolbar.down('[fillSelectMove]'),
 			strokeButton = toolbar.down('[strokeSelectMove]'), val, s, hex;
@@ -140,7 +141,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.MoveOptions', {
 		this.setStrokeWidthValue(options.strokeWidth, options.shapeType);
 	},
 
-	setStrokeWidthValue: function(strokeValue, shapeType) {
+    setStrokeWidthValue: function(strokeValue, shapeType) {
 		if (!shapeType) { return;}
 		var s = shapeType.split('.').pop().toLowerCase(), a, sel, btn;
 
@@ -159,7 +160,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.MoveOptions', {
 		}
 	},
 
-	getOptions: function() {
+    getOptions: function() {
 		var toolbar = this.down('toolbar[cls=shape-options]'),
 			fillButton = toolbar.down('[fillSelectMove]'),
 			strokeButton = toolbar.down('[strokeSelectMove]'),

@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.assessment.input.ModeledContent', {
+var Ext = require('extjs');
+var DomUtils = require('../../../util/Dom');
+var InputBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.input.ModeledContent', {
 	extend: 'NextThought.app.assessment.input.Base',
 	alias: 'widget.question-input-modeledcontentpart',
 

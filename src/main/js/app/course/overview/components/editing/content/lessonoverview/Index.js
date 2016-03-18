@@ -1,26 +1,28 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.lessonoverview.Index', {
-	extend: 'NextThought.common.components.BoundCollection',
-	alias: 'widget.overview-editing-lessonoverview',
+var Ext = require('extjs');
+var Globals = require('../../../../../../../util/Globals');
+var ComponentsBoundCollection = require('../../../../../../../common/components/BoundCollection');
+var DndOrderingContainer = require('../../../../../../../mixins/dnd/OrderingContainer');
+var MixinsFillScreen = require('../../../../../../../mixins/FillScreen');
+var OverviewGroup = require('../../../../../../../model/courses/overview/Group');
+var ControlsAdd = require('../../controls/Add');
+var OverviewgroupListItem = require('../overviewgroup/ListItem');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.lessonoverview.Index', {
+    extend: 'NextThought.common.components.BoundCollection',
+    alias: 'widget.overview-editing-lessonoverview',
+
+    mixins: {
 		OrderingContainer: 'NextThought.mixins.dnd.OrderingContainer',
 		FillScreen: 'NextThought.mixins.FillScreen'
 	},
 
+    emptyText: 'Add a section to get started.',
+    transitionStates: true,
+    ui: 'course',
+    cls: 'course-overview course-overview-editing',
 
-	requires: [
-		'NextThought.model.courses.overview.Group',
-		'NextThought.app.course.overview.components.editing.controls.Add',
-		'NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem'
-	],
-
-	emptyText: 'Add a section to get started.',
-	transitionStates: true,
-
-	ui: 'course',
-	cls: 'course-overview course-overview-editing',
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.setDataTransferHandler(NextThought.model.courses.overview.Group.mimeType, {
@@ -32,15 +34,13 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		this.setCollection(this.contents);
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.fillScreen(this.el.dom, 20);
 	},
 
-
-	onceLoaded: function() {
+    onceLoaded: function() {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
 
@@ -55,23 +55,20 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}));
 	},
 
-
-	getOrderingItems: function() {
+    getOrderingItems: function() {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
 
 		return items || [];
 	},
 
-
-	getDropzoneTarget: function() {
+    getDropzoneTarget: function() {
 		var body = this.getBodyContainer();
 
 		return body && body.el && body.el.dom;
 	},
 
-
-	cacheHeight: function() {
+    cacheHeight: function() {
 		var dom = this.el && this.el.dom;
 
 		if (dom) {
@@ -79,8 +76,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	uncacheHeight: function() {
+    uncacheHeight: function() {
 		var dom = this.el && this.el.dom;
 
 		if (dom) {
@@ -88,21 +84,18 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	beforeSetCollection: function(collection) {
+    beforeSetCollection: function(collection) {
 		this.lessonOverview = collection;
 		this.disableOrderingContainer();
 		this.cacheHeight();
 	},
 
-
-	afterSetCollection: function() {
+    afterSetCollection: function() {
 		this.uncacheHeight();
 		this.enableOrderingContainer();
 	},
 
-
-	buildFooter: function() {
+    buildFooter: function() {
 		return {
 			xtype: 'container',
 			cls: 'course-overview-footer',
@@ -118,8 +111,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		};
 	},
 
-
-	getCmpForRecord: function(record, transition, initialState) {
+    getCmpForRecord: function(record, transition, initialState) {
 		if (record instanceof NextThought.model.courses.overview.Group) {
 			return NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem.create({
 				record: record,
@@ -140,8 +132,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		console.warn('Unknown type: ', record);
 	},
 
-
-	onGroupDrop: function(group, newIndex, moveInfo) {
+    onGroupDrop: function(group, newIndex, moveInfo) {
 		this.suspendUpdates();
 
 		return this.contents.moveToFromContainer(group, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.contents)
@@ -149,8 +140,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			.then(this.resumeUpdates.bind(this));
 	},
 
-
-	addCardToGroup: function(group, card, newIndex, moveInfo) {
+    addCardToGroup: function(group, card, newIndex, moveInfo) {
 		this.suspendUpdates();
 
 		return group.moveToFromContainer(card, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.contents)

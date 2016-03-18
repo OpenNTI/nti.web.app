@@ -1,9 +1,12 @@
-export default Ext.define('NextThought.model.QuizResult', {
-	extend: 'NextThought.model.Base',
-	requires: [
-		'NextThought.model.QuizQuestionResponse'
-	],
-	fields: [
+var Ext = require('extjs');
+var ModelBase = require('./Base');
+var ModelQuizQuestionResponse = require('./QuizQuestionResponse');
+
+
+module.exports = exports = Ext.define('NextThought.model.QuizResult', {
+    extend: 'NextThought.model.Base',
+
+    fields: [
 		{ name: 'QuizID', type: 'string' },
 		{ name: 'Items', type: 'arrayItem' }
 	]

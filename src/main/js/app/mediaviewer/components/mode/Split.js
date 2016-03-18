@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.mediaviewer.components.mode.Split', {
+var Ext = require('extjs');
+var ModeSmallVideo = require('./SmallVideo');
+
+
+module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mode.Split', {
     extend: 'NextThought.app.mediaviewer.components.mode.SmallVideo',
     alias: 'widget.media-split-viewer',
 

@@ -1,28 +1,30 @@
-export default Ext.define('NextThought.app.chat.transcript.Window', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.chat-transcript-window',
+var Ext = require('extjs');
+var IdCache = require('../../../cache/IdCache');
+var UserRepository = require('../../../cache/UserRepository');
+var ParseUtils = require('../../../util/Parsing');
+var WindowsStateStore = require('../../windows/StateStore');
+var ComponentsHeader = require('../../windows/components/Header');
+var ComponentsLoading = require('../../windows/components/Loading');
+var WindowsActions = require('../../windows/Actions');
+var TranscriptMain = require('./Main');
+var ChatGutter = require('../Gutter');
+var ChatActions = require('../Actions');
+var ChatStateStore = require('../StateStore');
+var ModelTranscript = require('../../../model/Transcript');
+var ModelTranscriptSummary = require('../../../model/TranscriptSummary');
+var ModelMessageInfo = require('../../../model/MessageInfo');
+var UtilParsing = require('../../../util/Parsing');
 
-	layout: 'none',
-	autoScroll: true,
-	cls: 'chat-window no-gutter chat-transcript-window scrollable',
-	titleTpl: '{0} (Chat History)',
 
-	requires: [
-		'NextThought.app.windows.StateStore',
-		'NextThought.app.windows.components.Header',
-		'NextThought.app.windows.components.Loading',
-		'NextThought.app.windows.Actions',
-		'NextThought.app.chat.transcript.Main',
-		'NextThought.app.chat.Gutter',
-		'NextThought.app.chat.Actions',
-		'NextThought.app.chat.StateStore',
-		'NextThought.model.Transcript',
-		'NextThought.model.TranscriptSummary',
-		'NextThought.model.MessageInfo',
-		'NextThought.util.Parsing'
-	],
+module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.chat-transcript-window',
+    layout: 'none',
+    autoScroll: true,
+    cls: 'chat-window no-gutter chat-transcript-window scrollable',
+    titleTpl: '{0} (Chat History)',
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.WindowActions = NextThought.app.windows.Actions.create();
 
@@ -46,16 +48,18 @@ export default Ext.define('NextThought.app.chat.transcript.Window', {
 		}
 	},
 
-	ui: 'chat-window',
+    ui: 'chat-window',
 
-	tools: {
+    tools: {
 		'flag-for-moderation': {
 			tip: 'Report',
 			handler: 'onFlagToolClicked'
 		}
 	},
 
-	fixScroll: Ext.emptyFn,//don't "fixScroll" in chat windows.
+    fixScroll: Ext.emptyFn,
+
+    //don't "fixScroll" in chat windows.
 
 	afterRender: function() {
 		var btn;
@@ -67,8 +71,7 @@ export default Ext.define('NextThought.app.chat.transcript.Window', {
 		}
 	},
 
-
-	maybeEnableButtons: function() {
+    maybeEnableButtons: function() {
 		var b = this.down('[flagButton]');
 		//if there is checked stuff down there, enable button
 		if (this.el.down('.control.checked')) {
@@ -80,8 +83,7 @@ export default Ext.define('NextThought.app.chat.transcript.Window', {
 		}
 	},
 
-
-	flagMessages: function() {
+    flagMessages: function() {
 		var allFlaggedEntries = this.el.query('.message.flagged'),
 				allFlaggedMessages = [],
 				guid, m;
@@ -100,8 +102,7 @@ export default Ext.define('NextThought.app.chat.transcript.Window', {
 		this.fireEvent('flag-messages', allFlaggedMessages, this);
 	},
 
-
-	onFlagToolClicked: function() {
+    onFlagToolClicked: function() {
 		var transcriptViews = this.query('chat-transcript'),
 				btn = this.el.down('.flag-for-moderation');
 
@@ -120,8 +121,7 @@ export default Ext.define('NextThought.app.chat.transcript.Window', {
 		}
 	},
 
-
-	clearFlagOptions: function() {
+    clearFlagOptions: function() {
 		var allFlaggedEntries = this.el.query('.message.flagged'),
 				checked = this.el.query('.control.checked');
 		Ext.each(allFlaggedEntries, function(f) {
@@ -136,8 +136,7 @@ export default Ext.define('NextThought.app.chat.transcript.Window', {
 		this.maybeEnableButtons();
 	},
 
-
-	failedToLoadTranscript: function() {
+    failedToLoadTranscript: function() {
 		alert({
 				  msg: 'There was an error loading chat history for:' + (this.errorMsgSupplement || ''),
 				  width: 450
@@ -145,8 +144,7 @@ export default Ext.define('NextThought.app.chat.transcript.Window', {
 		this.destroy();
 	},
 
-
-	setTitleInfo: function(contributors) {
+    setTitleInfo: function(contributors) {
 		var me = this;
 		// list = me.down('chat-gutter');
 
@@ -168,8 +166,7 @@ export default Ext.define('NextThought.app.chat.transcript.Window', {
 		});
 	},
 
-
-	insertTranscript: function(record) {
+    insertTranscript: function(record) {
 		this.setTitleInfo(record.get('Contributors'));
 
 		var time = record.get('RoomInfo').get('CreatedTime') || record.get('CreatedTime'),

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.windows.components.Loading', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.windows.components.Loading', {
 	extend: 'Ext.Component',
 	alias: 'widget.window-loading',
 

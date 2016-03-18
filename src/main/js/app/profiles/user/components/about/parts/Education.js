@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.profiles.user.components.about.parts.Education', {
+var Ext = require('extjs');
+var User = require('../../../../../../model/User');
+var PartsEntrySet = require('./EntrySet');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.about.parts.Education', {
 	extend: 'NextThought.app.profiles.user.components.about.parts.EntrySet',
 	alias: 'widget.profile-user-about-education',
 

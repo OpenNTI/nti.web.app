@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.assessment.AssignmentSubmissionPendingAssessment', {
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.assessment.AssignmentSubmissionPendingAssessment', {
 	extend: 'NextThought.model.Base',
 	fields: [
 		{name: 'assignmentId', type: 'string'},

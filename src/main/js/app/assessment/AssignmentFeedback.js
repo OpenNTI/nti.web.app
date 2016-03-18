@@ -1,19 +1,20 @@
-export default Ext.define('NextThought.app.assessment.AssignmentFeedback', {
-	extend: 'NextThought.app.contentviewer.overlay.Panel',
-	alias: 'widget.assignment-feedback',
+var Ext = require('extjs');
+var UserRepository = require('../../cache/UserRepository');
+var OverlayPanel = require('../contentviewer/overlay/Panel');
+var EditorEditor = require('../../editor/Editor');
 
-	requires: [
-		'NextThought.editor.Editor'
-	],
 
-	cls: 'feedback-panel',
-	ui: 'assessment',
-	appendPlaceholder: true,
-	forceInsert: true,
-	hidden: true,
-	shouldShow: true,
+module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeedback', {
+    extend: 'NextThought.app.contentviewer.overlay.Panel',
+    alias: 'widget.assignment-feedback',
+    cls: 'feedback-panel',
+    ui: 'assessment',
+    appendPlaceholder: true,
+    forceInsert: true,
+    hidden: true,
+    shouldShow: true,
 
-	items: [
+    items: [
 		{
 			xtype: 'box',
 			ui: 'feedback-title',
@@ -63,8 +64,7 @@ export default Ext.define('NextThought.app.assessment.AssignmentFeedback', {
 		}
 	],
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var commentBox;
@@ -104,8 +104,7 @@ export default Ext.define('NextThought.app.assessment.AssignmentFeedback', {
 		});
 	},
 
-
-	addFeedback: function(editor) {
+    addFeedback: function(editor) {
 		var item = new NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback(
 						{body: editor.getValue().body}),
 			me = this,
@@ -129,8 +128,7 @@ export default Ext.define('NextThought.app.assessment.AssignmentFeedback', {
 
 	},
 
-
-	setHistory: function(history) {
+    setHistory: function(history) {
 		if (!history || !history.get('Feedback')) {
 			this.hide();
 			return;
@@ -181,15 +179,13 @@ export default Ext.define('NextThought.app.assessment.AssignmentFeedback', {
 		this.show();
 	},
 
-
-	showEditor: function() {
+    showEditor: function() {
 		this.editor.activate();
 		Ext.defer(this.editor.focus, 350, this.editor);
 		this.updateLayout();
 	},
 
-
-	updateFeedback: function(store) {
+    updateFeedback: function(store) {
 		var items = store.getRange();
 
 		this.history.get('Feedback').set({
@@ -199,8 +195,7 @@ export default Ext.define('NextThought.app.assessment.AssignmentFeedback', {
 		this.history.afterEdit(['feedback']);
 	},
 
-
-	resolveUsers: function(store) {
+    resolveUsers: function(store) {
 		var pluck = Ext.Array.pluck,
 			list = this.feedbackList,
 			records = store.getRange();
@@ -223,8 +218,7 @@ export default Ext.define('NextThought.app.assessment.AssignmentFeedback', {
 
 	},
 
-
-	openEditorFor: function(record, el) {
+    openEditorFor: function(record, el) {
 		var me = this;
 
 
@@ -284,8 +278,7 @@ export default Ext.define('NextThought.app.assessment.AssignmentFeedback', {
 		me.editEditor.activate();
 	},
 
-
-	onFeedbackClick: function(s, record, item, index, e) {
+    onFeedbackClick: function(s, record, item, index, e) {
 		var c = record.get('Creator'),
 			store = this.store;
 
@@ -300,15 +293,13 @@ export default Ext.define('NextThought.app.assessment.AssignmentFeedback', {
 		}
 	},
 
-
-	addMask: function(){
+    addMask: function(){
 		if(this.feedbackList) {
 			this.feedbackList.el.mask('Loading...');
 		}
 	},
 
-
-	removeMask: function(){
+    removeMask: function(){
 		if(this.feedbackList) {
 			this.feedbackList.el.unmask();
 		}

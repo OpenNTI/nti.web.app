@@ -1,6 +1,9 @@
-export default Ext.define('NextThought.overrides.XTemplate', {
-	override: 'Ext.XTemplate',
-	requires: ['NextThought.util.Globals']
+var Ext = require('extjs');
+var UtilGlobals = require('../util/Globals');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.XTemplate', {
+  override: 'Ext.XTemplate'
 });
 
 Ext.override(Ext.XTemplateCompiler, {

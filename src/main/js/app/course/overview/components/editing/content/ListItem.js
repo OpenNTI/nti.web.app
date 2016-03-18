@@ -1,26 +1,25 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.ListItem', {
-	extend: 'Ext.container.Container',
-	//This should only be extended, not instantiated
+var Ext = require('extjs');
+var DndOrderingItem = require('../../../../../../mixins/dnd/OrderingItem');
+var MixinsTransition = require('../../../../../../mixins/Transition');
+var ControlsEdit = require('../controls/Edit');
+var EditingControls = require('../Controls');
+var ContentPrompt = require('./Prompt');
 
-	requires: [
-		'NextThought.app.course.overview.components.editing.controls.Edit',
-		'NextThought.app.course.overview.components.editing.Controls',
-		'NextThought.app.course.overview.components.editing.content.Prompt'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.ListItem', {
+    extend: 'Ext.container.Container',
+
+    mixins: {
 		OrderingItem: 'NextThought.mixins.dnd.OrderingItem',
 		Transition: 'NextThought.mixins.Transition'
 	},
 
-	cls: 'overview-editing-listitem',
+    cls: 'overview-editing-listitem',
+    layout: 'none',
+    items: [],
+    canEdit: false,
 
-	layout: 'none',
-	items: [],
-
-	canEdit: false,
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.setDataTransfer(new NextThought.model.app.MoveInfo({
@@ -37,13 +36,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	updateRecord: function(record) {
+    updateRecord: function(record) {
 		this.setRecord(record);
 	},
 
-
-	setRecord: function(record) {
+    setRecord: function(record) {
 		this.removeAll(true);
 
 		var preview = this.getPreview(record),
@@ -76,16 +73,13 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	getDragHandle: function() {
+    getDragHandle: function() {
 		return this.el && this.el.dom && this.el.dom.querySelector('.controls');
 	},
 
+    getPreviewType: function(record) {},
 
-	getPreviewType: function(record) {},
-
-
-	getPreview: function(record) {
+    getPreview: function(record) {
 		var item = record.getRaw(),
 			type = this.getPreviewType(record);
 
@@ -107,8 +101,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}, item);
 	},
 
-
-	getControls: function(record, bundle) {
+    getControls: function(record, bundle) {
 		var controls = [];
 
 		if (NextThought.app.course.overview.components.editing.content.Prompt.canEdit(record)) {

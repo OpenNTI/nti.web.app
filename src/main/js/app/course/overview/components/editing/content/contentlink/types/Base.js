@@ -1,16 +1,16 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.Base', {
-	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-
-	requires: [
-		'NextThought.model.RelatedWork',
-		'NextThought.app.course.overview.components.editing.Actions',
-		'NextThought.app.course.overview.components.editing.content.ParentSelection',
-		'NextThought.app.course.overview.components.editing.controls.Advanced',
-		'NextThought.app.course.overview.components.editing.settings.Window'
-	],
+var Ext = require('extjs');
+var ContentEditor = require('../../Editor');
+var ModelRelatedWork = require('../../../../../../../../model/RelatedWork');
+var EditingActions = require('../../../Actions');
+var ContentParentSelection = require('../../ParentSelection');
+var ControlsAdvanced = require('../../../controls/Advanced');
+var SettingsWindow = require('../../../settings/Window');
 
 
-	inheritableStatics: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.Base', {
+    extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+
+    inheritableStatics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.RelatedWork.mimeType
@@ -18,9 +18,9 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-	cls: 'content-editor content-link',
+    cls: 'content-editor content-link',
 
-	getFormSchema: function() {
+    getFormSchema: function() {
 		var schema = [
 				{name: 'MimeType', type: 'hidden'},
 				{type: 'group', name: 'card', inputs: [
@@ -43,8 +43,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return schema;
 	},
 
-
-	getDefaultValues: function() {
+    getDefaultValues: function() {
 		if (this.record) {
 			return this.record.isModel && this.record.getData();
 		}
@@ -54,8 +53,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		};
 	},
 
-
-	showEditor: function() {
+    showEditor: function() {
 		this.callParent(arguments);
 
 		if (Service.canDoAdvancedEditing()) {
@@ -63,8 +61,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	addAdvancedDisclosure: function() {
+    addAdvancedDisclosure: function() {
 		var visibility = this.record && this.record.get('visibility'),
 			me = this;
 
@@ -83,8 +80,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			});
 	},
 
-
-	onVisibilityChange: function(cmp) {
+    onVisibilityChange: function(cmp) {
 		var value = cmp && cmp.getValue();
 
 		console.log('changed visibility to: ', value.visibility);

@@ -1,13 +1,13 @@
-export default Ext.define('NextThought.model.courses.AssignmentCollection', {
-	extend: 'NextThought.model.Base',
-
-	requires: [
-		'NextThought.model.courses.assignments.StudentCollection',
-		'NextThought.model.courses.assignments.InstructorCollection'
-	],
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+var AssignmentsStudentCollection = require('./assignments/StudentCollection');
+var AssignmentsInstructorCollection = require('./assignments/InstructorCollection');
 
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.model.courses.AssignmentCollection', {
+    extend: 'NextThought.model.Base',
+
+    statics: {
 		fromJson: function(assignments, nonAssignments, gradeBook, historyURL, isAdmin) {
 			var collection;
 

@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.form.fields.SimpleTextField', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleTextField', {
 	extend: 'Ext.Component',
 	alias: 'widget.simpletext',
 

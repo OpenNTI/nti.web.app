@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.store.ProfileItem', {
+var Ext = require('extjs');
+var StorePageItem = require('./PageItem');
+
+
+module.exports = exports = Ext.define('NextThought.store.ProfileItem', {
 	extend: 'NextThought.store.PageItem',
 
 	sorters: [{

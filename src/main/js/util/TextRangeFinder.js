@@ -1,32 +1,33 @@
-export default Ext.define('NextThought.util.TextRangeFinder', {
-	requires: ['NextThought.util.Search'],
+var Ext = require('extjs');
+var SearchUtils = require('./Search');
+var UtilSearch = require('./Search');
 
 
-  rangeIsInsideRedaction: function(r) {
-    if (r.dom && r.hasCls('redacted')) {return r;}
-    else if (r.commonAncestorContainer) {return Ext.fly(r.commonAncestorContainer).up('.redacted');}
-    return false;
-  },
+module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
+    rangeIsInsideRedaction: function(r) {
+	  if (r.dom && r.hasCls('redacted')) {return r;}
+	  else if (r.commonAncestorContainer) {return Ext.fly(r.commonAncestorContainer).up('.redacted');}
+	  return false;
+	},
+
+    getRedactionActionSpan: function(r) {
+	  var redactionParent = this.rangeIsInsideRedaction(r),
+			  redactionAction, blockRedaction;
+	  if (!redactionParent) {return null;}
 
 
-  getRedactionActionSpan: function(r) {
-    var redactionParent = this.rangeIsInsideRedaction(r),
-            redactionAction, blockRedaction;
-    if (!redactionParent) {return null;}
+	  redactionAction = redactionParent.prev('.redactionAction');
+	  if (!redactionAction) {
+		blockRedaction = redactionParent.prev('.block-redaction');
+		if (blockRedaction) {
+		  redactionAction = blockRedaction.down('.redactionAction');
+		}
+	  }
 
+	  return redactionAction;
+	},
 
-    redactionAction = redactionParent.prev('.redactionAction');
-    if (!redactionAction) {
-      blockRedaction = redactionParent.prev('.block-redaction');
-      if (blockRedaction) {
-        redactionAction = blockRedaction.down('.redactionAction');
-      }
-    }
-
-    return redactionAction;
-  },
-
-	/**
+    /**
 	 * These functions are a heavily modified version of Raymond Hill's doHighlight code. Attribution below
 	 */
 	// Author: Raymond Hill
@@ -122,7 +123,7 @@ export default Ext.define('NextThought.util.TextRangeFinder', {
 		return {text: text, indices: indices};
 	},
 
-	// find entry in indices array (using binary search)
+    // find entry in indices array (using binary search)
 	searchForEntry: function(start, end, lookFor, array, endEdge) {
 		var i;
 		while (start < end) {
@@ -134,11 +135,11 @@ export default Ext.define('NextThought.util.TextRangeFinder', {
 		return start;
 	},
 
-	adjustLocatedRange: function(range) {
+    adjustLocatedRange: function(range) {
 		return this.rangeIsInsideRedaction(range) || range;
 	},
 
-	mapMatchToTextRange: function(match, whichGroup, textIndex, doc) {
+    mapMatchToTextRange: function(match, whichGroup, textIndex, doc) {
 		var iMatch, iTextStart, iTextEnd, iEntryLeft, iEntryRight,
 			entryLeft, entryRight, iNodeTextStart, iNodeTextEnd,
 			indices = textIndex.indices, range;
@@ -172,7 +173,7 @@ export default Ext.define('NextThought.util.TextRangeFinder', {
 		return range;
 	},
 
-	/**
+    /**
 	 * @param node - the node to search for ranges beneath
 	 * @param doc - the document fragment node is a child of
 	 * @param searchFor - a string or a regex to search for
@@ -258,7 +259,7 @@ export default Ext.define('NextThought.util.TextRangeFinder', {
 		return ranges;
 	},
 
-	findTextRangesForSearchHit: function(hit, node, doc) {
+    findTextRangesForSearchHit: function(hit, node, doc) {
 		var fragments, phrase, ranges = [], textIndex;
 
 		if (!hit) {
@@ -286,5 +287,4 @@ export default Ext.define('NextThought.util.TextRangeFinder', {
 
 		return ranges;
 	}
-
 });

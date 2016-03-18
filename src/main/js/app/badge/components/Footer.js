@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.badge.components.Footer', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.badge.components.Footer', {
 	extend: 'Ext.Component',
 	alias: 'widget.badge-window-footer',
 

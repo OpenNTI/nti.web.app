@@ -1,4 +1,10 @@
-export default Ext.define('NextThought.util.Line', {
+var Ext = require('extjs');
+var ReaderPanel = require('../app/contentviewer/components/Reader');
+var Anchors = require('./Anchors');
+var AnnotationUtils = require('./Annotations');
+
+
+module.exports = exports = Ext.define('NextThought.util.Line', {
 	singleton: true,
 
 	containerMimeSelectors: ['object[type$=naquestion]', 'object[type$=ntivideo]'],

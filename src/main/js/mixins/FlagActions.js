@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.mixins.FlagActions', {
+var Ext = require('extjs');
+var TemplatesForNotes = require('../app/annotations/note/Templates');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.FlagActions', {
 
 	constructor: function() {
 		function onAfterRender() {

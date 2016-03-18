@@ -1,9 +1,14 @@
-export default Ext.define('NextThought.common.ux.SearchHits', {
-	alias: 'widget.search-hits',
-	mixins: {observable: 'Ext.util.Observable'},
-	requires: ['NextThought.util.Search'],
+var Ext = require('extjs');
+var RectUtils = require('../../util/Rects');
+var TextRangeFinderUtils = require('../../util/TextRangeFinder');
+var UtilSearch = require('../../util/Search');
 
-	constructor: function(config) {
+
+module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
+    alias: 'widget.search-hits',
+    mixins: {observable: 'Ext.util.Observable'},
+
+    constructor: function(config) {
 		var me = this;
 		me.mixins.observable.constructor.call(me);
 		Ext.apply(me, {
@@ -22,7 +27,7 @@ export default Ext.define('NextThought.common.ux.SearchHits', {
 		me.insertSearchHitsOverlay();
 	},
 
-	insertSearchHitsOverlay: function() {
+    insertSearchHitsOverlay: function() {
 		var container = Ext.DomHelper.append(this.ownerCmp.getInsertionPoint('innerCt'), { cls: 'searchHit-overlay' }, true);
 		if (Ext.isIE) {
 			container.on('click', function(e) {
@@ -38,7 +43,7 @@ export default Ext.define('NextThought.common.ux.SearchHits', {
 		this.showAllHits();
 	},
 
-	removeOverlay: function() {
+    removeOverlay: function() {
 		try {
 			Ext.fly(this.searchHitsOverlay).remove();
 		}
@@ -47,7 +52,7 @@ export default Ext.define('NextThought.common.ux.SearchHits', {
 		}
 	},
 
-	//FIXME the caching that happens in this method is no longer safe.
+    //FIXME the caching that happens in this method is no longer safe.
 	//rangesForSearchHits returns an array objects.  These objects encapsulate
 	//not only the ranges to highlight but also some positioning information.
 	//In the current use case the ranges from assesment items have an offset
@@ -81,12 +86,11 @@ export default Ext.define('NextThought.common.ux.SearchHits', {
 		return this.ranges;
 	},
 
-
-	showAllHits: function() {
+    showAllHits: function() {
 		this.renderRanges(this.getRanges());
 	},
 
-	entriesToAppend: function(rangeInfo, toAppend) {
+    entriesToAppend: function(rangeInfo, toAppend) {
 		var rangesToRender = rangeInfo.ranges,
 			adjustments = this.ownerCmp.getRangePositionAdjustments(rangeInfo.key) || {},
 			redactionAction, rects;
@@ -142,7 +146,7 @@ export default Ext.define('NextThought.common.ux.SearchHits', {
 		return toAppend;
 	},
 
-	renderRanges: function(rangesToRender) {
+    renderRanges: function(rangesToRender) {
 		var toAppend = [], redactionAction, rects;
 
 		Ext.each(rangesToRender, function(rangeInfo) {
@@ -152,13 +156,13 @@ export default Ext.define('NextThought.common.ux.SearchHits', {
 		Ext.DomHelper.append(this.searchHitsOverlay, toAppend, true);
 	},
 
-	reLayout: function() {
+    reLayout: function() {
 		console.log('Relaying out search hit overlays');
 		this.removeOverlay();
 		this.insertSearchHitsOverlay();
 	},
 
-	cleanup: function() {
+    cleanup: function() {
 		this.removeOverlay();
 		delete this.hit;
 		delete this.regex;
@@ -167,5 +171,4 @@ export default Ext.define('NextThought.common.ux.SearchHits', {
 		this.clearListeners();
 		this.clearManagedListeners();
 	}
-
 });

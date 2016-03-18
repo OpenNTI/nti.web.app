@@ -1,28 +1,30 @@
-export default Ext.define('NextThought.app.profiles.community.components.activity.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.profile-community-activity',
+var Ext = require('extjs');
+var User = require('../../../../../model/User');
+var AnalyticsUtil = require('../../../../../util/Analytics');
+var StoreUtils = require('../../../../../util/Store');
+var MixinsRouter = require('../../../../../mixins/Router');
+var TilesNote = require('../../../../course/dashboard/components/tiles/Note');
+var TilesTopic = require('../../../../course/dashboard/components/tiles/Topic');
+var TilesBlog = require('../../../../course/dashboard/components/tiles/Blog');
+var PartsNewPost = require('./parts/NewPost');
+var WindowsActions = require('../../../../windows/Actions');
+var UtilStore = require('../../../../../util/Store');
 
-	requires: [
-		'NextThought.app.course.dashboard.components.tiles.Note',
-		'NextThought.app.course.dashboard.components.tiles.Topic',
-		'NextThought.app.course.dashboard.components.tiles.Blog',
-		'NextThought.app.profiles.community.components.activity.parts.NewPost',
-		'NextThought.app.windows.Actions',
-		'NextThought.util.Store'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.profiles.community.components.activity.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.profile-community-activity',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	cls: 'community-activity',
-	layout: 'none',
+    cls: 'community-activity',
+    layout: 'none',
+    PAGE_SIZE: 50,
+    items: [],
 
-	PAGE_SIZE: 50,
-
-	items: [],
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -70,7 +72,7 @@ export default Ext.define('NextThought.app.profiles.community.components.activit
 		this.onScroll = this.onScroll.bind(this);
 	},
 
-	startResourceViewed: function() {
+    startResourceViewed: function() {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && !this.hasCurrentTimer) {
@@ -83,8 +85,7 @@ export default Ext.define('NextThought.app.profiles.community.components.activit
 		}
 	},
 
-
-	stopResourceViewed: function() {
+    stopResourceViewed: function() {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && this.hasCurrentTimer) {
@@ -93,28 +94,24 @@ export default Ext.define('NextThought.app.profiles.community.components.activit
 		}
 	},
 
-
-	onActivate: function() {
+    onActivate: function() {
 		this.startResourceViewed();
 		window.addEventListener('scroll', this.onScroll);
 	},
 
-
-	onDeactivate: function() {
+    onDeactivate: function() {
 		this.stopResourceViewed();
 		window.removeEventListener('scroll', this.onScroll);
 	},
 
-
-	onRemove: function() {
+    onRemove: function() {
 		var i = this.firstColumn.items;
 		if (Ext.isEmpty(i && i.items) && this.currentPage === -1) {
 			this.showEmpty();
 		}
 	},
 
-
-	userChanged: function(user) {
+    userChanged: function(user) {
 		if (this.activeUser !== user) {
 			this.stopResourceViewed();
 		}
@@ -126,8 +123,7 @@ export default Ext.define('NextThought.app.profiles.community.components.activit
 		return Promise.resolve();
 	},
 
-
-	setSourceURL: function(url) {
+    setSourceURL: function(url) {
 		//if we are loading the same feed don't bother doing any work
 		if (this.feedUrl === url) { return; }
 
@@ -155,13 +151,11 @@ export default Ext.define('NextThought.app.profiles.community.components.activit
 		this.loadPage(1);
 	},
 
-
-	getActiveForum: function() {
+    getActiveForum: function() {
 		return this.postContainer;
 	},
 
-
-	setPostContainer: function(forum) {
+    setPostContainer: function(forum) {
 		this.postContainer = forum;
 
 		var title = forum && forum.getTitle();
@@ -178,13 +172,11 @@ export default Ext.define('NextThought.app.profiles.community.components.activit
 		}
 	},
 
-
-	showActivity: function(route, subRoute) {
+    showActivity: function(route, subRoute) {
 		this.setTitle('Activity');
 	},
 
-
-	onNewPost: function() {
+    onNewPost: function() {
 		if (this.postContainer && this.postContainer.getLink('add')) {
 			this.WindowActions.showWindow('new-topic', null, this.newPostCmp.el.dom, {afterClose: this.onPostSaved.bind(this)}, {
 				forum: this.postContainer
@@ -192,8 +184,7 @@ export default Ext.define('NextThought.app.profiles.community.components.activit
 		}
 	},
 
-
-	onPostSaved: function(record) {
+    onPostSaved: function(record) {
 		if (!record) { return; }
 
 		var left = this.firstColumn, me = this;
@@ -207,8 +198,7 @@ export default Ext.define('NextThought.app.profiles.community.components.activit
 			});
 	},
 
-
-	addItems: function(items, feedUrl) {
+    addItems: function(items, feedUrl) {
 		if (feedUrl !== this.feedUrl) {
 			console.warn('Trying to add items from a different feed, dropping them on the floor');
 			return;
@@ -221,9 +211,7 @@ export default Ext.define('NextThought.app.profiles.community.components.activit
 		return this.__renderItems(items, feedUrl);
 	},
 
-
-
-	__loadItem: function(item) {
+    __loadItem: function(item) {
 		var load;
 
 		if (item instanceof NextThought.model.forums.CommunityHeadlineTopic) {
@@ -240,8 +228,7 @@ export default Ext.define('NextThought.app.profiles.community.components.activit
 		return load;
 	},
 
-
-	__renderItems: function(items, feedUrl) {
+    __renderItems: function(items, feedUrl) {
 		var me = this,
 			left = me.firstColumn,
 			right = me.secondColumn;
@@ -270,15 +257,13 @@ export default Ext.define('NextThought.app.profiles.community.components.activit
 			});
 	},
 
-
-	removeFeedItems: function() {
+    removeFeedItems: function() {
 		this.feedItems = [];
 		this.firstColumn.removeAll(true);
 		this.secondColumn.removeAll(true);
 	},
 
-
-	showEmpty: function() {
+    showEmpty: function() {
 		if (!this.emptyCmp) {
 			this.emptyCmp = this.add({
 				xtype: 'box',
@@ -288,15 +273,14 @@ export default Ext.define('NextThought.app.profiles.community.components.activit
 		}
 	},
 
-
-	clearEmpty: function() {
+    clearEmpty: function() {
 		if (this.emptyCmp) {
 			this.emptyCmp.destroy();
 			delete this.emptyCmp;
 		}
 	},
 
-	/**
+    /**
 	 * Given a page number load that batch for the feedUrl. Capture the current feedUrl in the closure, then check
 	 * to see if its changed by the time we've loaded. If it has don't do anything so we can avoid getting tiles from
 	 * the wrong batch
@@ -335,8 +319,7 @@ export default Ext.define('NextThought.app.profiles.community.components.activit
 			});
 	},
 
-
-	onBatchError: function(error) {
+    onBatchError: function(error) {
 		console.error('Failed to load community activity: ', error);
 
 		this.loadingCmp.removeCls('hidden');
@@ -351,8 +334,7 @@ export default Ext.define('NextThought.app.profiles.community.components.activit
 		});
 	},
 
-
-	onBatchLoad: function(batch, feedUrl) {
+    onBatchLoad: function(batch, feedUrl) {
 		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
 
 		this.isLoading = false;
@@ -376,21 +358,18 @@ export default Ext.define('NextThought.app.profiles.community.components.activit
 		this.nextBatchLink = nextLink;
 	},
 
-
-	loadNextBatch: function() {
+    loadNextBatch: function() {
 		if (this.currentPage > 0) {
 			this.loadPage(this.currentPage + 1);
 		}
 	},
 
-
-	getScrollEl: function() {
+    getScrollEl: function() {
 		//TODO: figure out how to not have to do a user agent check for this
 		return Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body;
 	},
 
-
-	onScroll: function() {
+    onScroll: function() {
 		var height = document.documentElement.clientHeight,
 			el = this.getScrollEl(),
 			scrollTop = el.scrollTop,

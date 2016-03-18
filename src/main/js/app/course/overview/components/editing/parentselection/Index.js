@@ -1,20 +1,16 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.parentselection.Index', {
-	extend: 'Ext.Component',
-	//Shouldn't be instantiated, only extended
-
-	requires: [
-		'NextThought.app.course.overview.components.editing.parentselection.Menu',
-		'NextThought.app.course.overview.components.editing.parentselection.PositionMenu'
-	],
+var Ext = require('extjs');
+var ParentselectionMenu = require('./Menu');
+var ParentselectionPositionMenu = require('./PositionMenu');
 
 
-	label: 'Parent: ',
-	positionLabel: 'Position: ',
-	cls: 'overview-editing-parentselection',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.parentselection.Index', {
+    extend: 'Ext.Component',
+    label: 'Parent: ',
+    positionLabel: 'Position: ',
+    cls: 'overview-editing-parentselection',
+    emptyText: 'Create New Parent',
 
-	emptyText: 'Create New Parent',
-
-	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+    itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'item {cls}',
 		'data-ntiid': '{ntiid}',
 		cn: [
@@ -25,8 +21,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		]
 	})),
 
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'selection closed disabled', 'data-label': '{selectionLabel}', cn: [
 			{cls: 'active'}
 		]},
@@ -35,16 +30,14 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		]}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		selectionEl: '.selection',
 		activeEl: '.selection .active',
 		positionEl: '.position',
 		activePositionEl: '.position .active'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.onParentScroll = this.onParentScroll.bind(this);
@@ -56,8 +49,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		});
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -66,8 +58,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.originalSelection = this.selectedItem;
@@ -85,16 +76,13 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		this.mon(this.activePositionEl, 'click', this.togglePositionMenu.bind(this));
 	},
 
-
-	parseItemData: function(item) {
+    parseItemData: function(item) {
 		return item.getData();
 	},
 
+    getEditor: function() {},
 
-	getEditor: function() {},
-
-
-	/**
+    /**
 	 * Build the menu components to choose parents from.
 	 *
 	 * NOTE: for now we are assuming that the max depth of the tree is 2
@@ -128,8 +116,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		return menu;
 	},
 
-
-	buildPositionMenu: function() {
+    buildPositionMenu: function() {
 		var menu;
 
 		menu = new NextThought.app.course.overview.components.editing.parentselection.PositionMenu({
@@ -147,8 +134,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		return menu;
 	},
 
-
-	selectRecord: function(record) {
+    selectRecord: function(record) {
 		if (!this.rendered) {
 			this.on('afterrender', this.selectRecord.bind(this, record));
 			return;
@@ -178,15 +164,13 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		}
 	},
 
-
-	selectPosition: function(index) {
+    selectPosition: function(index) {
 		var active = this.positionMenu.selectPosition(index);
 
 		this.activePositionEl.update(active || '');
 	},
 
-
-	toggleSelectionMenu: function(e) {
+    toggleSelectionMenu: function(e) {
 		if (this.selectionEl.hasCls('closed')) {
 			this.showSelectionMenu();
 		} else {
@@ -194,8 +178,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		}
 	},
 
-
-	showSelectionMenu: function() {
+    showSelectionMenu: function() {
 		this.selectionEl.removeCls('closed');
 		this.selectionMenu.show();
 
@@ -204,8 +187,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		this.alignMenuTo(this.activeEl.dom, this.selectionMenu);
 	},
 
-
-	hideSelectionMenu: function() {
+    hideSelectionMenu: function() {
 		this.selectionEl.addCls('closed');
 		this.selectionMenu.hide();
 
@@ -216,19 +198,16 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		this.unalignMenu();
 	},
 
-
-	enableSelectionMenu: function() {
+    enableSelectionMenu: function() {
 		this.selectionEl.removeCls('disabled');
 	},
 
-
-	disableSelectionMenu: function() {
+    disableSelectionMenu: function() {
 		this.hideSelectionMenu();
 		this.selectionEl.addCls('disabled');
 	},
 
-
-	togglePositionMenu: function() {
+    togglePositionMenu: function() {
 		if (this.positionEl.hasCls('closed')) {
 			this.showPositionMenu();
 		} else {
@@ -236,8 +215,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		}
 	},
 
-
-	showPositionMenu: function() {
+    showPositionMenu: function() {
 		this.positionEl.removeCls('closed');
 		this.positionMenu.show();
 
@@ -246,8 +224,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		this.alignMenuTo(this.activePositionEl.dom, this.positionMenu);
 	},
 
-
-	hidePositionMenu: function() {
+    hidePositionMenu: function() {
 		this.positionEl.addCls('closed');
 		this.positionMenu.hide();
 
@@ -258,19 +235,16 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		this.unalignMenu();
 	},
 
-
-	enablePositionMenu: function() {
+    enablePositionMenu: function() {
 		this.positionEl.removeCls('disabled');
 	},
 
-
-	disablePositionMenu: function() {
+    disablePositionMenu: function() {
 		this.hidePositionMenu();
 		this.positionEl.addCls('disabled');
 	},
 
-
-	onBodyClick: function(e) {
+    onBodyClick: function(e) {
 		var onSelection = e.getTarget('.overview-editing-parentselection'),
 			onSelectionMenu = e.getTarget('.overview-editing-parentselection-menu'),
 			onPositionMenu = e.getTarget('.overview-editing-parentselection-position-menu');
@@ -289,13 +263,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		}
 	},
 
-
-	onParentScroll: function() {
+    onParentScroll: function() {
 		this.alignMenuTo(this.menuAlignedTo);
 	},
 
-
-	alignMenuTo: function(el, menu) {
+    alignMenuTo: function(el, menu) {
 		this.unalignMenu();
 
 		var menuDom = menu && menu.el && menu.el.dom,
@@ -321,45 +293,38 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pa
 		});
 	},
 
-
-	unalignMenu: function() {
+    unalignMenu: function() {
 		Ext.EventManager.removeResizeListener(this.onParentScroll);
 		// this.scrollingParent.dom.removeEventListener('scroll', this.onParentScroll);
 		Ext.destroy(this.bodyClickListener);
 	},
 
-
-	getOriginalSelection: function() {
+    getOriginalSelection: function() {
 		return this.originalSelection;
 	},
 
-
-	getCurrentSelection: function() {
+    getCurrentSelection: function() {
 		return this.selectionMenu.getSelection();
 	},
 
-
-	getOriginalIndex: function() {
+    getOriginalIndex: function() {
 		if (this.originalSelection && this.originalSelection.indexOfId && this.editingRecord) {
 			return this.originalSelection.indexOfId(this.editingRecord.getId());
 		}
 	},
 
-
-	getCurrentIndex: function() {
+    getCurrentIndex: function() {
 		return this.positionMenu.getCurrentPosition();
 	},
 
-
-	getOriginalPosition: function() {
+    getOriginalPosition: function() {
 		return {
 			parent: this.getOriginalSelection(),
 			index: this.getOriginalIndex()
 		};
 	},
 
-
-	getCurrentPosition: function() {
+    getCurrentPosition: function() {
 		return {
 			parent: this.getCurrentSelection(),
 			index: this.getCurrentIndex()

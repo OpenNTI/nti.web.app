@@ -1,22 +1,23 @@
-export default Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
-	extend: 'NextThought.app.profiles.user.components.about.parts.FieldSet',
-	alias: 'widget.profile-user-about-about',
+var Ext = require('extjs');
+var User = require('../../../../../../model/User');
+var PartsFieldSet = require('./FieldSet');
+var MixinsModelWithBodyContent = require('../../../../../../mixins/ModelWithBodyContent');
+var AccountActions = require('../../../../../account/Actions');
+var EditorEditor = require('../../../../../../editor/Editor');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
+    extend: 'NextThought.app.profiles.user.components.about.parts.FieldSet',
+    alias: 'widget.profile-user-about-about',
+
+    mixins: {
 		ModelBodyContent: 'NextThought.mixins.ModelWithBodyContent'
 	},
 
+    cls: 'about fieldset',
+    name: 'about',
 
-	requires: [
-		'NextThought.app.account.Actions',
-		'NextThought.editor.Editor'
-	],
-
-
-	cls: 'about fieldset',
-	name: 'about',
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{tag: 'h2', cls: 'title', html: 'About'},
 		{cls: 'empty-text hidden', html: 'Tell us about yourself...'},
 		{cls: 'field-container', cn: [
@@ -71,8 +72,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.parts.
 		]}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		aboutEl: '.field.about',
 		nameEl: '.field.alias',
 		realnameEl: '.field.realname',
@@ -86,15 +86,13 @@ export default Ext.define('NextThought.app.profiles.user.components.about.parts.
 		emptyTextEl: '.empty-text'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.AccountActions = NextThought.app.account.Actions.create();
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.aliasMonitor = this.mon(this.nameEl, {
@@ -103,8 +101,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.parts.
 		});
 	},
 
-
-	setUser: function(user, isMe) {
+    setUser: function(user, isMe) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setUser.bind(this, user, isMe));
 			return;
@@ -140,8 +137,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.parts.
 		}
 	},
 
-
-	setEditable: function() {
+    setEditable: function() {
 		this.callParent(arguments);
 		this.updateRequestAlias();
 
@@ -169,8 +165,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.parts.
 		}
 	},
 
-
-	setUneditable: function() {
+    setUneditable: function() {
 		this.callParent(arguments);
 		this.updateRequestAlias();
 
@@ -197,12 +192,12 @@ export default Ext.define('NextThought.app.profiles.user.components.about.parts.
 		}
 	},
 
-	setSchema: function() {
+    setSchema: function() {
 		this.callParent(arguments);
 		this.updateRequestAlias();
 	},
 
-	updateRequestAlias: function() {
+    updateRequestAlias: function() {
 		if (!this.nameEl.hasCls('editable') && isFeature('request-alias-change') && this.isMe) {
 			this.nameEl.addCls('request');
 		} else {
@@ -210,15 +205,13 @@ export default Ext.define('NextThought.app.profiles.user.components.about.parts.
 		}
 	},
 
-	requestAliasChange: function(e) {
+    requestAliasChange: function(e) {
 		if (e.getTarget('.request')) {
 			this.AccountActions.requestAliasChange();
 		}
 	},
 
-
-
-	getErrorMsg: function() {
+    getErrorMsg: function() {
 		var me = this,
 			valid = true,
 			schema = this.profileSchema && this.profileSchema.ProfileSchema,
@@ -246,8 +239,7 @@ export default Ext.define('NextThought.app.profiles.user.components.about.parts.
 		return valid ? '' : 'Missing Required About Fields';
 	},
 
-
-	getValues: function() {
+    getValues: function() {
 		var me = this,
 			values = {},
 			schema = me.profileSchema && me.profileSchema.ProfileSchema,

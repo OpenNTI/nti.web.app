@@ -1,25 +1,24 @@
-export default Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeList', {
-	extend: 'Ext.view.View',
-	alias: 'widget.profile-badge-list',
-
-	requires: [
-		'NextThought.app.badge.Window',
-		'NextThought.model.openbadges.Badge',
-		'NextThought.app.windows.Actions'
-	],
+var Ext = require('extjs');
+var MixinsExportBadge = require('../../../../../../mixins/ExportBadge');
+var BadgeWindow = require('../../../../../badge/Window');
+var OpenbadgesBadge = require('../../../../../../model/openbadges/Badge');
+var WindowsActions = require('../../../../../windows/Actions');
 
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeList', {
+    extend: 'Ext.view.View',
+    alias: 'widget.profile-badge-list',
+
+    mixins: {
 		exportBadge: 'NextThought.mixins.ExportBadge'
 	},
 
-	layout: 'none',
-	cls: 'badge-list',
-	itemSelector: '.badge',
+    layout: 'none',
+    cls: 'badge-list',
+    itemSelector: '.badge',
+    deferEmptyText: false,
 
-	deferEmptyText: false,
-
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
+    tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': '.', cn: [
 			{cls: 'badge {earnedCls}', cn: [
 				{cls: 'img', style: {backgroundImage: 'url({image})'}},
@@ -35,8 +34,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		}
 	}),
 
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'header-container', cn: [
 			{cls: 'header', html: '{header}'},
 			{tag: 'tpl', 'if': 'preference', cn: [
@@ -53,13 +51,11 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		]}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		preferenceEl: '.nti-checkbox'
 	},
 
-
-	constructor: function(config) {
+    constructor: function(config) {
 		var cls = config.cls,
 			newConfig = Ext.clone(config);
 
@@ -71,8 +67,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		}
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -86,8 +81,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.columnWidth) {
@@ -95,8 +89,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		}
 	},
 
-
-	setPublicPreference: function(show) {
+    setPublicPreference: function(show) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setPublicPreference.bind(this));
 			return;
@@ -126,7 +119,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 				});
 	},
 
-	/**
+    /**
 	 * Set the number of columns the list can fill
 	 * @param {Number} width the number of columns
 	 */
@@ -139,8 +132,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		this.el.set({'data-columns': width});
 	},
 
-
-	updateUIFromPreference: function(preference) {
+    updateUIFromPreference: function(preference) {
 		if (!preference) {
 			console.error('Cant update the ui with an empty preference');
 			return;
@@ -151,8 +143,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		this.preferenceEl[checked ? 'addCls' : 'removeCls']('checked');
 	},
 
-
-	showPreference: function() {
+    showPreference: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.showPreference.bind(this));
 			return;
@@ -163,8 +154,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		}
 	},
 
-
-	hidePreference: function() {
+    hidePreference: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.hidePreference.bind(this));
 			return;
@@ -174,8 +164,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		}
 	},
 
-
-	updatePreference: function() {
+    updatePreference: function() {
 		var state = !this.preferenceEl.hasCls('checked');
 
 		this.preference.set(this.preferenceKey, state);
@@ -183,8 +172,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		this.updateUIFromPreference(this.preference);
 	},
 
-
-	onItemClick: function(record, item, index, e) {
+    onItemClick: function(record, item, index, e) {
 		if (e.getTarget('.export')) {
 			this.showExportMenu(record, Ext.get(item));
 		} else {
@@ -192,8 +180,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		}
 	},
 
-
-	setItems: function(items) {
+    setItems: function(items) {
 		if (!this.badgeStore) {
 			this.badgeStore = new Ext.data.Store({
 				model: 'NextThought.model.openbadges.Badge',

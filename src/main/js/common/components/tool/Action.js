@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.common.components.tool.Action', {
+var Ext = require('extjs');
+var Globals = require('../../../util/Globals');
+
+
+module.exports = exports = Ext.define('NextThought.common.components.tool.Action', {
 	extend: 'Ext.Component',
 	alias: 'widget.nti-tool-action',
 

@@ -1,21 +1,19 @@
-export default Ext.define('NextThought.app.chat.StateStore', {
-	extend: 'NextThought.common.StateStore',
+var Ext = require('extjs');
+var Toaster = require('../../common/toast/Manager');
+var ParseUtils = require('../../util/Parsing');
+var CommonStateStore = require('../../common/StateStore');
+var ModelRoomInfo = require('../../model/RoomInfo');
 
-	requires: [
-		'NextThought.model.RoomInfo'
-	],
 
-	availableForChat: false,
+module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
+    extend: 'NextThought.common.StateStore',
+    availableForChat: false,
+    PRESENCE_MAP: {},
+    STATE_KEY: 'chats',
+    CHAT_WIN_MAP: {},
+    ROOM_USER_MAP: {},
 
-	PRESENCE_MAP: {},
-
-	STATE_KEY: 'chats',
-
-	CHAT_WIN_MAP: {},
-
-	ROOM_USER_MAP: {},
-
-	getSocket: function() {
+    getSocket: function() {
 		if (!this.socket) {
 			this.socket = Socket;
 		}
@@ -23,8 +21,7 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		return this.socket;
 	},
 
-
-	setMySelfOffline: function() {
+    setMySelfOffline: function() {
 		var me = this;
 
 		me.didSetMySelfOffline = true;
@@ -35,8 +32,7 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 			});
 	},
 
-
-	getPresenceOf: function(user) {
+    getPresenceOf: function(user) {
 		var username = (user && user.isModel) ? user.get('Username') : user;
 
 		if (!username) { return; }
@@ -44,8 +40,7 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		return this.PRESENCE_MAP[username];
 	},
 
-
-	/**
+    /**
 	 * Update the presence of a user, if it is the current user and they went offline
 	 * in another session, give them a chance to come back online.
 	 *
@@ -102,28 +97,24 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		this.fireEvent('presence-changed', username, presence);
 	},
 
-
-	showChatWindow: function(roomInfo) {
+    showChatWindow: function(roomInfo) {
 		this.fireEvent('show-window', roomInfo);
 	},
 
-
-	fireGutterToggle: function() {
+    fireGutterToggle: function() {
 		// The chat gutter should always be visible except in case the viewport width is too small (i.e width < 1024)
 		// In those cases, we will use this event to show and hide the gutter.
 		this.fireEvent('toggle-gutter');
 	},
 
-
-	notify: function(win, msg) {
+    notify: function(win, msg) {
 		var creator = msg && msg.isModel ? msg.get('Creator') : msg && msg.Creator;
 		if (!isMe(creator)) {
 			this.fireEvent('notify', win, msg);
 		}
 	},
 
-
-	getChatWindow: function(roomInfo) {
+    getChatWindow: function(roomInfo) {
 		var me = this,
 			rIsString = (typeof roomInfo === 'string'),
 			w, occupantsKey;
@@ -142,8 +133,7 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		return w;
 	},
 
-
-	replaceChatRoomInfo: function(chatWindow, newRoom) {
+    replaceChatRoomInfo: function(chatWindow, newRoom) {
 		var	oldRoom = chatWindow.roomInfo,
 			occupantsKey = newRoom && newRoom.getOccupantsKey(),
 			me = this;
@@ -171,8 +161,7 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		me.putRoomInfoIntoSession(newRoom);
 	},
 
-
-	cacheChatWindow: function(win, roomInfo) {
+    cacheChatWindow: function(win, roomInfo) {
 		var rid = roomInfo && roomInfo.isModel ? roomInfo.getId() : roomInfo,
 			occupantsKey = roomInfo && roomInfo.getOccupantsKey();
 
@@ -181,13 +170,11 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		this.fireEvent('added-chat-window', win);
 	},
 
-
-	getWindow: function(id) {
+    getWindow: function(id) {
 		return this.CHAT_WIN_MAP[id];
 	},
 
-
-	getAllChatWindows: function() {
+    getAllChatWindows: function() {
 		var wins = [];
 		for(var k in this.CHAT_WIN_MAP) {
 			if(this.CHAT_WIN_MAP.hasOwnProperty(k)) {
@@ -198,8 +185,7 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		return wins;
 	},
 
-
-	/**
+    /**
 	 * Check to see if a room already exists.  A room exists when any of the following conditions are met, in this order:
 	 *1) if there's a roomId sent.  there must be an existing roomId in the active rooms object.
 	 *2) if no roomId is sent, then look for a room with the same constituants, that room must not be a group/class.
@@ -217,8 +203,7 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		return this.getRoomInfoFromSession(occupantsKey);
 	},
 
-
-	putRoomInfoIntoSession: function(roomInfo) {
+    putRoomInfoIntoSession: function(roomInfo) {
 		if (!roomInfo) {
 			console.error('Requires a RoomInfo object');
 			return;
@@ -233,8 +218,7 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		this.setSessionObject(roomData, key);
 	},
 
-
-	/**
+    /**
 	 *
 	 * @param {String} [key] Optional sub-key
 	 * @return {*}
@@ -247,8 +231,7 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		return o;
 	},
 
-
-	/**
+    /**
 	 *
 	 * @param {Object} o Value to put into session storage.
 	 * @param {String} [key] Optional key. If present, `o` is assumed to be the new value at the `key` instead of
@@ -264,8 +247,7 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		TemporaryStorage.set(this.STATE_KEY, o);
 	},
 
-
-	removeSessionObject: function(key) {
+    removeSessionObject: function(key) {
 		if (!Ext.isEmpty(key)) {
 			var o = this.getSessionObject();
 			delete o[key];
@@ -275,18 +257,15 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		TemporaryStorage.remove('chats');
 	},
 
-
-	isPersistantRoomId: function(id) {
+    isPersistantRoomId: function(id) {
 		return (/meetingroom/i).test(id);
 	},
 
-
-	isOccupantsKeyAccepted: function(id) {
+    isOccupantsKeyAccepted: function(id) {
 		return Boolean((this.getSessionObject('roomIdsAccepted') || {})[id]);
 	},
 
-
-	setOccupantsKeyAccepted: function(roomInfo) {
+    setOccupantsKeyAccepted: function(roomInfo) {
 		var key = 'roomIdsAccepted',
 			occupantsKey = roomInfo.getOccupantsKey(),
 			status = this.getSessionObject(key) || {};
@@ -295,8 +274,7 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		this.setSessionObject(status, key);
 	},
 
-
-	deleteOccupantsKeyAccepted: function(roomInfo) {
+    deleteOccupantsKeyAccepted: function(roomInfo) {
 		var key = 'roomIdsAccepted',
 			status = this.getSessionObject(key),
 			occupantsKey = roomInfo.getOccupantsKey();
@@ -311,8 +289,7 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		this.fireEvent('exited-room', roomInfo.getId());
 	},
 
-
-	getAllOccupantsKeyAccepted: function() {
+    getAllOccupantsKeyAccepted: function() {
 		var accepted = this.getSessionObject('roomIdsAccepted') || {},
 			pairs = [], key;
 
@@ -325,8 +302,7 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		return pairs;
 	},
 
-
-	getRoomInfoFromSession: function(key, json) {
+    getRoomInfoFromSession: function(key, json) {
 		if (!key) {
 			Ext.Error.raise('Requires key to look up RoomInfo');
 		}
@@ -347,8 +323,7 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		return null; //not there
 	},
 
-
-	getAllRoomInfosFromSession: function() {
+    getAllRoomInfosFromSession: function() {
 		var roomInfos = [], ri, key, chats;
 
 		chats = this.getSessionObject();
@@ -366,16 +341,14 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		return roomInfos;
 	},
 
-
-	removeAllRoomInfosFromSession: function() {
+    removeAllRoomInfosFromSession: function() {
 		var chats = this.getSessionObject(),
 			o = chats['roomIdsAccepted'];
 
 		this.setSessionObject(this.STATE_KEY, o);
 	},
 
-
-	updateRoomInfo: function(ri) {
+    updateRoomInfo: function(ri) {
 		var win = this.getChatWindow(ri.getId()),
 				ro = win ? win.roomInfo : this.getRoomInfoFromSession(ri.getId());
 		if (ro) {
@@ -384,8 +357,7 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		this.putRoomInfoIntoSession(ri);
 	},
 
-
-	buildTranscriptId: function(roomInfoId, uname, type) {
+    buildTranscriptId: function(roomInfoId, uname, type) {
 		var id = ParseUtils.parseNTIID(roomInfoId);
 
 		if (!id) {
@@ -397,14 +369,12 @@ export default Ext.define('NextThought.app.chat.StateStore', {
 		return id;
 	},
 
-
-	getTranscriptIdForRoomInfo: function(roomInfo) {
+    getTranscriptIdForRoomInfo: function(roomInfo) {
 		var id = roomInfo.isModel ? roomInfo.getId() : roomInfo;
 		return this.buildTranscriptId(id, $AppConfig.username.replace('-', '_'), 'Transcript');
 	},
 
-
-	getTranscripts: function() {
+    getTranscripts: function() {
 		return this.__transcriptStore;
 	}
 });

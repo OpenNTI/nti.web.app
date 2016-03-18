@@ -1,12 +1,13 @@
-export default Ext.define('NextThought.model.store.Purchasable', {
-	extend: 'NextThought.model.Base',
-	mimeType: 'application/vnd.nextthought.store.purchasable',
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+var StoreStripeConnectKey = require('./StripeConnectKey');
 
-	requires: [
-		'NextThought.model.store.StripeConnectKey'
-	],
 
-	fields: [
+module.exports = exports = Ext.define('NextThought.model.store.Purchasable', {
+    extend: 'NextThought.model.Base',
+    mimeType: 'application/vnd.nextthought.store.purchasable',
+
+    fields: [
 		{ name: 'Featured', type: 'bool', persist: false, defaultValue: false },
 		{ name: 'Activated', type: 'bool', persist: false },
 		{ name: 'Amount', type: 'float', persist: false },
@@ -27,14 +28,13 @@ export default Ext.define('NextThought.model.store.Purchasable', {
 		}}
 	],
 
-
-	isActive: function() {
+    isActive: function() {
 		return Boolean(this.get('Activated'));
 	},
 
-	isPurchasable: true,
+    isPurchasable: true,
 
-	//TODO we want the pricing link on the actual purchasable
+    //TODO we want the pricing link on the actual purchasable
 	getLink: function(rel) {
 		if (rel === 'pricing') {
 			return getURL('/dataserver2/store/price_purchasable_with_stripe_coupon');
@@ -45,12 +45,11 @@ export default Ext.define('NextThought.model.store.Purchasable', {
 		return this.mixins.hasLinks.getLink.call(this, rel);
 	},
 
-	hasHistory: function() {
+    hasHistory: function() {
 		return Boolean(this.getLink('history'));
 	},
 
-
-	fireAcquisitionEvent: function(eventSource, callback) {
+    fireAcquisitionEvent: function(eventSource, callback) {
 		try {
 			return eventSource.fireEvent('show-purchasable', eventSource, this);
 		} finally {
@@ -58,11 +57,11 @@ export default Ext.define('NextThought.model.store.Purchasable', {
 		}
 	},
 
-	isGiftable: function() {
+    isGiftable: function() {
 		return !!this.getLink('gift_stripe_payment');
 	},
 
-	isRedeemable: function() {
+    isRedeemable: function() {
 		return !!this.getLink('redeem_gift');
 	}
 });

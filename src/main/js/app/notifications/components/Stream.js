@@ -1,19 +1,21 @@
-export default Ext.define('NextThought.app.notifications.components.Stream', {
-	extend: 'NextThought.app.notifications.components.List',
-	alias: 'widget.notifications-stream-list',
+var Ext = require('extjs');
+var ComponentsList = require('./List');
+var MixinsRouter = require('../../../mixins/Router');
+var ComponentsHeader = require('./Header');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.notifications.components.Stream', {
+    extend: 'NextThought.app.notifications.components.List',
+    alias: 'widget.notifications-stream-list',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	requires: [
-		'NextThought.app.notifications.components.Header'
-	],
+    cls: 'notification-stream',
+    PREPEND_INDEX: 1,
 
-	cls: 'notification-stream',
-	PREPEND_INDEX: 1,
-
-	items: [
+    items: [
 		{xtype: 'box', cls: 'sidebar'},
 		{
 			xtype: 'container',
@@ -26,7 +28,7 @@ export default Ext.define('NextThought.app.notifications.components.Stream', {
 		}
 	],
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -36,37 +38,32 @@ export default Ext.define('NextThought.app.notifications.components.Stream', {
 		this.onScroll = this.onScroll.bind(this);
 	},
 
-	getGroupContainer: function() {
+    getGroupContainer: function() {
 		return this.groupsContainer;
 	},
 
-
-	onActivate: function() {
+    onActivate: function() {
 		this.callParent(arguments);
 
 		window.addEventListener('scroll', this.onScroll);
 	},
 
-
-	onDeactivate: function() {
+    onDeactivate: function() {
 		this.callParent(arguments);
 
 		window.addEventListener('scroll', this.onScroll);
 	},
 
-
-	getScrollEl: function() {
+    getScrollEl: function() {
 		//TODO: figure out how to not have to do a user agent check for this
 		return Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body;
 	},
 
-
-	isOnLastBatch: function() {
+    isOnLastBatch: function() {
 		return this.isLastBatch;
 	},
 
-
-	maybeShowMoreItems: function() {
+    maybeShowMoreItems: function() {
 		//if we can't scroll
 		var body = document.body,
 			height = document.documentElement.clientHeight;
@@ -80,16 +77,14 @@ export default Ext.define('NextThought.app.notifications.components.Stream', {
 		}
 	},
 
-
-	prefetchNext: Ext.Function.createBuffered(function() {
+    prefetchNext: Ext.Function.createBuffered(function() {
 		if (!this.isOnLastBatch()) {
 			this.currentBatch.getNextBatch()
 				.then(this.loadBatch.bind(this));
 		}
 	}, 500, null, null),
 
-
-	onScroll: function() {
+    onScroll: function() {
 		var body = this.getScrollEl(),
 			height = document.documentElement.clientHeight,
 			top = body.scrollTop,
@@ -106,9 +101,7 @@ export default Ext.define('NextThought.app.notifications.components.Stream', {
 		}
 	},
 
-
-	navigateToItem: function(rec) {
+    navigateToItem: function(rec) {
 		this.Router.root.attemptToNavigateToObject(rec);
 	}
-
 });

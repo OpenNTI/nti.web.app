@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.model.BaseProgress', {
+var Ext = require('extjs');
+var AnalyticsUtil = require('../util/Analytics');
+var ModelBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.BaseProgress', {
     extend: 'NextThought.model.Base',
 
     fields: [

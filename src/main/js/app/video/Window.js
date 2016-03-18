@@ -1,8 +1,13 @@
-export default Ext.define('NextThought.app.video.Window', {
-	extend: 'NextThought.common.window.Window',
-	alias: 'widget.video-window',
-	requires: ['NextThought.app.video.Panel'],
-	/*
+var Ext = require('extjs');
+var WindowWindow = require('../../common/window/Window');
+var VideoPanel = require('./Panel');
+
+
+module.exports = exports = Ext.define('NextThought.app.video.Window', {
+    extend: 'NextThought.common.window.Window',
+    alias: 'widget.video-window',
+
+    /*
 		src:
 		[
 			// firefox (ogg theora)
@@ -43,5 +48,4 @@ export default Ext.define('NextThought.app.video.Window', {
 
 		this.callParent([config]);
 	}
-
 });

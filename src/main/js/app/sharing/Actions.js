@@ -1,16 +1,19 @@
-export default Ext.define('NextThought.app.sharing.Actions', {
-	extend: 'NextThought.common.Actions',
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var CommonActions = require('../../common/Actions');
+var ContextStateStore = require('../context/StateStore');
 
-	requires: ['NextThought.app.context.StateStore'],
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
-
-	getSuggestionStore: function() {
+    getSuggestionStore: function() {
 		var store = new Ext.data.Store({
 				model: 'NextThought.model.UserSearch'
 			});
@@ -24,7 +27,7 @@ export default Ext.define('NextThought.app.sharing.Actions', {
 		return store;
 	},
 
-	__getSuggestionItems: function() {
+    __getSuggestionItems: function() {
 		return Promise.all([
 				this.getSuggestions(),
 				this.getCommunities(),
@@ -63,8 +66,7 @@ export default Ext.define('NextThought.app.sharing.Actions', {
 			});
 	},
 
-
-	getSiteCommunity: function() {
+    getSiteCommunity: function() {
 		var siteId = Service.get('SiteCommunity');
 
 		return Service.getCommunitiesList()
@@ -79,8 +81,7 @@ export default Ext.define('NextThought.app.sharing.Actions', {
 			});
 	},
 
-
-	getSuggestions: function() {
+    getSuggestions: function() {
 		var suggestions = [this.getSiteCommunity()],
 			rootBundle = this.ContextStore.getRootBundle(),
 			context = this.ContextStore.getContext();
@@ -115,8 +116,7 @@ export default Ext.define('NextThought.app.sharing.Actions', {
 			});
 	},
 
-
-	getCommunities: function() {
+    getCommunities: function() {
 		var siteId = Service.get('SiteCommunity');
 
 		return Service.getCommunitiesList()
@@ -129,8 +129,7 @@ export default Ext.define('NextThought.app.sharing.Actions', {
 			});
 	},
 
-
-	getGroups: function() {
+    getGroups: function() {
 		return Service.getGroupsList()
 			.then(function(groups) {
 				return groups.map(function(group) {

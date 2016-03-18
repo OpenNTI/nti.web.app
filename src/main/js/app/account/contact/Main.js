@@ -1,13 +1,12 @@
-export default Ext.define('NextThought.app.account.contact.Main', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.contact-main-view',
-	requires: [
-		'Ext.form.field.TextArea'
-	],
+var Ext = require('extjs');
 
-	cls: 'contact-main-view',
 
-	items: [
+module.exports = exports = Ext.define('NextThought.app.account.contact.Main', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.contact-main-view',
+    cls: 'contact-main-view',
+
+    items: [
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
 			{xtype: 'simpletext', name: 'email', cls: 'input-box', inputType: 'email', placeholder: getString('NextThought.view.account.contact.Main.email')},
 			{
@@ -57,7 +56,7 @@ export default Ext.define('NextThought.app.account.contact.Main', {
 		]}
 	],
 
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var u = $AppConfig.userObject,
@@ -70,8 +69,7 @@ export default Ext.define('NextThought.app.account.contact.Main', {
 		}
 	},
 
-
-	getValues: function() {
+    getValues: function() {
 		var email = this.down('[name=email]').getValue(),
 			message = this.down('[name=message]').getEl().getValue();
 
@@ -83,7 +81,7 @@ export default Ext.define('NextThought.app.account.contact.Main', {
 
 	},
 
-	setError: function(error) {
+    setError: function(error) {
 		var box = this.down('[name=error]'),
 			field = this.down('[name=' + error.field + ']'),
 			allFields = this.query('[name]');
@@ -102,8 +100,7 @@ export default Ext.define('NextThought.app.account.contact.Main', {
 		this.up('window').updateLayout();
 	},
 
-
-	submit: function(b) {
+    submit: function(b) {
 		var values = this.getValues(),
 			win = this.up('window');
 

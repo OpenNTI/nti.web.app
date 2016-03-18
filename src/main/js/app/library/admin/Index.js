@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.library.admin.Index', {
+var Ext = require('extjs');
+var CoursesIndex = require('../courses/Index');
+var MixinsRouter = require('../../../mixins/Router');
+
+
+module.exports = exports = Ext.define('NextThought.app.library.admin.Index', {
 	extend: 'NextThought.app.library.courses.Index',
 	alias: 'widget.library-admin',
 

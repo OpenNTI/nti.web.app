@@ -1,17 +1,18 @@
-export default Ext.define('NextThought.app.course.overview.components.types.Content', {
-	extend: 'NextThought.common.components.BoundCollection',
-	alias: 'widget.overview-types-content',
-
-	requires: [
-		'NextThought.app.course.overview.components.parts.Header',
-		'NextThought.app.course.overview.components.parts.Group',
-		'NextThought.model.courses.overview.Lesson',
-		'NextThought.model.courses.overview.Group',
-		'NextThought.model.courses.LegacyCommunityBasedCourseInstance'
-	],
+var Ext = require('extjs');
+var ParseUtils = require('../../../../../util/Parsing');
+var ComponentsBoundCollection = require('../../../../../common/components/BoundCollection');
+var PartsHeader = require('../parts/Header');
+var PartsGroup = require('../parts/Group');
+var OverviewLesson = require('../../../../../model/courses/overview/Lesson');
+var OverviewGroup = require('../../../../../model/courses/overview/Group');
+var CoursesLegacyCommunityBasedCourseInstance = require('../../../../../model/courses/LegacyCommunityBasedCourseInstance');
 
 
-	setProgress: function(progress) {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.types.Content', {
+    extend: 'NextThought.common.components.BoundCollection',
+    alias: 'widget.overview-types-content',
+
+    setProgress: function(progress) {
 		var body = this.getBodyContainer();
 
 		this.progress = progress;
@@ -27,8 +28,7 @@ export default Ext.define('NextThought.app.course.overview.components.types.Cont
 		});
 	},
 
-
-	setCommentCounts: function(commentCounts) {
+    setCommentCounts: function(commentCounts) {
 		var body = this.getBodyContainer();
 
 		this.commentCounts = commentCounts;
@@ -44,8 +44,7 @@ export default Ext.define('NextThought.app.course.overview.components.types.Cont
 		});
 	},
 
-
-	onceLoaded: function() {
+    onceLoaded: function() {
 		var me = this;
 
 		return new Promise(function(fulfill, reject) {
@@ -70,8 +69,7 @@ export default Ext.define('NextThought.app.course.overview.components.types.Cont
 		});
 	},
 
-
-	__collapseGroup: function(group) {
+    __collapseGroup: function(group) {
 		var items = group.Items;
 
 		group.Items = items.reduce(function(acc, item, index, arr) {
@@ -100,8 +98,7 @@ export default Ext.define('NextThought.app.course.overview.components.types.Cont
 		return group;
 	},
 
-
-	parseCollection: function(response) {
+    parseCollection: function(response) {
 		var json = JSON.parse(response),
 			items = json.Items || [];
 
@@ -112,8 +109,7 @@ export default Ext.define('NextThought.app.course.overview.components.types.Cont
 		return ParseUtils.parseItems([json])[0];
 	},
 
-
-	buildHeader: function(collection) {
+    buildHeader: function(collection) {
 		return {
 			xtype: 'course-overview-header',
 			record: this.record,
@@ -123,8 +119,7 @@ export default Ext.define('NextThought.app.course.overview.components.types.Cont
 		};
 	},
 
-
-	afterSetCollection: function() {
+    afterSetCollection: function() {
 		if (this.progress) {
 			this.setProgress(this.progress);
 		}
@@ -137,8 +132,7 @@ export default Ext.define('NextThought.app.course.overview.components.types.Cont
 		}
 	},
 
-
-	getCmpForRecord: function(record) {
+    getCmpForRecord: function(record) {
 		if (record instanceof NextThought.model.courses.overview.Group) {
 			return NextThought.app.course.overview.components.parts.Group.create({
 				record: record,

@@ -1,17 +1,21 @@
-export default Ext.define('NextThought.model.UserSearch', {
-	extend: 'NextThought.model.Base',
-	requires: [
-		'NextThought.model.User',
-		'NextThought.proxy.UserSearch',
-		'NextThought.app.chat.StateStore'
-	],
+var Ext = require('extjs');
+var ModelBase = require('./Base');
+var MixinsShareEntity = require('../mixins/ShareEntity');
+var MixinsAvatar = require('../mixins/Avatar');
+var ModelUser = require('./User');
+var ProxyUserSearch = require('../proxy/UserSearch');
+var ChatStateStore = require('../app/chat/StateStore');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.model.UserSearch', {
+    extend: 'NextThought.model.Base',
+
+    mixins: {
 		shareEntity: 'NextThought.mixins.ShareEntity',
 		Avatar: 'NextThought.mixins.Avatar'
 	},
 
-	statics: {
+    statics: {
 		getType: function(modelData) {
 			var m = ((modelData && modelData.Class) || '').toLowerCase(), type;
 
@@ -31,9 +35,10 @@ export default Ext.define('NextThought.model.UserSearch', {
 		}
 	},
 
-	idProperty: 'Username',
-	homogenous: true,
-	fields: [
+    idProperty: 'Username',
+    homogenous: true,
+
+    fields: [
 		{ name: 'Username', type: 'string' },
 		{ name: 'Presence', convert: function(v, record) {
 			var presence = NextThought.app.chat.StateStore.getInstance().getPresenceOf(record.get('Username'));
@@ -66,15 +71,14 @@ export default Ext.define('NextThought.model.UserSearch', {
 		{ name: 'isMarked', type: 'boolean', persist: false}
 	],
 
-	constructor: function() {
+    constructor: function() {
 		this.callParent(arguments);
 		this.initAvatar();
 	},
 
-	isUnresolved: function() {
+    isUnresolved: function() {
 		return this.Unresolved === true;
 	}
-
 }, function() {
 	this.borrow(NextThought.model.User, ['getName', 'getProfileUrl']);
 });

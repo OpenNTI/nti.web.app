@@ -1,15 +1,17 @@
-export default Ext.define('NextThought.app.annotations.QuizResults', {
-	extend: 'NextThought.app.annotations.Base',
-	alias: 'widget.quizresult',
-	$displayName: 'Quiz Result',
-	requires: [],
+var Ext = require('extjs');
+var AnnotationsBase = require('./Base');
 
-	constructor: function(config) {
+
+module.exports = exports = Ext.define('NextThought.app.annotations.QuizResults', {
+    extend: 'NextThought.app.annotations.Base',
+    alias: 'widget.quizresult',
+    $displayName: 'Quiz Result',
+
+    constructor: function(config) {
 		this.callParent(arguments);
 	},
 
-
-	render: function() {
+    render: function() {
 		return this;
 	}
 });

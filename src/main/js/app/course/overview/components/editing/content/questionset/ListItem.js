@@ -1,8 +1,15 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.questionset.ListItem', {
-	extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
-	alias: 'widget.overview-editing-questionset-listitem',
+var Ext = require('extjs');
+var ContentListItem = require('../ListItem');
+var PartsQuestionSet = require('../../../parts/QuestionSet');
+var ModelQuestionSetRef = require('../../../../../../../model/QuestionSetRef');
+var ModelAssignmentRef = require('../../../../../../../model/AssignmentRef');
 
-	statics: {
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.ListItem', {
+    extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
+    alias: 'widget.overview-editing-questionset-listitem',
+
+    statics: {
 		isAssessmentWidget: true,
 		getSupported: function() {
 			return [
@@ -12,14 +19,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-	requires: [
-		'NextThought.app.course.overview.components.parts.QuestionSet',
-		'NextThought.model.QuestionSetRef',
-		'NextThought.model.AssignmentRef'
-	],
-
-
-	updateRecord: function(record) {
+    updateRecord: function(record) {
 		var me = this;
 
 		me.course.getAssignments()
@@ -30,8 +30,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			});
 	},
 
-
-	getPreviewType: function() {
+    getPreviewType: function() {
 		return this.assignment ? 'course-overview-assignment' : 'course-overview-naquestionset';
 	}
 });

@@ -1,18 +1,17 @@
-export default Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
-	extend: 'NextThought.app.contentviewer.panels.Reader',
-	alias: 'widget.assignment-reader',
-
-	requires: [
-		'NextThought.app.contentviewer.navigation.assignment.Student',
-		'NextThought.app.contentviewer.components.assignment.TimedPlaceholder',
-		'NextThought.app.contentviewer.components.assignment.NotStartedPlaceholder'
-	],
-
-	prefix: 'course-assignment',
-	cls: 'reader-container assignment-reader',
+var Ext = require('extjs');
+var PanelsReader = require('../Reader');
+var AssignmentStudent = require('../../navigation/assignment/Student');
+var AssignmentTimedPlaceholder = require('../../components/assignment/TimedPlaceholder');
+var AssignmentNotStartedPlaceholder = require('../../components/assignment/NotStartedPlaceholder');
 
 
-	getToolbarConfig: function() {
+module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
+    extend: 'NextThought.app.contentviewer.panels.Reader',
+    alias: 'widget.assignment-reader',
+    prefix: 'course-assignment',
+    cls: 'reader-container assignment-reader',
+
+    getToolbarConfig: function() {
 		return {
 			xtype: 'assignment-header',
 			student: this.student,
@@ -25,8 +24,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.assignment.Stude
 		};
 	},
 
-
-	getReaderConfig: function() {
+    getReaderConfig: function() {
 		var assignment = this.assignment;
 
 		if (assignment.isTimed && !assignment.isStarted() && isMe(this.student) && !this.instructorProspective) {
@@ -49,8 +47,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.assignment.Stude
 		}
 	},
 
-
-	startTimed: function(assignment) {
+    startTimed: function(assignment) {
 		if (this.pageInfo) {
 			this.pageInfo.replaceAssignment(assignment);
 		}
@@ -64,8 +61,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.assignment.Stude
 		}
 	},
 
-
-	showAllowedTime: function() {
+    showAllowedTime: function() {
 		var toolbar = this.getToolbar();
 
 		if (toolbar && toolbar.showAllowedTime) {
@@ -73,8 +69,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.assignment.Stude
 		}
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.hasTimedPlaceholder) {
@@ -84,11 +79,10 @@ export default Ext.define('NextThought.app.contentviewer.panels.assignment.Stude
 		}
 	},
 
-	//Override this so the reader doesn't set the page info twice
+    //Override this so the reader doesn't set the page info twice
 	setPageInfo: function() {},
 
-
-	showAssignment: function() {
+    showAssignment: function() {
 		var me = this,
 			header = me.getToolbar(),
 			reader = me.getReaderContent(),
@@ -144,8 +138,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.assignment.Stude
 		}).always(done.bind(this));
 	},
 
-
-	updateHistory: function(h) {
+    updateHistory: function(h) {
 		var header = this.getToolbar(),
 			readerContent = this.getReaderContent(),
 			assessment = readerContent.getAssessment();
@@ -154,8 +147,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.assignment.Stude
 		header.setHistory(h);
 	},
 
-
-	getAnalyticData: function() {
+    getAnalyticData: function() {
 		if (!this.assignment) {
 			return {};
 		}

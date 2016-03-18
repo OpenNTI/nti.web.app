@@ -1,9 +1,13 @@
+var Ext = require('extjs');
+var ParseUtils = require('../util/Parsing');
+
+
 /**
  * A CACHE to hold a shared instance of a record to be shared across
  * different views and components, so a change to one will trigger
  * a change to all
  */
-export default Ext.define('NextThought.cache.SharedInstance', {
+module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 
 	//A list of props to include in the JSON of a record when updating
 	UPDATE_WHITELIST: ['href', 'IsExcused', 'Links'],

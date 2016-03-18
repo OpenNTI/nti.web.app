@@ -1,23 +1,21 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.timeline.items.Items', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.overview-editing-timeline-items',
-	
-	requires: [
-		'NextThought.app.course.overview.components.editing.content.timeline.items.Item'	
-	],
-	
-	cls: 'timeline-items timeline-item-selection',
+var Ext = require('extjs');
+var ItemsItem = require('./Item');
 
-	layout: 'none',
-	items: [],
 
-	initComponent: function() {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.items.Items', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.overview-editing-timeline-items',
+    cls: 'timeline-items timeline-item-selection',
+    layout: 'none',
+    items: [],
+
+    initComponent: function() {
 		this.callParent(arguments);
 		
 		this.addItems(this.record || this.selectedItems);
 	},
-	
-	addItems: function(items) {
+
+    addItems: function(items) {
 		var me = this;
 		if (items && !(items instanceof Array)) {
 			items = [items];
@@ -34,8 +32,8 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			}
 		}));
 	},
-	
-	getItems: function() {
+
+    getItems: function() {
 		return this.selectedItems;
 	}
 });

@@ -1,5 +1,8 @@
-export default Ext.define('NextThought.model.forums.DFLHeadlineTopic', {
-	extend: 'NextThought.model.forums.HeadlineTopic',
+var Ext = require('extjs');
+var ForumsHeadlineTopic = require('./HeadlineTopic');
+var ForumsDFLHeadlinePost = require('./DFLHeadlinePost');
 
-	requires: ['NextThought.model.forums.DFLHeadlinePost']
+
+module.exports = exports = Ext.define('NextThought.model.forums.DFLHeadlineTopic', {
+    extend: 'NextThought.model.forums.HeadlineTopic'
 });

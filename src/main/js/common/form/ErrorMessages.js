@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.form.ErrorMessages', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.form.ErrorMessages', {
 
 	MESSAGES: {
 		missing: 'Please fill out all required fields.',

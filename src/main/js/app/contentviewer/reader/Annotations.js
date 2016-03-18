@@ -1,37 +1,45 @@
-export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
-	alias: 'reader.annotations',
-	requires: [
-		'NextThought.model.Highlight',
-		'NextThought.model.Note',
-		'NextThought.model.Redaction',
-		'NextThought.model.TranscriptSummary',
-		'NextThought.model.QuizResult',
-		'NextThought.util.Annotations',
-		'NextThought.util.Color',
-		'NextThought.common.ux.SearchHits',
-		'NextThought.app.annotations.renderer.Manager',
-		'NextThought.app.annotations.Redaction',
-		'NextThought.app.annotations.Highlight',
-		'NextThought.app.annotations.Note',
-		'NextThought.app.annotations.Transcript',
-		'NextThought.app.annotations.QuizResults',
-		'NextThought.app.assessment.Scoreboard',
-		'NextThought.cache.IdCache',
-		'NextThought.util.Search',
-		'NextThought.util.TextRangeFinder',
-		'NextThought.app.userdata.Actions'
-	],
-	mixins: {
+var Ext = require('extjs');
+var FilterManager = require('../../../filter/FilterManager');
+var Anchors = require('../../../util/Anchors');
+var AnnotationUtils = require('../../../util/Annotations');
+var Color = require('../../../util/Color');
+var Globals = require('../../../util/Globals');
+var RectUtils = require('../../../util/Rects');
+var TextRangeFinderUtils = require('../../../util/TextRangeFinder');
+var SearchUtils = require('../../../util/Search');
+var ModelHighlight = require('../../../model/Highlight');
+var ModelNote = require('../../../model/Note');
+var ModelRedaction = require('../../../model/Redaction');
+var ModelTranscriptSummary = require('../../../model/TranscriptSummary');
+var ModelQuizResult = require('../../../model/QuizResult');
+var UtilAnnotations = require('../../../util/Annotations');
+var UtilColor = require('../../../util/Color');
+var UxSearchHits = require('../../../common/ux/SearchHits');
+var RendererManager = require('../../annotations/renderer/Manager');
+var AnnotationsRedaction = require('../../annotations/Redaction');
+var AnnotationsHighlight = require('../../annotations/Highlight');
+var AnnotationsNote = require('../../annotations/Note');
+var AnnotationsTranscript = require('../../annotations/Transcript');
+var AnnotationsQuizResults = require('../../annotations/QuizResults');
+var AssessmentScoreboard = require('../../assessment/Scoreboard');
+var CacheIdCache = require('../../../cache/IdCache');
+var UtilSearch = require('../../../util/Search');
+var UtilTextRangeFinder = require('../../../util/TextRangeFinder');
+var UserdataActions = require('../../userdata/Actions');
+
+
+module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Annotations', {
+    alias: 'reader.annotations',
+
+    mixins: {
 		observable: 'Ext.util.Observable'
 	},
 
-
-	getBubbleTarget: function() {
+    getBubbleTarget: function() {
 		return this.reader;
 	},
 
-
-	constructor: function(config) {
+    constructor: function(config) {
 		Ext.apply(this, config);
 		var me = this,
 				reader = me.reader;
@@ -86,13 +94,11 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		}, me, {buffer: 500});
 	},
 
-
-	getDocumentElement: function() {
+    getDocumentElement: function() {
 		return this.reader.getDocumentElement();
 	},
 
-
-	onGutterClicked: function(e) {
+    onGutterClicked: function(e) {
 		var t = e.getTarget('[data-line]', null, true),
 				toggle = t && t.hasCls('active'),
 				line = !toggle && t && parseInt(t.getAttribute('data-line'), 10);
@@ -105,8 +111,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		}
 	},
 
-
-	storeEventsAdd: function(store, records) {
+    storeEventsAdd: function(store, records) {
 		console.debug('New records in store, adding to page...', store.cacheMapId || store.containerId, records);
 		Ext.each(records, function(r) {
 			var cls = r.get('Class');
@@ -119,20 +124,17 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		}, this);
 	},
 
-
-	storeEventsBulkRemove: function(store, records) {
+    storeEventsBulkRemove: function(store, records) {
 		Ext.each(records, function(record) {
 			this.remove(record.getId());
 		}, this);
 	},
 
-
-	storeEventsRemove: function(store, record) {
+    storeEventsRemove: function(store, record) {
 		this.remove(record.getId());
 	},
 
-
-	insertAnnotationGutter: function() {
+    insertAnnotationGutter: function() {
 		var me = this,
 				container = Ext.DomHelper.insertAfter(
 						me.reader.getInsertionPoint().first(),
@@ -145,13 +147,11 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		me.annotationManager.registerGutter(container, me.reader);
 	},
 
-
-	getManager: function() {
+    getManager: function() {
 		return this.annotationManager;
 	},
 
-
-	convertRectToScreen: function(r) {
+    convertRectToScreen: function(r) {
 		var readerOffsets = this.reader.getAnnotationOffsets().rect;
 
 		return {
@@ -164,39 +164,34 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		};
 	},
 
-
-	loadAnnotations: function(containerId, subContainers) {
+    loadAnnotations: function(containerId, subContainers) {
 		var location = this.reader.getLocation();
 
 		this.clearAnnotations();
 		this.UserDataActions.loadAnnotations(this.reader, containerId, location.pageInfo, subContainers);
 	},
 
-
-	objectsLoaded: function(items, bins/*, containerId*/) {
+    objectsLoaded: function(items, bins/*, containerId*/) {
 		var me = this;
 
 		me.setAssessedQuestions((bins || {}).AssessedQuestionSet);
 		me.buildAnnotations(items);
 	},
 
-
-	applyFilter: function(newFilter) {
+    applyFilter: function(newFilter) {
 		this.filter = newFilter;
 		this.clearAnnotations();
 		this.fireEvent('filter-annotations', this.reader);
 	},
 
-
-	showSearchHit: function(hit) {
+    showSearchHit: function(hit) {
 		this.clearSearchHit();
 		if (hit.isContent()) {
 			this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this.reader});
 		}
 	},
 
-
-	//generalize this
+    //generalize this
 	//Returns an array of objects with two propertes.  ranges is a list
 	//of dom ranges that should be used to position the highlights.
 	//key is a string that used to help distinguish the type of content when we calculate the adjustments( top and left ) needed.
@@ -235,8 +230,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		return result;
 	},
 
-
-	//	@returns an object with top and left properties used to adjust the
+    //	@returns an object with top and left properties used to adjust the
 	//  coordinate space of the ranges bounding client rects.
 	//  It decides based on the type of container( main content or overlays).
 	getRangePositionAdjustments: function(key) {
@@ -252,8 +246,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		return {top: overlayYAdjustment, left: overlayXAdjustment };
 	},
 
-
-	clearSearchHit: function() {
+    clearSearchHit: function() {
 		if (!this.searchAnnotations) {
 			return;
 		}
@@ -262,8 +255,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		this.searchAnnotations = null;
 	},
 
-
-	remove: function(oid) {
+    remove: function(oid) {
 		var v = this.annotations[oid];
 		if (v) {
 			this.annotations[oid] = undefined;
@@ -273,8 +265,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		}
 	},
 
-
-	clearAnnotations: function() {
+    clearAnnotations: function() {
 		var v, oid, leftovers;
 		for (oid in this.annotations) {
 			if (this.annotations.hasOwnProperty(oid)) {
@@ -300,8 +291,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 
 	},
 
-
-	exists: function(record) {
+    exists: function(record) {
 		var oid = record.getId();
 		if (!oid) {
 			return false;
@@ -310,8 +300,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		return !!this.annotations[oid];
 	},
 
-
-	getDefinitionMenuItem: function(range) {
+    getDefinitionMenuItem: function(range) {
 		try {
 			range = range || this.getSelection();
 			if (!range) {
@@ -346,8 +335,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		}
 	},
 
-
-	addAnnotation: function(range, xy) {
+    addAnnotation: function(range, xy) {
 		if (!range) {
 			console.warn('bad range');
 			return;
@@ -507,8 +495,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		me.selectRange(range);
 	},
 
-
-	// For compatibility with native scrolling on iPad
+    // For compatibility with native scrolling on iPad
 	iAddAnnotation: function(range) {
 		if (!range) {
 			console.warn('bad range');
@@ -614,8 +601,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		}
 	},
 
-
-	/**
+    /**
 	 *
 	 * @param {String} type
 	 * @param {Ext.data.Model} record - annotation record (highlight, note, redaction, etc)
@@ -670,8 +656,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		return Boolean(w);
 	},
 
-
-	setAssessedQuestions: function(sets) {
+    setAssessedQuestions: function(sets) {
 		if (!sets || sets.length === 0) {
 			//do nothing if we have no prior sets
 			return;
@@ -687,8 +672,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		scoreboard.setPriorResults(sets);
 	},
 
-
-	buildAnnotations: function(list) {
+    buildAnnotations: function(list) {
 		var me = this;
 		Ext.each(list || [], function(r) {
 			if (!r) {
@@ -704,8 +688,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		}, this);
 	},
 
-
-	onContextMenuHandler: function(e) {
+    onContextMenuHandler: function(e) {
 		try {
 			var origSelection = window.rangy.getSelection(this.getDocumentElement()).toString(),
 					range = this.getSelection();
@@ -728,8 +711,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		}
 	},
 
-
-	getAnnotations: function() {
+    getAnnotations: function() {
 		var key,
 			items = [];
 
@@ -742,8 +724,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		return items;
 	},
 
-
-	realignAnnotations: function() {
+    realignAnnotations: function() {
 		var items = this.getAnnotations();
 
 		items = items.map(function(x) { return x.record; });
@@ -752,8 +733,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		this.buildAnnotations(items);
 	},
 
-
-	getSelection: function() {
+    getSelection: function() {
 		var doc = this.getDocumentElement(),
 				range, selection, txt;
 		try {
@@ -777,8 +757,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		return null;
 	},
 
-
-	selectRange: function(range) {
+    selectRange: function(range) {
 		try {
 			var s = this.getDocumentElement().parentWindow.getSelection();
 			s.removeAllRanges();
@@ -789,8 +768,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		}
 	},
 
-
-	clearSelection: function() {
+    clearSelection: function() {
 		var doc = this.getDocumentElement(),
 				win = doc.parentWindow;
 		try {

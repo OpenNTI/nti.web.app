@@ -1,12 +1,12 @@
-export default Ext.define('NextThought.model.Bookmark', {
+var Ext = require('extjs');
+var ModelBase = require('./Base');
+var AnchorablesDomContentRangeDescription = require('./anchorables/DomContentRangeDescription');
+var ConvertersContentRangeDescription = require('./converters/ContentRangeDescription');
+
+
+module.exports = exports = Ext.define('NextThought.model.Bookmark', {
   extend: 'NextThought.model.Base',
-
   isBookmark: true,
-
-  requires: [
-    'NextThought.model.anchorables.DomContentRangeDescription',
-    'NextThought.model.converters.ContentRangeDescription'
-  ],
 
   fields: [
     { name: 'sharedWith', type: 'UserList'},

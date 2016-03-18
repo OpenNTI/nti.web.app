@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.components.Collection', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.components.Collection', {
 	extend: 'Ext.view.View',
 	//disabling invoking this directly. Only use this through subclasses
 	alias: 'widget.navigation-collection',

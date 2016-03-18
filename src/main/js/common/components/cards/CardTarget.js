@@ -1,25 +1,25 @@
-export default Ext.define('NextThought.common.components.cards.CardTarget', {
-	extend: 'NextThought.app.contentviewer.overlay.Panel',
-	alias: 'widget.overlay-card-target',
-
-	requires: [
-		'NextThought.util.Dom'
-	],
-
-	representsUserDataContainer: true,
-	ui: 'content-card',
-	cls: 'content-card-target-container',
+var Ext = require('extjs');
+var DomUtils = require('../../../util/Dom');
+var Globals = require('../../../util/Globals');
+var OverlayPanel = require('../../../app/contentviewer/overlay/Panel');
+var UtilDom = require('../../../util/Dom');
 
 
-	setupContentElement: function() {
+module.exports = exports = Ext.define('NextThought.common.components.cards.CardTarget', {
+    extend: 'NextThought.app.contentviewer.overlay.Panel',
+    alias: 'widget.overlay-card-target',
+    representsUserDataContainer: true,
+    ui: 'content-card',
+    cls: 'content-card-target-container',
+
+    setupContentElement: function() {
 		this.callParent(arguments);
 		Ext.fly(this.contentElement).setStyle({
 			margin: '45px 0 0 0'
 		});
 	},
 
-
-	syncTop: function() {
+    syncTop: function() {
 		if (!this.contentElement) {return;}
 		var ctTop = this.el.up('.x-reader-pane').getY(),
 			top = (10 + ctTop);
@@ -29,7 +29,7 @@ export default Ext.define('NextThought.common.components.cards.CardTarget', {
 		return top;
 	},
 
-	constructor: function(config) {
+    constructor: function(config) {
 		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
@@ -83,18 +83,15 @@ export default Ext.define('NextThought.common.components.cards.CardTarget', {
 		}, this);
 	},
 
-
-	resolveHref: function(data) {
+    resolveHref: function(data) {
 		return Promise.resolve(data.href);
 	},
 
-
-	resolveTargetMimeType: function(data) {
+    resolveTargetMimeType: function(data) {
 		return Promise.resolve(data.targetMimeType);
 	},
 
-
-	addIframe: function(data) {
+    addIframe: function(data) {
 		var me = this;
 
 		return Promise.all([
@@ -105,8 +102,7 @@ export default Ext.define('NextThought.common.components.cards.CardTarget', {
 			});
 	},
 
-
-	addIframeFromHref: function(href, targetMimeType) {
+    addIframeFromHref: function(href, targetMimeType) {
 		this.add({
 			xtype: 'box',
 			autoEl: {
@@ -120,14 +116,12 @@ export default Ext.define('NextThought.common.components.cards.CardTarget', {
 		});
 	},
 
-
-	addUnsupported: function(data) {
+    addUnsupported: function(data) {
 		return this.resolveHref(data)
 			.then(this.addUnsupportedForHref.bind(this));
 	},
 
-
-	addUnsupportedForHref: function(href) {
+    addUnsupportedForHref: function(href) {
 		var	anchorAttr = 'class=\'link\' target=\'_blank\'',
 			chrome = '<a ' + anchorAttr + ' href=\'http://www.google.com/chrome\'>Chrome,</a>',
 			safari = '<a ' + anchorAttr + ' href=\'http://www.apple.com/safari/download/\'>Safari,</a>',
@@ -160,15 +154,13 @@ export default Ext.define('NextThought.common.components.cards.CardTarget', {
 		});
 	},
 
-
-	onDestroy: function() {
+    onDestroy: function() {
 		this.reader.getScroll().unlock();
 		Ext.EventManager.removeResizeListener(this.viewportMonitor, this);
 		this.callParent(arguments);
 	},
 
-
-	viewportMonitor: function() {
+    viewportMonitor: function() {
 		try {
 
 			var margin = 15,
@@ -184,8 +176,7 @@ export default Ext.define('NextThought.common.components.cards.CardTarget', {
 		}
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.viewportMonitor();
 		//	this.mon(Ext.get(Ext.DomHelper.append(this.el,{cls:'back-button'})),{
@@ -195,8 +186,7 @@ export default Ext.define('NextThought.common.components.cards.CardTarget', {
 		//	});
 	},
 
-
-	findLine: function() {
+    findLine: function() {
 		var doc = this.contentElement.ownerDocument,
 			range = doc.createRange();
 

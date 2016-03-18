@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.enrollment.components.parts.SplitRadio', {
+var Ext = require('extjs');
+var PartsRadioGroup = require('./RadioGroup');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.SplitRadio', {
 	extend: 'NextThought.app.course.enrollment.components.parts.RadioGroup',
 	alias: 'widget.enrollment-split-radio',
 

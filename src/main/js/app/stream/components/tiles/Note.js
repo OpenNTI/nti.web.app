@@ -1,23 +1,20 @@
-export default Ext.define('NextThought.app.stream.components.tiles.Note', {
-	extend: 'Ext.container.Container',
+var Ext = require('extjs');
+var ModelNote = require('../../../../model/Note');
+var PartsBodyContent = require('../parts/BodyContent');
+var PartsAddComment = require('../parts/AddComment');
+var WindowsActions = require('../../../windows/Actions');
 
-	layout: 'none',
 
-	cls: 'item note',
+module.exports = exports = Ext.define('NextThought.app.stream.components.tiles.Note', {
+    extend: 'Ext.container.Container',
+    layout: 'none',
+    cls: 'item note',
 
-	requires: [
-		'NextThought.model.Note',
-		'NextThought.app.stream.components.parts.BodyContent',
-		'NextThought.app.stream.components.parts.AddComment',
-		'NextThought.app.windows.Actions'
-	],
-
-	inheritableStatics: {
+    inheritableStatics: {
 		mimeTypes: [NextThought.model.Note.mimeType]
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -47,8 +44,7 @@ export default Ext.define('NextThought.app.stream.components.tiles.Note', {
 		]);
 	},
 
-
-	getBodyContent: function() {
+    getBodyContent: function() {
 		var record = this.record;
 
 		return new Promise(function(fulfill, reject) {
@@ -58,22 +54,16 @@ export default Ext.define('NextThought.app.stream.components.tiles.Note', {
 		});
 	},
 
-
-	onShow: function() {
+    onShow: function() {
 		this.WindowActions.pushWindow(this.record, null, this.el.dom);
 	},
 
+    onEdit: function() {},
 
-	onEdit: function() {},
-
-
-	onAddComment: function() {
+    onAddComment: function() {
 		this.WindowActions.pushWindow(this.record, 'reply', this.el.dom);
 	},
 
-
-	onReport: function() {},
-
-
-	onDelete: function() {}
+    onReport: function() {},
+    onDelete: function() {}
 });

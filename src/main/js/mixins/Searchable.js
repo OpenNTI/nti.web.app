@@ -1,16 +1,14 @@
-export default Ext.define('NextThought.mixins.Searchable', {
+var Ext = require('extjs');
+var MixinsSearchHitHighlighting = require('./SearchHitHighlighting');
+var SearchStateStore = require('../app/search/StateStore');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.mixins.Searchable', {
+    mixins: {
 		SearchHighlighting: 'NextThought.mixins.SearchHitHighlighting'
 	},
 
-
-	requires: [
-		'NextThought.app.search.StateStore'
-	],
-
-
-	initSearch: function() {
+    initSearch: function() {
 		this.SearchStore = NextThought.app.search.StateStore.getInstance();
 		this.searchId = this.getContainerIdForSearch();
 
@@ -21,8 +19,7 @@ export default Ext.define('NextThought.mixins.Searchable', {
 		}
 	},
 
-
-	showSearch: function(hit, fragIdx) {
+    showSearch: function(hit, fragIdx) {
 		var frags = hit.get('Fragments'),
 			frag = frags && (frags[fragIdx || 0] || frags[0]);
 
@@ -30,8 +27,7 @@ export default Ext.define('NextThought.mixins.Searchable', {
 			.then(this.showSearchHit.bind(this, hit, frag));
 	},
 
-
-	/**
+    /**
 	 * Return a promise that fulfills when then cmp is ready
 	 * for the search results to be applied
 	 * @override
@@ -41,8 +37,7 @@ export default Ext.define('NextThought.mixins.Searchable', {
 		return Promise.resolve();
 	},
 
-
-	/**
+    /**
 	 * Return the NTIID of the thing to look for
 	 * search results in
 	 * @override
@@ -50,8 +45,7 @@ export default Ext.define('NextThought.mixins.Searchable', {
 	 */
 	getContainerIdForSearch: function() {},
 
-
-	clearSearchHit: function() {
+    clearSearchHit: function() {
 		this.SearchStore.clearHitForContainer(this.searchId);
 		this.mixins.SearchHighlighting.clearSearchHit.call(this);
 	}

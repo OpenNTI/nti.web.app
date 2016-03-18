@@ -1,13 +1,14 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.questionset.Editor', {
-	extend: 'NextThought.app.course.overview.components.editing.EditorGroup',
-	alias: 'widget.overview-editing-contentlink-editor',
+var Ext = require('extjs');
+var EditingEditorGroup = require('../../EditorGroup');
+var TypesSelfAssessment = require('./types/SelfAssessment');
+var TypesAssignment = require('./types/Assignment');
 
-	requires: [
-		'NextThought.app.course.overview.components.editing.content.questionset.types.SelfAssessment',
-		'NextThought.app.course.overview.components.editing.content.questionset.types.Assignment'
-	],
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.Editor', {
+    extend: 'NextThought.app.course.overview.components.editing.EditorGroup',
+    alias: 'widget.overview-editing-contentlink-editor',
+
+    statics: {
 		getSubEditors: function() {
 			var base = NextThought.app.course.overview.components.editing.content.questionset.types;
 
@@ -17,5 +18,4 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			];
 		}
 	}
-
 });

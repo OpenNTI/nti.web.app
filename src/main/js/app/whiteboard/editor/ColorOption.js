@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.whiteboard.editor.ColorOption', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ColorOption', {
 	alias: 'widget.wb-color-option',
 	extend: 'Ext.button.Button',
 

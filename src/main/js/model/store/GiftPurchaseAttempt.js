@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.store.GiftPurchaseAttempt', {
+var Ext = require('extjs');
+var StorePurchaseAttempt = require('./PurchaseAttempt');
+
+
+module.exports = exports = Ext.define('NextThought.model.store.GiftPurchaseAttempt', {
 	extend: 'NextThought.model.store.PurchaseAttempt',
 
 	statics: {

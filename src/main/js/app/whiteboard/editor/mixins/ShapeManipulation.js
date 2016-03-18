@@ -1,3 +1,9 @@
+var Ext = require('extjs');
+var Color = require('../../../../util/Color');
+var WhiteboardMatrix = require('../../Matrix');
+var WhiteboardUtils = require('../../Utils');
+
+
 /**
  *
  * Assumed fields in containing class:
@@ -5,14 +11,8 @@
  * {@link NextThought.app.whiteboard.Canvas canvas}
  * currentTool : String
  */
-export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipulation', {
-	requires: [
-		'NextThought.app.whiteboard.Matrix',
-		'NextThought.app.whiteboard.Utils'
-	],
-
-
-	initMixin: function(toolbar, canvas) {
+module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipulation', {
+    initMixin: function(toolbar, canvas) {
 		this.toolbar = toolbar;
 		this.canvas = canvas;
 
@@ -73,8 +73,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 
 	},
 
-
-	getRelativeXY: function(e, scaled) {
+    getRelativeXY: function(e, scaled) {
 		var x = e.getXY().slice(),
 			c = this.canvas.el.getXY();
 
@@ -88,8 +87,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		return x;
 	},
 
-
-	scalePoint: function(xy) {
+    scalePoint: function(xy) {
 		var w = this.canvas.el.getWidth();
 
 		xy = xy.slice();
@@ -99,7 +97,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		return xy;
 	},
 
-	onToolbarClick: function(e) {
+    onToolbarClick: function(e) {
 		var action, c, me = this, n;
 		function togglePressed() {
 			var b = Ext.Array.filter(me.toolbar.query('[isEditAction]'), function(b) { return b.pressed; });
@@ -125,25 +123,25 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		}
 	},
 
-	onFillColorChange: function(e) {
+    onFillColorChange: function(e) {
 		if (!e.value || !this.selected) { return; }
 		this.selected.fill = e.value !== 'NONE' ? Color.toRGBA('#' + e.value) : null;
 		this.canvas.drawScene();
 	},
 
-	onStrokeColorChange: function(e) {
+    onStrokeColorChange: function(e) {
 		if (!e.value || !this.selected) { return; }
 		this.selected.stroke = e.value !== 'NONE' ? Color.toRGBA('#' + e.value) : null;
 		this.canvas.drawScene();
 	},
 
-	onStrokeWidthChange: function(e) {
+    onStrokeWidthChange: function(e) {
 		if (!e.value || !this.selected) {return;}
 		this.selected.strokeWidth = e.value / this.canvas.el.getWidth();
 		this.canvas.drawScene();
 	},
 
-	onPathStrokeWidthChange: function(e) {
+    onPathStrokeWidthChange: function(e) {
 		if (!this.selected) { return; }
 
 		var pressed = this.toolbar.down('[pathSelectStrokeWidth]').query('button[pressed]'), strokeValue = 0, stroke;
@@ -160,7 +158,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		this.canvas.drawScene();
 	},
 
-	onTurnOnSelection: function() {
+    onTurnOnSelection: function() {
 		/*
 		*   Occasionally we nay need to turn on selection on demand, rather than when the user clicks
 		*   on the selection tool. i.e when an imageUrl is added to a WB
@@ -177,13 +175,13 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		}
 	},
 
-	onCanvasMouseEnter: function(e) {
+    onCanvasMouseEnter: function(e) {
 		if (this.mouseLeftNoMouseUp) {
 			this.onCanvasMouseDown(e);
 		}
 	},
 
-	onCanvasMouseLeave: function(e) {
+    onCanvasMouseLeave: function(e) {
 		var tool = this.toolbar.getCurrentTool();
 		if (tool) {
 			tool = tool.getToolType();
@@ -194,8 +192,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		this.onCanvasMouseUp(e);
 	},
 
-
-	onCanvasMouseDown: function(e) {
+    onCanvasMouseDown: function(e) {
     e.stopEvent();
 		var s = this.selected;
 		this.mouseDown = true;
@@ -206,8 +203,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		this.handleSelection(e);
 	},
 
-
-	onCanvasMouseMove: function(e) {
+    onCanvasMouseMove: function(e) {
 		if (!this.mouseDown) { return; }
 		var tool = this.toolbar.getCurrentTool(),
 			c = this.mouseMoveHandlerMap[tool.getToolType()];
@@ -218,8 +214,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		return c && c.apply(this, arguments);
 	},
 
-
-	onCanvasMouseUp: function(e) {
+    onCanvasMouseUp: function(e) {
     e.stopEvent();
 		delete this.clickedNib;
 		delete this.mouseDown;
@@ -235,8 +230,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		}
 	},
 
-
-	handleSelection: function(e) {
+    handleSelection: function(e) {
 		e.stopEvent();
 		var selectedTool = this.toolbar.getCurrentTool().forTool;
 		this.currentTool = selectedTool === 'move' ? 'Hand' : selectedTool;
@@ -245,18 +239,16 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		}
 	},
 
+    onDoubleClick: function(e) {},
 
-	onDoubleClick: function(e) {},
-
-
-	onContextMenu: function(e) {
+    onContextMenu: function(e) {
 		this.selectShape(e);
 		e.preventDefault();
 		e.stopPropagation();
 		alert('show context menu');
 	},
 
-	deselectShape: function() {
+    deselectShape: function() {
 		if (this.selected) {
 			delete this.selected.selected;
 			delete this.selected;
@@ -265,8 +257,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		//this.activateToolOptions(this.currentTool);
 	},
 
-
-	selectShape: function(e) {
+    selectShape: function(e) {
 		var c = this.canvas,
 			s = null,
 			cs = this.selected,
@@ -322,8 +313,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
     //		}, 1000);
 	},
 
-
-	doMove: function(e) {
+    doMove: function(e) {
 		var xy = this.getRelativeXY(e),
 			m = this.mouseDown,
 			w = this.canvas.el.dom.width,
@@ -359,8 +349,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		this.canvas.drawScene();
 	},
 
-
-	doPath: function(e) {
+    doPath: function(e) {
 		var s = this.selected,
 			opts = this.toolbar.getCurrentTool().getOptions(),
 			t, xy, w, p;
@@ -395,8 +384,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		this.canvas.drawScene();
 	},
 
-
-	doLine: function(e) {
+    doLine: function(e) {
 		var tool = this.toolbar.getCurrentTool(),
 			opts = tool.getOptions(),
 			s = this.selected,
@@ -433,8 +421,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		this.canvas.drawScene();
 	},
 
-
-	doShape: function(e) {
+    doShape: function(e) {
 		if (!this.mouseDown) { return; }
 
 		var tool = this.toolbar.getCurrentTool(),
@@ -478,8 +465,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		this.canvas.drawScene();
 	},
 
-
-	doText: function(e) {
+    doText: function(e) {
 		if (!this.mouseDown) { return; }
 
 		var tool = this.currentTool,
@@ -512,14 +498,12 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		this.canvas.drawScene();
 	},
 
-
-	clear: function() {
+    clear: function() {
 		this.canvas.updateData(null);
 		this.canvas.drawScene();
 	},
 
-
-	deleteSelected: function() {
+    deleteSelected: function() {
 		var c = this.canvas,
 			l = c.drawData.shapeList,
 			i = l.indexOf(this.selected);
@@ -528,7 +512,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		this.deselectShape();
 	},
 
-	sendSelectedBack: function() {
+    sendSelectedBack: function() {
 		var c = this.canvas,
 			l = c.drawData.shapeList,
 			i = l.indexOf(this.selected);
@@ -539,7 +523,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		c.drawScene();
 	},
 
-	sendSelectedFront: function() {
+    sendSelectedFront: function() {
 		var c = this.canvas,
 			l = c.drawData.shapeList,
 			i = l.indexOf(this.selected);
@@ -550,7 +534,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		c.drawScene();
 	},
 
-	duplicateSelected: function() {
+    duplicateSelected: function() {
 		var c = this.canvas,
 			l = c.drawData.shapeList, i, s = this.selected, w = this.canvas.el.dom.width, sel;
 
@@ -565,7 +549,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		setTimeout(function() { c.drawScene();}, 10);
 	},
 
-	addShape: function(shape) {
+    addShape: function(shape) {
 		var opts = this.toolbar.getCurrentTool().getOptions(),
 			newShape,
 			stroke = opts.strokeWidth / (this.canvas.el.getWidth()),
@@ -609,7 +593,7 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		return newShape;
 	},
 
-	copyShape: function(shape) {
+    copyShape: function(shape) {
 		var newShape,
 			defs = {
 				'Class': shape.Class,
@@ -648,7 +632,6 @@ export default Ext.define('NextThought.app.whiteboard.editor.mixins.ShapeManipul
 		this.canvas.addShape(newShape);
 		return newShape;
 	}
-
 }, function() {
 	var p = this.prototype;
 

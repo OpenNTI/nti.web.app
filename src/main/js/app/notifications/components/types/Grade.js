@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.notifications.components.types.Grade', {
+var Ext = require('extjs');
+var TypesBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.app.notifications.components.types.Grade', {
 	extend: 'NextThought.app.notifications.components.types.Base',
 	alias: 'widget.notification-item-grade',
 

@@ -1,4 +1,10 @@
-export default Ext.define('NextThought.app.profiles.user.components.membership.Index', {
+var Ext = require('extjs');
+var User = require('../../../../../model/User');
+var AnalyticsUtil = require('../../../../../util/Analytics');
+var MixinsRouter = require('../../../../../mixins/Router');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.membership.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.user-profile-membership',
 

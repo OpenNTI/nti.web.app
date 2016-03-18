@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.grid.column.Column', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.grid.column.Column', {
 	override: 'Ext.grid.column.Column',
 
 	afterRender: function() {

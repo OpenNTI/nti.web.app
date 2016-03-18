@@ -1,4 +1,10 @@
-export default Ext.define('NextThought.app.context.StateStore', {
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var ParseUtils = require('../../util/Parsing');
+var CommonStateStore = require('../../common/StateStore');
+
+
+module.exports = exports = Ext.define('NextThought.app.context.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	setContext: function(context, title, route) {

@@ -1,22 +1,22 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.video.items.Items', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.overview-editing-video-items',
+var Ext = require('extjs');
+var DndOrderingContainer = require('../../../../../../../../mixins/dnd/OrderingContainer');
+var ModelVideo = require('../../../../../../../../model/Video');
+var ItemsItem = require('./Item');
 
-	requires: [
-		'NextThought.model.Video',
-		'NextThought.app.course.overview.components.editing.content.video.items.Item'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.items.Items', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.overview-editing-video-items',
+
+    mixins: {
 		OrderingContainer: 'NextThought.mixins.dnd.OrderingContainer'
 	},
 
-	cls: 'video-items',
+    cls: 'video-items',
+    layout: 'none',
+    items: [],
 
-	layout: 'none',
-	items: [],
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -63,20 +63,17 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		});
 	},
 
-
-	getDropzoneTarget: function() {
+    getDropzoneTarget: function() {
 		return this.itemsCmp && this.itemsCmp.el && this.itemsCmp.el.dom;
 	},
 
-
-	getOrderingItems: function() {
+    getOrderingItems: function() {
 		var items = this.itemsCmp && this.itemsCmp.items && this.itemsCmp.items.items;
 
 		return items || [];
 	},
 
-
-	getItemsFromRecord: function(record) {
+    getItemsFromRecord: function(record) {
 		if (record instanceof NextThought.model.VideoRoll) {
 			return record.get('Items');
 		}
@@ -84,13 +81,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return [record];
 	},
 
-
-	getItems: function() {
+    getItems: function() {
 		return this.selectedItems;
 	},
 
-
-	addItems: function(items) {
+    addItems: function(items) {
 		var me = this,
 			single = items.length === 1;
 
@@ -120,8 +115,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	reorderVideo: function(video, newIndex, moveInfo) {
+    reorderVideo: function(video, newIndex, moveInfo) {
 		var items = this.getItems(),
 			contains = items.filter(function(item) { return item.getId() === video.getId(); }),
 			oldIndex = moveInfo.getIndex();

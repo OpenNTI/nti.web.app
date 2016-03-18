@@ -1,20 +1,24 @@
-export default Ext.define('NextThought.app.account.activity.Preview', {
-	extend: 'Ext.container.Container',
+var Ext = require('extjs');
+var UserRepository = require('../../../cache/UserRepository');
+var ContentUtils = require('../../../util/Content');
+var DomUtils = require('../../../util/Dom');
+var MixinsLikeFavoriteActions = require('../../../mixins/LikeFavoriteActions');
+var MixinsQuestionContent = require('../../../mixins/QuestionContent');
+var MixinsProfileLinks = require('../../../mixins/ProfileLinks');
+var CacheLocationMeta = require('../../../cache/LocationMeta');
+var EditorEditor = require('../../../editor/Editor');
+var MixinsProfileLinks = require('../../../mixins/ProfileLinks');
+var ComponentNatural = require('../../../layout/component/Natural');
 
-	requires: [
-		'NextThought.cache.LocationMeta',
-		'NextThought.editor.Editor',
-		'NextThought.mixins.ProfileLinks',
-		'NextThought.layout.component.Natural'
-	],
 
+module.exports = exports = Ext.define('NextThought.app.account.activity.Preview', {
+    extend: 'Ext.container.Container',
 
-	inheritableStatics: {
+    inheritableStatics: {
 		WhiteboardSize: 360
 	},
 
-
-	onClassExtended: function(cls, data) {
+    onClassExtended: function(cls, data) {
 		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
 		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
 
@@ -35,23 +39,23 @@ export default Ext.define('NextThought.app.account.activity.Preview', {
 		}
 	},
 
-	mixins: {
+    mixins: {
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
 		questionContent: 'NextThought.mixins.QuestionContent',
 		profileLinks: 'NextThought.mixins.ProfileLinks'
 	},
 
+    componentLayout: 'natural',
+    layout: 'auto',
+    childEls: ['body'],
 
-	componentLayout: 'natural',
-	layout: 'auto',
-	childEls: ['body'],
-	getTargetEl: function() {
+    getTargetEl: function() {
 		return this.body;
 	},
 
-	cls: 'activity-preview',
+    cls: 'activity-preview',
 
-	renderSelectors: {
+    renderSelectors: {
 		avatar: '.avatar',
 		name: '.name',
 		liked: '.controls .like',
@@ -68,7 +72,7 @@ export default Ext.define('NextThought.app.account.activity.Preview', {
 		timeEl: '.stamp > .time'
 	},
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{
 			cls: '{type} activity-preview-body',
 			cn: [
@@ -115,21 +119,18 @@ export default Ext.define('NextThought.app.account.activity.Preview', {
 		}
 	]),
 
-
-	moreTpl: Ext.DomHelper.createTemplate({tag: 'a', cls: 'more', cn: [
+    moreTpl: Ext.DomHelper.createTemplate({tag: 'a', cls: 'more', cn: [
 		{},
 		{},
 		{}
 	]}),
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.enableBubble(['resize', 'realign', 'editorActivated', 'editorDeactivated']);
 	},
 
-
-	setBody: function(body) {
+    setBody: function(body) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.setBody, this, arguments), this);
 			return;
@@ -155,8 +156,7 @@ export default Ext.define('NextThought.app.account.activity.Preview', {
 		Ext.defer(this.maybeShowMoreLink, 1, this);
 	},
 
-
-	maybeShowMoreLink: function() {
+    maybeShowMoreLink: function() {
 		var el = this.messageBodyEl;
 		if (!el || el.dom.scrollHeight <= el.getHeight()) {
 			return;
@@ -166,8 +166,7 @@ export default Ext.define('NextThought.app.account.activity.Preview', {
 		this.mon(this.el.down('a.more'), 'click', this.navigateToItem, this);
 	},
 
-
-	setupReplyScrollZone: function() {
+    setupReplyScrollZone: function() {
 		if (!this.rendered || this.isDestroyed) {
 			return;
 		}
@@ -184,18 +183,15 @@ export default Ext.define('NextThought.app.account.activity.Preview', {
 		}
 	},
 
-
-	navigateToItem: function() {
+    navigateToItem: function() {
 		console.warn('Should be overridden by its children');
 	},
 
-
-	showReplies: function() {
+    showReplies: function() {
 		this.setupReplyScrollZone();
 	},
 
-
-	/**
+    /**
 	 * Maps the records 'reply/comment/post' counts to a single value.
 	 *
 	 * @param {Ext.data.Model} record
@@ -205,8 +201,7 @@ export default Ext.define('NextThought.app.account.activity.Preview', {
 		throw 'Do not use the base class directly. Subclass and implement this';
 	},
 
-
-	/**
+    /**
 	 * Place to derive fields that should be put into the template.
 	 *
 	 * @param {Ext.data.Model} record
@@ -218,16 +213,14 @@ export default Ext.define('NextThought.app.account.activity.Preview', {
 		};
 	},
 
-
-	setRenderedTitle: function(record) {
+    setRenderedTitle: function(record) {
 		if (record.isModel) {
 			return record.get('title');
 		}
 		return record.title;
 	},
 
-
-	/** @private */
+    /** @private */
 	prepareRenderData: function(record) {
 		var me = this,
 			o = record.getData();
@@ -254,8 +247,7 @@ export default Ext.define('NextThought.app.account.activity.Preview', {
 		return Ext.apply(this.renderData || {}, o);
 	},
 
-
-	getRefItems: function() {
+    getRefItems: function() {
 		var ret = this.callParent(arguments) || [];
 		if (this.editor) {
 			ret.push(this.editor);
@@ -263,23 +255,20 @@ export default Ext.define('NextThought.app.account.activity.Preview', {
 		return ret;
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.callParent(arguments);
 		this.renderData = this.prepareRenderData(this.record);
 	},
 
-
-	saveCallback: function(editor, cmp, replyRecord) {
+    saveCallback: function(editor, cmp, replyRecord) {
 		editor.deactivate();
 		editor.setValue('');
 		editor.reset();
 		cmp.add({record: replyRecord});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var DISPLAY = Ext.dom.Element.DISPLAY,
@@ -343,7 +332,7 @@ export default Ext.define('NextThought.app.account.activity.Preview', {
 		this.enableProfileClicks(this.name, this.avatar);
 	},
 
-	maybeAllowEditor: function() {
+    maybeAllowEditor: function() {
 		//if this has an active editor
 		if ((this.editor && this.editor.isActive()) || this.editorOpened) {
 			return false;
@@ -353,18 +342,17 @@ export default Ext.define('NextThought.app.account.activity.Preview', {
 		return undefined;
 	},
 
-	closedEditor: function() {
+    closedEditor: function() {
 		delete this.editorOpened;
 	},
 
-	constrainPopout: function() {
+    constrainPopout: function() {
 		var pop = this.up('.activity-popout');
 
     pop.doConstrain();
 	},
 
-
-	handleBeforeDeactivate: function() {
+    handleBeforeDeactivate: function() {
 		if ((this.editor && this.editor.isActive())) {
 			return false;
 		}
@@ -373,8 +361,7 @@ export default Ext.define('NextThought.app.account.activity.Preview', {
 		});
 	},
 
-
-	showEditor: function() {
+    showEditor: function() {
 		if (this.editorOpened) { return; }
 		this.editor.reset();
 		this.editor.activate();
@@ -382,9 +369,7 @@ export default Ext.define('NextThought.app.account.activity.Preview', {
 		this.fireEvent('realign');
 	},
 
-
-	getPointerStyle: function(x, y) {
+    getPointerStyle: function(x, y) {
 		return y >= this.footEl.getY() ? 'grey' : '';
 	}
-
 });

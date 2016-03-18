@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.creation.Type', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.creation.Type', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-type',
 

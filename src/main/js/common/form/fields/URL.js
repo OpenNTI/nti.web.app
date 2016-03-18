@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.common.form.fields.URL', {
+var Ext = require('extjs');
+var Globals = require('../../../util/Globals');
+
+
+module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 	extend: 'Ext.Component',
 	alias: 'widget.url-field',
 

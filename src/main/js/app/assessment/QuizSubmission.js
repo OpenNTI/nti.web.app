@@ -1,22 +1,23 @@
+var Ext = require('extjs');
+var OverlayPanel = require('../contentviewer/overlay/Panel');
+var AssessmentActions = require('./Actions');
+var AssessmentSurvey = require('../../model/assessment/Survey');
+
+
 /*globals getFormattedString:false*/
-export default Ext.define('NextThought.app.assessment.QuizSubmission', {
-	extend: 'NextThought.app.contentviewer.overlay.Panel',
-	alias: 'widget.assessment-quiz-submission',
+module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission', {
+    extend: 'NextThought.app.contentviewer.overlay.Panel',
+    alias: 'widget.assessment-quiz-submission',
+    cls: 'submission-panel',
+    ui: 'assessment',
+    appendPlaceholder: true,
+    hidden: true,
+    shouldShow: true,
 
-	requires: [
-		'NextThought.app.assessment.Actions',
-		'NextThought.model.assessment.Survey'
-	],
-
-	cls: 'submission-panel',
-	ui: 'assessment',
-	appendPlaceholder: true,
-	hidden: true,
-	shouldShow: true,
-	//layout: 'none',
+    //layout: 'none',
 	componentLayout: Ext.isIE10m ? undefined : 'auto',
 
-	/* Because we're inheriting from a "Panel" to get the special handling provided by the super class, we can't use
+    /* Because we're inheriting from a "Panel" to get the special handling provided by the super class, we can't use
 	 * our typical renderTpl. Instead we're going to take advantage of the Ext.panal.Panel's html config property...
 	 *
 	 * We don't normally do this for our custom widgets, because the Panel is a fairly heavy weight component, so don't
@@ -30,13 +31,13 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		{ cls: 'status' }
 	]),
 
-	renderSelectors: {
+    renderSelectors: {
 		statusMessage: '.status',
 		resetBtn: '.reset',
 		submitBtn: '.submit'
 	},
 
-	initComponent: function() {
+    initComponent: function() {
 		var answeredMap = {};
 
 		this.callParent(arguments);
@@ -74,8 +75,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		this.AssessmentActions = NextThought.app.assessment.Actions.create();
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.resetBtn.hide();
 		this.reflectStateChange();
@@ -114,35 +114,30 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		}
 	},
 
-
-	isActive: function() {
+    isActive: function() {
 		return this.state === 'active';
 	},
 
-
-	isInActive: function() {
+    isInActive: function() {
 		return !this.state || this.state === 'inactive';
 	},
 
-
-	isSubmitted: function() {
+    isSubmitted: function() {
 		return this.state === 'submitted' || this.submitted;
 	},
 
-
-	isReady: function() {
+    isReady: function() {
 		return !this.isActive() && !this.isSubmitted;
 	},
 
-
-	disableView: function() {
+    disableView: function() {
 		if (!this.allowResettingAssignment) {
 			this.shouldShow = false;
 			this.hide();
 		}
 	},
 
-	moveToActive: function() {
+    moveToActive: function() {
 		if (this.isActive()) {
 			return;
 		}
@@ -163,8 +158,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		}
 	},
 
-
-	moveToInActive: function() {
+    moveToInActive: function() {
 		if (this.isInActive()) {
 			return;
 		}
@@ -184,13 +178,11 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		}
 	},
 
-
-	isSurvey: function() {
+    isSurvey: function() {
 		return this.questionSet instanceof NextThought.model.assessment.Survey;
 	},
 
-
-	moveToSubmitted: function() {
+    moveToSubmitted: function() {
 		var isAssignment = !!this.questionSet.associatedAssignment,
 			isSurvey = this.isSurvey(),
 			assessmentReader = this.reader.getAssessment(),
@@ -221,8 +213,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		this.submitBtn.removeCls('disabled');
 	},
 
-
-	moveToReady: function() {
+    moveToReady: function() {
 		if (this.isReady()) {
 			return;
 		}
@@ -231,25 +222,21 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		delete this.submitted;
 	},
 
-
-	//just use us being in the active state to determine if
+    //just use us being in the active state to determine if
 	//we have any answers
 	hasAnyAnswers: function() {
 		return this.isActive();
 	},
 
-
-	hasAnyMissing: function() {
+    hasAnyMissing: function() {
 		return !this.noParts && !this.allQuestionsAnswered;
 	},
 
-
-	hasProgressSaved: function() {
+    hasProgressSaved: function() {
 		return this.progressSaved;
 	},
 
-
-	updateStatus: function(question, part, count, enabling) {
+    updateStatus: function(question, part, count, enabling) {
 		if (enabling) {
 			this.moveToActive();
 		}
@@ -263,16 +250,14 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		return status;
 	},
 
-
-	historyUpdated: function() {
+    historyUpdated: function() {
 		if (this.submitted) {
 			this.submitted = false;
 			this.moveToSubmitted();
 		}
 	},
 
-
-	reflectStateChange: function() {
+    reflectStateChange: function() {
 		var totalAnsweredParts = 0,
 			totalParts = 0,
 			answeredQuestions = 0,
@@ -329,26 +314,22 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		}
 	},
 
-
-	reset: function() {
+    reset: function() {
 		this.moveToReady();
 	},
 
-
-	graded: function() {
+    graded: function() {
 		this.moveToSubmitted();
 	},
 
-
-	instructorReset: function() {
+    instructorReset: function() {
 		var assessmentReader = this.reader.getAssessment();
 
 		assessmentReader.wasReset();
 		this.questionSet.fireEvent('instructor-reset');
 	},
 
-
-	forceSubmitted: function() {
+    forceSubmitted: function() {
 		var assessmentReader = this.reader.getAssessment();
 
 		assessmentReader.forceSubmitted();
@@ -356,8 +337,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		this.setGradingResult(null, this.history);
 	},
 
-
-	maybeDoReset: function(keepAnswers) {
+    maybeDoReset: function(keepAnswers) {
 		var me = this,
 			q = me.questionSet,
 			isAssignment = q.associatedAssignment,
@@ -411,8 +391,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		}
 	},
 
-
-	resetBasedOnButtonClick: function(e) {
+    resetBasedOnButtonClick: function(e) {
 		//If we are in a submitted state we want to reset things
 		var me = this;
 
@@ -427,8 +406,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		}
 	},
 
-
-	resetClicked: function(e) {
+    resetClicked: function(e) {
 		var me = this;
 
 		if (me.isSubmitted()) {
@@ -464,16 +442,14 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		}
 	},
 
-
-	beforeSaveProgress: function() {
+    beforeSaveProgress: function() {
 		var assessmentReader = this.reader.getAssessment();
 
 		if (this.isInstructor) { return; }
 		assessmentReader.showSavingProgress();
 	},
 
-
-	afterSaveProgress: function(success) {
+    afterSaveProgress: function(success) {
 		var assessmentReader = this.reader.getAssessment();
 
 		this.progressSaved = success;
@@ -481,8 +457,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		assessmentReader[success ? 'showProgressSaved' : 'showProgressFailed']();
 	},
 
-
-	saveProgress: function(progress) {
+    saveProgress: function(progress) {
 		if (this.isInstructor) {
 			return Promise.reject();
 		}
@@ -490,8 +465,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		return this.AssessmentActions.saveProgress(this.questionSet, progress, this.startTimestamp);
 	},
 
-
-	beforeRouteChange: function() {
+    beforeRouteChange: function() {
 		var submission = {};
 
 		this.questionSet.fireEvent('beforesubmit', this.questionSet, submission);
@@ -499,8 +473,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		this.saveProgress(submission);
 	},
 
-
-	shouldAllowSubmit: function(onChangeHandler) {
+    shouldAllowSubmit: function(onChangeHandler) {
 		var enabled;
 
 		if (this.shouldShow) {
@@ -524,8 +497,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		};
 	},
 
-
-	submitClicked: function(e) {
+    submitClicked: function(e) {
 		var questionSet = this.questionSet,
 			isAssignment = !!questionSet.associatedAssignment,
 			submission = {};
@@ -563,8 +535,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		}
 	},
 
-
-	submitAssignment: function(questionSet, submission) {
+    submitAssignment: function(questionSet, submission) {
 		var me = this,
 			container = me.reader.getLocation().NTIID;
 
@@ -585,8 +556,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 			});
 	},
 
-
-	submitAssessment: function(questionSet, submission) {
+    submitAssessment: function(questionSet, submission) {
 		var me = this,
 			container = me.reader.getLocation().NTIID;
 
@@ -604,8 +574,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 			});
 	},
 
-
-	submitSurvey: function(questionSet, submission) {
+    submitSurvey: function(questionSet, submission) {
 		var me = this,
 			container = me.reader.getLocation().NTIID;
 
@@ -625,8 +594,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 			});
 	},
 
-
-	setFromSavePoint: function(savepoint) {
+    setFromSavePoint: function(savepoint) {
 		var submission = savepoint && savepoint.getQuestionSetSubmission();
 
 		if (savepoint && !this.assessmentHistory) {
@@ -636,8 +604,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		}
 	},
 
-
-	setGradingResult: function(assessedQuestionSet, assessmentHistory) {
+    setGradingResult: function(assessedQuestionSet, assessmentHistory) {
 		this.assessmentHistory = assessmentHistory;
 		try {
 			assessedQuestionSet = assessedQuestionSet || NextThought.model.assessment.AssessedQuestionSet.from(this.questionSet);
@@ -648,8 +615,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		}
 	},
 
-
-	onFailure: function() {
+    onFailure: function() {
 		try {
 			Ext.getBody().unmask();
 		} catch (e) {
@@ -657,8 +623,7 @@ export default Ext.define('NextThought.app.assessment.QuizSubmission', {
 		}
 	},
 
-
-	syncTop: function() {
+    syncTop: function() {
 		if (this.shouldShow) {
 			this.show();
 		}

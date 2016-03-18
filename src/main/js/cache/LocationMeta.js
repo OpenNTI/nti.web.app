@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.cache.LocationMeta', {
+var Ext = require('extjs');
+var ContentUtils = require('../util/Content');
+var ParseUtils = require('../util/Parsing');
+
+
+module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 	alias: 'LocationMeta',
 	singleton: true,
 

@@ -1,10 +1,13 @@
+var Ext = require('extjs');
+
+
 /*
  * Cue.js
  * This class defines a single WebVTT cue as specified by http://dev.w3.org/html5/webvtt/
  * @author Bryan Hoke
  */
 
-export default Ext.define('NextThought.webvtt.Cue', {
+module.exports = exports = Ext.define('NextThought.webvtt.Cue', {
 	config: {
 		// ID for the cue
 		identifier: '',

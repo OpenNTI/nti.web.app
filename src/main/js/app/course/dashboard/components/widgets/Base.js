@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.dashboard.components.widgets.Base', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.widgets.Base', {
 	statics: {
 
 		//the base weight for tiles we return

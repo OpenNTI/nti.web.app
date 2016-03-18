@@ -1,15 +1,18 @@
-export default Ext.define('NextThought.cache.UserRepository', {
-	alias: 'UserRepository',
-	singleton: true,
-	isDebug: $AppConfig.userRepositoryDebug,
+var Ext = require('extjs');
+var UserRepository = require('./UserRepository');
+var User = require('../model/User');
+var ParseUtils = require('../util/Parsing');
+var UtilParsing = require('../util/Parsing');
+var ModelUser = require('../model/User');
+var ChatStateStore = require('../app/chat/StateStore');
 
-	requires: [
-		'NextThought.util.Parsing',
-		'NextThought.model.User',
-		'NextThought.app.chat.StateStore'
-	],
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
+    alias: 'UserRepository',
+    singleton: true,
+    isDebug: $AppConfig.userRepositoryDebug,
+
+    constructor: function() {
 		Ext.apply(this, {
 			store: null,
 			activeRequests: {},
@@ -55,8 +58,7 @@ export default Ext.define('NextThought.cache.UserRepository', {
 		this.setPresenceChangeListener(this.ChatStore);
 	},
 
-
-	//<editor-fold desc="Private Interfaces">
+    //<editor-fold desc="Private Interfaces">
 	getStore: function() {
 		if (!this.store) {
 			this.store = Ext.data.Store.create({model: 'NextThought.model.User'});
@@ -71,13 +73,11 @@ export default Ext.define('NextThought.cache.UserRepository', {
 		return this.store;
 	},
 
-
-	setPresenceChangeListener: function(store) {
+    setPresenceChangeListener: function(store) {
 		store.on('presence-changed', this.presenceChanged, this);
 	},
 
-
-	precacheUser: function(refreshedUser) {
+    precacheUser: function(refreshedUser) {
 		var s = this.getStore(), uid, u;
 
 		if (refreshedUser.getId === undefined) {
@@ -123,8 +123,7 @@ export default Ext.define('NextThought.cache.UserRepository', {
 		}
 	},
 
-
-	/*searchUser: function(query) {
+    /*searchUser: function(query) {
 		var fieldsToMatch = ['Username', 'alias', 'realname', 'email'],
 			regex = new RegExp(query),
 			matches;
@@ -155,7 +154,7 @@ export default Ext.define('NextThought.cache.UserRepository', {
 		fromStore.fireEvent('changed', fromStore);
 	},
 
-	cacheUser: function(user, maybeMerge) {
+    cacheUser: function(user, maybeMerge) {
 		var s = this.getStore(),
 			id = user.getId() || user.raw[user.idProperty],
 			fromStore = s.getById(id);
@@ -175,11 +174,12 @@ export default Ext.define('NextThought.cache.UserRepository', {
 		return user;
 	},
 
-	resolveFromStore: function(key) {
+    resolveFromStore: function(key) {
 		var s = this.getStore();
 		return s.getById(key) || s.findRecord('Username', key, 0, false, true, true) || s.findRecord('NTIID', key, 0, false, true, true);
 	},
-	//</editor-fold>
+
+    //</editor-fold>
 
 	//<editor-fold desc="Public Interface">
 	getUser: function(username, callback, scope, forceFullResolve, cacheBust) {
@@ -304,7 +304,8 @@ export default Ext.define('NextThought.cache.UserRepository', {
 
 		});
 	},
-	//</editor-fold>
+
+    //</editor-fold>
 
 
 	//<editor-fold desc="Bulk Request">
@@ -386,8 +387,7 @@ export default Ext.define('NextThought.cache.UserRepository', {
 		};
 	}()),
 
-
-	makeBulkRequest: function(usernames) {
+    makeBulkRequest: function(usernames) {
 		var me = this,
 			chunkSize = $AppConfig.userBatchResolveChunkSize || 200;
 
@@ -403,8 +403,7 @@ export default Ext.define('NextThought.cache.UserRepository', {
 				});
 	},
 
-
-	__recompose: function(names, lists) {
+    __recompose: function(names, lists) {
 		var agg = [],
 			i = lists.length - 1,
 			x, list, u, m = {};
@@ -427,8 +426,7 @@ export default Ext.define('NextThought.cache.UserRepository', {
 		return agg;
 	},
 
-
-	__chunkBulkRequest: function(names) {
+    __chunkBulkRequest: function(names) {
 		var me = this,
 			divert = [], requestNames,
 			active = me._pendingResolve;
@@ -462,8 +460,7 @@ export default Ext.define('NextThought.cache.UserRepository', {
 			});
 	},
 
-
-	__bulkRequest: function(names) {
+    __bulkRequest: function(names) {
 		var me = this,
 			store = me.getStore(),
 			active = me._pendingResolve,
@@ -535,15 +532,13 @@ export default Ext.define('NextThought.cache.UserRepository', {
 		return p;
 	},
 
-
-	__foregroundRequest: function() {
+    __foregroundRequest: function() {
 		console.log('Requesting in foreground');
 		return Service.request.apply(Service, arguments)
 				.then(function(txt) { return Ext.decode(txt, true); });
 	},
 
-
-	__makeRequest: function(req) {
+    __makeRequest: function(req) {
 		var w = this.worker, p, a = {};
 		if (!w) {
 			return this.__foregroundRequest(req);
@@ -566,8 +561,7 @@ export default Ext.define('NextThought.cache.UserRepository', {
 		return p;
 	},
 
-
-	__workerMessage: function(msg) {
+    __workerMessage: function(msg) {
 		var data = msg.data,
 			w = this.worker, p, a;
 		if (!w) {
@@ -583,7 +577,8 @@ export default Ext.define('NextThought.cache.UserRepository', {
 		delete a[data.id];
 		p.fulfill(data.result);
 	},
-	//</editor-fold>
+
+    //</editor-fold>
 
 
 	/**
@@ -674,8 +669,7 @@ export default Ext.define('NextThought.cache.UserRepository', {
 		return result;
 	},
 
-
-	updatePresenceFromResolve: function(list) {
+    updatePresenceFromResolve: function(list) {
 		var store = this.ChatStore;
 
 		list.forEach(function(u) {
@@ -687,8 +681,7 @@ export default Ext.define('NextThought.cache.UserRepository', {
 		});
 	},
 
-
-	presenceChanged: function(username, presence) {
+    presenceChanged: function(username, presence) {
 		var u = this.getStore().getById(username), newPresence;
 		if (this.debug) {console.log('User repository recieved a presence change for ', username, arguments);}
 		newPresence = (presence && presence.isPresenceInfo) ?
@@ -706,7 +699,6 @@ export default Ext.define('NextThought.cache.UserRepository', {
 			console.debug('no user found to update presence');
 		}
 	}
-
 },
 function() {
 	function worker() {

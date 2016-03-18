@@ -1,10 +1,13 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.poll.Editor', {
-	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-	alias: 'widget.overview-editing-poll',
+var Ext = require('extjs');
+var ContentEditor = require('../Editor');
+var ModelPollRef = require('../../../../../../../model/PollRef');
 
-	requires: ['NextThought.model.PollRef'],
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.poll.Editor', {
+    extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+    alias: 'widget.overview-editing-poll',
+
+    statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.PollRef.mimeType
@@ -12,5 +15,5 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-	addFormCmp: function() {}
+    addFormCmp: function() {}
 });

@@ -1,15 +1,15 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.Editor', {
-	extend: 'NextThought.app.course.overview.components.editing.Editor',
-	alias: 'widget.overview-editing-overviewgroup-editor',
-
-	requires: [
-		'NextThought.model.courses.overview.Group',
-		'NextThought.app.course.overview.components.editing.content.overviewgroup.ParentSelection',
-		'NextThought.app.course.overview.components.editing.content.overviewgroup.InlineEditor'
-	],
+var Ext = require('extjs');
+var EditingEditor = require('../../Editor');
+var OverviewGroup = require('../../../../../../../model/courses/overview/Group');
+var OverviewgroupParentSelection = require('./ParentSelection');
+var OverviewgroupInlineEditor = require('./InlineEditor');
 
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.Editor', {
+    extend: 'NextThought.app.course.overview.components.editing.Editor',
+    alias: 'widget.overview-editing-overviewgroup-editor',
+
+    statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.courses.overview.Group.mimeType
@@ -30,8 +30,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	addFormCmp: function() {
+    addFormCmp: function() {
 		return this.add({
 			xtype: 'overview-editing-overviewgroup-inlineeditor',
 			record: this.record,
@@ -39,8 +38,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		});
 	},
 
-
-	onSave: function() {
+    onSave: function() {
 		var me = this,
 			parentSelection = me.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
@@ -56,8 +54,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 			});
 	},
 
-
-	addParentSelection: function(record, parentRecord, rootRecord, onChange) {
+    addParentSelection: function(record, parentRecord, rootRecord, onChange) {
 		if (!rootRecord) { return null; }
 
 		var items = rootRecord.get('Items');

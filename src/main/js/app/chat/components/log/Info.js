@@ -1,11 +1,12 @@
-export default Ext.define('NextThought.app.chat.components.log.Info', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.chat-info-log-entry',
+var Ext = require('extjs');
+var UserRepository = require('../../../../cache/UserRepository');
 
-	requires: [
-	],
 
-	renderTpl: new Ext.XTemplate(
+module.exports = exports = Ext.define('NextThought.app.chat.components.log.Info', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.chat-info-log-entry',
+
+    renderTpl: new Ext.XTemplate(
 		'<div class="x-chat-info-log-entry">',
 			'<div class="timestamp">{time}</div>',
 			'<img src="{icon}" width=16 height=16"/>',
@@ -16,7 +17,7 @@ export default Ext.define('NextThought.app.chat.components.log.Info', {
 		'</div>'
 	),
 
-	renderSelectors: {
+    renderSelectors: {
 		box: 'div.x-chat-info-log-entry',
 		name: '.x-chat-info-log-entry span.name',
 		text: 'span.body-text',
@@ -24,13 +25,12 @@ export default Ext.define('NextThought.app.chat.components.log.Info', {
 		icon: 'img'
 	},
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.update(this.person, this.message);
 	},
 
-
-	update: function(person, m) {
+    update: function(person, m) {
 		var me = this;
 
 		me.message = m;
@@ -51,8 +51,7 @@ export default Ext.define('NextThought.app.chat.components.log.Info', {
 		me.addCls('nooid');
 	},
 
-
-	fillInUser: function(u) {
+    fillInUser: function(u) {
 		var name = u.get('alias') || u.get('Username'),
 			i = u.get('avatarURL');
 

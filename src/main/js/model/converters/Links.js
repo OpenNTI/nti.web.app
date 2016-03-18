@@ -1,9 +1,10 @@
-export default Ext.define('NextThought.model.converters.Links', {
-	override: 'Ext.data.Types',
-	requires: [
-		'Ext.data.SortTypes'
-	],
-	LINKS: {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.model.converters.Links', {
+    override: 'Ext.data.Types',
+
+    LINKS: {
 		type: 'links',
 		sortType: null,
 

@@ -1,17 +1,14 @@
-export default Ext.define('NextThought.app.contentviewer.components.PageWidgets', {
-	extend: 'Ext.Component',
-	alias: 'widget.content-page-widgets',
-	ui: 'content-page-widgets',
-
-	cls: 'content-page-widgets',
+var Ext = require('extjs');
+var UserdataActions = require('../../userdata/Actions');
 
 
-	requires: [
-		'NextThought.app.userdata.Actions'
-	],
+module.exports = exports = Ext.define('NextThought.app.contentviewer.components.PageWidgets', {
+    extend: 'Ext.Component',
+    alias: 'widget.content-page-widgets',
+    ui: 'content-page-widgets',
+    cls: 'content-page-widgets',
 
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'meta',
 			cn: [
@@ -26,20 +23,17 @@ export default Ext.define('NextThought.app.contentviewer.components.PageWidgets'
 		}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		meta: '.meta',
 		favorite: '.meta .controls .favorite',
 		like: '.meta .controls .like'
 	},
 
-
-	listeners: {
+    listeners: {
 		favorite: {'click': 'onFavoriteClick'}
 	},
 
-
-	onBookmark: function(r) {
+    onBookmark: function(r) {
 		var currentNTIID = this.reader.getLocation().NTIID;
 
 
@@ -52,8 +46,7 @@ export default Ext.define('NextThought.app.contentviewer.components.PageWidgets'
 		this.favorite.addCls('on');
 	},
 
-
-	onFavoriteClick: function() {
+    onFavoriteClick: function() {
 		if (this.bookmarkModel) {
 			this.bookmarkModel.destroy();
 			this.clearBookmark();
@@ -67,19 +60,16 @@ export default Ext.define('NextThought.app.contentviewer.components.PageWidgets'
 			.then(this.onBookmark.bind(this));
 	},
 
-
-	clearBookmark: function() {
+    clearBookmark: function() {
 		this.favorite.removeCls('on');
 		delete this.bookmarkModel;
 	},
 
-
-	hideControls: function() {
+    hideControls: function() {
 		this.hide();
 	},
 
-
-	showControls: function() {
+    showControls: function() {
 		this.show();
 	}
 });

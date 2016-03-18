@@ -1,13 +1,15 @@
-export default Ext.define('NextThought.common.menus.AnswerHistory', {
-	extend: 'Ext.menu.Menu',
-	alias: 'widget.answer-history-menu',
-	requires: [
-		'NextThought.common.menus.LabeledSeparator'
-	],
-	cls: 'answer_history_menu',
-	overflowHandler: 'Scroller',
-	constrain: true,
-	items: [
+var Ext = require('extjs');
+var MenusLabeledSeparator = require('./LabeledSeparator');
+
+
+module.exports = exports = Ext.define('NextThought.common.menus.AnswerHistory', {
+    extend: 'Ext.menu.Menu',
+    alias: 'widget.answer-history-menu',
+    cls: 'answer_history_menu',
+    overflowHandler: 'Scroller',
+    constrain: true,
+
+    items: [
 		{
 			text: getString('NextThought.view.menus.AnswerHistory.answer'), cls: 'answer-title', allowUncheck: false, answerHistoryTitle: true},
 		{
@@ -15,7 +17,7 @@ export default Ext.define('NextThought.common.menus.AnswerHistory', {
 		}
 	],
 
-	defaults: {
+    defaults: {
 		ui: 'nt-menuitem',
 		xtype: 'menucheckitem',
 		plain: true,
@@ -25,13 +27,13 @@ export default Ext.define('NextThought.common.menus.AnswerHistory', {
 		}
 	},
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.store.on('changed', this.reload, this);
 		this.store.on('load', this.reload, this);
 	},
 
-	reload: function() {
+    reload: function() {
 		var items = [], me = this;
 
 		this.removeAll();
@@ -59,7 +61,7 @@ export default Ext.define('NextThought.common.menus.AnswerHistory', {
 		}
 	},
 
-	handleClick: function(item) {
+    handleClick: function(item) {
 		if (!item.is('[answerHistoryTitle]') && !item.is('[noAnswerHistory]')) {
 			this.ownerCmp.up('assessment-question').reset();
 			this.ownerCmp.setValue(item.text);
@@ -67,10 +69,8 @@ export default Ext.define('NextThought.common.menus.AnswerHistory', {
 		}
 	},
 
-
-	showBy: function() {
+    showBy: function() {
 		this.showByArgs = Array.prototype.slice.call(arguments);
 		this.callParent(arguments);
 	}
-
 });

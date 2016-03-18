@@ -1,18 +1,19 @@
+var Ext = require('extjs');
+var DomUtils = require('../../../../util/Dom');
+var OverlayPanel = require('../../../contentviewer/overlay/Panel');
+var UtilDom = require('../../../../util/Dom');
+var ContentSlidedeck = require('../Slidedeck');
+
+
 /*jslint */
 /*global DomUtils */
-export default Ext.define('NextThought.app.mediaviewer.content.deck.OverlayedPanel', {
-	extend: 'NextThought.app.contentviewer.overlay.Panel',
-	alias: 'widget.overlay-slidedeck',
+module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.deck.OverlayedPanel', {
+    extend: 'NextThought.app.contentviewer.overlay.Panel',
+    alias: 'widget.overlay-slidedeck',
+    ui: 'content-launcher',
+    cls: 'content-launcher-container',
 
-	requires: [
-		'NextThought.util.Dom',
-		'NextThought.app.mediaviewer.content.Slidedeck'
-	],
-
-	ui: 'content-launcher',
-	cls: 'content-launcher-container',
-
-	statics: {
+    statics: {
 		getData: function(dom, reader) {
 			var el = Ext.get(dom),
 				data = DomUtils.parseDomObject(dom),
@@ -27,7 +28,7 @@ export default Ext.define('NextThought.app.mediaviewer.content.deck.OverlayedPan
 		}
 	},
 
-	constructor: function(config) {
+    constructor: function(config) {
 		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
@@ -58,8 +59,7 @@ export default Ext.define('NextThought.app.mediaviewer.content.deck.OverlayedPan
 		this.callParent([config]);
 	},
 
-
-	findLine: function() {
+    findLine: function() {
 		var doc = this.contentElement.ownerDocument,
 			range = doc.createRange();
 

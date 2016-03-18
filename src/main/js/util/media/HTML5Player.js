@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.util.media.HTML5Player', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 
 	statics: {
 		kind: 'audio',

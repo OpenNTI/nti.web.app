@@ -1,19 +1,28 @@
-export default Ext.define('NextThought.app.annotations.Highlight', {
-	extend: 'NextThought.app.annotations.Base',
-	alias: 'widget.highlight',
-	requires: [
-		'NextThought.util.Anchors',
-		'NextThought.util.Rects'
-	],
-	inheritableStatics: {
+var Ext = require('extjs');
+var ReaderPanel = require('../contentviewer/components/Reader');
+var Anchors = require('../../util/Anchors');
+var AnnotationUtils = require('../../util/Annotations');
+var Globals = require('../../util/Globals');
+var RangeUtils = require('../../util/Ranges');
+var RectUtils = require('../../util/Rects');
+var AnnotationsBase = require('./Base');
+var UtilAnchors = require('../../util/Anchors');
+var UtilRects = require('../../util/Rects');
+
+
+module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
+    extend: 'NextThought.app.annotations.Base',
+    alias: 'widget.highlight',
+
+    inheritableStatics: {
 		bgcolor: {},
 		blockElementRe: /^(address|blockquote|body|center|dir|div|dl|fieldset|form|h[1-6]|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul|dd|dt|frameset|li|tbody|td|tfoot|th|thead|tr|html)$/i
 	},
 
-	highlightCls: 'application-highlight',
-	mouseOverCls: 'highlight-mouse-over',
+    highlightCls: 'application-highlight',
+    mouseOverCls: 'highlight-mouse-over',
 
-	constructor: function(config) {
+    constructor: function(config) {
 		this.callParent(arguments);
 
 		//TODO hook up browser range for speed, throw away after render
@@ -32,8 +41,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		this.allowShare = false;
 	},
 
-
-	getRange: function() {
+    getRange: function() {
 		var range = Anchors.toDomRange(this.getRecordField('applicableRange'), this.doc, ReaderPanel.get().getCleanContent(), this.getRecordField('ContainerId'));
 
 		if (!range) {
@@ -48,8 +56,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		return range;
 	},
 
-
-	buildMenu: function(i) {
+    buildMenu: function(i) {
 		var items = [];
 
 		if (i) {
@@ -59,8 +66,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		return this.callParent([items]);
 	},
 
-
-	cleanup: function() {
+    cleanup: function() {
 		this.isDestroyed = true;
 		if (this.rendered) {
 			try {
@@ -93,8 +99,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		return this.callParent(arguments);
 	},
 
-
-	onMouseOver: function() {
+    onMouseOver: function() {
 		clearTimeout(this.mouseOutTimout);
 		if (!this.compElements.first().hasCls(this.mouseOverCls)) {
 			this.compElements.addCls(this.mouseOverCls);
@@ -112,8 +117,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		}
 	},
 
-
-	onMouseOut: function() {
+    onMouseOut: function() {
 		var me = this;
 
 		function off() {
@@ -124,8 +128,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		this.mouseOutTimout = setTimeout(off, 250);
 	},
 
-
-	visibilityChanged: function(show) {
+    visibilityChanged: function(show) {
 		var c = this.compElements,
 				fn = show ? 'addCls' : 'removeCls';
 		if (c) {
@@ -136,8 +139,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		return this.callParent(arguments);
 	},
 
-
-	buildRange: function() {
+    buildRange: function() {
 		var range = this.doc.createRange();
 
 		if (this.rendered && this.rendered.length > 0) {
@@ -154,8 +156,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		return range;
 	},
 
-
-	resolveVerticalLocation: function() {
+    resolveVerticalLocation: function() {
 		var r, rect, node;
 
 		if (this.rendered) {
@@ -173,8 +174,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		return !RectUtils.isZeroRect(rect) ? rect.top : NextThought.app.annotations.Base.HIDDEN;
 	},
 
-
-	render: function() {
+    render: function() {
 		if (this.isDestroyed) {
 			return;
 		}
@@ -310,8 +310,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		return boundingTop || me.resolveVerticalLocation();
 	},
 
-
-	createCanvas: function() {
+    createCanvas: function() {
 
 		var id = 'annotation-container',
 				doc = this.doc,
@@ -329,8 +328,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 				'highlight-canvas');
 	},
 
-
-	createCounter: function(after) {
+    createCounter: function(after) {
 		var el = Ext.get(this.createNonAnchorableSpan()),
 				style = this.record.get('style') || 'plain';
 
@@ -340,8 +338,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		return el.dom;
 	},
 
-
-	isInlineElement: function(node) {
+    isInlineElement: function(node) {
 		return {
 			none: true,
 			inline: true,
@@ -352,8 +349,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		//return !this.self.blockElementRe.test(node.nodeName);
 	},
 
-
-	validToWrapEntireNode: function(node) {
+    validToWrapEntireNode: function(node) {
 		var ntiInline;
 		if (node.nodeType === node.TEXT_NODE) {
 			return true;
@@ -381,8 +377,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		return false;
 	},
 
-
-	onClick: function(e) {
+    onClick: function(e) {
 		if (this.ownerCmp.getAnnotations().getSelection() || !this.isModifiable) {
 			return;
 		}
@@ -397,9 +392,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		return p;
 	},
 
-
-
-	wrapRange: function(node, range) {
+    wrapRange: function(node, range) {
 		var nodeList = [],
 				newRange,
 				nodeRange = node.ownerDocument.createRange(),
@@ -462,8 +455,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		return Ext.Array.clean(nodeList);
 	},
 
-
-	doWrap: function(range) {
+    doWrap: function(range) {
 		var span,
 				style = this.record.get('style') || 'plain',
 				s,
@@ -506,8 +498,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		return span;
 	},
 
-
-	getScrollPosition: function(currentPosition) {
+    getScrollPosition: function(currentPosition) {
 		var dh = 100,
 				range = this.getRange(), top;
 
@@ -519,8 +510,7 @@ export default Ext.define('NextThought.app.annotations.Highlight', {
 		return 0;
 	},
 
-
-	unwrap: function(node) {
+    unwrap: function(node) {
 		var r, p = node.parentNode;
 
 		if (node.firstChild) {

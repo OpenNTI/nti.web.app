@@ -1,22 +1,20 @@
-export default Ext.define('NextThought.app.notifications.components.List', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.notifications-panel',
+var Ext = require('extjs');
+var NotificationsStateStore = require('../StateStore');
+var ComponentsGroup = require('./Group');
+var WindowsActions = require('../../windows/Actions');
+var PathActions = require('../../navigation/path/Actions');
 
-	requires: [
-		'NextThought.app.notifications.StateStore',
-		'NextThought.app.notifications.components.Group',
-		'NextThought.app.windows.Actions',
-		'NextThought.app.navigation.path.Actions'
-	],
 
-	cls: 'notification-list',
-	layout: 'none',
-	SHOW_GROUP_LABEL: true,
-	PREPEND_INDEX: 0,
+module.exports = exports = Ext.define('NextThought.app.notifications.components.List', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.notifications-panel',
+    cls: 'notification-list',
+    layout: 'none',
+    SHOW_GROUP_LABEL: true,
+    PREPEND_INDEX: 0,
+    items: [],
 
-	items: [],
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.groups = {};
@@ -30,8 +28,7 @@ export default Ext.define('NextThought.app.notifications.components.List', {
 		});
 	},
 
-
-	onActivate: function() {
+    onActivate: function() {
 		this.storeListeners = this.mon(this.NotificationsStore, {
 			destroyable: true,
 			'record-added': this.addRecord.bind(this, true),
@@ -44,8 +41,7 @@ export default Ext.define('NextThought.app.notifications.components.List', {
 			.then(this.loadBatch.bind(this));
 	},
 
-
-	onDeactivate: function() {
+    onDeactivate: function() {
 		var container = this.getGroupContainer(),
 			group = container && container.down('notification-group');
 
@@ -61,13 +57,11 @@ export default Ext.define('NextThought.app.notifications.components.List', {
 		this.groups = {};
 	},
 
-
-	getGroupContainer: function() {
+    getGroupContainer: function() {
 		return this;
 	},
 
-
-	addRecord: function(prepend, record) {
+    addRecord: function(prepend, record) {
 		var groupValue = record.get('GroupingField'),
 			groupName = groupValue.getTime(),
 			group = this.groups[groupName];
@@ -87,8 +81,7 @@ export default Ext.define('NextThought.app.notifications.components.List', {
 		}
 	},
 
-
-	deleteRecord: function(record) {
+    deleteRecord: function(record) {
 		var groupValue = record.get('GroupingField'),
 			groupName = groupValue.getTime(),
 			group = this.groups[groupName];
@@ -100,8 +93,7 @@ export default Ext.define('NextThought.app.notifications.components.List', {
 		}
 	},
 
-
-	loadBatch: function(batch) {
+    loadBatch: function(batch) {
 		this.currentBatch = batch;
 
 		this.addMask();
@@ -111,8 +103,7 @@ export default Ext.define('NextThought.app.notifications.components.List', {
 			.always(this.removeMask.bind(this));
 	},
 
-
-	fillInItems: function(items) {
+    fillInItems: function(items) {
 		if (items.length < this.currentBatch.batchSize) {
 			this.isLastBatch = true;
 		}
@@ -122,11 +113,9 @@ export default Ext.define('NextThought.app.notifications.components.List', {
 		this.maybeShowMoreItems();
 	},
 
+    maybeShowMoreItems: function() {},
 
-	maybeShowMoreItems: function() {},
-
-
-	addGroup: function(groupName, group, prepend) {
+    addGroup: function(groupName, group, prepend) {
 		var cmp,
 			container = this.getGroupContainer(),
 			config = {
@@ -147,8 +136,7 @@ export default Ext.define('NextThought.app.notifications.components.List', {
 		return this.groups[groupName];
 	},
 
-
-	addMask: function() {
+    addMask: function() {
 		var container = this.getGroupContainer();
 
 		if (!this.loadingCmp) {
@@ -163,8 +151,7 @@ export default Ext.define('NextThought.app.notifications.components.List', {
 		}
 	},
 
-
-	removeMask: function() {
+    removeMask: function() {
 		var container = this.getGroupContainer();
 
 		if (this.loadingCmp) {
@@ -173,6 +160,5 @@ export default Ext.define('NextThought.app.notifications.components.List', {
 		}
 	},
 
-
-	navigateToItem: function() {}
+    navigateToItem: function() {}
 });

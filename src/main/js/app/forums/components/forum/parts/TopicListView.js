@@ -1,4 +1,10 @@
-export default Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
+var Ext = require('extjs');
+var UserRepository = require('../../../../../cache/UserRepository');
+var TimeUtils = require('../../../../../util/Time');
+var MixinsUIHelpers = require('../../../../../mixins/UIHelpers');
+
+
+module.exports = exports = Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 	extend: 'Ext.view.View',
 	alias: 'widget.forums-forum-topic-list-view',
 

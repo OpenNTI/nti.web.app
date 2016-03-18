@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.grid.Panel', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.grid.Panel', {
 	override: 'Ext.grid.Panel',
 
 	ui: 'nti',

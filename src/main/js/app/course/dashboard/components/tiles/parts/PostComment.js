@@ -1,14 +1,15 @@
+var Ext = require('extjs');
+var UserRepository = require('../../../../../../cache/UserRepository');
+var User = require('../../../../../../model/User');
+var WindowsActions = require('../../../../../windows/Actions');
+
+
 /*globals User*/
-export default Ext.define('NextThought.app.course.dashboard.components.tiles.parts.PostComment', {
-	extend: 'Ext.Component',
+module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.parts.PostComment', {
+    extend: 'Ext.Component',
+    cls: 'post-comment',
 
-	cls: 'post-comment',
-
-	requires: [
-		'NextThought.app.windows.Actions'
-	],
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'avatar-wrapper', cn: ['{user:avatar}']},
 		{cls: 'meta', cn: [
 			{cls: 'name'},
@@ -22,7 +23,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.par
 		]}
 	]),
 
-	renderSelectors: {
+    renderSelectors: {
 		avatarEl: '.avatar-wrapper',
 		nameEl: '.meta .name',
 		createdEl: '.meta .created',
@@ -32,8 +33,7 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.par
 		reportEl: '.actions .report'
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.isDeleted()) {
@@ -51,21 +51,18 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.par
 		this.mon(this.el, 'click', 'itemClicked');
 	},
 
-
-	isDeleted: function() {
+    isDeleted: function() {
 		return false;
 	},
 
-
-	itemClicked: function(e) {
+    itemClicked: function(e) {
 		if (this.handleNavigation) {
 			e.stopPropagation();
 			this.handleNavigation();
 		}
 	},
 
-
-	fillInUser: function() {
+    fillInUser: function() {
 		var me = this;
 
 		UserRepository.getUser(me.record.get('Creator'))
@@ -81,18 +78,15 @@ export default Ext.define('NextThought.app.course.dashboard.components.tiles.par
 			});
 	},
 
-
-	fillInCreated: function() {
+    fillInCreated: function() {
 		var created = this.record.get('CreatedTime');
 
 		this.createdEl.update(moment(created).format('MMM Do h:mm A'));
 	},
 
-
-	fillInBody: function() {
+    fillInBody: function() {
 		this.bodyEl.update(this.record.getBodyText());
 	},
 
-
-	fillInComments: function() {}
+    fillInComments: function() {}
 });

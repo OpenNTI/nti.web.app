@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.assessment.PartContent', {
+var Ext = require('extjs');
+var ContentUtils = require('../../util/Content');
+var MixinsQuestionContent = require('../../mixins/QuestionContent');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.PartContent', {
 	extend: 'Ext.Component',
 	alias: 'widget.part-content',
 

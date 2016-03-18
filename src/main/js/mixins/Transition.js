@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.mixins.Transition', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.mixins.Transition', {
 
 	statics: {
 		LIST_ADD: {

@@ -1,28 +1,27 @@
-export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
-	extend: 'NextThought.common.components.NavPanel',
-	alias: 'widget.reader',
-
-	requires: [
-		'NextThought.app.contentviewer.components.Reader',
-		'NextThought.app.contentviewer.navigation.Content',
-		'NextThought.app.contentviewer.notepad.View',
-		'NextThought.store.FlatPage',
-		'NextThought.app.annotations.Index',
-		'NextThought.app.userdata.Actions',
-		'NextThought.app.context.StateStore',
-		'NextThought.app.windows.Actions'
-	],
+var Ext = require('extjs');
+var AnalyticsUtil = require('../../../util/Analytics');
+var ComponentsNavPanel = require('../../../common/components/NavPanel');
+var ComponentsReader = require('../components/Reader');
+var NavigationContent = require('../navigation/Content');
+var NotepadView = require('../notepad/View');
+var StoreFlatPage = require('../../../store/FlatPage');
+var AnnotationsIndex = require('../../annotations/Index');
+var UserdataActions = require('../../userdata/Actions');
+var ContextStateStore = require('../../context/StateStore');
+var WindowsActions = require('../../windows/Actions');
 
 
-	prefix: 'default',
-	ui: 'reader',
-	cls: 'reader-container',
-	layout: 'none',
+module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Reader', {
+    extend: 'NextThought.common.components.NavPanel',
+    alias: 'widget.reader',
+    prefix: 'default',
+    ui: 'reader',
+    cls: 'reader-container',
+    layout: 'none',
+    scrollTargetSelector: '.x-panel-body-reader',
+    secondaryElSelector: '.x-panel-notes-and-discussion',
 
-	scrollTargetSelector: '.x-panel-body-reader',
-	secondaryElSelector: '.x-panel-notes-and-discussion',
-
-	navigation: {
+    navigation: {
 		height: 'auto',
 		xtype: 'tabpanel',
 		ui: 'notes-and-discussion',
@@ -43,10 +42,9 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		items: []
 	},
 
+    body: {xtype: 'container', cls: 'center', layout: 'none', width: 766},
 
-	body: {xtype: 'container', cls: 'center', layout: 'none', width: 766},
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -66,20 +64,17 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		});
 	},
 
-
-	onActivate: function() {
+    onActivate: function() {
 		Ext.EventManager.onWindowResize(this.onWindowResize, this);
 		this.alignNavigation();
 	},
 
-
-	onDeactivate: function() {
+    onDeactivate: function() {
 		this.endViewedAnalytics();
 		Ext.EventManager.removeResizeListener(this.onWindowResize, this);
 	},
 
-
-	/**
+    /**
 	 * Handles resize event on the reader
 	 *
 	 * NOTE: Since most video APIs do not provide events for when the browser goes into fullscreen mode,
@@ -104,8 +99,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		}
 	},
 
-
-	showReader: function() {
+    showReader: function() {
 		this.navigation.removeAll(true);
 		this.body.removeAll(true);
 
@@ -171,8 +165,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		}
 	},
 
-
-	alignNavigation: function() {
+    alignNavigation: function() {
 		var header = this.getToolbar();
 
 		if (header && header.alignTimer) {
@@ -182,8 +175,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		this.callParent(arguments);
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var center = this.el.down('.center'),
@@ -200,8 +192,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		});
 	},
 
-
-	getToolbarConfig: function() {
+    getToolbarConfig: function() {
 		return {
 			xtype: 'content-toolbar',
 			bundle: this.bundle,
@@ -215,8 +206,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		};
 	},
 
-
-	getReaderConfig: function() {
+    getReaderConfig: function() {
 		 return {
 		 	xtype: 'reader-content',
 		 	prefix: this.prefix,
@@ -224,15 +214,13 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		 };
 	},
 
-
-	onceReadyForSearch: function() {
+    onceReadyForSearch: function() {
 		var reader = this.getReaderContent();
 
 		return reader.onceReadyForSearch();
 	},
 
-
-	showSearchHit: function(hit, fragment) {
+    showSearchHit: function(hit, fragment) {
 		var reader = this.getReaderContent(),
 			scroll = reader && reader.getScroll();
 
@@ -241,8 +229,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		}
 	},
 
-
-	showRemainingTime: function() {
+    showRemainingTime: function() {
 		var header = this.getToolbar();
 
 		if (header && header.showRemainingTime) {
@@ -250,8 +237,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		}
 	},
 
-
-	showHeaderToast: function() {
+    showHeaderToast: function() {
 		var header = this.getToolbar();
 
 		if (header && header.showToast) {
@@ -259,25 +245,21 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		}
 	},
 
-
-	getToolbar: function() {
+    getToolbar: function() {
 		return this.down('[isReaderToolBar]');
 	},
 
-
-	getReaderContent: function() {
+    getReaderContent: function() {
 		return this.down('reader-content');
 	},
 
-
-	getLocation: function() {
+    getLocation: function() {
 		var reader = this.getReaderContent();
 
 		return reader && reader.getLocation();
 	},
 
-
-	setPageInfo: function(pageInfo, bundle) {
+    setPageInfo: function(pageInfo, bundle) {
 		var reader = this.getReaderContent(),
 			toolbar = this.getToolbar();
 
@@ -294,8 +276,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 			.then(this.beginViewedAnalytics.bind(this));
 	},
 
-
-	goToFragment: function(fragment) {
+    goToFragment: function(fragment) {
 		var reader = this.getReaderContent();
 
 		this.fragment = fragment;
@@ -305,8 +286,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		}
 	},
 
-
-	goToNote: function(note) {
+    goToNote: function(note) {
 		var reader = this.getReaderContent();
 
 		this.note = note;
@@ -315,18 +295,17 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		}
 	},
 
-	beforeDeactivate: function() {
+    beforeDeactivate: function() {
 		var reader = this.down('reader-content');
 		return !reader || reader.getNoteOverlay().onNavigation();
 	},
 
-	selectDiscussion: function() {
+    selectDiscussion: function() {
 		this.down('tabpanel[ui=notes-and-discussion]').setActiveTab(
 			this.down('annotation-view[discussion]'));
 	},
 
-
-	/**
+    /**
 	 * Return true if the reader should allow itself to be close
 	 * false should attempt to stop the navigation if it can
 	 * @return {Promise} fulfills once it can navigate, or rejects if it needs to stop
@@ -337,25 +316,21 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		return !reader || reader.allowNavigation(forced);
 	},
 
-
-	beforeRouteChange: function() {
+    beforeRouteChange: function() {
 		var reader = this.getReaderContent();
 
 		return reader && reader.beforeRouteChange();
 	},
 
-
-	doNavigation: function(title, route, precache) {
+    doNavigation: function(title, route, precache) {
 		this.handleNavigation(title, route, precache);
 	},
 
-
-	showNote: function(record, el, monitors) {
+    showNote: function(record, el, monitors) {
 		this.WindowActions.pushWindow(record, null, el, monitors);
 	},
 
-
-	getQuestionSet: function() {
+    getQuestionSet: function() {
 		var assessmentItems = this.pageInfo.get('AssessmentItems'),
 			i, item;
 
@@ -372,8 +347,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		return null;
 	},
 
-
-	getAnalyticData: function() {
+    getAnalyticData: function() {
 		var questionSet = this.getQuestionSet(),
 			data = {};
 
@@ -389,8 +363,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		return data;
 	},
 
-
-	beginViewedAnalytics: function() {
+    beginViewedAnalytics: function() {
 		var data = this.getAnalyticData();
 		//if we don't have a resource id for some reason, we can't send a valid event
 		if (!data.resource_id) { return; }
@@ -409,8 +382,7 @@ export default Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		AnalyticsUtil.getResourceTimer(data.resource_id, data);
 	},
 
-
-	endViewedAnalytics: function() {
+    endViewedAnalytics: function() {
 		var data = this.__lastAnalyticEvent;
 
 		if (!data) { return; }

@@ -1,4 +1,10 @@
-export default Ext.define('NextThought.app.profiles.user.components.activity.parts.events.NoteReply', {
+var Ext = require('extjs');
+var UserRepository = require('../../../../../../../cache/UserRepository');
+var ParseUtils = require('../../../../../../../util/Parsing');
+var EventsActivityItem = require('./ActivityItem');
+
+
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.NoteReply', {
 	extend: 'NextThought.app.profiles.user.components.activity.parts.events.ActivityItem',
 	alias: 'widget.profile-activity-note-reply-item',
 

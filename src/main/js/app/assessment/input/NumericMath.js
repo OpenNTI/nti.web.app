@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.assessment.input.NumericMath', {
+var Ext = require('extjs');
+var InputFreeResponse = require('./FreeResponse');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.input.NumericMath', {
 	extend: 'NextThought.app.assessment.input.FreeResponse',
 	alias: 'widget.question-input-numericmathpart',
 

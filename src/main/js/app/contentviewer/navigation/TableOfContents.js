@@ -1,22 +1,24 @@
-export default Ext.define('NextThought.app.contentviewer.navigation.TableOfContents', {
-	extend: 'Ext.view.View',
-	alias: 'widget.table-of-contents-flyout',
+var Ext = require('extjs');
+var CSSUtils = require('../../../util/CSS');
+var ParseUtils = require('../../../util/Parsing');
+var MixinsMenuShowHideBehavior = require('../../../mixins/MenuShowHideBehavior');
+var ModelTopicNode = require('../../../model/TopicNode');
 
-	requires: [
-		'NextThought.model.TopicNode'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.TableOfContents', {
+    extend: 'Ext.view.View',
+    alias: 'widget.table-of-contents-flyout',
+
+    mixins: {
 		menuBehavior: 'NextThought.mixins.MenuShowHideBehavior'
 	},
 
-	cls: 'toc-flyout nav-outline',
+    cls: 'toc-flyout nav-outline',
+    floating: true,
+    hidden: true,
+    renderTo: Ext.getBody(),
 
-	floating: true,
-	hidden: true,
-	renderTo: Ext.getBody(),
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
 			{ cls: 'button', html: 'Close' },//'{{{NextThought.view.content.Navigation.toc.close|Close}}}' },
 			{
@@ -30,7 +32,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.TableOfConte
 		{ cls: 'outline-list'}
 	]),
 
-	renderSelectors: {
+    renderSelectors: {
 		closeEl: '.header .button',
 		formEl: 'form.search',
 		clearEl: '.search button',
@@ -38,22 +40,20 @@ export default Ext.define('NextThought.app.contentviewer.navigation.TableOfConte
 		frameBodyEl: '.outline-list'
 	},
 
-
-	getTargetEl: function() {
+    getTargetEl: function() {
 		return this.frameBodyEl;
 	},
 
+    overItemCls: 'over',
+    itemSelector: '.outline-row',
 
-	overItemCls: 'over',
-	itemSelector: '.outline-row',
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
+    tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 		{ cls: 'outline-row {type}', cn: [
 			{cls: 'label', html: '{label}'}
 		]}
 	]})),
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.mixins.menuBehavior.constructor.call(this);
 		this.cssRule = CSSUtils.getRule('table-of-content-styles', '#' + this.id);
@@ -74,8 +74,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.TableOfConte
 		});
 	},
 
-
-	doFilter: Ext.Function.createBuffered(
+    doFilter: Ext.Function.createBuffered(
 			function() {
 				if (this.isDestroyed) {return;}
 
@@ -105,8 +104,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.TableOfConte
 			},
 			100),
 
-
-	onFilter: function(e) {
+    onFilter: function(e) {
 		if (e) {
 			try {
 				e.stopPropagation();
@@ -122,15 +120,13 @@ export default Ext.define('NextThought.app.contentviewer.navigation.TableOfConte
 		this.doFilter();
 	},
 
-
-	onItemClick: function(record) {
+    onItemClick: function(record) {
 		this.onSelect(record);
 	},
 
-	HASH_REGEX: /#/,
+    HASH_REGEX: /#/,
 
-
-	__findPageNode: function(node) {
+    __findPageNode: function(node) {
 		if (!node || node.tagName === 'toc') {
 			return node;
 		}
@@ -144,8 +140,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.TableOfConte
 		return node;
 	},
 
-
-	onSelect: function(record) {
+    onSelect: function(record) {
 		var node = record.get('tocNode'),
 			pageNode = this.__findPageNode(node),
 			href = node.getAttribute('href'),
@@ -160,20 +155,17 @@ export default Ext.define('NextThought.app.contentviewer.navigation.TableOfConte
 		this.doNavigation(pageNode.getAttribute('label'), id);
 	},
 
-
-	onShow: function() {
+    onShow: function() {
 		this.callParent(arguments);
 		this.showSelection();
 		this.stopShowHideTimers();
 	},
 
-
-	selectId: function(id) {
+    selectId: function(id) {
 		this.activeNTIID = id;
 	},
 
-
-	showSelection: function() {
+    showSelection: function() {
 		var rec = this.store.getById(this.activeNTIID);
 		if (rec) {
 			this.getSelectionModel().select(rec, false, true);
@@ -181,8 +173,7 @@ export default Ext.define('NextThought.app.contentviewer.navigation.TableOfConte
 		}
 	},
 
-
-	scrollSelectionIntoView: function() {
+    scrollSelectionIntoView: function() {
 		var el, scroll, offset, height,
 			sel = this.getSelectionModel().getSelection()[0];
 		if (!sel) {return;}

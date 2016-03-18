@@ -1,24 +1,24 @@
-export default Ext.define('NextThought.app.assessment.results.Poll', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.assessment-result',
+var Ext = require('extjs');
+var Globals = require('../../../util/Globals');
+var PartsMultiChoice = require('./parts/MultiChoice');
+var PartsMultiAnswer = require('./parts/MultiAnswer');
+var PartsMatching = require('./parts/Matching');
+var PartsOrdering = require('./parts/Ordering');
+var PartsModeledContent = require('./parts/ModeledContent');
 
-	requires: [
-		'NextThought.app.assessment.results.parts.MultiChoice',
-		'NextThought.app.assessment.results.parts.MultiAnswer',
-		'NextThought.app.assessment.results.parts.Matching',
-		'NextThought.app.assessment.results.parts.Ordering',
-		'NextThought.app.assessment.results.parts.ModeledContent'
-	],
 
-	cls: 'assessment-result',
-	layout: 'none',
+module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.assessment-result',
+    cls: 'assessment-result',
+    layout: 'none',
 
-	items: [
+    items: [
 		{xtype: 'container', layout: 'none', isResultContainer: true},
 		{xtype: 'container', layout: 'none', cls: 'footer', isFooter: true}
 	],
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var parts = NextThought.app.assessment.results.parts;
@@ -57,8 +57,7 @@ export default Ext.define('NextThought.app.assessment.results.Poll', {
 			.always(this.resize.bind(this));
 	},
 
-
-	fillInMimeTypeToComponent: function(cmps) {
+    fillInMimeTypeToComponent: function(cmps) {
 		this.mimeToComponent = cmps.reduce(function(acc, cmp) {
 			acc[cmp.mimeType] = cmp;
 
@@ -67,27 +66,23 @@ export default Ext.define('NextThought.app.assessment.results.Poll', {
 
 	},
 
-
-	getCmpForMimeType: function(mimeType) {
+    getCmpForMimeType: function(mimeType) {
 		return this.mimeToComponent[mimeType];
 	},
 
-
-	removeLoadingCmp: function() {
+    removeLoadingCmp: function() {
 		if (this.loadingCmp) {
 			this.loadingCmp.destroy();
 			delete this.loadingCmp;
 		}
 	},
 
-
-	resize: function() {
+    resize: function() {
 		this.syncHeight();
 		this.syncPositioning();
 	},
 
-
-	showError: function() {
+    showError: function() {
 		this.removeLoadingCmp();
 		this.resultContainer.add({
 			xtype: 'box',
@@ -95,8 +90,7 @@ export default Ext.define('NextThought.app.assessment.results.Poll', {
 		});
 	},
 
-
-	showResults: function(results) {
+    showResults: function(results) {
 		this.removeLoadingCmp();
 
 		var me = this,
@@ -108,8 +102,7 @@ export default Ext.define('NextThought.app.assessment.results.Poll', {
 		});
 	},
 
-
-	addPart: function(resultPart, questionPart) {
+    addPart: function(resultPart, questionPart) {
 		var cmp = this.getCmpForMimeType(resultPart.MimeType);
 
 		if (cmp) {
@@ -123,8 +116,7 @@ export default Ext.define('NextThought.app.assessment.results.Poll', {
 		}
 	},
 
-
-	onHideResults: function() {
+    onHideResults: function() {
 		if (this.doHideResults) {
 			this.doHideResults();
 		}

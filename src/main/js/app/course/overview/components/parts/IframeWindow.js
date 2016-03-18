@@ -1,12 +1,13 @@
-export default Ext.define('NextThought.app.course.overview.components.parts.IframeWindow', {
-	extend: 'NextThought.common.components.cards.Card',
-	alias: 'widget.course-overview-ntigenericiframewindow',
+var Ext = require('extjs');
+var CardsCard = require('../../../../../common/components/cards/Card');
+var UxIframeWindow = require('../../../../../common/ux/IframeWindow');
 
-	requires: [
-		'NextThought.common.ux.IframeWindow'
-	],
 
-	constructor: function(config) {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.IframeWindow', {
+    extend: 'NextThought.common.components.cards.Card',
+    alias: 'widget.course-overview-ntigenericiframewindow',
+
+    constructor: function(config) {
 		var n = config.node || {getAttribute: function(a) { return config[a];} },
 			ntiid = n.getAttribute('NTIID');
 
@@ -24,12 +25,11 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Ifra
 		this.callParent([config]);
 	},
 
-	shouldOpenInApp: function() {
+    shouldOpenInApp: function() {
 		return true;
 	},
 
-
-	navigateToTarget: function() {
+    navigateToTarget: function() {
 		var win,
 			dH = this.data.windowHeight,
 			dW = this.data.windowWidth,

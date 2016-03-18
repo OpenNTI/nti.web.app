@@ -1,19 +1,20 @@
-export default Ext.define('NextThought.app.library.communities.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.library-communities',
+var Ext = require('extjs');
+var MixinsRouter = require('../../../mixins/Router');
+var ComponentsPage = require('./components/Page');
 
-	requires: [
-		'NextThought.app.library.communities.components.Page'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.library.communities.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.library-communities',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	layout: 'none',
-	cls: 'library-page',
+    layout: 'none',
+    cls: 'library-page',
 
-	items: [{
+    items: [{
 		xtype: 'box',
 		cls: 'title-container',
 		autoEl: {cn: [
@@ -24,23 +25,20 @@ export default Ext.define('NextThought.app.library.communities.Index', {
 		]}
 	}],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.addRoute('/', this.showCommunities.bind(this));
 		this.addDefaultRoute('/');
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', this.onClick.bind(this));
 	},
 
-
-	loadCommunities: function() {
+    loadCommunities: function() {
 		var me = this;
 
 		me.loadingCmp = me.loadingCmp || me.add({
@@ -73,16 +71,13 @@ export default Ext.define('NextThought.app.library.communities.Index', {
 			});
 	},
 
-
-
-	showCommunities: function() {
+    showCommunities: function() {
 		this.setTitle('Communities');
 
 		return this.loadCommunities();
 	},
 
-
-	showEmptyState: function() {
+    showEmptyState: function() {
 		if (this.coursePage) {
 			this.remove(this.coursePage, true);
 			delete this.coursePage;
@@ -94,8 +89,7 @@ export default Ext.define('NextThought.app.library.communities.Index', {
 		});
 	},
 
-
-	navigateToCommunity: function(community, el) {
+    navigateToCommunity: function(community, el) {
 		var route = community.getProfileUrl();
 
 		if (route) {
@@ -103,7 +97,7 @@ export default Ext.define('NextThought.app.library.communities.Index', {
 		}
 	},
 
-	onClick: function(e) {
+    onClick: function(e) {
 		if (e.getTarget('.home')) {
 			this.pushRootRoute('', '/');
 		}

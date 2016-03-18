@@ -1,30 +1,33 @@
-export default Ext.define('NextThought.model.Base', {
-	extend: 'Ext.data.Model',
-	requires: [
-		'NextThought.mixins.HasLinks',
-		'NextThought.model.converters.ContentRangeDescription',
-		'NextThought.model.converters.DCCreatorToAuthor',
-		'NextThought.model.converters.Date',
-		'NextThought.model.converters.Future',
-		'NextThought.model.converters.GroupByTime',
-		'NextThought.model.converters.Items',
-		'NextThought.model.converters.Links',
-		'NextThought.model.converters.PresenceInfo',
-		'NextThought.model.converters.Synthetic',
-		'NextThought.model.converters.Users',
-		'NextThought.model.converters.VideoSources',
-		'NextThought.util.Time',
-		'NextThought.util.Parsing',
-		'NextThought.proxy.Rest'
+var Ext = require('extjs');
+var Globals = require('../util/Globals');
+var ParseUtils = require('../util/Parsing');
+var TimeUtils = require('../util/Time');
+var MixinsHasLinks = require('../mixins/HasLinks');
+var MixinsHasLinks = require('../mixins/HasLinks');
+var ConvertersContentRangeDescription = require('./converters/ContentRangeDescription');
+var ConvertersDCCreatorToAuthor = require('./converters/DCCreatorToAuthor');
+var ConvertersDate = require('./converters/Date');
+var ConvertersFuture = require('./converters/Future');
+var ConvertersGroupByTime = require('./converters/GroupByTime');
+var ConvertersItems = require('./converters/Items');
+var ConvertersLinks = require('./converters/Links');
+var ConvertersPresenceInfo = require('./converters/PresenceInfo');
+var ConvertersSynthetic = require('./converters/Synthetic');
+var ConvertersUsers = require('./converters/Users');
+var ConvertersVideoSources = require('./converters/VideoSources');
+var UtilTime = require('../util/Time');
+var UtilParsing = require('../util/Parsing');
+var ProxyRest = require('../proxy/Rest');
 
-	],
 
+module.exports = exports = Ext.define('NextThought.model.Base', {
+    extend: 'Ext.data.Model',
 
-	mixins: {
+    mixins: {
 		hasLinks: 'NextThought.mixins.HasLinks'
 	},
 
-	inheritableStatics: {
+    inheritableStatics: {
 		idsBeingGloballyUpdated: {},
 
 		isInstanceOf: function(instance) {
@@ -32,7 +35,7 @@ export default Ext.define('NextThought.model.Base', {
 		}
 	},
 
-	statics: {
+    statics: {
 		/**
 		 * Fact: creating elements is *kind of* expensive.
 		 * Fact: JavaScript is thread-safe, because its not threaded. Its Evented. No more than one block of code runs at a time.
@@ -63,9 +66,10 @@ export default Ext.define('NextThought.model.Base', {
 		}
 	},
 
-	idProperty: 'NTIID',
-	proxy: { type: 'nti' },
-	fields: [
+    idProperty: 'NTIID',
+    proxy: { type: 'nti' },
+
+    fields: [
 		{ name: 'Class', type: 'string', persist: false },
 		{ name: 'ContainerId', type: 'string', useNull: true, convert: function(v) {
 			if (v && v.isModel) { v = v.getId(); }
@@ -115,11 +119,10 @@ export default Ext.define('NextThought.model.Base', {
 		{ name: 'likeState', persist: false, type: 'auto', convert: function(o, r) { return r.getLink('unlike') ? 'on' : 'off'; }}
 	],
 
-	//TODO: move into model event domain??
+    //TODO: move into model event domain??
 	observer: new Ext.util.Observable(),
 
-
-	onClassExtended: function(cls, data) {
+    onClassExtended: function(cls, data) {
 		var map,
 			type,
 			mime = {mimeType: 'application/vnd.nextthought.' + data.$className.replace(/^.*?model\./, '').toLowerCase()};
@@ -152,8 +155,7 @@ export default Ext.define('NextThought.model.Base', {
 		});
 	},
 
-
-	getClassForModel: function(aliasPrefix, fallback) {
+    getClassForModel: function(aliasPrefix, fallback) {
 		var c = this,
 			cls = null,
 			name;
@@ -167,12 +169,11 @@ export default Ext.define('NextThought.model.Base', {
 		return cls || fallback;
 	},
 
-
-	is: function(selector) {
+    is: function(selector) {
 		return selector === '*';
 	},
 
-	//Override isEqual so we can test more complex equality and
+    //Override isEqual so we can test more complex equality and
 	//avoid resetting fields that haven't changed
 	isEqual: function(a, b) {
 		//Super checks === so if it is equal by that
@@ -197,13 +198,13 @@ export default Ext.define('NextThought.model.Base', {
 		return false;
 	},
 
-	/**
+    /**
 	 * A list of keys to not include when syncing a record
 	 * @type {Array}
 	 */
 	SYNC_BLACKLIST: [],
 
-	/**
+    /**
 	 * Given another instance of the same class, update this values.
 	 *
 	 * @param  {Model} record the instance to update with
@@ -229,7 +230,7 @@ export default Ext.define('NextThought.model.Base', {
 		this.fireEvent('update', this);
 	},
 
-	/**
+    /**
 	 * Given a response from the server, update my values
 	 * @param  {String} response server response
 	 */
@@ -244,8 +245,7 @@ export default Ext.define('NextThought.model.Base', {
 		return this.syncWith(newRecord);
 	},
 
-
-	/**
+    /**
 	 * Get the link to request updated values from on the server
 	 *
 	 * @return {String} the link
@@ -254,7 +254,7 @@ export default Ext.define('NextThought.model.Base', {
 		return this.get('href');
 	},
 
-	/**
+    /**
 	 * Update this record from the server.
 	 *
 	 * If we are unable to find a href or the update fails, just return
@@ -292,8 +292,7 @@ export default Ext.define('NextThought.model.Base', {
 			});
 	},
 
-
-	constructor: function(data, id, raw) {
+    constructor: function(data, id, raw) {
 		var fs = this.fields,
 			cName = this.self.getName().split('.').pop(),
 			cField = fs.getByKey('Class'), me = this;
@@ -339,16 +338,14 @@ export default Ext.define('NextThought.model.Base', {
 		});
 	},
 
-
-	getFieldItem: function(field, key) {
+    getFieldItem: function(field, key) {
 		var f = this.get(field) || [];
 		// let not having an INDEX_KEYMAP throw an exception so we KNOW we don't have one
 		// so that we can fallback to search... if it just doesn't have the key, we can take its word.
 		return f[f.INDEX_KEYMAP[key]];
 	},
 
-
-	//A model may have some derived fields that
+    //A model may have some derived fields that
 	//are readonly values.  These values depend on other traditional fields.
 	//one such property is 'flagged', it isn't a real field but
 	//it is derived from Links.  We support getting those values by
@@ -378,13 +375,11 @@ export default Ext.define('NextThought.model.Base', {
 		return val;
 	},
 
-
-	valuesAffectedByLinks: function() {
+    valuesAffectedByLinks: function() {
 		return ['flagged', 'favorited', 'liked', 'published'];
 	},
 
-
-	isTopLevel: function() {
+    isTopLevel: function() {
 		var notAReply = !this.get('inReplyTo'),
 			noReferences = (this.get('references') || []).length === 0,
 			noParent = !this.parent;
@@ -394,8 +389,7 @@ export default Ext.define('NextThought.model.Base', {
 		return notAReply && noReferences && noParent;
 	},
 
-
-	/**
+    /**
 	 * Caller should wrap in beginEdit() and endEdit()
 	 * @param {Ext.data.Model} recordSrc
 	 * @param {String...} fields
@@ -423,12 +417,11 @@ export default Ext.define('NextThought.model.Base', {
 		});
 	},
 
-
-	hasField: function(fieldName) {
+    hasField: function(fieldName) {
 		return this.data.hasOwnProperty(fieldName);
 	},
 
-	tearDownLinks: function() {
+    tearDownLinks: function() {
 		var p = this.parent, cn = (this.children || []),
 			i, splice = Array.prototype.splice;
 		delete this.parent;
@@ -448,13 +441,11 @@ export default Ext.define('NextThought.model.Base', {
 
 	},
 
-
-	getBubbleParent: function() {
+    getBubbleParent: function() {
 		return this.parent;
 	},
 
-
-	getRoot: function() {
+    getRoot: function() {
 		var current = this,
 			currentParent = current.parent;
 
@@ -466,13 +457,11 @@ export default Ext.define('NextThought.model.Base', {
 		return current;
 	},
 
-
-	wouldBePlaceholderOnDelete: function() {
+    wouldBePlaceholderOnDelete: function() {
 		return (this.children !== undefined && this.get('RecursiveReferenceCount')) || (!Ext.isEmpty(this.children));
 	},
 
-
-	convertToPlaceholder: function() {
+    convertToPlaceholder: function() {
 		var me = this, keepList = {
 			'Class': 1,
 			'ContainerId': 1,
@@ -496,8 +485,7 @@ export default Ext.define('NextThought.model.Base', {
 		me.maybeCallOnAllObjects('convertToPlaceholder', me, arguments);
 	},
 
-
-	destroy: function(options) {
+    destroy: function(options) {
 		var me = this,
 			successCallback = (options || {}).success || Ext.emptyFn,
 			failureCallback = (options || {}).failure || Ext.emptyFn;
@@ -537,8 +525,7 @@ export default Ext.define('NextThought.model.Base', {
 		me.callParent([options]);
 	},
 
-
-	enforceMutability: function() {
+    enforceMutability: function() {
 		if (!this.isModifiable()) {
 			Ext.apply(this, {
 				destroy: Ext.emptyFn(),
@@ -547,46 +534,38 @@ export default Ext.define('NextThought.model.Base', {
 		}
 	},
 
-
-	getModelName: function() {
+    getModelName: function() {
 		return this.get('Class');
 	},
 
-
-	getFriendlyLikeCount: function() {
+    getFriendlyLikeCount: function() {
 		var c = this.get('LikeCount');
 		if (c <= 0) {return '';}
 		if (c >= 1000) { return '999+';}
 		return String(c);
 	},
 
-
-	isLikeable: function() {
+    isLikeable: function() {
 		return Boolean(this.getLink('like') || this.getLink('unlike'));
 	},
 
-
-	isFavoritable: function() {
+    isFavoritable: function() {
 		return Boolean(this.getLink('favorite') || this.getLink('unfavorite'));
 	},
 
-
-	isFavorited: function() {
+    isFavorited: function() {
 		return Boolean(this.getLink('unfavorite'));
 	},
 
-
-	isLiked: function() {
+    isLiked: function() {
 		return Boolean(this.getLink('unlike'));
 	},
 
-
-	isFlagged: function() {
+    isFlagged: function() {
 		return Boolean(this.getLink('flag.metoo'));
 	},
 
-
-	flag: function(widget) {
+    flag: function(widget) {
 		var action = this.isFlagged() ? 'flag.metoo' : 'flag',
 			prePost = action === 'flag' ? 'addCls' : 'removeCls',
 			postPost = action === 'flag' ? 'removeCls' : 'addCls';
@@ -603,8 +582,7 @@ export default Ext.define('NextThought.model.Base', {
 		});
 	},
 
-
-	favorite: function(widget) {
+    favorite: function(widget) {
 		var me = this,
 			currentValue = this.isFavorited(),
 			action = currentValue ? 'unfavorite' : 'favorite';
@@ -627,8 +605,7 @@ export default Ext.define('NextThought.model.Base', {
 		}, 'favorite');
 	},
 
-
-	like: function(widget) {
+    like: function(widget) {
 		var me = this,
 			lc = this.get('LikeCount'),
 			currentValue = this.isLiked(),
@@ -661,8 +638,7 @@ export default Ext.define('NextThought.model.Base', {
 		}, 'LikeCount');
 	},
 
-
-	postTo: function(link, callback, modifiedFieldName) {
+    postTo: function(link, callback, modifiedFieldName) {
 		this.activePostTos = this.activePostTos || {};
 		var me = this, req,
 			l = this.getLink(link);
@@ -694,8 +670,7 @@ export default Ext.define('NextThought.model.Base', {
 		return this.activePostTos[link];
 	},
 
-
-	isModifiable: function() {
+    isModifiable: function() {
 		try {
 			//This isn't necessarily true for all objects. For instance anyone's blog comments
 			//can be edited or deleted by the blogs author.  I notice the field logic is correct
@@ -708,13 +683,11 @@ export default Ext.define('NextThought.model.Base', {
 		return false;
 	},
 
-
-	isMine: function() {
+    isMine: function() {
 		return isMe(this.get('Creator'));
 	},
 
-
-	getFieldEditURL: function(editLink, field) {
+    getFieldEditURL: function(editLink, field) {
 		if (/.*\+\+fields\+\+.*/.test(editLink)) {
 			//edit link is already edit link for that field
 			return editLink;
@@ -726,8 +699,7 @@ export default Ext.define('NextThought.model.Base', {
 				editLink, f));
 	},
 
-
-	/**
+    /**
 	 * Save a specific field off this model, optionally set a value and save it if value is sent.
 	 *
 	 * @param {String} fieldName - name of the field that we want to save
@@ -801,8 +773,7 @@ export default Ext.define('NextThought.model.Base', {
 		Ext.Ajax.request(req);
 	},
 
-
-	/**
+    /**
 	 * Calls the href and fills in the values missing.
 	 */
 	resolve: function() {
@@ -835,8 +806,7 @@ export default Ext.define('NextThought.model.Base', {
 
 	},
 
-
-	//Only seems to be called from legacy classroom stuff
+    //Only seems to be called from legacy classroom stuff
 	getParent: function(callback, scope) {
 		var href = this.getLink('parent'), req;
 
@@ -867,8 +837,7 @@ export default Ext.define('NextThought.model.Base', {
 
 	},
 
-
-	equal: function(b) {
+    equal: function(b) {
 		var a = this,
 			r = true;
 
@@ -895,13 +864,11 @@ export default Ext.define('NextThought.model.Base', {
 		return r;
 	},
 
-
-	toJSON: function() {
+    toJSON: function() {
 		return this.asJSON();
 	},
 
-
-	asJSON: function() {
+    asJSON: function() {
 		var data = {},
 			me = this;
 
@@ -928,8 +895,7 @@ export default Ext.define('NextThought.model.Base', {
 		return data;
 	},
 
-
-	getRaw: function() {
+    getRaw: function() {
 		var data = {},
 			me = this;
 
@@ -956,43 +922,37 @@ export default Ext.define('NextThought.model.Base', {
 		return data;
 	},
 
-
-	getRelativeTimeString: function() {
+    getRelativeTimeString: function() {
 		return TimeUtils.timeDifference(Ext.Date.now(), this.get('CreatedTime'));
 	},
 
-	/**
+    /**
 	 * @private
 	 * property {Boolean} destroyDoesNotClearListeners
 	 */
 	destroyDoesNotClearListeners: false,
 
-
-	clearManagedListeners: function() {
+    clearManagedListeners: function() {
 		if (!this.destroyDoesNotClearListeners) {
 			this.callParent(arguments);
 		}
 	},
 
-
-	clearListeners: function() {
+    clearListeners: function() {
 		if (!this.destroyDoesNotClearListeners) {
 			this.callParent(arguments);
 		}
 	},
 
-
-	fieldEvent: function(name) {
+    fieldEvent: function(name) {
 		return name + '-changed';
 	},
 
-
-	notifyObserversOfFieldChange: function(f) {
+    notifyObserversOfFieldChange: function(f) {
 		this.fireEvent(this.fieldEvent(f), f, this.get(f));
 	},
 
-
-	//Fires an event signaling the given field has changed.
+    //Fires an event signaling the given field has changed.
 	//If there are dependent fields those events are also fired
 	//To signal dependent fields implement a function valuesAffectedByField
 	//that returns an array of dependent field names
@@ -1009,8 +969,7 @@ export default Ext.define('NextThought.model.Base', {
 		}
 	},
 
-
-	addObserverForField: function(observer, field, fn, scope, options) {
+    addObserverForField: function(observer, field, fn, scope, options) {
 		if (!observer) {
 			return null;
 		}
@@ -1018,16 +977,14 @@ export default Ext.define('NextThought.model.Base', {
 		return observer.mon(this, this.fieldEvent(field), fn, scope, options);
 	},
 
-
-	removeObserverForField: function(observer, field, fn, scope) {
+    removeObserverForField: function(observer, field, fn, scope) {
 		if (!observer) {
 			return;
 		}
 		observer.mun(this, this.fieldEvent(field), fn, scope);
 	},
 
-
-	afterEdit: function(fnames) {
+    afterEdit: function(fnames) {
 		var me = this, updatedValue;
 		//are we getting called by a child record (see converters/Items.js)
 		if (fnames instanceof Ext.data.Model) {
@@ -1050,8 +1007,7 @@ export default Ext.define('NextThought.model.Base', {
 		}
 	},
 
-
-	/**
+    /**
 	 *
 	 * JSG - Yanked from the Ext.data.Model#callStore() so we can patch it.
 	 *
@@ -1089,8 +1045,7 @@ export default Ext.define('NextThought.model.Base', {
 		}
 	},
 
-
-	//Methods for updating all copies of an object in memory when one changes,
+    //Methods for updating all copies of an object in memory when one changes,
 	//ideally we have one in memory object that is just referenced everywhere.
 	//We are a bit far away from that (mostly because of how we represent threads)
 	//so we brute force it by passing these calls
@@ -1155,26 +1110,22 @@ export default Ext.define('NextThought.model.Base', {
 		delete active[rec.getId()];
 	},
 
-
-	beginEdit: function() {
+    beginEdit: function() {
 		this.callParent(arguments);
 		this.maybeCallOnAllObjects('beginEdit', this, arguments);
 	},
 
-
-	endEdit: function() {
+    endEdit: function() {
 		this.callParent(arguments);
 		this.maybeCallOnAllObjects('endEdit', this, arguments);
 	},
 
-
-	cancelEdit: function() {
+    cancelEdit: function() {
 		this.callParent(arguments);
 		this.maybeCallOnAllObjects('cancelEdit', this, arguments);
 	},
 
-
-	set: function() {
+    set: function() {
 		this.callParent(arguments);
 		this.maybeCallOnAllObjects('set', this, arguments);
 	}

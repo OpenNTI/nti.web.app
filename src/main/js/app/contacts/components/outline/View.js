@@ -1,20 +1,20 @@
-export default Ext.define('NextThought.app.contacts.components.outline.View', {
-	extend: 'Ext.view.View',
-	alias: 'widget.contacts-outline',
+var Ext = require('extjs');
+var MixinsContactSearchMixin = require('../../../../mixins/ContactSearchMixin');
+var OutlineSearch = require('./Search');
+var ContactsActions = require('../../Actions');
 
-	ui: 'nav',
-	preserveScrollOnRefresh: true,
 
-	requires: [
-		'NextThought.app.contacts.components.outline.Search',
-		'NextThought.app.contacts.Actions'
-	],
+module.exports = exports = Ext.define('NextThought.app.contacts.components.outline.View', {
+    extend: 'Ext.view.View',
+    alias: 'widget.contacts-outline',
+    ui: 'nav',
+    preserveScrollOnRefresh: true,
 
-	mixins: {
+    mixins: {
 		contactSearching: 'NextThought.mixins.ContactSearchMixin'
 	},
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
 			'{outlineLabel}'
 		]},
@@ -40,25 +40,23 @@ export default Ext.define('NextThought.app.contacts.components.outline.View', {
 		]}}
 	]),
 
-	renderSelectors: {
+    renderSelectors: {
 		frameBodyEl: '.outline-list',
 		buttonsEl: '.buttons'
 	},
 
-
-	getTargetEl: function() {
+    getTargetEl: function() {
 		return this.frameBodyEl;
 	},
 
-
-	config: {
+    config: {
 		outlineLabel: '--'
 	},
 
+    overItemCls: 'over',
+    itemSelector: '.outline-row',
 
-	overItemCls: 'over',
-	itemSelector: '.outline-row',
-	tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
+    tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 
 		{
 			cls: 'outline-row {type}', 'data-qtip': '{displayName:htmlEncode}',
@@ -69,8 +67,7 @@ export default Ext.define('NextThought.app.contacts.components.outline.View', {
 
 	]}),
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 		this.addCls('nav-outline make-white scrollable');
 		if (this.subType === 'contact') {
@@ -80,8 +77,7 @@ export default Ext.define('NextThought.app.contacts.components.outline.View', {
 		this.ContactsActions = NextThought.app.contacts.Actions.create();
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		this.callParent();
 		var me = this, s = this.getSelectionModel();
 		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey, function() {
@@ -134,8 +130,7 @@ export default Ext.define('NextThought.app.contacts.components.outline.View', {
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.buttonsEl) {
@@ -143,16 +138,14 @@ export default Ext.define('NextThought.app.contacts.components.outline.View', {
 		}
 	},
 
-
-	onButtonsClicked: function(evt) {
+    onButtonsClicked: function(evt) {
 		var b = evt.getTarget('.contact-button');
 		if (b && !Ext.fly(b).hasCls('search')) {
 			this.ContactsActions.groupButtonClicked(b, this);
 		}
 	},
 
-
-	addMask: function() {
+    addMask: function() {
 		try {
 			var maskEl = this.el && this.el.down('.outline-list');
 			if (maskEl) {
@@ -163,8 +156,7 @@ export default Ext.define('NextThought.app.contacts.components.outline.View', {
 		}
 	},
 
-
-	removeMask: function() {
+    removeMask: function() {
 		var maskEl = this.el.down('.outline-list'),
 			mask = maskEl && maskEl.down('.x-mask'),
 			maskMsg = maskEl && maskEl.down('.x-mask-msg');
@@ -183,8 +175,7 @@ export default Ext.define('NextThought.app.contacts.components.outline.View', {
 		}
 	},
 
-
-	clear: function() {
+    clear: function() {
 		this.bindStore('ext-empty-store');
 	}
 });

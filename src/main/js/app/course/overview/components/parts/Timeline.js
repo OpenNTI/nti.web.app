@@ -1,14 +1,14 @@
-export default Ext.define('NextThought.app.course.overview.components.parts.Timeline', {
-	extend: 'NextThought.common.components.cards.Card',
-	alias: 'widget.course-overview-ntitimeline',
-
-	requires: [
-		'NextThought.model.Timeline',
-		'NextThought.app.windows.Actions'
-	],
+var Ext = require('extjs');
+var CardsCard = require('../../../../../common/components/cards/Card');
+var ModelTimeline = require('../../../../../model/Timeline');
+var WindowsActions = require('../../../../windows/Actions');
 
 
-	initComponent: function() {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Timeline', {
+    extend: 'NextThought.common.components.cards.Card',
+    alias: 'widget.course-overview-ntitimeline',
+
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var root = this.locationInfo && this.locationInfo.root,
@@ -34,14 +34,14 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Time
 		};
 	},
 
-	__getActiveBundle: function() {
+    __getActiveBundle: function() {
 		return this.course && this.course.getId();
 	},
 
-	//always open this up in app
+    //always open this up in app
 	shouldOpenInApp: function() { return true; },
 
-	onCardClicked: function() {
+    onCardClicked: function() {
 		var me = this,
 			model = NextThought.model.Timeline.fromOutlineNode(this.data);
 
@@ -50,7 +50,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Time
 		});
 	},
 
-	setProgress: function(progress) {
+    setProgress: function(progress) {
 		progress = progress || this.progress;
 
 		this.progress = progress;

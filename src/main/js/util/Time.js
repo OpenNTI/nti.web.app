@@ -1,5 +1,9 @@
+var Ext = require('extjs');
+var TimeUtils = require('./Time');
+
+
 /*globals Duration: false*/
-export default Ext.define('NextThought.util.Time', {
+module.exports = exports = Ext.define('NextThought.util.Time', {
 	singleton: true,
 
 	DIVISORS: {

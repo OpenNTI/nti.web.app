@@ -1,14 +1,14 @@
-export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
-	extend: 'Ext.Component',
-	alias: 'widget.coppa-birthday-form',
+var Ext = require('extjs');
+var Globals = require('../../../../util/Globals');
+var UpgradedMonthPicker = require('./MonthPicker');
 
-	requires: [
-		'NextThought.app.account.coppa.upgraded.MonthPicker'
-	],
 
-	cls: 'coppa-form',
+module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
+    extend: 'Ext.Component',
+    alias: 'widget.coppa-birthday-form',
+    cls: 'coppa-form',
 
-	renderTpl: Ext.DomHelper.markup([{
+    renderTpl: Ext.DomHelper.markup([{
 		cls: 'birthday-info', cn: [
 			{cls: 'legend', html: 'When is your birthday?'},
 			{cls: 'fields', cn: [
@@ -54,7 +54,7 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 		]}
 	]),
 
-	renderSelectors: {
+    renderSelectors: {
 		monthEl: '.month',
 		accountInfoEl: '.account-info',
 		continueEl: '.continue',
@@ -63,9 +63,7 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 		optionalEl: '.optionalContainer'
 	},
 
-
-
-	buildAffiliationBox: function() {
+    buildAffiliationBox: function() {
 
 		if (!Ext.getStore('schoolStore')) {
 			Ext.data.ArrayStore.create({
@@ -135,8 +133,7 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -163,8 +160,7 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 		this.validated = {};
 	},
 
-
-	getFormValues: function() {
+    getFormValues: function() {
 		var me = this, i, v,
 			canSave = true,
 			params = {}, msg;
@@ -187,8 +183,7 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 		return canSave ? params : null;
 	},
 
-
-	markInvalidated: function(param) {
+    markInvalidated: function(param) {
 		var el, e;
 		try {
 			el = this.el.down('.' + param.field);
@@ -204,7 +199,7 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 		}
 	},
 
-	markValidated: function(param) {
+    markValidated: function(param) {
 		var el, e;
 		try {
 			el = this.el.down('.' + param.field);
@@ -220,8 +215,7 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 		}
 	},
 
-
-	markFields: function() {
+    markFields: function() {
 		var key, schema = this.schema, me = this;
 		for (key in schema) {
 			if (schema.hasOwnProperty(key) && me.validated.hasOwnProperty(key) && key !== 'birthdate') {
@@ -230,8 +224,7 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 		}
 	},
 
-
-	save: function() {
+    save: function() {
 		function fail(res, req) {
 			var r = Ext.decode(res.responseText);
 			me.markFields();
@@ -281,7 +274,7 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 		Ext.Ajax.request(req);
 	},
 
-	openPolicy: function(e) {
+    openPolicy: function(e) {
 		e.stopEvent();
 
 		var w = Ext.widget('nti-window', {
@@ -311,15 +304,13 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 		w.show();
 	},
 
-
-	getRealName: function() {
+    getRealName: function() {
 		var f = this.el.down('[name=first]').getValue(),
 			l = this.el.down('[name=last]').getValue();
 		return f + ' ' + l;
 	},
 
-
-	submitBirthday: function() {
+    submitBirthday: function() {
 		var bd = this.getBirthdayValue();
 		if (Ext.isEmpty(bd)) { return;}
 
@@ -327,8 +318,7 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 
 	},
 
-
-	lockBirthday: function() {
+    lockBirthday: function() {
 		this.continueEl.update('Thanks!');
 		this.continueEl.addCls('submitted');
 
@@ -339,8 +329,7 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 		this.el.down('[name=year]').set({'disabled': 'disabled'});
 	},
 
-
-	getBirthdayValue: function() {
+    getBirthdayValue: function() {
 		function isValidBirthday() {
 			return (bd && !isNaN(bd.getTime()) && bd.getFullYear() === y && bd.getMonth() === m && bd.getDate() === d);
 		}
@@ -363,8 +352,7 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 		return null;
 	},
 
-
-	preflight: function(params, successCallBack, failCallBack) {
+    preflight: function(params, successCallBack, failCallBack) {
 		function fail() {
 			console.error('Preflight failed, ', arguments);
 			Ext.callback(failCallBack, me, arguments);
@@ -391,8 +379,7 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 		Ext.Ajax.request(req);
 	},
 
-
-	showSchemaFields: function(schema) {
+    showSchemaFields: function(schema) {
 		var i, me = this, t, shouldAskAccountInfo = false, win = this.up('window');
 		for (i in schema) {
 			if (schema.hasOwnProperty(i)) {
@@ -419,8 +406,7 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 		this.schema = schema;
 	},
 
-
-	getLink: function(link) {
+    getLink: function(link) {
 		var href = $AppConfig.userObject.get('href');
 
 		href = href.split('?')[0];
@@ -428,8 +414,7 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 		return (href + '/@@' + link);
 	},
 
-
-	showMonthPicker: function() {
+    showMonthPicker: function() {
 		if (this.monthEl.is('[disabled]')) { return; }
 		if (this.monthPickerView.isVisible()) {
 			this.monthPickerView.hide();
@@ -438,10 +423,8 @@ export default Ext.define('NextThought.app.account.coppa.upgraded.Confirm', {
 		this.monthPickerView.showBy(this.monthEl, 'tl-bl?', [0, 0]);
 	},
 
-
-	onSelectedItem: function(sel, record) {
+    onSelectedItem: function(sel, record) {
 		this.monthEl.update(record.get('name'));
 		this.monthEl.set({'data-value': record.get('id')});
 	}
-
 });

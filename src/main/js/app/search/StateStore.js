@@ -1,11 +1,13 @@
-export default Ext.define('NextThought.app.search.StateStore', {
-	extend: 'NextThought.common.StateStore',
+var Ext = require('extjs');
+var CommonStateStore = require('../../common/StateStore');
+var StoreHit = require('../../store/Hit');
 
-	requires: ['NextThought.store.Hit'],
 
-	HIT_MAP: {},
+module.exports = exports = Ext.define('NextThought.app.search.StateStore', {
+    extend: 'NextThought.common.StateStore',
+    HIT_MAP: {},
 
-	setSearchContext: function(val, silent, bundle, page) {
+    setSearchContext: function(val, silent, bundle, page) {
 		this.BUNDLE = bundle;
 		this.PAGE = page;
 		this.TERM = val;
@@ -15,36 +17,30 @@ export default Ext.define('NextThought.app.search.StateStore', {
 		}
 	},
 
-
-	getTerm: function() {
+    getTerm: function() {
 		return this.TERM;
 	},
 
-
-	getBundleLocation: function() {
+    getBundleLocation: function() {
 		return this.BUNDLE;
 	},
 
-
-	getPageLocation: function() {
+    getPageLocation: function() {
 		return this.PAGE;
 	},
 
-
-	setHitForContainer: function(containerId, hit, frag) {
+    setHitForContainer: function(containerId, hit, frag) {
 		this.HIT_MAP[containerId] = {
 			hit: hit,
 			fragment: frag
 		};
 	},
 
-
-	getHitForContainer: function(containerId) {
+    getHitForContainer: function(containerId) {
 		return this.HIT_MAP[containerId];
 	},
 
-
-	clearHitForContainer: function(containerId) {
+    clearHitForContainer: function(containerId) {
 		delete this.HIT_MAP[containerId];
 	}
 });

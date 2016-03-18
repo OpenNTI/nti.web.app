@@ -1,4 +1,9 @@
-export default Ext.define('NextThought.app.store.Collection', {
+var Ext = require('extjs');
+var AnnotationUtils = require('../../util/Annotations');
+var ComponentsCollection = require('../../common/components/Collection');
+
+
+module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 	extend: 'NextThought.common.components.Collection',
 	alias: 'widget.purchasable-collection',
 

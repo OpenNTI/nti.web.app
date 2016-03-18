@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.courseware.CourseInstanceEnrollment', {
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+
+
+module.exports = exports = Ext.define('NextThought.model.courseware.CourseInstanceEnrollment', {
 	extend: 'NextThought.model.Base',
 
 	idProperty: 'href',

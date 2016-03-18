@@ -1,18 +1,17 @@
+var Ext = require('extjs');
+var AssignmentsListItem = require('./ListItem');
+
+
 /*globals getFormattedString:false*/
-export default Ext.define('NextThought.app.course.assessment.components.student.assignments.List', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-assessment-assignment-list',
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.assignments.List', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.course-assessment-assignment-list',
+    ui: 'course-assessment',
+    cls: 'assignment-list',
+    layout: 'none',
+    itemType: 'course-assessment-assignment-list-item',
 
-	ui: 'course-assessment',
-	cls: 'assignment-list',
-
-	requires: ['NextThought.app.course.assessment.components.student.assignments.ListItem'],
-
-	layout: 'none',
-
-	itemType: 'course-assessment-assignment-list-item',
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.addItems(this.store);
@@ -20,9 +19,8 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 			this.store.on('refresh', 'onRefresh', this);
 		}
 	},
-	
-	
-	addItems: function(store){
+
+    addItems: function(store){
 		var items = this.store ? this.store.getRange() : [],
 			itemType = this.itemType,
 			navigateToItem = this.navigateToItem,
@@ -41,13 +39,11 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		}));	
 	},
 
-
-	getItemsContainer: function() {
+    getItemsContainer: function() {
 		return this;
 	},
 
-	
-	onRefresh: function(store){
+    onRefresh: function(store){
 		var container = this.getItemsContainer();
 		if (container) {
 			container.removeAll(true);

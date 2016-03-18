@@ -1,14 +1,14 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ParentSelection', {
-	extend: 'NextThought.app.course.overview.components.editing.parentselection.Index',
-	alias: 'widget.overview-editing-overviewgroup-parentselection',
+var Ext = require('extjs');
+var ParentselectionIndex = require('../../parentselection/Index');
+var OverviewgroupInlineEditor = require('./InlineEditor');
 
-	requires: [
-		'NextThought.app.course.overview.components.editing.content.overviewgroup.InlineEditor'
-	],
 
-	label: 'Lesson:',
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ParentSelection', {
+    extend: 'NextThought.app.course.overview.components.editing.parentselection.Index',
+    alias: 'widget.overview-editing-overviewgroup-parentselection',
+    label: 'Lesson:',
 
-	parseItemData: function(item) {
+    parseItemData: function(item) {
 		return {
 			cls: 'lesson-overview-item',
 			ntiid: item.getId(),

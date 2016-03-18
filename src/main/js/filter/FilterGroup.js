@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.filter.FilterGroup', {
+var Ext = require('extjs');
+var FilterFilter = require('./Filter');
+
+
+module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
 	alternateClassName: 'NextThought.FilterGroup',
 	extend: 'NextThought.filter.Filter',
 

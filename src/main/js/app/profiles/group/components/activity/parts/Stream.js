@@ -1,10 +1,13 @@
-export default Ext.define('NextThought.app.profiles.group.components.activity.parts.Stream', {
-	extend: 'NextThought.app.profiles.user.components.activity.parts.Stream',
-	alias: 'widget.profile-group-activity-stream',
+var Ext = require('extjs');
+var PartsStream = require('../../../../user/components/activity/parts/Stream');
+var EventsCreated = require('./events/Created');
 
-	requires: ['NextThought.app.profiles.group.components.activity.parts.events.Created'],
 
-	userChanged: function(user) {
+module.exports = exports = Ext.define('NextThought.app.profiles.group.components.activity.parts.Stream', {
+    extend: 'NextThought.app.profiles.user.components.activity.parts.Stream',
+    alias: 'widget.profile-group-activity-stream',
+
+    userChanged: function(user) {
 		var created;
 
 		this.user = user;
@@ -16,11 +19,11 @@ export default Ext.define('NextThought.app.profiles.group.components.activity.pa
 		}
 	},
 
-	initialWidgetConfig: function() {
+    initialWidgetConfig: function() {
 	   return { xtype: 'created-event', entity: this.user };
 	},
 
-	hasInitialWidget: function() {
+    hasInitialWidget: function() {
 	   return !!this.down('created-event');
 	}
 });

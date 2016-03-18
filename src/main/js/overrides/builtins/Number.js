@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.overrides.builtins.Number', {});
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.overrides.builtins.Number', {});
 
 (function() {
 	Ext.applyIf(Number.prototype, {

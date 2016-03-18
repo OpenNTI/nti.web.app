@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.chat.components.gutter.Tab', {
+var Ext = require('extjs');
+var User = require('../../../../model/User');
+
+
+module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Tab', {
 	extend: 'Ext.Component',
 
 	cls: 'chat-notifications-icon',

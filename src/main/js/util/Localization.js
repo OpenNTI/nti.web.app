@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.util.Localization', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.util.Localization', {
 	singleton: true,
 
 	formatRe: /\{([^\{]+)\}/g,

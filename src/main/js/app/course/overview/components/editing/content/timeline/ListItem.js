@@ -1,20 +1,20 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.timeline.ListItem', {
-	extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
-	alias: 'widget.overview-editing-timeline-listitem',
+var Ext = require('extjs');
+var ContentListItem = require('../ListItem');
+var PartsTimeline = require('../../../parts/Timeline');
+var ModelTimeline = require('../../../../../../../model/Timeline');
 
-	statics: {
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.ListItem', {
+    extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
+    alias: 'widget.overview-editing-timeline-listitem',
+
+    statics: {
 		getSupported: function() {
 			return NextThought.model.Timeline.mimeType;
 		}
 	},
 
-	requires: [
-		'NextThought.app.course.overview.components.parts.Timeline',
-		'NextThought.model.Timeline'
-	],
-
-
-	getPreviewType: function() {
+    getPreviewType: function() {
 		return 'course-overview-ntitimeline';
 	}
 });

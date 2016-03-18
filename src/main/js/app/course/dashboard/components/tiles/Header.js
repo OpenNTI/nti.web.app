@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.dashboard.components.tiles.Header', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Header', {
 	extend: 'Ext.Component',
 	alias: 'widget.dashboard-header',
 

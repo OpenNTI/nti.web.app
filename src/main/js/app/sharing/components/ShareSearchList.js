@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.sharing.components.ShareSearchList', {
+var Ext = require('extjs');
+var NTIFormat = require('../../../util/Format');
+
+
+module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareSearchList', {
 	extend: 'Ext.view.View',
 	alias: ['widget.share-search'],
 	cls: 'share-search',

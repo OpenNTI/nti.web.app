@@ -1,8 +1,11 @@
-export default Ext.define('NextThought.model.converters.Items', {
-	override: 'Ext.data.Types',
-	requires: ['Ext.data.SortTypes'],
+var Ext = require('extjs');
+var ParseUtils = require('../../util/Parsing');
 
-	/* converters for models which reference other models*/
+
+module.exports = exports = Ext.define('NextThought.model.converters.Items', {
+    override: 'Ext.data.Types',
+
+    /* converters for models which reference other models*/
 	SINGLEITEM: {
 		type: 'singleItem',
 		convert: function(v, r) {
@@ -20,8 +23,7 @@ export default Ext.define('NextThought.model.converters.Items', {
 		sortType: 'none'
 	},
 
-
-	ARRAYITEM: {
+    ARRAYITEM: {
 		type: 'arrayItem',
 		convert: function(v, r) {
 			var result = null;
@@ -41,8 +43,7 @@ export default Ext.define('NextThought.model.converters.Items', {
 		sortType: 'none'
 	},
 
-
-	COLLECTIONITEM: {
+    COLLECTIONITEM: {
 		type: 'collectionItem',
 		convert: function(v, r) {
 			var values = [], keys = {}, key, result;
@@ -71,7 +72,6 @@ export default Ext.define('NextThought.model.converters.Items', {
 		},
 		sortType: 'none'
 	}
-
 }, function() {
 	function set(o) { o.sortType = Ext.data.SortTypes[o.sortType]; }
 

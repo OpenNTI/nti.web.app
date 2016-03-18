@@ -1,28 +1,23 @@
-export default Ext.define('NextThought.app.forums.components.forum.Index', {
-	extend: 'NextThought.common.components.NavPanel',
-	alias: 'widget.forum-view',
-
-	cls: 'topic-list-view',
-
-	requires: [
-		'NextThought.app.forums.components.forum.Navigation',
-		'NextThought.app.forums.components.forum.Forum'
-	],
-
-	navigation: {xtype: 'forums-forum-nav', margin: 0, override: true},
-	body: {xtype: 'forums-forum-body'},
-
-	storeCfg: {},
-
-	model: 'NextThought.model.forums.CommunityForum',
+var Ext = require('extjs');
+var ComponentsNavPanel = require('../../../../common/components/NavPanel');
+var ForumNavigation = require('./Navigation');
+var ForumForum = require('./Forum');
 
 
-	initComponent: function() {
+module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Index', {
+    extend: 'NextThought.common.components.NavPanel',
+    alias: 'widget.forum-view',
+    cls: 'topic-list-view',
+    navigation: {xtype: 'forums-forum-nav', margin: 0, override: true},
+    body: {xtype: 'forums-forum-body'},
+    storeCfg: {},
+    model: 'NextThought.model.forums.CommunityForum',
+
+    initComponent: function() {
 		this.callParent(arguments);
 	},
 
-
-	onAddedToParentRouter: function() {
+    onAddedToParentRouter: function() {
 		this.navigation.pushRoute = this.pushForum.bind(this);
 		this.body.pushRouteState = this.pushRouteState.bind(this);
 		this.body.replaceRouteState = this.replaceRouteState.bind(this);
@@ -30,15 +25,13 @@ export default Ext.define('NextThought.app.forums.components.forum.Index', {
 		this.body.alignNavigation = this.alignNavigation.bind(this);
 	},
 
-
-	clearForum: function() {
+    clearForum: function() {
 		this.forumList = null;
 		this.navigation.setForumList(null);
 		this.body.clearForum();
 	},
 
-
-	pushForum: function(title, route, precache) {
+    pushForum: function(title, route, precache) {
 		var state = this.getRouteState();
 
 		delete state.currentPage;
@@ -47,14 +40,12 @@ export default Ext.define('NextThought.app.forums.components.forum.Index', {
 		this.pushRouteState(state, title, route, precache);
 	},
 
-
-	setForumList: function(forumList) {
+    setForumList: function(forumList) {
 		this.forumList = forumList;
 		this.navigation.setForumList(forumList);
 	},
 
-
-	setForum: function(id) {
+    setForum: function(id) {
 		var record = this.navigation.selectRecord(id),
 			title = record && record.get('title');
 

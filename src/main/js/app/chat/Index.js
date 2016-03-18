@@ -1,48 +1,43 @@
-export default Ext.define('NextThought.app.chat.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.chats-view',
+var Ext = require('extjs');
+var User = require('../../model/User');
+var ChatStateStore = require('./StateStore');
+var ChatActions = require('./Actions');
+var ChatGutter = require('./Gutter');
+var TranscriptWindow = require('./transcript/Window');
+var ComponentsWindow = require('./components/Window');
+var GutterList = require('./components/gutter/List');
+var NavigationStateStore = require('../navigation/StateStore');
 
-	layout: 'none',
 
-	cls: 'chat-container',
+module.exports = exports = Ext.define('NextThought.app.chat.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.chats-view',
+    layout: 'none',
+    cls: 'chat-container',
+    items: [],
 
-	requires: [
-		'NextThought.app.chat.StateStore',
-		'NextThought.app.chat.Actions',
-		'NextThought.app.chat.Gutter',
-		'NextThought.app.chat.transcript.Window',
-		'NextThought.app.chat.components.Window',
-		'NextThought.app.chat.components.gutter.List',
-		'NextThought.app.navigation.StateStore'
-	],
-
-	items: [],
-
-	statics: {
+    statics: {
 		// show the notification tab if the vp is less than this threshold.
 		MIN_VIEWPORT_WIDTH: 1180
 	},
 
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'gutter'},
 		{cls: 'gutter-list'},
 		{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']}
 	]),
 
+    getTargetEl: function() { return this.body; },
+    childEls: ['body'],
 
-	getTargetEl: function() { return this.body; },
-	childEls: ['body'],
-
-	renderSelectors: {
+    renderSelectors: {
 		gutter: '.gutter',
 		listEl: '.gutter-list'
 	},
 
-	CHAT_WIN_MAP: {},
+    CHAT_WIN_MAP: {},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
@@ -60,14 +55,12 @@ export default Ext.define('NextThought.app.chat.Index', {
 		});
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 		this.gutterWin = Ext.widget('chat-gutter-window', {renderTo: this.gutter, autoShow: true});
 	},
 
-
-	showAllOnlineContacts: function(gutter) {
+    showAllOnlineContacts: function(gutter) {
 		var me = this;
 		if (!this.listWin) {
 			this.listWin = Ext.widget('chat-gutter-list-view', {
@@ -84,8 +77,7 @@ export default Ext.define('NextThought.app.chat.Index', {
 		this.addCls('show-all');
 	},
 
-
-	hideAllOnlineContacts: function() {
+    hideAllOnlineContacts: function() {
 		var me = this;
 
 		this.removeCls('show-all');
@@ -96,8 +88,7 @@ export default Ext.define('NextThought.app.chat.Index', {
 		});
 	},
 
-
-	showChatWindow: function(roomInfo) {
+    showChatWindow: function(roomInfo) {
 		var w;
 
 		this.ChatActions.onEnteredRoom(roomInfo);
@@ -108,7 +99,7 @@ export default Ext.define('NextThought.app.chat.Index', {
 		}
 	},
 
-	toggleGutter: function() {
+    toggleGutter: function() {
 		var active = this.hasCls('show-gutter');
 
 		if (active) {
@@ -120,15 +111,13 @@ export default Ext.define('NextThought.app.chat.Index', {
 		}
 	},
 
-
-	shouldHaveChatTab: function() {
+    shouldHaveChatTab: function() {
 		var viewportWidth = Ext.Element.getViewportWidth();
 		// We would like to hide the gutter if the window is too small.
 		return viewportWidth <= NextThought.app.chat.Index.MIN_VIEWPORT_WIDTH;
 	},
 
-
-	handleTabNotifications: function(win, msg) {
+    handleTabNotifications: function(win, msg) {
 		if (win && win.isVisible() ||
 			this.gutterWin && this.gutterWin.el && this.gutterWin.el.isVisible() ||
 			this.listWin && this.listWin.el && this.listWin.el.isVisible()) {
@@ -141,8 +130,7 @@ export default Ext.define('NextThought.app.chat.Index', {
 		}
 	},
 
-
-	createWhiteBoard: function(data, ownerCmp, chatStatusEvent) {
+    createWhiteBoard: function(data, ownerCmp, chatStatusEvent) {
 		var win = Ext.widget('wb-window', {
 			width: 802,
 			value: data,
@@ -153,8 +141,7 @@ export default Ext.define('NextThought.app.chat.Index', {
 		return win;
 	},
 
-
-	showWhiteboard: function(data, cmp, mid, channel, recipients) {
+    showWhiteboard: function(data, cmp, mid, channel, recipients) {
 		var me = this,
 			room = this.ChatActions.getRoomInfoFromComponent(cmp),
 			wbWin = this.createWhiteBoard(data, cmp, 'status-change'),

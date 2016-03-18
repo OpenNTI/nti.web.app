@@ -1,21 +1,16 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCreation', {
-	extend: 'Ext.container.Container',
-	//this shouldn't be instantiated, only extended
-
-	requires: [
-		'NextThought.app.course.overview.components.editing.creation.TypeList'
-	],
-
-	title: 'Create New Item',
-	saveText: 'Save',
-
-	cls: 'overview-editing child-creation',
-
-	layout: 'none',
-	items: [],
+var Ext = require('extjs');
+var CreationTypeList = require('./TypeList');
 
 
-	inheritableStatics: {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.creation.ChildCreation', {
+    extend: 'Ext.container.Container',
+    title: 'Create New Item',
+    saveText: 'Save',
+    cls: 'overview-editing child-creation',
+    layout: 'none',
+    items: [],
+
+    inheritableStatics: {
 		getHandledMimeTypes: function() {},
 
 		getEditors: function() {},
@@ -44,8 +39,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.cr
 		}
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		var types = this.self.getTypes();
@@ -63,8 +57,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.cr
 		}
 	},
 
-
-	setUpTypeList: function() {
+    setUpTypeList: function() {
 		if (this.disableBack) {
 			this.disableBack();
 		}
@@ -78,8 +71,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.cr
 		}
 	},
 
-
-	setUpTypeEditor: function(type) {
+    setUpTypeEditor: function(type) {
 		if (!this.hasSingleType && this.enableBack) {
 			this.enableBack(this.backText || this.title);
 		}
@@ -93,8 +85,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.cr
 		}
 	},
 
-
-	switchToTypeList: function() {
+    switchToTypeList: function() {
 		if (this.activeEditor) {
 			this.activeEditor.destroy();
 			delete this.activeEditor;
@@ -107,8 +98,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.cr
 		this.setUpTypeList();
 	},
 
-
-	showTypeList: function(types) {
+    showTypeList: function(types) {
 		types = types || this.types;
 
 		this.activeTypeList = this.add({
@@ -122,8 +112,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.cr
 		this.setUpTypeList();
 	},
 
-
-	showEditorForType: function(type) {
+    showEditorForType: function(type) {
 		if (this.activeEditor) {
 			//TODO: if we have an existing editor, do we want to prefill
 			//the values that where there?
@@ -157,8 +146,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.cr
 
 	},
 
-
-	onBack: function() {
+    onBack: function() {
 		if (this.activeEditor && this.activeEditor.onBack) {
 			this.activeEditor.onBack();
 		} else {
@@ -166,8 +154,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.cr
 		}
 	},
 
-
-	doValidation: function() {
+    doValidation: function() {
 		if (this.activeEditor && this.activeEditor.doValidation) {
 			return this.activeEditor.doValidation();
 		}
@@ -175,8 +162,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.cr
 		return Promise.resolve();
 	},
 
-
-	onSaveFailure: function(reason) {
+    onSaveFailure: function(reason) {
 		if (this.activeEditor && this.activeEditor.onSaveFailure) {
 			return this.activeEditor.onSaveFailure(reason);
 		}
@@ -184,9 +170,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.cr
 		return Promise.reject();
 	},
 
-
-
-	onSave: function() {
+    onSave: function() {
 		if (this.activeEditor && this.activeEditor.onSave) {
 			return this.activeEditor.onSave();
 		}
@@ -194,8 +178,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.cr
 		return Promise.reject();
 	},
 
-
-	allowCancel: function() {
+    allowCancel: function() {
 		if (this.activeEditor && this.activeEditor.isVisible() && this.activeEditor.allowCancel()) {
 			return this.activeEditor.allowCancel();
 		}

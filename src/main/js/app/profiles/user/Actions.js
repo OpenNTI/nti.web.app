@@ -1,15 +1,15 @@
-export default Ext.define('NextThought.app.profiles.user.Actions', {
-	extend: 'NextThought.common.Actions',
-
-	requires: [
-		'NextThought.app.navigation.Actions',
-		'NextThought.login.StateStore',
-		'NextThought.app.profiles.user.components.emailverify.Window',
-		'NextThought.app.profiles.user.components.emailverify.info.Window'
-	],
+var Ext = require('extjs');
+var CommonActions = require('../../../common/Actions');
+var NavigationActions = require('../../navigation/Actions');
+var LoginStateStore = require('../../../login/StateStore');
+var EmailverifyWindow = require('./components/emailverify/Window');
+var InfoWindow = require('./components/emailverify/info/Window');
 
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.app.profiles.user.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    constructor: function() {
 		this.callParent(arguments);
 		this.LoginStore = NextThought.login.StateStore.getInstance();
 		this.NavActions = NextThought.app.navigation.Actions.create();
@@ -19,8 +19,7 @@ export default Ext.define('NextThought.app.profiles.user.Actions', {
 		}
 	},
 
-
-	maybeAskForEmailVerification: function() {
+    maybeAskForEmailVerification: function() {
 		var user = $AppConfig.userObject;
 
 		if (user && user.get('email') && !user.isEmailVerified()) {
@@ -29,8 +28,7 @@ export default Ext.define('NextThought.app.profiles.user.Actions', {
 		}
 	},
 
-
-	askForEmailVerfication: function() {
+    askForEmailVerfication: function() {
 		var cfg = {
 				iconCls: 'warning',
 				message: 'Please take a moment to verify your email address.',
@@ -54,8 +52,7 @@ export default Ext.define('NextThought.app.profiles.user.Actions', {
 		this.NavActions.presentMessageBar(cfg);
 	},
 
-
-	sendEmailVerification: function() {
+    sendEmailVerification: function() {
 		var me = this,
 			user = $AppConfig.userObject;
 			
@@ -83,15 +80,13 @@ export default Ext.define('NextThought.app.profiles.user.Actions', {
 			});
 	},
 
-
-	showMoreInfo: function() {
+    showMoreInfo: function() {
 		this.moreInfo = Ext.widget('email-verify-info-window');
 		this.moreInfo.show();
 		this.moreInfo.center();
 	},
 
-
-	createEmailVerifyWindow: function() {
+    createEmailVerifyWindow: function() {
 		var me = this;
 
 		this.emailVerifyWin = Ext.widget('email-token-window', {

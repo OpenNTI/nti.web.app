@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.info.components.OpenCourseInfo', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.info.components.OpenCourseInfo', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info-outline-open-course',
 

@@ -1,3 +1,6 @@
+var Ext = require('extjs');
+
+
 loadExternalLibraries([
 	{'Clamp': 'resources/lib/clamp.min.js'},
 	{'Formatter': 'resources/lib/formatter.min.js'},//http://firstopinion.github.io/formatter.js/

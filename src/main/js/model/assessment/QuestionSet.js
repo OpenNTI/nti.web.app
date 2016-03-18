@@ -1,35 +1,33 @@
-export default Ext.define('NextThought.model.assessment.QuestionSet', {
-	extend: 'NextThought.model.Base',
+var Ext = require('extjs');
+var ModelBase = require('../Base');
+var ConvertersItems = require('../converters/Items');
+var UtilParsing = require('../../util/Parsing');
 
-	statics: {
+
+module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet', {
+    extend: 'NextThought.model.Base',
+
+    statics: {
 		mimeType: 'application/vnd.nextthought.naquestionset'
 	},
 
-	mimeType: 'application/vnd.nextthought.naquestionset',
+    mimeType: 'application/vnd.nextthought.naquestionset',
+    progress: {},
+    isSet: true,
 
-	requires: [
-		'NextThought.model.converters.Items',
-		'NextThought.util.Parsing'
-	],
-
-	progress: {},
-
-	isSet: true,
-	fields: [
+    fields: [
 		{ name: 'questions', type: 'arrayItem' },
 		{name: 'title', type: 'String'}
 	],
 
-
-	tallyParts: function() {
+    tallyParts: function() {
 		function sum(agg, r) {
 			return agg + (r.tallyParts ? r.tallyParts() : 1);
 		}
 		return (this.get('questions') || []).reduce(sum, 0);
 	},
 
-
-	containsId: function(id) {
+    containsId: function(id) {
 		var items = this.get('questions').filter(function(p) {
 			return p && p.getId() === id;
 		});
@@ -37,21 +35,19 @@ export default Ext.define('NextThought.model.assessment.QuestionSet', {
 		return items.length > 0 || this.getId() === id;
 	},
 
-	getStartTime: function() {
+    getStartTime: function() {
 		return this.startTime || 0;
 	},
 
-	setStartTime: function(time) {
+    setStartTime: function(time) {
 		this.startTime = time;
 	},
 
-
-	getPreviousEffortDuration: function() {
+    getPreviousEffortDuration: function() {
 		return this.previousEffortDuration || 0;
 	},
 
-
-	clearProgress: function(save) {
+    clearProgress: function(save) {
 		this.progress = {};
 
 		if (save) {
@@ -59,13 +55,11 @@ export default Ext.define('NextThought.model.assessment.QuestionSet', {
 		}
 	},
 
-
-	setPreviousEffortDuration: function(duration) {
+    setPreviousEffortDuration: function(duration) {
 		this.previousEffortDuration = duration;
 	},
 
-
-	setProgress: function(question, input) {
+    setProgress: function(question, input) {
 		if (input.isDestroyed) {
 			return;
 		}
@@ -82,8 +76,7 @@ export default Ext.define('NextThought.model.assessment.QuestionSet', {
 		this.progress[id] = values;
 	},
 
-
-	saveProgress: function(question, input) {
+    saveProgress: function(question, input) {
 		if (question && input) {
 			this.setProgress(question, input);
 		}
@@ -103,8 +96,7 @@ export default Ext.define('NextThought.model.assessment.QuestionSet', {
 		}
 	},
 
-
-	onSaveProgress: function(question, input, result) {
+    onSaveProgress: function(question, input, result) {
 		if (!result) {
 			this.afterSaveProgress.call(null, false);
 			return;
@@ -132,7 +124,7 @@ export default Ext.define('NextThought.model.assessment.QuestionSet', {
 		}
 	},
 
-	/**
+    /**
 	 * Add handlers for saving progress
 	 * @param {Function} save   saves the progress and returns a promise
 	 * @param {Function} before called before progress is saved

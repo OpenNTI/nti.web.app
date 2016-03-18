@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.dashboard.components.tiles.Lesson', {
+var Ext = require('extjs');
+var TilesItem = require('./Item');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Lesson', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.Item',
 	alias: 'widget.dashboard-lesson',
 

@@ -1,29 +1,31 @@
-export default Ext.define('NextThought.app.course.overview.components.View', {
-	extend: 'NextThought.common.components.NavPanel',
-	alias: 'widget.course-overview-view',
+var Ext = require('extjs');
+var Globals = require('../../../../util/Globals');
+var ParseUtils = require('../../../../util/Parsing');
+var ComponentsNavPanel = require('../../../../common/components/NavPanel');
+var MixinsRouter = require('../../../../mixins/Router');
+var MixinsAuditLog = require('../../../../mixins/AuditLog');
+var ComponentsOutline = require('./Outline');
+var ComponentsBody = require('./Body');
+var AuditlogPrompt = require('./editing/auditlog/Prompt');
+var WindowsActions = require('../../../windows/Actions');
+var PromptActions = require('../../../prompt/Actions');
+var MixinsAuditLog = require('../../../../mixins/AuditLog');
 
 
-	requires: [
-		'NextThought.app.course.overview.components.Outline',
-		'NextThought.app.course.overview.components.Body',
-		'NextThought.app.course.overview.components.editing.auditlog.Prompt',
-		'NextThought.app.windows.Actions',
-		'NextThought.app.prompt.Actions',
-		'NextThought.mixins.AuditLog'
-	],
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.View', {
+    extend: 'NextThought.common.components.NavPanel',
+    alias: 'widget.course-overview-view',
+    cls: 'course-overview',
 
-	cls: 'course-overview',
-
-	mixins: {
+    mixins: {
 		Router: 'NextThought.mixins.Router',
 		auditLog: 'NextThought.mixins.AuditLog'
 	},
 
-	navigation: {xtype: 'course-outline'},
-	body: {xtype: 'course-overview-body'},
+    navigation: {xtype: 'course-outline'},
+    body: {xtype: 'course-overview-body'},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -49,8 +51,7 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 		this.onScroll = this.onScroll.bind(this);
 	},
 
-
-	onRouteActivate: function() {
+    onRouteActivate: function() {
 		this.updateOutline(this.isEditing);
 
 		this.alignNavigation();
@@ -61,41 +62,35 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 		}
 	},
 
-
-	onRouteDeactivate: function() {
+    onRouteDeactivate: function() {
 		delete this.isActive;
 		this.removeScrollListener();
 	},
 
-	alignNavigation: function() {
+    alignNavigation: function() {
 		this.callParent(arguments);
 
 		this.onScroll();
 	},
 
-
-	addScrollListener: function() {
+    addScrollListener: function() {
 		this.removeScrollListener();
 		window.addEventListener('scroll', this.onScroll);
 	},
 
-
-	removeScrollListener: function() {
+    removeScrollListener: function() {
 		window.removeEventListener('scroll', this.onScroll);
 	},
 
-
-	onScroll: function() {
+    onScroll: function() {
 		this.navigation.syncTop(this.body.getLessonTop());
 	},
 
-
-	getActiveLesson: function() {
+    getActiveLesson: function() {
 		return this.activeLesson;
 	},
 
-
-	openEditing: function() {
+    openEditing: function() {
 		var me = this,
 			node = me.activeNode,
 			outline = me.activeOutline,
@@ -133,8 +128,7 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 		});
 	},
 
-
-	closeEditing: function() {
+    closeEditing: function() {
 		var me = this,
 			bundle = me.currentBundle,
 			outlineInterface = bundle && bundle.getOutlineInterface(true);
@@ -191,15 +185,13 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 			});
 	},
 
-
-	openAuditLog: function() {
+    openAuditLog: function() {
 		if(this.currentBundle && this.currentBundle.getLink('recursive_audit_log')) {
 			this.PromptActions.prompt('audit-log', {parent: this, record: this.currentBundle});
 		}
 	},
 
-
-	selectOutlineNode: function(record) {
+    selectOutlineNode: function(record) {
 		var id = ParseUtils.encodeForURI(record.getId()),
 			route = id;
 
@@ -210,8 +202,7 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 		this.pushRoute(record.get('label'), route, {outlineNode: record});
 	},
 
-
-	showEditControls: function() {
+    showEditControls: function() {
 		this.hasEditControls = true;
 
 		if (this.isActive) {
@@ -222,16 +213,14 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 		this.body.showEditControls();
 	},
 
-
-	hideEditControls: function() {
+    hideEditControls: function() {
 		delete this.hasEditControls;
 		this.removeScrollListener();
 		this.removeCls('has-editing-controls');
 		this.body.hideEditControls();
 	},
 
-
-	updateOutline: function(editing, doNotCache) {
+    updateOutline: function(editing, doNotCache) {
 		var me = this,
 			bundle = me.currentBundle,
 			outlineInterface = editing ? bundle.getAdminOutlineInterface(doNotCache) : bundle.getOutlineInterface(doNotCache);
@@ -256,8 +245,7 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 		return outlineInterface;
 	},
 
-
-	bundleChanged: function(bundle) {
+    bundleChanged: function(bundle) {
 		if (this.currentBundle === bundle) { return; }
 
 		var me = this;
@@ -273,8 +261,7 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 		me.body.setActiveBundle(bundle);
 	},
 
-
-	clear: function() {
+    clear: function() {
 		var me = this;
 
 		me.mon(me.body, {
@@ -294,20 +281,17 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 		me.body.clear();
 	},
 
-
-	unmask: function() {
+    unmask: function() {
 		if (this.el) {
 			this.el.unmask();
 		}
 	},
 
-
-	getActiveItem: function() {
+    getActiveItem: function() {
 		return this.navigation.getActiveItem();
 	},
 
-
-	__getRecord: function(id, record, editing, doNotCache) {
+    __getRecord: function(id, record, editing, doNotCache) {
 		var me = this, rIndex,
 			outline = this.updateOutline(editing, doNotCache);
 
@@ -337,8 +321,7 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 			});
 	},
 
-
-	showOutlineNode: function(route, subRoute) {
+    showOutlineNode: function(route, subRoute) {
 		var me = this,
 			id = route.params && route.params.node && ParseUtils.decodeFromURI(route.params.node),
 			changedEditing = me.isEditing,
@@ -373,8 +356,7 @@ export default Ext.define('NextThought.app.course.overview.components.View', {
 			});
 	},
 
-
-	showEditOutlineNode: function(route, subRoute) {
+    showEditOutlineNode: function(route, subRoute) {
 		var me = this,
 			id = route.params && route.params.node && ParseUtils.decodeFromURI(route.params.node),
 			changedEditing = !me.isEditing,

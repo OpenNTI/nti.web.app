@@ -1,27 +1,29 @@
-export default Ext.define('NextThought.app.annotations.note.Viewer', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.note-window',
+var Ext = require('extjs');
+var MixinsInstanceTracking = require('../../../mixins/InstanceTracking');
+var NoteMain = require('./Main');
 
-	requires: [
-		'Ext.util.KeyMap',
-		'NextThought.app.annotations.note.Main'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.annotations.note.Viewer', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.note-window',
+
+    mixins: {
 		instanceTracking: 'NextThought.mixins.InstanceTracking'
 	},
 
-	cls: 'note-window',
-	ui: 'note-window',
-	width: 780,
-	floating: true,
-	shadow: false,
-	//preventBringToFront:true,
+    cls: 'note-window',
+    ui: 'note-window',
+    width: 780,
+    floating: true,
+    shadow: false,
+
+    //preventBringToFront:true,
 	layout: {
 		type: 'vbox',
 		align: 'stretch'
 	},
-	items: [
+
+    items: [
 		{
 			xtype: 'box',
 			autoEl: {
@@ -59,15 +61,14 @@ export default Ext.define('NextThought.app.annotations.note.Viewer', {
 		}
 	],
 
-	constructor: function(config) {
+    constructor: function(config) {
 		this.fireEvent('before-new-note-viewer', this, config && (config.reader || config.ownerCmp || config.floatParent));
 		Ext.each(this.getInstances(), function(w) { w.closeOrDie(); });
 		this.callParent(arguments);
 		this.trackThis();
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		var m, annotationView = this.up && this.up('annotation-view');
 		this.callParent(arguments);
 
@@ -101,7 +102,7 @@ export default Ext.define('NextThought.app.annotations.note.Viewer', {
 		this.reader.fireEvent('request-visibility');
 	},
 
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent();
 
 		var resized, keyMap, me = this;
@@ -154,14 +155,12 @@ export default Ext.define('NextThought.app.annotations.note.Viewer', {
 		}
 	},
 
-
-	onEsc: function(k, e) {
+    onEsc: function(k, e) {
 		e.stopEvent();
 		this.close();
 	},
 
-
-	resizeView: function(reference) {
+    resizeView: function(reference) {
 		var position, height, width, newPosition,
 			viewportHeight = Ext.Element.getViewportHeight();
 
@@ -186,21 +185,18 @@ export default Ext.define('NextThought.app.annotations.note.Viewer', {
 		return false;
 	},
 
-
-	canClose: function() {
+    canClose: function() {
 		var noteMain = this.down('note-main-view');
 		return !noteMain || !noteMain.editorActive();
 	},
 
-
-	closeOrDie: function() {
+    closeOrDie: function() {
 		if (!this.close()) {
 			Ext.Error.raise('Editor open, refusing to close.');
 		}
 	},
 
-
-	close: function() {
+    close: function() {
 		//Only close if the editor is not active.
 		if (this.canClose()) {
 			this.destroy();
@@ -211,8 +207,7 @@ export default Ext.define('NextThought.app.annotations.note.Viewer', {
 		return false;
 	},
 
-
-	warnBeforeDismissingEditor: function() {
+    warnBeforeDismissingEditor: function() {
 		Ext.defer(alert, 1, null, [
 			{
 				msg: getString('NextThought.view.annotations.note.Viewer.open-editor')

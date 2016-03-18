@@ -1,21 +1,20 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.itemselection.Index', {
-	extend: 'Ext.container.Container',
-	//Shouldn't be instantiated, only extended
+var Ext = require('extjs');
+var ItemselectionItem = require('./Item');
 
-	requires: [
-		'NextThought.app.course.overview.components.editing.itemselection.Item'
-	],
 
-	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.itemselection.Index', {
+    extend: 'Ext.container.Container',
+
+    itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'title', html: '{title}'
 	})),
 
-	showSearch: true,
-	multiSelect: false,
-	layout: 'none',
-	items: [],
+    showSearch: true,
+    multiSelect: false,
+    layout: 'none',
+    items: [],
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.selection = this.selectedItems || [];
@@ -55,8 +54,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.it
 		}
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var search = this.searchCmp;
@@ -74,8 +72,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.it
 		this.searchInput.addEventListener('keyup', this.onSearchKeyUp.bind(this));
 	},
 
-
-	onSearchClicked: function(e) {
+    onSearchClicked: function(e) {
 		if (e.getTarget('.clear')) {
 			this.clearSearch();
 		} else if (e.getTarget('.do-search')) {
@@ -83,21 +80,18 @@ export default Ext.define('NextThought.app.course.overview.components.editing.it
 		}
 	},
 
-
-	clearSearch: function() {
+    clearSearch: function() {
 		if (!this.rendered) { return; }
 
 		this.searchInput.value = '';
 		this.searchForTerm('');
 	},
 
-
-	onSearchKeyUp: function() {
+    onSearchKeyUp: function() {
 		this.searchForTerm(this.searchInput.value);
 	},
 
-
-	searchForTerm: function(term) {
+    searchForTerm: function(term) {
 		this.itemsContainer.items.each(function(item) {
 			item.applySearchTerm(term);
 		});
@@ -110,8 +104,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.it
 		this[term ? 'addCls' : 'removeCls']('has-search-term');
 	},
 
-
-	setSelectionItems: function(items) {
+    setSelectionItems: function(items) {
 		var me = this;
 
 		if (!items || items.length === 0) {
@@ -145,8 +138,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.it
 		me.applySelection(me.selection);
 	},
 
-
-	excludeItems: function(exclude) {
+    excludeItems: function(exclude) {
 		if (!Array.isArray(exclude)) {
 			exclude = [exclude];
 		}
@@ -158,11 +150,9 @@ export default Ext.define('NextThought.app.course.overview.components.editing.it
 		});
 	},
 
+    showEmptyState: function() {},
 
-	showEmptyState: function() {},
-
-
-	applySelection: function(selection) {
+    applySelection: function(selection) {
 		if (!Array.isArray(selection)) {
 			selection = [selection];
 		}
@@ -176,13 +166,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.it
 		this.selection = selection;
 	},
 
-
-	getSelection: function() {
+    getSelection: function() {
 		return this.selection;
 	},
 
-
-	isSelected: function(item) {
+    isSelected: function(item) {
 		var me = this,
 			itemId = me.getSelectionItemId(item),
 			selection = me.getSelection();
@@ -196,32 +184,27 @@ export default Ext.define('NextThought.app.course.overview.components.editing.it
 		}, false);
 	},
 
-
-	getItemData: function(item) {
+    getItemData: function(item) {
 		return {
 			title: item.getTitle && item.getTitle()
 		};
 	},
 
-
-	clearSelection: function() {
+    clearSelection: function() {
 		this.selection.forEach(this.unselectItem.bind(this));
 	},
 
-
-	itemMatchesSearch: function(item, searchTerm) {
+    itemMatchesSearch: function(item, searchTerm) {
 		var title = item.getTitle && item.getTitle();
 
 		return title && title.indexOf(searchTerm) >= 0;
 	},
 
-
-	getSelectionItemId: function(item) {
+    getSelectionItemId: function(item) {
 		return item.getId();
 	},
 
-
-	selectItem: function(selectionItem) {
+    selectItem: function(selectionItem) {
 		if (!this.multiSelect) { this.clearSelection(); }
 
 		this.itemsContainer.items.each(function(item) {
@@ -237,8 +220,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.it
 		}
 	},
 
-
-	unselectItem: function(selectionItem) {
+    unselectItem: function(selectionItem) {
 		var me = this;
 
 		me.itemsContainer.items.each(function(item) {
@@ -256,10 +238,8 @@ export default Ext.define('NextThought.app.course.overview.components.editing.it
 		}
 	},
 
-
-	onSelectItem: function(el) {},
-	onUnselectItem: function(el) {},
-
-	onItemExpand: function(item) {},
-	onItemCollapse: function(item) {}
+    onSelectItem: function(el) {},
+    onUnselectItem: function(el) {},
+    onItemExpand: function(item) {},
+    onItemCollapse: function(item) {}
 });

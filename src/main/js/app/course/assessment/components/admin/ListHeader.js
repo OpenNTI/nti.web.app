@@ -1,18 +1,17 @@
-export default Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
-	extend: 'Ext.Component',
-	alias: 'widget.course-assessment-admin-listheader',
-
-	requires: [
-		'NextThought.common.menus.LabeledSeparator',
-		'NextThought.app.course.assessment.AssignmentStatus',
-		'NextThought.app.course.assessment.components.admin.email.Window',
-		'NextThought.app.course.assessment.components.AssignmentStatus',
-		'NextThought.model.Email',
-		'NextThought.app.windows.StateStore'
-	],
+var Ext = require('extjs');
+var MenusLabeledSeparator = require('../../../../../common/menus/LabeledSeparator');
+var AssessmentAssignmentStatus = require('../../AssignmentStatus');
+var EmailWindow = require('./email/Window');
+var ComponentsAssignmentStatus = require('../AssignmentStatus');
+var ModelEmail = require('../../../../../model/Email');
+var WindowsStateStore = require('../../../../windows/StateStore');
 
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
+    extend: 'Ext.Component',
+    alias: 'widget.course-assessment-admin-listheader',
+
+    statics: {
 		setPageSize: function(size) {
 			var instances = Ext.ComponentQuery.query(this.xtype) || [];
 
@@ -22,11 +21,10 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		}
 	},
 
-	cls: 'admin-list-header',
+    cls: 'admin-list-header',
+    PAGE_SIZES: [50, 75, 100],
 
-	PAGE_SIZES: [50, 75, 100],
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'header-container', cn: [
 			{cls: 'assignment', cn: [
 				{cls: 'title', html: '{assignmentTitle}'},
@@ -61,8 +59,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		]}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		assignmentEl: '.assignment',
 		assignmentTitleEl: '.assignment .title',
 		assignmentDueEl: '.assignment .due',
@@ -78,8 +75,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		viewAssignmentEl: '.assignment .raw'
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.onStoreLoad();
@@ -106,18 +102,15 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		wait(10).then(this.onStudentFilterChange.bind(this));
 	},
 
-
-	setDisabled: function() {
+    setDisabled: function() {
 		this.addCls('disabled');
 	},
 
-
-	setEnabled: function() {
+    setEnabled: function() {
 		this.removeCls('disabled');
 	},
 
-
-	buildPageMenu: function() {
+    buildPageMenu: function() {
 		if (!this.store || !this.rendered) { return; }
 
 		var items = [], i, start, end,
@@ -173,8 +166,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		});
 	},
 
-
-	buildSettingsMenu: function() {
+    buildSettingsMenu: function() {
 		if (!this.store) { return; }
 
 		var me = this,
@@ -230,8 +222,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		me.settingsMenu.show().hide();
 	},
 
-
-	onStudentFilterChange: function(filter) {
+    onStudentFilterChange: function(filter) {
 		var q;
 
 		if (!filter) {
@@ -254,20 +245,18 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		}
 	},
 
-	maybeShowEmailButton: function(filter) {
+    maybeShowEmailButton: function(filter) {
 		var isAllowed = this.shouldAllowInstructorEmail() && this.currentBundle && this.currentBundle.getLink('Mail');
 		if (isAllowed && this.emailEl) {
 			this.emailEl.show();
 		}
 	},
 
-
-	shouldAllowInstructorEmail: function() {
+    shouldAllowInstructorEmail: function() {
 		return isFeature('instructor-email');
 	},
 
-
-	showEmailEditor: function(e) {
+    showEmailEditor: function(e) {
 		var me = this,
 			editor,
 			emailRecord = new NextThought.model.Email(),
@@ -283,25 +272,21 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		this.WindowActions.showWindow('new-email', null, e.getTarget(), {afterSave: this.onCourseEmailSent.bind(this)});
 	},
 
+    onCourseEmailSent: function() {},
 
-	onCourseEmailSent: function() {},
-
-
-	showSettingsMenu: function() {
+    showSettingsMenu: function() {
 		if (!this.settingsMenu) { return; }
 
 		this.settingsMenu.showBy(this.settingsEl, 'tr-br');
 	},
 
-
-	showPageMenu: function(e) {
+    showPageMenu: function(e) {
 		if (!this.pageMenu || e.getTarget('.empty')) { return; }
 
 		this.pageMenu.showBy(this.viewingEl, 'tr-br');
 	},
 
-
-	changePage: function(item, status) {
+    changePage: function(item, status) {
 		if (!status || !this.store) { return; }
 
 
@@ -310,8 +295,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		this.loadPage(page);
 	},
 
-
-	changePageSize: function(item, status) {
+    changePageSize: function(item, status) {
 		if (!status || !this.store) { return; }
 
 		var size = item.size;
@@ -319,20 +303,17 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		this.setPageSize(size);
 	},
 
-
-	setPageSize: function(size) {
+    setPageSize: function(size) {
 		this.pageSize = size;
 
 		this.fireEvent('set-page-size', this.pageSize);
 	},
 
-
-	toggleAvatars: function(item, status) {
+    toggleAvatars: function(item, status) {
 		this.fireEvent('toggle-avatars', !status);
 	},
 
-
-	bindStore: function(store) {
+    bindStore: function(store) {
 		this.store = store;
 
 		this.mon(store, 'load', 'onStoreLoad');
@@ -340,16 +321,14 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		this.buildSettingsMenu();
 	},
 
-
-	onStoreLoad: function() {
+    onStoreLoad: function() {
 		if (!this.store || !this.rendered) { return; }
 
 		this.buildPageMenu();
 		this.buildSettingsMenu();
 	},
 
-
-	setExportURL: function(url, tip) {
+    setExportURL: function(url, tip) {
 		this.exportURL = url;
 		this.exportTip = tip;
 
@@ -366,8 +345,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		}
 	},
 
-
-	setAvatarToggle: function(show) {
+    setAvatarToggle: function(show) {
 		this.showAvatars = show;
 
 		this.buildSettingsMenu();
@@ -375,8 +353,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		this.toggleAvatars(null, !show);
 	},
 
-
-	setAssignment: function(assignment) {
+    setAssignment: function(assignment) {
 		if (!this.rendered) {
 			this.assignment = assignment;
 			return;
@@ -422,8 +399,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		this.on('destroy', this.assignmentStatusCmp.destroy.bind(this.assignmentStatusCmp));
 	},
 
-
-	toggleDateEditor: function() {
+    toggleDateEditor: function() {
 		if (this.assignmentStatusCmp && this.assignmentStatusCmp.dueDateEditorVisible()) {
 			this.assignmentStatusCmp.closeDueDateEditor();
 		} else if (this.assignmentStatusCmp) {
@@ -431,8 +407,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		}
 	},
 
-
-	updateFilterCount: function(filter) {
+    updateFilterCount: function(filter) {
 		if (!this.rendered) {
 			this.filter = filter;
 			return;
@@ -445,8 +420,7 @@ export default Ext.define('NextThought.app.course.assessment.components.admin.Li
 		}
 	},
 
-
-	loadPage: function(page) {
+    loadPage: function(page) {
 		this.currentPage = page;
 
 		this.fireEvent('load-page', this.currentPage);

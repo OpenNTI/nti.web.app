@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.course.info.components.Menu', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.info.components.Menu', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info-outline-menu',
 

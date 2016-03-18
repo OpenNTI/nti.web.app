@@ -1,14 +1,17 @@
-export default Ext.define('NextThought.login.Actions', {
+var Ext = require('extjs');
+var Socket = require('../proxy/Socket');
+var AnalyticsUtil = require('../util/Analytics');
+var B64 = require('../util/Base64');
+var Globals = require('../util/Globals');
+var ParseUtils = require('../util/Parsing');
+var LoginStateStore = require('./StateStore');
+var ModelService = require('../model/Service');
+var ModelUser = require('../model/User');
+var ModelCommunity = require('../model/Community');
 
-	requires: [
-		'NextThought.login.StateStore',
-		'NextThought.model.Service',
-		'NextThought.model.User',
-		'NextThought.model.Community',
-		'Ext.util.Cookies'
-	],
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.login.Actions', {
+    constructor: function() {
 		this.callParent(arguments);
 
 		//we don't have the service doc yet, but we need the ajax helpers
@@ -16,8 +19,7 @@ export default Ext.define('NextThought.login.Actions', {
 		this.store = NextThought.login.StateStore.getInstance();
 	},
 
-
-	handleImpersonate: function() {
+    handleImpersonate: function() {
 		var url = $AppConfig.userObject.getLink('logon.nti.impersonate'),
 			username = url && prompt('What username do you want to impersonate?'),
 			params;
@@ -34,8 +36,7 @@ export default Ext.define('NextThought.login.Actions', {
 		}
 	},
 
-
-	handleLogout: function() {
+    handleLogout: function() {
 		var me = this,
 			url = getURL(Ext.String.urlAppend(
 				me.store.getLogoutURL(),
@@ -64,8 +65,7 @@ export default Ext.define('NextThought.login.Actions', {
 		me.store.willLogout(finishLoggingOut);
 	},
 
-
-	__onLoginSuccess: function() {
+    __onLoginSuccess: function() {
 		var me = this,
 			setFromCookie, preference,
 			field = 'useHighContrast',
@@ -130,8 +130,7 @@ export default Ext.define('NextThought.login.Actions', {
 			});
 	},
 
-
-	__onLoginFailure: function(reason) {
+    __onLoginFailure: function(reason) {
 		var o = {},
 			url = $AppConfig.server.login;
 
@@ -157,8 +156,7 @@ export default Ext.define('NextThought.login.Actions', {
 		return Promise.reject();
 	},
 
-
-	/**
+    /**
 	 * Get the user, and set up the service object
 	 * @return {Promise} fulfills is successfully logged in
 	 */
@@ -166,8 +164,7 @@ export default Ext.define('NextThought.login.Actions', {
 		return this.__attemptLogin().then(this.__onLoginSuccess.bind(this), this.__onLoginFailure.bind(this));
 	},
 
-
-	__attemptLogin: function() {
+    __attemptLogin: function() {
 		var me = this,
 			server = $AppConfig.server,
 			dataserver = server.data,
@@ -201,8 +198,7 @@ export default Ext.define('NextThought.login.Actions', {
 		}).then(me.performHandshake.bind(me));
 	},
 
-
-	performHandshake: function(pongFromPing) {
+    performHandshake: function(pongFromPing) {
 		var me = this,
 			link = me.ServiceInterface.getLinkFrom(pongFromPing.Links, 'logon.handshake'),
 			username = decodeURIComponent(Ext.util.Cookies.get('username')),
@@ -246,8 +242,7 @@ export default Ext.define('NextThought.login.Actions', {
 			});
 	},
 
-
-	findResolveSelfWorkspace: function(service) {
+    findResolveSelfWorkspace: function(service) {
 		var items = service.get('Items') || [],
 			w = null, l;
 
@@ -267,8 +262,7 @@ export default Ext.define('NextThought.login.Actions', {
 		return w;
 	},
 
-
-	resolveService: function() {
+    resolveService: function() {
 		var me = this,
 			unauthed = {401: true, 403: true},
 			server = $AppConfig.server;
@@ -315,8 +309,7 @@ export default Ext.define('NextThought.login.Actions', {
 			});
 	},
 
-
-	attemptLoginCallback: function(service) {
+    attemptLoginCallback: function(service) {
 		var me = this,
 			href, workspace;
 

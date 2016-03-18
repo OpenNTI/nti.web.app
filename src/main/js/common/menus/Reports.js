@@ -1,12 +1,12 @@
-export default Ext.define('NextThought.common.menus.Reports', {
-	extend: 'Ext.menu.Menu',
-	alias: 'widget.report-menu',
+var Ext = require('extjs');
+var MenusLabeledSeparator = require('./LabeledSeparator');
 
-	requires: [
-		'NextThought.common.menus.LabeledSeparator'
-	],
 
-	defaults: {
+module.exports = exports = Ext.define('NextThought.common.menus.Reports', {
+    extend: 'Ext.menu.Menu',
+    alias: 'widget.report-menu',
+
+    defaults: {
 		ui: 'nt-menuitem',
 		xtype: 'menuitem',
 		cls: 'report-menu-option',
@@ -14,7 +14,7 @@ export default Ext.define('NextThought.common.menus.Reports', {
 		plain: true
 	},
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		if (!this.links) {
@@ -51,8 +51,7 @@ export default Ext.define('NextThought.common.menus.Reports', {
 		}
 	},
 
-
-	showReport: function(href) {
+    showReport: function(href) {
 		/*
 		....Report.pdf#view=FitH&toolbar=0&navpanes=0&statusbar=0&page=1
 
@@ -73,8 +72,7 @@ export default Ext.define('NextThought.common.menus.Reports', {
 		win.show();
 	},
 
-
-	reportItemClicked: function(item) {
+    reportItemClicked: function(item) {
 		if (!item.pdf) {
 			console.log('Cant show a report with out an pdf');
 			return;

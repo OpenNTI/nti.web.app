@@ -1,3 +1,8 @@
+var Ext = require('extjs');
+var Globals = require('../../util/Globals');
+var ObjectUtils = require('../../util/Object');
+
+
 /**
  * This entire file is a hack.  The ExtJS implementation aligns and positions the tip before it updates the contents of
  * the tip. So, it is potentially offset.  This attempts to correct that by repeating alignment calculations when it
@@ -5,11 +10,11 @@
  *
  * We also try to apply sane defaults.
  */
-export default Ext.define('NextThought.overrides.tip.QuickTip', {
-	override: 'Ext.tip.QuickTip',
-	requires: ['Ext.tip.QuickTipManager'],
+module.exports = exports = Ext.define('NextThought.overrides.tip.QuickTip', {
+    override: 'Ext.tip.QuickTip',
+    EDGE_PADDING: 20,
 
-	EDGE_PADDING: 20, //pixals from any given edge to trigger a repositioning
+    //pixals from any given edge to trigger a repositioning
 
 	//Apply defaults
 	constructor: function(config) {
@@ -48,11 +53,11 @@ export default Ext.define('NextThought.overrides.tip.QuickTip', {
 		this.callParent([config]);
 	},
 
-	getDockingRefItems: function(deep, items) {
+    getDockingRefItems: function(deep, items) {
 		return items;
 	},
 
-	onTargetOver: function(e, dom, opts) {
+    onTargetOver: function(e, dom, opts) {
         if(Ext.is.iOS){
             return;
         }
@@ -63,8 +68,7 @@ export default Ext.define('NextThought.overrides.tip.QuickTip', {
 		return this.callParent(arguments);
 	},
 
-
-	//Override alignment and force the 'target' element to be the element with the title/tip attribute if not the
+    //Override alignment and force the 'target' element to be the element with the title/tip attribute if not the
 	// registered owner element. Default to a top centered position, unless screen position forces us to reposition.
 	getTargetXY: function getTargetXY() {
 		function getTarget(el) {
@@ -130,7 +134,7 @@ export default Ext.define('NextThought.overrides.tip.QuickTip', {
 		return r;
 	},
 
-	//Hack: The contents change during show, AFTER positioning and aligning, so if we change size, redo it all.
+    //Hack: The contents change during show, AFTER positioning and aligning, so if we change size, redo it all.
 	showAt: function(xy) {
 		if (!xy) {
 			return;
@@ -152,8 +156,7 @@ export default Ext.define('NextThought.overrides.tip.QuickTip', {
 		}
 	},
 
-
-	show: function() {
+    show: function() {
 		var ini = this.initialConfig.html;
 
 		function detectCrash() {
@@ -175,14 +178,12 @@ export default Ext.define('NextThought.overrides.tip.QuickTip', {
 		return this.callParent(arguments);
 	},
 
-
-	onScroll: function() {
+    onScroll: function() {
 		this.hide();
 		window.removeEventListener('scroll', this.onScroll);
 	},
 
-
-	//center the tip pointer
+    //center the tip pointer
 	//We prefer to align to the center posisitions instead of the corner positions.
 	syncAnchor: function() {
     var me = this, pos;
@@ -196,8 +197,7 @@ export default Ext.define('NextThought.overrides.tip.QuickTip', {
     me.anchorEl.alignTo(me.el, pos);
   },
 
-
-	//We prefer to align to the center posisitions instead of the corner positions.
+    //We prefer to align to the center posisitions instead of the corner positions.
 	getAnchorAlign: function() {
     switch (this.anchor) {
       case 'top': return 't-b';
@@ -209,7 +209,7 @@ export default Ext.define('NextThought.overrides.tip.QuickTip', {
 });
 
 
-export default Ext.define('NextThought.view.tip.Tooltip', {
+module.exports = exports = Ext.define('NextThought.view.tip.Tooltip', {
 	extend: 'Ext.tip.ToolTip',
 	alias: 'widget.nt-tooltip',
 

@@ -1,13 +1,12 @@
-export default Ext.define('NextThought.app.windows.components.Header', {
-	extend: 'Ext.Component',
-	alias: 'widget.window-header',
+var Ext = require('extjs');
+var PathActions = require('../../navigation/path/Actions');
 
 
-	requires: [
-		'NextThought.app.navigation.path.Actions'
-	],
+module.exports = exports = Ext.define('NextThought.app.windows.components.Header', {
+    extend: 'Ext.Component',
+    alias: 'widget.window-header',
 
-	pathTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+    pathTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': 'labels', cn: [
 			{tag: 'tpl', 'if': 'noLink', cn: [
 				{tag: 'span', cls: 'no-link', html: '{label}'}
@@ -21,35 +20,33 @@ export default Ext.define('NextThought.app.windows.components.Header', {
 		]}
 	])),
 
-	cls: 'window-header',
+    cls: 'window-header',
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'title'},
 		{cls: 'close'}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		titleEl: '.title',
 		closeEl: '.close'
 	},
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.NavigationActions = NextThought.app.navigation.path.Actions.create();
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.closeEl, 'click', this.doClose.bind(this));
 		this.mon(this.titleEl, 'click', 'onPathClicked');
 	},
 
-	setTitle: function(title) {
+    setTitle: function(title) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setTitle.bind(this, title));
 			return;
@@ -58,8 +55,7 @@ export default Ext.define('NextThought.app.windows.components.Header', {
 		this.titleEl.update(title);
 	},
 
-
-	showPath: function(titles, leaf) {
+    showPath: function(titles, leaf) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showPath.bind(this, titles, leaf));
 			return;
@@ -68,8 +64,7 @@ export default Ext.define('NextThought.app.windows.components.Header', {
 		this.pathTpl.append(this.titleEl, {labels: titles, leaf: leaf});
 	},
 
-
-	showPathFor: function(record, leaf, length, parent) {
+    showPathFor: function(record, leaf, length, parent) {
 		//Get the root bundle, from the context StateStore
 		if (!this.rendered) {
 			this.on('afterrender', this.showPathFor.bind(this, record, leaf, length, parent));
@@ -102,8 +97,7 @@ export default Ext.define('NextThought.app.windows.components.Header', {
 			});
 	},
 
-
-	onPathClicked: function(e) {
+    onPathClicked: function(e) {
 		var rootContext = this.ContextStore.getRootContext(),
 			rootObj = rootContext.obj,
 			rootId = rootObj && rootObj.getId();

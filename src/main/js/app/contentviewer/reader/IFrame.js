@@ -1,22 +1,25 @@
-export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
-	alias: 'reader.iframe',
-	requires: [
-		'NextThought.app.contentviewer.reader.ContentAPIRegistry',
-		'NextThought.app.contentviewer.components.SimplePopoverWidget'
-	],
+var Ext = require('extjs');
+var ContentAPIRegistry = require('./ContentAPIRegistry');
+var Globals = require('../../../util/Globals');
+var ReaderContentAPIRegistry = require('./ContentAPIRegistry');
+var ComponentsSimplePopoverWidget = require('../components/SimplePopoverWidget');
 
-	mixins: {
+
+module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFrame', {
+    alias: 'reader.iframe',
+
+    mixins: {
 		observable: 'Ext.util.Observable'
 	},
 
-	getBubbleTarget: function() {
+    getBubbleTarget: function() {
 		return this.reader;
 	},
 
-	baseFrameCheckIntervalInMillis: 500,
-	frameCheckRateChangeFactor: 1.5,
+    baseFrameCheckIntervalInMillis: 500,
+    frameCheckRateChangeFactor: 1.5,
 
-	constructor: function(config) {
+    constructor: function(config) {
 		Ext.apply(this, config);
 
 		var me = this,
@@ -62,15 +65,13 @@ export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		Ext.EventManager.onWindowResize(me.onWindowResize, me);
 	},
 
-
-	onWindowResize: function() {
+    onWindowResize: function() {
 		if (this.iframe && this.iframe.el) {
 			this.iframe.el.repaint();
 		}
 	},
 
-
-	displayPopover: function(href, html, node) {
+    displayPopover: function(href, html, node) {
 		var me = this,
 			nibHeight = 10,
 			offsets = me.reader.getAnnotationOffsets(),
@@ -135,15 +136,13 @@ export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		me.popoverWidget.showAt(adjustPosition(x, y));
 	},
 
-
-	dismissPopover: function() {
+    dismissPopover: function() {
 		if (this.popoverWidget) {
 			this.popoverWidget.startCloseTimer();
 		}
 	},
 
-
-	applyContentAPI: function() {
+    applyContentAPI: function() {
 		//TODO: can we get rid of this?
 		var doc = this.getDocumentElement(),
 				win = doc.parentWindow;
@@ -153,8 +152,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 
 	},
 
-
-	getConfig: function() {
+    getConfig: function() {
 		var me = this;
 		return {
 			xtype: 'box',
@@ -185,8 +183,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		};
 	},
 
-
-	resetFrame: function(cb) {
+    resetFrame: function(cb) {
 		var BLANK_DOC = '<!DOCTYPE html>' +
 				Ext.DomHelper.markup({tag: 'html', lang: 'en', cn: [
 					{tag: 'head'},{tag: 'body'}]}),
@@ -223,8 +220,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		});
 	},
 
-
-	initContentFrame: function() {
+    initContentFrame: function() {
 		var me = this,
 			base = (function() {
 				var d = window.location; return d.protocol + '//' + d.host;} ()),
@@ -517,8 +513,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		me.syncInterval = setInterval(me.checkFrame, this.baseFrameCheckIntervalInMillis);
 	},
 
-
-	getTopBodyStyles: function() {
+    getTopBodyStyles: function() {
 		var mainBodyStyleString = Ext.getBody().getAttribute('class') || '',
 				mainBodyStyleList = mainBodyStyleString.split(' '),
 				styleBlacklist = [
@@ -531,8 +526,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		return Ext.Array.difference(mainBodyStyleList, styleBlacklist);
 	},
 
-
-	onceSettled: function() {
+    onceSettled: function() {
 		var me = this, fn,
 			p = me.settledPromise || new Promise(function(fulfill, reject) {
 				fn = Ext.Function.createBuffered(function() {
@@ -553,8 +547,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		return p;
 	},
 
-
-	checkFrame: function() {
+    checkFrame: function() {
 		if (this.reader.isDestroyed) {clearInterval(this.syncInterval); return;}
 		var doc = this.getDocumentElement(), html;
 		if (doc) {
@@ -586,8 +579,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		}
 	},
 
-
-	syncFrame: function(content) {
+    syncFrame: function(content) {
 		var i = this.get(), h, contentHeight = 150, ii;
 		//We need the buffer because otherwise the end of the doc would go offscreen
 
@@ -620,8 +612,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		this.fireEvent('sync-height', h);
 	},
 
-
-	get: function() {
+    get: function() {
 		var iframe, el = this.iframe && this.iframe.el;
 		if (!el) {
 			return null;
@@ -631,8 +622,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		return el;
 	},
 
-
-	getDocumentElement: function() {
+    getDocumentElement: function() {
 		var iframe, win, dom, doc = this.contentDocumentElement;
 
 		if (!doc) {
@@ -667,8 +657,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		return doc;
 	},
 
-
-	update: function(html, metaData) {
+    update: function(html, metaData) {
 		var doc = this.getDocumentElement(),
 			body = Ext.get(doc.body || doc.getElementsByName('body')[0]),
 			head = doc.getElementsByTagName('head')[0],
@@ -720,12 +709,11 @@ export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		this.syncInterval = setInterval(this.checkFrame, this.baseFrameCheckIntervalInMillis);
 	},
 
-
-	getCleanContent: function() {
+    getCleanContent: function() {
 		return this.cleanContent;
 	},
 
-	/**
+    /**
 	 * Makes pointer events go through the iframe so that all the
 	 * interactions can be handled manually.
 	 * @param {Boolean} should
@@ -744,11 +732,11 @@ export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		}
 	},
 
-	hasClickthrough: function() {
+    hasClickthrough: function() {
 		return this.get().hasCls('clickthrough');
 	},
 
-	/**
+    /**
 	 * @param {Number} x relative to the window's top left corner
 	 * @param {Number} y relative to the window's top left corner
 	 */
@@ -814,7 +802,7 @@ export default Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		return pickedElement;
 	},
 
-	/**
+    /**
 	 * Positions relative to the window
 	 * @param {Number} x1
 	 * @param {Number} y1

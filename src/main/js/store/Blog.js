@@ -1,13 +1,13 @@
-export default Ext.define('NextThought.store.Blog', {
-	extend: 'Ext.data.Store',
-	alias: 'store.blog',
+var Ext = require('extjs');
+var ReaderJson = require('../proxy/reader/Json');
 
-	requires: [
-		'NextThought.proxy.reader.Json'
-	],
-	model: 'NextThought.model.forums.PersonalBlogEntry',
 
-	proxy: {
+module.exports = exports = Ext.define('NextThought.store.Blog', {
+    extend: 'Ext.data.Store',
+    alias: 'store.blog',
+    model: 'NextThought.model.forums.PersonalBlogEntry',
+
+    proxy: {
 		url: 'tbd',
 		type: 'rest',
 		reader: {
@@ -23,7 +23,7 @@ export default Ext.define('NextThought.store.Blog', {
 		model: 'NextThought.model.forums.PersonalBlogEntry'
 	},
 
-	remove: function(records) {
+    remove: function(records) {
 		this.callParent(arguments);
 
 		Ext.each(records, function(record) {

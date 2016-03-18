@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.model.transcript.TranscriptItem', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.model.transcript.TranscriptItem', {
 	extend: 'Ext.data.Model',
 
 	fields: [

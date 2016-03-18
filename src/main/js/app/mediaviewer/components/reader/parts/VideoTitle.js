@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.mediaviewer.components.reader.parts.VideoTitle', {
+var Ext = require('extjs');
+var MixinsAnnotationsMixin = require('../mixins/AnnotationsMixin');
+
+
+module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.parts.VideoTitle', {
 	extend: 'Ext.Component',
 	alias: 'widget.video-title-component',
 

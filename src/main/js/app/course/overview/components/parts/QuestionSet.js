@@ -1,6 +1,19 @@
-export default Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
-	extend: 'Ext.Panel',
-	alias: [
+var Ext = require('extjs');
+var ContentUtils = require('../../../../../util/Content');
+var Globals = require('../../../../../util/Globals');
+var ParseUtils = require('../../../../../util/Parsing');
+var ModelQuestionSetRef = require('../../../../../model/QuestionSetRef');
+var ModelAssignmentRef = require('../../../../../model/AssignmentRef');
+var ChartScore = require('../../../../../common/chart/Score');
+var AssessmentScoreboardHeader = require('../../../../assessment/ScoreboardHeader');
+var AssessmentScoreboardTally = require('../../../../assessment/ScoreboardTally');
+var ComponentsAssignmentStatus = require('../../../assessment/components/AssignmentStatus');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
+    extend: 'Ext.Panel',
+
+    alias: [
 		'widget.course-overview-naquestionset',
 		'widget.course-overview-questionsetref',
 		'widget.course-overview-nanosubmitassignment',
@@ -9,29 +22,17 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Ques
 		'widget.course-overview-assignmentref'
 	],
 
-	requires: [
-		'NextThought.model.QuestionSetRef',
-		'NextThought.model.AssignmentRef',
-		'NextThought.common.chart.Score',
-		'NextThought.app.assessment.ScoreboardHeader',
-		'NextThought.app.assessment.ScoreboardTally',
-		'NextThought.app.course.assessment.components.AssignmentStatus'
-	],
-
-	statics: {
+    statics: {
 		isAssessmentWidget: true
 	},
 
-	header: false,
+    header: false,
+    cls: 'scoreboard overview-naquestionset',
+    ui: 'assessment',
+    layout: 'none',
+    items: [],
 
-	cls: 'scoreboard overview-naquestionset',
-	ui: 'assessment',
-
-	layout: 'none',
-
-	items: [],
-
-	config: {
+    config: {
 		assignment: null,
 		containerId: null,
 		ntiid: null,
@@ -39,7 +40,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Ques
 		quetionSetContainerTitle: ''
 	},
 
-	constructor: function(config) {
+    constructor: function(config) {
 		var me = this,
 			n = config.node || {getAttribute: function(a) { return config[a];} },
 			ntiid = n.getAttribute('target-ntiid') || 'no-value',
@@ -67,8 +68,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Ques
 		}
 	},
 
-
-	getButton: function() {
+    getButton: function() {
 		var me = this;
 
 		return {
@@ -83,8 +83,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Ques
 		};
 	},
 
-
-	buildForAssessment: function() {
+    buildForAssessment: function() {
 		var me = this,
 			req, ntiid = this.getNtiid();
 
@@ -123,8 +122,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Ques
 			});
 	},
 
-
-	buildForAssignment: function() {
+    buildForAssignment: function() {
 		this.add([
 			{
 				xtype: 'container',
@@ -149,8 +147,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Ques
 		this.setAsAssignment(this.assignment);
 	},
 
-
-	disableButton: function() {
+    disableButton: function() {
 		var button = this.down('button');
 
 		if (button) {
@@ -158,8 +155,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Ques
 		}
 	},
 
-
-	enableButton: function() {
+    enableButton: function() {
 		var button = this.down('button');
 
 		if (button) {
@@ -167,8 +163,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Ques
 		}
 	},
 
-
-	setAsAssignment: function(assignment) {
+    setAsAssignment: function(assignment) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.setAsAssignment, this, arguments), this, {single: true});
 			return;
@@ -219,8 +214,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Ques
 		}
 	},
 
-
-	setHistory: function(history) {
+    setHistory: function(history) {
 		if (!history) {
 			console.warn('No history');
 			return;
@@ -255,8 +249,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Ques
 		}
 	},
 
-
-	containerLoaded: function(q, s, r) {
+    containerLoaded: function(q, s, r) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.containerLoaded, this, arguments), this, {single: true});
 			return;
@@ -279,8 +272,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Ques
 		this.updateWithScore(correct);
 	},
 
-
-	setAsNotStarted: function() {
+    setAsNotStarted: function() {
 		var b = this.down('button');
 
 		if (b) {
@@ -291,8 +283,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Ques
 		this.addCls('not-started');
 	},
 
-
-	updateWithScore: function(correct) {
+    updateWithScore: function(correct) {
 		var tally = this.down('assessment-tally'),
 			score = this.down('chart-score');
 
@@ -307,7 +298,7 @@ export default Ext.define('NextThought.app.course.overview.components.parts.Ques
 		this.updateLayout();
 	},
 
-	reviewClicked: function() {
+    reviewClicked: function() {
 		if (this.assignment) {
 			this.navigate(this.assignment);
 			return;

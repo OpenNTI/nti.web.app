@@ -1,25 +1,27 @@
-export default Ext.define('NextThought.app.course.assessment.components.student.assignments.View', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.course-assessment-assignments',
+var Ext = require('extjs');
+var MixinsRouter = require('../../../../../../mixins/Router');
+var MixinsState = require('../../../../../../mixins/State');
+var UxGrouping = require('../../../../../../common/ux/Grouping');
+var PathActions = require('../../../../../navigation/path/Actions');
+var AssignmentsFilterBar = require('./FilterBar');
+var AssignmentsList = require('./List');
 
-	state_key: 'course-assessment-assignments',
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.assignments.View', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.course-assessment-assignments',
+    state_key: 'course-assessment-assignments',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router',
 		State: 'NextThought.mixins.State'
 	},
 
-	requires: [
-		'NextThought.common.ux.Grouping',
-		'NextThought.app.navigation.path.Actions',
-		'NextThought.app.course.assessment.components.student.assignments.FilterBar',
-		'NextThought.app.course.assessment.components.student.assignments.List'
-	],
+    handlesAssignment: true,
+    layout: 'none',
+    cls: 'course-assessment-assignments',
 
-	handlesAssignment: true,
-	layout: 'none',
-	cls: 'course-assessment-assignments',
-	items: [
+    items: [
 		{xtype: 'course-assessment-assignments-filterbar'},
 		{xtype: 'container', rel: 'content'}
 			/* Exmaple items:
@@ -29,8 +31,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 			*/
 	],
 
-
-	grouperMap: {
+    grouperMap: {
 		'lesson': {
 			 'property': 'lesson',
 			 'sorterFn': function(a, b) {
@@ -81,8 +82,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		}
 	},
 
-
-	/**
+    /**
 	 * Groupers: (Interpreting the images from Aaron)
 	 *	->Completion - (Incomplete/Complete) Incomplete sorted to the top, then by due date...then by name?
 	 *	->Date Due - Grouped by Date (Completion date if present, or by due if not complete?) then sorted by name?
@@ -224,8 +224,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		};
 	},
 
-
-	navigateToItem: function(assignment) {
+    navigateToItem: function(assignment) {
 		var openDate = assignment.get('availableBeginning'),
 			date = Ext.Date.format(openDate, 'l F j \\a\\t g:i A');
 
@@ -237,8 +236,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		this.showAssignment(assignment);
 	},
 
-
-	getFields: function() {
+    getFields: function() {
 		return [
 			{name: 'lesson', type: 'string'},
 			{name: 'outlineNode', type: 'auto'},
@@ -263,8 +261,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		];
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.subviewBackingStores = [];
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment', 'update-assignment-view', 'close-reader']);
@@ -283,24 +280,21 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		});
 	},
 
-
-	getFilterBar: function() {
+    getFilterBar: function() {
 		if (!this.filterBar) {
 			this.filterBar = this.down('course-assessment-assignments-filterbar');
 		}
 		return this.filterBar;
 	},
 
-
-	getContent: function() {
+    getContent: function() {
 		if (!this.contentCmp) {
 			this.contentCmp = this.down('container[rel=content]');
 		}
 		return this.contentCmp;
 	},
 
-
-	updateFilters: function() {
+    updateFilters: function() {
 		var bar = this.getFilterBar(),
 			groupBy = bar && bar.getGroupBy(),
 			search = bar && bar.getSearch();
@@ -317,8 +311,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		});
 	},
 
-
-	applyState: function(state) {
+    applyState: function(state) {
 		var cmp = this.getContent(),
 			store = this.store,
 			g = this.getGrouper(state);
@@ -333,8 +326,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		return Promise.resolve();
 	},
 
-
-	filterSearchValue: function(val) {
+    filterSearchValue: function(val) {
 		val = val || '';
 
 		(this.activeStores || []).forEach(function(store) {
@@ -364,8 +356,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		});
 	},
 
-
-	clearAssignmentsData: function() {
+    clearAssignmentsData: function() {
 		var cmp = this.getContent();
 		if (cmp) {
 			cmp.removeAll(true);
@@ -374,8 +365,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		this.subviewBackingStores.splice(0);//truncate
 	},
 
-
-	/**
+    /**
 	 * Apply an assignment collection and a bundle
 	 *
 	 * if we already have the same instance don't do anything
@@ -430,8 +420,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 			});
 	},
 
-
-	applyAssignmentsData: function(silent) {
+    applyAssignmentsData: function(silent) {
 		var me = this,
 			lesson, raw = [], waitsOn = [],
 			bundle = me.data.instance,
@@ -529,8 +518,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 			.then(me.restoreState.bind(me));
 	},
 
-
-	newGroupUIConfig: function(grouper) {
+    newGroupUIConfig: function(grouper) {
 		return {
 			xtype: 'grouping',
 			dataPromise: grouper.dataPromise,
@@ -539,8 +527,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		};
 	},
 
-
-	newAssignmentList: function(grouper) {
+    newAssignmentList: function(grouper) {
 		return {
 			xtype: 'course-assessment-assignment-list',
 			store: grouper.store,
@@ -548,8 +535,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		};
 	},
 
-
-	applyPagerFilter: function() {
+    applyPagerFilter: function() {
 		var now = new Date();
 		this.store.filter({
 			id: 'open',
@@ -560,8 +546,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		});
 	},
 
-
-	restoreState: function() {
+    restoreState: function() {
 		var state = this.getCurrentState(),
 			bar = this.getFilterBar();
 
@@ -577,9 +562,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		return this.applyState(state);
 	},
 
-
-
-	showAssignment: function(assignment) {
+    showAssignment: function(assignment) {
 		if (assignment) {
 			this.navigateToObject(assignment);
 		} else {
@@ -587,8 +570,7 @@ export default Ext.define('NextThought.app.course.assessment.components.student.
 		}
 	},
 
-
-	getStateKey: function() {
+    getStateKey: function() {
 		var bundle = this.data.instance;
 
 		return bundle && bundle.getId() + '-course-assessment';

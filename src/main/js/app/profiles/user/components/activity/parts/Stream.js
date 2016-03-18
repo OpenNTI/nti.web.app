@@ -1,14 +1,15 @@
-export default Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
-	extend: 'NextThought.app.stream.List',
-	alias: 'widget.profile-user-activity-stream',
-
-	requires: [
-		'NextThought.app.profiles.user.components.activity.parts.Page',
-		'NextThought.app.profiles.user.components.activity.parts.events.Empty'
-	],
+var Ext = require('extjs');
+var Globals = require('../../../../../../util/Globals');
+var StreamList = require('../../../../../stream/List');
+var PartsPage = require('./Page');
+var EventsEmpty = require('./events/Empty');
 
 
-	userChanged: function(user) {
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
+    extend: 'NextThought.app.stream.List',
+    alias: 'widget.profile-user-activity-stream',
+
+    userChanged: function(user) {
 		var joined;
 
 		this.user = user;
@@ -20,17 +21,15 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		}
 	},
 
-
-	initialWidgetConfig: function() {
+    initialWidgetConfig: function() {
 		return { xtype: 'joined-event', username: this.user };
 	},
 
-	hasInitialWidget: function() {
+    hasInitialWidget: function() {
 		return !!this.down('joined-event');
 	},
 
-
-	getPageConfig: function(items) {
+    getPageConfig: function(items) {
 		return {
 			xtype: 'profile-stream-page',
 			records: items,
@@ -39,8 +38,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		};
 	},
 
-
-	loadBatch: function(batch) {
+    loadBatch: function(batch) {
 		if (batch.Items.length) {
 			this.removeEmpty();
 			this.fillInItems(batch.Items);
@@ -54,8 +52,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
  		}
  	},
 
-
-	onDone: function(streamSource) {
+    onDone: function(streamSource) {
 		var config = this.initialWidgetConfig();
 
 		if (this.shouldAddJoinedEvent(streamSource)) {
@@ -67,8 +64,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		}
 	},
 
-
-	onEmpty: function(batch) {
+    onEmpty: function(batch) {
 		var cmp = this.getGroupContainer(),
 			hasFilters = this.hasFiltersApplied(batch),
 			title, subtitle;
@@ -81,8 +77,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		}
 	},
 
-
-	hasFiltersApplied: function(batch) {
+    hasFiltersApplied: function(batch) {
 		var s = this.StreamSource;
 
 		if (batch && batch.FilteredTotalItemCount !== batch.TotalItemCount) {
@@ -96,8 +91,7 @@ export default Ext.define('NextThought.app.profiles.user.components.activity.par
 		return false;
 	},
 
-
-	shouldAddJoinedEvent: function(source) {
+    shouldAddJoinedEvent: function(source) {
 		var extra = source && source.extraParams,
 			createdTime = this.user && this.user.get('CreatedTime'),
 			inSeconds = (createdTime && createdTime.getTime()) / 1000;

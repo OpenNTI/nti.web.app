@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.app.chat.components.log.PagerEntry', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.app.chat.components.log.PagerEntry', {
 	extend: 'Ext.Component',
 	alias: 'widget.chat-pager-entry',
 

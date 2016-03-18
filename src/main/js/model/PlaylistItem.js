@@ -1,15 +1,14 @@
+var Ext = require('extjs');
+var DomUtils = require('../util/Dom');
+var ConvertersVideoSources = require('./converters/VideoSources');
+
+
 /*global DomUtils, ParseUtils */
-export default Ext.define('NextThought.model.PlaylistItem', {
-	extend: 'Ext.data.Model',
-	// extend: 'NextThought.model.Base',
+module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
+    extend: 'Ext.data.Model',
+    idProperty: 'NTIID',
 
-	requires: [
-		'NextThought.model.converters.VideoSources'
-	],
-
-	idProperty: 'NTIID',
-
-	fields: [
+    fields: [
 		{name: 'mediaId', type: 'string'},
 		{name: 'start', type: 'float', defaultValue: 0.0},
 		{name: 'end', type: 'float', defaultValue: -1.0},
@@ -34,7 +33,7 @@ export default Ext.define('NextThought.model.PlaylistItem', {
 		{name: 'label', type: 'string', persist: false}
 	],
 
-	statics: {
+    statics: {
 		// FIXME: This is a Hack since a playlistItem doesn't have to be a video.
 		// So far we're using like so and we need to use this mimeType for routing
 		mimeType: "application/vnd.nextthought.ntivideo",
@@ -155,15 +154,13 @@ export default Ext.define('NextThought.model.PlaylistItem', {
 		}
 	},
 
-
-	usesService: function(service) {
+    usesService: function(service) {
 		return Ext.Array.contains(
 				Ext.Array.pluck(this.get('sources'), 'service'),
 				service);
 	},
 
-
-	getSources: function(service) {
+    getSources: function(service) {
 		var i = [];
 		Ext.each(this.data.sources, function(o) {
 			if (!service || (o && service === o.service)) {
@@ -173,11 +170,11 @@ export default Ext.define('NextThought.model.PlaylistItem', {
 		return i;
 	},
 
-	activeSource: function() {
+    activeSource: function() {
 		return this.data.sources[this.data.sourceIndex];
 	},
 
-	useNextSource: function() {
+    useNextSource: function() {
 		if (this.data.sourceIndex + 1 < this.data.sources.length) {
 			this.data.sourceIndex += 1;
 			return true;
@@ -185,18 +182,12 @@ export default Ext.define('NextThought.model.PlaylistItem', {
 		return false;
 	},
 
-	nextSource: function() {},
+    nextSource: function() {},
 
-
-	getAssociatedVideoId: function() {
+    getAssociatedVideoId: function() {
 		var frag = this.get('dom-clone'),
 			video = (frag && frag.querySelector('object[type$=ntivideo]')) || this.get('NTIID');
 
 		return (video && video.getAttribute && video.getAttribute('data-ntiid')) || video;
 	}
-
-
-
-
-
 });

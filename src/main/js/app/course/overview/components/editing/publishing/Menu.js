@@ -1,17 +1,15 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu', {
-	extend: 'Ext.Component',
-	alias: 'widget.overview-editing-publishing-menu',
+var Ext = require('extjs');
+var FieldsDatePicker = require('../../../../../../common/form/fields/DatePicker');
+var EditingActions = require('../Actions');
 
-	requires: [
-		'NextThought.common.form.fields.DatePicker',
-		'NextThought.app.course.overview.components.editing.Actions'
-	],
 
-	MAX_HEIGHT: 550,
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu', {
+    extend: 'Ext.Component',
+    alias: 'widget.overview-editing-publishing-menu',
+    MAX_HEIGHT: 550,
+    cls: 'editing-publishing-menu',
 
-	cls: 'editing-publishing-menu',
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'arrow'},
 		{cls: 'container', cn: [
 			{cls: 'option publish', 'data-action': 'publish', cn: [
@@ -33,8 +31,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		]}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		containerEl: '.container',
 		publishEl: '.publish',
 		publishOnDateEl: '.publish-on-date',
@@ -42,8 +39,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		saveBtnEl: '.save'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.EditingActions = new NextThought.app.course.overview.components.editing.Actions();
@@ -55,8 +51,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
    		this.on('destroy', this.close.bind(this));
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.publishEl, 'click', this.handleSelectionClick.bind(this));
@@ -65,28 +60,25 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		this.mon(this.saveBtnEl, 'click', this.onSave.bind(this));
 	},
 
-
-	open: function() {
+    open: function() {
 		Ext.EventManager.onWindowResize(this.onWindowResizeBuffer, this);
 		window.addEventListener('scroll', this.realign);
 		this.setInitialState();
 		this.realign(true);
 	},
 
-
-	close: function() {
+    close: function() {
 		Ext.EventManager.removeResizeListener(this.onWindowResizeBuffer, this);
 		window.removeEventListener('scroll', this.realign);
 	},
 
-
-	alignTo: function(domNode) {
+    alignTo: function(domNode) {
 		this.alignedTo = domNode;
 
 		this.realign();
 	},
 
-	realign: function(unlockSide) {
+    realign: function(unlockSide) {
 		if (!this.alignedTo || !this.rendered) { return; }
 
 		var menu = this.el,
@@ -146,8 +138,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		}
 	},
 
-
-	setInitialState: function() {
+    setInitialState: function() {
 		var node = this.record,
 			isNodePublished = node && node.isPublished && node.isPublished(),
 			lesson = this.contents,
@@ -192,13 +183,11 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		}
 	},
 
-
-	reset: function() {
+    reset: function() {
 		this.setInitialState();
 	},
 
-
-	handleSelectionClick: function(e) {
+    handleSelectionClick: function(e) {
 		var el = Ext.get(e.target),
 			me = this;
 
@@ -206,8 +195,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		this.select(el);
 	},
 
-
-	onPublishOnDateClick: function(e) {
+    onPublishOnDateClick: function(e) {
 		var el = Ext.get(e.target);
 
 		e.stopEvent();
@@ -219,8 +207,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		this.select(el);
 	},
 
-
-	onSave: function(e) {
+    onSave: function(e) {
 		var selectedEl = this.el.down('.option.selected'),
 			action = selectedEl && selectedEl.getAttribute('data-action');
 
@@ -243,8 +230,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		}
 	},
 
-
-	publishSave: function() {
+    publishSave: function() {
 		var me = this;
 
 		Promise.all([
@@ -259,8 +245,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		});
 	},
 
-
-	publishOnDateSave: function() {
+    publishOnDateSave: function() {
 		var dateValue = this.datepicker && this.datepicker.getValue(),
 			me = this;
 
@@ -279,8 +264,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		});
 	},
 
-
-	unpublishSave: function() {
+    unpublishSave: function() {
 		var me = this;
 
 		Promise.all([
@@ -295,8 +279,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		});
 	},
 
-
-	createDatePicker: function(dateContainer) {
+    createDatePicker: function(dateContainer) {
 		//If we've already set on up, no need to create a new one
 		if (this.datepicker) { return; }
 
@@ -321,8 +304,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		this.on('destroy', this.datepicker.destroy.bind(this.datepicker));
 	},
 
-
-	getDefaultDate: function(){
+    getDefaultDate: function(){
 		var defaultValue = new Date();
 
 		// Set it to tomorrow at mid night.
@@ -334,8 +316,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		return defaultValue;
 	},
 
-
-	dateChanged: function() {
+    dateChanged: function() {
 		var time = this.datepicker.getValue(),
 			date = new Date(time * 1000);
 
@@ -345,8 +326,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		}
 	},
 
-
-	setPublishOnDateText: function(date) {
+    setPublishOnDateText: function(date) {
 		var	targetEl = this.publishOnDateEl.down('.description'),
 			time = this.getDisplayDateValue(date);
 
@@ -355,8 +335,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		}
 	},
 
-
-	getDisplayDateValue: function(date) {
+    getDisplayDateValue: function(date) {
 		var hour, minutes,
 			meridiemVal, date;
 
@@ -378,8 +357,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.pu
 		return null;
 	},
 
-
-	select: function(el) {
+    select: function(el) {
 		var t = el && el.hasCls('option') ? el : el && el.up('.option'),
 			selectedEl = this.el.down('.selected');
 

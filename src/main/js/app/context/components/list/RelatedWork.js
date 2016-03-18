@@ -1,18 +1,19 @@
-export default Ext.define('NextThought.app.context.components.list.RelatedWork', {
-	extend: 'NextThought.app.context.components.list.Content',
-	alias: 'widget.context-relatedwork-list',
-
-	requires: ['NextThought.model.PageInfo'],
+var Ext = require('extjs');
+var ListContent = require('./Content');
+var ModelPageInfo = require('../../../../model/PageInfo');
 
 
-	afterRender: function() {
+module.exports = exports = Ext.define('NextThought.app.context.components.list.RelatedWork', {
+    extend: 'NextThought.app.context.components.list.Content',
+    alias: 'widget.context-relatedwork-list',
+
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.snippetEl.update(this.content.get('label'));
 	},
 
-
-	getContentRootFor: function(path) {
+    getContentRootFor: function(path) {
 		var root, i = 0, part;
 
 		while (!root) {
@@ -28,8 +29,7 @@ export default Ext.define('NextThought.app.context.components.list.RelatedWork',
 		return root;
 	},
 
-
-	setIcon: function(path) {
+    setIcon: function(path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setIcon.bind(this, path));
 			return;
@@ -51,7 +51,7 @@ export default Ext.define('NextThought.app.context.components.list.RelatedWork',
 		}
 	},
 
-	setLineage: function(path){
+    setLineage: function(path){
 		if (!this.rendered) {
 			this.on('afterrender', this.setLineage.bind(this, path));
 			return;

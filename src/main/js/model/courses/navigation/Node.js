@@ -1,12 +1,12 @@
-export default Ext.define('NextThought.model.courses.navigation.Node', {
-	extend: 'Ext.data.Model',
-	requires: [
-		'Ext.data.reader.Xml'
-	],
+var Ext = require('extjs');
+var ParseUtils = require('../../../util/Parsing');
 
-	idProperty: 'NTIID',
 
-	proxy: {
+module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node', {
+    extend: 'Ext.data.Model',
+    idProperty: 'NTIID',
+
+    proxy: {
 		type: 'memory',
 		reader: {
 		    type: 'xml',
@@ -15,7 +15,7 @@ export default Ext.define('NextThought.model.courses.navigation.Node', {
 		}
 	},
 
-	fields: [
+    fields: [
 		{ name: 'src', type: 'string', mapping: '@src'},
 
 			//id
@@ -99,8 +99,7 @@ export default Ext.define('NextThought.model.courses.navigation.Node', {
 		}
 	],
 
-
-	parseDates: function(str, fieldScope) {
+    parseDates: function(str, fieldScope) {
 		if (Ext.isEmpty(str)) {
 			return null;
 		}
@@ -113,8 +112,7 @@ export default Ext.define('NextThought.model.courses.navigation.Node', {
 		return v;
 	},
 
-
-	getAssociatedNode: function() {
+    getAssociatedNode: function() {
 		var n = this.raw,
 			ntiid;
 		if (!this.associatedNode) {
@@ -129,8 +127,7 @@ export default Ext.define('NextThought.model.courses.navigation.Node', {
 		return this.associatedNode;
 	},
 
-
-	getChildren: function() {
+    getChildren: function() {
 		var n = this.get('tocNode'),
 			c = n && n.getChildren();
 
@@ -143,9 +140,7 @@ export default Ext.define('NextThought.model.courses.navigation.Node', {
 		return Ext.Array.clone(n.getChildren());
 	},
 
-
-
-	listenForFieldChange: function(field, fn, scope, single) {
+    listenForFieldChange: function(field, fn, scope, single) {
 		var monitor;
 
 		function update(store, record, type, modifiedFieldNames) {

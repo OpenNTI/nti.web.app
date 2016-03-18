@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.store.courseware.StudentHistoryItems', {
+var Ext = require('extjs');
+var CoursewareHistoryItems = require('./HistoryItems');
+
+
+module.exports = exports = Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 	extend: 'NextThought.store.courseware.HistoryItems',
 
 	getTotalCount: function() {

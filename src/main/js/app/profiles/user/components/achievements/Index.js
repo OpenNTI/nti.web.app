@@ -1,23 +1,24 @@
-export default Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.user-profile-achievements',
+var Ext = require('extjs');
+var Globals = require('../../../../../util/Globals');
+var MixinsRouter = require('../../../../../mixins/Router');
+var PartsBadgeList = require('./parts/BadgeList');
+var OpenbadgesBadge = require('../../../../../model/openbadges/Badge');
 
-	requires: [
-		'NextThought.app.profiles.user.components.achievements.parts.BadgeList',
-		'NextThought.model.openbadges.Badge'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.achievements.Index', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.user-profile-achievements',
+
+    mixins: {
 		Route: 'NextThought.mixins.Router'
 	},
 
-	columns: 7,
+    columns: 7,
+    layout: 'none',
+    ui: 'profile-achievements',
+    cls: 'profile-achievements',
 
-	layout: 'none',
-	ui: 'profile-achievements',
-	cls: 'profile-achievements',
-
-	items: [
+    items: [
 		{
 			xtype: 'container',
 			layout: 'none',
@@ -54,8 +55,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		}
 	],
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.addRoute('/', this.showBadges.bind(this));
@@ -67,8 +67,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		this.achievements = this.down('[achievements]');
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -118,17 +117,14 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		});
 	},
 
-
-	getRecord: function(el) {
+    getRecord: function(el) {
 		var p = Ext.fly(el).parent('.badge-list'),
 			cmp = p && Ext.getCmp(p.id);
 
 		return cmp && cmp.getRecord(el);
 	},
 
-
-
-	userChanged: function(user, isMe) {
+    userChanged: function(user, isMe) {
 		if (this.activeUser === user) {
 			return Promise.resolve();
 		}
@@ -170,15 +166,13 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		return Promise.resolve();
 	},
 
-
-	showBadges: function(route, subRoute) {
+    showBadges: function(route, subRoute) {
 		this.setTitle('Achievements');
 
 		return Promise.resolve();
 	},
 
-
-	loadWorkSpace: function(workspace) {
+    loadWorkSpace: function(workspace) {
 		var earnableUrl, earnedUrl;
 
 		if (!workspace) {
@@ -204,8 +198,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		this.loadBadges(earnableUrl, earnedUrl);
 	},
 
-
-	loadBadges: function(earnableUrl, earnedUrl) {
+    loadBadges: function(earnableUrl, earnedUrl) {
 		var me = this,
 			loadPromise;
 
@@ -284,8 +277,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 			});
 	},
 
-
-	buildIsMe: function(completed, current, achievements) {
+    buildIsMe: function(completed, current, achievements) {
 		var cCount = completed.length,
 			iCount = current.length,
 			aCount = achievements.length,
@@ -333,8 +325,7 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		this.finishLoading();
 	},
 
-
-	buildNotMe: function(completed, achievements) {
+    buildNotMe: function(completed, achievements) {
 		var me = this;
 
 		function setEmptyCls(add) {
@@ -382,16 +373,14 @@ export default Ext.define('NextThought.app.profiles.user.components.achievements
 		this.finishLoading();
 	},
 
-
-	finishLoading: function() {
+    finishLoading: function() {
 		if (this.loadingCmp) {
 			this.remove(this.loadingCmp, true);
 			delete this.loadingCmp;
 		}
 	},
 
-
-	setEmptyState: function() {
+    setEmptyState: function() {
 		this.coursesContainer.hide();
 		this.achievements.hide();
 		this.currentCourses.hide();

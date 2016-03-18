@@ -1,40 +1,36 @@
-export default Ext.define('NextThought.app.profiles.user.components.activity.parts.Page', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.profile-stream-page',
+var Ext = require('extjs');
+var EventsActivityItem = require('./events/ActivityItem');
+var EventsActivityItemReply = require('./events/ActivityItemReply');
+var EventsBadge = require('./events/Badge');
+var EventsBlogged = require('./events/Blogged');
+var EventsBlogReply = require('./events/BlogReply');
+var EventsForumActivityItem = require('./events/ForumActivityItem');
+var EventsHighlightContainer = require('./events/HighlightContainer');
+var EventsJoined = require('./events/Joined');
+var EventsNoteReply = require('./events/NoteReply');
+var EventsPostReply = require('./events/PostReply');
+var EventsTopicReply = require('./events/TopicReply');
+var EventsTranscriptSummaryItem = require('./events/TranscriptSummaryItem');
 
-	requires: [
-		'NextThought.app.profiles.user.components.activity.parts.events.ActivityItem',
-		'NextThought.app.profiles.user.components.activity.parts.events.ActivityItemReply',
-		'NextThought.app.profiles.user.components.activity.parts.events.Badge',
-		'NextThought.app.profiles.user.components.activity.parts.events.Blogged',
-		'NextThought.app.profiles.user.components.activity.parts.events.BlogReply',
-		'NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItem',
-		'NextThought.app.profiles.user.components.activity.parts.events.HighlightContainer',
-		'NextThought.app.profiles.user.components.activity.parts.events.Joined',
-		'NextThought.app.profiles.user.components.activity.parts.events.NoteReply',
-		'NextThought.app.profiles.user.components.activity.parts.events.PostReply',
-		'NextThought.app.profiles.user.components.activity.parts.events.TopicReply',
-		'NextThought.app.profiles.user.components.activity.parts.events.TranscriptSummaryItem'
-	],
 
-	layout: 'none',
+module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.Page', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.profile-stream-page',
+    layout: 'none',
+    items: [],
 
-	items: [],
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.add(this.cmpsFromRecords(this.records));
 	},
 
-
-	onAdd: function(cmp) {
+    onAdd: function(cmp) {
 		this.callParent(arguments);
 		cmp.addCls('activity-event-item');
 	},
 
-
-	cmpsFromRecords: function(records) {
+    cmpsFromRecords: function(records) {
 		var me = this,
 			cmps = [], lastHighlightContainer, user = me.user;
 

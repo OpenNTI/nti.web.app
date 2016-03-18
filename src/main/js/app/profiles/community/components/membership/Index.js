@@ -1,30 +1,32 @@
-export default Ext.define('NextThought.app.profiles.community.components.membership.Index', {
-	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
-	alias: 'widget.profile-community-membership',
+var Ext = require('extjs');
+var AnalyticsUtil = require('../../../../../util/Analytics');
+var StoreUtils = require('../../../../../util/Store');
+var PartsMembership = require('../../../user/components/membership/parts/Membership');
+var MixinsRouter = require('../../../../../mixins/Router');
+var UtilStore = require('../../../../../util/Store');
 
-	requires: [
-		'NextThought.util.Store'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.profiles.community.components.membership.Index', {
+    extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
+    alias: 'widget.profile-community-membership',
+
+    mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	title: 'Community Members',
-	cls: 'memberships full community two-column',
-	profileRouteRoot: '/user',
+    title: 'Community Members',
+    cls: 'memberships full community two-column',
+    profileRouteRoot: '/user',
+    PAGE_SIZE: 100,
 
-	PAGE_SIZE: 100,
-
-	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+    entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'entry', 'data-route': '{route}', cn: [
 			'{member:avatar}',
 			{cls: 'name', html: '{name}'}
 		]
 	})),
 
-
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{cls: 'title', html: '{title}'},
 		{cls: 'entries'},
 		{cls: 'loading hidden', html: 'Loading...'},
@@ -32,8 +34,7 @@ export default Ext.define('NextThought.app.profiles.community.components.members
 		{cls: 'load-more hidden', html: 'Load More'}
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		titleEl: '.title',
 		entriesEl: '.entries',
 		loadingEl: '.loading',
@@ -41,8 +42,7 @@ export default Ext.define('NextThought.app.profiles.community.components.members
 		loadMoreEl: '.load-more'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -57,8 +57,7 @@ export default Ext.define('NextThought.app.profiles.community.components.members
 		});
 	},
 
-
-	startResourceViewed: function() {
+    startResourceViewed: function() {
 		var id = this.activeEntity && this.activeEntity.getId();
 
 		if (id && !this.hasCurrentTimer) {
@@ -71,8 +70,7 @@ export default Ext.define('NextThought.app.profiles.community.components.members
 		}
 	},
 
-
-	stopResourceViewed: function() {
+    stopResourceViewed: function() {
 		var id = this.activeEntity && this.activeEntity.getId();
 
 		if (id && this.hasCurrentTimer) {
@@ -81,15 +79,13 @@ export default Ext.define('NextThought.app.profiles.community.components.members
 		}
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.loadMoreEl, 'click', this.onLoadMore.bind(this));
 	},
 
-
-	updateEntity: function(entity) {
+    updateEntity: function(entity) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateEntity.bind(this));
 			return;
@@ -109,13 +105,11 @@ export default Ext.define('NextThought.app.profiles.community.components.members
 		this.startResourceViewed();
 	},
 
-
-	showMembership: function() {
+    showMembership: function() {
 		this.setTitle('Members');
 	},
 
-
-	loadPage: function(page) {
+    loadPage: function(page) {
 		var params = {
 				batchSize: this.PAGE_SIZE,
 				batchStart: (page - 1) * this.PAGE_SIZE
@@ -129,20 +123,17 @@ export default Ext.define('NextThought.app.profiles.community.components.members
 			.fail(this.onBatchError.bind(this));
 	},
 
-
-	onLoadMore: function() {
+    onLoadMore: function() {
 		if (this.currentPage) {
 			this.loadPage(this.currentPage + 1);
 		}
 	},
 
-
-	onBatchError: function() {
+    onBatchError: function() {
 		this.showError();
 	},
 
-
-	onBatchLoad: function(batch) {
+    onBatchLoad: function(batch) {
 		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
 
 		this.removeLoading();
@@ -159,38 +150,31 @@ export default Ext.define('NextThought.app.profiles.community.components.members
 		}
 	},
 
-
-	showLoadMore: function() {
+    showLoadMore: function() {
 		this.loadMoreEl.removeCls('hidden');
 	},
 
-
-	hideLoadMore: function() {
+    hideLoadMore: function() {
 		this.loadMoreEl.addCls('hidden');
 	},
 
-
-	showLoading: function() {
+    showLoading: function() {
 		this.loadingEl.removeCls('hidden');
 	},
 
-
-	removeLoading: function() {
+    removeLoading: function() {
 		this.loadingEl.addCls('hidden');
 	},
 
-
-	showError: function() {
+    showError: function() {
 		this.errorEl.removeCls('hidden');
 	},
 
-
-	removeError: function() {
+    removeError: function() {
 		this.errorEl.addCls('hidden');
 	},
 
-
-	addMembers: function(members) {
+    addMembers: function(members) {
 		members = members || [];
 
 		members.map(function(member) {

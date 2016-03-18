@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.common.components.BoundPanel', {
+var Ext = require('extjs');
+var ParseUtils = require('../../util/Parsing');
+
+
+module.exports = exports = Ext.define('NextThought.common.components.BoundPanel', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.data-bound-panel',
 

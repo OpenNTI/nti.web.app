@@ -1,10 +1,14 @@
+var Ext = require('extjs');
+var User = require('../../User');
+var ModelBase = require('../../Base');
+var ModelUser = require('../../User');
+
+
 /*global User*/
-export default Ext.define('NextThought.model.courses.assignments.Summary', {
-	extend: 'NextThought.model.Base',
+module.exports = exports = Ext.define('NextThought.model.courses.assignments.Summary', {
+    extend: 'NextThought.model.Base',
 
-	requires: ['NextThought.model.User'],
-
-	fields: [
+    fields: [
 		{name: 'Alias', type: 'string'},
 		{name: 'Username', type: 'string'},
 		{name: 'avatar', type: 'string', defaultValue: User.BLANK_AVATAR},
@@ -17,8 +21,7 @@ export default Ext.define('NextThought.model.courses.assignments.Summary', {
 		{name: 'AvailableFinalGrade', type: 'bool'}
 	],
 
-
-	hasFinalGrade: function() {
+    hasFinalGrade: function() {
 		return this.get('AvailableFinalGrade');
 	}
 });

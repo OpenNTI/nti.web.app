@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.URL', {
+var Ext = require('extjs');
+var TypesBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.URL', {
 	extend: 'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
 	alias: 'widget.overview-editing-contentlink-url',
 

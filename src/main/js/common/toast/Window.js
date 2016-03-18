@@ -1,4 +1,7 @@
-export default Ext.define('NextThought.common.toast.Window', {
+var Ext = require('extjs');
+
+
+module.exports = exports = Ext.define('NextThought.common.toast.Window', {
 	extend: 'Ext.Component',
 	alias: 'widget.toast',
 

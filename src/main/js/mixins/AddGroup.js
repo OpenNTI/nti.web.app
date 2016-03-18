@@ -1,10 +1,9 @@
-export default Ext.define('NextThought.mixins.AddGroup', {
+var Ext = require('extjs');
+var GroupsActions = require('../app/groups/Actions');
 
-	requires: [
-		'NextThought.app.groups.Actions'
-	],
 
-	attachAddGroupControl: function(parent, tag) {
+module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
+    attachAddGroupControl: function(parent, tag) {
 		var link;
 		this.addGroupParent = parent;
 		this.addGroupTag = tag;
@@ -36,7 +35,7 @@ export default Ext.define('NextThought.mixins.AddGroup', {
 		});
 	},
 
-	addGroupClearBox: function() {
+    addGroupClearBox: function() {
 		var w = this.addGroupDom.down('.input-wrap');
 		w.addCls('empty');
 		w.down('input').dom.value = '';
@@ -44,7 +43,7 @@ export default Ext.define('NextThought.mixins.AddGroup', {
 		this.reset();
 	},
 
-	newGroupKeyDown: function(event) {
+    newGroupKeyDown: function(event) {
 		var specialKeys = {
 			27: true,	//Ext.EventObject.prototype.ESC
 			8: true,	//Ext.EventObject.prototype.BACKSPACE
@@ -59,13 +58,13 @@ export default Ext.define('NextThought.mixins.AddGroup', {
 		}
 	},
 
-	keyUp: function(event) {
+    keyUp: function(event) {
 		var len = event.getTarget().value.trim().length;
 		this.addGroupDom.down('.input-wrap')[(len > 0) ? 'removeCls' : 'addCls']('empty');
 		this.addGroupDom.down('.save-button')[(len > 0) ? 'removeCls' : 'addCls']('save-button-disabled');
 	},
 
-	newGroupKeyPressed: function(event) {
+    newGroupKeyPressed: function(event) {
 		var k = event.getKey();
 		if (k === event.ESC) {
 			event.stopEvent();
@@ -86,8 +85,7 @@ export default Ext.define('NextThought.mixins.AddGroup', {
 		return true;
 	},
 
-
-	submitNewGroup: function(groupName) {
+    submitNewGroup: function(groupName) {
 		this.GroupActions = NextThought.app.groups.Actions.create();
 		var input = this.addGroupDom.down('input'),
 			me = this,
@@ -112,7 +110,7 @@ export default Ext.define('NextThought.mixins.AddGroup', {
 		delete this.newListInputBoxActive;
 	},
 
-	addGroupClicked: function(e) {
+    addGroupClicked: function(e) {
 		var a = Ext.get(e.getTarget('a', undefined, true)),
             wrap = a.next('.input-wrap'),
             input = wrap.down('input');

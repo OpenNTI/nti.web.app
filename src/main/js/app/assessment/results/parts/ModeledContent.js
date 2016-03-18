@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.assessment.results.parts.ModeledContent', {
+var Ext = require('extjs');
+var MixinsModelWithBodyContent = require('../../../../mixins/ModelWithBodyContent');
+
+
+module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.ModeledContent', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-modeledcontent-result',
 

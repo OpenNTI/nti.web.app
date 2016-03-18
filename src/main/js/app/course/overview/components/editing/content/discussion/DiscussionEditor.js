@@ -1,15 +1,15 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.discussion.DiscussionEditor', {
-	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-	alias: 'widget.overview-editing-discussion-editor',
-
-	requires: [
-		'NextThought.model.DiscussionRef'
-	],
-
-	cls: 'content-editor content-link',
+var Ext = require('extjs');
+var Globals = require('../../../../../../../util/Globals');
+var ContentEditor = require('../Editor');
+var ModelDiscussionRef = require('../../../../../../../model/DiscussionRef');
 
 
-	getFormSchema: function() {
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.discussion.DiscussionEditor', {
+    extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+    alias: 'widget.overview-editing-discussion-editor',
+    cls: 'content-editor content-link',
+
+    getFormSchema: function() {
 		var schema = [
 				{name: 'MimeType', type: 'hidden'},
 				{name: 'target', type: 'hidden'},
@@ -42,8 +42,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return schema;
 	},
 
-
-	getDefaultValues: function() {
+    getDefaultValues: function() {
 		if (this.record) {
 			var data = this.record.isModel && this.record.getData();
 
@@ -61,8 +60,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		};
 	},
 
-
-	isDiscussionRef: function(record) {
+    isDiscussionRef: function(record) {
 		if (record && record.get('MimeType') === NextThought.model.DiscussionRef.mimeType) {
 			return true;
 		}
@@ -70,8 +68,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return false;
 	},
 
-
-	getFormMethod: function() {
+    getFormMethod: function() {
 		var isDiscussionRef = this.isDiscussionRef(this.record);
 		if (isDiscussionRef) {
 			return 'PUT';
@@ -80,7 +77,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return 'POST';
 	},
 
-	getThumbnailURL: function() {
+    getThumbnailURL: function() {
 		var iconURL = this.record && this.record.get('icon');
 		if (iconURL) {
 			if (Globals.ROOT_URL_PATTERN.test(iconURL)) {
@@ -94,8 +91,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return '';
 	},
 
-
-	onSave: function() {
+    onSave: function() {
 		var me = this,
 			parentSelection = me.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),

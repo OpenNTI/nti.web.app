@@ -1,12 +1,14 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.ReadingEditor', {
-	extend: 'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
-	alias: 'widget.overview-editing-reading-editor',
+var Ext = require('extjs');
+var ContentUtils = require('../../../../../../../util/Content');
+var TypesBase = require('./types/Base');
+var ModelRelatedWork = require('../../../../../../../model/RelatedWork');
 
 
-	requires: ['NextThought.model.RelatedWork'],
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.ReadingEditor', {
+    extend: 'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
+    alias: 'widget.overview-editing-reading-editor',
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		this.formCmp.setPlaceholder('icon', NextThought.model.RelatedWork.getIconForMimeType('unknown'));
@@ -17,16 +19,14 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	readingHasChanged: function() {
+    readingHasChanged: function() {
 		var href = this.record && this.record.get('href'),
 			selected = this.selectedItem && this.selectedItem.getAttribute('ntiid');
 
 		return href && selected && href !== selected;
 	},
 
-
-	showEditor: function() {
+    showEditor: function() {
 		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord, this.onFormChange.bind(this));
 
 		if (this.selectedItem) {
@@ -42,8 +42,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	addReadingPreview: function(item) {
+    addReadingPreview: function(item) {
 		var me = this,
 			breadcrumb = ContentUtils.getReadingBreadCrumb(item),
 			pages = ContentUtils.getReadingPages(item),
@@ -83,8 +82,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		});
 	},
 
-
-	getFormSchema: function() {
+    getFormSchema: function() {
 		var schema = this.callParent(arguments);
 
 		schema.unshift({type: 'hidden', name: 'href'});
@@ -93,8 +91,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		return schema;
 	},
 
-
-	getDefaultValues: function() {
+    getDefaultValues: function() {
 		var values = this.callParent(arguments),
 			selectedItem = this.selectedItem;
 

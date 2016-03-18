@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.model.assessment.FilePart', {
+var Ext = require('extjs');
+var AssessmentPart = require('./Part');
+
+
+module.exports = exports = Ext.define('NextThought.model.assessment.FilePart', {
 	extend: 'NextThought.model.assessment.Part',
 	fields: [
 		{ name: 'AllowedExtentions', mapping: 'allowed_extensions', type: 'auto'},

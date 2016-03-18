@@ -1,22 +1,34 @@
-export default Ext.define('NextThought.app.userdata.Actions', {
-	extend: 'NextThought.common.Actions',
+var Ext = require('extjs');
+var LocationMeta = require('../../cache/LocationMeta');
+var UserRepository = require('../../cache/UserRepository');
+var FilterManager = require('../../filter/FilterManager');
+var Anchors = require('../../util/Anchors');
+var AnnotationUtils = require('../../util/Annotations');
+var ContentUtils = require('../../util/Content');
+var Globals = require('../../util/Globals');
+var ObjectUtils = require('../../util/Object');
+var ParseUtils = require('../../util/Parsing');
+var SharingUtils = require('../../util/Sharing');
+var StoreUtils = require('../../util/Store');
+var CommonActions = require('../../common/Actions');
+var LoginStateStore = require('../../login/StateStore');
+var UserdataStateStore = require('./StateStore');
+var GroupsStateStore = require('../groups/StateStore');
+var StorePageItem = require('../../store/PageItem');
+var FilterFilterManager = require('../../filter/FilterManager');
+var ModelBookmark = require('../../model/Bookmark');
+var AnchorablesContentRangeDescription = require('../../model/anchorables/ContentRangeDescription');
+var ContextStateStore = require('../context/StateStore');
+var UtilAnchors = require('../../util/Anchors');
+var UtilAnnotations = require('../../util/Annotations');
+var DefinitionWindow = require('../contentviewer/components/definition/Window');
+var ReaderAnchorResolver = require('../mediaviewer/components/reader/AnchorResolver');
 
-	requires: [
-		'NextThought.login.StateStore',
-		'NextThought.app.userdata.StateStore',
-		'NextThought.app.groups.StateStore',
-		'NextThought.store.PageItem',
-		'NextThought.filter.FilterManager',
-		'NextThought.model.Bookmark',
-		'NextThought.model.anchorables.ContentRangeDescription',
-		'NextThought.app.context.StateStore',
-		'NextThought.util.Anchors',
-		'NextThought.util.Annotations',
-		'NextThought.app.contentviewer.components.definition.Window',
-		'NextThought.app.mediaviewer.components.reader.AnchorResolver'
-	],
 
-	constructor: function() {
+module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
+    extend: 'NextThought.common.Actions',
+
+    constructor: function() {
 		this.callParent(arguments);
 
 		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
@@ -33,8 +45,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-
-	onLogin: function() {
+    onLogin: function() {
 		var socket = this.UserDataStore.getSocket();
 
 		socket.register({
@@ -44,8 +55,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		this.UserDataStore.setLoaded();
 	},
 
-
-	changeActionMap: {
+    changeActionMap: {
 		/**
 		 * Stubs that show what we could handle. They will be called with these args:
 		 *
@@ -61,7 +71,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		shared: 'incomingSharedChange'
 	},
 
-	/*
+    /*
 		TODO: make this subscription based on the container id, so a store can say give me all
 		incoming changes with this container id and we only apply those changes to that store
 		instead of iterating all of them
@@ -115,8 +125,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-
-	incomingCreatedChange: function(change, item) {
+    incomingCreatedChange: function(change, item) {
 		var cid = item.get('ContainerId'),
 			actedOn = false,
 			recordForStore = item;
@@ -149,8 +158,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-
-	incomingDeletedChange: function(change, item) {
+    incomingDeletedChange: function(change, item) {
 		var cid = item.get('ContainerId'),
 			actedOn = false;
 
@@ -177,8 +185,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-
-	incomingModifiedChange: function(change, item) {
+    incomingModifiedChange: function(change, item) {
 		var cid = item.get('ContainerId'),
 			actedOn = false;
 
@@ -209,14 +216,12 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-
-	incomingSharedChange: function(change, item) {
+    incomingSharedChange: function(change, item) {
 		console.warn('What would we do here? treating as a create.');
 		this.incomingCreatedChange(change, item);
 	},
 
-
-	updatePreferences: function(pageInfo) {
+    updatePreferences: function(pageInfo) {
 		if (Array.isArray(pageInfo)) {
 			pageInfo.map(this.updatePreferences.bind(this));
 			return;
@@ -242,8 +247,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-
-	__getPreferenceFromLineage: function(ntiids) {
+    __getPreferenceFromLineage: function(ntiids) {
 		if (!ntiids) { return Promise.reject('No id to get preference for.'); }
 
 		var store = this.UserDataStore,
@@ -268,8 +272,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 			});
 	},
 
-
-	/**
+    /**
 	* Returns preferences for the given ntiid.  Currently this functions primary responsibility is
 	* to determine the intial sharedWith list that userdata (new notes) should have the sharedWith list
 	* defaulted to.
@@ -366,15 +369,13 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 			});
 	},
 
-
-	listenToPageStores: function(monitor, listeners) {
+    listenToPageStores: function(monitor, listeners) {
 		var context = this.UserDataStore.getContext(monitor) || this.UserDataStore.getMainReaderContext();
 
 		monitor.mon(context.pageStoreEvents, listeners);
 	},
 
-
-	initPageStores: function(cmpContext) {
+    initPageStores: function(cmpContext) {
 		var context = this.UserDataStore.getContext(cmpContext),
 			currentPageStoresMap = {};
 
@@ -413,8 +414,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-
-	clearPageStore: function(ctx) {
+    clearPageStore: function(ctx) {
 		ctx = ctx || this.UserDataStore.getContext();
 
 		var fp = ctx.flatPageStore;
@@ -428,8 +428,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-
-	getPageStore: function(id, ctx) {
+    getPageStore: function(id, ctx) {
 		ctx = ctx || this.UserDataStore.getContext();
 
 		var theStore, root;
@@ -453,15 +452,13 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		return theStore || {bad: true, add: bad, getById: bad, remove: bad, on: bad, each: bad, un: bad, getItems: bad, getCount: bad};
 	},
 
-
-	hasPageStore: function(id, ctx) {
+    hasPageStore: function(id, ctx) {
 		ctx = ctx || this.UserDataStore.getContext();
 
 		return !id ? false : (ctx.currentPageStores || {}).hasOwnProperty(id);
 	},
 
-
-	addPageStore: function(id, store, ctx) {
+    addPageStore: function(id, store, ctx) {
 		ctx = ctx || this.UserDataStore.getContext();
 
 		var events = ctx.pageStoreEvents,
@@ -510,8 +507,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 				events.relayEvents(store, ['add', 'bulkremove', 'remove']));
 	},
 
-
-	onAnnotationsLineFilter: function(cmp, line) {
+    onAnnotationsLineFilter: function(cmp, line) {
 		var context = this.UserDataStore.getContext(cmp),
 			store = context.flatPageStore;
 
@@ -530,8 +526,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		store.sort();
 	},
 
-
-	onAnnotationsFilter: function(cmp) {
+    onAnnotationsFilter: function(cmp) {
 		var context = this.UserDataStore.getContext(cmp),
 			listParams = FilterManager.getServerListParams(),
 			filter = ['TopLevel'];
@@ -588,8 +583,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		}, containerStorePredicate);
 	},
 
-
-	loadAnnotations: function(cmp, containerId, pageInfo, containers) {
+    loadAnnotations: function(cmp, containerId, pageInfo, containers) {
 		var me = this,
 			Store = NextThought.store.PageItem,
 			userDataStore = me.UserDataStore,
@@ -623,18 +617,15 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-
-	applyToStores: function() {
+    applyToStores: function() {
 		this.UserDataStore.applyToStores.apply(this.UserDataStore, arguments);
 	},
 
-
-	applyToStoresThatWantItem: function() {
+    applyToStoresThatWantItem: function() {
 		this.UserDataStore.applyToStoresThatWantItem.apply(this.UserDataStore, arguments);
 	},
 
-
-	setupPageStoreDelegates: function(cmp) {
+    setupPageStoreDelegates: function(cmp) {
 		var context = this.UserDataStore.getContext(cmp),
 			delegate, delegates = {};
 
@@ -666,8 +657,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-
-	saveNewBookmark: function(container) {
+    saveNewBookmark: function(container) {
 		var me = this,
 			bm = NextThought.model.Bookmark.create({
 				ContainerId: container,
@@ -689,8 +679,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		});
 	},
 
-
-	getSaveCallback: function(fulfill, reject) {
+    getSaveCallback: function(fulfill, reject) {
 		var me = this;
 
 		return function(record, operation) {
@@ -710,8 +699,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-
-	handleException: function(reject, proxy, response) {
+    handleException: function(reject, proxy, response) {
 		var error,
 			msg = 'An unknown error occurred saving your note.';
 
@@ -731,8 +719,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		console.warn('Exception Message:', response.responseText);
 	},
 
-
-	__saveNote: function(applicableRange, body, title, ContainerId, shareWith, selectedText, style, callback) {
+    __saveNote: function(applicableRange, body, title, ContainerId, shareWith, selectedText, style, callback) {
 		var me = this,
 			noteRecord = NextThought.model.Note.create({
 				applicableRange: applicableRange,
@@ -769,8 +756,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		});
 	},
 
-
-	saveNewNote: function(title, body, range, container, shareWith, style, callback) {
+    saveNewNote: function(title, body, range, container, shareWith, style, callback) {
 		if (!body || (Array.isArray(body) && body.length < 1)) {
 			console.error('Note creating a noe missing content');
 			return;
@@ -803,8 +789,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		return this.__saveNote(rangeDescription.description, body, title, container, shareWith, selectedText, style, callback);
 	},
 
-
-	saveNewSeriesNote: function(title, body, range, cueInfo, containerId, shareWith, style, callback) {
+    saveNewSeriesNote: function(title, body, range, cueInfo, containerId, shareWith, style, callback) {
 		console.log(cueInfo);
 		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
 				AnchorResolver = NextThought.app.mediaviewer.components.reader.AnchorResolver,
@@ -814,8 +799,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		return this.__saveNote(rangeDescription.description, body, title, containerId, shareWith, selectedText, style, callback);
 	},
 
-
-	saveNewReply: function(recordRepliedTo, replyBody, shareWith, callback) {
+    saveNewReply: function(recordRepliedTo, replyBody, shareWith, callback) {
 		//some validation of input:
 		if (!recordRepliedTo) {
 			return Promise.reject('Must reply a record to reply to');
@@ -841,8 +825,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		});
 	},
 
-
-	savePhantomAnnotation: function(record, applySharing, successFn, failureFn) {
+    savePhantomAnnotation: function(record, applySharing, successFn, failureFn) {
 		var p,
 			me = this;
 
@@ -866,8 +849,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		});
 	},
 
-
-	/**
+    /**
 	 * Save the sharing prefs as the default for the container in this context
 	 * where context is a bundle.
 	 *
@@ -911,8 +893,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 
 	},
 
-
-	updateShareWith: function(record, sharedWith, saveAsDefault, context) {
+    updateShareWith: function(record, sharedWith, saveAsDefault, context) {
 		if (!record) {
 			return Promise.resolve();
 		}
@@ -952,7 +933,7 @@ export default Ext.define('NextThought.app.userdata.Actions', {
 		});
 	},
 
-	define: function(term, boundingScreenBox, reader) {
+    define: function(term, boundingScreenBox, reader) {
 
 		if (this.definition) {
 			this.definition.close();

@@ -1,22 +1,22 @@
-export default Ext.define('NextThought.app.course.overview.components.editing.content.video.VideoEditor', {
-	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-	alias: 'widget.overview-editing-video-editor',
+var Ext = require('extjs');
+var ContentEditor = require('../Editor');
+var VideoActions = require('./Actions');
+var ItemsItems = require('./items/Items');
 
-	requires: [
-		'NextThought.app.course.overview.components.editing.content.video.Actions',
-		'NextThought.app.course.overview.components.editing.content.video.items.Items'
-	],
 
-	layout: 'none',
-	items: [],
+module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.VideoEditor', {
+    extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+    alias: 'widget.overview-editing-video-editor',
+    layout: 'none',
+    items: [],
 
-	initComponent: function() {
+    initComponent: function() {
 		this.callParent(arguments);
 
 		this.VideoEditingActions = NextThought.app.course.overview.components.editing.content.video.Actions.create();
 	},
 
-	showEditor: function() {
+    showEditor: function() {
 		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord);
 
 		this.videoItems = this.add({
@@ -31,8 +31,7 @@ export default Ext.define('NextThought.app.course.overview.components.editing.co
 		}
 	},
 
-
-	onSave: function() {
+    onSave: function() {
 		var parentSelection = this.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
 			currentPosition = parentSelection && parentSelection.getCurrentPosition(),

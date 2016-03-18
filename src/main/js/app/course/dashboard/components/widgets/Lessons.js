@@ -1,9 +1,12 @@
-export default Ext.define('NextThought.app.course.dashboard.components.widgets.Lessons', {
-	extend: 'NextThought.app.course.dashboard.components.widgets.Base',
+var Ext = require('extjs');
+var WidgetsBase = require('./Base');
+var TilesLesson = require('../tiles/Lesson');
 
-	requires: ['NextThought.app.course.dashboard.components.tiles.Lesson'],
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.widgets.Lessons', {
+    extend: 'NextThought.app.course.dashboard.components.widgets.Base',
+
+    statics: {
 
 		__BASE_WEIGHT: 2.5,
 

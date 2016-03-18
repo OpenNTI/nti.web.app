@@ -1,4 +1,8 @@
-export default Ext.define('NextThought.app.notifications.components.types.ForumTopic', {
+var Ext = require('extjs');
+var TypesBase = require('./Base');
+
+
+module.exports = exports = Ext.define('NextThought.app.notifications.components.types.ForumTopic', {
 	extend: 'NextThought.app.notifications.components.types.Base',
 	alias: 'widget.notifications-item-forum-topic',
 

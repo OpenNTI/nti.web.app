@@ -1,20 +1,25 @@
-export default Ext.define('NextThought.app.blog.parts.old.Comment', {
-	extend: 'Ext.Component',
+var Ext = require('extjs');
+var UserRepository = require('../../../../cache/UserRepository');
+var DomUtils = require('../../../../util/Dom');
+var MixinsProfileLinks = require('../../../../mixins/ProfileLinks');
+var MixinsLikeFavoriteActions = require('../../../../mixins/LikeFavoriteActions');
+var MixinsFlagActions = require('../../../../mixins/FlagActions');
+var EditorEditor = require('../../../../editor/Editor');
 
-	requires: [
-		'NextThought.editor.Editor'
-	],
 
-	mixins: {
+module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', {
+    extend: 'Ext.Component',
+
+    mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
 		flagActions: 'NextThought.mixins.FlagActions'
 	},
 
-	cls: 'topic-comment',
-	ui: 'forum-comment',
+    cls: 'topic-comment',
+    ui: 'forum-comment',
 
-	renderTpl: Ext.DomHelper.markup([
+    renderTpl: Ext.DomHelper.markup([
 		{ cls: 'controls', cn: [
 			{cls: 'favorite-spacer'},
 			{cls: 'like'}
@@ -39,8 +44,7 @@ export default Ext.define('NextThought.app.blog.parts.old.Comment', {
 		] }
 	]),
 
-
-	renderSelectors: {
+    renderSelectors: {
 		bodyEl: '.body',
 		nameEl: '.name',
 		avatarEl: '.avatar',
@@ -54,8 +58,7 @@ export default Ext.define('NextThought.app.blog.parts.old.Comment', {
 		footEl: '.foot'
 	},
 
-
-	initComponent: function() {
+    initComponent: function() {
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.mixins.flagActions.constructor.call(this);
 		this.callParent(arguments);
@@ -64,8 +67,7 @@ export default Ext.define('NextThought.app.blog.parts.old.Comment', {
 		this.mon(this.record, 'destroy', this.onRecordDestroyed, this);
 	},
 
-
-	beforeRender: function() {
+    beforeRender: function() {
 		var me = this, r = me.record, rd;
 		me.callParent(arguments);
 		rd = me.renderData = Ext.apply(me.renderData || {}, r.getData());
@@ -82,12 +84,12 @@ export default Ext.define('NextThought.app.blog.parts.old.Comment', {
 		}
 	},
 
-	loadUser: function(creator) {
+    loadUser: function(creator) {
 		var me = this;
 		UserRepository.getUser(creator, me.addUser, me);
 	},
 
-	addUser: function(u) {
+    addUser: function(u) {
 		var me = this, r = me.record,
 			rd = Ext.apply(me.renderData || {}, r.getData());
 		rd.lastModified = rd['Last Modified'];
@@ -101,8 +103,7 @@ export default Ext.define('NextThought.app.blog.parts.old.Comment', {
 		}
 	},
 
-
-	afterRender: function() {
+    afterRender: function() {
 		this.callParent(arguments);
 
 		var bodyEl = this.bodyEl,
@@ -166,8 +167,7 @@ export default Ext.define('NextThought.app.blog.parts.old.Comment', {
 		});
 	},
 
-
-	onDestroy: function() {
+    onDestroy: function() {
 		if (this.editor) {
 			delete this.editor.ownerCt;
 			this.editor.destroy();
@@ -176,23 +176,19 @@ export default Ext.define('NextThought.app.blog.parts.old.Comment', {
 		this.callParent(arguments);
 	},
 
-
-	getRefItems: function() {
+    getRefItems: function() {
 		return this.editor ? [this.editor] : [];
 	},
 
-
-	getRecord: function() {
+    getRecord: function() {
 		return this.record;
 	},
 
-
-	updateContent: function() {
+    updateContent: function() {
 		this.record.compileBodyContent(this.setContent, this);
 	},
 
-
-	setContent: function(html) {
+    setContent: function(html) {
 		var el = this.bodyEl, me = this;
 
 		el.update(html);
@@ -208,7 +204,7 @@ export default Ext.define('NextThought.app.blog.parts.old.Comment', {
 		});
 	},
 
-	/*
+    /*
 	 * The normal pattern employed is to have the records destroy trigger this
 	 * component to go away. But, for blog (and forum I assume) comments
 	 * the server deletes them but then continues to return them as placeholder looking
@@ -250,8 +246,7 @@ export default Ext.define('NextThought.app.blog.parts.old.Comment', {
 		this.addCls('deleted');
 	},
 
-
-	onDeletePost: function(e) {
+    onDeletePost: function(e) {
 		e.stopEvent();
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
@@ -270,13 +265,11 @@ export default Ext.define('NextThought.app.blog.parts.old.Comment', {
 		});
 	},
 
-
-	fireDeleteEvent: function() {
+    fireDeleteEvent: function() {
 		this.fireEvent('delete-topic-comment', this.record, this);
 	},
 
-
-	onEditPost: function(e) {
+    onEditPost: function(e) {
 		e.stopEvent();
 		var parentCmp = this.up('forums-topic');
 		if (parentCmp && parentCmp.clearSearchHit) {
@@ -285,5 +278,4 @@ export default Ext.define('NextThought.app.blog.parts.old.Comment', {
 		this.editor.editBody(this.record.get('body'));
 		this.editor.activate();
 	}
-
 });

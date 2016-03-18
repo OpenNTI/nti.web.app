@@ -1,13 +1,12 @@
-export default Ext.define('NextThought.app.context.types.Question', {
+var Ext = require('extjs');
+var ComponentsQuestion = require('../components/Question');
+var ListQuestion = require('../components/list/Question');
+var CardsQuestion = require('../components/cards/Question');
+var LibraryActions = require('../../library/Actions');
 
-	requires: [
-		'NextThought.app.context.components.Question',
-		'NextThought.app.context.components.list.Question',
-		'NextThought.app.context.components.cards.Question',
-		'NextThought.app.library.Actions'
-	],
 
-	statics: {
+module.exports = exports = Ext.define('NextThought.app.context.types.Question', {
+    statics: {
 		type: 'question',
 
 		canHandle: function(obj) {
@@ -15,7 +14,7 @@ export default Ext.define('NextThought.app.context.types.Question', {
 		}
 	},
 
-	constructor: function(config) {
+    constructor: function(config) {
 		this.callParent(arguments);
 
 		this.container = config.container;
@@ -27,8 +26,7 @@ export default Ext.define('NextThought.app.context.types.Question', {
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
-
-	parse: function(question, kind) {
+    parse: function(question, kind) {
 		var me = this,
 			container = question.get('ContainerId');
 
@@ -45,8 +43,7 @@ export default Ext.define('NextThought.app.context.types.Question', {
 			});
 	},
 
-
-	__parseQuestion: function(question, kind) {
+    __parseQuestion: function(question, kind) {
 		var cmp;
 
 		if (kind === 'card') {
