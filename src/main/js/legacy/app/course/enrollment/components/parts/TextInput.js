@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const Formatter = require('formatter.js');
+const Formatter = require('formatter.js/dist/formatter');
 require('./BaseInput');
 require('legacy/common/form/fields/SimpleTextField');
 
