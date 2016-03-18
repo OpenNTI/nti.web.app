@@ -1,15 +1,16 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../../../cache/UserRepository');
-var User = require('../../../../../../model/User');
-var WindowsActions = require('../../../../../windows/Actions');
+const Ext = require('extjs');
+const moment = require('moment');
+const UserRepository = require('legacy/cache/UserRepository');
+const User = require('legacy/model/User');
+
+require('legacy/app/windows/Actions');
 
 
-/*globals User*/
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.parts.PostComment', {
-    extend: 'Ext.Component',
-    cls: 'post-comment',
+	extend: 'Ext.Component',
+	cls: 'post-comment',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'avatar-wrapper', cn: ['{user:avatar}']},
 		{cls: 'meta', cn: [
 			{cls: 'name'},
@@ -23,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		avatarEl: '.avatar-wrapper',
 		nameEl: '.meta .name',
 		createdEl: '.meta .created',
@@ -33,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		reportEl: '.actions .report'
 	},
 
-    afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.isDeleted()) {
@@ -51,22 +52,22 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		this.mon(this.el, 'click', 'itemClicked');
 	},
 
-    isDeleted: function() {
+	isDeleted: function () {
 		return false;
 	},
 
-    itemClicked: function(e) {
+	itemClicked: function (e) {
 		if (this.handleNavigation) {
 			e.stopPropagation();
 			this.handleNavigation();
 		}
 	},
 
-    fillInUser: function() {
+	fillInUser: function () {
 		var me = this;
 
 		UserRepository.getUser(me.record.get('Creator'))
-			.then(function(user) {
+			.then(function (user) {
 				me.avatarEl.setHTML(Ext.DomHelper.createTemplate('{user:avatar}').apply({user: user}));
 
 				me.mon(user, {
@@ -78,15 +79,15 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			});
 	},
 
-    fillInCreated: function() {
+	fillInCreated: function () {
 		var created = this.record.get('CreatedTime');
 
 		this.createdEl.update(moment(created).format('MMM Do h:mm A'));
 	},
 
-    fillInBody: function() {
+	fillInBody: function () {
 		this.bodyEl.update(this.record.getBodyText());
 	},
 
-    fillInComments: function() {}
+	fillInComments: function () {}
 });

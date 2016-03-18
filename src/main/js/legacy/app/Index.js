@@ -1,31 +1,32 @@
-var Ext = require('extjs');
-var AppMessageBox = require('./MessageBox');
-var AppMessageBar = require('./MessageBar');
-var NavigationIndex = require('./navigation/Index');
-var NavigationMessageBar = require('./navigation/MessageBar');
-var AppBody = require('./Body');
-var WindowsIndex = require('./windows/Index');
-var ChatIndex = require('./chat/Index');
-var PromptIndex = require('./prompt/Index');
+const Ext = require('extjs');
+const DetectZoom = require('detect-zoom');
+
+require('./MessageBox');
+require('./MessageBar');
+require('./navigation/Index');
+require('./navigation/MessageBar');
+require('./Body');
+require('./windows/Index');
+require('./chat/Index');
+require('./prompt/Index');
 require('../layout/container/None');
 
-const DetectZoom = require('detect-zoom');
 
 
 module.exports = exports = Ext.define('NextThought.app.Index', {
-    extend: 'Ext.container.Viewport',
-    alias: 'widget.master-view',
-    border: false,
-    frame: false,
-    defaults: { border: false, frame: false },
-    layout: 'none',
-    id: 'viewport',
-    ui: 'nextthought',
-    cls: 'main-viewport',
-    minWidth: 1024,
-    touchStartTime: -1,
+	extend: 'Ext.container.Viewport',
+	alias: 'widget.master-view',
+	border: false,
+	frame: false,
+	defaults: { border: false, frame: false },
+	layout: 'none',
+	id: 'viewport',
+	ui: 'nextthought',
+	cls: 'main-viewport',
+	minWidth: 1024,
+	touchStartTime: -1,
 
-    items: [
+	items: [
 		{xtype: 'navigation-message-bar', id: 'message-bar'},
 		{xtype: 'main-navigation', id: 'nav'},
 		{xtype: 'main-views', id: 'view'},
@@ -34,13 +35,13 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 		{xtype: 'chats-view', id: 'chat-window'}
 	],
 
-    initComponent: function() {
+	initComponent: function () {
 		this.callParent();
 		this.el = Ext.DomHelper.insertFirst(Ext.getBody(), { cls: 'viewport' }, true);
 		this.renderTo = this.el;
 	},
 
-    constructor: function() {
+	constructor: function () {
 		this.hidden = Boolean(NextThought.phantomRender);
 		this.callParent(arguments);
 
@@ -57,16 +58,17 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 		}
 	},
 
-    afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
-		var me = this, map = {
-			width: 'right',
-			height: 'bottom',
-			widthp: 'left',
-			heightp: 'top'
-		};
+		var me = this,
+			map = {
+				width: 'right',
+				height: 'bottom',
+				widthp: 'left',
+				heightp: 'top'
+			};
 
-		Ext.Object.each(Ext.getScrollbarSize(), function(k, v) {
+		Ext.Object.each(Ext.getScrollbarSize(), function (k, v) {
 			if (v) {
 				Ext.getBody().addCls('detected-scrollbars');
 
@@ -94,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 			this.lockOrientation();
 
 			//keep element under body from shrinking. Can cause the screen to go white
-			Ext.defer(function() {
+			Ext.defer(function () {
 				me.el.setStyle('min-height', me.el.getHeight() + 'px');
 			},1000);
 
@@ -102,14 +104,14 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 			//Adjust the height to get rid of the odd white bar at the bottom
 			//Edit: the top bar is getting cut off a little bit
 			console.log(Ext.get(Ext.query('.viewport')[0]).getHeight());
-			Ext.defer(function() {
+			Ext.defer(function () {
 				Ext.get(Ext.query('.viewport')[0]).setHeight(window.outerHeight);
 				Ext.get('view').setHeight(window.outerHeight - Ext.get('nav').getHeight());
 			},500);
 		}
 	},
 
-    onTouchStart: function(e) {
+	onTouchStart: function (e) {
 		var touch = e.browserEvent.touches[0],
 			mouseEnterEvent,
 			mouseOverEvent,
@@ -147,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 		touch.target.dispatchEvent(mouseDownEvent);
 	},
 
-    onTouchMove: function(e) {
+	onTouchMove: function (e) {
 		var touch = e.browserEvent.touches[0],
 			changedTouch = e.browserEvent.changedTouches[0],
 			currTarget,
@@ -232,7 +234,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 		}
 	},
 
-    onTouchEnd: function(e) {
+	onTouchEnd: function (e) {
 		var touch = e.browserEvent.changedTouches[0],
 			clickEvent,
 			mouseUpEvent,
@@ -285,12 +287,12 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 
 	},
 
-    lockOrientation: function() {
+	lockOrientation: function () {
 		var optWindow, iframe, me = this;
 
 		/*If user rotates to portrait, display screen saying to rotate it.
 		 * if they rotate back to landscape, destroy screen*/
-		window.addEventListener('orientationchange', function() {
+		window.addEventListener('orientationchange', function () {
 			var iframe;
 
 			if (optWindow) {
@@ -300,7 +302,7 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 			if (Math.abs(window.orientation) !== 90) {
 				optWindow = me.createPortraitOrientationScreen();
 				iframe = optWindow.el.down('iframe');
-				iframe.el.dom.contentWindow.addEventListener('touchstart', function(e) {
+				iframe.el.dom.contentWindow.addEventListener('touchstart', function (e) {
 					e.preventDefault();
 				});
 				optWindow.show();
@@ -310,19 +312,19 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 		if (Math.abs(window.orientation) !== 90) {
 			optWindow = this.createPortraitOrientationScreen();
 			iframe = optWindow.el.down('iframe');
-			iframe.el.dom.contentWindow.addEventListener('touchstart', function(e) {
+			iframe.el.dom.contentWindow.addEventListener('touchstart', function (e) {
 				e.preventDefault();
 			});
 
 			optWindow.show();
 		}
 
-		document.body.onorientationchange = function() {
+		document.body.onorientationchange = function () {
 			window.scrollTo(0, 0);
 		};
 	},
 
-    createPortraitOrientationScreen: function() {
+	createPortraitOrientationScreen: function () {
 		var optWindow = Ext.widget('nti-window', {
 			title: 'Portrait mode unavailabe',
 			closeAction: 'hide',
@@ -354,12 +356,13 @@ module.exports = exports = Ext.define('NextThought.app.Index', {
 		return optWindow;
 	},
 
-    onWindowResize: function onWindowResize() {
-		var z = 1,
-			bodyEl = Ext.getBody(),
-			body = Ext.getDom(bodyEl),
-			fn = onWindowResize,
-			currentBar;
+	onWindowResize: function () {
+		var z = 1;
+		//var bodyEl = Ext.getBody();
+		//var body = Ext.getDom(bodyEl);
+		//var fn = this.onWindowResize;
+		var currentBar;
+
 		try {
 			z = DetectZoom.zoom();
 			console.log('Zoom:', z);

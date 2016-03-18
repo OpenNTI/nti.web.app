@@ -1,14 +1,16 @@
-var Ext = require('extjs');
-var ComponentsFilter = require('../../../../stream/components/Filter');
+const Ext = require('extjs');
+const moment = require('moment');
+
+require('legacy/app/stream/components/Filter');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.profile-user-activity-sidebar',
-    layout: 'none',
-    cls: 'activity-sidebar',
+	extend: 'Ext.container.Container',
+	alias: 'widget.profile-user-activity-sidebar',
+	layout: 'none',
+	cls: 'activity-sidebar',
 
-    BASE_FILTERS:[
+	BASE_FILTERS:[
 		{
 			displayText: 'Sort By',
 			type: 'sort',
@@ -147,20 +149,20 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 				}
 			},
 
-			setActiveItem: function(el, activeItems) {
+			setActiveItem: function (el, activeItems) {
 				if (!el) { return; }
 
 				var items = el.querySelectorAll('.group-item'),
 					item, type, input, i;
 
-				for (i=0; i < items.length; i++) {
+				for (i = 0; i < items.length; i++) {
 					item = items[i];
 					type = item.getAttribute('data-value');
 					input = item.querySelector('input');
 
 					if (!input) { return; }
 
-					if ((activeItems ||[]).indexOf(type) !== -1) {
+					if ((activeItems || []).indexOf(type) !== -1) {
 						input.checked = true;
 					}
 					else {
@@ -168,14 +170,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					}
 				}
 			}
-		} 
+		}
 	],
 
-    items: [{
+	items: [{
 		xtype: 'stream-filter'
 	}],
 
-    initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		if (!isFeature('profile-activity-filters')) {
@@ -197,20 +199,20 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    onActivate: function() {
+	onActivate: function () {
 		Ext.getBody().on('click', this.onBodyClick);
 	},
 
-    onDeactivate: function() {
+	onDeactivate: function () {
 		Ext.getBody().un('click', this.onBodyClick);
 	},
 
-    onBodyClick: function(e) {
+	onBodyClick: function (e) {
 		var filters = this.filters,
 			keys = Object.keys(filters);
 
 		if (!e.getTarget('.activity-sidebar')) {
-			keys.forEach(function(key) {
+			keys.forEach(function (key) {
 				filters[key].active = false;
 			});
 
@@ -218,11 +220,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    resetFilters: function() {
+	resetFilters: function () {
 		this.filters = Ext.clone(this.BASE_FILTERS);
 	},
 
-    __mapItemForUI: function(group, key) {
+	__mapItemForUI: function (group, key) {
 		var isActive = false,
 			item = group.items[key],
 			active;
@@ -245,11 +247,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		};
 	},
 
-    updateFilterUI: function() {
+	updateFilterUI: function () {
 		this.filterCmp.setActiveFilters(this.filters);
 	},
 
-    userChanged: function(entity) {
+	userChanged: function (entity) {
 		if (this.activeEntity !== entity) {
 			this.resetFilters();
 			this.updateFilterUI();
@@ -258,12 +260,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.activeEntity = entity;
 	},
 
-    onGroupSelect: function(group) {
+	onGroupSelect: function (group) {
 		var filters = this.filters,
 			filterKeys = Object.keys(this.filters);
 
 		//set active to true for group, and false for the rest
-		filterKeys.forEach(function(key) {
+		filterKeys.forEach(function (key) {
 			if (key !== group) {
 				filters[key].active = false;
 			} else {
@@ -274,14 +276,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.updateFilterUI();
 	},
 
-    __toggleMultiSelect: function(items, key) {
+	__toggleMultiSelect: function (items, key) {
 		var filtered;
 
 		if (!items) {
 			items = [];
 		}
 
-		filtered = (items || []).filter(function(item) {
+		filtered = (items || []).filter(function (item) {
 			return item !== key;
 		});
 
@@ -292,9 +294,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return filtered;
 	},
 
-    getGroup: function(groupKey) {
+	getGroup: function (groupKey) {
 		var i, found = false, g;
-		for (i=0; i < this.filters.length && !found; i++) {
+		for (i = 0; i < this.filters.length && !found; i++) {
 			g = this.filters[i];
 			if (g.type === groupKey) {
 				found = true;
@@ -304,7 +306,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return g;
 	},
 
-    onItemSelect: function(itemKey, groupKey, modifierValue) {
+	onItemSelect: function (itemKey, groupKey, modifierValue) {
 		var group = this.getGroup(groupKey),
 			modifier;
 
@@ -328,15 +330,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.replaceFilter();
 	},
 
-    /**
+	/**
 	 * Update the filter, should trigger the filter to be pushed to state i.e. queryParams
 	 */
-	replaceFilter: function() {
+	replaceFilter: function () {
 		var filters = this.filters,
 			keys = Object.keys(filters),
 			params = {}, me = this;
 
-		keys.forEach(function(key) {
+		keys.forEach(function (key) {
 			var filter = filters[key],
 				m = me.__getModifier(filter),
 				active;
@@ -359,15 +361,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.updateFilter(params);
 	},
 
-    /**
+	/**
 	 * Apply the state set by replaceFilter
 	 */
-	setFilterFromQueryParams: function(params) {
+	setFilterFromQueryParams: function (params) {
 		var filters = this.filters,
-			keys = Object.keys(filters), 
+			keys = Object.keys(filters),
 			me = this;
 
-		keys.forEach(function(key) {
+		keys.forEach(function (key) {
 			var filter = filters[key],
 				paramValue = params[filter.paramName],
 				modifierValue = params[filter.modifierName], m;
@@ -389,42 +391,42 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.updateFilterUI();
 	},
 
-    __getModifier: function(filter) {
+	__getModifier: function (filter) {
 		var activeItem = filter && (filter.activeItem || filter.defaultItem),
 			item = filter.items && filter.items[activeItem],
 			modifier = item && item.modifier;
 
-		return modifier;	
+		return modifier;
 	},
 
-    __getModifierValue: function(value, type) {
+	__getModifierValue: function (value, type) {
 		var m = value && type && moment().subtract(value, type),
 			date = m && m.toDate();
 
-		if (date && value !== "0") {
+		if (date && value !== '0') {
 			return Math.round(date.getTime() / 1000);
 		}
 		return null;
 	},
 
-    /**
+	/**
 	 * Convert the current filters to params to pass to the stream
 	 * @return {Object} config to pass to the stream
 	 */
-	getStreamParams: function() {
+	getStreamParams: function () {
 		var params = {},
 			filters = this.filters,
-			keys = Object.keys(this.filters), 
+			keys = Object.keys(this.filters),
 			me = this;
 
-		function addMutliSelectValue(filter) {
+		function addMutliSelectValue (filter) {
 			var activeItems = filter.activeItems || [],
 				value = [];
 
-			activeItems.forEach(function(item) {
+			activeItems.forEach(function (item) {
 				var v = filter.items[item].streamValue;
 				if (v) {
-					value.push(v);	
+					value.push(v);
 				}
 			});
 
@@ -433,8 +435,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			}
 		}
 
-		function addSingleSelectValue(filter) {
-			var activeItem = filter.activeItem || filter.defaultItem, 
+		function addSingleSelectValue (filter) {
+			var activeItem = filter.activeItem || filter.defaultItem,
 				filterItem = activeItem && filter.items[activeItem],
 				value = filterItem && filterItem.streamValue,
 				modifier = filterItem && filterItem.modifier,
@@ -449,7 +451,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			}
 		}
 
-		keys.forEach(function(key) {
+		keys.forEach(function (key) {
 			var filter = filters[key];
 
 			if (filter.multiselect) {

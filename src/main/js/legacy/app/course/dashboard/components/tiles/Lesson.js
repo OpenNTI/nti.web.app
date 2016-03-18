@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var TilesItem = require('./Item');
+const Ext = require('extjs');
+const moment = require('moment');
+
+require('./Item');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Lesson', {
@@ -9,27 +11,27 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	cls: 'dashboard-item lesson-tile',
 
 
-	getPath: function() {
+	getPath: function () {
 		return 'Lessons';
 	},
 
 
-	getTitle: function() {
+	getTitle: function () {
 		return this.record.get('title');
 	},
 
 
-	getBullets: function() { return []; },
+	getBullets: function () { return []; },
 
 
-	getFooter: function() {
+	getFooter: function () {
 		var start = this.record.get('startDate');
 
 		return moment(start).format('dddd, MMMM D');
 	},
 
 
-	handleNavigation: function() {
+	handleNavigation: function () {
 		this.navigateToObject(this.record);
 	}
 });

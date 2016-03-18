@@ -1,4 +1,5 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+const moment = require('moment');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Header', {
@@ -24,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	setUpcoming: function() {
+	setUpcoming: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.setUpcoming.bind(this));
 			return;
@@ -34,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	setWeek: function(week) {
+	setWeek: function (week) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setWeek.bind(this, week));
 			return;
@@ -52,12 +53,12 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		}
 	},
 
-	formatDate: function(date) {
+	formatDate: function (date) {
 		return moment(date).format(this.DATE_FORMAT);
 	},
 
 
-	addLoadingMask: function() {
+	addLoadingMask: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.addLoadingMask.bind(this));
 			return;
@@ -68,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	removeLoadingMask: function() {
+	removeLoadingMask: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.removeLoadingMask.bind(this));
 			return;

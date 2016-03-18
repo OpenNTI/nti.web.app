@@ -1,4 +1,5 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+const moment = require('moment');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker', {
@@ -37,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	clickedCls: 'x-datepicker-clicked',
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var today = Ext.Date.format(new Date(), 'F j, Y');
@@ -48,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.dateContainerEl) {
@@ -65,14 +66,14 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 		if (this.hourEl) {
 			this.hourEl.dom.addEventListener('blur', this.onDateChange.bind(this));
 			this.hourEl.dom.addEventListener('focus', this.clearError.bind(this));
-			this.hourEl.dom.addEventListener('mousewheel', function(e){ e.preventDefault(); });
+			this.hourEl.dom.addEventListener('mousewheel', function (e) { e.preventDefault(); });
 			this.hourEl.dom.addEventListener('keydown', this.onKeyDown.bind(this));
 		}
 
 		if (this.minuteEl) {
 			this.minuteEl.dom.addEventListener('blur', this.onDateChange.bind(this));
 			this.minuteEl.dom.addEventListener('focus', this.clearError.bind(this));
-			this.minuteEl.dom.addEventListener('mousewheel', function(e){ e.preventDefault(); });
+			this.minuteEl.dom.addEventListener('mousewheel', function (e) { e.preventDefault(); });
 		}
 
 		this.setValue(this.defaultValue);
@@ -80,14 +81,14 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 
-	createDatePicker: function() {
+	createDatePicker: function () {
 		var picker = Ext.widget({
 			xtype: 'datepicker',
-	        minDate: this.minDate,
-	        handler: this.onDateChange.bind(this),
-	        monthYearText: '',
-	        showMonthPicker: function() {}, //Override this to not show anything
-	        handleMouseWheel: function() {}	// Override ExtJS mousewheel callbacks.
+			minDate: this.minDate,
+			handler: this.onDateChange.bind(this),
+			monthYearText: '',
+			showMonthPicker: function () {}, //Override this to not show anything
+			handleMouseWheel: function () {}	// Override ExtJS mousewheel callbacks.
 		});
 
 		this.on('destroy', picker.destroy.bind(picker));
@@ -97,34 +98,34 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 
-	handleSelect: function(datepicker, value) {
+	handleSelect: function (datepicker, value) {
 		var newlySelectedEl = datepicker.el.down('.' + datepicker.selectedCls);
 
 		this.clearSelectedDate();
 
 		if (newlySelectedEl) {
-			newlySelectedEl.addCls(this.clickedCls);	
+			newlySelectedEl.addCls(this.clickedCls);
 		}
 
 		this.selectedDate = value;
 	},
 
 
-	highlightDate: function(picker, cell) {
+	highlightDate: function (picker, cell) {
 		var m = this.selectedDate && moment(this.selectedDate), me = this;
 
 		if (this.selectedDate && m.isSame(picker.value)) {
 			wait()
-				.then(function(){
+				.then(function () {
 					if (cell) {
-						cell.className += ' ' + me.clickedCls;	
+						cell.className += ' ' + me.clickedCls;
 					}
 				});
 		}
 	},
 
 
-	clearSelectedDate: function(){
+	clearSelectedDate: function () {
 		var currentClickedEl = this.datepicker && this.datepicker.el.down('.' + this.clickedCls);
 
 		if (currentClickedEl) {
@@ -135,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 
-	showSelectedDate: function() {
+	showSelectedDate: function () {
 		var p = this.datepicker,
 			selected = p && p.el.down('.' + p.selectedCls);
 
@@ -148,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 
-	onKeyDown: function(e){
+	onKeyDown: function (e) {
 		var key = e.keyCode,
 			target = e.target,
 			el = Ext.get(target),
@@ -166,12 +167,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 
-	isDelimiter: function(key) {
+	isDelimiter: function (key) {
 		return key === 188 || key === 186;
 	},
 
 
-	onDateChange: function(picker, date) {
+	onDateChange: function (picker, date) {
 
 		if (this.isValid()) {
 			if (this.TimePicker) {
@@ -190,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 
-	showMeridiemPicker: function() {
+	showMeridiemPicker: function () {
 		if (!this.meridiemMenu) {
 			this.meridiemMenu = this.createMeridiemMenu();
 		}
@@ -204,31 +205,31 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 
-	createMeridiemMenu: function() {
+	createMeridiemMenu: function () {
 		var me = this,
 			menu = Ext.widget('menu', {
-					defaults: {
-						ui: 'nt-menuitem',
-						xtype: 'menucheckitem',
-						plain: true,
-						group: 'meridiem-group',
-						handler: function(item) {
-							me.handleMeridiemMenuClick(item, item.up('.menu'));
-						}
-					},
-					width: 75,
-					items: [
-						{ text: 'AM', value: 'am'},
-						{ text: 'PM', value: 'pm'}
-					]
-				});
+				defaults: {
+					ui: 'nt-menuitem',
+					xtype: 'menucheckitem',
+					plain: true,
+					group: 'meridiem-group',
+					handler: function (item) {
+						me.handleMeridiemMenuClick(item, item.up('.menu'));
+					}
+				},
+				width: 75,
+				items: [
+					{ text: 'AM', value: 'am'},
+					{ text: 'PM', value: 'pm'}
+				]
+			});
 
 		this.on('destroy', menu.destroy.bind(menu));
 		return menu;
 	},
 
 
-	handleMeridiemMenuClick: function(item, menu) {
+	handleMeridiemMenuClick: function (item, menu) {
 		var targetEl = this.meridiemEl;
 		if (targetEl) {
 			targetEl.setHTML(item.text);
@@ -241,7 +242,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 		}
 	},
 
-	setValue: function(value, forceSelect) {
+	setValue: function (value, forceSelect) {
 		var date = new Date(value),
 			me = this, dateString, hour, minute, m = 'am';
 
@@ -266,13 +267,13 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 		minute = ('0' + minute).slice(-2);
 
 		this.onceRendered
-			.then(function() {
+			.then(function () {
 				var b = Ext.Date.format(date, 'n/j/Y'),
 					dateOnly = new Date(b);
 
 				// Set date
 				if (me.datepicker) {
-					me.datepicker.setValue(dateOnly);	
+					me.datepicker.setValue(dateOnly);
 
 					if (forceSelect) {
 						me.showSelectedDate();
@@ -294,10 +295,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 
-	setMeridiem: function(value) {
+	setMeridiem: function (value) {
 		if (this.meridiemEl && value) {
 			this.meridiemEl.dom.setAttribute('data-value', value);
-			this.meridiemEl.setHTML(value.toUpperCase());	
+			this.meridiemEl.setHTML(value.toUpperCase());
 		}
 	},
 
@@ -306,7 +307,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	 * Get the timestamp in seconds.
 	 * @return {Number} Timestamp in seconds.
 	 */
-	getValue: function() {
+	getValue: function () {
 		if (!this.selectedDate) { return null; }
 
 		var millis = this.getMilliseconds();
@@ -318,7 +319,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	 * Display text for the selected date.
 	 * @return {[type]} [description]
 	 */
-	getDisplayValue: function() {
+	getDisplayValue: function () {
 		var p = this.datepicker,
 			hour = this.hourEl && this.hourEl.dom.value,
 			minutes = this.minuteEl && this.minuteEl.dom.value,
@@ -326,8 +327,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 			date;
 
 		// this.onTimeChange();
-		hour = parseInt(hour);
-		minutes = parseInt(minutes);
+		hour = parseInt(hour, 10);
+		minutes = parseInt(minutes, 10);
 		meridiemVal = meridiemVal && meridiemVal.toUpperCase();
 
 		date = Ext.Date.format(p.getValue(), 'F d');
@@ -335,21 +336,21 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 
-	onTimeChange: function() {
+	onTimeChange: function () {
 		var p = this.datepicker,
 			hour = this.hourEl && this.hourEl.dom.value,
 			minutes = this.minuteEl && this.minuteEl.dom.value,
 			meridiemVal = this.meridiemEl && this.meridiemEl.dom.getAttribute('data-value'),
 			date;
 
-		hour = parseInt(hour);
-		minutes = parseInt(minutes);
+		hour = parseInt(hour, 10);
+		minutes = parseInt(minutes, 10);
 
 		if (hour > 12) {
 			hour = hour % 12;
 			this.setMeridiem('pm');
 		}
-		
+
 		if (hour === 0) {
 			hour = 12;
 			this.setMeridiem('am');
@@ -364,7 +365,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 
-	isValid: function() {
+	isValid: function () {
 		var fields = [this.hourEl.dom, this.minuteEl.dom],
 			field, isValid = true, min, max, val;
 
@@ -378,7 +379,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 			max = field.getAttribute('max');
 			val = field.value;
 
-			val = parseInt(val);
+			val = parseInt(val, 10);
 			if (isNaN(val) || val > max || val < min) {
 				isValid = false;
 			}
@@ -388,7 +389,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 
-	getErrors: function() {
+	getErrors: function () {
 		var fields = [this.hourEl.dom, this.minuteEl.dom],
 			field, isValid = true, min, max, val,
 			validity, errors = [], name, d;
@@ -396,7 +397,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 		if (!this.selectedDate) {
 			errors.push({name: 'date', error: 'Please select a date above.'});
 		}
-			
+
 		for (var i = 0; i < fields.length; i++) {
 			field = fields[i];
 			min = field.getAttribute('min');
@@ -404,7 +405,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 			name = field.getAttribute('name');
 			val = field.value;
 
-			val = parseInt(val);
+			val = parseInt(val, 10);
 			if (isNaN(val)) {
 				errors.push({name: name, error: 'Invalid number for ' + name});
 			}
@@ -417,11 +418,11 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 
-	showErrors: function(){
+	showErrors: function () {
 		var errors = this.getErrors(), name, el;
 		for (var i = 0; i < errors.length; i++) {
 			name = errors[i].name;
-			el = this.el.down('input[name='+name+']');
+			el = this.el.down('input[name=' + name + ']');
 			if (el) {
 				el.addCls('has-error');
 			}
@@ -434,17 +435,17 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 
-	clearError: function(e){
+	clearError: function (e) {
 		var dom = e && e.target;
 		if (Ext.fly(dom).hasCls('has-error')) {
 			Ext.fly(dom).removeCls('has-error');
 			this.errorEl.update('');
 			this.errorEl.hide();
-		}		
+		}
 	},
 
 
-	clearAllErrors: function(){
+	clearAllErrors: function () {
 		this.hourEl.removeCls('has-error');
 		this.minuteEl.removeCls('has-error');
 		this.errorEl.update('');
@@ -456,7 +457,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	 * Get the timestamp value time.
 	 * @return {Number} timestamp in milliseconds.
 	 */
-	getMilliseconds: function() {
+	getMilliseconds: function () {
 		if (this.TimePicker) {
 			return this.getDateMilliseconds() + this.getTimeMilliseconds();
 		}
@@ -465,7 +466,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 
-	getDateMilliseconds: function() {
+	getDateMilliseconds: function () {
 		var v, date;
 		if (this.selectedDate) {
 			return this.selectedDate.getTime();
@@ -475,34 +476,34 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DatePicker
 	},
 
 
-	getTimeMilliseconds: function() {
+	getTimeMilliseconds: function () {
 		var v, time,
 			hour = this.hourEl && this.hourEl.dom.value,
 			minutes = this.minuteEl && this.minuteEl.dom.value,
 			meridiemVal = this.meridiemEl && this.meridiemEl.dom.getAttribute('data-value'),
 			t;
 
-		hour = parseInt(hour);
-		minutes = parseInt(minutes);
+		hour = parseInt(hour, 10);
+		minutes = parseInt(minutes, 10);
 
-		// Handling the am/pm intrication. 
+		// Handling the am/pm intrication.
 		if (meridiemVal === 'pm' && hour < 12) {
 			hour = hour + 12;
 		}
 
 		if (meridiemVal === 'am' && hour === 12) {
 			hour = 0;
-		} 
+		}
 
 		t = hour * 3600 * 1000 + minutes * 60 * 1000;
 		return isNaN(t) ? 0 : t;
 	},
 
-	setMaxDate: function(date){
+	setMaxDate: function (date) {
 		this.datepicker.setMaxDate(date);
 	},
 
-	setMinDate: function(date){
+	setMinDate: function (date) {
 		this.datepicker.setMinDate(date);
 	}
 

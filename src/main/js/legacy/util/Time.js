@@ -1,4 +1,5 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+const moment = require('moment');
 
 global.TimeUtils =
 module.exports = exports = Ext.define('NextThought.util.Time', {
@@ -12,13 +13,13 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 	},
 
 
-	getTimeGroupHeader: function(time) {
+	getTimeGroupHeader: function (time) {
 		var now = new Date(), t = time.getTime(),
 			oneDayAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1),
 			twoDaysAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 2),
 			oneWeekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1 * 7);
 
-		function between(start, end) {
+		function between (start, end) {
 			return start.getTime() < t && t <= end.getTime();
 		}
 
@@ -38,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 	},
 
 	//yanked & modifed from: http://stackoverflow.com/questions/6108819/javascript-timestamp-to-relative-time-eg-2-seconds-ago-one-week-ago-etc-best
-	timeDifference: function(current, previous) {
+	timeDifference: function (current, previous) {
 
 		if (!previous) {
 			previous = current;
@@ -85,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 
 
 
-	getDurationText: function(started, ended) {
+	getDurationText: function (started, ended) {
 		var milli = ended - started,
 			seconds = milli / 1000,
 			minutes = seconds / 60,
@@ -110,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 	},
 
 
-	getTimer: function() {
+	getTimer: function () {
 		return new this._timer();
 	},
 
@@ -121,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 	 * @param  {Date}  b the other date to compare
 	 * @return {Boolean}   if they are on the same day
 	 */
-	isSameDay: function(a, b) {
+	isSameDay: function (a, b) {
 		//clone the dates so we don't affect what we were passed
 		a = new Date(a);
 		b = new Date(b);
@@ -133,27 +134,27 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 		return a.getTime() === b.getTime();
 	},
 
-	getDays: function(time) {
+	getDays: function (time) {
 		return time / (24 * 60 * 60 * 1000); // milli / 1000 = seconds / 60  = minutes / 60 = hours / 24 = days
 	},
 
-	getHours: function getRemainingHours(time) {
+	getHours: function getRemainingHours (time) {
 		return (time / (60 * 60 * 1000)) % 24;//milli / 1000 = seconds, seconds / 60 = minutes, minutes / 60 = hours
 	},
 
-	getMinutes: function(time) {
+	getMinutes: function (time) {
 		return (time / (60 * 1000)) % 60;//milli / 10000 = seconds, seconds / 60 = minutes
 	},
 
-	getSeconds: function(time) {
+	getSeconds: function (time) {
 		return (time / 1000) % 60;//milli / 1000 = seconds
 	},
 
-	getMilliSeconds: function(time) {
+	getMilliSeconds: function (time) {
 		return time % 1000;
 	},
 
-	getTimePartsFromTime: function(time) {
+	getTimePartsFromTime: function (time) {
 		return {
 			days: this.getDays(time),
 			hours: this.getHours(time),
@@ -174,7 +175,7 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 	 * @param  {Object} overrides Strings to use instead of the defaults
 	 * @return {String}                the parsed string
 	 */
-	getNaturalDuration: function(millis, numberOfUnits, doNotPluralize, overrides) {
+	getNaturalDuration: function (millis, numberOfUnits, doNotPluralize, overrides) {
 		var units = [], lastItem, s,
 			weeks = Math.floor(parseInt(millis, 10) / this.DIVISORS.WEEKS),
 			days =  Math.floor(parseInt(millis, 10) / this.DIVISORS.DAYS % 7),
@@ -185,7 +186,7 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 		overrides = overrides || {};
 		numberOfUnits = numberOfUnits || 5;
 
-		function add(unit, label) {
+		function add (unit, label) {
 			units.push(doNotPluralize ? unit + ' ' + label : Ext.util.Format.plural(unit, label));
 		}
 
@@ -219,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 		}
 
 		//filter out any empty strings we may have added
-		units = units.filter(function(val) {
+		units = units.filter(function (val) {
 			return val;
 		});
 
@@ -227,7 +228,7 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 			s = units[0];
 		} else if (units.length === 2) {
 			s = units.join(' and ');
-		} else if (units.length === 0){
+		} else if (units.length === 0) {
 			s = '';
 		}
 		else {
@@ -253,7 +254,7 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 	 * @param  {Date|String} date argument to pass to the moment constructor, falsy means today
 	 * @return {Object}      utility for stepping through the weeks
 	 */
-	getWeek: function(date) {
+	getWeek: function (date) {
 		var m = date ? moment(date) : moment();
 
 		return {
@@ -272,10 +273,10 @@ Ext.util.Format.timeDifference = exports.timeDifference.bind(exports);
 /**
  * A utility to do a count down or count up from a starting point until a stopping point or infinity
  */
-exports._timer = function() {
+exports._timer = function () {
 	var start, from, to, direction, duration, interval, intervalWindow, timerInterval, tickFn, alarmFn, intervalUnit;
 
-	function getTimeStamp(d) {
+	function getTimeStamp (d) {
 		if (!d && d !== 0) {
 			d = (new Date()).getTime();
 		} else if (d instanceof Date) {
@@ -285,7 +286,7 @@ exports._timer = function() {
 		return d;
 	}
 
-	function updateTime() {
+	function updateTime () {
 		var now = new Date(),
 			diff, time;
 
@@ -324,7 +325,7 @@ exports._timer = function() {
 	 * @param  {Number} i how often to update
 	 * @return {Object}          this so calls can be chained
 	 */
-	this.start = function(i) {
+	this.start = function (i) {
 		interval = i || 'seconds'; //default to a second
 
 		duration = Math.abs(from - to);
@@ -356,7 +357,7 @@ exports._timer = function() {
 	 * @param  {Date|Number} f date or milliseconds to start at
 	 * @return {Object}   this so calls can be chained
 	 */
-	this.countDown = function(t, f) {
+	this.countDown = function (t, f) {
 		from = getTimeStamp(f);
 
 		if (t || t === 0) {
@@ -376,7 +377,7 @@ exports._timer = function() {
 	 * @param  {Date|Number} f date or milliseconds to start at
 	 * @return {Object}   this so calls can be chained
 	 */
-	this.countUp = function(t, f) {
+	this.countUp = function (t, f) {
 		from = getTimeStamp(f);
 
 		if (t || t === 0) {
@@ -405,7 +406,7 @@ exports._timer = function() {
 	 * @param  {Function} fn callback to be called
 	 * @return {Object}      return this so calls can be chained
 	*/
-	this.tick = function(fn) {
+	this.tick = function (fn) {
 		var time = from;
 
 		tickFn = fn;
@@ -428,7 +429,7 @@ exports._timer = function() {
 	 * Clear the interval, make sure this gets called. Otherwise we will have an interval hanging around
 	 * @return {Object} return this so calls can be chained
 	 */
-	this.stop = function() {
+	this.stop = function () {
 		clearInterval(timerInterval);
 
 		return this;
@@ -440,7 +441,7 @@ exports._timer = function() {
 	 * @param  {Function} fn [description]
 	 * @return {Object}      return this so calls can be chained
 	 */
-	this.alarm = function(fn) {
+	this.alarm = function (fn) {
 		alarmFn = fn;
 
 		return this;

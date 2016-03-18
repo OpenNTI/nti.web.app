@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var StoreUtils = require('../../util/Store');
+const Ext = require('extjs');
+const moment = require('moment');
+const ParseUtils = require('legacy/util/Parsing');
+const StoreUtils = require('legacy/util/Store');
 
 
 module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
@@ -16,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 	},
 
 
-	constructor: function(config) {
+	constructor: function (config) {
 
 		//A map of start date to bin
 		this.WEEK_MAP = {};
@@ -40,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 	},
 
 
-	__loadNextBatch: function() {
+	__loadNextBatch: function () {
 		var me = this;
 
 		if (me.loading && !me.noMoreBins) {
@@ -52,14 +53,14 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 		me.params.MostRecent = me.latestBinDate / 1000; //the server is expecting seconds
 
 		me.loadingPromise = StoreUtils.loadRawItems(me.url, me.params)
-				.then(function(response) {
+				.then(function (response) {
 					me.loading = false;
 					return Ext.decode(response, true);
 				})
-				.then(function(json) {
+				.then(function (json) {
 					me.__binItems(json.Items);
 				})
-				.fail(function(reason) {
+				.fail(function (reason) {
 					console.log('Failed to load stream: ', reason);
 					return Promise.reject();
 				});
@@ -68,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 	},
 
 
-	__binItems: function(bins) {
+	__binItems: function (bins) {
 		var i, key;
 
 		for (i = 0; i < bins.length; i++) {
@@ -93,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 	},
 
 
-	__getCachedBin: function(date) {
+	__getCachedBin: function (date) {
 		var ranges = this.WEEK_RANGES, i,
 			range;
 
@@ -107,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 	},
 
 
-	__getOrLoadBin: function(date) {
+	__getOrLoadBin: function (date) {
 		var me = this,
 			cached = me.__getCachedBin(date);
 
@@ -122,20 +123,20 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 		}
 
 		return me.__loadNextBatch()
-			.then(function() {
+			.then(function () {
 				return me.__getOrLoadBin(date);
 			})
-			.fail(function() {
+			.fail(function () {
 				return Ext.clone(me.EMPTY_BIN);
 			});
 	},
 
 
-	getWeek: function(date) {
+	getWeek: function (date) {
 		date = moment.utc(date);
 
 		return this.__getOrLoadBin(date)
-					.then(function(bin) {
+					.then(function (bin) {
 						return bin.Items;
 					});
 	}

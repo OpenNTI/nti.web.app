@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../../../../util/Content');
-var TilesItem = require('./Item');
+const Ext = require('extjs');
+const moment = require('moment');
+const ContentUtils = require('legacy/util/Content');
+
+require('./Item');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Assignment', {
@@ -10,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	cls: 'dashboard-item assignment-tile',
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.getHistory()
@@ -18,14 +20,14 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	handleNavigation: function() {
+	handleNavigation: function () {
 		this.navigateToObject(this.record);
 	},
 
 
-	getPath: function() {
+	getPath: function () {
 		return ContentUtils.getLineageLabels(this.record.get('ContainerId'), false, this.course)
-			.then(function(paths) {
+			.then(function (paths) {
 				var path = paths[0];
 
 				Ext.clone(path);
@@ -40,12 +42,12 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	getTitle: function() {
+	getTitle: function () {
 		return this.record.get('title');
 	},
 
 
-	getBullets: function() {
+	getBullets: function () {
 		var questionCount = this.record.getQuestionCount();
 
 		if (!questionCount) {
@@ -58,12 +60,12 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	getHistory: function() {
+	getHistory: function () {
 		return this.getAssignmentHistory;
 	},
 
 
-	getFooter: function() {
+	getFooter: function () {
 		var due = this.record.getDueDate();
 
 		if (!due) { return ''; }
@@ -71,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		due = moment(due);
 
 		return this.getHistory()
-			.then(function(history) {
+			.then(function (history) {
 				var submission = history && history.get('Submission'),
 					grade = history && history.get('Grade');
 
@@ -86,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 				//cause a fail so the next fail handler can return the due date
 				return Promise.reject();
 			})
-			.fail(function() {
+			.fail(function () {
 				var now = new Date();
 				if (due.isSame(now, 'day') && due.isSame(now, 'month') && due.isSame(now, 'year')) {
 					return 'Due Today';
@@ -97,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	setLate: function() {
+	setLate: function () {
 		var	due = this.record.getDueDate();
 
 		due = moment(due);

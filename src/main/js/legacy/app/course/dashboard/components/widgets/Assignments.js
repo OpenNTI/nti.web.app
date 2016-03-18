@@ -1,35 +1,37 @@
-var Ext = require('extjs');
-var WidgetsBase = require('./Base');
-var TilesAssignment = require('../tiles/Assignment');
+const Ext = require('extjs');
+const moment = require('moment');
+
+require('./Base');
+require('../tiles/Assignment');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.widgets.Assignments', {
-    extend: 'NextThought.app.course.dashboard.components.widgets.Base',
+	extend: 'NextThought.app.course.dashboard.components.widgets.Base',
 
-    statics: {
+	statics: {
 
 		__BASE_WEIGHT: 2,
 
 		MAX_NOT_DUE: 5,
 
-		getWeight: function(record) {
+		getWeight: function (record) {
 			var time = NextThought.app.course.dashboard.components.widgets.Base.getTimeWeight(record.get('availableEnding'));
 
 			return this.__BASE_WEIGHT + time;
 		},
 
 
-		getTiles: function(course, startDate, endDate, isNow) {
+		getTiles: function (course, startDate, endDate, isNow) {
 			var start = moment(startDate),
 				end = moment(endDate),
 				maxNotDue = 5,
 				getWeight = this.getWeight.bind(this);
 
-			function getCmpConfig(assignment, assignments) {
+			function getCmpConfig (assignment, assignments) {
 				var getConfig = NextThought.app.course.dashboard.components.tiles.Assignment.getTileConfig(assignment);
 
 				return getConfig
-						.then(function(config) {
+						.then(function (config) {
 							config.record = assignment;
 							config.weight = getWeight(assignment);
 							config.course = course;
@@ -41,13 +43,13 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			}
 
 			return course.getAssignments()
-						.then(function(assignmentCollection) {
+						.then(function (assignmentCollection) {
 							return assignmentCollection.updateAssignments();
 						})
-						.then(function(assignmentCollection) {
+						.then(function (assignmentCollection) {
 							var assignments = [];
 
-							assignmentCollection.each(function(assignment) {
+							assignmentCollection.each(function (assignment) {
 								var assignmentStart = assignment.get('availableBeginning'),
 									assignmentEnd = assignment.get('availableEnding');
 
@@ -69,10 +71,10 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 							return Promise.all(assignments);
 						})
-						.then(function(tiles) {
+						.then(function (tiles) {
 							if (!isNow) { return tiles.reverse(); }
 
-							tiles.sort(function(a, b) {
+							tiles.sort(function (a, b) {
 								var wA = a.record.get('availableEnding'),
 									wB = b.record.get('availableEnding');
 
@@ -87,20 +89,20 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		UPCOMING_DAYS_CUTOFF: 10,
 
 
-		getUpcomingTiles: function(course, date) {
+		getUpcomingTiles: function (course, date) {
 			var now = moment(date), load,
 				upcomingCutoff = this.UPCOMING_DAYS_CUTOFF;
 
 			console.log(upcomingCutoff);
 
 			load = course.getAssignments()
-						.then(function(assignmentCollection) {
+						.then(function (assignmentCollection) {
 							var items = Ext.clone(assignmentCollection.get('Items')),
 								notPastDue;
 
 							items = items || [];
 
-							notPastDue = items.filter(function(item) {
+							notPastDue = items.filter(function (item) {
 								var due = item.get('availableEnding'),
 									start = item.get('availableBeginning');
 
@@ -110,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 								return due ? now.isAfter(due) : false;
 							});
 
-							notPastDue.sort(function(a, b) {
+							notPastDue.sort(function (a, b) {
 								var dA = a.get('availableEnding'),
 									dB = b.get('availableEnding');
 

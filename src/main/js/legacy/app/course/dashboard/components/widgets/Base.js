@@ -1,5 +1,5 @@
-var Ext = require('extjs');
-
+const Ext = require('extjs');
+const moment = require('moment');
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.widgets.Base', {
 	statics: {
@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		 * @param  {Boolean} isNow		if we are getting tiles for the current week
 		 * @return {Promise}			Promise that will fulfill with an array of tiles to add
 		 */
-		getTiles: function(course, startDate, endDate, isNow) {
+		getTiles: function (courseNode, startDate, endDate, isNow) {
 			return Promise.resolve([]);
 		},
 
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		 * @param  {Date} date   the date to pick deadlines from
 		 * @return {Promise}      Promise that fills with array of tiles to add
 		 */
-		getUpcomingTiles: function(course, now) {
+		getUpcomingTiles: function (course, now) {
 			return Promise.resolve([]);
 		},
 
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		 * @param  {Model} record   the record to get the weight for
 		 * @return {Number}         weight of the tile
 		 */
-		getWeight: function(record) {
+		getWeight: function (record) {
 			return this.__BASE_WEIGHT + record.get('Last Modified');
 		},
 
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		 * @param  {Date} time			the time from the record
 		 * @return {Number}				the time modifier to add to the weight
 		 */
-		getTimeWeight: function(time) {
+		getTimeWeight: function (time) {
 			time = moment(time).toDate().getTime();
 
 			var now = (new Date()).getTime();
