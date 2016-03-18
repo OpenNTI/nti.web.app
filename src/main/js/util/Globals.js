@@ -1,6 +1,8 @@
 var Ext = require('extjs');
 var ParseUtils = require('./Parsing');
 
+var Url = require('url');
+
 global.Globals =
 module.exports = exports = Ext.define('NextThought.util.Globals', {
 
