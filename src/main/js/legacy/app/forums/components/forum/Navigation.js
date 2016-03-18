@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var ParseUtils = require('../../../../util/Parsing');
 var MenusReports = require('../../../../common/menus/Reports');
 var ModelUIViewHeader = require('../../../../model/UIViewHeader');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Navigation', {

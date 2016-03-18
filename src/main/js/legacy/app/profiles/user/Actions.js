@@ -4,6 +4,7 @@ var NavigationActions = require('../../navigation/Actions');
 var LoginStateStore = require('../../../login/StateStore');
 var EmailverifyWindow = require('./components/emailverify/Window');
 var InfoWindow = require('./components/emailverify/info/Window');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.Actions', {
@@ -15,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Actions', {
 		this.NavActions = NextThought.app.navigation.Actions.create();
 
 		if (isFeature('email-verification')) {
-			this.mon(this.LoginStore, 'login-ready', this.maybeAskForEmailVerification.bind(this));	
+			this.mon(this.LoginStore, 'login-ready', this.maybeAskForEmailVerification.bind(this));
 		}
 	},
 
@@ -55,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Actions', {
     sendEmailVerification: function() {
 		var me = this,
 			user = $AppConfig.userObject;
-			
+
 		user.sendEmailVerification()
 			.then(function() {
 				if (!me.emailVerifyWin) {
@@ -67,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Actions', {
 			})
 			.fail(function(error) {
 				var e = Ext.decode(error && error.responseText);
-				
+
 				if (!me.emailVerifyWin) {
 					me.createEmailVerifyWindow();
 				}

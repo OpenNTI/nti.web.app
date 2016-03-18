@@ -9,6 +9,7 @@ var AnnotationsIndex = require('../../annotations/Index');
 var UserdataActions = require('../../userdata/Actions');
 var ContextStateStore = require('../../context/StateStore');
 var WindowsActions = require('../../windows/Actions');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.Reader', {

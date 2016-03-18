@@ -1,6 +1,6 @@
 var Ext = require('extjs');
 var Globals = require('./Globals');
-var {getURL} = Globals;
+var {getURL, isFeature} = Globals;
 var PageVisibility = require('./Visibility');
 var ContextStateStore = require('../app/context/StateStore');
 

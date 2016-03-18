@@ -1,4 +1,5 @@
 var Ext = require('extjs');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.badge.components.Footer', {

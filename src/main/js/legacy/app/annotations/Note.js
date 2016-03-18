@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var AnnotationsHighlight = require('./Highlight');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.Note', {

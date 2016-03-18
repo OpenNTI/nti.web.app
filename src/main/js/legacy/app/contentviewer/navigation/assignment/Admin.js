@@ -6,6 +6,7 @@ var MixinsProfileLinks = require('../../../../mixins/ProfileLinks');
 var MixinsChatLinks = require('../../../../mixins/ChatLinks');
 var AssessmentAssignmentStatus = require('../../../course/assessment/AssignmentStatus');
 var ChatStateStore = require('../../../chat/StateStore');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {

@@ -6,6 +6,7 @@ var TypesRelatedWork = require('./types/RelatedWork');
 var TypesSlide = require('./types/Slide');
 var TypesVideo = require('./types/Video');
 var ComponentsAuthorizationContext = require('./components/AuthorizationContext');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.ContainerContext', {

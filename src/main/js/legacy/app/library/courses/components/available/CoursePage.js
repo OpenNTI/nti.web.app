@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var ComponentsPage = require('../Page');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.available.CoursePage', {
@@ -23,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'tabs' },
 		{ id: '{id}-body', cls: 'body-container',
-			cn: ['{%this.renderContainer(out,values)%}'] 
+			cn: ['{%this.renderContainer(out,values)%}']
 		}
 	]),
 
@@ -98,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		Ext.each(this.query('course-catalog-collection'), function(cmp) {
 			if (cmp.store && cmp.store.find('NTIID', id) >= 0) {
 				targetCmp = cmp;
-				return false; 
+				return false;
 			}
 		});
 
@@ -120,7 +121,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		wait(10)
 			.then(function () {
 				if (h !== undefined && h >= 0) {
-					me.el.setStyle('height', (h - 100) + 'px');	
+					me.el.setStyle('height', (h - 100) + 'px');
 				}
 			});
 	},
@@ -137,12 +138,12 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		if (first) {
 			defaulTop = first.el.getTop();
 		}
-		
+
 		if (upcoming) {
 			this.scrollTops['upcoming'] = upcoming.el.getTop() - defaulTop;
 		}
 		if (current) {
-			this.scrollTops['current'] = current.el.getTop() - defaulTop;	
+			this.scrollTops['current'] = current.el.getTop() - defaulTop;
 		}
 		if (archived) {
 			this.scrollTops['archived'] = archived.el.getTop() - defaulTop;
@@ -185,10 +186,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	},
 
 
-	onTabClick: function (e) {	
+	onTabClick: function (e) {
 		var target = Ext.get(e.getTarget()),
 			isTab = target && target.hasCls('tab'),
-			category = target && target.getAttribute('data-category'), 
+			category = target && target.getAttribute('data-category'),
 			activeTab = this.tabsEl.down('.active'), me = this;
 
 		if (!isTab || target.hasCls('active')) {
@@ -224,7 +225,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			if (el) {
 				el.remove();
 			}
-		}); 
+		});
 	},
 
 

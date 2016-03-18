@@ -3,6 +3,7 @@ var LocationMeta = require('../../../../cache/LocationMeta');
 var ContentUtils = require('../../../../util/Content');
 var DomUtils = require('../../../../util/Dom');
 var Globals = require('../../../../util/Globals');
+var {isFeature} = Globals;
 var RangeUtils = require('../../../../util/Ranges');
 var SharingUtils = require('../../../../util/Sharing');
 var UtilLine = require('../../../../util/Line');
@@ -504,8 +505,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 				if (!rootId) {
 					return Promise.reject('No ID');
 				}
-				return LocationMeta.getMeta(rootId);		
+				return LocationMeta.getMeta(rootId);
 			});
-		
+
 	}
 });

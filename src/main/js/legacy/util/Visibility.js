@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var ToastManager = require('../common/toast/Manager');
+var {isFeature} = require('legacy/util/Globals');
 
 
 /*globals Toaster*/

@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var MixinsContactSearchMixin = require('../../../../mixins/ContactSearchMixin');
 var OutlineSearch = require('./Search');
 var ContactsActions = require('../../Actions');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.outline.View', {

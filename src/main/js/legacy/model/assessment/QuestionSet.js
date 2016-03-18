@@ -2,7 +2,7 @@ var Ext = require('extjs');
 var ModelBase = require('../Base');
 var ConvertersItems = require('../converters/Items');
 var UtilParsing = require('../../util/Parsing');
-
+var {isFeature} = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSet', {
     extend: 'NextThought.model.Base',

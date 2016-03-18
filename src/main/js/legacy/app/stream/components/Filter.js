@@ -1,4 +1,5 @@
 var Ext = require('extjs');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.stream.components.Filter', {
@@ -71,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 		this.callParent(arguments);
 
 		if (isFeature('profile-activity-filters')) {
-			this.showFilters(this.filterGroups);	
+			this.showFilters(this.filterGroups);
 		}
 	},
 
@@ -87,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 	addFilterGroup: function(group){
 		var type = group.type,
 			tpl = this.GROUP_TYPES[type],
-			items = group.items, 
+			items = group.items,
 			g = Ext.clone(group), el;
 
 		// Change the items to an array, if it's not.
@@ -141,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 
 		items.forEach(function(item){
 			modifier = item.modifier;
-	
+
 			if (modifier) {
 				modifier.group = group.type;
 				modifier.item = item.value;
@@ -243,7 +244,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 
 		if (item) {
 			this.onItemSelect(item, group);
-		} 
+		}
 		else if (group) {
 			this.onGroupSelect(group);
 		}

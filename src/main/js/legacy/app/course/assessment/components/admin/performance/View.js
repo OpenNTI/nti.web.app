@@ -7,6 +7,7 @@ var PerformanceRoot = require('./Root');
 var PerformanceStudent = require('./Student');
 var UtilPagedPageSource = require('../../../../../../util/PagedPageSource');
 var ModelUser = require('../../../../../../model/User');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.View', {

@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var UserRepository = require('../../../../../cache/UserRepository');
 var TimeUtils = require('../../../../../util/Time');
 var MixinsUIHelpers = require('../../../../../mixins/UIHelpers');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {

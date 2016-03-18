@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var Globals = require('../../util/Globals');
+var {isFeature} = Globals;
 var UxVideoPopout = require('../../common/ux/VideoPopout');
 
 

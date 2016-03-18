@@ -1,6 +1,6 @@
 var Ext = require('extjs');
 var Globals = require('../Globals');
-var UtilGlobals = require('../Globals');
+var {isFeature} = Globals;
 
 
 /*jslint */

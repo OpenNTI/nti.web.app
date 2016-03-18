@@ -5,6 +5,7 @@ var EmailWindow = require('./email/Window');
 var ComponentsAssignmentStatus = require('../AssignmentStatus');
 var ModelEmail = require('../../../../../model/Email');
 var WindowsStateStore = require('../../../../windows/StateStore');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {

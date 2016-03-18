@@ -4,6 +4,7 @@ var PartsFieldSet = require('./FieldSet');
 var MixinsModelWithBodyContent = require('../../../../../../mixins/ModelWithBodyContent');
 var AccountActions = require('../../../../../account/Actions');
 var EditorEditor = require('../../../../../../editor/Editor');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.about.parts.About', {

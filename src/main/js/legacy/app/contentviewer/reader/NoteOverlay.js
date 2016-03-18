@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var DomUtils = require('../../../util/Dom');
 var Globals = require('../../../util/Globals');
+var {isFeature} = Globals;
 var LineUtils = require('../../../util/Line');
 var SharingUtils = require('../../../util/Sharing');
 var UtilLine = require('../../../util/Line');

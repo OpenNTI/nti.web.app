@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var AssignmentsListItem = require('../../student/assignments/ListItem');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.ListItem', {

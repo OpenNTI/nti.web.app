@@ -5,7 +5,7 @@ var EnrollmentStateStore = require('./StateStore');
 var EnrollmentActions = require('./Actions');
 var CoursesStateStore = require('../../library/courses/StateStore');
 var AccountActions = require('../../account/Actions');
-var {guidGenerator} = require('legacy/util/Globals');
+var {guidGenerator, isFeature} = require('legacy/util/Globals');
 
 
 /*globals getFormattedString*/

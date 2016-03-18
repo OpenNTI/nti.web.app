@@ -3,6 +3,7 @@ var User = require('../../../../model/User');
 var ModelUser = require('../../../../model/User');
 var OpenbadgesBadge = require('../../../../model/openbadges/Badge');
 var ContextStateStore = require('../../../context/StateStore');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Profiles', {

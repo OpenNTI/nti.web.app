@@ -887,9 +887,9 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 // window.isMe = exports.isMe.bind(exports);
 // window.getURL = exports.getURL.bind(exports);
 // window.swallow = function(e) {};
-window.getResourceURL = exports.getResourceURL.bind(exports);
-window.reloadCSS = exports.reloadCSS.bind(exports);
-window.isFeature = exports.isFeature.bind(exports);
+// window.getResourceURL = exports.getResourceURL.bind(exports);
+// window.reloadCSS = exports.reloadCSS.bind(exports);
+// window.isFeature = exports.isFeature.bind(exports);
 
 exports.stopBackspace(document);
 
@@ -898,11 +898,14 @@ exports.handleCache();
 
 function makeImage(prop) {
 	var src = exports[prop];
-	src = window.getResourceURL(src);
+
+	src = exports.getResourceURL(src);
+
 	if (!src) {
 		console.warn('No Image for: ' + prop);
 		return;
 	}
+
 	exports[prop] = new Image();
 	exports[prop].src = src;
 }

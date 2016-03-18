@@ -4,6 +4,7 @@ var ChartPie = require('../../../../common/chart/Pie');
 var CoursewareRoster = require('../../../../proxy/courseware/Roster');
 var MenusReports = require('../../../../common/menus/Reports');
 var CoursesCourseInstanceEnrollment = require('../../../../model/courses/CourseInstanceEnrollment');
+var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Roster', {

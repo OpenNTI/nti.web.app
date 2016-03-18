@@ -2,7 +2,7 @@ var Ext = require('extjs');
 
 var User = require('../model/User');
 var ParseUtils = require('../util/Parsing');
-var {isMe} = require('legacy/util/Globals');
+var {isMe, isFeature} = require('legacy/util/Globals');
 
 require('../app/chat/StateStore');
 
