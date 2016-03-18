@@ -3,6 +3,7 @@ var ContentUtils = require('../../util/Content');
 var ModelPlaylistItem = require('../../model/PlaylistItem');
 var ModelSlide = require('../../model/Slide');
 var ContentOverlay = require('../../app/mediaviewer/content/Overlay');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.SlideDeck', {

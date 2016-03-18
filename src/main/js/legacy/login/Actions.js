@@ -8,6 +8,7 @@ var LoginStateStore = require('./StateStore');
 var ModelService = require('../model/Service');
 var ModelUser = require('../model/User');
 var ModelCommunity = require('../model/Community');
+var {getURL} = Globals;
 
 
 module.exports = exports = Ext.define('NextThought.login.Actions', {

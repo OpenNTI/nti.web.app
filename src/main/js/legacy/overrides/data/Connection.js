@@ -1,5 +1,5 @@
 var Ext = require('extjs');
-
+var {getURL} = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.overrides.data.Connection', {
     override: 'Ext.data.Connection',

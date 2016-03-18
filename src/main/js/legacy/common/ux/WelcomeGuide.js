@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var WindowWindow = require('../window/Window');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.WelcomeGuide', {

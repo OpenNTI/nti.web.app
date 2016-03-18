@@ -7,6 +7,7 @@ var CoursesCourseInstanceAdministrativeRole = require('../../../model/courses/Co
 var CoursewareCourseInstanceEnrollment = require('../../../model/courseware/CourseInstanceEnrollment');
 var CoursesLegacyCommunityBasedCourseInstance = require('../../../model/courses/LegacyCommunityBasedCourseInstance');
 var UtilStore = require('../../../util/Store');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.Actions', {

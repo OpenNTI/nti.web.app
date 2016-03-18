@@ -5,6 +5,7 @@ var MixinsBundleLike = require('../mixins/BundleLike');
 var MixinsPresentationResources = require('../mixins/PresentationResources');
 var ForumsContentBoard = require('./forums/ContentBoard');
 var ModelContentPackage = require('./ContentPackage');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.model.ContentBundle', {

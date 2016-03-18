@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var AnnotationUtils = require('./Annotations');
 var Globals = require('./Globals');
+var {getURL} = Globals;
 var ParseUtils = require('./Parsing');
 var UtilParsing = require('./Parsing');
 var LibraryStateStore = require('../app/library/StateStore');

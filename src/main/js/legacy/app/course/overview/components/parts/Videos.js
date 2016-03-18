@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var ModelPlaylistItem = require('../../../../../model/PlaylistItem');
 var VideoVideo = require('../../../../video/Video');
 var LibraryActions = require('../../../../library/Actions');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Videos', {

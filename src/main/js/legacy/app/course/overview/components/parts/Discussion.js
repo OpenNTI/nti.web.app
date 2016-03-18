@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var Globals = require('../../../../../util/Globals');
+var {getURL} = Globals;
 var ParseUtils = require('../../../../../util/Parsing');
 var MixinsEllipsisText = require('../../../../../mixins/EllipsisText');
 var ModelDiscussion = require('../../../../../model/Discussion');

@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var Globals = require('../../util/Globals');
+var {getURL} = Globals;
 var ParseUtils = require('../../util/Parsing');
 var StoreUtils = require('../../util/Store');
 var CommonActions = require('../../common/Actions');

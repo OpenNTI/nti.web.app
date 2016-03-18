@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var StoreUtils = require('../../../util/Store');
 var CommonActions = require('../../../common/Actions');
 var ContentStateStore = require('./StateStore');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.content.Actions', {

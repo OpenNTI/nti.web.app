@@ -3,6 +3,7 @@ var UserRepository = require('../cache/UserRepository');
 var User = require('./User');
 var B64 = require('../util/Base64');
 var Globals = require('../util/Globals');
+var {getURL} = Globals;
 var ParseUtils = require('../util/Parsing');
 var ModelBase = require('./Base');
 var MixinsAvatar = require('../mixins/Avatar');

@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var NTMatrix = require('./Matrix');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {

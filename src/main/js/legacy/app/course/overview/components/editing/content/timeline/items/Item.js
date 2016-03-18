@@ -1,13 +1,13 @@
 var Ext = require('extjs');
 var Globals = require('../../../../../../../../util/Globals');
-
+var {getURL} = Globals;
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.items.Item', {
 	extend: 'Ext.Component',
 	alias: 'widget.overview-editing-timeline-items-item',
-	
+
 	cls: 'overview-editing-listitem',
-	
+
 	renderTpl: Ext.DomHelper.markup(
 		{ cls: 'overview-timeline', cn: [
 			{ cls: 'timeline-item', cn: [
@@ -20,10 +20,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 		]}
 	),
-	
+
 	beforeRender: function(){
 		this.callParent(arguments);
-		
+
 		var item = this.record;
 		this.renderData = Ext.apply(this.renderData || {}, {
 			thumbnail: this.getThumbnailURL(item),
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			description: item && item.get('description')
 		});
 	},
-	
+
 	getThumbnailURL: function(item) {
 		var iconURL = item && item.get('icon');
 		if (iconURL) {

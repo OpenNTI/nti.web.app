@@ -5,6 +5,7 @@ var CacheAbstractStorage = require('../../../cache/AbstractStorage');
 var VideoWindow = require('../../video/Window');
 var UtilContent = require('../../../util/Content');
 var UserdataActions = require('../../userdata/Actions');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Location', {

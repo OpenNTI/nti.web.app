@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var Globals = require('./util/Globals');
+var {getURL} = Globals;
 
 require('./util/Localization');
 require('./overrides');

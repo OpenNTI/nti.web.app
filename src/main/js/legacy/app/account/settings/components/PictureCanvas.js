@@ -1,4 +1,5 @@
 var Ext = require('extjs');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.settings.components.PictureCanvas', {

@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var Globals = require('../../../util/Globals');
+var {getURL} = Globals;
 var RangeUtils = require('../../../util/Ranges');
 var UtilRanges = require('../../../util/Ranges');
 var CardsOverlayedPanel = require('../../../common/components/cards/OverlayedPanel');

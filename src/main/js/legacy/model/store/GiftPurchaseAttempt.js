@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var StorePurchaseAttempt = require('./PurchaseAttempt');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.model.store.GiftPurchaseAttempt', {

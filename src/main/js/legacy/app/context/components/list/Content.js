@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var PathActions = require('../../../navigation/path/Actions');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.list.Content', {
@@ -91,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 				}
 
 				url = url && 'url(' + getURL(url) + ')';
-				
+
 				me.iconEl.setStyle({
 					backgroundImage: url
 				});

@@ -790,7 +790,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		if (!this.HOST_PREFIX_PATTERN.test(u) && u.indexOf('//') !== 0) {
 			if (!Ext.isEmpty(root)) {
 				u = root + u;
-				return getURL(u);
+				return this.getURL(u);
 			}
 			return $AppConfig.server.host + u;
 		}

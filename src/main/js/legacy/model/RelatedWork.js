@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var DomUtils = require('../util/Dom');
 var Globals = require('../util/Globals');
+var {getURL} = Globals;
 var ModelBase = require('./Base');
 var MixinsAuditLog = require('../mixins/AuditLog');
 var MixinsAuditLog = require('../mixins/AuditLog');

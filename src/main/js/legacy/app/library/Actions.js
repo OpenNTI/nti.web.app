@@ -9,6 +9,7 @@ var ContentActions = require('./content/Actions');
 var ContentStateStore = require('./content/StateStore');
 var LoginStateStore = require('../../login/StateStore');
 var ProxyJSONP = require('../../proxy/JSONP');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.Actions', {

@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var ModelBase = require('../Base');
 var StoreStripePurchaseOrder = require('./StripePurchaseOrder');
 var StorePricingResults = require('./PricingResults');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.model.store.PurchaseAttempt', {

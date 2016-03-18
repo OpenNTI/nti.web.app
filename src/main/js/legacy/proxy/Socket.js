@@ -2,6 +2,7 @@
 var Ext = require('extjs');
 var Socket = require('./Socket');
 var Globals = require('../util/Globals');
+var {getURL} = Globals;
 
 global.Socket =
 module.exports = exports = Ext.define('NextThought.proxy.Socket', {

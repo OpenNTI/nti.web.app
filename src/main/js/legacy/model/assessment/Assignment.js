@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var ParseUtils = require('../../util/Parsing');
 var ModelBase = require('../Base');
 var ConvertersDate = require('../converters/Date');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.Assignment', {

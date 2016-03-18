@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var AnalyticsUtil = require('../../../../../util/Analytics');
 var DomUtils = require('../../../../../util/Dom');
 var Globals = require('../../../../../util/Globals');
+var {getURL} = Globals;
 var ParseUtils = require('../../../../../util/Parsing');
 var CardsCard = require('../../../../../common/components/cards/Card');
 var ModelNote = require('../../../../../model/Note');

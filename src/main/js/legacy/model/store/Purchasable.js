@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var ModelBase = require('../Base');
 var StoreStripeConnectKey = require('./StripeConnectKey');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.model.store.Purchasable', {

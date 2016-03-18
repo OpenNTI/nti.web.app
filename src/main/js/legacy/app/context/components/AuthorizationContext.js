@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var ContextStateStore = require('../StateStore');
 var WindowsActions = require('../../windows/Actions');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.AuthorizationContext', {

@@ -27,6 +27,7 @@ var ModelVideo = require('../Video');
 var AssessmentAssignment = require('../assessment/Assignment');
 var AssessmentQuestionSet = require('../assessment/QuestionSet');
 var MixinsAuditLog = require('../../mixins/AuditLog');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance', {
@@ -863,7 +864,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	},
 
     getTimelineAssets: function() {
-		return this.__getAssets(NextThought.model.Timeline.mimeType);	
+		return this.__getAssets(NextThought.model.Timeline.mimeType);
 	},
 
     getDiscussionAssets: function() {

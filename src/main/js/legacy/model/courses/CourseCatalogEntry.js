@@ -6,6 +6,7 @@ var CoursesEnrollmentOptions = require('./EnrollmentOptions');
 var CoursesCourseCreditLegacyInfo = require('./CourseCreditLegacyInfo');
 var CoursesCourseCatalogInstructorInfo = require('./CourseCatalogInstructorInfo');
 var ModelCatalogFamilies = require('../CatalogFamilies');
+var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEntry', {
@@ -300,12 +301,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 			if (!Ext.isEmpty(duration)) {
 				d = now.getTime() - (new Duration(duration).inSeconds() * 1000);
 				s = this.get('StartDate').getTime();
-				return d > s;	
+				return d > s;
 			}
 			else if (endDate) {
 				return endDate < now;
 			}
-			
+
 		} catch (e) {}
 
 		return false;
