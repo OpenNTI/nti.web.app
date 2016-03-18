@@ -3,6 +3,7 @@ var PanelsReader = require('../Reader');
 var AssignmentStudent = require('../../navigation/assignment/Student');
 var AssignmentTimedPlaceholder = require('../../components/assignment/TimedPlaceholder');
 var AssignmentNotStartedPlaceholder = require('../../components/assignment/NotStartedPlaceholder');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {

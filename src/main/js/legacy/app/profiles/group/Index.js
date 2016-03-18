@@ -5,6 +5,7 @@ var MembershipIndex = require('../user/components/membership/Index');
 var ActivityIndex = require('./components/activity/Index');
 var MembershipIndex = require('./components/membership/Index');
 var GroupsActions = require('../../groups/Actions');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {

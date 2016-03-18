@@ -9,6 +9,7 @@ var ChatStateStore = require('../StateStore');
 var GroupsActions = require('../../groups/Actions');
 var GroupsStateStore = require('../../groups/StateStore');
 var TranscriptPager = require('../transcript/Pager');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.Window', {

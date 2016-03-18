@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var UserRepository = require('../../../../../../../cache/UserRepository');
 var TimeUtils = require('../../../../../../../util/Time');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.TranscriptSummaryItem', {
@@ -172,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		//get the page info
 		//check if its cached
-        
+
         NextThought.app.groups.StateStore.getInstance().getFriendsList()
 		page = NextThought.app.groups.StateStore.getInstance().getFriendsList().getById(RoomInfo.get('ContainerId'));
 

@@ -4,6 +4,7 @@ var ContentviewerActions = require('./Actions');
 var PanelsReader = require('./panels/Reader');
 var AssignmentAdmin = require('./panels/assignment/Admin');
 var AssignmentStudent = require('./panels/assignment/Student');
+var {isMe} = require('legacy/util/Globals');
 
 
 /**

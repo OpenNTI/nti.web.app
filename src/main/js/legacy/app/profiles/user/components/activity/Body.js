@@ -4,6 +4,7 @@ var PartsStream = require('./parts/Stream');
 var PartsNewPost = require('./parts/NewPost');
 var WindowsActions = require('../../../../windows/Actions');
 var BlogWindow = require('../../../../blog/Window');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.Body', {

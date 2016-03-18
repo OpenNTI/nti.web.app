@@ -3,6 +3,7 @@ var ComponentsPresenceEditor = require('./PresenceEditor');
 var CacheAbstractStorage = require('../../../../cache/AbstractStorage');
 var ChatStateStore = require('../../../chat/StateStore');
 var ChatActions = require('../../../chat/Actions');
+var {isMe} = require('legacy/util/Globals');
 
 
 //styles in identity.scss

@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var ForumsHeadlineTopic = require('./HeadlineTopic');
 var MixinsModelWithPublish = require('../../mixins/ModelWithPublish');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.model.forums.PersonalBlogEntry', {

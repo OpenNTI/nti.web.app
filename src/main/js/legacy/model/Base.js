@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var Globals = require('../util/Globals');
+var {isMe} = Globals;
 var ParseUtils = require('../util/Parsing');
 var TimeUtils = require('../util/Time');
 var MixinsHasLinks = require('../mixins/HasLinks');

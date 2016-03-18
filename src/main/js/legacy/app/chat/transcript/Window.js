@@ -14,6 +14,7 @@ var ModelTranscript = require('../../../model/Transcript');
 var ModelTranscriptSummary = require('../../../model/TranscriptSummary');
 var ModelMessageInfo = require('../../../model/MessageInfo');
 var UtilParsing = require('../../../util/Parsing');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', {

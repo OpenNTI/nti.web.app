@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var NavigationActions = require('../app/navigation/Actions');
+var {isMe} = require('legacy/util/Globals');
 
 
 var contactCardPopout, showCardTimer,

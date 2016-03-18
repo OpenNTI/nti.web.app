@@ -3,6 +3,7 @@ var UserRepository = require('../../../../../cache/UserRepository');
 var ParseUtils = require('../../../../../util/Parsing');
 var StudentActivity = require('../student/Activity');
 var CoursewareCourseActivity = require('../../../../../model/courseware/CourseActivity');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.Activity', {

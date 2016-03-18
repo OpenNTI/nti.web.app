@@ -3,6 +3,7 @@ var Globals = require('../../../../../util/Globals');
 var MixinsRouter = require('../../../../../mixins/Router');
 var PartsBadgeList = require('./parts/BadgeList');
 var OpenbadgesBadge = require('../../../../../model/openbadges/Badge');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.achievements.Index', {

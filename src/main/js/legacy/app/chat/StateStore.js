@@ -3,6 +3,7 @@ var Toaster = require('../../common/toast/Manager');
 var ParseUtils = require('../../util/Parsing');
 var CommonStateStore = require('../../common/StateStore');
 var ModelRoomInfo = require('../../model/RoomInfo');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {

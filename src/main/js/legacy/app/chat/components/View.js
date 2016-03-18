@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var ComponentsLog = require('./Log');
 var ComponentsEntry = require('./Entry');
 var ChatActions = require('../Actions');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.View', {

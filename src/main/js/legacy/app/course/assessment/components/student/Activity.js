@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var UserRepository = require('../../../../../cache/UserRepository');
 var MixinsRouter = require('../../../../../mixins/Router');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.Activity', {

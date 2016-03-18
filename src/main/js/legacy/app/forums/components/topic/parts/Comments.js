@@ -10,6 +10,7 @@ var UtilUserDataThreader = require('../../../../../util/UserDataThreader');
 var WhiteboardWindow = require('../../../../whiteboard/Window');
 var ForumsActions = require('../../../Actions');
 var WindowWindow = require('../../../../video/window/Window');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.topic.parts.Comments', {

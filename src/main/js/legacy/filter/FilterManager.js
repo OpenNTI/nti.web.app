@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var FilterFilter = require('./Filter');
 var FilterFilterGroup = require('./FilterGroup');
+var {isMe} = require('legacy/util/Globals');
 
 
 //TODO: find a way to generalize this and make this class responsible for all filter operations for UGD calls.

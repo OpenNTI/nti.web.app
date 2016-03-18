@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var User = require('../model/User');
+var {isMe} = require('legacy/util/Globals');
 
 var NTIFormat =
 module.exports = exports = Ext.define('NextThought.util.Format', {

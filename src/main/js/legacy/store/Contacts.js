@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var UserRepository = require('../cache/UserRepository');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.store.Contacts', {

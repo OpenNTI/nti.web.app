@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var IdCache = require('../../../cache/IdCache');
 var UserRepository = require('../../../cache/UserRepository');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {

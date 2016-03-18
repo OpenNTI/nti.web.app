@@ -3,6 +3,7 @@ var ParseUtils = require('../../util/Parsing');
 var CommonActions = require('../../common/Actions');
 var UserdataActions = require('../userdata/Actions');
 var UserdataStateStore = require('../userdata/StateStore');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.Actions', {

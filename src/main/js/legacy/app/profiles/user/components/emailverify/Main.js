@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var User = require('../../../../../model/User');
 var ParseUtils = require('../../../../../util/Parsing');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
@@ -36,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 				]}
 			]},
 			{ tag: 'tpl', 'if': '!email', cn: [
-				{ tag: 'span', html: 'Contact support'}	
+				{ tag: 'span', html: 'Contact support'}
 			]},
 			{ tag: 'span', html: ' to update your email'}
 		]}
@@ -188,9 +189,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 
 	onSave: function(){
-		var tokenVal = this.getValue(), 
+		var tokenVal = this.getValue(),
 			me = this;
-		
+
 		me.saveToken(tokenVal)
 			.fail(function (){
 				me.showError();

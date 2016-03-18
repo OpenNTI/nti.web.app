@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var UserRepository = require('../cache/UserRepository');
 var CoderetrievalWindow = require('../app/contacts/components/coderetrieval/Window');
+var {isMe} = require('legacy/util/Globals');
 
 
 /**

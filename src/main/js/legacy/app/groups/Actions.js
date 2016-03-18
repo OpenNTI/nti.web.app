@@ -1,7 +1,7 @@
 var Ext = require('extjs');
 var UserRepository = require('../../cache/UserRepository');
 var Globals = require('../../util/Globals');
-var {guidGenerator} = Globals;
+var {guidGenerator, isMe} = Globals;
 var ParseUtils = require('../../util/Parsing');
 var CommonActions = require('../../common/Actions');
 var LoginStateStore = require('../../login/StateStore');

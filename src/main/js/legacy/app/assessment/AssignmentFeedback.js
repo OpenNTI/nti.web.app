@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var UserRepository = require('../../cache/UserRepository');
 var OverlayPanel = require('../contentviewer/overlay/Panel');
 var EditorEditor = require('../../editor/Editor');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeedback', {

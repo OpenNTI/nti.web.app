@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var UserRepository = require('../../../../cache/UserRepository');
 var UtilSearch = require('../../../../util/Search');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.search.components.results.Base', {

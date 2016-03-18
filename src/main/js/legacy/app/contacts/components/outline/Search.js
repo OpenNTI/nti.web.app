@@ -5,6 +5,7 @@ var StoreUserSearch = require('../../../../store/UserSearch');
 var ChatStateStore = require('../../../chat/StateStore');
 var ManagementPopout = require('../../../account/contacts/management/Popout');
 var GroupsActions = require('../../../groups/Actions');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.outline.Search', {

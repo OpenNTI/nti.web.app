@@ -5,6 +5,7 @@ var EventsActivityItemReply = require('./ActivityItemReply');
 var NoteFeatureGetLatestReply = require('../../../../../../../mixins/note-feature/GetLatestReply');
 var ContextContainerContext = require('../../../../../../context/ContainerContext');
 var PathActions = require('../../../../../../navigation/path/Actions');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ActivityItem', {

@@ -4,6 +4,7 @@ var NTIFormat = require('../../../../util/Format');
 var ParseUtils = require('../../../../util/Parsing');
 var ResultsBase = require('./Base');
 var ChatActions = require('../../../chat/Actions');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.search.components.results.ChatResult', {

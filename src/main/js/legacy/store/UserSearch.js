@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var ProxyUserSearch = require('../proxy/UserSearch');
 var GroupsStateStore = require('../app/groups/StateStore');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.store.UserSearch', {

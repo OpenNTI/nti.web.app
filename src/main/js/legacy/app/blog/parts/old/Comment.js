@@ -5,6 +5,7 @@ var MixinsProfileLinks = require('../../../../mixins/ProfileLinks');
 var MixinsLikeFavoriteActions = require('../../../../mixins/LikeFavoriteActions');
 var MixinsFlagActions = require('../../../../mixins/FlagActions');
 var EditorEditor = require('../../../../editor/Editor');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', {

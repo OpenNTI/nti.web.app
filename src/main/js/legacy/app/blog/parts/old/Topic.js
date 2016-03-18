@@ -12,6 +12,7 @@ var EditorEditor = require('../../../../editor/Editor');
 var OldComment = require('./Comment');
 var UxSearchHits = require('../../../../common/ux/SearchHits');
 var ComponentNatural = require('../../../../layout/component/Natural');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Topic', {

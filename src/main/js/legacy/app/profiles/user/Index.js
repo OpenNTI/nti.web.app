@@ -9,6 +9,7 @@ var ActivityIndex = require('./components/activity/Index');
 var AboutIndex = require('./components/about/Index');
 var MembershipIndex = require('./components/membership/Index');
 var AchievementsIndex = require('./components/achievements/Index');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {

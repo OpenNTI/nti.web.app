@@ -3,6 +3,7 @@ var IdCache = require('../../cache/IdCache');
 var UserRepository = require('../../cache/UserRepository');
 var Toaster = require('../../common/toast/Manager');
 var Globals = require('../../util/Globals');
+var {isMe} = Globals;
 var ParseUtils = require('../../util/Parsing');
 var CommonActions = require('../../common/Actions');
 var LoginStateStore = require('../../login/StateStore');
@@ -619,7 +620,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 
 		// We want to remove the cached room when a user exits a room.
 		// However, we would like to keep the occupants key in the accepted list.
-		// That will help us to know when users to add in the gutter. 
+		// That will help us to know when users to add in the gutter.
 		// this.ChatStore.deleteOccupantsKeyAccepted(room.getId());
 		this.ChatStore.removeSessionObject(room.getOccupantsKey());
 

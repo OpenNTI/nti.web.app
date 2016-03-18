@@ -13,6 +13,7 @@ var PathActions = require('../../../../../../navigation/path/Actions');
 var ForumsActions = require('../../../../../../forums/Actions');
 var WindowsActions = require('../../../../../../windows/Actions');
 var ForumsActions = require('../../../../../../forums/Actions');
+var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItem', {

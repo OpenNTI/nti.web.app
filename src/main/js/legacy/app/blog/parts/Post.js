@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var Globals = require('../../../util/Globals');
+var {isMe} = Globals;
 var ParseUtils = require('../../../util/Parsing');
 var SharingUtils = require('../../../util/Sharing');
 var OldTopic = require('./old/Topic');
