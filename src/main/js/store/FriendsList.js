@@ -1,5 +1,5 @@
 var Ext = require('extjs');
-
+require('../model/FriendsList');
 
 module.exports = exports = Ext.define('NextThought.store.FriendsList', {
 	extend: 'Ext.data.Store',

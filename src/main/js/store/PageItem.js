@@ -3,26 +3,26 @@ var Globals = require('../util/Globals');
 var ParseUtils = require('../util/Parsing');
 var ReaderJson = require('../proxy/reader/Json');
 var UtilUserDataThreader = require('../util/UserDataThreader');
-
+require('../model/GenericObject');
 
 var coordinator = new Ext.util.Observable();
 
 module.exports = exports = Ext.define('NextThought.store.PageItem', {
-    extend: 'Ext.data.Store',
-    model: 'NextThought.model.GenericObject',
-    autoLoad: false,
-    pageSize: 20,
+	extend: 'Ext.data.Store',
+	model: 'NextThought.model.GenericObject',
+	autoLoad: false,
+	pageSize: 20,
 
-    /**
+	/**
 	 * {Boolean} Stores added to the location provider will automatically forward their events to who ever
 	 * listens to the location provider.  Set this to true to prevent this automatic behavior.
 	 */
 	doesNotShareEventsImplicitly: false,
 
-    groupField: 'Class',
-    groupDir: 'ASC',
+	groupField: 'Class',
+	groupDir: 'ASC',
 
-    proxy: {
+	proxy: {
 		url: 'tbd',
 		type: 'rest',
 		limitParam: 'batchSize',
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		model: 'NextThought.model.GenericObject'
 	},
 
-    statics: {
+	statics: {
 		make: function makeFactory(url, id, disablePaging) {
 			var ps = this.create({
 				clearOnPageLoad: false,
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		}
 	},
 
-    onProxyLoad: function(operation) {
+	onProxyLoad: function(operation) {
 		var resultSet = operation.getResultSet();
 		delete this.batchLinks;
 		if (resultSet && resultSet.links) {
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		return this.callParent(arguments);
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		//Allow partial overriding the proxy.
 		if (config && config.proxyOverride) {
 			this.proxy = Ext.merge(Ext.clone(this.proxy), this.config.proxyOverride);
@@ -97,12 +97,12 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		});
 	},
 
-    //By default PageItems want things that match the container
+	//By default PageItems want things that match the container
 	wantsItem: function(record) {
 		return this.containerId === record.get('ContainerId');
 	},
 
-    getBins: function() {
+	getBins: function() {
 		var groups = this.getGroups(),
 				bins = {},
 				k, b = null,
@@ -118,14 +118,14 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		return b ? bins : null;
 	},
 
-    getItems: function(otherBins) {
+	getItems: function(otherBins) {
 		var bins = otherBins || this.getBins() || {},
 				tree = this.buildThreads(bins);
 
 		return Ext.Object.getValues(tree).concat(bins.Highlight || []).concat(bins.Redaction || []);
 	},
 
-    buildThreads: function(bins) {
+	buildThreads: function(bins) {
 		var bms = bins.Bookmark;
 
 		//handle bookmarks here:
@@ -140,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		return NextThought.util.UserDataThreader.buildThreads(bins);
 	},
 
-    //TODO the docs say this can take an array instead of a single instance.  We don't handle
+	//TODO the docs say this can take an array instead of a single instance.  We don't handle
 	//that here
 	add: function(record) {
 		this.suspendEvents(true);
@@ -206,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		this.resumeEvents();
 	},
 
-    resolveRange: function(range) {
+	resolveRange: function(range) {
 		var i = range.start,
 			length = range.end + 1,
 			ret = [];
@@ -218,7 +218,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		return ret;
 	},
 
-    remove: function(r, isMove, silent) {
+	remove: function(r, isMove, silent) {
 		var toActuallyRemove = [],
 			idsToBoradcast = [],
 			args = Array.prototype.slice.call(arguments),
@@ -280,17 +280,17 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		coordinator.fireEvent('removed-item', idsToBoradcast, isMove, silent);
 	},
 
-    suspendEvents: function() {
+	suspendEvents: function() {
 		coordinator.suspendEvents.apply(coordinator, arguments);
 		return this.callParent(arguments);
 	},
 
-    resumeEvents: function() {
+	resumeEvents: function() {
 		coordinator.resumeEvents.apply(coordinator, arguments);
 		return this.callParent(arguments);
 	},
 
-    addFromEvent: function(records) {
+	addFromEvent: function(records) {
 		//don't fire more coordinator events
 		coordinator.suspendEvents();
 
@@ -323,7 +323,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		coordinator.resumeEvents();
 	},
 
-    removeByIdsFromEvent: function(ids, isMove, silent) {
+	removeByIdsFromEvent: function(ids, isMove, silent) {
 		coordinator.suspendEvents(true);
 		var me = this;
 

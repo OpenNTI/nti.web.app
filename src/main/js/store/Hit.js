@@ -2,15 +2,16 @@ var Ext = require('extjs');
 var ReaderJson = require('../proxy/reader/Json');
 var FilterFilterGroup = require('../filter/FilterGroup');
 var FilterFilter = require('../filter/Filter');
+require('../model/Hit');
 
 
 module.exports = exports = Ext.define('NextThought.store.Hit', {
-    extend: 'Ext.data.Store',
-    model: 'NextThought.model.Hit',
-    autoLoad: false,
-    groupField: 'GroupingField',
+	extend: 'Ext.data.Store',
+	model: 'NextThought.model.Hit',
+	autoLoad: false,
+	groupField: 'GroupingField',
 
-    proxy: {
+	proxy: {
 		type: 'nti',
 		reader: {
 			type: 'nti',
@@ -18,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.store.Hit', {
 		}
 	},
 
-    loadRecords: function(records, options) {
+	loadRecords: function(records, options) {
 		var response = Ext.JSON.decode(options.response.responseText, true),
 			me = this;
 		if (response) {
@@ -36,4 +37,3 @@ module.exports = exports = Ext.define('NextThought.store.Hit', {
 		return this.callParent(arguments);
 	}
 });
-
