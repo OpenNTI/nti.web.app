@@ -3,8 +3,8 @@ var Ext = require('extjs');
 function validateHandler (fn) { if (typeof fn !== 'function') { throw new TypeError('Expected a function'); } }
 
 Ext.applyIf(Promise.prototype, {
-	done: function (fn) { this.validateHandler(fn); return this.then(fn); },
-	fail: function (fn) { this.validateHandler(fn); return this.then(undefined, fn); },
+	done: function (fn) { validateHandler(fn); return this.then(fn); },
+	fail: function (fn) { validateHandler(fn); return this.then(undefined, fn); },
 	always: function (fn) {validateHandler(fn); return this.then(fn, fn); }
 });
 
