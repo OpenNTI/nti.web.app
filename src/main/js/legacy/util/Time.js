@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 const moment = require('moment');
+const Duration = require('durationjs');
 
 global.TimeUtils =
 module.exports = exports = Ext.define('NextThought.util.Time', {

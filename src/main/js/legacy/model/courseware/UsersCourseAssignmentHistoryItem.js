@@ -1,24 +1,24 @@
-var Ext = require('extjs');
-var ModelBase = require('../Base');
-var UtilBatchExecution = require('../../util/BatchExecution');
+const Ext = require('extjs');
+const Duration = require('durationjs');
 
+require('legacy/util/BatchExecution');
+require('../Base');
 
-/*globals Duration:false*/
 module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
-    alternateClassName: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItemSummary',
-    extend: 'NextThought.model.Base',
+	alternateClassName: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItemSummary',
+	extend: 'NextThought.model.Base',
 
-    statics: {
-		getBatchExecution: function() {
+	statics: {
+		getBatchExecution: function () {
 			this.batchExecution = this.batchExecution || NextThought.util.BatchExecution.create();
 
 			return this.batchExecution;
 		}
 	},
 
-    mimeType: 'application/vnd.nextthought.assessment.userscourseassignmenthistoryitem',
+	mimeType: 'application/vnd.nextthought.assessment.userscourseassignmenthistoryitem',
 
-    //application/vnd.nextthought.assessment.userscourseassignmenthistoryitemsummary
+	//application/vnd.nextthought.assessment.userscourseassignmenthistoryitemsummary
 
 	fields: [
 		{name: 'Feedback', type: 'singleItem', persist: false},
@@ -34,59 +34,60 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		{name: 'item', type: 'auto', persist: false},
 
 		//<editor-fold desc="Synthetic fields derived from server data and the assocated assignment.">
-		{name: 'ntiid', type: 'Synthetic', persist: false, fn: function() {
+		{name: 'ntiid', type: 'Synthetic', persist: false, fn: function () {
 			var i = this.get('item');
 			return i && i.get('ntiid');
 		}},
 
-		{name: 'ContainerId', type: 'Synthetic', persist: false, fn: function() {
+		{name: 'ContainerId', type: 'Synthetic', persist: false, fn: function () {
 			var i = this.get('item');
 			return i && i.get('containerId');
 		}},
 
-		{name: 'name', type: 'Synthetic', persist: false, fn: function() {
+		{name: 'name', type: 'Synthetic', persist: false, fn: function () {
 			var i = this.get('item');
 			return (i && i.get('title')) || 'Missing';
 		}},
 
-		{name: 'due', type: 'Synthetic', persist: false, fn: function() {
+		{name: 'due', type: 'Synthetic', persist: false, fn: function () {
 			var i = this.get('item');
 			return i && i.getDueDate();
 		}},
 
 
-		{name: 'feedback', type: 'Synthetic', persist: false, fn: function(r) {
+		{name: 'feedback', type: 'Synthetic', persist: false, fn: function (r) {
 			var f = r.get('Feedback');
 			f = (f && f.get('Items')) || [];
 			return f.length || r.raw.FeedbackCount;
-		}, convert: function() {
+		}, convert: function () {
 			this.sortType = Ext.data.SortTypes.asInt;
 			return this.type.convert.apply(this, arguments);
 		}},
 
-		{name: 'correct', type: 'int', persist: false, affectedBy: 'pendingAssessment', convert: function(v, r) {
+		{name: 'correct', type: 'int', persist: false, affectedBy: 'pendingAssessment', convert: function (v, r) {
 			var a = r.get('pendingAssessment');
 			return (a && a.getCorrectCount()) || 0;
 		}},
 
 
 		{name: 'completed', type: 'date', dateFormat: 'timestamp', persist: false, mapping: 'SubmissionCreatedTime', affectedBy: 'Submission',
-			convert: function(v, r) {
-			if (!v) {
-				var s = r.get('Submission');
-				return (s && this.type.convert.call(this, s.raw.CreatedTime));
+			convert: function (v, r) {
+				if (!v) {
+					var s = r.get('Submission');
+					return (s && this.type.convert.call(this, s.raw.CreatedTime));
+				}
+				return this.type.convert.call(this, v);
 			}
-			return this.type.convert.call(this, v);
-		}},
+		},
 
 
-		{name: 'submission', type: 'string', persist: false, affectedBy: 'Submission', convert: function(v, r) {
+		{name: 'submission', type: 'string', persist: false, affectedBy: 'Submission', convert: function (v, r) {
 			r = r.raw || {};
 			return (r.hasOwnProperty('SubmissionCreatedTime') || r.hasOwnProperty('Submission')) ? 'true' : '';
 		}},
 
 
-		{name: 'grade', type: 'Synthetic', persist: false, fn: function(r) {
+		{name: 'grade', type: 'Synthetic', persist: false, fn: function (r) {
 			var s = r.get('Grade'),
 				values = s && s.getValues();
 
@@ -95,14 +96,14 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		//</editor-fold>
 	],
 
-    constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 		if (this.raw && this.raw.Class === 'UsersCourseAssignmentHistoryItemSummary') {
 			this.isSummary = true;
 		}
 	},
 
-    onSynced: function() {
+	onSynced: function () {
 		var cls = this.get('Class');
 
 		if (cls === 'UsersCourseAssignmentHistoryItemSummary') {
@@ -112,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		}
 	},
 
-    getAssignmentId: function() {
+	getAssignmentId: function () {
 		var r = this.raw,
 			g = r.Grade,
 			s = r.Submission,
@@ -122,29 +123,29 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		return (i && i.getId()) || (g && g.AssignmentId) || (s && s.assignmentId) || (p && p.assignmentId);
 	},
 
-    isSubmitted: function() {
+	isSubmitted: function () {
 		return this.get('pendingAssessment') || this.get('Submission');
 	},
 
-    getDuration: function() {
+	getDuration: function () {
 		var metaData = this.get('Metadata');
 
 		return metaData && ((metaData.Duration || 0) * 1000);
 	},
 
-    allowReset: function() {
+	allowReset: function () {
 		return !!this.getLink('edit');
 	},
 
-    /**
+	/**
 	 * Deletes the assignment history item if it can, returns a promise that either
 	 * 1.)	Fufill with false if they cancel the dialog
 	 * 2.)	Rejects if the request was unsuccessful
 	 * 3.)	Fulfills with true if the request was successful
 	 * @param  {Boolean} isMine Which message to show in the confirmation
-	 * @return {Promise}         fulfills is it was successful
+	 * @return {Promise}		 fulfills is it was successful
 	 */
-	resetAssignment: function(isMine) {
+	resetAssignment: function (isMine) {
 		var record = this,
 			msg, url = record.getLink('edit'), store = this.store;
 
@@ -155,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 			msg = 'This will reset the assignment. All work will be deleted and is not recoverable.';
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Ext.MessageBox.alert({
 				title: 'Are you sure?',
 				msg: msg,
@@ -169,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 					},
 					secondary: 'Cancel'
 				},
-				fn: function(button) {
+				fn: function (button) {
 					if (button === 'yes') {
 						if (!url) {
 							reject('No edit link');
@@ -178,11 +179,11 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 								url: url,
 								method: 'DELETE'
 							})
-								.fail(function() {
+								.fail(function () {
 									console.error('Failed to reset assignment: ', arguments);
 									reject('Request Failed');
 								})
-								.done(function() {
+								.done(function () {
 									var user = record.get('Creator'),
 										item = record.get('item'),
 										grade = null;
@@ -225,14 +226,14 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 	},
 
-    beginReset: function() {
+	beginReset: function () {
 		var record = this,
 			store = record.store;
 
 		Ext.MessageBox.alert({
 			title: 'Are you sure?',
 			msg: 'This will reset this assignment for this student. It is not recoverable.' +
-				 '\nFeedback and work will be deleted.',
+				'\nFeedback and work will be deleted.',
 			icon: 'warning-red',
 			buttonText: true,
 			buttons: {
@@ -243,16 +244,16 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 				},
 				secondary: 'Cancel'
 			},
-			fn: function(button) {
+			fn: function (button) {
 				if (button === 'yes') {
 					Service.request({
 						url: record.getLink('UsersCourseAssignmentHistoryItem') || record.get('href'),
 						method: 'DELETE'})
-							.fail(function() {
+							.fail(function () {
 								alert('Sorry, I could not do that.');
 								console.error(arguments);
 							})
-							.done(function() {
+							.done(function () {
 								var user = record.get('Creator'),
 									item = record.get('item'),
 									grade = null;
@@ -291,12 +292,12 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		});
 	},
 
-    handleExcuseGrade: function(menuItemEl) {
+	handleExcuseGrade: function (menuItemEl) {
 		var grade = this.get('Grade'), me = this;
 
 		if (grade && grade.excuseGrade) {
 			grade.excuseGrade()
-				.then(function(record) {
+				.then(function (record) {
 					var txt = record.get('IsExcused') === true ? 'Unexcuse Grade' : 'Excuse Grade',
 						store = me.store, grade = me.get('Grade');
 					menuItemEl.setText(txt);
@@ -306,13 +307,13 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 					}
 					me.fireEvent('excused-changed', grade);
 				})
-				.fail(function(err) {
+				.fail(function (err) {
 					console.log('Excusing grade failed: ' + err);
 				});
 		}
 	},
 
-    getSubmissionStatus: function(due) {
+	getSubmissionStatus: function (due) {
 		due = due || this.get('due');
 
 		var completed = this.get('completed');
@@ -346,19 +347,19 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		return {cls: 'late', html: due + ' Late'};
 	},
 
-    shouldSaveGrade: function(value, letter) {
+	shouldSaveGrade: function (value, letter) {
 		var grade = this.get('Grade');
 
 		return grade.shouldSave(value, letter);
 	},
 
-    /**
+	/**
 	 * Given a value and letter for a grade, either create one or update an existing one
 	 * @param  {String} value  value of the grade
 	 * @param  {Char} letter letter of the grade
-	 * @return {Promise}     fulfills when the grade has been saved
+	 * @return {Promise}	 fulfills when the grade has been saved
 	 */
-	saveGrade: function(value, letter) {
+	saveGrade: function (value, letter) {
 		var me = this,
 			grade = me.get('Grade'),
 			batcher = me.self.getBatchExecution();
@@ -370,41 +371,41 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 
 		//if we are a placeholder create a new grade
 		if (this.isPlaceholder) {
-			return batcher.schedule(function() {
-					return grade.createNewGrade(value, letter);
-				})
-				.then(function(response) {
-					return Ext.decode(response);
-				})
-				.then(function(historyItem) {
-					//update the grade with the new values;
-					grade.set(historyItem.Grade);
-					grade.isPlaceholder = false;
+			return batcher.schedule(function () {
+				return grade.createNewGrade(value, letter);
+			})
+			.then(function (response) {
+				return Ext.decode(response);
+			})
+			.then(function (historyItem) {
+				//update the grade with the new values;
+				grade.set(historyItem.Grade);
+				grade.isPlaceholder = false;
 
-					historyItem.Grade = grade;
+				historyItem.Grade = grade;
 
-					//update with the new history item values
-					me.raw = Ext.apply(me.raw || {}, historyItem);
-					me.set(historyItem);
-					me.isPlaceholder = false;
+				//update with the new history item values
+				me.raw = Ext.apply(me.raw || {}, historyItem);
+				me.set(historyItem);
+				me.isPlaceholder = false;
 
-					//if we get here the submission has been forced from setting the grade
-					//so fire an event to update the ui appropriately
-					me.fireEvent('force-submission');
-				});
+				//if we get here the submission has been forced from setting the grade
+				//so fire an event to update the ui appropriately
+				me.fireEvent('force-submission');
+			});
 		//if we aren't a placeholder and the grade has different values save the new ones
 		} else if (!grade.valueEquals(value, letter)) {
-			return batcher.schedule(function() {
-					return grade.saveValue(value, letter);
-				})
-				.then(function(newGrade) {
-					grade.set(newGrade.asJSON());
-				});
+			return batcher.schedule(function () {
+				return grade.saveValue(value, letter);
+			})
+			.then(function (newGrade) {
+				grade.set(newGrade.asJSON());
+			});
 		}
 
 		//otherwise the grade doesn't need to be updated so just resolve
 		return Promise.resolve();
 	}
-}, function() {
+}, function () {
 	NextThought.model.MAP['application/vnd.nextthought.assessment.userscourseassignmenthistoryitemsummary'] = this.$className;
 });

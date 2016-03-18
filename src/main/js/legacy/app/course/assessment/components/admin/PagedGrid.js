@@ -1,42 +1,42 @@
 var Ext = require('extjs');
-var User = require('../../../../../model/User');
-var TimeUtils = require('../../../../../util/Time');
-var GridFeatureGradeInputs = require('../../../../../mixins/grid-feature/GradeInputs');
-var AssessmentAssignmentStatus = require('../../AssignmentStatus');
+var TimeUtils = require('legacy/util/Time');
+
+require('legacy/model/User');
+require('legacy/mixins/grid-feature/GradeInputs');
+require('../../AssignmentStatus');
 
 
-/* globals getFormattedString,Duration */
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
-    extend: 'Ext.grid.Panel',
-    alias: 'widget.course-admin-paged-grid',
+	extend: 'Ext.grid.Panel',
+	alias: 'widget.course-admin-paged-grid',
 
-    mixins: {
+	mixins: {
 		gridGrades: 'NextThought.mixins.grid-feature.GradeInputs'
 	},
 
-    cls: 'admin-paged-grid',
-    layout: 'none',
-    scroll: false,
+	cls: 'admin-paged-grid',
+	layout: 'none',
+	scroll: false,
 
-    viewConfig: {
+	viewConfig: {
 		loadMask: true,
 		preserveScrollOnRefresh: true,
 		layout: 'none'
 	},
 
-    selType: 'cellmodel',
+	selType: 'cellmodel',
 
-    columns: {
+	columns: {
 		defaults: {
 			//reverse the default state order (descending first)
 			possibleSortStates: ['DESC', 'ASC'],
 			resizable: false,
 
-			getSortParam: function() {
+			getSortParam: function () {
 				return this.sortOn || this.dataIndex;
 			},
 
-			setSortState: function(state, skipClear, initial) {
+			setSortState: function (state, skipClear, initial) {
 				var ownerHeaderCt = this.getOwnerHeaderCt(),
 					ascCls = this.ascSortCls,
 					descCls = this.descSortCls,
@@ -46,16 +46,16 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 				if (!this.sorting && oldSortState !== state && this.getSortParam()) {
 					switch (state) {
-						case 'DESC':
-							this.addCls(descCls);
-							this.removeCls(ascCls);
-							break;
-						case 'ASC':
-							this.addCls(ascCls);
-							this.removeCls(descCls);
-							break;
-						default:
-							this.removeCls([ascCls, descCls]);
+					case 'DESC':
+						this.addCls(descCls);
+						this.removeCls(ascCls);
+						break;
+					case 'ASC':
+						this.addCls(ascCls);
+						this.removeCls(descCls);
+						break;
+					default:
+						this.removeCls([ascCls, descCls]);
 					}
 
 					if (ownerHeaderCt && !this.triStateSort && !skipClear) {
@@ -74,13 +74,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		items: []
 	},
 
-    pageRowTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+	pageRowTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		tag: 'td', cls: '{cls} page-row', colspan: '{col}', html: '{start} - {end}'
 	})),
 
-    columnOrder: ['Student', 'Username', 'Completed', 'Grade'],
+	columnOrder: ['Student', 'Username', 'Completed', 'Grade'],
 
-    definedColumns: {
+	definedColumns: {
 		Student: {
 			text: 'Student',
 			dataIndex: 'Alias',
@@ -89,37 +89,35 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			flex: 1,
 			xtype: 'templatecolumn',
 			tpl: new Ext.XTemplate(Ext.DomHelper.markup([{
-					cls: 'padded-cell user-cell student-cell', cn: [
-						'{User:avatar}',
-						{ cls: 'name', html: '{[this.displayName(values)]}'}
-					]
-				}]), {
-					displayName: function(values) {
-						if (!values.User || !values.User.isModel) {
-							return 'Resolving';
-						}
-
-
-						var creator = values.User,
-							displayName = creator && creator.get && creator.get('displayName'),
-							f = creator && creator.get && creator.get('FirstName'),
-							l = creator && creator.get && creator.get('LastName'),
-							lm, d = displayName;
-
-						if (l) {
-							lm = Ext.DomHelper.markup({tag: 'b', html: l});
-							d = displayName.replace(l, lm);
-							if (d === displayName) {
-								d += (' (' + (f ? f + ' ' : '') + lm + ')');
-							}
-							d = Ext.DomHelper.markup({cls: 'accent-name', 'data-qtip': d, html: d});
-						}
-
-						return d;
+				cls: 'padded-cell user-cell student-cell', cn: [
+					'{User:avatar}',
+					{ cls: 'name', html: '{[this.displayName(values)]}'}
+				]
+			}]), {
+				displayName: function (values) {
+					if (!values.User || !values.User.isModel) {
+						return 'Resolving';
 					}
-				}
-			)
 
+
+					var creator = values.User,
+						displayName = creator && creator.get && creator.get('displayName'),
+						f = creator && creator.get && creator.get('FirstName'),
+						l = creator && creator.get && creator.get('LastName'),
+						lm, d = displayName;
+
+					if (l) {
+						lm = Ext.DomHelper.markup({tag: 'b', html: l});
+						d = displayName.replace(l, lm);
+						if (d === displayName) {
+							d += (' (' + (f ? f + ' ' : '') + lm + ')');
+						}
+						d = Ext.DomHelper.markup({cls: 'accent-name', 'data-qtip': d, html: d});
+					}
+
+					return d;
+				}
+			})
 		},
 
 		Username: {
@@ -136,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			name: 'completed',
 			sortOn: 'dateSubmitted',
 			width: 150,
-			renderer: function(v, col, rec) {
+			renderer: function (v, col, rec) {
 				if (!rec.get('HistoryItemSummary')) {
 					return '';
 				}
@@ -212,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					{cls: 'dropdown letter grade', tabindex: '1', html: '{[this.getLetter(values)]}'}
 				]}
 			]), {
-				getGrade: function(values) {
+				getGrade: function (values) {
 					var historyItem = values.HistoryItemSummary,
 						grade = historyItem && historyItem.get('Grade'),
 						gradeVals = (grade && grade.getValues()) || {};
@@ -220,7 +218,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					return gradeVals.value || '';
 				},
 
-				getLetter: function(values) {
+				getLetter: function (values) {
 					var historyItem = values.HistoryItemSummary,
 						grade = historyItem && historyItem.get('Grade'),
 						gradeVals = (grade && grade.getValues()) || {};
@@ -237,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			tdCls: 'feedback',
 			sortOn: 'feedbackCount',
 			width: 120,
-			renderer: function(v, col, rec) {
+			renderer: function (v, col, rec) {
 				if (!rec.get('HistoryItemSummary')) { return; }
 
 				var item = rec.get('HistoryItemSummary'),
@@ -261,7 +259,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			name: 'submission',
 			sortable: false,
 			width: 40,
-			renderer: function(v, col, rec) {
+			renderer: function (v, col, rec) {
 				var item = rec.get('HistoryItemSummary');
 
 				if (item && NextThought.app.course.assessment.AssignmentStatus.hasActions(item)) {
@@ -271,14 +269,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    __getColumnConfigs: function(order, extras, overrides) {
+	__getColumnConfigs: function (order, extras, overrides) {
 		var items = [],
 			definedColumns = Ext.clone(this.self.prototype.definedColumns);
 
 		extras = extras || {};
 		overrides = overrides || {};
 
-		order.forEach(function(name) {
+		order.forEach(function (name) {
 			var col;
 
 			if (extras[name]) {
@@ -297,7 +295,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return items;
 	},
 
-    constructor: function(config) {
+	constructor: function (config) {
 		var me = this, items = [],
 			extraCols = config.extraColumns || {},
 			overrides = config.columnOverrides || {},
@@ -314,23 +312,23 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.callParent(arguments);
 
 		me.on({
-			sortchange: function(ct, column) {
-				ct.items.each(function(c) { c.tdCls = (c.tdCls || '').replace(/sortedOn/g, '').trim(); }, ct);
+			sortchange: function (ct, column) {
+				ct.items.each(function (c) { c.tdCls = (c.tdCls || '').replace(/sortedOn/g, '').trim(); }, ct);
 				me.markColumn(column);
 			},
-			viewready: function(grid) {
-				grid.mon(grid.getView(), 'refresh', function() {
+			viewready: function (grid) {
+				grid.mon(grid.getView(), 'refresh', function () {
 					grid.markColumn(grid.down('gridcolumn[sortState]'));
 				});
 			},
 			itemclick: {fn: 'onItemClicked', scope: this},
-			select: function(cmp, record) {
+			select: function (cmp, record) {
 				me.selModel.deselect(record);
 			}
 		});
 	},
 
-    showColumn: function(name) {
+	showColumn: function (name) {
 		var index = (this.HIDDEN_INDEX || {})[name],
 			items;
 
@@ -346,7 +344,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.reconfigure(this.store, items);
 	},
 
-    hideColumn: function(name) {
+	hideColumn: function (name) {
 		var index = this.columnOrder.indexOf(name),
 			items;
 
@@ -364,7 +362,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.reconfigure(this.store, items);
 	},
 
-    afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var view = this.getView();
@@ -376,15 +374,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.monitorSubTree();
 	},
 
-    setDisabled: function() {
+	setDisabled: function () {
 		this.addCls('disabled');
 	},
 
-    setEnabled: function() {
+	setEnabled: function () {
 		this.removeCls('disabled');
 	},
 
-    scrollToTop: function() {
+	scrollToTop: function () {
 		var dom = Ext.getBody();
 
 		if (dom) {
@@ -392,7 +390,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    maybeLoadPage: function(e) {
+	maybeLoadPage: function (e) {
 		var pageRow = e.getTarget('td.page-row');
 
 
@@ -407,8 +405,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    loadPreviousPage: function() {
-		var current = parseInt(this.store.getCurrentPage());
+	loadPreviousPage: function () {
+		var current = parseInt(this.store.getCurrentPage(), 10);
 
 		if (current > 1) {
 			this.mon(this.store, {
@@ -420,8 +418,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    loadNextPage: function() {
-		var current = parseInt(this.store.getCurrentPage()),
+	loadNextPage: function () {
+		var current = parseInt(this.store.getCurrentPage(), 10),
 			total = this.store.getTotalPages();
 
 		if (current < total) {
@@ -434,7 +432,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    setUpPageRows: function() {
+	setUpPageRows: function () {
 		var view = this.getView(),
 			store = this.store,
 			totalPage = store.getTotalPages(),
@@ -446,7 +444,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.addNextRow(tbody);
 	},
 
-    addPrevRow: function(tbody) {
+	addPrevRow: function (tbody) {
 		var prevPageRow = tbody && tbody.down('tr.prevPage'),
 			currentPage = this.store.getCurrentPage(),
 			pageSize = this.store.pageSize,
@@ -485,7 +483,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    addNextRow: function(tbody) {
+	addNextRow: function (tbody) {
 		var nextPageRow = tbody && tbody.down('tr.nextPage'),
 			currentPage = this.store.getCurrentPage(),
 			totalPages = this.store.getTotalPages(),
@@ -530,7 +528,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    markColumn: function(c) {
+	markColumn: function (c) {
 		var cls = 'sortedOn', el = this.getEl();
 		if (el) {
 			el.select('.' + cls).removeCls(cls);
@@ -541,11 +539,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    getHistoryItemFromRecord: function(record) {
+	getHistoryItemFromRecord: function (record) {
 		return record.get('HistoryItemSummary');
 	},
 
-    onItemClicked: function(v, record, dom, i, e) {
+	onItemClicked: function (v, record, dom, i, e) {
 		var nib = e.getTarget('.actions'),
 			historyItem = record.get('HistoryItemSummary') || record,
 			menu;
@@ -563,12 +561,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    bindStore: function(store) {
+	bindStore: function (store) {
 		var res = this.callParent(arguments),
 			sorts = store.getSorters(), s, sort,
 			cols = this.columns, c, col;
 
-		function sortForCol(col, sort) {
+		function sortForCol (col, sort) {
 			var p = col.getSortParam();
 			if (p === 'Creator') {
 				p = col.name === 'username' ? 'username' : 'realname';
@@ -576,7 +574,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			return p === sort.property;
 		}
 
-		function toState(sort) {
+		function toState (sort) {
 			if (/^asc/i.test(sort.direction)) { return 'ASC'; }
 			return 'DESC';
 		}

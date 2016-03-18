@@ -1,8 +1,9 @@
-var Ext = require('extjs');
-var User = require('../model/User');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const Duration = require('durationjs');
+const User = require('../model/User');
+const {isMe} = require('legacy/util/Globals');
 
-var NTIFormat =
+const NTIFormat =
 module.exports = exports = Ext.define('NextThought.util.Format', {
 
 	currencyInfo: {
@@ -13,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 	},
 
 
-	currency: function(value, currency) {
+	currency: function (value, currency) {
 		var info = this.currencyInfo[currency] || {},
 			sign = info.sign || currency,
 			decimals = info.decimals,
@@ -22,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 		return Ext.util.Format.currency(value, sign, decimals, end);
 	},
 
-	ago: function(value, max, format) {
+	ago: function (value, max, format) {
 		var d = new Duration(Math.abs(value - new Date()) / 1000);
 		d = d.ago();
 		//if (/^4 weeks/i.test(d)) { d = '1 month ago'; }
@@ -30,14 +31,14 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 	},
 
 
-	avatarURL: function(value) {
+	avatarURL: function (value) {
 		return (value && value.get && value.get('avatarURL')) ||
-			   (value && value.avatarURL) ||
-			   User.BLANK_AVATAR;
+				(value && value.avatarURL) ||
+				User.BLANK_AVATAR;
 	},
 
 
-	avatar: function(value, cls) {
+	avatar: function (value, cls) {
 		var avatar = getField('avatarURL'),
 			bgColor = getField('avatarBGColor'),
 			initials = getField('avatarInitials'),
@@ -45,11 +46,11 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 			defaultAvatar = className && className !== 'User' ? NextThought.model.FriendsList.BLANK_AVATAR : NextThought.model.User.BLANK_AVATAR,
 			clsList = [cls || 'avatar', 'avatar-container'], cn = [];
 
-		function getField(name) {
+		function getField (name) {
 			return (value && value.get && value.get(name)) || (value && value[name]);
 		}
 
-		function getURL(link) {
+		function getURL (link) {
 			return 'url(' + link + ')';
 		}
 
@@ -71,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 	},
 
 
-	xavatar: function(value, cls) {
+	xavatar: function (value, cls) {
 		var avatar = (value && value.get && value.get('avatarURL')) || (value && value.avatarURL),
 			username = (value && value.get && value.get('Username')) || (value && value.Username),
 			clazz = (value && value.get && value.get('Class')) || (value && value.Class),
@@ -80,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 			initials,
 			cn = [], color, idx;
 
-		function get(link) {
+		function get (link) {
 			return 'url(' + link + ')';
 		}
 
@@ -112,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 	},
 
 
-	background: function(value) {
+	background: function (value) {
 		var background = (value && value.get && value.get('backgroundURL')) || (value && value.backgroundURL);
 
 		if (!background) {
@@ -125,13 +126,13 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 	},
 
 
-	boolStr: function(value, trueString, falseString) {
+	boolStr: function (value, trueString, falseString) {
 		trueString = trueString && getString(trueString);
 		falseString = falseString && getString(falseString);
 		return value ? (trueString || '') : (falseString || '');
 	},
 
-	displayName: function(value, me) {
+	displayName: function (value, me) {
 		if (isMe(value) && me) {
 			return me;
 		}
@@ -143,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 		return value && (value.displayName || value);
 	},
 
-	pluralIf: function(value) {
+	pluralIf: function (value) {
 		return (value && this.plural.apply(this, arguments)) || '';
 	}
 

@@ -1,4 +1,5 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+const Duration = require('durationjs');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.parts.Description', {
@@ -81,14 +82,14 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 		info: null
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		var i = this.getInfo() || {get: Ext.emptyFn},
 			s = i.get('Schedule') || {},
 			c = (i.get('Credit') || [])[0],
 			p = Ext.Array.pluck(i.get('Prerequisites') || [], 'title'),
 			start = Ext.Date.format(i.get('StartDate'), 'Y-m-d');
 
-		function fo(d) {
+		function fo (d) {
 			var date = Ext.Date.parse([start, d].join('T'), 'c');
 			return Ext.Date.format(date, 'g:i a');
 		}

@@ -4,22 +4,21 @@ var GridFeatureGradeInputs = require('../../../../../mixins/grid-feature/GradeIn
 var AssessmentAssignmentStatus = require('../../AssignmentStatus');
 
 
-/*globals getFormattedString:false, Duration:false*/
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.Grid', {
-    extend: 'Ext.grid.Panel',
-    alias: 'widget.course-admin-grid',
+	extend: 'Ext.grid.Panel',
+	alias: 'widget.course-admin-grid',
 
-    mixins: {
+	mixins: {
 		gridGrades: 'NextThought.mixins.grid-feature.GradeInputs'
 	},
 
-    scroll: 'vertical',
+	scroll: 'vertical',
 
-    viewConfig: {
+	viewConfig: {
 		loadMask: true
 	},
 
-    verticalScroller: {
+	verticalScroller: {
 		synchronousRender: !Ext.isGecko,
 		scrollToLoadBuffer: 100,
 		trailingBufferZone: 100,
@@ -27,9 +26,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		leadingBufferZone: 150
 	},
 
-    selType: 'cellmodel',
+	selType: 'cellmodel',
 
-    columns: {
+	columns: {
 		defaults: {
 			//reverse the default state order (descending first)
 			possibleSortStates: ['DESC', 'ASC'],
@@ -37,221 +36,221 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		},
 
 		items: [
-					{
-						text: getString('NextThought.view.courseware.assessment.admin.Grid.assignment'),
-						dataIndex: 'name',
-						name: 'name',
-						tdCls: 'padded-cell',
-						padding: '0 0 0 30',
-						flex: 1
-					},
+			{
+				text: getString('NextThought.view.courseware.assessment.admin.Grid.assignment'),
+				dataIndex: 'name',
+				name: 'name',
+				tdCls: 'padded-cell',
+				padding: '0 0 0 30',
+				flex: 1
+			},
 
 
-					{ text: getString('NextThought.view.courseware.assessment.admin.Grid.completed'), dataIndex: 'completed', name: 'completed', width: 140,
-						renderer: function(v, col, rec) {
-							var d = this.dueDate || rec.get('due'),
-								s = (v && v.get && v.get('Last Modified')) || v,
-								item = rec.get('item'),
-								parts = item && item.get('parts');
+			{ text: getString('NextThought.view.courseware.assessment.admin.Grid.completed'), dataIndex: 'completed', name: 'completed', width: 140,
+				renderer: function (v, col, rec) {
+					var d = this.dueDate || rec.get('due'),
+						s = (v && v.get && v.get('Last Modified')) || v,
+						item = rec.get('item'),
+						parts = item && item.get('parts');
 
 
-							if (!s && !d) {
-								return '';
+					if (!s && !d) {
+						return '';
+					}
+
+					//if no submission
+					if (!s) {
+						return Ext.DomHelper.markup({
+							cls: 'incomplete',
+							html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.incomplete', {date: Ext.Date.format(d, 'm/d')})
+						});
+					}
+					//if the submisson is before the due date
+					if (d > s) {
+						return Ext.DomHelper.markup({cls: 'ontime', html: getString('NextThought.view.courseware.assessment.admin.Grid.ontime')});
+					}
+					//if we don't have a due data to tell how late it was
+					if (!d) {
+						return Ext.DomHelper.markup({
+							cls: 'ontime',
+							'data-qtip': getString('NextThought.view.courseware.assessment.admin.Grid.ontime'),
+							html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.submitted', {date: Ext.Date.format(s, 'm/d')})
+						});
+					}
+
+					//if we get here the submission was late
+					d.html = TimeUtils.getNaturalDuration(Math.abs(s - d), 1);
+
+					return Ext.DomHelper.markup({
+						cls: 'late',
+						'data-qtip': getFormattedString('NextThought.view.courseware.assessment.admin.Grid.late', {
+							late: d.html
+						}),
+						html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.submitted', {date: Ext.Date.format(s, 'm/d')})
+					});
+				},
+				doSort: function (state) {
+					function get (o) { o = o.data; return o.completed || o.due; }
+					var store = this.up('grid').getStore(),
+						groupModifier = state === 'ASC' ? 1 : -1,
+						sorters = [
+							{
+								direction: state,
+								property: 'dateSubmitted',
+								sorterFn: function (a, b) {
+									var v1 = !!a.get('completed'),
+										v2 = !!b.get('completed'),
+										v = v1 && !v2 ? -1 : (!v1 && v2 ? 1 : 0);
+
+									//keep the completed items on top
+									return groupModifier * v;
+								}
+							},
+							{
+								direction: state,
+								property: 'dateSubmitted',
+								//not invoked if remote sort.
+								sorterFn: function (a, b) {
+									var v1 = get(a), v2 = get(b);
+									return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
+								}
 							}
+					];
 
-							//if no submission
-							if (!s) {
-								return Ext.DomHelper.markup({
-									cls: 'incomplete',
-									html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.incomplete', {date: Ext.Date.format(d, 'm/d')})
-								});
-							}
-							//if the submisson is before the due date
-							if (d > s) {
-								return Ext.DomHelper.markup({cls: 'ontime', html: getString('NextThought.view.courseware.assessment.admin.Grid.ontime')});
-							}
-							//if we don't have a due data to tell how late it was
-							if (!d) {
-								return Ext.DomHelper.markup({
-									cls: 'ontime',
-									'data-qtip': getString('NextThought.view.courseware.assessment.admin.Grid.ontime'),
-									html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.submitted', {date: Ext.Date.format(s, 'm/d')})
-								});
-							}
+					store.sort(sorters);
+				}
+			},
 
-							//if we get here the submission was late
-							d.html = TimeUtils.getNaturalDuration(Math.abs(s - d), 1);
 
-							return Ext.DomHelper.markup({
-								cls: 'late',
-								'data-qtip': getFormattedString('NextThought.view.courseware.assessment.admin.Grid.late', {
-									late: d.html
-								}),
-								html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.submitted', {date: Ext.Date.format(s, 'm/d')})
-							});
-						},
-						doSort: function(state) {
-							function get(o) { o = o.data; return o.completed || o.due; }
-							var store = this.up('grid').getStore(),
-								groupModifier = state === 'ASC' ? 1 : -1,
-								sorters = [
-									{
-										direction: state,
-										property: 'dateSubmitted',
-										sorterFn: function(a, b) {
-											var v1 = !!a.get('completed'),
-												v2 = !!b.get('completed'),
-												v = v1 && !v2 ? -1 : (!v1 && v2 ? 1 : 0);
 
-											//keep the completed items on top
-											return groupModifier * v;
-										}
-									},
-									{
-										direction: state,
-										property: 'dateSubmitted',
-										//not invoked if remote sort.
-										sorterFn: function(a, b) {
-											var v1 = get(a), v2 = get(b);
-											return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
-										}
-									}
-							  ];
+			{
+				text: getString('NextThought.view.courseware.assessment.admin.Grid.score'),
+				componentCls: 'score',
+				dataIndex: 'Grade', allowTab: true, name: 'grade', width: 120,/*90*/
+				tdCls: 'text score',
+				renderer: function (v, col, rec) {
+					var grade = rec.get('Grade'),
+						scoreTpl = Ext.DomHelper.markup({tag: 'input', type: 'text', value: rec.get('grade')}),
+						isExcused = grade && grade.get('IsExcused'),
+						excusedCls = isExcused === true ? 'on' : 'off', excusedTpl;
 
-							store.sort(sorters);
+					if (isExcused) {
+						col.tdCls += ' excused';
+						excusedTpl = Ext.DomHelper.markup({
+							tag: 'span',
+							cls: 'grade-excused',
+							html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.excused')
+						});
+
+						return scoreTpl + excusedTpl;
+					}
+					return scoreTpl;
+
+				},
+				doSort: function (state) {
+					function getGrade (o) {
+						var grade = o.get('Grade'),
+							values = grade && grade.getValues(),
+							value = values && values.value,
+							g = value && parseFloat(value, 10);
+
+						if (value && isNaN(g)) {
+							g = value;
 						}
-					},
+
+						return g;
+					}
 
 
+					var store = this.up('grid').getStore(),
+						less = -1, more = 1, same = 0,
+						sorter = new Ext.util.Sorter({
+							direction: state,
+							property: store.remoteSort ? 'gradeValue' : 'Grade',
+							//the transform and root are ignored on remote sort
+							root: 'data',
+							sorterFn: function (oA, oB) {
+								var a = getGrade(oA),
+									b = getGrade(oB),
+									cA = oA.get('completed'),
+									cB = oB.get('completed'),
+									tA = typeof a,
+									tB = typeof b,
+									direction;
 
-					{
-						text: getString('NextThought.view.courseware.assessment.admin.Grid.score'),
-						componentCls: 'score',
-						dataIndex: 'Grade', allowTab: true, name: 'grade', width: 120,/*90*/
-						tdCls: 'text score',
-						renderer: function(v, col, rec) {
-							var grade = rec.get('Grade'),
-								scoreTpl = Ext.DomHelper.markup({tag: 'input', type: 'text', value: rec.get('grade')}),
-								isExcused = grade && grade.get('IsExcused'),
-								excusedCls = isExcused === true ? 'on' : 'off', excusedTpl;
-
-							if (isExcused) {
-								col.tdCls += ' excused';
-								excusedTpl = Ext.DomHelper.markup({
-									tag: 'span',
-									cls: 'grade-excused',
-									html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.excused')
-								});
-
-								return scoreTpl + excusedTpl;
-							}
-							return scoreTpl;
-
-						},
-						doSort: function(state) {
-							function getGrade(o) {
-								var grade = o.get('Grade'),
-									values = grade && grade.getValues(),
-									value = values && values.value,
-									g = value && parseFloat(value, 10);
-
-								if (value && isNaN(g)) {
-									g = value;
+								if (cA && !cB) {
+									direction = more;
+								} else if (!cA && cB) {
+									direction = less;
+								//these are intentionally == and not ===
+								} else if (a == null && b != null) {
+									direction = less;
+								} else if (a != null && b == null) {
+									direction = more;
+								} else if (tA === 'string' && tB === 'string') {
+									direction = -a.localeCompare(b);
+									direction = direction === 0 ? same : (direction < 0) ? less : more;
+								} else if (tA === 'string' && tB !== 'string') {
+									direction = less;
+								} else if (tA !== 'string' && tB === 'string') {
+									direction = more;
+								} else {
+									direction = a === b ? same : a < b ? less : more;
 								}
 
-								return g;
+								return direction;
 							}
+						});
+
+					store.sort(sorter);
+				}
+			},
 
 
-							var store = this.up('grid').getStore(),
-								less = -1, more = 1, same = 0,
-								sorter = new Ext.util.Sorter({
-									direction: state,
-									property: store.remoteSort ? 'gradeValue' : 'Grade',
-									//the transform and root are ignored on remote sort
-									root: 'data',
-									sorterFn: function(oA, oB) {
-										var a = getGrade(oA),
-											b = getGrade(oB),
-											cA = oA.get('completed'),
-											cB = oB.get('completed'),
-											tA = typeof a,
-											tB = typeof b,
-											direction;
+			{
+				text: getString('NextThought.view.courseware.assessment.admin.Grid.feedback'),
+				dataIndex: 'feedback',
+				name: 'feedback',
+				tdCls: 'feedback',
+				width: 120,
+				renderer: function (v, col, rec) {
+					var feedbackTpl, commentText = rec.get('feedback') === 1 ? ' Comment' : ' Comments';
 
-										if (cA && !cB) {
-											direction = more;
-										} else if (!cA && cB) {
-											direction = less;
-										//these are intentionally == and not ===
-										} else if (a == null && b != null) {
-											diection = less;
-										} else if (a != null && b == null) {
-											direction = more;
-										} else if (tA === 'string' && tB === 'string') {
-											direction = -a.localeCompare(b);
-											direction = direction === 0 ? same : (direction < 0) ? less : more;
-										} else if (tA === 'string' && tB !== 'string') {
-											direction = less;
-										} else if (tA !== 'string' && tB === 'string') {
-											direction = more;
-										} else {
-											direction = a === b ? same : a < b ? less : more;
-										}
+					feedbackTpl = Ext.DomHelper.markup({cls: 'feedback', html: rec.get('feedback') + commentText});
 
-										return direction;
-									}
-								});
+					if (rec.get('feedback')) {
+						return feedbackTpl;
+					}
 
-							store.sort(sorter);
-						}
-					},
+					return '';
+				},
+				doSort: function (state) {
+					var store = this.up('grid').getStore(),
+						sorter = new Ext.util.Sorter({
+							direction: state,
+							property: store.remoteSort ? 'feedbackCount' : 'feedback',
 
-
-					{
-						text: getString('NextThought.view.courseware.assessment.admin.Grid.feedback'),
-						dataIndex: 'feedback',
-						name: 'feedback',
-						tdCls: 'feedback',
-						width: 120,
-						renderer: function(v, col, rec) {
-							var feedbackTpl, commentText = rec.get('feedback') === 1 ? ' Comment' : ' Comments';
-
-							feedbackTpl = Ext.DomHelper.markup({cls: 'feedback', html: rec.get('feedback') + commentText});
-
-							if (rec.get('feedback')) {
-								return feedbackTpl;
+							root: 'data',
+							transform: function (o) {
+								return o || 0;
 							}
+						});
 
-							return '';
-						},
-						doSort: function(state) {
-							var store = this.up('grid').getStore(),
-								sorter = new Ext.util.Sorter({
-									direction: state,
-									property: store.remoteSort ? 'feedbackCount' : 'feedback',
-
-									root: 'data',
-									transform: function(o) {
-										return o || 0;
-									}
-								});
-
-							store.sort(sorter);
-						}
-					},
+					store.sort(sorter);
+				}
+			},
 
 
-					{ text: '', dataIndex: 'submission', name: 'submission', sortable: false, width: 40, renderer: function(v) {
-						return v && Ext.DomHelper.markup({cls: 'actions'});
-					} }
-				]
+			{ text: '', dataIndex: 'submission', name: 'submission', sortable: false, width: 40, renderer: function (v) {
+				return v && Ext.DomHelper.markup({cls: 'actions'});
+			} }
+		]
 	},
 
-    tabIndex: 2,
-    nameOrder: ['name', 'completed', 'grade', 'feedback', 'submission'],
+	tabIndex: 2,
+	nameOrder: ['name', 'completed', 'grade', 'feedback', 'submission'],
 
-    markColumn: function(c) {
+	markColumn: function (c) {
 		var cls = 'sortedOn', el = this.getEl();
 		if (el) {
 			el.select('.' + cls).removeCls(cls);
@@ -262,7 +261,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    constructor: function(config) {
+	constructor: function (config) {
 		var me = this, items = [];
 
 		me.columns = Ext.clone(me.self.prototype.columns);
@@ -270,7 +269,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			Ext.apply(me.columns.items, config.columnOverrides);
 		}
 
-		(config.nameOrder || me.nameOrder || []).forEach(function(name, i) {
+		(config.nameOrder || me.nameOrder || []).forEach(function (name, i) {
 			var col, index;
 
 			for (index in me.columns.items) {
@@ -307,24 +306,24 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.callParent(arguments);
 
 		me.on({
-			sortchange: function(ct, column) {
-				ct.items.each(function(c) { c.tdCls = (c.tdCls || '').replace(/sortedOn/g, '').trim(); }, ct);
+			sortchange: function (ct, column) {
+				ct.items.each(function (c) { c.tdCls = (c.tdCls || '').replace(/sortedOn/g, '').trim(); }, ct);
 				me.markColumn(column);
 			},
-			//selectionchange: function(sm, selected) { sm.deselect(selected); },
-			viewready: function(grid) {
-				grid.mon(grid.getView(), 'refresh', function() {
+			//selectionchange: function (sm, selected) { sm.deselect(selected); },
+			viewready: function (grid) {
+				grid.mon(grid.getView(), 'refresh', function () {
 					grid.markColumn(grid.down('gridcolumn[sortState]'));
 				});
 			},
 			itemclick: {fn: 'onItemClicked', scope: this},
-			select: function(cmp, record) {
+			select: function (cmp, record) {
 				me.selModel.deselect(record);
 			}
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.monitorSubTree(arguments);
@@ -338,12 +337,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    bindStore: function(store) {
+	bindStore: function (store) {
 		var res = this.callParent(arguments),
 			sorts = store.getSorters(), s, sort,
 			cols = this.columns, c, col;
 
-		function sortForCol(col, sort) {
+		function sortForCol (col, sort) {
 			var p = col.getSortParam();
 			if (p === 'Creator') {
 				p = col.name === 'username' ? 'username' : 'realname';
@@ -351,7 +350,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			return p === sort.property;
 		}
 
-		function toState(sort) {
+		function toState (sort) {
 			if (/^asc/i.test(sort.direction)) { return 'ASC'; }
 			return 'DESC';
 		}
@@ -377,25 +376,25 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return res;
 	},
 
-    /**
+	/**
 	 * This function sets the table layout to fixed.
 	 * We've observed that some browsers(i.e. Safari)
 	 * end up mixing our styles and Ext Js table styles.
 	 * In this method, we add the necessary class to override Ext Js styles.
 	 */
-	adjustTableLayout: function() {
+	adjustTableLayout: function () {
 		var me = this;
 		this.onceRendered
-			.then(function() {
+			.then(function () {
 				me.el.removeCls('fixed-table');
 				wait(100)
-					.then(function() {
+					.then(function () {
 						me.el.addCls('fixed-table');
 					});
 			});
 	},
 
-    onItemClicked: function(v, record, dom, ix, e) {
+	onItemClicked: function (v, record, dom, ix, e) {
 		var nib = e.getTarget('.actions');
 		if (nib) {
 			NextThought.app.course.assessment.AssignmentStatus.getActionsMenu(record).showBy(nib, 'tr-br');

@@ -41,6 +41,7 @@
     "compression-webpack-plugin": "^0.2.0",
     "css-loader": "^0.23.0",
     "detect-zoom": "^1.0.2",
+    "durationjs": "1.1.1",
     "eslint-config-nti-codestyle-js": "^1.1.0",
     "eslint-config-nti-codestyle-jsx": "^1.0.0",
     "exports-loader": "^0.6.2",

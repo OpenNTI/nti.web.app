@@ -1,5 +1,5 @@
-var Ext = require('extjs');
-
+const Ext = require('extjs');
+const Duration = require('durationjs');
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.DetailsTable', {
 	extend: 'Ext.Component',
@@ -57,11 +57,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				// 	{cls: 'value', html: '{type}'}
 				// ]}
 			]}
-		]}
-	),
+	]}),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var c = this.course, showCredit = false,
@@ -91,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	getPrice: function() {
+	getPrice: function () {
 		var pricing = this.enrollmentOption.pricing;
 
 		if (pricing) {
