@@ -1,4 +1,5 @@
 var Ext = require('extjs');
+var rangy = require('legacy/util/rangy');
 var FilterManager = require('../../../filter/FilterManager');
 var Anchors = require('../../../util/Anchors');
 var AnnotationUtils = require('../../../util/Annotations');
@@ -691,7 +692,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 
     onContextMenuHandler: function(e) {
 		try {
-			var origSelection = window.rangy.getSelection(this.getDocumentElement()).toString(),
+			var origSelection = rangy.getSelection(this.getDocumentElement()).toString(),
 					range = this.getSelection();
 
 			if (range && !range.collapsed) {

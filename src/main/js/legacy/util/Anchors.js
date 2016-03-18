@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var XRegExp = require('xregexp');
+var rangy = require('./rangy');
 var Anchors = require('./Anchors');
 var AnnotationUtils = require('./Annotations');
 var Globals = require('./Globals');
