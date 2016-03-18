@@ -1,13 +1,14 @@
-var Ext = require('extjs');
-var PartsBaseInput = require('./BaseInput');
-var FieldsSimpleTextField = require('../../../../../common/form/fields/SimpleTextField');
+const Ext = require('extjs');
+const Formatter = require('formatter.js');
+require('./BaseInput');
+require('legacy/common/form/fields/SimpleTextField');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.TextInput', {
-    extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
-    alias: 'widget.enrollment-textinput',
+	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
+	alias: 'widget.enrollment-textinput',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'input-container enrollment-input text {required} {size}'},
 		{tag: 'tpl', 'if': 'help', cn: [
 			{cls: 'help', cn: [
@@ -16,14 +17,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		inputEl: '.input-container'
 	},
 
-    initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
-		function asPatterns(v) {
+		function asPatterns (v) {
 			return v ? (Array.isArray(v) ? v : [{'*': v}]) : undefined;
 		}
 
@@ -34,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.valuePattern = asPatterns(this.valuePattern);
 	},
 
-    beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -44,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var helpIcon = this.el.down('.help .icon'), helpText;
@@ -81,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		//}
 	},
 
-    addFormatter: function(formatter) {
+	addFormatter: function (formatter) {
 		var input = this.input && this.input.inputEl && this.input.inputEl.dom;
 
 		if (input) {
@@ -89,13 +90,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-    setUpChangeMonitors: function() {
+	setUpChangeMonitors: function () {
 		if (!this.input) { return; }
 
 		this.mon(this.input, 'changed', 'changed');
 	},
 
-    isValid: function() {
+	isValid: function () {
 		//if we are required and empty we aren't
 		var value = this.getValue()[this.name],
 			isValid = this.required ? !this.isEmpty() : true,
@@ -118,19 +119,19 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return isValid;
 	},
 
-    isEmpty: function() {
+	isEmpty: function () {
 		return Ext.isEmpty(this.input.getValue().replace(/\W/ig, ''));
 	},
 
-    addError: function() {
+	addError: function () {
 		this.inputEl.addCls('error');
 	},
 
-    removeError: function() {
+	removeError: function () {
 		this.inputEl.removeCls('error');
 	},
 
-    setValue: function(value) {
+	setValue: function (value) {
 		var me = this;
 
 		if (!me.rendered) {
@@ -144,13 +145,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			//me.input is set in this.afterRender but we are called in this.parent.afterRender
 			//so wait until the next event pump when we have me.input
 			wait()
-				.then(function() {
+				.then(function () {
 					me.input.setValue(value);
 				});
 		}
 	},
 
-    getValue: function(force) {
+	getValue: function (force) {
 		var value = {}, val = this.input.getValue();
 
 		if (this.getter && Ext.isFunction(this.getter)) {
