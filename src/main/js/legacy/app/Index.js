@@ -9,6 +9,8 @@ var ChatIndex = require('./chat/Index');
 var PromptIndex = require('./prompt/Index');
 require('../layout/container/None');
 
+const DetectZoom = require('detect-zoom');
+
 
 module.exports = exports = Ext.define('NextThought.app.Index', {
     extend: 'Ext.container.Viewport',
