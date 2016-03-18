@@ -8,6 +8,7 @@ var CoursewareOutlineInterface = require('../../store/courseware/OutlineInterfac
 var NavigationCourseOutlineNode = require('./navigation/CourseOutlineNode');
 var NavigationCourseOutlineContentNode = require('./navigation/CourseOutlineContentNode');
 var NavigationCourseOutlineCalendarNode = require('./navigation/CourseOutlineCalendarNode');
+var Url = require('url');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline', {
