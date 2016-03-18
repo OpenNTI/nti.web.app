@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		var groups = this.getGroups(),
 				bins = {},
 				k, b = null,
-				getters = NextThought.util.UserDataThreader.GETTERS;
+				getters = UtilUserDataThreader.GETTERS;
 
 		for (k in groups) {
 			if (groups.hasOwnProperty(k)) {
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 			delete bins.Bookmark;
 		}
 
-		return NextThought.util.UserDataThreader.buildThreads(bins);
+		return UtilUserDataThreader.buildThreads(bins);
 	},
 
 	//TODO the docs say this can take an array instead of a single instance.  We don't handle

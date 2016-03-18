@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 					items = json && ParseUtils.parseItems(json), tree;
 
 				items.push(comment);
-				tree = items && NextThought.util.UserDataThreader.threadUserData(items);
+				tree = items && UtilUserDataThreader.threadUserData(items);
 
 				flatList = this.__flattenReplies(tree[0].children, comment.get('depth') || 0);
 

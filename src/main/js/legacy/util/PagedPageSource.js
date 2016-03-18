@@ -4,8 +4,6 @@ var StoreUtils = require('./Store');
 
 module.exports = exports = Ext.define('NextThought.util.PagedPageSource', {
 
-	requires: 'NextThought.util.Store',
-
 	mixins: {
 		observable: 'Ext.util.Observable'
 	},
