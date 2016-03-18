@@ -1,5 +1,4 @@
 var Ext = require('extjs');
-var Globals = require('./Globals');
 var ParseUtils = require('./Parsing');
 
 
@@ -383,7 +382,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		for (u in urls) {
 			if (urls.hasOwnProperty(u)) {
 				stack.push(u);
-				Globals.loadScript(urls[u], tick, fail, this, bustCache);
+				this.loadScript(urls[u], tick, fail, this, bustCache);
 			}
 		}
 	},
@@ -636,7 +635,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	getNaturalSorter: function(field) {
 		return function(a, b) {
 			var sa = a.get(field), sb = b.get(field);
-			return Globals.naturalSortComparator(sa, sb);
+			return this.naturalSortComparator(sa, sb);
 		};
 	},
 
@@ -644,7 +643,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	getCaseInsensitiveNaturalSorter: function(field) {
 		return function(a, b) {
 			var sa = String(a.get(field)).toLowerCase(), sb = String(b.get(field)).toLowerCase();
-			return Globals.naturalSortComparator(sa, sb);
+			return this.naturalSortComparator(sa, sb);
 		};
 	},
 
@@ -662,7 +661,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 			return (g ? g(v) : v).get(key);
 		}
 
-		var n = Globals.naturalSortComparator;
+		var n = this.naturalSortComparator;
 
 		return function(a, b) {
 			var c = 0, $a = $(a), $b = $(b);
@@ -764,21 +763,21 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	getURLRooted: function(url, root) {
 		if (!url) { return ''; }
 
-		if (Globals.HOST_PREFIX_PATTERN.test(url) || url.indexOf('/') === 0) {
+		if (this.HOST_PREFIX_PATTERN.test(url) || url.indexOf('/') === 0) {
 			return url;
 		}
 
-		url = Globals.trimRoute(url);
+		url = this.trimRoute(url);
 
 		if (root) {
-			return Globals.getURLRooted(Globals.trimRoute(root) + '/' + url + '/');
+			return this.getURLRooted(this.trimRoute(root) + '/' + url + '/');
 		}
 
 		var host = $AppConfig.server.host.replace(/\/$/, '');
 
 		url = host + '/' + url;
 
-		if (!Globals.FILE_EXTENSION_PATTERN.test(url)) {
+		if (!this.FILE_EXTENSION_PATTERN.test(url)) {
 			url += '/';
 		}
 
@@ -788,7 +787,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 
 	getURL: function(u, root) {
 		if (!u) {return '';}
-		if (!Globals.HOST_PREFIX_PATTERN.test(u) && u.indexOf('//') !== 0) {
+		if (!this.HOST_PREFIX_PATTERN.test(u) && u.indexOf('//') !== 0) {
 			if (!Ext.isEmpty(root)) {
 				u = root + u;
 				return getURL(u);
@@ -879,14 +878,15 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 },
 function() {
 	var proto = '__proto__';
+	var Globals = this;
 	//TODO: figure out how to fix this globals
-	window.guidGenerator = this.guidGenerator;
-	window.isMe = this.isMe;
-	window.getURL = this.getURL;
+	window.guidGenerator = this.guidGenerator.bind(this);
+	window.isMe = this.isMe.bind(this);
+	window.getURL = this.getURL.bind(this);
 	window.swallow = function(e) {};
-	window.getResourceURL = this.getResourceURL;
-	window.reloadCSS = Ext.bind(this.reloadCSS, this);
-	window.isFeature = this.isFeature;
+	window.getResourceURL = this.getResourceURL.bind(this);
+	window.reloadCSS = this.reloadCSS.bind(this);
+	window.isFeature = this.isFeature.bind(this);
 
 	this.stopBackspace(document);
 
