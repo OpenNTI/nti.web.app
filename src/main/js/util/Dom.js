@@ -2,7 +2,6 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.util.Dom', {
-	singleton: true,
 
 
 	filterNodeList: function(nodeList, filter) {
@@ -324,4 +323,4 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 	}
 
 
-});
+}).create();

@@ -1,10 +1,11 @@
+/*globals io*/
 var Ext = require('extjs');
 var Socket = require('./Socket');
 var Globals = require('../util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.Socket', {
-	singleton: true,
+
 	isDebug: $AppConfig.debugSocket,
 	isVerbose: $AppConfig.debugSocketVerbosely,
 	mixins: { observable: 'Ext.util.Observable' },
@@ -112,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 		}
 
 		var me = this,
-			socket = io.connect(getURL(), {'reconnection delay': $AppConfig.socketReconnectDelay || 2000}),
+			socket = io.connect(Globals.getURL(), {'reconnection delay': $AppConfig.socketReconnectDelay || 2000}),
 			k;
 
 		if (this.isDebug && !socket.emit.chained) {
@@ -147,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 
 		for (k in this.control) {
 			if (this.control.hasOwnProperty(k)) {
-				if (this.isDebug){ 
+				if (this.isDebug){
 					console.debug('Attaching handler for ', k);
 				}
 				socket.on(k, this.control[k]);
@@ -225,8 +226,8 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 
 	onReconnecting: function(){
 		if(this.isDebug){
-			console.log('reconnecting', arguments);	
-		}	
+			console.log('reconnecting', arguments);
+		}
 	},
 
 	onReconnect: function(){
@@ -269,4 +270,4 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 		console.error('Socket connection failed', arguments);
 	}
 
-});
+}).create();

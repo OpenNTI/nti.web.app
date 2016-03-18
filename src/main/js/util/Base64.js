@@ -6,9 +6,8 @@ var Ext = require('extjs');
  *
  * TODO: de-lint
  */
+global.B64 =
 module.exports = exports = Ext.define('NextThought.util.Base64', {
-	alternateClassName: 'B64',
-	singleton: true,
 
 	_isBase64Re: /^([A-Za-z0-9+\/]{4})*([A-Za-z0-9+\/]{4}|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{2}==)$/,
 
@@ -172,4 +171,4 @@ module.exports = exports = Ext.define('NextThought.util.Base64', {
 		return string;
 	}
 
-});
+}).create();

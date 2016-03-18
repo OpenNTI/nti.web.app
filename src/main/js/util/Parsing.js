@@ -1,16 +1,12 @@
 var Ext = require('extjs');
 var ObjectUtils = require('./Object');
-var UtilObject = require('./Object');
 var ReaderJson = require('../proxy/reader/Json');
 
 
-/*jslint continue: true*/
-/*globals console, document, DOMParser */
 module.exports = exports = Ext.define('NextThought.util.Parsing', {
-    singleton: true,
-    COMMON_PREFIX: 'tag:nextthought.com,2011-10:',
+	COMMON_PREFIX: 'tag:nextthought.com,2011-10:',
 
-    /**
+	/**
 	 * @param {String|String[]|Object|Object[]} items
 	 * @param {Object} [supplemental] Properties to add to the parsed items (such as flags)
 	 */
@@ -49,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		return results;
 	},
 
-    findModel: function(data) {
+	findModel: function(data) {
 		function recurse(dir, modelName) {
 			var sub, o = dir[modelName];
 
@@ -90,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		return recurse(NextThought.model, name);
 	},
 
-    getReaderFor: function(item) {
+	getReaderFor: function(item) {
 		this.readers = this.readers || [];
 
 		var o = this.findModel(item);
@@ -109,11 +105,11 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 
 	},
 
-    isNTIID: function(id) {
+	isNTIID: function(id) {
 		return Boolean(this.parseNTIID(id));
 	},
 
-    /**
+	/**
 	 * Parses an id and returns an object containing the split portions
 	 * See http://excelsior.nextthought.com/server-docs/ntiid-structure/
 
@@ -205,7 +201,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		return result;
 	},
 
-    /**
+	/**
 	 * CSS escape ids
 	 * @param {string} id
 	 * @return {string} CSS-friendly string to use in a selector
@@ -216,7 +212,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 				.replace(/\./g, '\\2e ');//no periods
 	},
 
-    /**
+	/**
 	 * Returns the prefix of the content ntiid we think this ntiid would reside beneath
 	 * @param {String} id
 	 * @return {String}
@@ -230,7 +226,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		return ntiid && ntiid.toString();
 	},
 
-    parseNtiFragment: function(fragment) {
+	parseNtiFragment: function(fragment) {
 		var authority = 'nextthought.com,2011-10',
 			parts, type, provider, typeSpecific, s;
 
@@ -255,7 +251,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		return ['tag', authority, s.join('-')].join(':');
 	},
 
-    parseQueryString: function(qStr) {
+	parseQueryString: function(qStr) {
 		if (Ext.isEmpty(qStr)) {
 			return null;
 		}
@@ -278,20 +274,20 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		return r;
 	},
 
-    isEncodedNTIID: function(component) {
+	isEncodedNTIID: function(component) {
 		var decoded = this.decodeFromURI(component);
 
 		return this.isNTIID(decoded) && !this.isEncodedNTIIMimeType(component);
 	},
 
-    isEncodedNTIIMimeType: function(component) {
+	isEncodedNTIIMimeType: function(component) {
 		var decoded = decodeURIComponent(component),
 			index = decoded.indexOf('application/vnd.nextthought');
 
 		return index > -1;
 	},
 
-    encodeForURI: function(ntiid) {
+	encodeForURI: function(ntiid) {
 		var cut = this.COMMON_PREFIX.length;
 
 		if (ntiid && ntiid.substr(0, cut) === this.COMMON_PREFIX) {
@@ -301,7 +297,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		return encodeURIComponent(ntiid);
 	},
 
-    decodeFromURI: function(component) {
+	decodeFromURI: function(component) {
 		var ntiid = decodeURIComponent(component);
 
 		if (!this.isNTIID(ntiid) && ntiid.substr(0,3) !== 'tag') {
@@ -310,53 +306,54 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 
 		return ntiid;
 	}
-},function() {
-	/*
-	 * DOMParser HTML extension
-	 * 2012-02-02
-	 *
-	 * By Eli Grey, http://eligrey.com
-	 * Public domain.
-	 * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
-	 */
+}).create();
 
-	/*! @source https://gist.github.com/1129031 */
-	(function(DOMParser) {
-	    'use strict';
-	    var DOMParser_proto = DOMParser.prototype,
-			real_parseFromString = DOMParser_proto.parseFromString;
 
-	    // Firefox/Opera/IE throw errors on unsupported types
-	    try {
-	        // WebKit returns null on unsupported types
-	        if ((new DOMParser()).parseFromString('', 'text/html')) {
-	            // text/html parsing is natively supported
-	            return;
-	        }
-	    } catch (ex) {}
+/*
+ * DOMParser HTML extension
+ * 2012-02-02
+ *
+ * By Eli Grey, http://eligrey.com
+ * Public domain.
+ * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+ */
 
-	    DOMParser_proto.parseFromString = function(markup, type) {
-		    if (/^\s*text\/html\s*(?:;|$)/i.test(type)) {
-			    var doc = document.implementation.createHTMLDocument(''),
-				    doc_elt = doc.documentElement,
-				    first_elt;
+/*! @source https://gist.github.com/1129031 */
+(function(DOMParser) {
+	'use strict';
+	var DOMParser_proto = DOMParser.prototype,
+		real_parseFromString = DOMParser_proto.parseFromString;
 
-			    try {
-				    doc_elt.innerHTML = markup;
-				    first_elt = doc_elt.firstElementChild;
+	// Firefox/Opera/IE throw errors on unsupported types
+	try {
+		// WebKit returns null on unsupported types
+		if ((new DOMParser()).parseFromString('', 'text/html')) {
+			// text/html parsing is natively supported
+			return;
+		}
+	} catch (ex) {}
 
-				    if (doc_elt.childElementCount === 1 && first_elt.localName.toLowerCase() === 'html') {
-					    doc.replaceChild(first_elt, doc_elt);
-				    }
-			    }
-			    catch (IE_SUCKS) {
-				    console.warn('Head tags may not be returned from queries, due to polyfill/browser shortcomings');
-				    doc.body.innerHTML = markup;
-			    }
+	DOMParser_proto.parseFromString = function(markup, type) {
+		if (/^\s*text\/html\s*(?:;|$)/i.test(type)) {
+			var doc = document.implementation.createHTMLDocument(''),
+				doc_elt = doc.documentElement,
+				first_elt;
 
-			    return doc;
-		    }
-		    return real_parseFromString.apply(this, arguments);
-	    };
-	}(DOMParser));
-});
+			try {
+				doc_elt.innerHTML = markup;
+				first_elt = doc_elt.firstElementChild;
+
+				if (doc_elt.childElementCount === 1 && first_elt.localName.toLowerCase() === 'html') {
+					doc.replaceChild(first_elt, doc_elt);
+				}
+			}
+			catch (IE_SUCKS) {
+				console.warn('Head tags may not be returned from queries, due to polyfill/browser shortcomings');
+				doc.body.innerHTML = markup;
+			}
+
+			return doc;
+		}
+		return real_parseFromString.apply(this, arguments);
+	};
+}(global.DOMParser));

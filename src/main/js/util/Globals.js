@@ -1,10 +1,8 @@
 var Ext = require('extjs');
 var ParseUtils = require('./Parsing');
 
-
+global.Globals =
 module.exports = exports = Ext.define('NextThought.util.Globals', {
-	singleton: true,
-
 
 	/* DATASERVER 2 Constants*/
 	MESSAGE_INBOX: 'RUGDByOthersThatIMightBeInterestedIn',
@@ -875,34 +873,34 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		location.href = href;
 	}
 
-},
-function() {
-	var proto = '__proto__';
-	var Globals = this;
-	//TODO: figure out how to fix this globals
-	window.guidGenerator = this.guidGenerator.bind(this);
-	window.isMe = this.isMe.bind(this);
-	window.getURL = this.getURL.bind(this);
-	window.swallow = function(e) {};
-	window.getResourceURL = this.getResourceURL.bind(this);
-	window.reloadCSS = this.reloadCSS.bind(this);
-	window.isFeature = this.isFeature.bind(this);
+}).create();
 
-	this.stopBackspace(document);
+//TODO: figure out how to fix this globals
 
-	this.handleCache();
+window.guidGenerator = exports.guidGenerator.bind(exports);
+window.isMe = exports.isMe.bind(exports);
+window.getURL = exports.getURL.bind(exports);
+window.swallow = function(e) {};
+window.getResourceURL = exports.getResourceURL.bind(exports);
+window.reloadCSS = exports.reloadCSS.bind(exports);
+window.isFeature = exports.isFeature.bind(exports);
+
+exports.stopBackspace(document);
+
+exports.handleCache();
 
 
-	function makeImage(prop) {
-		var src = Globals[prop];
-		src = getResourceURL(src);
-		if (!src) {
-			console.warn('No Image for: ' + prop);
-			return;
-		}
-		Globals[prop] = new Image();
-		Globals[prop].src = src;
+function makeImage(prop) {
+	var src = exports[prop];
+	src = window.getResourceURL(src);
+	if (!src) {
+		console.warn('No Image for: ' + prop);
+		return;
 	}
-	makeImage('CANVAS_URL_SHAPE_BROKEN_IMAGE');
-	makeImage('CANVAS_BROKEN_IMAGE');
-});
+	exports[prop] = new Image();
+	exports[prop].src = src;
+}
+
+
+makeImage('CANVAS_URL_SHAPE_BROKEN_IMAGE');
+makeImage('CANVAS_BROKEN_IMAGE');

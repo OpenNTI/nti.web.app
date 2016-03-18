@@ -1,10 +1,8 @@
+/*globals YT */
 var Ext = require('extjs');
 var Globals = require('../Globals');
-var UtilGlobals = require('../Globals');
 
 
-/*jslint */
-/*globals Globals, NextThought, YT */
 module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
     statics: {
 		kind: 'video',

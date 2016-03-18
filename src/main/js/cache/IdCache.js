@@ -1,19 +1,15 @@
 var Ext = require('extjs');
 var B64 = require('../util/Base64');
-var UtilBase64 = require('../util/Base64');
-
 
 module.exports = exports = Ext.define('NextThought.cache.IdCache', {
-    alias: 'IdCache',
-    singleton: true,
 
-    getIdentifier: function(id)
+	getIdentifier: function(id)
 	{
 		if (!id) { return null; }
 		return B64.encode(id);
 	},
 
-    getComponentId: function(rec, subRecordField, prefix) {
+	getComponentId: function(rec, subRecordField, prefix) {
 		prefix = prefix || '';
 		if (!rec) { return null; }
 
@@ -32,4 +28,5 @@ module.exports = exports = Ext.define('NextThought.cache.IdCache', {
 
 		return 'cmp-' + prefix + '-' + this.getIdentifier(i);
 	}
-});
+
+}).create();

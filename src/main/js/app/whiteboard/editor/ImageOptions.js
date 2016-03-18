@@ -1,5 +1,6 @@
 var Ext = require('extjs');
-var WhiteboardUtils = require('../Utils');
+var NTMatrix = require('../Matrix');
+var WBUtils = require('../Utils');
 var FileBrowserItem = require('../../../common/menus/file/BrowserItem');
 
 

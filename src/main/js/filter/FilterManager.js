@@ -6,13 +6,12 @@ var FilterFilterGroup = require('./FilterGroup');
 //TODO: find a way to generalize this and make this class responsible for all filter operations for UGD calls.
 
 module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
-    singleton: true,
 
-    constructor: function() {
+	constructor: function() {
 		this.scopes = {};
 	},
 
-    getScope: function(scope) {
+	getScope: function(scope) {
 		if (!this.scopes[scope]) {
 			this.scopes[scope] = new Ext.util.Observable();
 			this.scopes[scope].addEvents('change');
@@ -20,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
 		return this.scopes[scope];
 	},
 
-    registerFilterListener: function retry(filterScope, fn, fnScope) {
+	registerFilterListener: function retry(filterScope, fn, fnScope) {
 		var me = this, o, p, fc;
 		if (filterScope && filterScope.isComponent) {
 			p = filterScope.up('view-container');
@@ -41,17 +40,17 @@ module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
 		}
 	},
 
-    setFilter: function(scope, filter) {
+	setFilter: function(scope, filter) {
 		var o = this.getScope(scope);
 		o.current = filter;
 		o.fireEvent('change', filter);
 	},
 
-    getCurrentFilter: function(scope) {
+	getCurrentFilter: function(scope) {
 		return this.getScope(scope || 'default-filter-control').current;
 	},
 
-    /**
+	/**
 	 * This will naively iterate the filters and grab all $className filters and add them to the result, as well as
 	 * determin which filter to use. ie MeOnly,FollowingAndMe, Following.
 	 *
@@ -64,11 +63,11 @@ module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
 			list = filter ? filter.flatten() : [],
 			params = {};
 
-    //        list.push({
-    //            fieldName: '$className',
-    //            operation: 1,
-    //            value: 'NextThought.model.Bookmark'
-    //        });
+	//		list.push({
+	//			fieldName: '$className',
+	//			operation: 1,
+	//			value: 'NextThought.model.Bookmark'
+	//		});
 
 		Ext.each(list, function(f) {
 			var m;
@@ -113,4 +112,5 @@ module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
 
 		return params;
 	}
-});
+
+}).create();

@@ -2,12 +2,11 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.util.Rects', {
-	singleton: true,
 
 
 	getFirstNonBoundingRect: function(ra) {
 		var range = ra.nativeRange || ra,
-            bound = range.getBoundingClientRect(),
+			bound = range.getBoundingClientRect(),
 			rects = Array.prototype.slice.call(range.getClientRects()) || [],
 			i = rects.length - 1, r;
 
@@ -76,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.util.Rects', {
 				bins[b + 1] = r.length;
 			}
 			else {
-        b = r[(bins[b] || bins[b + 1]) - 1];
+		b = r[(bins[b] || bins[b + 1]) - 1];
 				b.left = b.left < x ? b.left : x;
 				b.top = b.top < y ? b.top : y;
 				b.right = b.right > xx ? b.right : xx;
@@ -156,4 +155,4 @@ module.exports = exports = Ext.define('NextThought.util.Rects', {
 		return rect.top === 0 && rect.left === 0 && rect.height === 0 && rect.width === 0;
 	}
 
-});
+}).create();

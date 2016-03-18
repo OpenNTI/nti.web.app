@@ -4,7 +4,7 @@ var Globals = require('../../../util/Globals');
 var LineUtils = require('../../../util/Line');
 var SharingUtils = require('../../../util/Sharing');
 var UtilLine = require('../../../util/Line');
-var WhiteboardUtils = require('../../whiteboard/Utils');
+var WBUtils = require('../../whiteboard/Utils');
 var EditorEditor = require('../../../editor/Editor');
 var UserdataActions = require('../../userdata/Actions');
 

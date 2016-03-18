@@ -1,18 +1,17 @@
 var Ext = require('extjs');
-var UserRepository = require('./UserRepository');
+
 var User = require('../model/User');
 var ParseUtils = require('../util/Parsing');
-var UtilParsing = require('../util/Parsing');
-var ModelUser = require('../model/User');
-var ChatStateStore = require('../app/chat/StateStore');
+
+require('../app/chat/StateStore');
 
 
+global.UserRepository =
 module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
-    alias: 'UserRepository',
-    singleton: true,
-    isDebug: $AppConfig.userRepositoryDebug,
 
-    constructor: function() {
+	isDebug: $AppConfig.userRepositoryDebug,
+
+	constructor: function() {
 		Ext.apply(this, {
 			store: null,
 			activeRequests: {},
@@ -58,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		this.setPresenceChangeListener(this.ChatStore);
 	},
 
-    //<editor-fold desc="Private Interfaces">
+	//<editor-fold desc="Private Interfaces">
 	getStore: function() {
 		if (!this.store) {
 			this.store = Ext.data.Store.create({model: 'NextThought.model.User'});
@@ -73,11 +72,11 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		return this.store;
 	},
 
-    setPresenceChangeListener: function(store) {
+	setPresenceChangeListener: function(store) {
 		store.on('presence-changed', this.presenceChanged, this);
 	},
 
-    precacheUser: function(refreshedUser) {
+	precacheUser: function(refreshedUser) {
 		var s = this.getStore(), uid, u;
 
 		if (refreshedUser.getId === undefined) {
@@ -123,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		}
 	},
 
-    /*searchUser: function(query) {
+	/*searchUser: function(query) {
 		var fieldsToMatch = ['Username', 'alias', 'realname', 'email'],
 			regex = new RegExp(query),
 			matches;
@@ -154,7 +153,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		fromStore.fireEvent('changed', fromStore);
 	},
 
-    cacheUser: function(user, maybeMerge) {
+	cacheUser: function(user, maybeMerge) {
 		var s = this.getStore(),
 			id = user.getId() || user.raw[user.idProperty],
 			fromStore = s.getById(id);
@@ -174,12 +173,12 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		return user;
 	},
 
-    resolveFromStore: function(key) {
+	resolveFromStore: function(key) {
 		var s = this.getStore();
 		return s.getById(key) || s.findRecord('Username', key, 0, false, true, true) || s.findRecord('NTIID', key, 0, false, true, true);
 	},
 
-    //</editor-fold>
+	//</editor-fold>
 
 	//<editor-fold desc="Public Interface">
 	getUser: function(username, callback, scope, forceFullResolve, cacheBust) {
@@ -305,7 +304,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		});
 	},
 
-    //</editor-fold>
+	//</editor-fold>
 
 
 	//<editor-fold desc="Bulk Request">
@@ -387,7 +386,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		};
 	}()),
 
-    makeBulkRequest: function(usernames) {
+	makeBulkRequest: function(usernames) {
 		var me = this,
 			chunkSize = $AppConfig.userBatchResolveChunkSize || 200;
 
@@ -403,7 +402,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 				});
 	},
 
-    __recompose: function(names, lists) {
+	__recompose: function(names, lists) {
 		var agg = [],
 			i = lists.length - 1,
 			x, list, u, m = {};
@@ -426,7 +425,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		return agg;
 	},
 
-    __chunkBulkRequest: function(names) {
+	__chunkBulkRequest: function(names) {
 		var me = this,
 			divert = [], requestNames,
 			active = me._pendingResolve;
@@ -460,7 +459,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 			});
 	},
 
-    __bulkRequest: function(names) {
+	__bulkRequest: function(names) {
 		var me = this,
 			store = me.getStore(),
 			active = me._pendingResolve,
@@ -532,13 +531,13 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		return p;
 	},
 
-    __foregroundRequest: function() {
+	__foregroundRequest: function() {
 		console.log('Requesting in foreground');
 		return Service.request.apply(Service, arguments)
 				.then(function(txt) { return Ext.decode(txt, true); });
 	},
 
-    __makeRequest: function(req) {
+	__makeRequest: function(req) {
 		var w = this.worker, p, a = {};
 		if (!w) {
 			return this.__foregroundRequest(req);
@@ -561,7 +560,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		return p;
 	},
 
-    __workerMessage: function(msg) {
+	__workerMessage: function(msg) {
 		var data = msg.data,
 			w = this.worker, p, a;
 		if (!w) {
@@ -578,7 +577,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		p.fulfill(data.result);
 	},
 
-    //</editor-fold>
+	//</editor-fold>
 
 
 	/**
@@ -669,7 +668,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		return result;
 	},
 
-    updatePresenceFromResolve: function(list) {
+	updatePresenceFromResolve: function(list) {
 		var store = this.ChatStore;
 
 		list.forEach(function(u) {
@@ -681,7 +680,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		});
 	},
 
-    presenceChanged: function(username, presence) {
+	presenceChanged: function(username, presence) {
 		var u = this.getStore().getById(username), newPresence;
 		if (this.debug) {console.log('User repository recieved a presence change for ', username, arguments);}
 		newPresence = (presence && presence.isPresenceInfo) ?
@@ -699,108 +698,111 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 			console.debug('no user found to update presence');
 		}
 	}
-},
-function() {
-	function worker() {
-		var keep = {
-			Class: 1,
-			CreatedTime: 1,
-			avatarURL: 1,
-			Links: 1,
-			MimeType: 1,
-			NTIID: 1,
-			OU4x4: 1,
-			Username: 1,
-			alias: 1,
-			realname: 1,
-			NonI18NLastName: 1,
-			NonI18NFirstName: 1,
-			href: 1,
-			//profile fields (can't drop these) It would be nice to not to include these until we view the profile. (separate call?)
-			about: 1,
-			affiliation: 1,
-			description: 1,
-			home_page: 1,
-			location: 1,
-			role: 1
-		};
+}).create();
 
-		self.addEventListener('message', function(e) {
-			var resp = {};
-			fetch(e.data, function(json, shell) {
-				var i, l, o, p;
 
-				resp.id = e.data.id;
-				try {
-					resp.result = JSON.parse(json);
-				} catch (er) {
-					console.error(json + '\n', er.stack || er.message || er);
-					resp.result = {};
-				}
+function worker() {
+	var keep = {
+		Class: 1,
+		CreatedTime: 1,
+		avatarURL: 1,
+		Links: 1,
+		MimeType: 1,
+		NTIID: 1,
+		OU4x4: 1,
+		Username: 1,
+		alias: 1,
+		realname: 1,
+		NonI18NLastName: 1,
+		NonI18NFirstName: 1,
+		href: 1,
+		//profile fields (can't drop these) It would be nice to not to include these until we view the profile. (separate call?)
+		about: 1,
+		affiliation: 1,
+		description: 1,
+		home_page: 1,
+		location: 1,
+		role: 1
+	};
 
-				if (shell) {
-					l = (resp.result || {}).Items || {};
+	self.addEventListener('message', function(e) {
+		var resp = {};
+		fetch(e.data, function(json, shell) {
+			var i, l, o, p;
 
-					if (l.avatarURL == null) {
-						l.avatarURL = '@@avatar';
-					}
-
-					for (i in l) {
-						if (l.hasOwnProperty(i)) {
-							o = l[i];
-							for (p in o) {
-								if (o.hasOwnProperty(p) && !keep[p]) {
-									delete o[p];
-								}
-							}
-							o.shell = true;
-						}
-					}
-				}
-
-				self.postMessage(resp);
-			});
-		}, false);
-
-		function fetch(data, fn) {
-			var req = new XMLHttpRequest();
-			req.open('POST', data.url, true);
-			if (!data.hasOwnProperty('shell')) {
-				data.shell = true;
+			resp.id = e.data.id;
+			try {
+				resp.result = JSON.parse(json);
+			} catch (er) {
+				console.error(json + '\n', er.stack || er.message || er);
+				resp.result = {};
 			}
 
-			req.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-			req.setRequestHeader('Accept', 'application/json');
+			if (shell) {
+				l = (resp.result || {}).Items || {};
 
-			req.onreadystatechange = function() {
-				if (req.readyState === 4) {
-					if (req.status === 200) {
-						fn(req.responseText, data.shell);
-					} else {
-						fn('Error: ' + req.status);
+				if (l.avatarURL == null) {
+					l.avatarURL = '@@avatar';
+				}
+
+				for (i in l) {
+					if (l.hasOwnProperty(i)) {
+						o = l[i];
+						for (p in o) {
+							if (o.hasOwnProperty(p) && !keep[p]) {
+								delete o[p];
+							}
+						}
+						o.shell = true;
 					}
 				}
-			};
-			req.send(JSON.stringify(data.jsonData));
+			}
+
+			self.postMessage(resp);
+		});
+	}, false);
+
+	function fetch(data, fn) {
+		var req = new XMLHttpRequest();
+		req.open('POST', data.url, true);
+		if (!data.hasOwnProperty('shell')) {
+			data.shell = true;
 		}
-	}
-	try {
-		var re = /(__cov_\$[^\[]+\['\d+'\])(\[\d+\])?(\+\+)[;,]\s*/ig,//istanbul's (code coverage) instrumentation pattern
-			code = worker.toString();
 
-		if (Ext.isIE11p) { throw 'Webworkers are broken in IE11'; }
+		req.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+		req.setRequestHeader('Accept', 'application/json');
 
-		//unit tests' coverage reporter doesn't instrument the generated
-		// code correctly and causes code execution to halt. So, strip it out for now.
-		code = code.replace(re, '');
-
-		this.worker = new Worker(URL.createObjectURL(new Blob(['(', code, ')();'], {type: 'text/javascript'})));
-		this.worker.onmessage = this.__workerMessage.bind(this);
-		this.worker.onerror = function() {
-			delete UserRepository.worker;
-			console.error('No Worker for bulk resolve');
+		req.onreadystatechange = function() {
+			if (req.readyState === 4) {
+				if (req.status === 200) {
+					fn(req.responseText, data.shell);
+				} else {
+					fn('Error: ' + req.status);
+				}
+			}
 		};
-	} catch (e) {
-		console.error('No Worker for bulk resolve');
+		req.send(JSON.stringify(data.jsonData));
 	}
-});
+}
+
+
+
+try {
+	var re = /(__cov_\$[^\[]+\['\d+'\])(\[\d+\])?(\+\+)[;,]\s*/ig;//istanbul's (code coverage) instrumentation pattern
+	var code = worker.toString();
+
+	if (Ext.isIE11p) { throw 'Webworkers are broken in IE11'; }
+
+	//unit tests' coverage reporter doesn't instrument the generated
+	// code correctly and causes code execution to halt. So, strip it out for now.
+	code = code.replace(re, '');
+
+	exports.worker = new Worker(URL.createObjectURL(new Blob(['(', code, ')();'], {type: 'text/javascript'})));
+	exports.worker.onmessage = exports.__workerMessage.bind(exports);
+	exports.worker.onerror = function() {
+		delete exports.worker;
+		console.error('No Worker for bulk resolve');
+	};
+} catch (e) {
+	console.error('No Worker for bulk resolve');
+}

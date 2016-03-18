@@ -1,10 +1,8 @@
 var Ext = require('extjs');
 var User = require('../model/User');
-var NTIFormat = require('./Format');
 
-
+var NTIFormat =
 module.exports = exports = Ext.define('NextThought.util.Format', {
-	singleton: true,
 
 	currencyInfo: {
 		'USD' : {
@@ -148,13 +146,13 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 		return (value && this.plural.apply(this, arguments)) || '';
 	}
 
-},function() {
-	Ext.util.Format.ntiCurrency = Ext.bind(NTIFormat.currency, NTIFormat);//PhantomJS doesn't support .bind()
-	Ext.util.Format.ago = NTIFormat.ago;
-	Ext.util.Format.avatarURL = NTIFormat.avatarURL;
-	Ext.util.Format.boolStr = NTIFormat.boolStr;
-	Ext.util.Format.displayName = NTIFormat.displayName;
-	Ext.util.Format.pluralIf = NTIFormat.pluralIf;
-	Ext.util.Format.avatar = NTIFormat.avatar;
-	Ext.util.Format.background = NTIFormat.background;
-});
+}).create();
+
+Ext.util.Format.ntiCurrency = NTIFormat.currency.bind(NTIFormat);
+Ext.util.Format.ago = NTIFormat.ago;
+Ext.util.Format.avatarURL = NTIFormat.avatarURL;
+Ext.util.Format.boolStr = NTIFormat.boolStr;
+Ext.util.Format.displayName = NTIFormat.displayName;
+Ext.util.Format.pluralIf = NTIFormat.pluralIf;
+Ext.util.Format.avatar = NTIFormat.avatar;
+Ext.util.Format.background = NTIFormat.background;

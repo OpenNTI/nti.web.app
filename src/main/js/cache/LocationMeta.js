@@ -4,8 +4,6 @@ var ParseUtils = require('../util/Parsing');
 
 
 module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
-	alias: 'LocationMeta',
-	singleton: true,
 
 	mixins: {
 		observable: 'Ext.util.Observable'
@@ -192,4 +190,4 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 		return ParseUtils.ntiidPrefix(id);
 	}
 
-});
+}).create();

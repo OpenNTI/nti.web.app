@@ -9,9 +9,8 @@ var UtilAnchors = require('./Anchors');
 
 
 module.exports = exports = Ext.define('NextThought.util.Annotations', {
-    singleton: true,
 
-    // Recursively go up to the root of the a note.
+	// Recursively go up to the root of the a note.
 	getNoteRoot: function(rec) {
 		var root = rec.parent || rec;
 		while (root.parent) {
@@ -20,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 		return root;
 	},
 
-    //needs testing? where did the test go?
+	//needs testing? where did the test go?
 	/**
 	 * From a reply, build its absent parent
 	 * @param {NextThought.model.Note} note
@@ -65,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 		return holder;
 	},
 
-    selectionToNote: function(range, documentElement) {
+	selectionToNote: function(range, documentElement) {
 		if (range && range.collapsed) {
 			Ext.Error.raise('Cannot create highlight from null or collapsed range');
 		}
@@ -80,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 										  });
 	},
 
-    selectionToHighlight: function(range, style, root) {
+	selectionToHighlight: function(range, style, root) {
 		if (range && range.collapsed) {
 			Ext.Error.raise('Cannot create highlight from null or collapsed range');
 		}
@@ -98,14 +97,14 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 				});
 	},
 
-    getBlockParent: function(node, ignoreSpan) {
+	getBlockParent: function(node, ignoreSpan) {
 		if (!node || (this.isBlockNode(node) && !(node.tagName === 'SPAN' && ignoreSpan))) {
 			return node;
 		}
 		return this.getBlockParent(node.parentNode, ignoreSpan);
 	},
 
-    /* tested */
+	/* tested */
 	isBlockNode: function(n) {
 		var e = Ext.get(n),
 				p = /static|relative|^$/i,
@@ -126,7 +125,7 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 				&& p.test(e.getStyle('position'));
 	},
 
-    isDisplayed: function(a, root) {
+	isDisplayed: function(a, root) {
 		if (!a || a === root || a.nodeType === Node.DOCUMENT_NODE || Ext.get(a) === null) {
 			return true;
 		}
@@ -142,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 		return this.isDisplayed(a.parentNode, root) && check(a);
 	},
 
-    getTextNodes: function(root) {
+	getTextNodes: function(root) {
 		var textNodes = [];
 
 		function getNodes(node) {
@@ -162,14 +161,14 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 		return textNodes;
 	},
 
-    colorsForName: function(highlightColorName) {
+	colorsForName: function(highlightColorName) {
 		 var colors = Service.getHighlightColors();
 		 return Ext.Array.findBy(colors,function(item,idx) {
 			 return item.name == highlightColorName;
 		 });
 	},
 
-    drawCanvas: function(canvas, content, range, backgroundColor, offset) {
+	drawCanvas: function(canvas, content, range, backgroundColor, offset) {
 
 		function getLineHeight(e) {
 			function getNode(e) { return (e.nodeType === Node.TEXT_NODE) ? e.parentNode : e; }
@@ -258,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 			}
 
 			if (last) {
-//                w -= 4;
+//				w -= 4;
 				ctx.beginPath();
 				ctx.moveTo(x + w, y);
 				ctx.lineTo(x + w, y + h);
@@ -275,6 +274,7 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 		return boundingTop;
 	},
 
-    addToHistory: Ext.emptyFn,
-    updateHistory: Ext.emptyFn
-});
+	addToHistory: Ext.emptyFn,
+	updateHistory: Ext.emptyFn
+
+}).create();

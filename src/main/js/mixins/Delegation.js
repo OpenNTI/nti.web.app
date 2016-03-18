@@ -127,7 +127,6 @@ module.exports = exports = Ext.define('NextThought.mixins.Delegation', function(
  * Utility class to aid in defining delegated functions.
  */
 var Factory = Ext.define('NextThought.mixins.Delegation.Factory', {
-	singleton: true,
 
 	/** @property This is a special value to return form a delegated function to prevent the default */
 	PREVENT_DEFAULT: {},
@@ -149,4 +148,4 @@ var Factory = Ext.define('NextThought.mixins.Delegation.Factory', {
 		fn.applyAll = Boolean(applyAll);
 		return fn;
 	}
-});
+}).create();

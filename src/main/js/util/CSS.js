@@ -2,7 +2,6 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.util.CSS', {
-	singleton: true,
 
 	getOrMakeSheet: function(id) {
 		var sheet = document.getElementById(id);
@@ -52,4 +51,4 @@ module.exports = exports = Ext.define('NextThought.util.CSS', {
 	}
 
 
-});
+}).create();

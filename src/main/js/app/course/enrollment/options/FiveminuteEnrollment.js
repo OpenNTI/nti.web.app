@@ -5,8 +5,6 @@ var OptionsBase = require('./Base');
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.options.FiveminuteEnrollment', {
 	extend: 'NextThought.app.course.enrollment.options.Base',
 
-	singleton: true,
-
 	NAME: 'FiveminuteEnrollment',
 	displayKey: 'course-info.pricing-widget.enrolled',
 	isBase: true,
@@ -322,4 +320,4 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		};
 	}
 
-});
+}).create();

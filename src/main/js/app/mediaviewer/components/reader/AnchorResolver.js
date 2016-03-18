@@ -14,9 +14,8 @@ var AnchorablesTranscriptRangeDescription = require('../../../../model/anchorabl
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.AnchorResolver', {
-    singleton: true,
 
-    // TODO: While most of these could be just added to Anchors.js,
+	// TODO: While most of these could be just added to Anchors.js,
 	// we think in the future, each type of anchor should have information about how to resolve its range.
 	// These utils deal with time range resolution. This is just a first step.
 
@@ -43,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		})};
 	},
 
-    //TODO: this function is too customized for resolving time range to dom range in transcript.
+	//TODO: this function is too customized for resolving time range to dom range in transcript.
 	// It needs to be reworked to handle more of a general case( any time of time range to dom Range.)
 	toDomRange: function(description, doc, cleanRoot, containerId) {
 		if (!description || description.isEmpty) {
@@ -71,17 +70,17 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return range;
 	},
 
-    /**
+	/**
 	 * Get the dom element given a timeRange description
 	 * This function filters the cueStore to find cues at a given time
-	 * given by the timeRange description. 
+	 * given by the timeRange description.
 	 * It also doesn't rely on the content being in the dom.
 	 * This is used as a lightweight approach to get timeRange's dom element
 	 * when conmputing the context of a note for instance.
-	 * 
+	 *
 	 * @param  {[TranscriptTimeRange]} description [the range of a given userdata]
-	 * @param  {[Ext.Store]} cueStore    [store of cue]
-	 * @return {[HTMLElement]}             [html element containing the described time range]
+	 * @param  {[Ext.Store]} cueStore	[store of cue]
+	 * @return {[HTMLElement]}			 [html element containing the described time range]
 	 */
 	getDomElementForTranscriptTimeRange: function(description, cueStore, video) {
 		if (!description || description.isEmpty) {
@@ -92,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 		var start = description.getStart() && description.getStart().seconds,
 			end = description.getEnd() && description.getEnd().seconds,
-		    cues,
+			cues,
 			els = [], resultRange, n, context;
 
 		//Conversions.
@@ -112,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return context;
 	},
 
-    //TODO: this function is too customized for resolving time range to dom range in transcript.
+	//TODO: this function is too customized for resolving time range to dom range in transcript.
 	// It needs to be reworked to handle more of a general case( any time of time range to dom Range.)
 	fromTimeRangeToDomRange: function(description, cueStore, container, docElement) {
 		if (!description || description.isEmpty) {
@@ -120,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}
 		var start = description.getStart() && description.getStart().seconds,
 			end = description.getEnd() && description.getEnd().seconds,
-		    cues,
+			cues,
 			els = [], resultRange;
 
 		//Conversions.
@@ -146,14 +145,14 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return resultRange;
 	},
 
-    getCuesWithinRange: function(store, start, end) {
+	getCuesWithinRange: function(store, start, end) {
 		function fn(item) {
 			return (item.get('endTime') > 0) && (start.isFloatLessThanOrEqual(item.get('startTime')) && end.isFloatGreaterThanOrEqual(item.get('endTime')));
 		}
 		return store ? store.queryBy(fn, this) : null;
 	},
 
-    createRangeDescriptionFromTimeRange: function(cueInfo) {
+	createRangeDescriptionFromTimeRange: function(cueInfo) {
 		var desc = NextThought.model.anchorables.TimeRangeDescription.create({
 			start: this.createTimePointer('start', cueInfo.startTime),
 			end: this.createTimePointer('end', cueInfo.endTime),
@@ -163,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return {description: desc};
 	},
 
-    createTranscriptPointer: function(rangePointer, role, cueId, time) {
+	createTranscriptPointer: function(rangePointer, role, cueId, time) {
 		return NextThought.model.anchorables.TranscriptContentPointer.create({
 			pointer: rangePointer,
 			cueid: cueId,
@@ -172,18 +171,19 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		});
 	},
 
-    createTimePointer: function(role, time) {
+	createTimePointer: function(role, time) {
 		return NextThought.model.anchorables.TimeContentPointer.create({
 			seconds: this.toMillSecond(time),
 			role: role
 		});
 	},
 
-    fromMillSecondToSecond: function(millsec) {
+	fromMillSecondToSecond: function(millsec) {
 		return millsec / 1000;
 	},
 
-    toMillSecond: function(seconds) {
+	toMillSecond: function(seconds) {
 		return seconds * 1000;
 	}
-});
+
+}).create();

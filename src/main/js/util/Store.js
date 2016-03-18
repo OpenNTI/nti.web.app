@@ -4,7 +4,6 @@ var ParseUtils = require('./Parsing');
 
 
 module.exports = exports = Ext.define('NextThought.util.Store', {
-	singleton: true,
 
 	fillInUsers: function fillIn(store, records) {
 
@@ -136,4 +135,4 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 			});
 	}
 
-});
+}).create();

@@ -5,7 +5,6 @@ var AnnotationUtils = require('./Annotations');
 
 
 module.exports = exports = Ext.define('NextThought.util.Line', {
-	singleton: true,
 
 	containerMimeSelectors: ['object[type$=naquestion]', 'object[type$=ntivideo]'],
 
@@ -82,24 +81,24 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 		}
 
 
-    range = this.getAnchorableRange(range, doc);
+		range = this.getAnchorableRange(range, doc);
 
-    if (!range && ancestor) {
-      // NOTE: if we have no range but we do have an ancestor that's an object,
-      // let's use that to create the anchorable range.
-      if (Ext.fly(ancestor).is('object') || Ext.fly(ancestor).up('object')) {
-        parentObject = !Ext.fly(ancestor).is('object') ? Ext.fly(ancestor).up('object') : ancestor;
-        if (parentObject) {
-          t = parentObject.dom ? parentObject.dom : parentObject;
-          if (t) {
-            range = doc.createRange();
-            range.selectNodeContents(t);
-            range = this.getAnchorableRange(range, doc);
-          }
-        }
-      }
+		if (!range && ancestor) {
+			// NOTE: if we have no range but we do have an ancestor that's an object,
+			// let's use that to create the anchorable range.
+			if (Ext.fly(ancestor).is('object') || Ext.fly(ancestor).up('object')) {
+				parentObject = !Ext.fly(ancestor).is('object') ? Ext.fly(ancestor).up('object') : ancestor;
+				if (parentObject) {
+					t = parentObject.dom ? parentObject.dom : parentObject;
+					if (t) {
+						range = doc.createRange();
+						range.selectNodeContents(t);
+						range = this.getAnchorableRange(range, doc);
+					}
+				}
+			}
+		}
 
-    }
 		if (range) {
 			return { rect: range.getBoundingClientRect(), range: range };
 		}
@@ -109,29 +108,29 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 
 
 
-  getAnchorableRange: function(range, doc) {
-    try {
-      //ranges created next to videos sometimes require massaging to be anchorable, do that now.
-      if (!Ext.isTextNode(range.commonAncestorContainer) && Ext.fly(range.commonAncestorContainer).hasCls('externalvideo')) {
-        range.setStartBefore(range.startContainer);
-        range.setEndAfter(range.endContainer);
-      }
-      //Note this is being abused here.  Just because this returns null doesn't mean we can't anchor the range.
-      //Case in point for ranges within a question we can always anchor them, but this may return null.  The correct thing
-      //to do is actually call createDomContentPointer and see if it returns something, but that will have performance implications
-      //so we need to figure something else out
-      range = Anchors.makeRangeAnchorable(range, doc);
-    }
-    catch (e) {
-      range = null;
-    }
-    return range;
-  },
+	getAnchorableRange: function(range, doc) {
+		try {
+			//ranges created next to videos sometimes require massaging to be anchorable, do that now.
+			if (!Ext.isTextNode(range.commonAncestorContainer) && Ext.fly(range.commonAncestorContainer).hasCls('externalvideo')) {
+			range.setStartBefore(range.startContainer);
+			range.setEndAfter(range.endContainer);
+			}
+			//Note this is being abused here. Just because this returns null doesn't mean we can't anchor the range.
+			//Case in point for ranges within a question we can always anchor them, but this may return null. The correct thing
+			//to do is actually call createDomContentPointer and see if it returns something, but that will have performance implications
+			//so we need to figure something else out
+			range = Anchors.makeRangeAnchorable(range, doc);
+		}
+		catch (e) {
+			range = null;
+		}
+		return range;
+	},
 
 	/** @private */
 	//Gecko (FF)
 	rangeByRecursiveSearch: function(y, doc) {
-    //		y -= 30; //Correction
+		// y -= 30; //Correction
 		var curNode = doc.documentElement, range, rect, sibling;
 		//First text node ending past y
 		var i, cn;
@@ -219,7 +218,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 		return range;
 	},
 
-  /*
+/*
 	isMath: function isMath(n){
 		return n && n.nodeType === 1
 				? Ext.fly(n).hasCls('math') || isMath(n.parentNode)
@@ -232,16 +231,16 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 			: false;
 	},
 
-  */
+*/
 	isContent: function isContent(n) {
 		var root = n.ownerDocument.getElementById('NTIContent');
 		//n must be a node, and must be at least 3 levels deep into the content, otherwise, n is just a top level container.
 		return n && n.parentNode && n.parentNode.parentNode &&
-			   root !== n &&
-			   root !== n.parentNode &&
-			   root !== n.parentNode.parentNode &&
-			   Ext.fly(root).contains(n) &&
-			   !n.getAttribute('data-ntiid');//no containers...it selects too much
+			root !== n &&
+			root !== n.parentNode &&
+			root !== n.parentNode.parentNode &&
+			Ext.fly(root).contains(n) &&
+			!n.getAttribute('data-ntiid');//no containers...it selects too much
 	},
 
 
@@ -299,7 +298,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 				}
 			}
 			overlay.show();
-      //			if(!range){return null;}
+			// if(!range){return null;}
 			return range;
 		}
 		else {
@@ -331,8 +330,8 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 	//mozilla mostly
 	rangeForLineBySelection: function(y, doc) {
 		var xStart = 0,
-            xEnd = doc.querySelector('#NTIContent .page-contents').getBoundingClientRect().width,
-            sel = doc.parentWindow.getSelection(),
+			xEnd = doc.querySelector('#NTIContent .page-contents').getBoundingClientRect().width,
+			sel = doc.parentWindow.getSelection(),
 			elem,
 			iterationCount = 0,
 			range, qpart,
@@ -342,86 +341,86 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 			//clear ranges and get the node on this y
 			sel.removeAllRanges();
 
-    while (xStart < xEnd) {
-      elem = doc.elementFromPoint(xStart, y);
-      if (!this.isNodeAnchorable(elem) && elem.getAttribute('id') !== 'NTIContent') {
-        elem = AnnotationUtils.getTextNodes(elem)[0];
-      }
-				//more right 20, it's a guess of a reasonable offset.
-      xStart += 20;
-    }
-
-    if (!this.isNodeAnchorable(elem)) {
-      return null;
-    }
-
-			//HACK to stop the page from jumping
-			function fixScroll() {
-				var newTop = reader.getAnnotationOffsets().scrollTop;
-				if (newTop !== readerScrollTop) {
-					console.log('Fixing jumpy content', readerScrollTop, newTop);
-					reader.getScroll().to(readerScrollTop, false);
-				}
+		while (xStart < xEnd) {
+			elem = doc.elementFromPoint(xStart, y);
+			if (!this.isNodeAnchorable(elem) && elem.getAttribute('id') !== 'NTIContent') {
+				elem = AnnotationUtils.getTextNodes(elem)[0];
 			}
+			//more right 20, it's a guess of a reasonable offset.
+			xStart += 20;
+		}
 
-			//TODO needed still?
-			//we have an element, it's an object but not a video (an assessment probably)
-    if (Ext.fly(elem).is('object[type$=naquestion]') || Ext.fly(elem).parent('object[type$=naquestion]')) {
-				elem = Ext.fly(elem).parent('object') || elem;
-				qpart = Ext.fly(elem).down('div.naquestionpart');
-				if (qpart) {
-					sel.selectAllChildren(qpart.dom);
-					range = sel.getRangeAt(0);
-					sel.removeAllRanges();
-					fixScroll();
-					return range;
-				}
-    }
+		if (!this.isNodeAnchorable(elem)) {
+			return null;
+		}
 
-		    elem = Anchors.referenceNodeForNode(elem);
+		//HACK to stop the page from jumping
+		function fixScroll() {
+			var newTop = reader.getAnnotationOffsets().scrollTop;
+			if (newTop !== readerScrollTop) {
+				console.log('Fixing jumpy content', readerScrollTop, newTop);
+				reader.getScroll().to(readerScrollTop, false);
+			}
+		}
 
-			//check to make sure this node is selectable, if not, then return null:
-			if (!this.isNodeAnchorable(elem)) {
+		//TODO needed still?
+		//we have an element, it's an object but not a video (an assessment probably)
+		if (Ext.fly(elem).is('object[type$=naquestion]') || Ext.fly(elem).parent('object[type$=naquestion]')) {
+			elem = Ext.fly(elem).parent('object') || elem;
+			qpart = Ext.fly(elem).down('div.naquestionpart');
+			if (qpart) {
+				sel.selectAllChildren(qpart.dom);
+				range = sel.getRangeAt(0);
+				sel.removeAllRanges();
 				fixScroll();
-				return null;
+				return range;
 			}
+		}
 
-			//we probably got a block node, select children and prepare to start looking for the correct y:
-			sel.selectAllChildren(elem);
-			sel.collapseToStart();
+		elem = Anchors.referenceNodeForNode(elem);
 
-			//If there is no range here, skip this line:
-			if (sel.rangeCount === 0) {
-				fixScroll();
-				return null;
-			}
-
-			//Go line by line until we get one on the correct y, quit trying after 100 tries:
-			while (iterationCount < 100 && sel.getRangeAt(0).getBoundingClientRect().bottom < y) {
-				sel.modify('extend', 'forward', 'line');
-				iterationCount++;
-			}
-
-			//minor adjustment to move/extend selection to last line only:
-			sel.modify('extend', 'backward', 'line');
-			sel.collapseToEnd();
-			sel.modify('extend', 'forward', 'line');
-
-			//detect weirdness, if we have not been able to select anything by this point,
-			//do not allow anchoring:
-			//If we have selected a range that is still collapsed.  No anchor.
-			if (sel.toString().trim().length === 0) {
-				fixScroll();
-				return false;
-			}
-
-			//get the range, clear the selection, and return the range:
-			range = sel.getRangeAt(0);
-
-			//for testing, comment next line to show ranges
-			sel.removeAllRanges();
+		//check to make sure this node is selectable, if not, then return null:
+		if (!this.isNodeAnchorable(elem)) {
 			fixScroll();
-			return range;
+			return null;
+		}
+
+		//we probably got a block node, select children and prepare to start looking for the correct y:
+		sel.selectAllChildren(elem);
+		sel.collapseToStart();
+
+		//If there is no range here, skip this line:
+		if (sel.rangeCount === 0) {
+			fixScroll();
+			return null;
+		}
+
+		//Go line by line until we get one on the correct y, quit trying after 100 tries:
+		while (iterationCount < 100 && sel.getRangeAt(0).getBoundingClientRect().bottom < y) {
+			sel.modify('extend', 'forward', 'line');
+			iterationCount++;
+		}
+
+		//minor adjustment to move/extend selection to last line only:
+		sel.modify('extend', 'backward', 'line');
+		sel.collapseToEnd();
+		sel.modify('extend', 'forward', 'line');
+
+		//detect weirdness, if we have not been able to select anything by this point,
+		//do not allow anchoring:
+		//If we have selected a range that is still collapsed.  No anchor.
+		if (sel.toString().trim().length === 0) {
+			fixScroll();
+			return false;
+		}
+
+		//get the range, clear the selection, and return the range:
+		range = sel.getRangeAt(0);
+
+		//for testing, comment next line to show ranges
+		sel.removeAllRanges();
+		fixScroll();
+		return range;
 	},
 
 
@@ -429,15 +428,15 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 	isNodeAnchorable: function(n) {
 		if (!n) {return false;}
 
-    //check for figured inside assessments:
-    if (Ext.fly(n).is('.figure') && Ext.fly(n).up('object')) {
-      return null;
-    }
+		//check for figured inside assessments:
+		if (Ext.fly(n).is('.figure') && Ext.fly(n).up('object')) {
+			return null;
+		}
 
 		var node = Anchors.referenceNodeForNode(n);
 
-    //shortcut, found nothing..
-    if (!node) {return false;}
+		//shortcut, found nothing..
+		if (!node) {return false;}
 
 		if (Ext.isTextNode(node) && node.nodeValue.trim().length > 0) {
 			return true;
@@ -477,4 +476,4 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 		return result;
 	}
 
-});
+}).create();

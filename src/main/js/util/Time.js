@@ -1,10 +1,7 @@
 var Ext = require('extjs');
-var TimeUtils = require('./Time');
 
-
-/*globals Duration: false*/
+global.TimeUtils =
 module.exports = exports = Ext.define('NextThought.util.Time', {
-	singleton: true,
 
 	DIVISORS: {
 		WEEKS: 7 * 24 * 60 * 60 * 1000, //millis / 1000 = seconds / 60 = minutes / 60 = hours / 24 = days / 7 = weeks
@@ -267,187 +264,185 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 			getPrevious: this.getWeek.bind(this, moment(m).subtract(1, 'weeks'))
 		};
 	}
-},
-function() {
-	var TimeUtils = this;
-	Ext.util.Format.timeDifference = Ext.bind(this.timeDifference, this);
+}).create();
+
+
+Ext.util.Format.timeDifference = exports.timeDifference.bind(exports);
+
+/**
+ * A utility to do a count down or count up from a starting point until a stopping point or infinity
+ */
+exports._timer = function() {
+	var start, from, to, direction, duration, interval, intervalWindow, timerInterval, tickFn, alarmFn, intervalUnit;
+
+	function getTimeStamp(d) {
+		if (!d && d !== 0) {
+			d = (new Date()).getTime();
+		} else if (d instanceof Date) {
+			d = d.getTime();
+		}
+
+		return d;
+	}
+
+	function updateTime() {
+		var now = new Date(),
+			diff, time;
+
+		if (intervalUnit === 'seconds') {
+			now.setMilliseconds(0);
+		}
+
+		now = now.getTime();
+
+		diff = now - start;
+		time = from + (direction * diff);
+
+		if (tickFn) {
+			tickFn.call(null, {
+				days: exports.getDays(time),
+				hours: exports.getHours(time),
+				minutes: exports.getMinutes(time),
+				seconds: exports.getSeconds(time),
+				millisseconds: exports.getMilliSeconds(time),
+				time: time,
+				remaining: Math.abs(to - time)
+			});
+		}
+
+		//if we've reached the target then call the alarm if there is one
+		//set the alarmFn to null so we don't call it again
+		//if the diff is with in half of the iteration of the duration
+		if (alarmFn && Math.abs(diff - duration) <= intervalWindow) {
+			alarmFn.call();
+			alarmFn = null;
+		}
+	}
 
 	/**
-	 * A utility to do a count down or count up from a starting point until a stopping point or infinity
+	 * Start the count down/up and update on the interval
+	 * @param  {Number} i how often to update
+	 * @return {Object}          this so calls can be chained
 	 */
-	this._timer = function() {
-		var start, from, to, direction, duration, interval, intervalWindow, timerInterval, tickFn, alarmFn, intervalUnit;
+	this.start = function(i) {
+		interval = i || 'seconds'; //default to a second
 
-		function getTimeStamp(d) {
-			if (!d && d !== 0) {
-				d = (new Date()).getTime();
-			} else if (d instanceof Date) {
-				d = d.getTime();
-			}
+		duration = Math.abs(from - to);
 
-			return d;
+		if (typeof interval === 'string') {
+			intervalUnit = interval;
 		}
 
-		function updateTime() {
-			var now = new Date(),
-				diff, time;
-
-			if (intervalUnit === 'seconds') {
-				now.setMilliseconds(0);
-			}
-
-			now = now.getTime();
-
-			diff = now - start;
-			time = from + (direction * diff);
-
-			if (tickFn) {
-				tickFn.call(null, {
-					days: TimeUtils.getDays(time),
-					hours: TimeUtils.getHours(time),
-					minutes: TimeUtils.getMinutes(time),
-					seconds: TimeUtils.getSeconds(time),
-					millisseconds: TimeUtils.getMilliSeconds(time),
-					time: time,
-					remaining: Math.abs(to - time)
-				});
-			}
-
-			//if we've reached the target then call the alarm if there is one
-			//set the alarmFn to null so we don't call it again
-			//if the diff is with in half of the iteration of the duration
-			if (alarmFn && Math.abs(diff - duration) <= intervalWindow) {
-				alarmFn.call();
-				alarmFn = null;
-			}
+		//if we are using seconds set the millis to 0 so we start on an
+		//even second
+		if (intervalUnit === 'seconds') {
+			interval = 1000;
+			start = new Date();
+			start.setMilliseconds(0);
+			start = start.getTime();
 		}
 
-		/**
-		 * Start the count down/up and update on the interval
-		 * @param  {Number} i how often to update
-		 * @return {Object}          this so calls can be chained
-		 */
-		this.start = function(i) {
-			interval = i || 'seconds'; //default to a second
+		start = start || (new Date()).getTime();
+		intervalWindow = interval / 2;
 
-			duration = Math.abs(from - to);
+		timerInterval = setInterval(updateTime, interval);
 
-			if (typeof interval === 'string') {
-				intervalUnit = interval;
-			}
-
-			//if we are using seconds set the millis to 0 so we start on an
-			//even second
-			if (intervalUnit === 'seconds') {
-				interval = 1000;
-				start = new Date();
-				start.setMilliseconds(0);
-				start = start.getTime();
-			}
-
-			start = start || (new Date()).getTime();
-			intervalWindow = interval / 2;
-
-			timerInterval = setInterval(updateTime, interval);
-
-			return this;
-		};
-
-		/**
-		 * Set a count down from t to f
-		 * @param  {Date|Number} t date or milliseconds to stop at
-		 * @param  {Date|Number} f date or milliseconds to start at
-		 * @return {Object}   this so calls can be chained
-		 */
-		this.countDown = function(t, f) {
-			from = getTimeStamp(f);
-
-			if (t || t === 0) {
-				to = getTimeStamp(t);
-			} else {
-				to = Infinity;
-			}
-
-			direction = -1;
-
-			return this;
-		};
-
-		/**
-		 * Set a count up from t to f
-		 * @param  {Date|Number} t date or milliseconds to stop at
-		 * @param  {Date|Number} f date or milliseconds to start at
-		 * @return {Object}   this so calls can be chained
-		 */
-		this.countUp = function(t, f) {
-			from = getTimeStamp(f);
-
-			if (t || t === 0) {
-				to = getTimeStamp(t);
-			} else {
-				to = Infinity;
-			}
-
-			direction = 1;
-
-			return this;
-		};
-
-		/**
-		 * Add a callback to be called every time the interval passes
-		 *
-		 *	Will be called with an object containing...
-		 *	{
-		 *		hours: int, //number of hours left
-		 *		minutes: int, //number of minutes left after hours
-		 *		seconds: int, //number of seconds left after minutes
-		 *		milliseconds: int, //number of milliseconds left after seconds
-		 *		remaining: int, //total number of milliseconds left
-		 *	}
-		 *
-		 * @param  {Function} fn callback to be called
-		 * @return {Object}      return this so calls can be chained
-		*/
-		this.tick = function(fn) {
-			var time = from;
-
-			tickFn = fn;
-
-			tickFn.call(null, {
-				days: TimeUtils.getDays(time),
-				hours: TimeUtils.getHours(time),
-				minutes: TimeUtils.getMinutes(time),
-				seconds: TimeUtils.getSeconds(time),
-				milliseconds: TimeUtils.getMilliSeconds(time),
-				time: time,
-				remaining: Math.abs(to - from)
-			});
-
-			return this;
-		};
-
-
-		/**
-		 * Clear the interval, make sure this gets called. Otherwise we will have an interval hanging around
-		 * @return {Object} return this so calls can be chained
-		 */
-		this.stop = function() {
-			clearInterval(timerInterval);
-
-			return this;
-		};
-
-
-		/**
-		 * A callback to be called when the timer reaches the destination
-		 * @param  {Function} fn [description]
-		 * @return {Object}      return this so calls can be chained
-		 */
-		this.alarm = function(fn) {
-			alarmFn = fn;
-
-			return this;
-		};
+		return this;
 	};
 
-});
+	/**
+	 * Set a count down from t to f
+	 * @param  {Date|Number} t date or milliseconds to stop at
+	 * @param  {Date|Number} f date or milliseconds to start at
+	 * @return {Object}   this so calls can be chained
+	 */
+	this.countDown = function(t, f) {
+		from = getTimeStamp(f);
+
+		if (t || t === 0) {
+			to = getTimeStamp(t);
+		} else {
+			to = Infinity;
+		}
+
+		direction = -1;
+
+		return this;
+	};
+
+	/**
+	 * Set a count up from t to f
+	 * @param  {Date|Number} t date or milliseconds to stop at
+	 * @param  {Date|Number} f date or milliseconds to start at
+	 * @return {Object}   this so calls can be chained
+	 */
+	this.countUp = function(t, f) {
+		from = getTimeStamp(f);
+
+		if (t || t === 0) {
+			to = getTimeStamp(t);
+		} else {
+			to = Infinity;
+		}
+
+		direction = 1;
+
+		return this;
+	};
+
+	/**
+	 * Add a callback to be called every time the interval passes
+	 *
+	 *	Will be called with an object containing...
+	 *	{
+	 *		hours: int, //number of hours left
+	 *		minutes: int, //number of minutes left after hours
+	 *		seconds: int, //number of seconds left after minutes
+	 *		milliseconds: int, //number of milliseconds left after seconds
+	 *		remaining: int, //total number of milliseconds left
+	 *	}
+	 *
+	 * @param  {Function} fn callback to be called
+	 * @return {Object}      return this so calls can be chained
+	*/
+	this.tick = function(fn) {
+		var time = from;
+
+		tickFn = fn;
+
+		tickFn.call(null, {
+			days: exports.getDays(time),
+			hours: exports.getHours(time),
+			minutes: exports.getMinutes(time),
+			seconds: exports.getSeconds(time),
+			milliseconds: exports.getMilliSeconds(time),
+			time: time,
+			remaining: Math.abs(to - from)
+		});
+
+		return this;
+	};
+
+
+	/**
+	 * Clear the interval, make sure this gets called. Otherwise we will have an interval hanging around
+	 * @return {Object} return this so calls can be chained
+	 */
+	this.stop = function() {
+		clearInterval(timerInterval);
+
+		return this;
+	};
+
+
+	/**
+	 * A callback to be called when the timer reaches the destination
+	 * @param  {Function} fn [description]
+	 * @return {Object}      return this so calls can be chained
+	 */
+	this.alarm = function(fn) {
+		alarmFn = fn;
+
+		return this;
+	};
+};

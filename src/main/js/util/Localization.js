@@ -1,8 +1,7 @@
 var Ext = require('extjs');
 
-
+var Localization =
 module.exports = exports = Ext.define('NextThought.util.Localization', {
-	singleton: true,
 
 	formatRe: /\{([^\{]+)\}/g,
 
@@ -65,12 +64,9 @@ module.exports = exports = Ext.define('NextThought.util.Localization', {
 		return s.replace('{#}', count);
 	}
 
-}, function() {
-	//TODO: figure out how to not make these globals
-	window.getString = this.getExternalizedString.bind(this);
-	window.getFormattedString = this.formatExternalString.bind(this);
+}).create();
 
-	this.oldPlural = Ext.util.Format.plural;
-
-	Ext.util.Format.plural = this.pluralizeString.bind(this);
-});
+window.getString = Localization.getExternalizedString.bind(Localization);
+window.getFormattedString = Localization.formatExternalString.bind(Localization);
+Localization.oldPlural = Ext.util.Format.plural;
+Ext.util.Format.plural = Localization.pluralizeString.bind(Localization);

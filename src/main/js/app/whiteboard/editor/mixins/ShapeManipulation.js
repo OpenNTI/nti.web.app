@@ -1,7 +1,7 @@
 var Ext = require('extjs');
 var Color = require('../../../../util/Color');
-var WhiteboardMatrix = require('../../Matrix');
-var WhiteboardUtils = require('../../Utils');
+var NTMatrix = require('../../Matrix');
+var WBUtils = require('../../Utils');
 
 
 /**

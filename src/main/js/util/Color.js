@@ -3,18 +3,18 @@ var Color = require('./Color');
 
 
 module.exports = exports = Ext.define('NextThought.util.Color', {
-    singleton: true,
-    hex16Re: /^#?([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])$/i,
-    hex8Re: /^#?([0-9a-f])([0-9a-f])([0-9a-f])$/i,
-    rgbaRe: /^rgba?\((.+?)\)$/i,
-    dsRGBARe: /^(\d+(\.\d+)?) (\d+(\.\d+)?) (\d+(\.\d+)?)( (\d+(\.\d+)?))?$/i,
-    sources: [],
 
-    isValidHexColor: function(code) {
+	hex16Re: /^#?([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])$/i,
+	hex8Re: /^#?([0-9a-f])([0-9a-f])([0-9a-f])$/i,
+	rgbaRe: /^rgba?\((.+?)\)$/i,
+	dsRGBARe: /^(\d+(\.\d+)?) (\d+(\.\d+)?) (\d+(\.\d+)?)( (\d+(\.\d+)?))?$/i,
+	sources: [],
+
+	isValidHexColor: function(code) {
 		return this.hex16Re.test(code) || this.hex8Re.test(code);
 	},
 
-    toRGBA: function(color, alpha) {
+	toRGBA: function(color, alpha) {
 		if (typeof color === 'string') {
 			if (!(color = Ext.draw.Color.fromString(color))) {
 				return 'rgba(255,255,0,1)';
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 		);
 	},
 
-    /**
+	/**
 	 *
 	 * @param {String} string either a 8 or 16 bit hex color, or a CSS color function (rgb() or rgba()).
 	 * @param {number} [alpha] If supplied, the float will override or add alpha to this color.
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 				toString: function() {return color;}};
 	},
 
-    rgbaToHex: function(color) {
+	rgbaToHex: function(color) {
 		/**
 		 * Converts rgba to rgb then to Hex. TODO: this func is ignoring the Alpha component.
 		 * assuming that it is always 1 in our case.
@@ -125,7 +125,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 		return color;
 	},
 
-    /**
+	/**
 	 * http://ridiculousfish.com/blog/posts/colors.html
 	 * @param {number} idx
 	 */
@@ -150,7 +150,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 		return (hue + 0.561) % 1;
 	},
 
-    /**
+	/**
 	 *
 	 * @param {number} idx - either the known index (a number) or a username with which to look up the index for
 	 */
@@ -163,16 +163,16 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 		return Ext.draw.Color.fromHSL(Math.round(this.hue(idx) * 360), 0.91, 0.606);
 	},
 
-    /**
+	/**
 	 * Return a unique hex value for the index
 	 * @param  {number} idx the index
-	 * @return {String}     the hex code
+	 * @return {String}	 the hex code
 	 */
 	getColorHex: function(idx) {
 		return this.rgbaToHex(this.toRGBA((this.getColor(idx))));
 	},
 
-    addSource: function(userId) {
+	addSource: function(userId) {
 		if (userId && !Ext.Array.contains(this.sources, userId)) {
 			this.sources.push(userId);
 			Ext.Array.sort(this.sources);
@@ -183,4 +183,5 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 			this.sources.unshift(id);
 		}
 	}
-});
+
+}).create();

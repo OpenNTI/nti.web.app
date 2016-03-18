@@ -1,11 +1,8 @@
 var Ext = require('extjs');
-var Toaster = require('./Manager');
+require('./Window');
 
 
-module.exports = exports = new Ext.define('NextThought.common.toast.Manager', {
-	requires: [
-		'NextThought.common.toast.Window'
-	],
+module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
 
 	PADDING: 10,
 
@@ -121,4 +118,4 @@ module.exports = exports = new Ext.define('NextThought.common.toast.Manager', {
 		});
 	}
 
-});
+}).create();

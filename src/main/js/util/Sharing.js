@@ -4,7 +4,6 @@ var ParseUtils = require('./Parsing');
 
 
 module.exports = exports = Ext.define('NextThought.util.Sharing', {
-	singleton: true,
 
 
 	shareWith: function(sharable, people, callback) {
@@ -339,4 +338,4 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 	}
 
 
-});
+}).create();

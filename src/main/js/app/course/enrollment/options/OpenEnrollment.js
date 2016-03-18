@@ -5,7 +5,6 @@ var OptionsBase = require('./Base');
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.options.OpenEnrollment', {
 	extend: 'NextThought.app.course.enrollment.options.Base',
 
-	singleton: true,
 
 	NAME: 'OpenEnrollment',
 	isBase: true,
@@ -183,4 +182,4 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			IsAvailable: true
 		};
 	}
-});
+}).create();

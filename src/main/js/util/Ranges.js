@@ -1,13 +1,12 @@
+/*global Node, NodeFilter*/
 var Ext = require('extjs');
 var Anchors = require('./Anchors');
 var Globals = require('./Globals');
 var RectUtils = require('./Rects');
 
 
-/*jslint */
-/*global Anchors, Globals, Node, NodeFilter*/
 module.exports = exports = Ext.define('NextThought.util.Ranges', {
-	singleton: true,
+
 
 	nonContextWorthySelectors: [
 		'object:not([type*=nti])'
@@ -470,4 +469,4 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 	}
 
 
-});
+}).create();

@@ -13,10 +13,9 @@ var ContentSlideVideo = require('../../mediaviewer/content/SlideVideo');
 var CardsOverlayedPanel = require('../../../common/components/cards/OverlayedPanel');
 var ContentSlidedeck = require('../../mediaviewer/content/Slidedeck');
 var CardsCard = require('../../../common/components/cards/Card');
+var WBUtils = require('../../whiteboard/Utils');
 
 
-/*jslint */
-/*global $AppConfig, Globals, ImageZoomView, NextThought, ReaderPanel, SlideDeck, TemplatesForNotes, UserRepository, WBUtils*/
 module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
     extend: 'NextThought.app.annotations.note.Panel',
     alias: 'widget.note-main-view',

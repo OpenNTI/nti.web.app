@@ -1,9 +1,7 @@
 var Ext = require('extjs');
 
-
+global.ObjectUtils =
 module.exports = exports = Ext.define('NextThought.util.Object', {
-	alternateClassName: 'ObjectUtils',
-	singleton: true,
 
 
 	deleteFunctionProperties: function deleteFunctionsOn(o, allowClassRefs) {
@@ -61,4 +59,5 @@ module.exports = exports = Ext.define('NextThought.util.Object', {
 
 		return Ext.Object.isEmpty(o);
 	}
-});
+
+}).create();

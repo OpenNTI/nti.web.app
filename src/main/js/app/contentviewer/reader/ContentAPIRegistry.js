@@ -2,14 +2,10 @@ var Ext = require('extjs');
 
 
 /**
- * TODO: Explain this class.
- *
- * TODO: JSG: Can we get rid of this?  The only injected function definintions seem to be "togglehint" and "NTIPreviousPage"
- * I don't think we use "ToggleHint" anymore...and if we do, that may need to be come "content" scripts...
- * what about previous page?? I would like to dump this concept.
+ * XXX: Drop this class
  */
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.ContentAPIRegistry', {
-	singleton: true,
+
 	mixins: {
 		observable: 'Ext.util.Observable'
 	},
@@ -51,4 +47,4 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 	}
 
 
-});
+}).create();
