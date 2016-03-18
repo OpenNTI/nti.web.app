@@ -3,12 +3,16 @@ var XRegExp = require('xregexp');
 var rangy = require('./rangy');
 var AnnotationUtils = require('./Annotations');
 var Globals = require('./Globals');
-var RangeUtils = require('./Ranges');
 var AnchorablesTextDomContentPointer = require('../model/anchorables/TextDomContentPointer');
 var AnchorablesElementDomContentPointer = require('../model/anchorables/ElementDomContentPointer');
 var AnchorablesDomContentPointer = require('../model/anchorables/DomContentPointer');
 var AnchorablesContentRangeDescription = require('../model/anchorables/ContentRangeDescription');
-var UtilRanges = require('./Ranges');
+var lazyResolve = {
+	get RangeUtils () {
+		delete this.RangeUtils;
+		return this.RangeUtils = require('./Ranges');
+	}
+}
 
 
 module.exports = exports = Ext.define('NextThought.util.Anchors', {
@@ -1370,7 +1374,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 	/* tested */
 	nodeThatIsEdgeOfRange: function(range, start) {
-		return RangeUtils.nodeThatIsEdgeOfRange(range, start);
+		return lazyResolve.RangeUtils.nodeThatIsEdgeOfRange(range, start);
 	},
 
 	/* tested */

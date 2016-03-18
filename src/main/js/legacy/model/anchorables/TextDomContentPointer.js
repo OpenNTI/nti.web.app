@@ -3,6 +3,12 @@ var Anchors = require('../../util/Anchors');
 var AnchorablesDomContentPointer = require('./DomContentPointer');
 var AnchorablesTextContext = require('./TextContext');
 var AnchorablesDomContentPointer = require('./DomContentPointer');
+var lazyResolve = {
+		get Anchors () {
+			delete this.Anchors;
+			return this.Anchors = require('../../util/Anchors');
+		}
+	};
 
 
 module.exports = exports = Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
@@ -68,6 +74,6 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TextDomCont
 	},
 
     locateRangePointInAncestor: function(ancestorNode, startResult) {
-		return Anchors.locateRangeEdgeForAnchor(this, ancestorNode, startResult);
+		return lazyResolve.Anchors.locateRangeEdgeForAnchor(this, ancestorNode, startResult);
 	}
 });

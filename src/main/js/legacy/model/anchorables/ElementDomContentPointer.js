@@ -1,7 +1,11 @@
 var Ext = require('extjs');
-var Anchors = require('../../util/Anchors');
 var AnchorablesDomContentPointer = require('./DomContentPointer');
-
+var lazyResolve = {
+	get Anchors () {
+		delete this.Anchors;
+		return this.Anchors = require('../../util/Anchors');
+	}
+};
 
 module.exports = exports = Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {
 	extend: 'NextThought.model.anchorables.DomContentPointer',
@@ -53,6 +57,6 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.ElementDomC
 
 
 	locateRangePointInAncestor: function(ancestorNode, startResult) {
-		 return Anchors.locateElementDomContentPointer(this, ancestorNode, startResult);
+		return lazyResolve.Anchors.locateElementDomContentPointer(this, ancestorNode, startResult);
 	}
 });
