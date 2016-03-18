@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var Globals = require('../util/Globals');
+var {swallow} = Globals;
 
 
 module.exports = exports = Ext.define('NextThought.overrides.Ext', {

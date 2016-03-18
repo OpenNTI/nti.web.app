@@ -3,6 +3,8 @@ var ParseUtils = require('./Parsing');
 
 var Url = require('url');
 
+const HOST_PREFIX_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i;
+
 global.Globals =
 module.exports = exports = Ext.define('NextThought.util.Globals', {
 
@@ -19,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	CONTENT_ROOT: 'tag:nextthought.com,2011-10:Root',
 
 	ROOT_URL_PATTERN: /^\//,//starts with a slash
-	HOST_PREFIX_PATTERN: /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i,
+	HOST_PREFIX_PATTERN: HOST_PREFIX_PATTERN,
 	FILE_EXTENSION_PATTERN: /\..+$/,
 	INVALID_CHARACTERS_PATTERN: /^[^\/\\";=?<>#%'\{\}\|\^\[\]\-]+$/,
 	ESCAPE_REGEX_PATTERN: /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,
@@ -160,6 +162,8 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		}
 	},
 
+	swallow: function(e) {},
+
 
 	/**
 	 * Search the navigator for a plugin
@@ -189,7 +193,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		try {
 			return new ActiveXObject(name);
 		} catch (e) {
-			swallow(e);
+			this.swallow(e);
 		}
 	},
 
@@ -785,12 +789,12 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	getURL: function(u, root) {
+	getURL: function getU(u, root) {
 		if (!u) {return '';}
-		if (!this.HOST_PREFIX_PATTERN.test(u) && u.indexOf('//') !== 0) {
+		if (!HOST_PREFIX_PATTERN.test(u) && u.indexOf('//') !== 0) {
 			if (!Ext.isEmpty(root)) {
 				u = root + u;
-				return this.getURL(u);
+				return getU(u);
 			}
 			return $AppConfig.server.host + u;
 		}
@@ -881,8 +885,8 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 
 // window.guidGenerator = exports.guidGenerator.bind(exports);
 // window.isMe = exports.isMe.bind(exports);
-window.getURL = exports.getURL.bind(exports);
-window.swallow = function(e) {};
+// window.getURL = exports.getURL.bind(exports);
+// window.swallow = function(e) {};
 window.getResourceURL = exports.getResourceURL.bind(exports);
 window.reloadCSS = exports.reloadCSS.bind(exports);
 window.isFeature = exports.isFeature.bind(exports);

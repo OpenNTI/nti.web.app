@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var Globals = require('../../util/Globals');
+var {swallow} = Globals;
 var ShapesCircle = require('./shapes/Circle');
 var ShapesLine = require('./shapes/Line');
 var ShapesPath = require('./shapes/Path');

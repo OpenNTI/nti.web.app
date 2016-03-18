@@ -4,6 +4,7 @@ var GridFeatureGradeInputs = require('../../../../../../mixins/grid-feature/Grad
 var MixinsState = require('../../../../../../mixins/State');
 var AdminPagedGrid = require('../PagedGrid');
 var AdminListHeader = require('../ListHeader');
+var {swallow} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.Root', {

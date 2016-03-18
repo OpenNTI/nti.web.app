@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var CommonStateStore = require('../StateStore');
 var CacheAbstractStorage = require('../../cache/AbstractStorage');
+var {swallow} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.common.state.StateStore', {

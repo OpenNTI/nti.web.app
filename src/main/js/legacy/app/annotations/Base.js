@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var IdCache = require('../../cache/IdCache');
 var Globals = require('../../util/Globals');
+var {swallow} = Globals;
 var MixinsShareable = require('../../mixins/Shareable');
 var RendererManager = require('./renderer/Manager');
 

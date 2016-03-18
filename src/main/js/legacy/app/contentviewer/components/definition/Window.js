@@ -1,6 +1,6 @@
 var Ext = require('extjs');
 var WindowWindow = require('../../../../common/window/Window');
-var {getURL} = require('legacy/util/Globals');
+var {getURL, swallow} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.components.definition.Window', {
