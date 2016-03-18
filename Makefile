@@ -1,27 +1,16 @@
-.PHONY: all \
-	build-all \
-	build-app \
-	build-widgets \
-	compile-app \
-	compile-widgets \
-	stage setup \
-	clean-stage-app \
-	clean-stage-widgets \
-	clean-maps \
-	clean \
-	check
+.PHONY: all stage setup compile clean check
 
 DIST=./dist/
 STAGE=./stage/
 SRC=./src/
-IMAGES=resources/images/
+RES=resources/
 
 CC=webpack --progress --cache --bail --config
 
-
 export NODE_ENV="production"
 
-all: build-all
+# all: check compile
+all: compile
 
 
 setup:
@@ -30,61 +19,26 @@ setup:
 
 
 check:
-	@eslint --ext .js,.jsx .
+	@eslint --ext .js,.jsx . || true
 
-
-build-all: build-app build-widgets
-## will silently fail if stage is not empty.
-	@rm -d $(STAGE) &> /dev/null || true
-
-build-app: compile-app clean-dist-app
-	@mkdir -p $(DIST)
-	@mv -f $(STAGE)client $(DIST)client
-	@mv -f $(STAGE)server $(DIST)server
-
-build-widgets: compile-widgets clean-dist-widgets
-	@mkdir -p $(DIST)
-	@mv -f $(STAGE)widgets $(DIST)widgets
-
-compile-app: stage clean-stage-app $(STAGE)server
+compile: clean stage $(DIST)server
+	@compass compile
 ## copy static assets
-	@(cd $(SRC)main; rsync -R *.* ../../$(STAGE)client)
-	@(cd $(SRC)main; rsync -R $(IMAGES)*.* ../../$(STAGE)client)
+	@(cd $(SRC)main; rsync -Rr . ../../$(DIST)client)
+	@rm -r $(DIST)client/js
+	@rm -r $(DIST)client/resources/scss
 ##compile
-	@$(CC) ./webpack/app.config.js
-
-compile-widgets: $(STAGE) clean-stage-widgets
-	@(cd src/main; rsync -R widgets/**/*.html ../../stage/)
-	@$(CC) ./webpack/widgets.config.js
+	@$(CC) ./webpack.config.js
 
 
-$(STAGE)server:
+$(DIST)server:
 ##the server code doesn't compile, just copy it.
-	@cp -r $(SRC)server $(STAGE)server
+	@cp -r $(SRC)server $(DIST)server
 
 stage:
-	@mkdir -p $(STAGE)client
-	@mkdir -p $(STAGE)server
-
-
-clean-dist-app:
-	@rm -rf $(DIST)client
-	@rm -rf $(DIST)server
-
-clean-stage-app:
-	@rm -rf $(STAGE)client
-	@rm -rf $(STAGE)server
-
-
-clean-dist-widgets:
-	@rm -rf $(DIST)widgets
-
-clean-stage-widgets:
-	@rm -rf $(STAGE)widgets
-
-clean-maps:
-	@find ./dist/client -name "*.map" -type f -delete
-	@find ./dist/client -name "*.map.gz" -type f -delete
+	@mkdir -p $(DIST)client
+	@mkdir -p $(DIST)server
 
 clean:
-	@rm -rf $(STAGE) $(DIST)
+	@compass clean
+	@rm -rf $(DIST)

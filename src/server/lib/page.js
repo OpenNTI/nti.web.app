@@ -53,6 +53,8 @@ exports.getPage = function getPage () {
 
 		html += clientConfig.html;
 
+		//template.replace('<!-- x-itunes -->', `<meta name="apple-itunes-app" content="app-id=${appleAppId}" />`)
+
 		let out = template
 				.replace(/<html/, manifest)
 				.replace(configValues, injectConfig.bind(this, cfg))

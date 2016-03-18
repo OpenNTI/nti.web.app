@@ -2,7 +2,7 @@
 'use strict';
 
 const publicPath = '/app/';
-const outPath = './stage/';
+const outPath = './dist/';
 
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
@@ -29,7 +29,7 @@ exports = module.exports =
 	name: 'browser',
 	output: {
 		path: outPath + 'client/',
-		filename: 'js/[hash].js',
+		filename: 'js/index.js',
 		chunkFilename: 'js/[hash]-[id].js',
 		publicPath: publicPath
 	},

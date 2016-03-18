@@ -1,11 +1,11 @@
 var Ext = require('extjs');
-var Globals = require('./util/Globals');
-var {getURL} = Globals;
+Ext.Loader.setConfig({enabled: false});
+
+var {getURL, validateConfig, loadScript} = require('./util/Globals');
 
 require('./util/Localization');
 require('./overrides');
 require('./controller/Application');
-
 
 // DO NOT DELETE - this directive is required for Sencha Cmd packages to work.
 //@require @packageOverrides
@@ -15,8 +15,6 @@ window.Blob = window.Blob || window.webkitBlob;
 
 Ext.USE_NATIVE_JSON = true;
 
-//disable script cache-busting _dc=... get string args
-Ext.Loader.setConfig('disableCaching', false); //for when unminified
 
 Ext.application({
 	name: 'NextThought',
@@ -28,10 +26,15 @@ Ext.application({
 		'Application'
 	],
 
-	launch: function() {
+	launch: function () {
 		console.debug('launching');
+		var me = this;
+		var ios;
+		var reasons = [];
+		var unsupported = [];
+		var geckoRev = /rv:(\d+\.\d+)/.exec(Ext.userAgent) || [];
 
-		function start() {
+		function start () {
 			if (Ext.is.iOS) {
 				Ext.getBody().addCls('x-ios');
 			}
@@ -44,14 +47,11 @@ Ext.application({
 			NextThought.isReady = true;
 		}
 
-		var me = this, ios,
-			reasons = [],
-			unsupported = [], g,
-			geckoRev = /rv:(\d+\.\d+)/.exec(Ext.userAgent) || [];
+
 
 		Ext.each(//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
 				['Canvas', 'Range', 'CSS3BoxShadow', 'CSS3BorderRadius'],
-				function(f) {Boolean(!Ext.supports[f] && unsupported.push(f));});
+				function (f) {Boolean(!Ext.supports[f] && unsupported.push(f));});
 
 
 		// allow PhantomJS through the browser block - at least far enough for our headless login test
@@ -60,7 +60,7 @@ Ext.application({
 		// allow capybara-webkit through in the same way
 		Ext.isCapybaraWebkit = /capybara-webkit/i.test(navigator.userAgent);
 
-		ios = (function() {
+		ios = (function () {
 			if (/iP(hone|od|ad)/.test(navigator.platform)) {
 				var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
 				return v && [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
@@ -94,7 +94,7 @@ Ext.application({
 			return;//we're leaving... so lets just stop here.
 		}
 
-		if (!Globals.validateConfig()) {
+		if (!validateConfig()) {
 			return;
 		}
 
@@ -110,7 +110,7 @@ Ext.application({
 		window.onerror = null;
 		window.reportErrorEvent();//keep the error reporter going.
 
-		Globals.loadScript(getURL('/socket.io/static/socket.io.js'));
+		loadScript(getURL('/socket.io/static/socket.io.js'));
 
 		start();
 	}
