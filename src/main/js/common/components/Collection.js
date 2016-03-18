@@ -1,5 +1,5 @@
 var Ext = require('extjs');
-
+var $clamp = require('clamp-js');
 
 module.exports = exports = Ext.define('NextThought.common.components.Collection', {
 	extend: 'Ext.view.View',
