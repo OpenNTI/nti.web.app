@@ -1,6 +1,6 @@
 var Ext = require('extjs');
 var ObjectUtils = require('./Object');
-var ReaderJson = require('../proxy/reader/Json');
+var JSONProxy = require('../proxy/reader/Json');
 
 
 module.exports = exports = Ext.define('NextThought.util.Parsing', {
@@ -308,6 +308,9 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	}
 }).create();
 
+
+JSONProxy.findModel = 
+JSONProxy.prototype.findModel = exports.findModel.bind(exports);
 
 /*
  * DOMParser HTML extension

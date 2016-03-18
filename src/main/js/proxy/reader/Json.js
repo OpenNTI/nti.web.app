@@ -1,6 +1,4 @@
 var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var ParseUtils = require('../../util/Parsing');
 var ReaderBase = require('./Base');
 
 
@@ -42,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.proxy.reader.Json', {
 						continue;
 					}
 
-					if (!ParseUtils.findModel(item)) {
+					if (!this.findModel(item)) {
 						console.warn('IGNORING: Received object that does not match a model', item);
 						continue;
 					}
@@ -79,13 +77,13 @@ module.exports = exports = Ext.define('NextThought.proxy.reader.Json', {
 							modelName = record.get('Class');
 							if (record.modelName.substr(-modelName.length) !== modelName) {
 								result.records[i] = this.__rebuildRecordAsType(
-										ParseUtils.findModel(record.raw), record.getId(), record.raw);
+										this.findModel(record.raw), record.getId(), record.raw);
 								delete record.raw;
 							}
 						}
 					}
 					catch (e1) {
-						console.error(Globals.getError(e1), '\n\nNo model for record? : ', record);
+						console.error(e1.stack || e1.message || e1, '\n\nNo model for record? : ', record);
 					}
 				}
 			} finally {

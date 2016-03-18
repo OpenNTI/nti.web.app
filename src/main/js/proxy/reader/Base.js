@@ -1,6 +1,11 @@
 var Ext = require('extjs');
-var UserRepository = require('../../cache/UserRepository');
 
+var lazyResolve = {
+	get UserRepository () {
+		delete this.UserRepository;
+		return this.UserRepository = require('../../cache/UserRepository');
+	}
+}
 
 module.exports = exports = Ext.define('NextThought.proxy.reader.Base', {
 	extend: 'Ext.data.reader.Json',
@@ -15,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.proxy.reader.Base', {
 			//console.debug('Need to fill cache with userlist for' , record.getId(), field, users);
 			Ext.each(users, function(user) {
 				if (user.isModel || Ext.isObject(user)) {
-					UserRepository.precacheUser(user);
+					lazyResolve.UserRepository.precacheUser(user);
 				}
 			});
 		}
