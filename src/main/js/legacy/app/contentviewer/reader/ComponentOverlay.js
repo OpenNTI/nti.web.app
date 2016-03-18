@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var UtilDom = require('../../../util/Dom');
 var UtilTabIndexTracker = require('../../../util/TabIndexTracker');
+var {guidGenerator} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay', {

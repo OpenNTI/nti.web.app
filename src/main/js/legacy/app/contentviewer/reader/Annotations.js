@@ -4,6 +4,7 @@ var Anchors = require('../../../util/Anchors');
 var AnnotationUtils = require('../../../util/Annotations');
 var Color = require('../../../util/Color');
 var Globals = require('../../../util/Globals');
+var {guidGenerator} = Globals;
 var RectUtils = require('../../../util/Rects');
 var TextRangeFinderUtils = require('../../../util/TextRangeFinder');
 var SearchUtils = require('../../../util/Search');

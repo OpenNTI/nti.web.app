@@ -9,6 +9,7 @@ var FieldsTagField = require('../common/form/fields/TagField');
 var ComponentsUserTokenField = require('../app/sharing/components/UserTokenField');
 var UtilSharing = require('../util/Sharing');
 var EmbedvideoWindow = require('./embedvideo/Window');
+var {guidGenerator} = require('legacy/util/Globals');
 
 Ext.define('NextThought.editor.AbstractEditor', {
 	extend: 'Ext.Component',

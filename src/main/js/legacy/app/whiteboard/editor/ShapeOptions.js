@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var EditorColorPickerButton = require('./ColorPickerButton');
 var EditorStrokeWidthSelector = require('./StrokeWidthSelector');
 var EditorToolOption = require('./ToolOption');
+var {guidGenerator} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ShapeOptions', {

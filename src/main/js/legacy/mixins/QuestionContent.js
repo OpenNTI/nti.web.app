@@ -60,6 +60,7 @@ var AssessmentUsersCourseAssignmentSavepoint = require('../model/assessment/User
 var AssessmentUsersCourseAssignmentSavepointItem = require('../model/assessment/UsersCourseAssignmentSavepointItem');
 var AssessmentUsersCourseInquiryItem = require('../model/assessment/UsersCourseInquiryItem');
 var AssessmentUsersCourseInquiryItemResponse = require('../model/assessment/UsersCourseInquiryItemResponse');
+var {guidGenerator} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {

@@ -14,6 +14,7 @@ var RendererManager = require('../../../annotations/renderer/Manager');
 var AnnotationsIndex = require('../../../annotations/Index');
 var UserdataActions = require('../../../userdata/Actions');
 var WindowsActions = require('../../../windows/Actions');
+var {guidGenerator} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.View', {
@@ -286,7 +287,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 					// Checking the time make sure we only scroll the first part,
 					// when we have parts that are overlapping.
-					// NOTE: For now, if we have overlapping parts scroll to the last one. We use to scroll to the first one. 
+					// NOTE: For now, if we have overlapping parts scroll to the last one. We use to scroll to the first one.
 					if (allowScroll) {
 						me.scrollToEl(tEl, offset);
 					}

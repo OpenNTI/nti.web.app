@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var DomUtils = require('../util/Dom');
 var ConvertersVideoSources = require('./converters/VideoSources');
+var {guidGenerator} = require('legacy/util/Globals');
 
 
 /*global DomUtils, ParseUtils */

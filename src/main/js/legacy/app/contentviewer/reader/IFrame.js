@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var ContentAPIRegistry = require('./ContentAPIRegistry');
 var Globals = require('../../../util/Globals');
+var {guidGenerator} = Globals;
 var ReaderContentAPIRegistry = require('./ContentAPIRegistry');
 var ComponentsSimplePopoverWidget = require('../components/SimplePopoverWidget');
 

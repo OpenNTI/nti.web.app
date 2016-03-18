@@ -10,6 +10,7 @@ var ContentOverlayedPanel = require('../../mediaviewer/content/OverlayedPanel');
 var VideoOverlayedPanel = require('../../video/OverlayedPanel');
 var RollOverlayedPanel = require('../../video/roll/OverlayedPanel');
 var ImageOverlayedPanel = require('../../image/OverlayedPanel');
+var {guidGenerator} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.ResourceManagement', {

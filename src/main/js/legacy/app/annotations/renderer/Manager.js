@@ -1,23 +1,26 @@
 var Ext = require('extjs');
 var Anchors = require('../../../util/Anchors');
 var Globals = require('../../../util/Globals');
-var UtilLine = require('../../../util/Line');
+var {guidGenerator} = Globals;
+
+require('../../../util/Line');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Manager', {
-    events: new Ext.util.Observable(),
-    registry: [],
+	events: new Ext.util.Observable(),
+	registry: [],
 
-    constructor: function(reader) {
+	constructor: function (reader) {
 		this.callParent();
 		this.reader = reader;
 		this.rendererSuspended = 0;
 	},
 
-    controlLineTmpl: Ext.DomHelper.createTemplate({ cls: 'controlContainer'}).compile(),
-    isDebug: false,
+	controlLineTmpl: Ext.DomHelper.createTemplate({ cls: 'controlContainer'}).compile(),
+	isDebug: false,
 
-    /**
+	/*
 	 * @constructor Inner class
 	 */
 	Bucket: function() {
@@ -60,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		};
 	},
 
-    registerGutter: function(el, reader) {
+	registerGutter: function(el, reader) {
 		//TODO all this junk about prefixes should go away once we aren't using a singleton here...
 		if (this.gutter) {
 			console.warn('replacing exisiting gutter?', this.gutter);
@@ -74,12 +77,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		this.render();//renders wait for the gutter to exist
 	},
 
-    register: function(o) {
+	register: function(o) {
 		this.registry.push(o);
 		o.requestRender();
 	},
 
-    unregister: function(o) {
+	unregister: function(o) {
 		var r = this.registry;
 		if (r) {
 			this.registry = Ext.Array.remove(r, o);
@@ -89,11 +92,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		}
 	},
 
-    getReader: function() {
+	getReader: function() {
 		return this.reader;
 	},
 
-    buildSorter: function(prefix) {
+	buildSorter: function(prefix) {
 		//Default sort will sort by lastModified
 		return function(a, b) {
 			var e = {get: Ext.emptyFn},
@@ -106,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		};
 	},
 
-    clearBuckets: function() {
+	clearBuckets: function() {
 		function clear(d) {
 			while (d && d.firstChild) {
 				d.removeChild(d.firstChild);
@@ -126,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		this.buckets = new this.Bucket();
 	},
 
-    getBucket: function(line) {
+	getBucket: function(line) {
 		//console.debug('prefix:'+prefix, line);
 		if (line < 0) {
 			//bad line, don't render:
@@ -160,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		return b;
 	},
 
-    layoutBuckets: function() {
+	layoutBuckets: function() {
 		var g = this.gutter,
 			b = this.buckets,
 			cT = this.controlLineTmpl;
@@ -189,11 +192,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		});
 	},
 
-    suspend: function() {
+	suspend: function() {
 		this.rendererSuspended++;
 	},
 
-    resume: function() {
+	resume: function() {
 		this.rendererSuspended--;
 		if (this.rendererSuspended === 0 && this.renderOnResume) {
 			delete this.renderOnResume;
@@ -201,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		}
 	},
 
-    render: function() {
+	render: function() {
 		var me = this, containers = {}, renderedCount = 0,
 			cleanContent, rootContainerId,
 			cloned, descs = [], cids = [], doc = null, selectedEl;

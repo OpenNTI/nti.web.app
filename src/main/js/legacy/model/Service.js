@@ -1,5 +1,6 @@
 var Ext = require('extjs');
 var Globals = require('../util/Globals');
+var {guidGenerator} = Globals;
 var ObjectUtils = require('../util/Object');
 var ParseUtils = require('../util/Parsing');
 var ModelBase = require('./Base');

@@ -8,6 +8,7 @@ var AssessmentPoll = require('../../assessment/Poll');
 var AssessmentQuizSubmission = require('../../assessment/QuizSubmission');
 var AssessmentAssignmentFeedback = require('../../assessment/AssignmentFeedback');
 var AssessmentAssignmentStatus = require('../../course/assessment/AssignmentStatus');
+var {guidGenerator} = require('legacy/util/Globals');
 
 
 /*globals isMe:false, Toaster:false, swallow:false*/
