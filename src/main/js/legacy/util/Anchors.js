@@ -68,10 +68,11 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
 	//or locations but have the same container id.  That seem unlikely but may Need to figure that out eventually
 	preresolveLocatorInfo: function(contentRangeDescriptions, docElement, cleanRoot, containers, docElementContainerId) {
-		var virginContentCache = {},
-				locatorsFound = 0;
+		var me = this,
+			virginContentCache = {},
+			locatorsFound = 0;
 
-		docElementContainerId = docElementContainerId || this.rootContainerIdFromDocument(docElement);
+		docElementContainerId = docElementContainerId || me.rootContainerIdFromDocument(docElement);
 
 		if (!contentRangeDescriptions || (containers && contentRangeDescriptions.length !== containers.length)) {
 			Ext.Error.raise('toDomRanges requires contentRangeDescriptions and containers to be the same length if containers provided');
@@ -100,17 +101,17 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			if (!containerId) {
 				console.warn('No container id provided will assume root without validating container');
 			}
-			if (!this.supportedContentRange(desc)) {
+			if (!me.supportedContentRange(desc)) {
 				console.warn('nothing to parse?');
 				return;
 			}
 
-			if (desc.isEmpty || this.cachedLocatorEnsuringDocument(desc, docElement)) {
+			if (desc.isEmpty || me.cachedLocatorEnsuringDocument(desc, docElement)) {
 				locatorsFound++;
 				return;
 			}
 
-			searchWithin = this.scopedContainerNode(cleanRoot, containerId, docElementContainerId);
+			searchWithin = me.scopedContainerNode(cleanRoot, containerId, docElementContainerId);
 			if (!searchWithin) {
 				Ext.Error.raise('Unable to find container ' + containerId + ' in provided doc element');
 			}
@@ -123,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			virginNode = getVirginNode(ancestorNode);
 
 			try {
-				if (this.resolveCleanLocatorForDesc(desc, virginNode, docElement)) {
+				if (me.resolveCleanLocatorForDesc(desc, virginNode, docElement)) {
 					locatorsFound++;
 				}
 			}
