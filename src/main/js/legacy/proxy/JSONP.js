@@ -1,10 +1,9 @@
 var Ext = require('extjs');
 var B64 = require('../util/Base64');
 var Globals = require('../util/Globals');
-var JSONP = require('./JSONP');
 
 
-module.exports = exports = new Ext.define('NextThought.proxy.JSONP', {
+module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 	bufferedContent: {},
 
 
@@ -216,6 +215,8 @@ module.exports = exports = new Ext.define('NextThought.proxy.JSONP', {
 		console.warn('JSONP is already defined!!!');
 	}
 
+	window.JSONP = this;
+
 	window.jsonpReceiveContent = Ext.bind(JSONP.receiveContent, JSONP);
 	/** @deprecated use jsonpReceiveContent instaed */
 	window.jsonpContent = Ext.bind(JSONP.receiveContent, JSONP);
@@ -223,4 +224,4 @@ module.exports = exports = new Ext.define('NextThought.proxy.JSONP', {
 	window.jsonpToc = Ext.bind(JSONP.receiveContent, JSONP);
 	/** @deprecated use jsonpReceiveContent instaed */
 	window.jsonpData = Ext.bind(JSONP.receiveContentVTT, JSONP);
-});
+}).create();
