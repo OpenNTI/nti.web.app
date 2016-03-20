@@ -1,7 +1,12 @@
 var Ext = require('extjs');
-var ReaderPanel = require('../app/contentviewer/components/Reader');
 var Anchors = require('./Anchors');
 var AnnotationUtils = require('./Annotations');
+var lazyResolve = {
+	get ReaderPanel() {
+		delete this.ReaderPanel;
+		return this.ReaderPanel = require('../app/contentviewer/components/Reader');
+	}
+};
 
 
 module.exports = exports = Ext.define('NextThought.util.Line', {
@@ -335,7 +340,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 			elem,
 			iterationCount = 0,
 			range, qpart,
-			reader = ReaderPanel.get(),
+			reader = lazyResolve.ReaderPanel.get(),
 			readerScrollTop = reader.getAnnotationOffsets().scrollTop; //Tight coupling here
 
 			//clear ranges and get the node on this y

@@ -444,6 +444,6 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		Ext.get(e.getTarget().nextSibling).toggleCls('hidden');
 		return false;
 	});
-
-
 });
+
+window.ReaderPanel = exports;

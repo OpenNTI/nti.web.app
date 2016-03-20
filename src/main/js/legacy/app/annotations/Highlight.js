@@ -1,5 +1,4 @@
 var Ext = require('extjs');
-var ReaderPanel = require('../contentviewer/components/Reader');
 var Anchors = require('../../util/Anchors');
 var AnnotationUtils = require('../../util/Annotations');
 var Globals = require('../../util/Globals');
@@ -8,6 +7,12 @@ var RectUtils = require('../../util/Rects');
 var AnnotationsBase = require('./Base');
 var UtilAnchors = require('../../util/Anchors');
 var UtilRects = require('../../util/Rects');
+var lazyResolve = {
+	get ReaderPanel () {
+		delete this.ReaderPanel;
+		return this.ReaderPanel = require('../contentviewer/components/Reader');
+	}
+};
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
@@ -42,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 	},
 
     getRange: function() {
-		var range = Anchors.toDomRange(this.getRecordField('applicableRange'), this.doc, ReaderPanel.get().getCleanContent(), this.getRecordField('ContainerId'));
+		var range = Anchors.toDomRange(this.getRecordField('applicableRange'), this.doc, lazyResolve.ReaderPanel.get().getCleanContent(), this.getRecordField('ContainerId'));
 
 		if (!range) {
 			if (this.manager.isDebug) {

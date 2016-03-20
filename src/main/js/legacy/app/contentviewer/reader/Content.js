@@ -1,5 +1,4 @@
 var Ext = require('extjs');
-var ReaderPanel = require('../components/Reader');
 var ImageZoomView = require('../../../common/ux/ImageZoomView');
 var SlideDeck = require('../../../common/ux/SlideDeck');
 var ContentUtils = require('../../../util/Content');
