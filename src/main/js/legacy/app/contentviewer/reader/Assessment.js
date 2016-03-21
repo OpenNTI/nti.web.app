@@ -5,6 +5,7 @@ var ParseUtils = require('legacy/util/Parsing');
 var TimeUtils = require('legacy/util/Time');
 
 require('legacy/app/assessment/Scoreboard');
+require('legacy/app/assessment/SurveyHeader');
 require('legacy/app/assessment/Question');
 require('legacy/app/assessment/Poll');
 require('legacy/app/assessment/QuizSubmission');
