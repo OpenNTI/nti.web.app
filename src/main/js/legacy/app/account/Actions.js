@@ -1,21 +1,22 @@
 var Ext = require('extjs');
 var Globals = require('../../util/Globals');
 var {getURL} = Globals;
-var CommonActions = require('../../common/Actions');
-var CoppaWindow = require('./coppa/Window');
-var RecoveryWindow = require('./recovery/Window');
-var UpgradedWindow = require('./coppa/upgraded/Window');
-var UxWelcomeGuide = require('../../common/ux/WelcomeGuide');
-var UxIframeConfirmWindow = require('../../common/ux/IframeConfirmWindow');
-var UxUpdatedTos = require('../../common/ux/UpdatedTos');
-var UxIframeWindow = require('../../common/ux/IframeWindow');
-var ModelUserPasswordSet = require('../../model/UserPasswordSet');
+require('../../common/Actions');
+require('../../common/ux/WelcomeGuide');
+require('../../common/ux/IframeConfirmWindow');
+require('../../common/ux/UpdatedTos');
+require('../../common/ux/IframeWindow');
+require('../../model/UserPasswordSet');
+require('./contact/Window');
+require('./coppa/Window');
+require('./coppa/upgraded/Window');
+require('./recovery/Window');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    maybeShowCoppaWindow: function() {
+	maybeShowCoppaWindow: function () {
 		var user = $AppConfig.userObject,
 			showWindow = user.getLink('account.profile.needs.updated'),
 			url = user.getLink('account.profile'),
@@ -29,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 			url: getURL(url),
 			timeout: 20000,
 			scope: this,
-			callback: function(q, success, r) {
+			callback: function (q, success, r) {
 				if (!success) {
 					console.log('Could not get acct rel schema for coppa window. Window will not show');
 					return;
@@ -51,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 		console.log('get data from ' + url + ' and show coppa window...');
 	},
 
-    showEmailRecoveryWindow: function(fieldName, linkName) {
+	showEmailRecoveryWindow: function (fieldName, linkName) {
 		Ext.widget('recovery-email-window', {
 			fieldName: fieldName,
 			linkName: linkName,
@@ -59,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 		}).show();
 	},
 
-    showCoppaConfirmWindow: function() {
+	showCoppaConfirmWindow: function () {
 		var link = $AppConfig.userObject.getLink('coppa.upgraded.rollbacked');
 
 		Ext.widget('coppa-confirm-window', {
@@ -68,17 +69,17 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 		}).show();
 	},
 
-    showWelcomePage: function(link) {
+	showWelcomePage: function (link) {
 		Ext.widget('welcome-guide', {link: link, deleteOnDestroy: true}).show();
 	},
 
-    showResearchAgreement: function() {
+	showResearchAgreement: function () {
 		var user = $AppConfig.userObject,
 			html = user.getLink('irb_html'),
 			pdf = user.getLink('irb_pdf'),
 			post = user.getLink('SetUserResearch');
 
-		function sendRequest(agreed) {
+		function sendRequest (agreed) {
 			if (!post) {
 				return Promise.reject('No link to post to');
 			}
@@ -98,11 +99,11 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 		}).show();
 	},
 
-    showNewTermsOfService: function(link) {
+	showNewTermsOfService: function (link) {
 		Ext.widget('updated-tos', {link: link, deleteOnDestroy: true}).show();
 	},
 
-    __createWindow: function(link, title) {
+	__createWindow: function (link, title) {
 		var win = Ext.widget('nti-window', {
 			title: title,
 			closeAction: 'destroy',
@@ -128,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 		});
 
 		if (Ext.is.iPad) {
-			win.on('afterrender', function() {
+			win.on('afterrender', function () {
 				var iframe = this.el.down('.x-fit-item');
 				iframe.parent().el.setStyle('-webkit-overflow-scrolling', 'touch');
 				iframe.parent().el.setStyle('overflow', 'auto');
@@ -138,23 +139,23 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 		return win;
 	},
 
-    showTermsOfService: function(link) {
+	showTermsOfService: function (link) {
 		this.__createWindow(link, 'Terms of Service').show();
 	},
 
-    showChildrensPrivacy: function(link) {
+	showChildrensPrivacy: function (link) {
 		this.__createWindow(link, 'Children\'s Privacy').show();
 	},
 
-    showPrivacy: function(link) {
+	showPrivacy: function (link) {
 		this.__createWindow(link, 'Privacy').show();
 	},
 
-    showHref: function(href, target) {
+	showHref: function (href, target) {
 		window.open(href, target);
 	},
 
-    submitCoppaInfo: function(values) {
+	submitCoppaInfo: function (values) {
 		var linkToDelete = $AppConfig.userObject.getLink('account.profile.needs.updated'),
 			key;
 
@@ -175,9 +176,9 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 			}
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			$AppConfig.userObject.save({
-				callback: function(req, success, resp) {
+				callback: function (req, success, resp) {
 					if (!success) {
 						reject(Ext.decode(resp.responseText));
 					} else {
@@ -186,8 +187,8 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 							url: getURL(linkToDelete),
 							timeout: 20000,
 							method: 'DELETE',
-							callback: function(q, success, r) {
-								if (!success) {
+							callback: function (q, success2) {
+								if (!success2) {
 									console.log('Could not delete the needs.updated link');
 									return;
 								}
@@ -201,7 +202,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 		});
 	},
 
-    fixEmail: function(values) {
+	fixEmail: function (values) {
 		var linkToDelete = $AppConfig.userObject.getLink(values.linkName),
 			email = values.email,
 			fieldName = values.fieldName,
@@ -213,8 +214,8 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 		}
 
 		if (fieldName && email) {
-			return new Promise(function(fulfill, reject) {
-				$AppConfig.userObject.saveField(fieldName, email, function() {
+			return new Promise(function (fulfill, reject) {
+				$AppConfig.userObject.saveField(fieldName, email, function () {
 					if (linkToDelete) {
 						//we need to delete the link now
 						Ext.Ajax.request({
@@ -222,7 +223,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 							timeout: 20000,
 							scope: this,
 							method: 'DELETE',
-							callback: function(q, success, r) {
+							callback: function (q, success) {
 								if (!success) {
 									console.log('Could not delete the needs.update link');
 									return;
@@ -232,14 +233,14 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 					}
 
 					fulfill();
-				}, function(resp) {
+				}, function (resp) {
 					reject(Ext.decode(resp.responseText));
 				}, optionalLinkName);
 			});
 		}
 	},
 
-    showContactUs: function() {
+	showContactUs: function () {
 		var help = Service.getSupportLinks().supportEmail;
 
 		if (help) {
@@ -252,7 +253,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 		}).show();
 	},
 
-    requestAliasChange: function() {
+	requestAliasChange: function () {
 		Ext.widget('contact-us-window', {
 			role: 'alias',
 			titleKey: 'alias_request_title',
@@ -261,14 +262,14 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 		}).show();
 	},
 
-    __contactUsBodyForMessage: function(data) {
+	__contactUsBodyForMessage: function (data) {
 		var body = data.email || '[NO EMAIL SUPPLIED]';
 
 		body += (' wrote: ' + data.message);
 		return body;
 	},
 
-    __aliasBodyForMessage: function(data) {
+	__aliasBodyForMessage: function (data) {
 		var body = data.email || '[NO EMAIL SUPPLIED]';
 
 		body += (' has requested an alias change for account ' + $AppConfig.username);
@@ -277,7 +278,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 		return body;
 	},
 
-    submitContactForm: function(values, role) {
+	submitContactForm: function (values, role) {
 		var feedbackLink = $AppConfig.userObject.getLink('send-feedback'),
 			url = getURL(feedbackLink),
 			body,
@@ -318,7 +319,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 			});
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Ext.Ajax.request({
 				url: url,
 				jsonData: Ext.encode({body: body}),
@@ -326,7 +327,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 				headers: {
 					Accept: 'application/json'
 				},
-				callback: function(q, success, r) {
+				callback: function (q, success, r) {
 					if (!success) {
 						reject(Ext.decode(r.responseText));
 					} else {
@@ -337,13 +338,13 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 		});
 	},
 
-    changePassword: function(values) {
+	changePassword: function (values) {
 		var u = NextThought.model.UserPasswordSet.fromUser($AppConfig.userObject);
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			u.set(values);
 			u.save({
-				callback: function(req, success, resp) {
+				callback: function (req, success, resp) {
 					if (!success) {
 						reject(Ext.decode(resp.responseText, true) || 'There was an error setting your password.');
 					} else {

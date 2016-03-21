@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var UtilPageSourceStore = require('../util/PageSourceStore');
+const Ext = require('extjs');
+
+require('legacy/util/PageSourceStore');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
@@ -7,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
 
 	statics: {
 
-		 urlFrom: function(store) {
+		urlFrom: function (store) {
 			var px = store.getProxy(),
 				op = new Ext.data.Operation({
 					action: 'read',
@@ -15,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
 					sorters: store.sorters.items
 				}),
 				url,
-			params = {};
+				params = {};
 
 			op.params = px.getParams(op);
 			url = px.buildUrl({
@@ -28,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
 			delete params.sorters;
 
 			return Ext.urlAppend(url, Ext.Object.toQueryString(params));
-		 }
+		}
 
 	},
 
@@ -43,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
 	},
 
 
-	constructor: function(cfg) {
+	constructor: function (cfg) {
 		this.mixins.observable.constructor.call(this);
 		this.initConfig(cfg);
 		this.addEvents({
@@ -60,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
 	},
 
 
-	applyCurrent: function(n, o) {
+	applyCurrent: function (n, o) {
 		if (!n) { return o;}
 
 		if (this._getIdOf(o) === this._getIdOf(n)) {
@@ -72,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
 	},
 
 
-	_loadRecord: function(direction, current) {
+	_loadRecord: function (direction, current) {
 		var rec, url, me = this,
 			p = {
 				batchSize: 3,
@@ -100,17 +101,17 @@ module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
 		delete me.previous;
 
 		Service.request(url)
-			.done(function(result) {
+			.done(function (result) {
 				me.current = rec;
 				me.update(result);
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error(reason);
 			});
 	},
 
 
-	_makeRecord: function(json) {
+	_makeRecord: function (json) {
 		var Model = this.getModel(),
 			idProp = Model.create().idProperty;
 
@@ -118,22 +119,22 @@ module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
 	},
 
 
-	_getIdOf: function(o) {
+	_getIdOf: function (o) {
 		return (this.getIdExtractor() || Ext.identityFn).call(this, o);
 	},
 
 
-	_indexOfCurrentIn: function(list) {
+	_indexOfCurrentIn: function (list) {
 		var id = this._getIdOf(this.current);
 		list = list.map(this._getIdOf.bind(this));
 		return list.indexOf(id);
 	},
 
 
-	update: function(reply) {
+	update: function (reply) {
 		reply = Ext.decode(reply, true) || {};
 
-		function username(o) {
+		function username (o) {
 			return (o && o.get && o.get('Creator')) || o;
 		}
 
@@ -144,8 +145,8 @@ module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
 			idx = me._indexOfCurrentIn(items);
 
 		this.total = reply.hasOwnProperty(total) ? reply[total] :
-					 reply.hasOwnProperty(rawTotal) ? reply[rawTotal] :
-					 null;
+					reply.hasOwnProperty(rawTotal) ? reply[rawTotal] :
+					null;
 
 		//todo: fill in next/prev from results
 		// The docs say batchAround(Creator) should put the id in the
@@ -163,7 +164,7 @@ module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
 	},
 
 
-	updatePageNumber: function(links, current) {
+	updatePageNumber: function (links, current) {
 		var nextLink, prevLink;
 
 		//if the current is the first one, we are the first item in the list
@@ -172,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
 			return;
 		}
 
-		(links || []).forEach(function(link) {
+		(links || []).forEach(function (link) {
 			if (link.rel === 'batch-next') {
 				nextLink = link.href;
 			} else {
@@ -190,10 +191,10 @@ module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
 	//we do not care about the actual page number.
 	// The consumers of this function should expect
 	// that it might return null.
-	getPageNumber: function() { return this.currentPage || null; },
+	getPageNumber: function () { return this.currentPage || null; },
 
 
-	getNext: function(set) {
+	getNext: function (set) {
 		var next = this.next;
 
 		if (next && set) {
@@ -204,7 +205,7 @@ module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
 	},
 
 
-	getPrevious: function(set) {
+	getPrevious: function (set) {
 		var previous = this.previous;
 
 		if (previous && set) {
@@ -215,7 +216,7 @@ module.exports = exports = Ext.define('NextThought.proxy.PageSource', {
 	},
 
 
-	getTotal: function() { return this.total || '?'; },
-	hasNext: function() { return !!this.next; },
-	hasPrevious: function() { return !!this.previous; }
+	getTotal: function () { return this.total || '?'; },
+	hasNext: function () { return !!this.next; },
+	hasPrevious: function () { return !!this.previous; }
 });

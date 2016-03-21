@@ -1,11 +1,13 @@
 var Ext = require('extjs');
-var UtilPageSourceStore = require('../../util/PageSourceStore');
+const {wait} = require('legacy/util/Promise');
+
+require('legacy/util/PageSourceStore');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.courseware.PagedPageSource', {
 	extend: 'NextThought.util.PageSourceStore',
 
-	constructor: function(cfg) {
+	constructor: function (cfg) {
 		this.mixins.observable.constructor.call(this);
 		this.initConfig(cfg);
 
@@ -17,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.PagedPageSou
 	},
 
 
-	setCurrent: function(record) {
+	setCurrent: function (record) {
 		var currentPage = this.store.getCurrentPage(),
 			pageSize = this.store.pageSize,
 			currentIndex = this.store.indexOf(record);
@@ -26,22 +28,22 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.PagedPageSou
 	},
 
 
-	getTotal: function() {
+	getTotal: function () {
 		return this.store.getTotalCount();
 	},
 
 
-	getPageNumber: function() {
+	getPageNumber: function () {
 		return this.getCurrentPosition() + 1;
 	},
 
 
-	getCurrentPosition: function() {
+	getCurrentPosition: function () {
 		return this.currentIndex;
 	},
 
 
-	__loadPage: function(page) {
+	__loadPage: function (page) {
 		var store = this.store,
 			current = store.currentPage,
 			total = this.getTotal(),
@@ -62,9 +64,9 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.PagedPageSou
 			return Promise.reject();
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			store.loadPage(page, {
-				callback: function(records, op, success) {
+				callback: function (records, op, success) {
 					if (success) {
 						wait()
 							.then(fulfill.bind(null, records));
@@ -77,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.PagedPageSou
 	},
 
 
-	getCurrent: function() {
+	getCurrent: function () {
 		var pageSize = this.store.pageSize;
 
 		return this.store.getAt(this.currentIndex % pageSize);
@@ -95,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.PagedPageSou
 	 *
 	 * @return {Promise} fulfills with the next record
 	 */
-	getNext: function() {
+	getNext: function () {
 		var me = this,
 			nextPage = me.store.currentPage,
 			currentIndex = me.getCurrentPosition(),
@@ -109,11 +111,11 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.PagedPageSou
 		}
 
 		return me.__loadPage(nextPage)
-			.then(function() {
+			.then(function () {
 				me.currentIndex = nextIndex;
 				return me.getCurrent();
 			})
-			.fail(function() {
+			.fail(function () {
 				return me.getCurrent();
 			});
 	},
@@ -130,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.PagedPageSou
 	 *
 	 * @return {Promise} fulfills with the previous record
 	 */
-	getPrevious: function() {
+	getPrevious: function () {
 		var me = this,
 			prevPage = me.store.currentPage,
 			currentIndex = me.getCurrentPosition(),
@@ -144,17 +146,17 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.PagedPageSou
 		}
 
 		return me.__loadPage(prevPage)
-			.then(function() {
+			.then(function () {
 				me.currentIndex = prevIndex;
 				return me.getCurrent();
 			})
-			.fail(function() {
+			.fail(function () {
 				return me.getCurrent();
 			});
 	},
 
 
-	hasNext: function() {
+	hasNext: function () {
 		var currentPosition = this.getCurrentPosition(),
 			total = this.getTotal();
 
@@ -162,7 +164,7 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.PagedPageSou
 	},
 
 
-	hasPrevious: function() {
+	hasPrevious: function () {
 		var currentPosition = this.getCurrentPosition();
 
 		return currentPosition > 0;
