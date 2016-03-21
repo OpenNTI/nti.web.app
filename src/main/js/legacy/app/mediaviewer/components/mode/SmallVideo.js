@@ -4,6 +4,7 @@ var ParseUtils = require('../../../../util/Parsing');
 var MixinsSearchable = require('../../../../mixins/Searchable');
 var ReaderView = require('../reader/View');
 var VideoVideo = require('../../../video/Video');
+var VideoNavigation = require('../../../video/navigation/Video');
 var {isFeature} = require('legacy/util/Globals');
 
 
