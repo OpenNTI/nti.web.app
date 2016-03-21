@@ -18,7 +18,7 @@
 	},
 
 	"rules": {
-		"no-console": [1, { allow: ["warn", "error"] }],
+		"no-console": 0,
 		"no-undef": 2,
 		"no-var": 0,
 		"strict": [2, "never"],
