@@ -1,6 +1,7 @@
 var Ext = require('extjs');
-var ModelBase = require('../Base');
-
+require('../Base');
+require('./GradeBookEntry');
+require('./GradeBookPart');
 
 module.exports = exports = Ext.define('NextThought.model.courseware.GradeBook', {
 	extend: 'NextThought.model.Base',

@@ -11,7 +11,7 @@ var StoreStripePricedPurchasable = require('../../model/store/StripePricedPurcha
 var StoreStripePurchaseError = require('../../model/store/StripePurchaseError');
 var StoreStripePurchaseItem = require('../../model/store/StripePurchaseItem');
 var StoreStripePurchaseOrder = require('../../model/store/StripePurchaseOrder');
-
+require('legacy/model/Course'); //Still used?
 
 module.exports = exports = Ext.define('NextThought.app.store.StateStore', {
     extend: 'NextThought.common.StateStore',

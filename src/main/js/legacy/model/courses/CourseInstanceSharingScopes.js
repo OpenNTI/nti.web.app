@@ -1,5 +1,6 @@
 var Ext = require('extjs');
-var ModelBase = require('../Base');
+require('../Base');
+require('./CourseInstanceSharingScope')
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.CourseInstanceSharingScopes', {
