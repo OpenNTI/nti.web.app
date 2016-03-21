@@ -1,30 +1,30 @@
 var Ext = require('extjs');
-var DomUtils = require('../../../util/Dom');
-var ParseUtils = require('../../../util/Parsing');
-var TimeUtils = require('../../../util/Time');
-var AssessmentScoreboard = require('../../assessment/Scoreboard');
-var AssessmentQuestion = require('../../assessment/Question');
-var AssessmentPoll = require('../../assessment/Poll');
-var AssessmentQuizSubmission = require('../../assessment/QuizSubmission');
-var AssessmentAssignmentFeedback = require('../../assessment/AssignmentFeedback');
-var AssessmentAssignmentStatus = require('../../course/assessment/AssignmentStatus');
 var {guidGenerator, isMe, swallow} = require('legacy/util/Globals');
+var DomUtils = require('legacy/util/Dom');
+var ParseUtils = require('legacy/util/Parsing');
+var TimeUtils = require('legacy/util/Time');
+
+require('legacy/app/assessment/Scoreboard');
+require('legacy/app/assessment/Question');
+require('legacy/app/assessment/Poll');
+require('legacy/app/assessment/QuizSubmission');
+require('legacy/app/assessment/AssignmentFeedback');
+require('legacy/app/course/assessment/AssignmentStatus');
 
 
-/*globals isMe:false, Toaster:false, swallow:false*/
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Assessment', {
-    alias: 'reader.assessment',
+	alias: 'reader.assessment',
 
-    uses: [
+	uses: [
 		'NextThought.app.contentviewer.reader.ComponentOverlay'
 	],
 
-    constructor: function(config) {
+	constructor: function (config) {
 		Ext.apply(this, config);
 		this.reader.on('set-content', 'injectAssessments', this);
 	},
 
-    makeAssessmentPoll: function(p, set) {
+	makeAssessmentPoll: function (p, set) {
 		var contentElement = this.getContentElement('object', 'data-ntiid', p.getId()),
 			o = this.reader.getComponentOverlay();
 
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		}
 	},
 
-    makeAssessmentQuestion: function(q, set) {
+	makeAssessmentQuestion: function (q, set) {
 		var contentElement = this.getContentElement('object', 'data-ntiid', q.getId()),
 			o = this.reader.getComponentOverlay();
 
@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		}
 	},
 
-    makeAssessmentSurvey: function(survey, guid) {
+	makeAssessmentSurvey: function (survey, guid) {
 		var me = this,
 			o = me.reader.getComponentOverlay(),
 			c = o.componentOverlayEl,
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			tabIndexTracker: o.tabIndexer
 		}));
 
-		questions.forEach(function(poll) {
+		questions.forEach(function (poll) {
 			me.makeAssessmentPoll(poll, survey);
 		});
 
@@ -100,16 +100,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			}));
 		} else {
 			Service.request(historyLink)
-				.then(function(response) {
+				.then(function (response) {
 					return ParseUtils.parseItems(response)[0];
 				})
-				.then(function(history) {
+				.then(function (history) {
 					survey.fireEvent('graded', history.get('Submission'));
 				});
 		}
 	},
 
-    makeAssessmentQuiz: function(set, guid) {
+	makeAssessmentQuiz: function (set, guid) {
 		var me = this,
 			isInstructor = this.isInstructorProspective,
 			completed,
@@ -120,11 +120,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			questions = set.get('questions'),
 			pendingAssessment;
 
-		function getPendingAssessment(h) {
+		function getPendingAssessment (history) {
 			var temp;
 
 			try {
-				temp = h.get('pendingAssessment').get('parts')[0];
+				temp = history.get('pendingAssessment').get('parts')[0];
 			} catch (e) {
 				swallow(e);
 			}
@@ -148,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 
 		set.isAssignment = !!this.injectedAssignment;
 
-		Ext.each(questions, function(q) {me.makeAssessmentQuestion(q, set);});
+		Ext.each(questions, function (q) {me.makeAssessmentQuestion(q, set);});
 
 		this.submission = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessment-quiz-submission', {
 			reader: r, renderTo: c, questionSet: set,
@@ -174,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		}
 	},
 
-    updateAssessmentHistory: function(history) {
+	updateAssessmentHistory: function (history) {
 		var setId = this.injectedAssignment.getId(),
 			historyItem = setId && history.getItem(setId);
 
@@ -192,7 +192,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		}
 	},
 
-    updateAssignmentHistoryItem: function(historyItem) {
+	updateAssignmentHistoryItem: function (historyItem) {
 		//Check history item is for injectedAssignment
 		var assignmentId = this.injectedAssignment.getId(),
 			grade = historyItem.get('Grade'),
@@ -200,7 +200,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 
 		this.injectedAssignmentHistory = historyItem;
 
-		if (historyItem && (assignmentId == historyAssignmentId)) {
+		if (historyItem && (assignmentId === historyAssignmentId)) {
 			if (this.injectedAssignment.isTimed) {
 				this.injectedAssignment.updateMetaData(historyItem.get('Metadata'));
 			}
@@ -216,7 +216,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 
 	},
 
-    showAssignmentTimer: function(submitFn) {
+	showAssignmentTimer: function (submitFn) {
 		var me = this,
 			max = me.injectedAssignment.getMaxTime(),
 			remaining = me.injectedAssignment.getTimeRemaining();
@@ -224,24 +224,24 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		me.reader.showRemainingTime(remaining, max, submitFn);
 	},
 
-    __goBackToAssignment: function(assignment) {
+	__goBackToAssignment: function (assignment) {
 		var me = this;
 
 		CourseWareUtils.findCourseBy(assignment.findMyCourse())
-			.then(function(instance) {
+			.then(function (instance) {
 				instance = instance.get('CourseInstance') || instance;
 
 				return instance.fireNavigationEvent(me.reader);
 			})
-			.then(function() {
+			.then(function () {
 				me.reader.fireEvent('navigate-to-assignment', assignment.getId());
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Failed to go back to assignment', reason);
 			});
 	},
 
-    notSubmittedTimed: function() {
+	notSubmittedTimed: function () {
 		var me = this,
 			assignment = me.injectedAssignment,
 			remaining = assignment.getTimeRemaining(),
@@ -256,7 +256,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			remaining = NextThought.app.course.assessment.AssignmentStatus.getTimeString(time, true) + ' Remaining';
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Ext.Msg.show({
 				title: remaining,
 				msg: title + ' is a timed assignment, and is still in progress. Be sure to submit the assignment before time runs out.',
@@ -275,7 +275,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		});
 	},
 
-    notSubmitted: function() {
+	notSubmitted: function () {
 		var me = this,
 			assignment = me.injectedAssignment,
 			title = (assignment && assignment.get('title')),
@@ -283,7 +283,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			due = assignment ? 'It is due on ' + Ext.Date.format(assignment.getDueDate(), 'l, F j') + '.' : '';
 
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Ext.Msg.show({
 				title: 'Are you sure?',
 				msg: 'You left ' + title + ' without submitting it. ' + progress,
@@ -302,13 +302,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		});
 	},
 
-    progressLostAlert: function() {
+	progressLostAlert: function () {
 		var assignment = this.injectedAssignment,
 			title = (assignment && assignment.get('title')),
 			progress = ' Your progress will be lost.',
 			due = assignment ? 'It is due on ' + Ext.Date.format(assignment.getDueDate(), 'l, F j') + '.' : '';
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Ext.Msg.show({
 				title: 'Are you sure?',
 				msg: title + ' has not been submitted for grading. ' + due + progress,
@@ -327,7 +327,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		});
 	},
 
-    allowNavigation: function() {
+	allowNavigation: function () {
 		//If there is no submission or we have no assignment (self-assessment)
 		//don't prevent navigation.  TODO what if we are opening a note on something
 		//like an assignment.  We would probably want to allowNavigation in that case.
@@ -362,13 +362,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		return Promise.resolve();
 	},
 
-    beforeRouteChange: function() {
+	beforeRouteChange: function () {
 		if (this.submission) {
 			this.submission.beforeRouteChange();
 		}
 	},
 
-    showSavingProgress: function() {
+	showSavingProgress: function () {
 		if (this.progressToast && !this.progressToast.el.isDestroyed) {
 			console.warn('Toast already open');
 		} else {
@@ -380,13 +380,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		}
 	},
 
-    showProgressSaved: function() {
+	showProgressSaved: function () {
 		var toast = this.progressToast;
 
 		if (!toast) { return; }
 
 		toast.openLongEnough
-			.then(function() {
+			.then(function () {
 				//the toast got destroyed by something else
 				if (!toast.el || toast.isDestroyed) {
 					return;
@@ -401,13 +401,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			});
 	},
 
-    showProgressFailed: function() {
+	showProgressFailed: function () {
 		var toast = this.progressToast;
 
 		if (!toast) { return; }
 
 		toast.openLongEnough
-			.then(function() {
+			.then(function () {
 				//the toast got destroyed by something else
 				if (!toast.el || toast.isDestroyed) {
 					return;
@@ -422,7 +422,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			});
 	},
 
-    shouldStudentAllowReset: function() {
+	shouldStudentAllowReset: function () {
 		var history,
 			injectedHistory = this.injectedAssignmentHistory,
 			allow = true;
@@ -442,13 +442,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		return allow;
 	},
 
-    resetAssignment: function() {
+	resetAssignment: function () {
 		var me = this,
 			history = me.injectedAssignmentHistory.get('history') || me.injectedAssignmentHistory,
 			reset = history && history.resetAssignment ? history.resetAssignment(isMe(history.get('Creator'))) : Promise.reject();
 
 		return reset
-			.then(function(deleted) {
+			.then(function (deleted) {
 				if (deleted && me.feedback) {
 					me.feedback.hide();
 				}
@@ -457,19 +457,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			});
 	},
 
-    wasReset: function() {
+	wasReset: function () {
 		if (this.feedback) {
 			this.feedback.hide();
 		}
 	},
 
-    forceSubmitted: function() {
+	forceSubmitted: function () {
 		var history = this.injectedAssignmentHistory;
 
 		this.feedback.setHistory(history);
 	},
 
-    injectAssignmentSavePoint: function(point) {
+	injectAssignmentSavePoint: function (point) {
 		this.injectedSavePoint = point;
 
 		if (this.submission) {
@@ -477,7 +477,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		}
 	},
 
-    injectAssessments: function(reader, doc, items) {
+	injectAssessments: function (reader, doc, items) {
 		var me = this,
 			slice = Array.prototype.slice,
 			questionObjs, pollObjs,
@@ -500,14 +500,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		//For polls just treat them exactly like we do questions
 		pollObjs = slice.call(doc.querySelectorAll('object[type*=napoll][data-ntiid]'));
 
-		Ext.Array.sort(items, function(ar, br) {
+		Ext.Array.sort(items, function (ar, br) {
 			var a = questionObjs.indexOf(me.getRelatedElement(ar.get('NTIID'), questionObjs)),
 				b = questionObjs.indexOf(me.getRelatedElement(br.get('NTIID'), questionObjs));
 			return ((a === b) ? 0 : ((a > b) ? 1 : -1));
 		});
 
 		if (pollObjs.length) {
-			Ext.Array.sort(items, function(ar, br) {
+			Ext.Array.sort(items, function (ar, br) {
 				var a = pollObjs.indexOf(me.getRelatedElement(ar.get('NTIID'), pollObjs)),
 					b = pollObjs.indexOf(me.getRelatedElement(br.get('NTIID'), pollObjs));
 
@@ -517,7 +517,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 
 
 		if (questionObjs.length) {
-			Ext.each(this.cleanQuestionsThatAreInQuestionSets(items, questionObjs), function(q) {
+			Ext.each(this.cleanQuestionsThatAreInQuestionSets(items, questionObjs), function (q) {
 				if (q.isSet) { me.makeAssessmentQuiz(q, guid); }
 				else { me.makeAssessmentQuestion(q); }
 			});
@@ -525,7 +525,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 
 
 		if (pollObjs.length) {
-			Ext.each(this.cleanQuestionsThatAreInQuestionSets(items, pollObjs), function(p) {
+			Ext.each(this.cleanQuestionsThatAreInQuestionSets(items, pollObjs), function (p) {
 				if (p.isSet) {
 					me.makeAssessmentSurvey(p, guid);
 				} else {
@@ -534,7 +534,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			});
 		}
 
-		slice.call(doc.querySelectorAll('object[type*=naquestion][data-ntiid]:not([data-used])')).forEach(function(e) {
+		slice.call(doc.querySelectorAll('object[type*=naquestion][data-ntiid]:not([data-used])')).forEach(function (e) {
 			e.parentNode.removeChild(e);
 		});
 
@@ -552,25 +552,25 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		}
 	},
 
-    isAssignment: function() {
+	isAssignment: function () {
 		return !!this.injectedAssignment;
 	},
 
-    setAssignmentFromInstructorProspective: function(assignment, history) {
+	setAssignmentFromInstructorProspective: function (assignment, history) {
 		this.isInstructorProspective = true;
 		this.injectedAssignment = assignment;
 		this.injectedAssignmentHistory = history;
 	},
 
-    setAssignmentFromStudentProspective: function(assignment, history) {
+	setAssignmentFromStudentProspective: function (assignment, history) {
 		this.injectedAssignment = assignment;
 		this.injectedAssignmentHistory = history;
 	},
 
-    cleanQuestionsThatAreInQuestionSets: function(items, objects) {
+	cleanQuestionsThatAreInQuestionSets: function (items, objects) {
 		items = items.slice();
 		//move assignments to the front.
-		items.sort(function(a, b) {
+		items.sort(function (a, b) {
 			var c = a.isAssignment,
 				d = b.isAssignment;
 			return c === d ? 0 : (c && !d) ? -1 : 1;
@@ -584,7 +584,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			assignments = [],
 			usedQuestions = {};
 
-		function inSet(id) {
+		function inSet (id) {
 			var i = questionsInSets.length - 1;
 			for (i; i >= 0; i--) {
 				if (id === questionsInSets[i].getId()) {
@@ -593,7 +593,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			}
 			return false;
 		}
-		function hasElement(id) {
+		function hasElement (id) {
 			var i;
 			for (i = 0; i < objects.length; i++) {
 				if (objects[i] && typeof objects[i] !== 'string') {
@@ -604,7 +604,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			return false;
 		}
 
-		function pushSetQuestions(i) {
+		function pushSetQuestions (i) {
 			if (i.isSet) { push.apply(questionsInSets, i.get('questions')); }
 		}
 
@@ -616,11 +616,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		//get sets
 		items.forEach(pushSetQuestions);
 
-		items.forEach(function(i) {
+		items.forEach(function (i) {
 			if (i.isAssignment) {
 				assignments.push(i);
 
-				(i.get('parts') || []).forEach(function(qset) {
+				(i.get('parts') || []).forEach(function (qset) {
 					qset = qset.get('question_set');
 					sets[qset.getId()] = qset;
 					pushSetQuestions(qset);
@@ -639,8 +639,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		});
 
 		//Let question sets know they're part of an assignment.
-		assignments.forEach(function(a) {
-			(a.get('parts') || []).forEach(function(p) {
+		assignments.forEach(function (a) {
+			(a.get('parts') || []).forEach(function (p) {
 				var s = p.get('question_set');
 				s = (s && sets[s.getId()]);
 
@@ -659,10 +659,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 		return result;
 	},
 
-    getFeedbackContentEl: function() {
+	getFeedbackContentEl: function () {
 		return this.feedback && this.feedback.contentElement;
 	}
-}, function() {
+}, function () {
 	var c = NextThought.app.contentviewer.reader.ComponentOverlay.prototype;
 	Ext.copyTo(this.prototype, c, ['getRelatedElement', 'getContentElement']);
 });
