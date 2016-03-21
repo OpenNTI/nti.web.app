@@ -2,6 +2,7 @@ var Ext = require('extjs');
 var TypesBadge = require('./types/Badge');
 var TypesBase = require('./types/Base');
 var TypesBlogComment = require('./types/BlogComment');
+var TypesBlogEntry = require('./types/BlogEntry');
 var TypesBlogEntryPost = require('./types/BlogEntryPost');
 var TypesContact = require('./types/Contact');
 var TypesFeedback = require('./types/Feedback');
