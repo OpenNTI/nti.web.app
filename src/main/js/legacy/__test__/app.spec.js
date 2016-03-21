@@ -125,7 +125,6 @@ describe('All Classes Exist', function () {
 		'NextThought.app.chat.components.log.NotificationEntry': [],
 		'NextThought.app.chat.components.log.NotificationStatus': [],
 		'NextThought.app.chat.components.log.PagerEntry': [],
-		'NextThought.app.chat.components.log.Pinned': [],
 		'NextThought.app.chat.transcript.Main': [],
 		'NextThought.app.chat.transcript.Pager': [],
 		'NextThought.app.chat.transcript.Window': [],
