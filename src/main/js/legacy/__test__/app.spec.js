@@ -1159,7 +1159,6 @@ describe('All Classes Exist', function () {
 		'NextThought.store.Hit': [],
 		'NextThought.store.NTI': [],
 		'NextThought.store.PageItem': [],
-		'NextThought.store.ProfileItem': [],
 		'NextThought.store.Stream': [],
 		'NextThought.store.UserSearch': [],
 		'NextThought.store.courseware.AssignmentHistoryItems': [],
