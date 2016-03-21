@@ -2,7 +2,7 @@ var Ext = require('extjs');
 var Globals = require('../../../util/Globals');
 var MixinsRouter = require('../../../mixins/Router');
 var CoursesStateStore = require('./StateStore');
-var ComponentsPage = require('./components/Page');
+var ComponentsPage = require('./components/available/CoursePage');
 var CourseActions = require('../../course/Actions');
 var AvailableCourseWindow = require('./components/available/CourseWindow');
 

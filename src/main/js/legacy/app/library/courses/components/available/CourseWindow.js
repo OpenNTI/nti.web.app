@@ -11,6 +11,7 @@ var EnrollmentDetails = require('../../../../course/enrollment/Details');
 var ComponentsProcess = require('../../../../course/enrollment/components/Process');
 var StoreActions = require('../../../../store/Actions');
 var {isFeature} = require('legacy/util/Globals');
+var CoursePage = require('./CoursePage');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.available.CourseWindow', {
