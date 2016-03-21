@@ -1,21 +1,20 @@
 var Ext = require('extjs');
-var DomUtils = require('../../../util/Dom');
-var OverlayPanel = require('../../contentviewer/overlay/Panel');
-var UtilDom = require('../../../util/Dom');
-var CardsLauncher = require('../../../common/components/cards/Launcher');
+var DomUtils = require('legacy/util/Dom');
+require('legacy/app/contentviewer/overlay/Panel');
+require('legacy/common/components/cards/Launcher');
+require('./Roll');
 
 
-/*global DomUtils, NextThought */
 module.exports = exports = Ext.define('NextThought.app.video.roll.OverlayedPanel', {
-    extend: 'NextThought.app.contentviewer.overlay.Panel',
-    alias: 'widget.overlay-video-roll',
-    ui: 'content-launcher',
-    cls: 'content-launcher-container',
+	extend: 'NextThought.app.contentviewer.overlay.Panel',
+	alias: 'widget.overlay-video-roll',
+	ui: 'content-launcher',
+	cls: 'content-launcher-container',
 
-    statics: {
-		getData: function(dom, reader) {
+	statics: {
+		getData: function (dom, reader) {
 			var videos = DomUtils.getVideosFromDom(dom);
-			return NextThought.common.components.cards.Launcher.getData(dom, reader, videos, function() {
+			return NextThought.common.components.cards.Launcher.getData(dom, reader, videos, function () {
 				var thumb = videos[0];
 				thumb = thumb && thumb.sources && thumb.sources[0];
 				return thumb && thumb.thumbnail;
@@ -23,9 +22,9 @@ module.exports = exports = Ext.define('NextThought.app.video.roll.OverlayedPanel
 		}
 	},
 
-    constructor: function(config) {
+	constructor: function (config) {
 		if (!config || !config.contentElement) {
-			throw 'you must supply a contentElement';
+			throw new Error('you must supply a contentElement');
 		}
 
 		Ext.apply(config, {
@@ -43,27 +42,27 @@ module.exports = exports = Ext.define('NextThought.app.video.roll.OverlayedPanel
 		this.callParent([config]);
 	},
 
-    showVideoRole: function(data) {
+	showVideoRole: function (data) {
 		var videos = [];
 
-		Ext.each((data && data.items) || [], function(v) {
+		Ext.each((data && data.items) || [], function (v) {
 			var s = v.sources[0],
 				source = s && s.source,
-				data = {
+				item = {
 					type: s && s.service,
 					thumbnail: s && s.thumbnail
 				};
 
-			if (data.type === 'vimeo') {
-				data.url = Ext.String.format('//player.vimeo.com/video/{0}?badge=0&portrait=0&byline=0', source);
-			} else if (data.type === 'youtube') {
-				data.url = Ext.String.format('//www.youtube.com/embed/{0}?rel=0&wmode=opaque', source);
+			if (item.type === 'vimeo') {
+				item.url = Ext.String.format('//player.vimeo.com/video/{0}?badge=0&portrait=0&byline=0', source);
+			} else if (item.type === 'youtube') {
+				item.url = Ext.String.format('//www.youtube.com/embed/{0}?rel=0&wmode=opaque', source);
 			} else {
 				console.warn('Unknown source:', v);
 			}
 
-			if (data.url) {
-				videos.push(data);
+			if (item.url) {
+				videos.push(item);
 			}
 		});
 

@@ -1,17 +1,16 @@
-var Ext = require('extjs');
-var DomUtils = require('../../../util/Dom');
-var OverlayPanel = require('../overlay/Panel');
-var UtilDom = require('../../../util/Dom');
-
+const Ext = require('extjs');
+const DomUtils = require('legacy/util/Dom');
+require('../overlay/Panel');
+require('./EmbededWidget');
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.components.EmbededWidgetPanel', {
-    extend: 'NextThought.app.contentviewer.overlay.Panel',
-    alias: 'widget.overlay-content-embeded-widget',
-    cls: 'content-embeded-widget-frame',
+	extend: 'NextThought.app.contentviewer.overlay.Panel',
+	alias: 'widget.overlay-content-embeded-widget',
+	cls: 'content-embeded-widget-frame',
 
-    constructor: function(config) {
+	constructor: function (config) {
 		if (!config || !config.contentElement) {
-			throw 'you must supply a contentElement';
+			throw new Error('you must supply a contentElement');
 		}
 
 		Ext.apply(config, {
