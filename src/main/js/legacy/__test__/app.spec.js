@@ -307,7 +307,6 @@ describe('All Classes Exist', function () {
 		'NextThought.app.course.enrollment.options.FiveminuteEnrollment': [],
 		'NextThought.app.course.enrollment.options.OpenEnrollment': [],
 		'NextThought.app.course.enrollment.options.StoreEnrollment': [],
-		'NextThought.app.course.info.Actions': [],
 		'NextThought.app.course.info.Index': [],
 		'NextThought.app.course.info.components.Body': [],
 		'NextThought.app.course.info.components.Menu': [],
