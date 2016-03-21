@@ -45,6 +45,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 					type: 'text',
 					name: 'title',
 					placeholder: 'Title',
+					required: true,
 					maxlength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
 				}
 			];
@@ -57,7 +58,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 	getDefaultValues: function() {
 		return {
 			MimeType: NextThought.model.courses.navigation.CourseOutlineNode.mimeType,
-			title: (this.record && this.record.getTitle()) || ''
+			title: (this.record && this.record.getTitle()) || (this.getDefaultTitle && this.getDefaultTitle()) || ''
 		};
 	},
 

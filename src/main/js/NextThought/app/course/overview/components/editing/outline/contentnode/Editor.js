@@ -43,5 +43,18 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.contentno
 			scrollingParent: this.scrollingParent,
 			onChange: onChange
 		}));
+	},
+
+
+	getDefaultTitle: function() {
+		var title = '';
+
+		if (this.record && this.record.getTitle) {
+			title = this.record.getTitle();
+		} else if (this.parentRecord && this.parentRecord.getItemsCount) {
+			title = 'Lesson ' + (this.parentRecord.getItemsCount() + 1);
+		}
+
+		return title;
 	}
 });
