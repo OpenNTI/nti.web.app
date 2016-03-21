@@ -15,14 +15,14 @@ module.exports = exports = Ext.define('NextThought.overrides.Ext', {
 	 * @param {Object} cfg The values to apply to the object in the first arg.
 	 * @return {*}
 	 */
-	applyRecursively: function applyRecursively(o, cfg) {
+	applyRecursively: function applyRecursively (o, cfg) {
 		if (!o) {return o;}
 
 		if (Ext.isArray(o)) {
-			Ext.each(o, function(v, i, a) { a[i] = applyRecursively(v, cfg); });
+			Ext.each(o, function (v, i, a) { a[i] = applyRecursively(v, cfg); });
 		}
 		else if (Ext.isObject(o)) {
-			Ext.Object.each(o, function(k, v) { o[k] = applyRecursively(v, cfg); });
+			Ext.Object.each(o, function (k, v) { o[k] = applyRecursively(v, cfg); });
 			o = Ext.apply(o, cfg);
 		}
 
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.overrides.Ext', {
 	}
 
 
-},function() {
+},function () {
 
 	Ext.isIE11p = !Ext.isIE && /Trident/i.test(navigator.userAgent);
 	Ext.isGecko = Ext.isGecko && !Ext.isIE11p;
@@ -67,10 +67,10 @@ module.exports = exports = Ext.define('NextThought.overrides.Ext', {
 	 *  clear the interval: Ext.Element.collectorThreadId
 	 *  Copy function garbageCollect() from ext/src/dom/Element.js as a starting point, then restart the 30second interval.
 	 */
-	Ext.getElementById = function(id) {
+	Ext.getElementById = function (id) {
 		var el = get.apply(this, arguments);
 
-		function testFrame(frame) {
+		function testFrame (frame) {
 			var win = frame.contentWindow || window.frames[frame.name],
 				src;
 			try {
@@ -90,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.overrides.Ext', {
 		return el;
 	};
 
-	Ext.EventManager.removeAll = function() {
+	Ext.EventManager.removeAll = function () {
 		try {
 			removeAllEvents.apply(this, arguments);
 		} catch (e) {
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.overrides.Ext', {
 	};
 
 	//do our own GC... (mostly copied verbatim, added lint fixes and try/catch)
-	function garbageCollect() {
+	function garbageCollect () {
 		if (!Ext.enableGarbageCollector) {
 			clearInterval(Element.collectorThreadId);
 		} else {
@@ -152,7 +152,7 @@ module.exports = exports = Ext.define('NextThought.overrides.Ext', {
 		}
 	}
 
-	function takeOverGC() {
+	function takeOverGC () {
 		if (!Element.collectorThreadId) {
 			setTimeout(takeOverGC, 1000);
 			return;

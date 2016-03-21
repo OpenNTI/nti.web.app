@@ -1,17 +1,18 @@
 var Ext = require('extjs');
-var MixinsDelegation = require('../mixins/Delegation');
-var UtilPromise = require('../util/Promise');
+
+require('../mixins/Delegation');
+require('../util/Promise');
 
 
 module.exports = exports = Ext.define('NextThought.overrides.Component', {
-    override: 'Ext.Component',
+	override: 'Ext.Component',
 
-    constructor: function() {
+	constructor: function () {
 		var me = this;
 
 		me.shadow = false;
 
-		me.onceRendered = new Promise(function(fulfill) {
+		me.onceRendered = new Promise(function (fulfill) {
 			me.afterRender = Ext.Function.createSequence(me.afterRender, fulfill);
 		}.bind(me));
 
@@ -20,26 +21,26 @@ module.exports = exports = Ext.define('NextThought.overrides.Component', {
 		me.setNTTooltip();
 
 
-		me.on('afterrender', function() {
+		me.on('afterrender', function () {
 			var maybeFireVisibilityChange = Ext.Function.createBuffered(this.maybeFireVisibilityChange, 100, this);
 
-			function monitorCardChange(cmp, me) {
+			function monitorCardChange (cmp, scope) {
 				var next = cmp.up('{isOwnerLayout("card")}'),
 					c = cmp.isOwnerLayout('card') ? cmp : next;
 
-				me = me || cmp;
+				scope = scope || cmp;
 
 				if (c) {
-					me.mon(c, {
+					scope.mon(c, {
 						//beforeactivate: '',
 						//beforedeactivate: '',
 						activate: maybeFireVisibilityChange,
 						deactivate: maybeFireVisibilityChange,
-						scope: me
+						scope: scope
 					});
 
 					if (next) {
-						monitorCardChange(next, me);
+						monitorCardChange(next, scope);
 					}
 				}
 			}
@@ -48,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.overrides.Component', {
 		});
 	},
 
-    maybeFireVisibilityChange: function() {
+	maybeFireVisibilityChange: function () {
 		var v = this.isVisible(true);
 		if (v !== this.___visibility) {
 			this.fireEvent('visibility-changed-' + (v ? 'visible' : 'hidden'), this);
@@ -57,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.overrides.Component', {
 		this.___visibility = v;
 	},
 
-    setNTTooltip: function() {
+	setNTTooltip: function () {
 		if (!this.rendered) {
 			this.on('afterrender', 'setNTTooltip', this, {single: true});
 			return;
@@ -74,21 +75,21 @@ module.exports = exports = Ext.define('NextThought.overrides.Component', {
 		}
 	},
 
-    rtlSetLocalX: function(x) {
+	rtlSetLocalX: function (x) {
 		var style = this.el.dom.style;
 		style.left = 'auto';
 		style.right = (x === null) ? 'auto' : x + 'px';
 	},
 
-    isOwnerLayout: function(type) {
+	isOwnerLayout: function (type) {
 		var o = this.ownerLayout;
 		return o && o.type === type;
 	},
 
-    isLayout: function(type) {
+	isLayout: function (type) {
 		var o = this.layout;
 		return o && o.type === type;
 	}
-},function() {
+},function () {
 	Ext.Component.mixin('delegation', NextThought.mixins.Delegation);
 });

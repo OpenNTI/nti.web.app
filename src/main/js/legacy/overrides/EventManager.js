@@ -1,13 +1,13 @@
 var Ext = require('extjs');
 
 
-module.exports = exports = Ext.define('NextThought.overrides.EventManager', function() {
+module.exports = exports = Ext.define('NextThought.overrides.EventManager', function () {
 
 	var EM = Ext.EventManager,
 		normalizeEventExt = EM.normalizeEvent;
 
-	function makeSafe(fn) {
-		return function() {
+	function makeSafe (fn) {
+		return function () {
 			try {
 				return fn.apply(this, arguments);
 			} catch (e) {
@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.overrides.EventManager', func
 	}
 
 	Ext.apply(EM, {
-		xnormalizeEvent: function(eventName, fn) {
+		xnormalizeEvent: function (eventName, fn) {
 			if (arguments.length > 2) {
 				console.error('i didnt account for this');
 			}
