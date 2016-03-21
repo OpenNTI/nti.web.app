@@ -1223,7 +1223,7 @@ describe('All Classes Exist', function () {
 		const missing = [''];
 
 		for (let clazz of Object.keys(bootstrap)) {
-			if (!Ext.ClassManager.get(clazz)) {
+			if (!Ext.ClassManager.get(clazz) && !Ext.ClassManager.existCache[clazz]) {
 				missing.push(clazz);
 				continue;
 			}
