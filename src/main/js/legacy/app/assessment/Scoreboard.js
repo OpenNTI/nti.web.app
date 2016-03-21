@@ -1,6 +1,7 @@
 var Ext = require('extjs');
 var OverlayPanel = require('../contentviewer/overlay/Panel');
 var ChartScore = require('../../common/chart/Score');
+var AssessmentScore = require('./Score');
 var AssessmentScoreboardHeader = require('./ScoreboardHeader');
 var AssessmentScoreboardTally = require('./ScoreboardTally');
 var AssessmentQuizSubmission = require('./QuizSubmission');
