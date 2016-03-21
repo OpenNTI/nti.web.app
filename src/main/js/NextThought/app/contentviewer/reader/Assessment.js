@@ -220,10 +220,12 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 
 	showAssignmentTimer: function(submitFn) {
 		var me = this,
-			max = me.injectedAssignment.getMaxTime(),
-			remaining = me.injectedAssignment.getTimeRemaining();
+			max = me.injectedAssignment.getMaxTime();
 
-		me.reader.showRemainingTime(remaining, max, submitFn);
+		me.injectedAssignment.getTimeRemaining()
+			.then(function(remaining) {
+				me.reader.showRemainingTime(remaining, max, submitFn);
+			});
 	},
 
 
@@ -248,35 +250,37 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 	notSubmittedTimed: function() {
 		var me = this,
 			assignment = me.injectedAssignment,
-			remaining = assignment.getTimeRemaining(),
 			overrides = {week: 'Week', day: 'Day', hour: 'Hour', minute: 'Minute', second: 'Second'},
 			title = assignment && assignment.get('title'), time;
 
-		if (remaining < 0) {
-			time = TimeUtils.getTimePartsFromTime(-1 * remaining);
-			remaining = NextThought.app.course.assessment.AssignmentStatus.getTimeString(time) + ' Over';
-		} else {
-			time = TimeUtils.getTimePartsFromTime(remaining);
-			remaining = NextThought.app.course.assessment.AssignmentStatus.getTimeString(time, true) + ' Remaining';
-		}
-
-		return new Promise(function(fulfill, reject) {
-			Ext.Msg.show({
-				title: remaining,
-				msg: title + ' is a timed assignment, and is still in progress. Be sure to submit the assignment before time runs out.',
-				buttons: {
-					primary: {
-						cls: 'caution',
-						text: 'Leave',
-						handler: fulfill
-					},
-					secondary: {
-						text: 'Stay',
-						handler: reject
-					}
+		return assignment.getTimeRemaining()
+			.then(function(remaining) {
+				if (remaining < 0) {
+					time = TimeUtils.getTimePartsFromTime(-1 * remaining);
+					remaining = NextThought.app.course.assessment.AssignmentStatus.getTimeString(time) + ' Over';
+				} else {
+					time = TimeUtils.getTimePartsFromTime(remaining);
+					remaining = NextThought.app.course.assessment.AssignmentStatus.getTimeString(time, true) + ' Remaining';
 				}
+
+				return new Promise(function(fulfill, reject) {
+					Ext.Msg.show({
+						title: remaining,
+						msg: title + ' is a timed assignment, and is still in progress. Be sure to submit the assignment before time runs out.',
+						buttons: {
+							primary: {
+								cls: 'caution',
+								text: 'Leave',
+								handler: fulfill
+							},
+							secondary: {
+								text: 'Stay',
+								handler: reject
+							}
+						}
+					});
+				});
 			});
-		});
 	},
 
 
