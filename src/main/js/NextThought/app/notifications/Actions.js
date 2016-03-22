@@ -69,8 +69,10 @@ Ext.define('NextThought.app.notifications.Actions', {
 					  me.NotificationsStore.removeRecord(change);
 					  return;
 				 }
-
-				 me.NotificationsStore.addRecord(change);
+				 
+				 if (change.get('ChangeType') !== 'Modified') {
+					me.NotificationsStore.addRecord(change);	 
+				 }
 			}
 		});
 	}
