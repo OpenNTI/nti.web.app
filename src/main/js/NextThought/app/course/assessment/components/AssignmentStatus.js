@@ -98,6 +98,7 @@ Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
 			grade = history && history.get && history.get('Grade'),
 			status = me.status || NextThought.app.course.assessment.AssignmentStatus.getStatusHTML({
 				due: assignment.getDueDate(),
+				start: assignment.get('availableBeginning'),
 				completed: history && history.get('completed'),
 				maxTime: assignment.isTimed && assignment.getMaxTime(),
 				duration: assignment.isTimed && assignment.getDuration(),

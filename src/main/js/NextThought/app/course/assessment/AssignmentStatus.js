@@ -69,19 +69,32 @@ Ext.define('NextThought.app.course.assessment.AssignmentStatus', {
 				d.cls = 'today';
 				d.qtipFn = 'getTimeUntilDue';
 			} else {
-				if (!data.due && data.isNoSubmitAssignment) {
-					d.html = '';
-				} else {
-					d.html = 'Due ' + Ext.Date.format(data.due, 'l, F j g:i A T');
-				}
-
 				if (data.isNoSubmitAssignment) {
 					d.cls = 'nosubmit';
-				} else if (now >= data.due) {
+					if (!data.due) {
+						d.html = '';
+					} else {
+						d.html = 'Due ' + Ext.Date.format(data.due, 'l, F j g:i A T');
+					}
+				}
+				else {
+					if (data.due) {
+						d.html = 'Due ' + Ext.Date.format(data.due, 'l, F j g:i A T');
+					}
+					else {
+						if (data.start) {
+							d.html = 'Available ' + Ext.Date.format(data.start, 'l, F j g:i A T');
+						}
+						else {
+							d.html = 'Available Now' + '&nbsp;';							
+						}
+					}
+				}
+				
+				if (now >= data.due) {
 					d.cls = 'late';
 				}
 			}
-
 
 			return d;
 		},
