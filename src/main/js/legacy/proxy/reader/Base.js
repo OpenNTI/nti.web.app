@@ -1,11 +1,8 @@
 var Ext = require('extjs');
 
-var lazyResolve = {
-	get UserRepository () {
-		delete this.UserRepository;
-		return this.UserRepository = require('../../cache/UserRepository');
-	}
-}
+var lazy = require('legacy/util/lazy-require')
+			.get('UserRepository', () => require('legacy/cache/UserRepository'));
+
 
 module.exports = exports = Ext.define('NextThought.proxy.reader.Base', {
 	extend: 'Ext.data.reader.Json',
@@ -13,14 +10,14 @@ module.exports = exports = Ext.define('NextThought.proxy.reader.Base', {
 
 	//TODO The fact we are doing this may play into why we run into issues
 	//with LastModified caching and friends lists.  Need to look into that
-	fillCacheWithUserList: function(record, field) {
+	fillCacheWithUserList: function (record, field) {
 		var users = (record.raw || {})[field];
 
 		if (!Ext.isEmpty(users)) {
 			//console.debug('Need to fill cache with userlist for' , record.getId(), field, users);
-			Ext.each(users, function(user) {
+			Ext.each(users, function (user) {
 				if (user.isModel || Ext.isObject(user)) {
-					lazyResolve.UserRepository.precacheUser(user);
+					lazy.UserRepository.precacheUser(user);
 				}
 			});
 		}

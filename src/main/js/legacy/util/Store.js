@@ -1,12 +1,14 @@
 var Ext = require('extjs');
-var UserRepository = require('../cache/UserRepository');
+
 var ParseUtils = require('./Parsing');
 var {getURL} = require('legacy/util/Globals');
 
+var lazy = require('legacy/util/lazy-require')
+			.get('UserRepository', () => require('legacy/cache/UserRepository'));
 
 module.exports = exports = Ext.define('NextThought.util.Store', {
 
-	fillInUsers: function fillIn(store, records) {
+	fillInUsers: function fillIn (store, records) {
 
 		if (store && arguments.length === 1) {
 			store.on({'load': fillIn});
@@ -20,12 +22,12 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 
 		records = records || [];
 
-		var users = records.map(function(r) {return r.get('Creator');});
+		var users = records.map(function (r) {return r.get('Creator');});
 
-		function apply(r, i) {
+		function apply (r, i) {
 			var u = users[i],
-					id = u.getId(),
-					c = r.get('Creator');
+				id = u.getId(),
+				c = r.get('Creator');
 
 			if (c !== id && !Ext.isString(c) && c && c.getId() !== id) {
 				console.error('Bad mapping:', c, id, records, users, i);
@@ -37,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 			}
 		}
 
-		UserRepository.getUser(users, function(u) {
+		lazy.UserRepository.getUser(users, function (u) {
 			users = u;
 
 			store.suspendEvents(true);
@@ -49,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 
 
 
-	newView: function(store) {
+	newView: function (store) {
 		if (Ext.isString(store)) {
 			store = Ext.getStore(store);
 		}
@@ -62,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 			data: store.getRange()
 		});
 
-		function refilter() {
+		function refilter () {
 			var f = copy.filters.getRange();
 			copy.clearFilter();
 			copy.removeAll();
@@ -78,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 
 	},
 
-	loadRawItems: function(url, queryParams) {
+	loadRawItems: function (url, queryParams) {
 		var queryString = queryParams && Ext.Object.toQueryString(queryParams),
 			a = document.createElement('a');
 
@@ -97,16 +99,16 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 	 * @param  {Object} model       model to use to parse the items
 	 * @return {Promise}            fulfills with the batch
 	 */
-	loadBatch: function(url, queryParams, itemProp, model) {
+	loadBatch: function (url, queryParams, itemProp, model) {
 		itemProp = itemProp || 'Items';
 
 		return this.loadRawItems(url, queryParams)
-			.then(function(response) {
+			.then(function (response) {
 				var json = Ext.decode(response, true) || {},
 					items = json[itemProp];
 
 				if (model && model.create) {
-					items = items.map(function(item) { return model.create(item); });
+					items = items.map(function (item) { return model.create(item); });
 				} else {
 					items = ParseUtils.parseItems(items);
 				}
@@ -127,11 +129,11 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 	 * @param {Object} model the model to use to parse the items
 	 * @return {Promise}            fulfills with the parsed items from the response
 	 */
-	loadItems: function(url, queryParams, itemProp, model) {
+	loadItems: function (url, queryParams, itemProp, model) {
 		itemProp = itemProp || 'Items';
 
 		return this.loadBatch(url, queryParams, itemProp, model)
-			.then(function(json) {
+			.then(function (json) {
 				return json[itemProp];
 			});
 	}

@@ -8,7 +8,7 @@ const {wait, Deferred} = require('legacy/util/Promise');
 require('../app/chat/StateStore');
 
 
-global.UserRepository =
+User.Repository = global.UserRepository =
 module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 
 	isDebug: $AppConfig.userRepositoryDebug,

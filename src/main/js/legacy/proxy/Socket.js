@@ -1,8 +1,8 @@
 /*globals io*/
 var Ext = require('extjs');
-var Socket = require('./Socket');
-var Globals = require('../util/Globals');
-var {getURL} = Globals;
+
+var Globals = require('legacy/util/Globals');
+
 
 global.Socket =
 module.exports = exports = Ext.define('NextThought.proxy.Socket', {
@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 	isVerbose: $AppConfig.debugSocketVerbosely,
 	mixins: { observable: 'Ext.util.Observable' },
 
-	constructor: function() {
+	constructor: function () {
 		var me = this;
 		me.mixins.observable.constructor.call(me);
 		Ext.apply(me, {
@@ -20,21 +20,21 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 			},
 			socket: null,
 			control: {
-				//'connect': function(){me.onConnect.apply(me, arguments);},
-				'reconnect': function(){me.onReconnect.apply(me, arguments);},
-				'reconnecting': function(){me.onReconnecting.apply(me, arguments);},
-				'reconnect_failed': function(){me.onReconnectFailed.apply(me, arguments);},
-				'serverkill': function() {me.onKill.apply(me, arguments);},
-				'error': function() {me.onError.apply(me, arguments);},
-				'disconnect': function() {me.onDisconnect.apply(me, arguments);},
-				'connecting': function() {me.onConnecting.apply(me, arguments);},
-				'connect': function() {me.onConnected.apply(me, arguments);},
-				'connect_failed': function() {me.onConnectFailed.apply(me, arguments);}
+				//'connect': function () {me.onConnect.apply(me, arguments);},
+				'reconnect': function () {me.onReconnect.apply(me, arguments);},
+				'reconnecting': function () {me.onReconnecting.apply(me, arguments);},
+				'reconnect_failed': function () {me.onReconnectFailed.apply(me, arguments);},
+				'serverkill': function () {me.onKill.apply(me, arguments);},
+				'error': function () {me.onError.apply(me, arguments);},
+				'disconnect': function () {me.onDisconnect.apply(me, arguments);},
+				'connecting': function () {me.onConnecting.apply(me, arguments);},
+				'connect': function () {me.onConnected.apply(me, arguments);},
+				'connect_failed': function () {me.onConnectFailed.apply(me, arguments);}
 			}
 		});
 
 		window.onbeforeunload = Ext.Function.createSequence(
-			window.onbeforeunload || Ext.emptyFn, function() { me.tearDownSocket(); });
+			window.onbeforeunload || Ext.emptyFn, function () { me.tearDownSocket(); });
 	},
 
 
@@ -45,11 +45,11 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 	 * @param username
 	 * @param password
 	 */
-	ensureSocketAvailable: function() {
+	ensureSocketAvailable: function () {
 		var task;
 
 		task = {
-			run: function() {
+			run: function () {
 				if (window.io) {
 					Ext.TaskManager.stop(task);
 					this.setup();
@@ -63,18 +63,18 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 	},
 
 
-	wrapHandler: function(handler, name) {
-		return function() {
-				try {
-					handler.apply(this, arguments);
-				}
-				catch (e) {
-					console.error('Caught an uncaught exception when taking action on', name, Globals.getError(e));
-				}
+	wrapHandler: function (handler, name) {
+		return function () {
+			try {
+				handler.apply(this, arguments);
+			}
+			catch (e) {
+				console.error('Caught an uncaught exception when taking action on', name, Globals.getError(e));
+			}
 		};
 	},
 
-	register: function(newControl) {
+	register: function (newControl) {
 		var k, x, f;
 		for (k in newControl) {
 			if (newControl.hasOwnProperty(k)) {
@@ -82,14 +82,14 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 				f = this.wrapHandler(newControl[k], k);
 
 				if (this.socket) {
-					if (this.isDebug){
+					if (this.isDebug) {
 						console.debug('registering handler for ', k);
 					}
 					//this handles sequencing appropriately
 					this.socket.on(k, newControl[k]);
 				}
 				else{
-					if (this.isDebug){
+					if (this.isDebug) {
 						console.debug('chaining handler for ', k, ' because socket not ready');
 					}
 					//No socket yet so track it (sequencing if necessary) for addition later
@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 	 * @param username
 	 * @param password
 	 */
-	setup: function() {
+	setup: function () {
 		if (!window.io) {//if no io, then call ensure to wait until io is available
 			this.ensureSocketAvailable();
 			return;
@@ -120,12 +120,12 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 		if (this.isDebug && !socket.emit.chained) {
 			socket.emit = Ext.Function.createSequence(
 				socket.emit,
-				function() {console.debug('socket.emit:', arguments);}
+				function () {console.debug('socket.emit:', arguments);}
 			);
 			socket.emit.chained = true;
 
 			socket.onPacket = Ext.Function.createSequence(
-				function() {
+				function () {
 					var o = JSON.stringify(arguments);
 					if ((me.isDebug && me.isVerbose) || o !== '{"0":{"type":"noop","endpoint":""}}') {
 						console.debug('socket.onPacket: args:' + o);
@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 
 			if (io.Transport.prototype.onHeartbeat) {
 				io.Transport.prototype.onHeartbeat = Ext.Function.createSequence(
-					function() {
+					function () {
 						me.lastHeartbeat = new Date();
 						if (me.isDebug && me.isVerbose) {
 							console.debug('Recieved heartbeat from server', me.lastHeartbeat);
@@ -149,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 
 		for (k in this.control) {
 			if (this.control.hasOwnProperty(k)) {
-				if (this.isDebug){
+				if (this.isDebug) {
 					console.debug('Attaching handler for ', k);
 				}
 				socket.on(k, this.control[k]);
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 	},
 
 
-	onSocketAvailable: function(fn, scope) {
+	onSocketAvailable: function (fn, scope) {
 		if (this.socket) {
 			Ext.callback(fn, scope);
 			return;
@@ -170,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 	},
 
 
-	emit: function() {
+	emit: function () {
 		if (this.socket) {
 			try {
 				this.socket.emit.apply(this.socket, arguments);
@@ -186,7 +186,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 	/**
 	 * Destroy the socket.
 	 */
-	tearDownSocket: function() {
+	tearDownSocket: function () {
 		var s = this.socket;
 		try {
 			if (s) {
@@ -202,7 +202,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 	},
 
 
-	onError: function() {
+	onError: function () {
 		//TODO if we get called during handshake thats it, the socket is kaput.
 		//Attempt to reconnect with an exponential backoff.
 		if (this.isDebug) {
@@ -210,14 +210,14 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 		}
 	},
 
-	onKill: function() {
+	onKill: function () {
 		if (this.isDebug) {
 			console.debug('server kill');
 		}
 		Ext.defer(this.tearDownSocket, 1, this);//new "thread"
 	},
 
-	onDisconnect: function() {
+	onDisconnect: function () {
 		var ds = this.disconnectStats;
 		ds.count++;
 		if (this.isDebug) {
@@ -225,29 +225,29 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 		}
 	},
 
-	onReconnecting: function(){
-		if(this.isDebug){
+	onReconnecting: function () {
+		if(this.isDebug) {
 			console.log('reconnecting', arguments);
 		}
 	},
 
-	onReconnect: function(){
-		if(this.isDebug){
+	onReconnect: function () {
+		if(this.isDebug) {
 			console.log('reconnect', arguments);
 		}
 	},
 
-	onReconnectFailed: function(){
+	onReconnectFailed: function () {
 		console.error('reconnect failed', arguments);
 	},
 
-	onConnecting: function(transportName) {
+	onConnecting: function (transportName) {
 		if (this.isDebug) {
 			console.log('Connecting with transport', transportName);
 		}
 	},
 
-	onConnected: function() {
+	onConnected: function () {
 		var socket = this.socket.socket;
 
 		if (this.sid !== socket.sessionid) {
@@ -267,7 +267,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Socket', {
 		}
 	},
 
-	onConnectFailed: function() {
+	onConnectFailed: function () {
 		console.error('Socket connection failed', arguments);
 	}
 
