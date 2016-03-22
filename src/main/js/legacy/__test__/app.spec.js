@@ -50,7 +50,6 @@ describe('All Classes Exist', function () {
 		'NextThought.app.annotations.note.Main': [],
 		'NextThought.app.annotations.note.Panel': [],
 		'NextThought.app.annotations.note.Templates': [],
-		'NextThought.app.annotations.note.Viewer': [],
 		'NextThought.app.annotations.note.Window': [],
 		'NextThought.app.annotations.renderer.Manager': [],
 		'NextThought.app.assessment.Actions': [],
