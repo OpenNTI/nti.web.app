@@ -53,7 +53,7 @@ global.wait = Promise.wait;
  *
  * I strongly recommend examining your code and your structure before commiting to using this as a final solution.
  */
-global.Deferred = (function () {
+global.Deferred = Promise.Deferred = (function () {
 
 	function apply (d, src) {
 		var k;
