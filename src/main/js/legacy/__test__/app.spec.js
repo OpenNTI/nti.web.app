@@ -428,8 +428,6 @@ describe('All Classes Exist', function () {
 		'NextThought.app.course.overview.components.editing.parentselection.PositionMenu': [],
 		'NextThought.app.course.overview.components.editing.publishing.Menu': [],
 		'NextThought.app.course.overview.components.editing.settings.Window': [],
-		'NextThought.app.course.overview.components.editing.window.Footer': [],
-		'NextThought.app.course.overview.components.editing.window.Window': [],
 		'NextThought.app.course.overview.components.outline.Header': [],
 		'NextThought.app.course.overview.components.outline.OutlineNode': [],
 		'NextThought.app.course.overview.components.parts.ContentLink': [],
