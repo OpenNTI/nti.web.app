@@ -1,22 +1,22 @@
 var Ext = require('extjs');
-var ComponentsPage = require('../../courses/components/Page');
-var ComponentsCollection = require('../../components/Collection');
+require('legacy/app/library/courses/components/Page');
+require('legacy/app/library/components/Collection');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.content.components.Page', {
-    extend: 'NextThought.app.library.courses.components.Page',
-    alias: 'widget.library-view-book-page',
+	extend: 'NextThought.app.library.courses.components.Page',
+	alias: 'widget.library-view-book-page',
 
-    initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.setBooks(this.bundles, this.packages);
 	},
 
-    //Override this so the parent doesn't think its empty
-	setItems: function() {},
+	//Override this so the parent doesn't think its empty
+	setItems: function () {},
 
-    setBooks: function(bundles, packages) {
+	setBooks: function (bundles, packages) {
 		if (!this.store) {
 			this.buildStore();
 		}
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.library.content.component
 		});
 	},
 
-    buildStore: function() {
+	buildStore: function () {
 		this.store = Ext.data.Store.create({
 			model: 'NextThought.model.ContentBundle'
 		});

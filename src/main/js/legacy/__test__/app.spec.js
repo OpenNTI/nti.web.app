@@ -491,7 +491,6 @@ describe('All Classes Exist', function () {
 		'NextThought.app.library.content.Current': [],
 		'NextThought.app.library.content.Index': [],
 		'NextThought.app.library.content.StateStore': [],
-		'NextThought.app.library.content.components.Page': [],
 		'NextThought.app.library.courses.Actions': [],
 		'NextThought.app.library.courses.Current': [],
 		'NextThought.app.library.courses.Index': [],
