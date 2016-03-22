@@ -93,6 +93,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.overviewg
 
 		if (this.colorInput) {
 			value = this.colorInput && this.colorInput.dom.value;
+			value = value.replace('#', '');
 		} else if (selectedEl) {
 			value = selectedEl.getAttribute('data-value');
 		} else if (recordColor) {
