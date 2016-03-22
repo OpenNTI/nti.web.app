@@ -62,7 +62,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 
 	addParts: function(o) {
-		var me = this, 
+		var me = this,
 			controls = o[1] || [];
 
 		if (!(controls instanceof Array)) {
@@ -73,7 +73,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 			.then(function() {
 				var start = me.record && me.record.get('AvailableBeginning'),
 				 	config;
-				
+
 				// Set dates
 				me.getStartDate()
 					.then(me.setDayAndMonth.bind(me));
@@ -136,7 +136,7 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 		var parts, m;
 		if (this.dateCmp && this.dateCmp.setDayAndMonth) {
 			this.dateCmp.setDayAndMonth(date);
-		}	
+		}
 	},
 
 
@@ -169,6 +169,9 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 					bundle: bundle,
 					beforeShowMenu: me.beforeShowMenuControl
 				};
+			})
+			.fail(function(reason) {
+				console.log('Failed to load contents for: ', record.getTitle(), ' ', reason);
 			});
 	}
 });

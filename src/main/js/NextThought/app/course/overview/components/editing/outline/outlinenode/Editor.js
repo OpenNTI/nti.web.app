@@ -56,8 +56,19 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.outlineno
 
 
 	getDefaultValues: function() {
+		var types = this.self.getHandledMimeTypes();
+
+		if (!types || types.length === 0) {
+			console.warn('No default mime type');
+			return;
+		}
+
+		if (types.length > 1) {
+			console.warn('More than one default mime type, picking first: ', types);
+		}
+
 		return {
-			MimeType: NextThought.model.courses.navigation.CourseOutlineNode.mimeType,
+			MimeType: types[0],
 			title: (this.record && this.record.getTitle()) || (this.getDefaultTitle && this.getDefaultTitle()) || ''
 		};
 	},
