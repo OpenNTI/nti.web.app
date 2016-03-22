@@ -21,6 +21,8 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 
 	cls: 'outline-items',
 
+	emptyText: 'Add a lesson to get started.',
+
 	layout: 'none',
 	items: [],
 
@@ -88,7 +90,13 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
 	},
 
 
-	buildHeader: function() {
+	buildHeader: function(collection) {
+		var items = this.getItems(collection);
+
+		if (!items || !items.length) {
+			return null;
+		}
+
 		return {
 			xtype: 'box',
 			autoEl: {

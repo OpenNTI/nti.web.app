@@ -9,6 +9,10 @@ Ext.define('NextThought.app.course.overview.components.editing.outline.calendarn
 		}
 	},
 
+
+	hideItemsIfEmpty: true,
+
+
 	PREVIEW_TYPE: 'overview-editing-outline-calendarnode-preview',
 
 	requires: [
