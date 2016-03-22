@@ -1,8 +1,9 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
-var User = require('../model/User');
-var ParseUtils = require('../util/Parsing');
-var {isMe, isFeature} = require('legacy/util/Globals');
+const User = require('legacy/model/User');
+const ParseUtils = require('legacy/util/Parsing');
+const {isMe, isFeature} = require('legacy/util/Globals');
+const {wait, Deferred} = require('legacy/util/Promise');
 
 require('../app/chat/StateStore');
 
@@ -12,29 +13,28 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 
 	isDebug: $AppConfig.userRepositoryDebug,
 
-	constructor: function() {
+	constructor: function () {
 		Ext.apply(this, {
 			store: null,
 			activeRequests: {},
-			_activeBulkRequests: new Ext.util.MixedCollection(),
-			_queuedBulkRequests: new Ext.util.MixedCollection(),
-			_pendingResolve: {}
+			activeBulkRequests: new Ext.util.MixedCollection(),
+			queuedBulkRequests: new Ext.util.MixedCollection(),
+			pendingResolve: {}
 		});
 
-		var active = this._activeBulkRequests,
-			queued = this._queuedBulkRequests, task;
+		var active = this.activeBulkRequests,
+			queued = this.queuedBulkRequests, task;
 
 		task = Ext.util.TaskManager.newTask({
 			interval: 50,
-			run: function() {
-				var t, i = $AppConfig.userBatchResolveRequestStagger || 20;
-				function removeWhenDone(t) {
-					return function() {
-						active.remove(t);
-					};
+			run () {
+				function removeWhenDone (x) {
+					return () => active.remove(x);
 				}
+
+				let i = $AppConfig.userBatchResolveRequestStagger || 20;
 				for (i; i > 0 && queued.getCount() > 0; i--) {
-					t = queued.removeAt(0);
+					let t = queued.removeAt(0);
 					if (t) {
 						t = t();
 						if (t) {
@@ -59,25 +59,25 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 	},
 
 	//<editor-fold desc="Private Interfaces">
-	getStore: function() {
+	getStore: function () {
 		if (!this.store) {
 			this.store = Ext.data.Store.create({model: 'NextThought.model.User'});
 			//By default getById on the store is order n.  given we need to call this to both cache
 			//and retrieve data that makes resolving a big chunk of users n^2.  Mixed collection
 			//supports constant lookups if you can do it by key (which we can for users) so replace
 			//the implementation with something faster.
-			this.store.getById = function(theId) {
+			this.store.getById = function (theId) {
 				return (this.snapshot || this.data).getByKey(theId);
 			};
 		}
 		return this.store;
 	},
 
-	setPresenceChangeListener: function(store) {
+	setPresenceChangeListener: function (store) {
 		store.on('presence-changed', this.presenceChanged, this);
 	},
 
-	precacheUser: function(refreshedUser) {
+	precacheUser: function (refreshedUser) {
 		var s = this.getStore(), uid, u;
 
 		if (refreshedUser.getId === undefined) {
@@ -123,14 +123,14 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		}
 	},
 
-	/*searchUser: function(query) {
+	/*searchUser: function (query) {
 		var fieldsToMatch = ['Username', 'alias', 'realname', 'email'],
 			regex = new RegExp(query),
 			matches;
-		matches = this.getStore().queryBy(function(rec) {
+		matches = this.getStore().queryBy(function (rec) {
 			var matched = false;
 
-			Ext.each(fieldsToMatch, function(field) {
+			Ext.each(fieldsToMatch, function (field) {
 				var v = rec.get(field);
 				if (v && regex.test(v)) {
 					matched = true;
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 	},*/
 
 
-	mergeUser: function(fromStore, newUser) {
+	mergeUser: function (fromStore, newUser) {
 		//Do an in place update so things holding references to us
 		//don't lose their listeners
 		//console.debug('Doing an in place update of ', fromStore, 'with', newUser.raw);
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		fromStore.fireEvent('changed', fromStore);
 	},
 
-	cacheUser: function(user, maybeMerge) {
+	cacheUser: function (user, maybeMerge) {
 		var s = this.getStore(),
 			id = user.getId() || user.raw[user.idProperty],
 			fromStore = s.getById(id);
@@ -174,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		return user;
 	},
 
-	resolveFromStore: function(key) {
+	resolveFromStore: function (key) {
 		var s = this.getStore();
 		return s.getById(key) || s.findRecord('Username', key, 0, false, true, true) || s.findRecord('NTIID', key, 0, false, true, true);
 	},
@@ -182,7 +182,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 	//</editor-fold>
 
 	//<editor-fold desc="Public Interface">
-	getUser: function(username, callback, scope, forceFullResolve, cacheBust) {
+	getUser: function (username, callback, scope, forceFullResolve, cacheBust) {
 		if (!Ext.isArray(username)) {
 			username = [username];
 			username.returnSingle = true;
@@ -201,14 +201,14 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 			toResolve = [],
 			canBulkResolve = !forceFullResolve && isFeature('bulk-resolve-users');
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 
-			function maybeFinish(k, v) {
+			function maybeFinish (k, v) {
 				result[k] = v;
 				l -= 1;
 
 				if (l <= 0) {
-					result = names.map(function(n) {
+					result = names.map(function (n) {
 						return result[n] || User.getUnresolved(n);
 					});
 
@@ -220,81 +220,81 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 				}
 			}
 
-			username.forEach(function(o) {
-					var name, r;
+			username.forEach(function (o) {
+				var name, r;
 
-					if (Ext.isString(o)) {
-						name = o;
-					}
-					else if (o.getId !== undefined) {
-						if (o.isUnresolved && o.isUnresolved() === true) {
-							names.push(o.getId());
-							maybeFinish(o.getId(), o);
-							return;
-						}
-						name = o.getId();
-					}
-					else {
-						//JSON representation of User
-						r = ParseUtils.parseItems(o)[0];
-						if (!r || !r.getModelName) {
-							Ext.Error.raise({message: 'Unknown result', object: r});
-						}
-						name = r.getId();
-					}
-					names.push(name);
-
-					r = me.resolveFromStore(name);
-					if (r && r.raw && (!forceFullResolve || !r.summaryObject)) {
-						maybeFinish(name, r);
+				if (Ext.isString(o)) {
+					name = o;
+				}
+				else if (o.getId !== undefined) {
+					if (o.isUnresolved && o.isUnresolved() === true) {
+						names.push(o.getId());
+						maybeFinish(o.getId(), o);
 						return;
 					}
-
-					if (ParseUtils.isNTIID(name)) {
-						Service.getObject(name)
-							.then(function(u) {
-								maybeFinish(name, me.cacheUser(u, true));
-							})
-							.fail(function() {
-								maybeFinish(name);
-							});
-
-						return;
+					name = o.getId();
+				}
+				else {
+					//JSON representation of User
+					r = ParseUtils.parseItems(o)[0];
+					if (!r || !r.getModelName) {
+						Ext.Error.raise({message: 'Unknown result', object: r});
 					}
+					name = r.getId();
+				}
+				names.push(name);
 
-					result[name] = null;
-					toResolve.push(name);
-					//Legacy Path begin:
-					if (!canBulkResolve) {
-						me.makeRequest(name, {
-							scope: me,
-							failure: function() {
-								maybeFinish(name, User.getUnresolved(name));
-							},
-							success: function(u) {
-								//Note we recache the user here no matter what
-								//if we requestsd it we cache the new values
-								maybeFinish(name, me.cacheUser(u, true));
-							}
-						}, cacheBust);
-					} else {
-						console.debug('Defer to Bulk Resolve...', name);
-					}
-					//Legacy Path END
-				});
+				r = me.resolveFromStore(name);
+				if (r && r.raw && (!forceFullResolve || !r.summaryObject)) {
+					maybeFinish(name, r);
+					return;
+				}
+
+				if (ParseUtils.isNTIID(name)) {
+					Service.getObject(name)
+						.then(function (u) {
+							maybeFinish(name, me.cacheUser(u, true));
+						})
+						.fail(function () {
+							maybeFinish(name);
+						});
+
+					return;
+				}
+
+				result[name] = null;
+				toResolve.push(name);
+				//Legacy Path begin:
+				if (!canBulkResolve) {
+					me.makeRequest(name, {
+						scope: me,
+						failure: function () {
+							maybeFinish(name, User.getUnresolved(name));
+						},
+						success: function (u) {
+							//Note we recache the user here no matter what
+							//if we requestsd it we cache the new values
+							maybeFinish(name, me.cacheUser(u, true));
+						}
+					}, cacheBust);
+				} else {
+					console.debug('Defer to Bulk Resolve...', name);
+				}
+				//Legacy Path END
+			});
 
 			if (toResolve.length > 0 && canBulkResolve) {
 				me.bulkResolve(toResolve)
-					.done(function(users) {
+					.done(function (users) {
 						//Note we recache the user here no matter what
 						//if we requestsd it we cache the new values
-						users.forEach(function(u) { maybeFinish(u.getId(), me.cacheUser(u, true)); });
+						users.forEach(function (u) { maybeFinish(u.getId(), me.cacheUser(u, true)); });
 						if (l > 0) {
 							l = 0;
 							maybeFinish();
 						}
 					})
-					.fail(function(reason) {
+					.fail(function (reason) {
 						console.error('Failed to bulk resolve: %o %o', toResolve, reason);
 						reject(reason);
 						fulfill = Ext.emptyFn;
@@ -314,10 +314,10 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 	 * @param {String[]} names
 	 * @return {Promise}
 	 */
-	bulkResolve: (function() {
+	bulkResolve: (function () {
 		var toResolve = [],
 			pending = [],
-			work = Ext.Function.createBuffered(function() {
+			work = Ext.Function.createBuffered(function () {
 				var job = pending,
 					load = toResolve;
 
@@ -327,8 +327,8 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 				console.debug('Resolving in bulk...', load.length);
 
 				this.makeBulkRequest(load)
-						.done(function(v) {
-							job.forEach(function(p) {
+						.done(function (v) {
+							job.forEach(function (p) {
 								try {
 									p.fulfill(v);
 								} catch (e) {
@@ -336,8 +336,8 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 								}
 							});
 						})
-						.fail(function(v) {
-							job.forEach(function(p) {
+						.fail(function (v) {
+							job.forEach(function (p) {
 								try {
 									p.reject(v);
 								} catch (e) {
@@ -347,7 +347,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 						});
 			}, 10);
 
-		function toWork(names, fulfill, reject) {
+		function toWork (names, fulfill, reject) {
 			toResolve = Ext.Array.unique(toResolve.concat(names));
 			pending.push({
 				fulfill: fulfill,
@@ -356,14 +356,14 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 			work.call(this);
 		}
 
-		return function(names) {
+		return function (names) {
 			var me = this;
 
 			names = Ext.Array.unique(names);
 
-			return new Promise(function(fulfill, reject) {
+			return new Promise(function (fulfill, reject) {
 
-				function success(v) {
+				function success (v) {
 					var fulfillment = [], x, i;
 
 					for (i = v.length - 1; i >= 0; i--) {
@@ -387,30 +387,30 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		};
 	}()),
 
-	makeBulkRequest: function(usernames) {
+	makeBulkRequest: function (usernames) {
 		var me = this,
 			chunkSize = $AppConfig.userBatchResolveChunkSize || 200;
 
-		function rebuild(lists) {
-			return me.__recompose(usernames, lists);
+		function rebuild (lists) {
+			return me.recompose(usernames, lists);
 		}
 
-		return Promise.all(usernames.chunk(chunkSize).map(me.__chunkBulkRequest.bind(me)))
+		return Promise.all(usernames.chunk(chunkSize).map(me.chunkBulkRequest.bind(me)))
 				.done(rebuild)
-				.fail(function failed(reason) {
+				.fail(function failed (reason) {
 					console.error('Failed: %o', reason);
 					return Promise.reject(reason);
 				});
 	},
 
-	__recompose: function(names, lists) {
+	recompose: function (names, lists) {
 		var agg = [],
 			i = lists.length - 1,
 			x, list, u, m = {};
 
 		agg.length = names.length;//JSLint doesn't like the Array(size) constructor. SO, lets just do the two-step version. (declare, then assign length :|)
 
-		names.forEach(function(n, ix) { m[n] = ix; });
+		names.forEach(function (n, ix) { m[n] = ix; });
 
 		//because we may not have the same lists of requested items,
 		// we must rebuild based on usernames.
@@ -426,12 +426,12 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		return agg;
 	},
 
-	__chunkBulkRequest: function(names) {
+	chunkBulkRequest: function (names) {
 		var me = this,
 			divert = [], requestNames,
-			active = me._pendingResolve;
+			active = me.pendingResolve;
 
-		requestNames = names.filter(function(n) {
+		requestNames = names.filter(function (n) {
 			var a = active[n], u;
 			if (a && divert.indexOf(a) === -1) {
 				divert.push(a);
@@ -447,36 +447,36 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		});
 
 		if (requestNames.length > 0) {
-			divert.push(me.__bulkRequest(requestNames));
+			divert.push(me.bulkRequest(requestNames));
 		}
 
 		return Promise.all(divert)
-			.done(function(lists) {
-				return me.__recompose(names, lists);
+			.done(function (lists) {
+				return me.recompose(names, lists);
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Failed: %o', reason);
 				return Promise.reject(reason);
 			});
 	},
 
-	__bulkRequest: function(names) {
+	bulkRequest: function (names) {
 		var me = this,
 			store = me.getStore(),
-			active = me._pendingResolve,
-			requestQue = me._queuedBulkRequests, p;
+			active = me.pendingResolve,
+			requestQue = me.queuedBulkRequests, p;
 
-		function recieve(json) {
-			var u = [], i = names.length - 1, o, n;
+		function recieve (json) {
+			var u = [];
 
 			json = (json || {}).Items || {};
 
 			store.suspendEvents(true);
 
 			//large sets, use as little extra function calls as possible.
-			for (i; i >= 0; i--) {
-				n = names[i];
-				o = json[n];
+			for (let i = names.length - 1; i >= 0; i--) {
+				let n = names[i];
+				let o = json[n];
 				if (o) {
 					o = json[n];
 					if (o.MimeType === User.mimeType) {
@@ -498,10 +498,9 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 
 
 			//schedual cleanup.
-			wait(60000).then(function() {
+			wait(60000).then(function () {
 				console.debug('Cleanup...');
-				var i = names.length - 1;
-				for (i; i >= 0; i--) {
+				for (let i = names.length - 1; i >= 0; i--) {
 					delete active[names[i]];
 				}
 			});
@@ -509,11 +508,11 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 			return u;
 		}
 
-		function fire(fulfill) {
+		function fire (fulfill) {
 
 			return wait()
-				.then(function() {
-					return me.__makeRequest({
+				.then(function () {
+					return me.backgroundRequest({
 						url: Service.getBulkResolveUserURL(),
 						method: 'POST',
 						jsonData: {usernames: names}
@@ -523,25 +522,25 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 				.done(fulfill);
 		}
 
-		p = new Promise(function(fulfill, reject) {
+		p = new Promise(function (fulfill, reject) {
 			requestQue.add(fire.bind(null, fulfill, reject));
 		});
 
-		names.forEach(function(n) { active[n] = p; });
+		names.forEach(function (n) { active[n] = p; });
 
 		return p;
 	},
 
-	__foregroundRequest: function() {
+	foregroundRequest: function () {
 		console.log('Requesting in foreground');
 		return Service.request.apply(Service, arguments)
-				.then(function(txt) { return Ext.decode(txt, true); });
+				.then(function (txt) { return Ext.decode(txt, true); });
 	},
 
-	__makeRequest: function(req) {
+	backgroundRequest: function (req) {
 		var w = this.worker, p, a = {};
 		if (!w) {
-			return this.__foregroundRequest(req);
+			return this.foregroundRequest(req);
 		}
 
 		a = w.active = w.active || a;
@@ -561,7 +560,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		return p;
 	},
 
-	__workerMessage: function(msg) {
+	workerMessage: function (msg) {
 		var data = msg.data,
 			w = this.worker, p, a;
 		if (!w) {
@@ -586,11 +585,12 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 	 * user while its still resolving, the record will not have a 'raw' property and it will have 'placeholder' set true
 	 * in the 'data' property.
 	 *
-	 * @param {String} username
-	 * @param {Object} callbacks
-	 * @param {Boolean} cacheBust
+	 * @param {String} username username
+	 * @param {Object} callbacks callbacks
+	 * @param {Boolean} cacheBust cacheBust
+	 * @returns {User} null most cases.
 	 */
-	makeRequest: function(username, callbacks, cacheBust) {
+	makeRequest: function (username, callbacks, cacheBust) {
 		var me = this,
 			result = null,
 			url = Service.getResolveUserURL(username),
@@ -605,7 +605,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 			return null;
 		}
 
-		function callback(o, success, r) {
+		function callback (o, success, r) {
 
 			delete me.activeRequests[username];
 
@@ -626,7 +626,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 				console.warn('many matching users: "', username, '"', list);
 			}
 
-			list.forEach(function(u) {
+			list.forEach(function (u) {
 				if (u.get('Username') === username) {
 					result = u;
 					u.summaryObject = false;
@@ -652,7 +652,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 			options = this.activeRequests[username].options;
 			options.callback = Ext.Function.createSequence(
 				options.callback,
-				function() {
+				function () {
 					callback.apply(me, arguments);
 				}, me);
 			return null;
@@ -669,10 +669,10 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		return result;
 	},
 
-	updatePresenceFromResolve: function(list) {
+	updatePresenceFromResolve: function (list) {
 		var store = this.ChatStore;
 
-		list.forEach(function(u) {
+		list.forEach(function (u) {
 			//check if we already have a presence info for them
 			var presence = store.getPresenceOf(u.get('Username'));
 			if (presence) {
@@ -681,12 +681,12 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		});
 	},
 
-	presenceChanged: function(username, presence) {
+	presenceChanged: function (username, presence) {
 		var u = this.getStore().getById(username), newPresence;
 		if (this.debug) {console.log('User repository recieved a presence change for ', username, arguments);}
 		newPresence = (presence && presence.isPresenceInfo) ?
-					  presence :
-					  NextThought.model.PresenceInfo.createFromPresenceString(presence, username);
+					presence :
+					NextThought.model.PresenceInfo.createFromPresenceString(presence, username);
 
 		if (u) {
 			if (this.debug) {
@@ -701,8 +701,8 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 	}
 }).create();
 
-
-function worker() {
+/* istanbul ignore next */
+function worker () {
 	var keep = {
 		Class: 1,
 		CreatedTime: 1,
@@ -721,14 +721,14 @@ function worker() {
 		about: 1,
 		affiliation: 1,
 		description: 1,
-		home_page: 1,
+		home_page: 1, //eslint-disable-line camelcase
 		location: 1,
 		role: 1
 	};
 
-	self.addEventListener('message', function(e) {
+	self.addEventListener('message', function (e) {
 		var resp = {};
-		fetch(e.data, function(json, shell) {
+		fetch(e.data, function (json, shell) {
 			var i, l, o, p;
 
 			resp.id = e.data.id;
@@ -763,7 +763,7 @@ function worker() {
 		});
 	}, false);
 
-	function fetch(data, fn) {
+	function fetch (data, fn) {
 		var req = new XMLHttpRequest();
 		req.open('POST', data.url, true);
 		if (!data.hasOwnProperty('shell')) {
@@ -773,7 +773,7 @@ function worker() {
 		req.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 		req.setRequestHeader('Accept', 'application/json');
 
-		req.onreadystatechange = function() {
+		req.onreadystatechange = function () {
 			if (req.readyState === 4) {
 				if (req.status === 200) {
 					fn(req.responseText, data.shell);
@@ -787,20 +787,19 @@ function worker() {
 }
 
 
-
+/* istanbul ignore next */
 try {
-	var re = /(__cov_\$[^\[]+\['\d+'\])(\[\d+\])?(\+\+)[;,]\s*/ig;//istanbul's (code coverage) instrumentation pattern
-	var code = worker.toString();
+	const code = worker.toString();
 
-	if (Ext.isIE11p) { throw 'Webworkers are broken in IE11'; }
+	if (Ext.isIE11p) { throw new Error( 'Webworkers are broken in IE11' ); }
 
-	//unit tests' coverage reporter doesn't instrument the generated
-	// code correctly and causes code execution to halt. So, strip it out for now.
-	code = code.replace(re, '');
+	if (/PhantomJS/i.test(navigator.userAgent)) {
+		throw new Error('Skip Worker in Unit Tests');
+	}
 
 	exports.worker = new Worker(URL.createObjectURL(new Blob(['(', code, ')();'], {type: 'text/javascript'})));
-	exports.worker.onmessage = exports.__workerMessage.bind(exports);
-	exports.worker.onerror = function() {
+	exports.worker.onmessage = exports.workerMessage.bind(exports);
+	exports.worker.onerror = function () {
 		delete exports.worker;
 		console.error('No Worker for bulk resolve');
 	};
