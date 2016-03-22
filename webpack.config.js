@@ -40,10 +40,7 @@ exports = module.exports =
 	entry: './src/main/js/index.js',
 
 	target: 'web',
-	stats: {
-		colors: true,
-		reasons: true
-	},
+
 
 	node: {
 		net: 'empty',
