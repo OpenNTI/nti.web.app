@@ -85,6 +85,8 @@ Ext.define('NextThought.mixins.dnd.OrderingContainer', {
 			} else {
 				if (current.isPointContainedVertically(x, y) && !current.isFullWidth(dropzoneWidth)) {
 					isBefore = current.isPointLeft(x, y);
+				} else if (current.isFullWidth(dropzoneWidth)) {
+					isBefore = current.isPointAbove(x, y);
 				} else {
 					isBefore = current.isPointBefore(x, y);
 				}
