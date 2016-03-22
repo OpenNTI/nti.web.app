@@ -1131,7 +1131,6 @@ describe('All Classes Exist', function () {
 		'NextThought.overrides.tip.QuickTip': [],
 		'NextThought.overrides.view.Table': [],
 		'NextThought.preference.Manager': [],
-		'NextThought.proxy.IndexedDB': [],
 		'NextThought.proxy.JSONP': [],
 		'NextThought.proxy.PageSource': [],
 		'NextThought.proxy.Preference': [],
