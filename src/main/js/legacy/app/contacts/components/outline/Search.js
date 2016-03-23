@@ -9,14 +9,14 @@ var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.outline.Search', {
-    extend: 'Ext.view.View',
-    alias: 'widget.contact-search-overlay',
-    preserveScrollOnRefresh: true,
-    overItemCls: 'over',
-    loadMask: false,
-    itemSelector: '.contact-row',
+	extend: 'Ext.view.View',
+	alias: 'widget.contact-search-overlay',
+	preserveScrollOnRefresh: true,
+	overItemCls: 'over',
+	loadMask: false,
+	itemSelector: '.contact-row',
 
-    tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
+	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 		{ cls: 'contact-row {[this.isContact(values)]}', cn: [
 			{ tag: 'tpl', 'if': 'values.Presence', cn: { cls: 'presence {Presence.name}' }},
 			{ tag: 'tpl', 'if': '!values.Presence', cn: { cls: 'presence' }},
@@ -38,10 +38,10 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 		}
 	}),
 
-    emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: getString('NextThought.view.contacts.outline.search.View.empty')}),
-    cls: 'contact-search',
+	emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: getString('NextThought.view.contacts.outline.search.View.empty')}),
+	cls: 'contact-search',
 
-    listeners: {
+	listeners: {
 		itemclick: 'rowClicked',
 		// itemmouseenter: 'rowHover',
 		select: function(s, record) {
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 		}
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		var me = this;
 
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
@@ -76,49 +76,49 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 		});
 	},
 
-    rowClicked: function(view, record, item, index, e) {
+	rowClicked: function(view, record, item, index, e) {
 		if(e && e.getTarget().classList.contains('nib')){
 			this.GroupActions.addContact(record.get('Username') );
 		}
 	},
 
-    // Old Logic for the popup
+	// Old Logic for the popup
 	// rowHover: function(view, record, item, wait) {
-	// 	// this.startPopupTimeout(view, record, item, 500);
+	//	// this.startPopupTimeout(view, record, item, 500);
 	// },
 	//
 	// startPopupTimeout: function(view, record, item, wait) {
-	// 	function fin(pop) {
-	// 		// If the popout is destroyed, clear the activeTargetDom,
-	// 		// that way we will be able to show the popout again.
-	// 		if (!pop) {
-	// 			return;
-	// 		}
-	// 		pop.on('destroy', function() {
-	// 			delete me.activeTargetDom;
-	// 		});
-	// 	}
+	//	function fin(pop) {
+	//		// If the popout is destroyed, clear the activeTargetDom,
+	//		// that way we will be able to show the popout again.
+	//		if (!pop) {
+	//			return;
+	//		}
+	//		pop.on('destroy', function() {
+	//			delete me.activeTargetDom;
+	//		});
+	//	}
 	//
-	// 	var popout = NextThought.app.account.contacts.management.Popout,
-	// 		el = Ext.get(item), me = this;
+	//	var popout = NextThought.app.account.contacts.management.Popout,
+	//		el = Ext.get(item), me = this;
 	//
-	// 	if (!record || me.activeTargetDom === Ext.getDom(Ext.fly(item))) {
-	// 		return;
-	// 	}
+	//	if (!record || me.activeTargetDom === Ext.getDom(Ext.fly(item))) {
+	//		return;
+	//	}
 	//
-	// 	me.cancelPopupTimeout();
-	// 	me.hoverTimeout = Ext.defer(function() {
-	// 		Ext.fly(item).un('mouseout', me.cancelPopupTimeout, me, {single: true});
-	// 		popout.popup(record, el, item, [-1, 0], fin);
-	// 		me.activeTargetDom = Ext.getDom(Ext.fly(item));
-	// 	}, wait);
+	//	me.cancelPopupTimeout();
+	//	me.hoverTimeout = Ext.defer(function() {
+	//		Ext.fly(item).un('mouseout', me.cancelPopupTimeout, me, {single: true});
+	//		popout.popup(record, el, item, [-1, 0], fin);
+	//		me.activeTargetDom = Ext.getDom(Ext.fly(item));
+	//	}, wait);
 	//
-	// 	Ext.fly(item).on('mouseout', me.cancelPopupTimeout, me, {single: true});
+	//	Ext.fly(item).on('mouseout', me.cancelPopupTimeout, me, {single: true});
 	// },
 	//
 	//
 	// cancelPopupTimeout: function() {
-	// 	clearTimeout(this.hoverTimeout);
+	//	clearTimeout(this.hoverTimeout);
 	// },
 
 	buildStore: function() {

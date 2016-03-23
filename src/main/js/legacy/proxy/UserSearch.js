@@ -3,24 +3,24 @@ var ReaderJson = require('./reader/Json');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.UserSearch', {
-    extend: 'Ext.data.proxy.Rest',
-    alias: 'proxy.usersearch',
-    url: '',
-    appendId: false,
+	extend: 'Ext.data.proxy.Rest',
+	alias: 'proxy.usersearch',
+	url: '',
+	appendId: false,
 
-    //default
+	//default
 	reader: {
-    type: 'nti',
-    root: 'Items'
+	type: 'nti',
+	root: 'Items'
   },
 
-    constructor: function(config) {
+	constructor: function(config) {
 		Ext.copyTo(this.reader, config, 'model');
 		this.callParent(arguments);
 		this.on('exception', this.exception, this);
 	},
 
-    buildUrl: function(request) {
+	buildUrl: function(request) {
 		var me	= this,
 			qs	= request.params.query.split(','),
 			q	= Ext.String.trim(qs[qs.length - 1]);
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.proxy.UserSearch', {
 		return this.callParent(arguments);
 	},
 
-    exception: function(proxy, resp, operation) {
+	exception: function(proxy, resp, operation) {
 		try {
 			Ext.callback(operation.failed, operation.scope, [operation.records, operation]);
 		}

@@ -26,9 +26,9 @@ var ReaderAnchorResolver = require('../mediaviewer/components/reader/AnchorResol
 
 
 module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-    onLogin: function() {
+	onLogin: function() {
 		var socket = this.UserDataStore.getSocket();
 
 		socket.register({
@@ -55,13 +55,13 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		this.UserDataStore.setLoaded();
 	},
 
-    changeActionMap: {
+	changeActionMap: {
 		/**
 		 * Stubs that show what we could handle. They will be called with these args:
 		 *
-		 *    @param {Object/Ext.data.Model} change the change record.
-		 *    @param {Object/Ext.data.Model} item Item the change is about.
-		 *    @param {Object} meta Location meta data
+		 *	  @param {Object/Ext.data.Model} change the change record.
+		 *	  @param {Object/Ext.data.Model} item Item the change is about.
+		 *	  @param {Object} meta Location meta data
 		 *
 		 * these are assigned in the init() above
 		 */
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		shared: 'incomingSharedChange'
 	},
 
-    /*
+	/*
 		TODO: make this subscription based on the container id, so a store can say give me all
 		incoming changes with this container id and we only apply those changes to that store
 		instead of iterating all of them
@@ -109,8 +109,8 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		//I don't think we need this, doesn't look like any of the change handlers use it
 		// //callback with our self, only if we haven't already and there is a containerId to resolve
 		// if (!meta && !reCalled && cid) {
-		// 	LocationMeta.getMeta(cid, reCall, me);
-		// 	return;
+		//	LocationMeta.getMeta(cid, reCall, me);
+		//	return;
 		// }
 
 		try {
@@ -125,7 +125,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-    incomingCreatedChange: function(change, item) {
+	incomingCreatedChange: function(change, item) {
 		var cid = item.get('ContainerId'),
 			actedOn = false,
 			recordForStore = item;
@@ -148,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 				//The store will handle making all the threading/placement, etc
 				store.add(recordForStore);
 				//once added, null out this pointer so that subsequent loop iterations don't read the same instance
-				//to another store.  (I don't think our threading algorithm would appreciate that)
+				//to another store.	 (I don't think our threading algorithm would appreciate that)
 				recordForStore = null;
 			}
 		}, item);
@@ -158,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-    incomingDeletedChange: function(change, item) {
+	incomingDeletedChange: function(change, item) {
 		var cid = item.get('ContainerId'),
 			actedOn = false;
 
@@ -185,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-    incomingModifiedChange: function(change, item) {
+	incomingModifiedChange: function(change, item) {
 		var cid = item.get('ContainerId'),
 			actedOn = false;
 
@@ -216,12 +216,12 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-    incomingSharedChange: function(change, item) {
+	incomingSharedChange: function(change, item) {
 		console.warn('What would we do here? treating as a create.');
 		this.incomingCreatedChange(change, item);
 	},
 
-    updatePreferences: function(pageInfo) {
+	updatePreferences: function(pageInfo) {
 		if (Array.isArray(pageInfo)) {
 			pageInfo.map(this.updatePreferences.bind(this));
 			return;
@@ -247,7 +247,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-    __getPreferenceFromLineage: function(ntiids) {
+	__getPreferenceFromLineage: function(ntiids) {
 		if (!ntiids) { return Promise.reject('No id to get preference for.'); }
 
 		var store = this.UserDataStore,
@@ -272,35 +272,35 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 			});
 	},
 
-    /**
-	* Returns preferences for the given ntiid.  Currently this functions primary responsibility is
+	/**
+	* Returns preferences for the given ntiid.	Currently this functions primary responsibility is
 	* to determine the intial sharedWith list that userdata (new notes) should have the sharedWith list
 	* defaulted to.
 	*
-	* Details on determing a ntiids default sharedWith.  This piggy backs off of the original sharingPreferneces
+	* Details on determing a ntiids default sharedWith.	 This piggy backs off of the original sharingPreferneces
 	* that the server has long been sending back as part of the PageInfo, with some additional steps/complications
 	* to make the sharing default to something sane(?) for both open and for credit students when in the context
 	* of a course.
 	*
-	* The current business logic is as follows.  In the context of a book use whatever the content default is,
-	* or whatever the user has overriden it to.  For a course, students enrolled for credit should default to
-	* the for credit dfl unless they have changed the default.  In courses, open users default to whatever public means for that
-	* course unless they have changed the default..  I don't think this business logic will make sense at even
+	* The current business logic is as follows.	 In the context of a book use whatever the content default is,
+	* or whatever the user has overriden it to.	 For a course, students enrolled for credit should default to
+	* the for credit dfl unless they have changed the default.	In courses, open users default to whatever public means for that
+	* course unless they have changed the default..	 I don't think this business logic will make sense at even
 	* the next step forward in formalizing CourseInstances so we should revist both the current business logic and implementation
 	* at that point in time.
 	*
 	* Meeting the business case for the books and content is currently done using the same implementation.
 	* This is possible because we piggy back on some of the implementation details of how the communities and dfls are setup
 	* for legacy community based courses.  Obviously this level of coupling to implementation details is extermely fragile.
-	* This is one place where moving things further into the server can help immensly.  That will come with time.
+	* This is one place where moving things further into the server can help immensly.	That will come with time.
 	*
 	* We start with the sharingPreferences, which by default for course content packages are configured to be the for credit dfl.
-	* Given the list of default entites we then attempt to validate it.  The list of entities is valid iff we can resolve all
+	* Given the list of default entites we then attempt to validate it.	 The list of entities is valid iff we can resolve all
 	* usernames/ntiids in it to Entities (users, friendslists, dfls, or communities) AND entites that are friendslists, dfls, or communities
-	* are in our set of friendslists, dfls, communities we own or are a member of.  If the sharedWith list is found to be valid, we use it
+	* are in our set of friendslists, dfls, communities we own or are a member of.	If the sharedWith list is found to be valid, we use it
 	* as is.  If the default sharing entites are found to be invalid or if we never found the default sharingPreferences to begin with,
 	* we default to whatever 'public' means for the 'title' this ntiid belong to.  Note: this last detail also has assumptions
-	* baked in around one content package per course, and the lack of cross content/course references.  When we have courses
+	* baked in around one content package per course, and the lack of cross content/course references.	When we have courses
 	* references books external to their content package this will break.
 	*
 	*
@@ -329,7 +329,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 							sharingIsValid = false;
 						} else {
 							//If its not a user its a fl, or dfl we have to have it in
-							//the fl store.  If its a community it would need to be in  our
+							//the fl store.	 If its a community it would need to be in	our
 							//community list
 							if (entity.isFriendsList) {
 								if (!flStore.getById(entity.getId())) {
@@ -369,13 +369,13 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 			});
 	},
 
-    listenToPageStores: function(monitor, listeners) {
+	listenToPageStores: function(monitor, listeners) {
 		var context = this.UserDataStore.getContext(monitor) || this.UserDataStore.getMainReaderContext();
 
 		monitor.mon(context.pageStoreEvents, listeners);
 	},
 
-    initPageStores: function(cmpContext) {
+	initPageStores: function(cmpContext) {
 		var context = this.UserDataStore.getContext(cmpContext),
 			currentPageStoresMap = {};
 
@@ -414,7 +414,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-    clearPageStore: function(ctx) {
+	clearPageStore: function(ctx) {
 		ctx = ctx || this.UserDataStore.getContext();
 
 		var fp = ctx.flatPageStore;
@@ -428,7 +428,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-    getPageStore: function(id, ctx) {
+	getPageStore: function(id, ctx) {
 		ctx = ctx || this.UserDataStore.getContext();
 
 		var theStore, root;
@@ -452,13 +452,13 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		return theStore || {bad: true, add: bad, getById: bad, remove: bad, on: bad, each: bad, un: bad, getItems: bad, getCount: bad};
 	},
 
-    hasPageStore: function(id, ctx) {
+	hasPageStore: function(id, ctx) {
 		ctx = ctx || this.UserDataStore.getContext();
 
 		return !id ? false : (ctx.currentPageStores || {}).hasOwnProperty(id);
 	},
 
-    addPageStore: function(id, store, ctx) {
+	addPageStore: function(id, store, ctx) {
 		ctx = ctx || this.UserDataStore.getContext();
 
 		var events = ctx.pageStoreEvents,
@@ -489,7 +489,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		*
 		* An example of when you would want to set this is if there are two stores that represent the same set of data
 		* and they are currently active ...such as the "notes only" store in the slide deck, and the general purpose
-		* store on the page...  adding to the slide's store would trigger a duplicate event (the page's store would be
+		* store on the page...	adding to the slide's store would trigger a duplicate event (the page's store would be
 		* added to as well)
 		*/
 		if (store.doesNotShareEventsImplicitly) {
@@ -507,7 +507,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 				events.relayEvents(store, ['add', 'bulkremove', 'remove']));
 	},
 
-    onAnnotationsLineFilter: function(cmp, line) {
+	onAnnotationsLineFilter: function(cmp, line) {
 		var context = this.UserDataStore.getContext(cmp),
 			store = context.flatPageStore;
 
@@ -526,7 +526,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		store.sort();
 	},
 
-    onAnnotationsFilter: function(cmp) {
+	onAnnotationsFilter: function(cmp) {
 		var context = this.UserDataStore.getContext(cmp),
 			listParams = FilterManager.getServerListParams(),
 			filter = ['TopLevel'];
@@ -583,7 +583,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		}, containerStorePredicate);
 	},
 
-    loadAnnotations: function(cmp, containerId, pageInfo, containers) {
+	loadAnnotations: function(cmp, containerId, pageInfo, containers) {
 		var me = this,
 			Store = NextThought.store.PageItem,
 			userDataStore = me.UserDataStore,
@@ -617,15 +617,15 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-    applyToStores: function() {
+	applyToStores: function() {
 		this.UserDataStore.applyToStores.apply(this.UserDataStore, arguments);
 	},
 
-    applyToStoresThatWantItem: function() {
+	applyToStoresThatWantItem: function() {
 		this.UserDataStore.applyToStoresThatWantItem.apply(this.UserDataStore, arguments);
 	},
 
-    setupPageStoreDelegates: function(cmp) {
+	setupPageStoreDelegates: function(cmp) {
 		var context = this.UserDataStore.getContext(cmp),
 			delegate, delegates = {};
 
@@ -657,7 +657,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-    saveNewBookmark: function(container) {
+	saveNewBookmark: function(container) {
 		var me = this,
 			bm = NextThought.model.Bookmark.create({
 				ContainerId: container,
@@ -679,7 +679,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		});
 	},
 
-    getSaveCallback: function(fulfill, reject) {
+	getSaveCallback: function(fulfill, reject) {
 		var me = this;
 
 		return function(record, operation) {
@@ -699,7 +699,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		}
 	},
 
-    handleException: function(reject, proxy, response) {
+	handleException: function(reject, proxy, response) {
 		var error,
 			msg = 'An unknown error occurred saving your note.';
 
@@ -719,7 +719,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		console.warn('Exception Message:', response.responseText);
 	},
 
-    __saveNote: function(applicableRange, body, title, ContainerId, shareWith, selectedText, style, callback) {
+	__saveNote: function(applicableRange, body, title, ContainerId, shareWith, selectedText, style, callback) {
 		var me = this,
 			noteRecord = NextThought.model.Note.create({
 				applicableRange: applicableRange,
@@ -756,7 +756,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		});
 	},
 
-    saveNewNote: function(title, body, range, container, shareWith, style, callback) {
+	saveNewNote: function(title, body, range, container, shareWith, style, callback) {
 		if (!body || (Array.isArray(body) && body.length < 1)) {
 			console.error('Note creating a noe missing content');
 			return;
@@ -789,7 +789,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		return this.__saveNote(rangeDescription.description, body, title, container, shareWith, selectedText, style, callback);
 	},
 
-    saveNewSeriesNote: function(title, body, range, cueInfo, containerId, shareWith, style, callback) {
+	saveNewSeriesNote: function(title, body, range, cueInfo, containerId, shareWith, style, callback) {
 		console.log(cueInfo);
 		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
 				AnchorResolver = NextThought.app.mediaviewer.components.reader.AnchorResolver,
@@ -799,7 +799,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		return this.__saveNote(rangeDescription.description, body, title, containerId, shareWith, selectedText, style, callback);
 	},
 
-    saveNewReply: function(recordRepliedTo, replyBody, shareWith, callback) {
+	saveNewReply: function(recordRepliedTo, replyBody, shareWith, callback) {
 		//some validation of input:
 		if (!recordRepliedTo) {
 			return Promise.reject('Must reply a record to reply to');
@@ -825,7 +825,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		});
 	},
 
-    savePhantomAnnotation: function(record, applySharing, successFn, failureFn) {
+	savePhantomAnnotation: function(record, applySharing, successFn, failureFn) {
 		var p,
 			me = this;
 
@@ -849,13 +849,13 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		});
 	},
 
-    /**
+	/**
 	 * Save the sharing prefs as the default for the container in this context
 	 * where context is a bundle.
 	 *
 	 * @param  {String} container NTIID for the container
 	 * @param  {Object} shareWith entities and public toggle
-	 * @param  {Bundle} context   the bundle to make this the default sharing prefs for
+	 * @param  {Bundle} context	  the bundle to make this the default sharing prefs for
 	 * @return {Promsie}
 	 */
 	saveSharingPrefs: function(container, prefs, context) {
@@ -893,7 +893,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 
 	},
 
-    updateShareWith: function(record, sharedWith, saveAsDefault, context) {
+	updateShareWith: function(record, sharedWith, saveAsDefault, context) {
 		if (!record) {
 			return Promise.resolve();
 		}
@@ -933,7 +933,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		});
 	},
 
-    define: function(term, boundingScreenBox, reader) {
+	define: function(term, boundingScreenBox, reader) {
 
 		if (this.definition) {
 			this.definition.close();

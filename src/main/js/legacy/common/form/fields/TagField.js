@@ -114,19 +114,19 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 
 
 	to_ascii: {
-    '188': 44,
-    '109': 45,
-    '190': 46,
-    '191': 47,
-    '192': 96,
-    '220': 92,
-    '222': 39,
-    '221': 93,
-    '219': 91,
-    '173': 45,
-    '187': 61,
-    '186': 59,
-    '189': 45
+	'188': 44,
+	'109': 45,
+	'190': 46,
+	'191': 47,
+	'192': 96,
+	'220': 92,
+	'222': 39,
+	'221': 93,
+	'219': 91,
+	'173': 45,
+	'187': 61,
+	'186': 59,
+	'189': 45
   },
 
 
@@ -134,8 +134,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 
 		//see http://jsfiddle.net/S2dyB/17/
 		if (this.to_ascii.hasOwnProperty(ch)) {
-      ch = this.to_ascii[ch];
-    }
+	  ch = this.to_ascii[ch];
+	}
 
 		return Boolean(String.fromCharCode(ch).match(this.delimiterRe));
 	},

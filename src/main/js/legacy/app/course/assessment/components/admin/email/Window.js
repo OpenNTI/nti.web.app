@@ -7,13 +7,13 @@ var WindowsActions = require('../../../../../windows/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.email.Window', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.course-email-window',
-    layout: 'none',
-    cls: 'email-window',
-    items: [],
+	extend: 'Ext.container.Container',
+	alias: 'widget.course-email-window',
+	layout: 'none',
+	cls: 'email-window',
+	items: [],
 
-    initComponent: function(){
+	initComponent: function(){
 		this.callParent(arguments);
 
 		this.headerCmp = this.add({
@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    onClose: function(){
+	onClose: function(){
 		var win = this.allowNavigation(),
 			me = this;
 
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.WindowActions.closeActiveWindow();
 	},
 
-    allowNavigation: function(){
+	allowNavigation: function(){
 		if (!this.editor) {
 			return true;
 		}
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return this.editor.allowNavigation();
 	},
 
-    showEditor: function() {
+	showEditor: function() {
 		var me = this,
 			editor;
 

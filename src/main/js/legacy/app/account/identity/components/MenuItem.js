@@ -4,16 +4,16 @@ var SettingsWindow = require('../../settings/Window');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.identity.components.MenuItem', {
-    extend: 'Ext.Component',
-    alias: 'widget.account-menuitem',
+	extend: 'Ext.Component',
+	alias: 'widget.account-menuitem',
 
-    mixins: {
+	mixins: {
 		eableProfiles: 'NextThought.mixins.ProfileLinks'
 	},
 
-    cls: 'account-menu-item',
+	cls: 'account-menu-item',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		'{user:avatar}',
 		{cls: 'content', cn: [
 			{cls: 'username', html: '{user:displayName}'},
@@ -24,27 +24,27 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		avatarEl: '.avatar',
 		nameEl: '.username',
 		profileEl: '.content .links .profile',
 		accountEl: '.content .links .account'
 	},
 
-    listeners: {
+	listeners: {
 		accountEl: {
 			'click': 'showAccount'
 		}
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {user: $AppConfig.userObject});
 		this.monitorUser($AppConfig.userObject);
 	},
 
-    monitorUser: function(user) {
+	monitorUser: function(user) {
 		var me = this,
 			m = {
 				scope: this,
@@ -72,13 +72,13 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		}
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.enableProfileClicks(this.profileEl);
 	},
 
-    showAccount: function() {
+	showAccount: function() {
 		var win = NextThought.app.account.settings.Window.create();
 
 		win.show();

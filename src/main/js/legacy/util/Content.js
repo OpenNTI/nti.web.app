@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 	/**
 	 * Detect whether or not a uri is pointing out of the site
-	 * @param  {String}  r uri to check
+	 * @param  {String}	 r uri to check
 	 * @return {Boolean}   true if its outside of the side
 	 */
 	isExternalUri: function (r) {
@@ -523,7 +523,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		function getPageInToc (toc) {
 			return me.getLineage(ntiid, toc)
 				.then(function (lineages) {
-					var	l = (lineages && lineages[0]) || [],
+					var l = (lineages && lineages[0]) || [],
 						i, href, node;
 
 					for (; l.length > 0;) {
@@ -602,7 +602,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	},
 
 	getSiblings: function (node, bundleOrToc) {
-		var	ntiid = node && node.getAttribute && node.getAttribute('ntiid'),
+		var ntiid = node && node.getAttribute && node.getAttribute('ntiid'),
 			nodes = [];
 
 		function getSiblings (info) {
@@ -663,7 +663,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 	bustCorsForResources: function (string, name, value) {
 		//Look for things we know come out of a different domain
-		//and append a query param.  This allows us to, for example,
+		//and append a query param.	 This allows us to, for example,
 		//add a query param related to our location host so that
 		//we can tell amazon's caching servers to take that into consideration
 

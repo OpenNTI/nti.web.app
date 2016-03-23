@@ -42,8 +42,8 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 			addValue(obj, p.getAttribute('name'), p.getAttribute('value'));
 		});
 
-    //		SAJ: Does not work as intent and just wastes CPU cycles.
-    //		Ext.each(driectChildNodes('object'), this.parseDomObject, this);
+	//		SAJ: Does not work as intent and just wastes CPU cycles.
+	//		Ext.each(driectChildNodes('object'), this.parseDomObject, this);
 
 		obj.asDomSpec = this.asDomSpec;
 
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 		if (contentElement) {
 			Ext.each(contentElement.querySelectorAll('object .naqvideo, object .ntivideo'), function(v) {
 				var o = me.parseDomObject(v),
-					s =	[];
+					s = [];
 
 				o.sources = s;
 

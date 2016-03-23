@@ -6,11 +6,11 @@ var ModelDiscussionRef = require('../../../../../../../model/DiscussionRef');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.discussion.DiscussionEditor', {
-    extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-    alias: 'widget.overview-editing-discussion-editor',
-    cls: 'content-editor content-link',
+	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+	alias: 'widget.overview-editing-discussion-editor',
+	cls: 'content-editor content-link',
 
-    getFormSchema: function() {
+	getFormSchema: function() {
 		var schema = [
 				{name: 'MimeType', type: 'hidden'},
 				{name: 'target', type: 'hidden'},
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return schema;
 	},
 
-    getDefaultValues: function() {
+	getDefaultValues: function() {
 		if (this.record) {
 			var data = this.record.isModel && this.record.getData();
 
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-    isDiscussionRef: function(record) {
+	isDiscussionRef: function(record) {
 		if (record && record.get('MimeType') === NextThought.model.DiscussionRef.mimeType) {
 			return true;
 		}
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return false;
 	},
 
-    getFormMethod: function() {
+	getFormMethod: function() {
 		var isDiscussionRef = this.isDiscussionRef(this.record);
 		if (isDiscussionRef) {
 			return 'PUT';
@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return 'POST';
 	},
 
-    getThumbnailURL: function() {
+	getThumbnailURL: function() {
 		var iconURL = this.record && this.record.get('icon');
 		if (iconURL) {
 			if (Globals.ROOT_URL_PATTERN.test(iconURL)) {
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return '';
 	},
 
-    onSave: function() {
+	onSave: function() {
 		var me = this,
 			parentSelection = me.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),

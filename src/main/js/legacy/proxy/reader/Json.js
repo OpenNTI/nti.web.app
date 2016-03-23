@@ -71,8 +71,8 @@ module.exports = exports = Ext.define('NextThought.proxy.reader.Json', {
 					record = result.records[i];
 					try {
 						//Stores like to have one type of model in them, but we need non-homogenous stores.
-						//e.g. PageItem stores have notes, highlights, redaction, etc.  So make sure we coerce the proper model
-						//here.  TODO move into NextThought.proxy.reader.Base and/or a more elegant way to do this
+						//e.g. PageItem stores have notes, highlights, redaction, etc.	So make sure we coerce the proper model
+						//here.	 TODO move into NextThought.proxy.reader.Base and/or a more elegant way to do this
 						if (record instanceof NextThought.model.Base && !record.homogenous) {
 							modelName = record.get('Class');
 							if (record.modelName.substr(-modelName.length) !== modelName) {

@@ -73,7 +73,7 @@ function stopShowCard() {
 }
 
 module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
-    navigateToProfile: function(u) {
+	navigateToProfile: function(u) {
 		var profileUrl = u.getProfileUrl && u.getProfileUrl();
 
 		if (profileUrl) {
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
 		}
 	},
 
-    /**
+	/**
 	 * Pass in Dom Nodes or Ext.Elements (var arg style) and this will make them clickable and add the css class "over"
 	 * when the mouse is hovering over these elements. (it will also remove the class as the mouse leaves)
 	 *
@@ -104,13 +104,13 @@ module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
 			if (!Ext.isEmpty(el)) {
 				//el.addClsOnOver('over');
 				// if ((user && !isMe(user)) && me.profileLinkCard !== false) {
-				// 	events.mouseover = function(e) {
-				// 		return startShowCard.call(me, e, el);
-				// 	};
+				//	events.mouseover = function(e) {
+				//		return startShowCard.call(me, e, el);
+				//	};
 
-				// 	events.mouseout = function(e) {
-				// 		return stopShowCard.call(me, e, el);
-				// 	};
+				//	events.mouseout = function(e) {
+				//		return stopShowCard.call(me, e, el);
+				//	};
 				// }
 
 				me.mon(el, events);

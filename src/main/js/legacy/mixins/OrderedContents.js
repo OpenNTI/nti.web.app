@@ -275,9 +275,9 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 
 	/**
 	 * Move a record from a given container to the end of my ordered contents
-	 * @param  {Object} record    record to move
+	 * @param  {Object} record	  record to move
 	 * @param  {Object|String} oldParent the current parent
-	 * @param  {Object} root      the root of me and the oldParent
+	 * @param  {Object} root	  the root of me and the oldParent
 	 * @return {Promise}
 	 */
 	appendFromContainer: function(record, oldParent, root) {
@@ -300,11 +300,11 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	/**
 	 * Move a record from a given container to the given index in my ordered contents
 	 *
-	 * @param  {Object|String} record    record or ntiid of record
-	 * @param  {Number} index     the position to move it to
+	 * @param  {Object|String} record	 record or ntiid of record
+	 * @param  {Number} index	  the position to move it to
 	 * @param {Number} oldIndex the old position
 	 * @param  {Object|String} oldParent old parent or ntiid
-	 * @param  {Object} root      the root of me and the oldParent
+	 * @param  {Object} root	  the root of me and the oldParent
 	 * @return {Promise}
 	 */
 	moveToFromContainer: function(record, index, oldIndex, oldParent, root) {

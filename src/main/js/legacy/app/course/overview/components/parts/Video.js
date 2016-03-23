@@ -6,23 +6,23 @@ var PartsCurtain = require('./Curtain');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Video', {
-    extend: 'Ext.container.Container',
-    alias: ['widget.course-overview-video', 'widget.course-overview-ntivideo'],
+	extend: 'Ext.container.Container',
+	alias: ['widget.course-overview-video', 'widget.course-overview-ntivideo'],
 
-    statics: {
+	statics: {
 		isVideo: true
 	},
 
-    cls: 'overview-video',
-    ui: 'course',
-    layout: 'none',
-    items: [],
+	cls: 'overview-video',
+	ui: 'course',
+	layout: 'none',
+	items: [],
 
-    renderSelectors: {
+	renderSelectors: {
 		screenEl: '.video-player'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.videoPlayer = this.add({
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 		this.playerWidth = 512;
 
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			.then(this.addVideo.bind(this));
 	},
 
-    addVideo: function(video) {
+	addVideo: function(video) {
 		this.video = video;
 		var curtainClicked = this.curtainClicked.bind(this);
 
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    getVideo: function() {
+	getVideo: function() {
 		var me = this;
 
 		if (me.record) {
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    curtainClicked: function(e) {
+	curtainClicked: function(e) {
 		e.stopEvent();
 
 		var video = this.playlist[0],
@@ -128,16 +128,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    hideCurtain: function() {
+	hideCurtain: function() {
 		this.curtain.hide();
 	},
 
-    showCurtain: function() {
+	showCurtain: function() {
 		this.curtain.show();
 		wait().then(this.setProgress.bind(this));
 	},
 
-    maybeCreatePlayer: function() {
+	maybeCreatePlayer: function() {
 		var single = this.isVideoRoll !== true;
 
 		if (!this.rendered) {
@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		]);
 	},
 
-    maybePauseCurrentVideo: function() {
+	maybePauseCurrentVideo: function() {
 		if (!this.player) { return; }
 
 		if (this.player.isPlaying()) {
@@ -203,7 +203,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.hasCls('playing')) { return; }
 	},
 
-    navigateToTarget: function(videoItem, basePath) {
+	navigateToTarget: function(videoItem, basePath) {
 		if (!this.navigate) {
 			console.error('No navigate set on content link');
 			return;
@@ -219,7 +219,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    navigateToSlidedeck: function(slidedeckId) {
+	navigateToSlidedeck: function(slidedeckId) {
 		var me = this;
 		if (slidedeckId) {
 			Service.getObject(slidedeckId)
@@ -229,7 +229,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    setProgress: function(progress) {
+	setProgress: function(progress) {
 		progress = progress || this.progress;
 
 		this.progress = progress;

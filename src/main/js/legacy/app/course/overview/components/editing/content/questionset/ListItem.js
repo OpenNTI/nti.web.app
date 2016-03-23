@@ -6,10 +6,10 @@ var ModelAssignmentRef = require('../../../../../../../model/AssignmentRef');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.ListItem', {
-    extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
-    alias: 'widget.overview-editing-questionset-listitem',
+	extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
+	alias: 'widget.overview-editing-questionset-listitem',
 
-    statics: {
+	statics: {
 		isAssessmentWidget: true,
 		getSupported: function() {
 			return [
@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    updateRecord: function(record) {
+	updateRecord: function(record) {
 		var me = this;
 
 		me.course.getAssignments()
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    getPreviewType: function() {
+	getPreviewType: function() {
 		return this.assignment ? 'course-overview-assignment' : 'course-overview-naquestionset';
 	}
 });

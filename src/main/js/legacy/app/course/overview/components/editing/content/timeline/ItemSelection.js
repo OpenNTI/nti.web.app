@@ -4,12 +4,12 @@ var ModelTimelineRef = require('../../../../../../../model/TimelineRef');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.ItemSelection', {
-    extend: 'NextThought.app.course.overview.components.editing.content.discussion.ItemSelection',
-    alias: 'widget.overview-editing-timeline-item-selection',
-    multiSelect: false,
-    cls: 'timeline-item-selection item-selection',
+	extend: 'NextThought.app.course.overview.components.editing.content.discussion.ItemSelection',
+	alias: 'widget.overview-editing-timeline-item-selection',
+	multiSelect: false,
+	cls: 'timeline-item-selection item-selection',
 
-    itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
+	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{ cls: 'overview-timeline', cn: [
 			{ tag: 'label', cls: 'timeline-item', cn: [
 					{tag: 'input', type: 'checkbox'},
@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		]}
 	)),
 
-    getItemData: function(item) {
+	getItemData: function(item) {
 		return {
 			thumbnail: this.getThumbnailURL(item),
 			title: item.get('label'),
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-    showEmptyState: function() {
+	showEmptyState: function() {
 		// Display empty state
 		this.itemsContainer.add({
 			xtype: 'box',

@@ -7,11 +7,11 @@ var ContentlinkReadingEditor = require('../ReadingEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.Reading', {
-    extend: 'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
-    alias: 'widget.overview-editing-contentlink-reading',
-    SWITCHED: 'switched-items',
+	extend: 'NextThought.app.course.overview.components.editing.content.contentlink.types.Base',
+	alias: 'widget.overview-editing-contentlink-reading',
+	SWITCHED: 'switched-items',
 
-    statics: {
+	statics: {
 		getTypes: function() {
 			return [
 				{
@@ -34,15 +34,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    cls: 'content-editor reading-editor',
+	cls: 'content-editor reading-editor',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.ContentActions = NextThought.app.content.Actions.create();
 
 		this.callParent(arguments);
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.loading) {
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    showEditor: function() {
+	showEditor: function() {
 		if (this.record) {
 			this.showReadingEditor();
 		} else {
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    onBack: function() {
+	onBack: function() {
 		if (this.readingEditorCmp) {
 			this.showReadingList(this.readingEditorCmp.selectedItem);
 		} else if (this.doBack) {
@@ -66,13 +66,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    maybeEnableBack: function(text) {
+	maybeEnableBack: function(text) {
 		if (!this.record && this.enableBack) {
 			this.enableBack(text);
 		}
 	},
 
-    showReadingList: function(selectedItems) {
+	showReadingList: function(selectedItems) {
 		var me = this;
 
 		if (this.readingSelectionCmp) {
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    getSelection: function() {
+	getSelection: function() {
 		var getReading;
 
 		if (this.readingSelectionCmp) {
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return getReading;
 	},
 
-    showReadingEditor: function() {
+	showReadingEditor: function() {
 		if (this.readingEditorCmp) {
 			this.readingEditorCmp.destroy();
 			delete this.readingEditorCmp;
@@ -169,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    onReadingListSelectionChange: function(selection) {
+	onReadingListSelectionChange: function(selection) {
 		var length = selection.length;
 
 		this.setSaveText('Select');
@@ -181,17 +181,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    onSaveFailure: function(reason) {
+	onSaveFailure: function(reason) {
 		if (reason === this.SWITCHED) { return; }
 
 		this.callParent(arguments);
 	},
 
-    doValidation: function() {
+	doValidation: function() {
 		return Promise.resolve();
 	},
 
-    onSave: function() {
+	onSave: function() {
 		var me = this;
 
 		if (!me.readingEditorCmp) {

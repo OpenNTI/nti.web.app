@@ -5,11 +5,11 @@ var UxGrouping = require('../../../../../../common/ux/Grouping');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.Root', {
-    extend: 'NextThought.app.course.assessment.components.student.assignments.View',
-    alias: 'widget.course-assessment-admin-assignments-root',
-    cls: 'assignment-list admin',
+	extend: 'NextThought.app.course.assessment.components.student.assignments.View',
+	alias: 'widget.course-assessment-admin-assignments-root',
+	cls: 'assignment-list admin',
 
-    newAssignmentList: function(grouper) {
+	newAssignmentList: function(grouper) {
 		return {
 			xtype: 'course-assessment-assignment-admin-list',
 			store: grouper.store,
@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		};
 	},
 
-    navigateToItem: function(rec) {
+	navigateToItem: function(rec) {
 		if (!rec) {
 			console.error('Ignoring click because no record was passed', arguments);
 			return;
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.goToRecord(rec);
 	},
 
-    applyPagerFilter: function() {
+	applyPagerFilter: function() {
 		this.store.filter({
 			id: 'open',
 			filterFn: function(rec) {
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-    goToRecord: function(assignment) {
+	goToRecord: function(assignment) {
 		if (assignment) {
 			this.showStudentsForAssignment(assignment);
 		}

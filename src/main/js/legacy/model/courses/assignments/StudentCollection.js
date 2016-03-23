@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Stu
 	 * Get the HistoryItem for an assignment
 	 * @param  {String} assignment Id of the assignment to get
 	 * @param {Boolean} useCache use the last call instead of making a new one
-	 * @return {[type]}            [description]
+	 * @return {[type]}			   [description]
 	 */
 	getHistoryItem: function(assignment, useCache) {
 		return this.getHistory(useCache)
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Stu
 	/**
 	 * Update the history item in the cache with data
 	 * @param  {String} assignment id of the assignment to update
-	 * @param  {Object} data       data to update with
+	 * @param  {Object} data	   data to update with
 	 */
 	updateHistoryItem: function(assignment, data) {
 		return this.getHistory(true)

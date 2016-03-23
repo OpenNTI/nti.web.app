@@ -25,8 +25,8 @@ module.exports = exports = Ext.define('NextThought.mixins.SearchHitHighlighting'
 
 
 	//	@returns an object with top and left properties used to adjust the
-	//  coordinate space of the ranges bounding client rects.
-	//  It decides based on the type of container( main content or overlays).
+	//	coordinate space of the ranges bounding client rects.
+	//	It decides based on the type of container( main content or overlays).
 	getRangePositionAdjustments: function(key) {
 		return {top: -1 * this.el.getY(), left: -1 * this.el.getX()};
 	},
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.mixins.SearchHitHighlighting'
 		}
 
 		if (ranges.length > 1) {
-			console.warn('Found multiple hits for fragment.  Using first', fragment, ranges);
+			console.warn('Found multiple hits for fragment.	 Using first', fragment, ranges);
 		}
 		range = ranges[0];
 

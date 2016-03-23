@@ -2,9 +2,9 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.PresenceInfo', {
-    override: 'Ext.data.Types',
+	override: 'Ext.data.Types',
 
-    PRESENCEINFO: {
+	PRESENCEINFO: {
 		type: 'PresenceInfo',
 		sortType: 'none',
 		convert: function(v, record) {

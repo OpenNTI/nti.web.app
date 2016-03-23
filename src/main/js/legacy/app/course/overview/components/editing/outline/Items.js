@@ -11,20 +11,20 @@ var ContentnodeListItem = require('./contentnode/ListItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.Items', {
-    extend: 'NextThought.common.components.BoundCollection',
-    alias: 'widget.overview-editing-outline-items',
+	extend: 'NextThought.common.components.BoundCollection',
+	alias: 'widget.overview-editing-outline-items',
 
-    mixins: {
+	mixins: {
 		OrderingContainer: 'NextThought.mixins.dnd.OrderingContainer',
 		FillScreen: 'NextThought.mixins.FillScreen'
 	},
 
-    autoUpdate: false,
-    cls: 'outline-items',
-    layout: 'none',
-    items: [],
+	autoUpdate: false,
+	cls: 'outline-items',
+	layout: 'none',
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.setCollection(this.record);
@@ -41,13 +41,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.activeControls = {};
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.fillScreen(this.el.dom, 20);
 	},
 
-    onceLoaded: function() {
+	onceLoaded: function() {
 		var items = this.getOrderingItems();
 
 		return Promise.all(items.map(function(item) {
@@ -59,28 +59,28 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}));
 	},
 
-    getDropzoneTarget: function() {
+	getDropzoneTarget: function() {
 		var body = this.getBodyContainer();
 
 		return body && body.el && body.el.dom;
 	},
 
-    getOrderingItems: function() {
+	getOrderingItems: function() {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
 
 		return items || [];
 	},
 
-    beforeSetCollection: function() {
+	beforeSetCollection: function() {
 		this.disableOrderingContainer();
 	},
 
-    afterSetCollection: function() {
+	afterSetCollection: function() {
 		this.enableOrderingContainer();
 	},
 
-    buildHeader: function() {
+	buildHeader: function() {
 		return {
 			xtype: 'box',
 			autoEl: {
@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-    buildFooter: function() {
+	buildFooter: function() {
 		return {
 			xtype: 'container',
 			cls: 'outline-overview-footer',
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-    beforeShowMenuControl: function(control, menu, type) {
+	beforeShowMenuControl: function(control, menu, type) {
 		var prevControl = this.activeControls[type];
 		if (prevControl !== control) {
 			if (prevControl && prevControl.hideMenu) {
@@ -120,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    getCmpForRecord: function(record) {
+	getCmpForRecord: function(record) {
 		var cmp,
 			base = NextThought.app.course.overview.components.editing.outline,
 			bundle = this.bundle;
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return cmp;
 	},
 
-    onDrop: function(record, newIndex, moveInfo) {
+	onDrop: function(record, newIndex, moveInfo) {
 		return this.record.moveToFromContainer(record, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.outline);
 	}
 });

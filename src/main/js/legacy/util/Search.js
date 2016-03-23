@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 		}
 		return term;
 
-    /*		//Do any regex escaping required
+	/*		//Do any regex escaping required
 		term = term.replace(/[.*+?|()\[\]{}\\$\^]/g,'\\$&');
 
 		//to make things like qoutes in the term match unicode apostrophe their
@@ -145,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 	 * captureMatches is true this function returns an object with two properties. 're'
 	 * is the regular expression, matchingGroups is an array of ints marking which capture
 	 * group of re corresponds to each for the fragments matches.  These values are indexed start
-	 * at 1.  Example;  a fragment of "the brown fox" with a match corresponding to "brown" will
+	 * at 1.  Example;	a fragment of "the brown fox" with a match corresponding to "brown" will
 	 * return the following. {re: /(the )(brown)( fox)/, matchingGroups: [2]}
 	 */
 	contentRegexForFragment: function(fragment, phraseSearch, captureMatches) {

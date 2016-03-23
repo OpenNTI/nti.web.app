@@ -5,18 +5,18 @@ var FileBrowserItem = require('../../../common/menus/file/BrowserItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOptions', {
-    alias: 'widget.wb-tool-image-options',
-    extend: 'Ext.toolbar.Toolbar',
-    ui: 'options',
-    cls: 'image-options',
+	alias: 'widget.wb-tool-image-options',
+	extend: 'Ext.toolbar.Toolbar',
+	ui: 'options',
+	cls: 'image-options',
 
-    defaults: {
+	defaults: {
 		ui: 'option',
 		scale: 'large',
 		xtype: 'button'
 	},
 
-    items: [
+	items: [
 		{
 			text: 'Choose File',
 			menu: {
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 		{ text: 'Take Picture', menu: [], disabled: true*/ }
 	],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		var file = this.down('file-browser-menu-item');
 
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 		file[(window.FileReader === undefined) ? 'disable' : 'enable']();
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		//only enable canvas dropping if allowed...
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 		}
 	},
 
-    enableImageDropping: function() {
+	enableImageDropping: function() {
 		var me = this,
 			el = me.up('whiteboard-editor').canvas.el,
 			t;
@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 		});
 	},
 
-    dropImage: function(e) {
+	dropImage: function(e) {
 		e.stopPropagation();
 		e.preventDefault();
 
@@ -107,14 +107,14 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 
 	},
 
-    //TODO - should fire when menuitem is selected, override in initComponent of this toolbar
+	//TODO - should fire when menuitem is selected, override in initComponent of this toolbar
 	selectImage: function(inputField) {
 		var hasFileApi = Boolean(inputField.fileInputEl.dom.files),
 			files = hasFileApi ? inputField.extractFileInput().files : [];
 		this.readFile(files);
 	},
 
-    readFile: function(files) {
+	readFile: function(files) {
 		var me = this,
 			file = files[0],
 			reader;
@@ -141,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 		}
 	},
 
-    handlePaste: function(event) {
+	handlePaste: function(event) {
 		var clipboardData = event.clipboardData || {},
 			me = this;
 
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 
 	},
 
-    insertImage: function(dataUrl) {
+	insertImage: function(dataUrl) {
 		var image = new Image(),
 			e = this.up('whiteboard-editor'),
 			c = e.canvas,
@@ -242,15 +242,15 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 		WBUtils.maybeProxyImage(dataUrl, image);
 	},
 
-    getOptions: function() {
+	getOptions: function() {
 		return {};
 	},
 
-    setOptions: function() {
+	setOptions: function() {
 		console.warn('no need to set options on image toolbar');
 	},
 
-    getToolType: function() {
+	getToolType: function() {
 		return 'image';
 	}
 });

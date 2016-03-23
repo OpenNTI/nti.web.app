@@ -31,13 +31,13 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		 * Fact: creating elements is *kind of* expensive.
 		 * Fact: JavaScript is thread-safe, because its not threaded. Its Evented. No more than one block of code runs at a time.
 		 * Fact: Anchor tags implement the Location API. Setting a value to the href attribute populates:
-		 *  #host, #hostname, #protocol, #port, #pathname, #search, #hash and #origin
-		 *  AND modifiying those attribute updates #href.
+		 *	#host, #hostname, #protocol, #port, #pathname, #search, #hash and #origin
+		 *	AND modifiying those attribute updates #href.
 		 *
-		 *  Given those, we can safely make a single instance and share it for use of URL normalization and parsing.
+		 *	Given those, we can safely make a single instance and share it for use of URL normalization and parsing.
 		 *
-		 *  ALWAYS set the href before using. NEVER rely on its previous value. Think of this the same way you would the return value of Ext.fly().
-		 *  As in temporary!  Assume once your 'atomic' like action is finished, the value is useless. Reaquire, or re-init.
+		 *	ALWAYS set the href before using. NEVER rely on its previous value. Think of this the same way you would the return value of Ext.fly().
+		 *	As in temporary!  Assume once your 'atomic' like action is finished, the value is useless. Reaquire, or re-init.
 		 */
 		__SHARED_LOCATION_INTERFACE: document.createElement('a'),
 
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		 * Gives you the shared location interface intialized to a given ref.
 		 *
 		 * ALWAYS set the href before using. NEVER rely on its previous value. Think of this the same way you would the return value of Ext.fly().
-		 * As in temporary!  Assume once your 'atomic' like action is finished, the value is useless. Reaquire.
+		 * As in temporary!	 Assume once your 'atomic' like action is finished, the value is useless. Reaquire.
 		 *
 		 * @param {String} ref
 		 * @return {Location}
@@ -337,9 +337,9 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	},
 
 	//A model may have some derived fields that
-	//are readonly values.  These values depend on other traditional fields.
+	//are readonly values.	These values depend on other traditional fields.
 	//one such property is 'flagged', it isn't a real field but
-	//it is derived from Links.  We support getting those values by
+	//it is derived from Links.	 We support getting those values by
 	//looking for a properly named getter
 	//
 	//First we look for a traditional field with the given name
@@ -665,7 +665,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	isModifiable: function () {
 		try {
 			//This isn't necessarily true for all objects. For instance anyone's blog comments
-			//can be edited or deleted by the blogs author.  I notice the field logic is correct
+			//can be edited or deleted by the blogs author.	 I notice the field logic is correct
 			//and different from this.
 			return this.phantom || (this.getLink('edit') !== null && this.isMine());
 		}
@@ -1063,11 +1063,11 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		}
 
 		//If we haven't already started calling fname on other in memory objects
-		//set the flag and notify.  Make sure we clear it at the end
+		//set the flag and notify.	Make sure we clear it at the end
 		active[recId] = true;
 		//console.time('looking for objects');
 		//Use the store manager to iterate all stores looking for an object
-		//that has the same id.  If it isn't the exact record call the function
+		//that has the same id.	 If it isn't the exact record call the function
 		//fname on it with the provided args
 		Ext.data.StoreManager.each(function (s) {
 			var data = s.snapshot || s.data,

@@ -5,9 +5,9 @@ var CourseStateStore = require('../../../../StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.email.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    sendEmail: function(record, postURL, scope) {
+	sendEmail: function(record, postURL, scope) {
 		var me = this, 
 			data = record && record.asJSON(),
 			params = {};

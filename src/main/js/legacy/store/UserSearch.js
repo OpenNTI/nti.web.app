@@ -5,20 +5,20 @@ var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.store.UserSearch', {
-    extend: 'Ext.data.Store',
-    model: 'NextThought.model.UserSearch',
+	extend: 'Ext.data.Store',
+	model: 'NextThought.model.UserSearch',
 
-    proxy: {
+	proxy: {
 		type: 'usersearch',
 		model: 'NextThought.model.UserSearch'
 	},
 
-    filters: [
+	filters: [
 		{ fn: function(rec) { return !isMe(rec); } },
 		{ fn: function(rec) { return (!rec.isEveryone || !rec.isEveryone()); } }
 	],
 
-    sorters: [
+	sorters: [
 		{sorterFn: function(a, b) {
 			var list = this.contactsList, aa, bb;
 			if (!this.contactsList || (new Date() - (this.lastUsed || 0)) > 0) {
@@ -34,9 +34,9 @@ module.exports = exports = Ext.define('NextThought.store.UserSearch', {
 		{property: 'displayName', direction: 'DESC'}
 	],
 
-    minRemoteSearchLength: 3,
+	minRemoteSearchLength: 3,
 
-    search: function(q) {
+	search: function(q) {
 		var query = q || '';
 
 		if (query.length === 0) {

@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 	 * route:String //The route to navigate to for this object
 	 * title:String //The title of the route
 	 * precache:Object //A map of keys to objects that is passed to the routes handler
-	 * 					//so it doesn't have to redo all the work to get the objects
+	 *					//so it doesn't have to redo all the work to get the objects
 	 *
 	 * @param {String|Array} mimeTypes MimeType or list of MimeTypes to use the handler for
 	 * @param {Function} handler   function to handle mime types
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 	/**
 	 * Given an object return the mime type
 	 * @param  {Object|String} object
-	 * @return {String}       object's mime type
+	 * @return {String}		  object's mime type
 	 */
 	__getMimeType: function(object) {
 		if (typeof object === 'string') {
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 	/**
 	 * Given an object (or mime type) return a Promise that is the return value of the handler
 	 * @param  {Object|String} objectOrMimeType thing to handle
-	 * @return {Promise}                  fulfills with handler's return
+	 * @return {Promise}				  fulfills with handler's return
 	 */
 	handleObject: function(objectOrMimeType) {
 		var object = typeof objectOrMimeType === 'string' ? null : objectOrMimeType,
@@ -97,9 +97,9 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 	 *
 	 * path: String, //route itself
 	 * isFull: Boolean //True if we were able to get full route for the path
-	 * 					//false if we were only able to get part way
+	 *					//false if we were only able to get part way
 	 * isAccessible: Boolean //!== false if we have access to this route
-	 * 							// === false if we don't
+	 *							// === false if we don't
 	 *
 	 * @override
 	 * @param {Array} path array of objects to navigate to, top down

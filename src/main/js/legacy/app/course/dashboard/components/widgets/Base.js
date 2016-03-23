@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		 * NOTE: if there are no tiles fulfill with an empty array, if the promise is rejected the
 		 * dashboard tab will be hidden
 		 *
-		 * @param  {CourseInstance} course     the course instance model
+		 * @param  {CourseInstance} course	   the course instance model
 		 * @param  {Node} courseNode	the course node from the TOC
 		 * @param  {Date} startDate		the start of the range to get tiles for (inclusive)
 		 * @param  {Date} endDate		the end of the range to get tiles for (inclusive)
@@ -33,8 +33,8 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		 * be aware of
 		 *
 		 * @param  {CourseInstance} course the course instance model
-		 * @param  {Date} date   the date to pick deadlines from
-		 * @return {Promise}      Promise that fills with array of tiles to add
+		 * @param  {Date} date	 the date to pick deadlines from
+		 * @return {Promise}	  Promise that fills with array of tiles to add
 		 */
 		getUpcomingTiles: function (course, now) {
 			return Promise.resolve([]);
@@ -42,8 +42,8 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 		/**
 		 * Return the weight of a tile for a record
-		 * @param  {Model} record   the record to get the weight for
-		 * @return {Number}         weight of the tile
+		 * @param  {Model} record	the record to get the weight for
+		 * @return {Number}			weight of the tile
 		 */
 		getWeight: function (record) {
 			return this.__BASE_WEIGHT + record.get('Last Modified');

@@ -71,8 +71,8 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 			i.inGrid = 'grid-item';
 
 			// if (rows > 1 && !updating && (x === 0 || i.Featured)) {
-			// 	i.featured = true;
-			// 	cols = 4;
+			//	i.featured = true;
+			//	cols = 4;
 			// }
 
 			i.rows = rows;

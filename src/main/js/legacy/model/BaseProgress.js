@@ -4,28 +4,28 @@ var ModelBase = require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.BaseProgress', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    fields: [
-        {name: 'Items', type: 'auto'}
-    ],
-
-
-    getProgress: function(id) {
-        var items = this.get('Items');
-
-        return items[id];
-    },
+	fields: [
+		{name: 'Items', type: 'auto'}
+	],
 
 
-    hasBeenViewed: function(id) {
-        var progress = this.getProgress(id),
-            hasBeenViewed = AnalyticsUtil.hasBeenViewed(id);
+	getProgress: function(id) {
+		var items = this.get('Items');
 
-        if (progress) {
-            hasBeenViewed = hasBeenViewed || progress.AbsoluteProgress > 0;
-        }
+		return items[id];
+	},
 
-        return hasBeenViewed;
-    }
+
+	hasBeenViewed: function(id) {
+		var progress = this.getProgress(id),
+			hasBeenViewed = AnalyticsUtil.hasBeenViewed(id);
+
+		if (progress) {
+			hasBeenViewed = hasBeenViewed || progress.AbsoluteProgress > 0;
+		}
+
+		return hasBeenViewed;
+	}
 });

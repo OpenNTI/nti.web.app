@@ -11,9 +11,9 @@ var ComponentsAssignmentStatus = require('../../../assessment/components/Assignm
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
-    extend: 'Ext.Panel',
+	extend: 'Ext.Panel',
 
-    alias: [
+	alias: [
 		'widget.course-overview-naquestionset',
 		'widget.course-overview-questionsetref',
 		'widget.course-overview-nanosubmitassignment',
@@ -22,17 +22,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		'widget.course-overview-assignmentref'
 	],
 
-    statics: {
+	statics: {
 		isAssessmentWidget: true
 	},
 
-    header: false,
-    cls: 'scoreboard overview-naquestionset',
-    ui: 'assessment',
-    layout: 'none',
-    items: [],
+	header: false,
+	cls: 'scoreboard overview-naquestionset',
+	ui: 'assessment',
+	layout: 'none',
+	items: [],
 
-    config: {
+	config: {
 		assignment: null,
 		containerId: null,
 		ntiid: null,
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		quetionSetContainerTitle: ''
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		var me = this,
 			n = config.node || {getAttribute: function(a) { return config[a];} },
 			ntiid = n.getAttribute('target-ntiid') || 'no-value',
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    getButton: function() {
+	getButton: function() {
 		var me = this;
 
 		return {
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-    buildForAssessment: function() {
+	buildForAssessment: function() {
 		var me = this,
 			req, ntiid = this.getNtiid();
 
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    buildForAssignment: function() {
+	buildForAssignment: function() {
 		this.add([
 			{
 				xtype: 'container',
@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.setAsAssignment(this.assignment);
 	},
 
-    disableButton: function() {
+	disableButton: function() {
 		var button = this.down('button');
 
 		if (button) {
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    enableButton: function() {
+	enableButton: function() {
 		var button = this.down('button');
 
 		if (button) {
@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    setAsAssignment: function(assignment) {
+	setAsAssignment: function(assignment) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.setAsAssignment, this, arguments), this, {single: true});
 			return;
@@ -214,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    setHistory: function(history) {
+	setHistory: function(history) {
 		if (!history) {
 			console.warn('No history');
 			return;
@@ -249,7 +249,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    containerLoaded: function(q, s, r) {
+	containerLoaded: function(q, s, r) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.containerLoaded, this, arguments), this, {single: true});
 			return;
@@ -259,7 +259,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			json = Ext.decode(r.responseText, true) || {};
 
 		json = (json.Items || [])[0];
-    //		console.debug('Loaded:', r.status, r.responseText);
+	//		console.debug('Loaded:', r.status, r.responseText);
 
 		if (!json) {
 			this.setAsNotStarted();
@@ -272,7 +272,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.updateWithScore(correct);
 	},
 
-    setAsNotStarted: function() {
+	setAsNotStarted: function() {
 		var b = this.down('button');
 
 		if (b) {
@@ -283,7 +283,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.addCls('not-started');
 	},
 
-    updateWithScore: function(correct) {
+	updateWithScore: function(correct) {
 		var tally = this.down('assessment-tally'),
 			score = this.down('chart-score');
 
@@ -298,7 +298,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.updateLayout();
 	},
 
-    reviewClicked: function() {
+	reviewClicked: function() {
 		if (this.assignment) {
 			this.navigate(this.assignment);
 			return;

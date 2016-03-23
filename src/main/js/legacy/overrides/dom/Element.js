@@ -52,57 +52,57 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 	needsScrollIntoView: function(containerEl) {
 		var container = Ext.getDom(containerEl) || Ext.getBody().dom,
 			el = this.dom,
-            offsets = this.getOffsetsTo(container),
+			offsets = this.getOffsetsTo(container),
 
-            top = offsets[1] + container.scrollTop,
-            bottom = top + el.offsetHeight,
+			top = offsets[1] + container.scrollTop,
+			bottom = top + el.offsetHeight,
 
-            ctClientHeight = container.clientHeight,
-            ctTop = parseInt(container.scrollTop, 10),
-            ctBottom = ctTop + ctClientHeight;
+			ctClientHeight = container.clientHeight,
+			ctTop = parseInt(container.scrollTop, 10),
+			ctBottom = ctTop + ctClientHeight;
 
-    return top > ctBottom || top < ctTop || bottom < ctTop || bottom > ctBottom;
+	return top > ctBottom || top < ctTop || bottom < ctTop || bottom > ctBottom;
 	},
 
 
 	scrollCompletelyIntoView: function(container, hscroll, animate) {
 		var me = this,
-            dom = me.dom,
-            offsets = me.getOffsetsTo(container = Ext.getDom(container) || Ext.getBody().dom),
-        // el's box
-            left = offsets[0] + container.scrollLeft,
-            top = offsets[1] + container.scrollTop,
-            bottom = top + dom.offsetHeight,
-            right = left + dom.offsetWidth,
-        // ct's box
-            ctClientHeight = container.clientHeight,
-            ctScrollTop = parseInt(container.scrollTop, 10),
-            ctScrollLeft = parseInt(container.scrollLeft, 10),
-            ctBottom = ctScrollTop + ctClientHeight,
-            ctRight = ctScrollLeft + container.clientWidth,
-            newPos;
+			dom = me.dom,
+			offsets = me.getOffsetsTo(container = Ext.getDom(container) || Ext.getBody().dom),
+		// el's box
+			left = offsets[0] + container.scrollLeft,
+			top = offsets[1] + container.scrollTop,
+			bottom = top + dom.offsetHeight,
+			right = left + dom.offsetWidth,
+		// ct's box
+			ctClientHeight = container.clientHeight,
+			ctScrollTop = parseInt(container.scrollTop, 10),
+			ctScrollLeft = parseInt(container.scrollLeft, 10),
+			ctBottom = ctScrollTop + ctClientHeight,
+			ctRight = ctScrollLeft + container.clientWidth,
+			newPos;
 
-	    if (dom.offsetHeight > ctClientHeight || top < ctScrollTop) {
-	      newPos = top - this.getHeight();
-	    } else if (bottom > ctBottom) {
-	      newPos = (bottom - ctClientHeight) + this.getHeight();
-	    }
-	    if (newPos !== null) {
-	      me.scrollChildFly.attach(container).scrollTo('top', newPos, animate);
-	    }
+		if (dom.offsetHeight > ctClientHeight || top < ctScrollTop) {
+		  newPos = top - this.getHeight();
+		} else if (bottom > ctBottom) {
+		  newPos = (bottom - ctClientHeight) + this.getHeight();
+		}
+		if (newPos !== null) {
+		  me.scrollChildFly.attach(container).scrollTo('top', newPos, animate);
+		}
 
-	    if (hscroll !== false) {
-	      newPos = null;
-	      if (dom.offsetWidth > container.clientWidth || left < ctScrollLeft) {
-	        newPos = left;
-	      } else if (right > ctRight) {
-	        newPos = right - container.clientWidth;
-	      }
-	      if (newPos !== null) {
-	        me.scrollChildFly.attach(container).scrollTo('left', newPos, animate);
-	      }
-	    }
-	    return me;
+		if (hscroll !== false) {
+		  newPos = null;
+		  if (dom.offsetWidth > container.clientWidth || left < ctScrollLeft) {
+			newPos = left;
+		  } else if (right > ctRight) {
+			newPos = right - container.clientWidth;
+		  }
+		  if (newPos !== null) {
+			me.scrollChildFly.attach(container).scrollTo('left', newPos, animate);
+		  }
+		}
+		return me;
 	},
 
 

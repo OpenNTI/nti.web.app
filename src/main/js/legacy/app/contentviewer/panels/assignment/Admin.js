@@ -4,11 +4,11 @@ var AssignmentAdmin = require('../../navigation/assignment/Admin');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assignment.Admin', {
-    extend: 'NextThought.app.contentviewer.panels.Reader',
-    alias: 'widget.admin-assignment-reader',
-    prefix: 'course-assignment-admin',
+	extend: 'NextThought.app.contentviewer.panels.Reader',
+	alias: 'widget.admin-assignment-reader',
+	prefix: 'course-assignment-admin',
 
-    getToolbarConfig: function() {
+	getToolbarConfig: function() {
 		return {
 			xtype: 'course-assessment-admin-reader-header',
 			parentView: this.parentView,
@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		};
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var reader = this.down('reader-content'),
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		.then(done.bind(this));
 	},
 
-    getAnalyticData: function() {
+	getAnalyticData: function() {
 		if (!this.assignment) {
 			return {};
 		}

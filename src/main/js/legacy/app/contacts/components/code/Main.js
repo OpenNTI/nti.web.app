@@ -3,11 +3,11 @@ var FieldsSimpleTextField = require('../../../../common/form/fields/SimpleTextFi
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.code.Main', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.code-main-view',
-    cls: 'code-main-view',
+	extend: 'Ext.container.Container',
+	alias: 'widget.code-main-view',
+	cls: 'code-main-view',
 
-    items: [
+	items: [
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
 						{xtype: 'simpletext', name: 'code', cls: 'input-box', inputType: 'text', placeholder: getString('NextThought.view.account.code.Main.enter-code')}
 		]},
@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 		]}
 	],
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.down('[name=code]'), {
 			scope: this,
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 		this.GroupActions = NextThought.app.groups.Actions.create();
 	},
 
-    changed: function(value, t) {
+	changed: function(value, t) {
 		var val = value.trim(),
 			empty = Ext.isEmpty(val),
 			btn = this.query('[name=submit]', this)[0];
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 		}
 	},
 
-    getValue: function() {
+	getValue: function() {
 		var code = this.down('[name=code]').getValue();
 		if (code) {code = code.trim(); }
 		return {
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 
 	},
 
-    setError: function(error) {
+	setError: function(error) {
 		var box = this.down('[name=error]'),
 			field = this.down('[name=code]'),
 			allFields = this.query('[name]');
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 		this.up('window').updateLayout();
 	},
 
-    submitClicked: function() {
+	submitClicked: function() {
 		var me = this,
 			btn = this.down('[name=submit]'),
 			w = this.up('window'),
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 			});
 	},
 
-    clearError: function() {
+	clearError: function() {
 		var box = this.down('[name=error]');
 		box.hide();
 	}

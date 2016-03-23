@@ -3,23 +3,23 @@ var FieldsLegacySearchComboBox = require('./LegacySearchComboBox');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.DateField', {
-    extend: 'Ext.Component',
-    alias: 'widget.datefield',
-    cls: 'datefield',
+	extend: 'Ext.Component',
+	alias: 'widget.datefield',
+	cls: 'datefield',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'month'},
 		{tag: 'input', cls: 'day date-field-input', placeholder: 'Day', size: 2},
 		{tag: 'input', cls: 'year date-field-input', placeholder: 'Year', size: 4}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		monthEl: '.month',
 		dayEl: '.day',
 		yearEl: '.year'
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 
@@ -58,13 +58,13 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateField'
 		}
 	},
 
-    isEmpty: function() {
+	isEmpty: function() {
 		return Ext.isEmpty(this.yearEl.getValue() +
 						   this.dayEl.getValue() +
 						   this.monthInput.getValue());
 	},
 
-    isFullyAnswered: function() {
+	isFullyAnswered: function() {
 		var q = this.hasBeenAnswered || (!Ext.isEmpty(this.yearEl.getValue()) &&
 										 !Ext.isEmpty(this.dayEl.getValue()) &&
 										 !Ext.isEmpty(this.monthInput.getValue()));
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateField'
 		return q;
 	},
 
-    maybeChanged: function onChange() {
+	maybeChanged: function onChange() {
 		var last = onChange.lastValue,
 			current = this.getValue();
 		if (last !== current && this.isFullyAnswered()) {
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateField'
 		}
 	},
 
-    setValue: function(date) {
+	setValue: function(date) {
 		if (!this.rendered) {
 			this.date = date;
 			return;
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateField'
 		this.monthInput.setValue(month);
 	},
 
-    getValue: function() {
+	getValue: function() {
 		var year = parseInt(this.yearEl.getValue(), 10),
 			day = parseInt(this.dayEl.getValue(), 10),
 			month = parseInt(this.monthInput.getValue(), 10),

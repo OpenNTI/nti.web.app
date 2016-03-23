@@ -6,16 +6,16 @@ var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.model.store.PurchaseAttempt', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    statics: {
+	statics: {
 		STATE_UNKNOWN: 'Unknown',
 		STATE_FAILURE: 'Failed',
 		STATE_SUCCESS: 'Success',
 		STATE_STARTED: 'Started'
 	},
 
-    fields: [
+	fields: [
 	  { name: 'Items', type: 'auto', persist: false },
 	  { name: 'State', type: 'string', persist: false },
 	  { name: 'Processor', type: 'string', persist: false },
@@ -34,9 +34,9 @@ module.exports = exports = Ext.define('NextThought.model.store.PurchaseAttempt',
 		  { name: 'VendorThankYouPage', type: 'auto'}
 	],
 
-    isPurchaseAttempt: true,
+	isPurchaseAttempt: true,
 
-    //TODO we want the polling link on the attempt
+	//TODO we want the polling link on the attempt
 	getLink: function(rel) {
 		if (rel === 'get_purchase_attempt') {
 			return getURL('/dataserver2/store/get_purchase_attempt?' + Ext.Object.toQueryString({purchaseID: this.getId()}));
@@ -44,15 +44,15 @@ module.exports = exports = Ext.define('NextThought.model.store.PurchaseAttempt',
 		return this.mixins.hasLinks.getLink.call(this, rel);
 	},
 
-    isComplete: function() {
+	isComplete: function() {
 		return this.isSuccess() || this.isFailure();
 	},
 
-    isSuccess: function() {
+	isSuccess: function() {
 		return this.get('State') === this.self.STATE_SUCCESS;
 	},
 
-    isFailure: function() {
+	isFailure: function() {
 		return this.get('State') === this.self.STATE_FAILURE;
 	}
 });

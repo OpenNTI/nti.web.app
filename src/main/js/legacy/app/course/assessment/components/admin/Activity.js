@@ -7,16 +7,16 @@ var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.Activity', {
-    extend: 'NextThought.app.course.assessment.components.student.Activity',
-    alias: 'widget.course-assessment-admin-activity',
-    view: 'admin',
+	extend: 'NextThought.app.course.assessment.components.student.Activity',
+	alias: 'widget.course-assessment-admin-activity',
+	view: 'admin',
 
-    MIME_TYPE_MAP: {
+	MIME_TYPE_MAP: {
 		'application/vnd.nextthought.assessment.userscourseassignmenthistoryitemfeedback': 'addFeedback',
 		'application/vnd.nextthought.assessment.assignmentsubmission': 'addStudentSubmission'
 	},
 
-    setAssignmentsData: function() {
+	setAssignmentsData: function() {
 		var me = this;
 		me.callParent(arguments);
 
@@ -33,21 +33,21 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return me.loadPage();
 	},
 
-    onLoadMore: function() {
+	onLoadMore: function() {
 		this.loadPage();
 	},
 
-    mask: function() {
+	mask: function() {
 		if (!this.rendered) {return;}
 		this.callParent(arguments);
 	},
 
-    unmask: function() {
+	unmask: function() {
 		if (!this.rendered || this.isDestroyed) {return;}
 		this.callParent(arguments);
 	},
 
-    setMoreLinkState: function(state) {
+	setMoreLinkState: function(state) {
 		if (!this.rendered) {
 			this.on({afterrender: this.setMoreLinkState.bind(this, state), single: true});
 			return;
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.loadMoreLink[state ? 'removeCls' : 'addCls']('hidden');
 	},
 
-    loadPage: function() {
+	loadPage: function() {
 		var me = this;
 		me.mask();
 		return Service.request(me.nextPageURL).done(function(json) {
@@ -92,9 +92,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-    deriveEvents: Ext.emptyFn,
+	deriveEvents: Ext.emptyFn,
 
-    addFeedback: function(f) {
+	addFeedback: function(f) {
 		var rec = this.callParent(arguments),
 			path = (f.get('href') || '').split('/').slice(0, -2).join('/');//EWWW... url nastyness
 
@@ -121,7 +121,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return rec;
 	},
 
-    addStudentSubmission: function(s) {
+	addStudentSubmission: function(s) {
 		var c = s.get('Creator'),
 			str = ' submitted',
 			r = this.addEvent(this.getEventConfig('--' + str, s.get('assignmentId'), s.get('CreatedTime')));
@@ -135,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    goToAssignment: function(s, record) {
+	goToAssignment: function(s, record) {
 		var user = record.get('user'),
 			userId,
 			me = this,

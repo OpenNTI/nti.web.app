@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	CANVAS_URL_SHAPE_BROKEN_IMAGE: 'whiteboard-error-image',
 	CANVAS_BROKEN_IMAGE: 'whiteboard-broken-image',
 
-	CANVAS_GOLDEN_RATIO: 1.6180,    //http://en.wikipedia.org/wiki/Golden_ratio
+	CANVAS_GOLDEN_RATIO: 1.6180,	//http://en.wikipedia.org/wiki/Golden_ratio
 
 	SAD_FACE: Ext.DomHelper.markup({
 		style: {
@@ -124,11 +124,11 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	/**
 	 * Should the given ntiid, url, and targetMimeType be opened in the app
 	 * or in another window.
-	 * @param  {String} ntiid          the ntiid of the thing
-	 * @param  {Srring} url            the url to the thing
+	 * @param  {String} ntiid		   the ntiid of the thing
+	 * @param  {Srring} url			   the url to the thing
 	 * @param  {String} basePath
 	 * @param  {String} targetMimeType the mimeType of the thing to open
-	 * @return {Boolean}               if we can show this in the app
+	 * @return {Boolean}			   if we can show this in the app
 	 */
 	shouldOpenInApp: function(ntiid, url, basePath, targetMimeType) {
 		var isTargetAnNTIID = ParseUtils.isNTIID(url),
@@ -148,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	/**
 	 * Search the navigator for a  mimeType
 	 * @param  {String} type mimeType to search for
-	 * @return {MimeType}    the mimeType if we find it or null
+	 * @return {MimeType}	 the mimeType if we find it or null
 	 */
 	getNavigatorMimeType: function(type) {
 		var key, mimeType;
@@ -168,7 +168,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	/**
 	 * Search the navigator for a plugin
 	 * @param  {String} name name of the plugin
-	 * @return {Plugin}      the plugin if we find it or null
+	 * @return {Plugin}		 the plugin if we find it or null
 	 */
 	getNavigatorPlugin: function(name) {
 		var key, plugin;
@@ -187,7 +187,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 * Attempt to create an active x object
 	 *
 	 * @param  {String} name name of the application providing the object
-	 * @return {Object}      the active x object or null if we couldn't create one
+	 * @return {Object}		 the active x object or null if we couldn't create one
 	 */
 	getActiveXObject: function(name) {
 		try {
@@ -292,7 +292,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 			alert('Bad Server Config, your data path does not validate the pattern: /.+/');
 			return false;
 		}
-    /*
+	/*
 		var hostInfo = HOST_PATTERN.exec($AppConfig.server.host);
 
 		Ext.apply($AppConfig.server,{
@@ -300,7 +300,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 			domain: hostInfo[HOST_PATTERN_DOMAIN_MATCH_GROUP],
 			port: parseInt(hostInfo[HOST_PATTERN_PORT_MATCH_GROUP],10)
 		});
-    */
+	*/
 
 		if ($AppConfig.server.jsonp === undefined) {
 			$AppConfig.server.jsonp = Ext.isIE && !Ext.isIE10p;
@@ -561,7 +561,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 *
 	 * @param a - first array
 	 * @param b - second array
-	 * @param [fn] - an equality function.  If this is ommited === is used on each elment
+	 * @param [fn] - an equality function.	If this is ommited === is used on each elment
 	 */
 	arrayEquals: function(a, b, fn) {
 		var i;
@@ -595,44 +595,44 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		}
 
 		var re = naturalSort.re = (naturalSort.re || /(^-?[0-9]+(\.?[0-9]*)[df]?e?[0-9]?$|^0x[0-9a-f]+$|[0-9]+)/gi),
-	        sre = naturalSort.sre = (naturalSort.sre || /(^[ ]*|[ ]*$)/g),
-	        dre = naturalSort.dre =
+			sre = naturalSort.sre = (naturalSort.sre || /(^[ ]*|[ ]*$)/g),
+			dre = naturalSort.dre =
 				  (naturalSort.dre || /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/),
-	        hre = naturalSort.hre = (naturalSort.hre || /^0x[0-9a-f]+$/i),
-	        ore = naturalSort.ore = (naturalSort.ore || /^0/),
+			hre = naturalSort.hre = (naturalSort.hre || /^0x[0-9a-f]+$/i),
+			ore = naturalSort.ore = (naturalSort.ore || /^0/),
 			// convert all to strings strip whitespace
-	        x = i(a).replace(sre, '') || '',
-	        y = i(b).replace(sre, '') || '',
-	        // chunk/tokenize
-	        xN = x.replace(re, '\u0000$1\u0000').replace(/\u0000$/, '').replace(/^\u0000/, '').split('\u0000'),
-	        yN = y.replace(re, '\u0000$1\u0000').replace(/\u0000$/, '').replace(/^\u0000/, '').split('\u0000'),
-	        // numeric, hex or date detection
-	        xD = parseInt(x.match(hre), 10) || (xN.length !== 1 && x.match(dre) && Date.parse(x)),
-	        yD = parseInt(y.match(hre), 10) || (xD && y.match(dre) && Date.parse(y)) || null,
-	        oFxNcL, oFyNcL, cLoc;
+			x = i(a).replace(sre, '') || '',
+			y = i(b).replace(sre, '') || '',
+			// chunk/tokenize
+			xN = x.replace(re, '\u0000$1\u0000').replace(/\u0000$/, '').replace(/^\u0000/, '').split('\u0000'),
+			yN = y.replace(re, '\u0000$1\u0000').replace(/\u0000$/, '').replace(/^\u0000/, '').split('\u0000'),
+			// numeric, hex or date detection
+			xD = parseInt(x.match(hre), 10) || (xN.length !== 1 && x.match(dre) && Date.parse(x)),
+			yD = parseInt(y.match(hre), 10) || (xD && y.match(dre) && Date.parse(y)) || null,
+			oFxNcL, oFyNcL, cLoc;
 
 
-	    // first try and sort Hex codes or Dates
-	    if (yD) {
-	        if (xD < yD) { return -1; }
-	        if (xD > yD) { return 1;}
+		// first try and sort Hex codes or Dates
+		if (yD) {
+			if (xD < yD) { return -1; }
+			if (xD > yD) { return 1;}
 		}
-	    // natural sorting through split numeric strings and default strings
-	    for (cLoc = 0, numS = Math.max(xN.length, yN.length); cLoc < numS; cLoc++) {
-	        // find floats not starting with '0', string or 0 if not defined (Clint Priest)
-	        oFxNcL = (!(xN[cLoc] || '').match(ore) && parseFloat(xN[cLoc])) || xN[cLoc] || 0;
-	        oFyNcL = (!(yN[cLoc] || '').match(ore) && parseFloat(yN[cLoc])) || yN[cLoc] || 0;
-	        // handle numeric vs string comparison - number < string - (Kyle Adams)
-	        if (isNaN(oFxNcL) !== isNaN(oFyNcL)) { return (isNaN(oFxNcL)) ? 1 : -1; }
-	        // rely on string comparison if different types - i.e. '02' < 2 != '02' < '2'
-	        if ((typeof oFxNcL) !== (typeof oFyNcL)) {
-	            oFxNcL += '';
-	            oFyNcL += '';
-	        }
-	        if (oFxNcL < oFyNcL) { return -1; }
-	        if (oFxNcL > oFyNcL) { return 1; }
-	    }
-	    return 0;
+		// natural sorting through split numeric strings and default strings
+		for (cLoc = 0, numS = Math.max(xN.length, yN.length); cLoc < numS; cLoc++) {
+			// find floats not starting with '0', string or 0 if not defined (Clint Priest)
+			oFxNcL = (!(xN[cLoc] || '').match(ore) && parseFloat(xN[cLoc])) || xN[cLoc] || 0;
+			oFyNcL = (!(yN[cLoc] || '').match(ore) && parseFloat(yN[cLoc])) || yN[cLoc] || 0;
+			// handle numeric vs string comparison - number < string - (Kyle Adams)
+			if (isNaN(oFxNcL) !== isNaN(oFyNcL)) { return (isNaN(oFxNcL)) ? 1 : -1; }
+			// rely on string comparison if different types - i.e. '02' < 2 != '02' < '2'
+			if ((typeof oFxNcL) !== (typeof oFyNcL)) {
+				oFxNcL += '';
+				oFyNcL += '';
+			}
+			if (oFxNcL < oFyNcL) { return -1; }
+			if (oFxNcL > oFyNcL) { return 1; }
+		}
+		return 0;
 	},
 
 

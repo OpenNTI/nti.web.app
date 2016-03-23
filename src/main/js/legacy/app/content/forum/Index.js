@@ -4,27 +4,27 @@ var ForumsIndex = require('../../forums/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.content.forum.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.bundle-forum',
-    layout: 'none',
-    title: 'Discussions',
-    cls: 'course-forum',
+	extend: 'Ext.container.Container',
+	alias: 'widget.bundle-forum',
+	layout: 'none',
+	title: 'Discussions',
+	cls: 'course-forum',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-    statics: {
+	statics: {
 		showTab: function(bundle) {
 			return bundle && bundle.hasForumList && bundle.hasForumList() && bundle.get('Preview') !== true;
 		}
 	},
 
-    items: [
+	items: [
 		{xtype: 'forum-container'}
 	],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.forumContainer = this.down('forum-container');
@@ -36,15 +36,15 @@ module.exports = exports = Ext.define('NextThought.app.content.forum.Index', {
 		this.addDefaultRoute(this.onRoute.bind(this));
 	},
 
-    getRouteTitle: function() {
+	getRouteTitle: function() {
 		return this.title;
 	},
 
-    onActivate: function() {
+	onActivate: function() {
 		this.setTitle(this.title);
 	},
 
-    bundleChanged: function(bundle) {
+	bundleChanged: function(bundle) {
 		var container = this.forumContainer,
 			getForumList;
 
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.content.forum.Index', {
 			.then(container.setForumList.bind(container));
 	},
 
-    onRoute: function(route, subRoute) {
+	onRoute: function(route, subRoute) {
 		return this.forumContainer.handleRoute(route.path, route.precache);
 	}
 });

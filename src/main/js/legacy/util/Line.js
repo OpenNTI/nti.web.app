@@ -145,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 			range.selectNode(cn[i]);
 			rect = range.getBoundingClientRect();
 			if (!rect) { rect = range.getClientRects()[0];}
-			if (rect.bottom > y && (cn[i].data || cn[i].innerText || '  ').length > 1) {
+			if (rect.bottom > y && (cn[i].data || cn[i].innerText || '	').length > 1) {
 				curNode = cn[i];
 				i = -1;
 			}
@@ -212,7 +212,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 		}
 		else {range.expand('word');}
 
-		//If we have selected a range that is still collapsed.  No anchor.
+		//If we have selected a range that is still collapsed.	No anchor.
 		if (range.collapsed) {return null;}
 
 		//testing, show ranges:
@@ -413,7 +413,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 
 		//detect weirdness, if we have not been able to select anything by this point,
 		//do not allow anchoring:
-		//If we have selected a range that is still collapsed.  No anchor.
+		//If we have selected a range that is still collapsed.	No anchor.
 		if (sel.toString().trim().length === 0) {
 			fixScroll();
 			return false;

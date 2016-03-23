@@ -4,9 +4,9 @@ var AssessmentWordBank = require('./WordBank');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.FillInTheBlankWithWordBankSolution', {
-    extend: 'NextThought.model.assessment.Solution',
+	extend: 'NextThought.model.assessment.Solution',
 
-    fields: [
+	fields: [
 		{ name: 'value', type: 'auto' }
 	]
 });

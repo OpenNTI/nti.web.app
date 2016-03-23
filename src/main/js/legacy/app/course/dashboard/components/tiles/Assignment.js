@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 
 	setLate: function () {
-		var	due = this.record.getDueDate();
+		var due = this.record.getDueDate();
 
 		due = moment(due);
 

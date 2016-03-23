@@ -8,33 +8,33 @@ var ComponentsCard = require('./Card');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.Grouping', {
-    extend: 'NextThought.common.components.BoundPanel',
-    alias: 'widget.contacts-tabs-grouping',
-    defaultType: 'contacts-tabs-card',
+	extend: 'NextThought.common.components.BoundPanel',
+	alias: 'widget.contacts-tabs-grouping',
+	defaultType: 'contacts-tabs-card',
 
-    mixins: {
+	mixins: {
 		userContainer: 'NextThought.mixins.UserContainer',
 		enableProfiles: 'NextThought.mixins.ProfileLinks'
 	},
 
-    ui: 'contact-grouping',
-    cls: 'contact-grouping',
+	ui: 'contact-grouping',
+	cls: 'contact-grouping',
 
-    // layout: 'auto',
+	// layout: 'auto',
 	// componentLayout: 'natural',
 
 	layout: 'none',
 
-    pageSize: 15,
-    currentPage: 1,
+	pageSize: 15,
+	currentPage: 1,
 
-    //	width: 700,
+	//	width: 700,
 	plain: true,
 
-    frame: false,
-    border: false,
+	frame: false,
+	border: false,
 
-    tools: [
+	tools: [
 		{
 			xtype: 'nti-tool-action',
 			iconCls: 'options',
@@ -43,9 +43,9 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		}
 	],
 
-    titleTpl: Ext.DomHelper.createTemplate(['{0} ', {tag: 'span', html: '{1}'}]),
+	titleTpl: Ext.DomHelper.createTemplate(['{0} ', {tag: 'span', html: '{1}'}]),
 
-    showMoreTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+	showMoreTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'show-more',
 		cn: [
 			{cls: 'dots', cn: [{},{},{}]},
@@ -53,13 +53,13 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		]
 	})),
 
-    childEls: ['body'],
+	childEls: ['body'],
 
-    getTargetEl: function() {
+	getTargetEl: function() {
 		return this.body;
 	},
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'grouping-header',
 			cn: [
@@ -74,19 +74,19 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		toolsEl: '.grouping-header .tools',
 		nameEl: '.grouping-header .name',
 		countEl: '.grouping-header .count'
 	},
 
-    maybeDestroy: function(store, record) {
+	maybeDestroy: function(store, record) {
 		if (record === this.record) {
 			this.destroy();
 		}
 	},
 
-    maybeHideMenu: function(e) {
+	maybeHideMenu: function(e) {
 		if (!this.menu || !this.menu.el) {
 			return;
 		}
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		}
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.storeId = this.record.storeId;
 		this.mon(this.record.store, 'remove', 'maybeDestroy', this);
 
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		this.itemsList = [];
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		Ext.each(this.tools, function(t) {
 			t.render(this.toolsEl);
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		}
 	},
 
-    showMenu: function(e, cmp) {
+	showMenu: function(e, cmp) {
 		// settingsTool acts as a toggle on iPad
 		if (Ext.is.iPad) {
 			if (this.menu.isHidden()) {
@@ -170,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		}
 	},
 
-    setTitle: function(newTitle) {
+	setTitle: function(newTitle) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.setTitle, this, [newTitle]));
 			return;
@@ -184,28 +184,28 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		this.countEl.update(Ext.String.format('{0}', this.itemsList.length));
 	},
 
-    getTitle: function() {
+	getTitle: function() {
 		return this.initialConfig.title;
 	},
 
-    createUserComponent: function(i) {
+	createUserComponent: function(i) {
 		return {record: i};
 	},
 
-    getModelObject: function() {
+	getModelObject: function() {
 		return this.associatedGroup;
 	},
 
-    getUserListFieldName: function() {
+	getUserListFieldName: function() {
 		return 'friends';
 	},
 
-    removeAllItems: function() {
+	removeAllItems: function() {
 		this.itemsList = [];
 		this.callParent();
 	},
 
-    insertItem: function(insertAt, toInsert) {
+	insertItem: function(insertAt, toInsert) {
 		var spliceArgs = [insertAt, 0].concat(toInsert);
 		this.itemsList.splice.apply(this.itemsList, spliceArgs);
 
@@ -213,7 +213,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		Ext.defer(this.updateList, 1, this, [insertAt]);
 	},
 
-    removeItem: function(o, autoDestroy) {
+	removeItem: function(o, autoDestroy) {
 		var list = this.itemsList, removed = false;
 
 		this.remove(o, autoDestroy);
@@ -226,13 +226,13 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		});
 	},
 
-    updateStuff: function() {
+	updateStuff: function() {
 		this.setTitle();
 		this.updateMore();
 		this.updateChatState(this.associatedGroup);
 	},
 
-    updateMore: function() {
+	updateMore: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateMore, this, {single: true});
 			return;
@@ -253,14 +253,14 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		}
 	},
 
-    showMore: function() {
+	showMore: function() {
 		var last = (this.pageSize * this.currentPage) - 1;//the minus 1 is the more tile
 		this.currentPage++;
 
 		Ext.defer(this.updateList, 1, this, [last]);
 	},
 
-    updateList: function(dirtyIndex) {
+	updateList: function(dirtyIndex) {
 		console.time('updateList');
 
 		var rendered = this.items.getCount(),

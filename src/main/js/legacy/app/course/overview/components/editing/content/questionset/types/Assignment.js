@@ -5,10 +5,10 @@ var QuestionsetAssignmentSelection = require('../AssignmentSelection');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.types.Assignment', {
-    extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-    alias: 'widget.overview-editing-questionset-assignment',
+	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+	alias: 'widget.overview-editing-questionset-assignment',
 
-    statics: {
+	statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.AssignmentRef.mimeType
@@ -35,13 +35,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    LIST_XTYPE: 'overview-editing-assignment-selection',
-    EDITOR_XTYPE: 'overview-editing-assignment-editor',
-    backToList: 'Assignments',
-    SWITCHED: 'switched',
-    cls: 'content-editor questionset assignment',
+	LIST_XTYPE: 'overview-editing-assignment-selection',
+	EDITOR_XTYPE: 'overview-editing-assignment-editor',
+	backToList: 'Assignments',
+	SWITCHED: 'switched',
+	cls: 'content-editor questionset assignment',
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.loading) {
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    showEditor: function() {
+	showEditor: function() {
 		if (this.record) {
 			this.showItemEditor();
 		} else {
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    onBack: function() {
+	onBack: function() {
 		if (this.itemEditorCmp) {
 			this.showItemList([this.itemEditorCmp.selectedItem]);
 		} else if (this.doBack) {
@@ -65,17 +65,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    maybeEnableBack: function(text) {
+	maybeEnableBack: function(text) {
 		if (!this.record && this.enableBack) {
 			this.enableBack(text);
 		}
 	},
 
-    getItemList: function() {
+	getItemList: function() {
 		return this.bundle.getAllAssignments();
 	},
 
-    showItemList: function(selectedItems) {
+	showItemList: function(selectedItems) {
 		var me = this;
 
 		if (me.itemSelectionCmp) {
@@ -104,14 +104,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    getSelectionFromRecord: function(record) {
+	getSelectionFromRecord: function(record) {
 		return this.bundle.getAssignments()
 			.then(function(assignments) {
 				return assignments.findItem(record.get('Target-NTIID'));
 			});
 	},
 
-    getSelection: function() {
+	getSelection: function() {
 		var getAssignment,
 			record = this.record;
 
@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return getAssignment;
 	},
 
-    showItemEditor: function() {
+	showItemEditor: function() {
 		if (this.itemEditorCmp) {
 			this.itemEditorCmp.destroy();
 			delete this.itemEditorCmp;
@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    onItemListSelectionChange: function(selection) {
+	onItemListSelectionChange: function(selection) {
 		var length = selection.length;
 
 		this.setSaveText('Select');
@@ -185,13 +185,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    onSaveFailure: function(reason) {
+	onSaveFailure: function(reason) {
 		if (reason === this.SWITCHED) { return; }
 
 		this.callParent(arguments);
 	},
 
-    onSave: function() {
+	onSave: function() {
 		var me = this;
 
 		if (!me.itemEditorCmp) {

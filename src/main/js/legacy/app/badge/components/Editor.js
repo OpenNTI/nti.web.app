@@ -3,12 +3,12 @@ var EmailverifyMain = require('../../profiles/user/components/emailverify/Main')
 
 
 module.exports = exports = Ext.define('NextThought.app.badge.components.Editor', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.badge-export-editor',
-    layout: 'none',
-    items: [],
+	extend: 'Ext.container.Container',
+	alias: 'widget.badge-export-editor',
+	layout: 'none',
+	items: [],
 
-    initComponent: function(){
+	initComponent: function(){
 		this.callParent(arguments);
 
 		if (!this.user.isEmailVerified()) {
@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 		}
 	},
 
-    showEmailVerfication: function(){
+	showEmailVerfication: function(){
 		if (this.activeEditor) {
 			this.activeEditor.destroy();
 		}
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 			.then(this.setupEmailVerification.bind(this));
 	},
 
-    setupEmailVerification: function() {
+	setupEmailVerification: function() {
 		if (this.disableBack) {
 			this.disableBack();
 		}
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 		}
 	},
 
-    /**
+	/**
 	 * Handles the save event on the email token view.
 	 * When it succeeds, it triggers the doSave call on the prompt object
 	 * to perform the fulfill action.
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 		}
 	},
 
-    /**
+	/**
 	 * Lock the badge 
 	 * 
 	 * @return {Promise} the promise to lock the badge.
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 		return record.lockBadge();
 	},
 
-    showBadgeLock: function(){
+	showBadgeLock: function(){
 		var email = this.user && this.user.get('email');
 
 		if (this.activeEditor) {
@@ -118,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 			.then(this.setupEmailLock.bind(this));
 	},
 
-    setupEmailLock: function() {
+	setupEmailLock: function() {
 		if (this.setTitle) {
 			this.setTitle(this.title);
 		}

@@ -4,13 +4,13 @@ var AssessmentUsersCourseAssignmentSavepointItem = require('./UsersCourseAssignm
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.UsersCourseAssignmentSavepoint', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    fields: [
+	fields: [
 		{name: 'Items', type: 'collectionItem'}
 	],
 
-    getSavePoint: function(assignmentId) {
+	getSavePoint: function(assignmentId) {
 		return this.getFieldItem('Items', assignmentId);
 	}
 });

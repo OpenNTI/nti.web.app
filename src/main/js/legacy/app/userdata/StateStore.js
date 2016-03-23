@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 
 
 	//<editor-fold desc="Store Iteration">
-	//Calls the provided fn on all the stores.  Optionally takes a predicate
+	//Calls the provided fn on all the stores.	Optionally takes a predicate
 	//which skips stores that do not match the predicate
 	applyToStores: function(fn, predicate) {
 		Ext.Object.each(this.flatPageContextMap, function(k, o) {

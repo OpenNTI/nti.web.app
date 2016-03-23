@@ -7,17 +7,17 @@ var ModelUser = require('../../../model/User');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.ContactTabView', {
-    extend: 'NextThought.app.contacts.components.TabView',
-    alias: 'widget.contacts-tab-view',
+	extend: 'NextThought.app.contacts.components.TabView',
+	alias: 'widget.contacts-tab-view',
 
-    navigation: {
+	navigation: {
 		xtype: 'contacts-outline',
 		cls: 'contact',
 		subType: 'contact',
 		outlineLabel: getString('NextThought.view.contacts.View.contact-tab')
 	},
 
-    body: {
+	body: {
 		xtype: 'data-bound-panel',
 		defaultType: 'contacts-tabs-card',
 		items: [],
@@ -34,16 +34,16 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Conta
 		}
 	},
 
-    subType: 'contact',
+	subType: 'contact',
 
-    initComponent: function () {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.buildStore();
 	},
 
-    buildStore: function() {
+	buildStore: function() {
 		var s = this.GroupStore.getAllContactsStore(),
 			store = StoreUtils.newView(s), me = this;
 

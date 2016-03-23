@@ -380,7 +380,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 		'37': true, //LEFT
 		'38': true, //UP
 		'39': true, //RIGHT
-		'40': true  //DOWN
+		'40': true	//DOWN
 	},
 
 	KEY_CODES: {

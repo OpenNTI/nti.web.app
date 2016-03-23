@@ -145,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 
 	/**
 	 * Whether or not this catalog entry is in a given family id
-	 * @param  {String}  id FamilyId
+	 * @param  {String}	 id FamilyId
 	 * @return {Boolean}	if it is in the family
 	 */
 	isInFamily: function (id) {
@@ -189,8 +189,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 	/**
 	 * Mark the appropriate enrollment option as enrolled
 	 * @param  {String} status the scope they are enrolled in
-	 * @param  {Boolean} open   if they are open enrolled
-	 * @param  {Boolean} admin  if they are an admin
+	 * @param  {Boolean} open	if they are open enrolled
+	 * @param  {Boolean} admin	if they are an admin
 	 */
 	updateEnrollmentState: function (status, open, admin) {
 		var options = this.get('EnrollmentOptions'),
@@ -270,7 +270,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 	 * Compare a given catalog entry to this one to see if they
 	 * are in the same family
 	 * @param  {CourseCatalogEntry} catalog entry to compare
-	 * @return {Boolean}		 	whether or not they are in the same family
+	 * @return {Boolean}			whether or not they are in the same family
 	 */
 	inSameFamily: function (catalog) {
 		var families = this.get('CatalogFamilies');

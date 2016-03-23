@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.StudentHisto
 	/**
 	 * Find a record with the same assignment id as given
 	 * @param  {NTIID} assignmentId Assignment to look up
-	 * @return {HistoryItem}        history item for the assignment
+	 * @return {HistoryItem}		history item for the assignment
 	 */
 	__getEntryForAssignment: function(assignmentId) {
 		var range = this.getRange() || [],

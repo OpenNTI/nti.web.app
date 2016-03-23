@@ -2,21 +2,21 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.VideoPopout', {
-    extend: 'Ext.panel.Panel',
-    alias: 'widget.video-lightbox',
-    modal: true,
-    plain: true,
-    shadow: false,
-    frame: false,
-    border: false,
-    floating: true,
-    cls: 'videos',
-    ui: 'video',
-    width: 640,
-    height: 475,
-    layout: 'fit',
+	extend: 'Ext.panel.Panel',
+	alias: 'widget.video-lightbox',
+	modal: true,
+	plain: true,
+	shadow: false,
+	frame: false,
+	border: false,
+	floating: true,
+	cls: 'videos',
+	ui: 'video',
+	width: 640,
+	height: 475,
+	layout: 'fit',
 
-    constructor: function(config) {
+	constructor: function(config) {
 		var me = this;
 		me.callParent(arguments);
 		Ext.EventManager.onWindowResize(me.syncSize, me, false);
@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.VideoPopout', {
 		Ext.TaskManager.start(me.task);
 	},
 
-    syncSize: function() {
+	syncSize: function() {
 		var vh = Ext.Element.getViewportHeight(),
 			mh = this.getHeight(),
 			top = Math.round((vh - mh) / 2);
@@ -54,17 +54,17 @@ module.exports = exports = Ext.define('NextThought.common.ux.VideoPopout', {
 		}
 	},
 
-    destroy: function() {
+	destroy: function() {
 		Ext.TaskManager.stop(this.task);
 		this.callParent(arguments);
 	},
 
-    onShow: function() {
+	onShow: function() {
 		this.down('video-roll').selectFirst();
 		return this.callParent(arguments);
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(Ext.DomHelper.append(this.el, { cls: 'close', 'data-qtip': 'close' }, true), {

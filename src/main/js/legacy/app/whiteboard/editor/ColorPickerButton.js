@@ -3,16 +3,16 @@ var EditorColorPicker = require('./ColorPicker');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ColorPickerButton', {
-    extend: 'Ext.button.Button',
-    alias: 'widget.color-picker-button',
-    scale: 'large',
-    cls: 'color',
-    ui: 'button',
-    baseCls: 'whiteboard-color',
-    menuAlign: 't-b?',
-    menu: {xtype: 'color-picker'},
+	extend: 'Ext.button.Button',
+	alias: 'widget.color-picker-button',
+	scale: 'large',
+	cls: 'color',
+	ui: 'button',
+	baseCls: 'whiteboard-color',
+	menuAlign: 't-b?',
+	menu: {xtype: 'color-picker'},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.palette = this.menu.down('color-palette');
@@ -23,15 +23,15 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ColorPi
 		this.setValue(this.value);
 	},
 
-    selectHandler: function(palette,value) {
+	selectHandler: function(palette,value) {
 		this.setValue(value);
 	},
 
-    getValue: function() {
+	getValue: function() {
 		return this.value || 'NONE';
 	},
 
-    setValue: function(color) {
+	setValue: function(color) {
 		var me = this, found = false;
 		Ext.each(this.palette.colors, function(c) {
 			if (c.value === color) { found = true; me.addCls(c.name); }

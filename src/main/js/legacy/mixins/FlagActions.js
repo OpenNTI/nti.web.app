@@ -57,9 +57,9 @@ module.exports = exports = Ext.define('NextThought.mixins.FlagActions', {
 
 
 	reflectFlagged: function(record) {
-    if (this.flagEl) {
+	if (this.flagEl) {
 			this.markAsFlagged(record.isFlagged());
-    }
+	}
 	},
 
 

@@ -11,7 +11,7 @@ var DndDropzone = require('../../app/dnd/Dropzone');
  * It can also implement a getDropTarget method, otherwise this.el.dom will be used
  */
 module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
-    /**
+	/**
 	 * If we haven't yet, set up the dropzone wrapper
 	 */
 	initDropzone: function() {
@@ -31,11 +31,11 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 		}
 	},
 
-    getDropzoneTarget: function() {
+	getDropzoneTarget: function() {
 		return this.el && this.el.dom;
 	},
 
-    getDropzoneBoundingClientRect: function() {
+	getDropzoneBoundingClientRect: function() {
 		var target = this.getDropzoneTarget(),
 			rect;
 
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 		return rect;
 	},
 
-    /**
+	/**
 	 * Add all the listeners to the target
 	 */
 	enableDropzone: function() {
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 		}
 	},
 
-    /**
+	/**
 	 * Remove all the listeners on the target
 	 */
 	disableDropzone: function() {
@@ -74,9 +74,9 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 		}
 	},
 
-    /**
+	/**
 	 * Set a data transfer handler on the dropzone wrapper
-	 * @param {Strins} key     key to look up data on
+	 * @param {Strins} key	   key to look up data on
 	 * @param {Object} handler the handlers, see NextThought.app.dnd.Dropzone
 	 */
 	setDataTransferHandler: function(key, handler) {
@@ -85,13 +85,13 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 		this.Dropzone.setDataTransferHandler(key, handler);
 	},
 
-    getHandlersForDataTransfer: function(dataTransfer) {
+	getHandlersForDataTransfer: function(dataTransfer) {
 		this.initDropzone();
 
 		return this.Dropzone.getHandlersForDataTransfer(dataTransfer);
 	},
 
-    hasHandlerForDataTransfer: function(dataTransfer) {
+	hasHandlerForDataTransfer: function(dataTransfer) {
 		var handlers = this.getHandlersForDataTransfer(dataTransfer);
 
 		return handlers.length > 0;

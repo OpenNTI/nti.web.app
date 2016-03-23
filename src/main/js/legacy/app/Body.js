@@ -26,22 +26,22 @@ var ContactsIndex = require('./contacts/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.Body', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.main-views',
-    state_key: 'main-view',
-    ISCHANGE: /change$/,
+	extend: 'Ext.container.Container',
+	alias: 'widget.main-views',
+	state_key: 'main-view',
+	ISCHANGE: /change$/,
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router',
 		State: 'NextThought.mixins.State',
 		Scrolling: 'NextThought.mixins.Scrolling'
 	},
 
-    layout: 'card',
-    cls: 'main-body',
-    items: [],
+	layout: 'card',
+	cls: 'main-body',
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		window.addEventListener('wheel', this.maybeStopScrollBleed.bind(this));
 	},
 
-    allowNavigation: function() {
+	allowNavigation: function() {
 		var win = this.WindowStore.allowNavigation();
 
 		//if the window stops it or returns a promise don't keep looking
@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return this.mixins.Router.allowNavigation.call(this);
 	},
 
-    getCmp: function(xtype, cmpQuery) {
+	getCmp: function(xtype, cmpQuery) {
 		var cmp = this.down(cmpQuery || xtype);
 
 		if (!cmp) {
@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return cmp;
 	},
 
-    setActiveCmp: function(xtype, cmpQuery) {
+	setActiveCmp: function(xtype, cmpQuery) {
 		var old = this.getLayout().getActiveItem();
 			cmp = this.getCmp(xtype, cmpQuery);
 
@@ -129,11 +129,11 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return cmp;
 	},
 
-    beforeRoute: function() {
+	beforeRoute: function() {
 		this.WindowActions.closeActiveWindow();
 	},
 
-    onNewContext: function() {
+	onNewContext: function() {
 		var parts = this.ContextStore.getCurrentObjectParts();
 
 		if (parts.mimeType && parts.id) {
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		}
 	},
 
-    lockHeight: function() {
+	lockHeight: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.lockHeight.bind(this));
 			return;
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		this.addCls('height-locked');
 	},
 
-    unlockHeight: function() {
+	unlockHeight: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.unlockHeight.bind(this));
 			return;
@@ -166,11 +166,11 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		this.removeCls('height-locked');
 	},
 
-    navigateToWindowRecord: function(record) {
+	navigateToWindowRecord: function(record) {
 		this.attemptToNavigateToObject(record);
 	},
 
-    pushWindow: function(id, mimeType, state, title, route, precache) {
+	pushWindow: function(id, mimeType, state, title, route, precache) {
 		if (!title) {
 			title = this.ContextStore.getCurrentTitle();
 		}
@@ -217,20 +217,20 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		this.pushRoute(title, route, precache, state);
 	},
 
-    replaceOpenWindowRoute: function() {
+	replaceOpenWindowRoute: function() {
 		var route = this.ContextStore.removeObjectRoute(),
 			title = this.ContextStore.getCurrentTitle();
 
 		this.replaceRootRoute(title, route);
 	},
 
-    setLibraryActive: function(route, subRoute) {
+	setLibraryActive: function(route, subRoute) {
 		var library = this.setActiveCmp('library-view-container');
 
 		return library.handleRoute(subRoute, route.precache);
 	},
 
-    setCourseActive: function(route, subRoute) {
+	setCourseActive: function(route, subRoute) {
 		var me = this,
 			courseView = me.setActiveCmp('course-view-container'),
 			ntiid = route.params.id,
@@ -250,7 +250,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			});
 	},
 
-    setBundleActive: function(route, subRoute) {
+	setBundleActive: function(route, subRoute) {
 		var me = this,
 			bundleView = me.setActiveCmp('bundle-view-container'),
 			ntiid = route.params.id,
@@ -265,7 +265,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			});
 	},
 
-    setGroupActive: function(route, subRoute) {
+	setGroupActive: function(route, subRoute) {
 		var me = this,
 		   userView = me.setActiveCmp('profile-group', 'profile-group(true)'),
 		   id = route.params.id,
@@ -280,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 				 });
 	},
 
-    setUserActive: function(route, subRoute) {
+	setUserActive: function(route, subRoute) {
 		var me = this,
 			userView = me.setActiveCmp('profile-user', 'profile-user(true)'),
 			id = route.params.id,
@@ -295,7 +295,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			});
 	},
 
-    setCommunityActive: function(route, subRoute) {
+	setCommunityActive: function(route, subRoute) {
 		var me = this,
 			communityView = me.setActiveCmp('profile-community'),
 			id = route.params.id,
@@ -310,26 +310,26 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			});
 	},
 
-    setNotificationsActive: function(route, subRoute) {
+	setNotificationsActive: function(route, subRoute) {
 		var me = this,
 			notableView = me.setActiveCmp('notifications-index');
 
 		return notableView.handleRoute(subRoute, route.precache);
 	},
 
-    setSearchActive: function(route, subRoute) {
+	setSearchActive: function(route, subRoute) {
 		var searchView = this.setActiveCmp('search-index');
 
 		return searchView.handleRoute(subRoute, route.precache);
 	},
 
-    setContactsActive: function(route, subRoute) {
+	setContactsActive: function(route, subRoute) {
 		var contactsView = this.setActiveCmp('contacts-index');
 
 		return contactsView.handleRoute(subRoute, route.precache);
 	},
 
-    setObjectActive: function(route, subRoute) {
+	setObjectActive: function(route, subRoute) {
 		var me = this,
 			hash = route.hash,
 			id = route.params.id;
@@ -396,7 +396,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			});
 	},
 
-    /**
+	/**
 	 * Create and append a div to the body with a class of body-shade-mask
 	 * to add come contrast
 	 *
@@ -412,7 +412,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return div;
 	},
 
-    removeBodyContent: function(content) {
+	removeBodyContent: function(content) {
 		var body = Ext.getBody();
 
 		if (content && content.BODY_CLS) {
@@ -422,7 +422,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		body.setStyle({backgroundImage: ''});
 	},
 
-    addBodyContent: function(content) {
+	addBodyContent: function(content) {
 		var body = Ext.getBody(),
 			getBackground = content && content.getBackgroundImage && content.getBackgroundImage();
 
@@ -438,7 +438,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		}
 	},
 
-    updateBodyContent: function(content, masked) {
+	updateBodyContent: function(content, masked) {
 		var body = Ext.getBody(),
 			getBackground = content && content.getBackgroundImage && content.getBackgroundImage(),
 			mask = document.querySelector('.body-shade-mask');
@@ -460,7 +460,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		}
 	},
 
-    getObjectRoute: function(obj) {
+	getObjectRoute: function(obj) {
 		var me = this,
 			id = obj.getId && obj.getId();
 
@@ -491,7 +491,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			});
 	},
 
-    getRouteForPath: function(path) {
+	getRouteForPath: function(path) {
 		var root = path && path[0],
 			subPath = path && path.slice(1),
 			route;
@@ -519,7 +519,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return route;
 	},
 
-    getRouteForCourse: function(course, path) {
+	getRouteForCourse: function(course, path) {
 		var cmp = this.getCmp('course-view-container'),
 			route = cmp.getRouteForPath && cmp.getRouteForPath(path, course),
 			id = course.getId();
@@ -533,7 +533,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return route;
 	},
 
-    getRouteForUser: function(user, path) {
+	getRouteForUser: function(user, path) {
 		var cmp = this.getCmp('profile-user', 'profile-user(true)'),
 			route = cmp.getRouteForPath && cmp.getRouteForPath(path, user),
 			id = user.getId();
@@ -544,7 +544,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return route;
 	},
 
-    getRouteForCommunity: function(community, path) {
+	getRouteForCommunity: function(community, path) {
 		var cmp = this.getCmp('profile-community'),
 			route, id = community.getId();
 
@@ -563,7 +563,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return route;
 	},
 
-    getRouteForGroup: function(group, path) {
+	getRouteForGroup: function(group, path) {
 		var cmp = this.getCmp('profile-group'),
 			route, id = group.getId();
 
@@ -584,7 +584,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return route;
 	},
 
-    getRouteForBundle: function(bundle, path) {
+	getRouteForBundle: function(bundle, path) {
 		var cmp = this.getCmp('bundle-view-container'),
 			route, id = bundle.get('NTIID');
 

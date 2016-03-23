@@ -6,24 +6,24 @@ var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.chat-view',
-    header: false,
-    frame: false,
-    border: false,
-    autoScroll: false,
-    overflowX: 'hidden',
-    overflowY: 'hidden',
-    cls: 'chat-view scrollable',
-    ui: 'chat-view',
+	extend: 'Ext.container.Container',
+	alias: 'widget.chat-view',
+	header: false,
+	frame: false,
+	border: false,
+	autoScroll: false,
+	overflowX: 'hidden',
+	overflowY: 'hidden',
+	cls: 'chat-view scrollable',
+	ui: 'chat-view',
 
-    layout: {
+	layout: {
 		type: 'anchor'
 	},
 
-    defaults: {anchor: '100%'},
+	defaults: {anchor: '100%'},
 
-    items: [
+	items: [
 		{ xtype: 'chat-log-view', anchor: '0 -61' },
 		{xtype: 'box', hidden: true, name: 'error', autoEl: {cls: 'error-box', tag: 'div',
 			cn: [
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		}
 	],
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this, 'control-clicked', this.maybeEnableButtons, this);
 		this.mon(this.down('chat-log-view'), 'add', this.maybeShowFlagIcon, this);
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		}
 	},
 
-    makeAdjustmentForiOS: function() {
+	makeAdjustmentForiOS: function() {
 		var me = this,
 			topWindow = me.el.up('.x-window-chat-window'),
 			logView = topWindow.down('.chat-log-view'),
@@ -115,12 +115,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 			logView.setHeight(me.logheight);
 		}, me);
 
-  		//pressing key can hide keyboard and move view up. Stop top from changing.
+		//pressing key can hide keyboard and move view up. Stop top from changing.
 		chatWindow = this.el.up('.x-window');
 		chatWindow.on('resize', function() { chatWindow.setTop(me.initialY); });
 	},
 
-    trackChatState: function(notification) {
+	trackChatState: function(notification) {
 		if (!notification || !notification.status) {
 			return;
 		}
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		}
 	},
 
-    flagMessages: function() {
+	flagMessages: function() {
 		var allEntries = this.query('chat-log-entry'),
 			allFlaggedMessages = [];
 		Ext.each(allEntries, function(e) {
@@ -149,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		this.fireEvent('flag-messages', allFlaggedMessages, this);
 	},
 
-    maybeShowFlagIcon: function(view, entry) {
+	maybeShowFlagIcon: function(view, entry) {
 		if (this.showFlagIcon) {
 			return;
 		}
@@ -169,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		}
 	},
 
-    maybeEnableButtons: function() {
+	maybeEnableButtons: function() {
 		var b = this.down('[flagButton]');
 		//if there is checked stuff down there, enable button
 		if (this.el.down('.control.checked')) {
@@ -181,7 +181,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		}
 	},
 
-    toggleModerationButtons: function() {
+	toggleModerationButtons: function() {
 		var layout = this.down('[entryCard]').getLayout(),
 			activeId = layout.getActiveItem().itemId,
 			toggledId = (activeId === 'entry') ? 'buttons' : 'entry';
@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		this.updateLayout();
 	},
 
-    showError: function(errorObject) {
+	showError: function(errorObject) {
 		var box = this.down('[name=error]'),
 			errorText = errorObject.message || getString('NextThought.view.chat.View.error');
 		//make main error field show up
@@ -200,14 +200,14 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		this.reanchorLog();
 	},
 
-    clearError: function() {
+	clearError: function() {
 		var box = this.down('[name=error]'),
 			log = this.down('chat-log-view');
 		log.anchor = log.initialConfig.anchor;
 		box.hide();
 	},
 
-    reanchorLog: function() {
+	reanchorLog: function() {
 		var log = this.down('chat-log-view'),
 			foot = 0;
 

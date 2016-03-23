@@ -5,12 +5,12 @@ var {guidGenerator} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.PencilOptions', {
-    alias: 'widget.wb-tool-pencil-options',
-    extend: 'Ext.container.Container',
-    ui: 'options',
-    layout: 'none',
+	alias: 'widget.wb-tool-pencil-options',
+	extend: 'Ext.container.Container',
+	ui: 'options',
+	layout: 'none',
 
-    items: [{
+	items: [{
 		xtype: 'toolbar',
 		ui: 'options',
 		cls: 'pencil-stroke-options',
@@ -53,20 +53,20 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.PencilO
 		]
 	}],
 
-    constructor: function() {
+	constructor: function() {
 		this.items = Ext.clone(this.items);//copy onto instance from prototype
 		this.items[0].defaults.toggleGroup += guidGenerator();
 		this.items[1].defaults.toggleGroup += guidGenerator();
 		this.callParent(arguments);
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.addEvents({ 'wb-options-change': true });
 		this.enableBubble(['wb-options-change']);
 		this.callParent(arguments);
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		var me = this;
 		me.callParent(arguments);
 
@@ -79,11 +79,11 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.PencilO
 		});
 	},
 
-    getToolType: function() {
+	getToolType: function() {
 		return 'pencil';
 	},
 
-    setOptions: function(options) {
+	setOptions: function(options) {
 		if (options.stroke) {
 			this.down('[stroke=' + options.stroke + ']').toggle(true);
 		}
@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.PencilO
 		}
 	},
 
-    getOptions: function() {
+	getOptions: function() {
 		var pressed = this.query('button[pressed]'),
 			stroke, strokeWidth;
 
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.PencilO
 
 		return {
 			fill: null, //TODO - not implemented in design
-			stroke:	stroke,
+			stroke: stroke,
 			strokeWidth: strokeWidth
 		};
 	}

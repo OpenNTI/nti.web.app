@@ -8,9 +8,9 @@ var UtilStreamSource = require('./util/StreamSource');
  * as they get scrolled into and out of view.
  *
  * The stream source is an interface that implements the following methods
- * 		getCurrentBatch: fulfills with the current batch
- * 		getNextBatch: fulfills with the next batch
- * 		getPreviousBatch: fulfills with the previous batch
+ *		getCurrentBatch: fulfills with the current batch
+ *		getNextBatch: fulfills with the next batch
+ *		getPreviousBatch: fulfills with the previous batch
  *
  * Monitors can be added by the container for beforePageLoad, and afterPageLoad
  *
@@ -18,53 +18,53 @@ var UtilStreamSource = require('./util/StreamSource');
  * @author andrew.ligon@nextthought.com (Andrew Ligon)
  */
 module.exports = exports = Ext.define('NextThought.app.stream.Base', {
-    extend: 'Ext.container.Container',
+	extend: 'Ext.container.Container',
 
-    mixins: {
+	mixins: {
 		Scrolling: 'NextThought.mixins.Scrolling'
 	},
 
-    layout: 'none',
-    cls: 'stream',
-    items: [],
+	layout: 'none',
+	cls: 'stream',
+	items: [],
 
-    /**
+	/**
 	 * Contains a map of a mimeType to a component to show for it
 	 * @type {Object}
 	 */
 	MIME_TO_COMPONENTS: {},
 
-    clearOnDeactivate: false,
-    pageOnScroll: true,
+	clearOnDeactivate: false,
+	pageOnScroll: true,
 
-    /**
+	/**
 	 * The text to display when its empty
 	 * @override
 	 * @type {String}
 	 */
 	emptyText: '',
 
-    /**
+	/**
 	 * The text to display when there is an error
 	 * @override
 	 * @type {String}
 	 */
 	errorText: 'Error: Unable to load more data.',
 
-    /**
+	/**
 	 * The text to display at the bottom of the list
 	 * @override
 	 * @type {String}
 	 */
 	doneText: '',
 
-    onClassExtended: function(cls, data) {
+	onClassExtended: function(cls, data) {
 		if (data.cls) {
 			data.cls = [cls.superclass.cls, data.cls].join(' ');
 		}
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.initScrolling();
@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 		this.fillInMimeTypes(this.tiles || []);
 	},
 
-    fillInMimeTypes: function(cmps) {
+	fillInMimeTypes: function(cmps) {
 		this.MIME_TO_COMPONENTS = cmps.reduce(function(acc, cmp) {
 			var mimeType = cmp.mimeType;
 
@@ -100,11 +100,11 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 		}, {});
 	},
 
-    getGroupContainer: function() {
+	getGroupContainer: function() {
 		return this;
 	},
 
-    setStreamSource: function(source) {
+	setStreamSource: function(source) {
 		this.clearPages();
 		this.StreamSource = source;
 
@@ -121,13 +121,13 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 		}
 	},
 
-    setStreamParams: function(params) {
+	setStreamParams: function(params) {
 		params.url = params.url || this.StreamSource.getURL();
 
 		this.setStreamSource(new NextThought.app.stream.util.StreamSource(params));
 	},
 
-    onActivate: function() {
+	onActivate: function() {
 		//if we might have cleared on deactivate or haven't loaded any pages yet
 		if (this.clearOnDeactivate || this.PAGES.length === 0) {
 			this.setStreamSource(this.StreamSource);
@@ -138,7 +138,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 		}
 	},
 
-    onDeactivate: function() {
+	onDeactivate: function() {
 		if (this.clearOnDeactivate) {
 			this.clearPages();
 		}
@@ -148,15 +148,15 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 		}
 	},
 
-    setUpScrollListener: function() {
+	setUpScrollListener: function() {
 		window.addEventListener('scroll', this.onScroll);
 	},
 
-    removeScrollListener: function() {
+	removeScrollListener: function() {
 		window.removeEventListener('scroll', this.onScroll);
 	},
 
-    clearPages: function() {
+	clearPages: function() {
 		this.PAGES.forEach(function(page) {
 			page.destroy();
 		});
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 		delete this.isOnLastBatch;
 	},
 
-    loadBatch: function(batch) {
+	loadBatch: function(batch) {
 		if (batch.isFirst && !batch.Items.length) {
 			this.onEmpty();
 		} else {
@@ -180,9 +180,9 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 		}
 	},
 
-    fillInItems: function(items) {},
+	fillInItems: function(items) {},
 
-    maybeLoadMoreItems: function(batch) {
+	maybeLoadMoreItems: function(batch) {
 		var height = this.getPageHeight(),
 			scrollHeight = this.getPageScrollHeight();
 
@@ -191,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 		}
 	},
 
-    loadNextPage: function() {
+	loadNextPage: function() {
 		if (!this.isOnLastBatch && !this.isLoading) {
 			this.showLoading();
 			this.StreamSource.getNextBatch()
@@ -202,7 +202,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 		}
 	},
 
-    showLoading: function() {
+	showLoading: function() {
 		var cmp = this.getGroupContainer();
 
 		this.isLoading = true;
@@ -219,7 +219,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 		}
 	},
 
-    removeLoading: function() {
+	removeLoading: function() {
 		var cmp = this.getGroupContainer();
 
 		this.isLoading = null;
@@ -230,7 +230,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 		}
 	},
 
-    showError: function() {
+	showError: function() {
 		var cmp = this.getGroupContainer();
 
 		if (!this.errorCmp) {
@@ -245,7 +245,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 		}
 	},
 
-    onEmpty: function() {
+	onEmpty: function() {
 		var cmp = this.getGroupContainer();
 
 		if (!this.emptyCmp && this.emptyText) {
@@ -260,7 +260,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 		}
 	},
 
-    removeEmpty: function() {
+	removeEmpty: function() {
 		var cmp = this.getGroupContainer();
 
 		if (this.emptyCmp) {
@@ -269,7 +269,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 		}
 	},
 
-    onDone: function() {
+	onDone: function() {
 		var cmp = this.getGroupContainer();
 
 		if (!this.doneCmp && this.doneText) {
@@ -284,7 +284,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 		}
 	},
 
-    onScroll: function() {
+	onScroll: function() {
 		if (this.isOnLastBatch) { return; }
 
 		var body = this.getPageScrollingEl(),

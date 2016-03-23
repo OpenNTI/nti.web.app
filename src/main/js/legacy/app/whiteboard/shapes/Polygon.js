@@ -3,7 +3,7 @@ var ShapesBase = require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Polygon', {
-	extend:	'NextThought.app.whiteboard.shapes.Base',
+	extend: 'NextThought.app.whiteboard.shapes.Base',
 
 
 	draw: function(ctx,renderCallback) {
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Polygon
 	},
 
 	migrateTriangle: function(ctx) {
-    /**
+	/**
  * Unused func. We might use this function in the future when we need to migrate existing triangles.
  *
  * */
@@ -118,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Polygon
 	},
 
 	drawTriangle: function(ctx) {
-    /**
+	/**
  * Unused func. We will use it to draw triangles correctly.
  *
  * */

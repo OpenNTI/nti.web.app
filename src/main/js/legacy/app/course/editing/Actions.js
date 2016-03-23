@@ -6,19 +6,19 @@ var ConflictActions = require('../../conflict/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.ConflictActions = NextThought.app.conflict.Actions.create();
 	},
 
-    __resolveConflict: function(conflict, data) {
+	__resolveConflict: function(conflict, data) {
 		return this.ConflictActions.resolveConflict(conflict, data);
 	},
 
-    updateAssignmentDates: function(assignment, available, due) {
+	updateAssignmentDates: function(assignment, available, due) {
 		var me = this,
 			link = assignment.getLink('edit'),
 			data = {

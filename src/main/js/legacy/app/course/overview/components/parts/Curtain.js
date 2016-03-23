@@ -3,10 +3,10 @@ var ResolversVideoPosters = require('../../../../../model/resolvers/VideoPosters
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Curtain', {
-    extend: 'Ext.Component',
-    alias: 'widget.course-overview-curtain',
+	extend: 'Ext.Component',
+	alias: 'widget.course-overview-curtain',
 
-    renderTpl: Ext.DomHelper.markup([{
+	renderTpl: Ext.DomHelper.markup([{
 		cls: 'curtain',
 		cn: [{
 			cls: 'ctr',
@@ -28,24 +28,24 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}]
 	}]),
 
-    renderSelectors: {
+	renderSelectors: {
 		curtainEl: '.curtain',
 		playBtnEl: '.curtain .play',
 		playLabelEl: '.curtain .play .label',
 		playBlurEl: '.curtain .play .blur'
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, this.video);
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.selectVideo();
 		this.mon(this.curtainEl, 'click', this.onCurtainClicked.bind(this));
 	},
 
-    // Adds a videos attributes to the curtain
+	// Adds a videos attributes to the curtain
 	selectVideo: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.selectVideo.bind(this));
@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	},
 
-    onCurtainClicked: function(e) {
+	onCurtainClicked: function(e) {
 		e.stopEvent();
 		this.curtainClicked(e);
 	}

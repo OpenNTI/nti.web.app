@@ -7,12 +7,12 @@ var UtilColor = require('../../../util/Color');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.MoveOptions', {
-    alias: 'widget.wb-tool-move-options',
-    extend: 'Ext.toolbar.Toolbar',
-    ui: 'options',
-    layout: 'none',
+	alias: 'widget.wb-tool-move-options',
+	extend: 'Ext.toolbar.Toolbar',
+	ui: 'options',
+	layout: 'none',
 
-    items: [{
+	items: [{
 		xtype: 'toolbar',
 		ui: 'options',
 		cls: 'move-action-picker',
@@ -63,13 +63,13 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.MoveOpt
 		}
 	],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.addEvents({'wb-options-change': true });
 		this.enableBubble(['wb-options-change']);
 		this.callParent(arguments);
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		var me = this;
 
@@ -87,17 +87,17 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.MoveOpt
 		this.down('toolbar[cls=pencil-stroke-options]').hide();
 	},
 
-    getToolType: function() {
+	getToolType: function() {
 		return 'move';
 	},
 
-    getActionType: function() {
+	getActionType: function() {
 		var b = Ext.Array.filter(this.query('[isEditAction]'), function(x) { return x.pressed; });
 		if (!b || b.length === 0) { return; }
 		return b[0].option.replace('move', '').trim();
 	},
 
-    setOptions: function(options) {
+	setOptions: function(options) {
 		var toolbar = this.down('toolbar[cls=shape-options]'),
 			fillButton = toolbar.down('[fillSelectMove]'),
 			strokeButton = toolbar.down('[strokeSelectMove]'), val, s, hex;
@@ -122,26 +122,26 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.MoveOpt
 		}
 
 		if (options.stroke) {
-      val = null;
-      if (options.stroke !== 'NONE') {
-	            hex = Color.rgbaToHex(options.stroke);
-	            val = hex[0] === '#' ? hex.substr(1).toUpperCase() : hex.toUpperCase();
-      }
-      strokeButton.setValue(val);
+	  val = null;
+	  if (options.stroke !== 'NONE') {
+				hex = Color.rgbaToHex(options.stroke);
+				val = hex[0] === '#' ? hex.substr(1).toUpperCase() : hex.toUpperCase();
+	  }
+	  strokeButton.setValue(val);
 		}
 		if (options.fill) {
-      val = null;
-      if (options.fill !== 'NONE') {
-	            hex = Color.rgbaToHex(options.fill);
-	            val = hex[0] === '#' ? hex.substr(1).toUpperCase() : hex.toUpperCase();
-      }
+	  val = null;
+	  if (options.fill !== 'NONE') {
+				hex = Color.rgbaToHex(options.fill);
+				val = hex[0] === '#' ? hex.substr(1).toUpperCase() : hex.toUpperCase();
+	  }
 			fillButton.setValue(val);
 		}
 
 		this.setStrokeWidthValue(options.strokeWidth, options.shapeType);
 	},
 
-    setStrokeWidthValue: function(strokeValue, shapeType) {
+	setStrokeWidthValue: function(strokeValue, shapeType) {
 		if (!shapeType) { return;}
 		var s = shapeType.split('.').pop().toLowerCase(), a, sel, btn;
 
@@ -160,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.MoveOpt
 		}
 	},
 
-    getOptions: function() {
+	getOptions: function() {
 		var toolbar = this.down('toolbar[cls=shape-options]'),
 			fillButton = toolbar.down('[fillSelectMove]'),
 			strokeButton = toolbar.down('[strokeSelectMove]'),
@@ -172,7 +172,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.MoveOpt
 
 		return {
 			fill: fill,
-			stroke:	stroke,
+			stroke: stroke,
 			strokeWidth: strokeWidth
 		};
 	}

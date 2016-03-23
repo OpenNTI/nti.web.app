@@ -7,12 +7,12 @@ var AuditlogIndex = require('./auditlog/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.Editor', {
-    extend: 'Ext.container.Container',
-    saveText: 'Save',
-    headerTitle: 'Edit',
-    cls: 'content-editor',
+	extend: 'Ext.container.Container',
+	saveText: 'Save',
+	headerTitle: 'Edit',
+	cls: 'content-editor',
 
-    inheritableStatics: {
+	inheritableStatics: {
 		/**
 		 * Return a list of mimeTypes that this editor can
 		 * handle editing or creating.
@@ -36,10 +36,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		 * A type looks like:
 		 *
 		 * {
-		 * 	title: String, //The name of the type
-		 * 	description: String, // A short description
-		 * 	iconCls: String, // A class to apply so css can pick an icon
-		 * 	editor: Class //The component to instantiate to create the editor
+		 *	title: String, //The name of the type
+		 *	description: String, // A short description
+		 *	iconCls: String, // A class to apply so css can pick an icon
+		 *	editor: Class //The component to instantiate to create the editor
 		 * }
 		 *
 		 * @override
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		 *
 		 * @override
 		 * @param  {Object} record the record to edit
-		 * @return {Object}       	Null or the Class for the editor
+		 * @return {Object}			Null or the Class for the editor
 		 */
 		getEditorForRecord: function(record) {
 			if (this.handlesMimeType(record.mimeType)) {
@@ -62,9 +62,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    UNKNOWN_ERROR: 'Unable to save record.',
+	UNKNOWN_ERROR: 'Unable to save record.',
 
-    ERRORS: {
+	ERRORS: {
 		MaxFileSizeUploadLimitError: function(reason) {
 			var msg = 'The uploaded file is too large.',
 				fileSize = reason && reason.max_bytes;
@@ -83,17 +83,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    /**
+	/**
 	 * The Schema used to set up the fields
 	 * @override
 	 * @type {Array}
 	 */
 	FORM_SCHEMA: [],
 
-    layout: 'none',
-    items: [],
+	layout: 'none',
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.showEditor();
 	},
 
-    showEditor: function() {
+	showEditor: function() {
 		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord, this.onFormChange.bind(this));
 
 		this.formCmp = this.addFormCmp();
@@ -124,22 +124,22 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    getSaveText: function() {
+	getSaveText: function() {
 		return this.saveText;
 	},
 
-    getHeaderTitle: function() {
+	getHeaderTitle: function() {
 		var types = this.self.getTypes(),
 			type = types && types[0];
 
 		return type ? type.title : this.headerTitle;
 	},
 
-    getFormSchema: function() {
+	getFormSchema: function() {
 		return this.FORM_SCHEMA;
 	},
 
-    getSchema: function(){
+	getSchema: function(){
 		var me = this;
 
 		if (!this.record || !this.record.getLink('schema')) {
@@ -157,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    applySchema: function(schema){
+	applySchema: function(schema){
 		var defaultSchema = this.getFormSchema();
 
 		this.schema = schema;
@@ -166,10 +166,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return defaultSchema;
 	},
 
-    addPreview: function() {},
-    addParentSelection: function(record, parentRecord, rootRecord, onChange) {},
+	addPreview: function() {},
+	addParentSelection: function(record, parentRecord, rootRecord, onChange) {},
 
-    addFormCmp: function() {
+	addFormCmp: function() {
 		var values = this.getDefaultValues();
 
 		return this.add({
@@ -184,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    addDeleteButton: function() {
+	addDeleteButton: function() {
 		if (this.record.getLink('edit')) {
 			return this.add({
 				xtype: 'overview-editing-controls-delete',
@@ -196,20 +196,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    addAuditLog: function() {
+	addAuditLog: function() {
 		return this.add({
 			xtype: 'overview-editing-audit-log',
 			record: this.record
 		});
 	},
 
-    onDelete: function() {
+	onDelete: function() {
 		if (this.el) {
 			this.el.mask('Deleting...');
 		}
 	},
 
-    afterDelete: function(success) {
+	afterDelete: function(success) {
 		if (this.el) {
 			this.el.unmask();
 		}
@@ -221,9 +221,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    getDefaultValues: function() {},
+	getDefaultValues: function() {},
 
-    getFormAction: function() {
+	getFormAction: function() {
 		if (this.record) {
 			return this.record.getLink('edit');
 		} else if (this.parentRecord && this.parentRecord.getAppendLink) {
@@ -232,15 +232,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return null;
 	},
 
-    //TODO: once the parent selection stuff is up, we'll need to
+	//TODO: once the parent selection stuff is up, we'll need to
 	//figure out how to get the href for creating, or moving to a new spot
 	updateFormAction: function() {},
 
-    getFormMethod: function() {
+	getFormMethod: function() {
 		return this.record ? 'PUT' : 'POST';
 	},
 
-    isValid: function() {
+	isValid: function() {
 		var valid = true;
 
 		//If we have a parent selection menu, it has to have a selection to be valid
@@ -256,11 +256,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return valid;
 	},
 
-    isEmpty: function() {
+	isEmpty: function() {
 		return this.formCmp && this.formCmp.isEmpty();
 	},
 
-    onFormChange: function(values) {
+	onFormChange: function(values) {
 		if (!this.isEmpty()) {
 			this.enableSubmission();
 		} else {
@@ -272,24 +272,24 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    enableSubmission: function() {
+	enableSubmission: function() {
 		if (this.enableSave) {
 			this.enableSave();
 		}
 	},
 
-    disableSubmission: function() {
+	disableSubmission: function() {
 		if (this.disableSave) {
 			this.disableSave();
 		}
 	},
 
-    allowCancel: function() {
+	allowCancel: function() {
 		//TODO: fill this out
 		return Promise.resolve();
 	},
 
-    getFormErrors: function() {
+	getFormErrors: function() {
 		var errors = this.formCmp && this.formCmp.getErrors(),
 			fields = errors && Object.keys(errors),
 			msgs = [], required;
@@ -322,11 +322,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return msgs;
 	},
 
-    getErrors: function() {
+	getErrors: function() {
 		return this.getFormErrors();
 	},
 
-    maybeClearErrors: function() {
+	maybeClearErrors: function() {
 		var form = this.formCmp;
 
 
@@ -355,7 +355,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}, []);
 	},
 
-    clearErrors: function() {
+	clearErrors: function() {
 		var form = this.formCmp;
 
 		this.activeErrors = (this.activeErrors || []).reduce(function(acc, error) {
@@ -369,8 +369,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}, []);
 	},
 
-    setErrorOn: function(field, msg) {
-		var	form = this.formCmp,
+	setErrorOn: function(field, msg) {
+		var form = this.formCmp,
 			activeErrors = this.activeErrors || [];
 
 		if (!field) {
@@ -390,7 +390,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.activeErrors = activeErrors;
 	},
 
-    doValidation: function() {
+	doValidation: function() {
 		var me = this,
 			form = me.formCmp,
 			errors = me.getErrors();
@@ -410,7 +410,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return errors.length > 0 ? Promise.reject() : Promise.resolve();
 	},
 
-    onSaveFailure: function(reason) {
+	onSaveFailure: function(reason) {
 		if (!reason || typeof reason === 'string') { return this.setErrorOn(null, this.UNKNOWN_ERROR); }
 
 		var field = reason.field,
@@ -429,7 +429,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return this.setErrorOn(field, msg);
 	},
 
-    onSave: function() {
+	onSave: function() {
 		var me = this,
 			parentSelection = me.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
@@ -447,7 +447,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    onFormSubmit: function() {
+	onFormSubmit: function() {
 		if (this.doSave) {
 			this.doSave();
 		}

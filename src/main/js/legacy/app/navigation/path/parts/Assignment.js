@@ -6,11 +6,11 @@ var CoursewareUsersCourseAssignmentHistoryItemFeedback = require('../../../../mo
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Assignment', {
-    constructor: function() {
+	constructor: function() {
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
-    addHandlers: function(handlers) {
+	addHandlers: function(handlers) {
 		handlers['application/vnd.nextthought.grade'] = this.getPathToGrade.bind(this);
 		handlers[NextThought.model.courseware.Grade.mimeType] = this.getPathToGrade.bind(this);
 		handlers[NextThought.model.assessment.Assignment.mimeType] = this.getPathToAssignment.bind(this);
@@ -20,14 +20,14 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Ass
 		return handlers;
 	},
 
-    getPathToAssignment: function(assignment, getPathTo) {
+	getPathToAssignment: function(assignment, getPathTo) {
 		return this.LibraryActions.findBundleForNTIID(assignment.get('ContainerId'))
 			.then(function(bundle) {
 				return [bundle, assignment];
 			});
 	},
 
-    getPathToGrade: function(grade, getPathTo) {
+	getPathToGrade: function(grade, getPathTo) {
 		return Service.getObject(grade.get('AssignmentId'))
 			.then(function(assignment) {
 				return getPathTo(assignment);
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Ass
 			});
 	},
 
-    getPathToFeedback: function(feedback, getPathTo) {
+	getPathToFeedback: function(feedback, getPathTo) {
 		return Service.getObject(feedback.get('AssignmentId'))
 			.then(function(assignment) {
 				return getPathTo(assignment);

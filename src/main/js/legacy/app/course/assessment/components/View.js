@@ -16,18 +16,18 @@ var StudentPerformance = require('./student/Performance');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.View', {
-    extend: 'NextThought.common.components.NavPanel',
-    alias: 'widget.course-assessment',
+	extend: 'NextThought.common.components.NavPanel',
+	alias: 'widget.course-assessment',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-    navigation: {xtype: 'course-assessment-navigation'},
-    body: {xtype: 'course-assessment-body'},
-    cls: 'course-assessment-view',
+	navigation: {xtype: 'course-assessment-navigation'},
+	body: {xtype: 'course-assessment-body'},
+	cls: 'course-assessment-view',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.on('activate', this.onActivate.bind(this));
 	},
 
-    bundleChanged: function(bundle) {
+	bundleChanged: function(bundle) {
 		var me = this,
 			isSync = (me.currentBundle && me.currentBundle.getId()) === (bundle && bundle.getId());
 
@@ -131,13 +131,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			});
 	},
 
-    onActivate: function() {
+	onActivate: function() {
 		if (!this.rendered) { return; }
 
 		this.alignNavigation();
 	},
 
-    getAssignmentList: function() {
+	getAssignmentList: function() {
 		var me = this;
 
 		//apply the assignments data and let it restore state so we can get that order
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			});
 	},
 
-    getStudentListForAssignment: function(assignment, student) {
+	getStudentListForAssignment: function(assignment, student) {
 		var me = this;
 
 		//apply the assignments data and let it restore state so we can get that order
@@ -167,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			});
 	},
 
-    getAssignmentListForStudent: function(student) {
+	getAssignmentListForStudent: function(student) {
 		var me = this;
 
 		//apply the assignments data and let it restore state so we can get that order
@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			});
 	},
 
-    maybeMask: function(cmp, isActive, path) {
+	maybeMask: function(cmp, isActive, path) {
 		var el = this.body.el;
 
 		//if passed an active cmp the want to try to mask itself, let it
@@ -205,7 +205,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    maybeUnmask: function(cmp, isActive, path) {
+	maybeUnmask: function(cmp, isActive, path) {
 		this.finished = true;
 
 		var el = this.body.el;
@@ -219,17 +219,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    shouldPushViews: function() {
+	shouldPushViews: function() {
 		return !this.body.items.getCount();
 	},
 
-    setActiveItem: function(item, route) {
+	setActiveItem: function(item, route) {
 		this.navigation.updateActive(item, route);
 
 		this.callParent(arguments);
 	},
 
-    clearViews: function() {
+	clearViews: function() {
 		var items = this.body.items.items || [];
 
 		items.forEach(function(item) {
@@ -246,12 +246,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		delete this.performanceView;
 	},
 
-    addChildRouter: function(cmp) {
+	addChildRouter: function(cmp) {
 		this.mixins.Router.addChildRouter.call(this, cmp);
 		cmp.pushRoute = this.changeRoute.bind(this);
 	},
 
-    addAdminViews: function(getLink) {
+	addAdminViews: function(getLink) {
 		this.isAdmin = true;
 		this.notificationsView = this.body.add({
 			xtype: 'course-assessment-admin-activity',
@@ -287,7 +287,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		]);
 	},
 
-    addContentEditorViews: function() {
+	addContentEditorViews: function() {
 		var me = this;
 
 		this.addStudentViews();
@@ -298,7 +298,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			});
 	},
 
-    addStudentViews: function() {
+	addStudentViews: function() {
 		this.isAdmin = false;
 		this.notificationsView = this.body.add({
 			xtype: 'course-assessment-activity',
@@ -333,7 +333,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		]);
 	},
 
-    showNotifications: function(route, subRoute) {
+	showNotifications: function(route, subRoute) {
 		if (!this.notificationsView) { return; }
 
 		var me = this;
@@ -348,7 +348,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.then(me.alignNavigation.bind(me));
 	},
 
-    showPerformance: function(route, subRoute) {
+	showPerformance: function(route, subRoute) {
 		if (!this.performanceView) { return; }
 
 		var me = this,
@@ -372,7 +372,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.then(me.alignNavigation.bind(me));
 	},
 
-    showAssignments: function(route, subRoute) {
+	showAssignments: function(route, subRoute) {
 		if (!this.assignmentsView) { return; }
 
 		var me = this;
@@ -392,7 +392,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.then(me.alignNavigation.bind(me));
 	},
 
-    showStudentsForAssignment: function(route, subRoute) {
+	showStudentsForAssignment: function(route, subRoute) {
 		if (!this.assignmentsView) { return; }
 
 		var me = this,
@@ -417,7 +417,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.then(me.alignNavigation.bind(me));
 	},
 
-    showAssignmentsForStudent: function(route, subRoute) {
+	showAssignmentsForStudent: function(route, subRoute) {
 		if (!this.performanceView) { return; }
 
 		var me = this,

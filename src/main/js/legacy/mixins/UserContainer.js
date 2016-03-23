@@ -5,16 +5,16 @@ var {isMe} = require('legacy/util/Globals');
 
 
 /**
- *  We assume that the component that mixes this in should implement 'createUserComponent' and the its children should
- *  implement 'getUserObject' method.  User containers drive their contents (child components) off a specified model objects
- *  specified field.  This information should be provided as two functions, getModelObject and getUserListFiendName, on the component that mixes in this mixin.
- *  The fieldName provided should map to a field of type UserList on the given model.  People mixing this in should call the constructor
- *  of this mixin in initComponent.  By default this mixin will handle presence-changed events from it's children. You can set the property
- *  reactToChildPresenceChanged to false to stop that behaviour.  By default this component will also watch the underlying model for changes
- *  to the specified field.  Set the property reactToModelChanges to false to turn off this behaviour
+ *	We assume that the component that mixes this in should implement 'createUserComponent' and the its children should
+ *	implement 'getUserObject' method.  User containers drive their contents (child components) off a specified model objects
+ *	specified field.  This information should be provided as two functions, getModelObject and getUserListFiendName, on the component that mixes in this mixin.
+ *	The fieldName provided should map to a field of type UserList on the given model.  People mixing this in should call the constructor
+ *	of this mixin in initComponent.	 By default this mixin will handle presence-changed events from it's children. You can set the property
+ *	reactToChildPresenceChanged to false to stop that behaviour.  By default this component will also watch the underlying model for changes
+ *	to the specified field.	 Set the property reactToModelChanges to false to turn off this behaviour
  */
 module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
-    //Should be called from initComponent
+	//Should be called from initComponent
 	constructor: function() {
 		this.on('presence-changed', this.presenceOfComponentChanged, this);
 		this.on('beforeRender', this.onCmpRendered, this);
@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		this.GroupActions = NextThought.app.groups.Actions.create();
 	},
 
-    setupActions: function(group, ignoreChatOption) {
+	setupActions: function(group, ignoreChatOption) {
 		var allHidden = true, items, listOrGroup = group && Ext.String.capitalize(group.readableType),
 			menuCfg = {
 				parentItem: this
@@ -112,13 +112,13 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		this.updateChatState(group);
 	},
 
-    groupChatHidden: function(group) {
+	groupChatHidden: function(group) {
 		return true;
 		// TODO: Add group chat functionality
 		// return !Service.canChat() || !group || !isMe(group.get('Creator')) || group.getFriendCount() === 0;
 	},
 
-    getUserList: function() {
+	getUserList: function() {
 		var model = this.getModelObject();
 		if (!model) {
 			return;
@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		return model.get(this.getUserListFieldName() || '');
 	},
 
-    onCmpRendered: function() {
+	onCmpRendered: function() {
 		var model = this.getModelObject(),
 			fn = this.getUserListFieldName(),
 			users;
@@ -142,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		model.addObserverForField(this, fn, this.updateFromModelObject, this);
 	},
 
-    updateFromModelObject: function(key, value) {
+	updateFromModelObject: function(key, value) {
 		var users = value || key,
 			model = this.getModelObject();
 
@@ -158,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		UserRepository.getUser(users, this.setUsers, this);
 	},
 
-    setUsers: function(resolvedUsers) {
+	setUsers: function(resolvedUsers) {
 		var p;
 
 		if (!Ext.isArray(resolvedUsers)) {
@@ -181,7 +181,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		console.timeEnd('Adding Users');
 	},
 
-    presenceOfComponentChanged: function(cmp) {
+	presenceOfComponentChanged: function(cmp) {
 		var users;
 
 		if (this.reactToChildPresenceChanged === false) {
@@ -193,7 +193,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		return false; //Stop bubble we handled it
 	},
 
-    cleanupActions: function() {
+	cleanupActions: function() {
 		if (this.userMenu) {
 			this.userMenu.destroy();
 		}
@@ -202,7 +202,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		}
 	},
 
-    getMenuHideHandlers: function(menu) {
+	getMenuHideHandlers: function(menu) {
 		var leave;
 		function hide() {menu.hide();}
 		function start() { stop(); leave = setTimeout(hide, 500); }
@@ -213,7 +213,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		};
 	},
 
-    updateChatState: function(group) {
+	updateChatState: function(group) {
 		var me = this,
 			friends;
 
@@ -233,7 +233,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		}
 	},
 
-    //Users isn't very big here so do the naive thing
+	//Users isn't very big here so do the naive thing
 	indexToInsertAt: function(users, newUser) {
 		var collection = new Ext.util.MixedCollection();
 		collection.addAll(users);
@@ -241,17 +241,17 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		return collection.findInsertionIndex(newUser, this.userSorterFunction);
 	},
 
-    addCmpInSortedPosition: function(cmp) {
+	addCmpInSortedPosition: function(cmp) {
 		var users = Ext.Array.map(this.query('[username]') || [], function(u) {return u.getUserObject();});
 		this.insert(this.indexToInsertAt(users, cmp.getUserObject()), cmp);
 	},
 
-    updateCmpPosition: function(cmp) {
+	updateCmpPosition: function(cmp) {
 		this.remove(cmp, false);
 		this.addCmpInSortedPosition(cmp);
 	},
 
-    addUser: function(user) {
+	addUser: function(user) {
 		var existing = this.down('[username=' + user.get('Username') + ']'), users;
 		if (!existing) {
 			//Figure out where we need to insert it
@@ -262,7 +262,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		return false;
 	},
 
-    removeUser: function(user) {
+	removeUser: function(user) {
 		var name = (user && user.isModel) ? user.get('Username') : user,
 			existing = this.down('[username=' + name + ']');
 		if (existing) {
@@ -272,7 +272,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		return false;
 	},
 
-    //Sort the users first by presense (online, offline) then
+	//Sort the users first by presense (online, offline) then
 	//alphabetically withing that
 	userSorterFunction: function(a, b) {
 		var aPresence = a.getPresence().toString() || '',
@@ -289,7 +289,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		return aName.localeCompare(bName);
 	},
 
-    deleteGroup: function(group) {
+	deleteGroup: function(group) {
 		var me = this,
 			msg = Ext.DomHelper.markup(['The ', group.readableType, ' ',
 									{tag: 'span', html: group.get('displayName')},
@@ -303,13 +303,13 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		this.areYouSure(msg, cb);
 	},
 
-    chatWithGroup: function(group) {
+	chatWithGroup: function(group) {
 		if (group.getFriendCount() > 0) {
 			this.fireEvent('group-chat', group, {persistent: false});
 		}
 	},
 
-    getGroupCode: function(group) {
+	getGroupCode: function(group) {
 		var dn = group.get('displayName');
 		if (!group.getLink('default-trivial-invitation-code')) {
 			return;
@@ -325,7 +325,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 			});
 	},
 
-    leaveGroup: function(group) {
+	leaveGroup: function(group) {
 		if (group.getLink('my_membership')) {
 			this.GroupActions.leaveGroup(group)
 				.then(function() {
@@ -337,7 +337,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		}
 	},
 
-    forcefullyRemoveUser: function(item, group) {
+	forcefullyRemoveUser: function(item, group) {
 		var me = this,
 			menu = item && item.up ? item.up('menu') : null,
 			//use the menu's reference, if we called with user instead, use it
@@ -357,7 +357,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		this.areYouSure(msg, cb);
 	},
 
-    areYouSure: function(msg, callback) {
+	areYouSure: function(msg, callback) {
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
 			msg: msg,

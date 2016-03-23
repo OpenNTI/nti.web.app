@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 	},
 
 	getDays: function (time) {
-		return time / (24 * 60 * 60 * 1000); // milli / 1000 = seconds / 60  = minutes / 60 = hours / 24 = days
+		return time / (24 * 60 * 60 * 1000); // milli / 1000 = seconds / 60	 = minutes / 60 = hours / 24 = days
 	},
 
 	getHours: function getRemainingHours (time) {
@@ -170,17 +170,17 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 	 *
 	 * ex. 2 weeks, 2 days, and 2 hours
 	 *
-	 * @param  {Number} millis         millis to convert
+	 * @param  {Number} millis		   millis to convert
 	 * @param  {Number} numberOfUnits  How many units (weeks, days, hours, etc.) to include
 	 * @param  {Boolean} doNotPluralize whether or not to pluralize the units
 	 * @param  {Object} overrides Strings to use instead of the defaults
-	 * @return {String}                the parsed string
+	 * @return {String}				   the parsed string
 	 */
 	getNaturalDuration: function (millis, numberOfUnits, doNotPluralize, overrides) {
 		var units = [], lastItem, s,
 			weeks = Math.floor(parseInt(millis, 10) / this.DIVISORS.WEEKS),
-			days =  Math.floor(parseInt(millis, 10) / this.DIVISORS.DAYS % 7),
-			hours =  Math.floor(parseInt(millis, 10) / this.DIVISORS.HOURS % 24),
+			days =	Math.floor(parseInt(millis, 10) / this.DIVISORS.DAYS % 7),
+			hours =	 Math.floor(parseInt(millis, 10) / this.DIVISORS.HOURS % 24),
 			minutes =  Math.floor(parseInt(millis, 10) / this.DIVISORS.MINUTES % 60),
 			seconds =  Math.round(parseInt(millis, 10) / this.DIVISORS.SECONDS % 60);
 
@@ -253,7 +253,7 @@ module.exports = exports = Ext.define('NextThought.util.Time', {
 	 * getPrevious: calls this function with a week before the date given
 	 *
 	 * @param  {Date|String} date argument to pass to the moment constructor, falsy means today
-	 * @return {Object}      utility for stepping through the weeks
+	 * @return {Object}		 utility for stepping through the weeks
 	 */
 	getWeek: function (date) {
 		var m = date ? moment(date) : moment();
@@ -324,7 +324,7 @@ exports._timer = function () {
 	/**
 	 * Start the count down/up and update on the interval
 	 * @param  {Number} i how often to update
-	 * @return {Object}          this so calls can be chained
+	 * @return {Object}			 this so calls can be chained
 	 */
 	this.start = function (i) {
 		interval = i || 'seconds'; //default to a second
@@ -356,7 +356,7 @@ exports._timer = function () {
 	 * Set a count down from t to f
 	 * @param  {Date|Number} t date or milliseconds to stop at
 	 * @param  {Date|Number} f date or milliseconds to start at
-	 * @return {Object}   this so calls can be chained
+	 * @return {Object}	  this so calls can be chained
 	 */
 	this.countDown = function (t, f) {
 		from = getTimeStamp(f);
@@ -376,7 +376,7 @@ exports._timer = function () {
 	 * Set a count up from t to f
 	 * @param  {Date|Number} t date or milliseconds to stop at
 	 * @param  {Date|Number} f date or milliseconds to start at
-	 * @return {Object}   this so calls can be chained
+	 * @return {Object}	  this so calls can be chained
 	 */
 	this.countUp = function (t, f) {
 		from = getTimeStamp(f);
@@ -405,7 +405,7 @@ exports._timer = function () {
 	 *	}
 	 *
 	 * @param  {Function} fn callback to be called
-	 * @return {Object}      return this so calls can be chained
+	 * @return {Object}		 return this so calls can be chained
 	*/
 	this.tick = function (fn) {
 		var time = from;
@@ -440,7 +440,7 @@ exports._timer = function () {
 	/**
 	 * A callback to be called when the timer reaches the destination
 	 * @param  {Function} fn [description]
-	 * @return {Object}      return this so calls can be chained
+	 * @return {Object}		 return this so calls can be chained
 	 */
 	this.alarm = function (fn) {
 		alarmFn = fn;

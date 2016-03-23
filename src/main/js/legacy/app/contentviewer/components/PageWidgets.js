@@ -3,12 +3,12 @@ var UserdataActions = require('../../userdata/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.components.PageWidgets', {
-    extend: 'Ext.Component',
-    alias: 'widget.content-page-widgets',
-    ui: 'content-page-widgets',
-    cls: 'content-page-widgets',
+	extend: 'Ext.Component',
+	alias: 'widget.content-page-widgets',
+	ui: 'content-page-widgets',
+	cls: 'content-page-widgets',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'meta',
 			cn: [
@@ -16,24 +16,24 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 					cls: 'controls',
 					cn: [
 						{ cls: 'favorite' }//,
-						//    { cls: 'like' }
+						//	  { cls: 'like' }
 					]
 				}
 			]
 		}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		meta: '.meta',
 		favorite: '.meta .controls .favorite',
 		like: '.meta .controls .like'
 	},
 
-    listeners: {
+	listeners: {
 		favorite: {'click': 'onFavoriteClick'}
 	},
 
-    onBookmark: function(r) {
+	onBookmark: function(r) {
 		var currentNTIID = this.reader.getLocation().NTIID;
 
 
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		this.favorite.addCls('on');
 	},
 
-    onFavoriteClick: function() {
+	onFavoriteClick: function() {
 		if (this.bookmarkModel) {
 			this.bookmarkModel.destroy();
 			this.clearBookmark();
@@ -60,16 +60,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			.then(this.onBookmark.bind(this));
 	},
 
-    clearBookmark: function() {
+	clearBookmark: function() {
 		this.favorite.removeCls('on');
 		delete this.bookmarkModel;
 	},
 
-    hideControls: function() {
+	hideControls: function() {
 		this.hide();
 	},
 
-    showControls: function() {
+	showControls: function() {
 		this.show();
 	}
 });

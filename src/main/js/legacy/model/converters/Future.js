@@ -2,9 +2,9 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.Future', {
-    override: 'Ext.data.Types',
+	override: 'Ext.data.Types',
 
-    FUTURE: {
+	FUTURE: {
 		type: 'Future',
 		sortType: 'none',
 		convert: function(v) {

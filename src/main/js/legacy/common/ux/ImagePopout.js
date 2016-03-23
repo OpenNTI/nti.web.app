@@ -3,22 +3,22 @@ var WindowWindow = require('../window/Window');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.ImagePopout', {
-    //TODO: this is 99% copied from the video version. Unify this in to a configurable popup.
+	//TODO: this is 99% copied from the video version. Unify this in to a configurable popup.
 	extend: 'NextThought.common.window.Window',
 
-    alias: 'widget.image-lightbox',
-    modal: true,
-    plain: true,
-    shadow: false,
-    frame: false,
-    border: false,
-    floating: true,
-    cls: 'videos x-panel-video',
-    ui: 'video',
-    width: 640,
-    layout: 'none',
+	alias: 'widget.image-lightbox',
+	modal: true,
+	plain: true,
+	shadow: false,
+	frame: false,
+	border: false,
+	floating: true,
+	cls: 'videos x-panel-video',
+	ui: 'video',
+	width: 640,
+	layout: 'none',
 
-    constructor: function(config) {
+	constructor: function(config) {
 		var me = this;
 		me.callParent(arguments);
 		Ext.EventManager.onWindowResize(me.syncSize, me, false);
@@ -46,21 +46,21 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImagePopout', {
 		Ext.TaskManager.start(me.task);
 	},
 
-    syncSize: function() {
+	syncSize: function() {
 		this.center();
 	},
 
-    destroy: function() {
+	destroy: function() {
 		Ext.TaskManager.stop(this.task);
 		this.callParent(arguments);
 	},
 
-    onShow: function() {
+	onShow: function() {
 		this.down('image-roll').selectFirst();
 		return this.callParent(arguments);
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(Ext.DomHelper.append(this.el, { cls: 'close', 'data-qtip': 'close' }, true), {
@@ -69,9 +69,9 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImagePopout', {
 		});
 	},
 
-    setPosition: function() {},
+	setPosition: function() {},
 
-    center: function() {
+	center: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.center.bind(this));
 			return;

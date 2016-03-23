@@ -6,20 +6,20 @@ var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Navigation', {
-    extend: 'Ext.view.View',
-    alias: 'widget.forums-forum-nav',
-    cls: 'topic-list-nav forum-nav',
-    itemSelector: '.outline-row',
-    ID_TO_BOARD: {},
+	extend: 'Ext.view.View',
+	alias: 'widget.forums-forum-nav',
+	cls: 'topic-list-nav forum-nav',
+	itemSelector: '.outline-row',
+	ID_TO_BOARD: {},
 
-    selModel: {
+	selModel: {
 		preventFocus: true,
 		allowDeselect: false,
 		toggleOnClick: false,
 		deselectOnContainerClick: false
 	},
 
-    tpl: new Ext.XTemplate(Ext.DomHelper.markup({
+	tpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'nav-outline forum-outline scrollable', cn: [
 			{cls: 'header', html: '{{{NextThought.view.forums.forum.Navigation.header}}}'},
 			{cls: 'outline-list', cn: [
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		}
 	}),
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -72,11 +72,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		});
 	},
 
-    canCreateForums: function(record) {
+	canCreateForums: function(record) {
 		return record;// && isFeautre('mutable-forums') && record.getLink('add');
 	},
 
-    buildStore: function(forumList) {
+	buildStore: function(forumList) {
 		if (forumList && forumList.isBoard) {
 			forumList = [];
 		}
@@ -135,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		}
 	},
 
-    getFirstForum: function() {
+	getFirstForum: function() {
 		var first;
 
 		this.store.each(function(record) {
@@ -149,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		return first;
 	},
 
-    setForumList: function(forumList) {
+	setForumList: function(forumList) {
 		var me = this,
 			store = me.buildStore(forumList),
 			selModel = me.getSelectionModel();
@@ -157,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		me.refresh();
 	},
 
-    selectRecord: function(id) {
+	selectRecord: function(id) {
 		var record,
 			selModel = this.getSelectionModel();
 
@@ -174,11 +174,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		return record;
 	},
 
-    maybeShowNewForum: function() {
+	maybeShowNewForum: function() {
 		//TODO fill this in when we turn it back on
 	},
 
-    selectForum: function(cmp, record) {
+	selectForum: function(cmp, record) {
 		var id = record.getId();
 
 		id = ParseUtils.encodeForURI(id);
@@ -189,7 +189,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		});
 	},
 
-    onItemClick: function(record, node, index, e) {
+	onItemClick: function(record, node, index, e) {
 		if (e.getTarget('.report-icon')) {
 			e.stopEvent();
 

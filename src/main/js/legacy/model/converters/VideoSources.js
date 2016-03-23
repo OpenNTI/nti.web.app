@@ -3,9 +3,9 @@ var ResolversVideoPosters = require('../resolvers/VideoPosters');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.VideoSources', {
-    override: 'Ext.data.Types',
+	override: 'Ext.data.Types',
 
-    VIDEOSOURCES: {
+	VIDEOSOURCES: {
 		type: 'VideoSource',
 		sortType: null,
 
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.VideoSources
 		}
 	},
 
-    VIDEOPOSTER: {
+	VIDEOPOSTER: {
 		type: 'VideoPoster',
 		sortType: null,
 		convert: function(v, r, source) {

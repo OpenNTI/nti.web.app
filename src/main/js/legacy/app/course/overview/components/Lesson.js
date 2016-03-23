@@ -6,29 +6,29 @@ var TypesToc = require('./types/Toc');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.Lesson', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.course-overview-lesson',
-    ui: 'course',
+	extend: 'Ext.container.Container',
+	alias: 'widget.course-overview-lesson',
+	ui: 'course',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-    isLessonView: true,
-    layout: 'none',
-    cls: 'course-overview',
+	isLessonView: true,
+	layout: 'none',
+	cls: 'course-overview',
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.maybeMask();
 	},
 
-    setActiveBundle: function(bundle) {
+	setActiveBundle: function(bundle) {
 		this.bundle = bundle;
 	},
 
-    maybeMask: function() {
+	maybeMask: function() {
 		if (!this.rendered || !this.buildingOverview) {
 			return;
 		}
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.el.mask(getString('NextThought.view.courseware.overview.View.loading'), 'loading');
 	},
 
-    maybeUnmask: function() {
+	maybeUnmask: function() {
 		delete this.buildingOverview;
 
 		if (this.rendered) {
@@ -46,11 +46,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    clear: function() {
+	clear: function() {
 		this.removeAll(true);
 	},
 
-    __updateProgress: function() {
+	__updateProgress: function() {
 		if (!this.currentNode || !this.currentNode.getProgress) { return; }
 
 		var me = this;
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					});
 	},
 
-    __updateCounts: function() {
+	__updateCounts: function() {
 		if (!this.currentNode || !this.currentNode.getCommentCounts) { return; }
 
 		var me = this;
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    getInfo: function(record, course, overviewsrc) {
+	getInfo: function(record, course, overviewsrc) {
 		return Promise.all([
 				course.getAssignments(),
 				course.getWrapper && course.getWrapper(),
@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			]);
 	},
 
-    renderLesson: function(record, doNotCache) {
+	renderLesson: function(record, doNotCache) {
 		var me = this,
 			course = me.bundle,
 			overviewsrc = (record && record.getLink('overview-content')) || null;
@@ -117,8 +117,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (me.currentOverview && me.currentOverview.record.getId() === record.getId() && !doNotCache) {
 			if (me.currentOverview.refresh) {
 				 return me.currentOverview.refresh()
-				 			.then(me.__updateProgress.bind(me))
-				 			.then(me.__updateCounts.bind(me))
+							.then(me.__updateProgress.bind(me))
+							.then(me.__updateCounts.bind(me))
 							.always(me.maybeUnmask.bind(me));
 			}
 
@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			.then(me.maybeUnmask.bind(me));
 	},
 
-    navigate: function(obj) {
+	navigate: function(obj) {
 		obj.parent = this.currentNode;
 		this.navigateToObject(obj);
 	}

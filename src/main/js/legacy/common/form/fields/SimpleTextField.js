@@ -180,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 
 
 	keyPressed: function(event) {
-		var	e = this.inputEl, v = this.getValue(), c = this.clearEl,
+		var e = this.inputEl, v = this.getValue(), c = this.clearEl,
 			k = event.getKey && event.getKey();
 
 		if (!this.readOnly) {

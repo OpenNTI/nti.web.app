@@ -354,7 +354,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	isEmpty: function() {
 		if (!this.rendered) { return true; }
 
-		var active = this.el.down('input[type=radio]:checked'),	input;
+		var active = this.el.down('input[type=radio]:checked'), input;
 
 		if (active) {
 			input = active.up('.radio');

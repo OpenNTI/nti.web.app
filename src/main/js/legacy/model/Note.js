@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 	/*
 	 * Retrieves the descendants for the given note.
 	 * If this is a placeholder that means aggregating
-	 * getDescendants on each of it's children.  If this
+	 * getDescendants on each of it's children.	 If this
 	 * is an actual note this means an ajax request to the server.
 	 *
 	 * When complete, callback will be called with a PageItem store

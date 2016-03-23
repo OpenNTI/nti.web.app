@@ -19,12 +19,12 @@ var ModelVideo = require('../../../../../model/Video');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Group', {
-    extend: 'NextThought.common.components.BoundCollection',
-    alias: 'widget.overview-group',
-    ui: 'course',
-    cls: 'overview-group',
+	extend: 'NextThought.common.components.BoundCollection',
+	alias: 'widget.overview-group',
+	ui: 'course',
+	cls: 'overview-group',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.add([
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.setCollection(this.record);
 	},
 
-    onceLoaded: function() {
+	onceLoaded: function() {
 		var me = this;
 
 		return new Promise(function(fulfill, reject) {
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    setProgress: function(progress) {
+	setProgress: function(progress) {
 		var body = this.getBodyContainer();
 
 		body.items.each(function(item) {
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    setCommentCounts: function(commentCounts) {
+	setCommentCounts: function(commentCounts) {
 		var body = this.getBodyContainer();
 
 		body.items.each(function(item) {
@@ -81,11 +81,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    getBodyContainer: function() {
+	getBodyContainer: function() {
 		return this.down('[bodyContainer]');
 	},
 
-    setCollection: function(collection) {
+	setCollection: function(collection) {
 		var me = this,
 			items = me.getItems(collection),
 			body = me.getBodyContainer(),
@@ -117,9 +117,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 			//The server should be taking care of this now...
 			// if (!ContentUtils.hasVisibilityForContent({
-			// 				getAttribute: function(i) { return item[i]; }},
-			// 				enrollment.get('Status'))) {
-			// 	return items;
+			//				getAttribute: function(i) { return item[i]; }},
+			//				enrollment.get('Status'))) {
+			//	return items;
 			// }
 
 			if (cls.isSection) {
@@ -184,5 +184,5 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    navigate: function() {}
+	navigate: function() {}
 });

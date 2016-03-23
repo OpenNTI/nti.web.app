@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	onVisibilityChange: function(e){
 		var target = e.target,
-		 	scope = target && target.getAttribute('data-scope');
+			scope = target && target.getAttribute('data-scope');
 
 		this.selectOption(target);
 		this.scopeEl.update(scope);

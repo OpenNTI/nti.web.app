@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 		/**
 		 * Converts rgba to rgb then to Hex. TODO: this func is ignoring the Alpha component.
 		 * assuming that it is always 1 in our case.
-		 *  Which might change
+		 *	Which might change
 		 */
 
 		var a = this.rgbaRe.exec(color), c, rgb, hex;

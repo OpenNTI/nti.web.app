@@ -5,11 +5,11 @@ var PublishingMenu = require('./publishing/Menu');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.Controls', {
-    extend: 'Ext.Component',
-    alias: 'widget.overview-editing-controls',
-    cls: 'outline-editing-controls',
+	extend: 'Ext.Component',
+	alias: 'widget.overview-editing-controls',
+	cls: 'outline-editing-controls',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': 'buttons', cn: [
 			{cls: 'button {cls}', 'data-action': '{name}', cn: [
 				{tag: 'div', cls: 'label', html: '{label}'},
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		]}
 	]),
 
-    BUTTONS: {
+	BUTTONS: {
 		audit: {
 			iconCls: 'audit',
 			label: 'Audit',
@@ -44,15 +44,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    /**
+	/**
 	 * How to configure the options audit, publish, edit, add add
 	 *
 	 * {
-	 * 	order: [String], //the order of options,
-	 * 	[name]: { //Override properties of the button
-	 * 		cls: String, //a class to add
-	 * 		label: String, //override the label
-	 * 	}
+	 *	order: [String], //the order of options,
+	 *	[name]: { //Override properties of the button
+	 *		cls: String, //a class to add
+	 *		label: String, //override the label
+	 *	}
 	 * }
 	 *
 	 * @type {Object}
@@ -61,14 +61,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		order: ['audit', 'publish', 'edit', 'add']
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.PromptActions = NextThought.app.prompt.Actions.create();
 		this.WindowActions = NextThought.app.windows.Actions.create();
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		var config = this.optionsConfig,
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.auditEl = this.el.down('[data-action=audit]');
@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.setPublishState();
 	},
 
-    initPublishMenu: function(el) {
+	initPublishMenu: function(el) {
 		var menuContainer = el && el.down('.menu-container'), me = this,
 			html = Ext.query('.x-viewport')[0];
 
@@ -143,17 +143,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		
 		this.onWindowResizeBuffer = Ext.Function.createBuffered(this.onWindowResize, 10, this);
-   		Ext.EventManager.onWindowResize(this.onWindowResizeBuffer, this);
-   		window.addEventListener('scroll', this.onWindowResizeBuffer.bind(this));
+		Ext.EventManager.onWindowResize(this.onWindowResizeBuffer, this);
+		window.addEventListener('scroll', this.onWindowResizeBuffer.bind(this));
 
 		this.on('destroy', this.publishMenu.destroy.bind(this.publishMenu));
-   		this.on('destroy', function(){
-   			Ext.EventManager.removeResizeListener(me.onWindowResizeBuffer, me);
-   			window.removeEventListener(me.onWindowResizeBuffer, me);
-   		});
+		this.on('destroy', function(){
+			Ext.EventManager.removeResizeListener(me.onWindowResizeBuffer, me);
+			window.removeEventListener(me.onWindowResizeBuffer, me);
+		});
 	},
 
-    /**
+	/**
 	 * Set the initial publication state of the lesson control.
 	 * Since publishing affects both the outline node and the lesson overview,
 	 * we will take into account both to make sure they follow the intended business logic.
@@ -182,7 +182,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    setPublished: function() {
+	setPublished: function() {
 		var label = this.publishEl && this.publishEl.down('.label');
 
 		if (this.publishEl) {
@@ -194,7 +194,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    setWillPublishOn: function() {
+	setWillPublishOn: function() {
 		var label = this.publishEl && this.publishEl.down('.label'),
 			rec = this.contents,
 			value = rec && rec.get('publishBeginning'),
@@ -210,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    getDayAndMonth: function(date){
+	getDayAndMonth: function(date){
 		var parts, m;
 
 		if (!date) { return ''; }
@@ -222,7 +222,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return m + ' ' + parts[1];
 	},
 
-    setNotPublished: function() {
+	setNotPublished: function() {
 		var label = this.publishEl && this.publishEl.down('.label');
 
 		if (this.publishEl) {
@@ -234,14 +234,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    onWindowResize: function(){
+	onWindowResize: function(){
 		var menuContainer = this.publishEl;
 		if (menuContainer) {
 			this.alignPublishingMenu(menuContainer);
 		}
 	},
 
-    alignPublishingMenu: function(menuContainer){
+	alignPublishingMenu: function(menuContainer){
 		var box = menuContainer && menuContainer.dom.getBoundingClientRect() || {},
 			me = this,
 			menu = this.publishMenu,
@@ -258,7 +258,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    handleClick: function(e) {
+	handleClick: function(e) {
 		if (e.getTarget('.disabled')) { return; }
 
 		if (e.getTarget('[data-action=audit]')) {
@@ -272,11 +272,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    showAuditLog: function() {
+	showAuditLog: function() {
 		//TODO: fill this in
 	},
 
-    togglePublishMenu: function() {
+	togglePublishMenu: function() {
 		if (this.publishEl) {
 			if (this.publishEl.hasCls('closed')) {
 				this.alignPublishingMenu(this.publishEl);
@@ -285,11 +285,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    doEdit: function() {
+	doEdit: function() {
 		this.PromptActions.prompt('overview-editing', {record: this.record, parent: this.parentRecord, root: this.root});
 	},
 
-    doAdd: function() {
+	doAdd: function() {
 		this.PromptActions.prompt('overview-creation', {parent: this.contents || this.record, root: this.root});
 	}
 });

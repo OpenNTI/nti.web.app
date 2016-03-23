@@ -93,11 +93,11 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 	/**
 	 * A helper method to return a batch, with links, counts, and items
 	 *
-	 * @param  {String} url         url to load
+	 * @param  {String} url			url to load
 	 * @param  {Object} queryParams params to add to the request
-	 * @param  {String} itemProp    the item property of the batch
-	 * @param  {Object} model       model to use to parse the items
-	 * @return {Promise}            fulfills with the batch
+	 * @param  {String} itemProp	the item property of the batch
+	 * @param  {Object} model		model to use to parse the items
+	 * @return {Promise}			fulfills with the batch
 	 */
 	loadBatch: function (url, queryParams, itemProp, model) {
 		itemProp = itemProp || 'Items';
@@ -123,11 +123,11 @@ module.exports = exports = Ext.define('NextThought.util.Store', {
 	 * A helper method for when we don't need a full store, to just load the items
 	 * from a url
 	 *
-	 * @param  {String} url         the url to load
+	 * @param  {String} url			the url to load
 	 * @param  {Object} queryParams query params to attach
-	 * @param  {String} itemProp 	the item prop to parse off of the response
+	 * @param  {String} itemProp	the item prop to parse off of the response
 	 * @param {Object} model the model to use to parse the items
-	 * @return {Promise}            fulfills with the parsed items from the response
+	 * @return {Promise}			fulfills with the parsed items from the response
 	 */
 	loadItems: function (url, queryParams, itemProp, model) {
 		itemProp = itemProp || 'Items';

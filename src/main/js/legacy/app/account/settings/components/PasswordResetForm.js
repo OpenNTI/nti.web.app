@@ -4,13 +4,13 @@ var FieldsSimpleTextField = require('../../../../common/form/fields/SimpleTextFi
 
 
 module.exports = exports = Ext.define('NextThought.app.account.settings.components.PasswordResetForm', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.password-reset-form',
-    cls: 'reset-password',
-    ui: 'account',
-    layout: 'none',
+	extend: 'Ext.container.Container',
+	alias: 'widget.password-reset-form',
+	cls: 'reset-password',
+	ui: 'account',
+	layout: 'none',
 
-    items: [{
+	items: [{
 		xtype: 'container',
 		layout: 'none',
 		items: [{
@@ -90,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		]
 	}],
 
-    constructor: function() {
+	constructor: function() {
 		if (!Service.canChangePassword()) {
 			console.warn('User can\'t change password');
 			this.items = [{
@@ -113,20 +113,20 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		this.callParent(arguments);
 	},
 
-    setMessage: function(msg, error) {
+	setMessage: function(msg, error) {
 		var el = this.down('box[message]').getEl().down('.text');
 		el[error ? 'addCls' : 'removeCls']('error');
 		el.update(msg || '');
 	},
 
-    setError: function(errorJson) {
+	setError: function(errorJson) {
 		this.setMessage(errorJson.message, true);
 		if (errorJson.field === 'password') {
 			this.down('[name=old_password]').setError();
 		}
 	},
 
-    setSuccess: function() {
+	setSuccess: function() {
 		this.setMessage(getString('NextThought.view.form.PasswordResetForm.changed'));
 		Ext.each(this.query('simpletext'), function(t) {
 			t.suspendEvents();
@@ -139,14 +139,14 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 	},
 
-    getValues: function() {
+	getValues: function() {
 		return {
 			old_password: this.down('[name=old_password]').getValue(),
 			password: this.down('[name=password]').getValue()
 		};
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var button = this.down('button');
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		},this);
 	},
 
-    checkValidity: function(value, input) {
+	checkValidity: function(value, input) {
 
 		function val(i, s) {
 			try {
@@ -189,7 +189,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		me.updateLayout();
 	},
 
-    onSaveClick: function() {
+	onSaveClick: function() {
 		var values = this.getValues();
 
 		this.AccountActions.changePassword(values)

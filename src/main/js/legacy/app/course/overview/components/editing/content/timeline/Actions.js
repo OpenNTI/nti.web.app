@@ -4,9 +4,9 @@ var ModelTimeline = require('../../../../../../../model/Timeline');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.Actions', {
-    extend: 'NextThought.app.course.overview.components.editing.Actions',
+	extend: 'NextThought.app.course.overview.components.editing.Actions',
 
-    saveTimeline: function(timelines, record, originalPosition, newPosition, root) {
+	saveTimeline: function(timelines, record, originalPosition, newPosition, root) {
 		if (record) {
 			return this.__updateSingleTimeline(timelines, record, originalPosition, newPosition, root);		
 		}
@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return this.__createSingleTimeline(timelines, newPosition);
 	},
 
-    __updateSingleTimeline: function(timelines, record, originalPosition, newPosition, root) {
+	__updateSingleTimeline: function(timelines, record, originalPosition, newPosition, root) {
 		var newTimeline = timelines[0],
 			newParent = newPosition.parent,
 			oldParent = originalPosition.parent,
@@ -32,13 +32,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    __createSingleTimeline: function(timelines, newPosition) {
+	__createSingleTimeline: function(timelines, newPosition) {
 		var values = this.__getTimelineData(timelines[0]);
 
 		return this.__createRecordValues(values, newPosition);
 	},
 
-    __getTimelineData: function(timeline){
+	__getTimelineData: function(timeline){
 		return {
 			NTIID: timeline && timeline.getId()
 		};

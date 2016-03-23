@@ -3,13 +3,13 @@ var ComponentsPictureCanvas = require('./PictureCanvas');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.settings.components.PictureEditor', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.picture-editor',
-    cls: 'picture-editor',
-    ui: 'account',
-    layout: 'none',
+	extend: 'Ext.container.Container',
+	alias: 'widget.picture-editor',
+	cls: 'picture-editor',
+	ui: 'account',
+	layout: 'none',
 
-    items: [
+	items: [
 		{ xtype: 'picture-canvas' },
 		{
 			xtype: 'container',
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		}
 	],
 
-    initComponent: function() {
+	initComponent: function() {
 		var me = this;
 		me.callParent(arguments);
 		me.mon(me.down('picture-canvas'), {
@@ -52,24 +52,24 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		});
 	},
 
-    rotate: function() {
+	rotate: function() {
 		this.down('picture-canvas').rotate();
 	},
 
-    reset: function() {
+	reset: function() {
 		this.down('picture-canvas').clear();
 	},
 
-    setField: function(field) {
+	setField: function(field) {
 		this.activeField = field;
 	},
 
-    editMode: function(url) {
+	editMode: function(url) {
 		this.reset();
 		this.down('picture-canvas').setImage(url || $AppConfig.userObject.get('avatarURL'));
 	},
 
-    buttonHandler: function(btn, isSave, event) {
+	buttonHandler: function(btn, isSave, event) {
 		var me = this,
 			u = $AppConfig.userObject,
 			c = me.down('picture-canvas'),

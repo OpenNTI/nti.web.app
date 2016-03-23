@@ -3,9 +3,9 @@ var ParseUtils = require('../../util/Parsing');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.Items', {
-    override: 'Ext.data.Types',
+	override: 'Ext.data.Types',
 
-    /* converters for models which reference other models*/
+	/* converters for models which reference other models*/
 	SINGLEITEM: {
 		type: 'singleItem',
 		convert: function(v, r) {
@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Items', {
 		sortType: 'none'
 	},
 
-    ARRAYITEM: {
+	ARRAYITEM: {
 		type: 'arrayItem',
 		convert: function(v, r) {
 			var result = null;
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Items', {
 		sortType: 'none'
 	},
 
-    COLLECTIONITEM: {
+	COLLECTIONITEM: {
 		type: 'collectionItem',
 		convert: function(v, r) {
 			var values = [], keys = {}, key, result;

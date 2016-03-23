@@ -9,10 +9,10 @@ var CoursesLegacyCommunityBasedCourseInstance = require('../../../../../model/co
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.types.Content', {
-    extend: 'NextThought.common.components.BoundCollection',
-    alias: 'widget.overview-types-content',
+	extend: 'NextThought.common.components.BoundCollection',
+	alias: 'widget.overview-types-content',
 
-    setProgress: function(progress) {
+	setProgress: function(progress) {
 		var body = this.getBodyContainer();
 
 		this.progress = progress;
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    setCommentCounts: function(commentCounts) {
+	setCommentCounts: function(commentCounts) {
 		var body = this.getBodyContainer();
 
 		this.commentCounts = commentCounts;
@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    onceLoaded: function() {
+	onceLoaded: function() {
 		var me = this;
 
 		return new Promise(function(fulfill, reject) {
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    __collapseGroup: function(group) {
+	__collapseGroup: function(group) {
 		var items = group.Items;
 
 		group.Items = items.reduce(function(acc, item, index, arr) {
@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return group;
 	},
 
-    parseCollection: function(response) {
+	parseCollection: function(response) {
 		var json = JSON.parse(response),
 			items = json.Items || [];
 
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return ParseUtils.parseItems([json])[0];
 	},
 
-    buildHeader: function(collection) {
+	buildHeader: function(collection) {
 		return {
 			xtype: 'course-overview-header',
 			record: this.record,
@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-    afterSetCollection: function() {
+	afterSetCollection: function() {
 		if (this.progress) {
 			this.setProgress(this.progress);
 		}
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    getCmpForRecord: function(record) {
+	getCmpForRecord: function(record) {
 		if (record instanceof NextThought.model.courses.overview.Group) {
 			return NextThought.app.course.overview.components.parts.Group.create({
 				record: record,

@@ -7,7 +7,7 @@ var VideoservicesYoutube = require('./videoservices/Youtube');
 	TODO: Does this need to be a model?
  */
 module.exports = exports = Ext.define('NextThought.model.resolvers.VideoPosters', {
-    statics: {
+	statics: {
 		YOUTUBE: 'youtube',
 		VIMEO: 'vimeo',
 

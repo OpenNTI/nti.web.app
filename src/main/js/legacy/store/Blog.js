@@ -3,11 +3,11 @@ var ReaderJson = require('../proxy/reader/Json');
 
 
 module.exports = exports = Ext.define('NextThought.store.Blog', {
-    extend: 'Ext.data.Store',
-    alias: 'store.blog',
-    model: 'NextThought.model.forums.PersonalBlogEntry',
+	extend: 'Ext.data.Store',
+	alias: 'store.blog',
+	model: 'NextThought.model.forums.PersonalBlogEntry',
 
-    proxy: {
+	proxy: {
 		url: 'tbd',
 		type: 'rest',
 		reader: {
@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.store.Blog', {
 		model: 'NextThought.model.forums.PersonalBlogEntry'
 	},
 
-    remove: function(records) {
+	remove: function(records) {
 		this.callParent(arguments);
 
 		Ext.each(records, function(record) {

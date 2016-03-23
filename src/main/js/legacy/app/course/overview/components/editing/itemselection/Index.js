@@ -3,18 +3,18 @@ var ItemselectionItem = require('./Item');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.itemselection.Index', {
-    extend: 'Ext.container.Container',
+	extend: 'Ext.container.Container',
 
-    itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'title', html: '{title}'
 	})),
 
-    showSearch: true,
-    multiSelect: false,
-    layout: 'none',
-    items: [],
+	showSearch: true,
+	multiSelect: false,
+	layout: 'none',
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.selection = this.selectedItems || [];
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var search = this.searchCmp;
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.searchInput.addEventListener('keyup', this.onSearchKeyUp.bind(this));
 	},
 
-    onSearchClicked: function(e) {
+	onSearchClicked: function(e) {
 		if (e.getTarget('.clear')) {
 			this.clearSearch();
 		} else if (e.getTarget('.do-search')) {
@@ -80,18 +80,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    clearSearch: function() {
+	clearSearch: function() {
 		if (!this.rendered) { return; }
 
 		this.searchInput.value = '';
 		this.searchForTerm('');
 	},
 
-    onSearchKeyUp: function() {
+	onSearchKeyUp: function() {
 		this.searchForTerm(this.searchInput.value);
 	},
 
-    searchForTerm: function(term) {
+	searchForTerm: function(term) {
 		this.itemsContainer.items.each(function(item) {
 			item.applySearchTerm(term);
 		});
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this[term ? 'addCls' : 'removeCls']('has-search-term');
 	},
 
-    setSelectionItems: function(items) {
+	setSelectionItems: function(items) {
 		var me = this;
 
 		if (!items || items.length === 0) {
@@ -138,7 +138,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.applySelection(me.selection);
 	},
 
-    excludeItems: function(exclude) {
+	excludeItems: function(exclude) {
 		if (!Array.isArray(exclude)) {
 			exclude = [exclude];
 		}
@@ -150,9 +150,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    showEmptyState: function() {},
+	showEmptyState: function() {},
 
-    applySelection: function(selection) {
+	applySelection: function(selection) {
 		if (!Array.isArray(selection)) {
 			selection = [selection];
 		}
@@ -166,11 +166,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.selection = selection;
 	},
 
-    getSelection: function() {
+	getSelection: function() {
 		return this.selection;
 	},
 
-    isSelected: function(item) {
+	isSelected: function(item) {
 		var me = this,
 			itemId = me.getSelectionItemId(item),
 			selection = me.getSelection();
@@ -184,27 +184,27 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}, false);
 	},
 
-    getItemData: function(item) {
+	getItemData: function(item) {
 		return {
 			title: item.getTitle && item.getTitle()
 		};
 	},
 
-    clearSelection: function() {
+	clearSelection: function() {
 		this.selection.forEach(this.unselectItem.bind(this));
 	},
 
-    itemMatchesSearch: function(item, searchTerm) {
+	itemMatchesSearch: function(item, searchTerm) {
 		var title = item.getTitle && item.getTitle();
 
 		return title && title.indexOf(searchTerm) >= 0;
 	},
 
-    getSelectionItemId: function(item) {
+	getSelectionItemId: function(item) {
 		return item.getId();
 	},
 
-    selectItem: function(selectionItem) {
+	selectItem: function(selectionItem) {
 		if (!this.multiSelect) { this.clearSelection(); }
 
 		this.itemsContainer.items.each(function(item) {
@@ -220,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    unselectItem: function(selectionItem) {
+	unselectItem: function(selectionItem) {
 		var me = this;
 
 		me.itemsContainer.items.each(function(item) {
@@ -238,8 +238,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    onSelectItem: function(el) {},
-    onUnselectItem: function(el) {},
-    onItemExpand: function(item) {},
-    onItemCollapse: function(item) {}
+	onSelectItem: function(el) {},
+	onUnselectItem: function(el) {},
+	onItemExpand: function(item) {},
+	onItemCollapse: function(item) {}
 });

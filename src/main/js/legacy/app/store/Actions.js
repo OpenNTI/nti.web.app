@@ -10,9 +10,9 @@ var LoginStateStore = require('../../login/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.store.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.LibraryStore = NextThought.app.library.StateStore.getInstance();
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		}
 	},
 
-    onLogin: function() {
+	onLogin: function() {
 		if (this.LibraryStore.hasLoaded()) {
 			this.loadPurchasables();
 		} else {
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		}
 	},
 
-    loadPurchasables: function() {
+	loadPurchasables: function() {
 		var service = window.Service,
 			collection = service && service.getCollection('store', 'store'),
 			link = collection && service.getLinkFrom(collection.Links, 'get_purchasables'),
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 			.then(store.setLoaded.bind(store));
 	},
 
-    __updateLibraryWithPurchasables: function(items) {
+	__updateLibraryWithPurchasables: function(items) {
 		var library = this.LibraryStore;
 
 		(items || []).forEach(function(p) {
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		return items;
 	},
 
-    /**
+	/**
 	 * Called to generate a stripe payment token from purchase information
 	 *
 	 * @param {NextThought.view.store.purchase.Form} cmp the owner cmp
@@ -141,10 +141,10 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		}
 	},
 
-    /**
+	/**
 	 * validates a coupon code or figures the cost for activation keys
 	 * @param {Component} sender  the form that is sending the request
-	 * @param {Object} desc an object containing the Purchasable, Quantity, and Coupon.  Ommitted quantity is assumed 1, Coupon is optional.
+	 * @param {Object} desc an object containing the Purchasable, Quantity, and Coupon.	 Ommitted quantity is assumed 1, Coupon is optional.
 	 * @param {Function} success The success callback called if the provided coupone is valid
 	 * @param {Function} failure The failure callback called if we are unable to validate the coupon for any reason
 	 */
@@ -213,7 +213,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		}
 	},
 
-    doPricingRequest: function(url, data, callback) {
+	doPricingRequest: function(url, data, callback) {
 		Ext.Ajax.request({
 			url: url,
 			jsonData: data,
@@ -223,11 +223,11 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		});
 	},
 
-    doEnrollmentPricingRequest: function(url, data) {
+	doEnrollmentPricingRequest: function(url, data) {
 		return Service.post(url, data);
 	},
 
-    __attemptPurchase: function(purchaseDescription, tokenObject, expectedPrice, linkName) {
+	__attemptPurchase: function(purchaseDescription, tokenObject, expectedPrice, linkName) {
 		var purchasable = purchaseDescription.Purchasable,
 			tokenId = tokenObject.id,
 			url = purchasable && purchasable.getLink(linkName),
@@ -291,7 +291,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 				.then(this.__parsePurchaseAttempt.bind(this));
 	},
 
-    __parsePurchaseAttempt: function(response) {
+	__parsePurchaseAttempt: function(response) {
 		var result = Ext.JSON.decode(response, true);
 
 		if (result) {
@@ -307,7 +307,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		return result;
 	},
 
-    __pollPurchaseAttempt: function(purchaseAttempt) {
+	__pollPurchaseAttempt: function(purchaseAttempt) {
 		var me = this,
 			startedPollingAt = (new Date()).getTime(),
 			maxWaitInMillis = 2 * 60 * 1000, //2 minutes
@@ -350,11 +350,11 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		});
 	},
 
-    /**
+	/**
 	 * Make the purchase for purchasable using tokenObject
 	 *
 	 * @param {Component} cmp the owner cmp
-	 * @param {Object} purchaseDescription an object containing the Purchasable, Quantity, and Coupon.  Omitted quantity is assumed 1, Coupon is optional.
+	 * @param {Object} purchaseDescription an object containing the Purchasable, Quantity, and Coupon.	Omitted quantity is assumed 1, Coupon is optional.
 	 * @param {Object} tokenObject the stripe token object
 	 * @param {NextThought.model.store.StripePricedPurchasable} pricingInfo
 	 * @param {Function} success success callback
@@ -404,11 +404,11 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 			});
 	},
 
-    /**
+	/**
 	 * Make the purchase for purchasable using tokenObject
 	 *
 	 * @param {Component} cmp the owner cmp
-	 * @param {Object} purchaseDescription an object containing the Purchasable, Quantity, and Coupon.  Omitted quantity is assumed 1, Coupon is optional.
+	 * @param {Object} purchaseDescription an object containing the Purchasable, Quantity, and Coupon.	Omitted quantity is assumed 1, Coupon is optional.
 	 * @param {Object} tokenObject the stripe token object
 	 * @param {NextThought.model.store.StripePricedPurchasable} pricingInfo
 	 * @param {Function} success success callback
@@ -458,15 +458,15 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 			});
 	},
 
-    /**
+	/**
 	 * Submit a redeem token for a purchasable
-	 * @param  {Ext.Component} sender      the component sending the request
+	 * @param  {Ext.Component} sender	   the component sending the request
 	 * @param  {NextThought.model.store.Purchasable} purchasable the purchasable the token is for
-	 * @param  {String} token       the redeem token
+	 * @param  {String} token		the redeem token
 	 * @param  {Boolean} allowVendorUpdates subscribe the user to updates from the vendor
 	 * @param {String} ntiid ntiid of the thing you are redeeming
-	 * @param  {Function} success   success callback
-	 * @param  {Function} failure   failure callback
+	 * @param  {Function} success	success callback
+	 * @param  {Function} failure	failure callback
 	 */
 	redeemGift: function(sender, purchasable, token, allowVendorUpdates, ntiid, success, failure) {
 		var me = this,

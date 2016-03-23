@@ -9,13 +9,13 @@ var TimelineEditor = require('../timeline/Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ChildCreation', {
-    extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
-    alias: 'widget.overview-editing-overviewgroup-childcreation',
-    title: 'Choose a content type',
-    backText: 'Content Types',
-    saveText: 'Add to Lesson',
+	extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
+	alias: 'widget.overview-editing-overviewgroup-childcreation',
+	title: 'Choose a content type',
+	backText: 'Content Types',
+	saveText: 'Add to Lesson',
 
-    statics: {
+	statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.courses.overview.Group.mimeType
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    setUpTypeList: function() {
+	setUpTypeList: function() {
 		this.callParent(arguments);
 
 		var subTitle = this.rootRecord && this.rootRecord.getTitle && this.rootRecord.getTitle();
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    setUpTypeEditor: function() {
+	setUpTypeEditor: function() {
 		this.callParent(arguments);
 
 		var subTitle = this.rootRecord && this.rootRecord.getTitle && this.rootRecord.getTitle();

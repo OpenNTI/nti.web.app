@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.util.PagedPageSource', {
 	 * Check if the index is in the store's current page
 	 *
 	 * @param  {Integer} absoluteIndex index to look up
-	 * @return {Record}               the record from the store if its there
+	 * @return {Record}				  the record from the store if its there
 	 */
 	__maybeGetFromStore: function(absoluteIndex) {
 		var pageSize = this.store.pageSize,

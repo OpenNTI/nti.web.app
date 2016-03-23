@@ -3,16 +3,16 @@ var PartsBarChart = require('./BarChart');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.MultiChoice', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.assessment-multichoice-result',
+	extend: 'Ext.container.Container',
+	alias: 'widget.assessment-multichoice-result',
 
-    statics: {
+	statics: {
 		mimeType: 'application/vnd.nextthought.assessment.aggregatedmultiplechoicepart'
 	},
 
-    cls: 'result-part',
+	cls: 'result-part',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.barChart = this.add({
@@ -21,13 +21,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 		});
 	},
 
-    /**
+	/**
 	 * Get the rows to pass to the bar chart.
 	 *
 	 * The results we get back look like:
 	 *
 	 * {
-	 * 	choiceIndex: number of times it was chosen
+	 *	choiceIndex: number of times it was chosen
 	 * }
 	 *
 	 * To map this to the labels, we iterate the choices listed in the question.

@@ -237,7 +237,7 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 				suffix = '';
 
 				if (others) {
-				    suffix = Ext.String.format('and {0}', Ext.util.Format.plural(others, 'other'));
+					suffix = Ext.String.format('and {0}', Ext.util.Format.plural(others, 'other'));
 				} else if (names.length > 1) {
 					suffix = ' and' + names.pop();
 				}

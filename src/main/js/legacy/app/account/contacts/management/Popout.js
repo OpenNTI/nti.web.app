@@ -9,17 +9,17 @@ var ChatActions = require('../../../chat/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.contacts.management.Popout', {
-    extend: 'NextThought.app.account.activity.Popout',
-    alias: ['widget.contact-popout', 'widget.activity-popout-user'],
+	extend: 'NextThought.app.account.activity.Popout',
+	alias: ['widget.contact-popout', 'widget.activity-popout-user'],
 
-    mixins: {
+	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks'
 	},
 
-    width: 350,
-    cls: 'contact-popout',
+	width: 350,
+	cls: 'contact-popout',
 
-    renderTpl: Ext.DomHelper.markup([{
+	renderTpl: Ext.DomHelper.markup([{
 		cls: 'header',
 		cn: [{
 				cls: 'card-wrap',
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		]
 	}]),
 
-    renderSelectors: {
+	renderSelectors: {
 		name: '.name',
 		avatar: '.contact-card .avatar',
 		actionEl: '.right',
@@ -88,9 +88,9 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		optionsEl: '.options'
 	},
 
-    setupItems: Ext.emptyFn,
+	setupItems: Ext.emptyFn,
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		var me = this;
 		this.groupsListMenu = Ext.widget({
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		this.pointer.disable();
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, this.record.getData());
 		this.renderData = Ext.apply(this.renderData, {
@@ -132,10 +132,10 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.enableProfileClicks(this.avatar, this.name);
-		this.user = this.record;    //EnableProfileClicks mixin expects us to have a this.user object.
+		this.user = this.record;	//EnableProfileClicks mixin expects us to have a this.user object.
 
 		this.mon(this.listEl, 'click', this.showUserList, this);
 		this.mon(this.actionButtonEl, 'click', this.actOnContactOrChat, this);
@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 
 	},
 
-    getListCount: function() {
+	getListCount: function() {
 		var u = this.record.get('Username'),
 			s = this.groupsList.store,
 			k = s.queryBy(function(a) { return a && a.hasFriend && a.hasFriend(u) && !a.isDFL; }),
@@ -184,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		return c;
 	},
 
-    getPointerStyle: function(x, y) {
+	getPointerStyle: function(x, y) {
 		var el = this.getTargetEl(),
 			t = el.getY(),
 			b = t + el.getHeight();
@@ -192,7 +192,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		return (t <= y && y <= b) ? '' : 'contact';
 	},
 
-    actOnContactOrChat: function(e) {
+	actOnContactOrChat: function(e) {
 		e.stopEvent();
 
 		if (e.getTarget('.disabled')) {
@@ -206,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		}
 	},
 
-    onAddContact: function() {
+	onAddContact: function() {
 		var me = this, data = this.getSelected();
 
 		this.GroupActions.addContact(this.user, data.groups)
@@ -215,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 			});
 	},
 
-    onDeleteContact: function() {
+	onDeleteContact: function() {
 		var me = this, data = this.getSelected(),
 			fin = function() { me.destroy(); };
 
@@ -236,7 +236,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		});
 	},
 
-    showUserList: function() {
+	showUserList: function() {
 		if (this.showingListMenu) {
 			this.groupsListMenu.hide();
 			this.fireEvent('adjust-height');
@@ -248,7 +248,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		this.syncMenuHeight(this.groupsListMenu);
 	},
 
-    showOptionMenu: function() {
+	showOptionMenu: function() {
 		if (this.showingOptionsMenu) {
 			this.optionsMenu.hide();
 			this.fireEvent('adjust-height');
@@ -260,7 +260,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		this.syncMenuHeight(this.optionsMenu);
 	},
 
-    syncMenuHeight: function(menu) {
+	syncMenuHeight: function(menu) {
 		var topMenu = menu.getY(),
 			avatarTop = this.avatar.getY(),
 			avatarHeight = this.avatar.getHeight();
@@ -270,7 +270,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		}
 	},
 
-    align: function() {
+	align: function() {
 		try {
 			this.maxHeight = Ext.dom.Element.getViewportHeight();
 			this.alignTo(this.refEl, this.anchor || 'tr-tl?', this.offsets || [-10, 0]);
@@ -286,7 +286,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		}
 	},
 
-    getSelected: function() {
+	getSelected: function() {
 		var l = this.groupsList;
 		return {
 			user: this.user.getId(),
@@ -294,7 +294,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		};
 	},
 
-    setPresenceButton: function() {
+	setPresenceButton: function() {
 		var pi = this.user.get('Presence'),
 			current = $AppConfig.userObject.get('Presence'),
 			isOnline = (pi && pi.isOnline && pi.isOnline()) || this.isUserOnline();
@@ -305,35 +305,35 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		}
 	},
 
-    isUserOnline: function() {
+	isUserOnline: function() {
 		var o = this.GroupStore.getOnlineContactStore();
 		return Boolean(o.findRecord('Username', this.user.get('Username')));
 	},
 
-    makeItContact: function() {
+	makeItContact: function() {
 		this.actionEl.removeCls('add-contact').addCls('chat');
 		this.actionButtonEl.update(getString('NextThought.view.account.contacts.management.Popout.chat'));
 		this.isContact = true;
 		this.setPresenceButton();
 	},
 
-    updateCount: function(count) {
+	updateCount: function(count) {
 		this.listEl.set({'data-value': count});
 	},
 
-    incrementCount: function() {
+	incrementCount: function() {
 		var count = this.getListCount();
 		count++;
 		this.updateCount(count);
 	},
 
-    decreaseCount: function() {
+	decreaseCount: function() {
 		var count = this.getListCount();
 		count--;
 		this.updateCount(count);
 	},
 
-    onDestroy: function() {
+	onDestroy: function() {
 		//debugger;
 		if (this.groupsListMenu.el) {
 			this.groupsListMenu.el.remove();

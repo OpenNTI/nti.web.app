@@ -16,10 +16,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		cls: 'pager-container',
 		cn: [
 			// {tag: 'tpl', 'if': 'hasRandomAccess', cn: [
-			// 	{tag: 'label', cls: 'page', cn: [
-			// 		'Page:',
-			// 		{tag: 'input', type: 'text', value: '{current}'}
-			// 	]}
+			//	{tag: 'label', cls: 'page', cn: [
+			//		'Page:',
+			//		{tag: 'input', type: 'text', value: '{current}'}
+			//	]}
 			// ]},
 			{tag: 'ul', cls: 'pages', cn: [
 				{tag: 'tpl', 'for': 'pages', cn: [

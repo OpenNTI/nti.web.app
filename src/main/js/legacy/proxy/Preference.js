@@ -3,29 +3,29 @@ var ReaderJson = require('./reader/Json');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.Preference', {
-    extend: 'Ext.data.proxy.Rest',
-    alias: 'proxy.preference',
-    url: '',
-    appendId: false,
+	extend: 'Ext.data.proxy.Rest',
+	alias: 'proxy.preference',
+	url: '',
+	appendId: false,
 
-    //default
+	//default
 	reader: {
 		type: 'nti',
 		root: 'Items'
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		Ext.copyTo(this.reader, config, 'model');
 		this.callParent(arguments);
 		this.on('exception', this.exception, this);
 	},
 
-    buildUrl: function(request) {
+	buildUrl: function(request) {
 		request.url = request.params.id;
 		return this.callParent(arguments);
 	},
 
-    exception: function(proxy, resp, operation) {
+	exception: function(proxy, resp, operation) {
 		try {
 			Ext.callback(operation.failed, operation.scope, [operation.records, operation]);
 		}

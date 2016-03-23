@@ -4,7 +4,7 @@ var CardsSlide = require('../components/cards/Slide');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
-    statics: {
+	statics: {
 		type: 'slide',
 
 		canHandle: function(obj) {
@@ -12,20 +12,20 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 		}
 	},
 
-    contextTpl: Ext.DomHelper.markup([
+	contextTpl: Ext.DomHelper.markup([
 		{cls: 'image-wrap', cn: [
 			{tag: 'img', src: '{image}'}
 		]}
 	]),
 
-    constructor: function(config) {
+	constructor: function(config) {
 		this.callParent(arguments);
 		Ext.applyIf(this, config || {});
 		this.MediaActions = NextThought.app.mediaviewer.Actions.create();
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
-    getBasePath: function(obj) {
+	getBasePath: function(obj) {
 		var slidedeckId = obj && obj.get('slidedeckid'),
 			me = this;
 
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 			.then(this.MediaActions.getBasePath.bind(this.MediaActions));
 	},
 
-    parse: function(slide, kind) {
+	parse: function(slide, kind) {
 		var context, cmp, me = this, store, t;
 
 		return this.getBasePath(slide)
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 							cmp = Ext.apply(config, {xtype: 'context-slide-card'});
 						}
 						else {
-							cmp = Ext.widget('context-slide-card', config);	
+							cmp = Ext.widget('context-slide-card', config); 
 						}
 
 						

@@ -330,7 +330,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 
 	allowNavigation: function () {
 		//If there is no submission or we have no assignment (self-assessment)
-		//don't prevent navigation.  TODO what if we are opening a note on something
+		//don't prevent navigation.	 TODO what if we are opening a note on something
 		//like an assignment.  We would probably want to allowNavigation in that case.
 		//Seems like we need to pass some more information to this method or have
 		//the framework support that in another way.

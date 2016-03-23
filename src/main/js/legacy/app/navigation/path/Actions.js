@@ -11,9 +11,9 @@ var PartsProfiles = require('./parts/Profiles');
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.PathStore = NextThought.app.navigation.path.StateStore.getInstance();
@@ -22,11 +22,11 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		this.buildHandlerMap();
 	},
 
-    clearCache: function() {
+	clearCache: function() {
 		this.PathStore.clearCache();
 	},
 
-    buildHandlerMap: function() {
+	buildHandlerMap: function() {
 		var parts = NextThought.app.navigation.path.parts,
 			keys = Object.keys(parts), handlers = {};
 
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		this.mimeToHandlers = handlers;
 	},
 
-    __doNTIIDRequest: function(ntiid) {
+	__doNTIIDRequest: function(ntiid) {
 		var link = Service.getPathToObjectLink(ntiid);
 
 		if (!link) {
@@ -51,11 +51,11 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		return this.__doRequestForLink(link);
 	},
 
-    /**
+	/**
 	 * Given an object, built the link to get its path, call it, and fulfill with the path
 	 *
 	 * @param  {Object} obj object to get the link for
-	 * @return {Promise}    fulfills with the path
+	 * @return {Promise}	fulfills with the path
 	 */
 	__doRequestForNoLink: function(obj) {
 		var url = Service.getPathToObjectLink(),
@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 			});
 	},
 
-    /**
+	/**
 	 * Given a link return the path it returns
 	 *
 	 * We are caching on the link, because this call will sometimes
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	 * so lets not chance the browser not caching it.
 	 *
 	 * @param  {String} link
-	 * @return {Promise}      fulfills with the path
+	 * @return {Promise}	  fulfills with the path
 	 */
 	__doRequestForLink: function(link) {
 		var cache = this.PathStore.getFromCache(link);
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		return this.PathStore.setInCache(link, cache);
 	},
 
-    __doHandledRequest: function(obj, handler) {
+	__doHandledRequest: function(obj, handler) {
 		var id = obj.getId(),
 			cache = this.PathStore.getFromCache(id),
 			doNotCache = Ext.isObject(handler) && handler.doNotCache,
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		return this.PathStore.setInCache(id, cache);
 	},
 
-    /**
+	/**
 	 * Given an object (ntiid), return an array of objects that make up the path
 	 * to it.
 	 *
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	 * attempt to build a link using the Service doc
 	 *
 	 * @param  {Object|String} obj the object to get the path to
-	 * @return {Promise}    fulfills with the path to the object
+	 * @return {Promise}	fulfills with the path to the object
 	 */
 	getPathToObject: function(obj) {
 		var link = obj.getLink && obj.getLink('LibraryPath'),
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 			});
 	},
 
-    __resolveForbiddenBreadCrumb: function(resp) {
+	__resolveForbiddenBreadCrumb: function(resp) {
 		var json = Globals.parseJSON(resp, true),
 			items = json && json.Items,
 			obj = items && items[0];
@@ -177,7 +177,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		return Promise.reject();
 	},
 
-    getBreadCrumb: function(record) {
+	getBreadCrumb: function(record) {
 		var me = this,
 			rootObject = me.ContextStore.getRootBundle() || me.ContextStore.getRootProfile(),
 			path,

@@ -4,17 +4,17 @@ var ListTilesNote = require('./listTiles/Note');
 
 
 module.exports = exports = Ext.define('NextThought.app.stream.components.ListPage', {
-    extend: 'NextThought.app.stream.components.BasePage',
-    alias: 'widget.stream-list-page',
-    cls: 'list-page',
+	extend: 'NextThought.app.stream.components.BasePage',
+	alias: 'widget.stream-list-page',
+	cls: 'list-page',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.streamItems.forEach(this.addItem.bind(this));
 	},
 
-    addItem: function(record) {
+	addItem: function(record) {
 		record = this.unwrapRecord(record);
 
 		var cmp = this.getForMimeType(record.mimeType);

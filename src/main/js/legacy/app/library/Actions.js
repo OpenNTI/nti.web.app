@@ -13,9 +13,9 @@ var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.CourseActions = NextThought.app.library.courses.Actions.create();
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 		}
 	},
 
-    onLogin: function() {
+	onLogin: function() {
 		var s = window.Service,
 			store = this.LibraryStore,
 			courseStore = this.CourseStore,
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 		});
 	},
 
-    /**
+	/**
 	 * Iterate the courses, admin courses, and content bundles, adding the content packages
 	 * they use to a list, then tell the content store to remove any content packages in that
 	 * list
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 		this.ContentStore.deDupContentPackages(used);
 	},
 
-    parseXML: function(xml) {
+	parseXML: function(xml) {
 		try {
 			return new DOMParser().parseFromString(xml, 'text/xml');
 		}
@@ -104,17 +104,17 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 		return undefined;
 	},
 
-    findBundle: function(id) {
+	findBundle: function(id) {
 		return this.CourseActions.findCourseInstance(id)
 				.fail(this.ContentActions.findContent.bind(this.ContentActions, id));
 	},
 
-    findBundleForNTIID: function(id) {
+	findBundleForNTIID: function(id) {
 		return this.CourseActions.findForNTIID(id)
 			.fail(this.ContentActions.findForNTIID.bind(this.ContentActions, id));
 	},
 
-    findContentPackage: function(id) {
+	findContentPackage: function(id) {
 		return this.findBundleForNTIID(id)
 			.then(function(bundle) {
 				var packages = bundle && bundle.getContentPackages() || [],
@@ -130,16 +130,16 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 			});
 	},
 
-    findBundleBy: function(fn) {
+	findBundleBy: function(fn) {
 
 	},
 
-    /**
+	/**
 	 * Takes a function that takes a course and returns a number priority
 	 * and returns an array of the courses ordered by their priority, excluding
 	 * courses that have zero or lower priority
 	 * @param  {Function} fn takes a bundle instance and wrapper and returns a number
-	 * @return {Promise}     fulfills with an array of bundles in order
+	 * @return {Promise}	 fulfills with an array of bundles in order
 	 */
 	findBundleByPriority: function(fn) {
 		return this.CourseActions.findCourseByPriority(fn)
@@ -153,7 +153,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 			.fail(this.ContentActions.findContentByPriority.bind(this.ContentActions, fn));
 	},
 
-    getVideoIndex: function(bundle) {
+	getVideoIndex: function(bundle) {
 		console.warn('DEPCRECIATED: we should try to not rely on getVideoIndex');
 		var cache = this.LibraryStore.videoIndex = this.LibraryStore.videoIndex || {},
 			index = bundle.getId(), toc, root;

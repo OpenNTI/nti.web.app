@@ -6,14 +6,14 @@ var ContentnodeIndex = require('./contentnode/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.overview-editing-outline',
+	extend: 'Ext.container.Container',
+	alias: 'widget.overview-editing-outline',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-    statics: {
+	statics: {
 		canHandle: function(mimeType) {
 			return !!this.HANDLES[mimeType];
 		},
@@ -48,11 +48,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    cls: 'outline-node-editing',
-    layout: 'none',
-    items: [],
+	cls: 'outline-node-editing',
+	layout: 'none',
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var record = this.record,
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}));
 	},
 
-    onceLoaded: function() {
+	onceLoaded: function() {
 		if (this.activeComponent && this.activeComponent.onceLoaded) {
 			return this.activeComponent.onceLoaded();
 		}
@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Promise.resolve();
 	},
 
-    onDelete: function() {
+	onDelete: function() {
 		if (this.afterDelete) {
 			this.afterDelete();
 		}

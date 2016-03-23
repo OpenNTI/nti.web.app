@@ -5,16 +5,16 @@ var Ext = require('extjs');
 // FIXME: Maybe delete this? We no longer use a different version of slidedeck
 // We use the mediaviewer for showing both videos and slidedeck.
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.Overlay', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.slidedeck-overlay',
-    cls: 'overlay',
-    ui: 'slidedeck',
-    plain: true,
-    layout: 'fit',
-    maximized: true,
-    floating: true,
+	extend: 'Ext.container.Container',
+	alias: 'widget.slidedeck-overlay',
+	cls: 'overlay',
+	ui: 'slidedeck',
+	plain: true,
+	layout: 'fit',
+	maximized: true,
+	floating: true,
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		var me = this,
 			store = me.store,
@@ -45,12 +45,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.Overl
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.el.set({role: 'dialog'});
 	},
 
-    tabNext: function(k, e) {
+	tabNext: function(k, e) {
 		e.stopEvent();
 		var a = this.el.query('[tabindex]'), i;
 		i = Ext.Array.indexOf(a, (this.el.down('[tabindex]:focus') || {}).dom) + 1;
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.Overl
 		return false;
 	},
 
-    setSize: function() {
+	setSize: function() {
 		if (this.rendered) {this.toFront();}
 		return this.callParent(arguments);
 	}

@@ -31,17 +31,17 @@ var UserdataActions = require('../../userdata/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Annotations', {
-    alias: 'reader.annotations',
+	alias: 'reader.annotations',
 
-    mixins: {
+	mixins: {
 		observable: 'Ext.util.Observable'
 	},
 
-    getBubbleTarget: function() {
+	getBubbleTarget: function() {
 		return this.reader;
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		Ext.apply(this, config);
 		var me = this,
 				reader = me.reader;
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 					  'resize'
 				  ]));
 
-	    reader.on('destroy', 'clearAnnotations', this);
+		reader.on('destroy', 'clearAnnotations', this);
 
 		Ext.apply(me, {
 			annotations: {},
@@ -96,11 +96,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}, me, {buffer: 500});
 	},
 
-    getDocumentElement: function() {
+	getDocumentElement: function() {
 		return this.reader.getDocumentElement();
 	},
 
-    onGutterClicked: function(e) {
+	onGutterClicked: function(e) {
 		var t = e.getTarget('[data-line]', null, true),
 				toggle = t && t.hasCls('active'),
 				line = !toggle && t && parseInt(t.getAttribute('data-line'), 10);
@@ -113,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}
 	},
 
-    storeEventsAdd: function(store, records) {
+	storeEventsAdd: function(store, records) {
 		console.debug('New records in store, adding to page...', store.cacheMapId || store.containerId, records);
 		Ext.each(records, function(r) {
 			var cls = r.get('Class');
@@ -126,17 +126,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}, this);
 	},
 
-    storeEventsBulkRemove: function(store, records) {
+	storeEventsBulkRemove: function(store, records) {
 		Ext.each(records, function(record) {
 			this.remove(record.getId());
 		}, this);
 	},
 
-    storeEventsRemove: function(store, record) {
+	storeEventsRemove: function(store, record) {
 		this.remove(record.getId());
 	},
 
-    insertAnnotationGutter: function() {
+	insertAnnotationGutter: function() {
 		var me = this,
 				container = Ext.DomHelper.insertAfter(
 						me.reader.getInsertionPoint().first(),
@@ -149,11 +149,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		me.annotationManager.registerGutter(container, me.reader);
 	},
 
-    getManager: function() {
+	getManager: function() {
 		return this.annotationManager;
 	},
 
-    convertRectToScreen: function(r) {
+	convertRectToScreen: function(r) {
 		var readerOffsets = this.reader.getAnnotationOffsets().rect;
 
 		return {
@@ -166,34 +166,34 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		};
 	},
 
-    loadAnnotations: function(containerId, subContainers) {
+	loadAnnotations: function(containerId, subContainers) {
 		var location = this.reader.getLocation();
 
 		this.clearAnnotations();
 		this.UserDataActions.loadAnnotations(this.reader, containerId, location.pageInfo, subContainers);
 	},
 
-    objectsLoaded: function(items, bins/*, containerId*/) {
+	objectsLoaded: function(items, bins/*, containerId*/) {
 		var me = this;
 
 		me.setAssessedQuestions((bins || {}).AssessedQuestionSet);
 		me.buildAnnotations(items);
 	},
 
-    applyFilter: function(newFilter) {
+	applyFilter: function(newFilter) {
 		this.filter = newFilter;
 		this.clearAnnotations();
 		this.fireEvent('filter-annotations', this.reader);
 	},
 
-    showSearchHit: function(hit) {
+	showSearchHit: function(hit) {
 		this.clearSearchHit();
 		if (hit.isContent()) {
 			this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this.reader});
 		}
 	},
 
-    //generalize this
+	//generalize this
 	//Returns an array of objects with two propertes.  ranges is a list
 	//of dom ranges that should be used to position the highlights.
 	//key is a string that used to help distinguish the type of content when we calculate the adjustments( top and left ) needed.
@@ -232,9 +232,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		return result;
 	},
 
-    //	@returns an object with top and left properties used to adjust the
-	//  coordinate space of the ranges bounding client rects.
-	//  It decides based on the type of container( main content or overlays).
+	//	@returns an object with top and left properties used to adjust the
+	//	coordinate space of the ranges bounding client rects.
+	//	It decides based on the type of container( main content or overlays).
 	getRangePositionAdjustments: function(key) {
 		var annotationOffsets, overlayXAdjustment, overlayYAdjustment;
 		if (key === 'content') {
@@ -248,7 +248,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		return {top: overlayYAdjustment, left: overlayXAdjustment };
 	},
 
-    clearSearchHit: function() {
+	clearSearchHit: function() {
 		if (!this.searchAnnotations) {
 			return;
 		}
@@ -257,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		this.searchAnnotations = null;
 	},
 
-    remove: function(oid) {
+	remove: function(oid) {
 		var v = this.annotations[oid];
 		if (v) {
 			this.annotations[oid] = undefined;
@@ -267,7 +267,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}
 	},
 
-    clearAnnotations: function() {
+	clearAnnotations: function() {
 		var v, oid, leftovers;
 		for (oid in this.annotations) {
 			if (this.annotations.hasOwnProperty(oid)) {
@@ -293,7 +293,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 
 	},
 
-    exists: function(record) {
+	exists: function(record) {
 		var oid = record.getId();
 		if (!oid) {
 			return false;
@@ -302,7 +302,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		return !!this.annotations[oid];
 	},
 
-    getDefinitionMenuItem: function(range) {
+	getDefinitionMenuItem: function(range) {
 		try {
 			range = range || this.getSelection();
 			if (!range) {
@@ -337,7 +337,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}
 	},
 
-    addAnnotation: function(range, xy) {
+	addAnnotation: function(range, xy) {
 		if (!range) {
 			console.warn('bad range');
 			return;
@@ -497,7 +497,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		me.selectRange(range);
 	},
 
-    // For compatibility with native scrolling on iPad
+	// For compatibility with native scrolling on iPad
 	iAddAnnotation: function(range) {
 		if (!range) {
 			console.warn('bad range');
@@ -603,12 +603,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}
 	},
 
-    /**
+	/**
 	 *
 	 * @param {String} type
 	 * @param {Ext.data.Model} record - annotation record (highlight, note, redaction, etc)
 	 * @param {Range} [browserRange] - optional, if we already have a range from the browser, that can be used instead of resolving it
-	 *                         from the record
+	 *						   from the record
 	 * @param {Function} [onCreated] - Function
 	 * @return {*}
 	 */
@@ -658,7 +658,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		return Boolean(w);
 	},
 
-    setAssessedQuestions: function(sets) {
+	setAssessedQuestions: function(sets) {
 		if (!sets || sets.length === 0) {
 			//do nothing if we have no prior sets
 			return;
@@ -674,7 +674,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		scoreboard.setPriorResults(sets);
 	},
 
-    buildAnnotations: function(list) {
+	buildAnnotations: function(list) {
 		var me = this;
 		Ext.each(list || [], function(r) {
 			if (!r) {
@@ -690,7 +690,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}, this);
 	},
 
-    onContextMenuHandler: function(e) {
+	onContextMenuHandler: function(e) {
 		try {
 			var origSelection = rangy.getSelection(this.getDocumentElement()).toString(),
 					range = this.getSelection();
@@ -713,7 +713,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}
 	},
 
-    getAnnotations: function() {
+	getAnnotations: function() {
 		var key,
 			items = [];
 
@@ -726,7 +726,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		return items;
 	},
 
-    realignAnnotations: function() {
+	realignAnnotations: function() {
 		var items = this.getAnnotations();
 
 		items = items.map(function(x) { return x.record; });
@@ -735,7 +735,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		this.buildAnnotations(items);
 	},
 
-    getSelection: function() {
+	getSelection: function() {
 		var doc = this.getDocumentElement(),
 				range, selection, txt;
 		try {
@@ -759,7 +759,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		return null;
 	},
 
-    selectRange: function(range) {
+	selectRange: function(range) {
 		try {
 			var s = this.getDocumentElement().parentWindow.getSelection();
 			s.removeAllRanges();
@@ -770,7 +770,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}
 	},
 
-    clearSelection: function() {
+	clearSelection: function() {
 		var doc = this.getDocumentElement(),
 				win = doc.parentWindow;
 		try {

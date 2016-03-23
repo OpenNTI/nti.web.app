@@ -4,15 +4,15 @@ var PathActions = require('../../../../../../navigation/path/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.HighlightContainer', {
-    extend: 'Ext.Component',
-    alias: 'widget.profile-activity-highlight-container',
-    cls: 'activity-highlight-container',
+	extend: 'Ext.Component',
+	alias: 'widget.profile-activity-highlight-container',
+	cls: 'activity-highlight-container',
 
-    mixins: {
+	mixins: {
 		profileLink: 'NextThought.mixins.ProfileLinks'
 	},
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
 			{tag: 'span', cls: 'name link', html: '{name}'},
 			' created ', {tag: 'span', cls: 'count', html: '{count}'},
@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		{ cls: 'box' }
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		headerEl: '.header',
 		nameEl: '.header .name',
 		countEl: '.header .count',
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		bodyEl: '.box'
 	},
 
-    selectedTpl: new Ext.XTemplate(Ext.DomHelper.markup(
+	selectedTpl: new Ext.XTemplate(Ext.DomHelper.markup(
 			{tag: 'tpl', 'for': '.', cn: [
 				{tag: 'tpl', 'if': '.', cn: [
 					{tag: 'span', html: '{.}' }
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			]}
 	)),
 
-    tpl: new Ext.XTemplate(Ext.DomHelper.markup(
+	tpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{ tag: 'tpl', 'for': 'books', cn: [
 			{ cls: 'book', cn: [
 				{ cls: 'icon', style: 'background-image: url({icon});', 'data-ntiid': '{ntiid}' },
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		]}
 	)),
 
-    setupContainerRenderData: function() {
+	setupContainerRenderData: function() {
 		var me = this,
 			c = me.up('[user]'),
 			u = me.user || null,
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return d;
 	},
 
-    /**
+	/**
 	 * This is intended to be a callback. No return value. We modify {data}
 	 * @param {Object} data the output
 	 * @param {Object} groupings the input
@@ -181,7 +181,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			});
 	},
 
-    maybeFillIn: function(data) {
+	maybeFillIn: function(data) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.maybeFillIn, this, [data]), this, {single: true});
 			return;
@@ -196,7 +196,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    /**
+	/**
 	 * @override {Ext.Component#beforeRender}
 	 */
 	beforeRender: function() {
@@ -204,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.setupContainerRenderData();
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		var me = this;
 		me.callParent(arguments);
 		me.enableProfileClicks(me.nameEl);
@@ -214,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		Ext.each(this.items, function(i) { me.mon(i, 'destroy', me.onHighlightRemoved, me); });
 	},
 
-    /**
+	/**
 	 * Attempts to add the record to this container.  If the date is a match it adds it. Otherwise it skips it.
 	 *
 	 * @param {NextThought.model.Highlight} record
@@ -231,12 +231,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return false;
 	},
 
-    addHighlight: function(record) {
+	addHighlight: function(record) {
 		this.items.unshift(record);
 		this.setupContainerRenderData();
 	},
 
-    onHighlightRemoved: function(item) {
+	onHighlightRemoved: function(item) {
 		Ext.Array.remove(this.items, item);
 		this.mun(item, 'destroy', this.onHighlightRemoved, this);
 
@@ -248,7 +248,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.destroy();
 	},
 
-    onClick: function(e) {
+	onClick: function(e) {
 		var t = e.getTarget('[data-ntiid]', null, true),
 			ntiid = t && t.getAttribute('data-ntiid'),
 			selectedItem;
@@ -267,7 +267,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    goToObject: function(id) {
+	goToObject: function(id) {
 		var item, cid;
 
 		if (!id) {

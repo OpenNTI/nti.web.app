@@ -5,10 +5,10 @@ var UtilSearch = require('../../util/Search');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
-    alias: 'widget.search-hits',
-    mixins: {observable: 'Ext.util.Observable'},
+	alias: 'widget.search-hits',
+	mixins: {observable: 'Ext.util.Observable'},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		var me = this;
 		me.mixins.observable.constructor.call(me);
 		Ext.apply(me, {
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 		me.insertSearchHitsOverlay();
 	},
 
-    insertSearchHitsOverlay: function() {
+	insertSearchHitsOverlay: function() {
 		var container = Ext.DomHelper.append(this.ownerCmp.getInsertionPoint('innerCt'), { cls: 'searchHit-overlay' }, true);
 		if (Ext.isIE) {
 			container.on('click', function(e) {
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 		this.showAllHits();
 	},
 
-    removeOverlay: function() {
+	removeOverlay: function() {
 		try {
 			Ext.fly(this.searchHitsOverlay).remove();
 		}
@@ -52,12 +52,12 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 		}
 	},
 
-    //FIXME the caching that happens in this method is no longer safe.
-	//rangesForSearchHits returns an array objects.  These objects encapsulate
+	//FIXME the caching that happens in this method is no longer safe.
+	//rangesForSearchHits returns an array objects.	 These objects encapsulate
 	//not only the ranges to highlight but also some positioning information.
 	//In the current use case the ranges from assesment items have an offset
-	//that takes into account scroll position.  That obviously can't be cached
-	//across varying scroll positions.  Really what we are trying to cache here
+	//that takes into account scroll position.	That obviously can't be cached
+	//across varying scroll positions.	Really what we are trying to cache here
 	//are the ranges because they take some cycles to calculate. We could move the caching
 	//of ranges into ownerCmp but I'm not sure that makes sense.  Need to ponder some options
 	getRanges: function() {
@@ -86,11 +86,11 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 		return this.ranges;
 	},
 
-    showAllHits: function() {
+	showAllHits: function() {
 		this.renderRanges(this.getRanges());
 	},
 
-    entriesToAppend: function(rangeInfo, toAppend) {
+	entriesToAppend: function(rangeInfo, toAppend) {
 		var rangesToRender = rangeInfo.ranges,
 			adjustments = this.ownerCmp.getRangePositionAdjustments(rangeInfo.key) || {},
 			redactionAction, rects;
@@ -99,24 +99,24 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 			return toAppend;
 		}
 		Ext.each(rangesToRender, function(sel) {
-      redactionAction = TextRangeFinderUtils.getRedactionActionSpan(sel);
-      if (redactionAction) {
-        redactionAction.addCls('searchHitInside');
-        sel.getClientRects = function() {
-          var b = redactionAction.getBox();
-          return [{
-            bottom: b.bottom,
-            top: b.y + adjustments.top || 0,
-            left: b.x + adjustments.left || 0,
-            right: b.right,
-            height: b.height,
-            width: b.width
-          }];
-        };
-        sel.noOverlay = true;
-      }
+	  redactionAction = TextRangeFinderUtils.getRedactionActionSpan(sel);
+	  if (redactionAction) {
+		redactionAction.addCls('searchHitInside');
+		sel.getClientRects = function() {
+		  var b = redactionAction.getBox();
+		  return [{
+			bottom: b.bottom,
+			top: b.y + adjustments.top || 0,
+			left: b.x + adjustments.left || 0,
+			right: b.right,
+			height: b.height,
+			width: b.width
+		  }];
+		};
+		sel.noOverlay = true;
+	  }
 
-      if (!sel.getClientRects) {sel.getClientRects = function() {return [];};}
+	  if (!sel.getClientRects) {sel.getClientRects = function() {return [];};}
 			rects = RectUtils.merge(sel.getClientRects(), null);
 
 			Ext.each(rects, function(range) {
@@ -146,7 +146,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 		return toAppend;
 	},
 
-    renderRanges: function(rangesToRender) {
+	renderRanges: function(rangesToRender) {
 		var toAppend = [], redactionAction, rects;
 
 		Ext.each(rangesToRender, function(rangeInfo) {
@@ -156,13 +156,13 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchHits', {
 		Ext.DomHelper.append(this.searchHitsOverlay, toAppend, true);
 	},
 
-    reLayout: function() {
+	reLayout: function() {
 		console.log('Relaying out search hit overlays');
 		this.removeOverlay();
 		this.insertSearchHitsOverlay();
 	},
 
-    cleanup: function() {
+	cleanup: function() {
 		this.removeOverlay();
 		delete this.hit;
 		delete this.regex;

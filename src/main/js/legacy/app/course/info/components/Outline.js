@@ -4,15 +4,15 @@ var ComponentsOpenCourseInfo = require('./OpenCourseInfo');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Outline', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.course-info-outline',
-    layout: 'none',
+	extend: 'Ext.container.Container',
+	alias: 'widget.course-info-outline',
+	layout: 'none',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 	},
 
-    setContent: function(info, status, showRoster, courseMode) {
+	setContent: function(info, status, showRoster, courseMode) {
 		var startDate = Ext.util.Format.date(info.get('StartDate'), 'F j, Y');
 
 		this.removeAll(true);
@@ -20,18 +20,18 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 		if (courseMode) {
 			this.startDate = this.add({
 				xtype: 'box',
-			    autoEl: {
+				autoEl: {
 					cls: 'course-info-header-bar',
 					cn: [
 						{
 							cls: 'col-left',
-						    cn: [
-						        {cls: 'label', html: getString('NextThought.view.courseware.info.parts.NotStarted.starts')},
+							cn: [
+								{cls: 'label', html: getString('NextThought.view.courseware.info.parts.NotStarted.starts')},
 								{cls: 'date', html: startDate}
-						    ]
+							]
 						}
 					]
-			    }
+				}
 			});
 		}
 
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 		}
 	},
 
-    setActiveItem: function(route) {
+	setActiveItem: function(route) {
 		this.activePath = route.path;
 
 		if (this.menu) {
@@ -66,11 +66,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 		}
 	},
 
-    getMenu: function() {
+	getMenu: function() {
 		return this.menu || this.down('course-info-outline-menu');
 	},
 
-    changeRoute: function(title, route) {
+	changeRoute: function(title, route) {
 		this.fireEvent('select-route', title, route);
 	}
 });

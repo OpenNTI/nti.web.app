@@ -46,7 +46,7 @@ global.wait = Promise.wait;
  * I guess there _MIGHT_ be some cases where we want this pattern. :/ I don't like it. But here you go.
  *
  * This will make a promise that you may or may NOT be able to keep.
- *    -- There is no guarantee that fulfill or reject will get called.
+ *	  -- There is no guarantee that fulfill or reject will get called.
  *
  * This version of the promise is no better than the callback-hell model.  Keep in mind that
  * Deferred's do not force execution of their promise, the are not Guaranteed to resolve.
@@ -95,7 +95,7 @@ global.Deferred = Promise.Deferred = (function () {
  * if it returns a promise that fails, repeat with the next item
  *
  * @param  {Array} values An Array of values or functions that return value or a Promise.
- * @return {Promise}      fulfills with the first successful value in the array or rejects if none are.
+ * @return {Promise}	  fulfills with the first successful value in the array or rejects if none are.
  */
 Promise.first = Promise.first || function (values) {
 	if (!Array.isArray(values) || !values.length) {

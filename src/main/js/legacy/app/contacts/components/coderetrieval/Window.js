@@ -5,25 +5,25 @@ var CoderetrievalMain = require('./Main');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.coderetrieval.Window', {
-    extend: 'NextThought.common.window.Window',
-    alias: 'widget.coderetrieval-window',
-    cls: 'coderetrieval-window',
-    ui: 'nt-window',
-    minimizable: false,
-    constrain: true,
-    modal: true,
-    closable: true,
-    resizable: false,
-    dialog: true,
-    closeAction: 'destroy',
-    width: 480,
+	extend: 'NextThought.common.window.Window',
+	alias: 'widget.coderetrieval-window',
+	cls: 'coderetrieval-window',
+	ui: 'nt-window',
+	minimizable: false,
+	constrain: true,
+	modal: true,
+	closable: true,
+	resizable: false,
+	dialog: true,
+	closeAction: 'destroy',
+	width: 480,
 
-    layout: {
+	layout: {
 		type: 'vbox',
 		align: 'stretch'
 	},
 
-    items: [
+	items: [
 		{xtype: 'container', layout: {type: 'absolute'}, items: [
 			{
 				anchor: '100% 100%',
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.coder
 		{xtype: 'coderetrieval-main-view'}
 	],
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.el.down('.close'), 'click', this.close, this);
 		this.down('account-header-view').updateTitle(this.groupName);

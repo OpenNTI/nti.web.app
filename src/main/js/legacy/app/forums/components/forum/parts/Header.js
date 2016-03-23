@@ -3,11 +3,11 @@ var MenusReports = require('../../../../../common/menus/Reports');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.parts.Header', {
-    extend: 'Ext.Component',
-    alias: 'widget.forums-forum-header',
-    cls: 'topic-list-header',
+	extend: 'Ext.Component',
+	alias: 'widget.forums-forum-header',
+	cls: 'topic-list-header',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'new-topic', html: '{{{NextThought.view.forums.forum.parts.Header.new}}}'},
 		{cls: 'controls', cn: [
 			{cls: 'position', cn: [
@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		newTopicEl: '.new-topic',
 		currentEl: '.controls .position .current',
 		totalEl: '.controls .position .total',
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		nextEl: '.controls .pager .next'
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		var me = this, total;
 
 		if (!me.record.getLink('add')) {
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		me.mon(me.nextEl, 'click', 'nextPage');
 	},
 
-    updatePosition: function() {
+	updatePosition: function() {
 		var total = Math.ceil(this.store.getTotalCount() / this.store.pageSize),
 			currentPage = total ? this.store.currentPage : 0;
 
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		this.totalEl.update(total || '0');
 	},
 
-    previousPage: function() {
+	previousPage: function() {
 		var current = this.store.currentPage;
 
 		if (current - 1 > 0) {
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		}
 	},
 
-    nextPage: function() {
+	nextPage: function() {
 		var total = Math.ceil(this.store.getTotalCount() / this.store.pageSize),
 			current = this.store.currentPage;
 

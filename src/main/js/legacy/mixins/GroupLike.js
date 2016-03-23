@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.mixins.GroupLike', {
 	//A method that can be used to detect if this is the old system created 'Everyone' group.
 	//This shouldn't exist except for very old accounts (non of which would be prod accounts).
 	isEveryone: function() {
-		//FIXME: No one should be calling this anymore. See why it's happening. It should only be for data that we have in  local. Needs cleaning!
+		//FIXME: No one should be calling this anymore. See why it's happening. It should only be for data that we have in	local. Needs cleaning!
 		// console.warn('No one should be calling isEveryone anymore. See why it\'s happening.');//This is happening now so hide the warning
 		return (!this.get('Creator') || this.isSystem()) && this.EVERYONE_USERNAME === this.get('Username').toLowerCase();
 	},

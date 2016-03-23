@@ -7,9 +7,9 @@ var UserdataStateStore = require('../../app/userdata/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.model.forums.Base', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    fields: [
+	fields: [
 		{name: 'isGroupHeader', type: 'boolean', persist: false, defaultValue: false},
 		{name: 'groupName', type: 'string', persist: false},
 		//View only
@@ -17,13 +17,13 @@ module.exports = exports = Ext.define('NextThought.model.forums.Base', {
 		{name: 'searchTerm', type: 'string', persist: false, defaultValue: ''}
 	],
 
-    getContentsStoreId: function(prefix, suffix) {
+	getContentsStoreId: function(prefix, suffix) {
 		prefix = prefix || '';
 		suffix = suffix || '';
 		return prefix + this.get('Class') + '-' + this.get('NTIID') + suffix;
 	},
 
-    buildContentsStore: function(idSuffix, cfg, extraParams) {
+	buildContentsStore: function(idSuffix, cfg, extraParams) {
 		var store,
 			UserDataStore = NextThought.app.userdata.StateStore.getInstance(),
 			id = this.getContentsStoreId('', idSuffix);
@@ -54,14 +54,14 @@ module.exports = exports = Ext.define('NextThought.model.forums.Base', {
 		return store;
 	},
 
-    getParentHref: function() {
+	getParentHref: function() {
 		var path = this.get('href');
 		path = path.split('/');
 		path.pop();
 		return path.join('/');
 	},
 
-    getMatchCount: function(term) {
+	getMatchCount: function(term) {
 		if (!term) { return 0; }
 
 		var me = this,
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Base', {
 		return count;
 	},
 
-    setMatchCount: function(term) {
+	setMatchCount: function(term) {
 		var headline = this.get('headline'),
 			count = 0;
 

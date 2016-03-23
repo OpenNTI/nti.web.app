@@ -7,22 +7,22 @@ var NoteWindow = require('../annotations/note/Window');
 
 
 module.exports = exports = Ext.define('NextThought.app.windows.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.windows-view',
+	extend: 'Ext.container.Container',
+	alias: 'widget.windows-view',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-    activeWindows: [],
-    layout: 'none',
-    cls: 'window-container',
+	activeWindows: [],
+	layout: 'none',
+	cls: 'window-container',
 
-    items: [{
+	items: [{
 		xtype: 'window-container'
 	}],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
@@ -41,12 +41,12 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.el, 'click', this.onClick.bind(this));
 	},
 
-    allowNavigation: function() {
+	allowNavigation: function() {
 		var allow = true;
 
 		this.viewContainer.items.each(function(item) {
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 		return allow;
 	},
 
-    showWindow: function(object, state, el, monitors, precache) {
+	showWindow: function(object, state, el, monitors, precache) {
 		var type = this.WindowStore.getComponentForMimeType(object && (object.mimeType || object)),
 			cmp;
 
@@ -98,19 +98,19 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 		this.WindowStore.addOpenCls(cmp.isWindow);
 	},
 
-    onKeyPress: function(e) {
+	onKeyPress: function(e) {
 		var key = e.key || e.keyCode;
 		if (key === Ext.EventObject.ESC) {
 			this.closeAllWindows();
 		}
 	},
 
-    onClick: function(e) {
+	onClick: function(e) {
 		if (e.getTarget('.window-content')) { return; }
 		this.closeAllWindows();
 	},
 
-    closeWindow: function() {
+	closeWindow: function() {
 		this.activeWindows.forEach(function(win) {
 			Ext.destroy(win);
 		});
@@ -118,13 +118,13 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 		this.WindowStore.removeOpenCls();
 	},
 
-    closeAllWindows: function() {
+	closeAllWindows: function() {
 		this.viewContainer.items.each(function(item) {
 			item.doClose();
 		});
 	},
 
-    doClose: function(doClose, afterClose, record) {
+	doClose: function(doClose, afterClose, record) {
 
 		if (doClose) {
 			doClose();
@@ -140,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Index', {
 		}
 	},
 
-    doNavigate: function(beforeNavigate, record) {
+	doNavigate: function(beforeNavigate, record) {
 		this.WindowStore.navigateToObject(record);
 	}
 });

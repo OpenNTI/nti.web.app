@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.util.BatchExecution', {
 	 * If the function returns a Promise, the next execution will wait for it to finish
 	 *
 	 * @param  {Function} fn task to run
-	 * @return {Promise}     fulfills with the return value of the task
+	 * @return {Promise}	 fulfills with the return value of the task
 	 */
 	schedule: function(fn) {
 		var me = this;

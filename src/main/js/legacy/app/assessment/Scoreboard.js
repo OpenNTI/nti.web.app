@@ -8,18 +8,18 @@ var AssessmentQuizSubmission = require('./QuizSubmission');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Scoreboard', {
-    extend: 'NextThought.app.contentviewer.overlay.Panel',
-    alias: 'widget.assessment-scoreboard',
-    cls: 'scoreboard',
-    ui: 'assessment',
-    hidden: true,
+	extend: 'NextThought.app.contentviewer.overlay.Panel',
+	alias: 'widget.assessment-scoreboard',
+	cls: 'scoreboard',
+	ui: 'assessment',
+	hidden: true,
 
-    layout: {
+	layout: {
 		type: 'hbox',
 		align: 'middle'
 	},
 
-    items: [
+	items: [
 		{ xtype: 'assessment-score' },
 		{ xtype: 'assessment-tally', flex: 1 },
 		{ xtype: 'button',
@@ -30,9 +30,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Scoreboard', {
 		}
 	],
 
-    shouldShow: true,
+	shouldShow: true,
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.addDocked({ dock: 'top', xtype: 'assessment-scoreboard-header', questionSet: this.questionSet});
 
@@ -49,25 +49,25 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Scoreboard', {
 		});
 	},
 
-    doReset: function() {
+	doReset: function() {
 		this.hide();
 
 		wait()
 			.then(this.realignAnnotations.bind(this));
 	},
 
-    realignAnnotations: function() {
+	realignAnnotations: function() {
 		var annotations = this.reader.getAnnotations();
 
 		annotations.realignAnnotations();
 	},
 
-    disableView: function() {
+	disableView: function() {
 		this.shouldShow = false;
 		this.hide();
 	},
 
-    updateWithResults: function(assessedQuestionSet) {
+	updateWithResults: function(assessedQuestionSet) {
 		if (!this.shouldShow || this.questionSet.associatedAssignment) {
 			return;
 		}
@@ -88,12 +88,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Scoreboard', {
 			.then(this.realignAnnotations.bind(this));
 	},
 
-    updateWithScore: function(correct, total) {
+	updateWithScore: function(correct, total) {
 		this.down('assessment-tally').setTally(correct, total);
 		this.down('assessment-score').setValue(Math.floor(100 * correct / total) || 0);
 	},
 
-    setPriorResults: function(assessedQuestionSet) {
+	setPriorResults: function(assessedQuestionSet) {
 		if (!this.shouldShow) {return;}
 
 		//Sort by date, so that the latest is as 0, and the oldest is at N:
@@ -101,8 +101,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Scoreboard', {
 			var aDate = a.get('Last Modified').getTime(),
 				bDate = b.get('Last Modified').getTime();
 			if (aDate < bDate) {return 1;}
-		    if (aDate > bDate) {return -1;}
-		    return 0;
+			if (aDate > bDate) {return -1;}
+			return 0;
 		});
 
 		//Ask header to add menu items for each:
@@ -118,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Scoreboard', {
 		//}
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 	}
 }, function() {

@@ -7,13 +7,13 @@ var ResultsPoll = require('./results/Poll');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
-    extend: 'NextThought.app.assessment.Question',
-    alias: 'widget.assessment-poll',
-    cls: 'question scrollable poll',
-    NotSubmittedTextOverride: 'Submit',
-    SubmittedTextOverride: false,
+	extend: 'NextThought.app.assessment.Question',
+	alias: 'widget.assessment-poll',
+	cls: 'question scrollable poll',
+	NotSubmittedTextOverride: 'Submit',
+	SubmittedTextOverride: false,
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
 		}
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var surveyClosed = this.survey && this.survey.get('isClosed'),
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
 		}
 	},
 
-    updateWithResults: function() {
+	updateWithResults: function() {
 		this.callParent(arguments);
 
 		var parts = this.down('question-parts'),
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
 		}
 	},
 
-    checkIt: function() {
+	checkIt: function() {
 		if (this.submissionDisabled) {
 			return;
 		}
@@ -97,11 +97,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
 			});
 	},
 
-    getResults: function() {
+	getResults: function() {
 		return this.survey ? this.survey.getResults(this.poll.getId()) : this.poll.getResults();
 	},
 
-    showResults: function() {
+	showResults: function() {
 		var parts = this.down('question-parts'),
 			header = this.down('question-header');
 
@@ -121,7 +121,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
 		}));
 	},
 
-    hideResults: function() {
+	hideResults: function() {
 		var parts = this.down('question-parts'),
 			results = this.down('assessment-result'),
 			header = this.down('question-header'),

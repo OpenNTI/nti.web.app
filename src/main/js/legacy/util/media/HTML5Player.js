@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 	isReady: true,
 
 	playerSetup: function() {
-    //		Inject HTML5 Player HTML
+	//		Inject HTML5 Player HTML
 		this.playerTpl.append(this.parentEl, {id: this.id, height: this.height, width: this.width});
 		console.log(this.id);
 		this.el = Ext.get(this.id);

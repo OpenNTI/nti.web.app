@@ -6,10 +6,10 @@ var ChartGradePerformance = require('../../../../../common/chart/GradePerformanc
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.Performance', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.course-assessment-performance',
+	extend: 'Ext.container.Container',
+	alias: 'widget.course-assessment-performance',
 
-    statics: {
+	statics: {
 		getScoreSorter: function() {
 			function get(o) {
 				var grade = o.get('Grade'),
@@ -54,15 +54,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-    ui: 'course-assessment',
-    cls: 'course-performance',
-    layout: 'none',
+	ui: 'course-assessment',
+	cls: 'course-performance',
+	layout: 'none',
 
-    items: [
+	items: [
 		{
 			cls: 'nti-header course-performance-header',
 			xtype: 'container',
@@ -192,9 +192,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		]}
 	],
 
-    pathRoot: 'Grades & Performance',
+	pathRoot: 'Grades & Performance',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.enableBubble(['goto-assignment', 'close-reader']);
@@ -238,7 +238,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.mon(store, 'datachanged', 'updateHeader');
 	},
 
-    updateHeader: function() {
+	updateHeader: function() {
 		function complete(o) {return !!o.get('completed'); }
 
 		var me = this,
@@ -295,11 +295,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    clearAssignmentsData: function() {
+	clearAssignmentsData: function() {
 		this.store.removeAll();
 	},
 
-    fireGoToAssignment: function(selModel, record) {
+	fireGoToAssignment: function(selModel, record) {
 		var date = Ext.Date.format(record.get('assigned'), 'l F j \\a\\t g:i A');
 
 		if (!record || record.get('assigned') > new Date()) {
@@ -310,7 +310,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.navigateToObject(record.get('item'));
 	},
 
-    //This is a read-only view from the STUDENT'S perspective. READ: updates when students navigate to it.
+	//This is a read-only view from the STUDENT'S perspective. READ: updates when students navigate to it.
 	setAssignmentsData: function(assignments, currentBundle) {
 		var raw = [], waitsOn = [], me = this;
 
@@ -370,7 +370,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				.then(this.grid.view.refresh.bind(this.grid.view));
 	},
 
-    maybeSetFinalGrade: function(assignment, history, grade) {
+	maybeSetFinalGrade: function(assignment, history, grade) {
 		if (!Ext.String.endsWith(assignment.get('NTIID'), ':Final_Grade')) {
 			return false;
 		}

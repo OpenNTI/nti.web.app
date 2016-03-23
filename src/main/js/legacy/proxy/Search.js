@@ -4,20 +4,20 @@ var WriterJson = require('./writer/Json');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.Search', {
-    extend: 'Ext.data.proxy.Rest',
-    alias: 'proxy.search',
-    appendId: false,
+	extend: 'Ext.data.proxy.Rest',
+	alias: 'proxy.search',
+	appendId: false,
 
-    //default
+	//default
 	reader: {type: 'nti'},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		Ext.copyTo(this.reader, config, 'model');
 		this.callParent(arguments);
 		this.on('exception', this.exception, this);
 	},
 
-    buildUrl: function(request) {
+	buildUrl: function(request) {
 		var f = Ext.JSON.decode(request.params.filter) || [{}];
 
 		request.url = this.url + (f[0].value || '*');
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Search', {
 		return this.callParent(arguments);
 	},
 
-    exception: function(proxy, resp, operation) {
+	exception: function(proxy, resp, operation) {
 		try {
 			Ext.callback(operation.failed, operation.scope, [operation.records, operation]);
 		}

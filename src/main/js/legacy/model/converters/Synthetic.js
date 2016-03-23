@@ -4,7 +4,7 @@ var UtilObject = require('../../util/Object');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.Synthetic', {
-    SYNTHETIC: {
+	SYNTHETIC: {
 		type: 'Synthetic',
 		persist: false,
 

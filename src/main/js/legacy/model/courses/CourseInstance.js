@@ -31,18 +31,18 @@ var {getURL, isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance', {
-    extend: 'NextThought.model.Base',
-    isBundle: true,
-    isCourse: true,
+	extend: 'NextThought.model.Base',
+	isBundle: true,
+	isCourse: true,
 
-    mixins: {
+	mixins: {
 		'BundleLike': 'NextThought.mixins.BundleLike',
 		'PresentationResources': 'NextThought.mixins.PresentationResources',
 		'DurationCache': 'NextThought.mixins.DurationCache',
 		auditLog: 'NextThought.mixins.AuditLog'
 	},
 
-    fields: [
+	fields: [
 		{ name: 'AnnouncementForums', type: 'auto'},
 		{ name: 'ParentAnnouncementForums', type: 'auto'},
 		{ name: 'Bundle', type: 'singleItem', mapping: 'ContentPackageBundle'},
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		{ name: 'thumb', type: 'string', persist: false, defaultValue: 'missing.png'}
 	],
 
-    asUIData: function() {
+	asUIData: function() {
 		var e = this.getCourseCatalogEntry(),
 			bundle = this.get('Bundle').asUIData(),
 			data = {
@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		});
 	},
 
-    getDefaultAssetRoot: function() {
+	getDefaultAssetRoot: function() {
 		var location = this.getLocationInfo(),
 			root = location && location.root;
 
@@ -103,15 +103,15 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return getURL(root).concatPath('/presentation-assets/webapp/v1/');
 	},
 
-    setEnrollment: function(enrollment) {
+	setEnrollment: function(enrollment) {
 		this.__instanceEnrollment = enrollment;
 	},
 
-    getEnrollment: function(enrollment) {
+	getEnrollment: function(enrollment) {
 		return this.__instanceEnrollment;
 	},
 
-    __precacheEntry: function() {
+	__precacheEntry: function() {
 		var p = this.precachePromise,
 			me = this,
 			Cls = NextThought.model.courses.CourseCatalogEntry;
@@ -151,11 +151,11 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return p;
 	},
 
-    getCourseCatalogEntry: function() {
+	getCourseCatalogEntry: function() {
 		return this.__courseCatalogEntry;
 	},
 
-    /**
+	/**
 	 * Get the catalog family for this course
 	 * @return {CatalogFamily}
 	 */
@@ -163,22 +163,22 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this.__courseCatalogEntry.getCatalogFamily();
 	},
 
-    /**
+	/**
 	 * Whether or not this instance is in a given family id
-	 * @param  {String}  id FamilyId
-	 * @return {Boolean}    if it is in the family
+	 * @param  {String}	 id FamilyId
+	 * @return {Boolean}	if it is in the family
 	 */
 	isInFamily: function(id) {
 		return this.__courseCatalogEntry.isInFamily(id);
 	},
 
-    getFirstPage: function() {
+	getFirstPage: function() {
 		var bundle = this.get('Bundle');
 
 		return bundle.getFirstPage();
 	},
 
-    SCOPE_SUGGESTIONS: {
+	SCOPE_SUGGESTIONS: {
 		ADMIN: {
 			order: ['Default', 'Public', 'Purchased', 'ForCredit', 'ForCreditNonDegree'],
 			keys: {
@@ -211,7 +211,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		}
 	},
 
-    getSuggestedSharing: function() {
+	getSuggestedSharing: function() {
 		var me = this;
 
 		return me.getWrapper()
@@ -220,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			});
 	},
 
-    __scopeToUserSearch: function(scope, friendlyName) {
+	__scopeToUserSearch: function(scope, friendlyName) {
 		var json = scope.asJSON();
 
 		json.friendlyName = friendlyName || '';
@@ -228,7 +228,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return NextThought.model.UserSearch.create(json);
 	},
 
-    getStudentSuggestedSharing: function() {
+	getStudentSuggestedSharing: function() {
 		var sectionScopes = this.get('SharingScopes'),
 			parentScopes = this.get('ParentSharingScopes') || sectionScopes,
 			defaultId = sectionScopes && sectionScopes.getDefaultSharing(),
@@ -251,7 +251,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return suggestions;
 	},
 
-    getParentSuggestedSharing: function() {
+	getParentSuggestedSharing: function() {
 		var sectionScopes = this.get('SharingScopes'),
 			parentScopes = this.get('ParentSharingScopes'),
 			containsDefault = this.sectionScopes && this.sectionScopes.containsDefault(),
@@ -272,7 +272,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return parentSuggestions.concat(sectionSuggestions);
 	},
 
-    __buildSuggestedSharing: function(config, sharingScopes, sectionName) {
+	__buildSuggestedSharing: function(config, sharingScopes, sectionName) {
 		var me = this,
 			scopes = {}, defaultKey,
 			items = [],
@@ -322,7 +322,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return items;
 	},
 
-    getContentBreadCrumb: function(path, pageId, rootId, parent) {
+	getContentBreadCrumb: function(path, pageId, rootId, parent) {
 		var root = path[0];
 
 		if (parent) {
@@ -342,10 +342,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return path;
 	},
 
-    //get a count of how many things the user has done in the course
+	//get a count of how many things the user has done in the course
 	getCompletionStatus: function() {},
 
-    getTocs: function() {
+	getTocs: function() {
 		var bundle = this.get('Bundle');
 
 		return this.getWrapper()
@@ -354,37 +354,37 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			});
 	},
 
-    getContentPackages: function() {
+	getContentPackages: function() {
 		var bundle = this.get('Bundle');
 
 		return bundle.getContentPackages();
 	},
 
-    getContentRoots: function() {
+	getContentRoots: function() {
 		var bundle = this.get('Bundle');
 
 		return bundle.getContentRoots();
 	},
 
-    getContentIds: function() {
+	getContentIds: function() {
 		var bundle = this.get('Bundle');
 
 		return bundle.getContentIds();
 	},
 
-    getTitle: function() {
+	getTitle: function() {
 		var bundle = this.get('Bundle');
 
 		return bundle.getTitle();
 	},
 
-    getIcon: function() {
+	getIcon: function() {
 		var bundle = this.get('Bundle');
 
 		return bundle.getIcon();
 	},
 
-    canGetToContent: function(ntiid, rootId) {
+	canGetToContent: function(ntiid, rootId) {
 		var me = this;
 
 		return Promise.all([
@@ -435,10 +435,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		});
 	},
 
-    /**
+	/**
 	 * Check is this instance is in the same family as another
 	 * @param  {CourseInstance} instance the instance to compare against
-	 * @return {Boolean}        if they are in the same family
+	 * @return {Boolean}		if they are in the same family
 	 */
 	inSameFamily: function(instance) {
 		var catalog = this.getCourseCatalogEntry();
@@ -446,12 +446,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return catalog.inSameFamily(instance.getCourseCatalogEntry());
 	},
 
-    isExpired: function() {
+	isExpired: function() {
 		var c = this.getCourseCatalogEntry();
 		return c && c.isExpired();
 	},
 
-    getLocationInfo: function() {
+	getLocationInfo: function() {
 		var me = this,
 			bundle = me.get('Bundle');
 
@@ -470,15 +470,15 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			});
 	},
 
-    getPresentationProperties: function(id) {
+	getPresentationProperties: function(id) {
 		return this.get('Bundle').getPresentationProperties(id);
 	},
 
-    getAssetRoot: function() {
+	getAssetRoot: function() {
 		return this.get('Bundle').getAssetRoot();
 	},
 
-    /**
+	/**
 	 * Return the a promise that fulfills with the background image of the bundle
 	 *
 	 * @return {Promise} fulfills with url
@@ -487,22 +487,22 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this.get('Bundle').getBackgroundImage();
 	},
 
-    getIconImage: function() {
+	getIconImage: function() {
 		return this.get('Bundle').getIconImage();
 	},
 
-    getThumbnail: function() {
+	getThumbnail: function() {
 		return this.get('Bundle').getThumbnail();
 	},
 
-    getVendorIconImage: function() {
+	getVendorIconImage: function() {
 		return this.get('Bundle').getVendorIcon();
 	},
 
-    getPublicScope: function() { return this.getScope('Public'); },
-    getRestrictedScope: function() { return this.getScope('Restricted'); },
+	getPublicScope: function() { return this.getScope('Public'); },
+	getRestrictedScope: function() { return this.getScope('Restricted'); },
 
-    //i don't think this is used
+	//i don't think this is used
 
 
 	getScope: function(scope) {
@@ -522,7 +522,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return s.filter(function(v) {return !Ext.isEmpty(v);});
 	},
 
-    getDefaultSharing: function() {
+	getDefaultSharing: function() {
 		var defaultSharing = this.getPublicScope();
 
 		if (this.raw.SharingScopes) {
@@ -533,7 +533,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return defaultSharing;
 	},
 
-    /**
+	/**
 	 * Return the enrollment instance for this course.
 	 *
 	 * The enrollment instance should've set itself on the course instance on precache
@@ -573,25 +573,25 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return me.__findWrapper;
 	},
 
-    findOutlineNode: function(id) {
+	findOutlineNode: function(id) {
 		var outline = this.get('Outline');
 
 		return outline.findOutlineNode(id);
 	},
 
-    getOutlineContents: function(doNotCache) {
+	getOutlineContents: function(doNotCache) {
 		var outline = this.get('Outline');
 
 		return outline.getOutlineContents(doNotCache);
 	},
 
-    getAdminOutlineContents: function(doNotCache) {
+	getAdminOutlineContents: function(doNotCache) {
 		var outline = this.get('Outline');
 
 		return outline.getAdminOutlineContents(doNotCache);
 	},
 
-    getOutlineInterface: function(doNotCache) {
+	getOutlineInterface: function(doNotCache) {
 		return new NextThought.store.courseware.OutlineInterface({
 			outlineContentsPromise: this.getOutlineContents(doNotCache),
 			tocPromise: this.__getTocOutline(),
@@ -599,7 +599,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		});
 	},
 
-    getAdminOutlineInterface: function(doNotCache) {
+	getAdminOutlineInterface: function(doNotCache) {
 		return new NextThought.store.courseware.OutlineInterface({
 			outlineContentsPromise: this.getAdminOutlineContents(doNotCache),
 			tocPromise: this.__getTocOutline(),
@@ -607,13 +607,13 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		});
 	},
 
-    hasOutline: function() {
+	hasOutline: function() {
 		var outline = this.get('Outline');
 
 		return outline && outline.hasContentsLink();
 	},
 
-    getOutline: function() {
+	getOutline: function() {
 		//cache outline
 		if (!this._outlinePromise) {
 			var o = this.get('Outline'),
@@ -631,7 +631,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this._outlinePromise;
 	},
 
-    /**
+	/**
 	 * Return an outline store based on the first toc,
 	 * cache these results for now.
 	 * TODO: don't keep these cached for the lifetime of the app
@@ -648,7 +648,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this.tocOutline;
 	},
 
-    getNavigationStore: function() {
+	getNavigationStore: function() {
 		var key = 'NavStore',
 			navStore;
 
@@ -668,12 +668,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return navStore;
 	},
 
-    shouldShowAssignments: function() {
+	shouldShowAssignments: function() {
 		//we should only show assignments if there is an assignments by outline node link
 		return !!this.getLink('AssignmentsByOutlineNode');
 	},
 
-    /**
+	/**
 	 * Get the AssignmentHistory link off of the enrolled instance or this
 	 * @return {String} link to the assignment history
 	 */
@@ -686,10 +686,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			.then(getLink.bind(null, 'AssignmentHistory'));
 	},
 
-    /**
+	/**
 	 * get the link, and cache the results
 	 * @param  {String} link rel of the link to get
-	 * @return {Promise}      the request for the link
+	 * @return {Promise}	  the request for the link
 	 */
 	__getList: function(link) {
 		var promiseName = '__get' + link + 'Promise',
@@ -711,15 +711,15 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this[promiseName];
 	},
 
-    __getAssignmentsByOutline: function() {
+	__getAssignmentsByOutline: function() {
 		return this.__getList('AssignmentsByOutlineNode');
 	},
 
-    __getNonAssignmentsByOutline: function() {
+	__getNonAssignmentsByOutline: function() {
 		return this.__getList('NonAssignmentAssessmentItemsByOutlineNode');
 	},
 
-    __getGradeBook: function() {
+	__getGradeBook: function() {
 		if (this.__getGradeBookPromise) { return this.__getGradeBookPromise; }
 
 		var link = this.getLink('GradeBook');
@@ -736,7 +736,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this.__getGradeBookPromise;
 	},
 
-    /**
+	/**
 	 * Return an assignment collection for this course
 	 * @return {AssignmentCollection} the assignment collection
 	 */
@@ -769,7 +769,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this.__getAssignmentsPromise;
 	},
 
-    getAssignmentSavePoints: function() {
+	getAssignmentSavePoints: function() {
 		var p = this.getAssignmentSavePointsPromise,
 			link;
 
@@ -798,14 +798,14 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return p;
 	},
 
-    getAllAssignments: function() {
+	getAllAssignments: function() {
 		return this.getAssignments()
 				.then(function(assignments) {
 					return assignments.get('Assignments');
 				});
 	},
 
-    getAllAssessments: function() {
+	getAllAssessments: function() {
 		return this.getAssignments()
 				.then(function(assignments) {
 					var nonAssignments = assignments.get('NonAssignments');
@@ -816,7 +816,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 				});
 	},
 
-    fireNavigationEvent: function(eventSource) {
+	fireNavigationEvent: function(eventSource) {
 		var me = this;
 
 		return new Promise(function(fulfill) {
@@ -826,7 +826,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		});
 	},
 
-    __getAssets: function(type) {
+	__getAssets: function(type) {
 		var link = this.getLink('assets'),
 			config;
 
@@ -859,15 +859,15 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			});
 	},
 
-    getVideoAssets: function() {
+	getVideoAssets: function() {
 		return this.__getAssets(NextThought.model.Video.mimeType);
 	},
 
-    getTimelineAssets: function() {
+	getTimelineAssets: function() {
 		return this.__getAssets(NextThought.model.Timeline.mimeType);
 	},
 
-    getDiscussionAssets: function() {
+	getDiscussionAssets: function() {
 		var link = this.getLink('CourseDiscussions');
 
 		if (!link) {
@@ -896,15 +896,15 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			});
 	},
 
-    getVideosByContentPackage: function() {
+	getVideosByContentPackage: function() {
 		return this.get('Bundle').getVideosByContentPackage();
 	},
 
-    getMediaByOutline: function() {
+	getMediaByOutline: function() {
 		return this.__getList('MediaByOutlineNode');
 	},
 
-    getVideoIndex: function() {
+	getVideoIndex: function() {
 		if (this.videoIndexPromise) {
 			return this.videoIndexPromise;
 		}
@@ -934,7 +934,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this.videoIndexPromise;
 	},
 
-    getVideoForId: function(vid) {
+	getVideoForId: function(vid) {
 		return this.getVideoIndex()
 				.then(function(index) {
 					var i = index[vid];
@@ -948,7 +948,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 				});
 	},
 
-    /**
+	/**
 	/*	Check if a video belongs to a slidedeck
 	*/
 	getSlidedeckForVideo: function(vid) {
@@ -962,7 +962,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 				});
 	},
 
-    /**
+	/**
 	*Takes two arrays of forums and bins then
 	*
 	*	1.) by for credit or open
@@ -983,7 +983,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	*
 	* @param  {Array} section Array of forums in this section
 	* @param  {Array} parent  Array of forums in the parent if there are any
-	* @return {Object}        The binned forums
+	* @return {Object}		  The binned forums
 	*/
 	__binDiscussions: function(section, parent) {
 		var bin = {
@@ -1036,7 +1036,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return bin;
 	},
 
-    /**
+	/**
 	 * Takes the binned forums and creates a forum list from it
 	 *
 	 * Forum lists are an object that look like
@@ -1048,7 +1048,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	 *	}
 	 *
 	 * @param  {Object} bin binned forums
-	 * @return {Object}     a forum list of the above type
+	 * @return {Object}		a forum list of the above type
 	 */
 	__binToForumList: function(bin) {
 		var section = this.get('Discussions'),
@@ -1147,7 +1147,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return forumList;
 	},
 
-    /**
+	/**
 	 * Sends requests for the contents link of the discussions and parent discussions if they are there
 	 * @return {Promise} Fulfills or rejects with the response of the request
 	 */
@@ -1166,14 +1166,14 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return request;
 	},
 
-    hasForumList: function() {
+	hasForumList: function() {
 		var board = this.get('Discussions'),
 			parentBoard = this.get('ParentDiscussions');
 
 		return !!((board && board.getLink('contents')) || (parentBoard && parentBoard.getLink('contents')));
 	},
 
-    getForumList: function() {
+	getForumList: function() {
 		var me = this,
 			sectionContents,
 			parentContents;
@@ -1231,7 +1231,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			.then(me.__binToForumList.bind(me));//create a forum list for the ui to build from
 	},
 
-    represents: function(catalogEntry) {
+	represents: function(catalogEntry) {
 		var cceId = catalogEntry.getId(),
 			cceHref = catalogEntry.get('href'),
 			cce = this.getCourseCatalogEntry();
@@ -1241,14 +1241,14 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			   this.getLink('CourseCatalogEntry') === cceHref;
 	},
 
-    containsNTIID: function(id) {
+	containsNTIID: function(id) {
 		return this.get('Bundle').containsNTIID(id);
 	},
 
-    /**
+	/**
 	 * A helper to parse the object in AnnouncementForums or ParentAnnouncementForums
 	 * @param  {Object} items []
-	 * @return {[type]}       [description]
+	 * @return {[type]}		  [description]
 	 */
 	__getAnnouncementsForums: function(items) {
 		var keys = Object.keys(items) || [],
@@ -1266,7 +1266,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return forums;
 	},
 
-    /**
+	/**
 	 * AnnouncementForums contain the forums for all the scopes the user is in their section
 	 *{
 	 *	Items: {
@@ -1286,7 +1286,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this.__sectionAnnouncements;
 	},
 
-    /**
+	/**
 	 * Same as getMySectionAnnouncements just for my parent section
 	 * @return {Array} a flattened list of the forums
 	 */
@@ -1300,7 +1300,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this.__parentAnnouncements;
 	},
 
-    getStream: function() {
+	getStream: function() {
 		var catalog = this.getCourseCatalogEntry(),
 			link = this.getLink('CourseRecursiveStreamByBucket');
 
@@ -1312,7 +1312,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		return this.__streamStore;
 	},
 
-    getCurrentGrade: function() {
+	getCurrentGrade: function() {
 		var link = this.getLink('CurrentGrade');
 
 		if (!link) { return Promise.reject(); }
@@ -1323,7 +1323,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 					});
 	},
 
-    getVideoProgress: function() {
+	getVideoProgress: function() {
 		var link = this.getLink('VideoProgress');
 
 		if (!link) { return Promise.reject(); }
@@ -1334,7 +1334,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 					});
 	},
 
-    getSuggestContacts: function() {
+	getSuggestContacts: function() {
 		if (!isFeature('suggest-contacts') || !this.hasLink('Classmates')) { return Promise.reject(); }
 
 		var link = this.getLink('Classmates');

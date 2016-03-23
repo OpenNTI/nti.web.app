@@ -5,10 +5,10 @@ var ResolversVideoPosters = require('../../../model/resolvers/VideoPosters');
 
 /*global DomUtils */
 module.exports = exports = Ext.define('NextThought.common.components.cards.Launcher', {
-    extend: 'Ext.Component',
-    alias: 'widget.content-launcher',
+	extend: 'Ext.Component',
+	alias: 'widget.content-launcher',
 
-    statics: {
+	statics: {
 		getData: function(dom, reader, items, getThumb) {
 			var data = DomUtils.parseDomObject(dom);
 
@@ -24,10 +24,10 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Launc
 		}
 	},
 
-    ui: 'content-launcher',
-    cls: 'content-launcher',
+	ui: 'content-launcher',
+	cls: 'content-launcher',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
 		{ cls: 'meta', cn: [
 			{ cls: 'title', html: '{title}' },
@@ -36,11 +36,11 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Launc
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		thumbnailEl: '.thumbnail'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {},this.data);
 
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Launc
 		}
 	},
 
-    resolveVideoThumbnail: function() {
+	resolveVideoThumbnail: function() {
 		var video = this.data && this.data.items && this.data.items[0],
 			s = video && video.sources[0],
 			id = s && s.source,
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Launc
 
 	},
 
-    onLaunch: function(e) {
+	onLaunch: function(e) {
 		e.stopEvent();
 		this.fireEvent('launch', this.data);
 	}

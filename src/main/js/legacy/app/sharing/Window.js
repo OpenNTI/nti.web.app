@@ -8,13 +8,13 @@ var UserdataActions = require('../userdata/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
-    extend: 'NextThought.common.window.Window',
-    alias: 'widget.share-window',
-    width: 450,
-    modal: true,
-    dialog: true,
+	extend: 'NextThought.common.window.Window',
+	alias: 'widget.share-window',
+	width: 450,
+	modal: true,
+	dialog: true,
 
-    constructor: function() {
+	constructor: function() {
 		this.items = [
 			{
 				xtype: 'component',
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
 		this.callParent(arguments);
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		var readOnly = this.isReadOnly(),
 			title = this.titleLabel || (readOnly ? 'Item Info' : 'Share this...'),
 			content = 'This item does not have text',
@@ -143,17 +143,17 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
 		});
 	},
 
-    show: function() {
+	show: function() {
 		NextThought.getApplication().fireEvent('showshare', this);
 		this.callParent(arguments);
 	},
 
-    hide: function() {
+	hide: function() {
 		NextThought.getApplication().fireEvent('hideshare', this);
 		this.callParent(arguments);
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -168,7 +168,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
 		this.toBack();
 	},
 
-    isReadOnly: function() {
+	isReadOnly: function() {
 		var refCount;
 		if (!this.record) {
 			return false;
@@ -180,15 +180,15 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
 		return (this.record.children && this.record.children.length > 0) || (!Ext.isEmpty(refCount) && refCount > 0);
 	},
 
-    getValue: function() {
+	getValue: function() {
 		return this.down('user-sharing-list').getValue();
 	},
 
-    setValue: function(v) {
+	setValue: function(v) {
 		this.down('user-sharing-list').setValue(v);
 	},
 
-    save: function() {
+	save: function() {
 		var checkbox = this.down('checkbox');
 
 		this.el.mask('Sharing...');

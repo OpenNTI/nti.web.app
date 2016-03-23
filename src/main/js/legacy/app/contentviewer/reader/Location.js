@@ -9,10 +9,10 @@ var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Location', {
-    alias: 'reader.locationProvider',
-    mixins: { observable: 'Ext.util.Observable' },
+	alias: 'reader.locationProvider',
+	mixins: { observable: 'Ext.util.Observable' },
 
-    constructor: function(config) {
+	constructor: function(config) {
 		Ext.apply(this, config);
 
 		this.mixins.observable.constructor.call(this);
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Loca
 				'beforeNavigate',
 				'beginNavigate',
 				'navigate',
-	            'navigateAbort',//From error (navigation started and must recover)
+				'navigateAbort',//From error (navigation started and must recover)
 				'navigateCanceled',//From blocking UI (open editor) -- navigation never started.
 				'navigateComplete',
 				'change'
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Loca
 		this.callParent(arguments);
 	},
 
-    setLocation: function(pageInfo, bundle) {
+	setLocation: function(pageInfo, bundle) {
 		var me = this,
 			ntiid = pageInfo.get('NTIID');
 
@@ -67,11 +67,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Loca
 				});
 	},
 
-    getLocation: function() {
+	getLocation: function() {
 		return this.currentLocation;
 	},
 
-    getRelated: function(givenNtiid) {
+	getRelated: function(givenNtiid) {
 		if (!givenNtiid) { return Promise.resolve([]); }
 
 		var me = this,
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Loca
 			});
 	},
 
-    relatedItemHandler: function(el) {
+	relatedItemHandler: function(el) {
 		var m = el.relatedInfo;
 
 		if (m.type === 'index' || m.type === 'link') {

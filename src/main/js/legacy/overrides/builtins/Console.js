@@ -83,8 +83,8 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Console', 
 				//get a trace (in WebKit)
 	//			var e = new Error(name),
 	//				stack = e.stack.replace(/^[^\(]+?[\n$]/gm, '')
-	//			      .replace(/^\s+at\s+/gm, '')
-	//			      .replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@'),
+	//				  .replace(/^\s+at\s+/gm, '')
+	//				  .replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@'),
 
 				var args = [[name, ':'].join('')].concat(Array.prototype.slice.call(arguments)),
 					x = args.length - 1;

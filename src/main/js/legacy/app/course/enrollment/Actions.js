@@ -7,19 +7,19 @@ var PathActions = require('../../navigation/path/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    constructor: function() {
+	constructor: function() {
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 		this.CourseActions = NextThought.app.library.courses.Actions.create();
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
-    /**
+	/**
 	 * Drops a course
-	 * @param  {CourseCatalogEntry}   course   the course to enroll or drop
-	 * @param  {boolean}   enrolled   true to enroll false to drop
-	 * @param  {Function} callback    what to do when its done, takes two arguments success,changed
+	 * @param  {CourseCatalogEntry}	  course   the course to enroll or drop
+	 * @param  {boolean}   enrolled	  true to enroll false to drop
+	 * @param  {Function} callback	  what to do when its done, takes two arguments success,changed
 	 */
 	dropCourse: function(course, callback) {
 		var me = this;
@@ -64,11 +64,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 
 	},
 
-    /**
+	/**
 	 * Enrolls in a course
-	 * @param  {CourseCatalogEntry}   course   the course to enroll or drop
-	 * @param  {boolean}   enrolled   true to enroll false to drop
-	 * @param  {Function} callback    what to do when its done, takes two arguments success,changed
+	 * @param  {CourseCatalogEntry}	  course   the course to enroll or drop
+	 * @param  {boolean}   enrolled	  true to enroll false to drop
+	 * @param  {Function} callback	  what to do when its done, takes two arguments success,changed
 	 */
 	enrollCourse: function(course, callback) {
 		var me = this;
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 			});
 	},
 
-    __toggleEnrollmentStatus: function(catelogEntry, enrollement) {
+	__toggleEnrollmentStatus: function(catelogEntry, enrollement) {
 		var collection = (Service.getCollection('EnrolledCourses', 'Courses') || {}).href;
 		if (enrollement) {
 			return Service.requestDelete(enrollement.get('href'));
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 		});
 	},
 
-    refreshEnrolledCourses: function(fulfill, reject) {
+	refreshEnrolledCourses: function(fulfill, reject) {
 		var me = this,
 			collection = (Service.getCollection('EnrolledCourses', 'Courses') || {}).href;
 
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 			.fail(reject);
 	},
 
-    courseDropped: function(catalogEntry) {
+	courseDropped: function(catalogEntry) {
 		// this.enrollmentChanged();
 		this.fireEvent('content-dropped', catalogEntry);
 	}

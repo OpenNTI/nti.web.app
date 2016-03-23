@@ -4,7 +4,7 @@ var ShapesBase = require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Url', {
-	extend:	'NextThought.app.whiteboard.shapes.Base',
+	extend: 'NextThought.app.whiteboard.shapes.Base',
 
 	constructor: function() {
 		this.calculatedAttributes = ['url'];

@@ -14,7 +14,7 @@ var PathActions = require('../../navigation/path/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
-    videoPlayerTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+	videoPlayerTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ cls: 'curtain content-video-curtain', cn: [
 			{ cls: 'ctr', cn: [
 				{ cls: 'play', cn: [
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 		]}
 	])),
 
-    statics: {
+	statics: {
 		type: 'video',
 
 		canHandle: function(obj) {
@@ -33,14 +33,14 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 		}
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		this.callParent(arguments);
 		Ext.applyIf(this, config || {});
 		this.MediaActions = NextThought.app.mediaviewer.Actions.create();
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
-    __buildTranscriptStore: function(vttCueList) {
+	__buildTranscriptStore: function(vttCueList) {
 		var cuesList = [], s;
 
 		Ext.each(vttCueList, function(c) {
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 		return s;
 	},
 
-    __getBasePath: function(obj) {
+	__getBasePath: function(obj) {
 		var me = this;
 
 		return new Promise(function(fulfill, reject) {
@@ -82,11 +82,11 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 		});
 	},
 
-    /**
+	/**
 	 * Parse a video object and build the context component
 	 * @param  {[Object]} obj [video object]
 	 *
-	 * @return {[Promise]}     [promise that will resolve with an Ext.Component]
+	 * @return {[Promise]}	   [promise that will resolve with an Ext.Component]
 	 */
 	parse: function(obj, kind) {
 		obj = obj.getData();

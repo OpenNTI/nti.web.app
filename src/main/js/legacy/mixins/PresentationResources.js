@@ -85,9 +85,9 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 	 * Keep track of which assets we have checked existed, so we don't do
 	 * it more than once
 	 *
-	 * @param  {String} key   field to store the value on
+	 * @param  {String} key	  field to store the value on
 	 * @param  {String} asset the name of the asset (defaults to the key arg)
-	 * @return {Promise}      fulfills once the asset has been found to exist or not
+	 * @return {Promise}	  fulfills once the asset has been found to exist or not
 	 */
 	__ensureAsset: function (key, asset) {
 		var existing = null,
@@ -110,9 +110,9 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 
 	/**
 	 * Return the url for the asset if the asset exists
-	 * @param  {String} key   field to store the value on
+	 * @param  {String} key	  field to store the value on
 	 * @param  {String} asset the name of the asset (defaults to key arg)
-	 * @return {Promise}      fulfills with the url to the asset if it exists
+	 * @return {Promise}	  fulfills with the url to the asset if it exists
 	 */
 	getAsset: function (key, asset) {
 		return this.__ensureAsset(key, asset).then(this.get.bind(this, key));

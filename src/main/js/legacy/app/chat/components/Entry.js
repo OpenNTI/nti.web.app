@@ -3,13 +3,13 @@ var ChatActions = require('../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.Entry', {
-    extend: 'Ext.Component',
-    alias: 'widget.chat-entry',
-    height: 61,
-    ui: 'chat-entry',
-    cls: 'chat-entry',
+	extend: 'Ext.Component',
+	alias: 'widget.chat-entry',
+	height: 61,
+	ui: 'chat-entry',
+	cls: 'chat-entry',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'entry-wrapper',
 			cn: [
@@ -25,14 +25,14 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Entry', {
 		}
 	]),
 
-    chanel: 'DEFAULT',
+	chanel: 'DEFAULT',
 
-    renderSelectors: {
+	renderSelectors: {
 		buttonEl: '.add-whiteboard',
 		inputEl: 'input'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.addEvents({ 'status-change': true });
 		this.enableBubble(['status-change']);
 		this.callParent(arguments);
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Entry', {
 		this.ChatActions = NextThought.app.chat.Actions.create();
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.inputEl.selectable();
 		this.inputEl.on({
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Entry', {
 		this.buttonEl.on('click', this.addWhiteboard.bind(this));
 	},
 
-    keyUp: function(e) {
+	keyUp: function(e) {
 		var me = this, k = e.getKey(e);
 
 		if (e.ENTER !== k) {
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Entry', {
 		}
 	},
 
-    keyDown: function(e) {
+	keyDown: function(e) {
 		var k = e.getKey(), me = this;
 		if (e.ESC === k) {
 			this.inputEl.set({value: ''});
@@ -85,32 +85,32 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Entry', {
 		}
 	},
 
-    focus: function(defer) {
+	focus: function(defer) {
 		this.inputEl.focus(defer);
 	},
 
-    getValue: function() {
+	getValue: function() {
 		var e = this.inputEl,
 			v = e.getValue();
 		e.dom.value = '';
 		return v;
 	},
 
-    disable: function() {
+	disable: function() {
 		this.callParent(arguments);
 		if (this.inputEl) {
 			this.inputEl.set({disabled: true});
 		}
 	},
 
-    enable: function() {
+	enable: function() {
 		this.callParent(arguments);
 		if (this.inputEl) {
 			this.inputEl.dom.removeAttribute('disabled');
 		}
 	},
 
-    addWhiteboard: function() {
+	addWhiteboard: function() {
 		this.ChatActions.sendWhiteboard(this, this.replyTo, this.chanel, this.recipients);
 	}
 });

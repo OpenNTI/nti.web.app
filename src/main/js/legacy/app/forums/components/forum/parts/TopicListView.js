@@ -384,9 +384,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 			currentPage = state.currentPage[this.record.getId()] || 0;
 		}
 
-        //The store adds a sorter for any groupers at load time.  Make sure
-        //we clear them out, they get applied after load anyway.
-        me.setGrouper('');
+		//The store adds a sorter for any groupers at load time.  Make sure
+		//we clear them out, they get applied after load anyway.
+		me.setGrouper('');
 		me.store.sorters.removeAll();
 
 		return new Promise(function(fulfill, reject) {

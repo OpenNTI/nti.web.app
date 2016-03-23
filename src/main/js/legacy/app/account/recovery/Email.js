@@ -2,12 +2,12 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.recovery.Email', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.recovery-email-view',
-    cls: 'recovery-email-view',
-    layout: 'none',
+	extend: 'Ext.container.Container',
+	alias: 'widget.recovery-email-view',
+	cls: 'recovery-email-view',
+	layout: 'none',
 
-    items: [
+	items: [
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
 			{xtype: 'simpletext', name: 'email', cls: 'input-box', inputType: 'email', placeholder: getString('NextThought.view.account.recovery.Email.email')}
 		]},
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.account.recovery.Email', 
 		]}
 	],
 
-    getValue: function() {
+	getValue: function() {
 		return {
 			email: this.down('[name=email]').getValue(),
 			fieldName: this.fieldName,
@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.account.recovery.Email', 
 		};
 	},
 
-    setError: function(error) {
+	setError: function(error) {
 		var box = this.down('[name=error]'),
 						field = this.down('[name=email]'),
 						bContainer = this.down('[name=buttons]');
@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.account.recovery.Email', 
 		this.up('window').updateLayout();
 	},
 
-    submit: function() {
+	submit: function() {
 		var values = this.getValue(),
 			win = this.up('window');
 

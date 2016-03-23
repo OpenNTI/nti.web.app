@@ -10,20 +10,20 @@ var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.ContainerContext', {
-    constructor: function(config) {
+	constructor: function(config) {
 		this.callParent(arguments);
 
 		this.config = config;
 		this.container = config.container;
 	},
 
-    /**
+	/**
 	 * Load the context of UserData (i.e. note)
 	 * @param  {[string]} type [type of context: card, list, or leave empty.
-	 *                          Leave empty, in case of a note will be presented in a note window
-	 *                          'card': to be rendered as a card, @see notes in activity.
-	 *                          'list': to be rendered as a list object, @see notes in profiles.]
-	 * @return {[Promise]}   	[Promise that resolves with dom element for the context]
+	 *							Leave empty, in case of a note will be presented in a note window
+	 *							'card': to be rendered as a card, @see notes in activity.
+	 *							'list': to be rendered as a list object, @see notes in profiles.]
+	 * @return {[Promise]}		[Promise that resolves with dom element for the context]
 	 */
 	load: function(type) {
 		var url = Service.getObjectURL(this.container);
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 				.fail(this.__handle403Response.bind(this));
 	},
 
-    __parseResponse: function(response) {
+	__parseResponse: function(response) {
 		var parse;
 
 		return new Promise(function(fulfill) {
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 		});
 	},
 
-    __parseContext: function(contextType, obj) {
+	__parseContext: function(contextType, obj) {
 		var typesPath = NextThought.app.context.types,
 			keys = Object.keys(typesPath), i, handler;
 
@@ -72,8 +72,8 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 		}
 
 		if (this.contextCmp && this.contextCmp.destroy) {
-		    this.contextCmp.destroy();
-		    delete this.contextCmp;
+			this.contextCmp.destroy();
+			delete this.contextCmp;
 		}
 
 		if (handler) {
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 		return Promise.resolve(null);
 	},
 
-    __handle403Response: function(response) {
+	__handle403Response: function(response) {
 		var o = Ext.decode(response.responseText, true),
 			status = response.status,
 			req = response && response.request,
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 		return Promise.resolve();
 	},
 
-    requestForbiddenContext: function(url){
+	requestForbiddenContext: function(url){
 		if (!url) { return Promise.resolve(); }
 
 		// Forbidden Context URL.

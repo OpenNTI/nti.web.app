@@ -5,16 +5,16 @@ var ModelVideo = require('../../../../../../../model/Video');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.ListItem', {
-    extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
-    alias: 'widget.overview-editing-video-listitem',
+	extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
+	alias: 'widget.overview-editing-video-listitem',
 
-    statics: {
+	statics: {
 		getSupported: function() {
 			return NextThought.model.Video.mimeType;
 		}
 	},
 
-    getPreviewType: function(record) {
+	getPreviewType: function(record) {
 		return 'course-overview-video';
 	}
 });

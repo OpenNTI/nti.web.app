@@ -7,30 +7,30 @@ var WindowsStateStore = require('../../app/windows/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.common.window.Window', {
-    extend: 'Ext.window.Window',
-    alias: 'widget.nti-window',
-    cls: 'nti-window',
-    ui: 'nti-window',
-    plain: true,
-    shadow: false,
-    autoShow: false,
-    border: true,
-    frame: false,
-    header: false,
-    constrainHeader: false,
-    liveDrag: true,
-    dragStartTolerance: 5,
-    dialog: false,
-    modal: false,
-    isOverlay: true,
-    layout: 'none',
+	extend: 'Ext.window.Window',
+	alias: 'widget.nti-window',
+	cls: 'nti-window',
+	ui: 'nti-window',
+	plain: true,
+	shadow: false,
+	autoShow: false,
+	border: true,
+	frame: false,
+	header: false,
+	constrainHeader: false,
+	liveDrag: true,
+	dragStartTolerance: 5,
+	dialog: false,
+	modal: false,
+	isOverlay: true,
+	layout: 'none',
 
-    items: [
+	items: [
 		{xtype: 'nti-window-header' },
 		{xtype: 'container', flex: 1, windowContentWrapper: true}
 	],
 
-    onClassExtended: function(cls, data, hooks) {
+	onClassExtended: function(cls, data, hooks) {
 		var onBeforeClassCreated = hooks.onBeforeCreated;
 
 		hooks.onBeforeCreated = function(cls, data) {
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		};
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		if (!this.dialog && !config.dialog) {
 
 			Ext.copyTo(this.items.last(), config, ['items', 'layout']);
@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		this.callParent([config]);
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		var me = this,
 			closeCalled, windowStore,
@@ -113,8 +113,8 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		if(this.isOverlay) {
 			this.on({
 				'show': function(){
-				    me._windowStoreNotified = true;
-				    windowStore.addOpenCls();  
+					me._windowStoreNotified = true;
+					windowStore.addOpenCls();  
 				},
 				'close': function() {
 					closeCalled = true;
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		}
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		var me = this;
 
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		}
 	},
 
-    fixScroll: function() {
+	fixScroll: function() {
 		if (!Ext.isWebKit) {
 			return;
 		}
@@ -185,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 					side = 'margin' + Ext.String.capitalize(cmp.dock),
 					margin = cmp.getWidth() + 'px';
 			//we need a margin here in webkits case because the docked items do not jive with the position fixed.  So,
-			//calculate the margin and which side we need to set and apply.  If it's 0, that's okay.
+			//calculate the margin and which side we need to set and apply.	 If it's 0, that's okay.
 			getEl(me, target).setStyle(side, margin);
 		}
 
@@ -210,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		});
 	},
 
-    show: function() {
+	show: function() {
 		var s = window.getSelection(), r,
 				c = Ext.WindowManager.getActive();
 		if (c) {
@@ -258,7 +258,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		return this;
 	},
 
-    syncHeight: function() {
+	syncHeight: function() {
 		var height = this.getHeight(),
 				viewHeight = Ext.Element.getViewportHeight();
 
@@ -273,7 +273,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		this.center();
 	},
 
-    syncSize: function() {
+	syncSize: function() {
 		var me = this,
 				h = Ext.Element.getViewportHeight() * me.heightPercent,
 				w = Ext.Element.getViewportWidth() * me.widthPercent,
@@ -287,7 +287,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		return size;
 	},
 
-    initResizable: function() {
+	initResizable: function() {
 		this.callParent(arguments);
 
 		this.resizer.on({
@@ -298,7 +298,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		});
 	},
 
-    initDraggable: function() {
+	initDraggable: function() {
 		if (!this.dialog) {
 			try {
 				this.dd = new Ext.util.ComponentDragger(this, {
@@ -321,14 +321,14 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		}
 	},
 
-    setTitle: function(title) {
+	setTitle: function(title) {
 		if (this.titleBar) {
 			this.titleBar.update(title);
 			this.fireEvent('titleChange', this, title);
 		}
 	},
 
-    getTitle: function() {
+	getTitle: function() {
 		var title;
 		if (this.titleBar) {
 			title = this.titleBar.getTitle();
@@ -336,30 +336,30 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		return title || 'Untitled';
 	},
 
-    getHeight: function() {
+	getHeight: function() {
 		return this.rendered ? this.callParent() : this.height || this.minHeight;
 	},
 
-    getWidth: function() {
+	getWidth: function() {
 		return this.rendered ? this.callParent() : this.width || this.minWidth;
 	},
 
-    addTools: function(tools) {
+	addTools: function(tools) {
 		if (this.titleBar) {
 			this.titleBar.addTools(tools);
 		}
 	},
 
-    resizeDragMaskOn: function() {
+	resizeDragMaskOn: function() {
 		this.dragMaskOn();
 		this.resizeDragTimeout = Ext.defer(this.dragMaskOff, 2000, this);
 	},
 
-    cancelResizeMaskTimeout: function() {
+	cancelResizeMaskTimeout: function() {
 		clearTimeout(this.resizeDragTimeout);
 	},
 
-    dragMaskOn: function() {
+	dragMaskOn: function() {
 		var e = Ext.getBody();
 		this.wasMasked = this.modal || Boolean(Ext.getBody().isMasked());
 		if (!this.wasMasked) {
@@ -374,7 +374,7 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 		}
 	},
 
-    dragMaskOff: function() {
+	dragMaskOff: function() {
 		if (this.wasMasked === false) {
 			Ext.getBody().unmask();
 		}

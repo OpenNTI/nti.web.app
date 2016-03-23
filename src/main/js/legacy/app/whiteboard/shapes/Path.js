@@ -3,7 +3,7 @@ var ShapesBase = require('./Base');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Path', {
-	extend:	'NextThought.app.whiteboard.shapes.Base',
+	extend: 'NextThought.app.whiteboard.shapes.Base',
 
 	draw: function(ctx,renderCallback) {
 		this.callParent(arguments);
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Path', 
 				ctx.quadraticCurveTo(midP[0], midP[1], p1[0], p1[1]);
 			}
 		}
-    //		ctx.closePath();
+	//		ctx.closePath();
 
 		this.bbox = {
 			x: minx,	w: maxx - minx,
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Path', 
   //		console.log('new starting point after rotation: ', newM.getTranslation());
   //
   //		c1 = this.getCenter(true);
-  //		newM.translate(  c[0]-c1[0], c[1]-c1[1] );
+  //		newM.translate(	 c[0]-c1[0], c[1]-c1[1] );
   //
   //		return newM.toTransform();
   //	}

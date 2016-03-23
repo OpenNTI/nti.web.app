@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.proxy.reader.Base', {
 	alias: 'reader.nti-base',
 
 	//TODO The fact we are doing this may play into why we run into issues
-	//with LastModified caching and friends lists.  Need to look into that
+	//with LastModified caching and friends lists.	Need to look into that
 	fillCacheWithUserList: function (record, field) {
 		var users = (record.raw || {})[field];
 
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.proxy.reader.Base', {
 	precacheUserLists: function(record) {
 		var me = this;
 		//If we were given a model from the server go ahead and cache it
-		//so we don't have to resolve it again.  Failure to do this leads to hundreds
+		//so we don't have to resolve it again.	 Failure to do this leads to hundreds
 		//of user resolutions (in accounts with lots of data) up front
 		record.fields.each(function(f) {
 			if (f.type === Ext.data.Types.USERLIST) {

@@ -7,12 +7,12 @@ var ContextContainerContext = require('../../context/ContainerContext');
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.note.Window', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.note-panel-window',
-    layout: 'none',
-    cls: 'note-window',
+	extend: 'Ext.container.Container',
+	alias: 'widget.note-panel-window',
+	layout: 'none',
+	cls: 'note-window',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.headerCmp = this.add({
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 		}
 	},
 
-    loadNote: function(record) {
+	loadNote: function(record) {
 		var context = NextThought.app.context.ContainerContext.create({
 				container: record.get('ContainerId'),
 				range: record.get('applicableRange'),
@@ -57,21 +57,21 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 		});
 	},
 
-    loadRoot: function() {
+	loadRoot: function() {
 		var root = this.record.get('references')[0];
 
 		Service.getObject(root)
 			.then(this.loadNote.bind(this), this.loadParent.bind(this));
 	},
 
-    loadParent: function() {
+	loadParent: function() {
 		var parent = this.record.get('inReplyTo');
 
 		Service.getObject(parent)
 			.then(this.loadNote.bind(this), this.loadNote.bind(this, this.record));
 	},
 
-    allowNavigation: function() {
+	allowNavigation: function() {
 		var panel = this.down('note-main-view');
 
 		if (!panel) { return true; }

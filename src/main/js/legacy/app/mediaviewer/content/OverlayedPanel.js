@@ -8,12 +8,12 @@ var ContentSlideVideo = require('./SlideVideo');
 /*jslint */
 /*global DomUtils */
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.OverlayedPanel', {
-    extend: 'NextThought.app.contentviewer.overlay.Panel',
-    alias: 'widget.overlay-slidevideo',
-    ui: 'content-laucher',
-    cls: 'content-launcher-container',
+	extend: 'NextThought.app.contentviewer.overlay.Panel',
+	alias: 'widget.overlay-slidevideo',
+	ui: 'content-laucher',
+	cls: 'content-launcher-container',
 
-    statics: {
+	statics: {
 		getData: function(dom, reader) {
 			var el = Ext.get(dom),
 				data = DomUtils.parseDomObject(dom),
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.Overl
 		}
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.Overl
 		this.callParent([config]);
 	},
 
-    findLine: function() {
+	findLine: function() {
 		var doc = this.contentElement.ownerDocument,
 			range = doc.createRange();
 

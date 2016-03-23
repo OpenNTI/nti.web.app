@@ -6,30 +6,30 @@ var AdminGrid = require('../Grid');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.performance.Student', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.course-assessment-admin-performance-student',
+	extend: 'Ext.container.Container',
+	alias: 'widget.course-assessment-admin-performance-student',
 
-    mixins: {
+	mixins: {
 		State: 'NextThought.mixins.State'
 	},
 
-    layout: 'none',
-    ui: 'course-assessment',
-    cls: 'course-assessment-admin assignment-item',
+	layout: 'none',
+	ui: 'course-assessment',
+	cls: 'course-assessment-admin assignment-item',
 
-    pathRoot: {
+	pathRoot: {
 		label: 'Grades & Performance',
 		title: 'Grades & Performance',
 		route: 'performance'
 	},
 
-    items: [{
+	items: [{
 		xtype: 'course-admin-grid',
 		flex: 1,
 		cls: 'student-performance-overview'
 	}],
 
-    initComponent: function() {
+	initComponent: function() {
 		this._masked = 0;
 		this.callParent(arguments);
 
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		if (this._masked) {
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    _showMask: function() {
+	_showMask: function() {
 		var el = this.el;
 
 		this._maskIn = setTimeout(function() {
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}, 1);
 	},
 
-    mask: function() {
+	mask: function() {
 		this._masked++;
 
 		if (!this.rendered) {
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this._showMask();
 	},
 
-    unmask: function() {
+	unmask: function() {
 		this._masked--;
 
 		if (this._masked <= 0) {
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    refresh: function() {
+	refresh: function() {
 		var grid = this.down('grid'),
 			view = grid && grid.view;
 
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return Promise.resolve();
 	},
 
-    setAssignmentsData: function(assignments) {
+	setAssignmentsData: function(assignments) {
 		if (!assignments) {
 			console.error('No Assignments?');
 			return Promise.reject('no data?');
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return this.applyState(state);
 	},
 
-    setEnrollmentData: function(enrollment) {
+	setEnrollmentData: function(enrollment) {
 		var mailLink = enrollment && enrollment.getLink('Mail'),
 			me = this;
 
@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    applyState: function(state) {
+	applyState: function(state) {
 		if (this.applyingState) { return; }
 
 		var me = this,
@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-    changeSort: function(ct, column, direction) {
+	changeSort: function(ct, column, direction) {
 		var prop = column.sortOn || column.dataIndex,
 			state = this.getCurrentState() || {};
 
@@ -197,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    maybeShowAssignment: function(view, record, node, index, e) {
+	maybeShowAssignment: function(view, record, node, index, e) {
 		var selModel = view.getSelectionModel(),
 			selection = selModel && selModel.selection,
 			dataIndex = selection && selection.columnHeader.dataIndex;
@@ -207,7 +207,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    showAssignment: function(selModel, record) {
+	showAssignment: function(selModel, record) {
 		var userId = this.student.getURLPart(),
 			assignmentId = record.get('AssignmentId');
 
@@ -216,7 +216,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.pushRoute('', '/performance/' + userId + '/' + assignmentId);
 	},
 
-    doNavigation: function(title, route, precache) {
+	doNavigation: function(title, route, precache) {
 		var userId = this.student.getId();
 
 		this.pushRoute(title, route, precache);

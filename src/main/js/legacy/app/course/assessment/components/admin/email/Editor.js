@@ -7,31 +7,31 @@ var EmailEmailTokenField = require('./EmailTokenField');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.email.Editor', {
-    extend: 'NextThought.editor.Editor',
-    alias: 'widget.course-email-editor',
-    enableTitle: true,
-    enableObjectControls: false,
-    enableTextControls: false,
+	extend: 'NextThought.editor.Editor',
+	alias: 'widget.course-email-editor',
+	enableTitle: true,
+	enableObjectControls: false,
+	enableTextControls: false,
 
-    RECEIVER_MAP: {
+	RECEIVER_MAP: {
 		'ForCredit': 'Enrolled Students',
 		'All': 'All Students',
 		'Open': 'Open Students'
 	},
 
-    REPLY_DEFAULTS: {
+	REPLY_DEFAULTS: {
 		'ForCredit': 'ForCredit',
 		'All': 'ForCredit',
 		'Open': 'NoReply'
 	},
 
-    toolbarTpl: Ext.DomHelper.markup(
+	toolbarTpl: Ext.DomHelper.markup(
 		[
 			{
 				cls: 'aux', cn: [
 				{
 					cls: 'row receiver', cn: [
-					 	{cls: 'label', html: 'To'},
+						{cls: 'label', html: 'To'},
 						{cls: 'field'},
 						{cls: 'action', cn: [
 							{cls: 'reply-option', cn: [
@@ -47,18 +47,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			]}
 		]),
 
-    footerControlsTpl: new Ext.XTemplate(Ext.DomHelper.markup(
+	footerControlsTpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{tag: 'div', cls:'toggle', cn: [
 			{tag: 'input', type: 'checkbox', id: 'email-copy-toggle', cls: 'email-copy'},
 			{tag: 'label', 'for': 'email-copy-toggle', html: 'Send me a copy of the email'}
 		]}
 	)),
 
-    headerTplOrder: '{toolbar}{title}',
-    cls: 'email-editor scrollable',
-    renderTpl: Ext.DomHelper.markup({ cls: 'editor active', html: '{super}' }),
+	headerTplOrder: '{toolbar}{title}',
+	cls: 'email-editor scrollable',
+	renderTpl: Ext.DomHelper.markup({ cls: 'editor active', html: '{super}' }),
 
-    renderSelectors: {
+	renderSelectors: {
 		titleEl: '.title',
 		footerEl: '.footer',
 		receiverEl: '.row.receiver .field',
@@ -67,12 +67,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		replyCheckBoxEl: '.reply-option .reply-check'
 	},
 
-    initComponent: function(){
+	initComponent: function(){
 		this.callParent(arguments);
 		this.isIndividualEmail = !!(this.record && this.record.get('Receiver'));	
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		var me = this;
 
@@ -95,13 +95,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.mon(this.replyCheckBoxEl, 'click', this.replyCheckboxClicked.bind(this));
 	},
 
-    setupTitleField: function() {
+	setupTitleField: function() {
 		if (!this.titleEl) { return; }
 
 		this.titleEl.dom.setAttribute('placeholder', 'Subject');
 	},
 
-    setupFooterControls: function(){
+	setupFooterControls: function(){
 		var left = this.footerEl.down('.left'), copyCheckboxEl;
 		if (left) {
 			this.footerControlsTpl.append(left);
@@ -117,14 +117,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    emailCopyClicked: function(e){
+	emailCopyClicked: function(e){
 		var i = e.target;
 		if (this.record) {
-			this.record.set('Copy', i.checked);	
+			this.record.set('Copy', i.checked); 
 		}
 	},
 
-    setReceiverField: function() {
+	setReceiverField: function() {
 		var scope,
 			to = this.record && this.record.get('Receiver');
 
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    createReceiverScopePicker: function(){
+	createReceiverScopePicker: function(){
 		var me = this,
 			menu = 
 				Ext.widget('menu', {
@@ -184,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.receiverScopeMenu = menu;
 	},
 
-    showReceiverScopePicker: function(){
+	showReceiverScopePicker: function(){
 		if (!this.receiverScopeMenu) { return; }
 
 		if (!this.receiverScopeMenu.isVisible()) {
@@ -195,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    receiverScopeChanged: function(item, menu){
+	receiverScopeChanged: function(item, menu){
 		this.receiverEl.setHTML(item && item.text);
 		if (this.record) {
 			this.record.set('scope', item && item.studentFilter);
@@ -204,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    updateScope: function(record){
+	updateScope: function(record){
 		var scope = record && record.raw && record.raw.studentFilter;
 
 		if (scope) {
@@ -212,7 +212,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    syncHeight: function() {
+	syncHeight: function() {
 		var el = this.contentEl,
 			container = this.ownerCt && this.ownerCt.el && this.ownerCt.el.dom,
 			containerRect = container && container.getBoundingClientRect(),
@@ -243,7 +243,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.then(this.updateLayout.bind(this));
 	},
 
-    setReplyToField: function(){
+	setReplyToField: function(){
 		var scope;
 		
 		this.noReplyPicker = this.createNoReplyMenu();
@@ -264,14 +264,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.filterReplyOptions();
 	},
 
-    updateReplyScope: function(){
+	updateReplyScope: function(){
 		var selected = this.noReplyPicker && this.noReplyPicker.down('[checked]');
 		if (selected) {
 			this.record.set('replyScope', selected.scope);
 		}
 	},
 
-    replyPickerClicked: function(e) {
+	replyPickerClicked: function(e) {
 		var target = Ext.get(e.getTarget());
 
 		if (this.replyScopeEl.hasCls('disabled')) {
@@ -291,11 +291,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    replyCheckboxClicked: function(e){
+	replyCheckboxClicked: function(e){
 		var i = e.target, 
 		action = i.checked ? 'removeCls' : 'addCls';
 		if (this.record) {
-			this.record.set('NoReply', !i.checked);	
+			this.record.set('NoReply', !i.checked); 
 		}
 
 		if (i.checked) {
@@ -305,7 +305,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.replyScopeEl[action]('disabled');
 	},
 
-    createNoReplyMenu: function(){
+	createNoReplyMenu: function(){
 		var me = this, menu,
 			initialScope = this.record && this.record.get('scope') || 'All',
 			defaults = this.REPLY_DEFAULTS;
@@ -351,7 +351,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return menu;
 	},
 
-    filterReplyOptions: function(){
+	filterReplyOptions: function(){
 		var menu = this.noReplyPicker,
 			me = this, selectedItem;
 
@@ -380,7 +380,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    /**
+	/**
 	 * Handle the reply-picker selection.
 	 *
 	 * Note: If a user chooses to allow reply, make sure we set both the reply option 
@@ -398,7 +398,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    getValue: function() {
+	getValue: function() {
 		return {
 			body: this.getBody(this.getBodyValue()),
 			NoReply: this.record && this.record.get('NoReply'),
@@ -406,7 +406,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    onSave: function(e){
+	onSave: function(e){
 		e.stopEvent();
 		var me = this,
 			v = this.getValue(),
@@ -470,7 +470,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		
 	},
 
-    allowNavigation: function(){
+	allowNavigation: function(){
 		var msg = 'You are currently creating an email. Would you like to leave without sending it?';
 
 		if (this.emailSent) {
@@ -496,7 +496,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-    presentSuccessMessage: function(){
+	presentSuccessMessage: function(){
 		alert({
 			icon: 'success',
 			title: 'Email Sent',
@@ -504,7 +504,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-    onCancel: function(e) {
+	onCancel: function(e) {
 		e.stopEvent();
 		this.emailSent = true;
 		this.fireEvent('cancel');

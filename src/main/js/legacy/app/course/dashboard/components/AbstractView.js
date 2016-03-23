@@ -3,19 +3,19 @@ var TilesHeader = require('./tiles/Header');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.AbstractView', {
-    extend: 'Ext.container.Container',
-    COLUMN_PADDING: 10,
-    COLUMN_COUNT: 3,
-    width: 1024 - 17,
+	extend: 'Ext.container.Container',
+	COLUMN_PADDING: 10,
+	COLUMN_COUNT: 3,
+	width: 1024 - 17,
 
-    //17 to account for potential scrollbars
+	//17 to account for potential scrollbars
 
 	ui: 'course',
 
-    cls: 'course-dashboard-container scrollable',
-    layout: 'none',
+	cls: 'course-dashboard-container scrollable',
+	layout: 'none',
 
-    items: [
+	items: [
 		{xtype: 'dashboard-header'},
 		{
 			xtype: 'container',
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		}
 	],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var i;
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		}
 	},
 
-    getSortFn: function() {
+	getSortFn: function() {
 		return function(a, b) {
 			var wA = a.weight || 0,
 				wB = b.weight || 0;
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		};
 	},
 
-    addToColumn: function(index, cmp) {
+	addToColumn: function(index, cmp) {
 		var column = this.COLUMN_MAP[index];
 
 		if (column) {
@@ -68,14 +68,14 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		}
 	},
 
-    /**
+	/**
 	 * Fit the tiles in to columns and try to get the columns height to be as
 	 * close to the same as possible. Set the top and left for the tiles,
 	 * the cmps need to have width and height on them.
 	 *
 	 * See http://stackoverflow.com/a/7128902
 	 *
-	 * @param {Array} tiles	list of cmp configs to set top and left on
+	 * @param {Array} tiles list of cmp configs to set top and left on
 	 * @return {Array}			the list with top and left set on them
 	 */
 	fitTiles: function(tiles) {
@@ -120,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		return tiles;
 	},
 
-    /**
+	/**
 	 * Add the tiles back, use the previous configs so the layout doesn't change any
 	 */
 	addTilesBack: function() {
@@ -135,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		});
 	},
 
-    /**
+	/**
 	 * Add an array of tile components
 	 */
 	setTiles: function(tiles) {
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		this.addTilesBack();
 	},
 
-    clearTiles: function() {
+	clearTiles: function() {
 		var i;
 
 		for (i = 0; i < this.COLUMN_COUNT; i++) {

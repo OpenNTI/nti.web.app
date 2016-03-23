@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 	 * If the data is there, but we are not allowed to access it return true
 	 *
 	 * @param  {String} key the key to look for
-	 * @return {String}     the value on data transfer for that key
+	 * @return {String}		the value on data transfer for that key
 	 */
 	getData: function(key) {
 		var data;

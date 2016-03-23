@@ -6,19 +6,19 @@ var WindowsActions = require('../../../../../windows/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.achievements.parts.BadgeList', {
-    extend: 'Ext.view.View',
-    alias: 'widget.profile-badge-list',
+	extend: 'Ext.view.View',
+	alias: 'widget.profile-badge-list',
 
-    mixins: {
+	mixins: {
 		exportBadge: 'NextThought.mixins.ExportBadge'
 	},
 
-    layout: 'none',
-    cls: 'badge-list',
-    itemSelector: '.badge',
-    deferEmptyText: false,
+	layout: 'none',
+	cls: 'badge-list',
+	itemSelector: '.badge',
+	deferEmptyText: false,
 
-    tpl: new Ext.XTemplate(Ext.DomHelper.markup([
+	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': '.', cn: [
 			{cls: 'badge {earnedCls}', cn: [
 				{cls: 'img', style: {backgroundImage: 'url({image})'}},
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	}),
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header-container', cn: [
 			{cls: 'header', html: '{header}'},
 			{tag: 'tpl', 'if': 'preference', cn: [
@@ -51,11 +51,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		preferenceEl: '.nti-checkbox'
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		var cls = config.cls,
 			newConfig = Ext.clone(config);
 
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.columnWidth) {
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    setPublicPreference: function(show) {
+	setPublicPreference: function(show) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setPublicPreference.bind(this));
 			return;
@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 				});
 	},
 
-    /**
+	/**
 	 * Set the number of columns the list can fill
 	 * @param {Number} width the number of columns
 	 */
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.el.set({'data-columns': width});
 	},
 
-    updateUIFromPreference: function(preference) {
+	updateUIFromPreference: function(preference) {
 		if (!preference) {
 			console.error('Cant update the ui with an empty preference');
 			return;
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.preferenceEl[checked ? 'addCls' : 'removeCls']('checked');
 	},
 
-    showPreference: function() {
+	showPreference: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.showPreference.bind(this));
 			return;
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    hidePreference: function() {
+	hidePreference: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.hidePreference.bind(this));
 			return;
@@ -164,7 +164,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    updatePreference: function() {
+	updatePreference: function() {
 		var state = !this.preferenceEl.hasCls('checked');
 
 		this.preference.set(this.preferenceKey, state);
@@ -172,7 +172,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.updateUIFromPreference(this.preference);
 	},
 
-    onItemClick: function(record, item, index, e) {
+	onItemClick: function(record, item, index, e) {
 		if (e.getTarget('.export')) {
 			this.showExportMenu(record, Ext.get(item));
 		} else {
@@ -180,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    setItems: function(items) {
+	setItems: function(items) {
 		if (!this.badgeStore) {
 			this.badgeStore = new Ext.data.Store({
 				model: 'NextThought.model.openbadges.Badge',

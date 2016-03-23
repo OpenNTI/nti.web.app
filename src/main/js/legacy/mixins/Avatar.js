@@ -77,8 +77,8 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 
 
 		//This is isn't really a battle we can win given the complexity of names
-		//globally, however as a default this should work.  If they don't like it
-		//they can upload an image.  If we have a first and last from the server
+		//globally, however as a default this should work.	If they don't like it
+		//they can upload an image.	 If we have a first and last from the server
 		//take the first char of each, else take the first char of the display name.
 		//As of 7/2015 this matches the mobile app. Unresolved users don't show initials
 		getAvatarInitials: function(data, f, l, d) {

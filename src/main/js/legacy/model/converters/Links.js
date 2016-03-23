@@ -2,9 +2,9 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.Links', {
-    override: 'Ext.data.Types',
+	override: 'Ext.data.Types',
 
-    LINKS: {
+	LINKS: {
 		type: 'links',
 		sortType: null,
 

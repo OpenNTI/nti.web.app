@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		if (!this.store) {
 			this.store = Ext.data.Store.create({model: 'NextThought.model.User'});
 			//By default getById on the store is order n.  given we need to call this to both cache
-			//and retrieve data that makes resolving a big chunk of users n^2.  Mixed collection
+			//and retrieve data that makes resolving a big chunk of users n^2.	Mixed collection
 			//supports constant lookups if you can do it by key (which we can for users) so replace
 			//the implementation with something faster.
 			this.store.getById = function (theId) {
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 			}
 
 			//If the incoming object is a summary object (not from a resolve user call)
-			//we don't want to merge into a non summary object.  We end up losing data
+			//we don't want to merge into a non summary object.	 We end up losing data
 			if (!refreshedUser.summaryObject || u.summaryObject) {
 				this.mergeUser(u, refreshedUser);
 			}

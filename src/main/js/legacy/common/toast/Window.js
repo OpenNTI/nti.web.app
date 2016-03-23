@@ -81,8 +81,8 @@ module.exports = exports = Ext.define('NextThought.common.toast.Window', {
 			to: { top: size.height + 10 },
 			duration: 200,
 			listeners: {
-	            afteranimate: this.destroy,
-	            scope: this
+				afteranimate: this.destroy,
+				scope: this
 			}
 		});
 

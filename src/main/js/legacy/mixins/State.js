@@ -4,25 +4,25 @@ var StateActions = require('../common/state/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.State', {
-    state_key: 'default',
+	state_key: 'default',
 
-    getStateKey: function() {
+	getStateKey: function() {
 		return this.state_key;
 	},
 
-    __getStateActions: function() {
+	__getStateActions: function() {
 		this.__StateActions = this.__StateActions || NextThought.common.state.Actions.create();
 
 		return this.__StateActions;
 	},
 
-    __getStateStore: function() {
+	__getStateStore: function() {
 		this.__StateStore = this.__StateStore || NextThought.common.state.StateStore.getInstance();
 
 		return this.__StateStore;
 	},
 
-    /**
+	/**
 	 * Return the current state
 	 * @return {Object} the current state
 	 */
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.mixins.State', {
 		return store.getState(key);
 	},
 
-    /**
+	/**
 	 * Store the state in local storage
 	 * @param {Object} state state to store
 	 */
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.mixins.State', {
 		return this.applyState(state);
 	},
 
-    /**
+	/**
 	 * Apply a state to the ui, return promise that fulfills when its down
 	 * @override
 	 * @param {Object} state state to apply

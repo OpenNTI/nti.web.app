@@ -7,10 +7,10 @@ var ForumsCommentPost = require('./CommentPost');
 
 
 module.exports = exports = Ext.define('NextThought.model.forums.Board', {
-    extend: 'NextThought.model.forums.Base',
-    isBoard: true,
+	extend: 'NextThought.model.forums.Base',
+	isBoard: true,
 
-    statics: {
+	statics: {
 		buildContentsStoreFromData: function(id, data) {
 			var store;
 
@@ -46,16 +46,16 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 		}
 	},
 
-    fields: [
+	fields: [
 		{ name: 'ForumCount', type: 'int', persist: false },
 		{ name: 'title', type: 'auto', persist: false}
 	],
 
-    getTitle: function() {
+	getTitle: function() {
 		return this.get('title');
 	},
 
-    findBundle: function() {
+	findBundle: function() {
 		var me = this;
 
 		return ContentManagementUtils.findBundleBy(function(bundle) {
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 		});
 	},
 
-    findCourse: function() {
+	findCourse: function() {
 		var me = this,
 			id = me.getId();
 
@@ -108,9 +108,9 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 		});
 	},
 
-    hasForumList: function() { return true; },
+	hasForumList: function() { return true; },
 
-    /**
+	/**
 	 * See CourseInstance getForumList for more details the structure this is returning
 	 * @return {Object} A forum list of the contents of this board
 	 */

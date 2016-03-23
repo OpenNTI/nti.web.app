@@ -214,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareS
 			index = this.store && this.store.indexOf(selected.items[0]) || -1;
 
 		if(index > -1){
-		 	this.getSelectionModel().deselect(index);
+			this.getSelectionModel().deselect(index);
 		}
 	},
 

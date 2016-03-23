@@ -15,12 +15,12 @@ var PartsTopic = require('./parts/Topic');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.topic.Window', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.topic-window',
-    layout: 'none',
-    cls: 'topic-window',
+	extend: 'Ext.container.Container',
+	alias: 'widget.topic-window',
+	layout: 'none',
+	cls: 'topic-window',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -44,11 +44,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		}
 	},
 
-    onClose: function() {
+	onClose: function() {
 		this.doClose(this.activeTopic);
 	},
 
-    loadForum: function(topic) {
+	loadForum: function(topic) {
 		if (this.precache.forum) {
 			return Promise.resolve(this.precache.forum);
 		}
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		return Service.getObject(topic.get('ContainerId'));
 	},
 
-    loadTopic: function() {
+	loadTopic: function() {
 		var me = this;
 
 		me.loadForum(me.record)
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			});
 	},
 
-    loadComment: function() {
+	loadComment: function() {
 		var me = this,
 			topic;
 
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			});
 	},
 
-    loadPost: function() {
+	loadPost: function() {
 		var me = this,
 			topic;
 
@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			});
 	},
 
-    loadEditor: function() {
+	loadEditor: function() {
 		var me = this;
 
 		me.loadForum(me.record)
@@ -120,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			});
 	},
 
-    allowNavigation: function() {
+	allowNavigation: function() {
 		var editor = this.down('forums-topic-editor'),
 			comment = this.down('forums-topic-comment-thread');
 
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		return (editor && editor.allowNavigation()) || (comment && comment.allowNavigation());
 	},
 
-    showTopic: function(topic, forum, activeComment) {
+	showTopic: function(topic, forum, activeComment) {
 		var topicCmp = this.down('forums-topic-topic'),
 			commentCmp = this.down('forums-topic-comment-thread'),
 			me = this;
@@ -208,7 +208,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		});
 	},
 
-    showEditor: function(topic, forum) {
+	showEditor: function(topic, forum) {
 		var me = this,
 			topicCmp = this.down('forums-topic-topic'),
 			commentCmp = this.down('forums-topic-comment-thread'),

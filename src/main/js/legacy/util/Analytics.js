@@ -345,7 +345,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 
 	/**
 	 * Whether or not we have sent a view event for an ntiid
-	 * @param  {String}  id Ntiid to check
+	 * @param  {String}	 id Ntiid to check
 	 * @return {Boolean}	[description]
 	 */
 	hasBeenViewed: function(id) {

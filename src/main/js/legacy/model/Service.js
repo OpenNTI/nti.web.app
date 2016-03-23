@@ -9,17 +9,17 @@ var UserdataActions = require('../app/userdata/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.model.Service', {
-    extend: 'NextThought.model.Base',
-    idProperty: 'Class',
+	extend: 'NextThought.model.Base',
+	idProperty: 'Class',
 
-    fields: [
+	fields: [
 		{ name: 'Items', type: 'auto', defaultValue: {Items: []}},
 		{ name: 'Class', type: 'string', defaultValue: 'Service'},
 		{ name: 'SiteCommunity', type: 'string'},
 		{ name: 'CapabilityList', type: 'auto'}
 	],
 
-    request: function(urlOrConfig) {
+	request: function(urlOrConfig) {
 		var cfg = {};
 
 		return new Promise(function(fulfill, reject) {
@@ -49,11 +49,11 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		});
 	},
 
-    requestDelete: function(url) {
+	requestDelete: function(url) {
 		return this.request({url: url, method: 'DELETE'});
 	},
 
-    post: function(urlOrConfig, data) {
+	post: function(urlOrConfig, data) {
 		var config;
 		if (Ext.isString(urlOrConfig)) {
 			config = {
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return this.request(config);
 	},
 
-    postAndExit: function(url, data) {
+	postAndExit: function(url, data) {
 		var id = guidGenerator(),
 			tpl = new Ext.XTemplate(
 				Ext.DomHelper.markup({tag: 'form', id: id, action: url, method: 'POST', cn: {
@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		tpl.append(Ext.getBody(), data).submit();
 	},
 
-    put: function(url, data) {
+	put: function(url, data) {
 		return this.request({
 			url: url,
 			method: 'PUT',
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		});
 	},
 
-    getUserSearchURL: function(username) {
+	getUserSearchURL: function(username) {
 		var w = this.getWorkspace('Global') || {},
 			l = this.getLinkFrom(w.Links || [], Globals.USER_SEARCH_REL);
 		if (!l) {
@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return getURL(this.forceTrailingSlash(l) + (username ? encodeURIComponent(username) : ''));
 	},
 
-    getResolveUserURL: function(username) {
+	getResolveUserURL: function(username) {
 		var w = this.getWorkspace('Global') || {},
 			l = this.getLinkFrom(w.Links || [], Globals.USER_RESOLVE_REL);
 		if (!l) {
@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return getURL(this.forceTrailingSlash(l) + (username ? encodeURIComponent(username) : ''));
 	},
 
-    getBulkResolveUserURL: function() {
+	getBulkResolveUserURL: function() {
 		var w = this.getWorkspace('Global') || {},
 			l = this.getLinkFrom(w.Links || [], Globals.BULK_USER_RESOLVE_REL);
 		if (!l) {
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return getURL(this.forceTrailingSlash(l));
 	},
 
-    getHighlightColors: function() {
+	getHighlightColors: function() {
 		return [
 			{name: 'yellow', color: 'EDE619'},
 			{name: 'green', color: '4CE67F'},
@@ -123,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		];
 	},
 
-    getUserUnifiedSearchURL: function() {
+	getUserUnifiedSearchURL: function() {
 		var w = this.getWorkspace($AppConfig.username) || {},
 			l = this.getLinkFrom(w.Links || [], Globals.USER_UNIFIED_SEARCH_REL);
 
@@ -134,16 +134,16 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return getURL(this.forceTrailingSlash(l));
 	},
 
-    getPurchasableItemURL: function() {
+	getPurchasableItemURL: function() {
 		//Until we get this hung off some workspace
 		return getURL('/dataserver2/store/get_purchasables');
 	},
 
-    getStoreActivationURL: function() {
+	getStoreActivationURL: function() {
 		return getURL('/dataserver2/store/redeem_purchase_code');
 	},
 
-    forceTrailingSlash: function(uri) {
+	forceTrailingSlash: function(uri) {
 		if (uri.charAt(uri.length - 1) === '/') {
 			return uri;
 		}
@@ -151,7 +151,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return uri + '/';
 	},
 
-    getLinkFrom: function(links, rel) {
+	getLinkFrom: function(links, rel) {
 		var i = links.length - 1, o;
 		for (i; i >= 0; i--) {
 			o = links[i] || {};
@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return null;
 	},
 
-    getWorkspace: function(name) {
+	getWorkspace: function(name) {
 		var items = this.get('Items') || [],
 			i, workspace = null;
 
@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return workspace;
 	},
 
-    getLibrary: function(name) {
+	getLibrary: function(name) {
 		var libs = this.getWorkspace('Library') || {},
 			items = libs.Items || [],
 			i, library = null;
@@ -196,11 +196,11 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return library;
 	},
 
-    getMainLibrary: function() {
+	getMainLibrary: function() {
 		return this.getLibrary('Main') || {};
 	},
 
-    /**
+	/**
 	 *
 	 * @param {String} mimeType
 	 * @param {String} [title]
@@ -232,7 +232,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return Ext.clone(collection);
 	},
 
-    getCollection: function(title, workspaceName) {
+	getCollection: function(title, workspaceName) {
 		var workspace = this.getWorkspace(workspaceName || $AppConfig.username) || {},
 			items = workspace.Items || [],
 			i, item, collection = null;
@@ -252,7 +252,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return Ext.clone(collection);
 	},
 
-    getObjectURL: function(ntiid, field) {
+	getObjectURL: function(ntiid, field) {
 		var f = '',
 			collection = this.getCollection('Objects', 'Global') || {};
 		if (field) {
@@ -265,14 +265,14 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			f));
 	},
 
-    getContainerUrl: function(ntiid, type) {
+	getContainerUrl: function(ntiid, type) {
 		var pid = 'Pages(' + ntiid + ')',
 			u = $AppConfig.userObject.get('href').split('?')[0];
 
 		return getURL(Ext.String.format('{0}/{1}/{2}', u, encodeURIComponent(pid || ''), type || ''));
 	},
 
-    urlWithQueryParams: function(base, obj) {
+	urlWithQueryParams: function(base, obj) {
 		if (!Ext.isObject(obj)) {
 			return base;
 		}
@@ -280,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return [base, Ext.Object.toQueryString(obj)].join(base.indexOf('?') < 0 ? '?' : '&');
 	},
 
-    getObjectRaw: function(url, mime, forceMime, targetBundle) {
+	getObjectRaw: function(url, mime, forceMime, targetBundle) {
 		var headers = {}, opts = {},
 			params = {type: mime};
 
@@ -311,15 +311,15 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 					var reason, contentType;
 					//If sent an Accept header the server
 					//may return a 406 if the Accept value is not supported
-					//or it may just return whatever it wants.  If we send
+					//or it may just return whatever it wants.	If we send
 					//Accept we check the Content-Type to see if that is what
-					//we get back.  If it's not and forceMime is truthy
+					//we get back.	If it's not and forceMime is truthy
 					//we call the failure callback
 					if (s) {
 						if (mime && forceMime) {
 							contentType = resp.getResponseHeader('Content-Type');
 							if (contentType && contentType.indexOf(mime) < 0) {
-								reason = 'Requested with an explicit accept value of ' + mime + ' but got ' + contentType + '.  Rejecting.';
+								reason = 'Requested with an explicit accept value of ' + mime + ' but got ' + contentType + '.	Rejecting.';
 								console.error(reason, arguments);
 								return reject(reason);
 							}
@@ -336,7 +336,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		});
 	},
 
-    dropPageInfosForPrefix: function(prefix) {
+	dropPageInfosForPrefix: function(prefix) {
 		var url = this.getObjectURL(prefix),
 				k, o = this.pageInfoCache;
 
@@ -349,9 +349,9 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		}
 	},
 
-    FAKE_PUBLISH_COMMUNITY_NAME: 'client:publish',
+	FAKE_PUBLISH_COMMUNITY_NAME: 'client:publish',
 
-    getFakePublishCommunity: function() {
+	getFakePublishCommunity: function() {
 		if (!this.__fakePublishCommunity) {
 			this.__fakePublishCommunity = NextThought.model.Community.create({
 				Username: this.FAKE_PUBLISH_COMMUNITY_NAME,
@@ -362,13 +362,13 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return this.__fakePublishCommunity;
 	},
 
-    isFakePublishCommunity: function(community) {
+	isFakePublishCommunity: function(community) {
 		community = community.isModel ? community.get('Username') : community;
 
 		return community === this.FAKE_PUBLISH_COMMUNITY_NAME;
 	},
 
-    getGroupsMap: function() {
+	getGroupsMap: function() {
 		if (this.__loadUserGroups) { return this.__loadUserGroups; }
 
 		var collection = this.getCollection('Groups'),
@@ -394,7 +394,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return this.__loadUserGroups;
 	},
 
-    getCommunitiesMap: function() {
+	getCommunitiesMap: function() {
 		if (this.__loadUserCommunities) { return this.__loadUserCommunities; }
 
 		var collection = this.getCollection('Communities'),
@@ -420,7 +420,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return this.__loadUserCommunities;
 	},
 
-    getGroupsList: function() {
+	getGroupsList: function() {
 		return this.getGroupsMap()
 			.then(function(items) {
 				var keys = Object.keys(items);
@@ -431,7 +431,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			});
 	},
 
-    getCommunitiesList: function() {
+	getCommunitiesList: function() {
 		return this.getCommunitiesMap()
 			.then(function(items) {
 				var keys = Object.keys(items);
@@ -442,7 +442,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			});
 	},
 
-    getPageInfo: function(ntiid, success, failure, scope, targetBundle) {
+	getPageInfo: function(ntiid, success, failure, scope, targetBundle) {
 		var url, me = this,
 			cache = me.pageInfoCache = me.pageInfoCache || {},
 			params = targetBundle ? { course: targetBundle.getId() } : {},
@@ -487,12 +487,12 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		function onSuccess(resp) {
 			var pageInfos = ParseUtils.parseItems(resp.responseText),
 				//We claim success but the damn browsers like to give the wrong object
-				//type from cache.  They don't seem to listen to Vary: Accept or any
+				//type from cache.	They don't seem to listen to Vary: Accept or any
 				//of the other myriad of caching headers supplied by the server
 				pageInfo = pageInfos.first();
 
 			if (pageInfo && pageInfo.get('MimeType') !== mime) {
-				console.warn('Received an unknown object when requesting PageInfo.  Treating as failure', resp);
+				console.warn('Received an unknown object when requesting PageInfo.	Treating as failure', resp);
 				return Promise.reject([{}, resp]);
 			}
 
@@ -532,7 +532,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 
 		// if (cache.hasOwnProperty(url)) {
-		// 	return wait(1).then(onSuccess.bind(this, cache[url]));//make this call from its own stack
+		//	return wait(1).then(onSuccess.bind(this, cache[url]));//make this call from its own stack
 		// }
 
 		return this.getObjectRaw({url: url, ntiid: ntiid}, mime + '+json', true)
@@ -541,7 +541,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 				.fail(onFailure);
 	},
 
-    getPathToObjectLink: function(id) {
+	getPathToObjectLink: function(id) {
 		var collection = this.getCollection('LibraryPath', 'Global'),
 			url = collection && collection.href,
 			params = {
@@ -557,7 +557,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return url;
 	},
 
-    getObject: function(ntiid, success, failure, scope, safe, targetBundle) {
+	getObject: function(ntiid, success, failure, scope, safe, targetBundle) {
 		var url, result;
 
 		if (!ParseUtils.isNTIID(ntiid)) {
@@ -594,7 +594,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return result;
 	},
 
-    getObjects: function(ntiids, success, failure, scope, safe) {
+	getObjects: function(ntiids, success, failure, scope, safe) {
 		var me = this;
 		if (!Ext.isArray(ntiids)) {
 			ntiids = [ntiids];
@@ -616,7 +616,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 	},
 
-    getSupportLinks: function() {
+	getSupportLinks: function() {
 		var aboutLink = getString('NextThought.view.menus.Settings.about.href', null, true) || 'http://nextthought.com';
 		var supportEmailLink = getString('NextThought.view.menus.Settings.supportEmail', null, true) || null;
 
@@ -629,12 +629,12 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		});
 	},
 
-    overrideServiceLink: function(link, value) {
+	overrideServiceLink: function(link, value) {
 		var o = {}; o[link] = value || undefined;
 		this.supportLinks = Ext.apply(this.supportLinks || {}, o);
 	},
 
-    __resolveBoards: function(link, community) {
+	__resolveBoards: function(link, community) {
 		return Service.request(link)
 				.then(ParseUtils.parseItems.bind(ParseUtils))
 				.then(function(objs) {
@@ -656,7 +656,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 				});
 	},
 
-    getRootBoardLink: function() {
+	getRootBoardLink: function() {
 		var collection = this.getCollection('Boards', $AppConfig.username),
 			links = collection && collection.Links,
 			link = links && this.getLinkFrom(links, 'global.site.board');
@@ -664,7 +664,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return link;
 	},
 
-    resolveRootBoards: function() {
+	resolveRootBoards: function() {
 		var me = this,
 			rootLink = me.getRootBoardLink(),
 			communities;
@@ -688,7 +688,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		});
 	},
 
-    //region capability shortcuts
+	//region capability shortcuts
 	/*
 		 *	The following methods are for deciding when things can or cannot happen
 		 */
@@ -697,64 +697,64 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return this.hasCapability('nti.platform.customization.avatar_upload');
 	},
 
-    canBlog: function() {
+	canBlog: function() {
 		return this.hasCapability('nti.platform.blogging.createblogentry');
 	},
 
-    canChat: function() {
+	canChat: function() {
 		return this.hasCapability('nti.platform.p2p.chat');
 	},
 
-    canShare: function() {
+	canShare: function() {
 		return this.hasCapability('nti.platform.p2p.sharing');
 	},
 
-    canFriend: function() {
+	canFriend: function() {
 		return this.hasCapability('nti.platform.p2p.friendslists');
 	},
 
-    canHaveForum: function() {
+	canHaveForum: function() {
 		return this.hasCapability('nti.platform.forums.communityforums');
 	},
 
-    canChangePassword: function() {
+	canChangePassword: function() {
 		return this.hasCapability('nti.platform.customization.can_change_password');
 	},
 
-    //Removed crazy filter logic after consoluting Greg and Jason on 1/16/2014. -cutz
+	//Removed crazy filter logic after consoluting Greg and Jason on 1/16/2014. -cutz
 	canCreateDynamicGroups: function() {
 		return this.hasCapability('nti.platform.p2p.dynamicfriendslists');
 	},
 
-    canDoAdvancedEditing: function() {
+	canDoAdvancedEditing: function() {
 		return this.hasCapability('nti.platform.courseware.advanced_editing');
 	},
 
-    hasCapability: function(c) {
+	hasCapability: function(c) {
 		var caps = this.get('CapabilityList') || [];
 		return Ext.Array.contains(caps, c);
 	},
 
-    canCanvasURL: function() {
+	canCanvasURL: function() {
 		var coll = Service.getCollectionFor('application/vnd.nextthought.canvasurlshape', 'Pages');
 		return !!coll;
 	},
 
-    canEmbedVideo: function() {
+	canEmbedVideo: function() {
 		var coll = Service.getCollectionFor('application/vnd.nextthought.embeddedvideo', 'Pages');
 		return !!coll;
 	},
 
-    canShareRedaction: function() {
+	canShareRedaction: function() {
 		return false;
 	},
 
-    canRedact: function() {
+	canRedact: function() {
 		var coll = Service.getCollectionFor('application/vnd.nextthought.redaction', 'Pages');
 		return !!coll;
 	},
 
-    //endregion
+	//endregion
 	canWorkspaceBlog: function() {
 		return Boolean(Service.getCollection('Blog'));
 	}

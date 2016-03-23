@@ -6,10 +6,10 @@ var OverviewgroupInlineEditor = require('./InlineEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.Editor', {
-    extend: 'NextThought.app.course.overview.components.editing.Editor',
-    alias: 'widget.overview-editing-overviewgroup-editor',
+	extend: 'NextThought.app.course.overview.components.editing.Editor',
+	alias: 'widget.overview-editing-overviewgroup-editor',
 
-    statics: {
+	statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.courses.overview.Group.mimeType
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    addFormCmp: function() {
+	addFormCmp: function() {
 		return this.add({
 			xtype: 'overview-editing-overviewgroup-inlineeditor',
 			record: this.record,
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    onSave: function() {
+	onSave: function() {
 		var me = this,
 			parentSelection = me.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    addParentSelection: function(record, parentRecord, rootRecord, onChange) {
+	addParentSelection: function(record, parentRecord, rootRecord, onChange) {
 		if (!rootRecord) { return null; }
 
 		var items = rootRecord.get('Items');

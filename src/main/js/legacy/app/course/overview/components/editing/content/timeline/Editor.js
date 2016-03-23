@@ -6,10 +6,10 @@ var ModelTimeline = require('../../../../../../../model/Timeline');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.Editor', {
-    extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-    alias: 'widget.overview-editing-timeline',
+	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+	alias: 'widget.overview-editing-timeline',
 
-    statics: {
+	statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.Timeline.mimeType
@@ -30,9 +30,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    addFormCmp: function() {},
+	addFormCmp: function() {},
 
-    showEditor: function() {
+	showEditor: function() {
 		if (this.selectedItems || this.record) {
 			this.showTimelineEditor();
 		} else {
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    showTimelineEditor: function() {
+	showTimelineEditor: function() {
 		if (this.timelineEditorCmp) {
 			this.timelineEditorCmp.destroy();
 			delete this.timelineEditorCmp;
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.maybeEnableBack('Timeline');
 	},
 
-    showTimelineList: function() {
+	showTimelineList: function() {
 		var me = this;
 
 		if (this.listCmp) {
@@ -93,11 +93,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    __sortTimelines: function(items) {
+	__sortTimelines: function(items) {
 		return items;
 	},
 
-    onDiscussionSelectionChange: function(selection) {
+	onDiscussionSelectionChange: function(selection) {
 		var length = selection.length;
 
 		if (length === 0) {
@@ -108,13 +108,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    maybeEnableBack: function(text) {
+	maybeEnableBack: function(text) {
 		if (!this.record && this.enableBack) {
 			this.enableBack(text);
 		}
 	},
 
-    onSave: function() {
+	onSave: function() {
 		var me = this;
 		if (!me.editorCmp) {
 			me.showTimelineEditor();
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    onSaveFailure: function(reason) {
+	onSaveFailure: function(reason) {
 		if (reason === this.SWITCHED) { return; }
 
 		this.callParent(arguments);

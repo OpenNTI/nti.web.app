@@ -5,29 +5,29 @@ var ControlsPublish = require('../../controls/Publish');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.ListItem', {
-    extend: 'Ext.Component',
-    alias: 'widget.overview-editing-outlinenode-listitem',
+	extend: 'Ext.Component',
+	alias: 'widget.overview-editing-outlinenode-listitem',
 
-    mixins: {
+	mixins: {
 		OrderingItem: 'NextThought.mixins.dnd.OrderingItem'
 	},
 
-    cls: 'outline-node-listitem',
-    layout: 'none',
+	cls: 'outline-node-listitem',
+	layout: 'none',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'calendar-container'},
 		{cls: 'title'},
 		{cls: 'controls'}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		titleEl: '.title',
 		controlsEl: '.controls',
 		dateContainerEl: '.date-container'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var move = new NextThought.model.app.MoveInfo({
@@ -44,18 +44,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			]).then(this.addParts.bind(this));
 	},
 
-    onceLoaded: function() {
+	onceLoaded: function() {
 		return this.loadContents || Promise.resolve();
 	},
 
-    afterRender: function(){
+	afterRender: function(){
 		this.callParent(arguments);
 
 		this.mon(this.titleEl, 'click', this.handleClick.bind(this));
 		this.addCalendarPicker();
 	},
 
-    addParts: function(o) {
+	addParts: function(o) {
 		var me = this, 
 			controls = o[1] || [];
 
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.onceRendered
 			.then(function() {
 				var start = me.record && me.record.get('AvailableBeginning'),
-				 	config;
+					config;
 				
 				// Set dates
 				me.getStartDate()
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    /**
+	/**
 	 * For now, restrict the drag and drop to only the title.
 	 * We don't want drag the controls.
 	 */
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return this.titleEl.dom;
 	},
 
-    addCalendarPicker: function(){
+	addCalendarPicker: function(){
 		var container = this.el.down('.calendar-container');
 
 		if (container) {
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    getStartDate: function(){
+	getStartDate: function(){
 		var start = this.record && this.record.get('AvailableBeginning'),
 			catalog;
 
@@ -122,20 +122,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Promise.resolve(catalog.get('StartDate'));
 	},
 
-    setDayAndMonth: function(date){
+	setDayAndMonth: function(date){
 		var parts, m;
 		if (this.dateCmp && this.dateCmp.setDayAndMonth) {
 			this.dateCmp.setDayAndMonth(date);
 		}	
 	},
 
-    handleClick: function(e){
+	handleClick: function(e){
 		if (this.navigateToOutlineNode) {
 			this.navigateToOutlineNode(this.record);
 		}
 	},
 
-    getPreview: function(record) {
+	getPreview: function(record) {
 		return Promise.resolve({
 			xtype: 'box',
 			autoEl: {
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    getControls: function(record, bundle) {
+	getControls: function(record, bundle) {
 		var me = this;
 
 		return record.getContents()

@@ -11,7 +11,7 @@ var StoreBatchInterface = require('../../../store/BatchInterface');
  */
 
 module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource', {
-    /**
+	/**
 	 * Construct an instance of a StreamSource
 	 *
 	 * @memberOf NextThought.app.stream.util.StreamSource#
@@ -83,11 +83,11 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 		};
 	},
 
-    getURL: function() {
+	getURL: function() {
 		return this.url;
 	},
 
-    /**
+	/**
 	 * Build the params to send back with the request
 	 *
 	 * @memberOf  NextThought.app.stream.util.StreamSource#
@@ -116,11 +116,11 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 		return params;
 	},
 
-    __getBatch: function() {
+	__getBatch: function() {
 		return this.currentBatch;
 	},
 
-    getCurrentBatch: function() {
+	getCurrentBatch: function() {
 		if (!this.currentBatch) {
 			this.currentBatch = new NextThought.store.BatchInterface({
 				url: this.getURL(),
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 		return this.currentBatch.getBatch();
 	},
 
-    getNextBatch: function() {
+	getNextBatch: function() {
 		var me = this,
 			batch = me.__getBatch();
 
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 			});
 	},
 
-    getPreviousBatch: function() {
+	getPreviousBatch: function() {
 		var me = this,
 			batch = me.__getBatch();
 
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 			});
 	},
 
-    reset: function() {
+	reset: function() {
 		delete this.currentBatch;
 	}
 });

@@ -4,9 +4,9 @@ var ModelQuizQuestionResponse = require('./QuizQuestionResponse');
 
 
 module.exports = exports = Ext.define('NextThought.model.QuizResult', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    fields: [
+	fields: [
 		{ name: 'QuizID', type: 'string' },
 		{ name: 'Items', type: 'arrayItem' }
 	]

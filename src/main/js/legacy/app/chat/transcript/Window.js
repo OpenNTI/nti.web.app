@@ -18,14 +18,14 @@ var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.chat-transcript-window',
-    layout: 'none',
-    autoScroll: true,
-    cls: 'chat-window no-gutter chat-transcript-window scrollable',
-    titleTpl: '{0} (Chat History)',
+	extend: 'Ext.container.Container',
+	alias: 'widget.chat-transcript-window',
+	layout: 'none',
+	autoScroll: true,
+	cls: 'chat-window no-gutter chat-transcript-window scrollable',
+	titleTpl: '{0} (Chat History)',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.WindowActions = NextThought.app.windows.Actions.create();
 
@@ -49,18 +49,18 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 		}
 	},
 
-    ui: 'chat-window',
+	ui: 'chat-window',
 
-    tools: {
+	tools: {
 		'flag-for-moderation': {
 			tip: 'Report',
 			handler: 'onFlagToolClicked'
 		}
 	},
 
-    fixScroll: Ext.emptyFn,
+	fixScroll: Ext.emptyFn,
 
-    //don't "fixScroll" in chat windows.
+	//don't "fixScroll" in chat windows.
 
 	afterRender: function() {
 		var btn;
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 		}
 	},
 
-    maybeEnableButtons: function() {
+	maybeEnableButtons: function() {
 		var b = this.down('[flagButton]');
 		//if there is checked stuff down there, enable button
 		if (this.el.down('.control.checked')) {
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 		}
 	},
 
-    flagMessages: function() {
+	flagMessages: function() {
 		var allFlaggedEntries = this.el.query('.message.flagged'),
 				allFlaggedMessages = [],
 				guid, m;
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 		this.fireEvent('flag-messages', allFlaggedMessages, this);
 	},
 
-    onFlagToolClicked: function() {
+	onFlagToolClicked: function() {
 		var transcriptViews = this.query('chat-transcript'),
 				btn = this.el.down('.flag-for-moderation');
 
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 		}
 	},
 
-    clearFlagOptions: function() {
+	clearFlagOptions: function() {
 		var allFlaggedEntries = this.el.query('.message.flagged'),
 				checked = this.el.query('.control.checked');
 		Ext.each(allFlaggedEntries, function(f) {
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 		this.maybeEnableButtons();
 	},
 
-    failedToLoadTranscript: function() {
+	failedToLoadTranscript: function() {
 		alert({
 				  msg: 'There was an error loading chat history for:' + (this.errorMsgSupplement || ''),
 				  width: 450
@@ -145,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 		this.destroy();
 	},
 
-    setTitleInfo: function(contributors) {
+	setTitleInfo: function(contributors) {
 		var me = this;
 		// list = me.down('chat-gutter');
 
@@ -160,14 +160,14 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 			// list.updateList(users);
 
 			// me.windowHeader.setTitle(list.isHidden()
-			// 					? Ext.String.format(me.titleTpl, names.join(','))
-			// 					: 'Group Chat History');
+			//					? Ext.String.format(me.titleTpl, names.join(','))
+			//					: 'Group Chat History');
 
 			me.windowHeader.setTitle(Ext.String.format(me.titleTpl, names.join(',')));
 		});
 	},
 
-    insertTranscript: function(record) {
+	insertTranscript: function(record) {
 		this.setTitleInfo(record.get('Contributors'));
 
 		var time = record.get('RoomInfo').get('CreatedTime') || record.get('CreatedTime'),

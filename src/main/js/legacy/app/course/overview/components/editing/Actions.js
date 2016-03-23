@@ -175,18 +175,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * This originalPosition and newPosition both look like:
 	 *
 	 * {
-	 * 	parent: Model, //something that mixins the OrderedContents
-	 * 	index: Number, //the position in that parent
+	 *	parent: Model, //something that mixins the OrderedContents
+	 *	index: Number, //the position in that parent
 	 * }
 	 *
 	 * If the originalPosition and newPosition are records, treat it as an append
 	 *
-	 * @param  {NextThought.common.form.Form} form           the form component with the inputs
-	 * @param  {Object} record         the record we are editing, null if creating
+	 * @param  {NextThought.common.form.Form} form			 the form component with the inputs
+	 * @param  {Object} record		   the record we are editing, null if creating
 	 * @param  {Object} originalPosition the parent and index the record started at
-	 * @param  {Object} newPosition      the parent and index the record is moving to
-	 * @param  {Object} root           the root of both parents
-	 * @return {Promise}               fulfill when successful, reject when fail
+	 * @param  {Object} newPosition		 the parent and index the record is moving to
+	 * @param  {Object} root		   the root of both parents
+	 * @return {Promise}			   fulfill when successful, reject when fail
 	 */
 	saveEditorForm: function(form, record, originalPosition, newPosition, root, visibilityCmp) {
 		var me = this;
@@ -226,7 +226,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * The first one we, post to the publish link to make it publish
 	 * and then we edit the AvailableBeginning date and then post to the edit link.
 	 *
-	 * @param  {CourseOutlineNode} record       A record with a publish link.
+	 * @param  {CourseOutlineNode} record		A record with a publish link.
 	 * @param  {TimeStamp} optionalDate Optional date to publish a date on
 	 * @return {Promise}  fulfills when successfully published, reject when it failed.
 	 */
@@ -268,7 +268,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	/**
 	 * Handle un-publishing a record (i.e. CourseOutlineNode, CourseOutlineContentNode)
 	 *
-	 * @param  {CourseOutlineNode} record       A record with a publish link.
+	 * @param  {CourseOutlineNode} record		A record with a publish link.
 	 * @return {Promise}  fulfills when successfully published, reject when it failed.
 	 */
 	unpublish: function(record) {

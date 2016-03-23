@@ -7,10 +7,10 @@ var QuestionsetSelfAssessmentEditor = require('../SelfAssessmentEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.types.SelfAssessment', {
-    extend: 'NextThought.app.course.overview.components.editing.content.questionset.types.Assignment',
-    alias: 'widget.overview-editing-questionset-self-assessment',
+	extend: 'NextThought.app.course.overview.components.editing.content.questionset.types.Assignment',
+	alias: 'widget.overview-editing-questionset-self-assessment',
 
-    statics: {
+	statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.QuestionSetRef.mimeType
@@ -37,13 +37,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    EDITOR_XTYPE: 'overview-editing-self-assessment-editor',
-    LIST_XTYPE: 'overview-editing-self-assessment-selection',
-    backToList: 'Self Assessments',
-    SWITCHED: 'switched',
-    cls: 'content-editor questionset self-assessment',
+	EDITOR_XTYPE: 'overview-editing-self-assessment-editor',
+	LIST_XTYPE: 'overview-editing-self-assessment-selection',
+	backToList: 'Self Assessments',
+	SWITCHED: 'switched',
+	cls: 'content-editor questionset self-assessment',
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.loading) {
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    getItemList: function() {
+	getItemList: function() {
 		return this.bundle.getAllAssessments();
 	}
 });

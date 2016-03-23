@@ -4,17 +4,17 @@ var ResolversVideoPosters = require('./resolvers/VideoPosters');
 
 
 module.exports = exports = Ext.define('NextThought.model.Video', {
-    extend: 'NextThought.model.Base',
-    mimeType: 'application/vnd.nextthought.ntivideo',
+	extend: 'NextThought.model.Base',
+	mimeType: 'application/vnd.nextthought.ntivideo',
 
-    statics: {
+	statics: {
 		mimeType: 'application/vnd.nextthought.ntivideo',
 		refMimeType: 'application/vnd.nextthought.ntivideoref'
 	},
 
-    idProperty: 'ntiid',
+	idProperty: 'ntiid',
 
-    fields: [
+	fields: [
 		{name: 'description', type: 'string'},
 		{name: 'poster', type: 'string'},
 		{name: 'subtitle', type: 'string'},
@@ -25,23 +25,23 @@ module.exports = exports = Ext.define('NextThought.model.Video', {
 		{name: 'ntiid', type: 'string'}
 	],
 
-    getId: function() {
+	getId: function() {
 		return this.get('ntiid') || this.get('NTIID');
 	},
 
-    getTitle: function() {
+	getTitle: function() {
 		return this.get('label');
 	},
 
-    getPoster: function() {
+	getPoster: function() {
 		return Promise.resolve(this.get('poster'));
 	},
 
-    getIcon: function() {
+	getIcon: function() {
 		return this.getPoster();
 	},
 
-    __resolvePosterFromSource: function() {
+	__resolvePosterFromSource: function() {
 		var sources = this.get('sources');
 
 		return Promise.all(sources.map(function(source) {
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.model.Video', {
 		}));
 	},
 
-    resolveThumbnail: function() {
+	resolveThumbnail: function() {
 		var poster = this.get('poster');
 
 		if (poster) {
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.model.Video', {
 			});
 	},
 
-    shouldBeRoot: function() {
+	shouldBeRoot: function() {
 		return true;
 	}
 });

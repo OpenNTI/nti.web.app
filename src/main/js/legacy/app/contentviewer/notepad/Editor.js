@@ -4,12 +4,12 @@ var EditorEditor = require('../../../editor/Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Editor', {
-    extend: 'Ext.Component',
-    alias: 'widget.notepad-editor',
-    ui: 'notepad-item',
-    cls: 'inline-editor',
+	extend: 'Ext.Component',
+	alias: 'widget.notepad-editor',
+	ui: 'notepad-item',
+	cls: 'inline-editor',
 
-    renderTpl: Ext.DomHelper.markup({
+	renderTpl: Ext.DomHelper.markup({
 		cls: 'body',
 		id: '{id}-body',
 		contentEditable: true,
@@ -23,9 +23,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Edi
 		]
 	}),
 
-    childEls: ['body'],
+	childEls: ['body'],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.on({
 			afterRender: 'setup',
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Edi
 		});
 	},
 
-    setup: function() {
+	setup: function() {
 		var v;
 		this.body.selectable();
 		if (!Ext.isEmpty(this.value)) {
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Edi
 		this[this.isEmpty() ? 'addCls' : 'removeCls']('empty');
 	},
 
-    onKeyDown: function(e) {
+	onKeyDown: function(e) {
 		this.stop(e);
 		if (e.getKey() === e.ESC) {
 			this.fireEvent('cancel');
@@ -66,29 +66,29 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Edi
 
 	},
 
-    doLater: function(fn,args){
+	doLater: function(fn,args){
 		if(this.isDestroyed){return;}
 		this[fn].apply(this,args);
 	},
 
-    stop: function(e) {
+	stop: function(e) {
 		e.stopPropagation();
 	},
 
-    focus: function() {
+	focus: function() {
 		this.body.focus();
 		this.moveCursorToEnd(this.body.last());
 	},
 
-    blur: function() {
+	blur: function() {
 		this.fireEvent('blur', this);
 	},
 
-    isEmpty: function isEmpty() {
+	isEmpty: function isEmpty() {
 		return DomUtils.isEmpty(this.getValue());
 	},
 
-    getValue: function() {
+	getValue: function() {
 		//Sanitize some new line stuff that various browsers produce.
 		//See http://stackoverflow.com/a/12832455 and http://jsfiddle.net/sathyamoorthi/BmTNP/5/
 		var out = [];

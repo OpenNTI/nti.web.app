@@ -4,22 +4,22 @@ var WindowWindow = require('../window/Window');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {
-    extend: 'NextThought.common.window.Window',
-    alias: 'widget.iframe-lightbox',
-    modal: true,
-    plain: true,
-    shadow: false,
-    frame: false,
-    border: false,
-    floating: true,
-    closeAction: 'destroy',
-    cls: 'lightbox x-panel-lightbox',
-    ui: 'lightbox',
-    widthRatio: 0.8,
-    heightRatio: 0.75,
-    layout: 'fit',
+	extend: 'NextThought.common.window.Window',
+	alias: 'widget.iframe-lightbox',
+	modal: true,
+	plain: true,
+	shadow: false,
+	frame: false,
+	border: false,
+	floating: true,
+	closeAction: 'destroy',
+	cls: 'lightbox x-panel-lightbox',
+	ui: 'lightbox',
+	widthRatio: 0.8,
+	heightRatio: 0.75,
+	layout: 'fit',
 
-    constructor: function(config) {
+	constructor: function(config) {
 		var me = this;
 		me.callParent(arguments);
 		Ext.EventManager.onWindowResize(me.syncSize, me, false);
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {
 		Ext.TaskManager.start(me.task);
 	},
 
-    noContent: function() {
+	noContent: function() {
 		this.getComponent('content')
 				.addCls('empty-state')
 				.removeCls('loading')
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {
 				]));
 	},
 
-    setContent: function(content) {
+	setContent: function(content) {
 		var c, dom = document.createElement('HTML'); dom.innerHTML = content;
 		content = dom.querySelector('BODY').innerHTML;
 
@@ -89,14 +89,14 @@ module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {
 		});
 	},
 
-    syncSize: function() {
+	syncSize: function() {
 		this.setSize(
 				Math.floor(Ext.Element.getViewportWidth() * (this.widthRatio || 0.5)),
 				Math.floor(Ext.Element.getViewportHeight() * (this.heightRatio || 0.5)));
 		this.center();
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(Ext.DomHelper.append(this.el, { cls: 'close', 'data-qtip': 'close' }, true), {
 			scope: this,
@@ -104,9 +104,9 @@ module.exports = exports = Ext.define('NextThought.common.ux.IFramePopout', {
 		});
 	},
 
-    setPosition: function() {},
+	setPosition: function() {},
 
-    //TODO: come up with a better system for positioning these windows
+	//TODO: come up with a better system for positioning these windows
 	center: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.center.bind(this));

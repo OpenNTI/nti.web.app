@@ -5,12 +5,12 @@ var OutlinenodeEditor = require('./Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.ChildCreation', {
-    extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
-    alias: 'widget.overview-editing-outlinenode-childcreation',
-    title: 'Lesson',
-    saveText: 'Add to Unit',
+	extend: 'NextThought.app.course.overview.components.editing.creation.ChildCreation',
+	alias: 'widget.overview-editing-outlinenode-childcreation',
+	title: 'Lesson',
+	saveText: 'Add to Unit',
 
-    statics: {
+	statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.courses.navigation.CourseOutlineNode.mimeType
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    setUpTypeList: function() {
+	setUpTypeList: function() {
 		this.callParent(arguments);
 	}
 });

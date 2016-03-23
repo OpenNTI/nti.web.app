@@ -7,12 +7,12 @@ var UtilScrolling = require('../../util/Scrolling');
 
 
 module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
-    mixins: {
+	mixins: {
 		Scrolling: 'NextThought.mixins.Scrolling',
 		observable: 'Ext.util.Observable'
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		this.mixins.observable.constructor.call(this, config);
 
 		this.DnDStore = NextThought.app.dnd.StateStore.getInstance();
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		});
 	},
 
-    __setOrRemoveDropListeners: function(remove) {
+	__setOrRemoveDropListeners: function(remove) {
 
 		this.isEnabled = !remove;
 
@@ -77,27 +77,27 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		}
 	},
 
-    enableDropzone: function() {
+	enableDropzone: function() {
 		this.__setOrRemoveDropListeners();
 	},
 
-    disableDropzone: function() {
+	disableDropzone: function() {
 		this.__setOrRemoveDropListeners(true);
 	},
 
-    /**
+	/**
 	 * The handler is be a group of functions that looks like:
 	 *
 	 * {
-	 * 	onDrop: fn, //call to handle the drop event
-	 * 	isValid: fn, //returns a boolean value, if the given data transfer is valid
-	 * 	effect: String //returns a string of the drop effect to use (copy, move, link, copyMove, copyLink, linkMove, all)
+	 *	onDrop: fn, //call to handle the drop event
+	 *	isValid: fn, //returns a boolean value, if the given data transfer is valid
+	 *	effect: String //returns a string of the drop effect to use (copy, move, link, copyMove, copyLink, linkMove, all)
 	 * }
 	 *
 	 * NOTE: the data from the event will only be available in the same
 	 * event pump as the handler
 	 *
-	 * @param {String}   key the key to look in the data transfer for
+	 * @param {String}	 key the key to look in the data transfer for
 	 * @param {Object} fn  the methods
 	 */
 	setDataTransferHandler: function(key, handler) {
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		this.transferHandlers[key] = handler;
 	},
 
-    getHandlersForDataTransfer: function(dataTransfer) {
+	getHandlersForDataTransfer: function(dataTransfer) {
 		var handlers = this.transferHandlers,
 			keys = handlers && Object.keys(handlers);
 
@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		}, []);
 	},
 
-    __onDragStart: function() {
+	__onDragStart: function() {
 		var scrollingParent = this.findScrollableParent(this.getDropzoneTarget());
 
 		if (scrollingParent) {
@@ -140,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		}
 	},
 
-    __onDragStop: function() {
+	__onDragStop: function() {
 		if (this.scrollingParent) {
 			this.scrollingParent.unscrollWhenDragNearEdges();
 		}
@@ -150,17 +150,17 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		}
 	},
 
-    __isValidTransfer: function(dataTransfer) {
+	__isValidTransfer: function(dataTransfer) {
 		return !!dataTransfer.containsType(NextThought.model.app.DndInfo.mimeType);
 	},
 
-    __isValidDrop: function(dataTransfer) {
+	__isValidDrop: function(dataTransfer) {
 		var dndInfo = dataTransfer.getData(NextThought.model.app.DndInfo.mimeType);
 
 		return !!dndInfo;//TODO: maybe check the source and version number
 	},
 
-    __getEffectForHandlers: function(handlers) {
+	__getEffectForHandlers: function(handlers) {
 		var effect, handler, i = 0;
 
 		handler = handlers[i];
@@ -174,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		return effect;
 	},
 
-    __dragEnter: function(e) {
+	__dragEnter: function(e) {
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -200,7 +200,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		}
 	},
 
-    __dragLeave: function(e) {
+	__dragLeave: function(e) {
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		}
 	},
 
-    __dragOver: function(e) {
+	__dragOver: function(e) {
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -243,7 +243,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		}
 	},
 
-    __dragDrop: function(e) {
+	__dragDrop: function(e) {
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -264,7 +264,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 		}
 	},
 
-    __callHandlers: function(e, dataTransfer) {
+	__callHandlers: function(e, dataTransfer) {
 		var handlers = this.transferHandlers || {},
 			keys = Object.keys(handlers);
 

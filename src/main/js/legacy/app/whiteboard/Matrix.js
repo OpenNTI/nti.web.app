@@ -52,20 +52,20 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 
 
 	translate: function(x, y) {
-    if (Ext.isArray(x)) {
-      y = x[1];
-      x = x[0];
-    }
+	if (Ext.isArray(x)) {
+	  y = x[1];
+	  x = x[0];
+	}
 		this.multiply({m: [1, 0, 0, 1, x, y]});
 	},
 
 
 	scale: function(sx, sy) {
-    if (Ext.isArray(sx)) {
-      sy = sx[1];
-      sx = sx[0];
-    }
-    if (sy === undefined) { sy = sx; }
+	if (Ext.isArray(sx)) {
+	  sy = sx[1];
+	  sx = sx[0];
+	}
+	if (sy === undefined) { sy = sx; }
 		this.multiply({m: [sx, 0, 0, sy, 0, 0]});
 	},
 
@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 
 	getRotation: function() {
 		var m = this.m, a = m[0], b = m[1];
-    //			c = m[2], d = m[3];
+	//			c = m[2], d = m[3];
 
 		return Math.atan2(b, a);
 	},

@@ -6,21 +6,21 @@ var BlogActions = require('../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
-    extend: 'NextThought.editor.Editor',
-    alias: 'widget.profile-blog-editor',
-    enableTags: true,
-    enableTitle: true,
-    enableVideo: true,
-    enableShareControls: true,
-    keyboardUp: false,
-    amountScrolled: 0,
-    cls: 'blog-editor scrollable',
-    headerTplOrder: '{title}{toolbar}',
+	extend: 'NextThought.editor.Editor',
+	alias: 'widget.profile-blog-editor',
+	enableTags: true,
+	enableTitle: true,
+	enableVideo: true,
+	enableShareControls: true,
+	keyboardUp: false,
+	amountScrolled: 0,
+	cls: 'blog-editor scrollable',
+	headerTplOrder: '{title}{toolbar}',
 
-    //TODO: update CSS to not require this nesting.
+	//TODO: update CSS to not require this nesting.
 	renderTpl: Ext.DomHelper.markup({ cls: 'editor active', html: '{super}' }),
 
-    renderSelectors: {
+	renderSelectors: {
 		cancelEl: '.action.cancel',
 		saveEl: '.action.save',
 		publishEl: '.action.publish',
@@ -30,13 +30,13 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 		editorEl: '.editor'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.addEvents(['save-post']);
 		this.BlogActions = NextThought.app.blog.Actions.create();
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		var r = this.record,
 			me = this,
@@ -111,13 +111,13 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 		}
 	},
 
-    destroy: function() {
+	destroy: function() {
 		Ext.EventManager.removeResizeListener(this.syncHeight, this);
 
 		return this.callParent(arguments);
 	},
 
-    syncHeight: function() {
+	syncHeight: function() {
 		var el = this.contentEl,
 			container = this.ownerCt && this.ownerCt.el && this.ownerCt.el.dom,
 			containerRect = container && container.getBoundingClientRect(),
@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 			.then(this.updateLayout.bind(this));
 	},
 
-    onSave: function(e) {
+	onSave: function(e) {
 		e.stopEvent();
 		var me = this,
 			v = this.getValue(),
@@ -200,11 +200,11 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 			});
 	},
 
-    onSaveSuccess: function() {
+	onSaveSuccess: function() {
 		this.destroy();
 	},
 
-    onSaveFailure: function(proxy, response, operation) {
+	onSaveFailure: function(proxy, response, operation) {
 		var msg = getString('NextThought.view.profiles.parts.BlogEditor.unknown'), error;
 
 		if (response && response.responseText) {
@@ -217,7 +217,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 		console.debug(arguments);
 	},
 
-    onCancel: function(e) {
+	onCancel: function(e) {
 		e.stopEvent();
 
 		this.fireEvent('cancel');

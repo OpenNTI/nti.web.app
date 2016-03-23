@@ -3,19 +3,19 @@ var ParseUtils = require('../../../util/Parsing');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node', {
-    extend: 'Ext.data.Model',
-    idProperty: 'NTIID',
+	extend: 'Ext.data.Model',
+	idProperty: 'NTIID',
 
-    proxy: {
+	proxy: {
 		type: 'memory',
 		reader: {
-		    type: 'xml',
-		    root: 'course',
+			type: 'xml',
+			root: 'course',
 			record: 'unit,lesson'//flatten the tree
 		}
 	},
 
-    fields: [
+	fields: [
 		{ name: 'src', type: 'string', mapping: '@src'},
 
 			//id
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node
 		}
 	],
 
-    parseDates: function(str, fieldScope) {
+	parseDates: function(str, fieldScope) {
 		if (Ext.isEmpty(str)) {
 			return null;
 		}
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node
 		return v;
 	},
 
-    getAssociatedNode: function() {
+	getAssociatedNode: function() {
 		var n = this.raw,
 			ntiid;
 		if (!this.associatedNode) {
@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node
 		return this.associatedNode;
 	},
 
-    getChildren: function() {
+	getChildren: function() {
 		var n = this.get('tocNode'),
 			c = n && n.getChildren();
 
@@ -140,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Node
 		return Ext.Array.clone(n.getChildren());
 	},
 
-    listenForFieldChange: function(field, fn, scope, single) {
+	listenForFieldChange: function(field, fn, scope, single) {
 		var monitor;
 
 		function update(store, record, type, modifiedFieldNames) {

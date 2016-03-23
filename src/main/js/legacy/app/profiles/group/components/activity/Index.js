@@ -8,22 +8,22 @@ var UserdataActions = require('../../../../userdata/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.components.activity.Index', {
-    extend: 'NextThought.app.profiles.user.components.activity.Index',
-    alias: 'widget.profile-group-activity',
+	extend: 'NextThought.app.profiles.user.components.activity.Index',
+	alias: 'widget.profile-group-activity',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-    cls: 'activity-page',
-    layout: 'none',
+	cls: 'activity-page',
+	layout: 'none',
 
-    items: [
+	items: [
 		{xtype: 'profile-group-activity-body'},
 		{xtype: 'profile-group-activity-sidebar'}
 	],
 
-    initChildComponentRefs: function() {
+	initChildComponentRefs: function() {
 		this.streamCmp = this.down('profile-group-activity-body');
 		this.sidebarCmp = this.down('profile-group-activity-sidebar');
 		this.membershipCmp = this.down('profile-group-membership-condensed');
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		this.streamCmp.navigateToObject = this.navigateToActivityItem.bind(this);
 	},
 
-    onAddedToParentRouter: function() {
+	onAddedToParentRouter: function() {
 		var me = this;
 
 		this.membershipCmp.gotoSeeAll = function() {
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		};
 	},
 
-    navigateToActivityItem: function(item, monitors) {
+	navigateToActivityItem: function(item, monitors) {
 		this.Router.root.attemptToNavigateToObject(item, monitors);
 	}
 });

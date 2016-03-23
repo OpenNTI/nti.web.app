@@ -11,31 +11,31 @@ var BlogActions = require('../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
-    extend: 'NextThought.app.blog.parts.old.Topic',
-    alias: 'widget.profile-blog-post',
+	extend: 'NextThought.app.blog.parts.old.Topic',
+	alias: 'widget.profile-blog-post',
 
-    mixins: {
+	mixins: {
 		Searchable: 'NextThought.mixins.Searchable'
 	},
 
-    cls: 'entry',
-    defaultType: 'profile-blog-comment',
+	cls: 'entry',
+	defaultType: 'profile-blog-comment',
 
-    pathTpl: Ext.DomHelper.markup([
+	pathTpl: Ext.DomHelper.markup([
 		{cls: 'path', cn: [
 			{tag: 'span', cls: 'part back-part', 'data-qtip': '{path}', html: '{path}'},
 			{tag: 'span', cls: 'part title-part current', 'data-qtip': '{title}' , html: '{title}'}
 		]}
 	]),
 
-    constructor: function() {
+	constructor: function() {
 		this.threaded = false;
 		this.callParent(arguments);
 
 		this.BlogActions = NextThought.app.blog.Actions.create();
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		var r, headline = this.record.get('headline');
@@ -62,13 +62,13 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 		});
 	},
 
-    renderSelectors: {
+	renderSelectors: {
 		publishStateEl: '.meta .state'
 	},
 
-    setPath: function() {},
+	setPath: function() {},
 
-    updateRecord: function(record, store) {
+	updateRecord: function(record, store) {
 		if (!record || !store) { return; }
 
 		try {
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 		}
 	},
 
-    updateField: function(key, value) {
+	updateField: function(key, value) {
 		var el = this.el.down('.' + key), len;
 		if (el) {
 			if (Ext.isArray(value) && key === 'tags') {
@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 		}
 	},
 
-    buildStore: function() {
+	buildStore: function() {
 		this.store = NextThought.store.Blog.create({
 			storeId: this.record.get('Class') + '-' + this.record.get('NTIID')
 		});
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 		this.store.load();
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		var commentId;
 
@@ -141,15 +141,15 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 		this.initSearch();
 	},
 
-    getContainerIdForSearch: function() {
+	getContainerIdForSearch: function() {
 		return this.record.get('NTIID');
 	},
 
-    onceReadyForSearch: function() {
+	onceReadyForSearch: function() {
 		return wait();
 	},
 
-    closeView: function() {
+	closeView: function() {
 		if (this.closedPost) {
 			return;
 		}
@@ -162,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 		}
 	},
 
-    saveComment: function(editor, record, valueObject) {
+	saveComment: function(editor, record, valueObject) {
 		var me = this;
 
 		if (me.editor.el) {
@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 			});
 	},
 
-    navigationClick: function(e) {
+	navigationClick: function(e) {
 		e.stopEvent();
 		var direction = Boolean(e.getTarget('.next')),
 			disabled = Boolean(e.getTarget('.disabled'));
@@ -202,34 +202,34 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 		return false;
 	},
 
-    getMainView: function() {
+	getMainView: function() {
 		return this.getEl().getScrollingEl();
 	},
 
-    onDestroy: function() {
+	onDestroy: function() {
 		this.closeView();
 		this.callParent(arguments);
 	},
 
-    fireDeleteEvent: function() {
+	fireDeleteEvent: function() {
 		this.BlogActions.deleteBlogPost(this.record)
 			.then(this.fireEvent.bind(this, 'record-deleted'));
 	},
 
-    destroyWarningMessage: function() {
+	destroyWarningMessage: function() {
 		return getString('NextThought.view.profiles.parts.BlogPost.warning');
 	},
 
-    onEditPost: function(e) {
+	onEditPost: function(e) {
 		e.stopEvent();
 		this.fireEvent('edit-topic', this.record);
 	},
 
-    setPublishAndSharingState: function() {
+	setPublishAndSharingState: function() {
 		this.updateSharedWith('sharedWith', this.record.get('sharedWith'));
 	},
 
-    updateSharedWith: function(field, value) {
+	updateSharedWith: function(field, value) {
 		var sharingInfo, tags,
 			published = this.record.isPublished();
 
@@ -257,13 +257,13 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 		this.publishStateEl[published ? 'removeCls' : 'addCls']('private');
 	},
 
-    addIncomingComment: function(item) {
+	addIncomingComment: function(item) {
 		if (this.isVisible() && item.get('ContainerId') === this.record.getId() && isMe(this.record.get('Creator'))) {
 			this.addComments(this.store, [item]);
 		}
 	},
 
-    onReady: function() {
+	onReady: function() {
 		function scrollCommentIntoView() {
 			if (typeof(me.scrollToComment) === 'boolean') {
 				el = me.getTargetEl();
@@ -288,7 +288,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 		}
 	},
 
-    //Search hit highlighting
+	//Search hit highlighting
 	getSearchHitConfig: function() {
 		return {
 			key: 'blog',

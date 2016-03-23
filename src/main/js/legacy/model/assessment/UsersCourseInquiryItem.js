@@ -4,9 +4,9 @@ var AssessmentPollSubmission = require('./PollSubmission');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.UsersCourseInquiryItem', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    fields: [
+	fields: [
 		{name: 'Submission', type: 'singleItem'}
 	]
 });

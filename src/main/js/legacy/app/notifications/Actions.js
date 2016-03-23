@@ -9,9 +9,9 @@ var ModelChange = require('../../model/Change');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.NotificationsStore = NextThought.app.notifications.StateStore.getInstance();
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 		}
 	},
 
-    doLogin: function() {
+	doLogin: function() {
 		var store = this.NotificationsStore;
 
 		Service.getPageInfo(Globals.CONTENT_ROOT)
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 			});
 	},
 
-    incomingChange: function(change) {
+	incomingChange: function(change) {
 		var me = this;
 
 		this.NotificationsStore.getStore().then(function(store) {

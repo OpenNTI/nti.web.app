@@ -5,9 +5,9 @@ var {guidGenerator} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay', {
-    alias: 'reader.componentOverlay',
+	alias: 'reader.componentOverlay',
 
-    constructor: function(config) {
+	constructor: function(config) {
 		Ext.apply(this, config);
 
 		function sync() {
@@ -32,13 +32,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 		this.activeOverlayedPanels = {};
 	},
 
-    insertComponentOverlay: function() {
+	insertComponentOverlay: function() {
 		var container = Ext.DomHelper.append(this.reader.getInsertionPoint('innerCt'), { cls: 'component-overlay' }, true);
 		this.reader.on('destroy' , function() { container.remove(); });
 		this.componentOverlayEl = container;
 	},
 
-    overlayedPanelAtY: function(y) {
+	overlayedPanelAtY: function(y) {
 		var panel = null,
 			offsets = this.reader.getAnnotationOffsets();
 
@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 		return panel;
 	},
 
-    /**
+	/**
 	 *
 	 * @param {String|Object} key
 	 * @param {Object} [panel]
@@ -83,11 +83,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 		return panel;
 	},
 
-    adjustOverlayedPanels: function() {
+	adjustOverlayedPanels: function() {
 		NextThought.app.contentviewer.overlay.Panel.syncPositioning();
 	},
 
-    clearOverlayedPanels: function() {
+	clearOverlayedPanels: function() {
 		var active = this.activeOverlayedPanels,
 			myReader = this.reader;
 
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 			});
 	},
 
-    getRelatedElement: function(ntiid, objectEls) {
+	getRelatedElement: function(ntiid, objectEls) {
 		var i;
 		for (i = 0; i < objectEls.length; i++) {
 			if (!(objectEls[i].getAttribute)) { continue; }
@@ -120,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 		return undefined;
 	},
 
-    getContentElement: function(tagName, attribute, value) {
+	getContentElement: function(tagName, attribute, value) {
 		try {
 		var doc = this.reader.getDocumentElement(),
 			tags = doc.getElementsByTagName(tagName),

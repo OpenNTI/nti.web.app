@@ -3,14 +3,14 @@ var VideoservicesVimeo = require('../../../model/resolvers/videoservices/Vimeo')
 
 
 module.exports = exports = Ext.define('NextThought.app.video.roll.Roll', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.video-roll',
-    layout: 'anchor',
-    defaults: {anchor: '100%'},
-    cls: 'videos',
-    ui: 'video',
+	extend: 'Ext.container.Container',
+	alias: 'widget.video-roll',
+	layout: 'anchor',
+	defaults: {anchor: '100%'},
+	cls: 'videos',
+	ui: 'video',
 
-    items: [{
+	items: [{
 		name: 'video',
 		xtype: 'box',
 		cls: 'video',
@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.video.roll.Roll', {
 		}
 	}],
 
-    constructor: function(config) {
+	constructor: function(config) {
 		var store = config ? (config.store || undefined) : undefined,
 			data = config ? (config.data || undefined) : undefined,
 			Vimeo = NextThought.model.resolvers.videoservices.Vimeo,
@@ -107,23 +107,23 @@ module.exports = exports = Ext.define('NextThought.app.video.roll.Roll', {
 		this.on('afterrender', 'selectFirst', this);
 	},
 
-    selection: function(v, s) {
+	selection: function(v, s) {
 		if (s && s[0]) {
 			this.iframe.el.dom.setAttribute('src', this.filterVideoUrl(s[0]));
 		}
 	},
 
-    pauseVideo: function() {
+	pauseVideo: function() {
 		var o = this.iframe.el.dom;
 		o.contentWindow.postMessage(JSON.stringify({
-		        event: 'command',
-		        func: 'pauseVideo',
-		        args: [],
-		        id: o.getAttribute('id')
+				event: 'command',
+				func: 'pauseVideo',
+				args: [],
+				id: o.getAttribute('id')
 		}), '*');
 	},
 
-    filterVideoUrl: function(video) {
+	filterVideoUrl: function(video) {
 		var type = video.get('type'),
 			url = video.get('url'),
 			a = document.createElement('a'),
@@ -150,7 +150,7 @@ module.exports = exports = Ext.define('NextThought.app.video.roll.Roll', {
 		return a.href;
 	},
 
-    selectFirst: function() {
+	selectFirst: function() {
 		this.others.getSelectionModel().select(0);
 	}
 });

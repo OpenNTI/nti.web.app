@@ -76,8 +76,8 @@ module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
 
 		var m = this;
 		return (same(m.value, o.value)
-				&&	m.operation	=== o.operation
-				&&	m.scope	=== o.scope
+				&&	m.operation === o.operation
+				&&	m.scope === o.scope
 			);
 	},
 

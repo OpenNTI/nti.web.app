@@ -45,11 +45,11 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Array', {}
 
 
 	 function chunk(chunkSize) {
-	    var r = [], i = 0, len = this.length;
-	    for (i; i < len; i += chunkSize) {
-	        r.push(this.slice(i, i + chunkSize));
+		var r = [], i = 0, len = this.length;
+		for (i; i < len; i += chunkSize) {
+			r.push(this.slice(i, i + chunkSize));
 		}
-	    return r;
+		return r;
 	}
 
 

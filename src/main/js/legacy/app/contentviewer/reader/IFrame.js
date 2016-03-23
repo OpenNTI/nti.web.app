@@ -7,20 +7,20 @@ var ComponentsSimplePopoverWidget = require('../components/SimplePopoverWidget')
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFrame', {
-    alias: 'reader.iframe',
+	alias: 'reader.iframe',
 
-    mixins: {
+	mixins: {
 		observable: 'Ext.util.Observable'
 	},
 
-    getBubbleTarget: function() {
+	getBubbleTarget: function() {
 		return this.reader;
 	},
 
-    baseFrameCheckIntervalInMillis: 500,
-    frameCheckRateChangeFactor: 1.5,
+	baseFrameCheckIntervalInMillis: 500,
+	frameCheckRateChangeFactor: 1.5,
 
-    constructor: function(config) {
+	constructor: function(config) {
 		Ext.apply(this, config);
 
 		var me = this,
@@ -66,13 +66,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		Ext.EventManager.onWindowResize(me.onWindowResize, me);
 	},
 
-    onWindowResize: function() {
+	onWindowResize: function() {
 		if (this.iframe && this.iframe.el) {
 			this.iframe.el.repaint();
 		}
 	},
 
-    displayPopover: function(href, html, node) {
+	displayPopover: function(href, html, node) {
 		var me = this,
 			nibHeight = 10,
 			offsets = me.reader.getAnnotationOffsets(),
@@ -137,13 +137,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		me.popoverWidget.showAt(adjustPosition(x, y));
 	},
 
-    dismissPopover: function() {
+	dismissPopover: function() {
 		if (this.popoverWidget) {
 			this.popoverWidget.startCloseTimer();
 		}
 	},
 
-    applyContentAPI: function() {
+	applyContentAPI: function() {
 		//TODO: can we get rid of this?
 		var doc = this.getDocumentElement(),
 				win = doc.parentWindow;
@@ -153,7 +153,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 
 	},
 
-    getConfig: function() {
+	getConfig: function() {
 		var me = this;
 		return {
 			xtype: 'box',
@@ -184,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		};
 	},
 
-    resetFrame: function(cb) {
+	resetFrame: function(cb) {
 		var BLANK_DOC = '<!DOCTYPE html>' +
 				Ext.DomHelper.markup({tag: 'html', lang: 'en', cn: [
 					{tag: 'head'},{tag: 'body'}]}),
@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		});
 	},
 
-    initContentFrame: function() {
+	initContentFrame: function() {
 		var me = this,
 			base = (function() {
 				var d = window.location; return d.protocol + '//' + d.host;} ()),
@@ -479,7 +479,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 						 }
 				);
 
-				//Strip out the redacted text.  Note we look based on class
+				//Strip out the redacted text.	Note we look based on class
 				//here which is failry tightly coupled to annotations/Redaction.js/
 				//TODO for things like this key off some generic data-nti-injected-element
 				//attribute
@@ -514,7 +514,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		me.syncInterval = setInterval(me.checkFrame, this.baseFrameCheckIntervalInMillis);
 	},
 
-    getTopBodyStyles: function() {
+	getTopBodyStyles: function() {
 		var mainBodyStyleString = Ext.getBody().getAttribute('class') || '',
 				mainBodyStyleList = mainBodyStyleString.split(' '),
 				styleBlacklist = [
@@ -527,7 +527,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		return Ext.Array.difference(mainBodyStyleList, styleBlacklist);
 	},
 
-    onceSettled: function() {
+	onceSettled: function() {
 		var me = this, fn,
 			p = me.settledPromise || new Promise(function(fulfill, reject) {
 				fn = Ext.Function.createBuffered(function() {
@@ -548,7 +548,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		return p;
 	},
 
-    checkFrame: function() {
+	checkFrame: function() {
 		if (this.reader.isDestroyed) {clearInterval(this.syncInterval); return;}
 		var doc = this.getDocumentElement(), html;
 		if (doc) {
@@ -580,7 +580,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		}
 	},
 
-    syncFrame: function(content) {
+	syncFrame: function(content) {
 		var i = this.get(), h, contentHeight = 150, ii;
 		//We need the buffer because otherwise the end of the doc would go offscreen
 
@@ -613,7 +613,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		this.fireEvent('sync-height', h);
 	},
 
-    get: function() {
+	get: function() {
 		var iframe, el = this.iframe && this.iframe.el;
 		if (!el) {
 			return null;
@@ -623,7 +623,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		return el;
 	},
 
-    getDocumentElement: function() {
+	getDocumentElement: function() {
 		var iframe, win, dom, doc = this.contentDocumentElement;
 
 		if (!doc) {
@@ -658,7 +658,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		return doc;
 	},
 
-    update: function(html, metaData) {
+	update: function(html, metaData) {
 		var doc = this.getDocumentElement(),
 			body = Ext.get(doc.body || doc.getElementsByName('body')[0]),
 			head = doc.getElementsByTagName('head')[0],
@@ -710,11 +710,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		this.syncInterval = setInterval(this.checkFrame, this.baseFrameCheckIntervalInMillis);
 	},
 
-    getCleanContent: function() {
+	getCleanContent: function() {
 		return this.cleanContent;
 	},
 
-    /**
+	/**
 	 * Makes pointer events go through the iframe so that all the
 	 * interactions can be handled manually.
 	 * @param {Boolean} should
@@ -733,11 +733,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		}
 	},
 
-    hasClickthrough: function() {
+	hasClickthrough: function() {
 		return this.get().hasCls('clickthrough');
 	},
 
-    /**
+	/**
 	 * @param {Number} x relative to the window's top left corner
 	 * @param {Number} y relative to the window's top left corner
 	 */
@@ -803,7 +803,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		return pickedElement;
 	},
 
-    /**
+	/**
 	 * Positions relative to the window
 	 * @param {Number} x1
 	 * @param {Number} y1

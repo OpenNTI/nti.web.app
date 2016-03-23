@@ -6,27 +6,27 @@ var ReaderJson = require('./reader/Json');
 
 
 module.exports = exports = Ext.define('NextThought.proxy.Rest', {
-    extend: 'Ext.data.proxy.Rest',
-    alias: 'proxy.nti',
-    timeout: 3600000,
+	extend: 'Ext.data.proxy.Rest',
+	alias: 'proxy.nti',
+	timeout: 3600000,
 
-    //hour
+	//hour
 
 	reader: {
 		type: 'nti',
 		root: 'Items'
 	},
 
-    writer: {
+	writer: {
 		type: 'nti'
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		this.callParent(arguments);
 		this.on('exception', this.exception, this);
 	},
 
-    doRequest: function(operation, callback, scope) {
+	doRequest: function(operation, callback, scope) {
 		operation.retryArgs = {callback: callback, scope: scope};
 		if (operation.async === false) {
 			Ext.Ajax.async = false;
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Rest', {
 		//TODO: fire an event in case anyone cares
 	},
 
-    buildUrl: function(request) {
+	buildUrl: function(request) {
 		var action = request.operation.action,
 			records = request.records,
 			record = records ? records[0] : null,
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.proxy.Rest', {
 		return href;
 	},
 
-    exception: function(proxy, response, operation, eOpts) {
+	exception: function(proxy, response, operation, eOpts) {
 		var code = response.status;
 		if (code < 400 || code >= 500) {
 			console.error('Error getting data:', arguments);

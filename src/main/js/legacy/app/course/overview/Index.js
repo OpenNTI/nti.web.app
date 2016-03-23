@@ -12,28 +12,28 @@ var ModelSurveyRef = require('../../../model/SurveyRef');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.course-overview',
+	extend: 'Ext.container.Container',
+	alias: 'widget.course-overview',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router',
 		FillScreen: 'NextThought.mixins.FillScreen'
 	},
 
-    statics: {
+	statics: {
 		showTab: function(bundle) {
 			return bundle && bundle.hasOutline();
 		}
 	},
 
-    title: 'Lessons',
-    layout: 'card',
+	title: 'Lessons',
+	layout: 'card',
 
-    items: [
+	items: [
 		{xtype: 'course-overview-view'}
 	],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -57,16 +57,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
-    onAddedToParentRouter: function() {
+	onAddedToParentRouter: function() {
 		//replace lesson's push route with mine
 		this.lessons.pushRoute = this.pushRoute.bind(this);
 	},
 
-    onRouteActivate: function() {
+	onRouteActivate: function() {
 		this.setTitle(this.title);
 	},
 
-    onRouteDeactivate: function() {
+	onRouteDeactivate: function() {
 		if (this.activeMediaWindow) {
 			Ext.destroy(this.activeMediaWindow);
 			delete this.activeMediaWindow;
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		}
 	},
 
-    getContext: function() {
+	getContext: function() {
 		var lessons = this.getLessons(), item = this.getLayout().getActiveItem();
 
 		if (item === this.activeMediaWindow) {
@@ -87,11 +87,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		return this.activeLesson || lessons.getActiveLesson();
 	},
 
-    getLessons: function() {
+	getLessons: function() {
 		return this.lessons;
 	},
 
-    bundleChanged: function(bundle) {
+	bundleChanged: function(bundle) {
 		var item = this.getLayout().getActiveItem(),
 			lessons = this.getLessons();
 
@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		return item.bundleChanged(bundle);
 	},
 
-    showLessons: function(route, subRoute) {
+	showLessons: function(route, subRoute) {
 		var lessons = this.getLessons();
 
 		this.getLayout().setActiveItem(lessons);
@@ -130,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		return lessons.handleRoute(route.path, route.precache);
 	},
 
-    showContent: function(route, subRoute) {
+	showContent: function(route, subRoute) {
 		var me = this,
 			contentPath,
 			rootId = route.params.id,
@@ -192,23 +192,23 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 				//XXX me.store is no longer the navigation store, it is now the bundle's
 				//XXX OutlineInterface
 				// siblings = me.store.getRange().reduce(function(c, item) {
-				// 	var id;
+				//	var id;
 
-				// 	if (item.get('type') === 'lesson') {
-				// 		id = item.getId();
+				//	if (item.get('type') === 'lesson') {
+				//		id = item.getId();
 
-				// 		c.push({
-				// 			route: ParseUtils.encodeForURI(id),
-				// 			precache: {
-				// 				lesson: item
-				// 			},
-				// 			label: item.get('label'),
-				// 			title: item.get('label'),
-				// 			cls: item === lesson ? 'current' : ''
-				// 		});
-				// 	}
+				//		c.push({
+				//			route: ParseUtils.encodeForURI(id),
+				//			precache: {
+				//				lesson: item
+				//			},
+				//			label: item.get('label'),
+				//			title: item.get('label'),
+				//			cls: item === lesson ? 'current' : ''
+				//		});
+				//	}
 
-				// 	return c;
+				//	return c;
 				// }, []);
 
 				me.activeLesson = lesson;
@@ -269,7 +269,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			});
 	},
 
-    showMediaViewer: function(route, subRoute) {
+	showMediaViewer: function(route, subRoute) {
 		var me = this,
 			lessonId = ParseUtils.decodeFromURI(route.params.lesson);
 
@@ -304,7 +304,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		return me.activeMediaWindow.handleRoute(subRoute, route.precache);
 	},
 
-    getPageInfoRoute: function(obj) {
+	getPageInfoRoute: function(obj) {
 		var lesson = obj.parent || this.activeLesson,
 			lessonId = lesson && lesson.getId(),
 			label = obj.get ? obj.get('label') : obj.label,
@@ -327,8 +327,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		};
 	},
 
-    getRelatedWorkRoute: function(obj) {
-		var	lesson = obj.parent,
+	getRelatedWorkRoute: function(obj) {
+		var lesson = obj.parent,
 			lessonId = lesson && lesson.getId(),
 			relatedWork = obj.getId();
 
@@ -349,7 +349,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		};
 	},
 
-    getVideoRoute: function(obj) {
+	getVideoRoute: function(obj) {
 		var lesson = obj.parent,
 			lessonId = lesson && lesson.getId(),
 			videoId = obj.get && obj.getId();
@@ -368,7 +368,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		};
 	},
 
-    getSlidedeckRoute: function(obj) {
+	getSlidedeckRoute: function(obj) {
 		var lesson = obj.parent,
 			lessonId = lesson && lesson.getId(),
 			sid = obj.get && obj.getId();
@@ -387,15 +387,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		};
 	},
 
-    handleNavigation: function(title, route, precache) {
+	handleNavigation: function(title, route, precache) {
 		this.pushRoute(title, route, precache);
 	},
 
-    handleMediaClose: function(cmp) {
+	handleMediaClose: function(cmp) {
 		this.pushRoute(null, '/');
 	},
 
-    getRouteForPath: function(path, lesson) {
+	getRouteForPath: function(path, lesson) {
 		var root = path[0],
 			subPath = path.slice(1),
 			route,
@@ -431,7 +431,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		return route;
 	},
 
-    getRouteForRelatedWorkPath: function(relatedWork, path, lesson) {
+	getRouteForRelatedWorkPath: function(relatedWork, path, lesson) {
 		var page = path[0],
 			pageId = page && page instanceof NextThought.model.PageInfo ? page.getId() : null,
 			relatedWorkId = relatedWork && relatedWork.get('target'),
@@ -459,7 +459,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		};
 	},
 
-    getRouteForQuestionSetPath: function(questionSetRef, path, lesson) {
+	getRouteForQuestionSetPath: function(questionSetRef, path, lesson) {
 		var page = path[0],
 			pageId = page && page.getId();
 
@@ -471,7 +471,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		};
 	},
 
-    getRouteForSurveyPath: function(survey, path, lesson) {
+	getRouteForSurveyPath: function(survey, path, lesson) {
 		var surveyId = survey.get('Target-NTIID');
 
 		surveyId = surveyId && ParseUtils.encodeForURI(surveyId);
@@ -482,7 +482,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		};
 	},
 
-    getRouteForPageInfoPath: function(pageInfo, path) {
+	getRouteForPageInfoPath: function(pageInfo, path) {
 		var pageId = pageInfo && pageInfo.getId();
 
 		pageId = pageId && ParseUtils.encodeForURI(pageId);
@@ -493,7 +493,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		};
 	},
 
-    getRouteForVideoPath: function(video, path) {
+	getRouteForVideoPath: function(video, path) {
 		var videoId = video && video.getId();
 
 		videoId = video && ParseUtils.encodeForURI(videoId);
@@ -504,7 +504,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 		};
 	},
 
-    getRouteForSlidedeckPath: function(slidedeck, path) {
+	getRouteForSlidedeckPath: function(slidedeck, path) {
 		var slidedeckId = slidedeck && slidedeck.getId();
 
 		slidedeckId = ParseUtils.encodeForURI(slidedeckId);

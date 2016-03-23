@@ -6,20 +6,20 @@ var CacheIdCache = require('../../../../cache/IdCache');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moderated', {
-    extend: 'Ext.form.field.Checkbox',
-    alias: 'widget.chat-log-entry-moderated',
+	extend: 'Ext.form.field.Checkbox',
+	alias: 'widget.chat-log-entry-moderated',
 
-    mixins: {
+	mixins: {
 		abstractContainer: 'Ext.container.AbstractContainer',
 		contains: 'Ext.container.Container'
 	},
 
-    preventMark: true,
-    anchor: '100%',
-    layout: 'anchor',
-    cls: 'chat-entry',
+	preventMark: true,
+	anchor: '100%',
+	layout: 'anchor',
+	cls: 'chat-entry',
 
-    labelableRenderTpl: [
+	labelableRenderTpl: [
 		'<tpl if="!hideLabel && !(!fieldLabel && hideEmptyLabel)">',
 			'<label<tpl if="inputId"> for="{inputId}"</tpl> class="{labelCls}"<tpl if="labelStyle"> style="{labelStyle}"</tpl>>',
 				'<tpl if="fieldLabel">{fieldLabel}{labelSeparator}</tpl>',
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 			'</div>',
 		'</div>',
 		'<div class="x-chat-replies"></div>',
-    //		'<div class="{errorMsgCls}" style="display:none"></div>',
+	//		'<div class="{errorMsgCls}" style="display:none"></div>',
 		'<div id="{id}-errorEl" class="{errorMsgCls} errorEl" style="display:none"></div>',
 		'<div class="{clearCls}" role="presentation"><!-- --></div>',
 		{
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		}
 	],
 
-    renderSelectors: {
+	renderSelectors: {
 		box: 'div.x-chat-log-entry',
 		name: '.x-chat-log-entry span.name',
 		text: 'span.body-text',
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		bodyEl: 'div.x-chat-log-entry'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		Ext.container.Container.prototype.initComponent.apply(this, arguments);
 		this.callParent(arguments);
 		this.update(this.message);
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		};
 	},
 
-    update: function(m) {
+	update: function(m) {
 		var me = this,
 			s = m.get('Creator');
 
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		me.addCls(m.getId() ? '' : ' nooid');
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.initializeDragZone(this);
 
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		this.box.on('click', this.click, this);
 	},
 
-    click: function(event, target, eOpts) {
+	click: function(event, target, eOpts) {
 		target = Ext.get(target);
 		var inBox = target && this.box.contains(target),
 			tag = target ? target.tagName : '';
@@ -162,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		}
 	},
 
-    fillInUser: function(u) {
+	fillInUser: function(u) {
 		var name = u.get('alias') || u.get('Username'),
 			i = u.get('avatarURL');
 
@@ -176,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		}
 	},
 
-    initializeDragZone: function(v) {
+	initializeDragZone: function(v) {
 		v.dragZone = Ext.dd.DragZone.create(v.getEl(), {
 
 			getDragData: function(e) {
@@ -200,7 +200,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		});
 	},
 
-    showReplyToComponent: function() {
+	showReplyToComponent: function() {
 		return this.add({
 			xtype: 'chat-reply-to',
 			replyTo: this.message.getId()

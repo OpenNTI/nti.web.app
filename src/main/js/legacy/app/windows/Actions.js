@@ -5,29 +5,29 @@ var WindowsStateStore = require('./StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 	},
 
-    __resolveBeforeShow: function(ntiid) {
+	__resolveBeforeShow: function(ntiid) {
 		return Service.getObject(ntiid);
 	},
 
-    hasWindow: function(obj) {
+	hasWindow: function(obj) {
 		return this.WindowStore.hasComponentForMimeType(obj.mimeType);
 	},
 
-    /**
+	/**
 	 * Given an object return the object url
 	 *
 	 * TODO: unify this with the building of the url in Body.js
 	 *
 	 * @param  {Model} obj model to get url for
-	 * @return {String}     the url
+	 * @return {String}		the url
 	 */
 	getRouteForObject: function(obj) {
 		var id = obj.getId(),
@@ -42,11 +42,11 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 		return '/object/' + id;
 	},
 
-    /**
+	/**
 	 * Push a window to the state
 	 * @param  {String|Model} objectOrNTIID the object or ntiid of the object to show
-	 * @param  {Array} path          the path to show for the model
-	 * @param  {Element} el           element to show the note opening from
+	 * @param  {Array} path			 the path to show for the model
+	 * @param  {Element} el			  element to show the note opening from
 	 */
 	pushWindow: function(objectOrNTIID, state, el, monitors, precache) {
 		var id = objectOrNTIID,
@@ -67,20 +67,20 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 		this.WindowStore.firePushWindow(id, mimeType, state);
 	},
 
-    closeWindow: function() {
+	closeWindow: function() {
 		this.WindowStore.firePushWindow(null);
 	},
 
-    closeActiveWindow: function() {
+	closeActiveWindow: function() {
 		this.WindowStore.fireCloseWindow();
 	},
 
-    /**
+	/**
 	 * Given an object or NTIID show a modal for it, without pushing or replacing state
 	 *
 	 *
 	 * @param  {String|Model} objectOrNTIID the object or ntiid of the object to show
-	 * @return {Promise}          fulfills when the window is open
+	 * @return {Promise}		  fulfills when the window is open
 	 */
 	showWindow: function(objectOrNTIID, state, el, monitors, precache) {
 		var me = this, id, cache,
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 		});
 	},
 
-    showWindowWithMimeType: function(id, mimeType, state, rawId) {
+	showWindowWithMimeType: function(id, mimeType, state, rawId) {
 		var me = this,
 			resolver = me.WindowStore.getResolverFor(mimeType);
 

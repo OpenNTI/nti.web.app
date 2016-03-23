@@ -4,13 +4,13 @@ var ComponentsContainer = require('./components/Container');
 
 
 module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.prompt-view',
-    cls: 'prompt-layer',
-    layout: 'none',
-    items: [],
+	extend: 'Ext.container.Container',
+	alias: 'widget.prompt-view',
+	cls: 'prompt-layer',
+	layout: 'none',
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.HTML_ELEMENT = document.getElementsByTagName('html')[0];
@@ -24,19 +24,19 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 		});
 	},
 
-    addOpenCls: function() {
+	addOpenCls: function() {
 		if (this.HTML_ELEMENT) {
 			this.HTML_ELEMENT.classList.add('prompt-open');
 		}
 	},
 
-    removeOpenCls: function() {
+	removeOpenCls: function() {
 		if (this.HTML_ELEMENT) {
 			this.HTML_ELEMENT.classList.remove('prompt-open');
 		}
 	},
 
-    addStackClasses: function() {
+	addStackClasses: function() {
 		var stack = this.promptStack,
 			lastIndex = stack.length - 1;
 
@@ -49,8 +49,8 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 		});
 	},
 
-    openPrompt: function(cmp, type, fulfill, reject, data) {
-		if (!cmp) {	return;	}
+	openPrompt: function(cmp, type, fulfill, reject, data) {
+		if (!cmp) { return; }
 
 		var index = this.promptStack.length,
 			close = this.closePrompt.bind(this, index),
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 		this.addStackClasses();
 	},
 
-    closePrompt: function(index) {
+	closePrompt: function(index) {
 		var stack = this.promptStack,
 			removeOpenCls = this.removeOpenCls.bind(this),
 			addStackClasses = this.addStackClasses.bind(this),

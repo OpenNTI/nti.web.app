@@ -16,9 +16,9 @@ module.exports = exports = Ext.define('NextThought.common.menus.file.BrowserItem
 	},
 
 	onClick: function(e) {
-    this.href = true;
+	this.href = true;
 		this.callParent(arguments);
-    delete this.href;
+	delete this.href;
 	},
 
 	onRender: function() {

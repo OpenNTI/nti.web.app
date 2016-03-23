@@ -6,9 +6,9 @@ var ModelUser = require('../../User');
 
 /*global User*/
 module.exports = exports = Ext.define('NextThought.model.courses.assignments.Summary', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    fields: [
+	fields: [
 		{name: 'Alias', type: 'string'},
 		{name: 'Username', type: 'string'},
 		{name: 'avatar', type: 'string', defaultValue: User.BLANK_AVATAR},
@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Sum
 		{name: 'AvailableFinalGrade', type: 'bool'}
 	],
 
-    hasFinalGrade: function() {
+	hasFinalGrade: function() {
 		return this.get('AvailableFinalGrade');
 	}
 });

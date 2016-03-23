@@ -11,21 +11,21 @@ var ForumsDFLForum = require('./forums/DFLForum');
 
 
 module.exports = exports = Ext.define('NextThought.model.FriendsList', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    mixins: {
+	mixins: {
 		groupLike: 'NextThought.mixins.GroupLike',
 		shareEntity: 'NextThought.mixins.ShareEntity',
 		Avatar: 'NextThought.mixins.Avatar'
 	},
 
-    statics: {
+	statics: {
 		BLANK_AVATAR: '/app/resources/images/icons/unresolved-group.png'
 	},
 
-    isFriendsList: true,
+	isFriendsList: true,
 
-    fields: [
+	fields: [
 		{ name: 'Username', type: 'string' },
 		{ name: 'alias', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' },
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 		{ name: 'avatarBGColor', type: 'string', persist: false}
 	],
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.initAvatar();
@@ -60,14 +60,14 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 
 	},
 
-    getAboutData: function() {
+	getAboutData: function() {
 	   return {
 		   displayName: this.getName(),
 		   about: this.get('about')
 	   };
 	},
 
-    getProfileUrl: function() {
+	getProfileUrl: function() {
 		var id = this.get('Username');
 
 		if (id && this.getLink('Activity')) {
@@ -77,12 +77,12 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 		return null;
 	},
 
-    destroy: function() {
+	destroy: function() {
 		this.set('friends', []);
 		this.callParent(arguments);
 	},
 
-    drawIcon: function(canvas) {
+	drawIcon: function(canvas) {
 		var ctx = canvas.getContext('2d'),
 			urls = this.get('CompositeGravatars').slice(),
 			grid = Math.ceil(Math.sqrt(urls.length)),
@@ -100,14 +100,14 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 			i.onload = function() {
 				ctx.drawImage(i,
 						0,	0,	i.width, i.height,	//source x,y,w,h
-						col, row, imgSize, imgSize		//dest   x,y,w,h
+						col, row, imgSize, imgSize		//dest	 x,y,w,h
 				);
 			};
 			i.src = url;
 		});
 	},
 
-    getDefaultForum: function() {
+	getDefaultForum: function() {
 		return this.getForumList()
 			.then(function(forums) {
 				forums = forums.filter(function(forum) {
@@ -118,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 			});
 	},
 
-    getForumList: function(force) {
+	getForumList: function(force) {
 		if (this.loadForumList && !force) {
 			return this.loadForumList;
 		}

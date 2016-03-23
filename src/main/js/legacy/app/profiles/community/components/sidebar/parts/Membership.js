@@ -6,35 +6,35 @@ var UtilStore = require('../../../../../../util/Store');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.community.components.sidebar.parts.Membership', {
-    extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
-    alias: 'widget.profile-community-sidebar-memberships',
-    cls: 'memberships condensed community',
-    profileRouteRoot: '/user',
-    SIZE: 35,
+	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
+	alias: 'widget.profile-community-sidebar-memberships',
+	cls: 'memberships condensed community',
+	profileRouteRoot: '/user',
+	SIZE: 35,
 
-    entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'entry', 'data-route': '{route}', 'data-qtip': '{name}', cn: [
 			'{member:avatar}'
 		]
 	})),
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'see-all', html: 'Members'},
 		{cls: 'entries'}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		seeAllEl: '.see-all',
 		entriesEl: '.entries'
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.seeAllEl, 'click', this.onSeeAllClick.bind(this));
 	},
 
-    updateEntity: function(entity) {
+	updateEntity: function(entity) {
 		if (this.activeEntity === entity) {
 			return;
 		}
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 			.then(this.fillInUsers.bind(this));
 	},
 
-    fillInUsers: function(users) {
+	fillInUsers: function(users) {
 		this.removeAll();
 
 		if (!users.length) {
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		}).forEach(this.addEntry.bind(this));
 	},
 
-    onSeeAllClick: function() {
+	onSeeAllClick: function() {
 		if (this.gotoMembership) {
 			this.gotoMembership();
 		}

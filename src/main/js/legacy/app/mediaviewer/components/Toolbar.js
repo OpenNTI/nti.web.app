@@ -198,10 +198,10 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 
 
 	handleClick: function(item, menu) {
-        var previousType = this.currentType, me = this;
+		var previousType = this.currentType, me = this;
 
-        this.floatParent.switchVideoViewer(item.action)
-            .then(function() {
+		this.floatParent.switchVideoViewer(item.action)
+			.then(function() {
 				me.updateCurrentType(item.action,item.text);
 
 				Ext.each(menu.query('menuitem[checked]'), function(i) {
@@ -209,7 +209,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 				});
 
 				item.setChecked(true, true);
-            });
+			});
 
 		return false;
 	},

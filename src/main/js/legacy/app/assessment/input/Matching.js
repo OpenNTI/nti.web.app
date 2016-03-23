@@ -14,10 +14,10 @@ function toMap(ar, attr) {
 }
 
 module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching', {
-    extend: 'NextThought.app.assessment.input.Base',
-    alias: 'widget.question-input-matchingpart',
+	extend: 'NextThought.app.assessment.input.Base',
+	alias: 'widget.question-input-matchingpart',
 
-    //<editor-fold desc="Setup & Config">
+	//<editor-fold desc="Setup & Config">
 	inputTpl: Ext.DomHelper.markup([
 		{ cls: 'terms', cn: { 'tag': 'tpl', 'for': 'terms', cn: [
 			{ cls: 'target term drag', 'data-match': '{[xindex-1]}', cn: [
@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		]}
 	]),
 
-    solTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+	solTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{'tag': 'tpl', 'for': '.', cn: [
 			{ cn: [
 				{ cls: 'target term drag', html: '{term}' },
@@ -42,11 +42,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		]}
 	])),
 
-    renderSelectors: {
+	renderSelectors: {
 		shelfEl: '.terms'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var values = Ext.clone(this.part.get('values')),
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		});
 	},
 
-    getAnsweredCount: function() {
+	getAnsweredCount: function() {
 		var value = this.getValue(),
 			total, answered;
 
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		return answered / total;
 	},
 
-    injectMatchTerms: function() {
+	injectMatchTerms: function() {
 		var s = this.shelfEl,
 			el, ownerMain;
 
@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		this.setupDropZone();
 	},
 
-    //</editor-fold>
+	//</editor-fold>
 
 
 	//<editor-fold desc="Drag & Drop">
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		return proxy;
 	},
 
-    moveTerm: function moveTerm(el, to) {
+	moveTerm: function moveTerm(el, to) {
 		var p = el.parentNode,
 			tP = to.parentNode,
 			tS = to.nextSibling,
@@ -157,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		this.bufferedUpdateLayout();
 	},
 
-    resetTerm: function resetTerm(e) {
+	resetTerm: function resetTerm(e) {
 		var toReset = e.getTarget('.target.drag');
 		if (toReset) {
 			this.moveTerm(toReset, this.shelfEl.dom);
@@ -165,7 +165,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		this.maybeChangeSubmitButtonState();
 	},
 
-    dropTerm: function(dropOn, term) {
+	dropTerm: function(dropOn, term) {
 		var t = Ext.fly(dropOn).down('.dropzone', true),
 			c = t && t.childNodes,
 			n = c && c[0];
@@ -191,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		return true;
 	},
 
-    setupDragging: function() {
+	setupDragging: function() {
 		var cfg, me = this,
 			el = this.up().getEl(), z;
 
@@ -261,7 +261,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		this.on('destroy', 'destroy', this.reDD);
 	},
 
-    setupDropZone: function() {
+	setupDropZone: function() {
 
 		var id = this.id,
 			me = this,
@@ -315,7 +315,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		];
 	},
 
-    //</editor-fold>
+	//</editor-fold>
 
 
 	//<editor-fold desc="Grading">
@@ -337,7 +337,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		return Object.keys(val).length ? val : null;
 	},
 
-    setValue: function(value) {
+	setValue: function(value) {
 		var q = '.drag.term', termId, binId, bin,
 			bins = toMap(this.inputBox.query('.choice'), 'data-target'),
 			terms = Ext.Array.unique(
@@ -363,7 +363,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		}
 	},
 
-    mark: function() {
+	mark: function() {
 		var s = (this.part.get('solutions') || [])[0],
 			c = (s && s.get('value')) || {}, me = this,
 			values = Ext.clone(this.part.get('values')),
@@ -391,12 +391,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		}, 1);
 	},
 
-    markSubmitted: function(state) {
+	markSubmitted: function(state) {
 		this.callParent(arguments);
 		this.mark();
 	},
 
-    //</editor-fold>
+	//</editor-fold>
 
 
 	//<editor-fold desc="UI State">
@@ -405,7 +405,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		this[(allInPlay ? 'en' : 'dis') + 'ableSubmission']();
 	},
 
-    reset: function() {
+	reset: function() {
 		var el = this.getEl(),
 			q = '.drag.term';
 
@@ -425,7 +425,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		this.callParent();
 	},
 
-    //</editor-fold>
+	//</editor-fold>
 	getSolutionContent: function(part) {
 		var f = this.filterHTML.bind(this),
 			labels = this.part.get('values').slice().map(f),

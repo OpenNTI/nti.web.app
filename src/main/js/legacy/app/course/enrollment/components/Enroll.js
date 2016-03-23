@@ -3,15 +3,15 @@ var PartsDetailsTable = require('./parts/DetailsTable');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.Enroll', {
-    extend: 'Ext.Component',
-    alias: 'widget.enrollment-enroll',
-    cls: 'enroll-for-credit-confirmation',
+	extend: 'Ext.Component',
+	alias: 'widget.enrollment-enroll',
+	cls: 'enroll-for-credit-confirmation',
 
-    buttonCfg: [
+	buttonCfg: [
 		{name: getString('NextThought.view.courseware.enrollment.Enroll.ConttoPay'), action: 'goto-payment'}
 	],
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'message', cn: [
 			{cls: 'main {headerCls}', html: '{header}'},
 			{cls: 'text description', html: '{text}'},
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		enrollEl: '.enroll-now',
 		titleEl: '.main',
 		descriptionEl: '.description',
@@ -41,13 +41,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		subscribeLegalEl: '.subscribe-container .legal'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.enableBubble('show-msg');
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		var c = this.course;
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.detailsTable = Ext.widget('enrollment-details-table', {
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.beforeShow();
 	},
 
-    beforeShow: function() {
+	beforeShow: function() {
 		if (!this.rendered) { return; }
 
 		if (this.enrollmentOption.AllowVendorUpdates) {
@@ -91,17 +91,17 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-    getButtonCfg: function() {
+	getButtonCfg: function() {
 		return this.buttonCfg;
 	},
 
-    buttonClick: function(action) {
+	buttonClick: function(action) {
 		if (action === 'goto-payment') {
 			this.maybeSubmit();
 		}
 	},
 
-    stopClose: function() {
+	stopClose: function() {
 		var me = this;
 
 		return new Promise(function(fulfill, reject) {
@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-    showErrorMsg: function(json) {
+	showErrorMsg: function(json) {
 		if (json && json.Message) {
 			this.fireEvent('show-msg', json.Message, true, 5000);
 		} else {
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-    showError: function(json) {
+	showError: function(json) {
 		json = json || {};
 		json.title = getString('NextThought.view.courseware.enrollment.Enroll.PaymentProblems');
 		json.Message = json.Message || getString('NextThought.view.courseware.enrollment.Enroll.TryPayAgain');
@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.confirmEl.update(json.ContactInformation);
 	},
 
-    maybeSubmit: function() {
+	maybeSubmit: function() {
 		var me = this,
 			minTime = wait(5000),
 			subscribe;

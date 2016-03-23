@@ -7,11 +7,11 @@ var CoursesStateStore = require('../../library/courses/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateStore', {
-    extend: 'NextThought.common.StateStore',
-    __Option_Map: {},
-    __Options: [],
+	extend: 'NextThought.common.StateStore',
+	__Option_Map: {},
+	__Options: [],
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.addOption(NextThought.app.course.enrollment.options.OpenEnrollment);
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 	},
 
-    getBasePriority: function() {
+	getBasePriority: function() {
 		return {
 			OpenEnrollment: 3,
 			StoreEnrollment: 2,
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 		};
 	},
 
-    addOption: function(option) {
+	addOption: function(option) {
 		this.__Option_Map[option.NAME] = option;
 
 		this.__Options.push({
@@ -37,11 +37,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 		});
 	},
 
-    getOption: function(name) {
+	getOption: function(name) {
 		return this.__Option_Map[name] || {};
 	},
 
-    getEnrolledText: function(course) {
+	getEnrolledText: function(course) {
 		var me = this,
 			text = '';
 
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 		return text;
 	},
 
-    /**
+	/**
 	 * Takes a course and a type of enrollment and returns a list of steps
 	 * that have to be completed to enroll in that course.
 	 *
@@ -74,13 +74,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 	 * @param {String} enrollmentType the type of enrollment
 	 * @param {String} type a subtype of the enrollment gift, or redeem
 	 * @param {Array} config array of strings for the option to parse into the correct state
-	 * @return {Array}        an array of steps
+	 * @return {Array}		  an array of steps
 	 */
 	getEnrollmentSteps: function(course, enrollmentType, type, config) {
 		return this.getOption(enrollmentType).buildEnrollmentSteps(course, type, config);
 	},
 
-    /*
+	/*
 		Enrollment details are objects with the details about if the enrollment process is open, how long it will be open, when it
 		closes, if they have already enrolled in this option and how much it is.
 
@@ -100,8 +100,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 	/**
 	 * Returns the details about the different enrollment options
 	 *
-	 * @param  {CourseCatalogEntry} course         The course we are getting the options for
-	 * @return {Promise}                fulfills with information needed to show the enrollment options
+	 * @param  {CourseCatalogEntry} course		   The course we are getting the options for
+	 * @return {Promise}				fulfills with information needed to show the enrollment options
 	 */
 	getEnrollmentDetails: function(course) {
 		var p, catalogData = {
@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 
 	},
 
-    getGiftDetails: function(course) {
+	getGiftDetails: function(course) {
 		var me = this,
 			catalogData = {
 				Enrolled: course.isActive()
@@ -158,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 		});
 	},
 
-    __fillInOptionDetails: function(course, catalogData) {
+	__fillInOptionDetails: function(course, catalogData) {
 		var me = this;
 
 		this.forEachOption(function(option) {
@@ -170,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 		return catalogData;
 	},
 
-    //a shortcut for CourseWareUtils.Enrollment.__Options.forEach
+	//a shortcut for CourseWareUtils.Enrollment.__Options.forEach
 	forEachOption: function(fn) {
 		this.__Options.forEach(fn);
 	}

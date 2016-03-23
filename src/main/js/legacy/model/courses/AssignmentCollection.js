@@ -5,9 +5,9 @@ var AssignmentsInstructorCollection = require('./assignments/InstructorCollectio
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.AssignmentCollection', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    statics: {
+	statics: {
 		fromJson: function(assignments, nonAssignments, gradeBook, historyURL, isAdmin) {
 			var collection;
 

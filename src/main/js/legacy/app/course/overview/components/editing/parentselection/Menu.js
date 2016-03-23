@@ -4,13 +4,13 @@ var ParentselectionNewItem = require('./NewItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.parentselection.Menu', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.overview-editing-parentselection-menu',
-    cls: 'overview-editing-parentselection-menu',
-    layout: 'none',
-    items: [],
+	extend: 'Ext.container.Container',
+	alias: 'widget.overview-editing-parentselection-menu',
+	cls: 'overview-editing-parentselection-menu',
+	layout: 'none',
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    onHide: function() {
+	onHide: function() {
 		if (this.selectionItems.length) {
 			this.showItems();
 		} else {
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    doSelection: function(record) {
+	doSelection: function(record) {
 		if (this.doSelectRecord) {
 			this.doSelectRecord(record);
 		}
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.close();
 	},
 
-    selectRecord: function(record) {
+	selectRecord: function(record) {
 		this.selectedRecord = record;
 
 		this.itemListContainer.items.each(function(item) {
@@ -81,11 +81,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    getSelection: function() {
+	getSelection: function() {
 		return this.selectedRecord;
 	},
 
-    showItems: function() {
+	showItems: function() {
 		this.itemListContainer.removeAll(true);
 
 		var itemTpl = this.itemTpl,
@@ -128,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.newItemContainer.hide();
 	},
 
-    showAddNewItem: function() {
+	showAddNewItem: function() {
 		this.newItemContainer.removeAll(true);
 
 		this.newItemContainer.add({
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.itemListContainer.hide();
 	},
 
-    afterCreation: function(record) {
+	afterCreation: function(record) {
 		this.showItems();
 		this.doSelection(record);
 	}

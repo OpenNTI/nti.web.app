@@ -8,13 +8,13 @@ var {isMe} = require('legacy/util/Globals');
 
 //styles in identity.scss
 module.exports = exports = Ext.define('NextThought.app.account.identity.components.Presence', {
-    extend: 'Ext.Component',
-    alias: 'widget.presence-menu',
-    cls: 'presence-menu',
-    ui: 'presence-menu',
-    sessionKey: 'presence-state',
+	extend: 'Ext.Component',
+	alias: 'widget.presence-menu',
+	cls: 'presence-menu',
+	ui: 'presence-menu',
+	sessionKey: 'presence-state',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header', html: '{{{NextThought.view.menus.Presence.header}}}'},
 		{cls: 'list', cn: [
 			{tag: 'tpl', 'for': 'states', cn: [
@@ -27,23 +27,23 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		availableEl: '.list .available',
 		awayEl: '.list .away',
 		dndEl: '.list .dnd',
 		offlineEl: '.list .offline'
 	},
 
-    defaultStates: {
+	defaultStates: {
 		'available': getString('NextThought.view.menus.Presence.available'),
 		'away': getString('NextThought.view.menus.Presence.away'),
 		'dnd': getString('NextThought.view.menus.Presence.dnd'),
 		'offline': getString('NextThought.view.menus.Presence.offline')
 	},
 
-    currentPreference: {},
+	currentPreference: {},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		var me = this;
 
 		me.callParent(arguments);
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 			});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var presence = this.ChatStore.getPresenceOf($AppConfig.username);
@@ -90,23 +90,23 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		this.mon(this.ChatStore, 'presence-changed', this.setPresence.bind(this));
 	},
 
-    onDestroy: function() {
+	onDestroy: function() {
 		clearTimeout(this.deferHideParentMenusTimer);
 		this.callParent(arguments);
 	},
 
-    deferHideParentMenus: function() {
+	deferHideParentMenus: function() {
 		Ext.menu.Manager.hideAll();
 	},
 
-    updatePreference: function(record, type, show, status) {
+	updatePreference: function(record, type, show, status) {
 		record.set('type', type);
 		record.set('show', show);
 		record.set('status', status);
 		record.save();
 	},
 
-    savePreferenceValues: function(record, key, type, show, status) {
+	savePreferenceValues: function(record, key, type, show, status) {
 		var me = this;
 
 		if (!record) {
@@ -125,11 +125,11 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		}
 	},
 
-    saveActive: function(type, show, status) {
+	saveActive: function(type, show, status) {
 		this.savePreferenceValues(this.currentPreference.Active, 'ChatPresence/Active', type, show, status);
 	},
 
-    savePreference: function(type, show, status) {
+	savePreference: function(type, show, status) {
 		var record, key;
 
 
@@ -153,7 +153,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		this.saveActive(type, show, status);
 	},
 
-    restoreState: function() {
+	restoreState: function() {
 		var me = this,
 			active = me.currentPreference.Active,
 			type = active.get('type'),
@@ -196,7 +196,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		}
 	},
 
-    setPresence: function(username, presence) {
+	setPresence: function(username, presence) {
 		if (!isMe(username) || !presence) {
 			return;
 		}
@@ -228,7 +228,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		}
 	},
 
-    setUpEditor: function() {
+	setUpEditor: function() {
 		this.editor = Ext.widget('presence-editor', {
 			updateEl: true,
 			renderTo: this.el.down('.list'),
@@ -248,7 +248,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		});
 	},
 
-    getTarget: function(row) {
+	getTarget: function(row) {
 		if (row.is('.available')) {
 			return 'available';
 		}
@@ -265,7 +265,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		return null;
 	},
 
-    clicked: function(e) {
+	clicked: function(e) {
 		var show, status, type, presence;
 
 		if (e.getTarget('.edit')) {
@@ -306,7 +306,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		this.deferHideParentMenusTimer = Ext.defer(this.deferHideParentMenus.bind(this), 250);
 	},
 
-    isNewPresence: function(updated) {
+	isNewPresence: function(updated) {
 		var current = this.ChatStore.getPresenceOf($AppConfig.username);
 
 		function compare(k) {
@@ -316,13 +316,13 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		return compare('type') || compare('show') || compare('status');
 	},
 
-    isStatus: function(value) {
+	isStatus: function(value) {
 		var v = value && value.toLowerCase();
 
 		return v && v !== 'available' && v !== 'away' && v !== 'do not disturb';
 	},
 
-    saveEditor: function(cmp, value, oldValue) {
+	saveEditor: function(cmp, value, oldValue) {
 		value = value.trim();
 
 		if (value.length < 1) {
@@ -353,7 +353,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		}
 	},
 
-    startEditor: function(e) {
+	startEditor: function(e) {
 		var row = e.getTarget('.status', null, true),
 			edit = row && row.down('.edit');
 
@@ -364,7 +364,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		}
 	},
 
-    cancelEdit: function(cmp, value, startValue) {
+	cancelEdit: function(cmp, value, startValue) {
 		var activeRow = cmp.boundEl.up('.status.active');
 
 		if (activeRow) {

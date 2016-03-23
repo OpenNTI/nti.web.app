@@ -4,13 +4,13 @@ var AuditlogItem = require('./Item');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.auditlog.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.overview-editing-audit-log',
-    cls: 'audit-log',
-    layout: 'none',
-    items: [],
+	extend: 'Ext.container.Container',
+	alias: 'widget.overview-editing-audit-log',
+	cls: 'audit-log',
+	layout: 'none',
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		if (!this.record || !this.record.getLog) {
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.loadBatch(this.record.getLog());
 	},
 
-    loadBatch: function(batchInterface) {
+	loadBatch: function(batchInterface) {
 		this.currentBatch = batchInterface;
 
 		if (batchInterface.getBatch) {
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    loadNextBatch: function() {
+	loadNextBatch: function() {
 		this.removeNext();
 		this.showLoading();
 
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    __addBatch: function(batch) {
+	__addBatch: function(batch) {
 		this.removeNext();
 
 		this.addItems(batch.Items);
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    addItems: function(items) {
+	addItems: function(items) {
 		var parentRecord = this.record;
 
 		this.add(items.map(function(item, index) {
@@ -86,14 +86,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	},
 
-    removeNext: function() {
+	removeNext: function() {
 		if (this.nextBatchCmp) {
 			this.remove(this.nextBatchCmp);
 			this.nextBatchCmp = null;
 		}
 	},
 
-    addNext: function() {
+	addNext: function() {
 		this.nextBatchCmp = this.add({
 			xtype: 'box',
 			autoEl: {
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    showLoading: function() {
+	showLoading: function() {
 		if (!this.loadingCmp) {
 			this.loadingCmp = this.add({
 				xtype: 'box',
@@ -118,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    hideLoading: function() {
+	hideLoading: function() {
 		if (this.loadingCmp) {
 			this.remove(this.loadingCmp);
 			this.loadingCmp = null;

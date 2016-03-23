@@ -9,11 +9,11 @@ var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {
-    extend: 'NextThought.app.profiles.user.Index',
-    alias: 'widget.profile-group',
-    cls: 'group-profile profile',
+	extend: 'NextThought.app.profiles.user.Index',
+	alias: 'widget.profile-group',
+	cls: 'group-profile profile',
 
-    initRoutes: function() {
+	initRoutes: function() {
 	   this.addRoute('/activity', this.showActivity.bind(this));
 	   this.addRoute('/members', this.showMembership.bind(this));
 
@@ -22,16 +22,16 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {
 	   this.GroupActions = NextThought.app.groups.Actions.create();
 	},
 
-    buildHeaderComponent: function() {
+	buildHeaderComponent: function() {
 		return {
 		   xtype: 'profile-group-header',
 		   doLeaveGroup: this.leaveGroup.bind(this)
 		};
 	},
 
-    finalizeInit: Ext.emptyFn,
+	finalizeInit: Ext.emptyFn,
 
-    setState: function(active) {
+	setState: function(active) {
 		var tabs = [];
 
 		this.activeTab = active;
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {
 		this.NavActions.setActiveContent(this.activeEntity);
 	},
 
-    resolveEntity: function(id, entity) {
+	resolveEntity: function(id, entity) {
 	   var me = this;
 	   return Service.getObject(id)
 		   .then(function(user) {
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {
 				 });
 	},
 
-    showMembership: function(route, subRoute) {
+	showMembership: function(route, subRoute) {
 		   var membershipCmp = this.setActiveItem('group-profile-membership'),
 		   headerCmp = this.headerCmp;
 
@@ -80,9 +80,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {
 		   .then(membershipCmp.handleRoute.bind(membershipCmp, subRoute, route.params));
 	},
 
-    showActivity: function(route, subRoute) {
+	showActivity: function(route, subRoute) {
 		var activityCmp = this.setActiveItem('profile-group-activity'),
-		    headerCmp = this.headerCmp;
+			headerCmp = this.headerCmp;
 
 		activityCmp.gotoMembership = this.pushRoute.bind(this, 'Members', '/members');
 		this.setState('activity');
@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.Index', {
 		   .then(activityCmp.handleRoute.bind(activityCmp, subRoute, route.params));
 	},
 
-    leaveGroup: function() {
+	leaveGroup: function() {
 		var me = this,
 			user = $AppConfig.userObject;
 

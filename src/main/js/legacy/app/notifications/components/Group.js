@@ -13,13 +13,13 @@ var TypesNote = require('./types/Note');
 
 
 module.exports = exports = Ext.define('NextThought.app.notifications.components.Group', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.notification-group',
-    layout: 'none',
-    cls: 'notification-group',
-    ISCHANGE: /change$/,
+	extend: 'Ext.container.Container',
+	alias: 'widget.notification-group',
+	layout: 'none',
+	cls: 'notification-group',
+	ISCHANGE: /change$/,
 
-    statics: {
+	statics: {
 		MIME_TO_COMPONENT: {},
 
 		fillInMimeTypeComponent: function(cmps) {
@@ -43,9 +43,9 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		}
 	},
 
-    items: [],
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var groupLabel = this.group && Ext.data.Types.GROUPBYTIME.groupTitle(this.group, 'Today'),
@@ -72,11 +72,11 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		}
 	},
 
-    unwrap: function(item) {
+	unwrap: function(item) {
 		return this.ISCHANGE.test(item.mimeType) ? item.getItem() : item;
 	},
 
-    addItem: function(item, prepend) {
+	addItem: function(item, prepend) {
 		item = this.unwrap(item);
 
 		var cmp = this.self.MIME_TO_COMPONENT[item.mimeType],
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		}
 	},
 
-    deleteRecord: function(record) {
+	deleteRecord: function(record) {
 		record = this.unwrap(record);
 
 		var me = this;

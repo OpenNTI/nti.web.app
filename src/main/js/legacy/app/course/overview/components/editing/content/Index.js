@@ -4,22 +4,22 @@ var LessonoverviewIndex = require('./lessonoverview/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.Index', {
-    extend: 'NextThought.app.course.overview.components.Lesson',
-    alias: 'widget.overview-editing-content',
-    cls: '',
-    isLessonView: false,
+	extend: 'NextThought.app.course.overview.components.Lesson',
+	alias: 'widget.overview-editing-content',
+	cls: '',
+	isLessonView: false,
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.loadLesson = this.renderLesson(this.outlineNode, this.record);
 	},
 
-    onceLoaded: function() {
+	onceLoaded: function() {
 		return this.loadLesson || Promise.resolve();
 	},
 
-    renderLesson: function(outlineNode, contents) {
+	renderLesson: function(outlineNode, contents) {
 		var me = this,
 			course = me.bundle,
 			overviewsrc = (outlineNode && outlineNode.getLink('overview-content')) || null;

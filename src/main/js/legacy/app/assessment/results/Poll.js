@@ -8,17 +8,17 @@ var PartsModeledContent = require('./parts/ModeledContent');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.assessment-result',
-    cls: 'assessment-result',
-    layout: 'none',
+	extend: 'Ext.container.Container',
+	alias: 'widget.assessment-result',
+	cls: 'assessment-result',
+	layout: 'none',
 
-    items: [
+	items: [
 		{xtype: 'container', layout: 'none', isResultContainer: true},
 		{xtype: 'container', layout: 'none', cls: 'footer', isFooter: true}
 	],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var parts = NextThought.app.assessment.results.parts;
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll',
 			.always(this.resize.bind(this));
 	},
 
-    fillInMimeTypeToComponent: function(cmps) {
+	fillInMimeTypeToComponent: function(cmps) {
 		this.mimeToComponent = cmps.reduce(function(acc, cmp) {
 			acc[cmp.mimeType] = cmp;
 
@@ -66,23 +66,23 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll',
 
 	},
 
-    getCmpForMimeType: function(mimeType) {
+	getCmpForMimeType: function(mimeType) {
 		return this.mimeToComponent[mimeType];
 	},
 
-    removeLoadingCmp: function() {
+	removeLoadingCmp: function() {
 		if (this.loadingCmp) {
 			this.loadingCmp.destroy();
 			delete this.loadingCmp;
 		}
 	},
 
-    resize: function() {
+	resize: function() {
 		this.syncHeight();
 		this.syncPositioning();
 	},
 
-    showError: function() {
+	showError: function() {
 		this.removeLoadingCmp();
 		this.resultContainer.add({
 			xtype: 'box',
@@ -90,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll',
 		});
 	},
 
-    showResults: function(results) {
+	showResults: function(results) {
 		this.removeLoadingCmp();
 
 		var me = this,
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll',
 		});
 	},
 
-    addPart: function(resultPart, questionPart) {
+	addPart: function(resultPart, questionPart) {
 		var cmp = this.getCmpForMimeType(resultPart.MimeType);
 
 		if (cmp) {
@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll',
 		}
 	},
 
-    onHideResults: function() {
+	onHideResults: function() {
 		if (this.doHideResults) {
 			this.doHideResults();
 		}

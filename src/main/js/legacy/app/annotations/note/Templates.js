@@ -150,7 +150,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Template
 			 */
 
 			//			if(options.user){involved.push(options.user);}
-			//			if(	Service.canChat()
+			//			if( Service.canChat()
 			//				&& shared
 			//				&& hasUser(involved, $AppConfig.username) ){
 			//				items.push(chatItem);

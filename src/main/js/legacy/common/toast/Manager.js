@@ -20,24 +20,24 @@ module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
 	 *
 	 * ### Example: (Chat invitation)
 	 *
-	 *     myToastMessage = Toaster.makeToast({
-	 *         title: 'Chat Invitation...',
-	 *         message: 'You\'ve been invited to chat with <span>Math Buddies</span>.',
-	 *         iconCls: 'icons-chat-32',
-	 *         timeout: 60,
-	 *         //Buttons appear in the RTL order, so decline, here, will be the rigth-most button
-	 *         buttons: [{
-	 *             label: 'decline',
-	 *             callback: [...],
-	 *             scope: this
-	 *         }, {
-	 *             label: 'accept',
-	 *             callback: [...],
-	 *             scope: this
-	 *         }],
-	 *         callback: [...],
-	 *         scope: this
-	 *     });
+	 *	   myToastMessage = Toaster.makeToast({
+	 *		   title: 'Chat Invitation...',
+	 *		   message: 'You\'ve been invited to chat with <span>Math Buddies</span>.',
+	 *		   iconCls: 'icons-chat-32',
+	 *		   timeout: 60,
+	 *		   //Buttons appear in the RTL order, so decline, here, will be the rigth-most button
+	 *		   buttons: [{
+	 *			   label: 'decline',
+	 *			   callback: [...],
+	 *			   scope: this
+	 *		   }, {
+	 *			   label: 'accept',
+	 *			   callback: [...],
+	 *			   scope: this
+	 *		   }],
+	 *		   callback: [...],
+	 *		   scope: this
+	 *	   });
 	 *
 	 * #### Note about callbacks:
 	 *

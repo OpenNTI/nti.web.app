@@ -4,11 +4,11 @@ var LibraryActions = require('../../../library/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Forums', {
-    constructor: function() {
+	constructor: function() {
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
-    addHandlers: function(handlers) {
+	addHandlers: function(handlers) {
 		// handlers['application/vnd.nextthought.forums.generalforumcomment'] = this.getPathToTopicComment.bind(this);
 		// handlers[NextThought.model.forums.CommentPost.mimeType] = this.getPathToTopicComment.bind(this);
 		// handlers[NextThought.model.forums.CommunityHeadlinePost.mimeType] = this.getPathToTopicPost.bind(this);
@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.For
 		return handlers;
 	},
 
-    getPathToForum: function(forum, getPathTo) {
+	getPathToForum: function(forum, getPathTo) {
 		var href = forum.get('href');
 
 		return this.LibraryActions.findBundleByPriority(function(bundle) {
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.For
 		});
 	},
 
-    getPathToTopic: function(topic, getPathTo) {
+	getPathToTopic: function(topic, getPathTo) {
 		return Service.getObject(topic.get('ContainerId'))
 			//if we can resolve the forum then get the path to that
 			.then(function(forum) {
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.For
 			});
 	},
 
-    getPathToTopicPost: function(post, getPathTo) {
+	getPathToTopicPost: function(post, getPathTo) {
 		return Service.getObject(post.get('ContainerId'))
 			.then(function(topic) {
 				return getPathTo(topic);
@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.For
 			});
 	},
 
-    getPathToTopicComment: function(comment, getPathTo) {
+	getPathToTopicComment: function(comment, getPathTo) {
 		return Service.getObject(comment.get('ContainerId'))
 			.then(function(topic) {
 				return getPathTo(topic);

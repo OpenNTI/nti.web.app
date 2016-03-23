@@ -9,5 +9,5 @@ module.exports = exports = Ext.define('NextThought.model.assessment.MatchingPart
 		{ name: 'values', type: 'auto' }
 	]
 },function() {
-    NextThought.model.MAP['application/vnd.nextthought.assessment.randomizedmatchingpart'] = this.$className;
+	NextThought.model.MAP['application/vnd.nextthought.assessment.randomizedmatchingpart'] = this.$className;
 });

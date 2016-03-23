@@ -8,15 +8,15 @@ var UserdataActions = require('../userdata/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
 	},
 
-    __parseSharingInfo: function(sharingInfo) {
+	__parseSharingInfo: function(sharingInfo) {
 		var entities = sharingInfo.entities,
 			newEntities = [], i,
 			isPublic = false;
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		};
 	},
 
-    savePost: function(record, blog, title, tags, body, sharingInfo) {
+	savePost: function(record, blog, title, tags, body, sharingInfo) {
 		var isEdit = Boolean(record),
 			post = isEdit ? record.get('headline') : NextThought.model.forums.PersonalBlogEntryPost.create(),
 			me = this;
@@ -86,14 +86,14 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		});
 	},
 
-    /**
+	/**
 	 * There are four distinct states:
 	 *	1) Private, no entities
 	 *	2) Public, no entities
 	 *	3) Private, with entities
 	 *	4) Public, with entities.
 	 *
-	 * The first two are the easiest. Simply toggling publish.  The last two it gets a little dicey.
+	 * The first two are the easiest. Simply toggling publish.	The last two it gets a little dicey.
 	 *
 	 * For #3, we can simply add the entities to the sharedWith field.
 	 * For #4, we add the entities to the TAGS field.
@@ -158,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 
    },
 
-    saveBlogComment: function(record, blogPost, valueObject) {
+	saveBlogComment: function(record, blogPost, valueObject) {
 		var isEdit = Boolean(record && !record.phantom),
 			commentPost = record || NextThought.model.forums.PersonalBlogComment.create();
 
@@ -183,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		});
 	},
 
-    deleteBlogPost: function(record) {
+	deleteBlogPost: function(record) {
 		var idToDestroy, me = this;
 
 		function maybeDeleteFromStore(id, store) {

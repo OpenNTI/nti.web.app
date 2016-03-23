@@ -4,25 +4,25 @@ var UserdataActions = require('../userdata/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.StateStore', {
-    extend: 'NextThought.common.StateStore',
-    obj_map: {},
-    cmpMap: {},
-    DEFAULT_SHARING: {},
+	extend: 'NextThought.common.StateStore',
+	obj_map: {},
+	cmpMap: {},
+	DEFAULT_SHARING: {},
 
-    constructor: function(){
+	constructor: function(){
 		this.callParent(arguments);
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
 	},
 
-    cacheTranscriptObject: function(id, content) {
+	cacheTranscriptObject: function(id, content) {
 		this.obj_map[id] = content;
 	},
 
-    getTranscriptObject: function(id) {
+	getTranscriptObject: function(id) {
 		return this.obj_map[id];
 	},
 
-    addComponentForStore: function(cmp, store) {
+	addComponentForStore: function(cmp, store) {
 		var id = store && store.getId ? store.getId() : store,
 			v = this.cmpMap[id] || [];
 
@@ -30,12 +30,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.StateStore', 
 		this.cmpMap[id] = v;
 	},
 
-    getComponentsForStore: function(store) {
+	getComponentsForStore: function(store) {
 		var id = store && store.getId ? store.getId() : store;
 		return this.cmpMap[id] || [];
 	},
 
-    getContext: function(cmp) {
+	getContext: function(cmp) {
 		if (!this.pageContextMap) {
 			this.pageContextMap = {};
 		}
@@ -57,11 +57,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.StateStore', 
 		return this.currentContext;
 	},
 
-    cacheSharingPreferences: function(ntiid, prefs) {
+	cacheSharingPreferences: function(ntiid, prefs) {
 		this.DEFAULT_SHARING[ntiid] = prefs;
 	},
 
-    getSharingPreferences: function(ntiid, currentBundle) {
+	getSharingPreferences: function(ntiid, currentBundle) {
 		var prefs = this.DEFAULT_SHARING[ntiid],
 			me = this;
 

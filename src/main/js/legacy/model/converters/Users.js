@@ -3,9 +3,9 @@ var Globals = require('../../util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.Users', {
-    override: 'Ext.data.Types',
+	override: 'Ext.data.Types',
 
-    USERLIST: {
+	USERLIST: {
 		type: 'UserList',
 		convert: function(v, record) {
 			var a = arguments,
@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Users', {
 		sortType: 'none'
 	},
 
-    AVATARURL: {
+	AVATARURL: {
 		type: 'AvatarURL',
 		sortType: 'asUCString',
 		convert: function convert(v, rec) {
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Users', {
 		}
 	},
 
-    AVATARURLLIST: {
+	AVATARURLLIST: {
 		type: 'AvatarURLList',
 		sortType: 'asUCString',
 		convert: function convert(v, rec) {

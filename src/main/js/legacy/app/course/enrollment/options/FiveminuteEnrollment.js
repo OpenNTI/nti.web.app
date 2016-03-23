@@ -208,7 +208,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	__getOptionDetails: function(course, option) {
 		var drop = option.OU_DropCutOffDate,
 			enroll = option.EnrollCutOffDate,
-			rv,	unsupported = false;
+			rv, unsupported = false;
 
 		drop = drop && new Date(drop);
 		enroll = enroll ? new Date(enroll) : new Date();

@@ -8,25 +8,25 @@ var ComponentsBoundPanel = require('../../../common/components/BoundPanel');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.TabView', {
-    extend: 'NextThought.common.components.NavPanel',
-    alias: 'widget.contact-tab-view',
+	extend: 'NextThought.common.components.NavPanel',
+	alias: 'widget.contact-tab-view',
 
-    mixins: {
+	mixins: {
 		// Route: 'NextThought.mixins.Router'
 	},
 
-    navigation: { xtype: 'contacts-outline' },
-    body: { xtype: 'data-bound-panel' },
-    ui: 'contacts',
-    cls: 'contact-sub-view',
+	navigation: { xtype: 'contacts-outline' },
+	body: { xtype: 'data-bound-panel' },
+	ui: 'contacts',
+	cls: 'contact-sub-view',
 
-    constructor: function(config) {
+	constructor: function(config) {
 		this.callParent(arguments);
 		this.mon(this.navigation, 'contact-row-selected', 'scrollIntoView');
 		this.on('activate', this.onActivate.bind(this));
 	},
 
-    scrollIntoView: function(rec) {
+	scrollIntoView: function(rec) {
 		var query = Ext.String.format('[recordId="{0}"]', ParseUtils.escapeId(rec.getId())),
 			cmp = this.body.down(query);
 
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.TabVi
 		}
 	},
 
-    injectLetterDividers: function(store) {
+	injectLetterDividers: function(store) {
 		var User = NextThought.model.User,
 			pluck = Ext.Array.pluck,
 			letters = {}, toAdd = [];
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.TabVi
 		store.resumeEvents();
 	},
 
-    onActivate: function() {
+	onActivate: function() {
 		if (!this.rendered) { return; }
 		this.alignNavigation();
 		this.navigation.refresh();

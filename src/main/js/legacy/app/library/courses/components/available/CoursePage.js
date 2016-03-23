@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 
 	setPageHeight: function () {
-		var h = this.ownerCt &&  this.ownerCt.el && this.ownerCt.el.getHeight(),
+		var h = this.ownerCt &&	 this.ownerCt.el && this.ownerCt.el.getHeight(),
 			me = this;
 
 		wait(10)

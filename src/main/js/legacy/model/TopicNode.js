@@ -3,10 +3,10 @@ var ContentUtils = require('../util/Content');
 
 
 module.exports = exports = Ext.define('NextThought.model.TopicNode', {
-    extend: 'Ext.data.Model',
-    idProperty: 'NTIID',
+	extend: 'Ext.data.Model',
+	idProperty: 'NTIID',
 
-    proxy: {
+	proxy: {
 		type: 'memory',
 		reader: {
 			type: 'xml',
@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.model.TopicNode', {
 		}
 	},
 
-    fields: [
+	fields: [
 		//id
 		{ name: 'NTIID', type: 'string', mapping: '@topic-ntiid',
 			convert: function(v, m) {
@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.model.TopicNode', {
 		{ name: 'isRoot', type: 'bool', defaultVale: false }
 	],
 
-    matches: function(substring) {
+	matches: function(substring) {
 		var re, rootId = this.get('NTIID'),
 			matchingMap = {}, keys,
 			children = this.get('tocNode').querySelectorAll('topic');
@@ -109,12 +109,12 @@ module.exports = exports = Ext.define('NextThought.model.TopicNode', {
 		return matchingMap;
 	},
 
-    isUnder: function(ntiid) {
+	isUnder: function(ntiid) {
 		var lineage = ContentUtils.getLineage(this.getId());
 		return lineage.indexOf(ntiid) >= 0;
 	},
 
-    getChildren: function() {
+	getChildren: function() {
 		var n = this.get('tocNode'),
 			c = n && n.getChildren();
 

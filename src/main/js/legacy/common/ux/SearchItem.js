@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.SearchItem', {
 	},
 
 	 stop: function(e) {
-	 	//Because it is in a view, it is preventing the default function of space 
-	 	e.stopPropagation();
+		//Because it is in a view, it is preventing the default function of space 
+		e.stopPropagation();
 	 }
 });

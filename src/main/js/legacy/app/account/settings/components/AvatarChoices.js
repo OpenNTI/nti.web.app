@@ -3,10 +3,10 @@ var WhiteboardUtils = require('../../../whiteboard/Utils');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.settings.components.AvatarChoices', {
-    extend: 'Ext.Component',
-    alias: 'widget.avatar-choices',
+	extend: 'Ext.Component',
+	alias: 'widget.avatar-choices',
 
-    renderTpl: Ext.DomHelper.markup({
+	renderTpl: Ext.DomHelper.markup({
 		tag: 'ul',
 		cls: 'avatar-choices',
 		cn: [
@@ -24,22 +24,22 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 				]}
 			]}
 			// {tag: 'li', cls: 'custom background', cn: [
-			// 	{cls: 'avatar-wrapper', html: '{user:background}'},
-			// 	{cls: 'wrapper', cn: [
-			// 		{tag: 'h3', cls: 'title', html: 'Background Picture'},
-			// 		{cn: [
-			// 			{tag: 'span', cls: 'editCustom', cn: [
-			// 				{tag: 'a', cls: 'editCustom', href: '#editBackground', html: '{{{NextThought.view.account.settings.AvatarChoices.edit}}}'},
-			// 				' | '
-			// 			]},
-			// 			{tag: 'a', cls: 'uploadCustom', href: '#uploadBackground', html: '{{{NextThought.view.account.settings.AvatarChoices.upload}}}'}
-			// 		]}
-			// 	]}
+			//	{cls: 'avatar-wrapper', html: '{user:background}'},
+			//	{cls: 'wrapper', cn: [
+			//		{tag: 'h3', cls: 'title', html: 'Background Picture'},
+			//		{cn: [
+			//			{tag: 'span', cls: 'editCustom', cn: [
+			//				{tag: 'a', cls: 'editCustom', href: '#editBackground', html: '{{{NextThought.view.account.settings.AvatarChoices.edit}}}'},
+			//				' | '
+			//			]},
+			//			{tag: 'a', cls: 'uploadCustom', href: '#uploadBackground', html: '{{{NextThought.view.account.settings.AvatarChoices.upload}}}'}
+			//		]}
+			//	]}
 			// ]},
 		]
 	}),
 
-    renderSelectors: {
+	renderSelectors: {
 		list: 'ul.avatar-choices',
 		avatarWrapper: 'li.avatar .avatar-wrapper',
 		editAvatarChoice: 'li.avatar span.editCustom',
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		editBackgroundChoice: 'li.background span.editCustom'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		var me = this,
 			u = (me.user || $AppConfig.userObject),
 			url = u.get('avatarURL');
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		me.callParent(arguments);
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -78,8 +78,8 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		}
 
 		// if (!background) {
-		// 	me.editBackgroundChoice.setVisibilityMode(Ext.dom.Element.DISPLAY);
-		// 	me.editBackgroundChoice.hide();
+		//	me.editBackgroundChoice.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		//	me.editBackgroundChoice.hide();
 		// }
 
 
@@ -97,12 +97,12 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 			}
 
 			// if (background) {
-			// 	me.editBackgroundChoice.show();
+			//	me.editBackgroundChoice.show();
 			// }
 		});
 	},
 
-    clickHandler: function(e) {
+	clickHandler: function(e) {
 		e.stopEvent();
 
 		var item = e.getTarget('li', null, true),
@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		}
 	},
 
-    edit: function(field, src) {
+	edit: function(field, src) {
 		var w = this.up('account-window'),
 			picEditor = w.down('picture-editor');
 
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		});
 	},
 
-    upload: function(field) {
+	upload: function(field) {
 		var w = this.up('account-window'),
 			picEditor = w.down('picture-editor');
 
@@ -145,19 +145,19 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		});
 	},
 
-    editAvatar: function() {
+	editAvatar: function() {
 		this.edit('avatarURL', $AppConfig.userObject.get('avatarURL'));
 	},
 
-    uploadAvatar: function() {
+	uploadAvatar: function() {
 		this.upload('avatarURL');
 	},
 
-    editBackground: function() {
+	editBackground: function() {
 		this.edit('backgroundURL', $AppConfig.userObject.get('backgroundURL'));
 	},
 
-    uploadBackground: function() {
+	uploadBackground: function() {
 		this.upload('backgroundURL');
 	}
 });

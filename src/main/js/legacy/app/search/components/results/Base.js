@@ -5,18 +5,18 @@ var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.search.components.results.Base', {
-    extend: 'Ext.Component',
-    alias: 'widget.search-result',
-    cls: 'search-result',
-    SYSTEM_CREATOR: 'system',
+	extend: 'Ext.Component',
+	alias: 'widget.search-result',
+	cls: 'search-result',
+	SYSTEM_CREATOR: 'system',
 
-    pathTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+	pathTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		tag: 'tpl', 'for': 'labels', cn: [
 			{tag: 'span', cls: 'list-item{[values.cls ? " " + values.cls : ""]}', html: '{label}'}
 		]
 	})),
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'title', html: '{title}'},
 		{tag: 'span', cls: 'list-item creator', html: '{creator}'},
 		{cls: 'fragments', cn: [
@@ -31,14 +31,14 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		titleEl: '.title',
 		rootIconEl: '.root-icon',
 		pathEl: '.path',
 		creatorEl: '.creator'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var hit = this.hit,
@@ -53,12 +53,12 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		this.fillInData();
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.wrapFragmentHits();
 		return this.callParent(arguments);
 	},
 
-    fillInData: function() {
+	fillInData: function() {
 		var me = this,
 			hit = me.hit,
 			name = hit.get('Creator');
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 			});
 	},
 
-    setCreator: function(user) {
+	setCreator: function(user) {
 		var creator = 'By ' + user.getName();
 
 		this.renderData.creator = creator;
@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		}
 	},
 
-    setTitle: function(record) {
+	setTitle: function(record) {
 		var title = record.get('title');
 
 		this.renderData.title = title;
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		}
 	},
 
-    showBreadCrumb: function(path) {
+	showBreadCrumb: function(path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showBreadCrumb.bind(this, path));
 			return;
@@ -139,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		}
 	},
 
-    wrapFragmentHits: function() {
+	wrapFragmentHits: function() {
 		var fragments = this.hit.get('Fragments') || [],
 			wrapped = [];
 
@@ -175,7 +175,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		this.renderData.fragments = wrapped || this.renderData.fragments;
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.typeCls) {
@@ -185,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		this.mon(this.el, 'click', this.clicked.bind(this));
 	},
 
-    clicked: function(e) {
+	clicked: function(e) {
 		var me = this,
 			hit = me.hit,
 			fragEl = e.getTarget('[ordinal]'),

@@ -6,16 +6,16 @@ var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeedback', {
-    extend: 'NextThought.app.contentviewer.overlay.Panel',
-    alias: 'widget.assignment-feedback',
-    cls: 'feedback-panel',
-    ui: 'assessment',
-    appendPlaceholder: true,
-    forceInsert: true,
-    hidden: true,
-    shouldShow: true,
+	extend: 'NextThought.app.contentviewer.overlay.Panel',
+	alias: 'widget.assignment-feedback',
+	cls: 'feedback-panel',
+	ui: 'assessment',
+	appendPlaceholder: true,
+	forceInsert: true,
+	hidden: true,
+	shouldShow: true,
 
-    items: [
+	items: [
 		{
 			xtype: 'box',
 			ui: 'feedback-title',
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		}
 	],
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var commentBox;
@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		});
 	},
 
-    addFeedback: function(editor) {
+	addFeedback: function(editor) {
 		var item = new NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback(
 						{body: editor.getValue().body}),
 			me = this,
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 
 	},
 
-    setHistory: function(history) {
+	setHistory: function(history) {
 		if (!history || !history.get('Feedback')) {
 			this.hide();
 			return;
@@ -180,13 +180,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		this.show();
 	},
 
-    showEditor: function() {
+	showEditor: function() {
 		this.editor.activate();
 		Ext.defer(this.editor.focus, 350, this.editor);
 		this.updateLayout();
 	},
 
-    updateFeedback: function(store) {
+	updateFeedback: function(store) {
 		var items = store.getRange();
 
 		this.history.get('Feedback').set({
@@ -196,7 +196,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		this.history.afterEdit(['feedback']);
 	},
 
-    resolveUsers: function(store) {
+	resolveUsers: function(store) {
 		var pluck = Ext.Array.pluck,
 			list = this.feedbackList,
 			records = store.getRange();
@@ -219,7 +219,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 
 	},
 
-    openEditorFor: function(record, el) {
+	openEditorFor: function(record, el) {
 		var me = this;
 
 
@@ -279,7 +279,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		me.editEditor.activate();
 	},
 
-    onFeedbackClick: function(s, record, item, index, e) {
+	onFeedbackClick: function(s, record, item, index, e) {
 		var c = record.get('Creator'),
 			store = this.store;
 
@@ -294,13 +294,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		}
 	},
 
-    addMask: function(){
+	addMask: function(){
 		if(this.feedbackList) {
 			this.feedbackList.el.mask('Loading...');
 		}
 	},
 
-    removeMask: function(){
+	removeMask: function(){
 		if(this.feedbackList) {
 			this.feedbackList.el.unmask();
 		}

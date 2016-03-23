@@ -4,11 +4,11 @@ var EnrollmentStateStore = require('../../../enrollment/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.parts.NotStarted', {
-    extend: 'Ext.Component',
-    alias: 'widget.course-info-not-started',
-    ui: 'course-info',
+	extend: 'Ext.Component',
+	alias: 'widget.course-info-not-started',
+	ui: 'course-info',
 
-    renderTpl: Ext.DomHelper.createTemplate({ cls: 'course-info-header-bar {status}', cn: [
+	renderTpl: Ext.DomHelper.createTemplate({ cls: 'course-info-header-bar {status}', cn: [
 		{ cls: 'col-right', cn: [
 			{ tag: 'a', cls: 'enroll', html: '{enroll}', href: '{enrollUrl}', target: '_blank'},
 			{ cls: 'registered', cn: [
@@ -18,15 +18,15 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 		] }
 	] }),
 
-    config: {
+	config: {
 		info: null
 	},
 
-    renderSelectors: {
+	renderSelectors: {
 		editLink: '.edit'
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		var i = this.getInfo() || {},
 			c = (i.get('Credit') || [])[0],
 			e = (c && c.get('Enrollment')) || {},

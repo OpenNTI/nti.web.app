@@ -9,17 +9,17 @@ var ComponentsView = require('./components/View');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.media-window-view',
+	extend: 'Ext.container.Container',
+	alias: 'widget.media-window-view',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router',
 		State: 'NextThought.mixins.State'
 	},
 
-    layout: 'none',
+	layout: 'none',
 
-    initComponent: function(argument) {
+	initComponent: function(argument) {
 		this.callParent(argument);
 
 		this.initRouter();
@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 		this.__addKeyMapListeners();
 	},
 
-    showMediaView: function(route, subRoute) {
+	showMediaView: function(route, subRoute) {
 		var basePath = route.precache.basePath,
 			rec = route.precache.rec,
 			options = route.precache.options || {},
@@ -98,17 +98,17 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 		}
 	},
 
-    __presentVideo: function(videoId, basePath, options) {
+	__presentVideo: function(videoId, basePath, options) {
 		var me = this;
 		me.resolveVideo(videoId)
 			.then(function(videoRec) {
 				me.video = videoRec;
- 				me.transcript = NextThought.model.transcript.TranscriptItem.fromVideo(me.video, basePath);
+				me.transcript = NextThought.model.transcript.TranscriptItem.fromVideo(me.video, basePath);
 				me.activeMediaView.setContent(me.video, me.transcript, options);
 			});
 	},
 
-    __presentSlidedeck: function(slidedeckId, slidedeck, options) {
+	__presentSlidedeck: function(slidedeckId, slidedeck, options) {
 		var me = this,
 			p = slidedeck && slidedeck.isModel ? Promise.resolve(slidedeck) : Service.getObject(slidedeckId);
 
@@ -125,12 +125,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 		});
 	},
 
-    showVideoGrid: function(route, subRoute) {
+	showVideoGrid: function(route, subRoute) {
 		//TOOD: not yet handled
 		console.error('route not yet implemented: ', arguments);
 	},
 
-    __addKeyMapListeners: function() {
+	__addKeyMapListeners: function() {
 		keyMap = new Ext.util.KeyMap({
 			target: document,
 			binding: [{
@@ -143,23 +143,23 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 		this.on('destroy', function() {keyMap.destroy(false);});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.maybeMask();
 	},
 
-    destroy: function() {
+	destroy: function() {
 		this.activeMediaView.destroy();
 		this.callParent(arguments);
 	},
 
-    allowNavigation: function() {
+	allowNavigation: function() {
 		var me = this;
 
 		return !me.activeMediaView || me.activeMediaView.allowNavigation();
 	},
 
-    resolveVideo: function(id) {
+	resolveVideo: function(id) {
 		var me = this, video, basePath;
 
 		if (!id || !this.currentBundle) {
@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 			});
 	},
 
-    getContext: function() {
+	getContext: function() {
 		var me = this;
 
 		return me.resolveVideo(me.mediaId)
@@ -192,7 +192,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 				});
 	},
 
-    containsId: function(contextRecord, id) {
+	containsId: function(contextRecord, id) {
 		var result = false;
 		if (contextRecord.getId() === this.slidedeckId) {
 			result = this.slidedeck.containsSlide(id);
@@ -204,14 +204,14 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 		return result;
 	},
 
-    bundleChanged: function(bundle) {
+	bundleChanged: function(bundle) {
 		if (bundle && bundle !== this.currentBundle) {
 			// TODO: Do more, maybe?
 			this.currentBundle = bundle;
 		}
 	},
 
-    maybeMask: function() {
+	maybeMask: function() {
 		if (!this.rendered || this.hasCls('loading')) {
 			return;
 		}
@@ -220,14 +220,14 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 		this.el.mask('Loading media viewer comtents...', 'loading');
 	},
 
-    maybeUnmask: function() {
+	maybeUnmask: function() {
 		if (this.rendered) {
 			this.removeCls('loading');
 			this.el.unmask();
 		}
 	},
 
-    exitViewer: function() {
+	exitViewer: function() {
 		var me = this,
 			mediaId = this.videoId || this.slidedeckId;
 
@@ -257,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 			});
 	},
 
-    __navigateToParent: function(lesson) {
+	__navigateToParent: function(lesson) {
 		var me = this;
 
 		return new Promise(function(fulfill, reject) {
@@ -275,7 +275,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 		});
 	},
 
-    /**
+	/**
 	 * This function provides a way to go to the parent lesson.
 	 * Now, it's mainly used by the Slidedeck, since its libraryPath is not correct
 	 * For videos, we will resolve the parent lesson based on their library path.

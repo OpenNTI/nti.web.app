@@ -4,9 +4,9 @@ var StoreStripePricedPurchasable = require('./StripePricedPurchasable');
 
 
 module.exports = exports = Ext.define('NextThought.model.store.PricingResults', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    fields: [
+	fields: [
 		{ name: 'Currency', type: 'string', persist: false },
 		{ name: 'TotalPurchasePrice', type: 'float', persist: false },
 		{ name: 'TotalNonDiscountedPrice', type: 'float', persist: false },

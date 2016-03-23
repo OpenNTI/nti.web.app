@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.filter.Filter', {
 
 		t = (v === 'Everyone' && f === 'Creator') || this.compareValue(v, t);
 
-    //		console.debug(t,this.toString());
+	//		console.debug(t,this.toString());
 
 		return o === this.self.OPERATION_EXCLUDE
 				? !t

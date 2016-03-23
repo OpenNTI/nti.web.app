@@ -4,11 +4,11 @@ var StoreStateStore = require('../../../store/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.GiftConfirmation', {
-    extend: 'Ext.Component',
-    alias: 'widget.enrollment-gift-confirmation',
-    cls: 'enrollment-gift-confirmation',
+	extend: 'Ext.Component',
+	alias: 'widget.enrollment-gift-confirmation',
+	cls: 'enrollment-gift-confirmation',
 
-    giftInfoTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+	giftInfoTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cn: [
 			'{{{NextThought.view.courseware.enrollment.GiftConfirmation.EmailReceipt}}} ',
 			{tag: 'tpl', 'if': 'receiverEmail', cn: [
@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		]}
 	])),
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'title', html: '{heading}'},
 		{cls: 'gift-info', html: '{gift-info}'},
 		{cls: 'prompt', html: '{prompt}'},
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		{cls: 'iframe-container'}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		tokenEl: '.token .token-text',
 		transactionEl: '.transaction .transaction-id',
 		giftEl: '.gift-info',
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		iframeEl: '.iframe-container'
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		var prompt = this.getPrompt();
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-    getPrompt: function(hasReceiver) {
+	getPrompt: function(hasReceiver) {
 		var c = this.course,
 			start = c.get('StartDate'),
 			prompt;
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return prompt;
 	},
 
-    beforeShow: function() {
+	beforeShow: function() {
 		var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
 			receiverEmail = purchaseAttempt && purchaseAttempt.get('Receiver'),
 			transactionId = purchaseAttempt && purchaseAttempt.get('TransactionID'),
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-    addThankYouPage: function(url) {
+	addThankYouPage: function(url) {
 		var container = this.iframeEl.dom,
 			existing = container.querySelector('iframe'),
 			iframe;

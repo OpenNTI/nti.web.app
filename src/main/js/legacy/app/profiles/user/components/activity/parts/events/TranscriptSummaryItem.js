@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 				if (me.rendered) {
 					//oops...we resolved later than the render...re-render
 					me.renderTpl.overwrite(me.el, me.renderData);
-          //				}else{
+		  //				}else{
 					//me.renderTpl.overwrite(me.el,me.renderData);
 				}
 
@@ -153,8 +153,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 						if (me.rendered) {
 							//oops...we resolved later than the render...re-render
 							me.renderTpl.overwrite(me.el, me.renderData);
-              //						}else{
-              //							me.renderTpl.overwrite(me.el,me.renderData);
+			  //						}else{
+			  //							me.renderTpl.overwrite(me.el,me.renderData);
 						}
 					});
 					unMask();
@@ -174,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		//get the page info
 		//check if its cached
 
-        NextThought.app.groups.StateStore.getInstance().getFriendsList()
+		NextThought.app.groups.StateStore.getInstance().getFriendsList()
 		page = NextThought.app.groups.StateStore.getInstance().getFriendsList().getById(RoomInfo.get('ContainerId'));
 
 		if (page) {

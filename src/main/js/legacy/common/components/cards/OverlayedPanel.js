@@ -6,13 +6,13 @@ var CardsCard = require('./Card');
 
 
 module.exports = exports = Ext.define('NextThought.common.components.cards.OverlayedPanel', {
-    extend: 'NextThought.app.contentviewer.overlay.Panel',
-    alias: 'widget.overlay-card',
-    representsUserDataContainer: true,
-    ui: 'content-card',
-    cls: 'content-card-container',
+	extend: 'NextThought.app.contentviewer.overlay.Panel',
+	alias: 'widget.overlay-card',
+	representsUserDataContainer: true,
+	ui: 'content-card',
+	cls: 'content-card-container',
 
-    statics: {
+	statics: {
 		getData: function(dom, reader) {
 			var el = Ext.get(dom),
 				data = DomUtils.parseDomObject(dom),
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Overl
 		}
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Overl
 		this.callParent([config]);
 	},
 
-    findLine: function() {
+	findLine: function() {
 		var doc = this.contentElement.ownerDocument,
 			range = doc.createRange();
 

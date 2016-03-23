@@ -5,21 +5,21 @@ var EditingActions = require('../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.settings.Window', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.overview-editing-settings-window',
-    cls: 'content-editor',
-    layout: 'none',
-    items: [],
-    title: 'Advanced Settings',
+	extend: 'Ext.container.Container',
+	alias: 'widget.overview-editing-settings-window',
+	cls: 'content-editor',
+	layout: 'none',
+	items: [],
+	title: 'Advanced Settings',
 
-    statics: {
+	statics: {
 		canChangeVisibility: function(record) {
 			var r = record && record.raw || {};
 			return r.hasOwnProperty('visibility');
 		}
 	},
 
-    initComponent: function(){
+	initComponent: function(){
 		this.callParent(arguments);
 
 		var data = this.Prompt.data;
@@ -36,33 +36,33 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				parentRecord: this.parentRecord,
 				defaultValue:  this.record && this.record.get('visibility'),
 				onChange: this.enableSave.bind(this)
-			});	
+			}); 
 		}
 	},
 
-    afterRender: function(){
+	afterRender: function(){
 		this.callParent(arguments);
 
 		this.setHeaderTitle(this.title);
 	},
 
-    enableSave: function() {
+	enableSave: function() {
 		return this.Prompt.Footer.enableSave();
 	},
 
-    disableSave: function() {
+	disableSave: function() {
 		return this.Prompt.Footer.disableSave();
 	},
 
-    setHeaderTitle: function(title) {
+	setHeaderTitle: function(title) {
 		return this.Prompt.Header.setTitle(title);
 	},
 
-    onSave: function(){
+	onSave: function(){
 		return this.EditingActions.updateRecordVisibility(this.record, this.visibilityCmp);
 	},
 
-    onCancel: function(){
+	onCancel: function(){
 		return Promise.resolve();
 	}
 }, function() {

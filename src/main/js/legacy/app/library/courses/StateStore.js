@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	getAdminCourses: function() { return this.ADMIN_COURSES; },
 
 
-	getAllCourses: function() {	return this.ALL_COURSES; },
+	getAllCourses: function() { return this.ALL_COURSES; },
 
 	__updateCoursesEnrollmentState: function(courses) {
 		var me = this;
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	/**
 	 * Filter the courses down to the ones that haven't expired yet
 	 * @param  {Array} courses list of courses
-	 * @return {Array}         courses in the list that haven't expired
+	 * @return {Array}		   courses in the list that haven't expired
 	 */
 	__getCurrentCourses: function(courses) {
 		var current = [];
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	/**
 	 * Filter the courses down to ones that have expired
 	 * @param  {Array} courses list of courses
-	 * @return {Array}         courses in the list that are expired
+	 * @return {Array}		   courses in the list that are expired
 	 */
 	__getArchivedCourses: function(courses) {
 		var archived = [];
@@ -377,7 +377,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	/**
 	 * Return all courses in the same catalog family
 	 * @param  {String} familyId id of the catalog family to search for
-	 * @return {[Course]}        list of courses in the same catalog family
+	 * @return {[Course]}		 list of courses in the same catalog family
 	 */
 	findForCatalogFamily: function(familyId) {
 		return this.findCoursesBy(function(course) {

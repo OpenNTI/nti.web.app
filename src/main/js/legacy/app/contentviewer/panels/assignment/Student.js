@@ -7,12 +7,12 @@ var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
-    extend: 'NextThought.app.contentviewer.panels.Reader',
-    alias: 'widget.assignment-reader',
-    prefix: 'course-assignment',
-    cls: 'reader-container assignment-reader',
+	extend: 'NextThought.app.contentviewer.panels.Reader',
+	alias: 'widget.assignment-reader',
+	prefix: 'course-assignment',
+	cls: 'reader-container assignment-reader',
 
-    getToolbarConfig: function() {
+	getToolbarConfig: function() {
 		return {
 			xtype: 'assignment-header',
 			student: this.student,
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		};
 	},
 
-    getReaderConfig: function() {
+	getReaderConfig: function() {
 		var assignment = this.assignment;
 
 		if (assignment.isTimed && !assignment.isStarted() && isMe(this.student) && !this.instructorProspective) {
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		}
 	},
 
-    startTimed: function(assignment) {
+	startTimed: function(assignment) {
 		if (this.pageInfo) {
 			this.pageInfo.replaceAssignment(assignment);
 		}
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		}
 	},
 
-    showAllowedTime: function() {
+	showAllowedTime: function() {
 		var toolbar = this.getToolbar();
 
 		if (toolbar && toolbar.showAllowedTime) {
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		}
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.hasTimedPlaceholder) {
@@ -80,10 +80,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		}
 	},
 
-    //Override this so the reader doesn't set the page info twice
+	//Override this so the reader doesn't set the page info twice
 	setPageInfo: function() {},
 
-    showAssignment: function() {
+	showAssignment: function() {
 		var me = this,
 			header = me.getToolbar(),
 			reader = me.getReaderContent(),
@@ -139,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		}).always(done.bind(this));
 	},
 
-    updateHistory: function(h) {
+	updateHistory: function(h) {
 		var header = this.getToolbar(),
 			readerContent = this.getReaderContent(),
 			assessment = readerContent.getAssessment();
@@ -148,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		header.setHistory(h);
 	},
 
-    getAnalyticData: function() {
+	getAnalyticData: function() {
 		if (!this.assignment) {
 			return {};
 		}

@@ -298,11 +298,11 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 	modify: function(nib,	x1,y1,	x2,y2,	dx,dy) {
 		var m = new NTMatrix(this.transform),
 			map = {
-				'l'	: function() { return this.nibUpdate(m, x1, y1, dx, dy, -1, 0);},
-				't'	: function() { return this.nibUpdate(m, x1, y1, dx, dy, 0, -1);},
+				'l' : function() { return this.nibUpdate(m, x1, y1, dx, dy, -1, 0);},
+				't' : function() { return this.nibUpdate(m, x1, y1, dx, dy, 0, -1);},
 				't-l'	: function() { return this.nibUpdate(m, x1, y1, dx, dy, 1, 1); },
-				'r'	: function() { return this.nibUpdate(m, x1, y1, dx, dy, 1, 0); },
-				'b'	: function() { return this.nibUpdate(m, x1, y1, dx, dy, 0, 1); },
+				'r' : function() { return this.nibUpdate(m, x1, y1, dx, dy, 1, 0); },
+				'b' : function() { return this.nibUpdate(m, x1, y1, dx, dy, 0, 1); },
 				'b-r'	: function() { return this.nibUpdate(m, x1, y1, dx, dy, 1, 1); },
 				't-r'	: function() { return this.nibUpdate(m, x1, y1, dx, dy, 1, 1); },
 				'b-l'	: function() { return this.nibUpdate(m, x1, y1, dx, dy, 1, 1); },
@@ -394,8 +394,8 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 		ctx.rotate(rot);
 		ctx.translate(-center[0], -center[1]);
 
-		r = 6;  //circle
-		a = 8;  //square
+		r = 6;	//circle
+		a = 8;	//square
 
 		b.mx = (b.w / 2) + b.x;
 		b.my = (b.h / 2) + b.y;
@@ -507,14 +507,14 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 	},
 
 	/**
-	 *  Globals which should be set before calling this function:
+	 *	Globals which should be set before calling this function:
 	 *
-	 *  @param x - point to be tested
-	 *  @param y - point to be tested
-	 *  @param poly - two dimentional array with horizontal & vertical coordinates of corners in their own arrays
+	 *	@param x - point to be tested
+	 *	@param y - point to be tested
+	 *	@param poly - two dimentional array with horizontal & vertical coordinates of corners in their own arrays
 	 *
-	 *  @return true if the point x,y is inside the polygon, or false if it is not.  If the point is
-	 *  exactly on the edge of the polygon, then the function may return true or false.
+	 *	@return true if the point x,y is inside the polygon, or false if it is not.	 If the point is
+	 *	exactly on the edge of the polygon, then the function may return true or false.
 	 */
 	pointInPolygon: function(x,y, points) {
 		function dotProduct(p1, p2) {
@@ -525,7 +525,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 			return [v1[0] - v2[0], v1[1] - v2[1]];
 		}
 
-		var	point = [x, y];
+		var point = [x, y];
 		var p0p3 = subtractVector(points[3], points[0]),
 			p0p1 = subtractVector(points[1], points[0]),
 			v = subtractVector(point, points[0]);

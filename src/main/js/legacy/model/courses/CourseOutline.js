@@ -12,39 +12,39 @@ var Url = require('url');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline', {
-    extend: 'NextThought.model.Base',
-    mimeType: 'application/vnd.nextthought.courses.courseoutline',
+	extend: 'NextThought.model.Base',
+	mimeType: 'application/vnd.nextthought.courses.courseoutline',
 
-    mixins: {
+	mixins: {
 		DurationCache: 'NextThought.mixins.DurationCache',
 		MovingRoot: 'NextThought.mixins.MovingRoot'
 	},
 
-    fields: [
+	fields: [
 		{name: 'CourseOutlineSharedEntries', type: 'auto', persist: false},
 		{name: 'Items', type: 'arrayItem', persist: false},
 		{name: 'IsCourseOutlineShared', type: 'bool', persist: false}
 	],
 
-    hasContentsLink: function() {
+	hasContentsLink: function() {
 		return !!this.getLink('contents');
 	},
 
-    setBundle: function(bundle) {
+	setBundle: function(bundle) {
 		this.bundle = bundle;
 	},
 
-    getTitle: function() {
+	getTitle: function() {
 		return this.bundle && this.bundle.getTitle();
 	},
 
-    getAllowedTypes: function() {
+	getAllowedTypes: function() {
 		return [
 			NextThought.model.courses.navigation.CourseOutlineNode.mimeType
 		];
 	},
 
-    __loadContents: function(link, key, doNotCache) {
+	__loadContents: function(link, key, doNotCache) {
 		var me = this,
 			load;
 
@@ -73,13 +73,13 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 		return load;
 	},
 
-    getOutlineContents: function(doNotCache) {
+	getOutlineContents: function(doNotCache) {
 		var link = this.getLink('contents');
 
 		return this.__loadContents(link, 'LoadContents', doNotCache);
 	},
 
-    getAdminOutlineContents: function(doNotCache) {
+	getAdminOutlineContents: function(doNotCache) {
 		var link = this.getLink('contents'),
 			parts = Url.parse(link),
 			query = Ext.Object.fromQueryString(parts.search);
@@ -92,11 +92,11 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 		return this.__loadContents(link, 'AdminLoadContents', doNotCache);
 	},
 
-    hasSharedEntries: function() {
+	hasSharedEntries: function() {
 		return this.get('IsCourseOutlineShared');
 	},
 
-    findOutlineNode: function(id) {
+	findOutlineNode: function(id) {
 		return this.getOutlineContents()
 			.then(function(outline) {
 				var items = outline.get('Items'),
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 			});
 	},
 
-    getContents: function() {
+	getContents: function() {
 		var me = this, l;
 
 		if (!me.__promiseToLoadContents) {
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 		return me.__promiseToLoadContents;
 	},
 
-    findNode: function(id) {
+	findNode: function(id) {
 		if (!this.navStore) {
 			return Promise.reject('Navigation store not loaded');
 		}
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 				});
 	},
 
-    getNode: function(id) {
+	getNode: function(id) {
 		var legacy, node = (this.get('Items') || []).reduce(function(n, o) {
 			return n || (o.findNode && o.findNode(id));
 		}, null);
@@ -160,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 		return node;
 	},
 
-    //TODO: do we need this funtion?
+	//TODO: do we need this funtion?
 	isVisible: function(ntiid) {
 		if (!this.bundle) {
 			return Promise.resolve(true);
@@ -184,15 +184,15 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 			});
 	},
 
-    onItemUpdated: function() {
+	onItemUpdated: function() {
 		NextThought.store.courseware.OutlineInterface.fillInDepths(this);
 	},
 
-    onItemAdded: function() {
+	onItemAdded: function() {
 		NextThought.store.courseware.OutlineInterface.fillInDepths(this);
 	},
 
-    onSync: function() {
+	onSync: function() {
 		NextThought.store.courseware.OutlineInterface.fillInDepths(this);
 		this.fillInItems();
 	}

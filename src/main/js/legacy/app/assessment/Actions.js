@@ -10,15 +10,15 @@ var ContextStateStore = require('../context/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
-    __getDataForSubmission: function(questionSet, submissionData, containerId, startTime, questionCls, questionMime, questionId) {
+	__getDataForSubmission: function(questionSet, submissionData, containerId, startTime, questionCls, questionMime, questionId) {
 		var me = this, key, value, qData,
 			endTimeStamp = (new Date()).getTime(),
 			//in seconds
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		return data;
 	},
 
-    __getDataForQuestionSubmission: function(questionSet, submissionData, containerId, startTime) {
+	__getDataForQuestionSubmission: function(questionSet, submissionData, containerId, startTime) {
 		return this.__getDataForSubmission(
 				questionSet,
 				submissionData,
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			);
 	},
 
-    __getDataForSurveySubmission: function(survey, submissionData, containerId, startTime) {
+	__getDataForSurveySubmission: function(survey, submissionData, containerId, startTime) {
 		var data = this.__getDataForSubmission(
 				survey,
 				submissionData,
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		return data;
 	},
 
-    gradeAssessment: function(questionSet, submissionData, containerId, startTime) {
+	gradeAssessment: function(questionSet, submissionData, containerId, startTime) {
 		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, containerId, startTime),
 			qsetSubmission;
 
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
-    submitSurvey: function(survey, submissionData, containerId, startTime) {
+	submitSurvey: function(survey, submissionData, containerId, startTime) {
 		var data = this.__getDataForSurveySubmission(survey, submissionData, containerId, startTime),
 			surveySubmission;
 
@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
-    submitAssignment: function(questionSet, submissionData, containerId, startTime) {
+	submitAssignment: function(questionSet, submissionData, containerId, startTime) {
 		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, containerId, startTime),
 			assignmentId = questionSet.associatedAssignment.getId(),
 			qsetSubmission, assignmentSubmission;
@@ -167,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
-    saveProgress: function(questionSet, submissionData, startTime) {
+	saveProgress: function(questionSet, submissionData, startTime) {
 		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, '', startTime),
 			qsetSubmission, assignmentSubmission,
 			assignment = questionSet.associatedAssignment,
@@ -204,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
-    checkAnswer: function(question, answerValues, startTime, canSubmitIndividually) {
+	checkAnswer: function(question, answerValues, startTime, canSubmitIndividually) {
 		var endTimestamp = (new Date()).getTime(),
 			// in seconds
 			// TODO We may have to reset startTimestamp, depending on flow.
@@ -235,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
-    submitPoll: function(poll, answerValues, startTime, canSubmitIndividually) {
+	submitPoll: function(poll, answerValues, startTime, canSubmitIndividually) {
 		var endTimeStamp = (new Date()).getTime(),
 			// in seconds
 			// TODO We may have to reset startTimestamp, depending on flow.

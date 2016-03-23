@@ -5,14 +5,14 @@ var CalendarnodePreview = require('./Preview');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.calendarnode.Index', {
-    extend: 'NextThought.app.course.overview.components.editing.outline.outlinenode.Index',
-    alias: 'widget.overview-editing.calendarnode',
+	extend: 'NextThought.app.course.overview.components.editing.outline.outlinenode.Index',
+	alias: 'widget.overview-editing.calendarnode',
 
-    statics: {
+	statics: {
 		getSupported: function() {
 			return NextThought.model.courses.navigation.CourseOutlineCalendarNode.mimeType;
 		}
 	},
 
-    PREVIEW_TYPE: 'overview-editing-outline-calendarnode-preview'
+	PREVIEW_TYPE: 'overview-editing-outline-calendarnode-preview'
 });

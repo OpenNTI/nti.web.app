@@ -21,23 +21,23 @@ var PartsTextInput = require('./parts/TextInput');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.Purchase', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.enrollment-purchase',
+	extend: 'Ext.container.Container',
+	alias: 'widget.enrollment-purchase',
 
-    mixins: {
+	mixins: {
 		form: 'NextThought.mixins.enrollment-feature.Form'
 	},
 
-    defaultType: 'enrollment-group',
+	defaultType: 'enrollment-group',
 
-    buttonCfg: [
+	buttonCfg: [
 		{name: getString('NextThought.view.courseware.enrollment.Purchase.ContEnroll'), disabled: true, action: 'submit-payment'},
 		{name: getString('NextThought.view.courseware.enrollment.Purchase.CancelEnroll'), disabled: false, action: 'go-back', secondary: true}
 	],
 
-    STATE_NAME: 'enrollment-purchase',
+	STATE_NAME: 'enrollment-purchase',
 
-    form: [
+	form: [
 		{
 			name: 'payment',
 			label: getString('NextThought.view.courseware.enrollment.Purchase.PayInfo'),
@@ -123,12 +123,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	],
 
-    changeMonitors: {
+	changeMonitors: {
 		'coupon': 'updatePrice',
 		'quantity': 'updatePrice'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.enableBubble(['show-msg', 'update-buttons', 'create-enroll-purchase']);
@@ -142,13 +142,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.add(this.form);
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.beforeShow();
 	},
 
-    fillInDefaults: function(values) {
+	fillInDefaults: function(values) {
 		values.number = '';
 		values.cvc = '';
 		values.affirm = false;
@@ -156,36 +156,36 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return values;
 	},
 
-    lock: function() {
+	lock: function() {
 		this.locked = true;
 		this.previousDisabled = this.submitBtnCfg.disabled;
 		this.submitBtnCfg.disabled = true;
 		this.fireEvent('update-buttons');
 	},
 
-    unlock: function() {
+	unlock: function() {
 		this.locked = false;
 		this.submitBtnCfg.disabled = !!this.previousDisabled;
 		this.fireEvent('update-buttons');
 	},
 
-    beforeShow: function() {
+	beforeShow: function() {
 		// this.submitBtnCfg.disabled = false;
 		// this.fireEvent('update-buttons');
 		this.updateFromStorage();
 	},
 
-    getButtonCfg: function() {
+	getButtonCfg: function() {
 		return this.buttonCfg;
 	},
 
-    buttonClick: function(action) {
+	buttonClick: function(action) {
 		if (action === 'submit-payment') {
 			this.maybeSubmit();
 		}
 	},
 
-    stopClose: function() {
+	stopClose: function() {
 		var r, me = this;
 
 		if (this.hasMask()) {
@@ -215,12 +215,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return r;
 	},
 
-    showTerms: function() {
+	showTerms: function() {
 		//TODO hardcoded link needs to go away preferably for a link like what we use for the welcome guide
 		window.open(Service.getSupportLinks().termsOfService, '_blank');
 	},
 
-    getPricingInfo: function(formValue) {
+	getPricingInfo: function(formValue) {
 		var desc = {Purchasable: this.enrollmentOption.Purchasable},
 			coupon = this.getCoupon();
 
@@ -231,7 +231,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return desc;
 	},
 
-    getParsedValues: function() {
+	getParsedValues: function() {
 		var raw = this.getValue();
 
 		if (raw.exp_) {
@@ -253,7 +253,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return raw;
 	},
 
-    shouldAllowSubmission: function() {
+	shouldAllowSubmission: function() {
 		var me = this;
 
 		return new Promise(function(fulfill, reject) {
@@ -266,7 +266,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-    showStripeError: function(json) {
+	showStripeError: function(json) {
 		var error = {};
 
 		if (json) {
@@ -288,7 +288,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.showError(error);
 	},
 
-    maybeSubmit: function() {
+	maybeSubmit: function() {
 		var me = this,
 			invalid,
 			value = me.getParsedValues(),

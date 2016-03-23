@@ -17,34 +17,34 @@ var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItem', {
-    extend: 'Ext.container.Container',
+	extend: 'Ext.container.Container',
 
-    alias: [
+	alias: [
 		'widget.profile-activity-communityheadlinetopic-item',
 		'widget.profile-activity-dflheadlinetopic-item',
 		'widget.profile-forum-activity-item'
 	],
 
-    mixins: {
+	mixins: {
 		flagActions: 'NextThought.mixins.FlagActions',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
 		profileLink: 'NextThought.mixins.ProfileLinks'
 	},
 
-    defaultType: 'profile-forum-activity-item-reply',
-    ui: 'activity',
-    layout: 'none',
-    componentLayout: 'natural',
-    getTargetEl: function() {return this.body;},
-    childEls: ['body'],
+	defaultType: 'profile-forum-activity-item-reply',
+	ui: 'activity',
+	layout: 'none',
+	componentLayout: 'natural',
+	getTargetEl: function() {return this.body;},
+	childEls: ['body'],
 
-    pathTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+	pathTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		tag: 'tpl', 'for': 'paths', cn: [
 			{tag: 'span', html: '{.}'}
 		]
 	})),
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'topic profile-activity-item',
 			cn: [
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		avatarEl: '.avatar',
 		nameEl: '.name',
 
@@ -130,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		replyOptions: '.respond .reply-options'
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		var me = this, rd, r = me.record,
 			h = r.get('headline'),
 			username = me.record.get('Creator'),
@@ -199,7 +199,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			.then(me.setPath.bind(me));
 	},
 
-    updateCount: function(key, value) {
+	updateCount: function(key, value) {
 		console.log(arguments);
 		if (this.rendered) {
 			this.commentsEl.update(value + ' Comment' + (value > 1 ? 's' : ''));
@@ -209,7 +209,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    onDeletePost: function(e) {
+	onDeletePost: function(e) {
 		e.stopEvent();
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
@@ -230,7 +230,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    onDestroy: function() {
+	onDestroy: function() {
 		this.record.removeObserverForField(this, 'PostCount', this.updateCount, this);
 
 		if (this.editor) {
@@ -242,11 +242,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.callParent(arguments);
 	},
 
-    getRecord: function() {
+	getRecord: function() {
 		return this.record;
 	},
 
-    getRefItems: function() {
+	getRefItems: function() {
 		var ret = this.callParent(arguments) || [];
 		if (this.editor) {
 			ret.push(this.editor);
@@ -254,7 +254,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return ret;
 	},
 
-    fillInReplies: function(s, recs) {
+	fillInReplies: function(s, recs) {
 		this.removeAll(true);
 		if (recs) {
 			this.add(Ext.Array.map(recs, function(r) {
@@ -263,7 +263,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var box = this.replyOptions;
@@ -311,7 +311,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.mon(this.record, 'destroy', this.destroy, this);
 	},
 
-    bodyClickHandler: function(event) {
+	bodyClickHandler: function(event) {
 		event.stopEvent();
 		var me = this,
 			a = event.getTarget('a');
@@ -324,13 +324,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    showEditor: function() {
+	showEditor: function() {
 		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);
 	},
 
-    saveComment: function(editor, record, valueObject, successCallback) {
+	saveComment: function(editor, record, valueObject, successCallback) {
 		var me = this,
 			topic = this.record;
 
@@ -355,7 +355,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			});
 	},
 
-    setPath: function(path) {
+	setPath: function(path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setPath.bind(this, path));
 			return;
@@ -372,7 +372,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    setBody: function(text, insertComponents) {
+	setBody: function(text, insertComponents) {
 		var me = this;
 
 		if (!me.rendered) {
@@ -389,26 +389,26 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    click: function() {
+	click: function() {
 		alert('Clicked');
 		return false;
 	},
 
-    forumClickHandlerGoToComments: function() {
+	forumClickHandlerGoToComments: function() {
 		this.navigateToObject(this.record);
 	},
 
-    forumClickHandler: function() {
+	forumClickHandler: function() {
 		this.navigateToObject(this.record, {
 			afterClose: this.updateRecord.bind(this)
 		});
 	},
 
-    bodyClickHandler: function() {
+	bodyClickHandler: function() {
 		this.navigateToObject(this.record);
 	},
 
-    updateRecord: function(rec) {
+	updateRecord: function(rec) {
 		var headline;
 		if (!this.rendered) {
 			return;
@@ -420,7 +420,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.titleEl.update(headline.get('title'));
 	},
 
-    navigateToTopicForEdit: function(e, el) {
+	navigateToTopicForEdit: function(e, el) {
 		var me = this;
 
 		me.WindowActions.pushWindow(me.record, 'edit', el, {
@@ -432,16 +432,16 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 
 Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItemReply', {
-    extend: 'Ext.Component',
-    alias: 'widget.profile-forum-activity-item-reply',
+	extend: 'Ext.Component',
+	alias: 'widget.profile-forum-activity-item-reply',
 
-    mixins: {
+	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
 		flagActions: 'NextThought.mixins.FlagActions'
 	},
 
-    renderTpl: Ext.DomHelper.markup({
+	renderTpl: Ext.DomHelper.markup({
 		cls: 'reply profile-activity-reply-item',
 		cn: [
 			'{user:avatar}',
@@ -469,7 +469,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		]
 	}),
 
-    renderSelectors: {
+	renderSelectors: {
 		avatarEl: '.avatar',
 		nameEl: '.name',
 		messageBodyEl: '.body',
@@ -482,7 +482,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		metaEl: '.meta'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.mixins.flagActions.constructor.call(this);
 		this.mon(this.record, 'destroy', this.onRecordDestroyed, this);
@@ -490,7 +490,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		this.ForumActions = NextThought.app.forums.Actions.create();
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		var me = this, rd, r = me.record,
 			username = me.record.get('Creator');
 
@@ -515,11 +515,11 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		});
 	},
 
-    getRefItems: function() {
+	getRefItems: function() {
 		return this.editor ? [this.editor] : [];
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var optionsEl = this.controlOptions,
@@ -577,7 +577,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		}
 	},
 
-    saveComment: function(editor, record, valueObject, successCallback) {
+	saveComment: function(editor, record, valueObject, successCallback) {
 		var me = this,
 			topic = this.record;
 
@@ -602,7 +602,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 			});
 	},
 
-    onRecordDestroyed: function() {
+	onRecordDestroyed: function() {
 		//First remove the delete and edit link listeners followed by the els
 		if (this.deleteEl) {
 			this.mun(this.deleteEl, 'click', this.onDeletePost, this);
@@ -631,7 +631,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		this.addCls('deleted');
 	},
 
-    onDelete: function(e) {
+	onDelete: function(e) {
 		e.stopEvent();
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
@@ -650,16 +650,16 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		});
 	},
 
-    onEdit: function() {
+	onEdit: function() {
 		this.editor.editBody(this.record.get('body'));
 		this.editor.activate();
 	},
 
-    updateContent: function() {
+	updateContent: function() {
 		this.record.compileBodyContent(this.setBody, this);
 	},
 
-    bodyClickHandler: function(event) {
+	bodyClickHandler: function(event) {
 		event.stopEvent();
 		var me = this,
 			a = event.getTarget('a');
@@ -672,7 +672,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		}
 	},
 
-    setBody: function(html) {
+	setBody: function(html) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.setBody, this, arguments), this);
 			return;

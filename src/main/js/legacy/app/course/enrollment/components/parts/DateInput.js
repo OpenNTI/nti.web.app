@@ -4,25 +4,25 @@ var FieldsDateField = require('../../../../../common/form/fields/DateField');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.DateInput', {
-    extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
-    alias: 'widget.enrollment-dateinput',
+	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
+	alias: 'widget.enrollment-dateinput',
 
-    renderTpl: Ext.DomHelper.markup({
+	renderTpl: Ext.DomHelper.markup({
 		cls: 'enrollment-input date-input full {required}'
 	}),
 
-    renderSelectors: {
+	renderSelectors: {
 		dateEl: '.date-input'
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 		Ext.apply(this.renderData, {
 			required: this.required ? 'required' : ''
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -42,24 +42,24 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		me.mon(me.dateInput, 'changed', 'changed');
 	},
 
-    setUpChangeMonitors: function() {},
+	setUpChangeMonitors: function() {},
 
-    //Uh...not rendered yet.
+	//Uh...not rendered yet.
 
 
 	isEmpty: function() {
 		return this.dateInput ? this.dateInput.isEmpty() : true;
 	},
 
-    addError: function() {
+	addError: function() {
 		this.addCls('error');
 	},
 
-    removeError: function() {
+	removeError: function() {
 		this.removeCls('error');
 	},
 
-    isValid: function() {
+	isValid: function() {
 		var c = this.isCorrect();
 
 		if (!c) {
@@ -69,11 +69,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return c;
 	},
 
-    isCorrect: function() {
+	isCorrect: function() {
 		return !this.rendered || (this.isEmpty() || !!this.getValue()[this.name]);
 	},
 
-    //value looks like YYYYMMDD
+	//value looks like YYYYMMDD
 	setValue: function(value) {
 		var year, month, day, date;
 
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-    getValue: function() {
+	getValue: function() {
 		var value = {},
 			date = this.dateInput.getValue(),
 			year = date && date.getFullYear(),

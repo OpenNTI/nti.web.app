@@ -7,17 +7,17 @@ var ModelUser = require('../../../model/User');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.ListView', {
-    extend: 'NextThought.app.contacts.components.TabView',
-    alias: 'widget.lists-tab-view',
+	extend: 'NextThought.app.contacts.components.TabView',
+	alias: 'widget.lists-tab-view',
 
-    navigation: {
+	navigation: {
 		xtype: 'contacts-outline',
 		cls: 'list',
 		subType: 'list',
 		outlineLabel: getString('contacts_all_list')
 	},
 
-    body: {
+	body: {
 		xtype: 'data-bound-panel',
 		defaultType: 'contacts-tabs-grouping',
 		items: [],
@@ -35,17 +35,17 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.ListV
 		}
 	},
 
-    subType: 'list',
-    filter: function(group) { return group.hidden !== true && !group.isDFL; },
+	subType: 'list',
+	filter: function(group) { return group.hidden !== true && !group.isDFL; },
 
-    initComponent: function () {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.buildStore();
 	},
 
-    buildStore: function() {
+	buildStore: function() {
 		var s = this.GroupStore.getFriendsList(),
 			store = StoreUtils.newView(s);
 

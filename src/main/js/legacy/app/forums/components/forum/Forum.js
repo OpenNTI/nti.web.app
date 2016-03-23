@@ -5,16 +5,16 @@ var PartsTopicListView = require('./parts/TopicListView');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Forum', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.forums-forum-body',
-    layout: 'none',
-    cls: 'topic-list-body forum-body',
+	extend: 'Ext.container.Container',
+	alias: 'widget.forums-forum-body',
+	layout: 'none',
+	cls: 'topic-list-body forum-body',
 
-    storeCfg: {
+	storeCfg: {
 		pageSize: 10
 	},
 
-    clearForum: function() {
+	clearForum: function() {
 		var topicList = this.down('forums-forum-topic-list-view'),
 			filterBar = this.down('forums-forum-filterbar'),
 			header = this.down('forums-forum-header');
@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.F
 		Ext.destroy(topicList, filterBar, header);
 	},
 
-    setForum: function(record) {
+	setForum: function(record) {
 		var topicList = this.down('forums-forum-topic-list-view'),
 			filterBar = this.down('forums-forum-filterbar'),
 			header = this.down('forums-forum-header'),
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.F
 		return topicList.restoreState(this.getRouteState());
 	},
 
-    updateForum: function() {
+	updateForum: function() {
 		var topicList = this.down('forums-forum-topic-list-view');
 
 		if (!topicList) {

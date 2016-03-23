@@ -9,16 +9,16 @@ var ForumIndex = require('../content/forum/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
-    extend: 'NextThought.app.content.Index',
-    alias: 'widget.bundle-view-container',
-    state_key: 'bundle_index',
+	extend: 'NextThought.app.content.Index',
+	alias: 'widget.bundle-view-container',
+	state_key: 'bundle_index',
 
-    mixins: {
+	mixins: {
 		State: 'NextThought.mixins.State',
 		Router: 'NextThought.mixins.Router'
 	},
 
-    items: [
+	items: [
 		{
 			xtype: 'bundle-forum',
 			id: 'bundle-forum'
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		}
 	],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
@@ -45,11 +45,11 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		this.addDefaultRoute('/content');
 	},
 
-    afterRoute: function(route) {
+	afterRoute: function(route) {
 		this.BundleViewStore.markRouteFor(this.activeBundle.getId(), route);
 	},
 
-    setActiveBundle: function(ntiid, bundle) {
+	setActiveBundle: function(ntiid, bundle) {
 		var me = this;
 
 		ntiid = ntiid.toLowerCase();
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		return me.getActiveBundle;
 	},
 
-    applyState: function(state) {
+	applyState: function(state) {
 		var bundle = this.activeBundle,
 			active = state.active,
 			content = NextThought.app.content,
@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		 * if the view doesn't have a static showTab then show it,
 		 * otherwise return the value of showTab
 		 * @param  {Object} index the view to check
-		 * @return {Boolean}      show the tab or not
+		 * @return {Boolean}	  show the tab or not
 		 */
 		function showTab(index) {
 			return !index.showTab || index.showTab(bundle);
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		this.navigation.setTabs(tabs);
 	},
 
-    showContent: function(route, subRoute) {
+	showContent: function(route, subRoute) {
 		this.contentRoute = subRoute;
 
 		return this.setActiveView('bundle-content', [
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 			});
 	},
 
-    showDiscussions: function(route, subRoute) {
+	showDiscussions: function(route, subRoute) {
 		this.discussionsRoute = subRoute;
 
 		return this.setActiveView('bundle-forum', [
@@ -146,7 +146,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 			});
 	},
 
-    getRouteForPath: function(path, bundle) {
+	getRouteForPath: function(path, bundle) {
 		var root = path[0] || {},
 			isAccessible = this.ContentStore.hasContent(bundle),
 			subPath = path.slice[1],

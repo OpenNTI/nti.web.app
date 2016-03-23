@@ -4,10 +4,10 @@ var VideoPanel = require('./Panel');
 
 
 module.exports = exports = Ext.define('NextThought.app.video.Window', {
-    extend: 'NextThought.common.window.Window',
-    alias: 'widget.video-window',
+	extend: 'NextThought.common.window.Window',
+	alias: 'widget.video-window',
 
-    /*
+	/*
 		src:
 		[
 			// firefox (ogg theora)

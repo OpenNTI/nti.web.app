@@ -23,7 +23,7 @@ var ListContent = require('../components/list/Content');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
-    statics: {
+	statics: {
 		type: 'content',
 
 		canHandle: function(obj) {
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		}
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		this.callParent(arguments);
 
 		this.LibraryActions = NextThought.app.library.Actions.create();
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		this.maxWidth = config.maxWidth || 574;
 	},
 
-    parse: function(pageInfo, contextKind) {
+	parse: function(pageInfo, contextKind) {
 		var me = this,
 			link = pageInfo.getLink('content'),
 			contentPackage = pageInfo.get('ContentPackageNTIID');
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 			});
 	},
 
-    __parseNode: function(doc, root, contextKind) {
+	__parseNode: function(doc, root, contextKind) {
 		var page = doc && doc.querySelector('#NTIContent'),
 			context,
 			range = this.range,
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		}
 	},
 
-    //TODO: clean this up to not rely on ext so much.
+	//TODO: clean this up to not rely on ext so much.
 	__fixUpContext: function(n, root) {
 		var node = Ext.get(n), cardTpl, slideDeckTpl, slideVideoTpl, dom, data,
 			imgs = n && n.querySelectorAll('img'),
@@ -168,16 +168,16 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 
 		// cardTpl = Ext.DomHelper.createTemplate({cls: 'content-card', html: NextThought.common.components.cards.Card.prototype.renderTpl.html});
 		// Ext.each(node.query('object[type*=nticard]'), function(c) {
-		// 	var d = NextThought.common.components.cards.OverlayedPanel.getData(c);
-		// 	cardTpl.insertAfter(c, d, false);
-		// 	Ext.fly(c).remove();
+		//	var d = NextThought.common.components.cards.OverlayedPanel.getData(c);
+		//	cardTpl.insertAfter(c, d, false);
+		//	Ext.fly(c).remove();
 		// });
 
 		// slideDeckTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.app.mediaviewer.content.Slidedeck.prototype.renderTpl.html});
 		// Ext.each(node.query('object[type*=ntislidedeck]'), function(c) {
-		// 	var d = NextThought.app.mediaviewer.content.deck.OverlayedPanel.getData(c);
-		// 	slideDeckTpl.insertAfter(c, d, false);
-		// 	Ext.fly(c).remove();
+		//	var d = NextThought.app.mediaviewer.content.deck.OverlayedPanel.getData(c);
+		//	slideDeckTpl.insertAfter(c, d, false);
+		//	Ext.fly(c).remove();
 		// });
 
 
@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		return node.dom;
 	},
 
-    __fixCards: function(node, root) {
+	__fixCards: function(node, root) {
 		var cardTpl = new Ext.XTemplate(Ext.DomHelper.markup({
 				cls: 'content-card',
 				html: NextThought.common.components.cards.Card.prototype.renderTpl

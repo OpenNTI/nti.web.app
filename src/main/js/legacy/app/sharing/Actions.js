@@ -5,15 +5,15 @@ var ContextStateStore = require('../context/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
-    getSuggestionStore: function() {
+	getSuggestionStore: function() {
 		var store = new Ext.data.Store({
 				model: 'NextThought.model.UserSearch'
 			});
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 		return store;
 	},
 
-    __getSuggestionItems: function() {
+	__getSuggestionItems: function() {
 		return Promise.all([
 				this.getSuggestions(),
 				this.getCommunities(),
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 			});
 	},
 
-    getSiteCommunity: function() {
+	getSiteCommunity: function() {
 		var siteId = Service.get('SiteCommunity');
 
 		return Service.getCommunitiesList()
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 			});
 	},
 
-    getSuggestions: function() {
+	getSuggestions: function() {
 		var suggestions = [this.getSiteCommunity()],
 			rootBundle = this.ContextStore.getRootBundle(),
 			context = this.ContextStore.getContext();
@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 			});
 	},
 
-    getCommunities: function() {
+	getCommunities: function() {
 		var siteId = Service.get('SiteCommunity');
 
 		return Service.getCommunitiesList()
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 			});
 	},
 
-    getGroups: function() {
+	getGroups: function() {
 		return Service.getGroupsList()
 			.then(function(groups) {
 				return groups.map(function(group) {

@@ -5,11 +5,11 @@ var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.AuthorizationContext', {
-    extend: 'Ext.Component',
-    alias: 'widget.context-authorization',
-    cls: 'context-authorization',
+	extend: 'Ext.Component',
+	alias: 'widget.context-authorization',
+	cls: 'context-authorization',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'context-image image-context', cn: [
 			{cls: 'thumbnail'},
 			{cls: 'meta', cn: [
@@ -20,12 +20,12 @@ module.exports = exports = Ext.define('NextThought.app.context.components.Author
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		iconEl: '.thumbnail',
 		enrollButtonEl: '.action'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -36,13 +36,13 @@ module.exports = exports = Ext.define('NextThought.app.context.components.Author
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.__setContent();
 		this.mon(this.enrollButtonEl, 'click', this.onEnrollClick.bind(this));
 	},
 
-    __setContent: function() {
+	__setContent: function() {
 		var href = this.catalogEntry && this.catalogEntry.get('thumb'),
 			url = getURL(href);
 
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.Author
 		}
 	},
 
-    onEnrollClick: function(e) {
+	onEnrollClick: function(e) {
 		this.WindowActions.pushWindow(this.catalogEntry, null, e);
 	}
 });

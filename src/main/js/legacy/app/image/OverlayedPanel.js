@@ -10,12 +10,12 @@ require('./Roll');
 
 /*global DomUtils, NextThought */
 module.exports = exports = Ext.define('NextThought.app.image.OverlayedPanel', {
-    extend: 'NextThought.app.contentviewer.overlay.Panel',
-    alias: 'widget.overlay-image-roll',
-    ui: 'content-launcher',
-    cls: 'content-launcher-container',
+	extend: 'NextThought.app.contentviewer.overlay.Panel',
+	alias: 'widget.overlay-image-roll',
+	ui: 'content-launcher',
+	cls: 'content-launcher-container',
 
-    statics: {
+	statics: {
 		getData: function(dom, reader) {
 			var images = DomUtils.getImagesFromDom(dom);
 			return NextThought.common.components.cards.Launcher.getData(dom, reader, images, function() {
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.image.OverlayedPanel', {
 		}
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.image.OverlayedPanel', {
 		this.callParent([config]);
 	},
 
-    showImageRole: function(data) {
+	showImageRole: function(data) {
 		this.imagePopout = Ext.widget('image-lightbox', { data: data.items }).show();
 		this.on('destroy', this.imagePopout.destroy.bind(this.imagePopout));
 	}

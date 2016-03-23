@@ -2,7 +2,7 @@ var Ext = require('extjs');
 
 
 /**
- * This class is experimental, it does not totally work right.  However it can probably be fixed at some point so I've checked it in.
+ * This class is experimental, it does not totally work right.	However it can probably be fixed at some point so I've checked it in.
  * As of the checkin time, it is not referenced anywhere and will be tossed out by the minification process which is just fine.
  */
 

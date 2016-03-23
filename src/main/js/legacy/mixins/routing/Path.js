@@ -188,7 +188,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 			oId = parts[parts.length - 1];
 
 			objectParts = parts.slice(-2);
-		 	parts = parts.slice(0, -2);
+			parts = parts.slice(0, -2);
 		}
 
 		//for each part in the url
@@ -257,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 		}
 
 		if (!(val instanceof Promise)) {
-		 	val = Promise.resolve(val);
+			val = Promise.resolve(val);
 		}
 
 		val
@@ -344,7 +344,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 *
 	 * @param  {String} title
 	 * @param  {String} subRoute
-	 * @return {Object}           map of the values
+	 * @return {Object}			  map of the values
 	 */
 	__mergeChildRoute: function(title, subRoute, precache) {
 		var myTitle = this.getRouteTitle(),
@@ -390,7 +390,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Merge the child's route with mine and push it
-	 * @param  {String} title    title of the route
+	 * @param  {String} title	 title of the route
 	 * @param  {String} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
@@ -401,7 +401,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Merge the childs route with mine and replace it
-	 * @param  {String} title    title of the route
+	 * @param  {String} title	 title of the route
 	 * @param  {String} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
@@ -434,7 +434,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * Merge the childs route with mine and push it
 	 * @param {String} key key of the cmp
 	 * @param {Object} obj state object
-	 * @param  {String} title    title of the route
+	 * @param  {String} title	 title of the route
 	 * @param  {String} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
@@ -449,7 +449,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * Merge the childs route with mine and replace it
 	 * @param {String} key the key of the cmp
 	 * @param {Object} obj state object
-	 * @param  {String} title    title of the route
+	 * @param  {String} title	 title of the route
 	 * @param  {String} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
@@ -486,7 +486,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * Push a current route
 	 * @override
 	 * @param  {String} title the title to set on the document
-	 * @param  {String} route   the route to set
+	 * @param  {String} route	the route to set
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
 	pushRoute: function(title, route, precache) {},
@@ -496,7 +496,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * Replace the current route
 	 * @override
 	 * @param  {String} title the title to set on the document
-	 * @param  {String} route   the route to replace with
+	 * @param  {String} route	the route to replace with
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
 	replaceRoute: function(title, route, precache) {},
@@ -506,7 +506,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * Skips all the route building and sets it on the root
 	 * @override
 	 * @param  {String} title the title to set on the document
-	 * @param  {String} route   the route to set
+	 * @param  {String} route	the route to set
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
 	pushRootRoute: function(title, route, precache) {},
@@ -516,7 +516,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * Skips all the route building and sets it on the root
 	 * @override
 	 * @param  {String} title the title to set on the document
-	 * @param  {String} route   the route to set
+	 * @param  {String} route	the route to set
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
 	replaceRootRoute: function(title, route, precache) {},
@@ -524,18 +524,18 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Push a state object to the history
-	 * @param  {Object} obj      state object to push
-	 * @param  {String} title    title of the state
-	 * @param  {String} route    route for the state
+	 * @param  {Object} obj		 state object to push
+	 * @param  {String} title	 title of the state
+	 * @param  {String} route	 route for the state
 	 * @param  {Object} precache a map of keys to prevent resolving them more than once
 	 */
 	pushRouteState: function(obj, title, route, precache) {},
 
 	/**
 	 * Push a state object to the history
-	 * @param  {Object} obj      state object to push
-	 * @param  {String} title    title of the state
-	 * @param  {String} route    route for the state
+	 * @param  {Object} obj		 state object to push
+	 * @param  {String} title	 title of the state
+	 * @param  {String} route	 route for the state
 	 * @param  {Object} precache a map of keys to prevent resolving them more than once
 	 */
 	replaceRouteState: function(obj, title, route, precache) {},

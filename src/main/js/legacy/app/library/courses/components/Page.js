@@ -1,20 +1,20 @@
 var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.Page', {
-    extend: 'Ext.container.Container',
-    alias: ['widget.library-view-course-page', 'widget.library-view-tab'],
-    layout: 'none',
-    defaultType: 'course-collection',
-    showPage: true,
-    cls: 'page scrollable',
+	extend: 'Ext.container.Container',
+	alias: ['widget.library-view-course-page', 'widget.library-view-tab'],
+	layout: 'none',
+	defaultType: 'course-collection',
+	showPage: true,
+	cls: 'page scrollable',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.setItems(this.upcoming, this.current, this.archived);
 	},
 
-    setItems: function(upcoming, current, archived) {
+	setItems: function(upcoming, current, archived) {
 		this.removeAll(true);
 
 		if (upcoming && upcoming.length) {
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	},
 
-    /*
+	/*
 		returns {
 			bins: {},
 			years: [],
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	*/
 	binCourses: function(courses) {
-		var	me = this,
+		var me = this,
 			bins = {upcoming: {}},
 			years = [], upcoming = [],
 			semesters = Ext.Object.getValues(getString('months'));
@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		};
 	},
 
-    addBinnedCourses: function(binObj, label, options) {
+	addBinnedCourses: function(binObj, label, options) {
 		var me = this, i, semester,
 			bins = binObj.bins || {},
 			years = binObj.years || [],
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		});
 	},
 
-    addCourses: function(courses, label, group, options) {
+	addCourses: function(courses, label, group, options) {
 		var o = {
 			label: label,
 			group: group || '',
@@ -118,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		this.add(o);
 	},
 
-    getCourseStore: function(data) {
+	getCourseStore: function(data) {
 		return new Ext.data.Store({
 			model: 'NextThought.model.courseware.CourseInstanceEnrollment',
 			data: data,

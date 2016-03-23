@@ -2,21 +2,21 @@ var Ext = require('extjs');
 var {getURL} = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.overrides.data.Connection', {
-    override: 'Ext.data.Connection',
-    disableCaching: Ext.isGecko === true,
-    withCredentials: true,
-    useDefaultXhrHeader: true,
+	override: 'Ext.data.Connection',
+	disableCaching: Ext.isGecko === true,
+	withCredentials: true,
+	useDefaultXhrHeader: true,
 
-    newRequest: function() {
+	newRequest: function() {
 		return this.getXhrInstance();
 	},
 
-    setOptions: function(options, scope) {
+	setOptions: function(options, scope) {
 		var i, badParams = ['id', 'page', 'start', 'limit', 'group', 'sort'],//'_dc'
 			params = options.params || {};
-    if (Ext.isGecko) {
-      badParams.shift();
-    }
+	if (Ext.isGecko) {
+	  badParams.shift();
+	}
 		if (Ext.isFunction(params)) {
 			console.warn('Params were a function!');
 			options.params = (params = params.call(scope, options));
@@ -31,13 +31,13 @@ module.exports = exports = Ext.define('NextThought.overrides.data.Connection', {
 		return this.callParent(arguments);
 	},
 
-    //We define an error as 4xx or 5xx
+	//We define an error as 4xx or 5xx
 	//i.e. 400 <= statusCode <=599
 	isHTTPErrorCode: function(statusCode) {
 		return 400 <= statusCode && statusCode <= 599;
 	},
 
-    //Patch Ext's open request...if I explicitly say to not include credentials, don't.
+	//Patch Ext's open request...if I explicitly say to not include credentials, don't.
 	openRequest: function(options) {
 		var xhr = this.callParent(arguments);
 

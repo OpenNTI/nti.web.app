@@ -4,20 +4,20 @@ var ForumsActions = require('../../../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
-    extend: 'NextThought.editor.Editor',
-    alias: 'widget.forums-topic-editor',
-    cls: 'forums-topic-editor-box',
-    border: 1,
-    enableTags: true,
-    enableTitle: true,
-    enableVideo: true,
-    headerTplOrder: '{title}{toolbar}',
+	extend: 'NextThought.editor.Editor',
+	alias: 'widget.forums-topic-editor',
+	cls: 'forums-topic-editor-box',
+	border: 1,
+	enableTags: true,
+	enableTitle: true,
+	enableVideo: true,
+	headerTplOrder: '{title}{toolbar}',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'forums-topic-editor', cn: { cls: 'editor active', html: '{super}' } }
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		editor: '.editor',
 		cancelEl: '.action.cancel',
 		saveEl: '.action.save',
@@ -26,13 +26,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		publishEl: '.action.publish'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.addEvents(['save-post']);
 		this.ForumActions = NextThought.app.forums.Actions.create();
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		var r = this.record,
 				me = this,
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		}
 	},
 
-    allowNavigation: function() {
+	allowNavigation: function() {
 		var msg = 'You are currently creating a topic. Would you like to leave without saving?';
 
 		if (this.record) {
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		});
 	},
 
-    // destroy: function() {
+	// destroy: function() {
 	//	var container = this.ownerCt.getEl();
 	//	container.removeCls('scroll-lock scroll-padding-right');
 	//	Ext.EventManager.onWindowResize(this.syncHeight, this, null);
@@ -113,9 +113,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 	onBeforeDeactivate: function() {
 		/*
-		 *   NOTE: For now, since forums views aren't destroyed when you go away,
-		 *   and we like that behavior, don't warn the user if the editor is open, since it will still be there when we can back.
-		 *   If we change at some point, just uncomment the following lines to display a warning message.
+		 *	 NOTE: For now, since forums views aren't destroyed when you go away,
+		 *	 and we like that behavior, don't warn the user if the editor is open, since it will still be there when we can back.
+		 *	 If we change at some point, just uncomment the following lines to display a warning message.
 		 */
 	//		if(this.isVisible()){
 	//			this.warnBeforeDismissingEditor();
@@ -124,14 +124,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		return true;
 	},
 
-    warnBeforeDismissingEditor: function() {
+	warnBeforeDismissingEditor: function() {
 		var msg = getString('NextThought.view.forums.topic.parts.Editor.dismisswarn');
 		Ext.defer(function() {
 			alert({msg: msg});
 		}, 1);
 	},
 
-    syncHeight: function() {
+	syncHeight: function() {
 		var el = this.contentEl,
 				p = this.ownerCt && Ext.getDom(this.ownerCt.getEl()),
 				top;
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		Ext.defer(this.updateLayout, 700, this, []);
 	},
 
-    onSave: function(e) {
+	onSave: function(e) {
 		e.stopEvent();
 		var me = this,
 			v = me.getValue(),
@@ -216,13 +216,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			});
 	},
 
-    onSaveSuccess: function(record, isEdit) {
+	onSaveSuccess: function(record, isEdit) {
 		this.savedSuccess = true;
 		this.fireEvent(isEdit ? 'goto-record' : 'new-record', record);
 		this.destroy();
 	},
 
-    onSaveFailure: function(proxy, response, operation) {
+	onSaveFailure: function(proxy, response, operation) {
 		var msg = 'An unknown error occurred saving your Discussion.', error;
 
 		if (response && response.responseText) {
@@ -235,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		console.debug(arguments);
 	},
 
-    onCancel: function(e) {
+	onCancel: function(e) {
 		e.stopEvent();
 
 		this.fireEvent('cancel');

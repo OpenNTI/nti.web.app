@@ -5,21 +5,21 @@ var ContactMain = require('./Main');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.contact.Window', {
-    extend: 'NextThought.common.window.Window',
-    alias: 'widget.contact-us-window',
-    cls: 'contact-us-window',
-    ui: 'nt-window',
-    minimizable: false,
-    modal: true,
-    closable: true,
-    resizable: false,
-    dialog: true,
-    closeAction: 'destroy',
-    role: 'contact',
-    width: 480,
-    layout: 'none',
+	extend: 'NextThought.common.window.Window',
+	alias: 'widget.contact-us-window',
+	cls: 'contact-us-window',
+	ui: 'nt-window',
+	minimizable: false,
+	modal: true,
+	closable: true,
+	resizable: false,
+	dialog: true,
+	closeAction: 'destroy',
+	role: 'contact',
+	width: 480,
+	layout: 'none',
 
-    items: [
+	items: [
 		{
 			xtype: 'account-header-view',
 			noIcon: true,
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contact.Window', 
 		{xtype: 'contact-main-view'}
 	],
 
-    constructor: function(args) {
+	constructor: function(args) {
 		var header = this.items.first();
 
 		if (args.titleKey) {
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contact.Window', 
 		this.callParent(arguments);
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var main = this.down('contact-main-view');

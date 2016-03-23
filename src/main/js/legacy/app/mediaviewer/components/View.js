@@ -12,55 +12,55 @@ var NotificationsTab = require('../../notifications/Tab');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.View', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.media-view',
+	extend: 'Ext.container.Container',
+	alias: 'widget.media-view',
 
-    mixins: {
+	mixins: {
 		State: 'NextThought.mixins.State'
 	},
 
-    ui: 'media',
-    floating: true,
+	ui: 'media',
+	floating: true,
 
-    layout: {
+	layout: {
 		type: 'card',
 		deferredRender: true
 	},
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header'},
 		{id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out, values)%}']}
 	]),
 
-    getTargetEl: function() {
+	getTargetEl: function() {
 		return this.body;
 	},
 
-    childEls: ['body'],
-    lockVideoWithNoTranscript: true,
+	childEls: ['body'],
+	lockVideoWithNoTranscript: true,
 
-    renderSelectors: {
+	renderSelectors: {
 		headerEl: '.header'
 	},
 
-    viewerXtypeMap: {
+	viewerXtypeMap: {
 		'video-focus': 'media-split-viewer',
 		'transcript-focus': 'media-transcript-viewer',
 		'full-video': 'media-video-viewer'
 	},
 
-    viewerIdMap: {},
+	viewerIdMap: {},
 
-    getStorageManager: function() {
+	getStorageManager: function() {
 		return TemporaryStorage;
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
-    setContent: function(video, transcript, options) {
+	setContent: function(video, transcript, options) {
 		var me = this;
 
 		if (!this.rendered) {
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		}
 	},
 
-    setSlidedeckContent: function(slidedeck, videos, resourceList, options) {
+	setSlidedeckContent: function(slidedeck, videos, resourceList, options) {
 		var me = this;
 
 		if (!this.rendered) {
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		}
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -199,11 +199,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		});
 	},
 
-    setState: function(state) {
+	setState: function(state) {
 		return this.applyState(state);
 	},
 
-    applyState: function(state) {
+	applyState: function(state) {
 		var me = this,
 			hide = 'onMenuHide',
 			show = 'onMenuShow';
@@ -216,7 +216,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		showOrHide('notificationCmp');
 	},
 
-    buildInitialViewer: function() {
+	buildInitialViewer: function() {
 		var playerType = this.getViewerType(),
 			viewerType = this.viewerXtypeMap[playerType], me = this;
 
@@ -244,7 +244,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 			});
 	},
 
-    getViewerType: function(type) {
+	getViewerType: function(type) {
 		if (this.lockVideoWithNoTranscript && !this.transcript && !this.resourceList) {
 			return 'full-video';
 		}
@@ -252,18 +252,18 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		return type || this.getStorageManager().get('media-viewer-player-type') || 'video-focus';
 	},
 
-    cleanup: function() {
+	cleanup: function() {
 		Ext.getBody().removeCls('media-viewer-open media-viewer-closing');
 		Ext.EventManager.removeResizeListener(this.adjustOnResize, this);
 	},
 
-    startAtSpecificTime: function(startAt) {
+	startAtSpecificTime: function(startAt) {
 		if (this.viewer && this.viewer.startAtSpecificTime) {
 			this.viewer.startAtSpecificTime(startAt);
 		}
 	},
 
-    animateIn: function() {
+	animateIn: function() {
 		var me = this;
 		if (!this.rendered) {
 			this.on('afterrender', 'animateIn', this);
@@ -276,7 +276,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		}
 	},
 
-    adjustOnResize: function() {
+	adjustOnResize: function() {
 		var toolbarHeight = this.toolbar.el && this.toolbar.getHeight() || 0,
 			availableHeight, paddingHeight = 0, availableWidth,
 			activeItem = this.getLayout().getActiveItem();
@@ -289,20 +289,20 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		}
 	},
 
-    beforeClose: function() {
+	beforeClose: function() {
 		Ext.getBody().removeCls('media-viewer-open').addCls('media-viewer-closing');
 		this.removeCls('ready');
 		this.addCls('closing');
 	},
 
-    allowNavigation: function() {
+	allowNavigation: function() {
 		if (this.viewer) {
 			return this.viewer.allowNavigation();
 		}
 		return Promise.resolve();
 	},
 
-    listStoreSet: function(store) {
+	listStoreSet: function(store) {
 		if (!store) { return; }
 		var me = this, index = store.indexOf(this.video);
 
@@ -347,7 +347,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 		}
 	},
 
-    switchVideoViewer: function(type, item) {
+	switchVideoViewer: function(type, item) {
 		if (!type || type === (this.viewer && this.viewer.viewerType)) { return Promise.reject(); }
 
 		var me = this,
@@ -403,7 +403,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 			});
 	},
 
-    showGridViewer: function(action) {
+	showGridViewer: function(action) {
 		var me = this,
 			allow = Promise.resolve();
 

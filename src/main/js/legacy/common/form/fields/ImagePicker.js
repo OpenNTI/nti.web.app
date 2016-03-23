@@ -5,10 +5,10 @@ var CroppingPrompt = require('../../../app/image/cropping/Prompt');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicker', {
-    extend: 'NextThought.common.form.fields.FilePicker',
-    alias: 'widget.image-picker-field',
+	extend: 'NextThought.common.form.fields.FilePicker',
+	alias: 'widget.image-picker-field',
 
-    renderTpl: Ext.DomHelper.markup({
+	renderTpl: Ext.DomHelper.markup({
 		cls: 'image-picker {fileCls}', style: {width: '{width}', height: '{height}'}, cn: [
 			{cls: 'preview'},
 			{tag: 'input', type: 'file', 'data-qtip': 'Add Cover Image', accept: 'image/*', tabindex: '1'},
@@ -16,9 +16,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		]
 	}),
 
-    accepts: 'image/*',
+	accepts: 'image/*',
 
-    renderSelectors: {
+	renderSelectors: {
 		fileContainer: '.image-picker',
 		inputContainer: '.image-picker',
 		previewEl: '.preview',
@@ -26,13 +26,13 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		clearEl: '.clear'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.on('destroy', this.cleanUpCroppedImage.bind(this));
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		this.PromptActions = NextThought.app.prompt.Actions.create();
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.clearEl, 'click', this.onClearImage.bind(this));
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		}
 	},
 
-    getValue: function() {
+	getValue: function() {
 		if (this.croppedImage) {
 			return this.croppedImage.getBlob();
 		}
@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		return this.callParent(arguments);
 	},
 
-    getValueName: function() {
+	getValueName: function() {
 		if (this.croppedImage) {
 			return this.croppedImage.getName();
 		}
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		return this.callParent(arguments);
 	},
 
-    onFileChange: function(file) {
+	onFileChange: function(file) {
 		var me = this,
 			url = me.createObjectURL(file);
 
@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 			});
 	},
 
-    setPlaceholder: function(value) {
+	setPlaceholder: function(value) {
 		this.placeholder = value;
 
 		if (!this.hasFile() && !this.defaultValue) {
@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		}
 	},
 
-    setPreviewFromValue: function(value) {
+	setPreviewFromValue: function(value) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setPreviewFromValue.bind(this, value));
 			return;
@@ -136,14 +136,14 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		this.updateTooltip(true);
 	},
 
-    setPreviewFromInput: function(file) {
+	setPreviewFromInput: function(file) {
 		var url = this.createObjectURL(file);
 
 		this.previewEl.setStyle({backgroundImage: 'url(' + url + ')'});
 		this.updateTooltip(true);
 	},
 
-    setPreviewFromCrop: function(crop) {
+	setPreviewFromCrop: function(crop) {
 		var url = crop.getURL();
 
 		this.previewEl.setStyle({backgroundImage: 'url(' + url + ')'});
@@ -153,7 +153,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		this.fileContainer.addCls('has-file');
 	},
 
-    updateTooltip: function(hasImage) {
+	updateTooltip: function(hasImage) {
 		if (hasImage) {
 			this.inputEl.set({'data-qtip': 'Cover Image'});
 		}
@@ -162,13 +162,13 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		}
 	},
 
-    showPreviewFromSchema: function() {
+	showPreviewFromSchema: function() {
 		var url = this.placeholder || this.schema.placeholder || '';
 
 		this.previewEl.setStyle({backgroundImage: 'url(' + url + ')'});
 	},
 
-    onClearImage: function() {
+	onClearImage: function() {
 		delete this.defaultValue;
 		this.clearInput();
 
@@ -181,7 +181,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 		this.updateTooltip();
 	},
 
-    cleanUpCroppedImage: function() {
+	cleanUpCroppedImage: function() {
 		if (this.croppedImage) {
 			this.croppedImage.cleanUp();
 		}

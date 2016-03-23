@@ -5,20 +5,20 @@ var AccountHeader = require('../Header');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.recovery.Window', {
-    extend: 'NextThought.common.window.Window',
-    alias: 'widget.recovery-email-window',
-    cls: 'recovery-email-window',
-    ui: 'nt-window',
-    minimizable: false,
-    constrain: true,
-    modal: true,
-    closable: false,
-    resizable: false,
-    dialog: true,
-    width: 480,
-    layout: 'none',
+	extend: 'NextThought.common.window.Window',
+	alias: 'widget.recovery-email-window',
+	cls: 'recovery-email-window',
+	ui: 'nt-window',
+	minimizable: false,
+	constrain: true,
+	modal: true,
+	closable: false,
+	resizable: false,
+	dialog: true,
+	width: 480,
+	layout: 'none',
 
-    items: [
+	items: [
 		{
 			xtype: 'account-header-view',
 			title: getString('NextThought.view.account.recovery.Window.general-title'),
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.account.recovery.Window',
 		}
 	],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.add({
 			xtype: 'recovery-email-view',
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.account.recovery.Window',
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var headerView = this.down('account-header-view'),

@@ -10,8 +10,8 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 
 	mixins: {
 			'EllipsisText': 'NextThought.mixins.EllipsisText'
-    //		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
-    //		profileLinks: 'NextThought.mixins.ProfileLinks' // For future, maybe?
+	//		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
+	//		profileLinks: 'NextThought.mixins.ProfileLinks' // For future, maybe?
 	},
 
 	ui: 'content-card',
@@ -19,10 +19,10 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
-    //		{ cls: 'controls', cn: [
-    //			{ cls: 'favorite' },
-    //			{ cls: 'like' }
-    //		]},
+	//		{ cls: 'controls', cn: [
+	//			{ cls: 'favorite' },
+	//			{ cls: 'like' }
+	//		]},
 		{ cls: 'meta', cn: [
 			{ cls: 'title', html: '{title}' },
 			{ cls: 'byline', html: '{{{NextThought.view.cards.Card.by}}}' },
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 		}
 
 		this.callParent(arguments);
-    //		this.mixins.likeAndFavoriteActions.constructor.call(this);
+	//		this.mixins.likeAndFavoriteActions.constructor.call(this);
 	},
 
 

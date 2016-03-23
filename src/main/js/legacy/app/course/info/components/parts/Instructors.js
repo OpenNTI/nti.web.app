@@ -59,11 +59,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 	},
 	
 	afterRender: function(){
-	    this.callParent(arguments);
-	    //Our parent doesn't participate in ext layout so if our store is
-	    //bound when the view is hidden or collapsed the view is never initially rendered
-	    //(assuming a later layout pass will trigger the rendering).  Therefore force
-	    //view view to render here.
-	    this.refresh();
+		this.callParent(arguments);
+		//Our parent doesn't participate in ext layout so if our store is
+		//bound when the view is hidden or collapsed the view is never initially rendered
+		//(assuming a later layout pass will trigger the rendering).  Therefore force
+		//view view to render here.
+		this.refresh();
 	}
 });

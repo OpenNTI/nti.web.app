@@ -2,9 +2,9 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.ContentRangeDescription', {
-    override: 'Ext.data.Types',
+	override: 'Ext.data.Types',
 
-    CONTENTRANGEDESCRIPTION: {
+	CONTENTRANGEDESCRIPTION: {
 		type: 'ContentRangeDescription',
 		convert: function(v, record) {
 			try {

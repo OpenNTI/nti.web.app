@@ -8,9 +8,9 @@ var ModelPlaylistItem = require('./PlaylistItem');
 /*jslint */
 /*globals NextThought, ParseUtils */
 module.exports = exports = Ext.define('NextThought.model.Slide', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    fields: [
+	fields: [
 		{ name: 'id', type: 'string', mapping: 'ntiid'},
 		{ name: 'title', type: 'string' },
 		{ name: 'image', type: 'string', mapping: 'slideimage'},
@@ -27,12 +27,12 @@ module.exports = exports = Ext.define('NextThought.model.Slide', {
 		{ name: 'slidedeckid', type: 'string'}
 	],
 
-    getSibling: function(direction) {
+	getSibling: function(direction) {
 		var s = this.store;
 		return s.getAt(s.indexOf(this) + direction);
 	},
 
-    statics: {
+	statics: {
 		getParamFromDom: function(dom, name) {
 			var el = Ext.DomQuery.select('param[name="' + name + '"]', dom)[0];
 			return el ? el.getAttribute('value') : null;

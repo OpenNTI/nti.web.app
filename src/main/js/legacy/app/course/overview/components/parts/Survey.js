@@ -5,12 +5,12 @@ var ModelPageInfo = require('../../../../../model/PageInfo');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Survey', {
-    extend: 'Ext.Component',
-    alias: 'widget.course-overview-surveyref',
-    ui: 'course',
-    cls: 'overview-survey',
+	extend: 'Ext.Component',
+	alias: 'widget.course-overview-surveyref',
+	ui: 'course',
+	cls: 'overview-survey',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'meta', cn: [
 			{cls: 'title', html: '{title}'},
 			{tag: 'span', cls: 'question-count', html: '{questions:plural("Question")}'},
@@ -22,13 +22,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		{cls: 'button x-btn x-btn-primary-large', html: '{buttonTxt}'}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		responsesEl: '.responses',
 		startEl: '.button',
 		reportEl: '.report'
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		var n = config.node || {getAttribute: function(a) { return config[a];} },
 			links = n.getAttribute('Links'),
 			ntiid = n.getAttribute('ntiid');
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.callParent([config]);
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.startEl, 'click', this.onStart.bind(this));
@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    onStart: function(e) {
+	onStart: function(e) {
 		var ntiid = this.data.ntiid;
 
 		if (!e.getTarget('.closed')) {
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    showReport: function(e) {
+	showReport: function(e) {
 		var win = Ext.widget('iframe-window', {
 				width: 'max',
 				saveText: getString('NextThought.view.menus.Reports.savetext'),

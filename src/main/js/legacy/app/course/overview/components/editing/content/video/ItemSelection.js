@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	onSelectItem: function(el) {
-		var	input = el && el.querySelector('input[type=checkbox]');
+		var input = el && el.querySelector('input[type=checkbox]');
 
 		if (input) {
 			input.checked = true;

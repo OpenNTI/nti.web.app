@@ -4,7 +4,7 @@ var Globals = require('../Globals');
 
 
 module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
-    statics: {
+	statics: {
 		kind: 'video',
 		type: 'youtube',
 		valid: function() {
@@ -12,13 +12,13 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-    mixins: {
+	mixins: {
 		observable: 'Ext.util.Observable'
 	},
 
-    playerTpl: Ext.DomHelper.createTemplate({ id: '{id}' }),
+	playerTpl: Ext.DomHelper.createTemplate({ id: '{id}' }),
 
-    constructor: function(config) {
+	constructor: function(config) {
 		this.mixins.observable.constructor.call(this);
 		this.parentEl = Ext.get(config.el);
 		this.id = config.parentId + '-youtube-video';
@@ -30,10 +30,10 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		this.playerSetup();
 	},
 
-    playerSetup: function() {
+	playerSetup: function() {
 		this.isReady = false;
 
-    //		Inject Youtube HTML
+	//		Inject Youtube HTML
 		this.playerTpl.append(this.parentEl, {id: this.id});
 		console.log(this.id);
 
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		});
 	},
 
-    playerReady: function() {
+	playerReady: function() {
 		var me = this,
 			state = NaN;
 
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-    playerError: function(error) {
+	playerError: function(error) {
 		var oldSource;
 		console.warn('YouTube player died with error: ' + error.data);
 
@@ -97,10 +97,10 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 			return;
 		}
 
-    //		SAJ: If we receive error 5 from YouTube that is mostly likely due to a bad
-    //		interaction with the browsers built-in HTML5 player, so lets try, try again.
-    //		SAJ: We should probably also give up after X tries and just go to the next source
-    //		or playlist entry.
+	//		SAJ: If we receive error 5 from YouTube that is mostly likely due to a bad
+	//		interaction with the browsers built-in HTML5 player, so lets try, try again.
+	//		SAJ: We should probably also give up after X tries and just go to the next source
+	//		or playlist entry.
 		if (error.data === 5) {
 			this.isReady = false;
 			console.warn('There was an issue with the YouTube HTML5 player. Cleaning-up and trying again.');
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-    playerStatusChange: function(event) {
+	playerStatusChange: function(event) {
 		var type = '';
 		switch (event.data) {
 			case -1:
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		this.fireEvent('player-event-' + type, this.id, this);
 	},
 
-    playBackRateChange: function(event) {
+	playBackRateChange: function(event) {
 		var data = event.data,
 			rate = parseFloat(data, 10);
 
@@ -165,15 +165,15 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		this.playbackspeed = rate;
 	},
 
-    getCurrentTime: function() {
+	getCurrentTime: function() {
 		return this.player && this.player.getCurrentTime();
 	},
 
-    getPlayerState: function() {
+	getPlayerState: function() {
 		return this.player && this.player.getPlayerState();
 	},
 
-    load: function(source, offset) {
+	load: function(source, offset) {
 		source = Ext.isArray(source) ? source[0] : source;
 		var current = this.currentSource;
 
@@ -194,7 +194,7 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		//this.pause(); //-- pause has zero effect since "ready is false"
 	},
 
-    onPlay: function() {
+	onPlay: function() {
 		var me = this,
 			current = me.getCurrentTime;
 
@@ -219,11 +219,11 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-    onPause: function() {
+	onPause: function() {
 		clearInterval(this.seekInterval);
 	},
 
-    play: function() {
+	play: function() {
 		if (this.player && this.player.playVideo) {
 			if (Ext.is.iOS && !this.userActivatedPlayer) {//we have to wait for the player to have been touched, but after that, we can interact with it just as normal.
 				return;
@@ -232,11 +232,11 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-    deactivate: function() {
+	deactivate: function() {
 		return this.pause.apply(this, arguments);
 	},
 
-    activate: function(sourceId) {
+	activate: function(sourceId) {
 		console.log(this.id, 'Activate triggered');
 		// save the source id to be loaded whenever we are ready.
 		if (!this.isReady) {
@@ -244,7 +244,7 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-    pause: function() {
+	pause: function() {
 		if (!this.isReady || !this.player) { return; }
 		if (this.player.pauseVideo) {
 				try {
@@ -255,7 +255,7 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-    seek: function(offset, seekAhead) {
+	seek: function(offset, seekAhead) {
 		if (!this.isReady || !this.player) { return;}
 
 		var duration = this.player.getDuration();
@@ -280,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		//this.pause();
 	},
 
-    stop: function() {
+	stop: function() {
 		console.log('Youtube stop called:', arguments);
 		if (this.player && this.player.stopVideo) {
 			try {
@@ -293,7 +293,7 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-    cleanup: function() {
+	cleanup: function() {
 		var el = Ext.get(this.id);
 
 		this.stop();
@@ -307,7 +307,7 @@ module.exports = exports = Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-    getDuration: function() {
+	getDuration: function() {
 		var duration = this.player && this.player.getDuration();
 
 		return (duration || 0) * 1000;

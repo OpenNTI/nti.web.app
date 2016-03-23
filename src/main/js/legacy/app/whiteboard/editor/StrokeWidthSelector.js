@@ -3,22 +3,22 @@ var FieldsComboBox = require('../../../common/form/fields/ComboBox');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.StrokeWidthSelector', {
-    extend: 'NextThought.common.form.fields.ComboBox',
-    alias: 'widget.stroke-select',
-    ui: 'stroke-size-select',
-    width: 85,
-    store: '',
+	extend: 'NextThought.common.form.fields.ComboBox',
+	alias: 'widget.stroke-select',
+	ui: 'stroke-size-select',
+	width: 85,
+	store: '',
 
-    //defined in callback below
+	//defined in callback below
 
 	queryMode: 'local',
 
-    displayField: 'size-class',
-    valueField: 'size',
-    forceSelection: true,
-    value: 1,
+	displayField: 'size-class',
+	valueField: 'size',
+	forceSelection: true,
+	value: 1,
 
-    listConfig: {
+	listConfig: {
 		ui: 'nt',
 		plain: true,
 		shadow: false,
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.StrokeW
 		}
 	},
 
-    setSelected: function(size) {
+	setSelected: function(size) {
 		var i = this.store.find(this.valueField, size), cl;
 		if (i >= 0) {
 			cl = this.store.getAt(i).get(this.displayField);
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.StrokeW
 		}
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.on('select', function(me,val) {

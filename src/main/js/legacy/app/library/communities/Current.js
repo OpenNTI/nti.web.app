@@ -4,13 +4,13 @@ var ComponentsCollection = require('./components/Collection');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.communities.Current', {
-    extend: 'NextThought.app.library.components.Current',
-    alias: 'widget.library-current-communities',
-    layout: 'none',
-    title: 'Communities',
-    storeModel: 'NextThought.model.Community',
+	extend: 'NextThought.app.library.components.Current',
+	alias: 'widget.library-current-communities',
+	layout: 'none',
+	title: 'Communities',
+	storeModel: 'NextThought.model.Community',
 
-    statics: {
+	statics: {
 		shouldShow: function() {
 			return Service.getCommunitiesList()
 				.then(function(communities) {
@@ -19,9 +19,9 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Curre
 		}
 	},
 
-    items: [],
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var siteCommunity = Service.get('SiteCommunity');
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Curre
 			.then(this.showCurrentItems.bind(this));
 	},
 
-    showCurrentItems: function(communities) {
+	showCurrentItems: function(communities) {
 		if (communities.length > 8) {
 			this.showSeeAll();
 		} else {
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Curre
 		this.showItems(communities.slice(0, 8));
 	},
 
-    showItems: function(items) {
+	showItems: function(items) {
 		var siteCommunity = Service.get('SiteCommunity');
 
 		if (this.store) {
@@ -81,13 +81,13 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Curre
 		});
 	},
 
-    onSeeAllClick: function() {
+	onSeeAllClick: function() {
 		if (this.pushRoute) {
 			this.pushRoute('Communities', '/communities');
 		}
 	},
 
-    navigate: function(community, el) {
+	navigate: function(community, el) {
 		if (this.navigateToCommunity) {
 			this.navigateToCommunity(community, el);
 		}

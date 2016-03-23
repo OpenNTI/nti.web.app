@@ -7,16 +7,16 @@ var ModelVideo = require('../../model/Video');
 
 
 module.exports = exports = Ext.define('NextThought.app.content.Index', {
-    extend: 'Ext.container.Container',
+	extend: 'Ext.container.Container',
 
-    //Should only be extended
+	//Should only be extended
 
 	layout: {
 		type: 'card',
 		deferredRender: true
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		//Declare this here so its scope to the instance
@@ -31,21 +31,21 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		});
 	},
 
-    onBack: function() {
+	onBack: function() {
 		this.pushRootRoute('', '/');
 	},
 
-    onContentChange: function(title, route) {
+	onContentChange: function(title, route) {
 		this.pushRootRoute('', route);
 	},
 
-    onTabChange: function(title, route) {
+	onTabChange: function(title, route) {
 		this.pushRoute('', route);
 	},
 
-    onQuickLinkNav: function(tilte, route) {},
+	onQuickLinkNav: function(tilte, route) {},
 
-    getRouteTitle: function() {
+	getRouteTitle: function() {
 		if (!this.activeBundle) { return ''; }
 
 		var data = this.activeBundle.asUIData();
@@ -53,23 +53,23 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		return data.title;
 	},
 
-    getContext: function() {
+	getContext: function() {
 		return this.activeBundle;
 	},
 
-    onBeforeDeactivate: function() {
+	onBeforeDeactivate: function() {
 		var current = this.getLayout().getActiveItem();
 
 		return current.fireEvent('beforedeactivate');
 	},
 
-    onDeactivate: function() {
+	onDeactivate: function() {
 		var current = this.getLayout().getActiveItem();
 
 		return current.fireEvent('deactivate');
 	},
 
-    getNavigation: function() {
+	getNavigation: function() {
 		if (!this.navigation || this.navigation.isDestroyed) {
 			this.navigation = NextThought.app.content.components.Navigation.create({
 				bodyView: this
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		return this.navigation;
 	},
 
-    getItem: function(xtype) {
+	getItem: function(xtype) {
 		var cmp = this.cmp_map[xtype];
 
 		if (!cmp) {
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		return cmp;
 	},
 
-    setItemBundle: function(xtypes, bundle) {
+	setItemBundle: function(xtypes, bundle) {
 		if (!Ext.isArray(xtypes)) {
 			xtypes = [xtypes];
 		}
@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		return Promise.all(xtypes);
 	},
 
-    setActiveItem: function(xtype) {
+	setActiveItem: function(xtype) {
 		var layout = this.getLayout(),
 			item = this.getItem(xtype),
 			current = layout.getActiveItem();
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		this.getLayout().setActiveItem(item);
 	},
 
-    setShadowRoot: function(xtype, root) {
+	setShadowRoot: function(xtype, root) {
 		this.SHADOW_ROOTS = this.SHADOW_ROOTS || {};
 
 		this.SHADOW_ROOTS[xtype] = root;
@@ -133,13 +133,13 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		this.applyState(this.activeState);
 	},
 
-    getRoot: function(xtype) {
+	getRoot: function(xtype) {
 		var shadow = this.SHADOW_ROOTS && this.SHADOW_ROOTS[xtype];
 
 		return shadow || '';
 	},
 
-    __loadBundle: function() {
+	__loadBundle: function() {
 		var bundle = this.activeBundle;
 
 		this.NavigationActions.updateNavBar({
@@ -149,11 +149,11 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		this.NavigationActions.setActiveContent(bundle);
 	},
 
-    /**
+	/**
 	 * Set up the active tab
-	 * @param  {String} active   xtype of the active tab
+	 * @param  {String} active	 xtype of the active tab
 	 * @param  {Array} inactive xtypes of the other views to set the active course on, but not wait
-	 * @return {Promise}         fulfills when the tab is set up
+	 * @return {Promise}		 fulfills when the tab is set up
 	 */
 	setActiveView: function(active, inactive, tab) {
 		var me = this;
@@ -185,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 				});
 	},
 
-    getRouteForPageInfo: function(pageInfo, path) {
+	getRouteForPageInfo: function(pageInfo, path) {
 		var id = pageInfo.getId();
 
 		id = ParseUtils.encodeForURI(id);
@@ -197,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		};
 	},
 
-    getRouteForForum: function(forum, path) {
+	getRouteForForum: function(forum, path) {
 		var forumId = forum.getId(),
 			topic = path.shift(),
 			comment = path.shift();

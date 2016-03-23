@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Node', {})
 
 	if (!HTMLCanvasElement.prototype.toBlob) {
 		Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
-	  		value: function(callback, type, quality) {
+			value: function(callback, type, quality) {
 				var binStr = atob(this.toDataURL(type, quality).split(',')[1]),
 					len = binStr.length,
 					arr = new Uint8Array(len);
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Node', {})
 				}
 
 				callback(new Blob([arr], {type: type || 'image/png'}));
-	  		}
-	 	});
+			}
+		});
 	}
 }());

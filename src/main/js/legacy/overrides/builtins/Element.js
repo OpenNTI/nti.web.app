@@ -4,11 +4,11 @@ var Ext = require('extjs');
 /**
  * Add dataset support to elements
  * No globals, no overriding prototype with non-standard methods,
- *   handles CamelCase properly, attempts to use standard
- *   Object.defineProperty() (and Function bind()) methods,
- *   falls back to native implementation when existing
+ *	 handles CamelCase properly, attempts to use standard
+ *	 Object.defineProperty() (and Function bind()) methods,
+ *	 falls back to native implementation when existing
  * Inspired by http://code.eligrey.com/html5/dataset/
- *   (via https://github.com/adalgiso/html5-dataset/blob/master/html5-dataset.js )
+ *	 (via https://github.com/adalgiso/html5-dataset/blob/master/html5-dataset.js )
  * Depends on Function.bind and Object.defineProperty/Object.getOwnPropertyDescriptor (shims below)
  * Licensed under the X11/MIT License
  */
@@ -52,7 +52,7 @@ if (!Function.prototype.bind) {
  * legacy __(define|lookup)[GS]etter__ support.
  *
  * Licensed under the X11/MIT License
- *   See LICENSE.md
+ *	 See LICENSE.md
 */
 
 /*! @source http://purl.eligrey.com/github/Xccessors/blob/master/xccessors-standard.js*/
@@ -191,7 +191,7 @@ if (!document.documentElement.dataset &&
 			for (i = 0; i < attsLength; i++) {
 				attribute = attributes[i];
 				// Fix: This test really should allow any XML Name without
-				//         colons (and non-uppercase for XHTML)
+				//		   colons (and non-uppercase for XHTML)
 				if (attribute && attribute.name &&
 					(/^data-\w[\w\-]*$/).test(attribute.name)) {
 					attrVal = attribute.value;

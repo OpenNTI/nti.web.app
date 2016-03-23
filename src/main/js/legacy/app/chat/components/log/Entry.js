@@ -10,10 +10,10 @@ var ChatActions = require('../../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.chat-log-entry',
+	extend: 'Ext.container.Container',
+	alias: 'widget.chat-log-entry',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'log-entry-wrapper {me}', cn: [
 			'{user:avatar}',
 			{tag: 'span', cls: 'control'},
@@ -27,18 +27,18 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		{id: '{id}-body', cls: 'replies', cn: ['{%this.renderContainer(out,values)%}']}
 	]),
 
-    componentLayout: 'natural',
-    layout: 'auto',
-    childEls: ['body'],
-    getTargetEl: function() { return this.body; },
+	componentLayout: 'natural',
+	layout: 'auto',
+	childEls: ['body'],
+	getTargetEl: function() { return this.body; },
 
-    renderSelectors: {
+	renderSelectors: {
 		icon: '.avatar',
 		name: '.name',
 		text: '.body-text'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.addEvents('rendered-late');
 		this.enableBubble('rendered-late');
 		this.callParent(arguments);
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		this.ChatActions = NextThought.app.chat.Actions.create();
 	},
 
-    add: function() {
+	add: function() {
 		var r = this.callParent(arguments),
 			reply = this.down('chat-reply-to'),
 			ci;
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		return r;
 	},
 
-    update: function(m) {
+	update: function(m) {
 		var me = this,
 			s = m.get('Creator');
 
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		me.addCls(m.getId() ? '' : ' nooid');
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.el.on('click', this.click, this);
 		this.mon(this.ownerCt, 'afterlayout', 'setNameMaxWidth', this);
@@ -113,23 +113,23 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		});
 	},
 
-    setNameMaxWidth: function() {
+	setNameMaxWidth: function() {
 		var width = this.ownerCt.getWidth() - 40;
 		this.name.setStyle('max-width', width + 'px');
 	},
 
-    onControlClick: function() {
+	onControlClick: function() {
 		this.el.down('.control').toggleCls('checked');
 		this.el.down('.log-entry').toggleCls('flagged');
 		//let our parent know so he can do something.
 		this.up('chat-view').fireEvent('control-clicked');
 	},
 
-    isFlagged: function() {
+	isFlagged: function() {
 		return this.el.down('.log-entry').hasCls('flagged');
 	},
 
-    click: function(event) {
+	click: function(event) {
 		event.stopEvent();
 		var me = this, t = event.getTarget('.whiteboard-container', null, true),
 			a = event.getTarget('a'),
@@ -142,9 +142,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 			this.ChatActions.replyToWhiteboard(
 					Ext.clone(this.message.get('body')[0]), //wbData
 					this,
-					this.message.getId(),           //midReplyOf
-					this.message.get('channel'),    //channel
-					this.message.get('recipients')  //recipients
+					this.message.getId(),			//midReplyOf
+					this.message.get('channel'),	//channel
+					this.message.get('recipients')	//recipients
 			);
 		}else if (a) {
 			//its a link
@@ -158,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		return false;
 	},
 
-    fillInUser: function(u) {
+	fillInUser: function(u) {
 		var name = u.getName(), avatar;
 
 		this.renderData.user = u;
@@ -170,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		}
 	},
 
-    getTimeStamp: function(date) {
+	getTimeStamp: function(date) {
 		function isToday(t) {
 			var today = new Date();
 			return today.getYear() === t.getYear() &&
@@ -180,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		return isToday(date) ? Ext.Date.format(date, 'g:i a') : Ext.Date.format(date, 'F j, Y, g:i a');
 	},
 
-    initializeDragZone: function(v) {
+	initializeDragZone: function(v) {
 		v.dragZone = new Ext.dd.DragZone(v.getEl(), {
 			getDragData: function() {
 				var sourceEl = v.el.dom, d;

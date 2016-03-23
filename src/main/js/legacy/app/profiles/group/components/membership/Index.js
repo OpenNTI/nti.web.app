@@ -7,21 +7,21 @@ var PartsAdmins = require('./parts/Admins');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.components.membership.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.group-profile-membership',
+	extend: 'Ext.container.Container',
+	alias: 'widget.group-profile-membership',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-    cls: 'memberships-container',
+	cls: 'memberships-container',
 
-    items: [
+	items: [
 		{xtype: 'profile-group-membership-administrators'},
 		{xtype: 'profile-group-membership-users'}
 	],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		});
 	},
 
-    startResourceViewed: function() {
+	startResourceViewed: function() {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && !this.hasCurrentTimer) {
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		}
 	},
 
-    stopResourceViewed: function() {
+	stopResourceViewed: function() {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && this.hasCurrentTimer) {
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		}
 	},
 
-    userChanged: function(user, isMe) {
+	userChanged: function(user, isMe) {
 		if (this.activeUser !== user) {
 			this.stopResourceViewed();
 		}
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 			]);
 	},
 
-    onRoute: function() {
+	onRoute: function() {
 		this.setTitle('Members');
 	}
 });

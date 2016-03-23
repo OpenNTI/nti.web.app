@@ -3,18 +3,18 @@ var ComponentsCollection = require('./Collection');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.communities.components.Page', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.library-view-community-page',
-    layout: 'none',
-    storeModel: 'NextThought.model.Community',
+	extend: 'Ext.container.Container',
+	alias: 'widget.library-view-community-page',
+	layout: 'none',
+	storeModel: 'NextThought.model.Community',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent();
 
 		this.setItems(this.communities);
 	},
 
-    setItems: function(items) {
+	setItems: function(items) {
 		this.removeAll(true);
 
 		if (items && items.length) {
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.compo
 		}
 	},
 
-    buildStore: function(items) {
+	buildStore: function(items) {
 		return new Ext.data.Store({
 			model: this.storeModel,
 			data: items,

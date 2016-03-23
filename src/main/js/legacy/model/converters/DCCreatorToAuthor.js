@@ -2,9 +2,9 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.DCCreatorToAuthor', {
-    override: 'Ext.data.Types',
+	override: 'Ext.data.Types',
 
-    DCCREATORTOAUTHOR: {
+	DCCREATORTOAUTHOR: {
 		type: 'DCCreatorToAuthor',
 		convert: function(v) {
 			return v && v.join(', ');

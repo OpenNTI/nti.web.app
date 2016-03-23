@@ -6,18 +6,18 @@ var AssessmentAssignmentStatus = require('../../../AssignmentStatus');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.assignments.List', {
-    extend: 'NextThought.app.course.assessment.components.student.assignments.List',
-    alias: 'widget.course-assessment-assignment-admin-list',
-    cls: 'assignment-list admin',
-    view: 'admin',
-    itemType: 'course-assessment-assignment-admin-list-item',
+	extend: 'NextThought.app.course.assessment.components.student.assignments.List',
+	alias: 'widget.course-assessment-assignment-admin-list',
+	cls: 'assignment-list admin',
+	view: 'admin',
+	itemType: 'course-assessment-assignment-admin-list-item',
 
-    items: [
+	items: [
 		{xtype: 'box', autoEl: {cls: 'group-header', html: 'Completion'}},
 		{xtype: 'container', layout: 'none', itemContainer: true}
 	],
 
-    getItemsContainer: function() {
+	getItemsContainer: function() {
 		return this.down('[itemContainer]');
 	}
 });

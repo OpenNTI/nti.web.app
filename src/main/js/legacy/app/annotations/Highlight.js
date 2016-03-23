@@ -16,18 +16,18 @@ var lazyResolve = {
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
-    extend: 'NextThought.app.annotations.Base',
-    alias: 'widget.highlight',
+	extend: 'NextThought.app.annotations.Base',
+	alias: 'widget.highlight',
 
-    inheritableStatics: {
+	inheritableStatics: {
 		bgcolor: {},
 		blockElementRe: /^(address|blockquote|body|center|dir|div|dl|fieldset|form|h[1-6]|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul|dd|dt|frameset|li|tbody|td|tfoot|th|thead|tr|html)$/i
 	},
 
-    highlightCls: 'application-highlight',
-    mouseOverCls: 'highlight-mouse-over',
+	highlightCls: 'application-highlight',
+	mouseOverCls: 'highlight-mouse-over',
 
-    constructor: function(config) {
+	constructor: function(config) {
 		this.callParent(arguments);
 
 		//TODO hook up browser range for speed, throw away after render
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		this.allowShare = false;
 	},
 
-    getRange: function() {
+	getRange: function() {
 		var range = Anchors.toDomRange(this.getRecordField('applicableRange'), this.doc, lazyResolve.ReaderPanel.get().getCleanContent(), this.getRecordField('ContainerId'));
 
 		if (!range) {
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return range;
 	},
 
-    buildMenu: function(i) {
+	buildMenu: function(i) {
 		var items = [];
 
 		if (i) {
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return this.callParent([items]);
 	},
 
-    cleanup: function() {
+	cleanup: function() {
 		this.isDestroyed = true;
 		if (this.rendered) {
 			try {
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return this.callParent(arguments);
 	},
 
-    onMouseOver: function() {
+	onMouseOver: function() {
 		clearTimeout(this.mouseOutTimout);
 		if (!this.compElements.first().hasCls(this.mouseOverCls)) {
 			this.compElements.addCls(this.mouseOverCls);
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		}
 	},
 
-    onMouseOut: function() {
+	onMouseOut: function() {
 		var me = this;
 
 		function off() {
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		this.mouseOutTimout = setTimeout(off, 250);
 	},
 
-    visibilityChanged: function(show) {
+	visibilityChanged: function(show) {
 		var c = this.compElements,
 				fn = show ? 'addCls' : 'removeCls';
 		if (c) {
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return this.callParent(arguments);
 	},
 
-    buildRange: function() {
+	buildRange: function() {
 		var range = this.doc.createRange();
 
 		if (this.rendered && this.rendered.length > 0) {
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return range;
 	},
 
-    resolveVerticalLocation: function() {
+	resolveVerticalLocation: function() {
 		var r, rect, node;
 
 		if (this.rendered) {
@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return !RectUtils.isZeroRect(rect) ? rect.top : NextThought.app.annotations.Base.HIDDEN;
 	},
 
-    render: function() {
+	render: function() {
 		if (this.isDestroyed) {
 			return;
 		}
@@ -211,7 +211,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 
 			//don't create counter when suppressed:
 			// Disabled counters on iPad because 1) their span added width which threw off all the content and could
-			//  break its presentation, and 2) they didn't seem to be doing anything functional anywhere.
+			//	break its presentation, and 2) they didn't seem to be doing anything functional anywhere.
 			if (style !== 'suppressed' && !Ext.is.iPad) {
 				me.counter = me.createCounter(me.rendered.last());
 			}
@@ -222,8 +222,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 
 			//highlights that are not ours do not get a marked over treatment...so don't create the canvas
 
-			//FIXME Dirty Work around an issue with redactions also being highlighted.  At this point the redaction class
-			//hasn't been applied to what becomes sampleEl.  It gets applied in the subclass when this returns
+			//FIXME Dirty Work around an issue with redactions also being highlighted.	At this point the redaction class
+			//hasn't been applied to what becomes sampleEl.	 It gets applied in the subclass when this returns
 			//therefore here it looks just like a highlight.
 			if (me.record.get('Class') === 'Highlight') {
 
@@ -315,7 +315,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return boundingTop || me.resolveVerticalLocation();
 	},
 
-    createCanvas: function() {
+	createCanvas: function() {
 
 		var id = 'annotation-container',
 				doc = this.doc,
@@ -333,7 +333,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 				'highlight-canvas');
 	},
 
-    createCounter: function(after) {
+	createCounter: function(after) {
 		var el = Ext.get(this.createNonAnchorableSpan()),
 				style = this.record.get('style') || 'plain';
 
@@ -343,7 +343,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return el.dom;
 	},
 
-    isInlineElement: function(node) {
+	isInlineElement: function(node) {
 		return {
 			none: true,
 			inline: true,
@@ -354,7 +354,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		//return !this.self.blockElementRe.test(node.nodeName);
 	},
 
-    validToWrapEntireNode: function(node) {
+	validToWrapEntireNode: function(node) {
 		var ntiInline;
 		if (node.nodeType === node.TEXT_NODE) {
 			return true;
@@ -382,7 +382,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return false;
 	},
 
-    onClick: function(e) {
+	onClick: function(e) {
 		if (this.ownerCmp.getAnnotations().getSelection() || !this.isModifiable) {
 			return;
 		}
@@ -397,7 +397,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return p;
 	},
 
-    wrapRange: function(node, range) {
+	wrapRange: function(node, range) {
 		var nodeList = [],
 				newRange,
 				nodeRange = node.ownerDocument.createRange(),
@@ -460,7 +460,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return Ext.Array.clean(nodeList);
 	},
 
-    doWrap: function(range) {
+	doWrap: function(range) {
 		var span,
 				style = this.record.get('style') || 'plain',
 				s,
@@ -483,7 +483,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 					Ext.fly(span).setStyle({display: s});
 				}
 			} catch (e) {
-				//   Ext.fly(span).setStyle({display:'inline-block'});
+				//	 Ext.fly(span).setStyle({display:'inline-block'});
 			}
 		}
 
@@ -503,7 +503,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return span;
 	},
 
-    getScrollPosition: function(currentPosition) {
+	getScrollPosition: function(currentPosition) {
 		var dh = 100,
 				range = this.getRange(), top;
 
@@ -515,7 +515,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return 0;
 	},
 
-    unwrap: function(node) {
+	unwrap: function(node) {
 		var r, p = node.parentNode;
 
 		if (node.firstChild) {

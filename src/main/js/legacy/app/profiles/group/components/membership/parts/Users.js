@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 	setUser: function(user, isMe) {
 		var me = this,
 		   friends = user.get('friends');
-	    return this.setFriends(friends);
+		return this.setFriends(friends);
 	},
 		   
 	setFriends: function(friends){

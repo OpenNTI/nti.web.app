@@ -22,26 +22,26 @@ var EnrollmentFeatureForm = require('../../../../mixins/enrollment-feature/Form'
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.Admission', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.enrollment-admission',
+	extend: 'Ext.container.Container',
+	alias: 'widget.enrollment-admission',
 
-    mixins: {
+	mixins: {
 		form: 'NextThought.mixins.enrollment-feature.Form'
 	},
 
-    defaultType: 'enrollment-group',
+	defaultType: 'enrollment-group',
 
-    defaultMessages: {
+	defaultMessages: {
 		Message: '',
 		ContactInformation: getString('NextThought.view.courseware.enrollment.Admission.ContactHelpDesk')
 	},
 
-    buttonCfg: [
+	buttonCfg: [
 		{name: getString('NextThought.view.courseware.enrollment.Admission.SubmitApp'), disabled: true, action: 'submit-application'},
 		{name: getString('NextThought.view.courseware.enrollment.Admission.CancelApp'), disabled: false, action: 'go-back', secondary: true}
 	],
 
-    groups: {
+	groups: {
 		'concurrent': {
 			'preflight': null,
 			'submit': 'submitConcurrentForm',
@@ -54,15 +54,15 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-    //which group to use for validation when the enable events are fired
+	//which group to use for validation when the enable events are fired
 	eventToGroup: {
 		'enable-submit-concurrent': 'concurrent',
 		'enable-submit': 'admission'
 	},
 
-    STATE_NAME: 'admission-form',
+	STATE_NAME: 'admission-form',
 
-    form: [
+	form: [
 		{
 			name: 'concurrent-contact',
 			group: 'concurrent',
@@ -247,9 +247,9 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 					inputs: [
 						{type: 'radio-group', name: 'country_of_citizenship', required: true, options: [
 							{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'United States'},
-                            {text: getFormattedString('NextThought.view.courseware.enrollment.Admission.NoCitizenOf', {dropdown: '{input}'}), value: 'dropdown', options: []}
-                    ]}]},
-                {
+							{text: getFormattedString('NextThought.view.courseware.enrollment.Admission.NoCitizenOf', {dropdown: '{input}'}), value: 'dropdown', options: []}
+					]}]},
+				{
 					xtype: 'enrollment-set',
 					label: getString('NextThought.view.courseware.enrollment.Admission.AskOklahoman'),
 					inputs: [
@@ -331,7 +331,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	],
 
-    prohibitedPopover: new Ext.XTemplate(Ext.DomHelper.markup([
+	prohibitedPopover: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cls: 'help-popover hidden', cn: [
 			{cls: 'close'},
 			{cls: 'title', html: getString('NextThought.view.courseware.enrollment.Admission.NonAcademicPolicy')},
@@ -342,7 +342,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		]}
 	])),
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -474,21 +474,21 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 	},
 
-    getButtonCfg: function() {
+	getButtonCfg: function() {
 		return this.buttonCfg;
 	},
 
-    buttonClick: function(action) {
+	buttonClick: function(action) {
 		if (action === 'submit-application') {
 			this.maybeSubmit();
 		}
 	},
 
-    fillInDefaults: function(values) {
+	fillInDefaults: function(values) {
 		var user = $AppConfig.userObject,
 			realname = user.get('realname'),
 			firstName = user.get('FirstName'),
@@ -518,7 +518,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return values;
 	},
 
-    stopClose: function() {
+	stopClose: function() {
 		var me = this,
 			r;
 
@@ -552,7 +552,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return r;
 	},
 
-    showRejection: function(json) {
+	showRejection: function(json) {
 		this.removeAll(true);
 
 		var fields = this.getFormForGroup('admission'),
@@ -608,7 +608,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.updateFromStorage();
 	},
 
-    showPending: function(json) {
+	showPending: function(json) {
 		var defaults = {
 			Message: getFormattedString('NextThought.view.courseware.enrollment.Admission.ComeBackEnroll', {title: this.course.get('Title')}),
 			ContactInformation: this.defaultMessages.ContactInformation
@@ -639,7 +639,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-    showAlreadyExisted: function(json) {
+	showAlreadyExisted: function(json) {
 		var defaults = {
 			Message: getString('NextThought.view.courseware.enrollment.Admission.CantProcessNow'),
 			ContactInformation: this.defaultMessages.ContactInformation
@@ -667,7 +667,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-    showErrorState: function(json) {
+	showErrorState: function(json) {
 		var defaults = {
 			Message: getString('NextThought.view.courseware.enrollment.Admission.TryLater'),
 			ContactInformation: this.defaultMessages.ContactInformation
@@ -695,7 +695,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-    showConcurrentSubmitted: function() {
+	showConcurrentSubmitted: function() {
 		this.removeAll(true);
 
 		this.add({
@@ -716,7 +716,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-    shouldAllowSubmission: function(value) {
+	shouldAllowSubmission: function(value) {
 		var me = this,
 			preflightlink = $AppConfig.userObject.getLink('fmaep.admission.preflight'),
 			groupConfig;
@@ -749,10 +749,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			});
 	},
 
-    isValidForSubmission: function(group) {
+	isValidForSubmission: function(group) {
 		var valid = this.isValid(group);
 
-		if (!valid)  {
+		if (!valid)	 {
 			this.fireEvent('show-msg', getString('NextThought.view.courseware.enrollment.Admission.FillOutAllInfo'), true, 5000);
 			return Promise.reject();
 		}
@@ -760,7 +760,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return Promise.resolve();
 	},
 
-    handleResponse: function(json) {
+	handleResponse: function(json) {
 		this.completed = true;
 
 		if (json.State) {
@@ -796,7 +796,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-    handleConcurrentResponse: function(json, success) {
+	handleConcurrentResponse: function(json, success) {
 		if (success) {
 			this.completed = true;
 			this.clearStorage();
@@ -807,7 +807,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-    getValue: function() {
+	getValue: function() {
 		var value = this.mixins.form.getValue.call(this),
 			group = 'admission', data;
 
@@ -836,7 +836,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		};
 	},
 
-    submitConcurrentForm: function(value) {
+	submitConcurrentForm: function(value) {
 		var url = $AppConfig.userObject.getLink('concurrent.enrollment.notify');
 
 
@@ -847,7 +847,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return Service.post(url, value.postData);
 	},
 
-    submitAdmission: function(value) {
+	submitAdmission: function(value) {
 		this.submitBtnCfg.disabled = true;
 		this.fireEvent('update-buttons');
 		this.addMask(getString('NextThought.view.courseware.enrollment.Admission.ProcessApp'));
@@ -855,7 +855,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return this.complete(this, value.postData);
 	},
 
-    maybeSubmit: function() {
+	maybeSubmit: function() {
 		var me = this, isValid,
 			value = me.getValue(),
 			preflight,

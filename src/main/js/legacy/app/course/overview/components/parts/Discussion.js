@@ -8,22 +8,22 @@ var ModelDiscussionRef = require('../../../../../model/DiscussionRef');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
-    extend: 'Ext.Component',
+	extend: 'Ext.Component',
 
-    alias: [
+	alias: [
 		'widget.course-overview-discussion',
 		'widget.course-overview-discussionref'
 	],
 
-    mixins: {
+	mixins: {
 		EllipsisText: 'NextThought.mixins.EllipsisText'
 	},
 
-    ui: 'course',
-    cls: 'overview-discussion',
-    containerCls: 'discussions',
+	ui: 'course',
+	cls: 'overview-discussion',
+	containerCls: 'discussions',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'image', style: {backgroundImage: 'url({icon})'}},
 		{ cls: 'meta', cn: [
 			{ cls: 'label', html: '{label}'},
@@ -32,14 +32,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		]}
 	]),
 
-    listeners: {
+	listeners: {
 		click: {
 			element: 'el',
 			fn: 'onClick'
 		}
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		var n = config.node || {getAttribute: function(a) { return config[a];} },
 			i = config.locationInfo || {},
 			icon = n.getAttribute('icon');
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.callParent([config]);
 	},
 
-    getIcon: function(icon, root) {
+	getIcon: function(icon, root) {
 		if (icon && Globals.ROOT_URL_PATTERN.test(icon)) {
 			return getURL(icon);
 		}
@@ -71,12 +71,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    getBundle: function() {
+	getBundle: function() {
 		var container = this.up('content-view-container');
 		return container && container.currentBundle;
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {},this.data);
 		this.idsToLookup = Ext.clone(this.data.ntiid) || [];
@@ -84,13 +84,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.WindowActions = NextThought.app.windows.Actions.create();
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.ellipsisTitle();
 	},
 
-    ellipsisTitle: function() {
+	ellipsisTitle: function() {
 		var title = this.el.down('.title');
 
 		if (title && title.dom) {
@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    loadTopic: function(ntiid) {
+	loadTopic: function(ntiid) {
 		var parsedId = ParseUtils.parseNTIID(ntiid),
 			bundle = this.getBundle(),
 			e;
@@ -107,14 +107,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		* when we resolving a topic. We do this primarily for instructors who may instruct multiple
 		* subinstances that contain this discussion although strickly speaking it coudl happen for any
 		* account type if the account is enrolled in multiple subinstances of a course that contain
-		* the same named topic.  The issue is without the contexxt of the course we are in when the topic
+		* the same named topic.	 The issue is without the contexxt of the course we are in when the topic
 		* is selected on the overview the server as multiple topics to choose from (one for each section)
 		* and it is ambiguous as to which one to select.  Now the problem with this particular hack
 		& is that when we are in a section but trying to get to the root (because the topics are set up
 		* in the root rather than the section) the provider id no longer matches the root and we 404.  In most
 		* cases the section is what contains the topic making this a non issue, but we now have courses where
-		* the topic only exists in the parent.  We need another way to pass the context of the such that we
-		* get the proper context in the event it is ambiguous.  While we have this in the context of a course (from
+		* the topic only exists in the parent.	We need another way to pass the context of the such that we
+		* get the proper context in the event it is ambiguous.	While we have this in the context of a course (from
 		* the overview or content) we aren't going to have this in the stream right?  I think this manifests
 		* as course roulette but that is already a problem right?
 		*/
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		Service.getObject(ntiid, this.onTopicResolved, this.onTopicResolveFailure, this, true);
 	},
 
-    onTopicResolved: function(topic) {
+	onTopicResolved: function(topic) {
 		if (!/topic$/i.test(topic.get('Class'))) {
 			console.warn('Got something other than what we were expecting. Was expecting a Topic, got:', topic);
 		}
@@ -152,7 +152,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    onTopicResolveFailure: function() {
+	onTopicResolveFailure: function() {
 		console.warn('Could not load the topic object: ', arguments);
 
 		if (!Ext.isEmpty(this.idsToLookup)) {
@@ -160,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    onClick: function() {
+	onClick: function() {
 		if (!this.topic) {
 			alert('An error occurred showing this discussion.');
 		}

@@ -7,17 +7,17 @@ var ModelUser = require('../../../model/User');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.GroupTabView', {
-    extend: 'NextThought.app.contacts.components.TabView',
-    alias: 'widget.groups-tab-view',
+	extend: 'NextThought.app.contacts.components.TabView',
+	alias: 'widget.groups-tab-view',
 
-    navigation: {
+	navigation: {
 		xtype: 'contacts-outline',
 		cls: 'group',
 		subType: 'group',
 		outlineLabel: getString('contacts_all_group')
 	},
 
-    body: {
+	body: {
 		xtype: 'data-bound-panel',
 		defaultType: 'contacts-tabs-grouping',
 		items: [],
@@ -35,17 +35,17 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		}
 	},
 
-    filter: function(group) { return group.hidden !== true && group.isDFL; },
-    subType: 'group',
+	filter: function(group) { return group.hidden !== true && group.isDFL; },
+	subType: 'group',
 
-    initComponent: function () {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.buildStore();
 	},
 
-    buildStore: function() {
+	buildStore: function() {
 		var s = this.GroupStore.getGroupsList(),
 			store = StoreUtils.newView(s);
 

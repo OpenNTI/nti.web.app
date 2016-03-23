@@ -4,25 +4,25 @@ var UtilScrolling = require('../../../util/Scrolling');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeField', {
-    extend: 'Ext.Component',
-    alias: 'widget.date-time-field',
+	extend: 'Ext.Component',
+	alias: 'widget.date-time-field',
 
-    statics: {
+	statics: {
 		//http://stackoverflow.com/questions/16353211/check-if-year-is-leap-year-in-javascript
 		isLeapYear: function(year) {
 			return ((year % 4 === 0) && (year % 100 != 0)) || (year % 400 === 0);
 		}
 	},
 
-    INVALID_DATE: 'Please enter a valid date.',
-    INVALID_TIME: 'Please enter a valid time.',
-    YEARS_IN_PAST: 5,
-    YEARS_IN_FUTURE: 5,
-    AM: 'AM',
-    PM: 'PM',
-    showCurrentDateSelect: true,
+	INVALID_DATE: 'Please enter a valid date.',
+	INVALID_TIME: 'Please enter a valid time.',
+	YEARS_IN_PAST: 5,
+	YEARS_IN_FUTURE: 5,
+	AM: 'AM',
+	PM: 'PM',
+	showCurrentDateSelect: true,
 
-    MONTHS: [
+	MONTHS: [
 		{longLabel: 'January', shortLabel: 'JAN', value: 0, days: 31},
 		{longLabel: 'February', shortLabel: 'FEB', value: 1, days: 28, leapDays: 29},
 		{longLabel: 'March', shortLabel: 'MAR', value: 2, days: 31},
@@ -37,9 +37,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		{longLabel: 'December', shortLabel: 'DEC', value: 11, days: 31}
 	],
 
-    cls: 'date-time-field',
+	cls: 'date-time-field',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'date', cn: [
 			{cls: 'container', cn: [
 				{cls: 'month', cn: [
@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		monthLabel: '.month .label',
 		monthContainer: '.month-input',
 		dayLabel: '.day .label',
@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		selectCurrentEl: '.select-current-date .link'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var upperBound,
@@ -114,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		this.onResize = this.closeSelects.bind(this);
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -214,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		me.selectDate(me.currentDate);
 	},
 
-    disable: function() {
+	disable: function() {
 		this.hasBeenDisabled = true;
 
 		if (this.rendered) {
@@ -228,7 +228,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		}
 	},
 
-    enable: function() {
+	enable: function() {
 		this.hasBeenDisabled = null;
 
 		if (this.rendered) {
@@ -242,34 +242,34 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		}
 	},
 
-    closeSelects: function() {
+	closeSelects: function() {
 		this.yearSelect.hideOptions();
 		this.monthSelect.hideOptions();
 		this.daySelect.hideOptions();
 		this.meridiemSelect.hideOptions();
 	},
 
-    addScrollListener: function() {
+	addScrollListener: function() {
 		var parent = this.scrollParent || window;
 
 		parent.addEventListener('scroll', this.onParentScroll);
 	},
 
-    addResizeListener: function() {
+	addResizeListener: function() {
 		Ext.EventManager.onWindowResize(this.onResize);
 	},
 
-    removeScrollListener: function() {
+	removeScrollListener: function() {
 		var parent = this.scrollParent || window;
 
 		parent.removeEventListener('scroll', this.onParentScroll);
 	},
 
-    removeResizeListener: function() {
+	removeResizeListener: function() {
 		Ext.EventManager.removeResizeListener(this.onResize);
 	},
 
-    getSelectedDate: function() {
+	getSelectedDate: function() {
 		var year = this.getYear(),
 			month = this.getMonth(),
 			day = this.getDay(),
@@ -283,19 +283,19 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		return null;
 	},
 
-    getYear: function() {
+	getYear: function() {
 		return this.yearSelect && this.yearSelect.getValue();
 	},
 
-    getMonth: function() {
+	getMonth: function() {
 		return this.monthSelect && this.monthSelect.getValue();
 	},
 
-    getDay: function() {
+	getDay: function() {
 		return this.daySelect && this.daySelect.getValue();
 	},
 
-    getHours: function() {
+	getHours: function() {
 		var value = this.hourInput && this.hourInput.dom && this.hourInput.dom.value,
 			meridiem = this.meridiemSelect.getValue() || this.AM;
 
@@ -316,7 +316,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		return value;
 	},
 
-    getMinutes: function() {
+	getMinutes: function() {
 		var value = this.minuteInput && this.minuteInput.dom && this.minuteInput.dom.value;
 
 		if (value == null || value === '') {
@@ -328,11 +328,11 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		return value;
 	},
 
-    selectCurrentDate: function(date) {
+	selectCurrentDate: function(date) {
 		this.selectDate(new Date());
 	},
 
-    selectDate: function(date) {
+	selectDate: function(date) {
 		if (date && date < this.lowerBound) {
 			date = this.lowerBound;
 		} else if (date && date > this.upperBound) {
@@ -348,7 +348,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		this.setValues(year, month, day, hour, minute);
 	},
 
-    setValues: function(year, month, day, hour, minute) {
+	setValues: function(year, month, day, hour, minute) {
 		year = year === undefined || year === null ? this.getYear() : year;
 		month = month === undefined || month === null ? this.getMonth() : month;
 		day = day === undefined || day === null ? this.getDay() : day;
@@ -366,7 +366,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		this.setYear(year);
 	},
 
-    updateYearRange: function(year, month, day) {
+	updateYearRange: function(year, month, day) {
 		var lower = this.lowerBound.getFullYear(),
 			upper = this.upperBound.getFullYear(),
 			i, years = [];
@@ -378,7 +378,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		this.yearSelect.addOptions(years);
 	},
 
-    updateMonthRange: function(year, month, day) {
+	updateMonthRange: function(year, month, day) {
 		var useShort = this.useShortDates,
 			months;
 
@@ -392,7 +392,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		this.monthSelect.addOptions(months);
 	},
 
-    updateDayRange: function(year, month, day) {
+	updateDayRange: function(year, month, day) {
 		month = this.MONTHS[month || 0];
 
 		var lower = 1,
@@ -406,7 +406,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		this.daySelect.addOptions(days);
 	},
 
-    setYear: function(year) {
+	setYear: function(year) {
 		if (!year) {
 			this.yearSelect.setValue('');
 			return;
@@ -425,7 +425,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		this.yearSelect.setValue(year);
 	},
 
-    setMonth: function(month) {
+	setMonth: function(month) {
 		if (month === undefined) {
 			this.monthSelect.setValue('');
 			return;
@@ -444,7 +444,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		this.monthSelect.setValue(month);
 	},
 
-    setDay: function(day) {
+	setDay: function(day) {
 		if (!day) {
 			this.daySelect.setValue('');
 			return;
@@ -463,7 +463,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		this.daySelect.setValue(day);
 	},
 
-    setHour: function(hour) {
+	setHour: function(hour) {
 		if (hour < 12) {
 			this.meridiemSelect.setValue(this.AM);
 		} else {
@@ -474,7 +474,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		this.hourInput.dom.value = hour === 0 ? '12' : hour;
 	},
 
-    setMinute: function(minute) {
+	setMinute: function(minute) {
 		if (minute < 10) {
 			minute = '0' + minute;
 		}
@@ -482,7 +482,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		this.minuteInput.dom.value = minute;
 	},
 
-    onYearChanged: function(year) {
+	onYearChanged: function(year) {
 
 
 		this.setMonth(this.getMonth());
@@ -495,7 +495,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		}
 	},
 
-    onMonthChanged: function(month) {
+	onMonthChanged: function(month) {
 		this.updateDayRange(this.getYear(), month, this.getDay());
 
 		this.setDay(this.getDay());
@@ -507,7 +507,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		}
 	},
 
-    onDayChanged: function(day) {
+	onDayChanged: function(day) {
 		this.clearDateError();
 
 		if (this.onChange) {
@@ -515,7 +515,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		}
 	},
 
-    onHourChanged: function(hour) {
+	onHourChanged: function(hour) {
 		var hour = this.hourInput.dom.value,
 			meridiem = this.meridiemSelect.getValue();
 
@@ -539,53 +539,53 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		}
 	},
 
-    onMinuteChanged: function(minute) {
+	onMinuteChanged: function(minute) {
 		if (this.onChange) {
 			this.onChange();
 		}
 	},
 
-    onMeridiemChanged: function(meridiem) {
+	onMeridiemChanged: function(meridiem) {
 		if (this.onChange) {
 			this.onChange();
 		}
 	},
 
-    showDateError: function(error) {
+	showDateError: function(error) {
 		this.dateError.update(error);
 	},
 
-    clearDateError: function() {
+	clearDateError: function() {
 		this.dateError.update('');
 	},
 
-    showTimeError: function(error) {
+	showTimeError: function(error) {
 		this.timeError.update(error);
 		this.timeLabel.addCls('error');
 	},
 
-    clearTimeError: function() {
+	clearTimeError: function() {
 		this.timeError.update('');
 		this.timeLabel.removeCls('error');
 	},
 
-    onInvalidDate: function() {
+	onInvalidDate: function() {
 		this.showDateError(this.invalidDateMsg);
 	},
 
-    onInvalidTime: function() {
+	onInvalidTime: function() {
 		this.showTimeError(this.invalidTimeMsg);
 	},
 
-    onDateToLow: function() {
+	onDateToLow: function() {
 		this.showDateError(this.dateToLowMsg || 'Please enter a date after ' + Ext.Date.format(this.lowerBound, 'F n, Y g:i A'));
 	},
 
-    onDateToHigh: function() {
+	onDateToHigh: function() {
 		this.showDateError(this.dateToHighMsg || 'Please enter a date before ' + Ext.Date.format(this.upperBound, 'F n, Y g:i A'));
 	},
 
-    __validateValue: function(value) {
+	__validateValue: function(value) {
 		var isValid = true;
 
 		if (this.lowerBound && value < this.lowerBound) {
@@ -599,7 +599,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		return isValid;
 	},
 
-    __validateNoValue: function(year, month, day, hour, minute) {
+	__validateNoValue: function(year, month, day, hour, minute) {
 		//If all the values are null, then the value is null and its valid
 		if (year == null && month == null && day == null && hour == null && minute == null) {
 			return true;
@@ -637,7 +637,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 		return false;
 	},
 
-    validate: function() {
+	validate: function() {
 		var year = this.getYear(),
 			month = this.getMonth(),
 			day = this.getDay(),

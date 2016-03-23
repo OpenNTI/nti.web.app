@@ -4,9 +4,9 @@ var StoreStripePurchaseItem = require('./StripePurchaseItem');
 
 
 module.exports = exports = Ext.define('NextThought.model.store.StripePurchaseOrder', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    fields: [
+	fields: [
 		{ name: 'Amount', type: 'float', persist: false },
 		{ name: 'Coupon', type: 'auto', persist: false, defaultValue: undefined},
 		{ name: 'Currency', type: 'string', persist: false },

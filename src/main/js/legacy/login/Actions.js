@@ -12,7 +12,7 @@ var {getURL} = Globals;
 
 
 module.exports = exports = Ext.define('NextThought.login.Actions', {
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		//we don't have the service doc yet, but we need the ajax helpers
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		this.store = NextThought.login.StateStore.getInstance();
 	},
 
-    handleImpersonate: function() {
+	handleImpersonate: function() {
 		var url = $AppConfig.userObject.getLink('logon.nti.impersonate'),
 			username = url && prompt('What username do you want to impersonate?'),
 			params;
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		}
 	},
 
-    handleLogout: function() {
+	handleLogout: function() {
 		var me = this,
 			url = getURL(Ext.String.urlAppend(
 				me.store.getLogoutURL(),
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		me.store.willLogout(finishLoggingOut);
 	},
 
-    __onLoginSuccess: function() {
+	__onLoginSuccess: function() {
 		var me = this,
 			setFromCookie, preference,
 			field = 'useHighContrast',
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			});
 	},
 
-    __onLoginFailure: function(reason) {
+	__onLoginFailure: function(reason) {
 		var o = {},
 			url = $AppConfig.server.login;
 
@@ -157,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		return Promise.reject();
 	},
 
-    /**
+	/**
 	 * Get the user, and set up the service object
 	 * @return {Promise} fulfills is successfully logged in
 	 */
@@ -165,7 +165,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		return this.__attemptLogin().then(this.__onLoginSuccess.bind(this), this.__onLoginFailure.bind(this));
 	},
 
-    __attemptLogin: function() {
+	__attemptLogin: function() {
 		var me = this,
 			server = $AppConfig.server,
 			dataserver = server.data,
@@ -199,7 +199,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		}).then(me.performHandshake.bind(me));
 	},
 
-    performHandshake: function(pongFromPing) {
+	performHandshake: function(pongFromPing) {
 		var me = this,
 			link = me.ServiceInterface.getLinkFrom(pongFromPing.Links, 'logon.handshake'),
 			username = decodeURIComponent(Ext.util.Cookies.get('username')),
@@ -243,7 +243,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			});
 	},
 
-    findResolveSelfWorkspace: function(service) {
+	findResolveSelfWorkspace: function(service) {
 		var items = service.get('Items') || [],
 			w = null, l;
 
@@ -263,7 +263,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		return w;
 	},
 
-    resolveService: function() {
+	resolveService: function() {
 		var me = this,
 			unauthed = {401: true, 403: true},
 			server = $AppConfig.server;
@@ -310,7 +310,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			});
 	},
 
-    attemptLoginCallback: function(service) {
+	attemptLoginCallback: function(service) {
 		var me = this,
 			href, workspace;
 

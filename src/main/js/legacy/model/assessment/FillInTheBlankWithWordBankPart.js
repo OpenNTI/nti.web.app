@@ -4,9 +4,9 @@ var AssessmentWordBank = require('./WordBank');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.FillInTheBlankWithWordBankPart', {
-    extend: 'NextThought.model.assessment.Part',
+	extend: 'NextThought.model.assessment.Part',
 
-    fields: [
+	fields: [
 		{ name: 'input', type: 'string' },
 		{ name: 'wordbank', type: 'singleItem' }
 	]

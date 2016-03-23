@@ -5,10 +5,10 @@ var TypesAssignment = require('./types/Assignment');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.Editor', {
-    extend: 'NextThought.app.course.overview.components.editing.EditorGroup',
-    alias: 'widget.overview-editing-contentlink-editor',
+	extend: 'NextThought.app.course.overview.components.editing.EditorGroup',
+	alias: 'widget.overview-editing-contentlink-editor',
 
-    statics: {
+	statics: {
 		getSubEditors: function() {
 			var base = NextThought.app.course.overview.components.editing.content.questionset.types;
 

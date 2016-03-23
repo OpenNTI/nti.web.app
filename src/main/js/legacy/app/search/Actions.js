@@ -8,21 +8,21 @@ var ContextStateStore = require('../context/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.search.Actions', {
-    extend: 'NextThought.common.Actions',
-    PAGE_SIZE: 10,
+	extend: 'NextThought.common.Actions',
+	PAGE_SIZE: 10,
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.SearchStore = NextThought.app.search.StateStore.getInstance();
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
-    getPageSize: function() {
+	getPageSize: function() {
 		return this.PAGE_SIZE;
 	},
 
-    __getSearchLocation: function() {
+	__getSearchLocation: function() {
 		var location = this.ContextStore.getReaderLocation(),
 			NTIID = location && location.NTIID,
 			currentNode = location && location.location;
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 		return NTIID;
 	},
 
-    loadSearchPage: function(term, accepts, bundle, location, page) {
+	loadSearchPage: function(term, accepts, bundle, location, page) {
 		var rootUrl = Service.getUserUnifiedSearchURL(),
 			url, params;
 
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 		return StoreUtils.loadBatch(url, params);
 	},
 
-    setSearchContext: function(term, silent) {
+	setSearchContext: function(term, silent) {
 		var currentBundle = this.ContextStore.getRootBundle(),
 			bundleId = currentBundle && currentBundle.getId(),
 			loc = this.__getSearchLocation();
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Actions', {
 		this.SearchStore.setSearchContext(term, silent, bundleId, loc);
 	},
 
-    syncTerm: function(term) {
+	syncTerm: function(term) {
 		this.SearchStore.fireEvent('sync-term', term);
 	}
 });

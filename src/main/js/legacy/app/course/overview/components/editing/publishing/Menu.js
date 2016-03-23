@@ -4,12 +4,12 @@ var EditingActions = require('../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu', {
-    extend: 'Ext.Component',
-    alias: 'widget.overview-editing-publishing-menu',
-    MAX_HEIGHT: 550,
-    cls: 'editing-publishing-menu',
+	extend: 'Ext.Component',
+	alias: 'widget.overview-editing-publishing-menu',
+	MAX_HEIGHT: 550,
+	cls: 'editing-publishing-menu',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'arrow'},
 		{cls: 'container', cn: [
 			{cls: 'option publish', 'data-action': 'publish', cn: [
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		containerEl: '.container',
 		publishEl: '.publish',
 		publishOnDateEl: '.publish-on-date',
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		saveBtnEl: '.save'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.EditingActions = new NextThought.app.course.overview.components.editing.Actions();
@@ -48,10 +48,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.onWindowResizeBuffer = Ext.Function.createBuffered(this.realign, 10, this);
 
-   		this.on('destroy', this.close.bind(this));
+		this.on('destroy', this.close.bind(this));
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.publishEl, 'click', this.handleSelectionClick.bind(this));
@@ -60,25 +60,25 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.mon(this.saveBtnEl, 'click', this.onSave.bind(this));
 	},
 
-    open: function() {
+	open: function() {
 		Ext.EventManager.onWindowResize(this.onWindowResizeBuffer, this);
 		window.addEventListener('scroll', this.realign);
 		this.setInitialState();
 		this.realign(true);
 	},
 
-    close: function() {
+	close: function() {
 		Ext.EventManager.removeResizeListener(this.onWindowResizeBuffer, this);
 		window.removeEventListener('scroll', this.realign);
 	},
 
-    alignTo: function(domNode) {
+	alignTo: function(domNode) {
 		this.alignedTo = domNode;
 
 		this.realign();
 	},
 
-    realign: function(unlockSide) {
+	realign: function(unlockSide) {
 		if (!this.alignedTo || !this.rendered) { return; }
 
 		var menu = this.el,
@@ -138,7 +138,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    setInitialState: function() {
+	setInitialState: function() {
 		var node = this.record,
 			isNodePublished = node && node.isPublished && node.isPublished(),
 			lesson = this.contents,
@@ -183,11 +183,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    reset: function() {
+	reset: function() {
 		this.setInitialState();
 	},
 
-    handleSelectionClick: function(e) {
+	handleSelectionClick: function(e) {
 		var el = Ext.get(e.target),
 			me = this;
 
@@ -195,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.select(el);
 	},
 
-    onPublishOnDateClick: function(e) {
+	onPublishOnDateClick: function(e) {
 		var el = Ext.get(e.target);
 
 		e.stopEvent();
@@ -207,7 +207,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.select(el);
 	},
 
-    onSave: function(e) {
+	onSave: function(e) {
 		var selectedEl = this.el.down('.option.selected'),
 			action = selectedEl && selectedEl.getAttribute('data-action');
 
@@ -230,7 +230,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    publishSave: function() {
+	publishSave: function() {
 		var me = this;
 
 		Promise.all([
@@ -245,7 +245,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    publishOnDateSave: function() {
+	publishOnDateSave: function() {
 		var dateValue = this.datepicker && this.datepicker.getValue(),
 			me = this;
 
@@ -264,7 +264,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    unpublishSave: function() {
+	unpublishSave: function() {
 		var me = this;
 
 		Promise.all([
@@ -279,7 +279,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    createDatePicker: function(dateContainer) {
+	createDatePicker: function(dateContainer) {
 		//If we've already set on up, no need to create a new one
 		if (this.datepicker) { return; }
 
@@ -295,16 +295,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.datepicker = Ext.widget({
 			xtype: 'date-picker-field',
-	        defaultValue: defaultValue,
-	        renderTo: parentEl,
-	        dateChanged: this.dateChanged.bind(this),
-	        minDate: new Date()
+			defaultValue: defaultValue,
+			renderTo: parentEl,
+			dateChanged: this.dateChanged.bind(this),
+			minDate: new Date()
 		});
 
 		this.on('destroy', this.datepicker.destroy.bind(this.datepicker));
 	},
 
-    getDefaultDate: function(){
+	getDefaultDate: function(){
 		var defaultValue = new Date();
 
 		// Set it to tomorrow at mid night.
@@ -316,7 +316,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return defaultValue;
 	},
 
-    dateChanged: function() {
+	dateChanged: function() {
 		var time = this.datepicker.getValue(),
 			date = new Date(time * 1000);
 
@@ -326,8 +326,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    setPublishOnDateText: function(date) {
-		var	targetEl = this.publishOnDateEl.down('.description'),
+	setPublishOnDateText: function(date) {
+		var targetEl = this.publishOnDateEl.down('.description'),
 			time = this.getDisplayDateValue(date);
 
 		if (targetEl) {
@@ -335,7 +335,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    getDisplayDateValue: function(date) {
+	getDisplayDateValue: function(date) {
 		var hour, minutes,
 			meridiemVal, date;
 
@@ -357,7 +357,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return null;
 	},
 
-    select: function(el) {
+	select: function(el) {
 		var t = el && el.hasCls('option') ? el : el && el.up('.option'),
 			selectedEl = this.el.down('.selected');
 

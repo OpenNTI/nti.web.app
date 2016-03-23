@@ -17,13 +17,13 @@ var InputWordBank = require('./input/WordBank');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.Parts', {
-    extend: 'Ext.panel.Panel',
-    alias: 'widget.question-parts',
-    plain: true,
-    cls: 'parts',
-    ui: 'assessment',
+	extend: 'Ext.panel.Panel',
+	alias: 'widget.question-parts',
+	plain: true,
+	cls: 'parts',
+	ui: 'assessment',
 
-    setQuestionAndPart: function(question, questionSet, individual, tabIndexTracker, answerLabel) {
+	setQuestionAndPart: function(question, questionSet, individual, tabIndexTracker, answerLabel) {
 		var parts = question.get('parts'),
 				multiPart = (parts.length > 1);
 
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Parts', {
 		this.setSinglePart(question, questionSet, parts.first(), tabIndexTracker, answerLabel);
 	},
 
-    setSinglePart: function(question, questionSet, part, tabIndexTracker, answerLabel) {
+	setSinglePart: function(question, questionSet, part, tabIndexTracker, answerLabel) {
 		var cls = (part && part.get) ? part.get('Class') : 'unsupported',
 				type = 'question-input-' + cls.toLowerCase();
 
@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Parts', {
 		}
 	},
 
-    setMultiPart: function(question, questionSet, parts, tabIndexTracker, answerLabel) {
+	setMultiPart: function(question, questionSet, parts, tabIndexTracker, answerLabel) {
 		var type, part, items, i;
 
 		this.addCls('multipart');
@@ -113,19 +113,19 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Parts', {
 		}
 	},
 
-    updateWithProgress: function(questionSubmission, reapplying) {
+	updateWithProgress: function(questionSubmission, reapplying) {
 		var parts = this.query('[updateWithProgress]');
 		Ext.each(parts, function(part) {
 			part.updateWithProgress(questionSubmission, reapplying);
 		});
 	},
 
-    updateWithResults: function(assessedQuestion) {
+	updateWithResults: function(assessedQuestion) {
 		var parts = this.query('[updateWithResults]');
 		Ext.each(parts, function(part) {part.updateWithResults(assessedQuestion);});
 	},
 
-    reset: function(keepAnswers) {
+	reset: function(keepAnswers) {
 		var inputs = this.query('abstract-question-input,assessment-multipart-submission');
 		Ext.each(inputs, function(input) {
 			var val, dontUseTheOldAnswer;
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Parts', {
 		});
 	},
 
-    instructorReset: function() {
+	instructorReset: function() {
 		var inputs = this.query('abstract-question-input,assessment-multipart-submission');
 
 		Ext.each(inputs, function(input) {
@@ -152,7 +152,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Parts', {
 		});
 	},
 
-    showQuestionSetWithAnswers: function() {
+	showQuestionSetWithAnswers: function() {
 		var parts = this.query('[markSubmitted]');
 		Ext.each(parts, function(part) {
 			part.maskResponseBox();
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Parts', {
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		var me = this;
 		//updatelayout because sometimes this can render before other things, causing overlap

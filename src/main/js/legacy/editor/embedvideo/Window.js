@@ -5,29 +5,29 @@ var EmbedvideoMain = require('./Main');
 
 
 module.exports = exports = Ext.define('NextThought.editor.embedvideo.Window', {
-    extend: 'NextThought.common.window.Window',
-    alias: 'widget.embedvideo-window',
-    cls: 'embedvideo-window',
-    ui: 'nt-window',
-    minimizable: false,
-    constrain: true,
-    modal: true,
-    closable: true,
-    resizable: false,
-    dialog: true,
-    closeAction: 'destroy',
-    width: 480,
+	extend: 'NextThought.common.window.Window',
+	alias: 'widget.embedvideo-window',
+	cls: 'embedvideo-window',
+	ui: 'nt-window',
+	minimizable: false,
+	constrain: true,
+	modal: true,
+	closable: true,
+	resizable: false,
+	dialog: true,
+	closeAction: 'destroy',
+	width: 480,
 
-    layout: {
+	layout: {
 		type: 'vbox',
 		align: 'stretch'
 	},
 
-    config: {
+	config: {
 		url: ''
 	},
 
-    items: [
+	items: [
 		{
 			//TODO: why is this a custom component?
 			xtype: 'account-header-view',
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.editor.embedvideo.Window', {
 		{xtype: 'embedvideo-main-view'}
 	],
 
-    embed: function() {
+	embed: function() {
 		var main = this.down('embedvideo-main-view'),
 			val = main.getValues();
 

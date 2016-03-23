@@ -12,16 +12,16 @@ var PromptActions = require('../prompt/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.badge.Window', {
-    extend: 'Ext.container.Container',
+	extend: 'Ext.container.Container',
 
-    mixins: {
+	mixins: {
 		'exportBadge': 'NextThought.mixins.ExportBadge'
 	},
 
-    layout: 'none',
-    cls: 'badge-window',
+	layout: 'none',
+	cls: 'badge-window',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.add({xtype: 'window-header', doClose: this.doClose.bind(this)});
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.Window', {
 		this.add({xtype: 'badge-window-footer', doClose: this.doClose.bind(this), onExport: this.exportBadgeClicked.bind(this)});
 	},
 
-    exportBadgeClicked: function(e){
+	exportBadgeClicked: function(e){
 		var target = e && e.getTarget();
 		this.showExportMenu(this.record, Ext.get(target));
 	}

@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		description = description && (description.innerText || description.textContent);
 
 		function normalizeYear(year) {
-		    return year ? parseInt(year, 10) : null;
+			return year ? parseInt(year, 10) : null;
 		}
 
 		return {

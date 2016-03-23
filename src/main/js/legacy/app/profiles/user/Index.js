@@ -13,17 +13,17 @@ var {isMe, isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.profile-user',
+	extend: 'Ext.container.Container',
+	alias: 'widget.profile-user',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-    cls: 'user-profile profile',
-    layout: 'none',
+	cls: 'user-profile profile',
+	layout: 'none',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.NavActions = NextThought.app.navigation.Actions.create();
@@ -40,15 +40,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		this.initRouter();
 		this.initRoutes();
 
-	    this.finalizeInit();
+		this.finalizeInit();
 
-	    this.on({
-	    	'activate': this.onActivate.bind(this),
-	    	'deactivate': this.onDeactivate.bind(this)
-	    });
+		this.on({
+			'activate': this.onActivate.bind(this),
+			'deactivate': this.onDeactivate.bind(this)
+		});
 	},
 
-    onActivate: function() {
+	onActivate: function() {
 		var active = this.bodyCmp && this.bodyCmp.getLayout().getActiveItem();
 
 		if (active) {
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		}
 	},
 
-    onDeactivate: function() {
+	onDeactivate: function() {
 		var active = this.bodyCmp && this.bodyCmp.getLayout().getActiveItem();
 
 		if (active) {
@@ -64,11 +64,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		}
 	},
 
-    getContext: function() {
+	getContext: function() {
 		return this.activeEntity;
 	},
 
-    initRoutes: function() {
+	initRoutes: function() {
 		this.addRoute('/about', this.showAbout.bind(this));
 		this.addRoute('/activity', this.showActivity.bind(this));
 		this.addRoute('/membership', this.showMembership.bind(this));
@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		this.addDefaultRoute('/about');
 	},
 
-    buildHeaderComponent: function() {
+	buildHeaderComponent: function() {
 		return {
 		   xtype: 'profile-user-header',
 		   saveProfile: this.saveProfile.bind(this),
@@ -89,19 +89,19 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		};
 	},
 
-    finalizeInit: function() {
+	finalizeInit: function() {
 	   window.saveProfile = this.saveProfile.bind(this);
 	},
 
-    onAddedToParentRouter: function() {
+	onAddedToParentRouter: function() {
 		this.headerCmp.pushRoute = this.pushRoute.bind(this);
 	},
 
-    getActiveItem: function() {
+	getActiveItem: function() {
 		return this.bodyCmp.getLayout().getActiveItem();
 	},
 
-    setActiveEntity: function(id, user) {
+	setActiveEntity: function(id, user) {
 		var me = this,
 			lowerId = id.toLowerCase();
 
@@ -120,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		return me.getUser;
 	},
 
-    resolveEntity: function(id, entity) {
+	resolveEntity: function(id, entity) {
 		var me = this;
 		return UserRepository.getUser(id, null, null, true)
 		   .then(function(user) {
@@ -132,11 +132,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			});
 	},
 
-    getRouteTitle: function() {
+	getRouteTitle: function() {
 		return this.activeEntity.getName();
 	},
 
-    setActiveItem: function(xtype) {
+	setActiveItem: function(xtype) {
 		var cmp = this.down(xtype),
 			current = this.bodyCmp.getLayout().getActiveItem(cmp);
 
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		return cmp;
 	},
 
-    setState: function(active) {
+	setState: function(active) {
 		var tabs = [],
 			isContact = this.GroupStore.isContact(this.activeEntity);
 
@@ -197,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		this.NavActions.setActiveContent(this.activeEntity);
 	},
 
-    showAbout: function(route, subRoute) {
+	showAbout: function(route, subRoute) {
 		var aboutCmp = this.setActiveItem('profile-user-about'),
 			headerCmp = this.headerCmp;
 
@@ -218,7 +218,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			.then(aboutCmp.handleRoute.bind(aboutCmp, subRoute, route.precache));
 	},
 
-    showActivity: function(route, subRoute) {
+	showActivity: function(route, subRoute) {
 		var activityCmp = this.setActiveItem('profile-user-activity'),
 			headerCmp = this.headerCmp;
 
@@ -236,7 +236,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			.then(activityCmp.handleRoute.bind(activityCmp, subRoute, route.precache));
 	},
 
-    showMembership: function(route, subRoute) {
+	showMembership: function(route, subRoute) {
 		var membershipCmp = this.setActiveItem('user-profile-membership'),
 			headerCmp = this.headerCmp;
 
@@ -253,7 +253,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			.then(membershipCmp.handleRoute.bind(membershipCmp, subRoute, route.precache));
 	},
 
-    showAchievements: function(route, subRoute) {
+	showAchievements: function(route, subRoute) {
 		var achievementsCmp = this.setActiveItem('user-profile-achievements'),
 			headerCmp = this.headerCmp;
 
@@ -270,7 +270,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			.then(achievementsCmp.handleRoute.bind(achievementsCmp, subRoute, route.precache));
 	},
 
-    saveProfile: function() {
+	saveProfile: function() {
 		if (!this.isMe) { return Promise.resolve(false); }
 
 		var aboutCmp = this.bodyCmp.down('profile-user-about');
@@ -286,7 +286,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		return aboutCmp.saveEdits();
 	},
 
-    removeContact: function() {
+	removeContact: function() {
 		var me = this,
 			actions = me.GroupActions,
 			user = me.activeEntity;
@@ -317,7 +317,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		});
 	},
 
-    addContact: function() {
+	addContact: function() {
 		var me = this;
 
 		me.GroupActions.addContact(me.activeEntity)
@@ -330,7 +330,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			});
 	},
 
-    getRouteForBlog: function(blog, path) {
+	getRouteForBlog: function(blog, path) {
 		var blogId = blog.getId(),
 			entry = path.shift();
 
@@ -341,7 +341,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		};
 	},
 
-    getRouteForPath: function(path, user) {
+	getRouteForPath: function(path, user) {
 		var root = path[0],
 			subPath = path.slice(1);
 

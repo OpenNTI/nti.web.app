@@ -7,11 +7,11 @@ var VideoVideoEditor = require('./VideoEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.Editor', {
-    extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-    alias: 'widget.overview-editing-video',
-    SWITCHED: 'switched-items',
+	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+	alias: 'widget.overview-editing-video',
+	SWITCHED: 'switched-items',
 
-    statics: {
+	statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.Video.mimeType,
@@ -39,13 +39,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    cls: 'content-editor video-editor',
+	cls: 'content-editor video-editor',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 	},
 
-    showEditor: function() {
+	showEditor: function() {
 		if (this.record) {
 			this.showVideoEditor();
 		} else {
@@ -53,13 +53,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    maybeEnableBack: function(text) {
+	maybeEnableBack: function(text) {
 		if (!this.record && this.enableBack) {
 			this.enableBack(text);
 		}
 	},
 
-    onBack: function() {
+	onBack: function() {
 		if (this.videoEditorCmp) {
 			this.showVideoList(this.videoEditorCmp.selectedItems);
 		} else if (this.doBack) {
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    __sortVideos: function(videos) {
+	__sortVideos: function(videos) {
 		return videos.sort(function(a, b) {
 			var vA = a.get('title'),
 				vB = b.get('title');
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    __getExcludedVideos: function(videos) {
+	__getExcludedVideos: function(videos) {
 		var siblings = this.parentRecord ? this.parentRecord.get('Items') : [];
 
 		return siblings.reduce(function getVideoIds(acc, item) {
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}, []);
 	},
 
-    showVideoList: function(selectedItems) {
+	showVideoList: function(selectedItems) {
 		var me = this,
 			exclude = me.__getExcludedVideos();
 
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    showVideoEditor: function() {
+	showVideoEditor: function() {
 		if (this.videoEditorCmp) {
 			this.viedoEditorCmp.destroy();
 			delete this.videoEditorCmp;
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.maybeEnableBack('Videos');
 	},
 
-    onVideoListSelectionChange: function(selection) {
+	onVideoListSelectionChange: function(selection) {
 		var length = selection.length;
 
 		if (length === 0) {
@@ -168,17 +168,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    onSaveFailure: function(reason) {
+	onSaveFailure: function(reason) {
 		if (reason === this.SWITCHED) { return; }
 
 		this.callParent(arguments);
 	},
 
-    doValidation: function() {
+	doValidation: function() {
 		return Promise.resolve();
 	},
 
-    onSave: function() {
+	onSave: function() {
 		var me = this;
 
 		if (!me.videoEditorCmp) {

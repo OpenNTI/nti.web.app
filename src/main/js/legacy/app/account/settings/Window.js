@@ -7,22 +7,22 @@ var ComponentsPictureEditor = require('./components/PictureEditor');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.settings.Window', {
-    extend: 'NextThought.common.window.Window',
-    alias: 'widget.account-window',
-    cls: 'account-window',
-    ui: 'account-window',
-    minimizable: false,
-    constrain: true,
-    closable: true,
-    modal: true,
-    dialog: true,
-    resizable: false,
-    width: 535,
-    y: 80,
-    layout: 'none',
-    items: [],
+	extend: 'NextThought.common.window.Window',
+	alias: 'widget.account-window',
+	cls: 'account-window',
+	ui: 'account-window',
+	minimizable: false,
+	constrain: true,
+	closable: true,
+	modal: true,
+	dialog: true,
+	resizable: false,
+	width: 535,
+	y: 80,
+	layout: 'none',
+	items: [],
 
-    constructor: function() {
+	constructor: function() {
 		var user = $AppConfig.userObject,
 			canUploadAvatar = Service.canUploadAvatar(),
 			availablePanels = [], tabs = [];
@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.Window',
 		this.callParent(arguments);
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		var me = this;
 
 		me.callParent(arguments);
@@ -117,9 +117,9 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.Window',
 		});
 	},
 
-    syncHeight: function() {},
+	syncHeight: function() {},
 
-    changeView: function(btn) {
+	changeView: function(btn) {
 		var c = this.down('[name=settings]'),
 			p = c.down(btn.associatedPanel);
 

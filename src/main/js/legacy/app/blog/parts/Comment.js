@@ -4,17 +4,17 @@ var BlogActions = require('../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.parts.Comment', {
-    extend: 'NextThought.app.blog.parts.old.Comment',
-    alias: 'widget.profile-blog-comment',
-    cls: 'blog-comment',
+	extend: 'NextThought.app.blog.parts.old.Comment',
+	alias: 'widget.profile-blog-comment',
+	cls: 'blog-comment',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.BlogActions = NextThought.app.blog.Actions.create();
 	},
 
-    fireDeleteEvent: function() {
+	fireDeleteEvent: function() {
 		this.BlogActions.deleteBlogPost(this.record);
 	}
 });

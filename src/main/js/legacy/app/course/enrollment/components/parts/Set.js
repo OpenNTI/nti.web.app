@@ -12,17 +12,17 @@ var PartsLinks = require('./Links');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.Set', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.enrollment-set',
+	extend: 'Ext.container.Container',
+	alias: 'widget.enrollment-set',
 
-    require: [
+	require: [
 		 'NextThought.layout.container.None'
 	],
 
-    cls: 'admission-set',
-    layout: 'none',
+	cls: 'admission-set',
+	layout: 'none',
 
-    typesMap: {
+	typesMap: {
 		'text': 'enrollment-textinput',
 		'textarea': 'enrollment-textarea',
 		'checkbox': 'enrollment-checkbox',
@@ -36,13 +36,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		'link': 'enrollment-link'
 	},
 
-    //name of the group so it can be idenitified
+	//name of the group so it can be idenitified
 	name: '',
 
-    //once the group is correct, the name of another group or input to reveal
+	//once the group is correct, the name of another group or input to reveal
 	reveals: undefined,
 
-    //returns true if all of its items are correct
+	//returns true if all of its items are correct
 	isCorrect: function() {
 		var correct = true;
 
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return correct;
 	},
 
-    isEmpty: function() {
+	isEmpty: function() {
 		var empty = true;
 
 		this.items.each(function(item) {
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return empty;
 	},
 
-    isValid: function(group) {
+	isValid: function(group) {
 		var valid = true;
 
 		if (group && group !== this.group) {
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return valid;
 	},
 
-    getValue: function() {
+	getValue: function() {
 		var value = {};
 
 		this.items.each(function(item) {
@@ -99,21 +99,21 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return value;
 	},
 
-    defaultType: null,
+	defaultType: null,
 
-    getTargetEl: function() {
+	getTargetEl: function() {
 		return this.body;
 	},
 
-    childEls: ['body'],
+	childEls: ['body'],
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'label', html: '{label}'},
 		{ id: '{id}-body', cls: 'body-container',
 			cn: ['{%this.renderContainer(out,values)%}'] }
 	]),
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.enableBubble(['reveal-item', 'hide-item', 'add-address-line', 'go-back', 'viewLicense']);
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -142,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-    changed: function(name, value, doNotStore, sets) {
+	changed: function(name, value, doNotStore, sets) {
 		var parent = this.up('[changed]'),
 			correct = this.isCorrect();
 
@@ -181,7 +181,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-    maybeToggleHides: function(correct) {
+	maybeToggleHides: function(correct) {
 		var parent = this.up('[maybeToggleHides]'),
 			notEmpty = true;
 

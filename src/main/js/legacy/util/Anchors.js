@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
-	//or locations but have the same container id.  That seem unlikely but may Need to figure that out eventually
+	//or locations but have the same container id.	That seem unlikely but may Need to figure that out eventually
 	preresolveLocatorInfo: function(contentRangeDescriptions, docElement, cleanRoot, containers, docElementContainerId) {
 		var me = this,
 			virginContentCache = {},
@@ -130,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		}
 
 		//First step is build all the locators cloning and purifying the least
-		//amount possible.  That is one of the places the profiler indicated problems
+		//amount possible.	That is one of the places the profiler indicated problems
 		Ext.each(contentRangeDescriptions, function(desc, idx) {
 			var containerId = containers ? containers[idx] : null;
 			try {
@@ -163,10 +163,10 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			}
 
 			//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
-			//or locations but have the same container id.  That seem unlikely but may Need to figure that out eventually
+			//or locations but have the same container id.	That seem unlikely but may Need to figure that out eventually
 			//Optimization shortcut, if we have a cached locator use it
-			//TODO a potential optimization here is that if locator() is defined but null return null.  We already tried
-			//to resolve it once and it failed.  Right now we try again but in reality nothing changes between when we
+			//TODO a potential optimization here is that if locator() is defined but null return null.	We already tried
+			//to resolve it once and it failed.	 Right now we try again but in reality nothing changes between when we
 			//preresolve the locator and now
 			locator = this.cachedLocatorEnsuringDocument(contentRangeDescription, docElement);
 			if (locator) {
@@ -214,29 +214,29 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 	/*
 	 *	Returns a boolean indicating whether or not the provided contentRangeDescription
-	 *  can be found in the provided node
+	 *	can be found in the provided node
 	 *
 	 *	@param contentRagneDescription must not be null
-	 *  @param node the node to look in.  This node must be clean.  IE it must come from the virgin
+	 *	@param node the node to look in.  This node must be clean.	IE it must come from the virgin
 	 *				content document or it must have been cleaned already
-	 *  @param doc the doc or doc fragment that can be used to generate ranges.  If this param is undefined
+	 *	@param doc the doc or doc fragment that can be used to generate ranges.	 If this param is undefined
 	 *				node.ownderDocument will be used
 	 *
-	 *  Note: if we find ourselves using inside a loop over contentRangeDescriptions on the same node
-	 *  an optimized versio nof this function should be written and used
+	 *	Note: if we find ourselves using inside a loop over contentRangeDescriptions on the same node
+	 *	an optimized versio nof this function should be written and used
 	 */
 	doesContentRangeDescriptionResolve: function(contentRangeDescription, node, doc) {
 		var result, range, theDoc = (node && node.ownerDocument) || doc;
 
-		//Ok so this sucks.  There is a complicated reason why we can't let ourselves
+		//Ok so this sucks.	 There is a complicated reason why we can't let ourselves
 		//use our cached locator for this query.  Basically, the locator gets cached by the owner document
-		//that the original range is resolved from.  The problem is sometimes node is a docFragment that
+		//that the original range is resolved from.	 The problem is sometimes node is a docFragment that
 		//we really want the search scoped within, however the docFragment has an owner doc of the main
 		//document (one place this happens is presentation mode).  This means that this method could return
 		//yes if the contentRangeDescription resolves in nodes ownerdoc even if it is not technically
 		//resolved beneath node.  This is partly a result of this method being bolted on to an existing implementation
 		//as well as a caching strategy that was devised back when we only ever used the anchor methods on the content
-		//fragment.  Unfortunately the easiest, and safest, thing to do about this is prevent the locator from
+		//fragment.	 Unfortunately the easiest, and safest, thing to do about this is prevent the locator from
 		//being used.  Double unfortunately, the only way to do that right now is to dump the cached information.
 		if (contentRangeDescription) {
 			contentRangeDescription.attachLocator(null);
@@ -271,10 +271,10 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			}
 
 			//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
-			//or locations but have the same container id.  That seem unlikely but may Need to figure that out eventually
+			//or locations but have the same container id.	That seem unlikely but may Need to figure that out eventually
 			//Optimization shortcut, if we have a cached locator use it
-			//TODO a potential optimization here is that if locator() is defined but null return null.  We already tried
-			//to resolve it once and it failed.  Right now we try again but in reality nothing changes between when we
+			//TODO a potential optimization here is that if locator() is defined but null return null.	We already tried
+			//to resolve it once and it failed.	 Right now we try again but in reality nothing changes between when we
 			//preresolve the locator and now
 			locator = this.cachedLocatorEnsuringDocument(contentRangeDescription, docElement);
 			if (locator) {
@@ -426,9 +426,9 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 	/*
 	 *	Returns the node for the supplied container or defaultNode
-	 *  if that container can't be found.  If containerId resolves
-	 *  to a node that isn't valid as described by getContainerNtiid
-	 *  we warn and return the node anyway
+	 *	if that container can't be found.  If containerId resolves
+	 *	to a node that isn't valid as described by getContainerNtiid
+	 *	we warn and return the node anyway
 	 */
 	getContainerNode: function(containerId, root, defaultNode) {
 		var result, isContainerNode = false,
@@ -479,11 +479,11 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 	/*
 	 *	Finds a containerId for the closet valid container
-	 *  of node.  At this point valid cantainers are questions
-	 *  with a data-ntiid attribute or the page.  Note we currently
-	 *  don't contain things in section-style sub containers.  Support on
-	 *  the ds is questionable and other parts of the app (carousel?) will
-	 *  need to be reworked
+	 *	of node.  At this point valid cantainers are questions
+	 *	with a data-ntiid attribute or the page.  Note we currently
+	 *	don't contain things in section-style sub containers.  Support on
+	 *	the ds is questionable and other parts of the app (carousel?) will
+	 *	need to be reworked
 	 */
 	getContainerNtiid: function(node, def) {
 		var n = Ext.get(node), ntiidAttr = 'data-ntiid',
@@ -925,7 +925,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		}
 
 		//Resolution starts by locating the reference node
-		//for this text anchor.  If it can't be found ancestor is used
+		//for this text anchor.	 If it can't be found ancestor is used
 
 		var root = ancestorNode,
 			referenceNode,
@@ -975,16 +975,16 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		//In the past we had contexts with empty contextText
 		//that added no value but made things more fragile.
 		//We don't create those anymore but for old data we filter them out.
-		//Note we do this here for performance reasons.  It is a more localized change
+		//Note we do this here for performance reasons.	 It is a more localized change
 		//to do this in getCurrentNodeMatches but that gets called for every node we
 		//are iterating over.  Maybe there is a better way to architect this since its probably
 		//a change that stays in place for ever...
 		if (this.getWhitespaceFilter()) {
 			pointer.nonEmptyContexts = Ext.Array.filter(pointer.getContexts(), function(c, i) {
-				//Always keep the primary.  It should never be empty, but just in case
+				//Always keep the primary.	It should never be empty, but just in case
 				if (i === 0) {
 					if (Ext.isEmpty(c.contextText.trim())) {
-						console.error('Found a primary context with empty contextText.  Where did that come from?', pointer);
+						console.error('Found a primary context with empty contextText.	Where did that come from?', pointer);
 					}
 					return true;
 				}
@@ -1033,8 +1033,8 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			//makes us the largest range.  If not we fail to resolve
 			if (!foundReferenceNode) {
 				//TODO hmm so if we failed to resolve the reference node and we fell back
-				//to looking in the ancestor we don't do any partial matching.  We should
-				//reevaluate this decision.  In something like the mathcounts case where we have stuff anchored
+				//to looking in the ancestor we don't do any partial matching.	We should
+				//reevaluate this decision.	 In something like the mathcounts case where we have stuff anchored
 				//to non stable ids that have changed we end up never partial matching.
 				//Instead of doing that maybe instead of not trying to partial match we just take a
 				//deduciton from the overal confidence.
@@ -1047,7 +1047,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 			//We want the best match
 			//NOTE in the past we were "normalizing" the highest confidence
-			//by dividing by the sum of all the confidence values.  Not
+			//by dividing by the sum of all the confidence values.	Not
 			//only is that an improper way to normalize these values,
 			//it is counterintuitive to what we are actually trying to do.
 			if (result === null) {
@@ -1129,10 +1129,10 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		if (pointer.nonEmptyContexts === undefined) {
 			console.error('nonEmptyContexts not set. This should only happen when testing');
 			pointer.nonEmptyContexts = Ext.Array.filter(pointer.getContexts(), function(c, i) {
-				//Always keep the primary.  It should never be empty, but just in case
+				//Always keep the primary.	It should never be empty, but just in case
 				if (i === 0) {
 					if (Ext.isEmpty(c.contextText.trim())) {
-						console.error('Found a primary context with empty contextText.  Where did that come from?', pointer);
+						console.error('Found a primary context with empty contextText.	Where did that come from?', pointer);
 					}
 					return true;
 				}
@@ -1167,8 +1167,8 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			}
 		}
 
-		//If we don't have a full set of contexts.  lookingAtNode
-		//should be null here.  If it isn't, then we might have a problem
+		//If we don't have a full set of contexts.	lookingAtNode
+		//should be null here.	If it isn't, then we might have a problem
 		if (confidenceMultiplier === 1) {
 			//TODO in our handling of past data we assume that if it had a full context
 			//before we stripped out the empty Context objects it has full context after that.

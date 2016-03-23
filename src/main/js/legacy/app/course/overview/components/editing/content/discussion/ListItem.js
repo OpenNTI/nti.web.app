@@ -5,22 +5,22 @@ var ModelDiscussionRef = require('../../../../../../../model/DiscussionRef');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.discussion.ListItem', {
-    extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
-    alias: 'widget.overview-editing-discussion-listitem',
+	extend: 'NextThought.app.course.overview.components.editing.content.ListItem',
+	alias: 'widget.overview-editing-discussion-listitem',
 
-    statics: {
+	statics: {
 		getSupported: function() {
 			return NextThought.model.DiscussionRef.mimeType;
 		}
 	},
 
-    cls: 'overview-editing-listitem discussion',
+	cls: 'overview-editing-listitem discussion',
 
-    dropPlaceholderStyles: {
+	dropPlaceholderStyles: {
 		side: 'left'
 	},
 
-    getPreviewType: function() {
+	getPreviewType: function() {
 		return 'course-overview-discussion';
 	}
 });

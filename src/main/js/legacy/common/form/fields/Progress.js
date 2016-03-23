@@ -3,12 +3,12 @@ var FieldsFilePicker = require('./FilePicker');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.Progress', {
-    extend: 'Ext.Component',
-    alias: 'widget.form-progress',
-    cls: 'save-progress',
-    UPDATE_RATE: 300,
+	extend: 'Ext.Component',
+	alias: 'widget.form-progress',
+	cls: 'save-progress',
+	UPDATE_RATE: 300,
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'progress-bar', cn: [
 			{cls: 'bar'}
 		]},
@@ -19,25 +19,25 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.Progress',
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		barEl: '.progress-bar .bar',
 		currentEl: '.out-of .current',
 		totalEl: '.out-of .total'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 	},
 
-    onceDone: function() {
+	onceDone: function() {
 		return Promise.resolve();
 	},
 
-    showError: function() {
+	showError: function() {
 		//TODO: fill this out
 	},
 
-    setProgress: function(loaded, total) {
+	setProgress: function(loaded, total) {
 		this.progress = {
 			percent: Math.round((loaded / total) * 100),
 			loaded: loaded,
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.Progress',
 		console.log(this.progress);
 	},
 
-    start: function() {
+	start: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.update.bind(this));
 			return;
@@ -63,14 +63,14 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.Progress',
 		this.update();
 	},
 
-    stop: function() {
+	stop: function() {
 		delete this.running;
 
 		this.update();
 		return wait(this.UPDATE_RATE);
 	},
 
-    update: function() {
+	update: function() {
 		var progress = this.progress || {},
 			filePicker = NextThought.common.form.fields.FilePicker,
 			total = progress.total || 0,

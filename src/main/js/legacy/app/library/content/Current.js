@@ -6,13 +6,13 @@ var ComponentsCollection = require('../components/Collection');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.content.Current', {
-    extend: 'NextThought.app.library.components.Current',
-    alias: 'widget.library-current-content',
-    layout: 'none',
-    title: 'Books',
-    storeModel: 'NextThought.model.ContentBundle',
+	extend: 'NextThought.app.library.components.Current',
+	alias: 'widget.library-current-content',
+	layout: 'none',
+	title: 'Books',
+	storeModel: 'NextThought.model.ContentBundle',
 
-    statics: {
+	statics: {
 		shouldShow: function() {
 			var ContentStore = NextThought.app.library.content.StateStore.getInstance(),
 				PurchaseStore = NextThought.app.store.StateStore.getInstance();
@@ -30,9 +30,9 @@ module.exports = exports = Ext.define('NextThought.app.library.content.Current',
 		}
 	},
 
-    items: [],
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
@@ -51,14 +51,14 @@ module.exports = exports = Ext.define('NextThought.app.library.content.Current',
 		//TODO: add a listener to update when a bundle is added to the library
 	},
 
-    showCurrentItems: function() {
+	showCurrentItems: function() {
 		var bundles = this.ContentStore.getContentBundles(),
 			packages = this.ContentStore.getContentPackages();
 
 		this.showItems(bundles.concat(packages));
 	},
 
-    showItems: function(current) {
+	showItems: function(current) {
 		if (this.store) {
 			this.store.loadRecords(current);
 		} else {
@@ -80,13 +80,13 @@ module.exports = exports = Ext.define('NextThought.app.library.content.Current',
 		});
 	},
 
-    onSeeAllClick: function() {
+	onSeeAllClick: function() {
 		if (this.pushRoute) {
 			this.pushRoute('Books', '/books');
 		}
 	},
 
-    navigate: function(bundle, el) {
+	navigate: function(bundle, el) {
 		if (this.navigateToBundle) {
 			this.navigateToBundle(bundle, el);
 		}

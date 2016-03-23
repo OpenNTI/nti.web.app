@@ -11,34 +11,34 @@ var ShapesUrl = require('./shapes/Url');
 
 /*globals swallow*/
 module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
-    extend: 'Ext.Component',
-    alias:	'widget.whiteboard-canvas',
-    autoEl: 'canvas',
+	extend: 'Ext.Component',
+	alias:	'widget.whiteboard-canvas',
+	autoEl: 'canvas',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.updateData(this.drawData);
 	},
 
-    destroy: function() {
+	destroy: function() {
 		if (this.el) {
 			this.el.removeAllListeners();
 		}
 		this.callParent(arguments);
 	},
 
-    updateData: function(scene) {
+	updateData: function(scene) {
 		this.drawData = this.self.updateData(scene);
 
 		if (scene && scene.viewportRatio) {
 			this.viewportRatio = scene.viewportRatio;
 		}
 		else {
-			this.viewportRatio = Globals.CANVAS_GOLDEN_RATIO;   //Default to this for new shapes.
+			this.viewportRatio = Globals.CANVAS_GOLDEN_RATIO;	//Default to this for new shapes.
 		}
 	},
 
-    getData: function() {
+	getData: function() {
 		if (!this.drawData) {
 			return null;
 		}
@@ -61,12 +61,12 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 		return data;
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent();
 		this.mon(this, 'resize', this.hasResized, this);
 	},
 
-    hasResized: function(cmp, width, height) {
+	hasResized: function(cmp, width, height) {
 		height = Math.round(width / (this.viewportRatio || 1));
 
 		this.el.setStyle({
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 		},1);
 	},
 
-    drawScene: function(finished) {
+	drawScene: function(finished) {
 		if (!this.drawData) {
 			return;
 		}
@@ -108,15 +108,15 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 		this.self.drawScene(this.drawData, this.el, fin);
 	},
 
-    makeShape: function(data) {
+	makeShape: function(data) {
 		return this.self.makeShape(data);
 	},
 
-    addShape: function(shape) {
+	addShape: function(shape) {
 		this.drawData.shapeList.unshift(shape);
 	},
 
-    statics: {
+	statics: {
 		objectNameRe: (/^Canvas(.+?)Shape$/i),
 
 		updateData: function(scene) {

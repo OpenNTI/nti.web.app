@@ -4,12 +4,12 @@ var UtilSharing = require('../util/Sharing');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.Shareable', {
-    afterRender: function() {
+	afterRender: function() {
 		this.registerDragZone(this.dragSelector || 'img');
 		this.registerDropZone(this.dropSelector || 'img');
 	},
 
-    registerDragZone: function(dragSelector) {
+	registerDragZone: function(dragSelector) {
 		var me = this, el = this.getEl();
 		if (!el) {return;}
 		this.dragZone = Ext.dd.DragZone.create(el, {
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Shareable', {
 		});
 	},
 
-    registerDropZone: function(dropSelector) {
+	registerDropZone: function(dropSelector) {
 		var me = this, el = me.getEl();
 		if (!el) {return;}
 		this.dropZone = Ext.dd.DropZone.create(el, {

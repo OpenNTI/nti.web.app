@@ -4,9 +4,9 @@ var AnchorablesTranscriptContentPointer = require('./TranscriptContentPointer');
 
 
 module.exports = exports = Ext.define('NextThought.model.anchorables.TranscriptRangeDescription', {
-    extend: 'NextThought.model.anchorables.TimeRangeDescription',
+	extend: 'NextThought.model.anchorables.TimeRangeDescription',
 
-    statics: {
+	statics: {
 		createFromObject: function(o) {
 			var cp = NextThought.model.anchorables.TranscriptContentPointer;
 
@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TranscriptR
 		}
 	},
 
-    constructor: function(o) {
+	constructor: function(o) {
 		this.callParent(arguments);
 		this.initConfig(o);
 		this.Class = 'TranscriptRangeDescription';

@@ -5,21 +5,21 @@ var ComponentsReports = require('./Reports');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Body', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.course-info-body',
+	extend: 'Ext.container.Container',
+	alias: 'widget.course-info-body',
 
-    layout: {
+	layout: {
 		type: 'card',
 		deferredRender: true
 	},
 
-    items: [
+	items: [
 		{ xtype: 'course-info-panel', itemId: 'info' },
 		{ xtype: 'course-info-roster', itemId: 'roster' },
 		{ xtype: 'course-info-reports', itemId: 'report'}
 	],
 
-    setContent: function(info, status, showRoster, bundle) {
+	setContent: function(info, status, showRoster, bundle) {
 		var me = this;
 		//always reset
 		me.setActiveItem('info');
@@ -28,28 +28,28 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 		me.getComponent('report').setContent(showRoster && bundle);
 	},
 
-    setActiveItem: function(itemId) {
+	setActiveItem: function(itemId) {
 		var targetItem = this.down('[itemId=' + itemId + ']'),
-		 	activeItem = this.getLayout().getActiveItem();
+			activeItem = this.getLayout().getActiveItem();
 
 		 if (targetItem == activeItem) {
-		 	return Promise.resolve();
+			return Promise.resolve();
 		 }
 
 		 this.getLayout().setActiveItem(targetItem);
 		 return Promise.resolve();
 	},
 
-    scrollRosterIntoView: function(route, subRoute) {
+	scrollRosterIntoView: function(route, subRoute) {
 		// Set scroll to top. Maybe change scroll based on route and subroute??
 		window.scrollTo(0, 0);
 	},
 
-    scrollReportsIntoView: function(route, subRoute) {
+	scrollReportsIntoView: function(route, subRoute) {
 		window.scrollTo(0, 0);
 	},
 
-    scrollInfoSectionIntoView: function(route) {
+	scrollInfoSectionIntoView: function(route) {
 		var infoCmp = this.getComponent('info'),
 			scrollTarget, hash, scrollTargetY, brect;
 

@@ -17,8 +17,8 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 	},
 	items: [
 		{ text: getString('NextThought.view.account.contacts.management.Options.settings-label'), cls: 'label', allowUncheck: false, header: true},
-    //		{ text: 'Mute', allowSelect:true},
-    //		{ text: 'Block', allowSelect:true},
+	//		{ text: 'Mute', allowSelect:true},
+	//		{ text: 'Block', allowSelect:true},
 		{ text: getString('NextThought.view.account.contacts.management.Options.remove'), cls: 'no-checkbox', removeContact: true, allowSelect: true}
 	],
 

@@ -21,12 +21,12 @@ var ReaderJson = require('../proxy/reader/Json');
  */
 
 module.exports = exports = Ext.define('NextThought.store.Stream', {
-    extend: 'Ext.data.Store',
-    model: 'NextThought.model.Change',
-    autoLoad: false,
-    pageSize: 100,
+	extend: 'Ext.data.Store',
+	model: 'NextThought.model.Change',
+	autoLoad: false,
+	pageSize: 100,
 
-    proxy: {
+	proxy: {
 		extraParams: {
 			exclude: 'application/vnd.nextthought.redaction',
 			sortOn: 'lastModified',
@@ -62,14 +62,14 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		}
 	},
 
-    groupers: [
+	groupers: [
 		{
 			property: 'EventTime',
 			direction: 'DESC'
 		}
 	],
 
-    //Note this matches the default sort order
+	//Note this matches the default sort order
 	//that we get when we request things on the ds
 	sorters: [
 		{
@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		}
 	],
 
-    constructor: function() {
+	constructor: function() {
 		var s, me = this;
 		me.callParent(arguments);
 
@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		});
 	},
 
-    onProxyLoad: function(operation) {
+	onProxyLoad: function(operation) {
 		var resultSet = operation.getResultSet();
 		delete this.batchLinks;
 		if (resultSet && resultSet.links) {
@@ -104,11 +104,11 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		return this.callParent(arguments);
 	},
 
-    hasSource: function() {
+	hasSource: function() {
 		return !!this.getProxy().url;
 	},
 
-    /**
+	/**
 	 * Like last but doesn't include any filtering
 	 */
 	unfilteredLast: function() {
@@ -120,19 +120,19 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		return this.last();
 	},
 
-    hasAdditionalPagesToLoad: function() {
+	hasAdditionalPagesToLoad: function() {
 		return this.mayHaveAdditionalPages === undefined || this.mayHaveAdditionalPages;
 	},
 
-    isOnLastBatch: function() {
+	isOnLastBatch: function() {
 		return this.lastBatchLoaded;
 	},
 
-    previousPage: function() {
+	previousPage: function() {
 		Ext.Error.raise('previousPage not supported for stream store');
 	},
 
-    loadPage: function(page, options) {
+	loadPage: function(page, options) {
 		if (page !== 1 && page !== this.currentPage + 1) {
 			Ext.Error.raise('loadPage can only be called for page 1 or n + 1 where n is currentPage');
 		}
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		this.callParent([page, options]);
 	},
 
-    load: function(options) {
+	load: function(options) {
 		if (!this.hasSource()) {
 			this.requestedToLoad = options;
 			return;
@@ -178,7 +178,7 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 			}
 
 
-			console.log('Load finished.  Do we have additional pages', this.mayHaveAdditionalPages);
+			console.log('Load finished.	 Do we have additional pages', this.mayHaveAdditionalPages);
 		}
 
 		options.callback = Ext.Function.createSequence(isMoreDetector, options.callback, this);

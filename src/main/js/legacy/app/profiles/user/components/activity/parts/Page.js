@@ -14,23 +14,23 @@ var EventsTranscriptSummaryItem = require('./events/TranscriptSummaryItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.Page', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.profile-stream-page',
-    layout: 'none',
-    items: [],
+	extend: 'Ext.container.Container',
+	alias: 'widget.profile-stream-page',
+	layout: 'none',
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.add(this.cmpsFromRecords(this.records));
 	},
 
-    onAdd: function(cmp) {
+	onAdd: function(cmp) {
 		this.callParent(arguments);
 		cmp.addCls('activity-event-item');
 	},
 
-    cmpsFromRecords: function(records) {
+	cmpsFromRecords: function(records) {
 		var me = this,
 			cmps = [], lastHighlightContainer, user = me.user;
 

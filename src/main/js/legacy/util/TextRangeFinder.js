@@ -4,13 +4,13 @@ var UtilSearch = require('./Search');
 
 
 module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
-    rangeIsInsideRedaction: function(r) {
+	rangeIsInsideRedaction: function(r) {
 	  if (r.dom && r.hasCls('redacted')) {return r;}
 	  else if (r.commonAncestorContainer) {return Ext.fly(r.commonAncestorContainer).up('.redacted');}
 	  return false;
 	},
 
-    getRedactionActionSpan: function(r) {
+	getRedactionActionSpan: function(r) {
 	  var redactionParent = this.rangeIsInsideRedaction(r),
 			  redactionAction, blockRedaction;
 	  if (!redactionParent) {return null;}
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
 	  return redactionAction;
 	},
 
-    /**
+	/**
 	 * These functions are a heavily modified version of Raymond Hill's doHighlight code. Attribution below
 	 */
 	// Author: Raymond Hill
@@ -37,12 +37,12 @@ module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
 	// Purpose: Hilight portions of text inside a specified element, according to a search expression.
 	// Key feature: Can safely hilight text across HTML tags.
 	// History:
-	//   2012-01-29
-	//     fixed a bug which caused special regex characters in the
-	//     search string to break the highlighter
+	//	 2012-01-29
+	//	   fixed a bug which caused special regex characters in the
+	//	   search string to break the highlighter
 
 	//Returns an object with two properties indices
-	//and text.  If nodeFilterFn is provided it will
+	//and text.	 If nodeFilterFn is provided it will
 	//be called with each node before it is indexed.  nodes returning
 	//true will be indexed
 	indexText: function(node, nodeFilterFn) {
@@ -123,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
 		return {text: text, indices: indices};
 	},
 
-    // find entry in indices array (using binary search)
+	// find entry in indices array (using binary search)
 	searchForEntry: function(start, end, lookFor, array, endEdge) {
 		var i;
 		while (start < end) {
@@ -135,11 +135,11 @@ module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
 		return start;
 	},
 
-    adjustLocatedRange: function(range) {
+	adjustLocatedRange: function(range) {
 		return this.rangeIsInsideRedaction(range) || range;
 	},
 
-    mapMatchToTextRange: function(match, whichGroup, textIndex, doc) {
+	mapMatchToTextRange: function(match, whichGroup, textIndex, doc) {
 		var iMatch, iTextStart, iTextEnd, iEntryLeft, iEntryRight,
 			entryLeft, entryRight, iNodeTextStart, iNodeTextEnd,
 			indices = textIndex.indices, range;
@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
 		return range;
 	},
 
-    /**
+	/**
 	 * @param node - the node to search for ranges beneath
 	 * @param doc - the document fragment node is a child of
 	 * @param searchFor - a string or a regex to search for
@@ -255,11 +255,11 @@ module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
 			if (quit) {
 				break;
 			}
-    }
+	}
 		return ranges;
 	},
 
-    findTextRangesForSearchHit: function(hit, node, doc) {
+	findTextRangesForSearchHit: function(hit, node, doc) {
 		var fragments, phrase, ranges = [], textIndex;
 
 		if (!hit) {

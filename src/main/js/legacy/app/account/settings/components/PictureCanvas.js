@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	onMouseDown: function(e) {
 		if (!this.imageInfo) {return;}
 
-    e.stopEvent();
+	e.stopEvent();
 		var xy = e.getXY(),
 			start = xy.slice(),
 			origin = this.el.getXY(),
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 			delete this.inCorner;
 
-			//Two bit field.  X Y.  The top left corner moves both X and Y, so it has the field of 11 (or 3),
+			//Two bit field.  X Y.	The top left corner moves both X and Y, so it has the field of 11 (or 3),
 			// Top right only moves Y so its bit field is 01 (or 1), the bottom left corner only moves X, so 10 (or 2),
 			// and finally the last corner does not move X or Y, so its bit field is 00.
 			if (nearLeft && nearTop) { this.inCorner = 3; }
@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 
 	onMouseUp: function(e) {
-    e.stopEvent();
+	e.stopEvent();
 		delete this.mouseDown;
 		delete this.mouseLeftNoMouseUp;
 	},

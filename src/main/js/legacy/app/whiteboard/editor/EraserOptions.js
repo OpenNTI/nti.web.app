@@ -5,12 +5,12 @@ var {guidGenerator} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.EraserOptions', {
-    alias: 'widget.wb-tool-eraser-options',
-    extend: 'Ext.container.Container',
-    ui: 'options',
-    layout: 'none',
+	alias: 'widget.wb-tool-eraser-options',
+	extend: 'Ext.container.Container',
+	ui: 'options',
+	layout: 'none',
 
-    items: [{
+	items: [{
 		xtype: 'toolbar',
 		ui: 'options',
 		cls: 'pencil-stroke-options',
@@ -26,17 +26,17 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.EraserO
 		]
 	}],
 
-    constructor: function() {
+	constructor: function() {
 		this.items = Ext.clone(this.items);//copy onto instance from prototype
 		this.items[0].defaults.toggleGroup += guidGenerator();
 		this.callParent(arguments);
 	},
 
-    getToolType: function() {
+	getToolType: function() {
 		return 'pencil';
 	},
 
-    setOptions: function(options) {
+	setOptions: function(options) {
 		if (options.strokeWidth) {
 			this.down('[strokeWidth=' + options.strokeWidth + ']').toggle(true);
 		}
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.EraserO
 		}
 	},
 
-    getOptions: function() {
+	getOptions: function() {
 		var pressed = this.query('button[pressed]'),
 			strokeWidth;
 
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.EraserO
 
 		return {
 			fill: null, //TODO - not implemented in design
-			stroke:	'#FFFFFF',
+			stroke: '#FFFFFF',
 			strokeWidth: strokeWidth
 		};
 	}

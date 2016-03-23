@@ -6,10 +6,10 @@ var EventsEmpty = require('./events/Empty');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
-    extend: 'NextThought.app.stream.List',
-    alias: 'widget.profile-user-activity-stream',
+	extend: 'NextThought.app.stream.List',
+	alias: 'widget.profile-user-activity-stream',
 
-    userChanged: function(user) {
+	userChanged: function(user) {
 		var joined;
 
 		this.user = user;
@@ -21,15 +21,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    initialWidgetConfig: function() {
+	initialWidgetConfig: function() {
 		return { xtype: 'joined-event', username: this.user };
 	},
 
-    hasInitialWidget: function() {
+	hasInitialWidget: function() {
 		return !!this.down('joined-event');
 	},
 
-    getPageConfig: function(items) {
+	getPageConfig: function(items) {
 		return {
 			xtype: 'profile-stream-page',
 			records: items,
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		};
 	},
 
-    loadBatch: function(batch) {
+	loadBatch: function(batch) {
 		if (batch.Items.length) {
 			this.removeEmpty();
 			this.fillInItems(batch.Items);
@@ -46,13 +46,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			this.onEmpty(batch);
 		}
 
- 		if (batch.isLast) {
+		if (batch.isLast) {
 			this.onDone(this.StreamSource);
- 			this.isOnLastBatch = true;
- 		}
- 	},
+			this.isOnLastBatch = true;
+		}
+	},
 
-    onDone: function(streamSource) {
+	onDone: function(streamSource) {
 		var config = this.initialWidgetConfig();
 
 		if (this.shouldAddJoinedEvent(streamSource)) {
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    onEmpty: function(batch) {
+	onEmpty: function(batch) {
 		var cmp = this.getGroupContainer(),
 			hasFilters = this.hasFiltersApplied(batch),
 			title, subtitle;
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    hasFiltersApplied: function(batch) {
+	hasFiltersApplied: function(batch) {
 		var s = this.StreamSource;
 
 		if (batch && batch.FilteredTotalItemCount !== batch.TotalItemCount) {
@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return false;
 	},
 
-    shouldAddJoinedEvent: function(source) {
+	shouldAddJoinedEvent: function(source) {
 		var extra = source && source.extraParams,
 			createdTime = this.user && this.user.get('CreatedTime'),
 			inSeconds = (createdTime && createdTime.getTime()) / 1000;

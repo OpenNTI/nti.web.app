@@ -8,7 +8,7 @@ var ListRelatedWork = require('../components/list/RelatedWork');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.types.RelatedWork', {
-    statics: {
+	statics: {
 		type: 'relatedwork',
 
 		canHandle: function(obj) {
@@ -16,12 +16,12 @@ module.exports = exports = Ext.define('NextThought.app.context.types.RelatedWork
 		}
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		this.callParent(arguments);
 		Ext.applyIf(this, config || {});
 	},
 
-    parse: function(obj, kind) {
+	parse: function(obj, kind) {
 		var cmp;
 		if (kind === 'card') {
 			cmp = {

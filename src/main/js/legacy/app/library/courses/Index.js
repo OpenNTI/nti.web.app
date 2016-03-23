@@ -9,18 +9,18 @@ var AvailableCourseWindow = require('./components/available/CourseWindow');
 require('./components/Collection');
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.library-courses',
+	extend: 'Ext.container.Container',
+	alias: 'widget.library-courses',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-    isCoursePage: true,
-    layout: 'none',
-    cls: 'library-page',
+	isCoursePage: true,
+	layout: 'none',
+	cls: 'library-page',
 
-    items: [{
+	items: [{
 		xtype: 'box',
 		cls: 'title-container',
 		autoEl: {cn: [
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 		]}
 	}],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', this.onClick.bind(this));
@@ -66,32 +66,32 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 		}
 	},
 
-    getActiveItem: function() {
+	getActiveItem: function() {
 		if (this.availableWin && !this.availableWin.isDestroyed) {
 			return this.availableWin;
 		}
 	},
 
-    onDeactivate: function() {
+	onDeactivate: function() {
 		if (this.availableWin) {
 			this.availableWin.destroy();
 			delete this.availableWin;
 		}
 	},
 
-    __getUpcomingCourses: function() {
+	__getUpcomingCourses: function() {
 		return this.CourseStore.getUpcomingEnrolledCourses();
 	},
 
-    __getCurrentCourses: function() {
+	__getCurrentCourses: function() {
 		return this.CourseStore.getCurrentEnrolledCourses();
 	},
 
-    __getArchivedCourses: function() {
+	__getArchivedCourses: function() {
 		return this.CourseStore.getArchivedEnrolledCourses();
 	},
 
-    loadCourses: function(force) {
+	loadCourses: function(force) {
 		var me = this;
 
 		me.loadingCmp = me.loadingCmp || me.add(Globals.getContainerLoadingMask());
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 				});
 	},
 
-    showCourses: function(route, subRoute) {
+	showCourses: function(route, subRoute) {
 		this.setTitle('Your Courses');
 
 		if (this.availableWin) {
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 		return this.loadCourses();
 	},
 
-    showAvailableCourses: function(route, subRoute) {
+	showAvailableCourses: function(route, subRoute) {
 		var me = this;
 
 
@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 			});
 	},
 
-    showEmptyState: function() {
+	showEmptyState: function() {
 		if (this.coursePage) {
 			this.remove(this.coursePage, true);
 			delete this.coursePage;
@@ -185,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 		});
 	},
 
-    navigateToCourse: function(enrollment, el) {
+	navigateToCourse: function(enrollment, el) {
 		var me = this,
 			instance = enrollment.get('CourseInstance');
 
@@ -195,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
 			});
 	},
 
-    onClick: function(e) {
+	onClick: function(e) {
 		if (e.getTarget('.add-more-link')) {
 			this.pushRoute('Available', '/available');
 		} else if (e.getTarget('.home')) {

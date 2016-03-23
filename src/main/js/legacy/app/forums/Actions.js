@@ -7,14 +7,14 @@ var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
 	},
 
-    saveTopicComment: function(topic, comment, values) {
+	saveTopicComment: function(topic, comment, values) {
 		var isEdit = Boolean(comment) && !comment.phantom,
 			postLink = topic.getLink('add');
 
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		});
 	},
 
-    saveTopic: function(editorCmp, record, forum, title, tags, body, autoPublish) {
+	saveTopic: function(editorCmp, record, forum, title, tags, body, autoPublish) {
 		var isEdit = Boolean(record),
 			post = isEdit ? record.get('headline') : NextThought.model.forums.Post.create(),
 			me = this;
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		});
 	},
 
-    deleteObject: function(record, cmp, callback) {
+	deleteObject: function(record, cmp, callback) {
 		var idToDestroy, me = this;
 		if (!record.get('href')) {
 			record.set('href', record.getLink('contents').replace(/\/contents$/, '') || 'no-luck');
@@ -150,7 +150,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		});
 	},
 
-    applyTopicToStores: function(topic) {
+	applyTopicToStores: function(topic) {
 		var actions = NextThought.app.userdata.Actions.create(),
 			headline = topic.get('headline'),
 			headlineJSON = headline.asJSON(),

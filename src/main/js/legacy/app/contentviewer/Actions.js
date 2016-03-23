@@ -7,9 +7,9 @@ var UtilContent = require('../../util/Content');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    getRelatedWorkPageInfo: function(data, bundle) {
+	getRelatedWorkPageInfo: function(data, bundle) {
 		var ntiid = data.get ? data.get('NTIID') : data.NTIID,
 			DH = Ext.DomHelper;
 

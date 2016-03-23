@@ -7,20 +7,20 @@ var OutlinenodePreview = require('./Preview');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.overview-editing-outlinenode',
+	extend: 'Ext.container.Container',
+	alias: 'widget.overview-editing-outlinenode',
 
-    statics: {
+	statics: {
 		getSupported: function() {
 			return NextThought.model.courses.navigation.CourseOutlineNode.mimeType;
 		}
 	},
 
-    PREVIEW_TYPE: 'overview-editing-outline-outlinenode-preview',
-    layout: 'none',
-    items: [],
+	PREVIEW_TYPE: 'overview-editing-outline-outlinenode-preview',
+	layout: 'none',
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    onceLoaded: function() {
+	onceLoaded: function() {
 		var me = this;
 
 		return (me.loadContents || Promise.resolve())
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    showOutlineNode: function(record, parentRecord) {
+	showOutlineNode: function(record, parentRecord) {
 		var me = this,
 			outline = me.outline,
 			bundle = me.bundle;
@@ -87,15 +87,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    getItems: function(record) {
+	getItems: function(record) {
 		return record.get('Items');
 	},
 
-    getContents: function(record) {
+	getContents: function(record) {
 		return record.getContents ? record.getContents() : Promise.resolve(null);
 	},
 
-    getPreviewConfig: function(record, parentRecord, contents, outline, bundle) {
+	getPreviewConfig: function(record, parentRecord, contents, outline, bundle) {
 		return {
 			xtype: this.PREVIEW_TYPE,
 			record: record,
@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-    getControlsConfig: function(record, contents, bundle) {
+	getControlsConfig: function(record, contents, bundle) {
 		return {
 			xtype: 'overview-editing-controls',
 			record: record,
@@ -120,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-    getItemsConfig: function(items, record, outline, bundle) {
+	getItemsConfig: function(items, record, outline, bundle) {
 		return {
 			xtype: 'overview-editing-outline-items',
 			record: record,
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-    getContentsConfig: function(contents, record, bundle) {
+	getContentsConfig: function(contents, record, bundle) {
 		return {
 			xtype: 'overview-editing-content',
 			record: contents,
@@ -141,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-    onDelete: function() {
+	onDelete: function() {
 		if (this.afterDelete) {
 			this.afterDelete();
 		}

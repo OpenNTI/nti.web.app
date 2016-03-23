@@ -5,25 +5,25 @@ var ListMain = require('./Main');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.list.Window', {
-    extend: 'NextThought.common.window.Window',
-    alias: 'widget.createlist-window',
-    cls: 'createlist-window',
-    ui: 'nt-window',
-    minimizable: false,
-    constrain: true,
-    modal: true,
-    closable: true,
-    resizable: false,
-    dialog: true,
-    closeAction: 'destroy',
-    width: 480,
+	extend: 'NextThought.common.window.Window',
+	alias: 'widget.createlist-window',
+	cls: 'createlist-window',
+	ui: 'nt-window',
+	minimizable: false,
+	constrain: true,
+	modal: true,
+	closable: true,
+	resizable: false,
+	dialog: true,
+	closeAction: 'destroy',
+	width: 480,
 
-    layout: {
+	layout: {
 		type: 'vbox',
 		align: 'stretch'
 	},
 
-    items: [
+	items: [
 		{xtype: 'container', layout: {type: 'absolute'}, items: [
 			{
 				anchor: '100% 100%',
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.list.
 		{xtype: 'createlist-main-view'}
 	],
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.el.down('.close'), 'click', this.close, this);
 		this.el.down('input').focus(200);
@@ -50,11 +50,11 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.list.
 		}
 	},
 
-    getListName: function() {
+	getListName: function() {
 		return this.query('createlist-main-view')[0].getListName();
 	},
 
-    showError: function(errorText) {
+	showError: function(errorText) {
 		return this.query('createlist-main-view')[0].showError(errorText);
 	}
 });

@@ -18,9 +18,9 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.String', f
 	}
 
 	String.prototype.strcmp = function(s) {
-	    if (this < s) { return -1; }
-	    if (this > s) { return 1; }
-	    return 0;
+		if (this < s) { return -1; }
+		if (this > s) { return 1; }
+		return 0;
 	};
 
 	function hashMe() { return hash(this); }

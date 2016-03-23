@@ -4,10 +4,10 @@ var EventsCreated = require('./events/Created');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.components.activity.parts.Stream', {
-    extend: 'NextThought.app.profiles.user.components.activity.parts.Stream',
-    alias: 'widget.profile-group-activity-stream',
+	extend: 'NextThought.app.profiles.user.components.activity.parts.Stream',
+	alias: 'widget.profile-group-activity-stream',
 
-    userChanged: function(user) {
+	userChanged: function(user) {
 		var created;
 
 		this.user = user;
@@ -19,11 +19,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		}
 	},
 
-    initialWidgetConfig: function() {
+	initialWidgetConfig: function() {
 	   return { xtype: 'created-event', entity: this.user };
 	},
 
-    hasInitialWidget: function() {
+	hasInitialWidget: function() {
 	   return !!this.down('created-event');
 	}
 });

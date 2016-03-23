@@ -9,22 +9,22 @@ var UtilStreamSource = require('../../../../stream/util/StreamSource');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.profile-user-activity',
+	extend: 'Ext.container.Container',
+	alias: 'widget.profile-user-activity',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-    cls: 'activity-page',
-    layout: 'none',
+	cls: 'activity-page',
+	layout: 'none',
 
-    items: [
+	items: [
 		{xtype: 'profile-user-activity-body'},
 		{xtype: 'profile-user-activity-sidebar'}
 	],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.flatPageStore = NextThought.store.FlatPage.create();
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    startResourceViewed: function() {
+	startResourceViewed: function() {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && !this.hasCurrentTimer) {
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    stopResourceViewed: function() {
+	stopResourceViewed: function() {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && this.hasCurrentTimer) {
@@ -74,32 +74,32 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    getSuggestedSharing: function() {
+	getSuggestedSharing: function() {
 		var community = Service.getFakePublishCommunity();
 
 		return NextThought.model.UserSearch.create(community.getData());
 	},
 
-    onActivate: function() {
+	onActivate: function() {
 		this.startResourceViewed();
 		this.items.each(function(item) {
 			item.fireEvent('activate');
 		});
 	},
 
-    onDeactivate: function() {
+	onDeactivate: function() {
 		this.stopResourceViewed();
 		this.items.each(function(item) {
 			item.fireEvent('deactivate');
 		});
 	},
 
-    initChildComponentRefs: function() {
+	initChildComponentRefs: function() {
 		this.streamCmp = this.down('profile-user-activity-body');
 		this.sidebarCmp = this.down('profile-user-activity-sidebar');
 	},
 
-    userChanged: function(user, isMe) {
+	userChanged: function(user, isMe) {
 		if (this.activeUser === user) {
 			return Promise.resolve();
 		}
@@ -117,13 +117,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			]);
 	},
 
-    applyState: function() {},
+	applyState: function() {},
 
-    updateFilter: function(filter) {
+	updateFilter: function(filter) {
 		this.replaceRoute('Activity', '/?' + Ext.Object.toQueryString(filter));
 	},
 
-    onRoute: function(route, subRoute) {
+	onRoute: function(route, subRoute) {
 		this.setTitle('Activity');
 
 		var streamParams;
@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.streamCmp.setStreamParams(streamParams);
 	},
 
-    navigateToActivityItem: function(item) {
+	navigateToActivityItem: function(item) {
 		this.Router.root.attemptToNavigateToObject(item);
 	}
 });

@@ -14,17 +14,17 @@ var ComponentsSuggestedContacts = require('../../../components/SuggestedContacts
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.about.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.profile-user-about',
+	extend: 'Ext.container.Container',
+	alias: 'widget.profile-user-about',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-    layout: 'none',
-    cls: 'profile-about user-about',
+	layout: 'none',
+	cls: 'profile-about user-about',
 
-    items: [
+	items: [
 		{
 			xtype: 'container',
 			layout: 'none',
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    startResourceViewed: function() {
+	startResourceViewed: function() {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && !this.hasCurrentTimer) {
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    stopResourceViewed: function() {
+	stopResourceViewed: function() {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && this.hasCurrentTimer) {
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    onAddedToParentRouter: function() {
+	onAddedToParentRouter: function() {
 		var me = this;
 
 		this.communitiesCmp.gotoSeeAll = this.groupsCmp.gotoSeeAll = function() {
@@ -123,11 +123,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		};
 	},
 
-    doEdit: function() {
+	doEdit: function() {
 		this.pushRoute('Edit', '/edit');
 	},
 
-    isDataEmpty: function(user) {
+	isDataEmpty: function(user) {
 		var data = user.getAboutData(),
 			empty = true;
 
@@ -138,7 +138,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return empty;
 	},
 
-    setEmpty: function(user) {
+	setEmpty: function(user) {
 		this.emptyCmp.show();
 
 		this.profileParts.forEach(function(part) {
@@ -150,7 +150,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.suggestedCmp.show();
 	},
 
-    removeEmpty: function() {
+	removeEmpty: function() {
 		this.emptyCmp.hide();
 
 		this.profileParts.forEach(function(part) {
@@ -158,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    userChanged: function(user, isMe) {
+	userChanged: function(user, isMe) {
 		var cmps = this.profileParts;
 
 		if (this.activeUser !== user) {
@@ -191,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return Promise.all(cmps);
 	},
 
-    validate: function() {
+	validate: function() {
 		var msgs = [];
 
 		this.profileParts.forEach(function(part) {
@@ -210,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return !msgs.length;
 	},
 
-    removeErrors: function() {
+	removeErrors: function() {
 		var error = this.down('[errorName=this]');
 
 		if (error) {
@@ -224,7 +224,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    clearError: function(name) {
+	clearError: function(name) {
 		var error = this.down('[errorName="' + name + '"]');
 
 		if (error) {
@@ -232,7 +232,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    showError: function(error) {
+	showError: function(error) {
 		if (!this.down('[errorName="' + error.name + '"]')) {
 			this.insert(0, {
 				xtype: 'box',
@@ -242,7 +242,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    getValues: function() {
+	getValues: function() {
 		var values = this.aboutCmp.getValues();
 
 		values.education = this.educationCmp.getValues();
@@ -252,7 +252,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return values;
 	},
 
-    saveEdits: function() {
+	saveEdits: function() {
 		var me = this,
 			user = me.activeUser,
 			hasChanged = false,
@@ -331,7 +331,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    saveProfile: function() {
+	saveProfile: function() {
 		var me = this;
 
 		if (!this.validate()) {
@@ -344,11 +344,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			});
 	},
 
-    cancelEdit: function() {
+	cancelEdit: function() {
 		this.pushRoute('About', '/');
 	},
 
-    setSchema: function(schema) {
+	setSchema: function(schema) {
 		this.profileParts.forEach(function(part) {
 			if (part.setSchema) {
 				part.setSchema(schema);
@@ -356,11 +356,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    setHeaderCmp: function(header) {
+	setHeaderCmp: function(header) {
 		this.headerCmp = header;
 	},
 
-    allowNavigation: function() {
+	allowNavigation: function() {
 		if (!this.hasCls('editing') || this.successfulEdit) {
 			return true;
 		}
@@ -384,7 +384,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    showAbout: function() {
+	showAbout: function() {
 		this.setTitle('About');
 		this.removeErrors();
 		delete this.successfulEdit;
@@ -398,7 +398,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.removeCls('editing');
 	},
 
-    showEdit: function() {
+	showEdit: function() {
 		this.setTitle('About');
 
 		delete this.successfulEdit;

@@ -4,13 +4,13 @@ var EditorColorPickerButton = require('./ColorPickerButton');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.TextOptions', {
-    alias: 'widget.wb-tool-text-options',
-    extend: 'Ext.toolbar.Toolbar',
-    ui: 'options',
-    cls: 'text-options',
-    layout: 'none',
+	alias: 'widget.wb-tool-text-options',
+	extend: 'Ext.toolbar.Toolbar',
+	ui: 'options',
+	cls: 'text-options',
+	layout: 'none',
 
-    items: [
+	items: [
 		{
 			ui: 'font-size-select',
 			xtype: 'nt-combobox',

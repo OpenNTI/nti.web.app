@@ -3,17 +3,17 @@ var StoreBatchInterface = require('../store/BatchInterface');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.AuditLog', {
-    BATCH_SIZE: 20,
+	BATCH_SIZE: 20,
 
-    hasAuditLog: function() {
+	hasAuditLog: function() {
 		return !!this.getLink('audit_log');
 	},
 
-    hasRecursiveLog: function() {
+	hasRecursiveLog: function() {
 		return !!this.getLink('recursive_audit_log');
 	},
 
-    getLog: function() {
+	getLog: function() {
 		var auditLink = this.getLink('recursive_audit_log') || this.getLink('audit_log');
 
 		if (auditLink) {
@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.mixins.AuditLog', {
 		}
 	},
 
-    getCurrentBatch: function(link) {
+	getCurrentBatch: function(link) {
 		this.currentBatch = new NextThought.store.BatchInterface({
 			url: link,
 			params: {

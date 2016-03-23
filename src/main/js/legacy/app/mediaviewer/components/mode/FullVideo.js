@@ -3,76 +3,76 @@ var ModeSplit = require('./Split');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mode.FullVideo', {
-    extend: 'NextThought.app.mediaviewer.components.mode.Split',
-    alias: 'widget.media-video-viewer',
+	extend: 'NextThought.app.mediaviewer.components.mode.Split',
+	alias: 'widget.media-video-viewer',
 
-    cls: 'full-video-player',
+	cls: 'full-video-player',
 
-    viewerType: 'full-video',
+	viewerType: 'full-video',
 
-    transcriptRatio: 0,
+	transcriptRatio: 0,
 
-    statics:{
+	statics:{
 
-        getTargetVideoWidth: function(el, transcriptRatio){
-            var screenHeight = Ext.Element.getViewportHeight(),
-                screenWidth = Ext.Element.getViewportWidth(),
-                paddingRatio = 0.20,
-                ratio = NextThought.app.video.Video.ASPECT_RATIO,
-                defaultWidth = screenWidth - (screenWidth * paddingRatio),
-                defaultHeight = Math.round(defaultWidth * ratio),
-                y = 80,
-                diff = screenHeight - (y + defaultHeight),
-                newWidth;
-
-
-            if (diff >= 0) {
-                return defaultWidth;
-            }
-
-            // Let the available height help determine the appropriate width.
-            newWidth = ((screenHeight -  y - 50) * (1/ratio));
-            return Math.max(newWidth, 512);
-        }
-    },
+		getTargetVideoWidth: function(el, transcriptRatio){
+			var screenHeight = Ext.Element.getViewportHeight(),
+				screenWidth = Ext.Element.getViewportWidth(),
+				paddingRatio = 0.20,
+				ratio = NextThought.app.video.Video.ASPECT_RATIO,
+				defaultWidth = screenWidth - (screenWidth * paddingRatio),
+				defaultHeight = Math.round(defaultWidth * ratio),
+				y = 80,
+				diff = screenHeight - (y + defaultHeight),
+				newWidth;
 
 
-    buildResourceView: function(){
-        if(!this.transcript && !this.resourceList){
-            this.callParent(arguments);
-        }
-    },
+			if (diff >= 0) {
+				return defaultWidth;
+			}
+
+			// Let the available height help determine the appropriate width.
+			newWidth = ((screenHeight -	 y - 50) * (1/ratio));
+			return Math.max(newWidth, 512);
+		}
+	},
 
 
-    afterRender: function(){
-        this.callParent(arguments);
-
-        if(!this.transcript){
-            this.el.addCls('has-gutter-view');
-        }
-
-        if(this.viewerContainer){
-            wait(1000)
-                .then(this.viewerContainer.adjustOnResize.bind(this.viewerContainer));
-        }
-    },
+	buildResourceView: function(){
+		if(!this.transcript && !this.resourceList){
+			this.callParent(arguments);
+		}
+	},
 
 
-    adjustOnResize: function(availableHeight, availableWidth){
-        if(!availableHeight || !availableWidth){ return; }
+	afterRender: function(){
+		this.callParent(arguments);
 
-        var videoWidth = this.videoPlayerEl.getWidth(),
-            mLeft = Math.floor((availableWidth - videoWidth) /2),
-            targetEl= this.getTargetEl(),
-            diff = this.videoPlayerEl.getTop() - targetEl.getTop();
+		if(!this.transcript){
+			this.el.addCls('has-gutter-view');
+		}
+
+		if(this.viewerContainer){
+			wait(1000)
+				.then(this.viewerContainer.adjustOnResize.bind(this.viewerContainer));
+		}
+	},
 
 
-        if(!this.transcript){
-            this.getTargetEl().setStyle('height', availableHeight + 'px');
-            this.videoPlayerEl.setStyle('marginLeft', mLeft + 'px');
+	adjustOnResize: function(availableHeight, availableWidth){
+		if(!availableHeight || !availableWidth){ return; }
 
-            this.alignResourceViewNextToVideo(videoWidth + mLeft, diff);
-        }
-        console.log('Media viewer resizing');
-    }
+		var videoWidth = this.videoPlayerEl.getWidth(),
+			mLeft = Math.floor((availableWidth - videoWidth) /2),
+			targetEl= this.getTargetEl(),
+			diff = this.videoPlayerEl.getTop() - targetEl.getTop();
+
+
+		if(!this.transcript){
+			this.getTargetEl().setStyle('height', availableHeight + 'px');
+			this.videoPlayerEl.setStyle('marginLeft', mLeft + 'px');
+
+			this.alignResourceViewNextToVideo(videoWidth + mLeft, diff);
+		}
+		console.log('Media viewer resizing');
+	}
 });

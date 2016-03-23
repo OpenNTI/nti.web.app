@@ -5,25 +5,25 @@ var GroupMain = require('./Main');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.group.Window', {
-    extend: 'NextThought.common.window.Window',
-    alias: 'widget.codecreation-window',
-    cls: 'codecreation-window',
-    ui: 'nt-window',
-    minimizable: false,
-    constrain: true,
-    modal: true,
-    closable: true,
-    resizable: false,
-    dialog: true,
-    closeAction: 'destroy',
-    width: 480,
+	extend: 'NextThought.common.window.Window',
+	alias: 'widget.codecreation-window',
+	cls: 'codecreation-window',
+	ui: 'nt-window',
+	minimizable: false,
+	constrain: true,
+	modal: true,
+	closable: true,
+	resizable: false,
+	dialog: true,
+	closeAction: 'destroy',
+	width: 480,
 
-    layout: {
+	layout: {
 		type: 'vbox',
 		align: 'stretch'
 	},
 
-    items: [
+	items: [
 		{xtype: 'container', layout: {type: 'absolute'}, items: [
 			{
 				anchor: '100% 100%',
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 		{xtype: 'codecreation-main-view'}
 	],
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.el.down('.close'), 'click', this.close, this);
 		this.el.down('input').focus(200);
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 		}
 	},
 
-    showCreatedGroupCode: function(code) {
+	showCreatedGroupCode: function(code) {
 		var headerView = this.query('account-header-view')[0];
 		headerView.updateHeaderText(
 			getString('NextThought.view.account.codecreation.Window.created-title'),
@@ -61,11 +61,11 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 		this.doLayout();
 	},
 
-    getGroupName: function() {
+	getGroupName: function() {
 		return this.query('codecreation-main-view')[0].getGroupName();
 	},
 
-    showError: function(errorText) {
+	showError: function(errorText) {
 		return this.query('codecreation-main-view')[0].showError(errorText);
 	}
 });

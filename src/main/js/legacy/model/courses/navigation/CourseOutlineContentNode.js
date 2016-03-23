@@ -5,28 +5,28 @@ var MixinsAuditLog = require('../../../mixins/AuditLog');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.navigation.CourseOutlineContentNode', {
-    extend: 'NextThought.model.courses.navigation.CourseOutlineNode',
-    mimeType: 'application/vnd.nextthought.courses.courseoutlinecontentnode',
+	extend: 'NextThought.model.courses.navigation.CourseOutlineNode',
+	mimeType: 'application/vnd.nextthought.courses.courseoutlinecontentnode',
 
-    mixins: {
+	mixins: {
 		auditLog: 'NextThought.mixins.AuditLog'
 	},
 
-    fields: [
+	fields: [
 		{name: 'publishBeginning', type: 'auto'},
 		{name: 'publishEnding', type: 'number'},
 		{name: 'PublicationState', type: 'string'}
 	],
 
-    statics: {
+	statics: {
 		mimeType: 'application/vnd.nextthought.courses.courseoutlinecontentnode'
 	},
 
-    getFirstContentNode: function() {
+	getFirstContentNode: function() {
 		return this.isPublished() && this.get('isAvailable') ? this : null;
 	},
 
-    isPublished: function() {
+	isPublished: function() {
 		var state = this.get('PublicationState') || '';
 
 		return state.toLowerCase() === ('DefaultPublished').toLowerCase();

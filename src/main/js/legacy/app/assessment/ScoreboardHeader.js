@@ -3,12 +3,12 @@ var AssessmentDateMenu = require('./DateMenu');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.ScoreboardHeader', {
-    extend: 'Ext.Component',
-    alias: 'widget.assessment-scoreboard-header',
-    cls: 'score-header',
-    ui: 'assessment',
+	extend: 'Ext.Component',
+	alias: 'widget.assessment-scoreboard-header',
+	cls: 'score-header',
+	ui: 'assessment',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'time', cn: [
 			{tag: 'span'},
 			{cls: 'arrow'}
@@ -16,41 +16,41 @@ module.exports = exports = Ext.define('NextThought.app.assessment.ScoreboardHead
 		{cls: 'title', html: '{{{NextThought.view.assessment.ScoreboardHeader.title}}}'}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		time: '.time span',
 		arrow: '.time .arrow'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.mon(this.questionSet, 'graded', this.addResult, this);
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.time, 'click', this.showMenu, this);
 		this.menu = Ext.widget({ xtype: 'assessment-date-menu', ownerButton: this, items: [] });
 		this.mon(this.menu, 'click', this.menuItemClicked, this);
 	},
 
-    showMenu: function() {
+	showMenu: function() {
 		this.menu.showBy(this.time, 't-b', [0, 0]);
 	},
 
-    menuItemClicked: function(menu, item) {
+	menuItemClicked: function(menu, item) {
 		this.time.update(this.menu.getSelectedText());
 		this.questionSet.fireEvent('graded', this.menu.getSelectedAssessment(item), {origin: this});
 	},
 
-    setPriorResults: function(sortedAssessmentSets) {
+	setPriorResults: function(sortedAssessmentSets) {
 		this.menu.setResults(sortedAssessmentSets);
 		this.time.update(this.menu.getSelectedText());
 		//this.menuItemClicked(this.menu);
 		this.maybeHideTime();
 	},
 
-    addResult: function(assessment, opts) {
+	addResult: function(assessment, opts) {
 		if (opts && opts.origin === this) {
 			return;
 		}
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.ScoreboardHead
 		this.maybeHideTime();
 	},
 
-    maybeHideTime: function() {
+	maybeHideTime: function() {
 		//only show time if there's a dropdown...
 		if (this.menu.items.length < 2) {
 			this.time.hide();

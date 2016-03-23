@@ -17,16 +17,16 @@ var {isMe} = require('legacy/util/Globals');
  *		pageInfo: the page info to render,
  *		relatedWork: the related work ref to show,
  *		bundle: the bundle/content package we are in,
- *  	pageSource: what to fill in the next and previous arrows with, or a promise that fills in with the page source
- *   	path: the breadcrumb to show where you are, or a promise that fulfills with path,
- *   	toc: (optional) store to fill in the toc fly out,
- *   	next: ???? what to show as the next thing when you are at the bottom of the reader
- *   	assignment(optional): the assignment you are rendering
- *   	student(optional): if rendering an assignment the student you are rendering for
- *    	assignmentHistory(optional): if rendering an assignment and you already have the history item,
- *    	navigate: function to call to navigate,
- *    	onRoute: function to call when a route is changed,
- *    	onClose: function
+ *		pageSource: what to fill in the next and previous arrows with, or a promise that fills in with the page source
+ *		path: the breadcrumb to show where you are, or a promise that fulfills with path,
+ *		toc: (optional) store to fill in the toc fly out,
+ *		next: ???? what to show as the next thing when you are at the bottom of the reader
+ *		assignment(optional): the assignment you are rendering
+ *		student(optional): if rendering an assignment the student you are rendering for
+ *		assignmentHistory(optional): if rendering an assignment and you already have the history item,
+ *		navigate: function to call to navigate,
+ *		onRoute: function to call when a route is changed,
+ *		onClose: function
  * }
  *
  *
@@ -34,34 +34,34 @@ var {isMe} = require('legacy/util/Globals');
  *
  * 1.) String: the label to show for this path item,
  * 2.) Object: A config with
- * 			{
- * 				label: String,
- * 				cls: String,
- * 				route: String route to navigate to
- * 				title: String title of the route
- * 				precache: String items to prepopulate the route with
- * 				siblings: [ //items to fill out the hover menu
- * 					{
- * 						label: String,
- * 						cls: String,
- * 						ntiid: NTIID to navigate to
- * 					}
- * 				]
- * 			}
+ *			{
+ *				label: String,
+ *				cls: String,
+ *				route: String route to navigate to
+ *				title: String title of the route
+ *				precache: String items to prepopulate the route with
+ *				siblings: [ //items to fill out the hover menu
+ *					{
+ *						label: String,
+ *						cls: String,
+ *						ntiid: NTIID to navigate to
+ *					}
+ *				]
+ *			}
  *
  */
 module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.content-viewer',
-    cls: 'content-viewer',
+	extend: 'Ext.container.Container',
+	alias: 'widget.content-viewer',
+	cls: 'content-viewer',
 
-    mixins: {
+	mixins: {
 		Searchable: 'NextThought.mixins.Searchable'
 	},
 
-    layout: 'none',
+	layout: 'none',
 
-    constructor: function(config) {
+	constructor: function(config) {
 		var readerConfig = {
 			xtype: 'reader',
 			height: '100%',
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		this.callParent(arguments);
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		});
 	},
 
-    __fixConfigForPageInfo: function(config, pageInfo) {
+	__fixConfigForPageInfo: function(config, pageInfo) {
 		var assignment = pageInfo.getAssignment();
 
 		if (config.xtype === 'reader' && assignment) {
@@ -138,24 +138,24 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		return config;
 	},
 
-    onActivate: function() {
+	onActivate: function() {
 		this.initSearch();
 		if (this.reader) {
 			this.reader.fireEvent('activate');
 		}
 	},
 
-    onDeactivate: function() {
+	onDeactivate: function() {
 		if (this.reader) {
 			this.reader.fireEvent('deactivate');
 		}
 	},
 
-    getContainerIdForSearch: function() {
+	getContainerIdForSearch: function() {
 		return this.pageInfo && this.pageInfo.getId();
 	},
 
-    onceReadyForSearch: function() {
+	onceReadyForSearch: function() {
 		var me = this;
 
 		if (me.reader) {
@@ -169,22 +169,22 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		});
 	},
 
-    showSearchHit: function(hit, fragment) {
+	showSearchHit: function(hit, fragment) {
 		this.clearSearchHit();
 
 		wait()
 			.then(this.reader.showSearchHit.bind(this.reader, hit, fragment));
 	},
 
-    goToFragment: function(fragment) {
+	goToFragment: function(fragment) {
 		this.reader.goToFragment(fragment);
 	},
 
-    goToNote: function(note) {
+	goToNote: function(note) {
 		this.reader.goToNote(note);
 	},
 
-    resolvePageInfo: function() {
+	resolvePageInfo: function() {
 		var p;
 
 		if (this.pageInfo) {
@@ -200,19 +200,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.Index', {
 		return p;
 	},
 
-    allowNavigation: function() {
+	allowNavigation: function() {
 		return this.reader ? this.reader.allowNavigation() : true;
 	},
 
-    beforeRouteChange: function() {
+	beforeRouteChange: function() {
 		return this.reader && this.reader.beforeRouteChange();
 	},
 
-    getLocation: function() {
+	getLocation: function() {
 		return this.reader.getLocation();
 	},
 
-    updateHistory: function(h) {
+	updateHistory: function(h) {
 		var reader = this.reader;
 
 		if (reader && reader.updateHistory) {

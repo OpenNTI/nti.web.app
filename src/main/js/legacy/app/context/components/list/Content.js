@@ -4,11 +4,11 @@ var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.list.Content', {
-    extend: 'Ext.Component',
-    alias: 'widget.context-content-list',
-    cls: 'context-list-item',
+	extend: 'Ext.Component',
+	alias: 'widget.context-content-list',
+	cls: 'context-list-item',
 
-    pathTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+	pathTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'if': 'root', cn: [
 			{tag: 'span', html: '{root}'}
 		]},
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 		]}
 	])),
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'icon'},
 		{cn: [
 			{cls: 'location'},
@@ -30,13 +30,13 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		iconEl: '.icon',
 		locationEl: '.location',
 		snippetEl: '.snippet'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 			.then(this.setPath.bind(this));
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var div = document.createElement('div');
@@ -57,12 +57,12 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 		}
 	},
 
-    setPath: function(path) {
+	setPath: function(path) {
 		this.setIcon(path);
 		this.setLineage(path);
 	},
 
-    setIcon: function(path) {
+	setIcon: function(path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setIcon.bind(this, path));
 			return;
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 			});
 	},
 
-    setLineage: function(path) {
+	setLineage: function(path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setLineage.bind(this, path));
 			return;

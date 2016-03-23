@@ -7,20 +7,20 @@ var RendererManager = require('./renderer/Manager');
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
-    alias: 'annotations.base',
+	alias: 'annotations.base',
 
-    mixins: {
+	mixins: {
 		observable: 'Ext.util.Observable',
 		shareable: 'NextThought.mixins.Shareable'
 	},
 
-    statics: {
+	statics: {
 		NOT_FOUND: -3,
 		NOT_VISIBLE: -4,
 		HIDDEN: undefined
 	},
 
-    onClassExtended: function(cls, data, hooks) {
+	onClassExtended: function(cls, data, hooks) {
 		var a, onBeforeClassCreated = hooks.onBeforeCreated;
 		hooks.onBeforeCreated = function(cls, data) {
 			if (data.requestRender) {
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 		a.push.apply(a, getType(Ext.isArray(data.alias) ? data.alias.slice() : [data.alias]));
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		var me = this,
 			c = config.reader,
 			r = config.record,
@@ -101,28 +101,28 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 		}
 	},
 
-    is: function(selector) {
-    //		console.log(this.annotationsType,[selector]);
+	is: function(selector) {
+	//		console.log(this.annotationsType,[selector]);
 		return Ext.Array.contains(this.annotationsType, selector) || selector === '*';
 	},
 
-    getBubbleTarget: function() {return this.ownerCmp; },
-    getItemId: function() {return this.id; },
-    isXType: function() {return false;},
+	getBubbleTarget: function() {return this.ownerCmp; },
+	getItemId: function() {return this.id; },
+	isXType: function() {return false;},
 
-    getEl: function() {
+	getEl: function() {
 		return Ext.get(this.img);
 	},
 
-    getContainerId: function() {
+	getContainerId: function() {
 		return this.getRecord().get('ContainerId');
 	},
 
-    getDocumentElement: function() {
+	getDocumentElement: function() {
 		return this.ownerCmp.getDocumentElement();
 	},
 
-    createElement: function(tag, parent, cls, css, id) {
+	createElement: function(tag, parent, cls, css, id) {
 		var el = document.createElement(tag);
 		if (cls) { Ext.get(el).addCls(cls); }
 		if (css) { el.setAttribute('style', css); }
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 		return el;
 	},
 
-    createNonAnchorableSpan: function() {
+	createNonAnchorableSpan: function() {
 		//NOTE: it is very important to make sure we create the span
 		// in the same doc as the range it will surround.
 		var span = this.doc.createElement('span');
@@ -139,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 		return span;
 	},
 
-    /**
+	/**
 	 * Query inside the reader frame
 	 * @param {String} selector
 	 */
@@ -147,11 +147,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 		return Ext.query(selector, this.doc);
 	},
 
-    getSortValue: function() {console.warn('Implement me!!');},
-    getRecord: function() { return this.record || {get: Ext.emptyFn}; },
-    getRecordField: function(field) { return this.getRecord().get(field); },
+	getSortValue: function() {console.warn('Implement me!!');},
+	getRecord: function() { return this.record || {get: Ext.emptyFn}; },
+	getRecordField: function(field) { return this.getRecord().get(field); },
 
-    attachRecord: function(record) {
+	attachRecord: function(record) {
 		var old = this.record;
 		this.record = record;
 
@@ -172,7 +172,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 		}
 	},
 
-    onDestroy: function() {
+	onDestroy: function() {
 		try {
 			this.cleanup();
 		}
@@ -182,11 +182,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 		}
 	},
 
-    getDisplayName: function() {
+	getDisplayName: function() {
 		return this.$displayName || this.$className.split('.').last();
 	},
 
-    cleanup: function() {
+	cleanup: function() {
 		this.cleanup = Ext.emptyFn;
 		this.fireEvent('cleanup', this);
 		var me = this,
@@ -215,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 		this.requestRender();
 	},
 
-    updateFilterState: function(newFilter) {
+	updateFilterState: function(newFilter) {
 		var v = newFilter.test(this.record);
 		if (v !== this.isVisible) {
 			this.isVisible = !!v;
@@ -223,31 +223,31 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 		}
 	},
 
-    visibilityChanged: function(show) {
+	visibilityChanged: function(show) {
 		this.requestRender();
 	},
 
-    render: function() {
+	render: function() {
 		console.warn(Ext.String.format(
 				'{0} does not implement render()',
 				this.$className));
 	},
 
-    requestRender: function() {
+	requestRender: function() {
 		if (this.manager) {
 			this.manager.render(this.prefix);
 		}
 	},
 
-    remove: function() {
+	remove: function() {
 		this.record.destroy();//the destroy event calls cleanup
 	},
 
-    getRestrictedRange: function() {
+	getRestrictedRange: function() {
 		return null;
 	},
 
-    buildMenu: function(items) {
+	buildMenu: function(items) {
 		var m = this,
 			d = m.ownerCmp.getAnnotations().getDefinitionMenuItem();
 
@@ -285,7 +285,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 		});
 	},
 
-    getMenu: function(isLeaf, item) {
+	getMenu: function(isLeaf, item) {
 		var m = this.buildMenu(item ? [item] : []);
 
 		if (m) {
@@ -297,7 +297,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 		return m;
 	},
 
-    attachEvent: function(event, dom, fn, scope) {
+	attachEvent: function(event, dom, fn, scope) {
 		if (!Ext.isArray(event)) {
 			event = [event];
 		}
@@ -318,7 +318,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Base', {
 		});
 	},
 
-    onClick: function(e) {
+	onClick: function(e) {
 		if (!this.isVisible) {
 			console.debug('DEBUG: Ignoring click on hidden annotation');
 			return true;

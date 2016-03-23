@@ -7,13 +7,13 @@ var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Profiles', {
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
-    addHandlers: function(handlers) {
+	addHandlers: function(handlers) {
 		handlers[NextThought.model.User.mimeType] = this.getPathToUser.bind(this);
 		handlers[NextThought.model.openbadges.Badge.mimeType] = {doNotCache: true, fn: this.getPathToBadge.bind(this)};
 		handlers[NextThought.model.DynamicFriendsList.mimeType] = this.getPathToDynamicFriendsList.bind(this);
@@ -21,11 +21,11 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Pro
 		return handlers;
 	},
 
-    getPathToUser: function(user) {
+	getPathToUser: function(user) {
 		return Promise.resolve([user]);
 	},
 
-    getPathToBadge: function(badge, getPathTo) {
+	getPathToBadge: function(badge, getPathTo) {
 		var user = badge.targetUser || $AppConfig.userObject;
 
 		return getPathTo(user)
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Pro
 			});
 	},
 
-    getPathToDynamicFriendsList: function(dfl) {
+	getPathToDynamicFriendsList: function(dfl) {
 		return Promise.resolve([dfl]);
 	}
 });

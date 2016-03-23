@@ -14,14 +14,14 @@ var StoreStripePurchaseOrder = require('../../model/store/StripePurchaseOrder');
 require('legacy/model/Course'); //Still used?
 
 module.exports = exports = Ext.define('NextThought.app.store.StateStore', {
-    extend: 'NextThought.common.StateStore',
-    PURCHASABLES: [],
+	extend: 'NextThought.common.StateStore',
+	PURCHASABLES: [],
 
-    getPurchasables: function() {
+	getPurchasables: function() {
 		return this.PURCHASABLES;
 	},
 
-    setPurchasables: function(items) {
+	setPurchasables: function(items) {
 		this.PURCHASABLES = items;
 
 		this.fireEvent('purchasables-set', items);

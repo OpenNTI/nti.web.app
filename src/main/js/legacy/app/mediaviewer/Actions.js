@@ -12,9 +12,9 @@ var LibraryActions = require('../library/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.MediaUserDataStore = NextThought.app.mediaviewer.StateStore.getInstance();
@@ -24,12 +24,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
-    initPageStores: function(cmp, cid) {
+	initPageStores: function(cmp, cid) {
 		var context = this.MediaUserDataStore.getContext(cmp);
 		context.currentPageStores = {};
 	},
 
-    hasPageStore: function(id, ctx) {
+	hasPageStore: function(id, ctx) {
 		if (!ctx || !id) {
 			return false;
 		}
@@ -37,13 +37,13 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		return !!ctx.currentPageStores[id];
 	},
 
-    getPageStore: function(id, ctx) {
+	getPageStore: function(id, ctx) {
 		if (!ctx || !id) { return false; }
 
 		return ctx.currentPageStores[id];
 	},
 
-    addPageStore: function(id, store, ctx) {
+	addPageStore: function(id, store, ctx) {
 		if (this.hasPageStore(id, ctx)) {
 			console.warn('replacing an existing store??');
 		}
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		ctx.currentPageStores[id] = store;
 	},
 
-    loadUserData: function(cmps, reader) {
+	loadUserData: function(cmps, reader) {
 		var cid, me = this, loaded;
 
 		loaded = Ext.Array.map(cmps, function(cmp) {
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		return loaded;
 	},
 
-    loadAnnotations: function(cmp, containerId) {
+	loadAnnotations: function(cmp, containerId) {
 		var context = this.MediaUserDataStore.getContext(cmp),
 			store, me = this, parentContext = this.UserDataStore.getContext(cmp.ownerCt);
 
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-    __buildPageStore: function(containerId) {
+	__buildPageStore: function(containerId) {
 		var props = {}, object;
 
 		if (Ext.isObject(containerId)) {
@@ -138,7 +138,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		return store;
 	},
 
-    loadTranscript: function(transcript) {
+	loadTranscript: function(transcript) {
 		var me = this;
 
 		if (!transcript) {
@@ -165,7 +165,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-    loadRawTranscript: function(transcript) {
+	loadRawTranscript: function(transcript) {
 		var me = this,
 			content = me.MediaUserDataStore.getTranscriptObject(transcript && transcript.get('associatedVideoId')),
 			base = transcript.get('basePath'),
@@ -202,11 +202,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-    loadSlidedeck: function(slidedeckId) {
+	loadSlidedeck: function(slidedeckId) {
 		return Service.getObject(slidedeckId);
 	},
 
-    getBasePath: function(obj) {
+	getBasePath: function(obj) {
 		var me = this;
 		return new Promise(function(fulfill, reject) {
 			me.PathActions.getPathToObject(obj)
@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-    fixSlideImagesPath: function(slides, basePath, fullPath) {
+	fixSlideImagesPath: function(slides, basePath, fullPath) {
 		var pageInfo = (fullPath || []).last(),
 			courseBundle = (fullPath || []).first();
 
@@ -236,7 +236,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-    buildSlidedeckPlaylist: function(slidedeck) {
+	buildSlidedeckPlaylist: function(slidedeck) {
 		var videos = {},
 			transcripts = {}, me = this, promises,
 			slideStore;
@@ -280,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 
 
-		return new  Promise( function(fulfill, reject) {
+		return new	Promise( function(fulfill, reject) {
 			Promise.all(promises)
 				.then(me.__fixSlideContainer.bind(me, slidedeck, slideStore))
 				.then(function() {
@@ -298,7 +298,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-    __fixSlideContainer: function(slidedeck, slideStore) {
+	__fixSlideContainer: function(slidedeck, slideStore) {
 		var me = this;
 
 		return new Promise(function(fulfill) {
@@ -312,7 +312,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-    __getSlidedeckContainer: function(slidedeck) {
+	__getSlidedeckContainer: function(slidedeck) {
 		var me = this;
 		return new Promise(function(fulfill){
 			me.PathActions.getPathToObject(slidedeck)
@@ -325,7 +325,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		});
 	},
 
-    setSlideDocContent: function(slidedeck, slideStore) {
+	setSlideDocContent: function(slidedeck, slideStore) {
 		var me = this,
 			cid;
 
@@ -338,7 +338,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 			});
 	},
 
-    loadPageContent: function(pageInfo) {
+	loadPageContent: function(pageInfo) {
 		var me = this,
 			link = pageInfo.getLink('content'),
 			contentPackage = pageInfo.get('ContentPackageNTIID');
@@ -359,7 +359,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 			});
 	},
 
-    parseSlideDocFragments: function(containerId, slideStore, doc) {
+	parseSlideDocFragments: function(containerId, slideStore, doc) {
 		var slideFrags = Ext.DomQuery.select('object[type="application/vnd.nextthought.slide"]', doc),
 			fragsMap = {};
 
@@ -377,53 +377,53 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		return Promise.resolve();
 	},
 
-    buildSlidedeckComponents: function(slideStore, videosMap, transcriptsMap){
+	buildSlidedeckComponents: function(slideStore, videosMap, transcriptsMap){
 		var isTitle = true, items = [];
 
-        slideStore.each(function(slide) {
-            var vid = slide.get('video-id'),
-                t = transcriptsMap && transcriptsMap[vid],
-                video = videosMap && videosMap[vid],
-                start = slide.get('video-start'),
-                end = slide.get('video-end');
+		slideStore.each(function(slide) {
+			var vid = slide.get('video-id'),
+				t = transcriptsMap && transcriptsMap[vid],
+				video = videosMap && videosMap[vid],
+				start = slide.get('video-start'),
+				end = slide.get('video-end');
 
-            if (video && isTitle) {
-                items.push({
-                    xtype: 'video-title-component',
-                    video: video
-                });
+			if (video && isTitle) {
+				items.push({
+					xtype: 'video-title-component',
+					video: video
+				});
 
-                isTitle = false;
-            }
+				isTitle = false;
+			}
 
-            items.push({
-                xtype: 'slide-component',
-                slide: slide,
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                }
-            });
+			items.push({
+				xtype: 'slide-component',
+				slide: slide,
+				layout: {
+					type: 'vbox',
+					align: 'stretch'
+				}
+			});
 
-            if (t) {
-                // NOTE: make a copy of the transcript record,
-                // since many slide can have the same transcript but different start and end time.
-                t = t.copy();
-                t.set('desired-time-start', start);
-                t.set('desired-time-end', end);
+			if (t) {
+				// NOTE: make a copy of the transcript record,
+				// since many slide can have the same transcript but different start and end time.
+				t = t.copy();
+				t.set('desired-time-start', start);
+				t.set('desired-time-end', end);
 
-                items.push({
-                    xtype: 'video-transcript',
-                    flex: 1,
-                    transcript: t,
-                    layout: {
-                        type: 'vbox',
-                        align: 'stretch'
-                    }
-                });
-            }
-        }, this);
+				items.push({
+					xtype: 'video-transcript',
+					flex: 1,
+					transcript: t,
+					layout: {
+						type: 'vbox',
+						align: 'stretch'
+					}
+				});
+			}
+		}, this);
 
-        return items;
-    }
+		return items;
+	}
 });

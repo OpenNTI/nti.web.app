@@ -6,15 +6,15 @@ var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.content.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
 	},
 
-    loadContent: function(service) {
+	loadContent: function(service) {
 		var store = this.ContentStore;
 
 		if (!service) {
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.library.content.Actions',
 		]);
 	},
 
-    setUpContentPackages: function(link) {
+	setUpContentPackages: function(link) {
 		if (!link) {
 			this.ContentStore.setContentPackages([]);
 
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.library.content.Actions',
 			.then(this.ContentStore.setContentPackages.bind(this.ContentStore));
 	},
 
-    setUpContentBundles: function(link) {
+	setUpContentBundles: function(link) {
 		if (!link) {
 			this.ContentStore.setContentBundles([]);
 
@@ -52,17 +52,17 @@ module.exports = exports = Ext.define('NextThought.app.library.content.Actions',
 			.then(this.ContentStore.setContentBundles.bind(this.ContentStore));
 	},
 
-    findContent: function(id) {
+	findContent: function(id) {
 		return this.ContentStore.onceLoaded()
 			.then(this.ContentStore.findContent.bind(this.ContentStore, id));
 	},
 
-    findContentByPriority: function(fn) {
+	findContentByPriority: function(fn) {
 		return this.ContentStore.onceLoaded()
 			.then(this.ContentStore.findContentByPriority.bind(this.ContentStore, fn));
 	},
 
-    findForNTIID: function(id) {
+	findForNTIID: function(id) {
 		return this.ContentStore.onceLoaded()
 			.then(this.ContentStore.findForNTIID.bind(this.ContentStore, id));
 	}

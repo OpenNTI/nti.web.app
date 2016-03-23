@@ -4,33 +4,33 @@ var UxSearchItem = require('./SearchItem');
 
 
 module.exports = exports = Ext.define('NextThought.common.ux.FilterMenu', {
-    extend: 'Ext.menu.Menu',
-    alias: 'widget.filter-menupanel',
-    ui: 'nt',
-    plain: true,
-    showSeparator: false,
-    shadow: false,
-    frame: false,
-    cls: 'no-checkboxes no-footer blue-menu-items filter-search',
-    hideMode: 'display',
-    autoHide: false,
+	extend: 'Ext.menu.Menu',
+	alias: 'widget.filter-menupanel',
+	ui: 'nt',
+	plain: true,
+	showSeparator: false,
+	shadow: false,
+	frame: false,
+	cls: 'no-checkboxes no-footer blue-menu-items filter-search',
+	hideMode: 'display',
+	autoHide: false,
 
-    defaults: {
+	defaults: {
 		ui: 'nt',
 		xtype: 'filter-menu-item',
 		group: 'main-filter-group',
 		plain: true
 	},
 
-    searchPlaceHolderText: 'Search',
+	searchPlaceHolderText: 'Search',
 
-    filters: [
+	filters: [
 		//{ text: 'All Students', filter: '*'},
 		//{ text: 'Enrolled Students', filter: 'ForCredit'},
 		//{ text: 'Open Students', filter: 'Open'}
 	],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		if (!Ext.isArray(this.filters)) {
 			console.warn('Need an array of filter menu item configs... blanking out filters list');
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.FilterMenu', {
 		this.on({commit: 'hide'});
 	},
 
-    setState: function(filter, search) {
+	setState: function(filter, search) {
 		var item = this.down('[filter="' + filter + '"]') || this.down('[filter]');
 
 		if (item) {
@@ -70,16 +70,16 @@ module.exports = exports = Ext.define('NextThought.common.ux.FilterMenu', {
 		this.search.setValue(search || '');
 	},
 
-    setSearch: function(search) {
+	setSearch: function(search) {
 		this.search.setValue(search || '');
 	},
 
-    onSearch: function(searchTerm) {
+	onSearch: function(searchTerm) {
 		console.log('Search:', searchTerm);
 		this.fireEvent('search', searchTerm);
 	},
 
-    onFilter: function(item, state) {
+	onFilter: function(item, state) {
 		if (!state) {
 			return;
 		}
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.FilterMenu', {
 		this.fireEvent('filter', item.filter);
 	},
 
-    getFilterLabel: function(count) {
+	getFilterLabel: function(count) {
 		var search = this.search && this.search.getValue(),
 			item = this.down('menuitem[checked]') || {text: ''},
 			prefix = item.text;

@@ -8,14 +8,14 @@ var ChatStateStore = require('../app/chat/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.model.UserSearch', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    mixins: {
+	mixins: {
 		shareEntity: 'NextThought.mixins.ShareEntity',
 		Avatar: 'NextThought.mixins.Avatar'
 	},
 
-    statics: {
+	statics: {
 		getType: function(modelData) {
 			var m = ((modelData && modelData.Class) || '').toLowerCase(), type;
 
@@ -35,10 +35,10 @@ module.exports = exports = Ext.define('NextThought.model.UserSearch', {
 		}
 	},
 
-    idProperty: 'Username',
-    homogenous: true,
+	idProperty: 'Username',
+	homogenous: true,
 
-    fields: [
+	fields: [
 		{ name: 'Username', type: 'string' },
 		{ name: 'Presence', convert: function(v, record) {
 			var presence = NextThought.app.chat.StateStore.getInstance().getPresenceOf(record.get('Username'));
@@ -71,12 +71,12 @@ module.exports = exports = Ext.define('NextThought.model.UserSearch', {
 		{ name: 'isMarked', type: 'boolean', persist: false}
 	],
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 		this.initAvatar();
 	},
 
-    isUnresolved: function() {
+	isUnresolved: function() {
 		return this.Unresolved === true;
 	}
 }, function() {

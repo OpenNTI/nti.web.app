@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.SurveyHeader',
 
 
 	updateSurvey: function(survey, fromSubmit, results) {
-		var	items = [],
+		var items = [],
 			reportLink = survey.getReportLink();
 
 		if (!this.surveyCmp) {

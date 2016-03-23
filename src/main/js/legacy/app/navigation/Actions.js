@@ -9,9 +9,9 @@ var ModelPageInfo = require('../../model/PageInfo');
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    statics: {
+	statics: {
 		getContext: function() {
 			if (!this.NavStateStore) {
 				this.NavStateStore = NextThought.app.context.StateStore.getInstance();
@@ -125,11 +125,11 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 		}
 	},
 
-    constructor: function() {
+	constructor: function() {
 		this.store = NextThought.app.navigation.StateStore.getInstance();
 	},
 
-    /**
+	/**
 	 * Takes an object config
 	 *
 	 * cmp: Ext.Component, //a component to render in the header, tabs are ignored if this is present
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 		this.store.updateNavBar(config);
 	},
 
-    /**
+	/**
 	 * the active object to set the background from
 	 *
 	 * @param {Object} obj the thins to set active
@@ -152,25 +152,25 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 		this.store.fireEvent('set-active-content', obj, masked);
 	},
 
-    markReturnPoint: function(route) {
+	markReturnPoint: function(route) {
 		this.store.markReturnPoint(route);
 	},
 
-    /**
+	/**
 	 * Present a message in the main message bar
 	 *
 	 * Takes a config object:
 	 *
 	 * type: string // should be unique for each message.
 	 * message: string // message or title of the message bar
-	 * iconCls: string  // the class of the icon (warning, delete, ok...),
+	 * iconCls: string	// the class of the icon (warning, delete, ok...),
 	 * buttons: array // action buttons to be added
 	 * Each button has the following:
-	 * 	{
-	 * 		cls: string // name of the button class,
-	 * 		action: string // name of the method to call on click,
-	 * 		label: string // label of the button
-	 * 	}
+	 *	{
+	 *		cls: string // name of the button class,
+	 *		action: string // name of the method to call on click,
+	 *		label: string // label of the button
+	 *	}
 	 *
 	 * @param  {Object} cfg configuration to build a message bar.
 	 */
@@ -194,7 +194,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 					}
 
 					// if (id) {
-					// 	me.store.putMessageBarItemIntoSession(id, cfg);
+					//	me.store.putMessageBarItemIntoSession(id, cfg);
 					// }
 				});
 		}

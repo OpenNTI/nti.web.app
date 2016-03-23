@@ -32,8 +32,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		}
 
 		rd.entity = this.entity;
-	    rd.name = this.entity && this.entity.getName();
-		rd.date = this.entity && Ext.Date.format(this.entity.get('CreatedTime'), 'F j, Y');	
+		rd.name = this.entity && this.entity.getName();
+		rd.date = this.entity && Ext.Date.format(this.entity.get('CreatedTime'), 'F j, Y'); 
 
 		if (this.rendered) {
 			this.renderTpl.overwrite(this.el, rd);

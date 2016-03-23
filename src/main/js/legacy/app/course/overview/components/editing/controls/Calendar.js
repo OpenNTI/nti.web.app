@@ -3,13 +3,13 @@ var ControlsAvailableDateMenu = require('./AvailableDateMenu');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Calendar', {
-    extend: 'Ext.Component',
-    alias: 'widget.overview-editing-controls-calendar',
-    cls: 'button calendar',
-    placeholder: 'When should students begin this lesson?',
-    enableText: true,
+	extend: 'Ext.Component',
+	alias: 'widget.overview-editing-controls-calendar',
+	cls: 'button calendar',
+	placeholder: 'When should students begin this lesson?',
+	enableText: true,
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'date-calendar', cn: [
 			{cls: 'date', cn: [
 				{cls: 'month'},
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		{cls: 'menu-container'}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		monthEl: '.month',
 		dayEl: '.day',
 		dateEl: '.date',
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		clearEl: '.clear'
 	},
 
-    beforeRender: function () {
+	beforeRender: function () {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
 			placeholder: this.placeholder,
@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    afterRender: function () {
+	afterRender: function () {
 		this.callParent(arguments);
 		var me = this;
 		
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.el.addCls('closed');
 	},
 
-    setDefaultDate: function () {
+	setDefaultDate: function () {
 		var startDate = this.record && this.record.get('AvailableBeginning'),
 			date  = startDate ? new Date(startDate) : null, m;
 
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    setDayAndMonth: function(date){
+	setDayAndMonth: function(date){
 		var parts, m;
 		if (date) {
 			this.dateEl.removeCls('empty');
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}	
 	},
 
-    createPicker: function () {
+	createPicker: function () {
 		this.picker = Ext.widget('overview-editing-available-date-menu', {
 			record: this.record,
 			defaultValue: this.defaultValue,
@@ -107,13 +107,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.on('destroy', this.picker.destroy.bind(this.picker));
 	},
 
-    alignCalendarMenu: function(){
+	alignCalendarMenu: function(){
 		if (this.picker) {
 			this.picker.alignTo(this.el.dom);
 		}
 	},
 
-    updateDateText: function(){
+	updateDateText: function(){
 		var startDate = this.record && this.record.get('AvailableBeginning'),
 			endDate = this.record && this.record.get('AvailableEnding'), 
 			date;
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    dateClicked: function(){
+	dateClicked: function(){
 		if (!this.picker) {
 			this.createPicker();
 		}
@@ -170,13 +170,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    hideMenu: function(){
+	hideMenu: function(){
 		this.el.addCls('closed');
 		Ext.destroy(this.bodyListeners);
 		this.picker.close();
 	},
 
-    showMenu: function() {
+	showMenu: function() {
 		this.el.removeCls('closed');
 		this.bodyListeners = this.mon(Ext.getBody(), {
 			destroyable: true,
@@ -187,14 +187,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.picker.open();
 	},
 
-    resetMenu: function(){
+	resetMenu: function(){
 		if (this.picker.endEl && this.picker.endEl.hasCls('selected')) {
 			this.picker.toggleTab();
 		}
 		this.picker.setInitialState();
 	},
 
-    textLabelClicked: function(){
+	textLabelClicked: function(){
 		if (!this.picker) {
 			this.createPicker();
 		}
@@ -206,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    saveClicked: function(e){
+	saveClicked: function(e){
 		var me = this,
 			link = this.record && this.record.getLink('edit'),
 			values = this.picker && this.picker.getValue();
@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    clearDates: function(e){
+	clearDates: function(e){
 		var link = this.record && this.record.getLink('edit'),
 			me = this;
 
@@ -239,7 +239,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    onBodyClick: function(e) {
+	onBodyClick: function(e) {
 		if (e.getTarget('.calendar')) { return; }
 		if(!this.el.hasCls('closed')){
 			this.hideMenu();

@@ -10,17 +10,17 @@ var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
-    extend: 'NextThought.app.contentviewer.navigation.Base',
-    alias: 'widget.course-assessment-admin-reader-header',
-    ui: 'course-assessment',
-    cls: 'admin-reader-header reader-header course-assessment-header assignment-item',
+	extend: 'NextThought.app.contentviewer.navigation.Base',
+	alias: 'widget.course-assessment-admin-reader-header',
+	ui: 'course-assessment',
+	cls: 'admin-reader-header reader-header course-assessment-header assignment-item',
 
-    mixins: {
+	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
 		enableChat: 'NextThought.mixins.ChatLinks'
 	},
 
-    headerTpl: Ext.DomHelper.markup([
+	headerTpl: Ext.DomHelper.markup([
 		{cls: 'predicted hidden', cn: [
 			{cls: 'label', 'data-qtip': 'Estimated from the grading policy in the Syllabus', html: 'Projected Grade'},
 			{cls: 'value', html: '{predicted}'}
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		nameEl: '.header .user .wrap .name',
 		usernameEl: '.header .user .wrap .username',
 		profileEl: '.header .user .wrap .actions .profile',
@@ -69,14 +69,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		excusedEl: '.header .status .excused'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
 		this.WindowActions = NextThought.app.windows.Actions.create();
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		var status = this.status || 'Open',
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		});
 	},
 
-    __getExcusedTpl: function() {
+	__getExcusedTpl: function() {
 		var excusedTpl = {cls: 'off', html: 'Excused'},
 			grade = this.assignmentHistory && this.assignmentHistory.get && this.assignmentHistory.get('Grade');
 
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		return excusedTpl;
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		var me = this;
 
 		me.callParent(arguments);
@@ -160,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 	},
 
-    setupEmail: function(){
+	setupEmail: function(){
 		var me = this;
 		this.getStudentEnrollment(this.student)
 			.then(function(enrollment) {
@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			});
 	},
 
-    getStudentEnrollment: function(studentRecord) {
+	getStudentEnrollment: function(studentRecord) {
 		var roster = this.currentBundle && this.currentBundle.getLink('CourseEnrollmentRoster'),
 			username = studentRecord && studentRecord.get('Username'),
 			smallRequestURLToGetCounts = roster && !Ext.isEmpty(roster) && Ext.String.urlAppend(
@@ -194,7 +194,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 					});
 	},
 
-    setUpGradeBox: function(historyItem) {
+	setUpGradeBox: function(historyItem) {
 		if (!this.assignmentHistory && !historyItem) { return; }
 
 		if (historyItem) {
@@ -279,7 +279,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.mon(this.assignmentHistory, 'reset-assignment', this.markAssignmentAsReset.bind(this));
 	},
 
-    showActionsMenu: function(e) {
+	showActionsMenu: function(e) {
 		if (e.getTarget('.disabled') || !this.assignmentHistory) { return; }
 
 		var me = this,
@@ -288,7 +288,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		menu.showBy(me.actionsEl, 'tr-br');
 	},
 
-    changeGrade: function(number, letter) {
+	changeGrade: function(number, letter) {
 		var me = this,
 			historyItem = this.assignmentHistory;
 
@@ -308,13 +308,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			});
 	},
 
-    showGradeMenu: function() {
+	showGradeMenu: function() {
 		if (this.letterEl.hasCls('disabled')) { return; }
 
 		this.gradeMenu.showBy(this.letterEl, 'tl-tl', this.gradeMenu.offset);
 	},
 
-    createGradeMenu: function() {
+	createGradeMenu: function() {
 		//Wasn't sure if this needs to be translated or not?
 		var items = NextThought.model.courseware.Grade.Items;
 
@@ -340,7 +340,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		});
 	},
 
-    changeLetterGrade: function(item, status) {
+	changeLetterGrade: function(item, status) {
 		if (!status) { return; }
 		var offset = item.getOffsetsTo(this.gradeMenu),
 			x = offset && offset[1];
@@ -354,19 +354,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.changeGrade(this.currentGrade, this.currentLetter);
 	},
 
-    maybeChangeGrade: function(e, el) {
+	maybeChangeGrade: function(e, el) {
 		if (e.getCharCode() === e.ENTER) {
 			this.gradeChanged(e, el);
 		}
 	},
 
-    gradeChanged: function(e, el) {
+	gradeChanged: function(e, el) {
 		this.currentGrade = el.value;
 
 		this.changeGrade(this.currentGrade, this.currentLetter);
 	},
 
-    excuseGradeStatusChanged: function() {
+	excuseGradeStatusChanged: function() {
 		var grade = this.assignmentHistory.get('Grade');
 
 		if (!grade) { return; }
@@ -374,7 +374,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.markGradeAsExcused(grade);
 	},
 
-    markGradeAsExcused: function(grade) {
+	markGradeAsExcused: function(grade) {
 		if (!grade || !grade.isModel) { return; }
 
 		var cls = grade.get('IsExcused') === true ? 'on' : 'off',
@@ -383,13 +383,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.excusedEl.addCls(cls);
 	},
 
-    markAssignmentAsReset: function() {
+	markAssignmentAsReset: function() {
 		this.excusedEl.removeCls('on');
 		this.excusedEl.addCls('off');
 		this.setUpGradeBox();
 	},
 
-    openEmail: function(e) {
+	openEmail: function(e) {
 		var emailRecord = new NextThought.model.Email(),
 			mailLink = this.studentEnrollment && this.studentEnrollment.getLink('Mail');
 

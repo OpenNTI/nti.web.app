@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 		{tag: 'tpl', 'for': 'messages', cn: [
 
 			{cls: 'message {me} {moderatedCls}', 'data-guid': '{guid}', cn: [
-        {cls: 'control', tag: 'span'},
+		{cls: 'control', tag: 'span'},
 				{cls: 'time', html: '{time:date("g:i:s A")}'},
 				{ cls: 'wrap', cn: [
 					{cls: 'name {me}', html: '{name:ellipsis(50)}'},
@@ -49,12 +49,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-    var r = this.el.down('.reply');
+	var r = this.el.down('.reply');
 		if (r) {r.remove();}
 		this.el.on('click', this.click, this);
-    Ext.each(this.el.query('.control'), function(c) {
-      this.mon(Ext.fly(c), 'click', this.onControlClick, this);
-    }, this);
+	Ext.each(this.el.query('.control'), function(c) {
+	  this.mon(Ext.fly(c), 'click', this.onControlClick, this);
+	}, this);
 	},
 
 
@@ -80,17 +80,17 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 			var guid = IdCache.getIdentifier(msg.getId()),
 				creator = msg.get('Creator'),
 				o = {
-                    moderatedCls: msg.hasBeenModerated()
-		                    ? 'moderated'
-		                    : msg.hasBeenFlagged()
-		                        ? 'confirmFlagged'
-		                        : '',
+					moderatedCls: msg.hasBeenModerated()
+							? 'moderated'
+							: msg.hasBeenFlagged()
+								? 'confirmFlagged'
+								: '',
 					guid: guid,
 					me: isMe(creator) ? 'me' : undefined,
 					name: creator,
 					time: msg.get('CreatedTime'),
 					body: 'Loading...',
-                    msg: msg      //just pass the message back
+					msg: msg	  //just pass the message back
 				};
 
 
@@ -168,22 +168,22 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 
 
   onControlClick: function(evt, dom, opts) {
-    var message = evt.getTarget('.message');
+	var message = evt.getTarget('.message');
 
-    Ext.fly(message).toggleCls('flagged');
-    Ext.fly(dom).toggleCls('checked');
-    this.up('chat-transcript-window').fireEvent('control-clicked');
+	Ext.fly(message).toggleCls('flagged');
+	Ext.fly(dom).toggleCls('checked');
+	this.up('chat-transcript-window').fireEvent('control-clicked');
   },
 
 
   toggleModerationPanel: function() {
-    this.el.toggleCls('moderating');
+	this.el.toggleCls('moderating');
 		Ext.each(this.el.query('.flagged'), function(d) {
-      Ext.fly(d).removeCls('flagged');
-    });
-    Ext.each(this.el.query('.control.checked'), function(d) {
-      Ext.fly(d).removeCls('checked');
-    });
+	  Ext.fly(d).removeCls('flagged');
+	});
+	Ext.each(this.el.query('.control.checked'), function(d) {
+	  Ext.fly(d).removeCls('checked');
+	});
   }
 
 });

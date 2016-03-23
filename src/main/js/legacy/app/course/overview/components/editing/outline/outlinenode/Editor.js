@@ -6,11 +6,11 @@ var OutlinenodeParentSelection = require('./ParentSelection');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.Editor', {
-    extend: 'NextThought.app.course.overview.components.editing.Editor',
-    alias: 'widget.overview-editing-outlinenode-editor',
-    cls: 'content-editor outline-editor',
+	extend: 'NextThought.app.course.overview.components.editing.Editor',
+	alias: 'widget.overview-editing-outlinenode-editor',
+	cls: 'content-editor outline-editor',
 
-    statics: {
+	statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.courses.navigation.CourseOutlineNode.mimeType
@@ -31,12 +31,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    FORM_SCHEMA: [
+	FORM_SCHEMA: [
 		{type: 'hidden', name: 'MimeType'},
 		{type: 'text', name: 'title', placeholder: 'Title'}
 	],
 
-    getFormSchema: function() {
+	getFormSchema: function() {
 		var schema = [
 				{name: 'MimeType', type: 'hidden'},
 				{
@@ -50,14 +50,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return schema;
 	},
 
-    getDefaultValues: function() {
+	getDefaultValues: function() {
 		return {
 			MimeType: NextThought.model.courses.navigation.CourseOutlineNode.mimeType,
 			title: (this.record && this.record.getTitle()) || ''
 		};
 	},
 
-    addParentSelection: function(record, parentRecord, rootRecord, onChange) {
+	addParentSelection: function(record, parentRecord, rootRecord, onChange) {
 		if (!rootRecord) { return null; }
 
 		var items = rootRecord.get('Items'),

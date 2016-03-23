@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	/**
 	 * if we haven't gotten this.ENROLLMENT_STATES get the string and get the value for this enrollment option
 	 * @param  {String} state the state to get strings for
-	 * @return {Object}       the different wordings for this state
+	 * @return {Object}		  the different wordings for this state
 	 */
 	getEnrollmentState: function(state) {
 		var def = this.DefaultStrings || {};
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	/**
 	 * Takes the details of the option, and returns the wording for the state
 	 * @param  {Object} details the details of course and option, return value from __getOptionDetails
-	 * @return {Object}        the wording for the state it is in
+	 * @return {Object}		   the wording for the state it is in
 	 */
 	__getEnrollmentText: function(course, option) {
 		var details = this.__getOptionDetails(course, option);
@@ -152,9 +152,9 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 
 	/**
 	 * Parse out all the information needed to build the enrollment text
-	 * @param  {Object} course  details about the course
+	 * @param  {Object} course	details about the course
 	 * @param  {Object} option details about the option
-	 * @return {Object}         parsed details
+	 * @return {Object}			parsed details
 	 */
 	__getOptionDetails: function(course, option) {},
 

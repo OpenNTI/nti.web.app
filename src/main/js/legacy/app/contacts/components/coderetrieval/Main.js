@@ -3,11 +3,11 @@ var FieldsSimpleTextField = require('../../../../common/form/fields/SimpleTextFi
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.components.coderetrieval.Main', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.coderetrieval-main-view',
-    cls: 'coderetrieval-main-view',
+	extend: 'Ext.container.Container',
+	alias: 'widget.coderetrieval-main-view',
+	cls: 'coderetrieval-main-view',
 
-    items: [
+	items: [
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
 			{xtype: 'box', name: 'codelabel', cls: 'label', html: getString('NextThought.view.account.coderetrieval.Main.code-label')},
 			{xtype: 'simpletext', name: 'code', cls: 'input-box group-code', inputType: 'text', readOnly: true}
@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.coder
 		]}
 	],
 
-    updateCode: function(c) {
+	updateCode: function(c) {
 		var code = this.down('[name=code]');
 		code.update(c);
 		code.el.selectable();

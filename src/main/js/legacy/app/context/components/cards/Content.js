@@ -3,31 +3,31 @@ var ContextStateStore = require('../../StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.cards.Content', {
-    extend: 'Ext.Component',
-    alias: 'widget.context-content-card',
-    cls: 'context-card',
+	extend: 'Ext.Component',
+	alias: 'widget.context-content-card',
+	cls: 'context-card',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'context-image word-context', cn: [
 			{cls: 'text'}
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		textEl: '.text'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.setContent();
 	},
 
-    /**
+	/**
 	 * Override this if you want to set content after the component's been rendered.
 	 */
 	setContent: function() {

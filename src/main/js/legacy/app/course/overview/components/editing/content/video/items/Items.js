@@ -5,18 +5,18 @@ var ItemsItem = require('./Item');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.items.Items', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.overview-editing-video-items',
+	extend: 'Ext.container.Container',
+	alias: 'widget.overview-editing-video-items',
 
-    mixins: {
+	mixins: {
 		OrderingContainer: 'NextThought.mixins.dnd.OrderingContainer'
 	},
 
-    cls: 'video-items',
-    layout: 'none',
-    items: [],
+	cls: 'video-items',
+	layout: 'none',
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -63,17 +63,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    getDropzoneTarget: function() {
+	getDropzoneTarget: function() {
 		return this.itemsCmp && this.itemsCmp.el && this.itemsCmp.el.dom;
 	},
 
-    getOrderingItems: function() {
+	getOrderingItems: function() {
 		var items = this.itemsCmp && this.itemsCmp.items && this.itemsCmp.items.items;
 
 		return items || [];
 	},
 
-    getItemsFromRecord: function(record) {
+	getItemsFromRecord: function(record) {
 		if (record instanceof NextThought.model.VideoRoll) {
 			return record.get('Items');
 		}
@@ -81,11 +81,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return [record];
 	},
 
-    getItems: function() {
+	getItems: function() {
 		return this.selectedItems;
 	},
 
-    addItems: function(items) {
+	addItems: function(items) {
 		var me = this,
 			single = items.length === 1;
 
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    reorderVideo: function(video, newIndex, moveInfo) {
+	reorderVideo: function(video, newIndex, moveInfo) {
 		var items = this.getItems(),
 			contains = items.filter(function(item) { return item.getId() === video.getId(); }),
 			oldIndex = moveInfo.getIndex();

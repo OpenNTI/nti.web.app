@@ -5,19 +5,19 @@ var ForumForum = require('./Forum');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.Index', {
-    extend: 'NextThought.common.components.NavPanel',
-    alias: 'widget.forum-view',
-    cls: 'topic-list-view',
-    navigation: {xtype: 'forums-forum-nav', margin: 0, override: true},
-    body: {xtype: 'forums-forum-body'},
-    storeCfg: {},
-    model: 'NextThought.model.forums.CommunityForum',
+	extend: 'NextThought.common.components.NavPanel',
+	alias: 'widget.forum-view',
+	cls: 'topic-list-view',
+	navigation: {xtype: 'forums-forum-nav', margin: 0, override: true},
+	body: {xtype: 'forums-forum-body'},
+	storeCfg: {},
+	model: 'NextThought.model.forums.CommunityForum',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 	},
 
-    onAddedToParentRouter: function() {
+	onAddedToParentRouter: function() {
 		this.navigation.pushRoute = this.pushForum.bind(this);
 		this.body.pushRouteState = this.pushRouteState.bind(this);
 		this.body.replaceRouteState = this.replaceRouteState.bind(this);
@@ -25,13 +25,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 		this.body.alignNavigation = this.alignNavigation.bind(this);
 	},
 
-    clearForum: function() {
+	clearForum: function() {
 		this.forumList = null;
 		this.navigation.setForumList(null);
 		this.body.clearForum();
 	},
 
-    pushForum: function(title, route, precache) {
+	pushForum: function(title, route, precache) {
 		var state = this.getRouteState();
 
 		delete state.currentPage;
@@ -40,12 +40,12 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.I
 		this.pushRouteState(state, title, route, precache);
 	},
 
-    setForumList: function(forumList) {
+	setForumList: function(forumList) {
 		this.forumList = forumList;
 		this.navigation.setForumList(forumList);
 	},
 
-    setForum: function(id) {
+	setForum: function(id) {
 		var record = this.navigation.selectRecord(id),
 			title = record && record.get('title');
 

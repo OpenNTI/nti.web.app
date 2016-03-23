@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.model.MessageInfo', {
 	],
 
   hasBeenModerated: function() {
-    return Boolean(!this.getLink('flag') && !this.getLink('flag.metoo'));
+	return Boolean(!this.getLink('flag') && !this.getLink('flag.metoo'));
   },
 
 	hasBeenFlagged: function() {

@@ -3,19 +3,19 @@ var ItemsItem = require('./Item');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.items.Items', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.overview-editing-timeline-items',
-    cls: 'timeline-items timeline-item-selection',
-    layout: 'none',
-    items: [],
+	extend: 'Ext.container.Container',
+	alias: 'widget.overview-editing-timeline-items',
+	cls: 'timeline-items timeline-item-selection',
+	layout: 'none',
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		
 		this.addItems(this.record || this.selectedItems);
 	},
 
-    addItems: function(items) {
+	addItems: function(items) {
 		var me = this;
 		if (items && !(items instanceof Array)) {
 			items = [items];
@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}));
 	},
 
-    getItems: function() {
+	getItems: function() {
 		return this.selectedItems;
 	}
 });

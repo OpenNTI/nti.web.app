@@ -3,11 +3,11 @@ var CroppingCroppedImage = require('./CroppedImage');
 
 
 module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
-    extend: 'Ext.Component',
-    alias: 'widget.image-cropping-canvas',
-    cls: 'image-cropping-canvas',
+	extend: 'Ext.Component',
+	alias: 'widget.image-cropping-canvas',
+	cls: 'image-cropping-canvas',
 
-    OPERATIONS: {
+	OPERATIONS: {
 		NOOP: 'outside-of-mask',
 		RESIZE_NW: 'resize-nw',
 		RESIZE_NE: 'resize-ne',
@@ -16,19 +16,19 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		MOVE: 'move'
 	},
 
-    CORNER_SIZE: {
+	CORNER_SIZE: {
 		length: 16,
 		overhang: 6
 	},
 
-    IMAGE_PADDING: 6,
-    autoEl: {tag: 'canvas', cls: 'image-cropping-canvas', height: 3, width: 5},
+	IMAGE_PADDING: 6,
+	autoEl: {tag: 'canvas', cls: 'image-cropping-canvas', height: 3, width: 5},
 
-    renderSelectors: {
+	renderSelectors: {
 		canvasEl: 'canvas'
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		//TODO: generalize this to not have to have a locked aspect ratio
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		});
 	},
 
-    getValue: function() {
+	getValue: function() {
 		var imageInfo = this.imageInfo,
 			selection = this.selection,
 			name = this.name,
@@ -68,18 +68,18 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		});
 	},
 
-    getContext: function(context) {
+	getContext: function(context) {
 		return this.el && this.el.dom.getContext(context || '2d');
 	},
 
-    getCanvasSize: function() {
+	getCanvasSize: function() {
 		return {
 			width: this.getWidth(),
 			height: this.getHeight()
 		};
 	},
 
-    getSelection: function(x, y, width, height, imageInfo) {
+	getSelection: function(x, y, width, height, imageInfo) {
 		var minWidth = this.crop.minWidth || Infinity,
 			minHeight = this.crop.minHeight || Infinity,
 			aspectLocked = !!this.aspectLocked,
@@ -137,14 +137,14 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		};
 	},
 
-    clear: function() {
+	clear: function() {
 		if (!this.rendered) { return; }
 
 		this.el.dom.width = this.el.dom.width;
 		delete this.imageInfo;
 	},
 
-    rotate: function() {
+	rotate: function() {
 		if (!this.imageInfo) {
 			return;
 		}
@@ -164,7 +164,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		this.loadImage(c.toDataURL('image/png'));
 	},
 
-    loadImage: function(src) {
+	loadImage: function(src) {
 		var img = new Image();
 
 		img.onerror = this.clear.bind(this);
@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		img.src = src;
 	},
 
-    setImage: function(img) {
+	setImage: function(img) {
 		if (!this.rendered) {
 			this.image = img;
 			return;
@@ -218,7 +218,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		this.draw(this.imageInfo, this.selection);
 	},
 
-    getMask: function(size, pixAdj, imageInfo, selection) {
+	getMask: function(size, pixAdj, imageInfo, selection) {
 		size = size || 0;
 		pixAdj = pixAdj || 0;
 		imageInfo = imageInfo || {};
@@ -232,7 +232,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		];
 	},
 
-    draw: function(imageInfo, selection) {
+	draw: function(imageInfo, selection) {
 		imageInfo = imageInfo || this.imageInfo;
 		selection = selection || this.selection;
 
@@ -340,7 +340,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		drawCorners.apply(this, this.getMask(6, 0, imageInfo, selection));
 	},
 
-    __getOperationAt: function(x, y) {
+	__getOperationAt: function(x, y) {
 		if (!this.rendered || !this.imageInfo) { return this.OPERATIONS.NOOP; }
 
 		if (!x || !y) { return this.OPERATIONS.NOOP; }
@@ -387,11 +387,11 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		return operation;
 	},
 
-    __clamp: function(v, min, max) {
+	__clamp: function(v, min, max) {
 		return (v < min) ? min : ((v > max) ? max : v);
 	},
 
-    __getOppositeCorner: function(operation, selection) {
+	__getOppositeCorner: function(operation, selection) {
 		var opposite;
 
 		if (operation === this.OPERATIONS.RESIZE_NW) {
@@ -407,7 +407,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		return opposite;
 	},
 
-    __getNewSelectionForMove: function(dx, dy, selection, imageInfo) {
+	__getNewSelectionForMove: function(dx, dy, selection, imageInfo) {
 		if (dx === 0 && dy === 0) { return selection; }
 
 		selection.x = this.__clamp(selection.x - dx, 0, (imageInfo.width - selection.width));
@@ -416,7 +416,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		return selection;
 	},
 
-    __getSizeFromPointToAnchor: function(x, y, anchor, minSize, maxSize) {
+	__getSizeFromPointToAnchor: function(x, y, anchor, minSize, maxSize) {
 		var dx, dy;
 
 		function clampDimension(d, min, max) {
@@ -441,7 +441,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		};
 	},
 
-    __fitWidthToRatio: function(size, ratio, minSize, maxSize) {
+	__fitWidthToRatio: function(size, ratio, minSize, maxSize) {
 		var potential = Math.ceil(size.height * ratio);
 
 		while (potential > maxSize.width) {
@@ -455,7 +455,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		return size;
 	},
 
-    __fitHeightToRatio: function(size, ratio, minSize, maxSize) {
+	__fitHeightToRatio: function(size, ratio, minSize, maxSize) {
 		var potential = Math.ceil(size.width / ratio);
 
 		while (potential > maxSize.height) {
@@ -469,7 +469,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		return size;
 	},
 
-    __fitToAspectRatio: function(size, ratio, minSize, maxSize) {
+	__fitToAspectRatio: function(size, ratio, minSize, maxSize) {
 		if (Math.abs(size.width) < Math.abs(size.height)) {
 			size = this.__fitHeightToRatio(size, ratio, minSize, maxSize);
 		} else {
@@ -479,7 +479,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		return size;
 	},
 
-    __getNewSelectionForResize: function(operation, x, y, selection, imageInfo, origin) {
+	__getNewSelectionForResize: function(operation, x, y, selection, imageInfo, origin) {
 		var anchor = this.__getOppositeCorner(operation, selection),
 			lastSize = {width: selection.width, height: selection.height},
 			aspectRatio = selection.aspectRatio,
@@ -517,7 +517,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		return selection;
 	},
 
-    __doOperation: function(operation, x, y, imageInfo, selection) {
+	__doOperation: function(operation, x, y, imageInfo, selection) {
 		if (!operation || operation === this.OPERATIONS.NOOP || !this.rendered || !this.el.dom) { return; }
 
 		imageInfo = imageInfo || this.imageInfo;
@@ -546,7 +546,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		this.draw(imageInfo, selection);
 	},
 
-    onMouseDown: function(e) {
+	onMouseDown: function(e) {
 		e = e.browserEvent;
 
 		var x = e.clientX,
@@ -557,11 +557,11 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		this.lastPoint = {x: x, y: y};
 	},
 
-    onMouseUp: function() {
+	onMouseUp: function() {
 		delete this.currentOperation;
 	},
 
-    onMouseMove: function(e) {
+	onMouseMove: function(e) {
 		e = e.browserEvent;
 
 		var x = e.clientX,
@@ -580,7 +580,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Canvas', {
 		}
 	},
 
-    onMouseOut: function() {
+	onMouseOut: function() {
 		delete this.currentOperation;
 	}
 });

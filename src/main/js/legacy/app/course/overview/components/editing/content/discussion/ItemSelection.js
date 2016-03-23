@@ -6,12 +6,12 @@ var ModelDiscussionRef = require('../../../../../../../model/DiscussionRef');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.discussion.ItemSelection', {
-    extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
-    alias: 'widget.overview-editing-discussion-item-selection',
-    multiSelect: false,
-    cls: 'discussion-item-selection item-selection',
+	extend: 'NextThought.app.course.overview.components.editing.itemselection.Index',
+	alias: 'widget.overview-editing-discussion-item-selection',
+	multiSelect: false,
+	cls: 'discussion-item-selection item-selection',
 
-    itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
+	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{ cls: 'overview-discussion', cn: [
 			{ tag: 'label', cls: 'discussion-item', cn: [
 					{tag: 'input', type: 'checkbox'},
@@ -22,14 +22,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		]}
 	)),
 
-    getItemData: function(item) {
+	getItemData: function(item) {
 		return {
 			thumbnail: this.getThumbnailURL(item),
 			title: item.get('title')
 		};
 	},
 
-    getThumbnailURL: function(item) {
+	getThumbnailURL: function(item) {
 		var iconURL = item && item.get('icon');
 		if (iconURL) {
 			if (Globals.ROOT_URL_PATTERN.test(iconURL)) {
@@ -43,8 +43,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return '';
 	},
 
-    onSelectItem: function(el) {
-		var	input = el && el.querySelector('input[type=checkbox]');
+	onSelectItem: function(el) {
+		var input = el && el.querySelector('input[type=checkbox]');
 
 		if (input) {
 			input.checked = true;
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    showEmptyState: function() {
+	showEmptyState: function() {
 		// Display empty state
 		this.itemsContainer.add({
 			xtype: 'box',
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    onUnselectItem: function(el) {
+	onUnselectItem: function(el) {
 		var input = el && el.querySelector('input[type=checkbox]');
 
 		if (input) {
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    itemMatchesSearch: function(item, searchTerm) {
+	itemMatchesSearch: function(item, searchTerm) {
 		var title = item.get('title'),
 			ntiid = item.getId(),
 			matches = false;

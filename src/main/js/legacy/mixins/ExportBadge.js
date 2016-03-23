@@ -165,17 +165,17 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 		// Trigger a click event
 		// TODO: We still need to find a more reliable solution that doesn't depend on triggering a click event ourselves.
 		// For now however, this should cover all the browsers that we support.
-	    if (document.createEvent) {
-	        var event = document.createEvent('MouseEvents');
-	        event.initEvent('click', true, true);
-	        dom.dispatchEvent(event);
-	    }
-	    else {
-	        dom.click();
-	    }
+		if (document.createEvent) {
+			var event = document.createEvent('MouseEvents');
+			event.initEvent('click', true, true);
+			dom.dispatchEvent(event);
+		}
+		else {
+			dom.click();
+		}
 
-	    // cleanup
-	    Ext.fly(dom).remove();
+		// cleanup
+		Ext.fly(dom).remove();
 	},
 
 

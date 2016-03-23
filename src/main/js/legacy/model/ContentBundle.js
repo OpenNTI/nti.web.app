@@ -9,17 +9,17 @@ var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
-    alternateClassName: 'NextThought.model.ContentPackageBundle',
-    extend: 'NextThought.model.Base',
+	alternateClassName: 'NextThought.model.ContentPackageBundle',
+	extend: 'NextThought.model.Base',
 
-    mixins: {
+	mixins: {
 		'BundleLike': 'NextThought.mixins.BundleLike',
 		'PresentationResources': 'NextThought.mixins.PresentationResources'
 	},
 
-    isBundle: true,
+	isBundle: true,
 
-    fields: [
+	fields: [
 		{ name: 'ContentPackages', type: 'arrayItem' },
 		{ name: 'DCCreator', type: 'auto' },
 		{ name: 'DCDescription', type: 'string' },
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		{ name: 'vendorIcon', type: 'string'}
 	],
 
-    statics: {
+	statics: {
 		fromPackage: function(contentPackage) {
 			var id = contentPackage.get('NTIID') + '-auto-bundle',
 				reader = ParseUtils.getReaderFor({MimeType: 'application/vnd.nextthought.contentbundle'}),
@@ -58,20 +58,20 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		}
 	},
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		//this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 	},
 
-    onceAssetsLoadedPromise: function() {
+	onceAssetsLoadedPromise: function() {
 		if (!this.onceAssetsLoaded) {
 			this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 		}
 		return this.onceAssetsLoaded;
 	},
 
-    asUIData: function() {
+	asUIData: function() {
 		return {
 			id: this.getId(),
 			isBundle: true,
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		};
 	},
 
-    getDefaultAssetRoot: function() {
+	getDefaultAssetRoot: function() {
 		var root = ([this].concat(this.get('ContentPackages')))
 				.reduce(function(agg, o) {
 					return agg || o.get('root');
@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return getURL(root).concatPath('/presentation-assets/webapp/v1/');
 	},
 
-    __setImage: function() {
+	__setImage: function() {
 		var me = this;
 
 		//do a head request to make sure the assets exist
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		]);
 	},
 
-    /**
+	/**
 	 * Return a promise that fulfills with the background image,
 	 * its a promise so the head requests have a change to fail so we can fall back
 	 * if the images aren't there
@@ -120,19 +120,19 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return this.getAsset('background');
 	},
 
-    getVendorIcon: function() {
+	getVendorIcon: function() {
 		return this.getAsset('vendorIcon');
 	},
 
-    getIconImage: function() {
+	getIconImage: function() {
 		return this.getAsset('icon', 'landing');
 	},
 
-    getThumbnail: function() {
+	getThumbnail: function() {
 		return this.getAsset('thumb');
 	},
 
-    getTocs: function(status) {
+	getTocs: function(status) {
 		var packages = this.get('ContentPackages');
 
 		packages = packages.map(function(pack) {
@@ -142,31 +142,31 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return Promise.all(packages);
 	},
 
-    getTitle: function() {
+	getTitle: function() {
 		return this.get('Title');
 	},
 
-    getIcon: function() {
+	getIcon: function() {
 		return this.get('icon');
 	},
 
-    getContentPackages: function() {
+	getContentPackages: function() {
 		return this.get('ContentPackages');
 	},
 
-    getContentRoots: function() {
+	getContentRoots: function() {
 		return (this.get('ContentPackages') || []).map(function(content) {
 			return content && content.get('root');
 		});
 	},
 
-    getContentIds: function() {
+	getContentIds: function() {
 		return (this.get('ContentPackages') || []).map(function(content) {
 			return content && content.get('NTIID');
 		});
 	},
 
-    getPresentationProperties: function(id) {
+	getPresentationProperties: function(id) {
 		var packages = this.get('ContentPackages') || [],
 			props;
 
@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return props;
 	},
 
-    getLocationInfo: function(status) {
+	getLocationInfo: function(status) {
 		var firstPackage = this.get('ContentPackages')[0],
 			firstPage = this.getFirstPage(),
 			uiData = this.asUIData();
@@ -201,12 +201,12 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 			});
 	},
 
-    getFirstPage: function() {
+	getFirstPage: function() {
 		var e = this.get('ContentPackages')[0];
 		return e && e.get('NTIID');
 	},
 
-    fireNavigationEvent: function(eventSource) {
+	fireNavigationEvent: function(eventSource) {
 		var me = this;
 		return new Promise(function(fulfill) {
 			eventSource.fireEvent('bundle-selected', me, function() {
@@ -215,15 +215,15 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		});
 	},
 
-    //for now content bundles shouldn't show the assignment tab
+	//for now content bundles shouldn't show the assignment tab
 	shouldShowAssignments: function() {
 		return false;
 	},
 
-    getPublicScope: function() { return this.getScope('public'); },
-    getRestrictedScope: function() { return this.getScope('restricted'); },
+	getPublicScope: function() { return this.getScope('public'); },
+	getRestrictedScope: function() { return this.getScope('restricted'); },
 
-    //i don't think this is used
+	//i don't think this is used
 
 
 	getScope: function(scope) {
@@ -234,11 +234,11 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return s.filter(function(v) {return !Ext.isEmpty(v);});
 	},
 
-    hasForumList: function() {
+	hasForumList: function() {
 		return !!this.getLink('DiscussionBoard');
 	},
 
-    /**
+	/**
 	 * See getForumList in CourseInstance for more details
 	 * @return {Object} a forum list of the contents of this board
 	 */
@@ -268,7 +268,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 			});
 	},
 
-    resolveBoard: function() {
+	resolveBoard: function() {
 		var me = this,
 			link = me.getLink('DiscussionBoard'),
 			//get the cached request, or make a new one.
@@ -292,9 +292,9 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return p;
 	},
 
-    represents: function(catalogEntry) {return false;},
+	represents: function(catalogEntry) {return false;},
 
-    getVideosByContentPackage: function() {
+	getVideosByContentPackage: function() {
 		var contentPackages = this.get('ContentPackages'),
 			videoMap = {};
 

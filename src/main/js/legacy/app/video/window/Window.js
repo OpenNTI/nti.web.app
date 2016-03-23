@@ -4,15 +4,15 @@ var VideoVideo = require('../Video');
 
 
 module.exports = exports = Ext.define('NextThought.app.video.window.Window', {
-    extend: 'NextThought.common.window.Window',
-    alias: 'widget.video-window-window',
-    cls: 'video-window',
-    layout: 'none',
-    modal: true,
-    header: true,
-    dialog: true,
+	extend: 'NextThought.common.window.Window',
+	alias: 'widget.video-window-window',
+	cls: 'video-window',
+	layout: 'none',
+	modal: true,
+	header: true,
+	dialog: true,
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'video-window-container', cn: [
 			{cls: 'close'},
 			{
@@ -21,11 +21,11 @@ module.exports = exports = Ext.define('NextThought.app.video.window.Window', {
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		closeEl: '.close'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.add({
@@ -34,13 +34,13 @@ module.exports = exports = Ext.define('NextThought.app.video.window.Window', {
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.closeEl, 'click', this.onCloseClicked.bind(this));
 	},
 
-    onCloseClicked: function() {
+	onCloseClicked: function() {
 		this.close();
 		this.destroy();
 	}

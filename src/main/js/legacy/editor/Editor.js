@@ -1638,7 +1638,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				c.appendChild(d);
 			}
 			else {
-				//Ok its some part.  Look it up in our registry
+				//Ok its some part.	 Look it up in our registry
 				mime = (part.data || part).MimeType;
 				fnName = mime ? me.partRenderer[mime] || '' : undefined;
 				if (fnName && Ext.isFunction(me[fnName])) {
@@ -1648,8 +1648,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 					//TODO Shoot a part we don't understand.  We need to be graceful
 					//to this, but all we can do here is drop it.  Problem with that is
 					//when we save we gather the parts out of content and dropping it here
-					//means dropping for good.  How should we prevent this.  One idea
-					//is we keep an array of parts we don't understand.  Render them as a ?
+					//means dropping for good.	How should we prevent this.	 One idea
+					//is we keep an array of parts we don't understand.	 Render them as a ?
 					//or something and then on save we can index into the array and make sure
 					//we don't drop misunderstood parts.  What do you think J?
 					console.warn('Found a part we don\'t understand.  Inserting placeholder', part);
@@ -1839,7 +1839,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	}
 });
 
-module.exports = exports = 	Ext.define('NextThought.editor.Editor', {
+module.exports = exports =	Ext.define('NextThought.editor.Editor', {
 	extend: 'NextThought.editor.AbstractEditor',
 	alias: 'widget.nti-editor'
 });

@@ -13,10 +13,10 @@ var TimelineEditor = require('./timeline/Editor');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.Prompt', {
-    extend: 'NextThought.app.course.overview.components.editing.outline.Prompt',
-    alias: 'widget.overview-editing-content-editor',
+	extend: 'NextThought.app.course.overview.components.editing.outline.Prompt',
+	alias: 'widget.overview-editing-content-editor',
 
-    statics: {
+	statics: {
 
 		getCreators: function() {
 			var base = NextThought.app.course.overview.components.editing.content,

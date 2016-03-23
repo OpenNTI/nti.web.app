@@ -17,8 +17,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		}
 
 		return this.getTargetEl();
-    //		return Ext.get(this.getEl().id+'-innerCt');
-    //		return Ext.get(this.getEl().id+'-targetEl');
+	//		return Ext.get(this.getEl().id+'-innerCt');
+	//		return Ext.get(this.getEl().id+'-targetEl');
 	},
 
 

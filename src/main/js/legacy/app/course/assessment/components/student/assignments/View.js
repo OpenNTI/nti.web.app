@@ -8,20 +8,20 @@ var AssignmentsList = require('./List');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.assignments.View', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.course-assessment-assignments',
-    state_key: 'course-assessment-assignments',
+	extend: 'Ext.container.Container',
+	alias: 'widget.course-assessment-assignments',
+	state_key: 'course-assessment-assignments',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router',
 		State: 'NextThought.mixins.State'
 	},
 
-    handlesAssignment: true,
-    layout: 'none',
-    cls: 'course-assessment-assignments',
+	handlesAssignment: true,
+	layout: 'none',
+	cls: 'course-assessment-assignments',
 
-    items: [
+	items: [
 		{xtype: 'course-assessment-assignments-filterbar'},
 		{xtype: 'container', rel: 'content'}
 			/* Exmaple items:
@@ -31,26 +31,26 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			*/
 	],
 
-    grouperMap: {
+	grouperMap: {
 		'lesson': {
 			 'property': 'lesson',
 			 'sorterFn': function(a, b) {
-			 	var aVal = a.get('outlineNode'),
-			 		bVal = b.get('outlineNode');
+				var aVal = a.get('outlineNode'),
+					bVal = b.get('outlineNode');
 
-			 	if (aVal) {
-			 		aVal = aVal._position;
-			 	} else {
-			 		aVal = Infinity;
-			 	}
+				if (aVal) {
+					aVal = aVal._position;
+				} else {
+					aVal = Infinity;
+				}
 
-			 	if (bVal) {
-			 		bVal = bVal._position;
-			 	} else {
-			 		bVal = Infinity;
-			 	}
+				if (bVal) {
+					bVal = bVal._position;
+				} else {
+					bVal = Infinity;
+				}
 
-			 	return aVal < bVal ? -1 : aVal === bVal ? 0 : 1;
+				return aVal < bVal ? -1 : aVal === bVal ? 0 : 1;
 			 }
 		},
 		'completion': {
@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    /**
+	/**
 	 * Groupers: (Interpreting the images from Aaron)
 	 *	->Completion - (Incomplete/Complete) Incomplete sorted to the top, then by due date...then by name?
 	 *	->Date Due - Grouped by Date (Completion date if present, or by due if not complete?) then sorted by name?
@@ -224,7 +224,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		};
 	},
 
-    navigateToItem: function(assignment) {
+	navigateToItem: function(assignment) {
 		var openDate = assignment.get('availableBeginning'),
 			date = Ext.Date.format(openDate, 'l F j \\a\\t g:i A');
 
@@ -236,7 +236,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.showAssignment(assignment);
 	},
 
-    getFields: function() {
+	getFields: function() {
 		return [
 			{name: 'lesson', type: 'string'},
 			{name: 'outlineNode', type: 'auto'},
@@ -261,7 +261,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		];
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.subviewBackingStores = [];
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment', 'update-assignment-view', 'close-reader']);
@@ -280,21 +280,21 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-    getFilterBar: function() {
+	getFilterBar: function() {
 		if (!this.filterBar) {
 			this.filterBar = this.down('course-assessment-assignments-filterbar');
 		}
 		return this.filterBar;
 	},
 
-    getContent: function() {
+	getContent: function() {
 		if (!this.contentCmp) {
 			this.contentCmp = this.down('container[rel=content]');
 		}
 		return this.contentCmp;
 	},
 
-    updateFilters: function() {
+	updateFilters: function() {
 		var bar = this.getFilterBar(),
 			groupBy = bar && bar.getGroupBy(),
 			search = bar && bar.getSearch();
@@ -311,7 +311,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-    applyState: function(state) {
+	applyState: function(state) {
 		var cmp = this.getContent(),
 			store = this.store,
 			g = this.getGrouper(state);
@@ -326,7 +326,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return Promise.resolve();
 	},
 
-    filterSearchValue: function(val) {
+	filterSearchValue: function(val) {
 		val = val || '';
 
 		(this.activeStores || []).forEach(function(store) {
@@ -356,7 +356,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-    clearAssignmentsData: function() {
+	clearAssignmentsData: function() {
 		var cmp = this.getContent();
 		if (cmp) {
 			cmp.removeAll(true);
@@ -365,13 +365,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.subviewBackingStores.splice(0);//truncate
 	},
 
-    /**
+	/**
 	 * Apply an assignment collection and a bundle
 	 *
 	 * if we already have the same instance don't do anything
 	 *
-	 * @param {AssignmentCollection} assignments    the assignment collection
-	 * @param {Bundle} instance    the bundle we are in
+	 * @param {AssignmentCollection} assignments	the assignment collection
+	 * @param {Bundle} instance	   the bundle we are in
 	 */
 	setAssignmentsData: function(assignments, instance, silent) {
 		var me = this,
@@ -420,7 +420,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			});
 	},
 
-    applyAssignmentsData: function(silent) {
+	applyAssignmentsData: function(silent) {
 		var me = this,
 			lesson, raw = [], waitsOn = [],
 			bundle = me.data.instance,
@@ -518,7 +518,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.then(me.restoreState.bind(me));
 	},
 
-    newGroupUIConfig: function(grouper) {
+	newGroupUIConfig: function(grouper) {
 		return {
 			xtype: 'grouping',
 			dataPromise: grouper.dataPromise,
@@ -527,7 +527,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		};
 	},
 
-    newAssignmentList: function(grouper) {
+	newAssignmentList: function(grouper) {
 		return {
 			xtype: 'course-assessment-assignment-list',
 			store: grouper.store,
@@ -535,7 +535,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		};
 	},
 
-    applyPagerFilter: function() {
+	applyPagerFilter: function() {
 		var now = new Date();
 		this.store.filter({
 			id: 'open',
@@ -546,7 +546,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-    restoreState: function() {
+	restoreState: function() {
 		var state = this.getCurrentState(),
 			bar = this.getFilterBar();
 
@@ -562,7 +562,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return this.applyState(state);
 	},
 
-    showAssignment: function(assignment) {
+	showAssignment: function(assignment) {
 		if (assignment) {
 			this.navigateToObject(assignment);
 		} else {
@@ -570,7 +570,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-    getStateKey: function() {
+	getStateKey: function() {
 		var bundle = this.data.instance;
 
 		return bundle && bundle.getId() + '-course-assessment';

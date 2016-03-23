@@ -6,9 +6,9 @@ var TilesTopicComment = require('../tiles/TopicComment');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.widgets.Stream', {
-    extend: 'NextThought.app.course.dashboard.components.widgets.Base',
+	extend: 'NextThought.app.course.dashboard.components.widgets.Base',
 
-    statics: {
+	statics: {
 		__CLASS_TO_TILE: {
 			'Note': 'Note',
 			'CommunityHeadlineTopic': 'Topic'

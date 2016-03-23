@@ -24,32 +24,32 @@ var CardsVideo = require('../../context/components/cards/Video');
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.note-panel',
+	extend: 'Ext.container.Container',
+	alias: 'widget.note-panel',
 
-    mixins: {
+	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
 		flagActions: 'NextThought.mixins.FlagActions'
 	},
 
-    triggerAnalyticsViews: false,
-    enableTitle: false,
-    ui: 'nt',
-    cls: 'note-container scrollable',
-    componentLayout: 'natural',
-    layout: 'auto',
-    defaultType: 'note-panel',
-    childEls: ['body'],
+	triggerAnalyticsViews: false,
+	enableTitle: false,
+	ui: 'nt',
+	cls: 'note-container scrollable',
+	componentLayout: 'natural',
+	layout: 'auto',
+	defaultType: 'note-panel',
+	childEls: ['body'],
 
-    getTargetEl: function() {
+	getTargetEl: function() {
 		return this.body;
 	},
 
-    autoFillInReplies: true,
-    rootQuery: 'note-panel[root]',
+	autoFillInReplies: true,
+	rootQuery: 'note-panel[root]',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{
 			//cls: 'note-reply',
 			cls: 'note',
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		avatar: '.avatar-wrapper',
 		noteBody: '.note',
 		liked: '.meta .controls .like',
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		more: '.respond .reply-options .more'
 	},
 
-    onClassExtended: function(cls, data, hooks) {
+	onClassExtended: function(cls, data, hooks) {
 		var onBeforeClassCreated = hooks.onBeforeCreated;
 
 		//merge with subclass's render selectors
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		};
 	},
 
-    findWithRecordId: function(ntiid) {
+	findWithRecordId: function(ntiid) {
 		var o = null;
 
 		if (this.record && this.record.getId() === ntiid) {
@@ -149,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		return o;
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.wbData = {};
 		this.addEvents('chat', 'share', 'save-new-reply', 'editorActivated', 'editorDeactivated');
 		this.enableBubble('editorActivated', 'editorDeactivated');
@@ -161,11 +161,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
-    replyIdPrefix: function() {
+	replyIdPrefix: function() {
 		return [this.xtype, 'reply'].join('-');
 	},
 
-    onBeforeDestroyCheck: function() {
+	onBeforeDestroyCheck: function() {
 		if (this.editor && this.editor.isActive()) {
 			this.setPlaceholderContent();
 			return false;//stop the destroy
@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		return true;//allow the destroy to continue
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		var me = this;
 		me.callParent(arguments);
 
@@ -271,12 +271,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 	},
 
-    createEditor: function() {
+	createEditor: function() {
 		//TODO: clean this up! We should be relying on the editor's events, not digging into its dom.
 		this.editor = Ext.widget({xtype: 'nti-editor', ownerCt: this, renderTo: this.responseBox, enableTitle: this.enableTitle});
 	},
 
-    disable: function() {
+	disable: function() {
 		var me = this,
 			e = me.editorEl || {down: Ext.emptyFn},
 			cancel = e.down('.cancel'),
@@ -300,15 +300,15 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 	},
 
-    onMouseOver: function() {
+	onMouseOver: function() {
 		this.noteBody.addCls('hover');
 	},
 
-    onMouseOut: function() {
+	onMouseOut: function() {
 		this.noteBody.removeCls('hover');
 	},
 
-    fillInTitle: function() {
+	fillInTitle: function() {
 		var me = this;
 
 		function callback(snip, value) {
@@ -321,7 +321,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		this.record.resolveNoteTitle(callback, 46);
 	},
 
-    fillInUser: function(user) {
+	fillInUser: function(user) {
 		this.user = user;
 		this.renderData.user = user;
 		this.avatar.setHTML(Ext.DomHelper.createTemplate('{user:avatar}').apply({user: user}));
@@ -331,7 +331,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		TemplatesForNotes.attachMoreReplyOptionsHandler(this, this.more, user, this.record);
 	},
 
-    fillInShare: function(sharedWith) {
+	fillInShare: function(sharedWith) {
 		var me = this,
 			tpl = Ext.DomHelper.createTemplate({tag: 'name', 'data-profile-idx': '{1}', html: '{0}'}),
 			sharingInfo = SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith));
@@ -360,7 +360,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 			});
 	},
 
-    scrollIntoView: function() {
+	scrollIntoView: function() {
 		var scroller = this.scrollingParent;
 
 		if (this.noteBody) {
@@ -370,7 +370,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		this.responseBox.scrollIntoView(scroller);
 	},
 
-    droppedWhiteboard: function(guid) {
+	droppedWhiteboard: function(guid) {
 		try {
 			guid = guid.replace('-reply', '');
 			Ext.get(guid).down('.include').removeCls('checked');
@@ -380,7 +380,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 	},
 
-    editorSaved: function() {
+	editorSaved: function() {
 		var v = this.editor.getValue(),
 			me = this,
 			r = me.record;
@@ -438,12 +438,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		Ext.defer(save, 1);
 	},
 
-    updateToolState: function() {
+	updateToolState: function() {
 		this.reflectLikeAndFavorite(this.record);
 		this.reflectFlagged(this.record);
 	},
 
-    // In the future, we will want fieldName to be an array of all the fields that changed.
+	// In the future, we will want fieldName to be an array of all the fields that changed.
 	recordUpdated: function(newRec, fieldName) {
 		this.recordEvent = 'updated';
 		var r = this.updateFromRecord(newRec, fieldName);
@@ -451,14 +451,14 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		return r;
 	},
 
-    recordChanged: function() {
+	recordChanged: function() {
 		this.recordEvent = 'changed';
 		var r = this.updateFromRecord();
 		delete this.recordEvent;
 		return r;
 	},
 
-    //NOTE right now we are assuming the anchorable data won't change.
+	//NOTE right now we are assuming the anchorable data won't change.
 	//That is true in practice and it would be expensive to pull it everytime
 	//some other part of this record is updated
 	updateFromRecord: function(newRecord, modifiedFieldName) {
@@ -508,21 +508,21 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		me.updateToolState();
 	},
 
-    getRecord: function() {
+	getRecord: function() {
 		return this.record;
 	},
 
-    //For subclasses
+	//For subclasses
 	addAdditionalRecordListeners: function(record) {
 
 	},
 
-    //For subclasses
+	//For subclasses
 	removeAdditionalRecordListeners: function(record) {
 
 	},
 
-    setRecord: function(r) {
+	setRecord: function(r) {
 		//Remove the old listener
 		if (this.record) {
 			this.mun(this.record, 'child-added', this.onNewChild, this);
@@ -588,7 +588,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		return true;
 	},
 
-    maybeApplyState: function() {
+	maybeApplyState: function() {
 		if (this.state === 'reply') {
 			this.onReply();
 		} else if (this.state === 'edit') {
@@ -596,10 +596,10 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 	},
 
-    //Subclass can override it they care.
+	//Subclass can override it they care.
 	updateCount: Ext.emptyFn,
 
-    loadReplies: function(record) {
+	loadReplies: function(record) {
 		var me = this, toMask = me.el ? me.el.down('.note-replies') : null;
 		if (toMask) {
 			toMask.mask('Loading...');
@@ -652,7 +652,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		});
 	},
 
-    fillInReplies: function() {
+	fillInReplies: function() {
 		var r = this.record, me = this;
 		this.removeAll(true);
 
@@ -676,7 +676,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 				});
 	},
 
-    maybeOpenReplyEditor: function() {
+	maybeOpenReplyEditor: function() {
 		if (!this.getRoot()) {
 			return;
 		}
@@ -698,7 +698,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 	},
 
-    setContent: function(text) {
+	setContent: function(text) {
 		if (!this.rendered) {
 			this.on({
 				single: true,
@@ -737,7 +737,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 
 	},
 
-    setContext: function(contextCmp) {
+	setContext: function(contextCmp) {
 		var t, me = this;
 
 		return me.onceRendered
@@ -767,16 +767,16 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 				});
 	},
 
-    //for subclasses
+	//for subclasses
 	fixUpCopiedContext: function(n) {
 		return n;
 	},
 
-    generateClickHandler: function(id, data) {
+	generateClickHandler: function(id, data) {
 		this.wbData[id] = data;
 	},
 
-    getRoot: function() {
+	getRoot: function() {
 		var cmp = this.is(this.rootQuery) ? this : this.up(this.rootQuery);
 		if (!cmp) {
 			console.error('No root found');
@@ -784,11 +784,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		return cmp;
 	},
 
-    editorActive: function() {
+	editorActive: function() {
 		return Boolean(this.getRoot().activeEditorOwner);
 	},
 
-    //Sets cmp as the component that contains the active editor
+	//Sets cmp as the component that contains the active editor
 	setEditorActive: function(cmp) {
 		var active = Boolean(cmp),
 			root = this.getRoot();
@@ -804,9 +804,9 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		root.fireEvent(cmp ? 'editorActivated' : 'editorDeactivated', this);
 	},
 
-    //Checks to see if an editor is active for our root
+	//Checks to see if an editor is active for our root
 	//and sets the active editor to be the one owned by the provided
-	//cmp.  A cmp of null means the editor is no longer active
+	//cmp.	A cmp of null means the editor is no longer active
 	checkAndMarkAsActive: function(cmp) {
 		var root = this.getRoot();
 		if (!root.editorActive()) {
@@ -816,12 +816,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		return false;
 	},
 
-    deactivateEditor: function() {
+	deactivateEditor: function() {
 		console.error('Who called this?');
 		this.deactivateReplyEditor.apply(this, arguments);
 	},
 
-    activateReplyEditor: function(e) {
+	activateReplyEditor: function(e) {
 		var me = this;
 		if (e) {
 			e.stopEvent();
@@ -842,7 +842,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		return false;
 	},
 
-    deactivateReplyEditor: function() {
+	deactivateReplyEditor: function() {
 		var root = this.getRoot();
 		if (!root.editorActive()) {
 			return;
@@ -863,7 +863,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		root.setEditorActive(null);
 	},
 
-    editorKeyDown: function(event) {
+	editorKeyDown: function(event) {
 		event.stopPropagation();
 		var k = event.getKey();
 		if (k === event.ESC) {
@@ -872,11 +872,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 	},
 
-    editorKeyPressed: function(event) {
+	editorKeyPressed: function(event) {
 		event.stopPropagation();
 	},
 
-    canDelete: function() {
+	canDelete: function() {
 		var r = this.record;
 		if (!r) {
 			return true;
@@ -885,7 +885,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		return r.isModifiable();
 	},
 
-    onNewChild: function(child) {
+	onNewChild: function(child) {
 		if (child.get('inReplyTo') === this.record.getId()) {
 			this.addNewChild(child);
 			return true;
@@ -902,7 +902,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		return false;
 	},
 
-    addNewChild: function(child) {
+	addNewChild: function(child) {
 		var r = this.record;
 		if (child.get('inReplyTo') === r.getId()) {
 			this.addReplies([child]);
@@ -921,13 +921,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 	},
 
-    removedChild: function(child) {
+	removedChild: function(child) {
 		if (child.get('inReplyTo') === this.record.getId()) {
 			this.adjustRootsReferenceCount(child, false);
 		}
 	},
 
-    onBeforeAdd: function(cmp) {
+	onBeforeAdd: function(cmp) {
 		this.callParent(arguments);
 		cmp.addCls('child');
 		//decide if it is the first in this container's list:
@@ -936,7 +936,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 	},
 
-    addReplies: function(records) {
+	addReplies: function(records) {
 		var toAdd = [], recordCollection, prefix = this.getRoot() ? this.getRoot().replyIdPrefix() : null;
 
 		//Shortcircuit. Also check if we've been destroyed before adding replies.
@@ -977,11 +977,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		Ext.defer(this.maybeOpenReplyEditor, 1, this);
 	},
 
-    rootToCountComponentsFrom: function() {
+	rootToCountComponentsFrom: function() {
 		return this.getRoot();
 	},
 
-    adjustRootsReferenceCount: function(r, added) {
+	adjustRootsReferenceCount: function(r, added) {
 		var root = r.parent,
 			rootCmp = this.rootToCountComponentsFrom();
 
@@ -994,7 +994,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 	},
 
-    onEdit: function(e) {
+	onEdit: function(e) {
 		if (e && e.stopEvent) {e.stopEvent();}
 		if (this.replyMode) { return; }
 
@@ -1004,7 +1004,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		this.activateReplyEditor();
 	},
 
-    onRemove: function(cmp) {
+	onRemove: function(cmp) {
 		//direct children count:
 		var c = this.items.getCount(),
 		//panels below this panel:
@@ -1030,12 +1030,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 	},
 
-    onDelete: function(e) {
+	onDelete: function(e) {
 		if (e && e.stopEvent) {e.stopEvent();}
 		this.record.destroy();
 	},
 
-    startResourceTimer: function() {
+	startResourceTimer: function() {
 		if (!this.triggerAnalyticsViews || !this.record) { return; }
 
 		AnalyticsUtil.getResourceTimer(this.record.getId(), {
@@ -1044,7 +1044,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 			});
 	},
 
-    onDestroy: function() {
+	onDestroy: function() {
 		if (this.editor) {
 			delete this.editor.ownerCt;
 			this.editor.destroy();
@@ -1056,13 +1056,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		this.callParent(arguments);
 	},
 
-    wasDeleted: function() {
+	wasDeleted: function() {
 		console.log('Deleting panel from record destroy, marking deleteing=true');
 		this.deleting = true;
 		this.destroy();
 	},
 
-    setPlaceholderContent: function() {
+	setPlaceholderContent: function() {
 		var fromUpdatedRecord = Boolean(this.recordEvent);
 		this.time.update('This message has been deleted');
 		this.noteBody.addCls('deleted-reply');
@@ -1074,17 +1074,17 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 	},
 
-    onChat: function(e) {
+	onChat: function(e) {
 		if (e && e.stopEvent) {e.stopEvent();}
 		this.fireEvent('chat', this.record);
 	},
 
-    onFlag: function(e) {
+	onFlag: function(e) {
 		if (e && e.stopEvent) {e.stopEvent();}
 		this.record.flag(this);
 	},
 
-    click: function(e) {
+	click: function(e) {
 		var t = e.getTarget('.whiteboard-container', null, true), guid;
 		if (!t) {
 			return;
@@ -1116,13 +1116,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 	},
 
-    onReply: function(e) {
+	onReply: function(e) {
 		if (e && e.stopEvent) {e.stopEvent();}
 		this.replyMode = true;
 		this.activateReplyEditor();
 	},
 
-    onShare: function(e) {
+	onShare: function(e) {
 		if (e && e.stopEvent) {e.stopEvent();}
 
 		var bundle = this.ContextStore.getRootBundle();

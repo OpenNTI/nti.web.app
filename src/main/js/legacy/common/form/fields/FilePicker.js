@@ -5,10 +5,10 @@ var ModelContentBlobFile = require('../../../model/ContentBlobFile');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker', {
-    extend: 'Ext.Component',
-    alias: 'widget.file-picker-field',
+	extend: 'Ext.Component',
+	alias: 'widget.file-picker-field',
 
-    statics: {
+	statics: {
 		UNITS: ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
 
 		/**
@@ -16,10 +16,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		 *
 		 * http://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript
 		 *
-		 * @param  {Number} bytes    the size to convert
+		 * @param  {Number} bytes	 the size to convert
 		 * @param  {Number} decimals how many decimals
 		 * @param {String} unit force the result to be in a certain unit
-		 * @return {String}          human readable version
+		 * @return {String}			 human readable version
 		 */
 		getHumanReadableFileSize: function(bytes, decimals, unit) {
 			if (!bytes) {
@@ -51,9 +51,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		}
 	},
 
-    WARNING_SIZE: 52428800,
+	WARNING_SIZE: 52428800,
 
-    //50 mb
+	//50 mb
 
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'file-picker {fileCls}',
@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		]
 	}),
 
-    renderSelectors: {
+	renderSelectors: {
 		fileContainer: '.file-picker',
 		nameEl: '.preview .name',
 		sizeEl: '.preview .size',
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		inputEl: 'input[type=file]'
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		if (this.defaultValue) {
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		this.on('destroy', this.cleanUpObjectURL.bind(this));
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.attachInputListeners();
@@ -114,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		}
 	},
 
-    focus: function() {
+	focus: function() {
 		if (!this.rendered) {
 			this.focusOnRender = true;
 			return;
@@ -123,33 +123,33 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		return this.inputEl && this.inputEl.dom.focus();
 	},
 
-    getInput: function() {
+	getInput: function() {
 		return this.inputEl && this.inputEl.dom;
 	},
 
-    isEmpty: function() {
+	isEmpty: function() {
 		return !this.hasFile();
 	},
 
-    isValid: function() {
+	isValid: function() {
 		var input = this.getInput();
 
 		return input && input.checkValidity() ? input.checkValidity() : true;
 	},
 
-    showError: function() {
+	showError: function() {
 		this.fileContainer.addCls('error');
 	},
 
-    removeError: function() {
+	removeError: function() {
 		this.fileContainer.removeCls('error');
 	},
 
-    hasFile: function() {
+	hasFile: function() {
 		return !!this.currentFile;
 	},
 
-    getErrors: function() {
+	getErrors: function() {
 		var input = this.getInput();
 
 		return {
@@ -157,17 +157,17 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		};
 	},
 
-    getValue: function() {
+	getValue: function() {
 		return this.currentFile || this.defaultValue;
 	},
 
-    getValueName: function() {
+	getValueName: function() {
 		var value = this.getValue();
 
 		return value ? value.name : '';
 	},
 
-    appendToFormData: function(data) {
+	appendToFormData: function(data) {
 		var value = this.getValue(),
 			name = this.getValueName();
 
@@ -180,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		}
 	},
 
-    attachInputListeners: function() {
+	attachInputListeners: function() {
 		var input = this.inputEl && this.inputEl.dom;
 
 		if (input) {
@@ -193,7 +193,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		}
 	},
 
-    maybeWarnForSize: function(file) {
+	maybeWarnForSize: function(file) {
 		var size = this.schema.warningSize || this.WARNING_SIZE;
 
 		if (file && file.size > size) {
@@ -205,15 +205,15 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		}
 	},
 
-    onInputFocus: function() {
+	onInputFocus: function() {
 		this.fileContainer.addCls('focused');
 	},
 
-    onInputBlur: function() {
+	onInputBlur: function() {
 		this.fileContainer.removeCls('focused');
 	},
 
-    onFileInputChange: function(e) {
+	onFileInputChange: function(e) {
 		var input = this.getInput(),
 			file = input && input.files && input.files[0];
 
@@ -228,7 +228,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		}
 	},
 
-    onFileChange: function(file) {
+	onFileChange: function(file) {
 		this.maybeWarnForSize(file);
 
 		this.setPreviewFromInput(file);
@@ -245,15 +245,15 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		this.fileContainer.addCls('has-file');
 	},
 
-    onDragEnter: function() {
+	onDragEnter: function() {
 		this.inputContainer.addCls('file-over');
 	},
 
-    onDragLeave: function() {
+	onDragLeave: function() {
 		this.inputContainer.removeCls('file-over');
 	},
 
-    setPreviewFromValue: function(value) {
+	setPreviewFromValue: function(value) {
 		if (!ParseUtils.isNTIID(value)) { return; }
 
 
@@ -262,7 +262,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 			.fail(this.onFailToLoadPreview.bind(this));
 	},
 
-    setPreviewFromBlob: function(blob) {
+	setPreviewFromBlob: function(blob) {
 		if (!this.rendered) {
 			this.on(('afterrender'), this.setPreviewFromBlob.bind(this, blob));
 			return;
@@ -277,12 +277,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		this.previewLink.dom.setAttribute('href', blob.get('url'));
 	},
 
-    onFailToLoadPreview: function(reason) {
+	onFailToLoadPreview: function(reason) {
 		//TODO: Show some error state
 		console.error('Failed to load file preview: ', reason);
 	},
 
-    setPreviewFromInput: function(file) {
+	setPreviewFromInput: function(file) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setPreviewFromInput.bind(this, file));
 			return;
@@ -297,7 +297,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		this.previewLink.dom.setAttribute('href', href);
 	},
 
-    createObjectURL: function(file) {
+	createObjectURL: function(file) {
 		var url = Globals.getURLObject();
 
 		this.cleanUpObjectURL();
@@ -309,7 +309,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		return this.objectURL;
 	},
 
-    cleanUpObjectURL: function() {
+	cleanUpObjectURL: function() {
 		var url = Globals.getURLObject();
 
 		if (this.objectURL && url) {
@@ -318,7 +318,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 		}
 	},
 
-    clearInput: function() {
+	clearInput: function() {
 		delete this.currentFile;
 	}
 });

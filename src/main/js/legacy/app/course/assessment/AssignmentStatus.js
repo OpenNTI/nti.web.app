@@ -3,7 +3,7 @@ var TimeUtils = require('../../../util/Time');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.AssignmentStatus', {
-    statics: {
+	statics: {
 		statusTpl: new Ext.XTemplate(
 			Ext.DomHelper.markup({cls: 'assignment-status {cls}', cn: [
 				{tag: 'tpl', 'if': 'maxTime', cn: [
@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		 *	duration: Number [optional] //if the assignment is timed and completed how long they took
 		 *
 		 * @param  {Object} data the above fields for the assignment
-		 * @return {String}      [description]
+		 * @return {String}		 [description]
 		 */
 		getStatusHTML: function(data) {
 			var renderData = this.getRenderData(data);
@@ -194,7 +194,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		/**
 		 * If there are any actions for a history item
 		 * @param  {UsersCourseAssignmentHistoryItem}  record history item to check
-		 * @return {Boolean}        if there are actions
+		 * @return {Boolean}		if there are actions
 		 */
 		hasActions: function(record) {
 			var grade = record.get('Grade');
@@ -205,7 +205,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		/**
 		 * Return a menu of actions available for a history item
 		 * @param  {UsersCourseAssignmentHistoryItem} record the history item we are getting actions for
-		 * @return {Ext.Menu}        a menu component
+		 * @return {Ext.Menu}		 a menu component
 		 */
 		getActionsMenu: function(record) {
 			var menu = Ext.widget('menu', {

@@ -8,18 +8,18 @@ var PathActions = require('../../../../../../navigation/path/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.PostReply', {
-    extend: 'Ext.Component',
-    ui: 'activity',
-    cls: 'reply-event',
-    description: '---',
+	extend: 'Ext.Component',
+	ui: 'activity',
+	cls: 'reply-event',
+	description: '---',
 
-    mixins: {
+	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
 		flagActions: 'NextThought.mixins.FlagActions'
 	},
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'reply profile-activity-reply-item', cn: [
 			'{Creator:avatar}',
 			{ cls: 'meta', cn: [
@@ -40,9 +40,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		]}
 	]),
 
-    childEls: ['body', 'liked'],
+	childEls: ['body', 'liked'],
 
-    onClassExtended: function(cls, data) {
+	onClassExtended: function(cls, data) {
 		data.renderSelectors = Ext.applyIf(data.renderSelectors || {},cls.superclass.renderSelectors);
 
 		var tpl = this.prototype.renderTpl;
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		var record = this.record;
 		this.callParent(arguments);
 		this.mon(record, 'destroy', 'destroy', this);
@@ -64,9 +64,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
-    getRecord: function() {return this.record;},
+	getRecord: function() {return this.record;},
 
-    afterRender: function() {
+	afterRender: function() {
 		var me = this, rd, r = me.record,
 			postRef = r.get('href').split('/').slice(0, -1).join('/'),
 			username = me.record.get('Creator');
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 				.then(resolve, failed);
 	},
 
-    redraw: function(data) {
+	redraw: function(data) {
 		if (!this.el) {return;}
 		this.renderTpl.overwrite(this.el, data);
 		this.applyRenderSelectors();
@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.bodyUpdated();
 	},
 
-    bodyUpdated: function() {
+	bodyUpdated: function() {
 		var me = this, r = me.record;
 		if (me.rendered) {
 			r.compileBodyContent(function(html, cb) {
@@ -142,5 +142,5 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    onClick: Ext.emptyFn
+	onClick: Ext.emptyFn
 });

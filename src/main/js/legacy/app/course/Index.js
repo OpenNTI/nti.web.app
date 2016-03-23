@@ -19,16 +19,16 @@ var ContentviewerActions = require('../contentviewer/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.Index', {
-    extend: 'NextThought.app.content.Index',
-    alias: 'widget.course-view-container',
-    state_key: 'course_index',
+	extend: 'NextThought.app.content.Index',
+	alias: 'widget.course-view-container',
+	state_key: 'course_index',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router',
 		State: 'NextThought.mixins.State'
 	},
 
-    // cls: 'x-component-course',
+	// cls: 'x-component-course',
 
 
 	items: [
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		}
 	],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.addDefaultRoute('/lessons');
 	},
 
-    onQuickLinkNav: function(title, route) {
+	onQuickLinkNav: function(title, route) {
 		var activeRoute = this.getCurrentRoute() || '';
 
 		route = Globals.trimRoute(route) + '/' + Globals.trimRoute(activeRoute);
@@ -100,11 +100,11 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.pushRootRoute(title, route);
 	},
 
-    afterRoute: function(route) {
+	afterRoute: function(route) {
 		this.CourseViewStore.markRouteFor(this.activeBundle.getId(), route);
 	},
 
-    setActiveCourse: function(ntiid, course) {
+	setActiveCourse: function(ntiid, course) {
 		var me = this;
 
 		//if we are setting my current course no need to do anything
@@ -148,14 +148,14 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return me.getActiveCourse;
 	},
 
-    clearRouteStates: function() {
+	clearRouteStates: function() {
 		delete this.dashboardRoute;
 		delete this.overviewRoute;
 		delete this.assignmentRoute;
 		delete this.discussionsRoute;
 	},
 
-    applyState: function(state) {
+	applyState: function(state) {
 		var bundle = this.activeBundle,
 			active = state.active,
 			course = NextThought.app.course,
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		 * if the view doesn't have a static showTab then show it,
 		 * otherwise return the value of showTab
 		 * @param  {Object} index the view to check
-		 * @return {Boolean}      show the tab or not
+		 * @return {Boolean}	  show the tab or not
 		 */
 		function showTab(index) {
 			return !index.showTab || index.showTab(bundle);
@@ -239,7 +239,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		this.navigation.setTabs(tabs);
 	},
 
-    setPreview: function() {
+	setPreview: function() {
 		var me = this;
 
 		this.navigation.setTabs([]);
@@ -247,7 +247,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return me.setActiveItem('course-info');
 	},
 
-    setActiveView: function(active, inactive, tab) {
+	setActiveView: function(active, inactive, tab) {
 		var bundle = this.activeBundle,
 			base = NextThought.app.course,
 			tabs = [
@@ -280,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return this.callParent([active, inactive, tab]);
 	},
 
-    showDashboard: function(route, subRoute) {
+	showDashboard: function(route, subRoute) {
 		this.dashboardRoute = subRoute;
 
 		return this.setActiveView('course-dashboard', [
@@ -296,7 +296,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			});
 	},
 
-    showOverview: function(route, subRoute) {
+	showOverview: function(route, subRoute) {
 		this.overviewRoute = subRoute;
 
 		return this.setActiveView('course-overview', [
@@ -313,7 +313,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			});
 	},
 
-    showAssignments: function(route, subRoute) {
+	showAssignments: function(route, subRoute) {
 		this.assignmentRoute = subRoute;
 
 		if (!NextThought.app.course.assessment.Index.showTab(this.activeBundle)) {
@@ -333,7 +333,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			});
 	},
 
-    showDiscussions: function(route, subRoute) {
+	showDiscussions: function(route, subRoute) {
 		this.discussionsRoute = subRoute;
 
 		return this.setActiveView('bundle-forum', [
@@ -349,7 +349,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			});
 	},
 
-    showReports: function(route, subRoute) {
+	showReports: function(route, subRoute) {
 		this.reportsRoute = subRoute;
 
 		return this.setActiveView('course-reports', [
@@ -361,7 +361,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			]);
 	},
 
-    showInfo: function(route, subRoute) {
+	showInfo: function(route, subRoute) {
 		this.reportsRoute = subRoute;
 
 		return this.setActiveView('course-info', [
@@ -377,7 +377,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			});
 	},
 
-    showContent: function(route, subRoute) {
+	showContent: function(route, subRoute) {
 		return this.setActiveView('bundle-content[courseLevel]', [
 				'course-dashboard',
 				'course-overview',
@@ -390,7 +390,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 			});
 	},
 
-    getPageInfoRoute: function(obj) {
+	getPageInfoRoute: function(obj) {
 		var id = obj.getId ? obj.getId() : obj.NTIID;
 
 		id = ParseUtils.encodeForURI(id);
@@ -404,7 +404,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		};
 	},
 
-    getRelatedWorkRoute: function(obj) {
+	getRelatedWorkRoute: function(obj) {
 		var id = obj.getId();
 
 		id = ParseUtils.encodeForURI(id);
@@ -419,7 +419,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 
 	},
 
-    getAssignmentRoute: function(obj) {
+	getAssignmentRoute: function(obj) {
 		var id = obj.getId ? obj.getId() : obj.NTIID,
 			route;
 
@@ -436,7 +436,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		};
 	},
 
-    getLessonRoute: function(obj) {
+	getLessonRoute: function(obj) {
 		var id = obj.getId ? obj.getId() : obj.NTIID,
 			route;
 
@@ -453,7 +453,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		};
 	},
 
-    getRouteForPath: function(path, course) {
+	getRouteForPath: function(path, course) {
 		var root = path[0] || {},
 			subPath = path.slice(1),
 			page, i,
@@ -493,7 +493,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return route;
 	},
 
-    getRouteForAssignment: function(assignment, path) {
+	getRouteForAssignment: function(assignment, path) {
 		var cmp = this.down('course-assessment-container'),
 			route = cmp.getRouteForPath(path, assignment);
 
@@ -502,7 +502,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Index', {
 		return route;
 	},
 
-    getRouteForLesson: function(lesson, path) {
+	getRouteForLesson: function(lesson, path) {
 		var cmp = this.down('course-overview'),
 			route = cmp.getRouteForPath(path, lesson);
 

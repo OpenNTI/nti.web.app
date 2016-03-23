@@ -9,16 +9,16 @@ var UxIFramePopout = require('../../../common/ux/IFramePopout');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Content', {
-    alias: 'reader.content',
+	alias: 'reader.content',
 
-    mixins: {
+	mixins: {
 		observable: 'Ext.util.Observable'
 	},
 
-    BODY_TEMPLATE: Ext.DomHelper.createTemplate({ id: 'NTIContent', html: '{0}'}).compile(),
-    getBubbleTarget: function() {return this.reader; },
+	BODY_TEMPLATE: Ext.DomHelper.createTemplate({ id: 'NTIContent', html: '{0}'}).compile(),
+	getBubbleTarget: function() {return this.reader; },
 
-    constructor: function(config) {
+	constructor: function(config) {
 		Ext.apply(this, config);
 		var me = this,
 			reader = me.reader;
@@ -52,11 +52,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		reader.getContentRoot = Ext.bind(this.getContentRoot, this);
 	},
 
-    getDocumentElement: function() {
+	getDocumentElement: function() {
 		return this.reader.getDocumentElement();
 	},
 
-    getContentRoot: function() {
+	getContentRoot: function() {
 		if (!this.contentRootElement) {
 			this.contentRootElement = this.getDocumentElement().querySelector('#NTIContent > .page-contents');
 		}
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		return this.contentRootElement;
 	},
 
-    listenForImageLoads: function() {
+	listenForImageLoads: function() {
 		var d = this.getDocumentElement(),
 			imgs = d.querySelectorAll('img'),
 			me = this;
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		});
 	},
 
-    insertRelatedLinks: function(body, doc) {
+	insertRelatedLinks: function(body, doc) {
 		var position = body.query('#NTIContent .chapter.title')[0],
 			reader = this.reader,
 			tpl = this.relatedTemplate, last = null,
@@ -142,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 			});
 	},
 
-    //TODO: move this to a better place.
+	//TODO: move this to a better place.
 	pauseAllVideos: function() {
 		var d = this.getDocumentElement(),
 			frames = d.querySelectorAll('iframe');
@@ -150,10 +150,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		Ext.each(frames, function(o) {
 			if (/^(http(s)?:)?\/\/www\.youtube\.com/i.test(o.getAttribute('src'))) {
 				o.contentWindow.postMessage(JSON.stringify({
-				        event: 'command',
-				        func: 'pauseVideo',
-				        args: [],
-				        id: o.getAttribute('id')
+						event: 'command',
+						func: 'pauseVideo',
+						args: [],
+						id: o.getAttribute('id')
 				}), '*');
 			}
 			//else if(vimeo){}
@@ -162,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		Ext.each(Ext.ComponentQuery.query('overlay-video-roll'), function(c) {c.pauseVideo();});
 	},
 
-    resolveContainers: function() {
+	resolveContainers: function() {
 		var d = this.getDocumentElement(),
 			els, containers = [];
 
@@ -183,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		return containers;
 	},
 
-    setContent: function(resp, assessmentItems, finish) {
+	setContent: function(resp, assessmentItems, finish) {
 		var me = this,
 			req = resp.request,
 			o = req.options,
@@ -223,12 +223,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		Ext.callback(finish, null, [reader]);
 	},
 
-    buildPath: function(s) {
+	buildPath: function(s) {
 		var p = (s || '').split('/'); p.splice(-1, 1, '');
 		return (s && p.join('/')) || '';
 	},
 
-    parseHTML: function(request) {
+	parseHTML: function(request) {
 		function toObj(a, k, v) {
 			var i = a.length - 1, o = {};
 			for (i; i >= 0; i--) { o[(k.exec(a[i]) || [])[2]] = Ext.htmlDecode((v.exec(a[i]) || [])[1]); }
@@ -283,7 +283,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		return ContentUtils.fixReferences(body, basePath);
 	},
 
-    applyBodyStyles: function(bodyTag, basePath) {
+	applyBodyStyles: function(bodyTag, basePath) {
 		var styleMatches = bodyTag && bodyTag[1] && bodyTag[1].match(/style="([^"]+)"/i),
 			bodyStyles = styleMatches && styleMatches[1],
 			body = Ext.get(this.getDocumentElement().getElementById('NTIContent')),
@@ -310,8 +310,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		body.setStyle(bodyStylesObj);
 	},
 
-    //We would like all links to be both clickable in the app and right clickable to open in a
-	//new tab.  However we can't really hijack the context menu or cntlclicking and by default
+	//We would like all links to be both clickable in the app and right clickable to open in a
+	//new tab.	However we can't really hijack the context menu or cntlclicking and by default
 	//doing that on ntiids is just going to barf in the new tab.  So rewrite ntiid based links here
 	//in a way that the browsers native handling can process them (basically going out and coming back in)
 	//however we decorate the links such that our click handler to handle links internally can
@@ -345,11 +345,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 
 	},
 
-    navigateToFragment: function(frag) {
+	navigateToFragment: function(frag) {
 		this.reader.getScroll().toTarget(frag);
 	},
 
-    onClick: function(e, el) {
+	onClick: function(e, el) {
 		//Stupid FF fires onClick for right click. WTF!
 		if (e.button != 0) {
 			return true;

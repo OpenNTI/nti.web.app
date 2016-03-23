@@ -224,7 +224,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 			args = Array.prototype.slice.call(arguments),
 			records = args[0];
 
-		//Prior to ext4.2 remove all did its own thing.  But now it calls
+		//Prior to ext4.2 remove all did its own thing.	 But now it calls
 		//remove passing a range (removeAt also calls this but requires a new second optional
 		//arg of count which isn't used anywhere in our code). This means that now, in ext4.2,
 		//calling removeAll (like when we navigate pages) triggers all our special placeholder
@@ -275,7 +275,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 			record.fireEvent('destroy', record);
 		});
 
-		//FWIW: we may want to suspend (and queue) this event.  When records(instances of Model) are "destroyed" they
+		//FWIW: we may want to suspend (and queue) this event.	When records(instances of Model) are "destroyed" they
 		// call this method in a tight loop over all stores that the record was associated.
 		coordinator.fireEvent('removed-item', idsToBoradcast, isMove, silent);
 	},

@@ -6,7 +6,7 @@ var LibraryActions = require('../../library/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.types.Question', {
-    statics: {
+	statics: {
 		type: 'question',
 
 		canHandle: function(obj) {
@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Question', 
 		}
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		this.callParent(arguments);
 
 		this.container = config.container;
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Question', 
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
-    parse: function(question, kind) {
+	parse: function(question, kind) {
 		var me = this,
 			container = question.get('ContainerId');
 
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Question', 
 			});
 	},
 
-    __parseQuestion: function(question, kind) {
+	__parseQuestion: function(question, kind) {
 		var cmp;
 
 		if (kind === 'card') {

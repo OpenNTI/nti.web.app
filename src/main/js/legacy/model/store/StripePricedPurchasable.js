@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.model.store.StripePricedPurch
 	isPricedPurchase: true,
 
 	//Returns the different between NonDiscountedPrice and PurchasePrice.
-	//if either is not defined an exception is raised.  Also if purchase price is >
+	//if either is not defined an exception is raised.	Also if purchase price is >
 	//NonDiscountedPrice an exception is raised
 	calculatePurchaseDiscount: function() {
 		var pp = this.get('PurchasePrice'),

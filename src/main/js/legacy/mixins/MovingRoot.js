@@ -4,25 +4,25 @@ var DndActions = require('../app/dnd/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
-    isMovingRoot: true,
+	isMovingRoot: true,
 
-    mixins: {
+	mixins: {
 		OrderedContents: 'NextThought.mixins.OrderedContents'
 	},
 
-    getMoveLink: function() {
+	getMoveLink: function() {
 		return this.getLink('move');
 	},
 
-    getIdForMove: function(record) {
+	getIdForMove: function(record) {
 		return record.getId ? record.getId() : record;
 	},
 
-    /**
+	/**
 	 * Append a record from one parent to another
-	 * @param  {Object|String} record         the record to move
+	 * @param  {Object|String} record		  the record to move
 	 * @param  {Object|String} originalParent the current parent of the record
-	 * @param  {Object|String} newParent      the desired parent of the record
+	 * @param  {Object|String} newParent	  the desired parent of the record
 	 * @return {Promise}
 	 */
 	doAppendRecordFrom: function(record, originalParent, newParent) {
@@ -31,13 +31,13 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 		return this.doMoveRecordFrom(record, index, -1, newParent, originalParent);
 	},
 
-    /**
+	/**
 	 * Move a record from one parent to another at an index
 	 *
 	 * @param  {Object|String} record  the record to move
-	 * @param  {Number} index          the index to move to
-	 * @param  {Number} oldIndex       the old index
-	 * @param  {Object|String} newParent      the desired parent
+	 * @param  {Number} index		   the index to move to
+	 * @param  {Number} oldIndex	   the old index
+	 * @param  {Object|String} newParent	  the desired parent
 	 * @param  {Object|String} originalParent the current parent
 	 * @return {Promise}
 	 */
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 		return move;
 	},
 
-    /**
+	/**
 	 * Currently move operations are responding with the object we get the move link from.
 	 * So just sync with the response to get the new items.
 	 *

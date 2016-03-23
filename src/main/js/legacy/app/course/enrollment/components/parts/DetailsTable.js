@@ -53,8 +53,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 					{cls: 'value', html: '{duration}'}
 				]}
 				// {cls: 'field fourth', cn: [
-				// 	{cls: 'name', html: 'course type'},
-				// 	{cls: 'value', html: '{type}'}
+				//	{cls: 'name', html: 'course type'},
+				//	{cls: 'value', html: '{type}'}
 				// ]}
 			]}
 	]}),

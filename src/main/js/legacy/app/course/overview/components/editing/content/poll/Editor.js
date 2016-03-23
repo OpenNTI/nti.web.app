@@ -4,10 +4,10 @@ var ModelPollRef = require('../../../../../../../model/PollRef');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.poll.Editor', {
-    extend: 'NextThought.app.course.overview.components.editing.content.Editor',
-    alias: 'widget.overview-editing-poll',
+	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+	alias: 'widget.overview-editing-poll',
 
-    statics: {
+	statics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.PollRef.mimeType
@@ -15,5 +15,5 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    addFormCmp: function() {}
+	addFormCmp: function() {}
 });

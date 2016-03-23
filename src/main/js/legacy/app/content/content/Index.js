@@ -7,17 +7,17 @@ var ComponentsResourceNotFound = require('../../../common/components/ResourceNot
 
 
 module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.bundle-content',
+	extend: 'Ext.container.Container',
+	alias: 'widget.bundle-content',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-    layout: 'none',
-    cls: 'bundle-content',
+	layout: 'none',
+	cls: 'bundle-content',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.ContentActions = NextThought.app.content.Actions.create();
@@ -37,37 +37,37 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		});
 	},
 
-    onActivate: function() {
+	onActivate: function() {
 		if (this.reader) {
 			this.reader.fireEvent('activate');
 		}
 	},
 
-    onDeactivate: function() {
+	onDeactivate: function() {
 		if (this.reader) {
 			this.reader.fireEvent('deactivate');
 		}
 	},
 
-    getContext: function() {
+	getContext: function() {
 		if (this.reader) {
 			return this.reader.pageInfo || this.reader.relatedWork;
 		}
 	},
 
-    getActiveItem: function() {
+	getActiveItem: function() {
 		return this.reader;
 	},
 
-    getLocation: function() {
+	getLocation: function() {
 		return this.reader.getLocation();
 	},
 
-    hasReader: function() {
+	hasReader: function() {
 		return this.reader && !this.reader.isDestroyed;
 	},
 
-    isShowingPage: function(ntiid) {
+	isShowingPage: function(ntiid) {
 		var isShowing, assessmentItems;
 
 		if (!this.page) {
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		}, false);
 	},
 
-    onBeforeDeactivate: function() {
+	onBeforeDeactivate: function() {
 		if (!this.reader) { return; }
 
 		this.reader.hide();
@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		delete this.reader;
 	},
 
-    bundleChanged: function(bundle) {
+	bundleChanged: function(bundle) {
 		if (bundle === this.currentBundle) { return; }
 
 		if (this.reader) {
@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		this.currentBundle = bundle;
 	},
 
-    __loadContent: function(id, obj) {
+	__loadContent: function(id, obj) {
 		if (obj && obj.getId() === id) {
 			return Promise.resolve(obj);
 		}
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			});
 	},
 
-    showReader: function(page, parent, hash, note) {
+	showReader: function(page, parent, hash, note) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showReader.bind(this, page));
 			return;
@@ -178,7 +178,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		this.reader.fireEvent('activate');
 	},
 
-    __onFail: function(reason) {
+	__onFail: function(reason) {
 		console.error('Failed to load page:', reason);
 		this.setTitle('Not Found');
 
@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		}
 	},
 
-    showContent: function(route, subRoute) {
+	showContent: function(route, subRoute) {
 		var me = this,
 			ntiid = route.params.id,
 			obj = route.precache.pageInfo || route.precache.relatedWork;
@@ -206,58 +206,58 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			});
 	},
 
-    showPage: function(route, subRoute) {
-	 	var me = this,
-	 		root = route.params.id,
-	 		page = route.params.page,
-	 		obj = route.precache.pageInfo || route.precache.relatedWork,
-	 		precache = route.precache,
-	 		vid, video;
+	showPage: function(route, subRoute) {
+		var me = this,
+			root = route.params.id,
+			page = route.params.page,
+			obj = route.precache.pageInfo || route.precache.relatedWork,
+			precache = route.precache,
+			vid, video;
 
-	 	root = ParseUtils.decodeFromURI(root);
+		root = ParseUtils.decodeFromURI(root);
 
-	 	if (page === 'video') {
-	 		vid = subRoute.split('/')[1];
-	 		vid = ParseUtils.decodeFromURI(vid);
-	 		video = precache.video || precache.precache && precache.precache.video;
+		if (page === 'video') {
+			vid = subRoute.split('/')[1];
+			vid = ParseUtils.decodeFromURI(vid);
+			video = precache.video || precache.precache && precache.precache.video;
 
-	 		return this.__loadContent(root, obj)
+			return this.__loadContent(root, obj)
 				.then(function(page) {
 					me.showReader(page, route.precache.parent, route.hash, route.precache.note);
 					var p = video ? Promise.resolve(video) :
 									Service.getObject(vid).then(function(v) {
-								  		var o = v.isModel ? v.raw : v,
-								  			video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
+										var o = v.isModel ? v.raw : v,
+											video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
 
-								  		return Promise.resolve(video);
-								    });
+										return Promise.resolve(video);
+									});
 
 					p.then(function(video) {
 						route.precache.video = video;
 						me.showMediaView(route, subRoute);
 					});
 				});
-	 	}
+		}
 
-	 	page = ParseUtils.decodeFromURI(page);
+		page = ParseUtils.decodeFromURI(page);
 
-	 	if (!this.root) {
-	 		this.root = root;
-	 	} else if (this.root !== root) {
-	 		console.warn('Trying to show a reading a root that is different form what we got the root set as...');
-	 	}
+		if (!this.root) {
+			this.root = root;
+		} else if (this.root !== root) {
+			console.warn('Trying to show a reading a root that is different form what we got the root set as...');
+		}
 
-	 	if (me.activeMediaWindow) {
+		if (me.activeMediaWindow) {
 			me.activeMediaWindow.destroy();
 		}
 
-	 	return this.__loadContent(page, obj)
-	 		.then(function(page) {
-	 			me.showReader(page, route.precache.parent, route.hash, route.precache.note);
-	 		});
+		return this.__loadContent(page, obj)
+			.then(function(page) {
+				me.showReader(page, route.precache.parent, route.hash, route.precache.note);
+			});
 	},
 
-    showRoot: function(route, subRoute) {
+	showRoot: function(route, subRoute) {
 		var me = this;
 
 		return Service.getPageInfo(this.root, null, null, null, me.currentBundle)
@@ -267,11 +267,11 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			.fail(this.__onFail.bind(this));
 	},
 
-    showNote: function(note) {
+	showNote: function(note) {
 		this.reader.goToNote(note);
 	},
 
-    getVideoRouteForObject: function(obj) {
+	getVideoRouteForObject: function(obj) {
 		var page = obj.page,
 			pageId = page && page.isModel ? page.getId() : page,
 			videoId = obj.get && obj.getId();
@@ -290,7 +290,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		};
 	},
 
-    showMediaView: function(route, subRoute) {
+	showMediaView: function(route, subRoute) {
 		var me = this,
 			root = route.params.id;
 
@@ -324,7 +324,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		return me.activeMediaWindow.handleRoute(subRoute, route.precache);
 	},
 
-    handleNavigation: function(title, route, precache) {
+	handleNavigation: function(title, route, precache) {
 		this.pushRoute(title, route, precache);
 	}
 });

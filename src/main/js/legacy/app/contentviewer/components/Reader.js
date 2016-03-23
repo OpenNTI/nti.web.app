@@ -19,22 +19,22 @@ var ReaderNoteOverlay = require('../reader/NoteOverlay');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.components.Reader', {
-    extend: 'NextThought.app.contentviewer.components.Base',
-    alias: 'widget.reader-content',
+	extend: 'NextThought.app.contentviewer.components.Base',
+	alias: 'widget.reader-content',
 
-    mixins: {
+	mixins: {
 		instanceTracking: 'NextThought.mixins.InstanceTracking',
 		moduleContainer: 'NextThought.mixins.ModuleContainer'
 	},
 
-    cls: 'x-reader-pane scrollable',
-    overflowX: 'hidden',
-    overflowY: 'visible',
-    ui: 'reader',
-    layout: 'auto',
-    prefix: 'default',
+	cls: 'x-reader-pane scrollable',
+	overflowX: 'hidden',
+	overflowY: 'visible',
+	ui: 'reader',
+	layout: 'auto',
+	prefix: 'default',
 
-    //endregion
+	//endregion
 
 
 	//region Setup & Init
@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 
 		//For search hit highlighting we own the search overlay, but we
-		//need to forward some of the logic onto the proper module.  Note we
+		//need to forward some of the logic onto the proper module.	 Note we
 		//do this at init time because we need access to the mixed in module mixins
 		//as well as this.
 		this.getRangePositionAdjustments = this.forwardToModule('annotations', 'getRangePositionAdjustments');
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		var DH = Ext.DomHelper,
 			items = this.floatingItems,
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 				(this.notfound = Ext.widget({xtype: 'notfound', renderTo: this.splash, hideLibrary: true})));
 	},
 
-    hidePageWidgets: function() {
+	hidePageWidgets: function() {
 		if (!this.rendered) {
 			this.on('afterrender', this.hidePageWidgets.bind(this));
 			return;
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		this.pageWidgets.hide();
 	},
 
-    beforeDestroy: function() {
+	beforeDestroy: function() {
 		var items = this.floatingItems;
 		if (items) {
 			[this.notfound, this.pageWidgets].forEach(function(i) {
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		return this.callParent(arguments);
 	},
 
-    showRemainingTime: function() {
+	showRemainingTime: function() {
 		var panel = this.up('reader');
 
 		if (panel && panel.showRemainingTime) {
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		}
 	},
 
-    showHeaderToast: function() {
+	showHeaderToast: function() {
 		var panel = this.up('reader');
 
 		if (panel) {
@@ -125,7 +125,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		}
 	},
 
-    showToast: function(msg, cls) {
+	showToast: function(msg, cls) {
 		var toast,
 			left = this.getX() + this.getWidth(),
 			viewWidth = Ext.Element.getViewportWidth(),
@@ -145,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		return toast;
 	},
 
-    //endregion
+	//endregion
 
 
 
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		return this.calculateNecessaryAnnotationOffsets();
 	},
 
-    // NOTE: Now that we may have more than one reader, each reader should know how
+	// NOTE: Now that we may have more than one reader, each reader should know how
 	// to resolve dom ranges/nodes of annotations inside it.
 	getDomContextForRecord: function(r, doc, cleanRoot) {
 		var rangeDesc = r.get('applicableRange'),
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		return RangeUtils.getContextAroundRange(rangeDesc, doc, cleanRoot, cid);
 	},
 
-    getContentMaskTarget: function() {
+	getContentMaskTarget: function() {
 		var target;
 
 		//if we have a mask target already return that
@@ -184,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		return target;
 	},
 
-    //endregion
+	//endregion
 
 
 	//region Actions
@@ -192,7 +192,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		delete this.annotationOffsetsCache;
 	},
 
-    setSplash: function(hideNotFound) {
+	setSplash: function(hideNotFound) {
 		if (!this.rendered) {
 			return;
 		}
@@ -204,11 +204,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		this.splash.show();
 	},
 
-    allowCustomScrolling: function() {
+	allowCustomScrolling: function() {
 		return this.fireEvent('allow-custom-scrolling');
 	},
 
-    calculateNecessaryAnnotationOffsets: function() {
+	calculateNecessaryAnnotationOffsets: function() {
 		var cache = this.annotationOffsetsCache || {},
 				windowSizeStatics = cache.windowSizeStatics || {},
 				scrollStatics = cache.scrollStatics || {},
@@ -249,7 +249,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		};
 	},
 
-    //endregion
+	//endregion
 
 
 	//region Event Handlers
@@ -258,7 +258,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		return o.onContextMenuHandler.apply(o, arguments);
 	},
 
-    onceReadyForSearch: function() {
+	onceReadyForSearch: function() {
 		var me = this;
 
 		return new Promise(function(fulfill, reject) {
@@ -270,7 +270,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		});
 	},
 
-    goToFragment: function(fragment) {
+	goToFragment: function(fragment) {
 		var me = this;
 
 		if (fragment) {
@@ -281,7 +281,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		}
 	},
 
-    goToNote: function(note) {
+	goToNote: function(note) {
 		var me = this;
 
 		if (note) {
@@ -292,7 +292,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		}
 	},
 
-    setPageInfo: function(pageInfo, bundle, fragment, note) {
+	setPageInfo: function(pageInfo, bundle, fragment, note) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setPageInfo.bind(this, pageInfo, bundle, fragment, note));
 			return;
@@ -342,7 +342,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			});
 	},
 
-    allowNavigation: function() {
+	allowNavigation: function() {
 		var note = this.getNoteOverlay(),
 			assessment = this.getAssessment();
 
@@ -350,21 +350,21 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			.then(assessment.allowNavigation.bind(assessment));
 	},
 
-    beforeRouteChange: function() {
+	beforeRouteChange: function() {
 		var assessment = this.getAssessment();
 
 		return assessment.beforeRouteChange();
 	},
 
-    onNavigationAborted: function(resp, ntiid) {
+	onNavigationAborted: function(resp, ntiid) {
 		this.splash.removeCls('initial');
 	},
 
-    isAssignment: function() {
+	isAssignment: function() {
 		return this.getAssessment().isAssignment();
 	},
 
-    loadPageInfo: function(pageInfo) {
+	loadPageInfo: function(pageInfo) {
 		var me = this,
 			proxy = ContentProxy;
 
@@ -399,7 +399,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		});
 	},
 
-    //endregion
+	//endregion
 
 
 	//region Statics

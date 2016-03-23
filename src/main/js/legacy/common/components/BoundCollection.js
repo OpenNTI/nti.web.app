@@ -4,14 +4,14 @@ var MixinsTransition = require('../../mixins/Transition');
 
 
 module.exports = exports = Ext.define('NextThought.common.components.BoundCollection', {
-    extend: 'Ext.container.Container',
-    emptyText: '',
-    transitionStates: false,
-    autoUpdate: true,
-    layout: 'none',
-    items: [],
+	extend: 'Ext.container.Container',
+	emptyText: '',
+	transitionStates: false,
+	autoUpdate: true,
+	layout: 'none',
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.addBodyConfig();
@@ -21,11 +21,11 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		}
 	},
 
-    addBodyConfig: function() {
+	addBodyConfig: function() {
 		this.add(this.getBodyConfig());
 	},
 
-    getBodyConfig: function() {
+	getBodyConfig: function() {
 		var cls = ['collection-body'];
 
 		if (this.bodyCls) {
@@ -41,24 +41,24 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		};
 	},
 
-    getBodyContainer: function() {
+	getBodyContainer: function() {
 		return this.down('[isCollectionBody]');
 	},
 
-    getComponents: function() {
+	getComponents: function() {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
 
 		return items || [];
 	},
 
-    parseCollection: function(response) {
+	parseCollection: function(response) {
 		var obj = ParseUtils.parseItems(response)[0];
 
 		return obj || JSON.parse(response);
 	},
 
-    loadCollection: function(url) {
+	loadCollection: function(url) {
 		var me = this;
 
 		me.activeUrl = url;
@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 			});
 	},
 
-    getEmptyState: function() {
+	getEmptyState: function() {
 		return {
 			xtype: 'box',
 			autoEl: {
@@ -84,15 +84,15 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		};
 	},
 
-    getItems: function(collection) {
+	getItems: function(collection) {
 		return collection.get('Items') || [];
 	},
 
-    suspendUpdates: function() {
+	suspendUpdates: function() {
 		this.__suspendUpdates = true;
 	},
 
-    resumeUpdates: function() {
+	resumeUpdates: function() {
 		this.__suspendUpdates = false;
 
 		if (this.__latestUpdate) {
@@ -101,10 +101,10 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		}
 	},
 
-    beforeSetCollection: function() {},
-    afterSetCollection: function() {},
+	beforeSetCollection: function() {},
+	afterSetCollection: function() {},
 
-    onCollectionUpdate: function(collection) {
+	onCollectionUpdate: function(collection) {
 		if (this.__suspendUpdates) {
 			this.__latestUpdate = collection;
 		} else {
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		}
 	},
 
-    setHeaderForCollection: function(collection) {
+	setHeaderForCollection: function(collection) {
 		var header = this.buildHeader && this.buildHeader(collection);
 
 		if (this.currentHeader) {
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		}
 	},
 
-    setFooterForCollection: function(collection) {
+	setFooterForCollection: function(collection) {
 		var footer = this.buildFooter && this.buildFooter(collection);
 
 		if (this.currentFooter) {
@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		}
 	},
 
-    setCollection: function(collection) {
+	setCollection: function(collection) {
 		this.beforeSetCollection(collection);
 
 		var items = this.getItems(collection);
@@ -165,7 +165,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		this.afterSetCollection(collection);
 	},
 
-    mergeItems: function(oldItems, newItems) {
+	mergeItems: function(oldItems, newItems) {
 		var oldIndex = 0, newIndex = 0,
 			oldRecords, newRecords,
 			newItem, oldItem,
@@ -190,44 +190,44 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		 *
 		 * 1.) If both lists have the same record, add it to the merged list with no transition
 		 * 2.) If both lists have different records
-		 * 	a.) If the new is not in the old list, add it to the merged list with an add transition
-		 * 	b.) If the new is in the old list, add it to the merged list with a move transition
-		 * 	c.) If the old is not in the new list, add it to the merged list with a remove transition
-		 * 	d.) If the old is in the new list, do nothing (Hitting it in the new list will make sure its there)
+		 *	a.) If the new is not in the old list, add it to the merged list with an add transition
+		 *	b.) If the new is in the old list, add it to the merged list with a move transition
+		 *	c.) If the old is not in the new list, add it to the merged list with a remove transition
+		 *	d.) If the old is in the new list, do nothing (Hitting it in the new list will make sure its there)
 		 *
 		 * Then if there is anything left in the old list, append them with a remove transition
 		 */
 
 		 while (oldItems[oldIndex] || newItems[newIndex]) {
-		 	newItem = newItems[newIndex];
-		 	oldItem = oldItems[oldIndex];
+			newItem = newItems[newIndex];
+			oldItem = oldItems[oldIndex];
 
-		 	if (!newItem && oldItem) {
-		 		merge.push({record: oldItem, type: NextThought.mixins.Transition.LIST_REMOVE, oldRecord: oldItem});
-		 	} else if (newItem && !oldItem) {
-		 		merge.push({record: newItem, type: NextThought.mixins.Transition.LIST_ADD, oldRecord: oldItem});
-		 	} else if (newItem.getId() === oldItem.getId()) {
-		 		merge.push({record: newItem, type: '', oldRecord: oldItem});
-		 	} else {
-		 		if (oldRecords[newItem.getId()]) {
-		 			merge.push({record: newItem, type: NextThought.mixins.Transition.LIST_MOVE, oldRecord: newItem});
-		 		} else {
-		 			merge.push({record: newItem, type: NextThought.mixins.Transition.LIST_ADD, oldRecord: oldItem});
-		 		}
+			if (!newItem && oldItem) {
+				merge.push({record: oldItem, type: NextThought.mixins.Transition.LIST_REMOVE, oldRecord: oldItem});
+			} else if (newItem && !oldItem) {
+				merge.push({record: newItem, type: NextThought.mixins.Transition.LIST_ADD, oldRecord: oldItem});
+			} else if (newItem.getId() === oldItem.getId()) {
+				merge.push({record: newItem, type: '', oldRecord: oldItem});
+			} else {
+				if (oldRecords[newItem.getId()]) {
+					merge.push({record: newItem, type: NextThought.mixins.Transition.LIST_MOVE, oldRecord: newItem});
+				} else {
+					merge.push({record: newItem, type: NextThought.mixins.Transition.LIST_ADD, oldRecord: oldItem});
+				}
 
-		 		if (!newRecords[oldItem.getId()]) {
-		 			merge.push({record: oldItem, type: NextThought.mixins.Transition.LIST_REMOVE, oldRecord: oldItem});
-		 		}
-		 	}
+				if (!newRecords[oldItem.getId()]) {
+					merge.push({record: oldItem, type: NextThought.mixins.Transition.LIST_REMOVE, oldRecord: oldItem});
+				}
+			}
 
-		 	oldIndex += 1;
-		 	newIndex += 1;
+			oldIndex += 1;
+			newIndex += 1;
 		 }
 
 		return merge;
 	},
 
-    __transitionTo: function(items, state) {
+	__transitionTo: function(items, state) {
 		var me = this, newState,
 			merged = this.mergeItems(state.items, items),
 			body = this.getBodyContainer();
@@ -254,7 +254,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		return newState;
 	},
 
-    __showItems: function(items) {
+	__showItems: function(items) {
 		var me = this, state,
 			body = me.getBodyContainer();
 
@@ -280,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		return state;
 	},
 
-    /**
+	/**
 	 * Return a cmp to add to the body for a given record.
 	 *
 	 * A transition can be given to trigger an animation for adding or removing.
@@ -290,22 +290,22 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 	 * new cmps every time and not updating existing cmps, this gives us a chance
 	 * to nest the transition between states.
 	 *
-	 * @param  {Object} record       the record to get the comp for
-	 * @param  {String} transition   a transition cls to apply to the record
+	 * @param  {Object} record		 the record to get the comp for
+	 * @param  {String} transition	 a transition cls to apply to the record
 	 * @param  {Object} initialState an earlier version of the record
-	 * @return {Object}              the cmp for the record
+	 * @return {Object}				 the cmp for the record
 	 */
 	getCmpForRecord: function(record, transition, initialState) {
 
 	},
 
-    clearCollection: function() {
+	clearCollection: function() {
 		var body = this.getBodyContainer();
 
 		body.removeAll(true);
 	},
 
-    refresh: function() {
+	refresh: function() {
 		this.clearCollection();
 
 		return this.loadCollection(this.activeUrl);

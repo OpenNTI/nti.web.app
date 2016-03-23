@@ -6,38 +6,38 @@ var MediaviewerStateStore = require('../../../StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.parts.Slide', {
-    extend: 'Ext.Component',
-    alias: 'widget.slide-component',
+	extend: 'Ext.Component',
+	alias: 'widget.slide-component',
 
-    mixins: {
+	mixins: {
 		transcriptItem: 'NextThought.app.mediaviewer.components.reader.mixins.AnnotationsMixin'
 	},
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'image-wrap', cn: [
 			{tag: 'img', cls: 'slide'},
 			{tag: 'span', cls: 'add-note-here', cn: {cls: 'note-here-control-box hidden', tag: 'span'}}
 			//			{cls: 'left', cn:[{cls: 'prev'}]},
-      //			{cls: 'right',cn:[{cls: 'next'}]}
+	  //			{cls: 'right',cn:[{cls: 'next'}]}
 		]}
 	]),
 
-    contextTpl: Ext.DomHelper.markup([
+	contextTpl: Ext.DomHelper.markup([
 		{cls: 'image-wrap', cn: [
 			{tag: 'img', src: '{image}'}
 		]}
 	]),
 
-    ui: 'slide',
+	ui: 'slide',
 
-    renderSelectors: {
+	renderSelectors: {
 		slideImage: 'img.slide',
 		createNoteEl: '.add-note-here'
-    //		next: '.next',
-    //		prev: '.prev'
+	//		next: '.next',
+	//		prev: '.prev'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.mixins.transcriptItem.constructor.apply(this, arguments);
@@ -46,11 +46,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		this.MediaViewerStore = NextThought.app.mediaviewer.StateStore.getInstance();
 	},
 
-    containerIdForData: function() {
+	containerIdForData: function() {
 		return this.slide && this.slide.getId();
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var slide = this.slide, i, me = this;
@@ -74,11 +74,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}
 	},
 
-    finishedLoadingImage: function() {
+	finishedLoadingImage: function() {
 		this.notifyReady();
 	},
 
-    openNoteEditor: function(e) {
+	openNoteEditor: function(e) {
 		var data = {startTime: this.slide.get('video-start'), endTime: this.slide.get('video-end')};
 
 		data.isDomRange = true;
@@ -90,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			.then(this.setEditorDefaultSharing.bind(this));
 	},
 
-    setEditorDefaultSharing: function() {
+	setEditorDefaultSharing: function() {
 		var pageInfo = this.slide.pageInfo,
 			pid = pageInfo && pageInfo.getId(),
 			reader = this.up('slidedeck-transcript'),
@@ -113,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			});
 	},
 
-    onMouseOver: function(e) {
+	onMouseOver: function(e) {
 		var t = e.getTarget('.x-component-slide', null, true),
 			box = t && t.down('.add-note-here'), me = this,
 			current = this.el.parent().down('.note-here-control-box:not(.hidden)');
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 	},
 
-    onMouseOut: function(e) {
+	onMouseOut: function(e) {
 		var target = e.getTarget(null, null, true),
 			t = target && target.is('.x-component-slide'),
 			box = t && target.down('.add-note-here'), me = this;
@@ -151,11 +151,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}
 	},
 
-    getAnchorResolver: function() {
+	getAnchorResolver: function() {
 		return Anchors;
 	},
 
-    createDomRange: function() {
+	createDomRange: function() {
 		var range = document.createRange(),
 			el = this.el.down('img');
 
@@ -163,18 +163,18 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return range;
 	},
 
-    isTimeWithinTimeRange: function(time) {
+	isTimeWithinTimeRange: function(time) {
 		var start = this.slide.get('video-start'),
-            end = this.slide.get('video-end');
+			end = this.slide.get('video-end');
 
-        return start <= time && time <= end;
-    },
+		return start <= time && time <= end;
+	},
 
-    getElementAtTime: function(time) {
+	getElementAtTime: function(time) {
 		return this.slideImage;
 	},
 
-    wantsRecord: function(rec) {
+	wantsRecord: function(rec) {
 		var anchorResolver = this.getAnchorResolver(),
 			domFrag = this.slide.get('dom-clone'),
 			containerId = rec.get('ContainerId'),
@@ -187,11 +187,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return result;
 	},
 
-    domRangeForRecord: function(rec) {
+	domRangeForRecord: function(rec) {
 		return this.createDomRange();
 	},
 
-    getDomContextForRecord: function(r) {
+	getDomContextForRecord: function(r) {
 		return Ext.clone(this.el.down('img').dom);
 	}
 });

@@ -8,11 +8,11 @@ var EmailverifyWindow = require('./emailverify/Window');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.Header', {
-    extend: 'NextThought.app.profiles.components.Header',
-    alias: 'widget.profile-user-header',
-    cls: 'profile-header user-header',
+	extend: 'NextThought.app.profiles.components.Header',
+	alias: 'widget.profile-user-header',
+	cls: 'profile-header user-header',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'buttons'},
 		{cls: 'outline', cn: [
 			{cls: 'avatar-container'},
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		avatarContainerEl: '.avatar-container',
 		usernameEl: '.about .username',
 		educationEl: '.about .education',
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		buttonsEl: '.buttons'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
@@ -61,13 +61,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.mon(this.ChatStore, 'presence-changed', this.onPresenceChanged.bind(this));
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.avatarContainerEl, 'click', this.maybeEditAvatar.bind(this));
 	},
 
-    updateUser: function(user, tabs, contact, isMe) {
+	updateUser: function(user, tabs, contact, isMe) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateUser.bind(this, user, tabs, contact));
 			return;
@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    fillInUser: function(user) {
+	fillInUser: function(user) {
 		var data = user.getAboutData(),
 			presence = user.getPresence();
 
@@ -113,9 +113,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.__updatePresence(presence);
 	},
 
-    setSchema: function(schema) {},
+	setSchema: function(schema) {},
 
-    __updateAbout: function(data) {
+	__updateAbout: function(data) {
 		var education = data.education[0],
 			educationString,
 			position = data.positions[0],
@@ -168,7 +168,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    __updateSocial: function(data) {
+	__updateSocial: function(data) {
 		var me = this,
 			links = [
 				{
@@ -203,7 +203,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    __updatePresence: function(presence) {
+	__updatePresence: function(presence) {
 		this.usernameEl.removeCls(this.currentPresence && this.currentPresence.getName());
 		this.currentPresence = presence;
 		this.usernameEl.addCls(this.currentPresence.getName());
@@ -213,13 +213,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    __updateTabs: function(tabs) {
+	__updateTabs: function(tabs) {
 		this.clearTabs();
 
 		tabs.forEach(this.addTab.bind(this));
 	},
 
-    __showMyButtons: function() {
+	__showMyButtons: function() {
 		this.clearButtons();
 
 		this.addButton({
@@ -229,7 +229,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    showEditingActions: function(save, cancel) {
+	showEditingActions: function(save, cancel) {
 		this.clearButtons();
 
 		this.editSaveAction = save,
@@ -250,23 +250,23 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    onEditProfile: function() {
+	onEditProfile: function() {
 		this.pushRoute('Edit', '/about/edit');
 	},
 
-    onEditSave: function() {
+	onEditSave: function() {
 		if (this.editSaveAction) {
 			this.editSaveAction();
 		}
 	},
 
-    onEditCancel: function() {
+	onEditCancel: function() {
 		if (this.editCancelAction) {
 			this.editCancelAction();
 		}
 	},
 
-    __showContactButtons: function() {
+	__showContactButtons: function() {
 		this.clearButtons();
 
 		var presenceCls = this.currentPresence ? this.currentPresence.getName() : 'unavailable',
@@ -286,7 +286,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    __showNonContactButtons: function() {
+	__showNonContactButtons: function() {
 		this.clearButtons();
 
 		this.addButton({
@@ -296,28 +296,28 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    onFollow: function() {
+	onFollow: function() {
 		this.addContact();
 	},
 
-    onUnfollow: function() {
+	onUnfollow: function() {
 		this.removeContact();
 	},
 
-    onMessage: function() {
+	onMessage: function() {
 		if (this.currentPresence && this.currentPresence.isOnline()) {
 			this.ChatActions.startChat(this.user);
 		}
 	},
 
-    onPresenceChanged: function(username, presence) {
+	onPresenceChanged: function(username, presence) {
 		//if we aren't ready to show a user, or the update isn't for this user don't do anything
 		if (!this.user || !this.rendered || username !== this.user.getId()) { return; }
 
 		this.__updatePresence(presence);
 	},
 
-    maybeEditAvatar: function(e) {
+	maybeEditAvatar: function(e) {
 		if (!e.getTarget('.editing')) {
 			return;
 		}

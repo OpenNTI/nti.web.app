@@ -5,11 +5,11 @@ var VideoVideo = require('../../video/Video');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.components.VideoContext', {
-    extend: 'Ext.Component',
-    alias: 'widget.context-video',
-    cls: 'context-video',
+	extend: 'Ext.Component',
+	alias: 'widget.context-video',
+	cls: 'context-video',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'video'},
 		{cls: 'content', cn: [
 			{cls: 'text'}
@@ -17,21 +17,21 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 		{cls: 'see-more hidden', html: 'Read More'}
 	]),
 
-    WIDTH: 512,
+	WIDTH: 512,
 
-    renderSelectors: {
+	renderSelectors: {
 		videoEl: '.video',
 		textEl: '.content .text',
 		seeMoreEl: '.see-more'
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
-    isInContext: function() {
+	isInContext: function() {
 		var context = this.ContextStore.getContext(),
 			currentContext = context && context.last(),
 			contextRecord = currentContext && currentContext.obj,
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 		return inContext || contextRecord && contextRecord.get('NTIID') === this.containerId;
 	},
 
-    isInPageContext: function() {
+	isInPageContext: function() {
 		var context = this.ContextStore.getContext(),
 			currentContext = context && context.last(),
 			contextRecord = currentContext && currentContext.obj;
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 			});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this,

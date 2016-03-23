@@ -4,23 +4,23 @@ var ControlsVisibility = require('./Visibility');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Advanced', {
-    extend: 'Ext.Component',
-    alias: 'widget.overview-editing-controls-advanced-settings',
-    name: 'Advanced Settings',
-    cls: 'nt-button advanced',
-    promptName: 'overview-editing-settings',
+	extend: 'Ext.Component',
+	alias: 'widget.overview-editing-controls-advanced-settings',
+	name: 'Advanced Settings',
+	cls: 'nt-button advanced',
+	promptName: 'overview-editing-settings',
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'text', html: '{name}'},
 		{cls: 'toggle'}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		textEl: '.text',
 		contentEl: '.toggle'
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		this.PromptActions = NextThought.app.prompt.Actions.create();
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.color) {
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.mon(this.textEl, 'click', this.handleClick.bind(this));
 	},
 
-    handleClick: function(e){
+	handleClick: function(e){
 		if (e.getTarget('.disabled')) { return; }
 
 		if (!this.visibilityCmp) {
@@ -64,15 +64,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}	
 	},
 
-    onChange: function(){},
+	onChange: function(){},
 
-    getChangedValues: function(){
+	getChangedValues: function(){
 		if (this.visibilityCmp) {
 			return this.visibilityCmp.getChangedValues();
 		}
 	},
 
-    getValue: function(){
+	getValue: function(){
 		if (this.visibilityCmp) {
 			return this.visibilityCmp.getValue();
 		}

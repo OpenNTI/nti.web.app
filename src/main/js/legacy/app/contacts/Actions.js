@@ -8,9 +8,9 @@ var ListWindow = require('./components/list/Window');
 
 
 module.exports = exports = Ext.define('NextThought.app.contacts.Actions', {
-    extend: 'NextThought.common.Actions',
+	extend: 'NextThought.common.Actions',
 
-    groupButtonClicked: function(btn) {
+	groupButtonClicked: function(btn) {
 		var flyBtn = Ext.fly(btn);
 		if (flyBtn.hasCls('join-group')) {
 			this.codeWin = Ext.widget('code-window');
@@ -24,9 +24,9 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Actions', {
 			this.createListWin = Ext.widget('createlist-window');
 			this.createListWin.show();
 		}
-        else if (flyBtn.hasCls('suggest')) {
-        	this.suggestContactsAction();
-        }
+		else if (flyBtn.hasCls('suggest')) {
+			this.suggestContactsAction();
+		}
 		else {
 			console.error('Group button clicked but I do not know what to do', btn);
 		}

@@ -7,13 +7,13 @@ var AccountActions = require('../../../account/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
-    extend: 'NextThought.app.contentviewer.navigation.Base',
-    alias: 'widget.assignment-header',
-    WARNING_PERCENT: 0.2,
-    RED_PERCENT: 0.1,
-    cls: 'student-reader-header reader-header course-assessment-header assignment-item',
+	extend: 'NextThought.app.contentviewer.navigation.Base',
+	alias: 'widget.assignment-header',
+	WARNING_PERCENT: 0.2,
+	RED_PERCENT: 0.1,
+	cls: 'student-reader-header reader-header course-assessment-header assignment-item',
 
-    toolbarTpl: Ext.DomHelper.markup([
+	toolbarTpl: Ext.DomHelper.markup([
 		'{super}',
 		{
 			cls: 'time-remaining hidden',
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 	]),
 
-    headerTpl: Ext.DomHelper.markup([
+	headerTpl: Ext.DomHelper.markup([
 		{cls: 'quiz-container ontime', cn: [
 			{cls: 'title', html: '{title}'},
 			{cls: 'turned-in'}
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		]}
 	]),
 
-    renderSelectors: {
+	renderSelectors: {
 		ontimeIconEl: '.quiz-container .ontime-icon',
 		turnedInEl: '.quiz-container .turned-in',
 		gradeContainerEl: '.grade-container',
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		submitBtnEl: '.time-remaining .submit .submit-btn'
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		var rd = {};
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.renderData = Ext.apply(this.renderData || {}, rd);
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		me.mon(me.helpEl, 'click', 'helpClicked');
 	},
 
-    alignTimer: function() {
+	alignTimer: function() {
 		if (!this.rendered) {
 			return;
 		}
@@ -122,11 +122,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		});
 	},
 
-    helpClicked: function() {
+	helpClicked: function() {
 		this.AccountActions.showContactUs();
 	},
 
-    hideTimer: function() {
+	hideTimer: function() {
 		this.timeContainerEl.addCls('hidden');
 
 		if (this.timer) {
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 	},
 
-    showAllowedTime: function(time) {
+	showAllowedTime: function(time) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showAllowedTime.bind(this, time));
 			return;
@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.timeEl.update(t);
 	},
 
-    showRemainingTime: function(time, max, getSubmitFn) {
+	showRemainingTime: function(time, max, getSubmitFn) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showRemainingTime.bind(this, time, max, getSubmitFn));
 			return;
@@ -164,7 +164,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.timeContainerEl.removeCls(['hidden', 'max-time']);
 	},
 
-    showOverdueTime: function(time) {
+	showOverdueTime: function(time) {
 		var me = this,
 			current;
 
@@ -195,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			.then(me.timer.start.bind(me.timer, 'seconds'));
 	},
 
-    showDueTime: function(time, max, getSubmitFn) {
+	showDueTime: function(time, max, getSubmitFn) {
 		var me = this,
 			current,
 			warning = max * me.WARNING_PERCENT,
@@ -237,7 +237,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			.start('seconds');
 	},
 
-    showSubmitToast: function(getSubmitFn) {
+	showSubmitToast: function(getSubmitFn) {
 		if (!getSubmitFn) { return; }
 
 		var submitState = getSubmitFn(this.updateSubmitState.bind(this));
@@ -245,7 +245,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.updateSubmitState(submitState);
 	},
 
-    updateSubmitState: function(submitState) {
+	updateSubmitState: function(submitState) {
 		this.submitFn = submitState.submitFn;
 
 		this.timeContainerEl.addCls('submit-showing');
@@ -265,13 +265,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 	},
 
-    submitAssignmentClicked: function(e) {
+	submitAssignmentClicked: function(e) {
 		if (!e.getTarget('.disabled') && this.submitFn) {
 			this.submitFn.call(null);
 		}
 	},
 
-    setHistory: function(history) {
+	setHistory: function(history) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setHistory.bind(this, history));
 			return;

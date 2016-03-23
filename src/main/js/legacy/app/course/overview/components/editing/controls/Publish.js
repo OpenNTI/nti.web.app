@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			hasPublishDatePassed = lesson && lesson.hasPublishDatePassed && lesson.hasPublishDatePassed();
 
 
-		if (isNodePublished && ((isLessonPublished && !lessonPublishDate) || hasPublishDatePassed))  {
+		if (isNodePublished && ((isLessonPublished && !lessonPublishDate) || hasPublishDatePassed))	 {
 			this.setPublished();
 		}
 		else if (!isNodePublished && !isLessonPublished) {

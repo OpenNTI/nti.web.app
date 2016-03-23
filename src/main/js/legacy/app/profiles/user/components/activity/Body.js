@@ -8,17 +8,17 @@ var {isMe} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.Body', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.profile-user-activity-body',
-    layout: 'none',
-    cls: 'activity',
+	extend: 'Ext.container.Container',
+	alias: 'widget.profile-user-activity-body',
+	layout: 'none',
+	cls: 'activity',
 
-    items: [
+	items: [
 		{xtype: 'profile-user-newpost'},
 		{xtype: 'profile-user-activity-stream'}
 	],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.setUpComponents();
@@ -36,20 +36,20 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-    onActivate: function() {
+	onActivate: function() {
 		this.activityCmp.fireEvent('activate');
 	},
 
-    onDeactivate: function() {
+	onDeactivate: function() {
 		this.activityCmp.fireEvent('deactivate');
 	},
 
-    setUpComponents: function() {
+	setUpComponents: function() {
 		this.newPostCmp = this.down('profile-user-newpost');
 		this.activityCmp = this.down('profile-user-activity-stream');
 	},
 
-    onNewPost: function() {
+	onNewPost: function() {
 		if (this.postContainer && this.postContainer.getLink('add')) {
 			this.WindowActions.showWindow('new-blog', null, this.newPostCmp.el.dom, {afterSave: this.onPostSaved.bind(this)}, {
 				blog: this.postContainer
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    onPostSaved: function(record) {
+	onPostSaved: function(record) {
 		var store = this.activityCmp && this.activityCmp.store;
 
 		if (store) {
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-    userChanged: function(entity) {
+	userChanged: function(entity) {
 		this.activeEntity = entity;
 
 		var me = this,
@@ -95,15 +95,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			});
 	},
 
-    setStreamSource: function(store, entity) {
+	setStreamSource: function(store, entity) {
 		this.activityCmp.setStreamSource(store, entity);
 	},
 
-    setStreamParams: function(params) {
+	setStreamParams: function(params) {
 		this.activityCmp.setStreamParams(params);
 	},
 
-    navigateToActivityItem: function(item, monitors) {
+	navigateToActivityItem: function(item, monitors) {
 		if (this.navigateToObject) {
 			this.navigateToObject(item, monitors);
 		}

@@ -12,14 +12,14 @@ var PathActions = require('../../../../navigation/path/Actions');
 
 /*globals RangeUtils:false*/
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
-    extend: 'NextThought.app.course.dashboard.components.tiles.Post',
-    alias: 'widget.dashboard-note',
+	extend: 'NextThought.app.course.dashboard.components.tiles.Post',
+	alias: 'widget.dashboard-note',
 
-    mixins: {
+	mixins: {
 		questionContent: 'NextThought.mixins.QuestionContent'
 	},
 
-    statics: {
+	statics: {
 		HEIGHT: 200,
 		COMMENT_HEIGHT: 100,
 		VIDEO_THUMB_ASPECT: 1.77,
@@ -79,13 +79,13 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		}
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.WindowActions = NextThought.app.windows.Actions.create();
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
-    handleNavigation: function(e) {
+	handleNavigation: function(e) {
 		if (this.removeOnDelete) {
 			this.record.destroyDoesNotClearListeners = true;
 		}
@@ -93,19 +93,19 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		this.WindowActions.pushWindow(this.record, null, e, {afterClose: this.onWindowClose.bind(this)}, {course: this.course});
 	},
 
-    onWindowClose: function() {
+	onWindowClose: function() {
 		this.removeAll(true);
 		this.updateBody(); // Safe guard for now
 		this.showComments();
 	},
 
-    getMeta: function() {
+	getMeta: function() {
 		this.CACHE.loadMeta = this.CACHE.loadMeta || LocationMeta.getMeta(this.record.get('ContainerId'));
 
 		return this.CACHE.loadMeta;
 	},
 
-    getNavigationPath: function() {
+	getNavigationPath: function() {
 		return this.PathActions.getBreadCrumb(this.record)
 			.then(function(path) {
 				path = path && path.slice(0, 3) || [];
@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			});
 	},
 
-    getPath: function() {
+	getPath: function() {
 		var rec = this.record;
 
 		if (!this.course) {
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			});
 	},
 
-    getCurrent: function() {
+	getCurrent: function() {
 		return this.getPath()
 			.then(function(path) {
 				path = Ext.clone(path);
@@ -145,17 +145,17 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			});
 	},
 
-    getSharedWith: function() {
+	getSharedWith: function() {
 		var sharedWith = this.record.get('sharedWith') || [];
 
 		return UserRepository.getUser(sharedWith.slice());
 	},
 
-    getTitle: function() {
+	getTitle: function() {
 		return this.record.get('title');
 	},
 
-    getBody: function() {
+	getBody: function() {
 		var rec = this.record,
 			whiteboardSize = this.self.WHITEBOARD_SIZE;
 
@@ -164,11 +164,11 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		});
 	},
 
-    getCommentCount: function() {
+	getCommentCount: function() {
 		return this.record.getReplyCount();
 	},
 
-    getContext: function() {
+	getContext: function() {
 		if (this.CACHE.context) {
 			return this.CACHE.context;
 		}
@@ -183,18 +183,18 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		return this.CACHE.context;
 	},
 
-    hasComments: function() {
+	hasComments: function() {
 		return this.record.get('ReplyCount') > 0;
 	},
 
-    loadComments: function() {
+	loadComments: function() {
 		var rec = this.record,
 			link = rec.getLink('replies');
 
 		return StoreUtils.loadItems(link, this.self.COMMENT_PARAMS);
 	},
 
-    getCmpForComment: function(comment) {
+	getCmpForComment: function(comment) {
 		return {
 			xtype: 'dashboard-note-comment',
 			record: comment

@@ -5,20 +5,20 @@ var UxPointer = require('../../../common/ux/Pointer');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.activity.Popout', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.activity-popout',
-    width: 400,
-    floating: true,
-    constrain: true,
-    constrainTo: Ext.getBody(),
-    maxHeight: Ext.Element.getViewportHeight(),
-    shadow: false,
-    layout: 'auto',
-    cls: 'activity-popout',
-    hideMode: 'visibility',
-    previewPrefix: 'widget.activity-preview-',
+	extend: 'Ext.container.Container',
+	alias: 'widget.activity-popout',
+	width: 400,
+	floating: true,
+	constrain: true,
+	constrainTo: Ext.getBody(),
+	maxHeight: Ext.Element.getViewportHeight(),
+	shadow: false,
+	layout: 'auto',
+	cls: 'activity-popout',
+	hideMode: 'visibility',
+	previewPrefix: 'widget.activity-preview-',
 
-    initComponent: function() {
+	initComponent: function() {
 		var me = this;
 
 		this.callParent(arguments);
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 		this.setupItems();
 	},
 
-    setupItems: function() {
+	setupItems: function() {
 		var wName = this.getPreviewPanel();
 
 		if (Ext.isArray(wName)) {
@@ -62,17 +62,17 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 		this.preview = this.add({ xtype: wName, record: this.record, user: this.user });
 	},
 
-    getPreviewPanel: function() {
+	getPreviewPanel: function() {
 		var c = this.record.getClassForModel(this.previewPrefix, false);
 		return (c && c.xtype) || '';
 	},
 
-    getPointerStyle: function(x, y) {
+	getPointerStyle: function(x, y) {
 		var p = this.preview;
 		return p.getPointerStyle ? p.getPointerStyle(x, y) : '';
 	},
 
-    itemRefreshed: function(view) {
+	itemRefreshed: function(view) {
 		var el = view.getNodeByRecord(this.record);
 
 		if (el) {
@@ -82,23 +82,23 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 			// Why do we destroy the popout here?
 			// it was destroying the popout on every added reply. So it's commented for now.
 			// The refEl might have changed but that doesn't mean the parent (note) rec doesn't exist anymore.
-      //			this.destroy();
+	  //			this.destroy();
 		}
 	},
 
-    itemUpdated: function(rec, index, node) {
+	itemUpdated: function(rec, index, node) {
 		if (this.record === rec) {
 			this.updateRefEl(node);
 		}
 	},
 
-    updateRefEl: function(el) {
+	updateRefEl: function(el) {
 		this.refEl = el;
 		this.pointer.pointToEl = el;
 		this.pointer.point();
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		var me = this;
 		me.callParent(arguments);
 		me.mon(me.el, 'click', function(e) {e.stopPropagation();}, me);
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 		}, 1);
 	},
 
-    detectBlurClick: function(e) {
+	detectBlurClick: function(e) {
 		if (!e.getTarget('.' + this.cls) && (!this.preview || !this.preview.openEditor)) {
 			clearTimeout(this.hideTimer);
 			//this.hideTimer = Ext.defer(function(){this.fireEvent('blur');},1, this);
@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 		}
 	},
 
-    detectBlur: function(e) {
+	detectBlur: function(e) {
 		var isMe = e.getTarget('.' + this.cls) || e.getTarget('#' + this.refEl && this.refEl.id) || e.getTarget('.x-menu') || e.getTarget('.contact-popout');
 
 		if (!isMe && (!this.preview || !this.preview.openEditor)) {
@@ -139,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 		}
 	},
 
-    maybeHidePopout: function() {
+	maybeHidePopout: function() {
 		// NOTE: This allows for children, especially the preview to cancel hiding the Popout
 		// i.e when the editor is active.
 		if (this.fireEvent('beforedeactivate')) {
@@ -152,7 +152,7 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 		return false;
 	},
 
-    inheritableStatics: {
+	inheritableStatics: {
 
 		beforeShowPopup: function(record, el) {
 			var id = record.getId(), canShow = true;

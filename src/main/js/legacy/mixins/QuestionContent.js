@@ -64,17 +64,17 @@ var {guidGenerator} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
-    typeToComponent: {
+	typeToComponent: {
 		//'text/html': 'NextThought.view.assessment.components.Base',
 		'application/vnd.nextthought.ntiaudio': 'assessment-components-audio-clip',
 		'application/vnd.nextthought.contentsequence': 'assessment-components-sequence',
 		'application/vnd.nextthought.naqwordbank': 'assessment-components-wordbank'
 	},
 
-    contentComponents: [],
-    contentComponentsToRender: [],
+	contentComponents: [],
+	contentComponentsToRender: [],
 
-    parseDomString: function(dom) {
+	parseDomString: function(dom) {
 		var a = document.createElement('div');
 
 		a.id = 'tempdom';
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 		return a;
 	},
 
-    /**
+	/**
 	 * Takes the content of a question/part and returns the string to be inserted into the dom
 	 * @param  {String|Element} dom the string or element of the question content
 	 * @param  {bool} dontRender the element mixing in will hanldle it
@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 		return dom.innerHTML;
 	},
 
-    /**
+	/**
 	 * Takes the configs for the components we need to render and creates them
 	 * @return {Undefined}	no return value
 	 */
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 		me.contentComponentsToRender = [];
 	},
 
-    /**
+	/**
 	 * Takes the config for a component and either creates it or adds it to a a list to be created.
 	 * @param {String}	type	the data-type attribute of the object element
 	 * @param {Object} config	the config to pass to the component
@@ -197,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 		return true;
 	},
 
-    destroyContent: function() {
+	destroyContent: function() {
 		Ext.destroy(this.contentComponents);
 	}
 });

@@ -9,13 +9,13 @@ var PartsTitle = require('./parts/Title');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.info.components.Panel', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.course-info-panel',
-    cls: 'course-info-panel scrollable',
-    ui: 'course',
-    layout: 'none',
+	extend: 'Ext.container.Container',
+	alias: 'widget.course-info-panel',
+	cls: 'course-info-panel scrollable',
+	ui: 'course',
+	layout: 'none',
 
-    setContent: function(content, status) {
+	setContent: function(content, status) {
 		this.removeAll(true);
 
 		var toAdd = [],
@@ -61,13 +61,13 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 		this.add(toAdd);
 	},
 
-    getVideo: function() {
+	getVideo: function() {
 		var title = this.down('course-info-title');
 
 		return title && title.video;
 	},
 
-    //<editor-fold desc="Fallback Code">
+	//<editor-fold desc="Fallback Code">
 	fillInPage: function(html) {
 		var bodyTag = html.match(/<body.*?>(.*)<\/body>/i),
 			parent = this.up('course-info');
@@ -90,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 		}
 	},
 
-    loadPage: function(pageInfo) {
+	loadPage: function(pageInfo) {
 		this.activeRequest = pageInfo.getId();
 		ContentProxy.request({
 			pageInfo: pageInfo,
@@ -104,11 +104,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 		});
 	},
 
-    loadPageFailed: function(r) {
+	loadPageFailed: function(r) {
 		console.error('server-side failure with status code ' + r.status + '. Message: ' + r.responseText);
 	},
 
-    //</editor-fold>
+	//</editor-fold>
 	loadedPage: function(r, req) {
 		if (this.activeRequest !== req.pageInfo.getId()) {
 			return;

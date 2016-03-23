@@ -2,7 +2,7 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.model.converters.Date', {
-    override: 'Ext.data.Types'
+	override: 'Ext.data.Types'
 }, function() {
 	Ext.data.Types.ISODATE = {
 		convert: function(v) {

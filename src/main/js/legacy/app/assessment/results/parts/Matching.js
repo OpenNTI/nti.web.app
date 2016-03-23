@@ -4,17 +4,17 @@ var PartsTable = require('./Table');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.Matching', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.assessment-matching-results',
-    cls: 'result-part',
+	extend: 'Ext.container.Container',
+	alias: 'widget.assessment-matching-results',
+	cls: 'result-part',
 
-    statics: {
+	statics: {
 		mimeType: 'application/vnd.nextthought.assessment.aggregatedmatchingpart'
 	},
 
-    items: [],
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.tabBar = this.add({
@@ -63,21 +63,21 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 		this.barChart.show();
 	},
 
-    getRowLabels: function() {
+	getRowLabels: function() {
 		return this.questionPart.get('values');
 	},
 
-    getSeriesLabels: function() {
+	getSeriesLabels: function() {
 		return this.questionPart.get('labels');
 	},
 
-    /**
+	/**
 	 * The Results coming back look like:
 	 *
 	 * {
-	 * 	labelIndex: {
-	 * 		valueIndex: number of times this value was placed with this label
-	 * 	}
+	 *	labelIndex: {
+	 *		valueIndex: number of times this value was placed with this label
+	 *	}
 	 * }
 	 *
 	 * For graphing the results, we are trying to make the axis labels be the
@@ -88,9 +88,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	 * line up, for matching we need to inverse the results to look like:
 	 *
 	 * {
-	 * 	valueIndex: {
-	 * 		labelIndex: number of times this label was placed with this value
-	 * 	}
+	 *	valueIndex: {
+	 *		labelIndex: number of times this label was placed with this value
+	 *	}
 	 * }
 	 *
 	 * @return {Object} Map of the results
@@ -114,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 		return newResults;
 	},
 
-    /**
+	/**
 	 * Return an array of rows to pass to the bar chart.
 	 * See the comments in NextThought.app.assessment.results.parts.MultiChoice
 	 * for more explanation of why its structured this way.
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 		return axis;
 	},
 
-    getTable: function() {
+	getTable: function() {
 		var resultParts = this.getResults(),
 			total = this.resultPart.Total,
 			rowLabels = this.getRowLabels(),
@@ -198,7 +198,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 		};
 	},
 
-    showTable: function() {
+	showTable: function() {
 		this.barChart.hide();
 		this.table.show();
 
@@ -206,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 		this.chartTab.removeCls('active');
 	},
 
-    showChart: function() {
+	showChart: function() {
 		this.table.hide();
 		this.barChart.show();
 

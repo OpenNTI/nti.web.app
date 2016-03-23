@@ -8,15 +8,15 @@ var MixinsAuditLog = require('../mixins/AuditLog');
 
 
 module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
-    extend: 'NextThought.model.Base',
-    mimeType: 'application/vnd.nextthought.relatedworkref',
-    isPage: true,
+	extend: 'NextThought.model.Base',
+	mimeType: 'application/vnd.nextthought.relatedworkref',
+	isPage: true,
 
-    mixins: {
+	mixins: {
 		auditLog: 'NextThought.mixins.AuditLog'
 	},
 
-    statics: {
+	statics: {
 		mimeType: 'application/vnd.nextthought.relatedworkref',
 
 		fromOutlineNode: function(data) {
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		}
 	},
 
-    fields: [
+	fields: [
 		{name: 'description', type: 'string'},
 		{name: 'icon', type: 'string'},
 		{name: 'label', type: 'string'},
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		{name: 'byline', type: 'string'}
 	],
 
-    asDomData: function(root) {
+	asDomData: function(root) {
 		var data = {
 				ntiid: this.get('NTIID'),
 				href: this.get('href'),
@@ -113,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		return data;
 	},
 
-    /**
+	/**
 	 * If the ref is pointing to content.
 	 *
 	 * Consider it content if:
@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		return this.self.CONTENT_TYPE === this.get('type');
 	},
 
-    /**
+	/**
 	 * If the ref is pointing to an external link.
 	 *
 	 * Consider it an external link if:
@@ -139,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		return this.self.EXTERNAL_TYPE === this.get('type');
 	},
 
-    /**
+	/**
 	 * If the ref is pointing to a document that can be embedded in the app
 	 *
 	 * Consider it an embeddable document if:
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		return this.isDocument() && this.self.EMBEDABLE_TYPES[type];
 	},
 
-    /**
+	/**
 	 * If the ref is pointing to a document.
 	 *
 	 * Consider it a document if:
@@ -169,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		return !this.isContent() && !this.isExternalLink();
 	},
 
-    getIcon: function(root) {
+	getIcon: function(root) {
 		var icon = this.get('icon'),
 			targetMimeType = this.get('targetMimeType');
 
@@ -184,11 +184,11 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		return icon;
 	},
 
-    getTitle: function() {
+	getTitle: function() {
 		return this.isContent() ? '' : this.get('label');
 	},
 
-    shouldBeRoot: function() {
+	shouldBeRoot: function() {
 		return !this.isContent();
 	}
 });

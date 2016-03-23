@@ -12,13 +12,13 @@ var ForumsPersonalBlogEntryPost = require('../../model/forums/PersonalBlogEntryP
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.Window', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.blog-window',
-    layout: 'none',
-    cls: 'blog-window',
-    items: [],
+	extend: 'Ext.container.Container',
+	alias: 'widget.blog-window',
+	layout: 'none',
+	cls: 'blog-window',
+	items: [],
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -42,11 +42,11 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 		} 
 	},
 
-    onClose: function() {
+	onClose: function() {
 		this.doClose(this.activeBlogPost);
 	},
 
-    loadBlog: function() {
+	loadBlog: function() {
 		if (this.precache.blog) {
 			return Promise.resolve(this.precache.blog);
 		}
@@ -64,13 +64,13 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 			});
 	},
 
-    loadBlogPost: function() {
+	loadBlogPost: function() {
 		this.remove(this.loadingEl);
 
 		this.showBlogPost(this.record);
 	},
 
-    loadBlogEntry: function() {
+	loadBlogEntry: function() {
 		var entry = this.record.get('ContainerId'),
 			me = this;
 
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 			});
 	},
 
-    loadBlogComment: function() {
+	loadBlogComment: function() {
 		var me = this,
 			postId = me.record.get('ContainerId');
 
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 			});
 	},
 
-    loadEditor: function(blogPost) {
+	loadEditor: function(blogPost) {
 		var me = this;
 
 		me.loadBlog()
@@ -105,9 +105,9 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 			});
 	},
 
-    showBlog: function() {},
+	showBlog: function() {},
 
-    showBlogPost: function(blogPost, activeComment) {
+	showBlogPost: function(blogPost, activeComment) {
 		var me = this,
 			blogPostCmp = this.down('profile-blog-post');
 
@@ -170,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 		});
 	},
 
-    showEditor: function(blogPost, blog) {
+	showEditor: function(blogPost, blog) {
 		var me = this,
 			blogPostCmp = this.down('profile-blog-post'),
 			sharingInfo = blogPost && blogPost.getSharingInfo(),

@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 
 		getTiles: function (course, startDate, endDate) {
-			var	start = moment(startDate);
+			var start = moment(startDate);
 			var end = moment(endDate),
 				getWeight = this.getWeight.bind(this);
 

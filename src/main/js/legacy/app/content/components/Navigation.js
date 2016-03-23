@@ -4,11 +4,11 @@ var ComponentsContentSwitcher = require('./ContentSwitcher');
 
 
 module.exports = exports = Ext.define('NextThought.app.content.components.Navigation', {
-    extend: 'NextThought.common.components.Navigation',
-    alias: 'widget.content-navigation',
-    cls: 'content-navigation',
+	extend: 'NextThought.common.components.Navigation',
+	alias: 'widget.content-navigation',
+	cls: 'content-navigation',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.ContentSwitcher = Ext.widget('content-switcher', {
@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.activeContentEl.addCls('has-switcher');
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 		}
 	},
 
-    bundleChanged: function(bundle, activeRoute) {
+	bundleChanged: function(bundle, activeRoute) {
 		if (!this.rendered) {
 			this.bundle = bundle;
 			return;
@@ -65,13 +65,13 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 		}
 	},
 
-    switchContent: function(route) {
+	switchContent: function(route) {
 		if (this.bodyView && this.bodyView.onContentChange) {
 			this.bodyView.onContentChange('', route);
 		}
 	},
 
-    onActiveContentClicked: function(e) {
+	onActiveContentClicked: function(e) {
 		var active = this.titleContainerEl.dom,
 			rect = active && active.getBoundingClientRect();
 
@@ -89,13 +89,13 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 		}
 	},
 
-    onBodyClick: function(e) {
+	onBodyClick: function(e) {
 		if (!e.getTarget('.content-switcher') && this.ContentSwitcher.isVisible()) {
 			this.ContentSwitcher.hide();
 		}
 	},
 
-    //when we are collapsing tabs from a resize, go ahead and
+	//when we are collapsing tabs from a resize, go ahead and
 	//realign the content switcher
 	maybeCollapse: function() {
 		var r = this.callParent(arguments);

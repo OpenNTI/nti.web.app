@@ -9,17 +9,17 @@ var ComponentsHeader = require('./components/Header');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.community.Index', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.profile-community',
+	extend: 'Ext.container.Container',
+	alias: 'widget.profile-community',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-    cls: 'community-profile profile',
-    layout: 'none',
+	cls: 'community-profile profile',
+	layout: 'none',
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.NavActions = NextThought.app.navigation.Actions.create();
@@ -59,11 +59,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		});
 	},
 
-    getContext: function() {
+	getContext: function() {
 		return this.activeCommunity;
 	},
 
-    onActivate: function() {
+	onActivate: function() {
 		var cmp = this.bodyCmp.getLayout().getActiveItem();
 
 		if (cmp) {
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		this.headerCmp.fireEvent('activate');
 	},
 
-    onDeactivate: function() {
+	onDeactivate: function() {
 		var cmp = this.bodyCmp.getLayout().getActiveItem();
 
 		if (cmp) {
@@ -83,11 +83,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		this.headerCmp.fireEvent('deactivate');
 	},
 
-    getRouteTitle: function() {
+	getRouteTitle: function() {
 		return this.activeCommunity ? this.activeCommunity.getName() : '';
 	},
 
-    setActiveEntity: function(id, entity) {
+	setActiveEntity: function(id, entity) {
 		var me = this,
 			url = Service.getResolveUserURL(id);
 
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			});
 	},
 
-    setActiveItem: function(xtype) {
+	setActiveItem: function(xtype) {
 		var cmp = this.down(xtype),
 			current = this.bodyCmp.getLayout().getActiveItem();
 
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		return cmp;
 	},
 
-    setState: function(state) {
+	setState: function(state) {
 		state = state || {};
 
 		this.activeState = state;
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		this.NavActions.setActiveContent(this.activeCommunity);
 	},
 
-    showAllActivity: function(route, subRoute) {
+	showAllActivity: function(route, subRoute) {
 		var cmp = this.setActiveItem('profile-community-activity'),
 			link = this.activeCommunity.getLink('Activity');
 
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			.then(cmp.handleRoute.bind(cmp, subRoute, route.precache));
 	},
 
-    showTopicActivity: function(route, subRoute) {
+	showTopicActivity: function(route, subRoute) {
 		var me = this,
 			cmp = me.setActiveItem('profile-community-activity'),
 			entity = me.activeCommunity,
@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			.then(cmp.handleRoute.bind(cmp, subRoute, route.precache));
 	},
 
-    showMembers: function(route, subRoute) {
+	showMembers: function(route, subRoute) {
 		var cmp = this.setActiveItem('profile-community-membership');
 
 		this.setState();
@@ -230,17 +230,17 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		return cmp.handleRoute(subRoute, route.precache);
 	},
 
-    updateCommunity: function() {
+	updateCommunity: function() {
 		this.setState(this.activeState);
 
 		//TODO: reload what ever is active on the body
 	},
 
-    gotoMembership: function() {
+	gotoMembership: function() {
 		this.pushRoute('Members', '/members');
 	},
 
-    onShowForum: function(forum) {
+	onShowForum: function(forum) {
 		if (forum === 'all') {
 			this.pushRoute('Activity', '/');
 			return;
@@ -255,7 +255,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		});
 	},
 
-    joinCommunity: function() {
+	joinCommunity: function() {
 		var me = this,
 			join, link = me.activeCommunity.getLink('join');
 
@@ -277,7 +277,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 
 	},
 
-    leaveCommunity: function() {
+	leaveCommunity: function() {
 		var me = this,
 			leave, link = me.activeCommunity.getLink('leave');
 
@@ -298,7 +298,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			});
 	},
 
-    showCommunity: function() {
+	showCommunity: function() {
 		var me = this,
 			show, link = me.activeCommunity.getLink('unhide');
 
@@ -319,7 +319,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			});
 	},
 
-    hideCommunity: function() {
+	hideCommunity: function() {
 		var me = this,
 			hide, link = me.activeCommunity.getLink('hide');
 
@@ -340,7 +340,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			});
 	},
 
-    getRouteForPath: function(path, community) {
+	getRouteForPath: function(path, community) {
 		var forum = path[1],//the first one should be the index
 			forumId = forum.getId(),
 			path = '/';

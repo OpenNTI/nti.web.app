@@ -4,16 +4,16 @@ var FieldsLegacySearchComboBox = require('../../../../../common/form/fields/Lega
 
 
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.components.parts.DropDown', {
-    extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
-    alias: 'widget.enrollment-dropdown',
+	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
+	alias: 'widget.enrollment-dropdown',
 
-    renderTpl: Ext.DomHelper.markup({
+	renderTpl: Ext.DomHelper.markup({
 		cls: 'enrollment-input select {required} {size}'
 	}),
 
-    editable: true,
+	editable: true,
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -22,11 +22,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-    renderSelectors: {
+	renderSelectors: {
 		selectEl: '.select'
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		me.on('destroy', 'destroy', me.combobox);
 	},
 
-    addOptions: function(options) {
+	addOptions: function(options) {
 		this.options = options;
 
 		if (this.combobox) {
@@ -64,19 +64,19 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-    addError: function() {
+	addError: function() {
 		this.selectEl.addCls('error');
 	},
 
-    removeError: function() {
+	removeError: function() {
 		this.selectEl.removeCls('error');
 	},
 
-    isEmpty: function() {
+	isEmpty: function() {
 		return !this.getValue()[this.name];
 	},
 
-    setValue: function(value) {
+	setValue: function(value) {
 		var me = this;
 
 		if (!me.rendered) {
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			});
 	},
 
-    getValue: function() {
+	getValue: function() {
 		var value = {};
 
 		value[this.name] = this.combobox.getValue();

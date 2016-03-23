@@ -6,10 +6,10 @@ var {getURL} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.chat.components.log.Content', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.chat-content-log-entry',
+	extend: 'Ext.container.Container',
+	alias: 'widget.chat-content-log-entry',
 
-    renderTpl: new Ext.XTemplate(
+	renderTpl: new Ext.XTemplate(
 		'<div class="x-chat-content-log-entry">',
 			'<div class="timestamp">{time}</div>',
 			'<img src="{icon}" width=16 height=16"/>',
@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Conte
 		'</div>'
 		),
 
-    renderSelectors: {
+	renderSelectors: {
 		box: 'div.x-chat-content-log-entry',
 		name: '.x-chat-content-log-entry span.name',
 		text: 'span.body-text',
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Conte
 
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		var me = this;
 		me.callParent(arguments);
 
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Conte
 		});
 	},
 
-    update: function() {
+	update: function() {
 		var me = this,
 			href,
 			icon, root, username;
@@ -84,18 +84,18 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Conte
 		me.addCls('nooid');
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.attachClick();
 	},
 
-    attachClick: function() {
+	attachClick: function() {
 		if (this.clickable) {
 			this.el.on('click', function() {this.fireEvent('click', this);}, this);
 		}
 	},
 
-    fillInUser: function(u) {
+	fillInUser: function(u) {
 		var name = u.get('alias') || u.get('Username'),
 			i = u.get('avatarURL');
 

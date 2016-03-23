@@ -8,9 +8,9 @@ var SettingsWindow = require('../../../settings/Window');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.Base', {
-    extend: 'NextThought.app.course.overview.components.editing.content.Editor',
+	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 
-    inheritableStatics: {
+	inheritableStatics: {
 		getHandledMimeTypes: function() {
 			return [
 				NextThought.model.RelatedWork.mimeType
@@ -18,9 +18,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    cls: 'content-editor content-link',
+	cls: 'content-editor content-link',
 
-    getFormSchema: function() {
+	getFormSchema: function() {
 		var schema = [
 				{name: 'MimeType', type: 'hidden'},
 				{type: 'group', name: 'card', inputs: [
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return schema;
 	},
 
-    getDefaultValues: function() {
+	getDefaultValues: function() {
 		if (this.record) {
 			return this.record.isModel && this.record.getData();
 		}
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-    showEditor: function() {
+	showEditor: function() {
 		this.callParent(arguments);
 
 		if (Service.canDoAdvancedEditing()) {
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-    addAdvancedDisclosure: function() {
+	addAdvancedDisclosure: function() {
 		var visibility = this.record && this.record.get('visibility'),
 			me = this;
 
@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-    onVisibilityChange: function(cmp) {
+	onVisibilityChange: function(cmp) {
 		var value = cmp && cmp.getValue();
 
 		console.log('changed visibility to: ', value.visibility);

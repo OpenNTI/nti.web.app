@@ -5,9 +5,9 @@ var ModelVideo = require('../../../../../../../model/Video');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.video.Actions', {
-    extend: 'NextThought.app.course.overview.components.editing.Actions',
+	extend: 'NextThought.app.course.overview.components.editing.Actions',
 
-    __getVideoRollData: function(videos) {
+	__getVideoRollData: function(videos) {
 		var data = {
 				MimeType: NextThought.model.VideoRoll.mimeType
 			};
@@ -19,26 +19,26 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return data;
 	},
 
-    __getVideoData: function(video) {
+	__getVideoData: function(video) {
 		return {
 			MimeType: NextThought.model.Video.mimeType,
 			NTIID: video.getId()
 		};
 	},
 
-    __createVideoRollValue: function(videos, position) {
+	__createVideoRollValue: function(videos, position) {
 		var values = this.__getVideoRollData(videos);
 
 		return this.__createRecordValues(values, position);
 	},
 
-    __createSingleVideo: function(video, position) {
+	__createSingleVideo: function(video, position) {
 		var values = this.__getVideoData(video);
 
 		return this.__createRecordValues(values, position);
 	},
 
-    __createVideos: function(videos, position) {
+	__createVideos: function(videos, position) {
 		var create;
 
 		//If there is more than one create a video roll, otherwise create a single video
@@ -55,14 +55,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return create;
 	},
 
-    /**
+	/**
 	 * Remove a record from the oldPosition and add it to the new one
 	 * @param  {Model} oldRecord   the record to remove
 	 * @param  {Object} oldPosition the parent and position of the old position
-	 * @param  {Object} newValues   the new values to update the record with
+	 * @param  {Object} newValues	the new values to update the record with
 	 * @param  {Object} newPosition the parent and position of the new position
-	 * @param  {Object} root        the moving root of both parents
-	 * @return {Promise}            fulfills when both operations are done
+	 * @param  {Object} root		the moving root of both parents
+	 * @return {Promise}			fulfills when both operations are done
 	 */
 	__removeAndAdd: function(oldRecord, oldPosition, newValues, newPosition, root) {
 		var oldParent = oldPosition.parent,
@@ -91,19 +91,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return save;
 	},
 
-    __convertRollToSingle: function(videos, record, originalPosition, newPosition, root) {
+	__convertRollToSingle: function(videos, record, originalPosition, newPosition, root) {
 		var newVideo = this.__getVideoData(videos[0]);
 
 		return this.__removeAndAdd(record, originalPosition, newVideo, newPosition, root);
 	},
 
-    __convertSingleToRoll: function(videos, record, originalPosition, newPosition, root) {
+	__convertSingleToRoll: function(videos, record, originalPosition, newPosition, root) {
 		var newVideos = this.__getVideoRollData(videos);
 
 		return this.__removeAndAdd(record, originalPosition, newVideos, newPosition, root);
 	},
 
-    __updateVideoRoll: function(videos, record, originalPosition, newPosition, root) {
+	__updateVideoRoll: function(videos, record, originalPosition, newPosition, root) {
 		if (videos.length === 1) {
 			return this.__convertRollToSingle(videos, record, originalPosition, newPosition, root);
 		}
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	},
 
-    __updateSingleVideo: function(videos, record, originalPosition, newPosition, root) {
+	__updateSingleVideo: function(videos, record, originalPosition, newPosition, root) {
 		if (videos.length > 1) {
 			return this.__convertSingleToRoll(videos, record, originalPosition, newPosition, root);
 		}
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return save;
 	},
 
-    __updateVideos: function(videos, record, originalPosition, newPosition, root) {
+	__updateVideos: function(videos, record, originalPosition, newPosition, root) {
 		var save;
 
 		if (!videos) {
@@ -180,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return save;
 	},
 
-    saveVideo: function(videos, record, originalParent, newParent, root) {
+	saveVideo: function(videos, record, originalParent, newParent, root) {
 		if (record) {
 			return this.__updateVideos(videos, record, originalParent, newParent, root);
 		}

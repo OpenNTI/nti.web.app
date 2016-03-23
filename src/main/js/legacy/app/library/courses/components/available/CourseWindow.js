@@ -15,38 +15,38 @@ var CoursePage = require('./CoursePage');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.available.CourseWindow', {
-    extend: 'NextThought.common.window.Window',
-    alias: 'widget.library-available-courses-window',
+	extend: 'NextThought.common.window.Window',
+	alias: 'widget.library-available-courses-window',
 
-    mixins: {
+	mixins: {
 		Router: 'NextThought.mixins.Router'
 	},
 
-    floating: true,
-    label: 'Add Courses',
-    constrainTo: Ext.getBody(),
-    width: 1024,
-    height: '85%',
-    dialog: true,
-    header: false,
-    componentLayout: 'natural',
-    layout: 'card',
-    cls: 'available-courses',
+	floating: true,
+	label: 'Add Courses',
+	constrainTo: Ext.getBody(),
+	width: 1024,
+	height: '85%',
+	dialog: true,
+	header: false,
+	componentLayout: 'natural',
+	layout: 'card',
+	cls: 'available-courses',
 
-    getTargetEl: function() {
+	getTargetEl: function() {
 		return this.body;
 	},
 
-    childEls: ['body'],
-    getDockedItems: function() { return []; },
+	childEls: ['body'],
+	getDockedItems: function() { return []; },
 
-    /**
+	/**
 	 * Ext is shooting us in the foot when it tries to center it
 	 * so for now just don't let Ext do anything here.
 	 */
 	setPosition: function() {},
 
-    /**
+	/**
 	 * This is always going to be positioned  fixed, so don't
 	 * let Ext layout try to calculate according to parents.
 	 */
@@ -73,11 +73,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		dom.style.left = left + 'px';
 	},
 
-    buttonCfg: [
+	buttonCfg: [
 		{name: getString('NextThought.view.library.available.CourseWindow.Finished'), action: 'close'}
 	],
 
-    renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header', cn: [
 			{cls: 'name', html: '{label}'},
 			{cls: 'close'}
@@ -91,9 +91,9 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		{cls: 'footer'}
 	]),
 
-    btnTpl: new Ext.XTemplate(Ext.DomHelper.markup({cls: 'button {disabled} {secondary}', 'data-action': '{action}', html: '{name}'})),
+	btnTpl: new Ext.XTemplate(Ext.DomHelper.markup({cls: 'button {disabled} {secondary}', 'data-action': '{action}', html: '{name}'})),
 
-    renderSelectors: {
+	renderSelectors: {
 		labelEl: '.header .name',
 		msgContainerEl: '.msg-container',
 		msgEl: '.msg-container .msg',
@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		footerEl: '.footer'
 	},
 
-    restore: function(state) {
+	restore: function(state) {
 		var me = this;
 
 		function finish(catalogEntry, fulfill) {
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		});
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.CourseActions = NextThought.app.library.courses.Actions.create();
@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		this.mon(this.CourseStore, 'update-available-courses', this.updateCourses.bind(this));
 	},
 
-    setupCourses: function(courses) {
+	setupCourses: function(courses) {
 		var current = this.CourseStore.getAllCurrentCourses(),
 			archived = this.CourseStore.getAllArchivedCourses();
 			upcoming = this.CourseStore.getAllUpcomingCourses();
@@ -193,7 +193,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		this.removeMask();
 	},
 
-    beforeRender: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -201,7 +201,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		});
 	},
 
-    afterRender: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.addMask();
 		var me = this;
@@ -260,19 +260,19 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		me.updateButtons();
 	},
 
-    handleClose: function() {
+	handleClose: function() {
 		if (this.doClose) {
 			this.doClose();
 		}
 	},
 
-    updateAvailableCourses: function(current, upcoming, archived) {
+	updateAvailableCourses: function(current, upcoming, archived) {
 		if (!this.tabpanel) { return; }
 
 		this.tabpanel.setItems(upcoming, current, archived);
 	},
 
-    allowNavigation: function() {
+	allowNavigation: function() {
 		var active = this.getLayout().getActiveItem();
 
 		if (active.stopClose) {
@@ -282,7 +282,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		return true;
 	},
 
-    //TODO: this needs to be needs to be allowNavigation
+	//TODO: this needs to be needs to be allowNavigation
 	onBeforeClose: function() {
 		var me = this,
 			active = me.getLayout().getActiveItem(),
@@ -301,7 +301,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	},
 
-    showPrevItem: function(xtype) {
+	showPrevItem: function(xtype) {
 		var current = this.getLayout().getActiveItem(),
 			course;
 
@@ -324,11 +324,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	},
 
-    /**
+	/**
 	 * show the message bar across the top of the window
-	 * @param  {string}  msg  the message to display
+	 * @param  {string}	 msg  the message to display
 	 * @param  {Boolean} isError  whether or not we are showing an error
-	 * @param  {Number} timeout  timeout...
+	 * @param  {Number} timeout	 timeout...
 	 * @param  {String} msgid  id of the message element
 	 * @return {Promise} fulfill if there is a click handler on click, and reject on close
 	 */
@@ -360,21 +360,21 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	},
 
-    closeMsg: function() {
+	closeMsg: function() {
 		if (!this.rendered) { return; }
 		this.bodyEl.removeCls('has-msg');
 		this.msgContainerEl.removeCls(['show', 'link']);
 		this.msgEl.update('');
 	},
 
-    updateButtons: function() {
+	updateButtons: function() {
 		var active = this.getLayout().getActiveItem(),
 			btnCfg = active && active.getButtonCfg && active.getButtonCfg();
 
 		this.applyButtonCfg(btnCfg || this.buttonCfg);
 	},
 
-    applyButtonCfg: function(cfgs) {
+	applyButtonCfg: function(cfgs) {
 		var me = this;
 
 		//make sure its an array
@@ -393,7 +393,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		});
 	},
 
-    handleButtonClick: function(e) {
+	handleButtonClick: function(e) {
 		var btn = e.getTarget('.button'),
 			active, action;
 
@@ -415,7 +415,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 	},
 
-    updateCourses: function() {
+	updateCourses: function() {
 		var me = this,
 			current = me.CourseStore.getAllCurrentCourses(),
 			archived = me.CourseStore.getAllArchivedCourses(),
@@ -424,7 +424,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		me.updateAvailableCourses(current, upcoming, archived);
 	},
 
-    showTabpanel: function() {
+	showTabpanel: function() {
 		var me = this;
 
 		if (!me.tabpanel) {
@@ -460,7 +460,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		me.updateButtons();
 	},
 
-    showCourses: function(route, subRoute) {
+	showCourses: function(route, subRoute) {
 		this.mun(this.CourseStore, 'all-courses-set');
 		this.mon(this.CourseStore, 'all-courses-set', this.setupCourses.bind(this));
 		this.addMask();
@@ -468,7 +468,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		this.showTabpanel();
 	},
 
-    showCourseDetail: function(route, subRoute, notFoundMsg) {
+	showCourseDetail: function(route, subRoute, notFoundMsg) {
 		var ntiid = ParseUtils.decodeFromURI(route.params.id),
 			course = route.precache.course,
 			q = route.queryParams,
@@ -518,11 +518,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		});
 	},
 
-    onDrop: function() {
+	onDrop: function() {
 		this.pushRoute('', '/');
 	},
 
-    showCourse: function(course) {
+	showCourse: function(course) {
 		var me = this;
 
 		function addView() {
@@ -569,7 +569,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		});
 	},
 
-    showEnrollmentOption: function(course, name, type, config) {
+	showEnrollmentOption: function(course, name, type, config) {
 		var me = this;
 
 		function addView() {
@@ -613,7 +613,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		me.closeMsg();
 	},
 
-    showPaymenComplete: function(route, subRoute) {
+	showPaymenComplete: function(route, subRoute) {
 		var mostRecent = this.CourseStore.getMostRecentEnrollmentCourse();
 
 		this.showTabpanel();
@@ -626,7 +626,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		return this.showCourseDetail(route, subRoute);
 	},
 
-    showRedeemToken: function(route, subRoute) {
+	showRedeemToken: function(route, subRoute) {
 		var me = this,
 			//TODO: a better system for getting this email
 			email = Service.getSupportLinks().email || 'support@nextthought.com';
@@ -639,7 +639,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			});
 	},
 
-    showForCredit: function(route, subRoute) {
+	showForCredit: function(route, subRoute) {
 		var me = this;
 
 		return me.showCourseDetail(route, subRoute)
@@ -650,19 +650,19 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			});
 	},
 
-    addMask: function() {
+	addMask: function() {
 		if (this.rendered) {
 			this.el.mask('Loading...');
 		}
 	},
 
-    removeMask: function() {
+	removeMask: function() {
 		if (this.rendered) {
 			this.el.unmask();
 		}
 	},
 
-    updateLabelText: function(text) {
+	updateLabelText: function(text) {
 		if (Ext.isEmpty(text)) { return; }
 		this.labelEl.update(text);
 	}

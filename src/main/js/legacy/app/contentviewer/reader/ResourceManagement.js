@@ -14,16 +14,16 @@ var {guidGenerator} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.ResourceManagement', {
-    alias: 'reader.resourceManager',
-    YOU_TUBE_API_KEY: 'YT',
-    YOU_TUBE_IFRAME_QUERY: 'iframe[src*="youtube.com"]',
+	alias: 'reader.resourceManager',
+	YOU_TUBE_API_KEY: 'YT',
+	YOU_TUBE_IFRAME_QUERY: 'iframe[src*="youtube.com"]',
 
-    YOU_TUBE_BLOCKED_TPL: Ext.DomHelper.createTemplate({
+	YOU_TUBE_BLOCKED_TPL: Ext.DomHelper.createTemplate({
 		cls: 'youtube blocked video',
 		html: getString('NextThought.view.content.reader.ResourceManagement.youtubeblocked')
 	}),
 
-    IMAGE_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
+	IMAGE_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
 		{
 			cls: 'wrapper',
 			cn: [{
@@ -79,13 +79,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 		}
 	])),
 
-    AUDIO_SNIPPET_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
+	AUDIO_SNIPPET_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ tag: 'button', id: '{id}', cls: 'x-component-assessment audio-clip', cn: { tag: 'audio',
 				cn: { tag: 'tpl', 'for': 'sources', cn: [
 					{ tag: 'source', src: '{source}', type: '{type}'}]}}}
 	])),
 
-    AUDIO_SNIPPET_CODE_TEMPLATES: {
+	AUDIO_SNIPPET_CODE_TEMPLATES: {
 		init: function(document, id) {
 			var btn = document.getElementById(id),
 				audio = btn.querySelector('audio'),
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 
 	},
 
-    OVERLAY_DOM_QUERY_XTYPE_MAP: {
+	OVERLAY_DOM_QUERY_XTYPE_MAP: {
 		'object[type$=nticard]': 'overlay-card',
 		'object[type$=nticard-target]': 'overlay-card-target',
 		'object[type$=ntislidedeck]': 'overlay-slidedeck',
@@ -148,14 +148,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 		'object[class=ntirelatedworkref]': 'overlay-card'
 	},
 
-    constructor: function(config) {
+	constructor: function(config) {
 		Ext.apply(this, config);
 
 		this.reader.on('set-content', 'manage', this);//We can't defer this handler, otherwise the fireEvent completes before
 												// we update the dom with container flags
 	},
 
-    manage: function(reader) {
+	manage: function(reader) {
 		this.activateOverlays.apply(this, arguments);
 		this.activateAnnotatableItems.apply(this, arguments);
 		this.activateSequences.apply(this, arguments);
@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 		this.manageYouTubeVideos();
 	},
 
-    manageYouTubeVideos: function() {
+	manageYouTubeVideos: function() {
 		var d, items, tpl = this.YOU_TUBE_BLOCKED_TPL;
 
 		if (window[this.YOU_TUBE_API_KEY] !== undefined) {
@@ -179,14 +179,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 		});
 	},
 
-    activateOverlays: function(reader, doc) {
+	activateOverlays: function(reader, doc) {
 		var me = this;
 		Ext.Object.each(me.OVERLAY_DOM_QUERY_XTYPE_MAP, function(query, xtype) {
 			me.activateOverlayedPanel(reader, doc, query, xtype);
 		});
 	},
 
-    activateOverlayedPanel: function(reader, doc, query, widgetXType) {
+	activateOverlayedPanel: function(reader, doc, query, widgetXType) {
 		var me = reader,
 			o = me.getComponentOverlay(),
 			els = doc.querySelectorAll(query);
@@ -203,7 +203,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 		});
 	},
 
-    activateAudioSnippets: function(reader, doc) {
+	activateAudioSnippets: function(reader, doc) {
 		var tpl = this.AUDIO_SNIPPET_TEMPLATE,
 			code = this.AUDIO_SNIPPET_CODE_TEMPLATES;
 
@@ -242,7 +242,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 		});
 	},
 
-    activateSequences: function(reader, doc) {
+	activateSequences: function(reader, doc) {
 		var me = this,
 			ob = new Ext.util.Observable(),
 			itemSelector = 'object[type$=ntisequenceitem]';
@@ -282,7 +282,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 		});
 	},
 
-    activateAnnotatableItems: function(reader, doc) {
+	activateAnnotatableItems: function(reader, doc) {
 		var els = reader.isAssignment() ? [] : doc.querySelectorAll('[itemprop*=nti-data-markup],[itemprop~=nti-slide-video]'),
 			tpl = this.IMAGE_TEMPLATE,
 			activators = {
@@ -343,7 +343,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Reso
 		});
 	},
 
-    activateZoomBox: function(containerEl, toolbarEl, basePath) {
+	activateZoomBox: function(containerEl, toolbarEl, basePath) {
 		try {
 			Ext.fly(containerEl.querySelector('a.zoom')).removeCls('disabled');
 			var img = containerEl.querySelector('img[id]:not([id^=ext])'),

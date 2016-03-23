@@ -3,10 +3,10 @@ var MenusLabeledSeparator = require('./LabeledSeparator');
 
 
 module.exports = exports = Ext.define('NextThought.common.menus.Reports', {
-    extend: 'Ext.menu.Menu',
-    alias: 'widget.report-menu',
+	extend: 'Ext.menu.Menu',
+	alias: 'widget.report-menu',
 
-    defaults: {
+	defaults: {
 		ui: 'nt-menuitem',
 		xtype: 'menuitem',
 		cls: 'report-menu-option',
@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.common.menus.Reports', {
 		plain: true
 	},
 
-    initComponent: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		if (!this.links) {
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.common.menus.Reports', {
 		}
 	},
 
-    showReport: function(href) {
+	showReport: function(href) {
 		/*
 		....Report.pdf#view=FitH&toolbar=0&navpanes=0&statusbar=0&page=1
 
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.common.menus.Reports', {
 		win.show();
 	},
 
-    reportItemClicked: function(item) {
+	reportItemClicked: function(item) {
 		if (!item.pdf) {
 			console.log('Cant show a report with out an pdf');
 			return;

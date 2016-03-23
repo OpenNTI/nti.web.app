@@ -8,20 +8,20 @@ var CoursewareAssignmentHistoryItems = require('../../../store/courseware/Assign
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
-    extend: 'NextThought.model.courses.assignments.BaseCollection',
+	extend: 'NextThought.model.courses.assignments.BaseCollection',
 
-    constructor: function() {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.GradeCache = this.__createGradeCache();
 		this.HistoryItemCache = this.__createHistoryItemCache();
 	},
 
-    __getIdOf: function(obj) {
+	__getIdOf: function(obj) {
 		return Ext.isString(obj) ? obj : obj.getId();
 	},
 
-    __createGradeCache: function() {
+	__createGradeCache: function() {
 		return NextThought.cache.SharedInstance.create({
 			getKeyForRecord: function(record) {
 				var userName = record.get ? record.get('Username') : record.Username,
@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 		});
 	},
 
-    __createHistoryItemCache: function() {
+	__createHistoryItemCache: function() {
 		var me = this;
 
 		return NextThought.cache.SharedInstance.create({
@@ -47,21 +47,21 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 		});
 	},
 
-    /**
+	/**
 	 * Get the HistoryItem for an assignment, doesn't make sense for an instructor so reject
 	 * @param  {String} assignment NTIID of the assignment
-	 * @return {Promse}            fulfills with the history item
+	 * @return {Promse}			   fulfills with the history item
 	 */
 	getHistoryItem: function(assignment, useCache) {
 		return Promise.reject();
 	},
 
-    /**
+	/**
 	 * Get the HistoryItemSummaries for an assignment
 	 * returns a store that can be paged, filtered, and searched through
 	 *
 	 * @param  {String} assignment NTIID of the assignment
-	 * @return {Store}            store proxied to load the summaries
+	 * @return {Store}			  store proxied to load the summaries
 	 */
 	getAssignmentHistory: function(assignment) {
 		return NextThought.store.courseware.AssignmentHistoryItems.create({
@@ -73,14 +73,14 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 		});
 	},
 
-    /**
+	/**
 	 * Get the HistoryItemSummaries for a user
 	 * returns a store that can be pages, filtered, and searched though
 	 *
 	 * @param {String} historyLink link to the assignment histories for a user
 	 * @param {User} [] [description]
 	 * @param {[String]} available the list of ntiids for the assignments this student has
-	 * @return {Store}      store proxied to load the summaries
+	 * @return {Store}		store proxied to load the summaries
 	 */
 	getStudentHistory: function(historyLink, studentId) {
 		return NextThought.store.courseware.StudentHistoryItems.create({
@@ -93,20 +93,20 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 		});
 	},
 
-    /**
+	/**
 	 * Returns the gradebook entry for an assignment
 	 * @param  {String} assignment NTIID of the assignment
-	 * @return {Promise}           fulfills with the gradebook entry
+	 * @return {Promise}		   fulfills with the gradebook entry
 	 */
 	getGradeBookEntry: function(assignment) {
 		return Promise.resolve();
 	},
 
-    /**
+	/**
 	 * Returns the grade for a user on an assignment
 	 * @param  {String} assignment NTIID of the assignment
-	 * @param  {String} user       Username of the user
-	 * @return {Promise}            fulfills with the grade
+	 * @param  {String} user	   Username of the user
+	 * @return {Promise}			fulfills with the grade
 	 */
 	getGradeFor: function(assignment, user) {
 		user = this.__getIdOf(user);
@@ -121,7 +121,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 		return Promise.resolve(this.createPlaceholderGrade(assignment, user));
 	},
 
-    /**
+	/**
 	 * Returns a store with summaries for all the users
 	 * @return {Store}		pageable, sortable, searchable list of user summaries
 	 */
@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 		});
 	},
 
-    getHistory: function() {
+	getHistory: function() {
 		if (this.__loadHistoryRequest) { return this.__loadHistoryRequest; }
 
 		var link = this.get('HistoryURL');
@@ -160,13 +160,13 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 		return this.__loadHistoryRequest;
 	},
 
-    getCreateGradeLink: function() {
+	getCreateGradeLink: function() {
 		var gradebook = this.getGradeBook();
 
 		return gradebook && gradebook.getLink('SetGrade');
 	},
 
-    createPlaceholderGrade: function(assignment, user) {
+	createPlaceholderGrade: function(assignment, user) {
 		var href = this.getCreateGradeLink(),
 			grade = NextThought.model.courseware.Grade.create({
 				href: href,
@@ -184,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 		return grade;
 	},
 
-    createPlaceholderHistoryItem: function(assignment, user) {
+	createPlaceholderHistoryItem: function(assignment, user) {
 		var grade = this.createPlaceholderGrade(assignment, user),
 			historyItem = NextThought.model.courseware.UsersCourseAssignmentHistoryItem.create({
 				Creator: user,
