@@ -33,7 +33,7 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 		label: 'title',
 		title: 'title',
 		href: 'link',
-		items: 'children',
+		items: 'item',
 		byline: 'author',
 		availablebeginning: 'Avaiable Date',
 		availableending: 'Avaiable End Date',
@@ -67,12 +67,19 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 		if (type === 'created' && fields.length === 0 && title) {
 			fields.push('"' + title + '"');
 		}
-		
+
+		// Change the type if it's an item being added
+		if(changeType === 'update' && fields.length === 1 && fields[0] === 'item') {
+			type = 'added an';
+		}
+
 		if(isChild) {
-			var ifOn = ' on ' + title;
+			var ifOn;
 
 			if(type === 'created') { ifOn = ''; }
 			else if(type === 'moved') { ifOn = title; }
+			else if(type === 'added an') { ifOn = ' in ' + title; }
+			else{ ifOn = ' for ' + title; }
 
 			message = type + ' ' + fields.join(', ') + ifOn + '.';
 		} else {
