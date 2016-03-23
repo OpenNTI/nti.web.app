@@ -1,19 +1,18 @@
-var Ext = require('extjs');
-var ModelBase = require('../Base');
-var ConvertersItems = require('../converters/Items');
-var UtilParsing = require('../../util/Parsing');
+const Ext = require('extjs');
+
+require('legacy/model/Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.AssessedQuestion', {
-    extend: 'NextThought.model.Base',
-    idProperty: 'questionId',
+	extend: 'NextThought.model.Base',
+	idProperty: 'questionId',
 
-    fields: [
+	fields: [
 		{ name: 'questionId', type: 'string' },
 		{ name: 'parts', type: 'arrayItem' }
 	],
 
-    isCorrect: function() {
+	isCorrect: function () {
 		var p = this.get('parts') || [],
 			i = p.length - 1, v;
 
@@ -27,15 +26,15 @@ module.exports = exports = Ext.define('NextThought.model.assessment.AssessedQues
 		return true;
 	},
 
-    statics: {
+	statics: {
 
-		from: function(q) {
+		from: function (q) {
 			var raw = {
 				questionId: q.getId(),
 				parts: []
 			};
 
-			q.get('parts').forEach(function(p) {
+			q.get('parts').forEach(function () {
 				raw.parts.push(new NextThought.model.assessment.AssessedPart());
 			});
 

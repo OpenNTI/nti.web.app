@@ -1,13 +1,12 @@
 var Ext = require('extjs');
-var ModelBase = require('./Base');
-var AnchorablesDomContentRangeDescription = require('./anchorables/DomContentRangeDescription');
-var ConvertersContentRangeDescription = require('./converters/ContentRangeDescription');
+require('legacy/model/Base');
+require('legacy/model/anchorables/DomContentRangeDescription');
 
 
 module.exports = exports = Ext.define('NextThought.model.Highlight', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    fields: [
+	fields: [
 		{ name: 'sharedWith', type: 'UserList'},
 		{ name: 'prohibitReSharing', type: 'boolean' },
 		{ name: 'AutoTags', type: 'Auto'},
@@ -22,10 +21,10 @@ module.exports = exports = Ext.define('NextThought.model.Highlight', {
 		{ name: 'NotificationGroupingField', mapping: 'CreatedTime', type: 'groupByTime', persist: false, affectedBy: 'CreatedTime'}
 	],
 
-    getActivityItemConfig: function(type, cid) {
+	getActivityItemConfig: function (type, cid) {
 		var t = this.getModelName().toLowerCase();
 
-		console.error('does this branch (highlight and redaction) get called??');
+		console.error('%s: does this branch (highlight and redaction) get called??', t);
 
 		if (cid) {
 			//TODO: figure out what needs to happen here

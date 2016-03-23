@@ -1,15 +1,15 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var ModelBase = require('../Base');
-var ConvertersDate = require('../converters/Date');
-var {getURL} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const ParseUtils = require('legacy/util/Parsing');
+const {getURL} = require('legacy/util/Globals');
+
+require('legacy/model/Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.Assignment', {
-    extend: 'NextThought.model.Base',
-    isAssignment: true,
+	extend: 'NextThought.model.Base',
+	isAssignment: true,
 
-    fields: [
+	fields: [
 		{ name: 'category_name', type: 'string'},
 		{ name: 'ContainerId', type: 'string', persist: false, convert: function(v, rec) {
 			return v || (rec && rec.raw.containerId);
@@ -24,14 +24,14 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		{ name: 'no_submit', type: 'boolean'}
 	],
 
-    isAvailable: function() {
+	isAvailable: function() {
 		var now = new Date(),
 			start = this.get('availableBeginning');
 
 		return !start || start < now;
 	},
 
-    containsId: function(id) {
+	containsId: function(id) {
 		var parts = this.get('parts') || [],
 			items = parts.filter(function(p) {
 				p = p.get('question_set');
@@ -41,11 +41,11 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		return items.length > 0;
 	},
 
-    canSaveProgress: function() {
+	canSaveProgress: function() {
 		return !!this.getLink('Savepoint');
 	},
 
-    getSavePoint: function() {
+	getSavePoint: function() {
 		var url = this.getLink('Savepoint');
 
 		if (!url) {
@@ -61,43 +61,43 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 			});
 	},
 
-    setHistoryLink: function(link) {
+	setHistoryLink: function(link) {
 		this.historyLink = link;
 	},
 
-    getHistory: function() {
-	  var link = this.historyLink || this.getLink('History');
+	getHistory: function() {
+		var link = this.historyLink || this.getLink('History');
 
 		if (!link) { return Promise.reject(); }
 
 	  return Service.request(link)
-	      .then(function(response) {
-	          return ParseUtils.parseItems(response)[0];
-	      });
+		  .then(function(response) {
+			  return ParseUtils.parseItems(response)[0];
+		  });
   },
 
-    getDueDate: function() {
+	getDueDate: function() {
 		return this.get('availableEnding') || this.get('availableBeginning');
 	},
 
-    tallyParts: function() {
+	tallyParts: function() {
 		function sum(agg, r) {
 			return agg + (r.tallyParts ? r.tallyParts() : 1);
 		}
 		return (this.get('parts') || []).reduce(sum, 0);
 	},
 
-    isOpen: function() {
+	isOpen: function() {
 		var start = this.get('availableBeginning');
 
 		return !start || start < new Date();
 	},
 
-    isNoSubmit: function() {
+	isNoSubmit: function() {
 		return this.get('no_submit');
 	},
 
-    /**
+	/**
 	 * If the assignment has parts or not
 	 * @return {Boolean} False if there are parts
 	 */
@@ -105,11 +105,11 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		return Ext.isEmpty(this.get('parts'));
 	},
 
-    doNotShow: function() {
+	doNotShow: function() {
 		return this.isNoSubmit() && this.get('title') === 'Final Grade';
 	},
 
-    findMyCourse: function() {
+	findMyCourse: function() {
 		//returns a string that can be compared. NOTE: not for use as a URL!
 		function nomnom(href) {
 			return (getURL(href) || '').split('/').map(decodeURIComponent).join('/');
@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 		};
 	},
 
-    getQuestionCount: function() {
+	getQuestionCount: function() {
 		var parts = this.get('parts'),
 			part = parts && parts[0];
 

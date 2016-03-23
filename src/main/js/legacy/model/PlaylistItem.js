@@ -1,15 +1,13 @@
-var Ext = require('extjs');
-var DomUtils = require('../util/Dom');
-var ConvertersVideoSources = require('./converters/VideoSources');
-var {guidGenerator} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const DomUtils = require('legacy/util/Dom');
+const {guidGenerator} = require('legacy/util/Globals');
 
 
-/*global DomUtils, ParseUtils */
 module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
-    extend: 'Ext.data.Model',
-    idProperty: 'NTIID',
+	extend: 'Ext.data.Model',
+	idProperty: 'NTIID',
 
-    fields: [
+	fields: [
 		{name: 'mediaId', type: 'string'},
 		{name: 'start', type: 'float', defaultValue: 0.0},
 		{name: 'end', type: 'float', defaultValue: -1.0},
@@ -22,24 +20,24 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 		{name: 'description', type: 'string'},
 		{name: 'section', type: 'string'},
 		{name: 'duration', type: 'Synthetic', persist: false,
-			fn: function(r) {
+			fn: function () {
 				return '';
 			}
 		},
 		{name: 'comments', type: 'int', defaultValue: 0},
 		{name: 'poster', type: 'VideoPoster'},
 		{name: 'thumbnail', type: 'VideoPoster'},
-        {name: 'progress', type: 'string', persist: false},
-        {name: 'slidedeck', type: 'string', persist: false},
+		{name: 'progress', type: 'string', persist: false},
+		{name: 'slidedeck', type: 'string', persist: false},
 		{name: 'label', type: 'string', persist: false}
 	],
 
-    statics: {
+	statics: {
 		// FIXME: This is a Hack since a playlistItem doesn't have to be a video.
 		// So far we're using like so and we need to use this mimeType for routing
-		mimeType: "application/vnd.nextthought.ntivideo",
+		mimeType: 'application/vnd.nextthought.ntivideo',
 
-		compareSources: function(a, b) {
+		compareSources: function (a, b) {
 			var i;
 			if (Ext.isArray(a) && Ext.isArray(b)) {
 				if (a.length !== b.length) {
@@ -64,14 +62,13 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 			return false;
 		},
 
-		fromDom: function(dom, videoIndex) {
-			function getParam(name) {
+		fromDom: function (dom, videoIndex) {
+			function getParam (name) {
 				var el = Ext.DomQuery.select('param[name="' + name + '"]', dom)[0];
 				return el ? el.getAttribute('value') : null;
 			}
 			dom = Ext.getDom(dom);
-			var i,
-				frag = (dom.ownerDocument || document).createDocumentFragment(),
+			var frag = (dom.ownerDocument || document).createDocumentFragment(),
 				el = Ext.get(dom),
 				title = getParam('title'),
 				videoIndexId = getParam('video-ntiid'),
@@ -81,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 					'dom-clone': frag,
 					'NTIID': dom.getAttribute('data-ntiid')
 				},
-				sourceComparator = function(a, b) {
+				sourceComparator = function (a, b) {
 					var c = 0, $a = a['attribute-data-priority'], $b = b['attribute-data-priority'];
 					if ($a !== $b) {c = $a < $b ? -1 : 1;}
 					return c;
@@ -99,21 +96,21 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 		},
 
 
-		fromURL: function(url) {
+		fromURL: function (url) {
 
 			//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
-			function parseYoutubeIdOut(url) {
+			function parseYoutubeIdOut (uri) {
 				var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&\?]*).*/,
-						match = url.match(regExp);
+					match = uri.match(regExp);
 				if (match && match[2].length === 11) {
 					return match[2];
 				}
 				return null;
 			}
 
-			function parseVimeoId(url) {
+			function parseVimeoId (uri) {
 				var regExp = /^.*vimeo(\:\/\/|\.com\/)(.+)/i,
-					match = url.match(regExp);
+					match = uri.match(regExp);
 				if (match && match[2]) {
 					return match[2];
 				}
@@ -121,9 +118,9 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 			}
 
 
-			function parseKalturaInformation(url) {
+			function parseKalturaInformation (uri) {
 				var kalturaRegex = /^kaltura:\/\/([^\/]+)\/([^\/]+)\/{0,1}/i,
-						match = url.match(kalturaRegex);
+					match = uri.match(kalturaRegex);
 
 				return match ? match[1] + ':' + match[2] : null;
 			}
@@ -133,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 				vimeoId = parseVimeoId(url);
 
 			if (/^kaltura:/i.test(url)) {
-				kalturaSource = parseKalturaInformation(url);
+				let kalturaSource = parseKalturaInformation(url);
 				if (!kalturaSource) {
 					console.error('Kaltura video specified but did not resolve.', url);
 				}
@@ -146,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 				source = {
 					source: [youtubeId || vimeoId || url],
 					service: youtubeId ? 'youtube' :
-							 vimeoId ? 'vimeo' :
+							vimeoId ? 'vimeo' :
 							'html5'
 				};
 			}
@@ -155,15 +152,15 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 		}
 	},
 
-    usesService: function(service) {
+	usesService: function (service) {
 		return Ext.Array.contains(
 				Ext.Array.pluck(this.get('sources'), 'service'),
 				service);
 	},
 
-    getSources: function(service) {
+	getSources: function (service) {
 		var i = [];
-		Ext.each(this.data.sources, function(o) {
+		Ext.each(this.data.sources, function (o) {
 			if (!service || (o && service === o.service)) {
 				i.push(o.source);
 			}
@@ -171,11 +168,11 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 		return i;
 	},
 
-    activeSource: function() {
+	activeSource: function () {
 		return this.data.sources[this.data.sourceIndex];
 	},
 
-    useNextSource: function() {
+	useNextSource: function () {
 		if (this.data.sourceIndex + 1 < this.data.sources.length) {
 			this.data.sourceIndex += 1;
 			return true;
@@ -183,9 +180,9 @@ module.exports = exports = Ext.define('NextThought.model.PlaylistItem', {
 		return false;
 	},
 
-    nextSource: function() {},
+	nextSource: function () {},
 
-    getAssociatedVideoId: function() {
+	getAssociatedVideoId: function () {
 		var frag = this.get('dom-clone'),
 			video = (frag && frag.querySelector('object[type$=ntivideo]')) || this.get('NTIID');
 

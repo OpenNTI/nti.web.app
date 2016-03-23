@@ -1,13 +1,11 @@
-var Ext = require('extjs');
-var ModelBase = require('../Base');
-var ConvertersItems = require('../converters/Items');
-var UtilParsing = require('../../util/Parsing');
+const Ext = require('extjs');
+require('legacy/model/Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.Part', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    fields: [
+	fields: [
 		{ name: 'content', type: 'string' },
 		{ name: 'hints', type: 'arrayItem' },
 		{ name: 'solutions', type: 'arrayItem', limit: 1 },
@@ -15,13 +13,13 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Part', {
 		{ name: 'answerLabel', type: 'string' }
 	],
 
-    getVideos: function() {
+	getVideos: function () {
 		var out = [],
 			dom = new DOMParser().parseFromString(this.get('content'), 'text/xml');
 
-		Ext.each(dom.querySelectorAll('object.naqvideo'), function(i) {
+		Ext.each(dom.querySelectorAll('object.naqvideo'), function (i) {
 			var o = {};
-			Ext.each(i.getElementsByTagName('param'), function(p) {
+			Ext.each(i.getElementsByTagName('param'), function (p) {
 				o[p.getAttribute('name')] = p.getAttribute('value');
 			});
 			out.push(o);
@@ -30,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Part', {
 		return out;
 	},
 
-    hasSolutions: function() {
+	hasSolutions: function () {
 		var solutions = this.get('solutions');
 
 		return solutions && solutions.length > 0;

@@ -1,17 +1,15 @@
-var Ext = require('extjs');
-var ModelBase = require('../Base');
-var ConvertersItems = require('../converters/Items');
-var UtilParsing = require('../../util/Parsing');
+const Ext = require('extjs');
+require('legacy/model/Base');
 
 
 module.exports = exports = Ext.define('NextThought.model.assessment.QuestionSubmission', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    fields: [
+	fields: [
 		{ name: 'questionId', type: 'string' },
 		{ name: 'parts', type: 'auto' },
 		{ name: 'CreatorRecordedEffortDuration', type: 'int' }
 	],
 
-    isCorrect: function() { return null; }
+	isCorrect: function () { return null; }
 });

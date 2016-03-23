@@ -28,16 +28,16 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 	 * @return {string} default root to use
 	 * @override
 	 */
-	getDefaultAssetRoot: function() {},
+	getDefaultAssetRoot: function () {},
 
 
-	getAssetRoot: function() {
+	getAssetRoot: function () {
 		if (this.presentationroot) { return this.presentationroot; }
 
 		var presResources = (this.get && this.get('PlatformPresentationResources')) || [],
 			root;
 
-		presResources.forEach(function(resource) {
+		presResources.forEach(function (resource) {
 			if (resource.PlatformName === 'webapp') {
 				root = resource.href;
 			}
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 	 * @param  {string} name asset name to load
 	 * @return {Promise} whether or not the asset exists
 	 */
-	getImgAsset: function(name) {
+	getImgAsset: function (name) {
 		var assetPath = this.ASSET_MAP[name] || {name: ('missing-' + name + '-asset.png')},
 			root = this.getAssetRoot(),
 			url = root && root.concatPath(assetPath.name),
@@ -64,15 +64,15 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 			p = Promise.reject('No root');
 		} else if (assetPath.check) {
 			p = Service.request({
-					method: 'HEAD',
-					url: url
-				})
-				.then(function() {
-					return url;
-				})
-				.fail(function() {
-					return Promise.reject(name + ' asset not found');
-				});
+				method: 'HEAD',
+				url: url
+			})
+			.then(function () {
+				return url;
+			})
+			.fail(function () {
+				return Promise.reject(name + ' asset not found');
+			});
 		} else {
 			p = Promise.resolve(url);
 		}
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 	 * @param  {String} asset the name of the asset (defaults to the key arg)
 	 * @return {Promise}      fulfills once the asset has been found to exist or not
 	 */
-	__ensureAsset: function(key, asset) {
+	__ensureAsset: function (key, asset) {
 		var existing = null,
 			me = this;
 
@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 		existing = this.__assetPromises[key];
 
 		if (!existing) {
-			existing = this.getImgAsset(asset || key).then(function(url) { me.set(key, url); }, me.set.bind(me, [key, null]));
+			existing = this.getImgAsset(asset || key).then(function (url) { me.set(key, url); }, me.set.bind(me, [key, null]));
 			this.__assetPromises[key] = existing;
 		}
 
@@ -114,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 	 * @param  {String} asset the name of the asset (defaults to key arg)
 	 * @return {Promise}      fulfills with the url to the asset if it exists
 	 */
-	getAsset: function(key, asset) {
+	getAsset: function (key, asset) {
 		return this.__ensureAsset(key, asset).then(this.get.bind(this, key));
 	}
 });

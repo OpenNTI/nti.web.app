@@ -1,12 +1,10 @@
-var Ext = require('extjs');
-var ModelBase = require('./Base');
-var ConvertersDate = require('./converters/Date');
-
+const Ext = require('extjs');
+require('legacy/model/Base');
 
 module.exports = exports = Ext.define('NextThought.model.Course', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    fields: [
+	fields: [
 		{ name: 'Featured', type: 'bool', persist: false, defaultValue: false },
 		{ name: 'Activated', type: 'bool', persist: false },
 		{ name: 'Amount', type: 'float', persist: false },
@@ -24,14 +22,14 @@ module.exports = exports = Ext.define('NextThought.model.Course', {
 		{ name: 'isCourse', type: 'bool', persist: false, defaultValue: false },
 		{ name: 'StartDate', type: 'ISODate', persist: false },
 		{ name: 'courseName', type: 'string', persist: false, defaultValue: '' },
-		{ name: 'HasHistory', type: 'bool', persist: false, affectedBy: 'Last Modified', convert: function(v, r) {
+		{ name: 'HasHistory', type: 'bool', persist: false, affectedBy: 'Last Modified', convert: function (v, r) {
 			return r && r.hasHistory();
 		}}
 	],
 
-    isCourse: true,
+	isCourse: true,
 
-    hasHistory: function() {
+	hasHistory: function () {
 		return Boolean(this.getLink('history'));
 	}
 });

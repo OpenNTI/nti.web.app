@@ -2,13 +2,12 @@ const Ext = require('extjs');
 const Duration = require('durationjs');
 const {getURL} = require('legacy/util/Globals');
 
-require('../Base');
-require('../../mixins/PresentationResources');
-require('../converters/Date');
+require('legacy/mixins/PresentationResources');
+require('legacy/model/Base');
+require('legacy/model/CatalogFamilies');
 require('./EnrollmentOptions');
 require('./CourseCreditLegacyInfo');
 require('./CourseCatalogInstructorInfo');
-require('../CatalogFamilies');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEntry', {

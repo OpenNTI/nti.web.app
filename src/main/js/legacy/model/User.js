@@ -1,17 +1,15 @@
 const Ext = require('extjs');
 
-const B64 = require('../util/Base64');
-const Globals = require('../util/Globals');
-const {getURL, isFeature} = Globals;
-const ParseUtils = require('../util/Parsing');
-const PresenceInfo = require('./PresenceInfo');
+const B64 = require('legacy/util/Base64');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const PresenceInfo = require('legacy/model/PresenceInfo');
 
-const Community = require('./Community');
-const FriendsList = require('./FriendsList');
-const Avatar = require('../mixins/Avatar');
+const Community = require('legacy/model/Community');
+const FriendsList = require('legacy/model/FriendsList');
+const Avatar = require('legacy/mixins/Avatar');
 
 require('./Base');
-require('./converters/PresenceInfo');
 
 
 const User = module.exports =
@@ -389,7 +387,7 @@ exports = Ext.define('NextThought.model.User', {
 
 	refresh: function () {
 		var req = {
-			url: getURL(this.get('href')),
+			url: Globals.getURL(this.get('href')),
 			callback: function (q, s, r) {
 				if (!s) {
 					console.warn('could not refresh user');
@@ -441,7 +439,7 @@ exports = Ext.define('NextThought.model.User', {
 	},
 
 	getSuggestContacts: function () {
-		if (!isFeature('suggest-contacts') || !(this.hasLink('SuggestContacts') || this.hasLink('Classmates'))) { return Promise.reject(); }
+		if (!Globals.isFeature('suggest-contacts') || !(this.hasLink('SuggestContacts') || this.hasLink('Classmates'))) { return Promise.reject(); }
 
 		var link = this.getLink('SuggestContacts') || this.getLink('Classmates');
 

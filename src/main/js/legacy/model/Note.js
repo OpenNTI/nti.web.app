@@ -1,24 +1,22 @@
-var Ext = require('extjs');
-var User = require('./User');
-var ContentUtils = require('../util/Content');
-var ModelBase = require('./Base');
-var MixinsModelWithBodyContent = require('../mixins/ModelWithBodyContent');
-var AnchorablesDomContentRangeDescription = require('./anchorables/DomContentRangeDescription');
-var AnchorablesTranscriptRangeDescription = require('./anchorables/TranscriptRangeDescription');
-var ConvertersContentRangeDescription = require('./converters/ContentRangeDescription');
-var ConvertersGroupByTime = require('./converters/GroupByTime');
+const Ext = require('extjs');
+const User = require('legacy/model/User');
+const ContentUtils = require('legacy/util/Content');
+
+require('legacy/mixins/ModelWithBodyContent');
+require('legacy/model/Base');
+require('legacy/model/anchorables/DomContentRangeDescription');
+require('legacy/model/anchorables/TranscriptRangeDescription');
 
 
-/*globals User*/
 module.exports = exports = Ext.define('NextThought.model.Note', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    mixins: {
+	mixins: {
 		bodyContent: 'NextThought.mixins.ModelWithBodyContent'
 	},
 
-    statics: {
-		createFromHighlight: function(hl) {
+	statics: {
+		createFromHighlight: function (hl) {
 			return this.create({
 				ContainerId: hl.get('ContainerId'),
 				sharedWith: [],
@@ -30,10 +28,10 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 		}
 	},
 
-    isThreadable: true,
-    canReply: true,
+	isThreadable: true,
+	canReply: true,
 
-    fields: [
+	fields: [
 		{ name: 'ReferencedByCount', type: 'int'},
 		{ name: 'inReplyTo', type: 'string' },
 		{ name: 'references', type: 'auto', defaultValue: [] },
@@ -55,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 		{ name: 'line', type: 'int', defaultValue: 0, persist: false},
 		{ name: 'pline', type: 'int', defaultValue: 0, persist: false},
 		{ name: 'ReplyCount', type: 'Synthetic', persist: false,
-			fn: function(r) {
+			fn: function (r) {
 				if (r.placeholder) {
 					return r.countChildren();
 				}
@@ -65,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 		},
 		{ name: 'preview', type: 'Synthetic', persist: false,
 			affectedBy: ['body', 'title'],
-			fn: function(r) {
+			fn: function (r) {
 				if (r.placeholder) {
 					return '[Deleted]';
 				}
@@ -74,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 					return r.data.$preview;
 				}
 
-				r.resolveNotePreview(function(s) {
+				r.resolveNotePreview(function (s) {
 					r.data.$preview = s;
 					try {
 						r.afterEdit(['preview', 'GroupingField']);
@@ -87,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 
 				return '';
 			},
-			fnSet: function(r) { delete r.data.$preview; return r.data.preview; }
+			fnSet: function (r) { delete r.data.$preview; return r.data.preview; }
 		},
 
 
@@ -97,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 		{ name: 'textBodyContent', type: 'auto', persist: false}
 	],
 
-    /*
+	/*
 	 * Retrieves the descendants for the given note.
 	 * If this is a placeholder that means aggregating
 	 * getDescendants on each of it's children.  If this
@@ -112,12 +110,12 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 	 * maintained in the result.  Doesn't seem like this functions job to muck
 	 * with that stuff.
 	 */
-	getDescendants: function(callback, scope) {
+	getDescendants: function (callback, scope) {
 		var resultStore = NextThought.store.PageItem.create(),
 			outstandingChildren = 0, me = this;
 
 
-		function childFinished(childStore) {
+		function childFinished (childStore) {
 			if (childStore) {
 				resultStore.loadRecords(childStore.getRange(), {addRecords: true});
 			}
@@ -138,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 			}
 
 			outstandingChildren += this.children.length;
-			Ext.each(this.children, function(child) {
+			Ext.each(this.children, function (child) {
 				if (!child.placeholder) {
 					//Note we don't use add here.  PageItem overrides
 					//that to generate threads, which we don't really want
@@ -152,15 +150,15 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 		}
 	},
 
-    /**
+	/**
 	 * Asynchronously loads replies using the "replies" link type
 	 *
 	 * @param {Function} callback
 	 * @param {Object} scope
 	 * @param {Object} additionalParams An optional object describing params to send to the server.
-	 *          Ext: { sortOn: 'lastModified', sortOrder: 'descending' }
+	 *		  Ext: { sortOn: 'lastModified', sortOrder: 'descending' }
 	 */
-	loadReplies: function(callback, scope, additionalParams) {
+	loadReplies: function (callback, scope, additionalParams) {
 		var me = this,
 			link = this.getLink('replies'),
 			store,
@@ -183,11 +181,11 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 		store.load({});
 	},
 
-    /**
+	/**
 	 * From a note, build its reply
 	 * @return {NextThought.model.Note}
 	 */
-	makeReply: function() {
+	makeReply: function () {
 		var note = this,
 			reply = this.self.create(),
 			parent = note.get('NTIID'),
@@ -203,20 +201,20 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 		return reply;
 	},
 
-    getReplyCount: function() {
+	getReplyCount: function () {
 		if (this.hasRepliesBeenLoaded(this)) {
 			return this.countChildren();
 		}
 		return this.sumReferenceByCount();
 	},
 
-    /**
+	/**
 	 * 'AdjustedReferenceCount' is a derived field. Thus, we need to implement at least a getter fn.
 	 * When it's triggered, things that are listening to it will update their replyCount.
 	 */
 	getAdjustedReferenceCount: Ext.emptyFn,
 
-    hasRepliesBeenLoaded: function(rec) {
+	hasRepliesBeenLoaded: function (rec) {
 		if (!rec.placeholder) {
 			return rec.get('ReferencedByCount') === 0 || ((rec.children || []).length > 0);
 		}
@@ -224,14 +222,14 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 		return Ext.Array.every((rec.children || []), rec.hasRepliesBeenLoaded, this);
 	},
 
-    isWhiteboardOnly: function(body) {
+	isWhiteboardOnly: function (body) {
 		if (Ext.isEmpty(body)) { return false;}
-		return Ext.Array.every(body, function(i) {
+		return Ext.Array.every(body, function (i) {
 			return typeof i !== 'string';
 		});
 	},
 
-    resolveNoteTitle: function(cb, max) {
+	resolveNoteTitle: function (cb, max) {
 		var t = this.get('title'),
 			body = this.get('body'),
 			snip;
@@ -252,7 +250,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 		Ext.callback(cb, null, [snip, t]);
 	},
 
-    resolveNotePreview: function(cb, max) {
+	resolveNotePreview: function (cb, max) {
 		var t = this.get('title'),
 			body = this.get('body'),
 			snip, onlyObject;
@@ -270,7 +268,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 			if (onlyObject) {
 				t = 'Whiteboard';
 			}
-			this.compileBodyContent(function(html) {
+			this.compileBodyContent(function (html) {
 				//TODO: Create a white list of classnames we allow, instead of just allowing all of them
 				html = html.replace(/\s*(style)=".*?"\s*/ig, ' ');
 				snip = onlyObject ? html : ContentUtils.getHTMLSnippet(html, max);
@@ -286,21 +284,21 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 		Ext.callback(cb, null, [snip, t]);
 	},
 
-    //get the simplified body and filter out all non string parts
-	simplifyTitle: function(body) {
+	//get the simplified body and filter out all non string parts
+	simplifyTitle: function (body) {
 		var text = this.simplifyBody(body) || [];
 
-		text = text.filter(function(t) {
+		text = text.filter(function (t) {
 			return Ext.isString(t);
 		});
 
 		return text;
 	},
 
-    simplifyBody: function(body) {
+	simplifyBody: function (body) {
 		var text = [];
 
-		Ext.each(body, function(c) {
+		Ext.each(body, function (c) {
 			if (Ext.isString(c)) {
 				text.push(c.replace(/<.*?>/g, ' ').replace(/\s+/g, ' '));
 			}else {
@@ -311,8 +309,10 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 		return text;
 	},
 
-    countChildren: function() {
-		function allDescendants(rec) {
+	countChildren: function () {
+		var sum = 0;
+
+		function allDescendants (rec) {
 			var i, child;
 			for (i = 0; i < (rec.children || []).length; i++) {
 				child = rec.children[i];
@@ -320,12 +320,11 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 				allDescendants(child);
 			}
 		}
-		var sum = 0;
 		allDescendants(this);
 		return sum;
 	},
 
-    sumReferenceByCount: function(rec) {
+	sumReferenceByCount: function (rec) {
 		var sum = 0;
 		if (!rec) {
 			rec = this;
@@ -335,14 +334,14 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 			return rec.get('ReferencedByCount') + (rec.parent ? 1 : 0);
 		}
 
-		Ext.each((rec.children || []), function(a) {
+		Ext.each((rec.children || []), function (a) {
 			sum += rec.sumReferenceByCount(a);
 		});
 
 		return sum;
 	},
 
-    debugString: function() {
+	debugString: function () {
 		var bs = (this.get('body') || []).toString(), cs;
 
 		if (this.placeholder) {
@@ -353,22 +352,22 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 			return '[' + bs + ']';
 		}
 
-		cs = Ext.Array.map(this.children, function(c) {return c.debugString();});
+		cs = Ext.Array.map(this.children, function (c) {return c.debugString();});
 
 		return '[' + bs + ' (' + cs.join(',') + ') ]';
 	},
 
-    getTotalLikeCount: function() {
+	getTotalLikeCount: function () {
 		if (this.raw && this.raw.hasOwnProperty('RecursiveLikeCount')) {
 			return this.get('RecursiveLikeCount') || 0;
 		}
 
-		return (this.children || []).reduce(function(sum, child) {
+		return (this.children || []).reduce(function (sum, child) {
 			return sum + (child.getTotalLikeCount ? (child.getTotalLikeCount() || 0) : 0);
 		}, (this.isLiked() ? 1 : 0));
 	},
 
-    convertToPlaceholder: function() {
+	convertToPlaceholder: function () {
 		var me = this,
 			data = this.getData(false),
 			p = User.getUnresolved();
@@ -391,7 +390,7 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 		me.resumeEvents();
 	},
 
-    getActivityItemConfig: function() {
+	getActivityItemConfig: function () {
 		return Promise.resolve({
 			message: Ext.String.format('&ldquo;{0}&rdquo;', Ext.String.ellipsis(this.getBodyText(), 50, true)),
 			verb: this.get('inReplyTo') ? 'said' : 'shared a note'

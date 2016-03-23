@@ -1,23 +1,22 @@
 var Ext = require('extjs');
-var ModelBase = require('./Base');
-var MixinsModelWithBodyContent = require('../mixins/ModelWithBodyContent');
-var AnchorablesDomContentRangeDescription = require('./anchorables/DomContentRangeDescription');
-var ConvertersContentRangeDescription = require('./converters/ContentRangeDescription');
-var ModelHighlight = require('./Highlight');
+require('legacy/mixins/ModelWithBodyContent');
+require('legacy/model/Base');
+require('legacy/model/Highlight');
+require('legacy/model/anchorables/DomContentRangeDescription');
 
 
 module.exports = exports = Ext.define('NextThought.model.Redaction', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    mixins: {
+	mixins: {
 		bodyContent: 'NextThought.mixins.ModelWithBodyContent'
 	},
 
-    statics: {
+	statics: {
 
 		DEFAULT_TEXT: '<big>***</big>',
 
-		createFromHighlight: function(hl, block) {
+		createFromHighlight: function (hl, block) {
 			return this.create({
 				ContainerId: hl.get('ContainerId'),
 				sharedWith: [],
@@ -26,13 +25,13 @@ module.exports = exports = Ext.define('NextThought.model.Redaction', {
 				selectedText: hl.get('selectedText'),
 				applicableRange: hl.get('applicableRange'),
 				replacementContent: this.DEFAULT_TEXT,
-        //				style: block? 'block':'inline',
+				// style: block? 'block':'inline',
 				redactionExplanation: block ? 'Why was this redacted?' : null
 			});
 		}
 	},
 
-    fields: [
+	fields: [
 		{ name: 'AutoTags', type: 'Auto'},
 		{ name: 'applicableRange', type: 'ContentRangeDescription'},
 		{ name: 'prohibitReSharing', type: 'boolean' },

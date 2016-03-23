@@ -1,29 +1,29 @@
-var Ext = require('extjs');
-var Globals = require('../util/Globals');
-var {guidGenerator, getURL} = Globals;
-var ParseUtils = require('../util/Parsing');
-var ModelBase = require('./Base');
-var MixinsPresentationResources = require('../mixins/PresentationResources');
-var MixinsDurationCache = require('../mixins/DurationCache');
-var ConvertersDCCreatorToAuthor = require('./converters/DCCreatorToAuthor');
+const Ext = require('extjs');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const {wait} = require('legacy/util/Promise');
+
+require('legacy/model/Base');
+require('legacy/mixins/PresentationResources');
+require('legacy/mixins/DurationCache');
 
 
 module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
-    statics: {
+	statics: {
 		TOC_REQUESTS: {}
 	},
 
-    mixins: {
+	mixins: {
 		'PresentationResources': 'NextThought.mixins.PresentationResources',
 		'DurationCache': 'NextThought.mixins.DurationCache'
 	},
 
-    VIDEO_INDEX_TYPE: 'application/vnd.nextthought.videoindex',
-    idProperty: 'index',
+	VIDEO_INDEX_TYPE: 'application/vnd.nextthought.videoindex',
+	idProperty: 'index',
 
-    fields: [
+	fields: [
 		{ name: 'Archive Last Modified', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'archive', type: 'string' },
 		{ name: 'index', type: 'string' },
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 		{ name: 'thumb', type: 'string' }
 	],
 
-    constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		wait()
@@ -55,27 +55,27 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
-    getTitle: function() {
+	getTitle: function () {
 		return this.get('title');
 	},
 
-    getIcon: function() {
+	getIcon: function () {
 		return this.get('icon');
 	},
 
-    getToc: function(status) {
+	getToc: function (status) {
 		var me = this,
-			library = me.LibraryActions;
+			library = me.LibraryActions,
 			index = me.get('index');
 
 		if (me.self.TOC_REQUESTS[index + '-' + status]) {
 			me.tocPromise = me.self.TOC_REQUESTS[index + '-' + status];
 		} else {
-			me.tocPromise = Service.request(getURL(index))
+			me.tocPromise = Service.request(Globals.getURL(index))
 					//parse the response into a xml
 					.then(library.parseXML.bind(library))
 					//set my root, icon, and title on the doc
-					.then(function(xml) {
+					.then(function (xml) {
 						var doc = xml.documentElement;
 
 						doc.setAttribute('base', me.get('root'));
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 		}
 
 		me.tocPromise
-			.then(function(xml) {
+			.then(function (xml) {
 				var doc = xml.documentElement;
 
 				//make sure I am synced with the toc
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 		return me.tocPromise;
 	},
 
-    asUIData: function() {
+	asUIData: function () {
 		return {
 			id: this.getId(),
 			isCourse: this.get('isCourse'),
@@ -115,11 +115,11 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 		};
 	},
 
-    fireNavigationEvent: function(eventSource) {
+	fireNavigationEvent: function (eventSource) {
 		var id = this.get('NTIID');
-		return new Promise(function(fulfill, reject) {
-			var txn = history.beginTransaction('book-navigation-transaction-' + guidGenerator());
-			eventSource.fireEvent('set-last-location-or-root', id, function(ntiid, reader, error) {
+		return new Promise(function (fulfill, reject) {
+			var txn = history.beginTransaction('book-navigation-transaction-' + Globals.guidGenerator());
+			eventSource.fireEvent('set-last-location-or-root', id, function (ntiid, reader, error) {
 				if (error) {
 					txn.abort();
 					reject(error);
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 		});
 	},
 
-    getDefaultAssetRoot: function() {
+	getDefaultAssetRoot: function () {
 		var root = this.get('root');
 
 		if (!root) {
@@ -141,30 +141,30 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 			return '';
 		}
 
-		return getURL(root).concatPath('/presentation-assets/webapp/v1/');
+		return Globals.getURL(root).concatPath('/presentation-assets/webapp/v1/');
 	},
 
-    __cacheContentPreferences: function() {
+	__cacheContentPreferences: function () {
 		var c = console;
 		Service.getPageInfo(this.get('NTIID'))
 				.then(undefined, c.error.bind(c));
 	},
 
-    __setImage: function() {
+	__setImage: function () {
 		var me = this;
-		me.getImgAsset('landing').then(function(url) { me.set('icon', url); });
-		me.getImgAsset('thumb').then(function(url) { me.set('thumb', url); });
+		me.getImgAsset('landing').then(function (url) { me.set('icon', url); });
+		me.getImgAsset('thumb').then(function (url) { me.set('thumb', url); });
 	},
 
-    represents: function(catalogEntry) {return false;},
+	represents: function () {return false;},
 
-    getReferenceSelector: function(type) {
+	getReferenceSelector: function (type) {
 		type = ParseUtils.escapeId(type);
 
 		return 'reference[type="' + type + '"]';
 	},
 
-    getReference: function(type) {
+	getReference: function (type) {
 		var selector = this.getReferenceSelector(type),
 			root = this.get('root'),
 			key = 'reference-' + type,
@@ -174,9 +174,9 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 
 		if (!load) {
 			load = this.getToc()
-					.then(function(toc) {
-						var reference = toc.querySelector(selector),
-						link = reference && reference.getAttribute('href');
+					.then(function (toc) {
+						var reference = toc.querySelector(selector);
+						var link = reference && reference.getAttribute('href');
 
 						if (!link) {
 							return Promise.reject('No link');
@@ -186,7 +186,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 
 						return Service.request(link);
 					})
-					.then(function(response) {
+					.then(function (response) {
 						var json = Globals.parseJSON(response, true);
 
 						return json || response;
@@ -198,19 +198,19 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 		return load;
 	},
 
-    getVideos: function() {
+	getVideos: function () {
 		return this.getReference(this.VIDEO_INDEX_TYPE)
-			.then(function(videoIndex) {
+			.then(function (videoIndex) {
 				var items = videoIndex.Items,
 					keys = Object.keys(items);
 
-				return keys.map(function(key) {
+				return keys.map(function (key) {
 					var item = items[key];
 
 					return ParseUtils.parseItems(item)[0];
 				});
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Failed to get videos: ', reason);
 
 				return [];

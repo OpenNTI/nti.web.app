@@ -1,33 +1,32 @@
-var Ext = require('extjs');
-var ConvertersFuture = require('../converters/Future');
-var ProxyPreference = require('../../proxy/Preference');
-var ModelBase = require('../Base');
+const Ext = require('extjs');
+const Base = require('legacy/model/Base');
+require('legacy/proxy/Preference');
 
 
 module.exports = exports = Ext.define('NextThought.model.preference.Base', {
-    extend: 'Ext.data.Model',
-    idProperty: 'Class',
+	extend: 'Ext.data.Model',
+	idProperty: 'Class',
 
-    fields: [
+	fields: [
 		{name: 'Class', type: 'String', persist: false},
 		{name: 'MimeType', type: 'String', useNull: false}
 	],
 
-    subPreferences: [],
-    proxy: {type: 'preference', reader: 'json'},
+	subPreferences: [],
+	proxy: {type: 'preference', reader: 'json'},
 
-    getResourceUrl: function() {
+	getResourceUrl: function () {
 		return $AppConfig.Preferences.baseUrl;
 	},
 
-    save: function(ops) {
-		var request, me = this,
-			url = me.getResourceUrl();
+	save: function (ops) {
+		var me = this,
+			url = me.getResourceUrl(),
 			request = Ext.apply({
 				url: url,
 				method: 'PUT',
 				jsonData: me.asJSON(),
-				callback: function(req, success, resp) {
+				callback: function (req, success) {
 					if (success) {
 						me.fireEvent('changed', me);
 					}
@@ -36,6 +35,6 @@ module.exports = exports = Ext.define('NextThought.model.preference.Base', {
 
 		Ext.Ajax.request(request);
 	}
-}, function() {
-	this.borrow(NextThought.model.Base, ['asJSON']);
+}, function () {
+	this.borrow(Base, ['asJSON']);
 });
