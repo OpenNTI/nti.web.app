@@ -25,7 +25,8 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 		update: 'changed the',
 		overviewgroupmoved: 'moved',
 		outlinenodemove: 'moved',
-		assetremovedfromitemcontainer: 'removed'
+		assetremovedfromitemcontainer: 'removed',
+		presentationassetmoved: 'moved'
 	},
 
 	FIELDS: {
@@ -51,17 +52,22 @@ Ext.define('NextThought.app.course.overview.components.editing.auditlog.Item', {
 			recordable = record.get('Recordable'),
 			title = recordable && recordable.Title || '',
 			isChild = recordable.NTIID !== this.parentRecord.getId(),
+			externalValues = record && record.get('ExternalValue') || {},
 			message;
 
 		var fields = attributes.map(function(attr) {
-			return me.FIELDS[attr.toLowerCase()] || attr;
+			var f = me.FIELDS[attr.toLowerCase()] || attr;
+			if (externalValues[attr]) {
+				f += ' to "' + externalValues[attr] + '"';
+			}
+			return f;
 		});
 
 		// Message will be: {user} created {title of item}.
 		if (type === 'created' && fields.length === 0 && title) {
 			fields.push('"' + title + '"');
 		}
-
+		
 		if(isChild) {
 			var ifOn = ' on ' + title;
 
