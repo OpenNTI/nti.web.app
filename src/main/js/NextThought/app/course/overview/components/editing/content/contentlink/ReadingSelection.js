@@ -19,6 +19,41 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 	})),
 
 
+	getHeaderCfg: function() {
+		var me = this;
+
+		if (Service.canDoAdvancedEditing()) {
+			return {
+				xtype: 'box',
+				autoEl: {cls: 'filter', cn: [
+					{cls: 'nti-checkbox', cn: [
+						{tag: 'input', type: 'checkbox', name: 'end-date', id: 'filter-readings-checkbox-' + me.id},
+						{tag: 'label', 'for': 'filter-readings-checkbox-' + me.id, html: 'Do not filter'}
+					]}
+				]},
+				renderSelectors: {
+					checkbox: 'input[type=checkbox]'
+				},
+				listeners: {
+					afterrender: function() {
+						var checkbox = this.checkbox;
+
+						this.mon(checkbox, 'change', function() {
+							var checked = checkbox && checkbox.dom && checkbox.dom.checked;
+
+							if (checked && me.removeFilter) {
+								me.removeFilter();
+							} else if (me.applyFilter) {
+								me.applyFilter();
+							}
+						});
+					}
+				}
+			}
+		}
+	},
+
+
 	getItemData: function(item) {
 		var children = this.getItemChildren(item);
 
@@ -44,7 +79,7 @@ Ext.define('NextThought.app.course.overview.components.editing.content.contentli
 
 		return label.indexOf(searchTerm) >= 0 || searchTerm === ntiid;
 	},
-	
+
 
 	onSelectItem: function(el) {
 		el.classList.add('selected');

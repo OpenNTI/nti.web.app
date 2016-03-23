@@ -862,7 +862,20 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
-	getReadings: function(bundle) {
+	getReadings: function(bundle, unfiltered) {
+		function getTitle(toc) {
+			var t = toc.querySelector('toc');
+
+			return t && t.getAttribute('title');
+		}
+
+
+		function getTocID(toc) {
+			var t = toc.querySelector('toc');
+
+			return t && t.getAttribute('ntiid');
+		}
+
 		function buildNavigationMap(toc) {
 			var nodes = toc.querySelectorAll('course, course unit, course lesson');
 
@@ -877,25 +890,55 @@ Ext.define('NextThought.util.Content', {
 			}, {});
 		}
 
-		function findReadings(toc) {
+		function findUnfilteredReadings(toc) {
 			var navigation = buildNavigationMap(toc),
-				topLevel = toc.querySelectorAll('toc > topic'),
-				t = toc.querySelector('toc'),
-				title = t && t.getAttribute('title'), filtered;
+				topLevel = toc.querySelectorAll('toc > topic');
 
 			topLevel = Array.prototype.slice.call(topLevel);
 
-			filtered = topLevel.filter(function(node) {
+			return {
+				title: getTitle(toc),
+				id: getTocID(toc),
+				items: topLevel.filter(function(node) {
 							var ntiid = node.getAttribute('ntiid');
 
 							return !navigation[ntiid];
-						});
-			return {title: title, items: filtered};
+						})
+			};
+		}
+
+		function findFilteredReadings(toc) {
+			var navigation = buildNavigationMap(toc),
+				readingNodes = toc.querySelectorAll('topic[label=Readings]');
+
+			readingNodes = Array.prototype.slice.call(readingNodes);
+
+			readingNodes = readingNodes.filter(function(node) {
+						var ntiid = node.getAttribute('ntiid');
+
+						return !navigation[ntiid];
+					});
+
+			return {
+				title: getTitle(toc),
+				id: getTocID(toc),
+				items: readingNodes.reduce(function(acc, node) {
+					var topics = node.childNodes;
+
+					topics = Array.prototype.slice.call(topics);
+
+					topics = topics.filter(function(topic) {
+						return topic.tagName === 'topic';
+					});
+
+					return acc.concat(topics)
+				}, [])
+			}
 		}
 
 		return this.__resolveTocs(bundle)
 			.then(function(tocs) {
-				return tocs.map(findReadings);
+				return tocs.map(unfiltered ? findUnfilteredReadings : findFilteredReadings);
 			});
 	}
 

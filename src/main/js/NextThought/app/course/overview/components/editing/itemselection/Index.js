@@ -18,6 +18,8 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 	initComponent: function() {
 		this.callParent(arguments);
 
+		var headerCmps = [];
+
 		this.selection = this.selectedItems || [];
 
 		if (this.showSearch) {
@@ -41,6 +43,10 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 					}
 				}
 			});
+		}
+
+		if (this.getHeaderCfg && this.getHeaderCfg()) {
+			this.headerCmp = this.add(this.getHeaderCfg());
 		}
 
 		this.itemsContainer = this.add({
@@ -118,6 +124,7 @@ Ext.define('NextThought.app.course.overview.components.editing.itemselection.Ind
 			this.showEmptyState();
 		}
 
+		me.itemsContainer.removeAll(true);
 		me.selectionItems = items;
 		me.itemsSet = true;
 
