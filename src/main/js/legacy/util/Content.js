@@ -1,11 +1,13 @@
-var Ext = require('extjs');
-var AnnotationUtils = require('./Annotations');
-var Globals = require('./Globals');
-var {getURL} = Globals;
-var ParseUtils = require('./Parsing');
-var UtilParsing = require('./Parsing');
-var LibraryStateStore = require('../app/library/StateStore');
-var BuiltinsRegExp = require('../overrides/builtins/RegExp');
+const Ext = require('extjs');
+const Globals = require('./Globals');
+const {getURL} = Globals;
+const ParseUtils = require('./Parsing');
+
+const LibraryStateStore = require('legacy/app/library/StateStore');
+require('legacy/overrides/builtins/RegExp');
+
+const lazy = require('legacy/util/lazy-require')
+				.get('AnnotationUtils', () => require('legacy/util/Annotations'));
 
 
 module.exports = exports = Ext.define('NextThought.util.Content', {
@@ -20,14 +22,14 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 	IGNORE_ROOTING: new RegExp(RegExp.escape('tag:nextthought.com,2011-10:Alibra-'), 'i'),
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
-		this.LibraryStore = NextThought.app.library.StateStore.getInstance();
+		this.LibraryStore = LibraryStateStore.getInstance();
 		this.clearCache();
 	},
 
-	hasVisibilityForContent: function(content, status) {
+	hasVisibilityForContent: function (content, status) {
 		var u = $AppConfig.userObject,
 			visibilityKey = content.getAttribute('visibility'),
 			attr = this.CONTENT_VISIBILITY_MAP[visibilityKey] || visibilityKey;
@@ -45,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		return !attr || u.hasVisibilityField(attr) || attr === status || (/everyone/i).test(attr);
 	},
 
-	getNTIIDFromThing: function(thing) {
+	getNTIIDFromThing: function (thing) {
 		var ntiid;
 
 		if (thing && thing.getAttribute) {
@@ -57,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		return ntiid || thing;
 	},
 
-	__resolveTocs: function(bundleOrTocOrNTIID) {
+	__resolveTocs: function (bundleOrTocOrNTIID) {
 		var x = bundleOrTocOrNTIID,
 			load;
 
@@ -74,8 +76,8 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		return load;
 	},
 
-	__findNode: function(ntiid, toc) {
-		function getNode(node) {
+	__findNode: function (ntiid, toc) {
+		function getNode (node) {
 			return {
 				toc: toc,
 				location: node,
@@ -113,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 * @param  {String}  r uri to check
 	 * @return {Boolean}   true if its outside of the side
 	 */
-	isExternalUri: function(r) {
+	isExternalUri: function (r) {
 		var anchor = document.createElement('a'),
 			currentHost = window.location && window.location.host,
 			targetHost;
@@ -134,20 +136,20 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 * @param  {Bundle|XML} bundleOrTocOrNTIID the bundle to get the tocs from or the toc itself
 	 * @return {Promise}					fulfills with the nodes
 	 */
-	getNodes: function(ntiid, bundleOrTocOrNTIID) {
+	getNodes: function (ntiid, bundleOrTocOrNTIID) {
 		var result, me = this;
 
 		result = me.findCache[ntiid];
 
 		if (!result) {
 			result = me.__resolveTocs(bundleOrTocOrNTIID)
-				.then(function(tocs) {
-					var nodes = (tocs || []).map(function(toc) {
+				.then(function (tocs) {
+					var nodes = (tocs || []).map(function (toc) {
 						return me.__findNode(ntiid, toc);
 					});
 
 					//filter out falsy values
-					nodes = nodes.filter(function(node) {
+					nodes = nodes.filter(function (node) {
 						return !!node;
 					});
 
@@ -160,15 +162,12 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		return result;
 	},
 
-	__getNodesLineage: function(ntiid, bundleOrToc, fn) {
+	__getNodesLineage: function (ntiid, bundleOrToc, fn) {
 		if (!ntiid) {
 			return Promise.resolve([]);
 		}
 
-		var me = this;
-
-
-		function mapNode(node) {
+		function mapNode (node) {
 			var lineage = [],
 				value;
 
@@ -190,7 +189,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		}
 
 		return this.getNodes(ntiid, bundleOrToc)
-				.then(function(nodes) {
+				.then(function (nodes) {
 					return (nodes || []).map(mapNode);
 				});
 	},
@@ -203,10 +202,10 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 * @param  {Bundle|XML} bundleOrToc context to look under
 	 * @return {Promise}			 fulfills with the paths for all the tocs that have one
 	 */
-	getLineage: function(ntiid, bundleOrToc) {
+	getLineage: function (ntiid, bundleOrToc) {
 		ntiid = this.getNTIIDFromThing(ntiid);
 
-		return this.__getNodesLineage(ntiid, bundleOrToc, function(node) {
+		return this.__getNodesLineage(ntiid, bundleOrToc, function (node) {
 			var id = node.getAttribute ? node.getAttribute('ntiid') : null;
 
 			if (id) {
@@ -226,10 +225,10 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 * @param  {Bundle|XML} bundleOrToc context to look under
 	 * @return {Promise}			 fulfills with the paths for all the tocs that have one
 	 */
-	getLineageLabels: function(ntiid, showBundleAsRoot, bundleOrToc) {
+	getLineageLabels: function (ntiid, showBundleAsRoot, bundleOrToc) {
 		ntiid = this.getNTIIDFromThing(ntiid);
 
-		return this.__getNodesLineage(ntiid, bundleOrToc, function(node) {
+		return this.__getNodesLineage(ntiid, bundleOrToc, function (node) {
 			var label = node.getAttribute ? node.getAttribute('label') : null;
 
 			if (label) {
@@ -238,7 +237,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				console.error('Missing Label: ', node);
 				return 'Missing Label';
 			}
-		}).then(function(labels) {
+		}).then(function (labels) {
 			if (showBundleAsRoot) {
 				//TODO: figure this out
 			}
@@ -247,7 +246,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		});
 	},
 
-	listenToLibrary: function() {
+	listenToLibrary: function () {
 		if (this.libraryMon) {
 			return;
 		}
@@ -258,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		});
 	},
 
-	clearCache: function() {
+	clearCache: function () {
 		this.cache = {};
 		this.findCache = {};
 	},
@@ -270,12 +269,12 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 * @param  {Bundle|Toc} bundleOrToc context to look in
 	 * @return {Promise}			 fulfills with location info
 	 */
-	getLocation: function(ntiid, bundleOrToc) {
+	getLocation: function (ntiid, bundleOrToc) {
 		ntiid = this.getNTIIDFromThing(ntiid);
 
 		var me = this, result;
 
-		function getAttribute(elements, attr) {
+		function getAttribute (elements, attr) {
 			var i, value;
 
 			for (i = 0; i < elements.length; i++) {
@@ -295,7 +294,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			return null;
 		}
 
-		function mapNode(node) {
+		function mapNode (node) {
 			var doc = node.toc && node.toc.documentElement,
 				loc = node.location;
 
@@ -307,7 +306,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				title: getAttribute([loc, doc], 'title'),
 				label: getAttribute([loc, doc], 'label'),
 				thumbnail: getAttribute([loc, doc], 'thumbnail'),
-				getIcon: function(fromBook) {
+				getIcon: function (fromBook) {
 					var iconPath = fromBook ? this.title.get('icon') : this.icon;
 
 					if (iconPath.substr(0, this.root.length) !== root) {
@@ -316,12 +315,12 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 					return iconPath;
 				},
-				getPathLabel: function() {
+				getPathLabel: function () {
 					return me.getLineageLabels(this.NTIID, bundleOrToc)
-							.then(function(lineages) {
+							.then(function (lineages) {
 								var lineage = lineages[0],
 									sep = lineage.length <= 2 ? ' / ' : ' /.../ ',
-									base = linage.last() || '',
+									base = lineage.last() || '',
 									leaf = lineage.first();
 
 								return lineage.length <= 1 ? base : base + sep + leaf;
@@ -336,7 +335,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 		if (!result) {
 			result = this.getNodes(ntiid, bundleOrToc)
-						.then(function(nodes) {
+						.then(function (nodes) {
 							return (nodes || []).map(mapNode);
 						});
 
@@ -346,7 +345,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		return result;
 	},
 
-	getBlankNavInfo: function(suppressed) {
+	getBlankNavInfo: function (suppressed) {
 		return {
 			isSupressed: suppressed,
 			currentIndex: 0,
@@ -358,18 +357,18 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		};
 	},
 
-	__getNavInfoFromToc: function(node, toc, rootId) {
+	__getNavInfoFromToc: function (node, toc, rootId) {
 		var root = toc && toc.firstChild,
 			onSuppressed = false,
 			prev, next, prevTitle, nextTitle,
 			walker, visibleNodes, currentIndex,
 			topicOrTocRegex = /topic|toc/i;
 
-		function maybeBlocker(id) {
+		function maybeBlocker (id) {
 			return (!id || /\.blocker(\.)?/ig.test(id)) ? true : false;
 		}
 
-		function isTopicOrToc(n) {
+		function isTopicOrToc (n) {
 			if (!n) { return false; }
 
 			var result = NodeFilter.FILTER_SKIP,
@@ -385,7 +384,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			return result;
 		}
 
-		function getRef(n) {
+		function getRef (n) {
 			if (!n || !n.getAttribute) {
 				return null;
 			}
@@ -394,7 +393,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		}
 
 
-		function getTitle(n) {
+		function getTitle (n) {
 			if (!n || !n.getAttribute) {
 				return '';
 			}
@@ -463,38 +462,38 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		};
 	},
 
-	getNavigationInfo: function(ntiid, rootId, bundleOrToc) {
+	getNavigationInfo: function (ntiid, rootId, bundleOrToc) {
 		if (!ntiid) {
 			return Promise.reject('No NTIID');
 		}
 
 		var me = this;
 
-		function mapNode(node) {
+		function mapNode (node) {
 			return me.__getNavInfoFromToc(node && node.location, node && node.toc, rootId);
 		}
 
 
 		return this.getNodes(ntiid, bundleOrToc)
-			.then(function(nodes) {
+			.then(function (nodes) {
 				nodes = (nodes || []).map(mapNode);
 
-				nodes = nodes.filter(function(node) {
+				nodes = nodes.filter(function (node) {
 					return !!node;
 				});
 
 				return nodes[0];
 			})
-			.then(function(info) {
+			.then(function (info) {
 				var result;
 
 				if (!info) {
-					 result = me.getBlankNavInfo(false);
+					result = me.getBlankNavInfo(false);
 				} else if (bundleOrToc.canGetToContent) {
 					result = Promise.all([
 						bundleOrToc.canGetToContent(info.previous, rootId),
 						bundleOrToc.canGetToContent(info.next, rootId)
-					]).then(function(result) {
+					]).then(function (result) {
 						info.previous = result[0] ? info.previous : null;
 						info.next = result[1] ? info.next : null;
 
@@ -518,12 +517,12 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 * @param  {Bundle|XML} bundleOrToc TOC to look in
 	 * @return {Promise}			 fulfills with the page id
 	 */
-	getPageID: function(ntiid, bundleOrToc) {
-		var me = this, result;
+	getPageID: function (ntiid, bundleOrToc) {
+		var me = this;
 
-		function getPageInToc(toc) {
+		function getPageInToc (toc) {
 			return me.getLineage(ntiid, toc)
-				.then(function(lineages) {
+				.then(function (lineages) {
 					var	l = (lineages && lineages[0]) || [],
 						i, href, node;
 
@@ -542,15 +541,15 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 
 		return me.__resolveTocs(bundleOrToc)
-			.then(function(tocs) {
+			.then(function (tocs) {
 				return Promise.all((tocs || []).map(getPageInToc));
 			})
-			.then(function(pages) {
+			.then(function (pages) {
 				return pages && pages[0];
 			});
 	},
 
-	getRootForLocation: function(ntiid, bundleOrToc) {
+	getRootForLocation: function (ntiid, bundleOrToc) {
 		var me = this;
 
 		if (me.IGNORE_ROOTING.test(ntiid)) {
@@ -558,7 +557,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		}
 
 		return me.getNodes(ntiid, bundleOrToc)
-				.then(function(info) {
+				.then(function (info) {
 					info = info && info[0];
 
 					if (!info) { return null; }
@@ -574,7 +573,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 						node = node.parentNode;
 
 						if (/\.blocker/i.test(node.getAttribute && node.getAttribute('ntiid'))) {
-								console.error('\n\n\n\nBLOCKER NODE DETECTED IN HIERARCHY!!\n');
+							console.error('\n\n\n\nBLOCKER NODE DETECTED IN HIERARCHY!!\n');
 						}
 					}
 
@@ -582,11 +581,11 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 				});
 	},
 
-	getFirstTopic: function(node) {
+	getFirstTopic: function (node) {
 		return node.querySelector && node.querySelector('topic');
 	},
 
-	hasChildren: function(node) {
+	hasChildren: function (node) {
 		var num = 0;
 
 		node = this.getFirstTopic(node);
@@ -602,11 +601,11 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		return num > 0;
 	},
 
-	getSiblings: function(node, bundleOrToc) {
+	getSiblings: function (node, bundleOrToc) {
 		var	ntiid = node && node.getAttribute && node.getAttribute('ntiid'),
 			nodes = [];
 
-		function getSiblings(info) {
+		function getSiblings (info) {
 			var children,
 				p = node && node.parentNode,
 				courseNode = info && info.toc && info.toc.querySelector('unit[ntiid="' + ntiid + '"],lesson[topic-ntiid="' + ntiid + '"]');
@@ -619,7 +618,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 			children = children ? Array.prototype.slice.call(children) : [];
 
-			children.forEach(function(child) {
+			children.forEach(function (child) {
 				var ntiid;
 
 				if (/topic/i.test(child.tagName)) {
@@ -650,10 +649,10 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		}
 
 		return this.getNodes(ntiid, bundleOrToc)
-				.then(function(infos) {
+				.then(function (infos) {
 					infos = (infos || []).map(getSiblings);
 
-					infos.filter(function(x) { return !!x; });
+					infos.filter(function (x) { return !!x; });
 
 					return infos[0];
 				});
@@ -662,7 +661,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	/** @private */
 	externalUriRegex: /^((\/\/)|([a-z][a-z0-9\+\-\.]*):)/i,
 
-	bustCorsForResources: function(string, name, value) {
+	bustCorsForResources: function (string, name, value) {
 		//Look for things we know come out of a different domain
 		//and append a query param.  This allows us to, for example,
 		//add a query param related to our location host so that
@@ -677,19 +676,19 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		//we omit things that contain query strings here
 		var regex = /(\S+)\s*=\s*"(((\/[^"\/]+\/)||\/)resources\/[^?"]*?)"/igm;
 
-		function cleanup(original, attr, url) {
+		function cleanup (original, attr, url) {
 			return attr + '="' + url + '?' + name + '=' + value + '"';
 		}
 
 		return string.replace(regex, cleanup);
 	},
 
-	fixReferences: function(string, basePath) {
+	fixReferences: function (string, basePath) {
 		var me = this,
 			envSalt = $AppConfig.corsSalt ? ('?' + $AppConfig.corsSalt) : '',
 			locationHash = String.hash(window.location.hostname + envSalt);
 
-		function fixReferences(original, attr, url) {
+		function fixReferences (original, attr, url) {
 			var firstChar = url.charAt(0),
 				absolute = firstChar === '/',
 				anchor = firstChar === '#',
@@ -728,7 +727,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 	 * @param  {int} max
 	 * @return {String}
 	 */
-	getHTMLSnippet: function(html, max) {
+	getHTMLSnippet: function (html, max) {
 		var i = /[^\.\?!]+[\.\?!]?/,
 			spaces = /(\s{2,})/,
 			df = document.createDocumentFragment(),
@@ -748,20 +747,20 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			Ext.Error.raise('IllegalArgument');
 		}
 
-		Ext.each(Ext.DomQuery.select('.body-divider .toolbar', d), function(e) { e.parentNode.removeChild(e); });
+		Ext.each(Ext.DomQuery.select('.body-divider .toolbar', d), function (e) { e.parentNode.removeChild(e); });
 		html = d.innerHTML; //filter out whiteboard controls
 
 		if (d.firstChild) {
 			r.setStartBefore(d.firstChild);
 		}
-		texts = AnnotationUtils.getTextNodes(d);
+		texts = lazy.AnnotationUtils.getTextNodes(d);
 
-		Ext.each(texts, function(t) {
+		Ext.each(texts, function (t) {
 			var o = c + t.length,
 				v = t.nodeValue,
 				offset;
 
-			Ext.each(spaces.exec(v) || [], function(gap) {
+			Ext.each(spaces.exec(v) || [], function (gap) {
 				o -= (gap.length - 1);//subtract out the extra spaces, reduce them to count as 1 space(hence the -1)
 			});
 
@@ -788,15 +787,15 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		return html;
 	},
 
-	getReadingBreadCrumb: function(reading) {
+	getReadingBreadCrumb: function (reading) {
 		var path = this.getReadingPath(reading);
 
-		return path.map(function(part) {
+		return path.map(function (part) {
 			return part.getAttribute('label');
 		});
 	},
 
-	getReadingPath: function(reading) {
+	getReadingPath: function (reading) {
 		var path = [], node;
 
 		path.push(reading);
@@ -811,12 +810,12 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		return path.reverse();
 	},
 
-	getReadingPages: function(reading) {
+	getReadingPages: function (reading) {
 		var children = reading.children;
 
 		children = Array.prototype.slice.call(children);
 
-		return children.filter(function(node) {
+		return children.filter(function (node) {
 			var tagName = node.tagName,
 				href = node.getAttribute('href'),
 				parts = href && Globals.getURLParts(href);
@@ -825,8 +824,8 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		});
 	},
 
-	getReading: function(ntiid, bundle) {
-		function findReading(toc) {
+	getReading: function (ntiid, bundle) {
+		function findReading (toc) {
 			var escaped = ParseUtils.escapeId(ntiid),
 				query = 'topic[ntiid="' + escaped + '"]';
 
@@ -834,18 +833,18 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 		}
 
 		return this.__resolveTocs(bundle)
-			.then(function(tocs) {
+			.then(function (tocs) {
 				return tocs.map(findReading)[0];
 			});
 	},
 
-	getReadings: function(bundle) {
-		function buildNavigationMap(toc) {
+	getReadings: function (bundle) {
+		function buildNavigationMap (toc) {
 			var nodes = toc.querySelectorAll('course, course unit, course lesson');
 
 			nodes = Array.prototype.slice.call(nodes);
 
-			return nodes.reduce(function(acc, node) {
+			return nodes.reduce(function (acc, node) {
 				var ntiid = node.getAttribute('ntiid') || node.getAttribute('topic-ntiid');
 
 				acc[ntiid] = true;
@@ -854,7 +853,7 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 			}, {});
 		}
 
-		function findReadings(toc) {
+		function findReadings (toc) {
 			var navigation = buildNavigationMap(toc),
 				topLevel = toc.querySelectorAll('toc > topic'),
 				t = toc.querySelector('toc'),
@@ -862,16 +861,16 @@ module.exports = exports = Ext.define('NextThought.util.Content', {
 
 			topLevel = Array.prototype.slice.call(topLevel);
 
-			filtered = topLevel.filter(function(node) {
-							var ntiid = node.getAttribute('ntiid');
+			filtered = topLevel.filter(function (node) {
+				var ntiid = node.getAttribute('ntiid');
 
-							return !navigation[ntiid];
-						});
+				return !navigation[ntiid];
+			});
 			return {title: title, items: filtered};
 		}
 
 		return this.__resolveTocs(bundle)
-			.then(function(tocs) {
+			.then(function (tocs) {
 				return tocs.map(findReadings);
 			});
 	}

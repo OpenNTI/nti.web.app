@@ -1,6 +1,4 @@
 var Ext = require('extjs');
-var ComponentsCollection = require('./Collection');
-
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.Page', {
     extend: 'Ext.container.Container',

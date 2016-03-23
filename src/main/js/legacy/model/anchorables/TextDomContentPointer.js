@@ -1,38 +1,36 @@
-var Ext = require('extjs');
-var Anchors = require('../../util/Anchors');
-var AnchorablesDomContentPointer = require('./DomContentPointer');
-var AnchorablesTextContext = require('./TextContext');
-var AnchorablesDomContentPointer = require('./DomContentPointer');
-var lazyResolve = {
-		get Anchors () {
-			delete this.Anchors;
-			return this.Anchors = require('../../util/Anchors');
-		}
-	};
+const Ext = require('extjs');
 
+const DomContentPointer = require('./DomContentPointer');
+const ElementDomContentPointer = require('./ElementDomContentPointer');
+const TextContext = require('./TextContext');
 
-module.exports = exports = Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
-    extend: 'NextThought.model.anchorables.DomContentPointer',
+const lazy = require('legacy/util/lazy-require')
+			.get('Anchors', () => require('legacy/util/Anchors'));
 
-    config: {
+const TextDomContentPointer =
+module.exports = exports =
+Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
+	extend: 'NextThought.model.anchorables.DomContentPointer',
+
+	config: {
 		ancestor: {},
 		contexts: [],
 		edgeOffset: 0
 	},
 
-    statics: {
-		createFromObject: function(o) {
+	statics: {
+		createFromObject: function (o) {
 			var cp = NextThought.model.anchorables.ContentPointer;
-			return NextThought.model.anchorables.TextDomContentPointer.create({
+			return TextDomContentPointer.create({
 				role: o.role,
-				contexts: NextThought.model.anchorables.TextContext.createFromObjects(o.contexts),
+				contexts: TextContext.createFromObjects(o.contexts),
 				edgeOffset: o.edgeOffset,
 				ancestor: cp.createFromObject(o.ancestor)
 			});
 		}
 	},
 
-    constructor: function(o) {
+	constructor: function (o) {
 		this.validateContexts(o.contexts);
 		this.validateEdgeOffset(o.edgeOffset);
 		this.validateAncestor(o.ancestor);
@@ -40,23 +38,23 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TextDomCont
 		this.Class = 'TextDomContentPointer';
 	},
 
-    primaryContext: function() {
-	   if (this.getContexts().length > 0) {
-			   return this.getContexts()[0];
-	   }
-	   return null;
+	primaryContext: function () {
+		if (this.getContexts().length > 0) {
+			return this.getContexts()[0];
+		}
+		return null;
 	},
 
-    validateAncestor: function(a) {
-		if (!a || !(a instanceof NextThought.model.anchorables.DomContentPointer)) {
+	validateAncestor: function (a) {
+		if (!a || !(a instanceof DomContentPointer)) {
 			Ext.Error.raise('Ancestor must be supplied');
 		}
-		else if (a instanceof NextThought.model.anchorables.ElementDomContentPointer && a.getRole() !== 'ancestor') {
+		else if (a instanceof ElementDomContentPointer && a.getRole() !== 'ancestor') {
 			Ext.Error.raise('If ancestor is an ElementDomContentPointer, role must be of value ancestor');
 		}
 	},
 
-    validateContexts: function(contexts) {
+	validateContexts: function (contexts) {
 		if (!contexts) {
 			Ext.Error.raise('Must supply TextContexts');
 		}
@@ -65,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TextDomCont
 		}
 	},
 
-    validateEdgeOffset: function(o) {
+	validateEdgeOffset: function (/*o*/) {
 		/*
 		if (!o || o < 0) {
 			Ext.Error.raise('Offset must exist and be 0 or more');
@@ -73,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TextDomCont
 		*/
 	},
 
-    locateRangePointInAncestor: function(ancestorNode, startResult) {
-		return lazyResolve.Anchors.locateRangeEdgeForAnchor(this, ancestorNode, startResult);
+	locateRangePointInAncestor: function (ancestorNode, startResult) {
+		return lazy.Anchors.locateRangeEdgeForAnchor(this, ancestorNode, startResult);
 	}
 });

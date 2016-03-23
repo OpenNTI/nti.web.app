@@ -6,6 +6,7 @@ var ComponentsPage = require('./components/available/CoursePage');
 var CourseActions = require('../../course/Actions');
 var AvailableCourseWindow = require('./components/available/CourseWindow');
 
+require('./components/Collection');
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.Index', {
     extend: 'Ext.container.Container',

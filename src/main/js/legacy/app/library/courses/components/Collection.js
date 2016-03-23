@@ -4,16 +4,16 @@ var SettingsCourseWindow = require('./settings/CourseWindow');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.components.Collection', {
-    extend: 'NextThought.app.library.components.Collection',
-    alias: 'widget.course-collection',
+	extend: 'NextThought.app.library.components.Collection',
+	alias: 'widget.course-collection',
 
-    //hidden: true, //don't show this component unless the courseware controller says it can show.
+	//hidden: true, //don't show this component unless the courseware controller says it can show.
 	courseList: true,
 
-    store: 'courseware.EnrolledCourses',
-    cls: 'courses',
+	store: 'courseware.EnrolledCourses',
+	cls: 'courses',
 
-    tpl: Ext.DomHelper.markup([
+	tpl: Ext.DomHelper.markup([
 		//{ cls: 'stratum collection-name', 'aria-label': '{name} {count} items', 'role': 'heading', cn: {
 		//	'aria-hidden': 'true', cn: [
 		//		'{name}', {cls: 'count', 'aria-hidden': 'true', html: '{count}'}
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	]),
 
-    prepareData: function(data, index, record) {
+	prepareData: function (data, index, record) {
 		var i = Ext.Object.chain(this.callParent(arguments)),
 			courseRecord = record.get('CourseInstance'),
 			course = courseRecord.asUIData(),
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		return i;
 	},
 
-    collectData: function() {
+	collectData: function () {
 		var data = this.callParent(arguments);
 
 		data.label = this.label;
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		return data;
 	},
 
-    onItemClick: function(record, node, index, e) {
+	onItemClick: function (record, node, index, e) {
 		var win;
 
 		if (e.getTarget('.settings')) {
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		}
 	},
 
-    handleSelect: function(selModel, record) {
+	handleSelect: function (selModel, record) {
 		selModel.deselect(record);
 
 		var node = this.getNodeByRecord(record);

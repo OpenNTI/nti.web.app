@@ -1,6 +1,4 @@
 var Ext = require('extjs');
-var Color = require('./Color');
-
 
 module.exports = exports = Ext.define('NextThought.util.Color', {
 

@@ -1,5 +1,5 @@
 var Ext = require('extjs');
-var TemplatesForNotes = require('./Templates');
+
 var {isMe} = require('legacy/util/Globals');
 
 

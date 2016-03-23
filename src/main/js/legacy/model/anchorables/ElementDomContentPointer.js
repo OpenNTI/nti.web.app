@@ -1,11 +1,9 @@
 var Ext = require('extjs');
-var AnchorablesDomContentPointer = require('./DomContentPointer');
-var lazyResolve = {
-	get Anchors () {
-		delete this.Anchors;
-		return this.Anchors = require('../../util/Anchors');
-	}
-};
+
+require('./DomContentPointer');
+
+const lazy = require('legacy/util/lazy-require')
+			.get('Anchors', () => require('legacy/util/Anchors'));
 
 module.exports = exports = Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {
 	extend: 'NextThought.model.anchorables.DomContentPointer',
@@ -16,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.ElementDomC
 	},
 
 	statics: {
-		createFromObject: function(o) {
+		createFromObject: function (o) {
 			return NextThought.model.anchorables.ElementDomContentPointer.create({
 				role: o.role,
 				elementTagName: o.elementTagName,
@@ -25,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.ElementDomC
 		}
 	},
 
-	constructor: function(o) {
+	constructor: function (o) {
 		//If we are given a dom element as input, pull the necessary parts and
 		//create a config we can use to create this.
 		if (o.node) {
@@ -42,21 +40,21 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.ElementDomC
 	},
 
 
-	validateId: function(id) {
+	validateId: function (id) {
 		if (!id) {
 			Ext.Error.raise('Must supply an Id');
 		}
 	},
 
 
-	validateTagName: function(n) {
+	validateTagName: function (n) {
 		if (!n) {
 			Ext.Error.raise('Must supply a tag name');
 		}
 	},
 
 
-	locateRangePointInAncestor: function(ancestorNode, startResult) {
-		return lazyResolve.Anchors.locateElementDomContentPointer(this, ancestorNode, startResult);
+	locateRangePointInAncestor: function (ancestorNode, startResult) {
+		return lazy.Anchors.locateElementDomContentPointer(this, ancestorNode, startResult);
 	}
 });

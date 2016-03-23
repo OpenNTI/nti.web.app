@@ -1,17 +1,20 @@
 var Ext = require('extjs');
-var User = require('../model/User');
-var Anchors = require('./Anchors');
-var RectUtils = require('./Rects');
-var ModelHighlight = require('../model/Highlight');
-var ModelNote = require('../model/Note');
-var WhiteboardCanvas = require('../app/whiteboard/Canvas');
-var UtilAnchors = require('./Anchors');
+var User = require('legacy/model/User');
+
+var Highlight = require('legacy/model/Highlight');
+var Note = require('legacy/model/Note');
+
+require('legacy/app/whiteboard/Canvas');
+
+const lazy = require('legacy/util/lazy-require')
+			.get('Anchors', () => require('legacy/util/Anchors'))
+			.get('RectUtils', () => require('legacy/util/Rects'));
 
 
 module.exports = exports = Ext.define('NextThought.util.Annotations', {
 
 	// Recursively go up to the root of the a note.
-	getNoteRoot: function(rec) {
+	getNoteRoot: function (rec) {
 		var root = rec.parent || rec;
 		while (root.parent) {
 			root = root.parent;
@@ -25,13 +28,13 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 	 * @param {NextThought.model.Note} note
 	 * @return {NextThought.model.Note}
 	 */
-	replyToPlaceHolder: function(note) {
-		var holder = new NextThought.model.Note(),
+	replyToPlaceHolder: function (note) {
+		var holder = new Note(),
 			creator,
 			refs = (note.get('references') || []).slice(),
 		//Make sure we create a new date object so we don't mutate the
 		//the field in the child record.
-				ct = new Date(note.get('CreatedTime').getTime()), lm;
+			ct = new Date(note.get('CreatedTime').getTime()), lm;
 
 		if (refs.length) {
 			refs = Ext.Array.clone(refs);
@@ -64,40 +67,40 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 		return holder;
 	},
 
-	selectionToNote: function(range, documentElement) {
+	selectionToNote: function (range, documentElement) {
 		if (range && range.collapsed) {
 			Ext.Error.raise('Cannot create highlight from null or collapsed range');
 		}
 
 		//generate the range description
-		var contentRangeDescription = Anchors.createRangeDescriptionFromRange(range, documentElement);
+		var contentRangeDescription = lazy.Anchors.createRangeDescriptionFromRange(range, documentElement);
 
-		return new NextThought.model.Note({
-											  applicableRange: contentRangeDescription.description,
-											  selectedText: range.toString(),
-											  ContainerId: contentRangeDescription.container
-										  });
+		return new Note({
+			applicableRange: contentRangeDescription.description,
+			selectedText: range.toString(),
+			ContainerId: contentRangeDescription.container
+		});
 	},
 
-	selectionToHighlight: function(range, style, root) {
+	selectionToHighlight: function (range, style, root) {
 		if (range && range.collapsed) {
 			Ext.Error.raise('Cannot create highlight from null or collapsed range');
 		}
 
 		var text = range.toString(),
-				contentRangeDescription = Anchors.createRangeDescriptionFromRange(range, root);
+			contentRangeDescription = lazy.Anchors.createRangeDescriptionFromRange(range, root);
 
-		return NextThought.model.Highlight.create(
-				{
-					style: style,
-					applicableRange: contentRangeDescription.description,
-					ContainerId: contentRangeDescription.container,
-					selectedText: text//,
-//			sharedWith: p
-				});
+		return Highlight.create(
+			{
+				style: style,
+				applicableRange: contentRangeDescription.description,
+				ContainerId: contentRangeDescription.container,
+				selectedText: text//,
+				//sharedWith: p
+			});
 	},
 
-	getBlockParent: function(node, ignoreSpan) {
+	getBlockParent: function (node, ignoreSpan) {
 		if (!node || (this.isBlockNode(node) && !(node.tagName === 'SPAN' && ignoreSpan))) {
 			return node;
 		}
@@ -105,10 +108,10 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 	},
 
 	/* tested */
-	isBlockNode: function(n) {
+	isBlockNode: function (n) {
 		var e = Ext.get(n),
-				p = /static|relative|^$/i,
-				d = /block|box/i;
+			p = /static|relative|^$/i,
+			d = /block|box/i;
 
 		if (n) {
 			if (n.tagName === 'A') {
@@ -125,13 +128,13 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 				&& p.test(e.getStyle('position'));
 	},
 
-	isDisplayed: function(a, root) {
+	isDisplayed: function (a, root) {
 		if (!a || a === root || a.nodeType === Node.DOCUMENT_NODE || Ext.get(a) === null) {
 			return true;
 		}
 
-		function check(a) {
-			var e = Ext.get(a);
+		function check (element) {
+			var e = Ext.get(element);
 			return e.getStyle('display') !== 'none'
 					&& e.getAttribute('type') !== 'hidden'
 					&& (e.getWidth(true) !== 0 || e.getHeight(true) !== 0)
@@ -141,10 +144,10 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 		return this.isDisplayed(a.parentNode, root) && check(a);
 	},
 
-	getTextNodes: function(root) {
+	getTextNodes: function (root) {
 		var textNodes = [];
 
-		function getNodes(node) {
+		function getNodes (node) {
 			var child;
 
 			if (node.nodeType === 3) {
@@ -161,17 +164,32 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 		return textNodes;
 	},
 
-	colorsForName: function(highlightColorName) {
-		 var colors = Service.getHighlightColors();
-		 return Ext.Array.findBy(colors,function(item,idx) {
-			 return item.name == highlightColorName;
-		 });
+	colorsForName: function (highlightColorName) {
+		const colors = Service.getHighlightColors();
+		return Ext.Array.findBy(colors, item => item.name === highlightColorName );
 	},
 
-	drawCanvas: function(canvas, content, range, backgroundColor, offset) {
+	drawCanvas: function (canvas, content, range, backgroundColor, offset) {
 
-		function getLineHeight(e) {
-			function getNode(e) { return (e.nodeType === Node.TEXT_NODE) ? e.parentNode : e; }
+		var bounds = range.getBoundingClientRect(),
+			boundingTop = Math.ceil(bounds.top),
+			boundingLeft = Math.ceil(bounds.left),
+			boundingRight = Math.ceil(bounds.right),
+			width = content ? content.getWidth() : 680,
+			lineHeight = canvas.cachedLineHeightValue || getLineHeight(range.endContainer),
+			topOffset = offset[1],
+			leftOffset = offset[0],
+			ctx,
+			i, x, y, w, h, left, r,
+			lastY = 0, small,
+			padding = 2,
+			last = true,
+			s = lazy.RectUtils.merge(range.getClientRects(), width + 1),
+			minLeft = boundingRight,
+			maxRight = boundingLeft;
+
+		function getLineHeight (e) {
+			function getNode (a) { return (a.nodeType === Node.TEXT_NODE) ? a.parentNode : a; }
 
 			var m, tm = Ext.util.TextMetrics;
 			try {
@@ -186,31 +204,14 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 			return NaN;
 		}
 
-		function findMinMax(r) {
-			if (r.left < minLeft) {
-				minLeft = r.left;
+		function findMinMax (rect) {
+			if (rect.left < minLeft) {
+				minLeft = rect.left;
 			}
-			if (r.right > maxRight) {
-				maxRight = r.right;
+			if (rect.right > maxRight) {
+				maxRight = rect.right;
 			}
 		}
-
-		var bounds = range.getBoundingClientRect(),
-				boundingTop = Math.ceil(bounds.top),
-				boundingLeft = Math.ceil(bounds.left),
-				boundingRight = Math.ceil(bounds.right),
-				width = content ? content.getWidth() : 680,
-				lineHeight = canvas.cachedLineHeightValue || getLineHeight(range.endContainer),
-				topOffset = offset[1],
-				leftOffset = offset[0],
-				ctx,
-				i, x, y, w, h, left, r,
-				lastY = 0, small,
-				padding = 2,
-				last = true,
-				s = RectUtils.merge(range.getClientRects(), width + 1),
-				minLeft = boundingRight,
-				maxRight = boundingLeft;
 
 
 		Ext.each(s, findMinMax, this, true);
@@ -222,7 +223,7 @@ module.exports = exports = Ext.define('NextThought.util.Annotations', {
 		canvas.cachedLineHeightValue = lineHeight;
 
 
-		s.sort(function(a, b) { return a.top + a.bottom - b.top - b.bottom; });
+		s.sort(function (a, b) { return a.top + a.bottom - b.top - b.bottom; });
 		i = s.length - 1;
 
 		ctx = canvas.getContext('2d');

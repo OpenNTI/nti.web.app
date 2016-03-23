@@ -1,19 +1,15 @@
 var Ext = require('extjs');
 var XRegExp = require('xregexp');
 var rangy = require('./rangy');
-var AnnotationUtils = require('./Annotations');
 var Globals = require('./Globals');
 var AnchorablesTextDomContentPointer = require('../model/anchorables/TextDomContentPointer');
 var AnchorablesElementDomContentPointer = require('../model/anchorables/ElementDomContentPointer');
 var AnchorablesDomContentPointer = require('../model/anchorables/DomContentPointer');
 var AnchorablesContentRangeDescription = require('../model/anchorables/ContentRangeDescription');
-var lazyResolve = {
-	get RangeUtils () {
-		delete this.RangeUtils;
-		return this.RangeUtils = require('./Ranges');
-	}
-}
 
+var lazy = require('legacy/util/lazy-require')
+			.get('RangeUtils', () => require('./Ranges'))
+			.get('AnnotationUtils', () => require('./Annotations'));
 
 module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	containerSelectors: ['object[type$=naquestion][data-ntiid]', 'object[type$=ntivideo][data-ntiid]'],
@@ -1375,7 +1371,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 	/* tested */
 	nodeThatIsEdgeOfRange: function(range, start) {
-		return lazyResolve.RangeUtils.nodeThatIsEdgeOfRange(range, start);
+		return lazy.RangeUtils.nodeThatIsEdgeOfRange(range, start);
 	},
 
 	/* tested */
@@ -1865,7 +1861,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		var startContainer = range.startContainer,
 				endContainer = range.endContainer,
 				ancestor = Ext.isTextNode(range.commonAncestorContainer) ? range.commonAncestorContainer.parentNode : range.commonAncestorContainer,
-				txtNodes = AnnotationUtils.getTextNodes(ancestor),
+				txtNodes = lazy.AnnotationUtils.getTextNodes(ancestor),
 				index = 0, i;
 
 
