@@ -180,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		}
 
 		//if a defines an equals method return the result of that
-		if (a && Ext.isfunction (a.equal)) {
+		if (a && Ext.isFunction(a.equal)) {
 			return a.equal(b);
 		}
 
@@ -311,7 +311,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		fs.each(function (f) {
 			var affectedBy = f.affectedBy,
 				fnName = f.name + '-affectedByHandler';
-			if (affectedBy && Ext.isfunction (f.convert)) {
+			if (affectedBy && Ext.isFunction(f.convert)) {
 				if (!Ext.isArray(affectedBy)) {
 					affectedBy = [affectedBy];
 				}
@@ -356,7 +356,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		possibleGetters = ['get' + capitalizedFieldName, 'is' + capitalizedFieldName];
 
 		Ext.each(possibleGetters, function (g) {
-			if (Ext.isfunction (this[g])) {
+			if (Ext.isFunction(this[g])) {
 				val = this[g]();
 				return false;
 			}
@@ -956,7 +956,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		var dependentFunctionName = 'valuesAffectedBy' + f,
 			fn = this[dependentFunctionName];
 		this.notifyObserversOfFieldChange(f);
-		if (Ext.isfunction (fn)) {
+		if (Ext.isFunction(fn)) {
 			Ext.each(fn.call(this), this.notifyObserversOfFieldChange, this);
 		}
 	},
@@ -1015,7 +1015,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		args[0] = this;
 		for (i; i < len; ++i) {
 			store = stores[i];
-			if (store && Ext.isfunction (store[fn])) {
+			if (store && Ext.isFunction(store[fn])) {
 
 				//Some of our synthetic fields trigger this call before there are groups defined...
 				// the store's group updating code does not ensure a group exists before acting on it,
@@ -1084,7 +1084,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 			}
 
 			//Ok we found one and it isn't the same object
-			if (rec !== recById && rec.get('MimeType') === recById.get('MimeType') && Ext.isfunction (recById[fname])) {
+			if (rec !== recById && rec.get('MimeType') === recById.get('MimeType') && Ext.isFunction(recById[fname])) {
 				try {
 					recById[fname].apply(recById, args);
 				}
