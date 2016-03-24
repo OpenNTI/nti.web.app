@@ -191,6 +191,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 					me.onChange();
 				}
 			},
+			blur: function() {
+				me.setMinute(me.getMinutes());
+			},
 			change: me.onMinuteChanged.bind(me)
 		});
 
@@ -538,6 +541,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 			this.onChange();
 		}
 	},
+
 
 	onMeridiemChanged: function(meridiem) {
 		if (this.onChange) {
