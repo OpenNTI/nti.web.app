@@ -77,7 +77,7 @@
 	}
 
 	form {
-		
+
 
 		.group.card {
 			border-top: none;
@@ -131,7 +131,7 @@
 
 	.nt-button {
 		&.delete {
-			margin-top: 10px;	
+			margin-top: 10px;
 		}
 
 		&.advanced {
@@ -143,9 +143,9 @@
 			cursor: pointer;
 			text-align: right;
 		}
-		
+
 		&.visibility {
-			padding: 2px 0;	
+			padding: 2px 0;
 			.title {
 		    	display: inline-block;
 			    color: $secondary-grey;
@@ -220,13 +220,13 @@
 	}
 }
 
-input[type=number]{ 
+input[type=number]{
 	&::-webkit-inner-spin-button,
 	&::-webkit-inner-spin-button {
-		-webkit-appearance: none; 
+		-webkit-appearance: none;
 		-moz-appearance: none;
     	appearance: none;
-  		margin: 0;		
+  		margin: 0;
 	}
 }
 
@@ -406,7 +406,7 @@ input[type=number]{
 		    font-size: 0.875em;
 		    font-weight: 600;
 		    color: #3fb3f6;
-		}	
+		}
 	}
 }
 
@@ -547,6 +547,14 @@ input[type=number]{
 
 		.outline-node-listitem {
 			border-bottom: 1px solid $tertiary-grey-alt;
+			max-height: 60px;
+			transition: max-height 0.5s;
+
+			&.dragging {
+				border-bottom: none;
+				overflow: hidden;
+				max-height: 0;
+			}
 
 			&:last-of-type {
 				border-bottom: none;
@@ -643,7 +651,7 @@ input[type=number]{
 		margin-top: 0.5em;
 		margin-bottom: 2em;
 	    max-width: 240px;
-		
+
 		li.color {
 			display: inline-block;
 			width: 20px;
@@ -866,7 +874,7 @@ input[type=number]{
 				cursor: pointer;
 				border: 1px solid $tertiary-grey-alt;
 
-				@include icon('dropdown-white', $side: after, $top: 10px, $left: auto, $right: 10px);				
+				@include icon('dropdown-white', $side: after, $top: 10px, $left: auto, $right: 10px);
 			}
 		}
 
@@ -1023,7 +1031,7 @@ input[type=number]{
 						font: italic 500 12px/17px $font;
 						margin: 5px;
 						text-align: center;
-					}	
+					}
 				}
 
 				.date-picker-container {
