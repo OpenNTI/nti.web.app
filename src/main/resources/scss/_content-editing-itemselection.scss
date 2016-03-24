@@ -13,14 +13,14 @@
 			}
 		}
 
-		
+
 	}
 
 	.search {
 		padding: 0 10px;
 		margin-bottom: 20px;
 		@include flexContainer();
-		
+
 		.has-search {
 			visibility: hidden;
 			line-height: 35px;
@@ -37,7 +37,7 @@
 			overflow: hidden;
 			box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
 			@include flexItem(0 0 auto);
-			
+
 
 			input {
 				line-height: 35px;
@@ -72,6 +72,23 @@
 				@include icon('rhp-search', $top: 8px, $left: 9px, $position: absolute);
 			}
 		}
+	}
+
+	.filter {
+		margin-top: -10px;//pull it up into the search bar's margin
+		margin-bottom: 10px;
+		padding: 0 10px;
+		text-align: right;
+
+		label {
+			padding-left: 24px;
+		}
+
+
+	}
+
+	.items {
+		clear: both;
 	}
 
 	.empty {
@@ -459,7 +476,7 @@
 			background: #fff;
 			position: relative;
 			margin-bottom: 24px;
-			
+
 			input[type=checkbox] {
 				position: absolute;
 				top: 8px;
@@ -467,7 +484,7 @@
 				cursor: pointer;
 				pointer-events: none;
 			}
-			
+
 			.thumbnail {
 				width: 100px;
 				height: 125px;
@@ -478,13 +495,13 @@
 				float: left;
 				cursor: pointer;
 			}
-			
+
 			.meta {
 				padding-top: 16px;
 				margin-left: 120px;
 				height: 125px;
 				padding: 10px 45px 10px 0;
-				
+
 				.title {
 					font: normal 600 15px/20px $font;
 					max-height: 40px;
@@ -492,7 +509,7 @@
 					margin-bottom: 5px;
 					color: $primary-grey;
 				}
-				
+
 				.description {
 					margin-bottom: 20px;
 					max-height: 3em;
@@ -501,7 +518,7 @@
 					font: normal normal 12px/normal $font;
 					color: $primary-grey;
 				}
-			}	
+			}
 		}
 	}
 }

@@ -17,6 +17,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function() {
 		this.callParent(arguments);
 
+		var headerCmps = [];
+
 		this.selection = this.selectedItems || [];
 
 		if (this.showSearch) {
@@ -40,6 +42,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					}
 				}
 			});
+		}
+
+		if (this.getHeaderCfg && this.getHeaderCfg()) {
+			this.headerCmp = this.add(this.getHeaderCfg());
 		}
 
 		this.itemsContainer = this.add({
@@ -111,6 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.showEmptyState();
 		}
 
+		me.itemsContainer.removeAll(true);
 		me.selectionItems = items;
 		me.itemsSet = true;
 

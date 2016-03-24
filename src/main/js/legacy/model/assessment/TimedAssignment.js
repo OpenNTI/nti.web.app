@@ -74,19 +74,25 @@ module.exports = exports = Ext.define('NextThought.model.assessment.TimedAssignm
 	},
 
 
-
 	getTimeRemaining: function() {
-		var maxTime = this.getMaxTime(),
-			now = (new Date()).getTime(), diff,
-			startTime = this.getStartTime();
+		var link = this.getLink('TimeRemaining');
 
-		if (!startTime) {
-			diff = 0;
-		} else {
-			diff = now - startTime;
+		function fail() {
+			console.error('Unable get time remaining.. Returning Zero');
+			return Promise.resolve(0);
 		}
 
-		return maxTime - diff;
+		if (!link) {
+			return fail();
+		}
+
+		return Service.request(link)
+				.then(function(response) {
+					var json = JSON.parse(response);
+
+					return json.TimeRemaining * 1000;
+				})
+				.fail(fail);
 	},
 
 

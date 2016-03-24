@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var item = this.getItem(position),
 			currentSelection = this.el.dom.querySelector('li.selected');
 
-		if (item) {
+		if (item && item !== currentSelection) {
 			item.classList.add('selected');
 
 			if (currentSelection) {

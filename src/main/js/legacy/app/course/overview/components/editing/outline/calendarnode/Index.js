@@ -1,7 +1,7 @@
-var Ext = require('extjs');
-var OutlinenodeIndex = require('../outlinenode/Index');
-var NavigationCourseOutlineCalendarNode = require('../../../../../../../model/courses/navigation/CourseOutlineCalendarNode');
-var CalendarnodePreview = require('./Preview');
+const Ext = require('extjs');
+const CourseOutlineCalendarNode = require('legacy/model/courses/navigation/CourseOutlineCalendarNode');
+require('../outlinenode/Index');
+require('./Preview');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.calendarnode.Index', {
@@ -9,10 +9,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing.calendarnode',
 
 	statics: {
-		getSupported: function() {
-			return NextThought.model.courses.navigation.CourseOutlineCalendarNode.mimeType;
+		getSupported: function () {
+			return CourseOutlineCalendarNode.mimeType;
 		}
 	},
+
+
+	hideItemsIfEmpty: true,
+
 
 	PREVIEW_TYPE: 'overview-editing-outline-calendarnode-preview'
 });

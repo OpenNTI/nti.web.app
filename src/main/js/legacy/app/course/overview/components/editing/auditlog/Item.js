@@ -29,14 +29,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		update: 'changed the',
 		overviewgroupmoved: 'moved',
 		outlinenodemove: 'moved',
-		assetremovedfromitemcontainer: 'removed'
+		assetremovedfromitemcontainer: 'removed',
+		presentationassetmoved: 'moved'
 	},
 
 	FIELDS: {
 		label: 'title',
 		title: 'title',
 		href: 'link',
-		items: 'children',
+		items: 'item',
 		byline: 'author',
 		availablebeginning: 'Avaiable Date',
 		availableending: 'Avaiable End Date',
@@ -55,10 +56,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			recordable = record.get('Recordable'),
 			title = recordable && recordable.Title || '',
 			isChild = recordable.NTIID !== this.parentRecord.getId(),
+			externalValues = record && record.get('ExternalValue') || {},
 			message;
 
 		var fields = attributes.map(function(attr) {
-			return me.FIELDS[attr.toLowerCase()] || attr;
+			var f = me.FIELDS[attr.toLowerCase()] || attr;
+			if (externalValues[attr]) {
+				f += ' to "' + externalValues[attr] + '"';
+			}
+			return f;
 		});
 
 		// Message will be: {user} created {title of item}.
@@ -66,11 +72,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			fields.push('"' + title + '"');
 		}
 
+		// Change the type if it's an item being added
+		if(changeType === 'update' && fields.length === 1 && fields[0] === 'item') {
+			type = 'added an';
+		}
+
 		if(isChild) {
-			var ifOn = ' on ' + title;
+			var ifOn;
 
 			if(type === 'created') { ifOn = ''; }
 			else if(type === 'moved') { ifOn = title; }
+			else if(type === 'added an') { ifOn = ' in ' + title; }
+			else{ ifOn = ' for ' + title; }
 
 			message = type + ' ' + fields.join(', ') + ifOn + '.';
 		} else {

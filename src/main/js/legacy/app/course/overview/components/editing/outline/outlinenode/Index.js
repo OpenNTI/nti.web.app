@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						me.getPreviewConfig(record, parentRecord, contents, outline, bundle)
 					];
 
-				if (items && items.length) {
+				if (!me.hideItemsIfEmpty || (items && items.length)) {
 					cmps.push(me.getItemsConfig(items, record, outline, bundle));
 				}
 

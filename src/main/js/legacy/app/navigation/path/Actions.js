@@ -60,8 +60,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	__doRequestForNoLink: function(obj) {
 		var url = Service.getPathToObjectLink(),
 			//try the container id since its more liable to be cached
-			containerId = obj.get('ContainerId'),
-			id = containerId || obj.get('NTIID'),
+			containerId = obj && obj.get && obj.get('ContainerId'),
+			id = containerId || obj && obj.get && obj.get('NTIID'),
 			link = Service.getPathToObjectLink(id);
 
 		if (!link) {

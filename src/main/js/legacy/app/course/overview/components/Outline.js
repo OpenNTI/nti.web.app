@@ -127,7 +127,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			allowedTypes = me.outline && me.outline.getAllowedTypes(),
 			button;
 
-		if (allowedTypes && !me.addNodeCmp) {
+		if (me.addNodeCmp) {
+			me.addNodeCmp.destroy();
+			delete me.addNodeCmp;
+		}
+
+		if (allowedTypes) {
 			//TODO: May need to be able to handle more than one type here...
 			button = allowedTypes.reduce(function(acc, type) {
 				var inlineEditor = OutlinePrompt.getInlineEditor(type);

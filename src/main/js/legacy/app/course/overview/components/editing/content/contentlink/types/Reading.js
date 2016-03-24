@@ -73,8 +73,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	showReadingList: function(selectedItems) {
-		var me = this;
-
 		if (this.readingSelectionCmp) {
 			this.readingSelectionCmp.destroy();
 			delete this.readingSelectionCmp;
@@ -85,27 +83,43 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			delete this.readingEditorCmp;
 		}
 
-		me.maybeEnableBack(me.backText);
-		me.removeAll(true);
+		this.maybeEnableBack(this.backText);
+		this.removeAll(true);
 
-		me.readingSelectionCmp = me.add({
+		this.readingSelectionCmp = this.add({
 			xtype: 'overview-editing-reading-selection',
 			onSelectionChanged: this.onReadingListSelectionChange.bind(this),
-			selectedItems: selectedItems
+			selectedItems: selectedItems,
+			applyFilter: this.showFilteredList.bind(this),
+			removeFilter: this.showUnfilteredList.bind(this)
 		});
 
-		ContentUtils.getReadings(this.bundle)
-			.then(function(readings) {
-				// NOTE: When we have one content package,
-				// Simplify this and only return the list of items.
-				// However, in other cases, 
-				// we need to pass the title and items for each content package.
-				if (readings.length == 1) {
-					readings = readings[0] && readings[0].items;
-				}
+		this.showFilteredList();
+	},
 
-				me.readingSelectionCmp.setSelectionItems(readings);
-			});
+
+	showFilteredList: function() {
+		ContentUtils.getReadings(this.bundle)
+			.then(this.showReadings.bind(this));
+	},
+
+
+	showUnfilteredList: function() {
+		ContentUtils.getReadings(this.bundle, true)
+			.then(this.showReadings.bind(this));
+	},
+
+
+	showReadings: function(readings) {
+		// NOTE: When we have one content package,
+		// Simplify this and only return the list of items.
+		// However, in other cases,
+		// we need to pass the title and items for each content package.
+		if (readings.length == 1) {
+			readings = readings[0] && readings[0].items;
+		}
+
+		this.readingSelectionCmp.setSelectionItems(readings);
 	},
 
 	getSelection: function() {

@@ -11,7 +11,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var root = this.locationInfo && this.locationInfo.root,
+		var basePath = this.course && this.course.getContentRoots && this.course.getContentRoots()[0],
+			root = this.locationInfo && this.locationInfo.root || basePath,
 			width = this['suggested-width'],
 			height = this['suggested-height'],
 			thumbURL = root && this.icon && this.icon.indexOf(root) === -1 ? root + this.icon : this.icon,
@@ -27,6 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			description: this.desc,
 			title: this.label,
 			json: jsonURL,
+			href: jsonURL,
 			desiredHeight: height,
 			desiredWidth: width,
 			ntiid: this.ntiid,
@@ -59,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		var beenViewed = progress.hasBeenViewed(this.ntiid);
 
-		if (beenViewed) {
+		if (beenViewed && !this.isDestroyed) {
 			this.addCls('viewed');
 		}
 	}

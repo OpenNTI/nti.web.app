@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Naviga
 		if (isPreview) {
 			data.preview = 'in preview';
 			if (data.startDate) {
-				data.preview += '--Course starts on ' + Ext.Date.format(data.startDate, 'l, F j');
+				data.preview += '&mdash;Course starts on ' + Ext.Date.format(data.startDate, 'l, F j');
 			}
 			this.previewTagTpl.append(this.labelEl, {'preview': data.preview});
 		}

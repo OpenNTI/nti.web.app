@@ -21,6 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	autoUpdate: false,
 	cls: 'outline-items',
+	emptyText: 'Add a lesson to get started.',
 	layout: 'none',
 	items: [],
 
@@ -80,7 +81,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.enableOrderingContainer();
 	},
 
-	buildHeader: function() {
+	buildHeader: function(collection) {
+		var items = this.getItems(collection);
+
+		if (!items || !items.length) {
+			return null;
+		}
+
 		return {
 			xtype: 'box',
 			autoEl: {

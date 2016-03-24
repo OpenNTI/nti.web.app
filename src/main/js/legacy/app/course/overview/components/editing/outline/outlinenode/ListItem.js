@@ -156,6 +156,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					bundle: bundle,
 					beforeShowMenu: me.beforeShowMenuControl
 				};
+			})
+			.fail(function(reason) {
+				console.log('Failed to load contents for: ', record.getTitle(), ' ', reason);
 			});
 	}
 });

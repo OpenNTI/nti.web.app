@@ -12,7 +12,8 @@ module.exports = exports = Ext.define('NextThought.model.recorder.TransactionRec
 		{ name: 'principal', type: 'string' },
 		{ name: 'tid', type: 'string' },
 		{ name: 'type', type: 'create' },
-		{ name: 'attributes', type: 'auto'}
+		{ name: 'attributes', type: 'auto'},
+		{ name: 'ExternalValue', type: 'auto'}
 	]
 
 });

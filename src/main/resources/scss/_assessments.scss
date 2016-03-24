@@ -1352,6 +1352,7 @@ body.dragging * {
 		.label {
 			font: normal 500 1.5em/1 $font;
 			color: $primary-grey;
+			word-break: break-all;
 		}
 		.due {
 			font: normal 700 0.8em/3 $font;

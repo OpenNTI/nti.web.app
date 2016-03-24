@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
   },
 
 	getDueDate: function() {
-		return this.get('availableEnding') || this.get('availableBeginning');
+		return this.get('availableEnding');
 	},
 
 	tallyParts: function() {
