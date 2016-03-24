@@ -176,11 +176,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 		url = Globals.getURLRooted(url, base);
 
 		if (!transcript) {
-			return new Promise.reject();
+			return Promise.reject();
 		}
 
 		if (content) {
-			return new Promise.resolve(content);
+			return Promise.resolve(content);
 		}
 
 
