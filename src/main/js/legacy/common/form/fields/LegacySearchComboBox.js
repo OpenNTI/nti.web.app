@@ -471,6 +471,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 
 			if (li) {
 				this.selectOption(li.dom, silent);
+			} else {
+				delete this.currentText;
+				delete this.currentValue;
+				this.inputEl.dom.value = '';
 			}
 		}
 	},

@@ -140,10 +140,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.startOnRadio.addEventListener('change', me.onStartCheckChanged);
 		me.endCheckbox.addEventListener('change', me.onEndCheckChanged);
 
-
-		me.startNowRadio.checked = !available;
-		me.startOnRadio.checked = !!available;
-		me.endCheckbox.checked = !!due;
+		me.selectAvailableDate(available);
+		me.selectDueDate(due);
 
 		me.on('destroy', function() {
 			if (me.startCheckbox && me.startCheckbox.removeEventListener) {
@@ -159,6 +157,30 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.onStartCheckChanged();
 		me.onEndCheckChanged();
 	},
+
+
+	selectAvailableDate: function(date) {
+		if (!this.rendered) { return; }
+
+		var availableEditor = this.getAvailableEditor();
+
+		availableEditor.selectDate(date);
+
+		this.startNowRadio.checked = !date;
+		this.startOnRadio.checked = !!date;
+	},
+
+
+	selectDueDate: function(date) {
+		if (!this.rendered) { return; }
+
+		var dueEditor = this.getDueEditor();
+
+		dueEditor.selectDate(date);
+
+		this.endCheckbox.checked = !!date;
+	},
+
 
 	onStartCheckChanged: function(e) {
 		var editor = this.getAvailableEditor();
@@ -191,12 +213,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	doCancel: function() {
 		var assignment = this.assignment,
 			available = assignment.get('availableBeginning'),
-			due = assignment.get('availableEnding'),
-			availableEditor = this.getAvailableEditor(),
-			dueEditor = this.getDueEditor();
+			due = assignment.get('availableEnding');
 
-		availableEditor.selectDate(available);
-		dueEditor.selectDate(due);
+		this.selectAvailableDate(available);
+		this.selectDueDate(due);
 
 		if (this.onCancel) {
 			this.onCancel();

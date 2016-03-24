@@ -349,12 +349,6 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 	},
 
 	setValues: function(year, month, day, hour, minute) {
-		year = year === undefined || year === null ? this.getYear() : year;
-		month = month === undefined || month === null ? this.getMonth() : month;
-		day = day === undefined || day === null ? this.getDay() : day;
-		hour = hour === undefined || hour === null ? this.getHours() : hour;
-		minute = minute === undefined || minute === null ? this.getMinutes() : minute;
-
 		this.updateYearRange(year, month, day);
 		this.updateMonthRange(year, month, day);
 		this.updateDayRange(year, month, day);
