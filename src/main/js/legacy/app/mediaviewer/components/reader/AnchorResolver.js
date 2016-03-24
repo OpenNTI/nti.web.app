@@ -1,16 +1,19 @@
-var Ext = require('extjs');
-var Anchors = require('../../../../util/Anchors');
-var AnchorablesContentPointer = require('../../../../model/anchorables/ContentPointer');
-var AnchorablesContentRangeDescription = require('../../../../model/anchorables/ContentRangeDescription');
-var AnchorablesDomContentPointer = require('../../../../model/anchorables/DomContentPointer');
-var AnchorablesDomContentRangeDescription = require('../../../../model/anchorables/DomContentRangeDescription');
-var AnchorablesElementDomContentPointer = require('../../../../model/anchorables/ElementDomContentPointer');
-var AnchorablesTextContext = require('../../../../model/anchorables/TextContext');
-var AnchorablesTextDomContentPointer = require('../../../../model/anchorables/TextDomContentPointer');
-var AnchorablesTimeContentPointer = require('../../../../model/anchorables/TimeContentPointer');
-var AnchorablesTimeRangeDescription = require('../../../../model/anchorables/TimeRangeDescription');
-var AnchorablesTranscripContentPointer = require('../../../../model/anchorables/TranscriptContentPointer');
-var AnchorablesTranscriptRangeDescription = require('../../../../model/anchorables/TranscriptRangeDescription');
+const Ext = require('extjs');
+const lazy = require('legacy/util/lazy-require')
+				.get('Anchors', () => require('legacy/util/Anchors'));
+
+require('legacy/model/anchorables/ContentPointer');
+require('legacy/model/anchorables/ContentRangeDescription');
+require('legacy/model/anchorables/DomContentPointer');
+require('legacy/model/anchorables/DomContentRangeDescription');
+require('legacy/model/anchorables/ElementDomContentPointer');
+require('legacy/model/anchorables/TextContext');
+require('legacy/model/anchorables/TextDomContentPointer');
+
+const TimeContentPointer = require('legacy/model/anchorables/TimeContentPointer');
+const TimeRangeDescription = require('legacy/model/anchorables/TimeRangeDescription');
+const TranscriptContentPointer = require('legacy/model/anchorables/TranscriptContentPointer');
+const TranscriptRangeDescription = require('legacy/model/anchorables/TranscriptRangeDescription');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.AnchorResolver', {
@@ -24,18 +27,18 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			return this.createRangeDescriptionFromTimeRange(cueInfo);
 		}
 
-		Anchors.cleanRangeFromBadStartAndEndContainers(range);
-		range = Anchors.makeRangeAnchorable(range, docElement);
+		lazy.Anchors.cleanRangeFromBadStartAndEndContainers(range);
+		range = lazy.Anchors.makeRangeAnchorable(range, docElement);
 		if (!range || range.collapsed) {
 			console.error('Anchorable range for provided range could not be found', range);
 			Ext.Error.raise('Anchorable range for range could not be found');
 		}
 
-		var pureRange = Anchors.purifyRange(range, docElement),
-			startDomPointer = Anchors.createPointer(pureRange, 'start'),
-			endDomPointer = Anchors.createPointer(pureRange, 'end'), s, e;
+		var pureRange = lazy.Anchors.purifyRange(range, docElement),
+			startDomPointer = lazy.Anchors.createPointer(pureRange, 'start'),
+			endDomPointer = lazy.Anchors.createPointer(pureRange, 'end');
 
-		return {description: NextThought.model.anchorables.TranscriptRangeDescription.create({
+		return {description: TranscriptRangeDescription.create({
 			start: this.createTranscriptPointer(startDomPointer, 'start', cueInfo.startCueId, cueInfo.startTime),
 			end: this.createTranscriptPointer(endDomPointer, 'end', cueInfo.endCueId, cueInfo.endTime),
 			seriesId: cueInfo.containerId
@@ -152,8 +155,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return store ? store.queryBy(fn, this) : null;
 	},
 
-	createRangeDescriptionFromTimeRange: function(cueInfo) {
-		var desc = NextThought.model.anchorables.TimeRangeDescription.create({
+	createRangeDescriptionFromTimeRange: function  (cueInfo) {
+		var desc = TimeRangeDescription.create({
 			start: this.createTimePointer('start', cueInfo.startTime),
 			end: this.createTimePointer('end', cueInfo.endTime),
 			seriesId: cueInfo.containerId
@@ -162,8 +165,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return {description: desc};
 	},
 
-	createTranscriptPointer: function(rangePointer, role, cueId, time) {
-		return NextThought.model.anchorables.TranscriptContentPointer.create({
+	createTranscriptPointer: function  (rangePointer, role, cueId, time) {
+		return TranscriptContentPointer.create({
 			pointer: rangePointer,
 			cueid: cueId,
 			seconds: this.toMillSecond(time),
@@ -171,8 +174,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		});
 	},
 
-	createTimePointer: function(role, time) {
-		return NextThought.model.anchorables.TimeContentPointer.create({
+	createTimePointer: function  (role, time) {
+		return TimeContentPointer.create({
 			seconds: this.toMillSecond(time),
 			role: role
 		});

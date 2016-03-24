@@ -1,13 +1,15 @@
-var Ext = require('extjs');
-var XRegExp = require('xregexp');
-var rangy = require('./rangy');
-var Globals = require('./Globals');
-var AnchorablesTextDomContentPointer = require('../model/anchorables/TextDomContentPointer');
-var AnchorablesElementDomContentPointer = require('../model/anchorables/ElementDomContentPointer');
-var AnchorablesDomContentPointer = require('../model/anchorables/DomContentPointer');
-var AnchorablesContentRangeDescription = require('../model/anchorables/ContentRangeDescription');
+const Ext = require('extjs');
+const XRegExp = require('xregexp');
+const rangy = require('legacy/util/rangy');
+const Globals = require('legacy/util/Globals');
+const TextContext = require('legacy/model/anchorables/TextContext');
+const TextDomContentPointer = require('legacy/model/anchorables/TextDomContentPointer');
+const ElementDomContentPointer = require('legacy/model/anchorables/ElementDomContentPointer');
+const DomContentRangeDescription = require('legacy/model/anchorables/DomContentRangeDescription');
+const ContentRangeDescription = require('legacy/model/anchorables/ContentRangeDescription');
+require('legacy/model/anchorables/DomContentPointer');
 
-var lazy = require('legacy/util/lazy-require')
+const lazy = require('legacy/util/lazy-require')
 			.get('RangeUtils', () => require('./Ranges'))
 			.get('AnnotationUtils', () => require('./Annotations'));
 
@@ -379,7 +381,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	createRangeDescriptionFromRange: function(range, docElement) {
 		if (!range) {
 			console.log('Returning empty ContentRangeDescription for null range');
-			return {description: NextThought.model.anchorables.ContentRangeDescription.create({})};
+			return {description: ContentRangeDescription.create({})};
 		}
 
 		this.cleanRangeFromBadStartAndEndContainers(range);
@@ -407,13 +409,13 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 		result.container = this.getContainerNtiid(ancestorNode, docElement);
 
-		ancestorAnchor = NextThought.model.anchorables.ElementDomContentPointer.create({
+		ancestorAnchor = ElementDomContentPointer.create({
 			node: ancestorNode,
 			role: 'ancestor'
 		});
 
 		try {
-			result.description = NextThought.model.anchorables.DomContentRangeDescription.create({
+			result.description = DomContentRangeDescription.create({
 				start: this.createPointer(pureRange, 'start'),
 				end: this.createPointer(pureRange, 'end'),
 				ancestor: ancestorAnchor
@@ -544,7 +546,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		}
 
 		if (Ext.isElement(edgeNode)) {
-			return NextThought.model.anchorables.ElementDomContentPointer.create({
+			return ElementDomContentPointer.create({
 				elementTagName: edgeNode.tagName,
 				elementId: edgeNode.getAttribute('data-ntiid') || edgeNode.getAttribute('id'),
 				role: role
@@ -626,7 +628,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			sibling = nextSiblingFunction.call(walker);
 		}
 
-		return NextThought.model.anchorables.TextDomContentPointer.create({
+		return TextDomContentPointer.create({
 			role: role,
 			contexts: contexts,
 			edgeOffset: edgeOffset,
@@ -656,7 +658,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			offset = relativeNode.textContent.length - offset;
 		}
 
-		return NextThought.model.anchorables.TextContext.create({
+		return TextContext.create({
 			contextText: contextText,
 			contextOffset: offset
 		});
@@ -706,7 +708,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 		//console.log('Created Context, TEXT', "'"+textContent+"'", 'CONTEXT', contextText, 'OFFSET', contextOffset);
 
-		return NextThought.model.anchorables.TextContext.create({
+		return TextContext.create({
 			contextText: contextText,
 			contextOffset: contextOffset
 		});
@@ -857,7 +859,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	/* tested */
 	locateElementDomContentPointer: function(pointer, ancestor) {
 		//only element dom pointers after this point:
-		if (!(pointer instanceof NextThought.model.anchorables.ElementDomContentPointer)) {
+		if (!(pointer instanceof ElementDomContentPointer)) {
 			Ext.Error.raise('This method expects ElementDomContentPointers only');
 		}
 
@@ -920,7 +922,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		if (!pointer) {
 			Ext.Error.raise('Must supply a Pointer');
 		}
-		else if (!(pointer instanceof NextThought.model.anchorables.TextDomContentPointer)) {
+		else if (!(pointer instanceof TextDomContentPointer)) {
 			Ext.Error.raise('ContentPointer must be a TextDomContentPointer');
 		}
 
@@ -1667,7 +1669,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 
 		//TODO - must be a Node, not txt?
-		referencePointer = NextThought.model.anchorables.ElementDomContentPointer.create({node: referenceNode, role: 'ancestor'});
+		referencePointer = ElementDomContentPointer.create({node: referenceNode, role: 'ancestor'});
 		adaptedResult.referencePointer = referencePointer;
 		adaptedResult.offset = result.offset;
 

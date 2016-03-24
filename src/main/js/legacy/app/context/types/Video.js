@@ -1,16 +1,18 @@
-var Ext = require('extjs');
-var TranscriptTranscriptItem = require('../../../model/transcript/TranscriptItem');
-var MediaviewerActions = require('../../mediaviewer/Actions');
-var ReaderAnchorResolver = require('../../mediaviewer/components/reader/AnchorResolver');
-var ComponentsDefault = require('../components/Default');
-var ComponentsVideoContext = require('../components/VideoContext');
-var CardsContent = require('../components/cards/Content');
-var CardsQuestion = require('../components/cards/Question');
-var CardsRelatedWork = require('../components/cards/RelatedWork');
-var CardsSlide = require('../components/cards/Slide');
-var CardsVideo = require('../components/cards/Video');
-var ListVideo = require('../components/list/Video');
-var PathActions = require('../../navigation/path/Actions');
+const Ext = require('extjs');
+const PlaylistItem = require('legacy/model/transcript/TranscriptItem');
+const MediaViewerActions = require('legacy/app/mediaviewer/Actions');
+const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
+const PathActions = require('legacy/app/navigation/path/Actions');
+const Video = require('legacy/model/Video');
+require('legacy/model/transcript/TranscriptItem');
+require('legacy/app/context/components/Default');
+require('legacy/app/context/components/VideoContext');
+require('legacy/app/context/components/cards/Content');
+require('legacy/app/context/components/cards/Question');
+require('legacy/app/context/components/cards/RelatedWork');
+require('legacy/app/context/components/cards/Slide');
+require('legacy/app/context/components/cards/Video');
+require('legacy/app/context/components/list/Video');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
@@ -28,16 +30,16 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 	statics: {
 		type: 'video',
 
-		canHandle: function(obj) {
-			return obj && (obj.Class === 'Video' || obj instanceof NextThought.model.Video);
+		canHandle: function (obj) {
+			return obj && (obj.Class === 'Video' || obj instanceof Video);
 		}
 	},
 
 	constructor: function(config) {
 		this.callParent(arguments);
 		Ext.applyIf(this, config || {});
-		this.MediaActions = NextThought.app.mediaviewer.Actions.create();
-		this.PathActions = NextThought.app.navigation.path.Actions.create();
+		this.MediaActions = MediaViewerActions.create();
+		this.PathActions = PathActions.create();
 	},
 
 	__buildTranscriptStore: function(vttCueList) {
@@ -91,8 +93,8 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 	parse: function(obj, kind) {
 		obj = obj.getData();
 
-		var video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: obj.ntiid }, obj)),
-			Resolver = NextThought.app.mediaviewer.components.reader.AnchorResolver,
+		var video = PlaylistItem.create(Ext.apply({ NTIID: obj.ntiid }, obj)),
+			Resolver = AnchorResolver,
 			context, cmp, me = this, store, t;
 
 		return this.__getBasePath(obj)
