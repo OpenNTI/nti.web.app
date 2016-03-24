@@ -23,8 +23,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.callParent(arguments);
 
 		this.setDataTransfer(new NextThought.model.app.MoveInfo({
-			OriginContainer: this.record.parent.getId(),
-			OriginIndex: this.record.listIndex
+			OriginContainer: this.record && this.record.parent && this.record.parent.getId(),
+			OriginIndex: this.record && this.record.listIndex
 		}));
 
 		this.setDataTransfer(this.record);
