@@ -82,6 +82,24 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
+	showError: function() {
+		this.addCls('error');
+
+		if (this.onError) {
+			this.onError();
+		}
+	},
+
+
+	removeError: function() {
+		this.removeCls('error');
+
+		if (this.onRemoveError) {
+			this.onRemoveError();
+		}
+	},
+
+
 	onOptionsScroll: function(e) {
 		e.stopPropagation();
 
@@ -316,6 +334,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 			open = !this.optionsEl.hasCls('hidden'),
 			current = this.optionsEl.down('li.active'), next;
 
+		this.removeError();
+
 		if (!this.editable && charCode !== e.TAB) {
 			e.stopEvent();
 		}
@@ -433,6 +453,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 		this.inputEl.removeCls('error');
 		this.filterOptions('');
 		clearTimeout(this.__hideOptionsTimer);
+
+		this.removeError();
 	},
 
 	clear: function() {
