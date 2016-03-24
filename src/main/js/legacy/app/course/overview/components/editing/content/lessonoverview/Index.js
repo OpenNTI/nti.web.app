@@ -31,7 +31,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			effect: 'move'
 		});
 
-		this.setCollection(this.contents);
+		this.contents.onceFilledIn()
+			.then(this.setCollection.bind(this, this.contents));
 	},
 
 	afterRender: function() {

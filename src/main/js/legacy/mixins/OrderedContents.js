@@ -32,6 +32,19 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
+	onceFilledIn: function() {
+		var me = this;
+
+		return new Promise(function(fulfill, reject) {
+			if (me.isFilledIn) {
+				fulfill();
+			} else {
+				me.afterFilledIn = fulfill;
+			}
+		});
+	},
+
+
 	fillInItems: function() {
 		var me = this,
 			items = me.getItems();
@@ -54,6 +67,12 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 					});
 				}
 			});
+		}
+
+		this.isFilledIn = true;
+
+		if (this.afterFilledIn) {
+			this.afterFilledIn();
 		}
 	},
 
