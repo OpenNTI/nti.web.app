@@ -1,8 +1,8 @@
 var Ext = require('extjs');
 var CommonStateStore = require('../../../common/StateStore');
-var OptionsOpenEnrollment = require('./options/OpenEnrollment');
-var OptionsFiveminuteEnrollment = require('./options/FiveminuteEnrollment');
-var OptionsStoreEnrollment = require('./options/StoreEnrollment');
+var OpenEnrollment = require('./options/OpenEnrollment');
+var FiveminuteEnrollment = require('./options/FiveminuteEnrollment');
+var StoreEnrollment = require('./options/StoreEnrollment');
 var CoursesStateStore = require('../../library/courses/StateStore');
 
 
@@ -14,9 +14,9 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 	constructor: function() {
 		this.callParent(arguments);
 
-		this.addOption(NextThought.app.course.enrollment.options.OpenEnrollment);
-		this.addOption(NextThought.app.course.enrollment.options.FiveminuteEnrollment);
-		this.addOption(NextThought.app.course.enrollment.options.StoreEnrollment);
+		this.addOption(OpenEnrollment);
+		this.addOption(FiveminuteEnrollment);
+		this.addOption(StoreEnrollment);
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 	},
 
