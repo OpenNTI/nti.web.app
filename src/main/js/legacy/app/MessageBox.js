@@ -264,6 +264,10 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 		} else {
 			delete this.doNotShowCheckbox;
 		}
+		
+		if (me.isClosable && cfg.closeHandler) {
+			me.on('close', cfg.closeHandler.bind(null));
+		}
 
 		me.buttonOrder.forEach(function(btn) {
 			var btnCfg = buttons[btn];

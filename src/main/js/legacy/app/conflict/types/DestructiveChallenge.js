@@ -23,7 +23,8 @@ module.exports = exports = Ext.define('NextThought.app.conflict.types.Destructiv
 						text: 'No',
 						handler: reject
 					}
-				}
+				}, 
+				closeHandler:reject		// click on the x close button.
 			});
 		});
 	},
