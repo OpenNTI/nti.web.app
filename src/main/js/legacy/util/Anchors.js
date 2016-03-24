@@ -23,15 +23,15 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	NON_ANCHORABLE_ATTRIBUTE: 'data-non-anchorable',
 	NO_ANCHORABLE_CHILDREN_ATTRIBUTE: 'data-no-anchors-within',
 
-	isNodeIgnored: function(node) {
+	isNodeIgnored: function (node) {
 		return Boolean(node.getAttribute(this.NON_ANCHORABLE_ATTRIBUTE) ||
-					   node.getAttribute(this.NO_ANCHORABLE_CHILDREN_ATTRIBUTE));
+					node.getAttribute(this.NO_ANCHORABLE_CHILDREN_ATTRIBUTE));
 	},
 
 	IGNORE_WHITESPACE_TEXTNODES: true,
 
 	IGNORE_WHITESPACE_TEXTNODE_FILTER: {
-		acceptNode: function(node) {
+		acceptNode: function (node) {
 			if (node.nodeType === 3) {
 				if (Ext.isEmpty(node.textContent.trim())) {
 					return NodeFilter.FILTER_REJECT;
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		}
 	},
 
-	getWhitespaceFilter: function() {
+	getWhitespaceFilter: function () {
 		if (!this.IGNORE_WHITESPACE_TEXTNODES) {
 			return null;
 		}
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 	//Is this a content range description we know how to deal with.
 	//We handle non nil values that are empty or dom content range descriptions
-	supportedContentRange: function(contentRangeDescription) {
+	supportedContentRange: function (contentRangeDescription) {
 		if (!contentRangeDescription) {
 			return false;
 		}
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 	//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
 	//or locations but have the same container id.	That seem unlikely but may Need to figure that out eventually
-	preresolveLocatorInfo: function(contentRangeDescriptions, docElement, cleanRoot, containers, docElementContainerId) {
+	preresolveLocatorInfo: function (contentRangeDescriptions, docElement, cleanRoot, containers, docElementContainerId) {
 		var me = this,
 			virginContentCache = {},
 			locatorsFound = 0;
@@ -76,10 +76,10 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			Ext.Error.raise('toDomRanges requires contentRangeDescriptions and containers to be the same length if containers provided');
 		}
 
-		function getVirginNode(node) {
+		function getVirginNode (node) {
 			var theId = node.getAttribute('id'),
-					key = theId || node,
-					clean;
+				key = theId || node,
+				clean;
 
 			if (!node) {
 				return null;
@@ -93,8 +93,8 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			return clean;
 		}
 
-		function cacheLocatorForDescription(desc, docElement, cleanRoot, containerId, docElementContainerId) {
-			var searchWithin, ancestorNode, virginNode, locator = null;
+		function cacheLocatorForDescription (desc, docElement, cleanRoot, containerId, docElementContainerId) {
+			var searchWithin, ancestorNode, virginNode;
 
 			if (!containerId) {
 				console.warn('No container id provided will assume root without validating container');
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 		//First step is build all the locators cloning and purifying the least
 		//amount possible.	That is one of the places the profiler indicated problems
-		Ext.each(contentRangeDescriptions, function(desc, idx) {
+		Ext.each(contentRangeDescriptions, function (desc, idx) {
 			var containerId = containers ? containers[idx] : null;
 			try {
 				cacheLocatorForDescription(desc, docElement, cleanRoot, containerId, docElementContainerId);
@@ -148,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 				'log' : 'warn']('Preresolved ' + locatorsFound + '/' + contentRangeDescriptions.length + ' range descriptions');
 	},
 
-	toDomRange: function(contentRangeDescription, docElement, cleanRoot, containerId, docElementContainerId) {
+	toDomRange: function (contentRangeDescription, docElement, cleanRoot, containerId, docElementContainerId) {
 		var ancestorNode, resultRange, searchWithin, locator;
 
 		if (!this.supportedContentRange(contentRangeDescription)) {
@@ -207,7 +207,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		return null;
 	},
 
-	findElementsWithTagName: function(root, name) {
+	findElementsWithTagName: function (root, name) {
 		if (root.getElementsByTagName) {
 			return root.getElementsByTagName(name);
 		}
@@ -227,7 +227,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	 *	Note: if we find ourselves using inside a loop over contentRangeDescriptions on the same node
 	 *	an optimized versio nof this function should be written and used
 	 */
-	doesContentRangeDescriptionResolve: function(contentRangeDescription, node, doc) {
+	doesContentRangeDescriptionResolve: function (contentRangeDescription, node, doc) {
 		var result, range, theDoc = (node && node.ownerDocument) || doc;
 
 		//Ok so this sucks.	 There is a complicated reason why we can't let ourselves
@@ -255,9 +255,9 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	//TODO lots of duplicated code here
-	locateContentRangeDescription: function(contentRangeDescription, cleanRoot, doc) {
+	locateContentRangeDescription: function (contentRangeDescription, cleanRoot, doc) {
 		var ancestorNode, resultRange, searchWithin, containerId, docElementContainerId,
-				docElement = (cleanRoot && cleanRoot.ownerDocument) || doc, locator;
+			docElement = (cleanRoot && cleanRoot.ownerDocument) || doc, locator;
 
 		if (!this.supportedContentRange(contentRangeDescription)) {
 			console.warn('nothing to parse?');
@@ -313,7 +313,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		return null;
 	},
 
-	createEmptyContentRangeDescription: function(docElement, containerId, rootId) {
+	createEmptyContentRangeDescription: function (docElement, containerId, rootId) {
 		var searchWithin = this.scopedContainerNode(docElement, containerId, rootId), resultRange;
 
 		if (!searchWithin) {
@@ -326,7 +326,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		return resultRange;
 	},
 
-	cachedLocatorEnsuringDocument: function(contentRangeDescription, document) {
+	cachedLocatorEnsuringDocument: function (contentRangeDescription, document) {
 		var loc = contentRangeDescription.locator();
 		if (loc && loc.doc !== document) {
 			console.debug('Dumping locator because its from a different doc');
@@ -337,9 +337,9 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/*tested*/
-	scopedContainerNode: function(fragOrNode, containerId, rootId) {
+	scopedContainerNode: function (fragOrNode, containerId, rootId) {
 		var searchWithin,
-				node = fragOrNode && fragOrNode.body || fragOrNode && this.findElementsWithTagName(fragOrNode, 'body')[0] || fragOrNode;
+			node = fragOrNode && fragOrNode.body || fragOrNode && this.findElementsWithTagName(fragOrNode, 'body')[0] || fragOrNode;
 
 		if (!containerId) {
 			searchWithin = node;
@@ -351,13 +351,13 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		return searchWithin;
 	},
 
-	rootContainerIdFromDocument: function(doc) {
+	rootContainerIdFromDocument: function (doc) {
 		if (!doc) {
 			return null;
 		}
 
 		var foundContainer, metaNtiidTag,
-				head = doc.head || this.findElementsWithTagName(doc, 'head')[0];
+			head = doc.head || this.findElementsWithTagName(doc, 'head')[0];
 
 		if (head) {
 			metaNtiidTag = head.querySelectorAll('meta[name="NTIID"]');
@@ -378,7 +378,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	createRangeDescriptionFromRange: function(range, docElement) {
+	createRangeDescriptionFromRange: function (range, docElement) {
 		if (!range) {
 			console.log('Returning empty ContentRangeDescription for null range');
 			return {description: ContentRangeDescription.create({})};
@@ -432,7 +432,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	 *	to a node that isn't valid as described by getContainerNtiid
 	 *	we warn and return the node anyway
 	 */
-	getContainerNode: function(containerId, root, defaultNode) {
+	getContainerNode: function (containerId, root, defaultNode) {
 		var result, isContainerNode = false,
 			potentials = [];
 
@@ -442,7 +442,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 
 		if (containerId.indexOf('tag:nextthought.com') >= 0) {
-			Ext.each(root.querySelectorAll('[data-ntiid]'), function(x) {
+			Ext.each(root.querySelectorAll('[data-ntiid]'), function (x) {
 				if (x.getAttribute('data-ntiid') === containerId) {
 					potentials.push(x);
 				}
@@ -467,7 +467,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		}
 		result = Ext.fly(potentials[0]);
 
-		Ext.each(this.containerSelectors, function(sel) {
+		Ext.each(this.containerSelectors, function (sel) {
 			isContainerNode = Ext.fly(result).is(sel);
 			return !isContainerNode;
 		});
@@ -487,26 +487,26 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	 *	the ds is questionable and other parts of the app (carousel?) will
 	 *	need to be reworked
 	 */
-	getContainerNtiid: function(node, def) {
+	getContainerNtiid: function (node, def) {
 		var n = Ext.get(node), ntiidAttr = 'data-ntiid',
 			containerNode;
 
-		function ancestorOrSelfMatchingSelector(node, sel) {
+		function ancestorOrSelfMatchingSelector (node, sel) {
 			if (!node) {
 				return false;
 			}
 			return Ext.fly(node).is(sel) ? node : Ext.fly(node).parent(sel, true);
 		}
 
-		function nodeIfObject(n) {
+		function nodeIfObject (o) {
 			var node = null;
 
-			if (!n) {
+			if (!o) {
 				return null;
 			}
 
-			Ext.each(this.containerSelectors, function(sel) {
-				node = ancestorOrSelfMatchingSelector(n, sel);
+			Ext.each(this.containerSelectors, function (sel) {
+				node = ancestorOrSelfMatchingSelector(o, sel);
 				return node === null;
 			}, this);
 
@@ -531,14 +531,14 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		return def;
 	},
 
-	doesElementMatchPointer: function(element, pointer) {
+	doesElementMatchPointer: function (element, pointer) {
 		var id = element.id || (element.getAttribute ? element.getAttribute('id') : null);
 		return (id === pointer.elementId || (element.getAttribute && element.getAttribute('data-ntiid') === pointer.elementId)) &&
 			element.tagName.toUpperCase() === pointer.elementTagName.toUpperCase();
 	},
 
 	//TODO - testing
-	createPointer: function(range, role, node) {
+	createPointer: function (range, role, node) {
 		var edgeNode = node || this.nodeThatIsEdgeOfRange(range, (role === 'start'));
 
 		if (Ext.isTextNode(edgeNode)) {
@@ -558,7 +558,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	createTextPointerFromRange: function(range, role) {
+	createTextPointerFromRange: function (range, role) {
 		if (!range) {
 			Ext.Error.raise('Cannot proceed without range');
 		}
@@ -637,7 +637,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	generateAdditionalContext: function(relativeNode, role) {
+	generateAdditionalContext: function (relativeNode, role) {
 		if (!relativeNode) {
 			Ext.Error.raise('Node must not be null');
 		}
@@ -665,7 +665,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	generatePrimaryContext: function(range, role) {
+	generatePrimaryContext: function (range, role) {
 		if (!range) {
 			Ext.Error.raise('Range must not be null');
 		}
@@ -715,7 +715,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	lastWordFromString: function(str) {
+	lastWordFromString: function (str) {
 		if (str === null || str === undefined) {
 			Ext.Error.raise('Must supply a string');
 		}
@@ -723,14 +723,14 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	firstWordFromString: function(str) {
+	firstWordFromString: function (str) {
 		if (str === null || str === undefined) {
 			Ext.Error.raise('Must supply a string');
 		}
 		return (/^\s?\S*/).exec(str)[0];
 	},
 
-	resolveCleanLocatorForDesc: function(rangeDesc, ancestor, docElement) {
+	resolveCleanLocatorForDesc: function (rangeDesc, ancestor, docElement) {
 		var confidenceCutoff = 0.4, loc,
 			startResult,
 			endResult,
@@ -818,7 +818,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	resolveSpecBeneathAncestor: function(rangeDesc, ancestor, docElement) {
+	resolveSpecBeneathAncestor: function (rangeDesc, ancestor, docElement) {
 		var locator = this.resolveCleanLocatorForDesc(rangeDesc, ancestor, docElement);
 		if (!locator) {
 			return null;
@@ -828,7 +828,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	//TODO - testing
-	convertContentRangeToDomRange: function(startResult, endResult, docElement) {
+	convertContentRangeToDomRange: function (startResult, endResult, docElement) {
 
 		var liveStartResult = this.convertStaticResultToLiveDomContainerAndOffset(startResult, docElement),
 			liveEndResult = this.convertStaticResultToLiveDomContainerAndOffset(endResult, docElement),
@@ -857,7 +857,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	locateElementDomContentPointer: function(pointer, ancestor) {
+	locateElementDomContentPointer: function (pointer, ancestor) {
 		//only element dom pointers after this point:
 		if (!(pointer instanceof ElementDomContentPointer)) {
 			Ext.Error.raise('This method expects ElementDomContentPointers only');
@@ -869,8 +869,8 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		}
 
 		var theId = pointer.getElementId(),
-				potentials = [], parts,
-				p, i, r;
+			potentials = [], parts,
+			p, i, r;
 
 		if (theId.indexOf('tag:nextthought.com') === 0) {
 			parts = theId.split(',');
@@ -907,7 +907,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	isNodeChildOfAncestor: function(node, ancestor) {
+	isNodeChildOfAncestor: function (node, ancestor) {
 		while (node && node.parentNode) {
 			if (node.parentNode === ancestor) {
 				return true;
@@ -918,7 +918,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	locateRangeEdgeForAnchor: function(pointer, ancestorNode, startResult) {
+	locateRangeEdgeForAnchor: function (pointer, ancestorNode, startResult) {
 		if (!pointer) {
 			Ext.Error.raise('Must supply a Pointer');
 		}
@@ -938,7 +938,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			result = {}, matches,
 			possibleNodes = [],
 			done = false,
-			i, filter, node;
+			filter;
 
 		if (root.parentNode) {
 			root = root.parentNode;
@@ -982,7 +982,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		//are iterating over.  Maybe there is a better way to architect this since its probably
 		//a change that stays in place for ever...
 		if (this.getWhitespaceFilter()) {
-			pointer.nonEmptyContexts = Ext.Array.filter(pointer.getContexts(), function(c, i) {
+			pointer.nonEmptyContexts = Ext.Array.filter(pointer.getContexts(), function (c, i) {
 				//Always keep the primary.	It should never be empty, but just in case
 				if (i === 0) {
 					if (Ext.isEmpty(c.contextText.trim())) {
@@ -999,7 +999,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 		while (textNode && !done) {
 			matches = this.getCurrentNodeMatches(pointer, treeWalker);
-			for (i = 0; i < matches.length; i++) {
+			for (let i = 0; i < matches.length; i++) {
 				result = matches[i];
 				if (matches[i].confidence > 0) {
 					possibleNodes.push(matches[i]);
@@ -1024,7 +1024,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			return {confidence: 0};
 		}
 
-		node = null;
+
 		//Did we stop because we found a perfect match?
 		if (possibleNodes[possibleNodes.length - 1].confidence === 1) {
 			result = possibleNodes[possibleNodes.length - 1];
@@ -1058,7 +1058,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			if (this.isDebug) {
 				console.log('Searching for best ' + pointer.getRole() + ' match in ', possibleNodes);
 			}
-			for (i = 0; i < possibleNodes.length; i++) {
+			for (let i = 0; i < possibleNodes.length; i++) {
 				if (possibleNodes[i].confidence > result.confidence) {
 					result = possibleNodes[i];
 				}
@@ -1068,8 +1068,18 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		return result;
 	},
 
-	getCurrentNodeMatches: function(pointer, treeWalker) {
-		function multiIndexOf(str, tomatch) {
+	getCurrentNodeMatches: function (pointer, treeWalker) {
+		var currentNode = treeWalker.currentNode,
+			lookingAtNode = currentNode,
+			isStart = pointer.getRole() === 'start',
+			siblingFunction = isStart ? treeWalker.previousNode : treeWalker.nextNode,
+			contexts = pointer.nonEmptyContexts, //Caller sets this up
+			contextObj = contexts[0],
+			numContexts = contexts.length,
+			matches = getPrimaryContextMatches(contextObj, lookingAtNode, isStart),
+			confidenceMultiplier = 1;
+
+		function multiIndexOf (str, tomatch) {
 			var all = [], next = -2;
 			while (next !== -1) {
 				next = str.indexOf(tomatch, next + 1);
@@ -1080,23 +1090,23 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			return all;
 		}
 
-		function getPrimaryContextMatches(context, node, isStart) {
+		function getPrimaryContextMatches (context, node, adjustOffset) {
 			if (!node) {
 				return [];
 			}
 
 			var allmatches = [],
-					adjustedOffset = context.contextOffset,
-					nodeContent = node.textContent,
-					i, f, p, score;
+				adjustedOffset = context.contextOffset,
+				nodeContent = node.textContent,
+				f, p, score;
 
 
-			if (isStart) {
+			if (adjustOffset) {
 				adjustedOffset = node.textContent.length - adjustedOffset;
 			}
 
 			p = multiIndexOf(nodeContent, context.contextText);
-			for (i = 0; i < p.length; i++) {
+			for (let i = 0; i < p.length; i++) {
 				//Penalzies score based on disparity between expected
 				//and real offset. For longer paragraphs, which we
 				//expect will have larger and more changes made to them,
@@ -1113,7 +1123,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			return allmatches;
 		}
 
-		function secondaryContextMatch(context, node, isStart) {
+		function secondaryContextMatch (context, node, adjustOffset) {
 			if (!node) {
 				return 0;
 			}
@@ -1122,7 +1132,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			}
 			var adjustedOffset = context.contextOffset;
 
-			if (isStart) {
+			if (adjustOffset) {
 				adjustedOffset = node.textContent.length - adjustedOffset;
 			}
 			return node.textContent.substr(adjustedOffset).indexOf(context.contextText) === 0;
@@ -1130,7 +1140,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 		if (pointer.nonEmptyContexts === undefined) {
 			console.error('nonEmptyContexts not set. This should only happen when testing');
-			pointer.nonEmptyContexts = Ext.Array.filter(pointer.getContexts(), function(c, i) {
+			pointer.nonEmptyContexts = Ext.Array.filter(pointer.getContexts(), function (c, i) {
 				//Always keep the primary.	It should never be empty, but just in case
 				if (i === 0) {
 					if (Ext.isEmpty(c.contextText.trim())) {
@@ -1142,24 +1152,15 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			});
 		}
 
-		var currentNode = treeWalker.currentNode,
-			lookingAtNode = currentNode,
-			isStart = pointer.getRole() === 'start',
-			siblingFunction = isStart ? treeWalker.previousNode : treeWalker.nextNode,
-			contexts = pointer.nonEmptyContexts, //Caller sets this up
-			contextObj = contexts[0],
-			numContexts = contexts.length,
-			matches = getPrimaryContextMatches(contextObj, lookingAtNode, isStart),
-			i, c,
-			confidenceMultiplier = 1;
+
 
 		lookingAtNode = siblingFunction.call(treeWalker);
 
 		if (matches.length > 0) {
-			for (i = 1; i < numContexts; i++) {
+			for (let i = 1; i < numContexts; i++) {
 				contextObj = contexts[i];
 
-				c = secondaryContextMatch(contextObj, lookingAtNode, isStart);
+				let c = secondaryContextMatch(contextObj, lookingAtNode, isStart);
 				if (!c) {
 					confidenceMultiplier *= i / (i + 0.5);
 					break;
@@ -1181,14 +1182,14 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 				}
 			}
 		}
-		for (i = 0; i < matches.length; i++) {
+		for (let i = 0; i < matches.length; i++) {
 			matches[i].confidence *= confidenceMultiplier;
 		}
 		treeWalker.currentNode = currentNode;
 		return matches;
 	},
 
-	containsFullContext: function(pointer) {
+	containsFullContext: function (pointer) {
 		//Do we have a primary + 5 additional?
 
 		if (!pointer.getContexts()) {
@@ -1200,8 +1201,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		}
 
 		//Maybe we have 5 characters of additional context
-		var i,
-				chars = 0;
+		var i, chars = 0;
 
 		for (i = 1; i < pointer.getContexts().length; i++) {
 			chars += pointer.getContexts()[i].contextText.length;
@@ -1211,7 +1211,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	referenceNodeForNode: function(node, allowsUnsafeAnchors) {
+	referenceNodeForNode: function (node, allowsUnsafeAnchors) {
 		if (!node) {
 			return null;
 		}
@@ -1223,16 +1223,16 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	makeRangeAnchorable: function(range, docElement) {
+	makeRangeAnchorable: function (range, docElement) {
 		if (!range) {
 			Ext.Error.raise('Range cannot be null');
 		}
 
 		var startEdgeNode = this.nodeThatIsEdgeOfRange(range, true),
-				endEdgeNode = this.nodeThatIsEdgeOfRange(range, false),
-				newRange,
-				startOffset = range.startOffset,
-				endOffset = range.endOffset;
+			endEdgeNode = this.nodeThatIsEdgeOfRange(range, false),
+			newRange,
+			startOffset = range.startOffset,
+			endOffset = range.endOffset;
 
 		//If both anchors are already anchorable, we are done here.
 		if (endEdgeNode === range.endContainer &&
@@ -1291,14 +1291,14 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	//as an optimization. (Probably minor since those are small parts of the tree right now)
 	//TODO provide an end we don't go past
 	/* tested */
-	searchFromRangeStartInwardForAnchorableNode: function(startNode, commonParent) {
+	searchFromRangeStartInwardForAnchorableNode: function (startNode, commonParent) {
 		if (!startNode) {
 			return null;
 		}
 
 
 		var walker = document.createTreeWalker(commonParent, NodeFilter.SHOW_ALL, null, null),
-				temp;
+			temp;
 
 		walker.currentNode = startNode;
 		temp = walker.currentNode;
@@ -1316,7 +1316,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 	/* tested */
 	//TODO provide a node we don't go past
-	searchFromRangeEndInwardForAnchorableNode: function(endNode) {
+	searchFromRangeEndInwardForAnchorableNode: function (endNode) {
 		//handle simple cases where we can immediatly return
 		if (!endNode) {
 			return null;
@@ -1327,7 +1327,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 		endNode = this.walkDownToLastNode(endNode);
 
-		function recurse(n) {
+		function recurse (n) {
 			if (!n) {
 				return null;
 			}
@@ -1353,13 +1353,13 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	walkDownToLastNode: function(node) {
+	walkDownToLastNode: function (node) {
 		if (!node) {
 			Ext.Error.raise('Node cannot be null');
 		}
 
 		var workingNode = node,
-				result = workingNode;
+			result = workingNode;
 
 		while (workingNode) {
 			workingNode = workingNode.lastChild;
@@ -1372,22 +1372,22 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	nodeThatIsEdgeOfRange: function(range, start) {
+	nodeThatIsEdgeOfRange: function (range, start) {
 		return lazy.RangeUtils.nodeThatIsEdgeOfRange(range, start);
 	},
 
 	/* tested */
-	isNodeAnchorable: function(theNode, unsafeAnchorsAllowed) {
+	isNodeAnchorable: function (theNode, unsafeAnchorsAllowed) {
 		//obviously not if node is not there
 		if (!theNode) {
 			return false;
 		}
 
-		function isNodeItselfAnchorable(node, allowUnsafeAnchors) {
+		function isNodeItselfAnchorable (node, allowUnsafeAnchors) {
 			//distill the possible ids into an id var for easier reference later
 			var id = node.id || (node.getAttribute ? node.getAttribute('id') : null),
-					ntiid = node.getAttribute ? node.getAttribute('data-ntiid') : null,
-					nonAnchorable = node.getAttribute ? node.getAttribute('data-non-anchorable') : false;
+				ntiid = node.getAttribute ? node.getAttribute('data-ntiid') : null,
+				nonAnchorable = node.getAttribute ? node.getAttribute('data-non-anchorable') : false;
 
 			if (nonAnchorable) {
 				return false;
@@ -1440,12 +1440,9 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	purifyRange: function(range, doc) {
+	purifyRange: function (range, doc) {
 		var docFrag,
-			extElement,
 			tempRange = doc.createRange(),
-			parentContainer,
-			nodeToInsertBefore,
 			origStartNode = range.startContainer,
 			origEndNode = range.endContainer,
 			origStartOff = range.startOffset,
@@ -1535,7 +1532,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		return resultRange;
 	},
 
-	purifyNode: function(docFrag) {
+	purifyNode: function (docFrag) {
 		if (!docFrag) {
 			Ext.Error.raise('must pass a node to purify.');
 		}
@@ -1549,11 +1546,11 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		(new Ext.CompositeElement(Ext.fly(docFrag).query('span.blockRedactionAction'))).remove();
 
 		//loop over elements we need to remove and, well, remove them:
-		Ext.each(Ext.fly(docFrag).query('[data-non-anchorable]'), function(n) {
+		Ext.each(Ext.fly(docFrag).query('[data-non-anchorable]'), function (n) {
 			if (n.parentNode) {
 				parentContainer = n.parentNode;
 				nodeToInsertBefore = n;
-				Ext.each(n.childNodes, function(c) {
+				Ext.each(n.childNodes, function (c) {
 					parentContainer.insertBefore(c, nodeToInsertBefore);
 				});
 			}
@@ -1564,7 +1561,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 			//remove non-anchorable node
 			parentContainer.removeChild(nodeToInsertBefore);
 		});
-		function fallbackNormalize(node) {
+		function fallbackNormalize (node) {
 			var i = 0, nc = node.childNodes;
 			while (i < nc.length) {
 				while (nc[i].nodeType === node.TEXT_NODE && i + 1 < nc.length && nc[i + 1].nodeType === node.TEXT_NODE) {
@@ -1584,9 +1581,9 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	tagNode: function(node, tag, textOffset) {
+	tagNode: function (node, tag, textOffset) {
 		var attr = this.PURIFICATION_TAG,
-				start, end;
+			start, end;
 
 		if (Ext.isTextNode(node)) {
 			start = node.textContent.substring(0, textOffset);
@@ -1599,9 +1596,9 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	cleanNode: function(node, tag) {
+	cleanNode: function (node, tag) {
 		var attr = this.PURIFICATION_TAG,
-				tagSelector, offset;
+			tagSelector, offset;
 
 		//generic protection:
 		if (!node) {
@@ -1622,7 +1619,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	findTaggedNode: function(root, tag) {
+	findTaggedNode: function (root, tag) {
 		var walker = document.createTreeWalker(root, NodeFilter.SHOW_ALL, null, null),
 			attr = this.PURIFICATION_TAG,
 			selector = '[' + attr + ':' + tag + ']',
@@ -1654,7 +1651,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	//TODO - testing
-	toReferenceNodeXpathAndOffset: function(result) {
+	toReferenceNodeXpathAndOffset: function (result) {
 		//get a reference node that is NOT a text node...
 		var adaptedResult = {}, parts, node,
 			referencePointer,
@@ -1689,7 +1686,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	//TODO - testing
-	indexInParentsChildren: function(node) {
+	indexInParentsChildren: function (node) {
 		var i = 0;
 		while ((node = node.previousSibling) !== null) {
 			i++;
@@ -1697,19 +1694,19 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		return i;
 	},
 
-	convertStaticResultToLiveDomContainerAndOffset: function(staticResult, docElement) {
+	convertStaticResultToLiveDomContainerAndOffset: function (staticResult, docElement) {
 		if (!staticResult) {
 			return null;
 		}
 
 		var result,
-				body = docElement.body || this.findElementsWithTagName(docElement, 'body')[0],
-				referenceNode = staticResult.referencePointer.locateRangePointInAncestor(body).node,
-				container,
-				parts,
-				kids,
-				part,
-				lastPart;
+			body = docElement.body || this.findElementsWithTagName(docElement, 'body')[0],
+			referenceNode = staticResult.referencePointer.locateRangePointInAncestor(body).node,
+			container,
+			parts,
+			kids,
+			part,
+			lastPart;
 
 		if (!referenceNode) {
 			return null;
@@ -1749,18 +1746,18 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	//TODO - testing
-	ithChildAccountingForSyntheticNodes: function(node, idx, offset) {
+	ithChildAccountingForSyntheticNodes: function (node, idx, offset) {
 		if (idx < 0 || !node.firstChild) {
 			return null;
 		}
 
 		var childrenWithSyntheticsRemoved = this.childrenIfSyntheticsRemoved(node),
-				i = 0,
-				child,
-				adjustedIdx = 0,
-				result,
-				textNode,
-				limit;
+			i = 0,
+			child,
+			adjustedIdx = 0,
+			result,
+			textNode,
+			limit;
 
 		//Short circuit the error condition
 		if (idx >= childrenWithSyntheticsRemoved.length) {
@@ -1829,7 +1826,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 
 	//TODO -testing
 	//TODO - this can probably somehow be replaced with a purifiedNode call, rather than the logic that skips text nodes and subtracts offsets etc.
-	childrenIfSyntheticsRemoved: function(node) {
+	childrenIfSyntheticsRemoved: function (node) {
 		var sanitizedChildren = [], i,
 			children = node.childNodes,
 			child;
@@ -1855,16 +1852,16 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	},
 
 	/* tested */
-	cleanRangeFromBadStartAndEndContainers: function(range) {
-		function isBlankTextNode(n) {
+	cleanRangeFromBadStartAndEndContainers: function (range) {
+		function isBlankTextNode (n) {
 			return (Ext.isTextNode(n) && n.textContent.trim().length === 0);
 		}
 
 		var startContainer = range.startContainer,
-				endContainer = range.endContainer,
-				ancestor = Ext.isTextNode(range.commonAncestorContainer) ? range.commonAncestorContainer.parentNode : range.commonAncestorContainer,
-				txtNodes = lazy.AnnotationUtils.getTextNodes(ancestor),
-				index = 0, i;
+			endContainer = range.endContainer,
+			ancestor = Ext.isTextNode(range.commonAncestorContainer) ? range.commonAncestorContainer.parentNode : range.commonAncestorContainer,
+			txtNodes = lazy.AnnotationUtils.getTextNodes(ancestor),
+			index = 0, i;
 
 
 		if (isBlankTextNode(startContainer)) {
@@ -1891,7 +1888,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		return range;
 	},
 
-	isMathChild: function(node) {
+	isMathChild: function (node) {
 		if (!node) {
 			return false;
 		}
@@ -1903,7 +1900,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		return !!Ext.fly(node).up('.math');
 	},
 
-	expandRangeToIncludeMath: function(range) {
+	expandRangeToIncludeMath: function (range) {
 		if (!range) {
 			return null;
 		}
@@ -1917,7 +1914,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 		}
 	},
 
-	expandSelectionToIncludeMath: function(sel) {
+	expandSelectionToIncludeMath: function (sel) {
 		var range = sel.getRangeAt(0);
 		if (range) {
 			sel.removeAllRanges();
@@ -1934,7 +1931,7 @@ module.exports = exports = Ext.define('NextThought.util.Anchors', {
 	 * http://stackoverflow.com/questions/10964016/how-do-i-extend-selection-to-word-boundary-using-javascript-once-only/10964743#10964743
 	 * http://stackoverflow.com/questions/19450655/rangy-expands-for-cyrillic
 	 */
-	snapSelectionToWord: function(doc) {
+	snapSelectionToWord: function (doc) {
 		try {
 			var sel = rangy.getSelection(doc),
 				r = sel.rangeCount ? sel.getRangeAt(0) : null;

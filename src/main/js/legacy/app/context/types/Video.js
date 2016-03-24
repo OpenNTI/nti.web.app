@@ -35,43 +35,43 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 		}
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 		Ext.applyIf(this, config || {});
 		this.MediaActions = MediaViewerActions.create();
 		this.PathActions = PathActions.create();
 	},
 
-	__buildTranscriptStore: function(vttCueList) {
+	__buildTranscriptStore: function (vttCueList) {
 		var cuesList = [], s;
 
-		Ext.each(vttCueList, function(c) {
+		Ext.each(vttCueList, function (c) {
 			var m = NextThought.model.transcript.Cue.fromParserCue(c);
 			cuesList.push(m);
 		});
 
 		s = new Ext.data.Store({
-					proxy: 'memory',
-					model: 'NextThought.model.transcript.Cue',
-					data: cuesList,
-					sorters: [{
-						property: 'startTime',
-						direction: 'ASC'
-					}]
-				});
+			proxy: 'memory',
+			model: 'NextThought.model.transcript.Cue',
+			data: cuesList,
+			sorters: [{
+				property: 'startTime',
+				direction: 'ASC'
+			}]
+		});
 
 		return s;
 	},
 
-	__getBasePath: function(obj) {
+	__getBasePath: function (obj) {
 		var me = this;
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			if (me.course && me.course.getContentRoots) {
 				fulfill(me.course.getContentRoots()[0]);
 			} else {
 				me.PathActions.getPathToObject(me.contextRecord || obj)
-					.then(function(path) {
+					.then(function (path) {
 						var course = path[0], p;
 
 						if (course) {
@@ -86,11 +86,11 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 
 	/**
 	 * Parse a video object and build the context component
-	 * @param  {[Object]} obj [video object]
-	 *
-	 * @return {[Promise]}	   [promise that will resolve with an Ext.Component]
+	 * @param {Object} obj [video object]
+	 * @param {String} kind kind?
+	 * @return {Promise}	   [promise that will resolve with an Ext.Component]
 	 */
-	parse: function(obj, kind) {
+	parse: function (obj, kind) {
 		obj = obj.getData();
 
 		var video = PlaylistItem.create(Ext.apply({ NTIID: obj.ntiid }, obj)),
@@ -98,15 +98,15 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 			context, cmp, me = this, store, t;
 
 		return this.__getBasePath(obj)
-				.then(function(basePath) {
+				.then(function (basePath) {
 					t = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
 					return Promise.resolve(t);
 				})
-				.fail(function() {
+				.fail(function () {
 					t = NextThought.model.transcript.TranscriptItem.fromVideo(video);
 					return Promise.resolve(t);
 				})
-				.then(function(transcript) {
+				.then(function (transcript) {
 					if (kind === 'card') {
 						cmp = {
 							xtype: 'context-video-card',
@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 					}
 
 					return me.MediaActions.loadTranscript(transcript)
-							.then(function(cueList) {
+							.then(function (cueList) {
 								store = me.__buildTranscriptStore(cueList);
 								context = Resolver.getDomElementForTranscriptTimeRange(me.range, store, video);
 
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 
 								return Promise.resolve(cmp);
 							})
-							.fail(function(reason) {
+							.fail(function (/*reason*/) {
 								cmp = Ext.widget('context-video', {
 									type: me.self.type,
 									containerId: me.container,

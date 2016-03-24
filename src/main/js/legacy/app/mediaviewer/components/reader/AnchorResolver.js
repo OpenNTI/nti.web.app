@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	// we think in the future, each type of anchor should have information about how to resolve its range.
 	// These utils deal with time range resolution. This is just a first step.
 
-	createRangeDescriptionFromRange: function(range, docElement, cueInfo) {
+	createRangeDescriptionFromRange: function (range, docElement, cueInfo) {
 		if (!range) {
 			return this.createRangeDescriptionFromTimeRange(cueInfo);
 		}
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 	//TODO: this function is too customized for resolving time range to dom range in transcript.
 	// It needs to be reworked to handle more of a general case( any time of time range to dom Range.)
-	toDomRange: function(description, doc, cleanRoot, containerId) {
+	toDomRange: function (description, doc, cleanRoot) {
 		if (!description || description.isEmpty) {
 			return null;
 		}
@@ -83,9 +83,10 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	 *
 	 * @param  {[TranscriptTimeRange]} description [the range of a given userdata]
 	 * @param  {[Ext.Store]} cueStore	[store of cue]
+	 * @param {NextThought.model.Video} video video model
 	 * @return {[HTMLElement]}			 [html element containing the described time range]
 	 */
-	getDomElementForTranscriptTimeRange: function(description, cueStore, video) {
+	getDomElementForTranscriptTimeRange: function (description, cueStore, video) {
 		if (!description || description.isEmpty) {
 			// Notes that are anchored to the title, have any empty description.
 			// So if the description or range is null, return the title element.
@@ -95,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		var start = description.getStart() && description.getStart().seconds,
 			end = description.getEnd() && description.getEnd().seconds,
 			cues,
-			els = [], resultRange, n, context;
+			n, context;
 
 		//Conversions.
 		start = this.fromMillSecondToSecond(start);
@@ -105,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		console.log('cues count: ', cues && cues.getCount());
 
 		context = document.createElement('div');
-		cues.each(function(cue) {
+		cues.each(function (cue) {
 			n = document.createElement('span');
 			n.innerHTML = cue.get('text');
 			context.appendChild(n);
@@ -116,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 	//TODO: this function is too customized for resolving time range to dom range in transcript.
 	// It needs to be reworked to handle more of a general case( any time of time range to dom Range.)
-	fromTimeRangeToDomRange: function(description, cueStore, container, docElement) {
+	fromTimeRangeToDomRange: function  (description, cueStore, container, docElement) {
 		if (!description || description.isEmpty) {
 			return;
 		}
@@ -134,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		console.log('cues count: ', cues && cues.getCount());
 		if (!cues || cues.getCount() === 0) { return null; }
 
-		cues.each(function(cue) {
+		cues.each(function  (cue) {
 			var el = Ext.fly(container).down('.cue[cue-start=' + cue.get('startTime') + ']');
 			if (el) { els.push(el); }
 		});
@@ -148,8 +149,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return resultRange;
 	},
 
-	getCuesWithinRange: function(store, start, end) {
-		function fn(item) {
+	getCuesWithinRange: function  (store, start, end) {
+		function fn (item) {
 			return (item.get('endTime') > 0) && (start.isFloatLessThanOrEqual(item.get('startTime')) && end.isFloatGreaterThanOrEqual(item.get('endTime')));
 		}
 		return store ? store.queryBy(fn, this) : null;
@@ -181,11 +182,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		});
 	},
 
-	fromMillSecondToSecond: function(millsec) {
+	fromMillSecondToSecond: function  (millsec) {
 		return millsec / 1000;
 	},
 
-	toMillSecond: function(seconds) {
+	toMillSecond: function  (seconds) {
 		return seconds * 1000;
 	}
 
