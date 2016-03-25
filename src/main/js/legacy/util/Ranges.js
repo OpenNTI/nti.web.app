@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 
 
 	nodeIfObjectOrInObject: function (node) {
-		var selector = 'object', n;
+		var selector = 'object';
 		if (!node) {
 			return null;
 		}
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 	},
 
 
-	rangeIfItemPropSpan: function (range, doc) {
+	rangeIfItemPropSpan: function (range/*, doc*/) {
 		/*
 		 * Special case for annototable images: We don't want to expand past the annototable img.
 		 * And since we usually expand by a given number of characters,
@@ -265,7 +265,7 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 
 	expandRange: function (range, doc) {
 		var object = this.nodeIfObjectOrInObject(range.commonAncestorContainer) ||
-					 this.nodeIfObjectOrInObject(range.startContainer),
+					this.nodeIfObjectOrInObject(range.startContainer),
 			r;
 
 		if (!object) {
@@ -291,7 +291,7 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 	},
 
 
-	expandRangeGetNode: function (range, doc, dontClone) {
+	expandRangeGetNode: function (range, doc/*, dontClone*/) {
 		var tempDiv = doc.createElement('div'),
 			n = this.expandRange(range);
 		try {
@@ -324,7 +324,8 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 	 * Removes any nodes we don't want to show up in the context, for now that is assessment objects nodes, which have
 	 * a size but no display, so it looks like a bunch of emopty space in the note window.
 	 *
-	 * @param dom - the dom you want cleaned, make sure it's a clone or you will delete stuff from the dom it belongs to.
+	 * @param {Node} dom - the dom you want cleaned, make sure it's a clone or you will delete stuff from the dom it belongs to.
+	 * @return {Node} Dom Node.
 	 */
 	clearNonContextualGarbage: function (dom) {
 		Ext.each(this.nonContextWorthySelectors, function (sel) {
@@ -338,7 +339,8 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 
 	/**
 	 * Takes a range or a rangy range and returns the bounding rect
-	 * @param r - either a browser range or a rangy range
+	 * @param {Range} r - either a browser range or a rangy range
+	 * @returns {ClientRect} The bounding rect of the range.
 	 */
 	getBoundingClientRect: function (r) {
 		if (r.nativeRange) {
@@ -361,8 +363,11 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 
 		//NOTE in every browser but IE the last two params are optional, but IE explodes if they aren't provided
 
-		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
-		walker = doc.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, null, false);
+		walker = doc.createTreeWalker(
+			range.commonAncestorContainer,
+			//Tell ESLint to ignore bitwise opperations
+			NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, //eslint-disable-line no-bitwise
+			null, false);
 
 		//NOTE IE also blows up if you call nextNode() on a newly initialized treewalker whose root is a text node.
 		//Use a similar strategy as what is used in Anchors.js
@@ -392,14 +397,14 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 
 	/**
 	 *
-	 * @param applicableRange {NextThought.model.anchorables.ContentRangeDescription}
-	 * @param doc {Document}
-	 * @param cleanRoot {Node}
-	 * @param containerId {String}
-	 * @return {Node}
+	 * @param {NextThought.model.anchorables.ContentRangeDescription} applicableRange The range.
+	 * @param {Document} doc the current document.
+	 * @param {Node} cleanRoot clean copy of the document.
+	 * @param {String} containerId The container id.
+	 * @return {Node} Context Node
 	 */
-	getContextAroundRange: function (applicableRange, doc, cleanRoot, containerId) {
-		var utils = Boolean(applicableRange.isTimeRange) ? NextThought.view.slidedeck.transcript.AnchorResolver : Anchors,
+	getContextAroundRange: function (applicableRange, doc/*, cleanRoot, containerId*/) {
+		var utils = applicableRange.isTimeRange ? NextThought.view.slidedeck.transcript.AnchorResolver : Anchors,
 			range = utils.toDomRange.apply(utils, arguments);
 
 		if (range) {
@@ -411,8 +416,8 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 
 	/**
 	 *
-	 * @param n {Node}
-	 * @return {Node}
+	 * @param {Node} n A dom node.
+	 * @return {Node} A dom node.
 	 */
 	fixUpCopiedContext: function (n) {
 		var node = Ext.get(n);
@@ -434,6 +439,8 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 	 * Gets the bounding rect of the provided range.  If the rect is zero
 	 * but the range is not collapsed we will attempt to get the bounding box
 	 * based on the ranges contents.  We do this because IE sucks.
+	 * @param {Range} r A range
+	 * @returns {Rect} A rect
 	 */
 	safeBoundingBoxForRange: function (r) {
 		var rect = r ? r.getBoundingClientRect(r) : null, node;

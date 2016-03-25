@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var TranscriptCue = require('../model/transcript/Cue');
+const Ext = require('extjs');
+require('legacy/model/transcript/Cue');
+require('legacy/webvtt/Cue');
 
 
 /*
@@ -8,7 +9,8 @@ var TranscriptCue = require('../model/transcript/Cue');
  * @author Bryan Hoke
  */
 module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
-	/*@private
+	/**
+	 * @private
 	 * RegExps which are used throughout the program.
 	 */
 	regexp: {
@@ -44,7 +46,8 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		rePerDigits: /.*[^\u0025\d].*/
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Used to store variables used for scratchwork and which are no longer needed after the Transcript is created
 	 */
 	scratch: {
@@ -68,17 +71,22 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		ignoreLFs: false
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Used to signal that the parser is finished
+	 * @returns {void}
 	 */
 	signalHalt: function () {
-		//		  console.debug('End');
+		// console.debug('End');
 		this.scratch.halt = true;
 		return false;
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Used to signal that an error has occurred
+	 * @param {String} msg The error.
+	 * @returns {void}
 	 */
 	signalError: function (msg) {
 		console.error(msg);
@@ -88,11 +96,13 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		});
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Scans text matching a RegExp in fileContent starting at position and stores the result in line.<br>
 	 * Increases position by the length of the matched string.<br>
-	 * @param re The RegExp to match
-	 * @param canBeEmpty If this is false, throw an error if there is no match. Otherwise sets line to the empty string.
+	 * @param {RegExp} re The RegExp to match
+	 * @param {Boolean} canBeEmpty If this is false, throw an error if there is no match. Otherwise sets line to the empty string.
+	 * @returns {void}
 	 */
 	scan: function (re, canBeEmpty) {
 		var scratch = this.scratch,
@@ -110,11 +120,13 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		}
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Skips text matching a RegExp in fileContent starting at position.<br>
 	 * Increases position by the length of the matched string.<br>
-	 * @param canBeEmpty If this is false, throw an error if there is no match
-	 * @param re The RegExp to match
+	 * @param {RegExp} re The RegExp to match
+	 * @param {Boolean} canBeEmpty If this is false, throw an error if there is no match
+	 * @returns {void}
 	 */
 	skip: function (re, canBeEmpty) {
 		var scratch = this.scratch,
@@ -127,13 +139,14 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		}
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Pre-processes the WebVTT file contents in the following way:<br>
 	 * - Replaces all NULL characters with REPLACEMENT CHARACTERs<br>
 	 * - Replaces each CARRIAGE RETURN LINE FEED pair with a LINE FEED<br>
 	 * - Replaces each CARRIAGE RETURN with a LINE FEED
-	 * @param input The contents of the WebVTT file
-	 * @return The pre-processed contents of the WebVTT file
+	 * @param {String} input The contents of the WebVTT file
+	 * @return {String} The pre-processed contents of the WebVTT file
 	 */
 	preProcess: function (input) {
 		var output = input, // Unnecessary?
@@ -148,9 +161,11 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		return output;
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Verifies that the WebVTT file has a proper file signature.<br>
 	 * Throws an error if it does not.
+	 * @returns {void}
 	 */
 	verifySignature: function () {
 		var regexp = this.regexp,
@@ -181,9 +196,10 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		}
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Collects header string(s)
-	 * @return True if this should repeat, false if not
+	 * @return {Boolean} True if this should repeat, false if not
 	 */
 	getHeader: function () {
 		var regexp = this.regexp,
@@ -214,9 +230,10 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		return true;
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Collects all of the cues in the file
-	 * @return Whether cueLoop should be repeated
+	 * @return {Boolean} Whether cueLoop should be repeated
 	 */
 	cueLoop: function () {
 		var scratch = this.scratch,
@@ -268,35 +285,37 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		return !scratch.halt;
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Collects a cue identifier or signals parsing to halt
-	 * @return Whether a cue identifier was collected successfully
+	 * @return {Boolean} Whether a cue identifier was collected successfully
 	 */
 	collectIdentifier: function () {
-			var scratch = this.scratch,
+		var scratch = this.scratch,
 			regexp = this.regexp;
 
 		// 30. Set the cue's identifier
-			scratch.cue.identifier = scratch.line;
+		scratch.cue.identifier = scratch.line;
 		// 31. Halt if at end of file
-			if (scratch.position >= scratch.fileContent.length) {
+		if (scratch.position >= scratch.fileContent.length) {
 			return this.signalHalt();
 		}
 		// 32. Skip line feed if at one
-			if (scratch.fileContent.charCodeAt(scratch.position) === 10) {
+		if (scratch.fileContent.charCodeAt(scratch.position) === 10) {
 			scratch.position++;
 		}
 		// 33. Read until the next LF
-			this.scan(regexp.reNotLF, true);
+		this.scan(regexp.reNotLF, true);
 		// 34. Discard and read another cue if we read an empty string
-			return (scratch.line !== '');
-		},
+		return (scratch.line !== '');
+	},
 
-	/*@private
+	/**
+	 * @private
 	 * Collects timings and settings for a given cue and a given input line.
-	 * @param cue The cue for which timings and settings are being collected.
-	 * @param input A sequence containing cue timing and setting information.
-	 * @return The cue with timings/settings added, or false if there was an error
+	 * @param {Cue} cue The cue for which timings and settings are being collected.
+	 * @param {String} input A sequence containing cue timing and setting information.
+	 * @return {Cue|Boolean} The cue with timings/settings added, or false if there was an error
 	 */
 	collectTimingsAndSettings: function (cue, input) {
 		// 1. input // 2. position
@@ -355,11 +374,12 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		return cue;
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Parses a string of timestamp information
-	 * @param input 1. The string of timestamp information.
-	 * @param pos 1. The current position in input.
-	 * @return The timestamp value in seconds and the updated position, or false if the operation failed.
+	 * @param {String} input 1. The string of timestamp information.
+	 * @param {Number} pos 1. The current position in input.
+	 * @return {Number} The timestamp value in seconds and the updated position, or false if the operation failed.
 	 */
 	collectTimestamp: function (input, pos) {
 		// 2. By default assume minutes are the most significant units of time
@@ -466,8 +486,12 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		};
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Parses the settings for a given cue and a settings string
+	 * @param {Cue} cue A Cue
+	 * @param {String} input The input string
+	 * @returns {void}
 	 */
 	parseSettings: function (cue, input) {
 		// 1.
@@ -540,9 +564,10 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		}
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Collects the text (payload) for the current cue
-	 * @return Whether this should be repeated
+	 * @return {Boolean} Whether this should be repeated
 	 */
 	cueTextLoop: function () {
 		var scratch = this.scratch,
@@ -582,13 +607,14 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		return false;
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Processes a cue's text as necessary, e.g., by replacing <v> tags with <span> tags.<br>
 	 * Performs the role of the algorithm described at http://dev.w3.org/html5/webvtt/#webvtt-cue-text-parsing-rules
 	 * but with modifications and omissions as Ext JS handles the HTML parsing.<br>
 	 * Hence, this method modifies the cue's text rather than creating WebVTT objects.
-	 * @param input The cue text to be processed
-	 * @return The processed cue text
+	 * @param {String} input The cue text to be processed
+	 * @return {String} The processed cue text
 	 */
 	processCueText: function (input) {
 		// The return string
@@ -695,9 +721,10 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		return output;
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Skips over malformed cues
-	 * @return Whether badCueLoop should be repeated
+	 * @return {Boolean} Whether badCueLoop should be repeated
 	 */
 	badCueLoop: function () {
 		var scratch = this.scratch,
@@ -723,8 +750,10 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		return (scratch.line !== '');
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Extracts the indices of section-title cues from the "sections" header, if specified
+	 * @returns {void}
 	 */
 	findSections: function () {
 		var i, j, hdr;
@@ -739,8 +768,10 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		}
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Constructs a tree of nested cues in cueTree, if cues are nested
+	 * @returns {void}
 	 */
 	buildCueTree: function () {
 		var i;
@@ -750,10 +781,12 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 		}
 	},
 
-	/*@private
+	/**
+	 * @private
 	 * Recursively finds the string path into into cueTree where a cue should be inserted
-	 * @param cue The cue which is being inserted
-	 * @param tree The cueTree into which cue is currently fitting
+	 * @param {Cue} cue The cue which is being inserted
+	 * @param {Object} tree The cueTree into which cue is currently fitting
+	 * @returns {void}
 	 */
 	cueTreeInsert: function (cue, tree) {
 		var i, tmpCue;

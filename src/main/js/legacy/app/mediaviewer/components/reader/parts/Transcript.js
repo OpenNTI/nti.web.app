@@ -1,10 +1,13 @@
-var Ext = require('extjs');
-var RangeUtils = require('../../../../../util/Ranges');
-var MixinsAnnotationsMixin = require('../mixins/AnnotationsMixin');
-var WebvttTranscript = require('../../../../../webvtt/Transcript');
-var WebvttCue = require('../../../../../webvtt/Cue');
-var TranscriptCue = require('../../../../../model/transcript/Cue');
-var MediaviewerActions = require('../../../Actions');
+const Ext = require('extjs');
+const RangeUtils = require('legacy/util/Ranges');
+const {wait} = require('legacy/util/Promise');
+
+require('legacy/app/mediaviewer/components/reader/mixins/AnnotationsMixin');
+
+const Transcript = require('legacy/webvtt/Transcript');
+const Cue = require('legacy/model/transcript/Cue');
+const MediaViewerActions = require('legacy/app/mediaviewer/Actions');
+
 const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
 
 
@@ -25,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 	statics: {
 		processTranscripts: function (c) {
-			var parser = new NextThought.webvtt.Transcript({
+			const parser = new Transcript({
 				input: c,
 				ignoreLFs: true
 			});
@@ -73,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		this.mixins.transcriptItem.constructor.apply(this, arguments);
 		this.enableBubble(['jump-video-to', 'presentation-part-ready', 'register-records', 'unregister-records']);
 
-		this.MediaViewerActions = NextThought.app.mediaviewer.Actions.create();
+		this.MediaViewerActions = MediaViewerActions.create();
 		this.__setContent();
 	},
 
@@ -88,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	buildStore: function (cueList, filter) {
 		var cues = [], s;
 		Ext.each(cueList, function (c) {
-			var m = NextThought.model.transcript.Cue.fromParserCue(c);
+			var m = Cue.fromParserCue(c);
 			cues.push(m);
 		});
 
@@ -111,6 +114,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	},
 
 	getUserDataTimeFilter: function () {
+		let start = this.transcript.get('desired-time-start');
+		let end = this.transcript.get('desired-time-end');
+
 		function fn (item) {
 			var range = item.get('applicableRange'),
 				startAnchorTime = range.start && range.start.seconds,
@@ -124,14 +130,15 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			return (startAnchorTime >= start) && (endAnchorTime <= end);
 		}
 
-		var start = this.transcript.get('desired-time-start'),
-			end = this.transcript.get('desired-time-end');
 
 		//TODO: some transcript/video don't have a endTime or it's set to 0. Need to adjust for this.
 		return (start >= 0 && end > start) ? fn : null;
 	},
 
 	getTimeRangeFilter: function () {
+		let start = this.transcript.get('desired-time-start');
+		let end = this.transcript.get('desired-time-end');
+
 		function fn (item) {
 			if (item.get('type') === 'section') {
 				// NOTE: For section cue, we may not have an endTime set. So just make sure that
@@ -142,8 +149,6 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			return (item.get('startTime') >= start) && (item.get('startTime') <= end);
 		}
 
-		var start = this.transcript.get('desired-time-start'),
-			end = this.transcript.get('desired-time-end');
 
 		//if they are both zero don't filter out any of the transcript
 		if (start === 0 && end === 0) { return null; }
@@ -164,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 				if (me.rendered) {
 					me.refresh();
 				}
-				
+
 				wait()
 					.then(me.notifyReady.bind(me));
 			});
@@ -237,7 +242,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		});
 	},
 
-	positionAnnotationNibs: function (parentEl) {
+	positionAnnotationNibs: function () {
 		var me = this;
 		// Set the top position of note widget nibs.
 		Ext.each(this.el.query('.cue .add-note-here'), function (nib) {
@@ -265,7 +270,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		this.fireEvent('jump-video-to', videoId, start);
 	},
 
-	openEditor: function (view, record, item, index, e) {
+	openEditor: function (view, record, item) {
 		var cueEl = Ext.get(item),
 			cueStart = record.get('startTime'),
 			cueEnd = record.get('endTime'),
@@ -327,7 +332,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			sel = window.getSelection(),
 			range = (sel.rangeCount > 0) && (sel.getRangeAt(0).cloneRange()),
 			cueData = {},
-			viewBox = this.getBox(), pos;
+			viewBox = this.getBox();
 
 		// If no selection, return.
 		if (sel.isCollapsed) { return; }
@@ -361,7 +366,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return { startTime: startTime, endTime: endTime, range: range, startCueId: sid, endCueId: eid, containerId: cid, userDataStore: this.userDataStore };
 	},
 
-	mouseOver: function (view, record, item, index, e) {
+	mouseOver: function (view, record, item) {
 		var box = item && item.querySelector('.add-note-here'),
 			add = Ext.get(box),
 			currentDivs = this.el.query('.add-note-here:not(.hidden)');
@@ -381,7 +386,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}, 100);
 	},
 
-	mouseOut: function (view, record, item, index, e) {
+	mouseOut: function (view, record, item) {
 		var box = item && item.querySelector('.add-note-here'),
 			add = Ext.get(box);
 

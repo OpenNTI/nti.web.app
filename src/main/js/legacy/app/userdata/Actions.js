@@ -1,28 +1,30 @@
-var Ext = require('extjs');
-var LocationMeta = require('../../cache/LocationMeta');
-var UserRepository = require('../../cache/UserRepository');
-var FilterManager = require('../../filter/FilterManager');
-var Anchors = require('../../util/Anchors');
-var AnnotationUtils = require('../../util/Annotations');
-var ContentUtils = require('../../util/Content');
-var Globals = require('../../util/Globals');
-var ObjectUtils = require('../../util/Object');
-var ParseUtils = require('../../util/Parsing');
-var SharingUtils = require('../../util/Sharing');
-var StoreUtils = require('../../util/Store');
-var CommonActions = require('../../common/Actions');
-var LoginStateStore = require('../../login/StateStore');
-var UserdataStateStore = require('./StateStore');
-var GroupsStateStore = require('../groups/StateStore');
-var StorePageItem = require('../../store/PageItem');
-var FilterFilterManager = require('../../filter/FilterManager');
-var ModelBookmark = require('../../model/Bookmark');
-var AnchorablesContentRangeDescription = require('../../model/anchorables/ContentRangeDescription');
-var ContextStateStore = require('../context/StateStore');
-var UtilAnchors = require('../../util/Anchors');
-var UtilAnnotations = require('../../util/Annotations');
-var DefinitionWindow = require('../contentviewer/components/definition/Window');
-var ReaderAnchorResolver = require('../mediaviewer/components/reader/AnchorResolver');
+const Ext = require('extjs');
+// const LocationMeta = require('legacy/cache/LocationMeta');
+const UserRepository = require('legacy/cache/UserRepository');
+const FilterManager = require('legacy/filter/FilterManager');
+const Anchors = require('legacy/util/Anchors');
+// const AnnotationUtils = require('legacy/util/Annotations');
+const ContentUtils = require('legacy/util/Content');
+const Globals = require('legacy/util/Globals');
+const ObjectUtils = require('legacy/util/Object');
+const ParseUtils = require('legacy/util/Parsing');
+const SharingUtils = require('legacy/util/Sharing');
+const StoreUtils = require('legacy/util/Store');
+
+require('legacy/common/Actions');
+const LoginStateStore = require('legacy/login/StateStore');
+const UserdataStateStore = require('./StateStore');
+const GroupsStateStore = require('legacy/app/groups/StateStore');
+const StorePageItem = require('legacy/store/PageItem');
+
+const Bookmark = require('legacy/model/Bookmark');
+const Note = require('legacy/model/Note');
+const ContentRangeDescription = require('legacy/model/anchorables/ContentRangeDescription');
+const ContextStateStore = require('legacy/app/context/StateStore');
+
+require('legacy/app/contentviewer/components/definition/Window');
+
+const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
 
 
 module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
@@ -31,10 +33,10 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
-		this.GroupsStore = NextThought.app.groups.StateStore.getInstance();
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
-		this.LoginStore = NextThought.login.StateStore.getInstance();
+		this.UserDataStore = UserdataStateStore.getInstance();
+		this.GroupsStore = GroupsStateStore.getInstance();
+		this.ContextStore = ContextStateStore.getInstance();
+		this.LoginStore = LoginStateStore.getInstance();
 
 		var store = this.UserDataStore;
 
@@ -77,12 +79,6 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		instead of iterating all of them
 	 */
 	onIncomingChange: function withMeta (change, meta, reCalled) {
-		//fancy callback that calls this function back with additional arguments
-		function reCall (meta) {
-			var c = ParseUtils.parseItems([change.raw])[0];
-			withMeta.call(me, c, meta, true);
-		}
-
 
 		//we require at least one change object
 		if (!change) {
@@ -95,9 +91,8 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 			change = ParseUtils.parseItems([change])[0];
 		}
 
-		var me = this,
-			item = change.getItem(),
-			cid = change.getItemValue('ContainerId'),
+		var item = change.getItem(),
+			//cid = change.getItemValue('ContainerId'),
 			type = (change.get('ChangeType') || '').toLowerCase(),//ensure lowercase
 			fn;
 
@@ -304,7 +299,8 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 	* references books external to their content package this will break.
 	*
 	*
-	* @param {String} ntiid
+	* @param {String} ntiid id
+	* @param {Object} bundle Bundle instance
 	* @return {Object} An object encasuplating the prefences for the given ntiid.  Sharing related preferences are found beneath
 	* the 'sharing' key
 	*/
@@ -382,35 +378,35 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		if (!context.pageStoreEvents && !context.currentPageStores) {
 			context.pageStoreEvents = new Ext.util.Observable();
 			ObjectUtils.defineAttributes(context, {
-					currentPageStores: {
-						getter: function () { return currentPageStoresMap; },
-						setter: function (s) {
-							var key, o, m = currentPageStoresMap || {};
+				currentPageStores: {
+					getter: function () { return currentPageStoresMap; },
+					setter: function (s) {
+						var key, o, m = currentPageStoresMap || {};
 
-							currentPageStoresMap = s;
+						currentPageStoresMap = s;
 
-							for (key in m) {
-								if (m.hasOwnProperty(key)) {
-									o = m[key];
-									delete m[key];
+						for (key in m) {
+							if (m.hasOwnProperty(key)) {
+								o = m[key];
+								delete m[key];
 
-									if (o) {
-										console.debug('Setting currentPageStores:', o.storeId, 'Does not clear:', o.doesNotClear);
+								if (o) {
+									console.debug('Setting currentPageStores:', o.storeId, 'Does not clear:', o.doesNotClear);
 
-										if (!o.doesNotClear) {
-											o.fireEvent('clearnup', o);
-											o.clearListeners();
-											o.clearFilter(true);
-											o.removeAll();
-										} else {
-											s[key] = o;
-										}
+									if (!o.doesNotClear) {
+										o.fireEvent('clearnup', o);
+										o.clearListeners();
+										o.clearFilter(true);
+										o.removeAll();
+									} else {
+										s[key] = o;
 									}
 								}
 							}
 						}
 					}
-				});
+				}
+			});
 		}
 	},
 
@@ -585,7 +581,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 
 	loadAnnotations: function (cmp, containerId, pageInfo, containers) {
 		var me = this,
-			Store = NextThought.store.PageItem,
+			Store = StorePageItem,
 			userDataStore = me.UserDataStore,
 			context = userDataStore.getContext(cmp),
 			rel = Globals.USER_GENERATED_DATA, //TODO: should this be recursive generated data
@@ -658,13 +654,12 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 	},
 
 	saveNewBookmark: function (container) {
-		var me = this,
-			bm = NextThought.model.Bookmark.create({
-				ContainerId: container,
-				applicableRange: NextThought.model.anchorables.ContentRangeDescription.create()
-			});
+		var bm = Bookmark.create({
+			ContainerId: container,
+			applicableRange: ContentRangeDescription.create()
+		});
 
-		return new Promise(function (fulfill, reject) {
+		return new Promise(function (fulfill/*, reject*/) {
 			bm.save({
 				callback: function (record, operation) {
 					try {
@@ -719,9 +714,9 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		console.warn('Exception Message:', response.responseText);
 	},
 
-	__saveNote: function (applicableRange, body, title, ContainerId, shareWith, selectedText, style, callback) {
+	__saveNote: function (applicableRange, body, title, ContainerId, shareWith, selectedText, style/*, callback*/) {
 		var me = this,
-			noteRecord = NextThought.model.Note.create({
+			noteRecord = Note.create({
 				applicableRange: applicableRange,
 				body: body,
 				title: title,
@@ -792,14 +787,13 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 	saveNewSeriesNote: function (title, body, range, cueInfo, containerId, shareWith, style, callback) {
 		console.log(cueInfo);
 		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
-			AnchorResolver = NextThought.app.mediaviewer.components.reader.AnchorResolver,
 			rangeDescription = AnchorResolver.createRangeDescriptionFromRange(range, doc, cueInfo),
 			selectedText = range ? range.toString() : '';
 
 		return this.__saveNote(rangeDescription.description, body, title, containerId, shareWith, selectedText, style, callback);
 	},
 
-	saveNewReply: function (recordRepliedTo, replyBody, shareWith, callback) {
+	saveNewReply: function (recordRepliedTo, replyBody/*, shareWith, callback*/) {
 		//some validation of input:
 		if (!recordRepliedTo) {
 			return Promise.reject('Must reply a record to reply to');
@@ -809,9 +803,9 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 			replyBody = [replyBody];
 		}
 
-		var me = this,
-			replyRecord = recordRepliedTo.makeReply(),
-			root = AnnotationUtils.getNoteRoot(recordRepliedTo);
+		let me = this;
+		let replyRecord = recordRepliedTo.makeReply();
+		// let root = AnnotationUtils.getNoteRoot(recordRepliedTo);
 
 		replyRecord.set('body', replyBody);
 		console.log('Saving reply', replyRecord, ' to ', recordRepliedTo);
@@ -825,7 +819,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		});
 	},
 
-	savePhantomAnnotation: function (record, applySharing, successFn, failureFn) {
+	savePhantomAnnotation: function (record, applySharing/*, successFn, failureFn*/) {
 		var p,
 			me = this;
 
@@ -854,9 +848,9 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 	 * where context is a bundle.
 	 *
 	 * @param  {String} container NTIID for the container
-	 * @param  {Object} shareWith entities and public toggle
+	 * @param  {Object} prefs entities and public toggle
 	 * @param  {Bundle} context	  the bundle to make this the default sharing prefs for
-	 * @return {Promsie}
+	 * @return {Promsie} A promise that fulfills with...
 	 */
 	saveSharingPrefs: function (container, prefs, context) {
 		var me = this;
@@ -879,7 +873,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 					return Promise.reject('No page info');
 				}
 
-				return new Promise(function (fulfill, reject) {
+				return new Promise(function (fulfill/*, reject*/) {
 					pageInfo.saveField('sharingPreference', {sharedWith: prefs}, function (field, value, pi, newPageInfo) {
 						//always happen if success only:
 						me.updatePreferences(newPageInfo);

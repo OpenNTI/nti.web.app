@@ -1,11 +1,12 @@
-var Ext = require('extjs');
-var FieldsFilePicker = require('./fields/FilePicker');
-var FieldsImagePicker = require('./fields/ImagePicker');
-var FieldsDatePicker = require('./fields/DatePicker');
-var FieldsURL = require('./fields/URL');
-var FormErrorMessages = require('./ErrorMessages');
-var FieldsProgress = require('./fields/Progress');
+const Ext = require('extjs');
+const DatePicker = require('legacy/common/form/fields/DatePicker');
+const FilePicker = require('legacy/common/form/fields/FilePicker');
+const ImagePicker = require('legacy/common/form/fields/ImagePicker');
+const Progress = require('legacy/common/form/fields/Progress');
+const URL = require('legacy/common/form/fields/URL');
+const ErrorMessages = require('legacy/common/form/ErrorMessages');
 
+const {wait} = require('legacy/util/Promise');
 
 module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	extend: 'Ext.Component',
@@ -14,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	statics: {
 
 		__getMessages: function () {
-			this.__errorMessages = this.__errorMessages || new NextThought.common.form.ErrorMessages();
+			this.__errorMessages = this.__errorMessages || new ErrorMessages();
 
 			return this.__errorMessages;
 		},
@@ -234,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 		me.formEl.dom.addEventListener('submit', me.formSubmit);
 
-		me.on('destroy', function() {
+		me.on('destroy', function () {
 			if (me.formEl && me.formEl.dom) {
 				me.formEl.dom.removeEventListener('submit', me.formSubmit);
 			}
@@ -292,7 +293,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			this.buildInputs(schema.inputs, inputEl);
 		} else if (type === 'image') {
 			this.buildImageInput(schema, inputEl);
-		} else if (type == 'file') {
+		} else if (type === 'file') {
 			this.buildFileInput(schema, inputEl);
 		} else if (type === 'date') {
 			this.buildDateInput(schema, inputEl);
@@ -328,23 +329,23 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	},
 
 	buildImageInput: function (schema, inputEl) {
-		this.__buildComponent(NextThought.common.form.fields.ImagePicker, schema, inputEl);
+		this.__buildComponent(ImagePicker, schema, inputEl);
 	},
 
 	buildFileInput: function (schema, inputEl) {
-		this.__buildComponent(NextThought.common.form.fields.FilePicker, schema, inputEl);
+		this.__buildComponent(FilePicker, schema, inputEl);
 	},
 
 	buildDateInput: function (schema, inputEl) {
-		this.__buildComponent(NextThought.common.form.fields.DatePicker, schema, inputEl);
+		this.__buildComponent(DatePicker, schema, inputEl);
 	},
 
 	buildUrlInput: function (schema, inputEl) {
-		this.__buildComponent(NextThought.common.form.fields.URL, schema, inputEl);
+		this.__buildComponent(URL, schema, inputEl);
 	},
 
 	buildSaveProgress: function (schema, inputEl) {
-		this.saveProgressCmp = NextThought.common.form.fields.Progress.create({
+		this.saveProgressCmp = Progress.create({
 			schema: schema,
 			renderTo: inputEl
 		});
@@ -397,9 +398,9 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	 * for now, we will return the entire form values.
 	 *
 	 * @param  {Object} e Browser Event.
-	 *
+	 * @returns {void}
 	 */
-	onFormChange: function (e) {
+	onFormChange: function (/*e*/) {
 		var vals = this.getValues();
 
 		if (this.onChange) {
@@ -407,19 +408,19 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-	checkMaxLength: function (schema, field) {
-		var input = field.querySelector('input, textarea'),
-			value = input && input.value,
-			length = value && value.length,
-			maxLength = schema.maxlength,
-			warnThreshold = schema.warnThreshold || 20,
-			errorThreshold = schema.errorThreshold || 5;
+	checkMaxLength: function (/*schema, field*/) {
+		// var input = field.querySelector('input, textarea'),
+		// 	value = input && input.value,
+		// 	length = value && value.length,
+		// 	maxLength = schema.maxlength,
+		// 	warnThreshold = schema.warnThreshold || 20,
+		// 	errorThreshold = schema.errorThreshold || 5;
 	},
 
 	/**
 	 * Whether or not all the validation has been met
 	 *
-	 * @return {Boolean}
+	 * @return {Boolean} validity
 	 */
 	isValid: function () {
 		var form = this.formEl.dom;
@@ -457,7 +458,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			inputEl = this.__getInput(name),
 			textarea = this.__getTextarea(name),
 			field = inputEl || textarea,
-			error, hasErrors = false, keys;
+			error, hasErrors = false;
 
 		if (cmp) {
 			if (cmp.getErrors) {
@@ -681,6 +682,8 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	 * use the appropriate submission mechanism. If we have file changes, submit a form data.
 	 * Otherwise, submit a json object. For the json object, only pass the values that actually changed.
 	 *
+	 * @param {String} url Link
+	 * @returns {Promise} Fulfilled with the submission results, or rejected with an error.
 	 */
 	submitTo: function (url) {
 		var me = this,
