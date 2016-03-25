@@ -2,6 +2,7 @@ var Ext = require('extjs');
 require('legacy/model/User');
 var AnalyticsUtil = require('legacy/util/Analytics');
 require('legacy/mixins/Router');
+require('legacy/mixins/State');
 require('legacy/app/profiles/user/components/activity/Body');
 require('legacy/app/profiles/user/components/activity/Sidebar');
 require('legacy/app/userdata/Actions');
