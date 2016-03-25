@@ -61,10 +61,10 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 	},
 
 	getAboutData: function () {
-	   	return {
-		   displayName: this.getName(),
-		   about: this.get('about')
-	   };
+			return {
+			displayName: this.getName(),
+			about: this.get('about')
+		};
 	},
 
 	getProfileUrl: function () {

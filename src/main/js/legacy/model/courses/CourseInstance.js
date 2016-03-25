@@ -1237,8 +1237,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			cce = this.getCourseCatalogEntry();
 
 		return cce ?
-			   cce.getId() === cceId :
-			   this.getLink('CourseCatalogEntry') === cceHref;
+				cce.getId() === cceId :
+				this.getLink('CourseCatalogEntry') === cceHref;
 	},
 
 	containsNTIID: function (id) {

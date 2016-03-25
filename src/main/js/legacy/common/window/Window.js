@@ -119,8 +119,8 @@ module.exports = exports = Ext.define('NextThought.common.window.Window', {
 				'close': function () {
 					closeCalled = true;
 					if(me._windowStoreNotified) {
-					   	windowStore.removeOpenCls();
-					   	delete me._windowStoreNotified;
+							windowStore.removeOpenCls();
+							delete me._windowStoreNotified;
 					}
 				},
 				'destroy': function () {

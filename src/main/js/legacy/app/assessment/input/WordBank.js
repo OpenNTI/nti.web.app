@@ -215,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 
 		function isValid (data) {
 			return data.question === me.question.getId() &&
-				   (!data.part || me.ordinal.toFixed(0) === data.part);
+					(!data.part || me.ordinal.toFixed(0) === data.part);
 		}
 
 		var me = this,

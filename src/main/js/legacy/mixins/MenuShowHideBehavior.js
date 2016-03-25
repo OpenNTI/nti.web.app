@@ -14,8 +14,8 @@ module.exports = exports = Ext.define('NextThought.mixins.MenuShowHideBehavior',
 			this.getRefOwner = (function (original) {
 				return function () {
 					return this.parentMenu ||
-						   this.ownerButton ||
-						   original.apply(this, arguments);
+							this.ownerButton ||
+							original.apply(this, arguments);
 				}; }(this.getRefOwner));
 
 			Ext.menu.Manager.register(this);//if this is menu, this is a no-op, but just to be nice...

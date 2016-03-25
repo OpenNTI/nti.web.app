@@ -110,53 +110,53 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 	 * @param {Boolean} resolved
 	 */
 	handleShareAndPublishState: function (blogEntry, sharingInfo, resolved) {
-	   	if (!blogEntry) {
-		   return Promise.resolve();
-	   }
+			if (!blogEntry) {
+			return Promise.resolve();
+		}
 
-	   	var isPublic = sharingInfo.isPublic,
-		   resolveEntities, publish;
+			var isPublic = sharingInfo.isPublic,
+			resolveEntities, publish;
 
-	   	if (isPublic) {
-		   resolveEntities = UserRepository.getUser(sharingInfo.entities)
-			   .then(function (users) {
-				   return users.map(function (u) { return u.get('NTIID'); });
-			   });
-	   } else {
-		   resolveEntities = Promise.resolve(sharingInfo.entities);
-	   }
-
-
-	   	if (blogEntry.isPublished() !== isPublic) {
-		   publish = new Promise(function (fulfill, reject) {
-			   //This function (publish) is poorly named. It toggles.
-			   blogEntry.publish(null, fulfill, this);
-		   });
-	   } else {
-		   publish = Promise.resolve();
-	   }
+			if (isPublic) {
+			resolveEntities = UserRepository.getUser(sharingInfo.entities)
+				.then(function (users) {
+					return users.map(function (u) { return u.get('NTIID'); });
+				});
+		} else {
+			resolveEntities = Promise.resolve(sharingInfo.entities);
+		}
 
 
-	   	return Promise.all([
-		   resolveEntities,
-		   publish
-	   ]).then(function (results) {
-		   return results[0];
-	   }).then(function (entities) {
-		   var name = isPublic ? 'tags' : 'sharedWith',
-			   object = isPublic ? blogEntry.get('headline') : blogEntry,
-			   action = isPublic ? Ext.Array.merge : function (a) { return a; };
+			if (blogEntry.isPublished() !== isPublic) {
+			publish = new Promise(function (fulfill, reject) {
+				//This function (publish) is poorly named. It toggles.
+				blogEntry.publish(null, fulfill, this);
+			});
+		} else {
+			publish = Promise.resolve();
+		}
 
-		   object.set(name, action(entities, object.get(name)));
 
-		   return new Promise(function (fulfill, reject) {
-			   object.save({callback: fulfill});
-		   });
-	   }).then(function () {
-		   return blogEntry;
-	   });
+			return Promise.all([
+			resolveEntities,
+			publish
+		]).then(function (results) {
+			return results[0];
+		}).then(function (entities) {
+			var name = isPublic ? 'tags' : 'sharedWith',
+				object = isPublic ? blogEntry.get('headline') : blogEntry,
+				action = isPublic ? Ext.Array.merge : function (a) { return a; };
 
-   	},
+			object.set(name, action(entities, object.get(name)));
+
+			return new Promise(function (fulfill, reject) {
+				object.save({callback: fulfill});
+			});
+		}).then(function () {
+			return blogEntry;
+		});
+
+		},
 
 	saveBlogComment: function (record, blogPost, valueObject) {
 		var isEdit = Boolean(record && !record.phantom),

@@ -30,9 +30,9 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 		{ id: 'nochildren', filterFn: function (r) { return !r.parent;}},
 		{ id: 'no-private-notes', filterFn: function (r) {
 			return !isFeature('notepad') ||
-				   r.placeholder ||
-				   r.get('Class') !== 'Note' ||
-				   (r.get('sharedWith').length ||
+					r.placeholder ||
+					r.get('Class') !== 'Note' ||
+					(r.get('sharedWith').length ||
 					!Ext.isEmpty(r.get('title')));
 		}}
 	],

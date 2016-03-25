@@ -183,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					me.mon(item, {
 						'resolved-poster': function (item) {
 							if( item.get('poster') !== r.get('poster')
-							   || item.get('thumbnail') !== r.get('thumbnail')) {
+								|| item.get('thumbnail') !== r.get('thumbnail')) {
 								 r.set({
 									poster: item.get('poster'),
 									thumb: item.get('thumbnail')

@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 				{ tag: 'title', html: '{id}-sandbox' },
 				{ tag: 'meta', 'http-equiv': 'X-UA-Compatible', 'content': 'IE=edge' },
 				{ tag: 'script', type: 'text/javascript', src: '{scheme}//cdnapisec.kaltura.com/p/{partnerid}' +
-															   '/sp/150010100/embedIframeJs/uiconf_id/{uiconfid}/partner_id/{partnerid}'},
+																'/sp/150010100/embedIframeJs/uiconf_id/{uiconfid}/partner_id/{partnerid}'},
 				{ tag: 'style', type: 'text/css', cn: [
 					'body, html { margin: 0; padding: 0; overflow:hidden; }'
 				]}

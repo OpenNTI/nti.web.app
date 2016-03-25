@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.account.recovery.Window',
 			//is contact email, not cancelable
 			Ext.fly(headerView.el.query('.title')[0]).setHTML(getString('NextThought.view.account.recovery.Window.resend-title'));
 			Ext.fly(headerView.el.query('.detail')[0]).setHTML(getString('NextThought.view.account.recovery.Window.resend-detail') + ' ' +
-															   getString('NextThought.view.account.recovery.Window.need-parents'));
+																getString('NextThought.view.account.recovery.Window.need-parents'));
 			emailView.down('button[name=cancel]').destroy();
 		}
 		else if (this.linkName === 'contact-email-sends-consent-request') {

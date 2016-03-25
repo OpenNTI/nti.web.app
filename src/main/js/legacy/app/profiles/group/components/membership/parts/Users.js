@@ -22,15 +22,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 
 	setUser: function (user, isMe) {
 		var me = this,
-		   	friends = user.get('friends');
+				friends = user.get('friends');
 		return this.setFriends(friends);
 	},
-		   
+			
 	setFriends: function (friends) {
 		var me = this;
 		me.removeAll();
 		return UserRepository.getUser(friends)
-		   .then(function (members) {
+			.then(function (members) {
 				if (members.length) {
 					members.map(function (member) {
 						return me.configForUser(member);		

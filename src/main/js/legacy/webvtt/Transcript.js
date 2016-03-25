@@ -273,24 +273,24 @@ module.exports = exports = Ext.define('NextThought.webvtt.Transcript', {
 	 * @return Whether a cue identifier was collected successfully
 	 */
 	collectIdentifier: function () {
-	   	var scratch = this.scratch,
-		   regexp = this.regexp;
+			var scratch = this.scratch,
+			regexp = this.regexp;
 
-	   // 30. Set the cue's identifier
-	   	scratch.cue.identifier = scratch.line;
-	   // 31. Halt if at end of file
-	   	if (scratch.position >= scratch.fileContent.length) {
-		   return this.signalHalt();
-	   }
-	   // 32. Skip line feed if at one
-	   	if (scratch.fileContent.charCodeAt(scratch.position) === 10) {
-		   scratch.position++;
-	   }
-	   // 33. Read until the next LF
-	   	this.scan(regexp.reNotLF, true);
-	   // 34. Discard and read another cue if we read an empty string
-	   	return (scratch.line !== '');
-   	},
+		// 30. Set the cue's identifier
+			scratch.cue.identifier = scratch.line;
+		// 31. Halt if at end of file
+			if (scratch.position >= scratch.fileContent.length) {
+			return this.signalHalt();
+		}
+		// 32. Skip line feed if at one
+			if (scratch.fileContent.charCodeAt(scratch.position) === 10) {
+			scratch.position++;
+		}
+		// 33. Read until the next LF
+			this.scan(regexp.reNotLF, true);
+		// 34. Discard and read another cue if we read an empty string
+			return (scratch.line !== '');
+		},
 
 	/*@private
 	 * Collects timings and settings for a given cue and a given input line.

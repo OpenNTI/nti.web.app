@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
 		});
 
 		if(Ext.is.iOS) {
-		   	this.minHeight = 671;
+				this.minHeight = 671;
 		}
 	},
 

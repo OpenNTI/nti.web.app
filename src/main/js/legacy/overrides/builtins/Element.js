@@ -186,12 +186,12 @@ if (!document.documentElement.dataset &&
 			function getter () { return String(this); }
 			function setter (attrName, value) {
 				return (typeof value !== 'undefined') ?
-					   this.setAttribute(attrName, value) : this.removeAttribute(attrName); }
+						this.setAttribute(attrName, value) : this.removeAttribute(attrName); }
 
 			for (i = 0; i < attsLength; i++) {
 				attribute = attributes[i];
 				// Fix: This test really should allow any XML Name without
-				//		   colons (and non-uppercase for XHTML)
+				//			colons (and non-uppercase for XHTML)
 				if (attribute && attribute.name &&
 					(/^data-\w[\w\-]*$/).test(attribute.name)) {
 					attrVal = attribute.value;

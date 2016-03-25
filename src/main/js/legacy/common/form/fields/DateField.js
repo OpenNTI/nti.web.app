@@ -60,8 +60,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateField'
 
 	isEmpty: function () {
 		return Ext.isEmpty(this.yearEl.getValue() +
-						   this.dayEl.getValue() +
-						   this.monthInput.getValue());
+							this.dayEl.getValue() +
+							this.monthInput.getValue());
 	},
 
 	isFullyAnswered: function () {

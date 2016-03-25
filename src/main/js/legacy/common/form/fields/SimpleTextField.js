@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 			return this._value;
 		}
 
-	   	return this.inputEl.getValue();
+			return this.inputEl.getValue();
 	},
 
 

@@ -215,9 +215,9 @@ module.exports = exports = Ext.define('NextThought.util.Ranges', {
 
 		function test (c) {
 			return c.nodeType === Node.TEXT_NODE ||
-				   Anchors.isNodeIgnored(c) ||
-				   /^(a|b|i|u|img|li)$/i.test(c.tagName); // ||
-				   //c.childNodes.length === 1;
+					Anchors.isNodeIgnored(c) ||
+					/^(a|b|i|u|img|li)$/i.test(c.tagName); // ||
+					//c.childNodes.length === 1;
 		}
 
 		function walkOut (node, direction) {

@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		var me = this;
 		me.removeAll();
 		return UserRepository.getUser(user.get('Creator'))
-		   .then(function (creator) {
+			.then(function (creator) {
 			var creatoryConfig;
 			if (creator) {
 				creatorConfig = {
