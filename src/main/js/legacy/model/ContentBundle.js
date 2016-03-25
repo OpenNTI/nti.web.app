@@ -11,6 +11,7 @@ var {getURL} = require('legacy/util/Globals');
 module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	alternateClassName: 'NextThought.model.ContentPackageBundle',
 	extend: 'NextThought.model.Base',
+	mimeType: 'application/vnd.nextthought.contentpackagebundle',
 
 	mixins: {
 		'BundleLike': 'NextThought.mixins.BundleLike',
