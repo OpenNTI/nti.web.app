@@ -13,7 +13,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	alias: 'widget.profile-user-activity',
 
 	mixins: {
-		Router: 'NextThought.mixins.Router'
+		Router: 'NextThought.mixins.Router',
+		State: 'NextThought.mixins.State'
 	},
 
 	cls: 'activity-page',
@@ -45,6 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		this.addDefaultRoute('/');
 
+		this.stateKey = 'profile-activity-filters';
 
 		this.on({
 			activate: this.onActivate.bind(this),
@@ -111,29 +113,39 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		this.startResourceViewed();
 
+		let me = this;
+		
 		return Promise.all([
 				this.streamCmp.userChanged.apply(this.streamCmp, arguments),
 				this.sidebarCmp.userChanged.apply(this.sidebarCmp, arguments)
-			]);
+			])
+			.then(function() {
+				return me.restoreState();
+			});
 	},
 
-	applyState: function() {},
+	applyState: function(state) {
+		this.sidebarCmp.setFilterFromQueryParams(state);
+		
+		let streamParams = this.sidebarCmp.getStreamParams();
+		
+		streamParams.url = this.activeUser.getLink('Activity');
+		this.streamCmp.setStreamParams(streamParams);
+		
+		return Promise.resolve();
+	},
+	
+	restoreState: function() {
+		var state = this.getCurrentState();
+		return this.applyState(state);
+	},
 
 	updateFilter: function(filter) {
-		this.replaceRoute('Activity', '/?' + Ext.Object.toQueryString(filter));
+		this.setState(filter);
 	},
 
 	onRoute: function(route, subRoute) {
 		this.setTitle('Activity');
-
-		var streamParams;
-
-		this.sidebarCmp.setFilterFromQueryParams(route.queryParams);
-
-		streamParams = this.sidebarCmp.getStreamParams();
-		streamParams.url = this.activeUser.getLink('Activity');
-
-		this.streamCmp.setStreamParams(streamParams);
 	},
 
 	navigateToActivityItem: function(item) {
