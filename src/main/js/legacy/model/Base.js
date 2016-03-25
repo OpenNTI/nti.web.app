@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		},
 		{ name: 'CreatedTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date(0) },
 		{ name: 'Creator', type: 'auto', persist: false },
-		{ name: 'isMine', type: 'bool', persist: false, convert: function(v, record) {
+		{ name: 'isMine', type: 'bool', persist: false, convert: function (v, record) {
 			return record.isMine();
 		}},
 		{ name: 'ID', type: 'string', persist: false },
