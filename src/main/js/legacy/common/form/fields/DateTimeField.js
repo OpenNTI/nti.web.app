@@ -1,6 +1,7 @@
 var Ext = require('extjs');
-var FieldsLegacySearchComboBox = require('./LegacySearchComboBox');
-var UtilScrolling = require('../../../util/Scrolling');
+
+require('./LegacySearchComboBox');
+require('../../../util/Scrolling');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeField', {
@@ -9,8 +10,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 
 	statics: {
 		//http://stackoverflow.com/questions/16353211/check-if-year-is-leap-year-in-javascript
-		isLeapYear: function(year) {
-			return ((year % 4 === 0) && (year % 100 != 0)) || (year % 400 === 0);
+		isLeapYear: function (year) {
+			return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
 		}
 	},
 
@@ -131,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 			editable: false,
 			onSelect: me.onYearChanged.bind(me),
 			renderTo: me.yearContainer,
-			onError: function() {
+			onError: function () {
 				me.yearLabel.addCls('error');
 			},
 			onRemoveError: function() {
@@ -404,6 +405,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 	},
 
 	setYear: function(year) {
+		this.yearSelect.removeError();
+		this.clearDateError();
+
 		if (!year) {
 			this.yearSelect.setValue('');
 			return;
@@ -423,6 +427,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 	},
 
 	setMonth: function(month) {
+		this.monthSelect.removeError();
+		this.clearDateError();
+
 		if (month === undefined) {
 			this.monthSelect.setValue('');
 			return;
@@ -442,6 +449,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 	},
 
 	setDay: function(day) {
+		this.daySelect.removeError();
+		this.clearDateError();
+
 		if (!day) {
 			this.daySelect.setValue('');
 			return;
@@ -461,6 +471,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 	},
 
 	setHour: function(hour) {
+		this.hourInput.removeCls('error');
+		this.clearTimeError();
+
 		if (hour < 12) {
 			this.meridiemSelect.setValue(this.AM);
 		} else {
@@ -472,6 +485,9 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 	},
 
 	setMinute: function(minute) {
+		this.minuteInput.removeCls('error');
+		this.clearTimeError();
+
 		if (minute < 10) {
 			minute = '0' + minute;
 		}
