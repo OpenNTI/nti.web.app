@@ -5,9 +5,9 @@ const {getURL} = require('legacy/util/Globals');
 require('legacy/mixins/PresentationResources');
 require('legacy/model/Base');
 require('legacy/model/CatalogFamilies');
-require('./EnrollmentOptions');
-require('./CourseCreditLegacyInfo');
-require('./CourseCatalogInstructorInfo');
+require('legacy/model/courses/EnrollmentOptions');
+require('legacy/model/courses/CourseCreditLegacyInfo');
+require('legacy/model/courses/CourseCatalogInstructorInfo');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEntry', {

@@ -1,10 +1,10 @@
 var Ext = require('extjs');
-var ParseUtils = require('../util/Parsing');
-var ModelBase = require('./Base');
-var MixinsBundleLike = require('../mixins/BundleLike');
-var MixinsPresentationResources = require('../mixins/PresentationResources');
-var ForumsContentBoard = require('./forums/ContentBoard');
-var ModelContentPackage = require('./ContentPackage');
+var ParseUtils = require('legacy/util/Parsing');
+require('legacy/model/Base');
+require('legacy/mixins/BundleLike');
+require('legacy/mixins/PresentationResources');
+require('legacy/model/forums/ContentBoard');
+require('legacy/model/ContentPackage');
 var {getURL} = require('legacy/util/Globals');
 
 
