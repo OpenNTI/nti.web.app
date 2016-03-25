@@ -135,7 +135,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		console.log('cues count: ', cues && cues.getCount());
 		if (!cues || cues.getCount() === 0) { return null; }
 
-		cues.each(function  (cue) {
+		cues.each(function (cue) {
+			//XXX: This blows up, because: "invalid query selector"
 			var el = Ext.fly(container).down('.cue[cue-start=' + cue.get('startTime') + ']');
 			if (el) { els.push(el); }
 		});
