@@ -168,6 +168,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.startNowRadio.checked = !date;
 		this.startOnRadio.checked = !!date;
+
+		this.onStartCheckChanged();
 	},
 
 
@@ -179,6 +181,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		dueEditor.selectDate(date);
 
 		this.endCheckbox.checked = !!date;
+
+		this.onEndCheckChanged();
 	},
 
 
