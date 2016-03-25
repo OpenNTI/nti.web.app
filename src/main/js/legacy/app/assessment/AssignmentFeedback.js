@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 								{ tag: 'time', datetime: '{CreatedTime:date("c")}', html: '{CreatedTime:ago()}'}
 							]},
 							{ cls: 'message', html: '{body}'},
-							{tag: 'tpl', 'if': 'isMe(Creator)', cn: { cls: 'footer', cn: [
+							{tag: 'tpl', 'if': 'isMine', cn: { cls: 'footer', cn: [
 								{ tag: 'span', cls: 'link edit', html: '{{{NextThought.view.assessment.AssignmentFeedback.edit}}}'},
 								{ tag: 'span', cls: 'link delete', html: '{{{NextThought.view.assessment.AssignmentFeedback.delete}}}'}
 							]}}
