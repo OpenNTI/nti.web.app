@@ -15,7 +15,7 @@ const TimeRangeDescription = require('legacy/model/anchorables/TimeRangeDescript
 const TranscriptContentPointer = require('legacy/model/anchorables/TranscriptContentPointer');
 const TranscriptRangeDescription = require('legacy/model/anchorables/TranscriptRangeDescription');
 
-
+const AnchorResolver =
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.AnchorResolver', {
 
 	// TODO: While most of these could be just added to Anchors.js,
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 		var start = description.getStart() && description.getStart().seconds,
 			end = description.getEnd() && description.getEnd().seconds, range, targetEl,
-			utils = NextThought.app.mediaviewer.components.reader.AnchorResolver;
+			utils = AnchorResolver;
 
 		//Conversions.
 		start = utils.fromMillSecondToSecond(start);

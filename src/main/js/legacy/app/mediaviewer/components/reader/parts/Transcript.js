@@ -5,6 +5,7 @@ var WebvttTranscript = require('../../../../../webvtt/Transcript');
 var WebvttCue = require('../../../../../webvtt/Cue');
 var TranscriptCue = require('../../../../../model/transcript/Cue');
 var MediaviewerActions = require('../../../Actions');
+const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.parts.Transcript', {
@@ -279,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	},
 
 	getAnchorResolver: function () {
-		return NextThought.app.mediaviewer.components.reader.AnchorResolver;
+		return AnchorResolver;
 	},
 
 	getCueStore: function () {
@@ -482,10 +483,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	},
 
 	domRangeForRecord: function (rec) {
-		var cueStore = this.getCueStore(),
-			anchorResolver = NextThought.app.mediaviewer.components.reader.AnchorResolver;
+		var cueStore = this.getCueStore();
 
-		return anchorResolver.fromTimeRangeToDomRange(rec.get('applicableRange'), cueStore, this.el);
+		return AnchorResolver.fromTimeRangeToDomRange(rec.get('applicableRange'), cueStore, this.el);
 	},
 
 	getDomContextForRecord: function (r) {
