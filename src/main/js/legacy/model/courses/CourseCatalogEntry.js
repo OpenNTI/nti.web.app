@@ -13,7 +13,10 @@ require('legacy/model/courses/CourseCatalogInstructorInfo');
 module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	alternateClassName: 'NextThought.model.courses.CourseCatalogLegacyEntry',
 	extend: 'NextThought.model.Base',
-	mimeType: 'application/vnd.nextthought.courses.coursecataloglegacyentry',
+	mimeType: [
+		'application/vnd.nextthought.courses.coursecataloglegacyentry',
+		'application/vnd.nextthought.courseware.coursecataloglegacyentry'
+	],
 
 	statics: {
 		mimeType: 'application/vnd.nextthought.courses.coursecataloglegacyentry'

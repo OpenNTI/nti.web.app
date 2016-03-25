@@ -127,12 +127,18 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		type = data.mimeType || cls.mimeType;
 
 		map = NextThought.model.MAP = NextThought.model.MAP || {};
-		//console.log(type);
-		if (map[type] !== undefined) {
-			Ext.Error.raise('Cannot have more than one model per mimetype: ' + type);
+		if (!Array.isArray(type)) {
+			type = [type];
 		}
 
-		map[type] = data.$className || cls.$className;
+		for (let mimeTypeAlias of type) {
+			//console.log(type);
+			if (map[mimeTypeAlias] !== undefined) {
+				Ext.Error.raise('Cannot have more than one model per mimetype: ' + type);
+			}
+
+			map[mimeTypeAlias] = data.$className || cls.$className;
+		}
 
 		//We don't want to be turning null into empty strings so we must set useNull
 		//Failure to do so creates havok with server side validation and also
