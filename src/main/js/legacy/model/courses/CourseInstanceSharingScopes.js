@@ -5,6 +5,7 @@ require('./CourseInstanceSharingScope');
 
 module.exports = exports = Ext.define('NextThought.model.courses.CourseInstanceSharingScopes', {
 	extend: 'NextThought.model.Base',
+	mimeType: 'application/vnd.nextthought.courseinstancesharingscopes',
 
 	fields: [
 		{name: 'DefaultSharingScopeNTIID', type: 'string'},
