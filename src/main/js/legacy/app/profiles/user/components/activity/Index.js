@@ -1,11 +1,11 @@
 var Ext = require('extjs');
-var User = require('../../../../../model/User');
-var AnalyticsUtil = require('../../../../../util/Analytics');
-var MixinsRouter = require('../../../../../mixins/Router');
-var ActivityBody = require('./Body');
-var ActivitySidebar = require('./Sidebar');
-var UserdataActions = require('../../../../userdata/Actions');
-var UtilStreamSource = require('../../../../stream/util/StreamSource');
+require('legacy/model/User');
+var AnalyticsUtil = require('legacy/util/Analytics');
+require('legacy/mixins/Router');
+require('legacy/app/profiles/user/components/activity/Body');
+require('legacy/app/profiles/user/components/activity/Sidebar');
+require('legacy/app/userdata/Actions');
+require('legacy/app/stream/util/StreamSource');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.Index', {
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		{xtype: 'profile-user-activity-sidebar'}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.flatPageStore = NextThought.store.FlatPage.create();
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-	startResourceViewed: function() {
+	startResourceViewed: function () {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && !this.hasCurrentTimer) {
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	stopResourceViewed: function() {
+	stopResourceViewed: function () {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && this.hasCurrentTimer) {
@@ -76,32 +76,32 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	getSuggestedSharing: function() {
+	getSuggestedSharing: function () {
 		var community = Service.getFakePublishCommunity();
 
 		return NextThought.model.UserSearch.create(community.getData());
 	},
 
-	onActivate: function() {
+	onActivate: function () {
 		this.startResourceViewed();
-		this.items.each(function(item) {
+		this.items.each(function (item) {
 			item.fireEvent('activate');
 		});
 	},
 
-	onDeactivate: function() {
+	onDeactivate: function () {
 		this.stopResourceViewed();
-		this.items.each(function(item) {
+		this.items.each(function (item) {
 			item.fireEvent('deactivate');
 		});
 	},
 
-	initChildComponentRefs: function() {
+	initChildComponentRefs: function () {
 		this.streamCmp = this.down('profile-user-activity-body');
 		this.sidebarCmp = this.down('profile-user-activity-sidebar');
 	},
 
-	userChanged: function(user, isMe) {
+	userChanged: function (user, isMe) {
 		if (this.activeUser === user) {
 			return Promise.resolve();
 		}
@@ -114,41 +114,41 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.startResourceViewed();
 
 		let me = this;
-		
+
 		return Promise.all([
-				this.streamCmp.userChanged.apply(this.streamCmp, arguments),
-				this.sidebarCmp.userChanged.apply(this.sidebarCmp, arguments)
-			])
-			.then(function() {
+			this.streamCmp.userChanged.apply(this.streamCmp, arguments),
+			this.sidebarCmp.userChanged.apply(this.sidebarCmp, arguments)
+		])
+			.then(function () {
 				return me.restoreState();
 			});
 	},
 
-	applyState: function(state) {
+	applyState: function (state) {
 		this.sidebarCmp.setFilterFromQueryParams(state);
-		
+
 		let streamParams = this.sidebarCmp.getStreamParams();
-		
+
 		streamParams.url = this.activeUser.getLink('Activity');
 		this.streamCmp.setStreamParams(streamParams);
-		
+
 		return Promise.resolve();
 	},
-	
-	restoreState: function() {
+
+	restoreState: function () {
 		var state = this.getCurrentState();
 		return this.applyState(state);
 	},
 
-	updateFilter: function(filter) {
+	updateFilter: function (filter) {
 		this.setState(filter);
 	},
 
-	onRoute: function(route, subRoute) {
+	onRoute: function (/*route, subRoute*/) {
 		this.setTitle('Activity');
 	},
 
-	navigateToActivityItem: function(item) {
+	navigateToActivityItem: function (item) {
 		this.Router.root.attemptToNavigateToObject(item);
 	}
 });
