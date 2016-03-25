@@ -200,7 +200,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	},
 
 	renderTpl: Ext.DomHelper.markup([
-		{tag: 'form', cls: 'common-form', enctype: '{enctype}', autocomplete: '{autocomplete}', name: '{name}'}
+		{tag: 'form', cls: 'common-form', enctype: '{enctype}', autocomplete: '{autocomplete}', 'novalidate': true, name: '{name}'}
 	]),
 
 	renderSelectors: {
@@ -226,13 +226,25 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	afterRender: function () {
 		this.callParent(arguments);
 
-		this.buildInputs(this.schema, this.formEl);
+		var me = this;
 
-		this.formEl.on('submit', this.formSubmit.bind(this));
-		this.onFormChange();
+		me.buildInputs(me.schema, me.formEl);
+
+		me.formSubmit = me.formSubmit.bind(me);
+
+		me.formEl.dom.addEventListener('submit', me.formSubmit);
+
+		me.on('destroy', function() {
+			if (me.formEl && me.formEl.dom) {
+				me.formEl.dom.removeEventListener('submit', me.formSubmit);
+			}
+		});
+
+		me.formEl.on('submit', me.formSubmit.bind(me));
+		me.onFormChange();
 
 		wait()
-			.then(this.focusField.bind(this));
+			.then(me.focusField.bind(me));
 	},
 
 	onDestroy: function () {
@@ -274,6 +286,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		schema.required = schema.required || false;
 		schema.value = this.defaultValues[schema.name];
 		inputEl = tpl.append(el, schema, true);
+
 
 		if (type === 'group') {
 			this.buildInputs(schema.inputs, inputEl);
@@ -719,6 +732,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			});
 	},
 
+
 	doSubmit: function () {
 		var submit;
 
@@ -730,6 +744,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 		return submit;
 	},
+
 
 	submitToRecord: function (record) {
 		var link = record.getLink('edit'),
@@ -747,6 +762,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 				return record;
 			});
 	},
+
 
 	showErrorOn: function (name, reason) {
 		var cmp = this.__getComponent(name),
@@ -780,6 +796,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
+
 	setPlaceholder: function (name, value) {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
@@ -796,6 +813,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
+
 	setValue: function (name, value) {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
@@ -811,6 +829,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			textarea.value = value;
 		}
 	},
+
 
 	formSubmit: function (e) {
 		e.preventDefault();
