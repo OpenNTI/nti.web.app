@@ -47,11 +47,11 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		 * ALWAYS set the href before using. NEVER rely on its previous value. Think of this the same way you would the return value of Ext.fly().
 		 * As in temporary!	 Assume once your 'atomic' like action is finished, the value is useless. Reaquire.
 		 *
-		 * @param {String} ref
-		 * @return {Location}
+		 * @param {String} ref an URI
+		 * @return {Location} Returns a instance of the Location interface.
 		 */
 		getLocationInterfaceAt: function (ref) {
-			var a = this.__SHARED_LOCATION_INTERFACE;
+			var a = this['__SHARED_LOCATION_INTERFACE'];
 			a.setAttribute('href', ref);
 			return a;
 		}
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 			if (a.search) {
 				q = Ext.Object.fromQueryString(a.search);
-				delete q._dc;
+				delete q['_dc'];
 				a.search = Ext.Object.toQueryString(q);
 			}
 
@@ -208,6 +208,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	 * Given another instance of the same class, update this values.
 	 *
 	 * @param  {Model} record the instance to update with
+	 * @returns {void}
 	 */
 	syncWith: function (record) {
 		if (!this.self.isInstanceOf(record)) {
@@ -233,6 +234,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	/**
 	 * Given a response from the server, update my values
 	 * @param  {String} response server response
+	 * @returns {void}
 	 */
 	syncWithResponse: function (response) {
 		var json = JSON.parse(response),
@@ -242,7 +244,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 		newRecord = ParseUtils.parseItems([json])[0];
 
-		return this.syncWith(newRecord);
+		this.syncWith(newRecord);
 	},
 
 	/**
@@ -391,8 +393,9 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 	/**
 	 * Caller should wrap in beginEdit() and endEdit()
-	 * @param {Ext.data.Model} recordSrc
-	 * @param {String...} fields
+	 * @param {Ext.data.Model} recordSrc the source record to copy
+	 * @param {...String} fields A vararg list of fields
+	 * @returns {void}
 	 */
 	copyFields: function (recordSrc, fields) {
 		var me = this, maybeFields = fields;
@@ -706,9 +709,10 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	 * @param {String} fieldName - name of the field that we want to save
 	 * @param {*} [value] - if undefined the field from the model will be saved.  If not undefined the field
 	 *					will be set on the model prior to saving
-	 * @param {Function} successCallback
-	 * @param {Function} failCallback
+	 * @param {Function} successCallback called on success
+	 * @param {Function} failCallback called on failure
 	 * @param {String} [optionalLinkName] = provide if you want a specific link other than the edit link
+	 * @returns {void}
 	 */
 	saveField: function (fieldName, value, successCallback, failCallback, optionalLinkName) {
 		var editLink = this.getLink(optionalLinkName || 'edit'),
@@ -776,6 +780,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 	/**
 	 * Calls the href and fills in the values missing.
+	 * @return {void}
 	 */
 	resolve: function () {
 		console.error('still called?');
@@ -790,7 +795,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		req = {
 			url: getURL(href),
 			async: false,
-			callback: function (req, success, resp) {
+			callback: function (_, success, resp) {
 				if (!success) {
 					console.error('Resolving model failed');
 					return;
@@ -825,7 +830,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 		req = {
 			url: href,
-			callback: function (req, success, resp) {
+			callback: function (_, success, resp) {
 				if (!success) {
 					console.error('Resolving parent model failed');
 					return;
