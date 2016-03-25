@@ -48,8 +48,20 @@ exports.getPage = function getPage () {
 		let cfg = Object.assign({revision}, clientConfig.config || {});
 		let html = '';
 
-		let basePathFix = (original, attr, val) => attr + '="' +
-				(isRootPath.test(val) ? (basePath || '/') + val.substr(1) : val) + '"';
+		let basePathFix = (original, attr, val) => {
+			let part = `${attr}="`;
+
+			if (!isRootPath.test(val) || val.startsWith(basePath)) {
+				part += `${val}"`;
+			} else {
+				part += `${(basePath || '/')}${val.substr(1)}"`;
+			}
+
+			return part;
+		};
+
+		// let basePathFix = (original, attr, val) => attr + '="' +
+		// 		(isRootPath.test(val) ? (basePath || '/') + val.substr(1) : val) + '"';
 
 		html += clientConfig.html;
 
