@@ -693,7 +693,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 					fulfill(rec);
 				}
 			} catch (err) {
-				console.error('Something went terrible wrong...', err.stack || err.message);
+				console.error('Something went terribly wrong...', err.stack || err.message);
 				reject(err);
 			}
 		};
