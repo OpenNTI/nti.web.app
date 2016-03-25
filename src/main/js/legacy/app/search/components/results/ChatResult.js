@@ -11,13 +11,13 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 	extend: 'NextThought.app.search.components.results.Base',
 	alias: 'widget.search-result-messageinfo',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.ChatActions = NextThought.app.chat.Actions.create();
 	},
 
-	setCreator: function(user) {
+	setCreator: function (user) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setCreator.bind(this, user));
 			return;
@@ -38,22 +38,22 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		}
 	},
 
-	setTitle: function(record) {
+	setTitle: function (record) {
 		var me = this,
 			sharedWith = record.get('sharedWith');
 
-		sharedWith = sharedWith.filter(function(u) {
+		sharedWith = sharedWith.filter(function (u) {
 			return !isMe(u);
 		});
 
 		UserRepository.getUser(sharedWith)
-			.then(function(users) {
+			.then(function (users) {
 				if (!Array.isArray(users)) { users = [users]; }
 
 				var last,
 					title = 'Chat with ';
 
-				users = users.map(function(u) { return u.getName(); });
+				users = users.map(function (u) { return u.getName(); });
 
 				if (users.length === 1) {
 					title += users[0];
@@ -71,14 +71,14 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		me.onLoadTranscript = me.ChatActions.loadTranscript(record.get('ContainerId'));
 	},
 
-	clicked: function(e) {
+	clicked: function (e) {
 		var me = this,
 			hitId = this.hit.get('NTIID');
 
 		hitId = ParseUtils.encodeForURI(hitId);
 
 		me.onLoadTranscript
-			.then(function(transcript) {
+			.then(function (transcript) {
 				me.pushWindow(transcript, hitId, me.el);
 			});
 	}

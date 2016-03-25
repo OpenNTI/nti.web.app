@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ColorPi
 	hideMode: 'display',
 	items: [{xtype: 'color-palette'}],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.addEvents('select');
 		this.relayEvents(this.down('color-palette'), ['select']);

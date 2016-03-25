@@ -5,22 +5,22 @@ var CoursewareHistoryItems = require('./HistoryItems');
 module.exports = exports = Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 	extend: 'NextThought.store.courseware.HistoryItems',
 
-	getTotalCount: function() {
+	getTotalCount: function () {
 		return this.getCount();
 	},
 
 
-	getTotalPages: function() {
+	getTotalPages: function () {
 		return 1;
 	},
 
 
-	getCurrentPage: function() {
+	getCurrentPage: function () {
 		return 1;
 	},
 
 
-	load: function(options) {
+	load: function (options) {
 		var me = this,
 			oldCallBack;
 
@@ -29,10 +29,10 @@ module.exports = exports = Ext.define('NextThought.store.courseware.StudentHisto
 		if (options.callback) {
 			oldCallBack = options.callback.bind(options.scope || null);
 		} else {
-			oldCallBack = function() {};
+			oldCallBack = function () {};
 		}
 
-		options.callback = function() {
+		options.callback = function () {
 			oldCallBack.apply(null, arguments);
 
 			me.fillInHistories();
@@ -46,11 +46,11 @@ module.exports = exports = Ext.define('NextThought.store.courseware.StudentHisto
 	 * @param  {NTIID} assignmentId Assignment to look up
 	 * @return {HistoryItem}		history item for the assignment
 	 */
-	__getEntryForAssignment: function(assignmentId) {
+	__getEntryForAssignment: function (assignmentId) {
 		var range = this.getRange() || [],
 			entry;
 
-		range.forEach(function(item) {
+		range.forEach(function (item) {
 			if (item.get('AssignmentId') === assignmentId) {
 				entry = item;
 			}
@@ -60,24 +60,24 @@ module.exports = exports = Ext.define('NextThought.store.courseware.StudentHisto
 	},
 
 
-	getAvailableAssignments: function() {
+	getAvailableAssignments: function () {
 		return this.proxy.reader.AvailableAssignmentNTIIDs;
 	},
 
 
-	__hasAccessTo: function(assignment) {
+	__hasAccessTo: function (assignment) {
 		var available = this.getAvailableAssignments();
 
 		return !available || (available.indexOf(assignment.getId()) >= 0);
 	},
 
 
-	fillInHistories: function() {
+	fillInHistories: function () {
 		var me = this;
 
 		me.suspendEvents();
 
-		me.assignments.each(function(assignment) {
+		me.assignments.each(function (assignment) {
 			var entry = me.__getEntryForAssignment(assignment.getId());
 
 			//filter out the final grade assignment
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.StudentHisto
 	},
 
 
-	__replaceWithCachedInstance: function(record) {
+	__replaceWithCachedInstance: function (record) {
 		var index = this.indexOf(record);
 
 		this.remove(record);

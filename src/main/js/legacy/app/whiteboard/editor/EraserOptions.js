@@ -26,17 +26,17 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.EraserO
 		]
 	}],
 
-	constructor: function() {
+	constructor: function () {
 		this.items = Ext.clone(this.items);//copy onto instance from prototype
 		this.items[0].defaults.toggleGroup += guidGenerator();
 		this.callParent(arguments);
 	},
 
-	getToolType: function() {
+	getToolType: function () {
 		return 'pencil';
 	},
 
-	setOptions: function(options) {
+	setOptions: function (options) {
 		if (options.strokeWidth) {
 			this.down('[strokeWidth=' + options.strokeWidth + ']').toggle(true);
 		}
@@ -45,11 +45,11 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.EraserO
 		}
 	},
 
-	getOptions: function() {
+	getOptions: function () {
 		var pressed = this.query('button[pressed]'),
 			strokeWidth;
 
-		Ext.each(pressed, function(b) {
+		Ext.each(pressed, function (b) {
 			if (b.strokeWidth) {
 				strokeWidth = b.strokeWidth;
 			}

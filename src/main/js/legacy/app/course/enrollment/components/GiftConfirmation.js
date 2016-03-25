@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		iframeEl: '.iframe-container'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var prompt = this.getPrompt();
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this;
@@ -81,13 +81,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			renderTo: me.transactionEl
 		});
 
-		me.on('destroy', function() {
+		me.on('destroy', function () {
 			me.tokenInput.destroy();
 			me.transactionInput.destroy();
 		});
 	},
 
-	getPrompt: function(hasReceiver) {
+	getPrompt: function (hasReceiver) {
 		var c = this.course,
 			start = c.get('StartDate'),
 			prompt;
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return prompt;
 	},
 
-	beforeShow: function() {
+	beforeShow: function () {
 		var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
 			receiverEmail = purchaseAttempt && purchaseAttempt.get('Receiver'),
 			transactionId = purchaseAttempt && purchaseAttempt.get('TransactionID'),
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-	addThankYouPage: function(url) {
+	addThankYouPage: function (url) {
 		var container = this.iframeEl.dom,
 			existing = container.querySelector('iframe'),
 			iframe;

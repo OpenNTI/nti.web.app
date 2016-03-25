@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, this.record.getData());
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var e = this.course,
 			courseCatalog = e && e.getCourseCatalogEntry();
 
-		if(courseCatalog && courseCatalog.get('StartDate')){
+		if(courseCatalog && courseCatalog.get('StartDate')) {
 			this.renderData.courseStartDate = courseCatalog.get('StartDate');
 		}
 

@@ -37,14 +37,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		observable: 'Ext.util.Observable'
 	},
 
-	getBubbleTarget: function() {
+	getBubbleTarget: function () {
 		return this.reader;
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		Ext.apply(this, config);
 		var me = this,
-				reader = me.reader;
+			reader = me.reader;
 
 		me.up = reader.up.bind(reader);
 		me.mixins.observable.constructor.apply(me);
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 			annotationManager: new NextThought.app.annotations.renderer.Manager(reader)
 		});
 
-		reader.on('afterRender', function() {
+		reader.on('afterRender', function () {
 			me.UserDataActions.listenToPageStores(this, {
 				scope: me,
 				add: 'storeEventsAdd',
@@ -91,19 +91,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 			'location-cleared': 'clearAnnotations'
 		});
 
-		me.mon(me.annotationManager.events, 'finish', function(c) {
+		me.mon(me.annotationManager.events, 'finish', function (c) {
 			me.fireEvent('rendered', c);
 		}, me, {buffer: 500});
 	},
 
-	getDocumentElement: function() {
+	getDocumentElement: function () {
 		return this.reader.getDocumentElement();
 	},
 
-	onGutterClicked: function(e) {
+	onGutterClicked: function (e) {
 		var t = e.getTarget('[data-line]', null, true),
-				toggle = t && t.hasCls('active'),
-				line = !toggle && t && parseInt(t.getAttribute('data-line'), 10);
+			toggle = t && t.hasCls('active'),
+			line = !toggle && t && parseInt(t.getAttribute('data-line'), 10);
 
 		this.UserDataActions.onAnnotationsLineFilter(this.reader, line);
 
@@ -113,9 +113,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}
 	},
 
-	storeEventsAdd: function(store, records) {
+	storeEventsAdd: function (store, records) {
 		console.debug('New records in store, adding to page...', store.cacheMapId || store.containerId, records);
-		Ext.each(records, function(r) {
+		Ext.each(records, function (r) {
 			var cls = r.get('Class');
 			if (!this.createAnnotationWidget(cls, r)) {
 				console.warn('Apparently this record didn\'t get added', r);
@@ -126,19 +126,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}, this);
 	},
 
-	storeEventsBulkRemove: function(store, records) {
-		Ext.each(records, function(record) {
+	storeEventsBulkRemove: function (store, records) {
+		Ext.each(records, function (record) {
 			this.remove(record.getId());
 		}, this);
 	},
 
-	storeEventsRemove: function(store, record) {
+	storeEventsRemove: function (store, record) {
 		this.remove(record.getId());
 	},
 
-	insertAnnotationGutter: function() {
+	insertAnnotationGutter: function () {
 		var me = this,
-				container = Ext.DomHelper.insertAfter(
+			container = Ext.DomHelper.insertAfter(
 						me.reader.getInsertionPoint().first(),
 						{ cls: 'annotation-gutter', onclick: 'void(0)', cn: {cls: 'column controls'} },
 						true);
@@ -149,11 +149,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		me.annotationManager.registerGutter(container, me.reader);
 	},
 
-	getManager: function() {
+	getManager: function () {
 		return this.annotationManager;
 	},
 
-	convertRectToScreen: function(r) {
+	convertRectToScreen: function (r) {
 		var readerOffsets = this.reader.getAnnotationOffsets().rect;
 
 		return {
@@ -166,27 +166,27 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		};
 	},
 
-	loadAnnotations: function(containerId, subContainers) {
+	loadAnnotations: function (containerId, subContainers) {
 		var location = this.reader.getLocation();
 
 		this.clearAnnotations();
 		this.UserDataActions.loadAnnotations(this.reader, containerId, location.pageInfo, subContainers);
 	},
 
-	objectsLoaded: function(items, bins/*, containerId*/) {
+	objectsLoaded: function (items, bins/*, containerId*/) {
 		var me = this;
 
 		me.setAssessedQuestions((bins || {}).AssessedQuestionSet);
 		me.buildAnnotations(items);
 	},
 
-	applyFilter: function(newFilter) {
+	applyFilter: function (newFilter) {
 		this.filter = newFilter;
 		this.clearAnnotations();
 		this.fireEvent('filter-annotations', this.reader);
 	},
 
-	showSearchHit: function(hit) {
+	showSearchHit: function (hit) {
 		this.clearSearchHit();
 		if (hit.isContent()) {
 			this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this.reader});
@@ -197,12 +197,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 	//Returns an array of objects with two propertes.  ranges is a list
 	//of dom ranges that should be used to position the highlights.
 	//key is a string that used to help distinguish the type of content when we calculate the adjustments( top and left ) needed.
-	rangesForSearchHits: function(hit) {
+	rangesForSearchHits: function (hit) {
 		var phrase = hit.get('PhraseSearch'),
 		//fragments = hit.get('Fragments'),
-				regex, ranges,
-				o = this.reader.getComponentOverlay(),
-				contentDoc = this.getDocumentElement(), indexedOverlayData, result = [];
+			regex, ranges,
+			o = this.reader.getComponentOverlay(),
+			contentDoc = this.getDocumentElement(), indexedOverlayData, result = [];
 
 
 		console.log('Getting ranges for search hits');
@@ -212,12 +212,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		regex = SearchUtils.contentRegexForSearchHit(hit, phrase);
 		ranges = TextRangeFinderUtils.findTextRanges(contentDoc, contentDoc, regex);
 		result.push({
-						ranges: ranges.slice(),
-						key: 'content'
-					});
+			ranges: ranges.slice(),
+			key: 'content'
+		});
 
 		//Now look in assessment overlays
-		indexedOverlayData = TextRangeFinderUtils.indexText(o.componentOverlayEl.dom, function(node) {
+		indexedOverlayData = TextRangeFinderUtils.indexText(o.componentOverlayEl.dom, function (node) {
 			return Ext.fly(node).parent('.indexed-content');
 		});
 
@@ -225,9 +225,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 													 o.componentOverlayEl.dom.ownerDocument,
 													 regex, undefined, indexedOverlayData);
 		result.push({
-						ranges: ranges.slice(),
-						key: 'assessment'
-					});
+			ranges: ranges.slice(),
+			key: 'assessment'
+		});
 
 		return result;
 	},
@@ -235,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 	//	@returns an object with top and left properties used to adjust the
 	//	coordinate space of the ranges bounding client rects.
 	//	It decides based on the type of container( main content or overlays).
-	getRangePositionAdjustments: function(key) {
+	getRangePositionAdjustments: function (key) {
 		var annotationOffsets, overlayXAdjustment, overlayYAdjustment;
 		if (key === 'content') {
 			return {top: 0, left: 0};
@@ -248,7 +248,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		return {top: overlayYAdjustment, left: overlayXAdjustment };
 	},
 
-	clearSearchHit: function() {
+	clearSearchHit: function () {
 		if (!this.searchAnnotations) {
 			return;
 		}
@@ -257,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		this.searchAnnotations = null;
 	},
 
-	remove: function(oid) {
+	remove: function (oid) {
 		var v = this.annotations[oid];
 		if (v) {
 			this.annotations[oid] = undefined;
@@ -267,7 +267,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}
 	},
 
-	clearAnnotations: function() {
+	clearAnnotations: function () {
 		var v, oid, leftovers;
 		for (oid in this.annotations) {
 			if (this.annotations.hasOwnProperty(oid)) {
@@ -286,14 +286,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		//hanging like placeholder notes.
 		leftovers = Ext.query('[id*=note-container]');
 		if (leftovers && leftovers.length > 0) {
-			Ext.each(leftovers, function(l) {
+			Ext.each(leftovers, function (l) {
 				Ext.fly(l).destroy();
 			});
 		}
 
 	},
 
-	exists: function(record) {
+	exists: function (record) {
 		var oid = record.getId();
 		if (!oid) {
 			return false;
@@ -302,16 +302,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		return !!this.annotations[oid];
 	},
 
-	getDefinitionMenuItem: function(range) {
+	getDefinitionMenuItem: function (range) {
 		try {
 			range = range || this.getSelection();
 			if (!range) {
 				return null;
 			}
 			var me = this,
-					boundingBox = me.convertRectToScreen(range.getBoundingClientRect()),
-					text = range.toString().trim(),
-					result = null;
+				boundingBox = me.convertRectToScreen(range.getBoundingClientRect()),
+				text = range.toString().trim(),
+				result = null;
 
 			//Rangy likes to grab trailing punctuation so strip
 			//it here
@@ -321,7 +321,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 				result = {
 					text: 'Define...',
 					cls: 'define',
-					handler: function() {
+					handler: function () {
 						me.UserDataActions.define(text, boundingBox, me.reader);
 						me.clearSelection();
 					}
@@ -337,7 +337,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}
 	},
 
-	addAnnotation: function(range, xy) {
+	addAnnotation: function (range, xy) {
 		if (!range) {
 			console.warn('bad range');
 			return;
@@ -382,7 +382,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		if (win && $AppConfig.allowPrintingContent) {
 			menu.add({
 				text: getString('NextThought.view.content.reader.Annotations.print'),
-				handler: function() { win.print(); }
+				handler: function () { win.print(); }
 			});
 		}
 
@@ -392,8 +392,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 			cls: 'nt-highlight-picker',
 			plain: false,
 			listeners: {
-				select: function(picker, selColor) {
-					var hColor = Ext.Array.findBy(highlightColors, function(item) {return item.color === selColor;});
+				select: function (picker, selColor) {
+					var hColor = Ext.Array.findBy(highlightColors, function (item) {return item.color === selColor;});
 
 					record.set('presentationProperties', {highlightColorName: hColor.name});
 					me.UserDataActions.savePhantomAnnotation(record, false);
@@ -413,15 +413,15 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 			menu.add({
 				text: getString('NextThought.view.content.reader.Annotations.add-note'),
 				cls: 'add-note',
-				handler: function() {
+				handler: function () {
 					me.clearSelection();
 					me.fireEvent('create-note', range, rect2, 'plain');
 				}
 			});
 		}
 
-		function redaction(block) {
-			return function() {
+		function redaction (block) {
+			return function () {
 				me.clearSelection();
 				var r = NextThought.model.Redaction.createFromHighlight(record, block);
 				try {
@@ -440,25 +440,25 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		if (redactionRegex.test(this.reader.getLocation().NTIID)) {
 			//inject other menu items:
 			menu.add({
-						 text: getString('NextThought.view.content.reader.Annotations.redact-inline'),
-						 handler: redaction(false)
-					 });
+					text: getString('NextThought.view.content.reader.Annotations.redact-inline'),
+					handler: redaction(false)
+				});
 
 			menu.add({
-						 text: getString('NextThought.view.content.reader.Annotations.redact-block'),
-						 handler: redaction(true)
-					 });
+					text: getString('NextThought.view.content.reader.Annotations.redact-block'),
+					handler: redaction(true)
+				});
 		}
 
 		//on close make sure it gets destroyed.
-		menu.on('hide', function() {
+		menu.on('hide', function () {
 			menu.close();
 			delete this.reader.creatingAnnotation;
 		}, this);
 
 		//Figure out where to position the menu, at the top right of the
 		//highest client rect in the range
-		function menuPosition(range, xy) {
+		function menuPosition (range, xy) {
 			var readerRect = me.reader.el.dom.getBoundingClientRect(),
 				scrollOffSet = Ext.getBody().getScroll().top,
 				menuHeight = menu.getHeight() || 0,
@@ -498,7 +498,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 	},
 
 	// For compatibility with native scrolling on iPad
-	iAddAnnotation: function(range) {
+	iAddAnnotation: function (range) {
 		if (!range) {
 			console.warn('bad range');
 			return;
@@ -513,7 +513,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 			redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i,
 			innerDocOffset;
 
-		function createHighlight() {
+		function createHighlight () {
 			rect2 = RectUtils.getFirstNonBoundingRect(range);
 			record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement());
 			if (!record) {
@@ -534,24 +534,24 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		});
 
 		menu.add({
-					 text: getString('NextThought.view.content.reader.Annotations.save-highlight'),
-					 handler: function() {
+				text: getString('NextThought.view.content.reader.Annotations.save-highlight'),
+				handler: function () {
 						 createHighlight();
 						 me.UserDataActions.savePhantomAnnotation(record, false);
 					 }
-				 });
+			});
 
 		menu.add({
-					 text: getString('NextThought.view.content.reader.Annotations.add-note'),
-					 handler: function() {
+				text: getString('NextThought.view.content.reader.Annotations.add-note'),
+				handler: function () {
 						 createHighlight();
 						 me.fireEvent('create-note', range, rect2, 'plain');
 					 }
-				 });
+			});
 
 
-		function redaction(block) {
-			return function() {
+		function redaction (block) {
+			return function () {
 				createHighlight();
 				me.clearSelection();
 				var r = NextThought.model.Redaction.createFromHighlight(record, block);
@@ -571,18 +571,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		if (redactionRegex.test(this.reader.getLocation().NTIID)) {
 			//inject other menu items:
 			menu.add({
-						text: getString('NextThought.view.content.reader.Annotations.redact-inline'),
-						handler: redaction(false)
-					 });
+				text: getString('NextThought.view.content.reader.Annotations.redact-inline'),
+				handler: redaction(false)
+				});
 
 			menu.add({
-						 text: getString('NextThought.view.content.reader.Annotations.redact-block'),
-						 handler: redaction(true)
-					 });
+					text: getString('NextThought.view.content.reader.Annotations.redact-block'),
+					handler: redaction(true)
+				});
 		}
 
 		//on close make sure it gets destroyed.
-		menu.on('hide', function() {
+		menu.on('hide', function () {
 			menu.close();
 			delete this.reader.creatingAnnotation;
 		}, this);
@@ -612,10 +612,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 	 * @param {Function} [onCreated] - Function
 	 * @return {*}
 	 */
-	createAnnotationWidget: function(type, record, browserRange, onCreated) {
+	createAnnotationWidget: function (type, record, browserRange, onCreated) {
 		var oid = record.getId(),
-				style = record.get('style'),
-				w;
+			style = record.get('style'),
+			w;
 
 		if (record.get('inReplyTo') || record.parent) {
 			return false;
@@ -636,7 +636,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 					this.annotations[oid].cleanup();
 					delete this.annotations[oid];
 				}
-				record.on('updated', function(r) {
+				record.on('updated', function (r) {
 					this.annotations[r.get('NTIID')] = this.annotations[oid];
 
 					delete this.annotations[oid];
@@ -658,7 +658,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		return Boolean(w);
 	},
 
-	setAssessedQuestions: function(sets) {
+	setAssessedQuestions: function (sets) {
 		if (!sets || sets.length === 0) {
 			//do nothing if we have no prior sets
 			return;
@@ -674,9 +674,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		scoreboard.setPriorResults(sets);
 	},
 
-	buildAnnotations: function(list) {
+	buildAnnotations: function (list) {
 		var me = this;
-		Ext.each(list || [], function(r) {
+		Ext.each(list || [], function (r) {
 			if (!r) {
 				return;
 			}
@@ -690,10 +690,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}, this);
 	},
 
-	onContextMenuHandler: function(e) {
+	onContextMenuHandler: function (e) {
 		try {
 			var origSelection = rangy.getSelection(this.getDocumentElement()).toString(),
-					range = this.getSelection();
+				range = this.getSelection();
 
 			if (range && !range.collapsed) {
 				e.stopPropagation();
@@ -713,7 +713,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}
 	},
 
-	getAnnotations: function() {
+	getAnnotations: function () {
 		var key,
 			items = [];
 
@@ -726,18 +726,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		return items;
 	},
 
-	realignAnnotations: function() {
+	realignAnnotations: function () {
 		var items = this.getAnnotations();
 
-		items = items.map(function(x) { return x.record; });
+		items = items.map(function (x) { return x.record; });
 
 		this.clearAnnotations();
 		this.buildAnnotations(items);
 	},
 
-	getSelection: function() {
+	getSelection: function () {
 		var doc = this.getDocumentElement(),
-				range, selection, txt;
+			range, selection, txt;
 		try {
 			if (!Ext.is.iPad) { // iPad does this automatically
 				Anchors.snapSelectionToWord(doc);
@@ -759,7 +759,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		return null;
 	},
 
-	selectRange: function(range) {
+	selectRange: function (range) {
 		try {
 			var s = this.getDocumentElement().parentWindow.getSelection();
 			s.removeAllRanges();
@@ -770,9 +770,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Anno
 		}
 	},
 
-	clearSelection: function() {
+	clearSelection: function () {
 		var doc = this.getDocumentElement(),
-				win = doc.parentWindow;
+			win = doc.parentWindow;
 		try {
 			win.getSelection().removeAllRanges();
 		}

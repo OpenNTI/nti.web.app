@@ -1,9 +1,9 @@
 var Ext = require('extjs');
 
 
-module.exports = exports = Ext.define('NextThought.overrides.builtins.String', function() {
+module.exports = exports = Ext.define('NextThought.overrides.builtins.String', function () {
 
-	function hash(str) {
+	function hash (str) {
 		var h = 0, i, c;
 		if (Ext.isEmpty(str)) {
 			return h;
@@ -17,15 +17,15 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.String', f
 		return h;
 	}
 
-	String.prototype.strcmp = function(s) {
+	String.prototype.strcmp = function (s) {
 		if (this < s) { return -1; }
 		if (this > s) { return 1; }
 		return 0;
 	};
 
-	function hashMe() { return hash(this); }
+	function hashMe () { return hash(this); }
 
-	String.prototype.concatPath = function(str) {
+	String.prototype.concatPath = function (str) {
 		var result = this;
 		//ensure the base path ends in a separator...
 		if (result.charAt(result.length - 1) !== '/') {
@@ -44,9 +44,9 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.String', f
 	String.prototype.hash = hashMe;
 	String.hash = hash;
 
-	String.commonPrefix = function commonPrefix(words) {
-		var maxWord = words.reduce(function max(a, b) { return a > b ? a : b; }),
-			prefix = words.reduce(function min(a, b) { return a > b ? b : a; });
+	String.commonPrefix = function commonPrefix (words) {
+		var maxWord = words.reduce(function max (a, b) { return a > b ? a : b; }),
+			prefix = words.reduce(function min (a, b) { return a > b ? b : a; });
 
 		while (maxWord.indexOf(prefix) !== 0) {
 			prefix = prefix.slice(0, -1);

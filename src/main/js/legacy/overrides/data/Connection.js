@@ -7,15 +7,15 @@ module.exports = exports = Ext.define('NextThought.overrides.data.Connection', {
 	withCredentials: true,
 	useDefaultXhrHeader: true,
 
-	newRequest: function() {
+	newRequest: function () {
 		return this.getXhrInstance();
 	},
 
-	setOptions: function(options, scope) {
+	setOptions: function (options, scope) {
 		var i, badParams = ['id', 'page', 'start', 'limit', 'group', 'sort'],//'_dc'
 			params = options.params || {};
-	if (Ext.isGecko) {
-	  badParams.shift();
+		if (Ext.isGecko) {
+	  	badParams.shift();
 	}
 		if (Ext.isFunction(params)) {
 			console.warn('Params were a function!');
@@ -33,12 +33,12 @@ module.exports = exports = Ext.define('NextThought.overrides.data.Connection', {
 
 	//We define an error as 4xx or 5xx
 	//i.e. 400 <= statusCode <=599
-	isHTTPErrorCode: function(statusCode) {
+	isHTTPErrorCode: function (statusCode) {
 		return 400 <= statusCode && statusCode <= 599;
 	},
 
 	//Patch Ext's open request...if I explicitly say to not include credentials, don't.
-	openRequest: function(options) {
+	openRequest: function (options) {
 		var xhr = this.callParent(arguments);
 
 		if (options && options.withCredentials === false) {
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.overrides.data.Connection', {
 
 		return xhr;
 	}
-},function() {
+},function () {
 	Ext.Ajax.cors = true;
 	Ext.Ajax.withCredentials = true;
 
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.overrides.data.Connection', {
 	Ext.Ajax.useDefaultXhrHeader = true;
 	Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
 	Ext.Ajax.defaultHeaders.Accept = 'application/json';
-	Ext.Ajax.on('beforerequest', function(connection, options) {
+	Ext.Ajax.on('beforerequest', function (connection, options) {
 
 		if (Ext.Ajax.logRequests) {
 			console.debug('Will perform ajax request with ', arguments);
@@ -77,8 +77,8 @@ module.exports = exports = Ext.define('NextThought.overrides.data.Connection', {
 	//if the MEssageBox alert infrastructure is smart enough to present a bunch
 	//of these getting popped up all at once, however, since clicking ok on any
 	//of them changes the pages location that is probably ok for now
-	Ext.Ajax.on('requestexception', function(conn, response, options) {
-		function onConfirmed() {
+	Ext.Ajax.on('requestexception', function (conn, response, options) {
+		function onConfirmed () {
 			//TODO better way to send the user to the login page?
 			location.reload();
 		}

@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		accentcolor: 'section color'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var me = this,
@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			externalValues = record && record.get('ExternalValue') || {},
 			message;
 
-		var fields = attributes.map(function(attr) {
+		var fields = attributes.map(function (attr) {
 			var f = me.FIELDS[attr.toLowerCase()] || attr;
 			if (externalValues[attr]) {
 				f += ' to "' + externalValues[attr] + '"';
@@ -99,12 +99,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.loadUser(record.get('principal'));
 	},
 
-	loadUser: function(creator) {
+	loadUser: function (creator) {
 		var me = this;
 		UserRepository.getUser(creator, me.setUser, me);
 	},
 
-	setUser: function(user) {
+	setUser: function (user) {
 		var me = this,
 			rd = Ext.apply(me.renderData || {}, {
 				user: user
@@ -121,7 +121,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	setAvatar: function(user) {
+	setAvatar: function (user) {
 		if (this.rendered) {
 			this.avatarEl.setHTML(Ext.DomHelper.createTemplate('{user:avatar}').apply({user: user}));
 		}

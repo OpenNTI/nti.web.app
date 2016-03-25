@@ -19,15 +19,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	})),
 
 
-	setUser: function(user, isMe) {
+	setUser: function (user, isMe) {
 		var me = this;
 
 		me.removeAll();
 
 		user.getCommunityMembership()
-			.then(function(communities) {
+			.then(function (communities) {
 				if (communities.length) {
-					communities.map(function(community) {
+					communities.map(function (community) {
 						return {
 							community: community,
 							name: community.getName(),

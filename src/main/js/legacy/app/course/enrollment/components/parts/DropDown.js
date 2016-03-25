@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 	editable: true,
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		selectEl: '.select'
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this,
@@ -39,15 +39,15 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			editable: !!me.editable
 		});
 
-		me.mon(scrollParent, 'scroll', function() {
+		me.mon(scrollParent, 'scroll', function () {
 			me.combobox.hideOptions();
 		});
 
 		me.mon(me.combobox, {
-			'invalid-selection': function() {
+			'invalid-selection': function () {
 				me.selectEl.addCls('error');
 			},
-			'input-focused': function() {
+			'input-focused': function () {
 				me.selectEl.removeCls('error');
 			},
 			'select': {fn: 'changed', scope: me, buffer: 1}
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		me.on('destroy', 'destroy', me.combobox);
 	},
 
-	addOptions: function(options) {
+	addOptions: function (options) {
 		this.options = options;
 
 		if (this.combobox) {
@@ -64,19 +64,19 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-	addError: function() {
+	addError: function () {
 		this.selectEl.addCls('error');
 	},
 
-	removeError: function() {
+	removeError: function () {
 		this.selectEl.removeCls('error');
 	},
 
-	isEmpty: function() {
+	isEmpty: function () {
 		return !this.getValue()[this.name];
 	},
 
-	setValue: function(value) {
+	setValue: function (value) {
 		var me = this;
 
 		if (!me.rendered) {
@@ -87,12 +87,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		//me.comobox is set in me.afterRender but we are called in parent.afterRender
 		//so wait until the next event pump
 		wait()
-			.then(function() {
+			.then(function () {
 				me.combobox.setValue(value);
 			});
 	},
 
-	getValue: function() {
+	getValue: function () {
 		var value = {};
 
 		value[this.name] = this.combobox.getValue();

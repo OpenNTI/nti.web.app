@@ -8,13 +8,13 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 	showPage: true,
 	cls: 'page scrollable',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.setItems(this.upcoming, this.current, this.archived);
 	},
 
-	setItems: function(upcoming, current, archived) {
+	setItems: function (upcoming, current, archived) {
 		this.removeAll(true);
 
 		if (upcoming && upcoming.length) {
@@ -38,17 +38,17 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			semesters: []
 		}
 	*/
-	binCourses: function(courses) {
+	binCourses: function (courses) {
 		var me = this,
 			bins = {upcoming: {}},
 			years = [], upcoming = [],
 			semesters = Ext.Object.getValues(getString('months'));
 
-		function getSemester(date) {
+		function getSemester (date) {
 			var month = date.getMonth();
 		}
 
-		(courses || []).forEach(function(course) {
+		(courses || []).forEach(function (course) {
 			var isCatalogEntry = course instanceof NextThought.model.courses.CourseCatalogEntry,
 				catalog = isCatalogEntry ? course : course.getCourseCatalogEntry(),
 				start = catalog.get('StartDate'),
@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		};
 	},
 
-	addBinnedCourses: function(binObj, label, options) {
+	addBinnedCourses: function (binObj, label, options) {
 		var me = this, i, semester,
 			bins = binObj.bins || {},
 			years = binObj.years || [],
@@ -95,10 +95,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		semesters = ((semesters && Ext.Array.unique(semesters)) || []).reverse();
 
 
-		years.forEach(function(year) {
+		years.forEach(function (year) {
 			var bin = bins[year];
 
-			semesters.forEach(function(semester) {
+			semesters.forEach(function (semester) {
 				if (bin[semester] && bin[semester].length) {
 					me.addCourses(bin[semester], label, semester + ' ' + year, options);
 				}
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		});
 	},
 
-	addCourses: function(courses, label, group, options) {
+	addCourses: function (courses, label, group, options) {
 		var o = {
 			label: label,
 			group: group || '',
@@ -118,12 +118,12 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		this.add(o);
 	},
 
-	getCourseStore: function(data) {
+	getCourseStore: function (data) {
 		return new Ext.data.Store({
 			model: 'NextThought.model.courseware.CourseInstanceEnrollment',
 			data: data,
 			sorters: [{
-				sorterFn: function(a, b) {
+				sorterFn: function (a, b) {
 					var aVal = a.get('CourseInstance'),
 						bVal = b.get('CourseInstance');
 

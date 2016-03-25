@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.Index', 
 		name: '.name'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -34,12 +34,12 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.Index', 
 		this.monitorUser($AppConfig.userObject);
 	},
 
-	monitorUser: function(user) {
+	monitorUser: function (user) {
 		var me = this,
 			m = {
 				scope: this,
 				destroyable: true,
-				'changed': function(r) {
+				'changed': function (r) {
 					var profile = me.avatar && me.avatar.down('.avatar-pic'),
 						a;
 
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.Index', 
 		}
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		var me = this;
 
 		this.callParent(arguments);
@@ -96,19 +96,19 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.Index', 
 		}
 	},
 
-	onMenuShow: function() {
+	onMenuShow: function () {
 		this.menu.show();
 	},
 
-	onMenuHide: function() {
+	onMenuHide: function () {
 		this.menu.hide();
 	},
 
-	cancelHideShowEvents: function() {
+	cancelHideShowEvents: function () {
 		clearTimeout(this.hideTimeout);
 	},
 
-	toggleMenu: function() {
+	toggleMenu: function () {
 		if (this.menu.isVisible()) {
 			this.setMenuClosed();
 		} else {
@@ -117,13 +117,13 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.Index', 
 		}
 	},
 
-	startToHideMenu: function() {
+	startToHideMenu: function () {
 		var me = this;
 
 		this.cancelHideShowEvents();
 
 		if (!Ext.is.iPad || this.menu.isHidden()) {
-			this.hideTimeout = setTimeout(function() {
+			this.hideTimeout = setTimeout(function () {
 				me.menu.hide();
 			}, 500);
 		}

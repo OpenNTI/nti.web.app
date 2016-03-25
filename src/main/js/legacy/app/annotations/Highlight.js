@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 	highlightCls: 'application-highlight',
 	mouseOverCls: 'highlight-mouse-over',
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 
 		//TODO hook up browser range for speed, throw away after render
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		this.allowShare = false;
 	},
 
-	getRange: function() {
+	getRange: function () {
 		var range = Anchors.toDomRange(this.getRecordField('applicableRange'), this.doc, lazyResolve.ReaderPanel.get().getCleanContent(), this.getRecordField('ContainerId'));
 
 		if (!range) {
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return range;
 	},
 
-	buildMenu: function(i) {
+	buildMenu: function (i) {
 		var items = [];
 
 		if (i) {
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return this.callParent([items]);
 	},
 
-	cleanup: function() {
+	cleanup: function () {
 		this.isDestroyed = true;
 		if (this.rendered) {
 			try {
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return this.callParent(arguments);
 	},
 
-	onMouseOver: function() {
+	onMouseOver: function () {
 		clearTimeout(this.mouseOutTimout);
 		if (!this.compElements.first().hasCls(this.mouseOverCls)) {
 			this.compElements.addCls(this.mouseOverCls);
@@ -112,9 +112,9 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 
 			if (Ext.is.iOS) {
 				var me = this;
-				Ext.defer(function() {
+				Ext.defer(function () {
 					var menu = Ext.get(Ext.query('.x-menu .x-component-nt-annotaion')[0]).el.up('.x-menu');
-					me.mon(Ext.getCmp(menu.id), 'destroy', function() {
+					me.mon(Ext.getCmp(menu.id), 'destroy', function () {
 						me.onMouseOut();
 					});
 				},250);
@@ -122,10 +122,10 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		}
 	},
 
-	onMouseOut: function() {
+	onMouseOut: function () {
 		var me = this;
 
-		function off() {
+		function off () {
 			me.compElements.removeCls(me.mouseOverCls);
 			me.render();
 		}
@@ -133,9 +133,9 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		this.mouseOutTimout = setTimeout(off, 250);
 	},
 
-	visibilityChanged: function(show) {
+	visibilityChanged: function (show) {
 		var c = this.compElements,
-				fn = show ? 'addCls' : 'removeCls';
+			fn = show ? 'addCls' : 'removeCls';
 		if (c) {
 			c[fn].call(c, this.highlightCls);
 			this.render();
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return this.callParent(arguments);
 	},
 
-	buildRange: function() {
+	buildRange: function () {
 		var range = this.doc.createRange();
 
 		if (this.rendered && this.rendered.length > 0) {
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return range;
 	},
 
-	resolveVerticalLocation: function() {
+	resolveVerticalLocation: function () {
 		var r, rect, node;
 
 		if (this.rendered) {
@@ -179,23 +179,23 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return !RectUtils.isZeroRect(rect) ? rect.top : NextThought.app.annotations.Base.HIDDEN;
 	},
 
-	render: function() {
+	render: function () {
 		if (this.isDestroyed) {
 			return;
 		}
 		var me = this,
-				range = null,
-				style = me.getRecordField('style'),
-				bounds,
-				boundingTop,
-				boundingLeft,
-				boundingHeight,
-				boundingWidth,
-				width = me.content ? me.content.getWidth() : 700, // Didn't seem appropriate for how it was used
-				topOffset = 10,
-				leftOffset = 5,
-				fakeRectRange,
-				state = 'normal', sampleEl;
+			range = null,
+			style = me.getRecordField('style'),
+			bounds,
+			boundingTop,
+			boundingLeft,
+			boundingHeight,
+			boundingWidth,
+			width = me.content ? me.content.getWidth() : 700, // Didn't seem appropriate for how it was used
+			topOffset = 10,
+			leftOffset = 5,
+			fakeRectRange,
+			state = 'normal', sampleEl;
 
 		if (!me.rendered) {
 			range = me.getRange();
@@ -263,13 +263,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		boundingHeight = Math.ceil(bounds.height);
 		boundingWidth = Math.ceil(bounds.width); // Seemed more appropriate than content width
 		Ext.fly(me.canvas).setXY([
-									 boundingLeft - leftOffset,
-									 boundingTop - topOffset
-								 ]);
+				boundingLeft - leftOffset,
+				boundingTop - topOffset
+			]);
 		Ext.fly(me.canvas).set({
-								   width: boundingWidth + (leftOffset * 2),
-								   height: boundingHeight + (topOffset * 2)
-							   });
+						width: boundingWidth + (leftOffset * 2),
+						height: boundingHeight + (topOffset * 2)
+					});
 
 
 		if (me.compElements.first().hasCls(me.mouseOverCls)) {
@@ -279,13 +279,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		//for measurement purposes, make a range that responds to measurement requests but uses the spans instead of the
 		//range rects, which appear to be buggy.
 		fakeRectRange = {
-			getBoundingClientRect: function() {
+			getBoundingClientRect: function () {
 				return range.getBoundingClientRect();
 			},
 			endContainer: range.endContainer,
-			getClientRects: function() {
+			getClientRects: function () {
 				var r = [];
-				me.compElements.each(function(e) {
+				me.compElements.each(function (e) {
 					if (e.dom) {
 						if (e.up('.' + me.highlightCls)) {
 							return;
@@ -315,12 +315,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return boundingTop || me.resolveVerticalLocation();
 	},
 
-	createCanvas: function() {
+	createCanvas: function () {
 
 		var id = 'annotation-container',
-				doc = this.doc,
-				body = this.doc.getElementById('NTIContent'),
-				cnt = doc.getElementById(id);
+			doc = this.doc,
+			body = this.doc.getElementById('NTIContent'),
+			cnt = doc.getElementById(id);
 
 		if (!cnt) {
 			cnt = doc.createElement('div');
@@ -333,9 +333,9 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 				'highlight-canvas');
 	},
 
-	createCounter: function(after) {
+	createCounter: function (after) {
 		var el = Ext.get(this.createNonAnchorableSpan()),
-				style = this.record.get('style') || 'plain';
+			style = this.record.get('style') || 'plain';
 
 		el.addCls([this.highlightCls, 'counter', style]);//,'with-count']);
 		el.on('click', this.onClick, this);
@@ -343,7 +343,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return el.dom;
 	},
 
-	isInlineElement: function(node) {
+	isInlineElement: function (node) {
 		return {
 			none: true,
 			inline: true,
@@ -354,7 +354,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		//return !this.self.blockElementRe.test(node.nodeName);
 	},
 
-	validToWrapEntireNode: function(node) {
+	validToWrapEntireNode: function (node) {
 		var ntiInline;
 		if (node.nodeType === node.TEXT_NODE) {
 			return true;
@@ -382,7 +382,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return false;
 	},
 
-	onClick: function(e) {
+	onClick: function (e) {
 		if (this.ownerCmp.getAnnotations().getSelection() || !this.isModifiable) {
 			return;
 		}
@@ -397,22 +397,22 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return p;
 	},
 
-	wrapRange: function(node, range) {
+	wrapRange: function (node, range) {
 		var nodeList = [],
-				newRange,
-				nodeRange = node.ownerDocument.createRange(),
+			newRange,
+			nodeRange = node.ownerDocument.createRange(),
 
-				startToStart,
-				startToEnd,
-				endToStart,
-				endToEnd,
+			startToStart,
+			startToEnd,
+			endToStart,
+			endToEnd,
 
-				BEFORE = -1,
-				SAME = 0,
-				AFTER = 1,
+			BEFORE = -1,
+			SAME = 0,
+			AFTER = 1,
 
-				valid,
-				display;
+			valid,
+			display;
 
 		nodeRange.selectNodeContents(node);
 		startToStart = nodeRange.compareBoundaryPoints(Range.START_TO_START, range);
@@ -432,7 +432,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 
 		//If the node overlaps with the range in anyway we need to work on it's children
 		else {
-			Ext.each(node.childNodes, function(i) {
+			Ext.each(node.childNodes, function (i) {
 				nodeList.push.apply(nodeList, this.wrapRange(i, range));
 			}, this);
 
@@ -460,13 +460,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return Ext.Array.clean(nodeList);
 	},
 
-	doWrap: function(range) {
+	doWrap: function (range) {
 		var span,
-				style = this.record.get('style') || 'plain',
-				s,
-				rangeString = range.toString(),
-				sc = range.startContainer,
-				selectedNodes = RangeUtils.getSelectedNodes(range, range.commonAncestorContainer.ownerDocument);
+			style = this.record.get('style') || 'plain',
+			s,
+			rangeString = range.toString(),
+			sc = range.startContainer,
+			selectedNodes = RangeUtils.getSelectedNodes(range, range.commonAncestorContainer.ownerDocument);
 
 		//This drops entire empty ranges, anything that wraps no text is thrown out.
 		if (!rangeString || /^\s+$/.test(rangeString)) {
@@ -503,9 +503,9 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return span;
 	},
 
-	getScrollPosition: function(currentPosition) {
+	getScrollPosition: function (currentPosition) {
 		var dh = 100,
-				range = this.getRange(), top;
+			range = this.getRange(), top;
 
 		if (range) {
 			top = Math.floor(range.getBoundingClientRect().top);
@@ -515,7 +515,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		return 0;
 	},
 
-	unwrap: function(node) {
+	unwrap: function (node) {
 		var r, p = node.parentNode;
 
 		if (node.firstChild) {

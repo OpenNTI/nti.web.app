@@ -11,26 +11,26 @@ module.exports = exports = Ext.define('NextThought.common.menus.BlogTogglePublis
 		xtype: 'menucheckitem',
 		plain: true,
 		group: 'publish',
-		handler: function(item) {
+		handler: function (item) {
 			item.up('.menu').handleClick(item);
 		}
 	},
 
 	items: [{
-			text: getString('NextThought.view.menus.BlogTogglePublish.publish'),
-			published: true
-		},
-		{
-			text: getString('NextThought.view.menus.BlogTogglePublish.onlyme'),
-			published: false
-		}
+		text: getString('NextThought.view.menus.BlogTogglePublish.publish'),
+		published: true
+	},
+	{
+		text: getString('NextThought.view.menus.BlogTogglePublish.onlyme'),
+		published: false
+	}
 	],
 
-	initComponent: function(config) {
+	initComponent: function (config) {
 		this.callParent(arguments);
 	},
 
-	updateFromRecord: function(rec) {
+	updateFromRecord: function (rec) {
 		if (rec && rec.isPublished()) {
 			this.down('[published=true]').setChecked(true, true);
 		}else {
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.common.menus.BlogTogglePublis
 		}
 	},
 
-	handleClick: function(item) {
+	handleClick: function (item) {
 		var action = item.published;
 		if (this.record.isPublished() === action) { return; }
 

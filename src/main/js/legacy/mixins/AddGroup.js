@@ -3,16 +3,16 @@ var GroupsActions = require('../app/groups/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
-	attachAddGroupControl: function(parent, tag) {
+	attachAddGroupControl: function (parent, tag) {
 		var link;
 		this.addGroupParent = parent;
 		this.addGroupTag = tag;
 		this.addGroupDom = link = Ext.DomHelper.append(this.addGroupParent,
-				{
-					tag: this.addGroupTag,
-					cls: 'add-group-action selection-list-item',
-					role: 'button',
-					children: [
+			{
+				tag: this.addGroupTag,
+				cls: 'add-group-action selection-list-item',
+				role: 'button',
+				children: [
 						{ tag: 'a', href: '#', html: 'Create New List' },
 						{ cls: 'input-wrap empty', style: {display: 'none'}, cn: [
 							{ cls: 'clear' },
@@ -20,11 +20,11 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 							{ cls: 'save-button save-button-disabled', html: 'Add' }
 						]}
 					]
-				}, true);
+			}, true);
 
 		link.down('a').on('click', this.addGroupClicked, this);
 		link.down('.clear').on('click', this.addGroupClearBox, this);
-		link.down('.save-button').on('click', function() {
+		link.down('.save-button').on('click', function () {
 			this.submitNewGroup(link.down('input').dom.value);
 		}, this);
 		link.down('input').on({
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 		});
 	},
 
-	addGroupClearBox: function() {
+	addGroupClearBox: function () {
 		var w = this.addGroupDom.down('.input-wrap');
 		w.addCls('empty');
 		w.down('input').dom.value = '';
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 		this.reset();
 	},
 
-	newGroupKeyDown: function(event) {
+	newGroupKeyDown: function (event) {
 		var specialKeys = {
 			27: true,	//Ext.EventObject.prototype.ESC
 			8: true,	//Ext.EventObject.prototype.BACKSPACE
@@ -58,13 +58,13 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 		}
 	},
 
-	keyUp: function(event) {
+	keyUp: function (event) {
 		var len = event.getTarget().value.trim().length;
 		this.addGroupDom.down('.input-wrap')[(len > 0) ? 'removeCls' : 'addCls']('empty');
 		this.addGroupDom.down('.save-button')[(len > 0) ? 'removeCls' : 'addCls']('save-button-disabled');
 	},
 
-	newGroupKeyPressed: function(event) {
+	newGroupKeyPressed: function (event) {
 		var k = event.getKey();
 		if (k === event.ESC) {
 			event.stopEvent();
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 		return true;
 	},
 
-	submitNewGroup: function(groupName) {
+	submitNewGroup: function (groupName) {
 		this.GroupActions = NextThought.app.groups.Actions.create();
 		var input = this.addGroupDom.down('input'),
 			me = this,
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 
 		input.blur();
 		me.GroupActions.createList(groupName, friends)
-			.then(function(success){
+			.then(function (success) {
 				if (!success) { input.addCls('error'); }
 				me.afterGroupAdd(groupName);
 			});
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 		delete this.newListInputBoxActive;
 	},
 
-	addGroupClicked: function(e) {
+	addGroupClicked: function (e) {
 		var a = Ext.get(e.getTarget('a', undefined, true)),
 			wrap = a.next('.input-wrap'),
 			input = wrap.down('input');
@@ -123,8 +123,8 @@ module.exports = exports = Ext.define('NextThought.mixins.AddGroup', {
 		this.newListInputBoxActive = true;
 
 		// Make sure nothing steals focus while the input is visible
-		input.un('blur').on('blur', function() {
-		  if (input.isVisible()) {
+		input.un('blur').on('blur', function () {
+		  	if (input.isVisible()) {
 			input.focus(200);
 		  }
 		}).focus();

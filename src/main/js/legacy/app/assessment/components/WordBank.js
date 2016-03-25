@@ -13,17 +13,17 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'wordbank-body', id: '{id}-bodyEl',
 		cn: { 'tag': 'tpl', 'for': 'entries', cn: [
-		{
-			cls: 'target wordentry drag {parent.unique:boolStr("unique")}',
-			'data-wid': '{wid:htmlEncode}',
-			'data-lang': '{lang:htmlEncode}',
-			'data-question': '{parent.question}',
-			'data-part': '{parent.part}',
-			'data-word': '{word:htmlEncode}',
-			cn: [{cls: 'reset'}, '{[this.parseWord(values, parent.ownerCmp)]}']
-		}
-	]}}), {
-		parseWord: function(values, cmp) { return cmp.parseWordEntry(values.content || values.word); }
+			{
+				cls: 'target wordentry drag {parent.unique:boolStr("unique")}',
+				'data-wid': '{wid:htmlEncode}',
+				'data-lang': '{lang:htmlEncode}',
+				'data-question': '{parent.question}',
+				'data-part': '{parent.part}',
+				'data-word': '{word:htmlEncode}',
+				cn: [{cls: 'reset'}, '{[this.parseWord(values, parent.ownerCmp)]}']
+			}
+		]}}), {
+		parseWord: function (values, cmp) { return cmp.parseWordEntry(values.content || values.word); }
 	}),
 
 
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 	})),
 
 
-	parseDomString: function(dom) {
+	parseDomString: function (dom) {
 		var a = document.createElement('div');
 
 		a.id = 'tempdom';
@@ -46,13 +46,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 	},
 
 
-	parseWordEntry: function(word) {
+	parseWordEntry: function (word) {
 		var d = this.parseDomString(word),
 			tpl = this.audioTeplate,
 			elements = d.querySelectorAll('object[type$=ntiaudio]'),
 			x = elements.length - 1, c, o, p;
 
-		function trn(o) {
+		function trn (o) {
 			if (o.service !== 'html5' || o.source.length !== o.type.length) {
 				console.error('Bad audio source', o);
 				return [];
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 			return a;
 		}
 
-		function flatten(agg, v) { return agg.concat(v); }
+		function flatten (agg, v) { return agg.concat(v); }
 
 
 		for (x; x >= 0; x--) {
@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		var bank = this.record.get('wordbank'),
 			e = (bank && bank.get('entries')) || [],
 			num = Ext.isNumber(this.partNumber) ? this.partNumber : undefined;
@@ -108,14 +108,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 			part: num,
 			ownerCmp: this,
 			question: this.questionId,
-			entries: e.map(function(e) {return e.getData();})
+			entries: e.map(function (e) {return e.getData();})
 		});
 
 		return this.callParent(arguments);
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.setupAudioClips();
 		this.setupDragging();
@@ -123,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 	},
 
 
-	lockWordBank: function(xy, left, refEl) {
+	lockWordBank: function (xy, left, refEl) {
 		if (this.wordbankLocked) {return;}
 		this.wordbankLocked = true;
 
@@ -141,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 
 		body.addCls('locked');
 
-		function onResize() {
+		function onResize () {
 			if (body.getStyle('position', true) !== 'fixed' || !body.dom) {return;}
 
 			var refXY = Ext.fly(refEl).getXY();
@@ -150,13 +150,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 
 		Ext.EventManager.onWindowResize(onResize, window);
 
-		this.wordbankLocked = function() {
+		this.wordbankLocked = function () {
 			Ext.EventManager.removeResizeListener(onResize, window);
 		};
 	},
 
 
-	unlockWordBank: function() {
+	unlockWordBank: function () {
 		if (!this.wordbankLocked) {return;}
 		if (Ext.isFunction(this.wordbankLocked)) {
 			this.wordbankLocked();
@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 	},
 
 
-	onWordBankScroll: function(ev, scrollingEl) {
+	onWordBankScroll: function (ev, scrollingEl) {
 		var xy = this.el.getXY(),
 			refXY = Ext.fly(scrollingEl).getXY(),
 			diffY = xy[1] - refXY[1],
@@ -200,7 +200,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 	},
 
 
-	setupScrollLock: function() {
+	setupScrollLock: function () {
 		var reader = this.reader;
 		if (!reader || this.up('question-parts') || this.question.get('parts').length === 1) {
 			return;
@@ -212,10 +212,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 	},
 
 
-	setupAudioClips: function() {
+	setupAudioClips: function () {
 		var me = this;
 
-		function toggle(e) {
+		function toggle (e) {
 			e.stopEvent();
 			var el = e.getTarget(),
 				p = el.querySelector('audio');
@@ -226,11 +226,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 		}
 
 
-		function playing(e) { e.getTarget('button.audio-clip', 0, true).addCls('playing'); }
-		function stopped(e) { e.getTarget('button.audio-clip', 0, true).removeCls('playing'); }
+		function playing (e) { e.getTarget('button.audio-clip', 0, true).addCls('playing'); }
+		function stopped (e) { e.getTarget('button.audio-clip', 0, true).removeCls('playing'); }
 
 
-		function cannotPlay(e) {
+		function cannotPlay (e) {
 			var el = e.getTarget('button.audio-clip', 0, true);
 			el.addCls('noplay');
 			el.set({
@@ -240,7 +240,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 
 
 
-		this.el.select('audio').each(function(audio) {
+		this.el.select('audio').each(function (audio) {
 			me.mon(audio, {
 				abort: stopped,
 				emptied: stopped,
@@ -255,7 +255,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 	},
 
 
-	getItem: function(wid) {
+	getItem: function (wid) {
 		if (!this.rendered) {
 			Ext.Error.raise('Not rendered.');
 		}
@@ -264,7 +264,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 	},
 
 
-	getDragProxy: function() {
+	getDragProxy: function () {
 		var proxy = this.dragProxy;
 
 		if (!proxy) {
@@ -280,16 +280,16 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 	},
 
 
-	setupDragging: function() {
+	setupDragging: function () {
 		var cfg, me = this;
 
 		cfg = {
 			animRepair: true,
 			proxy: this.getDragProxy(),
 
-			afterRepair: function() { this.dragging = false; }, //override to stop the flash
+			afterRepair: function () { this.dragging = false; }, //override to stop the flash
 
-			getDragData: function(e) {
+			getDragData: function (e) {
 				var sourceEl = e.getTarget('.drag'), d;
 				if (sourceEl && !e.getTarget('.used') && !me.up('assessment-question').submitted) {
 					d = document.createElement('div');
@@ -305,15 +305,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 				}
 			},
 
-			getRepairXY: function() {
+			getRepairXY: function () {
 				return this.dragData.repairXY;
 			},
 
-			onBeforeDrag: function() {
+			onBeforeDrag: function () {
 				return !me.submitted;
 			},
 
-			onStartDrag: function() {
+			onStartDrag: function () {
 				var data = this.dragData,
 					co = Ext.fly(data.sourceEl).up('.component-overlay'),
 					so = data.sourceEl,
@@ -331,7 +331,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Wor
 				Ext.fly(so).addCls('dragging');
 			},
 
-			onEndDrag: function(data) {
+			onEndDrag: function (data) {
 				if (data.shield) {
 					data.shield.remove();
 					delete data.shield;

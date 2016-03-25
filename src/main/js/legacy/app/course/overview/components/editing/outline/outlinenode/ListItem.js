@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		dateContainerEl: '.date-container'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var move = new NextThought.model.app.MoveInfo({
@@ -39,23 +39,23 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.setDataTransfer(this.record);
 
 		this.loadContents = Promise.all([
-				this.getPreview(this.record, this.bundle),
-				this.getControls(this.record, this.bundle)
-			]).then(this.addParts.bind(this));
+			this.getPreview(this.record, this.bundle),
+			this.getControls(this.record, this.bundle)
+		]).then(this.addParts.bind(this));
 	},
 
-	onceLoaded: function() {
+	onceLoaded: function () {
 		return this.loadContents || Promise.resolve();
 	},
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.titleEl, 'click', this.handleClick.bind(this));
 		this.addCalendarPicker();
 	},
 
-	addParts: function(o) {
+	addParts: function (o) {
 		var me = this, 
 			controls = o[1] || [];
 
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		this.onceRendered
-			.then(function() {
+			.then(function () {
 				var start = me.record && me.record.get('AvailableBeginning'),
 					config;
 				
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				me.titleEl.update(me.record.getTitle());
 
 				// Add the controls
-				for (var i=0; i < controls.length; i++) {
+				for (var i = 0; i < controls.length; i++) {
 					config = controls[i];
 					config.renderTo = me.controlsEl;
 					Ext.widget(config);
@@ -88,11 +88,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * For now, restrict the drag and drop to only the title.
 	 * We don't want drag the controls.
 	 */
-	getDragHandle: function(){
+	getDragHandle: function () {
 		return this.titleEl.dom;
 	},
 
-	addCalendarPicker: function(){
+	addCalendarPicker: function () {
 		var container = this.el.down('.calendar-container');
 
 		if (container) {
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	getStartDate: function(){
+	getStartDate: function () {
 		var start = this.record && this.record.get('AvailableBeginning'),
 			catalog;
 
@@ -122,20 +122,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Promise.resolve(catalog.get('StartDate'));
 	},
 
-	setDayAndMonth: function(date){
+	setDayAndMonth: function (date) {
 		var parts, m;
 		if (this.dateCmp && this.dateCmp.setDayAndMonth) {
 			this.dateCmp.setDayAndMonth(date);
 		}	
 	},
 
-	handleClick: function(e){
+	handleClick: function (e) {
 		if (this.navigateToOutlineNode) {
 			this.navigateToOutlineNode(this.record);
 		}
 	},
 
-	getPreview: function(record) {
+	getPreview: function (record) {
 		return Promise.resolve({
 			xtype: 'box',
 			autoEl: {
@@ -144,11 +144,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	getControls: function(record, bundle) {
+	getControls: function (record, bundle) {
 		var me = this;
 
 		return record.getContents()
-			.then(function(contents) {
+			.then(function (contents) {
 				return {
 					xtype: 'overview-editing-controls-publish',
 					contents: contents,
@@ -157,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					beforeShowMenu: me.beforeShowMenuControl
 				};
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.log('Failed to load contents for: ', record.getTitle(), ' ', reason);
 			});
 	}

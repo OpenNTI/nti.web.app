@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 	VISIBILITY_STATE: null,
 	VISIBILITY_EVENT: null,
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 
 		this.mixins.observable.constructor.call(this, config);
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 		this.initActivityListeners();
 	},
 
-	initTimeoutFns: function() {
+	initTimeoutFns: function () {
 		var diff, warn, inactive,
 			blurName = 'blur_timeout',
 			inactiveName = 'inactive_timeout';
@@ -65,10 +65,10 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 		this.stopInactiveTimeout = this.__stopTimeout.bind(this, inactiveName);
 	},
 
-	initActivityListeners: function() {
+	initActivityListeners: function () {
 		var me = this;
 
-		function restartTimeout() {
+		function restartTimeout () {
 			me.stopInactiveTimeout();
 			me.startInactiveTimeout();
 
@@ -87,11 +87,11 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 		document.addEventListener('scroll', restartTimeout, true);
 	},
 
-	initVisibilityListeners: function() {
+	initVisibilityListeners: function () {
 		var me = this,
 			browserPrefixes = ['moz', 'ms', 'o', 'webkit'];
 
-		function checkPrefixes() {
+		function checkPrefixes () {
 			var i, hidden, prefix;
 
 			for (i = 0; i < browserPrefixes.length; i++) {
@@ -124,10 +124,10 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 		}
 	},
 
-	__setUpVisibilityListeners: function() {
+	__setUpVisibilityListeners: function () {
 		var me = this;
 
-		document.addEventListener(this.VISIBILITY_EVENT, function() {
+		document.addEventListener(this.VISIBILITY_EVENT, function () {
 			var hidden = me.isHidden();
 
 			if (hidden) {
@@ -140,12 +140,12 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 		});
 	},
 
-	__setUpLegacyListeners: function() {
+	__setUpLegacyListeners: function () {
 		var me = this,
 			oldOnFocus = window.onfocus,
 			oldOnBlur = window.onblur;
 
-		window.onfocus = function() {
+		window.onfocus = function () {
 			me.is_legacy_hidden = false;
 
 			me.__onVisibile();
@@ -160,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 		};
 
 
-		window.onblur = function() {
+		window.onblur = function () {
 			me.is_legacy_hidden = true;
 
 			me.__onHide();
@@ -175,13 +175,13 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 		};
 	},
 
-	__onHide: function() {
+	__onHide: function () {
 		this.startBlurTimeout();
 
 		this.fireEvent('page-hidden');
 	},
 
-	__onVisibile: function() {
+	__onVisibile: function () {
 		this.stopBlurTimeout();
 
 		if (this.is_inactive) {
@@ -191,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 		this.fireEvent('page-visible');
 	},
 
-	__setInactive: function() {
+	__setInactive: function () {
 		console.log('VISIBILITY: inactive');
 
 		this.is_inactive = true;
@@ -203,7 +203,7 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 		}
 	},
 
-	__setActive: function() {
+	__setActive: function () {
 		console.log('VISIBILITY: active');
 		this.is_inactive = false;
 
@@ -215,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 		this.fireEvent('active');
 	},
 
-	__warn: function(name, inactiveTime, showToast) {
+	__warn: function (name, inactiveTime, showToast) {
 		if (showToast && !this.inactiveToast) {
 			this.inactiveToast = Toaster.makeToast({
 				title: 'You\'ve been set inactive.',
@@ -230,27 +230,27 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 		}
 	},
 
-	__startTimeout: function(name, timeout, warnFn) {
+	__startTimeout: function (name, timeout, warnFn) {
 		this[name] = setTimeout(warnFn, timeout);
 	},
 
-	__stopTimeout: function(name) {
+	__stopTimeout: function (name) {
 		clearTimeout(this[name]);
 	},
 
-	lockActive: function() {
+	lockActive: function () {
 		this.locked_active = true;
 	},
 
-	unlockActive: function() {
+	unlockActive: function () {
 		this.locked_active = false;
 	},
 
-	isInactive: function() {
+	isInactive: function () {
 		return this.is_inactive;
 	},
 
-	isHidden: function() {
+	isHidden: function () {
 		if (this.HIDDEN) {
 			return document[this.HIDDEN];
 		}
@@ -258,7 +258,7 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 		return this.is_legacy_hidden;
 	},
 
-	getVisibilityState: function() {
+	getVisibilityState: function () {
 		if (!this.VISIBILITY_STATE) { return 'visible'; }
 
 		return document[this.VISIBILITY_STATE];

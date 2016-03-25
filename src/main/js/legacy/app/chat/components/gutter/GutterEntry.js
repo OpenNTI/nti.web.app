@@ -36,19 +36,19 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Gu
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.setStatus(this.user && this.user.getPresence());
 		this.mon(this.avatar, 'click', this.showChat.bind(this));
 	},
 
 
-	showChat: function(e) {
+	showChat: function (e) {
 		this.openChatWindow(this.user, this, e);
 	},
 
 
-	setStatus: function(presence) {
+	setStatus: function (presence) {
 		var currentStatus = this.presence && this.presence.dom.classList[1],
 			currentActiveStatus = this.avatar && this.avatar.dom.classList[1];
 
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Gu
 	},
 
 
-	updateBadgeCount: function(count) {
+	updateBadgeCount: function (count) {
 		// Keep the unread message count on the record,
 		// that way if we redraw the entry it will still be there.
 		this.user.set('unreadMessageCount', count);
@@ -71,14 +71,14 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Gu
 	},
 
 
-	clearUnreadCount: function() {
+	clearUnreadCount: function () {
 		this.unreadMessageIds = [];
 		this.user.set('unreadMessageCount', 0);
 		this.updateBadgeCount(0);
 	},
 
 
-	handleWindowNotify: function(win, msg) {
+	handleWindowNotify: function (win, msg) {
 		if (!win || win.isVisible() || isMe(msg.Creator)) {
 			return;
 		}

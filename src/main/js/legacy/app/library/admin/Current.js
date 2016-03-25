@@ -11,11 +11,11 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Current', {
 	storeModel: 'NextThought.model.courses.CourseInstanceAdministrativeRole',
 
 	statics: {
-		shouldShow: function() {
+		shouldShow: function () {
 			var CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 
 			return CourseStore.onceLoaded()
-				.then(function() {
+				.then(function () {
 					var admin = CourseStore.getAdminCourses();
 
 					return admin.length;
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Current', {
 
 	items: [],
 
-	showCurrentItems: function() {
+	showCurrentItems: function () {
 		var current = this.CourseStore.getCurrentAdminCourses(),
 			upcoming = this.CourseStore.getUpcomingAdminCourses(),
 			archived = this.CourseStore.getArchivedAdminCourses(),
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Current', {
 		otherLength = 4 - current.length;
 
 		if (otherLength > 0) {
-			otherCourses.sort(function(a, b) {
+			otherCourses.sort(function (a, b) {
 				var aVal = a.get('CreatedTime'),
 					bVal = a.get('CreatedTime');
 
@@ -57,9 +57,9 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Current', {
 		return this.showItems(current);
 	},
 
-	maybeShowAdd: function() {},
+	maybeShowAdd: function () {},
 
-	onSeeAllClick: function() {
+	onSeeAllClick: function () {
 		if (this.pushRoute) {
 			this.pushRoute('Administered Courses', '/admin');
 		}

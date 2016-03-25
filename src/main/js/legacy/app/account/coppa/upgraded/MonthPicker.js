@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Mo
 	itemCls: 'x-menu-item',
 	itemSelector: 'x-menu-item',
 
-	constructor: function() {
+	constructor: function () {
 		this.store = new Ext.data.Store({
 			fields: ['name', 'id'],
 			data: [
@@ -46,13 +46,13 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Mo
 		this.callParent(arguments);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.on('select', this.onSelect, this);
 		this.on('itemclick', this.onSelect, this);
 	},
 
-	onSelect: function() {
+	onSelect: function () {
 		this.hide();
 	}
 });

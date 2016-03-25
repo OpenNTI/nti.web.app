@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 	frame: false,
 
 	statics: {
-		getTargetVideoWidth: function(el, transcriptRatio) {
+		getTargetVideoWidth: function (el, transcriptRatio) {
 			return 512;
 		}
 	},
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 
 	layout: 'none',
 	childEls: ['body'],
-	getTargetEl: function() { return this.body; },
+	getTargetEl: function () { return this.body; },
 
 	renderSelectors: {
 		headerEl: '.header',
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		syncEl: '.sync-button'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.buildResourceView();
 		this.enableBubble(['jump-video-to']);
@@ -59,15 +59,15 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		this.initSearch();
 	},
 
-	getContainerIdForSearch: function() {
+	getContainerIdForSearch: function () {
 		return this.video.getId();
 	},
 
-	showSearch: function(hit, fragIdx) {
+	showSearch: function (hit, fragIdx) {
 		this.startAtMillis = hit.get('StartMilliSecs');
 	},
 
-	buildResourceView: function() {
+	buildResourceView: function () {
 		var me = this;
 
 		this.resourceView = this.add({
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 			videoPlaylist: [this.video],
 			currentBundle: this.currentBundle,
 			xhooks: {
-				getScrollTarget: function() { return this.ownerCt.getTargetEl().dom; }
+				getScrollTarget: function () { return this.ownerCt.getTargetEl().dom; }
 			}
 		});
 
@@ -92,12 +92,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		this.mon(this.resourceView, 'unsync-video', 'unSyncVideo', this);
 
 		wait(500)
-			.then(function() {
+			.then(function () {
 				me.resourceView.maybeLoadData();
 			});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.syncVideo();
 		this.mon(this.syncEl, 'click', 'syncVideo');
@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		Ext.defer(this.configureVideoPlayer, 300, this);
 	},
 
-	beforeDeactivate: function() {
+	beforeDeactivate: function () {
 		var shouldDeactivate = true;
 		if (this.resourceView && this.resourceView.beforeDeactivate) {
 			shouldDeactivate = this.resourceView.beforeDeactivate();
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		}
 	},
 
-	allowNavigation: function() {
+	allowNavigation: function () {
 		if (this.videoplayer.isPlaying()) {
 			this.videoplayer.pausePlayback();
 			this.didPauseVideoPlayer = true;
@@ -128,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		}
 	},
 
-	setNext: function(video) {
+	setNext: function (video) {
 		this.nextVideo = video;
 
 		if (this.videoPlayer) {
@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		}
 	},
 
-	setPrev: function(video) {
+	setPrev: function (video) {
 		this.prevVideo = video;
 
 		if (this.videoPlayer) {
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		}
 	},
 
-	configureVideoPlayer: function() {
+	configureVideoPlayer: function () {
 		var width = this.self.getTargetVideoWidth(this.getEl(), this.transcriptRatio),
 			startTimeSeconds = (this.startAtMillis || 0) / 1000,
 			range, pointer;
@@ -184,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		this.on('jump-video-to', Ext.bind(this.videoplayer.jumpToVideoLocation, this.videoplayer), this);
 	},
 
-	adjustOnResize: function(availableHeight, availableWidth) {
+	adjustOnResize: function (availableHeight, availableWidth) {
 		if (!this.resourceView) { return; }
 
 		var videoWidth = this.videoPlayerEl.getWidth(),
@@ -199,7 +199,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		this.videoPlayerEl.setStyle('-ms-flex-basis', videoWidth + 'px');
 	},
 
-	alignResourceViewNextToVideo: function(left, top) {
+	alignResourceViewNextToVideo: function (left, top) {
 		var padding = 20,
 			targetEl = this.getTargetEl();
 
@@ -209,11 +209,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		targetEl.setStyle('marginLeft', left + padding + 'px');
 	},
 
-	onPresentationPartsReady: function() {
+	onPresentationPartsReady: function () {
 		this.fireEvent('media-viewer-ready', this);
 	},
 
-	willShowAnnotation: function(annotationView) {
+	willShowAnnotation: function (annotationView) {
 		if (!this.resourceView) { return;}
 
 		var nWidth = annotationView.getWidth(),
@@ -228,12 +228,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		}
 	},
 
-	willHideAnnotation: function(annotationView) {
+	willHideAnnotation: function (annotationView) {
 		this.videoPlayerEl.setStyle('left', '10px');
 		this.getTargetEl().setStyle('left', '0px');
 	},
 
-	unSyncVideo: function() {
+	unSyncVideo: function () {
 		var transcript = this.resourceView;
 		this.syncWithTranscript = false;
 
@@ -244,7 +244,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		}
 	},
 
-	actOnMediaHeartBeat: function() {
+	actOnMediaHeartBeat: function () {
 		var state = this.videoplayer.queryPlayer(),
 			time = state && state.time;
 
@@ -256,7 +256,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		}
 	},
 
-	startAtSpecificTime: function(time, isSeconds) {
+	startAtSpecificTime: function (time, isSeconds) {
 		var startTimeSeconds = !isSeconds ? (time || 0) / 1000 : time;
 
 		console.debug('Should scroll cmps to time: ', startTimeSeconds);
@@ -269,7 +269,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		}
 	},
 
-	syncVideo: function() {
+	syncVideo: function () {
 		this.syncWithTranscript = true;
 
 		if (this.syncEl) {
@@ -277,15 +277,15 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		}
 	},
 
-	getLocationInfo: function() {
+	getLocationInfo: function () {
 		var me = this;
 
-		return new Promise(function(fufill, reject) {
+		return new Promise(function (fufill, reject) {
 			ContentUtils.getLineage(me.video.get('NTIID'), this.ownerCt && this.ownerCt.currentBundle)
-				.then(function(lineages) {
+				.then(function (lineages) {
 					var lineage = lineages[0];
 					ContentUtils.getLocation(lineage.last(), bundle)
-						.then(function(location) {
+						.then(function (location) {
 							me.setLocationInfo(location);
 							fulfill(location);
 						});
@@ -294,7 +294,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		});
 	},
 
-	videoNavigation: function(video) {
+	videoNavigation: function (video) {
 		if (!video) {
 			return;
 		}
@@ -313,14 +313,14 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 		}
 	},
 
-	beforeGridViewerShow: function() {
+	beforeGridViewerShow: function () {
 		if (this.videoplayer.isPlaying()) {
 			this.videoplayer.pausePlayback();
 			this.didPauseVideoPlayer = true;
 		}
 	},
 
-	afterGridViewerHide: function() {
+	afterGridViewerHide: function () {
 		if (this.didPauseVideoPlayer) {
 			this.videoplayer.resumePlayback();
 			delete this.didPauseVideoPlayer;

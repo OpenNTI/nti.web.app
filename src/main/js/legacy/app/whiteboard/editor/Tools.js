@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.Tools',
 		]
 	}],
 
-	initComponent: function() {
+	initComponent: function () {
 		var me = this;
 		me.callParent(arguments);
 
@@ -59,22 +59,22 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.Tools',
 		me.maybeRemoveImageFeature();
 
 		//attach click handlers:
-		Ext.each(me.query('button[tool]'), function(b) {b.on('click', me.switchMenus, me);});
+		Ext.each(me.query('button[tool]'), function (b) {b.on('click', me.switchMenus, me);});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		var me = this;
 		me.callParent(arguments);
-		Ext.each(me.query('wb-tool'), function(i) {
+		Ext.each(me.query('wb-tool'), function (i) {
 			me.mon(i.el, {
-				click: function() {
+				click: function () {
 					me.fireEvent('wb-tool-change', me);
 				}
 			});
 		});
 	},
 
-	maybeRemoveImageFeature: function() {
+	maybeRemoveImageFeature: function () {
 		if (Service.canCanvasURL()) {
 			return; //images approved, no delete...
 		}
@@ -96,19 +96,19 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.Tools',
 		}
 	},
 
-	switchMenus: function(btn) {
+	switchMenus: function (btn) {
 		var q = Ext.String.format('[forTool={0}]', btn.tool);
 		delete this.currentTool;
 		this.down('container[ui=secondary]').getLayout().setActiveItem(this.down(q));
 	},
 
-	setCurrentTool: function(tool) {
+	setCurrentTool: function (tool) {
 		var b = this.down('wb-tool[tool=' + tool + ']');
 		b.fireEvent('click', b);
 		b.toggle(true);
 	},
 
-	getCurrentTool: function() {
+	getCurrentTool: function () {
 		if (!this.currentTool) {
 			this.currentTool = this.down('container[ui=secondary]').getLayout().getActiveItem();
 		}

@@ -24,14 +24,14 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Naviga
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.dropdownEl, 'click', this.dropDownClick.bind(this));
 	},
 
 
-	buildMenu: function(options) {
+	buildMenu: function (options) {
 		if (this.viewMenu) {
 			this.viewMenu.hide();
 			this.viewMenu.removeAll();
@@ -64,14 +64,14 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Naviga
 	},
 
 
-	switchView: function(item) {
+	switchView: function (item) {
 		this.bodyView.setState({
 			active: item.type
 		});
 	},
 
 
-	updateState: function(active, options) {
+	updateState: function (active, options) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateState.bind(this, active, options));
 			return;
@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Naviga
 	},
 
 
-	dropDownClick: function(e) {
+	dropDownClick: function (e) {
 		if (e.getTarget('.available')) {
 			this.bodyView.showAvailable(this.activeItem.available.title, this.activeItem.available.route);
 		} else if (!e.getTarget('.disabled') && e.getTarget('.label')) {

@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	 * @param {String|String[]|Object|Object[]} items
 	 * @param {Object} [supplemental] Properties to add to the parsed items (such as flags)
 	 */
-	parseItems: function(items, supplemental) {
+	parseItems: function (items, supplemental) {
 		var key, item, reader, results = [];
 
 		if (!Ext.isArray(items)) {
@@ -45,8 +45,8 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		return results;
 	},
 
-	findModel: function(data) {
-		function recurse(dir, modelName) {
+	findModel: function (data) {
+		function recurse (dir, modelName) {
 			var sub, o = dir[modelName];
 
 			if (o) {
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		return recurse(NextThought.model, name);
 	},
 
-	getReaderFor: function(item) {
+	getReaderFor: function (item) {
 		this.readers = this.readers || [];
 
 		var o = this.findModel(item);
@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 
 	},
 
-	isNTIID: function(id) {
+	isNTIID: function (id) {
 		return Boolean(this.parseNTIID(id));
 	},
 
@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	 * @param {String} id
 	 * @return {Object} an object containing the components of the id
 	 */
-	parseNTIID: function(id) {
+	parseNTIID: function (id) {
 		var parts = (typeof id !== 'string' ? (id || '').toString() : id).split(':'),
 			authority, specific,
 			result = {};
@@ -154,8 +154,8 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		//Define a setter on provider property so we can match the ds escaping of '-' to '_'
 		ObjectUtils.defineAttributes(result.specific, {
 			provider: {
-				getter: function() {return this.$$provider;},
-				setter: function(p) {
+				getter: function () {return this.$$provider;},
+				setter: function (p) {
 					if (p && p.replace) {
 						p = p.replace(/-/g, '_');
 					}
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 
 		result.specific.provider = specific.length === 3 ? specific[0] : null;
 
-		result.toString = function() {
+		result.toString = function () {
 			var m = this,
 				a = [
 					m.authority.name,
@@ -185,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		};
 
 		//FIXME include authority?
-		result.toURLSuffix = function() {
+		result.toURLSuffix = function () {
 			//#!html/mathcounts/mathcounts2013.warm_up_7
 			var m = this, components = [];
 
@@ -206,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	 * @param {string} id
 	 * @return {string} CSS-friendly string to use in a selector
 	 */
-	escapeId: function(id) {
+	escapeId: function (id) {
 		return id.replace(/:/g, '\\3a ') //no colons
 				.replace(/,/g, '\\2c ')//no commas
 				.replace(/\./g, '\\2e ');//no periods
@@ -217,7 +217,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 	 * @param {String} id
 	 * @return {String}
 	 */
-	ntiidPrefix: function(id) {
+	ntiidPrefix: function (id) {
 		var ntiid = this.parseNTIID(id);
 		if (ntiid) {
 			ntiid.specific.type = 'HTML';
@@ -226,7 +226,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		return ntiid && ntiid.toString();
 	},
 
-	parseNtiFragment: function(fragment) {
+	parseNtiFragment: function (fragment) {
 		var authority = 'nextthought.com,2011-10',
 			parts, type, provider, typeSpecific, s;
 
@@ -251,18 +251,18 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		return ['tag', authority, s.join('-')].join(':');
 	},
 
-	parseQueryString: function(qStr) {
+	parseQueryString: function (qStr) {
 		if (Ext.isEmpty(qStr)) {
 			return null;
 		}
 		var r = {};
 
-		Ext.each(qStr.split('&'), function(kv) {
+		Ext.each(qStr.split('&'), function (kv) {
 			kv = kv.split('=');
 			r[kv[0]] = decodeURIComponent(kv[1]);
 		});
 
-		r.toString = function() {
+		r.toString = function () {
 			var out = [], k;
 			for (k in this) {
 				if (this.hasOwnProperty(k)) {
@@ -274,20 +274,20 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		return r;
 	},
 
-	isEncodedNTIID: function(component) {
+	isEncodedNTIID: function (component) {
 		var decoded = this.decodeFromURI(component);
 
 		return this.isNTIID(decoded) && !this.isEncodedNTIIMimeType(component);
 	},
 
-	isEncodedNTIIMimeType: function(component) {
+	isEncodedNTIIMimeType: function (component) {
 		var decoded = decodeURIComponent(component),
 			index = decoded.indexOf('application/vnd.nextthought');
 
 		return index > -1;
 	},
 
-	encodeForURI: function(ntiid) {
+	encodeForURI: function (ntiid) {
 		var cut = this.COMMON_PREFIX.length;
 
 		if (ntiid && ntiid.substr(0, cut) === this.COMMON_PREFIX) {
@@ -297,7 +297,7 @@ module.exports = exports = Ext.define('NextThought.util.Parsing', {
 		return encodeURIComponent(ntiid);
 	},
 
-	decodeFromURI: function(component) {
+	decodeFromURI: function (component) {
 		var ntiid = decodeURIComponent(component);
 
 		if (!this.isNTIID(ntiid) && ntiid.substr(0,3) !== 'tag') {
@@ -322,7 +322,7 @@ JSONProxy.prototype.findModel = exports.findModel.bind(exports);
  */
 
 /*! @source https://gist.github.com/1129031 */
-(function(DOMParser) {
+(function (DOMParser) {
 	'use strict';
 	var DOMParser_proto = DOMParser.prototype,
 		real_parseFromString = DOMParser_proto.parseFromString;
@@ -336,7 +336,7 @@ JSONProxy.prototype.findModel = exports.findModel.bind(exports);
 		}
 	} catch (ex) {}
 
-	DOMParser_proto.parseFromString = function(markup, type) {
+	DOMParser_proto.parseFromString = function (markup, type) {
 		if (/^\s*text\/html\s*(?:;|$)/i.test(type)) {
 			var doc = document.implementation.createHTMLDocument(''),
 				doc_elt = doc.documentElement,

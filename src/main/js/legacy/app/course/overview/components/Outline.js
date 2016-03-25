@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		]}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.setDataTransferHandler(NextThought.model.courses.navigation.CourseOutlineNode.mimeType, {
@@ -40,9 +40,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.headerCmp = this.down('overview-outline-header');
 	},
 
-	addBodyConfig: function() {},
+	addBodyConfig: function () {},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var body = this.getBodyContainer();
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.SYNCED_TOP) { this.syncTop(this.SYNCED_TOP); }
 	},
 
-	onScroll: function() {
+	onScroll: function () {
 		var body = this.getBodyContainer(),
 			bodyRect = body && body.el && body.el.dom && body.el.dom.getBoundingClientRect(),
 			selected = this.el.dom.querySelector('.outline-row.selected'),
@@ -67,28 +67,28 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	getBodyContainer: function() {
+	getBodyContainer: function () {
 		return this.down('[bodyContainer]');
 	},
 
-	getOrderingItems: function() {
+	getOrderingItems: function () {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
 
 		return items || [];
 	},
 
-	getDropzoneTarget: function() {
+	getDropzoneTarget: function () {
 		var body = this.getBodyContainer();
 
 		return body && body.el && body.el.dom;
 	},
 
-	onCollectionUpdate: function(outline) {
+	onCollectionUpdate: function (outline) {
 		this.setOutline(this.activeBundle, outline);
 	},
 
-	setOutline: function(bundle, outline) {
+	setOutline: function (bundle, outline) {
 		this.disableOrderingContainer();
 
 		var catalog = bundle.getCourseCatalogEntry(),
@@ -121,7 +121,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	createAddUnitNode: function() {
+	createAddUnitNode: function () {
 		var me = this,
 			OutlinePrompt = NextThought.app.course.overview.components.editing.outline.Prompt,
 			allowedTypes = me.outline && me.outline.getAllowedTypes(),
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (allowedTypes) {
 			//TODO: May need to be able to handle more than one type here...
-			button = allowedTypes.reduce(function(acc, type) {
+			button = allowedTypes.reduce(function (acc, type) {
 				var inlineEditor = OutlinePrompt.getInlineEditor(type);
 
 				inlineEditor = inlineEditor && inlineEditor.editor;
@@ -157,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	getCmpForRecord: function(record) {
+	getCmpForRecord: function (record) {
 		if (record instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
 			return NextThought.app.course.overview.components.outline.OutlineNode.create({
 				outlineNode: record,
@@ -171,33 +171,33 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		console.warn('Unknown type: ', record);
 	},
 
-	doSelectNode: function(record) {
+	doSelectNode: function (record) {
 		if (this.isEditing || record instanceof NextThought.model.courses.navigation.CourseOutlineContentNode) {
 			this.selectOutlineNode(record);
 		}
 	},
 
-	selectRecord: function(record, scrollTo) {
+	selectRecord: function (record, scrollTo) {
 		var body = this.getBodyContainer();
 
 		this.selectedRecord = record;
 		this.scrollToSelected = scrollTo;
 
-		body.items.each(function(item) {
+		body.items.each(function (item) {
 			item.selectRecord(record, scrollTo);
 		});
 
 		return record;
 	},
 
-	getActiveItem: function() {
+	getActiveItem: function () {
 		return this.selectedRecord;
 	},
 
 	MIN_TOP: 90,
 	MAX_TOP: 150,
 
-	syncTop: function(top) {
+	syncTop: function (top) {
 		top = Math.max(top, this.MIN_TOP);
 		top = Math.min(top, this.MAX_TOP);
 
@@ -208,7 +208,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	startEditing: function() {
+	startEditing: function () {
 		this.isEditing = true;
 		this.addCls('editing');
 
@@ -217,7 +217,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	stopEditing: function() {
+	stopEditing: function () {
 		delete this.isEditing;
 		this.removeCls('editing');
 		if (this.addNodeCmp) {
@@ -225,7 +225,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onDrop: function(record, newIndex, moveInfo) {
+	onDrop: function (record, newIndex, moveInfo) {
 		return this.outline.moveToFromContainer(record, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.outline);
 	}
 });

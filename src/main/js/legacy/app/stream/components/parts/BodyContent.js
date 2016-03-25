@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.parts.B
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var rd = {
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.parts.B
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.titleEl, {
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.parts.B
 	},
 
 
-	setUser: function(user) {
+	setUser: function (user) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setUser.bind(this, user));
 			return;
@@ -167,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.parts.B
 	},
 
 
-	setBody: function(html) {
+	setBody: function (html) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setBody.bind(this, html));
 			return;
@@ -180,12 +180,12 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.parts.B
 
 		DomUtils.adjustLinks(el, window.location.href);
 
-		el.select('img.whiteboard-thumbnail').each(function(el) {
+		el.select('img.whiteboard-thumbnail').each(function (el) {
 			el.replace(el.up('.body-divider'));
 		});
 
-		el.select('img').each(function(img) {
-			img.on('load', function() {
+		el.select('img').each(function (img) {
+			img.on('load', function () {
 				me.up('[record]').fireEvent('sync-height');
 			});
 		});
@@ -195,35 +195,35 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.parts.B
 	},
 
 
-	showObject: function() {
+	showObject: function () {
 		if (this.onShow) {
 			this.onShow();
 		}
 	},
 
 
-	addComment: function() {
+	addComment: function () {
 		if (this.onAddComment) {
 			this.onAddComment();
 		}
 	},
 
 
-	editObject: function() {
+	editObject: function () {
 		if (this.onEdit) {
 			this.onEdit();
 		}
 	},
 
 
-	reportObject: function() {
+	reportObject: function () {
 		if (this.onReport) {
 			this.onReport();
 		}
 	},
 
 
-	deleteObject: function() {
+	deleteObject: function () {
 		if (this.onDelete) {
 			this.onDelete();
 		}

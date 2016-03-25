@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 				scale: 'large',
 				name: 'cancel',
 				text: getString('NextThought.view.account.codecreation.Main.cancel'),
-				handler: function(b) {
+				handler: function (b) {
 					b.up('window').close();
 				}
 			},
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 		]}
 	],
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.down('[name=groupname]'), {
 			scope: this,
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 		this.GroupActions = NextThought.app.groups.Actions.create();
 	},
 
-	specialkey: function(el, event) {
+	specialkey: function (el, event) {
 		var val = el.lastValue,
 			empty = Ext.isEmpty(val);
 
@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 		}
 	},
 
-	changed: function(value, t) {
+	changed: function (value, t) {
 		var val = value.trim(),
 			empty = Ext.isEmpty(val),
 			btn = this.query('[name=submit]', this)[0];
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 		}
 	},
 
-	setGroupCode: function(c) {
+	setGroupCode: function (c) {
 		var code = this.query('[name=code]')[0];
 		code.update(c || null);
 		code.setVisible(!!c);
@@ -98,12 +98,12 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 		this.query('[name=cancel]')[0].setVisible(false);
 	},
 
-	getGroupName: function() {
+	getGroupName: function () {
 		var name = this.down('[name=groupname]').getValue();
 		return name ? name.trim() : name;
 	},
 
-	showError: function(errorText) {
+	showError: function (errorText) {
 		var box = this.down('[name=error]');
 
 		errorText = errorText || getString('NextThought.view.account.codecreation.Main.unknown-error');
@@ -113,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 		box.show();
 	},
 
-	submitClicked: function() {
+	submitClicked: function () {
 		var me = this,
 			btn = this.down('[name=submit]'),
 			w = this.up('window');
@@ -125,18 +125,18 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 		}
 
 		this.GroupActions.createGroupAndCode(btn)
-			.then(function(code) {
+			.then(function (code) {
 				btn.setDisabled(false);
 				w.showCreatedGroupCode(code);
 			})
-			.fail(function(errorText) {
+			.fail(function (errorText) {
 				console.error('An error occured', errorText);
 				me.showError(errorText);
 				btn.setDisabled(false);
 			});
 	},
 
-	clearError: function() {
+	clearError: function () {
 		var box = this.down('[name=error]');
 		box.hide();
 	}

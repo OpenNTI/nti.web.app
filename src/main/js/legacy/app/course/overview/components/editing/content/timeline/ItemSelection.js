@@ -18,12 +18,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						{cls: 'title', html: '{title}'},
 						{cls: 'description', html: '{description}'}
 					]}
-				]
+			]
 			}
 		]}
 	)),
 
-	getItemData: function(item) {
+	getItemData: function (item) {
 		return {
 			thumbnail: this.getThumbnailURL(item),
 			title: item.get('label'),
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-	showEmptyState: function() {
+	showEmptyState: function () {
 		// Display empty state
 		this.itemsContainer.add({
 			xtype: 'box',

@@ -12,11 +12,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 	storeModel: 'NextThought.model.courseware.CourseInstanceEnrollment',
 
 	statics: {
-		shouldShow: function() {
+		shouldShow: function () {
 			var CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 
 			return CourseStore.onceLoaded()
-				.then(function() {
+				.then(function () {
 					var enrolledCourses = CourseStore.getCurrentEnrolledCourses() || [],
 						hasAvailable = CourseStore.hasAllCoursesLink();
 
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
@@ -41,19 +41,19 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 		this.mon(this.CourseStore, 'enrolled-courses-set', this.showCurrentItems.bind(this));
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', this.onClick.bind(this));
 	},
 
-	onClick: function(e) {
+	onClick: function (e) {
 		if (e.getTarget('.add-more-link')) {
 			this.onAddClick();
 		}
 	},
 
-	maybeShowAdd: function() {
+	maybeShowAdd: function () {
 		if (this.CourseStore.hasAllCoursesLink()) {
 			this.showAdd();
 		} else {
@@ -61,19 +61,19 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 		}
 	},
 
-	showCurrentItems: function() {
+	showCurrentItems: function () {
 		var current = this.CourseStore.getCurrentEnrolledCourses(),
 			upcoming = this.CourseStore.getUpcomingEnrolledCourses(),
 			archived = this.CourseStore.getArchivedEnrolledCourses(),
 			otherCourses = upcoming.concat(archived), otherLength;
 
-		function sort(a, b) {
+		function sort (a, b) {
 			var aVal = a.get('CreatedTime'),
 				bVal = b.get('CreatedTime');
 
 				//Since we want the most recent enrollments to be at the, sort the lower value
 				//to the higher index
-				return aVal > bVal ? -1 : aVal === bVal ? 0 : 1;
+			return aVal > bVal ? -1 : aVal === bVal ? 0 : 1;
 		}
 
 		current.sort(sort);
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 		return this.showItems(current);
 	},
 
-	showItems: function(current) {
+	showItems: function (current) {
 		if (current.length === 0) {
 			this.showEmptyText();
 			return;
@@ -132,25 +132,25 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 		});
 	},
 
-	onAddClick: function() {
+	onAddClick: function () {
 		if (this.navigateToAllCourses) {
 			this.navigateToAllCourses();
 		}
 	},
 
-	onSeeAllClick: function() {
+	onSeeAllClick: function () {
 		if (this.pushRoute) {
 			this.pushRoute('Courses', '/courses');
 		}
 	},
 
-	navigate: function(course, el) {
+	navigate: function (course, el) {
 		if (this.navigateToCourse) {
 			this.navigateToCourse(course, el);
 		}
 	},
 
-	showEmptyText: function() {
+	showEmptyText: function () {
 		if (this.collection) {
 			this.remove(this.collection, true);
 			delete this.collection;
@@ -162,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 		});
 	},
 
-	hideEmptyText: function() {
+	hideEmptyText: function () {
 		if (this.emptyText) {
 			this.remove(this.emptyText, true);
 			delete this.emptyText;

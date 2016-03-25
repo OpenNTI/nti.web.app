@@ -12,18 +12,18 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 	title: 'Administrators',
 
 
-	setUser: function(user, isMe) {
+	setUser: function (user, isMe) {
 		var me = this;
 		me.removeAll();
 		return UserRepository.getUser(user.get('Creator'))
-		   .then(function(creator) {
+		   .then(function (creator) {
 			var creatoryConfig;
 			if (creator) {
 				creatorConfig = {
-						member: creator,
-						name: creator.getName(),
-						route: ParseUtils.encodeForURI(creator.getId())
-						};
+					member: creator,
+					name: creator.getName(),
+					route: ParseUtils.encodeForURI(creator.getId())
+				};
 				me.addEntry(creatorConfig);
 			 } else {
 				me.showEmptyText('This group has no administrators.');

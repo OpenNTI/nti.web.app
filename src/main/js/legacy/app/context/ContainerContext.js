@@ -10,7 +10,7 @@ var {isFeature} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.context.ContainerContext', {
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 
 		this.config = config;
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 	 *							'list': to be rendered as a list object, @see notes in profiles.]
 	 * @return {[Promise]}		[Promise that resolves with dom element for the context]
 	 */
-	load: function(type) {
+	load: function (type) {
 		var url = Service.getObjectURL(this.container);
 
 		if (type === 'card' && isFeature('disable-context-in-activity')) {
@@ -33,21 +33,21 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 		}
 
 		return Service.request({
-				url: url
-			})
+			url: url
+		})
 				.then(this.__parseResponse.bind(this))
 				.then(this.__parseContext.bind(this, type))
 				.fail(this.__handle403Response.bind(this));
 	},
 
-	__parseResponse: function(response) {
+	__parseResponse: function (response) {
 		var parse;
 
-		return new Promise(function(fulfill) {
+		return new Promise(function (fulfill) {
 			parse = ParseUtils.parseItems(response)[0];
 			fulfill(parse || Ext.decode(response, true));
 		})
-		.fail(function() {
+		.fail(function () {
 			var xml = (new DOMParser()).parseFromString(response, 'text/xml');
 
 			if (xml.querySelector('parsererror')) {
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 		});
 	},
 
-	__parseContext: function(contextType, obj) {
+	__parseContext: function (contextType, obj) {
 		var typesPath = NextThought.app.context.types,
 			keys = Object.keys(typesPath), i, handler;
 
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 		return Promise.resolve(null);
 	},
 
-	__handle403Response: function(response) {
+	__handle403Response: function (response) {
 		var o = Ext.decode(response.responseText, true),
 			status = response.status,
 			req = response && response.request,
@@ -99,21 +99,21 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 		return Promise.resolve();
 	},
 
-	requestForbiddenContext: function(url){
+	requestForbiddenContext: function (url) {
 		if (!url) { return Promise.resolve(); }
 
 		// Forbidden Context URL.
 		url = url + '/@@forbidden_related_context';
 
 		return Service.request(url)
-					.then(function(resp) {
+					.then(function (resp) {
 						var p = Ext.decode(resp, true);
-							catalogEntry = p.Items && ParseUtils.parseItems(p.Items)[0];
+						catalogEntry = p.Items && ParseUtils.parseItems(p.Items)[0];
 
 						if (catalogEntry) {
 							cmp = Ext.widget('context-authorization', {
-										catalogEntry: catalogEntry
-									});
+								catalogEntry: catalogEntry
+							});
 
 							return cmp;
 						}

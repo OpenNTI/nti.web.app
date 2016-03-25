@@ -7,12 +7,12 @@ module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 	bufferedContent: {},
 
 
-	get: function(urlOrConfig) {
+	get: function (urlOrConfig) {
 		var cfg = {},
 			me = this;
 
-		return new Promise(function(fulfill, reject) {
-			function resolve(q, s, r) {
+		return new Promise(function (fulfill, reject) {
+			function resolve (q, s, r) {
 				var value = r.responseText;
 				if (!s) {
 					reject(r);
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 	},
 
 
-	request: function(options) {
+	request: function (options) {
 		// an absolute url must be used. Luckily, thats all we use.
 		// and we care about the first 3 parts: [(protocoll:)//domain]/path/to/resource
 		var domain = options.url.split('/').slice(0, 3),
@@ -90,12 +90,12 @@ module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 	 * @param {Function} [options.failure]
 	 * @param {Object} [options.scope]
 	 */
-	requestJSONP: function(options) {
+	requestJSONP: function (options) {
 		var me = this;
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			var opts = Ext.apply({},options), script, t;
 
-			function jsonp(script) {
+			function jsonp (script) {
 				clearTimeout(t);
 				var resp = {
 					responseText: me.getContent(opts.ntiid, opts.expectedContentType),
@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 				}
 			}
 
-			function onError(script, reason) {
+			function onError (script, reason) {
 				delete script.onload;
 				clearTimeout(t);
 				Ext.fly(script).remove();
@@ -134,18 +134,18 @@ module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 			}
 
 			//ensure we have callbacks
-			opts.success = opts.success || function emptySuccess() {};
-			opts.failure = opts.failure || function emptyFailure() {};
-			opts.callback = opts.callback || function emptyCallback() {};
+			opts.success = opts.success || function emptySuccess () {};
+			opts.failure = opts.failure || function emptyFailure () {};
+			opts.callback = opts.callback || function emptyCallback () {};
 
-			t = setTimeout(function() { onError(script, 'Timeout'); },60000);
+			t = setTimeout(function () { onError(script, 'Timeout'); },60000);
 
 			script = Globals.loadScript(opts.jsonpUrl, jsonp, onError, this);
 		});
 	},
 
 
-	getContent: function(ntiid, type) {
+	getContent: function (ntiid, type) {
 		if (!type) {
 			Ext.Error.raise('Must specify the type you want');
 		}
@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 	},
 
 
-	receiveContent: function(content) {
+	receiveContent: function (content) {
 		//expects: {content:?, contentEncoding:?, NTIID:?, version: ?}
 		var type = content && content['Content-Type'],
 			enc = content && content['Content-Encoding'];
@@ -202,7 +202,7 @@ module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 	/**
 	 * @deprecated Workaround until content is rerendered.
 	 */
-	receiveContentVTT: function(content) {
+	receiveContentVTT: function (content) {
 		content['Content-Type'] = 'text/vtt';
 		content.ntiid = 'webvtt';
 		this.receiveContent(content);
@@ -210,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.proxy.JSONP', {
 
 
 
-},function() {
+},function () {
 	if (window.JSONP) {
 		console.warn('JSONP is already defined!!!');
 	}

@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Loca
 	alias: 'reader.locationProvider',
 	mixins: { observable: 'Ext.util.Observable' },
 
-	constructor: function(config) {
+	constructor: function (config) {
 		Ext.apply(this, config);
 
 		this.mixins.observable.constructor.call(this);
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Loca
 
 		this.up = reader.up.bind(reader);
 
-		reader.on('afterRender', function() {
+		reader.on('afterRender', function () {
 			UserDataActions.setupPageStoreDelegates(this);
 		}, this);
 
@@ -48,12 +48,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Loca
 		this.callParent(arguments);
 	},
 
-	setLocation: function(pageInfo, bundle) {
+	setLocation: function (pageInfo, bundle) {
 		var me = this,
 			ntiid = pageInfo.get('NTIID');
 
 		return ContentUtils.getLocation(ntiid, bundle)
-				.then(function(locations) {
+				.then(function (locations) {
 					var location = locations[0] || {
 						NTIID: ntiid
 					};
@@ -67,11 +67,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Loca
 				});
 	},
 
-	getLocation: function() {
+	getLocation: function () {
 		return this.currentLocation;
 	},
 
-	getRelated: function(givenNtiid) {
+	getRelated: function (givenNtiid) {
 		if (!givenNtiid) { return Promise.resolve([]); }
 
 		var me = this,
@@ -80,20 +80,20 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Loca
 			map = {};
 
 		if (!location) {
-			return new Promise(function(fulfill, reject) {
-				me.on('location-set', function() {
+			return new Promise(function (fulfill, reject) {
+				me.on('location-set', function () {
 					fulfill(me.getRelated(givenNtiid));
 				});
 			});
 		}
 
 		return ContentUtils.getNodes(ntiid, location.currentBundle)
-			.then(function(infos) {
+			.then(function (infos) {
 				var info = infos[0],
 					i, r,
 					related = info ? info.location.getElementsByTagName('Related') : [];
 
-				Ext.each(related, function(r) {
+				Ext.each(related, function (r) {
 					r = r.firstChild;
 					do {
 						if (!r.tagName) {
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Loca
 			});
 	},
 
-	relatedItemHandler: function(el) {
+	relatedItemHandler: function (el) {
 		var m = el.relatedInfo;
 
 		if (m.type === 'index' || m.type === 'link') {

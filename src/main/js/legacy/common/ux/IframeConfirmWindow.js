@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeConfirmWindow
 						cls: 'x-btn-blue-large confirm',
 						action: 'confirm',
 						style: { 'float': 'right'},
-						handler: function(b, e) {
+						handler: function (b, e) {
 							e.stopEvent();
 							b.up('window').onConfirm();
 						}
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeConfirmWindow
 						cls: 'x-btn-blue-large',
 						action: 'deny',
 						style: { 'float': 'left'},
-						handler: function(b, e) {
+						handler: function (b, e) {
 							e.stopEvent();
 							b.up('window').onDeny();
 						}
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeConfirmWindow
 	],
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var confirm = this.down('button[confirm]'),
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeConfirmWindow
 	},
 
 
-	onConfirm: function() {
+	onConfirm: function () {
 		if (this.confirmAction) {
 			this.el.mask('Loading...');
 			this.confirmAction()
@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeConfirmWindow
 	},
 
 
-	onDeny: function() {
+	onDeny: function () {
 		if (this.denyAction) {
 			this.el.mask('Loading...');
 			this.denyAction()
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeConfirmWindow
 	},
 
 
-	handleFailure: function() {
+	handleFailure: function () {
 		var footer = this.down('[footerContainer]');
 
 		footer.removeAll();
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeConfirmWindow
 			cls: 'x-btn-blue-large confirm',
 			action: 'confirm',
 			style: { 'float': 'right'},
-			handler: function(b, e) {
+			handler: function (b, e) {
 				e.stopEvent();
 				b.up('window').close();
 			}

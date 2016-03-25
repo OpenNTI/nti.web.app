@@ -5,23 +5,23 @@ var SharingUtils = require('../util/Sharing');
 
 module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {
 
-	getPublishState: function() {
+	getPublishState: function () {
 		return this.isPublished() ? 'Public' : 'Only Me';
 	},
 
 
-	isExplicit: function() {
+	isExplicit: function () {
 		return this.hasLink('publish') && !Ext.isEmpty(this.get('sharedWith'));
 	},
 
 
-	isPublished: function() {
+	isPublished: function () {
 		return this.hasLink('unpublish') ||
 			   this.get('PublicationState') === 'DefaultPublished';
 	},
 
 
-	publish: function(widget, cb, scope) {
+	publish: function (widget, cb, scope) {
 		var me = this,
 			currentValue = this.isPublished(),
 			action = currentValue ? 'unpublish' : 'publish';
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {
 		//The callback expects key/value pair as argument.
 		Ext.callback(widget.markAsPublished, widget, ['publish', !currentValue]);
 
-		me.postTo(action, function(s) {
+		me.postTo(action, function (s) {
 			Ext.callback(cb, scope || window, [me, s]);
 			if (!s) {
 				Ext.callback(widget.markAsPublished, widget, ['publish', currentValue]);
@@ -44,9 +44,9 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithPublish', {
 	},
 
 
-	getSharingInfo: function() {
+	getSharingInfo: function () {
 		var sharingInfo,
-			entities = Ext.Array.filter(this.get('headline').get('tags'), function(t) {
+			entities = Ext.Array.filter(this.get('headline').get('tags'), function (t) {
 				return ParseUtils.isNTIID(t);
 			});
 

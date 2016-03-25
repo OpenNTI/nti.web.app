@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Ite
 		'{body}'
 	]),
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.enableBubble(['detect-overflow', 'editor-closed', 'editor-open']);
 		this.on({
@@ -28,16 +28,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Ite
 		this.notepadCmp = this.floatParent;
 	},
 
-	destroy: function() {
+	destroy: function () {
 		return this.callParent(arguments);
 	},
 
-	eat: function(e) {
+	eat: function (e) {
 		e.stopEvent();
 		return false;
 	},
 
-	updateAnnotationMonitors: function(annotation) {
+	updateAnnotationMonitors: function (annotation) {
 		Ext.destroy(this.annotationMonitors);
 		this.annotation = annotation;
 		this.annotationMonitors = this.mon(annotation, {
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Ite
 		});
 	},
 
-	updateRecordMonitors: function(record) {
+	updateRecordMonitors: function (record) {
 		Ext.destroy(this.recordMonitors);
 		this.record = record;
 		this.recordMonitors = this.mon(record, {
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Ite
 		});
 	},
 
-	disableFloating: function(me, ct) {
+	disableFloating: function (me, ct) {
 		this.setLocalY(null);
 		this.getEl().addCls('grouped').removeCls('collide');
 		delete this.floatParent;
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Ite
 		this.el.appendTo(ct.getLayout().getContentTarget());
 	},
 
-	updateWith: function(data) {
+	updateWith: function (data) {
 		var me = this, el = me.getEl(),
 			p = el.hasCls('grouped') ? null : (data.placement || 0);
 
@@ -82,16 +82,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Ite
 		}
 
 		//Start with the stupid thing... (always draw)
-		data.record.compileBodyContent(function(html, cb) {
+		data.record.compileBodyContent(function (html, cb) {
 			me.renderTpl.overwrite(el, {body: html});
 			if (Ext.isFunction(cb)) {
-				Ext.each(cb(el, me), function(c) { me.on('destroy', 'destroy', c); });
+				Ext.each(cb(el, me), function (c) { me.on('destroy', 'destroy', c); });
 			}
 			me.checkOverflow();
 		});
 	},
 
-	refresh: function() {
+	refresh: function () {
 		this.updateWith({
 			placement: this.getLocalY(),
 			record: this.record,
@@ -99,15 +99,15 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Ite
 		});
 	},
 
-	contextMenu: function(e) {
+	contextMenu: function (e) {
 		console.log('context menu?');
 	},
 
-	checkOverflow: function() {
+	checkOverflow: function () {
 		this.fireEvent('detect-overflow');
 	},
 
-	openEditor: function() {
+	openEditor: function () {
 		if (this.notepadCmp && this.notepadCmp.savingNewNote) {
 			return;
 		}
@@ -135,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Ite
 		Ext.defer(this.editor.focus, 1, this.editor);
 	},
 
-	isEditorDead: function() {
+	isEditorDead: function () {
 		var o = this,
 			e = ['parentNode', 'dom', 'el', 'editor'];
 
@@ -146,13 +146,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Ite
 		return !o;
 	},
 
-	edit: function(e) {
+	edit: function (e) {
 		clearTimeout(this.openingEditor);
 		this.openingEditor = Ext.defer(this.openEditor, 10, this);
 		return this.eat(e);
 	},
 
-	cleanupEditor: function() {
+	cleanupEditor: function () {
 		this.removeCls('edit');
 		if (this.ownerCt) {
 			this.ownerCt.removeCls('edit');
@@ -163,11 +163,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Ite
 		this.fireEvent('editor-closed');
 	},
 
-	cancelEdit: function() {
+	cancelEdit: function () {
 		this.cleanupEditor();
 	},
 
-	commitEdit: function() {
+	commitEdit: function () {
 		var me = this, r = me.record,
 			dom = Ext.getDom(me.getEl()),
 			nextDom = Ext.getDom(me.getEl()).nextSibling,
@@ -187,7 +187,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Ite
 		if (Ext.isEmpty(b)) {
 			pDom.removeChild(dom);
 			r.destroy({
-				callback: function(recs, o) {
+				callback: function (recs, o) {
 					if (!o.success) {// put the node back
 						if (nextDom && nextDom.parentNode === pDom) {
 							pDom.appendChild(dom);
@@ -203,7 +203,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Ite
 		}
 
 		r.save({
-			failure: function() {
+			failure: function () {
 				console.error('coudn\'t save note');
 				r.set('body', oldBody);
 				if (me.isDestroyed) {

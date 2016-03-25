@@ -34,14 +34,14 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.__align = this.__align.bind(this);
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.options) {
@@ -74,20 +74,20 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	setOptions: function(options) {
+	setOptions: function (options) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setOptions.bind(this, options));
 			return;
 		}
 
-		this.options = options.map(function(option, index) {
+		this.options = options.map(function (option, index) {
 			if (option.hasOwnProperty('value')) {
 				option = Ext.clone(option);
 			} else {
 				option = {value: option, text: option.toString()};
 			}
 
-			option.toString = function() { return this.text; };
+			option.toString = function () { return this.text; };
 			option.index = index;
 
 			return option;
@@ -101,14 +101,14 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	getOptions: function() {
-		return (this.options || []).map(function(option) {
+	getOptions: function () {
+		return (this.options || []).map(function (option) {
 			return option.value;
 		});
 	},
 
 
-	showError: function() {
+	showError: function () {
 		this.addCls('error');
 
 		if (this.onError) {
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	removeError: function() {
+	removeError: function () {
 		this.removeCls('error');
 
 		if (this.onRemoveError) {
@@ -126,12 +126,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	isDisabled: function() {
+	isDisabled: function () {
 		return this.hasBeenDisabled;
 	},
 
 
-	enable: function() {
+	enable: function () {
 		this.hasBeenDisabled = null;
 
 		if (!this.rendered) {
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	disable: function() {
+	disable: function () {
 		this.hasBeenDisabled = true;
 
 		if (!this.rendered) {
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	__align: function() {
+	__align: function () {
 		if (!this.rendered) {
 			return;
 		}
@@ -171,20 +171,20 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	alignOptions: function() {
+	alignOptions: function () {
 		Ext.EventManager.onWindowResize(this.__align);
 		this.scrollListener = this.mon(this.scrollParent || Ext.getBody(), 'scroll', this.__align);
 		this.__align();
 	},
 
 
-	unalignOptions: function() {
+	unalignOptions: function () {
 		Ext.EventManager.removeResizeListener(this.__align);
 		Ext.destroy(this.scrollListener);
 	},
 
 
-	showOptions: function() {
+	showOptions: function () {
 		this.arrowEl.removeCls('down');
 		this.arrowEl.addCls('up');
 
@@ -194,7 +194,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	hideOptions: function() {
+	hideOptions: function () {
 		var active = this.optionsEl.down('li.active');
 
 		this.arrowEl.removeCls('up');
@@ -209,7 +209,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	toggleOptions: function(e) {
+	toggleOptions: function (e) {
 		if (e.getTarget('.disabled')) { return; }
 
 		if (e.getTarget('.down')) {
@@ -223,7 +223,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	filterOptions: function(value) {
+	filterOptions: function (value) {
 		var options = this.options,
 			listItems = this.optionsEl.dom.querySelectorAll('li'),
 			regex = value && new RegExp('^' + RegExp.escape(value), 'i'),
@@ -231,7 +231,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 
 		listItems = Array.prototype.slice.call(listItems);
 
-		unfilteredOptions = listItems.reduce(function(acc, listItem) {
+		unfilteredOptions = listItems.reduce(function (acc, listItem) {
 			var index = listItem.getAttribute('data-index'),
 				option = options[index],
 				filter = regex && !regex.test(option.text);
@@ -251,7 +251,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	selectItem: function(e) {
+	selectItem: function (e) {
 		var item = e.getTarget('li'),
 			index = item && item.getAttribute('data-index'),
 			option = index && this.options[index];
@@ -262,7 +262,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	__selectOption: function(option, silent) {
+	__selectOption: function (option, silent) {
 		var changed = option !== this.selectedOption;
 
 		this.selectedOption = option;
@@ -274,7 +274,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	__fillInPreview: function(option) {
+	__fillInPreview: function (option) {
 		var preview = option && option.text,
 			value = this.inputEl.dom.value,
 			regex = new RegExp(Globals.escapeForRegex(value), 'i');
@@ -288,10 +288,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	__selectSibling: function(options, direction) {
+	__selectSibling: function (options, direction) {
 		var currentIndex, item;
 
-		currentIndex = options.reduce(function(acc, item, index) {
+		currentIndex = options.reduce(function (acc, item, index) {
 			if (item.classList.contains('active')) {
 				acc = index;
 			}
@@ -326,11 +326,11 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	__autoCompleteSelectedItem: function(unfilteredOptions) {
+	__autoCompleteSelectedItem: function (unfilteredOptions) {
 		var active,
 			options = this.options;
 
-		active = unfilteredOptions.reduce(function(acc, option) {
+		active = unfilteredOptions.reduce(function (acc, option) {
 			if (option.classList.contains('active')) {
 				acc = options[option.getAttribute('data-index')];
 			}
@@ -346,12 +346,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	__getExactMatch: function(value) {
+	__getExactMatch: function (value) {
 		if (!value) { return null; }
 
 		value = value.toLowerCase();
 
-		return (this.options || []).reduce(function(acc, option) {
+		return (this.options || []).reduce(function (acc, option) {
 			if (value === option.text.toLowerCase()) {
 				acc = option;
 			}
@@ -361,7 +361,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	onInputKeyDown: function(e) {
+	onInputKeyDown: function (e) {
 		var charCode = e.getCharCode(),
 			value = this.inputEl.getValue(),
 			open = !this.optionsEl.hasCls('hidden'),
@@ -404,13 +404,13 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	onInputKeyUp: function() {
+	onInputKeyUp: function () {
 		var me = this,
 			value = me.inputEl.getValue(),
 			unfilteredOptions = me.filterOptions(value),
 			hasSelected;
 
-		hasSelected = unfilteredOptions.reduce(function(acc, option) {
+		hasSelected = unfilteredOptions.reduce(function (acc, option) {
 			var active = option.classList.contains('active');
 
 			if (active) {
@@ -429,7 +429,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	onInputBlur: function() {
+	onInputBlur: function () {
 		var value = this.inputEl.getValue(),
 			selectedOption = this.selectedOption,
 			exactMatch = this.__getExactMatch(value);
@@ -451,7 +451,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	onInputFocus: function() {
+	onInputFocus: function () {
 		// this.inputEl.dom.value = '';
 		this.removeError();
 		this.filterOptions('');
@@ -459,10 +459,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	setValue: function(value) {
+	setValue: function (value) {
 		var option;
 
-		option = (this.options || []).reduce(function(acc, o) {
+		option = (this.options || []).reduce(function (acc, o) {
 			if (o.value === value) {
 				acc = o;
 			}
@@ -474,7 +474,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SearchComb
 	},
 
 
-	getValue: function() {
+	getValue: function () {
 		var option = this.selectedOption;
 
 		return option && option.value;

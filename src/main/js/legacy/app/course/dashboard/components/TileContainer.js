@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 	cls: 'tile-container',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		if (this.isUpcoming) {
@@ -19,21 +19,21 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.reloadTiles();
 	},
 
 
-	reloadTiles: function() {
+	reloadTiles: function () {
 		var me = this;
 
 		me.addLoadingMask();
 
 		me.lastLoaded = new Date();
 
-		me.loadingTiles = me.loadTiles().then(function(tiles) {
+		me.loadingTiles = me.loadTiles().then(function (tiles) {
 			me.setTiles(tiles);
 
 			if (tiles.length === 0) {
@@ -50,43 +50,43 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	isEmpty: function() {
+	isEmpty: function () {
 		return this.hasNoTiles;
 	},
 
 
-	getRangeStart: function() {
+	getRangeStart: function () {
 		return this.week.start;
 	},
 
 
-	updateRangeStart: function(start) {
+	updateRangeStart: function (start) {
 		this.week.start = start;
 
 		this.updateRange();
 	},
 
 
-	updateRange: function() {
+	updateRange: function () {
 		this.header.setWeek(this.week);
 
 		this.removeLoadingMask();
 	},
 
 
-	addLoadingMask: function() {
+	addLoadingMask: function () {
 		this.addCls('loading');
 		this.header.addLoadingMask();
 	},
 
 
-	removeLoadingMask: function() {
+	removeLoadingMask: function () {
 		this.removeCls('loading');
 		this.header.removeLoadingMask();
 	},
 
 
-	getPositionInfo: function() {
+	getPositionInfo: function () {
 		if (!this.rendered) {
 			return {
 				offsetTop: 0,
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	parentScrollChanged: function(getState) {
+	parentScrollChanged: function (getState) {
 		var state = getState.call(null, this.getPositionInfo()),
 			handler;
 
@@ -124,13 +124,13 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	updateCurrent: function() {
+	updateCurrent: function () {
 		this.removeCls('in-buffer');
 		this.addCls('current');
 	},
 
 
-	removeTilesFromDOM: function() {
+	removeTilesFromDOM: function () {
 		var me = this,
 			load = me.loadingTiles;
 
@@ -142,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		me.addCls('out-of-buffer');
 
 		//once we load the tiles or if we already have them
-		load.then(function() {
+		load.then(function () {
 			delete me.loadingTiles;
 			me.setHeight(me.getHeight());
 			wait().then(me.clearTiles.bind(me));
@@ -150,12 +150,12 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	__shouldReload: function(date, force) {
+	__shouldReload: function (date, force) {
 		return date > this.lastLoaded || force;
 	},
 
 
-	reloadTilesToDom: function(containerPos) {
+	reloadTilesToDom: function (containerPos) {
 		var me = this,
 			load = me.loadingTiles;
 
@@ -167,11 +167,11 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		me.addCls('in-buffer');
 
 		//if we fail to load tiles, or already have tiles
-		return load.fail(function() {
+		return load.fail(function () {
 
 			if (me.__shouldReload(containerPos.refreshDate, containerPos.force)) {
 				me.reloadTiles()
-					.then(function() {
+					.then(function () {
 						me.setHeight(null);
 					});
 			} else {

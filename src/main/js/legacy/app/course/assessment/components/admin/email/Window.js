@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	cls: 'email-window',
 	items: [],
 
-	initComponent: function(){
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.headerCmp = this.add({
@@ -33,14 +33,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	onClose: function(){
+	onClose: function () {
 		var win = this.allowNavigation(),
 			me = this;
 
 		if (win === false) { return; }
 		if (win instanceof Promise) {
 			return win
-					.then(function() {
+					.then(function () {
 						me.WindowActions.closeActiveWindow();				
 					});
 		}
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.WindowActions.closeActiveWindow();
 	},
 
-	allowNavigation: function(){
+	allowNavigation: function () {
 		if (!this.editor) {
 			return true;
 		}
@@ -56,17 +56,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return this.editor.allowNavigation();
 	},
 
-	showEditor: function() {
+	showEditor: function () {
 		var me = this,
 			editor;
 
 		editor = me.add({xtype: 'course-email-editor', record: this.record});	
 
 		me.mon(editor, {
-			'cancel': function(rec) {
+			'cancel': function (rec) {
 				me.WindowActions.closeActiveWindow();
 			},
-			'after-save': function(rec) {
+			'after-save': function (rec) {
 				me.record = rec;
 				if (me.monitors && me.monitors.afterSave) {
 					me.monitors.afterSave(rec);
@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		me.editor = editor;
 	}
-}, function(){
+}, function () {
 	NextThought.app.windows.StateStore.register('new-email', this);
 	NextThought.app.windows.StateStore.register(NextThought.model.Email.mimeType, this);
 });

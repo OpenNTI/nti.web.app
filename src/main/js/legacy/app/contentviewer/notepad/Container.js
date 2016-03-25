@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Con
 	},
 
 
-	maybeCleanup: function() {
+	maybeCleanup: function () {
 		if (!this.items.getCount()) {
 			this.destroy();
 		}

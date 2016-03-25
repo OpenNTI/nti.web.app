@@ -18,18 +18,18 @@ module.exports = exports = Ext.define('NextThought.common.ux.FilterMenuItem', {
 		count: 0
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.enableBubble('checkchange');
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		this.renderData.count = this.getCount() || '';
 	},
 
-	updateCount: function(c) {
+	updateCount: function (c) {
 		if (this.rendered) {
 			this.countEl.update(c || '');
 		}

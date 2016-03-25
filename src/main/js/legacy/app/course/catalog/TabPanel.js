@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 			border: false
 		},
 		xhooks: {
-			initComponent: function() {
+			initComponent: function () {
 				this.callParent(arguments);
 				//this.layout.padding = 0;
 				this.layout.overflowHandler =
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 		]}
 	])),
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var upcoming, current, archived;
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 		}
 	},
 
-	buildStore: function(data) {
+	buildStore: function (data) {
 		return new Ext.data.Store({
 			model: 'NextThought.model.courses.CourseCatalogEntry',
 			data: data,
@@ -84,18 +84,18 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		var me = this;
 
 		if ($AppConfig.userObject.hasLink('first_time_logon') && isFeature('suggest-contacts')) {
-			wait().then(function() {
+			wait().then(function () {
 				me.showWelcomeMessage();
 			});
 		}
 	},
 
-	getTabForCourse: function(course) {
+	getTabForCourse: function (course) {
 		var id = course.get('NTIID'),
 			upcoming = this.down('[title=Upcoming]'),
 			current = this.down('[title=Current]'),
@@ -112,14 +112,14 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 		};
 	},
 
-	selectTabWithName: function(tabName) {
+	selectTabWithName: function (tabName) {
 		var tab = this.down('[title=' + tabName + ']');
 		if (tab) {
 			this.setActiveTab(tab);
 		}
 	},
 
-	updateCurrent: function(courses) {
+	updateCurrent: function (courses) {
 		var cmp = this.down('[title=Current]');
 
 		if (Ext.isEmpty(courses)) {
@@ -152,7 +152,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 		return cmp;
 	},
 
-	updateUpcoming: function(courses) {
+	updateUpcoming: function (courses) {
 		var cmp = this.down('[title=Upcoming]');
 
 		if (Ext.isEmpty(courses)) {
@@ -185,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 		return cmp;
 	},
 
-	updateArchived: function(courses) {
+	updateArchived: function (courses) {
 		var cmp = this.down('[title=Archived]');
 
 		if (Ext.isEmpty(courses)) {
@@ -218,7 +218,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 		return cmp;
 	},
 
-	showWelcomeMessage: function() {
+	showWelcomeMessage: function () {
 		var targetEl = this.ownerCt ? this.ownerCt.getTargetEl() : this.getTargetEl(),
 			courseStore = Ext.getStore('courseware.EnrolledCourses'),
 			enrollmentStatus = courseStore && courseStore.getCount() > 0 ? 'completed' : '';
@@ -234,14 +234,14 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 		this.updateWindowButtons(this.requiredActions.first());
 	},
 
-	showCreateProfile: function(onComplete) {
+	showCreateProfile: function (onComplete) {
 		var me = this;
 		me.createProfileWin = Ext.widget('profile-create-window');
 		me.createProfileWin.show();
 		me.mon(me.createProfileWin, 'destroy', onComplete);
 	},
 
-	onActionComplete: function(actionName) {
+	onActionComplete: function (actionName) {
 		var me = this,
 			el = me.welcomeCard && me.welcomeCard.down('.' + actionName), nextAction;
 
@@ -262,11 +262,11 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 		}
 	},
 
-	suggestContacts: function(onComplete) {
+	suggestContacts: function (onComplete) {
 		var me = this, peersStore;
 
 		$AppConfig.userObject.getSuggestContacts()
-			.then(function(items) {
+			.then(function (items) {
 				if (Ext.isEmpty(items)) { return Promise.reject(); }
 
 				var a = Ext.getStore('all-contacts-store');
@@ -275,7 +275,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 					proxy: 'memory',
 					data: items,
 					filters: [
-						function(item) {
+						function (item) {
 							return !(a && a.contains(item.get('Username')));
 						}
 					]
@@ -285,16 +285,16 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 				me.mon(me.suggestContactsWin, 'destroy', onComplete);
 				me.mon(me.suggestContactsWin, 'destroy', 'refresh');
 			})
-			.fail(function() {
+			.fail(function () {
 				onComplete.call(me);
 			});
 	},
 
-	updateWindowButtons: function(action, name) {
+	updateWindowButtons: function (action, name) {
 		if (!action) { return; }
 
 		var me = this;
-		me.getButtonCfg = function() {
+		me.getButtonCfg = function () {
 			return {
 				name: name || getString('NextThought.view.library.available.CourseWindow.Continue'),
 				action: action
@@ -306,7 +306,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 		}
 	},
 
-	buttonClick: function(action) {
+	buttonClick: function (action) {
 		if (action === 'enroll') {
 			if (this.ownerCt && this.ownerCt.updateLabelText) {
 				this.ownerCt.updateLabelText(getString('NextThought.view.library.available.CourseWindow.AddCourses'));

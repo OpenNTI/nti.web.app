@@ -13,13 +13,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	]),
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.enableBubble(['switch-to-reader']);
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		var data;
 
@@ -37,20 +37,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.el, 'click', 'onClick');
 	},
 
 
-	onClick: function(e) {
+	onClick: function (e) {
 		var me = this,
 			container = this.up('content-view-container'),
 			bundle = container && container.currentBundle;
 
 		e.stopEvent();
 
-		function cb() {
+		function cb () {
 			if (arguments.length === 0) {
 				//setlocation aborted (probably because we are already here)
 				me.fireEvent('switch-to-reader');

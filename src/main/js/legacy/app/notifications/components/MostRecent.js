@@ -12,16 +12,16 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	cls: 'recent-notifications',
 
 
-	navigateToItem: function(rec) {
+	navigateToItem: function (rec) {
 		this.navigateToObject(rec);
 	},
 
 
 	//Be sure to not show dividers in the most recent
-	insertDividers: function() {},
+	insertDividers: function () {},
 
 
-	setUpListeners: function(store) {
+	setUpListeners: function (store) {
 		this.mon(store.backingStore, {
 			add: 'updateRecords',
 			refresh: 'updateRecords'
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	},
 
 
-	updateRecords: function() {
+	updateRecords: function () {
 		var range = this.store.backingStore.getRange(),
 			subRange = range.slice(0, this.SHOW_COUNT);
 

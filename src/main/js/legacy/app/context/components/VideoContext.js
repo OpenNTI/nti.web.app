@@ -25,13 +25,13 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 		seeMoreEl: '.see-more'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
-	isInContext: function() {
+	isInContext: function () {
 		var context = this.ContextStore.getContext(),
 			currentContext = context && context.last(),
 			contextRecord = currentContext && currentContext.obj,
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 		return inContext || contextRecord && contextRecord.get('NTIID') === this.containerId;
 	},
 
-	isInPageContext: function() {
+	isInPageContext: function () {
 		var context = this.ContextStore.getContext(),
 			currentContext = context && context.last(),
 			contextRecord = currentContext && currentContext.obj;
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 		}
 
 		return this.PathActions.getPathToObject(this.record)
-			.then(function(path) {
+			.then(function (path) {
 				var pageInfo, i;
 
 				for (i = path.length - 1; i >= 0; i--) {
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 			});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this,
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 
 			if (me.doNavigate) {
 				me.isInPageContext()
-					.fail(function() {
+					.fail(function () {
 						me.seeMoreEl.removeCls('hidden');
 						me.mon(me.seeMoreEl, 'click', me.doNavigate.bind(me, me.record));
 					});

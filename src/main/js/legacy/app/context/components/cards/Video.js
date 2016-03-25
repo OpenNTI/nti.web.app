@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 		text: '.text'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.applyIf(this.renderData || {}, {
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.setPoster();
@@ -37,10 +37,10 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 		this.mon(this.video, 'resolved-poster', this.setPoster.bind(this));
 	},
 
-	setContent: function() {},
+	setContent: function () {},
 
 
-	setPoster: function() {
+	setPoster: function () {
 		if (!this.imageEl) { return; }
 
 		var poster = this.video.get('poster');

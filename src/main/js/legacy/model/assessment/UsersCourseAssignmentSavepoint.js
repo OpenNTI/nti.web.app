@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.UsersCourseA
 		{name: 'Items', type: 'collectionItem'}
 	],
 
-	getSavePoint: function(assignmentId) {
+	getSavePoint: function (assignmentId) {
 		return this.getFieldItem('Items', assignmentId);
 	}
 });

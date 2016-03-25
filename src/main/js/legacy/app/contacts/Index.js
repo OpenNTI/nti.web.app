@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 	activeItem: 0,
 	cmp_map: {},
 
-	initComponent: function() {
+	initComponent: function () {
 		var me = this;
 
 		me.callParent(arguments);
@@ -58,56 +58,56 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 		this.addDefaultRoute('/');
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		if (Ext.is.iOS) {
 			this.__adjustmentForiOS();
 		}
 	},
 
-	applyState: function(state) {
+	applyState: function (state) {
 		var active = state.active,
 			tabs = [];
 
 		tabs.push({
-				text: 'Contacts',
-				route: '/',
-				subRoute: this.contactsRoute,
-				active: active === 'contacts'
-			});
+			text: 'Contacts',
+			route: '/',
+			subRoute: this.contactsRoute,
+			active: active === 'contacts'
+		});
 
 		tabs.push({
-				text: 'Groups',
-				route: '/groups',
-				subRoute: this.groupsRoute,
-				active: active === 'groups'
-			});
+			text: 'Groups',
+			route: '/groups',
+			subRoute: this.groupsRoute,
+			active: active === 'groups'
+		});
 
 		tabs.push({
-				text: 'Distribution Lists',
-				route: '/lists',
-				subRoute: this.listsRoute,
-				active: active === 'lists'
-			});
+			text: 'Distribution Lists',
+			route: '/lists',
+			subRoute: this.listsRoute,
+			active: active === 'lists'
+		});
 
 		this.navigation.setTabs(tabs);
 	},
 
-	showContacts: function(route, subRoute) {
+	showContacts: function (route, subRoute) {
 		this.contactsRoute = subRoute;
 
 		this.setTitle('Contacts');
 		this.setActiveView('contacts-tab-view',
 			['groups-tab-view', 'lists-tab-view'],
 			'contacts'
-		).then(function(item) {
+		).then(function (item) {
 			if (item && item.handleRoute) {
 				item.handleRoute(subRoute);
 			}
 		});
 	},
 
-	showGroups: function(route, subRoute) {
+	showGroups: function (route, subRoute) {
 		this.groupsRoute = subRoute;
 
 		this.setTitle('Groups');
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 		);
 	},
 
-	showLists: function(route, subRoute) {
+	showLists: function (route, subRoute) {
 		this.listsRoute = subRoute;
 
 		this.setTitle('Distribution List');
@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 		);
 	},
 
-	setActiveView: function(active, inactive, tab) {
+	setActiveView: function (active, inactive, tab) {
 		var me = this, item;
 
 		me.prepareNavigation();
@@ -135,13 +135,13 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 			active: tab || active
 		});
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			item = me.setActiveItem(active);
 			fulfill(item);
 		});
 	},
 
-	setActiveItem: function(xtype) {
+	setActiveItem: function (xtype) {
 		var layout = this.getLayout(),
 			item = this.getItem(xtype),
 			current = layout.getActiveItem();
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 		return item;
 	},
 
-	getItem: function(xtype) {
+	getItem: function (xtype) {
 		var cmp = this.cmp_map[xtype];
 
 		if (!cmp) {
@@ -169,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 		return cmp;
 	},
 
-	prepareNavigation: function() {
+	prepareNavigation: function () {
 		this.NavigationActions.updateNavBar({
 			cmp: this.getNavigation(),
 			hideBranding: true
@@ -178,7 +178,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 		this.NavigationActions.setActiveContent(null);
 	},
 
-	getNavigation: function() {
+	getNavigation: function () {
 		if (!this.navigation || this.navigation.isDestroyed) {
 			this.navigation = NextThought.common.components.Navigation.create({
 				bodyView: this
@@ -188,31 +188,31 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 		return this.navigation;
 	},
 
-	onTabChange: function(title, route, tab) {
+	onTabChange: function (title, route, tab) {
 		this.pushRoute('', route);
 	},
 
-	restore: function(state) {
-		return new Promise(function(fulfill) {
+	restore: function (state) {
+		return new Promise(function (fulfill) {
 			this.setActiveTab(((state || {}).contacts || {}).activeTab);
 			fulfill();
 		}.bind(this));
 	},
 
-	__adjustmentForiOS: function() {
+	__adjustmentForiOS: function () {
 		var outline = this.el.down('.contact:nth-child(1)'),
 			list = this.el.down('.contact:nth-child(2)'),
 			input = this.el.down('input'),
 			me = this;
 
-		wait(100).then(function() {
+		wait(100).then(function () {
 			me.outlineY = outline.getY();
 			me.outlineHeight = outline.getHeight();
 		});
 
 		//For keyboard, reduce height and adjust position of elements to fit within smaller screen
-		input.on('focus', function() {
-			wait(250).then(function() {
+		input.on('focus', function () {
+			wait(250).then(function () {
 				if (window.innerHeight < 600) {
 					outline.setHeight(window.innerHeight - 15);
 					outline.setY(window.outerHeight - window.innerHeight);
@@ -224,7 +224,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 		});
 
 		//Undo resizing and repositioning when keyboard dismissed
-		input.on('blur', function() {
+		input.on('blur', function () {
 			if (this.outlineY) {
 				outline.setY(me.outlineY);
 				outline.setHeight(me.outlineHeight);
@@ -235,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.Index', {
 		}, this);
 
 		//Keep from permanently scrolling content off viewable area
-		window.onscroll = function() {
+		window.onscroll = function () {
 			if (!me.keyboardUpScrollY) {
 				return;
 			}

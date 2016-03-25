@@ -11,13 +11,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-questionset-self-assessment',
 
 	statics: {
-		getHandledMimeTypes: function() {
+		getHandledMimeTypes: function () {
 			return [
 				NextThought.model.QuestionSetRef.mimeType
 			];
 		},
 
-		getTypes: function() {
+		getTypes: function () {
 			return [
 				{
 					title: 'Self Assessment',
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			];
 		},
 
-		getEditorForRecord: function(record) {
+		getEditorForRecord: function (record) {
 			if (record instanceof NextThought.model.QuestionSetRef) {
 				return this;
 			}
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	SWITCHED: 'switched',
 	cls: 'content-editor questionset self-assessment',
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.loading) {
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	getItemList: function() {
+	getItemList: function () {
 		return this.bundle.getAllAssessments();
 	}
 });

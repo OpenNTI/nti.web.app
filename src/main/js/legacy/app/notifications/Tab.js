@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
 	alias: 'widget.notifications-tab',
 	cls: 'notifications-icon',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.list = Ext.widget({
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
 		this.on('destroy', 'destroy', this.listComponent);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.el, {
@@ -42,22 +42,22 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
 		});
 	},
 
-	updateBadge: function(badge) {
+	updateBadge: function (badge) {
 		if (this.el && this.el.dom) {
 			this.el.dom.setAttribute('data-badge', badge || 0);
 		}
 	},
 
-	onMenuShow: function() {
+	onMenuShow: function () {
 		this.list.show();
 	},
 
-	onMenuHide: function() {
+	onMenuHide: function () {
 		this.list.hide();
 		this.list.onDeactivate();
 	},
 
-	toggleMenu: function() {
+	toggleMenu: function () {
 		if (this.list.isVisible()) {
 			this.setMenuClosed();
 		} else {
@@ -65,12 +65,12 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Tab', {
 		}
 	},
 
-	doNavigateToObject: function(rec) {
+	doNavigateToObject: function (rec) {
 		this.toggleMenu();
 
 		this.navigateToObject(rec);
 	},
 
-	startToHideMenu: function() {},
-	cancelHide: function() {}
+	startToHideMenu: function () {},
+	cancelHide: function () {}
 });

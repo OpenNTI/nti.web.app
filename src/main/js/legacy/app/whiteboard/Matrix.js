@@ -7,7 +7,7 @@ var Ext = require('extjs');
 module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 	alternateClassName: 'NTMatrix',
 
-	constructor: function(transform) {
+	constructor: function (transform) {
 		var t = transform || {};
 		this.m = [
 			typeof t.a === 'number' ? t.a : 1, //m11
@@ -19,12 +19,12 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 		];
 	},
 
-	reset: function() {
+	reset: function () {
 		this.m = [1, 0, 0, 1, 0, 0];
 	},
 
 
-	multiply: function(matrix) {
+	multiply: function (matrix) {
 		var m11 = this.m[0] * matrix.m[0] + this.m[2] * matrix.m[1],
 			m12 = this.m[1] * matrix.m[0] + this.m[3] * matrix.m[1],
 
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 	},
 
 
-	rotate: function(rad) {
+	rotate: function (rad) {
 		var c = Math.cos(rad),
 			s = Math.sin(rad);
 
@@ -51,26 +51,26 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 	},
 
 
-	translate: function(x, y) {
-	if (Ext.isArray(x)) {
-	  y = x[1];
-	  x = x[0];
+	translate: function (x, y) {
+		if (Ext.isArray(x)) {
+	  	y = x[1];
+	  	x = x[0];
 	}
 		this.multiply({m: [1, 0, 0, 1, x, y]});
 	},
 
 
-	scale: function(sx, sy) {
-	if (Ext.isArray(sx)) {
-	  sy = sx[1];
-	  sx = sx[0];
+	scale: function (sx, sy) {
+		if (Ext.isArray(sx)) {
+	  	sy = sx[1];
+	  	sx = sx[0];
 	}
-	if (sy === undefined) { sy = sx; }
+		if (sy === undefined) { sy = sx; }
 		this.multiply({m: [sx, 0, 0, sy, 0, 0]});
 	},
 
 
-	scaleAll: function(scale) {
+	scaleAll: function (scale) {
 		var i = this.m.length - 1;
 		for (; i >= 0; i--) {
 			this.m[i] *= scale;
@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 	 *
 	 * @param [averaged]
 	 */
-	getScale: function(averaged) {
+	getScale: function (averaged) {
 		var m = this.m,
 			a = m[0], b = m[1],
 			c = m[2], d = m[3],
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 	},
 
 
-	getRotation: function() {
+	getRotation: function () {
 		var m = this.m, a = m[0], b = m[1];
 	//			c = m[2], d = m[3];
 
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 
 
 
-	getTranslation: function() {
+	getTranslation: function () {
 		return [this.m[4], this.m[5]];
 	},
 
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 	 * @param px
 	 * @param [py]
 	 */
-	transformPoint: function(px, py) {
+	transformPoint: function (px, py) {
 		if (Ext.isArray(px)) {
 			py = px[1];
 			px = px[0];
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Matrix', {
 	},
 
 
-	toTransform: function() {
+	toTransform: function () {
 		var i = this.m.length - 1;
 		for (; i >= 0; i--) { if (isNaN(this.m[i])) { throw 'NaN in matrix at index: ' + i; } }
 

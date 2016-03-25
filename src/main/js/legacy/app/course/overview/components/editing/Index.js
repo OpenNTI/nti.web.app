@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	layout: 'none',
 	items: [],
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.isLoading) {
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	showLoadingMask: function() {
+	showLoadingMask: function () {
 		this.isLoading = true;
 
 		if (!this.rendered) { return; }
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.el.mask('Loading...');
 	},
 
-	hideLoadingMask: function() {
+	hideLoadingMask: function () {
 		delete this.isLoading;
 
 		if (!this.rendered) { return; }
@@ -55,11 +55,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.el.unmask();
 	},
 
-	setActiveBundle: function(bundle) {
+	setActiveBundle: function (bundle) {
 		this.bundle = bundle;
 	},
 
-	editOutlineNode: function(record, outline) {
+	editOutlineNode: function (record, outline) {
 		//If we are switching outline nodes scroll the page to the top
 		if (!this.activeRecord || this.activeRecord.getId() !== record.getId()) {
 			this.scrollPageToTop();
@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return loaded;
 	},
 
-	doDelete: function() {
+	doDelete: function () {
 		var navigateTo;
 
 		if (!this.activeRecord) { return; }
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	navigate: function(obj) {
+	navigate: function (obj) {
 		obj.parent = this.currentNode;
 		this.navigateToObject(obj);
 	}

@@ -3,9 +3,9 @@ var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.model.converters.Date', {
 	override: 'Ext.data.Types'
-}, function() {
+}, function () {
 	Ext.data.Types.ISODATE = {
-		convert: function(v) {
+		convert: function (v) {
 			//if we already have a date don't try to parse it
 			if (v instanceof Date) {
 				return v;
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Date', {
 	};
 
 	Ext.data.Types.NTIDATE = {
-		convert: function(v) {
+		convert: function (v) {
 			if (Number(v) !== v) {
 				v = 0;
 			} else if (v % 1 !== 0) {

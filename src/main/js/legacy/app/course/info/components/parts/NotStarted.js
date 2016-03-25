@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 		editLink: '.edit'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		var i = this.getInfo() || {},
 			c = (i.get('Credit') || [])[0],
 			e = (c && c.get('Enrollment')) || {},
@@ -57,6 +57,6 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 		});
 
 	}
-}, function() {
+}, function () {
 	this.borrow(NextThought.app.course.info.components.OpenCourseInfo, ['showEnrollWindow']);
 });

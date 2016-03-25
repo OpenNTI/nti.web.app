@@ -11,14 +11,14 @@ module.exports = exports = Ext.define('NextThought.model.BaseProgress', {
 	],
 
 
-	getProgress: function(id) {
+	getProgress: function (id) {
 		var items = this.get('Items');
 
 		return items[id];
 	},
 
 
-	hasBeenViewed: function(id) {
+	hasBeenViewed: function (id) {
 		var progress = this.getProgress(id),
 			hasBeenViewed = AnalyticsUtil.hasBeenViewed(id);
 

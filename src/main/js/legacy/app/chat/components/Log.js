@@ -26,11 +26,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 
 	defaults: {border: false},
 
-	getMessageQuery: function(id) {
+	getMessageQuery: function (id) {
 		return Ext.String.format('{0}[messageId={1}]', this.entryType, IdCache.getIdentifier(id));
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 
 		this.entryType = this.entryType || 'chat-log-entry';
 		this.moderated = !!this.moderated;
@@ -86,13 +86,13 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		this.callParent(arguments);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.el, { scroll: this.onScroll, scope: this });
 		this.previousScroll = 0;
 	},
 
-	onScroll: function() {
+	onScroll: function () {
 		var me = this, scrollVal = Math.abs(me.el.dom.scrollHeight - me.el.dom.scrollTop - me.el.dom.offsetHeight),
 			minOffset = 50;
 
@@ -107,22 +107,22 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		me.previousScroll = me.el.dom.scrollTop;
 	},
 
-	selectall: function() {
-		Ext.each(this.query(this.entryType), function(f) {
+	selectall: function () {
+		Ext.each(this.query(this.entryType), function (f) {
 			f.setValue(true);
 		});
 	},
 
-	selectnone: function() {
-		Ext.each(this.query(this.entryType), function(f) {
+	selectnone: function () {
+		Ext.each(this.query(this.entryType), function (f) {
 			f.setValue(false);
 		});
 	},
 
-	approve: function() {
+	approve: function () {
 		var a = [];
 
-		Ext.each(this.query(this.entryType), function(f) {
+		Ext.each(this.query(this.entryType), function (f) {
 			if (f.getValue()) {
 				a.push(f.message.get('ID'));
 			}
@@ -131,13 +131,13 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		this.fireEvent('approve', a);
 	},
 
-	reject: function() {
-		Ext.each(this.query(this.entryType), function(f) {
+	reject: function () {
+		Ext.each(this.query(this.entryType), function (f) {
 			if (f.getValue()) {this.remove(f); }
 		}, this);
 	},
 
-	removeMessage: function(msg) {
+	removeMessage: function (msg) {
 		var c, m = this.down(this.getMessageQuery(msg.getId()));
 		if (m) {
 			c = m.ownerCt;
@@ -147,26 +147,26 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 
 	},
 
-	addContentMessage: function(msg) {
+	addContentMessage: function (msg) {
 		this.add({
 			xtype: 'chat-content-log-entry',
 			message: msg
 		});
 	},
 
-	insertTranscript: function(m) {
+	insertTranscript: function (m) {
 		var messages = m.get('Messages');
 		messages.sort(Globals.SortModelsBy('Last Modified', null, null));
-		Ext.each(messages, function(msg) {
+		Ext.each(messages, function (msg) {
 			this.addMessage(msg);
 		}, this);
 	},
 
-	failedToLoadTranscript: function() {
+	failedToLoadTranscript: function () {
 		console.error('failed to load transcript', arguments);
 	},
 
-	addMessage: function(msg) {
+	addMessage: function (msg) {
 		var id = msg.getId(),
 			rid = msg.get('inReplyTo'),
 			m = id ? this.down(this.getMessageQuery(id)) : null,
@@ -210,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 
 		// Scroll the chat log down after adding the element
 		// and after any images load
-		function scrollChatLog() {
+		function scrollChatLog () {
 			if (o.el && me.el && me.shouldAllowScrollingOnAdd) {
 				me.el.scroll('down', Infinity);
 			}
@@ -223,12 +223,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		scrollChatLog();
 	},
 
-	prepareMessagesBeforeAdd: function(messages) {
+	prepareMessagesBeforeAdd: function (messages) {
 		var m = [], me = this, lastTimeStamp, lastItem;
 
 		
 
-		(messages || []).forEach(function(msg) {
+		(messages || []).forEach(function (msg) {
 			var newMsgTime = msg.get('CreatedTime'),
 				stamp = Ext.Date.format(newMsgTime, 'F j, Y, g:i a'),
 				intervalTimeStamp;
@@ -263,10 +263,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		return m;
 	},
 
-	addBulkMessages: function(messages) {
+	addBulkMessages: function (messages) {
 		var m, win, lastItem, me = this;
 
-		function scroll() {
+		function scroll () {
 			if (lastItem && lastItem.el) {
 				lastItem.el.scrollIntoView(me.el);
 			}
@@ -290,7 +290,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		}
 	},
 
-	insertBulkMessages: function(index, messages) {
+	insertBulkMessages: function (index, messages) {
 		var m = this.prepareMessagesBeforeAdd(messages) || [],
 			lastItem, me = this, lastIndex;
 		if (!Ext.isEmpty(m)) {
@@ -300,13 +300,13 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 			// Wait is needed to make sure we account
 			// for whether the load more history button is added or not.
 			wait(10)
-				.then(function(){
+				.then(function () {
 					lastItem = me.items.items[lastIndex] || me.items.items.last();
 					if (lastItem) {
 						lastItem.onceRendered
-							.then(function(){
+							.then(function () {
 								wait()
-									.then(function(){
+									.then(function () {
 										lastItem.el.scrollIntoView(me.el);
 									});
 							});
@@ -315,12 +315,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		}
 	},
 
-	clearChatStatusNotifications: function() {
+	clearChatStatusNotifications: function () {
 		var ns = this.query('chat-notification-status'), me = this;
-		Ext.each(ns, function(n) { me.remove(n); });
+		Ext.each(ns, function (n) { me.remove(n); });
 	},
 
-	shouldAddTimestampBeforeMessage: function(msg) {
+	shouldAddTimestampBeforeMessage: function (msg) {
 		var newMsgTime = msg.get('CreatedTime'),
 			lastTimeStamp, intervalTimeStamp,
 			stamp = Ext.Date.format(newMsgTime, 'F j, Y, g:i a'),//shouldn't this be the previous message's time?
@@ -343,7 +343,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		}
 	},
 
-	addStatusNotification: function(state) {
+	addStatusNotification: function (state) {
 		var o = this.add({
 			xtype: 'chat-notification-status',
 			message: state
@@ -354,7 +354,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		}
 	},
 
-	addNotification: function(msg) {
+	addNotification: function (msg) {
 		//we are going to add then scroll to
 		var o = this.add({
 			xtype: 'chat-notification-entry',
@@ -366,11 +366,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		}
 	},
 
-	showInputStateNotifications: function(changes) {
+	showInputStateNotifications: function (changes) {
 		if (!Ext.isArray(changes)) { return; }
 		var me = this;
-		Ext.each(changes, function(change) {
-			UserRepository.getUser(change.user, function(u) {
+		Ext.each(changes, function (change) {
+			UserRepository.getUser(change.user, function (u) {
 				var name = u.getName(),
 					state = change.state === 'composing' ? 'typing' : change.state,
 					txt = name + ' is ' + state + '...';//TODO: find a way to put this into external strings
@@ -383,7 +383,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		});
 	},
 
-	scroll: function(entry) {
+	scroll: function (entry) {
 		var input = entry.nextSibling('chat-reply-to');
 
 		entry = input || entry;
@@ -393,35 +393,35 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Log', {
 		}
 	},
 
-	addMask: function() {
+	addMask: function () {
 		if (this.rendered) {
 			this.el.mask('loading chat history');
 		}
 	},
 
-	removeMask: function() {
+	removeMask: function () {
 		if (this.rendered) {
 			this.el.unmask();
 		}
 	},
 
-	getMessages: function() {
+	getMessages: function () {
 		var entryWidgets = this.query(this.entryType),
 			entries = [];
 
-		Ext.each(entryWidgets, function(o) {
+		Ext.each(entryWidgets, function (o) {
 			entries.push(o.message);
 		});
 
 		return entries;
 	},
 
-	toggleModerationPanel: function() {
+	toggleModerationPanel: function () {
 		this.el.toggleCls('moderating');
-		Ext.each(this.el.query('.log-entry.flagged'), function(d) {
+		Ext.each(this.el.query('.log-entry.flagged'), function (d) {
 			Ext.fly(d).removeCls('flagged');
 		});
-		Ext.each(this.el.query('.control.checked'), function(d) {
+		Ext.each(this.el.query('.control.checked'), function (d) {
 			Ext.fly(d).removeCls('checked');
 		});
 	}

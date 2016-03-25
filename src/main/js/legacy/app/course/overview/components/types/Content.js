@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	extend: 'NextThought.common.components.BoundCollection',
 	alias: 'widget.overview-types-content',
 
-	setProgress: function(progress) {
+	setProgress: function (progress) {
 		var body = this.getBodyContainer();
 
 		this.progress = progress;
@@ -21,14 +21,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return;
 		}
 
-		body.items.each(function(item) {
+		body.items.each(function (item) {
 			if (item.setProgress) {
 				item.setProgress(progress);
 			}
 		});
 	},
 
-	setCommentCounts: function(commentCounts) {
+	setCommentCounts: function (commentCounts) {
 		var body = this.getBodyContainer();
 
 		this.commentCounts = commentCounts;
@@ -37,17 +37,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return;
 		}
 
-		body.items.each(function(item) {
+		body.items.each(function (item) {
 			if (item.setCommentCounts) {
 				item.setCommentCounts(commentCounts);
 			}
 		});
 	},
 
-	onceLoaded: function() {
+	onceLoaded: function () {
 		var me = this;
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			if (me.collectionSet) {
 				fulfill();
 			} else {
@@ -56,10 +56,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					'collection-set': fulfill
 				});
 			}
-		}).then(function() {
+		}).then(function () {
 			var cmps = me.getComponents();
 
-			return Promise.all(cmps.map(function(cmp) {
+			return Promise.all(cmps.map(function (cmp) {
 				if (cmp.onceLoaded) {
 					return cmp.onceLoaded();
 				}
@@ -69,10 +69,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	__collapseGroup: function(group) {
+	__collapseGroup: function (group) {
 		var items = group.Items;
 
-		group.Items = items.reduce(function(acc, item, index, arr) {
+		group.Items = items.reduce(function (acc, item, index, arr) {
 			var last = acc.last(),
 				next = index < (arr.length - 1) ? arr[index + 1] : null;
 
@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return group;
 	},
 
-	parseCollection: function(response) {
+	parseCollection: function (response) {
 		var json = JSON.parse(response),
 			items = json.Items || [];
 
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return ParseUtils.parseItems([json])[0];
 	},
 
-	buildHeader: function(collection) {
+	buildHeader: function (collection) {
 		return {
 			xtype: 'course-overview-header',
 			record: this.record,
@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-	afterSetCollection: function() {
+	afterSetCollection: function () {
 		if (this.progress) {
 			this.setProgress(this.progress);
 		}
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	getCmpForRecord: function(record) {
+	getCmpForRecord: function (record) {
 		if (record instanceof NextThought.model.courses.overview.Group) {
 			return NextThought.app.course.overview.components.parts.Group.create({
 				record: record,

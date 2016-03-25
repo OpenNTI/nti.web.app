@@ -6,14 +6,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.SingleCh
 	extend: 'NextThought.app.assessment.input.MultipleChoice',
 	alias: 'widget.question-input-multiplechoicepart',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData, {
 			'choice-style': 'single'
 		});
 	},
 
-	choiceClicked: function(e) {
+	choiceClicked: function (e) {
 		if (this.submitted) {return;}
 
 		var c = e.getTarget('.choice', null, true);
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.SingleCh
 	},
 
 
-	getValue: function() {
+	getValue: function () {
 		var r = this.callParent();
 		if (r === null) {
 			return null;

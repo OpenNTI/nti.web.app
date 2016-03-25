@@ -19,7 +19,7 @@ var PreferenceWebApp = require('../model/preference/WebApp');
 
 
 module.exports = exports = Ext.define('NextThought.preference.Manager', {
-	constructor: function(config) {
+	constructor: function (config) {
 		this.baseUrl = config.href;
 		this.root = NextThought.model.preference.Root.create({Class: 'preference', href: this.baseUrl});
 	},
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.preference.Manager', {
 	* @param cb {Function} what to do after we get the value, takes the value as a parameter
 	* @param scope {Object} the scope to use when calling the callback
 	*/
-	getPreference: function(key, cb, scope) {
+	getPreference: function (key, cb, scope) {
 		var value = this.getSubPreference(key);
 
 		if (value && (value.isFuture || this.hasFutures(value))) {
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.preference.Manager', {
 		return Promise.resolve(value);
 	},
 
-	getSubPreference: function(key) {
+	getSubPreference: function (key) {
 		var i, keys = key.split('/'),
 			value = this.root;
 
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.preference.Manager', {
 		return value;
 	},
 
-	hasFutures: function(value) {
+	hasFutures: function (value) {
 		var i, cur, hasFuture = false,
 			subs = value.subPreferences;
 
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.preference.Manager', {
 		return hasFuture;
 	},
 
-	urlToClassName: function(url) {
+	urlToClassName: function (url) {
 		var i, className = 'NextThought.model.preference',
 			urls = url.split('/'),
 			startingIndex = Ext.Array.indexOf(urls, '++preferences++') + 1;
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.preference.Manager', {
 		return className;
 	},
 
-	classNameToModel: function(className) {
+	classNameToModel: function (className) {
 		var i, model = NextThought,
 			names = className.split('.');
 
@@ -113,17 +113,17 @@ module.exports = exports = Ext.define('NextThought.preference.Manager', {
 		return model;
 	},
 
-	loadSubPreference: function(key, cb, scope) {
+	loadSubPreference: function (key, cb, scope) {
 		var me = this,
 			url = me.baseUrl + '/' + key;
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			NextThought.model.preference.Base.load(url, {
-				failure: function(rec, op) {
+				failure: function (rec, op) {
 					reject(op.response);
 					Ext.callback(cb, scope, [false]);
 				},
-				success: function(rec, op) {
+				success: function (rec, op) {
 					var model, json = op.response.responseText;
 
 					json = Ext.JSON.decode(json);
@@ -139,13 +139,13 @@ module.exports = exports = Ext.define('NextThought.preference.Manager', {
 		});
 	},
 
-	setSubPreference: function(json) {
+	setSubPreference: function (json) {
 		var me = this, i, result, name = 'NextThought.model',
 			cls = json.Class,
 			path = cls.split('_'),
 			value = this.root, nextValue;
 
-		function sp(name) {
+		function sp (name) {
 			if (json[name]) {
 				me.setSubPreference(json[name]);
 			}
@@ -153,7 +153,7 @@ module.exports = exports = Ext.define('NextThought.preference.Manager', {
 
 		for (i = 0; i < path.length; i++) {
 			if (i + 1 < path.length) {
-					if (value.get(path[i])) {
+				if (value.get(path[i])) {
 						nextValue = value.get(path[i]);
 
 						//if a parent preference isn't load yet, init it to an empty one
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.preference.Manager', {
 						}
 					}
 
-					name = name + '.' + path[i].toLowerCase();
+				name = name + '.' + path[i].toLowerCase();
 			} else {
 				name = name + '.' + path[i];
 

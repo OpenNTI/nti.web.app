@@ -36,14 +36,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		colorInput: '.color-input'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var colors = NextThought.model.courses.overview.Group.COLOR_CHOICES,
 			title = this.record ? this.record.get('title') : '',
 			accent = this.record ? this.record.get('accentColor') : '';
 
-		function isSelectedColor(hex, index) {
+		function isSelectedColor (hex, index) {
 			if (accent) {
 				return hex === accent;
 			}
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			colors: colors.map(function(hex, index) {
+			colors: colors.map(function (hex, index) {
 				return {
 					cls: isSelectedColor(hex, index) ? 'selected' : '',
 					hex: hex
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.colorsEl, 'click', this.maybeSelectColor.bind(this));
@@ -78,11 +78,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.onInputChange();
 	},
 
-	getSelectedColorEl: function() {
+	getSelectedColorEl: function () {
 		return this.colorsEl && this.colorsEl.dom && this.colorsEl.dom.querySelector('.color.selected');
 	},
 
-	getSelectedColor: function() {
+	getSelectedColor: function () {
 		var selectedEl = this.getSelectedColorEl(),
 			recordColor = this.record && this.record.get('accentColor'),
 			value;
@@ -99,23 +99,23 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return value;
 	},
 
-	getTitle: function() {
+	getTitle: function () {
 		return this.inputEl && this.inputEl.getValue();
 	},
 
-	isEmpty: function() {
+	isEmpty: function () {
 		var values = this.getValue();
 
 		return !values.title && !values.accentColor;
 	},
 
-	onInputChange: function() {
+	onInputChange: function () {
 		if (this.onChange) {
 			this.onChange(this.getValue());
 		}
 	},
 
-	maybeSelectColor: function(e) {
+	maybeSelectColor: function (e) {
 		var color = e.getTarget('[data-value]'),
 			value = color && color.getAttribute('data-value'),
 			current = this.getSelectedColorEl();
@@ -137,13 +137,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	getErrors: function() {
+	getErrors: function () {
 		var values = this.getValue(),
 			errors = {};
 
 		if (!values.title) {
 			errors.title = {
-					missing: true
+				missing: true
 			};
 		}
 
@@ -162,23 +162,23 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return errors;
 	},
 
-	showErrorOn: function(name) {
+	showErrorOn: function (name) {
 		if (name === 'title') {
 			this.inputEl.addCls('error');
 		}
 	},
 
-	removeErrorOn: function(name) {
+	removeErrorOn: function (name) {
 		this.inputEl.removeCls('error');
 	},
 
-	getErrorsFor: function(name) {
+	getErrorsFor: function (name) {
 		var errors = this.getErrors();
 
 		return errors[name];
 	},
 
-	getValue: function() {
+	getValue: function () {
 		return {
 			MimeType: NextThought.model.courses.overview.Group.mimeType,
 			title: this.getTitle(),

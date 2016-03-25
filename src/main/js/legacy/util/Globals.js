@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	}),
 
 	//Holy mother of perl! JSLint really hates the javascript protocol. :( We have to really obfuscate that string for it not to complain.
-	EMPTY_WRITABLE_IFRAME_SRC: ('javascript' + (function() {return ':';}())),
+	EMPTY_WRITABLE_IFRAME_SRC: ('javascript' + (function () {return ':';}())),
 
 	ANIMATE_NO_FLASH: {
 		listeners: {
@@ -70,13 +70,13 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	escapeForRegex: function(str) {
+	escapeForRegex: function (str) {
 		return str.replace(this.ESCAPE_REGEX_PATTERN, '\\$&');
 	},
 
 
 	//A utility wrapper around JSON.parse to catch errors
-	parseJSON: function(s, safe) {
+	parseJSON: function (s, safe) {
 		try {
 			return JSON.parse(s);
 		} catch (e) {
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	parseError: function(response) {
+	parseError: function (response) {
 		var error,
 			status = response.status,
 			error;
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 
 
 	//Remove leading and trailing /'s from a route
-	trimRoute: function(route) {
+	trimRoute: function (route) {
 		route = route || '';
 		//get rid of any leading slash
 		route = route.replace(/^\//, '');
@@ -114,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	getContainerLoadingMask: function() {
+	getContainerLoadingMask: function () {
 		return {
 			xtype: 'box',
 			autoEl: {cls: 'loading-mask container-loading-mask', cn: {cls: 'load-text', html: 'Loading...'}}
@@ -130,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 * @param  {String} targetMimeType the mimeType of the thing to open
 	 * @return {Boolean}			   if we can show this in the app
 	 */
-	shouldOpenInApp: function(ntiid, url, basePath, targetMimeType) {
+	shouldOpenInApp: function (ntiid, url, basePath, targetMimeType) {
 		var isTargetAnNTIID = ParseUtils.isNTIID(url),
 			canHandleTypeInternally = this.INTERNAL_MIMETYPES[targetMimeType] || (/\.pdf$/i).test((url || '').split('?')[0]),
 			parts = this.getURLParts(url),
@@ -150,7 +150,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 * @param  {String} type mimeType to search for
 	 * @return {MimeType}	 the mimeType if we find it or null
 	 */
-	getNavigatorMimeType: function(type) {
+	getNavigatorMimeType: function (type) {
 		var key, mimeType;
 
 		for (key in navigator.mimeTypes) {
@@ -162,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		}
 	},
 
-	swallow: function(e) {},
+	swallow: function (e) {},
 
 
 	/**
@@ -170,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 * @param  {String} name name of the plugin
 	 * @return {Plugin}		 the plugin if we find it or null
 	 */
-	getNavigatorPlugin: function(name) {
+	getNavigatorPlugin: function (name) {
 		var key, plugin;
 
 		for (key in navigator.plugins) {
@@ -189,7 +189,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 * @param  {String} name name of the application providing the object
 	 * @return {Object}		 the active x object or null if we couldn't create one
 	 */
-	getActiveXObject: function(name) {
+	getActiveXObject: function (name) {
 		try {
 			return new ActiveXObject(name);
 		} catch (e) {
@@ -205,7 +205,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 *
 	 * @return {Boolean} true if it can, false it it can't
 	 */
-	hasPDFSupport: function() {
+	hasPDFSupport: function () {
 		var support = false;
 
 		//check if pdfs are registered as supported by the browser
@@ -223,10 +223,10 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	flatten: function(a) {
+	flatten: function (a) {
 		if (!a.reduce) { return a; }
 
-		return a.reduce(function(acc, x) {
+		return a.reduce(function (acc, x) {
 			if (Array.isArray(x)) {
 				acc = acc.concat(x);
 			} else {
@@ -238,13 +238,13 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	getError: function(e) {
+	getError: function (e) {
 		return e.stack || e;
 	},
 
-	stopBackspace: function(doc) {
-		function fn() {
-			return function(e) {
+	stopBackspace: function (doc) {
+		function fn () {
+			return function (e) {
 				var t = e.getTarget(),
 					key = e.getKey(),
 					notInput = (!t || (!(/input|textarea/i).test(t.tagName) && !t.getAttribute('contenteditable')));
@@ -265,7 +265,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	validateConfig: function() {
+	validateConfig: function () {
 		var HOST_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?$/i,
 			HOST_PATTERN_PROTOCOL_MATCH_GROUP = 1,
 			HOST_PATTERN_DOMAIN_MATCH_GROUP = 3,
@@ -318,12 +318,12 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 * @param {Function} [onError]
 	 * @param {Object} [scope]
 	 */
-	loadScript: function(url, onLoad, onError, scope, bustCache) {
+	loadScript: function (url, onLoad, onError, scope, bustCache) {
 		var head, doc = document,
 			script, onLoadFn, onErrorFn;
 
-		function buildCallback(cb, scope) {
-			return function() {
+		function buildCallback (cb, scope) {
+			return function () {
 				script.onload = null;
 				script.onreadystatechange = null;
 				script.onerror = null;
@@ -356,7 +356,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		script.onload = onLoadFn;
 		script.onerror = onErrorFn;
 
-		script.onreadystatechange = function() {
+		script.onreadystatechange = function () {
 			if (this.readyState === 'loaded' || this.readyState === 'complete') {
 				onLoadFn();
 			}
@@ -368,16 +368,16 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	loadScripts: function(urls, onLoad, scope, bustCache) {
+	loadScripts: function (urls, onLoad, scope, bustCache) {
 		var u, stack = [], errors = false;
-		function tick() {
+		function tick () {
 			stack.pop();
 			if (stack.length === 0) {
 				Ext.callback(onLoad, scope, [errors]);
 			}
 		}
 
-		function fail(s) {
+		function fail (s) {
 			errors = true;
 			console.error('Problem with: ' + s.src);
 			tick();
@@ -392,10 +392,10 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	loadStyleSheetPromise: function(url, id) {
+	loadStyleSheetPromise: function (url, id) {
 		var old, head;
 		//TODO: maybe try to restore the old one if it fails
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			var doc = document, i = 0,
 				link, checkInterval, sibling;
 
@@ -439,11 +439,11 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 			 * Check all the style sheets of the link to see if the it has rules
 			 * @return {Boolean} true if one matches false otherwise
 			 */
-			function checkIfLoaded() {
+			function checkIfLoaded () {
 				return link.style;
 			}
 
-			checkInterval = setInterval(function() {
+			checkInterval = setInterval(function () {
 				i++;
 
 				if (i > 300) {
@@ -466,7 +466,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 * @param {Function} [onFail]
 	 * @param {Object} [scope] Context object to execute the onLoad/onFail callbacks
 	 */
-	loadStyleSheet: function(url, onLoad, onFail, scope) {
+	loadStyleSheet: function (url, onLoad, onFail, scope) {
 		var t, i = 0, doc = document, head, link, call, check;
 
 		if (typeof url === 'object') {
@@ -477,13 +477,13 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		head = typeof doc !== 'undefined' &&
 				(doc.head || doc.getElementsByTagName('head')[0]);
 		link = doc.createElement('link');
-		call = function(cb) {
+		call = function (cb) {
 			clearInterval(t);
 			if (cb) {
 				cb.call(scope || window, link);
 			}
 		};
-		check = function() {
+		check = function () {
 			i++;
 			//30 seconds, if each interval is 10ms
 			if (i > 3000) {
@@ -508,24 +508,24 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	handleCache: function() {
+	handleCache: function () {
 		try {
 			var ac = window.applicationCache;
 			if (!ac) { return; }
 
-			ac.addEventListener('updateready', function(e) {
-									if (ac.status === ac.UPDATEREADY) {
+			ac.addEventListener('updateready', function (e) {
+				if (ac.status === ac.UPDATEREADY) {
 										ac.swapCache();
 										Ext.MessageBox.confirm(
 											'Update Available',
 											'A new version of this site is available. Load it now?',
-											function(btn) {
+											function (btn) {
 												if (btn === 'yes') { window.location.reload(); }
 											}
 										);
 									}
 									//else: Manifest didn't changed. Nothing new to do.
-								}, false);
+			}, false);
 		}
 		catch (error) {
 			console.error('Error handling html5 app cache', error);
@@ -533,17 +533,17 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	getAsynchronousTaskQueueForList: function(s) {
+	getAsynchronousTaskQueueForList: function (s) {
 		var list = [], i = (s && (s.length || s) - 1) || 0;
 		for (i; i > 0; i--) { list.push({}); }
 		return list;
 	},
 
 
-	removeLoaderSplash: function() {
+	removeLoaderSplash: function () {
 		var me = this;
 		me.removeLoaderSplash = Ext.emptyFn;
-		setTimeout(function() {
+		setTimeout(function () {
 			var mask = Ext.get('loading-mask');
 
 			if (mask) {
@@ -563,7 +563,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 * @param b - second array
 	 * @param [fn] - an equality function.	If this is ommited === is used on each elment
 	 */
-	arrayEquals: function(a, b, fn) {
+	arrayEquals: function (a, b, fn) {
 		var i;
 		if (a.length !== b.length) {
 			return false;
@@ -587,9 +587,9 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 * Author: Jim Palmer (based on chunking idea from Dave Koelle)
 	 * https://github.com/overset/javascript-natural-sort/blob/master/naturalSort.js
 	 */
-	naturalSortComparator: function naturalSort(a, b) {
+	naturalSortComparator: function naturalSort (a, b) {
 
-		function i(s) {
+		function i (s) {
 			s = String(s);
 			return naturalSort.insensitive ? s.toLowerCase() : s;
 		}
@@ -636,16 +636,16 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	getNaturalSorter: function(field) {
-		return function(a, b) {
+	getNaturalSorter: function (field) {
+		return function (a, b) {
 			var sa = a.get(field), sb = b.get(field);
 			return this.naturalSortComparator(sa, sb);
 		};
 	},
 
 
-	getCaseInsensitiveNaturalSorter: function(field) {
-		return function(a, b) {
+	getCaseInsensitiveNaturalSorter: function (field) {
+		return function (a, b) {
 			var sa = String(a.get(field)).toLowerCase(), sb = String(b.get(field)).toLowerCase();
 			return this.naturalSortComparator(sa, sb);
 		};
@@ -660,14 +660,14 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	 * @param {Function} [g] - Getter function, where the value in the array is passed, and the getter returns the comparable.
 	 * @param {Boolean} [natural] - Sort strings naturally (1 2...10 vs 1 10 2 20 ...etc)
 	 */
-	SortModelsBy: function(key, dir, g, natural) {
-		function $(v) {
+	SortModelsBy: function (key, dir, g, natural) {
+		function $ (v) {
 			return (g ? g(v) : v).get(key);
 		}
 
 		var n = this.naturalSortComparator;
 
-		return function(a, b) {
+		return function (a, b) {
 			var c = 0, $a = $(a), $b = $(b);
 
 			if ($a !== $b) {
@@ -687,7 +687,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		};
 	},
 
-	ensureSlash: function(s, atBeginning) {
+	ensureSlash: function (s, atBeginning) {
 		if (!s) {return;}
 
 		var index = atBeginning ? 0 : (s.length - 1),
@@ -704,15 +704,15 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	/**
 	 * @see http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
 	 */
-	guidGenerator: function() {
-		var S4 = function() {
-		   return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+	guidGenerator: function () {
+		var S4 = function () {
+		   	return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
 		};
 		return (S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4());
 	},
 
 
-	isMe: function(user) {
+	isMe: function (user) {
 		var id = user;
 		if (typeof user !== 'string' && user && user.getId) {
 			id = user.getId();
@@ -721,22 +721,22 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	getViewIdFromComponent: function(c) {
+	getViewIdFromComponent: function (c) {
 		return c.up('view-container').id;
 	},
 
-	buildBlocker: function(scope, blockTime) {
+	buildBlocker: function (scope, blockTime) {
 		var me = scope,
 			key = this.guidGenerator(),
 			time = blockTime || 500;
 
-		return function() {
+		return function () {
 			var block = me.hasOwnProperty(key);
 
 			if (block) { clearTimeout(me[key]); }
 
 			me[key] = setTimeout(
-					function() { delete me[key]; },
+					function () { delete me[key]; },
 					time);
 
 			if (block) {
@@ -746,7 +746,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	getURLObject: function() {
+	getURLObject: function () {
 		var url;
 
 		if (window.URL && window.URL.createObjectURL) {
@@ -759,12 +759,12 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	getURLParts: function(url) {
+	getURLParts: function (url) {
 		return Url.parse(url);
 	},
 
 
-	getURLRooted: function(url, root) {
+	getURLRooted: function (url, root) {
 		if (!url) { return ''; }
 
 		if (this.HOST_PREFIX_PATTERN.test(url) || url.indexOf('/') === 0) {
@@ -789,7 +789,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	getURL: function getU(u, root) {
+	getURL: function getU (u, root) {
 		if (!u) {return '';}
 		if (!HOST_PREFIX_PATTERN.test(u) && u.indexOf('//') !== 0) {
 			if (!Ext.isEmpty(root)) {
@@ -801,7 +801,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 		return u;
 	},
 
-	getResourceURL: function(name) {
+	getResourceURL: function (name) {
 		var url, d = document.createElement('div');
 		d.setAttribute('class', name);
 		try {
@@ -816,7 +816,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	reloadCSS: function(doc) {
+	reloadCSS: function (doc) {
 		doc = (doc || document);
 		console.log('Document Title:', doc.title);
 		var cb = '_dc=',
@@ -839,7 +839,7 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	},
 
 
-	isFeature: function(name) {
+	isFeature: function (name) {
 		var f = $AppConfig.features || {};
 		return Boolean(f[name]);
 	},
@@ -848,12 +848,12 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 	//taken from the login app
 	EMAIL_REGEX: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 
-	isEmail: function(email) {
+	isEmail: function (email) {
 		return this.EMAIL_REGEX.test(email);
 	},
 
 
-	sendEmailTo: function(to, subject, body, cc, bcc) {
+	sendEmailTo: function (to, subject, body, cc, bcc) {
 		var href = 'mailto:';
 
 		to = (Ext.isArray(to)) ? to : [to];
@@ -896,7 +896,7 @@ exports.stopBackspace(document);
 exports.handleCache();
 
 
-function makeImage(prop) {
+function makeImage (prop) {
 	var src = exports[prop];
 
 	src = exports.getResourceURL(src);

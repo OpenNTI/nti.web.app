@@ -10,12 +10,12 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Curren
 	addText: 'Add',
 	seeAllText: 'See All',
 
-	getTargetEl: function() {
+	getTargetEl: function () {
 		return this.body;
 	},
 
 	childEls: ['body'],
-	getDockedItems: function() { return []; },
+	getDockedItems: function () { return []; },
 
 
 	renderTpl: Ext.DomHelper.markup([
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Curren
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -47,12 +47,12 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Curren
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this;
 
-		me.mon(me.el, 'click', function(e) {
+		me.mon(me.el, 'click', function (e) {
 			if (e.getTarget('.add')) {
 				me.onAddClick();
 			} else if (e.getTarget('.see-all')) {
@@ -62,13 +62,13 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Curren
 	},
 
 
-	onAddClick: function() {},
+	onAddClick: function () {},
 
 
-	onSeeAllClick: function() {},
+	onSeeAllClick: function () {},
 
 
-	showSeeAll: function() {
+	showSeeAll: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.showSeeAll.bind(this));
 			return;
@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Curren
 	},
 
 
-	hideSeeAll: function() {
+	hideSeeAll: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.hideSeeAll.bind(this));
 			return;
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Curren
 	},
 
 
-	showAdd: function() {
+	showAdd: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.showAdd.bind(this));
 			return;
@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Curren
 	},
 
 
-	hideAdd: function() {
+	hideAdd: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.hideAdd.bind(this));
 			return;

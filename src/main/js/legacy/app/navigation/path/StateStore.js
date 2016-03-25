@@ -7,24 +7,24 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.StateStor
 
 	CONTAINER_PATH: {},
 
-	getFromCache: function(ntiid) {
+	getFromCache: function (ntiid) {
 		return this.CONTAINER_PATH[ntiid];
 	},
 
 
-	setInCache: function(ntiid, pathPromise) {
+	setInCache: function (ntiid, pathPromise) {
 		this.CONTAINER_PATH[ntiid] = pathPromise;
 
 		return pathPromise;
 	},
 
 
-	removeFromCache: function(ntiid) {
+	removeFromCache: function (ntiid) {
 		delete this.CONTAINER_PATH[ntiid];
 	},
 
 
-	clearCache: function() {
+	clearCache: function () {
 		this.CONTAINER_PATH = {};
 	}
 

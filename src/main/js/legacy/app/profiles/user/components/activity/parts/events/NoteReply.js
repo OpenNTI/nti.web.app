@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	fillIn: function() {
+	fillIn: function () {
 		var me = this,
 			replyTo = me.record.get('inReplyTo'),
 			parsed = ParseUtils.parseNTIID(replyTo),
@@ -75,22 +75,22 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			return;
 		}
 
-		function resolved(u) {
+		function resolved (u) {
 			if (el.dom) {
 				el.update(u.getName());
-				me.mon(el, 'click', function() {
+				me.mon(el, 'click', function () {
 					me.fireEvent('show-profile', u);
 				});
 			}
 		}
 
-		function fill(o) {
+		function fill (o) {
 			if (el.dom) {
 				UserRepository.getUser(o.get('Creator')).then(resolved, error);
 			}
 		}
 
-		function error() {
+		function error () {
 			if (el.dom) {
 				el.removeCls('name');
 				el.update('[Missing]');

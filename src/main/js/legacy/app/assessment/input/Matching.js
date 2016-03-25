@@ -3,13 +3,13 @@ var InputBase = require('./Base');
 var DdScrollingDragZone = require('../../../common/dd/ScrollingDragZone');
 
 
-function asInt(e, i) {
+function asInt (e, i) {
 	return e && parseInt(e.getAttribute(i), 10);
 }
 
-function toMap(ar, attr) {
+function toMap (ar, attr) {
 	var m = {};
-	Ext.each(ar, function(e) { m[e.getAttribute(attr)] = e; });
+	Ext.each(ar, function (e) { m[e.getAttribute(attr)] = e; });
 	return m;
 }
 
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		shelfEl: '.terms'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var values = Ext.clone(this.part.get('values')),
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 			afterRender: {scope: this, fn: 'injectMatchTerms', buffer: 1},
 			el: {
 				scope: this,
-				click: function(e) {
+				click: function (e) {
 					if (e.getTarget('.reset')) {
 						this.resetTerm(e);
 					}
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		});
 	},
 
-	getAnsweredCount: function() {
+	getAnsweredCount: function () {
 		var value = this.getValue(),
 			total, answered;
 
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		return answered / total;
 	},
 
-	injectMatchTerms: function() {
+	injectMatchTerms: function () {
 		var s = this.shelfEl,
 			el, ownerMain;
 
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 
 
 	//<editor-fold desc="Drag & Drop">
-	getDragProxy: function() {
+	getDragProxy: function () {
 		var proxy = this.dragProxy;
 
 		if (!proxy) {
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		return proxy;
 	},
 
-	moveTerm: function moveTerm(el, to) {
+	moveTerm: function moveTerm (el, to) {
 		var p = el.parentNode,
 			tP = to.parentNode,
 			tS = to.nextSibling,
@@ -157,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		this.bufferedUpdateLayout();
 	},
 
-	resetTerm: function resetTerm(e) {
+	resetTerm: function resetTerm (e) {
 		var toReset = e.getTarget('.target.drag');
 		if (toReset) {
 			this.moveTerm(toReset, this.shelfEl.dom);
@@ -165,7 +165,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		this.maybeChangeSubmitButtonState();
 	},
 
-	dropTerm: function(dropOn, term) {
+	dropTerm: function (dropOn, term) {
 		var t = Ext.fly(dropOn).down('.dropzone', true),
 			c = t && t.childNodes,
 			n = c && c[0];
@@ -191,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		return true;
 	},
 
-	setupDragging: function() {
+	setupDragging: function () {
 		var cfg, me = this,
 			el = this.up().getEl(), z;
 
@@ -201,9 +201,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 			animRepair: true,
 			proxy: this.getDragProxy(),
 
-			afterRepair: function() { this.dragging = false; }, //override to stop the flash
+			afterRepair: function () { this.dragging = false; }, //override to stop the flash
 
-			getDragData: function(e) {
+			getDragData: function (e) {
 				var sourceEl = e.getTarget('.drag'), d;
 				if (sourceEl) {
 					d = sourceEl.cloneNode(true);
@@ -218,15 +218,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 				}
 			},
 
-			getRepairXY: function() {
+			getRepairXY: function () {
 				return this.dragData.repairXY;
 			},
 
-			onBeforeDrag: function() {
+			onBeforeDrag: function () {
 				return !me.submitted;
 			},
 
-			onStartDrag: function() {
+			onStartDrag: function () {
 				var data = this.dragData,
 					co = Ext.fly(data.sourceEl).up('.component-overlay'),
 					so = data.sourceEl,
@@ -245,7 +245,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 				Ext.fly(so).addCls('dragging');
 			},
 
-			onEndDrag: function(data) {
+			onEndDrag: function (data) {
 				if (data.shield) {
 					data.shield.remove();
 					delete data.shield;
@@ -261,7 +261,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		this.on('destroy', 'destroy', this.reDD);
 	},
 
-	setupDropZone: function() {
+	setupDropZone: function () {
 
 		var id = this.id,
 			me = this,
@@ -269,21 +269,21 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 				//<editor-fold desc="Boilerplate">
 				// If the mouse is over a target node, return that node. This is provided as the "target" parameter in all "onNodeXXXX" node event
 				// handling functions
-				getTargetFromEvent: function(e) {
+				getTargetFromEvent: function (e) {
 					return e.getTarget('.target.choice') || e.getTarget('.terms'); },
 
 				// On entry into a target node, highlight that node.
-				onNodeEnter: function(target, dd, e, data) {
+				onNodeEnter: function (target, dd, e, data) {
 					if (data.instanceId !== id) {return false;}
 					Ext.fly(target).addCls('drop-hover'); },
 
 				// On exit from a target node, unhighlight that node.
-				onNodeOut: function(target, dd, e, data) {
+				onNodeOut: function (target, dd, e, data) {
 					if (data.instanceId !== id) {return false;}
 					Ext.fly(target).removeCls('drop-hover'); },
 
 				// While over a target node, return the default drop allowed
-				onNodeOver: function(target, dd, e, data) {
+				onNodeOver: function (target, dd, e, data) {
 					var p = Ext.dd.DropZone.prototype;
 					return (data.instanceId === id) ?
 						   p.dropAllowed :
@@ -292,7 +292,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 				//</editor-fzold>
 			},
 			dropOnAnswer = {
-				onNodeDrop: function(target, dd, e, data) {
+				onNodeDrop: function (target, dd, e, data) {
 					if (data.instanceId !== id) {return false;}
 					var r = me.dropTerm(target, data.sourceEl);
 					me.maybeChangeSubmitButtonState();
@@ -300,7 +300,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 				}
 			},
 			dropOnShelf = {
-				onNodeDrop: function(target, dd, e, data) {
+				onNodeDrop: function (target, dd, e, data) {
 					if (data.instanceId !== id) {return false;}
 					me.moveTerm(data.sourceEl, Ext.get(target));
 					me.maybeChangeSubmitButtonState();
@@ -319,10 +319,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 
 
 	//<editor-fold desc="Grading">
-	getValue: function() {
+	getValue: function () {
 		var val = {};
 
-		this.el.select('.choice').each(function(blank) {
+		this.el.select('.choice').each(function (blank) {
 			//this iterates the drop zones (blanks) and looks for the drag element (the "answer")
 			var answer = blank.down('.term'),
 			//Get the index off the answer...
@@ -337,7 +337,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		return Object.keys(val).length ? val : null;
 	},
 
-	setValue: function(value) {
+	setValue: function (value) {
 		var q = '.drag.term', termId, binId, bin,
 			bins = toMap(this.inputBox.query('.choice'), 'data-target'),
 			terms = Ext.Array.unique(
@@ -363,7 +363,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 		}
 	},
 
-	mark: function() {
+	mark: function () {
 		var s = (this.part.get('solutions') || [])[0],
 			c = (s && s.get('value')) || {}, me = this,
 			values = Ext.clone(this.part.get('values')),
@@ -373,7 +373,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 			return;
 		}
 
-		function m(e) {
+		function m (e) {
 			var key = asInt(Ext.fly(e).down('.term'), 'data-match'),
 				value = asInt(e, 'data-target'),
 				cls = (!Ext.isEmpty(key) && value === c[key]) ? 'correct' : 'incorrect';
@@ -385,13 +385,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 
 		this.getEl().select('.choice').removeCls('correct incorrect').each(m);
 
-		Ext.defer(function() {
+		Ext.defer(function () {
 			me.updateLayout();
 			me.syncElementHeight();
 		}, 1);
 	},
 
-	markSubmitted: function(state) {
+	markSubmitted: function (state) {
 		this.callParent(arguments);
 		this.mark();
 	},
@@ -400,16 +400,16 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 
 
 	//<editor-fold desc="UI State">
-	maybeChangeSubmitButtonState: function() {
+	maybeChangeSubmitButtonState: function () {
 		var allInPlay = !this.shelfEl.down('.term');
 		this[(allInPlay ? 'en' : 'dis') + 'ableSubmission']();
 	},
 
-	reset: function() {
+	reset: function () {
 		var el = this.getEl(),
 			q = '.drag.term';
 
-		function r(e) {
+		function r (e) {
 			var p = Ext.getDom(e).parentNode,
 				doc = (p && (p.ownerDocument || p.documentElement)) || document,
 				term = p && p.getAttribute('data-term');
@@ -426,7 +426,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 	},
 
 	//</editor-fold>
-	getSolutionContent: function(part) {
+	getSolutionContent: function (part) {
 		var f = this.filterHTML.bind(this),
 			labels = this.part.get('values').slice().map(f),
 			terms = this.part.get('labels').slice().map(f),
@@ -448,7 +448,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Matching
 			}
 		}
 
-		data.sort(function(a, b) {
+		data.sort(function (a, b) {
 			var x = a.sort, y = b.sort;
 			return x === y ? 0 : x < y ? -1 : 1;
 		});

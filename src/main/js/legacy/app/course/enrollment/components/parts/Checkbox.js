@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		{cls: 'help', html: '{help}'}
 	]),
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	setValue: function(value) {
+	setValue: function (value) {
 		var input;
 
 		if (!this.rendered) {
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	getValue: function(force) {
+	getValue: function (force) {
 		if (!this.el || (!force && this.doNotSend)) { return; }
 
 		var check = this.el.down('input[type=checkbox]'),
@@ -63,21 +63,21 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return value;
 	},
 
-	isEmpty: function() {
+	isEmpty: function () {
 		if (!this.rendered) { return true; }
 
 		return false;
 	},
 
 
-	addError: function() {
+	addError: function () {
 		var label = this.el.down('label');
 
 		label.addCls('error');
 	},
 
 
-	removeError: function() {
+	removeError: function () {
 		var label = this.el.down('label');
 
 		label.removeCls('error');

@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		OUT_OF_BUFFER: 'out-of-buffer',
 		IN_BUFFER: 'in-buffer',
 		CURRENT: 'current',
-		showTab: function(bundle) {
+		showTab: function (bundle) {
 			return bundle && !bundle.get('Preview');
 		}
 	},
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 	//how much the user has to scroll to trigger a scroll change
 	scrollChangeThreshold: 0,
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var me = this;
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		me.onScroll = me.onScroll.bind(me);
 
 		me.on({
-			'visibility-changed': function(visible) {
+			'visibility-changed': function (visible) {
 				if (visible) {
 					AnalyticsUtil.addContext('dashboard', true);
 				}
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.lastScrollTop = 0;
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		this.initialLoad();
 	},
 
-	onScroll: function() {
+	onScroll: function () {
 		var el = this.getScrollTarget(),
 			threshold = this.scrollChangeThreshold,
 			diff = Math.abs(el.scrollTop - this.lastScrollTop);
@@ -96,11 +96,11 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		this.lastScrollTop = el.scrollTop;
 	},
 
-	onRouteDeactivate: function() {
+	onRouteDeactivate: function () {
 		window.removeEventListener('scroll', this.onScroll);
 	},
 
-	onRouteActivate: function() {
+	onRouteActivate: function () {
 		var me = this;
 		this.setTitle(this.title);
 
@@ -113,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		}
 
 		this.reloadTiles()
-			.then(function() {
+			.then(function () {
 				wait().then(me.onScrollToLastScroll.bind(me));
 			});
 
@@ -125,19 +125,19 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		window.addEventListener('scroll', this.onScroll);
 	},
 
-	onScrollToLastScroll: function() {
+	onScrollToLastScroll: function () {
 		if (this.lastScrollCache > 0) {
 			window.scrollTo(0, this.lastScrollCache);
 			delete this.lastScrollCache;
 		}
 	},
 
-	getScrollTarget: function() {
+	getScrollTarget: function () {
 		//TODO: figure out how to not have to do a user agent check for this
 		return Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body;
 	},
 
-	bundleChanged: function(bundle) {
+	bundleChanged: function (bundle) {
 		var id = bundle && bundle.getId(),
 			courseCatalog, date = this.self.DATE_OVERRIDE || new Date();
 
@@ -176,29 +176,29 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		this.initialLoad();
 	},
 
-	queryUpcomingTiles: function(date) {
+	queryUpcomingTiles: function (date) {
 		var widgets = NextThought.app.course.dashboard.components.widgets,
 			course = this.course, tiles = [];
 
-		Ext.Object.each(widgets, function(clsName, cls) {
+		Ext.Object.each(widgets, function (clsName, cls) {
 			if (cls.getUpcomingTiles) {
 				tiles.push(cls.getUpcomingTiles(course, date));
 			}
 		});
 
 		return Promise.all(tiles)
-					.then(function(results) {
+					.then(function (results) {
 						if (Ext.isEmpty(results)) {
 							return [];
 						}
 
-						return results.reduce(function(a, b) {
+						return results.reduce(function (a, b) {
 							return a.concat(b);
 						}, []);
 					});
 	},
 
-	addUpcoming: function(date) {
+	addUpcoming: function (date) {
 		this.add({
 			xtype: 'dashboard-tile-container',
 			loadTiles: this.queryUpcomingTiles.bind(this, date),
@@ -206,14 +206,14 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		});
 	},
 
-	initialLoad: function() {
+	initialLoad: function () {
 		//wait until we are rendered
 		if (!this.rendered) { return; }
 
 		this.maybeLoadNextWeek({}, true);
 	},
 
-	maybeFinishInitialLoad: function() {
+	maybeFinishInitialLoad: function () {
 		//have already done the initial load, or haven't been given a bundle yet
 		//don't do the initial load
 		if (!this.rendered || this.loaded || !this.course) { return; }
@@ -228,29 +228,29 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		}
 	},
 
-	queryTiles: function(startDate, endDate, isCurrent) {
+	queryTiles: function (startDate, endDate, isCurrent) {
 		var widgets = NextThought.app.course.dashboard.components.widgets,
 			course = this.course, tiles = [];
 
-		Ext.Object.each(widgets, function(clsName, cls) {
+		Ext.Object.each(widgets, function (clsName, cls) {
 			if (cls.getTiles) {
 				tiles.push(cls.getTiles(course, startDate, endDate, isCurrent));
 			}
 		});
 
 		return Promise.all(tiles)
-					.then(function(results) {
+					.then(function (results) {
 						if (Ext.isEmpty(results)) {
 							return [];
 						}
 
-						return results.reduce(function(a, b) {
+						return results.reduce(function (a, b) {
 							return a.concat(b);
 						}, []);
 					});
 	},
 
-	getScrollInfo: function() {
+	getScrollInfo: function () {
 		var el = this.getScrollTarget();
 
 		return {
@@ -262,7 +262,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		};
 	},
 
-	scrollChanged: function() {
+	scrollChanged: function () {
 		var me = this,
 			changes = [],
 			buffer = this.bufferThreshold,
@@ -320,7 +320,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		// me.scrollChanged = me.oldScrollChanged;
 	},
 
-	maybeLoadNextWeek: function(scrollInfo, forced) {
+	maybeLoadNextWeek: function (scrollInfo, forced) {
 		var scrolledDown = scrollInfo.scrollTop + this.loadThreshold > scrollInfo.scrollHeight - scrollInfo.offSetHeight;
 
 		if (forced || (scrolledDown && !this.loadingWeek)) {
@@ -328,7 +328,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		}
 	},
 
-	__loadNextWeek: function() {
+	__loadNextWeek: function () {
 		var me = this, last,
 			week = me.weekToLoad,
 			isCurrent = week === me.currentWeek,
@@ -371,7 +371,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		}
 	},
 
-	getLastCmp: function() {
+	getLastCmp: function () {
 		var count = this.items.getCount();
 
 		if (count) {
@@ -379,16 +379,16 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		}
 	},
 
-	collapseCmps: function(a, b) {
+	collapseCmps: function (a, b) {
 		a.updateRangeStart(b.getRangeStart());
 		b.updateRangeStart = a.updateRangeStart.bind(a);
 		this.emptiesToRemove.push(b);
 	},
 
-	removeEmpties: function() {
+	removeEmpties: function () {
 		var me = this;
 
-		this.emptiesToRemove.forEach(function(cmp) {
+		this.emptiesToRemove.forEach(function (cmp) {
 			if (!cmp.isDestroyed) {
 				me.remove(cmp, true);
 			}
@@ -397,11 +397,11 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		this.emptiesToRemove = [];
 	},
 
-	maybeDisplayEmptyState: function() {
+	maybeDisplayEmptyState: function () {
 		var tileContainers = this.query('dashboard-tile-container'),
 			isEmpty = true;
 
-		Ext.each(tileContainers, function(tileContainer) {
+		Ext.each(tileContainers, function (tileContainer) {
 			if (!tileContainer.hasNoTiles) {
 				isEmpty = false;
 				return false;
@@ -413,11 +413,11 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		}
 	},
 
-	reloadTiles: function() {
+	reloadTiles: function () {
 		var tileContainers = this.query('dashboard-tile-container'),
 			loadedContainers = [], p;
 
-		Ext.each(tileContainers, function(tileContainer) {
+		Ext.each(tileContainers, function (tileContainer) {
 			if (tileContainer.reloadTiles) {
 				p = tileContainer.reloadTiles();
 				if (p instanceof Promise) {
@@ -429,7 +429,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		return Promise.all(loadedContainers);
 	},
 
-	__emptyContainer: function(cmp) {
+	__emptyContainer: function (cmp) {
 		var index = cmp.number,
 			previousCmp = index && this.getComponent(index - 1),
 			nextCmp = index && this.getComponent(index + 1);
@@ -449,12 +449,12 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.Index', 
 		this.maybeLoadNextWeek({}, true);
 	},
 
-	__notEmptyContainer: function(cmp) {
+	__notEmptyContainer: function (cmp) {
 		this.loadingWeek = false;
 		this.maybeFinishInitialLoad();
 		this.removeEmpties();
 		this.maybeLoadNextWeek(this.getScrollInfo());
 	},
 
-	hideDashboard: function() {}
+	hideDashboard: function () {}
 });

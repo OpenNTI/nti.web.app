@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Index', {
 		{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']}
 	]),
 
-	getTargetEl: function() { return this.body; },
+	getTargetEl: function () { return this.body; },
 	childEls: ['body'],
 
 	renderSelectors: {
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Index', {
 
 	CHAT_WIN_MAP: {},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
@@ -55,12 +55,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.Index', {
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.gutterWin = Ext.widget('chat-gutter-window', {renderTo: this.gutter, autoShow: true});
 	},
 
-	showAllOnlineContacts: function(gutter) {
+	showAllOnlineContacts: function (gutter) {
 		var me = this;
 		if (!this.listWin) {
 			this.listWin = Ext.widget('chat-gutter-list-view', {
@@ -77,18 +77,18 @@ module.exports = exports = Ext.define('NextThought.app.chat.Index', {
 		this.addCls('show-all');
 	},
 
-	hideAllOnlineContacts: function() {
+	hideAllOnlineContacts: function () {
 		var me = this;
 
 		this.removeCls('show-all');
-		Ext.each(this.ChatStore.getAllChatWindows(), function(win) {
+		Ext.each(this.ChatStore.getAllChatWindows(), function (win) {
 			if (me.gutterWin && me.gutterWin.adjustToExpandedChat && win.isVisible()) {
 				me.gutterWin.adjustToExpandedChat(win);
 			}
 		});
 	},
 
-	showChatWindow: function(roomInfo) {
+	showChatWindow: function (roomInfo) {
 		var w;
 
 		this.ChatActions.onEnteredRoom(roomInfo);
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Index', {
 		}
 	},
 
-	toggleGutter: function() {
+	toggleGutter: function () {
 		var active = this.hasCls('show-gutter');
 
 		if (active) {
@@ -111,13 +111,13 @@ module.exports = exports = Ext.define('NextThought.app.chat.Index', {
 		}
 	},
 
-	shouldHaveChatTab: function() {
+	shouldHaveChatTab: function () {
 		var viewportWidth = Ext.Element.getViewportWidth();
 		// We would like to hide the gutter if the window is too small.
 		return viewportWidth <= NextThought.app.chat.Index.MIN_VIEWPORT_WIDTH;
 	},
 
-	handleTabNotifications: function(win, msg) {
+	handleTabNotifications: function (win, msg) {
 		if (win && win.isVisible() ||
 			this.gutterWin && this.gutterWin.el && this.gutterWin.el.isVisible() ||
 			this.listWin && this.listWin.el && this.listWin.el.isVisible()) {
@@ -130,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Index', {
 		}
 	},
 
-	createWhiteBoard: function(data, ownerCmp, chatStatusEvent) {
+	createWhiteBoard: function (data, ownerCmp, chatStatusEvent) {
 		var win = Ext.widget('wb-window', {
 			width: 802,
 			value: data,
@@ -141,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Index', {
 		return win;
 	},
 
-	showWhiteboard: function(data, cmp, mid, channel, recipients) {
+	showWhiteboard: function (data, cmp, mid, channel, recipients) {
 		var me = this,
 			room = this.ChatActions.getRoomInfoFromComponent(cmp),
 			wbWin = this.createWhiteBoard(data, cmp, 'status-change'),
@@ -151,13 +151,13 @@ module.exports = exports = Ext.define('NextThought.app.chat.Index', {
 
 		//hook into the window's save and cancel operations:
 		wbWin.on({
-			save: function(win, wb) {
+			save: function (win, wb) {
 				wbData = wb.getValue();
 				me.ChatActions.clearErrorForRoom(room);
 				me.ChatActions.postMessage(room, [wbData], mid, channel, recipients, Ext.bind(me.ChatActions.sendAckHandler, me.ChatActions));
 				wbWin.close();
 			},
-			cancel: function() {
+			cancel: function () {
 				//if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
 				wbWin.close();
 				if (scrollEl.getScroll().top === 0) {

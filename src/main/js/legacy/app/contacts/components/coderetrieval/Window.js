@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.coder
 		{xtype: 'coderetrieval-main-view'}
 	],
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.el.down('.close'), 'click', this.close, this);
 		this.down('account-header-view').updateTitle(this.groupName);

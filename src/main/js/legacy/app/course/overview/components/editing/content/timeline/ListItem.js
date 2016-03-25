@@ -9,12 +9,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-timeline-listitem',
 
 	statics: {
-		getSupported: function() {
+		getSupported: function () {
 			return NextThought.model.Timeline.mimeType;
 		}
 	},
 
-	getPreviewType: function() {
+	getPreviewType: function () {
 		return 'course-overview-ntitimeline';
 	}
 });

@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 					cls: 'context', cn: [
 					{tag: 'canvas'},
 					{tag: 'span', cls: 'text'}
-				]
+					]
 				},
 				{ cls: 'body' },
 				{
@@ -96,12 +96,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		contextContainer: '.context'
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		var me = this;
 		me.callParent(arguments);
 
 		try {
-			this.on('editorDeactivated', function() {
+			this.on('editorDeactivated', function () {
 				me.editorEl.down('.title').hide();
 				var bRecord = me.bufferedRecord;
 				if (bRecord) {
@@ -118,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		this.initSearch();
 	},
 
-	createEditor: function() {
+	createEditor: function () {
 		this.callParent();
 		this.editor.el.down('.title')
 			.setVisibilityMode(Ext.Element.DISPLAY)
@@ -126,31 +126,31 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 			.hide();
 	},
 
-	fillInReplies: function() {
+	fillInReplies: function () {
 		var r = this.record, me = this;
 		this.removeAll(true);
 
 		return wait()
-				.then(function() {
+				.then(function () {
 					if (me.isDestroyed) {
 						return Promise.reject();
 					}
 
 					me.record.notifyObserversOfFieldChange('AdjustedReferenceCount');
 					return me.loadReplies(r)
-							.then(function() {
+							.then(function () {
 								me.record.notifyObserversOfFieldChange('AdjustedReferenceCount');
 								return Promise.resolve();
 							});
 				});
 	},
 
-	disable: function() {
+	disable: function () {
 		//don't call the parent, its destructive. This panel is meant to be reused.
 		this.replyOptions.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 	},
 
-	fixUpCopiedContext: function(n) {
+	fixUpCopiedContext: function (n) {
 		var node = Ext.get(n), cardTpl, slideDeckTpl, slideVideoTpl,
 			maxWidth = 574;//shortcut, probably should figure out how wide the context is...but that returns 0
 		// when queried at this point.
@@ -158,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		node.select('.injected-related-items,.related,.anchor-magic').remove();
 
 		//WE want to remove redaction text in the node body of the note viewer.
-		Ext.each(node.query('.redaction '), function(redaction) {
+		Ext.each(node.query('.redaction '), function (redaction) {
 			if (!Ext.fly(redaction).hasCls('redacted')) {
 				Ext.fly(redaction).addCls('redacted');
 			}
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 
 		node.select('.redactionAction .controls').remove();
 
-		Ext.each(node.query('span[itemprop~=nti-data-markupenabled]'), function(i) {
+		Ext.each(node.query('span[itemprop~=nti-data-markupenabled]'), function (i) {
 			var e = Ext.get(i);
 			//only strip off the style for width that are too wide.
 			if (parseInt(i.style.width, 10) >= maxWidth) {
@@ -174,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 			}
 		});
 
-		Ext.each(node.query('iframe'), function(i) {
+		Ext.each(node.query('iframe'), function (i) {
 			var e = Ext.get(i),
 				w, h, r;
 			if (e.parent('div.externalvideo')) {
@@ -193,28 +193,28 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		node.select('[itemprop~=nti-data-markupenabled] a').on('click', this.contextAnnotationActions, this);
 		this.on('markupenabled-action', this.commentOnAnnototableImage);
 
-		Ext.each(node.query('.application-highlight'), function(h) {
+		Ext.each(node.query('.application-highlight'), function (h) {
 			if (this.record.isModifiable()) {
 				Ext.fly(h).addCls('highlight-mouse-over');
 			}
 		}, this);
 
 		cardTpl = Ext.DomHelper.createTemplate({cls: 'content-card', html: NextThought.common.components.cards.Card.prototype.renderTpl.html});
-		Ext.each(node.query('object[type*=nticard]'), function(c) {
+		Ext.each(node.query('object[type*=nticard]'), function (c) {
 			var d = NextThought.common.components.cards.OverlayedPanel.getData(c);
 			cardTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
 		});
 
 		slideDeckTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.app.mediaviewer.content.Slidedeck.prototype.renderTpl.html});
-		Ext.each(node.query('object[type*=ntislidedeck]'), function(c) {
+		Ext.each(node.query('object[type*=ntislidedeck]'), function (c) {
 			var d = NextThought.app.mediaviewer.content.deck.OverlayedPanel.getData(c);
 			slideDeckTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
 		});
 
 		slideVideoTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.app.mediaviewer.content.SlideVideo.prototype.renderTpl.html});
-		Ext.each(node.query('object[type*=ntislidevideo][itemprop$=card]'), function(c) {
+		Ext.each(node.query('object[type*=ntislidevideo][itemprop$=card]'), function (c) {
 			var d = NextThought.app.mediaviewer.content.OverlayedPanel.getData(c);
 			slideVideoTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
@@ -224,7 +224,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 			this.context.up('.context').addCls('slide');
 		}
 
-		node.query('object.overlayed').forEach(function(ob) {
+		node.query('object.overlayed').forEach(function (ob) {
 			ob.removeAttribute('data');
 			ob.removeAttribute('style');
 		});
@@ -232,24 +232,24 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		return node.dom;
 	},
 
-	addAdditionalRecordListeners: function(record) {
+	addAdditionalRecordListeners: function (record) {
 		record.addObserverForField(this, 'sharedWith', 'fillInShareFromFieldChange');
 	},
 
-	removeAdditionalRecordListeners: function(record) {
+	removeAdditionalRecordListeners: function (record) {
 		record.removeObserverForField(this, 'sharedWith', 'fillInShareFromFieldChange');
 	},
 
-	fillInShareFromFieldChange: function(field, value) {
+	fillInShareFromFieldChange: function (field, value) {
 		var me = this;
 
 		UserRepository.getUser(value)
-			.then(function(users) {
+			.then(function (users) {
 				me.fillInShare(users);
 			});
 	},
 
-	setRecord: function(r) {
+	setRecord: function (r) {
 		//If we have an editor active for god sake don't blast it away
 		if (this.editorActive()) {
 			console.log('Need to buffer set record', r);
@@ -261,7 +261,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 
 		if (me.readerContext) {
 			me.contextLoad = me.readerContext.load()
-								.then(function(context) {
+								.then(function (context) {
 									me.setContext(context);
 								});
 		}
@@ -278,7 +278,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		me.replyOptions.show();
 	},
 
-	onRemove: function(cmp) {
+	onRemove: function (cmp) {
 		var c = this.items.getCount();
 		console.log('removed child, it was deleting: ', cmp.deleting);
 		if (cmp.deleting && c === 0 && (!this.record || this.record.placeholder)) {
@@ -291,7 +291,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		}
 	},
 
-	onDelete: function() {
+	onDelete: function () {
 		var c = this.items.getCount();
 
 		this.callParent(arguments);
@@ -300,7 +300,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		}
 	},
 
-	onEdit: function() {
+	onEdit: function () {
 		this.text.hide();
 		this.editMode = true;
 		this.editor.editBody(this.record.get('body'));
@@ -309,14 +309,14 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		this.editorEl.down('.title').show();
 	},
 
-	hideImageCommentLink: function() {
+	hideImageCommentLink: function () {
 		var aLink = this.context ? this.context.down('a[href=#mark]') : null;
 		if (aLink) {
 			aLink.hide();
 		}
 	},
 
-	setPurchasableContext: function(ntiid) {
+	setPurchasableContext: function (ntiid) {
 		var me = this, el,
 			course = CourseWareUtils.courseForNtiid(ntiid),
 			content = ContentUtils.purchasableForContentNTIID(ntiid);
@@ -343,21 +343,21 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 			el = me.noAccessTpl.append(me.contextContainer, null, true);
 		}
 
-		me.mon(el, 'click', function(e) {
+		me.mon(el, 'click', function (e) {
 			if (e.getTarget('.target')) {
 				me.fireEvent('unauthorized-navigation', me, ntiid);
 			}
 		});
 	},
 
-	contextAnnotationActions: function(e, dom) {
+	contextAnnotationActions: function (e, dom) {
 		e.stopEvent();
 		var action = (dom.getAttribute('href') || '').replace('#', ''),
 			d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('img'),
 			img = d && d.is('img') ? d.dom : null,
 			me = this;
 
-		function openSlideDeck() {
+		function openSlideDeck () {
 			me.up('note-window').close();
 			SlideDeck.openFromDom(dom, me.reader);
 		}
@@ -380,7 +380,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 					icon: 'warning-red',
 					title: getString('NextThought.view.annotations.note.Main.editor-warning-title'),
 					buttonText: {ok: 'caution:' + getString('NextThought.view.annotations.note.Main.ok')},
-					fn: function(str) {
+					fn: function (str) {
 						if (str === 'ok') {
 							openSlideDeck();
 						}
@@ -395,11 +395,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		return false;
 	},
 
-	getContainerIdForSearch: function() {
+	getContainerIdForSearch: function () {
 		return this.record.get('NTIID');
 	},
 
-	onceReadyForSearch: function() {
+	onceReadyForSearch: function () {
 		var ps = [];
 
 		if (this.contextLoad) {
@@ -411,31 +411,31 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 
 		// Wait for context and all replies to be loaded before doing search.
 		return Promise.all(ps)
-					.then(function() {
+					.then(function () {
 						return wait();
 					});
 	},
 
-	getSearchScrollTarget: function() {
+	getSearchScrollTarget: function () {
 		var targetEl = this.el && this.el.up('.window-container') || this.el;
 		return targetEl;
 	},
 
-	commentOnAnnototableImage: function(dom /*action*/) {
+	commentOnAnnototableImage: function (dom /*action*/) {
 		var me = this;
 		if (me.activateReplyEditor()) {
-			WBUtils.createFromImage(dom, function(data) {
+			WBUtils.createFromImage(dom, function (data) {
 				Ext.defer(me.editor.addWhiteboard, 400, me.editor, [data]);
 			});
 		}
 	},
 
-	resizeMathJax: function(/*node*/) {
+	resizeMathJax: function (/*node*/) {
 		var e = Ext.select('div.equation .mi').add(Ext.select('div.equation .mn')).add(Ext.select('div.equation .mo'));
 		e.setStyle('font-size', '13px');
 	},
 
-	allowNavigation: function() {
+	allowNavigation: function () {
 		var msg = 'You are currently creating a comment. Would you like to leave without saving?',
 			hasChildEditor = this.el.down('.note.editor-active');
 
@@ -449,7 +449,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 			msg = 'You are currently editing a comment. Would you like to leave without saving?';
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Ext.Msg.show({
 				title: 'Attention!',
 				msg: msg,

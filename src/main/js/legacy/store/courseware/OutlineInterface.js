@@ -4,16 +4,16 @@ var Ext = require('extjs');
 module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInterface', {
 
 	statics: {
-		fillInDepths: function(outline) {
+		fillInDepths: function (outline) {
 			this.flattenOutline(outline);
 		},
 
 
-		flattenOutline: function(outline) {
+		flattenOutline: function (outline) {
 			var records = [], maxDepth,
-			index = 0, depth = 0;
+				index = 0, depth = 0;
 
-			function itr(node) {
+			function itr (node) {
 				node._max_depth = maxDepth;
 				node._position = index;
 				node._depth = depth;
@@ -31,11 +31,11 @@ module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInter
 				depth -= 1;
 			}
 
-			function getDepth(n) {
+			function getDepth (n) {
 				var items = ((n && n.get('Items')) || []),
 					depth;
 
-				depth = items.reduce(function(max, item) {
+				depth = items.reduce(function (max, item) {
 					var depth = getDepth(item);
 
 					if (depth > max) {
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInter
 	},
 
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 
 		this.courseInstance = config.courseInstance;
@@ -70,20 +70,20 @@ module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInter
 		this.tocPromise = config.tocPromise || Promise.resolve();
 
 		this.building = Promise.all([
-				this.outlineContentsPromise,
-				this.tocPromise
-			]).then(this.__build.bind(this));
+			this.outlineContentsPromise,
+			this.tocPromise
+		]).then(this.__build.bind(this));
 
 		this.mixins.observable.constructor.call(this, config);
 	},
 
 
-	onceBuilt: function() {
+	onceBuilt: function () {
 		return this.building;
 	},
 
 
-	__build: function(results) {
+	__build: function (results) {
 		this.outline = results[0];
 		this.tocStore = results[1];
 
@@ -97,17 +97,17 @@ module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInter
 	},
 
 
-	__flattenOutline: function(outline) {
+	__flattenOutline: function (outline) {
 		this.__flatContents = this.self.flattenOutline(outline);
 	},
 
 
-	getOutline: function() {
+	getOutline: function () {
 		return this.outline;
 	},
 
 
-	getContents: function() {
+	getContents: function () {
 		if (!this.isBuilt) {
 			console.warn('Calling get contents before it is finished building');
 			return null;
@@ -116,31 +116,31 @@ module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInter
 		return this.outline.get('Items');
 	},
 
-	findOutlineNode: function(id) {
+	findOutlineNode: function (id) {
 		if (!this.isBuilt) {
 			console.warn('Calling getOutlineNode before it is finisehd building');
 			return null;
 		}
 
-		return this.findNodeBy(function(n) {
+		return this.findNodeBy(function (n) {
 			return n.getId() === id || n.get('ContentNTIID') === id;
 		});
 	},
 
 
-	getNode: function(id) {
+	getNode: function (id) {
 		if (!this.isBuilt) {
 			console.warn('Calling get node before it is finished building');
 			return null;
 		}
 
-		return this.findNodeBy(function(n) {
+		return this.findNodeBy(function (n) {
 			return n.getId() === id;
 		});
 	},
 
 
-	findNodeBy: function(fn) {
+	findNodeBy: function (fn) {
 		if (!this.isBuilt) {
 			console.warn('Calling find node before it is finished building');
 			return null;
@@ -148,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInter
 
 		var node;
 
-		this.__flatContents.every(function(n) {
+		this.__flatContents.every(function (n) {
 			if (fn(n)) {
 				node = n;
 				return false;
@@ -161,12 +161,12 @@ module.exports = exports = Ext.define('NextThought.store.courseware.OutlineInter
 	},
 
 
-	forEach: function(fn) {
+	forEach: function (fn) {
 		this.__flatContents.forEach(fn);
 	},
 
 
-	fillInNode: function(node) {
+	fillInNode: function (node) {
 		if (!this.isBuilt) {
 			console.warn('Calling fill in node before it is finished building');
 			return null;

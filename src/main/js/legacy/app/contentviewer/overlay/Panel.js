@@ -10,14 +10,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 	placementHolderTpl: Ext.DomHelper.createTemplate({type: 'application/vnd.nextthought.placeholder'}),
 
 	inheritableStatics: {
-		relayout: Ext.Function.createBuffered(function() {
-			Ext.each(Ext.ComponentQuery.query('overlayed-panel'), function(p) {p.updateLayout();}); },10),
+		relayout: Ext.Function.createBuffered(function () {
+			Ext.each(Ext.ComponentQuery.query('overlayed-panel'), function (p) {p.updateLayout();}); },10),
 
-		syncPositioning: Ext.Function.createBuffered(function() {
-			Ext.each(Ext.ComponentQuery.query('overlayed-panel'), function(p) { p.syncTop(); }); },10),
+		syncPositioning: Ext.Function.createBuffered(function () {
+			Ext.each(Ext.ComponentQuery.query('overlayed-panel'), function (p) { p.syncTop(); }); },10),
 
-		syncPositioningTillStable: Ext.Function.createBuffered(function() {
-			Ext.each(Ext.ComponentQuery.query('overlayed-panel'), function(p) {
+		syncPositioningTillStable: Ext.Function.createBuffered(function () {
+			Ext.each(Ext.ComponentQuery.query('overlayed-panel'), function (p) {
 				p.syncTopTillStable();
 			});
 		}, 10)
@@ -29,37 +29,37 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 	autoRender: true,
 	ui: 'overlayed',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 		Ext.defer(this.setupContentElement, 1, this);
 	},
 
-	getRefOwner: function() {
+	getRefOwner: function () {
 		return this.reader;
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		var d, el, insert = 'insertBefore', ix = 0;
 		if (!this.contentElement) {
 			try {
-			this.insertedElement = true;
-			d = this.reader.getDocumentElement().querySelectorAll(this.OBJECT_QUERY);
+				this.insertedElement = true;
+				d = this.reader.getDocumentElement().querySelectorAll(this.OBJECT_QUERY);
 
-			d = DomUtils.filterNodeList(d, 'isRootObject');
+				d = DomUtils.filterNodeList(d, 'isRootObject');
 
 			//TODO: ensure its a 'type=application/vnd.nextthought.*'
-			if (this.appendPlaceholder) {
+				if (this.appendPlaceholder) {
 				insert = 'insertAfter';
 				ix = d.length - 1;
 			}
 
-			el = d[ix];
+				el = d[ix];
 
-			if (!el && this.forceInsert) {
+				if (!el && this.forceInsert) {
 				el = this.reader.getDocumentElement().querySelector('#NTIContent .page-contents');
 			}
 
-			this.contentElement = this.placementHolderTpl[insert](el);
+				this.contentElement = this.placementHolderTpl[insert](el);
 			} catch (e) {
 				this.insertedElement = false;
 				this.contentElement = null;
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 		this.callParent(arguments);
 	},
 
-	destroy: function() {
+	destroy: function () {
 		if (this.insertedElement) {
 			Ext.fly(this.contentElement).remove();
 		}
@@ -81,27 +81,27 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 		this.callParent(arguments);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.syncTopTillStable();
 	},
 
-	hide: function() {
+	hide: function () {
 		if (this.contentElement) {
 			Ext.fly(this.contentElement).setStyle({display: 'none'});
 		}
 		this.callParent(arguments);
 	},
 
-	show: function() {
+	show: function () {
 		if (this.contentElement) {
 			Ext.fly(this.contentElement).setStyle({display: 'block'});
 		}
 		this.callParent(arguments);
 	},
 
-	removeContent: function(selector) {
+	removeContent: function (selector) {
 		if (!this.contentElement) {return;}
 		var el = Ext.get(this.contentElement);
 		el.select(selector)
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 				.setStyle({display: 'none'});
 	},
 
-	setupContentElement: function() {
+	setupContentElement: function () {
 		if (!this.contentElement) {return;}
 		this.removeContent('.hidden,INPUT,object,param');
 		Ext.fly(this.contentElement).setStyle({
@@ -123,12 +123,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 
 	},
 
-	syncTopTillStable: function() {
+	syncTopTillStable: function () {
 		if (this.interval || !this.rendered) { return; }
 
 		var me = this, lastTop = 0, sameCount = 0;
 
-		me.interval = setInterval(function() {
+		me.interval = setInterval(function () {
 			var y = me.syncTop();
 
 			if (Math.abs(y - lastTop) < 2) {
@@ -146,7 +146,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 		}, 200);
 	},
 
-	syncTop: function() {
+	syncTop: function () {
 		if (!this.contentElement) {return 0;}
 
 		var top = this.contentElement.getBoundingClientRect().top;
@@ -169,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 		return top;
 	},
 
-	maybeScrollIntoView: Ext.Function.createBuffered(function() {
+	maybeScrollIntoView: Ext.Function.createBuffered(function () {
 		try {
 			var offset = this.getHeight(),
 				reader = this.reader;
@@ -183,12 +183,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 		}
 	}, 250),
 
-	afterLayout: function() {
+	afterLayout: function () {
 		this.syncElementHeight();
 		this.callParent(arguments);
 	},
 
-	syncElementHeight: function() {
+	syncElementHeight: function () {
 		if (!this.rendered) {return;}
 		try {
 			var h = this.getHeight();

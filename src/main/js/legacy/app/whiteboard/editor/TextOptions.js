@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.TextOpt
 			enableToggle: true
 		}
 	]
-}, function() {
+}, function () {
 	this.prototype.items[0].store = Ext.data.Store.create({
 		fields: ['size'],
 		data: [

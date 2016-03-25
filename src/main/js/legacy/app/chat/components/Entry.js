@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Entry', {
 		inputEl: 'input'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.addEvents({ 'status-change': true });
 		this.enableBubble(['status-change']);
 		this.callParent(arguments);
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Entry', {
 		this.ChatActions = NextThought.app.chat.Actions.create();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.inputEl.selectable();
 		this.inputEl.on({
@@ -52,14 +52,14 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Entry', {
 		this.buttonEl.on('click', this.addWhiteboard.bind(this));
 	},
 
-	keyUp: function(e) {
+	keyUp: function (e) {
 		var me = this, k = e.getKey(e);
 
 		if (e.ENTER !== k) {
 			this.fireEvent('status-change', {'status': 'composing'});
 			clearTimeout(me.pauseTimer);
 			//If the user pass a given number of seconds without typing, fire a paused event.
-			me.pauseTimer = setTimeout(function() { me.fireEvent('status-change', {status: 'paused'}); }, 3000);
+			me.pauseTimer = setTimeout(function () { me.fireEvent('status-change', {status: 'paused'}); }, 3000);
 		}
 		else {
 			clearTimeout(me.pauseTimer);
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Entry', {
 		}
 	},
 
-	keyDown: function(e) {
+	keyDown: function (e) {
 		var k = e.getKey(), me = this;
 		if (e.ESC === k) {
 			this.inputEl.set({value: ''});
@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Entry', {
 		else if (e.ENTER === k) {
 			if (Ext.is.iOS) { //Delay event to allow autocorrect to change word beforehand, instead of after
 				wait(10)
-					.then(function() {
+					.then(function () {
 						me.ChatActions.sendMessage(me, me.replyTo, me.chanel, me.recipients);
 					});
 			}
@@ -85,32 +85,32 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.Entry', {
 		}
 	},
 
-	focus: function(defer) {
+	focus: function (defer) {
 		this.inputEl.focus(defer);
 	},
 
-	getValue: function() {
+	getValue: function () {
 		var e = this.inputEl,
 			v = e.getValue();
 		e.dom.value = '';
 		return v;
 	},
 
-	disable: function() {
+	disable: function () {
 		this.callParent(arguments);
 		if (this.inputEl) {
 			this.inputEl.set({disabled: true});
 		}
 	},
 
-	enable: function() {
+	enable: function () {
 		this.callParent(arguments);
 		if (this.inputEl) {
 			this.inputEl.dom.removeAttribute('disabled');
 		}
 	},
 
-	addWhiteboard: function() {
+	addWhiteboard: function () {
 		this.ChatActions.sendWhiteboard(this, this.replyTo, this.chanel, this.recipients);
 	}
 });

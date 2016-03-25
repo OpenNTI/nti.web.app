@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 
 	statics: {
 		//see the instance isEmpty method below
-		isEmpty: function(value, letter) {
+		isEmpty: function (value, letter) {
 			var v = value + ' ' + letter;
 
 			return Ext.isEmpty(v.replace('-', '').trim());
@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 		 * @param  {Object} values grade values to get the display for
 		 * @return {String}		   [escription]
 		 */
-		getDisplay: function(values) {
+		getDisplay: function (values) {
 			var value = values.value || values.Correctness,
 				letter = values.letter || values.Grade;
 
@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	mimeType: 'application/vnd.nextthought.grade',
 	fields: [
 		{name: 'Username', type: 'string'},
-		{name: 'value', type: 'string', convert: function(v) {
+		{name: 'value', type: 'string', convert: function (v) {
 			var n;
 			if (typeof v === 'number') {
 				n = v.toFixed(1);
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	 * @param  {char} letter the letter value of the grade
 	 * @return {Boolean}		if they are the same values
 	 */
-	valueEquals: function(value, letter) {
+	valueEquals: function (value, letter) {
 		var vals = this.getValues();
 
 		if (vals.value !== value) { return false; }
@@ -85,26 +85,26 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	},
 
 
-	isExcusable: function() {
+	isExcusable: function () {
 		return this.hasLink('excuse') || this.hasLink('unexcuse');
 	},
 
 
 
-	excuseGrade: function() {
+	excuseGrade: function () {
 		var record = this,
 			url = this.getLink('excuse') || this.getLink('unexcuse');
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Service.request({
 				url: url,
 				method: 'POST'
 			})
-			.fail(function() {
+			.fail(function () {
 				console.error('Failed to excuse grade: ', arguments);
 				reject('Request Failed');
 			})
-			.done(function(responseText) {
+			.done(function (responseText) {
 				var o = Ext.JSON.decode(responseText, true);
 
 				record.set(o);
@@ -113,12 +113,12 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 		});
 	},
 
-	isPredicted: function() {
+	isPredicted: function () {
 		return this.get('IsPredicted');
 	},
 
 
-	getPredictedValue: function() {
+	getPredictedValue: function () {
 		var grade = this.get('Correctness'),
 			letter = this.get('value');
 
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	 * Looks at the value for the grade and parses it into a value and letter value
 	 * @return {Object} an object with value and letter for keys
 	 */
-	getValues: function() {
+	getValues: function () {
 		if (this.isPredicted()) {
 			return this.getPredictedValue();
 		}
@@ -158,14 +158,14 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	},
 
 	//return false if we are already trying to save the same value
-	shouldSave: function(value, letter) {
+	shouldSave: function (value, letter) {
 		var val = value + ' ' + letter;
 
 		return this.pendingSaveValue !== val && !this.valueEquals(value, letter);
 	},
 
 
-	setValue: function(value, letter) {
+	setValue: function (value, letter) {
 		value = (value && value.trim()) || '';
 		letter = (letter && letter.trim()) || '';
 
@@ -177,7 +177,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	},
 
 
-	saveValue: function(value, letter) {
+	saveValue: function (value, letter) {
 		if (this.isPlaceholder) { return this.createNewGrade(value, letter); }
 
 		value = (value && value.trim()) || '';
@@ -195,9 +195,9 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 
 		me.set('value', val);
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			me.save({
-				success: function(grade, req) {
+				success: function (grade, req) {
 					var response = req && req.response,
 						text = response && response.responseText,
 						json;
@@ -220,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 						fulfill(grade);
 					}
 				},
-				failure: function() {
+				failure: function () {
 					delete me.pendingSaveValue;
 					me.set('value', oldVal);
 					reject();
@@ -238,7 +238,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	 * @param  {char} letter the letter value of the grade
 	 * @return {Promise}	 fulfills with the assignment history item that was created
 	 */
-	createNewGrade: function(value, letter) {
+	createNewGrade: function (value, letter) {
 		var me = this,
 			href = me.get('href');
 
@@ -249,12 +249,12 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 			AssignmentId: me.get('AssignmentId'),
 			value: me.get('value')
 		})
-		.then(function(response) {
+		.then(function (response) {
 			me.fireEvent('value-change');
 
 			return response;
 		})
-		.fail(function(reason) {
+		.fail(function (reason) {
 			me.set('value', null);
 
 			Ext.MessageBox.alert({
@@ -277,21 +277,21 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 	 * "# L", "# -", " L", " " -", "#", and ""
 	 * @return {Boolean}
 	 */
-	isEmpty: function() {
+	isEmpty: function () {
 		var val = this.get('value') || '';
 
 		return Ext.isEmpty(val.replace('-', '').trim());
 	},
 
 	//Doesn't make sense for this object
-	isMine: function() {
+	isMine: function () {
 		return true;
 	},
 
-	isModifiable: function() { return true; },
+	isModifiable: function () { return true; },
 
-	save: function(config) {
-		function failed() {
+	save: function (config) {
+		function failed () {
 			Ext.MessageBox.alert({
 				title: 'Error',
 				msg: 'There was an error saving the grade value.',

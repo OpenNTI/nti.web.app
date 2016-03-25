@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	]),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -22,12 +22,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var anchors = this.el.query('a') || [];
 
-		anchors.forEach(function(anchor) {
+		anchors.forEach(function (anchor) {
 			if (anchor.host && anchor.host !== window.location.host) {
 				anchor.setAttribute('target', '_blank');
 			}

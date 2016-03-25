@@ -10,14 +10,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-discussion',
 
 	statics: {
-		getHandledMimeTypes: function() {
+		getHandledMimeTypes: function () {
 			return [
 				NextThought.model.DiscussionRef.mimeType,
 				NextThought.model.Discussion.mimeType
 			];
 		},
 
-		getTypes: function() {
+		getTypes: function () {
 			return [
 				{
 					title: 'Pick a Discussion',
@@ -32,9 +32,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	SWITCHED: 'switched-items',
-	addFormCmp: function() {},
+	addFormCmp: function () {},
 
-	showEditor: function() {
+	showEditor: function () {
 		if (this.record) {
 			this.showDiscussionEditor();
 		} else {
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onBack: function() {
+	onBack: function () {
 		if (this.discussionEditorCmp) {
 			this.showDiscussionList();
 		} else if (this.doBack) {
@@ -50,13 +50,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	maybeEnableBack: function(text) {
+	maybeEnableBack: function (text) {
 		if (!this.record && this.enableBack) {
 			this.enableBack(text);
 		}
 	},
 
-	showDiscussionEditor: function() {
+	showDiscussionEditor: function () {
 		if (this.discussionEditorCmp) {
 			this.discussionEditorCmp.destroy();
 			delete this.discussionEditorCmp;
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.maybeEnableBack('Discussions');
 	},
 
-	showDiscussionList: function(selectedItems) {
+	showDiscussionList: function (selectedItems) {
 		var me = this;
 
 		if (this.discussionsListCmp) {
@@ -104,16 +104,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.bundle.getDiscussionAssets()
 			.then(me.__sortDiscussions.bind(me))
-			.then(function(discussions) {
+			.then(function (discussions) {
 				me.discussionsListCmp.setSelectionItems(discussions);
 			});
 	},
 
-	__sortDiscussions: function(discussions) {
+	__sortDiscussions: function (discussions) {
 		return discussions;
 	},
 
-	onDiscussionSelectionChange: function(selection) {
+	onDiscussionSelectionChange: function (selection) {
 		var length = selection.length;
 
 		if (length === 0) {
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onSave: function() {
+	onSave: function () {
 		var me = this;
 		if (!me.discussionEditorCmp) {
 			me.showDiscussionEditor();
@@ -133,13 +133,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.disableSubmission();
 		return me.discussionEditorCmp.onSave()
-			.fail(function(reason) {
+			.fail(function (reason) {
 				me.enableSubmission();
 				return Promise.reject(reason);
 			});
 	},
 
-	onSaveFailure: function(reason) {
+	onSaveFailure: function (reason) {
 		if (reason === this.SWITCHED) { return; }
 
 		this.callParent(arguments);

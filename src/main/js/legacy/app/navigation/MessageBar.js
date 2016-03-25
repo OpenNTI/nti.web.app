@@ -32,35 +32,35 @@ module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 	])),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.applyIf(this.renderData || {}, {iconCls: '', msg: ''});
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.closeEl, 'click', this.close.bind(this));
 		this.mon(this.buttonsEl, 'click', this.buttonClicked.bind(this));
 	},
 
 
-	addButton: function(data) {
+	addButton: function (data) {
 		data.tip = data.tip || '';
 		this.buttonTpl.append(this.buttonsEl, data);
 		if (data.action) {
-			this[data.action] = data.handler || function(){};
+			this[data.action] = data.handler || function () {};
 		}
 	},
 
 
-	setMessage: function(msg) {
+	setMessage: function (msg) {
 		this.messageEl.update(msg);
 	},
 
 
-	setIcon: function(iconCls) {
+	setIcon: function (iconCls) {
 		if (iconCls) {
 			this.iconEl.addCls(iconCls);
 			this.iconCls = iconCls;
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 	},
 
 
-	clear: function() {
+	clear: function () {
 		if (this.iconCls) {
 			this.iconEl.removeCls(this.iconCls);
 			delete this.iconCls;
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 		this.buttonsEl.update('');
 	},
 
-	buttonClicked: function(e) {
+	buttonClicked: function (e) {
 		var button = Ext.get(e.target),
 			action = button && button.getAttribute('data-action');
 
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.MessageBar', {
 	},
 
 
-	close: function() {
+	close: function () {
 		var vel = Ext.query('.x-viewport')[0];
 
 		if (this.closeHandler) {

@@ -18,12 +18,12 @@ module.exports = exports = Ext.define('NextThought.app.context.components.Questi
 		seeMoreEl: '.see-more'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.__setContent();
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.Questi
 		}
 	},
 
-	isInContent: function() {
+	isInContent: function () {
 		var context = this.ContextStore.getContext(),
 			currentContext = context && context.last(),
 			contextRecord = currentContext && currentContext.obj;
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.Questi
 		return contextRecord && contextRecord.getId() === this.question.get('containerId');
 	},
 
-	__setContent: function() {
+	__setContent: function () {
 		var me = this,
 			content = me.question && me.question.get('content'),
 			root = me.question && me.question.get('ContentRoot'),

@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ToolOpt
 	baseCls: 'whiteboard-tool-option',
 	menuAlign: 't-b?',
 
-	initComponent: function() {
+	initComponent: function () {
 		if (!this.options) {
 			this.split = false;
 			delete this.arrowCls;
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ToolOpt
 	},
 
 
-	onClick: function(e, t) {
+	onClick: function (e, t) {
 		var me = this;
 		if (!me.disabled && me.pressed) {
 			me.overMenuTrigger = true;
@@ -44,34 +44,34 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ToolOpt
 	},
 
 
-	toolTipText: function() {
+	toolTipText: function () {
 		return this.tipText || this.option;
 	},
 
 
-	buildOptions: function() {
+	buildOptions: function () {
 		var me = this,
 			menu = {
-			items: [],
-			ui: 'nt',
-			plain: true,
-			showSeparator: false,
-			shadow: false,
-			frame: false,
-			border: false,
-			minWidth: 70,
-			xhooks: {
-				showBy: function(cmp, pos, off) {
+				items: [],
+				ui: 'nt',
+				plain: true,
+				showSeparator: false,
+				shadow: false,
+				frame: false,
+				border: false,
+				minWidth: 70,
+				xhooks: {
+				showBy: function (cmp, pos, off) {
 					off = [0, 5];
 					return this.callParent([cmp, pos, off]);
 				}
 			}
-		};
+			};
 
-		function builder(o) {
+		function builder (o) {
 			var i = o;
 			if (!Ext.isObject(o)) {
-				i = { text: o, value: o, handler: function(m) {
+				i = { text: o, value: o, handler: function (m) {
 					me.setText(me.value = m.value);
 					me.fireEvent('wb-options-change', me.up('wb-tool-shape-options') || me);
 				}};
@@ -84,14 +84,14 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ToolOpt
 		return menu;
 	},
 
-	getValue: function() {
+	getValue: function () {
 		return this.value;
 	},
 
-	setValue: function(v) {
+	setValue: function (v) {
 		this.toggle(true);
 		if (this.options) {
-			this.menu.items.each(function(o) {
+			this.menu.items.each(function (o) {
 				if (o.value === v) {
 					o.handler(o);
 					return false;

@@ -6,7 +6,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	extend: 'NextThought.app.course.enrollment.components.parts.BaseInput',
 	alias: 'widget.enrollment-textarea',
 
-		renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup([
 		{cls: 'input-container enrollment-input text {required} {size}', cn: [
 			{tag: 'textarea', placeholder: '{placeholder}'}
 		]},
@@ -15,13 +15,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				{cls: 'information', html: '{help}'}
 			]}
 		]}
-	]),
+		]),
 
 	renderSelectors: {
 		textareaEl: '.input-container textarea'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.focusEvent) {
@@ -42,29 +42,29 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	setUpChangeMonitors: function() {
+	setUpChangeMonitors: function () {
 		if (this.textareaEl) {
 			this.mon(this.textareaEl, 'keyup', 'changed');
 		}
 	},
 
 
-	addError: function() {
+	addError: function () {
 		this.addCls('error');
 	},
 
 
-	removeError: function() {
+	removeError: function () {
 		this.removeCls('error');
 	},
 
 
-	isEmpty: function() {
+	isEmpty: function () {
 		return !this.textareaEl || !this.textareaEl.getValue();
 	},
 
 
-	setValue: function(value) {
+	setValue: function (value) {
 		if (!this.rendered) {
 			this.startingValue = value;
 		} else {
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	getValue: function() {
+	getValue: function () {
 		var value = {},
 			val;
 

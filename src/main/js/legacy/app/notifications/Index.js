@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Index', {
 
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Index', {
 		});
 	},
 
-	onActivate: function() {
+	onActivate: function () {
 		if (this.stream) {
 			this.stream.onActivate();
 		}
@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Index', {
 		this.isActive = true;
 	},
 
-	onDeactivate: function() {
+	onDeactivate: function () {
 		if (this.stream) {
 			this.stream.onDeactivate();
 		}
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Index', {
 		this.isActive = false;
 	},
 
-	showNotifications: function() {
+	showNotifications: function () {
 		var me = this;
 
 		me.NavActions.setActiveContent(null);
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Index', {
 		return Promise.resolve();
 	},
 
-	buildStream: function() {
+	buildStream: function () {
 		this.stream = this.add({
 			xtype: 'notifications-stream-list'
 		});

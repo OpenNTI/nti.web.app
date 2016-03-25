@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.util.Base64', {
 	_slashRe: /\//g,
 	_plusRe: /\+/g,
 
-	encodeURLFriendly: function(input) {
+	encodeURLFriendly: function (input) {
 		return this.encode('!@' + input)//to allow us to quickly determine if the value as raw or encoded.
 				.replace(this._plusRe, '-')
 				.replace(this._slashRe, '_')
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.util.Base64', {
 	},
 
 
-	decodeURLFriendly: function(str) {
+	decodeURLFriendly: function (str) {
 		// reverse to original encoding
 		if (str.length % 4 !== 0) {
 			str += ('===').slice(0, 4 - (str.length % 4));
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.util.Base64', {
 
 
 	// public method for encoding
-	encode: function(input) {
+	encode: function (input) {
 		var output = '',
 			chr1, chr2, chr3, enc1, enc2, enc3, enc4,
 			i = 0;
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.util.Base64', {
 	},
 
 	// public method for decoding
-	decode: function(input) {
+	decode: function (input) {
 		var output = '',
 			chr1, chr2, chr3,
 			enc1, enc2, enc3, enc4,
@@ -114,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.util.Base64', {
 	},
 
 	// private method for UTF-8 encoding
-	_utf8_encode: function(string) {
+	_utf8_encode: function (string) {
 		string = string.replace(/\r\n/g, '\n');
 		var utftext = '', n, c;
 
@@ -141,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.util.Base64', {
 	},
 
 	// private method for UTF-8 decoding
-	_utf8_decode: function(utftext) {
+	_utf8_decode: function (utftext) {
 		var string = '',
 			i = 0, c3 = 0, c2 = 0,
 			c = 0;

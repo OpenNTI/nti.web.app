@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Searchable', {
 		SearchHighlighting: 'NextThought.mixins.SearchHitHighlighting'
 	},
 
-	initSearch: function() {
+	initSearch: function () {
 		this.SearchStore = NextThought.app.search.StateStore.getInstance();
 		this.searchId = this.getContainerIdForSearch();
 
@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Searchable', {
 		}
 	},
 
-	showSearch: function(hit, fragIdx) {
+	showSearch: function (hit, fragIdx) {
 		var frags = hit.get('Fragments'),
 			frag = frags && (frags[fragIdx || 0] || frags[0]);
 
@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Searchable', {
 	 * @override
 	 * @return {Promise}
 	 */
-	onceReadyForSearch: function() {
+	onceReadyForSearch: function () {
 		return Promise.resolve();
 	},
 
@@ -43,9 +43,9 @@ module.exports = exports = Ext.define('NextThought.mixins.Searchable', {
 	 * @override
 	 * @return {String} NTIID
 	 */
-	getContainerIdForSearch: function() {},
+	getContainerIdForSearch: function () {},
 
-	clearSearchHit: function() {
+	clearSearchHit: function () {
 		this.SearchStore.clearHitForContainer(this.searchId);
 		this.mixins.SearchHighlighting.clearSearchHit.call(this);
 	}

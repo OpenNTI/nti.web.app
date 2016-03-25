@@ -3,7 +3,7 @@ var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.overrides.builtins.Node', {});
 	//Patch-in features that might be missing.
-(function() {
+(function () {
 
 	var EP = Element.prototype;
 
@@ -13,12 +13,12 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Node', {})
 
 	//FireFox & Safari & IE (WTH!@#??) give a different instance of Element.protoyp in their
 	// event targets so our above patch is not present for those instances! LAME!!
-	Element.matches = function(el, selector) {
+	Element.matches = function (el, selector) {
 		var m = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector || el.oMatchesSelector;
 		return m.call(el, selector);
 	};
 
-	window.Node = window.Node || function() {};
+	window.Node = window.Node || function () {};
 	window.NodeFilter = window.NodeFilter || {};
 
 	Ext.applyIf(NodeFilter, {
@@ -37,27 +37,27 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Node', {})
 		TEXT_NODE: 3,
 
 
-		getChildren: function() {
+		getChildren: function () {
 			if (this.children) {
 				return this.children;
 			}
 			var EA = Ext.Array;
 			return EA.filter(
 					EA.toArray(this.childNodes, 0, this.childNodes.length),
-						function(i) {
+						function (i) {
 							return i && i.nodeType !== Node.TEXT_NODE;
 						});
 		}
 	});
 
 
-	NodeList.prototype.toArray = function() {
+	NodeList.prototype.toArray = function () {
 		return Array.prototype.slice.call(this);
 	};
 
 
 	if (!('remove' in Element.prototype)) {
-		Element.prototype.remove = function() {
+		Element.prototype.remove = function () {
 			if (this.parentNode) {
 				this.parentNode.removeChild(this);
 			}
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Node', {})
 
 	if (!HTMLCanvasElement.prototype.toBlob) {
 		Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
-			value: function(callback, type, quality) {
+			value: function (callback, type, quality) {
 				var binStr = atob(this.toDataURL(type, quality).split(',')[1]),
 					len = binStr.length,
 					arr = new Uint8Array(len);

@@ -10,7 +10,7 @@ var ParseUtils = require('../util/Parsing');
  */
 module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.dataTransfer = config && config.dataTransfer;
 		this.transferData = {};
 	},
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 	 * @param {String|Mixed} key   the key to store the value on (typically a mimetype), or the object to store
 	 * @param {Mixed} value the value to store
 	 */
-	setData: function(key, value) {
+	setData: function (key, value) {
 		if (!value) {
 			value = key;
 			key = '';
@@ -78,11 +78,11 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 	 *
 	 * @param  {Function} fn callback
 	 */
-	forEach: function(fn) {
+	forEach: function (fn) {
 		var data = this.transferData,
 			keys = Object.keys(data);
 
-		keys.forEach(function(key) {
+		keys.forEach(function (key) {
 			fn(key, data[key]);
 		});
 	},
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 	 * @param  {String} key the key to look for
 	 * @return {String}		the value on data transfer for that key
 	 */
-	getData: function(key) {
+	getData: function (key) {
 		var data;
 
 		if (this.dataTransfer) {
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 	},
 
 
-	getJSON: function(key) {
+	getJSON: function (key) {
 		var data = this.getData(key);
 
 		try {
@@ -122,28 +122,28 @@ module.exports = exports = Ext.define('NextThought.store.DataTransfer', {
 	},
 
 
-	getModel: function(key) {
+	getModel: function (key) {
 		var data = this.getData(key);
 
 		return ParseUtils.parseItems(data)[0];
 	},
 
 
-	findDataFor: function(key) {
+	findDataFor: function (key) {
 		return this.getModel(key) || this.getJSON(key) || this.getData(key);
 	},
 
 
-	containsType: function(key) {
+	containsType: function (key) {
 		var types = this.dataTransfer && this.dataTransfer.types;
 
 		if (types) {
 			//Firefox returns a DomStringList which doesn't have
 			//an indexOf
-			if(types.contains){
+			if(types.contains) {
 				return types.contains(key);
 			}
-			else if(types.indexOf){
+			else if(types.indexOf) {
 				return types.indexOf(key) >= 0;
 			}
 		}

@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareS
 	layout: 'none',
 	items: [],
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.setupSearchList();
@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareS
 		this.mon(this.el, 'click', this.onClicked.bind(this));
 	},
 
-	setupSearchList: function(){
+	setupSearchList: function () {
 		this.searchList = this.add({
 			xtype: 'share-search',
 			ownerCls: this.ownerCls,
@@ -31,13 +31,13 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareS
 		});
 	},
 
-	onClicked: function() {
+	onClicked: function () {
 		if (this.stopHide) {
 			this.stopHide();
 		}
 	},
 
-	bindStore: function(store) {
+	bindStore: function (store) {
 		this.store = store;
 
 		if (this.searchList) {
@@ -45,39 +45,39 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareS
 		}
 	},
 
-	refresh: function() {
+	refresh: function () {
 		if (this.searchList) {
 			this.searchList.refresh();
 		}
 	},
 
-	addSelected: function(){
+	addSelected: function () {
 		this.searchList.addSelected();
 	},
 
-	getNode: function(index) {
+	getNode: function (index) {
 		if (this.searchList) {
 			return this.searchList.getNode(index);
 		}
 	},
 
-	getRecord: function(node){
-		return this.searchList.getRecord(node)
+	getRecord: function (node) {
+		return this.searchList.getRecord(node);
 	},
 
-	selectNext: function() {
+	selectNext: function () {
 		this.searchList.selectNext();
 	},
 
-	selectPrev: function() {
+	selectPrev: function () {
 		this.searchList.selectPrev();
 	},
 
-	unselectItem: function() {
+	unselectItem: function () {
 		this.searchList.unselectItem();
 	},
 
-	getSelectionModel: function(){
+	getSelectionModel: function () {
 		return this.searchList.getSelectionModel();
 	}
 });

@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	//		prev: '.prev'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.mixins.transcriptItem.constructor.apply(this, arguments);
@@ -46,11 +46,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		this.MediaViewerStore = NextThought.app.mediaviewer.StateStore.getInstance();
 	},
 
-	containerIdForData: function() {
+	containerIdForData: function () {
 		return this.slide && this.slide.getId();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var slide = this.slide, i, me = this;
@@ -74,11 +74,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}
 	},
 
-	finishedLoadingImage: function() {
+	finishedLoadingImage: function () {
 		this.notifyReady();
 	},
 
-	openNoteEditor: function(e) {
+	openNoteEditor: function (e) {
 		var data = {startTime: this.slide.get('video-start'), endTime: this.slide.get('video-end')};
 
 		data.isDomRange = true;
@@ -90,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			.then(this.setEditorDefaultSharing.bind(this));
 	},
 
-	setEditorDefaultSharing: function() {
+	setEditorDefaultSharing: function () {
 		var pageInfo = this.slide.pageInfo,
 			pid = pageInfo && pageInfo.getId(),
 			reader = this.up('slidedeck-transcript'),
@@ -100,20 +100,20 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		if (!pid || !course) { return; }
 
 		me.MediaViewerStore.getSharingPreferences(pid, course)
-			.then(function(prefs) {
+			.then(function (prefs) {
 				var sharing = prefs && prefs.sharing,
 					sharedWith = sharing && sharing.sharedWith;
 
 				return SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith), course);
 			})
-			.then(function(shareInfo) {
+			.then(function (shareInfo) {
 				if (me.noteOverlay && me.noteOverlay.editor) {
 					me.noteOverlay.editor.setSharedWith(shareInfo);
 				}
 			});
 	},
 
-	onMouseOver: function(e) {
+	onMouseOver: function (e) {
 		var t = e.getTarget('.x-component-slide', null, true),
 			box = t && t.down('.add-note-here'), me = this,
 			current = this.el.parent().down('.note-here-control-box:not(.hidden)');
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 		clearTimeout(this.mouseEnterTimeout);
 
-		this.mouseLeaveTimeout = setTimeout(function() {
+		this.mouseLeaveTimeout = setTimeout(function () {
 			box.down('.note-here-control-box').removeCls('hidden');
 			if (current && current !== box.down('.note-here-control-box')) {
 				current.addCls('hidden');
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 	},
 
-	onMouseOut: function(e) {
+	onMouseOut: function (e) {
 		var target = e.getTarget(null, null, true),
 			t = target && target.is('.x-component-slide'),
 			box = t && target.down('.add-note-here'), me = this;
@@ -142,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		//clearTimeout(this.mouseLeaveTimeout);
 
 		if (!box.down('.note-here-control-box').hasCls('hidden')) {
-			this.mouseEnterTimeout = setTimeout(function() {
+			this.mouseEnterTimeout = setTimeout(function () {
 				if (box && !box.down('.note-here-control-box').hasCls('hidden')) {
 					box.down('.note-here-control-box').addCls('hidden');
 				}
@@ -151,11 +151,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}
 	},
 
-	getAnchorResolver: function() {
+	getAnchorResolver: function () {
 		return Anchors;
 	},
 
-	createDomRange: function() {
+	createDomRange: function () {
 		var range = document.createRange(),
 			el = this.el.down('img');
 
@@ -163,18 +163,18 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return range;
 	},
 
-	isTimeWithinTimeRange: function(time) {
+	isTimeWithinTimeRange: function (time) {
 		var start = this.slide.get('video-start'),
 			end = this.slide.get('video-end');
 
 		return start <= time && time <= end;
 	},
 
-	getElementAtTime: function(time) {
+	getElementAtTime: function (time) {
 		return this.slideImage;
 	},
 
-	wantsRecord: function(rec) {
+	wantsRecord: function (rec) {
 		var anchorResolver = this.getAnchorResolver(),
 			domFrag = this.slide.get('dom-clone'),
 			containerId = rec.get('ContainerId'),
@@ -187,11 +187,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return result;
 	},
 
-	domRangeForRecord: function(rec) {
+	domRangeForRecord: function (rec) {
 		return this.createDomRange();
 	},
 
-	getDomContextForRecord: function(r) {
+	getDomContextForRecord: function (r) {
 		return Ext.clone(this.el.down('img').dom);
 	}
 });

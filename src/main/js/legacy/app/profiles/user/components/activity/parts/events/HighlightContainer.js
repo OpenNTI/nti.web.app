@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		]}
 	)),
 
-	setupContainerRenderData: function() {
+	setupContainerRenderData: function () {
 		var me = this,
 			c = me.up('[user]'),
 			u = me.user || null,
@@ -79,8 +79,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			date: Ext.Date.format(me.date, 'F j, Y')
 		});
 
-		function byTime(a, b) {
-			function g(x) { return x.get ? x.get('CreatedTime').getTime() : 0; }
+		function byTime (a, b) {
+			function g (x) { return x.get ? x.get('CreatedTime').getTime() : 0; }
 			a = g(a);
 			b = g(b);
 			return a - b;
@@ -88,9 +88,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		Ext.Array.sort(this.items, byTime);
 
-		waitsOn = items.map(function(item) {
+		waitsOn = items.map(function (item) {
 			return pathActions.getPathToObject(item)
-				.then(function(path) {
+				.then(function (path) {
 					var root = path[0],
 						roots, pages,
 						page = path.last(),
@@ -136,23 +136,23 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	 * @param {Object} data the output
 	 * @param {Object} groupings the input
 	 */
-	setupBookRenderData: function(data, groupings) {
+	setupBookRenderData: function (data, groupings) {
 		var toFillIn = [];
 
 		data.books = [];
 
-		Ext.Object.each(groupings, function(k, root) {
-			toFillIn.push(new Promise(function(fulfill, reject) {
+		Ext.Object.each(groupings, function (k, root) {
+			toFillIn.push(new Promise(function (fulfill, reject) {
 				var book = {pages: [], ntiid: k};
 
 				data.books.push(book);
 
-				Ext.Object.each(root, function(k, items) {
+				Ext.Object.each(root, function (k, items) {
 					var page = {items: [], ntiid: k};
 
 					book.pages.push(page);
 
-					Ext.each(items, function(i) {
+					Ext.each(items, function (i) {
 						var pp = i.get('presentationProperties');
 
 						page.items.push({
@@ -176,12 +176,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 
 		return Promise.all(toFillIn)
-			.then(function() {
+			.then(function () {
 				return data;
 			});
 	},
 
-	maybeFillIn: function(data) {
+	maybeFillIn: function (data) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.maybeFillIn, this, [data]), this, {single: true});
 			return;
@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.tpl.overwrite(this.bodyEl, data);
 
 		var me = this;
-		this.bodyEl.select('.selected-text > span').each(function(s) {
+		this.bodyEl.select('.selected-text > span').each(function (s) {
 			var words = Ext.String.ellipsis(s.dom.innerHTML.trim(), 200, true);
 			me.selectedTpl.overwrite(s, words.split(' '));
 		});
@@ -199,19 +199,19 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	/**
 	 * @override {Ext.Component#beforeRender}
 	 */
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		this.setupContainerRenderData();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		var me = this;
 		me.callParent(arguments);
 		me.enableProfileClicks(me.nameEl);
 		me.mon(me.bodyEl, 'click', me.onClick, me);
 
 		me.setupContainerRenderData = Ext.Function.createBuffered(me.setupContainerRenderData, 10, me, null);
-		Ext.each(this.items, function(i) { me.mon(i, 'destroy', me.onHighlightRemoved, me); });
+		Ext.each(this.items, function (i) { me.mon(i, 'destroy', me.onHighlightRemoved, me); });
 	},
 
 	/**
@@ -220,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	 * @param {NextThought.model.Highlight} record
 	 * @return {boolean} True if it was added, false otherwise.
 	 */
-	collate: function(record) {
+	collate: function (record) {
 		var d = record.get('CreatedTime'),
 			n = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
 		if (n === this.date.getTime() && /highlight$/i.test(record.get('Class') || '')) {
@@ -231,12 +231,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return false;
 	},
 
-	addHighlight: function(record) {
+	addHighlight: function (record) {
 		this.items.unshift(record);
 		this.setupContainerRenderData();
 	},
 
-	onHighlightRemoved: function(item) {
+	onHighlightRemoved: function (item) {
 		Ext.Array.remove(this.items, item);
 		this.mun(item, 'destroy', this.onHighlightRemoved, this);
 
@@ -248,14 +248,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.destroy();
 	},
 
-	onClick: function(e) {
+	onClick: function (e) {
 		var t = e.getTarget('[data-ntiid]', null, true),
 			ntiid = t && t.getAttribute('data-ntiid'),
 			selectedItem;
 
 		if (!ntiid) { return; }
 
-		this.items.forEach(function(item) {
+		this.items.forEach(function (item) {
 			if (item.getId() === ntiid || item.get('ContainerId') === ntiid) {
 				selectedItem = item;
 			}
@@ -267,14 +267,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	goToObject: function(id) {
+	goToObject: function (id) {
 		var item, cid;
 
 		if (!id) {
 			return;
 		}
 
-		Ext.each(this.items, function(i) {
+		Ext.each(this.items, function (i) {
 			if (i.getId() === id) {
 				item = i;
 				return false;

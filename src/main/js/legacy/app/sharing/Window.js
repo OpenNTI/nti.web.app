@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
 	modal: true,
 	dialog: true,
 
-	constructor: function() {
+	constructor: function () {
 		this.items = [
 			{
 				xtype: 'component',
@@ -49,11 +49,11 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
 							{xtype: 'checkbox', boxLabel: 'make sharing default', name: 'default'}
 						]
 					},
-					{xtype: 'button', text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function(btn, e) {
+					{xtype: 'button', text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function (btn, e) {
 						btn.up('window').close();
 						e.stopEvent();
 					}},
-					{xtype: 'button', text: 'Save', handler: function(btn, e) {
+					{xtype: 'button', text: 'Save', handler: function (btn, e) {
 						if (this.text === 'Close') {
 							btn.up('window').close();
 						} else {
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
 		this.callParent(arguments);
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		var readOnly = this.isReadOnly(),
 			title = this.titleLabel || (readOnly ? 'Item Info' : 'Share this...'),
 			content = 'This item does not have text',
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
 				name: 'resolving...'
 			};
 
-			UserRepository.getUser(u, function(user) {
+			UserRepository.getUser(u, function (user) {
 				var avatar;
 				if (!info.rendered) {
 					Ext.apply(info.renderData, {
@@ -138,29 +138,29 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
 			this.setValue(SharingUtils.sharedWithForSharingInfo(this.value));
 		}
 
-		this.on('close', function() {
+		this.on('close', function () {
 			this.dragMaskOff();
 		});
 	},
 
-	show: function() {
+	show: function () {
 		NextThought.getApplication().fireEvent('showshare', this);
 		this.callParent(arguments);
 	},
 
-	hide: function() {
+	hide: function () {
 		NextThought.getApplication().fireEvent('hideshare', this);
 		this.callParent(arguments);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this;
 		this.mon(this.down('user-sharing-list'), {
 			scope: me,
-			'new-tag': function() { Ext.defer(me.updateLayout, 1, me); },
-			'sync-height': function() { Ext.defer(me.updateLayout, 1, me); }
+			'new-tag': function () { Ext.defer(me.updateLayout, 1, me); },
+			'sync-height': function () { Ext.defer(me.updateLayout, 1, me); }
 		});
 
 		// Update the window's ordering so that the modal mask is
@@ -168,7 +168,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
 		this.toBack();
 	},
 
-	isReadOnly: function() {
+	isReadOnly: function () {
 		var refCount;
 		if (!this.record) {
 			return false;
@@ -180,15 +180,15 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
 		return (this.record.children && this.record.children.length > 0) || (!Ext.isEmpty(refCount) && refCount > 0);
 	},
 
-	getValue: function() {
+	getValue: function () {
 		return this.down('user-sharing-list').getValue();
 	},
 
-	setValue: function(v) {
+	setValue: function (v) {
 		this.down('user-sharing-list').setValue(v);
 	},
 
-	save: function() {
+	save: function () {
 		var checkbox = this.down('checkbox');
 
 		this.el.mask('Sharing...');

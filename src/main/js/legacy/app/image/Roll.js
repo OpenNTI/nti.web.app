@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.image.Roll', {
 		}
 	],
 
-	constructor: function(config) {
+	constructor: function (config) {
 		var store = config ? (config.store || undefined) : undefined,
 			data = config ? (config.data || undefined) : undefined,
 			me = this;
@@ -30,8 +30,8 @@ module.exports = exports = Ext.define('NextThought.app.image.Roll', {
 
 		me.image = me.down('box[name=image]');
 
-		me.mon(me.image, 'afterrender', function() {
-			me.image.el.dom.onload = function() {
+		me.mon(me.image, 'afterrender', function () {
+			me.image.el.dom.onload = function () {
 				me.updateLayout();
 			};
 		});
@@ -91,12 +91,12 @@ module.exports = exports = Ext.define('NextThought.app.image.Roll', {
 	},
 
 
-	preload: function(data) {
+	preload: function (data) {
 		var me = this,
 			loaded = 0,
 			maxAspect = 0;
 
-		function fin(img) {
+		function fin (img) {
 			loaded++;
 			var h, w;
 
@@ -115,16 +115,16 @@ module.exports = exports = Ext.define('NextThought.app.image.Roll', {
 			}
 		}
 
-		Ext.each(data, function(i) {
+		Ext.each(data, function (i) {
 			var o = i.img = new Image();
-			o.onload = function() { fin(o); };
-			o.onerror = function() { fin(); console.warn('Failed to load: ' + i.url); };
+			o.onload = function () { fin(o); };
+			o.onerror = function () { fin(); console.warn('Failed to load: ' + i.url); };
 			o.src = i.url;
 		});
 	},
 
 
-	updateAspect: function(aspect) {
+	updateAspect: function (aspect) {
 		var w = this.image.getWidth(),
 			h = Math.round(w / (aspect || 1));
 
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.image.Roll', {
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		Ext.DomHelper.append(this.el, {cls: 'fade-outs', cn: [{cls: 'left'},{cls: 'right'}]});
 
@@ -142,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.app.image.Roll', {
 	},
 
 
-	selection: function(v, s) {
+	selection: function (v, s) {
 		var item = s && s[0],
 			store = this.others.store,
 			index = store && store.indexOf(item),
@@ -173,12 +173,12 @@ module.exports = exports = Ext.define('NextThought.app.image.Roll', {
 	},
 
 
-	selectFirst: function() {
+	selectFirst: function () {
 		this.others.getSelectionModel().select(0);
 	},
 
 
-	onClick: function(e) {
+	onClick: function (e) {
 		if (e.getTarget('.disabled')) {
 			console.warn('disabled');
 		} else if (e.getTarget('.right')) {
@@ -189,7 +189,7 @@ module.exports = exports = Ext.define('NextThought.app.image.Roll', {
 	},
 
 
-	getActiveSelection: function() {
+	getActiveSelection: function () {
 		var selection = this.others.getSelectionModel(),
 			activeSelection = selection && selection.getSelection();
 
@@ -197,14 +197,14 @@ module.exports = exports = Ext.define('NextThought.app.image.Roll', {
 	},
 
 
-	selectItem: function(item) {
+	selectItem: function (item) {
 		var selection = this.others.getSelectionModel();
 
 		selection.select(item);
 	},
 
 
-	selectNext: function() {
+	selectNext: function () {
 		var active = this.getActiveSelection(),
 			store = this.others.store,
 			total = store && store.getCount(),
@@ -222,7 +222,7 @@ module.exports = exports = Ext.define('NextThought.app.image.Roll', {
 	},
 
 
-	selectPrev: function() {
+	selectPrev: function () {
 		var active = this.getActiveSelection(),
 			store = this.others.store,
 			total = store && store.getCount(),

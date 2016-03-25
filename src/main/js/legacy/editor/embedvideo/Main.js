@@ -21,16 +21,16 @@ module.exports = exports = Ext.define('NextThought.editor.embedvideo.Main', {
 			]}
 		},
 		{xtype: 'container', cls: 'submit', layout: {type: 'hbox', pack: 'end'}, items: [
-			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text: 'Cancel', handler: function(b) {
+			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text: 'Cancel', handler: function (b) {
 				b.up('window').close();
 			}},
-			{xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text: 'Embed', handler: function(b) {
+			{xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text: 'Embed', handler: function (b) {
 				b.up('window').embed();
 			}}
 		]}
 	],
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var url = this.up('window').getUrl(),
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.editor.embedvideo.Main', {
 		}
 	},
 
-	getValues: function() {
+	getValues: function () {
 		var raw = this.down('[name=embed]').getEl().getValue(), matches,
 			iframeRegex = /<iframe.*src="(.*?)".*?><\/iframe>/i,
 			Videos = NextThought.model.resolvers.videoservices,
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.editor.embedvideo.Main', {
 			raw = matches[1];
 		}
 
-		types.forEach(function(video) {
+		types.forEach(function (video) {
 			if (video.urlIsFor(raw) && !type) {
 				type = {
 					type: video.TYPE,
@@ -88,13 +88,13 @@ module.exports = exports = Ext.define('NextThought.editor.embedvideo.Main', {
 		// return type;
 	},
 
-	setError: function(error) {
+	setError: function (error) {
 		var box = this.down('[name=error]'),
 			field = this.down('[name=' + error.field + ']'),
 			allFields = this.query('[name]');
 
 		//clear all errors:
-		Ext.each(allFields, function(f) {f.removeCls('error');});
+		Ext.each(allFields, function (f) {f.removeCls('error');});
 
 		//make main error field show up
 		box.el.down('.error-field').update('Video');

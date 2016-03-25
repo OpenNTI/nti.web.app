@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.prevArrow, 'click', this.showPrev.bind(this));
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	},
 
 
-	showResult: function(index) {
+	showResult: function (index) {
 		index = index || 0;
 		this.currentIndex = index;
 
@@ -88,14 +88,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	},
 
 
-	showPrev: function(e) {
+	showPrev: function (e) {
 		if (!e.getTarget('.disabled')) {
 			this.showResult(this.currentIndex - 1);
 		}
 	},
 
 
-	showNext: function(e) {
+	showNext: function (e) {
 		if (!e.getTarget('.disabled')) {
 			this.showResult(this.currentIndex + 1);
 		}

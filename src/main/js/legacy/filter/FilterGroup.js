@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
 
 	isFilterGroup: true,
 
-	constructor: function(scope, operation, filteres) {
+	constructor: function (scope, operation, filteres) {
 		var me = this;
 		me.callParent(null);
 		me.operation = this.clamp([this.self.OPERATION_INTERSECTION, this.self.OPERATION_UNION], operation);
@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
 		me.scope = scope;
 		delete me.fieldName;
 		if (Ext.isArray(filteres)) {
-			Ext.each(filteres, function(v) {
+			Ext.each(filteres, function (v) {
 
 				if (!me.addFilter(v)) {
 					console.error('Bad value in filters:', v);
@@ -34,16 +34,16 @@ module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
 	},
 
 
-	flatten: function() {
+	flatten: function () {
 		var filters = [];
-		Ext.each(this.value, function(f) {
+		Ext.each(this.value, function (f) {
 			filters.push.apply(filters, f.flatten());
 		});
 		return filters;
 	},
 
 
-	toString: function() {
+	toString: function () {
 		if (this.value.length === 1) {
 			return this.value[0].toString();
 		}
@@ -58,12 +58,12 @@ module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
 	},
 
 
-	equals: function(o) {
+	equals: function (o) {
 		if (!o) {
 			return false;
 		}
 
-		function same(a,b) {
+		function same (a,b) {
 			if (!Ext.isArray(a) || !Ext.isArray(b) || a.length !== b.length) {
 				return false;
 			}
@@ -82,12 +82,12 @@ module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
 	},
 
 
-	getScope: function() {
+	getScope: function () {
 		return this.scope;
 	},
 
 
-	contains: function(filter) {
+	contains: function (filter) {
 		var v = this.value || this,//or 'this' allows us to call this on arrays.
 			i = v.length - 1;
 		for (i; i >= 0; i--) {
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
 	},
 
 
-	addFilter: function(filter) {
+	addFilter: function (filter) {
 		if (filter instanceof NextThought.filter.Filter
 		&& (filter instanceof NextThought.filter.FilterGroup || !this.contains(filter))) {
 			this.value.push(filter);
@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
 	},
 
 
-	test: function(obj) {
+	test: function (obj) {
 		if (this.operation === this.self.OPERATION_INTERSECTION) {
 			return this.testIntersection(obj);
 
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
 
 
 
-	testIntersection: function(obj) {
+	testIntersection: function (obj) {
 		var v = this.value,
 			i = v.length - 1;
 		for (i; i >= 0; i--) {
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.filter.FilterGroup', {
 	},
 
 
-	testUnion: function(obj) {
+	testUnion: function (obj) {
 		var v = this.value,
 			i = v.length - 1;
 		for (i; i >= 0; i--) {

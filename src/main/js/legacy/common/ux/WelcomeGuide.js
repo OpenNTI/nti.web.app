@@ -47,13 +47,13 @@ module.exports = exports = Ext.define('NextThought.common.ux.WelcomeGuide', {
 				defaults: { xtype: 'button', ui: 'blue', scale: 'large'},
 				items: [
 					//{text: 'Learn More',	action: 'more', ui: 'secondary', handler: function(b, e){ e.stopEvent();b.up('window').learnMore(); } },
-					{text: 'Get Started!', cls: '.x-btn-blue-large dismiss', action: 'cancel', handler: function(b, e) { e.stopEvent(); b.up('window').close();}}
+					{text: 'Get Started!', cls: '.x-btn-blue-large dismiss', action: 'cancel', handler: function (b, e) { e.stopEvent(); b.up('window').close();}}
 				]
 			}]
 		}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.down('component[cls=help-iframe]').autoEl.src = getURL((this.link && this.link.href) || this.link);
 		this.on('show', this.addCustomMask, this);
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.WelcomeGuide', {
 		}
 
 		if (Ext.is.iOS) {
-			this.on('afterrender', function() {
+			this.on('afterrender', function () {
 				var iframe = this.el.down('iframe');
 				iframe.parent().el.setStyle('-webkit-overflow-scrolling', 'touch');
 				iframe.parent().el.setStyle('overflow', 'auto');
@@ -71,13 +71,13 @@ module.exports = exports = Ext.define('NextThought.common.ux.WelcomeGuide', {
 		}
 	},
 
-	addCustomMask: function() {
+	addCustomMask: function () {
 		var mask = this.zIndexManager.mask;
 		mask.addCls('nti-black-clear');
 	},
 
 
-	removeCustomMask: function() {
+	removeCustomMask: function () {
 		var mask = this.zIndexManager.mask;
 		if (mask) {
 			mask.removeCls('nti-black-clear');
@@ -85,20 +85,20 @@ module.exports = exports = Ext.define('NextThought.common.ux.WelcomeGuide', {
 	},
 
 
-	learnMore: function() {
+	learnMore: function () {
 		console.log('Learn more was clicked');
 		this.fireEvent('go-to-help');
 		this.close();
 	},
 
-	deleteLink: function() {
+	deleteLink: function () {
 		Ext.Ajax.request({
 			url: this.link.href || this.link,
 			method: 'DELETE',
-			success: function(r, opts) {
+			success: function (r, opts) {
 				console.log('Success: ', arguments);
 			},
-			fail: function(r, opts) {
+			fail: function (r, opts) {
 				console.log('Fail: ', arguments);
 			}
 		});

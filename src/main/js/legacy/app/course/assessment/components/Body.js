@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	layout: 'card',
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		wait()

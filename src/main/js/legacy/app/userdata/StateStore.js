@@ -5,7 +5,7 @@ var CommonStateStore = require('../../common/StateStore');
 module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
-	getSocket: function() {
+	getSocket: function () {
 		if (!this.socket) {
 			this.socket = Socket;
 		}
@@ -14,34 +14,34 @@ module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 	},
 
 
-	setPreference: function(key, pref) {
+	setPreference: function (key, pref) {
 		this.page_preference_map = this.page_preference_map || {};
 
 		this.page_preference_map[key] = pref;
 	},
 
 
-	getPreference: function(key) {
+	getPreference: function (key) {
 		return this.page_preference_map && this.page_preference_map[key];
 	},
 
 
-	setContext: function(ctx) {
+	setContext: function (ctx) {
 		this.currentContext = ctx;
 	},
 
 
-	clearContext: function() {
+	clearContext: function () {
 		delete this.currentContext;
 	},
 
 
-	getMainReaderContext: function() {
+	getMainReaderContext: function () {
 		return this.flatPageContextMap['main-reader-view'];
 	},
 
 
-	addStore: function(store) {
+	addStore: function (store) {
 		if (!this.flatPageContextMap) {
 			this.flatPageContextMap = {};
 		}
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 	},
 
 
-	getContext: function(cmp) {
+	getContext: function (cmp) {
 		if (!this.flatPageContextMap) {
 			this.flatPageContextMap = {};
 		}
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 			var c = this.flatPageContextMap;
 
 			if (!c.hasOwnProperty(cmp.id)) {
-				cmp.on('destroy', function() {
+				cmp.on('destroy', function () {
 					delete c[cmp.id];
 				});
 			}
@@ -90,9 +90,9 @@ module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 	//<editor-fold desc="Store Iteration">
 	//Calls the provided fn on all the stores.	Optionally takes a predicate
 	//which skips stores that do not match the predicate
-	applyToStores: function(fn, predicate) {
-		Ext.Object.each(this.flatPageContextMap, function(k, o) {
-			Ext.Object.each(o.currentPageStores, function(k) {
+	applyToStores: function (fn, predicate) {
+		Ext.Object.each(this.flatPageContextMap, function (k, o) {
+			Ext.Object.each(o.currentPageStores, function (k) {
 				if (k === 'root') {
 					return;
 				}
@@ -105,8 +105,8 @@ module.exports = exports = Ext.define('NextThought.app.userdata.StateStore', {
 	},
 
 
-	applyToStoresThatWantItem: function(fn, item) {
-		function predicate(id, store) {
+	applyToStoresThatWantItem: function (fn, item) {
+		function predicate (id, store) {
 			return store && store.wantsItem(item);
 		}
 

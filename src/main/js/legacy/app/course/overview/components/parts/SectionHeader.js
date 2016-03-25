@@ -18,12 +18,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		{
 			tag: 'h2', cls: '{type}', cn: [
 			{tag: 'span', html: '{title}', style: '{[(values.color && ("background-color: #" + values.color)) || "" ]}'}
-		]
+			]
 		}
 	]),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var title = this.title || getString('NextThought.view.courseware.overview.parts.Section.untitled');
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	onAdd: function(item, index) {
+	onAdd: function (item, index) {
 		var first = this.items.getCount() === 1;
 
 		this.mon(item, 'show', 'show');
@@ -61,8 +61,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	setProgress: function(progress) {
-		this.items.each(function(item) {
+	setProgress: function (progress) {
+		this.items.each(function (item) {
 			if (item.setProgress) {
 				item.setProgress(progress);
 			}

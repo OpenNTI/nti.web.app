@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 	),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		Ext.apply(this.renderData, {
 			lineWithBlank: this.buildContent(this.filterHTML(this.part.get('input')))
@@ -39,14 +39,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		var me = this, ctEl,
 			tpl = me.blankTpl;
 		me.callParent(arguments);
 		ctEl = me.getContentElement();
 		me.blankInputs = me.inputBox.query('input[type="blankfield"]');
 
-		function setup(i, tag) {
+		function setup (i, tag) {
 			if (!i) {return;}
 
 			var blank = tpl.insertBefore(i),
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 			}
 		}
 
-		me.blankInputs.forEach(function(i) {
+		me.blankInputs.forEach(function (i) {
 			var name = i.getAttribute('name');
 			setup(i);
 			if (ctEl) {
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 	},
 
 
-	getContentElement: function() {
+	getContentElement: function () {
 		var ct = this.callParent(arguments);
 		if (!ct.classList.contains('naqfillintheblankshortanswerpart')) {
 			Ext.Error.raise('Part Ordinal Mismatch');
@@ -93,8 +93,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 	},
 
 
-	getSolutionContent: function(part) {
-		function re(original, attrs) {
+	getSolutionContent: function (part) {
+		function re (original, attrs) {
 			attrs = (attrs || '').trim().split(/\s/);
 
 			if (/type=(\"|\')?blankfield/i.test(attrs)) {
@@ -115,10 +115,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 							me.part.get('input')
 									.replace(/<input([^>]+?)\/?>/igm, re)));
 
-		Ext.each(part.get('solutions'), function(s) {
+		Ext.each(part.get('solutions'), function (s) {
 			var x = s.get('value');
 			// x may or may not be an Array.  Ext.each handles that for us.
-			Ext.each(x, function(s) {
+			Ext.each(x, function (s) {
 				var k, v = {}, o;
 				for (k in s) {
 					if (s.hasOwnProperty(k)) {
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 	},
 
 
-	checkSubmissionState: function() {
+	checkSubmissionState: function () {
 		var k, v = this.getValue(),
 			allFilledIn = true;
 
@@ -163,10 +163,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 	},
 
 
-	hasValue: function() {
+	hasValue: function () {
 		var isEmpty;
 
-		isEmpty = (this.blankInputs || []).every(function(input) {
+		isEmpty = (this.blankInputs || []).every(function (input) {
 			return !!input.value;
 		});
 
@@ -174,10 +174,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 	},
 
 
-	getValue: function() {
+	getValue: function () {
 		var value = {};
 
-		(this.blankInputs || []).forEach(function(input) {
+		(this.blankInputs || []).forEach(function (input) {
 			var name = input.getAttribute('name');
 			value[name] = input.value || null;
 		});
@@ -185,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 	},
 
 
-	setValue: function(value) {
+	setValue: function (value) {
 		if (!this.rendered) {
 			this._value = value;
 			return;
@@ -204,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 	},
 
 
-	setFieldValue: function(name, value) {
+	setFieldValue: function (name, value) {
 		var dom = Ext.getDom(this.el),
 			input = dom && dom.querySelector('input[name="' + name + '"]');
 
@@ -217,25 +217,25 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 	},
 
 
-	markCorrect: function() {
+	markCorrect: function () {
 		this.markGraded();
 		this.callParent(arguments);
 	},
 
 
-	markIncorrect: function() {
+	markIncorrect: function () {
 		this.markGraded();
 		this.callParent(arguments);
 	},
 
 
-	markSubmitted: function() {
+	markSubmitted: function () {
 		this.markGraded();
 		this.callParent(arguments);
 	},
 
 
-	markGraded: function(yes) {
+	markGraded: function (yes) {
 		var action = yes !== false ? 'addCls' : 'removeCls';
 		this.el[action]('graded');
 		this.el.select('span.blank')[action]('graded');
@@ -243,13 +243,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Short', 
 		this.el.select('span.blank input').set({disabled: yes !== false ? true : undefined});
 	},
 
-	reset: function() {
+	reset: function () {
 		this.markGraded(false);
 		this.callParent(arguments);
 
 		var inputs = this.el.select('.blank input');
 
-		inputs.each(function(i) {
+		inputs.each(function (i) {
 			i.dom.value = '';
 		});
 	}

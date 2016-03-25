@@ -37,13 +37,13 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 		{xtype: 'code-main-view'}
 	],
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.el.down('.close'), 'click', this.close, this);
 		this.el.down('input').focus(200);
 		if (Ext.is.iPad) {
 			this.mon(this.el.down('input'), {
-				blur: function() {
+				blur: function () {
 					window.scrollTo(0, 0);
 				}
 			});

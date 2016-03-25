@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 	layout: 'none',
 	cls: 'note-window',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.headerCmp = this.add({
@@ -30,13 +30,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 		}
 	},
 
-	loadNote: function(record) {
+	loadNote: function (record) {
 		var context = NextThought.app.context.ContainerContext.create({
-				container: record.get('ContainerId'),
-				range: record.get('applicableRange'),
-				contextRecord: record,
-				doNavigate: this.doNavigate.bind(this)
-			});
+			container: record.get('ContainerId'),
+			range: record.get('applicableRange'),
+			contextRecord: record,
+			doNavigate: this.doNavigate.bind(this)
+		});
 
 		this.headerCmp.showPathFor(record, null, 3);
 
@@ -57,27 +57,27 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Window',
 		});
 	},
 
-	loadRoot: function() {
+	loadRoot: function () {
 		var root = this.record.get('references')[0];
 
 		Service.getObject(root)
 			.then(this.loadNote.bind(this), this.loadParent.bind(this));
 	},
 
-	loadParent: function() {
+	loadParent: function () {
 		var parent = this.record.get('inReplyTo');
 
 		Service.getObject(parent)
 			.then(this.loadNote.bind(this), this.loadNote.bind(this, this.record));
 	},
 
-	allowNavigation: function() {
+	allowNavigation: function () {
 		var panel = this.down('note-main-view');
 
 		if (!panel) { return true; }
 
 		return panel.allowNavigation();
 	}
-}, function() {
+}, function () {
 	NextThought.app.windows.StateStore.register(NextThought.model.Note.mimeType, this);
 });

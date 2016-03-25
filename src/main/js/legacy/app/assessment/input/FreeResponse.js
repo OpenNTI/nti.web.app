@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FreeResp
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			tabIndex: this.tabIndexTracker.getNext()
 		});
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FreeResp
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.solutionAnswerBox.insertFirst([getString('NextThought.view.assessment.input.FreeResponse.answer') + ': ', {tag: 'span'}]);
 		this.solutionAnswerBox = this.solutionAnswerBox.down('span');
 
@@ -40,14 +40,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FreeResp
 
 		this.mon(this.inputField, {
 			scope: this,
-			blur: function(e, dom) { dom.setAttribute('placeholder', getString('NextThought.view.assessment.input.FreeResponse.answer')); },
-			focus: function(e, dom) { dom.removeAttribute('placeholder'); },
-			keyup: function(e, dom) {
+			blur: function (e, dom) { dom.setAttribute('placeholder', getString('NextThought.view.assessment.input.FreeResponse.answer')); },
+			focus: function (e, dom) { dom.removeAttribute('placeholder'); },
+			keyup: function (e, dom) {
 				if (dom.value === '') { this.disableSubmission(); }
 				else { this.enableSubmission(); }
 			},
 			keydown: this.keyFilter,
-			paste: function(e) {
+			paste: function (e) {
 				e.stopEvent();
 				return false;
 			}
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FreeResp
 	},
 
 
-	setupAnswerLabel: function(label) {
+	setupAnswerLabel: function (label) {
 		if (!label) {return;}
 
 		var i = this.inputField,
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FreeResp
 
 		el.hide();
 
-		function show() {
+		function show () {
 			var l, m = new Ext.util.TextMetrics();
 			m.bind(i);
 			l = 10 + m.getWidth(i.getValue());
@@ -76,14 +76,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FreeResp
 
 		this.mon(i, {
 			scope: this,
-			blur: function() { el.hide(); },
+			blur: function () { el.hide(); },
 			focus: show,
 			keyup: show
 		});
 	},
 
 
-	keyFilter: function(e, dom) {
+	keyFilter: function (e, dom) {
 		if (e.getKey() === e.ENTER) {
 			this.submitOrTabNext(dom);
 			e.stopEvent();
@@ -91,16 +91,16 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FreeResp
 		}
 	},
 
-	canHaveAnswerHistory: function() {
+	canHaveAnswerHistory: function () {
 		return this.questionSet ? false : true;
 	},
 
-	getValue: function() {
+	getValue: function () {
 		return this.inputField.getValue().trim();
 	},
 
 
-	setValue: function(str) {
+	setValue: function (str) {
 		if (!Ext.isString(str)) {
 			str = (str && str.value || [])[0] || '';
 		}
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FreeResp
 	},
 
 
-	markSubmitted: function(cls) {
+	markSubmitted: function (cls) {
 		this.callParent(arguments);
 
 		var b = this.inputBox.removeCls('incorrect correct');
@@ -121,7 +121,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FreeResp
 	},
 
 
-	reset: function() {
+	reset: function () {
 		this.callParent(arguments);
 		this.inputBox.removeCls(['incorrect', 'correct']);
 		this.inputField.set({

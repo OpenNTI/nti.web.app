@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 
 	//region Setup & Init
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.trackThis();
 
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		var DH = Ext.DomHelper,
 			items = this.floatingItems,
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 				(this.notfound = Ext.widget({xtype: 'notfound', renderTo: this.splash, hideLibrary: true})));
 	},
 
-	hidePageWidgets: function() {
+	hidePageWidgets: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.hidePageWidgets.bind(this));
 			return;
@@ -96,10 +96,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		this.pageWidgets.hide();
 	},
 
-	beforeDestroy: function() {
+	beforeDestroy: function () {
 		var items = this.floatingItems;
 		if (items) {
-			[this.notfound, this.pageWidgets].forEach(function(i) {
+			[this.notfound, this.pageWidgets].forEach(function (i) {
 				if (i) {
 					items.remove(i);
 					Ext.destroy(i);
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		return this.callParent(arguments);
 	},
 
-	showRemainingTime: function() {
+	showRemainingTime: function () {
 		var panel = this.up('reader');
 
 		if (panel && panel.showRemainingTime) {
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		}
 	},
 
-	showHeaderToast: function() {
+	showHeaderToast: function () {
 		var panel = this.up('reader');
 
 		if (panel) {
@@ -125,7 +125,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		}
 	},
 
-	showToast: function(msg, cls) {
+	showToast: function (msg, cls) {
 		var toast,
 			left = this.getX() + this.getWidth(),
 			viewWidth = Ext.Element.getViewportWidth(),
@@ -150,15 +150,15 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 
 	//region Getters/Queries
-	getAnnotationOffsets: function() {
+	getAnnotationOffsets: function () {
 		return this.calculateNecessaryAnnotationOffsets();
 	},
 
 	// NOTE: Now that we may have more than one reader, each reader should know how
 	// to resolve dom ranges/nodes of annotations inside it.
-	getDomContextForRecord: function(r, doc, cleanRoot) {
+	getDomContextForRecord: function (r, doc, cleanRoot) {
 		var rangeDesc = r.get('applicableRange'),
-				cid = r.get('ContainerId');
+			cid = r.get('ContainerId');
 
 		doc = doc || this.getDocumentElement();
 		cleanRoot = cleanRoot || this.getCleanContent();
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		return RangeUtils.getContextAroundRange(rangeDesc, doc, cleanRoot, cid);
 	},
 
-	getContentMaskTarget: function() {
+	getContentMaskTarget: function () {
 		var target;
 
 		//if we have a mask target already return that
@@ -188,11 +188,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 
 	//region Actions
-	activating: function() {
+	activating: function () {
 		delete this.annotationOffsetsCache;
 	},
 
-	setSplash: function(hideNotFound) {
+	setSplash: function (hideNotFound) {
 		if (!this.rendered) {
 			return;
 		}
@@ -204,18 +204,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		this.splash.show();
 	},
 
-	allowCustomScrolling: function() {
+	allowCustomScrolling: function () {
 		return this.fireEvent('allow-custom-scrolling');
 	},
 
-	calculateNecessaryAnnotationOffsets: function() {
+	calculateNecessaryAnnotationOffsets: function () {
 		var cache = this.annotationOffsetsCache || {},
-				windowSizeStatics = cache.windowSizeStatics || {},
-				scrollStatics = cache.scrollStatics || {},
-				currentWindowSize = Ext.dom.Element.getViewSize(),
-				f = this.getIframe().get(),
+			windowSizeStatics = cache.windowSizeStatics || {},
+			scrollStatics = cache.scrollStatics || {},
+			currentWindowSize = Ext.dom.Element.getViewSize(),
+			f = this.getIframe().get(),
 				//since the body is scrolling now get its scroll top
-				scrollPosition = Ext.getBody().getScroll().top;
+			scrollPosition = Ext.getBody().getScroll().top;
 
 		//Other things are based on the windowSize. left and height
 		if (!windowSizeStatics.hasOwnProperty('windowSize') ||
@@ -253,15 +253,15 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 
 	//region Event Handlers
-	onContextMenuHandler: function() {
+	onContextMenuHandler: function () {
 		var o = this.getAnnotations();
 		return o.onContextMenuHandler.apply(o, arguments);
 	},
 
-	onceReadyForSearch: function() {
+	onceReadyForSearch: function () {
 		var me = this;
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			if (me.isReadyForSearch) {
 				return fulfill();
 			} else {
@@ -270,29 +270,29 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		});
 	},
 
-	goToFragment: function(fragment) {
+	goToFragment: function (fragment) {
 		var me = this;
 
 		if (fragment) {
 			me.getIframe().onceSettled()
-				.then(function() {
+				.then(function () {
 					me.getScroll().toTarget(fragment);
 				});
 		}
 	},
 
-	goToNote: function(note) {
+	goToNote: function (note) {
 		var me = this;
 
 		if (note) {
 			me.getIframe().onceSettled()
-				.then(function() {
+				.then(function () {
 					me.getScroll().toNote(note);
 				});
 		}
 	},
 
-	setPageInfo: function(pageInfo, bundle, fragment, note) {
+	setPageInfo: function (pageInfo, bundle, fragment, note) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setPageInfo.bind(this, pageInfo, bundle, fragment, note));
 			return;
@@ -312,7 +312,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			.then(me.loadPageInfo.bind(me, pageInfo))
 			.then(me.fireEvent.bind(me, 'navigateComplete'))
 			.fail(me.fireEvent.bind(me, 'navigateAbort'))
-			.always(function() {
+			.always(function () {
 				maskTarget.unmask();
 				me.splash.removeCls('initial');
 
@@ -320,7 +320,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 				me.fireEvent('sync-overlays');
 
 				me.getIframe().onceSettled()
-					.then(function() {
+					.then(function () {
 						var el;
 
 						if (fragment === 'feedback') {
@@ -342,7 +342,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			});
 	},
 
-	allowNavigation: function() {
+	allowNavigation: function () {
 		var note = this.getNoteOverlay(),
 			assessment = this.getAssessment();
 
@@ -350,31 +350,31 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			.then(assessment.allowNavigation.bind(assessment));
 	},
 
-	beforeRouteChange: function() {
+	beforeRouteChange: function () {
 		var assessment = this.getAssessment();
 
 		return assessment.beforeRouteChange();
 	},
 
-	onNavigationAborted: function(resp, ntiid) {
+	onNavigationAborted: function (resp, ntiid) {
 		this.splash.removeCls('initial');
 	},
 
-	isAssignment: function() {
+	isAssignment: function () {
 		return this.getAssessment().isAssignment();
 	},
 
-	loadPageInfo: function(pageInfo) {
+	loadPageInfo: function (pageInfo) {
 		var me = this,
 			proxy = ContentProxy;
 
-		return new Promise(function(fulfill, reject) {
-			function success(resp) {
+		return new Promise(function (fulfill, reject) {
+			function success (resp) {
 				me.getContent().setContent(resp, pageInfo.get('AssessmentItems'), fulfill);
 				me.splash.hide();
 			}
 
-			function failure(r) {
+			function failure (r) {
 				console.error('Failed to load pageInfo content', r.status, r.responseText);
 				me.splash.show();
 				reject();
@@ -405,11 +405,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	//region Statics
 	//endregion
 	statics: {
-		get: function(prefix) {
+		get: function (prefix) {
 			var instances = this.instances;
 
 			if (prefix) {
-				instances.filter(function(r) {
+				instances.filter(function (r) {
 					return r.prefix === prefix;
 				});
 			}
@@ -419,9 +419,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 
 		MOCK_PAGE_PROXY: {
-			request: function(req) {
+			request: function (req) {
 				var pageInfo = req.pageInfo,
-						resp = {
+					resp = {
 							getAllResponseHeaders: Ext.emptyFn,
 							getResponseHeader: Ext.emptyFn,
 							requestId: NaN,
@@ -437,9 +437,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			}
 		}
 	}
-}, function() {
+}, function () {
 	//TODO: can we get rid of this?
-	ContentAPIRegistry.register('togglehint', function(e) {
+	ContentAPIRegistry.register('togglehint', function (e) {
 		e = Ext.EventObject.setEvent(e || event);
 		Ext.get(e.getTarget().nextSibling).toggleCls('hidden');
 		return false;

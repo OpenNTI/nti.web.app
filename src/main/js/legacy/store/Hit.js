@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.store.Hit', {
 		}
 	},
 
-	loadRecords: function(records, options) {
+	loadRecords: function (records, options) {
 		var response = Ext.JSON.decode(options.response.responseText, true),
 			me = this;
 		if (response) {
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.store.Hit', {
 			if (this.phraseSearch !== undefined) {
 				// Until we decide we want to replum all the search stuff to take an
 				// additional parameter add it from the root to each record.
-				Ext.each(records, function(record) {
+				Ext.each(records, function (record) {
 					record.set('PhraseSearch', me.phraseSearch);
 				});
 			}

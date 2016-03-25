@@ -13,12 +13,12 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 	ids: {},
 
 
-	getValue: function(id) {
+	getValue: function (id) {
 		return this.meta[this.ids[id]];
 	},
 
 
-	getMeta: function(ntiid, callback, scope) {
+	getMeta: function (ntiid, callback, scope) {
 		var maybe = this.getValue(ntiid), p,
 			cb = callback || Ext.emptyFn;
 
@@ -38,8 +38,8 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 	},
 
 
-	attachContentRootToMeta: function(meta, pi) {
-		function buildPath(s, root) {
+	attachContentRootToMeta: function (meta, pi) {
+		function buildPath (s, root) {
 			var p = s.split('/'); p.splice(-1, 1, '');
 			p = p.join('/');
 			//trim off the root if its present
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 	},
 
 
-	cacheMeta: function(meta, theId, ntiid, assessmentItems) {
+	cacheMeta: function (meta, theId, ntiid, assessmentItems) {
 		var me = this;
 		this.meta[theId] = meta;
 		this.ids[ntiid] = theId;
@@ -62,13 +62,13 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 		//right now this only works because there is a one-to-one question to
 		//PageInfo mapping.	 If I recall that is happening on the server now also
 		//but is probably temporary. IE mashups probably break this
-		Ext.each(assessmentItems || [], function(assessmentItem) {
+		Ext.each(assessmentItems || [], function (assessmentItem) {
 			me.ids[assessmentItem.getId()] = theId;
 		});
 	},
 
 
-	createAndCacheMeta: function(ntiid, pi, ignoreCache) {
+	createAndCacheMeta: function (ntiid, pi, ignoreCache) {
 		var assessmentItems = pi.get('AssessmentItems') || [],
 			theId = pi.getId(),
 			meta = ContentUtils.getLocation(theId);
@@ -112,23 +112,23 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 	 * @param {String} ntiid the ntiid we want content metadata for
 	 * @param {Boolean} ignoreCache ignore cache
 	 */
-	loadMeta: function(ntiid, ignoreCache) {
+	loadMeta: function (ntiid, ignoreCache) {
 		var me = this;
 
 		// me.listenToLibrary();
 
 		return Service.getPageInfo(ntiid)
-				.then(function(info) {
+				.then(function (info) {
 					return Promise.resolve(info)
-							.then(function(pi) {
+							.then(function (pi) {
 								var meta = me.createAndCacheMeta(ntiid, pi, ignoreCache);
 								return meta || Promise.reject(['createAndCacheMeta failed: ', ntiid, pi, ignoreCache]);
 							})
-							.then(function(infos) {
+							.then(function (infos) {
 								return Ext.isArray(infos) ? infos[0] : infos;
 							});
 				})
-				.fail(function(reason) {
+				.fail(function (reason) {
 					if (reason && reason.status === 403) {
 						console.log('Unauthorized when requesting page info', ntiid);
 						return me.handleUnauthorized(ntiid, reason);
@@ -138,7 +138,7 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 	},
 
 
-	listenToLibrary: function() {
+	listenToLibrary: function () {
 		var me = this;
 
 		if (me.libraryMon) {
@@ -152,20 +152,20 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 	},
 
 
-	clearCache: function() {
+	clearCache: function () {
 		this.meta = {};
 		this.ids = {};
 	},
 
 
-	handleUnauthorized: function(ntiid, reason) {
+	handleUnauthorized: function (ntiid, reason) {
 		var me = this,
 			meta = ContentUtils.getLocation(ntiid),
 			bookPrefix;
 
 		if (meta) {
 			return Service.getPageInfo(meta.ContentNTIID)
-					.then(function(pageInfo) {
+					.then(function (pageInfo) {
 						if (pageInfo.isPageInfo) {
 							me.attachContentRootToMeta(meta, pageInfo);
 							me.cacheMeta(meta, ntiid, ntiid);
@@ -182,11 +182,11 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 	},
 
 
-	findTitleWithPrefix: function(prefix) {
+	findTitleWithPrefix: function (prefix) {
 		return Library.findTitleWithPrefix(prefix);
 	},
 
-	bookPrefixIfQuestion: function(id) {
+	bookPrefixIfQuestion: function (id) {
 		return ParseUtils.ntiidPrefix(id);
 	}
 

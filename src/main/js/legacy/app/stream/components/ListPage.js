@@ -8,13 +8,13 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.ListPag
 	alias: 'widget.stream-list-page',
 	cls: 'list-page',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.streamItems.forEach(this.addItem.bind(this));
 	},
 
-	addItem: function(record) {
+	addItem: function (record) {
 		record = this.unwrapRecord(record);
 
 		var cmp = this.getForMimeType(record.mimeType);
@@ -28,12 +28,12 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.ListPag
 			record: record
 		}));
 	}
-}, function() {
+}, function () {
 	var me = this,
 		tiles = NextThought.app.stream.components.tiles,
 		keys = Object.keys(tiles) || [];
 
-	keys.forEach(function(key) {
+	keys.forEach(function (key) {
 		var cmp = tiles[key];
 
 		me.registerItem(cmp.mimeTypes, cmp);

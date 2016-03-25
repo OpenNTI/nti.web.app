@@ -3,13 +3,13 @@ var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.mixins.ContactSearchMixin', {
 
-	constructor: function() {
+	constructor: function () {
 		this.on('afterrender', 'attachContactSearch', this);
 		this.doSearch = Ext.Function.createBuffered(this.doSearch, 250, this, null);
 	},
 
 
-	attachContactSearch: function() {
+	attachContactSearch: function () {
 		this.searchButton = this.searchButton || this.el.down('.search');
 		if (!this.searchButton) {
 			console.error('Could not attach contact search. No el provided');
@@ -32,18 +32,18 @@ module.exports = exports = Ext.define('NextThought.mixins.ContactSearchMixin', {
 			scope: this,
 			blur: 'onSearchBlur',
 			keyup: 'onSearchKeyPressed',
-			contextmenu: function(e) {
+			contextmenu: function (e) {
 				e.stopPropagation();
 			} //allow context on simple texts
 		});
 
 	},
 
-	setSearchOverlay: function() {
+	setSearchOverlay: function () {
 		this.contactSearchOverlay = Ext.widget('contact-search-overlay', { renderTo: this.el});
 	},
 
-	onSearchBlur: function() {
+	onSearchBlur: function () {
 		var v = this.searchField.getValue();
 		if (Ext.isEmpty(v)) {
 			this.removeCls('searching');
@@ -56,13 +56,13 @@ module.exports = exports = Ext.define('NextThought.mixins.ContactSearchMixin', {
 	},
 
 
-	onSearchClick: function() {
+	onSearchClick: function () {
 		this.searchButton.addCls('active');
 		this.searchField.focus();
 	},
 
 
-	clearClicked: function(e) {
+	clearClicked: function (e) {
 		if (e) {
 			e.stopEvent();
 		}
@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ContactSearchMixin', {
 	},
 
 
-	onSearchKeyPressed: function(e) {
+	onSearchKeyPressed: function (e) {
 		if (e.ESC === e.getKey()) {
 			this.clearClicked();
 		}
@@ -90,12 +90,12 @@ module.exports = exports = Ext.define('NextThought.mixins.ContactSearchMixin', {
 	},
 
 
-	getSearchStore: function() {
+	getSearchStore: function () {
 		return this.contactSearchOverlay.getStore();
 	},
 
 
-	doSearch: function(v) {
+	doSearch: function (v) {
 		var fn = 'removeAll',
 			action = 'removeCls',
 			param = false,

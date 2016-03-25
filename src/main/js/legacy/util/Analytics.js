@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 	batch: [],
 	context: [],
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 
 		this.mixins.observable.constructor.call(this, config);
@@ -74,18 +74,18 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		}
 	},
 
-	addContext: function(context, isRoot) {},
+	addContext: function (context, isRoot) {},
 
-	getContextRoot: function() {
+	getContextRoot: function () {
 		return this.getContext().first();
 	},
 
-	getContext: function() {
+	getContext: function () {
 		var ContextSS = NextThought.app.context.StateStore.getInstance(),
 			contextObjects = ContextSS.getContext(),
 			contextStrings = [];
 
-		function mapContextObjectToAnalyticContextString(contextPart) {
+		function mapContextObjectToAnalyticContextString (contextPart) {
 			var contextObject = contextPart && contextPart.obj,
 				contextCmp = contextPart && contextPart.cmp,
 				contextStr = null;
@@ -101,11 +101,11 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		}
 
 		contextStrings = Ext.Array.map(contextObjects, mapContextObjectToAnalyticContextString);
-		contextStrings = Ext.Array.filter(contextStrings, function(str) {return !Ext.isEmpty(str)});
+		contextStrings = Ext.Array.filter(contextStrings, function (str) {return !Ext.isEmpty(str);});
 		return contextStrings || [];
 	},
 
-	beginSession: function() {
+	beginSession: function () {
 		//if we've already started one don't start another
 		if (this.session_started) { return; }
 
@@ -116,23 +116,23 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 
 		if (url) {
 			Service.post(url)
-				.then(function() {
+				.then(function () {
 					me.session_started = true;
 					console.log('Analytics session started.');
 				})
-				.fail(function() {
+				.fail(function () {
 					console.error('Failed to start analytic session: ', arguments);
 				});
 		} else {
-			this.addContext = function() {};
-			this.beginSession = function() {};
-			this.getResourceTimer = function() {};
-			this.stopResourceTimer = function() {};
-			this.sendBatch = function() {};
+			this.addContext = function () {};
+			this.beginSession = function () {};
+			this.getResourceTimer = function () {};
+			this.stopResourceTimer = function () {};
+			this.sendBatch = function () {};
 		}
 	},
 
-	endSession: function() {
+	endSession: function () {
 		this.closeOnGoing();
 
 		var collection = typeof Service === 'undefined' ? null : Service.getWorkspace('Analytics'),
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		this.session_started = false;
 	},
 
-	getResourceTimer: function(resourceId, data) {
+	getResourceTimer: function (resourceId, data) {
 		var now = new Date();
 
 		if (Ext.isString(data)) {
@@ -192,7 +192,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		}
 	},
 
-	fillInData: function(resource, data) {
+	fillInData: function (resource, data) {
 		var now = new Date();
 
 		data.time_length = (now - resource.start) / 1000;//send seconds back
@@ -200,13 +200,13 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		return data;
 	},
 
-	fillInVideo: function(resource, data) {
+	fillInVideo: function (resource, data) {
 		data.time_length = Math.abs(data.video_end_time - data.video_start_time);
 
 		return data;
 	},
 
-	maybePush: function(data) {
+	maybePush: function (data) {
 		//if the data isn't for an event that adds a resource when it
 		//is started, then we know its not going to be in the batch yet
 		if (!this.START_EVENT_TYPES[data.type]) {
@@ -217,7 +217,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 
 		//if a resource is added on start, check if we've sent it to the
 		//server yet. (look if its still in the batch)
-		var notInBatch = this.batch.every(function(item) {
+		var notInBatch = this.batch.every(function (item) {
 			return item !== data;
 		});
 
@@ -227,7 +227,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		}
 	},
 
-	stopResourceTimer: function(resourceId, type, data, doNotStartTimer) {
+	stopResourceTimer: function (resourceId, type, data, doNotStartTimer) {
 		var resource = this.TIMER_MAP[resourceId + type],
 			now = new Date();
 
@@ -256,7 +256,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		delete this.TIMER_MAP[resourceId + type];
 	},
 
-	addResource: function(resourceId, data) {
+	addResource: function (resourceId, data) {
 		var now = new Date();
 
 		if (Ext.isString(data)) {
@@ -276,14 +276,14 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 
 	},
 
-	__maybeStartBatchTimer: function() {
+	__maybeStartBatchTimer: function () {
 		if (!this.batchTimer) {
 			this.batchTimer = wait(this.BATCH_TIME)
 				.then(this.sendBatch.bind(this));
 		}
 	},
 
-	__getURL: function() {
+	__getURL: function () {
 		if (this.url) { return this.url; }
 
 		var collection = Service.getWorkspace('Analytics'),
@@ -295,7 +295,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		return this.url;
 	},
 
-	sendBatch: function() {
+	sendBatch: function () {
 		var me = this,
 			url = me.__getURL();
 
@@ -310,15 +310,15 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 			MimeType: 'application/vnd.nextthought.analytics.batchevents',
 			events: this.batch
 		})
-			.then(function() {
+			.then(function () {
 				me.batch = [];
 			})
-			.fail(function(response) {
+			.fail(function (response) {
 				console.error('Failed to save the analytic batch', response, me.batch);
 			});
 	},
 
-	closeOnGoing: function() {
+	closeOnGoing: function () {
 		var key, resource;
 
 		for (key in this.TIMER_MAP) {
@@ -330,16 +330,16 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 		}
 	},
 
-	__SuperTopSecretFn: function(name) {
+	__SuperTopSecretFn: function (name) {
 		var cookieName = 'nti.auth_tkt',
 			cookieValue = Ext.util.Cookies.get(cookieName) || '';
 
 		if (name && cookieValue.indexOf('!' + name) > 0) {
-			this.addContect = function() {};
-			this.beginSession = function() {};
-			this.getResourceTimer = function() {};
-			this.stopResourceTimer = function() {};
-			this.sendBatch = function() {};
+			this.addContect = function () {};
+			this.beginSession = function () {};
+			this.getResourceTimer = function () {};
+			this.stopResourceTimer = function () {};
+			this.sendBatch = function () {};
 		}
 	},
 
@@ -348,15 +348,15 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 	 * @param  {String}	 id Ntiid to check
 	 * @return {Boolean}	[description]
 	 */
-	hasBeenViewed: function(id) {
+	hasBeenViewed: function (id) {
 		return this.VIEWED_MAP[id];
 	}
-}, function() {
+}, function () {
 	if (!isFeature('capture-analytics')) {
-		this.addContext = function() {};
-		this.beginSession = function() {};
-		this.getResourceTimer = function() {};
-		this.stopResourceTimer = function() {};
-		this.sendBatch = function() {};
+		this.addContext = function () {};
+		this.beginSession = function () {};
+		this.getResourceTimer = function () {};
+		this.stopResourceTimer = function () {};
+		this.sendBatch = function () {};
 	}
 }).create();

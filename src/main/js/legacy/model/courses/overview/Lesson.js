@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.overview.Lesson
 	],
 
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		wait()
@@ -33,18 +33,18 @@ module.exports = exports = Ext.define('NextThought.model.courses.overview.Lesson
 	},
 
 
-	getTitle: function() {
+	getTitle: function () {
 		return this.outlineNode ? this.outlineNode.getTitle() : this.get('title');
 	},
 
 
-	isPublished: function() {
+	isPublished: function () {
 		var state = this.get('PublicationState') || '';
 		return state.toLowerCase() === 'DefaultPublished'.toLowerCase();
 	},
 
 
-	hasPublishDatePassed: function(){
+	hasPublishDatePassed: function () {
 		var publishBeginning = this.get('publishBeginning'),
 			now = new Date();
 		if (publishBeginning) {

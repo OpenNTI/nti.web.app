@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var time = this.getDisplayTime();
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.fillInData();
@@ -67,25 +67,25 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	},
 
 
-	onClicked: function() {
+	onClicked: function () {
 		if (this.navigateToItem) {
 			this.navigateToItem(this.record);
 		}
 	},
 
 
-	fillInData: function() {
+	fillInData: function () {
 		var me = this,
 			creator = me.record.get('Creator');
 
-		function updateAvatar(user) {
+		function updateAvatar (user) {
 			if (me.iconEl) {
 				me.iconEl.update(NTIFormat.avatar(user));
 			}
 		}
 
 		UserRepository.getUser(creator)
-			.then(function(user) {
+			.then(function (user) {
 				updateAvatar(user);
 				me.mon(user, 'avatarChanged', updateAvatar.bind(me, user));
 
@@ -96,14 +96,14 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	},
 
 
-	fillInWording: function() {
+	fillInWording: function () {
 		if (this.wordingEl && this.wordingEl.dom) {
 			this.wordingEl.dom.innerHTML = this.wording;
 		}
 	},
 
 
-	getDisplayTime: function() {
+	getDisplayTime: function () {
 		var time = this.record.get('EventTime');
 
 		if (!time || time.getTime() === 0) {

@@ -25,12 +25,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Info'
 		icon: 'img'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.update(this.person, this.message);
 	},
 
-	update: function(person, m) {
+	update: function (person, m) {
 		var me = this;
 
 		me.message = m;
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Info'
 		me.renderData.name = 'resolving...';
 		me.renderData.body = m;
 
-		UserRepository.getUser(person, function(u) {
+		UserRepository.getUser(person, function (u) {
 			if (!u) {
 				console.error('failed to resolve user', person, m);
 				return;
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Info'
 		me.addCls('nooid');
 	},
 
-	fillInUser: function(u) {
+	fillInUser: function (u) {
 		var name = u.get('alias') || u.get('Username'),
 			i = u.get('avatarURL');
 

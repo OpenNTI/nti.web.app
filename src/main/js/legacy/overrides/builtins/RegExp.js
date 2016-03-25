@@ -2,9 +2,9 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.overrides.builtins.RegExp', {});
-(function() {
+(function () {
 	Ext.applyIf(RegExp, {
-		escape: function me(text) {
+		escape: function me (text) {
 			if (!me.Re) {
 				me.Re = /[\-\[\]{}()*+?.,\\\^$|#\s]/g;
 			}

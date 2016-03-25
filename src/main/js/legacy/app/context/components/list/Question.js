@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.Q
 		snippetEl: '.snippet'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.Q
 			.then(this.setLineage.bind(this));
 	},
 
-	setLineage: function(path) {
+	setLineage: function (path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setLineage.bind(this, path));
 			return;

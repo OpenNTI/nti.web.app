@@ -87,13 +87,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		emptyTextEl: '.empty-text'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.AccountActions = NextThought.app.account.Actions.create();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.aliasMonitor = this.mon(this.nameEl, {
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-	setUser: function(user, isMe) {
+	setUser: function (user, isMe) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setUser.bind(this, user, isMe));
 			return;
@@ -138,7 +138,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	setEditable: function() {
+	setEditable: function () {
 		this.callParent(arguments);
 		this.updateRequestAlias();
 
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	setUneditable: function() {
+	setUneditable: function () {
 		this.callParent(arguments);
 		this.updateRequestAlias();
 
@@ -193,12 +193,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	setSchema: function() {
+	setSchema: function () {
 		this.callParent(arguments);
 		this.updateRequestAlias();
 	},
 
-	updateRequestAlias: function() {
+	updateRequestAlias: function () {
 		if (!this.nameEl.hasCls('editable') && isFeature('request-alias-change') && this.isMe) {
 			this.nameEl.addCls('request');
 		} else {
@@ -206,13 +206,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	requestAliasChange: function(e) {
+	requestAliasChange: function (e) {
 		if (e.getTarget('.request')) {
 			this.AccountActions.requestAliasChange();
 		}
 	},
 
-	getErrorMsg: function() {
+	getErrorMsg: function () {
 		var me = this,
 			valid = true,
 			schema = this.profileSchema && this.profileSchema.ProfileSchema,
@@ -224,7 +224,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			return 'Unable to edit profile at this time.';
 		}
 
-		fields.forEach(function(field) {
+		fields.forEach(function (field) {
 			var fieldSchema = schema[field],
 				value = values[field];
 
@@ -240,7 +240,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return valid ? '' : 'Missing Required About Fields';
 	},
 
-	getValues: function() {
+	getValues: function () {
 		var me = this,
 			values = {},
 			schema = me.profileSchema && me.profileSchema.ProfileSchema,
@@ -293,7 +293,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			return {};
 		}
 
-		keys.forEach(function(key) {
+		keys.forEach(function (key) {
 			var fieldSchema = schema[key.name],
 				dom, value;
 

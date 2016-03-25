@@ -16,16 +16,16 @@ module.exports = exports = Ext.define('NextThought.app.image.OverlayedPanel', {
 	cls: 'content-launcher-container',
 
 	statics: {
-		getData: function(dom, reader) {
+		getData: function (dom, reader) {
 			var images = DomUtils.getImagesFromDom(dom);
-			return NextThought.common.components.cards.Launcher.getData(dom, reader, images, function() {
+			return NextThought.common.components.cards.Launcher.getData(dom, reader, images, function () {
 				var thumb = images[0];
 				return thumb && thumb.url;
 			});
 		}
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.image.OverlayedPanel', {
 		this.callParent([config]);
 	},
 
-	showImageRole: function(data) {
+	showImageRole: function (data) {
 		this.imagePopout = Ext.widget('image-lightbox', { data: data.items }).show();
 		this.on('destroy', this.imagePopout.destroy.bind(this.imagePopout));
 	}

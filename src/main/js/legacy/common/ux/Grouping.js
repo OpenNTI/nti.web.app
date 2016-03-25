@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.Grouping', {
 	layout: 'auto',
 	componentLayout: 'body',
 	childEls: ['body', 'toolsEl'],
-	getTargetEl: function() { return this.body; },
+	getTargetEl: function () { return this.body; },
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
@@ -27,33 +27,33 @@ module.exports = exports = Ext.define('NextThought.common.ux.Grouping', {
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.addCls('grouping');
 		return this.callParent(arguments);
 	},
 
 
-	updateSubTitle: function(value) { this.updateEl('.subtitle', value); },
-	updateTitle: function(value) { this.updateEl('.title', value); },
+	updateSubTitle: function (value) { this.updateEl('.subtitle', value); },
+	updateTitle: function (value) { this.updateEl('.title', value); },
 
 
-	updateEl: function(selector, value) {
+	updateEl: function (selector, value) {
 		if (this.rendered) {
 			this.el.select(selector).update(value);
 		}
 	},
 
 
-	getRefItems: function() {
+	getRefItems: function () {
 		var r = this.callParent(arguments);
 		if (this.tools) {
-			r.push.apply(r, this.tools.filter(function(c) {return c && c.isComponent;}));
+			r.push.apply(r, this.tools.filter(function (c) {return c && c.isComponent;}));
 		}
 		return r;
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
 			subtitle: this.getSubTitle(),
@@ -62,12 +62,12 @@ module.exports = exports = Ext.define('NextThought.common.ux.Grouping', {
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		var tools = this.toolsEl;
 		if (this.tools) {
 			if (!Ext.isArray(this.tools)) {this.tools = [this.tools];}
-			this.tools = this.tools.map(function(t) {
+			this.tools = this.tools.map(function (t) {
 				return Ext.widget(Ext.applyIf(t, {
 					xtype: 'box',
 					renderTo: tools
@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.Grouping', {
 	},
 
 
-	onAdd: function(cmp) {
+	onAdd: function (cmp) {
 		var r = this.callParent(arguments);
 
 		this.mon(cmp, {

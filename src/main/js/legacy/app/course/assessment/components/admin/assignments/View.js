@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	handlesAssignment: true,
 	layout: 'card',
 
-	setAssignmentsData: function(assignments) {
+	setAssignmentsData: function (assignments) {
 		var root = this.add({
 				xtype: 'course-assessment-admin-assignments-root',
 				pushState: this.pushState,
@@ -35,19 +35,19 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return p;
 	},
 
-	clearAssignmentsData: function() {
+	clearAssignmentsData: function () {
 		this.removeAll(true);
 	},
 
-	getRoot: function() {
+	getRoot: function () {
 		return this.items.first();
 	},
 
-	getAssignmentView: function() {
+	getAssignmentView: function () {
 		return this.down('course-assessment-admin-assignments-item');
 	},
 
-	showRoot: function() {
+	showRoot: function () {
 		var root = this.getRoot(),
 			layout = this.getLayout(),
 			active = layout.getActiveItem();
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	showAssignment: function(assignment, student) {
+	showAssignment: function (assignment, student) {
 		if (!assignment) {
 			console.error('No assignment passed, showing root');
 			this.showRoot();
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return view.restoreState(this.getRouteState());
 	},
 
-	showStudentsForAssignment: function(rec) {
+	showStudentsForAssignment: function (rec) {
 		var id = rec.getId();
 
 		id = ParseUtils.encodeForURI(id);
@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-	showStudentForAssignment: function(student, assignment, historyItem) {
+	showStudentForAssignment: function (student, assignment, historyItem) {
 		var assignmentId = assignment.getId(),
 			assignmentTitle = assignment.get('title'),
 			studentTitle = student.getName(),

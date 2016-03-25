@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.V
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.video, 'resolved-poster', this.setPoster.bind(this));
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.V
 	},
 
 
-	setPoster: function() {
+	setPoster: function () {
 		if (!this.videoImgEl) { return; }
 
 		var poster = this.video.get('poster');
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.V
 	},
 
 
-	setLineage: function(path) {
+	setLineage: function (path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setLineage.bind(this, path));
 			return;

@@ -12,13 +12,13 @@ var ContextStateStore = require('../context/StateStore');
 module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
-	__getDataForSubmission: function(questionSet, submissionData, containerId, startTime, questionCls, questionMime, questionId) {
+	__getDataForSubmission: function (questionSet, submissionData, containerId, startTime, questionCls, questionMime, questionId) {
 		var me = this, key, value, qData,
 			endTimeStamp = (new Date()).getTime(),
 			//in seconds
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		return data;
 	},
 
-	__getDataForQuestionSubmission: function(questionSet, submissionData, containerId, startTime) {
+	__getDataForQuestionSubmission: function (questionSet, submissionData, containerId, startTime) {
 		return this.__getDataForSubmission(
 				questionSet,
 				submissionData,
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			);
 	},
 
-	__getDataForSurveySubmission: function(survey, submissionData, containerId, startTime) {
+	__getDataForSurveySubmission: function (survey, submissionData, containerId, startTime) {
 		var data = this.__getDataForSubmission(
 				survey,
 				submissionData,
@@ -81,21 +81,21 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		return data;
 	},
 
-	gradeAssessment: function(questionSet, submissionData, containerId, startTime) {
+	gradeAssessment: function (questionSet, submissionData, containerId, startTime) {
 		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, containerId, startTime),
 			qsetSubmission;
 
 		qsetSubmission = NextThought.model.assessment.QuestionSetSubmission.create(data);
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			qsetSubmission.save({
-				callback: function() {},
-				success: function(self, op) {
+				callback: function () {},
+				success: function (self, op) {
 					var result = op.getResultSet().records.first();
 
 					fulfill(result);
 				},
-				failure: function() {
+				failure: function () {
 					console.error('FAIL', arguments);
 					alert('There was a problem grading your quiz.');
 					reject();
@@ -104,21 +104,21 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
-	submitSurvey: function(survey, submissionData, containerId, startTime) {
+	submitSurvey: function (survey, submissionData, containerId, startTime) {
 		var data = this.__getDataForSurveySubmission(survey, submissionData, containerId, startTime),
 			surveySubmission;
 
 		surveySubmission = NextThought.model.assessment.SurveySubmission.create(data);
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			surveySubmission.save({
 				url: Service.getObjectURL(survey.getId()),
-				success: function(self, op) {
+				success: function (self, op) {
 					var result = op.getResultSet().records.first();
 
 					fulfill(result);
 				},
-				failure: function() {
+				failure: function () {
 					console.error('Failed to submit survey: ', arguments);
 					alert('There was a problem submitting your survey.');
 					reject();
@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
-	submitAssignment: function(questionSet, submissionData, containerId, startTime) {
+	submitAssignment: function (questionSet, submissionData, containerId, startTime) {
 		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, containerId, startTime),
 			assignmentId = questionSet.associatedAssignment.getId(),
 			qsetSubmission, assignmentSubmission;
@@ -142,10 +142,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			assignmentSubmission.save({
 				url: Service.getObjectURL(assignmentId),
-				success: function(self, op) {
+				success: function (self, op) {
 					var pendingAssessment = op.getResultSet().records.first(),
 						result = pendingAssessment.get('parts').first(),
 						itemLink = pendingAssessment.getLink('AssignmentHistoryItem');
@@ -158,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 						assignmentId: assignmentId
 					});
 				},
-				failure: function() {
+				failure: function () {
 					console.error('FAIL', arguments);
 					alert('There was a problem submitting your assignment.');
 					reject();
@@ -167,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
-	saveProgress: function(questionSet, submissionData, startTime) {
+	saveProgress: function (questionSet, submissionData, startTime) {
 		var data = this.__getDataForQuestionSubmission(questionSet, submissionData, '', startTime),
 			qsetSubmission, assignmentSubmission,
 			assignment = questionSet.associatedAssignment,
@@ -187,15 +187,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration
 		});
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			assignmentSubmission.save({
 				url: url,
-				success: function(self, op) {
+				success: function (self, op) {
 					var result = op.getResultSet().records.first();
 
 					fulfill(result);
 				},
-				failure: function() {
+				failure: function () {
 					console.error('Failed to save assignment progress');
 
 					fulfill(null);
@@ -204,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
-	checkAnswer: function(question, answerValues, startTime, canSubmitIndividually) {
+	checkAnswer: function (question, answerValues, startTime, canSubmitIndividually) {
 		var endTimestamp = (new Date()).getTime(),
 			// in seconds
 			// TODO We may have to reset startTimestamp, depending on flow.
@@ -220,13 +220,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 			});
 
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			submission.save({
-				failure: function() {
+				failure: function () {
 					console.error('FAIL', arguments);
 					reject();
 				},
-				success: function(self, op) {
+				success: function (self, op) {
 					var result = op.getResultSet().records.first();
 
 					fulfill(result);
@@ -235,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 		});
 	},
 
-	submitPoll: function(poll, answerValues, startTime, canSubmitIndividually) {
+	submitPoll: function (poll, answerValues, startTime, canSubmitIndividually) {
 		var endTimeStamp = (new Date()).getTime(),
 			// in seconds
 			// TODO We may have to reset startTimestamp, depending on flow.
@@ -251,14 +251,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Actions', {
 				CreatorRecordedEffortDuration: duration
 			});
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			submission.save({
 				url: Service.getObjectURL(poll.getId()),
-				failure: function() {
+				failure: function () {
 					console.error('Failed to save poll: ', arguments);
 					reject();
 				},
-				success: function(self, op) {
+				success: function (self, op) {
 					var result = op.getResultSet().records.first();
 
 					fulfill(result);

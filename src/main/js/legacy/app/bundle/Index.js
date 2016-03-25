@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
@@ -45,11 +45,11 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		this.addDefaultRoute('/content');
 	},
 
-	afterRoute: function(route) {
+	afterRoute: function (route) {
 		this.BundleViewStore.markRouteFor(this.activeBundle.getId(), route);
 	},
 
-	setActiveBundle: function(ntiid, bundle) {
+	setActiveBundle: function (ntiid, bundle) {
 		var me = this;
 
 		ntiid = ntiid.toLowerCase();
@@ -59,13 +59,13 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 			me.getActiveBundle = Promise.resolve(me.activeBundle);
 		} else {
 			me.getActiveBundle = me.ContentStore.onceLoaded()
-				.then(function() {
+				.then(function () {
 					var current;
 					//if the bundle was cached no need to look for it
 					if (bundle && (bundle.getId() || '').toLowerCase() === ntiid) {
 						current = bundle;
 					} else {
-						current = me.ContentStore.findContentBy(function(content) {
+						current = me.ContentStore.findContentBy(function (content) {
 							return content.get('NTIID').toLowerCase() === ntiid;
 						});
 					}
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		return me.getActiveBundle;
 	},
 
-	applyState: function(state) {
+	applyState: function (state) {
 		var bundle = this.activeBundle,
 			active = state.active,
 			content = NextThought.app.content,
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		 * @param  {Object} index the view to check
 		 * @return {Boolean}	  show the tab or not
 		 */
-		function showTab(index) {
+		function showTab (index) {
 			return !index.showTab || index.showTab(bundle);
 		}
 
@@ -122,31 +122,31 @@ module.exports = exports = Ext.define('NextThought.app.bundle.Index', {
 		this.navigation.setTabs(tabs);
 	},
 
-	showContent: function(route, subRoute) {
+	showContent: function (route, subRoute) {
 		this.contentRoute = subRoute;
 
 		return this.setActiveView('bundle-content', [
-				'bundle-forum'
-			]).then(function(item) {
+			'bundle-forum'
+		]).then(function (item) {
 				if (item.handleRoute) {
 					item.handleRoute(subRoute, route);
 				}
 			});
 	},
 
-	showDiscussions: function(route, subRoute) {
+	showDiscussions: function (route, subRoute) {
 		this.discussionsRoute = subRoute;
 
 		return this.setActiveView('bundle-forum', [
-				'bundle-forum'
-			]).then(function(item) {
+			'bundle-forum'
+		]).then(function (item) {
 				if (item.handleRoute) {
 					item.handleRoute(subRoute, route);
 				}
 			});
 	},
 
-	getRouteForPath: function(path, bundle) {
+	getRouteForPath: function (path, bundle) {
 		var root = path[0] || {},
 			isAccessible = this.ContentStore.hasContent(bundle),
 			subPath = path.slice[1],

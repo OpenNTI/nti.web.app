@@ -9,17 +9,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: '',
 	isLessonView: false,
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.loadLesson = this.renderLesson(this.outlineNode, this.record);
 	},
 
-	onceLoaded: function() {
+	onceLoaded: function () {
 		return this.loadLesson || Promise.resolve();
 	},
 
-	renderLesson: function(outlineNode, contents) {
+	renderLesson: function (outlineNode, contents) {
 		var me = this,
 			course = me.bundle,
 			overviewsrc = (outlineNode && outlineNode.getLink('overview-content')) || null;
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.maybeMask();
 
 		return me.getInfo(outlineNode, course, overviewsrc)
-			.then(function(results) {
+			.then(function (results) {
 				var assignments = results[0],
 					enrollment = results[1],
 					//Just use the first one for now
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				return me.currentOverview.onceLoaded();
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error(reason);
 			})
 			.then(me.maybeUnmask.bind(me));

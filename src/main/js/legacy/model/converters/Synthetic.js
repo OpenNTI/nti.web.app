@@ -8,16 +8,16 @@ module.exports = exports = Ext.define('NextThought.model.converters.Synthetic', 
 		type: 'Synthetic',
 		persist: false,
 
-		convert: function(v, record) {
+		convert: function (v, record) {
 			var dataName = record.persistenceProperty,
 				data = record[dataName],
 				config = {},
 				fn = this.fn,
 				sn = this.fnSet,
-				sfn = function(v) { return sn.call(record, record, v); };
+				sfn = function (v) { return sn.call(record, record, v); };
 
 			config[this.name] = {
-				getter: function() { return fn.call(record, record);},
+				getter: function () { return fn.call(record, record);},
 				setter: sn && sfn,
 				configurable: true
 			};
@@ -26,6 +26,6 @@ module.exports = exports = Ext.define('NextThought.model.converters.Synthetic', 
 			ObjectUtils.defineAttributes(data, config);
 		}
 	}
-},function() {
+},function () {
 	Ext.data.Types.SYNTHETIC = this.prototype.SYNTHETIC;
 });

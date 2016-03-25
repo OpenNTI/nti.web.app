@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: 'nt-button edit',
 	renderTpl: '{name}',
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		if (this.record && !this.record.getLink('edit')) {
@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.color) {
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.mon(this.el, 'click', this.handleClick.bind(this));
 	},
 
-	handleClick: function(e) {
+	handleClick: function (e) {
 		if (e.getTarget('.disabled')) { return; }
 
 		if (this.onPromptOpen) {
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			.fail(this.onPromptCancel.bind(this));
 	},
 
-	onPromptSuccess: function(action) {
+	onPromptSuccess: function (action) {
 		if (this.afterSave) {
 			this.afterSave();
 		}
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onPromptCancel: function(reason) {
+	onPromptCancel: function (reason) {
 		if (this.onPromptClose) {
 			this.onPromptClose(false);
 		}

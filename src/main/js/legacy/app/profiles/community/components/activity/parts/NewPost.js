@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		promptEl: '.prompt'
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.onNewPost) {
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	},
 
 
-	setContainerTitle: function(title) {
+	setContainerTitle: function (title) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setContainerTitle.bind(this, title));
 			return;

@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	})),
 
 
-	getHeaderCfg: function() {
+	getHeaderCfg: function () {
 		var me = this;
 
 		if (Service.canDoAdvancedEditing()) {
@@ -40,10 +40,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					checkbox: 'input[type=checkbox]'
 				},
 				listeners: {
-					afterrender: function() {
+					afterrender: function () {
 						var checkbox = this.checkbox;
 
-						this.mon(checkbox, 'change', function() {
+						this.mon(checkbox, 'change', function () {
 							var checked = checkbox && checkbox.dom && checkbox.dom.checked;
 
 							if (checked && me.removeFilter) {
@@ -54,12 +54,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						});
 					}
 				}
-			}
+			};
 		}
 	},
 
 
-	getItemData: function(item) {
+	getItemData: function (item) {
 		var children = this.getItemChildren(item);
 
 		return {
@@ -69,12 +69,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	getItemChildren: function(item) {
+	getItemChildren: function (item) {
 		return item && item.items  || ContentUtils.getReadingPages(item);
 	},
 
 
-	itemMatchesSearch: function(item, searchTerm) {
+	itemMatchesSearch: function (item, searchTerm) {
 		var label = item.getAttribute('label'),
 			ntiid = item.getAttribute('ntiid');
 
@@ -86,31 +86,31 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 	
 
-	onSelectItem: function(el) {
+	onSelectItem: function (el) {
 		el.classList.add('selected');
 	},
 
 
-	onUnselectItem: function(el) {
+	onUnselectItem: function (el) {
 		el.classList.remove('selected');
 	},
 
 
-	getSelectionItemId: function(item) {
+	getSelectionItemId: function (item) {
 		return item.getAttribute && item.getAttribute('ntiid');
 	},
 
 
-	onItemCollapse: function(item) {
+	onItemCollapse: function (item) {
 		this.unselectChildren(item);
 	},
 
 
-	unselectChildren: function(item) {
+	unselectChildren: function (item) {
 		var me = this,
 			children = me.getItemChildren(item);
 
-		children.forEach(function(child) {
+		children.forEach(function (child) {
 			if (me.isSelected(child)) {
 				me.unselectItem(child);
 			}
@@ -120,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	selectItem: function(item) {
+	selectItem: function (item) {
 		this.callParent(arguments);
 
 		var path = ContentUtils.getReadingPath(item);
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	showBreadCrumb: function(path) {
+	showBreadCrumb: function (path) {
 		var me = this;
 
 		if (me.breadcrumbCmp) {
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			items: []
 		});
 
-		me.breadcrumbCmp.add(path.map(function(part) {
+		me.breadcrumbCmp.add(path.map(function (part) {
 			var hasChildren, label, cls = [];
 
 			label = part.getAttribute('label');
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				listeners: {
 					click: {
 						element: 'el',
-						fn: function(e) {
+						fn: function (e) {
 							if (part.tagName !== 'toc') {
 								me.clearSearch();
 								me.selectItem(part);
@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	onSearchCleared: function() {
+	onSearchCleared: function () {
 		var me = this,
 			selection = me.getSelection(),
 			selectedItem = selection && selection[0],
@@ -192,7 +192,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			node = node.parentNode;
 		}
 
-		me.itemsContainer.items.each(function(item) {
+		me.itemsContainer.items.each(function (item) {
 			var selectionItem = item.selectionItem,
 				selectionId = selectedItem && me.getSelectionItemId(selectionItem);
 

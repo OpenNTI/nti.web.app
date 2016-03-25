@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.model.UserSearch', {
 	},
 
 	statics: {
-		getType: function(modelData) {
+		getType: function (modelData) {
 			var m = ((modelData && modelData.Class) || '').toLowerCase(), type;
 
 			//Tweak logic slightly if our type is community or
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.model.UserSearch', {
 
 	fields: [
 		{ name: 'Username', type: 'string' },
-		{ name: 'Presence', convert: function(v, record) {
+		{ name: 'Presence', convert: function (v, record) {
 			var presence = NextThought.app.chat.StateStore.getInstance().getPresenceOf(record.get('Username'));
 			if (presence) {
 				console.log(presence, presence.toString());
@@ -56,13 +56,13 @@ module.exports = exports = Ext.define('NextThought.model.UserSearch', {
 		{ name: 'role', type: 'string', persist: false },
 		{ name: 'location', type: 'string', persist: false },
 		{ name: 'alias', type: 'string' },
-		{ name: 'status', convert: function(v, record) {
+		{ name: 'status', convert: function (v, record) {
 			var presence = record.get('Presence');
 			return (presence && presence.getDisplayText()) || '';
 		}},
 		{ name: 'realname', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' },
-		{ name: 'displayName', convert: function(v, r) {return r.getName();}},
+		{ name: 'displayName', convert: function (v, r) {return r.getName();}},
 		{ name: 'IsDynamicSharing', type: 'auto'},
 
 		//UI Fields
@@ -71,14 +71,14 @@ module.exports = exports = Ext.define('NextThought.model.UserSearch', {
 		{ name: 'isMarked', type: 'boolean', persist: false}
 	],
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 		this.initAvatar();
 	},
 
-	isUnresolved: function() {
+	isUnresolved: function () {
 		return this.Unresolved === true;
 	}
-}, function() {
+}, function () {
 	this.borrow(NextThought.model.User, ['getName', 'getProfileUrl']);
 });

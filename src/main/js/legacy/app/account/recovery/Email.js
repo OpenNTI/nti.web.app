@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.account.recovery.Email', 
 			]}
 		},
 		{xtype: 'container', cls: 'submit', name: 'buttons', layout: 'none', items: [
-			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text: getString('NextThought.view.account.recovery.Email.cancel'), handler: function() {
+			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text: getString('NextThought.view.account.recovery.Email.cancel'), handler: function () {
 				this.up('window').close();
 			}},
 			{
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.account.recovery.Email', 
 				scale: 'large',
 				name: 'submit',
 				text: getString('NextThought.view.account.recovery.Email.submit'),
-				handler: function() {
+				handler: function () {
 					var main = this.up('recovery-email-view');
 
 					main.submit();
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.account.recovery.Email', 
 		]}
 	],
 
-	getValue: function() {
+	getValue: function () {
 		return {
 			email: this.down('[name=email]').getValue(),
 			fieldName: this.fieldName,
@@ -44,13 +44,13 @@ module.exports = exports = Ext.define('NextThought.app.account.recovery.Email', 
 		};
 	},
 
-	setError: function(error) {
+	setError: function (error) {
 		var box = this.down('[name=error]'),
-						field = this.down('[name=email]'),
-						bContainer = this.down('[name=buttons]');
+			field = this.down('[name=email]'),
+			bContainer = this.down('[name=buttons]');
 
 		//make main error field show up
-			box.el.down('.error-field').update(error.field.replace('_', ' '));
+		box.el.down('.error-field').update(error.field.replace('_', ' '));
 		box.el.down('.error-desc').update(error.message);
 		box.show();
 
@@ -59,14 +59,14 @@ module.exports = exports = Ext.define('NextThought.app.account.recovery.Email', 
 
 		if (error.code === 'AttemptingToResendConsentEmailTooSoon') {
 			//remove submit:
-			Ext.each(bContainer.query('button'), function(b) {b.destroy();});
+			Ext.each(bContainer.query('button'), function (b) {b.destroy();});
 			bContainer.add({
 				xtype: 'button',
 				ui: 'primary',
 				scale: 'large',
 				name: 'cancel',
 				text: getString('NextThought.view.account.recovery.Email.cancel'),
-				handler: function(b) {
+				handler: function (b) {
 					b.up('window').close();
 				}
 			});
@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.account.recovery.Email', 
 		this.up('window').updateLayout();
 	},
 
-	submit: function() {
+	submit: function () {
 		var values = this.getValue(),
 			win = this.up('window');
 

@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
 			title: this.title
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.buildVideo();
 		if (!Ext.isEmpty(this.videoUrl)) {
@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 	},
 
 
-	buildVideo: function() {
+	buildVideo: function () {
 		Ext.destroy(this.video, this.videoMonitor);
 
 		if (!Ext.isEmpty(this.videoUrl)) {
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 			this.videoMonitor = this.mon(this.video, {
 				destroyable: true,
 				'beforeRender': {
-					fn: function() {
+					fn: function () {
 						me.addCls('has-video');
 					},
 					single: true
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 	},
 
 
-	showCurtain: function() {
+	showCurtain: function () {
 		this.removeCls('playing');
 		Ext.destroy(this.video, this.videoMonitor);
 		delete this.video;
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 	},
 
 
-	curtainClicked: function(e) {
+	curtainClicked: function (e) {
 		var p = Promise.resolve();
 
 		if (!this.video) {
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 			p = wait();
 		}
 
-		p.then(function() {
+		p.then(function () {
 			if (e && e.shiftKey && this.player.canOpenExternally()) {
 				this.video.openExternally();
 			}

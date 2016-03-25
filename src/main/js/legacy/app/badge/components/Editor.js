@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 	layout: 'none',
 	items: [],
 
-	initComponent: function(){
+	initComponent: function () {
 		this.callParent(arguments);
 
 		if (!this.user.isEmailVerified()) {
@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 		}
 	},
 
-	showEmailVerfication: function(){
+	showEmailVerfication: function () {
 		if (this.activeEditor) {
 			this.activeEditor.destroy();
 		}
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 			.then(this.setupEmailVerification.bind(this));
 	},
 
-	setupEmailVerification: function() {
+	setupEmailVerification: function () {
 		if (this.disableBack) {
 			this.disableBack();
 		}
@@ -67,17 +67,17 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 	 * to perform the fulfill action.
 	 * 
 	 */
-	onSaveEmailToken: function(){
+	onSaveEmailToken: function () {
 		var token = this.activeEditor && this.activeEditor.getValue(),
 			me = this;
 		if (this.user) {
 			this.user.verifyEmailToken(token)
-				.then(function() {
+				.then(function () {
 					if (me.doSave) {
 						me.doSave();
 					}
 				})
-				.fail(function(){
+				.fail(function () {
 					me.activeEditor.showError();
 				});
 		}
@@ -88,12 +88,12 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 	 * 
 	 * @return {Promise} the promise to lock the badge.
 	 */
-	onSave: function(){
+	onSave: function () {
 		var record = this.badge;
 		return record.lockBadge();
 	},
 
-	showBadgeLock: function(){
+	showBadgeLock: function () {
 		var email = this.user && this.user.get('email');
 
 		if (this.activeEditor) {
@@ -118,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 			.then(this.setupEmailLock.bind(this));
 	},
 
-	setupEmailLock: function() {
+	setupEmailLock: function () {
 		if (this.setTitle) {
 			this.setTitle(this.title);
 		}

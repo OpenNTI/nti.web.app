@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	bubbleEvents: ['filters-changed', 'search-changed'],
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.currentSort = 'active';
 
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	searchKeyPressed: function(e) {
+	searchKeyPressed: function (e) {
 		var key = e.keyCode;
 
 		this.searchKey = this.searchEl.getValue();
@@ -65,14 +65,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	clearSearch: function() {
+	clearSearch: function () {
 		this.searchEl.dom.value = '';
 		this.searchKey = '';
 		this.fireEvent('search-changed', '');
 	},
 
 
-	showGroupByMenu: function() {
+	showGroupByMenu: function () {
 		var menu = this.groupByMenu, item = menu.down('[checked]');
 		if (!this.groupEl.hasCls('disabled')) {
 			if (item) {
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	createGroupByMenu: function() {
+	createGroupByMenu: function () {
 		var type = this.currentSort,
 			items = [
 				{ text: getString('NextThought.view.forums.forum.parts.FilterBar.mostrecent'), groupBy: 'active', checked: type === 'active'},
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	switchOrdering: function(item, status) {
+	switchOrdering: function (item, status) {
 		if (!status) { return; }
 		var offset = item.getOffsetsTo(this.groupByMenu),
 			x = offset && offset[1];
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	setSortBy: function(group) {
+	setSortBy: function (group) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setSortBy.bind(this, group));
 			return;
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	setSearch: function(search) {
+	setSearch: function (search) {
 		if (!this.rendered) {
 			this.searchKey = search;
 			return;
@@ -154,17 +154,17 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	getFilterType: function() {
+	getFilterType: function () {
 
 	},
 
 
-	getSortBy: function() {
+	getSortBy: function () {
 		return this.currentSort || 'active';
 	},
 
 
-	getSearch: function() {
+	getSearch: function () {
 		return this.searchKey || '';
 	}
 });

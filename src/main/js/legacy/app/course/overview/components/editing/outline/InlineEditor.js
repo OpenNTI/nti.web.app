@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-inline-editor',
 
 	inheritableStatics: {
-		getTypes: function() {}
+		getTypes: function () {}
 	},
 
 	cls: 'inline-editor',
@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		inputEl: '.field input[name=title]'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var type = this.self.getTypes();
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	getSuggestedNodeTitle: function() {
+	getSuggestedNodeTitle: function () {
 		var childrenCount = (this.parentRecord.get('Items') || []).length, childType;
 
 		if (this.parentRecord) {
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return '';
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		var me = this;
 
@@ -63,12 +63,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 
 		wait()
-			.then(function() {
+			.then(function () {
 				me.inputEl.dom.select();
 			});
 	},
 
-	onKeyup: function(e) {
+	onKeyup: function (e) {
 		var record;
 
 		if (e.getKey() === e.ENTER) {
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	getValue: function() {
+	getValue: function () {
 		return {
 			MimeType: this.mimeType,
 			ContentNTIID: null,
@@ -96,12 +96,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-	setSuggestTitle: function() {
+	setSuggestTitle: function () {
 		this.inputEl.dom.value = this.getSuggestedNodeTitle();
 		this.inputEl.dom.select();
 	},
 
-	isValid: function() {
+	isValid: function () {
 		var value = this.getValue();
 
 		if (!value.MimeType) {
@@ -116,11 +116,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return true;
 	},
 
-	showError: function() {
+	showError: function () {
 		this.inputEl.addCls('error');
 	},
 
-	clearError: function() {
+	clearError: function () {
 		if (this.inputEl.hasCls('error')) {
 			this.inputEl.removeCls('error');
 		}

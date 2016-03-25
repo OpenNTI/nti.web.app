@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstanceE
 
 	fields: [
 		{name: 'id', type: 'string', mapping: 'Username'},
-		{name: 'username', type: 'string', mapping: 'Username', convert: function(v, r) {
+		{name: 'username', type: 'string', mapping: 'Username', convert: function (v, r) {
 			return (r.raw.LegacyEnrollmentStatus === 'ForCredit' && v) || '';
 		}},
 		{name: 'Creator', type: 'singleItem', mapping: 'UserProfile' },

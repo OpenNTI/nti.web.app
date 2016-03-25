@@ -6,7 +6,7 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 	statics: {
 		kind: 'audio',
 		type: 'html5',
-		valid: function() {
+		valid: function () {
 			return !!document.createElement('audio').canPlayType;
 		}
 	},
@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 	}),
 
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.mixins.observable.constructor.call(this);
 		this.el = null;
 		this.parentEl = Ext.get(config.el);
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
   //	SAJ: The HTML5 player code is part of the browser and is always ready to load a media source.
 	isReady: true,
 
-	playerSetup: function() {
+	playerSetup: function () {
 	//		Inject HTML5 Player HTML
 		this.playerTpl.append(this.parentEl, {id: this.id, height: this.height, width: this.width});
 		console.log(this.id);
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 	},
 
 
-	togglePlayback: function(e) {
+	togglePlayback: function (e) {
 		var p = this.player,
 			y = e.getY(),
 			rect = p.getBoundingClientRect();
@@ -67,13 +67,13 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 	},
 
 
-	notify: function(e) {
+	notify: function (e) {
 		console.debug(this.id + ' - ' + e.type);
 		this.fireEvent('player-event-' + e.type, this.id, this);
 	},
 
 
-	onSeeking: function(e) {
+	onSeeking: function (e) {
 		this.notify(e);
 		if (!this.seeking) {
 			this.seeking = true;
@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 	},
 
 
-	onSeeked: function(e) {
+	onSeeked: function (e) {
 		this.notify(e);
 
 		if (this.seeking) {
@@ -93,17 +93,17 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 	},
 
 
-	playerError: function() {
+	playerError: function () {
 		this.fireEvent('player-error', 'html5');
 	},
 
 
-	getCurrentTime: function() {
+	getCurrentTime: function () {
 		return this.player.currentTime;
 	},
 
 
-	getPlayerState: function() {
+	getPlayerState: function () {
 		var playerState = -1;
 
 		if (this.player.paused) {
@@ -123,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 	},
 
 
-	load: function(source, offset) {
+	load: function (source, offset) {
 		var sourceTpl = Ext.DomHelper.createTemplate({tag: 'source', src: '{src}', type: '{type}'}),
 			player = this.player,
 			i = 0,
@@ -144,17 +144,17 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 		player.load();
 
 		if (offset > 0.0) {
-			this.el.on('loadedmetadata', function() {player.currentTime = offset;}, this, {single: true});
+			this.el.on('loadedmetadata', function () {player.currentTime = offset;}, this, {single: true});
 		}
 	},
 
 
-	play: function() {
+	play: function () {
 		this.player.play();
 	},
 
 
-	deactivate: function() {
+	deactivate: function () {
 		return this.pause.apply(this, arguments);
 	},
 
@@ -162,15 +162,15 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 	activate: Ext.emptyFn,
 
 
-	pause: function() {
+	pause: function () {
 		this.player.pause();
 	},
 
 
-	seek: function(offset) {
+	seek: function (offset) {
 		var player = this.player;
 		if (player.readyState === 0) {
-			this.el.on('loadedmetadata', function() {player.currentTime = offset;}, this, {single: true});
+			this.el.on('loadedmetadata', function () {player.currentTime = offset;}, this, {single: true});
 		}
 		else {
 			player.currentTime = offset;
@@ -178,14 +178,14 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 	},
 
 
-	stop: function() {
+	stop: function () {
 		// Remove the current sources and trigger a load to free the used memory
 		this.player.innerHTML = '';
 		this.player.load();
 	},
 
 
-	cleanup: function() {
+	cleanup: function () {
 		if (this.player) {
 			this.stop();
 		}
@@ -195,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5Player', {
 	},
 
 
-	getDuration: function() {
+	getDuration: function () {
 		return (this.player.duration || 0) * 1000;
 	}
 });

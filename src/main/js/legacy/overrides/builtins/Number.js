@@ -3,15 +3,15 @@ var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.overrides.builtins.Number', {});
 
-(function() {
+(function () {
 	Ext.applyIf(Number.prototype, {
-		pad: function(size) {
+		pad: function (size) {
 			if (typeof size !== 'number') {size = 2;}
 			var s = String(this);
 			while (s.length < size) {s = '0' + s;}
 			return s;
 		},
-		isFloatEqual: function(b, precision) {
+		isFloatEqual: function (b, precision) {
 			precision = precision || 2;
 
 			var zero = 0,
@@ -19,10 +19,10 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Number', {
 
 			return Math.abs(this - b) < ep;
 		},
-		isFloatGreaterThanOrEqual: function(b, precision) {
+		isFloatGreaterThanOrEqual: function (b, precision) {
 			return this.isFloatEqual(b, precision) || this > b;
 		},
-		isFloatLessThanOrEqual: function(b, precision) {
+		isFloatLessThanOrEqual: function (b, precision) {
 			return this.isFloatEqual(b, precision) || this < b;
 		}
 	});

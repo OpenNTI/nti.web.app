@@ -30,14 +30,14 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 				}
 			]}
 		]},{
-		cls: 'right', cn: [
+			cls: 'right', cn: [
 			{cls: 'video-picker', cn: [
 				{cls: 'grid-view'},
 				{cls: 'selected-mv-type hasTranscript video-focus', html: 'split video'}
 			]}
 		]
-	}]), {
-		splitNumberFromTitle: function(values) {
+		}]), {
+		splitNumberFromTitle: function (values) {
 			var s = (values.title || '').split(' '),
 				number = s.shift(),
 				numberVal = parseFloat(number),
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 		sectionNameEl: '.navigation .wrap .section-name'
 	},
 
-	clsToName: function(cls) {
+	clsToName: function (cls) {
 		var map = {
 			'video-focus': 'Split Video',
 			'transcript-focus': 'Split Transcript',
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 		return map[cls];
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		var me = this;
 		me.callParent(arguments);
 		me.currentType = me.currentType || 'video-focus';
@@ -77,21 +77,21 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 		me.on({
 			pickerEl: { click: 'showVideoPlayerPicker' },
 			gridEl: { click: 'showGridPicker' },
-			exitEl: { click: function() { me.fireEvent('exit-viewer'); } }
+			exitEl: { click: function () { me.fireEvent('exit-viewer'); } }
 		});
 	},
 
 
-	setContent: function(video, transcript) {
+	setContent: function (video, transcript) {
 		var me = this, title, description;
 
 		me.video = video;
 		me.transcript = transcript;
 		me.noTranscript = !transcript;
 		title = me.video && me.video.get('title'),
-		description = me.video && me.video.get('description')
+		description = me.video && me.video.get('description');
 
-		me.onceRendered.then(function() {
+		me.onceRendered.then(function () {
 			me.titleEl.update(title);
 			me.sectionNameEl.update(description);
 
@@ -106,34 +106,34 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.pickerEl.removeCls('video-focus').addCls(this.currentType);
 		this.pickerEl.update(this.clsToName(this.currentType));
 	},
 
 
-	showGridPicker: function() {
+	showGridPicker: function () {
 		var el = this.gridEl,
 			cls = 'active', me = this,
 			action = el.hasCls(cls) ? 'hide' : 'show';
 
 		this.floatParent.showGridViewer(action)
-			.then(function() {
+			.then(function () {
 				el.toggleCls(cls);
 			});
 	},
 
 
-	toggleGridPicker: function(){
+	toggleGridPicker: function () {
 		var el = this.gridEl,
 			cls = 'active';
 
-		el.toggleCls(cls)
+		el.toggleCls(cls);
 	},
 
 
-	showVideoPlayerPicker: function() {
+	showVideoPlayerPicker: function () {
 		console.log('clicked on show the video player picker..');
 		
 		// No menu, if we don't have a transcript.
@@ -146,7 +146,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 	},
 
 
-	createViewPlayerPicker: function() {
+	createViewPlayerPicker: function () {
 		var me = this,
 			type = this.currentType,
 			items = [
@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 			];
 
 		//Make selected item is at the top of the list.
-		items = Ext.Array.sort(items, function(a, b) {
+		items = Ext.Array.sort(items, function (a, b) {
 			return !a.checked && b.checked;
 		});
 
@@ -186,8 +186,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 				xtype: 'menucheckitem',
 				plain: true,
 				listeners: {
-					'beforecheckchange': function(item, checked) { return item.allowUncheck !== false; },
-					'click': function(item) {
+					'beforecheckchange': function (item, checked) { return item.allowUncheck !== false; },
+					'click': function (item) {
 						item.up('menu').ownerCmp.handleClick(item, item.up('menu'));
 					}
 				}
@@ -197,14 +197,14 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 	},
 
 
-	handleClick: function(item, menu) {
+	handleClick: function (item, menu) {
 		var previousType = this.currentType, me = this;
 
 		this.floatParent.switchVideoViewer(item.action)
-			.then(function() {
+			.then(function () {
 				me.updateCurrentType(item.action,item.text);
 
-				Ext.each(menu.query('menuitem[checked]'), function(i) {
+				Ext.each(menu.query('menuitem[checked]'), function (i) {
 					i.setChecked(false, true);
 				});
 
@@ -214,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.To
 		return false;
 	},
 
-	updateCurrentType: function(newType, newText) {
+	updateCurrentType: function (newType, newText) {
 		var previousType = this.currentType, me = this;
 
 		newText = newText || this.clsToName(newType);

@@ -8,12 +8,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-survey',
 
 	statics: {
-		getHandledMimeTypes: function() {
+		getHandledMimeTypes: function () {
 			return [
 				NextThought.model.SurveyRef.mimeType
 			];
 		}
 	},
 
-	addFormCmp: function() {}
+	addFormCmp: function () {}
 });

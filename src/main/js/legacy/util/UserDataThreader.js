@@ -5,21 +5,21 @@ var AnnotationUtils = require('./Annotations');
 module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 
 	GETTERS: {
-		'Highlight': function(r) {return r;},
-		'Note': function(r) {return r;},
-		'TranscriptSummary': function(r) {return r.get('RoomInfo');},
-		'QuizResult': function(r) {return r;},
-		'CommentPost': function(r) { return r;},
-		'GeneralForumComment': function(r) { return r;},
-		'PersonalBlogComment': function(r) { return r;},
-		'ContentCommentPost': function(r) { return r;}
+		'Highlight': function (r) {return r;},
+		'Note': function (r) {return r;},
+		'TranscriptSummary': function (r) {return r.get('RoomInfo');},
+		'QuizResult': function (r) {return r;},
+		'CommentPost': function (r) { return r;},
+		'GeneralForumComment': function (r) { return r;},
+		'PersonalBlogComment': function (r) { return r;},
+		'ContentCommentPost': function (r) { return r;}
 	},
 
 	//TODO unify this function with buildThreads
 	//into one function taking a list of userdata
 	//and returning a new list where the threadable objects
 	//have been threaded.
-	threadUserData: function(d) {
+	threadUserData: function (d) {
 		var data = !Ext.isArray(d) ? [d] : d,
 			tree = {};
 
@@ -32,11 +32,11 @@ module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 		return Ext.Object.getValues(tree);
 	},
 
-	buildThreads: function(bins) {
+	buildThreads: function (bins) {
 		var tree = {};
 
 		if (bins) {
-			Ext.Object.each(bins, function(k, o) {
+			Ext.Object.each(bins, function (k, o) {
 				if (o && o[0].isThreadable) {
 					this.buildItemTree(o, tree);
 				}
@@ -48,9 +48,9 @@ module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 		return tree;
 	},
 
-	cleanupTree: function(tree) {
+	cleanupTree: function (tree) {
 		//take all children off the main collection... make them accessible only by following the children pointers.
-		Ext.Object.each(tree, function(k, o, a) {
+		Ext.Object.each(tree, function (k, o, a) {
 			//turn children object into array
 			o.children = o.children ? Ext.Object.getValues(o.children) : o.children;
 			if (o.parent) { delete a[k]; }
@@ -59,26 +59,26 @@ module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 		this.prune(tree);
 	},
 
-	buildItemTree: function(rawList, tree) {
+	buildItemTree: function (rawList, tree) {
 		var me = this, threadables = {}, list;
 	//	console.group("Build Tree");
 		//console.log('Using list of objects', rawList);
 
 		//Flatten an preexisting relationships of list into the array ignoring
 		//duplicates.  A hash could speed this up
-		function flattenNode(n, result) {
+		function flattenNode (n, result) {
 			if (!n.placeholder) {
 				result[n.getId()] = n;
 			}
 
 			if (!Ext.isEmpty(n.children)) {
-				Ext.each(n.children, function(kid) {
+				Ext.each(n.children, function (kid) {
 					flattenNode(kid, result);
 				});
 			}
 		}
 
-		Ext.each(rawList, function(n) {
+		Ext.each(rawList, function (n) {
 			flattenNode(n, threadables);
 		});
 
@@ -88,17 +88,17 @@ module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 
 		console.log('Flattened rawList of size ', rawList.length, 'to flattened list of size', list.length);
 
-		Ext.each(list, function clearRefs(r) {
+		Ext.each(list, function clearRefs (r) {
 			if (!r.placeholder) {
 				me.tearDownThreadingLinks(r);
 			}
 		});
 
-		Ext.each(list, function buildTree(r) {
+		Ext.each(list, function buildTree (r) {
 			var g = me.GETTERS[r.getModelName()](r),
-					oid = g.getId(),
-					parent = g.get('inReplyTo'),
-					p;
+				oid = g.getId(),
+				parent = g.get('inReplyTo'),
+				p;
 
 			r.children = r.children || {};
 
@@ -124,9 +124,9 @@ module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 			}
 		});
 
-		function getID(id) {
+		function getID (id) {
 			var r = null,
-					f = function(o)
+				f = function (o)
 					{
 						if (o && o.get && o.getId() === id) {
 							r = o;
@@ -144,13 +144,13 @@ module.exports = exports = Ext.define('NextThought.util.UserDataThreader', {
 	//	console.groupEnd("Build Tree");
 	},
 
-	prune: function(tree) {
+	prune: function (tree) {
 		//until we decide we want to prune from the root down... this is a non-desired function. (we cannot have leaf
 		// placeholders with the current threading algorithm.)
 
 	},
 
-	tearDownThreadingLinks: function(o) {
+	tearDownThreadingLinks: function (o) {
 		delete o.parent;
 		delete o.children;
 	}

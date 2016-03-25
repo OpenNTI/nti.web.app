@@ -8,27 +8,27 @@ module.exports = exports = Ext.define('NextThought.common.menus.file.BrowserItem
 	text: 'Browse...',
 	iconCls: 'upload',
 
-	initComponent: function() {
+	initComponent: function () {
 		delete this.menu;
 		delete this.listeners;
 		delete this.handler;
 		this.callParent(arguments);
 	},
 
-	onClick: function(e) {
-	this.href = true;
+	onClick: function (e) {
+		this.href = true;
 		this.callParent(arguments);
-	delete this.href;
+		delete this.href;
 	},
 
-	onRender: function() {
+	onRender: function () {
 		var me = this;
 		me.callParent(arguments);
 		me.createFileInput();
 	},
 
 
-	createFileInput: function() {
+	createFileInput: function () {
 		var me = this;
 		me.fileInputEl = me.el.createChild({
 			name: 'file1',
@@ -45,14 +45,14 @@ module.exports = exports = Ext.define('NextThought.common.menus.file.BrowserItem
 	},
 
 
-	enable: function() {
+	enable: function () {
 		if (this.fileInputEl) {
 			this.fileInputEl.set({disabled: undefined});
 		}
 		return this.callParent(arguments);
 	},
 
-	disable: function() {
+	disable: function () {
 		if (this.fileInputEl) {
 			this.fileInputEl.set({disabled: true});
 		}
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.common.menus.file.BrowserItem
 	},
 
 
-	onFileChange: function(e) {
+	onFileChange: function (e) {
 		if (!this.target) {
 			console.error('no target set!');
 		}
@@ -75,13 +75,13 @@ module.exports = exports = Ext.define('NextThought.common.menus.file.BrowserItem
 
 
 	//for Legacy
-	isDirty: function() { return true; },
+	isDirty: function () { return true; },
 	isFormField: true,
-	isFileUpload: function() { return true; },
-	getSubmitData: function() { return null; },
-	validate: function() { return Boolean(this.fileInputEl.dom.value); },
+	isFileUpload: function () { return true; },
+	getSubmitData: function () { return null; },
+	validate: function () { return Boolean(this.fileInputEl.dom.value); },
 
-	extractFileInput: function() {
+	extractFileInput: function () {
 		var fileInput = this.fileInputEl.dom;
 		this.fileInputEl.remove();
 		this.createFileInput();

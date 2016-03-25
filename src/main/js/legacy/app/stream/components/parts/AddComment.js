@@ -12,14 +12,14 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.parts.A
 	}),
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', this.addComment.bind(this));
 	},
 
 
-	addComment: function() {
+	addComment: function () {
 		if (this.onAddComment) {
 			this.onAddComment();
 		}

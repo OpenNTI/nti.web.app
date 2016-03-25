@@ -15,14 +15,14 @@ var {isMe} = require('legacy/util/Globals');
  */
 module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 	//Should be called from initComponent
-	constructor: function() {
+	constructor: function () {
 		this.on('presence-changed', this.presenceOfComponentChanged, this);
 		this.on('beforeRender', this.onCmpRendered, this);
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.GroupActions = NextThought.app.groups.Actions.create();
 	},
 
-	setupActions: function(group, ignoreChatOption) {
+	setupActions: function (group, ignoreChatOption) {
 		var allHidden = true, items, listOrGroup = group && Ext.String.capitalize(group.readableType),
 			menuCfg = {
 				parentItem: this
@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 			];
 		}
 		//don't set up the menu if all the items are hidden
-		Ext.each(items, function(i) {
+		Ext.each(items, function (i) {
 			allHidden = allHidden ? i.isHidden() : allHidden;
 		});
 
@@ -112,13 +112,13 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		this.updateChatState(group);
 	},
 
-	groupChatHidden: function(group) {
+	groupChatHidden: function (group) {
 		return true;
 		// TODO: Add group chat functionality
 		// return !Service.canChat() || !group || !isMe(group.get('Creator')) || group.getFriendCount() === 0;
 	},
 
-	getUserList: function() {
+	getUserList: function () {
 		var model = this.getModelObject();
 		if (!model) {
 			return;
@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		return model.get(this.getUserListFieldName() || '');
 	},
 
-	onCmpRendered: function() {
+	onCmpRendered: function () {
 		var model = this.getModelObject(),
 			fn = this.getUserListFieldName(),
 			users;
@@ -142,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		model.addObserverForField(this, fn, this.updateFromModelObject, this);
 	},
 
-	updateFromModelObject: function(key, value) {
+	updateFromModelObject: function (key, value) {
 		var users = value || key,
 			model = this.getModelObject();
 
@@ -158,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		UserRepository.getUser(users, this.setUsers, this);
 	},
 
-	setUsers: function(resolvedUsers) {
+	setUsers: function (resolvedUsers) {
 		var p;
 
 		if (!Ext.isArray(resolvedUsers)) {
@@ -181,7 +181,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		console.timeEnd('Adding Users');
 	},
 
-	presenceOfComponentChanged: function(cmp) {
+	presenceOfComponentChanged: function (cmp) {
 		var users;
 
 		if (this.reactToChildPresenceChanged === false) {
@@ -193,7 +193,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		return false; //Stop bubble we handled it
 	},
 
-	cleanupActions: function() {
+	cleanupActions: function () {
 		if (this.userMenu) {
 			this.userMenu.destroy();
 		}
@@ -202,22 +202,22 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		}
 	},
 
-	getMenuHideHandlers: function(menu) {
+	getMenuHideHandlers: function (menu) {
 		var leave;
-		function hide() {menu.hide();}
-		function start() { stop(); leave = setTimeout(hide, 500); }
-		function stop() { clearTimeout(leave); }
+		function hide () {menu.hide();}
+		function start () { stop(); leave = setTimeout(hide, 500); }
+		function stop () { clearTimeout(leave); }
 		return {
 			mouseleave: start,
 			mouseenter: stop
 		};
 	},
 
-	updateChatState: function(group) {
+	updateChatState: function (group) {
 		var me = this,
 			friends;
 
-		function test(f) { return f.getPresence && f.getPresence().isOnline(); }
+		function test (f) { return f.getPresence && f.getPresence().isOnline(); }
 
 		//Update group chat state.
 		//TODO listen for change events instead of rechecking each time
@@ -225,7 +225,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 			friends = group.get('friends');
 			if (Ext.isEmpty(friends, false)) { this.groupChatAction.setDisabled(true); }
 			else {
-				UserRepository.getUser(friends, function(rFriends) {
+				UserRepository.getUser(friends, function (rFriends) {
 					var canGroupChat = Ext.Array.some(rFriends, test);
 					me.groupChatAction.setDisabled(!canGroupChat);
 				});
@@ -234,35 +234,35 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 	},
 
 	//Users isn't very big here so do the naive thing
-	indexToInsertAt: function(users, newUser) {
+	indexToInsertAt: function (users, newUser) {
 		var collection = new Ext.util.MixedCollection();
 		collection.addAll(users);
 
 		return collection.findInsertionIndex(newUser, this.userSorterFunction);
 	},
 
-	addCmpInSortedPosition: function(cmp) {
-		var users = Ext.Array.map(this.query('[username]') || [], function(u) {return u.getUserObject();});
+	addCmpInSortedPosition: function (cmp) {
+		var users = Ext.Array.map(this.query('[username]') || [], function (u) {return u.getUserObject();});
 		this.insert(this.indexToInsertAt(users, cmp.getUserObject()), cmp);
 	},
 
-	updateCmpPosition: function(cmp) {
+	updateCmpPosition: function (cmp) {
 		this.remove(cmp, false);
 		this.addCmpInSortedPosition(cmp);
 	},
 
-	addUser: function(user) {
+	addUser: function (user) {
 		var existing = this.down('[username=' + user.get('Username') + ']'), users;
 		if (!existing) {
 			//Figure out where we need to insert it
-			users = Ext.Array.map(this.query('[username]') || [], function(u) {return u.getUserObject();});
+			users = Ext.Array.map(this.query('[username]') || [], function (u) {return u.getUserObject();});
 			this.insertItem(this.indexToInsertAt(users, user), this.createUserComponent(user));
 			return true;
 		}
 		return false;
 	},
 
-	removeUser: function(user) {
+	removeUser: function (user) {
 		var name = (user && user.isModel) ? user.get('Username') : user,
 			existing = this.down('[username=' + name + ']');
 		if (existing) {
@@ -274,7 +274,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 
 	//Sort the users first by presense (online, offline) then
 	//alphabetically withing that
-	userSorterFunction: function(a, b) {
+	userSorterFunction: function (a, b) {
 		var aPresence = a.getPresence().toString() || '',
 			bPresence = b.getPresence().toString() || '',
 			aName = a.get('displayName') || '',
@@ -289,12 +289,12 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		return aName.localeCompare(bName);
 	},
 
-	deleteGroup: function(group) {
+	deleteGroup: function (group) {
 		var me = this,
 			msg = Ext.DomHelper.markup(['The ', group.readableType, ' ',
 									{tag: 'span', html: group.get('displayName')},
 									' will be permanently deleted...']);
-		function cb(str) {
+		function cb (str) {
 			if (str === 'ok') {
 				me.GroupActions.deleteGroup(me.associatedGroup);
 			}
@@ -303,41 +303,41 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		this.areYouSure(msg, cb);
 	},
 
-	chatWithGroup: function(group) {
+	chatWithGroup: function (group) {
 		if (group.getFriendCount() > 0) {
 			this.fireEvent('group-chat', group, {persistent: false});
 		}
 	},
 
-	getGroupCode: function(group) {
+	getGroupCode: function (group) {
 		var dn = group.get('displayName');
 		if (!group.getLink('default-trivial-invitation-code')) {
 			return;
 		}
 
 		this.GroupActions.getGroupCode(group)
-			.then(function(code) {
+			.then(function (code) {
 				var win = Ext.widget('coderetrieval-window', {groupName: dn, code: code});
 				win.show();
 			})
-			.fail(function(errorText) {
+			.fail(function (errorText) {
 				alert(errorText);
 			});
 	},
 
-	leaveGroup: function(group) {
+	leaveGroup: function (group) {
 		if (group.getLink('my_membership')) {
 			this.GroupActions.leaveGroup(group)
-				.then(function() {
+				.then(function () {
 					console.log('successfully left the group');
 				})
-				.fail(function(errorText) {
+				.fail(function (errorText) {
 					alert(errorText);
 				});
 		}
 	},
 
-	forcefullyRemoveUser: function(item, group) {
+	forcefullyRemoveUser: function (item, group) {
 		var me = this,
 			menu = item && item.up ? item.up('menu') : null,
 			//use the menu's reference, if we called with user instead, use it
@@ -348,7 +348,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 				{tag: 'span', cls: 'displayname', html: group.get('displayName')}
 			]);
 
-		function cb(str) {
+		function cb (str) {
 			if (str === 'ok') {
 				me.GroupActions.removeContact(group, user.getId());
 			}
@@ -357,7 +357,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 		this.areYouSure(msg, cb);
 	},
 
-	areYouSure: function(msg, callback) {
+	areYouSure: function (msg, callback) {
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
 			msg: msg,

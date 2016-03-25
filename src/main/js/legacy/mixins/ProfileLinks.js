@@ -4,10 +4,10 @@ var {isMe} = require('legacy/util/Globals');
 
 
 var contactCardPopout, showCardTimer,
-		canShow;
+	canShow;
 
 //the scope is being set by the caller
-function onUserNameClick(e) {
+function onUserNameClick (e) {
 	if (e) {
 		e.stopEvent();
 	}
@@ -33,10 +33,10 @@ function onUserNameClick(e) {
 }
 
 
-function showCard(e, el, position) {
+function showCard (e, el, position) {
 	var Popup = NextThought.app.account.contacts.management.Popout,
-			pop,
-			user = this.userObject || this.user;
+		pop,
+		user = this.userObject || this.user;
 
 	if (!user || this instanceof Popup || (!el.parent('.activity-popout') && !Popup.beforeShowPopup(user, el))) {
 		return;
@@ -46,11 +46,11 @@ function showCard(e, el, position) {
 
 	if (!pop || pop.isDestroyed) {
 		pop = Popup.create({
-							   renderTo: Ext.getBody(),
-							   record: user,
-							   refEl: el,
-							   hidden: true
-						   });
+						renderTo: Ext.getBody(),
+						record: user,
+						refEl: el,
+						hidden: true
+					});
 	}
 
 	pop.show();
@@ -63,17 +63,17 @@ function showCard(e, el, position) {
 	contactCardPopout = canShow ? null : pop;
 }
 
-function startShowCard(e, el) {
+function startShowCard (e, el) {
 	var p = el.getAnchorXY('tl');
 	showCardTimer = Ext.defer(showCard, canShow ? 0 : 500, this, [e, el, p]);
 }
 
-function stopShowCard() {
+function stopShowCard () {
 	clearTimeout(showCardTimer);
 }
 
 module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
-	navigateToProfile: function(u) {
+	navigateToProfile: function (u) {
 		var profileUrl = u.getProfileUrl && u.getProfileUrl();
 
 		if (profileUrl) {
@@ -90,14 +90,14 @@ module.exports = exports = Ext.define('NextThought.mixins.ProfileLinks', {
 	 * This mixin method assumes we are mixed into a class thta is Observable, and has a userObject property (or a user
 	 * property), where the object is an instance of {NextThought.model.User}.
 	 */
-	enableProfileClicks: function() {
+	enableProfileClicks: function () {
 		var me = this,
-				events = {
+			events = {
 					scope: me,
 					click: onUserNameClick
 				};
 
-		Ext.each(arguments, function(el) {
+		Ext.each(arguments, function (el) {
 			var user = me.userObject || me.user;
 			el = Ext.get(el);
 

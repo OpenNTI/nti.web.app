@@ -6,7 +6,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	extend: 'NextThought.app.course.overview.components.editing.Editor',
 
 
-	addParentSelection: function(record, parentRecord, rootRecord, onChange) {
+	addParentSelection: function (record, parentRecord, rootRecord, onChange) {
 		if (!rootRecord) { return null; }
 
 		var items = rootRecord.get('Items');

@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.store.NTI', {
 		}
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		//Allow partial overriding the proxy.
 		if (config && config.proxyOverride) {
 			this.proxy = Ext.merge(Ext.clone(this.proxy), this.config.proxyOverride);
@@ -46,8 +46,8 @@ module.exports = exports = Ext.define('NextThought.store.NTI', {
 		}
 	},
 
-	onProxyLoad: function(operation) {
-	var resultSet = operation.getResultSet();
+	onProxyLoad: function (operation) {
+		var resultSet = operation.getResultSet();
 		delete this.batchLinks;
 		if (resultSet && resultSet.links) {
 			this.batchLinks = resultSet.links;
@@ -56,12 +56,12 @@ module.exports = exports = Ext.define('NextThought.store.NTI', {
 		return this.callParent(arguments);
 	},
 
-	remove: function(records, m, silent) {
+	remove: function (records, m, silent) {
 		this.callParent(arguments);
 
 		if (silent) { return; }
 
-		Ext.each(records, function(record) {
+		Ext.each(records, function (record) {
 			record.fireEvent('destroy', record);
 		});
 

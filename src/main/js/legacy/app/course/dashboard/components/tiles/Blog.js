@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		HEIGHT: 200,
 		COMMENT_HEIGHT: 100,
 
-		getTileConfig: function(record, course, width, removeOnDelete) {
+		getTileConfig: function (record, course, width, removeOnDelete) {
 			var comments = Math.min(record.get('PostCount'), 2);
 
 			return Promise.resolve({
@@ -24,12 +24,12 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	getCommentCount: function() {
+	getCommentCount: function () {
 		return this.record.get('PostCount');
 	},
 
 
-	hasComments: function() {
+	hasComments: function () {
 		return this.record.get('PostCount') > 0;
 	}
 });

@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.video.navigation.Video', 
 		}
 	}),
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.setPrev(this.prevVideo);
@@ -31,21 +31,21 @@ module.exports = exports = Ext.define('NextThought.app.video.navigation.Video', 
 	},
 
 
-	getThumbnail: function(video) {
+	getThumbnail: function (video) {
 		var source = video.get('sources')[0];
 		return source && source.thumbnail;
 	},
 
-	getPreTitle: function(video) {
+	getPreTitle: function (video) {
 		return '';
 	},
 
-	getTitle: function(video) {
+	getTitle: function (video) {
 		return video.get('title');
 	},
 
 
-	updateNav: function(el, video) {
+	updateNav: function (el, video) {
 		var thumb, title, preTitle,
 			navEl = el && el.down('.nav-container'),
 			contentEl = navEl && navEl.down('.content'),
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.video.navigation.Video', 
 	},
 
 
-	setPrev: function(video) {
+	setPrev: function (video) {
 		this.prevVideo = video;
 
 		if (!this.rendered || !video) {
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.video.navigation.Video', 
 		this.updateNav(el, video);
 	},
 
-	setNext: function(video) {
+	setNext: function (video) {
 		this.nextVideo = video;
 
 		if (!this.rendered || !video) {
@@ -114,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.video.navigation.Video', 
 		this.updateNav(el, video);
 	},
 
-	navigationSelected: function(e) {
+	navigationSelected: function (e) {
 		var target = e.getTarget('.navigation', null, true);
 
 		if (!target || !target.hasCls) { return; }

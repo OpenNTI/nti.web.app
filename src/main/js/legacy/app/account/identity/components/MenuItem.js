@@ -37,19 +37,19 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		}
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {user: $AppConfig.userObject});
 		this.monitorUser($AppConfig.userObject);
 	},
 
-	monitorUser: function(user) {
+	monitorUser: function (user) {
 		var me = this,
 			m = {
 				scope: this,
 				destroyable: true,
-				'changed': function(r) {
+				'changed': function (r) {
 					var name = r.getName(),
 						profile = me.avatarEl && me.avatarEl.down('.profile.avatar-pic');
 
@@ -72,13 +72,13 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		}
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.enableProfileClicks(this.profileEl);
 	},
 
-	showAccount: function() {
+	showAccount: function () {
 		var win = NextThought.app.account.settings.Window.create();
 
 		win.show();

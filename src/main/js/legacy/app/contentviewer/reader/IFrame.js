@@ -13,14 +13,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		observable: 'Ext.util.Observable'
 	},
 
-	getBubbleTarget: function() {
+	getBubbleTarget: function () {
 		return this.reader;
 	},
 
 	baseFrameCheckIntervalInMillis: 500,
 	frameCheckRateChangeFactor: 1.5,
 
-	constructor: function(config) {
+	constructor: function (config) {
 		Ext.apply(this, config);
 
 		var me = this,
@@ -52,12 +52,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		me.iframe = me.reader.add(me.getConfig());
 
 		me.mon(me.reader, {
-			destroy: function() {
+			destroy: function () {
 				window.removeEventListener('scroll', scroll);
 				Ext.EventManager.removeResizeListener(me.onWindowResize, me);
 				clearInterval(me.syncInterval);
 			},
-			resize: function() { delete me.lastHeight; }
+			resize: function () { delete me.lastHeight; }
 		});
 
 		window.addEventListener('scroll', scroll);
@@ -66,13 +66,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		Ext.EventManager.onWindowResize(me.onWindowResize, me);
 	},
 
-	onWindowResize: function() {
+	onWindowResize: function () {
 		if (this.iframe && this.iframe.el) {
 			this.iframe.el.repaint();
 		}
 	},
 
-	displayPopover: function(href, html, node) {
+	displayPopover: function (href, html, node) {
 		var me = this,
 			nibHeight = 10,
 			offsets = me.reader.getAnnotationOffsets(),
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		//start out positioned at the bpttom, relative to the window
 		y = offsets.rect.top + nodeRect.top + nodeRect.height;
 
-		function adjustPosition(x, y) {
+		function adjustPosition (x, y) {
 			var horizontalSpaceNeeded = me.popoverWidget.getWidth() / 2,
 				width = me.popoverWidget.getWidth(),
 				height = me.popoverWidget.getHeight();
@@ -137,23 +137,23 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		me.popoverWidget.showAt(adjustPosition(x, y));
 	},
 
-	dismissPopover: function() {
+	dismissPopover: function () {
 		if (this.popoverWidget) {
 			this.popoverWidget.startCloseTimer();
 		}
 	},
 
-	applyContentAPI: function() {
+	applyContentAPI: function () {
 		//TODO: can we get rid of this?
 		var doc = this.getDocumentElement(),
-				win = doc.parentWindow;
-		Ext.Object.each(ContentAPIRegistry.getAPI(), function(f, n) {
+			win = doc.parentWindow;
+		Ext.Object.each(ContentAPIRegistry.getAPI(), function (f, n) {
 			win[f] = n;
 		});
 
 	},
 
-	getConfig: function() {
+	getConfig: function () {
 		var me = this;
 		return {
 			xtype: 'box',
@@ -169,8 +169,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 				style: 'overflow: hidden; z-index: 1;'
 			},
 			listeners: {
-				afterRender: function() {
-					me.resetFrame(function() {
+				afterRender: function () {
+					me.resetFrame(function () {
 						var frame = me.get();
 						if (frame) {
 							frame.selectable();
@@ -184,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		};
 	},
 
-	resetFrame: function(cb) {
+	resetFrame: function (cb) {
 		var BLANK_DOC = '<!DOCTYPE html>' +
 				Ext.DomHelper.markup({tag: 'html', lang: 'en', cn: [
 					{tag: 'head'},{tag: 'body'}]}),
@@ -195,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 
 		delete this.contentDocumentElement;
 
-		task.run = function() {
+		task.run = function () {
 			var doc = me.getDocumentElement();
 			if (!me.reader || me.reader.isDestroyed) {
 				Ext.TaskManager.stop(task);
@@ -206,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 				doc.write(BLANK_DOC);
 				doc.close();
 				delete me.contentDocumentElement;
-				setTimeout(function() {
+				setTimeout(function () {
 					me.initContentFrame();
 					if (cb) {
 						Ext.callback(cb, me);
@@ -216,14 +216,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		};
 
 		Ext.TaskManager.start(task);
-		me.reader.on('destroy', function() {
+		me.reader.on('destroy', function () {
 			Ext.TaskManager.stop(task);
 		});
 	},
 
-	initContentFrame: function() {
+	initContentFrame: function () {
 		var me = this,
-			base = (function() {
+			base = (function () {
 				var d = window.location; return d.protocol + '//' + d.host;} ()),
 			doc = me.getDocumentElement(),
 			con = console, tip,
@@ -231,11 +231,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 
 		if (me.reader.isDestroyed) {return;}
 
-		function on(dom, event, fn) {
+		function on (dom, event, fn) {
 			if (!Ext.isArray(event)) {
 				event = [event];
 			}
-			Ext.each(event, function(event) {
+			Ext.each(event, function (event) {
 				if (dom.addEventListener) {
 					dom.addEventListener(event, fn, false);
 				}
@@ -245,11 +245,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 			});
 		}
 
-		function forward(name) {
-			on(doc, name, function(e) {
+		function forward (name) {
+			on(doc, name, function (e) {
 				e = Ext.EventObject.setEvent(e || event);
 				var o = me.reader.getAnnotationOffsets(),
-						xy = e.getXY().slice();
+					xy = e.getXY().slice();
 
 				xy[0] += o.left;
 				xy[1] += o.top;
@@ -258,16 +258,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 				me.reader.fireEvent('iframe-' + e.type, {
 					browserEvent: e.browserEvent,
 					type: e.type,
-					getY: function() {
+					getY: function () {
 						return xy[1];
 					},
-					getX: function() {
+					getX: function () {
 						return xy[0];
 					},
-					getXY: function() {
+					getXY: function () {
 						return xy;
 					},
-					stopEvent: function() {
+					stopEvent: function () {
 						Ext.EventManager.stopPropagation(this.browserEvent);
 						Ext.EventManager.preventDefault(this.browserEvent);
 					}
@@ -275,7 +275,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 			});
 		}
 
-		me.get().win.onerror = function() {
+		me.get().win.onerror = function () {
 			(con || console).warn('iframe error: ', JSON.stringify(arguments));
 		};
 
@@ -289,13 +289,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		doc.getElementsByTagName('head')[0].appendChild(meta);
 
 		g.loadStyleSheet({
-							 url: base + document.getElementById('main-stylesheet').getAttribute('href'),
-							 document: doc });
+				url: base + document.getElementById('main-stylesheet').getAttribute('href'),
+				document: doc });
 
-		on(doc, ['keypress', 'keydown', 'keyup'], function(e) {
+		on(doc, ['keypress', 'keydown', 'keyup'], function (e) {
 			e = Ext.EventObject.setEvent(e || event);
 			var t = e.getTarget(),
-					k = e.getKey();
+				k = e.getKey();
 
 			if (k === e.BACKSPACE || e.getKey() === e.ESC) {
 				e.stopPropagation();
@@ -327,11 +327,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 			reader: me.reader
 		});
 
-		on(doc, 'mousedown', function() {
+		on(doc, 'mousedown', function () {
 			Ext.menu.Manager.hideAll();
 		});
 
-		on(doc, 'click', function(e) {
+		on(doc, 'click', function (e) {
 			var evt = Ext.EventObject.setEvent(e || event),
 				target = evt.getTarget(),
 				anchor = evt.getTarget('A');
@@ -344,7 +344,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 			evt.stopEvent();
 		});
 
-		on(doc, 'touchend', function() {
+		on(doc, 'touchend', function () {
 			//if open notepad editor, close it if touch on reader
 			var notepad = Ext.query('.inline-editor.x-component-notepad-item')[0];
 			if (notepad) {
@@ -355,32 +355,32 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 			}
 		});
 
-		on(doc, 'mouseup', function(e) {
+		on(doc, 'mouseup', function (e) {
 			var fakeEvent = Ext.EventObject.setEvent(e || event),
-					t = Ext.getBody().getScroll().top,
-					s = me.get().win.getSelection();
+				t = Ext.getBody().getScroll().top,
+				s = me.get().win.getSelection();
 
 			if (!fakeEvent.getTarget('a') || !s.isCollapsed) {
 				me.reader.onContextMenuHandler(
-						{
-							getTarget: function() {
+					{
+						getTarget: function () {
 								return fakeEvent.getTarget.apply(fakeEvent, arguments);
 							},
 
-							preventDefault: function() {
+						preventDefault: function () {
 								fakeEvent.preventDefault();
 							},
 
-							stopPropagation: function() {
+						stopPropagation: function () {
 								fakeEvent.stopPropagation();
 							},
 
-							getXY: function() {
+						getXY: function () {
 								var xy = fakeEvent.getXY();
 								xy[1] -= t;
 								return xy;
 							}
-						});
+					});
 			}
 		});
 
@@ -389,20 +389,20 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		}
 		else {
 			//NOTE: Are we using these listeners for iPad?
-			on(doc, 'touchstart', function() {
+			on(doc, 'touchstart', function () {
 				Ext.menu.Manager.hideAll();
 			});
 
-			on(doc, 'selectionchange', function(e) {
-				function selectionChange(e) {
+			on(doc, 'selectionchange', function (e) {
+				function selectionChange (e) {
 					var fakeEvent = Ext.EventObject.setEvent(e || event),
 						r = me.get().win.getSelection().getRangeAt(0);
 
-					function showMenu() {
+					function showMenu () {
 						me.reader.onContextMenuHandler({
-								getTarget: function() { return fakeEvent.getTarget.apply(fakeEvent, arguments); },
-								preventDefault: function() { fakeEvent.preventDefault(); },
-								stopPropagation: function() { fakeEvent.stopPropagation(); }
+							getTarget: function () { return fakeEvent.getTarget.apply(fakeEvent, arguments); },
+							preventDefault: function () { fakeEvent.preventDefault(); },
+							stopPropagation: function () { fakeEvent.stopPropagation(); }
 						});
 					}
 
@@ -434,9 +434,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		}
 
 
-		on(doc, 'mouseout', function(e) {
+		on(doc, 'mouseout', function (e) {
 			var evt = Ext.EventObject.setEvent(e || event),
-					target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry');
+				target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry');
 
 			if (target) {
 				me.dismissPopover();
@@ -444,19 +444,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		});
 
 
-		on(doc, 'mouseover', function(e) {
+		on(doc, 'mouseover', function (e) {
 			var evt = Ext.EventObject.setEvent(e || event),
 				target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry'),
 				targetType, href, popContent;
 
-			function getId(e, type) {
+			function getId (e, type) {
 				if (!Ext.fly(e).hasCls(type)) {
 					e = Ext.fly(e).up('.' + type);
 				}
 				return e.getAttribute('href');
 			}
 
-			function getPopoverContent(href) {
+			function getPopoverContent (href) {
 				var fn, clonedFn, redactedPlaceholder;
 				try {
 					fn = doc.querySelector(href);
@@ -471,7 +471,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 				clonedFn = fn.cloneNode(true);
 
 				Ext.each(Ext.fly(clonedFn).query('a'),
-						 function(d) {
+						 function (d) {
 							 var href = d.getAttribute ? d.getAttribute('href') : '';
 							 if (href && href.indexOf('#m') >= 0) {
 								 clonedFn.removeChild(d);
@@ -514,10 +514,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		me.syncInterval = setInterval(me.checkFrame, this.baseFrameCheckIntervalInMillis);
 	},
 
-	getTopBodyStyles: function() {
+	getTopBodyStyles: function () {
 		var mainBodyStyleString = Ext.getBody().getAttribute('class') || '',
-				mainBodyStyleList = mainBodyStyleString.split(' '),
-				styleBlacklist = [
+			mainBodyStyleList = mainBodyStyleString.split(' '),
+			styleBlacklist = [
 					'x-container',
 					'x-reset',
 					'x-unselectable',
@@ -527,10 +527,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		return Ext.Array.difference(mainBodyStyleList, styleBlacklist);
 	},
 
-	onceSettled: function() {
+	onceSettled: function () {
 		var me = this, fn,
-			p = me.settledPromise || new Promise(function(fulfill, reject) {
-				fn = Ext.Function.createBuffered(function() {
+			p = me.settledPromise || new Promise(function (fulfill, reject) {
+				fn = Ext.Function.createBuffered(function () {
 					fn = Ext.emptyFn;
 					Ext.destroy(fire);
 					fire = null;
@@ -548,7 +548,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		return p;
 	},
 
-	checkFrame: function() {
+	checkFrame: function () {
 		if (this.reader.isDestroyed) {clearInterval(this.syncInterval); return;}
 		var doc = this.getDocumentElement(), html;
 		if (doc) {
@@ -580,7 +580,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		}
 	},
 
-	syncFrame: function(content) {
+	syncFrame: function (content) {
 		var i = this.get(), h, contentHeight = 150, ii;
 		//We need the buffer because otherwise the end of the doc would go offscreen
 
@@ -613,7 +613,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		this.fireEvent('sync-height', h);
 	},
 
-	get: function() {
+	get: function () {
 		var iframe, el = this.iframe && this.iframe.el;
 		if (!el) {
 			return null;
@@ -623,7 +623,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		return el;
 	},
 
-	getDocumentElement: function() {
+	getDocumentElement: function () {
 		var iframe, win, dom, doc = this.contentDocumentElement;
 
 		if (!doc) {
@@ -658,7 +658,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		return doc;
 	},
 
-	update: function(html, metaData) {
+	update: function (html, metaData) {
 		var doc = this.getDocumentElement(),
 			body = Ext.get(doc.body || doc.getElementsByName('body')[0]),
 			head = doc.getElementsByTagName('head')[0],
@@ -670,7 +670,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 
 		div.innerHTML = html || '';
 
-		Ext.each(div.querySelectorAll('object object'), function(object) {
+		Ext.each(div.querySelectorAll('object object'), function (object) {
 			object.appendChild(fallback.cloneNode(true));
 		});
 
@@ -678,7 +678,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 
 		//Append some tags to the head
 		if (metaData) {
-			Ext.each(metaNames, function(tag) {
+			Ext.each(metaNames, function (tag) {
 				var meta;
 				if (metaData.hasOwnProperty(tag)) {
 					meta = doc.createElement('meta');
@@ -710,7 +710,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		this.syncInterval = setInterval(this.checkFrame, this.baseFrameCheckIntervalInMillis);
 	},
 
-	getCleanContent: function() {
+	getCleanContent: function () {
 		return this.cleanContent;
 	},
 
@@ -719,7 +719,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 	 * interactions can be handled manually.
 	 * @param {Boolean} should
 	 */
-	setClickthrough: function(should) {
+	setClickthrough: function (should) {
 		var el = this.get();
 		if (!el) {
 			return;
@@ -733,7 +733,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		}
 	},
 
-	hasClickthrough: function() {
+	hasClickthrough: function () {
 		return this.get().hasCls('clickthrough');
 	},
 
@@ -741,18 +741,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 	 * @param {Number} x relative to the window's top left corner
 	 * @param {Number} y relative to the window's top left corner
 	 */
-	elementAt: function(x, y) {
+	elementAt: function (x, y) {
 		var reader = this.reader,
-				iFrameDoc = this.getDocumentElement(),
-				outerDoc = Ext.getDoc().dom,
-				hasClickthrough = this.hasClickthrough(),
-				framePos = reader.getPosition(),
-				scrolledY = reader.getScroll().top(),
-				pickedElement,
-				localX = x - framePos[0],
-				localY = y - framePos[1] + scrolledY;
+			iFrameDoc = this.getDocumentElement(),
+			outerDoc = Ext.getDoc().dom,
+			hasClickthrough = this.hasClickthrough(),
+			framePos = reader.getPosition(),
+			scrolledY = reader.getScroll().top(),
+			pickedElement,
+			localX = x - framePos[0],
+			localY = y - framePos[1] + scrolledY;
 
-		function hasOverlay(element) {
+		function hasOverlay (element) {
 			if (!element || !element.tagName) {
 				return false;
 			}
@@ -762,12 +762,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 			}
 
 			var types = [
-						'application/vnd.nextthought.ntislidedeck',
-						'application/vnd.nextthought.naquestion',
-						'application/vnd.nextthought.ntivideo'
-					],
-					hasObjectTag = element.tagName === 'OBJECT',
-					type;
+					'application/vnd.nextthought.ntislidedeck',
+					'application/vnd.nextthought.naquestion',
+					'application/vnd.nextthought.ntivideo'
+				],
+				hasObjectTag = element.tagName === 'OBJECT',
+				type;
 
 			if (!hasObjectTag) {
 				element = Ext.get(element).up('object');
@@ -810,16 +810,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 	 * @param {Number} x2
 	 * @param {Number} y2
 	 */
-	makeRangeFrom: function(x1, y1, x2, y2) {
+	makeRangeFrom: function (x1, y1, x2, y2) {
 
-		function rangeAtPoint(x, y) {
+		function rangeAtPoint (x, y) {
 			var reader = me.reader,
-					hasClickthrough = me.hasClickthrough(),
-					framePos = reader.getPosition(),
-					scrolledY = reader.getScroll().top(),
-					localX = x - framePos[0],
-					localY = y - framePos[1] + scrolledY,
-					range;
+				hasClickthrough = me.hasClickthrough(),
+				framePos = reader.getPosition(),
+				scrolledY = reader.getScroll().top(),
+				localX = x - framePos[0],
+				localY = y - framePos[1] + scrolledY,
+				range;
 
 			me.setClickthrough(false);
 			range = iFrameDoc.caretRangeFromPoint(localX, localY);
@@ -828,10 +828,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.IFra
 		}
 
 		var me = this,
-				iFrameDoc = this.getDocumentElement(),
-				startRange = rangeAtPoint(x1, y1),
-				endRange = rangeAtPoint(x2, y2),
-				range = iFrameDoc.createRange();
+			iFrameDoc = this.getDocumentElement(),
+			startRange = rangeAtPoint(x1, y1),
+			endRange = rangeAtPoint(x2, y2),
+			range = iFrameDoc.createRange();
 		range.setStart(startRange.startContainer, startRange.startOffset);
 		range.setEnd(endRange.startContainer, endRange.endOffset);
 		return range;

@@ -12,7 +12,7 @@ var ModelDynamicFriendsList = require('../../model/DynamicFriendsList');
 module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		this.LoginStore.registerLoginAction(this.loadGroupsList.bind(this));
 	},
 
-	loadFriendsList: function() {
+	loadFriendsList: function () {
 		var me = this,
 			store = me.GroupStore.getFriendsList(),
 			mimeType = store.model.mimeType,
@@ -34,9 +34,9 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 			return;
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			store.on({
-				load: function(listStore, records, success) {
+				load: function (listStore, records, success) {
 					me.__friendsListsLoaded(listStore, records, success);
 					fulfill();
 				}
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		});
 	},
 
-	loadGroupsList: function() {
+	loadGroupsList: function () {
 		var me = this,
 			store = me.GroupStore.getGroupsList(),
 			collection = Service.getCollection('Groups');
@@ -57,9 +57,9 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 			return;
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			store.on({
-				load: function(listStore, records, success) {
+				load: function (listStore, records, success) {
 					fulfill();
 				}
 			});
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 
 	},
 
-	onLogin: function() {
+	onLogin: function () {
 		var store = this.GroupStore.getFriendsList(),
 			mimeType = store.model.mimeType,
 			collection = Service.getCollectionFor(mimeType, 'FriendsLists');
@@ -91,10 +91,10 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		store.load();
 	},
 
-	__friendsListsLoaded: function(listStore, records) {
+	__friendsListsLoaded: function (listStore, records) {
 		var me = this, cid = this.GroupStore.getMyContactsId();
 
-		(records || []).forEach(function(record) {
+		(records || []).forEach(function (record) {
 			var store;
 
 			if (record.get('Username') === cid) {
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 			if (!record.isDFL) {
 				console.debug('Resolving users from list:', record.get('Username'), 'potentially made # of requests:', record.get('friends').length);
 				UserRepository.getUser(record.get('friends'))
-					.then(function(friends) {
+					.then(function (friends) {
 						store.loadData(friends);
 						store.fireEvent('load', store, friends, true);
 					});
@@ -121,15 +121,15 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		this.__ensureContactsGroup.apply(this, arguments);
 	},
 
-	__setContactGroup: function(record) {
+	__setContactGroup: function (record) {
 		return this.GroupStore.setContactGroup(record);
 	},
 
-	getContactGroup: function() {
+	getContactGroup: function () {
 		return this.GroupeStore.getContactGroup();
 	},
 
-	__ensureContactsGroup: function(store, records, success) {
+	__ensureContactsGroup: function (store, records, success) {
 		var me = this, rec,
 			id = this.GroupStore.getMyContactsId();
 
@@ -142,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 
 		if (!rec) {
 			me.createGroupUnguarded('My Contacts', id, store.getContacts())
-				.then(function(rec) {
+				.then(function (rec) {
 					if (rec && rec.isModel) {
 						rec.hidden = true;
 						me.__setContactGroup(rec);
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 								 'You will not be able to add/remove contacts until this is resolved. ' +
 								 'This error has been reported and we are working on it.'
 						});
-						setTimeout(function() {
+						setTimeout(function () {
 							//ensure this is caught by the error reporter. (and not Ext's layout engine or event handlers)
 							Ext.Error.raise(JSON.stringify({
 								msg: 'Failed to create contacts groupd',
@@ -169,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		}
 	},
 
-	createFriendsListUnguarded: function(displayName, username, friends, dynamic, callback, errorCallback, scope) {
+	createFriendsListUnguarded: function (displayName, username, friends, dynamic, callback, errorCallback, scope) {
 		var me = this,
 			rec = dynamic ? NextThought.model.DynamicFriendsList.create() : NextThought.model.FriendsList.create(),
 			store = dynamic ? me.GroupStore.getGroupsList() : me.GroupStore.getFriendsList();
@@ -183,10 +183,10 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		rec.set('friends', friends || []);
 		rec.set('IsDynamicSharing', !!dynamic);
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			rec.save({
 				scope: me,
-				success: function(record, operation) {
+				success: function (record, operation) {
 					var newStore = me.GroupStore.getListStore(username);
 
 					record.storeId = newStore.storeId;
@@ -200,7 +200,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 
 					fulfill(record);
 				},
-				failure: function(record, operation, response) {
+				failure: function (record, operation, response) {
 					if (errorCallback) {
 						errorCallback.call(scope, record, operation, response);
 					} else if (callback) {
@@ -213,36 +213,36 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		});
 	},
 
-	createGroupUnguarded: function(displayName, username, friends, callback, scope, error) {
+	createGroupUnguarded: function (displayName, username, friends, callback, scope, error) {
 		return this.createFriendsListUnguarded(displayName, username, friends, false, callback, scope, error);
 	},
 
-	deleteContact: function(user, groups) {
+	deleteContact: function (user, groups) {
 		var username = (user && user.isModel) ? user.get('Username') : user;
 
 		return this.removeContact(null, username);
 	},
 
-	removeContact: function(record, contact) {
+	removeContact: function (record, contact) {
 		var store = this.GroupStore.getFriendsList(),
 			userId = typeof contact === 'string' ? contact : contact.get('Username'),
 			count = Globals.getAsynchronousTaskQueueForList(store.getCount());
 
-		return new Promise(function(fulfill, reject) {
-			function finish() {
+		return new Promise(function (fulfill, reject) {
+			function finish () {
 				if (!count.pop()) {
 					fulfill();
 				}
 			}
 
-			function revertEditOnError(group, oldValue) {
-				return function() {
+			function revertEditOnError (group, oldValue) {
+				return function () {
 					console.warn('membership adjustment failed reverting to old value', group, oldValue, arguments);
 					group.set('friends', oldValue);
 				};
 			}
 
-			function remove(record) {
+			function remove (record) {
 				var oldValue;
 				if (record.hasFriend(userId)) {
 					oldValue = record.get('friends').slice();
@@ -257,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 				count = Globals.getAsynchronousTaskQueueForList(1);
 				remove(record);
 			} else {
-				store.eachUnfiltered(function(g) {
+				store.eachUnfiltered(function (g) {
 					//Removing a contact shouldn't remove them from dfls
 					if (!g.isDFL) {
 						remove(g);
@@ -270,7 +270,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 	},
 
 	//TODO: figure out what groupList is suppose to be, I can't tell from the old code
-	addContact: function(username, groupList) {
+	addContact: function (username, groupList) {
 		var contactId = this.GroupStore.getMyContactsId(),
 			contacts = this.GroupStore.getContactGroup(),
 			tracker = Globals.getAsynchronousTaskQueueForList(groupList),
@@ -281,15 +281,15 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 			return Promise.resolve();
 		}
 
-		return new Promise(function(fulfill, reject) {
-			function finish() {
+		return new Promise(function (fulfill, reject) {
+			function finish () {
 				if (!tracker.pop()) {
 					fulfill();
 				}
 			}
 
-			function revertEditOnError(group, oldValue) {
-				return function() {
+			function revertEditOnError (group, oldValue) {
+				return function () {
 					console.warn('membership adjustment failed reverting to old value', group, oldValue, arguments);
 					group.set('friends', oldValue);
 				};
@@ -311,7 +311,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 				contacts.addFriend(username).saveField('friends', undefined, finish, revertEditOnError(contacts, oldContacts));
 			}
 
-			Ext.each(groupList, function(g) {
+			Ext.each(groupList, function (g) {
 				var oldValue;
 				if (g.get('Username') !== contactId && !g.hasFriend(username)) {
 					oldValue = g.get('friends').slice();
@@ -325,11 +325,11 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		});
 	},
 
-	createDFLUnguarded: function(displayName, username, friends, callback, error, scope) {
+	createDFLUnguarded: function (displayName, username, friends, callback, error, scope) {
 		return this.createFriendsListUnguarded(displayName, username, friends, true, callback, error, scope);
 	},
 
-	createList: function(displayName, friends) {
+	createList: function (displayName, friends) {
 		if (!Service.canFriend()) {
 			Ext.Error.raise('Permission denied.	 AppUser is not allowed to create lists');
 			return Promise.reject();
@@ -342,12 +342,12 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 			return Promise.reject();
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			me.createGroupUnguarded(displayName, username, friends)
-				.then(function(record) {
+				.then(function (record) {
 					fulfill(record);
 				})
-				.fail(function(record, operation, response) {
+				.fail(function (record, operation, response) {
 					var msg = response.message,
 						field = response.field,
 						code = response.code;
@@ -369,7 +369,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		});
 	},
 
-	createGroupAndCode: function(btn) {
+	createGroupAndCode: function (btn) {
 		var w = btn.up('window'), username, displayName, me = this;
 
 		if (!Service.canCreateDynamicGroups()) {
@@ -382,15 +382,15 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		console.log('Create group with name ' + displayName);
 		btn.setDisabled(true);
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			me.createDFLUnguarded(displayName, username)
-					.then(function(record) {
+					.then(function (record) {
 						return me.fetchGroupCode(record, displayName);
 					})
-					.then(function(code) {
+					.then(function (code) {
 						fulfill(code);
 					})
-					.fail(function(rec, operation, response) {
+					.fail(function (rec, operation, response) {
 						var msg = response && response.message,
 							field = response && response.field,
 							code = response && response.code;
@@ -415,7 +415,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		});
 	},
 
-	fetchGroupCode: function(record, displayName, success, onError) {
+	fetchGroupCode: function (record, displayName, success, onError) {
 		var link = record.getLink('default-trivial-invitation-code');
 
 		if (!link) {
@@ -423,7 +423,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 			return Promise.reject();
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Ext.Ajax.request({
 				url: link,
 				scope: this,
@@ -431,7 +431,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 				headers: {
 					Accept: 'application/json'
 				},
-				callback: function(q, s, r) {
+				callback: function (q, s, r) {
 					console.log(r.responseText);
 					var result, errorText = 'An error occurred generating \'Group Code\' for ' + displayName;
 					if (s) {
@@ -451,12 +451,12 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		});
 	},
 
-	getGroupCode: function(record) {
+	getGroupCode: function (record) {
 		var dn = record.get('displayName');
 		return this.fetchGroupCode(record, dn);
 	},
 
-	escapeGroupName: function(name) {
+	escapeGroupName: function (name) {
 		//Dataserver blows chunks if on @@ or @( at the beginning
 		//look for these things and yank them out.	This was happening
 		//when manipulating the list by the object url (say for deletion).
@@ -464,11 +464,11 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		return name.replace(/[^0-9A-Z\-@\+\._]/ig, '');
 	},
 
-	generateUsername: function(newGroupName) {
+	generateUsername: function (newGroupName) {
 		return this.escapeGroupName(newGroupName) + '-' + $AppConfig.username + '_' + guidGenerator();
 	},
 
-	joinGroupWithCode: function(code, btn) {
+	joinGroupWithCode: function (code, btn) {
 		var data = {'invitation_codes': [code]},
 			url = $AppConfig.userObject.getLink('accept-invitations'),
 			me = this;
@@ -477,7 +477,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 			return Promise.reject({field: 'Code', message: 'There was an error applying your Group Code.'});
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Ext.Ajax.request({
 				url: getURL(url),
 				scope: this,
@@ -486,7 +486,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 				headers: {
 					Accept: 'application/json'
 				},
-				callback: function(q, success, r) {
+				callback: function (q, success, r) {
 					var store;
 
 					if (!success) {
@@ -506,10 +506,10 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		});
 	},
 
-	deleteGroup: function(record) {
+	deleteGroup: function (record) {
 		if (record.get('Username') !== this.getMyContactsId()) {
 			record.destroy({
-				callback: function(recs, op, success) {
+				callback: function (recs, op, success) {
 					if (!success) {
 						alert('Unable to delete group.');
 					}
@@ -518,7 +518,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		}
 	},
 
-	leaveGroup: function(record) {
+	leaveGroup: function (record) {
 		var link = record.getLink('my_membership'),
 			groupStore = this.GroupStore.getGroupsList(),
 			dn = record.get('displayName'), me = this;
@@ -527,7 +527,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 			return Promise.reject('Unable to leave ' + dn);
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Ext.Ajax.request({
 				url: link,
 				scope: this,
@@ -535,7 +535,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 				headers: {
 					Accept: 'application/json'
 				},
-				callback: function(q, s, r) {
+				callback: function (q, s, r) {
 					console.log(r.responseText);
 					var errorText = 'An error occurred leaving	' + dn,
 						result;
@@ -560,7 +560,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 		});
 	},
 
-	getMyContactsId: function() {
+	getMyContactsId: function () {
 		if (!this.myContactsId) {
 			this.myContactsId = Ext.String.format('mycontacts-{0}', $AppConfig.username);
 		}

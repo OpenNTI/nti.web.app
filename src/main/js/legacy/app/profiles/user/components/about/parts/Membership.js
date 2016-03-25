@@ -19,14 +19,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.seeAllEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.mon(this.seeAllEl, 'click', this.onSeeAll.bind(this));
 	},
 
 
-	onSeeAll: function() {
+	onSeeAll: function () {
 		this.gotoSeeAll();
 	}
 });

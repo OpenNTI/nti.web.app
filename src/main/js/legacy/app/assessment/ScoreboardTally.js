@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.ScoreboardTall
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.correctCount.update('');
 
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.ScoreboardTall
 	},
 
 
-	setMessage: function(txt) {
+	setMessage: function (txt) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setMessage.bind(this, txt));
 			return;
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.ScoreboardTall
 	},
 
 
-	setGreyText: function(text) {
+	setGreyText: function (text) {
 		if (!this.rendered) {
 			this.on({single: true, afterrender: this.setGreyText.bind(this, [text])});
 			return;
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.ScoreboardTall
 		}
 	},
 
-	setGreenText: function(text) {
+	setGreenText: function (text) {
 		if (!this.rendered) {
 			this.on({single: true, afterrender: this.setGreenText.bind(this, [text])});
 			return;
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.ScoreboardTall
 		this.correctBox.show().update(text);
 	},
 
-	setRedText: function(text) {
+	setRedText: function (text) {
 		if (!this.rendered) {
 			this.on({single: true, afterrender: this.setRedText.bind(this, [text])});
 			return;
@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.ScoreboardTall
 		}
 	},
 
-	setTally: function(correct, total, noScore) {
+	setTally: function (correct, total, noScore) {
 		//force Integers or NaN
 		correct = parseInt(correct, 10);
 		total = parseInt(total, 10);
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.ScoreboardTall
 			console.error('Error getting message: ' + e.message, Globals.getError(e));
 		}
 
-		function updateTpl() {
+		function updateTpl () {
 			me.correctCount.update(correct || 0);
 
 			if (me.incorrectCount) {

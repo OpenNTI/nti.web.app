@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		/^id/
 	],
 
-	init: function() {
+	init: function () {
 		var me = this;
 
 		me.LoginActions = LoginActions.create();
@@ -62,14 +62,14 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		me.NavigationActions = NavigationActions.create();
 		me.UserProfileActions = UserActions.create();
 
-		window.addEventListener('popstate', function(e) {
+		window.addEventListener('popstate', function (e) {
 			me.handleCurrentState();
 		});
 	},
 
 
-	load: function() {
-		if(window.NextThought){
+	load: function () {
+		if(window.NextThought) {
 			window.NextThought.isInitialized = true;
 		}
 		this.mon(this.LoginStore, 'login-ready', 'onLogin');
@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	},
 
 
-	onLogin: function() {
+	onLogin: function () {
 		var masterView = Ext.widget('master-view'),
 			nav = this.getNav(),
 			body = this.getBody();
@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	},
 
 
-	handleCurrentState: function() {
+	handleCurrentState: function () {
 		var path = Globals.trimRoute(window.location.pathname),
 			hash = window.location.hash,
 			parts = path.split('/');
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	},
 
 
-	handleFragmentRoute: function(fragment) {
+	handleFragmentRoute: function (fragment) {
 		var path = '',
 			parts = fragment.split('/'),
 			subRoute = '',
@@ -182,14 +182,14 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		return this.handleRoute(document.title, path);
 	},
 
-	__shouldMark: function(route) {
+	__shouldMark: function (route) {
 		if (!route) { return false; }
 
 		var shouldMark = false;
 
 		route = Globals.trimRoute(route);
 
-		this.MARK_ROUTE.forEach(function(regex) {
+		this.MARK_ROUTE.forEach(function (regex) {
 			shouldMark = shouldMark || regex.test(route);
 		});
 
@@ -197,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	},
 
 
-	maybeMarkReturn: function(title, route) {
+	maybeMarkReturn: function (title, route) {
 		var nav = this.NavigationActions,
 			newRouteShouldMark = this.__shouldMark(route),
 			oldRouteShouldMark = this.__shouldMark(this.currentRoute);
@@ -208,13 +208,13 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	},
 
 
-	handleRoute: function(title, route, precache) {
+	handleRoute: function (title, route, precache) {
 		var me = this, location;
 
-		function handleRoute(r, p) {
+		function handleRoute (r, p) {
 			var tries = 0;
 
-			return new Promise(function handle(fulfill, reject) {
+			return new Promise(function handle (fulfill, reject) {
 				var body = me.getBody();
 
 				tries += 1;
@@ -263,7 +263,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	},
 
 
-	onRoute: function(title, route) {
+	onRoute: function (title, route) {
 		var body = this.getBody(),
 			store = this.ContextStore;
 
@@ -272,13 +272,13 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		route = route.split('#')[0];
 
 		body.getCurrentContext()
-			.then(function(context) {
+			.then(function (context) {
 				store.setContext(context, title || document.title, route);
 			});
 	},
 
 
-	__mergeTitle: function(title) {
+	__mergeTitle: function (title) {
 		var rootTitle = getString('application.title-bar-prefix', 'NextThought');
 
 		title = rootTitle + ': ' + title;
@@ -287,7 +287,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	},
 
 
-	__mergeRoute: function(route) {
+	__mergeRoute: function (route) {
 		var location = Globals.getURLParts(route),
 			pathname;
 
@@ -315,20 +315,20 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	},
 
 
-	__doRoute: function(fn, state, title, route, precache) {
+	__doRoute: function (fn, state, title, route, precache) {
 		var me = this,
 			body = me.getBody(),
 			myTitle = me.__mergeTitle(title),
 			myRoute = me.__mergeRoute(route),
 			allow = body.allowNavigation();
 
-		function finish() {
+		function finish () {
 			history[fn](state || history.state, myTitle, myRoute);
 			document.title = title;
 			me.handleRoute(title, route, precache);
 		}
 
-		function stopNav() {
+		function stopNav () {
 			console.warn('NAVIGATION STOPPED:', title, route);
 		}
 
@@ -344,17 +344,17 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	},
 
 
-	pushRoute: function(title, route, precache) {
+	pushRoute: function (title, route, precache) {
 		this.__doRoute('pushState', null, title, route, precache);
 	},
 
 
-	replaceRoute: function(title, route, precache, fragment) {
+	replaceRoute: function (title, route, precache, fragment) {
 		this.__doRoute('replaceState', null, title, route, precache);
 	},
 
 
-	pushRouteState: function(state, title, route, precache, fragment) {
+	pushRouteState: function (state, title, route, precache, fragment) {
 		var body = this.getBody(),
 			historyState = {};
 
@@ -364,7 +364,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	},
 
 
-	replaceRouteState: function(state, title, route, precache, fragment) {
+	replaceRouteState: function (state, title, route, precache, fragment) {
 		var body = this.getBody(),
 			historyState = {};
 
@@ -374,7 +374,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 	},
 
 
-	setTitle: function(title) {
+	setTitle: function (title) {
 		title = this.__mergeTitle(title);
 
 		document.title = title;

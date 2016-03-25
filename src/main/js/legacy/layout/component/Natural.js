@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.layout.component.Natural', {
 	type: 'natural',
 
 
-	beginLayout: function(ownerContext) {
+	beginLayout: function (ownerContext) {
 		this.callParent(arguments);
 		if (!ownerContext.bodyContext) {
 			try {
@@ -19,12 +19,12 @@ module.exports = exports = Ext.define('NextThought.layout.component.Natural', {
 	},
 
 
-	publishInnerWidth: function(ownerContext, width) {
+	publishInnerWidth: function (ownerContext, width) {
 		return (ownerContext.bodyContext || ownerContext).setWidth(width, false);
 	},
 
 
-	publishInnerHeight: function(ownerContext, height) {
+	publishInnerHeight: function (ownerContext, height) {
 		return (ownerContext.bodyContext || ownerContext).setHeight(height, false);
 	}
 });

@@ -6,7 +6,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	extend: 'NextThought.app.content.content.Index',
 	alias: 'widget.course-assessment-assignment',
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.reader = NextThought.app.contentviewer.Index.create(this.readerConfig);
@@ -21,24 +21,24 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	allowNavigation: function() {
+	allowNavigation: function () {
 		return this.reader ? this.reader.allowNavigation() : true;
 	},
 
 
-	beforeRouteChange: function() {
+	beforeRouteChange: function () {
 		return this.reader && this.reader.beforeRouteChange();
 	},
 
 
-	handleSubmission: function(assignmentId, historyItemLink) {
+	handleSubmission: function (assignmentId, historyItemLink) {
 		if (this.onSubmission) {
 			this.onSubmission(assignmentId, historyItemLink);
 		}
 	},
 
 
-	updateHistory: function(h) {
+	updateHistory: function (h) {
 		var reader = this.reader;
 
 		if (reader && reader.updateHistory) {

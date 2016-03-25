@@ -1,7 +1,7 @@
 var Ext = require('extjs');
 
 
-module.exports = exports = Ext.define('NextThought.overrides.builtins.Console', function() {
+module.exports = exports = Ext.define('NextThought.overrides.builtins.Console', function () {
 
 	$AppConfig.maxLogCapture = $AppConfig.maxLogCapture || 20;
 
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Console', 
 	Ext.copyTo(originalLogFns, console, fns, true);
 
 
-	function collect(string) {
+	function collect (string) {
 		if (log.last() !== string) {
 			log.push(string);
 		}
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Console', 
 	}
 
 
-	function getReportableValue(val) {
+	function getReportableValue (val) {
 		var v = val;
 		if (!val) {
 			v = val;
@@ -73,11 +73,11 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Console', 
 	}
 
 
-	function getReporter(name) {
+	function getReporter (name) {
 		if (ignored.hasOwnProperty(name) || !$AppConfig.enableLogCapture) {
-			return function() {};
+			return function () {};
 		}
-		return function() {
+		return function () {
 
 			try {
 				//get a trace (in WebKit)
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Console', 
 
 
 
-	function disableLogging() {
+	function disableLogging () {
 		var l = fns.length - 1;
 		for (l; l >= 0; l--) {
 			if (fns[l]) {
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Console', 
 	}
 
 
-	function enableLogging() {
+	function enableLogging () {
 		var l = fns.length - 1;
 		for (l; l >= 0; l--) {
 			if (fns[l]) {
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Console', 
 	}
 
 	try {
-		console.getCollected = function() {
+		console.getCollected = function () {
 			try {
 				return log;
 			}

@@ -7,17 +7,17 @@ var WindowsStateStore = require('./StateStore');
 module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 	},
 
-	__resolveBeforeShow: function(ntiid) {
+	__resolveBeforeShow: function (ntiid) {
 		return Service.getObject(ntiid);
 	},
 
-	hasWindow: function(obj) {
+	hasWindow: function (obj) {
 		return this.WindowStore.hasComponentForMimeType(obj.mimeType);
 	},
 
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 	 * @param  {Model} obj model to get url for
 	 * @return {String}		the url
 	 */
-	getRouteForObject: function(obj) {
+	getRouteForObject: function (obj) {
 		var id = obj.getId(),
 			mimeType = obj.mimeType;
 
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 	 * @param  {Array} path			 the path to show for the model
 	 * @param  {Element} el			  element to show the note opening from
 	 */
-	pushWindow: function(objectOrNTIID, state, el, monitors, precache) {
+	pushWindow: function (objectOrNTIID, state, el, monitors, precache) {
 		var id = objectOrNTIID,
 			mimeType;
 
@@ -67,11 +67,11 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 		this.WindowStore.firePushWindow(id, mimeType, state);
 	},
 
-	closeWindow: function() {
+	closeWindow: function () {
 		this.WindowStore.firePushWindow(null);
 	},
 
-	closeActiveWindow: function() {
+	closeActiveWindow: function () {
 		this.WindowStore.fireCloseWindow();
 	},
 
@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 	 * @param  {String|Model} objectOrNTIID the object or ntiid of the object to show
 	 * @return {Promise}		  fulfills when the window is open
 	 */
-	showWindow: function(objectOrNTIID, state, el, monitors, precache) {
+	showWindow: function (objectOrNTIID, state, el, monitors, precache) {
 		var me = this, id, cache,
 			fetchObject;
 
@@ -107,15 +107,15 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 			fetchObject = Promise.resolve(objectOrNTIID);
 		}
 
-		return fetchObject.then(function(result) {
+		return fetchObject.then(function (result) {
 			me.WindowStore.removeCache(id);
 			me.WindowStore.fireShowWindow(result, state, el, monitors, precache);
-		}).fail(function(error) {
+		}).fail(function (error) {
 			me.WindowStore.fireShowWindow(error, state, el, monitors, precache);
 		});
 	},
 
-	showWindowWithMimeType: function(id, mimeType, state, rawId) {
+	showWindowWithMimeType: function (id, mimeType, state, rawId) {
 		var me = this,
 			resolver = me.WindowStore.getResolverFor(mimeType);
 
@@ -125,10 +125,10 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 		}
 
 		resolver(id, rawId)
-			.then(function(result) {
+			.then(function (result) {
 				me.WindowStore.fireShowWindow(result, state);
 			})
-			.fail(function(error) {
+			.fail(function (error) {
 				me.WindowStore.fireShowWindow(error);
 			});
 	}

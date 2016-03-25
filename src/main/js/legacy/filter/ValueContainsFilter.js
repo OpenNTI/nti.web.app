@@ -6,7 +6,7 @@ module.exports = exports = Ext.define('NextThought.filter.ValueContainsFilter', 
 	extend: 'NextThought.filter.Filter',
 	alternateClassName: 'NextThought.ValueContainsFilter',
 
-	compareValue: function(value, testedValue) {
+	compareValue: function (value, testedValue) {
 		var result = false;
 
 		if (value.isModel && value.isGroup) {

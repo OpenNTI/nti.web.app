@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.VideoPosters'
 		YOUTUBE: 'youtube',
 		VIMEO: 'vimeo',
 
-		getResolver: function(source) {
+		getResolver: function (source) {
 			var service = source.service,
 				cls = Ext.ClassManager.getByAlias('resolvers.videoservices.' + service);
 			if (!cls) {
@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.VideoPosters'
 			return cls.create({source: source});
 		},
 
-		resolveForSource: function(source) {
+		resolveForSource: function (source) {
 			var resolver = this.getResolver(source);
 
 			if (!resolver) {
@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.VideoPosters'
 		},
 
 
-		resolvePoster: function(type, id) {
+		resolvePoster: function (type, id) {
 			var resolve;
 
 			if (type === this.YOUTUBE) {

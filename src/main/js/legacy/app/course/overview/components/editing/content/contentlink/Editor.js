@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-contentlink-editor',
 
 	statics: {
-		getSubEditors: function() {
+		getSubEditors: function () {
 			var base = NextThought.app.course.overview.components.editing.content.contentlink.types;
 
 			return [

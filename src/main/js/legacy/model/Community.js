@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 		{ name: 'avatarURL', type: 'AvatarURL' },
 		{ name: 'backgroundURL', type: 'string'},
 		{ name: 'about', type: 'string'},
-		{ name: 'displayName', convert: function(v, r) {return r.getName();}},
+		{ name: 'displayName', convert: function (v, r) {return r.getName();}},
 
 		//UI fields
 		{ name: 'avatarInitials', type: 'string', persist: false},
@@ -37,22 +37,22 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 	],
 
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.initAvatar();
 	},
 
 
-	getName: function() {
+	getName: function () {
 		return this.get('alias') || this.get('realname');
 	},
 
-	toString: function() {
+	toString: function () {
 		return this.getName();
 	},
 
-	getProfileUrl: function() {
+	getProfileUrl: function () {
 		var id = this.get('Username');
 		if (id && this.getLink('Activity')) {
 			return '/community/' + ParseUtils.encodeForURI(id);
@@ -61,20 +61,20 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 		return null;
 	},
 
-	hasActivity: function() {
+	hasActivity: function () {
 		return !!this.getLink('Activity');
 	},
 
 
-	isDefaultForum: function(forum) {
+	isDefaultForum: function (forum) {
 		return forum && forum.get('title') === 'Forum';
 	},
 
 
-	getDefaultForum: function() {
+	getDefaultForum: function () {
 		return this.getForumList()
-			.then(function(forums) {
-				forums = forums.filter(function(forum) {
+			.then(function (forums) {
+				forums = forums.filter(function (forum) {
 					return forum.get('title') === 'Forum';
 				});
 
@@ -83,17 +83,17 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 	},
 
 
-	getForums: function() {
+	getForums: function () {
 		return this.getForumList()
-			.then(function(forums) {
-				return forums.filter(function(forum) {
+			.then(function (forums) {
+				return forums.filter(function (forum) {
 					return forum.get('title') !== 'Forum';
 				});
 			});
 	},
 
 
-	getForumList: function(force) {
+	getForumList: function (force) {
 		if (this.loadForumList && !force) {
 			return this.loadForumList;
 		}
@@ -105,20 +105,20 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 		}
 
 		this.loadForumList = Service.request(link)
-			.then(function(response) {
+			.then(function (response) {
 				return ParseUtils.parseItems(response)[0];
 			})
-			.then(function(board) {
+			.then(function (board) {
 				var content = board && board.getLink('contents');
 
 				return content ? Service.request(content) : Promise.reject('No contents link');
 			})
-			.then(function(response) {
+			.then(function (response) {
 				var json = JSON.parse(response);
 
 				return ParseUtils.parseItems(json.Items);
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Failed to load forum list for community:', reason);
 
 				return [];

@@ -6,7 +6,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	extend: 'NextThought.app.course.enrollment.components.parts.RadioGroup',
 	alias: 'widget.enrollment-split-radio',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.options = [{
 			text: this.text,
 			value: this.value,
@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}];
 	},
 
-	setValue: function(value) {
+	setValue: function (value) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setValue.bind(this, value));
 			return;
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		checkbox.dom.checked = this.value === value;
 	},
 
-	getValue: function() {
+	getValue: function () {
 		var isChecked = this.el && this.el.down('input[type=radio]:checked'),
 			val = {};
 

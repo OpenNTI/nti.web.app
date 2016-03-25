@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 
 	EnrolledWordingKey: 'course-info.description-widget.enrolled',
 
-	buildEnrollmentSteps: function(course) {
+	buildEnrollmentSteps: function (course) {
 		var enrollmentOption = course.getEnrollmentOption(this.NAME),
 			openOption = course.getEnrollmentOption(NextThought.app.course.enrollment.options.OpenEnrollment.NAME),
 			storeOption = course.getEnrollmentOption(NextThought.app.course.enrollment.options.StoreEnrollment.NAME),
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		//enrollmentOption.refunds = true;
 		//enrollmentOption.refundDate = enrollmentOption.OU_RefundCutOffDate && Ext.Date.format(enrollmentOption.OU_RefundCutOffDate, this.DateFormat);
 
-		function getEnrollAndPayLink() {
+		function getEnrollAndPayLink () {
 			var link = course.getEnrollAndPayLink();
 
 			if (!link) {
@@ -44,8 +44,8 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			hasOpenOption: openOption && openOption.Enabled,
 			hasStoreOption: storeOption && storeOption.IsAvailable,
 			enrollmentOption: enrollmentOption,
-			isComplete: function() {
-				return new Promise(function(fulfill, reject) {
+			isComplete: function () {
+				return new Promise(function (fulfill, reject) {
 					if ($AppConfig.userObject.get('admission_status') === 'Admitted') {
 						fulfill();
 					} else {
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 					}
 				});
 			},
-			complete: function(cmp, data) {
+			complete: function (cmp, data) {
 				var link = $AppConfig.userObject.getLink('fmaep.admission');
 
 				if (!link) {
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			xtype: 'enrollment-enroll',
 			name: 'Enrollment',
 			enrollmentOption: enrollmentOption,
-			isComplete: function() {
+			isComplete: function () {
 				var links = enrollmentOption.Links,
 					link = Service.getLinkFrom(links, 'fmaep.is.pay.done'),
 					crn = enrollmentOption.NTI_CRN,
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 				return Service.post(link, {
 					crn: crn,
 					term: term
-				}).then(function(response) {
+				}).then(function (response) {
 					var json = Ext.JSON.decode(response, true);
 
 					if (json.Status !== 200) {
@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 					}
 				});
 			},
-			complete: function(cmp, data) {
+			complete: function (cmp, data) {
 				var link = getEnrollAndPayLink(),
 					crn = enrollmentOption.NTI_CRN,
 					term = enrollmentOption.NTI_Term,
@@ -123,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		this.__addStep({
 			xtype: '',
 			name: 'Payment',
-			isComplete: function() {
+			isComplete: function () {
 				return Promise.resolve();
 			}
 		}, steps);
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			xtype: 'enrollment-confirmation',
 			name: 'Confirmation',
 			heading: 'You\'re Enrolled to Earn College Credit.',
-			isComplete: function() { return Promise.resolve(); },
+			isComplete: function () { return Promise.resolve(); },
 			enrollmentOption: enrollmentOption
 		}, steps);
 
@@ -142,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	},
 
 
-	__getEnrollmentText: function(course, option) {
+	__getEnrollmentText: function (course, option) {
 		var state = {}, now = new Date(),
 			details = this.__getOptionDetails(course, option),
 			dropDate = details.DropCutOff && Ext.Date.format(details.DropCutOff, this.DateFormat),
@@ -168,9 +168,9 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			state = this.getWording('unsupported');
 			//Hard code this for now, since the strings aren't updating correctly on the server
 			state = !Ext.Object.isEmpty(state) ? state : {
-						title: 'Earn College Credit',
-						information: 'Your browser (FireFox) does not support the enrollment process. Please try Chrome, Safari, or Internet Explorer.'
-					};
+				title: 'Earn College Credit',
+				information: 'Your browser (FireFox) does not support the enrollment process. Please try Chrome, Safari, or Internet Explorer.'
+			};
 			state.price = details.Price;
 		} else if (details.AdmissionState === 'Rejected') {//if our application was rejected
 			state = this.getWording('admissionRejected');
@@ -205,7 +205,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	},
 
 
-	__getOptionDetails: function(course, option) {
+	__getOptionDetails: function (course, option) {
 		var drop = option.OU_DropCutOffDate,
 			enroll = option.EnrollCutOffDate,
 			rv, unsupported = false;
@@ -228,12 +228,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	},
 
 
-	__getForCreditEnrolled: function(details) {
+	__getForCreditEnrolled: function (details) {
 		var me = this;
 
 		return {
 			name: me.NAME,
-			loaded: new Promise(function(fulfill, reject) {
+			loaded: new Promise(function (fulfill, reject) {
 				var state = me.getWording('enrolled', {
 					date: Ext.Date.format(details.StartDate, me.DateFormat),
 					drop: ''
@@ -254,7 +254,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	},
 
 
-	buildEnrollmentDetails: function(course, details) {
+	buildEnrollmentDetails: function (course, details) {
 		var me = this,	catalogData, link, p,
 			name = me.NAME,
 			loadDetails,
@@ -276,7 +276,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			BaseOption: me.isBase,
 			Enrolled: option.IsEnrolled,
 			Price: option.Price,
-			doEnrollment: function(cmp) {
+			doEnrollment: function (cmp) {
 				cmp.fireEvent('enroll-in-course', course, name);
 			},
 			undoEnrollment: null
@@ -284,7 +284,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 
 		if (link && !option.IsEnrolled) {
 			p = Service.request(link)
-				.then(function(json) {
+				.then(function (json) {
 					json = Ext.decode(json, true);
 
 					if (json) {
@@ -295,7 +295,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 						}
 					}
 				})
-				.fail(function(reason) {
+				.fail(function (reason) {
 					console.error('course detail request failed:', reason);
 
 					option.API_DOWN = true;
@@ -305,7 +305,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		}
 
 
-		loadDetails = p.then(function() {
+		loadDetails = p.then(function () {
 			catalogData.Wording = me.__getEnrollmentText(details, option);
 
 			return catalogData;

@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ChatLinks', {
 	 * property), where the object is an instance of {NextThought.model.User}.
 	 */
 
-	shouldShowChat: function() {
+	shouldShowChat: function () {
 		//We show the chat button if the following conditions are true
 		//1)We can chat and we have a user object
 		//2)The profile we are looking at is not us
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ChatLinks', {
 		return false;
 	},
 
-	maybeShowChat: function(el) {
+	maybeShowChat: function (el) {
 		if (!el) {
 			console.error('Error: No chat element was passed to maybeShowChat.');
 			return;
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ChatLinks', {
 		me.mon(el, {click: me.onChatWith, scope: me});
 	},
 
-	onChatWith: function(e) {
+	onChatWith: function (e) {
 		e.stopEvent();
 		var ChatActions = NextThought.app.chat.Actions.create();
 		if (!this.userObject && !this.user) {

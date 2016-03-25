@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 	cls: 'community-profile profile',
 	layout: 'none',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.NavActions = NextThought.app.navigation.Actions.create();
@@ -59,11 +59,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		});
 	},
 
-	getContext: function() {
+	getContext: function () {
 		return this.activeCommunity;
 	},
 
-	onActivate: function() {
+	onActivate: function () {
 		var cmp = this.bodyCmp.getLayout().getActiveItem();
 
 		if (cmp) {
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		this.headerCmp.fireEvent('activate');
 	},
 
-	onDeactivate: function() {
+	onDeactivate: function () {
 		var cmp = this.bodyCmp.getLayout().getActiveItem();
 
 		if (cmp) {
@@ -83,11 +83,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		this.headerCmp.fireEvent('deactivate');
 	},
 
-	getRouteTitle: function() {
+	getRouteTitle: function () {
 		return this.activeCommunity ? this.activeCommunity.getName() : '';
 	},
 
-	setActiveEntity: function(id, entity) {
+	setActiveEntity: function (id, entity) {
 		var me = this,
 			url = Service.getResolveUserURL(id);
 
@@ -96,12 +96,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		}
 
 		return Service.request(url)
-			.then(function(response) {
+			.then(function (response) {
 				var json = JSON.parse(response) || {};
 
 				return ParseUtils.parseItems(json.Items)[0];
 			})
-			.then(function(community) {
+			.then(function (community) {
 				me.activeCommunity = community;
 
 				//Call this with force to reload the forums incase there are any new ones
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			});
 	},
 
-	setActiveItem: function(xtype) {
+	setActiveItem: function (xtype) {
 		var cmp = this.down(xtype),
 			current = this.bodyCmp.getLayout().getActiveItem();
 
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		return cmp;
 	},
 
-	setState: function(state) {
+	setState: function (state) {
 		state = state || {};
 
 		this.activeState = state;
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		this.NavActions.setActiveContent(this.activeCommunity);
 	},
 
-	showAllActivity: function(route, subRoute) {
+	showAllActivity: function (route, subRoute) {
 		var cmp = this.setActiveItem('profile-community-activity'),
 			link = this.activeCommunity.getLink('Activity');
 
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			.then(cmp.handleRoute.bind(cmp, subRoute, route.precache));
 	},
 
-	showTopicActivity: function(route, subRoute) {
+	showTopicActivity: function (route, subRoute) {
 		var me = this,
 			cmp = me.setActiveItem('profile-community-activity'),
 			entity = me.activeCommunity,
@@ -177,7 +177,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			cmp.setPostContainer(null);
 
 			entity.getForums()
-				.then(function(topics) {
+				.then(function (topics) {
 					var current, i;
 
 					for (i = 0; i < topics.length; i++) {
@@ -195,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 
 					return topic;
 				})
-				.fail(function(reason) {
+				.fail(function (reason) {
 					console.error('failed to load forum: ', reason);
 
 					cmp.setSourceURL(entity.getLink('Activity'));
@@ -204,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 					entity.getDefaultForum()
 						.then(cmp.setPostContainer.bind(cmp));
 				})
-				.then(function(forum) {
+				.then(function (forum) {
 					var link = forum.getLink('contents');
 
 					cmp.setSourceURL(link);
@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 			.then(cmp.handleRoute.bind(cmp, subRoute, route.precache));
 	},
 
-	showMembers: function(route, subRoute) {
+	showMembers: function (route, subRoute) {
 		var cmp = this.setActiveItem('profile-community-membership');
 
 		this.setState();
@@ -230,17 +230,17 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		return cmp.handleRoute(subRoute, route.precache);
 	},
 
-	updateCommunity: function() {
+	updateCommunity: function () {
 		this.setState(this.activeState);
 
 		//TODO: reload what ever is active on the body
 	},
 
-	gotoMembership: function() {
+	gotoMembership: function () {
 		this.pushRoute('Members', '/members');
 	},
 
-	onShowForum: function(forum) {
+	onShowForum: function (forum) {
 		if (forum === 'all') {
 			this.pushRoute('Activity', '/');
 			return;
@@ -255,7 +255,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		});
 	},
 
-	joinCommunity: function() {
+	joinCommunity: function () {
 		var me = this,
 			join, link = me.activeCommunity.getLink('join');
 
@@ -266,18 +266,18 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		}
 
 		join
-			.then(function(response) {
+			.then(function (response) {
 				me.activeCommunity = ParseUtils.parseItems(response)[0];
 				me.updateCommunity();
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Error joining community: ', reason);
 				alert('Unable to join community at this time.');
 			});
 
 	},
 
-	leaveCommunity: function() {
+	leaveCommunity: function () {
 		var me = this,
 			leave, link = me.activeCommunity.getLink('leave');
 
@@ -288,17 +288,17 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		}
 
 		leave
-			.then(function(response) {
+			.then(function (response) {
 				me.activeCommunity = ParseUtils.parseItems(response)[0];
 				me.updateCommunity();
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Error leaving community: ', reason);
 				alert('Unable to leave community at this time.');
 			});
 	},
 
-	showCommunity: function() {
+	showCommunity: function () {
 		var me = this,
 			show, link = me.activeCommunity.getLink('unhide');
 
@@ -309,17 +309,17 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		}
 
 		show
-			.then(function(response) {
+			.then(function (response) {
 				me.activeCommunity = ParseUtils.parseItems(response)[0];
 				me.updateCommunity();
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Error hiding community: ', reason);
 				alert('Unable to show community at this time.');
 			});
 	},
 
-	hideCommunity: function() {
+	hideCommunity: function () {
 		var me = this,
 			hide, link = me.activeCommunity.getLink('hide');
 
@@ -330,17 +330,17 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 		}
 
 		hide
-			.then(function(response) {
+			.then(function (response) {
 				me.activeCommunity = ParseUtils.parseItems(response)[0];
 				me.updateCommunity();
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Error hiding community: ', reason);
 				alert('Unable to hide community at this time.');
 			});
 	},
 
-	getRouteForPath: function(path, community) {
+	getRouteForPath: function (path, community) {
 		var forum = path[1],//the first one should be the index
 			forumId = forum.getId(),
 			path = '/';

@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -33,14 +33,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.entriesEl, 'click', this.onEntryClick.bind(this));
 	},
 
 
-	addEntry: function(data) {
+	addEntry: function (data) {
 		var entry = Ext.get(this.entryTpl.append(this.entriesEl, data));
 
 		if (data && data.member) {
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	updateAvatar: function(entry, record) {
+	updateAvatar: function (entry, record) {
 		var avatar = entry && entry.down('.avatar-pic'), a;
 
 		if (avatar) {
@@ -59,17 +59,17 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	removeAll: function() {
+	removeAll: function () {
 		this.entriesEl.dom.innerHTML = '';
 	},
 
 
-	showEmptyText: function(text) {
+	showEmptyText: function (text) {
 		this.emptyTpl.append(this.entriesEl, {text: text});
 	},
 
 
-	onEntryClick: function(e, el) {
+	onEntryClick: function (e, el) {
 		var entryEl = e.getTarget('.entry[data-route]'),
 			route = entryEl && entryEl.getAttribute('data-route'),
 			parts;

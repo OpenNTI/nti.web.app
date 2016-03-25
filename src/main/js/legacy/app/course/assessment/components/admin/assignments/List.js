@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		{xtype: 'container', layout: 'none', itemContainer: true}
 	],
 
-	getItemsContainer: function() {
+	getItemsContainer: function () {
 		return this.down('[itemContainer]');
 	}
 });

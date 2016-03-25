@@ -44,11 +44,11 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 		QUESTION: 'question',
 		ERROR: 'error',
 
-		alert: function() {
+		alert: function () {
 			this.show.apply(this, arguments);
 		},
 
-		show: function() {
+		show: function () {
 			this.SHARED_INSTANCE = this.SHARED_INSTANCE || this.create();
 
 			this.SHARED_INSTANCE.show.apply(this.SHARED_INSTANCE, arguments);
@@ -73,12 +73,12 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	items: [],
 
 	childEls: ['body'],
-	getTargetEl: function() {
+	getTargetEl: function () {
 		return this.body;
 	},
 
 
-	getDockedItems: function() {
+	getDockedItems: function () {
 		return [];
 	},
 
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 		buttonEl: '.button-body'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.buttonText = {
@@ -125,17 +125,17 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', 'handleClick', this);
 	},
 
 
-	applyState: function() {},
+	applyState: function () {},
 
 
-	startClose: function() {
+	startClose: function () {
 		this.addCls('closing');
 		this.removeCls('showing');
 
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	},
 
 
-	handleClick: function(e) {
+	handleClick: function (e) {
 		//if we aren't closable then there is no need to check the others
 		if (!this.isClosable) {
 			return;
@@ -158,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	},
 
 
-	parseButtons: function(cfg) {
+	parseButtons: function (cfg) {
 		var btns = cfg.buttons,
 			btnCfg = {}, i, text, order,
 			lookUp = ['ok', 'yes', 'no', 'cancel'],
@@ -183,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	},
 
 
-	getButtons: function(cfg) {
+	getButtons: function (cfg) {
 		var btns = cfg.buttons;
 
 		if (!btns) {
@@ -205,14 +205,14 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	},
 
 
-	__maybeDoNotShowAgain: function(cfg) {
+	__maybeDoNotShowAgain: function (cfg) {
 		var key = cfg.doNotShowAgainKey;
 
 		return key && this.DO_NOT_SHOW[key];
 	},
 
 
-	doNotShowAgain: function(cfg) {
+	doNotShowAgain: function (cfg) {
 		var primaryHandler = cfg.buttons && cfg.buttons.primary && cfg.buttons.primary.handler;
 
 		if (primaryHandler) {
@@ -221,12 +221,12 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	},
 
 
-	alert: function(cfg) {
+	alert: function (cfg) {
 		this.show(cfg);
 	},
 
 
-	show: function(cfg) {
+	show: function (cfg) {
 		if (!this.rendered) {
 			this.render(Ext.getBody());
 		}
@@ -269,7 +269,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 			me.on('close', cfg.closeHandler.bind(null));
 		}
 
-		me.buttonOrder.forEach(function(btn) {
+		me.buttonOrder.forEach(function (btn) {
 			var btnCfg = buttons[btn];
 
 			if (btnCfg) {
@@ -277,7 +277,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 			}
 		});
 
-		wait().then(function() {
+		wait().then(function () {
 			me.adjustSize();
 		});
 
@@ -287,7 +287,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	},
 
 
-	adjustSize: function() {
+	adjustSize: function () {
 		var height = this.getHeight(),
 			aspect = this.aspectRatio,
 			width = height * aspect;
@@ -301,7 +301,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	},
 
 
-	__clearPreviousConfig: function() {
+	__clearPreviousConfig: function () {
 		var current = this.currentConfig;
 
 		if (current) {
@@ -313,7 +313,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	},
 
 
-	getDoNotShowAgainCheckState: function() {
+	getDoNotShowAgainCheckState: function () {
 		if (!this.doNotShowCheckbox) { return false; }
 
 		var dom = this.doNotShowCheckbox && this.doNotShowCheckbox.el && this.doNotShowCheckbox.el.dom,
@@ -323,7 +323,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	},
 
 
-	addDoNotShowAgain: function(config) {
+	addDoNotShowAgain: function (config) {
 		this.doNotShowCheckbox = this.add({
 			xtype: 'box',
 			autoEl: {
@@ -338,7 +338,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	},
 
 
-	addButton: function(name, cfg, closeHandler, alertConfig) {
+	addButton: function (name, cfg, closeHandler, alertConfig) {
 		var me = this,
 			cls = 'button ' + name;
 
@@ -364,7 +364,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 			listeners: {
 				click: {
 					element: 'el',
-					fn: function() {
+					fn: function () {
 						if (!cfg.doNotClose) {
 							me.startClose();
 
@@ -385,7 +385,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 	},
 
 
-	onClose: function(cfg) {
+	onClose: function (cfg) {
 		if (!cfg.doNotShowAgainKey) { return; }
 
 		var checked = this.getDoNotShowAgainCheckState();
@@ -398,11 +398,11 @@ module.exports = exports = Ext.define('NextThought.app.MessageBox', {
 
 		this.setState(this.DO_NOT_SHOW);
 	}
-}, function() {
+}, function () {
 	//This needs to be come lazy! create on first use, not at define time. (the current constructor seems to trigger an early Ext.isReady)
 	Ext.MessageBox = Ext.Msg = NextThought.app.MessageBox;
 
-	window.alert = function(cfg, fn) {
+	window.alert = function (cfg, fn) {
 		Globals.removeLoaderSplash();
 
 		if (!cfg || Ext.isString(cfg)) {

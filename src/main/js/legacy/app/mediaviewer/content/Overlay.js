@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.Overl
 	maximized: true,
 	floating: true,
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		var me = this,
 			store = me.store,
@@ -39,18 +39,18 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.Overl
 				scope: me
 			}]
 		});
-		me.on('destroy', function() {
+		me.on('destroy', function () {
 			keyMap.destroy(false);
 			Ext.EventManager.removeResizeListener(me.setSize, me);
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.el.set({role: 'dialog'});
 	},
 
-	tabNext: function(k, e) {
+	tabNext: function (k, e) {
 		e.stopEvent();
 		var a = this.el.query('[tabindex]'), i;
 		i = Ext.Array.indexOf(a, (this.el.down('[tabindex]:focus') || {}).dom) + 1;
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.Overl
 		return false;
 	},
 
-	setSize: function() {
+	setSize: function () {
 		if (this.rendered) {this.toFront();}
 		return this.callParent(arguments);
 	}

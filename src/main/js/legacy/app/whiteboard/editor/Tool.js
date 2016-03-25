@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.Tool', 
 	ui: 'button',
 	baseCls: 'whiteboard-tool',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.addCls(this.tool);
 		this.iconCls = this.tool;
 		this.tooltip = Ext.String.capitalize(this.tool);

@@ -6,7 +6,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Polygon
 	extend: 'NextThought.app.whiteboard.shapes.Base',
 
 
-	draw: function(ctx,renderCallback) {
+	draw: function (ctx,renderCallback) {
 		this.callParent(arguments);
 
 		var x = 0,
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Polygon
 		renderCallback.call(this);
 	},
 
-	migrateTriangle: function(ctx) {
+	migrateTriangle: function (ctx) {
 	/**
  * Unused func. We might use this function in the future when we need to migrate existing triangles.
  *
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Polygon
 		if (this.migrated) { return;}
 		this.migrated = true;
 
-		function triangleCenter(m) {
+		function triangleCenter (m) {
 			var scale = m.getScale(), r, h, c = m.getTranslation(), dc, ct = [],
 				rot = m.getRotation();
 
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Polygon
 			return ct;
 		}
 
-		function triangleHeight(m) {
+		function triangleHeight (m) {
 			var scale = m.getScale(),
 				r = scale[0] / 2,
 				h = (r * 3 * Math.cos(Math.PI / 6)) / Math.sqrt(3);
@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Polygon
 		this.transform = m.toTransform();
 	},
 
-	drawRect: function(ctx) {
+	drawRect: function (ctx) {
 		var x = -0.5,
 			y = -0.5,
 			w = 1,
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Polygon
 		ctx.quadraticCurveTo(x, y, x, y, x, y);
 	},
 
-	drawTriangle: function(ctx) {
+	drawTriangle: function (ctx) {
 	/**
  * Unused func. We will use it to draw triangles correctly.
  *

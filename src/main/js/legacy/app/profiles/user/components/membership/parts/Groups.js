@@ -19,15 +19,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	})),
 
 
-	setUser: function(user, isMe) {
+	setUser: function (user, isMe) {
 		var me = this;
 
 		me.removeAll();
 
 		user.getGroupMembership()
-			.then(function(groups) {
+			.then(function (groups) {
 				if (groups.length) {
-					groups.map(function(group) {
+					groups.map(function (group) {
 						return {
 							group: group,
 							name: group.getName(),

@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 		optionalEl: '.optionalContainer'
 	},
 
-	buildAffiliationBox: function() {
+	buildAffiliationBox: function () {
 
 		if (!Ext.getStore('schoolStore')) {
 			Ext.data.ArrayStore.create({
@@ -109,14 +109,14 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 				itemCls: 'x-menu-item no-border',
 				emptyText: '<div class="x-menu-item">No results</div>',
 				xhooks: {
-					initComponent: function() {
+					initComponent: function () {
 						this.callParent(arguments);
 						this.itemSelector = '.x-menu-item';
 					}
 				}
 			},
 			listeners: {
-				change: function() {
+				change: function () {
 					var store = this.store;
 					store.suspendEvents();
 					store.clearFilter();
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this;
@@ -149,10 +149,10 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 		this.fieldsChannel = {
 			'birthdate': this.getBirthdayValue,
 			'realname': this.getRealName,
-			'contact_email': function() { return me.el.down('[name=contact_email]').getValue(); },
-			'email': function() { return me.el.down('[name=email]').getValue(); },
-			'opt_in_email_communication': function() { return me.el.down('input[name=opt_in_email_communication]').is(':checked'); },
-			'affiliation': function() { return me.affiliation.getValue();}
+			'contact_email': function () { return me.el.down('[name=contact_email]').getValue(); },
+			'email': function () { return me.el.down('[name=email]').getValue(); },
+			'opt_in_email_communication': function () { return me.el.down('input[name=opt_in_email_communication]').is(':checked'); },
+			'affiliation': function () { return me.affiliation.getValue();}
 		};
 
 		this.monthPickerView.show().hide();
@@ -160,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 		this.validated = {};
 	},
 
-	getFormValues: function() {
+	getFormValues: function () {
 		var me = this, i, v,
 			canSave = true,
 			params = {}, msg;
@@ -183,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 		return canSave ? params : null;
 	},
 
-	markInvalidated: function(param) {
+	markInvalidated: function (param) {
 		var el, e;
 		try {
 			el = this.el.down('.' + param.field);
@@ -199,7 +199,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 		}
 	},
 
-	markValidated: function(param) {
+	markValidated: function (param) {
 		var el, e;
 		try {
 			el = this.el.down('.' + param.field);
@@ -215,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 		}
 	},
 
-	markFields: function() {
+	markFields: function () {
 		var key, schema = this.schema, me = this;
 		for (key in schema) {
 			if (schema.hasOwnProperty(key) && me.validated.hasOwnProperty(key) && key !== 'birthdate') {
@@ -224,8 +224,8 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 		}
 	},
 
-	save: function() {
-		function fail(res, req) {
+	save: function () {
+		function fail (res, req) {
 			var r = Ext.decode(res.responseText);
 			me.markFields();
 			me.markInvalidated(r);
@@ -242,10 +242,10 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 			url: url,
 			params: JSON.stringify(params),
 			method: 'POST',
-			success: function(r, opts) {
+			success: function (r, opts) {
 				console.log('SUCCESS Account Upgraded: ', arguments);
 
-				function s() {
+				function s () {
 					console.log('Success update to service doc:', arguments);
 					if (Service.canFriend()) {
 						p.destroy();
@@ -259,7 +259,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 						Ext.defer(p.destroy, 1, p);
 					}
 				}
-				function f() {
+				function f () {
 					console.log('failure update:', arguments);
 					Ext.defer(p.destroy, 1, p);
 				}
@@ -274,7 +274,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 		Ext.Ajax.request(req);
 	},
 
-	openPolicy: function(e) {
+	openPolicy: function (e) {
 		e.stopEvent();
 
 		var w = Ext.widget('nti-window', {
@@ -304,13 +304,13 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 		w.show();
 	},
 
-	getRealName: function() {
+	getRealName: function () {
 		var f = this.el.down('[name=first]').getValue(),
 			l = this.el.down('[name=last]').getValue();
 		return f + ' ' + l;
 	},
 
-	submitBirthday: function() {
+	submitBirthday: function () {
 		var bd = this.getBirthdayValue();
 		if (Ext.isEmpty(bd)) { return;}
 
@@ -318,7 +318,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 
 	},
 
-	lockBirthday: function() {
+	lockBirthday: function () {
 		this.continueEl.update('Thanks!');
 		this.continueEl.addCls('submitted');
 
@@ -329,8 +329,8 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 		this.el.down('[name=year]').set({'disabled': 'disabled'});
 	},
 
-	getBirthdayValue: function() {
-		function isValidBirthday() {
+	getBirthdayValue: function () {
+		function isValidBirthday () {
 			return (bd && !isNaN(bd.getTime()) && bd.getFullYear() === y && bd.getMonth() === m && bd.getDate() === d);
 		}
 
@@ -352,13 +352,13 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 		return null;
 	},
 
-	preflight: function(params, successCallBack, failCallBack) {
-		function fail() {
+	preflight: function (params, successCallBack, failCallBack) {
+		function fail () {
 			console.error('Preflight failed, ', arguments);
 			Ext.callback(failCallBack, me, arguments);
 		}
 
-		function success(r, opts) {
+		function success (r, opts) {
 			var o = Ext.decode(r.responseText);
 
 			console.log('Preflight success', arguments);
@@ -379,7 +379,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 		Ext.Ajax.request(req);
 	},
 
-	showSchemaFields: function(schema) {
+	showSchemaFields: function (schema) {
 		var i, me = this, t, shouldAskAccountInfo = false, win = this.up('window');
 		for (i in schema) {
 			if (schema.hasOwnProperty(i)) {
@@ -406,7 +406,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 		this.schema = schema;
 	},
 
-	getLink: function(link) {
+	getLink: function (link) {
 		var href = $AppConfig.userObject.get('href');
 
 		href = href.split('?')[0];
@@ -414,7 +414,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 		return (href + '/@@' + link);
 	},
 
-	showMonthPicker: function() {
+	showMonthPicker: function () {
 		if (this.monthEl.is('[disabled]')) { return; }
 		if (this.monthPickerView.isVisible()) {
 			this.monthPickerView.hide();
@@ -423,7 +423,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.upgraded.Co
 		this.monthPickerView.showBy(this.monthEl, 'tl-bl?', [0, 0]);
 	},
 
-	onSelectedItem: function(sel, record) {
+	onSelectedItem: function (sel, record) {
 		this.monthEl.update(record.get('name'));
 		this.monthEl.set({'data-value': record.get('id')});
 	}

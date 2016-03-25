@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.attachInputListeners();
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 	},
 
 
-	focus: function() {
+	focus: function () {
 		if (!this.rendered) {
 			this.focusOnRender = true;
 			return;
@@ -64,24 +64,24 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 	},
 
 
-	getInput: function() {
+	getInput: function () {
 		return this.inputEl && this.inputEl.dom;
 	},
 
 
-	getValidator: function() {
+	getValidator: function () {
 		return this.validationInput && this.validationInput.dom;
 	},
 
 
-	getValue: function() {
+	getValue: function () {
 		var input = this.getValidator();
 
 		return input && input.value;
 	},
 
 
-	getErrors: function() {
+	getErrors: function () {
 		var input = this.getValidator();
 
 		return {
@@ -91,29 +91,29 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 	},
 
 
-	showError: function() {
+	showError: function () {
 		this.urlField.addCls('error');
 	},
 
 
-	removeError: function() {
+	removeError: function () {
 		this.urlField.removeCls('error');
 	},
 
 
-	isEmpty: function() {
+	isEmpty: function () {
 		return !this.getValue();
 	},
 
 
-	isValid: function() {
+	isValid: function () {
 		var input = this.getValidator();
 
 		return !input.validity || input.validity.valid;
 	},
 
 
-	syncValidator: function(value) {
+	syncValidator: function (value) {
 		var parts = Globals.getURLParts(value),
 			validator = this.getValidator();
 
@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 	},
 
 
-	attachInputListeners: function() {
+	attachInputListeners: function () {
 		var input = this.getInput();
 
 		if (input) {
@@ -138,17 +138,17 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 	},
 
 
-	onInputFocus: function() {
+	onInputFocus: function () {
 		this.urlField.addCls('focused');
 	},
 
 
-	onInputBlur: function() {
+	onInputBlur: function () {
 		this.urlField.removeCls('focused');
 	},
 
 
-	onInputChange: function() {
+	onInputChange: function () {
 		var input = this.getInput(),
 			value = this.syncValidator(input.value);
 

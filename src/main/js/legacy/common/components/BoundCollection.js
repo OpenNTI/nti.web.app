@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 	layout: 'none',
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.addBodyConfig();
@@ -21,11 +21,11 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		}
 	},
 
-	addBodyConfig: function() {
+	addBodyConfig: function () {
 		this.add(this.getBodyConfig());
 	},
 
-	getBodyConfig: function() {
+	getBodyConfig: function () {
 		var cls = ['collection-body'];
 
 		if (this.bodyCls) {
@@ -41,40 +41,40 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		};
 	},
 
-	getBodyContainer: function() {
+	getBodyContainer: function () {
 		return this.down('[isCollectionBody]');
 	},
 
-	getComponents: function() {
+	getComponents: function () {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
 
 		return items || [];
 	},
 
-	parseCollection: function(response) {
+	parseCollection: function (response) {
 		var obj = ParseUtils.parseItems(response)[0];
 
 		return obj || JSON.parse(response);
 	},
 
-	loadCollection: function(url) {
+	loadCollection: function (url) {
 		var me = this;
 
 		me.activeUrl = url;
 
 		return Service.request(url)
 			.then(me.parseCollection.bind(me))
-			.then(function(json) {
+			.then(function (json) {
 				me.setCollection(json);
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Failed to load outline contents: ', reason);
 				//TODO: Show an error state
 			});
 	},
 
-	getEmptyState: function() {
+	getEmptyState: function () {
 		return {
 			xtype: 'box',
 			autoEl: {
@@ -84,15 +84,15 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		};
 	},
 
-	getItems: function(collection) {
+	getItems: function (collection) {
 		return collection.get('Items') || [];
 	},
 
-	suspendUpdates: function() {
+	suspendUpdates: function () {
 		this.__suspendUpdates = true;
 	},
 
-	resumeUpdates: function() {
+	resumeUpdates: function () {
 		this.__suspendUpdates = false;
 
 		if (this.__latestUpdate) {
@@ -101,10 +101,10 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		}
 	},
 
-	beforeSetCollection: function() {},
-	afterSetCollection: function() {},
+	beforeSetCollection: function () {},
+	afterSetCollection: function () {},
 
-	onCollectionUpdate: function(collection) {
+	onCollectionUpdate: function (collection) {
 		if (this.__suspendUpdates) {
 			this.__latestUpdate = collection;
 		} else {
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		}
 	},
 
-	setHeaderForCollection: function(collection) {
+	setHeaderForCollection: function (collection) {
 		var header = this.buildHeader && this.buildHeader(collection);
 
 		if (this.currentHeader) {
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		}
 	},
 
-	setFooterForCollection: function(collection) {
+	setFooterForCollection: function (collection) {
 		var footer = this.buildFooter && this.buildFooter(collection);
 
 		if (this.currentFooter) {
@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		}
 	},
 
-	setCollection: function(collection) {
+	setCollection: function (collection) {
 		this.beforeSetCollection(collection);
 
 		var items = this.getItems(collection);
@@ -165,19 +165,19 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		this.afterSetCollection(collection);
 	},
 
-	mergeItems: function(oldItems, newItems) {
+	mergeItems: function (oldItems, newItems) {
 		var oldIndex = 0, newIndex = 0,
 			oldRecords, newRecords,
 			newItem, oldItem,
 			merge = [];
 
-		oldRecords = oldItems.reduce(function(acc, item) {
+		oldRecords = oldItems.reduce(function (acc, item) {
 			acc[item.getId()] = true;
 			return acc;
 		}, {});
 
 
-		newRecords = newItems.reduce(function(acc, item) {
+		newRecords = newItems.reduce(function (acc, item) {
 			acc[item.getId()] = true;
 			return acc;
 		}, {});
@@ -227,14 +227,14 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		return merge;
 	},
 
-	__transitionTo: function(items, state) {
+	__transitionTo: function (items, state) {
 		var me = this, newState,
 			merged = this.mergeItems(state.items, items),
 			body = this.getBodyContainer();
 
 		this.clearCollection();
 
-		newState = merged.reduce(function(acc, item) {
+		newState = merged.reduce(function (acc, item) {
 			var cmp = item && me.getCmpForRecord(item.record, item.type, item.oldRecord);
 
 			if (cmp) {
@@ -254,13 +254,13 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 		return newState;
 	},
 
-	__showItems: function(items) {
+	__showItems: function (items) {
 		var me = this, state,
 			body = me.getBodyContainer();
 
 		this.clearCollection();
 
-		state = items.reduce(function(acc, item) {
+		state = items.reduce(function (acc, item) {
 			var cmp = item && me.getCmpForRecord(item);
 
 			if (cmp) {
@@ -295,17 +295,17 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 	 * @param  {Object} initialState an earlier version of the record
 	 * @return {Object}				 the cmp for the record
 	 */
-	getCmpForRecord: function(record, transition, initialState) {
+	getCmpForRecord: function (record, transition, initialState) {
 
 	},
 
-	clearCollection: function() {
+	clearCollection: function () {
 		var body = this.getBodyContainer();
 
 		body.removeAll(true);
 	},
 
-	refresh: function() {
+	refresh: function () {
 		this.clearCollection();
 
 		return this.loadCollection(this.activeUrl);

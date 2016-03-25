@@ -10,13 +10,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	layout: 'none',
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.VideoEditingActions = NextThought.app.course.overview.components.editing.content.video.Actions.create();
 	},
 
-	showEditor: function() {
+	showEditor: function () {
 		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord);
 
 		this.videoItems = this.add({
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onSave: function() {
+	onSave: function () {
 		var parentSelection = this.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
 			currentPosition = parentSelection && parentSelection.getCurrentPosition(),

@@ -19,12 +19,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 		TIMEDASSIGNMENT: 'application/vnd.nextthought.assessment.timedassignment',
 
 
-		__parseHistoryURL: function(url) {
+		__parseHistoryURL: function (url) {
 			return url;
 		},
 
 
-		parseOutline: function(json) {
+		parseOutline: function (json) {
 			var outline = json.Outline,
 				map = {}, key, i, list, id;
 
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 		},
 
 
-		parseData: function(assignments, nonAssignments) {
+		parseData: function (assignments, nonAssignments) {
 
 			assignments = assignments.Items || assignments;
 			nonAssignments = nonAssignments && (nonAssignments.Items || nonAssignments);
@@ -58,15 +58,15 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 				hitmap = {}, nodemap = {};
 
 			//filter out items that aren't an assignment or don't have an ntiid
-			function filter(i) {
+			function filter (i) {
 				return (i.MimeType === assignmentMimeType || i.MimeType === timedAssignmentMimeType) && i.NTIID;
 			}
 
-			function count(c, i) {
+			function count (c, i) {
 				return c + (filter(i) ? NaN : 1);//NaN will mean we saw an assignment
 			}
 
-			function build(json) {
+			function build (json) {
 				var items = [], key;
 
 				for (key in json) {
@@ -90,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 		},
 
 
-		fromJson: function(assignments, nonAssignments, gradeBook, historyURL) {
+		fromJson: function (assignments, nonAssignments, gradeBook, historyURL) {
 			if (!assignments) { return null; }
 
 			var itemData = this.parseData(assignments, nonAssignments);
@@ -124,13 +124,13 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 		{name: 'NonAssignmentsRaw', type: 'auto'}
 	],
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.cacheForShortPeriod(this.assignmentUpdateKey, Promise.resolve(this));
 	},
 
-	pageContainsAssignment: function(ntiid) {
+	pageContainsAssignment: function (ntiid) {
 		var p = this.get('HitMap')[ntiid];
 
 		// If p is NaN, we directly saw an assignment when we built the collection on this ntiid.
@@ -144,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 		return false;
 	},
 
-	__updateData: function(assignments, nonAssignments) {
+	__updateData: function (assignments, nonAssignments) {
 		assignments = assignments || this.get('AssignmentsRaw');
 		nonAssignments = nonAssignments || this.get('NonAssignmentsRaw');
 
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 		return this;
 	},
 
-	updateAssignments: function() {
+	updateAssignments: function () {
 		var me = this,
 			key = me.assignmentUpdateKey,
 			load, link = me.get('AssignmentsLink'),
@@ -165,10 +165,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 
 		if (!load) {
 			load = Service.request(link)
-				.then(function(response) {
+				.then(function (response) {
 					return Ext.decode(response, true);
 				})
-				.then(function(assignments) {
+				.then(function (assignments) {
 					return me.__updateData(assignments, null);
 				});
 
@@ -178,21 +178,21 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 		return load;
 	},
 
-	isAssignment: function(id) {
+	isAssignment: function (id) {
 		//Its an assignment unless its listed in the "NotItems"
 		return (!!this.getItem(id)) || (!this.getItem(id, 'NonAssignments'));
 	},
 
-	isEmpty: function() {
+	isEmpty: function () {
 		return this.get('Assignments').length === 0;
 	},
 
-	each: function() {
+	each: function () {
 		var a = this.get('Assignments') || [];
 		return a.forEach.apply(a, arguments);
 	},
 
-	map: function() {
+	map: function () {
 		var a = this.get('Assignments') || [];
 		return a.map.apply(a, arguments);
 	},
@@ -202,28 +202,28 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 	 * @param  {String} id the id to search for
 	 * @return {Object}	   the item if there is one
 	 */
-	findItem: function(id) {
+	findItem: function (id) {
 		var assignment = this.getItem(id),
 			nonAssignment = !assignment && this.getItem(id, 'NonAssignments');
 
 		return assignment || nonAssignment;
 	},
 
-	getItem: function(id, field) {
+	getItem: function (id, field) {
 		var items = this.get(field || 'Assignments');
 
 		if (!id) {
 			return null;
 		}
 
-		items = items.filter(function(rec) {
+		items = items.filter(function (rec) {
 			return rec.getId().toLowerCase() === id.toLowerCase() || (rec.containsId && rec.containsId(id));
 		});
 
 		return items[0];
 	},
 
-	fetchAssignment: function(id) {
+	fetchAssignment: function (id) {
 		var assignment = this.getItem(id);
 
 		if (!assignment) {
@@ -233,17 +233,17 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 		return assignment.updateFromServer();
 	},
 
-	getCount: function() {
+	getCount: function () {
 		var items = this.get('Assignments');
 
 		return items.length;
 	},
 
-	getAssignmentsForContainer: function(containerId) {
+	getAssignmentsForContainer: function (containerId) {
 		var items = this.get('Assignments') || [],
 			assignments = [];
 
-		items.forEach(function(item) {
+		items.forEach(function (item) {
 			if (item.get('ContainerId') === containerId) {
 				assignments.push(item);
 			}
@@ -252,33 +252,33 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 		return assignments;
 	},
 
-	getGradeBook: function() {
+	getGradeBook: function () {
 		return this.get('GradeBook');
 	},
 
-	getOutlineNodesContaining: function(assignmentId) {
+	getOutlineNodesContaining: function (assignmentId) {
 		var assignmentToOutlineNodes = this.get('AssignmentToOutlineNodes');
 
 		return assignmentToOutlineNodes[assignmentId];
 	},
 
 	//override these
-	getGradeBookEntry: function(assignment) { return Promise.resolve(null); },
+	getGradeBookEntry: function (assignment) { return Promise.resolve(null); },
 
-	getGradeFor: function(assignment, user) { return Promise.resolve(null); },
+	getGradeFor: function (assignment, user) { return Promise.resolve(null); },
 
 	/**
 	 * Get the no submit assignment that has a title of Final Grade if there is one
 	 * TODO: figure out where there is a link to this to compare instead
 	 * @return {Assignment} the final grade assignment or null if there isn't one
 	 */
-	getFinalGradeAssignment: function() {
+	getFinalGradeAssignment: function () {
 		if (this.__finalGrade !== undefined) { return this.__finalGrade; }
 
 		var me = this,
 			finalGrade = null;
 
-		me.each(function(assignment) {
+		me.each(function (assignment) {
 			if (me.isFinalGradeAssignment(assignment)) {
 				finalGrade = assignment;
 			}
@@ -289,11 +289,11 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 		return me.__finalGrade;
 	},
 
-	isFinalGradeAssignment: function(assignment) {
+	isFinalGradeAssignment: function (assignment) {
 		return assignment.isNoSubmit() && assignment.get('title') === 'Final Grade';
 	},
 
-	hasFinalGrade: function() {
+	hasFinalGrade: function () {
 		return !!this.getFinalGradeAssignment();
 	}
 });

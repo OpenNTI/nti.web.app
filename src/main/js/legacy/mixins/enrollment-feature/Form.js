@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 
 	eventToGroup: {},
 
-	addListeners: function() {
+	addListeners: function () {
 		this.on({
 			'reveal-item': 'revealItem',
 			'hide-item': 'hideItem',
@@ -18,12 +18,12 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 	},
 
 
-	fillInDefaults: function(values) {
+	fillInDefaults: function (values) {
 		return values;
 	},
 
 
-	updateFromStorage: function() {
+	updateFromStorage: function () {
 		var me = this,
 			values = TemporaryStorage.get(me.STATE_NAME) || {},
 			keys,
@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 		values = me.fillInDefaults(values);
 		keys = Object.keys(values);
 
-		(keys || []).forEach(function(key) {
+		(keys || []).forEach(function (key) {
 			var input = me.down('[name="' + key + '"]'),
 				parent;
 
@@ -57,11 +57,11 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 			//If we don't have an item with for the key, its probably a sub input of another item
 			//so wait until we are rendered, get the input element with that name and set its value
 			me.onceRendered
-				.then(function() {
+				.then(function () {
 					return wait();
 				})
-				.then(function() {
-					waitOnRender.forEach(function(key) {
+				.then(function () {
+					waitOnRender.forEach(function (key) {
 						var input = me.el.down('input[name="' + key + '"]'),
 							type = input && input.getAttribute('type'),
 							value = values[key];
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 	},
 
 
-	setInput: function(name, value) {
+	setInput: function (name, value) {
 		var input = this.down('[name=' + name + ']');
 
 		if (input && input.setValue && value) {
@@ -90,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 	},
 
 
-	getFormForGroup: function(name) {
+	getFormForGroup: function (name) {
 		var form = this.form.slice(), i,
 			items = [];
 
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 	},
 
 
-	changed: function(name, value, doNotStore, sets) {
+	changed: function (name, value, doNotStore, sets) {
 		if (this.changeMonitors[name]) {
 			this[this.changeMonitors[name]].call(this, value);
 		}
@@ -121,16 +121,16 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 	},
 
 
-	clearStorage: function() {
+	clearStorage: function () {
 		TemporaryStorage.set(this.STATE_NAME, {});
 	},
 
 
-	hideItem: function(name) {
+	hideItem: function (name) {
 		var me = this, item, parent;
 
 		if (Ext.isArray(name)) {
-			name.forEach(function(n) {
+			name.forEach(function (n) {
 				me.hideItem(n);
 			});
 
@@ -165,11 +165,11 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 	},
 
 
-	revealItem: function(name) {
+	revealItem: function (name) {
 		var me = this, item, parent;
 
 		if (Ext.isArray(name)) {
-			name.forEach(function(n) {
+			name.forEach(function (n) {
 				me.revealItem(n);
 			});
 
@@ -205,10 +205,10 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 	},
 
 
-	isValid: function(group) {
+	isValid: function (group) {
 		var valid = true;
 
-		this.items.each(function(item) {
+		this.items.each(function (item) {
 			if (Ext.isFunction(item.isValid) && !item.isValid(group)) {
 				valid = false;
 			}
@@ -220,10 +220,10 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 	},
 
 
-	getValue: function() {
+	getValue: function () {
 		var value = {};
 
-		this.items.each(function(item) {
+		this.items.each(function (item) {
 			value = Ext.apply(value, item.getValue && item.getValue());
 		});
 
@@ -234,7 +234,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 	 * Fire an event to show an error on the window
 	 * @param  {Object || String} json the message to alert
 	 */
-	showError: function(json) {
+	showError: function (json) {
 		var input;
 
 		json = Ext.isString(json) ? {Message: json} : (json || {});
@@ -259,18 +259,18 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 	 * If there is a link to get the nations from the server, request it and fill in the inputs
 	 * TODO: Don't hard code the inputs to fill in the nations with in the mixin
 	 */
-	fillInNations: function() {
+	fillInNations: function () {
 		var me = this;
 
 		if (this.nationsLink) {
 			Service.request(this.nationsLink)
-				.then(function(response) {
+				.then(function (response) {
 					var nations = Ext.JSON.decode(response, true),
 						nationInput = me.down('[name=nation_code]'),
 						mailingNationInput = me.down('[name=mailing_nation_code]'),
 						citizenshipInput = me.down('[name=country_of_citizenship]');
 
-					function updateInputs() {
+					function updateInputs () {
 						if (nationInput) {
 							nationInput.addOptions(nations);
 						}
@@ -290,7 +290,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 						updateInputs();
 					}
 				})
-				.fail(function(reason) {
+				.fail(function (reason) {
 					console.error('Failed to load nation list ', reason);
 				});
 		}
@@ -300,19 +300,19 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 	 * If there is a link to get the states from the server request it and fill in the inputs
 	 * TODO: Don't hard code the inputs to fill in the states with in the mixin
 	 */
-	fillInStates: function() {
+	fillInStates: function () {
 		var me = this;
 
 		if (this.statesLink) {
 			Service.request(this.statesLink)
-				.then(function(response) {
+				.then(function (response) {
 					var states = Ext.JSON.decode(response, true),
 						stateInput = me.down('[name=state]'),
 						mailingStateInput = me.down('[name=mailing_state]');
 
 					states.unshift(''); // insert empty value as first option.
 
-					function updateInputs() {
+					function updateInputs () {
 						if (stateInput) {
 							stateInput.addOptions(states);
 						}
@@ -328,7 +328,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 						updateInputs();
 					}
 				})
-				.fail(function(reason) {
+				.fail(function (reason) {
 					console.error('Failed to load state list: ', reaseon);
 				});
 		}
@@ -340,7 +340,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 	 * this.addressLines is an array of all the prefixes for the street line inputs in all the address forms
 	 */
 	numberofaddressline: {},
-	addAddressLine: function(prefix, cmp) {
+	addAddressLine: function (prefix, cmp) {
 		var me = this,
 			line = me.numberofaddressline[prefix] || 2;
 
@@ -353,7 +353,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 		if (prefix) {
 			me.revealItem(prefix + line);
 		} else {
-			me.addressLines.forEach(function(pref) {
+			me.addressLines.forEach(function (pref) {
 				me.revealItem(pref + line);
 			});
 		}

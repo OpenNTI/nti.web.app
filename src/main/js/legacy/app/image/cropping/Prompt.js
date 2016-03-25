@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Prompt', {
 	title: 'Crop & Rotate',
 	saveText: 'Save',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var data = this.Prompt.data;
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Prompt', {
 		this.Prompt.Footer.enableSave();
 	},
 
-	loadSrc: function(src, name) {
+	loadSrc: function (src, name) {
 		this.editor = this.add({
 			xtype: 'image-cropping-editor',
 			name: name,
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Prompt', {
 		});
 	},
 
-	loadImage: function(img, name) {
+	loadImage: function (img, name) {
 		this.editor = this.add({
 			xtype: 'image-cropping-editor',
 			name: name,
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Prompt', {
 		});
 	},
 
-	showError: function() {
+	showError: function () {
 		this.add({
 			xtype: 'box',
 			autoEl: {cls: 'error', html: 'Failed to load image.'}
@@ -55,13 +55,13 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.Prompt', {
 		this.Prompt.Footer.disableSave();
 	},
 
-	onSave: function() {
+	onSave: function () {
 		if (this.editor && this.editor.onSave) {
 			return this.editor.onSave();
 		}
 
 		return Promise.reject('Nothing to submit.');
 	}
-}, function() {
+}, function () {
 	NextThought.app.prompt.StateStore.register('image-cropping', this);
 });

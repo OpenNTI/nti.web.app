@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Collec
 	}),
 
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		if (this.store) {
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Collec
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (!Ext.is.iOS) {
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Collec
 		}
 	},
 
-	prepareData: function(data, index, record) {
+	prepareData: function (data, index, record) {
 		var i = this.callParent(arguments),
 			catalog = record.getCourseCatalogEntry && record.getCourseCatalogEntry();
 		
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.library.components.Collec
 		return i;
 	},
 
-	handleSelect: function(selModel, record) {
+	handleSelect: function (selModel, record) {
 		selModel.deselect(record);
 
 		var node = this.getNodeByRecord(record);

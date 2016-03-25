@@ -12,12 +12,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 
 	cls: 'result-part',
 
-	getRowLabels: function() {
+	getRowLabels: function () {
 		return this.questionPart.get('labels');
 	},
 
 
-	getSeriesLabels: function() {
+	getSeriesLabels: function () {
 		return this.questionPart.get('values');
 	},
 
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	 * See Comment in NextThought.app.assessment.results.parts.Matching
 	 * @return {Object} Map of results
 	 */
-	getResults: function() {
+	getResults: function () {
 		return this.resultPart.Results;
 	}
 });

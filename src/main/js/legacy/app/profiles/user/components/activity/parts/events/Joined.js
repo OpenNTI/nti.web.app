@@ -19,13 +19,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	]),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		UserRepository.getUser(this.username, this.setUser.bind(this));
 	},
 
 
-	setUser: function(u){
+	setUser: function (u) {
 		var rd = this.renderData = Ext.apply(this.renderData || {}, u && u.getData());
 
 		rd.user = u;

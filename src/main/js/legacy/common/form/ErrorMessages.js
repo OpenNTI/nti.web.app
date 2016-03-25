@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.common.form.ErrorMessages', {
 
 	PRIORITY: ['missing', 'invalidUrl', 'invalidColor'],
 
-	getMessageForErrors: function(errors) {
+	getMessageForErrors: function (errors) {
 		var priority = this.PRIORITY, i;
 
 		for (i = 0; i < priority.length; i++) {

@@ -17,14 +17,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		observable: 'Ext.util.Observable'
 	},
 
-	disable: function() {
+	disable: function () {
 		this.disabled = true;
 		if (!this.container) {return;}
 
 		this.container.hide();
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		Ext.apply(this, config);
 		this.mixins.observable.constructor.call(this);
 		this.mon(this.reader, {
@@ -51,10 +51,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
 	},
 
-	insertOverlay: function() {
+	insertOverlay: function () {
 		var me = this,
-				box,
-				container = {
+			box,
+			container = {
 					cls: 'note-gutter', onclick: 'void(0)',
 					style: {
 						height: me.reader.getIframe().get().getHeight()
@@ -107,17 +107,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 			me.reader.on({
 							 //no buffer
-							 'iframe-mouseout': 'mouseOut',
-							 'iframe-mousedown': 'suspendResolver',
-							 'iframe-mouseup': 'resumeResolver',
-							 scope: me
-						 });
+					'iframe-mouseout': 'mouseOut',
+					'iframe-mousedown': 'suspendResolver',
+					'iframe-mouseup': 'resumeResolver',
+					scope: me
+				});
 
 			me.reader.on({
-							 scope: me,
-							 'iframe-mousemove': 'mouseOver',
-							 buffer: 400
-						 });
+					scope: me,
+					'iframe-mousemove': 'mouseOver',
+					buffer: 400
+				});
 		}
 
 		if (this.disabled) {
@@ -125,14 +125,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		}
 	},
 
-	getAnnotationOffsets: function() {
+	getAnnotationOffsets: function () {
 		return this.reader.getAnnotationOffsets();
 	},
 
-	onNavigation: function() {
+	onNavigation: function () {
 		if (this.editor && this.editor.isActive()) {
 			var msg = getString('NextThought.view.content.reader.NoteOverlay.editing');
-			Ext.defer(function() {
+			Ext.defer(function () {
 				alert({msg: msg});
 			}, 1);
 
@@ -142,18 +142,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		return true;
 	},
 
-	onScroll: function(e, dom) {
+	onScroll: function (e, dom) {
 	},
 
-	onContentUpdate: function() {
+	onContentUpdate: function () {
 	},
 
-	editorCleanup: function() {
+	editorCleanup: function () {
 		delete this.suspendMoveEvents;
 		delete this.editor;
 	},
 
-	getTabPanel: function() {
+	getTabPanel: function () {
 		var targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
 			tabPanel;
 
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		return tabPanel && Ext.getCmp(tabPanel.id);
 	},
 
-	allowOpenEditor: function() {
+	allowOpenEditor: function () {
 		if (this.editor && !this.editor.isDestroyed) {
 			return false;
 		}
@@ -169,9 +169,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		return true;
 	},
 
-	openEditorClick: function(e, rect) {
+	openEditorClick: function (e, rect) {
 		var nib = e && e.getTarget('.note-here-control-box'),
-				top;
+			top;
 
 		rect = (nib && nib.getBoundingClientRect()) || rect;
 
@@ -185,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		return false;
 	},
 
-	openEditor: function(top) {
+	openEditor: function (top) {
 		if (this.disabled) { return Promise.reject(); }
 
 		var me = this,
@@ -203,7 +203,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 			return Promise.reject();
 		}
 
-		function work(prefs) {
+		function work (prefs) {
 			var sharing = prefs && prefs.sharing,
 				sharedWith = sharing && sharing.sharedWith,
 				shareInfo = SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith), currentBundle);
@@ -226,8 +226,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 				preventBringToFront: true,
 				listeners: {
 					'deactivated-editor': 'destroy',
-					'no-title-content': function() {return !isFeature('notepad');},//require title if notepad is a feature
-					grew: function() {
+					'no-title-content': function () {return !isFeature('notepad');},//require title if notepad is a feature
+					grew: function () {
 						if (Ext.is.iPad) {
 							return;
 						}
@@ -280,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 
 			if (Ext.is.iPad) {
-				Ext.defer(function() {
+				Ext.defer(function () {
 					var contentEl = me.editor.el.down('.content'),
 						footerHeight = me.editor.el.down('.footer').getHeight(),
 						hiddenAmount = window.innerHeight - 276,
@@ -295,13 +295,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 		return this.UserDataActions.getPreferences(pageId, currentBundle)
 			.then(work.bind(this))
-			.fail(function() { return null; });
+			.fail(function () { return null; });
 	},
 
-	syncEditorWidth: function(c, w) {
+	syncEditorWidth: function (c, w) {
 		var edEl = this.editor.getEl(),
-				minW,
-				nW = w + 65;
+			minW,
+			nW = w + 65;
 		if (!edEl) {
 			return;
 		}
@@ -311,25 +311,25 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		this.editor.fireEvent('grew');
 	},
 
-	syncHeight: function(h) {
+	syncHeight: function (h) {
 		var c = this.container;
 		if (c) {
 			c.setHeight(h);
 		}
 	},
 
-	saveNewNote: function(editor, r, v) {
+	saveNewNote: function (editor, r, v) {
 		var me = this,
-				note = v.body,
-				title = v.title,
-				location = this.reader.getLocation(),
-				pageInfo = location.pageInfo,
-				bundle = location.currentBundle,
-				pageId = pageInfo.getId(),
-				style = editor.lineInfo.style || 'suppressed',
-				rangeInfo;
+			note = v.body,
+			title = v.title,
+			location = this.reader.getLocation(),
+			pageInfo = location.pageInfo,
+			bundle = location.currentBundle,
+			pageId = pageInfo.getId(),
+			style = editor.lineInfo.style || 'suppressed',
+			rangeInfo;
 
-		function afterSave(success) {
+		function afterSave (success) {
 			editor.unmask();
 			if (success) {
 				editor.deactivate();
@@ -349,17 +349,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 			title, note, rangeInfo.range, rangeInfo.container || pageId,
 			SharingUtils.sharedWithForSharingInfo(v.sharingInfo, bundle),
 			style, afterSave
-		).then(function() {
+		).then(function () {
 			editor.unmask();
 			editor.deactivate();
-		}).fail(function() {
+		}).fail(function () {
 			editor.unmask();
 		});
 
 		return false;
 	},
 
-	noteHereEvent: function(range, rect, style, top) {
+	noteHereEvent: function (range, rect, style, top) {
 		this.data.box.activeLineInfo = Ext.apply(
 				{style: style},
 				this.lineInfoForRangeAndRect(range, rect));
@@ -371,17 +371,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		});
 	},
 
-	noteHere: function(range, rect, style, top) {
+	noteHere: function (range, rect, style, top) {
 		this.positionInputBox(Ext.apply(this.lineInfoForRangeAndRect(range, rect), {style: style}));
 
 		return this.openEditor(top)
-			.fail(function() {
+			.fail(function () {
 				alert(getString('NextThought.view.content.reader.NoteOverlay.inprogress'));
 				return Promise.reject();
 			});
 	},
 
-	contentDefinedAnnotationAction: function(dom, action) {
+	contentDefinedAnnotationAction: function (dom, action) {
 		var d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('[id]:not([id^=ext])'),
 			id = d ? d.id : null, me = this,
 			img = d && d.is('img') ? d.dom : null,
@@ -397,8 +397,8 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 			top = rect ? rect.top + readerRect.top : 0;
 
 			this.noteHere(range, rect, null, top)
-				.then(function() {
-					WBUtils.createFromImage(img, function(data) {
+				.then(function () {
+					WBUtils.createFromImage(img, function (data) {
 						me.editor.reset();
 						me.editor.setValue('');
 						me.editor.addWhiteboard(data);
@@ -408,7 +408,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		}
 	},
 
-	getAnnotationGutter: function() {
+	getAnnotationGutter: function () {
 		if (!this.annotationGutter) {
 			this.annotationGutter = this.reader.el.down('.annotation-gutter');
 		}
@@ -433,7 +433,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 	//	},
 
 
-	copyClientRect: function(rect) {
+	copyClientRect: function (rect) {
 		return {
 			top: rect.top,
 			bottom: rect.bottom,
@@ -444,21 +444,21 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		};
 	},
 
-	adjustContentRectForTop: function(rect, top) {
+	adjustContentRectForTop: function (rect, top) {
 		var adjusted = this.copyClientRect(rect);
 		adjusted.top += top;
 		adjusted.bottom += top;
 		return adjusted;
 	},
 
-	lineInfoForRangeAndRect: function(range, rect, offsets) {
+	lineInfoForRangeAndRect: function (range, rect, offsets) {
 		return {range: range, rect: offsets ? this.adjustContentRectForTop(rect, offsets.top) : rect};
 	},
 
-	lineInfoForY: function(y) {
+	lineInfoForY: function (y) {
 		var overlay = this.reader.getComponentOverlay().overlayedPanelAtY(y),
-				result = null,
-				top;
+			result = null,
+			top;
 
 		//If there is an overlay at that position it gets
 		//the decision as to if there is a line there.	After
@@ -486,11 +486,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		return result;
 	},
 
-	trackLineAtEvent: function(e) {
+	trackLineAtEvent: function (e) {
 		var o = this.data,
-				offsets = this.getAnnotationOffsets(),
-				y = e.getY() - offsets.top, lineInfo,
-				box = Ext.get(o.box);
+			offsets = this.getAnnotationOffsets(),
+			y = e.getY() - offsets.top, lineInfo,
+			box = Ext.get(o.box);
 
 		try {
 			clearTimeout(this.mouseLeaveTimeout);
@@ -520,7 +520,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		return false;
 	},
 
-	positionInputBox: function(lineInfo) {
+	positionInputBox: function (lineInfo) {
 		var o = this.data,
 			offset = this.getAnnotationOffsets(),
 			box = Ext.get(o.box),
@@ -548,14 +548,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		box.show();
 	},
 
-	offNib: function(e) {
+	offNib: function (e) {
 		if (!Ext.is.iPad) {
 			e.stopEvent();
 		}
 		this.mouseOut(e);
 	},
 
-	overNib: function(e) {
+	overNib: function (e) {
 		if (!Ext.is.iPad) {
 			e.stopEvent();
 		}
@@ -563,15 +563,15 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		return false;
 	},
 
-	suspendResolver: function() {
+	suspendResolver: function () {
 		this.suspendMoveEvents = true;
 	},
 
-	resumeResolver: function() {
+	resumeResolver: function () {
 		delete this.suspendMoveEvents;
 	},
 
-	mouseOver: function(evt) {
+	mouseOver: function (evt) {
 		if (Ext.dd.DragDropManager.dragCurrent || this.suspendMoveEvents || this.reader.creatingAnnotation) {
 			return false;
 		}
@@ -579,27 +579,27 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		return this.trackLineAtEvent(evt);
 	},
 
-	mouseOut: function(e) {
+	mouseOut: function (e) {
 
 		if (this.suspendMoveEvents || this.reader.creatingAnnotation) {
 			return;
 		}
 
 		var o = this.data,
-				sel = this.reader.getDocumentElement().parentWindow.getSelection();
+			sel = this.reader.getDocumentElement().parentWindow.getSelection();
 		if (sel) {
 			sel.removeAllRanges();
 		}
 
 		clearTimeout(this.mouseLeaveTimeout);
-		this.mouseLeaveTimeout = setTimeout(function() {
+		this.mouseLeaveTimeout = setTimeout(function () {
 			delete o.lastLine;
 			delete o.box.activeLineInfo;
 			o.box.hide();
 		}, 100);
 	},
 
-	rangeForLineInfo: function(line, style) {
+	rangeForLineInfo: function (line, style) {
 		var range = line.range,
 			maybeContainer = (range && range.commonAncestorContainer) || null,
 			containerSelector = 'object[data-nti-container]',
@@ -626,14 +626,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 	},
 
 	//TODO: fill this out
-	allowNavigation: function() {
+	allowNavigation: function () {
 		if (!this.editor || !this.editor.isActive()) {
 			return Promise.resolve();
 		}
 
 		var me = this;
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Ext.Msg.show({
 				title: 'Attention!',
 				msg: 'You are currently creating a note. Would you like to leave without saving?',
@@ -641,7 +641,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 					primary: {
 						text: 'Leave',
 						cls: 'caution',
-						handler: function() {
+						handler: function () {
 							me.editor.destroy();
 							fulfill();
 						}

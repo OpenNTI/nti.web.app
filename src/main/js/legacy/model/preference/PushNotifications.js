@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.model.preference.PushNotifica
 
 	subPreferences: ['Email'],
 
-	getResourceUrl: function() {
+	getResourceUrl: function () {
 		return this.callParent(arguments) + '/PushNotifications';
 	}
 });

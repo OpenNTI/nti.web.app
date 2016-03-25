@@ -1,7 +1,7 @@
 var Ext = require('extjs');
 
 
-module.exports = exports = Ext.define('NextThought.model.converters.GroupByTime', {}, function() {
+module.exports = exports = Ext.define('NextThought.model.converters.GroupByTime', {}, function () {
 	Ext.data.Types.GROUPBYTIME = {
 		type: 'groupByTime',
 		sortType: Ext.data.SortTypes.asUCString,
@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.GroupByTime'
 		DAY: 86400,//seconds in a day
 		WEEK: 604800, //seconds in a week
 
-		groupForElapsedTime: function(n, v) {
+		groupForElapsedTime: function (n, v) {
 			var now = new Date(n.getFullYear(), n.getMonth(), n.getDate()),
 				oneDayAgo = Ext.Date.add(now, Ext.Date.DAY, -1),
 				twoDaysAgo = Ext.Date.add(now, Ext.Date.DAY, -2),
@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.GroupByTime'
 				weekday, nextWeekday;
 
 
-			function between(date, start, end) {
+			function between (date, start, end) {
 				var t = date.getTime();
 				return start.getTime() < t && t <= end.getTime();
 			}
@@ -65,11 +65,11 @@ module.exports = exports = Ext.define('NextThought.model.converters.GroupByTime'
 			return new Date(0); //Older
 		},
 
-		groupTitle: function(groupValue, defaultValue, forceNow) {
+		groupTitle: function (groupValue, defaultValue, forceNow) {
 			var d = (forceNow || new Date()).setHours(0, 0, 0, 0), c, now = new Date(d),
 				tollerance = 0.0099;
 
-			function under(c, i) {
+			function under (c, i) {
 				var d = (i - c);
 				d = d > 0 && d < tollerance;//account for DST shifts
 				return c < i && !d;
@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.GroupByTime'
 			return 'Last month';
 		},
 
-		convert: function(r, o) {
+		convert: function (r, o) {
 			if (!r && this.mapping) { r = o.get(this.mapping); }
 
 			var now = new Date(),

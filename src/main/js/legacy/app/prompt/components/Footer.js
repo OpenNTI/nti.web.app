@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Footer'
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.saveText !== undefined) {
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Footer'
 	},
 
 
-	enableSave: function() {
+	enableSave: function () {
 		if (!this.rendered) {
 			this.saveEnabled = true;
 			return;
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Footer'
 	},
 
 
-	disableSave: function() {
+	disableSave: function () {
 		if (!this.rendered) {
 			delete this.saveEnabled;
 			return;
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Footer'
 	},
 
 
-	setSaveText: function(text) {
+	setSaveText: function (text) {
 		if (!this.rendered) {
 			this.saveText = text;
 			return;
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Footer'
 	},
 
 
-	setCancelText: function(text) {
+	setCancelText: function (text) {
 		if (!this.rendered) {
 			this.cancelText = text;
 			return;
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Footer'
 	},
 
 
-	handleKeyPress: function(e) {
+	handleKeyPress: function (e) {
 		if (e.getTarget('.disabled')) { return; }
 
 		if (e.charCode === e.ENTER && e.getTarget('.save')) {
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Footer'
 	},
 
 
-	handleClick: function(e) {
+	handleClick: function (e) {
 		if (e.getTarget('.disabled')) { return; }
 
 		if (e.getTarget('.save')) {
@@ -103,14 +103,14 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Footer'
 	},
 
 
-	onSave: function() {
+	onSave: function () {
 		if (this.doSave) {
 			this.doSave();
 		}
 	},
 
 
-	onCancel: function() {
+	onCancel: function () {
 		if (this.doCancel) {
 			this.doCancel();
 		}

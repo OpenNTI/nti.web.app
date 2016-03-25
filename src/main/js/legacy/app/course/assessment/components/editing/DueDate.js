@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	layout: 'none',
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var me = this,
@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				listeners: {
 					click: {
 						element: 'el',
-						fn: function(e) {
+						fn: function (e) {
 							if (e.getTarget('.cancel')) {
 								me.doCancel();
 							} else if (e.getTarget('.save')) {
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		]);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.startNowRadio = this.el.dom.querySelector('input.start-now');
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.selectAvailableDate(available);
 		me.selectDueDate(due);
 
-		me.on('destroy', function() {
+		me.on('destroy', function () {
 			if (me.startCheckbox && me.startCheckbox.removeEventListener) {
 				me.startCheckbox.removeEventListener('change', me.onStartCheckChanged);
 			}
@@ -159,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	selectAvailableDate: function(date) {
+	selectAvailableDate: function (date) {
 		if (!this.rendered) { return; }
 
 		var availableEditor = this.getAvailableEditor();
@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	selectDueDate: function(date) {
+	selectDueDate: function (date) {
 		if (!this.rendered) { return; }
 
 		var dueEditor = this.getDueEditor();
@@ -186,7 +186,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	onStartCheckChanged: function(e) {
+	onStartCheckChanged: function (e) {
 		var editor = this.getAvailableEditor();
 
 		if (this.startOnRadio.checked) {
@@ -196,7 +196,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	onEndCheckChanged: function(e) {
+	onEndCheckChanged: function (e) {
 		var editor = this.getDueEditor();
 
 		if (this.endCheckbox.checked) {
@@ -206,15 +206,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	getAvailableEditor: function() {
+	getAvailableEditor: function () {
 		return this.down('[isAvailableEditor]');
 	},
 
-	getDueEditor: function() {
+	getDueEditor: function () {
 		return this.down('[isDueEditor]');
 	},
 
-	doCancel: function() {
+	doCancel: function () {
 		var assignment = this.assignment,
 			available = assignment.get('availableBeginning'),
 			due = assignment.get('availableEnding');
@@ -227,7 +227,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	showError: function(msg) {
+	showError: function (msg) {
 		var cmp = this.down('[isError]');
 
 		if (cmp && cmp.el) {
@@ -235,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	clearError: function() {
+	clearError: function () {
 		var cmp = this.down('[isError]');
 
 		if (cmp && cmp.el) {
@@ -243,19 +243,19 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	addSavingMask: function() {
+	addSavingMask: function () {
 		if (this.el) {
 			this.el.mask('Saving...');
 		}
 	},
 
-	removeSavingMask: function() {
+	removeSavingMask: function () {
 		if (this.el) {
 			this.el.unmask();
 		}
 	},
 
-	doSave: function() {
+	doSave: function () {
 		var me = this,
 			available = me.getAvailableEditor(),
 			due = me.getDueEditor(),
@@ -280,12 +280,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		me.EditingActions.updateAssignmentDates(me.assignment, availableDate, dueDate)
 			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
-			.then(function(response) {
+			.then(function (response) {
 				if (response && me.onSave) {
 					me.onSave();
 				}
 			})
-			.fail(function(response) {
+			.fail(function (response) {
 				//Show an error
 				var error = Globals.parseError(response);
 

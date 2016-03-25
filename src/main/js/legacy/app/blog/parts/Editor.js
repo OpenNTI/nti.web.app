@@ -30,13 +30,13 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 		editorEl: '.editor'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.addEvents(['save-post']);
 		this.BlogActions = NextThought.app.blog.Actions.create();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		var r = this.record,
 			me = this,
@@ -55,17 +55,17 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 			me.setSharedWith({publicToggleOn: sharedWith.publicToggleOn, entities: []});
 
 			//if we have entities, the callback will set them... (resolved)
-			UserRepository.getUser(sharedWith.entities, function(entities) {
+			UserRepository.getUser(sharedWith.entities, function (entities) {
 				if (sharedWith && sharedWith.publicToggleOn) {
 					entities.push(Service.getFakePublishCommunity());
 				}
 
-				sharedWith.entities = Ext.Array.map(entities, function(u) {
+				sharedWith.entities = Ext.Array.map(entities, function (u) {
 					return u.get('Username');
 				});
 
 				me.setSharedWith(sharedWith);
-			}, function() {
+			}, function () {
 				console.error('failed to resolve:', sharedWith.entities, arguments);
 			}, this);
 		}
@@ -79,19 +79,19 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 		if (Ext.is.iOS) {
 			el = me.editorBodyEl;
 
-			el.dom.onmouseup = function(e) { me.scrollDiv = (e.pageY > 438); };
+			el.dom.onmouseup = function (e) { me.scrollDiv = (e.pageY > 438); };
 
 			//Shorten the editor body to fit on iPad screen when keyboard up
-			el.on('focus', function() {
+			el.on('focus', function () {
 				if (!me.bodyheight) {
 					me.bodyheight = el.getHeight();
 				}
-				Ext.defer(function() {
+				Ext.defer(function () {
 					//Make sure on-screen keyboard is up (and not physical keyboard connected)
 					if (window.innerHeight < 600) {
 						el.setHeight(window.scrollY - 16);
 						//scroll div is selected part is no longer visible
-						Ext.defer(function() {
+						Ext.defer(function () {
 							if (me.scrollDiv) {
 								el.scrollBy(0, 100);
 							}
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 					}
 				},250, me);
 			});
-			el.on('blur', function() {
+			el.on('blur', function () {
 				if (me.bodyheight) {
 					el.setHeight(me.bodyheight);
 				}
@@ -111,13 +111,13 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 		}
 	},
 
-	destroy: function() {
+	destroy: function () {
 		Ext.EventManager.removeResizeListener(this.syncHeight, this);
 
 		return this.callParent(arguments);
 	},
 
-	syncHeight: function() {
+	syncHeight: function () {
 		var el = this.contentEl,
 			container = this.ownerCt && this.ownerCt.el && this.ownerCt.el.dom,
 			containerRect = container && container.getBoundingClientRect(),
@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 			.then(this.updateLayout.bind(this));
 	},
 
-	onSave: function(e) {
+	onSave: function (e) {
 		e.stopEvent();
 		var me = this,
 			v = this.getValue(),
@@ -191,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 		// NOTE: For now, as a matter of simplicit, we are ignoring the 'publish' field.
 		// We will derive it from the sharedWith value. ~PM.
 		me.BlogActions.savePost(me.record, me.blog, v.title, v.tags, v.body, v.sharingInfo)
-			.then(function(rec) {
+			.then(function (rec) {
 				if (me.el) {
 					me.el.unmask();
 				}
@@ -200,11 +200,11 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 			});
 	},
 
-	onSaveSuccess: function() {
+	onSaveSuccess: function () {
 		this.destroy();
 	},
 
-	onSaveFailure: function(proxy, response, operation) {
+	onSaveFailure: function (proxy, response, operation) {
 		var msg = getString('NextThought.view.profiles.parts.BlogEditor.unknown'), error;
 
 		if (response && response.responseText) {
@@ -217,7 +217,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Editor', {
 		console.debug(arguments);
 	},
 
-	onCancel: function(e) {
+	onCancel: function (e) {
 		e.stopEvent();
 
 		this.fireEvent('cancel');

@@ -3,10 +3,10 @@ var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.mixins.LikeFavoriteActions', {
 
-	constructor: function() {
+	constructor: function () {
 		var me = this;
 
-		function onAfterRender() {
+		function onAfterRender () {
 			me.updateLikeAndFavoriteFromRecord();
 
 			if (me.liked) { me.mon(me.liked, 'click', me.likeClicked, me); }
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.mixins.LikeFavoriteActions', 
 	},
 
 
-	likeClicked: function(e) {
+	likeClicked: function (e) {
 		if (e && e.stopEvent) {e.stopEvent();}
 		var rec = this.getRecord();
 		if (!rec) {
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.mixins.LikeFavoriteActions', 
 	},
 
 
-	favoriteClicked: function(e) {
+	favoriteClicked: function (e) {
 		if (e && e.stopEvent) {e.stopEvent();}
 		var rec = this.getRecord();
 		if (!rec) {
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.mixins.LikeFavoriteActions', 
 	},
 
 
-	updateLikeAndFavoriteFromRecord: function(record) {
+	updateLikeAndFavoriteFromRecord: function (record) {
 		var rec = record || this.getRecord(), fnName,
 			me = this;
 
@@ -77,13 +77,13 @@ module.exports = exports = Ext.define('NextThought.mixins.LikeFavoriteActions', 
 	},
 
 
-	tearDownLikeAndFavorite: function() {
+	tearDownLikeAndFavorite: function () {
 		if (this.liked) {
-			this.mun(this.liked, 'click', function() { rec.like(this); }, this);
+			this.mun(this.liked, 'click', function () { rec.like(this); }, this);
 			this.liked.remove();
 		}
 		if (this.favorites) {
-			this.mon(this.favorites, 'click', function() { rec.favorite(this); },this);
+			this.mon(this.favorites, 'click', function () { rec.favorite(this); },this);
 			this.favorites.remove();
 		}
 
@@ -94,19 +94,19 @@ module.exports = exports = Ext.define('NextThought.mixins.LikeFavoriteActions', 
 	},
 
 
-	getRecord: function() {
+	getRecord: function () {
 		return this.record;
 	},
 
 
-	listenForLikeAndFavoriteChanges: function(record) {
+	listenForLikeAndFavoriteChanges: function (record) {
 		if (!record) {return;}
 		record.addObserverForField(this, 'favorited', this.markAsFavorited, this);
 		record.addObserverForField(this, 'liked', this.markAsLiked, this);
 		record.addObserverForField(this, 'LikeCount', this.updateLikeCount, this);
 	},
 
-	stopListeningForLikeAndFavoriteChanges: function(record) {
+	stopListeningForLikeAndFavoriteChanges: function (record) {
 		if (!record) {return;}
 		record.removeObserverForField(this, 'favorited', this.markAsFavorited, this);
 		record.removeObserverForField(this, 'liked', this.markAsLiked, this);
@@ -114,20 +114,20 @@ module.exports = exports = Ext.define('NextThought.mixins.LikeFavoriteActions', 
 	},
 
 
-	reflectLikeAndFavorite: function(record) {
+	reflectLikeAndFavorite: function (record) {
 		this.updateLikeAndFavoriteFromRecord(record);
 		if (this.liked) {
 			this.updateLikeCount(record);
-	  this.markAsLiked(record && record.isLiked());
-	}
+	  		this.markAsLiked(record && record.isLiked());
+		}
 
-	if (this.favorites) {
-			this.markAsFavorited(record && record.isFavorited());
+		if (this.favorites) {
+		this.markAsFavorited(record && record.isFavorited());
 	}
 	},
 
 
-	updateLikeCount: function(record) {
+	updateLikeCount: function (record) {
 		var c;
 		if (this.liked) {
 			record = record && record.isModel ? record : this.getRecord();
@@ -140,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.mixins.LikeFavoriteActions', 
 	},
 
 
-	markAsLiked: function(field, value) {
+	markAsLiked: function (field, value) {
 		var liked = value === undefined ? field : value,
 			method = liked ? 'addCls' : 'removeCls';
 		if (!this.liked) {
@@ -151,7 +151,7 @@ module.exports = exports = Ext.define('NextThought.mixins.LikeFavoriteActions', 
 	},
 
 
-	markAsFavorited: function(field, value) {
+	markAsFavorited: function (field, value) {
 		var favorited = value === undefined ? field : value,
 			method = favorited ? 'addCls' : 'removeCls';
 		if (!this.favorites) {

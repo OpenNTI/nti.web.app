@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.AssignmentColle
 	extend: 'NextThought.model.Base',
 
 	statics: {
-		fromJson: function(assignments, nonAssignments, gradeBook, historyURL, isAdmin) {
+		fromJson: function (assignments, nonAssignments, gradeBook, historyURL, isAdmin) {
 			var collection;
 
 			if (isAdmin) {

@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 	},
 
 	statics: {
-		make: function makeFactory(url, id, disablePaging) {
+		make: function makeFactory (url, id, disablePaging) {
 			var ps = this.create({
 				clearOnPageLoad: false,
 				containerId: id
@@ -56,12 +56,12 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		},
 
 
-		peek: function() {
+		peek: function () {
 			return coordinator;
 		}
 	},
 
-	onProxyLoad: function(operation) {
+	onProxyLoad: function (operation) {
 		var resultSet = operation.getResultSet();
 		delete this.batchLinks;
 		if (resultSet && resultSet.links) {
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		return this.callParent(arguments);
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		//Allow partial overriding the proxy.
 		if (config && config.proxyOverride) {
 			this.proxy = Ext.merge(Ext.clone(this.proxy), this.config.proxyOverride);
@@ -98,15 +98,15 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 	},
 
 	//By default PageItems want things that match the container
-	wantsItem: function(record) {
+	wantsItem: function (record) {
 		return this.containerId === record.get('ContainerId');
 	},
 
-	getBins: function() {
+	getBins: function () {
 		var groups = this.getGroups(),
-				bins = {},
-				k, b = null,
-				getters = UtilUserDataThreader.GETTERS;
+			bins = {},
+			k, b = null,
+			getters = UtilUserDataThreader.GETTERS;
 
 		for (k in groups) {
 			if (groups.hasOwnProperty(k)) {
@@ -118,14 +118,14 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		return b ? bins : null;
 	},
 
-	getItems: function(otherBins) {
+	getItems: function (otherBins) {
 		var bins = otherBins || this.getBins() || {},
-				tree = this.buildThreads(bins);
+			tree = this.buildThreads(bins);
 
 		return Ext.Object.getValues(tree).concat(bins.Highlight || []).concat(bins.Redaction || []);
 	},
 
-	buildThreads: function(bins) {
+	buildThreads: function (bins) {
 		var bms = bins.Bookmark;
 
 		//handle bookmarks here:
@@ -142,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 
 	//TODO the docs say this can take an array instead of a single instance.  We don't handle
 	//that here
-	add: function(record) {
+	add: function (record) {
 		this.suspendEvents(true);
 		console.log('Adding record to store', record, this);
 		//get added to the store:
@@ -152,7 +152,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 			Ext.defer(this.filter, 1, this);
 		}
 
-		function adoptChild(parent, child) {
+		function adoptChild (parent, child) {
 			//found our parent:
 			child.parent = parent;
 			if (!parent.children) {parent.children = [];}
@@ -163,8 +163,8 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 			child.fireEvent('parent-set', parent);
 		}
 
-		function checkStoreItem(ancestor) {
-			return function checkItem(storeItem) {
+		function checkStoreItem (ancestor) {
+			return function checkItem (storeItem) {
 				if (ancestor === storeItem.getId()) {
 					adopted = true;
 					adoptChild(storeItem, record);
@@ -178,7 +178,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 			};
 		}
 
-		function updateRef(record) {
+		function updateRef (record) {
 			//find my parent if it's there and add myself to it:
 			var adopted,
 				refs = (record.get('references') || []).slice();
@@ -206,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		this.resumeEvents();
 	},
 
-	resolveRange: function(range) {
+	resolveRange: function (range) {
 		var i = range.start,
 			length = range.end + 1,
 			ret = [];
@@ -218,7 +218,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		return ret;
 	},
 
-	remove: function(r, isMove, silent) {
+	remove: function (r, isMove, silent) {
 		var toActuallyRemove = [],
 			idsToBoradcast = [],
 			args = Array.prototype.slice.call(arguments),
@@ -244,14 +244,14 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		if (!Ext.isIterable(records)) {
 
 			if (typeof records === 'object' && !records.isModel) {
-			   records = this.resolveRange(records);
+			   	records = this.resolveRange(records);
 			}
 			else {
 				records = [records];
 			}
 		}
 
-		Ext.each(records, function(record) {
+		Ext.each(records, function (record) {
 			if (Ext.isNumber(record)) {
 				record = this.getAt(record);
 			}
@@ -269,7 +269,7 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 			this.callParent(args);
 		}
 
-		Ext.each(toActuallyRemove, function(record) {
+		Ext.each(toActuallyRemove, function (record) {
 			if (record.parent) { record.parent.fireEvent('child-removed', record);}
 			record.tearDownLinks();
 			record.fireEvent('destroy', record);
@@ -280,24 +280,24 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		coordinator.fireEvent('removed-item', idsToBoradcast, isMove, silent);
 	},
 
-	suspendEvents: function() {
+	suspendEvents: function () {
 		coordinator.suspendEvents.apply(coordinator, arguments);
 		return this.callParent(arguments);
 	},
 
-	resumeEvents: function() {
+	resumeEvents: function () {
 		coordinator.resumeEvents.apply(coordinator, arguments);
 		return this.callParent(arguments);
 	},
 
-	addFromEvent: function(records) {
+	addFromEvent: function (records) {
 		//don't fire more coordinator events
 		coordinator.suspendEvents();
 
 		var me = this;
 
 		try {
-			Ext.each(records, function(rec) {
+			Ext.each(records, function (rec) {
 				var current,
 					newRecord;
 
@@ -323,12 +323,12 @@ module.exports = exports = Ext.define('NextThought.store.PageItem', {
 		coordinator.resumeEvents();
 	},
 
-	removeByIdsFromEvent: function(ids, isMove, silent) {
+	removeByIdsFromEvent: function (ids, isMove, silent) {
 		coordinator.suspendEvents(true);
 		var me = this;
 
 		try {
-			Ext.each(ids, function(id) {
+			Ext.each(ids, function (id) {
 				var r = me.getById(id);
 				if (r) {
 					me.remove(r, isMove, silent);

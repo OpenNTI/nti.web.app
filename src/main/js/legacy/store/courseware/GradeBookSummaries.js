@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 			root: 'Items',
 			totalProperty: 'TotalItemCount',
 
-			readRecords: function(resp) {
+			readRecords: function (resp) {
 				var data = this.self.prototype.readRecords.apply(this, arguments),
 					list = (data && data.records) || [],
 					i = list.length - 1, o, u;
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 		startParam: 'batchStart',
 		limitParam: 'batchSize',
 
-		buildUrl: function(request) {
+		buildUrl: function (request) {
 			var sort, dir,
 				p = request.params;
 
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 	},
 
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.proxy = Ext.clone(this.proxy);//get a local instance copy
 		this.callParent(arguments);
 
@@ -100,14 +100,14 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 	},
 
 
-	setPageSize: function(size) {
+	setPageSize: function (size) {
 		this.pageSize = size;
 
 		PersistentStorage.set(this.PAGE_SIZE_KEY, size);
 	},
 
 
-	__onRecordsLoaded: function(s, records) {
+	__onRecordsLoaded: function (s, records) {
 		var me = this,
 			loaded;
 
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 		loaded = (records || []).map(me.fillInRecord.bind(me));
 
 		Promise.all(loaded)
-			.always(function() {
+			.always(function () {
 				me.resumeEvents();
 				me.fireEvent('refresh');
 				me.fireEvent('records-filled-in');
@@ -128,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 	 * Take a record fill in the user and replace its HistoryItemSummary with a shared instance or a placeholder
 	 * @param  {Model} record record to fill in
 	 */
-	fillInRecord: function(record) {
+	fillInRecord: function (record) {
 		var assignment = this.getAssignment(),
 			alias = record.get('Alias'),
 			username = record.get('Username'),
@@ -185,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 
 		//Users are added to the cache when the data loads so this should be a no-op
 		return UserRepository.getUser(user)
-			.then(function(u) {
+			.then(function (u) {
 				var a = alias || u.getName(),
 					name = username || u.get('Username');
 
@@ -201,27 +201,27 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 	},
 
 
-	getAssignment: function() {
+	getAssignment: function () {
 		return this.assignments.getFinalGradeAssignment();
 	},
 
 
-	hasFinalGrade: function() {
+	hasFinalGrade: function () {
 		return this.proxy.reader.availableFinalGrade;
 	},
 
 
-	getCurrentPage: function() {
+	getCurrentPage: function () {
 		return this.proxy.reader.currentPage || 1;
 	},
 
 
-	getEnrollmentScope: function() {
+	getEnrollmentScope: function () {
 		return this.proxy.reader.EnrollmentScope || 'ForCredit';
 	},
 
 
-	getTotalPages: function() {
+	getTotalPages: function () {
 		var total = this.getTotalCount(),
 			pageSize = this.pageSize;
 
@@ -229,7 +229,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 	},
 
 
-	loadNextPage: function() {
+	loadNextPage: function () {
 		var current = this.currentPage,
 			total = this.getTotalPages();
 
@@ -239,7 +239,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 	},
 
 
-	loadPreviousPage: function() {
+	loadPreviousPage: function () {
 		var current = this.currentPage;
 
 		if (current > 1) {
@@ -249,5 +249,5 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 
 	//Override this, sorting should only take place
 	//from state updating and calling load
-	doSort: function() {}
+	doSort: function () {}
 });

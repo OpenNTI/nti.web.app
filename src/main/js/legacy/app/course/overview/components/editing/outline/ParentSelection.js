@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-outline-parentselection',
 	label: 'Unit: ',
 
-	parseItemData: function(item) {
+	parseItemData: function (item) {
 		return {
 			cls: 'outline-item',
 			ntiid: item.getId(),
@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-	getEditor: function() {
+	getEditor: function () {
 		return NextThought.app.course.overview.components.editing.outline.outlinenode.InlineEditor;
 	}
 });

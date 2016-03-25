@@ -28,13 +28,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		entriesEl: '.entries'
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.seeAllEl, 'click', this.onSeeAllClick.bind(this));
 	},
 
-	updateEntity: function(entity) {
+	updateEntity: function (entity) {
 		if (this.activeEntity === entity) {
 			return;
 		}
@@ -49,13 +49,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		}
 
 		StoreUtils.loadItems(link, {batchSize: this.SIZE, batchStart: 0})
-			.then(function(users) {
+			.then(function (users) {
 				return UserRepository.getUser(users);
 			})
 			.then(this.fillInUsers.bind(this));
 	},
 
-	fillInUsers: function(users) {
+	fillInUsers: function (users) {
 		this.removeAll();
 
 		if (!users.length) {
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 			return;
 		}
 
-		users.map(function(user) {
+		users.map(function (user) {
 			return {
 				member: user,
 				name: user.getName(),
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		}).forEach(this.addEntry.bind(this));
 	},
 
-	onSeeAllClick: function() {
+	onSeeAllClick: function () {
 		if (this.gotoMembership) {
 			this.gotoMembership();
 		}

@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.Author
 		enrollButtonEl: '.action'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -36,13 +36,13 @@ module.exports = exports = Ext.define('NextThought.app.context.components.Author
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.__setContent();
 		this.mon(this.enrollButtonEl, 'click', this.onEnrollClick.bind(this));
 	},
 
-	__setContent: function() {
+	__setContent: function () {
 		var href = this.catalogEntry && this.catalogEntry.get('thumb'),
 			url = getURL(href);
 
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.Author
 		}
 	},
 
-	onEnrollClick: function(e) {
+	onEnrollClick: function (e) {
 		this.WindowActions.pushWindow(this.catalogEntry, null, e);
 	}
 });

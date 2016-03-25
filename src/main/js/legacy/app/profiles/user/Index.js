@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 	cls: 'user-profile profile',
 	layout: 'none',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.NavActions = NextThought.app.navigation.Actions.create();
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		});
 	},
 
-	onActivate: function() {
+	onActivate: function () {
 		var active = this.bodyCmp && this.bodyCmp.getLayout().getActiveItem();
 
 		if (active) {
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		}
 	},
 
-	onDeactivate: function() {
+	onDeactivate: function () {
 		var active = this.bodyCmp && this.bodyCmp.getLayout().getActiveItem();
 
 		if (active) {
@@ -64,11 +64,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		}
 	},
 
-	getContext: function() {
+	getContext: function () {
 		return this.activeEntity;
 	},
 
-	initRoutes: function() {
+	initRoutes: function () {
 		this.addRoute('/about', this.showAbout.bind(this));
 		this.addRoute('/activity', this.showActivity.bind(this));
 		this.addRoute('/membership', this.showMembership.bind(this));
@@ -80,28 +80,28 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		this.addDefaultRoute('/about');
 	},
 
-	buildHeaderComponent: function() {
+	buildHeaderComponent: function () {
 		return {
-		   xtype: 'profile-user-header',
-		   saveProfile: this.saveProfile.bind(this),
-		   removeContact: this.removeContact.bind(this),
-		   addContact: this.addContact.bind(this)
+		   	xtype: 'profile-user-header',
+		   	saveProfile: this.saveProfile.bind(this),
+		   	removeContact: this.removeContact.bind(this),
+		   	addContact: this.addContact.bind(this)
 		};
 	},
 
-	finalizeInit: function() {
-	   window.saveProfile = this.saveProfile.bind(this);
+	finalizeInit: function () {
+	   	window.saveProfile = this.saveProfile.bind(this);
 	},
 
-	onAddedToParentRouter: function() {
+	onAddedToParentRouter: function () {
 		this.headerCmp.pushRoute = this.pushRoute.bind(this);
 	},
 
-	getActiveItem: function() {
+	getActiveItem: function () {
 		return this.bodyCmp.getLayout().getActiveItem();
 	},
 
-	setActiveEntity: function(id, user) {
+	setActiveEntity: function (id, user) {
 		var me = this,
 			lowerId = id.toLowerCase();
 
@@ -120,23 +120,23 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		return me.getUser;
 	},
 
-	resolveEntity: function(id, entity) {
+	resolveEntity: function (id, entity) {
 		var me = this;
 		return UserRepository.getUser(id, null, null, true)
-		   .then(function(user) {
-					me.activeEntity = user;
+		   .then(function (user) {
+			me.activeEntity = user;
 
-					me.isMe = isMe(user);
+			me.isMe = isMe(user);
 
-					return user;
-			});
+			return user;
+		});
 	},
 
-	getRouteTitle: function() {
+	getRouteTitle: function () {
 		return this.activeEntity.getName();
 	},
 
-	setActiveItem: function(xtype) {
+	setActiveItem: function (xtype) {
 		var cmp = this.down(xtype),
 			current = this.bodyCmp.getLayout().getActiveItem(cmp);
 
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		return cmp;
 	},
 
-	setState: function(active) {
+	setState: function (active) {
 		var tabs = [],
 			isContact = this.GroupStore.isContact(this.activeEntity);
 
@@ -197,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		this.NavActions.setActiveContent(this.activeEntity);
 	},
 
-	showAbout: function(route, subRoute) {
+	showAbout: function (route, subRoute) {
 		var aboutCmp = this.setActiveItem('profile-user-about'),
 			headerCmp = this.headerCmp;
 
@@ -205,7 +205,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 		if (this.isMe) {
 			this.activeEntity.getSchema()
-				.then(function(schema) {
+				.then(function (schema) {
 					aboutCmp.setSchema(schema);
 					headerCmp.setSchema(schema);
 				});
@@ -218,7 +218,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			.then(aboutCmp.handleRoute.bind(aboutCmp, subRoute, route.precache));
 	},
 
-	showActivity: function(route, subRoute) {
+	showActivity: function (route, subRoute) {
 		var activityCmp = this.setActiveItem('profile-user-activity'),
 			headerCmp = this.headerCmp;
 
@@ -226,7 +226,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 		if (this.isMe) {
 			this.activeEntity.getSchema()
-				.then(function(schema) {
+				.then(function (schema) {
 					headerCmp.setSchema();
 				});
 		}
@@ -236,7 +236,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			.then(activityCmp.handleRoute.bind(activityCmp, subRoute, route.precache));
 	},
 
-	showMembership: function(route, subRoute) {
+	showMembership: function (route, subRoute) {
 		var membershipCmp = this.setActiveItem('user-profile-membership'),
 			headerCmp = this.headerCmp;
 
@@ -244,7 +244,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 		if (this.isMe) {
 			this.activeEntity.getSchema()
-				.then(function(schema) {
+				.then(function (schema) {
 					headerCmp.setSchema();
 				});
 		}
@@ -253,7 +253,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			.then(membershipCmp.handleRoute.bind(membershipCmp, subRoute, route.precache));
 	},
 
-	showAchievements: function(route, subRoute) {
+	showAchievements: function (route, subRoute) {
 		var achievementsCmp = this.setActiveItem('user-profile-achievements'),
 			headerCmp = this.headerCmp;
 
@@ -261,7 +261,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 
 		if (this.isMe) {
 			this.activeEntity.getSchema()
-				.then(function(schema) {
+				.then(function (schema) {
 					headerCmp.setSchema();
 				});
 		}
@@ -270,7 +270,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			.then(achievementsCmp.handleRoute.bind(achievementsCmp, subRoute, route.precache));
 	},
 
-	saveProfile: function() {
+	saveProfile: function () {
 		if (!this.isMe) { return Promise.resolve(false); }
 
 		var aboutCmp = this.bodyCmp.down('profile-user-about');
@@ -286,7 +286,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		return aboutCmp.saveEdits();
 	},
 
-	removeContact: function() {
+	removeContact: function () {
 		var me = this,
 			actions = me.GroupActions,
 			user = me.activeEntity;
@@ -299,12 +299,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 				primary: {
 					text: 'Remove',
 					cls: 'caution',
-					handler: function() {
+					handler: function () {
 						actions.deleteContact(user)
-							.then(function() {
+							.then(function () {
 								me.setState(me.activeTab);
 							})
-							.fail(function() {
+							.fail(function () {
 								me.setState(me.activeTab);
 								alert('There was trouble deleting your contact.');
 							});
@@ -317,20 +317,20 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		});
 	},
 
-	addContact: function() {
+	addContact: function () {
 		var me = this;
 
 		me.GroupActions.addContact(me.activeEntity)
-			.then(function(something) {
+			.then(function (something) {
 				me.setState(me.activeTab);
 			})
-			.fail(function() {
+			.fail(function () {
 				me.setState(me.activeTab);
 				alert('There was trouble adding your contact.');
 			});
 	},
 
-	getRouteForBlog: function(blog, path) {
+	getRouteForBlog: function (blog, path) {
 		var blogId = blog.getId(),
 			entry = path.shift();
 
@@ -341,7 +341,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 		};
 	},
 
-	getRouteForPath: function(path, user) {
+	getRouteForPath: function (path, user) {
 		var root = path[0],
 			subPath = path.slice(1);
 

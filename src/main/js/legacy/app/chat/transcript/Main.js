@@ -28,17 +28,17 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 
 	]),
 
-	initComponent: function() {
+	initComponent: function () {
 		var d = this.renderData = Ext.apply(this.renderData || {},{
-			time: this.time,
-			messages: this.formatMessages(this.messages)
-		}),
+				time: this.time,
+				messages: this.formatMessages(this.messages)
+			}),
 
-		t = this.time || 0,
-		now = new Date(),
-		day = t.getDate(),
-		year = t.getFullYear(),
-		mo = t.getMonth();
+			t = this.time || 0,
+			now = new Date(),
+			day = t.getDate(),
+			year = t.getFullYear(),
+			mo = t.getMonth();
 		if (now.getDate() === day && now.getMonth() === mo && now.getFullYear() === year) {
 			delete d.time;
 			d.today = 'Today';
@@ -47,27 +47,27 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 		return this.callParent(arguments);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
-	var r = this.el.down('.reply');
+		var r = this.el.down('.reply');
 		if (r) {r.remove();}
 		this.el.on('click', this.click, this);
-	Ext.each(this.el.query('.control'), function(c) {
-	  this.mon(Ext.fly(c), 'click', this.onControlClick, this);
+		Ext.each(this.el.query('.control'), function (c) {
+	  	this.mon(Ext.fly(c), 'click', this.onControlClick, this);
 	}, this);
 	},
 
 
-	formatMessages: function(messages) {
+	formatMessages: function (messages) {
 		var m = [], me = this;
 
 
 
-		function getEl(guid) {
+		function getEl (guid) {
 			return me.getEl().down('[data-guid=' + guid + ']');
 		}
 
-		Ext.Array.sort(messages, function(a,b) {
+		Ext.Array.sort(messages, function (a,b) {
 			var k = 'CreatedTime';
 
 			a = a.get(k);
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 			return a === b ? 0 : a > b ? 1 : -1;
 		});
 
-		Ext.each(messages, function(msg) {
+		Ext.each(messages, function (msg) {
 			var guid = IdCache.getIdentifier(msg.getId()),
 				creator = msg.get('Creator'),
 				o = {
@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 				};
 
 
-			UserRepository.getUser(creator, function(u) {
+			UserRepository.getUser(creator, function (u) {
 				try {
 					o.name = u.getName();
 				}
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 				}
 			});
 
-			msg.compileBodyContent(function(text) {
+			msg.compileBodyContent(function (text) {
 				try {
 					o.body = text;
 				}
@@ -127,19 +127,19 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 	},
 
 
-	generateClickHandler: function(id,data) {
+	generateClickHandler: function (id,data) {
 		if (this.readOnlyWBsData === undefined) {
 			this.readOnlyWBsData = {};
 		}
 		this.readOnlyWBsData[id] = data;
 	},
 
-	click: function(e) {
+	click: function (e) {
 		e.stopEvent();
 		var me = this, t = e.getTarget('.whiteboard-container', null, true), guid,
 			a = e.getTarget('a');
 
-		function openHref(link, t) {
+		function openHref (link, t) {
 			try {
 				window.open(link, t);
 			}
@@ -167,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
 	},
 
 
-  onControlClick: function(evt, dom, opts) {
+  	onControlClick: function (evt, dom, opts) {
 	var message = evt.getTarget('.message');
 
 	Ext.fly(message).toggleCls('flagged');
@@ -176,13 +176,13 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Main', {
   },
 
 
-  toggleModerationPanel: function() {
+  	toggleModerationPanel: function () {
 	this.el.toggleCls('moderating');
-		Ext.each(this.el.query('.flagged'), function(d) {
-	  Ext.fly(d).removeCls('flagged');
-	});
-	Ext.each(this.el.query('.control.checked'), function(d) {
-	  Ext.fly(d).removeCls('checked');
+	Ext.each(this.el.query('.flagged'), function (d) {
+	  		Ext.fly(d).removeCls('flagged');
+		});
+	Ext.each(this.el.query('.control.checked'), function (d) {
+	  	Ext.fly(d).removeCls('checked');
 	});
   }
 

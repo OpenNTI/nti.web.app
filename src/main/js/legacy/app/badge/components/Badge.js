@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Badge', 
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var issuer = this.badge.get('issuer'),

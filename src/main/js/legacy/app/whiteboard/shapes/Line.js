@@ -7,12 +7,12 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Line', 
 	extend: 'NextThought.app.whiteboard.shapes.Base',
 
 
-	getShapeName: function() {
+	getShapeName: function () {
 		return 'Line';
 	},
 
 
-	draw: function(ctx,renderCallback) {
+	draw: function (ctx,renderCallback) {
 		var t = this.transform,
 			xy = this.getEndPoint();
 
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Line', 
 	},
 
 
-	getEndPoint: function(m) {
+	getEndPoint: function (m) {
 		m = m || new NTMatrix(this.transform);
 		var scale = m.getScale(true),
 			rad = m.getRotation();
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Line', 
 	},
 
 
-	modify: function(nib,	x1,y1) {
+	modify: function (nib,	x1,y1) {
 		var m = new NTMatrix(this.transform),
 			t = m.getTranslation(),
 			p = [t[0], t[1]];
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Line', 
 	},
 
 
-	showNibs: function(ctx) {
+	showNibs: function (ctx) {
 
 		ctx.save();
 

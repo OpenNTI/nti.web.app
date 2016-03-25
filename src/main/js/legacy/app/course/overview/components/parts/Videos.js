@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		isVideo: true,
 
-		buildConfig: function(item, prev) {
+		buildConfig: function (item, prev) {
 
 			if (prev && prev.xtype === this.xtype) {
 				prev.items.push(item);
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		frameBodyEl: '.video-list'
 	},
 
-	getTargetEl: function() {
+	getTargetEl: function () {
 		return this.frameBodyEl;
 	},
 
@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	]}),
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.store = config.store = new Ext.data.Store({
 			fields: [
 				{name: 'id', type: 'string', mapping: 'ntiid'},
@@ -141,12 +141,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.on('select', 'onSelectChange', this);
 		this.callParent(arguments);
 	},
 
-	applyVideoData: function(videoIndex) {
+	applyVideoData: function (videoIndex) {
 		//console.debug(videoIndex);
 		var reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
 			me = this, selected = this.getSelectionModel().selected, toRemove = [], count,
@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 			me.videoIndex = videoIndex || {};
 
-			store.each(function(r) {
+			store.each(function (r) {
 				var v = me.videoIndex[r.getId()], item, raw;
 				if (v) {
 					r.set('hasTranscripts', !Ext.isEmpty(v.transcripts) || !Ext.isEmpty(v.slidedeck));
@@ -181,9 +181,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					}).records[0];
 
 					me.mon(item, {
-						'resolved-poster': function(item) {
+						'resolved-poster': function (item) {
 							if( item.get('poster') !== r.get('poster')
-							   || item.get('thumbnail') !== r.get('thumbnail')){
+							   || item.get('thumbnail') !== r.get('thumbnail')) {
 								 r.set({
 									poster: item.get('poster'),
 									thumb: item.get('thumbnail')
@@ -228,11 +228,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	},
 
-	convertItems: function(items) {
+	convertItems: function (items) {
 		var out = [];
 
-		Ext.each(items, function(item) {
-			var n = item.node || {getAttribute: function(a) { return item[a];} },
+		Ext.each(items, function (item) {
+			var n = item.node || {getAttribute: function (a) { return item[a];} },
 				poster = item.sources && item.sources[0] && item.sources[0].poster,
 				i = item.locationInfo || {},
 				r = item.courseRecord;
@@ -249,7 +249,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return out;
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		if (this.type) {
@@ -257,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		//if (this.store.getCount() === 1) {
@@ -277,7 +277,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		//this.bodyEl.mask('Loading...');
 	},
 
-	getCommentCount: function(pi) {
+	getCommentCount: function (pi) {
 	//		var link = pi.getLink('RecursiveUserGeneratedData');
 	//		if(link){
 		//load 1 item, filer by notes... read filteredTotal-something-or-other.
@@ -285,13 +285,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		//on failure call resetCommentCount
 	},
 
-	pausePlayback: function() {
+	pausePlayback: function () {
 		if (this.player && this.player.isPlaying()) {
 			this.player.pausePlayback();
 		}
 	},
 
-	maybeCreatePlayer: function() {
+	maybeCreatePlayer: function () {
 		var single = this.store.getCount() === 1;
 
 		if (!this.rendered) {
@@ -322,7 +322,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.on({
 			scope: p,
-			beforedestroy: function() {
+			beforedestroy: function () {
 				return p.fireEvent('beforedestroy');
 			},
 			destroy: 'destroy'
@@ -350,12 +350,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	//allow querying using selector PATH (eg: "parent-xtype-container course-overview-ntivideo")
-	getRefItems: function() {
+	getRefItems: function () {
 		var p = this.player;
 		return (p && [p]) || [];
 	},
 
-	resetCommentCount: function(a, r) {
+	resetCommentCount: function (a, r) {
 		var req = r && r.request;
 		console.warn('resetting count to 0\n', r && r.responseText);
 		if (req) {
@@ -366,18 +366,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	loadPageInfo: function(r) {
+	loadPageInfo: function (r) {
 		var ntiid = r.getId();
 
 		Service.getPageInfo(ntiid, this.getCommentCount, this.resetCommentCount, this);
 	},
 
-	onPlayerError: function() {
+	onPlayerError: function () {
 		this.showCurtain();
 		alert(getString('NextThought.view.courseware.overview.parts.Videos.error'));
 	},
 
-	showCurtain: function() {
+	showCurtain: function () {
 		var c = this.getLeaveCurtain(),
 			a = c ? 'hide' : 'show',
 			el = this[(c ? 'screen' : 'curtain') + 'El'];
@@ -398,7 +398,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		wait().then(this.setProgress.bind(this));
 	},
 
-	hideCurtain: function() {
+	hideCurtain: function () {
 		var c = this.getLeaveCurtain(),
 			a = c ? 'show' : 'hide',
 			el = this[(c ? 'screen' : 'curtain') + 'El'];
@@ -417,7 +417,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onSelectChange: function(s, rec) {
+	onSelectChange: function (s, rec) {
 		if (!rec) { return; }
 
 		var p = rec.get('poster') || null, idx;
@@ -456,15 +456,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		wait().then(this.setProgress.bind(this));
 	},
 
-	getSelectedVideo: function() {
+	getSelectedVideo: function () {
 		return this.getSelectionModel().getSelection()[0];
 	},
 
-	getSelectedVideoIndex: function(r) {
+	getSelectedVideoIndex: function (r) {
 		return this.getStore().indexOf(r || this.getSelectedVideo() || 0);
 	},
 
-	onCurtainClicked: function(e) {
+	onCurtainClicked: function (e) {
 		e.stopEvent();
 
 		var me = this,
@@ -486,7 +486,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 
 			this.course.getVideoForId(m.getId())
-				.then(function(video) {
+				.then(function (video) {
 					slidedeck = video && video.slidedeck || m.get('slidedeck');
 					if (Ext.isEmpty(slidedeck)) {
 						me.navigateToTarget(m, li.root);
@@ -514,7 +514,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	navigateToTarget: function(videoItem, basePath) {
+	navigateToTarget: function (videoItem, basePath) {
 		if (!this.navigate) {
 			console.error('No navigate set on content link');
 			return;
@@ -523,25 +523,25 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var me = this;
 
 		this.course.getVideoForId(videoItem.getId())
-			.then(function(o) {
+			.then(function (o) {
 				var video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
 				video.basePath = basePath;
 				me.navigate.call(null, video);
 			});
 	},
 
-	navigateToSlidedeck: function(slidedeckId, startVideo) {
+	navigateToSlidedeck: function (slidedeckId, startVideo) {
 		var me = this;
 		if (slidedeckId) {
 			Service.getObject(slidedeckId)
-				.then(function(slidedeck) {
+				.then(function (slidedeck) {
 					me.navigate.call(null, slidedeck);
 				});
 		}
 
 	},
 
-	setProgress: function(progress) {
+	setProgress: function (progress) {
 		progress = progress || this.progress;
 
 		this.progress = progress;
@@ -551,7 +551,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var me = this,
 			single = me.store.getCount() === 1;
 
-		me.store.each(function(video) {
+		me.store.each(function (video) {
 			if (progress.hasBeenViewed(video.get('id'))) {
 				if (single) {
 					me.addCls('viewed');

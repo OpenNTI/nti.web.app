@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Sum
 		{name: 'AvailableFinalGrade', type: 'bool'}
 	],
 
-	hasFinalGrade: function() {
+	hasFinalGrade: function () {
 		return this.get('AvailableFinalGrade');
 	}
 });

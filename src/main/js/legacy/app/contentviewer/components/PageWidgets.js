@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		favorite: {'click': 'onFavoriteClick'}
 	},
 
-	onBookmark: function(r) {
+	onBookmark: function (r) {
 		var currentNTIID = this.reader.getLocation().NTIID;
 
 
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		this.favorite.addCls('on');
 	},
 
-	onFavoriteClick: function() {
+	onFavoriteClick: function () {
 		if (this.bookmarkModel) {
 			this.bookmarkModel.destroy();
 			this.clearBookmark();
@@ -60,16 +60,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			.then(this.onBookmark.bind(this));
 	},
 
-	clearBookmark: function() {
+	clearBookmark: function () {
 		this.favorite.removeCls('on');
 		delete this.bookmarkModel;
 	},
 
-	hideControls: function() {
+	hideControls: function () {
 		this.hide();
 	},
 
-	showControls: function() {
+	showControls: function () {
 		this.show();
 	}
 });

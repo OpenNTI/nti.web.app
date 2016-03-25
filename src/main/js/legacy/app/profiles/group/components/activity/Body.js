@@ -16,12 +16,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		{xtype: 'profile-group-activity-stream'}
 	],
 
-	setUpComponents: function() {
+	setUpComponents: function () {
 		this.newPostCmp = this.down('profile-group-newpost');
 		this.activityCmp = this.down('profile-group-activity-stream');
 	},
 
-	onNewPost: function() {
+	onNewPost: function () {
 		if (this.postContainer && this.postContainer.getLink('add')) {
 			this.WindowActions.showWindow('new-topic', null, this.newPostCmp.el.dom, {afterSave: this.onPostSaved.bind(this)}, {
 				forum: this.postContainer
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		}
 	},
 
-	onPostSaved: function(record) {
+	onPostSaved: function (record) {
 		var store = this.activityCmp && this.activityCmp.store;
 
 		if (store) {
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		}
 	},
 
-	userChanged: function(entity) {
+	userChanged: function (entity) {
 		var me = this;
 
 		delete me.postContainer;
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		this.activityCmp.userChanged(entity);
 
 		return entity.getDefaultForum()
-			.then(function(forum) {
+			.then(function (forum) {
 				me.postContainer = forum;
 
 				if (!forum || !forum.getLink('add')) {

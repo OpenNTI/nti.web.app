@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 	STOP_NIB: {},
 	IDENTITY: { 'Class': 'CanvasAffineTransform', 'a': 1, 'b': 0, 'c': 0, 'd': 1, 'tx': 0, 'ty': 0 },
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.calculatedAttributes = ['fill', 'stroke'].concat(this.calculatedAttributes || []);
 		this.defineCacheAttributes();
 
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 		}
 	},
 
-	defineCacheAttributes: function() {
+	defineCacheAttributes: function () {
 		var me = this,
 			defineSetter = '__defineSetter__',
 			defineGetter = '__defineGetter__',
@@ -40,9 +40,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 			Object.defineProperty(me, 'cache', {enumerable: false});
 		}
 
-		Ext.each(this.calculatedAttributes, function(p) {
-			function setter(newValue) {this.tracked[p] = newValue; delete this.cache[p];}
-			function getter() { return this.tracked[p]; }
+		Ext.each(this.calculatedAttributes, function (p) {
+			function setter (newValue) {this.tracked[p] = newValue; delete this.cache[p];}
+			function getter () { return this.tracked[p]; }
 
 			if (hasDefineProp) {
 				Object.defineProperty(me, p, {
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 		});
 	},
 
-	getShapeName: function() {
+	getShapeName: function () {
 		try {
 			return (/^Canvas(.+?)Shape$/i).exec(this.Class)[1];
 		}
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 		}
 	},
 
-	draw: function(ctx,renderCallback) {
+	draw: function (ctx,renderCallback) {
 		var m = new NTMatrix(Ext.clone(this.transform)),
 			w = ctx.canvas.width,
 			scale;
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 		}
 	},
 
-	cacheColor: function(name) {
+	cacheColor: function (name) {
 		var cache = this.cache[name],
 			value;
 
@@ -123,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 		return '#000000';
 	},
 
-	getJSON: function() {
+	getJSON: function () {
 		var data = {},
 			colorRe = /rgba\((.+?),(.+?),(.+?),(.+?)\)/im,
 			keys = ['bbox', 'selected', 'nibData', 'cache', 'tracked'],
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 
 		data.MimeType = 'application/vnd.nextthought.' + (this.Class.toLowerCase());
 
-		function convertRGBA(s,r,g,b,a) {
+		function convertRGBA (s,r,g,b,a) {
 			r = parseInt(r, 10) / 255;
 			g = parseInt(g, 10) / 255;
 			b = parseInt(b, 10) / 255;
@@ -158,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 		return data;
 	},
 
-	performFillAndStroke: function(ctx) {
+	performFillAndStroke: function (ctx) {
 		if (this.cache.fill) { ctx.fill(); }
 		if (this.cache.stroke && ctx.lineWidth) { ctx.stroke(); }
 
@@ -167,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 		}
 	},
 
-	translate: function(dx, dy) {
+	translate: function (dx, dy) {
 		var t = this.transform;
 		t.tx += dx;
 		t.ty += dy;
@@ -183,9 +183,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 	 * @param sx - 0 or 1 to indicate if the nib can move in that direction
 	 * @param sy - 0 or 1 to indicate if the nib can move in that direction
 	 */
-	nibUpdate: function(m, x,y, dx,dy, sx,sy) {
+	nibUpdate: function (m, x,y, dx,dy, sx,sy) {
 
-		function clamp(n) {
+		function clamp (n) {
 			if (n === 0) {
 				return 0;
 			}
@@ -209,7 +209,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 
 		if (sx >= 0 && sy >= 0) {
 			var translate = [0, 0];
-			if(this.getCenter && this.points && this.bbox){
+			if(this.getCenter && this.points && this.bbox) {
 				var center = this.getCenter(false);
 				var origin = [this.points[0], this.points[1]];
 				translate = [origin[0] - center[0],origin[1] - center[1]];
@@ -238,7 +238,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 	 * @param dy - the mouse's change in Y (magnitude)
 	 *
 	 * */
-	scaleWithConstraint: function(nib,dx,dy) {
+	scaleWithConstraint: function (nib,dx,dy) {
 		var m = new NTMatrix(this.transform),
 			s = m.getScale(),
 			c = m.getTranslation(),
@@ -266,7 +266,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 		adjustedDy *= sign;
 
 		var translate = [0, 0];
-		if(this.getCenter && this.points && this.bbox){
+		if(this.getCenter && this.points && this.bbox) {
 			var center = this.getCenter(false);
 			var origin = [this.points[0], this.points[1]];
 			translate = [origin[0] - center[0],origin[1] - center[1]];
@@ -281,7 +281,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 		this.transform = m.toTransform();
 	},
 
-	nibRotate: function(m, x,y) {
+	nibRotate: function (m, x,y) {
 		var t = m.getTranslation(),
 			s = m.getScale();
 
@@ -295,18 +295,18 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 		return m.toTransform();
 	},
 
-	modify: function(nib,	x1,y1,	x2,y2,	dx,dy) {
+	modify: function (nib,	x1,y1,	x2,y2,	dx,dy) {
 		var m = new NTMatrix(this.transform),
 			map = {
-				'l' : function() { return this.nibUpdate(m, x1, y1, dx, dy, -1, 0);},
-				't' : function() { return this.nibUpdate(m, x1, y1, dx, dy, 0, -1);},
-				't-l'	: function() { return this.nibUpdate(m, x1, y1, dx, dy, 1, 1); },
-				'r' : function() { return this.nibUpdate(m, x1, y1, dx, dy, 1, 0); },
-				'b' : function() { return this.nibUpdate(m, x1, y1, dx, dy, 0, 1); },
-				'b-r'	: function() { return this.nibUpdate(m, x1, y1, dx, dy, 1, 1); },
-				't-r'	: function() { return this.nibUpdate(m, x1, y1, dx, dy, 1, 1); },
-				'b-l'	: function() { return this.nibUpdate(m, x1, y1, dx, dy, 1, 1); },
-				'rot'	: function() { return this.nibRotate(m, x1, y1); }
+				'l' : function () { return this.nibUpdate(m, x1, y1, dx, dy, -1, 0);},
+				't' : function () { return this.nibUpdate(m, x1, y1, dx, dy, 0, -1);},
+				't-l'	: function () { return this.nibUpdate(m, x1, y1, dx, dy, 1, 1); },
+				'r' : function () { return this.nibUpdate(m, x1, y1, dx, dy, 1, 0); },
+				'b' : function () { return this.nibUpdate(m, x1, y1, dx, dy, 0, 1); },
+				'b-r'	: function () { return this.nibUpdate(m, x1, y1, dx, dy, 1, 1); },
+				't-r'	: function () { return this.nibUpdate(m, x1, y1, dx, dy, 1, 1); },
+				'b-l'	: function () { return this.nibUpdate(m, x1, y1, dx, dy, 1, 1); },
+				'rot'	: function () { return this.nibRotate(m, x1, y1); }
 			};
 
 		try {
@@ -323,7 +323,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 		}
 	},
 
-	drawNib: function(ctx,r,x,y, drawMatrix, m, name, s, a) {
+	drawNib: function (ctx,r,x,y, drawMatrix, m, name, s, a) {
 
 		s = s || 0;
 		a = a || Math.PI * 2;
@@ -362,11 +362,11 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 		};
 	},
 
-	shouldEnableRotation: function() {
+	shouldEnableRotation: function () {
 		return true;
 	},
 
-	showNibs: function(ctx) {
+	showNibs: function (ctx) {
 		if (!this.bbox) {
 			return;
 		}
@@ -442,7 +442,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 	 *
 	 * @return truthy, with the name of the nib if true, false if not within a nib.
 	 */
-	isPointInNib: function(x,y) {
+	isPointInNib: function (x,y) {
 		var n, nib, nibs = this.nibData, d, dx, dy;
 		if (!nibs) { return false; }
 
@@ -477,7 +477,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 	 *
 	 * @return boolean
 	 */
-	isPointInShape: function(x,y) {
+	isPointInShape: function (x,y) {
 		if (!this.bbox) {
 			console.warn('no bounding box computed');
 			return false;
@@ -516,12 +516,12 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Base', 
 	 *	@return true if the point x,y is inside the polygon, or false if it is not.	 If the point is
 	 *	exactly on the edge of the polygon, then the function may return true or false.
 	 */
-	pointInPolygon: function(x,y, points) {
-		function dotProduct(p1, p2) {
+	pointInPolygon: function (x,y, points) {
+		function dotProduct (p1, p2) {
 			return p1[0] * p2[0] + p1[1] * p2[1];
 		}
 
-		function subtractVector(v1, v2) {
+		function subtractVector (v1, v2) {
 			return [v1[0] - v2[0], v1[1] - v2[1]];
 		}
 

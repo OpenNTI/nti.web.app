@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	PAGE_SIZE: 50,
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		this.onScroll = this.onScroll.bind(this);
 	},
 
-	startResourceViewed: function() {
+	startResourceViewed: function () {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && !this.hasCurrentTimer) {
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		}
 	},
 
-	stopResourceViewed: function() {
+	stopResourceViewed: function () {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && this.hasCurrentTimer) {
@@ -94,24 +94,24 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		}
 	},
 
-	onActivate: function() {
+	onActivate: function () {
 		this.startResourceViewed();
 		window.addEventListener('scroll', this.onScroll);
 	},
 
-	onDeactivate: function() {
+	onDeactivate: function () {
 		this.stopResourceViewed();
 		window.removeEventListener('scroll', this.onScroll);
 	},
 
-	onRemove: function() {
+	onRemove: function () {
 		var i = this.firstColumn.items;
 		if (Ext.isEmpty(i && i.items) && this.currentPage === -1) {
 			this.showEmpty();
 		}
 	},
 
-	userChanged: function(user) {
+	userChanged: function (user) {
 		if (this.activeUser !== user) {
 			this.stopResourceViewed();
 		}
@@ -123,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		return Promise.resolve();
 	},
 
-	setSourceURL: function(url) {
+	setSourceURL: function (url) {
 		//if we are loading the same feed don't bother doing any work
 		if (this.feedUrl === url) { return; }
 
@@ -151,11 +151,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		this.loadPage(1);
 	},
 
-	getActiveForum: function() {
+	getActiveForum: function () {
 		return this.postContainer;
 	},
 
-	setPostContainer: function(forum) {
+	setPostContainer: function (forum) {
 		this.postContainer = forum;
 
 		var title = forum && forum.getTitle();
@@ -172,11 +172,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		}
 	},
 
-	showActivity: function(route, subRoute) {
+	showActivity: function (route, subRoute) {
 		this.setTitle('Activity');
 	},
 
-	onNewPost: function() {
+	onNewPost: function () {
 		if (this.postContainer && this.postContainer.getLink('add')) {
 			this.WindowActions.showWindow('new-topic', null, this.newPostCmp.el.dom, {afterClose: this.onPostSaved.bind(this)}, {
 				forum: this.postContainer
@@ -184,13 +184,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		}
 	},
 
-	onPostSaved: function(record) {
+	onPostSaved: function (record) {
 		if (!record) { return; }
 
 		var left = this.firstColumn, me = this;
 
 		this.__loadItem(record)
-			.then(function(cmp) {
+			.then(function (cmp) {
 				if (cmp) {
 					left.insert(0, cmp);
 					me.clearEmpty();
@@ -198,7 +198,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 			});
 	},
 
-	addItems: function(items, feedUrl) {
+	addItems: function (items, feedUrl) {
 		if (feedUrl !== this.feedUrl) {
 			console.warn('Trying to add items from a different feed, dropping them on the floor');
 			return;
@@ -211,7 +211,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		return this.__renderItems(items, feedUrl);
 	},
 
-	__loadItem: function(item) {
+	__loadItem: function (item) {
 		var load;
 
 		if (item instanceof NextThought.model.forums.CommunityHeadlineTopic) {
@@ -228,7 +228,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		return load;
 	},
 
-	__renderItems: function(items, feedUrl) {
+	__renderItems: function (items, feedUrl) {
 		var me = this,
 			left = me.firstColumn,
 			right = me.secondColumn;
@@ -238,16 +238,16 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		items = items.map(me.__loadItem.bind(me));
 
 		return Promise.all(items)
-			.then(function(results) {
-				return results.filter(function(x) { return !!x;});
+			.then(function (results) {
+				return results.filter(function (x) { return !!x;});
 			})
-			.then(function(cmps) {
+			.then(function (cmps) {
 				if (feedUrl !== me.feedUrl) {
 					console.warn('Trying to add items for a different feed, dropping them on the floor');
 					return;
 				}
 
-				cmps.forEach(function(cmp, index) {
+				cmps.forEach(function (cmp, index) {
 					if (index % 2) {
 						right.add(cmp);
 					} else {
@@ -257,13 +257,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 			});
 	},
 
-	removeFeedItems: function() {
+	removeFeedItems: function () {
 		this.feedItems = [];
 		this.firstColumn.removeAll(true);
 		this.secondColumn.removeAll(true);
 	},
 
-	showEmpty: function() {
+	showEmpty: function () {
 		if (!this.emptyCmp) {
 			this.emptyCmp = this.add({
 				xtype: 'box',
@@ -273,7 +273,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		}
 	},
 
-	clearEmpty: function() {
+	clearEmpty: function () {
 		if (this.emptyCmp) {
 			this.emptyCmp.destroy();
 			delete this.emptyCmp;
@@ -287,7 +287,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	 *
 	 * @param  {Number} page the page number to load
 	 */
-	loadPage: function(page) {
+	loadPage: function (page) {
 		var me = this,
 			feedUrl = me.feedUrl,
 			params = {
@@ -303,14 +303,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		me.currentPage = page;
 
 		StoreUtils.loadBatch(me.feedUrl, params)
-			.then(function(batch) {
+			.then(function (batch) {
 				if (feedUrl !== me.feedUrl) {
 					console.warn('Loaded batch for a different feedurl than the active, drop it on the floor');
 				} else {
 					me.onBatchLoad(batch, feedUrl);
 				}
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				if (feedUrl !== me.feedUrl) {
 					console.warn('Failed to loaded batch for a different feedurl than the active, drop it on the floor');
 				} else {
@@ -319,7 +319,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 			});
 	},
 
-	onBatchError: function(error) {
+	onBatchError: function (error) {
 		console.error('Failed to load community activity: ', error);
 
 		this.loadingCmp.removeCls('hidden');
@@ -334,7 +334,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		});
 	},
 
-	onBatchLoad: function(batch, feedUrl) {
+	onBatchLoad: function (batch, feedUrl) {
 		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
 
 		this.isLoading = false;
@@ -358,18 +358,18 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		this.nextBatchLink = nextLink;
 	},
 
-	loadNextBatch: function() {
+	loadNextBatch: function () {
 		if (this.currentPage > 0) {
 			this.loadPage(this.currentPage + 1);
 		}
 	},
 
-	getScrollEl: function() {
+	getScrollEl: function () {
 		//TODO: figure out how to not have to do a user agent check for this
 		return Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body;
 	},
 
-	onScroll: function() {
+	onScroll: function () {
 		var height = document.documentElement.clientHeight,
 			el = this.getScrollEl(),
 			scrollTop = el.scrollTop,

@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 					name: 'old_password',
 					placeholder: getString('NextThought.view.form.PasswordResetForm.oldplaceholder'),
 					allowBlank: true,
-					validator: function(value) {
+					validator: function (value) {
 						if (Ext.isEmpty(value)) {
 							throw getString('NextThought.view.form.PasswordResetForm.emptyold');
 						}
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 					name: 'password',
 					placeholder: getString('NextThought.view.form.PasswordResetForm.newplaceholder'),
 					//minLength: 6, // validator doesn't get called if this is set, and the value is less than
-					validator: function(value) {
+					validator: function (value) {
 						if (Ext.isEmpty(value)) {
 							throw getString('NextThought.view.form.PasswordResetForm.emptynew');
 						}
@@ -54,11 +54,11 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 					placeholder: getString('NextThought.view.form.PasswordResetForm.verifyplaceholder'),
 					allowBlank: true,
 					listeners: {
-						focus: function(field) {
+						focus: function (field) {
 							field.hasBeenFocused = true;
 						}
 					},
-					validator: function(value) {
+					validator: function (value) {
 						var password = this.previousSibling('[name=password]').getValue();
 
 						if (!this.hasBeenFocused) {
@@ -90,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		]
 	}],
 
-	constructor: function() {
+	constructor: function () {
 		if (!Service.canChangePassword()) {
 			console.warn('User can\'t change password');
 			this.items = [{
@@ -113,22 +113,22 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		this.callParent(arguments);
 	},
 
-	setMessage: function(msg, error) {
+	setMessage: function (msg, error) {
 		var el = this.down('box[message]').getEl().down('.text');
 		el[error ? 'addCls' : 'removeCls']('error');
 		el.update(msg || '');
 	},
 
-	setError: function(errorJson) {
+	setError: function (errorJson) {
 		this.setMessage(errorJson.message, true);
 		if (errorJson.field === 'password') {
 			this.down('[name=old_password]').setError();
 		}
 	},
 
-	setSuccess: function() {
+	setSuccess: function () {
 		this.setMessage(getString('NextThought.view.form.PasswordResetForm.changed'));
-		Ext.each(this.query('simpletext'), function(t) {
+		Ext.each(this.query('simpletext'), function (t) {
 			t.suspendEvents();
 			t.clearValue(true);
 			t.resumeEvents(false);
@@ -139,38 +139,38 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 	},
 
-	getValues: function() {
+	getValues: function () {
 		return {
 			old_password: this.down('[name=old_password]').getValue(),
 			password: this.down('[name=password]').getValue()
 		};
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var button = this.down('button');
 
-		if(button){
+		if(button) {
 			this.mon(button, 'click', this.onSaveClick.bind(this));
 		}
 
 		this.inputs = this.query('simpletext');
-		Ext.each(this.inputs, function(i) {
+		Ext.each(this.inputs, function (i) {
 			this.mon(i, 'changed', this.checkValidity, this, {buffer: 250});
 		},this);
 	},
 
-	checkValidity: function(value, input) {
+	checkValidity: function (value, input) {
 
-		function val(i, s) {
+		function val (i, s) {
 			try {
 				me.setError({message: ''});
 				return i.validate(!!s);
 			}
 			catch (msg) {
-					i.setError();
-					me.setError({message: msg});
+				i.setError();
+				me.setError({message: msg});
 			}
 			return false;
 		}
@@ -180,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 		if (val(input)) {
 			me.setMessage();
-			v = me.inputs.reduce(function(accum, o) { return accum && val(o, true); }, true);
+			v = me.inputs.reduce(function (accum, o) { return accum && val(o, true); }, true);
 	  //			if(input.name === 'password'){
 	  //			}
 		}
@@ -189,7 +189,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		me.updateLayout();
 	},
 
-	onSaveClick: function() {
+	onSaveClick: function () {
 		var values = this.getValues();
 
 		this.AccountActions.changePassword(values)

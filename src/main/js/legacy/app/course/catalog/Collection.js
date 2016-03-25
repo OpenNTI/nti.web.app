@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.Collection
 	}),
 
 
-	prepareData: function(data, index, record) {
+	prepareData: function (data, index, record) {
 
 		var i = Ext.Object.chain(this.callParent(arguments)),
 			isOpen = record.get('isOpen'),
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.Collection
 	},
 
 
-	collectData: function() {
+	collectData: function () {
 		var data = this.callParent(arguments);
 
 		data.label = this.label;
@@ -70,12 +70,12 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.Collection
 	},
 
 
-	handleSelect: function(selModel, record) {
+	handleSelect: function (selModel, record) {
 		selModel.deselect(record);
 	},
 
 
-	onItemClick: function(rec, node, index, e) {
+	onItemClick: function (rec, node, index, e) {
 		this.fireEvent('show-course-detail', rec);
 		e.stopPropagation();
 		return false;

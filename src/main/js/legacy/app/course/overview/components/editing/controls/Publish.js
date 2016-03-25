@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', this.togglePublishMenu.bind(this));
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	initPublishMenu: function() {
+	initPublishMenu: function () {
 		if (!this.publishMenu) {
 			this.publishMenu = NextThought.app.course.overview.components.editing.publishing.Menu.create({
 				record: this.record,
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * Since publishing affects both the outline node and the lesson overview,
 	 * we will take into account both to make sure they follow the intended business logic.
 	 */
-	setPublishState: function() {
+	setPublishState: function () {
 		var node = this.record,
 			isNodePublished = node && node.isPublished && node.isPublished(),
 			lesson = this.contents,
@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	setPublished: function() {
+	setPublished: function () {
 		var label = this.labelEl,
 			el = this.el;
 
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	setWillPublishOn: function() {
+	setWillPublishOn: function () {
 		var label = this.labelEl,
 			rec = this.contents,
 			value = rec && rec.get('publishBeginning'),
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	setNotPublished: function() {
+	setNotPublished: function () {
 		var label = this.labelEl,
 			el = this.el;
 
@@ -126,14 +126,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	alignPublishingMenu: function() {
+	alignPublishingMenu: function () {
 		if (!this.rendered) { return; }
 
 		this.publishMenu.alignTo(this.el.dom);
 	},
 
 
-	togglePublishMenu: function() {
+	togglePublishMenu: function () {
 		var el = this.el;
 
 		if (el.hasCls('closed')) {
@@ -150,7 +150,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	hideMenu: function() {
+	hideMenu: function () {
 		if (this.el.hasCls('closed')) {
 			return;
 		}
@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	showMenu: function() {
+	showMenu: function () {
 		this.initPublishMenu();
 
 		this.el.removeCls('closed');
@@ -176,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.publishMenu.open();
 	},
 
-	onBodyClick: function(e) {
+	onBodyClick: function (e) {
 		if (e.getTarget('.pub')) { return; }
 		if (!this.el.hasCls('closed')) {
 			this.hideMenu();

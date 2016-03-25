@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	hasOrderedContents: true,
 
 
-	isSameContainer: function(record) {
+	isSameContainer: function (record) {
 		var myId = this.getId(),
 			theirId = record.getId ? record.getId() : record;
 
@@ -15,27 +15,27 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	onSync: function() {
+	onSync: function () {
 		this.fillInItems();
 	},
 
 
-	getItems: function() {
+	getItems: function () {
 		return this.get('Items') || [];
 	},
 
 
-	getItemsCount: function() {
+	getItemsCount: function () {
 		var items = this.getItems();
 
 		return items.length;
 	},
 
 
-	onceFilledIn: function() {
+	onceFilledIn: function () {
 		var me = this;
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			if (me.isFilledIn) {
 				fulfill();
 			} else {
@@ -45,12 +45,12 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	fillInItems: function() {
+	fillInItems: function () {
 		var me = this,
 			items = me.getItems();
 
 		if (items) {
-			items.forEach(function(item, index) {
+			items.forEach(function (item, index) {
 				item.parent = me;
 				item.listIndex = index;
 				item.previousSibling = items[index - 1];
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	getOrderedContentsRoot: function() {
+	getOrderedContentsRoot: function () {
 		var parent = this.parent;
 
 		if (parent && parent.getRoot) {
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	findOrderedContentsItem: function(id) {
+	findOrderedContentsItem: function (id) {
 		var items = this.getItems(), i,
 			item, record;
 
@@ -110,12 +110,12 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	onItemUpdated: function() {
+	onItemUpdated: function () {
 		this.fireEvent('updated');
 	},
 
 
-	indexOfId: function(id) {
+	indexOfId: function (id) {
 		var items = this.getItems(),
 			i;
 
@@ -129,30 +129,30 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	hasContentsLink: function() {
+	hasContentsLink: function () {
 		return !!this.getContentsLink();
 	},
 
 
-	getContentsLink: function() {
+	getContentsLink: function () {
 		return this.getLink('ordered-contents');
 	},
 
 
-	getInsertLink: function(index) {
+	getInsertLink: function (index) {
 		var link = this.getLink('ordered-contents');
 
 		return Globals.trimRoute(link) + '/index/' + index;
 	},
 
 
-	__submitContent: function(content, link) {
+	__submitContent: function (content, link) {
 		if (!link) {
 			return Proimse.reject('No Link');
 		}
 
 		return Service.post(link, content)
-			.then(function(response) {
+			.then(function (response) {
 				return ParseUtils.parseItems(response)[0];
 			});
 	},
@@ -169,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	 * @param  {Object} content the values to append
 	 * @return {Promise}
 	 */
-	appendContent: function(content) {
+	appendContent: function (content) {
 		var link = this.getContentsLink();
 
 		return this.__submitContent(content, link)
@@ -177,7 +177,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	insertContent: function(content, index) {
+	insertContent: function (content, index) {
 		if (index === undefined) {
 			return this.appendContent(content);
 		}
@@ -189,13 +189,13 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	__submitFormTo: function(form, link) {
+	__submitFormTo: function (form, link) {
 		if (!link) {
 			return Promise.reject('No Link');
 		}
 
 		return form.submitTo(link)
-			.then(function(response) {
+			.then(function (response) {
 				return ParseUtils.parseItems(response)[0];
 			});
 	},
@@ -206,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	 * @param  {NextThought.common.form.Form} form the form component
 	 * @return {Promise}
 	 */
-	appendForm: function(form) {
+	appendForm: function (form) {
 		var link = this.getContentsLink();
 
 		return this.__submitFormTo(form, link)
@@ -214,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	insertForm: function(form, index) {
+	insertForm: function (form, index) {
 		if (index === undefined) {
 			return this.appendForm(form);
 		}
@@ -226,7 +226,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	__insertRecord: function(index, record) {
+	__insertRecord: function (index, record) {
 		if (index === undefined) {
 			return this.__appendRecord;
 		}
@@ -251,7 +251,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	__appendRecord: function(record) {
+	__appendRecord: function (record) {
 		var items = this.get('Items');
 
 		if (items !== null) {
@@ -272,11 +272,11 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	__removeRecord: function(record) {
+	__removeRecord: function (record) {
 		var items = this.get('Items'),
 			id = record.getId();
 
-		items = items.filter(function(item) {
+		items = items.filter(function (item) {
 			return item.getId() !== id;
 		});
 
@@ -299,7 +299,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	 * @param  {Object} root	  the root of me and the oldParent
 	 * @return {Promise}
 	 */
-	appendFromContainer: function(record, oldParent, root) {
+	appendFromContainer: function (record, oldParent, root) {
 		var move;
 
 		//If the old parent is this, there's no need to do anything
@@ -326,7 +326,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	 * @param  {Object} root	  the root of me and the oldParent
 	 * @return {Promise}
 	 */
-	moveToFromContainer: function(record, index, oldIndex, oldParent, root) {
+	moveToFromContainer: function (record, index, oldIndex, oldParent, root) {
 		if (index === undefined) {
 			return this.appendFromContainer(record, oldParent, root);
 		}
@@ -350,7 +350,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	__doRemove: function(record, index) {
+	__doRemove: function (record, index) {
 		var link = this.getContentsLink(),
 			ntiid = record && record.getId(),
 			remove;
@@ -373,7 +373,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	removeRecord: function(record) {
+	removeRecord: function (record) {
 		var items = this.getItems(),
 			i;
 
@@ -387,7 +387,7 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
-	removeAtIndex: function(index) {
+	removeAtIndex: function (index) {
 		var items = this.getItems(),
 			record = items[index];
 

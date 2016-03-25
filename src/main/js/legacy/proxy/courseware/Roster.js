@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.Roster', {
 		totalProperty: 'FilteredTotalItemCount',
 		type: 'json',
 		root: 'Items',
-		readRecords: function() {
+		readRecords: function () {
 			var data = this.self.prototype.readRecords.apply(this, arguments),
 				list = (data && data.records) || [],
 				i = list.length - 1, o, u;
@@ -53,16 +53,16 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.Roster', {
 	limitParam: 'batchSize',
 
 
-	setSource: function(source) {
+	setSource: function (source) {
 		//ForCredit, or Open
 		this.source = source;
 	},
 
 
-	setURL: function(url) { this.url = url; },
+	setURL: function (url) { this.url = url; },
 
 
-	buildUrl: function(request) {
+	buildUrl: function (request) {
 		var sort, dir, filter,
 			p = request.params;
 
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.proxy.courseware.Roster', {
 		if (p && p.filter) {
 			filter = p.filter;
 			delete p.filter;
-			Ext.decode(filter).forEach(function(filter) {
+			Ext.decode(filter).forEach(function (filter) {
 				if (filter.property === 'LegacyEnrollmentStatus' && filter.value !== '*') {
 					p.filter = filter.property + filter.value;
 				} else if (filter.property === 'usernameSearchTerm') {

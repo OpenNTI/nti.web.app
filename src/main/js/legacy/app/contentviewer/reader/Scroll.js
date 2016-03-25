@@ -8,19 +8,19 @@ var UtilSearch = require('../../../util/Search');
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 	alias: 'reader.scroll',
 
-	constructor: function(config) {
+	constructor: function (config) {
 		Ext.apply(this, config);
 		var me = this, reader = me.reader,
 			scroll = me.menuHideOnScroll.bind(me);
 
-		function afterReaderRenders() {
+		function afterReaderRenders () {
 			me.scrollingEl = Ext.isIE11p || Ext.isGecko ? Ext.get(document.documentElement) : Ext.getBody();
 			reader.on('destroy', 'destroy',
 					reader.relayEvents(me.scrollingEl, [
 						'scroll'
 					]));
 
-			reader.on('destroy', function() {
+			reader.on('destroy', function () {
 				window.removeEventListener('scroll', scroll);
 			});
 
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 		});
 	},
 
-	menuHideOnScroll: function() {
+	menuHideOnScroll: function () {
 		var scrollPosition = Math.abs(this.top());
 
 		Ext.menu.Manager.hideAll();
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 		}
 	},
 
-	isInFullScreenMode: function() {
+	isInFullScreenMode: function () {
 		var el = document.fullscreenElement ||
 				 document.webkitFullscreenElement ||
 				 document.mozFullScreenElement ||
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 		return Boolean(el);
 	},
 
-	lock: function() {
+	lock: function () {
 		if (!Ext.getDom(this.scrollingEl)) {
 			return;
 		}
@@ -65,43 +65,43 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 		this.scrollingEl.setStyle({overflowY: 'hidden'});
 	},
 
-	unlock: function() {
+	unlock: function () {
 		if (!Ext.getDom(this.scrollingEl)) {
 			return;
 		}
 		this.scrollingEl.setStyle({overflowY: 'auto'});
 	},
 
-	get: function() {
+	get: function () {
 		if (!this.scrollingEl) {
 			return;
 		}
 		return this.scrollingEl.getScroll();
 	},
 
-	up: function() {
+	up: function () {
 		this.by(50);
 	},
 
-	down: function() {
+	down: function () {
 		this.by(-50);
 	},
 
-	by: function(delta) {
+	by: function (delta) {
 		if (!this.scrollingEl) {
 			return;
 		}
 		var s = this.scrollingEl,
-				t = s.getScrollTop();
+			t = s.getScrollTop();
 		s.setScrollTop(t - delta);
 	},
 
-	top: function() {
+	top: function () {
 		var s = this.scrollingEl;
 		return s && s.getScrollTop();
 	},
 
-	toId: function(id) {
+	toId: function (id) {
 		var n = Ext.getCmp(id),
 			m,
 			offset = this.reader.getPosition(),
@@ -130,22 +130,22 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 
 	//Scrolls the reader to the first element matching the provided
 	//selector.
-	toSelector: function(selector) {
+	toSelector: function (selector) {
 		var de = this.reader.getDocumentElement(),
-				elem = de.querySelector(selector);
+			elem = de.querySelector(selector);
 		if (elem) {
 			this.toNode(elem, true, 0);
 		}
 	},
 
-	toTarget: function(target) {
-		function getNode(t) {
+	toTarget: function (target) {
+		function getNode (t) {
 			return document.getElementById(t) || de.getElementById(t) || de.getElementsByName(t)[0];
 		}
 		var de = this.reader.getDocumentElement(),
-				c = Ext.getCmp(target),
-				e = getNode(target) || getNode(decodeURIComponent(target)),
-				topMargin = 75;
+			c = Ext.getCmp(target),
+			e = getNode(target) || getNode(decodeURIComponent(target)),
+			topMargin = 75;
 
 		if (!e && c) {
 			try {
@@ -165,11 +165,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 		}
 	},
 
-	toContainer: function(containerId) {
+	toContainer: function (containerId) {
 		var de = this.reader.getDocumentElement(),
 			e = de.getElementById(containerId) || de.getElementsByName(containerId)[0];
 
-		Ext.each(de.querySelectorAll('[data-ntiid],[ntiid]'), function(o) {
+		Ext.each(de.querySelectorAll('[data-ntiid],[ntiid]'), function (o) {
 			var a = o.getAttribute('data-ntiid') || o.getAttribute('ntiid');
 			if (a === containerId) {
 				e = o;
@@ -191,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 	 *							 based on its visibility on screen
 	 * @param {Number} bottomThreshold - if you want to scroll if the target is close to the bottom, specify a threshold.
 	 */
-	toNode: function(n, onlyIfNotVisible, bottomThreshold, verticalOffset) {
+	toNode: function (n, onlyIfNotVisible, bottomThreshold, verticalOffset) {
 		while (n && n.nodeType === Node.TEXT_NODE) {
 			n = n.parentNode;
 		}
@@ -211,14 +211,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 		this.to(o - (verticalOffset || 0) - 10);
 	},
 
-	to: function(top, animate) {
+	to: function (top, animate) {
 		if (!this.scrollingEl || !this.scrollingEl.dom) {
 			return;
 		}
 		this.scrollingEl.scrollTo('top', top, animate !== false);
 	},
 
-	toNote: function(note) {
+	toNote: function (note) {
 		var applicableRange = note.get('applicableRange'),
 			containerId = note.get('ContainerId'),
 			doc = this.reader.getIframe().getDocumentElement(),
@@ -228,7 +228,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 		this.toNode(range.startContainer);
 	},
 
-	toSearchHit: function(hit, fragment) {
+	toSearchHit: function (hit, fragment) {
 		var me = this, pos;
 
 		this.reader.getAnnotations().clearSearchHit();
@@ -254,18 +254,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Scro
 	},
 
 	/** @private */
-	getFragmentLocation: function(fragment, phrase) {
+	getFragmentLocation: function (fragment, phrase) {
 		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase, true),
-				doc = this.reader.getDocumentElement(),
-				ranges = TextRangeFinderUtils.findTextRanges(doc, doc, fragRegex.re, fragRegex.matchingGroups),
-				range, pos = -2, nodeTop, scrollOffset, assessmentAdjustment = 0, indexOverlayData,
-				olDom = Ext.getDom(this.reader.getComponentOverlay().componentOverlayEl);
+			doc = this.reader.getDocumentElement(),
+			ranges = TextRangeFinderUtils.findTextRanges(doc, doc, fragRegex.re, fragRegex.matchingGroups),
+			range, pos = -2, nodeTop, scrollOffset, assessmentAdjustment = 0, indexOverlayData,
+			olDom = Ext.getDom(this.reader.getComponentOverlay().componentOverlayEl);
 
 		if (Ext.isEmpty(ranges)) {
 			//We are pretty tightly coupled here for assessment.  Each overlay needs to be
 			//asked to find the match
 			indexOverlayData = TextRangeFinderUtils.indexText(olDom,
-					function(node) {
+					function (node) {
 						return Ext.fly(node).parent('.indexed-content');
 					});
 

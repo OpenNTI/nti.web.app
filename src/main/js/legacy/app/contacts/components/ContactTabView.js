@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Conta
 		this.buildStore();
 	},
 
-	buildStore: function() {
+	buildStore: function () {
 		var s = this.GroupStore.getAllContactsStore(),
 			store = StoreUtils.newView(s), me = this;
 

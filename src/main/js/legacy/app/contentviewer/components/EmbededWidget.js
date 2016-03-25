@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.onMessage = this.onMessage.bind(this);
 	},
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			var out = {};
 			var query = src.split('?')[1] || '';
 
-			query.split('&').forEach(function(param) {
+			query.split('&').forEach(function (param) {
 				var p = param.split('=');
 				out[p[0]] = decodeURIComponent(p[1]);
 			});
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 			Ext.getDom(this.frame).style.height = value + 'px';
 
 			clearTimeout(this.onResizeBuffer);
-			this.onResizeBuffer = setTimeout(function() { me.updateLayout(); }, 250);
+			this.onResizeBuffer = setTimeout(function () { me.updateLayout(); }, 250);
 		}
 	}
 });

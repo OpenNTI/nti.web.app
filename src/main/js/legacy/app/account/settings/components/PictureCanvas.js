@@ -10,13 +10,13 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 	autoEl: {tag: 'canvas', width: 4, height: 3},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.dragOver = this.dragEnter;
 		this.on('boxready', this.syncSizeAttributes, this);
 	},
 
-	syncSizeAttributes: function() {
+	syncSizeAttributes: function () {
 		if (!this.el || !this.el.dom) { return; }
 
 		var width = this.el.dom.clientWidth,
@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.el, {
@@ -49,10 +49,10 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	onMouseDown: function(e) {
+	onMouseDown: function (e) {
 		if (!this.imageInfo) {return;}
 
-	e.stopEvent();
+		e.stopEvent();
 		var xy = e.getXY(),
 			start = xy.slice(),
 			origin = this.el.getXY(),
@@ -96,20 +96,20 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	onMouseMove: function(e) {
+	onMouseMove: function (e) {
 		if (!this.mouseDown) { return; }
 
-		function clamp(v, min, max) {
+		function clamp (v, min, max) {
 			return (v < min) ? min : ((v > max) ? max : v);
 		}
 
-		function doMove() {
+		function doMove () {
 			//clamp values
 			s.x = clamp((s.x - dx), 0, (i.width - s.size));
 			s.y = clamp((s.y - dy), 0, (i.height - s.size));
 		}
 
-		function doSize(corner, anchor) {
+		function doSize (corner, anchor) {
 			var mX = Boolean(corner & 2),
 				mY = Boolean(corner & 1),
 				origin = el.getXY().slice(),
@@ -162,24 +162,24 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	onMouseUp: function(e) {
-	e.stopEvent();
+	onMouseUp: function (e) {
+		e.stopEvent();
 		delete this.mouseDown;
 		delete this.mouseLeftNoMouseUp;
 	},
 
 
-	createFileInput: function() {
+	createFileInput: function () {
 		var me = this,
 			old = me.fileInputEl,
 			file = me.fileInputEl = Ext.DomHelper.insertAfter(me.targetInputEl || me.el, {
-			name: 'file1',
-			cls: 'file-input',
-			tag: 'input',
-			type: 'file',
-			accept: 'image/*',
-			size: 1
-		},true);
+				name: 'file1',
+				cls: 'file-input',
+				tag: 'input',
+				type: 'file',
+				accept: 'image/*',
+				size: 1
+			},true);
 
 		if (old) {
 			old.remove();
@@ -199,7 +199,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	onFileChange: function(e) {
+	onFileChange: function (e) {
 		if (!window.FileReader) {
 			this.doLegacyUpload(e.target.files);
 			return;
@@ -209,7 +209,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	doLegacyUpload: function(fileList) {
+	doLegacyUpload: function (fileList) {
 		if (!fileList || fileList.length === 0 || !fileList[0]) {
 			alert({
 				title: getString('avatar.upload.unsupported.title', 'So Sorry :('),
@@ -239,7 +239,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 		Ext.getBody().mask('Uploading...', 'navigation');
 
-		function fin(f, action) {
+		function fin (f, action) {
 			Ext.getBody().unmask();
 			var url = ((action || {}).result || {}).dataurl || false;//prevent an error, and force false if its not there.
 			if (url) {
@@ -251,14 +251,14 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 			form.destroy();
 		}
 
-		Ext.defer(function() {
+		Ext.defer(function () {
 			//sigh...lets try not to lock up the browser with a synchronous submit >.<
 			form.submit({ url: url, success: fin, failure: fin });
 		},1);
 	},
 
 
-	extractFileInput: function() {
+	extractFileInput: function () {
 		var fileInput = this.fileInputEl.dom;
 		this.fileInputEl.clearListeners();
 		this.fileInputEl.remove();
@@ -266,7 +266,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	clear: function() {
+	clear: function () {
 		if (!this.el) {return;}
 
 		var c = this.el.dom,
@@ -282,7 +282,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	rotate: function() {
+	rotate: function () {
 		if (!this.imageInfo) {
 			return;
 		}
@@ -303,16 +303,16 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	setImage: function(url) {
+	setImage: function (url) {
 		var me = this,
 			img = new Image();
 
-		img.onerror = function() {
+		img.onerror = function () {
 			console.error('Failed to load image?', arguments);
 			me.clear();
 		};
 
-		img.onload = function ImageLoaded() {
+		img.onload = function ImageLoaded () {
 			if (me.fileInputEl) {
 				me.fileInputEl.remove();
 			}
@@ -348,7 +348,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	getOppositeCorner: function(corner) {
+	getOppositeCorner: function (corner) {
 		var i = this.imageInfo,
 			s = i.selection,
 			corners = [
@@ -361,7 +361,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	getMask: function getMask(size, pixAdj) {
+	getMask: function getMask (size, pixAdj) {
 		size = size || 0;
 		pixAdj = pixAdj || 0;
 		var i = this.imageInfo || {selection: {}};
@@ -374,14 +374,14 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	drawCropTool: function() {
+	drawCropTool: function () {
 		var ctx = this.el.dom.getContext('2d'),
 			i = this.imageInfo;
 
 		//erase
 		this.el.dom.width = this.mySize.width;
 
-		function drawCorners(x, y, width, height) {
+		function drawCorners (x, y, width, height) {
 			ctx.save();
 			ctx.fillStyle = '#000';
 			ctx.strokeStyle = '#fff';
@@ -390,7 +390,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 			var cw = Math.ceil(width / 2),
 				ch = Math.ceil(height / 2);
 
-			function nib() {
+			function nib () {
 				ctx.beginPath();
 				ctx.moveTo(-cw, -ch);
 				ctx.lineTo(16 - cw, -ch);
@@ -451,7 +451,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	getValue: function(event) {
+	getValue: function (event) {
 
 		var i = this.imageInfo,
 			s = i.selection,
@@ -470,14 +470,14 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	selectImage: function(inputField) {
+	selectImage: function (inputField) {
 		var hasFileApi = Boolean(inputField.fileInputEl.dom.files),
 			files = hasFileApi ? inputField.extractFileInput().files : [];
 		this.readFile(files);
 	},
 
 
-	enableImageDropping: function() {
+	enableImageDropping: function () {
 		var me = this,
 			el = me.el;
 
@@ -490,7 +490,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	dragEnter: function(e) {
+	dragEnter: function (e) {
 		var b = e.browserEvent,
 			dt = b.dataTransfer;
 		dt.dropEffect = 'copy';
@@ -499,7 +499,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	dropImage: function(e) {
+	dropImage: function (e) {
 		var dt = e.browserEvent.dataTransfer;
 		if (dt) {
 			this.readFile(dt.files);
@@ -511,16 +511,16 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	handlePaste: function(event, domEl) {
+	handlePaste: function (event, domEl) {
 		var clipboardData = event.clipboardData || {},
 			me = this;
 
-		Ext.each(clipboardData.types || [], function(type, i) {
+		Ext.each(clipboardData.types || [], function (type, i) {
 			var file, reader;
 			if (type.match(/image\/.*/i)) {
 				file = clipboardData.items[i].getAsFile();
 				reader = new FileReader();
-				reader.onload = function(evt) {
+				reader.onload = function (evt) {
 					me.setImage(evt.target.result);
 				};
 				reader.readAsDataURL(file);
@@ -532,7 +532,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	},
 
 
-	readFile: function(files) {
+	readFile: function (files) {
 		var me = this,
 			file = files[0],
 			reader;
@@ -545,7 +545,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 		if (window.FileReader) {
 			reader = new FileReader();
-			reader.onload = function(event) {
+			reader.onload = function (event) {
 				//http://code.google.com/p/jsjpegmeta/source/browse/jpegmeta.js
 				me.setImage(event.target.result);
 			};
@@ -556,9 +556,9 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 
 	//for Legacy
-	isDirty: function() { return true; },
+	isDirty: function () { return true; },
 	isFormField: true,
-	isFileUpload: function() { return true; },
-	getSubmitData: function() { return null; },
-	validate: function() { return Boolean(this.fileInputEl.dom.value); }
+	isFileUpload: function () { return true; },
+	getSubmitData: function () { return null; },
+	validate: function () { return Boolean(this.fileInputEl.dom.value); }
 });

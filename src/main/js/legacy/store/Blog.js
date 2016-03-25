@@ -23,10 +23,10 @@ module.exports = exports = Ext.define('NextThought.store.Blog', {
 		model: 'NextThought.model.forums.PersonalBlogEntry'
 	},
 
-	remove: function(records) {
+	remove: function (records) {
 		this.callParent(arguments);
 
-		Ext.each(records, function(record) {
+		Ext.each(records, function (record) {
 			record.fireEvent('destroy', record);
 		});
 

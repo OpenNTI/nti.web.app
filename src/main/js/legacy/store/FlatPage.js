@@ -27,8 +27,8 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 		}
 	],
 	filters: [
-		{ id: 'nochildren', filterFn: function(r) { return !r.parent;}},
-		{ id: 'no-private-notes', filterFn: function(r) {
+		{ id: 'nochildren', filterFn: function (r) { return !r.parent;}},
+		{ id: 'no-private-notes', filterFn: function (r) {
 			return !isFeature('notepad') ||
 				   r.placeholder ||
 				   r.get('Class') !== 'Note' ||
@@ -38,16 +38,16 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 	],
 
 
-	remove: function(record, isMove, silent) {
+	remove: function (record, isMove, silent) {
 		var r = record || [],
-				args = Array.prototype.slice.call(arguments);
+			args = Array.prototype.slice.call(arguments);
 
 		if (!Ext.isArray(r)) {
 			r = [r];
 		}
 
 		if (isMove) {
-			Ext.each(r, function(r, i, a) {
+			Ext.each(r, function (r, i, a) {
 				if (r.placeholder) {
 					console.log('>>???');
 					a.splice(i, 1); }
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 	},
 
 
-	removeAll: function() {
+	removeAll: function () {
 		var f = this.filters.getRange();
 		this.clearFilter(true);
 		try {
@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 	},
 
 
-	bind: function(otherStore) {
+	bind: function (otherStore) {
 		var me = this, monitors;
 
 		if (!otherStore) {
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 		if (Ext.Array.contains(otherStore.$boundToFlat || [], this)) { return; }
 
 
-		function remove(s, rec) {
+		function remove (s, rec) {
 			var f;
 			if (!Ext.isEmpty(rec)) {
 				f = me.filters.getRange();
@@ -96,24 +96,24 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 			}
 		}
 
-		function cleanUp(o) {
+		function cleanUp (o) {
 			Ext.destroy(monitors);
 			o.clearFilter(true);
 			remove(o, o.getRange());
 		}
 
 
-		function add(s, rec) {
+		function add (s, rec) {
 
-			function doesRecordPassFilters(rec) {
-				return Ext.Array.every(currentFilters, function(f) {
+			function doesRecordPassFilters (rec) {
+				return Ext.Array.every(currentFilters, function (f) {
 					if (f.id !== 'lineFilter' && f.filterFn) { return f.filterFn.apply(f, [rec]); }
 					return true;
 				});
 			}
 
 
-			function addMe(r) {
+			function addMe (r) {
 				var i = me.findExact('NTIID', r.get('NTIID'));
 				if (!r || !(r instanceof NextThought.model.Note)) { return; }
 
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 						// If the lineFilter is set on the flatPage store,
 						// wait until we set the line property on the new rec,
 						// then check it and add it.
-						r.addObserverForField(me, 'line', function() {
+						r.addObserverForField(me, 'line', function () {
 							me.suspendEvents(false);
 							me.add(r);
 							me.filter(me.filters.getRange());
@@ -141,18 +141,18 @@ module.exports = exports = Ext.define('NextThought.store.FlatPage', {
 				}
 			}
 
-			var placeholders = Ext.Array.filter(s.getItems(), function(r) {return r.placeholder && !r.parent;}),
-					records = ((rec && (Ext.isArray(rec) ? rec : [rec])) || []).concat(placeholders),
-					currentFilters = me.filters.getRange();
+			var placeholders = Ext.Array.filter(s.getItems(), function (r) {return r.placeholder && !r.parent;}),
+				records = ((rec && (Ext.isArray(rec) ? rec : [rec])) || []).concat(placeholders),
+				currentFilters = me.filters.getRange();
 
 			Ext.each(records, addMe);
 		}
 
-		function load(s, rec) {
-			var placeholders = Ext.Array.filter(s.getItems(), function(r) {return r.placeholder && !r.parent;}),
-					records = ((rec && (Ext.isArray(rec) ? rec : [rec])) || []).concat(placeholders), me = this;
+		function load (s, rec) {
+			var placeholders = Ext.Array.filter(s.getItems(), function (r) {return r.placeholder && !r.parent;}),
+				records = ((rec && (Ext.isArray(rec) ? rec : [rec])) || []).concat(placeholders), me = this;
 
-			Ext.each(records, function(r) {
+			Ext.each(records, function (r) {
 				var i = me.find('NTIID', r.get('NTIID'), 0, false, true, true);
 				if (!r || !(r instanceof NextThought.model.Note)) { return; }
 

@@ -7,19 +7,19 @@ var ContextStateStore = require('../context/StateStore');
 module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
-	getSuggestionStore: function() {
+	getSuggestionStore: function () {
 		var store = new Ext.data.Store({
-				model: 'NextThought.model.UserSearch'
-			});
+			model: 'NextThought.model.UserSearch'
+		});
 
 		this.__getSuggestionItems()
-			.then(function(items) {
+			.then(function (items) {
 				store.loadRecords(items);
 				store.fireEvent('load');
 			});
@@ -27,12 +27,12 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 		return store;
 	},
 
-	__getSuggestionItems: function() {
+	__getSuggestionItems: function () {
 		return Promise.all([
-				this.getSuggestions(),
-				this.getCommunities(),
-				this.getGroups()
-			]).then(function(results) {
+			this.getSuggestions(),
+			this.getCommunities(),
+			this.getGroups()
+		]).then(function (results) {
 				var suggestions = results[0],
 					communities = results[1],
 					groups = results[2],
@@ -66,12 +66,12 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 			});
 	},
 
-	getSiteCommunity: function() {
+	getSiteCommunity: function () {
 		var siteId = Service.get('SiteCommunity');
 
 		return Service.getCommunitiesList()
-			.then(function(communities) {
-				communities = communities.filter(function(community) {
+			.then(function (communities) {
+				communities = communities.filter(function (community) {
 					return community.getId() === siteId;
 				});
 
@@ -81,12 +81,12 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 			});
 	},
 
-	getSuggestions: function() {
+	getSuggestions: function () {
 		var suggestions = [this.getSiteCommunity()],
 			rootBundle = this.ContextStore.getRootBundle(),
 			context = this.ContextStore.getContext();
 
-		(context || []).forEach(function(item) {
+		(context || []).forEach(function (item) {
 			if (item.obj && item.obj.getSuggestedSharing) {
 				suggestions.push(item.obj.getSuggestedSharing());
 			} else if (item.cmp && item.cmp.getSuggestedSharing) {
@@ -95,10 +95,10 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 		});
 
 		return Promise.all(suggestions)
-			.then(function(results) {
+			.then(function (results) {
 				results = Globals.flatten(results);
 
-				return results.reduce(function(acc, result) {
+				return results.reduce(function (acc, result) {
 					if (!result) { return acc; }
 
 					if (result.isModel) {
@@ -116,23 +116,23 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Actions', {
 			});
 	},
 
-	getCommunities: function() {
+	getCommunities: function () {
 		var siteId = Service.get('SiteCommunity');
 
 		return Service.getCommunitiesList()
-			.then(function(communities) {
-				return communities.filter(function(community) {
+			.then(function (communities) {
+				return communities.filter(function (community) {
 					return !community.isEveryone() && community.getId() !== siteId;
-				}).map(function(community) {
+				}).map(function (community) {
 					return NextThought.model.UserSearch.create(community.getData());
 				});
 			});
 	},
 
-	getGroups: function() {
+	getGroups: function () {
 		return Service.getGroupsList()
-			.then(function(groups) {
-				return groups.map(function(group) {
+			.then(function (groups) {
+				return groups.map(function (group) {
 					return NextThought.model.UserSearch.create(group.getData());
 				});
 			});

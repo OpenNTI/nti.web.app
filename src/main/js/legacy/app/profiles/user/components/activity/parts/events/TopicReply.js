@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		'{super}'
 	]),
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent();
 		this.addCls('x-container-profile');
 
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		// this.fillInPath();
 	},
 
-	redraw: function() {
+	redraw: function () {
 		if (!this.el) { return; }
 		var path = this.pathEl.getHTML();
 		this.callParent(arguments);
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	fillInPath: function(path) {
+	fillInPath: function (path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.fillInPath.bind(this, path));
 			return;
@@ -54,9 +54,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		var labels;
 
-		labels = path.map(function(p) {
+		labels = path.map(function (p) {
 			return p.getTitle && p.getTitle();
-		}).filter(function(p) { return !!p; });
+		}).filter(function (p) { return !!p; });
 
 		this.pathTpl.append(this.pathEl, {
 			paths: labels
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	onClick: function() {
+	onClick: function () {
 		this.navigateToObject(this.record);
 	}
 });

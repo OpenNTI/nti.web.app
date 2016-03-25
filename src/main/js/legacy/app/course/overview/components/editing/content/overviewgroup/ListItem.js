@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: 'overview-section overview-section-editing',
 	bodyCls: 'overview-group-body',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -51,12 +51,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				base.videoroll.ListItem
 			];
 
-		this.MIME_TO_CMP = items.reduce(function(acc, item) {
+		this.MIME_TO_CMP = items.reduce(function (acc, item) {
 			var supported = item.getSupported();
 
 			if (!Array.isArray(supported)) { supported = [supported]; }
 
-			supported.forEach(function(key) {
+			supported.forEach(function (key) {
 				acc[key] = item;
 			});
 
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.setDataTransfer(this.record);
 
-		(Object.keys(this.MIME_TO_CMP) || []).forEach(function(key) {
+		(Object.keys(this.MIME_TO_CMP) || []).forEach(function (key) {
 			setDataTransferHandler(key, {
 				onDrop: onDrop,
 				isValid: NextThought.mixins.dnd.OrderingContainer.hasMoveInfo,
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.activeGroup) {
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	setActiveGroup: function(group) {
+	setActiveGroup: function (group) {
 		var color = group && group.get('accentColor');
 
 		if (color) {
@@ -103,24 +103,24 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	getOrderingItems: function() {
+	getOrderingItems: function () {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
 
 		return items || [];
 	},
 
-	getDropzoneTarget: function() {
+	getDropzoneTarget: function () {
 		var body = this.getBodyContainer();
 
 		return body && body.el && body.el.dom;
 	},
 
-	getDragHandle: function() {
+	getDragHandle: function () {
 		return this.el && this.el.dom && this.el.dom.querySelector('.overview-group-header');
 	},
 
-	cacheHeight: function() {
+	cacheHeight: function () {
 		var el = this.el && this.el.dom,
 			height = el && el.offsetHeight;
 
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	uncacheHeight: function() {
+	uncacheHeight: function () {
 		var el = this.el && this.el.dom;
 
 		if (el) {
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	beforeSetCollection: function(collection) {
+	beforeSetCollection: function (collection) {
 		this.disableOrderingContainer();
 
 		this.activeGroup = collection;
@@ -148,12 +148,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	afterSetCollection: function() {
+	afterSetCollection: function () {
 		this.enableOrderingContainer();
 		this.uncacheHeight();
 	},
 
-	buildHeader: function(collection) {
+	buildHeader: function (collection) {
 
 		return {
 			xtype: 'container',
@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-	buildFooter: function() {
+	buildFooter: function () {
 		return {
 			xtype: 'container',
 			cls: 'overview-group-footer',
@@ -192,7 +192,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-	getCmpForRecord: function(record, transition, initialState) {
+	getCmpForRecord: function (record, transition, initialState) {
 		var mimeType = record.mimeType,
 			cmp = this.MIME_TO_CMP[mimeType],
 			assignment;
@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	},
 
-	onCardDrop: function(card, newIndex, moveInfo) {
+	onCardDrop: function (card, newIndex, moveInfo) {
 		this.movedCard = card;
 
 		return this.addCardToGroup(this.record, card, newIndex, moveInfo);

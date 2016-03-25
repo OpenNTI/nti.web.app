@@ -14,7 +14,7 @@ var Ext = require('extjs');
  */
 if (!Function.prototype.bind) {
 	// Inspired by https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function/bind#Compatibility
-	Function.prototype.bind = function(oThis) {
+	Function.prototype.bind = function (oThis) {
 		'use strict';
 		if (typeof this !== 'function') {
 			// closest thing possible to the ECMAScript 5 internal IsCallable function
@@ -24,8 +24,8 @@ if (!Function.prototype.bind) {
 		var aArgs = Array.prototype.slice.call(arguments, 1),
 			fToBind = this;
 
-		function FNOP() {}
-		function Bound() {
+		function FNOP () {}
+		function Bound () {
 			return fToBind.apply(
 							this instanceof FNOP && oThis ? this : oThis,
 					aArgs.concat(Array.prototype.slice.call(arguments))
@@ -56,19 +56,19 @@ if (!Function.prototype.bind) {
 */
 
 /*! @source http://purl.eligrey.com/github/Xccessors/blob/master/xccessors-standard.js*/
-(function() {
+(function () {
 	'use strict';
 	var ObjectProto = Object.prototype,
-			defineGetter = ObjectProto.__defineGetter__,
-			defineSetter = ObjectProto.__defineSetter__,
-			lookupGetter = ObjectProto.__lookupGetter__,
-			lookupSetter = ObjectProto.__lookupSetter__,
-			hasOwnProp = ObjectProto.hasOwnProperty;
+		defineGetter = ObjectProto.__defineGetter__,
+		defineSetter = ObjectProto.__defineSetter__,
+		lookupGetter = ObjectProto.__lookupGetter__,
+		lookupSetter = ObjectProto.__lookupSetter__,
+		hasOwnProp = ObjectProto.hasOwnProperty;
 
 	if (defineGetter && defineSetter && lookupGetter && lookupSetter) {
 
 		if (!Object.defineProperty) {
-			Object.defineProperty = function(obj, prop, descriptor) {
+			Object.defineProperty = function (obj, prop, descriptor) {
 				if (arguments.length < 3) { // all arguments required
 					throw new TypeError('Arguments not optional');
 				}
@@ -112,7 +112,7 @@ if (!Function.prototype.bind) {
 		}
 
 		if (!Object.getOwnPropertyDescriptor) {
-			Object.getOwnPropertyDescriptor = function(obj, prop) {
+			Object.getOwnPropertyDescriptor = function (obj, prop) {
 				if (arguments.length < 2) { // all arguments required
 					throw new TypeError('Arguments not optional.');
 				}
@@ -120,12 +120,12 @@ if (!Function.prototype.bind) {
 				prop += ''; // convert prop to string
 
 				var descriptor = {
-							configurable: true,
-							enumerable: true,
-							writable: true
-						},
-						getter = lookupGetter.call(obj, prop),
-						setter = lookupSetter.call(obj, prop);
+						configurable: true,
+						enumerable: true,
+						writable: true
+					},
+					getter = lookupGetter.call(obj, prop),
+					setter = lookupSetter.call(obj, prop);
 
 				if (!hasOwnProp.call(obj, prop)) {
 					// property doesn't exist or is inherited
@@ -153,7 +153,7 @@ if (!Function.prototype.bind) {
 		}
 
 		if (!Object.defineProperties) {
-			Object.defineProperties = function(obj, props) {
+			Object.defineProperties = function (obj, props) {
 				var prop;
 				for (prop in props) {
 					if (props.hasOwnProperty(prop)) {
@@ -173,7 +173,7 @@ if (!document.documentElement.dataset &&
 		) {
 	var propDescriptor = {
 		enumerable: true,
-		get: function() {
+		get: function () {
 			'use strict';
 			var i,
 				that = this,
@@ -182,9 +182,9 @@ if (!document.documentElement.dataset &&
 				attribute,
 				attributes = this.attributes,
 				attsLength = attributes.length;
-			function toUpperCase(n0) { return n0.charAt(1).toUpperCase(); }
-			function getter() { return String(this); }
-			function setter(attrName, value) {
+			function toUpperCase (n0) { return n0.charAt(1).toUpperCase(); }
+			function getter () { return String(this); }
+			function setter (attrName, value) {
 				return (typeof value !== 'undefined') ?
 					   this.setAttribute(attrName, value) : this.removeAttribute(attrName); }
 

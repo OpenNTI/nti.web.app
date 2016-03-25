@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 	layout: 'none',
 	cls: 'topic-window',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -44,11 +44,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		}
 	},
 
-	onClose: function() {
+	onClose: function () {
 		this.doClose(this.activeTopic);
 	},
 
-	loadForum: function(topic) {
+	loadForum: function (topic) {
 		if (this.precache.forum) {
 			return Promise.resolve(this.precache.forum);
 		}
@@ -56,11 +56,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		return Service.getObject(topic.get('ContainerId'));
 	},
 
-	loadTopic: function() {
+	loadTopic: function () {
 		var me = this;
 
 		me.loadForum(me.record)
-			.then(function(forum) {
+			.then(function (forum) {
 				me.forum = forum;
 
 				me.remove(me.loadingEl);
@@ -69,17 +69,17 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			});
 	},
 
-	loadComment: function() {
+	loadComment: function () {
 		var me = this,
 			topic;
 
 		Service.getObject(me.record.get('ContainerId'))
-			.then(function(t) {
+			.then(function (t) {
 				topic = t;
 
 				return me.loadForum(topic);
 			})
-			.then(function(forum) {
+			.then(function (forum) {
 				me.forum = forum;
 
 				me.remove(me.loadingEl);
@@ -88,17 +88,17 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			});
 	},
 
-	loadPost: function() {
+	loadPost: function () {
 		var me = this,
 			topic;
 
 		Service.getObject(me.record.get('ContainerId'))
-			.then(function(t) {
+			.then(function (t) {
 				topic = t;
 
 				return me.loadForum(topic);
 			})
-			.then(function(forum) {
+			.then(function (forum) {
 				me.forum = forum;
 
 				me.remove(me.loadingEl);
@@ -107,11 +107,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			});
 	},
 
-	loadEditor: function() {
+	loadEditor: function () {
 		var me = this;
 
 		me.loadForum(me.record)
-			.then(function(forum) {
+			.then(function (forum) {
 				me.forum = forum;
 
 				me.remove(me.loadingEl);
@@ -120,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			});
 	},
 
-	allowNavigation: function() {
+	allowNavigation: function () {
 		var editor = this.down('forums-topic-editor'),
 			comment = this.down('forums-topic-comment-thread');
 
@@ -131,19 +131,19 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		return (editor && editor.allowNavigation()) || (comment && comment.allowNavigation());
 	},
 
-	showTopic: function(topic, forum, activeComment) {
+	showTopic: function (topic, forum, activeComment) {
 		var topicCmp = this.down('forums-topic-topic'),
 			commentCmp = this.down('forums-topic-comment-thread'),
 			me = this;
 
-		function stopTimer() {
+		function stopTimer () {
 			if (me.currentAnalyticId && me.hasCurrentTimer) {
 				delete me.hasCurrentTimer;
 				AnalyticsUtil.stopResourceTimer(me.currentAnalyticId, 'discussion-viewed');
 			}
 		}
 
-		function startTimer() {
+		function startTimer () {
 			if (!me.hasCurrentTimer) {
 				me.hasCurrentTimer = true;
 
@@ -164,11 +164,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 
 		if (!this.visibilityMonitors) {
 			this.visibilityMonitors = this.on({
-				'destroy': function() {
+				'destroy': function () {
 					Ext.destroy(me.visibilityMonitors);
 					stopTimer();
 				},
-				'visibility-changed': function(visible) {
+				'visibility-changed': function (visible) {
 					//start the time when we become visible, stop it when we hide
 					if (visible) {
 						startTimer();
@@ -191,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		if (!commentCmp.ready) {
 			this.mon(commentCmp, {
 				single: true,
-				ready: function() {
+				ready: function () {
 					//TODO: highlight results
 					topicCmp.buildCommentPagingNav(commentCmp);
 				}
@@ -208,7 +208,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		});
 	},
 
-	showEditor: function(topic, forum) {
+	showEditor: function (topic, forum) {
 		var me = this,
 			topicCmp = this.down('forums-topic-topic'),
 			commentCmp = this.down('forums-topic-comment-thread'),
@@ -222,7 +222,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 		editor = me.add({xtype: 'forums-topic-editor', record: topic, forum: forum});
 
 		me.mon(editor, {
-			'cancel': function(rec) {
+			'cancel': function (rec) {
 				me.remove(editor);
 
 				if (me.record) {
@@ -231,7 +231,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 					me.doClose();
 				}
 			},
-			'after-save': function(rec) {
+			'after-save': function (rec) {
 				me.remove(editor);
 				me.record = rec;
 				me.showTopic(rec, forum);
@@ -242,7 +242,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.W
 			}
 		});
 	}
-}, function() {
+}, function () {
 	NextThought.app.windows.StateStore.register('application/vnd.nextthought.forums.generalforumcomment', this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.ContentHeadlineTopic.mimeType, this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.CommunityHeadlineTopic.mimeType, this);

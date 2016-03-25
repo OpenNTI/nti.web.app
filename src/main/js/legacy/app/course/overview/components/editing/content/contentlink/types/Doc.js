@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-contentlink-doc',
 
 	statics: {
-		getTypes: function() {
+		getTypes: function () {
 			return [
 				{
 					title: 'Upload a File',
@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		//TODO: override getEditorForRecord to check if the related work ref
 		//is pointing to a doc
-		getEditorForRecord: function(record) {
+		getEditorForRecord: function (record) {
 			if (record.isDocument()) {
 				return this;
 			}
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: 'content-editor content-link document',
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (!this.record) {
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	getDefaultValues: function() {
+	getDefaultValues: function () {
 		var base = this.callParent(arguments);
 
 		//For documents, set the target has the href so
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	getFormSchema: function() {
+	getFormSchema: function () {
 		var base = this.callParent(arguments);
 
 		//TODO: fill info about the existing file
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	onFileAdded: function(type) {
+	onFileAdded: function (type) {
 		this.formCmp.setPlaceholder('icon', NextThought.model.RelatedWork.getIconForMimeType(type));
 		this.removeCls('file-only');
 

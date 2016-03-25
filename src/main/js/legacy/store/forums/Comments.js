@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 			type: 'nti',
 			root: 'Items',
 			totalProperty: 'FilteredTotalItemCount',
-			readRecords: function(resp) {
+			readRecords: function (resp) {
 				var data = this.self.prototype.readRecords.apply(this, arguments);
 				this.currentPage = resp.BatchPage;
 				return data;
@@ -29,24 +29,24 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 		}
 	},
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.on('load', 'topLevelLoaded');
 	},
 
-	topLevelLoaded: function(store, records) {
-		(records || []).forEach(function(rec) {
+	topLevelLoaded: function (store, records) {
+		(records || []).forEach(function (rec) {
 			rec.set('depth', 0);
 		});
 	},
 
-	hideCommentThread: function(comment) {
+	hideCommentThread: function (comment) {
 		this.__addFilter(comment.getThreadFilter(), true);
 		comment.set('threadShowing', false);
 	},
 
-	showCommentThread: function(comment) {
+	showCommentThread: function (comment) {
 		if (!comment) {
 			console.error('Cant show thread for a comment thats not loaded:', id);
 			return;
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 		}
 	},
 
-	__loadCommentThread: function(comment) {
+	__loadCommentThread: function (comment) {
 		var url = comment.getLink('replies'), req;
 
 		if (!url) { return; }
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 			params: {
 				accept: comment.get('MimeType')
 			},
-			callback: function(q, s, r) {
+			callback: function (q, s, r) {
 				if (!s) {
 					console.error('Failed to load threaded replies');
 					return;
@@ -93,10 +93,10 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 		Ext.Ajax.request(req);
 	},
 
-	__flattenReplies: function(tree, currentDepth) {
+	__flattenReplies: function (tree, currentDepth) {
 		var flatTree = [];
 
-		function commentCompare(a, b) {
+		function commentCompare (a, b) {
 			a = a.get('CreatedTime');
 			b = b.get('CreatedTime');
 
@@ -105,11 +105,11 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 			return (a < b) ? -1 : 1;
 		}
 
-		function flattenThread(thread, depth) {
+		function flattenThread (thread, depth) {
 			if (!thread || Ext.Object.isEmpty(thread) || Ext.isEmpty(thread)) { return; }
 			thread.sort(commentCompare);
 
-			thread.forEach(function(t) {
+			thread.forEach(function (t) {
 				t.threadLoaded = true;
 				t.set('depth', depth);
 				t.set('threadShowing', true);
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 		return flatTree;
 	},
 
-	__insertFlatThread: function(flatList, parent) {
+	__insertFlatThread: function (flatList, parent) {
 		this.__clearFilters();
 		var me = this,
 			index = this.indexOf(parent);
@@ -137,14 +137,14 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 	},
 
 	//silently clear the filters, so the indexs will be correct for the insertions
-	__clearFilters: function() {
+	__clearFilters: function () {
 		this.filterCache = this.filters.items.slice();
 		this.filtersCleared = true;
 		this.clearFilter(true);
 	},
 
 	//add the filters back, so the view will look the same as before
-	__applyFilters: function() {
+	__applyFilters: function () {
 		var filters = this.filters.getRange();
 
 		this.filter(this.filterCache.concat(filters), true);
@@ -152,7 +152,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 		this.fireEvent('filters-applied');
 	},
 
-	__addFilter: function(filter) {
+	__addFilter: function (filter) {
 		var filters = this.filters.getRange();
 
 		this.clearFilter();
@@ -161,18 +161,18 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 		delete this.filtersCleared;
 	},
 
-	getTotalPages: function() {
+	getTotalPages: function () {
 		var total = this.getTotalCount(),
 			pageSize = this.pageSize;
 
 		return Math.ceil(total / pageSize);
 	},
 
-	getCurrentPage: function() {
+	getCurrentPage: function () {
 		return this.proxy.reader.currentPage;
 	},
 
-	loadNextPage: function() {
+	loadNextPage: function () {
 		var current = this.getCurrentPage(),
 			total = this.getTotalPages();
 
@@ -181,7 +181,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 		}
 	},
 
-	loadPreviousPage: function() {
+	loadPreviousPage: function () {
 		var current = this.getCurrentPage();
 
 		if (current > 1) {
@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.store.forums.Comments', {
 	},
 
 	//insert a single record into the right spot in the store
-	insertSingleRecord: function(record) {
+	insertSingleRecord: function (record) {
 		this.__clearFilters();
 
 		var parentId = record.get('inReplyTo'), i, current,

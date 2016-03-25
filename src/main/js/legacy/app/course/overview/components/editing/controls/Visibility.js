@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	beforeRender: function(){
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 		var selection;
 
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		
 		if (this.defaultValue) {
 			this.selected = this.defaultValue;
-			selection = this.el.down('.option[data-scope='+ this.defaultValue +']');	
+			selection = this.el.down('.option[data-scope=' + this.defaultValue + ']');	
 			this.selectOption(selection);
 		}
 
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	onVisibilityChange: function(e){
+	onVisibilityChange: function (e) {
 		var target = e.target,
 			scope = target && target.getAttribute('data-scope');
 
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	selectOption: function(item){
+	selectOption: function (item) {
 		var current = this.el.down('.option.selected'),
 			newItem = item && Ext.fly(item);
 
@@ -85,17 +85,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	getDefaultValue: function() {
+	getDefaultValue: function () {
 		return this.defaultValue || 'everyone';
 	},
 
 
-	getValue: function(){
+	getValue: function () {
 		return {visibility: this.selected};
 	},
 
 
-	getChangedValues: function(){
+	getChangedValues: function () {
 		if (this.defaultValue && this.defaultValue === this.selected) {
 			return {};
 		}
@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	toggleMenu: function(e) {		
+	toggleMenu: function (e) {		
 		this.menuContainer.toggleCls('open');
 	}
-})
+});

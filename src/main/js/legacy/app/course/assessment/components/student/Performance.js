@@ -10,15 +10,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	alias: 'widget.course-assessment-performance',
 
 	statics: {
-		getScoreSorter: function() {
-			function get(o) {
+		getScoreSorter: function () {
+			function get (o) {
 				var grade = o.get('Grade'),
 					values = grade && grade.getValues();
 
 				return (values && values.value) || '';
 			}
 
-			return function(a, b) {
+			return function (a, b) {
 				var aComp = a.get('completed'),
 					bComp = b.get('completed'),
 					aVal = get(a),
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}
 
 				return sort;
-			}
+			};
 		}
 	},
 
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					disclaimerTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 						cls: 'disclaimer', 'data-qtip': '{qtip}'
 					})),
-					addDisclaimer: function(disclaimer) {
+					addDisclaimer: function (disclaimer) {
 						if (!this.rendered) {
 							this.on('afterrender', this.addDisclaimer.bind(this, disclaimer));
 							return;
@@ -114,23 +114,23 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		{xtype: 'grouping', title: 'All Grades',
 			anchor: '0 -200', layout: 'none',
 			cls: 'grades scrollable', items: [
-			{
-				xtype: 'grid',
-				width: 709,
-				columns: [
+				{
+					xtype: 'grid',
+					width: 709,
+					columns: [
 						{ text: 'Assignment Name', dataIndex: 'name', flex: 1, resizable: false},
 						{ text: 'Assigned', dataIndex: 'assigned', xtype: 'datecolumn', width: 80, format: 'm/d', resizable: false },
 						{ text: 'Due', dataIndex: 'due', xtype: 'datecolumn', width: 70, format: 'm/d', resizable: false },
-						{ text: 'Completed', dataIndex: 'completed', width: 80, resizable: false, renderer: function(v) {
+						{ text: 'Completed', dataIndex: 'completed', width: 80, resizable: false, renderer: function (v) {
 							return (v && v.getTime() > 0) ? this.checkMarkTpl : '';
 						} },
-						{
-							text: 'Score',
-							dataIndex: 'grade',
-							width: 70,
-							resizable: false,
-							doSort: function(state) {
-								function get(o) {
+					{
+						text: 'Score',
+						dataIndex: 'grade',
+						width: 70,
+						resizable: false,
+						doSort: function (state) {
+								function get (o) {
 									var grade = o.get('Grade'),
 										values = grade && grade.getValues(),
 										value = values && values.value;
@@ -148,9 +148,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 								store.sort(sorter);
 							}
-						},
+					},
 						{ text: 'Feedback', dataIndex: 'feedback', tdCls: 'feedback', width: 140, resizable: false,
-							renderer: function(value, col, rec) {
+							renderer: function (value, col, rec) {
 								var grade = rec.get('Grade'),
 									isExcused = grade && grade.get('IsExcused'), excusedTpl, excusedCls,
 									feedbackTpl = value ? Ext.util.Format.plural(value, 'Comment') : '';
@@ -162,20 +162,20 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 								});
 
 								return excusedTpl + feedbackTpl;
-						} }
-					],
+							} }
+				],
 
-				listeners: {
-					sortchange: function(ct, column) { ct.up('grid').markColumn(column); },
-					selectionchange: function(sm, selected) { sm.deselect(selected); },
-					viewready: function(grid) {
-						grid.mon(grid.getView(), 'refresh', function() {
+					listeners: {
+					sortchange: function (ct, column) { ct.up('grid').markColumn(column); },
+					selectionchange: function (sm, selected) { sm.deselect(selected); },
+					viewready: function (grid) {
+						grid.mon(grid.getView(), 'refresh', function () {
 							grid.markColumn(grid.down('gridcolumn[sortState]'));
 						});
 					}
 				},
 
-				markColumn: function(c) {
+					markColumn: function (c) {
 					console.log('Marking...');
 					var cls = 'sortedOn',
 						el = this.getEl();
@@ -187,14 +187,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					}
 				},
 
-				checkMarkTpl: Ext.DomHelper.markup({cls: 'check', html: '&#10003;'})
-			}
-		]}
+					checkMarkTpl: Ext.DomHelper.markup({cls: 'check', html: '&#10003;'})
+				}
+			]}
 	],
 
 	pathRoot: 'Grades & Performance',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.enableBubble(['goto-assignment', 'close-reader']);
@@ -238,8 +238,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.mon(store, 'datachanged', 'updateHeader');
 	},
 
-	updateHeader: function() {
-		function complete(o) {return !!o.get('completed'); }
+	updateHeader: function () {
+		function complete (o) {return !!o.get('completed'); }
 
 		var me = this,
 			currentBundle = me.currentBundle,
@@ -248,7 +248,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			c = me.store.getRange().filter(complete).length,
 			values;
 
-		function addGrade(values) {
+		function addGrade (values) {
 			var elements = [];
 
 			if (values.value) {
@@ -276,7 +276,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			me.gradeLabel.addDisclaimer(false);
 		} else if (currentBundle) {
 			currentBundle.getCurrentGrade()
-				.then(function(grade) {
+				.then(function (grade) {
 					//if the final grade was set after getCurrentGrade was called
 					//but before it finished make sure we don't unset it
 					if (me.finalGrade && !me.finalGrade.isEmpty()) {
@@ -284,7 +284,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					}
 
 					var elements = [];
-						values = grade.getValues();
+					values = grade.getValues();
 
 					addGrade(values);
 
@@ -295,11 +295,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	clearAssignmentsData: function() {
+	clearAssignmentsData: function () {
 		this.store.removeAll();
 	},
 
-	fireGoToAssignment: function(selModel, record) {
+	fireGoToAssignment: function (selModel, record) {
 		var date = Ext.Date.format(record.get('assigned'), 'l F j \\a\\t g:i A');
 
 		if (!record || record.get('assigned') > new Date()) {
@@ -311,7 +311,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 	//This is a read-only view from the STUDENT'S perspective. READ: updates when students navigate to it.
-	setAssignmentsData: function(assignments, currentBundle) {
+	setAssignmentsData: function (assignments, currentBundle) {
 		var raw = [], waitsOn = [], me = this;
 
 		this.clearAssignmentsData();
@@ -323,11 +323,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			return Promise.reject('No Data?');
 		}
 
-		function collect(o) {
+		function collect (o) {
 			var id = o.getId();
 
 			waitsOn.push(assignments.getHistoryItem(o.getId(), true)
-				.always(function(h) {
+				.always(function (h) {
 					if (typeof h === 'string') {
 						h = null;
 					}
@@ -363,14 +363,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		assignments.each(collect);
 
 		return Promise.all(waitsOn)
-				.then(function() {
+				.then(function () {
 					return raw;
 				})
 				.then(this.store.loadRawData.bind(this.store))
 				.then(this.grid.view.refresh.bind(this.grid.view));
 	},
 
-	maybeSetFinalGrade: function(assignment, history, grade) {
+	maybeSetFinalGrade: function (assignment, history, grade) {
 		if (!Ext.String.endsWith(assignment.get('NTIID'), ':Final_Grade')) {
 			return false;
 		}

@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.model.preference.WebApp', {
 		{name: 'useHighContrast', type: 'bool'}
 	],
 
-	getResourceUrl: function() {
+	getResourceUrl: function () {
 		var base = this.callParent(arguments);
 
 		return base + '/WebApp';

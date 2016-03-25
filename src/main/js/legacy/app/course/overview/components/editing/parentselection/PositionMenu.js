@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		tag: 'li', 'data-index': '{index}', html: '{display}'
 	})),
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.totalPositions !== undefined) {
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	onClick: function(e) {
+	onClick: function (e) {
 		var item = e.getTarget('li'),
 			index = item && item.getAttribute('data-index');
 
@@ -38,14 +38,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	getItem: function(index) {
+	getItem: function (index) {
 		if (!this.rendered) { return; }
 
 		return this.el.dom.querySelector('[data-index="' + index + '"]');
 	},
 
 
-	setTotalPositions: function(total, currentIndex) {
+	setTotalPositions: function (total, currentIndex) {
 		this.totalPositions = total;
 
 		if (!this.rendered) {
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	setCurrentPosition: function(index) {
+	setCurrentPosition: function (index) {
 		var item = this.getItem(index);
 
 		if (item) {
@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	selectPosition: function(position) {
+	selectPosition: function (position) {
 		if (position === undefined || position < 0) {
 			position = this.totalPositions;
 		}
@@ -118,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	getCurrentPosition: function() {
+	getCurrentPosition: function () {
 		var item = this.el.dom.querySelector('li.selected'),
 			index = item && item.getAttribute('data-index');
 

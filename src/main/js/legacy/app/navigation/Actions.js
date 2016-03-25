@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	statics: {
-		getContext: function() {
+		getContext: function () {
 			if (!this.NavStateStore) {
 				this.NavStateStore = NextThought.app.context.StateStore.getInstance();
 			}
@@ -20,19 +20,19 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 			return this.NavStateStore.getContext();
 		},
 
-		pushRootRoute: function(title, route, precache) {
+		pushRootRoute: function (title, route, precache) {
 			if (this.doPushRootRoute) {
 				this.doPushRootRoute(title, route, precache);
 			}
 		},
 
-		replaceRootRoute: function(title, route, precache) {
+		replaceRootRoute: function (title, route, precache) {
 			if (this.doReplaceRootRoute) {
 				this.doReplaceRootRoute(title, route, precache);
 			}
 		},
 
-		navigateToHref: function(href) {
+		navigateToHref: function (href) {
 			var parts = href.split('#'),
 				context = this.getContext(),
 				newBase = parts[0],
@@ -44,13 +44,13 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 				//TODO: figure this out
 				Ext.getBody().el.mask('Loading...');
 				Service.getObject(newBase)
-					.then(function(obj) {
+					.then(function (obj) {
 						var i;
 						//iterate backwards
 						for (i = context.length - 1; i >= 0; i--) {
 							if (context[i].cmp && context[i].cmp.navigateToObject) {
 								context[i].cmp.navigateToObject(obj, newFragment)
-									.then(function() {
+									.then(function () {
 										Ext.getBody().el.unmask();
 									});
 								break;
@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 						//the first item with a cmp that implements navigateToObject
 						//Ext.getBody().el.unmask()
 					})
-					.fail(function(reason) {
+					.fail(function (reason) {
 						console.error('Failed to navigate to href: ', href, reason);
 						alert('Unable to navigate to link.');
 						Ext.getBody().el.unmask();
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 		},
 
 
-		navigateToCardTarget: function(data, silent, callback, bundle) {
+		navigateToCardTarget: function (data, silent, callback, bundle) {
 			var ntiid = data.ntiid,
 				postfix = data.notTarget ? '' : '-target',
 				DH = Ext.DomHelper,
@@ -125,7 +125,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 		}
 	},
 
-	constructor: function() {
+	constructor: function () {
 		this.store = NextThought.app.navigation.StateStore.getInstance();
 	},
 
@@ -139,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 	 *
 	 * @param  {Object} configuration to build the nav
 	 */
-	updateNavBar: function(config) {
+	updateNavBar: function (config) {
 		this.store.updateNavBar(config);
 	},
 
@@ -148,11 +148,11 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 	 *
 	 * @param {Object} obj the thins to set active
 	 */
-	setActiveContent: function(obj, masked) {
+	setActiveContent: function (obj, masked) {
 		this.store.fireEvent('set-active-content', obj, masked);
 	},
 
-	markReturnPoint: function(route) {
+	markReturnPoint: function (route) {
 		this.store.markReturnPoint(route);
 	},
 
@@ -174,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 	 *
 	 * @param  {Object} cfg configuration to build a message bar.
 	 */
-	presentMessageBar: function(cfg) {
+	presentMessageBar: function (cfg) {
 		var messageCmp = Ext.getCmp('message-bar'),
 			id = cfg.type || cfg.id,
 			// hasBeenSeen = !!this.store.getMessageBarItemFromSession(id),
@@ -182,7 +182,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 
 		if (messageCmp) {
 			messageCmp.onceRendered
-				.then(function() {
+				.then(function () {
 					messageCmp.setIcon(cfg.iconCls);
 					messageCmp.setMessage(cfg.message);
 					Ext.each(cfg.buttons || [], messageCmp.addButton.bind(messageCmp));

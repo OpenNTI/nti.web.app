@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Editor', {
 		{xtype: 'whiteboard-canvas', anchor: '100%'}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.canvas = this.down('whiteboard-canvas');
@@ -35,12 +35,12 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Editor', {
 		this.mixins.toolState.constructor.apply(this);
 	},
 
-	constructor: function() {
+	constructor: function () {
 		// this.maxHeight = 635; // FIXME: Naturally we shouldn't hardcode this. But we need some kind of maxHeight.
 		this.callParent(arguments);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var parentWin = this.up('window');
@@ -52,22 +52,22 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Editor', {
 			this.initMixin(this.toolbar, this.canvas);
 		}
 
-		this.mon(this.up('wb-window'), 'activate', function() {this.canvas.drawScene();}, this);
+		this.mon(this.up('wb-window'), 'activate', function () {this.canvas.drawScene();}, this);
 
 		this.canvas.hasResized(this, this.getWidth(), this.getHeight());
 	},
 
-	reset: function() {
+	reset: function () {
 		this.value = Ext.clone(this.initialConfig.value);
 		this.canvas.updateData(this.value);
 
 	},
 
-	getValue: function() {
+	getValue: function () {
 		return this.canvas.getData();
 	},
 
-	getThumbnail: function(callback) {
+	getThumbnail: function (callback) {
 		return NextThought.app.whiteboard.Canvas.getThumbnail(this.canvas.getData(), callback);
 	}
 });

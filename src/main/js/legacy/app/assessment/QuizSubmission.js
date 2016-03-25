@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		submitBtn: '.submit'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		var answeredMap = {};
 
 		this.callParent(arguments);
@@ -52,10 +52,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 			'save-progress': 'saveProgress'
 		});
 
-		Ext.each(this.questionSet.get('questions'), function(q) {
+		Ext.each(this.questionSet.get('questions'), function (q) {
 			var questionMap = {};
 
-			Ext.each(q.get('parts'), function(p) {
+			Ext.each(q.get('parts'), function (p) {
 				questionMap[p.id] = 0;
 			});
 
@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		this.AssessmentActions = NextThought.app.assessment.Actions.create();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.resetBtn.hide();
 		this.reflectStateChange();
@@ -87,13 +87,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 			s = me.submitBtn,
 			t = me.tabIndexTracker;
 
-		function setTabIndex(el, attr) {
+		function setTabIndex (el, attr) {
 			if (el.dom) {
 				el.set(attr);
 			}
 		}
 
-		setTimeout(function() {
+		setTimeout(function () {
 			try {
 				setTabIndex(s, {tabIndex: t.getNext()});
 				setTabIndex(r, {tabIndex: t.getNext()});
@@ -114,30 +114,30 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 	},
 
-	isActive: function() {
+	isActive: function () {
 		return this.state === 'active';
 	},
 
-	isInActive: function() {
+	isInActive: function () {
 		return !this.state || this.state === 'inactive';
 	},
 
-	isSubmitted: function() {
+	isSubmitted: function () {
 		return this.state === 'submitted' || this.submitted;
 	},
 
-	isReady: function() {
+	isReady: function () {
 		return !this.isActive() && !this.isSubmitted;
 	},
 
-	disableView: function() {
+	disableView: function () {
 		if (!this.allowResettingAssignment) {
 			this.shouldShow = false;
 			this.hide();
 		}
 	},
 
-	moveToActive: function() {
+	moveToActive: function () {
 		if (this.isActive()) {
 			return;
 		}
@@ -158,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 	},
 
-	moveToInActive: function() {
+	moveToInActive: function () {
 		if (this.isInActive()) {
 			return;
 		}
@@ -178,11 +178,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 	},
 
-	isSurvey: function() {
+	isSurvey: function () {
 		return this.questionSet instanceof NextThought.model.assessment.Survey;
 	},
 
-	moveToSubmitted: function() {
+	moveToSubmitted: function () {
 		var isAssignment = !!this.questionSet.associatedAssignment,
 			isSurvey = this.isSurvey(),
 			assessmentReader = this.reader.getAssessment(),
@@ -213,7 +213,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		this.submitBtn.removeCls('disabled');
 	},
 
-	moveToReady: function() {
+	moveToReady: function () {
 		if (this.isReady()) {
 			return;
 		}
@@ -224,19 +224,19 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 
 	//just use us being in the active state to determine if
 	//we have any answers
-	hasAnyAnswers: function() {
+	hasAnyAnswers: function () {
 		return this.isActive();
 	},
 
-	hasAnyMissing: function() {
+	hasAnyMissing: function () {
 		return !this.noParts && !this.allQuestionsAnswered;
 	},
 
-	hasProgressSaved: function() {
+	hasProgressSaved: function () {
 		return this.progressSaved;
 	},
 
-	updateStatus: function(question, part, count, enabling) {
+	updateStatus: function (question, part, count, enabling) {
 		if (enabling) {
 			this.moveToActive();
 		}
@@ -250,24 +250,24 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		return status;
 	},
 
-	historyUpdated: function() {
+	historyUpdated: function () {
 		if (this.submitted) {
 			this.submitted = false;
 			this.moveToSubmitted();
 		}
 	},
 
-	reflectStateChange: function() {
+	reflectStateChange: function () {
 		var totalAnsweredParts = 0,
 			totalParts = 0,
 			answeredQuestions = 0,
 			totalQuestions = 0,
 			newStatus;
 
-		Ext.Object.each(this.answeredMap, function(key, parts) {
+		Ext.Object.each(this.answeredMap, function (key, parts) {
 			var answeredParts = 0, partsCount = 0;
 
-			Ext.Object.each(parts, function(id, done) {
+			Ext.Object.each(parts, function (id, done) {
 				partsCount += 1;
 
 				answeredParts += done || 0;
@@ -299,8 +299,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 			this.statusMessage.addCls('ready');
 		} else {
 			newStatus = getFormattedString('NextThought.view.assessment.QuizSubmission.unanswered', {
-							questions: Ext.util.Format.plural(totalQuestions - answeredQuestions, 'question')
-						});
+				questions: Ext.util.Format.plural(totalQuestions - answeredQuestions, 'question')
+			});
 			this.allQuestionsAnswered = false;
 			this.statusMessage.removeCls('ready');
 		}
@@ -314,22 +314,22 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 	},
 
-	reset: function() {
+	reset: function () {
 		this.moveToReady();
 	},
 
-	graded: function() {
+	graded: function () {
 		this.moveToSubmitted();
 	},
 
-	instructorReset: function() {
+	instructorReset: function () {
 		var assessmentReader = this.reader.getAssessment();
 
 		assessmentReader.wasReset();
 		this.questionSet.fireEvent('instructor-reset');
 	},
 
-	forceSubmitted: function() {
+	forceSubmitted: function () {
 		var assessmentReader = this.reader.getAssessment();
 
 		assessmentReader.forceSubmitted();
@@ -337,7 +337,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		this.setGradingResult(null, this.history);
 	},
 
-	maybeDoReset: function(keepAnswers) {
+	maybeDoReset: function (keepAnswers) {
 		var me = this,
 			q = me.questionSet,
 			isAssignment = q.associatedAssignment,
@@ -345,7 +345,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 
 		if (me.resetting) {return Promise.reject();} //some how we're getting called repeatedly...lets not fire an infinte loop of events.
 
-		function finish() {
+		function finish () {
 			try {
 				if (q.fireEvent('beforereset')) {
 					q.fireEvent('reset', keepAnswers);
@@ -369,7 +369,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		//as opposed to clearing out the current answers
 		if (isAssignment && assessmentReader && assessmentReader.shouldStudentAllowReset() && keepAnswers) {
 			return assessmentReader.resetAssignment()
-				.then(function(deleted) {
+				.then(function (deleted) {
 					if (deleted) {
 						me.fireEvent('assignment-reset');
 						me.reset();
@@ -379,7 +379,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 
 					return Promise.reject();
 				})
-				.fail(function(reason) {
+				.fail(function (reason) {
 					delete me.resetting;
 
 					 alert('We are unable to reset your assignment at this time.');
@@ -391,12 +391,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 	},
 
-	resetBasedOnButtonClick: function(e) {
+	resetBasedOnButtonClick: function (e) {
 		//If we are in a submitted state we want to reset things
 		var me = this;
 
 		me.maybeDoReset(true)
-			.then(function() {
+			.then(function () {
 				me.reader.getScroll().to(0);
 			});
 
@@ -406,7 +406,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 	},
 
-	resetClicked: function(e) {
+	resetClicked: function (e) {
 		var me = this;
 
 		if (me.isSubmitted()) {
@@ -429,7 +429,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 					text: getString('NextThought.view.assessment.QuizSubmission.cancel')
 				}
 			},
-			fn: function(button) {
+			fn: function (button) {
 				if (button === 'yes') {
 					me.maybeDoReset(false);
 				}
@@ -442,14 +442,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 	},
 
-	beforeSaveProgress: function() {
+	beforeSaveProgress: function () {
 		var assessmentReader = this.reader.getAssessment();
 
 		if (this.isInstructor) { return; }
 		assessmentReader.showSavingProgress();
 	},
 
-	afterSaveProgress: function(success) {
+	afterSaveProgress: function (success) {
 		var assessmentReader = this.reader.getAssessment();
 
 		this.progressSaved = success;
@@ -457,7 +457,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		assessmentReader[success ? 'showProgressSaved' : 'showProgressFailed']();
 	},
 
-	saveProgress: function(progress) {
+	saveProgress: function (progress) {
 		if (this.isInstructor) {
 			return Promise.reject();
 		}
@@ -465,7 +465,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		return this.AssessmentActions.saveProgress(this.questionSet, progress, this.startTimestamp);
 	},
 
-	beforeRouteChange: function() {
+	beforeRouteChange: function () {
 		var submission = {};
 
 		this.questionSet.fireEvent('beforesubmit', this.questionSet, submission);
@@ -473,7 +473,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		this.saveProgress(submission);
 	},
 
-	shouldAllowSubmit: function(onChangeHandler) {
+	shouldAllowSubmit: function (onChangeHandler) {
 		var enabled;
 
 		if (this.shouldShow) {
@@ -497,7 +497,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		};
 	},
 
-	submitClicked: function(e) {
+	submitClicked: function (e) {
 		var questionSet = this.questionSet,
 			isAssignment = !!questionSet.associatedAssignment,
 			submission = {};
@@ -535,66 +535,66 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 	},
 
-	submitAssignment: function(questionSet, submission) {
+	submitAssignment: function (questionSet, submission) {
 		var me = this,
 			container = me.reader.getLocation().NTIID;
 
 		me.mask();
 
 		me.AssessmentActions.submitAssignment(questionSet, submission, container, me.startTimestamp)
-			.then(function(obj) {
+			.then(function (obj) {
 				var result = obj.result;
 
 				me.unmask();
 				me.setGradingResult(result);
 
 				me.reader.fireEvent('assignment-submitted', obj.assignmentId, obj.itemLink);
-			}, function() {
+			}, function () {
 				me.onFailure();
 				me.maybeDoReset(true);
 				me.unmask();
 			});
 	},
 
-	submitAssessment: function(questionSet, submission) {
+	submitAssessment: function (questionSet, submission) {
 		var me = this,
 			container = me.reader.getLocation().NTIID;
 
 		me.mask();
 
 		me.AssessmentActions.gradeAssessment(questionSet, submission, container, me.startTimestamp)
-			.then(function(result) {
+			.then(function (result) {
 				me.setGradingResult(result);
 
 				me.unmask();
 				me.reader.fireEvent('assessment-graded', result);
-			}, function() {
+			}, function () {
 				me.unmask();
 				me.onFailure();
 			});
 	},
 
-	submitSurvey: function(questionSet, submission) {
+	submitSurvey: function (questionSet, submission) {
 		var me = this,
 			container = me.reader.getLocation().NTIID;
 
 		me.mask();
 
 		me.AssessmentActions.submitSurvey(questionSet, submission, container, me.startTimeStamp)
-			.then(function(result) {
+			.then(function (result) {
 				me.setGradingResult(result.get('Submission').get('Submission'));
 
 				me.unmask();
 
 				me.reader.fireEvent('survey-submitted', result);
-			}, function() {
+			}, function () {
 				me.onFailure();
 				me.maybeDoReset(true);
 				me.unmask();
 			});
 	},
 
-	setFromSavePoint: function(savepoint) {
+	setFromSavePoint: function (savepoint) {
 		var submission = savepoint && savepoint.getQuestionSetSubmission();
 
 		if (savepoint && !this.assessmentHistory) {
@@ -604,7 +604,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 	},
 
-	setGradingResult: function(assessedQuestionSet, assessmentHistory) {
+	setGradingResult: function (assessedQuestionSet, assessmentHistory) {
 		this.assessmentHistory = assessmentHistory;
 		try {
 			assessedQuestionSet = assessedQuestionSet || NextThought.model.assessment.AssessedQuestionSet.from(this.questionSet);
@@ -615,7 +615,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 	},
 
-	onFailure: function() {
+	onFailure: function () {
 		try {
 			Ext.getBody().unmask();
 		} catch (e) {
@@ -623,7 +623,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission
 		}
 	},
 
-	syncTop: function() {
+	syncTop: function () {
 		if (this.shouldShow) {
 			this.show();
 		}

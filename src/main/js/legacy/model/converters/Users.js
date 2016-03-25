@@ -7,12 +7,12 @@ module.exports = exports = Ext.define('NextThought.model.converters.Users', {
 
 	USERLIST: {
 		type: 'UserList',
-		convert: function(v, record) {
+		convert: function (v, record) {
 			var a = arguments,
 				u = [];
 			try {
 				if (v) {
-					Ext.each(v, function(o) {
+					Ext.each(v, function (o) {
 						var p = typeof o === 'string' ? o : ((o.get && o.get('Username')) || o.Username);
 						if (!p) {
 							console.warn('WARNING: Could not handle Object: ', o, a);
@@ -36,11 +36,11 @@ module.exports = exports = Ext.define('NextThought.model.converters.Users', {
 	AVATARURL: {
 		type: 'AvatarURL',
 		sortType: 'asUCString',
-		convert: function convert(v, rec) {
+		convert: function convert (v, rec) {
 			var re = convert.re = (convert.re || /https/i), url,
 				needsSecure = re.test(location.protocol) || $AppConfig.server.forceSSL;
 
-			function secure(v, i, a) {
+			function secure (v, i, a) {
 				if (!v) {
 					return v;
 				}
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Users', {
 				return v;
 			}
 
-			function maybeSecure(v, i, a) {
+			function maybeSecure (v, i, a) {
 
 				if (needsSecure) {
 					v = secure(v, i, a);
@@ -89,15 +89,15 @@ module.exports = exports = Ext.define('NextThought.model.converters.Users', {
 	AVATARURLLIST: {
 		type: 'AvatarURLList',
 		sortType: 'asUCString',
-		convert: function convert(v, rec) {
-			Ext.each(v, function(o, i, a) {
+		convert: function convert (v, rec) {
+			Ext.each(v, function (o, i, a) {
 				a[i] = Ext.data.Types.AVATARURL.convert(o, rec);
 			});
 			return v;
 		}
 	}
-},function() {
-	function set(o) { o.sortType = Ext.data.SortTypes[o.sortType]; }
+},function () {
+	function set (o) { o.sortType = Ext.data.SortTypes[o.sortType]; }
 
 	set(this.USERLIST);
 	set(this.AVATARURL);

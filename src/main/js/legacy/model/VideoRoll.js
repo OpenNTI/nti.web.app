@@ -10,12 +10,12 @@ module.exports = exports = Ext.define('NextThought.model.VideoRoll', {
 		{name: 'Items', type: 'arrayItem'}
 	],
 
-	getItems: function(){
+	getItems: function () {
 		return this.get('Items');
 	},
 
-	addVideo: function(item){
-		if(!this.get('Items')){
+	addVideo: function (item) {
+		if(!this.get('Items')) {
 			this.set('Items',[]);
 		}
 		return this.get('Items').push(item);

@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.model.app.DndInfo', {
 	statics: {
 		SESSION_ID: null,
 
-		getSessionId: function() {
+		getSessionId: function () {
 			if (!this.SESSION_ID) {
 				this.SESSION_ID = B64.encode((new Date()).getTime() + '+' + $AppConfig.username);
 			}
@@ -19,12 +19,12 @@ module.exports = exports = Ext.define('NextThought.model.app.DndInfo', {
 		},
 
 
-		getSourceApp: function() {
+		getSourceApp: function () {
 			return 'application/vnd.nextthought.webapp';
 		},
 
 
-		getVersion: function() {
+		getVersion: function () {
 			return $AppConfig.version || '1';
 		}
 	},
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.model.app.DndInfo', {
 	],
 
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 
 		this.set({
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.model.app.DndInfo', {
 	},
 
 
-	getDataForTransfer: function() {
+	getDataForTransfer: function () {
 		return {
 			MimeType: this.mimeType,
 			SourceApp: this.get('SourceApp'),
@@ -66,22 +66,22 @@ module.exports = exports = Ext.define('NextThought.model.app.DndInfo', {
 	},
 
 
-	isSameSession: function() {
+	isSameSession: function () {
 		return this.get('DnDSession') === this.self.getSessionId();
 	},
 
 
-	isSameVersion: function() {
+	isSameVersion: function () {
 		return this.get('Version') === this.self.getVersion();
 	},
 
 
-	isSameApp: function() {
+	isSameApp: function () {
 		return this.get('SourceApp') === this.self.getSourceApp();
 	},
 
 
-	isSame: function() {
+	isSame: function () {
 		return this.isSameSession() && this.isSameVersion() && this.isSameApp();
 	}
 });

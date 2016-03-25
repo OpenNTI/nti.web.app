@@ -5,7 +5,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Panel', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.video',
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent([
 			Ext.applyIf(config, {
 				width: '100%',
@@ -20,10 +20,10 @@ module.exports = exports = Ext.define('NextThought.app.video.Panel', {
 		this.on({
 			scope: this,
 			render: this.videoRender,
-			beforedestroy: function() {
+			beforedestroy: function () {
 				this.video = null;
 			},
-			resize: function(panel, width, height) {
+			resize: function (panel, width, height) {
 				if (this.video) {
 					this.video.setSize(width, height);
 				}
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Panel', {
 		});
 	},
 
-	videoRender: function() {
+	videoRender: function () {
 		var fallback = '',
 			size = this.getSize(),
 			cfg, i, len;
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Panel', {
 			fallback = this.fallbackHTML;
 		}
 		else {
-			fallback = "Your browser doesn't support html5 video. ";
+			fallback = 'Your browser doesn\'t support html5 video. ';
 
 			if (Ext.isIE && this.suggestChromeFrame) {
 				/* chromeframe requires that your site have a special tag in the header
@@ -58,10 +58,10 @@ module.exports = exports = Ext.define('NextThought.app.video.Panel', {
 
 		/* match the video size to the panel dimensions */
 		cfg = Ext.copyTo({
-				tag: 'video',
-				width: size.width,
-				height: size.height
-			},
+			tag: 'video',
+			width: size.width,
+			height: size.height
+		},
 			this, 'poster,start,loopstart,loopend,playcount,autobuffer,loop');
 
 		/* just having the params exist enables them */

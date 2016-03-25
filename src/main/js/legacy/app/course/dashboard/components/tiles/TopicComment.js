@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	]),
 
 
-	getRenderData: function() {
+	getRenderData: function () {
 		return {
 			title: this.record.getBodyText()
 		};

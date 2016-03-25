@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		responseBox: '.respond > div'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		if (!this.record || !this.record.isModel) {
 			Ext.Error.raise('We need a record for this component');
 		}
@@ -52,16 +52,16 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.callParent(arguments);
 	},
 
-	setRecord: function(record) {
+	setRecord: function (record) {
 		this.callParent(arguments);
 		this.maybeFillIn();
 	},
 
-	updateFromRecord: function() {
+	updateFromRecord: function () {
 		this.callParent(arguments);
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.commentsEl && this.commentsEl.dom) {
@@ -87,14 +87,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		//NOTE: We run into a case where a reply to one of our replies doesn't trigger opening the reply editor.
 		// It was mainly a timing issue, so now listen to add events.
-		this.on('add', function(cmp, child) {
+		this.on('add', function (cmp, child) {
 			if (this.replyToId && child.record && child.record.getId() === this.replyToId) {
 				Ext.defer(this.maybeOpenReplyEditor, 1, this);
 			}
 		});
 	},
 
-	createEditor: function() {
+	createEditor: function () {
 		if (this.xtype === 'profile-activity-note-item') {
 			this.enableTitle = true;
 		}
@@ -108,19 +108,19 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	addAdditionalRecordListeners: function(record) {
+	addAdditionalRecordListeners: function (record) {
 		this.callParent(arguments);
 		this.mon(record, 'convertedToPlaceholder', this.destroy, this);
 		this.mon(record, 'deleted', this.destroy, this);
 	},
 
-	removeAdditionalRecordListeners: function(record) {
+	removeAdditionalRecordListeners: function (record) {
 		this.callParent(arguments);
 		this.mun(record, 'convertedToPlaceholder', this.destroy, this);
 		this.mun(record, 'deleted', this.destroy, this);
 	},
 
-	onBeforeAdd: function(cmp) {
+	onBeforeAdd: function (cmp) {
 		this.callParent(arguments);
 		if (!this.isExpanded()) {
 			if (this.items.last()) {
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	updateCount: function() {
+	updateCount: function () {
 		if (this.commentsEl) {
 			var c = this.record.getReplyCount() || 0;
 			console.log('count was update to: ', c);
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	clickedRevealAllReplies: function() {
+	clickedRevealAllReplies: function () {
 		this.mun(this.replyButton, 'click', this.clickedRevealAllReplies, this);
 		if (!this.commentsEl) {
 			return;
@@ -147,19 +147,19 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.shouldShowReplies();
 	},
 
-	shouldShowReplies: function() {
+	shouldShowReplies: function () {
 		this.suspendLayouts();
 		this.removeAll();
 		this.resumeLayouts();
 
-		Ext.defer(function() {
+		Ext.defer(function () {
 			Ext.suspendLayouts();
 			this.addReplies(this.record.children);
 			Ext.resumeLayouts(true);
 		}, 1, this);
 	},
 
-	onDelete: function() {
+	onDelete: function () {
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
@@ -169,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},
 			title: 'Are you sure?',
-			fn: function(str) {
+			fn: function (str) {
 				if (str === 'ok') {
 					me.record.destroy();
 					me.adjustRootsReferenceCount(me.record);
@@ -179,12 +179,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-	isExpanded: function() {
+	isExpanded: function () {
 		return !this.commentsEl;
 	},
 
-	setRecordTitle: function() {
-		function callback(snip, value) {
+	setRecordTitle: function () {
+		function callback (snip, value) {
 			if (snip && snip !== value) {
 				me.subjectEl.set({'data-qtip': value});
 			}
@@ -199,9 +199,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		me.record.resolveNoteTitle(callback);
 	},
 
-	fillIn: function() {},
+	fillIn: function () {},
 
-	maybeFillIn: function() {
+	maybeFillIn: function () {
 		var me = this,
 			D = Ext.dom.Element.DISPLAY,
 			subject,
@@ -237,7 +237,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			me.contextEl.show();
 			me.contextEl.mask('Loading...');
 			me.loadContext()
-				.then(function(context) {
+				.then(function (context) {
 					me.setContext(context);
 
 					if (me.contextEl) {
@@ -245,7 +245,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 						me.contextEl.select('input').addCls('preview').set({readonly: true});
 					}
 				})
-				.fail(function(error) {
+				.fail(function (error) {
 					if (me.contextEl) {
 						me.contextEl.unmask();
 					}
@@ -253,7 +253,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	onEdit: function() {
+	onEdit: function () {
 		this.callParent(arguments);
 
 		if (!this.replyMode) {
@@ -267,19 +267,19 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.editor.showTitle();
 	},
 
-	activateReplyEditor: function() {
+	activateReplyEditor: function () {
 		this.editor.hideTitle();
 		this.callParent(arguments);
 		this.addCls('has-active-editor');
 	},
 
-	deactivateReplyEditor: function() {
+	deactivateReplyEditor: function () {
 		this.callParent(arguments);
 		this.removeCls('has-active-editor');
 		this.footEl.show();
 	},
 
-	setContext: function() {
+	setContext: function () {
 		this.callParent(arguments);
 		if (this.context) {
 			this.context.select('iframe').remove();
@@ -287,7 +287,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	loadContext: function() {
+	loadContext: function () {
 		var context = NextThought.app.context.ContainerContext.create({
 			container: this.record.get('ContainerId'),
 			range: this.record.get('applicableRange'),
@@ -297,7 +297,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return context.load('list');
 	},
 
-	goToObject: function(e) {
+	goToObject: function (e) {
 		var rec = this.record,
 			t = e && e.target,
 			externalLink = t && t.getAttribute('target');
@@ -309,7 +309,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.navigateToObject(rec);
 	},
 
-	setLocation: function(meta) {
+	setLocation: function (meta) {
 		if (!meta) {
 			return;
 		}
@@ -323,7 +323,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		try {
 			meta.getPathLabel()
-				.then(function(label) {
+				.then(function (label) {
 					me.locationEl.update(label);
 				});
 
@@ -332,10 +332,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			});
 
 			this.locationEl.hover(
-				function() {
+				function () {
 					Ext.fly(this).addCls('over');
 				},
-				function() {
+				function () {
 					Ext.fly(this).removeCls('over');
 				});
 
@@ -345,7 +345,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			console.error(e.stack || e.message || e);
 		}
 	}
-}, function() {
+}, function () {
 
 	this.prototype.renderTpl = Ext.DomHelper.markup([
 		{
@@ -389,7 +389,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		},
 		{
 			cls: 'respond', cn: {
-			cn: [
+				cn: [
 				{
 					cls: 'reply-options',
 					cn: [

@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.CourseInstan
 	],
 
 
-	__precacheEntry: function() {
+	__precacheEntry: function () {
 		var instance = this.get('CourseInstance');
 
 		instance.setEnrollment(this);
@@ -24,11 +24,11 @@ module.exports = exports = Ext.define('NextThought.model.courseware.CourseInstan
 	},
 
 
-	getCourseCatalogEntry: function() {
+	getCourseCatalogEntry: function () {
 		return this.get('CourseInstance').getCourseCatalogEntry();
 	},
 
-	isOpen: function() {
+	isOpen: function () {
 		var status = this.get('Status');
 
 		return status === 'Open';

@@ -10,14 +10,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-overviewgroup-editor',
 
 	statics: {
-		getHandledMimeTypes: function() {
+		getHandledMimeTypes: function () {
 			return [
 				NextThought.model.courses.overview.Group.mimeType
 			];
 		},
 
 
-		getTypes: function() {
+		getTypes: function () {
 			return [
 				{
 					title: 'Section',
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	addFormCmp: function() {
+	addFormCmp: function () {
 		return this.add({
 			xtype: 'overview-editing-overviewgroup-inlineeditor',
 			record: this.record,
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	onSave: function() {
+	onSave: function () {
 		var me = this,
 			parentSelection = me.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
@@ -47,14 +47,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.disableSubmission();
 
 		return me.EditingActions.saveValues(me.formCmp.getValue(), me.record, originalPosition, currentPosition, me.rootRecord)
-			.fail(function(reason) {
+			.fail(function (reason) {
 				me.enableSubmission();
 
 				return Promise.reject(reason);
 			});
 	},
 
-	addParentSelection: function(record, parentRecord, rootRecord, onChange) {
+	addParentSelection: function (record, parentRecord, rootRecord, onChange) {
 		if (!rootRecord) { return null; }
 
 		var items = rootRecord.get('Items');

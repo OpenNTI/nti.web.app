@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 
 	statics:{
 
-		getTargetVideoWidth: function(el, transcriptRatio){
+		getTargetVideoWidth: function (el, transcriptRatio) {
 			var screenHeight = Ext.Element.getViewportHeight(),
 				screenWidth = Ext.Element.getViewportWidth(),
 				tWidth = Math.floor(screenWidth * transcriptRatio),

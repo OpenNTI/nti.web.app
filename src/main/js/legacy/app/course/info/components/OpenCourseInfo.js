@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Op
 		editLink: '.edit'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.addCls((this.enrollmentStatus || 'open').toLowerCase());
 		this.renderData = Ext.apply(this.renderData || {}, {
 			'heading': getString('course-info.open-course-widget.heading', '', true).replace(/\u200B/ig, ''),
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Op
 
 	//</editor-fold>
 
-	showEnrollWindow: function() {
+	showEnrollWindow: function () {
 		var me = this;
 		me.fireEvent('show-enrollment', me.getInfo());
 		

@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		cardsContainerEl: '.enrollment-container'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.enableBubble(['enrolled-action', 'show-msg', 'go-back']);
@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		window.EnrollInOption = this.enrollInOption.bind(this);
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -135,11 +135,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		});
 	},
 
-	stopClose: function() {
+	stopClose: function () {
 		return this.changingEnrollment ? Promise.reject() : Promise.resolve();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this;
@@ -159,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		me.mon(me.cardsEl, 'click', 'handleEnrollmentClick', me);
 
 		me.course.getBackgroundImage()
-			.then(function(img) {
+			.then(function (img) {
 				me.el.setStyle({
 					backgroundImage: 'url(' + img + ')'
 				});
@@ -171,7 +171,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * @param  {String} type   name of the enrollment option
 	 * @param  {Array} config  array of configs for the option to parse
 	 */
-	restoreEnrollmentOption: function(type, config) {
+	restoreEnrollmentOption: function (type, config) {
 		if (!this.rendered) {
 			this.on('afterrender', this.restoreEnrollmentOption.bind(this, type, config));
 			return;
@@ -206,17 +206,17 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		}
 	},
 
-	onDestroy: function() {
+	onDestroy: function () {
 		this.callParent(arguments);
 
 		AnalyticsUtil.stopResourceTimer(this.course.getId(), 'course-catalog-viewed');
 	},
 
-	onBeforeDeactivate: function() {
+	onBeforeDeactivate: function () {
 		return !this.changingEnrollment;
 	},
 
-	addMask: function() {
+	addMask: function () {
 		try {
 			var maskEl = this.el && this.el.up('.body-container');
 			if (maskEl) {
@@ -227,7 +227,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		}
 	},
 
-	removeMask: function() {
+	removeMask: function () {
 		var maskEl = this.el.up('.body-container'),
 			mask = maskEl && maskEl.down('.x-mask'),
 			maskMsg = maskEl && maskEl.down('.x-mask-msg');
@@ -245,11 +245,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		}
 	},
 
-	__getOptionText: function(details, option) {
+	__getOptionText: function (details, option) {
 		return option.Wording;
 	},
 
-	__addBaseOption: function(details, option) {
+	__addBaseOption: function (details, option) {
 		if (this.state.base) {
 			console.error('More than one base', details, option);
 			return;
@@ -258,7 +258,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		this.state.base = this.__getOptionText(details, option);
 	},
 
-	__addAddOnOption: function(details, option) {
+	__addAddOnOption: function (details, option) {
 		var data = this.__getOptionText(details, option);
 
 		if (option.Enrolled) {
@@ -279,12 +279,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * @param  {Object} option option to load
 	 * @return {Promise}	   fulfills when its loaded
 	 */
-	__addEnrollmentBase: function(option) {
+	__addEnrollmentBase: function (option) {
 		var me = this, loading;
 
 		if (option) {
 			loading = option.loaded
-				.then(function(data) {
+				.then(function (data) {
 					me.enrollmentOptions[data.Name] = data;
 
 					me.__addBaseOption(option, data);
@@ -301,11 +301,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * @param  {Object} option the enrollment details
 	 * @return {Promise}		 resolved if the option is available, reject if not;
 	 */
-	__addEnrollmentOption: function(option) {
+	__addEnrollmentOption: function (option) {
 		var me = this, loading;
 
 		if (option) {
-			loading = option.loaded.then(function(data) {
+			loading = option.loaded.then(function (data) {
 				me.enrollmentOptions[data.Name] = data;
 
 				me.__addAddOnOption(option, data);
@@ -323,13 +323,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * @param  {Object} details enrollment details
 	 * @return {Promise}		 fulfills when its done, a rejection is not expected
 	 */
-	__onDetailsLoaded: function(details) {
+	__onDetailsLoaded: function (details) {
 		var loading,
 			base, addOns = [],
 			priority = this.CourseEnrollmentStore.getBasePriority(),
 			me = this;
 
-		function addBase(option, details) {
+		function addBase (option, details) {
 			details.name = details.name || option.name;
 
 			//if we are enrolled in an option it is the base
@@ -355,7 +355,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 		//iterate through all the options and figure out which one
 		//should be the base and what the add ons should be
-		this.CourseEnrollmentStore.forEachOption(function(option) {
+		this.CourseEnrollmentStore.forEachOption(function (option) {
 			var optionDetails = details.Options[option.name];
 
 			//if we're not available stop here
@@ -374,7 +374,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 		loading = me.__addEnrollmentBase(base);
 
-		addOns = addOns.map(function(addOn) {
+		addOns = addOns.map(function (addOn) {
 			if (!addOn) { return; }
 
 			me.state.addOns[addOn.name] = {
@@ -386,7 +386,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		});
 
 		Promise.all(addOns)
-			.then(function() {
+			.then(function () {
 				if (me.__stateToRestore) {
 					me.__stateToRestore.call();
 				}
@@ -395,7 +395,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		return loading;
 	},
 
-	__maybeUpdateCard: function(state) {
+	__maybeUpdateCard: function (state) {
 		var me = this,
 			card = me.cardsContainerEl,
 			addOns = Object.keys(state.addOns || {});
@@ -404,7 +404,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		//if the card is still loading there's no need to update
 		if (card.hasCls('loading')) { return; }
 
-		addOns.forEach(function(key) {
+		addOns.forEach(function (key) {
 			var el = card.down('.loading[data-name="' + key + '"]'),
 				obj = state.addOns[key] || {},
 				title = obj.title,
@@ -449,7 +449,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		});
 	},
 
-	__buildCard: function(state) {
+	__buildCard: function (state) {
 		var data = {
 				base: state.base,
 				addOns: [],
@@ -462,7 +462,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 			me = this,
 			addOns = Ext.Object.getValues(state.addOns);
 
-		addOns.forEach(function(addOn) {
+		addOns.forEach(function (addOn) {
 			addOn.difference = me.getPriceString(state.base.price, addOn.price);
 
 			if (addOn.loading) {
@@ -478,7 +478,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 	},
 
-	__buildCongratsCard: function() {
+	__buildCongratsCard: function () {
 		var isFirstTimer = $AppConfig.userObject.hasLink('first_time_logon'),
 			data = {
 				firstName: Ext.String.capitalize($AppConfig.userObject.get('FirstName') || $AppConfig.userObject.getName()),
@@ -495,7 +495,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		me.updateWindowButtons(me.requiredActions.first());
 	},
 
-	__showError: function() {
+	__showError: function () {
 
 	},
 
@@ -505,7 +505,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 *
 	 * @param {Boolean} updateFromStore update the course from the available courses store
 	 */
-	updateEnrollmentCard: function(updateFromStore) {
+	updateEnrollmentCard: function (updateFromStore) {
 		if (this.isDestroyed) {
 			return;
 		}
@@ -535,7 +535,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 			me.CourseEnrollmentStore.getEnrollmentDetails(me.course),
 			me.CourseEnrollmentStore.getGiftDetails(me.course)
 		])
-			.then(function(results) {
+			.then(function (results) {
 				var enrollment = results[0],
 					gift = results[1];
 
@@ -544,16 +544,16 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 				return me.__onDetailsLoaded(enrollment);
 			})
-			.then(function() {
+			.then(function () {
 				return me.state;
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Failed to load enrollment details', reason);
 				me.__showError();
 				return Promise.reject();//keep the failure going
 			})
 			.then(me.__buildCard.bind(me))
-			.then(function() {
+			.then(function () {
 				if (me.__stateToRestore) {
 					me.__stateToRestore.call();
 				}
@@ -567,7 +567,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * @param  {Number} addOn the price of the addon
 	 * @return {String}		  what we should show the user
 	 */
-	getPriceString: function(base, addOn) {
+	getPriceString: function (base, addOn) {
 		var price;
 
 		if (!addOn && base === null) {
@@ -603,7 +603,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		return price;
 	},
 
-	getButtonCls: function(option) {
+	getButtonCls: function (option) {
 		var cls = 'free';
 
 		if (option.cls === 'enrolled') {
@@ -617,7 +617,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		return cls;
 	},
 
-	showMessage: function(msg, isError, cursor) {
+	showMessage: function (msg, isError, cursor) {
 		var me = this,
 			win = me.up('[showMsg]'),
 			guid = guidGenerator();
@@ -630,7 +630,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		me.__showMessageClickMonitor = me.mon(win, {
 			destroyable: true,
 			single: true,
-			'message-clicked': function(msgId) {
+			'message-clicked': function (msgId) {
 				if (msgId === guid) {
 					Ext.callback(me.msgClickHandler);
 				}
@@ -638,7 +638,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		});
 	},
 
-	clearMessage: function() {
+	clearMessage: function () {
 		var win = this.up('[closeMsg]');
 
 		if (win) {
@@ -652,7 +652,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * @param  {Event} e the click event
 	 * @return {Boolean}   if the event was stopped
 	 */
-	handleEnrollmentClick: function(e) {
+	handleEnrollmentClick: function (e) {
 		var checkbox = e.getTarget('.addon.checkbox'),
 			button = e.getTarget('.button'),
 			gift = e.getTarget('.gift-card'),
@@ -676,7 +676,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * @param  {Ext.element} checkbox the addon element
 	 * @param  {Event} e		the click event
 	 */
-	updateSelectedEnrollment: function(checkbox, e) {
+	updateSelectedEnrollment: function (checkbox, e) {
 		//if the checkbox is full don't do anything
 		if (checkbox.hasCls('full')) { return; }
 
@@ -689,7 +689,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 			refundEl = baseEl && baseEl.down('.refund'),
 			title, price, refund;
 
-		function fillInOption(option) {
+		function fillInOption (option) {
 			title = option.title;
 			refund = option.refund;
 			price = me.getPriceString(option.price);
@@ -731,7 +731,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * @param  {Event} e	the click event
 	 * @return {Boolean}	  whether or not the event should be stopped
 	 */
-	linkClicked: function(link, e) {
+	linkClicked: function (link, e) {
 		var href = link.getAttribute('href'), r = true,
 			win = this.up('window'), u = $AppConfig.userObject;
 
@@ -765,7 +765,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 	 * @param  {Ext.element} button the button element
 	 * @param  {Event} e	  the click event
 	 */
-	enrollmentClicked: function(button, e) {
+	enrollmentClicked: function (button, e) {
 		var me = this, title,
 			video = me.details.getVideo(),
 			name = button.getAttribute('data-name'),
@@ -786,7 +786,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 			title = title + '.';
 		}
 
-		function done(success, changed) {
+		function done (success, changed) {
 			delete me.changingEnrollment;
 
 			var c = me.CourseStore.findCourseForNtiid(me.course.getId());
@@ -815,10 +815,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 					primary: {
 						text: getString('NextThought.view.courseware.enrollment.Details.DropCourse'),
 						cls: 'caution',
-						handler: function() {
+						handler: function () {
 							me.addMask();
 							option.undoEnrollment(me)
-								.then(function(changed) {
+								.then(function (changed) {
 									me.fireEvent('enrolled-action', false);
 									me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.dropped', {
 										course: course
@@ -830,7 +830,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 										done(true, changed);
 									}
 								})
-								.fail(function(reason) {
+								.fail(function (reason) {
 									var msg;
 
 									if (reason === 404) {
@@ -862,19 +862,19 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 			if (action) {
 				me.addMask();
 				action
-					.then(function(changed) {
+					.then(function (changed) {
 						// TODO: We're not ready to show this yet.
 						if (isFeature('suggest-contacts')) {
 							me.__buildCongratsCard();
 						}
 						return changed;
 					})
-					.then(function(changed) {
+					.then(function (changed) {
 						me.fireEvent('enrolled-action', true);
-						me.msgClickHandler = function() {
+						me.msgClickHandler = function () {
 							var c = me.CourseStore.findCourseBy(me.course.findByMyCourseInstance());
 							Promise.resolve(c)
-								.then(function(course) {
+								.then(function (course) {
 									var instance = course.get('CourseInstance');
 									instance.fireNavigationEvent(me);
 
@@ -882,7 +882,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 										win.close();
 									}
 								})
-								.fail(function(reason) {
+								.fail(function (reason) {
 									alert('Unable to find course.');
 									console.error('Unable to find course.', reason);
 								});
@@ -897,7 +897,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 						}
 						done(true, changed);
 					})
-					.fail(function(reason) {
+					.fail(function (reason) {
 						if (reason === 409) {
 							console.error('failed to enroll in course', reason);
 							me.showMessage(getString('NextThought.view.courseware.enrollment.Details.AlreadyEnrolled'), true);
@@ -911,7 +911,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 
 	},
 
-	giftClicked: function(el, e) {
+	giftClicked: function (el, e) {
 		var give = e.getTarget('.give'),
 			redeem = e.getTarget('.redeem'),
 			option = this.enrollmentOptions.GiftOption;
@@ -923,7 +923,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		}
 	},
 
-	enrollInOption: function(name) {
+	enrollInOption: function (name) {
 		var option = this.enrollmentOptions[name];
 
 		if (option) {
@@ -931,7 +931,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		}
 	},
 
-	congratsLayerClicked: function(el) {
+	congratsLayerClicked: function (el) {
 		var nextSelectionEl = el.getTarget('.add-course');
 
 		if (nextSelectionEl) {
@@ -939,17 +939,17 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		}
 	},
 
-	suggestContacts: function(onComplete) {
+	suggestContacts: function (onComplete) {
 		var me = this, peersStore, c;
 
 		c = this.CourseStore.findCourseBy(me.course.findByMyCourseInstance());
 		Promise.resolve(c)
-			.then(function(course) {
+			.then(function (course) {
 				var instance = course.get('CourseInstance');
 
 				if (instance && instance.getSuggestContacts) {
 					instance.getSuggestContacts()
-						.then(function(items) {
+						.then(function (items) {
 							if (Ext.isEmpty(items)) { return Promise.reject(); }
 
 							var a = Ext.getStore('all-contacts-store');
@@ -958,7 +958,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 								proxy: 'memory',
 								data: items,
 								filters: [
-									function(item) {
+									function (item) {
 										return !(a && a.contains(item.get('Username')));
 									}
 								]
@@ -968,21 +968,21 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 							me.mon(me.suggestContactsWin, 'destroy', onComplete);
 							me.mon(me.suggestContactsWin, 'destroy', 'refresh');
 						})
-						.fail(function() {
+						.fail(function () {
 							me.mon(Ext.widget('oobe-contact-window'), 'destroy', onComplete);
 						});
 				}
 			});
 	},
 
-	showCreateProfile: function(onComplete) {
+	showCreateProfile: function (onComplete) {
 		var me = this;
 		me.createProfileWin = Ext.widget('profile-create-window');
 		me.createProfileWin.show();
 		me.mon(me.createProfileWin, 'destroy', onComplete);
 	},
 
-	onActionComplete: function(actionName) {
+	onActionComplete: function (actionName) {
 		var me = this,
 			el = me.congratsLayerEl && me.congratsLayerEl.down('.' + actionName), nextAction;
 
@@ -999,11 +999,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		}
 	},
 
-	updateWindowButtons: function(action, name) {
+	updateWindowButtons: function (action, name) {
 		if (!action) { return; }
 
 		var me = this;
-		me.getButtonCfg = function() {
+		me.getButtonCfg = function () {
 			return {
 				name: name || getString('NextThought.view.library.available.CourseWindow.Continue'),
 				action: action
@@ -1015,7 +1015,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 		}
 	},
 
-	buttonClick: function(action) {
+	buttonClick: function (action) {
 		if (action === 'suggestContacts') {
 			this.suggestContacts(this.onActionComplete.bind(this, action));
 		}

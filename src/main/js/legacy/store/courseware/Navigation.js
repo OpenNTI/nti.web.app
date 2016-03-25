@@ -10,14 +10,14 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Navigation',
 
 	sorters: [
 		{
-			fn: function(a, b) {
+			fn: function (a, b) {
 				var sa = a.get('position'), sb = b.get('position');
 				return Globals.naturalSortComparator(sa, sb);
 			}
 		}//We are assuming the dates are in order?
 	],
 
-	constructor: function(config) {
+	constructor: function (config) {
 		if (!config.outlinePromise) {
 			config.outlinePromise = Promise.reject('Not Given');
 		}
@@ -27,31 +27,31 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Navigation',
 		}
 
 		this.building = Promise.all([
-				config.outlinePromise,
-				config.tocPromise
-			])
+			config.outlinePromise,
+			config.tocPromise
+		])
 			.then(this.fillFromOutline.bind(this))
 			.fail(this.failedToBuild.bind(this));
 
 		this.callParent(arguments);
 	},
 
-	onceBuilt: function() {
+	onceBuilt: function () {
 		return this.building;
 	},
 
-	failedToBuild: function(reason) {
+	failedToBuild: function (reason) {
 		console.error('Could not build outline store:', reason);
 		return this;
 	},
 
-	fillFromOutline: function(results) {
+	fillFromOutline: function (results) {
 		var outline = results[0],
 			tocNodes = results[1],
 			index = 0, r = [], t,
 			depth = 0, maxDepth;
 
-		function itr(node) {
+		function itr (node) {
 			var id = node.getId(),
 				fill = {};
 
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Navigation',
 			depth--;
 		}
 
-		function getDepth(n) {
+		function getDepth (n) {
 			var i = ((n && n.get('Items')) || [])[0];
 
 			return i ? (getDepth(i) + 1) : 0;
@@ -103,9 +103,9 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Navigation',
 		return this;
 	},
 
-	findByDate: function(date) {
+	findByDate: function (date) {
 		var recs = this.getRange() || [];
-		return recs.filter(function(o) {
+		return recs.filter(function (o) {
 			var open = o.get('AvailableBeginning') || date,
 				close = o.get('AvailableEnding') || date;
 			return o.get('type') === 'lesson' && close >= date && open <= date;

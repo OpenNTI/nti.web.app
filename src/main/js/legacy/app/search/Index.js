@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 	layout: 'none',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.add([
@@ -55,24 +55,24 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.Results = this.down('search-results');
 	},
 
-	getActiveItem: function() {
+	getActiveItem: function () {
 		return this.Results;
 	},
 
-	onActivate: function() {
+	onActivate: function () {
 		this.isActive = true;
 
 		this.mon(this.SearchStore, 'context-updated', this.onContextUpdate);
 	},
 
-	onDeactivate: function() {
+	onDeactivate: function () {
 		this.isActive = false;
 
 		this.mun(this.SearchStore, 'context-updated', this.onContextUpdate);
 		this.clearResults();
 	},
 
-	updateRoute: function() {
+	updateRoute: function () {
 		var search = this.currentSearch,
 			term = search.term,
 			filter = search.filter,
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.replaceRoute('Search', '/?' + query);
 	},
 
-	showSearch: function(route, subRoute) {
+	showSearch: function (route, subRoute) {
 		var navActions = this.NavActions,
 			params = route.queryParams,
 			term = params.q,
@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 			this.NavActions.setActiveContent(null);
 		} else {
 			this.LibraryActions.findBundle(bundle)
-				.then(function(bundle) {
+				.then(function (bundle) {
 					navActions.setActiveContent(bundle, true);
 				});
 		}
@@ -148,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		return Promise.resolve();
 	},
 
-	onContextUpdate: function() {
+	onContextUpdate: function () {
 		var term = this.SearchStore.getTerm();
 
 		if (this.currentSearch.term === term) {
@@ -160,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.updateRoute();
 	},
 
-	changeFilter: function(filter) {
+	changeFilter: function (filter) {
 		if (this.currentSearch.filter === filter) {
 			return;
 		}
@@ -170,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.updateRoute();
 	},
 
-	doNewSearch: function() {
+	doNewSearch: function () {
 		if (!this.currentSearch) { return; }
 
 		this.clearResults();
@@ -178,39 +178,39 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.loadSearchPage(1);
 	},
 
-	clearResults: function() {
+	clearResults: function () {
 		this.Results.removeAll(true);
 	},
 
-	getAcceptFilter: function(filter) {
+	getAcceptFilter: function (filter) {
 		return this.OptionMenu.getMimeTypes(filter);
 	},
 
-	showLoading: function() {
+	showLoading: function () {
 		this.Results.showLoading();
 	},
 
-	removeLoading: function() {
+	removeLoading: function () {
 		this.Results.removeLoading();
 	},
 
-	showError: function() {
+	showError: function () {
 		this.Results.showError();
 	},
 
-	showNext: function() {
+	showNext: function () {
 		this.Results.showNext(this.loadNextPage.bind(this));
 	},
 
-	removeNext: function() {
+	removeNext: function () {
 		this.Results.removeNext();
 	},
 
-	showEmpty: function() {
+	showEmpty: function () {
 		this.Results.showEmpty();
 	},
 
-	loadSearchPage: function(page) {
+	loadSearchPage: function (page) {
 		var search = this.currentSearch,
 			accepts = this.getAcceptFilter(search.filter);
 
@@ -223,7 +223,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 			.fail(this.onLoadFail.bind(this, this.lock));
 	},
 
-	loadNextPage: function() {
+	loadNextPage: function () {
 		if (!this.nextPageLink) {
 			return this.loadSearchPage(1);
 		}
@@ -238,7 +238,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 			.fail(this.onLoadFail.bind(this, this.lock));
 	},
 
-	onLoadResults: function(lock, batch) {
+	onLoadResults: function (lock, batch) {
 		if (lock !== this.lock) { return; }
 
 		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
@@ -262,7 +262,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.OptionMenu.selectType(this.currentSearch.filter);
 	},
 
-	onLoadFail: function(lock, reason) {
+	onLoadFail: function (lock, reason) {
 		if (lock !== this.lock) { return; }
 
 		console.error('Failed to load search results: ', reason);
@@ -271,7 +271,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 		this.showError();
 	},
 
-	navigateToSearchHit: function(record, hit, frag, containerId) {
+	navigateToSearchHit: function (record, hit, frag, containerId) {
 		this.SearchStore.setHitForContainer(containerId || hit.get('ContainerId'), hit, frag);
 
 		this.Router.root.attemptToNavigateToObject(record);

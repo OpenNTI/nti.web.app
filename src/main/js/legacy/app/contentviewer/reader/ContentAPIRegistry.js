@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		observable: 'Ext.util.Observable'
 	},
 
-	constructor: function() {
+	constructor: function () {
 		this.mixins.observable.constructor.call(this);
 		this.addEvents('update');
 		this.registry = {};
@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 	 * @param fn
 	 * @param scope
 	 */
-	register: function(publicName, fn, scope) {
+	register: function (publicName, fn, scope) {
 		if (typeof publicName !== 'string') {
 			Ext.Error.raise('publicName must be a string');
 		}
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 			Ext.Error.raise('The function "' + publicName + '" is already registered.');
 		}
 
-		this.registry[publicName] = function() { return fn.apply(scope || this, arguments); };
+		this.registry[publicName] = function () { return fn.apply(scope || this, arguments); };
 		this.fireEvent('update', this);
 	},
 
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 	/**
 	 *
 	 */
-	getAPI: function() {
+	getAPI: function () {
 		return Ext.clone(this.registry);
 	}
 

@@ -8,6 +8,6 @@ module.exports = exports = Ext.define('NextThought.model.assessment.MultipleChoi
 		{ name: 'solutions', type: 'arrayItem' },
 		{ name: 'choices', type: 'auto' }
 	]
-},function() {
+},function () {
 	NextThought.model.MAP['application/vnd.nextthought.assessment.randomizedmultiplechoicepart'] = this.$className;
 });

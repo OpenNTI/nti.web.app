@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		}
 	],
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var commentBox;
@@ -91,21 +91,21 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		});
 
 		this.mon(this.editor, {
-			'activated-editor': function() {
+			'activated-editor': function () {
 				commentBox.addCls('editor-active');
 			},
-			'deactivated-editor': function() {
+			'deactivated-editor': function () {
 				commentBox.removeCls('editor-active');
 			},
 			'save': 'addFeedback',
-			'no-body-content': function(editor, el) {
+			'no-body-content': function (editor, el) {
 				editor.markError(el, getString('NextThought.view.assessment.AssignmentFeedback.empty-editor'));
 				return false;
 			}
 		});
 	},
 
-	addFeedback: function(editor) {
+	addFeedback: function (editor) {
 		var item = new NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback(
 						{body: editor.getValue().body}),
 			me = this,
@@ -116,20 +116,20 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 			url: feedback.get('href'),
 			method: 'POST',
 			jsonData: item.getData()
-		}).done(function() {
+		}).done(function () {
 			console.log('Saved feedback');
 			editor.deactivate();
 			editor.setValue('');
 			me.addMask();
 			store.load();
 			me.removeMask();
-		}).fail(function(reason) {
+		}).fail(function (reason) {
 			console.error('faild to save feedback', reason);
 		});
 
 	},
 
-	setHistory: function(history) {
+	setHistory: function (history) {
 		if (!history || !history.get('Feedback')) {
 			this.hide();
 			return;
@@ -180,13 +180,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		this.show();
 	},
 
-	showEditor: function() {
+	showEditor: function () {
 		this.editor.activate();
 		Ext.defer(this.editor.focus, 350, this.editor);
 		this.updateLayout();
 	},
 
-	updateFeedback: function(store) {
+	updateFeedback: function (store) {
 		var items = store.getRange();
 
 		this.history.get('Feedback').set({
@@ -196,13 +196,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		this.history.afterEdit(['feedback']);
 	},
 
-	resolveUsers: function(store) {
+	resolveUsers: function (store) {
 		var pluck = Ext.Array.pluck,
 			list = this.feedbackList,
 			records = store.getRange();
 
-		function fill(users) {
-			users.forEach(function(u, i) {
+		function fill (users) {
+			users.forEach(function (u, i) {
 				var r = records[i],
 					c = r && r.get('Creator');
 				if (c && typeof c === 'string' && u.getId() === c) {
@@ -219,7 +219,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 
 	},
 
-	openEditorFor: function(record, el) {
+	openEditorFor: function (record, el) {
 		var me = this;
 
 
@@ -231,7 +231,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 			record: record,
 			enableObjectControls: false, //lets not open too much complexity yet.
 			listeners: {
-				save: function(editor, record, value) {
+				save: function (editor, record, value) {
 					editor.mask(getString('NextThought.view.assessment.AssignmentFeedback.editor-mask'));
 					if (!record) {
 						console.error('No record!');
@@ -240,7 +240,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 					record.suspendEvents();
 					record.set('body', value.body);
 					record.save({
-						callback: function(q, s, r) {
+						callback: function (q, s, r) {
 							record.resumeEvents();
 							editor.unmask();
 							if (!s) {
@@ -264,7 +264,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 						}
 					});
 				},
-				'deactivated-editor': function() {
+				'deactivated-editor': function () {
 					var view = me.down('dataview');
 
 					if (view) {
@@ -279,7 +279,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		me.editEditor.activate();
 	},
 
-	onFeedbackClick: function(s, record, item, index, e) {
+	onFeedbackClick: function (s, record, item, index, e) {
 		var c = record.get('Creator'),
 			store = this.store;
 
@@ -288,19 +288,19 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		} else if (e.getTarget('.link.edit')) {
 			this.openEditorFor(record, Ext.get(item));
 		} else if (e.getTarget('.link.delete')) {
-			record.destroy({callback: function() {
+			record.destroy({callback: function () {
 				store.load();
 			}});
 		}
 	},
 
-	addMask: function(){
+	addMask: function () {
 		if(this.feedbackList) {
 			this.feedbackList.el.mask('Loading...');
 		}
 	},
 
-	removeMask: function(){
+	removeMask: function () {
 		if(this.feedbackList) {
 			this.feedbackList.el.unmask();
 		}

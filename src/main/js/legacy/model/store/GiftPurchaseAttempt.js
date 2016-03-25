@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.model.store.GiftPurchaseAttem
 		{name: 'Message', type: 'string'}
 	],
 
-	getLink: function(rel) {
+	getLink: function (rel) {
 		if (rel === 'get_purchase_attempt') {
 			return getURL('/dataserver2/store/get_gift_purchase_attempt?' + Ext.Object.toQueryString({purchaseID: this.getId(), creator: this.get('Creator')}));
 		}

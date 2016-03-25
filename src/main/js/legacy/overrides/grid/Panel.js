@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.overrides.grid.Panel', {
 		}
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		var headerCtCfg = this.columns;
 		if (Ext.isArray(headerCtCfg)) {
 			headerCtCfg = {

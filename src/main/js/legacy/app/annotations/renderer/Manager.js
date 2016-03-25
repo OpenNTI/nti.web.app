@@ -23,16 +23,16 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 	/*
 	 * @constructor Inner class
 	 */
-	Bucket: function() {
+	Bucket: function () {
 		this.values = {};
 		this.length = 0;
 
-		this.free = function() {
-			this.each(function(v, k, o) { delete o[k]; }, this);
-			Ext.Object.each(this, function(k, o, me) { delete me[k]; });
+		this.free = function () {
+			this.each(function (v, k, o) { delete o[k]; }, this);
+			Ext.Object.each(this, function (k, o, me) { delete me[k]; });
 		};
 
-		this.put = function(o, key) {
+		this.put = function (o, key) {
 			key = typeof key === 'number' ? key : guidGenerator();
 			if (this.values[key]) {
 				throw 'existing value';
@@ -42,17 +42,17 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 			return key;
 		};
 
-		this.each = function(cb, s) {
-			Ext.Object.each(this.values, function(key, value, o) {
+		this.each = function (cb, s) {
+			Ext.Object.each(this.values, function (key, value, o) {
 				Ext.callback(cb, s, [value, key, o]);
 			});
 		};
 
-		this.get = function(key) {
+		this.get = function (key) {
 			return this.values[key];
 		};
 
-		this.first = function() {
+		this.first = function () {
 			var key;
 			for (key in this.values) {
 				if (this.values.hasOwnProperty(key)) {
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		};
 	},
 
-	registerGutter: function(el, reader) {
+	registerGutter: function (el, reader) {
 		//TODO all this junk about prefixes should go away once we aren't using a singleton here...
 		if (this.gutter) {
 			console.warn('replacing exisiting gutter?', this.gutter);
@@ -77,12 +77,12 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		this.render();//renders wait for the gutter to exist
 	},
 
-	register: function(o) {
+	register: function (o) {
 		this.registry.push(o);
 		o.requestRender();
 	},
 
-	unregister: function(o) {
+	unregister: function (o) {
 		var r = this.registry;
 		if (r) {
 			this.registry = Ext.Array.remove(r, o);
@@ -92,15 +92,15 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		}
 	},
 
-	getReader: function() {
+	getReader: function () {
 		return this.reader;
 	},
 
-	buildSorter: function(prefix) {
+	buildSorter: function (prefix) {
 		//Default sort will sort by lastModified
-		return function(a, b) {
+		return function (a, b) {
 			var e = {get: Ext.emptyFn},
-					c = 0, $a = (a.record || e).get('Last Modified'), $b = (b.record || e).get('Last Modified');
+				c = 0, $a = (a.record || e).get('Last Modified'), $b = (b.record || e).get('Last Modified');
 			if ($a !== $b) {
 				c = $a < $b ? 1 : -1;
 			}
@@ -109,8 +109,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		};
 	},
 
-	clearBuckets: function() {
-		function clear(d) {
+	clearBuckets: function () {
+		function clear (d) {
 			while (d && d.firstChild) {
 				d.removeChild(d.firstChild);
 			}
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		this.buckets = new this.Bucket();
 	},
 
-	getBucket: function(line) {
+	getBucket: function (line) {
 		//console.debug('prefix:'+prefix, line);
 		if (line < 0) {
 			//bad line, don't render:
@@ -145,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 			a = Math.round(line - (lineTolerance / 2)), z = Math.round(line + (lineTolerance / 2));
 
 		if (!b && c) {
-			c.each(function(value, key) {
+			c.each(function (value, key) {
 				var keyNum = parseInt(key, 10);
 				if (keyNum >= a && keyNum <= z) {
 					b = value;
@@ -163,20 +163,20 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		return b;
 	},
 
-	layoutBuckets: function() {
+	layoutBuckets: function () {
 		var g = this.gutter,
 			b = this.buckets,
 			cT = this.controlLineTmpl;
 
 
-		b.each(function(line, y) {
+		b.each(function (line, y) {
 			var count = 0;
 
 			line.controls = line.controls || cT.append(g.controls, [], true);
 			line.controls.setStyle('top', y + 'px');
 			line.controls.set({'data-line': y});
 
-			line.each(function(o) {
+			line.each(function (o) {
 				if (o.isNote) {
 					++count;
 				}
@@ -192,11 +192,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		});
 	},
 
-	suspend: function() {
+	suspend: function () {
 		this.rendererSuspended++;
 	},
 
-	resume: function() {
+	resume: function () {
 		this.rendererSuspended--;
 		if (this.rendererSuspended === 0 && this.renderOnResume) {
 			delete this.renderOnResume;
@@ -204,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		}
 	},
 
-	render: function() {
+	render: function () {
 		var me = this, containers = {}, renderedCount = 0,
 			cleanContent, rootContainerId,
 			cloned, descs = [], cids = [], doc = null, selectedEl;
@@ -249,9 +249,9 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 		me.clearBuckets();
 
 		cloned = Ext.Array.clone(me.registry);
-		Ext.each(cloned, function(o) {
+		Ext.each(cloned, function (o) {
 			var desc = o.getRecordField ? o.getRecordField('applicableRange') : null,
-					cid = o.getRecordField ? o.getRecordField('ContainerId') : null;
+				cid = o.getRecordField ? o.getRecordField('ContainerId') : null;
 			if (o.doc) {
 				doc = o.doc;
 			}
@@ -263,7 +263,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 			cleanContent = me.getReader().getCleanContent();
 			rootContainerId = Anchors.rootContainerIdFromDocument(doc);
 			Anchors.preresolveLocatorInfo(descs, doc, cleanContent, cids, rootContainerId);
-			Ext.each(cloned, function(o) {
+			Ext.each(cloned, function (o) {
 				var y, b, c;
 				try {
 					if (!o.isVisible) {
@@ -307,17 +307,17 @@ module.exports = exports = Ext.define('NextThought.app.annotations.renderer.Mana
 			}
 		}
 	}
-}, function() {
+}, function () {
 	var me = this,
-			fn = this.prototype.render,
-			timerId;
+		fn = this.prototype.render,
+		timerId;
 
-	me.prototype.render = function() {
+	me.prototype.render = function () {
 		var callerScope = this;
 		if (timerId) {
 			clearTimeout(timerId);
 		}
-		timerId = setTimeout(function() {
+		timerId = setTimeout(function () {
 			fn.call(callerScope);
 		}, 100);
 	};

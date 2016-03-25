@@ -6,17 +6,17 @@ var StateActions = require('../common/state/Actions');
 module.exports = exports = Ext.define('NextThought.mixins.State', {
 	state_key: 'default',
 
-	getStateKey: function() {
+	getStateKey: function () {
 		return this.state_key;
 	},
 
-	__getStateActions: function() {
+	__getStateActions: function () {
 		this.__StateActions = this.__StateActions || NextThought.common.state.Actions.create();
 
 		return this.__StateActions;
 	},
 
-	__getStateStore: function() {
+	__getStateStore: function () {
 		this.__StateStore = this.__StateStore || NextThought.common.state.StateStore.getInstance();
 
 		return this.__StateStore;
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.mixins.State', {
 	 * Return the current state
 	 * @return {Object} the current state
 	 */
-	getCurrentState: function() {
+	getCurrentState: function () {
 		var actions = this.__getStateActions(),
 			store = this.__getStateStore(),
 			key = this.getStateKey();
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.mixins.State', {
 	 * Store the state in local storage
 	 * @param {Object} state state to store
 	 */
-	setState: function(state) {
+	setState: function (state) {
 		var actions = this.__getStateActions(),
 			key = this.getStateKey();
 
@@ -52,5 +52,5 @@ module.exports = exports = Ext.define('NextThought.mixins.State', {
 	 * @override
 	 * @param {Object} state state to apply
 	 */
-	applyState: function(state) {}
+	applyState: function (state) {}
 });

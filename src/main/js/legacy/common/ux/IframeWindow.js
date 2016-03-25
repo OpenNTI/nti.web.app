@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 						cls: 'x-btn-blue-large dismiss',
 						action: 'cancel',
 						style: { 'float': 'right'},
-						handler: function(b, e) {
+						handler: function (b, e) {
 							e.stopEvent(); b.up('window').close();
 						}
 					}
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 		}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var me = this,
@@ -87,12 +87,12 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 		}
 
 		iframe.on({
-			afterRender: function(cmp) {
+			afterRender: function (cmp) {
 				var parent = cmp.el.parent(),
 					iframe = cmp.el.dom,
 					loaded = false,
 					masked = false,
-					p = wait(100).then(function() {
+					p = wait(100).then(function () {
 						if (!loaded) {
 							masked = true;
 							parent.mask(me.getLoadingText(), 'navigation');
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 					iframe.style.height = me.iframeHeight + 'px';
 				}
 
-				cmp.el.on('load', function() {
+				cmp.el.on('load', function () {
 					loaded = true;
 					if (masked) {
 						p.then(parent.unmask.bind(parent));
@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 		this.on('close', this.removeCustomMask, this);
 
 		if (Ext.is.iOS) {
-			this.on('afterrender', function() {
+			this.on('afterrender', function () {
 				var iframe = this.el.down('iframe');
 				iframe.parent().el.setStyle('-webkit-overflow-scrolling', 'touch');
 				iframe.parent().el.setStyle('overflow', 'auto');
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 	},
 
 
-	fillScreen: function() {
+	fillScreen: function () {
 		var aspect = this.desiredWidth / this.desiredHeight, //width / height
 			height, width,
 			iframe = this.down('box[itemId=iframe]'),
@@ -152,13 +152,13 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeWindow', {
 	},
 
 
-	addCustomMask: function() {
+	addCustomMask: function () {
 		var mask = this.zIndexManager.mask;
 		mask.addCls('nti-black-clear');
 	},
 
 
-	removeCustomMask: function() {
+	removeCustomMask: function () {
 		var mask = this.zIndexManager.mask;
 		if (mask) {
 			mask.removeCls('nti-black-clear');

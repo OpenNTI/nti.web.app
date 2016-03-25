@@ -15,14 +15,14 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.DomContentP
 	],
 
 	statics: {
-		createFromObject: function(o) {
+		createFromObject: function (o) {
 			return NextThought.model.anchorables.DomContentPointer.create({
 				role: o.role
 			});
 		}
 	},
 
-	constructor: function(o) {
+	constructor: function (o) {
 		this.validateRole(o.role);
 		this.callParent(arguments);
 		this.Class = 'DomContentPointer';
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.DomContentP
 
 
 
-	validateRole: function(r) {
+	validateRole: function (r) {
 		if (!r) {
 			Ext.Error.raise('Must supply a role');
 		}
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.DomContentP
 	},
 
 
-	locateRangePointInAncestor: function() {
+	locateRangePointInAncestor: function () {
 		return {confidence: 0, node: null};
 	}
 });

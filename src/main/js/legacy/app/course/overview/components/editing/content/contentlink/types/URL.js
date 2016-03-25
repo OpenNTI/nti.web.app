@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-contentlink-url',
 
 	statics: {
-		getTypes: function() {
+		getTypes: function () {
 			return [
 				{
 					title: 'External Link',
@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		//TODO: override getEditorForRecord to check if the related work ref
 		//is pointing to a url
-		getEditorForRecord: function(record) {
+		getEditorForRecord: function (record) {
 			if (record.isExternalLink()) {
 				return this;
 			}
@@ -31,14 +31,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: 'content-editor content-link url',
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.formCmp.setPlaceholder('icon', NextThought.model.RelatedWork.getIconForURL());
 	},
 
 
-	getDefaultValues: function() {
+	getDefaultValues: function () {
 		var base = this.callParent(arguments);
 
 		base.targetMimeType = NextThought.model.RelatedWork.EXTERNAL_TYPE;
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	getFormSchema: function() {
+	getFormSchema: function () {
 		var base = this.callParent(arguments);
 
 		base.push({type: 'hidden', name: 'targetMimeType'});

@@ -22,11 +22,11 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Cour
 		mimeType: 'application/vnd.nextthought.courses.courseoutlinecontentnode'
 	},
 
-	getFirstContentNode: function() {
+	getFirstContentNode: function () {
 		return this.isPublished() && this.get('isAvailable') ? this : null;
 	},
 
-	isPublished: function() {
+	isPublished: function () {
 		var state = this.get('PublicationState') || '';
 
 		return state.toLowerCase() === ('DefaultPublished').toLowerCase();

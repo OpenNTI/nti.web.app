@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	layout: 'card',
 
-	clearAssignmentsData: function() {
+	clearAssignmentsData: function () {
 		var root = this.getRoot();
 		if (root && root.clearState) {
 			root.clearState();
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.removeAll(true);
 	},
 
-	maybeMask: function(path) {
+	maybeMask: function (path) {
 		var activeItem = this.getLayout().getActiveItem();
 
 		if (activeItem && activeItem.maybeMask && activeItem.path === path) {
@@ -40,15 +40,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return false;
 	},
 
-	maybeUnmask: function(path) {
-		this.items.each(function(item) {
+	maybeUnmask: function (path) {
+		this.items.each(function (item) {
 			if (item.maybeUnmask) {
 				item.maybeUnmask();
 			}
 		});
 	},
 
-	setAssignmentsData: function(assignments, bundle, student) {
+	setAssignmentsData: function (assignments, bundle, student) {
 		//if we haven't changed bundles
 		if (this.currentBundle === bundle) {
 			if (student) {
@@ -59,15 +59,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		var root = this.add({
-				xtype: 'course-assessment-admin-performance-root',
-				showAssignmentsForStudent: this.showAssignmentsForStudent.bind(this),
-				assignments: assignments,
-				pushRouteState: this.pushRouteState.bind(this),
-				replaceRouteState: this.replaceRouteState.bind(this),
-				student: student,
-				path: 'root',
-				currentBundle: bundle
-			});
+			xtype: 'course-assessment-admin-performance-root',
+			showAssignmentsForStudent: this.showAssignmentsForStudent.bind(this),
+			assignments: assignments,
+			pushRouteState: this.pushRouteState.bind(this),
+			replaceRouteState: this.replaceRouteState.bind(this),
+			student: student,
+			path: 'root',
+			currentBundle: bundle
+		});
 
 		this.currentBundle = bundle;
 		this.assignmentsData = Ext.Array.clone(arguments);
@@ -76,15 +76,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return root.restoreState(this.getRouteState());
 	},
 
-	getRoot: function() {
+	getRoot: function () {
 		return this.items.first();
 	},
 
-	getStudentView: function() {
+	getStudentView: function () {
 		return this.down('course-assessment-admin-performance-student');
 	},
 
-	showRoot: function() {
+	showRoot: function () {
 		var root = this.getRoot(),
 			layout = this.getLayout(),
 			active = layout.getActiveItem();
@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	showStudent: function(student) {
+	showStudent: function (student) {
 		var me = this, current,
 			record, pageSource,
 			historyURL, user, view;
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		//When we handle the route to show a students assignments, we tell the root
 		//to load to this student, so when this calls the store will already have loaded
 		//the page that contains this record.
-		current = me.store.findBy(function(rec) {
+		current = me.store.findBy(function (rec) {
 			var user = rec.get('User');
 
 			return student === NextThought.model.User.getIdFromRaw(user);
@@ -132,15 +132,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		pageSource = NextThought.util.PagedPageSource.create({
 			currentIndex: current,
 			store: me.store,
-			getTitle: function(rec) {
+			getTitle: function (rec) {
 				return rec ? rec.get('Alias') : '';
 			},
-			getRoute: function(rec) {
+			getRoute: function (rec) {
 				var user = rec.get('User');
 
 				return 'performance/' + user.getURLPart();
 			},
-			fillInRecord: function(item) {
+			fillInRecord: function (item) {
 				var user = item.get('User');
 
 				if (!user) {
@@ -148,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}
 
 				return UserRepository.getUser(user.Username || user)
-					.then(function(u) {
+					.then(function (u) {
 						item.set('User', u);
 
 						return item;
@@ -170,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 
 		me.getStudentEnrollment(record)
-			.then(function(enrollment) {
+			.then(function (enrollment) {
 				if (enrollment && view.setEnrollmentData) {
 					view.setEnrollmentData(enrollment);
 				}
@@ -183,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return view.setAssignmentsData.apply(view, me.assignmentsData);
 	},
 
-	getStudentEnrollment: function(studentRecord) {
+	getStudentEnrollment: function (studentRecord) {
 		var roster = this.currentBundle && this.currentBundle.getLink('CourseEnrollmentRoster'),
 			username = studentRecord && studentRecord.get('Username'),
 			smallRequestURLToGetCounts = roster && !Ext.isEmpty(roster) && Ext.String.urlAppend(
@@ -198,13 +198,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		return Service.request(smallRequestURLToGetCounts)
 					.then(JSON.parse)
-					.then(function(obj) {
+					.then(function (obj) {
 						var enrollment = obj.Items && obj.Items[0];
 						return Promise.resolve(ParseUtils.parseItems(enrollment)[0]);
 					});
 	},
 
-	showAssignmentsForStudent: function(student) {
+	showAssignmentsForStudent: function (student) {
 		this.pushRoute(student.getName(), '/performance/' + student.getURLPart(), { student: student});
 	}
 });

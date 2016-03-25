@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	items: [],
 	canEdit: false,
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.setDataTransfer(new NextThought.model.app.MoveInfo({
@@ -36,11 +36,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	updateRecord: function(record) {
+	updateRecord: function (record) {
 		this.setRecord(record);
 	},
 
-	setRecord: function(record) {
+	setRecord: function (record) {
 		this.removeAll(true);
 
 		var preview = this.getPreview(record),
@@ -73,13 +73,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	getDragHandle: function() {
+	getDragHandle: function () {
 		return this.el && this.el.dom && this.el.dom.querySelector('.controls');
 	},
 
-	getPreviewType: function(record) {},
+	getPreviewType: function (record) {},
 
-	getPreview: function(record) {
+	getPreview: function (record) {
 		var item = record.getRaw(),
 			type = this.getPreviewType(record);
 
@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}, item);
 	},
 
-	getControls: function(record, bundle) {
+	getControls: function (record, bundle) {
 		var controls = [];
 
 		if (NextThought.app.course.overview.components.editing.content.Prompt.canEdit(record)) {
@@ -111,8 +111,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				parentRecord: this.parentRecord,
 				root: this.lessonOverview,
 				bundle: bundle,
-				onPromptOpen: function() {},
-				onPromptClose: function() {}
+				onPromptOpen: function () {},
+				onPromptClose: function () {}
 			});
 		}
 

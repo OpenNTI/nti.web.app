@@ -4,12 +4,12 @@ var Ext = require('extjs');
 module.exports = exports = Ext.define('NextThought.mixins.note-feature.GetLatestReply', {
   //Mixin assumptions: Mixed into a Container, with a property "record" that has implemented "loadReplies"
 
-	getItemReplies: function() {
+	getItemReplies: function () {
 		var me = this,
 			r = me.record,
 			focusRecord = me.record.focusRecord;
 
-		function cb(store, records) {
+		function cb (store, records) {
 			var count = store.getCount(), rec = null, items;
 
 			//Set comments count
@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.mixins.note-feature.GetLatest
 			me.record.children = items;
 
 			//Set the latest direct reply
-			store.each(function(r) {
+			store.each(function (r) {
 				if (r.getId() === (focusRecord && focusRecord.getId())) {
 					rec = r;
 				}

@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		MAX_TITLE_LENGTH: 300
 	},
 
-	__createRecord: function(form, position) {
+	__createRecord: function (form, position) {
 		var parent = position && position.parent;
 
 		if (!parent.insertForm) {
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	__createRecordValues: function(values, position) {
+	__createRecordValues: function (values, position) {
 		var parent = position && position.parent;
 
 		if (!parent.insertContent) {
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	__saveRecord: function(form, record) {
+	__saveRecord: function (form, record) {
 		//if we aren't passed a form, there is nothing to update
 		if (!form) { return Promise.resolve(); }
 
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	__saveRecordValues: function(values, record) {
+	__saveRecordValues: function (values, record) {
 		var link = record.getLink('edit');
 
 		if (!values) {
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		return Service.put(link, values)
-			.then(function(response) {
+			.then(function (response) {
 				record.set(values);
 				record.syncWithResponse(response);
 
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	__moveRecord: function(record, originalPosition, newPosition, root) {
+	__moveRecord: function (record, originalPosition, newPosition, root) {
 		if (!newPosition && !originalPosition) {
 			return Promise.resolve();
 		}
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		return newParent.moveToFromContainer(record, newPosition.index, originalPosition.index, originalParent, root)
-			.fail(function(reason) {
+			.fail(function (reason) {
 				return Promise.reject({
 					msg: 'Unable to move record.',
 					error: reason
@@ -108,14 +108,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	__updateRecord: function(form, record, originalPosition, newPosition, root) {
+	__updateRecord: function (form, record, originalPosition, newPosition, root) {
 		return this.__saveRecord(form, record)
 			.then(this.__moveRecord.bind(this, record, originalPosition, newPosition, root))
 			.fail(this.parseError.bind(this));
 	},
 
 
-	updateRecordVisibility: function(record, visibilityCmp) {
+	updateRecordVisibility: function (record, visibilityCmp) {
 		var link = record && record.getLink('edit'),
 			values = visibilityCmp && visibilityCmp.getChangedValues && visibilityCmp.getChangedValues();
 
@@ -128,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		return Service.put(link, values)
-				.then(function(response) {
+				.then(function (response) {
 					var rec = ParseUtils.parseItems(response)[0];
 					
 					record.syncWith(rec);
@@ -137,14 +137,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	__updateRecordValues: function(values, record, originalPosition, newPosition, root) {
+	__updateRecordValues: function (values, record, originalPosition, newPosition, root) {
 		return this.__saveRecordValues(values, record)
 			.then(this.__moveRecord.bind(this, record, originalPosition, newPosition, root))
 			.fail(this.parseError.bind(this));
 	},
 
 
-	__getPosition: function(position, record) {
+	__getPosition: function (position, record) {
 		if (!position.isModel) { return position; }
 
 		return {
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	getSchema: function(record) {
+	getSchema: function (record) {
 		var url = record && record.getLink('schema');
 
 		if (!url) {
@@ -162,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		return Service.request(url)
-				.then(function(response) {
+				.then(function (response) {
 					return JSON.parse(response);
 				});
 	},
@@ -188,12 +188,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * @param  {Object} root		   the root of both parents
 	 * @return {Promise}			   fulfill when successful, reject when fail
 	 */
-	saveEditorForm: function(form, record, originalPosition, newPosition, root, visibilityCmp) {
+	saveEditorForm: function (form, record, originalPosition, newPosition, root, visibilityCmp) {
 		var me = this;
 		originalPosition = this.__getPosition(originalPosition);
 		newPosition = this.__getPosition(newPosition);
 
-		function visibilityPromise(rec){
+		function visibilityPromise (rec) {
 			if (visibilityCmp) {
 				return me.updateRecordVisibility(rec, visibilityCmp);
 			}
@@ -211,7 +211,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	saveValues: function(values, record, originalParent, newParent, root) {
+	saveValues: function (values, record, originalParent, newParent, root) {
 		if (record) {
 			return this.__updateRecordValues(values, record, originalParent, newParent, root);
 		}
@@ -230,7 +230,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * @param  {TimeStamp} optionalDate Optional date to publish a date on
 	 * @return {Promise}  fulfills when successfully published, reject when it failed.
 	 */
-	publishOnDate: function(record, date) {
+	publishOnDate: function (record, date) {
 		var link = record && record.getLink('publish');
 
 		if (!link) {
@@ -238,27 +238,27 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		return Service.post(link, {'publishBeginning': date})
-			.then(function(response) {
+			.then(function (response) {
 				return ParseUtils.parseItems(response)[0];
 			})
-			.then(function(rec) {
+			.then(function (rec) {
 				record.syncWith(rec);
 				return record;
 			});
 	},
 
 
-	publish: function(record) {
+	publish: function (record) {
 		var link = record && record.getLink('publish');
 		if (!link) {
 			return Promise.reject('No link');
 		}
 
 		return Service.post(link)
-			.then(function(response) {
+			.then(function (response) {
 				return ParseUtils.parseItems(response)[0];
 			})
-			.then(function(rec) {
+			.then(function (rec) {
 				record.syncWith(rec);
 				return record;
 			});
@@ -271,7 +271,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * @param  {CourseOutlineNode} record		A record with a publish link.
 	 * @return {Promise}  fulfills when successfully published, reject when it failed.
 	 */
-	unpublish: function(record) {
+	unpublish: function (record) {
 		var link = record && record.getLink('unpublish');
 
 		if (!link) {
@@ -279,17 +279,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		return Service.post(link)
-			.then(function(response) {
+			.then(function (response) {
 				return ParseUtils.parseItems(response)[0];
 			})
-			.then(function(rec) {
+			.then(function (rec) {
 				record.syncWith(rec);
 				return record;
 			});
 	},
 
 
-	parseError: function(reason) {
+	parseError: function (reason) {
 		var response = reason && reason.responseText,
 			item;
 

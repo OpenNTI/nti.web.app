@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 		{xtype: 'forum-view'}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 		this.forumView = this.down('forum-view');
 	},
 
-	onAddedToParentRouter: function() {
+	onAddedToParentRouter: function () {
 		this.forumView.pushRoute = this.pushRoute.bind(this);
 		this.forumView.pushRouteState = this.pushForumState.bind(this);
 		this.forumView.replaceRouteState = this.replaceForumState.bind(this);
@@ -65,19 +65,19 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 		this.forumView.onAddedToParentRouter();
 	},
 
-	replaceForumState: function(state, title, route, precache) {
+	replaceForumState: function (state, title, route, precache) {
 		route = route || this.getCurrentRoute();
 
 		this.replaceRouteState(state, title, route, precache);
 	},
 
-	pushForumState: function(state, title, route, precache) {
+	pushForumState: function (state, title, route, precache) {
 		route = route || this.getCurrentRoute();
 
 		this.pushRouteState(state, title, route, precache);
 	},
 
-	clearForumList: function() {
+	clearForumList: function () {
 		this.forumView.clearForum();
 	},
 
@@ -85,21 +85,21 @@ module.exports = exports = Ext.define('NextThought.app.forums.Index', {
 	 * Take a forum list or a promise that fulfills with a forum list
 	 * @param {Array|Object} boardList see comments in the CourseInstance model to see structure
 	 */
-	setForumList: function(forumList) {
+	setForumList: function (forumList) {
 		this.forumView.setForumList(null);
 		delete this.forumView.forumList;
 		this.get_forum_list = forumList instanceof Promise ? forumList : Promise.resolve(forumList);
 	},
 
-	getForumList: function() {
+	getForumList: function () {
 		return this.get_forum_list || Promise.reject('No forum list defined');
 	},
 
-	showForum: function(route, subRoute) {
+	showForum: function (route, subRoute) {
 		var me = this;
 
 		return me.getForumList()
-			.then(function(forumList) {
+			.then(function (forumList) {
 				var id = route.params.forum;
 
 				id = id && ParseUtils.decodeFromURI(id);

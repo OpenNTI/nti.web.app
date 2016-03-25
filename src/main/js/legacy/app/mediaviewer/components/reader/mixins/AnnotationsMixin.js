@@ -5,23 +5,23 @@ var UserdataActions = require('../../../../userdata/Actions');
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.mixins.AnnotationsMixin', {
 	isPresentationPartReady: false,
 
-	constructor: function() {
+	constructor: function () {
 		var UserDataStore = NextThought.app.userdata.Actions.create();
 
-		this.on('added', function() {
+		this.on('added', function () {
 			UserDataStore.setupPageStoreDelegates(this);
 		}, this);
 	},
 
-	getStore: function() {
+	getStore: function () {
 		return this.userDataStore;
 	},
 
-	bindToStore: function(store) {
+	bindToStore: function (store) {
 		this.userDataStore = store;
 	},
 
-	notifyReady: function() {
+	notifyReady: function () {
 		if (this.isPresentationPartReady) {
 			return;
 		}
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		this.fireEvent('presentation-part-ready', this);
 	},
 
-	registerAnnotations: function() {
+	registerAnnotations: function () {
 		if (this.userDataStore) {
 			this.fireEvent('register-records', this.userDataStore, this.userDataStore.getRange(), this);
 		}

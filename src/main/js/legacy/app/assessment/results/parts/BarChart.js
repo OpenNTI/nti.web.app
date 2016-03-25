@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	]),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var rows = this.__getRows(),
@@ -65,12 +65,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	},
 
 
-	getAxis: function() {
+	getAxis: function () {
 		return this.axis;
 	},
 
 
-	getColorForLabel: function(label) {
+	getColorForLabel: function (label) {
 		this.seenLabels = this.seenLabels || [];
 
 		var idx = this.seenLabels.indexOf(label);
@@ -84,12 +84,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	},
 
 
-	__getRows: function() {
+	__getRows: function () {
 		var me = this,
 			axis = me.getAxis();
 
-		axis.forEach(function(axi) {
-			axi.series.forEach(function(item) {
+		axis.forEach(function (axi) {
+			axi.series.forEach(function (item) {
 				item.color = me.getColorForLabel(item.label);
 				item.percentWidth = item.percent;
 				item.percent = item.percent.toFixed(0);
@@ -100,15 +100,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	},
 
 
-	__getLegendForRows: function(rows) {
+	__getLegendForRows: function (rows) {
 		var shouldShowLegend = false,
 			seen = {},
 			legend = [];
 
-		rows.forEach(function(row) {
+		rows.forEach(function (row) {
 			if (row.series.length < 1) { return; }
 
-			row.series.forEach(function(item) {
+			row.series.forEach(function (item) {
 				if (item.label) {
 					shouldShowLegend = true;
 

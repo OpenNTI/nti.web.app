@@ -21,23 +21,23 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 
 	labelableRenderTpl: [
 		'<tpl if="!hideLabel && !(!fieldLabel && hideEmptyLabel)">',
-			'<label<tpl if="inputId"> for="{inputId}"</tpl> class="{labelCls}"<tpl if="labelStyle"> style="{labelStyle}"</tpl>>',
-				'<tpl if="fieldLabel">{fieldLabel}{labelSeparator}</tpl>',
-			'</label>',
+		'<label<tpl if="inputId"> for="{inputId}"</tpl> class="{labelCls}"<tpl if="labelStyle"> style="{labelStyle}"</tpl>>',
+		'<tpl if="fieldLabel">{fieldLabel}{labelSeparator}</tpl>',
+		'</label>',
 		'</tpl>',
 		'<div class="x-chat-log-entry moderated {baseBodyCls} {fieldBodyCls}"<tpl if="inputId"> id="{baseBodyCls}-{inputId}"</tpl> role="presentation">',
-			'<span class="reply">',
-				'<span class="reply-whisper"></span>',
-				'<span class="reply-public"></span>',
-				'<span class="pin"></span>',
-			'</span>',
-			'<div class="timestamp">{time}</div>',
-			'{subTplMarkup}',
-			'<img class="icon" src="{icon}" width=16 height=16"/>',
-			'<div>',
-				'<span class="name">{name}</span> ',
-				'<span class="body-text">{body}</span> ',
-			'</div>',
+		'<span class="reply">',
+		'<span class="reply-whisper"></span>',
+		'<span class="reply-public"></span>',
+		'<span class="pin"></span>',
+		'</span>',
+		'<div class="timestamp">{time}</div>',
+		'{subTplMarkup}',
+		'<img class="icon" src="{icon}" width=16 height=16"/>',
+		'<div>',
+		'<span class="name">{name}</span> ',
+		'<span class="body-text">{body}</span> ',
+		'</div>',
 		'</div>',
 		'<div class="x-chat-replies"></div>',
 	//		'<div class="{errorMsgCls}" style="display:none"></div>',
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		bodyEl: 'div.x-chat-log-entry'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		Ext.container.Container.prototype.initComponent.apply(this, arguments);
 		this.callParent(arguments);
 		this.update(this.message);
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		this.$add = this.add;
 
 		//work around a mixin issue... we're mixing in a class that wasn't written as a mixin...
-		this.add = function() {
+		this.add = function () {
 			var r = this.$add.apply(this, arguments),
 				reply = this.down('chat-reply-to');
 
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		};
 	},
 
-	update: function(m) {
+	update: function (m) {
 		var me = this,
 			s = m.get('Creator');
 
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		me.renderData.time = Ext.Date.format(m.get('Last Modified'), 'g:i:sa');
 		me.renderData.name = 'resolving...';
 
-		m.compileBodyContent(function(content) {
+		m.compileBodyContent(function (content) {
 			me.renderData.body = content;
 			if (me.rendered) {
 				me.text.update(me.renderData.body);
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		});
 
 		if (s) {
-			UserRepository.getUser(s, function(u) {
+			UserRepository.getUser(s, function (u) {
 				if (!u) {
 					console.error('failed to resolve user', s, m);
 					return;
@@ -117,11 +117,11 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		me.addCls(m.getId() ? '' : ' nooid');
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.initializeDragZone(this);
 
-		this.on('change', function(cmp, state) {
+		this.on('change', function (cmp, state) {
 			this.box.removeCls('selected');
 			if (state) {
 				this.box.addCls('selected');
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		this.box.on('click', this.click, this);
 	},
 
-	click: function(event, target, eOpts) {
+	click: function (event, target, eOpts) {
 		target = Ext.get(target);
 		var inBox = target && this.box.contains(target),
 			tag = target ? target.tagName : '';
@@ -162,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		}
 	},
 
-	fillInUser: function(u) {
+	fillInUser: function (u) {
 		var name = u.get('alias') || u.get('Username'),
 			i = u.get('avatarURL');
 
@@ -176,10 +176,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 		}
 	},
 
-	initializeDragZone: function(v) {
+	initializeDragZone: function (v) {
 		v.dragZone = Ext.dd.DragZone.create(v.getEl(), {
 
-			getDragData: function(e) {
+			getDragData: function (e) {
 				var sourceEl = v.box.dom, d;
 				if (sourceEl) {
 					d = sourceEl.cloneNode(true);
@@ -194,13 +194,13 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Moder
 				}
 			},
 
-			getRepairXY: function() {
+			getRepairXY: function () {
 				return this.dragData.repairXY;
 			}
 		});
 	},
 
-	showReplyToComponent: function() {
+	showReplyToComponent: function () {
 		return this.add({
 			xtype: 'chat-reply-to',
 			replyTo: this.message.getId()

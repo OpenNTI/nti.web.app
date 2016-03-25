@@ -40,9 +40,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		quetionSetContainerTitle: ''
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		var me = this,
-			n = config.node || {getAttribute: function(a) { return config[a];} },
+			n = config.node || {getAttribute: function (a) { return config[a];} },
 			ntiid = n.getAttribute('target-ntiid') || 'no-value',
 			req;
 
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	getButton: function() {
+	getButton: function () {
 		var me = this;
 
 		return {
@@ -77,13 +77,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			ui: 'secondary',
 			scale: 'large',
 			cls: 'review-btn',
-			handler: function() {
+			handler: function () {
 				me.reviewClicked();
 			}
 		};
 	},
 
-	buildForAssessment: function() {
+	buildForAssessment: function () {
 		var me = this,
 			req, ntiid = this.getNtiid();
 
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 
 		ContentUtils.getLineage(ntiid, me.course)
-			.then(function(lineages) {
+			.then(function (lineages) {
 				var lineage = lineages[0],
 					containerId = lineage && lineage[1];
 
@@ -117,12 +117,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				return req;
 			})
-			.then(function(r) {
+			.then(function (r) {
 				Ext.Ajax.request(r);
 			});
 	},
 
-	buildForAssignment: function() {
+	buildForAssignment: function () {
 		this.add([
 			{
 				xtype: 'container',
@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.setAsAssignment(this.assignment);
 	},
 
-	disableButton: function() {
+	disableButton: function () {
 		var button = this.down('button');
 
 		if (button) {
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	enableButton: function() {
+	enableButton: function () {
 		var button = this.down('button');
 
 		if (button) {
@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	setAsAssignment: function(assignment) {
+	setAsAssignment: function (assignment) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.setAsAssignment, this, arguments), this, {single: true});
 			return;
@@ -214,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	setHistory: function(history) {
+	setHistory: function (history) {
 		if (!history) {
 			console.warn('No history');
 			return;
@@ -249,7 +249,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	containerLoaded: function(q, s, r) {
+	containerLoaded: function (q, s, r) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.containerLoaded, this, arguments), this, {single: true});
 			return;
@@ -272,7 +272,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.updateWithScore(correct);
 	},
 
-	setAsNotStarted: function() {
+	setAsNotStarted: function () {
 		var b = this.down('button');
 
 		if (b) {
@@ -283,7 +283,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.addCls('not-started');
 	},
 
-	updateWithScore: function(correct) {
+	updateWithScore: function (correct) {
 		var tally = this.down('assessment-tally'),
 			score = this.down('chart-score');
 
@@ -298,7 +298,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.updateLayout();
 	},
 
-	reviewClicked: function() {
+	reviewClicked: function () {
 		if (this.assignment) {
 			this.navigate(this.assignment);
 			return;

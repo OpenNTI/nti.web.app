@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		contentEl: '.toggle'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.PromptActions = NextThought.app.prompt.Actions.create();
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.color) {
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.mon(this.textEl, 'click', this.handleClick.bind(this));
 	},
 
-	handleClick: function(e){
+	handleClick: function (e) {
 		if (e.getTarget('.disabled')) { return; }
 
 		if (!this.visibilityCmp) {
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.visibilityCmp.hide();
 		}
 
-		if (!this.visibilityCmp.isVisible()){
+		if (!this.visibilityCmp.isVisible()) {
 			this.visibilityCmp.show();
 		}
 		else {
@@ -64,15 +64,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}	
 	},
 
-	onChange: function(){},
+	onChange: function () {},
 
-	getChangedValues: function(){
+	getChangedValues: function () {
 		if (this.visibilityCmp) {
 			return this.visibilityCmp.getChangedValues();
 		}
 	},
 
-	getValue: function(){
+	getValue: function () {
 		if (this.visibilityCmp) {
 			return this.visibilityCmp.getValue();
 		}

@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	defaults: {frame: false, border: false},
 
 
-	getInsertionPoint: function(subElPostfix) {
+	getInsertionPoint: function (subElPostfix) {
 		if (subElPostfix) {
 			return Ext.get(this.getEl().id + '-' + subElPostfix);
 		}
@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 
-	relayout: function() {
+	relayout: function () {
 		this.updateLayout();
 		this.fireEvent('resize');
 	}

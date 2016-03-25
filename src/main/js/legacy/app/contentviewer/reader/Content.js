@@ -16,9 +16,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 	},
 
 	BODY_TEMPLATE: Ext.DomHelper.createTemplate({ id: 'NTIContent', html: '{0}'}).compile(),
-	getBubbleTarget: function() {return this.reader; },
+	getBubbleTarget: function () {return this.reader; },
 
-	constructor: function(config) {
+	constructor: function (config) {
 		Ext.apply(this, config);
 		var me = this,
 			reader = me.reader;
@@ -45,18 +45,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 
 		ObjectUtils.defineAttributes(reader, {
 			basePath: {
-				getter: function() {return me.basePath;}
+				getter: function () {return me.basePath;}
 			}
 		});
 
 		reader.getContentRoot = Ext.bind(this.getContentRoot, this);
 	},
 
-	getDocumentElement: function() {
+	getDocumentElement: function () {
 		return this.reader.getDocumentElement();
 	},
 
-	getContentRoot: function() {
+	getContentRoot: function () {
 		if (!this.contentRootElement) {
 			this.contentRootElement = this.getDocumentElement().querySelector('#NTIContent > .page-contents');
 		}
@@ -64,19 +64,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		return this.contentRootElement;
 	},
 
-	listenForImageLoads: function() {
+	listenForImageLoads: function () {
 		var d = this.getDocumentElement(),
 			imgs = d.querySelectorAll('img'),
 			me = this;
 
-		Ext.each(imgs, function(i) {
-			i.onload = function() {
+		Ext.each(imgs, function (i) {
+			i.onload = function () {
 				me.fireEvent('image-loaded');
 			};
 		});
 	},
 
-	insertRelatedLinks: function(body, doc) {
+	insertRelatedLinks: function (body, doc) {
 		var position = body.query('#NTIContent .chapter.title')[0],
 			reader = this.reader,
 			tpl = this.relatedTemplate, last = null,
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 			};
 
 		reader.getRelated()
-			.then(function(related) {
+			.then(function (related) {
 				if (Ext.Object.getKeys(related).length === 0) {
 					return;
 				}
@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 					this.relatedTemplate = tpl;
 				}
 
-				Ext.Object.each(related, function(key, value) {
+				Ext.Object.each(related, function (key, value) {
 					c++;
 					last = tpl.append(container, [key, value.label, c, reader.prefix]);
 					last.relatedInfo = value;
@@ -129,40 +129,40 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 						Ext.DomHelper.append(container, {tag: 'span', cls: 'more', html: getString('NextThought.view.content.reader.Content.showmore')});
 					}
 
-					Ext.fly(container).on('click', function() {
+					Ext.fly(container).on('click', function () {
 						Ext.fly(container).removeAllListeners().addCls('showall');
 					});
 				} else {
 					Ext.fly(container).remove();
 				}
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.warn('Could not insert related links due to: ', e.stack || e.message || e);
 				return;
 			});
 	},
 
 	//TODO: move this to a better place.
-	pauseAllVideos: function() {
+	pauseAllVideos: function () {
 		var d = this.getDocumentElement(),
 			frames = d.querySelectorAll('iframe');
 
-		Ext.each(frames, function(o) {
+		Ext.each(frames, function (o) {
 			if (/^(http(s)?:)?\/\/www\.youtube\.com/i.test(o.getAttribute('src'))) {
 				o.contentWindow.postMessage(JSON.stringify({
-						event: 'command',
-						func: 'pauseVideo',
-						args: [],
-						id: o.getAttribute('id')
+					event: 'command',
+					func: 'pauseVideo',
+					args: [],
+					id: o.getAttribute('id')
 				}), '*');
 			}
 			//else if(vimeo){}
 			//else if(html5){}...
 		});
-		Ext.each(Ext.ComponentQuery.query('overlay-video-roll'), function(c) {c.pauseVideo();});
+		Ext.each(Ext.ComponentQuery.query('overlay-video-roll'), function (c) {c.pauseVideo();});
 	},
 
-	resolveContainers: function() {
+	resolveContainers: function () {
 		var d = this.getDocumentElement(),
 			els, containers = [];
 
@@ -172,7 +172,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		//for now just get object tags (assessment items)
 		els = d.querySelectorAll('[data-ntiid]');
 
-		Ext.each(els, function(el) {
+		Ext.each(els, function (el) {
 			var id = el.getAttribute('data-ntiid') || el.getAttribute('ntiid');
 			//Depends on overlayed panels being constructed and setting the attribute...
 			if (!el.hasAttribute('data-nti-container')) {return;}
@@ -183,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		return containers;
 	},
 
-	setContent: function(resp, assessmentItems, finish) {
+	setContent: function (resp, assessmentItems, finish) {
 		var me = this,
 			req = resp.request,
 			o = req.options,
@@ -223,23 +223,23 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		Ext.callback(finish, null, [reader]);
 	},
 
-	buildPath: function(s) {
+	buildPath: function (s) {
 		var p = (s || '').split('/'); p.splice(-1, 1, '');
 		return (s && p.join('/')) || '';
 	},
 
-	parseHTML: function(request) {
-		function toObj(a, k, v) {
+	parseHTML: function (request) {
+		function toObj (a, k, v) {
 			var i = a.length - 1, o = {};
 			for (i; i >= 0; i--) { o[(k.exec(a[i]) || [])[2]] = Ext.htmlDecode((v.exec(a[i]) || [])[1]); }
 			return o;
 		}
 
-		function metaObj(m) {
+		function metaObj (m) {
 			return toObj(m, /(name|http\-equiv)="([^"]+)"/i, /content="([^"]*)"/i);
 		}
 
-		function cssObj(m) {
+		function cssObj (m) {
 			var i = 0, k = /href="([^"]*)"/i, o, c = {};
 			for (i; i < m.length; i++) {
 				o = k.test(m[i]) ? basePath + k.exec(m[i])[1] : m[i];
@@ -252,7 +252,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 				}
 			}
 			//remove resources not used anymore...
-			Ext.Object.each(rc, function(k, v, o) {
+			Ext.Object.each(rc, function (k, v, o) {
 				if (!c[k]) {
 					Ext.fly(v).remove();
 					delete o[k];
@@ -283,7 +283,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		return ContentUtils.fixReferences(body, basePath);
 	},
 
-	applyBodyStyles: function(bodyTag, basePath) {
+	applyBodyStyles: function (bodyTag, basePath) {
 		var styleMatches = bodyTag && bodyTag[1] && bodyTag[1].match(/style="([^"]+)"/i),
 			bodyStyles = styleMatches && styleMatches[1],
 			body = Ext.get(this.getDocumentElement().getElementById('NTIContent')),
@@ -291,7 +291,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 
 		//Create an object with our styles split out
 		if (bodyStyles) {
-			Ext.each(bodyStyles.split(';'), function(s) {
+			Ext.each(bodyStyles.split(';'), function (s) {
 				var keyVal = s.split(':'),
 					key = keyVal[0].trim(),
 					val = keyVal[1].trim(),
@@ -316,10 +316,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 	//in a way that the browsers native handling can process them (basically going out and coming back in)
 	//however we decorate the links such that our click handler to handle links internally can
 	//act as they always had.
-	adjustNTIIDLinks: function(doc) {
+	adjustNTIIDLinks: function (doc) {
 		var links = doc.querySelectorAll('a[href^="tag:nextthought.com"]');
 
-		Ext.Array.each(links, function(l) {
+		Ext.Array.each(links, function (l) {
 			var link = Ext.fly(l),
 				ntiid = ParseUtils.parseNTIID(link.getAttribute('href') || ''),
 				type, provider, typeSpecific, externalLink;
@@ -345,11 +345,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 
 	},
 
-	navigateToFragment: function(frag) {
+	navigateToFragment: function (frag) {
 		this.reader.getScroll().toTarget(frag);
 	},
 
-	onClick: function(e, el) {
+	onClick: function (e, el) {
 		//Stupid FF fires onClick for right click. WTF!
 		if (e.button != 0) {
 			return true;
@@ -387,7 +387,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 		}
 
 		if (/^zoom$/i.test(target)) {
-			Ext.defer(function() {
+			Ext.defer(function () {
 				m.reader.getIframe().get().win.blur();
 				window.focus();
 			},100);

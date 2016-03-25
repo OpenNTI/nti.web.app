@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		submitBtnEl: '.time-remaining .submit .submit-btn'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var rd = {};
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.renderData = Ext.apply(this.renderData || {}, rd);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this,
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 			Ext.EventManager.onWindowResize(me.alignTimer, me, false);
 
-			me.on('destroy', function() {
+			me.on('destroy', function () {
 				Ext.EventManager.removeResizeListener(me.alignTimer, me);
 				if (me.timer) {
 					me.timer.stop();
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		me.mon(me.helpEl, 'click', 'helpClicked');
 	},
 
-	alignTimer: function() {
+	alignTimer: function () {
 		if (!this.rendered) {
 			return;
 		}
@@ -122,11 +122,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		});
 	},
 
-	helpClicked: function() {
+	helpClicked: function () {
 		this.AccountActions.showContactUs();
 	},
 
-	hideTimer: function() {
+	hideTimer: function () {
 		this.timeContainerEl.addCls('hidden');
 
 		if (this.timer) {
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 	},
 
-	showAllowedTime: function(time) {
+	showAllowedTime: function (time) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showAllowedTime.bind(this, time));
 			return;
@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.timeEl.update(t);
 	},
 
-	showRemainingTime: function(time, max, getSubmitFn) {
+	showRemainingTime: function (time, max, getSubmitFn) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showRemainingTime.bind(this, time, max, getSubmitFn));
 			return;
@@ -164,7 +164,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.timeContainerEl.removeCls(['hidden', 'max-time']);
 	},
 
-	showOverdueTime: function(time) {
+	showOverdueTime: function (time) {
 		var me = this,
 			current;
 
@@ -175,7 +175,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		me.timer
 			//add 3 seconds since the overdue animation is 3 seconds long
 			.countUp(null, time + 3000)
-			.tick(function(t) {
+			.tick(function (t) {
 				var s = NextThought.app.course.assessment.AssignmentStatus.getTimeString(t);
 
 				if (s && s !== current) {
@@ -195,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			.then(me.timer.start.bind(me.timer, 'seconds'));
 	},
 
-	showDueTime: function(time, max, getSubmitFn) {
+	showDueTime: function (time, max, getSubmitFn) {
 		var me = this,
 			current,
 			warning = max * me.WARNING_PERCENT,
@@ -205,7 +205,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 		me.timer
 			.countDown(0, time)
-			.tick(function(t) {
+			.tick(function (t) {
 				var s = NextThought.app.course.assessment.AssignmentStatus.getTimeString(t, true),
 					//since we are counting down the remaining will be the max starting out
 					//so 100 - %remaining of max will give the % of time left
@@ -230,14 +230,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 					me.timeContainerEl.addCls('warning-orange');
 				}
 			})
-			.alarm(function() {
+			.alarm(function () {
 				me.timer.stop();
 				me.showOverdueTime(0);
 			})
 			.start('seconds');
 	},
 
-	showSubmitToast: function(getSubmitFn) {
+	showSubmitToast: function (getSubmitFn) {
 		if (!getSubmitFn) { return; }
 
 		var submitState = getSubmitFn(this.updateSubmitState.bind(this));
@@ -245,7 +245,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.updateSubmitState(submitState);
 	},
 
-	updateSubmitState: function(submitState) {
+	updateSubmitState: function (submitState) {
 		this.submitFn = submitState.submitFn;
 
 		this.timeContainerEl.addCls('submit-showing');
@@ -265,13 +265,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 	},
 
-	submitAssignmentClicked: function(e) {
+	submitAssignmentClicked: function (e) {
 		if (!e.getTarget('.disabled') && this.submitFn) {
 			this.submitFn.call(null);
 		}
 	},
 
-	setHistory: function(history) {
+	setHistory: function (history) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setHistory.bind(this, history));
 			return;
@@ -310,7 +310,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}));
 
 		//we don't want to show the remaining time if we have a submission
-		this.showRemainingTime = function() {};
+		this.showRemainingTime = function () {};
 
 		if (this.timer) {
 			this.timer.stop();

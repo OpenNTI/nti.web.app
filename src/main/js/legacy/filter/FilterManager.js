@@ -8,11 +8,11 @@ var {isMe} = require('legacy/util/Globals');
 
 module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
 
-	constructor: function() {
+	constructor: function () {
 		this.scopes = {};
 	},
 
-	getScope: function(scope) {
+	getScope: function (scope) {
 		if (!this.scopes[scope]) {
 			this.scopes[scope] = new Ext.util.Observable();
 			this.scopes[scope].addEvents('change');
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
 		return this.scopes[scope];
 	},
 
-	registerFilterListener: function retry(filterScope, fn, fnScope) {
+	registerFilterListener: function retry (filterScope, fn, fnScope) {
 		var me = this, o, p, fc;
 		if (filterScope && filterScope.isComponent) {
 			p = filterScope.up('view-container');
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
 				if (fc) {filterScope = fc.menu.getId();}
 			}
 			else {
-				setTimeout(function() { retry.call(me, filterScope, fn, fnScope); },10);
+				setTimeout(function () { retry.call(me, filterScope, fn, fnScope); },10);
 				return;
 			}
 		}
@@ -41,13 +41,13 @@ module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
 		}
 	},
 
-	setFilter: function(scope, filter) {
+	setFilter: function (scope, filter) {
 		var o = this.getScope(scope);
 		o.current = filter;
 		o.fireEvent('change', filter);
 	},
 
-	getCurrentFilter: function(scope) {
+	getCurrentFilter: function (scope) {
 		return this.getScope(scope || 'default-filter-control').current;
 	},
 
@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
 	 *
 	 * @param {String} [scope] - id of the filter menu this filter is associated to.
 	 */
-	getServerListParams: function(scope) {
+	getServerListParams: function (scope) {
 		var filter = this.getCurrentFilter(scope),
 			list = filter ? filter.flatten() : [],
 			params = {};
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.filter.FilterManager', {
 	//			value: 'NextThought.model.Bookmark'
 	//		});
 
-		Ext.each(list, function(f) {
+		Ext.each(list, function (f) {
 			var m;
 			if (f.fieldName === 'sharedWith') {
 				params.sharedWith = params.sharedWith || [];

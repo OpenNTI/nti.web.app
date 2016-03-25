@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 	 * @param {String} config.context - an ntiid to filter to items contained in it
 	 * @param {String} config.contextParam - the value to key the context on
 	 */
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 
 		if (!config.url) {
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 		};
 	},
 
-	getURL: function() {
+	getURL: function () {
 		return this.url;
 	},
 
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 	 * @memberOf  NextThought.app.stream.util.StreamSource#
 	 * @return {Object} params
 	 */
-	getParams: function() {
+	getParams: function () {
 		var params,
 			knownParams = [
 				this.batch,
@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 				this.accepts
 			];
 
-		params = knownParams.reduce(function(acc, param) {
+		params = knownParams.reduce(function (acc, param) {
 			if (param.value) {
 				acc[param.param] = param.value;
 			}
@@ -116,11 +116,11 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 		return params;
 	},
 
-	__getBatch: function() {
+	__getBatch: function () {
 		return this.currentBatch;
 	},
 
-	getCurrentBatch: function() {
+	getCurrentBatch: function () {
 		if (!this.currentBatch) {
 			this.currentBatch = new NextThought.store.BatchInterface({
 				url: this.getURL(),
@@ -131,31 +131,31 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 		return this.currentBatch.getBatch();
 	},
 
-	getNextBatch: function() {
+	getNextBatch: function () {
 		var me = this,
 			batch = me.__getBatch();
 
 		return batch.getNextBatch()
-			.then(function(batch) {
+			.then(function (batch) {
 				me.currentBatch = batch;
 
 				return batch.getBatch();
 			});
 	},
 
-	getPreviousBatch: function() {
+	getPreviousBatch: function () {
 		var me = this,
 			batch = me.__getBatch();
 
 		return batch.getPreviousBatch()
-			.then(function(batch) {
+			.then(function (batch) {
 				me.currentBatch = batch;
 
 				return batch.getBatch();
 			});
 	},
 
-	reset: function() {
+	reset: function () {
 		delete this.currentBatch;
 	}
 });

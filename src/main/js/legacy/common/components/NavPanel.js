@@ -13,14 +13,14 @@ module.exports = exports = Ext.define('NextThought.common.components.NavPanel', 
 	body: {xtype: 'box', autoEl: {html: 'body'}},
 
 
-	onClassExtended: function(cls, data) {
+	onClassExtended: function (cls, data) {
 		if (data.cls) {
 			data.cls = [cls.superclass.cls, data.cls].join(' ');
 		}
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.alignNavigation = this.alignNavigation.bind(this);
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.common.components.NavPanel', 
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this;
@@ -48,13 +48,13 @@ module.exports = exports = Ext.define('NextThought.common.components.NavPanel', 
 
 		Ext.EventManager.onWindowResize(me.alignNavigation, me, false);
 
-		this.on('destroy', function() {
+		this.on('destroy', function () {
 			Ext.EventManager.removeResizeListener(me.alignNavigation, me);
 		});
 	},
 
 
-	alignNavigation: function() {
+	alignNavigation: function () {
 		if (!this.rendered) { return; }
 
 		var placeholder = this.el.down('.navigation-placeholder'),
@@ -67,12 +67,12 @@ module.exports = exports = Ext.define('NextThought.common.components.NavPanel', 
 	},
 
 
-	getActiveItem: function() {
+	getActiveItem: function () {
 		return this.body.getLayout().getActiveItem();
 	},
 
 
-	setActiveItem: function(item) {
+	setActiveItem: function (item) {
 		this.body.getLayout().setActiveItem(item);
 	}
 });

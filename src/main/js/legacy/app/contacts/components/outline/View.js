@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 		buttonsEl: '.buttons'
 	},
 
-	getTargetEl: function() {
+	getTargetEl: function () {
 		return this.frameBodyEl;
 	},
 
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 
 	]}),
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.addCls('nav-outline make-white scrollable');
 		if (this.subType === 'contact') {
@@ -78,10 +78,10 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 		this.ContactsActions = NextThought.app.contacts.Actions.create();
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent();
 		var me = this, s = this.getSelectionModel();
-		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey, function() {
+		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey, function () {
 			me.fromKey = true;
 		});
 
@@ -94,18 +94,18 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 			cancreate: (this.subType !== 'contact' && (this.subType !== 'group' || Service.canCreateDynamicGroups())),
 			canjoin: this.subType === 'group',
 			isContact: this.subType === 'contact',
-			suggestedContactsLabel: isFeature('suggest-contacts') && this.subType === 'contact' && "Suggested Contacts"
+			suggestedContactsLabel: isFeature('suggest-contacts') && this.subType === 'contact' && 'Suggested Contacts'
 		});
 
 		this.on({
 			scope: this,
-			itemclick: function() {
+			itemclick: function () {
 				this.fromClick = true;
 			},
-			beforeselect: function(s, r) {
+			beforeselect: function (s, r) {
 				var pass = r.data.type !== 'unit',
-						store = s.getStore(),
-						last = s.lastSelected || store.first(), next;
+					store = s.getStore(),
+					last = s.lastSelected || store.first(), next;
 
 				if (this.fromKey && !pass) {
 					last = store.indexOf(last);
@@ -118,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 				return pass;
 
 			},
-			select: function(s, r) {
+			select: function (s, r) {
 				if (this.fromClick || this.fromKey) {
 					console.debug('do something with selection');
 					this.fireEvent('contact-row-selected', r);
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.buttonsEl) {
@@ -139,14 +139,14 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 		}
 	},
 
-	onButtonsClicked: function(evt) {
+	onButtonsClicked: function (evt) {
 		var b = evt.getTarget('.contact-button');
 		if (b && !Ext.fly(b).hasCls('search')) {
 			this.ContactsActions.groupButtonClicked(b, this);
 		}
 	},
 
-	addMask: function() {
+	addMask: function () {
 		try {
 			var maskEl = this.el && this.el.down('.outline-list');
 			if (maskEl) {
@@ -157,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 		}
 	},
 
-	removeMask: function() {
+	removeMask: function () {
 		var maskEl = this.el.down('.outline-list'),
 			mask = maskEl && maskEl.down('.x-mask'),
 			maskMsg = maskEl && maskEl.down('.x-mask-msg');
@@ -176,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 		}
 	},
 
-	clear: function() {
+	clear: function () {
 		this.bindStore('ext-empty-store');
 	}
 });

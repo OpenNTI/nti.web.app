@@ -8,7 +8,7 @@ var CourseStateStore = require('./StateStore');
 module.exports = exports = Ext.define('NextThought.app.course.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.StateStore = NextThought.app.course.StateStore.getInstance();
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Actions', {
 	 * @param  {Element} libraryCars dom node of the image to expand
 	 * @return {Promise}			fulfills with the route for the course, once the animation is done
 	 */
-	transitionToCourse: function(course, libraryCard) {
+	transitionToCourse: function (course, libraryCard) {
 		var ntiid = course.getId(),
 			route = this.getRootRouteForId(ntiid),
 			subRoute = this.StateStore.getRouteFor(ntiid);
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.Actions', {
 		return Promise.resolve(route);
 	},
 
-	getRootRouteForId: function(id) {
+	getRootRouteForId: function (id) {
 		return '/course/' + ParseUtils.encodeForURI(id);
 	}
 });

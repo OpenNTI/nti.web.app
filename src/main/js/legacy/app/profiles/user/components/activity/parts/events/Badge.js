@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 	badgeNameTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'link', html: '{name}'}),
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var username = isMe(this.user) ? 'You' : this.user,
@@ -34,13 +34,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this, user = me.user;
 
 		if (user) {
-			me.mon(me.el.down('.link'), 'click', function() {
+			me.mon(me.el.down('.link'), 'click', function () {
 				me.record.targetUser = me.user;
 				me.navigateToObject(me.record);
 			});

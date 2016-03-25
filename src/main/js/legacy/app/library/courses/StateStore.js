@@ -11,18 +11,18 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	ALL_COURSES: [],
 
 
-	getEnrolledCourses: function() { return this.ENROLLED_COURSES; },
+	getEnrolledCourses: function () { return this.ENROLLED_COURSES; },
 
 
-	getAdminCourses: function() { return this.ADMIN_COURSES; },
+	getAdminCourses: function () { return this.ADMIN_COURSES; },
 
 
-	getAllCourses: function() { return this.ALL_COURSES; },
+	getAllCourses: function () { return this.ALL_COURSES; },
 
-	__updateCoursesEnrollmentState: function(courses) {
+	__updateCoursesEnrollmentState: function (courses) {
 		var me = this;
 
-		courses.forEach(function(course) {
+		courses.forEach(function (course) {
 			var precached = course.getCourseCatalogEntry(),
 				ntiid = precached.getId(),
 				catalog = me.findCourseForNtiid(ntiid),
@@ -37,20 +37,20 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 		});
 	},
 
-	setEnrolledCourses: function(courses) {
+	setEnrolledCourses: function (courses) {
 		this.ENROLLED_COURSES = courses;
 		this.__updateCoursesEnrollmentState(courses);
 		this.fireEvent('enrolled-courses-set', this.ENROLLED_COURSES);
 	},
 
 
-	setAdministeredCourses: function(courses) {
+	setAdministeredCourses: function (courses) {
 		this.ADMIN_COURSES = courses;
 		this.__updateCoursesEnrollmentState(courses);
 		this.fireEvent('admin-courses-set', this.ADMIN_COURSES);
 	},
 
-	setAllCourses: function(courses) {
+	setAllCourses: function (courses) {
 		this.ALL_COURSES = courses;
 
 		//Update catalog entries for enrolled and admin courses.
@@ -61,22 +61,22 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
-	updatedAvailableCourses: function() {
-			this.fireEvent('update-available-courses');
+	updatedAvailableCourses: function () {
+		this.fireEvent('update-available-courses');
 	},
 
 
-	setAllCoursesLink: function(link) {
+	setAllCoursesLink: function (link) {
 		this.all_courses_link = link;
 	},
 
 
-	getAllCoursesLink: function(link) {
+	getAllCoursesLink: function (link) {
 		return this.all_courses_link;
 	},
 
 
-	hasAllCoursesLink: function() {
+	hasAllCoursesLink: function () {
 		return !!this.all_courses_link;
 	},
 
@@ -86,10 +86,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	 * @param  {Array} courses list of courses
 	 * @return {Array}		   courses in the list that haven't expired
 	 */
-	__getCurrentCourses: function(courses) {
+	__getCurrentCourses: function (courses) {
 		var current = [];
 
-		courses.forEach(function(course) {
+		courses.forEach(function (course) {
 			var catalog = course.getCourseCatalogEntry ? course.getCourseCatalogEntry() : course;
 
 			if (catalog && catalog.isCurrent()) {
@@ -105,10 +105,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	 * @param  {Array} courses list of courses
 	 * @return {Array}		   courses in the list that are expired
 	 */
-	__getArchivedCourses: function(courses) {
+	__getArchivedCourses: function (courses) {
 		var archived = [];
 
-		courses.forEach(function(course) {
+		courses.forEach(function (course) {
 			var catalog = course.getCourseCatalogEntry ? course.getCourseCatalogEntry() : course;
 
 			if (!catalog || catalog.isArchived()) {
@@ -125,10 +125,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	 * @param  {Array} courses list of courses
 	 * @return {Array} courses that haven't started
 	 */
-	__getUpcomingCourses: function(courses) {
+	__getUpcomingCourses: function (courses) {
 		var upcoming = [];
 
-		courses.forEach(function(course) {
+		courses.forEach(function (course) {
 			var catalog = course.getCourseCatalogEntry ? course.getCourseCatalogEntry() : course;
 
 			if (catalog && catalog.isUpcoming()) {
@@ -139,43 +139,43 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 		return upcoming;
 	},
 
-	getAllCurrentCourses: function() {
+	getAllCurrentCourses: function () {
 		return this.__getCurrentCourses(this.ALL_COURSES);
 	},
 
-	getAllArchivedCourses: function() {
+	getAllArchivedCourses: function () {
 		return this.__getArchivedCourses(this.ALL_COURSES);
 	},
 
-	getAllUpcomingCourses: function() {
+	getAllUpcomingCourses: function () {
 		return this.__getUpcomingCourses(this.ALL_COURSES);
 	},
 
-	getCurrentEnrolledCourses: function() {
+	getCurrentEnrolledCourses: function () {
 		return this.__getCurrentCourses(this.ENROLLED_COURSES);
 	},
 
-	getArchivedEnrolledCourses: function() {
+	getArchivedEnrolledCourses: function () {
 		return this.__getArchivedCourses(this.ENROLLED_COURSES);
 	},
 
-	getUpcomingEnrolledCourses: function() {
+	getUpcomingEnrolledCourses: function () {
 		return this.__getUpcomingCourses(this.ENROLLED_COURSES);
 	},
 
-	getCurrentAdminCourses: function() {
+	getCurrentAdminCourses: function () {
 		return this.__getCurrentCourses(this.ADMIN_COURSES);
 	},
 
-	getArchivedAdminCourses: function() {
+	getArchivedAdminCourses: function () {
 		return this.__getArchivedCourses(this.ADMIN_COURSES);
 	},
 
-	getUpcomingAdminCourses: function() {
+	getUpcomingAdminCourses: function () {
 		return this.__getUpcomingCourses(this.ADMIN_COURSES);
 	},
 
-	__findIn: function(list, fn) {
+	__findIn: function (list, fn) {
 		var i, item = null;
 
 		for (i = 0; i < list.length; i++) {
@@ -189,8 +189,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
-	__findAllIn: function(list, fn) {
-		return list.reduce(function(acc, item) {
+	__findAllIn: function (list, fn) {
+		return list.reduce(function (acc, item) {
 			if (fn.call(null, item)) {
 				acc.push(item);
 			}
@@ -200,7 +200,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
-	findCourseBy: function(fn) {
+	findCourseBy: function (fn) {
 		var enrolled = this.ENROLLED_COURSES || [],
 			admin = this.ADMIN_COURSES || [],
 			i, course;
@@ -215,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
-	findCoursesBy: function(fn) {
+	findCoursesBy: function (fn) {
 		var enrolled = this.__findAllIn(this.ENROLLED_COURSES || [], fn),
 			admin = this.__findAllIn(this.ADMIN_COURSES || [], fn);
 
@@ -223,11 +223,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
-	findEnrollmentForCourse: function(courseOrNtiid) {
+	findEnrollmentForCourse: function (courseOrNtiid) {
 		var ntiid = courseOrNtiid && courseOrNtiid.isModel ? courseOrNtiid.getId() : courseOrNtiid,
 			me = this, match;
 
-		function fn(rec) {
+		function fn (rec) {
 			var catalog = rec.getCourseCatalogEntry(),
 				match = catalog.getId() === ntiid || catalog.get('OID') === ntiid;
 
@@ -238,8 +238,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 		return me.__findIn(me.ENROLLED_COURSES, fn);
 	},
 
-	findCourseForNtiid: function(ntiid) {
-		function fn(rec) {
+	findCourseForNtiid: function (ntiid) {
+		function fn (rec) {
 			//if ntiid is my id or my oid
 			var match = rec.getId() === ntiid || rec.get('OID') === ntiid;
 			//
@@ -251,8 +251,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
-	findCourseInstance: function(ntiid) {
-		function fn(rec) {
+	findCourseInstance: function (ntiid) {
+		function fn (rec) {
 			var instance = rec.get('CourseInstance');
 
 			return instance.get('NTIID') === ntiid || rec.get('NTIID') === ntiid;
@@ -268,12 +268,12 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
-	findCourseInstanceByPriority: function(fn) {
+	findCourseInstanceByPriority: function (fn) {
 		var priorities = {},
 			keys = [],
 			result = [];
 
-		function find(enrollment) {
+		function find (enrollment) {
 			var instance = enrollment.get('CourseInstance'),
 				priority = fn.call(null, instance, enrollment);
 
@@ -295,7 +295,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 
 		keys.sort();
 
-		keys.forEach(function(key) {
+		keys.forEach(function (key) {
 			result = result.concat(priorities[key]);
 		});
 
@@ -303,10 +303,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
-	__containsNTIID: function(rec, prefix) {
+	__containsNTIID: function (rec, prefix) {
 		var match = false;
 
-		rec.getContentPackages().every(function(contentPackage) {
+		rec.getContentPackages().every(function (contentPackage) {
 			var id = contentPackage.get('NTIID');
 
 			match = match || (prefix && prefix === ParseUtils.ntiidPrefix(id));
@@ -316,12 +316,12 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
-	findForNTIID: function(id) {
+	findForNTIID: function (id) {
 		var me = this,
 			prefix = ParseUtils.ntiidPrefix(id),
 			course;
 
-		function fn(rec) {
+		function fn (rec) {
 			rec = rec.get('CourseInstance');
 
 			//if the id is my id or oid
@@ -346,11 +346,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
-	getMostRecentEnrollmentCourse: function() {
+	getMostRecentEnrollmentCourse: function () {
 		var enrolledCourses = this.getEnrolledCourses() || [],
 			enrollment = enrolledCourses[0];
 
-		enrolledCourses.forEach(function(e) {
+		enrolledCourses.forEach(function (e) {
 			if (e.get('CreatedTime') > enrollment.get('CreatedTime')) {
 				enrollment = e;
 			}
@@ -360,10 +360,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	},
 
 
-	hasCourse: function(course) {
+	hasCourse: function (course) {
 		var ntiid = course.get('NTIID');
 
-		var found = this.findCourseBy(function(enrollment) {
+		var found = this.findCourseBy(function (enrollment) {
 			var instance = enrollment.get('CourseInstance'),
 				instanceId = instance.getId() || '',
 				enrollmentId = enrollment.get('NTIID') || '';
@@ -379,8 +379,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.StateStor
 	 * @param  {String} familyId id of the catalog family to search for
 	 * @return {[Course]}		 list of courses in the same catalog family
 	 */
-	findForCatalogFamily: function(familyId) {
-		return this.findCoursesBy(function(course) {
+	findForCatalogFamily: function (familyId) {
+		return this.findCoursesBy(function (course) {
 			var instance = course.get('CourseInstance');
 
 			return instance.isInFamily(familyId);

@@ -26,19 +26,19 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		publishEl: '.action.publish'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.addEvents(['save-post']);
 		this.ForumActions = NextThought.app.forums.Actions.create();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		var r = this.record,
-				me = this,
-				h,
-				parentCtEl = this.ownerCt.getEl(),
-				hasScrollBar = Ext.getDom(parentCtEl).scrollHeight !== parentCtEl.getHeight();
+			me = this,
+			h,
+			parentCtEl = this.ownerCt.getEl(),
+			hasScrollBar = Ext.getDom(parentCtEl).scrollHeight !== parentCtEl.getHeight();
 
 		this.mon(this.tags, 'new-tag', this.syncHeight, this);
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
@@ -67,23 +67,23 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			me.el.down('.content').setHeight(215);
 
 
-			this.el.down('.content').on('focus', function(e) {
+			this.el.down('.content').on('focus', function (e) {
 				me.el.down('.content').scrollBy(0, 1000);
-				Ext.defer(function() {
+				Ext.defer(function () {
 					me.el.down('.content').scrollBy(0, 1000);
 				},250);
 			});
 		}
 	},
 
-	allowNavigation: function() {
+	allowNavigation: function () {
 		var msg = 'You are currently creating a topic. Would you like to leave without saving?';
 
 		if (this.record) {
 			msg = 'You are currently editing a topic. Would you like to leave without saving?';
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Ext.Msg.show({
 				title: 'Attention!',
 				msg: msg,
@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	// },
 
 
-	onBeforeDeactivate: function() {
+	onBeforeDeactivate: function () {
 		/*
 		 *	 NOTE: For now, since forums views aren't destroyed when you go away,
 		 *	 and we like that behavior, don't warn the user if the editor is open, since it will still be there when we can back.
@@ -124,17 +124,17 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		return true;
 	},
 
-	warnBeforeDismissingEditor: function() {
+	warnBeforeDismissingEditor: function () {
 		var msg = getString('NextThought.view.forums.topic.parts.Editor.dismisswarn');
-		Ext.defer(function() {
+		Ext.defer(function () {
 			alert({msg: msg});
 		}, 1);
 	},
 
-	syncHeight: function() {
+	syncHeight: function () {
 		var el = this.contentEl,
-				p = this.ownerCt && Ext.getDom(this.ownerCt.getEl()),
-				top;
+			p = this.ownerCt && Ext.getDom(this.ownerCt.getEl()),
+			top;
 		if (!el || !p) {
 			return;
 		}
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		Ext.defer(this.updateLayout, 700, this, []);
 	},
 
-	onSave: function(e) {
+	onSave: function (e) {
 		e.stopEvent();
 		var me = this,
 			v = me.getValue(),
@@ -193,7 +193,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			return;
 		}
 
-		function unmask() {
+		function unmask () {
 			if (me.el) {
 				me.el.unmask();
 			}
@@ -204,25 +204,25 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		}
 
 		me.ForumActions.saveTopic(me, me.record, me.forum, v.title, v.tags, v.body, v.publish)
-			.then(function(record) {
+			.then(function (record) {
 				unmask();
 
 				me.fireEvent('after-save', record);
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				unmask();
 				console.error('Failed to save the discussion: ', reason);
 				alert('There was trouble saving the discussion');
 			});
 	},
 
-	onSaveSuccess: function(record, isEdit) {
+	onSaveSuccess: function (record, isEdit) {
 		this.savedSuccess = true;
 		this.fireEvent(isEdit ? 'goto-record' : 'new-record', record);
 		this.destroy();
 	},
 
-	onSaveFailure: function(proxy, response, operation) {
+	onSaveFailure: function (proxy, response, operation) {
 		var msg = 'An unknown error occurred saving your Discussion.', error;
 
 		if (response && response.responseText) {
@@ -235,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		console.debug(arguments);
 	},
 
-	onCancel: function(e) {
+	onCancel: function (e) {
 		e.stopEvent();
 
 		this.fireEvent('cancel');

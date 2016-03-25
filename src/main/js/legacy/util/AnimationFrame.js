@@ -4,7 +4,7 @@ var Ext = require('extjs');
 module.exports = exports = Ext.define('NextThought.util.AnimationFrame', {
 
 	statics: {
-		getRequestAnimationFrame: function() {
+		getRequestAnimationFrame: function () {
 			var names = [
 					'requestAnimationFrame',
 					'webkitRequestAnimationFrame',
@@ -13,12 +13,12 @@ module.exports = exports = Ext.define('NextThought.util.AnimationFrame', {
 				],
 				request;
 
-			request = names.reduce(function(acc, name) {
+			request = names.reduce(function (acc, name) {
 				return acc || window[name];
 			}, null);
 
 			if (!request) {
-				request = function(callback) {
+				request = function (callback) {
 					return setTimeout(callback, 1000 / 60);
 				};
 			}
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.util.AnimationFrame', {
 	MAX_RUN_TIME: 60000,//For now set it to a minute
 
 
-	constructor: function(fn) {
+	constructor: function (fn) {
 		if (!fn) {
 			throw 'No function passed to animation frame';
 		}
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.util.AnimationFrame', {
 
 
 
-	start: function() {
+	start: function () {
 		if (this.running) {
 			return;
 		}
@@ -51,11 +51,11 @@ module.exports = exports = Ext.define('NextThought.util.AnimationFrame', {
 
 		me.stopAnimation = null;
 
-		function onFrame() {
+		function onFrame () {
 			var now = new Date(),
 				diff = now - startTime;
 
-			function next() {
+			function next () {
 				requestAnimationFrame(onFrame);
 			}
 
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.util.AnimationFrame', {
 
 
 
-	stop: function() {
+	stop: function () {
 		this.stopAnimation = true;
 	}
 });

@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.StateStore'
 	PAGE_SIZE: 50,
 	ACTIVE_VIEWS: 0,
 
-	buildStore: function(url, lastViewed) {
+	buildStore: function (url, lastViewed) {
 		var me = this;
 
 		me.NOTABLE_STORE = NextThought.store.BatchInterface.create({
@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.StateStore'
 			params: {
 				batchSize: me.PAGE_SIZE
 			},
-			getNextConfig: function(batch) {
+			getNextConfig: function (batch) {
 				var item = batch.Items.last(),
 					lastModified = item && item.raw['Last Modified'];
 
@@ -43,21 +43,21 @@ module.exports = exports = Ext.define('NextThought.app.notifications.StateStore'
 			.then(me.__updateUnseenCount.bind(me));
 	},
 
-	getStore: function() {
+	getStore: function () {
 		var me = this;
 
 		return this.onceLoaded()
-			.then(function() {
+			.then(function () {
 				return me.NOTABLE_STORE;
 			});
 	},
 
-	updateLastViewed: function() {
+	updateLastViewed: function () {
 		this.getStore()
-			.then(function(store) {
+			.then(function (store) {
 				return store.getBatch();
 			})
-			.then(function(batch) {
+			.then(function (batch) {
 				var link = Service.getLinkFrom(batch.Links, 'lastViewed'),
 					lastViewed = new Date();
 
@@ -69,12 +69,12 @@ module.exports = exports = Ext.define('NextThought.app.notifications.StateStore'
 			.then(this.__updateUnseenCount.bind(this, 0, true));
 	},
 
-	addRecord: function(change) {
+	addRecord: function (change) {
 		this.getStore()
-			.then(function(store) {
+			.then(function (store) {
 				return store.getBatch();
 			})
-			.then(function(batch) {
+			.then(function (batch) {
 				batch.Items.unshift(change);
 			});
 
@@ -83,17 +83,17 @@ module.exports = exports = Ext.define('NextThought.app.notifications.StateStore'
 		this.__updateUnseenCount(this.unseen + 1);
 	},
 
-	removeRecord: function(change) {
+	removeRecord: function (change) {
 		this.fireEvent('record-deleted', change);
 	},
 
-	addActiveView: function() {
+	addActiveView: function () {
 		this.ACTIVE_VIEWS += 1;
 
 		this.updateLastViewed();
 	},
 
-	removeActiveView: function() {
+	removeActiveView: function () {
 		this.ACTIVE_VIEWS -= 1;
 
 		this.updateLastViewed();
@@ -103,10 +103,10 @@ module.exports = exports = Ext.define('NextThought.app.notifications.StateStore'
 		}
 	},
 
-	__getInitialUnseenCount: function(items) {
+	__getInitialUnseenCount: function (items) {
 		var lastViewed = this.lastViewed;
 
-		return items.reduce(function(acc, item) {
+		return items.reduce(function (acc, item) {
 			if (item.get('Last Modified') > lastViewed) {
 				acc += 1;
 			}
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.StateStore'
 		}, 0);
 	},
 
-	__updateUnseenCount: function(count, force) {
+	__updateUnseenCount: function (count, force) {
 		if (this.ACTIVE_VIEWS === 0 || force) {
 			this.unseen = count;
 			count = count >= 50 ? count + '+' : count;

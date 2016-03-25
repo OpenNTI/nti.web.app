@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		),
 
 
-		__getMaxTimeStatus: function(data) {
+		__getMaxTimeStatus: function (data) {
 			//if there is no max time this isn't timed
 			if (!data.maxTime) { return null; }
 
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		},
 
 
-		__getDueStatus: function(data) {
+		__getDueStatus: function (data) {
 			var now = new Date(),
 				d = {};
 
@@ -101,12 +101,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		},
 
 
-		__getSubmittedToolTip: function(submitted) {
+		__getSubmittedToolTip: function (submitted) {
 			return '<span>' + 'Submitted At ' + Ext.Date.format(submitted, 'g:i A n/j/Y') + '</span>';
 		},
 
 
-		__getCompletedStatus: function(data) {
+		__getCompletedStatus: function (data) {
 			if (!data.completed) { return null; }
 
 			var d = {
@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		},
 
 
-		__getOverTimeStatus: function(data) {
+		__getOverTimeStatus: function (data) {
 			//if we don't have a max time or duration there can be no overtime string
 			if (!data.maxTime || !data.duration || data.maxTime > data.duration) { return null; }
 
@@ -140,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		},
 
 
-		__getOverDueStatus: function(data) {
+		__getOverDueStatus: function (data) {
 			//if we aren't completed or we were completed on time there is no overdue string
 			//if we don't have a due date we can't be over due
 			if (!data.completed || !data.due || data.completed <= data.due || data.isNoSubmitAssignment) { return null; }
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 			return d;
 		},
 
-		__getExcuseGradeStatus: function(data) {
+		__getExcuseGradeStatus: function (data) {
 			if (!data.isExcused) { return null; }
 
 			return {
@@ -166,15 +166,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		},
 
 
-		getRenderData: function(data) {
+		getRenderData: function (data) {
 			return {
-					maxTime: this.__getMaxTimeStatus(data),
-					completed: this.__getCompletedStatus(data),
-					overtime: this.__getOverTimeStatus(data),
-					overdue: this.__getOverDueStatus(data),
-					due: this.__getDueStatus(data),
-					excused: this.__getExcuseGradeStatus(data)
-				};
+				maxTime: this.__getMaxTimeStatus(data),
+				completed: this.__getCompletedStatus(data),
+				overtime: this.__getOverTimeStatus(data),
+				overdue: this.__getOverDueStatus(data),
+				due: this.__getDueStatus(data),
+				excused: this.__getExcuseGradeStatus(data)
+			};
 		},
 
 		/**
@@ -188,7 +188,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		 * @param  {Object} data the above fields for the assignment
 		 * @return {String}		 [description]
 		 */
-		getStatusHTML: function(data) {
+		getStatusHTML: function (data) {
 			var renderData = this.getRenderData(data);
 
 			renderData.cls = renderData.due ? renderData.due.cls : '';
@@ -197,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		},
 
 
-		getTimeRemaining: function(due) {
+		getTimeRemaining: function (due) {
 			var diff = due.getTime() - (new Date()).getTime();
 
 			return TimeUtils.getNaturalDuration(diff, 1) + ' remaining';
@@ -209,7 +209,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		 * @param  {UsersCourseAssignmentHistoryItem}  record history item to check
 		 * @return {Boolean}		if there are actions
 		 */
-		hasActions: function(record) {
+		hasActions: function (record) {
 			var grade = record.get('Grade');
 
 			return record.get('submission') || grade.isExcusable();
@@ -220,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 		 * @param  {UsersCourseAssignmentHistoryItem} record the history item we are getting actions for
 		 * @return {Ext.Menu}		 a menu component
 		 */
-		getActionsMenu: function(record) {
+		getActionsMenu: function (record) {
 			var menu = Ext.widget('menu', {
 					ownerCmp: this,
 					constrainTo: Ext.getBody(),
@@ -266,8 +266,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 
 		WARNING_TIME_MINUTES: 1,
 
-		getTimeString: function(time, roundUp) {
-			function buildTimeString(timeArray, ceil) {
+		getTimeString: function (time, roundUp) {
+			function buildTimeString (timeArray, ceil) {
 				if (Ext.isEmpty(timeArray)) { return ''; }
 
 				var str = [], len = timeArray.length, tmp, u;

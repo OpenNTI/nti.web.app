@@ -22,17 +22,17 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	statics: {
 		MIME_TO_COMPONENT: {},
 
-		fillInMimeTypeComponent: function(cmps) {
+		fillInMimeTypeComponent: function (cmps) {
 			var map = {};
 
-			this.MIME_TO_COMPONENT = cmps.reduce(function(acc, cmp) {
+			this.MIME_TO_COMPONENT = cmps.reduce(function (acc, cmp) {
 				var mimeType = cmp.mimeType;
 
 				if (!Array.isArray(mimeType)) {
 					mimeType = [mimeType];
 				}
 
-				mimeType.forEach(function(val) {
+				mimeType.forEach(function (val) {
 					if (val) {
 						acc[val] = cmp;
 					}
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var groupLabel = this.group && Ext.data.Types.GROUPBYTIME.groupTitle(this.group, 'Today'),
@@ -72,11 +72,11 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		}
 	},
 
-	unwrap: function(item) {
+	unwrap: function (item) {
 		return this.ISCHANGE.test(item.mimeType) ? item.getItem() : item;
 	},
 
-	addItem: function(item, prepend) {
+	addItem: function (item, prepend) {
 		item = this.unwrap(item);
 
 		var cmp = this.self.MIME_TO_COMPONENT[item.mimeType],
@@ -97,12 +97,12 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		}
 	},
 
-	deleteRecord: function(record) {
+	deleteRecord: function (record) {
 		record = this.unwrap(record);
 
 		var me = this;
 
-		me.items.each(function(item) {
+		me.items.each(function (item) {
 			if (item.record && item.record.getId() === record.getId()) {
 				me.remove(item, true);
 			}

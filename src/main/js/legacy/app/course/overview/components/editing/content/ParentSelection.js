@@ -8,7 +8,7 @@ var OverviewgroupInlineEditor = require('./overviewgroup/InlineEditor');
 	 alias: 'widget.overview-editing-content-parentselection',
 	 label: 'Section:',
 
-	 parseItemData: function(item) {
+	 parseItemData: function (item) {
 		 return {
 			 cls: 'group-item',
 			 ntiid: item.getId(),
@@ -17,7 +17,7 @@ var OverviewgroupInlineEditor = require('./overviewgroup/InlineEditor');
 		 };
 	 },
 
-	 getEditor: function() {
+	 getEditor: function () {
 		 return NextThought.app.course.overview.components.editing.content.overviewgroup.InlineEditor;
 	 }
  });

@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		}
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		if (!this.topic) {
@@ -123,27 +123,27 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		this.ForumActions = NextThought.app.forums.Actions.create();
 	},
 
-	buildReadyPromise: function() {
+	buildReadyPromise: function () {
 		var me = this;
 
-		function ready() {
+		function ready () {
 			me.ready = true;
 			me.fireEvent('ready');
 		}
 
-		me.initialLoad.done(function() {
+		me.initialLoad.done(function () {
 			if (me.activeComment) {
 				me.goToComment(me.activeComment).done(ready);
 				delete me.store.proxy.extraParams.batchContaining;
 			} else {
 				ready();
 			}
-		}).fail(function(error) {
+		}).fail(function (error) {
 			console.error('Failure to load Comments store. Error: ', error);
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		var me = this, maskMon,
 			scrollEl;
 
@@ -160,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		if ((me.store.loading || this.notLoadedYet) && scrollEl) {
 			maskMon = me.mon(me.store, {
 				destroyable: true,
-				load: function() {
+				load: function () {
 					Ext.destroy(maskMon);
 					scrollEl.el.unmask();
 				}
@@ -182,28 +182,28 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		this.initSearch();
 	},
 
-	getContainerIdForSearch: function() {
+	getContainerIdForSearch: function () {
 		return this.topic.get('NTIID');
 	},
 
-	onceReadyForSearch: function() {
+	onceReadyForSearch: function () {
 		return this.initialLoad
-			.then(function() { return wait(); });
+			.then(function () { return wait(); });
 	},
 
-	allowNavigation: function() {
+	allowNavigation: function () {
 		if (!this.editor || !this.editor.isActive()) {
 			return true;
 		}
 
 		var title = 'Attention!';
-			msg = 'You are currently creating a topic. Would you like to leave without saving?';
+		msg = 'You are currently creating a topic. Would you like to leave without saving?';
 
 		if (this.editor.record) {
 			msg = 'You are currently editing a topic. Would you like to leave without saving?';
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Ext.Msg.show({
 				title: title,
 				msg: msg,
@@ -222,7 +222,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		});
 	},
 
-	buildStore: function(fulfill, reject) {
+	buildStore: function (fulfill, reject) {
 		var me = this,
 			s = NextThought.store.forums.Comments.create({
 				parentTopic: me.topic,
@@ -247,9 +247,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			});
 		}
 
-		function storeLoad() {
+		function storeLoad () {
 			me.onStoreAdd.apply(me, arguments)
-				.then(function() {
+				.then(function () {
 					if (me.notLoadedYet) {
 						delete me.notLoadedYet;
 						fulfill();
@@ -269,7 +269,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		me.store.load();
 	},
 
-	onStoreAdd: function(store, records) {
+	onStoreAdd: function (store, records) {
 		var loading = (records || []).map(this.fillInData.bind(this));
 
 		return Promise.all((loading))
@@ -277,27 +277,27 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			.then(this.fireEvent('realign-editor'));
 	},
 
-	onStoreUpdate: function(store, record) {
+	onStoreUpdate: function (store, record) {
 		this.fillInData(record);
 		this.clearLoadBox();
 		this.fireEvent('realign-editor');
 	},
 
-	setAvatar: function(user, record) {
+	setAvatar: function (user, record) {
 		record.set({
 			'Creator': user
 		});
 		this.refresh();
 	},
 
-	fillInData: function(record) {
+	fillInData: function (record) {
 		var me = this,
 			loadUser;
 
 
 		if (typeof record.get('Creator') === 'string') {
 			loadUser = UserRepository.getUser(record.get('Creator'))
-				.then(function(user) {
+				.then(function (user) {
 					record.set({
 						'Creator': user
 					});
@@ -307,16 +307,16 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 						'avatarChanged': me.setAvatar.bind(me, user, record)
 					});
 				})
-				.fail(function(reason) {
+				.fail(function (reason) {
 					console.error(reason);
 				});
 		} else {
 			loadUser = Promise.resolve();
 		}
 
-		return loadUser.then(function() {
-			return new Promise(function(fulfill, reject) {
-				record.compileBodyContent(function(body) {
+		return loadUser.then(function () {
+			return new Promise(function (fulfill, reject) {
+				record.compileBodyContent(function (body) {
 					var index;
 
 					if (!me.store) {return;}
@@ -338,7 +338,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 					wait()
 						.then(fulfill);
-				}, this, function(id, data, type) {
+				}, this, function (id, data, type) {
 					if (type === 'video') {
 						me.videoData[id] = data;
 					} else {
@@ -349,10 +349,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		});
 	},
 
-	refreshQueue: function() {
+	refreshQueue: function () {
 		var me = this;
 
-		me.recordsToRefresh.forEach(function(rec) {
+		me.recordsToRefresh.forEach(function (rec) {
 			var index = me.store.indexOf(rec);
 
 			me.refreshNode(index);
@@ -361,22 +361,22 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		me.recordsToRefresh = [];
 	},
 
-	isOnLastPage: function() {
+	isOnLastPage: function () {
 		var targetPage = Math.ceil((this.store.getTotalCount() + 1) / this.store.pageSize);
 
 		return targetPage === this.store.getCurrentPage();
 	},
 
-	loadLastPage: function() {
+	loadLastPage: function () {
 		var targetPage = Math.ceil((this.store.getTotalCount() + 1) / this.store.pageSize), me = this;
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			//if the pages are the same and the store has records don't bother
 			if (me.store.getCurrentPage() === targetPage && me.store.getCount()) {
 				fulfill(true);
 			} else {
 				me.mon(me.store, {
-					'load': function() { fulfill(); },
+					'load': function () { fulfill(); },
 					single: true,
 					delay: 1
 				});
@@ -388,19 +388,19 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		});
 	},
 
-	clearLoadBox: function() {
+	clearLoadBox: function () {
 		if (!this.currentLoadBox) { return; }
 		this.currentLoadBox.unmask();
 		this.currentLoadBox.setHeight(0);
 	},
 
-	maskLoadBox: function(el) {
+	maskLoadBox: function (el) {
 		this.currentLoadBox = el.down('.load-box');
 		this.currentLoadBox.setHeight(40);
 		this.currentLoadBox.mask('Loading...');
 	},
 
-	whiteboardContainerClick: function(record, container, e, el) {
+	whiteboardContainerClick: function (record, container, e, el) {
 		var me = this,
 			guid = container && container.up('.body-divider').getAttribute('id');
 
@@ -408,7 +408,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			container = e.getTarget('.reply:not(.thread-reply)', null, true);
 			if (container) {
 				me.replyTo(record, el)
-					.done(function() {
+					.done(function () {
 						me.editor.addWhiteboard(Ext.clone(me.wbData[guid]), guid + '-reply');
 					});
 			} else {
@@ -417,7 +417,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		}
 	},
 
-	videoPlaceholderClick: function(record, container, e, el) {
+	videoPlaceholderClick: function (record, container, e, el) {
 		var me = this,
 			guid = container && container.up('.body-divider').getAttribute('id'),
 			value = me.videoData[guid];
@@ -427,7 +427,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		}
 	},
 
-	loadThread: function(record, el) {
+	loadThread: function (record, el) {
 		if (!record.threadLoaded) {
 			this.maskLoadBox(el);
 		}
@@ -435,14 +435,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		this.store.showCommentThread(record);
 	},
 
-	onItemClick: function(record, item, index, e) {
+	onItemClick: function (record, item, index, e) {
 		//Give other event listeners a chance to do something before we modify the store
 		//causing the node that the click event is firing on to maybe be removed from the dom
 		wait()
 			.then(this.handleItemClick.bind(this, record, item, index, e));
 	},
 
-	handleItemClick: function(record, item, index, e) {
+	handleItemClick: function (record, item, index, e) {
 		var load, me = this, width,
 			whiteboard = e.getTarget('.whiteboard-container', null, true),
 			video = e.getTarget('.video-placeholder', null, true),
@@ -481,7 +481,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			delete this.isNewRecord;
 			t = el.down('.body');
 			t.hide();
-			this.openEditor(record, t, width, function() {
+			this.openEditor(record, t, width, function () {
 				t.show();
 			}, true);
 			return;
@@ -495,7 +495,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		if (e.getTarget('.flag') && !record.isFlagged()) {
 			me.flagging = true;
 
-			TemplatesForNotes.reportInappropriate(function(btn) {
+			TemplatesForNotes.reportInappropriate(function (btn) {
 				delete me.flagging;
 				if (btn === 'ok') { record.flag(me); }
 			});
@@ -504,13 +504,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 		if (e.getTarget('.name')) {
 			UserRepository.getUser(record.get('Creator'))
-				.done(function(u) {
+				.done(function (u) {
 					me.mixins.profileLinks.navigateToProfile(u);
 					if (!isMe(u)) {
 						me.fireEvent('show-profile', u);
 					}
 				})
-				.fail(function(reason) {
+				.fail(function (reason) {
 					console.error(reason);
 				});
 			return;
@@ -535,15 +535,15 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 	},
 
-	replyTo: function(record, el, width) {
+	replyTo: function (record, el, width) {
 		var me = this, newRecord;
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			me.isNewRecord = true;
 			newRecord = record.makeReply();
 
 			if (!record.threadLoaded && record.get('ReferencedByCount')) {
-				me.store.on('add', function() {
+				me.store.on('add', function () {
 					var el = me.getNode(record);
 
 					el = Ext.get(el);
@@ -559,7 +559,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		});
 	},
 
-	deleteRecord: function(record) {
+	deleteRecord: function (record) {
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
 			msg: getString('NextThought.view.forums.topic.parts.Comments.deletewarning'),
@@ -568,7 +568,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			icon: 'warning-red',
 			buttonText: {'ok': getString('NextThought.view.forums.topic.parts.Comments.deletebutton')},
 			title: getString('NextThought.view.forums.topic.parts.Comments.deletetitle'),
-			fn: function(str) {
+			fn: function (str) {
 				if (str === 'ok') {
 					var href = record.get('href'),
 						depth = record.get('depth');
@@ -581,7 +581,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 					Service.request({
 						url: href,
 						method: 'DELETE'
-					}).done(function() {
+					}).done(function () {
 						record.convertToPlaceholder();
 						record.set({
 							'depth': depth,
@@ -589,7 +589,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 							'Deleted': true
 						});
 
-					}).fail(function(reason) {
+					}).fail(function (reason) {
 						console.error(reason);
 					});
 
@@ -598,13 +598,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		});
 	},
 
-	openEditor: function(record, el, width, cancelCallback, isEdit) {
+	openEditor: function (record, el, width, cancelCallback, isEdit) {
 		var me = this, refreshMon;
 
 		me.clearSearchHit();
 		width = width || el.getWidth();
 
-		function size() {
+		function size () {
 			el.setHeight(me.editor.getHeight());
 		}
 
@@ -626,7 +626,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		}
 		else {
 			//Blur editor when first appears, to allow user to focus and bring up keyboard
-			Ext.defer(function() {
+			Ext.defer(function () {
 				me.editor.el.down('.content').blur();
 			}, 250);
 			//scrollCompletelyIntoView was causing trouble occasionally in iPad
@@ -635,7 +635,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 		refreshMon = me.mon(me, {
 			destroyable: true,
-			'realign-editor': function() {
+			'realign-editor': function () {
 				//if there isn't a record its a new top level comment and we don't need to resize/realign anything
 				if (!record) {
 					return;
@@ -665,7 +665,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			destroyable: true,
 			'grew': size,
 			'shrank': size,
-			'deactivated-editor': function() {
+			'deactivated-editor': function () {
 				//if there isn't a record its a new top level comment
 				if (!record) {
 					el.setHeight(undefined);
@@ -693,7 +693,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		});
 	},
 
-	addRootReply: function() {
+	addRootReply: function () {
 		if (this.editor.isActive()) {
 			this.refocusEditor();
 			return;
@@ -703,13 +703,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		this.openEditor(null, this.el.down('.new-root'));
 	},
 
-	addIncomingComment: function(comment) {
+	addIncomingComment: function (comment) {
 		if (this.topic.get('NTIID') === comment.get('ContainerId')) {
 			this.store.insertSingleRecord(comment);
 		}
 	},
 
-	refocusEditor: function() {
+	refocusEditor: function () {
 		var msg = getFormattedString('NextThought.view.forums.topic.parts.Comments.focuswarning', {verb: this.refocusVerb});
 
 		if (!this.editor.isActive()) { return; }
@@ -718,7 +718,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		alert({msg: msg});
 	},
 
-	getRefItems: function() {
+	getRefItems: function () {
 		var items = [];
 		if (this.editor) {
 			items.push(this.editor);
@@ -726,10 +726,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		return items;
 	},
 
-	saveComment: function(editor, record, values) {
+	saveComment: function (editor, record, values) {
 		var me = this;
 
-		function unmask() {
+		function unmask () {
 			if (editor.el) {
 				editor.el.unmask();
 			}
@@ -741,7 +741,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		}
 
 		me.ForumActions.saveTopicComment(me.topic, record, values)
-			.then(function(record) {
+			.then(function (record) {
 				unmask();
 				me.editor.deactivate();
 				me.editor.setValue('');
@@ -750,7 +750,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 				if (me.isNewRecord) {
 					if (record.isTopLevel() && !me.isOnLastPage()) {
 						me.loadLastPage(true)
-							.then(function() {
+							.then(function () {
 								me.goToComment(record);
 							});
 
@@ -764,13 +764,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 					}
 				}
 			})
-			.fail(function() {
+			.fail(function () {
 				editor.markError(editor.getEl(), 'Could not save comment');
 				unmask();
 			});
 	},
 
-	goToComment: function(comment) {
+	goToComment: function (comment) {
 		if (!this.rendered) {
 			this.scrollToComment = comment;
 			return Promise.resolve();
@@ -778,11 +778,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 		var me = this;
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			var refs = comment.get('references');
 
 			if (Ext.isEmpty(refs)) {
-				me.initialLoad.done(function() {
+				me.initialLoad.done(function () {
 					me.scrollCommentIntoView(comment);
 					fulfill();
 				});
@@ -790,15 +790,15 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 				return;
 			}
 
-			me.initialLoad.done(function() {
-				refs.forEach(function(ref) {
+			me.initialLoad.done(function () {
+				refs.forEach(function (ref) {
 					var rec = me.store.getById(ref);
 
 					if (rec && rec.get('depth') === 0) {
 						me.mon(me.store, {
 							single: true,
 							buffer: 1,
-							add: function() {
+							add: function () {
 								me.scrollCommentIntoView(comment);
 								fulfill();
 							}
@@ -810,7 +810,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		});
 	},
 
-	scrollCommentIntoView: function(comment) {
+	scrollCommentIntoView: function (comment) {
 		var node = this.getNode(comment),
 			win = this.up('windows-view');
 
@@ -828,7 +828,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		}
 	},
 
-	getSearchHitConfig: function() {
+	getSearchHitConfig: function () {
 		return {
 			key: 'forum',
 			mainViewId: 'forums'

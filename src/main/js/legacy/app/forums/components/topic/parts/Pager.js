@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	PREV_NEXT: false,
 
 
-	addNavigationPages: function(pages, count, current) {
+	addNavigationPages: function (pages, count, current) {
 		if (!this.PREV_NEXT) { return pages; }
 
 		pages.unshift({
@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	},
 
 
-	getPageList: function(count, current) {
+	getPageList: function (count, current) {
 		var pageList = [], pages = [], spots, i;
 
 		if (count < this.MAX_VISIBLE) {
@@ -75,10 +75,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	},
 
 
-	getPages: function(count, current) {
+	getPages: function (count, current) {
 		var pageList, pages = [];
 
-		function addPages(list) {
+		function addPages (list) {
 			var i;
 			for (i = 0; i <= list.length; i++) {
 				if (pageList[i] === 'first' || pageList[i] === 'last') {

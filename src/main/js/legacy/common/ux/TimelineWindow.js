@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.TimelineWindow', {
 					cls: 'x-btn-blue-large dismiss',
 					action: 'cancel',
 					style: { 'float': 'right'},
-					handler: function(b, e) {
+					handler: function (b, e) {
 						e.stopEvent(); b.up('window').close();
 					}
 				}
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.TimelineWindow', {
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.timelineContainer = this.down('[name=timeline-container]');
@@ -80,11 +80,11 @@ module.exports = exports = Ext.define('NextThought.common.ux.TimelineWindow', {
 	},
 
 
-	startTimer: function() {
+	startTimer: function () {
 		var data = {
-				type: 'resource-viewed',
-				resource_id: this.ntiid
-			};
+			type: 'resource-viewed',
+			resource_id: this.ntiid
+		};
 
 		if (this.ntiid) {
 			AnalyticsUtil.getResourceTimer(data.resource_id, data);
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.TimelineWindow', {
 	},
 
 
-	endTimer: function() {
+	endTimer: function () {
 		if (this.ntiid) {
 			AnalyticsUtil.stopResourceTimer(this.ntiid, 'resource-viewed');
 		}
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.TimelineWindow', {
 	 * @param  {Number} desiredWidth  suggested width
 	 * @param  {Number} desiredHeight suggested height
 	 */
-	sizeWindow: function(desiredWidth, desiredHeight) {
+	sizeWindow: function (desiredWidth, desiredHeight) {
 		var maxHeight = Ext.Element.getViewportHeight() - 20, //10px padding on top and bottom
 			maxWidth = Ext.Element.getViewportWidth() - 40; //20px padding on the left and right
 
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.TimelineWindow', {
 	},
 
 
-	sizeToRatio: function(ratio, desiredWidth, maxWidth, maxHeight) {
+	sizeToRatio: function (ratio, desiredWidth, maxWidth, maxHeight) {
 		var width = Math.min(maxWidth, desiredWidth),
 			height = width / ratio;
 

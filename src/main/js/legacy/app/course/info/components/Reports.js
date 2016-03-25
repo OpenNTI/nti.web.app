@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Re
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply((this.renderData || {}), {
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Re
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this;
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Re
 		wait()
 			.then(me.fillScreen.bind(me, me.el.dom));
 
-		me.mon(me.el, 'click', function(e) {
+		me.mon(me.el, 'click', function (e) {
 			var win;
 
 			if (e.getTarget('.target') && me.reportLink) {
@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Re
 	},
 
 
-	setContent: function(bundle) {
+	setContent: function (bundle) {
 		if (!bundle) { return; }
 
 		var catalog = bundle.getCourseCatalogEntry(),

@@ -17,13 +17,13 @@ module.exports = exports = Ext.define('NextThought.model.forums.Base', {
 		{name: 'searchTerm', type: 'string', persist: false, defaultValue: ''}
 	],
 
-	getContentsStoreId: function(prefix, suffix) {
+	getContentsStoreId: function (prefix, suffix) {
 		prefix = prefix || '';
 		suffix = suffix || '';
 		return prefix + this.get('Class') + '-' + this.get('NTIID') + suffix;
 	},
 
-	buildContentsStore: function(idSuffix, cfg, extraParams) {
+	buildContentsStore: function (idSuffix, cfg, extraParams) {
 		var store,
 			UserDataStore = NextThought.app.userdata.StateStore.getInstance(),
 			id = this.getContentsStoreId('', idSuffix);
@@ -54,14 +54,14 @@ module.exports = exports = Ext.define('NextThought.model.forums.Base', {
 		return store;
 	},
 
-	getParentHref: function() {
+	getParentHref: function () {
 		var path = this.get('href');
 		path = path.split('/');
 		path.pop();
 		return path.join('/');
 	},
 
-	getMatchCount: function(term) {
+	getMatchCount: function (term) {
 		if (!term) { return 0; }
 
 		var me = this,
@@ -70,17 +70,17 @@ module.exports = exports = Ext.define('NextThought.model.forums.Base', {
 
 		if (!re) { return 0; }
 
-		function getMatches(val) {
+		function getMatches (val) {
 			if (Ext.isString(val)) {
 				count += (val.match(re) || []).length;
 			} else if (Ext.isArray(val)) {
-				val.forEach(function(v) {
+				val.forEach(function (v) {
 					getMatches(v);
 				});
 			}
 		}
 
-		terms.forEach(function(prop) {
+		terms.forEach(function (prop) {
 			var val = me.get(prop);
 
 			getMatches(val);
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Base', {
 		return count;
 	},
 
-	setMatchCount: function(term) {
+	setMatchCount: function (term) {
 		var headline = this.get('headline'),
 			count = 0;
 

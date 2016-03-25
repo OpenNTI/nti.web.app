@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 	cls: 'main-body',
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		window.addEventListener('wheel', this.maybeStopScrollBleed.bind(this));
 	},
 
-	allowNavigation: function() {
+	allowNavigation: function () {
 		var win = this.WindowStore.allowNavigation();
 
 		//if the window stops it or returns a promise don't keep looking
@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return this.mixins.Router.allowNavigation.call(this);
 	},
 
-	getCmp: function(xtype, cmpQuery) {
+	getCmp: function (xtype, cmpQuery) {
 		var cmp = this.down(cmpQuery || xtype);
 
 		if (!cmp) {
@@ -107,9 +107,9 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return cmp;
 	},
 
-	setActiveCmp: function(xtype, cmpQuery) {
+	setActiveCmp: function (xtype, cmpQuery) {
 		var old = this.getLayout().getActiveItem();
-			cmp = this.getCmp(xtype, cmpQuery);
+		var cmp = this.getCmp(xtype, cmpQuery);
 
 		this.getLayout().setActiveItem(cmp);
 
@@ -129,11 +129,11 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return cmp;
 	},
 
-	beforeRoute: function() {
+	beforeRoute: function () {
 		this.WindowActions.closeActiveWindow();
 	},
 
-	onNewContext: function() {
+	onNewContext: function () {
 		var parts = this.ContextStore.getCurrentObjectParts();
 
 		if (parts.mimeType && parts.id) {
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		}
 	},
 
-	lockHeight: function() {
+	lockHeight: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.lockHeight.bind(this));
 			return;
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		this.addCls('height-locked');
 	},
 
-	unlockHeight: function() {
+	unlockHeight: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.unlockHeight.bind(this));
 			return;
@@ -166,11 +166,11 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		this.removeCls('height-locked');
 	},
 
-	navigateToWindowRecord: function(record) {
+	navigateToWindowRecord: function (record) {
 		this.attemptToNavigateToObject(record);
 	},
 
-	pushWindow: function(id, mimeType, state, title, route, precache) {
+	pushWindow: function (id, mimeType, state, title, route, precache) {
 		if (!title) {
 			title = this.ContextStore.getCurrentTitle();
 		}
@@ -217,20 +217,20 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		this.pushRoute(title, route, precache, state);
 	},
 
-	replaceOpenWindowRoute: function() {
+	replaceOpenWindowRoute: function () {
 		var route = this.ContextStore.removeObjectRoute(),
 			title = this.ContextStore.getCurrentTitle();
 
 		this.replaceRootRoute(title, route);
 	},
 
-	setLibraryActive: function(route, subRoute) {
+	setLibraryActive: function (route, subRoute) {
 		var library = this.setActiveCmp('library-view-container');
 
 		return library.handleRoute(subRoute, route.precache);
 	},
 
-	setCourseActive: function(route, subRoute) {
+	setCourseActive: function (route, subRoute) {
 		var me = this,
 			courseView = me.setActiveCmp('course-view-container'),
 			ntiid = route.params.id,
@@ -240,7 +240,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		return courseView.setActiveCourse(ntiid, course)
 			.then(courseView.handleRoute.bind(courseView, subRoute, route.precache))
-			.fail(function() {
+			.fail(function () {
 				//If we have a sub route that fails try setting the root of the course
 				if (Globals.trimRoute(subRoute)) {
 					me.replaceRoute('', '/course/' + route.params.id);
@@ -250,7 +250,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			});
 	},
 
-	setBundleActive: function(route, subRoute) {
+	setBundleActive: function (route, subRoute) {
 		var me = this,
 			bundleView = me.setActiveCmp('bundle-view-container'),
 			ntiid = route.params.id,
@@ -260,27 +260,27 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		return bundleView.setActiveBundle(ntiid, bundle)
 			.then(bundleView.handleRoute.bind(bundleView, subRoute, route.precache))
-			.fail(function() {
+			.fail(function () {
 				me.replaceRoute('', '/library');
 			});
 	},
 
-	setGroupActive: function(route, subRoute) {
+	setGroupActive: function (route, subRoute) {
 		var me = this,
-		   userView = me.setActiveCmp('profile-group', 'profile-group(true)'),
-		   id = route.params.id,
-		   user = route.precache.user;
+			userView = me.setActiveCmp('profile-group', 'profile-group(true)'),
+			id = route.params.id,
+			user = route.precache.user;
 
 		id = ParseUtils.decodeFromURI(id);
 
 		return userView.setActiveEntity(id, user)
-		   .then(userView.handleRoute.bind(userView, subRoute, route.precache))
-		   .fail(function() {
-				 me.replaceRoute('', '/library');
-				 });
+			.then(userView.handleRoute.bind(userView, subRoute, route.precache))
+			.fail(function () {
+				me.replaceRoute('', '/library');
+			});
 	},
 
-	setUserActive: function(route, subRoute) {
+	setUserActive: function (route, subRoute) {
 		var me = this,
 			userView = me.setActiveCmp('profile-user', 'profile-user(true)'),
 			id = route.params.id,
@@ -290,12 +290,12 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		return userView.setActiveEntity(id, user)
 			.then(userView.handleRoute.bind(userView, subRoute, route.precache))
-			.fail(function() {
+			.fail(function () {
 				me.replaceRoute('', '/library');
 			});
 	},
 
-	setCommunityActive: function(route, subRoute) {
+	setCommunityActive: function (route, subRoute) {
 		var me = this,
 			communityView = me.setActiveCmp('profile-community'),
 			id = route.params.id,
@@ -305,36 +305,36 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		return communityView.setActiveEntity(id, community)
 			.then(communityView.handleRoute.bind(communityView, subRoute, route.precache))
-			.fail(function() {
+			.fail(function () {
 				me.replaceRoute('', '/library');
 			});
 	},
 
-	setNotificationsActive: function(route, subRoute) {
+	setNotificationsActive: function (route, subRoute) {
 		var me = this,
 			notableView = me.setActiveCmp('notifications-index');
 
 		return notableView.handleRoute(subRoute, route.precache);
 	},
 
-	setSearchActive: function(route, subRoute) {
+	setSearchActive: function (route, subRoute) {
 		var searchView = this.setActiveCmp('search-index');
 
 		return searchView.handleRoute(subRoute, route.precache);
 	},
 
-	setContactsActive: function(route, subRoute) {
+	setContactsActive: function (route, subRoute) {
 		var contactsView = this.setActiveCmp('contacts-index');
 
 		return contactsView.handleRoute(subRoute, route.precache);
 	},
 
-	setObjectActive: function(route, subRoute) {
+	setObjectActive: function (route, subRoute) {
 		var me = this,
 			hash = route.hash,
 			id = route.params.id;
 
-		function doNavigate(obj, route) {
+		function doNavigate (obj, route) {
 			var path = route.path,
 				objId = obj.getId(),
 				hasWindow = me.Router.WindowActions.hasWindow(obj);
@@ -353,7 +353,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			me.replaceRootRoute('', path);
 		}
 
-		function failedNavigate(obj) {
+		function failedNavigate (obj) {
 			var objId = obj && obj.getId(),
 				path = '/library',
 				hasWindow = obj && me.Router.WindowActions.hasWindow(obj);
@@ -381,7 +381,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		//What for the library to load so we don't unmask too soon
 		return me.LibraryStore.onceLoaded()
 			.then(Service.getObject.bind(Service, id))
-			.then(function(obj) {
+			.then(function (obj) {
 				if (me.ISCHANGE.test(obj.mimeType)) {
 					obj = obj.getItem();
 				}
@@ -391,7 +391,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 					onFailedToGetFullPath: failedNavigate
 				});
 			})
-			.fail(function() {
+			.fail(function () {
 				failedNavigate();
 			});
 	},
@@ -402,7 +402,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 	 *
 	 * @return {Element} the element created and added
 	 */
-	__createMaskDiv: function() {
+	__createMaskDiv: function () {
 		var div = document.createElement('div');
 
 		div.classList.add('body-shade-mask');
@@ -412,7 +412,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return div;
 	},
 
-	removeBodyContent: function(content) {
+	removeBodyContent: function (content) {
 		var body = Ext.getBody();
 
 		if (content && content.BODY_CLS) {
@@ -422,7 +422,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		body.setStyle({backgroundImage: ''});
 	},
 
-	addBodyContent: function(content) {
+	addBodyContent: function (content) {
 		var body = Ext.getBody(),
 			getBackground = content && content.getBackgroundImage && content.getBackgroundImage();
 
@@ -432,13 +432,13 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		if (getBackground) {
 			getBackground
-				.then(function(src) {
+				.then(function (src) {
 					body.setStyle({backgroundImage: 'url(' + src + ')'});
 				});
 		}
 	},
 
-	updateBodyContent: function(content, masked) {
+	updateBodyContent: function (content, masked) {
 		var body = Ext.getBody(),
 			getBackground = content && content.getBackgroundImage && content.getBackgroundImage(),
 			mask = document.querySelector('.body-shade-mask');
@@ -460,20 +460,20 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		}
 	},
 
-	getObjectRoute: function(obj) {
+	getObjectRoute: function (obj) {
 		var me = this,
 			id = obj.getId && obj.getId();
 
 		id = id && ParseUtils.encodeForURI(id);
 
 		return me.PathActions.getPathToObject(obj)
-			.then(function(path) {
+			.then(function (path) {
 				path.push(obj);
 
 				return path;
 			})
 			.then(me.getRouteForPath.bind(me))
-			.then(function(route) {
+			.then(function (route) {
 				var path = route.path;
 
 				if (me.WindowActions.hasWindow(obj)) {
@@ -482,7 +482,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 				return path;
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error(('Unable to find path for: ', obj, reason));
 				return {
 					title: 'Library',
@@ -491,7 +491,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 			});
 	},
 
-	getRouteForPath: function(path) {
+	getRouteForPath: function (path) {
 		var root = path && path[0],
 			subPath = path && path.slice(1),
 			route;
@@ -519,7 +519,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return route;
 	},
 
-	getRouteForCourse: function(course, path) {
+	getRouteForCourse: function (course, path) {
 		var cmp = this.getCmp('course-view-container'),
 			route = cmp.getRouteForPath && cmp.getRouteForPath(path, course),
 			id = course.getId();
@@ -533,7 +533,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return route;
 	},
 
-	getRouteForUser: function(user, path) {
+	getRouteForUser: function (user, path) {
 		var cmp = this.getCmp('profile-user', 'profile-user(true)'),
 			route = cmp.getRouteForPath && cmp.getRouteForPath(path, user),
 			id = user.getId();
@@ -544,7 +544,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return route;
 	},
 
-	getRouteForCommunity: function(community, path) {
+	getRouteForCommunity: function (community, path) {
 		var cmp = this.getCmp('profile-community'),
 			route, id = community.getId();
 
@@ -563,7 +563,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return route;
 	},
 
-	getRouteForGroup: function(group, path) {
+	getRouteForGroup: function (group, path) {
 		var cmp = this.getCmp('profile-group'),
 			route, id = group.getId();
 
@@ -584,7 +584,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 		return route;
 	},
 
-	getRouteForBundle: function(bundle, path) {
+	getRouteForBundle: function (bundle, path) {
 		var cmp = this.getCmp('bundle-view-container'),
 			route, id = bundle.get('NTIID');
 

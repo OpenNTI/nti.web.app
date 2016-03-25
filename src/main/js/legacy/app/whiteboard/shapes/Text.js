@@ -5,12 +5,12 @@ var ShapesBase = require('./Base');
 module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Text', {
 	extend: 'NextThought.app.whiteboard.shapes.Base',
 
-	constructor: function() {
+	constructor: function () {
 		this.calculatedAttributes = ['font-face'];
 		this.callParent(arguments);
 	},
 
-	draw: function(ctx,renderCallback) {
+	draw: function (ctx,renderCallback) {
 		this.callParent(arguments);
 
 		if (!this.cache['font-face']) {

@@ -4,12 +4,12 @@ var Ext = require('extjs');
 module.exports = exports = Ext.define('NextThought.overrides.app.Controller', {
 	override: 'Ext.app.Controller',
 
-	callOnAllControllersWith: function(functionName) {
+	callOnAllControllersWith: function (functionName) {
 		var ret,
 			args = Array.prototype.slice.call(arguments, 1),
 			app = this.getApplication();
 
-		app.controllers.each(function(ctlr) {
+		app.controllers.each(function (ctlr) {
 			if (Ext.isFunction(ctlr[functionName])) {
 				ret = ctlr[functionName].apply(ctlr, args);
 				return !ret;
@@ -29,11 +29,11 @@ module.exports = exports = Ext.define('NextThought.overrides.app.Controller', {
 	 * @param {...} var_args Arguments to pass to the functionName
 	 * @return {Promise}
 	 */
-	performAnd: function(functionName, var_args) {
+	performAnd: function (functionName, var_args) {
 		var app = this.getApplication(),
 			args = Array.prototype.slice.call(arguments, 1);
 
-		function perform(ctlr) {
+		function perform (ctlr) {
 			var f = ctlr[functionName];
 			return (f && typeof f.apply === 'function' && f.apply(ctlr, args)) || undefined;
 			//the return value should be a promise to pool on. but if not, the all() function

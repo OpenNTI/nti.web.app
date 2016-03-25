@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 	},
 
 	statics: {
-		getData: function(dom, reader) {
+		getData: function (dom, reader) {
 			var el = Ext.get(dom),
 				data = DomUtils.parseDomObject(dom),
 				description = el.down('span.description');
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 		}
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 				contentElement: dom,
 				listeners: {
 					'height-change': 'refreshHeight',
-					'player-command-activate': function() {
+					'player-command-activate': function () {
 						var video = me.down('content-video');
 
 						if (!me.fromClick) {
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 					}
 				},
 				xhooks: {
-					playerConfigOverrides: function(type) {
+					playerConfigOverrides: function (type) {
 						return {reserveControlSpace: true};
 					}
 				}
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			.then(this.fillVideo.bind(this));
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.el.setStyle({
@@ -118,7 +118,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 		});
 	},
 
-	getSize: function(dom, desiredWidth) {
+	getSize: function (dom, desiredWidth) {
 		var parent = dom.parentElement, left, width,
 			parentRect = parent && parent.getBoundingClientRect();
 
@@ -150,7 +150,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 		};
 	},
 
-	fillVideo: function(index) {
+	fillVideo: function (index) {
 		var me = this,
 			id = me.data['attribute-data-ntiid'],
 			source = index[id].sources[0],
@@ -161,13 +161,13 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 			me.setBackground(poster, label);
 		} else {
 			NextThought.model.resolvers.VideoPosters.resolveForSource(source)
-				.then(function(imgs) {
+				.then(function (imgs) {
 					me.setBackground(imgs.poster, label);
 				});
 		}
 	},
 
-	setBackground: function(src, label) {
+	setBackground: function (src, label) {
 		if (!this.el) {
 			this.on('afterrender', this.setBackground.bind(this, src), this, {single: true});
 			return;
@@ -191,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 		this.mon(this.el, 'click', this.play.bind(this));
 	},
 
-	play: function(e) {
+	play: function (e) {
 		if (e.getTarget('.launch-player')) {
 			this.fromClick = true;
 			this.addCls('playing');
@@ -202,7 +202,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 		}
 	},
 
-	openMediaViewer: function() {
+	openMediaViewer: function () {
 		var v = this.playlist[0],
 			bundleContent = this.up('bundle-content'),
 			location = this.reader && this.reader.getLocation && this.reader.getLocation() || {},
@@ -219,7 +219,7 @@ module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 		}
 	},
 
-	findLine: function() {
+	findLine: function () {
 		var doc = this.contentElement.ownerDocument,
 			range = doc.createRange();
 

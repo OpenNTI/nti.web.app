@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		// 'mouseleave': 'startHide'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var items = [],
@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		items.push({xtype: 'menuseparator'});
 
 		//Currently the impersonation link comes back even if we cannot impersonate... so lets add a gate above and beyond the presence of the link...
-		if ($AppConfig.userObject.getLink('logon.nti.impersonate')&& (/@nextthought\.com$/).test($AppConfig.username)) {
+		if ($AppConfig.userObject.getLink('logon.nti.impersonate') && (/@nextthought\.com$/).test($AppConfig.username)) {
 			items.push({ handler: this.impersonate.bind(this), text: 'Impersonate User...' });
 		}
 
@@ -91,29 +91,29 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		this.add(items);
 	},
 
-	startHide: function() {
+	startHide: function () {
 		var me = this;
 
 		me.cancelHide();
 
-		me.hideTimeout = setTimeout(function() {
+		me.hideTimeout = setTimeout(function () {
 			me.hide();
 		}, 500);
 	},
 
-	cancelHide: function() {
+	cancelHide: function () {
 		clearTimeout(this.hideTimeout);
 	},
 
-	showWelcome: function(item) {
+	showWelcome: function (item) {
 		this.AccountActions.showWelcomePage(item.link);
 	},
 
-	showAbout: function(item) {
+	showAbout: function (item) {
 		this.AccountActions.showHref(item.href, item.target);
 	},
 
-	showPrivacy: function() {
+	showPrivacy: function () {
 		var link = $AppConfig.userObject.getLink('content.permanent_general_privacy_page');
 
 		if (link) {
@@ -121,7 +121,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		}
 	},
 
-	showChildPrivacy: function() {
+	showChildPrivacy: function () {
 		var link = $AppConfig.userObject.getLink('childrens-privacy');
 
 		if (link) {
@@ -129,21 +129,21 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		}
 	},
 
-	showTerms: function(item) {
+	showTerms: function (item) {
 		var link = Service.getSupportLinks().termsOfService;
 
 		this.AccountActions.showTermsOfService(link);
 	},
 
-	contactUs: function() {
+	contactUs: function () {
 		this.AccountActions.showContactUs();
 	},
 
-	impersonate: function() {
+	impersonate: function () {
 		this.LoginActions.handleImpersonate();
 	},
 
-	logout: function() {
+	logout: function () {
 		this.LoginActions.handleLogout();
 	}
 });

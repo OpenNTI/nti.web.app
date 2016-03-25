@@ -10,12 +10,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.MultiPartSubmi
 		{
 			cls: 'footer',
 			cn: [{cls: 'left'},
-				{
-					cls: 'right',
-					cn: [
+			{
+				cls: 'right',
+				cn: [
 						{cls: 'action check disabled'}
 					]
-				}
+			}
 			]
 		}),
 
@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.MultiPartSubmi
 		checkItBtn: '.footer .right .check'
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.checkItBtn, {
 			scope: this,
@@ -37,15 +37,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.MultiPartSubmi
 		}
 	},
 
-	checkit: function() {
+	checkit: function () {
 		this.up('assessment-question').checkIt();
 	},
 
-	reset: function() {
+	reset: function () {
 		this.checkItBtn.removeCls('wrong').update(getString('NextThought.view.assessment.MultiPartSubmission.check'));
 	},
 
-	enableSubmission: function() {
+	enableSubmission: function () {
 		if (!this.rendered) {
 			this.enabled = true;
 			return;
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.MultiPartSubmi
 		this.checkItBtn.removeCls('disabled');
 	},
 
-	disableSubmission: function() {
+	disableSubmission: function () {
 		if (!this.rendered) {
 			delete this.enabled;
 			return;
@@ -61,12 +61,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.MultiPartSubmi
 		this.checkItBtn.addCls('disabled');
 	},
 
-	updateWithProgress: function(questionSubmission) {
+	updateWithProgress: function (questionSubmission) {
 		this.enableSubmission();
 		this.checkitBtn.removeCls('wrong').update(getString('NextThought.view.assessment.MultiPartSubmission.redo'));
 	},
 
-	updateWithResults: function(assessmentQuestion) {
+	updateWithResults: function (assessmentQuestion) {
 		this.enableSubmission();
 		this.checkItBtn.removeCls('wrong').update(getString('NextThought.view.assessment.MultiPartSubmission.redo'));
 		if (!assessmentQuestion.isCorrect()) {

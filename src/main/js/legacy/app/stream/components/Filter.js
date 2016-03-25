@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (isFeature('profile-activity-filters')) {
@@ -77,15 +77,15 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 	},
 
 
-	showFilters: function(groups){
+	showFilters: function (groups) {
 		var me = this;
-		(groups || []).forEach(function(group) {
+		(groups || []).forEach(function (group) {
 			me.addFilterGroup(group);
 		});
 	},
 
 
-	addFilterGroup: function(group){
+	addFilterGroup: function (group) {
 		var type = group.type,
 			tpl = this.GROUP_TYPES[type],
 			items = group.items,
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 
 		// Change the items to an array, if it's not.
 		if (group.items && !(group.items instanceof Array)) {
-			items = Object.keys(group.items).map(function(k){ return group.items[k]; });
+			items = Object.keys(group.items).map(function (k) { return group.items[k]; });
 		}
 
 		if (tpl) {
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 	},
 
 
-	setActiveFilters: function(filters) {
+	setActiveFilters: function (filters) {
 		if (!this.rendered) { return; }
 
 		var me = this, dom = this.el.dom;
@@ -118,9 +118,9 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 		//Update the filterGroup
 		this.filterGroups = filters || [];
 
-		this.filterGroups.forEach(function(group) {
+		this.filterGroups.forEach(function (group) {
 			var type = group.type,
-				g = dom.querySelector('[data-key='+type+']');
+				g = dom.querySelector('[data-key=' + type + ']');
 
 			if (group.setActiveItem) {
 				group.setActiveItem(g, group.activeItems);
@@ -132,15 +132,15 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 	},
 
 
-	__addModifierGroup: function(group){
+	__addModifierGroup: function (group) {
 		var items = group.items || [],
 			el = this.el, modifier, tpl, groupEl, me = this;
 
 		if (group.items && !(group.items instanceof Array)) {
-			items = Object.keys(group.items).map(function(k){return group.items[k]});
+			items = Object.keys(group.items).map(function (k) {return group.items[k];});
 		}
 
-		items.forEach(function(item){
+		items.forEach(function (item) {
 			modifier = item.modifier;
 
 			if (modifier) {
@@ -159,12 +159,12 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 	},
 
 
-	__updateItem: function(item, dom) {
+	__updateItem: function (item, dom) {
 		dom.classList[item.active ? 'add' : 'remove']('active');
 	},
 
 
-	__updateGroup: function(group, dom) {
+	__updateGroup: function (group, dom) {
 		var me = this,
 			activeItem = group && (group.activeItem || group.defaultItem),
 			item = group && group.items && group.items[activeItem],
@@ -184,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 	},
 
 
-	__updateModifier: function(item, group){
+	__updateModifier: function (item, group) {
 		var dom = this.el.dom,
 			current = dom.querySelector('[data-item=' + item.value + ']'),
 			prev = dom.querySelector('.active[data-item]'),
@@ -213,7 +213,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 	},
 
 
-	setOptions: function(options) {
+	setOptions: function (options) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setOptions.bind(this, options));
 			return;
@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 
 		var me = this;
 
-		options.forEach(function(option) {
+		options.forEach(function (option) {
 			var dom = me.el.dom.querySelector('[data-key="' + option.key + '"]');
 
 			if (dom) {
@@ -233,7 +233,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 	},
 
 
-	handleClick: function(e) {
+	handleClick: function (e) {
 		var group = e.getTarget('.group'),
 			item = e.getTarget('.group-item');
 
@@ -251,7 +251,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 	},
 
 
-	onTimeFilterClick: function(e) {
+	onTimeFilterClick: function (e) {
 		var target = e.target,
 			group = e.getTarget('.group'),
 			value = target.getAttribute('data-value'),

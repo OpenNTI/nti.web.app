@@ -12,7 +12,7 @@ var LoginStateStore = require('../../login/StateStore');
 module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.LibraryStore = NextThought.app.library.StateStore.getInstance();
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		}
 	},
 
-	onLogin: function() {
+	onLogin: function () {
 		if (this.LibraryStore.hasLoaded()) {
 			this.loadPurchasables();
 		} else {
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		}
 	},
 
-	loadPurchasables: function() {
+	loadPurchasables: function () {
 		var service = window.Service,
 			collection = service && service.getCollection('store', 'store'),
 			link = collection && service.getLinkFrom(collection.Links, 'get_purchasables'),
@@ -51,11 +51,11 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 			.then(store.setLoaded.bind(store));
 	},
 
-	__updateLibraryWithPurchasables: function(items) {
+	__updateLibraryWithPurchasables: function (items) {
 		var library = this.LibraryStore;
 
-		(items || []).forEach(function(p) {
-			(p.get('Items') || []).forEach(function(itemId) {
+		(items || []).forEach(function (p) {
+			(p.get('Items') || []).forEach(function (itemId) {
 				var title = library.getTitle(itemId);
 
 				if (title) {
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	 * @param {Object} desc
 	 * @param {Object} cardinfo to provide to stripe in exchange for a token
 	 */
-	createEnrollmentPurchase: function(sender, desc, cardinfo, success, failure) {
+	createEnrollmentPurchase: function (sender, desc, cardinfo, success, failure) {
 		var purchasable = desc.Purchasable || {},
 			connectInfo = purchasable.get('StripeConnectKey'),
 			pKey = connectInfo && connectInfo.get('PublicKey'),
@@ -94,17 +94,17 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 			return;
 		}
 
-		function onPriced(result) {
+		function onPriced (result) {
 			delete sender.lockPurchaseAction;
 			success.call(null, {pricing: result, tokenObject: tokenObject});
 		}
 
-		function onFail(reason) {
+		function onFail (reason) {
 			delete sender.lockPurchaseAction;
 			failure.call(null, reason);
 		}
 
-		function tokenResponseHandler(status, response) {
+		function tokenResponseHandler (status, response) {
 			if (status !== 200 || response.error) {
 				console.error('An error occurred during the token generation for purchasable', purchasable, response);
 				onFail(response.error);
@@ -148,10 +148,10 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	 * @param {Function} success The success callback called if the provided coupone is valid
 	 * @param {Function} failure The failure callback called if we are unable to validate the coupon for any reason
 	 */
-	priceEnrollmentPurchase: function(sender, desc, success, failure) {
+	priceEnrollmentPurchase: function (sender, desc, success, failure) {
 		desc = desc || {};
-		success = success || function() {};
-		failure = failure || function() {};
+		success = success || function () {};
+		failure = failure || function () {};
 
 		var purchasable = desc.Purchasable,
 			data = {},
@@ -183,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 
 		try {
 			this.doEnrollmentPricingRequest(pricingLink, data)
-				.then(function(result) {
+				.then(function (result) {
 					delete sender.lockPurchaseAction;
 
 					if (result) {
@@ -196,7 +196,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 						success.call(null, result);
 					}
 				})
-				.fail(function(reason) {
+				.fail(function (reason) {
 					console.error('Error processing price,', reason);
 
 					if (reason && reason.responseText) {
@@ -213,7 +213,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		}
 	},
 
-	doPricingRequest: function(url, data, callback) {
+	doPricingRequest: function (url, data, callback) {
 		Ext.Ajax.request({
 			url: url,
 			jsonData: data,
@@ -223,11 +223,11 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		});
 	},
 
-	doEnrollmentPricingRequest: function(url, data) {
+	doEnrollmentPricingRequest: function (url, data) {
 		return Service.post(url, data);
 	},
 
-	__attemptPurchase: function(purchaseDescription, tokenObject, expectedPrice, linkName) {
+	__attemptPurchase: function (purchaseDescription, tokenObject, expectedPrice, linkName) {
 		var purchasable = purchaseDescription.Purchasable,
 			tokenId = tokenObject.id,
 			url = purchasable && purchasable.getLink(linkName),
@@ -291,7 +291,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 				.then(this.__parsePurchaseAttempt.bind(this));
 	},
 
-	__parsePurchaseAttempt: function(response) {
+	__parsePurchaseAttempt: function (response) {
 		var result = Ext.JSON.decode(response, true);
 
 		if (result) {
@@ -307,21 +307,21 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 		return result;
 	},
 
-	__pollPurchaseAttempt: function(purchaseAttempt) {
+	__pollPurchaseAttempt: function (purchaseAttempt) {
 		var me = this,
 			startedPollingAt = (new Date()).getTime(),
 			maxWaitInMillis = 2 * 60 * 1000, //2 minutes
 			pollingIntervalInMillis = 5 * 1000; //5 seconds
 
-		function poll(attempt) {
+		function poll (attempt) {
 			var url = attempt.getLink('get_purchase_attempt');
 
 			return Service.request(url)
 					.then(me.__parsePurchaseAttempt.bind(me));
 		}
 
-		return new Promise(function(fulfill, reject) {
-			function process(delay, attempt) {
+		return new Promise(function (fulfill, reject) {
+			function process (delay, attempt) {
 				var now = (new Date()).getTime();
 
 				if (attempt && attempt.isComplete()) {
@@ -360,7 +360,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	 * @param {Function} success success callback
 	 * @param {Function} failure failure callback
 	 */
-	submitEnrollmentPurchase: function(sender, purchaseDescription, tokenObject, pricingInfo, success, failure) {
+	submitEnrollmentPurchase: function (sender, purchaseDescription, tokenObject, pricingInfo, success, failure) {
 		var me = this;
 
 		if (sender.lockPurchaseAction) {
@@ -373,13 +373,13 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 
 		sender.lockPurchaseAction = true;
 
-		function done() {
+		function done () {
 			delete sender.lockPurchaseAction;
 		}
 
 		me.__attemptPurchase(purchaseDescription, tokenObject, pricingInfo.get('PurchasePrice'), 'purchase')
 			.then(me.__pollPurchaseAttempt.bind(me))
-			.then(function(attempt) {
+			.then(function (attempt) {
 				done();
 
 				success.call(null, {
@@ -387,7 +387,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 					purchaseAttempt: attempt
 				});
 			})
-			.fail(function(attempt) {
+			.fail(function (attempt) {
 				done();
 
 				if (attempt && attempt.isPurchaseAttempt) {
@@ -414,7 +414,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	 * @param {Function} success success callback
 	 * @param {Function} failure failure callback
 	 */
-	submitGiftPurchase: function(sender, purchaseDescription, tokenObject, pricingInfo, success, failure) {
+	submitGiftPurchase: function (sender, purchaseDescription, tokenObject, pricingInfo, success, failure) {
 		var me = this;
 
 		if (sender.lockPurchaseAction) {
@@ -427,13 +427,13 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 
 		sender.lockPurchaseAction = true;
 
-		function done() {
+		function done () {
 			delete sender.lockPurchaseAction;
 		}
 
 		me.__attemptPurchase(purchaseDescription, tokenObject, pricingInfo.get('PurchasePrice'), 'gift_stripe_payment')
 			.then(me.__pollPurchaseAttempt.bind(me))
-			.then(function(attempt) {
+			.then(function (attempt) {
 				done();
 
 				success.call(null, {
@@ -441,7 +441,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 					purchaseAttempt: attempt
 				});
 			})
-			.fail(function(attempt) {
+			.fail(function (attempt) {
 				done();
 
 				if (attempt && attempt.isPurchaseAttempt) {
@@ -468,7 +468,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 	 * @param  {Function} success	success callback
 	 * @param  {Function} failure	failure callback
 	 */
-	redeemGift: function(sender, purchasable, token, allowVendorUpdates, ntiid, success, failure) {
+	redeemGift: function (sender, purchasable, token, allowVendorUpdates, ntiid, success, failure) {
 		var me = this,
 			url = purchasable && purchasable.getLink('redeem_gift');
 
@@ -486,7 +486,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 
 		sender.lockPurchaseAction = true;
 
-		function done() {
+		function done () {
 			delete sender.lockPurchaseAction;
 		}
 
@@ -495,13 +495,13 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 			AllowVendorUpdates: allowVendorUpdates,
 			NTIID: ntiid
 		})
-			.then(function(response) {
+			.then(function (response) {
 				var courseInstance = ParseUtils.parseItems(response)[0];
 
 				done();
 				success.call(null, courseInstance);
 			})
-			.fail(function(response) {
+			.fail(function (response) {
 				done();
 
 				var json = Ext.decode(response && response.responseText, true);

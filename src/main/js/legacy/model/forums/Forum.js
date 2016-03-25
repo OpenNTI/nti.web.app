@@ -14,10 +14,10 @@ module.exports = exports = Ext.define('NextThought.model.forums.Forum', {
 		{ name: 'DCTitle', type: 'string' },
 		{ name: 'description', type: 'string' },
 		{ name: 'title', type: 'string' },
-		{ name: 'displayTitle', type: 'Synthetic', persist: false, fn: function(r) {
+		{ name: 'displayTitle', type: 'Synthetic', persist: false, fn: function (r) {
 			var title = r.get('title');
 
-			r.HIDE_PREFIXS.every(function(pre) {
+			r.HIDE_PREFIXS.every(function (pre) {
 				if (title.indexOf(pre) === 0) {
 					title = title.replace(pre, '');
 					title = title.trim();
@@ -36,11 +36,11 @@ module.exports = exports = Ext.define('NextThought.model.forums.Forum', {
 		{ name: 'ACL', type: 'auto'}
 	],
 
-	buildContentsStore: function(idSuffix, cfg, extraParams) {
+	buildContentsStore: function (idSuffix, cfg, extraParams) {
 		var ntiid = this.get('NTIID'),
 			myConfig = {
 				stateKey: 'forum',
-				wantsItem: function(record) {
+				wantsItem: function (record) {
 					return record.get('ContainerId') === ntiid;
 				}
 			};
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Forum', {
 	},
 
 
-	getTitle: function() {
+	getTitle: function () {
 		return this.get('displayTitle');
 	}
 });

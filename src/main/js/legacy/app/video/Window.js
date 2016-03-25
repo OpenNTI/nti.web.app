@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.video.Window', {
 		]
 	 */
 
-	constructor: function(config) {
+	constructor: function (config) {
 		if (!config || !config.src || !Ext.isArray(config.src)) {
 			throw 'you must supply a src array';
 		}

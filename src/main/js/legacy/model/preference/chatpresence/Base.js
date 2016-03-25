@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.model.preference.chatpresence
 		{name: 'type', type: 'String'}
 	],
 
-	getResourceUrl: function() {
+	getResourceUrl: function () {
 		var base = this.callParent(arguments);
 
 		return base + '/ChatPresence';

@@ -8,11 +8,11 @@ module.exports = exports = Ext.define('NextThought.mixins.JSONValue', {
 		initialConfig: true
 	},
 
-	asJSON: function() {
+	asJSON: function () {
 		return this.getJSONObject(this);
 	},
 
-	getJSONObject: function(obj) {
+	getJSONObject: function (obj) {
 		var me = this,
 			m = this.ignoredKeyMap,
 			result = {};
@@ -20,11 +20,11 @@ module.exports = exports = Ext.define('NextThought.mixins.JSONValue', {
 		//if it's not an obj, return
 		if (!obj || typeof obj !== 'object') {return obj;}
 
-		Ext.Object.each(obj, function(k, v) {
+		Ext.Object.each(obj, function (k, v) {
 			if (!Ext.isFunction(v) && k.charAt(0) !== '_' && !m.hasOwnProperty(k)) {
 				if (Ext.isArray(v)) {
 					result[k] = [];
-					Ext.each(v, function(a) {
+					Ext.each(v, function (a) {
 						result[k].push(me.getJSONObject(a));
 					});
 				}

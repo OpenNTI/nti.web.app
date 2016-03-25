@@ -7,8 +7,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	extend: 'NextThought.common.components.cards.Card',
 	alias: 'widget.course-overview-ntigenericiframewindow',
 
-	constructor: function(config) {
-		var n = config.node || {getAttribute: function(a) { return config[a];} },
+	constructor: function (config) {
+		var n = config.node || {getAttribute: function (a) { return config[a];} },
 			ntiid = n.getAttribute('NTIID');
 
 
@@ -25,11 +25,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.callParent([config]);
 	},
 
-	shouldOpenInApp: function() {
+	shouldOpenInApp: function () {
 		return true;
 	},
 
-	navigateToTarget: function() {
+	navigateToTarget: function () {
 		var win,
 			dH = this.data.windowHeight,
 			dW = this.data.windowWidth,

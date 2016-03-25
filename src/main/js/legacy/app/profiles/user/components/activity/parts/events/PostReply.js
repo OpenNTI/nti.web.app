@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 	childEls: ['body', 'liked'],
 
-	onClassExtended: function(cls, data) {
+	onClassExtended: function (cls, data) {
 		data.renderSelectors = Ext.applyIf(data.renderSelectors || {},cls.superclass.renderSelectors);
 
 		var tpl = this.prototype.renderTpl;
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		var record = this.record;
 		this.callParent(arguments);
 		this.mon(record, 'destroy', 'destroy', this);
@@ -64,9 +64,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
-	getRecord: function() {return this.record;},
+	getRecord: function () {return this.record;},
 
-	afterRender: function() {
+	afterRender: function () {
 		var me = this, rd, r = me.record,
 			postRef = r.get('href').split('/').slice(0, -1).join('/'),
 			username = me.record.get('Creator');
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		rd.date = Ext.Date.format(r.get('CreatedTime'), 'F j, Y');
 		rd.thisthing = me.description;
 
-		function resolve(json) {
+		function resolve (json) {
 			var post = me.post = ParseUtils.parseItems(json)[0],
 				other = post.get('Creator'),
 				users = [username];
@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					.then(fillIn, failed);
 		}
 
-		function fillIn(users) {
+		function fillIn (users) {
 			var other = me.targetUser = users[1] || users[0];
 			rd.Creator = me.user = users[0];
 
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			me.redraw(rd);
 		}
 
-		function failed() {
+		function failed () {
 			me.destroy();
 			throw arguments;//let the error reporter tell us about this.
 		}
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 				.then(resolve, failed);
 	},
 
-	redraw: function(data) {
+	redraw: function (data) {
 		if (!this.el) {return;}
 		this.renderTpl.overwrite(this.el, data);
 		this.applyRenderSelectors();
@@ -126,14 +126,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.bodyUpdated();
 	},
 
-	bodyUpdated: function() {
+	bodyUpdated: function () {
 		var me = this, r = me.record;
 		if (me.rendered) {
-			r.compileBodyContent(function(html, cb) {
+			r.compileBodyContent(function (html, cb) {
 				me.el.down('.body').update(html);
 				Ext.destroy(me.knownBodyComponents);
 				if (Ext.isFunction(cb)) {
-					me.knownBodyComponents = cb(me.body, this).map(function(c) {
+					me.knownBodyComponents = cb(me.body, this).map(function (c) {
 						me.on('destroy', 'destroy', c);
 						return c;
 					});

@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.content.timeline.Window',
 	// 4:3
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var me = this,
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.content.timeline.Window',
 				{
 					xtype: 'box',
 					autoEl: {cls: 'close-btn', html: 'Close'},
-					afterRender: function() {
+					afterRender: function () {
 						this.mon(this.el, 'click', me.handleClose.bind(me));
 					}
 				}
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.content.timeline.Window',
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		createStoryJS({
@@ -68,13 +68,13 @@ module.exports = exports = Ext.define('NextThought.app.content.timeline.Window',
 		AnalyticsUtil.getResourceTimer(this.record.get('NTIID'), {type: 'resource-viewed'});
 	},
 
-	handleClose: function() {
+	handleClose: function () {
 		AnalyticsUtil.stopResourceTimer(this.record.get('NTIID'), 'resource-viewed');
 
 		this.doClose();
 	},
 
-	calcSize: function(desiredWidth, desiredHeight) {
+	calcSize: function (desiredWidth, desiredHeight) {
 		var maxHeight = Ext.Element.getViewportHeight() - 70 - 20, //account for the navigation header, and 10px padding
 			maxWidth = Ext.Element.getViewportWidth() - 20,//account for the 10px padding
 			size = [];
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.content.timeline.Window',
 		return size;
 	},
 
-	sizeToRatio: function(ratio, desiredWidth, maxWidth, maxHeight) {
+	sizeToRatio: function (ratio, desiredWidth, maxWidth, maxHeight) {
 		var width = Math.min(maxWidth, desiredWidth),
 			height = width / ratio;
 
@@ -116,6 +116,6 @@ module.exports = exports = Ext.define('NextThought.app.content.timeline.Window',
 
 		return [width, height];
 	}
-}, function() {
+}, function () {
 	NextThought.app.windows.StateStore.register(NextThought.model.Timeline.mimeType, this);
 });

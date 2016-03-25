@@ -20,13 +20,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.ModeledC
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.tabIndex = this.tabIndexTracker.getNext();
 		this.callParent(arguments);
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.editor = Ext.widget('nti-editor', {
 			ownerCt: this,
 			renderTo: this.inputField,
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.ModeledC
 
 		this.mon(this.editor, {
 			'enable-save': 'updateState',
-			'no-body-content': function(editor, el) {
+			'no-body-content': function (editor, el) {
 				editor.markError(el, getString('NextThought.view.assessment.input.ModeledContent.empty-editor'));
 				return false;
 			}
@@ -56,13 +56,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.ModeledC
 	 * @param  {Boolean} silent if we are setting the value, don't save the progress
 	 * @param  {Boolean} forceSubmissionCheck if we want to force checking submission status, thus skipping the early return
 	 */
-	updateState: function(enable, silent, forceSubmissionCheck) {
+	updateState: function (enable, silent, forceSubmissionCheck) {
 		//Prevent setting enabled/disabled repeatedly.
 		enable = enable || undefined;
 		if (this.submissionDisabled !== enable && !silent) {
 			this.saveProgress();
 
-			if(!forceSubmissionCheck){
+			if(!forceSubmissionCheck) {
 				return;
 			}
 		}
@@ -72,10 +72,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.ModeledC
 	},
 
 
-	canHaveAnswerHistory: function() { return false; },
+	canHaveAnswerHistory: function () { return false; },
 
 
-	getValue: function() {
+	getValue: function () {
 		var v = this.editor.getValue().body;
 
 		if (DomUtils.isEmpty(v)) {
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.ModeledC
 	},
 
 
-	setValue: function(o) {
+	setValue: function (o) {
 		if (o) {
 			if (!o.value) {
 				console.warn('We did not understand this:', arguments);
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.ModeledC
 	markCorrect: Ext.emptyFn,
 	markIncorrect: Ext.emptyFn,
 
-	markSubmitted: function() {
+	markSubmitted: function () {
 		this.editor.lock();
 		if (this.isAssignment) {
 			this.editor.el.down('.footer').hide();
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.ModeledC
 	},
 
 
-	reset: function() {
+	reset: function () {
 		this.editor.reset();
 		this.editor.unlock();
 		if (this.isAssignment) {

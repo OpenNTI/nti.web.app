@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		loadMoreEl: '.load-more'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		});
 	},
 
-	startResourceViewed: function() {
+	startResourceViewed: function () {
 		var id = this.activeEntity && this.activeEntity.getId();
 
 		if (id && !this.hasCurrentTimer) {
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		}
 	},
 
-	stopResourceViewed: function() {
+	stopResourceViewed: function () {
 		var id = this.activeEntity && this.activeEntity.getId();
 
 		if (id && this.hasCurrentTimer) {
@@ -79,13 +79,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		}
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.loadMoreEl, 'click', this.onLoadMore.bind(this));
 	},
 
-	updateEntity: function(entity) {
+	updateEntity: function (entity) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateEntity.bind(this));
 			return;
@@ -105,15 +105,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		this.startResourceViewed();
 	},
 
-	showMembership: function() {
+	showMembership: function () {
 		this.setTitle('Members');
 	},
 
-	loadPage: function(page) {
+	loadPage: function (page) {
 		var params = {
-				batchSize: this.PAGE_SIZE,
-				batchStart: (page - 1) * this.PAGE_SIZE
-			};
+			batchSize: this.PAGE_SIZE,
+			batchStart: (page - 1) * this.PAGE_SIZE
+		};
 
 		this.showLoading();
 		this.currentPage = page;
@@ -123,17 +123,17 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 			.fail(this.onBatchError.bind(this));
 	},
 
-	onLoadMore: function() {
+	onLoadMore: function () {
 		if (this.currentPage) {
 			this.loadPage(this.currentPage + 1);
 		}
 	},
 
-	onBatchError: function() {
+	onBatchError: function () {
 		this.showError();
 	},
 
-	onBatchLoad: function(batch) {
+	onBatchLoad: function (batch) {
 		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
 
 		this.removeLoading();
@@ -150,34 +150,34 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		}
 	},
 
-	showLoadMore: function() {
+	showLoadMore: function () {
 		this.loadMoreEl.removeCls('hidden');
 	},
 
-	hideLoadMore: function() {
+	hideLoadMore: function () {
 		this.loadMoreEl.addCls('hidden');
 	},
 
-	showLoading: function() {
+	showLoading: function () {
 		this.loadingEl.removeCls('hidden');
 	},
 
-	removeLoading: function() {
+	removeLoading: function () {
 		this.loadingEl.addCls('hidden');
 	},
 
-	showError: function() {
+	showError: function () {
 		this.errorEl.removeCls('hidden');
 	},
 
-	removeError: function() {
+	removeError: function () {
 		this.errorEl.addCls('hidden');
 	},
 
-	addMembers: function(members) {
+	addMembers: function (members) {
 		members = members || [];
 
-		members.map(function(member) {
+		members.map(function (member) {
 			return {
 				route: member.getURLPart(),
 				name: member.getName(),

@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 	layout: 'none',
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.prompt = this.add({
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 		this.fireEvent('setup-complete');
 	},
 
-	onCovered: function() {
+	onCovered: function () {
 		this.addCls('covered');
 
 		if (this.bodyCmp && this.bodyCmp.onCovered) {
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 		}
 	},
 
-	onUncovered: function() {
+	onUncovered: function () {
 		this.removeCls('covered');
 
 		if (this.bodyCmp && this.bodyCmp.onUncovered) {
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 		}
 	},
 
-	getBodyConfig: function() {
+	getBodyConfig: function () {
 		return {
 			Prompt: {
 				data: this.data,
@@ -90,23 +90,23 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 
 	},
 
-	doBack: function() {
+	doBack: function () {
 		if (this.bodyCmp.onBack) {
 			this.bodyCmp.onBack();
 		}
 	},
 
-	onSaveSuccess: function(value) {
+	onSaveSuccess: function (value) {
 		if (this.onSubmit) {
 			this.onSubmit(value);
 		}
 	},
 
-	onSaveFailure: function(reason) {
+	onSaveFailure: function (reason) {
 		this.bodyCmp.onSaveFailure(reason);
 	},
 
-	__validate: function() {
+	__validate: function () {
 		if (this.bodyCmp.doValidation) {
 			return this.bodyCmp.doValidation();
 		}
@@ -114,7 +114,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 		return Promise.resolve();
 	},
 
-	__save: function() {
+	__save: function () {
 		if (this.bodyCmp.onSave) {
 			this.bodyCmp.onSave()
 				.then(this.onSaveSuccess.bind(this))
@@ -122,12 +122,12 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 		}
 	},
 
-	doSave: function() {
+	doSave: function () {
 		this.__validate()
 			.then(this.__save.bind(this));
 	},
 
-	allowCancel: function() {
+	allowCancel: function () {
 		if (this.bodyCmp.allowCancel) {
 			return this.bodyCmp.allowCancel();
 		}
@@ -135,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 		return Promise.resolve();
 	},
 
-	doCancel: function(action) {
+	doCancel: function (action) {
 		this.onCancel(action);
 	}
 });

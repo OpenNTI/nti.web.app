@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Window', {
 		{xtype: 'coppa-main-view'}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var view = this.down('coppa-main-view');

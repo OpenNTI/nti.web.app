@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.Window', {
 	layout: 'none',
 	cls: 'badge-window',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.add({xtype: 'window-header', doClose: this.doClose.bind(this)});
@@ -30,22 +30,22 @@ module.exports = exports = Ext.define('NextThought.app.badge.Window', {
 		this.add({xtype: 'badge-window-footer', doClose: this.doClose.bind(this), onExport: this.exportBadgeClicked.bind(this)});
 	},
 
-	exportBadgeClicked: function(e){
+	exportBadgeClicked: function (e) {
 		var target = e && e.getTarget();
 		this.showExportMenu(this.record, Ext.get(target));
 	}
-}, function() {
+}, function () {
 	NextThought.app.windows.StateStore.register(NextThought.model.openbadges.Badge.mimeType, this);
-	NextThought.app.windows.StateStore.registerCustomResolver(NextThought.model.openbadges.Badge.mimeType, function(id, raw) {
+	NextThought.app.windows.StateStore.registerCustomResolver(NextThought.model.openbadges.Badge.mimeType, function (id, raw) {
 		var workspace = Service.getWorkspace('Badges'),
 			earnedLink = getBadgesLink(workspace.Items, 'EarnedBadges'),
 			link = Service.getLinkFrom(workspace.Links, 'OpenBadges'),
 			targetLink;
 
-		function getBadgesLink(items, type) {
+		function getBadgesLink (items, type) {
 			var i, item, href;
 			items = items || []; 
-			for (i=0; i < items.length && !link; i++){
+			for (i = 0; i < items.length && !link; i++) {
 				item = items[i];
 				if (type === item.Title) {
 					href = item.href;
@@ -67,11 +67,11 @@ module.exports = exports = Ext.define('NextThought.app.badge.Window', {
 		// FIXME: This will fail if the badge hasn't been earned yet.
 		if (earnedLink) {
 			return Service.request(earnedLink)
-				.then(function(collection){
+				.then(function (collection) {
 					var badge, record,
 						badges = JSON.parse(collection).Items;
 
-					for (i=0; i < badges.length; i++){
+					for (i = 0; i < badges.length; i++) {
 						badge = badges[i];
 						if (badge.href === targetLink) {
 							record = badge;
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.Window', {
 		}
 
 		return Service.request('/' + Globals.trimRoute(link) + '/' + raw)
-			.then(function(badge) {
+			.then(function (badge) {
 				return ParseUtils.parseItems(badge)[0];
 			});
 	});

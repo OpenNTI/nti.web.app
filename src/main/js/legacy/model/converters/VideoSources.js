@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.VideoSources
 		type: 'VideoSource',
 		sortType: null,
 
-		convert: function(v) {
+		convert: function (v) {
 			var i = v.length - 1, x,
 				o, sources, types,
 				newSource = [];
@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.VideoSources
 	VIDEOPOSTER: {
 		type: 'VideoPoster',
 		sortType: null,
-		convert: function(v, r, source) {
+		convert: function (v, r, source) {
 			var name = this.mapping || this.name, len, x, s,
 				raw = r && r.raw,
 				resolver = NextThought.model.resolvers.VideoPosters;
@@ -80,10 +80,10 @@ module.exports = exports = Ext.define('NextThought.model.converters.VideoSources
 				v = Ext.BLANK_IMAGE_URL;//stop iteration on caller and let the async resolver replace this value as soon as it resolves.
 
 				resolver.resolveForSource(source)
-						.then(function(data) {
+						.then(function (data) {
 							r.set(name, data[name]);
 							if (name === 'poster') {
-								wait(1).then(function() {
+								wait(1).then(function () {
 									r.fireEvent('resolved-poster', r);
 								});
 							}
@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.VideoSources
 			return v;
 		}
 	}
-},function() {
+},function () {
 	this.VIDEOSOURCES.sortType = Ext.data.SortTypes.none;
 	this.VIDEOPOSTER.sortType = Ext.data.SortTypes.none;
 });

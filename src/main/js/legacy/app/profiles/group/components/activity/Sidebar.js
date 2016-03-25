@@ -17,13 +17,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		{xtype: 'profile-suggested-contacts'}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.membershipCmp = this.down('profile-group-membership-condensed');
 		this.suggestedCmp = this.down('profile-suggested-contacts');
 	},
 
-	userChanged: function(entity) {
+	userChanged: function (entity) {
 		var me = this;
 		return Promise.all([
 			me.membershipCmp.setUser(entity),

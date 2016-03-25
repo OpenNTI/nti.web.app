@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		deferredRender: true
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		//Declare this here so its scope to the instance
@@ -31,21 +31,21 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		});
 	},
 
-	onBack: function() {
+	onBack: function () {
 		this.pushRootRoute('', '/');
 	},
 
-	onContentChange: function(title, route) {
+	onContentChange: function (title, route) {
 		this.pushRootRoute('', route);
 	},
 
-	onTabChange: function(title, route) {
+	onTabChange: function (title, route) {
 		this.pushRoute('', route);
 	},
 
-	onQuickLinkNav: function(tilte, route) {},
+	onQuickLinkNav: function (tilte, route) {},
 
-	getRouteTitle: function() {
+	getRouteTitle: function () {
 		if (!this.activeBundle) { return ''; }
 
 		var data = this.activeBundle.asUIData();
@@ -53,23 +53,23 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		return data.title;
 	},
 
-	getContext: function() {
+	getContext: function () {
 		return this.activeBundle;
 	},
 
-	onBeforeDeactivate: function() {
+	onBeforeDeactivate: function () {
 		var current = this.getLayout().getActiveItem();
 
 		return current.fireEvent('beforedeactivate');
 	},
 
-	onDeactivate: function() {
+	onDeactivate: function () {
 		var current = this.getLayout().getActiveItem();
 
 		return current.fireEvent('deactivate');
 	},
 
-	getNavigation: function() {
+	getNavigation: function () {
 		if (!this.navigation || this.navigation.isDestroyed) {
 			this.navigation = NextThought.app.content.components.Navigation.create({
 				bodyView: this
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		return this.navigation;
 	},
 
-	getItem: function(xtype) {
+	getItem: function (xtype) {
 		var cmp = this.cmp_map[xtype];
 
 		if (!cmp) {
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		return cmp;
 	},
 
-	setItemBundle: function(xtypes, bundle) {
+	setItemBundle: function (xtypes, bundle) {
 		if (!Ext.isArray(xtypes)) {
 			xtypes = [xtypes];
 		}
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		var me = this,
 			activeBundle = this.activeBundle;
 
-		xtypes = xtypes.map(function(xtype) {
+		xtypes = xtypes.map(function (xtype) {
 			var item = me.getItem(xtype);
 
 			return item.bundleChanged && item.bundleChanged(bundle);
@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		return Promise.all(xtypes);
 	},
 
-	setActiveItem: function(xtype) {
+	setActiveItem: function (xtype) {
 		var layout = this.getLayout(),
 			item = this.getItem(xtype),
 			current = layout.getActiveItem();
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		this.getLayout().setActiveItem(item);
 	},
 
-	setShadowRoot: function(xtype, root) {
+	setShadowRoot: function (xtype, root) {
 		this.SHADOW_ROOTS = this.SHADOW_ROOTS || {};
 
 		this.SHADOW_ROOTS[xtype] = root;
@@ -133,13 +133,13 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		this.applyState(this.activeState);
 	},
 
-	getRoot: function(xtype) {
+	getRoot: function (xtype) {
 		var shadow = this.SHADOW_ROOTS && this.SHADOW_ROOTS[xtype];
 
 		return shadow || '';
 	},
 
-	__loadBundle: function() {
+	__loadBundle: function () {
 		var bundle = this.activeBundle;
 
 		this.NavigationActions.updateNavBar({
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 	 * @param  {Array} inactive xtypes of the other views to set the active course on, but not wait
 	 * @return {Promise}		 fulfills when the tab is set up
 	 */
-	setActiveView: function(active, inactive, tab) {
+	setActiveView: function (active, inactive, tab) {
 		var me = this;
 
 		me.__loadBundle();
@@ -168,24 +168,24 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 
 		me.applyState(me.activeState);
 
-		function updateInactive() {
+		function updateInactive () {
 			wait().then(me.setItemBundle.bind(me, inactive, me.activeBundle));
 		}
 
 		return me.setItemBundle(active, me.activeBundle)
 				.then(me.setActiveItem.bind(me, active))
-				.then(function() {
+				.then(function () {
 					var item = me.getItem(active);
 
 					updateInactive();
 					return item;
 				})
-				.fail(function(reason) {
+				.fail(function (reason) {
 					me.replaceRoute('Info', 'info');
 				});
 	},
 
-	getRouteForPageInfo: function(pageInfo, path) {
+	getRouteForPageInfo: function (pageInfo, path) {
 		var id = pageInfo.getId();
 
 		id = ParseUtils.encodeForURI(id);
@@ -197,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 		};
 	},
 
-	getRouteForForum: function(forum, path) {
+	getRouteForForum: function (forum, path) {
 		var forumId = forum.getId(),
 			topic = path.shift(),
 			comment = path.shift();

@@ -3,7 +3,7 @@ var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 
-	showExportMenu: function(record, itemEl) {
+	showExportMenu: function (record, itemEl) {
 		var me = this;
 		if (!this.exportMenu) {
 			this.exportMenu = Ext.widget('menu', {
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 	},
 
 
-	downloadItemClicked: function(record, targetEl, menuItem, e) {
+	downloadItemClicked: function (record, targetEl, menuItem, e) {
 		if (record.get('Locked')) {
 			this.downloadBadge(record, targetEl);			
 		}
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 	},
 
 
-	exportItemClicked: function(record, targetEl, menuItem, e) {
+	exportItemClicked: function (record, targetEl, menuItem, e) {
 		if (record.get('Locked')) {
 			this.exportToBackPack(record, targetEl);
 		}
@@ -65,41 +65,41 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 	},
 
 
-	downloadBadge: function(record, targetEl) {
+	downloadBadge: function (record, targetEl) {
 		var me = this;
 		return record.lockBadge()
-				.then(function() {
+				.then(function () {
 					me.triggerFileDownload(record);
 				})
-				.fail(function() {
+				.fail(function () {
 					console.warn('Failed to lock badge...', arguments);
 					me.askForEmailVerification('downloadBadge', record, targetEl);
 				});
 	},
 
 
-	exportToBackPack: function(record, targetEl) {
+	exportToBackPack: function (record, targetEl) {
 		var me = this;
 
 		return record.lockBadge()
-				.then(function() {
+				.then(function () {
 					return record.pushToMozillaBackpack()
-						.then(function(successes) {
+						.then(function (successes) {
 							console.log('Congratulations, your badge was sent to backpack: ' + successes);
 						})
-						.fail(function(errors) {
-							Ext.each(errors, function(err) {
+						.fail(function (errors) {
+							Ext.each(errors, function (err) {
 								console.warn('Failed Assertion: ' + err.assertion + ' Reason: ' + err.reason);
 							});
 						});
 				})
-				.fail(function() {
+				.fail(function () {
 					me.askForEmailVerification('exportToBackPack', record, targetEl);
 				});
 	},
 
 
-	askForEmailVerification: function(nextActionName, record, targetEl) {
+	askForEmailVerification: function (nextActionName, record, targetEl) {
 		if ($AppConfig.userObject.isEmailVerified()) { return; }
 
 		var action;
@@ -110,12 +110,12 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 		action = this.possibleExportActions[nextActionName] || {};
 
 		this.emailVerificationPrompt = this.PromptActions.prompt('badge-exporting', {
-				user: $AppConfig.userObject,
-				badge: record,
-				title: 'Email Verification',
-				subTitle: 'Verifying your email allows you to export your completion badge',
-				saveText: action.buttonTitle
-			}).then(function(rec){
+			user: $AppConfig.userObject,
+			badge: record,
+			title: 'Email Verification',
+			subTitle: 'Verifying your email allows you to export your completion badge',
+			saveText: action.buttonTitle
+		}).then(function (rec) {
 				if (action && action.onSubmit) {
 					action.onSubmit();
 				}
@@ -123,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 	},
 
 
-	askForEmailLock: function(nextActionName, record, targetEl) {
+	askForEmailLock: function (nextActionName, record, targetEl) {
 		if (record.get('Locked')) { return; }
 
 		var u = $AppConfig.userObject,
@@ -138,13 +138,13 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 		action = this.possibleExportActions['lock_' + nextActionName] || {};
 
 		this.emailVerificationPrompt = this.PromptActions.prompt('badge-exporting', {
-				user: u,
-				badge: record,
-				title: getString('NextThought.mixins.ExportBadge.LockEmail.Title'),
-				subTitle: getString('NextThought.mixins.ExportBadge.LockEmail.SubTitle'),
-				saveText: action.buttonTitle
-			})
-			.then(function(){
+			user: u,
+			badge: record,
+			title: getString('NextThought.mixins.ExportBadge.LockEmail.Title'),
+			subTitle: getString('NextThought.mixins.ExportBadge.LockEmail.SubTitle'),
+			saveText: action.buttonTitle
+		})
+			.then(function () {
 				if (action && action.onSubmit) {
 					action.onSubmit();
 				}
@@ -152,7 +152,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 	},
 
 
-	triggerFileDownload: function(record) {
+	triggerFileDownload: function (record) {
 		var el = new Ext.XTemplate(Ext.DomHelper.markup([
 				{ tag: 'a', href: '{href}', html: 'Download Badge'}
 			])),
@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 	},
 
 
-	presentError: function(title, message) {
+	presentError: function (title, message) {
 		Ext.MessageBox.alert({
 			msg: message,
 			buttons: Ext.MessageBox.OK,
@@ -190,12 +190,12 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 	},
 
 
-	buildDownloadAction: function(record) {
+	buildDownloadAction: function (record) {
 		var me = this,
 			action = {
 				name: 'downloadBadge',
 				buttonTitle: 'Verify and Download',
-				onSubmit: function() {
+				onSubmit: function () {
 					return me.downloadBadge(record);
 				}
 			};
@@ -204,12 +204,12 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 	},
 
 
-	buildMozillaBackpackAction: function(record) {
+	buildMozillaBackpackAction: function (record) {
 		var me = this,
 			action = {
 				name: 'exportToBackPack',
 				buttonTitle: 'Verify and Export',
-				onSubmit: function() {
+				onSubmit: function () {
 					return me.exportToBackPack(record);
 				}
 			};
@@ -218,12 +218,12 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 	},
 
 
-	buildLockDownloadAction: function(record) {
+	buildLockDownloadAction: function (record) {
 		var me = this,
 			action = {
 				name: 'lock_downloadBadge',
 				buttonTitle: 'Lock and Download',
-				onSubmit: function() {
+				onSubmit: function () {
 					return me.downloadBadge(record);
 				}
 			};
@@ -231,12 +231,12 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 	},
 
 
-	buildLockMozillaBackpackAction: function(record) {
+	buildLockMozillaBackpackAction: function (record) {
 		var me = this,
 			action = {
 				name: 'lock_exportToBackPack',
 				buttonTitle: 'Lock and Export',
-				onSubmit: function() {
+				onSubmit: function () {
 					return me.exportToBackPack(record);
 				}
 			};
@@ -245,7 +245,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 	},
 
 
-	addAllExportActions: function(record) {
+	addAllExportActions: function (record) {
 		this.possibleExportActions = {};
 		this.buildDownloadAction(record);
 		this.buildMozillaBackpackAction(record);

@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		titleEl: '.title'
 	},
 
-	onClassExtended: function(cls, data) {
+	onClassExtended: function (cls, data) {
 		data.toolbarTpl = data.toolbarTpl || cls.superclass.toolbarTpl || false;
 
 		var tpl = this.prototype.renderTpl.replace('{toolbar}', data.toolbarTpl || '');
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.enableEditControls) {
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	addEditControls: function() {
+	addEditControls: function () {
 		var container = this.el.down('.edit-container');
 
 		this.editCmp = Ext.widget('overview-editing-controls-edit', {
@@ -98,13 +98,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.on('destroy', this.editCmp.destroy.bind(this.editCmp));
 	},
 
-	updateTitle: function() {
+	updateTitle: function () {
 		if (this.titleEl) {
 			this.titleEl.update(this.record.getTitle());
 		}
 	},
 
-	addPublishControls: function() {
+	addPublishControls: function () {
 		var container = this.el.down('.publish-container');
 
 		this.publishCmp = Ext.widget('overview-editing-controls-publish', {
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.on('destroy', this.publishCmp.destroy.bind(this.publishCmp));
 	},
 
-	addCalendarControls: function() {
+	addCalendarControls: function () {
 		var container = this.el.down('.calendar-container');
 
 		if (container) {
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onDelete: function() {
+	onDelete: function () {
 		if (this.afterDelete) {
 			this.afterDelete();
 		}

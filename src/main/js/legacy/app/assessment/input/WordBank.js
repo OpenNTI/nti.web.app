@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		Ext.apply(this.renderData, {
 			lineWithBlank: this.buildContent(this.filterHTML(this.part.get('input')))
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 	},
 
 
-	getContentElement: function() {
+	getContentElement: function () {
 		var ct = this.callParent(arguments);
 		if (!ct.classList.contains('naqfillintheblankwithwordbankpart')) {
 			Ext.Error.raise('Part Ordinal Mismatch');
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		var blanks,
 			wordbank = this.part.get('wordbank');
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 	},
 
 
-	setupBlank: function(input) {
+	setupBlank: function (input) {
 		var ctEl = this.contentElement,
 			tpl = this.blankTpl,
 			data = Ext.apply({ inputName: input.getAttribute('name') }, input.dataset);
@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 	},
 
 
-	getDragProxy: function() {
+	getDragProxy: function () {
 		var proxy = this.dragProxy;
 
 		if (!proxy) {
@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 	},
 
 
-	setupDragZone: function() {
+	setupDragZone: function () {
 		var cfg, me = this;
 
 		cfg = {
@@ -134,17 +134,17 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 			proxy: this.getDragProxy(),
 
 
-			getRepairXY: function() { return this.dragData.repairXY; },
+			getRepairXY: function () { return this.dragData.repairXY; },
 
 
-			afterRepair: function(e) {
+			afterRepair: function (e) {
 				var d = this.dragData;
 				d.repairToEl.appendChild(d.repairEl);
 				this.dragging = false;
 			}, //override to stop the flash
 
 
-			getDragData: function(e) {
+			getDragData: function (e) {
 				var sourceEl, redrag = e.getTarget('.drag', 10), d;
 				if (redrag && !e.getTarget('.reset') && !e.getTarget('.graded')) {
 					sourceEl = me.getWordBankItem(redrag.dataset.wid);
@@ -167,14 +167,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 			},
 
 
-			onBeforeDrag: function(dragConfig, e) {
+			onBeforeDrag: function (dragConfig, e) {
 				var inputBox = !!e.getTarget('.inputbox');
 
 				return inputBox && !me.submitted;
 			},
 
 
-			onStartDrag: function() {
+			onStartDrag: function () {
 				var data = this.dragData,
 					co = Ext.fly(data.sourceEl).up('.component-overlay'),
 					so = data.sourceEl,
@@ -196,7 +196,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 			},
 
 
-			onEndDrag: function(data) {
+			onEndDrag: function (data) {
 				if (data.shield) {
 					data.shield.remove();
 					delete data.shield;
@@ -211,9 +211,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 	},
 
 
-	setupDropZones: function(dropzones) {
+	setupDropZones: function (dropzones) {
 
-		function isValid(data) {
+		function isValid (data) {
 			return data.question === me.question.getId() &&
 				   (!data.part || me.ordinal.toFixed(0) === data.part);
 		}
@@ -223,19 +223,19 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 				//<editor-fold desc="Boilerplate">
 				// If the mouse is over a target node, return that node. This is provided as the "target" parameter in all "onNodeXXXX" node event
 				// handling functions
-				getTargetFromEvent: function(e) {
+				getTargetFromEvent: function (e) {
 					return e.getTarget('.blank.target');
 					//return (n && n.childNodes.length > 0) ? null : n;
 				},
 
 				// On entry into a target node, highlight that node.
-				onNodeEnter: function(target, dd, e, data) { Ext.fly(target).addCls('drop-hover'); },
+				onNodeEnter: function (target, dd, e, data) { Ext.fly(target).addCls('drop-hover'); },
 
 				// On exit from a target node, unhighlight that node.
-				onNodeOut: function(target, dd, e, data) { Ext.fly(target).removeCls('drop-hover'); },
+				onNodeOut: function (target, dd, e, data) { Ext.fly(target).removeCls('drop-hover'); },
 
 				// While over a target node, return the default drop allowed
-				onNodeOver: function(target, dd, e, data) {
+				onNodeOver: function (target, dd, e, data) {
 					var p = Ext.dd.DropZone.prototype;
 					if (!isValid(data)) {
 						return p.dropNotAllowed;
@@ -246,7 +246,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 				//</editor-fzold>
 			},
 			dropOnAnswer = {
-				onNodeDrop: function(target, dd, e, data) {
+				onNodeDrop: function (target, dd, e, data) {
 					if (!isValid(data)) {return false;}
 
 					try {
@@ -260,7 +260,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 				}
 			};
 
-		this.dropZones = dropzones.map(function(zone) {
+		this.dropZones = dropzones.map(function (zone) {
 			return new Ext.dd.DropZone(zone, Ext.apply({}, dropOnAnswer, common));
 		});
 
@@ -271,20 +271,20 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 	},
 
 
-	onScroll: function() {
+	onScroll: function () {
 		var zones = this.dropZones || [];
 		this.el.select('.drop-hover').removeCls('drop-hover');
-		zones.forEach(function(z) {z.triggerCacheRefresh();});
+		zones.forEach(function (z) {z.triggerCacheRefresh();});
 	},
 
 
-	setFieldValue: function(dragSource, dropTarget) {
+	setFieldValue: function (dragSource, dropTarget) {
 		var el = dragSource && dragSource.cloneNode(true),
 			dom = el, me = this,
 			input = dropTarget && dropTarget.previousSibling,
 			replace;
 
-		function reset() {
+		function reset () {
 			input.value = '';
 			dropTarget.removeChild(dom);
 			Ext.fly(dragSource).removeCls('used');
@@ -308,7 +308,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 		}
 
 		el = Ext.get(dom);
-		Array.prototype.slice.call(dom.childNodes).forEach(function(d) {
+		Array.prototype.slice.call(dom.childNodes).forEach(function (d) {
 			if (!Ext.fly(d).is('.reset')) {
 				dom.removeChild(d);
 			}
@@ -336,7 +336,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 	},
 
 
-	checkSubmissionState: function() {
+	checkSubmissionState: function () {
 		if (this.submitted) {return;}
 
 		var k, v = this.getValue(),
@@ -359,7 +359,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 	},
 
 
-	hasValue: function() {
+	hasValue: function () {
 		var k, v = this.getValue();
 
 		for (k in v) {
@@ -372,10 +372,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 	},
 
 
-	getValue: function() {
+	getValue: function () {
 		var value = {};
 
-		(this.blankInputs || []).forEach(function(input) {
+		(this.blankInputs || []).forEach(function (input) {
 			var name = input.getAttribute('name');
 			value[name] = input.value || null;
 		});
@@ -384,7 +384,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 	},
 
 
-	setValue: function(value) {
+	setValue: function (value) {
 		var inputName, wordId, dropTarget, dragSource;
 
 		if (value) {
@@ -401,10 +401,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 	},
 
 
-	getWordBankItem: function(wid) {
+	getWordBankItem: function (wid) {
 		var shared = this.up('assessment-question').contentComponents,
 			wordBank = this.wordbank,
-			sharedWordBank = shared.filter(function(i) {return i.is('assessment-components-wordbank');})[0],
+			sharedWordBank = shared.filter(function (i) {return i.is('assessment-components-wordbank');})[0],
 			item;
 
 		if (wordBank) {
@@ -419,31 +419,31 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 	},
 
 
-	markCorrect: function() { this.markGraded(); this.callParent(arguments); },
+	markCorrect: function () { this.markGraded(); this.callParent(arguments); },
 
 
-	markIncorrect: function() { this.markGraded(); this.callParent(arguments); },
+	markIncorrect: function () { this.markGraded(); this.callParent(arguments); },
 
 
-	markGraded: function(yes) {
+	markGraded: function (yes) {
 		var action = yes !== false ? 'addCls' : 'removeCls';
 		this.el[action]('graded');
 		this.el.select('span.blank')[action]('graded');
 	},
 
 
-	reset: function() {
+	reset: function () {
 		this.callParent(arguments);
 		this.markGraded(false);
-		this.el.query('.dropzone .wordentry').forEach(function(pill) {
+		this.el.query('.dropzone .wordentry').forEach(function (pill) {
 			pill = Ext.getDom(pill);
 			pill.resetDD();
 		});
 	},
 
 
-	getSolutionContent: function(part) {
-		function re(original, attrs) {
+	getSolutionContent: function (part) {
+		function re (original, attrs) {
 			attrs = (attrs || '').trim().split(/\s/);
 
 			if (/type=(\"|\')?blankfield/i.test(attrs)) {
@@ -464,10 +464,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.WordBank
 							me.part.get('input')
 									.replace(/<input([^>]+?)\/?>/igm, re)));
 
-		Ext.each(part.get('solutions'), function(s) {
+		Ext.each(part.get('solutions'), function (s) {
 			var x = s.get('value');
 			// x may or may not be an Array.  Ext.each handles that for us.
-			Ext.each(x, function(s) {
+			Ext.each(x, function (s) {
 				var k, w, v = {};
 				for (k in s) {
 					if (s.hasOwnProperty(k)) {

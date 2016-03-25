@@ -18,14 +18,14 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		},
 
 
-		getWeight: function(record) {
+		getWeight: function (record) {
 			var time = NextThought.app.course.dashboard.components.widgets.Base.getTimeWeight(record.get('Last Modified'));
 
 			return this.__BASE_WEIGHT + time;
 		},
 
 
-		getTiles: function(course, startDate, endDate) {
+		getTiles: function (course, startDate, endDate) {
 			return Promise.resolve([]);
 
 			//var section = course.getMySectionAnnouncements(),

@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.filter.Filter', {
 		OPERATION_EXCLUDE: 2
 	},
 
-	constructor: function(fieldName, operation, value) {
+	constructor: function (fieldName, operation, value) {
 		this.fieldName = fieldName;
 		this.value = value;
 		this.operation = this.clamp([this.self.OPERATION_EXCLUDE, this.self.OPERATION_INCLUDE], operation);
@@ -19,15 +19,15 @@ module.exports = exports = Ext.define('NextThought.filter.Filter', {
 	 * Limit value to the list, if the value isn't in the list, use the first option in the list.
 	 * @protected
 	 */
-	clamp: function(options,value) {
+	clamp: function (options,value) {
 		var i = options.length - 1;
 		for (i; i >= 0; i--) { if (options[i] === value) { return value; } }
 		return options[0];
 	},
 
-	flatten: function() { return [this]; },
+	flatten: function () { return [this]; },
 
-	toString: function() {
+	toString: function () {
 		return Ext.String.format('{"{0}":"{1}", "operation": "{2}"}',
 				this.fieldName, this.value,
 				this.operation === this.self.OPERATION_EXCLUDE
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.filter.Filter', {
 							: 'unknown');
 	},
 
-	equals: function(o) {
+	equals: function (o) {
 		if (!o) {
 			return false;
 		}
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.filter.Filter', {
 			);
 	},
 
-	test: function(obj) {
+	test: function (obj) {
 		var f = this.fieldName,
 			v = this.value,
 			o = this.operation,
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.filter.Filter', {
 	},
 
 
-	compareValue: function(value, testedValue) {
+	compareValue: function (value, testedValue) {
 		var result = false;
 		result = Boolean(value === testedValue);
 		if (!result && testedValue.getId) {

@@ -30,28 +30,28 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		]
 	})),
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.seeAllEl, 'click', this.onSeeAll.bind(this));
 	},
 	
-	setUser: function(user, isMe){
+	setUser: function (user, isMe) {
 		this.creator = user.get('Creator');
 		this.callParent(arguments);
 	},
 
-	setFriends: function(friends) {
+	setFriends: function (friends) {
 		var me = this,
 			friends = friends.slice();
 
-		if(this.creator){
+		if(this.creator) {
 			friends.unshift(this.creator);
 		}
 
 		this.totalCount = friends.length;
 		
-		if(this.totalCount <= this.limit){
+		if(this.totalCount <= this.limit) {
 			this.seeAllEl.hide();
 		}
 		
@@ -62,17 +62,17 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		return this.callParent([friends]);
 	},
 	
-	configForUser: function(member){
+	configForUser: function (member) {
 		var config = this.callParent(arguments),
 			classes = ['entry'];
-		if(member.get('Username') === this.creator){
+		if(member.get('Username') === this.creator) {
 			classes.push('admin');
 		}
 		config.classes = classes.join(' ');
 		return config;
 	},
 	
-	onSeeAll: function() {
+	onSeeAll: function () {
 		this.gotoSeeAll();
 	}
 });

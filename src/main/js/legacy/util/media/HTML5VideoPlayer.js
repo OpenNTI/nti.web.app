@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.util.media.HTML5VideoPlayer',
 	statics: {
 		kind: 'video',
 		type: 'html5',
-		valid: function() {
+		valid: function () {
 			return !!document.createElement('video').canPlayType;
 		}
 	},

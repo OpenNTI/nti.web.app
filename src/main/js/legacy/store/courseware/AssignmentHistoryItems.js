@@ -6,7 +6,7 @@ var CoursewareGradeBookSummaries = require('./GradeBookSummaries');
 module.exports = exports = Ext.define('NextThought.store.courseware.AssignmentHistoryItems', {
 	extend: 'NextThought.store.courseware.GradeBookSummaries',
 
-	getAssignment: function() {
+	getAssignment: function () {
 		return this.assignment;
 	}
 });

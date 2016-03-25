@@ -8,18 +8,18 @@ module.exports = exports = Ext.define('NextThought.app.stream.List', {
 	alias: 'widget.stream-list',
 	cls: 'list-stream',
 
-	getPageConfig: function(items) {
+	getPageConfig: function (items) {
 		return {
 			xtype: 'stream-list-page',
 			records: items
 		};
 	},
 
-	getPageCount: function() {
+	getPageCount: function () {
 		return this.PAGES.length;
 	},
 
-	fillInItems: function(items) {
+	fillInItems: function (items) {
 		var config = this.getPageConfig(items);
 
 		// NOTE: Insert instead of add make sure the join-event is always at the last item.

@@ -3,7 +3,7 @@ var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.util.CSS', {
 
-	getOrMakeSheet: function(id) {
+	getOrMakeSheet: function (id) {
 		var sheet = document.getElementById(id);
 		if (!sheet) {
 			sheet = document.createElement('style');
@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.util.CSS', {
 	},
 
 
-	getRule: function(sheet, selector) {
+	getRule: function (sheet, selector) {
 		if (Ext.isString(sheet)) {
 			sheet = this.getOrMakeSheet(sheet);
 		}
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.util.CSS', {
 	},
 
 
-	set: function(rule, values, makeImportant) {
+	set: function (rule, values, makeImportant) {
 		var hyphenated, property, s = rule.style,
 			importance = (makeImportant && 'important') || '',
 			re = /([A-Z])/g;

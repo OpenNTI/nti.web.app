@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 	cls: 'library-view',
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.NavActions = NextThought.app.navigation.Actions.create();
@@ -37,13 +37,13 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 		});
 	},
 
-	onDeactivate: function() {
+	onDeactivate: function () {
 		var activeItem = this.getLayout().getActiveItem();
 
 		activeItem.fireEvent('deactivate');
 	},
 
-	setActiveView: function(xtype, selector) {
+	setActiveView: function (xtype, selector) {
 		var old = this.getLayout().getActiveItem(),
 			cmp = this.down(selector || xtype);
 
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 		return cmp;
 	},
 
-	showHome: function(route, subRoute) {
+	showHome: function (route, subRoute) {
 		var cmp = this.setActiveView('library-home');
 
 		this.setTitle('Home');
@@ -80,25 +80,25 @@ module.exports = exports = Ext.define('NextThought.app.library.Index', {
 		return cmp.handleRoute(subRoute, route.precache);
 	},
 
-	showCourses: function(route, subRoute) {
+	showCourses: function (route, subRoute) {
 		var cmp = this.setActiveView('library-courses', '[isCoursePage]');
 
 		return cmp.handleRoute(subRoute, route.precache);
 	},
 
-	showAdminCourses: function(route, subRoute) {
+	showAdminCourses: function (route, subRoute) {
 		var cmp = this.setActiveView('library-admin');
 
 		return cmp.handleRoute(subRoute, route.precache);
 	},
 
-	showBooks: function(route, subRoute) {
+	showBooks: function (route, subRoute) {
 		var cmp = this.setActiveView('library-content');
 
 		return cmp.handleRoute(subRoute, route.precache);
 	},
 
-	showCommunities: function(route, subRoute) {
+	showCommunities: function (route, subRoute) {
 		var cmp = this.setActiveView('library-communities');
 
 		return cmp.handleRoute(subRoute, route.precache);

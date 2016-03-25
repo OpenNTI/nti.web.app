@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Template
 
 	//Merge these functions into note.Panel
 
-	attachMoreReplyOptionsHandler: function(cmp, optionsEl, user, record) {
+	attachMoreReplyOptionsHandler: function (cmp, optionsEl, user, record) {
 		if (!optionsEl) {return;}
 		var scroller = optionsEl.up('{overflow=auto}');
 
@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Template
 			click: this.replyOptionsClicked,
 			mouseout: this.replyOptionsMouseOut,
 			mouseover: this.replyOptionsMouseIn,
-			mouseup: function(e) {
+			mouseup: function (e) {
 				e.stopEvent();
 				return false;
 			},
@@ -36,13 +36,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Template
 	},
 
 
-	replyOptionsScroll: function(e, el, opts) {
+	replyOptionsScroll: function (e, el, opts) {
 		var menu = opts.optionsEl;
 		menu.removeCls('active');
 	},
 
 
-	replyOptionsClicked: function(e, t, opts) {
+	replyOptionsClicked: function (e, t, opts) {
 		e.stopEvent();
 
 		var more = e.getTarget('.more', undefined, true),
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Template
 
 		if (!more || !more.dom) {return false;}
 
-		function moreMenuClick(item, e) {
+		function moreMenuClick (item, e) {
 			e.stopEvent();
 			var menuCls = 'on' + item.itemId;
 			if (this[menuCls]) {
@@ -64,11 +64,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Template
 			}
 		}
 
-		function flagItemClick(item , e) {
+		function flagItemClick (item , e) {
 			e.stopEvent();
 			var menuCls = 'onFlag', me = this;
 
-			TemplatesForNotes.reportInappropriate(function(btn) {
+			TemplatesForNotes.reportInappropriate(function (btn) {
 				if (btn !== 'ok') { return; }
 				if (me[menuCls]) {
 					me[menuCls]();
@@ -76,9 +76,9 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Template
 			});
 		}
 
-		function hasUser(users, name) {
+		function hasUser (users, name) {
 			var found = false;
-			Ext.each(users, function(user) {
+			Ext.each(users, function (user) {
 				if (user === name || (user.get && user.get('Username') === name)) {
 					found = true;
 				}
@@ -180,47 +180,47 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Template
 		//for iPad, if there are mouseover events, touching on the menu item
 		//will perform a mouseenter, mouseleave, and not click.
 		if (!Ext.is.iOS) {
-			menu.on('mouseover', function() {
+			menu.on('mouseover', function () {
 				console.log('mouseover');
 				if (opts.scope.el && opts.scope.el.down('.single') && !opts.scope.el.down('.menu-open')) {
 					opts.scope.el.down('.single').addCls('menu-open');
 				}
 			});
 
-			menu.on('mouseleave', function() {
+			menu.on('mouseleave', function () {
 				console.log('mouseleave');
-				menuTimer = setTimeout(function() {
+				menuTimer = setTimeout(function () {
 					menu.close();
 					if (opts.scope.el && opts.scope.el.down('.single')) {
 						opts.scope.el.down('.single').removeCls('menu-open');
 					}
 				}, 100);
 			});
-			menu.on('mouseenter', function() { console.log('mouseenter'); clearTimeout(menuTimer); });
+			menu.on('mouseenter', function () { console.log('mouseenter'); clearTimeout(menuTimer); });
 		}
 
 		menu.showBy(more, 'tl-bl?', [2, -7]);
 
-		menuTimer = setTimeout(function() { menu.close(); }, 2000);
+		menuTimer = setTimeout(function () { menu.close(); }, 2000);
 		return false;
 	},
 
-	replyOptionsMouseOut: function(e) {
+	replyOptionsMouseOut: function (e) {
 		var more = e.getTarget('.more', undefined, true);
 		if (more) {
 			this.moreReplyOptionsMouseOutTimer = setTimeout(
-				function() {
+				function () {
 					more.removeCls('active');
 				}
 			,500);
 		}
 	},
 
-	replyOptionsMouseIn: function() {
+	replyOptionsMouseIn: function () {
 		clearTimeout(this.moreReplyOptionsMouseOutTimer);
 	},
 
-	reportInappropriate: function(callback) {
+	reportInappropriate: function (callback) {
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
 			msg: 'This action cannot be undone.', //Y No Externalize?? :P

@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		Ext.DomHelper.append(this.el, this.controlTemplateObj);
@@ -29,14 +29,14 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 		this.mon(this.el.down('.cancel'), 'click', this.handleCancel.bind(this));
 
 		this.mon(this.el, {
-			keydown: function(e) { e.stopPropagation(); },
-			kepress: function(e) {e.stopPropagation(); },
-			keyup: function(e) {e.stopPropagation(); }
+			keydown: function (e) { e.stopPropagation(); },
+			kepress: function (e) {e.stopPropagation(); },
+			keyup: function (e) {e.stopPropagation(); }
 		});
 	},
 
 
-	startEdit: function() {
+	startEdit: function () {
 		this.callParent(arguments);
 
 		var total = this.el.getWidth() || 0,
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 	},
 
 
-	handleCancel: function() {
+	handleCancel: function () {
 		if (Ext.isEmpty(this.field.getValue())) {
 			this.cancelEdit();
 			return;
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.account.identity.componen
 	},
 
 
-	completedEdit: function(e) {
+	completedEdit: function (e) {
 		if (e && e.stopPropagation && e.type === 'click') {
 			e.stopPropagation();
 		}

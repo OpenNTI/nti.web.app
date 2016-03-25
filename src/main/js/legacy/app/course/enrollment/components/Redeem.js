@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	],
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.enableBubble('redeem-gift');
 
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	fillInDefaults: function(values) {
+	fillInDefaults: function (values) {
 		if (this.enrollmentOption.redeemToken) {
 			values.token = this.enrollmentOption.redeemToken;
 		}
@@ -105,15 +105,15 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return values;
 	},
 
-	disableRedeem: function(){
+	disableRedeem: function () {
 		this.redeemable = false;
 	},
 
-	enableRedeem: function() {
+	enableRedeem: function () {
 		this.redeemable = true;
 	},
 
-	maybeSubmit: function() {
+	maybeSubmit: function () {
 		if(!this.redeemable) {return;}
 
 		var me = this, invalid,
@@ -122,20 +122,20 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		value.purchasable = me.enrollmentOption.Purchasable;
 
 		me.shouldAllowSubmission()
-			.then(function() {
+			.then(function () {
 				invalid = false;
 				me.submitBtnCfg.disabled = true;
 				me.fireEvent('update-buttons');
 				me.addMask('Processing token.');
 				return me.complete(me, value);
-			}, function() {
+			}, function () {
 				invalid = true;
 				return Promise.reject();
 			})
-			.then(function(result) {
+			.then(function (result) {
 				me.done(me);
 			})
-			.fail(function(error) {
+			.fail(function (error) {
 				if (!invalid) {
 					me.submitBtnCfg.disabled = false;
 					me.fireEvent('update-buttons');
@@ -148,13 +148,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 	//need a separate function to appear when redeeming an access key
 
-	stopClose: function() {
+	stopClose: function () {
 		var r, me = this;
 
 		if (this.hasMask()) {
 			r = Promise.reject();
 		} else {
-			r = new Promise(function(fulfill, reject) {
+			r = new Promise(function (fulfill, reject) {
 				Ext.Msg.show({
 					title: getString('NextThought.view.courseware.enrollment.Redeem.NotRedeemed'),
 					msg: getString('NextThought.view.courseware.enrollment.Purchase.ProgressLost'),
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 						},
 						secondary: {
 							text: getString('NextThought.view.courseware.enrollment.Purchase.LeavePage'),
-							handler: function() {
+							handler: function () {
 								me.clearStorage();
 								fulfill();
 							}

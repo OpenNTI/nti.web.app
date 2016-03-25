@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.video.window.Window', {
 		closeEl: '.close'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.add({
@@ -34,13 +34,13 @@ module.exports = exports = Ext.define('NextThought.app.video.window.Window', {
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.closeEl, 'click', this.onCloseClicked.bind(this));
 	},
 
-	onCloseClicked: function() {
+	onCloseClicked: function () {
 		this.close();
 		this.destroy();
 	}

@@ -5,7 +5,7 @@ var ShapesBase = require('./Base');
 module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Circle', {
 	extend: 'NextThought.app.whiteboard.shapes.Base',
 
-	draw: function(ctx,renderCallback) {
+	draw: function (ctx,renderCallback) {
 		this.callParent(arguments);
 
 		ctx.beginPath();

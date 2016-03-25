@@ -13,10 +13,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	alias: 'widget.course-assessment-admin-listheader',
 
 	statics: {
-		setPageSize: function(size) {
+		setPageSize: function (size) {
 			var instances = Ext.ComponentQuery.query(this.xtype) || [];
 
-			instances.forEach(function(instance) {
+			instances.forEach(function (instance) {
 				instance.setPageSize(parseInt(size, 10));
 			});
 		}
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		viewAssignmentEl: '.assignment .raw'
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.onStoreLoad();
@@ -103,15 +103,15 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		wait(10).then(this.onStudentFilterChange.bind(this));
 	},
 
-	setDisabled: function() {
+	setDisabled: function () {
 		this.addCls('disabled');
 	},
 
-	setEnabled: function() {
+	setEnabled: function () {
 		this.removeCls('disabled');
 	},
 
-	buildPageMenu: function() {
+	buildPageMenu: function () {
 		if (!this.store || !this.rendered) { return; }
 
 		var items = [], i, start, end,
@@ -167,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-	buildSettingsMenu: function() {
+	buildSettingsMenu: function () {
 		if (!this.store) { return; }
 
 		var me = this,
@@ -180,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		items.push({xtype: 'labeledseparator', text: 'display', cls: 'labeled-separator'});
 
-		me.PAGE_SIZES.forEach(function(size) {
+		me.PAGE_SIZES.forEach(function (size) {
 			items.push({
 				ui: 'nt-menuitem',
 				xtype: 'menucheckitem',
@@ -223,7 +223,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.settingsMenu.show().hide();
 	},
 
-	onStudentFilterChange: function(filter) {
+	onStudentFilterChange: function (filter) {
 		var q;
 
 		if (!filter) {
@@ -246,18 +246,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	maybeShowEmailButton: function(filter) {
+	maybeShowEmailButton: function (filter) {
 		var isAllowed = this.shouldAllowInstructorEmail() && this.currentBundle && this.currentBundle.getLink('Mail');
 		if (isAllowed && this.emailEl) {
 			this.emailEl.show();
 		}
 	},
 
-	shouldAllowInstructorEmail: function() {
+	shouldAllowInstructorEmail: function () {
 		return isFeature('instructor-email');
 	},
 
-	showEmailEditor: function(e) {
+	showEmailEditor: function (e) {
 		var me = this,
 			editor,
 			emailRecord = new NextThought.model.Email(),
@@ -273,21 +273,21 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.WindowActions.showWindow('new-email', null, e.getTarget(), {afterSave: this.onCourseEmailSent.bind(this)});
 	},
 
-	onCourseEmailSent: function() {},
+	onCourseEmailSent: function () {},
 
-	showSettingsMenu: function() {
+	showSettingsMenu: function () {
 		if (!this.settingsMenu) { return; }
 
 		this.settingsMenu.showBy(this.settingsEl, 'tr-br');
 	},
 
-	showPageMenu: function(e) {
+	showPageMenu: function (e) {
 		if (!this.pageMenu || e.getTarget('.empty')) { return; }
 
 		this.pageMenu.showBy(this.viewingEl, 'tr-br');
 	},
 
-	changePage: function(item, status) {
+	changePage: function (item, status) {
 		if (!status || !this.store) { return; }
 
 
@@ -296,7 +296,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.loadPage(page);
 	},
 
-	changePageSize: function(item, status) {
+	changePageSize: function (item, status) {
 		if (!status || !this.store) { return; }
 
 		var size = item.size;
@@ -304,17 +304,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.setPageSize(size);
 	},
 
-	setPageSize: function(size) {
+	setPageSize: function (size) {
 		this.pageSize = size;
 
 		this.fireEvent('set-page-size', this.pageSize);
 	},
 
-	toggleAvatars: function(item, status) {
+	toggleAvatars: function (item, status) {
 		this.fireEvent('toggle-avatars', !status);
 	},
 
-	bindStore: function(store) {
+	bindStore: function (store) {
 		this.store = store;
 
 		this.mon(store, 'load', 'onStoreLoad');
@@ -322,14 +322,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.buildSettingsMenu();
 	},
 
-	onStoreLoad: function() {
+	onStoreLoad: function () {
 		if (!this.store || !this.rendered) { return; }
 
 		this.buildPageMenu();
 		this.buildSettingsMenu();
 	},
 
-	setExportURL: function(url, tip) {
+	setExportURL: function (url, tip) {
 		this.exportURL = url;
 		this.exportTip = tip;
 
@@ -346,7 +346,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	setAvatarToggle: function(show) {
+	setAvatarToggle: function (show) {
 		this.showAvatars = show;
 
 		this.buildSettingsMenu();
@@ -354,7 +354,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.toggleAvatars(null, !show);
 	},
 
-	setAssignment: function(assignment) {
+	setAssignment: function (assignment) {
 		if (!this.rendered) {
 			this.assignment = assignment;
 			return;
@@ -400,7 +400,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.on('destroy', this.assignmentStatusCmp.destroy.bind(this.assignmentStatusCmp));
 	},
 
-	toggleDateEditor: function() {
+	toggleDateEditor: function () {
 		if (this.assignmentStatusCmp && this.assignmentStatusCmp.dueDateEditorVisible()) {
 			this.assignmentStatusCmp.closeDueDateEditor();
 		} else if (this.assignmentStatusCmp) {
@@ -408,7 +408,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	updateFilterCount: function(filter) {
+	updateFilterCount: function (filter) {
 		if (!this.rendered) {
 			this.filter = filter;
 			return;
@@ -421,7 +421,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	loadPage: function(page) {
+	loadPage: function (page) {
 		this.currentPage = page;
 
 		this.fireEvent('load-page', this.currentPage);

@@ -39,11 +39,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 			]}
 		]
 	}), {
-		showReport: function(value, out) {
+		showReport: function (value, out) {
 			var show = false;
 
 			if (isFeature('analytic-reports')) {
-				(value.Links.asJSON() || []).forEach(function(link) {
+				(value.Links.asJSON() || []).forEach(function (link) {
 					if (link.rel.indexOf('report-') >= 0) {
 						show = true;
 						return false;
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		}
 	}),
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this;
@@ -66,17 +66,17 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 
 		me.on('select', me.selectForum.bind(this));
 
-		me.on('beforeselect', function(cmp, record) {
+		me.on('beforeselect', function (cmp, record) {
 			//don't allow headers to be selected
 			return !(record instanceof NextThought.model.UIViewHeader);
 		});
 	},
 
-	canCreateForums: function(record) {
+	canCreateForums: function (record) {
 		return record;// && isFeautre('mutable-forums') && record.getLink('add');
 	},
 
-	buildStore: function(forumList) {
+	buildStore: function (forumList) {
 		if (forumList && forumList.isBoard) {
 			forumList = [];
 		}
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 			store,
 			items = [];
 
-		function addList(list, level) {
+		function addList (list, level) {
 			var title;
 
 			if (!Ext.isEmpty(list.title)) {
@@ -109,13 +109,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 			}
 
 			if (list.children) {
-				list.children.forEach(function(child) {
+				list.children.forEach(function (child) {
 					addList(child, level + 1);
 				});
 			}
 		}
 
-		(forumList || []).forEach(function(list) {
+		(forumList || []).forEach(function (list) {
 			addList(list, 0);
 
 			if (list.board) {
@@ -135,10 +135,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		}
 	},
 
-	getFirstForum: function() {
+	getFirstForum: function () {
 		var first;
 
-		this.store.each(function(record) {
+		this.store.each(function (record) {
 			if (!(record instanceof NextThought.model.UIViewHeader)) {
 				first = record;
 			}
@@ -149,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		return first;
 	},
 
-	setForumList: function(forumList) {
+	setForumList: function (forumList) {
 		var me = this,
 			store = me.buildStore(forumList),
 			selModel = me.getSelectionModel();
@@ -157,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		me.refresh();
 	},
 
-	selectRecord: function(id) {
+	selectRecord: function (id) {
 		var record,
 			selModel = this.getSelectionModel();
 
@@ -174,11 +174,11 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		return record;
 	},
 
-	maybeShowNewForum: function() {
+	maybeShowNewForum: function () {
 		//TODO fill this in when we turn it back on
 	},
 
-	selectForum: function(cmp, record) {
+	selectForum: function (cmp, record) {
 		var id = record.getId();
 
 		id = ParseUtils.encodeForURI(id);
@@ -189,7 +189,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.N
 		});
 	},
 
-	onItemClick: function(record, node, index, e) {
+	onItemClick: function (record, node, index, e) {
 		if (e.getTarget('.report-icon')) {
 			e.stopEvent();
 

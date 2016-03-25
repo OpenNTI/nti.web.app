@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.enableBubble('send-application');
@@ -26,5 +26,5 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.mon(this.buttonEl, 'click', this.fireEvent.bind(this, 'send-application'));
 	},
 
-	changed: function() {}
+	changed: function () {}
 });

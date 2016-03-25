@@ -3,7 +3,7 @@ var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.mixins.MenuShowHideBehavior', {
 
-	constructor: function() {
+	constructor: function () {
 		// iPad doesn't need/want these
 		if (Ext.is.iPad) {
 			return;
@@ -11,15 +11,15 @@ module.exports = exports = Ext.define('NextThought.mixins.MenuShowHideBehavior',
 
 		if (!this.isMenu) {
 			//don't duplicate this logic
-			this.getRefOwner = (function(original) {
-				return function() {
+			this.getRefOwner = (function (original) {
+				return function () {
 					return this.parentMenu ||
 						   this.ownerButton ||
 						   original.apply(this, arguments);
 				}; }(this.getRefOwner));
 
 			Ext.menu.Manager.register(this);//if this is menu, this is a no-op, but just to be nice...
-			this.on('destroy', function() {
+			this.on('destroy', function () {
 				Ext.menu.Manager.unregister(this);
 				if (this.el) {
 					this.el.un(this.mouseMonitor);
@@ -32,19 +32,19 @@ module.exports = exports = Ext.define('NextThought.mixins.MenuShowHideBehavior',
 			destroy: 'stopShowHideTimers',
 			mouseleave: 'startHide',
 			mouseenter: 'stopHide',
-			afterrender: function() {
+			afterrender: function () {
 				var el = this.el;
 				if (this.isMenu) {return;}//don't duplicate this logic
 
 				el.addCls('x-menu');
 
-				this.mouseMonitor = el.monitorMouseLeave(100, function(e) {
+				this.mouseMonitor = el.monitorMouseLeave(100, function (e) {
 					if (this.disabled) { return; }
 					this.fireEvent('mouseleave', this, e); }, this);
 
 				this.mon(el, {
 					scope: this,
-					mouseover: function(e) {
+					mouseover: function (e) {
 						if (this.disabled) { return; }
 						if (!el.contains(e.getRelatedTarget())) { this.fireEvent('mouseenter', this, e); }
 						this.fireEvent('mouseover', this, null, e);
@@ -55,9 +55,9 @@ module.exports = exports = Ext.define('NextThought.mixins.MenuShowHideBehavior',
 	},
 
 
-	startShow: function(el, align, offset) {
+	startShow: function (el, align, offset) {
 		this.stopHide();
-		this.__showTimeout = Ext.defer(function() {
+		this.__showTimeout = Ext.defer(function () {
 			try {
 				if (el && Ext.fly(el).isVisible(true)) {
 					this.showBy(el, align, offset);
@@ -69,27 +69,27 @@ module.exports = exports = Ext.define('NextThought.mixins.MenuShowHideBehavior',
 	},
 
 
-	stopShow: function() {
+	stopShow: function () {
 		this.startHide();
 		clearTimeout(this.__showTimeout);
 	},
 
 
-	startHide: function() {
+	startHide: function () {
 		var me = this;
 		me.stopHide();
-		me.__leaveTimer = setTimeout(function() {
+		me.__leaveTimer = setTimeout(function () {
 			me.hide();
 		}, 500);
 	},
 
 
-	stopHide: function() {
+	stopHide: function () {
 		clearTimeout(this.__leaveTimer);
 	},
 
 
-	stopShowHideTimers: function() {
+	stopShowHideTimers: function () {
 		clearTimeout(this.__leaveTimer);
 		clearTimeout(this.__showTimeout);
 	}

@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.video.roll.Roll', {
 		}
 	}],
 
-	constructor: function(config) {
+	constructor: function (config) {
 		var store = config ? (config.store || undefined) : undefined,
 			data = config ? (config.data || undefined) : undefined,
 			Vimeo = NextThought.model.resolvers.videoservices.Vimeo,
@@ -65,14 +65,14 @@ module.exports = exports = Ext.define('NextThought.app.video.roll.Roll', {
 			data: data
 		});
 
-		this.store.each(function(item) {
+		this.store.each(function (item) {
 			if (item.get('thumbnail') || item.get('type') !== Vimeo.TYPE) { return; }
 
 			var url = item.get('url'),
 				id = Vimeo.getIdFromURL(url);
 
 			Vimeo.resolvePosterForID(id)
-				.then(function(poster) {
+				.then(function (poster) {
 					item.set('thumbnail', poster.poster);
 				});
 		});
@@ -107,23 +107,23 @@ module.exports = exports = Ext.define('NextThought.app.video.roll.Roll', {
 		this.on('afterrender', 'selectFirst', this);
 	},
 
-	selection: function(v, s) {
+	selection: function (v, s) {
 		if (s && s[0]) {
 			this.iframe.el.dom.setAttribute('src', this.filterVideoUrl(s[0]));
 		}
 	},
 
-	pauseVideo: function() {
+	pauseVideo: function () {
 		var o = this.iframe.el.dom;
 		o.contentWindow.postMessage(JSON.stringify({
-				event: 'command',
-				func: 'pauseVideo',
-				args: [],
-				id: o.getAttribute('id')
+			event: 'command',
+			func: 'pauseVideo',
+			args: [],
+			id: o.getAttribute('id')
 		}), '*');
 	},
 
-	filterVideoUrl: function(video) {
+	filterVideoUrl: function (video) {
 		var type = video.get('type'),
 			url = video.get('url'),
 			a = document.createElement('a'),
@@ -150,7 +150,7 @@ module.exports = exports = Ext.define('NextThought.app.video.roll.Roll', {
 		return a.href;
 	},
 
-	selectFirst: function() {
+	selectFirst: function () {
 		this.others.getSelectionModel().select(0);
 	}
 });

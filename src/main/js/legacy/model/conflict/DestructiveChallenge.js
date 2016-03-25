@@ -19,24 +19,24 @@ module.exports = exports = Ext.define('NextThought.model.conflict.DestructiveCha
 	],
 
 
-	getMessage: function() {
+	getMessage: function () {
 		var code = this.get('code');
 
 		return this.self.MESSAGE_OVERRIDES[code] || this.get('message');
 	},
 
 
-	getForceLink: function() {
+	getForceLink: function () {
 		return this.getLink('confirm');
 	},
 
 
-	isPut: function() {
+	isPut: function () {
 		return this.getLinkMethod('confirm') === 'PUT';
 	},
 
 
-	isPost: function() {
+	isPost: function () {
 		return this.getLinkMethod('confirm') === 'POST';
 	}
 });

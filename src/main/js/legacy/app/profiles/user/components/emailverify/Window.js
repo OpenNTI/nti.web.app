@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		{xtype: 'email-verify-view'}
 	],
 
-	initComponent: function(){
+	initComponent: function () {
 		this.callParent(arguments);
 		this.view = this.down('email-verify-view');
 		this.view.user = this.user;

@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.coder
 			{xtype: 'simpletext', name: 'code', cls: 'input-box group-code', inputType: 'text', readOnly: true}
 		]},
 		{xtype: 'container', cls: 'submit', layout: {type: 'hbox', pack: 'end'}, items: [
-			{xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text: getString('NextThought.view.account.coderetrieval.Main.ok'), handler: function(b) {
+			{xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text: getString('NextThought.view.account.coderetrieval.Main.ok'), handler: function (b) {
 				console.log('foo');
 				console.log(b.up('window'));
 				b.up('window').close();
@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.coder
 		]}
 	],
 
-	updateCode: function(c) {
+	updateCode: function (c) {
 		var code = this.down('[name=code]');
 		code.update(c);
 		code.el.selectable();

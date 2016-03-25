@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -23,13 +23,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	setGradeBook: function(historyItem) {
+	setGradeBook: function (historyItem) {
 		this.historyItem = historyItem;
 		this.setUpGradeBox();
 	},
 
 
-	setUpGradeBox: function() {
+	setUpGradeBox: function () {
 		if (!this.historyItem) {
 			this.gradeBoxEl.hide();
 			return;
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			number = values && values.value,
 			letter = values && values.letter;
 
-		function fillInValue() {
+		function fillInValue () {
 			var values = grade && grade.getValues(),
 				number = values && values.value,
 				letter = values && values.letter;
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	setupCourseEmail: function(emailLink) {
+	setupCourseEmail: function (emailLink) {
 		var emailEl = this.el.down('.email');
 		this.emailLink = emailLink;
 
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	showEmailEditor: function(e) {
+	showEmailEditor: function (e) {
 		var me = this,
 			emailRecord = new NextThought.model.Email();
 
@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	changeGrade: function(number, letter) {
+	changeGrade: function (number, letter) {
 		if (!this.historyItem) { return; }
 
 		var me = this,
@@ -111,14 +111,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		if (me.historyItem.shouldSaveGrade(number, letter)) {
 			me.historyItem.saveGrade(number, letter)
-				.fail(function(reason) {
+				.fail(function (reason) {
 					console.error('Failed to save final grade:', arguments);
 				});
 		}
 	},
 
 
-	setPredictedGrade: function(grade) {
+	setPredictedGrade: function (grade) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setPredictedGrade.bind(this, grade));
 			return;

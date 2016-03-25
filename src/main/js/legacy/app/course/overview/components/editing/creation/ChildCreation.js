@@ -11,26 +11,26 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	items: [],
 
 	inheritableStatics: {
-		getHandledMimeTypes: function() {},
+		getHandledMimeTypes: function () {},
 
-		getEditors: function() {},
+		getEditors: function () {},
 
-		getChildCreatorForRecord: function(record) {
+		getChildCreatorForRecord: function (record) {
 			return this;
 		},
 
 
-		getTypes: function() {
+		getTypes: function () {
 			var editors = this.getEditors();
 
-			return editors.reduce(function(acc, editor) {
+			return editors.reduce(function (acc, editor) {
 				var types = editor.getTypes ? editor.getTypes() : [];
 
 				if (!Array.isArray(types)) {
 					types = [types];
 				}
 
-				types.forEach(function(type) {
+				types.forEach(function (type) {
 					acc.push(type);
 				});
 
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var types = this.self.getTypes();
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	setUpTypeList: function() {
+	setUpTypeList: function () {
 		if (this.disableBack) {
 			this.disableBack();
 		}
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	setUpTypeEditor: function(type) {
+	setUpTypeEditor: function (type) {
 		if (!this.hasSingleType && this.enableBack) {
 			this.enableBack(this.backText || this.title);
 		}
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	switchToTypeList: function() {
+	switchToTypeList: function () {
 		if (this.activeEditor) {
 			this.activeEditor.destroy();
 			delete this.activeEditor;
@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.setUpTypeList();
 	},
 
-	showTypeList: function(types) {
+	showTypeList: function (types) {
 		types = types || this.types;
 
 		this.activeTypeList = this.add({
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.setUpTypeList();
 	},
 
-	showEditorForType: function(type) {
+	showEditorForType: function (type) {
 		if (this.activeEditor) {
 			//TODO: if we have an existing editor, do we want to prefill
 			//the values that where there?
@@ -146,7 +146,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	},
 
-	onBack: function() {
+	onBack: function () {
 		if (this.activeEditor && this.activeEditor.onBack) {
 			this.activeEditor.onBack();
 		} else {
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	doValidation: function() {
+	doValidation: function () {
 		if (this.activeEditor && this.activeEditor.doValidation) {
 			return this.activeEditor.doValidation();
 		}
@@ -162,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Promise.resolve();
 	},
 
-	onSaveFailure: function(reason) {
+	onSaveFailure: function (reason) {
 		if (this.activeEditor && this.activeEditor.onSaveFailure) {
 			return this.activeEditor.onSaveFailure(reason);
 		}
@@ -170,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Promise.reject();
 	},
 
-	onSave: function() {
+	onSave: function () {
 		if (this.activeEditor && this.activeEditor.onSave) {
 			return this.activeEditor.onSave();
 		}
@@ -178,7 +178,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Promise.reject();
 	},
 
-	allowCancel: function() {
+	allowCancel: function () {
 		if (this.activeEditor && this.activeEditor.isVisible() && this.activeEditor.allowCancel()) {
 			return this.activeEditor.allowCancel();
 		}

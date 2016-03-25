@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.PersonalBlogEntr
 	isBlogEntry: true,
 
 	mixins: {
-	publishActions: 'NextThought.mixins.ModelWithPublish'
+		publishActions: 'NextThought.mixins.ModelWithPublish'
 	},
 
 	fields: [
@@ -18,12 +18,12 @@ module.exports = exports = Ext.define('NextThought.model.forums.PersonalBlogEntr
 		{ name: 'sharedWith', type: 'UserList' }
 	],
 
-	getActivityLabel: function() {
+	getActivityLabel: function () {
 		return 'shared a thought:';
 	},
 
 	//TODO: workaround for no-edit link
-	isModifiable: function() {
+	isModifiable: function () {
 		return isMe(this.get('Creator'));
 	}
 

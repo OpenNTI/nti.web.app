@@ -24,14 +24,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.topicsEl, 'click', this.onTopicsClick.bind(this));
 	},
 
 
-	updateEntity: function(entity, activeForum) {
+	updateEntity: function (entity, activeForum) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateEntity.bind(this, entity));
 			return;
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		me.topicMap = {};
 
 		entity.getForums()
-			.then(function(forums) {
+			.then(function (forums) {
 				me.clearTopics();
 
 				if (entity.hasActivity()) {
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 					me.topicMap.all = 'all';
 				}
 
-				forums.forEach(function(forum) {
+				forums.forEach(function (forum) {
 					var id = forum.getId();
 
 					me.topicMap[id] = forum;
@@ -76,18 +76,18 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 					});
 				});
 			})
-			.always(function() {
+			.always(function () {
 				me.loadingEl.addCls('hidden');
 			});
 	},
 
 
-	addTopic: function(data) {
+	addTopic: function (data) {
 		this.entryTpl.append(this.topicsEl, data);
 	},
 
 
-	clearTopics: function() {
+	clearTopics: function () {
 		if (!this.rendered) {
 			return;
 		}
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	},
 
 
-	onTopicsClick: function(e) {
+	onTopicsClick: function (e) {
 		var topicEl = e.getTarget('.topic'),
 			id = topicEl.getAttribute('data-route'),
 			forum = this.topicMap[id];

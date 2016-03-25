@@ -26,12 +26,12 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 	statics: {
 		type: 'content',
 
-		canHandle: function(obj) {
+		canHandle: function (obj) {
 			return obj instanceof NextThought.model.PageInfo;
 		}
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 
 		this.LibraryActions = NextThought.app.library.Actions.create();
@@ -43,15 +43,15 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		this.maxWidth = config.maxWidth || 574;
 	},
 
-	parse: function(pageInfo, contextKind) {
+	parse: function (pageInfo, contextKind) {
 		var me = this,
 			link = pageInfo.getLink('content'),
 			contentPackage = pageInfo.get('ContentPackageNTIID');
 
 		return Promise.all([
-				Service.request(link),
-				this.LibraryActions.findContentPackage(contentPackage)
-			]).then(function(results) {
+			Service.request(link),
+			this.LibraryActions.findContentPackage(contentPackage)
+		]).then(function (results) {
 				var xml = results[0],
 					content = results[1];
 
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 			});
 	},
 
-	__parseNode: function(doc, root, contextKind) {
+	__parseNode: function (doc, root, contextKind) {
 		var page = doc && doc.querySelector('#NTIContent'),
 			context,
 			range = this.range,
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 	},
 
 	//TODO: clean this up to not rely on ext so much.
-	__fixUpContext: function(n, root) {
+	__fixUpContext: function (n, root) {
 		var node = Ext.get(n), cardTpl, slideDeckTpl, slideVideoTpl, dom, data,
 			imgs = n && n.querySelectorAll('img'),
 			maxWidth = this.maxWidth, Slide, c;
@@ -113,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		node.select('.injected-related-items,.related,.anchor-magic').remove();
 
 		//WE want to remove redaction text in the node body of the note viewer.
-		Ext.each(node.query('.redaction '), function(redaction) {
+		Ext.each(node.query('.redaction '), function (redaction) {
 			if (!Ext.fly(redaction).hasCls('redacted')) {
 				Ext.fly(redaction).addCls('redacted');
 			}
@@ -121,7 +121,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 
 		node.select('.redactionAction .controls').remove();
 
-		Ext.each(node.query('span[itemprop~=nti-data-markupenabled]'), function(i) {
+		Ext.each(node.query('span[itemprop~=nti-data-markupenabled]'), function (i) {
 			var e = Ext.get(i);
 			//only strip off the style for width that are too wide.
 			if (i.style && parseInt(i.style.width, 10) >= maxWidth) {
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 			}
 		});
 
-		Ext.each(node.query('iframe'), function(i) {
+		Ext.each(node.query('iframe'), function (i) {
 			var e = Ext.get(i),
 				w, h, r;
 			if (e.parent('div.externalvideo')) {
@@ -145,14 +145,14 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 			}
 		});
 
-		Ext.each(node.query('.application-highlight'), function(h) {
+		Ext.each(node.query('.application-highlight'), function (h) {
 			if (this.record.isModifiable()) {
 				Ext.fly(h).addCls('highlight-mouse-over');
 			}
 		}, this);
 
 		// Fix up URL for external links
-		Ext.each(node.query('a[target=_blank]'), function(a) {
+		Ext.each(node.query('a[target=_blank]'), function (a) {
 			var url = a.getAttribute('href'),
 				isExternalNTILink = !(/^(http(s)?:)/i.test(url));
 
@@ -198,7 +198,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 			return dom;
 		}
 
-		node.query('object.overlayed').forEach(function(ob) {
+		node.query('object.overlayed').forEach(function (ob) {
 			ob.removeAttribute('data');
 			ob.removeAttribute('style');
 		});
@@ -209,7 +209,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 			imgs = [];
 		}
 
-		imgs.forEach(function(img) {
+		imgs.forEach(function (img) {
 			var src = img.getAttribute('src');
 
 			if (!Globals.ROOT_URL_PATTERN.test(src)) {
@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 		return node.dom;
 	},
 
-	__fixCards: function(node, root) {
+	__fixCards: function (node, root) {
 		var cardTpl = new Ext.XTemplate(Ext.DomHelper.markup({
 				cls: 'content-card',
 				html: NextThought.common.components.cards.Card.prototype.renderTpl
@@ -235,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 				html: NextThought.common.components.cards.Launcher.prototype.renderTpl.html
 			});
 
-		function fixLink(link) {
+		function fixLink (link) {
 			if (link && Globals.ROOT_URL_PATTERN.test(link)) {
 				link = getURL(link);
 			} else if (link) {
@@ -245,7 +245,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 			return link;
 		}
 
-		Ext.each(node.query('object[type*=nticard]'), function(c) {
+		Ext.each(node.query('object[type*=nticard]'), function (c) {
 			var d = NextThought.common.components.cards.OverlayedPanel.getData(c);
 
 			d.thumbnail = fixLink(d.thumbnail);
@@ -254,19 +254,19 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Content', {
 			Ext.fly(c).remove();
 		});
 
-		Ext.each(node.query('object[type*=ntislidedeck]'), function(c) {
+		Ext.each(node.query('object[type*=ntislidedeck]'), function (c) {
 			var d = NextThought.app.mediaviewer.content.deck.OverlayedPanel.getData(c);
 			slideDeckTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
 		});
 
-		Ext.each(node.query('object[type*=videoroll]'), function(c) {
+		Ext.each(node.query('object[type*=videoroll]'), function (c) {
 			var d = NextThought.app.video.roll.OverlayedPanel.getData(c);
 			contentLauncherTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
 		});
 
-		Ext.each(node.query('object[type*=image-collection]'), function(c) {
+		Ext.each(node.query('object[type*=image-collection]'), function (c) {
 			var d = NextThought.app.image.OverlayedPanel.getData(c);
 
 			d.thumbnail = fixLink(d.thumbnail);

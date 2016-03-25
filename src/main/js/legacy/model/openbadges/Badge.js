@@ -25,15 +25,15 @@ module.exports = exports = Ext.define('NextThought.model.openbadges.Badge', {
 	],
 
 
-	pushToMozillaBackpack: function() {
+	pushToMozillaBackpack: function () {
 		var jsonURL = this.getLink('mozilla-backpack');
 
 		if (Ext.isEmpty(jsonURL)) {
 			return Promise.reject();
 		}
 
-		return new Promise(function(fulfill, reject) {
-			OpenBadges.issue([jsonURL], function(errors, successes) {
+		return new Promise(function (fulfill, reject) {
+			OpenBadges.issue([jsonURL], function (errors, successes) {
 				if (!Ext.isEmpty(errors)) {
 					reject(errors);
 				} else {
@@ -44,12 +44,12 @@ module.exports = exports = Ext.define('NextThought.model.openbadges.Badge', {
 	},
 
 
-	lockBadge: function() {
+	lockBadge: function () {
 		if (this.isBadgeLocked()) { return Promise.resolve(); }
 
 		var me = this;
 		return Service.post(this.getLink('lock'))
-			.then(function(resp) {
+			.then(function (resp) {
 				var rec = ParseUtils.parseItems(resp)[0];
 				me.set('Links', rec.get('Links'));
 				me.set('Locked', rec.get('Locked'));
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.model.openbadges.Badge', {
 	},
 
 
-	isBadgeLocked: function() {
+	isBadgeLocked: function () {
 		return !this.hasLink('lock');
 	}
 });

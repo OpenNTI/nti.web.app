@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	],
 
 	statics: {
-		fromPackage: function(contentPackage) {
+		fromPackage: function (contentPackage) {
 			var id = contentPackage.get('NTIID') + '-auto-bundle',
 				reader = ParseUtils.getReaderFor({MimeType: 'application/vnd.nextthought.contentbundle'}),
 				data = Ext.applyIf({ ContentPackages: [contentPackage], href: '/' }, contentPackage.raw),
@@ -62,20 +62,20 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		}
 	},
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		//this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 	},
 
-	onceAssetsLoadedPromise: function() {
+	onceAssetsLoadedPromise: function () {
 		if (!this.onceAssetsLoaded) {
 			this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 		}
 		return this.onceAssetsLoaded;
 	},
 
-	asUIData: function() {
+	asUIData: function () {
 		return {
 			id: this.getId(),
 			isBundle: true,
@@ -88,9 +88,9 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		};
 	},
 
-	getDefaultAssetRoot: function() {
+	getDefaultAssetRoot: function () {
 		var root = ([this].concat(this.get('ContentPackages')))
-				.reduce(function(agg, o) {
+				.reduce(function (agg, o) {
 					return agg || o.get('root');
 				}, null);
 
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return getURL(root).concatPath('/presentation-assets/webapp/v1/');
 	},
 
-	__setImage: function() {
+	__setImage: function () {
 		var me = this;
 
 		//do a head request to make sure the assets exist
@@ -120,61 +120,61 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	 * if the images aren't there
 	 * @return {Promise} fulfills with the url
 	 */
-	getBackgroundImage: function() {
+	getBackgroundImage: function () {
 		return this.getAsset('background');
 	},
 
-	getVendorIcon: function() {
+	getVendorIcon: function () {
 		return this.getAsset('vendorIcon');
 	},
 
-	getIconImage: function() {
+	getIconImage: function () {
 		return this.getAsset('icon', 'landing');
 	},
 
-	getThumbnail: function() {
+	getThumbnail: function () {
 		return this.getAsset('thumb');
 	},
 
-	getTocs: function(status) {
+	getTocs: function (status) {
 		var packages = this.get('ContentPackages');
 
-		packages = packages.map(function(pack) {
+		packages = packages.map(function (pack) {
 			return pack.getToc(status);
 		});
 
 		return Promise.all(packages);
 	},
 
-	getTitle: function() {
+	getTitle: function () {
 		return this.get('Title');
 	},
 
-	getIcon: function() {
+	getIcon: function () {
 		return this.get('icon');
 	},
 
-	getContentPackages: function() {
+	getContentPackages: function () {
 		return this.get('ContentPackages');
 	},
 
-	getContentRoots: function() {
-		return (this.get('ContentPackages') || []).map(function(content) {
+	getContentRoots: function () {
+		return (this.get('ContentPackages') || []).map(function (content) {
 			return content && content.get('root');
 		});
 	},
 
-	getContentIds: function() {
-		return (this.get('ContentPackages') || []).map(function(content) {
+	getContentIds: function () {
+		return (this.get('ContentPackages') || []).map(function (content) {
 			return content && content.get('NTIID');
 		});
 	},
 
-	getPresentationProperties: function(id) {
+	getPresentationProperties: function (id) {
 		var packages = this.get('ContentPackages') || [],
 			props;
 
-		packages.forEach(function(content) {
+		packages.forEach(function (content) {
 			if (content.get('NTIID') === id) {
 				props = content.get('PresentationProperties');
 			}
@@ -183,13 +183,13 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return props;
 	},
 
-	getLocationInfo: function(status) {
+	getLocationInfo: function (status) {
 		var firstPackage = this.get('ContentPackages')[0],
 			firstPage = this.getFirstPage(),
 			uiData = this.asUIData();
 
 		return firstPackage.getToc(status)
-			.then(function(toc) {
+			.then(function (toc) {
 				if (!toc) { return null; }
 
 				return Ext.applyIf({
@@ -199,46 +199,46 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 					ContentNTIID: firstPackage,
 					title: firstPackage,
 					root: firstPackage.get('root'),
-					getIcon: function() { return uiData.icon; },
-					getPathLabel: function() { return Promise.resolve(data.title); }
+					getIcon: function () { return uiData.icon; },
+					getPathLabel: function () { return Promise.resolve(data.title); }
 				}, uiData);
 			});
 	},
 
-	getFirstPage: function() {
+	getFirstPage: function () {
 		var e = this.get('ContentPackages')[0];
 		return e && e.get('NTIID');
 	},
 
-	fireNavigationEvent: function(eventSource) {
+	fireNavigationEvent: function (eventSource) {
 		var me = this;
-		return new Promise(function(fulfill) {
-			eventSource.fireEvent('bundle-selected', me, function() {
+		return new Promise(function (fulfill) {
+			eventSource.fireEvent('bundle-selected', me, function () {
 				fulfill();
 			});
 		});
 	},
 
 	//for now content bundles shouldn't show the assignment tab
-	shouldShowAssignments: function() {
+	shouldShowAssignments: function () {
 		return false;
 	},
 
-	getPublicScope: function() { return this.getScope('public'); },
-	getRestrictedScope: function() { return this.getScope('restricted'); },
+	getPublicScope: function () { return this.getScope('public'); },
+	getRestrictedScope: function () { return this.getScope('restricted'); },
 
 	//i don't think this is used
 
 
-	getScope: function(scope) {
+	getScope: function (scope) {
 		var s = (this.get('Scopes') || {})[scope] || '';
 		if (typeof s === 'string') {
 			s = s.split(' ');
 		}
-		return s.filter(function(v) {return !Ext.isEmpty(v);});
+		return s.filter(function (v) {return !Ext.isEmpty(v);});
 	},
 
-	hasForumList: function() {
+	hasForumList: function () {
 		return !!this.getLink('DiscussionBoard');
 	},
 
@@ -246,19 +246,19 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 	 * See getForumList in CourseInstance for more details
 	 * @return {Object} a forum list of the contents of this board
 	 */
-	getForumList: function() {
+	getForumList: function () {
 		var me = this,
 			b;
 
 		return me.resolveBoard()
-			.then(function(board) {
+			.then(function (board) {
 				var contents = board.getLink('contents');
 
 				b = board;
 
 				return Service.request(contents);
 			})
-			.then(function(json) {
+			.then(function (json) {
 				json = JSON.parse(json);
 				json.Items = ParseUtils.parseItems(json.Items);
 
@@ -272,7 +272,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 			});
 	},
 
-	resolveBoard: function() {
+	resolveBoard: function () {
 		var me = this,
 			link = me.getLink('DiscussionBoard'),
 			//get the cached request, or make a new one.
@@ -280,12 +280,12 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 					//parse
 				.then(ParseUtils.parseItems.bind(ParseUtils))
 					//unwrap from the array
-				.then(function(items) {
+				.then(function (items) {
 					if (items.length > 1) {console.warn('Too many items found.');}
 					return items[0];
 				})
 					//if we fail, delete the cached promise, and resume failure. :P
-				.fail(function(reason) {
+				.fail(function (reason) {
 					delete me.__BoardResolver;
 					return Promise.reject(reason);
 				}));
@@ -296,18 +296,18 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 		return p;
 	},
 
-	represents: function(catalogEntry) {return false;},
+	represents: function (catalogEntry) {return false;},
 
-	getVideosByContentPackage: function() {
+	getVideosByContentPackage: function () {
 		var contentPackages = this.get('ContentPackages'),
 			videoMap = {};
 
-		return Promise.all(contentPackages.map(function(contentPackage) {
+		return Promise.all(contentPackages.map(function (contentPackage) {
 			return contentPackage.getVideos()
-				.then(function(videos) {
+				.then(function (videos) {
 					videoMap[contentPackage.get('NTIID')] = videos;
 				});
-		})).then(function() {
+		})).then(function () {
 			return videoMap;
 		});
 	}

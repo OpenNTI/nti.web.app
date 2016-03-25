@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 
 
-	getEmptyEntry: function() {
+	getEmptyEntry: function () {
 		return {
 			companyName: '',
 			title: '',
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	setUser: function(user, isMe) {
+	setUser: function (user, isMe) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setUser.bind(this, user, isMe));
 			return;
@@ -87,14 +87,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	isReadOnly: function() {
+	isReadOnly: function () {
 		var schema = this.profileSchema && this.profileSchema.ProfileSchema;
 
 		return !schema || !schema.positions || schema.positions.readonly;
 	},
 
 
-	entryToValues: function(entry) {
+	entryToValues: function (entry) {
 		var companyName = entry.querySelector('[data-field=companyName]'),
 			title = entry.querySelector('[data-field=title]'),
 			startYear = entry.querySelector('[data-field=startYear]'),
@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		endYear = endYear && (endYear.innerText || endYear.textContent);
 		description = description && (description.innerText || description.textContent);
 
-		function normalizeYear(year) {
+		function normalizeYear (year) {
 			return year ? parseInt(year, 10) : null;
 		}
 
@@ -121,9 +121,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		};
 	},
 
-	validateEntry: function(entry) {
+	validateEntry: function (entry) {
 		var valid = true;
-			values = this.entryToValues(entry);
+		values = this.entryToValues(entry);
 
 		if (!values.companyName) {
 			this.showErrorForField(entry, 'companyName', 'Required');

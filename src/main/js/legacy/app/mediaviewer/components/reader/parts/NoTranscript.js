@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	}),
 
 
-	initComponent: function(){
+	initComponent: function () {
 		this.callParent(arguments);
 		this.enableBubble(['presentation-part-ready', 'register-records', 'unregister-records']);
 	}

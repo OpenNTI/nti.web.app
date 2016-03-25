@@ -13,14 +13,14 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 	statics: {
 
-		__getMessages: function() {
+		__getMessages: function () {
 			this.__errorMessages = this.__errorMessages || new NextThought.common.form.ErrorMessages();
 
 			return this.__errorMessages;
 		},
 
 
-		getMessageForError: function(errors) {
+		getMessageForError: function (errors) {
 			var message = this.__getMessages();
 
 			return message.getMessageForErrors(errors);
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 
 		text: {
-			append: function(el, data, returnEl) {
+			append: function (el, data, returnEl) {
 				var tpl,
 					config = {
 						cls: 'field {name}', cn: []
@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		// })),
 		//
 		textarea: {
-			append: function(el, data, returnEl) {
+			append: function (el, data, returnEl) {
 				var tpl,
 					config = {
 						cls: 'field {name}', cn: []
@@ -207,7 +207,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		formEl: 'form'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.componentMap = {};
@@ -223,7 +223,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.buildInputs(this.schema, this.formEl);
@@ -235,33 +235,33 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			.then(this.focusField.bind(this));
 	},
 
-	onDestroy: function() {
+	onDestroy: function () {
 		var componentMap = this.componentMap || {},
 			keys = Object.keys(componentMap);
 
-		keys.forEach(function(key) {
+		keys.forEach(function (key) {
 			var cmp = componentMap[key];
 
 			cmp.destroy();
 		});
 	},
 
-	focusField: function(name) {
+	focusField: function (name) {
 		var field = name ? {name: name} : this.getFirstField(),
 			input = field && this.getInputForField(field.name);
 
 		if (input && input.focus) { input.focus(); }
 	},
 
-	buildInputs: function(schema, el) {
+	buildInputs: function (schema, el) {
 		var me = this;
 
-		schema.forEach(function(inputSchema) {
+		schema.forEach(function (inputSchema) {
 			me.addInput(inputSchema, el);
 		});
 	},
 
-	addInput: function(schema, el) {
+	addInput: function (schema, el) {
 		var type = schema.type,
 			tpl = this.INPUT_TYPES[type],
 			inputEl;
@@ -292,7 +292,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-	addFieldListeners: function(schema, inputEl) {
+	addFieldListeners: function (schema, inputEl) {
 		var dom = inputEl.dom;
 
 		if (schema.maxlength) {
@@ -302,7 +302,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		dom.addEventListener('keyup', this.onFormChange.bind(this));
 	},
 
-	__buildComponent: function(cls, schema, inputEl) {
+	__buildComponent: function (cls, schema, inputEl) {
 		var cmp = cls.create({
 			defaultValue: schema.value,
 			defaultValues: this.defaultValues,
@@ -314,23 +314,23 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		this.componentMap[schema.name] = cmp;
 	},
 
-	buildImageInput: function(schema, inputEl) {
+	buildImageInput: function (schema, inputEl) {
 		this.__buildComponent(NextThought.common.form.fields.ImagePicker, schema, inputEl);
 	},
 
-	buildFileInput: function(schema, inputEl) {
+	buildFileInput: function (schema, inputEl) {
 		this.__buildComponent(NextThought.common.form.fields.FilePicker, schema, inputEl);
 	},
 
-	buildDateInput: function(schema, inputEl) {
+	buildDateInput: function (schema, inputEl) {
 		this.__buildComponent(NextThought.common.form.fields.DatePicker, schema, inputEl);
 	},
 
-	buildUrlInput: function(schema, inputEl) {
+	buildUrlInput: function (schema, inputEl) {
 		this.__buildComponent(NextThought.common.form.fields.URL, schema, inputEl);
 	},
 
-	buildSaveProgress: function(schema, inputEl) {
+	buildSaveProgress: function (schema, inputEl) {
 		this.saveProgressCmp = NextThought.common.form.fields.Progress.create({
 			schema: schema,
 			renderTo: inputEl
@@ -339,7 +339,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		this.saveProgressCmp.hide();
 	},
 
-	getFirstField: function(schema) {
+	getFirstField: function (schema) {
 		var first, field, i = 0;
 
 		schema = schema || this.schema;
@@ -359,19 +359,19 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		return first;
 	},
 
-	getInputForField: function(name) {
+	getInputForField: function (name) {
 		return this.__getComponent(name) || this.__getInput(name) || this.__getTextarea();
 	},
 
-	__getComponent: function(name) {
+	__getComponent: function (name) {
 		return this.componentMap[name];
 	},
 
-	__getInput: function(name) {
+	__getInput: function (name) {
 		return this.el && this.el.dom.querySelector('input[name="' + name + '"]');
 	},
 
-	__getTextarea: function(name) {
+	__getTextarea: function (name) {
 		return this.el && this.el.dom.querySelector('textarea[name="' + name + '"]');
 	},
 
@@ -386,7 +386,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	 * @param  {Object} e Browser Event.
 	 *
 	 */
-	onFormChange: function(e) {
+	onFormChange: function (e) {
 		var vals = this.getValues();
 
 		if (this.onChange) {
@@ -394,7 +394,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-	checkMaxLength: function(schema, field) {
+	checkMaxLength: function (schema, field) {
 		var input = field.querySelector('input, textarea'),
 			value = input && input.value,
 			length = value && value.length,
@@ -408,19 +408,19 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	 *
 	 * @return {Boolean}
 	 */
-	isValid: function() {
+	isValid: function () {
 		var form = this.formEl.dom;
 
 		return form.checkValidity ? form.checkValidity() : true;
 	},
 
-	getErrors: function(schema, errors) {
+	getErrors: function (schema, errors) {
 		var me = this;
 
 		schema = schema || this.schema;
 		errors = errors || {};
 
-		schema.forEach(function(entry) {
+		schema.forEach(function (entry) {
 			var name = entry.name,
 				error;
 
@@ -439,7 +439,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		return errors;
 	},
 
-	getErrorsFor: function(name) {
+	getErrorsFor: function (name) {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
 			textarea = this.__getTextarea(name),
@@ -456,7 +456,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			};
 		}
 
-		(Object.keys(error || {}) || []).forEach(function(key) {
+		(Object.keys(error || {}) || []).forEach(function (key) {
 			var type = error[key];
 
 			if (type) {
@@ -468,12 +468,12 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		return hasErrors && error;
 	},
 
-	__componentsEmpty: function() {
+	__componentsEmpty: function () {
 		var components = this.componentMap,
 			keys = Object.keys(components),
 			isEmpty = true;
 
-		keys.forEach(function(key) {
+		keys.forEach(function (key) {
 			var cmp = components[key];
 
 			if (cmp.isEmpty && !cmp.isEmpty()) {
@@ -484,13 +484,13 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		return isEmpty;
 	},
 
-	__inputsEmpty: function() {
+	__inputsEmpty: function () {
 		var inputs = this.el.dom.querySelectorAll('input[type=text], textarea'),
 			isEmpty = true;
 
 		inputs = Array.prototype.slice.call(inputs);
 
-		inputs.forEach(function(input) {
+		inputs.forEach(function (input) {
 			if (input.value) {
 				isEmpty = false;
 			}
@@ -499,7 +499,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		return isEmpty;
 	},
 
-	isEmpty: function() {
+	isEmpty: function () {
 		if (!this.rendered) {
 			return true;
 		}
@@ -507,14 +507,14 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		return this.__componentsEmpty() && this.__inputsEmpty();
 	},
 
-	getValues: function(schema, values) {
+	getValues: function (schema, values) {
 		var me = this;
 
 		schema = schema || me.schema || [];
 
 		values = values || {};
 
-		schema.forEach(function(entry) {
+		schema.forEach(function (entry) {
 			var name = entry.name;
 
 			if (entry.type === 'group') {
@@ -527,7 +527,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		return values;
 	},
 
-	getValueOf: function(name) {
+	getValueOf: function (name) {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
 			textarea = this.__getTextarea(name),
@@ -546,13 +546,13 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		return value;
 	},
 
-	getChangedValues: function() {
+	getChangedValues: function () {
 		var schema = this.schema,
 			sendAllValues = this.sendAllValues,
 			newValues = this.getValues(),
 			oldValues = this.defaultValues;
 
-		function reducer(acc, part) {
+		function reducer (acc, part) {
 			var oldValue = oldValues[part.name],
 				newValue = newValues[part.name];
 
@@ -570,7 +570,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		return schema.reduce(reducer, {});
 	},
 
-	getFormData: function() {
+	getFormData: function () {
 		var form = this.formEl.dom,
 			components = this.componentMap,
 			keys = Object.keys(components),
@@ -580,7 +580,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 		formData = new FormData(form);
 
-		keys.forEach(function(key) {
+		keys.forEach(function (key) {
 			var cmp = components[key];
 
 			if (cmp.appendToFormData) {
@@ -591,12 +591,12 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		return formData;
 	},
 
-	hasFiles: function() {
+	hasFiles: function () {
 		var componentMap = this.componentMap,
 			keys = Object.keys(componentMap),
 			hasFile = false;
 
-		keys.forEach(function(key) {
+		keys.forEach(function (key) {
 			var cmp = componentMap[key];
 
 			if (cmp.hasFile && cmp.hasFile()) {
@@ -607,13 +607,13 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		return hasFile;
 	},
 
-	onSubmitProgress: function(e) {
+	onSubmitProgress: function (e) {
 		if (!this.saveProgressCmp) { return; }
 
 		this.saveProgressCmp.setProgress(e.loaded, e.total);
 	},
 
-	__buildXHR: function(url, method, success, failure) {
+	__buildXHR: function (url, method, success, failure) {
 		var xhr = new XMLHttpRequest(),
 			progress = this.onSubmitProgress.bind(this);
 
@@ -622,7 +622,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		xhr.upload.addEventListener('progress', progress);
 		xhr.upload.addEventListener('load', progress);
 
-		xhr.onreadystatechange = function() {
+		xhr.onreadystatechange = function () {
 			if (xhr.readyState === 4) {
 				if (xhr.status >= 200 && xhr.status < 300) {
 					success(xhr.responseText);
@@ -640,20 +640,20 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		return xhr;
 	},
 
-	__submitFormData: function(formData, url, method) {
+	__submitFormData: function (formData, url, method) {
 		var me = this;
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			var xhr = me.__buildXHR(url, method, fulfill, reject);
 
 			xhr.send(formData);
 		});
 	},
 
-	__submitJSON: function(values, url, method) {
+	__submitJSON: function (values, url, method) {
 		var me = this;
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			var xhr = me.__buildXHR(url, method, fulfill, reject);
 
 			xhr.setRequestHeader('Content-Type', 'application/json');
@@ -669,7 +669,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	 * Otherwise, submit a json object. For the json object, only pass the values that actually changed.
 	 *
 	 */
-	submitTo: function(url) {
+	submitTo: function (url) {
 		var me = this,
 			hasFiles = me.hasFiles(),
 			progress = me.saveProgressCmp,
@@ -695,10 +695,10 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 
 
 		return submit
-			.then(function(results) {
+			.then(function (results) {
 				if (progress) {
 					return progress.stop()
-						.then(function() {
+						.then(function () {
 							me.removeCls('saving');
 							return results;
 						});
@@ -707,7 +707,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 				me.el.unmask();
 				return results;
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				if (progress) {
 					progress.showError();
 					me.removeCls('saving');
@@ -719,7 +719,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			});
 	},
 
-	doSubmit: function() {
+	doSubmit: function () {
 		var submit;
 
 		if (this.action) {
@@ -731,7 +731,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		return submit;
 	},
 
-	submitToRecord: function(record) {
+	submitToRecord: function (record) {
 		var link = record.getLink('edit'),
 			values = this.getChangedValues();
 
@@ -740,7 +740,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		}
 
 		return this.submitTo(link)
-			.then(function(response) {
+			.then(function (response) {
 				record.set(values);
 				record.syncWithResponse(response);
 
@@ -748,7 +748,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 			});
 	},
 
-	showErrorOn: function(name, reason) {
+	showErrorOn: function (name, reason) {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
 			textarea = this.__getTextarea(name);
@@ -764,7 +764,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-	removeErrorOn: function(name) {
+	removeErrorOn: function (name) {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
 			textarea = this.__getTextarea(name);
@@ -780,7 +780,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-	setPlaceholder: function(name, value) {
+	setPlaceholder: function (name, value) {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
 			textarea = this.__getTextarea(name);
@@ -796,7 +796,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-	setValue: function(name, value) {
+	setValue: function (name, value) {
 		var cmp = this.__getComponent(name),
 			inputEl = this.__getInput(name),
 			textarea = this.__getTextarea(name);
@@ -812,7 +812,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 		}
 	},
 
-	formSubmit: function(e) {
+	formSubmit: function (e) {
 		e.preventDefault();
 
 		if (this.onSubmit) {

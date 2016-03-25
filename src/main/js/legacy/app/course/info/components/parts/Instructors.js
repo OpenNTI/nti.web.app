@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 		info: null
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		var me = this;
 		config.tpl = new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 			{ cls: 'instructor', cn: [
@@ -33,19 +33,19 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.bindStore(this.buildStore());
 	},
 
 
-	buildStore: function() {
+	buildStore: function () {
 		var ifo = this.getInfo(),
 			data = ((ifo && ifo.get('Instructors')) || []).slice(),
 			photo = '{0}instructor-photos/{1}.png',
 			root = ifo.getAssetRoot() || '/no-root/';
 
-		data.forEach(function(o, i) {
+		data.forEach(function (o, i) {
 			var url = Ext.String.format(photo, root, Ext.String.leftPad(i + 1, 2, '0'));
 
 			o.set('photo', url);
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 		});
 	},
 	
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 		//Our parent doesn't participate in ext layout so if our store is
 		//bound when the view is hidden or collapsed the view is never initially rendered

@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	statics: {
 
-		getCreators: function() {
+		getCreators: function () {
 			var base = NextThought.app.course.overview.components.editing.content,
 				outline = NextThought.app.course.overview.components.editing.outline;
 
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		},
 
 
-		getTypeEditors: function() {
+		getTypeEditors: function () {
 			var base = NextThought.app.course.overview.components.editing.content;
 
 			return [
@@ -46,6 +46,6 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			];
 		}
 	}
-}, function() {
+}, function () {
 	this.initRegistry();
 });

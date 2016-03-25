@@ -3,7 +3,7 @@ var Globals = require('../../../util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.app.image.cropping.CroppedImage', {
-	constructor: function(config) {
+	constructor: function (config) {
 		this.blob = config.blob;
 		this.name = config.name;
 
@@ -11,17 +11,17 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.CroppedIma
 	},
 
 
-	getName: function() {
+	getName: function () {
 		return this.name;
 	},
 
 
-	getBlob: function() {
+	getBlob: function () {
 		return this.blob;
 	},
 
 
-	getURL: function() {
+	getURL: function () {
 		if (!this.url && this.urlObject) {
 			this.url = this.urlObject.createObjectURL(this.blob);
 		}
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.image.cropping.CroppedIma
 	},
 
 
-	cleanUp: function() {
+	cleanUp: function () {
 		if (this.url && this.urlObject) {
 			this.urlObject.revokeObjectURL(this.url);
 			delete this.url;

@@ -4,7 +4,7 @@ global.ObjectUtils =
 module.exports = exports = Ext.define('NextThought.util.Object', {
 
 
-	deleteFunctionProperties: function deleteFunctionsOn(o, allowClassRefs) {
+	deleteFunctionProperties: function deleteFunctionsOn (o, allowClassRefs) {
 		var key;
 		//let the functions go, free up some captured scopes
 		for (key in o) {
@@ -21,11 +21,11 @@ module.exports = exports = Ext.define('NextThought.util.Object', {
 	},
 
 
-	defineAttributes: function(obj, attrs) {
+	defineAttributes: function (obj, attrs) {
 		var setter = '__defineSetter__',
 			getter = '__defineGetter__',
 			hasDefineProp = Boolean(Object.defineProperty),
-			a, g, c, s, e = function() {};
+			a, g, c, s, e = function () {};
 
 		for (a in attrs) {
 			if (attrs.hasOwnProperty(a)) {
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.util.Object', {
 	},
 
 
-	clean: function clean(o) {
+	clean: function clean (o) {
 		var key, v;
 		if (!o || !Ext.isObject(o)) {return;}
 		for (key in o) {

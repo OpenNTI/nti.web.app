@@ -4,7 +4,7 @@ var Ext = require('extjs');
 module.exports = exports = Ext.define('NextThought.common.dd.ScrollingDragZone', {
 	extend: 'Ext.dd.DragZone',
 
-	constructor: function(el, cfg) {
+	constructor: function (el, cfg) {
 
 		Ext.apply(Ext.dd.ScrollManager, {
 			vthresh: 75,
@@ -22,12 +22,12 @@ module.exports = exports = Ext.define('NextThought.common.dd.ScrollingDragZone',
 		var scrollMonitor = observable.mon(this.scrollEl || el, {
 			destroyable: true,
 			scope: this,
-			scroll: function() {
+			scroll: function () {
 				this.DDMInstance.refreshCache(this.groups);
 			}
 		});
 
-		this.destroy = Ext.Function.createSequence(this.destroy, function() {
+		this.destroy = Ext.Function.createSequence(this.destroy, function () {
 			scrollMonitor.destroy();
 			observable.clearListeners();
 		});

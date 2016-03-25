@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	bubbleEvents: ['filters-changed', 'search-changed'],
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.currentGrouping = 'lesson';
 		this.searchKey = '';
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	searchKeyPressed: function(e) {
+	searchKeyPressed: function (e) {
 		var key = e.keyCode;
 
 		this.searchKey = this.searchEl.getValue();
@@ -58,25 +58,25 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	clearSearch: function() {
+	clearSearch: function () {
 		this.searchEl.dom.value = '';
 		this.searchKey = '';
 		this.fireEvent('search-changed', '');
 	},
 
 
-	showGroupByMenu: function() {
+	showGroupByMenu: function () {
 		var menu = this.groupByMenu, item = menu.down('[checked]');
 		if (!this.groupEl.hasCls('disabled')) {
-				if (item) {
+			if (item) {
 					menu.insert(0, item);
 				}
-				menu.showBy(this.groupEl, 'tl-tl');
+			menu.showBy(this.groupEl, 'tl-tl');
 		}
 	},
 
 
-	createGroupByMenu: function() {
+	createGroupByMenu: function () {
 		var type = this.currentGrouping, items = [
 				{ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.alllessons'), groupBy: 'lesson', checked: type === 'lesson'},
 				{ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.due'), groupBy: 'due', checked: type === 'due'},
@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	selectGroupBy: function(groupBy) {
+	selectGroupBy: function (groupBy) {
 		if (!this.rendered) {
 			this.on('afterrender', this.selectGroupBy.bind(this, groupBy));
 			return;
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	updateOrdering: function(item) {
+	updateOrdering: function (item) {
 		var offset = item.getOffsetsTo(this.groupByMenu),
 			x = offset && offset[1];
 
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	switchOrdering: function(item, status) {
+	switchOrdering: function (item, status) {
 		if (!status) { return; }
 
 
@@ -141,8 +141,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.fireEvent('filters-changed');
 	},
 
-	enableGroupBy: function(status){
-		if(status){
+	enableGroupBy: function (status) {
+		if(status) {
 			this.groupEl.el.removeCls('disabled');
 			this.groupByMenu.enable(true);
 		}else{
@@ -151,21 +151,21 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	getShowType: function() {
+	getShowType: function () {
 
 	},
 
 
-	getGroupBy: function() {
+	getGroupBy: function () {
 		return this.currentGrouping || 'lesson';
 	},
 
 
-	getSearch: function() {
+	getSearch: function () {
 		return this.searchKey || '';
 	},
 
-	setSearch: function(value) {
+	setSearch: function (value) {
 		this.searchEl.dom.value = value;
 		this.searchkey = value;
 	}

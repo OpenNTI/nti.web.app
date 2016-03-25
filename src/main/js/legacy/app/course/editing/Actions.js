@@ -8,17 +8,17 @@ var ConflictActions = require('../../conflict/Actions');
 module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.ConflictActions = NextThought.app.conflict.Actions.create();
 	},
 
-	__resolveConflict: function(conflict, data) {
+	__resolveConflict: function (conflict, data) {
 		return this.ConflictActions.resolveConflict(conflict, data);
 	},
 
-	updateAssignmentDates: function(assignment, available, due) {
+	updateAssignmentDates: function (assignment, available, due) {
 		var me = this,
 			link = assignment.getLink('edit'),
 			data = {
@@ -31,16 +31,16 @@ module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', 
 		}
 
 		return Service.put(link, data)
-			.then(function(response) {
+			.then(function (response) {
 				assignment.syncWithResponse(response);
 
 				return assignment;
-			}).fail(function(response) {
+			}).fail(function (response) {
 				var conflict = response && response.status === 409 && response.responseText && ParseUtils.parseItems(response.responseText)[0];
 
 				if (conflict) {
 					return me.__resolveConflict(conflict, data)
-						.then(function(response) {
+						.then(function (response) {
 							if (response) {
 								assignment.syncWithResponse(response);
 							}

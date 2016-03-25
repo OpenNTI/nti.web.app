@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 		snippetEl: '.snippet'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 			.then(this.setPath.bind(this));
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var div = document.createElement('div');
@@ -57,12 +57,12 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 		}
 	},
 
-	setPath: function(path) {
+	setPath: function (path) {
 		this.setIcon(path);
 		this.setLineage(path);
 	},
 
-	setIcon: function(path) {
+	setIcon: function (path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setIcon.bind(this, path));
 			return;
@@ -98,12 +98,12 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 				});
 
 			})
-			.fail(function() {
+			.fail(function () {
 				me.iconEl.hide();
 			});
 	},
 
-	setLineage: function(path) {
+	setLineage: function (path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setLineage.bind(this, path));
 			return;

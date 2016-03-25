@@ -20,12 +20,12 @@ module.exports = exports = Ext.define('NextThought.model.forums.HeadlineTopic', 
 	],
 
 
-	getActivityLabel: function() {
+	getActivityLabel: function () {
 		return 'started a discussion:';
 	},
 
 
-	getActivityItemConfig: function() {
+	getActivityItemConfig: function () {
 		return Promise.resolve({
 			message: Ext.String.ellipsis(this.get('headline').get('title'), 50, true),
 			verb: this.getActivityLabel()

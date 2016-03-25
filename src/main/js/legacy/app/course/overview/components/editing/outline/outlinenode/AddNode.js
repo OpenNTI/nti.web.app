@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		addLessonEl: '.title'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.EditingActions = NextThought.app.course.overview.components.editing.Actions.create();
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.addLessonEl, 'click', this.onClick.bind(this));
@@ -55,14 +55,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 *
 	 * @param  {Event} e Browser Event
 	 */
-	onClick: function(e) {
+	onClick: function (e) {
 		var me = this;
 
 		if (!this.inlineEditorEl.isVisible()) {
 			this.showEditor();
 		} else {
 			this.onSave(e)
-				.then(function(rec) {
+				.then(function (rec) {
 					if (me.afterSave) {
 						me.afterSave(rec);
 					}
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	showEditor: function() {
+	showEditor: function () {
 		this.inlineEditorEl.show();
 
 		//TODO: instead of checking the owner ct, have the owner pass
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	hideEditor: function() {
+	hideEditor: function () {
 		if (!this.rendered) { return; }
 
 		this.inlineEditorEl.hide();
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	isValid: function() {
+	isValid: function () {
 		if (this.editor.isValid && !this.editor.isValid()) {
 			if (this.editor.showError) {
 				this.editor.showError();
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return true;
 	},
 
-	onCancel: function(e) {
+	onCancel: function (e) {
 		this.hideEditor();
 	},
 
@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * @param  {Event} e  Browser click event
 	 * @return {Promise}   returns a promise that fulfills after the record is published.
 	 */
-	onSave: function(e) {
+	onSave: function (e) {
 		var me = this,
 			values = me.editor.getValue(),
 			outline = me.outlineCmp && me.outlineCmp.outline,
@@ -142,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		return parent.appendContent(values)
-			.then(function(rec) {
+			.then(function (rec) {
 				if (me.autoPublish) {
 					me.EditingActions.publish(rec);
 				}
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					}
 				} else {
 					wait()
-						.then(function() {
+						.then(function () {
 							if (me.editor.setSuggestTitle) {
 								me.editor.setSuggestTitle();
 							}

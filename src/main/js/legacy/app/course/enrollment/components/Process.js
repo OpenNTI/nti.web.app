@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	layout: 'card',
 	cls: 'enrollment-credit',
 
-	getTargetEl: function() {
+	getTargetEl: function () {
 		return this.body;
 	},
 
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	tabsToAdd: [],
 	numberOfSteps: 0,
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.tabsToAdd = [];
 		this.enableBubble([
@@ -50,14 +50,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			'submit-enroll-purchase',
 			'enrollment-enrolled-complete',
 			'redeem-gift'
-			]);
+		]);
 
 		(this.steps || []).forEach(this.addStep.bind(this));
 
 		this.on('beforedeactivate', 'beforeDeactivate', this);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.addTabs(this.tabsToAdd);
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.activateStep(0);
 	},
 
-	beforeDeactivate: function() {
+	beforeDeactivate: function () {
 		if (this.pricingInfo) {
 			this.pricingInfo.removePricingInfo();
 		}
@@ -73,15 +73,15 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.clearStorage();
 	},
 
-	clearStorage: function(all) {
-		this.items.each(function(item) {
+	clearStorage: function (all) {
+		this.items.each(function (item) {
 			if (item.clearStorage) {
 				item.clearStorage();
 			}
 		});
 	},
 
-	showPricingInfo: function(course, enrollmentOption, hidePrice) {
+	showPricingInfo: function (course, enrollmentOption, hidePrice) {
 		if (!this.rendered) { return; }
 
 		var container = this.el.down('.enrollment-container');
@@ -104,17 +104,17 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.on('destroy', 'destroy', this.pricingInfo);
 	},
 
-	hidePricingInfo: function(course, enrollmentOption) {
+	hidePricingInfo: function (course, enrollmentOption) {
 		if (this.pricingInfo) {
 			this.pricingInfo.hide();
 		}
 	},
 
-	getCoupon: function() {
+	getCoupon: function () {
 		return this.pricingInfo && this.pricingInfo.getCoupon();
 	},
 
-	lockProcess: function() {
+	lockProcess: function () {
 		var item = this.getLayout().getActiveItem();
 
 		if (item.lock && !item.locked) {
@@ -123,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-	unlockProcess: function() {
+	unlockProcess: function () {
 		var item = this.getLayout().getActiveItem();
 
 		if (item && item.unlock) {
@@ -132,20 +132,20 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-	getButtonCfg: function() {
+	getButtonCfg: function () {
 		var active = this.getLayout().getActiveItem(),
 			btnCfg = active && active.getButtonCfg && active.getButtonCfg();
 
 		return btnCfg;
 	},
 
-	buttonClick: function(action) {
+	buttonClick: function (action) {
 		var active = this.getLayout().getActiveItem();
 
 		active.buttonClick(action);
 	},
 
-	stopClose: function() {
+	stopClose: function () {
 		var active = this.getLayout().getActiveItem(),
 			stop;
 
@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return stop;
 	},
 
-	addMask: function(msg, cls) {
+	addMask: function (msg, cls) {
 		if (!this.el) { return; }
 
 		var isMasked = this.el.isMasked(),
@@ -176,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-	removeMask: function() {
+	removeMask: function () {
 		if (!this.el) { return; }
 		var mask = this.el.down('.x-mask'),
 			maskMsg = this.el.down('.x-mask-msg');
@@ -188,11 +188,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		wait(1000).then(this.el.unmask.bind(this.el));
 	},
 
-	hasMask: function() {
+	hasMask: function () {
 		return this.el.isMasked();
 	},
 
-	addTabs: function(cfgs) {
+	addTabs: function (cfgs) {
 		if (!this.rendered) {
 			this.tabsToAdd.push(cfgs);
 			return;
@@ -202,14 +202,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 		cfgs = Ext.isArray(cfgs) ? cfgs : [cfgs];
 
-		cfgs.forEach(function(cfg) {
+		cfgs.forEach(function (cfg) {
 			me.btnTpl.append(me.headerEl, cfg);
 		});
 
 		this.tabsToAdd = [];
 	},
 
-	addStep: function(step, i) {
+	addStep: function (step, i) {
 		var cmp, me = this,
 			tabCfg = {
 				text: step.name,
@@ -245,7 +245,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	 * Set the bread crumb to show the active item note that data-index is 1 based
 	 * @param {Number} index the item to activate
 	 */
-	setActiveTab: function(index) {
+	setActiveTab: function (index) {
 		var i, btn;
 
 		index = index + 1;
@@ -272,12 +272,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	 * @param  {Number} index the step to start looking from
 	 * @param {Boolean} recursive if we are called again to activate the next step
 	 */
-	activateStep: function(index, recursive) {
+	activateStep: function (index, recursive) {
 		var me = this,
 			item = me.down('[index="' + index + '"]') || me.down('[name="' + index + '"]'),
 			total = me.numberOfSteps,
 			maskCmp = me.el;
-			step = me.steps[index];
+		step = me.steps[index];
 
 		if (index < 0) {
 			step = me.steps[0];
@@ -296,7 +296,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			maskCmp.mask('Loading...');
 		}
 
-		function setItem() {
+		function setItem () {
 			if (item.beforeShow) {
 				item.beforeShow();
 			}
@@ -322,7 +322,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 
 		step.isComplete()
-			.then(function() {//if we are completed
+			.then(function () {//if we are completed
 				//if we aren't the last one check the next one
 				if (index < total - 1) {
 					me.activateStep(index + 1, true);
@@ -333,7 +333,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 					console.error('Last step must have a component to go with it');
 				}
 			})
-			.fail(function() {//if we aren't compeleted
+			.fail(function () {//if we aren't compeleted
 				//if we have an cmp for this step
 				if (item) {
 					setItem();
@@ -344,13 +344,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			});
 	},
 
-	stepCompleted: function(cmp) {
+	stepCompleted: function (cmp) {
 		var index = cmp.index;
 
 		this.activateStep(index + 1);
 	},
 
-	stepError: function(cmp) {
+	stepError: function (cmp) {
 		var index = cmp.index + 1,
 			btn = this.headerEl.down('[data-number="' + index + '"]');
 

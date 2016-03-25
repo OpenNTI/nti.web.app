@@ -2,9 +2,9 @@ var Ext = require('extjs');
 var B64 = require('../util/Base64');
 
 
-module.exports = exports = Ext.define('NextThought.cache.AbstractStorage', function() {
+module.exports = exports = Ext.define('NextThought.cache.AbstractStorage', function () {
 
-	var prefix = function prefix(v) {
+	var prefix = function prefix (v) {
 		if (!prefix.val) {
 			prefix.val = B64.encode($AppConfig.username).concat('-');
 		}
@@ -14,19 +14,19 @@ module.exports = exports = Ext.define('NextThought.cache.AbstractStorage', funct
 	return {
 
 		statics: {
-			getLocalStorage: function() {
+			getLocalStorage: function () {
 				return PersistentStorage;
 			},
 
 
-			getSessionStorage: function() {
+			getSessionStorage: function () {
 				return TemporaryStorage;
 			}
 		},
 
 		currentVersion: 2,
 
-		constructor: function(storage, noPrefix) {
+		constructor: function (storage, noPrefix) {
 			if (!storage ||
 				!Ext.isFunction(storage.removeItem) ||
 				!Ext.isFunction(storage.setItem) ||
@@ -49,20 +49,20 @@ module.exports = exports = Ext.define('NextThought.cache.AbstractStorage', funct
 		},
 
 
-		prefix: function(v) {return v;},
+		prefix: function (v) {return v;},
 
 
-		setItem: function(key, value) {
+		setItem: function (key, value) {
 			return this.set(key, value);
 		},
 
 
-		getItem: function(key) {
+		getItem: function (key) {
 			return this.get(key);
 		},
 
 
-		set: function(key, value) {
+		set: function (key, value) {
 			var old = this.get(key),
 				encKey = this.prefix(key),
 				encVal = Ext.encode(value);
@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.cache.AbstractStorage', funct
 		},
 
 
-		get: function(key) {
+		get: function (key) {
 			//Migrate:
 			var old = this.backingStore.getItem(key);
 			if (old && this.prefix(key) !== key) {
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.cache.AbstractStorage', funct
 		},
 
 
-		getProperty: function(key, property, defaultValue) {
+		getProperty: function (key, property, defaultValue) {
 			var o = this.get(key) || {};
 
 			property = property.split('/');
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.cache.AbstractStorage', funct
 		},
 
 
-		updateProperty: function(key, property, value) {
+		updateProperty: function (key, property, value) {
 			var o = this.get(key) || {}, v = o, p;
 
 			try {
@@ -130,35 +130,35 @@ module.exports = exports = Ext.define('NextThought.cache.AbstractStorage', funct
 		},
 
 
-		removeProperty: function(key, property) {
+		removeProperty: function (key, property) {
 			return this.updateProperty(key, property, undefined);
 		},
 
 
-		remove: function(key) {
+		remove: function (key) {
 			this.backingStore.removeItem(key);
 		},
 
 
-		removeAll: function() {
+		removeAll: function () {
 			this.backingStore.clear();
 		}
 	};
 
-},function() {
+},function () {
 	var w = window,
 		Cls = this,
 		ss,
 		ls,
 		fallback = {
 			data: {},
-			removeItem: function(k) {delete this.data[k];},
-			setItem: function(k, v) {this.data[k] = v; console.warn('[WARNING] Using fake storage to workaround missing broswer support for Storage API');},
-			getItem: function(k) {return this.data[k];},
-			clear: function() {this.data = {};}
+			removeItem: function (k) {delete this.data[k];},
+			setItem: function (k, v) {this.data[k] = v; console.warn('[WARNING] Using fake storage to workaround missing broswer support for Storage API');},
+			getItem: function (k) {return this.data[k];},
+			clear: function () {this.data = {};}
 		};
 
-	function isStorageSupported(storage) {
+	function isStorageSupported (storage) {
 		var testKey = 'test';
 		try {
 			storage.setItem(testKey, '1');

@@ -31,13 +31,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		nextEl: '.controls .pager .next'
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		var me = this, total;
 
 		if (!me.record.getLink('add')) {
 			me.newTopicEl.destroy();
 		} else {
-			me.mon(me.newTopicEl, 'click', function() {
+			me.mon(me.newTopicEl, 'click', function () {
 				me.fireEvent('new-topic', me, me.record, me.newTopicEl);
 			});
 		}
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		me.mon(me.nextEl, 'click', 'nextPage');
 	},
 
-	updatePosition: function() {
+	updatePosition: function () {
 		var total = Math.ceil(this.store.getTotalCount() / this.store.pageSize),
 			currentPage = total ? this.store.currentPage : 0;
 
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		this.totalEl.update(total || '0');
 	},
 
-	previousPage: function() {
+	previousPage: function () {
 		var current = this.store.currentPage;
 
 		if (current - 1 > 0) {
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		}
 	},
 
-	nextPage: function() {
+	nextPage: function () {
 		var total = Math.ceil(this.store.getTotalCount() / this.store.pageSize),
 			current = this.store.currentPage;
 

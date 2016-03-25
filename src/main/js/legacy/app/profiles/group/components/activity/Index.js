@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		{xtype: 'profile-group-activity-sidebar'}
 	],
 
-	initChildComponentRefs: function() {
+	initChildComponentRefs: function () {
 		this.streamCmp = this.down('profile-group-activity-body');
 		this.sidebarCmp = this.down('profile-group-activity-sidebar');
 		this.membershipCmp = this.down('profile-group-membership-condensed');
@@ -31,15 +31,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		this.streamCmp.navigateToObject = this.navigateToActivityItem.bind(this);
 	},
 
-	onAddedToParentRouter: function() {
+	onAddedToParentRouter: function () {
 		var me = this;
 
-		this.membershipCmp.gotoSeeAll = function() {
+		this.membershipCmp.gotoSeeAll = function () {
 			me.gotoMembership();
 		};
 	},
 
-	navigateToActivityItem: function(item, monitors) {
+	navigateToActivityItem: function (item, monitors) {
 		this.Router.root.attemptToNavigateToObject(item, monitors);
 	}
 });

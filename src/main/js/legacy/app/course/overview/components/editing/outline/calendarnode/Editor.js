@@ -8,13 +8,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-calendarnode-editor',
 
 	statics: {
-		getHandledMimeTypes: function() {
+		getHandledMimeTypes: function () {
 			return [
 				NextThought.model.courses.navigation.CourseOutlineCalendarNode.mimeType
 			];
 		},
 
-		getTypes: function() {
+		getTypes: function () {
 			return [];
 		}
 	}

@@ -29,13 +29,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	]}),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var me = this,
 			name = me.name;
 
-		(me.options || []).forEach(function(option) {
+		(me.options || []).forEach(function (option) {
 			var width = (option.inputWidth && (option.inputWidth + 'px')) || 'auto';
 
 			option.name = name;
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this,
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			scrollParent = this.el.parent('.enrollment-container'),
 			option = me.dropdownOption;
 
-		function stop(e) {
+		function stop (e) {
 			e.stopEvent();
 			var t = e.getTarget('input');
 			if (t) {
@@ -88,18 +88,18 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				renderTo: dropdownContainer
 			});
 
-			me.mon(scrollParent, 'scroll', function() {
+			me.mon(scrollParent, 'scroll', function () {
 				me.dropdown.hideOptions();
 			});
 		}
 
-		me.el.query('label input').forEach(function(n) {
+		me.el.query('label input').forEach(function (n) {
 			me.mon(Ext.get(n), 'click', stop);
 		});
 	},
 
 
-	addOptions: function(options) {
+	addOptions: function (options) {
 		if (this.dropdown) {
 			this.dropdown.addOptions(options);
 		}
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	setUpChangeMonitors: function() {
+	setUpChangeMonitors: function () {
 		var input, me = this;
 
 		me.mon(me.el, 'click', 'changed');
@@ -120,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		input = me.el.down('input[type=text]');
 
 		if (input) {
-			me.mon(input, 'keydown', function() {
+			me.mon(input, 'keydown', function () {
 				clearTimeout(me.inputChangeTimeout);
 
 				me.inputChangeTimeout = setTimeout(me.changed.bind(me), 500);
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	changed: function(e) {
+	changed: function (e) {
 		this.callParent(arguments);
 
 		var me = this,
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		if (!inputFields || Ext.isEmpty(inputFields)) { return; }
 
 		wait()
-			.then(function() {
+			.then(function () {
 				var checked = me.el.down('input[type=radio]:checked'),
 					container = checked && checked.up('.radio'),
 					content = container && container.down('.content'),
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 					container.addCls('error');
 				}
 
-				Ext.each(inputFields, function(input) {
+				Ext.each(inputFields, function (input) {
 					var credit = Ext.fly(input).up('.enrollment-input'),
 						checkedRadio = credit && credit.el.dom.querySelector('input[type=radio]:checked');
 
@@ -171,19 +171,19 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	addError: function() {
+	addError: function () {
 		if (!this.noIncorrect) {
 			this.addCls('error');
 		}
 	},
 
 
-	removeError: function() {
+	removeError: function () {
 		this.removeCls('error');
 	},
 
 
-	setValue: function(value) {
+	setValue: function (value) {
 		var me = this,
 			input, parent;
 
@@ -204,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		//drop down is set in this.afterRender but this is called from the parent.afterRender
 		//so wait until the next event pump
 		wait()
-			.then(function() {
+			.then(function () {
 				//if we have a drop down set that as the value
 				if (me.dropdown) {
 					me.dropdown.setValue(value);
@@ -248,7 +248,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		button and (if applicable) its corresponding text input,
 		or null if no button is selected.
 	*/
-	__selectionValues: function() {
+	__selectionValues: function () {
 		var active = this.el.down('input[type=radio]:checked'),
 			label, input, inputContainer, inputvalue;
 
@@ -279,7 +279,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		};
 	},
 
-	isValid: function() {
+	isValid: function () {
 		if (!this.required || !this.isVisible(true)) { return true; }
 
 		var val = this.getValue(),
@@ -305,7 +305,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return false;
 	},
 
-	getValue: function(force) {
+	getValue: function (force) {
 		if (!this.el || (!force && this.doNotSend)) { return; }
 
 		var active = this.el.down('input[type=radio]:checked'),
@@ -351,7 +351,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return value;
 	},
 
-	isEmpty: function() {
+	isEmpty: function () {
 		if (!this.rendered) { return true; }
 
 		var active = this.el.down('input[type=radio]:checked'), input;

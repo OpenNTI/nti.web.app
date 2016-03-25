@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 	navigation: {xtype: 'course-info-outline'},
 	body: {xtype: 'course-info-body'},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var me = this;
@@ -43,18 +43,18 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 		me.on('show-enrollment', me.showEnrollment.bind(me));
 	},
 
-	onActivate: function() {
+	onActivate: function () {
 		if (!this.rendered) { return; }
 
 		this.setTitle(this.title);
 		this.alignNavigation();
 	},
 
-	bundleChanged: function(bundle) {
+	bundleChanged: function (bundle) {
 		var me = this,
 			catalogEntry = bundle && bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry();
 
-		function update(info, status, showRoster) {
+		function update (info, status, showRoster) {
 			me.hasInfo = !!info;
 
 			me[me.infoOnly ? 'addCls' : 'removeCls']('info-only');
@@ -70,11 +70,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 
 		if (bundle && bundle.getWrapper) {
 			return bundle.getWrapper()
-				.done(function(e) {
+				.done(function (e) {
 					var showRoster = !!e.isAdministrative && !(e.isContentEditor && e.isContentEditor());
 					update(catalogEntry, e.get('Status'), showRoster, me.infoOnly);
 				})
-				.fail(function() {
+				.fail(function () {
 					//hide tab?
 				});
 		}
@@ -82,61 +82,61 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 		return Promise.resolve();
 	},
 
-	showInfo: function(route, subRoute) {
+	showInfo: function (route, subRoute) {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
-		me.body.setActiveItem('info').then(function() {
+		me.body.setActiveItem('info').then(function () {
 			me.body.scrollInfoSectionIntoView(route);
 		});
 	},
 
-	showInstructors: function(route, subRoute) {
+	showInstructors: function (route, subRoute) {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
-		me.body.setActiveItem('info').then(function() {
+		me.body.setActiveItem('info').then(function () {
 			me.body.scrollInfoSectionIntoView(route);
 		});
 	},
 
-	showSupport: function(route, subRoute) {
+	showSupport: function (route, subRoute) {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
-		me.body.setActiveItem('info').then(function() {
+		me.body.setActiveItem('info').then(function () {
 			me.body.scrollInfoSectionIntoView(route);
 		});
 	},
 
-	showRoster: function(route, subRoute) {
+	showRoster: function (route, subRoute) {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
-		me.body.setActiveItem('roster').then(function() {
+		me.body.setActiveItem('roster').then(function () {
 			me.body.scrollRosterIntoView(route, subRoute);
 		});
 	},
 
-	showReports: function(route, subRoute) {
+	showReports: function (route, subRoute) {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
 
-		me.body.setActiveItem('report').then(function() {
+		me.body.setActiveItem('report').then(function () {
 			me.body.scrollReportsIntoView(route, subRoute);
 		});
 	},
 
-	changeRoute: function(title, route) {
+	changeRoute: function (title, route) {
 		this.pushRoute(title, route || '/');
 	},
 
-	showEnrollment: function(catalogEntry) {
+	showEnrollment: function (catalogEntry) {
 		this.WindowActions.pushWindow(catalogEntry, null, null, {afterClose: this.onWindowClose.bind(this, catalogEntry)});
 	},
 
-	onWindowClose: function(catalogEntry) {
+	onWindowClose: function (catalogEntry) {
 		var catalogEntryID = catalogEntry.getId();
 
 		if (catalogEntryID && !this.CourseStore.findEnrollmentForCourse(catalogEntryID)) {

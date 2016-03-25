@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	)),
 
 
-	getItemData: function(item) {
+	getItemData: function (item) {
 		var questions = item.get('questions') || [],
 			questionCount = questions.length;
 

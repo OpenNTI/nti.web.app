@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.GradePerformance
 		pixelDensity: 2
 	},
 
-	testAnimationProperties: function() {
+	testAnimationProperties: function () {
 		if (this.hasOwnProperty('canAnimate')) {
 			return this.canAnimate;
 		}
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.GradePerformance
 	},
 
 
-	startAnimation: function() {
+	startAnimation: function () {
 		this.canAnimate = this.testAnimationProperties();
 		if (this.canAnimate && this.rendered) {
 			this.animateTask.start();//safe to call repeatedly (will noop if already started)
@@ -44,14 +44,14 @@ module.exports = exports = Ext.define('NextThought.common.chart.GradePerformance
 	},
 
 
-	stopAnimation: function() {
+	stopAnimation: function () {
 		if (this.animateTask) {
 			this.animateTask.stop();
 		}
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.dashOffset = 0;
 		this.canvas = Ext.getDom(this.el);
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.GradePerformance
 
 
 		if (!this.context.setLineDash) {
-			this.context.setLineDash = function(a) {};
+			this.context.setLineDash = function (a) {};
 		}
 
 		this.setStore(this.store);
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.GradePerformance
 
 
 
-	applyStore: function(store) {
+	applyStore: function (store) {
 		Ext.destroy(this.storeListeners);
 		delete this.storeListeners;
 		if (store) {
@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.GradePerformance
 	},
 
 
-	redraw: function() {
+	redraw: function () {
 		var ctx = this.context;
 		if (!ctx) {return;}
 
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.GradePerformance
 	},
 
 
-	drawAverages: function() {
+	drawAverages: function () {
 		this.dashOffset--;
 		var ctx = this.context;
 		ctx.save();
@@ -139,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.GradePerformance
 	},
 
 
-	drawGrades: function() {
+	drawGrades: function () {
 		var ctx = this.context;
 		ctx.save();
 		try {
@@ -159,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.GradePerformance
 	},
 
 
-	drawLine: function(property) {
+	drawLine: function (property) {
 		if (!this.store || !this.store.getCount()) {
 			this.stopAnimation();
 			console.warn('No data for chart:', this.id);
@@ -174,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.GradePerformance
 
 		ctx.translate(0, t);
 
-		this.store.each(function(rec, x) {
+		this.store.each(function (rec, x) {
 			var y = (rec.get(property) / 100) * h;
 			ctx[x === 0 ? 'moveTo' : 'lineTo'](currentX, y);
 			currentX += pointDistance;

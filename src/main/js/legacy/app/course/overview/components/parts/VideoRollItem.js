@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		'viewedEl': '.viewed'
 	},
 
-	beforeRender: function(){
+	beforeRender: function () {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, this.video);
 
@@ -29,19 +29,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.el, 'click', this.handleClick.bind(this));
 	},
 
 
-	handleClick: function() {
+	handleClick: function () {
 		if (this.selectVideo) {
 			this.selectVideo(this.video);
 		}
 	},
 
-	setProgress: function(progress){
+	setProgress: function (progress) {
 		if (progress.hasBeenViewed(this.video.getId())) {
 			this.addCls('hasBeenViewed');
 		}

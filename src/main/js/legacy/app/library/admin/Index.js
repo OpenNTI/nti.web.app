@@ -24,20 +24,20 @@ module.exports = exports = Ext.define('NextThought.app.library.admin.Index', {
 		]}
 	}],
 
-	__getUpcomingCourses: function() {
+	__getUpcomingCourses: function () {
 		return this.CourseStore.getUpcomingAdminCourses();
 	},
 
 
-	__getCurrentCourses: function() {
+	__getCurrentCourses: function () {
 		return this.CourseStore.getCurrentAdminCourses();
 	},
 
 
-	__getArchivedCourses: function() {
+	__getArchivedCourses: function () {
 		return this.CourseStore.getArchivedAdminCourses();
 	},
 
 
-	showAvailableCourses: function(route, subRoute) {}
+	showAvailableCourses: function (route, subRoute) {}
 });

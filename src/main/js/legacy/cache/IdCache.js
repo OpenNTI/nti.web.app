@@ -3,17 +3,17 @@ var B64 = require('../util/Base64');
 
 module.exports = exports = Ext.define('NextThought.cache.IdCache', {
 
-	getIdentifier: function(id)
+	getIdentifier: function (id)
 	{
 		if (!id) { return null; }
 		return B64.encode(id);
 	},
 
-	getComponentId: function(rec, subRecordField, prefix) {
+	getComponentId: function (rec, subRecordField, prefix) {
 		prefix = prefix || '';
 		if (!rec) { return null; }
 
-		var i = (typeof(rec) === 'string') ? rec : rec.getId();
+		var i = (typeof (rec) === 'string') ? rec : rec.getId();
 
 		if (!i && subRecordField) {
 			i = rec.get(subRecordField).getId();

@@ -26,14 +26,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.buttonsEl, 'click', this.onButtonClicked.bind(this));
 	},
 
 
-	onButtonClicked: function(e) {
+	onButtonClicked: function (e) {
 		var button = e.getTarget('.button'),
 			action = button.getAttribute('data-action');
 
@@ -43,21 +43,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	addButton: function(data) {
+	addButton: function (data) {
 		data.tip = data.tip || '';
 
 		this.buttonTpl.append(this.buttonsEl, data);
 	},
 
 
-	clearButtons: function() {
+	clearButtons: function () {
 		if (this.buttonsEl) {
 			this.buttonsEl.dom.innerHTML = '';
 		}
 	},
 
 
-	showNotEditing: function() {
+	showNotEditing: function () {
 		this.clearButtons();
 
 		this.addButton({
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	showEditing: function() {
+	showEditing: function () {
 		this.clearButtons();
 
 		if (Service.canDoAdvancedEditing()) {
@@ -87,21 +87,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	doEdit: function() {
+	doEdit: function () {
 		if (this.openEditing) {
 			this.openEditing();
 		}
 	},
 
 
-	stopEdit: function() {
+	stopEdit: function () {
 		if (this.closeEditing) {
 			this.closeEditing();
 		}
 	},
 
 
-	showAuditLog: function() {
+	showAuditLog: function () {
 		if (this.openAuditLog) {
 			this.openAuditLog();
 		}

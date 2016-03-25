@@ -21,17 +21,17 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	],
 
 
-	getFeedbackContainerURL: function() {
+	getFeedbackContainerURL: function () {
 		var href = this.get('href');
 		return href && href.split('/').slice(0, -1).join('/');
 	},
 
-	getSubmissionURL: function() {
+	getSubmissionURL: function () {
 		var href = this.get('href');
 		return href && href.split('/').slice(0, -2).join('/');
 	},
 
-	getFeedbackContainer: function() {
+	getFeedbackContainer: function () {
 		var url = this.getFeedbackContainerURL();
 
 		if (this.containerPromise) {
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		}
 
 		this.containerPromise = Service.request(url)
-			.then(function(resp) {
+			.then(function (resp) {
 				return ParseUtils.parseItems(resp)[0];
 			});
 
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	},
 
 
-	getSubmission: function() {
+	getSubmission: function () {
 		var me = this,
 			url = me.getSubmissionURL();
 
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		}
 
 		me.submissionPromise = Service.request(url)
-			.then(function(resp) {
+			.then(function (resp) {
 				var submission = ParseUtils.parseItems(resp)[0];
 
 				if (!me.containerPromise) {
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	},
 
 
-	getCourse: function() {
+	getCourse: function () {
 		var catalogEntry = CourseWareUtils.courseForNtiid(this.get('AssignmentId'));
 
 		return CourseWareUtils.findCourseBy(catalogEntry.findByMyCourseInstance());

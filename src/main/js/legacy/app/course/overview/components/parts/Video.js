@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		screenEl: '.video-player'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.videoPlayer = this.add({
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 		this.playerWidth = 512;
 
@@ -53,11 +53,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			.then(this.addVideo.bind(this));
 	},
 
-	addVideo: function(video) {
+	addVideo: function (video) {
 		this.video = video;
 		var curtainClicked = this.curtainClicked.bind(this);
 
-		if(this.progress){
+		if(this.progress) {
 			this.setProgress(this.progress);
 		}
 
@@ -76,28 +76,28 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	getVideo: function() {
+	getVideo: function () {
 		var me = this;
 
 		if (me.record) {
 			return me.course.getVideoForId(me.record.ntiid || me.record.getId())
-				.then(function(video){
-					if(video.slidedeck){
+				.then(function (video) {
+					if(video.slidedeck) {
 						me.record.slidedeck = video.slidedeck;
 					}
-					if(!(me.record.sources || me.record.get('sources'))){
+					if(!(me.record.sources || me.record.get('sources'))) {
 						me.record.sources = video.sources;
 					}
 					return Promise.resolve(me.record);
 				})
-				.fail(function(error) {
-					console.error("Unable to Resolve Video: " + error);
+				.fail(function (error) {
+					console.error('Unable to Resolve Video: ' + error);
 					return Promise.resolve(me.record);
 				});
 		}
 	},
 
-	curtainClicked: function(e) {
+	curtainClicked: function (e) {
 		e.stopEvent();
 
 		var video = this.playlist[0],
@@ -128,16 +128,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	hideCurtain: function() {
+	hideCurtain: function () {
 		this.curtain.hide();
 	},
 
-	showCurtain: function() {
+	showCurtain: function () {
 		this.curtain.show();
 		wait().then(this.setProgress.bind(this));
 	},
 
-	maybeCreatePlayer: function() {
+	maybeCreatePlayer: function () {
 		var single = this.isVideoRoll !== true;
 
 		if (!this.rendered) {
@@ -168,7 +168,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.on({
 			scope: p,
-			beforedestroy: function() {
+			beforedestroy: function () {
 				return p.fireEvent('beforedestroy');
 			},
 			destroy: 'destroy'
@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		]);
 	},
 
-	maybePauseCurrentVideo: function() {
+	maybePauseCurrentVideo: function () {
 		if (!this.player) { return; }
 
 		if (this.player.isPlaying()) {
@@ -203,7 +203,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.hasCls('playing')) { return; }
 	},
 
-	navigateToTarget: function(videoItem, basePath) {
+	navigateToTarget: function (videoItem, basePath) {
 		if (!this.navigate) {
 			console.error('No navigate set on content link');
 			return;
@@ -212,24 +212,24 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var me = this;
 
 		this.course.getVideoForId(videoItem.getId())
-			.then(function(o) {
+			.then(function (o) {
 				var video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
 				video.basePath = basePath;
 				me.navigate.call(null, video);
 			});
 	},
 
-	navigateToSlidedeck: function(slidedeckId) {
+	navigateToSlidedeck: function (slidedeckId) {
 		var me = this;
 		if (slidedeckId) {
 			Service.getObject(slidedeckId)
-				.then(function(slidedeck) {
+				.then(function (slidedeck) {
 					me.navigate.call(null, slidedeck);
 				});
 		}
 	},
 
-	setProgress: function(progress) {
+	setProgress: function (progress) {
 		progress = progress || this.progress;
 
 		this.progress = progress;

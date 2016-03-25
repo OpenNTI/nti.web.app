@@ -3,7 +3,7 @@ var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.overrides.builtins.Array', {});
 
-(function() {
+(function () {
 
 	/** @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/Reduce#Compatibility
 	 *
@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Array', {}
 	 * @param [initialValue]
 	 * @return {*}
 	 */
-	function reduce(callback, initialValue) {
+	function reduce (callback, initialValue) {
 		'use strict';
 		if (null === this || 'undefined' === typeof this) {
 			// At the moment all modern browsers, that support strict mode, have
@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Array', {}
 	}
 
 
-	 function chunk(chunkSize) {
+	 function chunk (chunkSize) {
 		var r = [], i = 0, len = this.length;
 		for (i; i < len; i += chunkSize) {
 			r.push(this.slice(i, i + chunkSize));
@@ -53,8 +53,8 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Array', {}
 	}
 
 
-	(function(o, a) {
-		Ext.Object.each(a, function(k, v) {
+	(function (o, a) {
+		Ext.Object.each(a, function (k, v) {
 			if (!o[k]) {
 				o[k] = v;
 				if (Object.defineProperty) {
@@ -63,9 +63,9 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Array', {}
 			}
 		});
 	}(Array.prototype, {
-		first: function first() { return this[0]; },
-		last: function last() { return this[this.length - 1]; },
-		peek: function peek() { return this[this.length - 1]; },
+		first: function first () { return this[0]; },
+		last: function last () { return this[this.length - 1]; },
+		peek: function peek () { return this[this.length - 1]; },
 		reduce: reduce,
 		chunk: chunk
 	}));

@@ -6,7 +6,7 @@ module.exports = exports = Ext.define('NextThought.overrides.tab.Panel', {
 
 	stateEvents: ['tabchange'],
 
-	applyState: function(state) {
+	applyState: function (state) {
 		var t = (state || {}).t || 0;
 
 		try {
@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.overrides.tab.Panel', {
 
 	},
 
-	getState: function() {
+	getState: function () {
 		return {t: this.items.indexOf(this.getActiveTab())};
 	}
 });

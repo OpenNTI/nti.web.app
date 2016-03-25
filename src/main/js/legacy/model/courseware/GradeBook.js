@@ -13,14 +13,14 @@ module.exports = exports = Ext.define('NextThought.model.courseware.GradeBook', 
 	],
 
 
-	getItem: function(key, book, assignmentId) {
+	getItem: function (key, book, assignmentId) {
 		var b = this.getFieldItem('Items', book || 'default'),
 			i = b && b.getFieldItem('Items', key);
 
 		try {
 			if (assignmentId && (!i || i.get('AssignmentId') !== assignmentId)) {
 				i = this.findGradeBookEntryFor(assignmentId) || [];
-				i = i.reduce(function(a, key) { return a.getFieldItem('Items', key); }, this);
+				i = i.reduce(function (a, key) { return a.getFieldItem('Items', key); }, this);
 				if (!NextThought.model.courseware.GradeBookEntry.isInstanceOf(i)) {
 					i = null;
 				}
@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.GradeBook', 
 	},
 
 
-	add: function(grade, assignmentId) {
+	add: function (grade, assignmentId) {
 		var path = grade.get('href')
 				.replace(this.get('href').split(/[\?#]/)[0], '')//remove the prefix
 				.replace(/^\//, '')//remove the initial separator
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.GradeBook', 
 	},
 
 
-	buildBook: function(name) {
+	buildBook: function (name) {
 		var items = this.get('Items'),
 			book = NextThought.model.courseware.GradeBookPart.create({Items: {}, Name: name}),
 			key = items.length;
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.GradeBook', 
 	},
 
 
-	findGradeBookEntryFor: function(assignmentId) {
+	findGradeBookEntryFor: function (assignmentId) {
 		var items = this.get('Items'),
 			map = items.INDEX_KEYMAP,
 			part, item, entry;

@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.AssignmentVi
 			collectionTypes: {
 				'application/vnd.nextthought.assessment.userscourseassignmenthistory': 1
 			},
-			onItemRead: function(item) {
+			onItemRead: function (item) {
 				if (Ext.isArray(item)) {
 					if (item[1] !== null) {
 						return item[1];
@@ -45,12 +45,12 @@ module.exports = exports = Ext.define('NextThought.store.courseware.AssignmentVi
 		limitParam: 'batchSize',
 
 
-		buildUrl: function(request) {
+		buildUrl: function (request) {
 			var sort, dir,
 				p = request.params;
 
 			if (p && p.filter) {
-				Ext.decode(p.filter).forEach(function(filter) {
+				Ext.decode(p.filter).forEach(function (filter) {
 					if (filter.property === 'LegacyEnrollmentStatus') {
 						p.filter = filter.property + filter.value;
 					} else if (filter.property === 'usernameSearchTerm') {
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.AssignmentVi
 
 	buffered: true,
 
-	constructor: function() {
+	constructor: function () {
 		this.proxy = Ext.clone(this.proxy);//get a local instance copy
 		this.callParent(arguments);
 		//Allow shortcutting the url setting.
@@ -103,12 +103,12 @@ module.exports = exports = Ext.define('NextThought.store.courseware.AssignmentVi
 	},
 
 
-	getFromPageSourceRecord: function(record) {
+	getFromPageSourceRecord: function (record) {
 		var match, id = record.getId(),
 			creator = record.get('Creator'),
 			creatorId = Ext.isString(creator) ? creator : creator.getId();
 
-		this.data.forEach(function(item) {
+		this.data.forEach(function (item) {
 			if (item.getId() === id) {
 				match = item;
 			} else if (item.get('Creator').getId() === creatorId) {

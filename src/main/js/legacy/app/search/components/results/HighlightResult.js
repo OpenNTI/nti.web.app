@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 	alias: ['widget.search-result-highlight'],
 	cls: 'search-result search-highlight',
 
-	showBreadCrumb: function(path) {
+	showBreadCrumb: function (path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showBreadCrumb.bind(this, path));
 

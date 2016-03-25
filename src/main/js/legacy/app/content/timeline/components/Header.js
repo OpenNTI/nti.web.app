@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.content.timeline.componen
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -31,14 +31,14 @@ module.exports = exports = Ext.define('NextThought.app.content.timeline.componen
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.closeEl, 'click', this.onCloseClick.bind(this));
 	},
 
 
-	onCloseClick: function() {
+	onCloseClick: function () {
 		if (this.doClose) {
 			this.doClose();
 		}

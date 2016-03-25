@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	layout: 'none',
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var me = this,
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			listeners: {
 				click: {
 					element: 'el',
-					fn: function(e) {
+					fn: function (e) {
 						if (e.getTarget('.add') && me.onAddVideos) {
 							me.onAddVideos(me.selectedItems);
 						}
@@ -63,17 +63,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	getDropzoneTarget: function() {
+	getDropzoneTarget: function () {
 		return this.itemsCmp && this.itemsCmp.el && this.itemsCmp.el.dom;
 	},
 
-	getOrderingItems: function() {
+	getOrderingItems: function () {
 		var items = this.itemsCmp && this.itemsCmp.items && this.itemsCmp.items.items;
 
 		return items || [];
 	},
 
-	getItemsFromRecord: function(record) {
+	getItemsFromRecord: function (record) {
 		if (record instanceof NextThought.model.VideoRoll) {
 			return record.get('Items');
 		}
@@ -81,18 +81,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return [record];
 	},
 
-	getItems: function() {
+	getItems: function () {
 		return this.selectedItems;
 	},
 
-	addItems: function(items) {
+	addItems: function (items) {
 		var me = this,
 			single = items.length === 1;
 
 		me.disableOrderingContainer();
 
-		function removeItems(remove) {
-			me.addItems(items.filter(function(item) {
+		function removeItems (remove) {
+			me.addItems(items.filter(function (item) {
 				return item.getId() !== remove.getId();
 			}));
 		}
@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.itemsCmp.removeAll(true);
 
-		me.itemsCmp.add(items.map(function(item, index) {
+		me.itemsCmp.add(items.map(function (item, index) {
 			return {
 				xtype: 'overview-editing-video-items-item',
 				item: item,
@@ -115,9 +115,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	reorderVideo: function(video, newIndex, moveInfo) {
+	reorderVideo: function (video, newIndex, moveInfo) {
 		var items = this.getItems(),
-			contains = items.filter(function(item) { return item.getId() === video.getId(); }),
+			contains = items.filter(function (item) { return item.getId() === video.getId(); }),
 			oldIndex = moveInfo.getIndex();
 
 		if (!contains) { return Promise.resolve(); }

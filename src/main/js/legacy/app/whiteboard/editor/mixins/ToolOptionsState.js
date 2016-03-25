@@ -3,9 +3,9 @@ var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.ToolOptionsState', {
 
-	constructor: function() {
+	constructor: function () {
 		this.toolOptionsState = NextThought.app.whiteboard.editor.mixins.ToolOptionsState;
-		this.on('afterrender', function() {
+		this.on('afterrender', function () {
 			this.on('wb-tool-change', this.toolChange);
 			this.on('wb-options-change', this.toolOptionsChange);
 			//Select previous choices
@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.
 		});
 	},
 
-	applyPrevioustoolState: function() {
+	applyPrevioustoolState: function () {
 		var tool = this.getCurrentState().activeTool,
 			options = this.getCurrentState().options;
 		if (tool) {
@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.
 		}
 	},
 
-	toolChange: function(tools) {
+	toolChange: function (tools) {
 		var t = tools.down('button[pressed]').tool,
 			options = this.toolbar.getCurrentTool().getOptions();
 
@@ -32,23 +32,23 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.mixins.
 		this.toolOptionsState.saveToolOptionState('options', options);
 	},
 
-	toolOptionsChange: function(toolOptions) {
+	toolOptionsChange: function (toolOptions) {
 		var currentTool = this.toolbar.getCurrentTool().forTool;
 		this.toolOptionsState.saveToolOptionState('options', toolOptions.getOptions());
 		this.toolOptionsState.saveToolState('activeTool', currentTool);
 	},
 
-	getCurrentState: function() {
+	getCurrentState: function () {
 		return this.toolOptionsState.selectionsConfig;
 	},
 
 	statics: {
 		selectionsConfig: {},
 
-		saveToolOptionState: function(name, state) {
+		saveToolOptionState: function (name, state) {
 			this.selectionsConfig[name] = state;
 		},
-		saveToolState: function(name, state) {
+		saveToolState: function (name, state) {
 			this.selectionsConfig[name] = state;
 		}
 	}

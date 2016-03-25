@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	isOrderingItem: true,
 
 
-	enableOrdering: function(index, onDragStart, onDragEnd) {
+	enableOrdering: function (index, onDragStart, onDragEnd) {
 		this.orderingIndex = index;
 		this.onDragStart = onDragStart;
 		this.onDragEnd = onDragEnd;
@@ -30,31 +30,31 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	},
 
 
-	disableOrdering: function() {
+	disableOrdering: function () {
 		this.disableDragging();
 	},
 
 
-	getVerticalMidpoint: function() {
+	getVerticalMidpoint: function () {
 		var rect = this.__getRect();
 
 		return rect.top + (rect.height / 2);
 	},
 
 
-	getHorizontalMidpoint: function() {
+	getHorizontalMidpoint: function () {
 		var rect = this.__getRect();
 
 		return rect.left + (rect.width / 2);
 	},
 
 
-	__getRect: function() {
+	__getRect: function () {
 		return this.lockedRect || this.getDragBoundingClientRect();
 	},
 
 
-	lockRectRelative: function(parent) {
+	lockRectRelative: function (parent) {
 		var rect = this.getDragBoundingClientRect(),
 			top = rect.top - parent.top,
 			left = rect.left - parent.left,
@@ -72,12 +72,12 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	},
 
 
-	unlockRect: function() {
+	unlockRect: function () {
 		// this.lockedRect = null;
 	},
 
 
-	__getTopOrBottom: function(x, y) {
+	__getTopOrBottom: function (x, y) {
 		var midpoint = this.getVerticalMidpoint(), side;
 
 		if (y < midpoint) {
@@ -90,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	},
 
 
-	__getLeftOrRight: function(x, y) {
+	__getLeftOrRight: function (x, y) {
 		var midpoint = this.getHorizontalMidpoint(), side;
 
 		if (x < midpoint) {
@@ -102,28 +102,28 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingItem', {
 		return side;
 	},
 
-	getPlaceholderBeforeHeight: function() {
+	getPlaceholderBeforeHeight: function () {
 		var rect = this.__getRect();
 
 		return rect.height;
 	},
 
 
-	getPlaceholderAfterHeight: function() {
+	getPlaceholderAfterHeight: function () {
 		var rect = this.__getRect();
 
 		return rect.height;
 	},
 
 
-	isFullWidth: function(fullWidth) {
+	isFullWidth: function (fullWidth) {
 		var rect = this.__getRect();
 
 		return Math.abs(fullWidth - rect.width) <= (this.HORIZONTAL_TOLERANCE * 2);
 	},
 
 
-	isPointContainedVertically: function(x, y) {
+	isPointContainedVertically: function (x, y) {
 		var rect = this.__getRect(),
 			tol = this.VERTICAL_TOLERANCE;
 
@@ -131,45 +131,45 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingItem', {
 	},
 
 
-	isPointAbove: function(x, y) {
+	isPointAbove: function (x, y) {
 		var side = this.__getTopOrBottom(x, y);
 
 		return side === NextThought.mixins.dnd.OrderingItem.SIDES.TOP;
 	},
 
 
-	isPointBelow: function(x, y) {
+	isPointBelow: function (x, y) {
 		var side = this.__getTopOrBottom(x, y);
 
 		return side === NextThought.mixins.dnd.OrderingItem.SIDES.BOTTOM;
 	},
 
 
-	isPointLeft: function(x, y) {
+	isPointLeft: function (x, y) {
 		var side = this.__getLeftOrRight(x, y);
 
 		return side === NextThought.mixins.dnd.OrderingItem.SIDES.LEFT && this.isPointContainedVertically(x, y);
 	},
 
 
-	isPointRight: function(x, y) {
+	isPointRight: function (x, y) {
 		var side = this.__getLeftOrRight(x, y);
 
 		return side === NextThought.mixins.dnd.OrderingItem.SIDES.RIGHT && this.isPointContainedVertically(x, y);
 	},
 
 
-	isPointBefore: function(x, y) {
+	isPointBefore: function (x, y) {
 		return this.isPointAbove(x, y) || this.isPointLeft(x, y);
 	},
 
 
-	isPointAfter: function(x, y, isFullWidth) {
+	isPointAfter: function (x, y, isFullWidth) {
 		return this.isPointBelow(x, y) || this.isPointRight(x, y);
 	},
 
 
-	isSameRow: function(orderingItem) {
+	isSameRow: function (orderingItem) {
 		if (!orderingItem.getVerticalMidpoint) {
 			console.error('Invalid Ordering Item');
 			return false;

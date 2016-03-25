@@ -2,7 +2,7 @@ var Ext = require('extjs');
 var Anchors = require('./Anchors');
 var AnnotationUtils = require('./Annotations');
 var lazyResolve = {
-	get ReaderPanel() {
+	get ReaderPanel () {
 		delete this.ReaderPanel;
 		return this.ReaderPanel = require('../app/contentviewer/components/Reader');
 	}
@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 
 	containerMimeSelectors: ['object[type$=naquestion]', 'object[type$=ntivideo]'],
 
-	getStyle: function(node, prop) {
+	getStyle: function (node, prop) {
 		if (!node) {return '';}
 		var view = node.ownerDocument.defaultView;
 		return view.getComputedStyle(node, undefined).getPropertyValue(prop);
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 	 * @param [doc]
 	 * @return {*}
 	 */
-	findLine: function(y, doc) {
+	findLine: function (y, doc) {
 		y = Math.round(y);
 		doc = doc || document;
 
@@ -51,17 +51,17 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 			range = this.rangeForLineBySelection(y, doc);
 		}
 
-		function ancestorOrSelfMatchingSelector(node, sel) {
+		function ancestorOrSelfMatchingSelector (node, sel) {
 			if (!node) {
 				return null;
 			}
 			return Ext.fly(node).is(sel) ? node : Ext.fly(node).parent(sel, true);
 		}
 
-		function nodeIfObject(n) {
+		function nodeIfObject (n) {
 			var node = null;
 
-			Ext.each(this.containerMimeSelectors, function(sel) {
+			Ext.each(this.containerMimeSelectors, function (sel) {
 				node = ancestorOrSelfMatchingSelector(n, sel);
 				return node === null;
 			}, this);
@@ -113,12 +113,12 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 
 
 
-	getAnchorableRange: function(range, doc) {
+	getAnchorableRange: function (range, doc) {
 		try {
 			//ranges created next to videos sometimes require massaging to be anchorable, do that now.
 			if (!Ext.isTextNode(range.commonAncestorContainer) && Ext.fly(range.commonAncestorContainer).hasCls('externalvideo')) {
-			range.setStartBefore(range.startContainer);
-			range.setEndAfter(range.endContainer);
+				range.setStartBefore(range.startContainer);
+				range.setEndAfter(range.endContainer);
 			}
 			//Note this is being abused here. Just because this returns null doesn't mean we can't anchor the range.
 			//Case in point for ranges within a question we can always anchor them, but this may return null. The correct thing
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 
 	/** @private */
 	//Gecko (FF)
-	rangeByRecursiveSearch: function(y, doc) {
+	rangeByRecursiveSearch: function (y, doc) {
 		// y -= 30; //Correction
 		var curNode = doc.documentElement, range, rect, sibling;
 		//First text node ending past y
@@ -195,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 
 	/** @private */
 	//webkit mostly
-	rangeForLineByPoint: function(y, doc) {
+	rangeForLineByPoint: function (y, doc) {
 		var n = doc.querySelector('#NTIContent .page-contents'),
 			rect = n && n.getBoundingClientRect(),
 			xStart = rect ? rect.left : 0,
@@ -237,7 +237,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 	},
 
 */
-	isContent: function isContent(n) {
+	isContent: function isContent (n) {
 		var root = n.ownerDocument.getElementById('NTIContent');
 		//n must be a node, and must be at least 3 levels deep into the content, otherwise, n is just a top level container.
 		return n && n.parentNode && n.parentNode.parentNode &&
@@ -249,7 +249,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 	},
 
 
-	rangeForLineByPointIE: function(y, doc) {
+	rangeForLineByPointIE: function (y, doc) {
 		var xStart = 0,
 			width = doc.querySelector('#NTIContent .page-contents').getBoundingClientRect().width,
 			xEnd = width,
@@ -333,7 +333,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 
 	/** @private */
 	//mozilla mostly
-	rangeForLineBySelection: function(y, doc) {
+	rangeForLineBySelection: function (y, doc) {
 		var xStart = 0,
 			xEnd = doc.querySelector('#NTIContent .page-contents').getBoundingClientRect().width,
 			sel = doc.parentWindow.getSelection(),
@@ -344,7 +344,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 			readerScrollTop = reader.getAnnotationOffsets().scrollTop; //Tight coupling here
 
 			//clear ranges and get the node on this y
-			sel.removeAllRanges();
+		sel.removeAllRanges();
 
 		while (xStart < xEnd) {
 			elem = doc.elementFromPoint(xStart, y);
@@ -360,7 +360,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 		}
 
 		//HACK to stop the page from jumping
-		function fixScroll() {
+		function fixScroll () {
 			var newTop = reader.getAnnotationOffsets().scrollTop;
 			if (newTop !== readerScrollTop) {
 				console.log('Fixing jumpy content', readerScrollTop, newTop);
@@ -430,7 +430,7 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 
 
 	/** @private */
-	isNodeAnchorable: function(n) {
+	isNodeAnchorable: function (n) {
 		if (!n) {return false;}
 
 		//check for figured inside assessments:
@@ -460,14 +460,14 @@ module.exports = exports = Ext.define('NextThought.util.Line', {
 			result = true;
 
 		//it is not anchorable if it has one of the listed classes:
-		Ext.each(nonAnchorableNodeClasses, function(c) {
+		Ext.each(nonAnchorableNodeClasses, function (c) {
 			if (Ext.fly(node).hasCls(c)) {
 				result = false;
 			}
 		});
 
 		//it is not anchorable if it has one of the listed classes:
-		Ext.each(nonAnchorableIds, function(c) {
+		Ext.each(nonAnchorableIds, function (c) {
 			if (node.getAttribute('id') === c) {
 				result = false;
 			}

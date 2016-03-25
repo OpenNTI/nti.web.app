@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		 * @param	{Model} record the record we are building the tile for
 		 * @return	{Object} the config to build this tile
 		 */
-		getTileConfig: function(/*record*/) {
+		getTileConfig: function (/*record*/) {
 			return Promise.resolve({
 				xtype: this.xtype,
 				width: this.WIDTH,
@@ -25,21 +25,21 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	onClassExtended: function(cls, data) {
+	onClassExtended: function (cls, data) {
 		if (data.cls) {
 			data.cls = [cls.superclass.cls, data.cls].join(' ');
 		}
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, this.getRenderData());
 	},
 
 
-	getRenderData: function() {
+	getRenderData: function () {
 		return {};
 	}
 });

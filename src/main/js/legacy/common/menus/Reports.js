@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.common.menus.Reports', {
 		plain: true
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		if (!this.links) {
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.common.menus.Reports', {
 
 		var items = [], me = this;
 
-		(me.links || []).forEach(function(link) {
+		(me.links || []).forEach(function (link) {
 			if (link.rel.indexOf('report-') === 0) {
 				items.push({
 					text: link.title,
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.common.menus.Reports', {
 		}
 	},
 
-	showReport: function(href) {
+	showReport: function (href) {
 		/*
 		....Report.pdf#view=FitH&toolbar=0&navpanes=0&statusbar=0&page=1
 
@@ -63,16 +63,16 @@ module.exports = exports = Ext.define('NextThought.common.menus.Reports', {
 		 */
 
 		var win = Ext.widget('iframe-window', {
-				width: 'max',
-				saveText: getString('NextThought.view.menus.Reports.savetext'),
-				link: href,
-				loadingText: getString('NextThought.view.menus.Reports.loadingtext')
-			});
+			width: 'max',
+			saveText: getString('NextThought.view.menus.Reports.savetext'),
+			link: href,
+			loadingText: getString('NextThought.view.menus.Reports.loadingtext')
+		});
 
 		win.show();
 	},
 
-	reportItemClicked: function(item) {
+	reportItemClicked: function (item) {
 		if (!item.pdf) {
 			console.log('Cant show a report with out an pdf');
 			return;

@@ -6,7 +6,7 @@ module.exports = exports = Ext.define('NextThought.util.Localization', {
 	formatRe: /\{([^\{]+)\}/g,
 
 
-	getExternalizedString: function(key, defaultValue, noKey) {
+	getExternalizedString: function (key, defaultValue, noKey) {
 		var v = (window.NTIStrings || {})[key] || defaultValue || (!noKey && key) || '';
 
 		if (v instanceof Array) {
@@ -17,19 +17,19 @@ module.exports = exports = Ext.define('NextThought.util.Localization', {
 	},
 
 
-	formatExternalString: function(key, values, dontUseKey) {
+	formatExternalString: function (key, values, dontUseKey) {
 		var string = this.getExternalizedString(key, dontUseKey ? null : key, true);
 
 		if (!values) {
 			return string;
 		}
 
-		return string.replace(this.formatRe, function(m, i) {
+		return string.replace(this.formatRe, function (m, i) {
 			return values[i] || m;
 		});
 	},
 
-	pluralizeString: function(count, key, noNum) {
+	pluralizeString: function (count, key, noNum) {
 		var forms = (window.NTIStrings.PluralForms || {})[key], i,
 			s;
 

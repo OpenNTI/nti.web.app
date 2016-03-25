@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Score', {
 		stroke: '#fff'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.store = Ext.data.JsonStore.create({fields: ['p']});
 		this.callParent(arguments);
 		this.add({
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Score', {
 		this.setValue(this.value || 0);
 	},
 
-	setValue: function(value) {
+	setValue: function (value) {
 		var v = value || 4,
 			data = [{p: v},{p: (100 - v)}],
 			c = this.down('chart-score').setValue(value);

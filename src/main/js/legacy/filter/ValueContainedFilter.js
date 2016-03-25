@@ -6,7 +6,7 @@ module.exports = exports = Ext.define('NextThought.filter.ValueContainedFilter',
 	extend: 'NextThought.filter.Filter',
 	alternateClassName: 'NextThought.ValueContainedFilter',
 
-	compareValue: function(value, testedValue) {
+	compareValue: function (value, testedValue) {
 		var result = false;
 		if (!Ext.isArray(testedValue)) {
 			return this.callParent(value, testedValue);

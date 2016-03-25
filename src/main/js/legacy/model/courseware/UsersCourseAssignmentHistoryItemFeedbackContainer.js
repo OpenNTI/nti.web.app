@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		{name: 'Items', type: 'arrayItem', persist: false}
 	],
 
-	getCount: function() {
+	getCount: function () {
 		return (this.get('Items') || []).length;
 	}
 });

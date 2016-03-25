@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 	layout: 'none',
 	cls: 'bundle-content',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.ContentActions = NextThought.app.content.Actions.create();
@@ -37,37 +37,37 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		});
 	},
 
-	onActivate: function() {
+	onActivate: function () {
 		if (this.reader) {
 			this.reader.fireEvent('activate');
 		}
 	},
 
-	onDeactivate: function() {
+	onDeactivate: function () {
 		if (this.reader) {
 			this.reader.fireEvent('deactivate');
 		}
 	},
 
-	getContext: function() {
+	getContext: function () {
 		if (this.reader) {
 			return this.reader.pageInfo || this.reader.relatedWork;
 		}
 	},
 
-	getActiveItem: function() {
+	getActiveItem: function () {
 		return this.reader;
 	},
 
-	getLocation: function() {
+	getLocation: function () {
 		return this.reader.getLocation();
 	},
 
-	hasReader: function() {
+	hasReader: function () {
 		return this.reader && !this.reader.isDestroyed;
 	},
 
-	isShowingPage: function(ntiid) {
+	isShowingPage: function (ntiid) {
 		var isShowing, assessmentItems;
 
 		if (!this.page) {
@@ -80,12 +80,12 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 
 		assessmentItems = this.page.get('AssessmentItems') || [];
 
-		return assessmentItems.reduce(function(acc, item) {
+		return assessmentItems.reduce(function (acc, item) {
 			return acc || item.getId() === ntiid;
 		}, false);
 	},
 
-	onBeforeDeactivate: function() {
+	onBeforeDeactivate: function () {
 		if (!this.reader) { return; }
 
 		this.reader.hide();
@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		delete this.reader;
 	},
 
-	bundleChanged: function(bundle) {
+	bundleChanged: function (bundle) {
 		if (bundle === this.currentBundle) { return; }
 
 		if (this.reader) {
@@ -105,14 +105,14 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		this.currentBundle = bundle;
 	},
 
-	__loadContent: function(id, obj) {
+	__loadContent: function (id, obj) {
 		if (obj && obj.getId() === id) {
 			return Promise.resolve(obj);
 		}
 
 		//Try getting the object first, since it would return a related work or page info
 		return Service.getObject(id, null, null, null, null, this.currentBundle)
-			.then(function(obj) {
+			.then(function (obj) {
 				//if we don't get a page (pageinfo or related work) request a page info
 				if (!obj.isPage) {
 					return Service.getPageInfo(id, null, null, null, this.currentBundle);
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			});
 	},
 
-	showReader: function(page, parent, hash, note) {
+	showReader: function (page, parent, hash, note) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showReader.bind(this, page));
 			return;
@@ -148,8 +148,8 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			}
 		}
 
-		pageSource.then(function(ps) {
-			ps.getRoute = function(ntiid) {
+		pageSource.then(function (ps) {
+			ps.getRoute = function (ntiid) {
 				return rootRoute + ParseUtils.encodeForURI(ntiid);
 			};
 		});
@@ -178,7 +178,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		this.reader.fireEvent('activate');
 	},
 
-	__onFail: function(reason) {
+	__onFail: function (reason) {
 		console.error('Failed to load page:', reason);
 		this.setTitle('Not Found');
 
@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		}
 	},
 
-	showContent: function(route, subRoute) {
+	showContent: function (route, subRoute) {
 		var me = this,
 			ntiid = route.params.id,
 			obj = route.precache.pageInfo || route.precache.relatedWork;
@@ -198,7 +198,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		ntiid = ParseUtils.decodeFromURI(ntiid);
 
 		return this.__loadContent(ntiid, obj)
-			.then(function(page) {
+			.then(function (page) {
 				me.showReader(page, route.precache.parent, route.hash, route.precache.note);
 				if (me.activeMediaWindow) {
 					me.activeMediaWindow.destroy();
@@ -206,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			});
 	},
 
-	showPage: function(route, subRoute) {
+	showPage: function (route, subRoute) {
 		var me = this,
 			root = route.params.id,
 			page = route.params.page,
@@ -222,17 +222,17 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			video = precache.video || precache.precache && precache.precache.video;
 
 			return this.__loadContent(root, obj)
-				.then(function(page) {
+				.then(function (page) {
 					me.showReader(page, route.precache.parent, route.hash, route.precache.note);
 					var p = video ? Promise.resolve(video) :
-									Service.getObject(vid).then(function(v) {
+									Service.getObject(vid).then(function (v) {
 										var o = v.isModel ? v.raw : v,
 											video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
 
 										return Promise.resolve(video);
 									});
 
-					p.then(function(video) {
+					p.then(function (video) {
 						route.precache.video = video;
 						me.showMediaView(route, subRoute);
 					});
@@ -252,26 +252,26 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		}
 
 		return this.__loadContent(page, obj)
-			.then(function(page) {
+			.then(function (page) {
 				me.showReader(page, route.precache.parent, route.hash, route.precache.note);
 			});
 	},
 
-	showRoot: function(route, subRoute) {
+	showRoot: function (route, subRoute) {
 		var me = this;
 
 		return Service.getPageInfo(this.root, null, null, null, me.currentBundle)
-			.then(function(pageInfo) {
+			.then(function (pageInfo) {
 				me.showReader(pageInfo, null, route.hash, route.precache.note);
 			})
 			.fail(this.__onFail.bind(this));
 	},
 
-	showNote: function(note) {
+	showNote: function (note) {
 		this.reader.goToNote(note);
 	},
 
-	getVideoRouteForObject: function(obj) {
+	getVideoRouteForObject: function (obj) {
 		var page = obj.page,
 			pageId = page && page.isModel ? page.getId() : page,
 			videoId = obj.get && obj.getId();
@@ -290,7 +290,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		};
 	},
 
-	showMediaView: function(route, subRoute) {
+	showMediaView: function (route, subRoute) {
 		var me = this,
 			root = route.params.id;
 
@@ -306,10 +306,10 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 
 			me.activeMediaWindow.fireEvent('suspend-annotation-manager', this);
 			me.activeMediaWindow.on({
-				'beforedestroy': function() {
+				'beforedestroy': function () {
 					// me.getLayout().setActiveItem(me.getLessons());
 				},
-				'destroy': function() {
+				'destroy': function () {
 					if (me.activeMediaWindow) {
 						me.activeMediaWindow.fireEvent('resume-annotation-manager', this);
 					}
@@ -324,7 +324,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 		return me.activeMediaWindow.handleRoute(subRoute, route.precache);
 	},
 
-	handleNavigation: function(title, route, precache) {
+	handleNavigation: function (title, route, precache) {
 		this.pushRoute(title, route, precache);
 	}
 });

@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	layout: 'none',
 	itemType: 'course-assessment-assignment-list-item',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.addItems(this.store);
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	addItems: function(store){
+	addItems: function (store) {
 		var items = this.store ? this.store.getRange() : [],
 			itemType = this.itemType,
 			navigateToItem = this.navigateToItem,
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		this.fireEvent((items.length > 0) ? 'show-parent' : 'hide-parent');
 
-		container.add(items.map(function(item) {
+		container.add(items.map(function (item) {
 			return {
 				xtype: itemType,
 				assignment: item.get('item'),
@@ -39,11 +39,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}));	
 	},
 
-	getItemsContainer: function() {
+	getItemsContainer: function () {
 		return this;
 	},
 
-	onRefresh: function(store){
+	onRefresh: function (store) {
 		var container = this.getItemsContainer();
 		if (container) {
 			container.removeAll(true);

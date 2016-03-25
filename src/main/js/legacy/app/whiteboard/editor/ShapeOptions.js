@@ -19,18 +19,18 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ShapeOp
 		defaults: {
 			xtype: 'wb-tool-option',
 			toggleGroup: 'shape-selected-',
-	  handler: function(btn) {
+	  		handler: function (btn) {
 		var me = btn.up('wb-tool-shape-options'),
-					fill = me.down('color-picker-button[fillSelect]'),
-					lbl = me.down('tbtext[fillLabel]');
+			fill = me.down('color-picker-button[fillSelect]'),
+			lbl = me.down('tbtext[fillLabel]');
 		if (btn.sides === 1) {
-		  fill.disable();
-					fill.hide();
-					lbl.hide();
+		  	fill.disable();
+			fill.hide();
+			lbl.hide();
 		}else {
-					fill.show();
-					lbl.show();
-					fill.enable();
+			fill.show();
+			lbl.show();
+			fill.enable();
 		}
 	  }
 		},
@@ -59,33 +59,33 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ShapeOp
 		]
 	}],
 
-	constructor: function() {
+	constructor: function () {
 		this.items = Ext.clone(this.items);//copy onto instance from prototype
 		this.items[0].defaults.toggleGroup += guidGenerator();
 		this.callParent(arguments);
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.addEvents({'wb-options-change': true });
 		this.enableBubble(['wb-options-change']);
 		this.callParent(arguments);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		var me = this;
 		me.callParent(arguments);
 
-		Ext.each(me.query('wb-tool-option'), function(i) {
+		Ext.each(me.query('wb-tool-option'), function (i) {
 			me.mon(i.el, {
-				click: function() {
+				click: function () {
 					me.fireEvent('wb-options-change', me);
 				}
 			});
 		});
 
-		Ext.each(me.query('color-picker-button'), function(i) {
+		Ext.each(me.query('color-picker-button'), function (i) {
 			me.mon(i.palette, {
-				select: function() {
+				select: function () {
 					me.fireEvent('wb-options-change', me);
 				}
 			});
@@ -93,12 +93,12 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ShapeOp
 
 		me.mon(me.down('stroke-select'), {
 			scope: this,
-			select: function() { me.fireEvent('wb-options-change', me); },
-			change: function() { me.fireEvent('wb-options-change', me); }
+			select: function () { me.fireEvent('wb-options-change', me); },
+			change: function () { me.fireEvent('wb-options-change', me); }
 		});
 	},
 
-	getToolType: function() {
+	getToolType: function () {
 		var shapeFull = this.down('toolbar[cls=shape-picker]').down('[pressed]').option;
 		shapeFull = shapeFull.replace('shape', '').trim();
 		if (shapeFull === 'square' || shapeFull === 'triangle' || shapeFull === 'poly') {
@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ShapeOp
 		return shapeFull;
 	},
 
-	setOptions: function(options) {
+	setOptions: function (options) {
 		var shapePicker = this.down('toolbar[cls=shape-picker]'),
 			button;
 
@@ -135,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ShapeOp
 		}
 	},
 
-	getOptions: function() {
+	getOptions: function () {
 		var toolbar = this.down('toolbar[cls=shape-options]'),
 			fillButton = toolbar.down('[fillSelect]'),
 			strokeButton = toolbar.down('[strokeSelect]'),

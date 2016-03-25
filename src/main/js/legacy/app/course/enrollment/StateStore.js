@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 	__Option_Map: {},
 	__Options: [],
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.addOption(OpenEnrollment);
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 	},
 
-	getBasePriority: function() {
+	getBasePriority: function () {
 		return {
 			OpenEnrollment: 3,
 			StoreEnrollment: 2,
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 		};
 	},
 
-	addOption: function(option) {
+	addOption: function (option) {
 		this.__Option_Map[option.NAME] = option;
 
 		this.__Options.push({
@@ -37,16 +37,16 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 		});
 	},
 
-	getOption: function(name) {
+	getOption: function (name) {
 		return this.__Option_Map[name] || {};
 	},
 
-	getEnrolledText: function(course) {
+	getEnrolledText: function (course) {
 		var me = this,
 			text = '';
 
 		if (course) {
-			me.forEachOption(function(option) {
+			me.forEachOption(function (option) {
 				var courseOption = course.getEnrollmentOption(option.name);
 
 				if (courseOption && courseOption.IsEnrolled) {
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 	 * @param {Array} config array of strings for the option to parse into the correct state
 	 * @return {Array}		  an array of steps
 	 */
-	getEnrollmentSteps: function(course, enrollmentType, type, config) {
+	getEnrollmentSteps: function (course, enrollmentType, type, config) {
 		return this.getOption(enrollmentType).buildEnrollmentSteps(course, type, config);
 	},
 
@@ -103,23 +103,23 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 	 * @param  {CourseCatalogEntry} course		   The course we are getting the options for
 	 * @return {Promise}				fulfills with information needed to show the enrollment options
 	 */
-	getEnrollmentDetails: function(course) {
+	getEnrollmentDetails: function (course) {
 		var p, catalogData = {
-					StartDate: course.get('StartDate'),
-					EndDate: course.get('EndDate'),
-					Enrolled: course.isActive(),
-					Options: {}
-				}, c;
+				StartDate: course.get('StartDate'),
+				EndDate: course.get('EndDate'),
+				Enrolled: course.isActive(),
+				Options: {}
+			}, c;
 
 		if (catalogData.Enrolled) {
 			c = this.CourseStore.findCourseBy(course.findByMyCourseInstance());
 			p = Promise.resolve(c)
-				.then(function(instance) {
+				.then(function (instance) {
 					if (instance) {
 						catalogData.EnrolledStartDate = instance.get('CreatedTime');
 					}
 				})
-				.fail(function(reason) {
+				.fail(function (reason) {
 					console.error('Failed to find course instance', reason);
 				});
 		} else {
@@ -128,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 
 
 		return p
-				.then(function() {
+				.then(function () {
 					return catalogData;
 				})
 				.then(this.__fillInOptionDetails.bind(this, course));
@@ -136,17 +136,17 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 
 	},
 
-	getGiftDetails: function(course) {
+	getGiftDetails: function (course) {
 		var me = this,
 			catalogData = {
 				Enrolled: course.isActive()
 			};
 
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			var wording;
 
-			me.forEachOption(function(option) {
+			me.forEachOption(function (option) {
 				option = me.getOption(option.name);
 
 				if (option.buildGiftOptions) {
@@ -158,10 +158,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 		});
 	},
 
-	__fillInOptionDetails: function(course, catalogData) {
+	__fillInOptionDetails: function (course, catalogData) {
 		var me = this;
 
-		this.forEachOption(function(option) {
+		this.forEachOption(function (option) {
 			var name = option.name;
 
 			catalogData.Options[name] = me.getOption(name).buildEnrollmentDetails(course, catalogData);
@@ -171,7 +171,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 	},
 
 	//a shortcut for CourseWareUtils.Enrollment.__Options.forEach
-	forEachOption: function(fn) {
+	forEachOption: function (fn) {
 		this.__Options.forEach(fn);
 	}
 });

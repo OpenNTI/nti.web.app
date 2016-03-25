@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.model.RoomInfo', {
 		{ name: 'references', type: 'auto', defaultValue: [] }
 	],
 
-	isGroupChat: function() {
+	isGroupChat: function () {
 		var participants = this.getOriginalOccupants();
 
 		if (Ext.isEmpty(participants, false)) {
@@ -27,21 +27,21 @@ module.exports = exports = Ext.define('NextThought.model.RoomInfo', {
 		return participants.length > 2;
 	},
 
-	getAllRoomStates: function() { return this.roomStates || {}; },
+	getAllRoomStates: function () { return this.roomStates || {}; },
 
-	getRoomState: function(user) {
+	getRoomState: function (user) {
 		if (!this.roomStates) { return null;}
 		return this.roomStates[user];
 	},
 
-	setRoomState: function(user, state) {
+	setRoomState: function (user, state) {
 		if (!this.roomStates) { this.roomStates = {};}
 		this.roomStates[user] = state;
 	},
 
-	getInputTypeStates: function() {
+	getInputTypeStates: function () {
 		var p = [], inputStates = ['composing', 'paused'], me = this;
-		Ext.each(me.get('Occupants'), function(user) {
+		Ext.each(me.get('Occupants'), function (user) {
 			var userState = me.getRoomState(user);
 			if (Ext.Array.contains(inputStates, userState) && !isMe(user)) {
 				p.push({user: user, state: userState});
@@ -56,21 +56,21 @@ module.exports = exports = Ext.define('NextThought.model.RoomInfo', {
 	 *	some occupants might have left the chat before, the original occupants will help to compare chat rooms with the same occupants.
 	 */
 
-	setOriginalOccupants: function(occupants) {
+	setOriginalOccupants: function (occupants) {
 		this._originalOccupants = occupants;
 	},
 
-	getOriginalOccupants: function() {
+	getOriginalOccupants: function () {
 		return this._originalOccupants || [];
 	},
 
 
-	getOccupantsKey: function() {
+	getOccupantsKey: function () {
 		var occupants = this.getOriginalOccupants();
 		if (occupants.length === 0) {
 			occupants = this.get('Occupants');
 		}
 
-		return Ext.Array.sort(occupants).join("_");
+		return Ext.Array.sort(occupants).join('_');
 	}
 });

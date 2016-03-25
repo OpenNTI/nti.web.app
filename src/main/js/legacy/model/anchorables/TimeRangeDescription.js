@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TimeRangeDe
 	isEmpty: false,
 
 	statics: {
-		createFromObject: function(o) {
+		createFromObject: function (o) {
 			var cp = NextThought.model.anchorables.TimeContentPointer;
 			return NextThought.model.anchorables.TimeRangeDescription.create({
 				seriesId: o.seriesId,
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TimeRangeDe
 	},
 
 
-	constructor: function(o) {
+	constructor: function (o) {
 		if (!this.isTimeContentPointer(o.start)) {
 			console.error('Missing or invalid time start', arguments);
 			Ext.Error.raise('Invalid contents');
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TimeRangeDe
 	},
 
 
-	isTimeContentPointer: function(o) {
+	isTimeContentPointer: function (o) {
 		return Boolean(o instanceof NextThought.model.anchorables.TimeContentPointer);
 	}
 });

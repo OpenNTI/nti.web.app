@@ -15,13 +15,13 @@ module.exports = exports = Ext.define('NextThought.model.CatalogFamilies', {
 	 * @param  {CatalogFamily|String} familyOrId id or or the CatalogFamily itself
 	 * @return {Boolean}			  whether or not the family is in my list
 	 */
-	containsFamily: function(familyOrId) {
+	containsFamily: function (familyOrId) {
 		if (!familyOrId) { return false; }
 
 		var items = this.get('Items'),
 			familyId = typeof familyOrId === 'string' ? familyOrId : familyOrId.get('CatalogFamilyID');
 
-		return items.reduce(function(acc, family) {
+		return items.reduce(function (acc, family) {
 			if (family.get('CatalogFamilyID') === familyId) {
 				acc = true;
 			}
@@ -30,13 +30,13 @@ module.exports = exports = Ext.define('NextThought.model.CatalogFamilies', {
 		}, false);
 	},
 
-	hasInstersectionWith: function(families) {
+	hasInstersectionWith: function (families) {
 		if (!families) { return false; }
 
 		var me = this;
-			items = families.get('Items');
+		items = families.get('Items');
 
-		return items.reduce(function(acc, family) {
+		return items.reduce(function (acc, family) {
 			if (me.containsFamily(family)) {
 				acc = true;
 			}
@@ -45,10 +45,10 @@ module.exports = exports = Ext.define('NextThought.model.CatalogFamilies', {
 		}, false);
 	},
 
-	getFamilyIds: function() {
+	getFamilyIds: function () {
 		var items = this.get('Items');
 
-		return items.map(function(family) {
+		return items.map(function (family) {
 			return family.get('CatalogFamilyID');
 		});
 	}

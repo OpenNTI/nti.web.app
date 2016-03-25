@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Links', {
 		type: 'links',
 		sortType: null,
 
-		convert: function(v) {
+		convert: function (v) {
 			if (v && v.getRelHref) {
 				//This happens if you set the links field on one record from another.
 				//e.g. calling rec1.copyFields(rec2, 'Links')
@@ -16,8 +16,8 @@ module.exports = exports = Ext.define('NextThought.model.converters.Links', {
 			}
 			return {
 				links: v,
-				asJSON: function() {return v;},
-				getRelHref: function(rel, raw) {
+				asJSON: function () {return v;},
+				getRelHref: function (rel, raw) {
 					var c = this.getRelLink(rel);
 
 					if (c) {
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Links', {
 
 					return c;
 				},
-				getRelLink: function(rel) {
+				getRelLink: function (rel) {
 					var i, c = this.links, len = c.length;
 
 					try {
@@ -46,18 +46,18 @@ module.exports = exports = Ext.define('NextThought.model.converters.Links', {
 							}
 						}
 					} catch (e) {
-						console.warn('bad Links value: "', c, '" it is a ', typeof(c));
+						console.warn('bad Links value: "', c, '" it is a ', typeof (c));
 					}
 
 					return null;
 				},
-				hasLink: function(rel) {
+				hasLink: function (rel) {
 					return !Ext.isEmpty(this.getRelHref(rel));
 				}
 			};
 		}
 	}
-},function() {
+},function () {
 	this.LINKS.sortType = Ext.data.SortTypes.none;
 });
 

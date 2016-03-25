@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	]),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {

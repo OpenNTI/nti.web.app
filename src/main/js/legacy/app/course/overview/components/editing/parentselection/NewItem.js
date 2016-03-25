@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	items: [],
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		if (!this.editor) {
@@ -69,24 +69,24 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		errorEl: '.error-msg'
 	},
 
-	onBackClick: function() {
+	onBackClick: function () {
 		if (this.onBack) {
 			this.onBack();
 		}
 	},
 
 
-	addMask: function() {
+	addMask: function () {
 		this.el.mask('Saving...');
 	},
 
 
-	unMask: function() {
+	unMask: function () {
 		this.el.unmask();
 	},
 
 
-	onSave: function() {
+	onSave: function () {
 		var value = this.editorCmp.getValue(),
 			minWait = Globals.WAIT_TIMES.SHORT,
 			start = new Date(),
@@ -97,13 +97,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.addMask();
 
 		this.parentRecord.appendContent(value)
-			.then(function(result) {
+			.then(function (result) {
 				var end = new Date(),
 					duration = end - start;
 
 				if (duration < wait) {
 					return wait(wait - duration)
-						.then(function() {
+						.then(function () {
 							return result;
 						});
 				}
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			})
 			.then(this.addNewItem.bind(this))
 			.then(this.unMask.bind(this))
-			.fail(function(error) {
+			.fail(function (error) {
 				me.unMask();
 				me.errorEl.setHTML('Unable to create section');
 				if (error) {
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	addNewItem: function(record) {
+	addNewItem: function (record) {
 		if (this.afterCreation) {
 			this.afterCreation(record);
 		}

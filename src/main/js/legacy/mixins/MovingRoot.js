@@ -10,11 +10,11 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 		OrderedContents: 'NextThought.mixins.OrderedContents'
 	},
 
-	getMoveLink: function() {
+	getMoveLink: function () {
 		return this.getLink('move');
 	},
 
-	getIdForMove: function(record) {
+	getIdForMove: function (record) {
 		return record.getId ? record.getId() : record;
 	},
 
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 	 * @param  {Object|String} newParent	  the desired parent of the record
 	 * @return {Promise}
 	 */
-	doAppendRecordFrom: function(record, originalParent, newParent) {
+	doAppendRecordFrom: function (record, originalParent, newParent) {
 		var index = newParent.getItemsCount ? newParent.getItemsCount() : Infinity;
 
 		return this.doMoveRecordFrom(record, index, -1, newParent, originalParent);
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 	 * @param  {Object|String} originalParent the current parent
 	 * @return {Promise}
 	 */
-	doMoveRecordFrom: function(record, index, oldIndex, newParent, originalParent) {
+	doMoveRecordFrom: function (record, index, oldIndex, newParent, originalParent) {
 		var link = this.getMoveLink(),
 			data, move;
 
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 	 *
 	 * @param  {String} response the response from the server
 	 */
-	__onMoveOperation: function(record, newParent, originalParent, response) {
+	__onMoveOperation: function (record, newParent, originalParent, response) {
 		var updatedNewParent, updatedOriginalParent, updatedRecord,
 			dndActions = NextThought.app.dnd.Actions.create();
 

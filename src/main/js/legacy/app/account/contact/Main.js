@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contact.Main', {
 					name: 'submit',
 					style: {'float': 'right'},
 					text: getString('NextThought.view.account.contact.Main.submit'),
-					handler: function(b) {
+					handler: function (b) {
 						b.up('contact-main-view').submit(b);
 					}
 				},
@@ -49,14 +49,14 @@ module.exports = exports = Ext.define('NextThought.app.account.contact.Main', {
 					name: 'cancel',
 					style: {'float': 'right'},
 					text: getString('NextThought.view.account.contact.Main.cancel'),
-					handler: function(b) {
+					handler: function (b) {
 						b.up('window').close();
 					}
 				}
-		]}
+			]}
 	],
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var u = $AppConfig.userObject,
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contact.Main', {
 		}
 	},
 
-	getValues: function() {
+	getValues: function () {
 		var email = this.down('[name=email]').getValue(),
 			message = this.down('[name=message]').getEl().getValue();
 
@@ -81,13 +81,13 @@ module.exports = exports = Ext.define('NextThought.app.account.contact.Main', {
 
 	},
 
-	setError: function(error) {
+	setError: function (error) {
 		var box = this.down('[name=error]'),
 			field = this.down('[name=' + error.field + ']'),
 			allFields = this.query('[name]');
 
 		//clear all errors:
-		Ext.each(allFields, function(f) {f.removeCls('error');});
+		Ext.each(allFields, function (f) {f.removeCls('error');});
 
 		//make main error field show up
 		box.el.down('.error-field').update(error.field.replace('_', ' '));
@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contact.Main', {
 		this.up('window').updateLayout();
 	},
 
-	submit: function(b) {
+	submit: function (b) {
 		var values = this.getValues(),
 			win = this.up('window');
 

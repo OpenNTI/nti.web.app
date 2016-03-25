@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -38,32 +38,32 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		this.onScroll = this.onScroll.bind(this);
 	},
 
-	getGroupContainer: function() {
+	getGroupContainer: function () {
 		return this.groupsContainer;
 	},
 
-	onActivate: function() {
+	onActivate: function () {
 		this.callParent(arguments);
 
 		window.addEventListener('scroll', this.onScroll);
 	},
 
-	onDeactivate: function() {
+	onDeactivate: function () {
 		this.callParent(arguments);
 
 		window.addEventListener('scroll', this.onScroll);
 	},
 
-	getScrollEl: function() {
+	getScrollEl: function () {
 		//TODO: figure out how to not have to do a user agent check for this
 		return Ext.isIE11p || Ext.isGecko ? document.documentElement : document.body;
 	},
 
-	isOnLastBatch: function() {
+	isOnLastBatch: function () {
 		return this.isLastBatch;
 	},
 
-	maybeShowMoreItems: function() {
+	maybeShowMoreItems: function () {
 		//if we can't scroll
 		var body = document.body,
 			height = document.documentElement.clientHeight;
@@ -77,14 +77,14 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		}
 	},
 
-	prefetchNext: Ext.Function.createBuffered(function() {
+	prefetchNext: Ext.Function.createBuffered(function () {
 		if (!this.isOnLastBatch()) {
 			this.currentBatch.getNextBatch()
 				.then(this.loadBatch.bind(this));
 		}
 	}, 500, null, null),
 
-	onScroll: function() {
+	onScroll: function () {
 		var body = this.getScrollEl(),
 			height = document.documentElement.clientHeight,
 			top = body.scrollTop,
@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		}
 	},
 
-	navigateToItem: function(rec) {
+	navigateToItem: function (rec) {
 		this.Router.root.attemptToNavigateToObject(rec);
 	}
 });

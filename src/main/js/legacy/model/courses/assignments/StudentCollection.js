@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Stu
 	extend: 'NextThought.model.courses.assignments.BaseCollection',
 
 
-	getHistory: function(useCache) {
+	getHistory: function (useCache) {
 		var link = this.get('HistoryURL');
 
 		if (useCache && this.__getHistoriesRequest) {
@@ -19,10 +19,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Stu
 		}
 
 		this.__getHistoriesRequest = Service.request(link)
-					.then(function(response) {
+					.then(function (response) {
 						return ParseUtils.parseItems(response)[0];
 					})
-					.fail(function(reason) {
+					.fail(function (reason) {
 						if (reason && reason.status === 404) {
 							return NextThought.model.courseware.UsersCourseAssignmentHistory.getEmpty();
 						}
@@ -39,9 +39,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Stu
 	 * @param {Boolean} useCache use the last call instead of making a new one
 	 * @return {[type]}			   [description]
 	 */
-	getHistoryItem: function(assignment, useCache) {
+	getHistoryItem: function (assignment, useCache) {
 		return this.getHistory(useCache)
-				.then(function(history) {
+				.then(function (history) {
 					var item = history.getItem(assignment);
 
 					if (item) {
@@ -58,9 +58,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Stu
 	 * @param  {String} assignment id of the assignment to update
 	 * @param  {Object} data	   data to update with
 	 */
-	updateHistoryItem: function(assignment, data) {
+	updateHistoryItem: function (assignment, data) {
 		return this.getHistory(true)
-			.then(function(history) {
+			.then(function (history) {
 				var item = history.getItem(assignment);
 
 				if (item) {

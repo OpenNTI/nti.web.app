@@ -10,13 +10,13 @@ var UserdataActions = require('../userdata/Actions');
 module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
 	},
 
-	__parseSharingInfo: function(sharingInfo) {
+	__parseSharingInfo: function (sharingInfo) {
 		var entities = sharingInfo.entities,
 			newEntities = [], i,
 			isPublic = false;
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		};
 	},
 
-	savePost: function(record, blog, title, tags, body, sharingInfo) {
+	savePost: function (record, blog, title, tags, body, sharingInfo) {
 		var isEdit = Boolean(record),
 			post = isEdit ? record.get('headline') : NextThought.model.forums.PersonalBlogEntryPost.create(),
 			me = this;
@@ -57,12 +57,12 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 			record.set({'title': title});
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			post.getProxy().on('exception', reject, null, {single: true});
 			post.save({
 				url: isEdit ? undefined : blog && blog.getLink('add'),
 				scope: me,
-				success: function(post, operation) {
+				success: function (post, operation) {
 					//the first argument is the record...problem is, it was a post, and the response from the server is
 					// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
 					// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
@@ -71,16 +71,16 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 
 					fulfill(isEdit ? record : ParseUtils.parseItems(operation.response.responseText)[0]);
 				},
-				failure: function() {
+				failure: function () {
 					console.debug('Failed to save blog: ', arguments);
 					reject();
 				}
 			});
 		})
-		.then(function(blogEntry) {
+		.then(function (blogEntry) {
 			return me.handleShareAndPublishState(blogEntry, sharingInfo);
 		})
-		.fail(function(reason) {
+		.fail(function (reason) {
 			console.error('Failed to save blog: ', reason);
 			return Promise.reject(reason);
 		});
@@ -109,26 +109,26 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 	 * @param {Ext.Component} cmp
 	 * @param {Boolean} resolved
 	 */
-	handleShareAndPublishState: function(blogEntry, sharingInfo, resolved) {
-	   if (!blogEntry) {
+	handleShareAndPublishState: function (blogEntry, sharingInfo, resolved) {
+	   	if (!blogEntry) {
 		   return Promise.resolve();
 	   }
 
-	   var isPublic = sharingInfo.isPublic,
+	   	var isPublic = sharingInfo.isPublic,
 		   resolveEntities, publish;
 
-	   if (isPublic) {
+	   	if (isPublic) {
 		   resolveEntities = UserRepository.getUser(sharingInfo.entities)
-			   .then(function(users) {
-				   return users.map(function(u) { return u.get('NTIID'); });
+			   .then(function (users) {
+				   return users.map(function (u) { return u.get('NTIID'); });
 			   });
 	   } else {
 		   resolveEntities = Promise.resolve(sharingInfo.entities);
 	   }
 
 
-	   if (blogEntry.isPublished() !== isPublic) {
-		   publish = new Promise(function(fulfill, reject) {
+	   	if (blogEntry.isPublished() !== isPublic) {
+		   publish = new Promise(function (fulfill, reject) {
 			   //This function (publish) is poorly named. It toggles.
 			   blogEntry.publish(null, fulfill, this);
 		   });
@@ -137,44 +137,44 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 	   }
 
 
-	   return Promise.all([
+	   	return Promise.all([
 		   resolveEntities,
 		   publish
-	   ]).then(function(results) {
+	   ]).then(function (results) {
 		   return results[0];
-	   }).then(function(entities) {
+	   }).then(function (entities) {
 		   var name = isPublic ? 'tags' : 'sharedWith',
 			   object = isPublic ? blogEntry.get('headline') : blogEntry,
-			   action = isPublic ? Ext.Array.merge : function(a) { return a; };
+			   action = isPublic ? Ext.Array.merge : function (a) { return a; };
 
 		   object.set(name, action(entities, object.get(name)));
 
-		   return new Promise(function(fulfill, reject) {
+		   return new Promise(function (fulfill, reject) {
 			   object.save({callback: fulfill});
 		   });
-	   }).then(function() {
+	   }).then(function () {
 		   return blogEntry;
 	   });
 
-   },
+   	},
 
-	saveBlogComment: function(record, blogPost, valueObject) {
+	saveBlogComment: function (record, blogPost, valueObject) {
 		var isEdit = Boolean(record && !record.phantom),
 			commentPost = record || NextThought.model.forums.PersonalBlogComment.create();
 
 		commentPost.set({body: valueObject.body});
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			commentPost.save({
 				url: isEdit ? undefined : blogPost && blogPost.getLink('add'),//only use the blog post record if its a new post.
-				success: function(rec) {
+				success: function (rec) {
 					if (!isEdit) {
 						blogPost.set('PostCount', blogPost.get('PostCount') + 1);
 					}
 
 					fulfill(rec);
 				},
-				failure: function() {
+				failure: function () {
 					console.error('Failed to create blog comment: ', arguments);
 
 					reject();
@@ -183,10 +183,10 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		});
 	},
 
-	deleteBlogPost: function(record) {
+	deleteBlogPost: function (record) {
 		var idToDestroy, me = this;
 
-		function maybeDeleteFromStore(id, store) {
+		function maybeDeleteFromStore (id, store) {
 			var r;
 
 			if (store) {
@@ -209,19 +209,19 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		idToDestroy = record.get('NTIID');
 
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			record.destroy({
-				success: function() {
+				success: function () {
 					me.UserDataActions.applyToStoresThatWantItem(maybeDeleteFromStore, record);
 
 					//Delete anything left that we know of
-					Ext.StoreManager.each(function(s) {
+					Ext.StoreManager.each(function (s) {
 						maybeDeleteFromStore(null, s);
 					}, me);
 
 					fulfill();
 				},
-				failure: function() {
+				failure: function () {
 					alert('Sorry, could not delete that');
 					reject();
 				}

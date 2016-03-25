@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.proxy.reader.Json', {
 
 	onItemRead: Ext.identityFn,
 
-	readRecords: function(data) {
+	readRecords: function (data) {
 		var records = [], key,
 			items = data.Items, item,
 			mimeType = data.MimeType,
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.proxy.reader.Json', {
 			}
 			if (links && Ext.isArray(links)) {
 				result.links = {};
-				Ext.each(links, function(l) {result.links[l.rel] = l.href;});
+				Ext.each(links, function (l) {result.links[l.rel] = l.href;});
 			}
 
 			try {
@@ -107,9 +107,9 @@ module.exports = exports = Ext.define('NextThought.proxy.reader.Json', {
 		}
 	},
 
-	__rebuildRecordAsType: function(Model, id, data) {
+	__rebuildRecordAsType: function (Model, id, data) {
 		var convertedValues,
-				record = new Model(undefined, id, data, convertedValues = {});
+			record = new Model(undefined, id, data, convertedValues = {});
 
 		if (this.model !== Model) {
 			this.model = Model;

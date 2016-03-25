@@ -25,9 +25,9 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 
 		AVATAR_CACHE: {},
 
-		getValidAvatarURL: function(url) {
+		getValidAvatarURL: function (url) {
 			if (!this.AVATAR_CACHE[url]) {
-				this.AVATAR_CACHE[url] = new Promise(function(fulfill, reject) {
+				this.AVATAR_CACHE[url] = new Promise(function (fulfill, reject) {
 					var img = new Image();
 
 					img.onload = fulfill.bind(null, url);
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 		},
 
 
-		getUsernameHash: function(str) {
+		getUsernameHash: function (str) {
 			var hash = 0, c, i;
 
 			if (!str || str.length === 0) { return hash; }
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 		},
 
 
-		getDefaultBackgroundForUsername: function(username) {
+		getDefaultBackgroundForUsername: function (username) {
 			var hash = this.getUsernameHash(username),
 				idx = Math.abs(hash) % this.BAKCGROUND_CHOICE_COUNT;
 
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 		},
 
 
-		getBackgroundColorForUsername: function(username) {
+		getBackgroundColorForUsername: function (username) {
 			var hash = this.getUsernameHash(username),
 				idx = Math.abs(hash) % this.DEFAULT_AVATAR_BG_COLORS.length;
 
@@ -81,29 +81,29 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 		//they can upload an image.	 If we have a first and last from the server
 		//take the first char of each, else take the first char of the display name.
 		//As of 7/2015 this matches the mobile app. Unresolved users don't show initials
-		getAvatarInitials: function(data, f, l, d) {
+		getAvatarInitials: function (data, f, l, d) {
 			//TODO should we cache this?
 
 			var first = f || data.NonI18NFirstName,
-			last = l || data.NonI18NLastName,
-			dn = d || data.displayName;
+				last = l || data.NonI18NLastName,
+				dn = d || data.displayName;
 
 			return first && last ? first[0] + last[0] : (dn && dn[0]);
 		}
 	},
 
-	initAvatar: function() {
+	initAvatar: function () {
 		var me = this;
 
 		//Give the field converters a chance to run
 		wait()
-			.then(function() {
+			.then(function () {
 				return Promise.all([
 					me.__getAvatar(),
 					me.__getInitials(),
 					me.__getBGColor()
 				]);
-			}).then(function(results) {
+			}).then(function (results) {
 				me.set({
 					avatarURL: results[0],
 					avatarInitials: results[1],
@@ -119,10 +119,10 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 	},
 
 
-	isUnresolved: function() { return true; },
+	isUnresolved: function () { return true; },
 
 
-	__getAvatar: function() {
+	__getAvatar: function () {
 		var url = this.get('avatarURL');
 
 		if (!url) {
@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 	},
 
 
-	__getInitials: function() {
+	__getInitials: function () {
 		if (this.isUnresolved()) {
 			return null;
 		} else {
@@ -145,13 +145,13 @@ module.exports = exports = Ext.define('NextThought.mixins.Avatar', {
 	},
 
 
-	__getBGColor: function() {
+	__getBGColor: function () {
 		return NextThought.mixins.Avatar.getBackgroundColorForUsername(this.get('Username'));
 	},
 
 
 
-	getBackgroundImage: function() {
+	getBackgroundImage: function () {
 		var background = this.get('backgroundURL'),
 			username = this.get('Username');
 

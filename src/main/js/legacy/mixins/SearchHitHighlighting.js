@@ -5,7 +5,7 @@ var SearchUtils = require('../util/Search');
 
 module.exports = exports = Ext.define('NextThought.mixins.SearchHitHighlighting', {
 
-	showSearchHit: function(hit, scrollToFragment) {
+	showSearchHit: function (hit, scrollToFragment) {
 		this.clearSearchHit();
 		this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this});
 		if (scrollToFragment) {
@@ -14,12 +14,12 @@ module.exports = exports = Ext.define('NextThought.mixins.SearchHitHighlighting'
 	},
 
 
-	getInsertionPoint: function() {
+	getInsertionPoint: function () {
 		return this.el;
 	},
 
 
-	getSearchScrollTarget: function() {
+	getSearchScrollTarget: function () {
 		return Ext.getBody();
 	},
 
@@ -27,12 +27,12 @@ module.exports = exports = Ext.define('NextThought.mixins.SearchHitHighlighting'
 	//	@returns an object with top and left properties used to adjust the
 	//	coordinate space of the ranges bounding client rects.
 	//	It decides based on the type of container( main content or overlays).
-	getRangePositionAdjustments: function(key) {
+	getRangePositionAdjustments: function (key) {
 		return {top: -1 * this.el.getY(), left: -1 * this.el.getX()};
 	},
 
 
-	clearSearchHit: function() {
+	clearSearchHit: function () {
 		if (!this.searchAnnotations) {
 			return;
 		}
@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.mixins.SearchHitHighlighting'
 	//Returns an array of objects with two propertes.  ranges is a list
 	//of dom ranges that should be used to position the highlights.
 	//key is a string that used to help distinguish the type of content when we calculate the adjustments( top and left ) needed.
-	rangesForSearchHits: function(hit) {
+	rangesForSearchHits: function (hit) {
 		var phrase = hit.get('PhraseSearch'),
 			fragments = hit.get('Fragments'),
 			regex, ranges,
@@ -64,9 +64,9 @@ module.exports = exports = Ext.define('NextThought.mixins.SearchHitHighlighting'
 		return result;
 	},
 
-	buildSearchIndex: function() {
+	buildSearchIndex: function () {
 		//We index only things in body, title, and tags
-		function interesting(child) {
+		function interesting (child) {
 			var f = Ext.fly(child);
 
 			return f.parent('.body', true) || f.parent('.title', true) || f.parent('.tags');
@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.mixins.SearchHitHighlighting'
 		return TextRangeFinderUtils.indexText(this.el.dom, interesting);
 	},
 
-	scrollToHit: function(fragment, phrase) {
+	scrollToHit: function (fragment, phrase) {
 		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase, true),
 			searchIn = this.el.dom,
 			doc = searchIn.ownerDocument,

@@ -7,10 +7,10 @@ var {guidGenerator} = require('legacy/util/Globals');
 module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay', {
 	alias: 'reader.componentOverlay',
 
-	constructor: function(config) {
+	constructor: function (config) {
 		Ext.apply(this, config);
 
-		function sync() {
+		function sync () {
 			var p = NextThought.app.contentviewer.overlay.Panel;
 
 			p.relayout();
@@ -32,20 +32,20 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 		this.activeOverlayedPanels = {};
 	},
 
-	insertComponentOverlay: function() {
+	insertComponentOverlay: function () {
 		var container = Ext.DomHelper.append(this.reader.getInsertionPoint('innerCt'), { cls: 'component-overlay' }, true);
-		this.reader.on('destroy' , function() { container.remove(); });
+		this.reader.on('destroy' , function () { container.remove(); });
 		this.componentOverlayEl = container;
 	},
 
-	overlayedPanelAtY: function(y) {
+	overlayedPanelAtY: function (y) {
 		var panel = null,
 			offsets = this.reader.getAnnotationOffsets();
 
 		y += offsets.top;
 
 		//This may need to be optimized
-		Ext.each(Ext.Object.getValues(this.activeOverlayedPanels), function(p) {
+		Ext.each(Ext.Object.getValues(this.activeOverlayedPanels), function (p) {
 			if (p.isDestroyed || !p.el) {return;}
 			var minY = p.el.getY(),
 				maxY = minY + p.el.getHeight();
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 	 * @param {String|Object} key
 	 * @param {Object} [panel]
 	 */
-	registerOverlayedPanel: function(key, panel) {
+	registerOverlayedPanel: function (key, panel) {
 
 		if (!panel && Ext.isObject(key)) {
 			panel = key;
@@ -83,18 +83,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 		return panel;
 	},
 
-	adjustOverlayedPanels: function() {
+	adjustOverlayedPanels: function () {
 		NextThought.app.contentviewer.overlay.Panel.syncPositioning();
 	},
 
-	clearOverlayedPanels: function() {
+	clearOverlayedPanels: function () {
 		var active = this.activeOverlayedPanels,
 			myReader = this.reader;
 
 		this.activeOverlayedPanels = {};
 		this.tabIndexer.reset(10);
 
-		Ext.Object.each(active, function(k, v) {
+		Ext.Object.each(active, function (k, v) {
 			delete v.floatParent;
 			v.destroy();
 			delete active[k];
@@ -102,14 +102,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 
 		Ext.each(
 			Ext.ComponentQuery.query('overlayed-panel'),
-			function(o) {
+			function (o) {
 				if (o.reader === myReader) {
 					o.destroy();
 				}
 			});
 	},
 
-	getRelatedElement: function(ntiid, objectEls) {
+	getRelatedElement: function (ntiid, objectEls) {
 		var i;
 		for (i = 0; i < objectEls.length; i++) {
 			if (!(objectEls[i].getAttribute)) { continue; }
@@ -120,14 +120,14 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Comp
 		return undefined;
 	},
 
-	getContentElement: function(tagName, attribute, value) {
+	getContentElement: function (tagName, attribute, value) {
 		try {
-		var doc = this.reader.getDocumentElement(),
+			var doc = this.reader.getDocumentElement(),
 			tags = doc.getElementsByTagName(tagName),
 			i = tags.length - 1,
 			vRe = new RegExp('^' + RegExp.escape(value) + '$', 'ig');
 
-		for (i; i >= 0; i--) {
+			for (i; i >= 0; i--) {
 			if (vRe.test(tags[i].getAttribute(attribute))) {
 				return tags[i];
 			}

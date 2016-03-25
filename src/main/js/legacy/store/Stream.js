@@ -46,13 +46,13 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		},
 		model: 'NextThought.model.Change',
 
-		getParams: function() {
+		getParams: function () {
 			//Better way? (we basically want callparent but we are replacing instead of
 			//overriding
 			//JSG: callSuper()??
 			var p = this.self.prototype.getParams.apply(this, arguments);
 
-			Ext.Object.each(p, function(k, v, o) {
+			Ext.Object.each(p, function (k, v, o) {
 				if (v === undefined || v === null) {
 					delete o[k];
 				}
@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		}
 	],
 
-	constructor: function() {
+	constructor: function () {
 		var s, me = this;
 		me.callParent(arguments);
 
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 			me.setProxy(Ext.clone(me.getProxy().proxyConfig));
 		}
 
-		me.on('load', function(s, recs) {
+		me.on('load', function (s, recs) {
 			recs = recs || [];
 
 			if (recs.length < me.pageSize) {
@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		});
 	},
 
-	onProxyLoad: function(operation) {
+	onProxyLoad: function (operation) {
 		var resultSet = operation.getResultSet();
 		delete this.batchLinks;
 		if (resultSet && resultSet.links) {
@@ -104,14 +104,14 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		return this.callParent(arguments);
 	},
 
-	hasSource: function() {
+	hasSource: function () {
 		return !!this.getProxy().url;
 	},
 
 	/**
 	 * Like last but doesn't include any filtering
 	 */
-	unfilteredLast: function() {
+	unfilteredLast: function () {
 		if (this.snapshot) {
 			//Note snapshot is both unfiltered and unsorted.
 			//TODO more efficient way to do this? sorting the mixed collection doesn't seem to work
@@ -120,19 +120,19 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		return this.last();
 	},
 
-	hasAdditionalPagesToLoad: function() {
+	hasAdditionalPagesToLoad: function () {
 		return this.mayHaveAdditionalPages === undefined || this.mayHaveAdditionalPages;
 	},
 
-	isOnLastBatch: function() {
+	isOnLastBatch: function () {
 		return this.lastBatchLoaded;
 	},
 
-	previousPage: function() {
+	previousPage: function () {
 		Ext.Error.raise('previousPage not supported for stream store');
 	},
 
-	loadPage: function(page, options) {
+	loadPage: function (page, options) {
 		if (page !== 1 && page !== this.currentPage + 1) {
 			Ext.Error.raise('loadPage can only be called for page 1 or n + 1 where n is currentPage');
 		}
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 		this.callParent([page, options]);
 	},
 
-	load: function(options) {
+	load: function (options) {
 		if (!this.hasSource()) {
 			this.requestedToLoad = options;
 			return;
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.store.Stream', {
 
 		options = Ext.applyIf(options || {}, {start: null});
 
-		function isMoreDetector(records, operation, success) {
+		function isMoreDetector (records, operation, success) {
 			//Set some state that indicates if we may have more
 
 			//If we fail with a 404 we treat that as no more

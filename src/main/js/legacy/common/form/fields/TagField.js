@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	},
 
 
-	onClassExtended: function(cls, data) {
+	onClassExtended: function (cls, data) {
 		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
 		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
 
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.xtypes.push('field');
 		this.initField();
@@ -66,10 +66,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	},
 
 
-	getFocusEl: function() {return this.inputEl;},
+	getFocusEl: function () {return this.inputEl;},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent();
 
 		this.mon(this.el, 'click', this.onClick, this);
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	},
 
 
-	addInputListeners: function() {
+	addInputListeners: function () {
 		this.mon(this.inputEl, {
 			scope: this,
 			keydown: this.onKeyDown,
@@ -96,10 +96,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	},
 
 
-	onBeforeRemoveToken: function(token) {},
+	onBeforeRemoveToken: function (token) {},
 
 
-	onClick: function(e) {
+	onClick: function (e) {
 		e.stopEvent();
 		var t = e.getTarget('.x', null, true),
 			p = t ? t.up('.token') : null;
@@ -114,45 +114,45 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 
 
 	to_ascii: {
-	'188': 44,
-	'109': 45,
-	'190': 46,
-	'191': 47,
-	'192': 96,
-	'220': 92,
-	'222': 39,
-	'221': 93,
-	'219': 91,
-	'173': 45,
-	'187': 61,
-	'186': 59,
-	'189': 45
-  },
+		'188': 44,
+		'109': 45,
+		'190': 46,
+		'191': 47,
+		'192': 96,
+		'220': 92,
+		'222': 39,
+		'221': 93,
+		'219': 91,
+		'173': 45,
+		'187': 61,
+		'186': 59,
+		'189': 45
+  	},
 
 
-	isDelimiter: function(ch) {
+	isDelimiter: function (ch) {
 
 		//see http://jsfiddle.net/S2dyB/17/
 		if (this.to_ascii.hasOwnProperty(ch)) {
-	  ch = this.to_ascii[ch];
-	}
+	  		ch = this.to_ascii[ch];
+		}
 
 		return Boolean(String.fromCharCode(ch).match(this.delimiterRe));
 	},
 
 
-	isToken: function(text) { return (text || '').match(this.regex); },
+	isToken: function (text) { return (text || '').match(this.regex); },
 
 
-	isMultipleTokens: function(text) {
+	isMultipleTokens: function (text) {
 		var me = this,
 			t = (text || '').split(me.delimiterRe);
 		t = Ext.Array.clean(t);
-		return t.reduce(function(acc, val) { return acc && me.isToken(val); }, true);
+		return t.reduce(function (acc, val) { return acc && me.isToken(val); }, true);
 	},
 
 
-	onKeyDown: function(e) {
+	onKeyDown: function (e) {
 		var el = this.inputEl,
 			key = e.getKey(),
 			val = el.getValue(),
@@ -180,14 +180,14 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	},
 
 
-	setPlaceholderText: function(text) {
+	setPlaceholderText: function (text) {
 		this.placeholder = text;
 		this.inputEl.set({'placeholder': text});
 		this.updateSize();
 	},
 
 
-	updateSize: function() {
+	updateSize: function () {
 		var i = this.inputEl,
 			v = i.getValue() || this.placeholder;
 		this.sizerEl.update(v + '###');
@@ -195,17 +195,17 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	},
 
 
-	getInsertionPoint: function() {
+	getInsertionPoint: function () {
 		return this.wrapEl;
 	},
 
 
-	getSnippet: function(value) {
+	getSnippet: function (value) {
 		return value; //In some cases we may want to truncate the value if it's too long.
 	},
 
 
-	addTag: function(val, type, extraData) {
+	addTag: function (val, type, extraData) {
 		var me = this, el = me.inputEl, snip, t;
 
 		el.dom.value = '';
@@ -223,20 +223,20 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	},
 
 
-	removeToken: function(p) {
+	removeToken: function (p) {
 		if (p && p.remove) {
 			p.remove();
 		}
 	},
 
 
-	handleBlur: function() {
+	handleBlur: function () {
 		this.updateTags();
 		return true;
 	},
 
 
-	updateTags: function() {
+	updateTags: function () {
 		var me = this,
 			el = me.inputEl,
 			val = (el.getValue() || '').toLowerCase();
@@ -257,13 +257,13 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	},
 
 
-	onPaste: function(e) {
+	onPaste: function (e) {
 		//wait for paste data to actually populate tne input
 		Ext.defer(this.updateTags, 100, this);
 	},
 
 
-	setReadOnly: function(readOnly) {
+	setReadOnly: function (readOnly) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.setReadOnly, this, [readOnly]), this, {single: true});
 			return;
@@ -274,7 +274,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	},
 
   //This MUST be reimplemented if the subclass redfines the value format
-	setValue: function(value) {
+	setValue: function (value) {
 		if (value && !Ext.isArray(value)) {
 			value = [value];
 		}
@@ -285,7 +285,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 		}
 
 		this.el.select('.token').remove();
-		Ext.each(value || [], function(v) { this.addTag(v); },this);
+		Ext.each(value || [], function (v) { this.addTag(v); },this);
 
 		return this;
 	},
@@ -294,13 +294,13 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.TagField',
 	//initValue: Ext.emptyFn,
 
 
-	isValid: function() { return true; },
+	isValid: function () { return true; },
 
 
-	getValue: function() {
+	getValue: function () {
 		return Ext.Array.map(
 			this.el.query('.token .value'),
-			function(el) {
+			function (el) {
 				return el.innerHTML || '';
 			}
 		);

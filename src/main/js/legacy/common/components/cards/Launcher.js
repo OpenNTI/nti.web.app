@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Launc
 	alias: 'widget.content-launcher',
 
 	statics: {
-		getData: function(dom, reader, items, getThumb) {
+		getData: function (dom, reader, items, getThumb) {
 			var data = DomUtils.parseDomObject(dom);
 
 			Ext.apply(data, {
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Launc
 		thumbnailEl: '.thumbnail'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {},this.data);
 
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Launc
 		}
 	},
 
-	resolveVideoThumbnail: function() {
+	resolveVideoThumbnail: function () {
 		var video = this.data && this.data.items && this.data.items[0],
 			s = video && video.sources[0],
 			id = s && s.source,
@@ -66,18 +66,18 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Launc
 
 		if (id) {
 			Resolver.resolvePoster(type, id)
-				.then(function(thumb){
+				.then(function (thumb) {
 					var thumbnail = thumb && thumb.thumbnail;
 					me.onceRendered
-						.then(function(){
-							me.thumbnailEl.setStyle('backgroundImage', 'url('+ thumbnail +')');
-						})
+						.then(function () {
+							me.thumbnailEl.setStyle('backgroundImage', 'url(' + thumbnail + ')');
+						});
 				});
 		}
 
 	},
 
-	onLaunch: function(e) {
+	onLaunch: function (e) {
 		e.stopEvent();
 		this.fireEvent('launch', this.data);
 	}

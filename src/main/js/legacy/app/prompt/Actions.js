@@ -10,13 +10,13 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Actions', {
 		DELETED: 'deleted'
 	},
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.PromptStateStore = NextThought.app.prompt.StateStore.getInstance();
 	},
 
-	prompt: function(type, data) {
+	prompt: function (type, data) {
 		return this.PromptStateStore.openPrompt(type, data);
 	}
 });

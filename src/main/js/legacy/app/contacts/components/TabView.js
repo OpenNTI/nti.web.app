@@ -20,13 +20,13 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.TabVi
 	ui: 'contacts',
 	cls: 'contact-sub-view',
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 		this.mon(this.navigation, 'contact-row-selected', 'scrollIntoView');
 		this.on('activate', this.onActivate.bind(this));
 	},
 
-	scrollIntoView: function(rec) {
+	scrollIntoView: function (rec) {
 		var query = Ext.String.format('[recordId="{0}"]', ParseUtils.escapeId(rec.getId())),
 			cmp = this.body.down(query);
 
@@ -36,17 +36,17 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.TabVi
 		}
 	},
 
-	injectLetterDividers: function(store) {
+	injectLetterDividers: function (store) {
 		var User = NextThought.model.User,
 			pluck = Ext.Array.pluck,
 			letters = {}, toAdd = [];
 
-		Ext.each(pluck(pluck(store.getRange(), 'data'), 'displayName'), function(v) {
+		Ext.each(pluck(pluck(store.getRange(), 'data'), 'displayName'), function (v) {
 			v = (v || '-')[0] || '-';
 			letters[v.toUpperCase()] = 1;
 		});
 
-		Ext.each(Ext.Object.getKeys(letters), function(v) {
+		Ext.each(Ext.Object.getKeys(letters), function (v) {
 			var m = User.getUnresolved(v);
 			m.set({
 				//if usernames are obscured, this will have been replaced with "Anonymous XXX"...
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.TabVi
 				alias: v,
 				type: 'unit'
 			});
-			if (store.findBy(function(r) { return r.get('type') === 'unit' && r.get('Username') === v; }) < 0) {
+			if (store.findBy(function (r) { return r.get('type') === 'unit' && r.get('Username') === v; }) < 0) {
 				toAdd.push(m);
 			}
 		});
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.TabVi
 		store.resumeEvents();
 	},
 
-	onActivate: function() {
+	onActivate: function () {
 		if (!this.rendered) { return; }
 		this.alignNavigation();
 		this.navigation.refresh();

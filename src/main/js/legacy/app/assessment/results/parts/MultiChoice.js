@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 
 	cls: 'result-part',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.barChart = this.add({
@@ -36,19 +36,19 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	 *
 	 * @return {Array} Rows to pass to the bar chart
 	 */
-	getAxis: function() {
+	getAxis: function () {
 		var resultParts = this.resultPart.Results,
 			total = this.resultPart.Total,
 			choices = this.questionPart.get('choices'),
 			d = document.createElement('div'),
 			axis = [];
 
-		function clean(text) {
+		function clean (text) {
 			d.innerHTML = text;
 			return d.textContent;
 		}
 
-		choices.forEach(function(choice, idx) {
+		choices.forEach(function (choice, idx) {
 			var result = resultParts[idx],
 				row = {
 					labelPrefix: String.fromCharCode(65 + idx) + '.',

@@ -11,14 +11,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: 'content-editor outline-editor',
 
 	statics: {
-		getHandledMimeTypes: function() {
+		getHandledMimeTypes: function () {
 			return [
 				NextThought.model.courses.navigation.CourseOutlineNode.mimeType
 			];
 		},
 
 
-		getTypes: function() {
+		getTypes: function () {
 			return [
 				{
 					title: 'Unit',
@@ -36,22 +36,22 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		{type: 'text', name: 'title', placeholder: 'Title'}
 	],
 
-	getFormSchema: function() {
+	getFormSchema: function () {
 		var schema = [
 				{name: 'MimeType', type: 'hidden'},
-				{
-					type: 'text',
-					name: 'title',
-					placeholder: 'Title',
-					required: true,
-					maxlength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
-				}
-			];
+			{
+				type: 'text',
+				name: 'title',
+				placeholder: 'Title',
+				required: true,
+				maxlength: NextThought.app.course.overview.components.editing.Actions.MAX_TITLE_LENGTH
+			}
+		];
 
 		return schema;
 	},
 
-	getDefaultValues: function() {
+	getDefaultValues: function () {
 		var types = this.self.getHandledMimeTypes();
 
 		if (!types || types.length === 0) {
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-	addParentSelection: function(record, parentRecord, rootRecord, onChange) {
+	addParentSelection: function (record, parentRecord, rootRecord, onChange) {
 		if (!rootRecord) { return null; }
 
 		var items = rootRecord.get('Items'),

@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TranscriptC
 
 
 	statics: {
-		createFromObject: function(o) {
+		createFromObject: function (o) {
 			var cp = NextThought.model.anchorables[o.pointer.Class];
 
 			return NextThought.model.anchorables.TranscriptContentPointer.create({
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TranscriptC
 	},
 
 
-	constructor: function(o) {
+	constructor: function (o) {
 		this.callParent(arguments);
 		this.Class = 'TranscriptContentPointer';
 	}

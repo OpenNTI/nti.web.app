@@ -6,7 +6,7 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 	override: 'Ext.dom.Element',
   //	requires: ['NextThought.util.Rects'],
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		if (this.dom && this.dom.addEventListener) {
@@ -21,18 +21,18 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 	},
 
 
-	_scrollStopped: function(e) {
+	_scrollStopped: function (e) {
 		var me = this,
 			d = me.dom,
 			c = Ext.EventManager.getEventListenerCache(d, 'scrollstop') || [];
 
-		c.forEach(function(listener) {
+		c.forEach(function (listener) {
 			listener.wrap.call(c.scope || d, e);
 		});
 	},
 
 
-	getScrollingEl: function() {
+	getScrollingEl: function () {
 
 		var el = this, found = 0, max = 100, flow;
 
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 		return el || this;
 	},
 
-	needsScrollIntoView: function(containerEl) {
+	needsScrollIntoView: function (containerEl) {
 		var container = Ext.getDom(containerEl) || Ext.getBody().dom,
 			el = this.dom,
 			offsets = this.getOffsetsTo(container),
@@ -61,11 +61,11 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 			ctTop = parseInt(container.scrollTop, 10),
 			ctBottom = ctTop + ctClientHeight;
 
-	return top > ctBottom || top < ctTop || bottom < ctTop || bottom > ctBottom;
+		return top > ctBottom || top < ctTop || bottom < ctTop || bottom > ctBottom;
 	},
 
 
-	scrollCompletelyIntoView: function(container, hscroll, animate) {
+	scrollCompletelyIntoView: function (container, hscroll, animate) {
 		var me = this,
 			dom = me.dom,
 			offsets = me.getOffsetsTo(container = Ext.getDom(container) || Ext.getBody().dom),
@@ -83,22 +83,22 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 			newPos;
 
 		if (dom.offsetHeight > ctClientHeight || top < ctScrollTop) {
-		  newPos = top - this.getHeight();
+		  	newPos = top - this.getHeight();
 		} else if (bottom > ctBottom) {
-		  newPos = (bottom - ctClientHeight) + this.getHeight();
+		  	newPos = (bottom - ctClientHeight) + this.getHeight();
 		}
 		if (newPos !== null) {
-		  me.scrollChildFly.attach(container).scrollTo('top', newPos, animate);
+		  	me.scrollChildFly.attach(container).scrollTo('top', newPos, animate);
 		}
 
 		if (hscroll !== false) {
-		  newPos = null;
-		  if (dom.offsetWidth > container.clientWidth || left < ctScrollLeft) {
+		  	newPos = null;
+		  	if (dom.offsetWidth > container.clientWidth || left < ctScrollLeft) {
 			newPos = left;
 		  } else if (right > ctRight) {
 			newPos = right - container.clientWidth;
 		  }
-		  if (newPos !== null) {
+		  	if (newPos !== null) {
 			me.scrollChildFly.attach(container).scrollTo('left', newPos, animate);
 		  }
 		}
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 	 * @param {Number} [bufferZone]
 	 * @return {*}
 	 */
-	isOnScreenRelativeTo: function(el, bufferZone) {
+	isOnScreenRelativeTo: function (el, bufferZone) {
 		var myRect = Ext.getDom(this).getBoundingClientRect(),
 			parentRect = Ext.getDom(el).getBoundingClientRect();
 
@@ -120,21 +120,21 @@ module.exports = exports = Ext.define('NextThought.overrides.dom.Element', {
 	},
 
 
-	getAttribute: function(attr, ns) {
+	getAttribute: function (attr, ns) {
 		var v = this.callParent(arguments);
 		return v || (attr === 'class' ? this.callParent(['className', ns]) : null);
 	},
 
 
-	getAndRemoveAttr: function(attr) {
+	getAndRemoveAttr: function (attr) {
 		var r = this.dom.getAttribute(attr);
 		this.dom.removeAttribute(attr);
 		return r;
 	},
 
 
-	allowContextMenu: function() {
-		this.on('contextmenu', function(e) {e.stopPropagation();});
+	allowContextMenu: function () {
+		this.on('contextmenu', function (e) {e.stopPropagation();});
 		return this;
 	}
 });

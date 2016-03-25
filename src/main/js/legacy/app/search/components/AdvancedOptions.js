@@ -51,12 +51,12 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Advance
 	}),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		var options = this.OPTIONS,
 			keys = Object.keys(options) || [],
 			labels = [];
 
-		keys.forEach(function(key) {
+		keys.forEach(function (key) {
 			labels.push({
 				type: key,
 				label: options[key].label
@@ -69,14 +69,14 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Advance
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', this.doClick.bind(this));
 	},
 
 
-	doClick: function(e) {
+	doClick: function (e) {
 		var option = e.getTarget('.search-option');
 
 		if (this.changeFilter && option) {
@@ -85,14 +85,14 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Advance
 	},
 
 
-	getMimeTypes: function(type) {
+	getMimeTypes: function (type) {
 		var option = this.OPTIONS[type];
 
 		return option && option.accepts;
 	},
 
 
-	selectType: function(type) {
+	selectType: function (type) {
 		if (!this.rendered) {
 			this.on('after', this.selectType.bind(this, type));
 			return;

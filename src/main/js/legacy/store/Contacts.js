@@ -17,12 +17,12 @@ module.exports = exports = Ext.define('NextThought.store.Contacts', {
 		{
 			property: 'displayName',
 			direction: 'ASC',
-			transform: function(value) { return value && value.toLowerCase(); }
+			transform: function (value) { return value && value.toLowerCase(); }
 		}
 	],
 
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
@@ -43,12 +43,12 @@ module.exports = exports = Ext.define('NextThought.store.Contacts', {
 	},
 
 
-	friendsListStoreLoad: function(store, records) {
+	friendsListStoreLoad: function (store, records) {
 		this.parentLoaded = true;
 		this.fireEvent('parent-store-loaded', store, records);
 	},
 
-	onPresenceChange: function(username, rec) {
+	onPresenceChange: function (username, rec) {
 		if (!rec.isPresenceInfo || (this.flStore && !this.flStore.isContact(username))) {
 			return;
 		}
@@ -56,20 +56,20 @@ module.exports = exports = Ext.define('NextThought.store.Contacts', {
 		this[fn]([username]);
 	},
 
-	contains: function(id) {
+	contains: function (id) {
 		return 0 <= this.indexOfId(id);
 	},
 
-	indexOfId: function(id) {
-		return (this.snapshot || this.data).findIndexBy(function(rec) {
+	indexOfId: function (id) {
+		return (this.snapshot || this.data).findIndexBy(function (rec) {
 			return rec.isEqual(rec.get('Username'), id);
 		}, this, 0);
 	},
 
-	doesItemPassFilter: function(item) {
+	doesItemPassFilter: function (item) {
 		var pass = true;
 
-		this.filters.each(function(filter) {
+		this.filters.each(function (filter) {
 			if (!filter.filterFn(item)) {
 				pass = false;
 			}
@@ -79,10 +79,10 @@ module.exports = exports = Ext.define('NextThought.store.Contacts', {
 		return pass;
 	},
 
-	addContacts: function(contacts) {
+	addContacts: function (contacts) {
 		var toAdd = [], me = this;
-		UserRepository.getUser(contacts, function(users) {
-			Ext.each(users, function(user) {
+		UserRepository.getUser(contacts, function (users) {
+			Ext.each(users, function (user) {
 				if (!isMe(user) && me.doesItemPassFilter(user) && !me.contains(user.getId())) {
 					toAdd.push(user);
 				}
@@ -93,9 +93,9 @@ module.exports = exports = Ext.define('NextThought.store.Contacts', {
 		});
 	},
 
-	removeContacts: function(contacts) {
+	removeContacts: function (contacts) {
 		var toRemove = [], me = this;
-		Ext.each(contacts, function(contact) {
+		Ext.each(contacts, function (contact) {
 			var idx = me.indexOfId(contact.getId ? contact.getId() : contact);
 			if (idx >= 0) {
 				toRemove.push((me.snapshot || me.data).getAt(idx));
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.store.Contacts', {
 		}
 	},
 
-	refreshContacts: function(listStore) {
+	refreshContacts: function (listStore) {
 		//TODO smarter merge here
 		this.removeAll();
 		this.addContacts(listStore.getContacts());

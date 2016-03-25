@@ -18,17 +18,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	layout: 'none',
 	cls: 'course-overview',
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.maybeMask();
 	},
 
-	setActiveBundle: function(bundle) {
+	setActiveBundle: function (bundle) {
 		this.bundle = bundle;
 	},
 
-	maybeMask: function() {
+	maybeMask: function () {
 		if (!this.rendered || !this.buildingOverview) {
 			return;
 		}
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.el.mask(getString('NextThought.view.courseware.overview.View.loading'), 'loading');
 	},
 
-	maybeUnmask: function() {
+	maybeUnmask: function () {
 		delete this.buildingOverview;
 
 		if (this.rendered) {
@@ -46,56 +46,56 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	clear: function() {
+	clear: function () {
 		this.removeAll(true);
 	},
 
-	__updateProgress: function() {
+	__updateProgress: function () {
 		if (!this.currentNode || !this.currentNode.getProgress) { return; }
 
 		var me = this;
 
 		return me.currentNode.getProgress()
-					.then(function(progress) {
-						me.items.each(function(item) {
+					.then(function (progress) {
+						me.items.each(function (item) {
 							if (item.setProgress) {
 								item.setProgress(progress);
 							}
 						});
 					})
-					.fail(function(reason) {
+					.fail(function (reason) {
 						console.error('Failed to load progress:', reason);
 					});
 	},
 
-	__updateCounts: function() {
+	__updateCounts: function () {
 		if (!this.currentNode || !this.currentNode.getCommentCounts) { return; }
 
 		var me = this;
 
 		return me.currentNode.getCommentCounts()
-			.then(function(counts) {
-				me.items.each(function(item) {
+			.then(function (counts) {
+				me.items.each(function (item) {
 					if (item.setCommentCounts) {
 						item.setCommentCounts(counts);
 					}
 				});
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Failed to load comment counts: ', reason);
 			});
 	},
 
-	getInfo: function(record, course, overviewsrc) {
+	getInfo: function (record, course, overviewsrc) {
 		return Promise.all([
-				course.getAssignments(),
-				course.getWrapper && course.getWrapper(),
-				ContentUtils.getLocation(record.get('ContentNTIID'), course),
-				overviewsrc ? null : course.getVideoIndex()
-			]);
+			course.getAssignments(),
+			course.getWrapper && course.getWrapper(),
+			ContentUtils.getLocation(record.get('ContentNTIID'), course),
+			overviewsrc ? null : course.getVideoIndex()
+		]);
 	},
 
-	renderLesson: function(record, doNotCache) {
+	renderLesson: function (record, doNotCache) {
 		var me = this,
 			course = me.bundle,
 			overviewsrc = (record && record.getLink('overview-content')) || null;
@@ -130,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.removeAll(true);
 
 		return this.getInfo(record, course, overviewsrc)
-			.then(function(results) {
+			.then(function (results) {
 				var assignments = results[0],
 					enrollment = results[1],
 					//Just use the first one for now
@@ -173,13 +173,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				return me.currentOverview.onceLoaded();
 			})
-			.fail(function(reason) { console.error(reason); })
+			.fail(function (reason) { console.error(reason); })
 			.then(me.__updateProgress.bind(me))
 			.then(me.__updateCounts.bind(me))
 			.then(me.maybeUnmask.bind(me));
 	},
 
-	navigate: function(obj) {
+	navigate: function (obj) {
 		obj.parent = this.currentNode;
 		this.navigateToObject(obj);
 	}

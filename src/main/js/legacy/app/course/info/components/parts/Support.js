@@ -21,9 +21,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 		] }
 	]),
 
-	beforeRender: function() {
+	beforeRender: function () {
 
-		function clean(i) {
+		function clean (i) {
 			return i && (!Ext.isEmpty(i.Label) || !Ext.isEmpty(i.URL));
 		}
 
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 					Label: getString('course-info.course-supoprt.link3.Label', null, true),
 					URL: getString('course-info.course-supoprt.link3.URL', null, true)
 				}
-				   ].filter(clean)
+				  ].filter(clean)
 		});
 
 		return this.callParent(arguments);

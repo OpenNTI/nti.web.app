@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Unsuppor
 
 	reset: Ext.emptyFn,
 
-	afterRender: function() {
+	afterRender: function () {
 		Ext.Component.prototype.afterRender.call(this);
 	}
 });

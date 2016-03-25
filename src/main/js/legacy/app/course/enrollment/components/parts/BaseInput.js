@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 	cls: 'enrollment-input-container',
 
-	initComponent: function() {
+	initComponent: function () {
 		var events = ['changed', 'reveal-item', 'hide-item', 'maybe-hide-item', 'viewLicense', 'prohibited'];
 
 		if (this.focusEvent) {
@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.setUpChangeMonitors();
 
@@ -48,12 +48,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	setUpChangeMonitors: function() {
+	setUpChangeMonitors: function () {
 		this.mon(this.el, 'click', 'changed');
 	},
 
 
-	changed: function(e) {
+	changed: function (e) {
 		var me = this,
 			anchor = e && e.getTarget && e.getTarget('a[data-event]'),
 			parent = me.up('[changed]');
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.removeError();
 
 		wait()
-			.then(function() {
+			.then(function () {
 
 				if (me.reveals) {
 					if (me.reveals.ifNotEmpty && !me.isEmpty() && me.isCorrect()) {
@@ -105,12 +105,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 	//override these
-	isEmpty: function() { return false; },
-	addError: function() {},
-	removeError: function() {},
-	setValue: function() {},
+	isEmpty: function () { return false; },
+	addError: function () {},
+	removeError: function () {},
+	setValue: function () {},
 
-	isValid: function() {
+	isValid: function () {
 		//if we are required and empty we aren't
 		var isValid = this.required ? !this.isEmpty() : true;
 
@@ -121,7 +121,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return isValid;
 	},
 
-	isCorrect: function() {
+	isCorrect: function () {
 		//if we don't have a correct value, we can't be incorrect
 		if (this.correct === undefined) { return true; }
 		//if we don't have an el we can't have any answers so we can't be correct

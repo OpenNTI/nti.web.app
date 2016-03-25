@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Header'
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.messages = {
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Header'
 	},
 
 
-	enableBack: function(title) {
+	enableBack: function (title) {
 		if (!this.rendered) {
 			this.backLabel = title;
 			return;
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Header'
 	},
 
 
-	disableBack: function() {
+	disableBack: function () {
 		if (!this.rendered) {
 			delete this.backLabel;
 			return;
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Header'
 	},
 
 
-	setTitle: function(title) {
+	setTitle: function (title) {
 		if (!this.rendered) {
 			this.title = title;
 			return;
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Header'
 	},
 
 
-	setSubTitle: function(subTitle) {
+	setSubTitle: function (subTitle) {
 		if (!this.rendered) {
 			this.subTitle = subTitle;
 			return;
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Header'
 	},
 
 
-	handleClick: function(e) {
+	handleClick: function (e) {
 		if (e.getTarget('.disabled')) { return; }
 
 		if (e.getTarget('.back')) {
@@ -123,28 +123,28 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Header'
 	},
 
 
-	onBack: function() {
+	onBack: function () {
 		if (this.doBack) {
 			this.doBack();
 		}
 	},
 
 
-	onClose: function() {
+	onClose: function () {
 		if (this.doCancel) {
 			this.doCancel();
 		}
 	},
 
 
-	__getMessageForKey: function(key) {
+	__getMessageForKey: function (key) {
 		var msg = this.msgEl && this.msgEl.dom && this.msgEl.dom.querySelector('.msg[data-id="' + key + '"]');
 
 		return msg;
 	},
 
 
-	__removeMessage: function(key) {
+	__removeMessage: function (key) {
 		var msg = this.__getMessageForKey(key);
 
 		if (msg) {
@@ -153,7 +153,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Header'
 	},
 
 
-	__addMessage: function(msg, cls) {
+	__addMessage: function (msg, cls) {
 		var key = this.messages.length + 1,
 			config = {
 				msg: msg,
@@ -169,17 +169,17 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Header'
 	},
 
 
-	showError: function(error) {
+	showError: function (error) {
 		return this.__addMessage(error, 'error');
 	},
 
 
-	showWarning: function(warning) {
+	showWarning: function (warning) {
 		return this.__addMessage(warning, 'warning');
 	},
 
 
-	showMessage: function(message) {
+	showMessage: function (message) {
 		return this.__addMessage(message, 'message');
 	}
 });

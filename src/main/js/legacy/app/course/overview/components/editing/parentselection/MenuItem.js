@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	cls: 'parentselection-menuitem',
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.itemTpl.append(this.el, this.parseItemData(this.selectionRecord));
@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	selectRecord: function(record) {
+	selectRecord: function (record) {
 		if (!this.rendered) {
 			this.on('afterrender', this.selectRecord.bind(this, record));
 			return;
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	handleClick: function(e) {
+	handleClick: function (e) {
 		if (this.doSelection) {
 			e.stopPropagation();
 			this.doSelection(this.selectionRecord);

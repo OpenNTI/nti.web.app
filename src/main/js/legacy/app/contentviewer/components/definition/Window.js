@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	fallbackURL: '/dictionary/',
 	xslUrl: '/app/resources/xsl/dictionary.xsl',
 
-	initComponent: function() {
+	initComponent: function () {
 		var me = this, p, nib = 20, top, y, x;
 
 		me.pageInfo = me.pageInfo || me.reader.getLocation().pageInfo;
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		me.callParent(arguments);
 		me.on({
 			scope: me,
-			close: function() { me.dragMaskOff(); },
+			close: function () { me.dragMaskOff(); },
 			show: me.fixMask,
 			destroy: me.unfixMask,
 			afterrender: Ext.bind(me.loadDefinition, me, [me.term])
@@ -77,24 +77,24 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 	syncHeight: Ext.emptyFn,//not needed here.
 
-	fixMask: function() {
+	fixMask: function () {
 		var m = this.maskEl = this.zIndexManager.mask;
 		m.addCls('nti-clear');
 	},
 
-	unfixMask: function() {
+	unfixMask: function () {
 		try { this.maskEl.removeCls('nti-clear'); }
 		catch (e) {swallow(e);}
 	},
 
 
-	fillIn: function(content) {
+	fillIn: function (content) {
 		var me = this,
 			doc = this.getDocumentElement().open();
 
 		doc.write(content);
 		doc.close();
-		doc.onclick = function(e) {
+		doc.onclick = function (e) {
 			e = Ext.EventObject.setEvent(e || event);
 			e.stopEvent();
 			var t = e.getTarget('a[href]', null, true);
@@ -109,30 +109,30 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 
-	loadDefinition: function(term) {
+	loadDefinition: function (term) {
 		var me = this;
 		me.term = term;
 
 
 		me.getXSLTProcessor()
-				.then(function(processor) {
+				.then(function (processor) {
 					return me.queryDefinition()
-							.then(function(text) {
+							.then(function (text) {
 								return Promise.resolve()
 										.then(me._hasStandardParts)
 										.then(me._parse.bind(me, processor, text), me._ieParse.bind(me, processor, text));
 							})
-							.then(function(o) {
+							.then(function (o) {
 								if (o.indexOf('&lt;/a&gt;') >= 0) {
 									o = Ext.String.htmlDecode(o);
 								}
 								return o;
 							});
 				})
-				.done(function(o) {
+				.done(function (o) {
 					me.fillIn(o);
 				})
-				.fail(function(e) {
+				.fail(function (e) {
 					me.destroy();
 					alert(getString('NextThought.view.definition.Window.error'));
 					Error.raiseForReport(e);
@@ -140,13 +140,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 
-	getDocumentElement: function() {
+	getDocumentElement: function () {
 		var iframe = this.down('[cls=definition]').el.dom;
 		return iframe.contentDocument || (iframe.contentWindow || window.frames[iframe.name]).document;
 	},
 
 
-	queryDefinition: function() {
+	queryDefinition: function () {
 		var u = this.pageInfo.getLink('Glossary');
 		if (!u) {
 			console.warn('PageInfo ', this.pageInfo.raw, 'did not contain a glocery rel link');
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 
-	_parse: function(processor, text) {
+	_parse: function (processor, text) {
 		var domtree, outputtree;
 		domtree = new DOMParser().parseFromString(text, 'text/xml');
 		outputtree = processor.transformToDocument(domtree);
@@ -169,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 
-	_ieParse: function(processor, text) {
+	_ieParse: function (processor, text) {
 		var domtree = new ActiveXObject('Msxml2.DOMDocument');
 		domtree.loadXML(text);
 		processor.input = domtree;
@@ -178,7 +178,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 
-	_buildProcessor: function(text) {
+	_buildProcessor: function (text) {
 		var dom = new DOMParser().parseFromString(text, 'text/xml'),
 			p = new XSLTProcessor();
 
@@ -187,7 +187,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 
-	_ieBuildProcessor: function(text) {
+	_ieBuildProcessor: function (text) {
 		try {
 			var xsldoc = new ActiveXObject('Msxml2.FreeThreadedDOMDocument'),
 				xslt = new ActiveXObject('Msxml2.XSLTemplate');
@@ -200,31 +200,31 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 
-	_hasStandardParts: function() {
+	_hasStandardParts: function () {
 		if (!window.XSLTProcessor || !window.XMLSerializer || !window.DOMParser) {
 			throw 'do IE path';
 		}
 	},
 
 
-	getXSLTProcessor: function() {
+	getXSLTProcessor: function () {
 		var me = this;
 		if (me.self.xsltProcessor) {
 			return Promise.resolve(me.self.xsltProcessor);
 		}
 
 		return Service.request(me.xslUrl)
-				.then(function(text) {
+				.then(function (text) {
 					return Promise.resolve()
 							.then(me._hasStandardParts)
-							.then(function() {
+							.then(function () {
 								return me._buildProcessor(text);
 							//IE doesn't have DOMParser AND XSLTProcessor as top level objects.
-							}, function() {
+							}, function () {
 								return me._ieBuildProcessor(text);
 							});
 				})
-				.done(function(p) {
+				.done(function (p) {
 					me.self.xsltProcessor = p;
 					return p;
 				});

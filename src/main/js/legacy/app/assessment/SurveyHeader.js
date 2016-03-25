@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.SurveyHeader',
 	items: [],
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var me = this;
@@ -29,14 +29,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.SurveyHeader',
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.syncElementHeight();
 	},
 
 
-	onSurveySubmit: function(results) {
+	onSurveySubmit: function (results) {
 		var aggregated = results.get('Aggregated');
 
 		this.survey.setResults(aggregated);
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.SurveyHeader',
 	},
 
 
-	updateSurvey: function(survey, fromSubmit, results) {
+	updateSurvey: function (survey, fromSubmit, results) {
 		var items = [],
 			reportLink = survey.getReportLink();
 
@@ -96,19 +96,19 @@ module.exports = exports = Ext.define('NextThought.app.assessment.SurveyHeader',
 	},
 
 
-	showReports: function(link) {
+	showReports: function (link) {
 		var win = Ext.widget('iframe-window', {
-				width: 'max',
-				saveText: getString('NextThought.view.menus.Reports.savetext'),
-				link: link,
-				loadingText: getString('NextThought.view.menus.Reports.loadingtext')
-			});
+			width: 'max',
+			saveText: getString('NextThought.view.menus.Reports.savetext'),
+			link: link,
+			loadingText: getString('NextThought.view.menus.Reports.loadingtext')
+		});
 
 		win.show();
 	},
 
 
-	toggleResults: function(e) {
+	toggleResults: function (e) {
 		var button = e.getTarget('.survey-results'),
 			hidden = e.getTarget('.hidden');
 
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.SurveyHeader',
 	},
 
 
-	showResults: function(button) {
+	showResults: function (button) {
 		button = button || this.el.dom.querySelector('.survey-results');
 
 		if (button) {
@@ -135,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.SurveyHeader',
 	},
 
 
-	hideResults: function(button) {
+	hideResults: function (button) {
 		 button = button || this.el.dom.querySelector('.survey-results');
 
 		if (button) {

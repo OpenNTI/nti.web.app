@@ -36,26 +36,26 @@ module.exports = exports = Ext.define('NextThought.app.profiles.components.Heade
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (!this.buttonsEl) {
-			this.addButton = function() {};
-			this.clearButtons = function() {};
+			this.addButton = function () {};
+			this.clearButtons = function () {};
 		} else {
 			this.mon(this.buttonsEl, 'click', this.onButtonClick.bind(this));
 		}
 
 		if (!this.tabsEl) {
-			this.addTab = function() {};
-			this.clearTabs = function() {};
+			this.addTab = function () {};
+			this.clearTabs = function () {};
 		} else {
 			this.mon(this.tabsEl, 'click', this.onTabClick.bind(this));
 		}
 	},
 
 
-	onButtonClick: function(e) {
+	onButtonClick: function (e) {
 		if (e.getTarget('.disabled')) {
 			return;
 		}
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.components.Heade
 	},
 
 
-	onTabClick: function(e) {
+	onTabClick: function (e) {
 		var tab = e.getTarget('.tab'),
 			route = tab && tab.getAttribute('data-route'),
 			title = tab && tab.getAttribute('data-title');
@@ -80,24 +80,24 @@ module.exports = exports = Ext.define('NextThought.app.profiles.components.Heade
 	},
 
 
-	addButton: function(data) {
+	addButton: function (data) {
 		data.tip = data.tip || '';
 
 		this.buttonTpl.append(this.buttonsEl, data);
 	},
 
 
-	addTab: function(data) {
+	addTab: function (data) {
 		this.tabTpl.append(this.tabsEl, data);
 	},
 
 
-	clearButtons: function() {
+	clearButtons: function () {
 		this.buttonsEl.dom.innerHTML = '';
 	},
 
 
-	clearTabs: function() {
+	clearTabs: function () {
 		this.tabsEl.dom.innerHTML = '';
 	}
 });

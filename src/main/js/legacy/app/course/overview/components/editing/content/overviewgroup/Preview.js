@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	renderTpl: '{title}',
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {

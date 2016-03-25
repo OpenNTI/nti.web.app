@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	wording3: 'shared a note: {title}',
 
 
-	fillInWording: function() {
+	fillInWording: function () {
 		var item = this.record,
 			wording;
 

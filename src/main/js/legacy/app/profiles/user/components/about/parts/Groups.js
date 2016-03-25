@@ -22,19 +22,19 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	})),
 
 
-	setUser: function(user, isMe) {
+	setUser: function (user, isMe) {
 		var me = this;
 
 		me.removeAll();
 
 		user.getGroupMembership()
-			.then(function(groups) {
+			.then(function (groups) {
 				if (groups.length) {
-					if(groups.length <= me.limit){
+					if(groups.length <= me.limit) {
 						me.seeAllEl.hide();
 					}
 					groups.slice(0, me.limit)
-						.map(function(group) {
+						.map(function (group) {
 							return {
 								group: group,
 								name: group.getName(),
@@ -50,5 +50,5 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	getValues: function() {}
+	getValues: function () {}
 });

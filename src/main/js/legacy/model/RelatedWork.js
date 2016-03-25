@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 	statics: {
 		mimeType: 'application/vnd.nextthought.relatedworkref',
 
-		fromOutlineNode: function(data) {
+		fromOutlineNode: function (data) {
 			return this.create({
 				description: data.description,
 				icon: data.thumbnail,
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		URL_ICON: 'icon-www.png',
 
 
-		getIconForMimeType: function(mimeType) {
+		getIconForMimeType: function (mimeType) {
 			var base = this.FILE_ICON_BASE,
 				icon = this.MIMETYPE_TO_ICON[mimeType] || this.MIMETYPE_TO_ICON['unknown'];
 
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		},
 
 
-		getIconForURL: function() {
+		getIconForURL: function () {
 			var base = this.FILE_ICON_BASE,
 				icon = this.URL_ICON;
 
@@ -92,19 +92,19 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		{name: 'byline', type: 'string'}
 	],
 
-	asDomData: function(root) {
+	asDomData: function (root) {
 		var data = {
-				ntiid: this.get('NTIID'),
-				href: this.get('href'),
-				icon: this.getIcon(root),
-				label: this.get('label'),
-				title: this.get('label'),
-				description: this.get('description'),
-				byline: this.get('byline'),
-				creator: this.get('byline'),
-				targetNTIID: this.get('target-NTIID'),
-				targetMimeType: this.get('targetMimeType')
-			};
+			ntiid: this.get('NTIID'),
+			href: this.get('href'),
+			icon: this.getIcon(root),
+			label: this.get('label'),
+			title: this.get('label'),
+			description: this.get('description'),
+			byline: this.get('byline'),
+			creator: this.get('byline'),
+			targetNTIID: this.get('target-NTIID'),
+			targetMimeType: this.get('targetMimeType')
+		};
 
 		data['attribute-data-href'] = Globals.getURLRooted(data.href, root);
 		data.noTarget = !Globals.shouldOpenInApp(data.ntiid, data.href, null, data.targetMimeType);
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 	 *
 	 * @return {Boolean} true if content link
 	 */
-	isContent: function() {
+	isContent: function () {
 		return this.self.CONTENT_TYPE === this.get('type');
 	},
 
@@ -135,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 	 *
 	 * @return {Boolean} true if external link
 	 */
-	isExternalLink: function() {
+	isExternalLink: function () {
 		return this.self.EXTERNAL_TYPE === this.get('type');
 	},
 
@@ -149,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 	 *
 	 * @return {Boolean} [description]
 	 */
-	isEmbeddableDocument: function() {
+	isEmbeddableDocument: function () {
 		var type = this.get('type');
 
 		return this.isDocument() && this.self.EMBEDABLE_TYPES[type];
@@ -165,11 +165,11 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 	 *
 	 * @return {Boolean} [description]
 	 */
-	isDocument: function() {
+	isDocument: function () {
 		return !this.isContent() && !this.isExternalLink();
 	},
 
-	getIcon: function(root) {
+	getIcon: function (root) {
 		var icon = this.get('icon'),
 			targetMimeType = this.get('targetMimeType');
 
@@ -184,11 +184,11 @@ module.exports = exports = Ext.define('NextThought.model.RelatedWork', {
 		return icon;
 	},
 
-	getTitle: function() {
+	getTitle: function () {
 		return this.isContent() ? '' : this.get('label');
 	},
 
-	shouldBeRoot: function() {
+	shouldBeRoot: function () {
 		return !this.isContent();
 	}
 });

@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.aboutCmp = this.down('profile-community-about');
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		this.membershipCmp.gotoMembership = this.gotoMembership.bind(this);
 	},
 
-	updateEntity: function(entity, activeTopic) {
+	updateEntity: function (entity, activeTopic) {
 		this.aboutCmp.updateEntity(entity);
 		this.topicsCmp.updateEntity(entity, activeTopic);
 		this.membershipCmp.updateEntity(entity);

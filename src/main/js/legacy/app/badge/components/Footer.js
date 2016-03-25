@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Footer',
 	},
 
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.exportEl, 'click', this.onExportClick.bind(this));
@@ -35,15 +35,15 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Footer',
 	},
 
 
-	onExportClick: function(e){
+	onExportClick: function (e) {
 		if (this.onExport) {
 			this.onExport(e);
 		}
 	},
 
-	onCloseClick: function(e){
+	onCloseClick: function (e) {
 		if (this.doClose) {
 			this.doClose(e);
 		}
 	}
-})
+});

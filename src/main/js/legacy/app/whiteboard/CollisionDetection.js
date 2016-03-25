@@ -8,17 +8,17 @@ var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.CollisionDetection', {
 
-	normal: function(vect) {
+	normal: function (vect) {
 		return [vect[1], -vect[0]];
 	},
 
 
-	normalize: function(vect) {
+	normalize: function (vect) {
 		return [vect[0] / this.magnitude(vect), vect[1] / this.magnitude(vect)];
 	},
 
 
-	dot_product: function(v1,v2) {
+	dot_product: function (v1,v2) {
 		var dot = 0, i;
 		for (i = 0; i < v1.length; i++) {
 			dot += v1[i] * v2[i];
@@ -27,12 +27,12 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.CollisionDetec
 	},
 
 
-	magnitude: function(vect) {
+	magnitude: function (vect) {
 		return (Math.sqrt(vect[0] * vect[0] + vect[1] * vect[1]));
 	},
 
 
-	is_colliding: function(obj1, obj2) {
+	is_colliding: function (obj1, obj2) {
 		var w1 = obj1.width;
 		var h1 = obj1.height;
 		var x1 = obj1.x;
@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.CollisionDetec
 	},
 
 
-	is_touching: function(p1,p2) {
+	is_touching: function (p1,p2) {
 		if ((p2[1] >= p1[0]) && (p2[1] <= p1[1])) {
 			return true;
 		}

@@ -22,11 +22,11 @@ module.exports = exports = Ext.define('NextThought.model.MessageInfo', {
 		{ name: 'sharedWith', type: 'auto'}
 	],
 
-  hasBeenModerated: function() {
+  	hasBeenModerated: function () {
 	return Boolean(!this.getLink('flag') && !this.getLink('flag.metoo'));
   },
 
-	hasBeenFlagged: function() {
+	hasBeenFlagged: function () {
 		return Boolean(this.getLink('flag.metoo'));
 	}
 });

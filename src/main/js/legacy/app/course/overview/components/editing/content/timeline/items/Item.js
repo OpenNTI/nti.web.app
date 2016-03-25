@@ -16,12 +16,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						{cls: 'title', html: '{title}'},
 						{cls: 'description', html: '{description}'}
 					]}
-				]
+			]
 			}
 		]}
 	),
 
-	beforeRender: function(){
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var item = this.record;
@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	getThumbnailURL: function(item) {
+	getThumbnailURL: function (item) {
 		var iconURL = item && item.get('icon');
 		if (iconURL) {
 			if (Globals.ROOT_URL_PATTERN.test(iconURL)) {

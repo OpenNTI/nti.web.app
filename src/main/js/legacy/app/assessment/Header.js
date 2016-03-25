@@ -31,12 +31,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Header', {
 		video: '.video'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.videos = [];
 		this.callParent(arguments);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		var //r = this.question,
 		//			l = this.liked,
@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Header', {
 
 	},
 
-	onAdded: function(assessmentParent) {
+	onAdded: function (assessmentParent) {
 		var id = '?unresolved title?';
 
 		try {
@@ -81,18 +81,18 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Header', {
 		this.setTitle(id);
 	},
 
-	maybeShow: function() {
+	maybeShow: function () {
 		if (this.currentTitle) {
 			this.show();
 		}
 	},
 
-	maybeHide: function(title) {
+	maybeHide: function (title) {
 		var v = this.videos.length;
 		this[!v && Ext.isEmpty(title) ? 'hide' : 'show']();
 	},
 
-	setTitle: function(title) {
+	setTitle: function (title) {
 		this.maybeHide(title);
 		if (!this.rendered) {
 			this.renderData.title = title;
@@ -102,32 +102,32 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Header', {
 		this.myTitle.update(title);
 	},
 
-	markCorrect: function() {
+	markCorrect: function () {
 		this.show();
 		this.el.removeCls('incorrect').addCls('correct');
 		this.status.update('Correct!');
 	},
 
-	markIncorrect: function() {
+	markIncorrect: function () {
 		this.show();
 		this.el.removeCls('correct').addCls('incorrect');
 		this.status.update('Incorrect');
 	},
 
-	markSubmitted: function() {
+	markSubmitted: function () {
 		this.show();
 		this.el.removeCls('correct').removeCls('incorrect');
 		this.status.update('Submitted');
 	},
 
-	reset: function() {
+	reset: function () {
 		this.el.removeCls(['incorrect', 'correct']);
 		this.status.update('');
 
 		this.maybeHide(this.myTitle.getHTML());
 	},
 
-	openVideos: function() {
+	openVideos: function () {
 		Ext.widget('video-lightbox', { data: this.videos }).show();
 	}
 });

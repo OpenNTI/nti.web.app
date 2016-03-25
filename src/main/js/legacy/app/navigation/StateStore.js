@@ -5,29 +5,29 @@ var CommonStateStore = require('../../common/StateStore');
 module.exports = exports = Ext.define('NextThought.app.navigation.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
-	updateNavBar: function(config) {
+	updateNavBar: function (config) {
 		this.fireEvent('update-nav', config);
 	},
 
-	maybeShowChatTab: function() {
+	maybeShowChatTab: function () {
 		this.fireEvent('show-chat-tab');
 	},
 
-	fireChatNotification: function(msg) {
+	fireChatNotification: function (msg) {
 		this.fireEvent('chat-notify-tab', msg);
 	},
 
-	markReturnPoint: function(route) {
+	markReturnPoint: function (route) {
 		this.returnPoint = route;
 	},
 
 
-	getReturnPoint: function() {
+	getReturnPoint: function () {
 		return this.returnPoint;
 	},
 
 
-	putMessageBarItemIntoSession: function(id, cfg) {
+	putMessageBarItemIntoSession: function (id, cfg) {
 		var stateKey = 'topMessages',
 			o = TemporaryStorage.get(stateKey) || {};
 
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.StateStore', {
 	},
 
 
-	getMessageBarItemFromSession: function(id) {
+	getMessageBarItemFromSession: function (id) {
 		var stateKey = 'topMessages',
 			o = TemporaryStorage.get(stateKey) || {};
 

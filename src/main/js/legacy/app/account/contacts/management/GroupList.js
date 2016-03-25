@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 	displayField: 'displayName',
 	selModel: { mode: 'SIMPLE' },
 
-	initComponent: function() {
+	initComponent: function () {
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.GroupActions = NextThought.app.groups.Actions.create();
 		this.buildGroupListStore();
@@ -45,8 +45,8 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		});
 	},
 
-	buildGroupListStore: function() {
-		function filterList(rec) {
+	buildGroupListStore: function () {
+		function filterList (rec) {
 			if (Ext.Array.contains(blocked || [], rec.get('Username'))) { return false; }
 			return rec.isModifiable() && !rec.isDFL;
 		}
@@ -60,14 +60,14 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 			id: 'group-list-store',
 			proxy: 'memory',
 			filters: [
-				function(item) { return item.get('Username') !== mycontact; },
+				function (item) { return item.get('Username') !== mycontact; },
 				filterList
 			]
 		});
 
 		this.store.loadData(fstore.getRange());
 
-		this.store.mon(fstore, 'add', function(store, record, i) {
+		this.store.mon(fstore, 'add', function (store, record, i) {
 			if (me.store) {
 				me.store.add(record);
 			}
@@ -75,16 +75,16 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 
 	},
 
-	getSelected: function() {
+	getSelected: function () {
 		return this.getSelectionModel().getSelection();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		var tpl = { cls: 'toolbar', cn: [{cls: 'title', html: 'Distribution lists'},{cls: 'close', html: ''}]};
 		this.close = Ext.DomHelper.append(this.el, tpl, true);
 		this.callParent(arguments);
 
-		this.mon(this.close, 'click', function(e) {
+		this.mon(this.close, 'click', function (e) {
 			e.stopEvent();
 			this.isClosing = true;
 			this.doDismiss = true;
@@ -92,12 +92,12 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 			return false;
 		}, this);
 
-		this.mon(this.el, 'mouseover', function(e) {
+		this.mon(this.el, 'mouseover', function (e) {
 			this.stopHideTimeout();
 			this.doDismiss = false;
 		}, this);
 
-		this.mon(this.el, 'mouseout', function(e) {
+		this.mon(this.el, 'mouseout', function (e) {
 	  //			if(!this.isClosing){
 				//this.startHideTimeout();
 	  //			}
@@ -105,24 +105,24 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 			this.doDismiss = true;
 		}, this);
 
-		this.on('beforedeactivate', function(e) {
+		this.on('beforedeactivate', function (e) {
 			return this.doDismiss && !this.newListInputBoxActive;
 		}, this);
 	},
 
-	startHideTimeout: function() {
-		this.hideTimeout = Ext.defer(function() {
+	startHideTimeout: function () {
+		this.hideTimeout = Ext.defer(function () {
 			if (!this.newListInputBoxActive) {
 				this.fireEvent('hide-menu');
 			}
 		}, 1000, this);
 	},
 
-	stopHideTimeout: function() {
+	stopHideTimeout: function () {
 		clearTimeout(this.hideTimeout);
 	},
 
-	refresh: function() {
+	refresh: function () {
 		var el = this.getEl(),
 			ul,
 			selection = this.getSelectionModel(),
@@ -139,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 			ul.addCls('disallowSelection');
 		}
 
-		Ext.each(ul.query('li'), function(li) {
+		Ext.each(ul.query('li'), function (li) {
 			var r = this.getRecord(li);
 			if (this.username && r.hasFriend(this.username)) {
 				selection.select([r], true, true);
@@ -152,14 +152,14 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		}
 	},
 
-	block: function(username) {
+	block: function (username) {
 		this.blocked = Ext.Array.merge(
 				this.blocked || [],
 				Ext.isArray(username) ? username : [username]);
 		this.refresh();
 	},
 
-	setUser: function(user) {
+	setUser: function (user) {
 		if (user && user.isModel) {
 			user = user.get('Username');
 		}
@@ -168,14 +168,14 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		return this;
 	},
 
-	reset: function() {
+	reset: function () {
 		if (!this.username) {
 			this.getSelectionModel().deselectAll();
 		}
 		this.refresh();
 	},
 
-	getInnerTpl: function(displayField) {
+	getInnerTpl: function (displayField) {
 		return ['<div class="name" data-qtip="{' + displayField + ':htmlEncode}">',
 				'<tpl>',
 				'{' + displayField + '}',
@@ -184,33 +184,33 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		].join('');
 	},
 
-	handleEvent: function(e) {
+	handleEvent: function (e) {
 		if (e.getTarget('li[role=option]')) {
 			this.callParent(arguments);
 		}
 	},
 
-	onBeforeSelect: function(list,model) {
+	onBeforeSelect: function (list,model) {
 		return (this.allowSelect && model.isModifiable());
 	},
 
-	onBeforeDeselect: function(list,model) {
+	onBeforeDeselect: function (list,model) {
 		return (!this.allowSelect || model.isModifiable());
 	},
 
-	onMaskBeforeShow: function() {
+	onMaskBeforeShow: function () {
 		this.ignoreSelection = true;
 		this.callParent(arguments);
 		delete this.ignoreSelection;
 	},
 
-	onDeselect: function(view, group) {
+	onDeselect: function (view, group) {
 		if (!this.ignoreSelection && group && group.hasFriend(this.username)) {
 			this.GroupActions.removeContact(group, this.username);
 		}
 	},
 
-	onSelect: function(view, group) {
+	onSelect: function (view, group) {
 		var me = this;
 		if (!this.ignoreSelection && group && !group.hasFriend(this.username)) {
 			this.GroupActions.addContact(this.username, [group])
@@ -218,7 +218,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		}
 	},
 
-	onSelectCallback: function() {
+	onSelectCallback: function () {
 		//If we were not previously a contact, adding us to a group, implicitly makes us a contact now.
 		if (!this.isContact) {
 			this.fireEvent('added-contact', this, this.user);
@@ -226,18 +226,18 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		}
 	},
 
-	disallowSelection: function() {
+	disallowSelection: function () {
 		this.allowSelect = false;
 		this.getSelectionModel().deselectAll();
 		this.refresh();
 	},
 
-	allowSelection: function() {
+	allowSelection: function () {
 		this.allowSelect = true;
 		this.refresh();
 	},
 
-	selectNewGroup: function(groupName) {
+	selectNewGroup: function (groupName) {
 		var record, s = this.getSelectionModel();
 		if (!this.allowSelect) {
 			return;
@@ -254,10 +254,10 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		}
 	},
 
-	afterGroupAdd: function(groupName) {
+	afterGroupAdd: function (groupName) {
 		var me = this;
 
-		me.store.on('datachanged', function() {
+		me.store.on('datachanged', function () {
 			me.selectNewGroup(groupName);
 			me.reset();
 			me.fireEvent('sync-menu-height', me.el.up('.x-menu'));

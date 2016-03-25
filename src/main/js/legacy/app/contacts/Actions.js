@@ -10,7 +10,7 @@ var ListWindow = require('./components/list/Window');
 module.exports = exports = Ext.define('NextThought.app.contacts.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	groupButtonClicked: function(btn) {
+	groupButtonClicked: function (btn) {
 		var flyBtn = Ext.fly(btn);
 		if (flyBtn.hasCls('join-group')) {
 			this.codeWin = Ext.widget('code-window');

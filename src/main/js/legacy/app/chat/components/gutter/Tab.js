@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Ta
 
 	cls: 'chat-notifications-icon',
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments),
 
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Ta
 	},
 
 
-	handleChatNotification: function(msg) {
+	handleChatNotification: function (msg) {
 		if (!this.hasCls('gutter-showing')) {
 			this.unreadMessages.push(msg);
 			this.updateChatBadgeCount();
@@ -40,18 +40,18 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Ta
 	},
 
 
-	updateChatBadgeCount: function() {
+	updateChatBadgeCount: function () {
 		if (this.rendered) {
 			this.el.set({'data-badge': this.unreadMessages.length});
 		}
 	},
 
 
-	clearMessagesForUser: function(user) {
+	clearMessagesForUser: function (user) {
 		var toRemove = [],
 			username = user.isModel ? user.get('Username') : user;
 
-		Ext.each(this.unreadMessages, function(msg) {
+		Ext.each(this.unreadMessages, function (msg) {
 			if (msg.Creator === username) {
 				toRemove.push(msg);
 			}
@@ -65,17 +65,17 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Ta
 	},
 
 
-	onGutterDeactive: function() {
+	onGutterDeactive: function () {
 		this.removeCls('gutter-showing');
 	},
 
 
-	onGutterActive: function() {
+	onGutterActive: function () {
 		this.addCls('gutter-showing');
 	},
 
 
-	toggleChatGutter: function() {
+	toggleChatGutter: function () {
 		this.ChatStore.fireGutterToggle();
 	}
 });

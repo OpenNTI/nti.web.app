@@ -29,19 +29,19 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 	layout: 'none',
 	cls: 'search-results',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 		this.WindowActions = NextThought.app.windows.Actions.create();
 	},
 
-	addResults: function(items) {
+	addResults: function (items) {
 		var results = items.map(this.mapHitToCmp.bind(this));
 
 		this.add(results);
 	},
 
-	getMimePart: function(mime) {
+	getMimePart: function (mime) {
 		if (Ext.isEmpty(mime)) {
 			return 'search-result';
 		}
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 		return mime;
 	},
 
-	mapHitToCmp: function(hit) {
+	mapHitToCmp: function (hit) {
 		var type = 'search-result',
 			part = this.getMimePart(hit.get('TargetMimeType')),
 			cls = this.TYPE_TO_CLS[part],
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 		};
 	},
 
-	showEmpty: function() {
+	showEmpty: function () {
 		var emptyCmp = this.down('[emptyCmp]');
 
 		if (!emptyCmp) {
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 		}
 	},
 
-	showError: function() {
+	showError: function () {
 		var errorCmp = this.down('[errorCmp]');
 
 		if (!errorCmp) {
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 		}
 	},
 
-	showLoading: function() {
+	showLoading: function () {
 		var loadingCmp = this.down('[loadingCmp]');
 
 		if (!loadingCmp) {
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 		}
 	},
 
-	removeLoading: function() {
+	removeLoading: function () {
 		var loadingCmp = this.down('[loadingCmp]');
 
 		if (loadingCmp) {
@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 		}
 	},
 
-	showNext: function(handler) {
+	showNext: function (handler) {
 		var nextCmp = this.down('[nextCmp]');
 
 		if (!nextCmp) {
@@ -124,14 +124,14 @@ module.exports = exports = Ext.define('NextThought.app.search.components.Results
 				xtype: 'box',
 				nextCmp: true,
 				autoEl: {cls: 'control-item load-more', html: 'Show More'},
-				afterRender: function() {
+				afterRender: function () {
 					this.mon(this.el, 'click', handler);
 				}
 			});
 		}
 	},
 
-	removeNext: function() {
+	removeNext: function () {
 		var nextCmp = this.down('[nextCmp]');
 
 		if (nextCmp) {

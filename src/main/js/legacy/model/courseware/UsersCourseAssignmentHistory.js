@@ -15,11 +15,11 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		{name: 'lastViewed', type: 'date', dateFormat: 'timestamp'}
 	],
 
-	getItem: function(id) {
+	getItem: function (id) {
 		return this.getFieldItem('Items', id);
 	},
 
-	addItem: function(key, item) {
+	addItem: function (key, item) {
 		var items = this.get('Items'),
 			index = items.length;
 
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	},
 
 	statics: {
-		getEmpty: function() {
+		getEmpty: function () {
 			var e = this.create({lastViewed: new Date()});
 			e.getItem = Ext.emptyFn;
 			return e;

@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 	componentLayout: 'natural',
 	layout: 'auto',
 	childEls: ['body'],
-	getTargetEl: function() { return this.body; },
+	getTargetEl: function () { return this.body; },
 
 	renderSelectors: {
 		icon: '.avatar',
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		text: '.body-text'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.addEvents('rendered-late');
 		this.enableBubble('rendered-late');
 		this.callParent(arguments);
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		this.ChatActions = NextThought.app.chat.Actions.create();
 	},
 
-	add: function() {
+	add: function () {
 		var r = this.callParent(arguments),
 			reply = this.down('chat-reply-to'),
 			ci;
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		return r;
 	},
 
-	update: function(m) {
+	update: function (m) {
 		var me = this,
 			s = m.get('Creator');
 
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		}
 
 		me.renderData.timestamp = this.getTimeStamp(me.message.get('CreatedTime'));
-		m.compileBodyContent(function(content) {
+		m.compileBodyContent(function (content) {
 			me.renderData.body = content;
 
 			if (me.rendered) {
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		});
 
 		if (s) {
-			UserRepository.getUser(s, function(u) {
+			UserRepository.getUser(s, function (u) {
 				if (!u) {
 					console.error('failed to resolve user', s, m);
 					return;
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		me.addCls(m.getId() ? '' : ' nooid');
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.el.on('click', this.click, this);
 		this.mon(this.ownerCt, 'afterlayout', 'setNameMaxWidth', this);
@@ -113,23 +113,23 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		});
 	},
 
-	setNameMaxWidth: function() {
+	setNameMaxWidth: function () {
 		var width = this.ownerCt.getWidth() - 40;
 		this.name.setStyle('max-width', width + 'px');
 	},
 
-	onControlClick: function() {
+	onControlClick: function () {
 		this.el.down('.control').toggleCls('checked');
 		this.el.down('.log-entry').toggleCls('flagged');
 		//let our parent know so he can do something.
 		this.up('chat-view').fireEvent('control-clicked');
 	},
 
-	isFlagged: function() {
+	isFlagged: function () {
 		return this.el.down('.log-entry').hasCls('flagged');
 	},
 
-	click: function(event) {
+	click: function (event) {
 		event.stopEvent();
 		var me = this, t = event.getTarget('.whiteboard-container', null, true),
 			a = event.getTarget('a'),
@@ -158,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		return false;
 	},
 
-	fillInUser: function(u) {
+	fillInUser: function (u) {
 		var name = u.getName(), avatar;
 
 		this.renderData.user = u;
@@ -170,8 +170,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		}
 	},
 
-	getTimeStamp: function(date) {
-		function isToday(t) {
+	getTimeStamp: function (date) {
+		function isToday (t) {
 			var today = new Date();
 			return today.getYear() === t.getYear() &&
 					today.getMonth() === t.getMonth() &&
@@ -180,9 +180,9 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 		return isToday(date) ? Ext.Date.format(date, 'g:i a') : Ext.Date.format(date, 'F j, Y, g:i a');
 	},
 
-	initializeDragZone: function(v) {
+	initializeDragZone: function (v) {
 		v.dragZone = new Ext.dd.DragZone(v.getEl(), {
-			getDragData: function() {
+			getDragData: function () {
 				var sourceEl = v.el.dom, d;
 				if (sourceEl) {
 					d = sourceEl.cloneNode(true);
@@ -198,7 +198,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Entry
 				return null;
 			},
 
-			getRepairXY: function() {
+			getRepairXY: function () {
 				return this.dragData.repairXY;
 			}
 		});

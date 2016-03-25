@@ -25,20 +25,20 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Index
 		]}
 	}],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.addRoute('/', this.showCommunities.bind(this));
 		this.addDefaultRoute('/');
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', this.onClick.bind(this));
 	},
 
-	loadCommunities: function() {
+	loadCommunities: function () {
 		var me = this;
 
 		me.loadingCmp = me.loadingCmp || me.add({
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Index
 		});
 
 		return Service.getCommunitiesList()
-			.then(function(communities) {
+			.then(function (communities) {
 				if (me.loadingCmp) {
 					me.remove(me.loadingCmp, true);
 					delete me.loadingCmp;
@@ -71,13 +71,13 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Index
 			});
 	},
 
-	showCommunities: function() {
+	showCommunities: function () {
 		this.setTitle('Communities');
 
 		return this.loadCommunities();
 	},
 
-	showEmptyState: function() {
+	showEmptyState: function () {
 		if (this.coursePage) {
 			this.remove(this.coursePage, true);
 			delete this.coursePage;
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Index
 		});
 	},
 
-	navigateToCommunity: function(community, el) {
+	navigateToCommunity: function (community, el) {
 		var route = community.getProfileUrl();
 
 		if (route) {
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Index
 		}
 	},
 
-	onClick: function(e) {
+	onClick: function (e) {
 		if (e.getTarget('.home')) {
 			this.pushRootRoute('', '/');
 		}

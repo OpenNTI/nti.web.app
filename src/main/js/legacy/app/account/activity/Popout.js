@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 	hideMode: 'visibility',
 	previewPrefix: 'widget.activity-preview-',
 
-	initComponent: function() {
+	initComponent: function () {
 		var me = this;
 
 		this.callParent(arguments);
@@ -30,12 +30,12 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 		});
 
 		this.on({
-					destroy: 'destroy',
-					show: 'show',
-					hide: 'hide',
-					scope: this.pointer,
-					resize: function() { me.fireEvent('realign'); }
-				});
+			destroy: 'destroy',
+			show: 'show',
+			hide: 'hide',
+			scope: this.pointer,
+			resize: function () { me.fireEvent('realign'); }
+		});
 
 		if (this.viewRef && this.viewRef.on) {
 			this.mon(this.viewRef, {
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 		this.setupItems();
 	},
 
-	setupItems: function() {
+	setupItems: function () {
 		var wName = this.getPreviewPanel();
 
 		if (Ext.isArray(wName)) {
@@ -62,17 +62,17 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 		this.preview = this.add({ xtype: wName, record: this.record, user: this.user });
 	},
 
-	getPreviewPanel: function() {
+	getPreviewPanel: function () {
 		var c = this.record.getClassForModel(this.previewPrefix, false);
 		return (c && c.xtype) || '';
 	},
 
-	getPointerStyle: function(x, y) {
+	getPointerStyle: function (x, y) {
 		var p = this.preview;
 		return p.getPointerStyle ? p.getPointerStyle(x, y) : '';
 	},
 
-	itemRefreshed: function(view) {
+	itemRefreshed: function (view) {
 		var el = view.getNodeByRecord(this.record);
 
 		if (el) {
@@ -86,27 +86,27 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 		}
 	},
 
-	itemUpdated: function(rec, index, node) {
+	itemUpdated: function (rec, index, node) {
 		if (this.record === rec) {
 			this.updateRefEl(node);
 		}
 	},
 
-	updateRefEl: function(el) {
+	updateRefEl: function (el) {
 		this.refEl = el;
 		this.pointer.pointToEl = el;
 		this.pointer.point();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		var me = this;
 		me.callParent(arguments);
-		me.mon(me.el, 'click', function(e) {e.stopPropagation();}, me);
+		me.mon(me.el, 'click', function (e) {e.stopPropagation();}, me);
 		me.relayEvents(me.el, ['mousemove']);
 
 		me.on('blur', me.maybeHidePopout, me);
 
-		Ext.defer(function() {
+		Ext.defer(function () {
 			if (me.el) {
 				me.mon(me.el.up('body'), {
 					scope: me,
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 		}, 1);
 	},
 
-	detectBlurClick: function(e) {
+	detectBlurClick: function (e) {
 		if (!e.getTarget('.' + this.cls) && (!this.preview || !this.preview.openEditor)) {
 			clearTimeout(this.hideTimer);
 			//this.hideTimer = Ext.defer(function(){this.fireEvent('blur');},1, this);
@@ -127,19 +127,19 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 		}
 	},
 
-	detectBlur: function(e) {
+	detectBlur: function (e) {
 		var isMe = e.getTarget('.' + this.cls) || e.getTarget('#' + this.refEl && this.refEl.id) || e.getTarget('.x-menu') || e.getTarget('.contact-popout');
 
 		if (!isMe && (!this.preview || !this.preview.openEditor)) {
 			clearTimeout(this.hideTimer);
-			this.hideTimer = Ext.defer(function() {this.fireEvent('blur');}, 500, this);
+			this.hideTimer = Ext.defer(function () {this.fireEvent('blur');}, 500, this);
 		}
 		else {
 			clearTimeout(this.hideTimer);
 		}
 	},
 
-	maybeHidePopout: function() {
+	maybeHidePopout: function () {
 		// NOTE: This allows for children, especially the preview to cancel hiding the Popout
 		// i.e when the editor is active.
 		if (this.fireEvent('beforedeactivate')) {
@@ -154,10 +154,10 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 
 	inheritableStatics: {
 
-		beforeShowPopup: function(record, el) {
+		beforeShowPopup: function (record, el) {
 			var id = record.getId(), canShow = true;
 			//TODO: rework this to not use the query
-			Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'), function(o) {
+			Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'), function (o) {
 				if (o.record.getId() !== id || record.modelName !== o.record.modelName) {
 					if (!o.maybeHidePopout()) {
 						canShow = false;//leave it open
@@ -172,7 +172,7 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 			return canShow && !el.hasCls('deleted');
 		},
 
-		popup: function(record, el, viewRef, anchor, cb) {
+		popup: function (record, el, viewRef, anchor, cb) {
 			if (!this.beforeShowPopup(record, el)) {
 				return;
 			}
@@ -180,10 +180,10 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 			var me = this,
 				creator = record.get('Creator');
 
-			function finish(user) {
+			function finish (user) {
 				var pop, sidebar;
 
-				function align() {
+				function align () {
 					if (!pop) { return; }
 
 					pop.maxHeight = Ext.dom.Element.getViewportHeight();
@@ -206,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 					refEl: Ext.get(el),
 					hidden: true,
 					viewRef: viewRef,
-					getBubbleTarget: function() {return viewRef;},
+					getBubbleTarget: function () {return viewRef;},
 					listeners: {
 						realign: align
 					}
@@ -220,15 +220,15 @@ module.exports = exports = Ext.define('NextThought.app.account.activity.Popout',
 
 					//If popout decides to change position when typing, put it back
 					if (pop.el.down('.content')) {
-						pop.el.down('.respond').down('.content').on('focus', function() {
-							Ext.defer(function() {
+						pop.el.down('.respond').down('.content').on('focus', function () {
+							Ext.defer(function () {
 								pop.firstY = pop.getY();
 							},100);
 						});
-						pop.el.down('.respond').down('.content').on('keydown', function() {
+						pop.el.down('.respond').down('.content').on('keydown', function () {
 							window.clearTimeout(me.popYTimeout);
 							me.timeElapsed = 0;
-							me.popYTimeout = window.setInterval(function() {
+							me.popYTimeout = window.setInterval(function () {
 								if ((pop.getY() !== pop.firstY) || me.timeElapsed >= 900) {
 									pop.setY(pop.firstY);
 									window.clearInterval(me.popYTimeout);

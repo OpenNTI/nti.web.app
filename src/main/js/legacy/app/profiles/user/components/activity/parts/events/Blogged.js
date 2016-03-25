@@ -21,12 +21,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		]}
 	]),
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.mon(this.record, 'destroy', this.destroy, this);
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		var me = this, rd, r = me.record,
 			username = me.record.get('Creator');
 
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		rd.headline = rd.headline.getData();
 		rd.date = Ext.Date.format(r.get('headline').get('CreatedTime'), 'F j, Y');
 
-		UserRepository.getUser(username, function(u) {
+		UserRepository.getUser(username, function (u) {
 			me.user = u;
 			rd.user = u;
 			rd.avatarURL = u.get('avatarURL');
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.el, 'click', this.onClick, this);
 		this.record.addObserverForField(this, 'LikeCount', this.likeCountUpdated, this);
@@ -58,21 +58,21 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	titleUpdated: function(f, v) {
+	titleUpdated: function (f, v) {
 		if (this.rendered) {
 			this.el.down('.title').update(v);
 		}
 	},
 
 
-	likeCountUpdated: function(f, v) {
+	likeCountUpdated: function (f, v) {
 		if (this.rendered) {
 			this.el.down('.likes').update(v + ' Like' + (v === 1 ? '' : 's'));
 		}
 	},
 
 
-	updatePostCount: function(k, v) {
+	updatePostCount: function (k, v) {
 		if (!this.rendered) {
 			return;
 		}
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	onClick: function(e) {
+	onClick: function (e) {
 		this.navigateToObject(this.record);
 	}
 });

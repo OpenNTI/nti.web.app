@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Li
 		contactsEl: '.footer .show-contacts'
 	},
 
-	getTargetEl: function() { return this.frameBodyEl; },
+	getTargetEl: function () { return this.frameBodyEl; },
 	itemSelector: '.presence-gutter-entry',
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
@@ -43,28 +43,28 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Li
 			]}
 		]}
 	]), {
-		getBadgeCount: function(model) {
+		getBadgeCount: function (model) {
 			return model.unreadMessageCount || 0;
 		},
-		getPresence: function(model) {
+		getPresence: function (model) {
 			var ChatStore = NextThought.app.chat.StateStore.getInstance(),
 				presence = ChatStore.getPresenceOf(model.Username);
 
 			return (presence && presence.getName()) || '';
 		},
-		getAvatar: function(model) {
+		getAvatar: function (model) {
 			var a = NTIFormat.avatar(model);
 			return a;
 		}
 	}),
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.on('itemclick', this.onItemClicked.bind(this));
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.closeBtn, 'click', this.hideOtherContacts.bind(this));
@@ -75,17 +75,17 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Li
 		});
 	},
 
-	addToggleListeners: function() {
+	addToggleListeners: function () {
 		var me = this;
 		// When this list is shown, hide the gutter and vice-versa.
 		this.on({
-			show: function() {
+			show: function () {
 				me.gutter.hide();
 				if (me.gutter.activeUser) {
 					me.selectActiveUser(me.gutter.activeUser);
 				}
 			},
-			hide: function() {
+			hide: function () {
 				me.gutter.show();
 				if (me.gutter.activeUser) {
 					me.gutter.selectActiveUser(me.gutter.activeUser);
@@ -94,26 +94,26 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Li
 		});
 
 		wait(100)
-			.then(function() {
+			.then(function () {
 				if (me.gutter.activeUser) {
 					me.selectActiveUser(me.gutter.activeUser);
 				}
 			});
 	},
 
-	onItemClicked: function(view, user, item, index, e) {
+	onItemClicked: function (view, user, item, index, e) {
 		this.openChatWindow(user, Ext.get(item));
 	},
 
-	goToContacts: function(e) {
+	goToContacts: function (e) {
 		NextThought.app.navigation.Actions.pushRootRoute('Contacts', '/contacts/');
 	},
 
-	hideOtherContacts: function() {
+	hideOtherContacts: function () {
 		this.ChatStore.fireEvent('hide-all-gutter-contacts', this);
 	},
 
-	bindChatWindow: function(win, user) {
+	bindChatWindow: function (win, user) {
 		var roomInfo = win && win.roomInfo,
 			isGroupChat = roomInfo.isGroupChat(),
 			me = this;
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.gutter.Li
 		if (!isGroupChat && user) {
 			user.associatedWindow = win;
 			win.onceRendered
-				.then(function() {
+				.then(function () {
 					wait()
 						.then(me.realignChatWindow.bind(me, win, user));
 				});

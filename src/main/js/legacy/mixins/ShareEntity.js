@@ -3,20 +3,20 @@ var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.mixins.ShareEntity', {
 
-	isDynamicSharing: function() {
+	isDynamicSharing: function () {
 		return NextThought.mixins.ShareEntity.isDynamicSharing(this.data);
 	},
 
-	getPresentationType: function() {
+	getPresentationType: function () {
 		return NextThought.mixins.ShareEntity.getPresentationType(this.data);
 	},
 
 	statics: {
-		isDynamicSharing: function(data) {
+		isDynamicSharing: function (data) {
 			return Boolean(data.IsDynamicSharing);
 		},
 
-		getPresentationType: function(data) {
+		getPresentationType: function (data) {
 			return this.isDynamicSharing(data) ? 'group' : 'list';
 		}
 	}

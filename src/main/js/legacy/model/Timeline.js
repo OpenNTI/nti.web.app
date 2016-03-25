@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.model.Timeline', {
 	statics: {
 		mimeType: 'application/vnd.nextthought.ntitimeline',
 
-		fromOutlineNode: function(data) {
+		fromOutlineNode: function (data) {
 			return this.create({
 				icon: data.thumbnail,
 				description: data.desciption,

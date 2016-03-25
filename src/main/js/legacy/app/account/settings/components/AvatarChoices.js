@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		editBackgroundChoice: 'li.background span.editCustom'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		var me = this,
 			u = (me.user || $AppConfig.userObject),
 			url = u.get('avatarURL');
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		me.callParent(arguments);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this,
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 		me.mon(me.list, 'click', me.clickHandler.bind(me));
 
-		me.mon(me.up('window').down('picture-editor'), 'saved', function(url) {
+		me.mon(me.up('window').down('picture-editor'), 'saved', function (url) {
 			var url = u.get('avatarURL'),
 				background = u.get('backgroundURL');
 
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		});
 	},
 
-	clickHandler: function(e) {
+	clickHandler: function (e) {
 		e.stopEvent();
 
 		var item = e.getTarget('li', null, true),
@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		}
 	},
 
-	edit: function(field, src) {
+	edit: function (field, src) {
 		var w = this.up('account-window'),
 			picEditor = w.down('picture-editor');
 
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		});
 	},
 
-	upload: function(field) {
+	upload: function (field) {
 		var w = this.up('account-window'),
 			picEditor = w.down('picture-editor');
 
@@ -145,19 +145,19 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		});
 	},
 
-	editAvatar: function() {
+	editAvatar: function () {
 		this.edit('avatarURL', $AppConfig.userObject.get('avatarURL'));
 	},
 
-	uploadAvatar: function() {
+	uploadAvatar: function () {
 		this.upload('avatarURL');
 	},
 
-	editBackground: function() {
+	editBackground: function () {
 		this.edit('backgroundURL', $AppConfig.userObject.get('backgroundURL'));
 	},
 
-	uploadBackground: function() {
+	uploadBackground: function () {
 		this.upload('backgroundURL');
 	}
 });

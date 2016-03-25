@@ -98,26 +98,26 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.enableBubble(['show-msg', 'update-buttons', 'close-msg', 'submit-enroll-purchase', 'enrollment-enrolled-complete', 'submit-gift-purchase']);
 		this.submitButton = this.buttonCfg[0];
 	},
 
 
-	getButtonCfg: function() {
+	getButtonCfg: function () {
 		return this.buttonCfg;
 	},
 
 
-	buttonClick: function(action) {
+	buttonClick: function (action) {
 		if (action === 'submit-payment') {
 			this.maybeSubmit();
 		}
 	},
 
 
-	beforeShow: function() {
+	beforeShow: function () {
 		var token = this.enrollmentOption.tokenObject,
 			purchaseDesc = this.enrollmentOption.purchaseDescription,
 			card = token && token.card;
@@ -209,12 +209,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this;
 
-		me.mon(me.el, 'click', function(e) {
+		me.mon(me.el, 'click', function (e) {
 			if (e.getTarget('.edit')) {
 				me.fireEvent('close-msg');
 				me.error(me);
@@ -227,13 +227,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	stopClose: function() {
+	stopClose: function () {
 		var r, me = this;
 
 		if (me.hasMask()) {
 			r = Promise.reject();
 		} else {
-			r = new Promise(function(fulfill, reject) {
+			r = new Promise(function (fulfill, reject) {
 				Ext.Msg.show({
 					title: getString('NextThought.view.courseware.enrollment.PaymentConfirmation.PayNotSubmitted'),
 					msg: getString('NextThought.view.courseware.enrollment.PaymentConfirmation.ProgressLost'),
@@ -245,7 +245,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 						},
 						secondary: {
 							text: getString('NextThought.view.courseware.enrollment.PaymentConfirmation.LeavePage'),
-							handler: function() {
+							handler: function () {
 								fulfill();
 							}
 						}
@@ -258,7 +258,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	showError: function(json) {
+	showError: function (json) {
 		if (json && (json.Message || json.message)) {
 			this.fireEvent('show-msg', json.Message || json.message, true);
 		} else {
@@ -267,7 +267,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	parsePurchaseAttempt: function(attempt) {
+	parsePurchaseAttempt: function (attempt) {
 		var error = attempt.get('Error');
 
 		return {
@@ -276,7 +276,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	showStripeError: function(json) {
+	showStripeError: function (json) {
 		var error = {},
 			purchaseAttempt = json && json.purchaseAttempt;
 
@@ -300,7 +300,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	maybeSubmit: function() {
+	maybeSubmit: function () {
 		var me = this,
 			data = {
 				purchaseDescription: me.enrollmentOption.purchaseDescription,
@@ -315,14 +315,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		me.addMask(getString('NextThought.view.courseware.enrollment.PaymentConfirmation.SubPaymentTime'));
 
 		me.complete(me, data)
-			.then(function(result) {
+			.then(function (result) {
 				console.log('Payment successful', arguments);
 				me.enrollmentOption.purchaseAttempt = result.purchaseAttempt;
 				me.removeMask();
 				me.clearProcessStorage();
 				me.done(me);
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				me.submitButton.disabled = false;
 				me.fireEvent('update-buttons');
 				me.showStripeError(reason);

@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.util.PagedPageSource', {
 	},
 
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 
 		this.mixins.observable.constructor.call(this);
@@ -36,12 +36,12 @@ module.exports = exports = Ext.define('NextThought.util.PagedPageSource', {
 	},
 
 	//Relative to the total
-	getPageNumber: function() {
+	getPageNumber: function () {
 		return this.getAbsoluteIndex() + 1;//account for zero indexing
 	},
 
 
-	getAbsoluteIndex: function() {
+	getAbsoluteIndex: function () {
 		var currentPage = this.store.getCurrentPage(),
 			pageSize = this.store.pageSize;
 
@@ -51,12 +51,12 @@ module.exports = exports = Ext.define('NextThought.util.PagedPageSource', {
 	},
 
 
-	getTotal: function() {
+	getTotal: function () {
 		return this.store.getTotalCount();
 	},
 
 
-	fillInRecord: function(items) {
+	fillInRecord: function (items) {
 		return items;
 	},
 
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.util.PagedPageSource', {
 	 * @param  {Integer} absoluteIndex index to look up
 	 * @return {Record}				  the record from the store if its there
 	 */
-	__maybeGetFromStore: function(absoluteIndex) {
+	__maybeGetFromStore: function (absoluteIndex) {
 		var pageSize = this.store.pageSize,
 			currentPage = this.store.getCurrentPage(),
 			pageStart = (currentPage - 1) * pageSize,
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.util.PagedPageSource', {
 	},
 
 
-	__loadRecord: function(index) {
+	__loadRecord: function (index) {
 		var store = this.store,
 			url = store.proxy.url,
 			storeRecord = this.__maybeGetFromStore(index),
@@ -98,18 +98,18 @@ module.exports = exports = Ext.define('NextThought.util.PagedPageSource', {
 		params.batchSize = 1;
 
 		return StoreUtils.loadItems(url, params, null, store.model)
-			.then(function(items) {
+			.then(function (items) {
 				return items[0];
 			})
 			.then(this.fillInRecord.bind(this))
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Failed to load record', reason);
 				return null;
 			});
 	},
 
 
-	__getPrevious: function(relativeIndex, absoluteIndex) {
+	__getPrevious: function (relativeIndex, absoluteIndex) {
 		var prev = relativeIndex - 1;
 
 		if (prev >= 0) {
@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.util.PagedPageSource', {
 	},
 
 
-	__getNext: function(relativeIndex, absoluteIndex) {
+	__getNext: function (relativeIndex, absoluteIndex) {
 		var next = relativeIndex + 1,
 			pageSize = this.store.pageSize,
 			total = this.store.getTotalCount();
@@ -145,16 +145,16 @@ module.exports = exports = Ext.define('NextThought.util.PagedPageSource', {
 	},
 
 
-	load: function() {
+	load: function () {
 		var me = this,
 			relativeIndex = me.currentIndex,
 			//getPageNumber is not zero indexed but the absoluteIndex needs to be
 			absoluteIndex = me.getPageNumber() - 1;
 
 		return Promise.all([
-				me.__getPrevious(relativeIndex, absoluteIndex),
-				me.__getNext(relativeIndex, absoluteIndex)
-			]).then(function(result) {
+			me.__getPrevious(relativeIndex, absoluteIndex),
+			me.__getNext(relativeIndex, absoluteIndex)
+		]).then(function (result) {
 				me.previous = result[0];
 				me.next = result[1];
 
@@ -163,49 +163,49 @@ module.exports = exports = Ext.define('NextThought.util.PagedPageSource', {
 	},
 
 
-	getTitle: function() {
+	getTitle: function () {
 		return '';
 	},
 
 
-	hasPrevious: function() {
+	hasPrevious: function () {
 		return !!this.previous;
 	},
 
 
-	hasNext: function() {
+	hasNext: function () {
 		return !!this.next;
 	},
 
 
-	getPrevious: function() {
+	getPrevious: function () {
 		return this.getRoute ? this.getRoute(this.previous) : this.previous;
 	},
 
 
-	getNext: function() {
+	getNext: function () {
 		return this.getRoute ? this.getRoute(this.next) : this.next;
 	},
 
 
-	getPreviousTitle: function() {
+	getPreviousTitle: function () {
 		return this.getTitle(this.previous);
 	},
 
 
-	getNextTitle: function() {
+	getNextTitle: function () {
 		return this.getTitle(this.next);
 	},
 
 
-	getNextPrecache: function() {
+	getNextPrecache: function () {
 		var index = this.currentIndex + 1;
 
 		return this.getPrecache ? this.getPrecache(this.next, index) : null;
 	},
 
 
-	getPreviousPrecache: function() {
+	getPreviousPrecache: function () {
 		var index = this.currentIndex - 1;
 
 		return this.getPrecache ? this.getPrecache(this.previous, index) : null;

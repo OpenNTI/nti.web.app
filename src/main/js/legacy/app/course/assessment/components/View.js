@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	body: {xtype: 'course-assessment-body'},
 	cls: 'course-assessment-view',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -41,11 +41,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.on('activate', this.onActivate.bind(this));
 	},
 
-	bundleChanged: function(bundle) {
+	bundleChanged: function (bundle) {
 		var me = this,
 			isSync = (me.currentBundle && me.currentBundle.getId()) === (bundle && bundle.getId());
 
-		function resetView(noAssignments) {
+		function resetView (noAssignments) {
 			me.clearViews();
 			me.maybeUnmask();
 
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			}
 		}
 
-		function getLink(rel, e) { return e.getLink(rel) || bundle.getLink(rel); }
+		function getLink (rel, e) { return e.getLink(rel) || bundle.getLink(rel); }
 
 		if (!isSync) {
 			me.clearViews();
@@ -76,14 +76,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		//if we can't get the wrapper or the bundle shouldn't show assignments
 		if (!bundle || !bundle.getWrapper || !bundle.shouldShowAssignments()) {
 			return Promise.resolve()
-				.then(function() {
+				.then(function () {
 					resetView(true);
 					delete me.currentBundle;
 				});
 		}
 
 		return bundle.getWrapper()
-			.then(function(enrollment) {
+			.then(function (enrollment) {
 				//if we are reloading for the instance we already have set, don't push views
 				if (isSync) { return bundle.getAssignments(); }
 
@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 							me.addContentEditorViews();
 						}
 						else {
-							me.addAdminViews(function(rel) { return getLink(rel, enrollment); });
+							me.addAdminViews(function (rel) { return getLink(rel, enrollment); });
 						}
 					} else {
 						me.addStudentViews();
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 				return bundle.getAssignments();
 			})
-			.then(function(assignments) {
+			.then(function (assignments) {
 				if (isSync) {
 					wait()
 						.then(me.alignNavigation.bind(me));
@@ -125,28 +125,28 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				assignments.getHistory(true);
 
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Failed to load assignments:', reason);
 				resetView(false);
 			});
 	},
 
-	onActivate: function() {
+	onActivate: function () {
 		if (!this.rendered) { return; }
 
 		this.alignNavigation();
 	},
 
-	getAssignmentList: function() {
+	getAssignmentList: function () {
 		var me = this;
 
 		//apply the assignments data and let it restore state so we can get that order
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle, true)
-			.then(function() {
+			.then(function () {
 				var items = me.assignmentsView.store.getRange() || [];
 
 
-				items = items.map(function(item) {
+				items = items.map(function (item) {
 					return item.get('item');
 				});
 
@@ -154,26 +154,26 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			});
 	},
 
-	getStudentListForAssignment: function(assignment, student) {
+	getStudentListForAssignment: function (assignment, student) {
 		var me = this;
 
 		//apply the assignments data and let it restore state so we can get that order
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle, true)
 			.then(me.assignmentsView.showAssignment.bind(me.assignmentsView, assignment, student))
-			.then(function() {
+			.then(function () {
 				var view = me.assignmentsView.getAssignmentView();
 
 				return view.store;
 			});
 	},
 
-	getAssignmentListForStudent: function(student) {
+	getAssignmentListForStudent: function (student) {
 		var me = this;
 
 		//apply the assignments data and let it restore state so we can get that order
 		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle, student)
 			.then(me.performanceView.showStudent.bind(me.performanceView, student))
-			.then(function() {
+			.then(function () {
 				var view = me.performanceView.getStudentView(),
 					store = view.store;
 
@@ -181,7 +181,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					return store;
 				}
 
-				return new Promise(function(fulfill, reject) {
+				return new Promise(function (fulfill, reject) {
 					me.mon(store, {
 						single: true,
 						'records-filled-in': fulfill.bind(null, store)
@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			});
 	},
 
-	maybeMask: function(cmp, isActive, path) {
+	maybeMask: function (cmp, isActive, path) {
 		var el = this.body.el;
 
 		//if passed an active cmp the want to try to mask itself, let it
@@ -205,7 +205,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	maybeUnmask: function(cmp, isActive, path) {
+	maybeUnmask: function (cmp, isActive, path) {
 		this.finished = true;
 
 		var el = this.body.el;
@@ -219,20 +219,20 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	shouldPushViews: function() {
+	shouldPushViews: function () {
 		return !this.body.items.getCount();
 	},
 
-	setActiveItem: function(item, route) {
+	setActiveItem: function (item, route) {
 		this.navigation.updateActive(item, route);
 
 		this.callParent(arguments);
 	},
 
-	clearViews: function() {
+	clearViews: function () {
 		var items = this.body.items.items || [];
 
-		items.forEach(function(item) {
+		items.forEach(function (item) {
 			if (item.clearAssignmentsData) {
 				item.clearAssignmentsData();
 			}
@@ -246,12 +246,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		delete this.performanceView;
 	},
 
-	addChildRouter: function(cmp) {
+	addChildRouter: function (cmp) {
 		this.mixins.Router.addChildRouter.call(this, cmp);
 		cmp.pushRoute = this.changeRoute.bind(this);
 	},
 
-	addAdminViews: function(getLink) {
+	addAdminViews: function (getLink) {
 		this.isAdmin = true;
 		this.notificationsView = this.body.add({
 			xtype: 'course-assessment-admin-activity',
@@ -287,18 +287,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		]);
 	},
 
-	addContentEditorViews: function() {
+	addContentEditorViews: function () {
 		var me = this;
 
 		this.addStudentViews();
 
 		this.navigation.onceRendered
-			.then(function() {
+			.then(function () {
 				me.navigation.disabledItem(me.performanceView.xtype);
 			});
 	},
 
-	addStudentViews: function() {
+	addStudentViews: function () {
 		this.isAdmin = false;
 		this.notificationsView = this.body.add({
 			xtype: 'course-assessment-activity',
@@ -333,7 +333,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		]);
 	},
 
-	showNotifications: function(route, subRoute) {
+	showNotifications: function (route, subRoute) {
 		if (!this.notificationsView) { return; }
 
 		var me = this;
@@ -348,7 +348,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.then(me.alignNavigation.bind(me));
 	},
 
-	showPerformance: function(route, subRoute) {
+	showPerformance: function (route, subRoute) {
 		if (!this.performanceView) { return; }
 
 		var me = this,
@@ -362,7 +362,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.setActiveItem(me.performanceView, route.path);
 
 		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle, student)
-			.then(function() {
+			.then(function () {
 				if (me.performanceView.showRoot) {
 					me.performanceView.showRoot();
 				}
@@ -372,7 +372,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.then(me.alignNavigation.bind(me));
 	},
 
-	showAssignments: function(route, subRoute) {
+	showAssignments: function (route, subRoute) {
 		if (!this.assignmentsView) { return; }
 
 		var me = this;
@@ -382,7 +382,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.setActiveItem(me.assignmentsView, route.path);
 
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
-			.then(function() {
+			.then(function () {
 				if (me.assignmentsView.showRoot) {
 					me.assignmentsView.showRoot();
 				}
@@ -392,7 +392,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.then(me.alignNavigation.bind(me));
 	},
 
-	showStudentsForAssignment: function(route, subRoute) {
+	showStudentsForAssignment: function (route, subRoute) {
 		if (!this.assignmentsView) { return; }
 
 		var me = this,
@@ -417,7 +417,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			.then(me.alignNavigation.bind(me));
 	},
 
-	showAssignmentsForStudent: function(route, subRoute) {
+	showAssignmentsForStudent: function (route, subRoute) {
 		if (!this.performanceView) { return; }
 
 		var me = this,
@@ -430,14 +430,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.setActiveItem(me.performanceView, route.path);
 
 		UserRepository.getUser(student)
-			.then(function(user) {
+			.then(function (user) {
 				me.setTitle(user.getName());
 			});
 
 		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle, student)
 			.then(me.performanceView.showStudent.bind(me.performanceView, student, route.precache))
 			.then(me.maybeUnmask.bind(me))
-			.then(function() { return wait(); })
+			.then(function () { return wait(); })
 			.then(me.alignNavigation.bind(me));
 	}
 });

@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 	redactionCls: 'redaction',
 	cls: 'redacted',
 
-	constructor: function(config) {
+	constructor: function (config) {
 		var r = config && config.record;
 		if (r && r.phantom) {
 			this.record = r;
@@ -26,22 +26,22 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		}
 	},
 
-	buildMenu: function(items) {
+	buildMenu: function (items) {
 		var me = this;
 
 		items.push({
 			text: getString('NextThought.view.annotations.Redaction.toggle'),
-			handler: function() {
+			handler: function () {
 				me.toggleRedaction();
 			}
 		});
 		return this.callParent([items]);
 	},
 
-	makeEditableSpanEditable: function(e) {
+	makeEditableSpanEditable: function (e) {
 		e.stopEvent();
 		var s = this.editableSpan, range, save = this.masterSpan.down('.edit'),
-				sel = this.doc.parentWindow.getSelection();
+			sel = this.doc.parentWindow.getSelection();
 
 		if (!s || !this.record.isModifiable()) {
 			return false;
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		return false;
 	},
 
-	makeEditableSpanNotEditable: function() {
+	makeEditableSpanNotEditable: function () {
 		var s = this.editableSpan, save = this.masterSpan.down('.edit');
 		if (!s || !this.record.isModifiable()) {
 			return;
@@ -81,15 +81,15 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		s.set({'contenteditable': undefined});
 	},
 
-	render: function() {
+	render: function () {
 		var y = this.callParent(arguments),
 			isBlock = this.isBlockRedaction();
 
 		console.debug('render', this.record.phantom);
 
-	if (!this.innerFootnotes) {
-	  this.innerFootnotes = this.containedFootnotes();
-			this.assureRedactedFootnoteText(this.innerFootnotes);
+		if (!this.innerFootnotes) {
+	  	this.innerFootnotes = this.containedFootnotes();
+		this.assureRedactedFootnoteText(this.innerFootnotes);
 	}
 
 		if (this.actionSpan) {
@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		return y;
 	},
 
-	getRestrictedRange: function(annotationOffsets) {
+	getRestrictedRange: function (annotationOffsets) {
 		var rect, t, rtop, rr;
 		if (this.masterSpan.hasCls(this.cls)) {
 			t = this.actionSpan.getBoundingClientRect();
@@ -130,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		return null;
 	},
 
-	visibilityChanged: function(show) {
+	visibilityChanged: function (show) {
 		if (this.actionSpan) {
 			Ext.fly(this.actionSpan).setVisibilityMode(Ext.dom.Element.DISPLAY);
 			Ext.fly(this.actionSpan)[show ? 'show' : 'hide']();
@@ -138,14 +138,14 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		return this.callParent(arguments);
 	},
 
-	isBlockRedaction: function() {
+	isBlockRedaction: function () {
 		return this.record && Boolean(this.record.get('redactionExplanation'));
 		//kind of hacky... as soon as you blank out this field, the redaction will become "inline" and there is no way
 		// to go back, nor is this obvious. TODO: expose a "style" much like highlights/notes. (I'm actually surprised
 		// style wasn't accepted already)
 	},
 
-	createActionHandle: function(before, block) {
+	createActionHandle: function (before, block) {
 
 		if (!before) {return null;}
 
@@ -158,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		this.mon(this.masterSpan, {
 			scope: this,
 			'click': this.onControlClick,
-			'mouseup': function(e) {e.stopEvent();return false;}
+			'mouseup': function (e) {e.stopEvent();return false;}
 		});
 
 		this.editableSpan = this.masterSpan.down('.editableSpan');
@@ -176,13 +176,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		return this.masterSpan.dom;
 	},
 
-	insertFooter: function(after) {
+	insertFooter: function (after) {
 
 	},
 
-	onClick: function() {},
+	onClick: function () {},
 
-	onControlClick: function(e) {
+	onControlClick: function (e) {
 		//stop event
 		e.stopEvent();
 
@@ -210,20 +210,20 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		return false; //for ie
 	},
 
-	saveEditorContent: function() {
+	saveEditorContent: function () {
 		this.makeEditableSpanNotEditable();
 		this.record.set('replacementContent', this.editableSpan.dom.textContent);
 		this.record.save();
 		this.manager.resume(this.prefix);
 	},
 
-	resetEditorContent: function() {
+	resetEditorContent: function () {
 		this.makeEditableSpanNotEditable();
 		this.editableSpan.update(this.record.get('replacementContent'));
 		this.manager.resume(this.prefix);
 	},
 
-	editableSpanEditorKeyDown: function(e, span) {
+	editableSpanEditorKeyDown: function (e, span) {
 		var k = e.getKey();
 
 
@@ -247,7 +247,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		return true;
 	},
 
-	cleanup: function() {
+	cleanup: function () {
 		console.debug('cleanup', this.record.phantom);
 		try {
 			if (this.actionSpan) {Ext.fly(this.actionSpan).remove();}
@@ -258,7 +258,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		this.callParent(arguments);
 	},
 
-	toggleRedaction: function(e) {
+	toggleRedaction: function (e) {
 		var redactionCollapsed = !this.compElements.first().hasCls(this.cls),
 			me = this;
 
@@ -281,8 +281,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		}
 
 		//If there are any innerFootnotes we need to toggle them also
-	if (this.innerFootnotes) {
-			this.innerFootnotes.each(function(footnote) {
+		if (this.innerFootnotes) {
+		this.innerFootnotes.each(function (footnote) {
 				var redactedText = footnote.down('.redacted-text'),
 					count = footnote ? footnote.getAttribute('data-redactedCount') : undefined,
 					clsMnpFn;
@@ -303,14 +303,14 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		return false;
 	},
 
-	assureRedactedFootnoteText: function(footnotes) {
+	assureRedactedFootnoteText: function (footnotes) {
 		var me = this;
 
 		if (!footnotes) {
 			return;
 		}
 
-		footnotes.each(function(footnote) {
+		footnotes.each(function (footnote) {
 			var toAdd;
 			if (!footnote.down('.redacted-text')) {
 				me.footnoteRedactedTpl.append(footnote);
@@ -318,33 +318,33 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Redaction', {
 		});
 	},
 
-	containedFootnotes: function() {
-	  var me = this,
-			  footnotes = [];
+	containedFootnotes: function () {
+	  	var me = this,
+			 footnotes = [];
 
 		  if (!this.compElements) {
 			  return null;
 		  }
 
-	  this.compElements.each(function(e) {
+	  	this.compElements.each(function (e) {
 		var fns = e.query('a.footnote');
-		Ext.each(fns, function(fn) {
-		  footnotes.push(Ext.DomQuery.select(fn.getAttribute('href'), me.doc)[0]);
+		Ext.each(fns, function (fn) {
+		  	footnotes.push(Ext.DomQuery.select(fn.getAttribute('href'), me.doc)[0]);
 		});
 	  });
-	  return new Ext.dom.CompositeElement(footnotes);
+	  	return new Ext.dom.CompositeElement(footnotes);
 	}
-}, function() {
+}, function () {
 
 	var p = this.prototype,
-	tpl = {tag: 'span', 'data-non-anchorable': 'true', 'data-no-anchors-within': 'true', cls: 'redactionAction {style}', cn: [
+		tpl = {tag: 'span', 'data-non-anchorable': 'true', 'data-no-anchors-within': 'true', cls: 'redactionAction {style}', cn: [
 					{tag: 'span', 'data-non-anchorable': 'true', cls: 'editableSpan', html: '{replacementContent}'},
 					{tag: 'span', 'data-non-anchorable': 'true', cls: 'controls', cn: [
 						{tag: 'span', 'data-non-anchorable': 'true', cls: 'edit', 'data-qtip': '{{{NextThought.view.annotations.Redaction.edit}}}'},
 						{tag: 'span', 'data-non-anchorable': 'true', cls: 'share', 'data-qtip': '{{{NextThought.view.annotations.Redaction.share}}}'},
 						{tag: 'span', 'data-non-anchorable': 'true', cls: 'delete', 'data-qtip': '{{{NextThought.view.annotations.Redaction.delete}}}'}
 					]}
-				]};
+	]};
 
 	p.actionTpl = new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'if': 'block', cn: [

@@ -9,12 +9,12 @@ var UtilContent = require('../../util/Content');
 module.exports = exports = Ext.define('NextThought.app.contentviewer.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	getRelatedWorkPageInfo: function(data, bundle) {
+	getRelatedWorkPageInfo: function (data, bundle) {
 		var ntiid = data.get ? data.get('NTIID') : data.NTIID,
 			DH = Ext.DomHelper;
 
 		return ContentUtils.getLocation(ntiid, bundle)
-			.then(function(locations) {
+			.then(function (locations) {
 				var location = locations[0],
 					root = location && location.root,
 					postfix, pageInfo,

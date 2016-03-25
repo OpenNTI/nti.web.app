@@ -17,11 +17,11 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 
 	MAX_PATH_LENGTH: 2,
 
-	getContentPath: function(ntiid, bundle, parent, rootPageId, rootRoute) {
+	getContentPath: function (ntiid, bundle, parent, rootPageId, rootRoute) {
 		var me = this;
 
 		return ContentUtils.getPageID(ntiid, bundle)
-			.then(function(page) {
+			.then(function (page) {
 				if (!page) {
 					return me.__getContentPathFromLineage(ntiid, bundle, parent, rootPageId, rootRoute);
 				}
@@ -30,12 +30,12 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 			});
 	},
 
-	__getContentPathFromLineage: function(ntiid, bundle, parent, rootPageId, rootRoute) {
+	__getContentPathFromLineage: function (ntiid, bundle, parent, rootPageId, rootRoute) {
 		var PathActions = NextThought.app.navigation.path.Actions.create();
 
 		return PathActions.getBreadCrumb(ntiid)
-			.then(function(path) {
-				return path.map(function(part) {
+			.then(function (path) {
+				return path.map(function (part) {
 					var route = part.ntiid ? ParseUtils.encodeForURI(part.ntiid) : '';
 
 					part.route = Globals.trimRoute(rootRoute) + '/' + route;
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 					return part;
 				});
 			})
-			.then(function(path) {
+			.then(function (path) {
 				if (bundle && bundle.getContentBreadCrumb) {
 					return bundle.getContentBreadCrumb(path, ntiid, rootPageId, parent);
 				}
@@ -52,15 +52,15 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 			});
 	},
 
-	__getContentPathFromTOC: function(page, ntiid, bundle, parent, rootPageId, rootRoute) {
+	__getContentPathFromTOC: function (page, ntiid, bundle, parent, rootPageId, rootRoute) {
 		var me = this;
 
 		return Promise.all([
-				ContentUtils.getLocation(page, bundle),
-				ContentUtils.getLineage(page, bundle),
-				ContentUtils.getRootForLocation(ntiid, bundle)
-			])
-			.then(function(results) {
+			ContentUtils.getLocation(page, bundle),
+			ContentUtils.getLineage(page, bundle),
+			ContentUtils.getRootForLocation(ntiid, bundle)
+		])
+			.then(function (results) {
 				var location = results[0] && results[0][0],
 					lineage = results[1] && results[1][0],
 					rootId = results[3],
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 
 				return me.buildContentPath(parentNode, location.location, lineage, leftOvers, allowMenus, bundle, rootPageId, rootRoute || '');
 			})
-			.then(function(path) {
+			.then(function (path) {
 				if (bundle.getContentBreadCrumb) {
 					return bundle.getContentBreadCrumb(path, ntiid, rootPageId, parent);
 				}
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 			});
 	},
 
-	__getLevelLabel: function(level, levelName, useTocLevelName) {
+	__getLevelLabel: function (level, levelName, useTocLevelName) {
 		var label = Boolean(useTocLevelName) ? 'Select ' + levelName : this.levelLabels[level], i;
 
 		if (label) { return label; }
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 		return 'Select a ' + label;
 	},
 
-	__getFirstTopic: function(node) {
+	__getFirstTopic: function (node) {
 		var topic = node.querySelector('topic');
 
 		if (!topic) {
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 		return topic.getAttribute('ntiid');
 	},
 
-	buildContentPath: function(parentNode, topic, lineage, leftOvers, allowMenus, bundle, rootPageId, rootRoute) {
+	buildContentPath: function (parentNode, topic, lineage, leftOvers, allowMenus, bundle, rootPageId, rootRoute) {
 		var path = [],
 			i = 0, pathLength = 0,
 			presentation = this.__getPresentationProps(parentNode, bundle),
@@ -166,12 +166,12 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 		}
 
 		return Promise.all(path)
-			.then(function(path) {
+			.then(function (path) {
 				return path.reverse();
 			});
 	},
 
-	buildContentPathPart: function(label, ntiid, parentNode, allowMenus, bundle, rootPageId, rootRoute) {
+	buildContentPathPart: function (label, ntiid, parentNode, allowMenus, bundle, rootPageId, rootRoute) {
 		if (!ntiid) {
 			return Promise.resolve({
 				label: label,
@@ -182,7 +182,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 		var me = this;
 
 		return ContentUtils.getLocation(ntiid, bundle)
-			.then(function(locations) {
+			.then(function (locations) {
 				var l = locations[0], route,
 					part = {};
 
@@ -199,7 +199,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 
 				if (allowMenus) {
 					return me.buildContentPathPartMenu(l, parentNode, bundle, rootRoute)
-							.then(function(siblings) {
+							.then(function (siblings) {
 								part.siblings = siblings;
 
 								if (!siblings.length) {
@@ -218,7 +218,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 			});
 	},
 
-	__getPresentationProps: function(ntiid, bundle) {
+	__getPresentationProps: function (ntiid, bundle) {
 		var presentationProps = bundle && bundle.getPresentationProperties && bundle.getPresentationProperties(ntiid),
 			numberProps = presentationProps && presentationProps.numbering || {},
 			tocProps = presentationProps && presentationProps.toc,
@@ -238,14 +238,14 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 		return o;
 	},
 
-	styleList: function(num, style) {
+	styleList: function (num, style) {
 		var me = this,
 			formatters = {
 				'a': me.toBase26SansNumbers,
-				'A': function(num) {
+				'A': function (num) {
 					return me.toBase26SansNumbers(num).toUpperCase();
 				},
-				'i': function(num) {
+				'i': function (num) {
 					return me.toRomanNumeral(num).toLowerCase();
 				},
 				'I': me.toRomanNumeral
@@ -259,7 +259,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 	},
 
 	//from: http://blog.stevenlevithan.com/archives/javascript-roman-numeral-converter
-	toRomanNumeral: function(num) {
+	toRomanNumeral: function (num) {
 		var digits, key, roman, i, m = [];
 
 		digits = String(+num).split('');
@@ -277,7 +277,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 		return m.join('M') + roman;
 	},
 
-	toBase26SansNumbers: function(num) {
+	toBase26SansNumbers: function (num) {
 		var val = (num - 1) % 26,
 			letter = String.fromCharCode(97 + val),
 			num2 = Math.floor((num - 1) / 26);
@@ -287,7 +287,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 		return letter;
 	},
 
-	buildContentPathPartMenu: function(location, parentNode, bundle, rootRoute) {
+	buildContentPathPartMenu: function (location, parentNode, bundle, rootRoute) {
 		var me = this,
 			p = bundle && bundle.getOutline && bundle.getOutline(),
 			currentNode = location ? location.location : null;
@@ -296,9 +296,9 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 
 
 		return Promise.all([
-				p,
-				ContentUtils.getSiblings(currentNode, bundle)
-			]).then(function(results) {
+			p,
+			ContentUtils.getSiblings(currentNode, bundle)
+		]).then(function (results) {
 				var outline = results[0],
 					siblings = results[1] || [],
 					visible,
@@ -307,14 +307,14 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 
 				currentNode = currentNode.getAttribute('ntiid');
 
-				visible = siblings.map(function(sibling) {
+				visible = siblings.map(function (sibling) {
 					if (!/topic/i.test(sibling.tagName) || sibling.getAttribute('suppressed') === 'true') {
 						return Promise.resolve(null);
 					}
 
 					if (outline && false) {
 						return outline.isVisible(sibling.getAttribute('ntiid'))
-							.then(function(visible) {
+							.then(function (visible) {
 								if (!visible) {
 									return null;
 								}
@@ -328,11 +328,11 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 				});
 
 				return Promise.all(visible)
-					.then(function(results) {
-						return results.filter(function(x) { return !!x; });
+					.then(function (results) {
+						return results.filter(function (x) { return !!x; });
 					})
-					.then(function(visible) {
-						return visible.map(function(node) {
+					.then(function (visible) {
+						return visible.map(function (node) {
 							var label = node.getAttribute('label'), text;
 
 							text = presentation.suppress ? (me.styleList(num, presentation.type) + presentation.separate + label) : label;
@@ -351,7 +351,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 			});
 	},
 
-	getContentPageSource: function(ntiid, bundle, root) {
+	getContentPageSource: function (ntiid, bundle, root) {
 		var getRoot;
 
 		if (root) {
@@ -360,17 +360,17 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 			getRoot = ContentUtils.getRootForLocation(ntiid, bundle);
 		}
 		return getRoot
-			.then(function(rootId) {
+			.then(function (rootId) {
 				return ContentUtils.getNavigationInfo(ntiid, rootId, bundle);
 			})
-			.then(function(navInfo) {
+			.then(function (navInfo) {
 				return NextThought.util.PageSource.create(navInfo);
 			});
 	},
 
-	getTocStore: function(bundle, root) {
+	getTocStore: function (bundle, root) {
 		return bundle.getTocs()
-			.then(function(tocs) {
+			.then(function (tocs) {
 				var toc = tocs[0];
 
 				if (tocs.length > 1) {
@@ -379,14 +379,14 @@ module.exports = exports = Ext.define('NextThought.app.content.Actions', {
 
 				return toc;
 			})
-			.then(function(toc) {
+			.then(function (toc) {
 				var rec,
 					store = new Ext.data.Store({
 						model: NextThought.model.TopicNode,
 						data: toc
 					});
 
-				store.remove(store.getRange().filter(function(_) {
+				store.remove(store.getRange().filter(function (_) {
 					return _.get('supressed');
 				}));
 

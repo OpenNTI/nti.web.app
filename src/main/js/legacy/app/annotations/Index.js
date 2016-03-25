@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 	]})),
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.on('beforedeactivate', 'beforeDeactivate');
@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 	},
 
 
-	handleEvent: function(e) {
+	handleEvent: function (e) {
 		if (e.getTarget('a[href]')) {
 			e.preventDefault();
 		}
@@ -40,13 +40,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 	},
 
 
-	beforeDeactivate: function() {
+	beforeDeactivate: function () {
 		// FIXME: they should be a better way to check if the editor is open on the note window.
 		var editorEl = Ext.getBody().down('.note-window .editor-active');
 
 		if (editorEl && editorEl.isVisible()) {
 			var msg = getString('NextThought.view.content.reader.NoteOverlay.editing');
-			Ext.defer(function() {
+			Ext.defer(function () {
 				alert({msg: msg});
 			}, 1);
 			return false;
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 	},
 
 
-	navigateToNote: function(sel, rec) {
+	navigateToNote: function (sel, rec) {
 		var el = this.getNodeByRecord(rec);
 
 		if (this.showNote) {
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Index', {
 	},
 
 
-	onNoteClose: function() {
+	onNoteClose: function () {
 		if (this.el) {
 			this.getSelectionModel().deselectAll();
 		}

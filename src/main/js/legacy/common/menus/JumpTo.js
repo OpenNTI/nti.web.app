@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.common.menus.JumpTo', {
 	cls: 'jump-menu',
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.mixins.menuBehavior.constructor.call(this);
 		//if (!this.parentMenu && !this.ownerButton) {
 			//debugger;
@@ -39,10 +39,10 @@ module.exports = exports = Ext.define('NextThought.common.menus.JumpTo', {
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
-		var owner = this.ownerCmp ||this.up();
+		var owner = this.ownerCmp || this.up();
 
 		if (owner) {
 			this.mon(owner, 'destroy', 'destroy');

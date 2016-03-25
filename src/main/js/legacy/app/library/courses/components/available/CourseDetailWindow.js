@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 	isSingle: true,
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var me = this;
@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			.then(me.show.bind(me));
 	},
 
-	onBeforeClose: function() {
+	onBeforeClose: function () {
 		var me = this,
 			active = me.getLayout().getActiveItem(),
 			warning;
@@ -28,22 +28,22 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 		if (warning) {
 			warning
-				.then(function() {
+				.then(function () {
 					me.doClose();
 				});
 			return false;
 		}
 	},
 
-	onDrop: function() {
+	onDrop: function () {
 		this.doClose();
 	},
 
-	addMask: function() {},
+	addMask: function () {},
 
-	handleClose: function() {
+	handleClose: function () {
 		this.doClose();
 	}
-}, function() {
+}, function () {
 	NextThought.app.windows.StateStore.register(NextThought.model.courses.CourseCatalogEntry.mimeType, this);
 });

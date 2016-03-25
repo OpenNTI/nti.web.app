@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Future', {
 	FUTURE: {
 		type: 'Future',
 		sortType: 'none',
-		convert: function(v) {
+		convert: function (v) {
 			if (v && v.isModel) {
 				return v;
 			}
@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.model.converters.Future', {
 			};
 		}
 	}
-}, function() {
-	function set(o) { o.sortType = Ext.data.SortTypes[o.sortType]; }
+}, function () {
+	function set (o) { o.sortType = Ext.data.SortTypes[o.sortType]; }
 	set(this.FUTURE);
 });

@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	cls: 'transcriptsummary-event',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'icon', style: {backgroundImage: "url('/app/resources/images/icons/chat-32-blue.png')"}},
+		{ cls: 'icon', style: {backgroundImage: 'url(\'/app/resources/images/icons/chat-32-blue.png\')'}},
 		{ cls: 'meta', cn: [
 			{ cls: 'title', cn: [
 				{tag: 'span', cls: 'name', html: '{owner}'},
@@ -36,14 +36,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		titleEl: '.meta .title'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.WindowActions = NextThought.app.windows.Actions.create();
 		//this.mon(this.record, 'destroy', this.destroy, this);
 	},
 
-	afterRender: function(cmp) {
-		function getCreator(r) {
+	afterRender: function (cmp) {
+		function getCreator (r) {
 			var c = r.get('Creator');
 			return c && c.isModel ? c.get('Username') : c;
 		}
@@ -66,19 +66,19 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		//add the render data that shows up in every case
 		me.renderData = Ext.apply(me.renderData || {},{
-				date: Ext.Date.format(date, 'F j, Y'),
-				duration: duration,
-				messages: (messageCount === 1) ? '1 message' : messageCount + ' messages'
+			date: Ext.Date.format(date, 'F j, Y'),
+			duration: duration,
+			messages: (messageCount === 1) ? '1 message' : messageCount + ' messages'
 		});
 
-		function unMask() {
+		function unMask () {
 			if (me.el) {
 				me.el.unmask();
 			}
 		}
 
 
-		function showRecepients(u) {
+		function showRecepients (u) {
 			var width, less,
 				m = new Ext.util.TextMetrics(),
 				occupantsString,
@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			u = Ext.Array.remove(u, u[OwnerIndex]);
 
 			//replace the users name with you in the array
-			u.forEach(function(item, index, a) {
+			u.forEach(function (item, index, a) {
 				if (isMe(item.get('ID'))) {
 					u[index] = 'you';
 				}else {
@@ -138,12 +138,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			m.destroy();
 		}
 
-		function success(obj) {
+		function success (obj) {
 
 			if (obj && obj.isGroup) {
 				if (obj.isDynamicSharing()) {
 					//is group
-					UserRepository.getUser(getCreator(RoomInfo), function(u) {
+					UserRepository.getUser(getCreator(RoomInfo), function (u) {
 						me.renderData = Ext.apply(me.renderData || {},{
 							owner: (isMe(u)) ? 'You' : u.getName(),
 							group: true,
@@ -165,7 +165,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			UserRepository.getUser(involved, showRecepients);
 		}
 
-		function failure(obj) {
+		function failure (obj) {
 
 			console.warn('Faild to load page info');
 			UserRepository.getUser(involved, showRecepients);
@@ -174,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		//get the page info
 		//check if its cached
 
-		NextThought.app.groups.StateStore.getInstance().getFriendsList()
+		NextThought.app.groups.StateStore.getInstance().getFriendsList();
 		page = NextThought.app.groups.StateStore.getInstance().getFriendsList().getById(RoomInfo.get('ContainerId'));
 
 		if (page) {
@@ -189,7 +189,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.mon(this.el, 'click', this.onClick, this);
 	},
 
-	stringifyNames: function(names, less) {
+	stringifyNames: function (names, less) {
 		less = less || 0;
 		names = names || 'no one';
 		names = (Ext.isArray(names)) ? ((names.length === 0) ? ['no one'] : names) : [names];
@@ -219,11 +219,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	handleNavigation: function(){
+	handleNavigation: function () {
 		this.WindowActions.pushWindow(this.record, null, null);
 	},
 
-	onClick: function() {
+	onClick: function () {
 		var errMsg = 'Unable to load chat transcript.';
 		if (!this.record) {
 			alert({ title: 'Error' , msg: errMsg, icon: 'warning-red'});

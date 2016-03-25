@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		creatorEl: '.creator'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var hit = this.hit,
@@ -53,12 +53,12 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		this.fillInData();
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.wrapFragmentHits();
 		return this.callParent(arguments);
 	},
 
-	fillInData: function() {
+	fillInData: function () {
 		var me = this,
 			hit = me.hit,
 			name = hit.get('Creator');
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 			me.renderData.creator === '';
 		} else if (name) {
 			UserRepository.getUser(name)
-				.then(function(user) {
+				.then(function (user) {
 					me.setCreator(user);
 				});
 		}
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		me.getObject = Service.getObject(hit.get('NTIID'));
 
 		me.getObject
-			.then(function(obj) {
+			.then(function (obj) {
 				me.setTitle(obj);
 				me.hitRecord = obj;
 
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 			});
 	},
 
-	setCreator: function(user) {
+	setCreator: function (user) {
 		var creator = 'By ' + user.getName();
 
 		this.renderData.creator = creator;
@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		}
 	},
 
-	setTitle: function(record) {
+	setTitle: function (record) {
 		var title = record.get('title');
 
 		this.renderData.title = title;
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		}
 	},
 
-	showBreadCrumb: function(path) {
+	showBreadCrumb: function (path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showBreadCrumb.bind(this, path));
 			return;
@@ -118,19 +118,19 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 			root = path[0],
 			labels;
 
-		labels = path.map(function(x) {
+		labels = path.map(function (x) {
 			if (x.getTitle) {
 				return {
 					label: x.getTitle()
 				};
 			}
-		}).filter(function(x) { return !! x; });
+		}).filter(function (x) { return !!x; });
 
 		me.pathTpl.append(me.pathEl, {labels: labels});
 
 		if (root && root.getIconImage) {
 			root.getIconImage()
-				.then(function(src) {
+				.then(function (src) {
 					if (me.rootIconEl) {
 						me.rootIconEl.removeCls('hidden');
 						me.rootIconEl.setStyle({backgroundImage: 'url(' + src + ')'});
@@ -139,20 +139,20 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		}
 	},
 
-	wrapFragmentHits: function() {
+	wrapFragmentHits: function () {
 		var fragments = this.hit.get('Fragments') || [],
 			wrapped = [];
 
-		fragments.forEach(function(fragment) {
+		fragments.forEach(function (fragment) {
 			var matches = fragment.matches,
 				wrappedText = fragment.text;
 
 			if (!matches || matches.length === 0 || !fragment.text) {
 				console.warn('No matches or text for fragment. Dropping', fragment);
 			} else {
-				matches.sort(function(a, b) { return b[0] - a[0]; });
+				matches.sort(function (a, b) { return b[0] - a[0]; });
 
-				matches.forEach(function(match, idx) {
+				matches.forEach(function (match, idx) {
 					var next = idx + 1 < matches.length ? matches[idx + 1] : [0, 0],
 						newString = '';
 
@@ -175,7 +175,7 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		this.renderData.fragments = wrapped || this.renderData.fragments;
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.typeCls) {
@@ -185,14 +185,14 @@ module.exports = exports = Ext.define('NextThought.app.search.components.results
 		this.mon(this.el, 'click', this.clicked.bind(this));
 	},
 
-	clicked: function(e) {
+	clicked: function (e) {
 		var me = this,
 			hit = me.hit,
 			fragEl = e.getTarget('[ordinal]'),
 			fragIndex = fragEl && fragEl.getAttribute('ordinal');
 
 		this.getObject
-			.then(function(obj) {
+			.then(function (obj) {
 				me.navigateToSearchHit(obj, me.hit, fragIndex);
 			});
 	}

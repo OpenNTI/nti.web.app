@@ -48,29 +48,29 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		'assigments': 'course-overview-section'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.buildFromToc(this.record, this.locInfo, this.assignments, this.course);
 	},
 
-	setProgress: function(progress) {
-		this.items.each(function(item) {
+	setProgress: function (progress) {
+		this.items.each(function (item) {
 			if (item.setProgress) {
 				item.setProgress(progress);
 			}
 		});
 	},
 
-	setCommentCounts: function(commentCounts) {
-		this.items.each(function(item) {
+	setCommentCounts: function (commentCounts) {
+		this.items.each(function (item) {
 			if (item.setCommentCounts) {
 				item.setCommentCounts(commentCounts);
 			}
 		});
 	},
 
-	buildFromToc: function(node, locInfo, assignments, course) {
+	buildFromToc: function (node, locInfo, assignments, course) {
 		var me = this,
 			SECTION_CONTAINER_MAP = me.SECTION_CONTAINER_MAP,
 			SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,
@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			children = this.collapseVideos(node.getChildren()),
 			items = [];
 
-		Ext.each(children, function(i) {
+		Ext.each(children, function (i) {
 			var c, t, p;
 
 			if (i.isModel) {
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.add([{xtype: 'course-overview-header', record: node}].concat(items));
 	},
 
-	getComponentForNode: function(node, info, rec, assignments, course) {
+	getComponentForNode: function (node, info, rec, assignments, course) {
 		var type = node && node.nodeName,
 			section = (node && node.getAttribute('section')) || null,
 			assignment, cls;
@@ -170,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return null;
 	},
 
-	getComponentForRecord: function(rec) {
+	getComponentForRecord: function (rec) {
 		var config;
 
 		if (rec instanceof NextThought.model.VideoRoll) {
@@ -194,11 +194,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return config;
 	},
 
-	collapseVideos: function(nodes) {
+	collapseVideos: function (nodes) {
 		var me = this,
 			children;
 
-		children = nodes.reduce(function(acc, item, index, arr) {
+		children = nodes.reduce(function (acc, item, index, arr) {
 			var last = acc.last(),
 				next = index < (arr.length - 1) ? arr[index + 1] : null;
 
@@ -227,7 +227,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return children;
 	},
 
-	createVideo: function(node) {
+	createVideo: function (node) {
 		var ntiid = node.getAttribute('ntiid'),
 			item = this.videoIndex[ntiid];
 

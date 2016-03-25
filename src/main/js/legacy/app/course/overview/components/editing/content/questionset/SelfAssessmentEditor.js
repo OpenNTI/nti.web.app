@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	extend: 'NextThought.app.course.overview.components.editing.content.questionset.AssignmentEditor',
 	alias: 'widget.overview-editing-self-assessment-editor',
 
-	addPreview: function(item) {
+	addPreview: function (item) {
 		var me = this,
 			questions = item.get('questions'),
 			questionCount = questions.length,
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			listeners: {
 				click: {
 					element: 'el',
-					fn: function(e) {
+					fn: function (e) {
 						if (e.getTarget('.remove')) {
 							me.onChangeItem();
 						}
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	getValues: function() {
+	getValues: function () {
 		var item = this.selectedItem;
 
 		return {
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-	hasRecordChanged: function(values) {
+	hasRecordChanged: function (values) {
 		var changed = false;
 
 		if (!this.record) {

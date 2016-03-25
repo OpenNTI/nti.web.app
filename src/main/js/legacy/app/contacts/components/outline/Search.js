@@ -28,11 +28,11 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 			]}
 		]}
 	]}), {
-		getAvatar: function(model){
+		getAvatar: function (model) {
 			var a = NTIFormat.avatar(model);
 			return a;
 		},
-		isContact: function(values) {
+		isContact: function (values) {
 			var a = NextThought.app.groups.StateStore.getInstance();
 			return (values.Class !== 'User' || a.isContact(values.Username)) ? 'contact' : 'not-contact';
 		}
@@ -44,12 +44,12 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 	listeners: {
 		itemclick: 'rowClicked',
 		// itemmouseenter: 'rowHover',
-		select: function(s, record) {
+		select: function (s, record) {
 			s.deselect(record);
 		}
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		var me = this;
 
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 			'update': 'refresh'
 		});
 
-		me.mon(this.ChatStore, 'presence-changed', function(username, presence) {
+		me.mon(this.ChatStore, 'presence-changed', function (username, presence) {
 			var user = me.store.getById(username);
 
 			if (user) {
@@ -76,8 +76,8 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 		});
 	},
 
-	rowClicked: function(view, record, item, index, e) {
-		if(e && e.getTarget().classList.contains('nib')){
+	rowClicked: function (view, record, item, index, e) {
+		if(e && e.getTarget().classList.contains('nib')) {
 			this.GroupActions.addContact(record.get('Username') );
 		}
 	},
@@ -121,28 +121,28 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.outli
 	//	clearTimeout(this.hoverTimeout);
 	// },
 
-	buildStore: function() {
+	buildStore: function () {
 		var flStore = this.GroupStore.getFriendsList();
 		this.store = new NextThought.store.UserSearch({
 			filters: [
 				//filter out communities, lists, groups and yourself. Just return users.
-				function(rec) {
+				function (rec) {
 					return rec.get('Username') !== $AppConfig.contactsGroupName;
 				},
-				function(rec) {
+				function (rec) {
 					return !rec.isCommunity;
 				},
-				function(rec) {
+				function (rec) {
 					return !isMe(rec);
 				},
-				function(rec) {
+				function (rec) {
 					return rec.get('ContainerId') === 'Users';
 				}
 			],
 			sorters: [
 				{
 					//Put contacts first
-					sorterFn: function(a, b) {
+					sorterFn: function (a, b) {
 						var c = flStore.find('Username', a.get('Username')),
 							d = flStore.find('Username', b.get('Username'));
 						return c === d ? 0 : c ? -1 : 1;

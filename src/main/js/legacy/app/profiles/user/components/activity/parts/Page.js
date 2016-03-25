@@ -19,22 +19,22 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	layout: 'none',
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.add(this.cmpsFromRecords(this.records));
 	},
 
-	onAdd: function(cmp) {
+	onAdd: function (cmp) {
 		this.callParent(arguments);
 		cmp.addCls('activity-event-item');
 	},
 
-	cmpsFromRecords: function(records) {
+	cmpsFromRecords: function (records) {
 		var me = this,
 			cmps = [], lastHighlightContainer, user = me.user;
 
-		function getDate(rec) {
+		function getDate (rec) {
 			var d = rec.get('CreatedTime') || new Date(0);
 			return new Date(
 					d.getFullYear(),
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					d.getDate());
 		}
 
-		function newContainer(rec) {
+		function newContainer (rec) {
 			lastHighlightContainer = {
 				xtype: 'profile-activity-highlight-container',
 				date: getDate(rec),
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			cmps.push(lastHighlightContainer);
 		}
 
-		(records || []).forEach(function(i) {
+		(records || []).forEach(function (i) {
 			if (/change$/.test(i.get('MimeType'))) {
 				i = i.getItem();
 			}

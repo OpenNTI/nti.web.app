@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		'text-line': 'limitToLine'
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.el.selectable();
 
@@ -25,14 +25,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	editProfile: function() {
+	editProfile: function () {
 		if (this.doEdit) {
 			this.doEdit();
 		}
 	},
 
 
-	onKeyPress: function(e) {
+	onKeyPress: function (e) {
 		var inputType = e.target.getAttribute('data-input-type'),
 			fnName = this.INPUT_TYPE_KEY_HANDLER[inputType];
 		if (this.hasErrors) {
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	limitToNumber: function(e) {
+	limitToNumber: function (e) {
 		var charCode = e.key || e.charCode;
 
 		//if its not a control char and not a number
@@ -54,14 +54,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	limitToLine: function(e) {
+	limitToLine: function (e) {
 		var charCode = e.key || e.charCode;
 		if (charCode == Ext.EventObject.ENTER) {
 			e.preventDefault();
 		}
 	},
 
-	clearErrors: function(e) {
+	clearErrors: function (e) {
 		//if you haven't typed in a field that has
 		if (!e.target || !e.target.classList.contains('error')) { return; }
 
@@ -87,12 +87,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	clearAllErrors: function() {
+	clearAllErrors: function () {
 		var errors = this.el.dom.querySelectorAll('.error');
 
 		errors = Array.prototype.slice.call(errors);
 
-		errors.forEach(function(err) {
+		errors.forEach(function (err) {
 			err.classList.remove('error');
 		});
 
@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	setSchema: function(schema) {
+	setSchema: function (schema) {
 		this.profileSchema = schema;
 
 		if (!this.rendered) {
@@ -111,14 +111,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	applySchema: function() {
+	applySchema: function () {
 		var dom = this.el.dom,
 			profileSchema = this.profileSchema.ProfileSchema,
 			fields = dom.querySelectorAll('[data-field]');
 
 		fields = Array.prototype.slice.call(fields);
 
-		fields.forEach(function(field) {
+		fields.forEach(function (field) {
 			var container = field && field.parentNode,
 				label = container && container.querySelector('.field-label'),
 				name = field.getAttribute('data-field'),
@@ -141,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	setUneditable: function() {
+	setUneditable: function () {
 		delete this.editMode;
 
 		if (!this.appliedSchema) {
@@ -153,13 +153,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		simpleFields = Array.prototype.slice.call(simpleFields);
 
-		simpleFields.forEach(function(field) {
+		simpleFields.forEach(function (field) {
 			field.removeAttribute('contenteditable');
 		});
 	},
 
 
-	setEditable: function() {
+	setEditable: function () {
 		this.editMode = true;
 
 		if (!this.appliedSchema) {
@@ -171,13 +171,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		simpleFields = Array.prototype.slice.call(simpleFields);
 
-		simpleFields.forEach(function(field) {
+		simpleFields.forEach(function (field) {
 			field.setAttribute('contenteditable', true);
 		});
 	},
 
 
-	showError: function(msg) {
+	showError: function (msg) {
 		var field = msg.field,
 			entry = this.el.dom.querySelector('[data-field="' + field + '"]');
 
@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	showErrorForField: function(fieldName, msg) {
+	showErrorForField: function (fieldName, msg) {
 		var entry = this.el.dom.querySelector('[data-field="' + fieldName + '"]'),
 			container = entry && entry.parentNode,
 			error = container && container.querySelector('.error-msg');

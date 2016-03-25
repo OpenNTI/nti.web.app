@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 		footEl: '.foot'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.mixins.flagActions.constructor.call(this);
 		this.callParent(arguments);
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 		this.mon(this.record, 'destroy', this.onRecordDestroyed, this);
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		var me = this, r = me.record, rd;
 		me.callParent(arguments);
 		rd = me.renderData = Ext.apply(me.renderData || {}, r.getData());
@@ -85,12 +85,12 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 		}
 	},
 
-	loadUser: function(creator) {
+	loadUser: function (creator) {
 		var me = this;
 		UserRepository.getUser(creator, me.addUser, me);
 	},
 
-	addUser: function(u) {
+	addUser: function (u) {
 		var me = this, r = me.record,
 			rd = Ext.apply(me.renderData || {}, r.getData());
 		rd.lastModified = rd['Last Modified'];
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 		}
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var bodyEl = this.bodyEl,
@@ -143,13 +143,13 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 		metaEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		footEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-		hide = function() {
+		hide = function () {
 			bodyEl.hide();
 			ctrlEl.hide();
 			metaEl.hide();
 			footEl.hide();
 		};
-		show = function() {
+		show = function () {
 			bodyEl.show();
 			ctrlEl.show();
 			metaEl.show();
@@ -161,14 +161,14 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 			scope: this,
 			'activated-editor': hide,
 			'deactivated-editor': show,
-			'no-body-content': function(editor, el) {
+			'no-body-content': function (editor, el) {
 				editor.markError(el, 'You need to type something');
 				return false;
 			}
 		});
 	},
 
-	onDestroy: function() {
+	onDestroy: function () {
 		if (this.editor) {
 			delete this.editor.ownerCt;
 			this.editor.destroy();
@@ -177,29 +177,29 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 		this.callParent(arguments);
 	},
 
-	getRefItems: function() {
+	getRefItems: function () {
 		return this.editor ? [this.editor] : [];
 	},
 
-	getRecord: function() {
+	getRecord: function () {
 		return this.record;
 	},
 
-	updateContent: function() {
+	updateContent: function () {
 		this.record.compileBodyContent(this.setContent, this);
 	},
 
-	setContent: function(html) {
+	setContent: function (html) {
 		var el = this.bodyEl, me = this;
 
 		el.update(html);
 		DomUtils.adjustLinks(el, window.location.href);
-		el.select('img.whiteboard-thumbnail').each(function(el) {
+		el.select('img.whiteboard-thumbnail').each(function (el) {
 			el.replace(el.up('.body-divider'));
 		});
 
-		el.select('img').each(function(img) {
-			img.on('load', function() {
+		el.select('img').each(function (img) {
+			img.on('load', function () {
 				me.up('[record]').fireEvent('sync-height');
 			});
 		});
@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 	 * FIXME I don't really like this way of handling this.	 I really want to use the placeholder logic but sill have
 	 * the ability for destroy and our store removal logic to kick in.
 	 */
-	onRecordDestroyed: function() {
+	onRecordDestroyed: function () {
 		//First remove the delete and edit link listeners followed by the els
 		if (this.deleteEl) {
 			this.mun(this.deleteEl, 'click', this.onDeletePost, this);
@@ -247,7 +247,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 		this.addCls('deleted');
 	},
 
-	onDeletePost: function(e) {
+	onDeletePost: function (e) {
 		e.stopEvent();
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
@@ -258,7 +258,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},
 			title: 'Are you sure?',
-			fn: function(str) {
+			fn: function (str) {
 				if (str === 'ok') {
 					me.fireDeleteEvent();
 				}
@@ -266,11 +266,11 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 		});
 	},
 
-	fireDeleteEvent: function() {
+	fireDeleteEvent: function () {
 		this.fireEvent('delete-topic-comment', this.record, this);
 	},
 
-	onEditPost: function(e) {
+	onEditPost: function (e) {
 		e.stopEvent();
 		var parentCmp = this.up('forums-topic');
 		if (parentCmp && parentCmp.clearSearchHit) {

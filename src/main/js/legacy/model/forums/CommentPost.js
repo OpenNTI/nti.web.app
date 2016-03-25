@@ -23,16 +23,16 @@ module.exports = exports = Ext.define('NextThought.model.forums.CommentPost', {
 		{ name: 'threadShowing', type: 'boolean', persist: false},
 		{ name: 'depth', type: 'number', persist: false},
 		{ name: 'creatorAvatarURL', type: 'AvatarUrl'},
-		{ name: 'flagged', type: 'Synthetic', fn: function(rec) {
+		{ name: 'flagged', type: 'Synthetic', fn: function (rec) {
 			return rec.isFlagged();
 		}},
-		{ name: 'liked', type: 'Synthetic', fn: function(rec) {
+		{ name: 'liked', type: 'Synthetic', fn: function (rec) {
 			return rec.isLiked();
 		}},
-		{ name: 'repliedTo', type: 'Synthetic', fn: function(rec) {
+		{ name: 'repliedTo', type: 'Synthetic', fn: function (rec) {
 			return rec.parent && rec.parent.get('Creator');
 		}},
-		{ name: 'likeCount', type: 'Synthetic', fn: function(rec) {
+		{ name: 'likeCount', type: 'Synthetic', fn: function (rec) {
 			return rec.getFriendlyLikeCount && rec.getFriendlyLikeCount();
 		}}
 	],
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.CommentPost', {
 	 *	Make a reply to this comment
 	 *	@return {NextThought.model.forums.CommentPost}
 	 */
-	makeReply: function() {
+	makeReply: function () {
 		var comment = this,
 			reply = this.self.create(),
 			parent = comment.get('NTIID'),
@@ -64,14 +64,14 @@ module.exports = exports = Ext.define('NextThought.model.forums.CommentPost', {
 	},
 
 
-	getThreadFilter: function() {
+	getThreadFilter: function () {
 		var id = this.get('NTIID');
 		//if my id is in the rec's references, its below me so return false, otherwise true
 		//if my id is in the references indexOf will return a number > 0 so we will return false to not show
 		//if my id isn't in the references indexOf will return -1 so we will return true
 		this.threadFilter = this.threadFilter || {
 			id: 'ThreadFilter-' + id,
-			filterFn: function(rec) {
+			filterFn: function (rec) {
 				return rec.get('references').indexOf(id) < 0;
 			}
 		};
@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.CommentPost', {
 	},
 
 
-	addChild: function(child) {
+	addChild: function (child) {
 		if (!this.children) { return; }
 
 		var count, p = this;

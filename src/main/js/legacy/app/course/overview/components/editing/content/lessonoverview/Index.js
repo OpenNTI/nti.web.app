@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	ui: 'course',
 	cls: 'course-overview course-overview-editing',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.setDataTransferHandler(NextThought.model.courses.overview.Group.mimeType, {
@@ -35,19 +35,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			.then(this.setCollection.bind(this, this.contents));
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.fillScreen(this.el.dom, 20);
 	},
 
-	onceLoaded: function() {
+	onceLoaded: function () {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
 
 		items = items || [];
 
-		return Promise.resolve(items.map(function(item) {
+		return Promise.resolve(items.map(function (item) {
 			if (item && item.onceLoaded) {
 				return item.onceLoaded();
 			}
@@ -56,20 +56,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}));
 	},
 
-	getOrderingItems: function() {
+	getOrderingItems: function () {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
 
 		return items || [];
 	},
 
-	getDropzoneTarget: function() {
+	getDropzoneTarget: function () {
 		var body = this.getBodyContainer();
 
 		return body && body.el && body.el.dom;
 	},
 
-	cacheHeight: function() {
+	cacheHeight: function () {
 		var dom = this.el && this.el.dom;
 
 		if (dom) {
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	uncacheHeight: function() {
+	uncacheHeight: function () {
 		var dom = this.el && this.el.dom;
 
 		if (dom) {
@@ -85,18 +85,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	beforeSetCollection: function(collection) {
+	beforeSetCollection: function (collection) {
 		this.lessonOverview = collection;
 		this.disableOrderingContainer();
 		this.cacheHeight();
 	},
 
-	afterSetCollection: function() {
+	afterSetCollection: function () {
 		this.uncacheHeight();
 		this.enableOrderingContainer();
 	},
 
-	buildFooter: function() {
+	buildFooter: function () {
 		return {
 			xtype: 'container',
 			cls: 'course-overview-footer',
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-	getCmpForRecord: function(record, transition, initialState) {
+	getCmpForRecord: function (record, transition, initialState) {
 		if (record instanceof NextThought.model.courses.overview.Group) {
 			return NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem.create({
 				record: record,
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		console.warn('Unknown type: ', record);
 	},
 
-	onGroupDrop: function(group, newIndex, moveInfo) {
+	onGroupDrop: function (group, newIndex, moveInfo) {
 		this.suspendUpdates();
 
 		return this.contents.moveToFromContainer(group, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.contents)
@@ -141,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			.then(this.resumeUpdates.bind(this));
 	},
 
-	addCardToGroup: function(group, card, newIndex, moveInfo) {
+	addCardToGroup: function (group, card, newIndex, moveInfo) {
 		this.suspendUpdates();
 
 		return group.moveToFromContainer(card, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.contents)

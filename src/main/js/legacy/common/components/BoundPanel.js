@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundPanel'
 	overflowY: 'auto',
 	cls: 'scrollable',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.store = this.store || Ext.getStore(this.storeId || '');
 		if (this.store) {
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundPanel'
 	},
 
 
-	getComponentConfigForRecord: function(rec) {
+	getComponentConfigForRecord: function (rec) {
 		var id = rec.getId();
 		if (rec.hidden || (this.filter && !this.filter(rec))) {
 			return null;
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundPanel'
 	},
 
 
-	showEmptyState: function() {
+	showEmptyState: function () {
 		if (this.emptyCmp && !this.emptyState) {
 			this.add(this.emptyCmp);
 			this.emptyState = true;
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundPanel'
 	},
 
 
-	hideEmptyState: function() {
+	hideEmptyState: function () {
 		if (this.down('[emptyState=true]')) {
 			this.down('[emptyState=true]').destroy();
 		}
@@ -74,9 +74,9 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundPanel'
 	},
 
 
-	shouldHide: function(records) {
+	shouldHide: function (records) {
 		var allHidden = true, me = this;
-		Ext.each(records, function(item) {
+		Ext.each(records, function (item) {
 			allHidden = allHidden && !!(item.hidden || (me.filter && !me.filter(item)));
 		});
 
@@ -84,10 +84,10 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundPanel'
 	},
 
 
-	onParentStoreLoad: function(store, records) {
+	onParentStoreLoad: function (store, records) {
 		var total = 0;
 
-		Ext.each(records, function(item) {
+		Ext.each(records, function (item) {
 			if (item.get('ID').indexOf('mycontacts') === 0) {
 				total += item.getFriendCount();
 			}
@@ -99,13 +99,13 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundPanel'
 	},
 
 
-	doRefresh: function(store) {
+	doRefresh: function (store) {
 		clearTimeout(this.refreshTask);
 		this.refreshTask = Ext.defer(this.onBoundStoreLoad, 100, this, [store]);
 	},
 
 
-	onBoundStoreLoad: function(store) {
+	onBoundStoreLoad: function (store) {
 		var items;
 
 		this.removeAll(true);
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundPanel'
 	},
 
 
-	onBoundStoreAdd: function(store, records, index) {
+	onBoundStoreAdd: function (store, records, index) {
 
 		var insertionPoint = this.defaultInsertPoint || index || 0,//force number
 			toAdd;
@@ -145,12 +145,12 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundPanel'
 	},
 
 
-	onBoundStoreRemove: function(store, record) {
+	onBoundStoreRemove: function (store, record) {
 		console.debug('remove', arguments);
 
 		var me = this;
 
-		function itr(i) {
+		function itr (i) {
 			if (i.recordId === ParseUtils.escapeId(record.getId())) {
 				me.removeItem(i, true);
 				return false;
@@ -166,17 +166,17 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundPanel'
 	},
 
 
-	removeAllItems: function() {
+	removeAllItems: function () {
 		this.removeAll(true);
 	},
 
 
-	insertItem: function(insertAt, toInsert) {
+	insertItem: function (insertAt, toInsert) {
 		return this.insert(insertAt, toInsert);
 	},
 
 
-	removeItem: function(o, autoDestroy) {
+	removeItem: function (o, autoDestroy) {
 		return this.remove(o, autoDestroy);
 	}
 });

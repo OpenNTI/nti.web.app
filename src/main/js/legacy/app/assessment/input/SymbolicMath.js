@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Symbolic
 		{ cls: 'mathsymbol neq', 'data-latex': '\\\\neq', 'data-qtip': 'Insert not Equal'}
 	]),
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.getEl().select('.mathsymbol'), {
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Symbolic
 
 		Ext.fly(s).set({'data-label': this.part.get('answerLabel')});
 
-		s.focus = function() {
+		s.focus = function () {
 			if (this.focusing) {return;}
 			this.focusing = true;
 			jQuery(this).focus();
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Symbolic
 	//don't let the base class's function run, we're using pure CSS for this version
 	setupAnswerLabel: Ext.emptyFn,
 
-	updateSubmission: function() {
+	updateSubmission: function () {
 		console.log('keypress', 'disable?', !this.getValue());
 		if (!this.getValue()) {
 			this.disableSubmission();
@@ -61,14 +61,14 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Symbolic
 		}
 	},
 
-	attachKeyListeners: function(span) {
+	attachKeyListeners: function (span) {
 		var s = span || this.mathquillSpan,
 			me = this,
 			r = jQuery(s),
 			timer;
 
 		//bind on kepress so we can adjust size:
-		r.bind('keyup.mathquill', function(e) {
+		r.bind('keyup.mathquill', function (e) {
 			//if enter:
 			if (e.which === 13) { //enter
 				me.submitOrTabNext(s);
@@ -84,19 +84,19 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Symbolic
 			}*/
 
 			clearTimeout(timer);
-			timer = setTimeout(function() {
+			timer = setTimeout(function () {
 				me.adjustSize();
 				me.updateSubmission();
 			}, 100);
 
-		}).bind('paste', function(e) {
+		}).bind('paste', function (e) {
 			e.stopPropagation();
 			e.preventDefault();
 			return false;
 		});
 	},
 
-	adjustSize: function() {
+	adjustSize: function () {
 		var currentHeight = this.inputBox.getHeight();
 
 		if (currentHeight !== this.lastHeight) {
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Symbolic
 		this.lastHeight = currentHeight;
 	},
 
-	updateSolutionButton: function() {
+	updateSolutionButton: function () {
 		var solutions, solutionNode, ab, orNode;
 		this.callParent(arguments);
 		if (!this.submitted) {
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Symbolic
 		ab.update('');
 
 		solutions = this.part.get('solutions');
-		Ext.each(solutions, function(s, idx) {
+		Ext.each(solutions, function (s, idx) {
 			solutionNode = document.createElement('span');
 			ab.appendChild(solutionNode);
 			solutionNode.innerHTML = s.get('value');
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Symbolic
 		});
 	},
 
-	mathSymbolClicked: function(e) {
+	mathSymbolClicked: function (e) {
 		if (this.submitted) {return;}
 		var t = e.getTarget();
 		jQuery(this.mathquillSpan).mathquill('write', t.getAttribute('data-latex'));
@@ -141,11 +141,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Symbolic
 		this.updateSubmission();
 	},
 
-	getPreviousMenuItemType: function() {
+	getPreviousMenuItemType: function () {
 		return 'symbolicmath-menuitem';
 	},
 
-	getValue: function() {
+	getValue: function () {
 		var v = jQuery(this.mathquillSpan).mathquill('latex') || '';
 		v = this.self.sanitizeMathquillOutput(v);
 
@@ -154,45 +154,45 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Symbolic
 		return v;
 	},
 
-	sanitizeForMathquill: function(latex) {
+	sanitizeForMathquill: function (latex) {
 		return this.self.transformToMathquillInput(latex);
 	},
 
-	setValue: function(latex) {
+	setValue: function (latex) {
 		latex = this.sanitizeForMathquill(latex);
 		console.log('Setting value to ', latex);
 		jQuery(this.mathquillSpan).mathquill('latex', latex);
 		this.adjustSize();
 	},
 
-	reset: function() {
+	reset: function () {
 		this.callParent(arguments);
 		this.setValue('');
 		jQuery(this.mathquillSpan).mathquill('revert').mathquill('editable');
 		this.attachKeyListeners();
 	},
 
-	markCorrect: function() {
+	markCorrect: function () {
 		this.callParent(arguments);
 		this.disableMathquillEditable();
 	},
 
-	markIncorrect: function() {
+	markIncorrect: function () {
 		this.callParent(arguments);
 		this.disableMathquillEditable();
 	},
 
-	disableMathquillEditable: function() {
+	disableMathquillEditable: function () {
 		console.log('disabling');
 		var latex = this.getValue();
 		jQuery(this.mathquillSpan).mathquill('revert').html(latex).mathquill();
 	},
 
-	focus: function() {
+	focus: function () {
 		this.mathquillSpan.focus();
 	},
 
-	checkit: function() {
+	checkit: function () {
 		//Mathquil dies a horrible death (crashes the browser) in certain cases
 		//if we don't do a mouseup here.  Without this fix (hack?) selecting some text
 		//and while the mouse is down triggering a submission with enter causes the browser
@@ -201,8 +201,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Symbolic
 		jQuery(this.mathquillSpan).mouseup();
 		this.callParent(arguments);
 	}
-}, function() {
-	this.transformToMathquillInput = function(latex) {
+}, function () {
+	this.transformToMathquillInput = function (latex) {
 		//Mathquill will produce latex it can't consume.
 		//Specifically we see issues arround the spacing
 		//comands \; \: and \,. We could probably patch this
@@ -227,7 +227,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Symbolic
 		return latex;
 	};
 
-	this.sanitizeMathquillOutput = function(v) {
+	this.sanitizeMathquillOutput = function (v) {
 		//console.log('Got raw value', v);
 		v = v.trim();
 		//v = v.replace(/\\quad/g, '\\space');

@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.components.Sugge
 	})),
 
 
-	setEntity: function(entity) {
+	setEntity: function (entity) {
 		var me = this,
 			link = entity.getLink('SuggestedContacts');
 
@@ -31,15 +31,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.components.Sugge
 
 		me.removeAll();
 		Service.request(link)
-			.then(function(responseBody) {
+			.then(function (responseBody) {
 				var json = JSON.parse(responseBody) || {},
 					items = json.Items;
 				return ParseUtils.parseItems(items);
 			})
-			.then(function(entities) {
+			.then(function (entities) {
 				if (entities.length) {
 					entities.slice(0, 4)
-						.map(function(entity) {
+						.map(function (entity) {
 							return {
 								entity: entity,
 								name: entity.getName(),
@@ -51,17 +51,17 @@ module.exports = exports = Ext.define('NextThought.app.profiles.components.Sugge
 					me.hide();
 				}
 			})
-			.fail(function() {
+			.fail(function () {
 				me.hide();
 			});
 	},
 
-	setUser: function() {
+	setUser: function () {
 		this.setEntity.apply(this, arguments);
 	},
 
 
-	addEntry: function(data) {
+	addEntry: function (data) {
 		var entry = Ext.get(this.entryTpl.append(this.entriesEl, data));
 
 		if (data && data.entity) {
@@ -69,5 +69,5 @@ module.exports = exports = Ext.define('NextThought.app.profiles.components.Sugge
 		}
 	},
 
-	getValues: function() {}
+	getValues: function () {}
 });

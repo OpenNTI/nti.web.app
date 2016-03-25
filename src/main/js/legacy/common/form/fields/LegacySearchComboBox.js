@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 		if (this.options) {
 			this.addOptions(this.options);
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.options) {
@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	showError: function() {
+	showError: function () {
 		this.addCls('error');
 
 		if (this.onError) {
@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	removeError: function() {
+	removeError: function () {
 		this.removeCls('error');
 
 		if (this.onRemoveError) {
@@ -100,14 +100,14 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	onOptionsScroll: function(e) {
+	onOptionsScroll: function (e) {
 		e.stopPropagation();
 
 		this.maybeStopScrollBleed(e);
 	},
 
 
-	toggleOptions: function(e) {
+	toggleOptions: function (e) {
 		if (e.getTarget('.disabled')) {
 			return;
 		}
@@ -124,10 +124,10 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	addOptions: function(options) {
-		function convert(o, index) {
+	addOptions: function (options) {
+		function convert (o, index) {
 			o = o.hasOwnProperty('value') ? Ext.clone(o) : {value: o, text: o.toString()};
-			o.toString = function() {return this.text;};
+			o.toString = function () {return this.text;};
 			o.index = index;
 			return o;
 		}
@@ -142,7 +142,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	showOptions: function() {
+	showOptions: function () {
 		if (!this.rendered) { return; }
 
 		if (!this.optionsEl.hasCls('hidden')) { return; }
@@ -160,7 +160,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	hideOptions: function() {
+	hideOptions: function () {
 		if (!this.rendered) { return; }
 
 		var active = this.optionsEl.down('li.active');
@@ -175,7 +175,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	filterOptions: function(value, show) {
+	filterOptions: function (value, show) {
 		var options = this.options,
 			active, current, regex;
 
@@ -228,7 +228,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	activateOption: function(el, silent) {
+	activateOption: function (el, silent) {
 		this.optionsEl.select('.active').removeCls('active');
 		el = Ext.get(el.dom || el);
 		el.addCls('active');
@@ -238,7 +238,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	selectOptionClick: function(e) {
+	selectOptionClick: function (e) {
 		var option = e.getTarget('li');
 
 		if (!option) {
@@ -255,7 +255,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	 * @param  {Node} el the li to select
 	 * @param  {Boolean} silent don't fire an event
 	 */
-	selectOption: function(el, silent) {
+	selectOption: function (el, silent) {
 		var index = el.getAttribute('data-index'),
 			option = this.options[index],
 			value = option && option.value,
@@ -264,7 +264,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 		this.__setValue(text || el.textContent, value || el.getAttribute('data-value'), silent);
 	},
 
-	__setValue: function(text, value, silent) {
+	__setValue: function (text, value, silent) {
 		this.currentText = text;
 		this.currentValue = value;
 		this.inputEl.dom.value = this.currentText;
@@ -279,15 +279,15 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 		}
 	},
 
-	selectNextMatch: function(e) {
-		function str(o) {return (o || '').toString();}
+	selectNextMatch: function (e) {
+		function str (o) {return (o || '').toString();}
 		var me = this,
 			ch = String.fromCharCode(e.getCharCode()),
 			options = this.options,
 			selected = options.map(str).indexOf(this.currentText),
 			matcher, o, len = options.length, start;
 
-		function clear() { me.__inputBuffer = '^'; }
+		function clear () { me.__inputBuffer = '^'; }
 
 		if (/[A-Z]/i.test(ch)) {
 			if (me.__inputBuffer.charAt(me.__inputBuffer.length - 1) !== ch) {
@@ -323,13 +323,13 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	deselect: function() {
+	deselect: function () {
 		delete this.currentText;
 		delete this.currentValue;
 	},
 
 
-	inputKeyDown: function(e) {
+	inputKeyDown: function (e) {
 		var charCode = e.getCharCode(),
 			open = !this.optionsEl.hasCls('hidden'),
 			current = this.optionsEl.down('li.active'), next;
@@ -408,7 +408,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	inputKeyPress: function(e) {
+	inputKeyPress: function (e) {
 		var value = this.inputEl.getValue();
 
 		if (this.editable) {
@@ -426,8 +426,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	inputBlur: function() {
-		function search(o) {
+	inputBlur: function () {
+		function search (o) {
 			return o.text.toLowerCase() === value;
 		}
 
@@ -449,7 +449,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	inputFocus: function() {
+	inputFocus: function () {
 		this.inputEl.removeCls('error');
 		this.filterOptions('');
 		clearTimeout(this.__hideOptionsTimer);
@@ -457,11 +457,11 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 		this.removeError();
 	},
 
-	clear: function() {
+	clear: function () {
 		this.__setValue('', null);
 	},
 
-	setValue: function(value, silent) {
+	setValue: function (value, silent) {
 		var li;
 
 		this.currentValue = value;
@@ -480,13 +480,13 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.LegacySear
 	},
 
 
-	getValue: function() {
+	getValue: function () {
 		return this.currentValue || this.currentText;
 	},
 
 
-	getOptions: function() {
-		return (this.options || []).map(function(option) {
+	getOptions: function () {
+		return (this.options || []).map(function (option) {
 			return option.value;
 		});
 	}

@@ -22,18 +22,18 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.Slide
 		]}
 	]),
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {},this.data);
 		this.target = this.data.href;
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.el, 'click', 'onSlideVideoClicked', this);
 	},
 
-	onSlideVideoClicked: function(e) {
+	onSlideVideoClicked: function (e) {
 		SlideDeck.openFromDom(this.contentElement, this.reader);
 	}
 });

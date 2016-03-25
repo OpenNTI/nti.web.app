@@ -35,10 +35,10 @@ module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 
 
 
-	updateSeries: function(v) {
-		function sum(a, v) { return a + v.value; }
-		function p(v) { return v.value / total; }
-		function str(p, i) {
+	updateSeries: function (v) {
+		function sum (a, v) { return a + v.value; }
+		function p (v) { return v.value / total; }
+		function str (p, i) {
 			return {
 				percent: (p * 100).toFixed(0),
 				label: v[i].label,
@@ -58,14 +58,14 @@ module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.addCls('pie');
 		this.callParent(arguments);
 		this.renderData.title = this.getTitle();
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.canvas = Ext.getDom(this.canvasEl);
 
@@ -81,17 +81,17 @@ module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 	},
 
 
-	redraw: function() {
+	redraw: function () {
 		if (!this.context) {return;}
 		this.context.canvas.width += 0; //set the canvas dirty and make it clear on next draw.
 		this.drawPie();
 	},
 
 
-	percentToRadians: function(percent) { return ((percent * 360) * Math.PI) / 180; },
+	percentToRadians: function (percent) { return ((percent * 360) * Math.PI) / 180; },
 
 
-	sumTo: function(i) {
+	sumTo: function (i) {
 		var sum = 0, j = 0;
 		for (j; j < i; j++) {
 			sum += this.data[j];
@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 	},
 
 
-	drawSegment: function(i) {
+	drawSegment: function (i) {
 		var ctx = this.context,
 			radius = Math.floor(this.canvas.width / 4),
 
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Pie', {
 	},
 
 
-	drawPie: function() {
+	drawPie: function () {
 		var ctx = this.context,
 			centerX = this.canvas.width / 2,
 			centerY = this.canvas.height / 2 - 10,

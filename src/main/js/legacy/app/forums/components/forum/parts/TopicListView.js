@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 			var show = false;
 
 			if (isFeature('analytic-reports')) {
-				((value.Links && value.Links.asJSON()) || []).forEach(function(link) {
+				((value.Links && value.Links.asJSON()) || []).forEach(function (link) {
 					if (link.rel.indexOf('report-') >= 0) {
 						show = true;
 						return false;
@@ -86,14 +86,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	}),
 
 
-	collectData: function() {
+	collectData: function () {
 		var r = this.callParent(arguments);
 		r.kind = 'Comment';
 		return r;
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		var me = this;
 		me.callParent(arguments);
 
@@ -124,14 +124,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.loadMask.renderTo = this.ownerCt.el;
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.loadMask, {
@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	beforeLoadMask: function() {
+	beforeLoadMask: function () {
 		var top = this.el.dom.getBoundingClientRect().top,
 			height = Ext.Element.getViewportHeight() - top;
 
@@ -156,21 +156,21 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	afterLoadMask: function() {
+	afterLoadMask: function () {
 		this.el.setStyle({height: 'auto'});
 		this.removeCls('loading');
 	},
 
 
-	fillInData: function(records, search) {
-		(records || []).forEach(function(record) {
+	fillInData: function (records, search) {
+		(records || []).forEach(function (record) {
 			var newest = record.get('NewestDescendant'),
 				creator = newest && newest.get('Creator');
 
 			record.setMatchCount(search);
 
 			if (creator) {
-				UserRepository.getUser(creator, function(u) {
+				UserRepository.getUser(creator, function (u) {
 					newest.set('Creator', u);
 					record.set('NewestDescendant', newest);
 				});
@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	onItemClick: function(record, node, index, e) {
+	onItemClick: function (record, node, index, e) {
 		var controls = e.getTarget('.controls'),
 			reports = e.getTarget('.reports');
 
@@ -207,7 +207,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	newTopic: function(header, forum, el) {
+	newTopic: function (header, forum, el) {
 		this.WindowActions.showWindow('new-topic', null, el, null, {
 			forum: forum
 		});
@@ -218,13 +218,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		active: {
 			direction: 'DESC',
 			property: 'NewestDescendantCreatedTime',
-			sorterFn: function(a, b) {
+			sorterFn: function (a, b) {
 				a = new Date(a.get('NewestDescendantCreatedTime')).setHours(0, 0, 0);
 				b = new Date(b.get('NewestDescendantCreatedTime')).setHours(0, 0, 0);
 
 				return a - b;
 			},
-			getGroupString: function(val) {
+			getGroupString: function (val) {
 				var created = new Date(val.get('NewestDescendantCreatedTime'));
 
 				created.setHours(0, 0, 0, 0);
@@ -235,13 +235,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		created: {
 			direction: 'DESC',
 			property: 'CreatedTime',
-			sorterFn: function(a, b) {
+			sorterFn: function (a, b) {
 				a = new Date(a.get('CreatedTime')).setHours(0, 0, 0);
 				b = new Date(b.get('CreatedTime')).setHours(0, 0, 0);
 
 				return a - b;
 			},
-			getGroupString: function(val) {
+			getGroupString: function (val) {
 				var created = new Date(val.get('CreatedTime'));
 
 				created.setHours(0, 0, 0, 0);
@@ -280,9 +280,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	setGrouper: function(by) {
+	setGrouper: function (by) {
 
-		function getHeader(name, value) {
+		function getHeader (name, value) {
 			var header = NextThought.model.forums.CommunityHeadlineTopic.create();
 
 			header.set(grouper.property, value);
@@ -297,7 +297,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 
 		me.store.clearGrouping();
 
-		me.store.each(function(rec) {
+		me.store.each(function (rec) {
 			if (rec.get('isGroupHeader')) {
 				headers.push(rec);
 			}
@@ -308,7 +308,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		if (grouper) {
 			me.store.sort({
 				direction: 'DESC',
-				sorterFn: function(a, b) {
+				sorterFn: function (a, b) {
 					if (a.get('isGroupHeader')) {
 						return 1;
 					}
@@ -321,7 +321,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 			});
 
 			me.store.group(grouper, 'DESC');
-			me.store.getGroups(false).forEach(function(g) {
+			me.store.getGroups(false).forEach(function (g) {
 				if (Ext.isEmpty(g.children) || g.name === 'Today') { return; }
 				var child = g.children[0],
 					header = getHeader(g.name, child.get(grouper.property));
@@ -334,14 +334,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	addGrouper: function() {
+	addGrouper: function () {
 		var by = this.filterBar.getSortBy();
 
 		this.setGrouper(by);
 	},
 
 
-	restoreState: function(state) {
+	restoreState: function (state) {
 		state.currentPage = state.currentPage || {};
 		state.currentPage[this.record.getId()] = state.currentPage[this.record.getId()] || 1;
 		state.sortBy = state.sortBy || 'active';
@@ -352,7 +352,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	applyState: function(state) {
+	applyState: function (state) {
 		if (this.applyingState) { return Promise.resolve();}
 
 		var me = this,
@@ -389,10 +389,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		me.setGrouper('');
 		me.store.sorters.removeAll();
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			me.mon(store, {
 				single: true,
-				load: function(store, records) {
+				load: function (store, records) {
 					delete params.batchAround;
 
 					me.fillInData(records, state.search);
@@ -423,13 +423,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	updateUI: function() {
+	updateUI: function () {
 		this.filterBar.setSortBy(this.currentSortBy);
 		this.filterBar.setSearch(this.currentSearch);
 	},
 
 
-	updateView: function(store, records) {
+	updateView: function (store, records) {
 		//since this is called as an event handler the second arg may not be an array of records.
 		records = (Ext.isArray(records) && records) || null;
 		var by = this.filterBar.getSortBy(),
@@ -455,7 +455,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	updateFilter: function() {
+	updateFilter: function () {
 		var state = this.currentState || {},
 			newPage = state.currentPage[this.record.getId()] !== this.currentPage;
 
@@ -488,7 +488,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	updateSort: function(sort, search) {
+	updateSort: function (sort, search) {
 		this.currentSortBy = sort;
 		this.currentSearch = search;
 
@@ -496,14 +496,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 	},
 
 
-	updateSearch: function(search) {
+	updateSearch: function (search) {
 		this.currentSearch = search;
 
 		this.updateFilter();
 	},
 
 
-	updatePage: function(page) {
+	updatePage: function (page) {
 		this.currentPage = page;
 
 		this.updateFilter();

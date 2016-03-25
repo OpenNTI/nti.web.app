@@ -15,7 +15,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Aud
 
 	renderTpl: Ext.DomHelper.markup({tag: 'audio', id: '{id}-audioEl', cn: {tag: 'tpl', 'for': 'sources', cn: [
 			{tag: 'source', src: '{source}', type: '{type}'}
-		]}
+	]}
 	}),
 
 
@@ -24,8 +24,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Aud
 	},
 
 
-	beforeRender: function() {
-		function trn(o) {
+	beforeRender: function () {
+		function trn (o) {
 			if (o.service !== 'html5' || o.source.length !== o.type.length) {
 				console.error('Bad audio source', o);
 				return [];
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Aud
 			return a;
 		}
 
-		function flatten(agg, v) { return agg.concat(v); }
+		function flatten (agg, v) { return agg.concat(v); }
 
 		Ext.apply(this.renderData, {
 			sources: this.domObject.querySelectorAll('object[type$=audiosource]').toArray()
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Aud
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.on({
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Aud
 	},
 
 
-	toggle: function() {
+	toggle: function () {
 		if (this.dead) {return;}
 
 		var p = Ext.getDom(this.audioEl);
@@ -91,11 +91,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.Aud
 	},
 
 
-	playing: function() { this.addCls('playing'); },
-	stopped: function() { this.removeCls('playing'); },
+	playing: function () { this.addCls('playing'); },
+	stopped: function () { this.removeCls('playing'); },
 
 
-	cannotPlay: function() {
+	cannotPlay: function () {
 		this.stopped();
 		this.dead = true;
 		this.addCls('noplay');

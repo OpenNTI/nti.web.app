@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.model.app.MoveInfo', {
 	],
 
 
-	getDataForTransfer: function() {
+	getDataForTransfer: function () {
 		return {
 			MimeType: this.mimeType,
 			OriginContainer: this.get('OriginContainer'),
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.model.app.MoveInfo', {
 	},
 
 
-	getIndex: function() {
+	getIndex: function () {
 		var index = this.get('OriginIndex');
 
 		return parseInt(index, 10);

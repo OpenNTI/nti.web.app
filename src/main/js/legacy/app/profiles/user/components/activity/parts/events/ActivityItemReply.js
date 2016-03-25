@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		deleteEl: '.reply-options .delete'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		var D = Ext.dom.Element.DISPLAY;
 		this.flagEl.setVisibilityMode(D);
 		this.editEl.setVisibilityMode(D);
@@ -81,14 +81,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.mon(this.editEl, 'click', this.onEdit, this);
 	},
 
-	onEdit: function() {
+	onEdit: function () {
 		var parent = this.up('profile-activity-item');
 
 		if (this.replyMode || parent.replyMode) { return; }
 		this.callParent(arguments);
 	},
 
-	shouldRevealReplies: function() {
+	shouldRevealReplies: function () {
 		this.mun(this.replyButton, 'click', this.shouldRevealReplies, this);
 
 		var activityItem = this.up('profile-activity-item');
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		activityItem.fireEvent('reveal-replies');
 	},
 
-	setRecord: function() {
+	setRecord: function () {
 		this.callParent(arguments);
 
 		if (!this.rendered) {

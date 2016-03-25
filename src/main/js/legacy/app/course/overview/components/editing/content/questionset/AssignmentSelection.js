@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	)),
 
 
-	getItemData: function(item) {
+	getItemData: function (item) {
 		var now = new Date(),
 			dueDate = item.getDueDate();
 
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-	itemMatchesSearch: function(item, searchTerm) {
+	itemMatchesSearch: function (item, searchTerm) {
 		var title = item.get('title'),
 			ntiid = item.getId(),
 			matches = false;
@@ -44,14 +44,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	onSelectItem: function(el) {
+	onSelectItem: function (el) {
 		if (el) {
 			el.classList.add('selected');
 		}
 	},
 
 
-	onUnselectItem: function(el) {
+	onUnselectItem: function (el) {
 		if (el) {
 			el.classList.remove('selected');
 		}

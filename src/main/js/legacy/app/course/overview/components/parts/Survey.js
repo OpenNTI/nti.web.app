@@ -28,8 +28,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		reportEl: '.report'
 	},
 
-	constructor: function(config) {
-		var n = config.node || {getAttribute: function(a) { return config[a];} },
+	constructor: function (config) {
+		var n = config.node || {getAttribute: function (a) { return config[a];} },
 			links = n.getAttribute('Links'),
 			ntiid = n.getAttribute('ntiid');
 
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.callParent([config]);
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.startEl, 'click', this.onStart.bind(this));
@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onStart: function(e) {
+	onStart: function (e) {
 		var ntiid = this.data.ntiid;
 
 		if (!e.getTarget('.closed')) {
@@ -85,13 +85,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	showReport: function(e) {
+	showReport: function (e) {
 		var win = Ext.widget('iframe-window', {
-				width: 'max',
-				saveText: getString('NextThought.view.menus.Reports.savetext'),
-				link: this.data.reportLink,
-				loadingText: getString('NextThought.view.menus.Reports.loadingtext')
-			});
+			width: 'max',
+			saveText: getString('NextThought.view.menus.Reports.savetext'),
+			link: this.data.reportLink,
+			loadingText: getString('NextThought.view.menus.Reports.loadingtext')
+		});
 
 		win.show();
 	}

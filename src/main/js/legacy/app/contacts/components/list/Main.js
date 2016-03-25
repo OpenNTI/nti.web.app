@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.list.
 				scale: 'large',
 				name: 'cancel',
 				text: getString('NextThought.view.account.contacts.createlist.Main.cancel'),
-				handler: function(b) {
+				handler: function (b) {
 					b.up('window').close();
 				}
 			},
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.list.
 		]}
 	],
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.down('[name=name]'), {
 			scope: this,
@@ -59,12 +59,12 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.list.
 		this.GroupActions = NextThought.app.groups.Actions.create();
 	},
 
-	getListName: function() {
+	getListName: function () {
 		var name = this.down('[name=name]').getValue();
 		return name ? name.trim() : name;
 	},
 
-	specialkey: function(el, event) {
+	specialkey: function (el, event) {
 		var val = el.lastValue,
 			empty = Ext.isEmpty(val);
 
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.list.
 		}
 	},
 
-	changed: function(value, t) {
+	changed: function (value, t) {
 		var val = value.trim(),
 			empty = Ext.isEmpty(val),
 			btn = this.query('[name=submit]', this)[0];
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.list.
 		}
 	},
 
-	showError: function(errorText) {
+	showError: function (errorText) {
 		var box = this.down('[name=error]');
 
 		errorText = errorText || getString('NextThought.view.account.contacts.createlist.Main.unknown-error');
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.list.
 		box.show();
 	},
 
-	submitClicked: function() {
+	submitClicked: function () {
 		var w = this.up('window'),
 			btn = this.down('[name=submit]'),
 			me = this;
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.list.
 			});
 	},
 
-	clearError: function() {
+	clearError: function () {
 		var box = this.down('[name=error]');
 		box.hide();
 	}

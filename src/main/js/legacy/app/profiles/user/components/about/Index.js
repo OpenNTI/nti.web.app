@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var me = this;
@@ -88,12 +88,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		me.on('clear-errors', me.clearError.bind(me));
 
-		me.profileParts.forEach(function(part) {
+		me.profileParts.forEach(function (part) {
 			part.doEdit = me.doEdit.bind(me);
 		});
 	},
 
-	startResourceViewed: function() {
+	startResourceViewed: function () {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && !this.hasCurrentTimer) {
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	stopResourceViewed: function() {
+	stopResourceViewed: function () {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && this.hasCurrentTimer) {
@@ -115,19 +115,19 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	onAddedToParentRouter: function() {
+	onAddedToParentRouter: function () {
 		var me = this;
 
-		this.communitiesCmp.gotoSeeAll = this.groupsCmp.gotoSeeAll = function() {
+		this.communitiesCmp.gotoSeeAll = this.groupsCmp.gotoSeeAll = function () {
 			me.gotoMembership();
 		};
 	},
 
-	doEdit: function() {
+	doEdit: function () {
 		this.pushRoute('Edit', '/edit');
 	},
 
-	isDataEmpty: function(user) {
+	isDataEmpty: function (user) {
 		var data = user.getAboutData(),
 			empty = true;
 
@@ -138,10 +138,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return empty;
 	},
 
-	setEmpty: function(user) {
+	setEmpty: function (user) {
 		this.emptyCmp.show();
 
-		this.profileParts.forEach(function(part) {
+		this.profileParts.forEach(function (part) {
 			part.hide();
 		});
 
@@ -150,15 +150,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.suggestedCmp.show();
 	},
 
-	removeEmpty: function() {
+	removeEmpty: function () {
 		this.emptyCmp.hide();
 
-		this.profileParts.forEach(function(part) {
+		this.profileParts.forEach(function (part) {
 			part.show();
 		});
 	},
 
-	userChanged: function(user, isMe) {
+	userChanged: function (user, isMe) {
 		var cmps = this.profileParts;
 
 		if (this.activeUser !== user) {
@@ -184,17 +184,17 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		user.getMemberships(true);
 
-		cmps = cmps.map(function(cmp) {
+		cmps = cmps.map(function (cmp) {
 			return cmp.setUser(user, isMe);
 		});
 
 		return Promise.all(cmps);
 	},
 
-	validate: function() {
+	validate: function () {
 		var msgs = [];
 
-		this.profileParts.forEach(function(part) {
+		this.profileParts.forEach(function (part) {
 			var msg = part.getErrorMsg && part.getErrorMsg();
 
 			if (msg) {
@@ -210,21 +210,21 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return !msgs.length;
 	},
 
-	removeErrors: function() {
+	removeErrors: function () {
 		var error = this.down('[errorName=this]');
 
 		if (error) {
 			this.remove(error);
 		}
 
-		this.profileParts.forEach(function(part) {
+		this.profileParts.forEach(function (part) {
 			if (part.clearAllErrors) {
 				part.clearAllErrors();
 			}
 		});
 	},
 
-	clearError: function(name) {
+	clearError: function (name) {
 		var error = this.down('[errorName="' + name + '"]');
 
 		if (error) {
@@ -232,7 +232,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	showError: function(error) {
+	showError: function (error) {
 		if (!this.down('[errorName="' + error.name + '"]')) {
 			this.insert(0, {
 				xtype: 'box',
@@ -242,17 +242,17 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	getValues: function() {
+	getValues: function () {
 		var values = this.aboutCmp.getValues();
 
 		values.education = this.educationCmp.getValues();
 		values.positions = this.positionsCmp.getValues();
-		values.interests = Ext.Array.filter(this.interestsCmp.getValues() || [], function(i) { return !Ext.isEmpty(i); });
+		values.interests = Ext.Array.filter(this.interestsCmp.getValues() || [], function (i) { return !Ext.isEmpty(i); });
 
 		return values;
 	},
 
-	saveEdits: function() {
+	saveEdits: function () {
 		var me = this,
 			user = me.activeUser,
 			hasChanged = false,
@@ -260,7 +260,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			fields = Object.keys(newValues),
 			oldValues = {};
 
-		fields.forEach(function(field) {
+		fields.forEach(function (field) {
 			oldValues[field] = user.get(field);
 
 			//force falsy values to be null
@@ -277,10 +277,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			return Promise.resolve(true);
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			user.set(newValues);
 			user.save({
-				success: function(resp) {
+				success: function (resp) {
 					var o = resp.responseText,
 						newUser = ParseUtils.parseItems(o)[0];
 
@@ -292,7 +292,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					user.set('Links', newUser.get('Links'));
 					fulfill(true);
 				},
-				failure: function(resp) {
+				failure: function (resp) {
 					var msg = Ext.JSON.decode(resp.responseText, true) || {};
 
 					if (me.aboutCmp.showError(msg)) {
@@ -331,7 +331,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-	saveProfile: function() {
+	saveProfile: function () {
 		var me = this;
 
 		if (!this.validate()) {
@@ -339,33 +339,33 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 
 		return me.saveEdits()
-			.then(function() {
+			.then(function () {
 				me.pushRoute('About', '/');
 			});
 	},
 
-	cancelEdit: function() {
+	cancelEdit: function () {
 		this.pushRoute('About', '/');
 	},
 
-	setSchema: function(schema) {
-		this.profileParts.forEach(function(part) {
+	setSchema: function (schema) {
+		this.profileParts.forEach(function (part) {
 			if (part.setSchema) {
 				part.setSchema(schema);
 			}
 		});
 	},
 
-	setHeaderCmp: function(header) {
+	setHeaderCmp: function (header) {
 		this.headerCmp = header;
 	},
 
-	allowNavigation: function() {
+	allowNavigation: function () {
 		if (!this.hasCls('editing') || this.successfulEdit) {
 			return true;
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Ext.Msg.show({
 				title: 'Attention!',
 				msg: 'You are currently editing your profile. Would you like to leave without saving?',
@@ -384,12 +384,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-	showAbout: function() {
+	showAbout: function () {
 		this.setTitle('About');
 		this.removeErrors();
 		delete this.successfulEdit;
 
-		this.profileParts.forEach(function(part) {
+		this.profileParts.forEach(function (part) {
 			if (part.setUneditable) {
 				part.setUneditable();
 			}
@@ -398,7 +398,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.removeCls('editing');
 	},
 
-	showEdit: function() {
+	showEdit: function () {
 		this.setTitle('About');
 
 		delete this.successfulEdit;
@@ -410,7 +410,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		this.headerCmp.showEditingActions(this.saveProfile.bind(this), this.cancelEdit.bind(this));
 
-		this.profileParts.forEach(function(part) {
+		this.profileParts.forEach(function (part) {
 			if (part.setEditable) {
 				part.setEditable();
 			}

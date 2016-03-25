@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstanceA
 	],
 
 
-	__precacheEntry: function() {
+	__precacheEntry: function () {
 		var instance = this.get('CourseInstance');
 
 		instance.setEnrollment(this);
@@ -23,12 +23,12 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstanceA
 	},
 
 
-	getCourseCatalogEntry: function() {
+	getCourseCatalogEntry: function () {
 		return this.get('CourseInstance').getCourseCatalogEntry();
 	},
 
 	//return false since admins are enrolled for credit
-	isOpen: function() {
+	isOpen: function () {
 		return false;
 	},
 
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstanceA
 	 * 
 	 * @return {Boolean} whether or not this is a content editor
 	 */
-	isContentEditor: function(){
+	isContentEditor: function () {
 		var instance = this.get('CourseInstance');
 		return !(instance && instance.get('GradeBook'));
 	}

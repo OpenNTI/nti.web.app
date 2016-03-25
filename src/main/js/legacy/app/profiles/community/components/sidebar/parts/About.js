@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 		aboutEl: '.about'
 	},
 
-	updateEntity: function(entity) {
+	updateEntity: function (entity) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateEntity.bind(this, entity));
 			return;

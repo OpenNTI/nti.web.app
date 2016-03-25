@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 							validateOnChange: true,
 							paymentFormatter: 'formatCardNumber',
 							//validator: 'validateCardNumber',
-							getter: function(val) {
+							getter: function (val) {
 								return val.replace(/[^0-9]/g, '');
 							}
 						},
@@ -160,12 +160,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	],
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var me = this;
 
-		me.on('enable-recipient', function() {
+		me.on('enable-recipient', function () {
 			var checkbox = me.recipientCheckbox || me.down('[name=enable_recipient]');
 
 			me.recipientCheckbox = checkbox;
@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	fillInDefaults: function(values) {
+	fillInDefaults: function (values) {
 		var user = $AppConfig.userObject,
 			realname = user.get('realname'),
 			email = user.get('email');
@@ -202,7 +202,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	changed: function(name, value) {
+	changed: function (name, value) {
 		this.mixins.form.changed.apply(this, arguments);
 
 		if (name === 'enable_recipient') {
@@ -215,19 +215,19 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	setRecipient: function(enabled) {
+	setRecipient: function (enabled) {
 		var items = this.recipientItems || [
-				this.down('[name=to_first_name]'),
-				this.down('[name=to_last_name]'),
-				this.down('[name=receiver]'),
-				this.down('[name=message]'),
-				this.down('[name=sender]')
-			];
+			this.down('[name=to_first_name]'),
+			this.down('[name=to_last_name]'),
+			this.down('[name=receiver]'),
+			this.down('[name=message]'),
+			this.down('[name=sender]')
+		];
 
 
 		this.recipientItems = items;
 
-		items.forEach(function(item) {
+		items.forEach(function (item) {
 			item[enabled ? 'removeCls' : 'addCls']('disabled');
 		});
 
@@ -235,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	getPricingInfo: function(formValue) {
+	getPricingInfo: function (formValue) {
 		var desc = this.callParent(arguments);
 
 		desc.from = formValue.from;

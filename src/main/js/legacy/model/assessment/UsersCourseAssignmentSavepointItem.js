@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.UsersCourseA
 	],
 
 
-	getQuestionSetSubmission: function() {
+	getQuestionSetSubmission: function () {
 		var sub = this.get('Submission'),
 			parts = sub && sub.get('parts');
 

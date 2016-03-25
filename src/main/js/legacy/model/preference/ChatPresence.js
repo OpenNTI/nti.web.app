@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.model.preference.ChatPresence
 
 	subPreferences: ['Active', 'Available', 'Away', 'DND'],
 
-	getResourceUrl: function() {
+	getResourceUrl: function () {
 		var base = this.callParent(arguments);
 
 		return base + '/ChatPresence';

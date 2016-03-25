@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 	cls: 'chat-window no-gutter chat-transcript-window scrollable',
 	titleTpl: '{0} (Chat History)',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.WindowActions = NextThought.app.windows.Actions.create();
 
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 			this.remove(this.loadingCmp);
 		} else {
 			Service.request(this.record.getLink('transcript'))
-				.then(function(value) {
+				.then(function (value) {
 					return ParseUtils.parseItems(value)[0];
 				})
 				.then(this.insertTranscript.bind(this))
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 
 	//don't "fixScroll" in chat windows.
 
-	afterRender: function() {
+	afterRender: function () {
 		var btn;
 		this.callParent(arguments);
 		this.mon(this, 'control-clicked', this.maybeEnableButtons);
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 		}
 	},
 
-	maybeEnableButtons: function() {
+	maybeEnableButtons: function () {
 		var b = this.down('[flagButton]');
 		//if there is checked stuff down there, enable button
 		if (this.el.down('.control.checked')) {
@@ -84,12 +84,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 		}
 	},
 
-	flagMessages: function() {
+	flagMessages: function () {
 		var allFlaggedEntries = this.el.query('.message.flagged'),
-				allFlaggedMessages = [],
-				guid, m;
+			allFlaggedMessages = [],
+			guid, m;
 
-		Ext.each(allFlaggedEntries, function(e) {
+		Ext.each(allFlaggedEntries, function (e) {
 			var arg = {};
 			guid = e.getAttribute('data-guid');
 			m = this.messageMap[guid];
@@ -103,12 +103,12 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 		this.fireEvent('flag-messages', allFlaggedMessages, this);
 	},
 
-	onFlagToolClicked: function() {
+	onFlagToolClicked: function () {
 		var transcriptViews = this.query('chat-transcript'),
-				btn = this.el.down('.flag-for-moderation');
+			btn = this.el.down('.flag-for-moderation');
 
 		this.el.toggleCls('moderating');
-		Ext.each(transcriptViews, function(v) {
+		Ext.each(transcriptViews, function (v) {
 			v.toggleModerationPanel();
 		});
 		btn.toggleCls('moderating');
@@ -122,36 +122,36 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 		}
 	},
 
-	clearFlagOptions: function() {
+	clearFlagOptions: function () {
 		var allFlaggedEntries = this.el.query('.message.flagged'),
-				checked = this.el.query('.control.checked');
-		Ext.each(allFlaggedEntries, function(f) {
+			checked = this.el.query('.control.checked');
+		Ext.each(allFlaggedEntries, function (f) {
 			Ext.fly(f).toggleCls('flagged');
 			if (!Ext.fly(f).hasCls('confirmFlagged')) {
 				Ext.fly(f).toggleCls('confirmFlagged');
 			}
 		});
-		Ext.each(checked, function(f) {
+		Ext.each(checked, function (f) {
 			Ext.fly(f).toggleCls('checked');
 		});
 		this.maybeEnableButtons();
 	},
 
-	failedToLoadTranscript: function() {
+	failedToLoadTranscript: function () {
 		alert({
-				  msg: 'There was an error loading chat history for:' + (this.errorMsgSupplement || ''),
-				  width: 450
-			  });
+				 msg: 'There was an error loading chat history for:' + (this.errorMsgSupplement || ''),
+				 width: 450
+			 });
 		this.destroy();
 	},
 
-	setTitleInfo: function(contributors) {
+	setTitleInfo: function (contributors) {
 		var me = this;
 		// list = me.down('chat-gutter');
 
-		UserRepository.getUser(contributors, function(users) {
+		UserRepository.getUser(contributors, function (users) {
 			var names = [];
-			Ext.each(users, function(u) {
+			Ext.each(users, function (u) {
 				if (!isMe(u)) {
 					names.push(u.getName());
 				}
@@ -167,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 		});
 	},
 
-	insertTranscript: function(record) {
+	insertTranscript: function (record) {
 		this.setTitleInfo(record.get('Contributors'));
 
 		var time = record.get('RoomInfo').get('CreatedTime') || record.get('CreatedTime'),
@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 			this.messageMap = {};
 		}
 
-		Ext.each(messages, function(m) {
+		Ext.each(messages, function (m) {
 			this.messageMap[IdCache.getIdentifier(m.getId())] = m;
 		}, this);
 
@@ -190,10 +190,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Window', 
 		});
 
 	}
-}, function() {
+}, function () {
 	NextThought.app.windows.StateStore.register(NextThought.model.TranscriptSummary.mimeType, this);
 	NextThought.app.windows.StateStore.register(NextThought.model.Transcript.mimeType, this);
-	NextThought.app.windows.StateStore.registerCustomResolver(NextThought.model.TranscriptSummary.mimeType, function(id) {
+	NextThought.app.windows.StateStore.registerCustomResolver(NextThought.model.TranscriptSummary.mimeType, function (id) {
 		var store = NextThought.app.chat.StateStore.getInstance();
 
 		id = store.getTranscriptIdForRoomInfo(id);

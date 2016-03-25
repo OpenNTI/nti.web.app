@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Transition', {
 	 *
 	 * @return {String} event name
 	 */
-	__getTransitionEndEventName: function(el) {
+	__getTransitionEndEventName: function (el) {
 		var i,
 			transitions = {
 				'transition': 'transitionend',
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Transition', {
 		}
 	},
 
-	applyTransition: function(transition) {
+	applyTransition: function (transition) {
 		if (!transition) { return; }
 
 		this.addCls(['transition', transition.cls, 'before']);
@@ -52,13 +52,13 @@ module.exports = exports = Ext.define('NextThought.mixins.Transition', {
 	},
 
 
-	__doTransition: function(transition) {
+	__doTransition: function (transition) {
 		var el = this.el && this.el.dom,
 			eventName = this.__getTransitionEndEventName(el),
 			cleanUp = this.__afterTransition.bind(this, transition);
 
 		if (eventName) {
-			el.addEventListener(eventName, function transitionEnd() {
+			el.addEventListener(eventName, function transitionEnd () {
 				cleanUp();
 
 				el.removeEventListener(eventName, transitionEnd);
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Transition', {
 	},
 
 
-	__afterTransition: function(transition) {
+	__afterTransition: function (transition) {
 		if (transition.removeWhenDone) {
 			this.destroy();
 		} else {

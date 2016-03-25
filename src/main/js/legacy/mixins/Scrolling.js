@@ -3,7 +3,7 @@ var UtilScrolling = require('../util/Scrolling');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
-	initScrolling: function() {
+	initScrolling: function () {
 		if (!this.Scrolling) {
 			this.Scrolling = {
 				scrollingEl: NextThought.util.Scrolling.getPageScrollingEl()
@@ -11,22 +11,22 @@ module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
 		}
 	},
 
-	getPageScrollingEl: function() {
+	getPageScrollingEl: function () {
 		return NextThought.util.Scrolling.getPageScrollingEl();
 	},
 
-	getPageScrollHeight: function() {
+	getPageScrollHeight: function () {
 		return NextThought.util.Scrolling.getPageScrollingHeight();
 	},
 
-	getPageHeight: function() {
+	getPageHeight: function () {
 		return NextThought.util.Scrolling.getPageHeight();
 	},
 
-	findScrollableParent: function(node) {
+	findScrollableParent: function (node) {
 		this.initScrolling();
 
-		function isScrollable(node) {
+		function isScrollable (node) {
 			var computed = node && getComputedStyle(node);
 
 			//if the node is scrollable and the overflow allows it to scroll
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
 		return node !== this.Scrolling.scrollingEl && node !== document && node;
 	},
 
-	maybeStopScrollBleed: function(e) {
+	maybeStopScrollBleed: function (e) {
 		var target = this.findScrollableParent(e.target),
 			scrollTop = target && target.scrollTop,
 			scrollHeight = target && target.scrollHeight,
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
 			delta = e.wheelDelta,
 			up = delta > 0;
 
-		function prevent() {
+		function prevent () {
 			e.stopPropagation();
 			e.preventDefault();
 			e.returnValue = false;
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
 		}
 	},
 
-	scrollPageTo: function(position) {
+	scrollPageTo: function (position) {
 		this.initScrolling();
 
 		var page = this.getPageScrollingEl();
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Scrolling', {
 		page.scrollTop = position;
 	},
 
-	scrollPageToTop: function() {
+	scrollPageToTop: function () {
 		this.scrollPageTo(0);
 	}
 });

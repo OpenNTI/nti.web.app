@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 	layout: 'none',
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.HTML_ELEMENT = document.getElementsByTagName('html')[0];
@@ -24,23 +24,23 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 		});
 	},
 
-	addOpenCls: function() {
+	addOpenCls: function () {
 		if (this.HTML_ELEMENT) {
 			this.HTML_ELEMENT.classList.add('prompt-open');
 		}
 	},
 
-	removeOpenCls: function() {
+	removeOpenCls: function () {
 		if (this.HTML_ELEMENT) {
 			this.HTML_ELEMENT.classList.remove('prompt-open');
 		}
 	},
 
-	addStackClasses: function() {
+	addStackClasses: function () {
 		var stack = this.promptStack,
 			lastIndex = stack.length - 1;
 
-		stack.forEach(function(prompt, index) {
+		stack.forEach(function (prompt, index) {
 			if (index < lastIndex) {
 				prompt.onCovered();
 			} else {
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 		});
 	},
 
-	openPrompt: function(cmp, type, fulfill, reject, data) {
+	openPrompt: function (cmp, type, fulfill, reject, data) {
 		if (!cmp) { return; }
 
 		var index = this.promptStack.length,
@@ -63,15 +63,15 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 			scrollingParent: this.el,
 			cmp: cmp,
 			data: data,
-			onSubmit: function(value) {
+			onSubmit: function (value) {
 				close()
-					.then(function() {
+					.then(function () {
 						fulfill(value);
 					});
 			},
-			onCancel: function(reason) {
+			onCancel: function (reason) {
 				close()
-					.then(function() {
+					.then(function () {
 						reject(reason);
 					});
 			}
@@ -83,14 +83,14 @@ module.exports = exports = Ext.define('NextThought.app.prompt.Index', {
 		this.addStackClasses();
 	},
 
-	closePrompt: function(index) {
+	closePrompt: function (index) {
 		var stack = this.promptStack,
 			removeOpenCls = this.removeOpenCls.bind(this),
 			addStackClasses = this.addStackClasses.bind(this),
 			prompt = stack.peek(),
 			allow;
 
-		function close() {
+		function close () {
 			prompt.destroy();
 			stack.pop();
 

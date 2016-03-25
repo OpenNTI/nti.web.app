@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	bodyCls: 'items',
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.setDataTransfer(new NextThought.model.app.MoveInfo({
@@ -44,13 +44,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.setCollection(this.outlineNode);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.truncateLabels();
 	},
 
-	truncateLabels: function() {
+	truncateLabels: function () {
 		var me = this,
 			label = me.currentHeader && me.currentHeader.el && me.currentHeader.el.dom.querySelector('.label');
 
@@ -64,28 +64,28 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	getOrderingItems: function() {
+	getOrderingItems: function () {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
 
 		return items || [];
 	},
 
-	getDropzoneTarget: function() {
+	getDropzoneTarget: function () {
 		var body = this.getBodyContainer();
 
 		return body && body.el && body.el.dom;
 	},
 
-	getDragHandle: function() {
+	getDragHandle: function () {
 		return this.el && this.el.dom && this.el.dom.querySelector('.outline-row');
 	},
 
-	beforeSetCollection: function() {
+	beforeSetCollection: function () {
 		this.disableOrderingContainer();
 	},
 
-	afterSetCollection: function() {
+	afterSetCollection: function () {
 		if (this.isEditing) {
 			this.enableOrderingContainer();
 		}
@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	setHeaderForCollection: function(){
+	setHeaderForCollection: function () {
 		this.callParent(arguments);
 
 		if (this.selectedRecord) {
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	buildHeader: function(collection) {
+	buildHeader: function (collection) {
 		var startDate = collection.get('startDate'),
 			classes = ['outline-row', collection.get('type')],
 			items = [];
@@ -140,13 +140,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-	buildFooter: function(collection) {
+	buildFooter: function (collection) {
 		var me = this,
 			OutlinePrompt = NextThought.app.course.overview.components.editing.outline.Prompt,
 			allowedTypes = this.outlineNode.getAllowedTypes();
 
 		if (this.isEditing) {
-			return allowedTypes.reduce(function(acc, type) {
+			return allowedTypes.reduce(function (acc, type) {
 				var inlineEditor = OutlinePrompt.getInlineEditor(type),
 					button;
 
@@ -176,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onClick: function(e) {
+	onClick: function (e) {
 		var isDisabled = Boolean(e.getTarget('.disabled'));
 
 		if (e.getTarget('.outline-row') && (!isDisabled || this.isEditing)) {
@@ -184,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	selectRecord: function(record, scrollTo) {
+	selectRecord: function (record, scrollTo) {
 		var body = this.getBodyContainer(),
 			header = this.currentHeader,
 			bodyListEl = this.el && this.el.up('.outline-list');
@@ -202,14 +202,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			header.removeCls('out-of-view');
 		}
 
-		body.items.each(function(item) {
+		body.items.each(function (item) {
 			if (item && item.selectRecord) {
 				item.selectRecord(record, scrollTo);
 			}
 		});
 	},
 
-	stopEditing: function() {
+	stopEditing: function () {
 		var body = this.getBodyContainer();
 		if (this.addNodeCmp) {
 			this.remove(this.addNodeCmp, true);
@@ -218,7 +218,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		delete this.isEditing;
 	},
 
-	getCmpForRecord: function(record) {
+	getCmpForRecord: function (record) {
 		if (record instanceof NextThought.model.courses.navigation.CourseOutlineNode) {
 			return NextThought.app.course.overview.components.outline.OutlineNode.create({
 				outlineNode: record,
@@ -231,7 +231,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		console.warn('Unknown type: ', record);
 	},
 
-	onDrop: function(record, newIndex, moveInfo) {
+	onDrop: function (record, newIndex, moveInfo) {
 		return this.outlineNode.moveToFromContainer(record, newIndex, moveInfo.get('OriginIndex'), moveInfo.get('OriginContainer'), this.outline);
 	}
 });

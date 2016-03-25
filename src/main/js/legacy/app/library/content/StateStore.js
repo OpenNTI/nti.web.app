@@ -9,18 +9,18 @@ module.exports = exports = Ext.define('NextThought.app.library.content.StateStor
 	CONTENT_BUNDLES: [],
 
 
-	getContentPackages: function() {
+	getContentPackages: function () {
 		return this.CONTENT_PACKAGES;
 	},
 
 
-	getContentBundles: function() {
+	getContentBundles: function () {
 		return this.CONTENT_BUNDLES;
 	},
 
 
-	setContentPackages: function(packages) {
-		packages = packages.map(function(p) {
+	setContentPackages: function (packages) {
+		packages = packages.map(function (p) {
 			return NextThought.model.ContentBundle.fromPackage(p);
 		});
 
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.library.content.StateStor
 	},
 
 
-	setContentBundles: function(bundles) {
+	setContentBundles: function (bundles) {
 		this.CONTENT_BUNDLES = bundles;
 
 		this.fireEvent('content-bundles-set', bundles);
@@ -42,8 +42,8 @@ module.exports = exports = Ext.define('NextThought.app.library.content.StateStor
 	 * TODO: needs unit tests
 	 * @param  {Object} used keys are the ids of content packages to remove
 	 */
-	deDupContentPackages: function(used) {
-		this.CONTENT_PACKAGES = this.CONTENT_PACKAGES.filter(function(fakeBundle) {
+	deDupContentPackages: function (used) {
+		this.CONTENT_PACKAGES = this.CONTENT_PACKAGES.filter(function (fakeBundle) {
 			var packages = fakeBundle.getContentPackages(),
 				p = packages[0];
 
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.library.content.StateStor
 	},
 
 
-	getTitle: function(index) {
+	getTitle: function (index) {
 		var title, i, packages = this.CONTENT_PACKAGES, content;
 
 		for (i = 0; i < packages.length; i++) {
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.library.content.StateStor
 	},
 
 
-	__findIn: function(list, fn) {
+	__findIn: function (list, fn) {
 		var i, item = null;
 
 		for (i = 0; i < list.length; i++) {
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.library.content.StateStor
 	},
 
 
-	findContentBy: function(fn) {
+	findContentBy: function (fn) {
 		var bundles = this.CONTENT_BUNDLES || [],
 			packages = this.CONTENT_PACKAGES || [],
 			content;
@@ -94,8 +94,8 @@ module.exports = exports = Ext.define('NextThought.app.library.content.StateStor
 	},
 
 
-	findContent: function(id) {
-		function fn(rec) {
+	findContent: function (id) {
+		function fn (rec) {
 			return rec.get('NTIID') === id;
 		}
 
@@ -109,12 +109,12 @@ module.exports = exports = Ext.define('NextThought.app.library.content.StateStor
 	},
 
 
-	findContentByPriority: function(fn) {
+	findContentByPriority: function (fn) {
 		var priorities = {},
 			keys = [],
 			result = [];
 
-		function find(bundle) {
+		function find (bundle) {
 			var priority = fn.call(null, bundle);
 
 			if (priority && priority > 0) {
@@ -135,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.library.content.StateStor
 
 		keys.sort();
 
-		keys.forEach(function(key) {
+		keys.forEach(function (key) {
 			result = result.concat(priorities[key]);
 		});
 
@@ -143,8 +143,8 @@ module.exports = exports = Ext.define('NextThought.app.library.content.StateStor
 	},
 
 
-	findForNTIID: function(ntiid) {
-		return this.findContentBy(function(bundle) {
+	findForNTIID: function (ntiid) {
+		return this.findContentBy(function (bundle) {
 			var contentPackages = bundle.get('ContentPackages'),
 				i;
 
@@ -159,9 +159,9 @@ module.exports = exports = Ext.define('NextThought.app.library.content.StateStor
 	},
 
 
-	hasContent: function(bundle) {
+	hasContent: function (bundle) {
 		var id = bundle.getId();
 
-		return !! this.findContent(id);
+		return !!this.findContent(id);
 	}
 });

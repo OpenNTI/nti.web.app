@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.common.toast.Window', {
 		buttonRowEl: '.button-row'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {},{
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.common.toast.Window', {
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.closeEl, 'click', this.close, this);
 		if (!this.iconCls) {
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.common.toast.Window', {
 		Ext.each(this.buttons, this.renderButton, this);
 	},
 
-	renderButton: function(button) {
+	renderButton: function (button) {
 		var b = this.buttonTpl.append(this.buttonRowEl, button, true);
 		this.mon(b, 'click',
 				Ext.Function.createSequence(
@@ -69,12 +69,12 @@ module.exports = exports = Ext.define('NextThought.common.toast.Window', {
 	},
 
 
-	setActedOn: function(clickEvent,dom,eOpts) {
+	setActedOn: function (clickEvent,dom,eOpts) {
 		this.actedOn = eOpts.buttonCfg || true;
 	},
 
 
-	close: function(e) {
+	close: function (e) {
 		if (e) { e.stopEvent(); }
 		var size = Ext.dom.Element.getViewSize();
 		this.animate({

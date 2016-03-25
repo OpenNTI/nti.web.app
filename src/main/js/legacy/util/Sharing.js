@@ -7,40 +7,40 @@ var {isMe} = require('legacy/util/Globals');
 module.exports = exports = Ext.define('NextThought.util.Sharing', {
 
 
-	shareWith: function(sharable, people, callback) {
+	shareWith: function (sharable, people, callback) {
 		var sharedTo = Ext.Array.merge(sharable.get('sharedWith') || [], people);
 		return this.setSharedWith(sharable, sharedTo, callback);
 	},
 
-	canSharePublicly: function() {
+	canSharePublicly: function () {
 		return !!Service.get('SiteCommunity');
 	},
 
-	entitiesDefiningPublic: function(scopeProvider) {
+	entitiesDefiningPublic: function (scopeProvider) {
 		return null;
 	},
 
-	setSharedWith: function(sharable, sharedTo, callback) {
+	setSharedWith: function (sharable, sharedTo, callback) {
 		var success = true;
 
 		if (Service.canShare()) {
 			sharable.set('sharedWith', sharedTo);
 		}
 		sharable.save({
-						  async: !!callback,
-						  callback: function(record, operation) {
+					async: !!callback,
+					callback: function (record, operation) {
 							  success = operation.success;//if we're synchronous
 							  if (callback) {
 								  Ext.callback(callback, null, arguments);
 							  }
 						  }
-					  });
+				});
 
 		return success;
 	},
 
 
-	resolveValue: function(value) {
+	resolveValue: function (value) {
 		var result = null;
 
 		//if there are no results yet, fall back to the given value (it may be blank as well)
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 		//clone the result to make sure we don't mess anything up when modifiying the list.
 		result = result.slice();
 
-		Ext.each(result, function(r, i, a) {
+		Ext.each(result, function (r, i, a) {
 			if (ParseUtils.isNTIID(r)) {
 				a[i] = UserRepository.getStore().findRecord('NTIID', r, 0, false, true, true) || r; //HACK!!
 				if (!Ext.isString(a[i])) {
@@ -69,27 +69,27 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 	},
 
 
-	getAppUserCommunities: function() {
+	getAppUserCommunities: function () {
 		return $AppConfig.userObject.getCommunities(true);
 	},
 
 
 	//TODO need to check published status for the case of blogs NO?
-	isPublic: function(sharedWith, scopeProvider) {
+	isPublic: function (sharedWith, scopeProvider) {
 		if (Ext.isEmpty(sharedWith)) {
 			return false;
 		}
 
 
 		var communities = [], sharedWithIds,
-				publicScope;
+			publicScope;
 
 		publicScope = this.entitiesDefiningPublic(scopeProvider) || [];
 		if (Ext.isEmpty(publicScope)) {
 			return false;
 		}
 
-		sharedWithIds = Ext.Array.map(sharedWith, function(u) {
+		sharedWithIds = Ext.Array.map(sharedWith, function (u) {
 			return u.getId ? u.getId() : u;
 		});
 
@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 
 
 	//Needs the ntiids of the entities in the sharingInfo
-	getTagSharingInfo: function(sharingInfo, ntiids) {
+	getTagSharingInfo: function (sharingInfo, ntiids) {
 		var result, explicitNtiids = ntiids || [],
 			isPublic = sharingInfo.publicToggleOn;
 
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 
 		//if the post is public add the ntiids to the tags
 		if (isPublic) {
-			Ext.each(explicitNtiids, function(u) {
+			Ext.each(explicitNtiids, function (u) {
 				if (ParseUtils.isNTIID(u)) {
 					result.tags.push(u);
 				}
@@ -124,18 +124,18 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 	},
 
 
-	getCurrentSharingInfo: function() {
+	getCurrentSharingInfo: function () {
 		return Ext.getCmp('content').currentBundle;
 	},
 
 
-	sharedWithForSharingInfo: function(sharingInfo, scopeProvider) {
+	sharedWithForSharingInfo: function (sharingInfo, scopeProvider) {
 		if (Ext.isEmpty(sharingInfo)) {
 			return [];
 		}
 		var isPublic = sharingInfo.publicToggleOn && this.canSharePublicly(),
-				entities = sharingInfo.entities || [],
-				targets;
+			entities = sharingInfo.entities || [],
+			targets;
 
 		if (isPublic) {
 			targets = this.entitiesDefiningPublic(scopeProvider) || [];
@@ -147,12 +147,12 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 	},
 
 
-	sharedWithToSharedInfo: function(sharedWith, scopeProvider) {
+	sharedWithToSharedInfo: function (sharedWith, scopeProvider) {
 		var sp = scopeProvider,
-				isPublic = this.isPublic(sharedWith, sp),
-				list = [],
-				publicEntities = this.entitiesDefiningPublic(scopeProvider) || [],
-				shareInfo = {publicToggleOn: isPublic};
+			isPublic = this.isPublic(sharedWith, sp),
+			list = [],
+			publicEntities = this.entitiesDefiningPublic(scopeProvider) || [],
+			shareInfo = {publicToggleOn: isPublic};
 
 		if (Ext.isEmpty(sharedWith)) {
 			shareInfo.entities = [];
@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 		}
 
 		if (isPublic) {
-			Ext.each(sharedWith, function(i) {
+			Ext.each(sharedWith, function (i) {
 				if (!Ext.Array.contains(publicEntities, i.getId ? i.getId() : i)) {
 					list.push(i);
 				}
@@ -178,8 +178,8 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 
 
 	//get the sharedInfo from the sharedWith and the tags
-	tagShareToSharedInfo: function(sharedWith, tags, published) {
-		var nts = Ext.Array.filter(tags, function(t) {
+	tagShareToSharedInfo: function (sharedWith, tags, published) {
+		var nts = Ext.Array.filter(tags, function (t) {
 			return ParseUtils.isNTIID(t);
 		});
 
@@ -196,7 +196,7 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 	},
 
 
-	getLongTextFromShareInfo: function(shareInfo, tpl, maxLength) {
+	getLongTextFromShareInfo: function (shareInfo, tpl, maxLength) {
 		var explicitEntities = shareInfo.entities,
 			isPublic = shareInfo.publicToggleOn,
 			prefix = isPublic && 'Public',
@@ -207,11 +207,11 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 		}
 
 		return UserRepository.getUser(explicitEntities)
-			.then(function(resolvedUsers) {
+			.then(function (resolvedUsers) {
 				var toResolve = resolvedUsers.length,
-				nameMap = {};
+					nameMap = {};
 
-				Ext.each(resolvedUsers || [], function(u) {
+				Ext.each(resolvedUsers || [], function (u) {
 					var dn;
 
 					if (!u.Unresolved) {
@@ -226,11 +226,11 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 				});
 
 				if (tpl) {
-					names = Ext.Array.map(names, function(name, idx) {
+					names = Ext.Array.map(names, function (name, idx) {
 						var u = nameMap[idx],
 							tplArgs = [name, ((u && u.getProfileUrl && u.getProfileUrl()) ? idx : '')];
 						return tpl.apply(tplArgs);
-						});
+					});
 				}
 
 				others = toResolve - names.length;
@@ -249,7 +249,7 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 	},
 
 
-	getShortTextFromShareInfo: function(shareInfo) {
+	getShortTextFromShareInfo: function (shareInfo) {
 		var explicitEntities = shareInfo.entities,
 			isPublic = shareInfo.publicToggleOn,
 			prefix = isPublic ? 'Public and' : 'Shared with',
@@ -267,7 +267,7 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 
 		//Exactly one, resolve the user then callback
 		return UserRepository.getUser(explicitEntities.first())
-			.then(function(resolved) {
+			.then(function (resolved) {
 				var dn = resolved.Unresolved !== true ? resolved.getName() : null;
 
 				if (Ext.isEmpty(dn) || dn.toLowerCase() === 'unknown') {
@@ -281,11 +281,11 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 	},
 
 
-	getLongSharingDisplayText: function(shareWith, callback, scope, tpl, maxLength) {
+	getLongSharingDisplayText: function (shareWith, callback, scope, tpl, maxLength) {
 		var shareInfo = this.sharedWithToSharedInfo(shareWith);
 
 		return this.getLongTextFromShareInfo(shareInfo, tpl, maxLength)
-			.then(function(str) {
+			.then(function (str) {
 				if (callback) {
 					callback.call(scope, str);
 				}
@@ -295,11 +295,11 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 	},
 
 
-	getShortSharingDisplayText: function(shareWith, callback, scope) {
+	getShortSharingDisplayText: function (shareWith, callback, scope) {
 		var shareInfo = this.sharedWithToSharedInfo(shareWith);
 
 		return this.getShortTextFromShareInfo(shareInfo)
-			.then(function(str) {
+			.then(function (str) {
 				if (callback) {
 					callback.call(scope, str);
 				}
@@ -310,11 +310,11 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 
 
 	//Take the shared with and tags of a post and returns the long sharing text
-	getTagSharingLongText: function(sharedWith, tags, published, callback, scope, tpl, maxLength) {
+	getTagSharingLongText: function (sharedWith, tags, published, callback, scope, tpl, maxLength) {
 		var shareInfo = this.tagShareToSharedInfo(sharedWith, tags, published);
 
 		return this.getLongTextFromShareInfo(shareInfo, tpl, maxLength)
-			.then(function(str) {
+			.then(function (str) {
 				if (callback) {
 					callback.call(scope, str);
 				}
@@ -325,11 +325,11 @@ module.exports = exports = Ext.define('NextThought.util.Sharing', {
 
 
 	//Takes the shared with and the tags of a post and returns the short sharing text
-	getTagSharingShortText: function(sharedWith, tags, published, callback, scope) {
+	getTagSharingShortText: function (sharedWith, tags, published, callback, scope) {
 		var shareInfo = this.tagShareToSharedInfo(sharedWith, tags, published);
 
 		return this.getShortTextFromShareInfo(shareInfo)
-			.then(function(str) {
+			.then(function (str) {
 				if (callback) {
 					callback.call(scope, str);
 				}

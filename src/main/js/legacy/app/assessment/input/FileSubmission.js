@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			tabIndex: this.tabIndexTracker.getNext()
 		});
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	onFileLoaded: function(event) {
+	onFileLoaded: function (event) {
 		this.value.value = event.target.result;
 
 		this.saveProgress();
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		var q = this.questionSet,
 			assignment = q && q.associatedAssignment;
 
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.dueString = this.dueEl.getHTML();
 
 		this.callParent(arguments);
@@ -101,13 +101,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	monitor: function() {
+	monitor: function () {
 		var reader = this.filereader,
 			me = this;
 
 		this.mon(this.inputField, {
 			scope: this,
-			change: function(e) {
+			change: function (e) {
 				var p = this.part,
 					t = e.getTarget(),
 					file = t.files[0],
@@ -136,12 +136,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	unsupported: function() {
+	unsupported: function () {
 		alert(getString('NextThought.view.assessment.input.FileSubmission.unsupported-feature'));
 	},
 
 
-	deleteFile: function() {
+	deleteFile: function () {
 		var me = this,
 			name = me.value.filename;
 
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 				'cancel': 'Cancel'
 			},
 			title: 'Are you sure?',
-			fn: function(str) {
+			fn: function (str) {
 				if (str === 'ok') {
 					delete me.value;
 					me.el.mask('Deleting...');
@@ -167,12 +167,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	getValue: function() {
+	getValue: function () {
 		return this.value;
 	},
 
 
-	setProgress: function(v) {
+	setProgress: function (v) {
 		this.unmask();
 
 		if (v) {
@@ -182,7 +182,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 		}
 	},
 
-	setValue: function(v) {
+	setValue: function (v) {
 		/*
 		We're expecting a RAW object here. Not a model. So the times will be the raw timestamps.
 			CreatedTime
@@ -195,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	setNotUploaded: function() {
+	setNotUploaded: function () {
 		this.value = null;
 
 		this.setLabel(this.renderData.label);
@@ -206,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	setUploadedNotSubmitted: function(v) {
+	setUploadedNotSubmitted: function (v) {
 		v = v || {};
 
 		var q = this.questionSet,
@@ -226,7 +226,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	setFileSubmitted: function(v) {
+	setFileSubmitted: function (v) {
 		v = v || {};
 
 		var q = this.questionSet,
@@ -246,7 +246,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	setLabel: function(label) {
+	setLabel: function (label) {
 		this.labelBoxEl.update(label);
 
 		if (label && label !== this.renderData.label) {
@@ -257,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	setSubText: function(uploadedNotSubmitted) {
+	setSubText: function (uploadedNotSubmitted) {
 		if (uploadedNotSubmitted) {
 			this.dueEl.update('Ready for Submission');
 		} else {
@@ -266,7 +266,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	setDownloadButton: function(url) {
+	setDownloadButton: function (url) {
 		if (url) {
 			this.addCls('has-file');
 			this.removeCls('no-file');
@@ -286,7 +286,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	markIncorrect: Ext.emptyFn,
 
 
-	markUploaded: function(date, doNotDisable) {
+	markUploaded: function (date, doNotDisable) {
 		var q = this.questionSet,
 			assignment = q && q.associatedAssignment;
 
@@ -304,11 +304,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.FileSubm
 	},
 
 
-	markBad: function() {
+	markBad: function () {
 		this.labelBoxEl.update(getString('NextThought.view.assessment.input.FileSubmission.unsupported-type'));
 	},
 
-	reset: function() {
+	reset: function () {
 		var dontSetBack,
 			q = this.questionSet;
 

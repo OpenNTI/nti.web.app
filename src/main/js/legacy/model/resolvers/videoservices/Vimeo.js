@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 		//URL: '//vimeo.com/api/v2/video/{0}.json',
 		URL: '//vimeo.com/api/oembed.json?url=http%3A//vimeo.com/{0}',
 
-		resolvePosterForID: function(id) {
+		resolvePosterForID: function (id) {
 			var cache = this.RESOLVED, url, promise;
 
 			if (cache[id]) {
@@ -24,14 +24,14 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 
 			promise = Service.request({url: url, withCredentials: false})
 				.then(Ext.decode)
-				.then(function(o) { return o[0] || o;})
-				.then(function(json) {
+				.then(function (o) { return o[0] || o;})
+				.then(function (json) {
 					json.poster = json.thumbnail_large || json.thumbnail_url;
 					json.thumbnail = json.thumbnail_medium || json.thumbnail_url;
 
 					return json;
 				})
-				.fail(function(reason) {
+				.fail(function (reason) {
 					console.log('Unable to resolve vimeo poster: ', reason);
 					return {
 						poster: Globals.CANVAS_BROKEN_IMAGE.src,
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 
 		EMBED_URL: 'https://www.vimeo.com/{0}',
 
-		getEmbedURL: function(url) {
+		getEmbedURL: function (url) {
 			var id = this.getIdFromURL(url);
 
 			return Ext.String.format(this.EMBED_URL, id);
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 		ID_REGEX: /(?:https?:)?\/\/(?:(www|player)\.)?vimeo.com\/(?:(channels|video)\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/,
 
 		//http://stackoverflow.com/questions/13286785/get-video-id-from-vimeo-url
-		getIdFromURL: function(url) {
+		getIdFromURL: function (url) {
 			var match = url.match(this.ID_REGEX);
 
 			if (match && match[5]) {
@@ -69,13 +69,13 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 
 		URL_MATCHES: /vimeo/,
 
-		urlIsFor: function(url) {
+		urlIsFor: function (url) {
 			return this.URL_MATCHES.test(url);
 		}
 	},
 
 
-	constructor: function(data) {
+	constructor: function (data) {
 		var source = data.source;
 		this.callParent(arguments);
 
@@ -90,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 	},
 
 
-	resolve: function() {
+	resolve: function () {
 		return this.self.resolvePosterForID(this.videoId);
 	}
 });

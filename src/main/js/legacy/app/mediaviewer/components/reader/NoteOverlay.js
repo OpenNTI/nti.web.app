@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		{tag: 'span', cls: 'count', 'data-line': '{line}', 'data-count': '{count}', html: '{count}'}
 	])),
 
-	constructor: function(config) {
+	constructor: function (config) {
 		Ext.apply(this, config);
 		this.mixins.observable.constructor.call(this);
 
@@ -75,19 +75,19 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			enableTitle: true,
 			width: 325,//match the content note window's width...a bit hackish, but this will get it from growing wider for now.
 			listeners: {
-				'deactivated-editor': function() {
+				'deactivated-editor': function () {
 					me.fireEvent('editorDeactivated');
 					me.reader.suspendMoveEvents = false;
 				},
-				'activated-editor': function() {
+				'activated-editor': function () {
 					me.fireEvent('editorActivated');
 					me.reader.suspendMoveEvents = true;
 				},
-				'no-title-content': function() {return !isFeature('notepad');},//require title if notepad is a feature
-				grew: function() {
+				'no-title-content': function () {return !isFeature('notepad');},//require title if notepad is a feature
+				grew: function () {
 					var h = this.getHeight(),
-							b = h + this.getY(),
-							v = Ext.Element.getViewportHeight();
+						b = h + this.getY(),
+						v = Ext.Element.getViewportHeight();
 					if (b > v) {
 						this.setY(v - h);
 					}
@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		me.on('beforedeactivate', 'beforeDeactivate');
 	},
 
-	registerReaderView: function(view) {
+	registerReaderView: function (view) {
 		this.noteOverlayManager.push(view);
 		this.mon(view, {
 			scope: this,
@@ -121,18 +121,18 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		view.noteOverlay = this;
 	},
 
-	beforeDeactivate: function(){
+	beforeDeactivate: function () {
 		return this.reader && this.reader.fireEvent('beforedeactivate');
 	},
 
-	allowNavigation: function(){
+	allowNavigation: function () {
 		var me = this,
 			title = 'Are you sure?',
 			msg = 'You haven’t finished your comment. Do you want to leave without finishing?';
 
 		if (this.editor && this.editor.isActive()) {
 
-			return new Promise(function(fulfill, reject) {
+			return new Promise(function (fulfill, reject) {
 				Ext.Msg.show({
 					title: title,
 					msg: msg,
@@ -140,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 						primary: {
 							text: 'Leave',
 							cls: 'caution',
-							handler: function(){
+							handler: function () {
 								me.deactivateEditor();
 								fulfill();
 							}
@@ -155,20 +155,20 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}
 	},
 
-	destroy: function() {
+	destroy: function () {
 		this.callParent(arguments);
 		if (this.annotationManager.length > 0) {
 			this.annotationManager.removeAll();
 		}
 	},
 
-	insertOverlay: function() {
+	insertOverlay: function () {
 		this.annotationOverlay = Ext.DomHelper.insertAfter(this.reader.getTargetEl().first(), {cls: 'note-gutter'}, true);
 
 		this.mon(this.annotationOverlay, 'click', 'showAnnotationsAtLine', this);
 	},
 
-	adjustAnnotationOverlayPosition: function() {
+	adjustAnnotationOverlayPosition: function () {
 		if (!this.reader.rendered || !this.annotationOverlay) { return; }
 
 		var cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [],
@@ -184,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		w = w < maxWidth ? w - 75 : maxWidth - 75;
 		this.annotationOverlay.setStyle('left', w + 'px');
 
-		Ext.each(cmps, function(cmp) {
+		Ext.each(cmps, function (cmp) {
 			if (Ext.isFunction(cmp.positionAnnotationNibs) && cmp.isVisible(true)) {
 				cmp.positionAnnotationNibs(me.reader.el);
 			}
@@ -193,22 +193,22 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		this.realignNotes();
 	},
 
-	realignNotes: function() {
+	realignNotes: function () {
 
 		//This is  not the right way to be plumbing this.  I'm not sure I have any better ideas though,
 		//the overlay needs component specific data to render a note.
 		var cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [],
-			visibleCmps = Ext.Array.filter(cmps, function(c){return Ext.isFunction(c.registerAnnotations) && c.isVisible(true);});
-		if(visibleCmps.length){
+			visibleCmps = Ext.Array.filter(cmps, function (c) {return Ext.isFunction(c.registerAnnotations) && c.isVisible(true);});
+		if(visibleCmps.length) {
 			this.annotationManager.removeAll();
-			Ext.each(visibleCmps, function(cmp){
+			Ext.each(visibleCmps, function (cmp) {
 				cmp.registerAnnotations();
 			});
 		}
 	},
 
-	editorSaved: function(editor, r, v) {
-		function onError(error) {
+	editorSaved: function (editor, r, v) {
+		function onError (error) {
 			console.error('Error saving note - ' + (error ? Globals.getError(error) : ''));
 			alert('There was an error saving your note.');
 			me.editorEl.unmask();
@@ -237,19 +237,19 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			// NOTE: For slide notes, for now we're keeping them domRange notes.
 			if (me.data.isDomRange) {
 				me.UserDataActions.saveNewNote(title, note, range, container, sharing, style)
-					.then(function(){
+					.then(function () {
 						editor.unmask();
 						me.deactivateEditor();
-					}).fail(function() {
+					}).fail(function () {
 						editor.unmask();
 					});
 			}
 			else {
 				me.UserDataActions.saveNewSeriesNote(title, note, range, me.data, container, sharing, style)
-					.then(function() {
+					.then(function () {
 						editor.unmask();
 						me.deactivateEditor();
-					}).fail(function() {
+					}).fail(function () {
 						editor.unmask();
 					});
 			}
@@ -260,20 +260,20 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return false;
 	},
 
-	editorCanceled: function() {
+	editorCanceled: function () {
 		if (this.editor.closeCallback) {
 			Ext.callback(this.editor.closeCallback);
 		}
 	},
 
-	noteHere: function() {
+	noteHere: function () {
 		console.log('To Be Implemented');
 	},
 
-	syncHeight: function() {
+	syncHeight: function () {
 		var cmps,
-				r = this.reader,
-				el = r && r.el;
+			r = this.reader,
+			el = r && r.el;
 
 		if (el && !el.isVisible(true)) {
 			Ext.defer(this.syncHeight, 10, this);
@@ -283,11 +283,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		this.realignNotes();
 	},
 
-	getFrameHeight: function() {
+	getFrameHeight: function () {
 		return this.readerHeight + 'px';
 	},
 
-	activateEditor: function(info, cb) {
+	activateEditor: function (info, cb) {
 		if (this.editor) {
 			this.data = info; //Ext.apply(this.data || {}, cueInfo);
 			this.editor.reset();
@@ -301,7 +301,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}
 	},
 
-	deactivateEditor: function() {
+	deactivateEditor: function () {
 		if (this.editor.closeCallback) {
 			Ext.callback(this.editor.closeCallback);
 			delete this.editor.closeCallback;
@@ -309,7 +309,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		this.editor.deactivate();
 	},
 
-	showEditorByEl: function(cueInfo, el, cb) {
+	showEditorByEl: function (cueInfo, el, cb) {
 		this.activateEditor(cueInfo, cb);
 		this.editor.alignTo(el, 'tl-tr?');
 		this.editor.show();
@@ -317,28 +317,28 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		this.editor.focus();
 	},
 
-	showEditorAtPosition: function(cueInfo, xy) {
+	showEditorAtPosition: function (cueInfo, xy) {
 		this.activateEditor(cueInfo);
 		this.editor.showAt(xy);
 	},
 
-	setDefaultSharingFor: function(ntiid) {
+	setDefaultSharingFor: function (ntiid) {
 		var me = this,
 			pageInfo;
 
 		me.MediaViewerStore.getSharingPreferences(ntiid, me.reader.currentBundle)
-			.then(function(prefs) {
+			.then(function (prefs) {
 				var sharing = prefs && prefs.sharing,
 					sharedWith = sharing && sharing.sharedWith;
 
 				return SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith), me.reader.currentBundle);
 			})
-			.then(function(shareInfo) {
+			.then(function (shareInfo) {
 				me.editor.setSharedWith(shareInfo);
 			});
 	},
 
-	registerGutterRecords: function(noteStore, records, view) {
+	registerGutterRecords: function (noteStore, records, view) {
 		if (Ext.isEmpty(noteStore)) { return;}
 
 		var me = this,
@@ -346,7 +346,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 		if (!reader.rendered) {
 			reader.onceRendered
-				.then(function() {
+				.then(function () {
 					wait(10)
 						.then(me.registerGutterRecords.bind(me));
 				});
@@ -354,14 +354,14 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}
 
 
-		Ext.each(records, function(n) {
+		Ext.each(records, function (n) {
 			if (n.isTopLevel && n.isTopLevel()) {
 				me.registerNoteRecord(n, view, noteStore);
 			}
 		});
 	},
 
-	rangeForDescription: function(rec, cmp, recStore) {
+	rangeForDescription: function (rec, cmp, recStore) {
 		var anchorResolver = cmp && cmp.getAnchorResolver && cmp.getAnchorResolver(),
 			cueStore = cmp.getCueStore && cmp.getCueStore(),
 			domRange, rect, line, domFrag, b, d;
@@ -380,12 +380,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return domRange;
 	},
 
-	registerNoteRecord: function(rec, cmp, recStore) {
+	registerNoteRecord: function (rec, cmp, recStore) {
 
 		if (this.isRecordAlreadyAdded(rec)) {return;}
 
 		var domRange = this.rangeForDescription(rec, cmp, recStore),
-				rect, line, readerTop;
+			rect, line, readerTop;
 
 		if (Ext.isEmpty(domRange)) {
 			return;
@@ -408,33 +408,33 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		});
 	},
 
-	unRegisterGutterRecords: function(store, records, view) {
+	unRegisterGutterRecords: function (store, records, view) {
 		var me = this;
-		Ext.each(records, function(rec) {
+		Ext.each(records, function (rec) {
 			me.unRegisterNoteRecord(rec);
 		});
 	},
 
-	unRegisterNoteRecord: function(rec) {
-		var r = this.annotationManager.findBy(function(item) { return item.id === rec.getId();});
+	unRegisterNoteRecord: function (rec) {
+		var r = this.annotationManager.findBy(function (item) { return item.id === rec.getId();});
 		if (r) {
 			this.annotationManager.remove(r);
 		}
 	},
 
-	isRecordAlreadyAdded: function(rec) {
-		var b = this.annotationManager.filterBy(function(item) {
+	isRecordAlreadyAdded: function (rec) {
+		var b = this.annotationManager.filterBy(function (item) {
 			return item.id === rec.getId();
 		});
 
 		return b.getCount() > 0;
 	},
 
-	updateAnnotationCountAtLine: function(line, count) {
+	updateAnnotationCountAtLine: function (line, count) {
 		var tpl = this.controlTpl,
 			el = this.getAnnotationEl(line);
 
-		if(el){
+		if(el) {
 			Ext.fly(el).update(count);
 			return;
 		}
@@ -446,13 +446,13 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}
 	},
 
-	getAnnotationEl: function(line) {
+	getAnnotationEl: function (line) {
 		var annotations = this.annotationOverlay.query('.count[data-line]'),
 			result = this.annotationOverlay.down('.count[data-line=' + line + ']');
 
 		if (result || Ext.isEmpty(annotations)) { return result; }
 
-		Ext.each(annotations, function(item) {
+		Ext.each(annotations, function (item) {
 			var nLine = item.getAttribute('data-line');
 
 			if (nLine && Math.abs(nLine - line) < 2) {
@@ -463,19 +463,19 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return result;
 	},
 
-	onAnnotationAdded: function(i, o) {
+	onAnnotationAdded: function (i, o) {
 		var count = this.getAnnotationsAtLine(o.line).getCount();
 		if (count > 0) {
 			this.updateAnnotationCountAtLine(o.line, count);
 		}
 	},
 
-	onAnnotationRemoved: function(o) {
+	onAnnotationRemoved: function (o) {
 		var count = this.getAnnotationsAtLine(o.line).getCount();
 		this.updateAnnotationCountAtLine(o.line, count);
 	},
 
-	showAnnotationsAtLine: function(e) {
+	showAnnotationsAtLine: function (e) {
 		var t = e && e.getTarget('.count', null, true),
 			line = t && t.getAttribute('data-line'), annotations;
 
@@ -486,11 +486,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		this.reader.showAnnotations(annotations, line);
 	},
 
-	getAnnotationsAtLine: function(line) {
+	getAnnotationsAtLine: function (line) {
 		var fudgeFactor = 2;
-		return this.annotationManager.filterBy(function(item) {
+		return this.annotationManager.filterBy(function (item) {
 			var rec = item.record,
-					s = item.store.getById(rec.getId());
+				s = item.store.getById(rec.getId());
 			if (s && (s.get('pline') !== rec.get('pline'))) {
 				s.set('pline', rec.get('pline'));
 			}
@@ -498,9 +498,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		});
 	},
 
-	resolveRootPageInfoFor: function(ntiid) {
+	resolveRootPageInfoFor: function (ntiid) {
 		return ContentUtils.getLineage(ntiid, this.reader.currentBundle)
-			.then(function(rootId) {
+			.then(function (rootId) {
 				rootId = rootId && rootId.last();
 				if (!rootId) {
 					return Promise.reject('No ID');

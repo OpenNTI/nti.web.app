@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		Object: 'NextThought.mixins.routing.Object'
 	},
 
-	initRouter: function() {
+	initRouter: function () {
 		if (this.__routerInitialized) {
 			return;
 		}
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		};
 	},
 
-	addChildRouter: function(cmp) {
+	addChildRouter: function (cmp) {
 		cmp.__parentRouter = this;
 
 
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		// this.mixins.Object.addChildRouter.call(this, cmp);
 	},
 
-	__handleObjectNav: function(fragment, result) {
+	__handleObjectNav: function (fragment, result) {
 		result = result || {};
 
 		if (typeof result === 'string') {
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		this.pushRoute(result.title || '', result.route, result.precache);
 	},
 
-	__handleObjectRoute: function(result) {
+	__handleObjectRoute: function (result) {
 		result = result || {};
 
 		if (typeof result === 'string') {
@@ -77,13 +77,13 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		this.replaceRoute(result.title || '', result.route, result.precache);
 	},
 
-	__handleNoObjectNavigation: function(object, fragment) {
+	__handleNoObjectNavigation: function (object, fragment) {
 		if (this.__parentRouter) {
 			 return this.__parentRouter.navigateToObject(object, fragment);
 		}
 	},
 
-	navigateToObject: function(object, fragment) {
+	navigateToObject: function (object, fragment) {
 		return this.mixins.Object.handleObject.call(this, object)
 			.then(this.__handleObjectNav.bind(this, fragment))
 			.fail(this.__handleNoObjectNavigation.bind(this, object, fragment));
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	 * @param  {Object} obj	  the thing to navigate to
 	 * @param  {Object} monitors key val map of events to functions
 	 */
-	attemptToNavigateToObject: function(obj, monitors) {
+	attemptToNavigateToObject: function (obj, monitors) {
 		var me = this,
 			objId = obj && obj.getId(),
 			WindowStore = this.Router.WindowActions && this.Router.WindowActions.WindowStore,
@@ -120,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		}
 
 		me.Router.PathActions.getPathToObject(obj)
-			.then(function(path) {
+			.then(function (path) {
 				if (!me.Router.WindowActions.hasWindow(obj)) {
 					path.push(obj);
 				}
@@ -128,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 				return path;
 			}, monitors.onFailedToGetFullPath.bind(null, obj))
 			.then(me.getRouteForPath.bind(me))
-			.then(function(route) {
+			.then(function (route) {
 				if (route.isFull && route.isAccessible !== false) {
 					monitors.doNavigateToFullPath(obj, route);
 				} else {
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 			});
 	},
 
-	attemptToNavigateToPath: function(path) {
+	attemptToNavigateToPath: function (path) {
 		var route = this.getRouteForPath(path);
 
 		if (route.isAccessible === false) {
@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		}
 	},
 
-	doNavigateToFullPath: function(obj, route) {
+	doNavigateToFullPath: function (obj, route) {
 		var path = route.path,
 			objId = obj && obj.getId(),
 			hasWindow = objId && this.Router.WindowActions.hasWindow(obj),
@@ -162,29 +162,29 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		this.pushRootRoute('', path);
 	},
 
-	onFailedToGetFullPath: function(obj, route) {
+	onFailedToGetFullPath: function (obj, route) {
 		this.WindowActions.pushWindow(obj);
 
 		return Promise.reject();
 	},
 
-	__handleNoObjectRoute: function(object) {
+	__handleNoObjectRoute: function (object) {
 		var me = this,
 			children = me.__childRouters || [];
 
-		Promise.first(children.map(function(child) {
+		Promise.first(children.map(function (child) {
 			if (child.handleObject) {
 				return child.handleObject(object);
 			}
 
 			return Promise.reject();
 		})).then(me.__handleObjectRoute.bind(me))
-			.fail(function() {
-					me.replaceRootState('', '/');
+			.fail(function () {
+				me.replaceRootState('', '/');
 			});
 	},
 
-	handleObject: function(object) {
+	handleObject: function (object) {
 		this.mixins.Object.handleObject.call(this, object)
 			.then(this.__handleObjectRoute.bind(this))
 			.then(this.__handleNoObjectRoute.bind(this, object));
@@ -195,13 +195,13 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	 * @override
 	 * @return {Object|String}
 	 */
-	getContext: function() {},
+	getContext: function () {},
 
 	/**
 	 * Returns an array of the current context the view is in
 	 * @return {[type]} [description]
 	 */
-	getCurrentContext: function() {
+	getCurrentContext: function () {
 		var me = this,
 			context = [],
 			currentRoute = me.getCurrentRoute(),
@@ -210,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 			child = me.getActiveItem(),
 			childContext = child && child.getCurrentContext && child.getCurrentContext();
 
-		function addContext(c) {
+		function addContext (c) {
 			if (Ext.isArray(c)) {
 				context = context.concat(c);
 			} else if (c) {
@@ -227,9 +227,9 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 		}
 
 		return Promise.all([
-				myContext,
-				childContext
-			]).then(function(results) {
+			myContext,
+			childContext
+		]).then(function (results) {
 				var my = {
 					route: currentRoute,
 					title: currentTitle,
@@ -249,7 +249,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	 * @override
 	 * @return {Object} the active cmp
 	 */
-	getActiveItem: function() {
+	getActiveItem: function () {
 		var layout = this.getLayout && this.getLayout(),
 			item = layout && layout.getActiveItem && layout.getActiveItem();
 
@@ -262,7 +262,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	 * @override
 	 * @return {Boolean|Promise} if we can navigate
 	 */
-	allowNavigation: function() {
+	allowNavigation: function () {
 		var activeItem = this.getActiveItem();
 
 		return activeItem && activeItem.allowNavigation ? activeItem.allowNavigation() : true;
@@ -273,7 +273,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	 * on any components that implement it. Handling it here is too late to
 	 * stop the route from changing
 	 */
-	beforeRouteChange: function() {
+	beforeRouteChange: function () {
 		var activeItem = this.getActiveItem();
 
 		if (activeItem && activeItem.onRouteDeactivate) {

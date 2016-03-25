@@ -16,12 +16,12 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 		imageEl: '.image-context'
 	},
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 		this.MediaActions = NextThought.app.mediaviewer.Actions.create();
 	},
 
-	setContent: function() {
+	setContent: function () {
 		if (this.contextDom && this.imageEl) {
 			this.imageEl.appendChild(this.contextDom);
 		}

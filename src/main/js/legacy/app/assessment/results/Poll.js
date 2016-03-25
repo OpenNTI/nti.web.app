@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll',
 		{xtype: 'container', layout: 'none', cls: 'footer', isFooter: true}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var parts = NextThought.app.assessment.results.parts;
@@ -57,8 +57,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll',
 			.always(this.resize.bind(this));
 	},
 
-	fillInMimeTypeToComponent: function(cmps) {
-		this.mimeToComponent = cmps.reduce(function(acc, cmp) {
+	fillInMimeTypeToComponent: function (cmps) {
+		this.mimeToComponent = cmps.reduce(function (acc, cmp) {
 			acc[cmp.mimeType] = cmp;
 
 			return acc;
@@ -66,23 +66,23 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll',
 
 	},
 
-	getCmpForMimeType: function(mimeType) {
+	getCmpForMimeType: function (mimeType) {
 		return this.mimeToComponent[mimeType];
 	},
 
-	removeLoadingCmp: function() {
+	removeLoadingCmp: function () {
 		if (this.loadingCmp) {
 			this.loadingCmp.destroy();
 			delete this.loadingCmp;
 		}
 	},
 
-	resize: function() {
+	resize: function () {
 		this.syncHeight();
 		this.syncPositioning();
 	},
 
-	showError: function() {
+	showError: function () {
 		this.removeLoadingCmp();
 		this.resultContainer.add({
 			xtype: 'box',
@@ -90,19 +90,19 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll',
 		});
 	},
 
-	showResults: function(results) {
+	showResults: function (results) {
 		this.removeLoadingCmp();
 
 		var me = this,
 			resultParts = results.parts,
 			questionParts = me.poll.get('parts');
 
-		resultParts.forEach(function(part, idx) {
+		resultParts.forEach(function (part, idx) {
 			me.addPart(part, questionParts[idx]);
 		});
 	},
 
-	addPart: function(resultPart, questionPart) {
+	addPart: function (resultPart, questionPart) {
 		var cmp = this.getCmpForMimeType(resultPart.MimeType);
 
 		if (cmp) {
@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll',
 		}
 	},
 
-	onHideResults: function() {
+	onHideResults: function () {
 		if (this.doHideResults) {
 			this.doHideResults();
 		}

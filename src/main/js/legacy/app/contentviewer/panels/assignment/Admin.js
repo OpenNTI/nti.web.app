@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	alias: 'widget.admin-assignment-reader',
 	prefix: 'course-assignment-admin',
 
-	getToolbarConfig: function() {
+	getToolbarConfig: function () {
 		return {
 			xtype: 'course-assessment-admin-reader-header',
 			parentView: this.parentView,
@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		};
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var reader = this.down('reader-content'),
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		reader.getScroll().lock();
 		reader.pageWidgets.hide();
 
-		function done() {
+		function done () {
 			reader.getScroll().unlock();
 			this.beginViewedAnalytics();
 		}
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			assignmentHistory = Promise.resolve(this.assignmentHistory);
 		}
 
-		assignmentHistory.then(function(h) {
+		assignmentHistory.then(function (h) {
 			readerAssessment.setAssignmentFromInstructorProspective(assignment, h);
 			reader.getNoteOverlay().disable();
 
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		.then(done.bind(this));
 	},
 
-	getAnalyticData: function() {
+	getAnalyticData: function () {
 		if (!this.assignment) {
 			return {};
 		}

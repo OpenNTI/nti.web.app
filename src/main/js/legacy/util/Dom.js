@@ -4,7 +4,7 @@ var Ext = require('extjs');
 module.exports = exports = Ext.define('NextThought.util.Dom', {
 
 
-	filterNodeList: function(nodeList, filter) {
+	filterNodeList: function (nodeList, filter) {
 		var d = Array.prototype.slice.call(nodeList);
 
 		if (typeof filter === 'string') {
@@ -15,30 +15,30 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 	},
 
 
-	isRootObject: function rootObjects(e) {
+	isRootObject: function rootObjects (e) {
 		var p = e.parentNode;
 		if (p && p.nodeName === 'OBJECT') { return false; }
 		return p ? rootObjects(p) : true;
 	},
 
 
-	parseDomObject: function(objectDomEl) {
+	parseDomObject: function (objectDomEl) {
 		var obj = {},
 			id = Ext.get(objectDomEl).id;
 
-		function addValue(o, n, v) {
+		function addValue (o, n, v) {
 			var c = o[n]; o[n] = c ? (Ext.isArray(c) ? c : [c]).concat(v) : v;
 		}
 
-		function directChildNodes(t) {
+		function directChildNodes (t) {
 			return objectDomEl.querySelectorAll('#' + id + ' > ' + t);
 		}
 
-		Ext.each(objectDomEl.attributes, function(p) {
+		Ext.each(objectDomEl.attributes, function (p) {
 			addValue(obj, 'attribute-' + p.name, p.value);
 		});
 
-		Ext.each(directChildNodes('param'), function(p) {
+		Ext.each(directChildNodes('param'), function (p) {
 			addValue(obj, p.getAttribute('name'), p.getAttribute('value'));
 		});
 
@@ -51,19 +51,19 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 	},
 
 
-	asDomSpec: function() {
+	asDomSpec: function () {
 		if (this instanceof Ext.Base) {
 			Ext.Error.raise('Apply this to a simple object not a ext class');
 		}
 
 		var r = /^attribute\-(.*)$/,
 			o = {
-					tag: 'object',
-					cn: []
-				};
+				tag: 'object',
+				cn: []
+			};
 
 
-		Ext.Object.each(this, function(k, v) {
+		Ext.Object.each(this, function (k, v) {
 			if (Ext.isFunction(v) || Ext.isEmpty(v)) {return;}
 
 			var n = (r.exec(k) || [])[1];
@@ -78,18 +78,18 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 	},
 
 
-	getVideosFromDom: function getVideosFromDom(contentElement) {
+	getVideosFromDom: function getVideosFromDom (contentElement) {
 		var me = this,
 			videoObjects = [];
 
 		if (contentElement) {
-			Ext.each(contentElement.querySelectorAll('object .naqvideo, object .ntivideo'), function(v) {
+			Ext.each(contentElement.querySelectorAll('object .naqvideo, object .ntivideo'), function (v) {
 				var o = me.parseDomObject(v),
 					s = [];
 
 				o.sources = s;
 
-				Ext.each(v.querySelectorAll('object[type$=videosource]'), function(source) {
+				Ext.each(v.querySelectorAll('object[type$=videosource]'), function (source) {
 					s.push(me.parseDomObject(source));
 				});
 
@@ -101,9 +101,9 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 	},
 
 
-	getImagesFromDom: function(contentElement) {
+	getImagesFromDom: function (contentElement) {
 		var imageObjects = [];
-		Ext.each(contentElement.querySelectorAll('span > img'), function(i) {
+		Ext.each(contentElement.querySelectorAll('span > img'), function (i) {
 			var imageObj = {},
 				sizes = ['full', 'half', 'quarter'],
 				base,
@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 			if (currentSrc) {
 				resourceIndex = src.indexOf(currentSrc);
 			} else {
-				sizes.every(function(s) {
+				sizes.every(function (s) {
 					resourceIndex = src.indexOf(i.getAttribute('data-nti-image-' + s));
 
 					return resourceIndex < 0;
@@ -145,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 	 * navigatio in the same tab so if people get clever and insert links to things like profile we
 	 * do the right thing.
 	 */
-	adjustLinks: function(dom, baseUrl) {
+	adjustLinks: function (dom, baseUrl) {
 		var string, tempDom;
 
 		if (!dom) {
@@ -159,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 			dom = tempDom;
 		}
 
-		Ext.each(Ext.fly(dom).query('a[href]') || [], function(link) {
+		Ext.each(Ext.fly(dom).query('a[href]') || [], function (link) {
 			var href = Ext.fly(link).getAttribute('href') || '',
 				base = baseUrl.split('#')[0],
 				changeTarget = href.indexOf(base) !== 0;
@@ -174,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 	},
 
 
-	isEmpty: function isEmpty(value) {
+	isEmpty: function isEmpty (value) {
 		var re = (isEmpty.re || /((&nbsp;)|(\u2060)|(\u200B)|(<br\/?>)|(<\/?div>))*/ig);
 
 		isEmpty.re = re;
@@ -191,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 	 * @param {Node} el
 	 * @private
 	 */
-	__removeNodeRecursively: function remove(el) {
+	__removeNodeRecursively: function remove (el) {
 		var pn = el && el.parentNode;
 		if (!pn) {return;}
 		pn.removeChild(el);
@@ -211,7 +211,7 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 	 * @return {Node[]}
 	 * @private
 	 */
-	__pickUnsanitaryElements: function(root, cleanAttributes) {
+	__pickUnsanitaryElements: function (root, cleanAttributes) {
 		var namespaced = /:/,
 			picked = [], tw, name, value, el, i,
 			notJs = /^(?!javascript:).*/i,
@@ -267,7 +267,7 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 	 * @param {String|Node} html
 	 * @return {String}
 	 */
-	sanitizeExternalContentForInput: function(html) {
+	sanitizeExternalContentForInput: function (html) {
 		console.debug('Sanitizing html...', html);
 		//html = html.trim().replace(/[\n\r]+/g, ' ');
 
@@ -294,20 +294,20 @@ module.exports = exports = Ext.define('NextThought.util.Dom', {
 	},
 
 
-	enforceNumber: function(e) {
-		function between(key, lower, upper) {
+	enforceNumber: function (e) {
+		function between (key, lower, upper) {
 			return lower <= key && key <= upper;
 		}
 
 		var input = e.getTarget('input'),
-				maxLength = parseInt(input.getAttribute('size'), 10) || -1,
-				tooLong = (input.value || '').length + 1 > maxLength,
-				letter = e.getCharCode() || 13,
-				isArrow = between(letter, 37, 40),//left arrow, and down arrow
-				isNumber = between(letter, 48, 57) || between(letter, 95, 105),//numbers across the top and num pad
-				isAllowedCtrl = between(letter, 8, 9) || letter === 13, //backspace, tab, or enter
-				hasSelection = Math.abs(input.selectionStart - input.selectionEnd) !== 0,
-				ctrlPressed = e.ctrlKey; //ext maps the metaKey to ctrlKey
+			maxLength = parseInt(input.getAttribute('size'), 10) || -1,
+			tooLong = (input.value || '').length + 1 > maxLength,
+			letter = e.getCharCode() || 13,
+			isArrow = between(letter, 37, 40),//left arrow, and down arrow
+			isNumber = between(letter, 48, 57) || between(letter, 95, 105),//numbers across the top and num pad
+			isAllowedCtrl = between(letter, 8, 9) || letter === 13, //backspace, tab, or enter
+			hasSelection = Math.abs(input.selectionStart - input.selectionEnd) !== 0,
+			ctrlPressed = e.ctrlKey; //ext maps the metaKey to ctrlKey
 
 		/*
 			if the character entered is

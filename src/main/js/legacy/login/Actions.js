@@ -12,7 +12,7 @@ var {getURL} = Globals;
 
 
 module.exports = exports = Ext.define('NextThought.login.Actions', {
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		//we don't have the service doc yet, but we need the ajax helpers
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		this.store = NextThought.login.StateStore.getInstance();
 	},
 
-	handleImpersonate: function() {
+	handleImpersonate: function () {
 		var url = $AppConfig.userObject.getLink('logon.nti.impersonate'),
 			username = url && prompt('What username do you want to impersonate?'),
 			params;
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		}
 	},
 
-	handleLogout: function() {
+	handleLogout: function () {
 		var me = this,
 			url = getURL(Ext.String.urlAppend(
 				me.store.getLogoutURL(),
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 		TemporaryStorage.removeAll();
 
-		function finishLoggingOut() {
+		function finishLoggingOut () {
 			try {
 				Socket.tearDownSocket();
 				me.store.fireEvent('session-closed');
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		me.store.willLogout(finishLoggingOut);
 	},
 
-	__onLoginSuccess: function() {
+	__onLoginSuccess: function () {
 		var me = this,
 			setFromCookie, preference,
 			field = 'useHighContrast',
@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		me.store.setSessionId(B64.encodeURLFriendly($AppConfig.username));//weak obfuscation
 
 		$AppConfig.Preferences.getPreference('WebApp')
-			.then(function(value) {
+			.then(function (value) {
 				var pref = value.get(field),
 					c = Ext.util.Cookies.get(cookieName);
 
@@ -89,23 +89,23 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 				if (pref || c) {
 					return Globals.loadStyleSheetPromise('/app/resources/css/accessibility.css', 'main-stylesheet')
-						.fail(function() {
+						.fail(function () {
 							throw 'Failed to load the accessibility style sheet';
 						});
 				}
 			})
-			.always(function() {
+			.always(function () {
 				me.store.onSessionReady();
 
 				return wait();
 			})
-			.then(function() {
+			.then(function () {
 				me.store.onLogin();
 				AnalyticsUtil.beginSession();
 
 				return wait();
 			})
-			.then(function() {
+			.then(function () {
 				if (!setFromCookie) { return; }
 				Ext.Msg.show({
 					title: 'High Contrast mode',
@@ -113,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 					buttons: {
 						primary: {
 							text: 'Yes',
-							handler: function() {
+							handler: function () {
 								if (preference) {
 									preference.set(field, true);
 									preference.save();
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 						},
 						secondary: {
 							text: 'No',
-							handler: function() {
+							handler: function () {
 								Ext.util.Cookies.set(cookieName, 'false');
 							}
 						}
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			});
 	},
 
-	__onLoginFailure: function(reason) {
+	__onLoginFailure: function (reason) {
 		var o = {},
 			url = $AppConfig.server.login;
 
@@ -161,11 +161,11 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 	 * Get the user, and set up the service object
 	 * @return {Promise} fulfills is successfully logged in
 	 */
-	login: function() {
+	login: function () {
 		return this.__attemptLogin().then(this.__onLoginSuccess.bind(this), this.__onLoginFailure.bind(this));
 	},
 
-	__attemptLogin: function() {
+	__attemptLogin: function () {
 		var me = this,
 			server = $AppConfig.server,
 			dataserver = server.data,
@@ -174,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		return me.ServiceInterface.request({
 			timeout: 60000,
 			url: getURL(dataserver + ping)
-		}).then(function(response) {
+		}).then(function (response) {
 			response = Globals.parseJSON(response, true);
 
 			var link = me.ServiceInterface.getLinkFrom(response.Links, 'logon.handshake'),
@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			}
 
 			return response;
-		}).fail(function(reason) {
+		}).fail(function (reason) {
 			if (reason && reason.timedout) {
 				console.log('Request timedout: ', reason.request.options.url);
 			}
@@ -199,7 +199,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		}).then(me.performHandshake.bind(me));
 	},
 
-	performHandshake: function(pongFromPing) {
+	performHandshake: function (pongFromPing) {
 		var me = this,
 			link = me.ServiceInterface.getLinkFrom(pongFromPing.Links, 'logon.handshake'),
 			username = decodeURIComponent(Ext.util.Cookies.get('username')),
@@ -212,15 +212,15 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			method: 'POST',
 			timeout: 60000,
 			url: getURL(link),
-			callback: function() { clearTimeout(handshakeTimer)},
+			callback: function () { clearTimeout(handshakeTimer);},
 			params: {
 				username: username
 			}
 		})
-			.then(function(response) {
+			.then(function (response) {
 				return Globals.parseJSON(response, true);
 			})
-			.then(function(response) {
+			.then(function (response) {
 				var resolveService, tosLink;
 
 				me.store.maybeAddImmediateAction(response);
@@ -233,9 +233,9 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 					resolveService = Promise.reject('No Continue Link');
 				}
 
-				resolveService.then(function() {
+				resolveService.then(function () {
 					if (tosLink) {
-					  Service.overrideServiceLink('termsOfService', tosLink);
+					  	Service.overrideServiceLink('termsOfService', tosLink);
 					}
 				});
 
@@ -243,11 +243,11 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			});
 	},
 
-	findResolveSelfWorkspace: function(service) {
+	findResolveSelfWorkspace: function (service) {
 		var items = service.get('Items') || [],
 			w = null, l;
 
-		Ext.each(items, function(item) {
+		Ext.each(items, function (item) {
 			var links = item.Links || [];
 
 			l = service.getLinkFrom(links, 'ResolveSelf');
@@ -263,7 +263,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		return w;
 	},
 
-	resolveService: function() {
+	resolveService: function () {
 		var me = this,
 			unauthed = {401: true, 403: true},
 			server = $AppConfig.server;
@@ -276,7 +276,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			},
 			scope: this
 		})
-			.then(function(doc) {
+			.then(function (doc) {
 				doc = NextThought.model.Service.create(Globals.parseJSON(doc));
 
 				if (!me.findResolveSelfWorkspace(doc)) {
@@ -291,7 +291,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 					return me.attemptLoginCallback(doc);
 				}
 			})
-			.fail(function(r) {
+			.fail(function (r) {
 				if (unauthed[r.status]) {
 					//Just let this fall through and reject. we can't
 					//logout because we never logged in, when we reject
@@ -310,7 +310,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			});
 	},
 
-	attemptLoginCallback: function(service) {
+	attemptLoginCallback: function (service) {
 		var me = this,
 			href, workspace;
 
@@ -331,21 +331,21 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 				Accept: 'application/json'
 			}
 		})
-			.then(function(r) { return ParseUtils.parseItems(Globals.parseJSON(r))[0]; })
-			.then(function(user) {
+			.then(function (r) { return ParseUtils.parseItems(Globals.parseJSON(r))[0]; })
+			.then(function (user) {
 				if (user && user.get('Username') === workspace.Title) {
 					return user;
 				}
 				throw 'Mismatch';
 			})
-			.then(function(user) {
+			.then(function (user) {
 				//we set the user's presence in the chat session-ready controller so we don't need to do it here.
 				user.summaryObject = false;
 				me.store.setActiveUser(user);
 
 				return user;
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.log('could not resolve app user', reason);
 				throw ['failed loading profile', reason];
 			});

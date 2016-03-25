@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.onScroll = this.onScroll.bind(this);
@@ -33,17 +33,17 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	},
 
 
-	onActivate: function() {
+	onActivate: function () {
 		window.addEventListener('scroll', this.onScroll);
 	},
 
 
-	onDeactivate: function() {
+	onDeactivate: function () {
 		window.removeEventListener('scroll', this.onScroll);
 	},
 
 
-	updateEntity: function(community) {
+	updateEntity: function (community) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateEntity.bind(this, community));
 			return;
@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	},
 
 
-	buildSettingsMenu: function(community) {
+	buildSettingsMenu: function (community) {
 		if (this.settingsMenu) {
 			Ext.destroy(this.settingsMenu);
 		}
@@ -111,37 +111,37 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 	},
 
 
-	onScroll: function() {
+	onScroll: function () {
 		if (this.settingsMenu) {
 			this.settingsMenu.hide();
 		}
 	},
 
 
-	showSettings: function(el) {
+	showSettings: function (el) {
 		if (this.settingsMenu) {
 			this.settingsMenu.showBy(Ext.get(el), 'tl-bl');
 		}
 	},
 
 
-	onJoin: function() {
+	onJoin: function () {
 		this.joinCommunity();
 	},
 
 
-	onLeave: function() {
+	onLeave: function () {
 		this.leaveCommunity();
 	},
 
 
-	onShow: function() {
+	onShow: function () {
 		this.settingsMenu.hide();
 		this.showCommunity();
 	},
 
 
-	onHide: function() {
+	onHide: function () {
 		this.settingsMenu.hide();
 		this.hideCommunity();
 	}

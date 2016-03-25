@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 		pixelDensity: 2
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.canvas = Ext.getDom(this.el);
 		this.viewWidth = this.el.getWidth();
@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 	},
 
 
-	updateGrade: function() {
+	updateGrade: function () {
 		try {
 			this.redraw();
 		} catch (e) {
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 	},
 
 
-	redraw: function() {
+	redraw: function () {
 		if (!this.context) {return;}
 		this.context.canvas.width += 0; //set the canvas dirty and make it clear on next draw.
 		this.drawCircle();
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 	},
 
 
-	getGradeLetter: function() {
+	getGradeLetter: function () {
 		var g = this.getGrade();
 		if (g >= 90) {
 			g = 'A';
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 	},
 
 
-	setFont: function(font) {
+	setFont: function (font) {
 		this.context.font = [
 			font.style || 'normal',
 			font.variant || 'normal',
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 	},
 
 
-	drawCircle: function() {
+	drawCircle: function () {
 		var ctx = this.context,
 			stroke = this.canvas.width * (1 / 112),
 			centerX = this.canvas.width / 2,
@@ -125,7 +125,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Grade', {
 	},
 
 
-	drawDot: function() {
+	drawDot: function () {
 		var ctx = this.context,
 			slope = this.canvas.height / this.canvas.width,
 			centerY = (this.canvas.height / 2) + (this.canvas.width / 4),

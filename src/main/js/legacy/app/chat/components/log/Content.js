@@ -31,21 +31,21 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Conte
 
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		var me = this;
 		me.callParent(arguments);
 
 		//request the location that has been sent, save it for use later
 		me.ntiid = me.message.get('body').ntiid;
 
-		LocationMeta.getMeta(this.ntiid, function(meta) {
+		LocationMeta.getMeta(this.ntiid, function (meta) {
 			me.location = meta;
 			me.clickable = me.location ? true : false;
 			me.update();
 		});
 	},
 
-	update: function() {
+	update: function () {
 		var me = this,
 			href,
 			icon, root, username;
@@ -84,18 +84,18 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Conte
 		me.addCls('nooid');
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.attachClick();
 	},
 
-	attachClick: function() {
+	attachClick: function () {
 		if (this.clickable) {
-			this.el.on('click', function() {this.fireEvent('click', this);}, this);
+			this.el.on('click', function () {this.fireEvent('click', this);}, this);
 		}
 	},
 
-	fillInUser: function(u) {
+	fillInUser: function (u) {
 		var name = u.get('alias') || u.get('Username'),
 			i = u.get('avatarURL');
 

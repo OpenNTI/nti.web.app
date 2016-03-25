@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Edi
 
 	childEls: ['body'],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.on({
 			afterRender: 'setup',
@@ -38,11 +38,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Edi
 		});
 	},
 
-	setup: function() {
+	setup: function () {
 		var v;
 		this.body.selectable();
 		if (!Ext.isEmpty(this.value)) {
-			v = Ext.Array.map(this.value, function(i) {
+			v = Ext.Array.map(this.value, function (i) {
 				if (Ext.isString(i)) {
 					i = Ext.DomHelper.markup({html: i});
 				}
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Edi
 		this[this.isEmpty() ? 'addCls' : 'removeCls']('empty');
 	},
 
-	onKeyDown: function(e) {
+	onKeyDown: function (e) {
 		this.stop(e);
 		if (e.getKey() === e.ESC) {
 			this.fireEvent('cancel');
@@ -66,39 +66,39 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Edi
 
 	},
 
-	doLater: function(fn,args){
-		if(this.isDestroyed){return;}
+	doLater: function (fn,args) {
+		if(this.isDestroyed) {return;}
 		this[fn].apply(this,args);
 	},
 
-	stop: function(e) {
+	stop: function (e) {
 		e.stopPropagation();
 	},
 
-	focus: function() {
+	focus: function () {
 		this.body.focus();
 		this.moveCursorToEnd(this.body.last());
 	},
 
-	blur: function() {
+	blur: function () {
 		this.fireEvent('blur', this);
 	},
 
-	isEmpty: function isEmpty() {
+	isEmpty: function isEmpty () {
 		return DomUtils.isEmpty(this.getValue());
 	},
 
-	getValue: function() {
+	getValue: function () {
 		//Sanitize some new line stuff that various browsers produce.
 		//See http://stackoverflow.com/a/12832455 and http://jsfiddle.net/sathyamoorthi/BmTNP/5/
 		var out = [];
 
-		function stripTrailingBreak(text) {
+		function stripTrailingBreak (text) {
 			var re = stripTrailingBreak.re = (stripTrailingBreak.re || /<br\/?>$/i);
 			return text.replace(re, '');
 		}
 
-		function clean(o) {
+		function clean (o) {
 			var r = [], p, i, len = o.length;
 			for (i = 0; i < len; i++) {
 				p = stripTrailingBreak(o[i]);
@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Edi
 			return r;
 		}
 
-		function join(o) {
+		function join (o) {
 			var i, v;
 			for (i = o.length; i >= 0; i--) {
 				v = o[i];
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Edi
 			return o;
 		}
 
-		this.el.select('.body > *').each(function(div) {
+		this.el.select('.body > *').each(function (div) {
 			var html, tmp, dom;
 			try {
 				//don't let manipulations here effect the dom
@@ -140,11 +140,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Edi
 			out = this.body.getHTML().split(/<br\/?>/);
 		}
 
-		return Ext.Array.filter(join(clean(out)), function(i) {
+		return Ext.Array.filter(join(clean(out)), function (i) {
 			//if we are just whitespace and html whitespace
 			return i && !Ext.isEmpty(i.replace(/<br\/?>|&nbsp;/g, '').trim());
 		});
 	}
-},function() {
+},function () {
 	this.borrow(NextThought.editor.AbstractEditor, ['moveCursorToEnd']);
 });

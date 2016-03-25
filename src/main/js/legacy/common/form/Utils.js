@@ -2,14 +2,14 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.Utils', {
-	constructor: function(config) {
+	constructor: function (config) {
 
 		this.handlers = {
 			limitToNumeric: this.__limitEventToNumeric.bind(this)
 		};
 	},
 
-	limitInputToNumeric: function(input) {
+	limitInputToNumeric: function (input) {
 		if (!input.addEventListener) {
 			console.error('Invalid input');
 
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Utils', {
 	},
 
 
-	unlimitInputToNumeric: function(input) {
+	unlimitInputToNumeric: function (input) {
 		if (!input.removeEventListener) {
 			console.error('Invalid input');
 
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Utils', {
 	},
 
 
-	__limitEventToNumeric: function(e) {
+	__limitEventToNumeric: function (e) {
 		var charCode = e.key || e.charCode;
 
 		//if its not a control char and not a number

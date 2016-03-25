@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.HistoryItems
 			},
 
 
-			readRecords: function(resp) {
+			readRecords: function (resp) {
 				var data = this.self.prototype.readRecords.apply(this, arguments);
 
 				this.AvailableAssignmentNTIIDs = resp.AvailableAssignmentNTIIDs;
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.HistoryItems
 				return data;
 			},
 
-			onItemRead: function(item, key) {
+			onItemRead: function (item, key) {
 				if (Ext.isArray(item)) {
 					if (item[1] !== null) {
 						item = item[1];
@@ -58,12 +58,12 @@ module.exports = exports = Ext.define('NextThought.store.courseware.HistoryItems
 		startParam: 'batchStart',
 		limitParam: 'batchSize',
 
-		buildUrl: function(request) {
+		buildUrl: function (request) {
 			var sort, dir,
 				p = request.params;
 
 			if (p && p.filter) {
-				Ext.decode(p.filter).forEach(function(filter) {
+				Ext.decode(p.filter).forEach(function (filter) {
 					if (filter.property === 'LegacyEnrollmentStatus') {
 						p.filter = filter.property + filter.value;
 					} else if (filter.property === 'usernameSearchTerm') {
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.HistoryItems
 	},
 
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.proxy = Ext.clone(this.proxy);//get a local instance copy
 		this.callParent(arguments);
 

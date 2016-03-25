@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.model.preference.Badges', {
 		{name: 'Course', type: 'Future'}
 	],
 
-	getResourceUrl: function() {
+	getResourceUrl: function () {
 		var base = this.callParent(arguments);
 
 		return base + '/Badges';

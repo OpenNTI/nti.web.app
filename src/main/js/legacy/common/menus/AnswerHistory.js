@@ -22,24 +22,24 @@ module.exports = exports = Ext.define('NextThought.common.menus.AnswerHistory', 
 		xtype: 'menucheckitem',
 		plain: true,
 		listeners: {
-			'beforecheckchange': function(item, checked) { return item.allowUncheck !== false; },
-			'click': function(item) {item.up('menu').handleClick(item);}
+			'beforecheckchange': function (item, checked) { return item.allowUncheck !== false; },
+			'click': function (item) {item.up('menu').handleClick(item);}
 		}
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.store.on('changed', this.reload, this);
 		this.store.on('load', this.reload, this);
 	},
 
-	reload: function() {
+	reload: function () {
 		var items = [], me = this;
 
 		this.removeAll();
 		items.push({text: getString('NextThought.view.menus.AnswerHistory.answer'), cls: 'answer-title', allowUncheck: false, answerHistoryTitle: true});
 
-		this.store.each(function(r) {
+		this.store.each(function (r) {
 			var parts = r.get('parts'),
 				part = parts[me.renderedData.partNum],
 				t = part.get('submittedResponse');
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.common.menus.AnswerHistory', 
 		}
 	},
 
-	handleClick: function(item) {
+	handleClick: function (item) {
 		if (!item.is('[answerHistoryTitle]') && !item.is('[noAnswerHistory]')) {
 			this.ownerCmp.up('assessment-question').reset();
 			this.ownerCmp.setValue(item.text);
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.common.menus.AnswerHistory', 
 		}
 	},
 
-	showBy: function() {
+	showBy: function () {
 		this.showByArgs = Array.prototype.slice.call(arguments);
 		this.callParent(arguments);
 	}

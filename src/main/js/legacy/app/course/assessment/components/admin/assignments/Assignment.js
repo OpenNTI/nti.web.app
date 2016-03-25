@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	layout: 'none',
 	componentLayout: 'customtemplate',
 	childEls: ['body'],
-	getTargetEl: function() { return this.body; },
+	getTargetEl: function () { return this.body; },
 	pathRoot: 'Assignments',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -88,8 +88,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 								}
 							]}
 						]}
-						]), {
-							getGrade: function(values) {
+					]), {
+							getGrade: function (values) {
 								var historyItem = values.HistoryItemSummary,
 									grade = historyItem && historyItem.get('Grade'),
 									gradeVals = (grade && grade.getValues()) || {};
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 								return gradeVals.value || '';
 							},
 
-							isGradeExcused: function(values) {
+							isGradeExcused: function (values) {
 								var historyItem = values.HistoryItemSummary,
 									grade = historyItem && historyItem.get('Grade');
 
@@ -118,12 +118,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	],
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.items = Ext.clone(this.items);
 		this.callParent(arguments);
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this._masked = 0;
 		this.callParent(arguments);
 
@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 
 		$AppConfig.Preferences.getPreference('Gradebook')
-			.then(function(value) {
+			.then(function (value) {
 				pageHeader.setAvatarToggle(!value.get('hide_avatars'));
 			});
 
@@ -180,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		me.mon(pageHeader, {
 			'toggle-avatars': 'toggleAvatars',
-			'page-change': function() {
+			'page-change': function () {
 				me.mon(me.store, {
 					single: true,
 					'load': grid.scrollToTop.bind(grid)
@@ -191,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-	restoreState: function(state, fromAfterRender) {
+	restoreState: function (state, fromAfterRender) {
 		//if this is coming form after render and we've already restored
 		//a state don't overwrite it. The main reason this is here is so
 		//if they hit the back button the component is already rendered with
@@ -217,7 +217,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	 * @param  {String} student id of the student to restore to
 	 * @return {Promise}		 fulfills once the store is loaded with the student
 	 */
-	restoreStudent: function(state, student) {
+	restoreStudent: function (state, student) {
 		if (!this.initialLoad) {
 			this.student = student;
 
@@ -226,7 +226,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		var record;
 
-		record = this.store.findBy(function(rec) {
+		record = this.store.findBy(function (rec) {
 			var user = rec.get('User');
 
 			return student === NextThought.model.User.getIdFromRaw(user);
@@ -240,7 +240,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return Promise.resolve();
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.pathBranch = this.assignmentTitle;
@@ -254,7 +254,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var pager;
@@ -280,7 +280,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	syncFilterToUI: function(firstPass) {
+	syncFilterToUI: function (firstPass) {
 		if (!this.rendered) {
 			this.on('afterrender', this.syncFilterToUI.bind(this, firstPass));
 			return;
@@ -301,13 +301,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	maybeSwitch: function() {
+	maybeSwitch: function () {
 		var menu = this.filterMenu,
 			s = this.store,
 			item = menu.down('[checked]'),
 			initial = menu.initialState;
 
-		function loaded(s) {
+		function loaded (s) {
 			if (!s.getCount()) {
 				item = menu.down('filter-menu-item:not([checked])');
 
@@ -326,7 +326,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	_setupButtons: function(el) {
+	_setupButtons: function (el) {
 		var tip = el.textContent;
 
 		Ext.fly(el).set({
@@ -335,11 +335,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-	toggleAvatarsClicked: function(e) {
+	toggleAvatarsClicked: function (e) {
 		this.toggleAvatars(!e.getTarget('.enabled'));
 	},
 
-	toggleAvatars: function(show) {
+	toggleAvatars: function (show) {
 		if (!this.rendered) {
 			this.on('afterrender', this.toggleAvatars.bind(this, show));
 			return;
@@ -348,13 +348,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this[show ? 'removeCls' : 'addCls']('hide-avatars');
 
 		$AppConfig.Preferences.getPreference('Gradebook')
-			.then(function(value) {
+			.then(function (value) {
 				value.set('hide_avatars', !show);
 				value.save();
 			});
 	},
 
-	updateFilterCount: function() {
+	updateFilterCount: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateFilterCount.bind(this));
 			return;
@@ -363,7 +363,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.pageHeader.updateFilterCount(this.filterMenu.getFilterLabel(this.store.getTotalCount()));
 	},
 
-	onPagerUpdate: function() {
+	onPagerUpdate: function () {
 		if (!this.rendered) {
 			this.on({afterrender: 'onPagerUpdate', single: true});
 			return;
@@ -380,11 +380,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.totalEl.update(this.pageSource.getTotal());
 	},
 
-	_showMask: function() {
+	_showMask: function () {
 		var me = this,
 			el = me.el;
 
-		me._maskIn = setTimeout(function() {
+		me._maskIn = setTimeout(function () {
 			var gridMask = (me.down('gridview') || {}).loadMask;
 
 			if (gridMask && !gridMask.isDestroyed) {
@@ -397,7 +397,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}, 1);
 	},
 
-	mask: function() {
+	mask: function () {
 		this._masked++;
 
 		if (this.rendered) {
@@ -405,7 +405,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	unmask: function() {
+	unmask: function () {
 		this._masked--;
 
 		var gridMask = (this.down('gridview') || {}).loadMask;
@@ -425,7 +425,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	scrollToRecord: function(record) {
+	scrollToRecord: function (record) {
 		var grid = this.down('grid'),
 			index = this.store.indexOf(record),
 			node = grid && index >= 0 && grid.view.getNodeByRecord(record);
@@ -437,13 +437,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	refresh: function() {
+	refresh: function () {
 		var grid = this.down('grid');
 
 		grid.view.refresh();
 	},
 
-	getStoreState: function() {
+	getStoreState: function () {
 		var store = this.store,
 			sorters = this.store.sorters && this.store.sorters.items,
 			sorter = (sorters && sorters[0]) || {},
@@ -461,7 +461,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		};
 	},
 
-	isSameState: function(state) {
+	isSameState: function (state) {
 		var storeState = this.getStoreState(),
 			isEqual = true;
 
@@ -482,7 +482,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return isEqual;
 	},
 
-	setDisabled: function() {
+	setDisabled: function () {
 		var grid = this.down('grid');
 
 		this.stateDisabled = true;
@@ -494,7 +494,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		grid.setDisabled();
 	},
 
-	setEnabled: function() {
+	setEnabled: function () {
 		var grid = this.down('grid');
 
 		delete this.stateDisabled;
@@ -506,7 +506,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		grid.setEnabled();
 	},
 
-	applyState: function(state) {
+	applyState: function (state) {
 		//if we are already applying state or the state hasn't changed and the store has loaded don't do anything
 		if (this.applyingState) { return Promise.resolve(); }
 
@@ -553,10 +553,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			}
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			me.mon(store, {
 				single: true,
-				'records-filled-in': function() {
+				'records-filled-in': function () {
 					delete store.proxy.extraParams.batchContainingUsernameFilterByScope;
 					delete store.proxy.extraParams.batchContainingUsername;
 					delete me.student;
@@ -589,7 +589,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-	onStoreLoad: function() {
+	onStoreLoad: function () {
 		this.syncFilterToUI();
 		this.unmask();
 		this.alignNavigation();
@@ -597,7 +597,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return;
 	},
 
-	updateColumns: function(filter) {
+	updateColumns: function (filter) {
 		var grid = this.down('grid');
 
 		if (filter === 'ForCredit') {
@@ -607,7 +607,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	onFiltersClicked: function(el) {
+	onFiltersClicked: function (el) {
 		if (this.applyingState || this.stateDisabled) {
 			return;
 		}
@@ -615,18 +615,18 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.filterMenu.showBy(el, 'tl-tl', [0, -39]);
 	},
 
-	setSearch: function(str) {
+	setSearch: function (str) {
 		this.searchTerm = str;
 		this.filterMenu.setSearch(str);
 	},
 
-	doSearch: function(str) {
+	doSearch: function (str) {
 		this.down('grid').getSelectionModel().deselectAll(true);
 		this.searchTerm = str;
 		this.updateFilter();
 	},
 
-	doFilter: function(filter) {
+	doFilter: function (filter) {
 		this.updateColumns(filter);
 		try {
 			this.down('grid').getSelectionModel().deselectAll(true);
@@ -637,7 +637,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	updateFilter: function() {
+	updateFilter: function () {
 		var state = this.current_state || {},
 			newPage = state.currentPage !== this.currentPage,
 			header = this.pageHeader;
@@ -684,19 +684,19 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	loadPage: function(page) {
+	loadPage: function (page) {
 		this.currentPage = page;
 
 		this.updateFilter();
 	},
 
-	setPageSize: function(size) {
+	setPageSize: function (size) {
 		this.pageSize = size;
 
 		this.updateFilter();
 	},
 
-	changeSort: function(ct, column, direction) {
+	changeSort: function (ct, column, direction) {
 		if (this.applyingState || this.stateDisabled) { return false; }
 
 		var prop = column.sortOn || column.dataIndex;
@@ -717,11 +717,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return false;
 	},
 
-	fireGoUp: function() {
+	fireGoUp: function () {
 		this.pushRoute('', '/');
 	},
 
-	firePreviousEvent: function(e) {
+	firePreviousEvent: function (e) {
 		if (e.getTarget('.disabled')) {
 			e.stopEvent();
 			return;
@@ -735,7 +735,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.pushRoute(title, prev + '/students');
 	},
 
-	fireNextEvent: function(e) {
+	fireNextEvent: function (e) {
 		if (e.getTarget('.disabled')) {
 			e.stopEvent();
 			return;
@@ -749,7 +749,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.pushRoute(title, next + '/students');
 	},
 
-	onItemClick: function(v, record) {
+	onItemClick: function (v, record) {
 		var selModel = v.getSelectionModel(),
 			selection = selModel && selModel.selection,
 			dataIndex = selection && selection.columnHeader.dataIndex;
@@ -760,7 +760,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	fireGoToAssignment: function(v, record, pageSource) {
+	fireGoToAssignment: function (v, record, pageSource) {
 		var student = record.get('User'),
 			historyItem = record.get('HistoryItemSummary');
 
@@ -772,7 +772,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.showStudentForAssignment(student, this.assignment, historyItem);
 	},
 
-	goToRawAssignment: function() {
+	goToRawAssignment: function () {
 		var title = this.assignment.get('title'),
 			id = this.assignment.getId();
 

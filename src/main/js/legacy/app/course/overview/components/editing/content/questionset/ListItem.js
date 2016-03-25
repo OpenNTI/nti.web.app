@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	statics: {
 		isAssessmentWidget: true,
-		getSupported: function() {
+		getSupported: function () {
 			return [
 				NextThought.model.QuestionSetRef.mimeType,
 				NextThought.model.AssignmentRef.mimeType
@@ -19,18 +19,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	updateRecord: function(record) {
+	updateRecord: function (record) {
 		var me = this;
 
 		me.course.getAssignments()
-			.then(function(assignments) {
+			.then(function (assignments) {
 				me.assignment = assignments.getItem(record.get('Target-NTIID'));
 
 				me.setRecord(record);
 			});
 	},
 
-	getPreviewType: function() {
+	getPreviewType: function () {
 		return this.assignment ? 'course-overview-assignment' : 'course-overview-naquestionset';
 	}
 });

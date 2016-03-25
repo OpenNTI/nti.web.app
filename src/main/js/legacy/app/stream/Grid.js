@@ -8,7 +8,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Grid', {
 	cls: 'grid-stream',
 
 
-	getPageConfig: function() {
+	getPageConfig: function () {
 		return {
 			xtype: 'stream-grid-page'
 		};

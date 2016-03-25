@@ -11,9 +11,9 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Curre
 	storeModel: 'NextThought.model.Community',
 
 	statics: {
-		shouldShow: function() {
+		shouldShow: function () {
 			return Service.getCommunitiesList()
-				.then(function(communities) {
+				.then(function (communities) {
 					return communities.length;
 				});
 		}
@@ -21,12 +21,12 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Curre
 
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var siteCommunity = Service.get('SiteCommunity');
 
-		this.sorterFn = function(a, b) {
+		this.sorterFn = function (a, b) {
 			var aVal = a.getName(),
 				bVal = b.getName();
 
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Curre
 			.then(this.showCurrentItems.bind(this));
 	},
 
-	showCurrentItems: function(communities) {
+	showCurrentItems: function (communities) {
 		if (communities.length > 8) {
 			this.showSeeAll();
 		} else {
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Curre
 		this.showItems(communities.slice(0, 8));
 	},
 
-	showItems: function(items) {
+	showItems: function (items) {
 		var siteCommunity = Service.get('SiteCommunity');
 
 		if (this.store) {
@@ -81,13 +81,13 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.Curre
 		});
 	},
 
-	onSeeAllClick: function() {
+	onSeeAllClick: function () {
 		if (this.pushRoute) {
 			this.pushRoute('Communities', '/communities');
 		}
 	},
 
-	navigate: function(community, el) {
+	navigate: function (community, el) {
 		if (this.navigateToCommunity) {
 			this.navigateToCommunity(community, el);
 		}

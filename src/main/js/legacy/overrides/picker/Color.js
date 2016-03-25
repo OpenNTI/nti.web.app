@@ -8,14 +8,14 @@ module.exports = exports = Ext.define('NextThought.overrides.picker.Color', {
 
 	renderTpl: [
 		'<tpl for="colors">',
-			'<a href="#" class="color-',
-				'<tpl if="values==\'None\'">NONE</tpl>',
-				'<tpl if="values!=\'None\'">{.}</tpl>',
-				'" hidefocus="on">',
-				'<em><span style="background:#{.}" unselectable="on">&#160;</span></em>',
-			'</a>',
+		'<a href="#" class="color-',
+		'<tpl if="values==\'None\'">NONE</tpl>',
+		'<tpl if="values!=\'None\'">{.}</tpl>',
+		'" hidefocus="on">',
+		'<em><span style="background:#{.}" unselectable="on">&#160;</span></em>',
+		'</a>',
 		'</tpl>'
 	]
-}, function() {
+}, function () {
 	this.prototype.colors.push('None');
 });

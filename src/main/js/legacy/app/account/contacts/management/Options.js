@@ -11,8 +11,8 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		xtype: 'menucheckitem',
 		plain: true,
 		listeners: {
-			'beforecheckchange': function(item, checked) { return item.allowUncheck !== false; },
-			'click': function(item) {item.up('menu').handleClick(item);}
+			'beforecheckchange': function (item, checked) { return item.allowUncheck !== false; },
+			'click': function (item) {item.up('menu').handleClick(item);}
 		}
 	},
 	items: [
@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		{ text: getString('NextThought.view.account.contacts.management.Options.remove'), cls: 'no-checkbox', removeContact: true, allowSelect: true}
 	],
 
-	handleClick: function(item) {
+	handleClick: function (item) {
 		if (item.removeContact) {
 			if (!this.isContact) { return; }
 			this.fireEvent('remove-contact-selected', this, this.user);
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		}
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.closeEl = Ext.DomHelper.append(this.el, {cls: 'close', html: ''}, true);
 		this.callParent(arguments);
 
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 			this.down('[removeContact=true]').setDisabled(true);
 		}
 
-		this.closeEl.on('click', function(e) {
+		this.closeEl.on('click', function (e) {
 			e.stopEvent();
 			this.stopHideTimeout();
 			this.doDismiss = true;
@@ -52,12 +52,12 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 		}, this);
 
 
-		this.mon(this.el, 'mouseover', function(e) {
+		this.mon(this.el, 'mouseover', function (e) {
 			this.stopHideTimeout();
 			this.doDismiss = false;
 		}, this);
 
-		this.mon(this.el, 'mouseout', function(e) {
+		this.mon(this.el, 'mouseout', function (e) {
 			if (!this.isClosing) {
 				this.startHideTimeOut();
 			}
@@ -65,18 +65,18 @@ module.exports = exports = Ext.define('NextThought.app.account.contacts.manageme
 			this.doDismiss = true;
 		}, this);
 
-		this.on('beforedeactivcate', function(e) {
+		this.on('beforedeactivcate', function (e) {
 			return this.doDismiss;
 		}, this);
 	},
 
-	startHideTimeOut: function() {
-		this.hideTimeout = Ext.defer(function() {
+	startHideTimeOut: function () {
+		this.hideTimeout = Ext.defer(function () {
 			this.fireEvent('hide-menu');
 		}, 1000, this);
 	},
 
-	stopHideTimeout: function() {
+	stopHideTimeout: function () {
 		clearTimeout(this.hideTimeout);
 	}
 });

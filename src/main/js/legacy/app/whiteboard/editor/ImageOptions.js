@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 		{ text: 'Take Picture', menu: [], disabled: true*/ }
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		var file = this.down('file-browser-menu-item');
 
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 		file[(window.FileReader === undefined) ? 'disable' : 'enable']();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		//only enable canvas dropping if allowed...
@@ -60,13 +60,13 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 		}
 	},
 
-	enableImageDropping: function() {
+	enableImageDropping: function () {
 		var me = this,
 			el = me.up('whiteboard-editor').canvas.el,
 			t;
 
 		if (!el) {
-			setTimeout(function() {
+			setTimeout(function () {
 
 				me.enableImageDropping();
 			},
@@ -74,12 +74,12 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 			return;
 		}
 
-		function over(e) {
+		function over (e) {
 			el.addCls('drop-over');
 			e.stopPropagation();
 			e.preventDefault();
 			if (t) { clearTimeout(t); }
-			t = setTimeout(function() {el.removeCls('drop-over');}, 100);
+			t = setTimeout(function () {el.removeCls('drop-over');}, 100);
 			return false; //for IE
 		}
 
@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 		});
 	},
 
-	dropImage: function(e) {
+	dropImage: function (e) {
 		e.stopPropagation();
 		e.preventDefault();
 
@@ -108,13 +108,13 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 	},
 
 	//TODO - should fire when menuitem is selected, override in initComponent of this toolbar
-	selectImage: function(inputField) {
+	selectImage: function (inputField) {
 		var hasFileApi = Boolean(inputField.fileInputEl.dom.files),
 			files = hasFileApi ? inputField.extractFileInput().files : [];
 		this.readFile(files);
 	},
 
-	readFile: function(files) {
+	readFile: function (files) {
 		var me = this,
 			file = files[0],
 			reader;
@@ -122,35 +122,35 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 		//file.size
 		if (!file || !(/image\/.*/i).test(file.type)) {
 			//TODO: alert user
-	  cfg = {
+	  		cfg = {
 		title: 'Sorry.',
 		icon: 'warning-red',
-		msg: "You can't upload that type of file."
-			};
-	  alert(cfg);
+		msg: 'You can\'t upload that type of file.'
+	};
+	  		alert(cfg);
 			console.log('selected file was invalid, or the browser does not support FileAPI');
 			return;
 		}
 
 		if (window.FileReader) {
 			reader = new FileReader();
-			reader.onload = function(event) {
+			reader.onload = function (event) {
 				me.insertImage(event.target.result);
 			};
 			reader.readAsDataURL(file);
 		}
 	},
 
-	handlePaste: function(event) {
+	handlePaste: function (event) {
 		var clipboardData = event.clipboardData || {},
 			me = this;
 
-		Ext.each(clipboardData.types || [], function(type, i) {
+		Ext.each(clipboardData.types || [], function (type, i) {
 			var file, reader;
 			if (type.match(/image\/.*/i)) {
 				file = clipboardData.items[i].getAsFile();
 				reader = new FileReader();
-				reader.onload = function(evt) {
+				reader.onload = function (evt) {
 					me.insertImage(evt.target.result);
 				};
 				reader.readAsDataURL(file);
@@ -161,14 +161,14 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 
 	},
 
-	insertImage: function(dataUrl) {
+	insertImage: function (dataUrl) {
 		var image = new Image(),
 			e = this.up('whiteboard-editor'),
 			c = e.canvas,
 			width,
 			height;
 
-		function addImageToWhiteboard() {
+		function addImageToWhiteboard () {
 			var m = new NTMatrix(),
 				canvasWidth = c.getWidth(),
 				canvasHeight = c.getHeight(),
@@ -195,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 			c.drawScene();
 		}
 
-		function scaleImage(maxW, maxH) {
+		function scaleImage (maxW, maxH) {
 			var aspectRatio = 1.0,
 				nw, nh,
 				cs = Ext.DomHelper.append(Ext.getBody(), {tag: 'canvas', style: {visibility: 'hidden', position: 'absolute'}}),
@@ -224,7 +224,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 
 		}
 
-		image.onload = function() {
+		image.onload = function () {
 			var maxImgH = 500,
 				maxImgW = 500;
 
@@ -242,15 +242,15 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ImageOp
 		WBUtils.maybeProxyImage(dataUrl, image);
 	},
 
-	getOptions: function() {
+	getOptions: function () {
 		return {};
 	},
 
-	setOptions: function() {
+	setOptions: function () {
 		console.warn('no need to set options on image toolbar');
 	},
 
-	getToolType: function() {
+	getToolType: function () {
 		return 'image';
 	}
 });

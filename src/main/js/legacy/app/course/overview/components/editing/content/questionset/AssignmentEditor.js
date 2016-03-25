@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 	alias: 'widget.overview-editing-assignment-editor',
 
-	showEditor: function() {
+	showEditor: function () {
 		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord, this.onFormChange.bind(this));
 
 		if (this.selectedItem) {
@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	addPreview: function(item) {
+	addPreview: function (item) {
 		var me = this,
 			now = new Date(),
 			dueDate = item.getDueDate(),
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			listeners: {
 				click: {
 					element: 'el',
-					fn: function(e) {
+					fn: function (e) {
 						if (e.getTarget('.remove')) {
 							me.onChangeItem();
 						}
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	getValues: function() {
+	getValues: function () {
 		var item = this.selectedItem;
 
 		return {
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	},
 
-	hasRecordChanged: function(values) {
+	hasRecordChanged: function (values) {
 		var changed = false;
 
 		if (!this.record) {
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return changed;
 	},
 
-	onSave: function() {
+	onSave: function () {
 		var me = this,
 			parentSelection = me.parentSelection,
 			originalPosition = parentSelection && parentSelection.getOriginalPosition(),
@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		return me.EditingActions.saveValues(values, me.record, originalPosition, currentPosition, me.rootRecord)
-			.fail(function(reason) {
+			.fail(function (reason) {
 				me.enableSubmission();
 
 				return Promise.reject(reason);

@@ -14,12 +14,12 @@ module.exports = exports = Ext.define('NextThought.store.UserSearch', {
 	},
 
 	filters: [
-		{ fn: function(rec) { return !isMe(rec); } },
-		{ fn: function(rec) { return (!rec.isEveryone || !rec.isEveryone()); } }
+		{ fn: function (rec) { return !isMe(rec); } },
+		{ fn: function (rec) { return (!rec.isEveryone || !rec.isEveryone()); } }
 	],
 
 	sorters: [
-		{sorterFn: function(a, b) {
+		{sorterFn: function (a, b) {
 			var list = this.contactsList, aa, bb;
 			if (!this.contactsList || (new Date() - (this.lastUsed || 0)) > 0) {
 				this.contactsList = list = NextThought.app.groups.StateStore.getInstance().getFriendsList().getContacts();
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.store.UserSearch', {
 
 	minRemoteSearchLength: 3,
 
-	search: function(q) {
+	search: function (q) {
 		var query = q || '';
 
 		if (query.length === 0) {

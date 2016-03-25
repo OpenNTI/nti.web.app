@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 	cls: 'blog-window',
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -42,11 +42,11 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 		} 
 	},
 
-	onClose: function() {
+	onClose: function () {
 		this.doClose(this.activeBlogPost);
 	},
 
-	loadBlog: function() {
+	loadBlog: function () {
 		if (this.precache.blog) {
 			return Promise.resolve(this.precache.blog);
 		}
@@ -59,44 +59,44 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 		}
 
 		return Service.request(href)
-			.then(function(resp) {
+			.then(function (resp) {
 				return ParseUtils.parseItems(resp)[0];
 			});
 	},
 
-	loadBlogPost: function() {
+	loadBlogPost: function () {
 		this.remove(this.loadingEl);
 
 		this.showBlogPost(this.record);
 	},
 
-	loadBlogEntry: function() {
+	loadBlogEntry: function () {
 		var entry = this.record.get('ContainerId'),
 			me = this;
 
 		return Service.getObject(entry)
-			.then(function(blogPost) {
+			.then(function (blogPost) {
 				me.remove(me.loadingEl);
 				me.showBlogPost(blogPost);
 			});
 	},
 
-	loadBlogComment: function() {
+	loadBlogComment: function () {
 		var me = this,
 			postId = me.record.get('ContainerId');
 
 		Service.getObject(postId)
-			.then(function(blogPost) {
+			.then(function (blogPost) {
 				me.remove(me.loadingEl);
 				me.showBlogPost(blogPost, me.record);
 			});
 	},
 
-	loadEditor: function(blogPost) {
+	loadEditor: function (blogPost) {
 		var me = this;
 
 		me.loadBlog()
-			.then(function(blog) {
+			.then(function (blog) {
 				me.remove(me.loadingEl);
 
 				me.showEditor(blogPost || me.record, blog);
@@ -105,15 +105,15 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 			});
 	},
 
-	showBlog: function() {},
+	showBlog: function () {},
 
-	showBlogPost: function(blogPost, activeComment) {
+	showBlogPost: function (blogPost, activeComment) {
 		var me = this,
 			blogPostCmp = this.down('profile-blog-post');
 
 		me.headerCmp.showPathFor(me.record, 'Thoughts', 3);
 
-		function startTimer() {
+		function startTimer () {
 			if (!me.hasCurrentTimer) {
 				me.hasCurrentTimer = true;
 
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 			}
 		}
 
-		function stopTimer() {
+		function stopTimer () {
 			if (me.currentAnalyticId && me.hasCurrentTimer) {
 				delete me.hasCurrentTimer;
 				AnalyticsUtil.stopResourceTimer(me.currentAnalyticId, 'thought-viewed');
@@ -141,11 +141,11 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 
 		if (!me.visibilityMonitors) {
 			me.visibilityMonitors = me.on({
-				'destroy': function() {
+				'destroy': function () {
 					Ext.destroy(me.visibilityMonitors);
 					stopTimer();
 				},
-				'visibility-changed': function(visible) {
+				'visibility-changed': function (visible) {
 					//start the time when we become visible, stop it when we hide
 					if (visible) {
 						startTimer();
@@ -170,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 		});
 	},
 
-	showEditor: function(blogPost, blog) {
+	showEditor: function (blogPost, blog) {
 		var me = this,
 			blogPostCmp = this.down('profile-blog-post'),
 			sharingInfo = blogPost && blogPost.getSharingInfo(),
@@ -194,7 +194,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 		});
 
 		me.mon(editor, {
-			'cancel': function(rec) {
+			'cancel': function (rec) {
 				me.remove(editor);
 
 				if (blogPost) {
@@ -203,7 +203,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 					me.doClose();
 				}
 			},
-			'after-save': function(rec) {
+			'after-save': function (rec) {
 				me.remove(editor);
 				me.record = rec;
 				me.showBlogPost(rec);
@@ -214,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Window', {
 			}
 		});
 	}
-}, function() {
+}, function () {
 	NextThought.app.windows.StateStore.register('new-blog', this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.PersonalBlogEntry.mimeType, this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.PersonalBlogComment.mimeType, this);

@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		buttonsEl: '.buttons'
 	},
 
-	updateEntity: function(entity, tabs) {
+	updateEntity: function (entity, tabs) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateUser.bind(this, entity, tabs));
 			return;
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		}
 	},
 
-	fillInEntity: function(entity) {
+	fillInEntity: function (entity) {
 		var data = entity.getAboutData();
 
 		this.avatarContainerEl.dom.innerHTML = Ext.util.Format.avatar(entity);
@@ -69,15 +69,15 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		this.aboutFieldEl.dom.innerHTML = data.about || '';
 	},
 
-	setSchema: function(schema) {},
+	setSchema: function (schema) {},
 
-	__updateTabs: function(tabs) {
+	__updateTabs: function (tabs) {
 		this.clearTabs();
 
 		tabs.forEach(this.addTab.bind(this));
 	},
 
-	leaveGroup: function() {
+	leaveGroup: function () {
 		if (this.doLeaveGroup) {
 			this.doLeaveGroup();
 		}

@@ -3,7 +3,7 @@ var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 
-	initRouter: function() {
+	initRouter: function () {
 		this.__mimeMap = {};
 	},
 
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 	 * @param {String|Array} mimeTypes MimeType or list of MimeTypes to use the handler for
 	 * @param {Function} handler   function to handle mime types
 	 */
-	addObjectHandler: function(mimeTypes, handler) {
+	addObjectHandler: function (mimeTypes, handler) {
 		if (!(mimeTypes instanceof Array)) {
 			mimeTypes = [mimeTypes];
 		}
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 
 		var map = this.__mimeMap;
 
-		(mimeTypes || []).forEach(function(mimeType) {
+		(mimeTypes || []).forEach(function (mimeType) {
 			if (map[mimeType]) {
 				throw 'MimeType collision' + mimeType;
 			} else {
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 	},
 
 
-	addDefaultObjectHandler: function(handler) {
+	addDefaultObjectHandler: function (handler) {
 		this.defaultObjectHandler = handler;
 	},
 
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 	 * @param  {Object|String} object
 	 * @return {String}		  object's mime type
 	 */
-	__getMimeType: function(object) {
+	__getMimeType: function (object) {
 		if (typeof object === 'string') {
 			return object;
 		}
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 	 * @param  {Object|String} objectOrMimeType thing to handle
 	 * @return {Promise}				  fulfills with handler's return
 	 */
-	handleObject: function(objectOrMimeType) {
+	handleObject: function (objectOrMimeType) {
 		var object = typeof objectOrMimeType === 'string' ? null : objectOrMimeType,
 			mimeType = this.__getMimeType(objectOrMimeType),
 			val;
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Object', {
 	 * @param {Object} root the object that would be set as my root for the path
 	 * @return {Object} the route route to navigate to
 	 */
-	getRouteForPath: function(path, root) {
+	getRouteForPath: function (path, root) {
 		return {
 			path: '',
 			isFull: false,

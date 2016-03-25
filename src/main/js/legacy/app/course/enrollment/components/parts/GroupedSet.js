@@ -6,11 +6,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	extend: 'NextThought.app.course.enrollment.components.parts.Set',
 	alias: 'widget.enrollment-grouped-set',
 
-	initComponent: function() {
+	initComponent: function () {
 		var me = this,
 			inputs = [];
 
-		(me.options || []).forEach(function(option) {
+		(me.options || []).forEach(function (option) {
 			inputs.push({
 				type: 'split-radio',
 				text: option.text,
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			});
 
 			if (!Ext.isEmpty(option.inputs)) {
-				option.inputs.forEach(function(input) {
+				option.inputs.forEach(function (input) {
 					input.groupParent = option.value;
 					input.otherCls = 'nested';
 					input.hidden = true;
@@ -35,14 +35,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	isValid: function() {
+	isValid: function () {
 		var r = this.callParent(arguments),
 			me = this,
 			body = me.el.down('.body-container'),
 			radios = me.query('[type=split-radio]') || [],
 			isAnswered = false;
 
-		radios.forEach(function(radio) {
+		radios.forEach(function (radio) {
 			var v = radio.getValue();
 
 			if (v[me.name]) {
@@ -60,24 +60,24 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	getValue: function() {
+	getValue: function () {
 		var me = this,
 			answers = {};
 
-		(me.options || []).forEach(function(option) {
-			var radio = me.down('[type=split-radio][value="' + option.value + "']"),
+		(me.options || []).forEach(function (option) {
+			var radio = me.down('[type=split-radio][value="' + option.value + '\']'),
 				value = radio.getValue();
 
 			if (value[me.name] === option.value) {
-				(option.inputs || []).forEach(function(input) {
-					var cmp = me.down('[name="' + input.name + "']");
+				(option.inputs || []).forEach(function (input) {
+					var cmp = me.down('[name="' + input.name + '\']');
 
 					if (cmp) {
 						value = Ext.apply(value, cmp.getValue && cmp.getValue());
 					}
 				});
 			} else {
-				(option.inputs || []).forEach(function(input) {
+				(option.inputs || []).forEach(function (input) {
 					value[input.name] = input.defaultAnswer;
 				});
 			}
@@ -89,10 +89,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	setValue: function(value) {
+	setValue: function (value) {
 		var radios = this.query('[type=split-radio]') || [];
 
-		radios.forEach(function(radio) {
+		radios.forEach(function (radio) {
 			radio.setValue(value);
 		});
 
@@ -100,12 +100,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	showSubInputs: function(value) {
+	showSubInputs: function (value) {
 		var me = this,
 			allInputs = me.query('[groupParent]') || [],
 			toShow = me.query('[groupParent="' + value + '"]') || [];
 
-		allInputs.forEach(function(input) {
+		allInputs.forEach(function (input) {
 			input.hide();
 
 			if (input.hides) {
@@ -113,14 +113,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			}
 		});
 
-		toShow.forEach(function(input) {
+		toShow.forEach(function (input) {
 			if (!input.shouldHide) {
 				input.show();
 			}
 		});
 	},
 
-	changed: function(name, value, doNotStore, sets) {
+	changed: function (name, value, doNotStore, sets) {
 		this.callParent(arguments);
 
 		var body = this.el.down('.body-container');
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	isCorrect: function() {
+	isCorrect: function () {
 		var values = this.getValue(),
 			inputs = this.inputs || [], i,
 			correct = true, empty = true;

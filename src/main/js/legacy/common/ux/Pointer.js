@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.Pointer', {
 	cls: 'pointer',
 	shadowBuffer: 3,
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (!this.getPointerStyle) {
@@ -38,13 +38,13 @@ module.exports = exports = Ext.define('NextThought.common.ux.Pointer', {
 	},
 
 
-	disable: function() {
+	disable: function () {
 		this.hide();
 		return this.callParent();
 	},
 
 
-	show: function() {
+	show: function () {
 		if (!this.disabled) {
 			this.callParent(arguments);
 		}
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.Pointer', {
 	},
 
 
-	point: function() {
+	point: function () {
 		if (!this.rendered || this.disabled) {
 			return;
 		}

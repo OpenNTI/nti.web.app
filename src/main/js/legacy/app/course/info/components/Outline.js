@@ -8,11 +8,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 	alias: 'widget.course-info-outline',
 	layout: 'none',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 	},
 
-	setContent: function(info, status, showRoster, courseMode) {
+	setContent: function (info, status, showRoster, courseMode) {
 		var startDate = Ext.util.Format.date(info.get('StartDate'), 'F j, Y');
 
 		this.removeAll(true);
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 		}
 	},
 
-	setActiveItem: function(route) {
+	setActiveItem: function (route) {
 		this.activePath = route.path;
 
 		if (this.menu) {
@@ -66,11 +66,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ou
 		}
 	},
 
-	getMenu: function() {
+	getMenu: function () {
 		return this.menu || this.down('course-info-outline-menu');
 	},
 
-	changeRoute: function(title, route) {
+	changeRoute: function (title, route) {
 		this.fireEvent('select-route', title, route);
 	}
 });

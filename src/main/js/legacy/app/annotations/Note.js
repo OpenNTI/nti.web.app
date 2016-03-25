@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Note', {
 	isNote: true,
 
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 		this.hasSpecificRange = this.getRecordField('style') !== 'suppressed';
 
@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Note', {
 	},
 
 
-	onDestroy: function() {
+	onDestroy: function () {
 		var children = this.getRecord().children || [];
 
 		if (children.length > 0) {
@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Note', {
 	},
 
 
-	attachRecord: function(record) {
+	attachRecord: function (record) {
 		this.mon(record, 'convertedToPlaceholder', 'requestRender');
 		var r = this.getRecord();
 		if (r) {
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Note', {
 	},
 
 
-	render: function() {
+	render: function () {
 		var y;
 		if (this.hasSpecificRange) {
 			y = this.callParent(arguments);

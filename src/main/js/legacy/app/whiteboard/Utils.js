@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 
 	USE_DATA_URLS: false,
 
-	getSlope: function(x0,y0, x1,y1) {
+	getSlope: function (x0,y0, x1,y1) {
 		if (Ext.isArray(x0)) {
 			y1 = x0[3];
 			x1 = x0[2];
@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 		return (y1 - y0) / (x1 - x0);
 	},
 
-	getDegrees: function(x0,y0, x1,y1) {
+	getDegrees: function (x0,y0, x1,y1) {
 		if (Ext.isArray(x0)) {
 			y1 = x0[3];
 			x1 = x0[2];
@@ -30,15 +30,15 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 		return Math.atan2(dy, dx) * 180 / Math.PI;
 	},
 
-	toRadians: function(degrees) {
+	toRadians: function (degrees) {
 		return (degrees % 360) * (Math.PI / 180);
 	},
 
-	toDegree: function(radians) {
+	toDegree: function (radians) {
 		return Math.round((radians * 180) / Math.PI);
 	},
 
-	getDistance: function(x1, y1, x2, y2) {
+	getDistance: function (x1, y1, x2, y2) {
 		if (Ext.isArray(x1)) {
 			y2 = x1[3];
 			x2 = x1[2];
@@ -50,9 +50,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 		return Math.sqrt(dx * dx + dy * dy);
 	},
 
-	canUse: function(image, fastOnCORS) {
+	canUse: function (image, fastOnCORS) {
 		var c, ctx, img, l = location;
-		var origin = l.protocol + "//" + l.hostname + (l.port ? ':' + l.port: '');
+		var origin = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '');
 		try {
 			var src = image.src;
 			var cors = src.indexOf(origin) < 0;
@@ -78,15 +78,15 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 		return true;
 	},
 
-	maybeProxyImage: function(url, image) {
-		function errorPassthrough() {
+	maybeProxyImage: function (url, image) {
+		function errorPassthrough () {
 			console.error('Could not load: ' + url);
 			passthrough();
 		}
 
-		function passthrough() { image.src = url; }
+		function passthrough () { image.src = url; }
 
-		function finishTest() {
+		function finishTest () {
 			if (!me.canUse(tempImage, true)) {
 				image.src = me.proxyImage(url);
 				return;
@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 		tempImage.src = url;
 	},
 
-	proxyImage: function(imageUrl) {
+	proxyImage: function (imageUrl) {
 		if (/^data:/i.test(imageUrl)) {
 			console.error('A data url was attempted to be proxied.');
 			throw 'A data url was attempted to be proxied.';
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 		return getURL($AppConfig.server.data + '@@echo_image_url?image_url=' + encodeURIComponent(imageUrl));
 	},
 
-	imgToDataUrl: function(img) {
+	imgToDataUrl: function (img) {
 		var c, url;
 		img = Ext.getDom(img);
 		c = document.createElement('canvas');
@@ -121,16 +121,16 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 		return url;
 	},
 
-	createFromImage: function(img, cb, forceDataUrl) {
+	createFromImage: function (img, cb, forceDataUrl) {
 		var me = this,
 			image,
 			useClonedImage = forceDataUrl || me.USE_DATA_URLS;
 
-		function error() {
+		function error () {
 			alert('Hmm, there seems to be a problem with that image');
 		}
 
-		function requestDataURL() {
+		function requestDataURL () {
 			var proxyUrl, proxy, dataUrl;
 			try {
 				dataUrl = me.imgToDataUrl(img);
@@ -140,11 +140,11 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 				Ext.getBody().mask('Loading...');
 				proxyUrl = me.proxyImage(img.src);
 				proxy = new Image();
-				proxy.onerror = function() {
+				proxy.onerror = function () {
 					Ext.getBody().unmask();
 					error('bad_proxy');
 				};
-				proxy.onload = function() {
+				proxy.onload = function () {
 					Ext.getBody().unmask();
 					dataUrl = me.imgToDataUrl(proxy);
 					image.src = dataUrl;
@@ -157,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 		if (useClonedImage === true) {
 			image = new Image();
 			image.onerror = error;
-			image.onload = function() { Ext.callback(cb, null, [me.buildCanvasFromImage(image)], 1); };
+			image.onload = function () { Ext.callback(cb, null, [me.buildCanvasFromImage(image)], 1); };
 			requestDataURL();
 		}
 		else {
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Utils', {
 
 	},
 
-	buildCanvasFromImage: function(img) {
+	buildCanvasFromImage: function (img) {
 		var w = img.naturalWidth || img.width,
 			h = img.naturalHeight || img.height,
 			scale = 1 / w,

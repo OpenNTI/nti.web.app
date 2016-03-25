@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	statics: {
 		creationText: 'Add Lesson',
 
-		getTypes: function() {
+		getTypes: function () {
 			return {
 				mimeType: NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType,
 				types: []

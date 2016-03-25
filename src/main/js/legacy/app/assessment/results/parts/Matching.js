@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.tabBar = this.add({
@@ -63,11 +63,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 		this.barChart.show();
 	},
 
-	getRowLabels: function() {
+	getRowLabels: function () {
 		return this.questionPart.get('values');
 	},
 
-	getSeriesLabels: function() {
+	getSeriesLabels: function () {
 		return this.questionPart.get('labels');
 	},
 
@@ -95,16 +95,16 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	 *
 	 * @return {Object} Map of the results
 	 */
-	getResults: function() {
+	getResults: function () {
 		var oldResults = this.resultPart.Results,
 			newResults = {},
 			resultKeys = Object.keys(oldResults);
 
-		resultKeys.forEach(function(labelIdx) {
+		resultKeys.forEach(function (labelIdx) {
 			var result = oldResults[labelIdx],
 				keys = Object.keys(result);
 
-			keys.forEach(function(valueIdx) {
+			keys.forEach(function (valueIdx) {
 				newResults[valueIdx] = newResults[valueIdx] || {};
 
 				newResults[valueIdx][labelIdx] = oldResults[labelIdx][valueIdx];
@@ -121,7 +121,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	 *
 	 * @return {Array} the rows to show in the bar chart.
 	 */
-	getAxis: function() {
+	getAxis: function () {
 		var resultParts = this.getResults(),
 			total = this.resultPart.Total,
 			rowLabels = this.getRowLabels(),
@@ -129,19 +129,19 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 			d = document.createElement('div'),
 			axis = [];
 
-		function clean(text) {
+		function clean (text) {
 			d.innerHTML = text;
 			return d.textContent;
 		}
 
-		rowLabels.forEach(function(value, valueIndex) {
+		rowLabels.forEach(function (value, valueIndex) {
 			var valueResult = resultParts[valueIndex],
 				row = {
 					label: clean(value),
 					series: []
 				};
 
-			seriesLabels.forEach(function(label, labelIndex) {
+			seriesLabels.forEach(function (label, labelIndex) {
 				var labelResult = valueResult[labelIndex];
 
 				if (labelResult) {
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 		return axis;
 	},
 
-	getTable: function() {
+	getTable: function () {
 		var resultParts = this.getResults(),
 			total = this.resultPart.Total,
 			rowLabels = this.getRowLabels(),
@@ -169,16 +169,16 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 			d = document.createElement('div'),
 			rows = [];
 
-		function clean(text) {
+		function clean (text) {
 			d.innerHTML = text;
 			return d.textContent;
 		}
 
-		rowLabels.forEach(function(value, valueIndex) {
+		rowLabels.forEach(function (value, valueIndex) {
 			var valueResult = resultParts[valueIndex],
 				row = [clean(value)];
 
-			seriesLabels.forEach(function(label, labelIndex) {
+			seriesLabels.forEach(function (label, labelIndex) {
 				var labelResult = valueResult[labelIndex];
 
 				row.push(labelResult || 0);
@@ -189,7 +189,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 
 
 		return {
-			header: seriesLabels.reduce(function(acc, label) {
+			header: seriesLabels.reduce(function (acc, label) {
 				acc.push(clean(label));
 
 				return acc;
@@ -198,7 +198,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 		};
 	},
 
-	showTable: function() {
+	showTable: function () {
 		this.barChart.hide();
 		this.table.show();
 
@@ -206,7 +206,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 		this.chartTab.removeCls('active');
 	},
 
-	showChart: function() {
+	showChart: function () {
 		this.table.hide();
 		this.barChart.show();
 

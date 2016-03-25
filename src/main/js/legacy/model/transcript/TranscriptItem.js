@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.model.transcript.TranscriptIt
 
 	statics: {
 
-		fromDom: function(el, basePath) {
+		fromDom: function (el, basePath) {
 			var t = Ext.fly(el).down('object[type*=mediatranscript]'),
 				url, type, jsonpUrl, assocVideoId, o;
 
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.model.transcript.TranscriptIt
 		},
 
 
-		fromVideo: function(v, basePath) {
+		fromVideo: function (v, basePath) {
 			var o = v.get('transcripts');
 
 			//For now, since we only assume there is one transcript per video, we can do this:

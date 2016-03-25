@@ -38,20 +38,20 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 		{xtype: 'codecreation-main-view'}
 	],
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.el.down('.close'), 'click', this.close, this);
 		this.el.down('input').focus(200);
 		if (Ext.is.iPad) {
 			this.mon(this.el.down('input'), {
-				blur: function() {
+				blur: function () {
 					window.scrollTo(0, 0);
 				}
 			});
 		}
 	},
 
-	showCreatedGroupCode: function(code) {
+	showCreatedGroupCode: function (code) {
 		var headerView = this.query('account-header-view')[0];
 		headerView.updateHeaderText(
 			getString('NextThought.view.account.codecreation.Window.created-title'),
@@ -61,11 +61,11 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 		this.doLayout();
 	},
 
-	getGroupName: function() {
+	getGroupName: function () {
 		return this.query('codecreation-main-view')[0].getGroupName();
 	},
 
-	showError: function(errorText) {
+	showError: function (errorText) {
 		return this.query('codecreation-main-view')[0].showError(errorText);
 	}
 });

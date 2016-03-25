@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	ui: 'course',
 	cls: 'overview-group',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.add([
@@ -46,10 +46,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.setCollection(this.record);
 	},
 
-	onceLoaded: function() {
+	onceLoaded: function () {
 		var me = this;
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			if (me.collectionSet) {
 				fulfill();
 			} else {
@@ -61,31 +61,31 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	setProgress: function(progress) {
+	setProgress: function (progress) {
 		var body = this.getBodyContainer();
 
-		body.items.each(function(item) {
+		body.items.each(function (item) {
 			if (item.setProgress) {
 				item.setProgress(progress);
 			}
 		});
 	},
 
-	setCommentCounts: function(commentCounts) {
+	setCommentCounts: function (commentCounts) {
 		var body = this.getBodyContainer();
 
-		body.items.each(function(item) {
+		body.items.each(function (item) {
 			if (item.setCommentCounts) {
 				item.setCommentCounts(commentCounts);
 			}
 		});
 	},
 
-	getBodyContainer: function() {
+	getBodyContainer: function () {
 		return this.down('[bodyContainer]');
 	},
 
-	setCollection: function(collection) {
+	setCollection: function (collection) {
 		var me = this,
 			items = me.getItems(collection),
 			body = me.getBodyContainer(),
@@ -95,15 +95,15 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			course = me.course,
 			node = me.outlineNode;
 
-		function getType(i) { return 'course-overview-' + (i.MimeType || i.type || '').split('.').last();}
-		function getClass(t) { return t && Ext.ClassManager.getByAlias('widget.' + t); }
+		function getType (i) { return 'course-overview-' + (i.MimeType || i.type || '').split('.').last();}
+		function getClass (t) { return t && Ext.ClassManager.getByAlias('widget.' + t); }
 
 		if (!items.length) {
 			this.hide();
 		}
 
 
-		items = (items || []).reduce(function(items, record) {
+		items = (items || []).reduce(function (items, record) {
 			var item = record.raw,
 				type = getType(item),
 				cls = getClass(type),
@@ -154,12 +154,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				if (item && item.assignment) {
 					items.push(assignments.fetchAssignment(item['target-ntiid'])
-								.then(function(assignment) {
+								.then(function (assignment) {
 									item.assignment = assignment;
 
 									return item;
 								})
-								.fail(function(reason) {
+								.fail(function (reason) {
 									console.error('Unable to update assignment: ', reason);
 
 									item.assignment = assignments.getItem(item['target-ntiid']);
@@ -176,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}, []);
 
 		Promise.all(items)
-			.then(function(items) {
+			.then(function (items) {
 				body.add(items);
 
 				me.collectionSet = true;
@@ -184,5 +184,5 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-	navigate: function() {}
+	navigate: function () {}
 });

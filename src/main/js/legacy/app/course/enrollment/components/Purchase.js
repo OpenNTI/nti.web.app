@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 							validateOnChange: true,
 							paymentFormatter: 'formatCardNumber',
 							//validator: 'validateCardNumber',
-							getter: function(val) {
+							getter: function (val) {
 								return val.replace(/[^0-9]/g, '');
 							}
 						},
@@ -128,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		'quantity': 'updatePrice'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.enableBubble(['show-msg', 'update-buttons', 'create-enroll-purchase']);
@@ -142,13 +142,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.add(this.form);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.beforeShow();
 	},
 
-	fillInDefaults: function(values) {
+	fillInDefaults: function (values) {
 		values.number = '';
 		values.cvc = '';
 		values.affirm = false;
@@ -156,42 +156,42 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return values;
 	},
 
-	lock: function() {
+	lock: function () {
 		this.locked = true;
 		this.previousDisabled = this.submitBtnCfg.disabled;
 		this.submitBtnCfg.disabled = true;
 		this.fireEvent('update-buttons');
 	},
 
-	unlock: function() {
+	unlock: function () {
 		this.locked = false;
 		this.submitBtnCfg.disabled = !!this.previousDisabled;
 		this.fireEvent('update-buttons');
 	},
 
-	beforeShow: function() {
+	beforeShow: function () {
 		// this.submitBtnCfg.disabled = false;
 		// this.fireEvent('update-buttons');
 		this.updateFromStorage();
 	},
 
-	getButtonCfg: function() {
+	getButtonCfg: function () {
 		return this.buttonCfg;
 	},
 
-	buttonClick: function(action) {
+	buttonClick: function (action) {
 		if (action === 'submit-payment') {
 			this.maybeSubmit();
 		}
 	},
 
-	stopClose: function() {
+	stopClose: function () {
 		var r, me = this;
 
 		if (this.hasMask()) {
 			r = Promise.reject();
 		} else {
-			r = new Promise(function(fulfill, reject) {
+			r = new Promise(function (fulfill, reject) {
 				Ext.Msg.show({
 					title: getString('NextThought.view.courseware.enrollment.Purchase.PayNotSubmitted'),
 					msg: getString('NextThought.view.courseware.enrollment.Purchase.ProgressLost'),
@@ -203,7 +203,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 						},
 						secondary: {
 							text: getString('NextThought.view.courseware.enrollment.Purchase.LeavePage'),
-							handler: function() {
+							handler: function () {
 								me.clearStorage();
 								fulfill();
 							}
@@ -215,12 +215,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return r;
 	},
 
-	showTerms: function() {
+	showTerms: function () {
 		//TODO hardcoded link needs to go away preferably for a link like what we use for the welcome guide
 		window.open(Service.getSupportLinks().termsOfService, '_blank');
 	},
 
-	getPricingInfo: function(formValue) {
+	getPricingInfo: function (formValue) {
 		var desc = {Purchasable: this.enrollmentOption.Purchasable},
 			coupon = this.getCoupon();
 
@@ -231,7 +231,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return desc;
 	},
 
-	getParsedValues: function() {
+	getParsedValues: function () {
 		var raw = this.getValue();
 
 		if (raw.exp_) {
@@ -253,10 +253,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return raw;
 	},
 
-	shouldAllowSubmission: function() {
+	shouldAllowSubmission: function () {
 		var me = this;
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			if (me.isValid()) {
 				fulfill();
 			} else {
@@ -266,7 +266,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-	showStripeError: function(json) {
+	showStripeError: function (json) {
 		var error = {};
 
 		if (json) {
@@ -288,7 +288,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.showError(error);
 	},
 
-	maybeSubmit: function() {
+	maybeSubmit: function () {
 		var me = this,
 			invalid,
 			value = me.getParsedValues(),
@@ -300,19 +300,19 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 		me.shouldAllowSubmission()
 			.then(
-				function() {
+				function () {
 					invalid = false;
 					me.submitBtnCfg.disabled = true;
 					me.fireEvent('update-buttons');
 					me.addMask(getString('NextThought.view.courseware.enrollment.Purchase.CardProcessNotCharge'));
 					return me.complete(me, data);
 				},
-				function() {
+				function () {
 					invalid = true;
 					return Promise.reject();
 				}
 			)
-			.then(function(result) {
+			.then(function (result) {
 				if (!result.pricing || !result.tokenObject) {
 					console.error('Unexpected result', result);
 					return Promise.reject({});
@@ -323,7 +323,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				me.enrollmentOption.tokenObject = result.tokenObject;
 				me.done(me);
 			})
-			.fail(function(error) {
+			.fail(function (error) {
 				if (!invalid) {
 					console.error('failed to create token', arguments);
 					me.removeMask();

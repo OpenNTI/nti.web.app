@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var me = this, renderData = {},
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 				Footer: this.getFooter()
 			};
 
-		Ext.Object.each(fields, function(key, value) {
+		Ext.Object.each(fields, function (key, value) {
 			//if the get* returns a promise what for it to fulfill and call set*
 			if (value instanceof Promise) {
 				value.then(me.callWhenRendered.bind(me, 'set' + key));
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	callWhenRendered: function(name, value) {
+	callWhenRendered: function (name, value) {
 		if (!this.rendered) {
 			this.on('afterrender', this[name].bind(this, value));
 			return;
@@ -66,40 +66,40 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', 'itemClicked');
 	},
 
 
-	itemClicked: function(e) {
+	itemClicked: function (e) {
 		if (this.handleNavigation) {
 			this.handleNavigation();
 		}
 	},
 
 
-	getPath: function() { return ''; },
-	getTitle: function() { return ''; },
-	getBullets: function() { return ''; },
-	getFooter: function() { return ''; },
+	getPath: function () { return ''; },
+	getTitle: function () { return ''; },
+	getBullets: function () { return ''; },
+	getFooter: function () { return ''; },
 
 
-	setPath: function(value) {
+	setPath: function (value) {
 		this.pathEl.update(value.join(' / '));
 	},
 
 
-	setTitle: function(value) {
+	setTitle: function (value) {
 		this.titleEl.update(value);
 	},
 
 	//TODO: fill this out when we need it
-	setBullets: function() {},
+	setBullets: function () {},
 
 
-	setFooter: function(value) {
+	setFooter: function (value) {
 		this.footerEl.update(value);
 	}
 });

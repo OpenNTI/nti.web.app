@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					{cls: 'buttons', cn: [
 							{cls: 'button send-email link', html: 'Send another email'},
 							{cls: 'button link change-email', html: 'Change email address'}
-						]
+					]
 					}
 				]},
 				{cls: 'input-box', cn: [
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 				{ cls: 'header', cn: [
 					{cls: 'buttons', cn: [
 							{cls: 'button verify-email link', html: '< Back to Email Verification'}
-						]
+					]
 					},
 					{cls: 'title', html: 'Update Email Address'},
 					{cls: 'sub'}
@@ -121,7 +121,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	beforeRender: function(){
+	beforeRender: function () {
 		this.callParent(arguments);
 		this.renderData = Ext.applyIf(this.renderData || {}, {
 			email: this.user && this.user.get('email'),
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this;
@@ -146,7 +146,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.mon(this.cancelEditEl, 'click', this.onClose.bind(this));
 		this.mon(this.clearEmailEl, 'click', this.resetEmail.bind(this));
 
-		this.on('show', function() {
+		this.on('show', function () {
 			me.tokenEl.focus(200);
 		});
 
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	maybeEnableSubmit: function(e) {
+	maybeEnableSubmit: function (e) {
 		var val = this.tokenEl.getValue(),
 			cls = 'disabled',
 			hasError = this.el.down('.input-box.error');
@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	submitClicked: function(e) {
+	submitClicked: function (e) {
 		if (e.getTarget('.done')) {
 			this.onClose();
 			return;
@@ -183,23 +183,23 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	getValue: function(){
+	getValue: function () {
 		return this.tokenEl.getValue();
 	},
 
 
-	onSave: function(){
+	onSave: function () {
 		var tokenVal = this.getValue(),
 			me = this;
 
 		me.saveToken(tokenVal)
-			.fail(function (){
+			.fail(function () {
 				me.showError();
 			});
 	},
 
 
-	onClose: function() {
+	onClose: function () {
 		if(this.ownerCt && this.ownerCt.close) {
 			this.ownerCt.close();
 		}
@@ -209,11 +209,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	saveToken: function(tokenVal) {
+	saveToken: function (tokenVal) {
 		var me = this;
 		if (!Ext.isEmpty(tokenVal) && isMe(this.user)) {
 			return this.user.verifyEmailToken(tokenVal)
-				.then(function(resp) {
+				.then(function (resp) {
 					me.showCongrats();
 					if (me.ownerCt && me.ownerCt.onVerificationComplete) {
 						me.ownerCt.onVerificationComplete();
@@ -225,7 +225,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	saveEmail: function(e) {
+	saveEmail: function (e) {
 		var emailVal = this.emailEditEl.getValue(),
 			oldEmail = this.user && this.user.get('email'),
 			me = this;
@@ -236,9 +236,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		this.user.set('email', emailVal);
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			me.user.save({
-				success: function(resp) {
+				success: function (resp) {
 					var o = resp.responseText,
 						newUser = ParseUtils.parseItems(o)[0];
 
@@ -246,7 +246,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					me.user.set('Links', newUser.get('Links'));
 					fulfill(true);
 				},
-				failure: function(resp) {
+				failure: function (resp) {
 					var msg = Ext.JSON.decode(resp.responseText, true) || {};
 
 					me.showEmailEditError(msg);
@@ -258,7 +258,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	submitEmailClicked: function(e) {
+	submitEmailClicked: function (e) {
 		if (!isMe(this.user)) {
 			return;
 		}
@@ -271,7 +271,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 
 		this.saveEmail()
-			.then(function() {
+			.then(function () {
 				me.emailEl.update(me.user.get('email'));
 				messageEl.update('Your email has been updated.');
 				messageEl.addCls('success visible');
@@ -282,11 +282,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	setupEmailEdit: function() {
+	setupEmailEdit: function () {
 		var me = this,
 			profileSchema;
 		this.user.getSchema()
-			.then(function(schema) {
+			.then(function (schema) {
 				var profileSchema = schema.ProfileSchema,
 					email = profileSchema && profileSchema.email;
 
@@ -302,20 +302,20 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	showEmailCard: function() {
+	showEmailCard: function () {
 		this.el.down('.card').addCls('flipped');
 		this.emailEditEl.focus(200);
 		this.clearEmailEl.show();
 	},
 
 
-	showVerifyCard: function() {
+	showVerifyCard: function () {
 		this.el.down('.card').removeCls('flipped');
 		this.tokenEl.focus(200);
 	},
 
 
-	showCongrats: function() {
+	showCongrats: function () {
 		this.congratsWrapperTpl.append(this.el);
 		this.submitEl.addCls('done');
 		this.submitEl.update('Dismiss');
@@ -323,28 +323,28 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	presentPendingVerification: function(waitingSeconds) {
+	presentPendingVerification: function (waitingSeconds) {
 		if (!waitingSeconds) { return; }
 
 		var txt = 'It may take several minutes for the email to reach your inbox. Please wait before requesting another.',
 			me = this;
 
 		me.onceRendered
-			.then(function() {
+			.then(function () {
 				me.subtitleEl.update(txt);
 				me.el.addCls('has-time-error');
 			});
 	},
 
 
-	handlePendingError: function() {
+	handlePendingError: function () {
 		var txt = getString('NextThought.view.account.verification.EmailToken.PendingTitle'),
 			sub = getFormattedString('NextThought.view.account.verification.EmailToken.PendingSubTitle', {time: timeTxt});
 
 	},
 
 
-	showError: function(error) {
+	showError: function (error) {
 		var errorEl = this.el.down('.front .error-msg'),
 			inputBoxEl = this.el.down('.front .input-box');
 		if (errorEl) {
@@ -355,7 +355,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	showEmailEditError: function(msg) {
+	showEmailEditError: function (msg) {
 		var errorEl = this.el.down('.back .error-msg'),
 			inputBoxEl = this.el.down('.back .input-box');
 
@@ -367,14 +367,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	reset: function() {
+	reset: function () {
 		this.clearError();
 		this.tokenEl.dom.value = '';
 		this.maybeEnableSubmit();
 	},
 
 
-	clearError: function(){
+	clearError: function () {
 		var errorEl = this.el.down('.error-msg'),
 			inputBoxEl = this.el.down('.input-box');
 
@@ -383,13 +383,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	resetEmail: function() {
+	resetEmail: function () {
 		this.clearEmailError();
 		this.emailEditEl.dom.value = '';
 	},
 
 
-	clearEmailError: function(){
+	clearEmailError: function () {
 		var errorEl = this.el.down('.back .error-msg'),
 			inputBoxEl = this.el.down('.back .input-box');
 
@@ -400,12 +400,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	sendEmailVerification: function() {
+	sendEmailVerification: function () {
 		return $AppConfig.userObject.sendEmailVerification();
 	},
 
 
-	handleVerificationRequest: function(e) {
+	handleVerificationRequest: function (e) {
 		var me = this,
 			targetEl = Ext.get(e.target);
 
@@ -422,21 +422,21 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		me.isVerifyingEmail = true;
 		wait(1000)
 			.then(this.sendEmailVerification.bind(this))
-			.then(function() {
+			.then(function () {
 				me.el.removeCls('has-time-error');
 				me.subtitleEl.update('');
 				me.requestLinkEl.update('Sent!');
 				me.titleEl.update('We sent another verification email to:');
 
 				wait(1000)
-					.then(function() {
+					.then(function () {
 						me.requestLinkEl.update('Send another email');
 						me.requestLinkEl.removeCls('sending');
 
 						delete me.isVerifyingEmail;
 					});
 			})
-			.fail(function(resp) {
+			.fail(function (resp) {
 				var e = Ext.decode(resp.responseText);
 				if (resp.status === 422) {
 					me.presentPendingVerification(e && e.seconds);

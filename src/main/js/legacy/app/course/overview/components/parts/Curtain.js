@@ -35,18 +35,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		playBlurEl: '.curtain .play .blur'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, this.video);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.selectVideo();
 		this.mon(this.curtainEl, 'click', this.onCurtainClicked.bind(this));
 	},
 
 	// Adds a videos attributes to the curtain
-	selectVideo: function() {
+	selectVideo: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.selectVideo.bind(this));
 			return;
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			resolver = NextThought.model.resolvers.VideoPosters;
 
 		Promise.all(
-			sources.map(function(source) {
+			sources.map(function (source) {
 				var data;
 
 				if (source.poster) {
@@ -67,18 +67,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					};
 				} else {
 					data = resolver.resolveForSource(source)
-						.fail(function() {
+						.fail(function () {
 							return null;
 						});
 				}
 
 				return data;
 			})
-		).then(function(results) {
-			return results.filter(function(result) {
+		).then(function (results) {
+			return results.filter(function (result) {
 				return !!result;
 			})[0];
-		}).then(function(data) {
+		}).then(function (data) {
 			if (!data || !data.poster) { return; }
 
 			var p = 'url(' + data.poster + ')';
@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	},
 
-	onCurtainClicked: function(e) {
+	onCurtainClicked: function (e) {
 		e.stopEvent();
 		this.curtainClicked(e);
 	}

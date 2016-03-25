@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	items: [],
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.itemCmp = this.add({
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var data = this.getItemData(this.selectionItem);
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	addChildren: function() {
+	addChildren: function () {
 		var me = this,
 			children = me.getItemChildren(me.selectionItem);
 
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				xtype: 'container',
 				cls: 'selection-children',
 				layout: 'none',
-				items: children.map(function(child) {
+				items: children.map(function (child) {
 					return {
 						xtype: 'overview-editing-item-selection-item',
 						selectionItem: child,
@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	setItemData: function(data) {
+	setItemData: function (data) {
 		this.itemTpl.append(this.itemCmp.el, data);
 
 		this.hasItemData = true;
@@ -86,7 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	doExpand: function() {
+	doExpand: function () {
 		this.addCls('expanded');
 
 		if (this.onItemExpand) {
@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	doCollapse: function() {
+	doCollapse: function () {
 		this.removeCls('expanded');
 
 		if (this.onItemCollapse) {
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	onItemClick: function(e) {
+	onItemClick: function (e) {
 		if (e.getTarget('.expand')) {
 			if (this.hasCls('expanded')) {
 				this.doCollapse();
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	unexclude: function(item) {
+	unexclude: function (item) {
 		if (this.hasItemData) {
 			this.itemCmp.removeCls('excluded');
 			this.itemCmp.el.dom.removeAttribute('data-qtip');
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	maybeExclude: function(item) {
+	maybeExclude: function (item) {
 		if (!this.hasItemData) {
 			this.on({
 				single: true,
@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	maybeSelectItem: function(item) {
+	maybeSelectItem: function (item) {
 		if (!this.hasItemData) {
 			this.on({
 				single: true,
@@ -182,7 +182,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		if (this.childContainer) {
-			this.childContainer.items.each(function(child) {
+			this.childContainer.items.each(function (child) {
 				if (child && child.maybeSelectItem) {
 					child.maybeSelectItem(item);
 				}
@@ -191,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	maybeUnselectItem: function(item) {
+	maybeUnselectItem: function (item) {
 		if (!this.hasItemData) {
 			this.on({
 				single: true,
@@ -210,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		if (this.childContainer) {
-			this.childContainer.items.each(function(child) {
+			this.childContainer.items.each(function (child) {
 				if (child && child.maybeUnselectItem) {
 					child.maybeUnselectItem(item);
 				}
@@ -219,7 +219,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	applySearchTerm: function(term) {
+	applySearchTerm: function (term) {
 		if (!term || !this.itemMatchesSearch || this.itemMatchesSearch(this.selectionItem, term)) {
 			this.itemCmp.removeCls('filtered');
 		} else {
@@ -227,7 +227,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		if (this.childContainer) {
-			this.childContainer.items.each(function(child) {
+			this.childContainer.items.each(function (child) {
 				if (child && child.applySearchTerm) {
 					child.applySearchTerm(term);
 				}

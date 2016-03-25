@@ -5,7 +5,7 @@ var ShapesBase = require('./Base');
 module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Path', {
 	extend: 'NextThought.app.whiteboard.shapes.Base',
 
-	draw: function(ctx,renderCallback) {
+	draw: function (ctx,renderCallback) {
 		this.callParent(arguments);
 
 		var p = Ext.clone(this.points),
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Path', 
 		renderCallback.call(this);
 	},
 
-	getCenter: function(transformed) {
+	getCenter: function (transformed) {
 		if (!this.bbox) { return; }
 
 		var center = [this.bbox.x + (this.bbox.w / 2), this.bbox.y + (this.bbox.h / 2)],
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Path', 
 		return center;
 	},
 
-	shouldEnableRotation: function() {
+	shouldEnableRotation: function () {
 		return false;
 	}
 

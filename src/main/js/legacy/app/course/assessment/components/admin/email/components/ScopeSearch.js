@@ -7,13 +7,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	alias: 'widget.scope-sharesearch',
 
 
-	setupSearchList: function() {
+	setupSearchList: function () {
 		this.searchList = this.add({
 			xtype: 'share-search',
 			ownerCls: this.ownerCls,
 			loadMaskContainer: this.el,
 			selectItem: this.selectItem.bind(this),
-			onRecordClick: function(view, record) {
+			onRecordClick: function (view, record) {
 				this.selectItem(record);
 			}
 		});

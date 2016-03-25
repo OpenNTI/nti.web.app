@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		{ tag: 'tpl', 'if': 'isDroppable', cn: {cls: 'drop', html: 'Drop Course'}}
 	]),
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var isOpen = this.course.isOpen(),
@@ -39,13 +39,13 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', 'onClick', this);
 	},
 
-	onClick: function(e) {
+	onClick: function (e) {
 		var instance = this.course.get('CourseInstance'),
 			catalog = instance.getCourseCatalogEntry();
 

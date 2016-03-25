@@ -27,25 +27,25 @@ module.exports = exports = Ext.define('NextThought.model.Slide', {
 		{ name: 'slidedeckid', type: 'string'}
 	],
 
-	getSibling: function(direction) {
+	getSibling: function (direction) {
 		var s = this.store;
 		return s.getAt(s.indexOf(this) + direction);
 	},
 
 	statics: {
-		getParamFromDom: function(dom, name) {
+		getParamFromDom: function (dom, name) {
 			var el = Ext.DomQuery.select('param[name="' + name + '"]', dom)[0];
 			return el ? el.getAttribute('value') : null;
 		},
 
-		fromDom: function(dom, containerId, videoIndex) {
+		fromDom: function (dom, containerId, videoIndex) {
 
-			function getParam(name) {
+			function getParam (name) {
 				var el = DQ.select('param[name="' + name + '"]', dom)[0];
 				return el ? el.getAttribute('value') : null;
 			}
 
-			function getImage() {
+			function getImage () {
 				var el = DQ.select('[itemprop] img', dom)[0], v = null;
 				if (el) {
 					v = el.getAttribute('data-nti-image-thumbnail') ||

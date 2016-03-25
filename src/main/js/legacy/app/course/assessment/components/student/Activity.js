@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		loadMoreLink: '.more'
 	},
 
-	getTargetEl: function() { return this.frameBodyEl; },
+	getTargetEl: function () { return this.frameBodyEl; },
 	itemSelector: '.item',
 
 	tpl: new Ext.XTemplate(
@@ -45,25 +45,25 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					]}), {
 				//template functions
 
-				isUnread: function(date) {
+						isUnread: function (date) {
 					return date > this.ownerCmp.getLastRead() ? 'unread' : '';
 				},
 
-				getTime: function(date) {
+						getTime: function (date) {
 					var format = 'M j',
-							today = new Date((new Date()).setHours(0, 0, 0, 0));
+						today = new Date((new Date()).setHours(0, 0, 0, 0));
 					if (date > today) {
 						format = 'g:i a';
 					}
 					return Ext.Date.format(date, format);
 				}
-			}),
+					}),
 
-	clear: function() {
+	clear: function () {
 		this.store.removeAll();
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.tpl.ownerCmp = this;
 		this.setTitle(this.title);
@@ -95,16 +95,16 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-	restoreState: function(state, active) {
+	restoreState: function (state, active) {
 		if (active) {
 			this.fireEvent('close-reader');
 		}
 	},
 
-	onLoadMore: function() {},
+	onLoadMore: function () {},
 
-	onAdded: function() {
-		function monitorCardChange(cmp, me) {
+	onAdded: function () {
+		function monitorCardChange (cmp, me) {
 			var c = cmp.up('{isOwnerLayout("card")}');
 			me = me || cmp;
 			if (c) {
@@ -120,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		monitorCardChange(this);
 	},
 
-	maybeClearBadge: function(deactivatedCmp) {
+	maybeClearBadge: function (deactivatedCmp) {
 		var c = this;
 		while (c && c.isVisible()) {
 			c = c.up();
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	clearBadge: function() {
+	clearBadge: function () {
 		if (this.notifications === 0) {
 			return;
 		}
@@ -152,7 +152,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.refresh();
 	},
 
-	setAssignmentsData: function(assignments, instance, savepoints) {
+	setAssignmentsData: function (assignments, instance, savepoints) {
 		var me = this,
 			waitsOn = [];
 
@@ -167,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.savepoints = savepoints;
 
 		//given an assignment figure out what activity item to add
-		function collect(o) {
+		function collect (o) {
 			waitsOn.push(
 				assignments.getHistoryItem(o.getId(), true)
 					.always(me.collectEvents.bind(me, o))
@@ -183,16 +183,16 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return Promise.all(waitsOn);
 	},
 
-	clearAssignmentsData: function() { this.clear(); },
+	clearAssignmentsData: function () { this.clear(); },
 
-	getEventConfig: function(label, target, date) {
+	getEventConfig: function (label, target, date) {
 		var a = this.assignments;
 		if (typeof target === 'string') {
 			if (!a.hasOwnProperty(target)) {
 				console.error('Dropping event, no assignment found in the map for:', target);
 
-				Error.raiseForReport((function() {
-					function trim(i) { return i.substring(p.length); }
+				Error.raiseForReport((function () {
+					function trim (i) { return i.substring(p.length); }
 
 					var keys = Object.keys(a),
 						p = String.commonPrefix(keys);
@@ -216,7 +216,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		};
 	},
 
-	addEvent: function(r) {
+	addEvent: function (r) {
 		var s = this.store;
 		try {
 			return (r && s.add.apply(s, arguments)[0]) || null;
@@ -225,14 +225,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	collectEvents: function(o, historyItem) {
+	collectEvents: function (o, historyItem) {
 		this.assignments[o.getId()] = o;
 		//if (o.doNotShow()) { return; }
 
 		this.deriveEvents(o, historyItem);
 	},
 
-	deriveEvents: function(assignment, historyItem) {
+	deriveEvents: function (assignment, historyItem) {
 		var me = this,
 			now = new Date(),
 			submission = historyItem && historyItem.get && historyItem.get('Submission'),
@@ -246,7 +246,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 
 		if (feedback) {
-			feedback.get('Items').forEach(function(f) {
+			feedback.get('Items').forEach(function (f) {
 				me.addFeedback(f);
 			});
 		}
@@ -268,7 +268,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	addFeedback: function(f) {
+	addFeedback: function (f) {
 		var c = f.get('Creator'),
 			label = isMe(c) ?
 				getFormattedString('NextThought.view.courseware.assessment.Activity.youfeedback', {name: 'You'}) :
@@ -277,7 +277,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		if (r) {
 			if (!isMe(c)) {
-				UserRepository.getUser(c).done(function(u) {
+				UserRepository.getUser(c).done(function (u) {
 					r.set({
 						label: getFormattedString('NextThought.view.courseware.assessment.Activity.theyfeedback', {name: u}),
 						user: u
@@ -291,7 +291,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return r;
 	},
 
-	setTitle: function(title) {
+	setTitle: function (title) {
 		this.title = title;
 		if (this.titleEl) {
 			this.titleEl.update(title);
@@ -303,10 +303,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	maybeNotify: function(store) {
+	maybeNotify: function (store) {
 		var count = 0, d = this.getLastRead();
 
-		store.each(function(r) {
+		store.each(function (r) {
 			if (r.get('date') > d) {
 				count++;
 			}
@@ -317,17 +317,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.refresh();
 	},
 
-	getLastRead: function() {
+	getLastRead: function () {
 		return this._lastRead || new Date();//don't show the notifications until we load the last view time.
 	},
 
-	setLastReadFrom: function(container) {
+	setLastReadFrom: function (container) {
 		this._lastRead = (container && container.get('lastViewed')) || new Date(0);
 		this._lastViewedURL = container && container.getLink('lastViewed');
 		this.maybeNotify(this.store);
 	},
 
-	goToAssignment: function(s, record) {
+	goToAssignment: function (s, record) {
 		var assignment = record.get('item');
 
 		if (!assignment) {

@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var title = this.assignment.get('title'),
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var height = Ext.Element.getViewportHeight();

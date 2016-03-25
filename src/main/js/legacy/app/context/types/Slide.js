@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 	statics: {
 		type: 'slide',
 
-		canHandle: function(obj) {
+		canHandle: function (obj) {
 			return obj && (obj.Class === 'Slide' || obj instanceof NextThought.model.Slide);
 		}
 	},
@@ -18,14 +18,14 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 		]}
 	]),
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 		Ext.applyIf(this, config || {});
 		this.MediaActions = NextThought.app.mediaviewer.Actions.create();
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
-	getBasePath: function(obj) {
+	getBasePath: function (obj) {
 		var slidedeckId = obj && obj.get('slidedeckid'),
 			me = this;
 
@@ -37,18 +37,18 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 			.then(this.MediaActions.getBasePath.bind(this.MediaActions));
 	},
 
-	parse: function(slide, kind) {
+	parse: function (slide, kind) {
 		var context, cmp, me = this, store, t;
 
 		return this.getBasePath(slide)
-				.then(function(basePath) {
+				.then(function (basePath) {
 					return Promise.resolve(basePath);
 				})
-				.fail(function() {
+				.fail(function () {
 					console.log(arguments);
 					return Promise.resolve();
 				})
-				.then(function(root) {
+				.then(function (root) {
 					var dom = new Ext.XTemplate(me.contextTpl).apply({image: (root || '') + slide.get('image')}),
 						cmp, config;
 					dom = Ext.DomHelper.createDom({cls: 'content-launcher', html: dom});
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 							record: me.record || me.contextRecord,
 							doNavigate: me.doNavigate,
 							type: kind
-						}
+						};
 
 						if (kind === 'card') {
 							cmp = Ext.apply(config, {xtype: 'context-slide-card'});

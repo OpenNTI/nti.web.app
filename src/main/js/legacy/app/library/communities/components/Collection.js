@@ -25,13 +25,13 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.compo
 			]}
 		]
 	}), {
-		getAvatar: function(model) {
+		getAvatar: function (model) {
 			return NTIFormat.avatar(model);
 		}
 	}),
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.on({
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.compo
 	},
 
 
-	truncateLabels: function() {
+	truncateLabels: function () {
 		var me = this;
 
 		if (!me.el) {
@@ -49,16 +49,16 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.compo
 			return;
 		}
 
-		wait(100).then(function() {
+		wait(100).then(function () {
 			var labels = me.el.select('.community-grid-item .title');
 
-			labels.each(function(label) {
+			labels.each(function (label) {
 				me.truncateText(label.dom, null, true);
 			});
 		});
 	},
 
-	handleSelect: function(selModel, record) {
+	handleSelect: function (selModel, record) {
 		selModel.deselect(record);
 
 		var node = this.getNodeByRecord(record);

@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.model.preference.Gradebook', 
 		{name: 'hide_avatars', type: 'bool'}
 	],
 
-	getResourceUrl: function() {
+	getResourceUrl: function () {
 		var base = this.callParent(arguments);
 
 		return base + '/Gradebook';

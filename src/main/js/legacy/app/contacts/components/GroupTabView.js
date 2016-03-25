@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		items: [],
 		ui: 'contacts-group',
 		cls: 'group-panel',
-		filter: function(group) { return group.hidden !== true && group.isDFL; },
+		filter: function (group) { return group.hidden !== true && group.isDFL; },
 		emptyCmp: {
 			xtype: 'box', emptyState: true,
 			renderTpl: Ext.DomHelper.markup([{
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		}
 	},
 
-	filter: function(group) { return group.hidden !== true && group.isDFL; },
+	filter: function (group) { return group.hidden !== true && group.isDFL; },
 	subType: 'group',
 
 	initComponent: function () {
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.Group
 		this.buildStore();
 	},
 
-	buildStore: function() {
+	buildStore: function () {
 		var s = this.GroupStore.getGroupsList(),
 			store = StoreUtils.newView(s);
 

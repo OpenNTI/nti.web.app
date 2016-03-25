@@ -4,16 +4,16 @@ var UtilSharing = require('../util/Sharing');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.Shareable', {
-	afterRender: function() {
+	afterRender: function () {
 		this.registerDragZone(this.dragSelector || 'img');
 		this.registerDropZone(this.dropSelector || 'img');
 	},
 
-	registerDragZone: function(dragSelector) {
+	registerDragZone: function (dragSelector) {
 		var me = this, el = this.getEl();
 		if (!el) {return;}
 		this.dragZone = Ext.dd.DragZone.create(el, {
-			getDragData: function(e) {
+			getDragData: function (e) {
 				var sourceEl = e.getTarget(dragSelector), d;
 				if (sourceEl) {
 					d = sourceEl.cloneNode(true);
@@ -29,27 +29,27 @@ module.exports = exports = Ext.define('NextThought.mixins.Shareable', {
 				}
 			},
 
-			getRepairXY: function() {
+			getRepairXY: function () {
 				return this.dragData.repairXY;
 			}
 		});
 	},
 
-	registerDropZone: function(dropSelector) {
+	registerDropZone: function (dropSelector) {
 		var me = this, el = me.getEl();
 		if (!el) {return;}
 		this.dropZone = Ext.dd.DropZone.create(el, {
-			getTargetFromEvent: function(e) { return e.getTarget(dropSelector); },
-			onNodeEnter: function(target, dd, e, data) { Ext.fly(target).addCls('target-hover'); },
-			onNodeOut: function(target, dd, e, data) { Ext.fly(target).removeCls('target-hover'); },
+			getTargetFromEvent: function (e) { return e.getTarget(dropSelector); },
+			onNodeEnter: function (target, dd, e, data) { Ext.fly(target).addCls('target-hover'); },
+			onNodeOut: function (target, dd, e, data) { Ext.fly(target).removeCls('target-hover'); },
 
-			onNodeOver: function(target, dd, e, data) {
+			onNodeOver: function (target, dd, e, data) {
 				if (data && data.username) {
 					return Ext.dd.DropZone.prototype.dropAllowed;
 				}
 			},
 
-			onNodeDrop: function(target, dd, e, data) {
+			onNodeDrop: function (target, dd, e, data) {
 				return SharingUtils.shareWith(me.record, data.usernames || [data.username]);
 			}
 		});

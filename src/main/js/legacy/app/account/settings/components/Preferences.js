@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 	]),
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.el, {
 			scope: this,
@@ -78,14 +78,14 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		this.updateCheckboxs();
 	},
 
-	updateCheckboxs: function() {
+	updateCheckboxs: function () {
 		var me = this,
 			prefs = {},
 			boxes = me.el.query('.nti-checkbox[data-preference-path]');
 
 		this.preferences = prefs;
 
-		boxes = boxes.map(function(el) {
+		boxes = boxes.map(function (el) {
 			var path = el.dataset.preferencePath,
 				key = el.dataset.preferenceKey,
 				promise = prefs[path];
@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 				promise = prefs[path] = $AppConfig.Preferences.getPreference(path);
 			}
 
-			promise = promise.then(function(pref) {
+			promise = promise.then(function (pref) {
 				Ext.fly(el).removeCls('not-ready');
 				Ext.fly(el)[pref && pref.get(key) ? 'addCls' : 'removeCls']('checked');
 				return el;
@@ -106,7 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 		return Promise.all(boxes);
 	},
 
-	checkboxClicked: function(e) {
+	checkboxClicked: function (e) {
 		e.stopEvent();
 		var dom = e.getTarget('.nti-checkbox[data-preference-path]'),
 			path = dom && dom.dataset.preferencePath,
@@ -116,10 +116,10 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 		if (!dom || !prefs || Ext.fly(dom).hasCls('not-ready')) {return;}
 
-		prefs.then(function(pref) {
+		prefs.then(function (pref) {
 			pref.set(key, state);
 			pref.save({
-				callback: function() {
+				callback: function () {
 					if (key === 'useHighContrast') {
 						Ext.util.Cookies.clear('use-accessibility-mode');
 						window.location.reload();

@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 		searchIconEl: '.search-icon'
 	},
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 		this.placeholder = 'Search';
 
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 		this.mon(this.SearchStore, 'sync-term', this.syncTerm.bind(this));
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.inputEl, {
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 		});
 	},
 
-	syncTerm: function(term) {
+	syncTerm: function (term) {
 		if (!this.rendered) {
 			this.on('afterrender', this.syncTerm.bind(this, term));
 			return;
@@ -75,28 +75,28 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 		this.inputEl.dom.value = term;
 	},
 
-	focusInput: function() {
+	focusInput: function () {
 		this.inputEl.focus();
 	},
 
-	onInputFocus: function() {
+	onInputFocus: function () {
 		this.isFocused = true;
 		this.onSearchFocus();
 	},
 
-	onInputBlur: function() {
+	onInputBlur: function () {
 		var me = this;
 
 		me.isFocused = false;
 		me.fromBlur = true;
 		me.onSearchBlur();
 
-		wait(1000).then(function() {
+		wait(1000).then(function () {
 			delete me.fromBlur;
 		});
 	},
 
-	keyDown: function(e) {
+	keyDown: function (e) {
 		var k = e.getKey();
 
 		if (this.specialKeys[k]) {
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 		}
 	},
 
-	keyPressed: function(e) {
+	keyPressed: function (e) {
 		e.stopPropagation();
 
 		var k = e.getKey();
@@ -122,14 +122,14 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 		}
 	},
 
-	searchClicked: function(e) {
+	searchClicked: function (e) {
 		if (!e.getTarget('.collapsed') || this.fromBlur) {
 			e.stopPropagation();
 			this.doNavigation();
 		}
 	},
 
-	doNavigation: function() {
+	doNavigation: function () {
 		if (this.noRouteOnSearch) { return this.doSearch(); }
 
 		this.doSearch(true);
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 		this.pushRootRoute('Search', route);
 	},
 
-	doSearch: function(silent) {
+	doSearch: function (silent) {
 		clearTimeout(this.searchEventDelayId);
 
 		var val = this.getValue();
@@ -162,12 +162,12 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 		this.SearchActions.setSearchContext(val, silent);
 	},
 
-	doSearchBuffered: function() {
+	doSearchBuffered: function () {
 		var me = this;
 
 		clearTimeout(this.searchEventDelayId);
 
-		this.searchEventDelayId = setTimeout(function() {
+		this.searchEventDelayId = setTimeout(function () {
 			var val = me.getValue();
 
 			if (!val || val.length > 3) {
@@ -176,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.search.SearchBar', {
 		}, me.BUFFER);
 	},
 
-	getValue: function() {
+	getValue: function () {
 		return this.inputEl.getValue();
 	}
 });

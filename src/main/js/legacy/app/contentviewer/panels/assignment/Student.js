@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	prefix: 'course-assignment',
 	cls: 'reader-container assignment-reader',
 
-	getToolbarConfig: function() {
+	getToolbarConfig: function () {
 		return {
 			xtype: 'assignment-header',
 			student: this.student,
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		};
 	},
 
-	getReaderConfig: function() {
+	getReaderConfig: function () {
 		var assignment = this.assignment;
 
 		if (assignment.isTimed && !assignment.isStarted() && isMe(this.student) && !this.instructorProspective) {
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		}
 	},
 
-	startTimed: function(assignment) {
+	startTimed: function (assignment) {
 		if (this.pageInfo) {
 			this.pageInfo.replaceAssignment(assignment);
 		}
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		}
 	},
 
-	showAllowedTime: function() {
+	showAllowedTime: function () {
 		var toolbar = this.getToolbar();
 
 		if (toolbar && toolbar.showAllowedTime) {
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		}
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.hasTimedPlaceholder) {
@@ -81,9 +81,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 	},
 
 	//Override this so the reader doesn't set the page info twice
-	setPageInfo: function() {},
+	setPageInfo: function () {},
 
-	showAssignment: function() {
+	showAssignment: function () {
 		var me = this,
 			header = me.getToolbar(),
 			reader = me.getReaderContent(),
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		reader.getScroll().lock();
 		reader.hidePageWidgets();
 
-		function done() {
+		function done () {
 			reader.getScroll().unlock();
 			me.beginViewedAnalytics();
 		}
@@ -119,16 +119,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			assignmentHistory = Promise.resolve(assignmentHistory);
 		}
 
-		assignmentHistory.then(function(h) {
+		assignmentHistory.then(function (h) {
 			return h;
-		}).fail(function() {
+		}).fail(function () {
 			return null;
-		}).then(function(h) {
+		}).then(function (h) {
 			readerAssessment.setAssignmentFromStudentProspective(assignment, h);
 			header.setHistory(h);
 
 			if (savepoint) {
-				savepoint.then(function(point) {
+				savepoint.then(function (point) {
 					readerAssessment.injectAssignmentSavePoint(point);
 				});
 			}
@@ -139,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		}).always(done.bind(this));
 	},
 
-	updateHistory: function(h) {
+	updateHistory: function (h) {
 		var header = this.getToolbar(),
 			readerContent = this.getReaderContent(),
 			assessment = readerContent.getAssessment();
@@ -148,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 		header.setHistory(h);
 	},
 
-	getAnalyticData: function() {
+	getAnalyticData: function () {
 		if (!this.assignment) {
 			return {};
 		}

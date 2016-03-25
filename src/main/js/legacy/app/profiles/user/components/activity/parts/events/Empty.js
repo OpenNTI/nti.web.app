@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	]),
 	
 	
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		var hasFilters = Boolean(this.hasFilters);
 		

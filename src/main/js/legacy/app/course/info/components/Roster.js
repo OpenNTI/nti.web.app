@@ -65,14 +65,14 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 									]}
 								]
 							}), {
-								getUsername: function(values) {
+								getUsername: function (values) {
 									var user = values && values.Creator;
 									return user && user.get && user.get('Username');
 								}
 							})
 						},
 						{ text: getString('NextThought.view.courseware.info.Roster.username'),
-							dataIndex: 'username', renderer: function(v, col, rec) {
+							dataIndex: 'username', renderer: function (v, col, rec) {
 								return rec.get('OU4x4') || v;
 							}
 						},
@@ -113,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		emailEl: '.tools .email'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.filterMenu = this.down('filter-menupanel');
 		this.grid = this.down('grid');
@@ -128,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this;
@@ -142,12 +142,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 
 		this.mon(this.grid, 'itemClick', 'handleClick');
 		Ext.EventManager.onWindowResize(this.onWindowResize, this, false);
-		me.on('destroy', function() {
+		me.on('destroy', function () {
 			Ext.EventManager.removeResizeListener(me.onWindowResize, me);
 		});
 	},
 
-	onActivate: function() {
+	onActivate: function () {
 		var grid = this.down('grid');
 		if (grid && grid.store) {
 			grid.getView().refresh();
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		}
 	},
 
-	updateFilterCount: function() {
+	updateFilterCount: function () {
 		if (!this.rendered) {
 			this.on('afterrender', 'updateFilterCount', this);
 			return;
@@ -170,13 +170,13 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		wait().then(this.adjustHeight.bind(this));
 	},
 
-	__getGridMaxHeight: function() {
+	__getGridMaxHeight: function () {
 		// deduct in order Top NavBar, paddingtop, roster header, roster grouping, column header.
 		// TODO: Find a better way to do this.
 		return Ext.Element.getViewportHeight() - 70 - 40 - 200 - 72 - 30;
 	},
 
-	adjustHeight: function() {
+	adjustHeight: function () {
 		var grid = this.down('grid'),
 			scrollTarget = grid && grid.getScrollTarget(),
 			currentHeight = scrollTarget && scrollTarget.getHeight(),
@@ -188,7 +188,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		}
 	},
 
-	onWindowResize: function() {
+	onWindowResize: function () {
 		var grid = this.down('grid'),
 			scrollTarget = grid && grid.getScrollTarget(),
 			scrollHeight = scrollTarget && scrollTarget.el && scrollTarget.el.dom.scrollHeight,
@@ -200,11 +200,11 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		}
 	},
 
-	onFilterClicked: function() {
+	onFilterClicked: function () {
 		this.filterMenu.showBy(this.filterLink.el, 'tl-tl', [0, 30]);
 	},
 
-	setContent: function(instance) {
+	setContent: function (instance) {
 		var roster = instance && instance.getLink('CourseEnrollmentRoster'),
 			smallRequestURLToGetCounts = roster && !Ext.isEmpty(roster) && Ext.String.urlAppend(
 					roster,
@@ -234,7 +234,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 				.fail(this.clearCounts.bind(this));
 	},
 
-	buildStore: function(url) {
+	buildStore: function (url) {
 		this.store = Ext.data.Store.create({
 			model: NextThought.model.courses.CourseInstanceEnrollment,
 			proxy: {
@@ -255,10 +255,10 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		this.storeMonitors = this.mon(this.store, {destroyable: true, load: 'updateFilterCount'});
 	},
 
-	setupEmail: function() {
+	setupEmail: function () {
 		var me = this;
 		this.onceRendered
-			.then(function() {
+			.then(function () {
 				me.emailEl = me.emailEl || me.el.down('.tools .email');
 				if (!me.emailListenerSet && me.emailEl && me.shouldAllowInstructorEmail()) {
 					me.emailListenerSet = true;
@@ -268,12 +268,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 			});
 	},
 
-	shouldAllowInstructorEmail: function() {
+	shouldAllowInstructorEmail: function () {
 		// Right now, we will only
 		return isFeature('instructor-email') && this.currentBundle && this.currentBundle.getLink('Mail');
 	},
 
-	maybeShowEmailButton: function() {
+	maybeShowEmailButton: function () {
 		if (!this.emailEl) {return; }
 
 		if (this.shouldAllowInstructorEmail()) {
@@ -284,7 +284,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		}
 	},
 
-	showEmailEditor: function(e) {
+	showEmailEditor: function (e) {
 		var me = this,
 			editor,
 			emailRecord = new NextThought.model.Email(),
@@ -303,12 +303,12 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		});
 	},
 
-	doSearch: function(str) {
+	doSearch: function (str) {
 		this.down('grid').getSelectionModel().deselectAll(true);
 		this.store.filter([{id: 'search', property: 'usernameSearchTerm', value: str}]);
 	},
 
-	doFilter: function(filter) {
+	doFilter: function (filter) {
 		try {
 			this.currentFilter = filter;
 			this.down('grid').getSelectionModel().deselectAll(true);
@@ -321,27 +321,27 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		}
 	},
 
-	setSeries: function(total, open, forCredit) {
+	setSeries: function (total, open, forCredit) {
 		this.down('pie-chart').setSeries([
 			{value: open || 0, label: 'Open'},
 			{value: forCredit || 0, label: 'For Credit'}
 		]);
 	},
 
-	clearCounts: function() {
+	clearCounts: function () {
 		this.setCount('*', 0);
 		this.setCount('Open', 0);
 		this.setCount('ForCredit', 0);
 		this.setSeries();
 	},
 
-	setCount: function(field, count) {
+	setCount: function (field, count) {
 		var m = this.down('filter-menupanel [filter="' + field + '"]');
 		if (m) { m.setCount(count); }
 		else { console.warn('Could not find filter: ' + field); }
 	},
 
-	fillCounts: function(serverResponse) {
+	fillCounts: function (serverResponse) {
 		var totalKey = 'TotalItemCount',
 			forCreditKey = 'Filtered' + totalKey,
 			total = serverResponse[totalKey],
@@ -355,7 +355,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		this.updateFilterCount();
 	},
 
-	handleClick: function(grid, record, node, i, e) {
+	handleClick: function (grid, record, node, i, e) {
 		var menu,
 			disclosure = e.getTarget('.disclosure');
 
@@ -371,7 +371,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		}
 	},
 
-	openIndividualEmail: function(e) {
+	openIndividualEmail: function (e) {
 		var target = e && e.getTarget('.email'),
 			user = target && target.getAttribute('data-user'),
 			index, rec, mailLink, emailRecord, r, creator;

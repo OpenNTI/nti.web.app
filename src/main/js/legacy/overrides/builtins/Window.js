@@ -3,8 +3,8 @@ var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.overrides.builtins.Window', {});
 
-(function() {
-	function getRequestAnimationFrame() {
+(function () {
+	function getRequestAnimationFrame () {
 		var names = [
 				'webkitRequestAnimationFrame',
 				'mozRequestAnimationFrame',
@@ -12,17 +12,17 @@ module.exports = exports = Ext.define('NextThought.overrides.builtins.Window', {
 			],
 			request;
 
-			request = names.reduce(function(acc, name) {
+		request = names.reduce(function (acc, name) {
 				return acc || window[name];
 			}, null);
 
-			if (!request) {
-				request = function(callback) {
+		if (!request) {
+				request = function (callback) {
 					return setTimeout(callback, 1000 / 60);
 				};
 			}
 
-			return request;
+		return request;
 	}
 
 	if (!window.requestAnimationFrame) {

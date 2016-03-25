@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	]),
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var dom = this.el.dom;
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	onClicked: function(e) {
+	onClicked: function (e) {
 		if (!e.getTarget('.remove')) {
 			return;
 		}
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	onEditorKeyPress: function(e) {
+	onEditorKeyPress: function (e) {
 		if (e.keyCode === Ext.EventObject.ENTER || e.charCode === Ext.EventObject.ENTER) {
 			this.saveNewInterest();
 			e.preventDefault();
@@ -70,14 +70,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	getEditor: function() {
+	getEditor: function () {
 		var dom = this.entriesEl.dom;
 
 		return dom && dom.querySelector('.new-field');
 	},
 
 
-	saveNewInterest: function() {
+	saveNewInterest: function () {
 		var editor = this.getEditor(),
 			text;
 
@@ -100,17 +100,17 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	applySchema: function() {},
+	applySchema: function () {},
 
 
-	isReadOnly: function() {
+	isReadOnly: function () {
 		var schema = this.profileSchema.ProfileSchema;
 
 		return !schema || schema.readonly;
 	},
 
 
-	setUneditable: function() {
+	setUneditable: function () {
 		var dom = this.entriesEl.dom,
 			editor = dom && dom.querySelector('.new-field');
 
@@ -120,12 +120,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	setEditable: function() {
+	setEditable: function () {
 		this.newEntryTpl.append(this.entriesEl);
 	},
 
 
-	setUser: function(user, isMe) {
+	setUser: function (user, isMe) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setUser.bind(this, user, isMe));
 			return;
@@ -141,9 +141,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		this.clearEntries();
 
-		data.interests.filter(function(x) {
+		data.interests.filter(function (x) {
 			return !!x;
-		}).map(function(interest) {
+		}).map(function (interest) {
 			return {label: interest};
 		}).forEach(this.addEntry.bind(this));
 
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	entryToValues: function(entry) {
+	entryToValues: function (entry) {
 		var label = entry.querySelector('.label');
 
 		//if we don't have a label we are the editor
@@ -165,7 +165,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	getErrorMsg: function() {
+	getErrorMsg: function () {
 		return '';
 	}
 });

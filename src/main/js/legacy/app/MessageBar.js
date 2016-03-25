@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBar', {
 		rememberEl: '.remember'
 	},
 
-	constructor: function(cfg) {
+	constructor: function (cfg) {
 		var messageType = cfg.messageType || '';
 
 		if (this.self.dontShow[messageType] || !Ext.isEmpty(Ext.ComponentQuery.query('message-bar'))) {
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.MessageBar', {
 		this.callParent(arguments);
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		if (Ext.isObject(this.message)) {
 			this.message = Ext.DomHelper.markup(this.message);
@@ -37,13 +37,13 @@ module.exports = exports = Ext.define('NextThought.app.MessageBar', {
 		this.renderData = Ext.apply(this.renderData || {}, {message: this.message});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.closeEl, 'click', this.destroy, this);
 		this.mon(this.rememberEl, 'click', this.remember, this);
 	},
 
-	remember: function() {
+	remember: function () {
 		this.self.dontShow[this.messageType] = !this.self.dontShow[this.messageType];
 		this.rememberEl[this.self.dontShow ? 'addCls' : 'removeCls']('checked');
 	}

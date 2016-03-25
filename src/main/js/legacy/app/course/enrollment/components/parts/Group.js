@@ -15,14 +15,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	]),
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.on('changed', 'changed');
 		this.enableBubble(['reveal-item', 'hide-item']);
 
 		this.callParent(arguments);
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {

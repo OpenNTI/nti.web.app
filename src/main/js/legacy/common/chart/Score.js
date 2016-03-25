@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Score', {
 		score: 0
 	},
 
-	getInitialState: function() {
+	getInitialState: function () {
 		//FIXME: Re-write this:
 		// See: http://facebook.github.io/react/tips/props-in-getInitialState-as-anti-pattern.html
 		// Additional Note: On Mount and Recieve Props fill state (this is ment to be called one per CLASS lifetime not Instance lifetime)
@@ -35,12 +35,12 @@ module.exports = exports = Ext.define('NextThought.common.chart.Score', {
 	},
 
 
-	getCanvas: function() {
+	getCanvas: function () {
 		return this.el.dom;
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		/*
 		var canvas = this.getCanvas();
 		var context = canvas.getContext('2d');
@@ -62,7 +62,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Score', {
 		this.paint(this.context);
 	},
 
-	paint: function(ctx) {
+	paint: function (ctx) {
 		var centerX = ctx.canvas.width / 2,
 			centerY = ctx.canvas.height / 2,
 			len = this.state.series.length, i = 0;
@@ -93,11 +93,11 @@ module.exports = exports = Ext.define('NextThought.common.chart.Score', {
 	},
 
 
-	getTotal: function() {
-		return this.state.series.reduce(function(sum, i) {return sum + i.value; }, 0);
+	getTotal: function () {
+		return this.state.series.reduce(function (sum, i) {return sum + i.value; }, 0);
 	},
 
-	drawSegment: function(ctx, i) {
+	drawSegment: function (ctx, i) {
 		var radius = Math.floor(ctx.canvas.width * 0.4),
 			series = this.state.series[i].value,
 			total = this.getTotal(),
@@ -135,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Score', {
 	},
 
 
-	drawLabel: function(ctx) {
+	drawLabel: function (ctx) {
 		try {
 			var centerX = ctx.canvas.width / 2,
 				centerY = ctx.canvas.height / 2,
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Score', {
 				textbox,
 				score = parseInt(this.score, 10),
 				font = {
-					size: Math.floor(radius/1.5),
+					size: Math.floor(radius / 1.5),
 					weight: 600
 				};
 
@@ -165,7 +165,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Score', {
 	},
 
 
-	sumTo: function(data, i) {
+	sumTo: function (data, i) {
 		var sum = 0, j = 0;
 		for (j; j < i; j++) {
 			sum += data[j].value;
@@ -174,10 +174,10 @@ module.exports = exports = Ext.define('NextThought.common.chart.Score', {
 	},
 
 
-	percentToRadians: function(percent) { return ((percent * 360) * Math.PI) / 180; },
+	percentToRadians: function (percent) { return ((percent * 360) * Math.PI) / 180; },
 
 
-	setFont: function(context, font) {
+	setFont: function (context, font) {
 		context.font = [
 			font.style || 'normal',
 			font.variant || 'normal',
@@ -186,7 +186,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Score', {
 		].join(' ');
 	},
 
-	setValue: function(score) {
+	setValue: function (score) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setValue.bind(this, score));
 			return;
@@ -203,7 +203,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Score', {
 		};
 
 		wait()
-			.then(function() {
+			.then(function () {
 				me.paint(me.context);
 			});
 	}

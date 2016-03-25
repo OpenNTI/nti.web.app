@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		frameBodyEl: '.outline-list'
 	},
 
-	getTargetEl: function() {
+	getTargetEl: function () {
 		return this.frameBodyEl;
 	},
 
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		]}
 	]})),
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.mixins.menuBehavior.constructor.call(this);
 		this.cssRule = CSSUtils.getRule('table-of-content-styles', '#' + this.id);
@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 	},
 
 	doFilter: Ext.Function.createBuffered(
-			function() {
+			function () {
 				if (this.isDestroyed) {return;}
 
 				var v = this.filterEl.getValue();
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 					this.store.filter({
 						id: 'search',
 						matchingIds: {},
-						fn: function(r) {
+						fn: function (r) {
 							//if we alread know its matching don't check again
 							if (this.matchingIds[r.get('NTIID')]) { return true; }
 
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			},
 			100),
 
-	onFilter: function(e) {
+	onFilter: function (e) {
 		if (e) {
 			try {
 				e.stopPropagation();
@@ -120,13 +120,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.doFilter();
 	},
 
-	onItemClick: function(record) {
+	onItemClick: function (record) {
 		this.onSelect(record);
 	},
 
 	HASH_REGEX: /#/,
 
-	__findPageNode: function(node) {
+	__findPageNode: function (node) {
 		if (!node || node.tagName === 'toc') {
 			return node;
 		}
@@ -140,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		return node;
 	},
 
-	onSelect: function(record) {
+	onSelect: function (record) {
 		var node = record.get('tocNode'),
 			pageNode = this.__findPageNode(node),
 			href = node.getAttribute('href'),
@@ -155,17 +155,17 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.doNavigation(pageNode.getAttribute('label'), id);
 	},
 
-	onShow: function() {
+	onShow: function () {
 		this.callParent(arguments);
 		this.showSelection();
 		this.stopShowHideTimers();
 	},
 
-	selectId: function(id) {
+	selectId: function (id) {
 		this.activeNTIID = id;
 	},
 
-	showSelection: function() {
+	showSelection: function () {
 		var rec = this.store.getById(this.activeNTIID);
 		if (rec) {
 			this.getSelectionModel().select(rec, false, true);
@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 	},
 
-	scrollSelectionIntoView: function() {
+	scrollSelectionIntoView: function () {
 		var el, scroll, offset, height,
 			sel = this.getSelectionModel().getSelection()[0];
 		if (!sel) {return;}

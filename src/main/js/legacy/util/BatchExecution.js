@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.util.BatchExecution', {
 	 *
 	 * @param  {Object} config
 	 */
-	constructor: function(config) {
+	constructor: function (config) {
 		this.batchSize = (config && config.batchSize) || 5;
 
 		this.TASKS = [];
@@ -27,19 +27,19 @@ module.exports = exports = Ext.define('NextThought.util.BatchExecution', {
 	 * @param  {Function} fn task to run
 	 * @return {Promise}	 fulfills with the return value of the task
 	 */
-	schedule: function(fn) {
+	schedule: function (fn) {
 		var me = this;
 
-		return new Promise(function(fulfill, rejeect) {
-			me.__queue(function() {
+		return new Promise(function (fulfill, rejeect) {
+			me.__queue(function () {
 				var resp = fn.call();
 
 				//if the resp is a Promise, a rejection will cause the execution to stop
 				//so catch failed promises.
 				if (resp instanceof Promise) {
-					resp = resp.then(function(val) {
+					resp = resp.then(function (val) {
 						fulfill(val);
-					}).fail(function(reason) {
+					}).fail(function (reason) {
 						console.warn('Batch Execution failed: ', reason);
 					});
 				} else {
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.util.BatchExecution', {
 	},
 
 
-	__queue: function(fn) {
+	__queue: function (fn) {
 		this.TASKS.push(fn);
 
 		if (!this.running) {
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.util.BatchExecution', {
 	},
 
 
-	__executeBatch: function() {
+	__executeBatch: function () {
 		//if we were stopped, don't execute the next batch
 		if (!this.running) { return; }
 
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.util.BatchExecution', {
 			return;
 		}
 
-		batch = batch.map(function(item) {
+		batch = batch.map(function (item) {
 			return item.call();
 		});
 
@@ -82,14 +82,14 @@ module.exports = exports = Ext.define('NextThought.util.BatchExecution', {
 	},
 
 
-	startExecution: function() {
+	startExecution: function () {
 		this.running = true;
 
 		this.__executeBatch();
 	},
 
 
-	stopExecution: function() {
+	stopExecution: function () {
 		this.running = false;
 	}
 });

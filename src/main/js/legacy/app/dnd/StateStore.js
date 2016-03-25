@@ -6,7 +6,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 
-	setActiveDragItem: function(activeItem) {
+	setActiveDragItem: function (activeItem) {
 		this.activeDragItem = activeItem;
 
 		if (activeItem && activeItem.getPlaceholderStyles) {
@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.StateStore', {
 	},
 
 
-	removeActiveDragItem: function(activeItem) {
+	removeActiveDragItem: function (activeItem) {
 		if (this.activeDragItem === activeItem) {
 			delete this.activeItem;
 			this.fireEvent('drag-stop');
@@ -25,12 +25,12 @@ module.exports = exports = Ext.define('NextThought.app.dnd.StateStore', {
 	},
 
 
-	getActiveDragItem: function() {
+	getActiveDragItem: function () {
 		return this.activeDragItem;
 	},
 
 
-	getPlaceholderStyles: function() {
+	getPlaceholderStyles: function () {
 		var styles;
 
 		if (this.placeholderStyles) {

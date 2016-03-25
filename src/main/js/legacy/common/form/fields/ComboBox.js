@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ComboBox',
 		itemCls: 'x-menu-item no-border',
 		emptyText: '<div class="x-menu-item">' + getString('NextThought.view.form.fields.ComboBox.empty') + '</div>',
 		xhooks: {
-			initComponent: function() {
+			initComponent: function () {
 				this.callParent(arguments);
 				this.itemSelector = '.x-menu-item';
 			}

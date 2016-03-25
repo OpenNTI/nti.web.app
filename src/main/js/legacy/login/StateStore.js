@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 	sessionTrackerKey: 'sidt',
 	actions: {},
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.onLoginActions = [];
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		});
 	},
 
-	registerLoginAction: function(fn, name) {
+	registerLoginAction: function (fn, name) {
 		if (name && !this.loginActionsNames[name]) {
 			this.onLoginActions.push(fn);
 			this.loginActionsNames[name] = true;
@@ -36,11 +36,11 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		}
 	},
 
-	setupSocket: function() {
+	setupSocket: function () {
 		Socket.setup();
 	},
 
-	__validateSession: function() {
+	__validateSession: function () {
 		console.log('Validating Session');
 
 		var v = this.sessionStarted && TemporaryStorage.get(this.sessionTrackerKey);
@@ -57,21 +57,21 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		}
 	},
 
-	setSessionId: function(id) {
+	setSessionId: function (id) {
 		this.sessionId = id;
 		TemporaryStorage.set(this.sessionTrackerKey, this.sessionId);
 		this.sessionStarted = true;
 	},
 
-	setLogoutURL: function(url) {
+	setLogoutURL: function (url) {
 		this.logOutURL = url;
 	},
 
-	getLogoutURL: function() {
+	getLogoutURL: function () {
 		return this.logOutURL;
 	},
 
-	maybeAddImmediateAction: function(handshake) {
+	maybeAddImmediateAction: function (handshake) {
 		var fakeService = window.Service || NextThought.model.Service.create({}),
 			links = handshake.Links;
 
@@ -86,12 +86,12 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		}
 	},
 
-	__shouldShowContentFor: function(linkRel) {
+	__shouldShowContentFor: function (linkRel) {
 		return !Ext.isEmpty($AppConfig.userObject.getLink(linkRel));
 	},
 
 	//TODO: Fill this in from controller/Session
-	takeImmediateAction: function() {
+	takeImmediateAction: function () {
 		var user = $AppConfig.userObject;
 
 		if (this.actions['show-coppa-window']) {
@@ -122,26 +122,26 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		}
 	},
 
-	willLogout: function(callback) {
+	willLogout: function (callback) {
 		this.fireEvent('will-logout', callback);
 	},
 
-	onLogin: function() {
+	onLogin: function () {
 		var me = this;
 
-		Promise.all(this.onLoginActions.map(function(action) { action.call(null); }))
+		Promise.all(this.onLoginActions.map(function (action) { action.call(null); }))
 			.then(this.fireEvent.bind(this, 'login-ready'))
-			.then(function() {
+			.then(function () {
 				wait()
 					.then(me.takeImmediateAction.bind(me));
 			});
 	},
 
-	onSessionReady: function() {
+	onSessionReady: function () {
 		this.fireEvent('session-ready');
 	},
 
-	setActiveUser: function(user) {
+	setActiveUser: function (user) {
 		$AppConfig.userObject = UserRepository.cacheUser(user, true);
 
 		$AppConfig.Preferences = NextThought.preference.Manager.create({
@@ -150,7 +150,7 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 
 		ObjectUtils.defineAttributes($AppConfig, {
 			username: {
-				getter: function() {
+				getter: function () {
 					try {
 						return this.userObject.getId();
 					} catch (e) {
@@ -159,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 
 					return null;
 				},
-				setter: function() { throw 'readonly'; }
+				setter: function () { throw 'readonly'; }
 			}
 		});
 	}

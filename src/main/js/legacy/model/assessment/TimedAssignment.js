@@ -14,18 +14,18 @@ module.exports = exports = Ext.define('NextThought.model.assessment.TimedAssignm
 		{name: 'MaximumTimeAllowed', type: 'int'}, //this is in seconds
 		{name: 'Metadata', type: 'auto'},
 		//ui fields
-		{name: 'isStarted', type: 'bool', persist: false, convert: function(v, rec) {
+		{name: 'isStarted', type: 'bool', persist: false, convert: function (v, rec) {
 			return v || !!rec.getLink('StartTime');
 		}}
 	],
 
 
-	isStarted: function() {
+	isStarted: function () {
 		return this.get('isStarted');
 	},
 
 
-	start: function() {
+	start: function () {
 		var me = this,
 			link = this.getLink('Commence');
 
@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.TimedAssignm
 		}
 
 		return Service.post(link)
-			.then(function(response) {
+			.then(function (response) {
 				var newAssignment = ParseUtils.parseItems(response)[0];
 
 				me.set(newAssignment.getData());
@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.TimedAssignm
 	},
 
 
-	updateMetaData: function(metaData) {
+	updateMetaData: function (metaData) {
 		var current = this.get('Metadata');
 
 		if (!current) {
@@ -53,31 +53,31 @@ module.exports = exports = Ext.define('NextThought.model.assessment.TimedAssignm
 	},
 
 
-	getMaxTime: function() {
+	getMaxTime: function () {
 		var maxTime = this.get('MaximumTimeAllowed');
 
 		return maxTime * 1000;
 	},
 
 
-	getMaxTimeString: function() {
+	getMaxTimeString: function () {
 		var maxTime = this.get('MaximumTimeAllowed');
 
 		return TimeUtils.getNaturalDuration(maxTime, 2);
 	},
 
 
-	getStartTime: function() {
+	getStartTime: function () {
 		var metaData = this.get('Metadata');
 
 		return (metaData && (metaData.StartTime * 1000));
 	},
 
 
-	getTimeRemaining: function() {
+	getTimeRemaining: function () {
 		var link = this.getLink('TimeRemaining');
 
-		function fail() {
+		function fail () {
 			console.error('Unable get time remaining.. Returning Zero');
 			return Promise.resolve(0);
 		}
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.TimedAssignm
 		}
 
 		return Service.request(link)
-				.then(function(response) {
+				.then(function (response) {
 					var json = JSON.parse(response);
 
 					return json.TimeRemaining * 1000;
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.TimedAssignm
 	},
 
 
-	getDuration: function() {
+	getDuration: function () {
 		var metaData = this.get('Metadata');
 
 		return metaData && (metaData.Duration * 1000);

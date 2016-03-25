@@ -15,14 +15,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		dateEl: '.date-input'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		Ext.apply(this.renderData, {
 			required: this.required ? 'required' : ''
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this,
@@ -35,31 +35,31 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 		me.on('destroy', 'destroy', me.dateInput);
 
-		me.mon(scrollParent, 'scroll', function() {
+		me.mon(scrollParent, 'scroll', function () {
 			me.dateInput.monthInput.hideOptions();
 		});
 
 		me.mon(me.dateInput, 'changed', 'changed');
 	},
 
-	setUpChangeMonitors: function() {},
+	setUpChangeMonitors: function () {},
 
 	//Uh...not rendered yet.
 
 
-	isEmpty: function() {
+	isEmpty: function () {
 		return this.dateInput ? this.dateInput.isEmpty() : true;
 	},
 
-	addError: function() {
+	addError: function () {
 		this.addCls('error');
 	},
 
-	removeError: function() {
+	removeError: function () {
 		this.removeCls('error');
 	},
 
-	isValid: function() {
+	isValid: function () {
 		var c = this.isCorrect();
 
 		if (!c) {
@@ -69,12 +69,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return c;
 	},
 
-	isCorrect: function() {
+	isCorrect: function () {
 		return !this.rendered || (this.isEmpty() || !!this.getValue()[this.name]);
 	},
 
 	//value looks like YYYYMMDD
-	setValue: function(value) {
+	setValue: function (value) {
 		var year, month, day, date;
 
 		if (!this.rendered) {
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-	getValue: function() {
+	getValue: function () {
 		var value = {},
 			date = this.dateInput.getValue(),
 			year = date && date.getFullYear(),

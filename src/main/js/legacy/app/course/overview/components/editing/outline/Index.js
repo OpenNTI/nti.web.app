@@ -14,17 +14,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	statics: {
-		canHandle: function(mimeType) {
+		canHandle: function (mimeType) {
 			return !!this.HANDLES[mimeType];
 		},
 
 
-		getTypeFor: function(mimeType) {
+		getTypeFor: function (mimeType) {
 			return this.HANDLES[mimeType];
 		},
 
 
-		initRegistry: function() {
+		initRegistry: function () {
 			var base = NextThought.app.course.overview.components.editing.outline,
 				types = [
 					base.outlinenode.Index,
@@ -32,14 +32,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					base.contentnode.Index
 				];
 
-			this.HANDLES = types.reduce(function(acc, type) {
+			this.HANDLES = types.reduce(function (acc, type) {
 				var supported = type.getSupported && type.getSupported();
 
 				if (!Array.isArray(supported)) {
 					supported = [supported];
 				}
 
-				supported.forEach(function(support) {
+				supported.forEach(function (support) {
 					acc[support] = type;
 				});
 
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	layout: 'none',
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var record = this.record,
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}));
 	},
 
-	onceLoaded: function() {
+	onceLoaded: function () {
 		if (this.activeComponent && this.activeComponent.onceLoaded) {
 			return this.activeComponent.onceLoaded();
 		}
@@ -80,11 +80,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Promise.resolve();
 	},
 
-	onDelete: function() {
+	onDelete: function () {
 		if (this.afterDelete) {
 			this.afterDelete();
 		}
 	}
-}, function() {
+}, function () {
 	this.initRegistry();
 });

@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	navigation: {xtype: 'course-outline'},
 	body: {xtype: 'course-overview-body'},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.onScroll = this.onScroll.bind(this);
 	},
 
-	onRouteActivate: function() {
+	onRouteActivate: function () {
 		this.updateOutline(this.isEditing);
 
 		this.alignNavigation();
@@ -62,41 +62,41 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onRouteDeactivate: function() {
+	onRouteDeactivate: function () {
 		delete this.isActive;
 		this.removeScrollListener();
 	},
 
-	alignNavigation: function() {
+	alignNavigation: function () {
 		this.callParent(arguments);
 
 		this.onScroll();
 	},
 
-	addScrollListener: function() {
+	addScrollListener: function () {
 		this.removeScrollListener();
 		window.addEventListener('scroll', this.onScroll);
 	},
 
-	removeScrollListener: function() {
+	removeScrollListener: function () {
 		window.removeEventListener('scroll', this.onScroll);
 	},
 
-	onScroll: function() {
+	onScroll: function () {
 		this.navigation.syncTop(this.body.getLessonTop());
 	},
 
-	getActiveLesson: function() {
+	getActiveLesson: function () {
 		return this.activeLesson;
 	},
 
-	openEditing: function() {
+	openEditing: function () {
 		var me = this,
 			node = me.activeNode,
 			outline = me.activeOutline,
 			id = node && node.getId();
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			if (!outline.hasSharedEntries()) {
 				fulfill();
 				return;
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					}
 				}
 			});
-		}).then(function() {
+		}).then(function () {
 			id = ParseUtils.encodeForURI(id);
 
 			if (id) {
@@ -128,31 +128,31 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	closeEditing: function() {
+	closeEditing: function () {
 		var me = this,
 			bundle = me.currentBundle,
 			outlineInterface = bundle && bundle.getOutlineInterface(true);
 
 		outlineInterface.onceBuilt()
-			.then(function(outlineInterface) {
+			.then(function (outlineInterface) {
 				var outline = outlineInterface && outlineInterface.getOutline(),
 					nodeId = me.activeNode && me.activeNode.getId();
 
-					outline.fillInItems();
+				outline.fillInItems();
 
-					return outline.findOrderedContentsItem(nodeId);
+				return outline.findOrderedContentsItem(nodeId);
 			})
-			.then(function(outlineNode) {
-					var node,
+			.then(function (outlineNode) {
+				var node,
 						next = outlineNode && outlineNode.nextSibling,
 						previous = outlineNode && outlineNode.previousSibling,
 						id;
 
-					if (outlineNode && outlineNode.getFirstContentNode) {
+				if (outlineNode && outlineNode.getFirstContentNode) {
 						node = outlineNode.getFirstContentNode();
 					}
 
-					while ((next || previous) && !node) {
+				while ((next || previous) && !node) {
 						if (next && next.getFirstContentNode()) {
 							node = next.getFirstContentNode();
 							break;
@@ -169,29 +169,29 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					}
 
 					// node be firstContent, next sibling, previous sibling,
-					if (node) {
+				if (node) {
 						id = node && node.getId();
 					}
 
-					if (id) {
+				if (id) {
 						id = ParseUtils.encodeForURI(id);
 						me.pushRoute('', id);
 					} else {
 						me.pushRoute('', '');
 					}
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Unable to stop editing because: ' + reason);
 			});
 	},
 
-	openAuditLog: function() {
+	openAuditLog: function () {
 		if(this.currentBundle && this.currentBundle.getLink('recursive_audit_log')) {
 			this.PromptActions.prompt('audit-log', {parent: this, record: this.currentBundle});
 		}
 	},
 
-	selectOutlineNode: function(record) {
+	selectOutlineNode: function (record) {
 		var id = ParseUtils.encodeForURI(record.getId()),
 			route = id;
 
@@ -202,7 +202,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.pushRoute(record.get('label'), route, {outlineNode: record});
 	},
 
-	showEditControls: function() {
+	showEditControls: function () {
 		this.hasEditControls = true;
 
 		if (this.isActive) {
@@ -213,20 +213,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.body.showEditControls();
 	},
 
-	hideEditControls: function() {
+	hideEditControls: function () {
 		delete this.hasEditControls;
 		this.removeScrollListener();
 		this.removeCls('has-editing-controls');
 		this.body.hideEditControls();
 	},
 
-	updateOutline: function(editing, doNotCache) {
+	updateOutline: function (editing, doNotCache) {
 		var me = this,
 			bundle = me.currentBundle,
 			outlineInterface = editing ? bundle.getAdminOutlineInterface(doNotCache) : bundle.getOutlineInterface(doNotCache);
 
 		outlineInterface.onceBuilt()
-			.then(function(outlineInterface) {
+			.then(function (outlineInterface) {
 				var outline = outlineInterface.getOutline();
 
 				if (outline.getLink('edit')) {
@@ -245,7 +245,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return outlineInterface;
 	},
 
-	bundleChanged: function(bundle) {
+	bundleChanged: function (bundle) {
 		if (this.currentBundle === bundle) { return; }
 
 		var me = this;
@@ -261,7 +261,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.body.setActiveBundle(bundle);
 	},
 
-	clear: function() {
+	clear: function () {
 		var me = this;
 
 		me.mon(me.body, {
@@ -271,7 +271,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 
 		wait()
-			.then(function() {
+			.then(function () {
 				if (me.el && me.el.dom) {
 					me.el.mask(getString('NextThought.view.courseware.View.loading'), 'loading');
 				}
@@ -281,22 +281,22 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.body.clear();
 	},
 
-	unmask: function() {
+	unmask: function () {
 		if (this.el) {
 			this.el.unmask();
 		}
 	},
 
-	getActiveItem: function() {
+	getActiveItem: function () {
 		return this.navigation.getActiveItem();
 	},
 
-	__getRecord: function(id, record, editing, doNotCache) {
+	__getRecord: function (id, record, editing, doNotCache) {
 		var me = this, rIndex,
 			outline = this.updateOutline(editing, doNotCache);
 
 		return outline.onceBuilt()
-			.then(function(outline) {
+			.then(function (outline) {
 				if (id && (!record || record.getId() !== id)) {
 					record = outline.getNode(id);
 				} else if (record) {
@@ -312,7 +312,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				// In case, we have no record, get the first available record.
 				// TODO: should we check if it's not in edit mode?
 				if (!record) {
-					record = outline.findNodeBy(function(rec) {
+					record = outline.findNodeBy(function (rec) {
 						return rec.get('type') === 'lesson' && rec.get('NTIID') && rec.get('isAvailable');
 					});
 				}
@@ -321,7 +321,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-	showOutlineNode: function(route, subRoute) {
+	showOutlineNode: function (route, subRoute) {
 		var me = this,
 			id = route.params && route.params.node && ParseUtils.decodeFromURI(route.params.node),
 			changedEditing = me.isEditing,
@@ -334,7 +334,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		delete me.isEditing;
 
 		return me.__getRecord(id, record, false, changedEditing)
-			.then(function(record) {
+			.then(function (record) {
 				me.unmask();
 
 				if (!record) {
@@ -350,13 +350,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				return me.body.showOutlineNode(record, changedEditing)
 					.then(me.alignNavigation.bind(me))
-					.then(function() {
+					.then(function () {
 						return record;
 					});
 			});
 	},
 
-	showEditOutlineNode: function(route, subRoute) {
+	showEditOutlineNode: function (route, subRoute) {
 		var me = this,
 			id = route.params && route.params.node && ParseUtils.decodeFromURI(route.params.node),
 			changedEditing = !me.isEditing,
@@ -369,7 +369,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		me.isEditing = true;
 
 		return me.__getRecord(id, record, true, changedEditing)
-			.then(function(record) {
+			.then(function (record) {
 				if (!record) {
 					console.error('No valid outline node to edit');
 					return;
@@ -382,7 +382,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				return me.body.editOutlineNode(record, changedEditing)
 					.then(me.alignNavigation.bind(me))
-					.then(function() {
+					.then(function () {
 						return record;
 					});
 			});

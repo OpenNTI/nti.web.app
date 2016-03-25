@@ -17,24 +17,24 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 		__BASE_WEIGHT: 2,
 
-		getWeight: function(record) {
+		getWeight: function (record) {
 			var timeWeight = NextThought.app.course.dashboard.components.widgets.Base.getTimeWeight(record.get('Last Modified'));
 
 			return this.__BASE_WEIGHT + timeWeight;
 		},
 
 
-		getTiles: function(course, startDate, endDate) {
+		getTiles: function (course, startDate, endDate) {
 			var stream = course.getStream(),
 				getWeight = this.getWeight.bind(this),
 				classMap = this.__CLASS_TO_TILE;
 
-			function getCmpConfig(record) {
+			function getCmpConfig (record) {
 				var cls = classMap[record.get('Class')],
 					getConfig = cls && NextThought.app.course.dashboard.components.tiles[cls].getTileConfig(record, course);
 
 				return getConfig
-					.then(function(config) {
+					.then(function (config) {
 						config.record = record;
 						config.weight = getWeight(record);
 						config.course = course;
@@ -44,10 +44,10 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			}
 
 			return stream.getWeek(startDate, endDate)
-				.then(function(items) {
+				.then(function (items) {
 					var tiles = [];
 
-					(items || []).forEach(function(item) {
+					(items || []).forEach(function (item) {
 						if (classMap[item.get('Class')]) {
 							tiles.push(getCmpConfig(item));
 						}
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 					return Promise.all(tiles);
 				})
-				.fail(function(reason) {
+				.fail(function (reason) {
 					console.error('failed to load dashboard stream:', reason);
 					return [];
 				});

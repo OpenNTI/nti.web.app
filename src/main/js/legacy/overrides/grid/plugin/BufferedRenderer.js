@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.overrides.grid.plugin.Buffere
 	},*/
 
 
-	renderRange: function() {
+	renderRange: function () {
 		console.debug('BufferedRenderer: renderRange?', arguments);
 		if (this.grid && this.grid.isVisible(true)) {
 			this.callParent(arguments);
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.overrides.grid.plugin.Buffere
 	},
 
 
-	init: function(grid) {
+	init: function (grid) {
 		this.callParent(arguments);
 		if (!grid.ownerCt) {
 			grid.on('added', this.__monitorActivation.bind(this, grid), null, {single: true, buffer: 1});
@@ -44,15 +44,15 @@ module.exports = exports = Ext.define('NextThought.overrides.grid.plugin.Buffere
 	},
 
 
-	__monitorActivation: function(grid) {
-		function monitorCardChange(cmp, me) {
+	__monitorActivation: function (grid) {
+		function monitorCardChange (cmp, me) {
 			var c = cmp.up('{isOwnerLayout("card")}');
 			me = me || cmp;
 			//console.log(c && c.id, ' - ', grid.id);
 			if (c) {
 				me.mon(c, {
 					buffer: 1,
-					show: function() {
+					show: function () {
 						if (grid && grid.isVisible(true)) {
 							grid.updateLayout({defer: false});
 						}

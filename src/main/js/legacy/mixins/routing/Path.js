@@ -31,12 +31,12 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 		'root/sub2/var/' will be handled by fn4 passed test = var as params
 		'root/sub2/var/varSub' will be handled by fn4 passed test = var as params
 	 */
-	initRouter: function() {
+	initRouter: function () {
 		this.__routeMap = this.__routeMap || {};
 	},
 
 
-	trimRoute: function(route) {
+	trimRoute: function (route) {
 		return Globals.trimRoute(route);
 	},
 
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @param {String} route   the path to add the handler to
 	 * @param {Function} handler the handler
 	 */
-	addRoute: function(route, handler) {
+	addRoute: function (route, handler) {
 		route = this.trimRoute(route);
 
 		var parts = route.split('/'),
@@ -97,14 +97,14 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 		sub = root;
 
 		//add or get the sub route for key
-		function addPart(s, key) {
+		function addPart (s, key) {
 			s = s[key] = s[key] || {};
 
 			return s;
 		}
 
 		//add or get the variable for sub route
-		function addVariablePart(s, name) {
+		function addVariablePart (s, name) {
 			var key = varKey;
 
 			s = addPart(s, key);
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 		}
 
 		//for each part of the url add a sub route
-		parts.forEach(function(part) {
+		parts.forEach(function (part) {
 			var key = part;
 
 			//if the key starts with a : add it as a variable sub route
@@ -140,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * the handler can return a promise
 	 * @param {Function|String} handler
 	 */
-	addDefaultRoute: function(handler) {
+	addDefaultRoute: function (handler) {
 		if (typeof handler === 'string') {
 			this.defaultRoutePath = handler;
 		} else {
@@ -155,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @param {Object} precached a map of keys to precached objects
 	 * @return {Promise} fulfills with the return value of the handler
 	 */
-	handleRoute: function(path, precache) {
+	handleRoute: function (path, precache) {
 		path = this.trimRoute(path);
 
 		this.beforeRoute();
@@ -267,28 +267,28 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 		return val;
 	},
 
-	beforeRoute: function() {},
-	afterRoute: function() {},
+	beforeRoute: function () {},
+	afterRoute: function () {},
 
 	/**
 	 * Gets called whenever a route we handle becomes active
 	 * @override
 	 */
-	onRouteActivate: function() {},
+	onRouteActivate: function () {},
 
 	/**
 	 * Gets called whenever a route we handle changes
 	 * @override
 	 */
-	onRouteDeactivate: function() {},
+	onRouteDeactivate: function () {},
 
 
-	getCurrentRoute: function() {
+	getCurrentRoute: function () {
 		return this.currentRoute;
 	},
 
 
-	addChildRouter: function(cmp) {
+	addChildRouter: function (cmp) {
 		if (!cmp.pushRoute) {
 			console.error('Cant set a non route cmp as a child router router');
 			return;
@@ -315,23 +315,23 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @override
 	 * @return {String} a title to describe the state of this route
 	 */
-	getRouteTitle: function() { return ''; },
+	getRouteTitle: function () { return ''; },
 
 	/**
 	 * Return objects to apply to the cache to speed up handling a route
 	 * @return {Object} items to merge into the precache
 	 */
-	getRoutePrecache: function() { return {}; },
+	getRoutePrecache: function () { return {}; },
 
 
-	getRouteState: function() {
+	getRouteState: function () {
 		var key = this.getRouteStateKey ? this.getRouteStateKey() : this.state_key || this.xtype;
 
 		return (history.state || {})[key] || {};
 	},
 
 
-	__getChildState: function(cmp) {
+	__getChildState: function (cmp) {
 		var key = this.__getStateForCmp(cmp),
 			state = this.getRouteState() || {};
 
@@ -346,7 +346,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} subRoute
 	 * @return {Object}			  map of the values
 	 */
-	__mergeChildRoute: function(title, subRoute, precache) {
+	__mergeChildRoute: function (title, subRoute, precache) {
 		var myTitle = this.getRouteTitle(),
 			route = this.getCurrentRoute(),
 			myCache = this.getRoutePrecache();
@@ -376,7 +376,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	},
 
 
-	__doRoute: function(fn, title, subRoute, precache) {
+	__doRoute: function (fn, title, subRoute, precache) {
 		var merged = this.__mergeChildRoute(title, subRoute, precache);
 
 
@@ -394,7 +394,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	__pushChildRoute: function(title, subRoute, precache) {
+	__pushChildRoute: function (title, subRoute, precache) {
 		this.__doRoute('pushRoute', title, subRoute, precache);
 	},
 
@@ -405,12 +405,12 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	__replaceChildRoute: function(title, subRoute, precache) {
+	__replaceChildRoute: function (title, subRoute, precache) {
 		this.__doRoute('replaceRoute', title, subRoute, precache);
 	},
 
 
-	__doState: function(fn, key, obj, title, subRoute, precache) {
+	__doState: function (fn, key, obj, title, subRoute, precache) {
 		var merged = this.__mergeChildRoute(title, subRoute, precache);
 
 		this.history_state = this.getRouteState();
@@ -425,7 +425,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	},
 
 
-	__getStateForCmp: function(cmp) {
+	__getStateForCmp: function (cmp) {
 		return cmp.getRouteStateKey ? cmp.getRouteStateKey() : cmp.state_key || cmp.xtype;
 	},
 
@@ -438,7 +438,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	__pushChildState: function(cmp, obj, title, subRoute, precache) {
+	__pushChildState: function (cmp, obj, title, subRoute, precache) {
 		var key = this.__getStateForCmp(cmp);
 
 		this.__doState('pushRouteState', key, obj, title, subRoute, precache);
@@ -453,7 +453,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	__replaceChildState: function(cmp, obj, title, subRoute, precache) {
+	__replaceChildState: function (cmp, obj, title, subRoute, precache) {
 		var key = this.__getStateForCmp(cmp);
 
 		this.__doState('replaceRouteState', key, obj, title, subRoute, precache);
@@ -464,7 +464,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * Merge my title in to the childs and set it
 	 * @param {String} title title to set on the document
 	 */
-	__setChildTitle: function(title) {
+	__setChildTitle: function (title) {
 		var myTitle = this.getRouteTitle();
 
 		if (myTitle && title) {
@@ -480,7 +480,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * Set the title of the document
 	 * @param {String} title title to set on the document
 	 */
-	setTitle: function(title) {},
+	setTitle: function (title) {},
 
 	/**
 	 * Push a current route
@@ -489,7 +489,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} route	the route to set
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	pushRoute: function(title, route, precache) {},
+	pushRoute: function (title, route, precache) {},
 
 
 	/**
@@ -499,7 +499,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} route	the route to replace with
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	replaceRoute: function(title, route, precache) {},
+	replaceRoute: function (title, route, precache) {},
 
 
 	/**
@@ -509,7 +509,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} route	the route to set
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	pushRootRoute: function(title, route, precache) {},
+	pushRootRoute: function (title, route, precache) {},
 
 
 	/**
@@ -519,7 +519,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} route	the route to set
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	replaceRootRoute: function(title, route, precache) {},
+	replaceRootRoute: function (title, route, precache) {},
 
 
 	/**
@@ -529,7 +529,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} route	 route for the state
 	 * @param  {Object} precache a map of keys to prevent resolving them more than once
 	 */
-	pushRouteState: function(obj, title, route, precache) {},
+	pushRouteState: function (obj, title, route, precache) {},
 
 	/**
 	 * Push a state object to the history
@@ -538,7 +538,7 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} route	 route for the state
 	 * @param  {Object} precache a map of keys to prevent resolving them more than once
 	 */
-	replaceRouteState: function(obj, title, route, precache) {},
+	replaceRouteState: function (obj, title, route, precache) {},
 
 
 	/**
@@ -547,5 +547,5 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @override
 	 * @return {Boolean|Promise} if we can navigate
 	 */
-	allowNavigation: function() { return true; }
+	allowNavigation: function () { return true; }
 });

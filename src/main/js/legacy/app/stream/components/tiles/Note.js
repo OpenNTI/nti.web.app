@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.tiles.N
 		mimeTypes: [NextThought.model.Note.mimeType]
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -44,26 +44,26 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.tiles.N
 		]);
 	},
 
-	getBodyContent: function() {
+	getBodyContent: function () {
 		var record = this.record;
 
-		return new Promise(function(fulfill, reject) {
-			record.compileBodyContent(function(html) {
+		return new Promise(function (fulfill, reject) {
+			record.compileBodyContent(function (html) {
 				fulfill(html);
 			});
 		});
 	},
 
-	onShow: function() {
+	onShow: function () {
 		this.WindowActions.pushWindow(this.record, null, this.el.dom);
 	},
 
-	onEdit: function() {},
+	onEdit: function () {},
 
-	onAddComment: function() {
+	onAddComment: function () {
 		this.WindowActions.pushWindow(this.record, 'reply', this.el.dom);
 	},
 
-	onReport: function() {},
-	onDelete: function() {}
+	onReport: function () {},
+	onDelete: function () {}
 });

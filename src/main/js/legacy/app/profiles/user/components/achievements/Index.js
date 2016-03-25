@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.addRoute('/', this.showBadges.bind(this));
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.achievements = this.down('[achievements]');
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this;
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 				type: 'auto',
 				setHeightInDom: false,
 				setWidthInDom: false,
-				getDockedItems: function() { return []; }
+				getDockedItems: function () { return []; }
 			},
 			layout: 'auto',
 			anchor: 'bottom',
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			},
 			renderTo: Ext.getBody(),
 			listeners: {
-				beforeshow: function(tip) {
+				beforeshow: function (tip) {
 					var trigger = tip.triggerElement,
 						record = trigger && me.getRecord(trigger);
 
@@ -118,14 +118,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-	getRecord: function(el) {
+	getRecord: function (el) {
 		var p = Ext.fly(el).parent('.badge-list'),
 			cmp = p && Ext.getCmp(p.id);
 
 		return cmp && cmp.getRecord(el);
 	},
 
-	userChanged: function(user, isMe) {
+	userChanged: function (user, isMe) {
 		if (this.activeUser === user) {
 			return Promise.resolve();
 		}
@@ -167,13 +167,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return Promise.resolve();
 	},
 
-	showBadges: function(route, subRoute) {
+	showBadges: function (route, subRoute) {
 		this.setTitle('Achievements');
 
 		return Promise.resolve();
 	},
 
-	loadWorkSpace: function(workspace) {
+	loadWorkSpace: function (workspace) {
 		var earnableUrl, earnedUrl;
 
 		if (!workspace) {
@@ -187,7 +187,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 
 
-		(workspace.Items || []).forEach(function(item) {
+		(workspace.Items || []).forEach(function (item) {
 			if (item.Title === 'EarnableBadges') {
 				earnableUrl = item.href;
 			} else if (item.Title === 'EarnedBadges') {
@@ -199,20 +199,20 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.loadBadges(earnableUrl, earnedUrl);
 	},
 
-	loadBadges: function(earnableUrl, earnedUrl) {
+	loadBadges: function (earnableUrl, earnedUrl) {
 		var me = this,
 			loadPromise;
 
-		function isCourse(item) {
+		function isCourse (item) {
 			return item.Type === 'Course';
 		}
 
 		//we should never have a url for earnable and not earned
 		if (earnableUrl && earnedUrl) {
 			loadPromise = Promise.all([
-					Service.request(earnedUrl),
-					Service.request(earnableUrl)
-				]);
+				Service.request(earnedUrl),
+				Service.request(earnableUrl)
+			]);
 		} else if (earnedUrl) {
 			loadPromise = Service.request(earnedUrl);
 		} else {
@@ -222,7 +222,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 
 		loadPromise
-			.then(function(results) {
+			.then(function (results) {
 				if (!Ext.isArray(results)) { results = [results]; }
 
 				var earned = results[0],
@@ -237,7 +237,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 				earnable = (earnable && earnable.Items) || [];
 				earned = (earned && earned.Items) || [];
 
-				earned.forEach(function(item) {
+				earned.forEach(function (item) {
 					item.earnedCls = 'earned';
 					item.isMe = me.isMe;
 
@@ -248,7 +248,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					}
 				});
 
-				earnable.forEach(function(item) {
+				earnable.forEach(function (item) {
 					item.earnedCls = 'earnable';
 					item.isMe = me.isMe;
 
@@ -265,7 +265,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					me.buildNotMe(completed, achievements);
 				}
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error(reason);
 
 				//if the request fails and it is me, build the me state with no badges
@@ -278,7 +278,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			});
 	},
 
-	buildIsMe: function(completed, current, achievements) {
+	buildIsMe: function (completed, current, achievements) {
 		var cCount = completed.length,
 			iCount = current.length,
 			aCount = achievements.length,
@@ -326,10 +326,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.finishLoading();
 	},
 
-	buildNotMe: function(completed, achievements) {
+	buildNotMe: function (completed, achievements) {
 		var me = this;
 
-		function setEmptyCls(add) {
+		function setEmptyCls (add) {
 			if (!me.rendered) {
 				me.on('afterrender', setEmptyCls.bind(me, show));
 			} else {
@@ -374,14 +374,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.finishLoading();
 	},
 
-	finishLoading: function() {
+	finishLoading: function () {
 		if (this.loadingCmp) {
 			this.remove(this.loadingCmp, true);
 			delete this.loadingCmp;
 		}
 	},
 
-	setEmptyState: function() {
+	setEmptyState: function () {
 		this.coursesContainer.hide();
 		this.achievements.hide();
 		this.currentCourses.hide();

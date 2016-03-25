@@ -31,8 +31,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		]}
 	]),
 
-	constructor: function(config) {
-		var n = config.node || {getAttribute: function(a) { return config[a];} },
+	constructor: function (config) {
+		var n = config.node || {getAttribute: function (a) { return config[a];} },
 			i = config.locationInfo,
 			href = n.getAttribute('href'),
 			icon = n.getAttribute('icon'),
@@ -79,12 +79,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		]
 	})),
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 	//		console.log('Loading:',ntiid);
 	},
 
-	loadContainer: function() {
+	loadContainer: function () {
 		var ntiid = this.data.href,
 			req;
 
@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		Ext.Ajax.request(req);
 	},
 
-	appendTotal: function(total) {
+	appendTotal: function (total) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.appendTotal, this, arguments), this, {single: true});
 			return;
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	containerLoaded: function(q, s, r) {
+	containerLoaded: function (q, s, r) {
 		var total = 0,
 			json = Ext.decode(r && r.responseText, true);
 		if (s && json) {
@@ -132,11 +132,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.appendTotal(total);
 	},
 
-	getCurrentBundle: function() {
+	getCurrentBundle: function () {
 		return this.course;
 	},
 
-	navigateToTarget: function() {
+	navigateToTarget: function () {
 		if (!this.navigate) {
 			console.error('No navigate set on content link');
 			return;
@@ -153,7 +153,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.navigate.call(null, config);
 	},
 
-	onCardClicked: function(e) {
+	onCardClicked: function (e) {
 		if (e && e.getTarget('.comment')) {
 			e.stopEvent();
 			this.bypassEvent = false;
@@ -170,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return this.callParent(arguments);
 	},
 
-	setProgress: function(progress) {
+	setProgress: function (progress) {
 		progress = progress || this.progress;
 
 		this.progress = progress;
@@ -184,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	setCommentCounts: function(commentCounts) {
+	setCommentCounts: function (commentCounts) {
 		var summary = commentCounts[this.record.getId()],
 			count = summary ? summary.ItemCount : 0;
 

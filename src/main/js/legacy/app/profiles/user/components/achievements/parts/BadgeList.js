@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			]}
 		]}
 	]), {
-		canExport: function(values) {
+		canExport: function (values) {
 			//TODO: remove the last false once we have email verification
 			return values.earnedCls === 'earned' && values.isMe === true && false;
 		}
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		preferenceEl: '.nti-checkbox'
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		var cls = config.cls,
 			newConfig = Ext.clone(config);
 
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.columnWidth) {
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	setPublicPreference: function(show) {
+	setPublicPreference: function (show) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setPublicPreference.bind(this));
 			return;
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		var me = this;
 
 		$AppConfig.Preferences.getPreference(me.preferencePath)
-				.then(function(preference) {
+				.then(function (preference) {
 					var checked;
 
 					me.preference = preference;
@@ -113,7 +113,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					me.mon(me.preferenceEl, 'click', me.updatePreference.bind(me));
 					me.updateUIFromPreference(me.preference);
 				})
-				.fail(function(reason) {
+				.fail(function (reason) {
 					console.error('Failed to get preference: ', me.preferencePath, reason);
 					me.hidePreference();
 				});
@@ -123,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	 * Set the number of columns the list can fill
 	 * @param {Number} width the number of columns
 	 */
-	setColumns: function(width) {
+	setColumns: function (width) {
 		if (!this.rendered) {
 			this.columnWidth = width;
 			return;
@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.el.set({'data-columns': width});
 	},
 
-	updateUIFromPreference: function(preference) {
+	updateUIFromPreference: function (preference) {
 		if (!preference) {
 			console.error('Cant update the ui with an empty preference');
 			return;
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.preferenceEl[checked ? 'addCls' : 'removeCls']('checked');
 	},
 
-	showPreference: function() {
+	showPreference: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.showPreference.bind(this));
 			return;
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	hidePreference: function() {
+	hidePreference: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.hidePreference.bind(this));
 			return;
@@ -164,7 +164,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	updatePreference: function() {
+	updatePreference: function () {
 		var state = !this.preferenceEl.hasCls('checked');
 
 		this.preference.set(this.preferenceKey, state);
@@ -172,7 +172,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		this.updateUIFromPreference(this.preference);
 	},
 
-	onItemClick: function(record, item, index, e) {
+	onItemClick: function (record, item, index, e) {
 		if (e.getTarget('.export')) {
 			this.showExportMenu(record, Ext.get(item));
 		} else {
@@ -180,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	setItems: function(items) {
+	setItems: function (items) {
 		if (!this.badgeStore) {
 			this.badgeStore = new Ext.data.Store({
 				model: 'NextThought.model.openbadges.Badge',

@@ -13,7 +13,7 @@ var PartsProfiles = require('./parts/Profiles');
 module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.PathStore = NextThought.app.navigation.path.StateStore.getInstance();
@@ -22,15 +22,15 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		this.buildHandlerMap();
 	},
 
-	clearCache: function() {
+	clearCache: function () {
 		this.PathStore.clearCache();
 	},
 
-	buildHandlerMap: function() {
+	buildHandlerMap: function () {
 		var parts = NextThought.app.navigation.path.parts,
 			keys = Object.keys(parts), handlers = {};
 
-		keys.forEach(function(key) {
+		keys.forEach(function (key) {
 			var part = parts[key].create();
 
 			if (part.addHandlers) {
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		this.mimeToHandlers = handlers;
 	},
 
-	__doNTIIDRequest: function(ntiid) {
+	__doNTIIDRequest: function (ntiid) {
 		var link = Service.getPathToObjectLink(ntiid);
 
 		if (!link) {
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	 * @param  {Object} obj object to get the link for
 	 * @return {Promise}	fulfills with the path
 	 */
-	__doRequestForNoLink: function(obj) {
+	__doRequestForNoLink: function (obj) {
 		var url = Service.getPathToObjectLink(),
 			//try the container id since its more liable to be cached
 			containerId = obj && obj.get && obj.get('ContainerId'),
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		}
 
 		return this.__doRequestForLink(link)
-			.then(function(path) {
+			.then(function (path) {
 				if (containerId) {
 					path.push(obj);
 				}
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	 * @param  {String} link
 	 * @return {Promise}	  fulfills with the path
 	 */
-	__doRequestForLink: function(link) {
+	__doRequestForLink: function (link) {
 		var cache = this.PathStore.getFromCache(link);
 
 		if (cache) {
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		}
 
 		cache = Service.request(link)
-			.then(function(response) {
+			.then(function (response) {
 				var json = JSON.parse(response);
 
 				//For now just return the first path in the list
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		return this.PathStore.setInCache(link, cache);
 	},
 
-	__doHandledRequest: function(obj, handler) {
+	__doHandledRequest: function (obj, handler) {
 		var id = obj.getId(),
 			cache = this.PathStore.getFromCache(id),
 			doNotCache = Ext.isObject(handler) && handler.doNotCache,
@@ -139,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 	 * @param  {Object|String} obj the object to get the path to
 	 * @return {Promise}	fulfills with the path to the object
 	 */
-	getPathToObject: function(obj) {
+	getPathToObject: function (obj) {
 		var link = obj.getLink && obj.getLink('LibraryPath'),
 			handler = this.mimeToHandlers[obj.mimeType],
 			request;
@@ -154,14 +154,14 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 			request = this.__doRequestForNoLink(obj);
 		}
 
-		return request.then(function(path) {
-				path = path || [];
+		return request.then(function (path) {
+			path = path || [];
 
-				return path.slice();
-			});
+			return path.slice();
+		});
 	},
 
-	__resolveForbiddenBreadCrumb: function(resp) {
+	__resolveForbiddenBreadCrumb: function (resp) {
 		var json = Globals.parseJSON(resp, true),
 			items = json && json.Items,
 			obj = items && items[0];
@@ -177,7 +177,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 		return Promise.reject();
 	},
 
-	getBreadCrumb: function(record) {
+	getBreadCrumb: function (record) {
 		var me = this,
 			rootObject = me.ContextStore.getRootBundle() || me.ContextStore.getRootProfile(),
 			path,
@@ -185,7 +185,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 
 		//Get the path for the record
 		return me.getPathToObject(record)
-			.then(function(path) {
+			.then(function (path) {
 				var i, titles = [], item;
 
 				//if the first path item is the root bundle, take it off
@@ -210,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 
 				return titles;
 			})
-			.fail(function(error) {
+			.fail(function (error) {
 				//if we fail to get the path to the item, try to get the container
 				//and show its title
 				var containerId = record && record.get('ContainerId');
@@ -220,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 				}
 
 				return Service.getObject(containerId)
-					.then(function(container) {
+					.then(function (container) {
 						if (container.getTitle) {
 							return [{
 								label: container.getTitle()
@@ -229,7 +229,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 
 						return Promise.reject();
 					})
-					.fail(function(reason) {
+					.fail(function (reason) {
 						//If the container fails, check if it 403s. If it did
 						//the response text should be an object the user needs
 						//to gain access to, so show it in the breadcrumb

@@ -9,13 +9,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-contentnode-editor',
 
 	statics: {
-		getHandledMimeTypes: function() {
+		getHandledMimeTypes: function () {
 			return [
 				NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType
 			];
 		},
 
-		getTypes: function() {
+		getTypes: function () {
 			return [
 				{
 					title: 'Lesson',
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	addParentSelection: function(record, parentRecord, rootRecord, onChange) {
+	addParentSelection: function (record, parentRecord, rootRecord, onChange) {
 		if (!rootRecord) { return null; }
 
 		var items = rootRecord.get('Items');
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	getDefaultTitle: function() {
+	getDefaultTitle: function () {
 		var title = '';
 
 		if (this.record && this.record.getTitle) {

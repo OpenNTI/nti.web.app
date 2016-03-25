@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.setDataTransfer(new NextThought.model.app.MoveInfo({
@@ -46,14 +46,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var sources = this.item.get('sources');
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			title: this.item.get('title'),
-			providers: sources.map(function(source) {
+			providers: sources.map(function (source) {
 				return {label: source.service};
 			}),
 			isAdvanced: Service.canDoAdvancedEditing()
@@ -61,13 +61,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var thumbnail = this.thumbnailEl;
 
 		this.item.resolveThumbnail()
-			.then(function(poster) {
+			.then(function (poster) {
 				thumbnail.setStyle('backgroundImage', 'url(' + poster + ')');
 			});
 
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	onClose: function() {
+	onClose: function () {
 		if (this.removeItem) {
 			this.removeItem(this.item);
 		}

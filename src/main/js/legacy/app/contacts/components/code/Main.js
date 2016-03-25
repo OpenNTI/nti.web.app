@@ -18,21 +18,21 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 						]}
 		},
 		{xtype: 'container', cls: 'submit', layout: {type: 'hbox', pack: 'end'}, items: [
-						{
-							xtype: 'button',
-							ui: 'secondary',
-							scale: 'large',
-							name: 'cancel',
-							text: getString('NextThought.view.account.code.Main.cancel'),
-							handler: function(b) {
+			{
+				xtype: 'button',
+				ui: 'secondary',
+				scale: 'large',
+				name: 'cancel',
+				text: getString('NextThought.view.account.code.Main.cancel'),
+				handler: function (b) {
 								b.up('window').close();
 							}
-						},
+			},
 						{xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text: getString('NextThought.view.account.code.Main.submit'), disabled: true}
 		]}
 	],
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.down('[name=code]'), {
 			scope: this,
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 		this.GroupActions = NextThought.app.groups.Actions.create();
 	},
 
-	changed: function(value, t) {
+	changed: function (value, t) {
 		var val = value.trim(),
 			empty = Ext.isEmpty(val),
 			btn = this.query('[name=submit]', this)[0];
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 		}
 	},
 
-	getValue: function() {
+	getValue: function () {
 		var code = this.down('[name=code]').getValue();
 		if (code) {code = code.trim(); }
 		return {
@@ -65,13 +65,13 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 
 	},
 
-	setError: function(error) {
+	setError: function (error) {
 		var box = this.down('[name=error]'),
 			field = this.down('[name=code]'),
 			allFields = this.query('[name]');
 
 		//clear all errors:
-		Ext.each(allFields, function(f) { f.removeCls('error'); });
+		Ext.each(allFields, function (f) { f.removeCls('error'); });
 
 		//make main error field show up
 		box.el.down('.error-field').update(error.field.replace('_', ' '));
@@ -84,7 +84,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 		this.up('window').updateLayout();
 	},
 
-	submitClicked: function() {
+	submitClicked: function () {
 		var me = this,
 			btn = this.down('[name=submit]'),
 			w = this.up('window'),
@@ -101,14 +101,14 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 					me.setError(error);
 				}
 			})
-			.always(function() {
+			.always(function () {
 				if(!me.isDestroyed) {
 					btn.removeCls('disabled');
 				}
 			});
 	},
 
-	clearError: function() {
+	clearError: function () {
 		var box = this.down('[name=error]');
 		box.hide();
 	}

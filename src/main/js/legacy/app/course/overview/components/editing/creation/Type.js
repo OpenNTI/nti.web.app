@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	]),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 
 		this.callParent(arguments);
 
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.addCls(this.typeConfig.category);
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	handleClick: function(e) {
+	handleClick: function (e) {
 		if (!e.getTarget('.disabled')) {
 			this.showEditor(this.typeConfig);
 		}

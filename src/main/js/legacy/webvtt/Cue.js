@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.webvtt.Cue', {
 		cueTree: []
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.subCues = [];
 
 		this.initConfig(config);

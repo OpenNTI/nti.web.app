@@ -12,14 +12,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	SWITCHED: 'switched-items',
 
 	statics: {
-		getHandledMimeTypes: function() {
+		getHandledMimeTypes: function () {
 			return [
 				NextThought.model.Video.mimeType,
 				NextThought.model.VideoRoll.mimeType
 			];
 		},
 
-		getTypes: function() {
+		getTypes: function () {
 			return [
 				{
 					title: 'Pick a Video',
@@ -34,18 +34,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		//TODO: override getEditorForRecord to check if the related work ref
 		//is pointing to a doc
-		getEditorForRecord: function(record) {
+		getEditorForRecord: function (record) {
 			return this;
 		}
 	},
 
 	cls: 'content-editor video-editor',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 	},
 
-	showEditor: function() {
+	showEditor: function () {
 		if (this.record) {
 			this.showVideoEditor();
 		} else {
@@ -53,13 +53,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	maybeEnableBack: function(text) {
+	maybeEnableBack: function (text) {
 		if (!this.record && this.enableBack) {
 			this.enableBack(text);
 		}
 	},
 
-	onBack: function() {
+	onBack: function () {
 		if (this.videoEditorCmp) {
 			this.showVideoList(this.videoEditorCmp.selectedItems);
 		} else if (this.doBack) {
@@ -67,8 +67,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	__sortVideos: function(videos) {
-		return videos.sort(function(a, b) {
+	__sortVideos: function (videos) {
+		return videos.sort(function (a, b) {
 			var vA = a.get('title'),
 				vB = b.get('title');
 
@@ -76,18 +76,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	__getExcludedVideos: function(videos) {
+	__getExcludedVideos: function (videos) {
 		var siblings = this.parentRecord ? this.parentRecord.get('Items') : [];
 
-		return siblings.reduce(function getVideoIds(acc, item) {
-				if (item instanceof NextThought.model.Video) {
+		return siblings.reduce(function getVideoIds (acc, item) {
+			if (item instanceof NextThought.model.Video) {
 					acc.push(item.getId());
 				} else if (item instanceof NextThought.model.VideoRoll) {
 					acc = item.get('Items').reduce(getVideoIds, acc);
 				}
 
-				return acc;
-			}, []).reduce(function(acc, item) {
+			return acc;
+		}, []).reduce(function (acc, item) {
 				acc.push({
 					id: item,
 					msg: 'Videos can not be in the same section more than once'
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}, []);
 	},
 
-	showVideoList: function(selectedItems) {
+	showVideoList: function (selectedItems) {
 		var me = this,
 			exclude = me.__getExcludedVideos();
 
@@ -123,13 +123,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.bundle.getVideoAssets()
 			.then(me.__sortVideos.bind(me))
-			.then(function(videos) {
+			.then(function (videos) {
 				me.videoSelectionCmp.setSelectionItems(videos);
 				me.videoSelectionCmp.excludeItems(exclude);
 			});
 	},
 
-	showVideoEditor: function() {
+	showVideoEditor: function () {
 		if (this.videoEditorCmp) {
 			this.viedoEditorCmp.destroy();
 			delete this.videoEditorCmp;
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.maybeEnableBack('Videos');
 	},
 
-	onVideoListSelectionChange: function(selection) {
+	onVideoListSelectionChange: function (selection) {
 		var length = selection.length;
 
 		if (length === 0) {
@@ -168,17 +168,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onSaveFailure: function(reason) {
+	onSaveFailure: function (reason) {
 		if (reason === this.SWITCHED) { return; }
 
 		this.callParent(arguments);
 	},
 
-	doValidation: function() {
+	doValidation: function () {
 		return Promise.resolve();
 	},
 
-	onSave: function() {
+	onSave: function () {
 		var me = this;
 
 		if (!me.videoEditorCmp) {
@@ -188,7 +188,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.disableSubmission();
 		return me.videoEditorCmp.onSave()
-			.fail(function(reason) {
+			.fail(function (reason) {
 				me.enableSubmission();
 				return Promise.reject(reason);
 			});

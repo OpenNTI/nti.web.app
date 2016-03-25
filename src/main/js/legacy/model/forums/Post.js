@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Post', {
 		{ name: 'title', type: 'string' }
 	],
 
-	getActivityItemConfig: function() {
+	getActivityItemConfig: function () {
 		return Promise.resolve({
 			message: Ext.String.format('&ldquo;{0}&ldquo;', Ext.String.ellipsis(this.getBodyText(), 50, true)),
 			verb: 'commented'

@@ -29,13 +29,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.closeEl, 'click', this.close.bind(this));
 	},
 
 
-	close: function() {
+	close: function () {
 		if (this.ownerCt && this.ownerCt.close) {
 			this.ownerCt.close();
 		}

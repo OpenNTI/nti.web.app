@@ -9,12 +9,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-videoroll-listitem',
 
 	statics: {
-		getSupported: function() {
+		getSupported: function () {
 			return NextThought.model.VideoRoll.mimeType;
 		}
 	},
 
-	getPreviewType: function(record) {
+	getPreviewType: function (record) {
 		return 'course-overview-videoroll';
 	}
 });

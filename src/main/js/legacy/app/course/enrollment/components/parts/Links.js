@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	]),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var me = this;
@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			me.addCls(me.otherCls);
 		}
 
-		me.mon(me.el, 'click', function() {
+		me.mon(me.el, 'click', function () {
 			var args = [me.eventName];
 
 			args = args.concat(me.args);

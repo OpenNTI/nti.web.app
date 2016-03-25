@@ -17,12 +17,12 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 		textEl: '.text'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.setContent();
 	},
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.cards.
 	/**
 	 * Override this if you want to set content after the component's been rendered.
 	 */
-	setContent: function() {
+	setContent: function () {
 		var div = document.createElement('div');
 
 		if (this.textEl && this.snippet) {

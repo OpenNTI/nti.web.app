@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 
 	silentIsValid: true,
 
-	constructor: function(config) {
+	constructor: function (config) {
 		delete config.autoEl;
 		delete config.renderTpl;
 		delete config.renderSelectors;
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.renderData = {
 			type: this.getInputType(),
 			placeholder: this.getPlaceholder()
@@ -42,13 +42,13 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 	},
 
 
-	setError: function() {
+	setError: function () {
 		//if there is an animation, we have to remove the class before it will play again.
 		this.inputEl.removeCls('error').addCls('error');
 	},
 
 
-	clearValue: function(silent) {
+	clearValue: function (silent) {
 		var e = this.inputEl;
 		e.dom.value = '';
 		e.removeCls('error');
@@ -62,31 +62,31 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 	},
 
 
-	reset: function() {
+	reset: function () {
 		this.clearValue(true);
 		this.keyPressed(new Ext.EventObjectImpl());
 	},
 
 
-	getValue: function() {
+	getValue: function () {
 		if (this._value !== undefined) {
 			return this._value;
 		}
 
-	   return this.inputEl.getValue();
+	   	return this.inputEl.getValue();
 	},
 
 
-	setValue: function(v) { this.update(v); },
+	setValue: function (v) { this.update(v); },
 
-	__maybeTagEmpty: function(v) {
+	__maybeTagEmpty: function (v) {
 		var a = (Ext.isEmpty(v) ? 'add' : 'remove') + 'Cls',
 			c = 'empty';
 		this.inputEl[a](c);
 		this[a](c);
 	},
 
-	update: function(v) {
+	update: function (v) {
 		if (!this.rendered) {
 			this._value = v;
 			this.on({afterrender: this.update.bind(this, v), single: true});
@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		var e = this.inputEl,
 			monitors = {
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 				focus: 'onInputFocus',
 				keyup: 'keyPressed',
 				paste: 'onPaste',
-				contextmenu: function(e) { e.stopPropagation(); } //allow context menu
+				contextmenu: function (e) { e.stopPropagation(); } //allow context menu
 			};
 
 		monitors[Ext.EventManager.getKeyEvent()] = 'keyDown';
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 	},
 
 
-	getFocusEl: function() { return this.inputEl; },
+	getFocusEl: function () { return this.inputEl; },
 
 
 	specialKeys: {
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 	},
 
 
-	keyDown: function(event) {
+	keyDown: function (event) {
 		var k = event.getKey();
 
 		//We need this to fit in more tightly with Ext's Field interface.
@@ -164,12 +164,12 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 	},
 
 
-	onInputFocus: function() {
+	onInputFocus: function () {
 		this.fireEvent('input-focus');
 	},
 
 
-	onPaste: function(e) {
+	onPaste: function (e) {
 		var me = this;
 		if (!me.pasteTask) {
 			me.pasteTask = new Ext.util.DelayedTask(me.keyPressed, me, [e]);
@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 	},
 
 
-	keyPressed: function(event) {
+	keyPressed: function (event) {
 		var e = this.inputEl, v = this.getValue(), c = this.clearEl,
 			k = event.getKey && event.getKey();
 
@@ -204,7 +204,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 	},
 
 
-	validate: function(silent) {
+	validate: function (silent) {
 		var valid, val = this.getValue() || '';
 
 		if (!silent) {
@@ -225,6 +225,6 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.SimpleText
 	},
 
 
-	isValid: function() { return this.validate(this.silentIsValid); }
+	isValid: function () { return this.validate(this.silentIsValid); }
 });
 

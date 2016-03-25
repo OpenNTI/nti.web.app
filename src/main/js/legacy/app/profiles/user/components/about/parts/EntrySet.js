@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 
@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	showEmptyText: function() {
+	showEmptyText: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.showEmptyText.bind(this));
 			return;
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	hideEmptyText: function() {
+	hideEmptyText: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.hideEmptyText.bind(this));
 			return;
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	onClicked: function(e) {
+	onClicked: function (e) {
 		if (e.getTarget('.add')) {
 			this.addNewEntry();
 			return;
@@ -80,34 +80,34 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	getEmptyEntry: function() {
+	getEmptyEntry: function () {
 		return {};
 	},
 
 
-	addNewEntry: function() {
+	addNewEntry: function () {
 		this.entryTpl.append(this.entriesEl, this.getEmptyEntry());
 
 		this.applySchema();
 	},
 
 
-	clearEntries: function() {
+	clearEntries: function () {
 		this.entriesEl.dom.innerHTML = '';
 	},
 
 
-	addEntry: function(data) {
+	addEntry: function (data) {
 		this.entryTpl.append(this.entriesEl, data);
 	},
 
 
-	isReadOnly: function() {
+	isReadOnly: function () {
 		return true;
 	},
 
 
-	applySchema: function() {
+	applySchema: function () {
 		if (!this.profileSchema) {
 			return;
 		}
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		fields = Array.prototype.slice.call(fields);
 
-		fields.forEach(function(field) {
+		fields.forEach(function (field) {
 			if (readOnly) {
 				field.classList.remove('editable');
 			} else {
@@ -140,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
-	showErrorForField: function(entry, fieldName, msg) {
+	showErrorForField: function (entry, fieldName, msg) {
 		var field = entry && entry.querySelector('[data-field="' + fieldName + '"]'),
 			container = field && field.parentNode,
 			error = container && container.querySelector('.error-msg');
@@ -157,13 +157,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 	//TODO: figure out what to do here since it doesn't look like the server
 	//is sending back a field name
-	showError: function(msg) {},
+	showError: function (msg) {},
 
 
-	validateEntry: function(entry) {},
+	validateEntry: function (entry) {},
 
 
-	getErrorMsg: function() {
+	getErrorMsg: function () {
 		var entries = this.entriesEl.dom.querySelectorAll('.entry') || [];
 
 		if (this.isReadOnly()) {
@@ -172,7 +172,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		entries = Array.prototype.slice.call(entries);
 
-		entries = entries.map(this.validateEntry.bind(this)).filter(function(x) { return !!x; });
+		entries = entries.map(this.validateEntry.bind(this)).filter(function (x) { return !!x; });
 
 		this.hasErrors = entries.length > 0;
 
@@ -180,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	getValues: function() {
+	getValues: function () {
 		var entries = this.entriesEl.dom.querySelectorAll('.entry') || [],
 			values = [];
 

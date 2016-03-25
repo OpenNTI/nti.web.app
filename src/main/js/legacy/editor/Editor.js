@@ -57,7 +57,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				{tag: 'tpl', 'if': 'enableTags', cn: {
 					cls: 'tags'
 				}}
-			]
+				]
 			}
 		]),
 
@@ -84,33 +84,33 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				]
 			}
 			, {
-			cls: 'footer',
-			cn: [
+				cls: 'footer',
+				cn: [
 				{
 					cls: 'left',
 					cn: [
 						{ tag: 'tpl', 'if': 'enableTextControls', cn:
 						{
 							cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn: {
-							cls: 'popctr', cn: {
+								cls: 'popctr', cn: {
 								cls: 'popover', cn: [
 									{cls: 'control bold', tabIndex: -1, 'data-qtip': 'Bold'},
 									{cls: 'control italic', tabIndex: -1, 'data-qtip': 'Italic'},
 									{cls: 'control underline', tabIndex: -1, 'data-qtip': 'Underline'}
 								]
 							}
-						}
+							}
 						}},
 						{ tag: 'tpl', 'if': 'enableObjectControls', cn:
 						{
 							cls: 'action object-controls', 'data-qtip': 'Insert Object', cn: {
-							cls: 'popctr', cn: {
+								cls: 'popctr', cn: {
 								cls: 'popover', cn: [
 									{ cls: 'control whiteboard', 'data-qtip': 'Create a whiteboard' },
 									{ tag: 'tpl', 'if': 'enableVideo', cn: { cls: 'control video', 'data-qtip': 'Embed a video' } }
 								]
 							}
-						}
+							}
 						}}
 					]
 				},
@@ -122,7 +122,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 					]
 				}
 			]
-		}
+			}
 		]),
 
 	supportedTypingAttributes: ['bold', 'underline', 'italic'],
@@ -212,7 +212,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	tabTpl: Ext.DomHelper.createTemplate({html: '\t'}).compile(),
 
-	onClassExtended: function(cls, data) {
+	onClassExtended: function (cls, data) {
 		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
 		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
 
@@ -239,7 +239,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.maybeResizeContentBox = Ext.Function.createBuffered(this.maybeResizeContentBox, 400);//typical key press spacing?
 		this.callParent(arguments);
 
@@ -264,14 +264,14 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		var aux, objectsControl;
 
 		this.callParent(arguments);
 		this.setupEditor();
 
 		this.mon(this.el.down('.action.cancel'), 'click', this.onCancel, this);
-		this.mon(this.saveButtonEl, 'click', function(e) {
+		this.mon(this.saveButtonEl, 'click', function (e) {
 			if (e.getTarget('.disabled')) {
 				e.stopEvent();
 				return;
@@ -294,7 +294,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	showTitle: function() {
+	showTitle: function () {
 		var title = this.el.down('.title-container');
 
 		if (title) {
@@ -302,7 +302,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	hideTitle: function() {
+	hideTitle: function () {
 		var title = this.el.down('.title-container');
 
 		if (title) {
@@ -310,7 +310,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	clearError: function(el) {
+	clearError: function (el) {
 		if (!el) {
 			el = this.el.down('.content');
 		}
@@ -321,11 +321,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		Ext.defer(el.removeCls, 1, el, ['error-tip']);
 	},
 
-	markError: function(el, message) {
+	markError: function (el, message) {
 		el.addCls('error-tip').set({'data-error-tip': message});
 	},
 
-	onCancel: function(e) {
+	onCancel: function (e) {
 		e.stopEvent();
 		this.deactivate();
 
@@ -338,7 +338,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	onSave: function(e) {
+	onSave: function (e) {
 		e.stopEvent();
 		var v = this.getValue();
 
@@ -360,7 +360,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.fireEvent('save', this, this.record, v, this.saveCallback || Ext.emptyFn);
 	},
 
-	setupEditor: function() {
+	setupEditor: function () {
 		var me = this,
 			el = me.el,
 			scrollParentEl = Ext.getBody(),
@@ -385,7 +385,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		if (me.tagsEl) {
 			me.tags = Ext.widget('tags', {renderTo: me.tagsEl, tabIndex: tabTracker.next()});
 			me.on('destroy', 'destroy', me.tags);
-			me.mon(me.tags, 'blur', function() {
+			me.mon(me.tags, 'blur', function () {
 				var e = el.down('.content');
 				Ext.defer(e.focus, 10, e);
 			});
@@ -393,7 +393,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		me.publishEl = el.down('.action.publish');
 		if (me.publishEl) {
-			me.mon(me.publishEl, 'click', function togglePublish(e) {
+			me.mon(me.publishEl, 'click', function togglePublish (e) {
 				var action = e.getTarget('.on') ? 'removeCls' : 'addCls';
 				me.publishEl[action]('on');
 			});
@@ -425,7 +425,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		me.mon(el, {
 			scope: me,
 			mousedown: me.editorMouseDown,
-			click: function(e) {
+			click: function (e) {
 				var content = el.down('.content'),
 					oldScroll = content.getScroll();
 
@@ -441,7 +441,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		me.contentEl.selectable();
 
 		me.mon(me.el, {
-			keydown: function(e) {
+			keydown: function (e) {
 				var v;
 				if (e.getKey() === e.ESC) {
 					e.stopPropagation();
@@ -453,7 +453,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			}
 		});
 
-		function stop(e) {e.stopPropagation();}
+		function stop (e) {e.stopPropagation();}
 		me.mon(me.contentEl, {
 			scope: me,
 			keydown: 'onKeyDown',
@@ -467,8 +467,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			mousemove: stop
 		});
 
-		me.on('destroy', function() {
-			Ext.Object.each(me.trackedParts, function(k, v) {
+		me.on('destroy', function () {
+			Ext.Object.each(me.trackedParts, function (k, v) {
 				if (v && v.destroy) {
 					v.destroy();
 				}
@@ -478,7 +478,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		me.typingAttributes = [];
 	},
 
-	moveCursorToEnd: function(el) {
+	moveCursorToEnd: function (el) {
 		//this is only for input/textarea elements
 		var range, selection;
 		el = Ext.getDom(el);
@@ -505,7 +505,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	setupSharedListEl: function(cmp, tabTracker, scrollParentEl) {
+	setupSharedListEl: function (cmp, tabTracker, scrollParentEl) {
 		var me = this, userTokenField, tokens, inputArea, tokenInputWrap, tokenInput;
 		me.sharedListEl = me.el.down('.recipients');
 		if (me.sharedListEl) {
@@ -524,10 +524,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				}
 
 				this.on('destroy', 'destroy', me.sharedList);
-				this.mon(me.sharedList, 'cancel-indicated', function() {
+				this.mon(me.sharedList, 'cancel-indicated', function () {
 					this.fireEvent('cancel');
 				}, me);
-				this.mon(me.sharedList, 'sync-height', function() {
+				this.mon(me.sharedList, 'sync-height', function () {
 					this.maybeResizeContentBox();
 				}, me);
 			} else {
@@ -536,9 +536,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	stop: function(e) { e.stopPropagation(); },
+	stop: function (e) { e.stopPropagation(); },
 
-	setupTitleEl: function(me, tabTracker) {
+	setupTitleEl: function (me, tabTracker) {
 		me.titleWrapEl = me.el.down('.title');
 		me.titleEl = me.el.down('.title input');
 		if (me.titleEl) {
@@ -548,7 +548,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				mousedown: 'stop',
 				keypress: 'stop',
 				keyup: 'stop',
-				keydown: function(e) {
+				keydown: function (e) {
 					var t = e.getTarget();
 					Ext.callback((t || {}).setAttribute, t, ['value', t.value], 1);
 					e.stopPropagation();
@@ -558,28 +558,28 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	activate: function() {
+	activate: function () {
 		this.maybeEnableSave();
 		this.el.addCls('active');
 		this.fireEvent('activated-editor', this);
 	},
 
-	isActive: function() {
+	isActive: function () {
 		return this.el && this.el.hasCls('active');
 	},
 
-	disable: function() {
+	disable: function () {
 		this.deactivate();
 		this.el.addCls(['active', 'disabled']);
 		this.el.down('.content').set({'contenteditable': undefined});
 	},
 
-	enable: function() {
+	enable: function () {
 		this.el.removeCls('disabled');
 		this.el.down('.content').set({'contenteditable': 'true'});
 	},
 
-	deactivate: function() {
+	deactivate: function () {
 		this.el.removeCls('active');
 		this.lastRange = null;
 		this.cleanTrackedParts();
@@ -587,12 +587,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.fireEvent('deactivated-editor', this);
 	},
 
-	handleContext: function(e) {
+	handleContext: function (e) {
 		e.stopPropagation();
 		return true;
 	},
 
-	handlePaste: function(e, elem) {
+	handlePaste: function (e, elem) {
 
 		elem = e.getTarget('.content', Number.MAX_VALUE);
 		if (!elem) {
@@ -633,7 +633,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		return false;
 	},
 
-	handleDrop: function(e) {
+	handleDrop: function (e) {
 		var browserEvent = e.browserEvent,
 			data = browserEvent && browserEvent.dataTransfer,
 			files = data && data.files;
@@ -643,7 +643,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	processPaste: function(offScreenBuffer, savedRange, elem) {
+	processPaste: function (offScreenBuffer, savedRange, elem) {
 		Ext.fly(offScreenBuffer).select('script,meta,iframe').remove();
 
 		var pasteData = offScreenBuffer.innerHTML, range, frag;
@@ -676,7 +676,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		elem.focus();
 	},
 
-	editorMouseDown: function(e) {
+	editorMouseDown: function (e) {
 		var s = window.getSelection();
 		if (e.getTarget('.action', undefined, true)) {
 			if (s.rangeCount) {
@@ -694,7 +694,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	editorFocus: function() {
+	editorFocus: function () {
 		var s = window.getSelection();
 		if (this.lastRange) {
 			if (s.rangeCount > 0) {
@@ -707,7 +707,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	moveCaret: function(n, offset) {
+	moveCaret: function (n, offset) {
 		var s = window.getSelection(),
 			range = document.createRange();
 
@@ -724,13 +724,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		s.addRange(range);
 	},
 
-	detectAndFixDanglingNodes: function() {
+	detectAndFixDanglingNodes: function () {
 		var s = window.getSelection(),
 			n = s && s.focusNode,
 			c = Ext.getDom(this.contentEl),
 			acted = false;
 		//detect elements that have fallen out of the nest
-		Ext.each(c.childNodes, function(el) {
+		Ext.each(c.childNodes, function (el) {
 			if (!/^div$/i.test(el.tagName)) {
 				acted = true;
 				el = Ext.getDom(el);
@@ -746,7 +746,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	onKeyDown: function(e) {
+	onKeyDown: function (e) {
 		try {
 			var s = window.getSelection(),
 				a = s && s.anchorNode,
@@ -826,7 +826,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		return true;
 	},
 
-	onKeyup: function(e) {
+	onKeyup: function (e) {
 		if (this.contentEl.hasCls('error-tip')) {
 			this.clearError(this.contentEl);
 		}
@@ -837,12 +837,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.maybeEnableSave();
 	},
 
-	onMouseUp: function(e) {
+	onMouseUp: function (e) {
 		e.stopPropagation();
 		this.detectTypingAttributes(e);
 	},
 
-	maybeResizeContentBox: function() {
+	maybeResizeContentBox: function () {
 		if (!this.rendered || this.isDestroyed || !this.el) {
 			return;
 		}
@@ -865,11 +865,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	syncTypingAttributeButtons: function() {
+	syncTypingAttributeButtons: function () {
 		var me = this,
 			buttonsName = ['bold', 'italic', 'underline'];
 
-		Ext.each(buttonsName, function(bn) {
+		Ext.each(buttonsName, function (bn) {
 			var b = me.el.down('.' + bn);
 			if (b) {
 				b[Ext.Array.contains(me.typingAttributes, bn) ? 'addCls' : 'removeCls']('selected');
@@ -877,7 +877,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		});
 	},
 
-	setTypingAttributes: function(attrs, alreadyFocused) {
+	setTypingAttributes: function (attrs, alreadyFocused) {
 		var content = this.el.down('.content'),
 			oldScroll = content.getScroll();
 
@@ -891,16 +891,16 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.applyTypingAttributesToEditable();
 	},
 
-	getTypingAttributes: function() {
+	getTypingAttributes: function () {
 		if (!this.typingAttributes) {
 			this.typingAttributes = [];
 		}
 		return this.typingAttributes;
 	},
 
-	applyTypingAttributesToEditable: function() {
+	applyTypingAttributesToEditable: function () {
 		var actions = this.supportedTypingAttributes, me = this;
-		Ext.each(actions, function(action) {
+		Ext.each(actions, function (action) {
 			if (document.queryCommandSupported(action) &&
 				document.queryCommandState(action) !== Ext.Array.contains(me.getTypingAttributes(), action)) {
 				document.execCommand(action, false, false);
@@ -908,7 +908,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		});
 	},
 
-	editorContentAction: function(e) {
+	editorContentAction: function (e) {
 		var t = e.getTarget('.control', undefined, true);
 		if (!t) {
 			return;
@@ -922,7 +922,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	fontStyleAction: function(e) {
+	fontStyleAction: function (e) {
 		var t = e.getTarget('.control', undefined, true), action;
 		if (t) {
 			action = (t.getAttribute('class') || '').split(' ')[1];
@@ -930,7 +930,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	togglePopover: function(el, e) {
+	togglePopover: function (el, e) {
 		if (e) {
 			e.stopPropagation();
 		}
@@ -952,18 +952,18 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	hidePopover: function(el) {
+	hidePopover: function (el) {
 		el.removeCls('selected');
 		el.set({'data-qtip': el.getAttribute('data-tiptext')});
 	},
 
-	toggleObjectsPopover: function(e) {
+	toggleObjectsPopover: function (e) {
 		var t = e.getTarget('.action.object-controls', undefined, true);
 
 		this.togglePopover(t, e);
 	},
 
-	hideObjectsPopover: function() {
+	hideObjectsPopover: function () {
 		var t = this.el.down('.action.object-controls', undefined, true);
 		if (t) {
 			this.hidePopover(t);
@@ -971,25 +971,25 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	// better named toggle!
-	showStylePopover: function(e) {
+	showStylePopover: function (e) {
 		var t = e.getTarget('.action.text-controls', undefined, true);
 
 		this.togglePopover(t, e);
 	},
 
-	hideStylePopover: function() {
+	hideStylePopover: function () {
 		var t = this.el.down('.action.text-controls', undefined, true);
 		if (t) {
 			this.hidePopover(t);
 		}
 	},
 
-	hidePopovers: function() {
+	hidePopovers: function () {
 		this.hideStylePopover();
 		this.hideObjectsPopover();
 	},
 
-	toggleTypingAttribute: function(action) {
+	toggleTypingAttribute: function (action) {
 		var attrs = this.getTypingAttributes().slice();
 		if (Ext.Array.contains(attrs, action)) {
 			Ext.Array.remove(attrs, action);
@@ -1000,9 +1000,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.setTypingAttributes(attrs);
 	},
 
-	detectTypingAttributes: function(e) {
+	detectTypingAttributes: function (e) {
 		var actions = this.supportedTypingAttributes, attrs = [];
-		Ext.each(actions, function(action) {
+		Ext.each(actions, function (action) {
 			if (document.queryCommandState(action)) {
 				attrs.push(action);
 			}
@@ -1010,7 +1010,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.setTypingAttributes(attrs, true);
 	},
 
-	handleClick: function(e) {
+	handleClick: function (e) {
 		var guid, p, fnName, mime,
 			content = e.getTarget('.content'),
 			t = e.getTarget('.object-part') || e.getTarget('.whiteboard-wrapper');
@@ -1030,7 +1030,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			p = this.trackedParts[guid];
 			if (p) {
 				if (!p.isDestroyed && p.show) {
-		  if (Ext.is.iOS) {
+		  			if (Ext.is.iOS) {
 			content.blur();
 		  }
 					p.show();
@@ -1055,9 +1055,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	checkTrackedParts: function() {
+	checkTrackedParts: function () {
 		var me = this;
-		Ext.Object.each(this.trackedParts, function(guid) {
+		Ext.Object.each(this.trackedParts, function (guid) {
 			if (!Ext.get(guid)) {
 				if ((me.trackedParts[guid] || {}).isWhiteboardWindow) {
 					me.removeWhiteboard(guid);
@@ -1067,7 +1067,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		});
 	},
 
-	removeWhiteboard: function(guid) {
+	removeWhiteboard: function (guid) {
 		var w = this.trackedParts[guid],
 			el = Ext.get(guid);
 
@@ -1085,7 +1085,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	//This needs to go somewhere else
-	createVideoPart: function(url, type) {
+	createVideoPart: function (url, type) {
 		return {
 			Class: 'EmbeddedVideo',
 			MimeType: 'application/vnd.nextthought.embeddedvideo',
@@ -1094,8 +1094,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		};
 	},
 
-	addVideo: function(data, guid, append, e) {
-		data = data || (function() {
+	addVideo: function (data, guid, append, e) {
+		data = data || (function () {
 		}()); //force the falsy value of data to always be undefinded.
 
 		var me = this;
@@ -1107,7 +1107,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		if (!data || e) {
 			Ext.widget('embedvideo-window', {
 				url: (data || {}).embedURL,
-				onEmbed: function(data) {
+				onEmbed: function (data) {
 					var part = me.createVideoPart(data.embedURL, data.type);
 					me.insertObjectThumbnail(me.el.down('.content'), guid, part, data, append/*, true*/);
 
@@ -1119,7 +1119,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	addWhiteboard: function(data, guid, append) {
+	addWhiteboard: function (data, guid, append) {
 		data = data || void undefined;//force the falsy value of data to always be undefinded.
 
 		var me = this, wbWin, content;
@@ -1154,7 +1154,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		//hook into the window's save and cancel operations:
 		this.mon(wbWin, {
-			save: function(win, wb) {
+			save: function (win, wb) {
 				data = wb.getValue();
 				me.insertObjectThumbnail(content, guid, wb, append, true);
 				if (Ext.query('.nav-helper')[0]) {
@@ -1162,7 +1162,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				}
 				wbWin.hide();
 			},
-			cancel: function() {
+			cancel: function () {
 				//if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
 				if (!data) {
 					me.cleanTrackedParts(guid);
@@ -1176,14 +1176,14 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	__insertIntoRange: function(el, range) {
+	__insertIntoRange: function (el, range) {
 		var content = this.el.dom.querySelector('.content'),
 			parent, i, node,
 			potentialParents = content.childNodes,
 			endContainer = range.endContainer,
 			after;
 
-		function insertAfter(n, target) {
+		function insertAfter (n, target) {
 			if (target.nextSibling) {
 				content.insertBefore(n, target.nextSibling);
 			} else {
@@ -1227,7 +1227,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	insertPartAtSelection: function(html) {
+	insertPartAtSelection: function (html) {
 		var sel,
 			range,
 			beforeRange,
@@ -1292,7 +1292,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		return true;
 	},
 
-	insertObjectThumbnail: function(content, guid, obj, append, scrollIntoView) {
+	insertObjectThumbnail: function (content, guid, obj, append, scrollIntoView) {
 		var me = this, re = me.REGEX_INITIAL_CHAR,
 			el = Ext.get(guid),
 			mime = (obj || obj.data).MimeType,
@@ -1310,7 +1310,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		if (!el) {
 
-			Ext.each(content.query('> div'), function(n) {
+			Ext.each(content.query('> div'), function (n) {
 				var v = n.firstChild === n.lastChild && n.firstChild && n.firstChild.nodeValue;
 				if (v && (v.length === 1 && re.test(v))) {
 					Ext.removeNode(n);
@@ -1365,7 +1365,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			}
 		}
 
-		callback = Ext.Function.createBuffered(function callback(node) {
+		callback = Ext.Function.createBuffered(function callback (node) {
 			me.fireEvent('size-changed');
 
 			//Make sure save is enabled
@@ -1374,7 +1374,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 			//scroll them into view
 			if (scrollIntoView && node) {
-				Ext.defer(function() {
+				Ext.defer(function () {
 					node.scrollIntoView(me.el.down('.content'), false, true);
 				}, 100);
 			}
@@ -1392,9 +1392,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	onWhiteboardThumbnailInserted: function(obj, guid, placeholder, callback) {
+	onWhiteboardThumbnailInserted: function (obj, guid, placeholder, callback) {
 		var me = this;
-		obj.getThumbnail(function(data) {
+		obj.getThumbnail(function (data) {
 			var el = Ext.get(guid).up('.whiteboard-divider'),
 				p = placeholder.insertBefore(el),
 				wbt;
@@ -1402,7 +1402,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			el.remove();
 			//recreate image with data
 			wbt = me.wbThumbnailTpm.insertBefore(p, [data, guid], true);
-			wbt.select('img').on('load', function() {
+			wbt.select('img').on('load', function () {
 				me.fireEvent('size-changed');
 				me.el.repaint();
 			});
@@ -1413,7 +1413,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	},
 
-	onVideoThumbnailInserted: function(obj, guid, placeholder, callback) {
+	onVideoThumbnailInserted: function (obj, guid, placeholder, callback) {
 		var el = Ext.get(guid);
 		if (el) {
 			el.set({'data-href': obj.embedURL, 'data-type': obj.type});
@@ -1421,7 +1421,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		callback(el);
 	},
 
-	cleanTrackedParts: function(guids) {
+	cleanTrackedParts: function (guids) {
 		var me = this;
 
 		if (!guids) {
@@ -1432,7 +1432,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			guids = [guids];
 		}
 
-		Ext.each(guids, function(g) {
+		Ext.each(guids, function (g) {
 			var w = me.trackedParts[g];
 			delete me.trackedParts[g];
 			if (w && w.destroy) {
@@ -1441,7 +1441,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		});
 	},
 
-	whiteboardPart: function(wp) {
+	whiteboardPart: function (wp) {
 		var me = this,
 			m = wp.match(/id="(.*?)"/),
 			id = m && m[1],
@@ -1450,7 +1450,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		return ed && ed.getValue();
 	},
 
-	videoPart: function(vp) {
+	videoPart: function (vp) {
 		var hrefRegex = /.*?data-href="(.*?)".*?/,
 			typeRegex = /.*?data-type="(.*?)".*?/,
 			href = hrefRegex && hrefRegex.exec(vp)[1],
@@ -1463,17 +1463,17 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		return this.createVideoPart(href, type);
 	},
 
-	unknownPart: function(up) {
+	unknownPart: function (up) {
 		var me = this,
 			m = up.match(/id="(.*?)"/),
 			id = m && m[1];
 		return id && me.trackedParts[id];
 	},
 
-	getPart: function(part) {
+	getPart: function (part) {
 		var me = this, p;
 
-		function convert(regex, fn) {
+		function convert (regex, fn) {
 			if (new RegExp(regex, 'i').test(part) && me[fn]) {
 				p = me[fn](part);
 			}
@@ -1484,13 +1484,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		return p;
 	},
 
-	getBody: function(parts) {
+	getBody: function (parts) {
 		var r = [], me = this,
 			objectPartRegex = /class=".*object-part.*"/i,
 			i, p, part;
 
 
-		function stripTrailingBreak(text) {
+		function stripTrailingBreak (text) {
 			return text.replace(/<br\/?>$/i, '').replace(me.REGEX_INITIAL_CHAR, '');
 		}
 
@@ -1532,7 +1532,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			}
 		}
 
-		r = r.filter(function(i) {
+		r = r.filter(function (i) {
 			var tmp;
 
 			if (!Ext.isString(i)) {
@@ -1550,7 +1550,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		return r;
 	},
 
-	collapseToEnd: function() {
+	collapseToEnd: function () {
 		var s, me = this,
 			c = Ext.getDom(me.el.down('.content')), r,
 			content = c && c.innerHTML;
@@ -1571,7 +1571,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	focus: function(collapse) {
+	focus: function (collapse) {
 		var content = this.el.down('[contenteditable=true]'),
 			oldScroll = content.getScroll();
 
@@ -1583,8 +1583,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	maybeEnableSave: function(silent) {
-		function isNoteBodyEmpty() {
+	maybeEnableSave: function (silent) {
+		function isNoteBodyEmpty () {
 			var d = Ext.getDom(me.el.down('.content')),
 				html = d && d.innerHTML,
 				parts = d && d.querySelectorAll('.object-part');
@@ -1623,14 +1623,14 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.contentEl[r.clearPlaceholder ? 'removeCls' : 'addCls']('show-placeholder');
 	},
 
-	editBody: function(body, silent) {
+	editBody: function (body, silent) {
 		var me = this,
 			c = Ext.getDom(this.el.down('.content'));
 
 		if (body && body.length > 0) {
 			c.innerHTML = '';
 		}
-		Ext.each(body, function(part) {
+		Ext.each(body, function (part) {
 			var d = document.createElement('div'),
 				mime, fnName;
 			if (typeof part === 'string') {
@@ -1663,7 +1663,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		return me;
 	},
 
-	injectUnknownPart: function(part) {
+	injectUnknownPart: function (part) {
 		var me = this, guid = guidGenerator();
 
 		this.trackedParts[guid] = part;
@@ -1676,14 +1676,14 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		me.insertObjectThumbnail(me.el.down('.content'), guid, part, true);
 	},
 
-	getBodyValue: function() {
+	getBodyValue: function () {
 		//Sanitize some new line stuff that various browsers produce.
 		//See http://stackoverflow.com/a/12832455 and http://jsfiddle.net/sathyamoorthi/BmTNP/5/
 		var out = [],
 			sel = this.el.select('.content > *'),
 			reInitialChar = this.REGEX_INITIAL_CHAR;
 
-		sel.each(function(div) {
+		sel.each(function (div) {
 			var html, parsed, tmp, dom;
 			try {
 				//don't let manipulations here effect the dom
@@ -1723,7 +1723,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		return out;
 	},
 
-	getValue: function() {
+	getValue: function () {
 		return {
 			body: this.getBody(this.getBodyValue()),
 			sharingInfo: this.sharedList ? this.sharedList.getValue() : null,
@@ -1733,15 +1733,15 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		};
 	},
 
-	setTitle: function(title) {
+	setTitle: function (title) {
 		var t = this.titleEl;
 		if (t) {
 			t.set({value: title});
 		}
 	},
 
-	setTags: function(tags) {
-		tags = Ext.Array.filter(tags || [], function(t) {
+	setTags: function (tags) {
+		tags = Ext.Array.filter(tags || [], function (t) {
 			return !ParseUtils.isNTIID(t);
 		});
 
@@ -1750,26 +1750,26 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	setPublished: function(value) {
+	setPublished: function (value) {
 		var action = value ? 'addCls' : 'removeCls';
 		if (this.publishEl) {
 			this.publishEl[action]('on');
 		}
 	},
 
-	getPublished: function() {
+	getPublished: function () {
 		var el = this.publishEl;
 		return el ? el.is('.on') : undefined;
 	},
 
-	setSharedWith: function(sharingInfo) {
+	setSharedWith: function (sharingInfo) {
 		if (this.sharedList) {
 			this.sharedList.setValue(sharingInfo);
 		}
 	},
 
 	/** @private */
-	setValue: function(text, putCursorAtEnd, focus) {
+	setValue: function (text, putCursorAtEnd, focus) {
 		this.setHTML(Ext.String.htmlEncode(text));
 		if (focus || putCursorAtEnd) {
 			this.focus(putCursorAtEnd);
@@ -1777,7 +1777,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	/** @private */
-	setHTML: function(html) {
+	setHTML: function (html) {
 		//if we are given a blank value, or the value doesn't begin with a div, wrap it.
 		if (!html || !/^<div/im.test(html)) {
 			//the div wrapper is for IE
@@ -1786,7 +1786,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.el.down('.content').dom.innerHTML = html;
 	},
 
-	reset: function() {
+	reset: function () {
 		var buttonsName = ['bold', 'italic', 'underline'], me = this, selection;
 		this.el.down('.content').innerHTML = '<div>' + this.defaultValue + '</div>';
 		this.cleanTrackedParts();
@@ -1804,7 +1804,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		try {
 			this.styleControlsEl.removeCls('selected');
 			// Deselect btns.
-			Ext.each(buttonsName, function(bn) {
+			Ext.each(buttonsName, function (bn) {
 				var b = me.el.down('.' + bn);
 				if (b) {
 					b.removeCls('selected');
@@ -1826,13 +1826,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 	},
 
-	lock: function() {
+	lock: function () {
 		if (Ext.getDom(this.contentEl)) {
 			this.contentEl.set({contentEditable: false});
 		}
 	},
 
-	unlock: function() {
+	unlock: function () {
 		if (Ext.getDom(this.contentEl)) {
 			this.contentEl.set({contentEditable: true});
 		}

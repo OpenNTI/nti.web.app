@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		Searchable: 'NextThought.mixins.Searchable'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.enableBubble(['presentation-parts-ready', 'no-presentation-parts', 'jump-video-to']);
 
 		this.buildComponents();
@@ -62,23 +62,23 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		});
 
 
-		Ext.EventManager.onWindowResize(function() {
+		Ext.EventManager.onWindowResize(function () {
 			this.fireEvent('sync-height');
 		}, this, {buffer: 250});
 
-		this.on('resize', function() {
+		this.on('resize', function () {
 			this.fireEvent('sync-height');
 		}, this);
 	},
 
-	getContainerIdForSearch: function() {
+	getContainerIdForSearch: function () {
 		return this.video.getId();
 	},
 
-	onceReadyForSearch: function() {
+	onceReadyForSearch: function () {
 		var transcript = this.down('video-transcript');
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			if (!transcript) {
 				fulfill();
 			} else if (transcript.isPresentationPartReady) {
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		});
 	},
 
-	buildComponents: function() {
+	buildComponents: function () {
 		var items = [];
 		if (this.transcript) {
 			items = [{
@@ -117,32 +117,32 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		this.items = items;
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		if (this.hasNoPresentationParts) {
 			this.fireEvent('no-presentation-parts', this);
 		}
 	},
 
-	onStoreEventsAdd: function(store, records) {
+	onStoreEventsAdd: function (store, records) {
 		var cmps = this.MediaViewerStore.getComponentsForStore(store.containerId);
-		Ext.each(cmps, function(c) {
+		Ext.each(cmps, function (c) {
 			if (c.isVisible(true)) {
 				this.fireEvent('register-records', store, records, c);
 			}
 		});
 	},
 
-	onStoreEventsRemove: function(store, records) {
+	onStoreEventsRemove: function (store, records) {
 		var cmps = this.MediaViewerStore.getComponentsForStore(store.containerId);
-		Ext.each(cmps, function(c) {
+		Ext.each(cmps, function (c) {
 			if (c.isVisible(true)) {
 				this.fireEvent('unregister-records', store, records, c);
 			}
 		});
 	},
 
-	setupNoteOverlay: function() {
+	setupNoteOverlay: function () {
 		var me = this;
 
 		this.noteOverlay = Ext.create('NextThought.app.mediaviewer.components.reader.NoteOverlay', {
@@ -152,12 +152,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 		this.on('destroy', 'destroy', this.relayEvents(this.noteOverlay, ['editorActivated', 'editorDeactivated']));
 
-		Ext.each(this.items.items, function(vt) {
+		Ext.each(this.items.items, function (vt) {
 			me.noteOverlay.registerReaderView(vt);
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.setupNoteOverlay();
@@ -174,20 +174,20 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 		this.mon(Ext.get(this.getScrollTarget()), 'scroll', 'onScroll');
 
-		this.on('will-hide-transcript', function() {
+		this.on('will-hide-transcript', function () {
 			if (this.annotationView) {
 				this.annotationView.hide();
 			}
 		}, this);
 	},
 
-	getPartComponents: function() {
-		return Ext.Array.filter(this.items.items, function(p) {
+	getPartComponents: function () {
+		return Ext.Array.filter(this.items.items, function (p) {
 			return p !== undefined;
 		});
 	},
 
-	getMaskTarget: function() {
+	getMaskTarget: function () {
 		var root = this;
 		while (root.ownerCt) {
 			root = root.ownerCt;
@@ -196,27 +196,27 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return root.el;
 	},
 
-	addMask: function() {
+	addMask: function () {
 		this.getMaskTarget().mask('Loading...');
 		this.isMasked = true;
 	},
 
-	removeMask: function() {
+	removeMask: function () {
 		this.getMaskTarget().unmask();
 		this.isMasked = false;
 	},
 
-	onAnimationEnd: function() {
+	onAnimationEnd: function () {
 		this.maybeLoadData();
 	},
 
-	maybeLoadData: function() {
+	maybeLoadData: function () {
 		var partCmps = this.getPartComponents(),
 			readyMap = {}, me = this;
 
-		function maybeDone() {
+		function maybeDone () {
 			var done = true;
-			Ext.Object.each(readyMap, function(k, v) {
+			Ext.Object.each(readyMap, function (k, v) {
 				if (v === false) {
 					done = false;
 				}
@@ -235,16 +235,16 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 				me.fireEvent('presentation-parts-ready', me, me.getPartComponents(), me.startOn);
 
 				Promise.all(me.MediaViewerActions.loadUserData(partCmps, me))
-					.then(function() {
+					.then(function () {
 						wait(10).then(me.fireEvent.bind(me, 'sync-height'));
 					})
-					.fail(function() {
+					.fail(function () {
 						console.error('*****FAILED to load UserData in the Media Viewer: ', arguments);
 					});
 			}
 		}
 
-		Ext.each(partCmps, function(p) {
+		Ext.each(partCmps, function (p) {
 
 			//Just in case something we aren't expecting sneaks in.
 			if (p.isPresentationPartReady === undefined) {
@@ -256,7 +256,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			}
 			readyMap[p.$presentationUUID] = p.isPresentationPartReady;
 			if (!p.isPresentationPartReady) {
-				this.mon(p, 'presentation-part-ready', function(sender) {
+				this.mon(p, 'presentation-part-ready', function (sender) {
 					readyMap[sender.$presentationUUID] = true;
 					maybeDone();
 				});
@@ -265,7 +265,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		maybeDone();
 	},
 
-	highlightAtTime: function(seconds, allowScroll) {
+	highlightAtTime: function (seconds, allowScroll) {
 		var cmps = this.getPartComponents(),
 			me = this,
 			offset = 10;
@@ -275,7 +275,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}
 
 		// highlight and scroll the component that contains the given time into view.
-		Ext.each(cmps, function(cmp) {
+		Ext.each(cmps, function (cmp) {
 			var isTimePart = cmp.isTimeWithinTimeRange && cmp.isTimeWithinTimeRange(seconds), tEl;
 			if (isTimePart) {
 				tEl = cmp.getElementAtTime && cmp.getElementAtTime(seconds);
@@ -300,7 +300,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		});
 	},
 
-	scrollToEl: function(el, offset) {
+	scrollToEl: function (el, offset) {
 		var scrollingEl = Ext.get(this.getScrollTarget()),
 			top, bottom, shouldScroll;
 
@@ -318,7 +318,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}
 	},
 
-	onScroll: function(e, dom) {
+	onScroll: function (e, dom) {
 		//if the current scroll top is too far off were is should be the user initiated it.
 		var delta = Math.abs(dom.scrollTop - this.desiredTop);
 
@@ -327,11 +327,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}
 	},
 
-	scrollToStartingTime: function(seconds) {
+	scrollToStartingTime: function (seconds) {
 		var cmps = this.getPartComponents(), tEl, scrollingEl;
 
 		// scroll the component that contains the given time into view.
-		Ext.each(cmps, function(part) {
+		Ext.each(cmps, function (part) {
 			if (part.isTimeWithinTimeRange && part.isTimeWithinTimeRange(seconds)) {
 				tEl = part.getElementAtTime(seconds);
 				scrollingEl = this.el.getScrollingEl();
@@ -348,14 +348,14 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return tEl;
 	},
 
-	syncWithVideo: function(videoState, allowScroll) {
+	syncWithVideo: function (videoState, allowScroll) {
 		if (videoState && videoState.time) {
 			this.highlightAtTime(videoState.time, allowScroll);
 		}
 		//this.transcriptView.syncTranscriptWithVideo(videoState);
 	},
 
-	showAnnotations: function(annotations, line, store) {
+	showAnnotations: function (annotations, line, store) {
 		var s = store;
 
 		if (!annotations || annotations.getCount() === 0) {
@@ -365,9 +365,9 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		if (!s) {
 			s = NextThought.store.FlatPage.create({
 				storeId: 'presentation-annotations-' + line,
-				filters: [{ id: 'nochildren', filterFn: function(r) { return !r.parent; }}]//override the base filter set
+				filters: [{ id: 'nochildren', filterFn: function (r) { return !r.parent; }}]//override the base filter set
 			});
-			annotations.each(function(annotation) {
+			annotations.each(function (annotation) {
 				//Note stores aren't unique here, but flatpage store won't let
 				//us bind the same store to it twice.  How convenient..
 				s.bind(annotation.store);
@@ -378,7 +378,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 			console.log('filtering by line: ', line);
 			s.addFilter({
 				id: this.lineFilterId,
-				filterFn: function(r) {
+				filterFn: function (r) {
 					//console.log('rec: ', r.getId(), ' line: ', r.get('line'));
 					return r.get('pline') === line;
 				}
@@ -389,7 +389,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		this.showAnnotationView(s);
 	},
 
-	showAnnotationView: function(store) {
+	showAnnotationView: function (store) {
 		var me = this, classList = 'presentation-note-slider annotation-view dark';
 		if (!this.annotationView) {
 			classList += (this.accountForScrollbars) ? ' scroll-margin-right' : '';
@@ -414,7 +414,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 				floatParent: this,
 				showNote: this.showNote.bind(this),
 				listeners: {
-					itemremove: function() {
+					itemremove: function () {
 						if (this.store && this.store.count() === 0) {
 							Ext.defer(this.hide, 1, this);
 						}
@@ -426,7 +426,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 					this.on({
 						destroyable: true,
 						scope: this.annotationView,
-						resize: function() {
+						resize: function () {
 							if (this.isVisible()) {
 								this.toFront();
 							}
@@ -438,8 +438,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 			this.annotationView.on({
 				scope: this,
-				show: function() { me.fireEvent('will-show-annotation', me.annotationView, this); },
-				hide: function() {
+				show: function () { me.fireEvent('will-show-annotation', me.annotationView, this); },
+				hide: function () {
 					if (me.el.down('.count.active')) {
 						me.el.down('.count.active').removeCls('active');
 					}
@@ -462,7 +462,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		// this.getLayout().setActiveItem(this.annotationView);
 	},
 
-	destroy: function() {
+	destroy: function () {
 		if (this.annotationView && this.annotationView.store) {
 			//Make sure we clear the line filter, since this store could be bound to another view.
 			this.annotationView.store.removeFilter(this.lineFilterId);
@@ -476,13 +476,13 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 	},
 
-	beforeDeactivate: function() {
+	beforeDeactivate: function () {
 		if (this.annotationView && this.annotationView.isVisible()) {
 			this.annotationView.hide();
 		}
 	},
 
-	allowNavigation: function() {
+	allowNavigation: function () {
 		if (this.noteOverlay && this.noteOverlay.editor.isActive()) {
 			return this.noteOverlay.allowNavigation();
 		} else {
@@ -490,7 +490,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		}
 	},
 
-	mayBeHideAnnotationView: function(e) {
+	mayBeHideAnnotationView: function (e) {
 		if (!this.annotationView || !this.annotationView.isVisible()) {
 			return true;
 		}
@@ -505,16 +505,16 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return true;
 	},
 
-	getDomContextForRecord: function(r) {
+	getDomContextForRecord: function (r) {
 		//Find the cmp with our UGD store.
-		function fn(cmp) {
+		function fn (cmp) {
 			var s = cmp.userDataStore;
 			return s && s.findRecord('NTIID', r.get('NTIID'));
 		}
 
 		var cmps = Ext.Array.filter(this.items.items, fn), node = null;
 
-		Ext.each(cmps, function(cmp) {
+		Ext.each(cmps, function (cmp) {
 
 			if (Ext.isFunction(cmp.getDomContextForRecord) && (!Ext.isFunction(cmp.wantsRecord) || cmp.wantsRecord(r))) {
 				node = cmp.getDomContextForRecord(r);
@@ -533,15 +533,15 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 	// NOTE: We don't need to scroll to a hit since when we open the media viewer we pass it the startMillis time,
 	// By the time, this function gets called, we are already scrolled at the right location.
-	scrollToHit: function() {},
+	scrollToHit: function () {},
 
-	getScrollTarget: function() {
+	getScrollTarget: function () {
 		return this.getTargetEl().dom || this.el.dom;
 	},
 
-	getViewerHooks: function() {
+	getViewerHooks: function () {
 		return {
-			'resizeView': function() {
+			'resizeView': function () {
 				var reader = this.reader,
 					w = reader.getWidth() - reader.annotationView.getWidth() - 20,
 					h = reader.annotationView.getHeight(),
@@ -560,7 +560,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		};
 	},
 
-	showNote: function(record, el, monitors) {
+	showNote: function (record, el, monitors) {
 		this.WindowActions.pushWindow(record, null, el, monitors);
 	}
 });

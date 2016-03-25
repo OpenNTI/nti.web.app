@@ -21,12 +21,12 @@ module.exports = exports = Ext.define('NextThought.model.Slidedeck', {
 		{ name: 'href', type: 'string'}
 	],
 
-	containsSlide: function(slide) {
+	containsSlide: function (slide) {
 		var slides = this.get('Slides') || [],
 			slideId = slide && slide.isModel ? slide.getId() : slide,
 			result = false;
 
-		Ext.each(slides, function(slide){
+		Ext.each(slides, function (slide) {
 			if (slide.NTIID === slideId) {
 				result = true;
 				return false;
@@ -37,11 +37,11 @@ module.exports = exports = Ext.define('NextThought.model.Slidedeck', {
 	},
 
 
-	containsVideo: function(videoId) {
+	containsVideo: function (videoId) {
 		var videos = this.get('Videos') || [],
 			result = false;
 
-		Ext.each(videos, function(video) {
+		Ext.each(videos, function (video) {
 			if (video.NTIID === videoId || video.video_ntiid === videoId) {
 				result = true;
 				return false;

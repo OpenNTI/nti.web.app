@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 
 
 	//<editor-fold desc="Setup & Init">
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 		this.notepadItems = {};
 		this.groupedLines = {};
@@ -65,12 +65,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.boxEl.setVisibilityMode(Ext.Element.ASCLASS).visibilityCls = 'hidden';
 	},
 
-	setupBindsToReaderRef: function() {
+	setupBindsToReaderRef: function () {
 		var ref = this.getReaderRef();
 
 		try {
@@ -97,7 +97,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 
 
 	//<editor-fold desc="Editor">
-	editorCleanup: function() {
+	editorCleanup: function () {
 		if (this.editor) {
 			this.editor.destroy();
 		}
@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 		delete this.editor;
 	},
 
-	openEditor: function(lineInfo) {
+	openEditor: function (lineInfo) {
 		if (this.editor && !this.editor.isDestroyed) {
 			return false;
 		}
@@ -133,19 +133,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 		return true;
 	},
 
-	commitEditor: function(editor) {
+	commitEditor: function (editor) {
 		this.savingNewNote = true;
 		this.saveNewNote(editor);
 	},
 
-	saveNewNote: function(editor) {
+	saveNewNote: function (editor) {
 		var me = this,
 			note = editor.getValue(),
 			reader = me.getReaderRef(),
 			style = editor.lineInfo.style || 'suppressed',
 			rangeInfo;
 
-		function afterSave(success) {
+		function afterSave (success) {
 			delete me.savingNewNote;
 			editor.unmask();
 			if (success) {
@@ -179,38 +179,38 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 
 
 	//<editor-fold desc="Mouse Event Handlers">
-	cleanupLine: function() {
+	cleanupLine: function () {
 		this.boxEl.hide();
 		delete this.lastLine;
 	},
 
-	lock: function() {
+	lock: function () {
 		this.suspendMoveEvents = true;
 		Ext.defer(this.boxEl.hide, 1, this.boxEl);
 	},
 
-	unlock: function() {
+	unlock: function () {
 		delete this.suspendMoveEvents;
 	},
 
-	eat: function(e) {
+	eat: function (e) {
 		clearTimeout(this.hideTimer);
 		e.stopEvent();
 		return false;
 	},
 
-	onClick: function() {
+	onClick: function () {
 		if (this.suspendMoveEvents) {return;}
 		this.openEditor(this.lastLine);
 	},
 
-	onMouseOut: function() {
+	onMouseOut: function () {
 		if (this.suspendMoveEvents) {return;}
 		clearTimeout(this.hideTimer);
 		this.hideTimer = Ext.defer(this.cleanupLine, 500, this);
 	},
 
-	onMouseTrack: function(e) {
+	onMouseTrack: function (e) {
 		if (this.suspendMoveEvents) {return;}
 
 		var lineY = this.getContentY(e),
@@ -227,7 +227,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 
 
 	//<editor-fold desc="Synchronizing Handlers">
-	syncHight: function() {
+	syncHight: function () {
 		var reader = this.getReaderRef(),
 			iFrame = reader && reader.getIframe().get();
 
@@ -236,7 +236,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 		}
 	},
 
-	syncScroll: function() {
+	syncScroll: function () {
 		if (!this.rendered) {
 			return;
 		}
@@ -248,9 +248,9 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 		}
 	},
 
-	onSyncScroll: function() {},
+	onSyncScroll: function () {},
 
-	onPushScroll: function pushScroll(e) {
+	onPushScroll: function pushScroll (e) {
 		var d = e.getWheelDelta(),
 			h = (this.scroller.getHeight() / this.getHeight()) / 2,//make sure the scale kinda matches
 			reader = this.getReaderRef();
@@ -264,13 +264,13 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 
 
 	//<editor-fold desc="Line Resolving">
-	getContentY: function(e) {
+	getContentY: function (e) {
 		var ref = this.getReaderRef(),
 			t = ref && ref.getAnnotationOffsets().top;
 		return e.getY() - (t || 0);
 	},
 
-	getLineInfo: function(y) {
+	getLineInfo: function (y) {
 		var reader = this.getReaderRef();
 
 		return reader.getNoteOverlay().lineInfoForY(y);
@@ -279,7 +279,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 	//</editor-fold>
 
 
-	clearItems: function() {
+	clearItems: function () {
 		var k,
 			m = this.notepadItems || {},
 			g = this.groupedLines || {},
@@ -306,16 +306,16 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 		this.scroller.select('div:not(.note-here)').remove();
 	},
 
-	noteHereMenu: function(e) {
+	noteHereMenu: function (e) {
 		return this.eat(e);//maybe show a context menu?
 	},
 
-	detectOverflow: function() {
+	detectOverflow: function () {
 		console.log('overflow detection');
 
 		var collided = {}, els, resort = false;
 
-		function doesCollide(el, set) {
+		function doesCollide (el, set) {
 			var top = el.getLocalY(),
 				height = el.getHeight(),
 				bottom = height + top,
@@ -324,7 +324,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 
 			//console.log(id, top, height, bottom);
 
-			set.each(function(e) {
+			set.each(function (e) {
 				var t = e.getLocalY(),
 					h = e.getHeight(),
 					i = e.getAttribute('id'),
@@ -363,7 +363,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 		}
 
 		els = this.el.select('.scroller > *:not(.note-here)').slice();
-		els.sort(function(a, b) {
+		els.sort(function (a, b) {
 			var c = Ext.fly(a).getLocalY() - Ext.fly(b).getLocalY();
 			if (c > 0) {
 				resort = true;
@@ -373,7 +373,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 
 		resort = !this.editor && resort && (new Ext.dom.CompositeElement(els)).filter('.edit').getCount() === 0;
 
-		(new Ext.dom.CompositeElement(els)).removeCls('collide').setHeight('auto').setStyle({minHeight: null}).each(function(el, c) {
+		(new Ext.dom.CompositeElement(els)).removeCls('collide').setHeight('auto').setStyle({minHeight: null}).each(function (el, c) {
 
 			var d = Ext.getDom(el),
 				i = doesCollide(el, c);
@@ -391,7 +391,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 		});
 	},
 
-	addOrUpdate: function(annotation, yPlacement) {
+	addOrUpdate: function (annotation, yPlacement) {
 		yPlacement = Math.round(yPlacement);
 		if (yPlacement < 5) {
 			yPlacement = 5;
@@ -425,7 +425,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 						renderTo: this.scroller
 					});
 					group.add(this.getItemsReferenced(groups[groupId]));
-					group.on('destroy', function() {
+					group.on('destroy', function () {
 						delete groups[groupId];
 					});
 				}
@@ -443,15 +443,15 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.notepad.Vie
 		o.updateWith({ annotation: annotation, record: annotation.getRecord(), placement: y });
 	},
 
-	getItemsReferenced: function(itemRefs) {
+	getItemsReferenced: function (itemRefs) {
 		var m = this.notepadItems;
 
-		return Ext.Array.map(itemRefs, function(v) {
+		return Ext.Array.map(itemRefs, function (v) {
 			return m[v];
 		});
 	},
 
-	groupContains: function(group, value) {
+	groupContains: function (group, value) {
 		if (Ext.isArray(group)) {
 			return Ext.Array.contains(group, value);
 		}

@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.GradeBookPar
 	],
 
 
-	findGradeBookEntryFor: function(assignmentId) {
+	findGradeBookEntryFor: function (assignmentId) {
 		var items = this.get('Items'),
 			map = items.INDEX_KEYMAP,
 			assignment, item;
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.GradeBookPar
 	},
 
 
-	buildEntry: function(name, id) {
+	buildEntry: function (name, id) {
 		var items = this.get('Items'),
 			entry = NextThought.model.courseware.GradeBookEntry.create({AssignmentId: id, Items: {}, Name: name}),
 			key = items.length;

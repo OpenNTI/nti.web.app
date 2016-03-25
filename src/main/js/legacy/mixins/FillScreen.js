@@ -3,7 +3,7 @@ var Ext = require('extjs');
 
 module.exports = exports = Ext.define('NextThought.mixins.FillScreen', {
 
-	fillScreen: function(node, paddingBottom) {
+	fillScreen: function (node, paddingBottom) {
 		if (!node) { return; }
 
 		var me = this,
@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.mixins.FillScreen', {
 
 		Ext.EventManager.onWindowResize(resizeHandler, me);
 
-		me.on('destroy', function() {
+		me.on('destroy', function () {
 			Ext.EventManager.removeResizeListener(resizeHandler, me);
 		});
 
@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.mixins.FillScreen', {
 	},
 
 
-	sizeNode: function(node, paddingBottom) {
+	sizeNode: function (node, paddingBottom) {
 		var rect = node.getBoundingClientRect(),
 			scrollTop = Ext.getBody().getScrollTop(),
 			viewHeight = Ext.Element.getViewportHeight(),

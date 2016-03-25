@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-discussion-listitem',
 
 	statics: {
-		getSupported: function() {
+		getSupported: function () {
 			return NextThought.model.DiscussionRef.mimeType;
 		}
 	},
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		side: 'left'
 	},
 
-	getPreviewType: function() {
+	getPreviewType: function () {
 		return 'course-overview-discussion';
 	}
 });

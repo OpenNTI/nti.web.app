@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 	contentComponents: [],
 	contentComponentsToRender: [],
 
-	parseDomString: function(dom) {
+	parseDomString: function (dom) {
 		var a = document.createElement('div');
 
 		a.id = 'tempdom';
@@ -89,12 +89,12 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 	 * @param  {bool} dontRender the element mixing in will hanldle it
 	 * @return {String} the html string of the content
 	 */
-	buildContent: function(dom, dontRender) {
+	buildContent: function (dom, dontRender) {
 		if (Ext.isString(dom)) {
 			dom = this.parseDomString(dom);
 		}
 
-		function topLevelOnly(o) {
+		function topLevelOnly (o) {
 			var p = o.parentNode;
 			if (p && p.nodeName === 'OBJECT') { return false; }
 			return p ? topLevelOnly(p) : true;
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 		me.contentComponents = [];
 		me.contentComponentsToRender = [];
 
-		objects.forEach(function(object) {
+		objects.forEach(function (object) {
 			var type = object.getAttribute('type'),
 				placeholder,
 				container = object.parentNode,
@@ -151,10 +151,10 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 	 * Takes the configs for the components we need to render and creates them
 	 * @return {Undefined}	no return value
 	 */
-	renderContentComponents: function() {
+	renderContentComponents: function () {
 		var me = this;
 
-		me.contentComponentsToRender.forEach(function(component) {
+		me.contentComponentsToRender.forEach(function (component) {
 			me.addObject(null, component, true);
 		});
 
@@ -168,7 +168,7 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 	 * @param {bool} create		whether or not to create the element or add it to the list of things to be created
 	 * @return {bool} whether or not we have a component for the type
 	 */
-	addObject: function(type, config, create) {
+	addObject: function (type, config, create) {
 		var placeholderEl, parent,
 			name = config.compName || (type && this.typeToComponent[type]);
 
@@ -197,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.mixins.QuestionContent', {
 		return true;
 	},
 
-	destroyContent: function() {
+	destroyContent: function () {
 		Ext.destroy(this.contentComponents);
 	}
 });

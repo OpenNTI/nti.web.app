@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.layout.component.CustomTempla
 	type: 'customtemplate',
 
 
-	publishInnerHeight: function(ownerContext, height) {
+	publishInnerHeight: function (ownerContext, height) {
 		var innerHeight = height - ownerContext.getFrameInfo().height,
 			targetContext = ownerContext.targetContext,
 			m = targetContext.el.getMargin();

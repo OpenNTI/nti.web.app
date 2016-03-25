@@ -39,14 +39,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		}
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 
 		this.StoreActions = NextThought.app.store.Actions.create();
 		this.CourseEnrollmentActions = NextThought.app.course.enrollment.Actions.create();
 	},
 
-	__getPurchasableByNTIID: function(ntiid, option) {
+	__getPurchasableByNTIID: function (ntiid, option) {
 		var items = option.Purchasables.Items, i, item,
 			purchasable;
 
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		return purchasable;
 	},
 
-	__getGiftPurchasable: function(option) {
+	__getGiftPurchasable: function (option) {
 		var ntiid = option && option.Purchasables && option.Purchasables.DefaultGiftingNTIID;
 
 		if (!ntiid) {
@@ -77,7 +77,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		return this.__getPurchasableByNTIID(ntiid, option);
 	},
 
-	__getPurchasable: function(option) {
+	__getPurchasable: function (option) {
 		var ntiid = option && option.Purchasables && option.Purchasables.DefaultPurchaseNTIID;
 
 		if (!ntiid) {
@@ -87,7 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		return this.__getPurchasableByNTIID(ntiid, option);
 	},
 
-	buildEnrollmentSteps: function(course, type, config) {
+	buildEnrollmentSteps: function (course, type, config) {
 		var option = course.getEnrollmentOption(this.NAME),
 			steps = [];
 
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		option.hasCredit = false;
 		//option.Refunds = false;
 
-		function addPurchasable(purchasable) {
+		function addPurchasable (purchasable) {
 			option.Purchasable = purchasable;
 			option.Price = purchasable.get('Amount');
 		}
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		return steps;
 	},
 
-	__addBaseSteps: function(course, option, steps) {
+	__addBaseSteps: function (course, option, steps) {
 		var me = this,
 			confirmationText = getString('EnrollmentConfirmation') || {};
 
@@ -124,14 +124,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			name: 'Payment Info',
 			hasPricingCard: true,
 			enrollmentOption: option,
-			isComplete: function() {return Promise.reject(); },
-			complete: function(cmp, data) {
+			isComplete: function () {return Promise.reject(); },
+			complete: function (cmp, data) {
 				if (!data.purchaseDescription || !data.cardInfo) {
 					console.error('Incorrect data passed to complete', arguments);
 					return Promise.reject();
 				}
 
-				return new Promise(function(fulfill, reject) {
+				return new Promise(function (fulfill, reject) {
 					me.StoreActions.createEnrollmentPurchase(cmp, data.purchaseDescription, data.cardInfo, fulfill, reject);
 				});
 			}
@@ -145,19 +145,19 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			hasPricingCard: true,
 			goBackOnError: true,
 			lockCoupon: true,
-			isComplete: function() {return Promise.reject(); },
-			complete: function(cmp, data) {
+			isComplete: function () {return Promise.reject(); },
+			complete: function (cmp, data) {
 				if (!data.purchaseDescription || !data.tokenObject || !data.pricingInfo) {
 					console.error('Incorrect data passed to complete', arguments);
 					return Promise.reject();
 				}
 
-				return new Promise(function(fulfill, reject) {
+				return new Promise(function (fulfill, reject) {
 					cmp.fireEvent('enrollment-enroll-started');//Nothing is listening to this...
 					me.StoreActions.submitEnrollmentPurchase(cmp, data.purchaseDescription, data.tokenObject, data.pricingInfo, fulfill, reject);
-				}).then(function(result) {
+				}).then(function (result) {
 					//trigger the library to reload
-					return new Promise(function(fulfill, reject) {
+					return new Promise(function (fulfill, reject) {
 						me.CourseEnrollmentActions.refreshEnrolledCourses(fulfill.bind(null, result), reject);
 					});
 				});
@@ -172,13 +172,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			hasPricingCard: true,
 			lockCoupon: true,
 			enrollmentOption: option,
-			isComplete: function() { return Promise.resolve(); }
+			isComplete: function () { return Promise.resolve(); }
 		}, steps);
 
 		return steps;
 	},
 
-	__addGiftSteps: function(course, option, steps) {
+	__addGiftSteps: function (course, option, steps) {
 		var me = this,
 			redemptionText = getString('RedemptionConfirmation') || {};
 
@@ -187,14 +187,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			name: 'Payment Info',
 			hasPricingCard: true,
 			enrollmentOption: option,
-			isComplete: function() { return Promise.reject(); },
-			complete: function(cmp, data) {
+			isComplete: function () { return Promise.reject(); },
+			complete: function (cmp, data) {
 				if (!data.purchaseDescription || !data.cardInfo) {
 					console.error('Incorrect data passed to complete', arguments);
 					return Promise.reject();
 				}
 
-				return new Promise(function(fulfill, reject) {
+				return new Promise(function (fulfill, reject) {
 					me.StoreActions.createEnrollmentPurchase(cmp, data.purchaseDescription, data.cardInfo, fulfill, reject);
 				});
 			}
@@ -208,14 +208,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			hasPricingCard: true,
 			goBackOnError: true,
 			lockCoupon: true,
-			isComplete: function() { return Promise.reject(); },
-			complete: function(cmp, data) {
+			isComplete: function () { return Promise.reject(); },
+			complete: function (cmp, data) {
 				if (!data.purchaseDescription || !data.tokenObject || !data.pricingInfo) {
 					console.error('Incorrect data passed to complete', arguments);
 					return Promise.reject();
 				}
 
-				return new Promise(function(fulfill, reject) {
+				return new Promise(function (fulfill, reject) {
 					me.StoreActions.submitGiftPurchase(cmp, data.purchaseDescription, data.tokenObject, data.pricingInfo, fulfill, reject);
 				});
 			}
@@ -227,13 +227,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			lockCoupon: true,
 			enrollmentOption: option,
 			hasPricingCard: true,
-			isComplete: function() { return Promise.resolve(); }
+			isComplete: function () { return Promise.resolve(); }
 		}, steps);
 
 		return steps;
 	},
 
-	__addRedeemSteps: function(course, option, steps, config) {
+	__addRedeemSteps: function (course, option, steps, config) {
 		if (config && config[0]) {
 			option.redeemToken = config[0];
 		}
@@ -247,21 +247,21 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			enrollmentOption: option,
 			hasPricingCard: true,
 			hidePrice: true,
-			isComplete: function() { return Promise.reject(); },
-			complete: function(cmp, data) {
+			isComplete: function () { return Promise.reject(); },
+			complete: function (cmp, data) {
 				if (!data.token || !data.purchasable) {
 					console.error('Incorrect data passed to redeem', arguments);
 					return Promise.reject();
 				}
-				return new Promise(function(fulfill, reject) {
+				return new Promise(function (fulfill, reject) {
 					me.StoreActions.redeemGift(cmp, data.purchasable, data.token, data.AllowVendorUpdates, course.getId(), fulfill, reject);
-				}).then(function(courseInstanceEnrollment) {
+				}).then(function (courseInstanceEnrollment) {
 					//trigger the library to reload
 					var courseInstance = courseInstanceEnrollment.get('CourseInstance');
 
-					return new Promise(function(fulfill, reject) {
+					return new Promise(function (fulfill, reject) {
 						Service.request(courseInstance.getLink('CourseCatalogEntry'))
-							.then(function(catalogEntry) {
+							.then(function (catalogEntry) {
 								catalogEntry = ParseUtils.parseItems(catalogEntry)[0];
 								course.set('EnrollmentOptions', catalogEntry.get('EnrollmentOptions'));
 								me.CourseEnrollmentActions.refreshEnrolledCourses(fulfill, reject);
@@ -278,13 +278,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			enrollmentOption: option,
 			heading: redemptionText.heading || 'You\'re Enrolled as a Lifelong Learner',
 			hasPricingCard: false,
-			isComplete: function() { return Promise.resolve(); }
+			isComplete: function () { return Promise.resolve(); }
 		}, steps);
 
 		return steps;
 	},
 
-	__getEnrollmentText: function(course, option) {
+	__getEnrollmentText: function (course, option) {
 		var state = {}, now = new Date(),
 			details = this.__getOptionDetails(course, option);
 
@@ -320,7 +320,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		return state;
 	},
 
-	__getGiftText: function(purchasable, course, option) {
+	__getGiftText: function (purchasable, course, option) {
 		var state = {},
 			details = this.__getOptionDetails(course, option);
 
@@ -339,7 +339,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		return state;
 	},
 
-	__getOptionDetails: function(course, option) {
+	__getOptionDetails: function (course, option) {
 		return {
 			Enrolled: option.IsEnrolled,
 			StartDate: course.StartDate,
@@ -349,7 +349,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		};
 	},
 
-	buildEnrollmentDetails: function(course, details) {
+	buildEnrollmentDetails: function (course, details) {
 		var me = this,
 			option = course.getEnrollmentOption(this.NAME),
 			giftPurchasable = this.__getGiftPurchasable(option),
@@ -371,18 +371,18 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		}
 
 
-		loadDetails = new Promise(function(fulfill, reject) {
+		loadDetails = new Promise(function (fulfill, reject) {
 			var catalogData = {
-					Name: me.NAME,
-					BaseOption: me.isBase,
-					Enrolled: option.IsEnrolled,
-					Price: null,
-					Wording: me.__getEnrollmentText(details, option),
-					doEnrollment: function(cmp, type, config) {
+				Name: me.NAME,
+				BaseOption: me.isBase,
+				Enrolled: option.IsEnrolled,
+				Price: null,
+				Wording: me.__getEnrollmentText(details, option),
+				doEnrollment: function (cmp, type, config) {
 						cmp.fireEvent('enroll-in-course', course, me.NAME, type, config);
 					},
-					undoEnrollment: null
-				};
+				undoEnrollment: null
+			};
 
 			fulfill(catalogData);
 		});
@@ -395,7 +395,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		};
 	},
 
-	buildGiftOptions: function(course, details) {
+	buildGiftOptions: function (course, details) {
 		var me = this,
 			option = course.getEnrollmentOption(this.NAME),
 			giftPurchasable = this.__getGiftPurchasable(option),
@@ -410,7 +410,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			Wording: me.__getGiftText(giftPurchasable, details, option),
 			//if the purchasable is redeemable and you're not enrolled
 			Redeemable: giftPurchasable.isRedeemable() && !course.isActive(),
-			doEnrollment: function(cmp, type, config) {
+			doEnrollment: function (cmp, type, config) {
 				cmp.fireEvent('enroll-in-course', course, me.NAME, type, config);
 			}
 		};

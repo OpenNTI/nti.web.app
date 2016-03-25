@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var rd = {
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', this.onClick.bind(this));
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	clear: function() {
+	clear: function () {
 		if (this.rendered) {
 			this.outlineEl.dom.innerHTML = '';
 		}
@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	setTitle: function(title) {
+	setTitle: function (title) {
 		if (!this.rendered) {
 			this.title = title;
 		} else {
@@ -69,7 +69,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	updateActive: function(item, route) {
+	updateActive: function (item, route) {
 		if (!this.rendered) {
 			this.activeItem = item.xtype || item;
 			return;
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	addItems: function(items) {
+	addItems: function (items) {
 		if (!this.rendered) {
 			this.items = items;
 			return;
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		me.clear();
 
-		(items || []).forEach(function(item) {
+		(items || []).forEach(function (item) {
 			me.cmp_map[item.xtype] = me.itemTpl.append(me.outlineEl, {
 				route: item.route,
 				title: item.title,
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	disabledItem: function(xtype){
+	disabledItem: function (xtype) {
 		var item = this.cmp_map[xtype];
 		if (item) {
 			item.addCls('disabled');
@@ -123,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	onClick: function(e) {
+	onClick: function (e) {
 		var item = e.getTarget('.outline-row');
 
 		if (!item || Ext.fly(item).hasCls('disabled')) { return; }

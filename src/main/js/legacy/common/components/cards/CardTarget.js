@@ -12,14 +12,14 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.CardT
 	ui: 'content-card',
 	cls: 'content-card-target-container',
 
-	setupContentElement: function() {
+	setupContentElement: function () {
 		this.callParent(arguments);
 		Ext.fly(this.contentElement).setStyle({
 			margin: '45px 0 0 0'
 		});
 	},
 
-	syncTop: function() {
+	syncTop: function () {
 		if (!this.contentElement) {return;}
 		var ctTop = this.el.up('.x-reader-pane').getY(),
 			top = (10 + ctTop);
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.CardT
 		return top;
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
@@ -78,31 +78,31 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.CardT
 
 		this.addIframe(data);
 
-		this.mon(this.reader, 'allow-custom-scrolling', function() {
+		this.mon(this.reader, 'allow-custom-scrolling', function () {
 			return false;
 		}, this);
 	},
 
-	resolveHref: function(data) {
+	resolveHref: function (data) {
 		return Promise.resolve(data.href);
 	},
 
-	resolveTargetMimeType: function(data) {
+	resolveTargetMimeType: function (data) {
 		return Promise.resolve(data.targetMimeType);
 	},
 
-	addIframe: function(data) {
+	addIframe: function (data) {
 		var me = this;
 
 		return Promise.all([
-				this.resolveHref(data),
-				this.resolveTargetMimeType(data)
-			]).then(function(results) {
+			this.resolveHref(data),
+			this.resolveTargetMimeType(data)
+		]).then(function (results) {
 				me.addIframeFromHref(results[0], results[1]);
 			});
 	},
 
-	addIframeFromHref: function(href, targetMimeType) {
+	addIframeFromHref: function (href, targetMimeType) {
 		this.add({
 			xtype: 'box',
 			autoEl: {
@@ -116,12 +116,12 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.CardT
 		});
 	},
 
-	addUnsupported: function(data) {
+	addUnsupported: function (data) {
 		return this.resolveHref(data)
 			.then(this.addUnsupportedForHref.bind(this));
 	},
 
-	addUnsupportedForHref: function(href) {
+	addUnsupportedForHref: function (href) {
 		var anchorAttr = 'class=\'link\' target=\'_blank\'',
 			chrome = '<a ' + anchorAttr + ' href=\'http://www.google.com/chrome\'>Chrome,</a>',
 			safari = '<a ' + anchorAttr + ' href=\'http://www.apple.com/safari/download/\'>Safari,</a>',
@@ -154,13 +154,13 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.CardT
 		});
 	},
 
-	onDestroy: function() {
+	onDestroy: function () {
 		this.reader.getScroll().unlock();
 		Ext.EventManager.removeResizeListener(this.viewportMonitor, this);
 		this.callParent(arguments);
 	},
 
-	viewportMonitor: function() {
+	viewportMonitor: function () {
 		try {
 
 			var margin = 15,
@@ -176,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.CardT
 		}
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.viewportMonitor();
 		//	this.mon(Ext.get(Ext.DomHelper.append(this.el,{cls:'back-button'})),{
@@ -186,7 +186,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.CardT
 		//	});
 	},
 
-	findLine: function() {
+	findLine: function () {
 		var doc = this.contentElement.ownerDocument,
 			range = doc.createRange();
 

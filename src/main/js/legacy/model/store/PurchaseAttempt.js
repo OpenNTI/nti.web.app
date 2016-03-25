@@ -37,22 +37,22 @@ module.exports = exports = Ext.define('NextThought.model.store.PurchaseAttempt',
 	isPurchaseAttempt: true,
 
 	//TODO we want the polling link on the attempt
-	getLink: function(rel) {
+	getLink: function (rel) {
 		if (rel === 'get_purchase_attempt') {
 			return getURL('/dataserver2/store/get_purchase_attempt?' + Ext.Object.toQueryString({purchaseID: this.getId()}));
 		}
 		return this.mixins.hasLinks.getLink.call(this, rel);
 	},
 
-	isComplete: function() {
+	isComplete: function () {
 		return this.isSuccess() || this.isFailure();
 	},
 
-	isSuccess: function() {
+	isSuccess: function () {
 		return this.get('State') === this.self.STATE_SUCCESS;
 	},
 
-	isFailure: function() {
+	isFailure: function () {
 		return this.get('State') === this.self.STATE_FAILURE;
 	}
 });

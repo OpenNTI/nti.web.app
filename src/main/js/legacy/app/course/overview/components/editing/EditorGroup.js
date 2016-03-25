@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		 * @override
 		 * @return {[Editors]} the editors
 		 */
-		getSubEditors: function() {},
+		getSubEditors: function () {},
 
 
 		/**
@@ -19,14 +19,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		 *
 		 * @return {[String]} the mimeTypes
 		 */
-		getHandledMimeTypes: function() {
+		getHandledMimeTypes: function () {
 			var editors = this.getSubEditors() || [],
 				seen;
 
-			seen = editors.reduce(function(acc, editor) {
+			seen = editors.reduce(function (acc, editor) {
 				var handled = editor.getHandledMimeTypes ? editor.getHandledMimeTypes() : [];
 
-				handled.forEach(function(mimeType) {
+				handled.forEach(function (mimeType) {
 					acc[mimeType] = true;
 				});
 
@@ -44,17 +44,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		 * @see look in NextThought.app.course.overview.components.editing.Editor for an example of a type
 		 * @return {[Objects]} combined types
 		 */
-		getTypes: function() {
+		getTypes: function () {
 			var editors = this.getSubEditors() || [];
 
-			return editors.reduce(function(acc, editor) {
+			return editors.reduce(function (acc, editor) {
 				var types = editor.getTypes ? editor.getTypes() : [];
 
 				if (!Array.isArray(types)) {
 					types = [types];
 				}
 
-				types.forEach(function(type) {
+				types.forEach(function (type) {
 					acc.push(type);
 				});
 
@@ -63,18 +63,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		},
 
 
-		getDefaultEditor: function() {},
+		getDefaultEditor: function () {},
 
 
 		/**
 		 * Return the editor in this group that can handle a record
 		 * @return {Editor} the Class to instantiate to edit the record
 		 */
-		getEditorForRecord: function(record) {
+		getEditorForRecord: function (record) {
 			var editors = this.getSubEditors() || [],
 				canHandle;
 
-			canHandle = editors.reduce(function(acc, editor) {
+			canHandle = editors.reduce(function (acc, editor) {
 				var e = editor.getEditorForRecord ? editor.getEditorForRecord(record) : null;
 
 				if (e) {

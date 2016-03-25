@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 		autoEl: {cls: 'loading-mask', cn: {cls: 'load-text', html: 'Loading...'}}
 	}],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var me = this,
@@ -37,13 +37,13 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 				NextThought.app.library.content.Current
 			];
 
-		Promise.all(cmps.map(function(c) {
+		Promise.all(cmps.map(function (c) {
 			return c.shouldShow();
 		}))
-			.then(function(showing) {
+			.then(function (showing) {
 				me.remove(loadingCmp, true);
 
-				cmps.forEach(function(cmp, i) {
+				cmps.forEach(function (cmp, i) {
 					if (showing[i]) {
 						me.add({
 							xtype: cmp.xtype,
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 					}
 				});
 			})
-			.fail(function() {
+			.fail(function () {
 				me.remove(loadingCmp, true);
 
 				me.add({
@@ -68,26 +68,26 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 		me.BundleViewActions = NextThought.app.bundle.Actions.create();
 	},
 
-	navigateToBundle: function(bundle, el) {
+	navigateToBundle: function (bundle, el) {
 		var me = this;
 
 		me.BundleViewActions.transitionToBundle(bundle, el)
-			.then(function(route) {
+			.then(function (route) {
 				me.pushRootRoute(null, route, {bundle: bundle});
 			});
 	},
 
-	navigateToCourse: function(enrollment, el) {
+	navigateToCourse: function (enrollment, el) {
 		var me = this,
 			instance = enrollment.get('CourseInstance');
 
 		me.CourseViewActions.transitionToCourse(instance, el)
-			.then(function(route) {
+			.then(function (route) {
 				me.pushRootRoute(null, route, {course: instance});
 			});
 	},
 
-	navigateToCommunity: function(community, el) {
+	navigateToCommunity: function (community, el) {
 		var route = community.getProfileUrl();
 
 		if (route) {
@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 		}
 	},
 
-	navigateToAllCourses: function() {
+	navigateToAllCourses: function () {
 		this.pushRoute('All Courses', '/courses/available', {
 			closeURL: '/'
 		});

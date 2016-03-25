@@ -24,13 +24,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Multiple
 	}).compile(),
 
 
-	initComponent: function() {
+	initComponent: function () {
 		var me = this;
 		this.callParent(arguments);
 		this.choices = (this.part.get('choices') || []).slice();
 
 		//clean out markup
-		Ext.each(this.choices, function(v, i, a) {
+		Ext.each(this.choices, function (v, i, a) {
 			a[i] = me.filterHTML(v);
 			//console.debug('Choice pruned HTML:',a[i]);
 		});
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Multiple
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.getEl().select('.choice'), {
@@ -52,11 +52,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Multiple
 			keydown: this.keyDown
 		});
 	},
-	keyDown: function(e) {
+	keyDown: function (e) {
 		if (e.getKey() === e.ENTER) { this.choiceClicked(e); }
 	},
 
-	choiceClicked: function(e) {
+	choiceClicked: function (e) {
 		if (this.submitted) {return;}
 
 		var c = e.getTarget('.choice', null, true);
@@ -69,10 +69,10 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Multiple
 	},
 
 
-	getValue: function() {
+	getValue: function () {
 		var val = null;
 
-		Ext.each(this.getEl().query('.control.checked'), function(e) {
+		Ext.each(this.getEl().query('.control.checked'), function (e) {
 			val = val || [];//on first occurance, replace null with an array.
 			val.push(parseInt(e.getAttribute('data-index'), 10));
 		});
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Multiple
 	},
 
 
-	setValue: function(checkedIndexes) {
+	setValue: function (checkedIndexes) {
 		if (!Ext.isArray(checkedIndexes)) {
 			checkedIndexes = [checkedIndexes];
 		}
@@ -89,21 +89,21 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Multiple
 		this.getEl().select('.choice').removeCls(['correct', 'incorrect']);
 		this.getEl().select('.control').removeCls('checked');
 
-		Ext.each(this.getEl().query('.control'), function(e) {
+		Ext.each(this.getEl().query('.control'), function (e) {
 			var check = (Ext.Array.contains(checkedIndexes, parseInt(e.getAttribute('data-index'), 10)));
 			Ext.fly(e)[check ? 'addCls' : 'removeCls']('checked');
 		});
 	},
 
 
-	getSolutionContent: function(part) {
+	getSolutionContent: function (part) {
 		var choices = this.choices,
 			out = [], tpl = this.solTpl;
 
-		Ext.each(part.get('solutions'), function(s) {
+		Ext.each(part.get('solutions'), function (s) {
 			var x = s.get('value');
 			// x may or may not be an Array.  Ext.each handles that for us.
-			Ext.each(x, function(s) {
+			Ext.each(x, function (s) {
 				out.push(tpl.apply([String.fromCharCode(65 + s), choices[s]]));
 			});
 		});
@@ -112,15 +112,15 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Multiple
 	},
 
 
-	mark: function(correctnessOfQuestion) {
+	mark: function (correctnessOfQuestion) {
 		var c = null;
 
 		// Extract the solutions. A solution may or may not be an array
 		// Ext.each handles this case for us.
-		Ext.each(this.part.get('solutions'), function(s) {
+		Ext.each(this.part.get('solutions'), function (s) {
 			c = c || {};
 			var value = s.get('value');
-			Ext.each(value, function(s) {c[s] = true;});
+			Ext.each(value, function (s) {c[s] = true;});
 		});
 
 		this.getEl().select('.choice').removeCls(['correct', 'incorrect']);
@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Multiple
 			return;
 		}
 
-		Ext.each(this.getEl().query('.control.checked'), function(e) {
+		Ext.each(this.getEl().query('.control.checked'), function (e) {
 			var x = parseInt(e.getAttribute('data-index'), 10),
 			//if we do not have the solutions, use the whole question's correctness as the marker.
 				cls = (c.hasOwnProperty(x) ? c[x] === true : correctnessOfQuestion) ?
@@ -140,19 +140,19 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Multiple
 	},
 
 
-	markCorrect: function() {
+	markCorrect: function () {
 		this.callParent();
 		this.mark(true);
 	},
 
 
-	markIncorrect: function() {
+	markIncorrect: function () {
 		this.callParent();
 		this.mark(false);
 	},
 
 
-	reset: function() {
+	reset: function () {
 		this.getEl().select('.choice').removeCls(['correct', 'incorrect']);
 		this.getEl().select('.control').removeCls('checked');
 		this.callParent();

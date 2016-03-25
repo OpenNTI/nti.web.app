@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	//A list of props to include in the JSON of a record when updating
 	UPDATE_WHITELIST: ['href', 'IsExcused', 'Links'],
 
-	constructor: function(config) {
+	constructor: function (config) {
 		//TODO: We might need to have multiple keys point to the same record
 		//so we would need a KEY_TO_INDEX and INDEX_TO_RECORD
 		this.KEY_TO_RECORD = {};
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	 * @param  {ModelInstance|JSON} record the record to look up or data for a record
 	 * @return {String}		   key
 	 */
-	getKeyForRecord: function(record) {
+	getKeyForRecord: function (record) {
 		var key;
 
 		if (record.get) {
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	 * @param  {ModelInstance|JSON} record record to get url for or data for a record
 	 * @return {String}		   the url
 	 */
-	getHrefForRecord: function(record) {
+	getHrefForRecord: function (record) {
 		var href;
 
 		if (record.get) {
@@ -61,12 +61,12 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	},
 
 
-	__getRecordForKey: function(key) {
+	__getRecordForKey: function (key) {
 		return this.KEY_TO_RECORD[key];
 	},
 
 
-	__storeRecordAtKey: function(key, record) {
+	__storeRecordAtKey: function (key, record) {
 		if (!this.KEY_TO_RECORD[key]) {
 			this.KEY_TO_RECORD[key] = record;
 		} else {
@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	 * @param {String} key key for the record
 	 * @param {ModelInstance} record the record to sync from
 	 */
-	__updateRecord: function(key, record) {
+	__updateRecord: function (key, record) {
 		var cachedRecord = this.__getRecordForKey(key),
 			json = record.asJSON(), i, prop, value;
 
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	 * Fetch the record from the server and update the values in the shared instance
 	 * @param  {ModelInstance} record record to sync
 	 */
-	__syncRecordWithServer: function(record) {
+	__syncRecordWithServer: function (record) {
 		var href = this.getHrefForRecord(record),
 			key = this.getKeyForRecord(record);
 
@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 
 		Service.request(href)
 			.then(this.__updateRecord.bind(this, key))
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Failed to get record for sync', reason);
 				return Promise.reject();
 			});
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	 * @param {Boolean} forceUpdate update the shared instance's data with the data from the record
 	 * @return {ModelInstance}		  shared instance of that record
 	 */
-	getRecord: function(record, sync, forceUpdate) {
+	getRecord: function (record, sync, forceUpdate) {
 		var key = this.getKeyForRecord(record),
 			cachedRecord = key && this.__getRecordForKey(key),
 			lastMod = record.get ? record.get('Last Modified') : record['Last Modified'],
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 	 * @param  {String} key key for the record
 	 * @return {ModelInstance}	   the cached record
 	 */
-	findRecord: function(key) {
+	findRecord: function (key) {
 		return this.__getRecordForKey(key);
 	}
 });

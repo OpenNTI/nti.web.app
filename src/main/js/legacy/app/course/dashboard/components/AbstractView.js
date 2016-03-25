@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var i;
@@ -45,8 +45,8 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		}
 	},
 
-	getSortFn: function() {
-		return function(a, b) {
+	getSortFn: function () {
+		return function (a, b) {
 			var wA = a.weight || 0,
 				wB = b.weight || 0;
 
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		};
 	},
 
-	addToColumn: function(index, cmp) {
+	addToColumn: function (index, cmp) {
 		var column = this.COLUMN_MAP[index];
 
 		if (column) {
@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	 * @param {Array} tiles list of cmp configs to set top and left on
 	 * @return {Array}			the list with top and left set on them
 	 */
-	fitTiles: function(tiles) {
+	fitTiles: function (tiles) {
 		//if we don't have any tiles there's no need to do anything
 		if (Ext.isEmpty(tiles)) { return []; }
 
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			padding = me.COLUMN_PADDING,
 			colHeights = [], i;
 
-		function getShortestCol() {
+		function getShortestCol () {
 			var j, minIndex, minHeight = Infinity;
 
 			for (j = 0; j < colHeights.length; j++) {
@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			colHeights.push(padding);
 		}
 
-		tiles.forEach(function(tile) {
+		tiles.forEach(function (tile) {
 			var index = getShortestCol();
 
 			tile.CACHE = tile.CACHE || {};
@@ -123,14 +123,14 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	/**
 	 * Add the tiles back, use the previous configs so the layout doesn't change any
 	 */
-	addTilesBack: function() {
+	addTilesBack: function () {
 		var i, me = this;
 
 		for (i = 0; i < me.COLUMN_COUNT; i++) {
 			me.COLUMN_MAP[i].removeAll(true);
 		}
 
-		me.tiles.forEach(function(tile) {
+		me.tiles.forEach(function (tile) {
 			me.addToColumn(tile.column, tile);
 		});
 	},
@@ -138,13 +138,13 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	/**
 	 * Add an array of tile components
 	 */
-	setTiles: function(tiles) {
+	setTiles: function (tiles) {
 		this.tiles = this.fitTiles(tiles);
 
 		this.addTilesBack();
 	},
 
-	clearTiles: function() {
+	clearTiles: function () {
 		var i;
 
 		for (i = 0; i < this.COLUMN_COUNT; i++) {

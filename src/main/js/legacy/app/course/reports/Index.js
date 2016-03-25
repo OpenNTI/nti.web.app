@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.course.reports.Index', {
 	},
 
 	statics: {
-		showTab: function(bundle) {
+		showTab: function (bundle) {
 			var reportLinks = bundle && bundle.getReportLinks && bundle.getReportLinks();
 
 			return false && reportLinks && isFeature('course-reports') && !bundle.get('Preview');
@@ -25,9 +25,9 @@ module.exports = exports = Ext.define('NextThought.app.course.reports.Index', {
 		{xtype: 'box', autoEl: {html: 'reports'}}
 	],
 
-	onActivate: function() {
+	onActivate: function () {
 		this.setTitle(this.title);
 	},
 
-	bundleChanged: function(bundle) {}
+	bundleChanged: function (bundle) {}
 });

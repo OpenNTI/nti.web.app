@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.Window',
 	layout: 'none',
 	items: [],
 
-	constructor: function() {
+	constructor: function () {
 		var user = $AppConfig.userObject,
 			canUploadAvatar = Service.canUploadAvatar(),
 			availablePanels = [], tabs = [];
@@ -76,7 +76,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.Window',
 					toggleGroup: 'account-buttons',
 					minWidth: 150,
 					listeners: {
-						toggle: function(btn, pressed) {
+						toggle: function (btn, pressed) {
 							if (pressed) {
 								btn.up('window').changeView(btn);
 							}
@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.Window',
 		this.callParent(arguments);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		var me = this;
 
 		me.callParent(arguments);
@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.Window',
 
 		me.mon($AppConfig.userObject, {
 			scope: me,
-			'changed': function(r) {
+			'changed': function (r) {
 				var el = me.el;
 
 				el.down('.identity div.name').update(r.getName());
@@ -117,9 +117,9 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.Window',
 		});
 	},
 
-	syncHeight: function() {},
+	syncHeight: function () {},
 
-	changeView: function(btn) {
+	changeView: function (btn) {
 		var c = this.down('[name=settings]'),
 			p = c.down(btn.associatedPanel);
 

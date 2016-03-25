@@ -2,12 +2,12 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.common.window.Header', {
-  extend: 'Ext.Component',
-  alias: 'widget.nti-window-header',
+  	extend: 'Ext.Component',
+  	alias: 'widget.nti-window-header',
 
-  cls: 'nti-window-header',
+  	cls: 'nti-window-header',
 
-  renderTpl: [
+  	renderTpl: [
 	'<div id="{id}-body" class="header-body">',
 	'<div class="controls {hasTools}">',
 	'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool close" title="Close" />',
@@ -45,61 +45,61 @@ module.exports = exports = Ext.define('NextThought.common.window.Header', {
 	 * <img src="..." class="tool x" alt="tool tip"/>
 	 */
 
-  renderSelectors: {
+  	renderSelectors: {
 	textEl: 'span',
 	closeEl: 'img.tool.close',
 	minimizeEl: 'img.tool.minimize'
   },
 
 
-  initComponent: function() {
+  	initComponent: function () {
 	this.callParent(arguments);
 
 	var me = this,
-			tools = [];
+		tools = [];
 
-	Ext.Object.each(this.tools, function(tool, info) {
-	  tools.push({ tool: tool, tip: info.tip });
-	  me.renderSelectors[tool] = Ext.String.format('img.tool.{0}', tool);
+	Ext.Object.each(this.tools, function (tool, info) {
+	  	tools.push({ tool: tool, tip: info.tip });
+	  	me.renderSelectors[tool] = Ext.String.format('img.tool.{0}', tool);
 	});
 
 	this.renderData = Ext.apply(this.renderData || {}, {
-	  title: this.title,
-	  tools: tools,
-	  hasTools: tools.length === 0 ? '' : 'has-tools'
+	  	title: this.title,
+	  	tools: tools,
+	  	hasTools: tools.length === 0 ? '' : 'has-tools'
 	});
   },
 
 
-  addTools: function(tools) {
+  	addTools: function (tools) {
 	var me = this,
-			rd = this.renderData;
+		rd = this.renderData;
 
 	if (!me.rendered) {
-	  Ext.Object.each(tools, function(tool, info) {
+	  	Ext.Object.each(tools, function (tool, info) {
 		if (!me.renderSelectors[tool]) {
-		  me.tools[tool] = info;//merge it in
-		  me.renderSelectors[tool] = Ext.String.format('img.tool.{0}', tool);
-		  rd.tools.push({tool: tool, tip: info.tip});
-		  rd.hasTools = 'has-tools';
+		  	me.tools[tool] = info;//merge it in
+		  	me.renderSelectors[tool] = Ext.String.format('img.tool.{0}', tool);
+		  	rd.tools.push({tool: tool, tip: info.tip});
+		  	rd.hasTools = 'has-tools';
 		}
 	  });
 	}
 	else {
-	  Ext.Error.raise('not implemented yet');
+	  	Ext.Error.raise('not implemented yet');
 	  //			this.applyToolHandlers();
 	}
   },
 
 
-  applyToolHandlers: function() {
+  	applyToolHandlers: function () {
 	var me = this;
-	Ext.Object.each(me.tools, function(tool, info) {
-	  var t = me[tool],
+	Ext.Object.each(me.tools, function (tool, info) {
+	  	var t = me[tool],
 		  sc = info && (info.scope || me.ownerCt),
 		  fn = info && info.handler;
 
-	  if (t && !t.toolAttached) {
+	  	if (t && !t.toolAttached) {
 		fn = typeof fn === 'string' ? sc[fn] : fn;
 		t.on('click', fn, sc);
 		t.addClsOnOver('tool-over');
@@ -109,26 +109,26 @@ module.exports = exports = Ext.define('NextThought.common.window.Header', {
   },
 
 
-  update: function(text) {
+  	update: function (text) {
 	this.title = text;
 	if (this.textEl) {
-	  this.textEl.update(text);
+	  	this.textEl.update(text);
 	}
 	else {
-	  this.renderData.title = text;
+	  	this.renderData.title = text;
 	}
   },
 
 
-  getTitle: function() {
+  	getTitle: function () {
 	if (this.textEl) {
-	  return this.textEl.getHTML();
+	  	return this.textEl.getHTML();
 	}
 	return this.renderData.title;
   },
 
 
-  afterRender: function() {
+  	afterRender: function () {
 	var me = this;
 
 	me.callParent(arguments);
@@ -136,10 +136,10 @@ module.exports = exports = Ext.define('NextThought.common.window.Header', {
 	me.minimizeEl.on('click', me.ownerCt.minimize, me.ownerCt);
 
 	if (!me.ownerCt.closable) {
-	  me.closeEl.remove();
+	  	me.closeEl.remove();
 	}
 	if (!me.ownerCt.minimizable) {
-	  me.minimizeEl.remove();
+	  	me.minimizeEl.remove();
 	}
 
 	me.applyToolHandlers();

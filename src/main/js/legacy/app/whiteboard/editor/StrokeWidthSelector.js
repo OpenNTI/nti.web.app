@@ -27,18 +27,18 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.StrokeW
 		cls: 'x-menu stroke-size-list',
 		baseCls: 'x-menu',
 		itemCls: 'x-menu-item stroke-size no-border',
-		getInnerTpl: function() {
+		getInnerTpl: function () {
 			return '<div class="stroke {size-class}"></div>';
 		},
 		xhooks: {
-			initComponent: function() {
+			initComponent: function () {
 				this.callParent(arguments);
 				this.itemSelector = '.stroke-size';
 			}
 		}
 	},
 
-	setSelected: function(size) {
+	setSelected: function (size) {
 		var i = this.store.find(this.valueField, size), cl;
 		if (i >= 0) {
 			cl = this.store.getAt(i).get(this.displayField);
@@ -47,15 +47,15 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.StrokeW
 		}
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
-		this.on('select', function(me,val) {
+		this.on('select', function (me,val) {
 			me.inputEl.dom.setAttribute('value', val[0].get(me.displayField));
 		},this);
 		this.setValue(1);
 	}
-},function() {
+},function () {
 	this.prototype.store = Ext.data.Store.create({
 		fields: ['size', 'size-class'],
 		data: [

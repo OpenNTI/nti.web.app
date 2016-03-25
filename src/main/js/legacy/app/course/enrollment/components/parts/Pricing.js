@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		amountEl: '.price .amount'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.enableBubble(['show-msg']);
@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.update = Ext.Function.createBuffered(this.update.bind(this), 2000);
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var course = this.course, hours,
@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.el.setTop(this.base_top);
@@ -143,11 +143,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		Ext.EventManager.onWindowResize(this.onContainerScroll.bind(this));
 	},
 
-	removePricingInfo: function() {
+	removePricingInfo: function () {
 		delete this.enrollmentOption.pricing;
 	},
 
-	onContainerScroll: function() {
+	onContainerScroll: function () {
 		if (!this.scrollTarget || !this.scrollTarget.dom) {
 			return;
 		}
@@ -172,7 +172,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 	},
 
-	getPrice: function(pricing) {
+	getPrice: function (pricing) {
 		pricing = pricing || this.enrollmentOption.pricing;
 
 		var price;
@@ -186,7 +186,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return (price || 0).toFixed(2);
 	},
 
-	couponChanged: function(coupon) {
+	couponChanged: function (coupon) {
 		this.lockProcess();
 
 		this.couponLabelEl.update('Checking Coupon');
@@ -196,7 +196,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.update(coupon);
 	},
 
-	updatePricing: function(pricing) {
+	updatePricing: function (pricing) {
 		pricing = pricing || this.enrollmentOption.pricing;
 
 		var oldPrice = this.enrollmentOption.Price || 0,
@@ -213,7 +213,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.amountEl.update('$' + newPrice);
 	},
 
-	update: function(coupon) {
+	update: function (coupon) {
 		var me = this,
 			desc = { Purchasable: me.enrollmentOption.Purchasable };
 
@@ -223,7 +223,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 		this.lockProcess();
 
-		function onSuccess(result) {
+		function onSuccess (result) {
 			me.enrollmentOption.pricing = result;
 
 			var coupon = result && result.get('Coupon'),
@@ -243,7 +243,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			me.updatePricing(result);
 		}
 
-		function onFailure(reason) {
+		function onFailure (reason) {
 			//unset any other pricing
 			me.enrollmentOption.pricing = null;
 
@@ -269,7 +269,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-	getCoupon: function() {
+	getCoupon: function () {
 		var pricing = this.enrollmentOption.pricing,
 			coupon = pricing && pricing.get('Coupon'),
 			id = coupon && coupon.ID;
@@ -277,7 +277,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		return id || '';
 	},
 
-	lockCoupon: function() {
+	lockCoupon: function () {
 		//if we don't have a coupon container we aren't allowing copupons
 		if (!this.couponContainerEl) { return; }
 
@@ -298,7 +298,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 	},
 
-	unlockCoupon: function() {
+	unlockCoupon: function () {
 		//if we don't have a coupon container we aren't allowing coupons
 		if (!this.couponContainerEl) { return; }
 

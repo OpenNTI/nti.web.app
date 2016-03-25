@@ -14,24 +14,24 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Survey', {
 	],
 
 
-	getReportLink: function() {
+	getReportLink: function () {
 		return this.getLink('report-InquiryReport.pdf');
 	},
 
 
-	getResultsLink: function() {
+	getResultsLink: function () {
 		return this.getLink('Aggregated');
 	},
 
 
-	setResults: function(results) {
+	setResults: function (results) {
 		//Don't delete this promise since we don't have a link
 		//to the results on the survey yet.
 		this.__loadResultsPromise = Promise.resolve(results);
 	},
 
 
-	__loadResults: function() {
+	__loadResults: function () {
 		var me = this,
 			link = me.getResultsLink(),
 			load;
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Survey', {
 			load = me.__loadResultsPromise;
 		} else if (link) {
 			load = Service.request(link)
-				.then(function(response) {
+				.then(function (response) {
 					return Ext.decode(response);
 				});
 		} else {
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Survey', {
 
 		//Wait an event pump then clear the cached result
 		wait()
-			.then(function() {
+			.then(function () {
 				delete me.__loadResultsPromise;
 			});
 
@@ -59,12 +59,12 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Survey', {
 	},
 
 
-	getResults: function(pollId) {
+	getResults: function (pollId) {
 		return this.__loadResults()
-			.then(function(results) {
+			.then(function (results) {
 				var polls = results.questions, poll;
 
-				poll = polls.reduce(function(acc, p) {
+				poll = polls.reduce(function (acc, p) {
 					if (p.pollId === pollId) {
 						acc = p;
 					}

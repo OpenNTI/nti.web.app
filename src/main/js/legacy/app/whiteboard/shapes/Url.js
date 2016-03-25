@@ -6,12 +6,12 @@ var ShapesBase = require('./Base');
 module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Url', {
 	extend: 'NextThought.app.whiteboard.shapes.Base',
 
-	constructor: function() {
+	constructor: function () {
 		this.calculatedAttributes = ['url'];
 		this.callParent(arguments);
 	},
 
-	draw: function(ctx, renderCallback) {
+	draw: function (ctx, renderCallback) {
 		var me = this,
 			image = me.cache.url || null,
 			x, y, w, h;
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.shapes.Url', {
 	},
 
 
-	imageFailed: function(image,ctx,cb) {
+	imageFailed: function (image,ctx,cb) {
 		console.log('failed to load: ' + this.url);
 		if (this.url !== Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src && Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src) {
 			image.src = Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src;

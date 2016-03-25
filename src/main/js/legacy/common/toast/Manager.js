@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
 	PADDING: 10,
 
 	/** @private */
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 		this.stack = [];
 
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
 	 * @param {Object} bread Configuration for {@link NextThought.view.toast.Window}
 	 * @return {Object} Toast component instance
 	 */
-	makeToast: function(bread) {
+	makeToast: function (bread) {
 		var size = Ext.dom.Element.getViewSize(),
 			toast,
 			timeout = bread.timeout || false;
@@ -72,15 +72,15 @@ module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
 	},
 
 	/** @private */
-	measure: function(loaf) {
+	measure: function (loaf) {
 		var padding = this.PADDING,
 			sum = 0;
-		Ext.each(loaf, function(o) {sum += (o.getHeight() + padding);});
+		Ext.each(loaf, function (o) {sum += (o.getHeight() + padding);});
 		return sum;
 	},
 
 	/** @private */
-	eatToast: function(toast) {
+	eatToast: function (toast) {
 		if (toast.hasOwnProperty('timeoutId')) {
 			clearTimeout(toast.timeoutId);
 		}
@@ -93,13 +93,13 @@ module.exports = exports = Ext.define('NextThought.common.toast.Manager', {
 	},
 
 
-	adjustStack: function() {
+	adjustStack: function () {
 		Ext.each(this.stack, this.popToast, this);
 	},
 
 
 	/** @private */
-	popToast: function(toast) {
+	popToast: function (toast) {
 
 		var vp = Ext.dom.Element.getViewSize(),
 			left = vp.width - (toast.width + 10),

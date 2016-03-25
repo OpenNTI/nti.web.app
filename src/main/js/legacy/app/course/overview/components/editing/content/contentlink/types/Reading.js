@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	SWITCHED: 'switched-items',
 
 	statics: {
-		getTypes: function() {
+		getTypes: function () {
 			return [
 				{
 					title: 'From Catalog',
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		//TODO: override getEditorForRecord to check if the related work ref
 		//is pointing to a reading
-		getEditorForRecord: function(record) {
+		getEditorForRecord: function (record) {
 			if (record.isContent()) {
 				return this;
 			}
@@ -36,13 +36,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	cls: 'content-editor reading-editor',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.ContentActions = NextThought.app.content.Actions.create();
 
 		this.callParent(arguments);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.loading) {
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	showEditor: function() {
+	showEditor: function () {
 		if (this.record) {
 			this.showReadingEditor();
 		} else {
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onBack: function() {
+	onBack: function () {
 		if (this.readingEditorCmp) {
 			this.showReadingList(this.readingEditorCmp.selectedItem);
 		} else if (this.doBack) {
@@ -66,13 +66,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	maybeEnableBack: function(text) {
+	maybeEnableBack: function (text) {
 		if (!this.record && this.enableBack) {
 			this.enableBack(text);
 		}
 	},
 
-	showReadingList: function(selectedItems) {
+	showReadingList: function (selectedItems) {
 		if (this.readingSelectionCmp) {
 			this.readingSelectionCmp.destroy();
 			delete this.readingSelectionCmp;
@@ -98,19 +98,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	showFilteredList: function() {
+	showFilteredList: function () {
 		ContentUtils.getReadings(this.bundle)
 			.then(this.showReadings.bind(this));
 	},
 
 
-	showUnfilteredList: function() {
+	showUnfilteredList: function () {
 		ContentUtils.getReadings(this.bundle, true)
 			.then(this.showReadings.bind(this));
 	},
 
 
-	showReadings: function(readings) {
+	showReadings: function (readings) {
 		// NOTE: When we have one content package,
 		// Simplify this and only return the list of items.
 		// However, in other cases,
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.readingSelectionCmp.setSelectionItems(readings);
 	},
 
-	getSelection: function() {
+	getSelection: function () {
 		var getReading;
 
 		if (this.readingSelectionCmp) {
@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return getReading;
 	},
 
-	showReadingEditor: function() {
+	showReadingEditor: function () {
 		if (this.readingEditorCmp) {
 			this.readingEditorCmp.destroy();
 			delete this.readingEditorCmp;
@@ -151,7 +151,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		me.getSelection()
-			.then(function(selection) {
+			.then(function (selection) {
 				me.readingEditorCmp = me.add({
 					xtype: 'overview-editing-reading-editor',
 					record: me.record,
@@ -169,13 +169,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				me.maybeEnableBack('Catalog');
 				me.setSaveText(me.record ? 'Save' : 'Add to Lesson');
 			})
-			.then(function() {
+			.then(function () {
 				if (me.readingSelectionCmp) {
 					me.readingSelectionCmp.destroy();
 					delete me.readingSelectionCmp;
 				}
 			})
-			.always(function() {
+			.always(function () {
 				delete me.loading;
 				if (me.rendered) {
 					me.el.unmask();
@@ -183,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-	onReadingListSelectionChange: function(selection) {
+	onReadingListSelectionChange: function (selection) {
 		var length = selection.length;
 
 		this.setSaveText('Select');
@@ -195,17 +195,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onSaveFailure: function(reason) {
+	onSaveFailure: function (reason) {
 		if (reason === this.SWITCHED) { return; }
 
 		this.callParent(arguments);
 	},
 
-	doValidation: function() {
+	doValidation: function () {
 		return Promise.resolve();
 	},
 
-	onSave: function() {
+	onSave: function () {
 		var me = this;
 
 		if (!me.readingEditorCmp) {
@@ -215,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.disableSubmission();
 		return me.readingEditorCmp.onSave()
-			.fail(function(reason) {
+			.fail(function (reason) {
 				me.enableSubmission();
 				return Promise.reject(reason);
 			});

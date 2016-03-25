@@ -8,11 +8,11 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 	dsRGBARe: /^(\d+(\.\d+)?) (\d+(\.\d+)?) (\d+(\.\d+)?)( (\d+(\.\d+)?))?$/i,
 	sources: [],
 
-	isValidHexColor: function(code) {
+	isValidHexColor: function (code) {
 		return this.hex16Re.test(code) || this.hex8Re.test(code);
 	},
 
-	toRGBA: function(color, alpha) {
+	toRGBA: function (color, alpha) {
 		if (typeof color === 'string') {
 			if (!(color = Ext.draw.Color.fromString(color))) {
 				return 'rgba(255,255,0,1)';
@@ -40,12 +40,12 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 	 * @param {String} string either a 8 or 16 bit hex color, or a CSS color function (rgb() or rgba()).
 	 * @param {number} [alpha] If supplied, the float will override or add alpha to this color.
 	 */
-	parse: function(string, alpha) {
+	parse: function (string, alpha) {
 		var me = this,
 			color,
 			m;
 
-		function parseHex(cCmp, is8bit) {
+		function parseHex (cCmp, is8bit) {
 			var r, g, b;
 			r = parseInt(cCmp[1], 16) >> 0;
 			g = parseInt(cCmp[2], 16) >> 0;
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 			return [r, g, b];
 		}
 
-		function parseRGBA(c) {
+		function parseRGBA (c) {
 			var i = c.length - 1;
 			for (; i >= 0; i--) { c[i] = +c[i]; } //ensure they're numbers
 			return c;
@@ -99,10 +99,10 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 				g: m[1],
 				b: m[2],
 				a: m[3],
-				toString: function() {return color;}};
+				toString: function () {return color;}};
 	},
 
-	rgbaToHex: function(color) {
+	rgbaToHex: function (color) {
 		/**
 		 * Converts rgba to rgb then to Hex. TODO: this func is ignoring the Alpha component.
 		 * assuming that it is always 1 in our case.
@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 	 * http://ridiculousfish.com/blog/posts/colors.html
 	 * @param {number} idx
 	 */
-	hue: function(idx) {
+	hue: function (idx) {
 		/*
 		 * Here we use 31 bit numbers because JavaScript doesn't have a 32 bit
 		 * unsigned type, and so the conversion to float would produce a negative
@@ -152,7 +152,7 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 	 *
 	 * @param {number} idx - either the known index (a number) or a username with which to look up the index for
 	 */
-	getColor: function(idx) {
+	getColor: function (idx) {
 		if (typeof idx === 'string') {
 			this.addSource(idx);
 			idx = Ext.Array.indexOf(this.sources, idx);
@@ -166,11 +166,11 @@ module.exports = exports = Ext.define('NextThought.util.Color', {
 	 * @param  {number} idx the index
 	 * @return {String}	 the hex code
 	 */
-	getColorHex: function(idx) {
+	getColorHex: function (idx) {
 		return this.rgbaToHex(this.toRGBA((this.getColor(idx))));
 	},
 
-	addSource: function(userId) {
+	addSource: function (userId) {
 		if (userId && !Ext.Array.contains(this.sources, userId)) {
 			this.sources.push(userId);
 			Ext.Array.sort(this.sources);

@@ -9,12 +9,12 @@ var {isMe} = require('legacy/util/Globals');
 module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
 	},
 
-	saveTopicComment: function(topic, comment, values) {
+	saveTopicComment: function (topic, comment, values) {
 		var isEdit = Boolean(comment) && !comment.phantom,
 			postLink = topic.getLink('add');
 
@@ -28,10 +28,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 			postLink = undefined;
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			comment.save({
 				url: postLink,
-				success: function(_, operation) {
+				success: function (_, operation) {
 					var rec = isEdit ? comment : ParseUtils.parseItems(operation.response.responseText)[0];
 
 					//TODO: increment PostCount in topic the same way we increment reply count in notes.
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 
 					fulfill(rec);
 				},
-				failure: function() {
+				failure: function () {
 					console.error('Failed to save topic comment:', arguments);
 					reject();
 				}
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		});
 	},
 
-	saveTopic: function(editorCmp, record, forum, title, tags, body, autoPublish) {
+	saveTopic: function (editorCmp, record, forum, title, tags, body, autoPublish) {
 		var isEdit = Boolean(record),
 			post = isEdit ? record.get('headline') : NextThought.model.forums.Post.create(),
 			me = this;
@@ -67,12 +67,12 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 			record.set({'title': title});
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			post.getProxy().on('exception', reject, null, {single: true});
 			post.save({
 				url: isEdit ? undefined : forum && forum.getLink('add'),//only use post record if its a new post
 				scope: this,
-				success: function(post, operation) {
+				success: function (post, operation) {
 					var entry = isEdit ? record : ParseUtils.parseItems(operation.response.responseText)[0];
 
 					if (autoPublish !== undefined) {
@@ -94,7 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 				},
 				failure: reject
 			});
-		}).then(function(entry) {
+		}).then(function (entry) {
 			var record;
 
 			//This is how the views are reading the display name... pre-set the Creator as your userObject.
@@ -108,14 +108,14 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		});
 	},
 
-	deleteObject: function(record, cmp, callback) {
+	deleteObject: function (record, cmp, callback) {
 		var idToDestroy, me = this;
 		if (!record.get('href')) {
 			record.set('href', record.getLink('contents').replace(/\/contents$/, '') || 'no-luck');
 		}
 		idToDestroy = record.get('NTIID');
 
-		function maybeDeleteFromStore(id, store) {
+		function maybeDeleteFromStore (id, store) {
 			var r;
 			if (store && !store.buffered) {
 				r = store.findRecord('NTIID', idToDestroy, 0, false, true, true);
@@ -129,20 +129,20 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 			}
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			record.destroy({
-				success: function() {
+				success: function () {
 					me.UserDataStore.applyToStoresThatWantItem(maybeDeleteFromStore, record);
 
 					//Delete anything left that we know of
-					Ext.StoreManager.each(function(s) {
+					Ext.StoreManager.each(function (s) {
 						maybeDeleteFromStore(null, s);
 					});
 
 					Ext.callback(callback, null, [cmp]);
 					fulfill();
 				},
-				failure: function() {
+				failure: function () {
 					alert('Sorry, could not delete that');
 					reject();
 				}
@@ -150,13 +150,13 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		});
 	},
 
-	applyTopicToStores: function(topic) {
+	applyTopicToStores: function (topic) {
 		var actions = NextThought.app.userdata.Actions.create(),
 			headline = topic.get('headline'),
 			headlineJSON = headline.asJSON(),
 			recordForStore;
 
-		actions.applyToStoresThatWantItem(function(id, store) {
+		actions.applyToStoresThatWantItem(function (id, store) {
 			var storeRecord,
 				storeHeadline;
 

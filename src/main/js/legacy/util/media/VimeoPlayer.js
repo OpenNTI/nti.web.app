@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 		PLAYER_ORIGIN: 'https://player.vimeo.com',
 		kind: 'video',
 		type: 'vimeo',
-		valid: function() { return true; }
+		valid: function () { return true; }
 	},
 
 	mixins: {
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 	},
 
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.mixins.observable.constructor.call(this);
 		this.el = null;
 		this.parentEl = Ext.get(config.el);
@@ -61,14 +61,14 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 	isReady: true,
 
 
-	playerSetup: function() {
+	playerSetup: function () {
 		// Inject Player Markup
 		this.frameTpl.append(this.parentEl, {id: this.id, height: this.height, width: this.width});
 		this.el = Ext.get(this.id);
 		window.addEventListener('message', this.handleMessage, false);
 	},
 
-	handleMessage: function(event) {
+	handleMessage: function (event) {
 		if (event.origin.toLowerCase() !== this.self.PLAYER_ORIGIN) {
 			return;
 		}
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 	},
 
 
-	postMessage: function(method, params) {
+	postMessage: function (method, params) {
 		var context = this.getPlayerContext(), data;
 		if (!context) {
 			console.warn(this.id, ' No Player Context!');
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 	},
 
 
-	onReady: function() {
+	onReady: function () {
 		//because when we are brought out of ready state, we destroy the iframe,
 		// we should always register our listeners when we become ready.
 
@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 	},
 
 
-	load: function(source, offset) {
+	load: function (source, offset) {
 		this.cleanPlayer();
 		this.el.select('iframe.vimeo').remove();
 		var o = this.playerTpl.append(this.el, {id: this.id, videoId: source, height: this.height, width: this.width});
@@ -146,68 +146,68 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 	},
 
 
-	getPlayerContext: function() {
+	getPlayerContext: function () {
 		var iframe = Ext.getDom(this.player);
 		return iframe && (iframe.contentWindow || window.frames[iframe.name]);
 	},
 
 
-	notify: function(type) {
+	notify: function (type) {
 		//We must fire: play, pause, ended
 		this.fireEvent('player-event-' + type, this.id, this);
 	},
 
 
-	playerError: function() {
+	playerError: function () {
 		this.fireEvent('player-error', 'vimeo');
 	},
 
 
-	onPlayProgress: function(event) {
+	onPlayProgress: function (event) {
 		this.currentPosition = event.data.seconds;
 	},
 
 
-	getCurrentTime: function() {
+	getCurrentTime: function () {
 		return this.currentPosition;
 	},
 
 
-	getPlayerState: function() {
+	getPlayerState: function () {
 		//we must track this ourselves
 		//return YT style state enum
 		return this.playerState;
 	},
 
 
-	play: function() {
+	play: function () {
 		this.postMessage('play');
 	},
 
 
-	onPlay: function() {
+	onPlay: function () {
 		this.playerState = NextThought.Video.states.PLAYING;
 		this.notify('play');
 	},
 
 
-	pause: function() {
+	pause: function () {
 		this.postMessage('pause');
 	},
 
 
-	onPause: function() {
+	onPause: function () {
 		this.playerState = NextThought.Video.states.PAUSED;
 		this.notify('pause');
 	},
 
 
-	seek: function(offset) {
+	seek: function (offset) {
 		this.postMessage('seekTo', offset);
 	},
 
 
-	onSeek: function(event) {
+	onSeek: function (event) {
 		var end = event.data.seconds;
 
 		if (!this.seeking) {
@@ -220,12 +220,12 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 		this.notify('seek');
 	},
 
-	detectSeekingStop: function(val) {
+	detectSeekingStop: function (val) {
 		clearTimeout(this.seekEndTimer);
 		this.seekEndTimer = setTimeout(this.onSeekEnd.bind(this, val), 750);
 	},
 
-	onSeekEnd: function(end) {
+	onSeekEnd: function (end) {
 		if (this.seeking) {
 			this.fireEvent('player-seek', {start: this.seekingStart, end: end});
 			this.notify('seekEnd');
@@ -235,14 +235,14 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 	},
 
 
-	stop: function() {
+	stop: function () {
 		this.currentPosition = 0;
 		this.playerState = NextThought.Video.states.UNSTARTED;
 		this.postMessage('unload');
 	},
 
 
-	onFinish: function() {
+	onFinish: function () {
 		this.playerState = NextThought.Video.states.ENDED;
 		this.notify('ended');
 	},
@@ -251,12 +251,12 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 	activate: Ext.emptyFn,
 
 
-	deactivate: function() {
+	deactivate: function () {
 		this.stop();
 	},
 
 
-	cleanPlayer: function() {
+	cleanPlayer: function () {
 		this.playerState = NextThought.Video.states.UNSTARTED;
 		delete this.playerReadyForCommands;
 		this.isReady = false;
@@ -268,7 +268,7 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 	},
 
 
-	cleanup: function() {
+	cleanup: function () {
 		this.cleanPlayer();
 		Ext.destroy(this.el);
 		delete this.el;
@@ -276,7 +276,7 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 	},
 
 
-	onGetDuration: function(e) {
+	onGetDuration: function (e) {
 		var value = e.value;
 
 		//value is in seconds so make it milliseconds
@@ -285,7 +285,7 @@ module.exports = exports = Ext.define('NextThought.util.media.VimeoPlayer', {
 	},
 
 
-	getDuration: function() {
+	getDuration: function () {
 		return this.video_duration || 0;
 	}
 });

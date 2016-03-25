@@ -18,11 +18,11 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImagePopout', {
 	width: 640,
 	layout: 'none',
 
-	constructor: function(config) {
+	constructor: function (config) {
 		var me = this;
 		me.callParent(arguments);
 		Ext.EventManager.onWindowResize(me.syncSize, me, false);
-		this.on('destroy', function() { Ext.EventManager.removeResizeListener(me.syncSize, me);});
+		this.on('destroy', function () { Ext.EventManager.removeResizeListener(me.syncSize, me);});
 
 		me.add({
 			xtype: 'image-roll',
@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImagePopout', {
 		me.task = {
 			scope: me,
 			interval: 300,
-			run: function() {
+			run: function () {
 				var m = Ext.getBody().down('.x-mask', true);
 				if (m) {
 					Ext.TaskManager.stop(me.task);
@@ -46,21 +46,21 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImagePopout', {
 		Ext.TaskManager.start(me.task);
 	},
 
-	syncSize: function() {
+	syncSize: function () {
 		this.center();
 	},
 
-	destroy: function() {
+	destroy: function () {
 		Ext.TaskManager.stop(this.task);
 		this.callParent(arguments);
 	},
 
-	onShow: function() {
+	onShow: function () {
 		this.down('image-roll').selectFirst();
 		return this.callParent(arguments);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(Ext.DomHelper.append(this.el, { cls: 'close', 'data-qtip': 'close' }, true), {
@@ -69,9 +69,9 @@ module.exports = exports = Ext.define('NextThought.common.ux.ImagePopout', {
 		});
 	},
 
-	setPosition: function() {},
+	setPosition: function () {},
 
-	center: function() {
+	center: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.center.bind(this));
 			return;

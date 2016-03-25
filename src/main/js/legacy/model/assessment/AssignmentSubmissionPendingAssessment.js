@@ -11,8 +11,8 @@ module.exports = exports = Ext.define('NextThought.model.assessment.AssignmentSu
 	],
 
 
-	getCorrectCount: function() {
-		function sum(agg, r) {
+	getCorrectCount: function () {
+		function sum (agg, r) {
 			return agg + (r.getCorrectCount ? r.getCorrectCount() : 0);
 		}
 		return (this.get('parts') || []).reduce(sum, 0);

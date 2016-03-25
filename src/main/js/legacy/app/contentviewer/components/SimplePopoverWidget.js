@@ -14,27 +14,27 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 
 	layout: 'fit',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.add(
-				{
-					xtype: 'box',
-					autoScroll: true,
-					autoEl: {
+			{
+				xtype: 'box',
+				autoScroll: true,
+				autoEl: {
 						cls: 'bubble',
 						cn: [
 							{cls: 'text', html: this.text}
 						]
 					}
-				});
+			});
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		var me = this;
 		this.callParent(arguments);
 		this.mon(this.el, {
-			mouseenter: function() { clearTimeout(me.closeTimer); },
+			mouseenter: function () { clearTimeout(me.closeTimer); },
 			mouseleave: 'startCloseTimer',
 			click: 'onClick',
 			scope: me
@@ -42,20 +42,20 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 	},
 
 
-	onClick: function(e) {
+	onClick: function (e) {
 		var target = e.getTarget('a[href]'),
 			id = target && (target.href || '').split('#')[0];
 		if (!target || !ParseUtils.isNTIID(id)) {return;}
 		e.stopEvent();
 
-		NextThought.app.navigation.Actions.navigateToHref(target.href)
+		NextThought.app.navigation.Actions.navigateToHref(target.href);
 		this.destroy();
 	},
 
 
-	startCloseTimer: function() {
+	startCloseTimer: function () {
 		var me = this;
-		me.closeTimer = setTimeout(function() {
+		me.closeTimer = setTimeout(function () {
 			me.destroy();
 		}, 1000);
 	}

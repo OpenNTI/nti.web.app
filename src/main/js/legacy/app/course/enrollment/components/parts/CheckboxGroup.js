@@ -27,10 +27,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				{tag: 'input', id: '{id}-{name}-no', type: 'radio', name: '{name}', value: 'N'},
 				{tag: 'label', 'for': '{id}-{name}-no', html: 'No.'}
 			]}
-	]}),
+		]}),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var options = this.el.down('.options'),
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	changed: function(e) {
+	changed: function (e) {
 		var yes = this.el.down('.yes input'),
 			options = this.el.down('.yes .options'),
 			parent = this.up('[changed]'),
@@ -76,14 +76,14 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 		if (input && parent) {
 			wait()
-				.then(function() {
+				.then(function () {
 					parent.changed(input.dom.name, input.dom.checked);
 				});
 		}
 	},
 
 
-	isEmpty: function() {
+	isEmpty: function () {
 		var yes = this.el.down('.yes input'),
 			no = this.el.down('.no input');
 
@@ -91,17 +91,17 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	addError: function() {
+	addError: function () {
 		this.addCls('error');
 	},
 
 
-	removeError: function() {
+	removeError: function () {
 		this.removeCls('error');
 	},
 
 
-	setValue: function(value) {
+	setValue: function (value) {
 		var input;
 
 		if (!this.rendered) {
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 	},
 
 
-	getValue: function() {
+	getValue: function () {
 		var el = this.el,
 			yes = el.down('.yes input'),
 			selected = yes && yes.is(':checked'),
@@ -125,7 +125,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 		value[this.name] = selected ? 'Y' : 'N';
 
-		function getOptionValue(name) {
+		function getOptionValue (name) {
 			var input = el.down('input[name="' + name + '"]');
 
 			return input.is(':checked') ? 'Y' : 'N';
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 		//if N is checked don't add the options to the value
 		//if y is checked add Y or N depending on if they are checked
-		(this.options || []).forEach(function(option) {
+		(this.options || []).forEach(function (option) {
 			if (selected) {
 				value[option.name] = getOptionValue(option.name);
 			}

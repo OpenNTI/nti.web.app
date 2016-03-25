@@ -5,14 +5,14 @@ var Globals = require('../../util/Globals');
 module.exports = exports = Ext.define('NextThought.overrides.app.Application', {
 	override: 'Ext.app.Application',
 
-	init: function() {
+	init: function () {
 		this.callParent(arguments);
 
 		NextThought.finishedLoading = new Deferred();
 	},
 
 
-	registerInitializeTask: function(task) {
+	registerInitializeTask: function (task) {
 		var method = this.registerInitializeTask.caller;
 		method = method.$previous || (method.$owner ? method : method.caller);
 		method = method.$owner ? (method.$owner.$className + '.' + method.$name) : method.name;
@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.overrides.app.Application', {
 		this.initTasks = this.initTasks || [];
 
 		this.initTasks.push(task);
-		task.timerId = setTimeout(function() {
+		task.timerId = setTimeout(function () {
 			console.debug('Abandoned init task from: ' + method, task.name || task);
 			Globals.removeLoaderSplash();
 			task.expired = true;
@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.overrides.app.Application', {
 		},task.timeout || 30000);
 	},
 
-	finishInitializeTask: function(task) {
+	finishInitializeTask: function (task) {
 		var method = this.finishInitializeTask.caller;
 		method = method.$previous || (method.$owner ? method : method.caller);
 		method = method.$owner ? (method.$owner.$className + '.' + method.$name) : method.name;
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.overrides.app.Application', {
 		Ext.Array.remove(this.initTasks, task);
 		if (!this.initTasks.length) {
 			this.registerInitializeTask = this.finishInitializeTask = Ext.emptyFn;
-			wait(100).then(function() {
+			wait(100).then(function () {
 				NextThought.finishedLoading.fulfill();
 			});
 			this.fireEvent('finished-loading');

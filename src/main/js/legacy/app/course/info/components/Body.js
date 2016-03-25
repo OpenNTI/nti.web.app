@@ -19,7 +19,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 		{ xtype: 'course-info-reports', itemId: 'report'}
 	],
 
-	setContent: function(info, status, showRoster, bundle) {
+	setContent: function (info, status, showRoster, bundle) {
 		var me = this;
 		//always reset
 		me.setActiveItem('info');
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 		me.getComponent('report').setContent(showRoster && bundle);
 	},
 
-	setActiveItem: function(itemId) {
+	setActiveItem: function (itemId) {
 		var targetItem = this.down('[itemId=' + itemId + ']'),
 			activeItem = this.getLayout().getActiveItem();
 
@@ -40,16 +40,16 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Bo
 		 return Promise.resolve();
 	},
 
-	scrollRosterIntoView: function(route, subRoute) {
+	scrollRosterIntoView: function (route, subRoute) {
 		// Set scroll to top. Maybe change scroll based on route and subroute??
 		window.scrollTo(0, 0);
 	},
 
-	scrollReportsIntoView: function(route, subRoute) {
+	scrollReportsIntoView: function (route, subRoute) {
 		window.scrollTo(0, 0);
 	},
 
-	scrollInfoSectionIntoView: function(route) {
+	scrollInfoSectionIntoView: function (route) {
 		var infoCmp = this.getComponent('info'),
 			scrollTarget, hash, scrollTargetY, brect;
 

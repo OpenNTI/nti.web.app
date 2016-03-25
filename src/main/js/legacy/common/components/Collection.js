@@ -33,7 +33,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Collection'
 	}),
 
 
-	onClassExtended: function(cls, data) {
+	onClassExtended: function (cls, data) {
 		data.entryTpl = data.entryTpl || cls.superclass.entryTpl || false;
 
 		var tpl = cls.superclass.__tpl || cls.superclass.tpl;
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Collection'
 	},
 
 
-	initComponent: function() {
+	initComponent: function () {
 		this.enableBubble('select');
 		this.callParent(arguments);
 
@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Collection'
 
 		me.mon(me.getStore(), 'datachanged', 'updateCount');
 
-		me.on('itemadd', function(record, e, node) {
+		me.on('itemadd', function (record, e, node) {
 			if (!Ext.isArray(node)) {
 				node = [node];
 			}
@@ -78,22 +78,22 @@ module.exports = exports = Ext.define('NextThought.common.components.Collection'
 			node.forEach(me.clamptitle.bind(me));
 		});
 
-		me.on('refresh', function() {
+		me.on('refresh', function () {
 			var titles = me.el.select('.item .title');
 
-			titles.each(function(title) {
+			titles.each(function (title) {
 				me.clampTitle(title.dom);
 			});
 		});
 	},
 
 
-	clampTitle: function(node) {
+	clampTitle: function (node) {
 		$clamp(node, {clamp: 3});
 	},
 
 
-	updateCount: function() {
+	updateCount: function () {
 		if (this.rendered && this.el.down('.count')) {
 			this.el.down('.count').update(this.store.getCount());
 		}
@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Collection'
 	},
 
 
-	collectData: function() {
+	collectData: function () {
 		var data = {items: this.callParent(arguments)};
 		data.name = this.name;
 		data.count = data.items.length;
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Collection'
 	},
 
 
-	handleSelect: function(selModel, record) {
+	handleSelect: function (selModel, record) {
 		selModel.deselect(record);
 	}
 });

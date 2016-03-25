@@ -25,26 +25,26 @@ module.exports = exports = Ext.define('NextThought.model.Video', {
 		{name: 'ntiid', type: 'string'}
 	],
 
-	getId: function() {
+	getId: function () {
 		return this.get('ntiid') || this.get('NTIID');
 	},
 
-	getTitle: function() {
+	getTitle: function () {
 		return this.get('label');
 	},
 
-	getPoster: function() {
+	getPoster: function () {
 		return Promise.resolve(this.get('poster'));
 	},
 
-	getIcon: function() {
+	getIcon: function () {
 		return this.getPoster();
 	},
 
-	__resolvePosterFromSource: function() {
+	__resolvePosterFromSource: function () {
 		var sources = this.get('sources');
 
-		return Promise.all(sources.map(function(source) {
+		return Promise.all(sources.map(function (source) {
 			if (source.poster || source.thumbnail) {
 				return {
 					poster: source.poster,
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.model.Video', {
 		}));
 	},
 
-	resolveThumbnail: function() {
+	resolveThumbnail: function () {
 		var poster = this.get('poster');
 
 		if (poster) {
@@ -64,14 +64,14 @@ module.exports = exports = Ext.define('NextThought.model.Video', {
 		}
 
 		return this.__resolvePosterFromSource()
-			.then(function(posters) {
+			.then(function (posters) {
 				var poster = posters[0];
 
 				return poster.thumbnail || poster.poster;
 			});
 	},
 
-	shouldBeRoot: function() {
+	shouldBeRoot: function () {
 		return true;
 	}
 });

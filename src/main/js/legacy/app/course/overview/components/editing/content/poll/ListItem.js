@@ -9,12 +9,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-poll-listitem',
 
 	statics: {
-		getSupported: function() {
+		getSupported: function () {
 			return NextThought.model.PollRef.mimeType;
 		}
 	},
 
-	getPreviewType: function() {
+	getPreviewType: function () {
 		// return 'widget.course-overview-pollref';//comment this out for now since we don't support it yet
 	}
 });

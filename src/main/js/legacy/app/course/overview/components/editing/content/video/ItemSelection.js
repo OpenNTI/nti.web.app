@@ -25,21 +25,21 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	})),
 
 
-	getItemData: function(item) {
+	getItemData: function (item) {
 		return item.resolveThumbnail()
-			.then(function(thumbnail) {
+			.then(function (thumbnail) {
 				var sources = item.get('sources');
 
 				return {
 					thumbnail: thumbnail,
 					title: item.get('title'),
-					providers: sources.map(function(source) { return {label: source.service}; })
+					providers: sources.map(function (source) { return {label: source.service}; })
 				};
 			});
 	},
 
 
-	showEmptyState: function(){
+	showEmptyState: function () {
 		// Display empty state
 		this.itemsContainer.add({
 			xtype: 'box',
@@ -54,7 +54,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	itemMatchesSearch: function(item, searchTerm) {
+	itemMatchesSearch: function (item, searchTerm) {
 		var title = item.get('title'),
 			ntiid = item.getId(),
 			sources = item.get('sources'),
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		} else if (ntiid && ntiid.toLowerCase() === searchTerm) {
 			matches = true;
 		} else if (sources && sources.length) {
-			matches = sources.reduce(function(acc, source) {
+			matches = sources.reduce(function (acc, source) {
 				var provider = source.service;
 
 				return provider.toLowerCase() === searchTerm;
@@ -78,7 +78,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	onSelectItem: function(el) {
+	onSelectItem: function (el) {
 		var input = el && el.querySelector('input[type=checkbox]');
 
 		if (input) {
@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	onUnselectItem: function(el) {
+	onUnselectItem: function (el) {
 		var input = el && el.querySelector('input[type=checkbox]');
 
 		if (input) {

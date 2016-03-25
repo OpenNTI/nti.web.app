@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 	alias: 'widget.content-card',
 
 	mixins: {
-			'EllipsisText': 'NextThought.mixins.EllipsisText'
+		'EllipsisText': 'NextThought.mixins.EllipsisText'
 	//		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
 	//		profileLinks: 'NextThought.mixins.ProfileLinks' // For future, maybe?
 	},
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 	},
 
 
-	constructor: function(config) {
+	constructor: function (config) {
 		var d = (config && config.data) || {};
 		if (!this.shouldOpenInApp(d.ntiid, d.href, d.basePath, d.targetMimeType)) {
 			this.renderTpl = Ext.DomHelper.markup({tag: 'a', target: '_blank', href: d.href, html: this.renderTpl.html || this.renderTpl});
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 	},
 
 
-	shouldOpenInApp: function(ntiid, url, basePath, targetMimeType) {
+	shouldOpenInApp: function (ntiid, url, basePath, targetMimeType) {
 		return Globals.shouldOpenInApp(ntiid, url, basePath, targetMimeType);
 	},
 
@@ -61,14 +61,14 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
   //	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {},this.data);
 		this.target = this.data.href;
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.el, 'click', 'onCardClicked', this);
 
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 	},
 
 
-	navigateToTarget: function(e) {
+	navigateToTarget: function (e) {
 		var status,
 			container = this.up('content-view-container'),
 			bundle = container && container.currentBundle;
@@ -102,13 +102,13 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Card'
 			status = NextThought.app.navigation.Actions.navigateToHref(this.target);
 		}
 		else {
-			status = NextThought.app.navigation.Actions.navigateToCardTarget(this.data, !e, function() {}, bundle);
+			status = NextThought.app.navigation.Actions.navigateToCardTarget(this.data, !e, function () {}, bundle);
 		}
 		return status;
 	},
 
 
-	onCardClicked: function(e) {
+	onCardClicked: function (e) {
 		//We cannot "stop" the event, or our anchor will not receive it, so bypassing simply prevents us from acting on it.
 		if (this.bypassEvent) {
 			return undefined;

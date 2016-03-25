@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			{tag: 'tpl', 'for': 'path', cn: [
 				{
 					tag: 'span',
-					cls: "path part{[xindex === xcount?	 ' current' : xindex === 1 ? ' root' : '']}{[values.cls ? ' ' + values.cls : '']}{[values.ntiid ? ' link' : '']}",
+					cls: 'path part{[xindex === xcount?	 \' current\' : xindex === 1 ? \' root\' : \'\']}{[values.cls ? \' \' + values.cls : \'\']}{[values.ntiid ? \' link\' : \'\']}',
 					'data-index': '{#}',
 					html: '{label}'
 				}
@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		tocEl: '.toc'
 	},
 
-	onClassExtended: function(cls, data) {
+	onClassExtended: function (cls, data) {
 		var tpl = cls.superclass.renderTpl,
 			superSelectors = Ext.clone(cls.superclass.renderSelectors);
 
@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		data.renderTpl = data.renderTpl.replace('{headerContents}', data.headerTpl || '');
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var me = this,
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		});
 	},
 
-	onPathLoad: function(path) {
+	onPathLoad: function (path) {
 		if (!this.rendered) {
 			this.on('afterrender', this.onPathLoad.bind(this, path));
 			return;
@@ -175,7 +175,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		});
 	},
 
-	onPageSourceLoad: function(pageSource) {
+	onPageSourceLoad: function (pageSource) {
 		if (!this.rendered) {
 			this.on('afterrender', this.onPageSourceLoad.bind(this, pageSource));
 			return;
@@ -186,18 +186,18 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.onPagerUpdate();
 	},
 
-	__getPathFromEvent: function(e) {
+	__getPathFromEvent: function (e) {
 		var part = e.getTarget('.part');
 	},
 
-	__getPathPart: function(part) {
+	__getPathPart: function (part) {
 		var index = part && part.getAttribute('data-index');
 
 		index = parseInt(index, 10);
 		return this.path[index - 1];
 	},
 
-	onPathClicked: function(e) {
+	onPathClicked: function (e) {
 		var part = e.getTarget('.part'), path;
 
 		if (e.getTarget('.toc')) {
@@ -214,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 	},
 
-	onPathHover: function(e) {
+	onPathHover: function (e) {
 		var part = e.getTarget('.part'), path;
 
 		if (e.getTarget('.locked') || !part) { return; }
@@ -226,11 +226,11 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 	},
 
-	startShowingPathMenu: function(el, path) {
+	startShowingPathMenu: function (el, path) {
 		var items = path.siblings,
 			rect = el.getBoundingClientRect();
 
-		items = items.map(function(item) {
+		items = items.map(function (item) {
 			return {
 				text: item.label,
 				title: item.title,
@@ -259,19 +259,19 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.pathMenu.startShow(el, 'tl-bl', [-10, -20]);
 	},
 
-	onPathOut: function(e) {
+	onPathOut: function (e) {
 		if (this.pathMenu && (!Ext.is.iPad || !this.pathMenu.isVisible())) {
 			this.pathMenu.stopShow();
 		}
 	},
 
-	switchPath: function(menu, item) {
+	switchPath: function (menu, item) {
 		if (item) {
 			this.doNavigation(item.title || '', item.route, item.precache || {});
 		}
 	},
 
-	onPagerUpdate: function() {
+	onPagerUpdate: function () {
 		if (!this.rendered) {
 			this.on('afterrender', this.onPagerUpdate.bind(this));
 			return;
@@ -289,7 +289,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.previousEl.dom.setAttribute('title', ps.getPreviousTitle());
 	},
 
-	onPrevious: function(e) {
+	onPrevious: function (e) {
 		if (e.getTarget('.disabled')) {
 			return;
 		}
@@ -301,7 +301,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.doNavigation(title, previous);
 	},
 
-	onNext: function(e) {
+	onNext: function (e) {
 		if (e.getTarget('.disabled')) {
 			return;
 		}
@@ -313,7 +313,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		this.doNavigation(title, next, precache);
 	},
 
-	showToast: function(msgOrConfig) {
+	showToast: function (msgOrConfig) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showToast.bind(this, msgOrConfig));
 			return;
@@ -348,10 +348,10 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			el: toast,
 			//fulfills after the minimum time the toast has to be open passes
 			openLongEnough: toast.waitToClose,
-			close: function(time) {
+			close: function (time) {
 				this.closing = true;
 				wait(time || 0)
-					.then(function() {
+					.then(function () {
 						//if the path el is still around
 						if (me.pathEl) {
 							me.pathEl.removeCls('show-toast');
@@ -365,7 +365,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		};
 	},
 
-	setPageInfo: function(pageInfo) {
+	setPageInfo: function (pageInfo) {
 		this.activeNTIID = pageInfo.getId();
 
 		if (this.tocComponent) {
@@ -373,7 +373,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 	},
 
-	buildTocComponent: function(store) {
+	buildTocComponent: function (store) {
 		this.tocComponent = Ext.widget({
 			xtype: 'table-of-contents-flyout',
 			store: store,
@@ -389,7 +389,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 		}
 	},
 
-	onShowToc: function() {
+	onShowToc: function () {
 		if (!this.tocComponent) {
 			this.hasTocOpen = true;
 			return;

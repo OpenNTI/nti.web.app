@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	}),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var header = this.__getHeader(),
@@ -42,18 +42,18 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 	},
 
 
-	__getHeader: function() {
-		return this.table.header.map(function(h) {
+	__getHeader: function () {
+		return this.table.header.map(function (h) {
 			return {label: h};
 		});
 	},
 
 
-	__getRows: function() {
-		function findMax(entries) {
+	__getRows: function () {
+		function findMax (entries) {
 			var max = -1;
 
-			entries.forEach(function(entry) {
+			entries.forEach(function (entry) {
 				if (max < entry) {
 					max = entry;
 				}
@@ -62,11 +62,11 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.parts.
 			return max;
 		}
 
-		return this.table.rows.map(function(row) {
+		return this.table.rows.map(function (row) {
 			var max = findMax(row.slice(1));
 
 			return {
-				columns: row.map(function(entry) {
+				columns: row.map(function (entry) {
 					return {
 						label: entry,
 						cls: max === entry ? 'max' : ''

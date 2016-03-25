@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.editor.embedvideo.Window', {
 		{xtype: 'embedvideo-main-view'}
 	],
 
-	embed: function() {
+	embed: function () {
 		var main = this.down('embedvideo-main-view'),
 			val = main.getValues();
 

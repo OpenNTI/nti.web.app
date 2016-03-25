@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.log.Notif
 		message: '.message'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.renderData.message = this.message;
 	}

@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	alias: 'widget.profile-activity-personalblogcomment-item',
 	description: 'thought',
 
-	onClick: function() {
+	onClick: function () {
 		this.navigateToObject(this.record);
 	}
 });

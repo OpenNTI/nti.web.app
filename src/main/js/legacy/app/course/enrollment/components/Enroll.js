@@ -41,13 +41,13 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		subscribeLegalEl: '.subscribe-container .legal'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.enableBubble('show-msg');
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		var c = this.course;
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.detailsTable = Ext.widget('enrollment-details-table', {
@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.beforeShow();
 	},
 
-	beforeShow: function() {
+	beforeShow: function () {
 		if (!this.rendered) { return; }
 
 		if (this.enrollmentOption.AllowVendorUpdates) {
@@ -91,31 +91,31 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-	getButtonCfg: function() {
+	getButtonCfg: function () {
 		return this.buttonCfg;
 	},
 
-	buttonClick: function(action) {
+	buttonClick: function (action) {
 		if (action === 'goto-payment') {
 			this.maybeSubmit();
 		}
 	},
 
-	stopClose: function() {
+	stopClose: function () {
 		var me = this;
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Ext.Msg.show({
 				msg: getString('NextThought.view.courseware.enrollment.Enroll.NotFinished'),
 				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 				scope: this,
 				icon: 'warning-red',
 				buttonText: {
-					'ok': 'caution: ' +getString('NextThought.view.courseware.enrollment.Enroll.Leave'),
+					'ok': 'caution: ' + getString('NextThought.view.courseware.enrollment.Enroll.Leave'),
 					'cancel': getString('NextThought.view.courseware.enrollment.Enroll.Stay')
 				},
 				title: getString('NextThought.view.courseware.enrollment.Enroll.AreYouSure'),
-				fn: function(str) {
+				fn: function (str) {
 					if (str === 'ok') {
 						fulfill();
 					} else {
@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		});
 	},
 
-	showErrorMsg: function(json) {
+	showErrorMsg: function (json) {
 		if (json && json.Message) {
 			this.fireEvent('show-msg', json.Message, true, 5000);
 		} else {
@@ -134,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		}
 	},
 
-	showError: function(json) {
+	showError: function (json) {
 		json = json || {};
 		json.title = getString('NextThought.view.courseware.enrollment.Enroll.PaymentProblems');
 		json.Message = json.Message || getString('NextThought.view.courseware.enrollment.Enroll.TryPayAgain');
@@ -147,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.confirmEl.update(json.ContactInformation);
 	},
 
-	maybeSubmit: function() {
+	maybeSubmit: function () {
 		var me = this,
 			minTime = wait(5000),
 			subscribe;
@@ -160,24 +160,24 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 		this.complete(this, {
 			subscribe: subscribe
 		})
-			.then(function(response) {
+			.then(function (response) {
 				var json = Ext.JSON.decode(response, true);
 
 				if (json.href) {
-					minTime.then(function() {
+					minTime.then(function () {
 						window.location.href = json.href;
 					});
 				} else {
 					console.error('No href to redirect to...', response);
 					me.showErrorMsg();
 
-					minTime.then(function() {
+					minTime.then(function () {
 						me.error(me);
 						me.removeMask();
 					});
 				}
 			})
-			.fail(function(response) {
+			.fail(function (response) {
 				var json = Ext.JSON.decode(response, true);
 
 				console.error('Enroll and pay failed', response);
@@ -186,7 +186,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 				me.showError(json);
 
-				minTime.then(function() {
+				minTime.then(function () {
 					me.error(me);
 					me.removeMask();
 				});

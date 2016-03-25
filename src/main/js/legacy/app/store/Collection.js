@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 		]
 	}),
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		var container = this.up('library-view-container'),
 			page = this.up('library-view-page');
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 		}
 	},
 
-	collectData: function(records, index) {
+	collectData: function (records, index) {
 		var rows = this.rowSpan,
 			data = this.callParent(arguments),
 		//Unspoken gotcha: index is the index of the updated record, since we set the first to be featrued by
@@ -65,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 		// will no longer be sufficiant.
 			updating = !!index;
 
-		Ext.each(data.items, function(i, x) {
+		Ext.each(data.items, function (i, x) {
 			var cols = 2;
 
 			i.inGrid = 'grid-item';
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 		return data;
 	},
 
-	onBeforeItemClick: function(record, item, idx, event) {
+	onBeforeItemClick: function (record, item, idx, event) {
 		var t = event && event.getTarget && event.getTarget();
 
 		if (t && Ext.fly(t).hasCls('history')) {
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 	},
 
 
-	onItemUpdate: function(node) {
+	onItemUpdate: function (node) {
 		var desc = Ext.fly(node).down('.description', true),
 			prev = Ext.fly(node).down('.history', true),
 			pos, e, texts, bottom,
@@ -128,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 
 		//Get all text nodes and split on spaces
 		texts = AnnotationUtils.getTextNodes(desc);
-		Ext.each(texts, function(v) {
+		Ext.each(texts, function (v) {
 			var i;
 			do {
 				i = v.nodeValue.indexOf(' ');
@@ -159,18 +159,18 @@ module.exports = exports = Ext.define('NextThought.app.store.Collection', {
 	},
 
 
-	detectOverflow: function() {
+	detectOverflow: function () {
 		console.log('Detecting overflow...');
-		Ext.each(this.getNodes(), function(v) {this.onItemUpdate(v);},this);
+		Ext.each(this.getNodes(), function (v) {this.onItemUpdate(v);},this);
 	},
 
 
-	refresh: function() {
+	refresh: function () {
 		this.callParent(arguments);
 		this.detectOverflow();
 	},
 
-	onUpdate: function(store, rec) {
+	onUpdate: function (store, rec) {
 		this.callParent(arguments);
 		var n = this.getNode(rec);
 		if (n) {

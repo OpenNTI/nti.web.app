@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	layout: 'none',
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var showEditor = this.showEditorForType.bind(this),
@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return;
 		}
 
-		this.add(this.types.reduce(function(acc, type) {
+		this.add(this.types.reduce(function (acc, type) {
 			if (!type.advanced || Service.canDoAdvancedEditing()) {
 				acc.push({
 					xtype: 'overview-editing-type',

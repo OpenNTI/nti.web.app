@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 							ui: 'flat',
 							text: getString('NextThought.view.chat.View.cancel'),
 							scale: 'large',
-							handler: function(btn) {
+							handler: function (btn) {
 								this.up('chat-window').onFlagToolClicked();
 							}
 						},
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 							text: getString('NextThought.view.chat.View.report'),
 							scale: 'large',
 							disabled: true,
-							handler: function() {
+							handler: function () {
 								this.up('chat-view').flagMessages();
 							}
 						}
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		}
 	],
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this, 'control-clicked', this.maybeEnableButtons, this);
 		this.mon(this.down('chat-log-view'), 'add', this.maybeShowFlagIcon, this);
@@ -87,14 +87,14 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		}
 	},
 
-	makeAdjustmentForiOS: function() {
+	makeAdjustmentForiOS: function () {
 		var me = this,
 			topWindow = me.el.up('.x-window-chat-window'),
 			logView = topWindow.down('.chat-log-view'),
 			chatWindow;
 
 		//On focusing input, shrink window to fit, and position where visible
-		me.el.down('input').on('focus', function() {
+		me.el.down('input').on('focus', function () {
 			me.windowheight = topWindow.getHeight();
 			me.logheight = logView.getHeight();
 			if (!me.hasOwnProperty('initialY')) {
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 			}
 		}, me);
 		//On blur, restore height, and positioning of chat window
-		me.el.down('input').on('blur', function() {
+		me.el.down('input').on('blur', function () {
 			topWindow.setY(me.chatY);
 			topWindow.setHeight(me.windowheight);
 			logView.setHeight(me.logheight);
@@ -117,10 +117,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 
 		//pressing key can hide keyboard and move view up. Stop top from changing.
 		chatWindow = this.el.up('.x-window');
-		chatWindow.on('resize', function() { chatWindow.setTop(me.initialY); });
+		chatWindow.on('resize', function () { chatWindow.setTop(me.initialY); });
 	},
 
-	trackChatState: function(notification) {
+	trackChatState: function (notification) {
 		if (!notification || !notification.status) {
 			return;
 		}
@@ -137,10 +137,10 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		}
 	},
 
-	flagMessages: function() {
+	flagMessages: function () {
 		var allEntries = this.query('chat-log-entry'),
 			allFlaggedMessages = [];
-		Ext.each(allEntries, function(e) {
+		Ext.each(allEntries, function (e) {
 			if (e.isFlagged()) {
 				allFlaggedMessages.push(e);
 			}
@@ -149,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		this.fireEvent('flag-messages', allFlaggedMessages, this);
 	},
 
-	maybeShowFlagIcon: function(view, entry) {
+	maybeShowFlagIcon: function (view, entry) {
 		if (this.showFlagIcon) {
 			return;
 		}
@@ -169,7 +169,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		}
 	},
 
-	maybeEnableButtons: function() {
+	maybeEnableButtons: function () {
 		var b = this.down('[flagButton]');
 		//if there is checked stuff down there, enable button
 		if (this.el.down('.control.checked')) {
@@ -181,7 +181,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		}
 	},
 
-	toggleModerationButtons: function() {
+	toggleModerationButtons: function () {
 		var layout = this.down('[entryCard]').getLayout(),
 			activeId = layout.getActiveItem().itemId,
 			toggledId = (activeId === 'entry') ? 'buttons' : 'entry';
@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		this.updateLayout();
 	},
 
-	showError: function(errorObject) {
+	showError: function (errorObject) {
 		var box = this.down('[name=error]'),
 			errorText = errorObject.message || getString('NextThought.view.chat.View.error');
 		//make main error field show up
@@ -200,18 +200,18 @@ module.exports = exports = Ext.define('NextThought.app.chat.components.View', {
 		this.reanchorLog();
 	},
 
-	clearError: function() {
+	clearError: function () {
 		var box = this.down('[name=error]'),
 			log = this.down('chat-log-view');
 		log.anchor = log.initialConfig.anchor;
 		box.hide();
 	},
 
-	reanchorLog: function() {
+	reanchorLog: function () {
 		var log = this.down('chat-log-view'),
 			foot = 0;
 
-		this.items.each(function(cmp) {
+		this.items.each(function (cmp) {
 			if (cmp !== log) {
 				foot += cmp.getHeight();
 			}

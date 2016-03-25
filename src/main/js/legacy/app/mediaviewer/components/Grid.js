@@ -50,13 +50,13 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 					] }
 				] }
 			] }
-		] }
+	] }
 	), {
-		is: function(values) {
+		is: function (values) {
 			return values.sources.length === 0;
 		},
 
-		splitNumber: function(values) {
+		splitNumber: function (values) {
 			var s = (values.section || '').split(' '),
 				number = s.shift(),
 				numberVal = parseFloat(number),
@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 			}
 		},
 
-		thumb: function(sources) {
+		thumb: function (sources) {
 			return sources[0].thumbnail;
 		}
 	}),
@@ -76,13 +76,13 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 
 
 	//<editor-fold desc="Setup">
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.LibraryActions = NextThought.app.library.Actions.create();
 
 		this.on({
-			itemclick: function(cmp, record, item) {
+			itemclick: function (cmp, record, item) {
 				var selectionChanged = cmp.getSelectedNodes()[0] !== item;
 
 				if (!selectionChanged) {
@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 				cmp.fireEvent('toggl-grid');
 				this.fromClick = true;
 			},
-			beforeselect: function(s, r) {
+			beforeselect: function (s, r) {
 				var pass = r.get('sources').length > 0,
 					store = s.getStore(),
 					last = s.lastSelected || store.first(),
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 				return pass;
 
 			},
-			select: function(s, r) {
+			select: function (s, r) {
 				var node = this.getNodeByRecord(r),
 					ct = this.el.getScrollingEl();
 				if (node && Ext.fly(node).needsScrollIntoView(ct)) {
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 		});
 	},
 
-	setContent: function(source, bundle) {
+	setContent: function (source, bundle) {
 		var me = this;
 
 		me.source = source;
@@ -133,10 +133,10 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 		}
 		else {
 			ContentUtils.getLineage(source.get('NTIID'), bundle)
-				.then(function(lineages) {
+				.then(function (lineages) {
 					var lineage = lineages[0];
 					ContentUtils.getLocation(lineage.last(), bundle)
-						.then(function(location) {
+						.then(function (location) {
 							me.setLocationInfo(location);
 						});
 				});
@@ -149,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 		}
 	},
 
-	__bundleChanged: function(bundle) {
+	__bundleChanged: function (bundle) {
 		var me = this;
 
 		me.currentBundle = bundle;
@@ -157,17 +157,17 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 		me.buildVideoStore(bundle);
 
 		ContentUtils.getLineage(me.source.get('NTIID'), bundle)
-			.then(function(lineages) {
+			.then(function (lineages) {
 				var lineage = lineages[0];
 				ContentUtils.getLocation(lineage.last(), bundle)
-					.then(function(location) {
+					.then(function (location) {
 						me.setLocationInfo(location);
 					});
 			});
 	},
 
 
-	__scrollSelectedIntoView: function() {
+	__scrollSelectedIntoView: function () {
 		if (!this.rendered) { return; }
 
 		var r = this.getSelectionModel().getLastSelected(),
@@ -180,12 +180,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 	},
 
 
-	__getCurrentProgress: function() {
+	__getCurrentProgress: function () {
 		return this._currentProgress || Promise.reject();
 	},
 
 
-	processSpecialEvent: function(e) {
+	processSpecialEvent: function (e) {
 		var k = e.getKey();
 		if (k === e.SPACE || k === e.ENTER) {
 			this.fireSelection();
@@ -193,10 +193,10 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 	},
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent();
 		var me = this, s = this.getSelectionModel();
-		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey, function() {
+		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey, function () {
 			me.fromKey = true;
 		});
 		if (Ext.is.iOS) {
@@ -205,20 +205,20 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.on('refresh', this.__updateProgress, this);
 	},
 
 
-	getThumbnail: function(video) {
+	getThumbnail: function (video) {
 		var source = video.get('sources')[0],
 			thumbnail = source && source.thumbnail;
 
 		if (!thumbnail && source) {
 			NextThought.model.resolvers.VideoPosters.resolveForSource(source)
-				.then(function(obj) {
+				.then(function (obj) {
 					source.thumbnail = obj.thumbnail;
 
 					video.set('sources', [source]);
@@ -231,7 +231,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 	 * Get list of videos for a course with section titles.
 	 * @return {[type]} [description]
 	 */
-	getVideosForBundle: function(bundle) {
+	getVideosForBundle: function (bundle) {
 		if (!bundle.getMediaByOutline || !bundle.getNavigationStore) {
 			return Promise.reject();
 		}
@@ -243,10 +243,10 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 		var outlineInterface = bundle.getOutlineInterface();
 
 		this.__getVideosPromise = Promise.all([
-				bundle.getMediaByOutline(),
-				outlineInterface.onceBuilt()
-			])
-			.then(function(results) {
+			bundle.getMediaByOutline(),
+			outlineInterface.onceBuilt()
+		])
+			.then(function (results) {
 				var outline = results[0],
 					outlineInterface = results[1],
 					orderedContainers = outline.ContainerOrder || [],
@@ -254,7 +254,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 					videoObject = outline.Items || {},
 					videos = [];
 
-				function addContainerVideos(cid, contentNTIID) {
+				function addContainerVideos (cid, contentNTIID) {
 					var videoIds = containers[cid] || containers[contentNTIID],
 						node = outlineInterface && outlineInterface.findOutlineNode(cid);
 
@@ -265,7 +265,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 						}));
 					}
 
-					Ext.each(videoIds, function(vid) {
+					Ext.each(videoIds, function (vid) {
 						var v = videoObject[vid];
 
 						// Filter Videos only
@@ -282,7 +282,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 					Ext.each(orderedContainers, addContainerVideos);
 				}
 				else {
-					outlineInterface.forEach(function(node) {
+					outlineInterface.forEach(function (node) {
 						addContainerVideos(node.getId(), node.get('ContentNTIID'));
 					});
 				}
@@ -294,21 +294,21 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 	},
 
 
-	buildVideoStore: function(bundle) {
+	buildVideoStore: function (bundle) {
 		if (!bundle) { return; }
 
 		var me = this,
 			selected = me.getSource().get('NTIID');
 
 		this.getVideosForBundle(bundle)
-			.then(function(videos) {
+			.then(function (videos) {
 				me.store = new Ext.data.Store({
 					model: NextThought.model.PlaylistItem,
 					proxy: 'memory',
 					data: videos
 				});
 
-				me.store.each(function(record) {
+				me.store.each(function (record) {
 					 me.getThumbnail(record);
 				});
 
@@ -324,24 +324,24 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 	},
 
 
-	__updateProgress: function() {
+	__updateProgress: function () {
 		var me = this;
 
 		this.__getCurrentProgress()
-			.then(function(progress) {
-				me.store.each(function(r) {
+			.then(function (progress) {
+				me.store.each(function (r) {
 					if (r.get('NTIID') && progress.hasBeenViewed(r.get('NTIID'))) {
 						r.set('progress', 'viewed');
 					}
 				});
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.log('Could not load the video progress: ' + reason);
 			});
 	},
 
 
-	fireSelection: function() {
+	fireSelection: function () {
 		var rec = this.getSelectionModel().getSelection().first(),
 			root = this.currentBundle.getContentRoots()[0],
 			section = rec && rec.get('section'), route,
@@ -362,5 +362,5 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 	},
 
 
-	adjustOnResize: function(availableWidth, availableHeight) {}
+	adjustOnResize: function (availableWidth, availableHeight) {}
 });

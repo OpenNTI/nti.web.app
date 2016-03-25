@@ -4,27 +4,27 @@ var UtilSearch = require('./Search');
 
 
 module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
-	rangeIsInsideRedaction: function(r) {
-	  if (r.dom && r.hasCls('redacted')) {return r;}
-	  else if (r.commonAncestorContainer) {return Ext.fly(r.commonAncestorContainer).up('.redacted');}
-	  return false;
+	rangeIsInsideRedaction: function (r) {
+	  	if (r.dom && r.hasCls('redacted')) {return r;}
+	  	else if (r.commonAncestorContainer) {return Ext.fly(r.commonAncestorContainer).up('.redacted');}
+	  	return false;
 	},
 
-	getRedactionActionSpan: function(r) {
-	  var redactionParent = this.rangeIsInsideRedaction(r),
-			  redactionAction, blockRedaction;
-	  if (!redactionParent) {return null;}
+	getRedactionActionSpan: function (r) {
+	  	var redactionParent = this.rangeIsInsideRedaction(r),
+			 redactionAction, blockRedaction;
+	  	if (!redactionParent) {return null;}
 
 
-	  redactionAction = redactionParent.prev('.redactionAction');
-	  if (!redactionAction) {
+	  	redactionAction = redactionParent.prev('.redactionAction');
+	  	if (!redactionAction) {
 		blockRedaction = redactionParent.prev('.block-redaction');
 		if (blockRedaction) {
-		  redactionAction = blockRedaction.down('.redactionAction');
+		  	redactionAction = blockRedaction.down('.redactionAction');
 		}
 	  }
 
-	  return redactionAction;
+	  	return redactionAction;
 	},
 
 	/**
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
 	//and text.	 If nodeFilterFn is provided it will
 	//be called with each node before it is indexed.  nodes returning
 	//true will be indexed
-	indexText: function(node, nodeFilterFn) {
+	indexText: function (node, nodeFilterFn) {
 			// initialize root loop
 		var indices = [],
 			text = [], // will be morphed into a string later
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
 	},
 
 	// find entry in indices array (using binary search)
-	searchForEntry: function(start, end, lookFor, array, endEdge) {
+	searchForEntry: function (start, end, lookFor, array, endEdge) {
 		var i;
 		while (start < end) {
 			i = start + end >> 1;
@@ -135,11 +135,11 @@ module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
 		return start;
 	},
 
-	adjustLocatedRange: function(range) {
+	adjustLocatedRange: function (range) {
 		return this.rangeIsInsideRedaction(range) || range;
 	},
 
-	mapMatchToTextRange: function(match, whichGroup, textIndex, doc) {
+	mapMatchToTextRange: function (match, whichGroup, textIndex, doc) {
 		var iMatch, iTextStart, iTextEnd, iEntryLeft, iEntryRight,
 			entryLeft, entryRight, iNodeTextStart, iNodeTextEnd,
 			indices = textIndex.indices, range;
@@ -184,7 +184,7 @@ module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
 	 *
 	 * @return a list of range objects that represent the portion of text to highlight
 	 **/
-	findTextRanges: function(node, doc, searchFor, which, textIndex) {
+	findTextRanges: function (node, doc, searchFor, which, textIndex) {
 		var iMatch, matchingText,
 			iTextStart, iTextEnd,
 			i, iLeft, iRight,
@@ -210,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
 		}
 		which = Ext.Array.sort(which);
 
-		function allButObjects(child) {
+		function allButObjects (child) {
 			return !Ext.fly(child).parent('object', true);
 		}
 
@@ -224,9 +224,9 @@ module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
 		//console.log(text);
 		indices = indexedText.indices;
 
-		function processGroup(whichGroup) {
-				var range;
-				try {
+		function processGroup (whichGroup) {
+			var range;
+			try {
 					range = this.mapMatchToTextRange(matchingText, whichGroup, indexedText, doc);
 					if (range) {
 						ranges.push(range);
@@ -255,11 +255,11 @@ module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
 			if (quit) {
 				break;
 			}
-	}
+		}
 		return ranges;
 	},
 
-	findTextRangesForSearchHit: function(hit, node, doc) {
+	findTextRangesForSearchHit: function (hit, node, doc) {
 		var fragments, phrase, ranges = [], textIndex;
 
 		if (!hit) {
@@ -278,7 +278,7 @@ module.exports = exports = Ext.define('NextThought.util.TextRangeFinder', {
 
 		//For each fragment build are regex string
 		//and grap the ranges
-		Ext.each(fragments, function(frag) {
+		Ext.each(fragments, function (frag) {
 			console.log('Working on frag', frag);
 			var re = SearchUtils.contentRegexForFragment(frag, phrase, true);
 

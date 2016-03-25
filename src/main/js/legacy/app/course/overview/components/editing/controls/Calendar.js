@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	setDayAndMonth: function(date){
+	setDayAndMonth: function (date) {
 		var parts, m;
 		if (date) {
 			this.dateEl.removeCls('empty');
@@ -90,8 +90,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.dayEl.update(parts[1]);
 		}
 		else {
-			this.monthEl.update("");
-			this.dayEl.update("");
+			this.monthEl.update('');
+			this.dayEl.update('');
 			this.dateEl.addCls('empty');
 		}	
 	},
@@ -107,13 +107,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.on('destroy', this.picker.destroy.bind(this.picker));
 	},
 
-	alignCalendarMenu: function(){
+	alignCalendarMenu: function () {
 		if (this.picker) {
 			this.picker.alignTo(this.el.dom);
 		}
 	},
 
-	updateDateText: function(){
+	updateDateText: function () {
 		var startDate = this.record && this.record.get('AvailableBeginning'),
 			endDate = this.record && this.record.get('AvailableEnding'), 
 			date;
@@ -154,7 +154,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	dateClicked: function(){
+	dateClicked: function () {
 		if (!this.picker) {
 			this.createPicker();
 		}
@@ -163,20 +163,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.beforeShowMenu(this, this.picker, 'calendar');
 		}
 
-		if (this.el.hasCls('closed')){
+		if (this.el.hasCls('closed')) {
 			this.showMenu();
 		} else {
 			this.hideMenu();
 		}
 	},
 
-	hideMenu: function(){
+	hideMenu: function () {
 		this.el.addCls('closed');
 		Ext.destroy(this.bodyListeners);
 		this.picker.close();
 	},
 
-	showMenu: function() {
+	showMenu: function () {
 		this.el.removeCls('closed');
 		this.bodyListeners = this.mon(Ext.getBody(), {
 			destroyable: true,
@@ -187,33 +187,33 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.picker.open();
 	},
 
-	resetMenu: function(){
+	resetMenu: function () {
 		if (this.picker.endEl && this.picker.endEl.hasCls('selected')) {
 			this.picker.toggleTab();
 		}
 		this.picker.setInitialState();
 	},
 
-	textLabelClicked: function(){
+	textLabelClicked: function () {
 		if (!this.picker) {
 			this.createPicker();
 		}
 
-		if (this.el.hasCls('closed')){
+		if (this.el.hasCls('closed')) {
 			this.showMenu();
 		} else {
 			this.hideMenu();
 		}
 	},
 
-	saveClicked: function(e){
+	saveClicked: function (e) {
 		var me = this,
 			link = this.record && this.record.getLink('edit'),
 			values = this.picker && this.picker.getValue();
 
 		if (values && link) {
 			Service.put(link, values)
-				.then(function(response){
+				.then(function (response) {
 					me.record.syncWithResponse(response);
 					me.setDefaultDate();
 					me.el.addCls('closed');
@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	clearDates: function(e){
+	clearDates: function (e) {
 		var link = this.record && this.record.getLink('edit'),
 			me = this;
 
@@ -229,7 +229,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (link) {
 			Service.put(link, {AvailableBeginning: null, AvailableEnding: null})
-				.then(function(response){
+				.then(function (response) {
 					me.record.syncWithResponse(response);
 					me.setDefaultDate();
 					me.el.addCls('closed');
@@ -239,9 +239,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onBodyClick: function(e) {
+	onBodyClick: function (e) {
 		if (e.getTarget('.calendar')) { return; }
-		if(!this.el.hasCls('closed')){
+		if(!this.el.hasCls('closed')) {
 			this.hideMenu();
 		}
 	}

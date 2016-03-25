@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		statusEl: '.status-container'
 	},
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.addClasses();
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		});
 	},
 
-	addClasses: function() {
+	addClasses: function () {
 		var cls = [],
 			completed = this.history && this.history.get('completed');
 
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.addCls(cls);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.addStatusCmp();
@@ -49,17 +49,17 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.mon(this.el, 'click', this.onItemClick.bind(this));
 	},
 
-	addStatusCmp: function() {
+	addStatusCmp: function () {
 		var me = this;
 
 		me.statusCmp = new NextThought.app.course.assessment.components.AssignmentStatus({
 			renderTo: me.statusEl,
 			assignment: me.assignment,
 			history: me.history,
-			onEditorOpen: function() {
+			onEditorOpen: function () {
 				me.addCls('editor-open');
 			},
-			onEditorClose: function() {
+			onEditorClose: function () {
 				me.removeCls('editor-open');
 			}
 		});
@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.on('destroy', me.statusCmp.destroy.bind(me.statusCmp));
 	},
 
-	onItemClick: function(e) {
+	onItemClick: function (e) {
 		if (this.navigateToItem && this.assignment && !e.getTarget('.status-container')) {
 			this.navigateToItem(this.assignment);
 		}

@@ -4,8 +4,8 @@ var TemplatesForNotes = require('../app/annotations/note/Templates');
 
 module.exports = exports = Ext.define('NextThought.mixins.FlagActions', {
 
-	constructor: function() {
-		function onAfterRender() {
+	constructor: function () {
+		function onAfterRender () {
 			var me = this;
 
 			if (me.flagEl) {
@@ -20,18 +20,18 @@ module.exports = exports = Ext.define('NextThought.mixins.FlagActions', {
 	},
 
 
-	flagActionClickHandler: function(e) {
+	flagActionClickHandler: function (e) {
 		if (e && e.stopEvent) {e.stopEvent();}
 		var me = this,
 			rec = me.getRecord();
 		me.flagging = true;
-		TemplatesForNotes.reportInappropriate(function(btn) {
-					delete me.flagging;
-					if (btn === 'ok') { rec.flag(me); }});
+		TemplatesForNotes.reportInappropriate(function (btn) {
+			delete me.flagging;
+			if (btn === 'ok') { rec.flag(me); }});
 	},
 
 
-	tearDownFlagging: function() {
+	tearDownFlagging: function () {
 		if (this.flagEl) {
 			this.mun(this.flagEl, 'click', this.flagActionClickHandler, this);
 			this.flagEl.remove();
@@ -42,28 +42,28 @@ module.exports = exports = Ext.define('NextThought.mixins.FlagActions', {
 	},
 
 
-	getRecord: function() {
+	getRecord: function () {
 		return this.record;
 	},
 
 
-	listenForFlagChanges: function(record) {
+	listenForFlagChanges: function (record) {
 		record.addObserverForField(this, 'flagged', this.markAsFlagged, this);
 	},
 
-	stopListeningForFlagChanges: function(record) {
+	stopListeningForFlagChanges: function (record) {
 		record.removeObserverForField(this, 'flagged', this.markAsFlagged, this);
 	},
 
 
-	reflectFlagged: function(record) {
-	if (this.flagEl) {
-			this.markAsFlagged(record.isFlagged());
+	reflectFlagged: function (record) {
+		if (this.flagEl) {
+		this.markAsFlagged(record.isFlagged());
 	}
 	},
 
 
-	markAsFlagged: function(field, value) {
+	markAsFlagged: function (field, value) {
 		var flagged = value === undefined ? field : value,
 			method = flagged ? 'addCls' : 'removeCls';
 		if (!this.flagEl) {

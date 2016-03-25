@@ -13,22 +13,22 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Poll', {
 	],
 
 
-	getReportLink: function() {
+	getReportLink: function () {
 		return this.getLink('report-InquiryReport.pdf');
 	},
 
 
-	getResultsLink: function() {
+	getResultsLink: function () {
 		return this.getLink('Aggregated');
 	},
 
 
-	setResults: function(results) {
+	setResults: function (results) {
 		this.__loadResultsPromise = Promise.resolve(results);
 	},
 
 
-	__loadResults: function() {
+	__loadResults: function () {
 		var me = this,
 			link = me.getResultsLink(),
 			load;
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Poll', {
 			load = me.__loadResultsPromise;
 		} else if (link) {
 			load = Service.request(link)
-				.then(function(response) {
+				.then(function (response) {
 					return Ext.decode(response);
 				});
 		} else {
@@ -48,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Poll', {
 
 		//Wait an event pump then clear the cached result
 		wait()
-			.then(function() {
+			.then(function () {
 				delete me.__loadResultsPromise;
 			});
 
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Poll', {
 	},
 
 
-	getResults: function() {
+	getResults: function () {
 		return this.__loadResults();
 	}
 });

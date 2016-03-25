@@ -12,7 +12,7 @@ module.exports = exports = Ext.define('NextThought.mixins.EllipsisText', {
 	statics: {
 		TASKS: [],
 
-		schedule: function(fn) {
+		schedule: function (fn) {
 			var task = this.addTask(fn);
 
 			this.start();
@@ -21,22 +21,22 @@ module.exports = exports = Ext.define('NextThought.mixins.EllipsisText', {
 		},
 
 
-		isInterrupted: function(task) {
+		isInterrupted: function (task) {
 			return task.skip || (task.parent && this.isInterrupted(task.parent));
 		},
 
 
-		getTasks: function() {
+		getTasks: function () {
 			var me = this;
 
 			//filter out tasks that have already run or have been interrupted
-			return (me.TASKS || []).filter(function(x) {
+			return (me.TASKS || []).filter(function (x) {
 				return !me.isInterrupted(x) && !x.run;
 			});
 		},
 
 
-		addTask: function(task) {
+		addTask: function (task) {
 			var tasks = this.getTasks();
 
 			task = {
@@ -51,11 +51,11 @@ module.exports = exports = Ext.define('NextThought.mixins.EllipsisText', {
 		},
 
 
-		start: function() {
+		start: function () {
 			var me = this;
 
 			if (!me.timeout) {
-				me.timeout = setTimeout(function() {
+				me.timeout = setTimeout(function () {
 					me.stop();
 					me.run();
 				}, 1);
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.mixins.EllipsisText', {
 		},
 
 
-		stop: function() {
+		stop: function () {
 			if (this.timeout) {
 				clearTimeout(this.timeout);
 				delete this.timeout;
@@ -71,10 +71,10 @@ module.exports = exports = Ext.define('NextThought.mixins.EllipsisText', {
 		},
 
 
-		run: function() {
+		run: function () {
 			var tasks = this.getTasks();
 
-			(tasks || []).forEach(function(task) {
+			(tasks || []).forEach(function (task) {
 				var child;
 
 				try {
@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.mixins.EllipsisText', {
 	* @param: {String} measure - the box that we should use as reference. Defaults to self node.
 	* NOTE: the box should have a max-height property set on it.
 	*/
-	truncateText: function(node, measure, noEllipse) {
+	truncateText: function (node, measure, noEllipse) {
 		var box = node,
 			textProperty = node.textContent !== null ? 'textContent' : 'innerText',
 			setToolTipOnce;
@@ -109,16 +109,16 @@ module.exports = exports = Ext.define('NextThought.mixins.EllipsisText', {
 			box = node.parentNode;
 		}
 
-		setToolTipOnce = function() {
+		setToolTipOnce = function () {
 			node.setAttribute('data-qtip', node[textProperty]);
-			setToolTipOnce = function() {};
+			setToolTipOnce = function () {};
 		};
 
 		if (noEllipse) {
-			setToolTipOnce = function() {};
+			setToolTipOnce = function () {};
 		}
 
-		function work() {
+		function work () {
 			// NOTE: because of line-height, in different browsers, we might have a slight difference
 			// between the box's scrollHeight and its offsetHeight. And since no line should be 5px tall, check against 5.
 			if (box.scrollHeight - (box.clientHeight || box.offsetHeight) >= 5) {
@@ -128,14 +128,14 @@ module.exports = exports = Ext.define('NextThought.mixins.EllipsisText', {
 			}
 		}
 
-		NextThought.mixins.EllipsisText.schedule(function() {
+		NextThought.mixins.EllipsisText.schedule(function () {
 			var box = node;
 
 			if (measure === 'parent') {
 				box = node.parentNode;
 			}
 
-			function work() {
+			function work () {
 				// NOTE: because of line-height, in different browsers, we might have a slight difference
 				// between the box's scrollHeight and its offsetHeight. And since no line should be 5px tall, check against 5.
 				if (box.scrollHeight - (box.clientHeight || box.offsetHeight) >= 5) {

@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	 * get the enrolled wording for this option if we haven't already
 	 * @return {String} the wording for this option
 	 */
-	getEnrolledWording: function() {
+	getEnrolledWording: function () {
 		if (!this.EnrolledWordingKey) { return ''; }
 
 		this.EnrolledWording = this.EnrolledWording || getString(this.EnrolledWordingKey);
@@ -44,23 +44,23 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		name: '',
 		enrollmentOption: {},
 		isActive: false,
-		isComplete: function() {},
-		comlete: function() {},
-		done: function(cmp) {
+		isComplete: function () {},
+		comlete: function () {},
+		done: function (cmp) {
 			cmp.fireEvent('step-completed');
 		},
-		error: function(cmp) {
+		error: function (cmp) {
 			cmp.fireEvent('step-error');
 		}
 	},
 
 	//make sure the steps have all the functions that need to be on there
-	__addStep: function(cfg, steps) {
+	__addStep: function (cfg, steps) {
 		steps.push(Ext.applyIf(cfg, this.__stepTpl));
 	},
 
 
-	buildEnrollmentSteps: function(course) {},
+	buildEnrollmentSteps: function (course) {},
 
 
 	/**
@@ -88,17 +88,17 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	 * @param  {String} state the state to get strings for
 	 * @return {Object}		  the different wordings for this state
 	 */
-	getEnrollmentState: function(state) {
+	getEnrollmentState: function (state) {
 		var def = this.DefaultStrings || {};
 
 		this.ENROLLMENT_STATES = this.ENROLLMENT_STATES || getString('EnrollmentText')[this.NAME] || def;
 
-		return this.ENROLLMENT_STATES ? this.ENROLLMENT_STATES[state] || def[state] : {}
+		return this.ENROLLMENT_STATES ? this.ENROLLMENT_STATES[state] || def[state] : {};
 	},
 
 	DateFormat: 'F j, g:i A T',
 
-	getWording: function(state, data) {
+	getWording: function (state, data) {
 		var text = this.getEnrollmentState(state),
 			prop, key;
 
@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	 * @param  {Object} details the details of course and option, return value from __getOptionDetails
 	 * @return {Object}		   the wording for the state it is in
 	 */
-	__getEnrollmentText: function(course, option) {
+	__getEnrollmentText: function (course, option) {
 		var details = this.__getOptionDetails(course, option);
 	},
 
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	 * @param  {Object} option details about the option
 	 * @return {Object}			parsed details
 	 */
-	__getOptionDetails: function(course, option) {},
+	__getOptionDetails: function (course, option) {},
 
 	/**
 	 * Returns an object
@@ -170,5 +170,5 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	 * @param {Object} details parsed enrollment details for the course
 	 * @return {Object}
 	 */
-	buildEnrollmentDetails: function(course, details) {}
+	buildEnrollmentDetails: function (course, details) {}
 });

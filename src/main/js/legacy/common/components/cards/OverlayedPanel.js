@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Overl
 	cls: 'content-card-container',
 
 	statics: {
-		getData: function(dom, reader) {
+		getData: function (dom, reader) {
 			var el = Ext.get(dom),
 				data = DomUtils.parseDomObject(dom),
 				description = el.down('span.description'),
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Overl
 		}
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.common.components.cards.Overl
 		this.callParent([config]);
 	},
 
-	findLine: function() {
+	findLine: function () {
 		var doc = this.contentElement.ownerDocument,
 			range = doc.createRange();
 

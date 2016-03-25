@@ -11,13 +11,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	saveText: 'Add to Unit',
 
 	statics: {
-		getHandledMimeTypes: function() {
+		getHandledMimeTypes: function () {
 			return [
 				NextThought.model.courses.navigation.CourseOutlineNode.mimeType
 			];
 		},
 
-		getEditors: function() {
+		getEditors: function () {
 			var base = NextThought.app.course.overview.components.editing.outline;
 
 			return [
@@ -26,7 +26,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	setUpTypeList: function() {
+	setUpTypeList: function () {
 		this.callParent(arguments);
 	}
 });

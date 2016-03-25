@@ -50,14 +50,14 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 					itemCls: 'x-menu-item no-border',
 					emptyText: '<div class="x-menu-item">' + getString('NextThought.view.account.coppa.Main.no-school') + '</div>',
 					xhooks: {
-						initComponent: function() {
+						initComponent: function () {
 							this.callParent(arguments);
 							this.itemSelector = '.x-menu-item';
 						}
 					}
 				},
 				listeners: {
-					change: function() {
+					change: function () {
 						var store = this.store;
 						store.suspendEvents();
 						store.clearFilter();
@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 				scale: 'medium',
 				name: 'submit',
 				text: getString('NextThought.view.account.coppa.Main.submit'),
-				handler: function() {
+				handler: function () {
 					var main = this.up('coppa-main-view');
 
 					main.submit();
@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 		]}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		//we need to setup the combo box with a store:
@@ -112,10 +112,10 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 			storeId: 'schoolStore',
 			autoLoad: true,
 			fields: [{
-						 mapping: 0,
-						 name: 'school',
-						 type: 'string'
-					 }],
+					mapping: 0,
+					name: 'school',
+					type: 'string'
+				}],
 			proxy: {
 				type: 'ajax',
 				url: '/resources/misc/school-data.json',
@@ -126,16 +126,16 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 		this.down('combobox').bindStore(this.store);
 	},
 
-	setSchema: function() {},
+	setSchema: function () {},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var u = $AppConfig.userObject,
-				realname = u.get('realname'),
-				email = u.get('email'),
-				aff = u.get('affiliation'),
-				fn, ln;
+			realname = u.get('realname'),
+			email = u.get('email'),
+			aff = u.get('affiliation'),
+			fn, ln;
 
 		fn = (realname.indexOf(' ') > 0) ? realname.substring(0, realname.indexOf(' ')) : realname;
 		ln = (realname.indexOf(' ') > 0) ? realname.substring(realname.indexOf(' ')) : null;
@@ -147,12 +147,12 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 		this.getEl().down('.privacyLink').on('click', this.openChildPrivacyWindow, this);
 	},
 
-	getValues: function() {
+	getValues: function () {
 		var email = this.down('[name=email]').getValue(),
-				firstname = this.down('[name=firstname]').getValue(),
-				lastname = this.down('[name=lastname]').getValue(),
-				check = this.down('[name=opt_in_email_communication]').checked,
-				affiliation = this.down('[name=affiliation]').getValue();
+			firstname = this.down('[name=firstname]').getValue(),
+			lastname = this.down('[name=lastname]').getValue(),
+			check = this.down('[name=opt_in_email_communication]').checked,
+			affiliation = this.down('[name=affiliation]').getValue();
 
 		return {
 			email: email,
@@ -165,13 +165,13 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 
 	},
 
-	setError: function(error) {
+	setError: function (error) {
 		var box = this.down('[name=error]'),
-				field = this.down('[name=' + error.field + ']'),
-				allFields = this.query('[name]');
+			field = this.down('[name=' + error.field + ']'),
+			allFields = this.query('[name]');
 
 		//clear all errors:
-		Ext.each(allFields, function(f) {f.removeCls('error');});
+		Ext.each(allFields, function (f) {f.removeCls('error');});
 
 		//make main error field show up
 		box.el.down('.error-field').update(error.field.replace('_', ' '));
@@ -186,7 +186,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 		this.up('window').updateLayout();
 	},
 
-	openChildPrivacyWindow: function(e) {
+	openChildPrivacyWindow: function (e) {
 		e.stopEvent();
 
 		var w = Ext.widget('nti-window', {
@@ -216,7 +216,7 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 		w.show();
 	},
 
-	submit: function() {
+	submit: function () {
 		var win = this.up('window'),
 			values = this.getValues();
 

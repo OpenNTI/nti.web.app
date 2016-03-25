@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 	/**
 	 * If we haven't yet, set up the dropzone wrapper
 	 */
-	initDropzone: function() {
+	initDropzone: function () {
 		if (!this.Dropzone) {
 			this.Dropzone = new NextThought.app.dnd.Dropzone({
 				getDropzoneTarget: this.getDropzoneTarget.bind(this),
@@ -31,11 +31,11 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 		}
 	},
 
-	getDropzoneTarget: function() {
+	getDropzoneTarget: function () {
 		return this.el && this.el.dom;
 	},
 
-	getDropzoneBoundingClientRect: function() {
+	getDropzoneBoundingClientRect: function () {
 		var target = this.getDropzoneTarget(),
 			rect;
 
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 	/**
 	 * Add all the listeners to the target
 	 */
-	enableDropzone: function() {
+	enableDropzone: function () {
 		this.initDropzone();
 
 		if (!this.rendered) {
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 	/**
 	 * Remove all the listeners on the target
 	 */
-	disableDropzone: function() {
+	disableDropzone: function () {
 		this.initDropzone();
 
 		if (!this.rendered) {
@@ -79,19 +79,19 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Dropzone', {
 	 * @param {Strins} key	   key to look up data on
 	 * @param {Object} handler the handlers, see NextThought.app.dnd.Dropzone
 	 */
-	setDataTransferHandler: function(key, handler) {
+	setDataTransferHandler: function (key, handler) {
 		this.initDropzone();
 
 		this.Dropzone.setDataTransferHandler(key, handler);
 	},
 
-	getHandlersForDataTransfer: function(dataTransfer) {
+	getHandlersForDataTransfer: function (dataTransfer) {
 		this.initDropzone();
 
 		return this.Dropzone.getHandlersForDataTransfer(dataTransfer);
 	},
 
-	hasHandlerForDataTransfer: function(dataTransfer) {
+	hasHandlerForDataTransfer: function (dataTransfer) {
 		var handlers = this.getHandlersForDataTransfer(dataTransfer);
 
 		return handlers.length > 0;

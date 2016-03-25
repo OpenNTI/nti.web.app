@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 		activeTabEl: '.content .active-tab'
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.tabContainerEl, 'click', this.onTabClick.bind(this));
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 			.then(this.maybeCollapse.bind(this));
 	},
 
-	onMouseEnterTitle: function() {
+	onMouseEnterTitle: function () {
 		var el = this.titleContainerEl.dom,
 			span = el.querySelector('span'),
 			title = span && span.textContent;
@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 		el.style.textIndent = el.clientWidth - span.offsetWidth + 'px';
 	},
 
-	onMouseLeaveTitle: function() {
+	onMouseLeaveTitle: function () {
 		var el = this.titleContainerEl.dom;
 
 		el.style.textIndent = 0;
@@ -117,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 	 * }
 	 * @param {Array} tabs a list of tab configs to show
 	 */
-	setTabs: function(tabs) {
+	setTabs: function (tabs) {
 		if (!this.rendered) {
 			this.tabs = tabs;
 			return;
@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 			container = me.tabContainerEl,
 			tabs, active;
 
-		function alignCurrentTab() {
+		function alignCurrentTab () {
 			//if for some reason the element was removed before we could call this
 			if (!me.activeTabEl || !active) { return; }
 			active = active.getBoundingClientRect();
@@ -159,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 		me.maybeCollapse();
 	},
 
-	updateRoute: function(route, subRoute) {
+	updateRoute: function (route, subRoute) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateRoute.bind(this, route, subRoute));
 			return;
@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 		}
 	},
 
-	maybeHideDropdown: function(e) {
+	maybeHideDropdown: function (e) {
 		if (!e.getTarget('.content-navigation')) {
 			this.hideDropdown();
 		}
@@ -187,15 +187,15 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 		this.onBodyClick(e);
 	},
 
-	toggleDropdown: function() {
+	toggleDropdown: function () {
 		this[this.hasCls('show-dropdown') ? 'removeCls' : 'addCls']('show-dropdown');
 	},
 
-	hideDropdown: function(e) {
+	hideDropdown: function (e) {
 		this.removeCls('show-dropdown');
 	},
 
-	onTabClick: function(e) {
+	onTabClick: function (e) {
 		if (e.getTarget('.show-more')) {
 			this.toggleDropdown();
 			return;
@@ -223,10 +223,10 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 		}
 	},
 
-	onActiveContentClicked: function(e) {},
-	onBodyClick: function(e) {},
+	onActiveContentClicked: function (e) {},
+	onBodyClick: function (e) {},
 
-	maybeCollapse: function(navWidth, barWidth) {
+	maybeCollapse: function (navWidth, barWidth) {
 		barWidth = barWidth || this.barWidth;
 		this.barWidth = barWidth;
 
@@ -237,7 +237,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 			seeMoreEl = this.el.dom.querySelector('.show-more'),
 			shouldCollapse = false, numberToShow, dropdowns = 0;
 
-		function collapse(li) {
+		function collapse (li) {
 			if (!li.classList.contains('dropdown')) {
 				li.classList.add('dropdown');
 			}
@@ -251,7 +251,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 			dropdowns += 1;
 		}
 
-		function unCollapse(li) {
+		function unCollapse (li) {
 			if (li.classList.contains('active')) {
 				seeMoreEl.classList.remove('active');
 				activeTabEl.removeCls('hidden');
@@ -291,7 +291,7 @@ module.exports = exports = Ext.define('NextThought.common.components.Navigation'
 		// }
 
 
-		tabs.forEach(function(tab, i) {
+		tabs.forEach(function (tab, i) {
 			if (i + 1 <= numberToShow) {
 				unCollapse(tab);
 			} else {

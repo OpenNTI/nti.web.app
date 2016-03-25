@@ -9,13 +9,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-questionset-assignment',
 
 	statics: {
-		getHandledMimeTypes: function() {
+		getHandledMimeTypes: function () {
 			return [
 				NextThought.model.AssignmentRef.mimeType
 			];
 		},
 
-		getTypes: function() {
+		getTypes: function () {
 			return [
 				{
 					title: 'Assignment',
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			];
 		},
 
-		getEditorForRecord: function(record) {
+		getEditorForRecord: function (record) {
 			if (record instanceof NextThought.model.AssignmentRef) {
 				return this;
 			}
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	SWITCHED: 'switched',
 	cls: 'content-editor questionset assignment',
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.loading) {
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	showEditor: function() {
+	showEditor: function () {
 		if (this.record) {
 			this.showItemEditor();
 		} else {
@@ -57,7 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onBack: function() {
+	onBack: function () {
 		if (this.itemEditorCmp) {
 			this.showItemList([this.itemEditorCmp.selectedItem]);
 		} else if (this.doBack) {
@@ -65,17 +65,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	maybeEnableBack: function(text) {
+	maybeEnableBack: function (text) {
 		if (!this.record && this.enableBack) {
 			this.enableBack(text);
 		}
 	},
 
-	getItemList: function() {
+	getItemList: function () {
 		return this.bundle.getAllAssignments();
 	},
 
-	showItemList: function(selectedItems) {
+	showItemList: function (selectedItems) {
 		var me = this;
 
 		if (me.itemSelectionCmp) {
@@ -99,19 +99,19 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 		me.getItemList()
-			.then(function(items) {
+			.then(function (items) {
 				me.itemSelectionCmp.setSelectionItems(items);
 			});
 	},
 
-	getSelectionFromRecord: function(record) {
+	getSelectionFromRecord: function (record) {
 		return this.bundle.getAssignments()
-			.then(function(assignments) {
+			.then(function (assignments) {
 				return assignments.findItem(record.get('Target-NTIID'));
 			});
 	},
 
-	getSelection: function() {
+	getSelection: function () {
 		var getAssignment,
 			record = this.record;
 
@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return getAssignment;
 	},
 
-	showItemEditor: function() {
+	showItemEditor: function () {
 		if (this.itemEditorCmp) {
 			this.itemEditorCmp.destroy();
 			delete this.itemEditorCmp;
@@ -141,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		me.getSelection()
-			.then(function(selection) {
+			.then(function (selection) {
 				me.itemEditorCmp = me.add({
 					xtype: me.EDITOR_XTYPE,
 					record: me.record,
@@ -159,13 +159,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				me.maybeEnableBack(me.backToList);
 				me.setSaveText(me.record ? 'Save' : 'Add to Lesson');
 			})
-			.then(function() {
+			.then(function () {
 				if (me.itemSelectionCmp) {
 					me.itemSelectionCmp.destroy();
 					delete me.itemSelectionCmp;
 				}
 			})
-			.always(function() {
+			.always(function () {
 				delete me.loading;
 				if (me.rendered) {
 					me.el.unmask('Loading...');
@@ -173,7 +173,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-	onItemListSelectionChange: function(selection) {
+	onItemListSelectionChange: function (selection) {
 		var length = selection.length;
 
 		this.setSaveText('Select');
@@ -185,13 +185,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onSaveFailure: function(reason) {
+	onSaveFailure: function (reason) {
 		if (reason === this.SWITCHED) { return; }
 
 		this.callParent(arguments);
 	},
 
-	onSave: function() {
+	onSave: function () {
 		var me = this;
 
 		if (!me.itemEditorCmp) {
@@ -201,7 +201,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.disableSubmission();
 		return me.itemEditorCmp.onSave()
-			.fail(function(reason) {
+			.fail(function (reason) {
 				me.enableSubmission();
 				return Promise.reject(reason);
 			});

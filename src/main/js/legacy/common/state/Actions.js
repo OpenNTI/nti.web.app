@@ -8,7 +8,7 @@ var StateStateStore = require('./StateStore');
 module.exports = exports = Ext.define('NextThought.common.state.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.LoginStore = NextThought.login.StateStore.getInstance();
@@ -23,13 +23,13 @@ module.exports = exports = Ext.define('NextThought.common.state.Actions', {
 		}
 	},
 
-	onLogin: function() {
+	onLogin: function () {
 		var user = $AppConfig.username;
 
 		this.StateStore.setStateKey(B64.encode($AppConfig.username));
 	},
 
-	setState: function(key, state) {
+	setState: function (key, state) {
 		this.StateStore.setState(key, state);
 	}
 });

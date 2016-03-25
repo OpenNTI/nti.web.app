@@ -9,7 +9,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-contentnode',
 
 	statics: {
-		getSupported: function() {
+		getSupported: function () {
 			return NextThought.model.courses.navigation.CourseOutlineContentNode.mimeType;
 		}
 	},

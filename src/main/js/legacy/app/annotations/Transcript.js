@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Transcript', 
 	alias: ['widget.transcript', 'widget.transcriptsummary'],
 
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 	}
 });

@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.common.StateStore', {
 		 *
 		 * @return {Object} an instance of this state store
 		 */
-		getInstance: function() {
+		getInstance: function () {
 			if (!this.__instance) {
 				this.__instance = this.create();
 			}
@@ -26,29 +26,29 @@ module.exports = exports = Ext.define('NextThought.common.StateStore', {
 	},
 
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 
 		this.mixins.observable.constructor.call(this, config);
 	},
 
 
-	isLoading: function() {
+	isLoading: function () {
 		return this.loading;
 	},
 
 
-	hasLoaded: function() {
+	hasLoaded: function () {
 		return this.hasFinishedLoad;
 	},
 
 
-	setLoading: function() {
+	setLoading: function () {
 		this.loading = true;
 	},
 
 
-	setLoaded: function() {
+	setLoaded: function () {
 		this.loading = false;
 		this.hasFinishedLoad = true;
 		this.fireEvent('loaded');
@@ -59,14 +59,14 @@ module.exports = exports = Ext.define('NextThought.common.StateStore', {
 	 * make sure setLoaded is called at some point if you use this
 	 * @return {Promise} fulfills once setLoaded has been called
 	 */
-	onceLoaded: function() {
+	onceLoaded: function () {
 		if (this.hasLoaded()) {
 			return Promise.resolve(this);
 		}
 
 		var me = this;
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			me.on({
 				single: true,
 				'loaded': fulfill.bind(null, me)

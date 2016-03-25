@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
 	 * @param {String} config.url - the url of the batch
 	 * @param {Object} config.params - the params to send
 	 */
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 
 		if (!config.url) {
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
 	 * @param  {String} params - params to send back
 	 * @return {Promise} - fulfills with the response from the server
 	 */
-	__loadBatch: function(url, params) {
+	__loadBatch: function (url, params) {
 		if (!url) {
 			return Promise.resolve({
 				href: 'Bad Batch',
@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
 		return StoreUtils.loadBatch(url, params);
 	},
 
-	getBatch: function(force) {
+	getBatch: function (force) {
 		var me = this,
 			url = me.getUrl(),
 			params = me.getParams();
@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
 		}
 
 		return me.__load
-			.then(function(batch) {
+			.then(function (batch) {
 				var next = Service.getLinkFrom(batch.Links || [], 'batch-next'),
 					prev = Service.getLinkFrom(batch.Links || [], 'batch-prev');
 
@@ -89,16 +89,16 @@ module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
 			});
 	},
 
-	getItems: function(force) {
+	getItems: function (force) {
 		var me = this;
 
 		return me.getBatch(force)
-			.then(function(batch) {
+			.then(function (batch) {
 				return batch.Items;
 			});
 	},
 
-	getParams: function() {
+	getParams: function () {
 		var params = this.params;
 
 		params = params || {};
@@ -106,34 +106,34 @@ module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
 		return params;
 	},
 
-	getUrl: function() {
+	getUrl: function () {
 		return this.url;
 	},
 
-	getNextConfig: function(current) {
+	getNextConfig: function (current) {
 		var link = Service.getLinkFrom(current.Links || [], 'batch-next');
 
 		return link && {url: link};
 	},
 
-	getPreviousConfig: function(current) {
+	getPreviousConfig: function (current) {
 		var link = Service.getLinkFrom(current.Links || [], 'batch-previous');
 
 		return link && {url: link};
 	},
 
-	__buildBatch: function(config) {
+	__buildBatch: function (config) {
 		config.getNextConfig = this.getNextConfig;
 		config.getPreviousConfig = this.getPreviousConfig;
 
 		return NextThought.store.BatchInterface.create(config);
 	},
 
-	getNextBatch: function() {
+	getNextBatch: function () {
 		var me = this;
 
 		return me.getBatch()
-			.then(function(batch) {
+			.then(function (batch) {
 				var config = me.getNextConfig(batch);
 
 				if (!config) {
@@ -146,11 +146,11 @@ module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
 			});
 	},
 
-	getPreviousBatch: function() {
+	getPreviousBatch: function () {
 		var me = this;
 
 		return me.getBatch()
-			.then(function(batch) {
+			.then(function (batch) {
 				var config = me.getPreviousConfig(batch);
 
 				if (!config) {

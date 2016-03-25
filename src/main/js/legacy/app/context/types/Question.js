@@ -9,12 +9,12 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Question', 
 	statics: {
 		type: 'question',
 
-		canHandle: function(obj) {
+		canHandle: function (obj) {
 			return obj instanceof NextThought.model.assessment.Question;
 		}
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 
 		this.container = config.container;
@@ -26,24 +26,24 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Question', 
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
-	parse: function(question, kind) {
+	parse: function (question, kind) {
 		var me = this,
 			container = question.get('ContainerId');
 
 		return Service.getPageInfo(container)
-			.then(function(pageInfo) {
+			.then(function (pageInfo) {
 				var contentPackage = pageInfo.get('ContentPackageNTIID');
 
 				return me.LibraryActions.findContentPackage(contentPackage);
 			})
-			.then(function(contentPackage) {
+			.then(function (contentPackage) {
 				question.set('ContentRoot', contentPackage.get('root'));
 
 				return me.__parseQuestion(question, kind);
 			});
 	},
 
-	__parseQuestion: function(question, kind) {
+	__parseQuestion: function (question, kind) {
 		var cmp;
 
 		if (kind === 'card') {

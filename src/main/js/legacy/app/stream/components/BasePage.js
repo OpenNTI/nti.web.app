@@ -9,14 +9,14 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.BasePag
 	inheritableStatics: {
 		MIME_TO_CMP: {},
 
-		registerItem: function(mimeTypes, cmp) {
+		registerItem: function (mimeTypes, cmp) {
 			if (!Array.isArray(mimeTypes)) {
 				mimeTypes = [mimeTypes];
 			}
 
 			var me = this;
 
-			mimeTypes.forEach(function(mimeType) {
+			mimeTypes.forEach(function (mimeType) {
 				me.MIME_TO_CMP[mimeType] = cmp;
 			});
 		}
@@ -25,7 +25,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.BasePag
 	layout: 'none',
 
 
-	unwrapRecord: function(record) {
+	unwrapRecord: function (record) {
 		if (this.ISCHANGE.test(record.get('MimeType'))) {
 			return record.getItem();
 		}
@@ -34,7 +34,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.BasePag
 	},
 
 
-	getForMimeType: function(mimeType) {
+	getForMimeType: function (mimeType) {
 		return this.self.MIME_TO_CMP[mimeType];
 	}
 });

@@ -53,37 +53,37 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.PencilO
 		]
 	}],
 
-	constructor: function() {
+	constructor: function () {
 		this.items = Ext.clone(this.items);//copy onto instance from prototype
 		this.items[0].defaults.toggleGroup += guidGenerator();
 		this.items[1].defaults.toggleGroup += guidGenerator();
 		this.callParent(arguments);
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.addEvents({ 'wb-options-change': true });
 		this.enableBubble(['wb-options-change']);
 		this.callParent(arguments);
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		var me = this;
 		me.callParent(arguments);
 
-		Ext.each(me.query('button'), function(i) {
+		Ext.each(me.query('button'), function (i) {
 			me.mon(i.el, {
-				click: function() {
+				click: function () {
 					me.fireEvent('wb-options-change', me);
 				}
 			});
 		});
 	},
 
-	getToolType: function() {
+	getToolType: function () {
 		return 'pencil';
 	},
 
-	setOptions: function(options) {
+	setOptions: function (options) {
 		if (options.stroke) {
 			this.down('[stroke=' + options.stroke + ']').toggle(true);
 		}
@@ -95,11 +95,11 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.PencilO
 		}
 	},
 
-	getOptions: function() {
+	getOptions: function () {
 		var pressed = this.query('button[pressed]'),
 			stroke, strokeWidth;
 
-		Ext.each(pressed, function(b) {
+		Ext.each(pressed, function (b) {
 			if (b.strokeWidth) {
 				strokeWidth = b.strokeWidth;
 			}

@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	extend: 'NextThought.app.course.overview.components.editing.content.Editor',
 
 	inheritableStatics: {
-		getHandledMimeTypes: function() {
+		getHandledMimeTypes: function () {
 			return [
 				NextThought.model.RelatedWork.mimeType
 			];
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	cls: 'content-editor content-link',
 
-	getFormSchema: function() {
+	getFormSchema: function () {
 		var schema = [
 				{name: 'MimeType', type: 'hidden'},
 				{type: 'group', name: 'card', inputs: [
@@ -38,12 +38,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					]},
 					{type: 'saveprogress'}
 				]}
-			];
+		];
 
 		return schema;
 	},
 
-	getDefaultValues: function() {
+	getDefaultValues: function () {
 		if (this.record) {
 			return this.record.isModel && this.record.getData();
 		}
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-	showEditor: function() {
+	showEditor: function () {
 		this.callParent(arguments);
 
 		if (Service.canDoAdvancedEditing()) {
@@ -61,14 +61,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	addAdvancedDisclosure: function() {
+	addAdvancedDisclosure: function () {
 		var visibility = this.record && this.record.get('visibility'),
 			me = this;
 
 		if (this.visibilityCmp) { return; }
 
 		this.getSchema()
-			.then(function(schema) {
+			.then(function (schema) {
 				me.visibilityCmp = me.add({
 					xtype: 'overview-editing-controls-advanced-settings',
 					record: me.record,
@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
-	onVisibilityChange: function(cmp) {
+	onVisibilityChange: function (cmp) {
 		var value = cmp && cmp.getValue();
 
 		console.log('changed visibility to: ', value.visibility);

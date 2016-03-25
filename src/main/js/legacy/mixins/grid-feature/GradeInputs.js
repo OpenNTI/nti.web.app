@@ -6,12 +6,12 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 	__inputSelector: '.score input',
 
 
-	__getGridView: function() {
+	__getGridView: function () {
 		return this.view;
 	},
 
 
-	monitorSubTree: function() {
+	monitorSubTree: function () {
 		var MutationObserver = window.MutationObserver || window.WebKitMutationObserver,
 			observer, view = this.__getGridView();
 
@@ -33,15 +33,15 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 	},
 
 
-	bindInputs: function() {
-		function stop(e) { e.stopPropagation(); }
+	bindInputs: function () {
+		function stop (e) { e.stopPropagation(); }
 		var mons = {
-					destroyable: true,
-					blur: 'onInputBlur',
-					focus: 'onInputFocus',
-					keypress: 'onInputKeyPress',
-					keydown: 'onInputKeyPress'
-				},
+				destroyable: true,
+				blur: 'onInputBlur',
+				focus: 'onInputFocus',
+				keypress: 'onInputKeyPress',
+				keydown: 'onInputKeyPress'
+			},
 			inputs = this.__getGridView().getEl().select(this.__inputSelector);
 
 		Ext.destroy(this.gridInputListeners);
@@ -63,14 +63,14 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 	},
 
 
-	getRecordFromEvent: function(e) {
+	getRecordFromEvent: function (e) {
 		var v = this.__getGridView(),
 			n = e.getTarget(v.itemSelector);
 		return v.getRecord(n);
 	},
 
 
-	onViewScroll: function() {
+	onViewScroll: function () {
 		if (!this.currentFocused) { return; }
 
 		var input = this.currentFocused,
@@ -85,7 +85,7 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 	},
 
 
-	onInputBlur: function(e, dom) {
+	onInputBlur: function (e, dom) {
 		var record = this.getRecordFromEvent(e),
 			value = Ext.fly(dom).getValue();
 
@@ -98,13 +98,13 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 	},
 
 
-	onInputFocusIE: function(e) {
+	onInputFocusIE: function (e) {
 		e.stopPropagation();
 		this.onInputFocus.apply(this, arguments);
 	},
 
 
-	onInputFocus: function(e, el) {
+	onInputFocus: function (e, el) {
 		var v = el.value,
 			len = (v && v.length) || 0;
 
@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 	},
 
 
-	onInputKeyPress: function(e) {
+	onInputKeyPress: function (e) {
 		var newInput, key = e.getKey(), direction = 'next';
 		if (key === e.ENTER || key === e.DOWN || key === e.UP) {
 			e.stopEvent();
@@ -130,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 	},
 
 
-	getSiblingInput: function(e, direction) {
+	getSiblingInput: function (e, direction) {
 		var current = e.getTarget(this.__getGridView().itemSelector);
 		if (current) {
 			current = Ext.fly(current[direction + 'Sibling']);
@@ -139,12 +139,12 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 	},
 
 
-	getHistoryItemFromRecord: function(record) {
+	getHistoryItemFromRecord: function (record) {
 		return record;
 	},
 
 
-	editGrade: function(record, value) {
+	editGrade: function (record, value) {
 		var me = this,
 			view = me.__getGridView(), store = me.store,
 			historyItem = me.getHistoryItemFromRecord(record),
@@ -166,7 +166,7 @@ module.exports = exports = Ext.define('NextThought.mixins.grid-feature.GradeInpu
 			me.beforeEdit();
 		}
 
-		save.always(function() {
+		save.always(function () {
 			var n = view.getNode(record);//get the node fresh since it may have changed
 
 			console.log(node);

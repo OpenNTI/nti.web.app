@@ -7,7 +7,7 @@ var CourseStateStore = require('../../../../StateStore');
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.admin.email.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	sendEmail: function(record, postURL, scope) {
+	sendEmail: function (record, postURL, scope) {
 		var me = this, 
 			data = record && record.asJSON(),
 			params = {};
@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			params['replyToScope'] = record.get('replyScope');
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			Ext.Ajax.request({
 				url: postURL,
 				scope: this,
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				headers: {
 					Accept: 'application/json'
 				},
-				callback: function(q, success, r) {
+				callback: function (q, success, r) {
 					if (!success) {
 						reject({field: 'Email', message: 'There was an error sending your email.'});
 					}
@@ -65,6 +65,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					}
 				}
 			});
-		})
+		});
 	}
 });

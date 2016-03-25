@@ -17,13 +17,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 	]),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		this.setEntity(this.entity);
 	},
 
 
-	setEntity: function(entity){
+	setEntity: function (entity) {
 		var rd = this.renderData = Ext.apply(this.renderData || {}, entity && entity.getData());
 
 		// Update the entity if it's different. This method can be used to update an existing cmp.

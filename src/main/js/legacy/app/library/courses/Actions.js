@@ -13,7 +13,7 @@ var {getURL} = require('legacy/util/Globals');
 module.exports = exports = Ext.define('NextThought.app.library.courses.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
@@ -24,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 	 * @param  {Service} s the service doc to get the links from
 	 * @return {Promise}   fulfills when all the courses have been loaded
 	 */
-	loadCourses: function(s) {
+	loadCourses: function (s) {
 		var store = this.CourseStore;
 
 		if (!s) {
@@ -46,30 +46,30 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 	 * @param  {Array} items items to iterate
 	 * @return {Promise}	   fulfills when all of the items precaches have finished
 	 */
-	__precacheItems: function(items) {
+	__precacheItems: function (items) {
 		var precache;
 
-		precache = items.map(function(item) {
+		precache = items.map(function (item) {
 			if (item.__precacheEntry) {
 				return item.__precacheEntry()
 					//if its successful fulfill with the course enrollment
-					.then(function() { return item})
+					.then(function () { return item;})
 					//otherwise fulfill with null so it can be filtered out
-					.fail(function() { return null});
+					.fail(function () { return null;});
 			}
 
 			return Promise.resolve(null);
 		});
 
 		return Promise.all(precache)
-				.then(function(results) {
-					return results.filter(function(r) {
+				.then(function (results) {
+					return results.filter(function (r) {
 						return !!r;
 					});
 				});
 	},
 
-	setUpAdministeredCourses: function(link) {
+	setUpAdministeredCourses: function (link) {
 		if (!link) {
 			this.CourseStore.setAdministeredCourses([]);
 
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 			.then(this.CourseStore.setAdministeredCourses.bind(this.CourseStore));
 	},
 
-	setUpEnrolledCourses: function(link) {
+	setUpEnrolledCourses: function (link) {
 		if (!link) {
 			this.CourseStore.setEnrolledCourses([]);
 
@@ -93,11 +93,11 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 			.then(this.CourseStore.setEnrolledCourses.bind(this.CourseStore));
 	},
 
-	setUpAllCourses: function(link) {
+	setUpAllCourses: function (link) {
 		this.CourseStore.setAllCoursesLink(link);
 	},
 
-	loadAllCourses: function() {
+	loadAllCourses: function () {
 		var link = this.CourseStore.getAllCoursesLink();
 
 		if (!link) { return Promise.resolve(); }
@@ -106,17 +106,17 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 			.then(this.CourseStore.setAllCourses.bind(this.CourseStore));
 	},
 
-	findCourseInstance: function(id) {
+	findCourseInstance: function (id) {
 		return this.CourseStore.onceLoaded()
 			.then(this.CourseStore.findCourseInstance.bind(this.CourseStore, id));
 	},
 
-	findCourseByPriority: function(fn) {
+	findCourseByPriority: function (fn) {
 		return this.CourseStore.onceLoaded()
 			.then(this.CourseStore.findCourseInstanceByPriority.bind(this.CourseStore, fn));
 	},
 
-	findForNTIID: function(id) {
+	findForNTIID: function (id) {
 		return this.CourseStore.onceLoaded()
 			.then(this.CourseStore.findForNTIID.bind(this.CourseStore, id));
 	}

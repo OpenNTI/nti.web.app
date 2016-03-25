@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	]),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 	}
 });

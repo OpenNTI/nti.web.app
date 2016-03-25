@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 	PREPEND_INDEX: 0,
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.groups = {};
@@ -28,7 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		});
 	},
 
-	onActivate: function() {
+	onActivate: function () {
 		this.storeListeners = this.mon(this.NotificationsStore, {
 			destroyable: true,
 			'record-added': this.addRecord.bind(this, true),
@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 			.then(this.loadBatch.bind(this));
 	},
 
-	onDeactivate: function() {
+	onDeactivate: function () {
 		var container = this.getGroupContainer(),
 			group = container && container.down('notification-group');
 
@@ -57,11 +57,11 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		this.groups = {};
 	},
 
-	getGroupContainer: function() {
+	getGroupContainer: function () {
 		return this;
 	},
 
-	addRecord: function(prepend, record) {
+	addRecord: function (prepend, record) {
 		var groupValue = record.get('GroupingField'),
 			groupName = groupValue.getTime(),
 			group = this.groups[groupName];
@@ -81,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		}
 	},
 
-	deleteRecord: function(record) {
+	deleteRecord: function (record) {
 		var groupValue = record.get('GroupingField'),
 			groupName = groupValue.getTime(),
 			group = this.groups[groupName];
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		}
 	},
 
-	loadBatch: function(batch) {
+	loadBatch: function (batch) {
 		this.currentBatch = batch;
 
 		this.addMask();
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 			.always(this.removeMask.bind(this));
 	},
 
-	fillInItems: function(items) {
+	fillInItems: function (items) {
 		if (items.length < this.currentBatch.batchSize) {
 			this.isLastBatch = true;
 		}
@@ -113,9 +113,9 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		this.maybeShowMoreItems();
 	},
 
-	maybeShowMoreItems: function() {},
+	maybeShowMoreItems: function () {},
 
-	addGroup: function(groupName, group, prepend) {
+	addGroup: function (groupName, group, prepend) {
 		var cmp,
 			container = this.getGroupContainer(),
 			config = {
@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		return this.groups[groupName];
 	},
 
-	addMask: function() {
+	addMask: function () {
 		var container = this.getGroupContainer();
 
 		if (!this.loadingCmp) {
@@ -151,7 +151,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		}
 	},
 
-	removeMask: function() {
+	removeMask: function () {
 		var container = this.getGroupContainer();
 
 		if (this.loadingCmp) {
@@ -160,5 +160,5 @@ module.exports = exports = Ext.define('NextThought.app.notifications.components.
 		}
 	},
 
-	navigateToItem: function() {}
+	navigateToItem: function () {}
 });

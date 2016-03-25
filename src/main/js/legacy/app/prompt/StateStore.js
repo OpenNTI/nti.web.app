@@ -8,13 +8,13 @@ module.exports = exports = Ext.define('NextThought.app.prompt.StateStore', {
 	statics: {
 		TYPE_TO_CMP: {},
 
-		register: function(type, cmp) {
+		register: function (type, cmp) {
 			this.TYPE_TO_CMP[type] = cmp;
 		}
 	},
 
 
-	getPromptCmp: function(type) {
+	getPromptCmp: function (type) {
 		//TODO: Create a basic prompt cmp to fall back to, similar to the native prompt
 		var cmp = this.self.TYPE_TO_CMP[type];
 
@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.StateStore', {
 	},
 
 
-	openPrompt: function(type, data) {
+	openPrompt: function (type, data) {
 		var me = this,
 			cmp = me.getPromptCmp(type);
 
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.StateStore', {
 			return Promise.reject('No cmp to prompt for type: ', type);
 		}
 
-		return new Promise(function(fulfill, reject) {
+		return new Promise(function (fulfill, reject) {
 			me.fireEvent('open-prompt', cmp, type, fulfill, reject, data);
 		});
 	}

@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		'application/vnd.nextthought.assessment.assignmentsubmission': 'addStudentSubmission'
 	},
 
-	setAssignmentsData: function() {
+	setAssignmentsData: function () {
 		var me = this;
 		me.callParent(arguments);
 
@@ -33,21 +33,21 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return me.loadPage();
 	},
 
-	onLoadMore: function() {
+	onLoadMore: function () {
 		this.loadPage();
 	},
 
-	mask: function() {
+	mask: function () {
 		if (!this.rendered) {return;}
 		this.callParent(arguments);
 	},
 
-	unmask: function() {
+	unmask: function () {
 		if (!this.rendered || this.isDestroyed) {return;}
 		this.callParent(arguments);
 	},
 
-	setMoreLinkState: function(state) {
+	setMoreLinkState: function (state) {
 		if (!this.rendered) {
 			this.on({afterrender: this.setMoreLinkState.bind(this, state), single: true});
 			return;
@@ -55,10 +55,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		this.loadMoreLink[state ? 'removeCls' : 'addCls']('hidden');
 	},
 
-	loadPage: function() {
+	loadPage: function () {
 		var me = this;
 		me.mask();
-		return Service.request(me.nextPageURL).done(function(json) {
+		return Service.request(me.nextPageURL).done(function (json) {
 			if (me.isDestroyed) {return;}
 
 			json = Ext.decode(json, true);
@@ -72,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			me.setMoreLinkState(!!me.nextPageURL);
 
 			me.store.suspendEvents();
-			activity.get('Items').forEach(function(o) {
+			activity.get('Items').forEach(function (o) {
 				var m = me.MIME_TYPE_MAP[o.get('MimeType')];
 				if (!m) {
 					console.warn('Unhandled event type', o.get('MimeType'));
@@ -94,23 +94,23 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	deriveEvents: Ext.emptyFn,
 
-	addFeedback: function(f) {
+	addFeedback: function (f) {
 		var rec = this.callParent(arguments),
 			path = (f.get('href') || '').split('/').slice(0, -2).join('/');//EWWW... url nastyness
 
 		if (rec && isMe(rec.get('user'))) {
-			Service.request(path).done(function(submission) {
+			Service.request(path).done(function (submission) {
 				submission = ParseUtils.parseItems(submission)[0];
 				var user = submission.get('Creator');
 				rec.set('user', user);
 
 				return UserRepository.getUser(submission.get('Creator'));
 
-			}).then(function(u) {
+			}).then(function (u) {
 
 				rec.set('suffix', ' for ' + u);
 
-			}).fail(function(r) {
+			}).fail(function (r) {
 				console.error(
 					'Failed associate instructor feedback activity to a students assignment.',
 					' Clicking on this feedback item will just take you to the assignment overview of all students, not a particular one, because:\n',
@@ -121,12 +121,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		return rec;
 	},
 
-	addStudentSubmission: function(s) {
+	addStudentSubmission: function (s) {
 		var c = s.get('Creator'),
 			str = ' submitted',
 			r = this.addEvent(this.getEventConfig('--' + str, s.get('assignmentId'), s.get('CreatedTime')));
 		if (r) {
-			UserRepository.getUser(c).done(function(u) {
+			UserRepository.getUser(c).done(function (u) {
 				r.set({
 					label: u + str,
 					user: u
@@ -135,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		}
 	},
 
-	goToAssignment: function(s, record) {
+	goToAssignment: function (s, record) {
 		var user = record.get('user'),
 			userId,
 			me = this,
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			assignmentId = assignment.getId();
 
 		UserRepository.getUser(user)
-			.then(function(userObj){
+			.then(function (userObj) {
 				userId = userObj.getURLPart();
 
 				assignmentId = ParseUtils.encodeForURI(assignmentId);
@@ -159,8 +159,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					user: user
 				});
 			})
-			.fail(function(reason){
-				console.log("Couldn't get user because " + reason);
+			.fail(function (reason) {
+				console.log('Couldn\'t get user because ' + reason);
 			});
 	}
 });

@@ -11,7 +11,7 @@ var ModelChange = require('../../model/Change');
 module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.NotificationsStore = NextThought.app.notifications.StateStore.getInstance();
@@ -27,11 +27,11 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 		}
 	},
 
-	doLogin: function() {
+	doLogin: function () {
 		var store = this.NotificationsStore;
 
 		Service.getPageInfo(Globals.CONTENT_ROOT)
-			.then(function(pageInfo) {
+			.then(function (pageInfo) {
 				var url = pageInfo.getLink(Globals.MESSAGE_INBOX),
 					lastViewed = new Date(0);
 
@@ -41,25 +41,25 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 				}
 
 				Service.request(url + '/lastViewed')
-					.then(function(_lastViewed) {
+					.then(function (_lastViewed) {
 						//we get this back in seconds so convert it to millis
 						lastViewed = new Date(parseFloat(_lastViewed) * 1000);
 					})
-					.fail(function() {
+					.fail(function () {
 						console.warn('Could not resolve notifications lastViewed');
 					})
-					.always(function() {
+					.always(function () {
 						store.buildStore(url, lastViewed);
 					});
-			}, function() {
+			}, function () {
 				console.error('Could not setup notifications!');
 			});
 	},
 
-	incomingChange: function(change) {
+	incomingChange: function (change) {
 		var me = this;
 
-		this.NotificationsStore.getStore().then(function(store) {
+		this.NotificationsStore.getStore().then(function (store) {
 			if (!store) { return; }
 			if (!change.isModel) {
 				 change = ParseUtils.parseItems([change])[0];

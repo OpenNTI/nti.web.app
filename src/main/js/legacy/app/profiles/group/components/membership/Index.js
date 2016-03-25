@@ -21,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		{xtype: 'profile-group-membership-users'}
 	],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.initRouter();
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		});
 	},
 
-	startResourceViewed: function() {
+	startResourceViewed: function () {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && !this.hasCurrentTimer) {
@@ -52,7 +52,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		}
 	},
 
-	stopResourceViewed: function() {
+	stopResourceViewed: function () {
 		var id = this.activeUser && this.activeUser.getId();
 
 		if (id && this.hasCurrentTimer) {
@@ -61,7 +61,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		}
 	},
 
-	userChanged: function(user, isMe) {
+	userChanged: function (user, isMe) {
 		if (this.activeUser !== user) {
 			this.stopResourceViewed();
 		}
@@ -71,12 +71,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 		this.startResourceViewed();
 
 		return Promise.all([
-				this.membershipCmp.setUser(user, isMe),
-				this.adminCmp.setUser(user, isMe)
-			]);
+			this.membershipCmp.setUser(user, isMe),
+			this.adminCmp.setUser(user, isMe)
+		]);
 	},
 
-	onRoute: function() {
+	onRoute: function () {
 		this.setTitle('Members');
 	}
 });

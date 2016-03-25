@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	layout: 'none',
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		var record = this.Prompt.data.record,
@@ -27,11 +27,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	showUnkownTypeError: function() {
+	showUnkownTypeError: function () {
 		//TODO: fill this out
 	},
 
-	editRecord: function(record, parentRecord, rootRecord, bundle) {
+	editRecord: function (record, parentRecord, rootRecord, bundle) {
 		var Outline = NextThought.app.course.overview.components.editing.outline.Prompt,
 			Contents = NextThought.app.course.overview.components.editing.content.Prompt,
 			config = {
@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	addRecord: function(parentRecord, rootRecord, bundle) {
+	addRecord: function (parentRecord, rootRecord, bundle) {
 		var Outline = NextThought.app.course.overview.components.editing.outline.Prompt,
 			Contents = NextThought.app.course.overview.components.editing.content.Prompt,
 			config = {
@@ -74,13 +74,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	onBack: function() {
+	onBack: function () {
 		if (this.editor && this.editor.onBack) {
 			this.editor.onBack();
 		}
 	},
 
-	doValidation: function() {
+	doValidation: function () {
 		if (this.editor && this.editor.doValidation) {
 			return this.editor.doValidation();
 		}
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Promise.resolve();
 	},
 
-	onSaveFailure: function(reason) {
+	onSaveFailure: function (reason) {
 		if (this.editor && this.editor.onSaveFailure) {
 			return this.editor.onSaveFailure(reason);
 		}
@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Promise.reject('Nothing to handle failure');
 	},
 
-	onSave: function() {
+	onSave: function () {
 		if (this.editor && this.editor.onSave) {
 			return this.editor.onSave();
 		}
@@ -104,14 +104,14 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Promise.reject('Nothing to submit.');
 	},
 
-	allowCancel: function() {
+	allowCancel: function () {
 		if (this.editor && this.editor.allowCancel) {
 			return this.editor.allowCancel();
 		}
 
 		return Promise.resolve();
 	}
-}, function() {
+}, function () {
 	NextThought.app.prompt.StateStore.register('overview-editing', this);
 	NextThought.app.prompt.StateStore.register('overview-creation', this);
 });

@@ -9,21 +9,21 @@ var Ext = require('extjs');
  * To attach delegate(s) to a component set the `delegate` config property to be either 'inherit' or a selector of the
  * component that will be delegated to. (It can also be an array if different components care about different aspects)
  */
-module.exports = exports = Ext.define('NextThought.mixins.Delegation', function() {
+module.exports = exports = Ext.define('NextThought.mixins.Delegation', function () {
 	var debug = $AppConfig.debugDelegation;
 
 	/** @private */
-	function getInheritedDelegates(cmp) {
+	function getInheritedDelegates (cmp) {
 		var ancestor = cmp.up('[delegate]:not([delegate="inherit"])');
 		return ancestor && ancestor.delegate;
 	}
 
 	/** @private */
-	function askDelegate(cmp,fn,applyAll,args) {
+	function askDelegate (cmp,fn,applyAll,args) {
 		var result = null,
 			found = false;
 
-		function getAgent(o,fn) {
+		function getAgent (o,fn) {
 			return (o.deletgationAgent || {})[fn] || o[fn];
 		}
 
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Delegation', function(
 		}
 
 		try {
-			Ext.each(cmp.delegate, function(v,i,a) {
+			Ext.each(cmp.delegate, function (v,i,a) {
 				var f, c, CQ = Ext.ComponentQuery;
 				if (Ext.isString(v)) {
 					c = CQ.query(v, cmp.up()).first();
@@ -77,11 +77,11 @@ module.exports = exports = Ext.define('NextThought.mixins.Delegation', function(
 	}
 
 	/** @private */
-	function setupDelegates(cmp) {
+	function setupDelegates (cmp) {
 		var k, v;
 
-		function makeDelegate(k,fn,o) {
-			return function() {
+		function makeDelegate (k,fn,o) {
+			return function () {
 				if (debug) { console.debug('delegating...' + k); }
 				var v = askDelegate.apply(o, [o, k, fn.applyAll, arguments]);
 				if (v === Factory.PREVENT_DEFAULT) {return undefined;}
@@ -102,13 +102,13 @@ module.exports = exports = Ext.define('NextThought.mixins.Delegation', function(
 
 
 	return {
-		initDelegation: function() {
+		initDelegation: function () {
 			if (!this.delegate) { return; }
 			setupDelegates(this);
 		},
 
 
-		registerDelegationTarget: function(delegate,targetFn) {
+		registerDelegationTarget: function (delegate,targetFn) {
 			var o = {};
 			if (Ext.isString(delegate)) {
 				o[delegate] = Ext.isString(targetFn) ? this[targetFn] : Ext.isFunction(targetFn) ? targetFn : null;
@@ -142,8 +142,8 @@ var Factory = Ext.define('NextThought.mixins.Delegation.Factory', {
 	 *
 	 * @return {Function} The delegated function.
 	 */
-	getDelegated: function(fn,applyAll) {
-		fn = fn || function() {};
+	getDelegated: function (fn,applyAll) {
+		fn = fn || function () {};
 		fn.delegated = true;
 		fn.applyAll = Boolean(applyAll);
 		return fn;

@@ -4,7 +4,7 @@ var Ext = require('extjs');
 module.exports = exports = Ext.define('NextThought.util.Rects', {
 
 
-	getFirstNonBoundingRect: function(ra) {
+	getFirstNonBoundingRect: function (ra) {
 		var range = ra.nativeRange || ra,
 			bound = range.getBoundingClientRect(),
 			rects = Array.prototype.slice.call(range.getClientRects()) || [],
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.util.Rects', {
 	},
 
 
-	merge: function(rects,clientWidth) {
+	merge: function (rects,clientWidth) {
 		var i = rects.length - 1,
 			lineHeight,
 			heights = [17, 24]; //Sane default values for small highlights
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.util.Rects', {
 			}
 		}
 
-		heights.sort(function(a,b) { return a - b; });
+		heights.sort(function (a,b) { return a - b; });
 		//Take the 33rd percentile of nonzero highlights; this seems to
 		//be a fairly good heuristic for the line height
 		lineHeight = heights[Math.floor(heights.length / 3)];
@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.util.Rects', {
 				bins[b + 1] = r.length;
 			}
 			else {
-		b = r[(bins[b] || bins[b + 1]) - 1];
+				b = r[(bins[b] || bins[b + 1]) - 1];
 				b.left = b.left < x ? b.left : x;
 				b.top = b.top < y ? b.top : y;
 				b.right = b.right > xx ? b.right : xx;
@@ -91,16 +91,16 @@ module.exports = exports = Ext.define('NextThought.util.Rects', {
 	},
 
 
-	trimCrazies: function(rects, lineHeight, clientWidth) {
-		function flip(a,i) { return Ext.apply({},a[i]); }
+	trimCrazies: function (rects, lineHeight, clientWidth) {
+		function flip (a,i) { return Ext.apply({},a[i]); }
 
-		function notTooShort(h) {
+		function notTooShort (h) {
 			return !lineHeight || h >= lineHeight;
 		}
-		function notTooTall(h) {
+		function notTooTall (h) {
 			return !lineHeight || h < lineHeight * 1.9;
 		}
-		function isCovered(i) {
+		function isCovered (i) {
 			var j = 0;
 			for (; j < rects.length; j++) {
 				if (rects[j].top > rects[i].top && rects[j].bottom < rects[i].bottom) {
@@ -111,8 +111,8 @@ module.exports = exports = Ext.define('NextThought.util.Rects', {
 		}
 
 		var rs = Array.prototype.slice.call(rects),
-				i = rs.length - 1, out = [], o, h, w,
-				lh2 = lineHeight * 2;
+			i = rs.length - 1, out = [], o, h, w,
+			lh2 = lineHeight * 2;
 
 		if (!i || Ext.isIE || !lineHeight) { return rects; }
 
@@ -130,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.util.Rects', {
 	},
 
 
-	contains: function(refRect, testRect, allowances) {
+	contains: function (refRect, testRect, allowances) {
 		var a = allowances || 0;
 		if (Ext.isNumber(a)) {
 			a = { top: -a, bottom: a, left: -a, right: a };
@@ -148,7 +148,7 @@ module.exports = exports = Ext.define('NextThought.util.Rects', {
 	},
 
 
-	isZeroRect: function(rect) {
+	isZeroRect: function (rect) {
 		if (!rect) {
 			return true;
 		}

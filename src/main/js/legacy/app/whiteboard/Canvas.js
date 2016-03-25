@@ -15,19 +15,19 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 	alias:	'widget.whiteboard-canvas',
 	autoEl: 'canvas',
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 		this.updateData(this.drawData);
 	},
 
-	destroy: function() {
+	destroy: function () {
 		if (this.el) {
 			this.el.removeAllListeners();
 		}
 		this.callParent(arguments);
 	},
 
-	updateData: function(scene) {
+	updateData: function (scene) {
 		this.drawData = this.self.updateData(scene);
 
 		if (scene && scene.viewportRatio) {
@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 		}
 	},
 
-	getData: function() {
+	getData: function () {
 		if (!this.drawData) {
 			return null;
 		}
@@ -61,12 +61,12 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 		return data;
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent();
 		this.mon(this, 'resize', this.hasResized, this);
 	},
 
-	hasResized: function(cmp, width, height) {
+	hasResized: function (cmp, width, height) {
 		height = Math.round(width / (this.viewportRatio || 1));
 
 		this.el.setStyle({
@@ -81,12 +81,12 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 
 		var me = this;
 
-		setTimeout(function() {
+		setTimeout(function () {
 			me.drawScene();
 		},1);
 	},
 
-	drawScene: function(finished) {
+	drawScene: function (finished) {
 		if (!this.drawData) {
 			return;
 		}
@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 
 		var me = this;
 
-		function fin() {
+		function fin () {
 			delete me.drawing;
 			Ext.callback(finished);
 		}
@@ -108,18 +108,18 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 		this.self.drawScene(this.drawData, this.el, fin);
 	},
 
-	makeShape: function(data) {
+	makeShape: function (data) {
 		return this.self.makeShape(data);
 	},
 
-	addShape: function(shape) {
+	addShape: function (shape) {
 		this.drawData.shapeList.unshift(shape);
 	},
 
 	statics: {
 		objectNameRe: (/^Canvas(.+?)Shape$/i),
 
-		updateData: function(scene) {
+		updateData: function (scene) {
 			var shapes, i,
 				drawData = Ext.clone(scene || {shapeList: []});
 
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 		},
 
 
-		makeShape: function(data) {
+		makeShape: function (data) {
 			//reparent shapes
 			var c = (this.objectNameRe.exec(data.Class) || [])[1];
 			if (!c) {
@@ -153,9 +153,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 		},
 
 
-		drawScene: function(data, canvas, finished) {
+		drawScene: function (data, canvas, finished) {
 
-			function draw(x, cb) {
+			function draw (x, cb) {
 				if (x < 0) {
 					if (cb && cb.call) {
 						cb.call(this);
@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 					return;
 				}
 				ctx.save();
-				shapes[x].draw(ctx, function() {
+				shapes[x].draw(ctx, function () {
 					ctx.restore();
 					draw(x - 1, cb);
 				});
@@ -191,9 +191,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 		},
 
 
-		getThumbnail: function(scene, resultCallback) {
+		getThumbnail: function (scene, resultCallback) {
 
-			function finish() {
+			function finish () {
 				var data = Globals.CANVAS_BROKEN_IMAGE.src;
 				try { data = c.dom.toDataURL('image/png'); } catch (er) {swallow(er);}
 				try { c.remove(); }catch (e) { console.warn(Globals.getError(e)); }

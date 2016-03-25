@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	cls: 'nt-button delete',
 	renderTpl: '{name}',
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.PromptActions = NextThought.app.prompt.Actions.create();
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (this.color) {
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.mon(this.el, 'click', this.handleClick.bind(this));
 	},
 
-	handleClick: function(e) {
+	handleClick: function (e) {
 		if (e.getTarget('.disabled') || !this.parentRecord || !this.parentRecord.removeRecord) { return; }
 
 		if (this.beforeDelete) {
@@ -41,8 +41,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			.then(this.doDelete.bind(this));
 	},
 
-	confirm: function() {
-		return new Promise(function(fulfill, reject) {
+	confirm: function () {
+		return new Promise(function (fulfill, reject) {
 			Ext.Msg.show({
 				title: 'Are you sure?',
 				msg: 'Deleted items cannot be recovered.',
@@ -62,20 +62,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
-	doDelete: function() {
+	doDelete: function () {
 		if (this.onDelete) {
 			this.onDelete();
 		}
 
 		if (!this.afterDelete) {
-			this.afterDelete = function() {};
+			this.afterDelete = function () {};
 		}
 
 		this.parentRecord.removeRecord(this.record)
-			.then(function() {
+			.then(function () {
 				return true;
 			})
-			.fail(function(reason) {
+			.fail(function (reason) {
 				console.error('Failed to delete content: ', reason);
 				return false;
 			})

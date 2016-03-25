@@ -5,16 +5,16 @@ module.exports = exports = Ext.define('NextThought.proxy.writer.Json', {
 	extend: 'Ext.data.writer.Json',
 	alias: 'writer.nti',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 	},
 
-	getRecordData: function(obj) {
+	getRecordData: function (obj) {
 		var defaults = this.callParent(arguments),
 			output = {},
 			key;
 
-		function getJSON(obj) {
+		function getJSON (obj) {
 			var a = [];
 			if (obj && Ext.isFunction(obj.asJSON)) {
 				obj = obj.asJSON();
@@ -42,7 +42,7 @@ module.exports = exports = Ext.define('NextThought.proxy.writer.Json', {
 		return output;
 	},
 
-	writeRecords: function(request, data) {
+	writeRecords: function (request, data) {
 		request = this.callParent(arguments);
 
 		//Because of ExtJS bug where jsonData is sent on delete, check to see if we

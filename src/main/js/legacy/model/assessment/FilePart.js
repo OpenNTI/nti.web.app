@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.FilePart', {
 	],
 
 
-	isFileAcceptable: function(file) {
+	isFileAcceptable: function (file) {
 		var name = this.__checkExt(file.name),
 			type = this.__checkMime(file.type),
 			size = this.__checkSize(file.size),
@@ -33,14 +33,14 @@ module.exports = exports = Ext.define('NextThought.model.assessment.FilePart', {
 	},
 
 
-	__getRegExp: function(pattern, regExpFormat) {
+	__getRegExp: function (pattern, regExpFormat) {
 		var o = RegExp.escape(pattern)
 				.replace(/\\\*/g, '[^/]+');
 		return new RegExp(Ext.String.format(regExpFormat || '^{0}$', o));
 	},
 
 
-	__checkMime: function(mime) {
+	__checkMime: function (mime) {
 		var me = this,
 			allowedMimes = this.get('AllowedMimeTypes') || ['*/*'];
 
@@ -48,22 +48,22 @@ module.exports = exports = Ext.define('NextThought.model.assessment.FilePart', {
 			mime = '-/-';
 		}
 
-		return allowedMimes.some(function(o) {
+		return allowedMimes.some(function (o) {
 			return me.__getRegExp(o).test(mime);
 		});
 	},
 
 
-	__checkExt: function(name) {
+	__checkExt: function (name) {
 		var me = this,
 			allowedNames = this.get('AllowedExtentions') || ['*.*'];
-		return allowedNames.some(function(o) {
+		return allowedNames.some(function (o) {
 			return me.__getRegExp(o, '{0}$').test(name);
 		});
 	},
 
 
-	__checkSize: function(size) {
+	__checkSize: function (size) {
 		var max = this.get('MaxFileSize') || Infinity;
 		return size < max && size > 0;
 	}

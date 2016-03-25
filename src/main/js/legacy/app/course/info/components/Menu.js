@@ -29,18 +29,18 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 		menuEl: '.outline-menu'
 	},
 
-	getTargetEl: function() {
+	getTargetEl: function () {
 		return this.menuEl;
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.addMenuItems();
 
 		this.mon(this.menuEl, 'click', this.onClick.bind(this));
 	},
 
-	addMenuItems: function() {
+	addMenuItems: function () {
 		var me = this, items = [],
 			i = ( this.info && this.info.get('Instructors')) || [] ;
 		if (!this.rendered) {
@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 
 		me.itemTpl.append(me.menuEl, {
 			title: getFormattedString('NextThought.view.courseware.info.outline.Menu.courseinstructors', {
-						instructor: Ext.util.Format.plural(i.length, 'Instructor', true)}),
+				instructor: Ext.util.Format.plural(i.length, 'Instructor', true)}),
 			route: '/instructors'
 		});
 
@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 		}
 	},
 
-	setActiveItem: function(route) {
+	setActiveItem: function (route) {
 		var activeItem = this.el && this.el.down('.x-item-selected'),
 			activeItemRoute = activeItem && activeItem.getAttribute('data-route');
 
@@ -95,7 +95,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Me
 	},
 
 
-	onClick: function(e) {
+	onClick: function (e) {
 		var item = e.getTarget('.outline-row');
 
 		if (!item) { return; }

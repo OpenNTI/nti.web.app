@@ -15,7 +15,7 @@ var {getURL} = require('legacy/util/Globals');
 module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.CourseActions = NextThought.app.library.courses.Actions.create();
@@ -36,7 +36,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 		}
 	},
 
-	onLogin: function() {
+	onLogin: function () {
 		var s = window.Service,
 			store = this.LibraryStore,
 			courseStore = this.CourseStore,
@@ -50,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 			this.ContentActions.loadContent(s)
 		])
 		.then(this.deDupContentPackages.bind(this))
-		.then(function() {
+		.then(function () {
 			store.setLoaded();
 			courseStore.setLoaded();
 			contentStore.setLoaded();
@@ -64,21 +64,21 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 	 *
 	 * TODO: needs unit tests
 	 */
-	deDupContentPackages: function() {
+	deDupContentPackages: function () {
 		var courses = this.CourseStore.getEnrolledCourses(),
 			admin = this.CourseStore.getAdminCourses(),
 			bundles = this.ContentStore.getContentBundles(),
 			used = {};
 
-		function unWrapBundle(bundle) {
+		function unWrapBundle (bundle) {
 			var packages = bundle.getContentPackages();
 
-			packages.forEach(function(p) {
+			packages.forEach(function (p) {
 				used[p.getId()] = true;
 			});
 		}
 
-		function unWrapCourse(course) {
+		function unWrapCourse (course) {
 			return unWrapBundle(course.get('CourseInstance'));
 		}
 
@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 		this.ContentStore.deDupContentPackages(used);
 	},
 
-	parseXML: function(xml) {
+	parseXML: function (xml) {
 		try {
 			return new DOMParser().parseFromString(xml, 'text/xml');
 		}
@@ -104,23 +104,23 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 		return undefined;
 	},
 
-	findBundle: function(id) {
+	findBundle: function (id) {
 		return this.CourseActions.findCourseInstance(id)
 				.fail(this.ContentActions.findContent.bind(this.ContentActions, id));
 	},
 
-	findBundleForNTIID: function(id) {
+	findBundleForNTIID: function (id) {
 		return this.CourseActions.findForNTIID(id)
 			.fail(this.ContentActions.findForNTIID.bind(this.ContentActions, id));
 	},
 
-	findContentPackage: function(id) {
+	findContentPackage: function (id) {
 		return this.findBundleForNTIID(id)
-			.then(function(bundle) {
+			.then(function (bundle) {
 				var packages = bundle && bundle.getContentPackages() || [],
 					pack;
 
-				packages.forEach(function(p) {
+				packages.forEach(function (p) {
 					if (p.get('NTIID') === id) {
 						pack = p;
 					}
@@ -130,7 +130,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 			});
 	},
 
-	findBundleBy: function(fn) {
+	findBundleBy: function (fn) {
 
 	},
 
@@ -141,9 +141,9 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 	 * @param  {Function} fn takes a bundle instance and wrapper and returns a number
 	 * @return {Promise}	 fulfills with an array of bundles in order
 	 */
-	findBundleByPriority: function(fn) {
+	findBundleByPriority: function (fn) {
 		return this.CourseActions.findCourseByPriority(fn)
-			.then(function(bundles) {
+			.then(function (bundles) {
 				if (!bundles || !bundles.length) {
 					return Promise.reject();
 				}
@@ -153,16 +153,16 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 			.fail(this.ContentActions.findContentByPriority.bind(this.ContentActions, fn));
 	},
 
-	getVideoIndex: function(bundle) {
+	getVideoIndex: function (bundle) {
 		console.warn('DEPCRECIATED: we should try to not rely on getVideoIndex');
 		var cache = this.LibraryStore.videoIndex = this.LibraryStore.videoIndex || {},
 			index = bundle.getId(), toc, root;
 
-		function query(tag, id) {
+		function query (tag, id) {
 			return tag + '[ntiid="' + ParseUtils.escapeId(id) + '"]';
 		}
 
-		function makeAbsolute(o) {
+		function makeAbsolute (o) {
 			o.src = getURL(o.src, root);
 			o.srcjsonp = getURL(o.srcjsonp, root);
 			return o;
@@ -171,7 +171,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 		if (cache[index]) { return cache[index]; }
 
 		cache[index] = bundle.getTocs()
-			.then(function(tocs) {
+			.then(function (tocs) {
 				toc = tocs[0];
 
 				var content = bundle.getContentPackages()[0],
@@ -191,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 					expectContentType: 'application/json'
 				});
 			})
-			.then(function(json) {
+			.then(function (json) {
 				var vi, n, keys, keyOrder = [],
 					containers;
 
@@ -203,7 +203,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 				keys = Ext.Object.getKeys(containers);
 
 				try {
-					keys.sort(function(a, b) {
+					keys.sort(function (a, b) {
 						var c = toc.querySelector(query('topic', a)) || toc.querySelector(query('toc', a)),
 							d = toc.querySelector(query('topic', b)),
 							p = d && c.compareDocumentPosition(d);
@@ -215,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 					console.warn('Potentially unsorted:', e.stack || e.message || e);
 				}
 
-				keys.forEach(function(k) {
+				keys.forEach(function (k) {
 					keyOrder.push.apply(keyOrder, containers[k]);
 				});
 
@@ -236,7 +236,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 				return vi;
 			});
 
-		cache[index].fail(function(reason) {
+		cache[index].fail(function (reason) {
 			console.error('Failed to load video index', reason);
 			//it fails, remove the cached promise so it can retry.
 			delete cache[index];

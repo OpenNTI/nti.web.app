@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Draggable', {
 	/**
 	 * If we haven't yet, set up the draggable wrapper
 	 */
-	initDragging: function() {
+	initDragging: function () {
 		if (!this.Draggable) {
 			this.Draggable = new NextThought.app.dnd.Draggable({
 				ghostImageScale: this.ghostImageScale,
@@ -31,17 +31,17 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Draggable', {
 		}
 	},
 
-	getDragTarget: function() {
+	getDragTarget: function () {
 		return this.el && this.el.dom;
 	},
 
-	getDragBoundingClientRect: function() {
+	getDragBoundingClientRect: function () {
 		var target = this.getDragTarget();
 
 		return target && target.getBoundingClientRect();
 	},
 
-	enableDragging: function() {
+	enableDragging: function () {
 		this.initDragging();
 
 		if (!this.rendered) {
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Draggable', {
 		}
 	},
 
-	disableDragging: function() {
+	disableDragging: function () {
 		this.initDragging();
 
 		if (!this.rendered) {
@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.Draggable', {
 	/**
 	 * Add values to be set on the dataTransfer object.
 	 */
-	setDataTransfer: function(key, value) {
+	setDataTransfer: function (key, value) {
 		this.initDragging();
 
 		this.Draggable.setDataTransfer(key, value);

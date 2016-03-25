@@ -5,7 +5,7 @@ module.exports = exports = Ext.define('NextThought.overrides.dd.DragDropManager'
 	override: 'Ext.dd.DragDropManager',
 
 
-	getLocation: function() {
+	getLocation: function () {
 		try {
 			return this.callParent(arguments);
 		} catch (e) {
@@ -14,7 +14,7 @@ module.exports = exports = Ext.define('NextThought.overrides.dd.DragDropManager'
 	},
 
 
-	__startDrag: function(x, y) {
+	__startDrag: function (x, y) {
 		var me = this,
 			current = me.dragCurrent,
 			dragEl;

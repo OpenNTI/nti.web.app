@@ -17,7 +17,7 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TimeContent
 
 
 	statics: {
-		createFromObject: function(o) {
+		createFromObject: function (o) {
 			return NextThought.model.anchorables.TimeContentPointer.create({
 				role: o.role,
 				seconds: parseInt(o.seconds, 10)
@@ -26,14 +26,14 @@ module.exports = exports = Ext.define('NextThought.model.anchorables.TimeContent
 	},
 
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.validateRole(config.role);
 		this.callParent(arguments);
 		this.Class = 'TimeContentPointer';
 	},
 
 
-	validateRole: function(r) {
+	validateRole: function (r) {
 		if (!r) {
 			Ext.Error.raise('Must supply a role');
 		}

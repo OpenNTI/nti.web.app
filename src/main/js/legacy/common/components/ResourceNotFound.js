@@ -28,13 +28,13 @@ module.exports = exports = Ext.define('NextThought.common.components.ResourceNot
 	layout: 'auto',
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {hideLibrary: this.hideLibrary});
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.backEl, 'click', this.goBack, this);
 		if (this.libraryEl) {
@@ -43,12 +43,12 @@ module.exports = exports = Ext.define('NextThought.common.components.ResourceNot
 	},
 
 
-	goBack: function() {
+	goBack: function () {
 		history.back();
 	},
 
 
-	goLibrary: function() {
+	goLibrary: function () {
 		if (this.gotoLibrary) {
 			this.gotoLibrary.call();
 		}

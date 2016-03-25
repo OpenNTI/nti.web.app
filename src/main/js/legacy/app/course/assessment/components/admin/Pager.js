@@ -40,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', 'onItemClick');
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	bindStore: function(store) {
+	bindStore: function (store) {
 		this.store = store;
 
 		this.mon(store, 'load', 'onStoreLoad');
@@ -58,11 +58,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	getPages: function(count, current) {
+	getPages: function (count, current) {
 		var pages = [],
 			halfRange = Math.floor(this.MIDDLE_RANGE / 2);
 
-		function addRange(start, end) {
+		function addRange (start, end) {
 			var i;
 
 			for (i = start; i <= end; i++) {
@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			}
 		}
 
-		function addEllipsis(start, end) {
+		function addEllipsis (start, end) {
 			pages.push({
 				html: '...',
 				isEllipse: true,
@@ -109,7 +109,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	addNavigationPages: function(pages, pageCount, current) {
+	addNavigationPages: function (pages, pageCount, current) {
 		pages.unshift({
 			html: '<',
 			index: 'prev',
@@ -127,7 +127,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	onStoreLoad: function() {
+	onStoreLoad: function () {
 		var s = this.store,
 			pages,
 			total = this.store.getTotalCount(),
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	attachListeners: function() {
+	attachListeners: function () {
 		if (!this.rendered) { return; }
 
 		var pageInput = this.el.down('label.page input[type=text]');
@@ -172,7 +172,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	onItemClick: function(e) {
+	onItemClick: function (e) {
 		if (e.getTarget('.disabled')) { return; }
 
 		var page = e.getTarget('.page'),
@@ -196,13 +196,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	loadPage: function(page) {
+	loadPage: function (page) {
 		this.fireEvent('mask-view');
 		this.store.loadPage(page);
 	},
 
 
-	loadPrev: function() {
+	loadPrev: function () {
 		var current = parseInt(this.store.getCurrentPage());
 
 		if (current > 1) {
@@ -211,7 +211,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	loadNext: function() {
+	loadNext: function () {
 		var current = parseInt(this.store.getCurrentPage()),
 			total = this.store.getTotalPages();
 
@@ -221,7 +221,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	loadLastPage: function() {
+	loadLastPage: function () {
 		var current = parseInt(this.store.getCurrentPage()),
 			lastPage = this.store.getTotalPages();
 
@@ -231,7 +231,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	loadFirstPage: function() {
+	loadFirstPage: function () {
 		var current = parseInt(this.store.getCurrentPage());
 
 		if (current !== 1) {
@@ -240,7 +240,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	getPageInputValue: function() {
+	getPageInputValue: function () {
 		var pageInput = this.el.down('label.page input[type=text'),
 			value = (pageInput && pageInput.getValue()) || 1;
 
@@ -248,7 +248,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	onKeyPress: function(e) {
+	onKeyPress: function (e) {
 		var keyCode = e.keyCode,
 			allowed = [e.BACKSPACE, e.TAB, e.ESCAPE];
 

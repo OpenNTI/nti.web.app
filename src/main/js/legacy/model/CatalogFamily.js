@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.model.CatalogFamily', {
 	],
 
 
-	asUIData: function() {
+	asUIData: function () {
 		return {
 			id: this.get('CatalogFamilyID'),
 			title: this.get('Title')
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.model.CatalogFamily', {
 	},
 
 
-	getThumbnail: function() {
+	getThumbnail: function () {
 		return this.getAsset('thumb');
 	}
 });

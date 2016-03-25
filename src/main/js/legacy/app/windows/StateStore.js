@@ -9,11 +9,11 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 		MIME_TO_CMP: {},
 		MIME_REGISTERS: {},
 
-		register: function(mimeType, cmp) {
+		register: function (mimeType, cmp) {
 			this.MIME_TO_CMP[mimeType] = cmp;
 		},
 
-		registerCustomResolver: function(mimeType, fn) {
+		registerCustomResolver: function (mimeType, fn) {
 			this.MIME_REGISTERS[mimeType] = fn;
 		}
 	},
@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 	obj_map: {},
 	OPEN_COUNT: 0,
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		this.HTML_ELEMENT = document.getElementsByTagName('html')[0];
@@ -30,7 +30,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
-	getHTML: function() {
+	getHTML: function () {
 		if (!this.HTML_ELEMENT) {
 			this.HTML_ELEMENT = document.getElementsByTagName('html')[0];
 		}
@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
-	getViewport: function() {
+	getViewport: function () {
 		if (!this.VIEWPORT_ELEMENT) {
 			this.VIEWPORT_ELEMENT = document.querySelector('.main-viewport');
 		}
@@ -48,50 +48,50 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
-	getResolverFor: function(mimeType) {
+	getResolverFor: function (mimeType) {
 		return this.self.MIME_REGISTERS[mimeType];
 	},
 
 
-	getComponentForMimeType: function(type) {
+	getComponentForMimeType: function (type) {
 		return this.self.MIME_TO_CMP[type];
 	},
 
 
-	hasComponentForMimeType: function(type) {
+	hasComponentForMimeType: function (type) {
 		return !!this.self.MIME_TO_CMP[type];
 	},
 
 
-	fireShowWindow: function(object, state, el, monitors, precache) {
+	fireShowWindow: function (object, state, el, monitors, precache) {
 		this.fireEvent('show-window', object, state, el, monitors, precache);
 	},
 
 
-	firePushWindow: function(object, mimeType, state, title, route, precache) {
+	firePushWindow: function (object, mimeType, state, title, route, precache) {
 		this.fireEvent('push-window', object, mimeType, state, title, route, precache);
 	},
 
-	fireReplaceOpenWindowRoute: function(object, state, title, route, precache) {
+	fireReplaceOpenWindowRoute: function (object, state, title, route, precache) {
 		this.fireEvent('replaceOpenWindowRoute', object, state, title, route, precache);
 	},
 
-	fireCloseWindow: function() {
+	fireCloseWindow: function () {
 		this.fireEvent('close-window');
 	},
 
 
-	navigateToObject: function(record) {
+	navigateToObject: function (record) {
 		this.fireEvent('navigate-to-record', record);
 	},
 
 
-	removeCache: function(id) {
+	removeCache: function (id) {
 		delete this.obj_map[id];
 	},
 
 
-	cacheObject: function(id, obj, el, monitors, precache) {
+	cacheObject: function (id, obj, el, monitors, precache) {
 		this.obj_map[id] = {
 			obj: obj,
 			el: el,
@@ -101,12 +101,12 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
-	getObject: function(id) {
+	getObject: function (id) {
 		return this.obj_map[id];
 	},
 
 
-	addAllowNavigationHandler: function(fn) {
+	addAllowNavigationHandler: function (fn) {
 		if (!this.allow_navigation_handler) {
 			this.allow_navigation_handler = fn;
 		} else {
@@ -115,28 +115,28 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
-	allowNavigation: function() {
+	allowNavigation: function () {
 		return (this.allow_navigation_handler && this.allow_navigation_handler.call(null)) || false;
 	},
 
 
-	incrementOpenWindows: function() {
+	incrementOpenWindows: function () {
 		this.OPEN_COUNT += 1;
 	},
 
 
-	decrementOpenWindows: function() {
+	decrementOpenWindows: function () {
 		this.OPEN_COUNT -= 1;
 		this.OPEN_COUNT = this.OPEN_COUNT < 0 ? 0 : this.OPEN_COUNT;
 	},
 
 
-	hasOpenWindows: function() {
+	hasOpenWindows: function () {
 		return this.OPEN_COUNT > 0;
 	},
 
 
-	addOpenCls: function(doNotIncrement) {
+	addOpenCls: function (doNotIncrement) {
 		var html = this.getHTML(),
 			viewport = this.getViewport();
 
@@ -151,7 +151,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
-	removeOpenCls: function() {
+	removeOpenCls: function () {
 		this.decrementOpenWindows();
 
 		if (this.hasOpenWindows()) { return; }

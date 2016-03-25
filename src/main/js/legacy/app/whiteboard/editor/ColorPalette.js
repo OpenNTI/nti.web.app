@@ -2,15 +2,15 @@ var Ext = require('extjs');
 
 
 module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ColorPalette', {
-  extend: 'Ext.picker.Color',
-  alias: 'widget.color-palette',
+  	extend: 'Ext.picker.Color',
+  	alias: 'widget.color-palette',
 
-  componentCls: 'color-palette',
-  selectedCls: 'x-pressed',
+  	componentCls: 'color-palette',
+  	selectedCls: 'x-pressed',
 
-  allowReselect: true,
+  	allowReselect: true,
 
-  colors: [
+  	colors: [
 		{ name: 'black',	value: '333333' },
 		{ name: 'grey1',	value: '858585' },
 		{ name: 'grey2',	value: 'E1E1E1' },
@@ -25,9 +25,9 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.editor.ColorPa
 		{ name: 'none', value: 'NONE' }
   ],
 
-  colorRe: /(?:^|\s)color-(.{6}|NONE)(?:\s|$)/,
+  	colorRe: /(?:^|\s)color-(.{6}|NONE)(?:\s|$)/,
 
-  renderTpl: [
+  	renderTpl: [
 	'<tpl for="colors">',
 	'<a href="#" class="color {name} color-{value}" hidefocus="on">',
 	'<em class="button"><span class="whiteboard-color-icon" unselectable="on">&#160;</span></em>',

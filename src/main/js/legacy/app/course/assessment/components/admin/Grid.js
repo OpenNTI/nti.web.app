@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 									return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
 								}
 							}
-					];
+						];
 
 					store.sort(sorters);
 				}

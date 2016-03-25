@@ -13,12 +13,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	alias: 'widget.overview-editing-outline-editor',
 
 	inheritableStatics: {
-		canAddChildren: function(mimeType) {
+		canAddChildren: function (mimeType) {
 			return !!this.CREATORS[mimeType];
 		},
 
 
-		canEdit: function(record) {
+		canEdit: function (record) {
 			var editor = this.EDITORS[record.mimeType],
 				typeEditor = editor && editor.getEditorForRecord(record);
 
@@ -26,29 +26,29 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		},
 
 
-		getChildCreator: function(mimeType) {
+		getChildCreator: function (mimeType) {
 			return this.CREATORS[mimeType];
 		},
 
 
-		getEditor: function(mimeType) {
+		getEditor: function (mimeType) {
 			return this.EDITORS[mimeType];
 		},
 
 
-		getInlineEditor: function(mimeType) {
+		getInlineEditor: function (mimeType) {
 			return this.INLINE_EDITORS[mimeType];
 		},
 
 
-		getCreators: function() {
+		getCreators: function () {
 			return [
 				NextThought.model.courses.CourseOutline.mimeType
 			];
 		},
 
 
-		getTypeEditors: function() {
+		getTypeEditors: function () {
 			var base = NextThought.app.course.overview.components.editing.outline;
 
 			return [
@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		},
 
 
-		getInlineEditors: function() {
+		getInlineEditors: function () {
 			return [
 				NextThought.app.course.overview.components.editing.outline.outlinenode.InlineEditor,
 				NextThought.app.course.overview.components.editing.outline.contentnode.InlineEditor
@@ -67,20 +67,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		},
 
 
-		initRegistry: function() {
+		initRegistry: function () {
 			this.setUpChildCreators();
 			this.setUpEditors();
 			this.setUpInlineEditors();
 		},
 
 
-		setUpChildCreators: function() {
+		setUpChildCreators: function () {
 			var creators = this.getCreators() || [];
 
-			this.CREATORS = creators.reduce(function(acc, item) {
+			this.CREATORS = creators.reduce(function (acc, item) {
 				var handled = item.getHandledMimeTypes ? item.getHandledMimeTypes() : [];
 
-				handled.forEach(function(type) {
+				handled.forEach(function (type) {
 					if (acc[type]) {
 						console.warn('Overriding type picker form mimetype: ', type);
 					}
@@ -93,13 +93,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		},
 
 
-		setUpEditors: function() {
+		setUpEditors: function () {
 			var editors = this.getTypeEditors() || [];
 
-			this.EDITORS = editors.reduce(function(acc, editor) {
+			this.EDITORS = editors.reduce(function (acc, editor) {
 				var handled = editor.getHandledMimeTypes ? editor.getHandledMimeTypes() : [];
 
-				handled.forEach(function(type) {
+				handled.forEach(function (type) {
 					if (acc[type]) {
 						console.warn('Overriding editor for mimetype: ', type);
 					}
@@ -111,10 +111,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		},
 
 
-		setUpInlineEditors: function() {
+		setUpInlineEditors: function () {
 			var editors = this.getInlineEditors() || [];
 
-			this.INLINE_EDITORS = editors.reduce(function(acc, item) {
+			this.INLINE_EDITORS = editors.reduce(function (acc, item) {
 				var type = item.getTypes ? item.getTypes() : null;
 
 				if (type) {
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	layout: 'none',
 	items: [],
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		if (this.record) {
@@ -141,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
-	getConfig: function(record, parentRecord, rootRecord, bundle) {
+	getConfig: function (record, parentRecord, rootRecord, bundle) {
 		return {
 			record: record,
 			parentRecord: parentRecord,
@@ -162,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
-	editRecord: function(record, parentRecord, rootRecord, bundle) {
+	editRecord: function (record, parentRecord, rootRecord, bundle) {
 		var editor = this.self.getEditor(record.mimeType),
 			cmp = editor && editor.getEditorForRecord(record);
 
@@ -174,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.activeEditor = this.add(cmp.create(this.getConfig(record, parentRecord, rootRecord, bundle)));
 	},
 
-	addRecord: function(parentRecord, rootRecord, bundle) {
+	addRecord: function (parentRecord, rootRecord, bundle) {
 		var editor = this.self.getChildCreator(parentRecord.mimeType),
 			cmp = editor && editor.getChildCreatorForRecord(parentRecord);
 
@@ -186,61 +186,61 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.activeEditor = this.add(cmp.create(this.getConfig(null, parentRecord, rootRecord, bundle)));
 	},
 
-	setSaveText: function(text) {
+	setSaveText: function (text) {
 		return this.Prompt.Footer.setSaveText(text);
 	},
 
-	enableSave: function() {
+	enableSave: function () {
 		return this.Prompt.Footer.enableSave();
 	},
 
-	disableSave: function() {
+	disableSave: function () {
 		return this.Prompt.Footer.disableSave();
 	},
 
-	setHeaderTitle: function(title) {
+	setHeaderTitle: function (title) {
 		return this.Prompt.Header.setTitle(title);
 	},
 
-	setSubTitle: function(subTitle) {
+	setSubTitle: function (subTitle) {
 		return this.Prompt.Header.setSubTitle(subTitle);
 	},
 
-	enableHeaderBack: function(text) {
+	enableHeaderBack: function (text) {
 		return this.Prompt.Header.enableBack(text);
 	},
 
-	disableHeaderBack: function() {
+	disableHeaderBack: function () {
 		return this.Prompt.Header.disableBack();
 	},
 
-	showError: function(err) {
+	showError: function (err) {
 		return this.Prompt.Header.showError(err);
 	},
 
-	showWarning: function(warn) {
+	showWarning: function (warn) {
 		return this.Prompt.Header.showWarning(warn);
 	},
 
-	showMessage: function(msg) {
+	showMessage: function (msg) {
 		return this.Prompt.Header.showMessage(msg);
 	},
 
-	doClose: function(reason) {
+	doClose: function (reason) {
 		return this.Prompt.doClose(reason);
 	},
 
-	doSave: function() {
+	doSave: function () {
 		return this.Prompt.doSave();
 	},
 
-	onBack: function() {
+	onBack: function () {
 		if (this.activeEditor && this.activeEditor.onBack) {
 			this.activeEditor.onBack();
 		}
 	},
 
-	doValidation: function() {
+	doValidation: function () {
 		if (this.activeEditor && this.activeEditor.doValidation) {
 			return this.activeEditor && this.activeEditor.doValidation();
 		}
@@ -248,7 +248,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Promise.resolve();
 	},
 
-	onSaveFailure: function(reason) {
+	onSaveFailure: function (reason) {
 		if (this.activeEditor && this.activeEditor.onSaveFailure) {
 			return this.activeEditor.onSaveFailure(reason);
 		}
@@ -256,7 +256,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Promise.reject();
 	},
 
-	onSave: function() {
+	onSave: function () {
 		if (this.activeEditor && this.activeEditor.onSave) {
 			return this.activeEditor.onSave();
 		}
@@ -264,13 +264,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Promise.reject();
 	},
 
-	allowCancel: function() {
+	allowCancel: function () {
 		if (this.activeEditor && this.activeEditor.allowCancel) {
 			return this.activeEditor.allowCancel();
 		}
 
 		return Promise.resolve();
 	}
-}, function() {
+}, function () {
 	this.initRegistry();
 });

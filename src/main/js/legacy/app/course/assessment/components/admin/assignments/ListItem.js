@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	]),
 
 
-	beforeRender: function() {
+	beforeRender: function () {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	addClasses: function() {
+	addClasses: function () {
 		var now = new Date(),
 			due = this.assignment.getDueDate() || new Date(),
 			isNoSubmit = this.assignment.isNoSubmit(),
@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	},
 
 
-	onItemClick: function(e) {
+	onItemClick: function (e) {
 		var link = e.getTarget('.report');
 
 		if (link) {

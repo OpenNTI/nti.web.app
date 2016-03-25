@@ -6,7 +6,7 @@ module.exports = exports = Ext.define('NextThought.common.Actions', {
 		observable: 'Ext.util.Observable'
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.callParent(arguments);
 
 		this.mixins.observable.constructor.call(this, config);

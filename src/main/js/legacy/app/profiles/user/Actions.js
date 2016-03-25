@@ -10,7 +10,7 @@ var {isFeature} = require('legacy/util/Globals');
 module.exports = exports = Ext.define('NextThought.app.profiles.user.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 		this.LoginStore = NextThought.login.StateStore.getInstance();
 		this.NavActions = NextThought.app.navigation.Actions.create();
@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Actions', {
 		}
 	},
 
-	maybeAskForEmailVerification: function() {
+	maybeAskForEmailVerification: function () {
 		var user = $AppConfig.userObject;
 
 		if (user && user.get('email') && !user.isEmailVerified()) {
@@ -29,11 +29,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Actions', {
 		}
 	},
 
-	askForEmailVerfication: function() {
+	askForEmailVerfication: function () {
 		var cfg = {
-				iconCls: 'warning',
-				message: 'Please take a moment to verify your email address.',
-				buttons: [
+			iconCls: 'warning',
+			message: 'Please take a moment to verify your email address.',
+			buttons: [
 					{
 						cls: 'verify',
 						action: 'onEmailVerify',
@@ -47,18 +47,18 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Actions', {
 						handler: this.showMoreInfo.bind(this)
 					}
 				],
-				type: 'email-verification'
-			};
+			type: 'email-verification'
+		};
 
 		this.NavActions.presentMessageBar(cfg);
 	},
 
-	sendEmailVerification: function() {
+	sendEmailVerification: function () {
 		var me = this,
 			user = $AppConfig.userObject;
 
 		user.sendEmailVerification()
-			.then(function() {
+			.then(function () {
 				if (!me.emailVerifyWin) {
 					me.createEmailVerifyWindow();
 				}
@@ -66,7 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Actions', {
 				me.emailVerifyWin.show();
 				me.emailVerifyWin.center();
 			})
-			.fail(function(error) {
+			.fail(function (error) {
 				var e = Ext.decode(error && error.responseText);
 
 				if (!me.emailVerifyWin) {
@@ -81,26 +81,26 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Actions', {
 			});
 	},
 
-	showMoreInfo: function() {
+	showMoreInfo: function () {
 		this.moreInfo = Ext.widget('email-verify-info-window');
 		this.moreInfo.show();
 		this.moreInfo.center();
 	},
 
-	createEmailVerifyWindow: function() {
+	createEmailVerifyWindow: function () {
 		var me = this;
 
 		this.emailVerifyWin = Ext.widget('email-token-window', {
 			user: $AppConfig.userObject,
 			autoShow: false,
-			onVerificationComplete: function(){
+			onVerificationComplete: function () {
 				var messageBar = Ext.getCmp('message-bar');
 
 				if (messageBar) {
 					messageBar.close();
 				}
 			},
-			onDestroy: function(){
+			onDestroy: function () {
 				delete me.emailVerifyWin;
 			}
 		});

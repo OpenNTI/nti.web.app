@@ -14,14 +14,14 @@ module.exports = exports = Ext.define('NextThought.model.PresenceInfo', {
 	],
 
 	statics: {
-		createFromPresenceString: function(presence, username) {
+		createFromPresenceString: function (presence, username) {
 			return Ext.create('NextThought.model.PresenceInfo', {
 				'username': username,
 				'type': (presence.toLowerCase() !== 'online') ? 'unavailable' : 'available'
 			});
 		},
 
-		createPresenceInfo: function(username, type, show, status) {
+		createPresenceInfo: function (username, type, show, status) {
 			return Ext.create('NextThought.model.PresenceInfo', {
 				'username': username,
 				'type': (type) ? type : 'unavailable',
@@ -32,7 +32,7 @@ module.exports = exports = Ext.define('NextThought.model.PresenceInfo', {
 	},
 
 
-	constructor: function() {
+	constructor: function () {
 		this.callParent(arguments);
 
 		ObjectUtils.defineAttributes(this, {
@@ -53,15 +53,15 @@ module.exports = exports = Ext.define('NextThought.model.PresenceInfo', {
 		'invisible': 'Invisible'
 	},
 
-	isOnline: function() {
+	isOnline: function () {
 		return this.get('type') !== 'unavailable';
 	},
 
-	toString: function() {
+	toString: function () {
 		return (this.isOnline()) ? 'Online' : 'Offline';
 	},
 
-	getDisplayText: function() {
+	getDisplayText: function () {
 		var status = this.get('status');
 
 		if (!this.isOnline()) {
@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.model.PresenceInfo', {
 		return this.nameToDisplay[this.getName()];
 	},
 
-	getName: function() {
+	getName: function () {
 		var show = this.get('show');
 
 		if (!this.isOnline()) {

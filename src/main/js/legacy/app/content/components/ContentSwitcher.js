@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		listEl: '.list'
 	},
 
-	initComponent: function() {
+	initComponent: function () {
 		this.callParent(arguments);
 
 		this.BundleActions = NextThought.app.bundle.Actions.create();
@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		this.LibraryCourseStateStore = NextThought.app.library.courses.StateStore.getInstance();
 	},
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.applyState(this.getCurrentState());
@@ -91,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		this.mon(this.el, 'click', this.onItemClicked.bind(this));
 	},
 
-	openAt: function(x, y) {
+	openAt: function (x, y) {
 		this.show();
 
 		var myWidth = this.getWidth(),
@@ -117,12 +117,12 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		this.pointerEl.dom.style.left = (x - left) + 'px';
 	},
 
-	getBundleData: function(bundle, route, cls) {
+	getBundleData: function (bundle, route, cls) {
 		var me = this,
 			uiData = bundle.asUIData();
 
 		return bundle.getThumbnail()
-			.then(function(thumb) {
+			.then(function (thumb) {
 				return {
 					id: uiData.id,
 					title: uiData.title,
@@ -134,12 +134,12 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 			});
 	},
 
-	getCourseData: function(bundle, route, cls) {
+	getCourseData: function (bundle, route, cls) {
 		var me = this,
 			uiData = bundle.asUIData();
 
 		return bundle.getThumbnail()
-			.then(function(thumb) {
+			.then(function (thumb) {
 				return {
 					id: uiData.id,
 					title: uiData.title,
@@ -151,7 +151,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 			});
 	},
 
-	getFamilyData: function(family, bundle, route) {
+	getFamilyData: function (family, bundle, route) {
 		var me = this,
 			id = family.get('CatalogFamilyID'),
 			courses = this.LibraryCourseStateStore.findForCatalogFamily(id),
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 			return this.getCourseData(bundle, route);
 		}
 
-		courses = courses.map(function(course) {
+		courses = courses.map(function (course) {
 			var instance = course.get('CourseInstance'),
 				isCurrent = instance.getId() === bundle.getId(),
 				uiData = instance.asUIData();
@@ -177,9 +177,9 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		});
 
 		return Promise.all([
-				courses,
-				family.getThumbnail()
-			]).then(function(results) {
+			courses,
+			family.getThumbnail()
+		]).then(function (results) {
 				uiData.cls = 'has-sub-items';
 				uiData.subItems = results[0];
 				uiData.thumb = results[1];
@@ -190,20 +190,20 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 			});
 	},
 
-	getCourseOrFamilyData: function(bundle, route) {
+	getCourseOrFamilyData: function (bundle, route) {
 		var family = bundle.getCatalogFamily();
 
 		return family ? this.getFamilyData(family, bundle, route) : this.getCourseData(bundle, route);
 	},
 
-	addBundle: function(bundle, route) {
+	addBundle: function (bundle, route) {
 		var state = this.getCurrentState() || {recent: []},
 			recent = state.recent || [],
 			getData = bundle.isCourse ? this.getCourseOrFamilyData(bundle, route) : this.getBundleData(bundle, route);
 
-		state.recent.forEach(function(item) {
+		state.recent.forEach(function (item) {
 			if (item.subItems) {
-				item.subItems.forEach(function(subItem) {
+				item.subItems.forEach(function (subItem) {
 					subItem.cls = '';
 				});
 
@@ -212,10 +212,10 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		});
 
 		getData
-			.then(function(data) {
+			.then(function (data) {
 				var currentIndex = -1;
 
-				recent.forEach(function(item, idx) {
+				recent.forEach(function (item, idx) {
 					if (item.id === data.id) {
 						currentIndex = idx;
 					}
@@ -233,16 +233,16 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 			.then(this.setState.bind(this));
 	},
 
-	updateRouteFor: function(bundle, route) {
+	updateRouteFor: function (bundle, route) {
 		var id = bundle.getId(),
 			rootRoute = this[bundle.isCourse ? 'CourseActions' : 'BundleActions'].getRootRouteForId(id),
 			state = this.getCurrentState() || {recent: []};
 
-		state.recent.forEach(function(item) {
+		state.recent.forEach(function (item) {
 			if (item.id === id) {
 				item.activeRoute = route;
 			} else if (item.subItems) {
-				item.subItems.forEach(function(subItem) {
+				item.subItems.forEach(function (subItem) {
 					if (subItem.id === id) {
 						subItem.activeRoute = route;
 
@@ -257,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		this.setState(state);
 	},
 
-	applyState: function(state) {
+	applyState: function (state) {
 		if (!this.rendered) { return; }
 
 		this.listEl.dom.innerHTML = '';
@@ -265,7 +265,7 @@ module.exports = exports = Ext.define('NextThought.app.content.components.Conten
 		this.listTpl.append(this.listEl, state);
 	},
 
-	onItemClicked: function(e) {
+	onItemClicked: function (e) {
 		if (!e.getTarget('li')) { return; }
 
 		var item = e.getTarget('li'),

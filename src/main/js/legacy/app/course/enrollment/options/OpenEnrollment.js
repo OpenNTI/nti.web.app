@@ -13,7 +13,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	EnrolledWordingKey: 'course-info.description-widget.open-enrolled',
 
 
-	buildEnrollmentSteps: function() {
+	buildEnrollmentSteps: function () {
 		return [];
 	},
 
@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 		}
 	},
 
-	__getEnrollmentText: function(course, option) {
+	__getEnrollmentText: function (course, option) {
 		var state = {}, now = new Date(),
 			details = this.__getOptionDetails(course, option);
 
@@ -83,12 +83,12 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	},
 
 
-	__getAdmin: function(details) {
+	__getAdmin: function (details) {
 		var me = this;
 
 		return {
 			name: me.NAME,
-			loaded: new Promise(function(fulfill, reject) {
+			loaded: new Promise(function (fulfill, reject) {
 				var state = me.getWording('enrolled', {
 					date: Ext.Date.format(details.StartDate, me.DateFormat),
 					drop: ''
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	},
 
 
-	__getOptionDetails: function(course, option) {
+	__getOptionDetails: function (course, option) {
 		return {
 			Enrolled: option.IsEnrolled,
 			StartDate: course.StartDate,
@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 	},
 
 
-	buildEnrollmentDetails: function(course, details) {
+	buildEnrollmentDetails: function (course, details) {
 		var me = this,
 			loadDetails,
 			option = course.getEnrollmentOption && course.getEnrollmentOption(me.NAME);
@@ -140,17 +140,17 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 			};
 		}
 
-		loadDetails = new Promise(function(fulfill, reject) {
+		loadDetails = new Promise(function (fulfill, reject) {
 			var catalogData = {
-					Name: me.NAME,
-					BaseOption: me.isBase,
-					Enrolled: option.IsEnrolled,
-					Price: null,
-					Wording: me.__getEnrollmentText(details, option),
-					lock: true,
-					doEnrollment: function(cmp) {
-						return new Promise(function(fulfill, reject) {
-							cmp.CourseEnrollmentActions.enrollCourse(course, function(success, changed, status) {
+				Name: me.NAME,
+				BaseOption: me.isBase,
+				Enrolled: option.IsEnrolled,
+				Price: null,
+				Wording: me.__getEnrollmentText(details, option),
+				lock: true,
+				doEnrollment: function (cmp) {
+						return new Promise(function (fulfill, reject) {
+							cmp.CourseEnrollmentActions.enrollCourse(course, function (success, changed, status) {
 								if (success) {
 									fulfill(changed);
 								} else {
@@ -159,9 +159,9 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 							});
 						});
 					},
-					undoEnrollment: function(cmp) {
-						return new Promise(function(fulfill, reject) {
-							cmp.CourseEnrollmentActions.dropCourse(course, function(success, changed, status) {
+				undoEnrollment: function (cmp) {
+						return new Promise(function (fulfill, reject) {
+							cmp.CourseEnrollmentActions.dropCourse(course, function (success, changed, status) {
 								if (success) {
 									fulfill(changed);
 								} else {
@@ -170,7 +170,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 							});
 						});
 					}
-				};
+			};
 
 			fulfill(catalogData);
 		});

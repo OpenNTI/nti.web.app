@@ -7,16 +7,16 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 
 		URL_MATCHES: /^(http:\/\/|https:\/\/|\/\/).*/i,
 
-		urlIsFor: function(url) {
+		urlIsFor: function (url) {
 			return this.URL_MATCHES.test(url);
 		},
 
-		getEmbedURL: function(raw) {
+		getEmbedURL: function (raw) {
 			return raw;
 		},
 
 
-		getIdFromURL: function(raw) {
+		getIdFromURL: function (raw) {
 			return raw;
 		}
 	}
