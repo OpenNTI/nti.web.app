@@ -115,6 +115,20 @@ module.exports = exports = Ext.define('NextThought.mixins.OrderedContents', {
 	},
 
 
+	getItemById: function(id) {
+		var items = this.getItems(),
+			i;
+
+		for (i = 0; i < items.length; i++) {
+			if (items[i].getId() === id) {
+				return items[i];
+			}
+		}
+
+		return null;
+	},
+
+
 	indexOfId: function (id) {
 		var items = this.getItems(),
 			i;

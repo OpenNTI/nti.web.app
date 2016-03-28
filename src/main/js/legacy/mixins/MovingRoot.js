@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var MixinsOrderedContents = require('./OrderedContents');
-var DndActions = require('../app/dnd/Actions');
+const Ext = require('extjs');
+
+require('./OrderedContents');
+require('../app/dnd/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
@@ -23,7 +24,7 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 	 * @param  {Object|String} record		  the record to move
 	 * @param  {Object|String} originalParent the current parent of the record
 	 * @param  {Object|String} newParent	  the desired parent of the record
-	 * @return {Promise}
+	 * @return {Promise} fulills with the record that was appended,
 	 */
 	doAppendRecordFrom: function (record, originalParent, newParent) {
 		var index = newParent.getItemsCount ? newParent.getItemsCount() : Infinity;
@@ -39,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 	 * @param  {Number} oldIndex	   the old index
 	 * @param  {Object|String} newParent	  the desired parent
 	 * @param  {Object|String} originalParent the current parent
-	 * @return {Promise}
+	 * @return {Promise} fulfills with the record that was moved
 	 */
 	doMoveRecordFrom: function (record, index, oldIndex, newParent, originalParent) {
 		var link = this.getMoveLink(),
@@ -64,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 		} else if (!originalParent) {
 			move = Promise.reject('No old parent to move from');
 		} else if (data.ParentNTIID === data.OldParentNTIID && index === oldIndex) {
-			move = Promise.resolve();
+			move = Promise.resolve(record);
 		} else {
 			move = Service.post(link, data)
 				.then(this.__onMoveOperation.bind(this, record, newParent, originalParent));
@@ -77,7 +78,11 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 	 * Currently move operations are responding with the object we get the move link from.
 	 * So just sync with the response to get the new items.
 	 *
+	 * @param {Object} record the record to move
+	 * @param {Object} newParent the record to move it to
+	 * @param {Object} originalParent the record its moving from
 	 * @param  {String} response the response from the server
+	 * @return {Object} the record that was moved
 	 */
 	__onMoveOperation: function (record, newParent, originalParent, response) {
 		var updatedNewParent, updatedOriginalParent, updatedRecord,
@@ -105,5 +110,9 @@ module.exports = exports = Ext.define('NextThought.mixins.MovingRoot', {
 		if (updatedNewParent && updatedOriginalParent !== updatedNewParent) {
 			newParent.syncWith(updatedNewParent);
 		}
+
+		updatedRecord = newParent.getItemById(record.getId());
+
+		return updatedRecord;
 	}
 });
