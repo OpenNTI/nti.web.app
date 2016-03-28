@@ -1,7 +1,8 @@
 var Ext = require('extjs');
-var WindowWindow = require('../../../common/window/Window');
-var ComponentsPasswordResetForm = require('./components/PasswordResetForm');
-var ComponentsPreferences = require('./components/Preferences');
+
+require('../../../common/window/Window');
+require('./components/PasswordResetForm');
+require('./components/Preferences');
 var ComponentsAvatarChoices = require('./components/AvatarChoices');
 var ComponentsPictureEditor = require('./components/PictureEditor');
 
@@ -117,7 +118,35 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.Window',
 		});
 	},
 
+
 	syncHeight: function () {},
+
+	/**
+	 * This is always going to be positioned  fixed, so don't
+	 * let Ext layout try to calculate according to parents.
+	 */
+	center: function () {
+		if (!this.rendered) {
+			this.on('afterrender', this.center.bind(this));
+			return;
+		}
+
+		var dom = this.el && this.el.dom,
+			myWidth = this.getWidth(),
+			myHeight = this.getHeight(),
+			viewWidth = Ext.Element.getViewportWidth(),
+			viewHeight = Ext.Element.getViewportHeight(),
+			top, left;
+
+		top = (viewHeight - myHeight) / 2;
+		left = (viewWidth - myWidth) / 2;
+
+		top = Math.max(top, 0);
+		left = Math.max(left, 0);
+
+		dom.style.top = top + 'px';
+		dom.style.left = left + 'px';
+	},
 
 	changeView: function (btn) {
 		var c = this.down('[name=settings]'),
