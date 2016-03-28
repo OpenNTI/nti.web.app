@@ -1,36 +1,44 @@
 var Ext = require('extjs');
 
-function validateHandler (fn) { if (typeof fn !== 'function') { throw new TypeError('Expected a function'); } }
+Object.assign(Promise.prototype, {
 
-Ext.applyIf(Promise.prototype, {
-	done: function (fn) { validateHandler(fn); return this.then(fn); },
-	fail: function (fn) { validateHandler(fn); return this.then(undefined, fn); },
-	always: function (fn) {validateHandler(fn); return this.then(fn, fn); }
+	done (fn) {
+		console.error('Depricated: use Promise#then() instead');
+		return this.then(fn);
+	},
+
+	fail (fn) {
+		console.error('Depricated: use Promise#catch() instead');
+		return this.catch(fn);
+	},
+
+	always (fn) {
+		return this.then(fn, fn);
+	}
 });
 
 
-Ext.applyIf(Promise, {
-	wait: function (t) { return new Promise(function (f) {setTimeout(f, t || 1);});},
+Object.assign(Promise, {
+	wait: t => new Promise(f => setTimeout(f, t || 1)),
+
 	/**
 	 * Given a minimum duration, return a function that when called
 	 * will return a promise that fulfills with its first arg after
 	 * at least the duration given has passed.
 	 *
 	 * @param  {Number} minWait the min time to wait
-	 * @return {Function}
+	 * @return {Function} see description
 	 */
-	minWait: function (minWait) {
-		var start = new Date();
+	minWait (minWait) {
+		const start = new Date();
 
-		return function (result) {
-			var end = new Date(),
-				duration = end - start;
+		return result => {
+			const end = new Date();
+			const duration = end - start;
 
 			if (duration < minWait) {
 				return Promise.wait(minWait - duration)
-					.then(function () {
-						return result;
-					});
+					.then(() => result);
 			}
 
 			return Promise.resolve(Promise.wait);
