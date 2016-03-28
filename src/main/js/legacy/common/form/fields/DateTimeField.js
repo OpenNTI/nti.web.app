@@ -481,6 +481,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateTimeFi
 			this.meridiemSelect.setValue(this.PM);
 		}
 
+		this.meridiemSelect.enable();
+
 		this.hourInput.dom.value = hour === 0 ? '12' : hour;
 	},
 

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ComponentsAssignmentStatus = require('../../AssignmentStatus');
+const Ext = require('extjs');
+
+require('../../AssignmentStatus');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.assignments.ListItem', {
@@ -57,10 +58,14 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			assignment: me.assignment,
 			history: me.history,
 			onEditorOpen: function () {
-				me.addCls('editor-open');
+				if (me.rendered) {
+					me.addCls('editor-open');
+				}
 			},
 			onEditorClose: function () {
-				me.removeCls('editor-open');
+				if (me.rendered) {
+					me.removeCls('editor-open');
+				}
 			}
 		});
 
