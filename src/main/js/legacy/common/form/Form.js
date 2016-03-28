@@ -400,10 +400,11 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 	 * @param  {Object} e Browser Event.
 	 * @returns {void}
 	 */
-	onFormChange: function (/*e*/) {
-		var vals = this.getValues();
+	onFormChange: function (e) {
+		var vals = this.getValues(),
+			key = e && (e.key || e.keyCode);
 
-		if (this.onChange) {
+		if (this.onChange && (key !== Ext.EventObject.ENTER)) {
 			this.onChange(vals);
 		}
 	},
