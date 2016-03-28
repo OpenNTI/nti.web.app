@@ -16,9 +16,11 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		}
 	},
 
-	mimeType: 'application/vnd.nextthought.assessment.userscourseassignmenthistoryitem',
+	mimeType: [
+		'application/vnd.nextthought.assessment.userscourseassignmenthistoryitem',
+		'application/vnd.nextthought.assessment.userscourseassignmenthistoryitemsummary'
+	],
 
-	//application/vnd.nextthought.assessment.userscourseassignmenthistoryitemsummary
 
 	fields: [
 		{name: 'Feedback', type: 'singleItem', persist: false},
@@ -146,8 +148,9 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	 * @return {Promise}		 fulfills is it was successful
 	 */
 	resetAssignment: function (isMine) {
-		var record = this,
-			msg, url = record.getLink('edit'), store = this.store;
+		let record = this;
+		let msg, url = record.getLink('edit');
+		//let store = this.store;
 
 		if (!isMine) {
 			msg = 'This will reset this assignment for this student. It is not recoverable.' +
@@ -227,8 +230,8 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 	},
 
 	beginReset: function () {
-		var record = this,
-			store = record.store;
+		let record = this;
+		// let store = record.store;
 
 		Ext.MessageBox.alert({
 			title: 'Are you sure?',
@@ -298,14 +301,15 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		if (grade && grade.excuseGrade) {
 			grade.excuseGrade()
 				.then(function (record) {
-					var txt = record.get('IsExcused') === true ? 'Unexcuse Grade' : 'Excuse Grade',
-						store = me.store, grade = me.get('Grade');
+					let txt = record.get('IsExcused') === true ? 'Unexcuse Grade' : 'Excuse Grade';
+					// let store = me.store;
+					let newGrade = me.get('Grade');
 					menuItemEl.setText(txt);
 
-					if (grade) {
-						grade.set('IsExcused', record.get('IsExcused'));
+					if (newGrade) {
+						newGrade.set('IsExcused', record.get('IsExcused'));
 					}
-					me.fireEvent('excused-changed', grade);
+					me.fireEvent('excused-changed', newGrade);
 				})
 				.fail(function (err) {
 					console.log('Excusing grade failed: ' + err);
@@ -406,6 +410,4 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 		//otherwise the grade doesn't need to be updated so just resolve
 		return Promise.resolve();
 	}
-}, function () {
-	NextThought.model.MAP['application/vnd.nextthought.assessment.userscourseassignmenthistoryitemsummary'] = this.$className;
 });
