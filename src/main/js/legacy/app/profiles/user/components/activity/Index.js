@@ -13,6 +13,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-user-activity',
 
+	state_key: 'profile_activity',
+
 	mixins: {
 		Router: 'NextThought.mixins.Router',
 		State: 'NextThought.mixins.State'
@@ -137,7 +139,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 	restoreState: function () {
-		var state = this.getCurrentState();
+		var state = this.getCurrentState() || {};
 		return this.applyState(state);
 	},
 
