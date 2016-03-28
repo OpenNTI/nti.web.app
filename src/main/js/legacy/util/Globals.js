@@ -883,13 +883,9 @@ module.exports = exports = Ext.define('NextThought.util.Globals', {
 
 //TODO: figure out how to fix this globals
 
-// window.guidGenerator = exports.guidGenerator.bind(exports);
-// window.isMe = exports.isMe.bind(exports);
-// window.getURL = exports.getURL.bind(exports);
-// window.swallow = function(e) {};
-// window.getResourceURL = exports.getResourceURL.bind(exports);
-// window.reloadCSS = exports.reloadCSS.bind(exports);
-// window.isFeature = exports.isFeature.bind(exports);
+// global.getURL = exports.getURL.bind(exports);
+global.isMe = exports.isMe.bind(exports); //Used in xtemplates >.<
+global.isFeature = exports.isFeature.bind(exports); //Used in xtemplates >.<
 
 exports.stopBackspace(document);
 
