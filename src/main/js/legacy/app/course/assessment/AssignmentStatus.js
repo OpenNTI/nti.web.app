@@ -65,7 +65,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 			var now = new Date(),
 				d = {};
 
-			if (TimeUtils.isSameDay(now, data.due)) {
+			//Its due today if its the same day and its not past due
+			if (TimeUtils.isSameDay(now, data.due) && data.due > now) {
 				d.html = 'Due Today at ' + Ext.Date.format(data.due, 'g:i a T') + '!';
 				d.cls = 'today';
 				d.qtipFn = 'getTimeUntilDue';
@@ -87,11 +88,11 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Assignm
 							d.html = 'Available ' + Ext.Date.format(data.start, 'l, F j g:i A T');
 						}
 						else {
-							d.html = 'Available Now' + '&nbsp;';							
+							d.html = 'Available Now' + '&nbsp;';
 						}
 					}
 				}
-				
+
 				if (now >= data.due) {
 					d.cls = 'late';
 				}
