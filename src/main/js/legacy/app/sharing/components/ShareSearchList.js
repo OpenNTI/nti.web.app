@@ -49,8 +49,8 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareS
 			return t === 'person';
 		},
 
-		getIcon: function (model) {
-			var t = this.getType(model);
+		getIcon: function (/*model*/) {
+			// var t = this.getType(model);
 			return '';
 		},
 
@@ -161,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareS
 			index = selected && this.store.indexOf(selected) || -1,
 			next;
 
-		if (index < 0 || index == this.store.getCount() - 1) {
+		if (index < 0 || index === this.store.getCount() - 1) {
 			next = 0;
 		}else{
 			next = index + 1;
