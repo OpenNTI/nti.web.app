@@ -133,7 +133,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Parts', {
 				val = input.getValue();
 			}
 
-			dontUseTheOldAnswer = input.reset();
+			dontUseTheOldAnswer = input.reset(keepAnswers);
 
 			if (!dontUseTheOldAnswer && keepAnswers && input.setValue) {
 				input.setValue(val);

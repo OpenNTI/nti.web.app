@@ -53,18 +53,28 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 	afterRender: function () {
 		this.callParent(arguments);
 
-		var me = this;
+		var me = this,
+			dragzoneEl = this.getDragzoneEl();
 
 		wait()
 			.then(function () {
 				if (me.rendered) {
-					me.dragzoneEl.setStyle({'width': '100%'});
+					dragzoneEl.setStyle({'width': '100%'});
 				}
 			});
 
 		me.initializeDragZone();
 		me.initializeDropZone();
-		me.dragzoneEl.dom.id = Ext.id();
+		dragzoneEl.dom.id = Ext.id();
+	},
+
+	getDragzoneEl: function() {
+		return this.el && this.el.down('.ordering-dd-zone');
+	},
+
+
+	getDraggableEl: function() {
+		return this.el && this.el.down('.ordinal .draggable-area');
 	},
 
 	getAnsweredCount: function () {
@@ -175,16 +185,20 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		//NOTE: The dragZoneEl has a display property of 'table' which allows its child elements to flex the box.
 		// Since marking a question alters the dom, we want to only set the width to 100% only after we've updated the layout.
 		// Otherwise, it will force its child elements to be each have a width of 50%, which alters the flex layout. --Pacifique M.
-		this.dragzoneEl.setStyle({'width': undefined});
+		var dragzoneEl = this.getDragzoneEl();
+
+		dragzoneEl.setStyle({'width': undefined});
 		this.callParent();
-		this.dragzoneEl.setStyle({'width': '100%'});
+		dragzoneEl.setStyle({'width': '100%'});
 		this.mark();
 	},
 
 	markIncorrect: function () {
-		this.dragzoneEl.setStyle({'width': undefined});
+		var dragzoneEl = this.getDragzoneEl();
+
+		dragzoneEl.setStyle({'width': undefined});
 		this.callParent();
-		this.dragzoneEl.setStyle({'width': '100%'});
+		dragzoneEl.setStyle({'width': '100%'});
 		this.mark();
 	},
 
@@ -208,9 +222,13 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 		}
 	},
 
-	reset: function () {
+	reset: function (keepAnswers) {
 		this.el.select('.ordinal .draggable-area').removeCls(['correct', 'incorrect']);
-	//		this.resetOrder();
+
+		if (!keepAnswers) {
+			this.resetOrder();
+		}
+
 		this.unlockDnD();
 		this.callParent();
 	},
@@ -226,57 +244,41 @@ module.exports = exports = Ext.define('NextThought.app.assessment.input.Ordering
 	},
 
 	resetOrder: function () {
-		var draggableParts = this.el.select('.ordinal .draggable-area');
-		this.quickSort(draggableParts.elements);
+		if (!this.rendered) {
+			return;
+		}
+
+		var values = Ext.clone(this.part.get('values')),
+			labels = Ext.clone(this.part.get('labels')),
+			i = 0, m = [], dragzoneEl,
+			tpl = new Ext.XTemplate(this.inputTpl);
+
+		for (i; i < values.length; i++) {
+			m.push({
+				label: this.filterHTML(labels[i]),
+				value: this.filterHTML(values[i])
+			});
+		}
+
+		this.inputBox.dom.innerHTML = '';
+
+		tpl.append(this.inputBox, {ordinals: m});
+
+		dragzoneEl = this.getDragzoneEl();
+
+		dragzoneEl.setStyle({'width': '100%'});
+		dragzoneEl.dom.id = Ext.id();
 	},
 
 	hideSolution: function () {
-		var me = this;
-		this.dragzoneEl.setStyle({'width': undefined});
+		var me = this,
+			dragzoneEl = this.getDragzoneEl();
+
+		dragzoneEl.setStyle({'width': undefined});
 		this.callParent();
-		me.dragzoneEl.setStyle({'width': '100%'});
+		dragzoneEl.setStyle({'width': '100%'});
 	},
 
-	quickSort: function (a) {
-		/**
-		 * adaptation of the quick sort algorithm found at http://en.literateprograms.org/Quicksort_(JavaScript)
-		 * While  we could easily do the swapping with a basic sort algorithm or remove all the items
-		 * and add them again in order, and the performance would still be great,
-		 * since the size of the set is small,
-		 * it's good to use this algorithm and hopefully reduce the number of comparison and swaps we need to do.
-		 */
-		function qsort (a, begin, end) {
-			var pivot;
-			if (begin < end) {
-				pivot = begin + Math.floor(Math.random() * (end - begin));
-
-				pivot = partition(a, begin, end, pivot);
-				qsort(a, begin, pivot);
-				qsort(a, pivot + 1, end);
-			}
-		}
-
-		function partition (a, begin, end, pivot) {
-			var p = parseInt(a[pivot].getAttribute('data-ordinal'), 10),
-				s, i, t;
-
-			me.swap(p, end - 1);
-			s = begin;
-			for (i = begin; i < end - 1; i++) {
-				t = parseInt(a[i].getAttribute('data-ordinal'), 10);
-				if (t <= p) {
-					me.swap(p, end - 1);
-					s++;
-				}
-			}
-
-			me.swap(end - 1, s);
-			return s;
-		}
-
-		var me = this;
-		qsort(a, 0, a.length);
-	},
 
 	swap: function (a, b) {
 		if (a === b) { return; }
