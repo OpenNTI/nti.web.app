@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var AssessmentAssignmentStatus = require('../AssignmentStatus');
-var EditingDueDate = require('./editing/DueDate');
+const Ext = require('extjs');
+
+require('../AssignmentStatus');
+require('./editing/DueDate');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.AssignmentStatus', {
@@ -85,11 +86,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		var me = this,
 			assignment = me.assignment,
 			history = me.history,
+			completed = history && history.get('completed'),
 			grade = history && history.get && history.get('Grade'),
 			status = me.status || NextThought.app.course.assessment.AssignmentStatus.getStatusHTML({
 				due: assignment.getDueDate(),
 				start: assignment.get('availableBeginning'),
-				completed: history && history.get('completed'),
+				completed: !assignment.getLink('edit') && completed,
 				maxTime: assignment.isTimed && assignment.getMaxTime(),
 				duration: assignment.isTimed && assignment.getDuration(),
 				isExcused: grade && grade.get('IsExcused'),
