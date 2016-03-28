@@ -2,11 +2,11 @@ var Ext = require('extjs');
 require('legacy/mixins/Router');
 require('legacy/mixins/State');
 require('legacy/common/ux/Grouping');
-require('legacy/navigation/path/Actions');
+require('legacy/app/navigation/path/Actions');
 require('./FilterBar');
 require('./List');
 
-const {wait} = require('legacy/utils/Promise');
+const {wait} = require('legacy/util/Promise');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.assignments.View', {
