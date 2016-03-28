@@ -262,7 +262,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			availableValid = available.validate(),
 			dueValid = due.validate(),
 			availableDate = null, dueDate = null,
-			success;
+			isValid = true;
 
 		if (!availableValid || !dueValid) {
 			return;
@@ -270,11 +270,23 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		if (this.startOnRadio.checked) {
 			availableDate = available.getSelectedDate();
+
+			if (!availableDate) {
+				available.showDateError('Please enter a date.');
+				isValid = false;
+			}
 		}
 
 		if (this.endCheckbox.checked) {
 			dueDate = due.getSelectedDate();
+
+			if (!dueDate) {
+				due.showDateError('Please enter a date.');
+				isValid = false;
+			}
 		}
+
+		if (!isValid) { return; }
 
 		me.addSavingMask();
 
