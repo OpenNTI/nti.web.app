@@ -1,10 +1,12 @@
 var Ext = require('extjs');
-var MixinsRouter = require('../../../../../../mixins/Router');
-var MixinsState = require('../../../../../../mixins/State');
-var UxGrouping = require('../../../../../../common/ux/Grouping');
-var PathActions = require('../../../../../navigation/path/Actions');
-var AssignmentsFilterBar = require('./FilterBar');
-var AssignmentsList = require('./List');
+require('legacy/mixins/Router');
+require('legacy/mixins/State');
+require('legacy/common/ux/Grouping');
+require('legacy/navigation/path/Actions');
+require('./FilterBar');
+require('./List');
+
+const {wait} = require('legacy/utils/Promise');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.assignments.View', {
@@ -33,8 +35,8 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 	grouperMap: {
 		'lesson': {
-			 'property': 'lesson',
-			 'sorterFn': function (a, b) {
+			'property': 'lesson',
+			'sorterFn': function (a, b) {
 				var aVal = a.get('outlineNode'),
 					bVal = b.get('outlineNode');
 
@@ -51,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}
 
 				return aVal < bVal ? -1 : aVal === bVal ? 0 : 1;
-			 }
+			}
 		},
 		'completion': {
 			'property': 'completed',
@@ -212,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			} else {
 				groupPromise = Promise.resolve();
 			}
-			
+
 			if (state && state.search) {
 				this.filterSearchValue(state.search);
 			}
