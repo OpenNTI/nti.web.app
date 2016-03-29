@@ -1,8 +1,9 @@
 var Ext = require('extjs');
-var DndActions = require('./Actions');
-var AppDndInfo = require('../../model/app/DndInfo');
-var StoreDataTransfer = require('../../store/DataTransfer');
+require('./Actions');
+require('../../model/app/DndInfo');
+require('../../store/DataTransfer');
 
+const {wait} = require('legacy/util/Promise');
 
 module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 	constructor: function (config) {

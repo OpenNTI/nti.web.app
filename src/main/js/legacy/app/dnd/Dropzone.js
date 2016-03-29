@@ -1,10 +1,10 @@
 var Ext = require('extjs');
-var MixinsScrolling = require('../../mixins/Scrolling');
-var AppDndInfo = require('../../model/app/DndInfo');
-var StoreDataTransfer = require('../../store/DataTransfer');
-var DndStateStore = require('./StateStore');
-var UtilScrolling = require('../../util/Scrolling');
 
+require('../../mixins/Scrolling');
+require('../../model/app/DndInfo');
+require('../../store/DataTransfer');
+require('./StateStore');
+require('../../util/Scrolling');
 
 module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 	mixins: {
@@ -182,8 +182,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Dropzone', {
 
 		var el = this.getDropzoneTarget(),
 			dataTransfer = new NextThought.store.DataTransfer({dataTransfer: e.dataTransfer}),
-			handlers = this.getHandlersForDataTransfer(dataTransfer),
-			effect = this.__getEffectForHandlers(handlers);
+			handlers = this.getHandlersForDataTransfer(dataTransfer);
 
 		this.dragEnterCounter = this.dragEnterCounter || 0;
 
