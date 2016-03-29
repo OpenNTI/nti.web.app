@@ -277,7 +277,7 @@ span.tab{
 							position: relative;
 							display: inline-block;
 
-							&.bold, &.italic, &.underline, &.whiteboard, &.video {
+							&.bold, &.italic, &.underline, &.whiteboard, &.video, &.upload {
 								margin-right: 5px;
 								margin-top: 4px;
 								height: 28px;
@@ -318,8 +318,15 @@ span.tab{
 								}
 							}
 
+							&.upload {
+								@include icon('editor-insert-link', $top:9px);
+								&:hover::after{
+									@include sprite($icons,'editor-insert-link_hover',$dimensions: true);
+								}
+							}
 
-							&.whiteboard, &.video{
+
+							&.whiteboard, &.video, &.upload{
 								margin-right: 10px;
 								&::after{
 									top: 6px;
@@ -329,6 +336,26 @@ span.tab{
 							&.video{
 								&::after{
 									top: 5px;
+								}
+							}
+
+							&.upload {
+								position: relative;
+								overflow: hidden;
+								cursor: pointer;
+
+								&::after {
+									top: 10px;
+									pointer-events: none;
+								}
+
+								input[type=file] {
+									position: absolute;
+									top: 0;
+									left: 0;
+									right: 0;
+									bottom: 0;
+									opacity: 0;
 								}
 							}
 						}

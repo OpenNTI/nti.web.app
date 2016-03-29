@@ -1,6 +1,6 @@
-var Ext = require('extjs');
-var EditorEditor = require('../../../../../editor/Editor');
-var ForumsActions = require('../../../Actions');
+const Ext = require('extjs');
+require('legacy/editor/Editor');
+require('../../../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
@@ -11,6 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	enableTags: true,
 	enableTitle: true,
 	enableVideo: true,
+	enableFileUpload: true,
 	headerTplOrder: '{title}{toolbar}',
 
 	renderTpl: Ext.DomHelper.markup([

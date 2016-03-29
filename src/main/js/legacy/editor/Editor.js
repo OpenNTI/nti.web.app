@@ -85,31 +85,33 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			}
 			, {
 				cls: 'footer',
-				cn: [
-				{
+				cn: [{
 					cls: 'left',
 					cn: [
-						{ tag: 'tpl', 'if': 'enableTextControls', cn:
-						{
+						{ tag: 'tpl', 'if': 'enableTextControls', cn: {
 							cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn: {
 								cls: 'popctr', cn: {
-								cls: 'popover', cn: [
-									{cls: 'control bold', tabIndex: -1, 'data-qtip': 'Bold'},
-									{cls: 'control italic', tabIndex: -1, 'data-qtip': 'Italic'},
-									{cls: 'control underline', tabIndex: -1, 'data-qtip': 'Underline'}
-								]
-							}
+									cls: 'popover', cn: [
+										{cls: 'control bold', tabIndex: -1, 'data-qtip': 'Bold'},
+										{cls: 'control italic', tabIndex: -1, 'data-qtip': 'Italic'},
+										{cls: 'control underline', tabIndex: -1, 'data-qtip': 'Underline'}
+									]
+								}
 							}
 						}},
-						{ tag: 'tpl', 'if': 'enableObjectControls', cn:
-						{
+						{ tag: 'tpl', 'if': 'enableObjectControls', cn: {
 							cls: 'action object-controls', 'data-qtip': 'Insert Object', cn: {
 								cls: 'popctr', cn: {
-								cls: 'popover', cn: [
-									{ cls: 'control whiteboard', 'data-qtip': 'Create a whiteboard' },
-									{ tag: 'tpl', 'if': 'enableVideo', cn: { cls: 'control video', 'data-qtip': 'Embed a video' } }
-								]
-							}
+									cls: 'popover', cn: [
+										{ cls: 'control whiteboard', 'data-qtip': 'Create a whiteboard' },
+										{ tag: 'tpl', 'if': 'enableVideo', cn: { cls: 'control video', 'data-qtip': 'Embed a video' } },
+										{ tag: 'tpl', 'if': 'enableFileUpload', cn: [
+											{cls: 'control upload', 'data-qtip': 'Add an Attachment', cn: [
+												{ tag: 'input', type: 'file'}
+											]}
+										]}
+									]
+								}
 							}
 						}}
 					]
@@ -256,6 +258,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			enableTitle: Boolean(this.enableTitle),
 			enableWhiteboards: Boolean(this.enableWhiteboards),
 			enableVideo: Boolean(this.enableVideo),
+			enableFileUpload: Boolean(this.enableFileUpload),
 			placeholderText: this.placeholderText
 		});
 
@@ -265,7 +268,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	afterRender: function () {
-		var aux, objectsControl;
+		var aux;
 
 		this.callParent(arguments);
 		this.setupEditor();
@@ -476,6 +479,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		});
 
 		me.typingAttributes = [];
+
+		if (this.enableFileUpload) {
+			this.setupFileUploadField();
+		}
 	},
 
 	moveCursorToEnd: function (el) {
@@ -557,6 +564,48 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			});
 		}
 	},
+
+
+	setupFileUploadField: function() {
+		if (!this.enableFileUpload) { return; }
+
+		let dom = this.el.dom,
+			input = dom && dom.querySelector('.control.upload input');
+
+		if (input) {
+			input.addEventListener('change', this.onFileInputChange.bind(this));
+			input.addEventListener('dragenter', this.onDragEnter.bind(this));
+			input.addEventListener('dragleave', this.onDragLeave.bind(this));
+			input.addEventListener('drop', this.onDragLeave.bind(this));
+		}
+	},
+
+
+	onFileInputChange: function (e) {
+		var input = e.target,
+			file = input && input.files && input.files[0];
+
+		e.preventDefault();
+		if (file && (!this.accepts || file.type.match(this.accepts))) {
+			this.onFileChange(file);
+		}
+	},
+
+
+	onFileChange: function () {
+		// TODO: Add file-container to the Body.
+	},
+
+
+	onDragEnter: function () {
+		// TODO: Not Implemented yet
+	},
+
+
+	onDragLeave: function () {
+		// TODO: Not Implemented yet
+	},
+
 
 	activate: function () {
 		this.maybeEnableSave();
