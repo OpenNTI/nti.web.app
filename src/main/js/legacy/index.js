@@ -1,7 +1,7 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 Ext.Loader.setConfig({enabled: false});
 
-var {getURL, validateConfig, loadScript} = require('./util/Globals');
+const {getURL, validateConfig, loadScript} = require('./util/Globals');
 
 require('./util/Localization');
 require('./overrides');
@@ -26,13 +26,13 @@ Ext.application({
 		'Application'
 	],
 
-	launch: function () {
+	launch () {
 		console.debug('launching');
-		var me = this;
-		var ios;
-		var reasons = [];
-		var unsupported = [];
-		var geckoRev = /rv:(\d+\.\d+)/.exec(Ext.userAgent) || [];
+		let me = this;
+		let ios;
+		let reasons = [];
+		let unsupported = [];
+		let geckoRev = /rv:(\d+\.\d+)/.exec(Ext.userAgent) || [];
 
 		function start () {
 			if (Ext.is.iOS) {
@@ -49,9 +49,10 @@ Ext.application({
 
 
 
-		Ext.each(//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
-				['Canvas', 'Range', 'CSS3BoxShadow', 'CSS3BorderRadius'],
-				function (f) {Boolean(!Ext.supports[f] && unsupported.push(f));});
+		//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
+		for(let f of ['Canvas', 'Range', 'CSS3BoxShadow', 'CSS3BorderRadius']) {
+			if(!Ext.supports[f]) { unsupported.push(f); }
+		}
 
 
 		// allow PhantomJS through the browser block - at least far enough for our headless login test
@@ -62,7 +63,7 @@ Ext.application({
 
 		ios = (function () {
 			if (/iP(hone|od|ad)/.test(navigator.platform)) {
-				var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+				let v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
 				return v && [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
 			}
 		}());
