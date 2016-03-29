@@ -1,0 +1,371 @@
+var Ext = require('extjs');
+var UserRepository = require('../cache/UserRepository');
+var CoderetrievalWindow = require('../app/contacts/components/coderetrieval/Window');
+var {isMe} = require('legacy/util/Globals');
+
+
+/**
+ *	We assume that the component that mixes this in should implement 'createUserComponent' and the its children should
+ *	implement 'getUserObject' method.  User containers drive their contents (child components) off a specified model objects
+ *	specified field.  This information should be provided as two functions, getModelObject and getUserListFiendName, on the component that mixes in this mixin.
+ *	The fieldName provided should map to a field of type UserList on the given model.  People mixing this in should call the constructor
+ *	of this mixin in initComponent.	 By default this mixin will handle presence-changed events from it's children. You can set the property
+ *	reactToChildPresenceChanged to false to stop that behaviour.  By default this component will also watch the underlying model for changes
+ *	to the specified field.	 Set the property reactToModelChanges to false to turn off this behaviour
+ */
+module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
+	//Should be called from initComponent
+	constructor: function () {
+		this.on('presence-changed', this.presenceOfComponentChanged, this);
+		this.on('beforeRender', this.onCmpRendered, this);
+		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
+		this.GroupActions = NextThought.app.groups.Actions.create();
+	},
+
+	setupActions: function (group, ignoreChatOption) {
+		var allHidden = true, items, listOrGroup = group && Ext.String.capitalize(group.readableType),
+			menuCfg = {
+				parentItem: this
+			};
+
+
+		this.deleteGroupAction = new Ext.Action({
+			text: 'Delete ' + listOrGroup,
+			scope: this,
+			handler: Ext.bind(this.deleteGroup, this, [group]),
+			itemId: 'delete-group',
+			ui: 'nt-menuitem', plain: true,
+			hidden: (group && !group.getLink('edit')) ||  (group && group.get('friends').length > 0)
+		});
+
+		this.leaveGroupAction = new Ext.Action({
+			text: 'Leave ' + listOrGroup,
+			scope: this,
+			handler: Ext.bind(this.leaveGroup, this, [group]),
+			itemId: 'leave-group',
+			ui: 'nt-menuitem', plain: true,
+			hidden: group && !group.getLink('my_membership')
+		});
+
+		this.groupChatAction = new Ext.Action({
+			text: 'Chat With ' + listOrGroup,
+			scope: this,
+			handler: Ext.bind(this.chatWithGroup, this, [group]),
+			itemId: 'group-chat',
+			ui: 'nt-menuitem', plain: true,
+			hidden: this.groupChatHidden(group)
+		});
+
+		this.getGroupCodeAction = new Ext.Action({
+			text: 'Group Code',
+			scope: this,
+			handler: Ext.bind(this.getGroupCode, this, [group]),
+			itemId: 'get-group-code',
+			ui: 'nt-menuitem', plain: true,
+			hidden: !group || !group.getLink('default-trivial-invitation-code')
+		});
+
+		this.forcefullyRemoveUserAction = new Ext.Action({
+			text: 'Remove User',
+			scope: this,
+			handler: Ext.bind(this.forcefullyRemoveUser, this, [group], 1),
+			itemId: 'remove-user',
+			ui: 'nt-menuitem', plain: true
+		});
+
+		this.userMenu = Ext.widget('menu', Ext.apply({
+			items: [
+				this.forcefullyRemoveUserAction
+			]
+		},menuCfg));
+
+		if (ignoreChatOption) {
+			items = [
+				this.leaveGroupAction,
+				this.deleteGroupAction,
+				this.getGroupCodeAction
+			];
+		}else {
+			items = [
+				this.leaveGroupAction,
+				this.deleteGroupAction,
+				this.groupChatAction,
+				this.getGroupCodeAction
+			];
+		}
+		//don't set up the menu if all the items are hidden
+		Ext.each(items, function (i) {
+			allHidden = allHidden ? i.isHidden() : allHidden;
+		});
+
+		if (allHidden) {
+			return;
+		}
+
+		this.menu = Ext.widget('menu', Ext.apply({
+			items: items
+		},menuCfg));
+
+		this.mon(this.menu, this.getMenuHideHandlers(this.menu));
+		this.mon(this.userMenu, this.getMenuHideHandlers(this.userMenu));
+
+		this.updateChatState(group);
+	},
+
+	groupChatHidden: function (group) {
+		return true;
+		// TODO: Add group chat functionality
+		// return !Service.canChat() || !group || !isMe(group.get('Creator')) || group.getFriendCount() === 0;
+	},
+
+	getUserList: function () {
+		var model = this.getModelObject();
+		if (!model) {
+			return;
+		}
+		return model.get(this.getUserListFieldName() || '');
+	},
+
+	onCmpRendered: function () {
+		var model = this.getModelObject(),
+			fn = this.getUserListFieldName(),
+			users;
+		if (this.reactToModelChanges === false || !model || !fn) {
+			return true;
+		}
+
+		users = model.get(fn);
+
+		this.updateFromModelObject(users);
+
+		//listen for changes to the list
+		model.addObserverForField(this, fn, this.updateFromModelObject, this);
+	},
+
+	updateFromModelObject: function (key, value) {
+		var users = value || key,
+			model = this.getModelObject();
+
+		console.time('updating user container with new users');
+
+		users = users.slice();
+
+		if (model && model.isDFL) {
+			users.push(model.get('Creator'));
+		}
+		Ext.Array.remove(users, $AppConfig.username);
+
+		UserRepository.getUser(users, this.setUsers, this);
+	},
+
+	setUsers: function (resolvedUsers) {
+		var p;
+
+		if (!Ext.isArray(resolvedUsers)) {
+			resolvedUsers = Ext.Object.getValues(resolvedUsers);
+		}
+
+		resolvedUsers.sort(this.userSorterFunction);
+
+		p = Ext.Array.map(resolvedUsers, this.createUserComponent, this);
+
+		console.timeEnd('updating user container with new users');
+
+		if (this.groupChatAction) {
+			this.groupChatAction.setHidden(this.groupChatHidden(this.getModelObject()));
+		}
+
+		console.time('Adding Users');
+		this.removeAllItems();
+		this.insertItem(0, p);
+		console.timeEnd('Adding Users');
+	},
+
+	presenceOfComponentChanged: function (cmp) {
+		var users;
+
+		if (this.reactToChildPresenceChanged === false) {
+			return;
+		}
+
+		console.warn('presence of component changed', arguments);
+		this.updateCmpPosition(cmp);
+		return false; //Stop bubble we handled it
+	},
+
+	cleanupActions: function () {
+		if (this.userMenu) {
+			this.userMenu.destroy();
+		}
+		if (this.menu) {
+			this.menu.destroy();
+		}
+	},
+
+	getMenuHideHandlers: function (menu) {
+		var leave;
+		function hide () {menu.hide();}
+		function start () { stop(); leave = setTimeout(hide, 500); }
+		function stop () { clearTimeout(leave); }
+		return {
+			mouseleave: start,
+			mouseenter: stop
+		};
+	},
+
+	updateChatState: function (group) {
+		var me = this,
+			friends;
+
+		function test (f) { return f.getPresence && f.getPresence().isOnline(); }
+
+		//Update group chat state.
+		//TODO listen for change events instead of rechecking each time
+		if (group) {
+			friends = group.get('friends');
+			if (Ext.isEmpty(friends, false)) { this.groupChatAction.setDisabled(true); }
+			else {
+				UserRepository.getUser(friends, function (rFriends) {
+					var canGroupChat = Ext.Array.some(rFriends, test);
+					me.groupChatAction.setDisabled(!canGroupChat);
+				});
+			}
+		}
+	},
+
+	//Users isn't very big here so do the naive thing
+	indexToInsertAt: function (users, newUser) {
+		var collection = new Ext.util.MixedCollection();
+		collection.addAll(users);
+
+		return collection.findInsertionIndex(newUser, this.userSorterFunction);
+	},
+
+	addCmpInSortedPosition: function (cmp) {
+		var users = Ext.Array.map(this.query('[username]') || [], function (u) {return u.getUserObject();});
+		this.insert(this.indexToInsertAt(users, cmp.getUserObject()), cmp);
+	},
+
+	updateCmpPosition: function (cmp) {
+		this.remove(cmp, false);
+		this.addCmpInSortedPosition(cmp);
+	},
+
+	addUser: function (user) {
+		var existing = this.down('[username=' + user.get('Username') + ']'), users;
+		if (!existing) {
+			//Figure out where we need to insert it
+			users = Ext.Array.map(this.query('[username]') || [], function (u) {return u.getUserObject();});
+			this.insertItem(this.indexToInsertAt(users, user), this.createUserComponent(user));
+			return true;
+		}
+		return false;
+	},
+
+	removeUser: function (user) {
+		var name = (user && user.isModel) ? user.get('Username') : user,
+			existing = this.down('[username=' + name + ']');
+		if (existing) {
+			this.removeItem(existing, true);
+			return true;
+		}
+		return false;
+	},
+
+	//Sort the users first by presense (online, offline) then
+	//alphabetically withing that
+	userSorterFunction: function (a, b) {
+		var aPresence = a.getPresence().toString() || '',
+			bPresence = b.getPresence().toString() || '',
+			aName = a.get('displayName') || '',
+			bName = b.get('displayName') || '',
+			presenceResult, nameResult;
+
+		presenceResult = bPresence.localeCompare(aPresence);
+		if (presenceResult !== 0) {
+			return presenceResult;
+		}
+
+		return aName.localeCompare(bName);
+	},
+
+	deleteGroup: function (group) {
+		var me = this,
+			msg = Ext.DomHelper.markup(['The ', group.readableType, ' ',
+									{tag: 'span', html: group.get('displayName')},
+									' will be permanently deleted...']);
+		function cb (str) {
+			if (str === 'ok') {
+				me.GroupActions.deleteGroup(me.associatedGroup);
+			}
+		}
+
+		this.areYouSure(msg, cb);
+	},
+
+	chatWithGroup: function (group) {
+		if (group.getFriendCount() > 0) {
+			this.fireEvent('group-chat', group, {persistent: false});
+		}
+	},
+
+	getGroupCode: function (group) {
+		var dn = group.get('displayName');
+		if (!group.getLink('default-trivial-invitation-code')) {
+			return;
+		}
+
+		this.GroupActions.getGroupCode(group)
+			.then(function (code) {
+				var win = Ext.widget('coderetrieval-window', {groupName: dn, code: code});
+				win.show();
+			})
+			.fail(function (errorText) {
+				alert(errorText);
+			});
+	},
+
+	leaveGroup: function (group) {
+		if (group.getLink('my_membership')) {
+			this.GroupActions.leaveGroup(group)
+				.then(function () {
+					console.log('successfully left the group');
+				})
+				.fail(function (errorText) {
+					alert(errorText);
+				});
+		}
+	},
+
+	forcefullyRemoveUser: function (item, group) {
+		var me = this,
+			menu = item && item.up ? item.up('menu') : null,
+			//use the menu's reference, if we called with user instead, use it
+			user = menu ? menu.user : item && item.isModel ? item : null,
+			msg = Ext.DomHelper.markup([
+				{tag: 'span', cls: 'displayname', html: user.get('displayName')},
+				' will no longer be a member of ',
+				{tag: 'span', cls: 'displayname', html: group.get('displayName')}
+			]);
+
+		function cb (str) {
+			if (str === 'ok') {
+				me.GroupActions.removeContact(group, user.getId());
+			}
+		}
+
+		this.areYouSure(msg, cb);
+	},
+
+	areYouSure: function (msg, callback) {
+		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+		Ext.Msg.show({
+			msg: msg,
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			icon: 'warning-red',
+			buttonText: {'ok': 'Delete'},
+			title: 'Are you sure?',
+			fn: callback
+		});
+	}
+});

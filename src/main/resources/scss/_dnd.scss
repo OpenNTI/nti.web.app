@@ -7,6 +7,10 @@
 	}
 }
 
+.drag-over {
+	min-height: 60px;
+}
+
 .dnd-save-placeholder {
 	line-height: 2em;
 	text-align: center;
@@ -17,7 +21,7 @@
 	&:not(.column) {
 		clear: both;
 	}
-	
+
 	span {
 		display: inline-block;
 		vertical-align: middle;
