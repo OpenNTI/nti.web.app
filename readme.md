@@ -24,8 +24,13 @@
   3. you can now compile the styles: `compass compile`
 
 
-### Login App & Server...
-See buildout docs.
+#### private npm
+All internal projects at NextThought are published into a private npm instance. You will need to configure npm to point to it before you can continue. It is located at https://npm.nextthought.com. For read-only access use the support credentials. When/if you need publishing (write) permissions, we can create a unique user for you.
+
+```bash
+npm set registry https://npm.nextthought.com
+npm login --registry https://npm.nextthought.com
+```
 
 
 ### Recommended
