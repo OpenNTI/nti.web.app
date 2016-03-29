@@ -7,6 +7,6 @@ src/main/resources/images/icons-*png
 #ignore minification byproducts
 stage
 dist
-
+reports
 node_modules
 npm-debug.log
