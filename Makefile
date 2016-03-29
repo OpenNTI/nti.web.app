@@ -9,7 +9,8 @@ CC=webpack --progress --cache --bail --config
 
 
 
-all: check build
+# all: check build
+all: build
 
 
 setup:
