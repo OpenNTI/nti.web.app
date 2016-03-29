@@ -1,23 +1,22 @@
-var Ext = require('extjs');
-var Socket = require('../proxy/Socket');
-var AnalyticsUtil = require('../util/Analytics');
-var B64 = require('../util/Base64');
-var Globals = require('../util/Globals');
-var ParseUtils = require('../util/Parsing');
-var LoginStateStore = require('./StateStore');
-var ModelService = require('../model/Service');
-var ModelUser = require('../model/User');
-var ModelCommunity = require('../model/Community');
-var {getURL} = Globals;
+const Ext = require('extjs');
+const Socket = require('legacy/proxy/Socket');
+const AnalyticsUtil = require('legacy/util/Analytics');
+const B64 = require('legacy/util/Base64');
+const Globals = require('legacy/util/Globals');
+const ParseUtils = require('legacy/util/Parsing');
+const LoginStateStore = require('legacy/login/StateStore');
+const ModelService = require('legacy/model/Service');
 
+const {wait} = require('legacy/util/Promise');
+const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
 
 module.exports = exports = Ext.define('NextThought.login.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 
 		//we don't have the service doc yet, but we need the ajax helpers
-		this.ServiceInterface = NextThought.model.Service.create({});
-		this.store = NextThought.login.StateStore.getInstance();
+		this.ServiceInterface = ModelService.create({});
+		this.store = LoginStateStore.getInstance();
 	},
 
 	handleImpersonate: function () {
@@ -39,9 +38,9 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 	handleLogout: function () {
 		var me = this,
-			url = getURL(Ext.String.urlAppend(
+			url = Globals.getURL(Ext.String.urlAppend(
 				me.store.getLogoutURL(),
-				'success=' + encodeURIComponent('/login')
+				'success=' + encodeURIComponent('/login/')
 			));
 
 		TemporaryStorage.removeAll();
@@ -90,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 				if (pref || c) {
 					return Globals.loadStyleSheetPromise('/app/resources/css/accessibility.css', 'main-stylesheet')
 						.fail(function () {
-							throw 'Failed to load the accessibility style sheet';
+							throw new Error('Failed to load the accessibility style sheet');
 						});
 				}
 			})
@@ -173,7 +172,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 		return me.ServiceInterface.request({
 			timeout: 60000,
-			url: getURL(dataserver + ping)
+			url: Globals.getURL(dataserver + ping)
 		}).then(function (response) {
 			response = Globals.parseJSON(response, true);
 
@@ -211,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		return me.ServiceInterface.request({
 			method: 'POST',
 			timeout: 60000,
-			url: getURL(link),
+			url: Globals.getURL(link),
 			callback: function () { clearTimeout(handshakeTimer);},
 			params: {
 				username: username
@@ -235,7 +234,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 				resolveService.then(function () {
 					if (tosLink) {
-					  	Service.overrideServiceLink('termsOfService', tosLink);
+						Service.overrideServiceLink('termsOfService', tosLink);
 					}
 				});
 
@@ -269,7 +268,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			server = $AppConfig.server;
 
 		return me.ServiceInterface.request({
-			url: getURL(server.data),
+			url: Globals.getURL(server.data),
 			timeout: 20000,
 			headers: {
 				'Accept': 'application/vnd.nextthought.workspace+json'
@@ -277,7 +276,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			scope: this
 		})
 			.then(function (doc) {
-				doc = NextThought.model.Service.create(Globals.parseJSON(doc));
+				doc = ModelService.create(Globals.parseJSON(doc));
 
 				if (!me.findResolveSelfWorkspace(doc)) {
 					console.error('Could not locate ResolveSelf link in:', doc);
@@ -325,7 +324,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 		}
 
 		return service.request({
-			url: getURL(href),
+			url: Globals.getURL(href),
 			scope: this,
 			headers: {
 				Accept: 'application/json'
@@ -336,7 +335,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 				if (user && user.get('Username') === workspace.Title) {
 					return user;
 				}
-				throw 'Mismatch';
+				return Promise.reject('Mismatch');
 			})
 			.then(function (user) {
 				//we set the user's presence in the chat session-ready controller so we don't need to do it here.
@@ -347,7 +346,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			})
 			.fail(function (reason) {
 				console.log('could not resolve app user', reason);
-				throw ['failed loading profile', reason];
+				return Promise.reject(['failed loading profile', reason]);
 			});
 	}
 });

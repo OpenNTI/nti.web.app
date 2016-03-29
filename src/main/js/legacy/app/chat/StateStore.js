@@ -1,10 +1,13 @@
-var Ext = require('extjs');
-var Toaster = require('../../common/toast/Manager');
-var ParseUtils = require('../../util/Parsing');
-var CommonStateStore = require('../../common/StateStore');
-var ModelRoomInfo = require('../../model/RoomInfo');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const Toaster = require('legacy/common/toast/Manager');
+const ParseUtils = require('legacy/util/Parsing');
+const Socket = require('legacy/proxy/Socket');
+const RoomInfo = require('legacy/model/RoomInfo');
+const {isMe} = require('legacy/util/Globals');
+const {wait} = require('legacy/util/Promise');
+const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
 
+require('legacy/common/StateStore');
 
 module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	extend: 'NextThought.common.StateStore',
@@ -48,6 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	 * @param {String} username		  id of the user the presence if for
 	 * @param {PresenceInfo} presence		the presence
 	 * @param {Function} changePresence what to call if they do set themselves online
+	 * @returns {void}
 	 */
 	setPresenceOf: function (username, presence, changePresence) {
 		var prevToast = this.__offlineToast,
@@ -116,8 +120,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 	getChatWindow: function (roomInfo) {
-		var me = this,
-			rIsString = (typeof roomInfo === 'string'),
+		var rIsString = (typeof roomInfo === 'string'),
 			w, occupantsKey;
 
 		if (!rIsString && roomInfo) {
@@ -193,8 +196,8 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	 *
 	 * @param {Array} users list of users
 	 * @param {String} roomId roomid
-	 * @param {Object} options
-	 * @return {NextThought.model.RoomInfo}
+	 * @param {Object} options options
+	 * @return {NextThought.model.RoomInfo} RoomInfo
 	 */
 	existingRoom: function (users, roomId) {
 		var allUsers = Ext.Array.unique(users.slice().concat($AppConfig.userObject.get('Username'))),
@@ -222,7 +225,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	/**
 	 *
 	 * @param {String} [key] Optional sub-key
-	 * @return {*}
+	 * @return {*} object
 	 */
 	getSessionObject: function (key) {
 		var o = TemporaryStorage.get(this.STATE_KEY) || {};
@@ -237,6 +240,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 	 * @param {Object} o Value to put into session storage.
 	 * @param {String} [key] Optional key. If present, `o` is assumed to be the new value at the `key` instead of
 	 *				the whole session object.
+	 * @returns {void}
 	 */
 	setSessionObject: function (o, key) {
 		var leaf = o;
@@ -313,7 +317,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.StateStore', {
 
 		if (json) {
 			try {
-				m = new NextThought.model.RoomInfo(json);
+				m = new RoomInfo(json);
 				m.setOriginalOccupants(json.originalOccupants);
 				return m;
 			}

@@ -1,7 +1,7 @@
-var Ext = require('extjs');
-var CommonStateStore = require('../StateStore');
-var CacheAbstractStorage = require('../../cache/AbstractStorage');
-var {swallow} = require('legacy/util/Globals');
+const Ext = require('extjs');
+require('legacy/common/StateStore');
+const AbstractStorage = require('legacy/cache/AbstractStorage');
+const {swallow} = require('legacy/util/Globals');
 
 
 module.exports = exports = Ext.define('NextThought.common.state.StateStore', {
@@ -10,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.common.state.StateStore', {
 	constructor: function () {
 		this.callParent(arguments);
 
-		this.storage = NextThought.cache.AbstractStorage.getLocalStorage();
+		this.storage = AbstractStorage.getLocalStorage();
 	},
 
 	setStateKey: function (key) {

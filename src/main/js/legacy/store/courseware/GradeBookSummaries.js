@@ -1,8 +1,10 @@
-var Ext = require('extjs');
-var UserRepository = require('../../cache/UserRepository');
-var User = require('../../model/User');
-require('../../model/courses/assignments/Summary');
+const Ext = require('extjs');
+const UserRepository = require('legacy/cache/UserRepository');
+const User = require('legacy/model/User');
+const {PersistentStorage} = require('legacy/cache/AbstractStorage');
+const {wait} = require('legacy/util/Promise');
 
+require('legacy/model/courses/assignments/Summary');
 
 module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 	extend: 'Ext.data.Store',
@@ -81,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 	},
 
 
-	constructor: function (config) {
+	constructor: function (/*config*/) {
 		this.proxy = Ext.clone(this.proxy);//get a local instance copy
 		this.callParent(arguments);
 
@@ -127,6 +129,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSum
 	/**
 	 * Take a record fill in the user and replace its HistoryItemSummary with a shared instance or a placeholder
 	 * @param  {Model} record record to fill in
+	 * @returns {Promise} --
 	 */
 	fillInRecord: function (record) {
 		var assignment = this.getAssignment(),

@@ -1,184 +1,188 @@
-var Ext = require('extjs');
-var B64 = require('../util/Base64');
+const Ext = require('extjs');
+const B64 = require('../util/Base64');
+
+function prefix (v) {
+	if (!prefix.val) {
+		prefix.val = B64.encode($AppConfig.username).concat('-');
+	}
+	return prefix.val.concat(v);
+}
 
 
-module.exports = exports = Ext.define('NextThought.cache.AbstractStorage', function () {
+class AbstractStorage {
 
-	var prefix = function prefix (v) {
-		if (!prefix.val) {
-			prefix.val = B64.encode($AppConfig.username).concat('-');
+	constructor (storage, noPrefix) {
+		this.currentVersion = 2;
+		if (!storage ||
+			!Ext.isFunction(storage.removeItem) ||
+			!Ext.isFunction(storage.setItem) ||
+			!Ext.isFunction(storage.getItem) ||
+			!Ext.isFunction(storage.clear)) {
+			Ext.Error.raise('Given storage object does not implement Storage api');
 		}
-		return prefix.val.concat(v);
-	};
 
-	return {
+		this.backingStore = storage;
 
-		statics: {
-			getLocalStorage: function () {
-				return PersistentStorage;
-			},
+		if (this.get('version') !== this.currentVersion) {
+			this.removeAll();
+		}
 
+		this.set('version', this.currentVersion);
 
-			getSessionStorage: function () {
-				return TemporaryStorage;
-			}
-		},
-
-		currentVersion: 2,
-
-		constructor: function (storage, noPrefix) {
-			if (!storage ||
-				!Ext.isFunction(storage.removeItem) ||
-				!Ext.isFunction(storage.setItem) ||
-				!Ext.isFunction(storage.getItem) ||
-				!Ext.isFunction(storage.clear)) {
-				Ext.Error.raise('Given storage object does not implement Storage api');
-			}
-
-			this.backingStore = storage;
-
-			if (this.get('version') !== this.currentVersion) {
-				this.removeAll();
-			}
-
-			this.set('version', this.currentVersion);
-
-			if (noPrefix !== true) {
-				this.prefix = prefix;
-			}
-		},
+		if (noPrefix !== true) {
+			this.prefix = prefix;
+		}
+	}
 
 
-		prefix: function (v) {return v;},
+	prefix (v) {return v;}
 
 
-		setItem: function (key, value) {
-			return this.set(key, value);
-		},
+	setItem (key, value) {
+		return this.set(key, value);
+	}
 
 
-		getItem: function (key) {
-			return this.get(key);
-		},
+	getItem (key) {
+		return this.get(key);
+	}
 
 
-		set: function (key, value) {
-			var old = this.get(key),
-				encKey = this.prefix(key),
-				encVal = Ext.encode(value);
+	set (key, value) {
+		let old = this.get(key);
+		let encKey = this.prefix(key);
+		let encVal = Ext.encode(value);
+
+		try {
+			this.backingStore.setItem(encKey, encVal);
+		}
+		catch (e) {
+			this.removeAll();
 			try {
 				this.backingStore.setItem(encKey, encVal);
-			} catch (e) {
-				this.removeAll();
-				try {
-					this.backingStore.setItem(encKey, encVal);
-				} catch (er) {
-					console.error('Trouble setting a value in storage: %o', er, key, value);
-				}
+			} catch (er) {
+				console.error('Trouble setting a value in storage: %o', er, key, value);
 			}
-			return old;
-		},
+		}
+		return old;
+	}
 
 
-		get: function (key) {
-			//Migrate:
-			var old = this.backingStore.getItem(key);
-			if (old && this.prefix(key) !== key) {
-				this.backingStore.setItem(this.prefix(key), old);
-				this.backingStore.removeItem(key);
-			}
-			//End Migrate
-			return Ext.decode(this.backingStore.getItem(this.prefix(key)), true);
-		},
+	get (key) {
+		//Migrate:
+		let old = this.backingStore.getItem(key);
+		if (old && this.prefix(key) !== key) {
+			this.backingStore.setItem(this.prefix(key), old);
+			this.backingStore.removeItem(key);
+		}
+		//End Migrate
+		try {
+			return JSON.parse(this.backingStore.getItem(this.prefix(key)));
+		} catch (e) {
+			return null;
+		}
+	}
 
 
-		getProperty: function (key, property, defaultValue) {
-			var o = this.get(key) || {};
+	getProperty (key, property, defaultValue) {
+		let o = this.get(key) || {};
 
+		property = property.split('/');
+
+		//comment this loop out if property-paths are causing problems.
+		while (o && property.length > 1) {
+			o = o[property.shift()];
+		}
+
+		return (o && o[property[0]]) || defaultValue;
+	}
+
+
+	updateProperty (key, property, value) {
+		let o = this.get(key) || {};
+		let v = o;
+
+		try {
 			property = property.split('/');
 
 			//comment this loop out if property-paths are causing problems.
 			while (o && property.length > 1) {
-				o = o[property.shift()];
+				let p = property.shift();
+				o = (o[p] = (o[p] || {}));//ensure the path exits
 			}
 
-			return (o && o[property[0]]) || defaultValue;
-		},
-
-
-		updateProperty: function (key, property, value) {
-			var o = this.get(key) || {}, v = o, p;
-
-			try {
-				property = property.split('/');
-
-				//comment this loop out if property-paths are causing problems.
-				while (o && property.length > 1) {
-					p = property.shift();
-					o = (o[p] = (o[p] || {}));//ensure the path exits
-				}
-
-				o[property[0]] = value;
-				if (value === undefined) {
-					delete o[property[0]];
-				}
-
-				return this.set(key, v);
-			} catch (e) {
-				console.warn('Storage property did not get set.', arguments, e.stack || e.message || e);
+			o[property[0]] = value;
+			if (value === undefined) {
+				delete o[property[0]];
 			}
-		},
 
-
-		removeProperty: function (key, property) {
-			return this.updateProperty(key, property, undefined);
-		},
-
-
-		remove: function (key) {
-			this.backingStore.removeItem(key);
-		},
-
-
-		removeAll: function () {
-			this.backingStore.clear();
-		}
-	};
-
-},function () {
-	var w = window,
-		Cls = this,
-		ss,
-		ls,
-		fallback = {
-			data: {},
-			removeItem: function (k) {delete this.data[k];},
-			setItem: function (k, v) {this.data[k] = v; console.warn('[WARNING] Using fake storage to workaround missing broswer support for Storage API');},
-			getItem: function (k) {return this.data[k];},
-			clear: function () {this.data = {};}
-		};
-
-	function isStorageSupported (storage) {
-		var testKey = 'test';
-		try {
-			storage.setItem(testKey, '1');
-			storage.removeItem(testKey);
-			return true;
-		} catch (error) {
-			return false;
+			return this.set(key, v);
+		} catch (e) {
+			console.warn('Storage property did not get set.', arguments, e.stack || e.message || e);
 		}
 	}
 
+
+	removeProperty (key, property) {
+		return this.updateProperty(key, property, undefined);
+	}
+
+
+	remove (key) {
+		this.backingStore.removeItem(key);
+	}
+
+
+	removeAll () {
+		this.backingStore.clear();
+	}
+
+}
+
+
+const fallback = {
+	data: {},
+	removeItem (k) {delete this.data[k];},
+	setItem (k, v) {this.data[k] = v; console.warn('[WARNING] Using fake storage to workaround missing broswer support for Storage API');},
+	getItem (k) {return this.data[k];},
+	clear () {this.data = {};}
+};
+
+function isStorageSupported (storage) {
+	let testKey = 'test';
 	try {
-		ss = w.sessionStorage;
-		ls = w.localStorage;
-		if (!isStorageSupported(ss)) { ss = null; }
-		if (!isStorageSupported(ls)) { ls = ss; }
-	} catch (e) {
-		console.error('Could not acces browser storage %o', e.stack || e.message || e);
+		storage.setItem(testKey, '1');
+		storage.removeItem(testKey);
+		return true;
+	} catch (error) {
+		return false;
 	}
+}
 
-	//TODO: figure out how to handle this since it puts two classes on the window...
-	window.TemporaryStorage = new Cls(ss || fallback, true);
-	window.PersistentStorage = new Cls(ls || fallback);
+let ss, ls;
+try {
+	ss = global.sessionStorage;
+	ls = global.localStorage;
+	if (!isStorageSupported(ss)) { ss = null; }
+	if (!isStorageSupported(ls)) { ls = ss; }
+} catch (e) {
+	console.error('Could not acces browser storage %o', e.stack || e.message || e);
+}
+
+
+const TemporaryStorage = new AbstractStorage(ss || fallback, true);
+const PersistentStorage = new AbstractStorage(ls || fallback);
+
+Object.assign(exports, {
+	TemporaryStorage,
+	PersistentStorage,
+
+	getLocalStorage () {
+		return PersistentStorage;
+	},
+
+
+	getSessionStorage () {
+		return TemporaryStorage;
+	}
 });

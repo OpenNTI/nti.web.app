@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-
+const Ext = require('extjs');
+const {wait} = require('legacy/util/Promise');
+const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
 
 module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.Form', {
 	STATE_VALUES: {},

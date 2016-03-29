@@ -1,11 +1,13 @@
 var Ext = require('extjs');
-var Globals = require('../util/Globals');
+var Globals = require('legacy/util/Globals');
 var {guidGenerator, getURL} = Globals;
-var ObjectUtils = require('../util/Object');
-var ParseUtils = require('../util/Parsing');
-var ModelBase = require('./Base');
-var ModelPageInfo = require('./PageInfo');
-var UserdataActions = require('../app/userdata/Actions');
+// var ObjectUtils = require('legacy/util/Object');
+var ParseUtils = require('legacy/util/Parsing');
+require('legacy/model/Base');
+require('legacy/model/PageInfo');
+
+const lazy = require('legacy/util/lazy-require')
+	.get('UserDataActions', () => require('legacy/app/userdata/Actions'));
 
 
 module.exports = exports = Ext.define('NextThought.model.Service', {
@@ -202,8 +204,9 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 	/**
 	 *
-	 * @param {String} mimeType
-	 * @param {String} [title]
+	 * @param {String} mimeType MimeType
+	 * @param {String} [title] Title
+	 * @returns {Object} The collection
 	 */
 	getCollectionFor: function (mimeType, title) {
 		var collection = null;
@@ -304,7 +307,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		url = Ext.String.urlAppend(url, Ext.Object.toQueryString(params));
 
 		return new Promise(function (fulfill, reject) {
-			var req = {
+			var request = {
 				url: url,
 				headers: headers,
 				callback: function (req, s, resp) {
@@ -331,8 +334,8 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 				}
 			};
 
-			Ext.apply(req, opts);
-			Ext.Ajax.request(req);
+			Ext.apply(request, opts);
+			Ext.Ajax.request(request);
 		});
 	},
 
@@ -458,11 +461,11 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 				destroyable: true,
 				beforerequest: function (connection, options) {
 					var method = options.method,
-						url = options.url && options.url.replace(/\/\+\+fields\+\+sharingPreference$/, '');
+						uri = options.url && options.url.replace(/\/\+\+fields\+\+sharingPreference$/, '');
 
-					if (method !== 'GET' && cache[url]) {
-						console.debug('Invalidate cache at url' + url);
-						delete cache[url];
+					if (method !== 'GET' && cache[uri]) {
+						console.debug('Invalidate cache at url' + uri);
+						delete cache[uri];
 					}
 				}
 			});
@@ -498,7 +501,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 			pageInfos.forEach(function (p) { (p || {}).originalNTIIDRequested = ntiid; });
 
-			me.UserDataActions = me.UserDataActions || NextThought.app.userdata.Actions.create();
+			me.UserDataActions = me.UserDataActions || lazy.UserDataActions.create();
 
 			me.UserDataActions.updatePreferences(pageInfos);
 			Ext.callback(success, scope, pageInfos);//back-compat
@@ -517,18 +520,18 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		}
 
 
-		function cacheWrapper (resp) {
-			if (resp.status === 200) {
-				try {
-					ObjectUtils.deleteFunctionProperties(cache[url] = Ext.clone(resp));
-				} catch (e) {
-					console.error('(IE9?) Error occured trying to cache the pageInfo response. ' + e.stack || e.message);
-				}
-			} else {
-				console.debug('Not caching response because it wasn\'t a 200', resp);
-			}
-			return resp;
-		}
+		// function cacheWrapper (resp) {
+		// 	if (resp.status === 200) {
+		// 		try {
+		// 			ObjectUtils.deleteFunctionProperties(cache[url] = Ext.clone(resp));
+		// 		} catch (e) {
+		// 			console.error('(IE9?) Error occured trying to cache the pageInfo response. ' + e.stack || e.message);
+		// 		}
+		// 	} else {
+		// 		console.debug('Not caching response because it wasn\'t a 200', resp);
+		// 	}
+		// 	return resp;
+		// }
 
 
 		// if (cache.hasOwnProperty(url)) {

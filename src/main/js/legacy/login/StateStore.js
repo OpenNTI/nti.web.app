@@ -1,12 +1,15 @@
-var Ext = require('extjs');
-var UserRepository = require('../cache/UserRepository');
-var Socket = require('../proxy/Socket');
-var ObjectUtils = require('../util/Object');
-var CommonStateStore = require('../common/StateStore');
-var PreferenceManager = require('../preference/Manager');
-var ProxySocket = require('../proxy/Socket');
-var AccountActions = require('../app/account/Actions');
+const Ext = require('extjs');
+const UserRepository = require('legacy/cache/UserRepository');
+const Socket = require('legacy/proxy/Socket');
+const ObjectUtils = require('legacy/util/Object');
+require('legacy/common/StateStore');
+const ModelService = require('legacy/model/Service');
+const PreferenceManager = require('legacy/preference/Manager');
 
+const AccountActions = require('legacy/app/account/Actions');
+
+const {wait} = require('legacy/util/Promise');
+const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
 
 module.exports = exports = Ext.define('NextThought.login.StateStore', {
 	extend: 'NextThought.common.StateStore',
@@ -19,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		this.onLoginActions = [];
 		this.loginActionsNames = {};
 
-		this.AccountActions = NextThought.app.account.Actions.create();
+		this.AccountActions = AccountActions.create();
 
 		//Make sure the session is still valid when the window is focused
 		this.mon(Ext.get(window), {
@@ -72,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 	},
 
 	maybeAddImmediateAction: function (handshake) {
-		var fakeService = window.Service || NextThought.model.Service.create({}),
+		var fakeService = window.Service || ModelService.create({}),
 			links = handshake.Links;
 
 		if (fakeService.getLink(links, 'account.profile.needs.updated')) {
@@ -144,7 +147,7 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 	setActiveUser: function (user) {
 		$AppConfig.userObject = UserRepository.cacheUser(user, true);
 
-		$AppConfig.Preferences = NextThought.preference.Manager.create({
+		$AppConfig.Preferences = PreferenceManager.create({
 			href: user.get('href').split('?')[0] + '/++preferences++'
 		});
 
@@ -159,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 
 					return null;
 				},
-				setter: function () { throw 'readonly'; }
+				setter: function () { throw new Error( 'readonly' ); }
 			}
 		});
 	}

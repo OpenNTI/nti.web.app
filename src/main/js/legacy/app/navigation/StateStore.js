@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var CommonStateStore = require('../../common/StateStore');
+const Ext = require('extjs');
+const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
+require('legacy/common/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.StateStore', {
@@ -27,9 +28,9 @@ module.exports = exports = Ext.define('NextThought.app.navigation.StateStore', {
 	},
 
 
-	putMessageBarItemIntoSession: function (id, cfg) {
-		var stateKey = 'topMessages',
-			o = TemporaryStorage.get(stateKey) || {};
+	putMessageBarItemIntoSession: function (id/*, cfg*/) {
+		const stateKey = 'topMessages';
+		let o = TemporaryStorage.get(stateKey) || {};
 
 		o[id] = true;
 		TemporaryStorage.set(stateKey, o);
@@ -37,8 +38,8 @@ module.exports = exports = Ext.define('NextThought.app.navigation.StateStore', {
 
 
 	getMessageBarItemFromSession: function (id) {
-		var stateKey = 'topMessages',
-			o = TemporaryStorage.get(stateKey) || {};
+		let stateKey = 'topMessages';
+		let o = TemporaryStorage.get(stateKey) || {};
 
 		return o[id];
 	}

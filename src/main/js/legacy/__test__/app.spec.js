@@ -715,7 +715,6 @@ describe('All Classes Exist', function () {
 		'NextThought.app.windows.components.Container': [],
 		'NextThought.app.windows.components.Header': [],
 		'NextThought.app.windows.components.Loading': [],
-		'NextThought.cache.AbstractStorage': [],
 		'NextThought.cache.IdCache': [],
 		'NextThought.cache.LocationMeta': [],
 		'NextThought.cache.SharedInstance': [],
