@@ -15,7 +15,7 @@ module.exports = function (config) {
 
 	baseConfig.webpackServer.noInfo = false;
 
-	baseConfig.files.unshift('src/main/resources/vendor/ext/ext-all.js');
+	baseConfig.files.unshift('https://downloads.nextthought.com/libs/ext-4.2/ext-all.js');
 
 	config.set(baseConfig);
 };
