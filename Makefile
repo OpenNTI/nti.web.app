@@ -1,4 +1,4 @@
-.PHONY: all stage setup compile clean check
+.PHONY: all setup check build compile stage deploy clean-dist clean-stage clean
 
 DIST=./dist/
 STAGE=./stage/
@@ -9,8 +9,7 @@ CC=webpack --progress --cache --bail --config
 
 
 
-# all: check compile
-all: compile
+all: check build
 
 
 setup:
@@ -21,24 +20,44 @@ setup:
 check:
 	@eslint --ext .js,.jsx . || true
 
-compile: clean stage $(DIST)server
+
+build: compile deploy
+	@rm -rf $(STAGE)
+
+
+compile: clean-stage stage $(STAGE)server
 	@compass compile
 ## copy static assets
-	@(cd $(SRC)main; rsync -Rr . ../../$(DIST)client)
-	@rm -r $(DIST)client/js
-	@rm -r $(DIST)client/resources/scss
+	@(cd $(SRC)main; rsync -Rr . ../../$(STAGE)client)
+	@rm -r $(STAGE)client/js
+	@rm -r $(STAGE)client/resources/scss
 ##compile
 	@NODE_ENV="production" $(CC) ./webpack.config.js
 
 
-$(DIST)server:
+$(STAGE)server:
 ##the server code doesn't compile, just copy it.
-	@cp -r $(SRC)server $(DIST)server
+	@cp -r $(SRC)server $(STAGE)server
+
 
 stage:
-	@mkdir -p $(DIST)client
-	@mkdir -p $(DIST)server
+	@mkdir -p $(STAGE)client
+	@mkdir -p $(STAGE)server
 
-clean:
-	@compass clean
+
+deploy: clean-dist
+	@mkdir -p $(DIST)
+	@mv -f $(STAGE)client $(DIST)client
+	@mv -f $(STAGE)server $(DIST)server
+
+
+clean-dist:
 	@rm -rf $(DIST)
+
+
+clean-stage:
+	@rm -rf $(STAGE)
+
+
+clean: clean-stage clean-dist
+	@compass clean
