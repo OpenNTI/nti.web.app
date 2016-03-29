@@ -1,7 +1,7 @@
-/*eslint no-var: 0 strict: 0*/
+/*eslint strict: 0*/
 'use strict';
-var baseConfig = require('nti-unittesting-clientside');
-var Progress = require('nti-unittesting-clientside/progress');
+const baseConfig = require('nti-unittesting-clientside');
+const Progress = require('nti-unittesting-clientside/progress');
 
 module.exports = function (config) {
 	const webpack = baseConfig.webpack;
