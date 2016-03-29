@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var TimeUtils = require('legacy/util/Time');
+const Ext = require('extjs');
+const TimeUtils = require('legacy/util/Time');
+const {wait} = require('legacy/util/Promise');
+const {getFormattedString} = require('legacy/util/Localization');
 
 require('legacy/model/User');
 require('legacy/mixins/grid-feature/GradeInputs');
@@ -36,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				return this.sortOn || this.dataIndex;
 			},
 
-			setSortState: function (state, skipClear, initial) {
+			setSortState: function (state, skipClear) {
 				var ownerHeaderCt = this.getOwnerHeaderCt(),
 					ascCls = this.ascSortCls,
 					descCls = this.descSortCls,
@@ -145,8 +147,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					//pretty sure completed will always be a time stamp not sure why this is this complicated,
 					//but I don't want to change the logic just in case
 					submitted = (completed && completed.get && completed.get('Last Modifed')) || completed,
-					assignment = item && item.get('item'),
-					parts = assignment && assignment.get('parts'),
 					dateFormat = 'm/d', late = {};
 
 				if ((!submitted && !due) || !item) {
@@ -365,14 +365,44 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	afterRender: function () {
 		this.callParent(arguments);
 
-		var view = this.getView();
+		var view = this.getView(),
+			grid = this.down('gridview');
 
 		this.mon(view, 'refresh', 'setUpPageRows');
 
 		this.mon(this.el, 'click', 'maybeLoadPage');
 
 		this.monitorSubTree();
+
+		// NOTE: We've observed that Safari invalidates
+		// the table layout styles every time it refreshes
+		// So we will need to listen on refresh to reapply those styles.
+		if (grid && Ext.isSafari) {
+			grid.on('refresh', this.adjustTableLayout.bind(this));
+		}
+
+		this.adjustTableLayout();
 	},
+
+
+	/*
+	 * This function sets the table layout to fixed.
+	 * We've observed that some browsers(i.e. Safari)
+	 * end up mixing our styles and Ext Js table styles.
+	 * In this method, we add the necessary class to override Ext Js styles.
+	 */
+	adjustTableLayout: function () {
+		var me = this;
+		this.onceRendered
+			.then(function () {
+				me.el.removeCls('fixed-table');
+				wait(100)
+					.then(function () {
+						me.el.addCls('fixed-table');
+					});
+			});
+	},
+
 
 	setDisabled: function () {
 		this.addCls('disabled');
@@ -566,16 +596,16 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			sorts = store.getSorters(), s, sort,
 			cols = this.columns, c, col;
 
-		function sortForCol (col, sort) {
-			var p = col.getSortParam();
+		function sortForCol (column, sorting) {
+			var p = column.getSortParam();
 			if (p === 'Creator') {
-				p = col.name === 'username' ? 'username' : 'realname';
+				p = column.name === 'username' ? 'username' : 'realname';
 			}
-			return p === sort.property;
+			return p === sorting.property;
 		}
 
-		function toState (sort) {
-			if (/^asc/i.test(sort.direction)) { return 'ASC'; }
+		function toState (sorting) {
+			if (/^asc/i.test(sorting.direction)) { return 'ASC'; }
 			return 'DESC';
 		}
 
@@ -593,6 +623,9 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				}
 			}
 		}
+
+		// Add table layout styles.
+		this.adjustTableLayout();
 
 		return res;
 	}

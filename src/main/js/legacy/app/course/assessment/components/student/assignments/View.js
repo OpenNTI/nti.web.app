@@ -502,7 +502,6 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 						acc.push(buildConfig(id, assignment, history, grade, node, actualId));
 
-						console.log(outlineInterface);
 						return acc;
 					}, []);
 				}));

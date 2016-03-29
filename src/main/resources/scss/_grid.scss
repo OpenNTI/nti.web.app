@@ -210,7 +210,7 @@
 		}
 
 		.right-aligned{
-			text-align: right;				
+			text-align: right;
 		}
 
 		.check {
@@ -350,6 +350,12 @@
 			height: 40px !important;
 			border: 1px solid #dcdcdc;
 			background-image: none;
+		}
+	}
+
+	&.fixed-table{
+		table {
+			table-layout: fixed !important;
 		}
 	}
 }

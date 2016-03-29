@@ -62,11 +62,21 @@ module.exports = exports = Ext.define('NextThought.util.Localization', {
 		}
 
 		return s.replace('{#}', count);
+	},
+
+
+	getString: function () {
+		return this.getExternalizedString.apply(this, arguments);
+	},
+
+
+	getFormattedString: function () {
+		return this.formatExternalString.apply(this, arguments);
 	}
 
 }).create();
 
-window.getString = Localization.getExternalizedString.bind(Localization);
-window.getFormattedString = Localization.formatExternalString.bind(Localization);
+window.getString = Localization.getString.bind(Localization);
+window.getFormattedString = Localization.getFormattedString.bind(Localization);
 Localization.oldPlural = Ext.util.Format.plural;
 Ext.util.Format.plural = Localization.pluralizeString.bind(Localization);
