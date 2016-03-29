@@ -10,7 +10,6 @@ var ContextContainerContext = require('../../../../context/ContainerContext');
 var PathActions = require('../../../../navigation/path/Actions');
 
 
-/*globals RangeUtils:false*/
 module.exports = exports = Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.Post',
 	alias: 'widget.dashboard-note',

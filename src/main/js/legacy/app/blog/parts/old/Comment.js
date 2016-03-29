@@ -250,10 +250,11 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.old.Comment', 
 	onDeletePost: function (e) {
 		e.stopEvent();
 		var me = this;
-		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+
 		Ext.Msg.show({
 			msg: 'This will permanently remove this comment.',
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			//We need to bitwise OR these two, so stop the lint.
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL, //eslint-disable-line no-bitwise
 			scope: me,
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},

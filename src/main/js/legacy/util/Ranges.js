@@ -1,4 +1,3 @@
-/*global Node, NodeFilter*/
 var Ext = require('extjs');
 var Anchors = require('./Anchors');
 var Globals = require('./Globals');

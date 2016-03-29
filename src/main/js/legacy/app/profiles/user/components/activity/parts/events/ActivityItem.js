@@ -161,10 +161,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 	onDelete: function () {
 		var me = this;
-		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+
 		Ext.Msg.show({
 			msg: 'The following action will delete your note',
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			//We need to bitwise OR these two, so stop the lint.
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL, //eslint-disable-line no-bitwise
 			scope: me,
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},

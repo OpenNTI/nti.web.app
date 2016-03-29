@@ -5,7 +5,6 @@ var PageVisibility = require('./Visibility');
 var ContextStateStore = require('../app/context/StateStore');
 
 
-/*globals PageVisibility*/
 module.exports = exports = Ext.define('NextThought.util.Analytics', {
 
 	mixins: {

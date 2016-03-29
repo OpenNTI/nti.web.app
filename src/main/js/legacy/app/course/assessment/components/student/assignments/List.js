@@ -2,7 +2,6 @@ var Ext = require('extjs');
 var AssignmentsListItem = require('./ListItem');
 
 
-/*globals getFormattedString:false*/
 module.exports = exports = Ext.define('NextThought.app.course.assessment.components.student.assignments.List', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-assignment-list',
@@ -36,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				item: item,
 				navigateToItem: navigateToItem
 			};
-		}));	
+		}));
 	},
 
 	getItemsContainer: function () {
@@ -48,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		if (container) {
 			container.removeAll(true);
 		}
-		
-		this.addItems(store);	
+
+		this.addItems(store);
 	}
 });

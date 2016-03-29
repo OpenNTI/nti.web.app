@@ -314,10 +314,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	onDeletePost: function (e) {
 		e.stopEvent();
 		var me = this;
-		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
 			msg: me.destroyWarningMessage(),
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			//We need to bitwise OR these two, so stop the lint.
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL, //eslint-disable-line no-bitwise
 			scope: me,
 			icon: 'warning-red',
 			buttonText: {'ok': getString('NextThought.view.forums.topic.parts.Topic.deletebutton')},

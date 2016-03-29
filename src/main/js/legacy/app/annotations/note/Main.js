@@ -372,11 +372,11 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Main', {
 		else if (/^slide$/.test(action)) {
 			if (this.editorActive()) {
 
-				/*jslint bitwise: false */ //Tell JSLint to ignore bitwise opperations
 				Ext.Msg.show({
 					msg: getString('NextThought.view.annotations.note.Main.editor-warning-msg'),
 					scope: me,
-					buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+					//We need to bitwise OR these two, so stop the lint.
+					buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL, //eslint-disable-line no-bitwise
 					icon: 'warning-red',
 					title: getString('NextThought.view.annotations.note.Main.editor-warning-title'),
 					buttonText: {ok: 'caution:' + getString('NextThought.view.annotations.note.Main.ok')},

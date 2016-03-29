@@ -8,8 +8,6 @@ var VideoVideo = require('./Video');
 var LibraryActions = require('../library/Actions');
 
 
-/*jslint */
-/*global DomUtils, NextThought */
 module.exports = exports = Ext.define('NextThought.app.video.OverlayedPanel', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.overlay-video',

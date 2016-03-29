@@ -4,8 +4,7 @@ var WebvttTranscript = require('../../../webvtt/Transcript');
 var WebvttCue = require('../../../webvtt/Cue');
 
 
-/*jslint */
-/*globals SlideDeck */
+
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.SlideVideo', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-slidevideo',

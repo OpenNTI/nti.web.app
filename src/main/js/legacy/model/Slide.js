@@ -5,8 +5,6 @@ var ModelBase = require('./Base');
 var ModelPlaylistItem = require('./PlaylistItem');
 
 
-/*jslint */
-/*globals NextThought, ParseUtils */
 module.exports = exports = Ext.define('NextThought.model.Slide', {
 	extend: 'NextThought.model.Base',
 

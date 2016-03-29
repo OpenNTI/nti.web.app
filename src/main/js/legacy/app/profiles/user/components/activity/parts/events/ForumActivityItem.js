@@ -212,10 +212,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	onDeletePost: function (e) {
 		e.stopEvent();
 		var me = this;
-		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+
 		Ext.Msg.show({
 			msg: 'Deleting this topic will permanently remove it and any comments.',
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			//We need to bitwise OR these two, so stop the lint.
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL, //eslint-disable-line no-bitwise
 			scope: me,
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},
@@ -634,10 +635,11 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 	onDelete: function (e) {
 		e.stopEvent();
 		var me = this;
-		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+
 		Ext.Msg.show({
 			msg: 'Deleting this comment will permanently remove it.',
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			//We need to bitwise OR these two, so stop the lint.
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL, //eslint-disable-line no-bitwise
 			scope: me,
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},

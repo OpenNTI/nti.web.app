@@ -221,10 +221,10 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Template
 	},
 
 	reportInappropriate: function (callback) {
-		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
 			msg: 'This action cannot be undone.', //Y No Externalize?? :P
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			//We need to bitwise OR these two, so stop the lint.
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL, //eslint-disable-line no-bitwise
 			icon: 'warning-red',
 			buttonText: {
 				ok: getString('NextThought.view.annotations.note.Templates.flag-option')

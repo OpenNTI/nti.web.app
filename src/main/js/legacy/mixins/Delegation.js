@@ -90,8 +90,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Delegation', function 
 		}
 
 		//I WANT all properties... so skipping !hasOwnProperty is not an option.
-		/*jslint forin: true */
-		for (k in cmp) {
+		for (k in cmp) { //eslint-disable-line guard-for-in
 			v = cmp[k];
 			if (Ext.isFunction(v) && v.delegated) {
 				if (debug) {console.debug('Rewriting...', k);}

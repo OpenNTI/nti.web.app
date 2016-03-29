@@ -5,8 +5,7 @@ var UtilDom = require('../../../../util/Dom');
 var ContentSlidedeck = require('../Slidedeck');
 
 
-/*jslint */
-/*global DomUtils */
+
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.deck.OverlayedPanel', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.overlay-slidedeck',
@@ -67,4 +66,3 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.deck.
 		return {range: range, rect: this.el.dom.getBoundingClientRect()};
 	}
 });
-

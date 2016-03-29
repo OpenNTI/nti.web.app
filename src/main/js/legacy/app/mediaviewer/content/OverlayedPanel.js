@@ -5,8 +5,7 @@ var UtilDom = require('../../../util/Dom');
 var ContentSlideVideo = require('./SlideVideo');
 
 
-/*jslint */
-/*global DomUtils */
+
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.OverlayedPanel', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.overlay-slidevideo',
@@ -67,4 +66,3 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.content.Overl
 		return {range: range, rect: this.el.dom.getBoundingClientRect()};
 	}
 });
-

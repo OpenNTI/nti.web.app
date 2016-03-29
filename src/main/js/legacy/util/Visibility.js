@@ -3,7 +3,6 @@ var Toaster = require('../common/toast/Manager');
 var {isFeature} = require('legacy/util/Globals');
 
 
-/*globals Toaster*/
 module.exports = exports = Ext.define('NextThought.util.Visibility', {
 
 	mixins: {

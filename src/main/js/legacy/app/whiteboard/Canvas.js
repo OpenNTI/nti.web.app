@@ -9,7 +9,6 @@ var ShapesText = require('./shapes/Text');
 var ShapesUrl = require('./shapes/Url');
 
 
-/*globals swallow*/
 module.exports = exports = Ext.define('NextThought.app.whiteboard.Canvas', {
 	extend: 'Ext.Component',
 	alias:	'widget.whiteboard-canvas',

@@ -3,7 +3,6 @@ var DomUtils = require('../../../util/Dom');
 var ResolversVideoPosters = require('../../../model/resolvers/VideoPosters');
 
 
-/*global DomUtils */
 module.exports = exports = Ext.define('NextThought.common.components.cards.Launcher', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-launcher',

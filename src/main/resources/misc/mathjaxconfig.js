@@ -1,160 +1,160 @@
-/**
- * $Revision: 1576 $
- **/
-if(window['MathJax']){
-	if(window.top !== window){
+/*global MathJax */
+/*eslint no-console: 0, no-var: 0 */
+if (window['MathJax']) {
+	if (window.top !== window) {
 		//We get loaded in an iframe that has already had
 		//its onload method called.  Mathjax relies on this
 		//to start processing things on the Hub queue so
 		//we trigger the onload call manually
 		MathJax.Hub.Startup.onload();
 
-		window.addEventListener("message", function(e){
+		window.addEventListener('message', function (e) {
 			if(e.data === '[MathJax.rerender]') { MathJax.rerender(); }
 		}, false);
 	}
 
-	MathJax.rerender = function(){
+	MathJax.rerender = function () {
 		try{
 		//Have mathjax display the new math that is in the content div
-			MathJax.Hub.Queue(["Typeset",MathJax.Hub, "NTIContent"]);
-		}catch( err ){
+			MathJax.Hub.Queue(['Typeset',MathJax.Hub, 'NTIContent']);
+		} catch( err ) {
 			console.log(err);
 		}
 	};
 
 //config MathJax
-    MathJax.Hub.Config({
-        showProcessingMessages : false,
-        messageStyle : "none",
-		styles: { "#MathJax_Message": { display: "none" }},
-        "HTML-CSS": {
-            preferredFont: "STIX",
-            availableFonts: ["STIX"],
-            webFont: "STIX",
-            imageFont: null
-        },
-        TeX : {
-            Macros : {
-                rlin : [ '\\overleftrightarrow{#1}', 1 ],
-                vv : [ '\\overrightarrow{#1}', 1 ],
-                Def: [ '\\textbf{#1}', 1],
-                lcm: '\\text{lcm}',
-                rule:['', 2],
-                bm: ['\\boldsymbol{#1}', 1],
-                textsuperscript: ['^{\\text{#1}}', 1]
-            }
-        },
+	MathJax.Hub.Config({
+		showProcessingMessages : false,
+		messageStyle : 'none',
+		styles: { '#MathJax_Message': { display: 'none' }},
+		'HTML-CSS': {
+			preferredFont: 'STIX',
+			availableFonts: ['STIX'],
+			webFont: 'STIX',
+			imageFont: null
+		},
+		TeX : {
+			Macros : {
+				rlin : [ '\\overleftrightarrow{#1}', 1 ],
+				vv : [ '\\overrightarrow{#1}', 1 ],
+				Def: [ '\\textbf{#1}', 1],
+				lcm: '\\text{lcm}',
+				rule:['', 2],
+				bm: ['\\boldsymbol{#1}', 1],
+				textsuperscript: ['^{\\text{#1}}', 1]
+			}
+		},
 		tex2jax: {
 			inlineMath: [['$','$'], ['\\(','\\)']],
 			processEscapes: true
 		}
-    });
+	});
 
-    MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
-        var TEX = MathJax.InputJax.TeX;
-        var MML = MathJax.ElementJax.mml;
+	MathJax.Hub.Register.StartupHook('TeX Jax Ready',function () {
+		var TEX = MathJax.InputJax.TeX;
+		var MML = MathJax.ElementJax.mml;
 
-        TEX.Definitions.macros.Cube = "cube";
-        TEX.Definitions.macros.hdotsfor = "hdotsfor";
-        TEX.Definitions.macros.text = 'myText';
-        TEX.Definitions.macros.cancel = ["cancel",MML.NOTATION.UPDIAGONALSTRIKE];
-        TEX.Definitions.macros.bcancel = ["cancel",MML.NOTATION.DOWNDIAGONALSTRIKE];
-        TEX.Definitions.macros.nst = ['nsuperscript', 'st'];
-        TEX.Definitions.macros.nnd = ['nsuperscript', 'nd'];
-        TEX.Definitions.macros.nrd = ['nsuperscript', 'rd'];
-        TEX.Definitions.macros.nth = ['nsuperscript', 'th'];
-
-
-        //FIXME These aren't really math operators.  Maybe they need to be
-        //in mathchar0mi
-        TEX.Definitions.mathchar0mo.iddots = '22F0';
-        TEX.Definitions.mathchar0mo.yen = '00A5';
-        TEX.Definitions.mathchar0mo.textregistered = '00AE';
-        TEX.Definitions.mathchar0mo.EUR = '20AC';
-        TEX.Definitions.mathchar0mo.smiley = '263A';
-        TEX.Definitions.mathchar0mo.cent = '00A2';
+		TEX.Definitions.macros.Cube = 'cube';
+		TEX.Definitions.macros.hdotsfor = 'hdotsfor';
+		TEX.Definitions.macros.text = 'myText';
+		TEX.Definitions.macros.cancel = ['cancel',MML.NOTATION.UPDIAGONALSTRIKE];
+		TEX.Definitions.macros.bcancel = ['cancel',MML.NOTATION.DOWNDIAGONALSTRIKE];
+		TEX.Definitions.macros.nst = ['nsuperscript', 'st'];
+		TEX.Definitions.macros.nnd = ['nsuperscript', 'nd'];
+		TEX.Definitions.macros.nrd = ['nsuperscript', 'rd'];
+		TEX.Definitions.macros.nth = ['nsuperscript', 'th'];
 
 
-        TEX.Parse.Augment({
+		//FIXME These aren't really math operators.  Maybe they need to be
+		//in mathchar0mi
+		TEX.Definitions.mathchar0mo.iddots = '22F0';
+		TEX.Definitions.mathchar0mo.yen = '00A5';
+		TEX.Definitions.mathchar0mo.textregistered = '00AE';
+		TEX.Definitions.mathchar0mo.EUR = '20AC';
+		TEX.Definitions.mathchar0mo.smiley = '263A';
+		TEX.Definitions.mathchar0mo.cent = '00A2';
 
-            nsuperscript: function(name, superscript){
-                var optionalprefix = this.GetArgument(name);
-                if (optionalprefix == null){
-                    optionalprefix = "";
-                }
-                var rewritten = optionalprefix +'\\textsuperscript{'+superscript+'}';
 
-                var old = new RegExp('\\'+name+'\\s*{.*?}');
+		TEX.Parse.Augment({
 
-                this.string = this.string.replace(old, rewritten);
-                this.i = this.string.indexOf(rewritten);
+			nsuperscript: function (name, superscript) {
+				var optionalprefix = this.GetArgument(name);
+				if (optionalprefix == null) {
+					optionalprefix = '';
+				}
+				var rewritten = optionalprefix + '\\textsuperscript{' + superscript + '}';
 
-            },
+				var old = new RegExp('\\' + name + '\\s*{.*?}');
 
-            cancel: function (name,notation) {
-                var mml = this.ParseArg(name);
-                this.Push(MML.menclose(mml).With({notation:notation}));
-            },
+				this.string = this.string.replace(old, rewritten);
+				this.i = this.string.indexOf(rewritten);
 
-            cube: function (name) {
-                var arg = this.GetArgument(name);
+			},
 
-                var dice = ['\u2680', '\u2681', '\u2682', '\u2683', '\u2684', '\u2685'];
+			cancel: function (name,notation) {
+				var mml = this.ParseArg(name);
+				this.Push(MML.menclose(mml).With({notation:notation}));
+			},
 
-                this.string = this.string.replace(/\\Cube\s*{.*?}/,dice[arg-1]);
-                this.i=this.string.indexOf(dice[arg-1]);
+			cube: function (name) {
+				var arg = this.GetArgument(name);
 
-            },
+				var dice = ['\u2680', '\u2681', '\u2682', '\u2683', '\u2684', '\u2685'];
 
-            //FIXME This is close but not exact.  It's better than nothing?
-            hdotsfor: function(name){
-                var spacing = this.GetBrackets(name);
-                var cols = this.GetArgument(name);
+				this.string = this.string.replace(/\\Cube\s*{.*?}/,dice[arg - 1]);
+				this.i = this.string.indexOf(dice[arg - 1]);
 
-                var dots='';
+			},
 
-                for(var i=0;i<cols;i++){
-                    dots+=' ... ';
-                    if(i!=cols-1){
-                        dots+='&';
-                    }
-                }
-                this.string=this.string.replace(/\\hdotsfor\s*\[.*?\]*{.*?}/,dots);
-                this.i=this.string.indexOf(dots);
-            },
+			//FIXME This is close but not exact.  It's better than nothing?
+			hdotsfor: function (name) {
+				// var spacing = this.GetBrackets(name);
+				var cols = this.GetArgument(name);
 
-            //FIXME This is also close but not exact.  Things that look like macros inside
-            //of text get reparsed and expanded.  The result is styled like math (italics).
-            //In some cases you can't tell, but in others the italics are noticible.  We
-            //get into some spacing issues when there are multiple words inside reexpanded text nodes.
-            myText: function(name){
-                var style=0;
-                var nodes=this.InternalMath(this.GetArgument(name), style);
-                var def = {displaystyle: false};
-                if (style != null)
-                {
-                    def.scriptlevel = style;
-                }
+				var dots = '';
 
-                var node=null;
-                for(var i=0;i<nodes.length;i++)
-                {
-                    node=nodes[i];
-                    if( node.__proto__.type === 'mtext'){
+				for (var i = 0; i < cols; i++) {
+					dots += ' ... ';
+					if (i !== cols - 1) {
+						dots += '&';
+					}
+				}
 
-                        var text = node.data[0].toString();
+				this.string = this.string.replace(/\\hdotsfor\s*\[.*?\]*{.*?}/, dots);
+				this.i = this.string.indexOf(dots);
+			},
 
-                        if(text.search(/\\[^\s]+\s*(\[.*?\])*\s*({.*?})*/)>=0)
-                        {
-                            var parseResult = TEX.Parse(node.data[0].data[0]).mml().With(def);
-                            nodes[i]=MML.TeXAtom(parseResult);
-                        }
-                    }
-                }
-                this.Push.apply(this, nodes);
-            }
+			//FIXME This is also close but not exact.  Things that look like macros inside
+			//of text get reparsed and expanded.  The result is styled like math (italics).
+			//In some cases you can't tell, but in others the italics are noticible.  We
+			//get into some spacing issues when there are multiple words inside reexpanded text nodes.
+			myText: function (name) {
+				var style = 0;
+				var nodes = this.InternalMath(this.GetArgument(name), style);
+				var def = {displaystyle: false};
+				if (style != null)
+				{
+					def.scriptlevel = style;
+				}
 
-        });
-    });
+				var node = null;
+				for (var i = 0; i < nodes.length; i++)
+				{
+					node = nodes[i];
+					if ( node.__proto__.type === 'mtext') {
+
+						var text = node.data[0].toString();
+
+						if(text.search(/\\[^\s]+\s*(\[.*?\])*\s*({.*?})*/) >= 0)
+						{
+							var parseResult = TEX.Parse(node.data[0].data[0]).mml().With(def);
+							nodes[i] = MML.TeXAtom(parseResult);
+						}
+					}
+				}
+				this.Push.apply(this, nodes);
+			}
+
+		});
+	});
 }

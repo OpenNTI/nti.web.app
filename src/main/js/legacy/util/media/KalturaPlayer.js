@@ -3,8 +3,6 @@ var Globals = require('../Globals');
 var {isFeature} = Globals;
 
 
-/*jslint */
-/*globals Globals, mw, NextThought, kWidget */
 module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 	reqruies: ['NextThought.util.Globals'],
 

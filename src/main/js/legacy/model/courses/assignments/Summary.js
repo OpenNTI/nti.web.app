@@ -4,7 +4,6 @@ var ModelBase = require('../../Base');
 var ModelUser = require('../../User');
 
 
-/*global User*/
 module.exports = exports = Ext.define('NextThought.model.courses.assignments.Summary', {
 	extend: 'NextThought.model.Base',
 

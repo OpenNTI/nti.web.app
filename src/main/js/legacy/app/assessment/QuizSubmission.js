@@ -4,7 +4,6 @@ var AssessmentActions = require('./Actions');
 var AssessmentSurvey = require('../../model/assessment/Survey');
 
 
-/*globals getFormattedString:false*/
 module.exports = exports = Ext.define('NextThought.app.assessment.QuizSubmission', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.assessment-quiz-submission',

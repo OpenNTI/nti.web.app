@@ -190,10 +190,11 @@ module.exports = exports = Ext.define('NextThought.app.whiteboard.Window', {
 
 	clearAll: function () {
 		var me = this;
-		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+
 		Ext.Msg.show({
 			msg: 'All your current progress\nwill be lost.',
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			//We need to bitwise OR these two, so stop the lint.
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL, //eslint-disable-line no-bitwise
 			scope: me,
 			icon: Ext.Msg.WARNING,
 			fn: function (str) {

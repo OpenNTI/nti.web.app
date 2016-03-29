@@ -8,7 +8,6 @@ var CardsLauncher = require('../../common/components/cards/Launcher');
 require('./Roll');
 
 
-/*global DomUtils, NextThought */
 module.exports = exports = Ext.define('NextThought.app.image.OverlayedPanel', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.overlay-image-roll',

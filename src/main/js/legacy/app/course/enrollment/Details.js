@@ -8,7 +8,6 @@ var AccountActions = require('../../account/Actions');
 var {guidGenerator, isFeature} = require('legacy/util/Globals');
 
 
-/*globals getFormattedString*/
 module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-enrollment-details',

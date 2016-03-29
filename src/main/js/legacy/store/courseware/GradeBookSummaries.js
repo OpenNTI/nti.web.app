@@ -3,7 +3,7 @@ var UserRepository = require('../../cache/UserRepository');
 var User = require('../../model/User');
 require('../../model/courses/assignments/Summary');
 
-/*globals User, PersistentStorage*/
+
 module.exports = exports = Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 	extend: 'Ext.data.Store',
 

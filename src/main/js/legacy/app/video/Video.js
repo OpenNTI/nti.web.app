@@ -14,8 +14,7 @@ var ModelPlaylistItem = require('../../model/PlaylistItem');
 var ResolversVideoPosters = require('../../model/resolvers/VideoPosters');
 
 
-/*jslint */
-/*globals Globals, NextThought, ObjectUtils, YT */
+
 module.exports = exports = Ext.define('NextThought.app.video.Video', {
 	alternateClassName: 'NextThought.Video',
 	extend: 'Ext.Component',
