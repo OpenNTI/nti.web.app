@@ -5,6 +5,13 @@ module.exports = exports = Ext.define('NextThought.util.Localization', {
 
 	formatRe: /\{([^\{]+)\}/g,
 
+	constructor: function () {
+		this.callParent(arguments);
+
+		this.getString = this.getString.bind(this);
+		this.getFormattedString = this.getFormattedString.bind(this);
+	},
+
 
 	getExternalizedString: function (key, defaultValue, noKey) {
 		var v = (window.NTIStrings || {})[key] || defaultValue || (!noKey && key) || '';
