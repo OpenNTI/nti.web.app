@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var Toaster = require('../common/toast/Manager');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const Toaster = require('legacy/common/toast/Manager');
+const {isFeature} = require('legacy/util/Globals');
+const {wait} = require('legacy/util/Promise');
 
 
 module.exports = exports = Ext.define('NextThought.util.Visibility', {
@@ -20,7 +21,7 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 
 		if (isFeature('no-analytic-end')) { return; }
 
-		var timeouts = $AppConfig.activity_timeouts || {};
+		const timeouts = $AppConfig.activity_timeouts || {};
 
 		this.BLUR_TIMEOUT = {
 			warn: (timeouts.blur_warn || 0) * 1000,
@@ -40,15 +41,14 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 	},
 
 	initTimeoutFns: function () {
-		var diff, warn, inactive,
-			blurName = 'blur_timeout',
-			inactiveName = 'inactive_timeout';
+		let blurName = 'blur_timeout';
+		let inactiveName = 'inactive_timeout';
 
 		this.__setInactive = this.__setInactive.bind(this);
 
-		warn = this.BLUR_TIMEOUT.warn || 0;
-		inactive = this.BLUR_TIMEOUT.timeout || 0;
-		diff = inactive - warn;
+		let warn = this.BLUR_TIMEOUT.warn || 0;
+		let inactive = this.BLUR_TIMEOUT.timeout || 0;
+		let diff = inactive - warn;
 
 		this.blurWarn = this.__warn.bind(this, blurName, diff, warn > 0);
 		this.startBlurTimeout = this.__startTimeout.bind(this, blurName, warn, this.blurWarn);
@@ -65,21 +65,19 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 	},
 
 	initActivityListeners: function () {
-		var me = this;
+		const restartTimeout = () => {
+			this.stopInactiveTimeout();
+			this.startInactiveTimeout();
 
-		function restartTimeout () {
-			me.stopInactiveTimeout();
-			me.startInactiveTimeout();
-
-			if (me.is_inactive) {
+			if (this['is_inactive']) {
 				//prevent the next mouse move from setting
 				//active again
-				me.is_inactive = false;
+				this['is_inactive'] = false;
 				//bump this to the next event pump, so any event handlers
 				//don't get called every mouse move
-				wait().then(me.__setActive.bind(me));
+				wait().then(x => this.__setActive(x));
 			}
-		}
+		};
 
 		document.addEventListener('mousemove', restartTimeout, true);
 		document.addEventListener('keypress', restartTimeout, true);
@@ -87,67 +85,60 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 	},
 
 	initVisibilityListeners: function () {
-		var me = this,
-			browserPrefixes = ['moz', 'ms', 'o', 'webkit'];
+		const browserPrefixes = ['moz', 'ms', 'o', 'webkit'];
 
-		function checkPrefixes () {
-			var i, hidden, prefix;
-
-			for (i = 0; i < browserPrefixes.length; i++) {
-				prefix = browserPrefixes[i];
-				hidden = prefix + 'Hidden';
+		const checkPrefixes = () => {
+			for (let i = 0; i < browserPrefixes.length; i++) {
+				let prefix = browserPrefixes[i];
+				let hidden = prefix + 'Hidden';
 
 				if (hidden in document) {
-					me.HIDDEN = hidden;
-					me.VISIBILITY_STATE = prefix + 'VisibilityState';
-					me.VISIBILITY_EVENT = prefix + 'visibilitychange';
+					this.HIDDEN = hidden;
+					this.VISIBILITY_STATE = prefix + 'VisibilityState';
+					this.VISIBILITY_EVENT = prefix + 'visibilitychange';
 				}
 			}
 
-			return me.HIDDEN;
-		}
+			return this.HIDDEN;
+		};
 
 		//check for the unprefixed
 		if ('hidden' in document) {
-			me.HIDDEN = 'hidden';
-			me.VISIBILITY_STATE = 'visibilityState';
-			me.VISIBILITY_EVENT = 'visibilitychange';
+			this.HIDDEN = 'hidden';
+			this.VISIBILITY_STATE = 'visibilityState';
+			this.VISIBILITY_EVENT = 'visibilitychange';
 
-			me.__setUpVisibilityListeners();
+			this.__setUpVisibilityListeners();
 		//check for the prefixed
 		} else if (checkPrefixes()) {
-			me.__setUpVisibilityListeners();
+			this.__setUpVisibilityListeners();
 		//fall back to the legacy
 		} else {
-			me.__setUpLegacyListeners();
+			this.__setUpLegacyListeners();
 		}
 	},
 
 	__setUpVisibilityListeners: function () {
-		var me = this;
-
-		document.addEventListener(this.VISIBILITY_EVENT, function () {
-			var hidden = me.isHidden();
+		document.addEventListener(this.VISIBILITY_EVENT, () => {
+			var hidden = this.isHidden();
 
 			if (hidden) {
-				me.__onHide();
+				this.__onHide();
 			} else {
-				me.__onVisibile();
+				this.__onVisibile();
 			}
 
-			me.fireEvent('page-visibility-changed', !hidden);
+			this.fireEvent('page-visibility-changed', !hidden);
 		});
 	},
 
 	__setUpLegacyListeners: function () {
-		var me = this,
-			oldOnFocus = window.onfocus,
-			oldOnBlur = window.onblur;
+		const {onfocus: oldOnFocus, onblur: oldOnBlur} = window;
 
-		window.onfocus = function () {
-			me.is_legacy_hidden = false;
+		window.onfocus = () => {
+			this['is_legacy_hidden'] = false;
 
-			me.__onVisibile();
+			this.__onVisibile();
 
 			console.log('VISIBILITY: focus');
 
@@ -155,14 +146,14 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 				oldOnFocus.call(null);
 			}
 
-			me.fireEvent('page-visibility-changed', true);
+			this.fireEvent('page-visibility-changed', true);
 		};
 
 
-		window.onblur = function () {
-			me.is_legacy_hidden = true;
+		window.onblur = () => {
+			this['is_legacy_hidden'] = true;
 
-			me.__onHide();
+			this.__onHide();
 
 			console.log('VISIBILITY: blur');
 
@@ -170,7 +161,7 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 				oldOnBlur.call(null);
 			}
 
-			me.fireEvent('page-visibility-changed', false);
+			this.fireEvent('page-visibility-changed', false);
 		};
 	},
 
@@ -183,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 	__onVisibile: function () {
 		this.stopBlurTimeout();
 
-		if (this.is_inactive) {
+		if (this['is_inactive']) {
 			this.__setActive();
 		}
 
@@ -193,9 +184,9 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 	__setInactive: function () {
 		console.log('VISIBILITY: inactive');
 
-		this.is_inactive = true;
+		this['is_inactive'] = true;
 
-		if (this.locked_active) {
+		if (this['locked_active']) {
 			console.log('VISIBILITY: locked active');
 		} else {
 			this.fireEvent('inactive');
@@ -204,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 
 	__setActive: function () {
 		console.log('VISIBILITY: active');
-		this.is_inactive = false;
+		this['is_inactive'] = false;
 
 		if (this.inactiveToast) {
 			this.inactiveToast.close();
@@ -238,15 +229,15 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 	},
 
 	lockActive: function () {
-		this.locked_active = true;
+		this['locked_active'] = true;
 	},
 
 	unlockActive: function () {
-		this.locked_active = false;
+		this['locked_active'] = false;
 	},
 
 	isInactive: function () {
-		return this.is_inactive;
+		return this['is_inactive'];
 	},
 
 	isHidden: function () {
@@ -254,7 +245,7 @@ module.exports = exports = Ext.define('NextThought.util.Visibility', {
 			return document[this.HIDDEN];
 		}
 
-		return this.is_legacy_hidden;
+		return this['is_legacy_hidden'];
 	},
 
 	getVisibilityState: function () {
