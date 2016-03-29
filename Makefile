@@ -7,7 +7,7 @@ RES=resources/
 
 CC=webpack --progress --cache --bail --config
 
-export NODE_ENV="production"
+
 
 # all: check compile
 all: compile
@@ -28,7 +28,7 @@ compile: clean stage $(DIST)server
 	@rm -r $(DIST)client/js
 	@rm -r $(DIST)client/resources/scss
 ##compile
-	@$(CC) ./webpack.config.js
+	@NODE_ENV="production" $(CC) ./webpack.config.js
 
 
 $(DIST)server:
