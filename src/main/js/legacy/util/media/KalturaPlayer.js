@@ -4,7 +4,6 @@ var {isFeature} = Globals;
 
 
 module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
-	reqruies: ['NextThought.util.Globals'],
 
 	statics: {
 		PARTNER_ID: '1500101',
@@ -295,8 +294,8 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 		}
 
 		code.push(
-			'VideoSupports = ', Ext.encode(NextThought.Video.supports), ';',
-			this.playerCode.inject.toString(),
+			'VideoSupports = ' + Ext.encode(NextThought.Video.supports) + ';',
+			'var inject = ' + this.playerCode.inject.toString() + ';',
 			'window.addEventListener("load",inject,false);');
 
 		return code.join('\n').replace(/%([^%]+)%/gm, resolve);
@@ -743,8 +742,7 @@ module.exports = exports = Ext.define('NextThought.util.media.KalturaPlayer', {
 
 	playerCode: {
 
-
-		inject: function inject () {
+		inject: function () {
 
 			console.log = console.log || function () {};
 			console.debug = console.debug || console.log || function () {};
