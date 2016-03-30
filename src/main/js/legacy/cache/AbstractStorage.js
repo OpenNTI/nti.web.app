@@ -9,43 +9,41 @@ function prefix (v) {
 }
 
 
-class AbstractStorage {
-
-	constructor (storage, noPrefix) {
-		this.currentVersion = 2;
-		if (!storage ||
-			!Ext.isFunction(storage.removeItem) ||
-			!Ext.isFunction(storage.setItem) ||
-			!Ext.isFunction(storage.getItem) ||
-			!Ext.isFunction(storage.clear)) {
-			Ext.Error.raise('Given storage object does not implement Storage api');
-		}
-
-		this.backingStore = storage;
-
-		if (this.get('version') !== this.currentVersion) {
-			this.removeAll();
-		}
-
-		this.set('version', this.currentVersion);
-
-		if (noPrefix !== true) {
-			this.prefix = prefix;
-		}
+function AbstractStorage (storage, noPrefix) {
+	this.currentVersion = 2;
+	if (!storage ||
+		!Ext.isFunction(storage.removeItem) ||
+		!Ext.isFunction(storage.setItem) ||
+		!Ext.isFunction(storage.getItem) ||
+		!Ext.isFunction(storage.clear)) {
+		Ext.Error.raise('Given storage object does not implement Storage api');
 	}
 
+	this.backingStore = storage;
 
-	prefix (v) {return v;}
+	if (this.get('version') !== this.currentVersion) {
+		this.removeAll();
+	}
+
+	this.set('version', this.currentVersion);
+
+	if (noPrefix !== true) {
+		this.prefix = prefix;
+	}
+}
+
+Object.assign(AbstractStorage.prototype, {
+	prefix (v) {return v;},
 
 
 	setItem (key, value) {
 		return this.set(key, value);
-	}
+	},
 
 
 	getItem (key) {
 		return this.get(key);
-	}
+	},
 
 
 	set (key, value) {
@@ -65,7 +63,7 @@ class AbstractStorage {
 			}
 		}
 		return old;
-	}
+	},
 
 
 	get (key) {
@@ -81,7 +79,7 @@ class AbstractStorage {
 		} catch (e) {
 			return null;
 		}
-	}
+	},
 
 
 	getProperty (key, property, defaultValue) {
@@ -95,7 +93,7 @@ class AbstractStorage {
 		}
 
 		return (o && o[property[0]]) || defaultValue;
-	}
+	},
 
 
 	updateProperty (key, property, value) {
@@ -120,24 +118,24 @@ class AbstractStorage {
 		} catch (e) {
 			console.warn('Storage property did not get set.', arguments, e.stack || e.message || e);
 		}
-	}
+	},
 
 
 	removeProperty (key, property) {
 		return this.updateProperty(key, property, undefined);
-	}
+	},
 
 
 	remove (key) {
 		this.backingStore.removeItem(key);
-	}
+	},
 
 
 	removeAll () {
 		this.backingStore.clear();
 	}
 
-}
+});
 
 
 const fallback = {
