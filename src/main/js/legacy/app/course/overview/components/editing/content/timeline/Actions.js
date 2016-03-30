@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var EditingActions = require('../../Actions');
-var ModelTimeline = require('../../../../../../../model/Timeline');
+const Ext = require('extjs');
+
+require('../../Actions');
+require('../../../../../../../model/Timeline');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.timeline.Actions', {
@@ -8,9 +9,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	saveTimeline: function (timelines, record, originalPosition, newPosition, root) {
 		if (record) {
-			return this.__updateSingleTimeline(timelines, record, originalPosition, newPosition, root);		
+			return this.__updateSingleTimeline(timelines, record, originalPosition, newPosition, root);
 		}
-		
+
 		return this.__createSingleTimeline(timelines, newPosition);
 	},
 
@@ -27,9 +28,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			save = Promise.resolve();
 		}
 		else {
-			newTimeline = this.__getTimelineData(newTimeline);
-			save = this.__removeAndAdd(record, originalPosition, newTimeline, newPosition, root);
+			save = this.__moveRecord(record, originalPosition, newPosition, root);
 		}
+
+		return save;
 	},
 
 	__createSingleTimeline: function (timelines, newPosition) {
