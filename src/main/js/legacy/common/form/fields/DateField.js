@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var FieldsLegacySearchComboBox = require('./LegacySearchComboBox');
+const Ext = require('extjs');
+const DomUtils = require('legacy/util/Dom');
+
+require('./LegacySearchComboBox');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.DateField', {
@@ -66,8 +68,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.DateField'
 
 	isFullyAnswered: function () {
 		var q = this.hasBeenAnswered || (!Ext.isEmpty(this.yearEl.getValue()) &&
-										 !Ext.isEmpty(this.dayEl.getValue()) &&
-										 !Ext.isEmpty(this.monthInput.getValue()));
+									!Ext.isEmpty(this.dayEl.getValue()) &&
+									!Ext.isEmpty(this.monthInput.getValue()));
 
 		this.hasBeenAnswered = q;
 		return q;
