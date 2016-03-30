@@ -10,6 +10,8 @@ var ComponentsUserTokenField = require('../app/sharing/components/UserTokenField
 var UtilSharing = require('../util/Sharing');
 var EmbedvideoWindow = require('./embedvideo/Window');
 var {guidGenerator} = require('legacy/util/Globals');
+const Globals = require('legacy/util/Globals');
+require('legacy/common/form/fields/FilePicker');
 
 Ext.define('NextThought.editor.AbstractEditor', {
 	extend: 'Ext.Component',
@@ -64,25 +66,28 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	renderTpl: Ext.DomHelper.markup(
 		[
 			'{header}',
-			{
-				cls: 'main',
-				cn: [
-					'{extra}',
-					{
-						cls: 'content show-placeholder scrollable',
-						'data-placeholder': '{placeholderText}',
-						contentEditable: true,
-						unselectable: 'off',
-						tabIndex: -1,
-						cn: [
-							{ //inner div for IE
-								//default value (U+2060 -- allow the cursor in to this placeholder div, but don't take any space)
-								html: '\u2060'
-							}
-						]
-					}
-				]
-			}
+			{tag: 'form', cls: 'common-form', enctype: '{enctype}', autocomplete: '{autocomplete}', 'novalidate': true, name: '{name}', cn: [
+				{cls: 'input', type: 'hidden', name: '__json__'},
+				{
+					cls: 'main',
+					cn: [
+						'{extra}',
+						{
+							cls: 'content show-placeholder scrollable',
+							'data-placeholder': '{placeholderText}',
+							contentEditable: true,
+							unselectable: 'off',
+							tabIndex: -1,
+							cn: [
+								{ //inner div for IE
+									//default value (U+2060 -- allow the cursor in to this placeholder div, but don't take any space)
+									html: '\u2060'
+								}
+							]
+						}
+					]
+				}
+			]}
 			, {
 				cls: 'footer',
 				cn: [{
@@ -214,6 +219,24 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	tabTpl: Ext.DomHelper.createTemplate({html: '\t'}).compile(),
 
+	attachmentPreviewTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{ cls: 'attachment-part preview', contentEditable: 'false', 'data-fileName': '{fileName}', 'name': '{name}', cn: [
+			{ cls: 'thumbnail', cn: [
+				{ cls: 'preview', style: 'background-image: url({href});'}
+			]},
+			{ cls: 'meta', cn: [
+				{ cls: 'text', cn: [
+					{ tag: 'span', cls: 'title', html: '{fileName}'},
+					{ tag: 'span', cls: 'size', html: '{size}'}
+				]},
+				{ cls: 'controls', cn: [
+					{ tag: 'span', cls: 'view', html: 'Preview'},
+					{ tag: 'span', cls: 'change', html: 'Change'}
+				]}
+			]}
+		]}
+	])),
+
 	onClassExtended: function (cls, data) {
 		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
 		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
@@ -259,7 +282,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			enableWhiteboards: Boolean(this.enableWhiteboards),
 			enableVideo: Boolean(this.enableVideo),
 			enableFileUpload: Boolean(this.enableFileUpload),
-			placeholderText: this.placeholderText
+			placeholderText: this.placeholderText,
+			enctype: this.enctype || 'multipart/form-data',
+			autocomplete: this.autocomplete || 'off',
+			name: this.formName || 'form'
 		});
 
 		if (this.enableShareControls || this.enablePublishControls) {
@@ -592,8 +618,51 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
-	onFileChange: function () {
-		// TODO: Add file-container to the Body.
+	onFileChange: function (file) {
+		// TODO: Check and warn about the size
+		this.setPreviewFromInput(file);
+	},
+
+
+	setPreviewFromInput: function (file) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setPreviewFromInput.bind(this, file));
+			return;
+		}
+
+		let content = this.el.down('.content'),
+			tpl = this.attachmentPreviewTpl,
+			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(file.size, 1),
+			href = this.createObjectURL(file),
+			placeholder = Ext.DomHelper.createTemplate({html: this.defaultValue}),
+			guid = guidGenerator();
+
+		tpl.append(content, {size: size, href: href, fileName: file.name, name: guid});
+
+		// Add a placeholder to allow adding text.
+		placeholder.append(content);
+	},
+
+
+	createObjectURL: function (file) {
+		var url = Globals.getURLObject();
+
+		this.cleanUpObjectURL();
+
+		if (!url) { return null; }
+
+		this.objectURL = url.createObjectURL(file);
+
+		return this.objectURL;
+	},
+
+	cleanUpObjectURL: function () {
+		var url = Globals.getURLObject();
+
+		if (this.objectURL && url) {
+			url.revokeObjectURL(this.objectURL);
+			delete this.objectURL;
+		}
 	},
 
 
@@ -1730,7 +1799,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		//See http://stackoverflow.com/a/12832455 and http://jsfiddle.net/sathyamoorthi/BmTNP/5/
 		var out = [],
 			sel = this.el.select('.content > *'),
-			reInitialChar = this.REGEX_INITIAL_CHAR;
+			reInitialChar = this.REGEX_INITIAL_CHAR, me = this;
 
 		sel.each(function (div) {
 			var html, parsed, tmp, dom;
@@ -1739,6 +1808,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				dom = Ext.getDom(div).cloneNode(true);
 				div = Ext.fly(dom, '__editer-flyweight');
 				html = div.getHTML() || '';
+
+				if (div.is('.attachment-part')) {
+					html = me.getAttachmentPart(div);
+					out.push(html);
+					return true;
+				}
 
 				if (div.is('.object-part')) {
 					html = '';
@@ -1772,6 +1847,16 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		return out;
 	},
 
+
+	getAttachmentPart: function (el) {
+		return {
+			MimeType: 'application/vnd.nextthought.contentfile',
+			fileName: el && el.getAttribute && el.getAttribute('data-fileName'),
+			name: el && el.getAttribute && el.getAttribute('name')
+		};
+	},
+
+
 	getValue: function () {
 		return {
 			body: this.getBody(this.getBodyValue()),
@@ -1781,6 +1866,19 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			tags: this.tags ? this.tags.getValue() : undefined
 		};
 	},
+
+
+	getFormData: function () {
+		var dom = this.el.dom,
+			form = dom && dom.querySelector('form'),
+			formData;
+
+		if (!form) { return; }
+
+		formData = new FormData(form);
+
+	},
+
 
 	setTitle: function (title) {
 		var t = this.titleEl;
