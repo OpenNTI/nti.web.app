@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var CommonStateStore = require('../../common/StateStore');
+const Ext = require('extjs');
+
+require('../../common/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
@@ -54,7 +55,19 @@ module.exports = exports = Ext.define('NextThought.app.windows.StateStore', {
 
 
 	getComponentForMimeType: function (type) {
-		return this.self.MIME_TO_CMP[type];
+		let map = this.self.MIME_TO_CMP;
+
+		if (!Array.isArray(type)) {
+			type = [type];
+		}
+
+		return type.reduce(function(acc, t) {
+			if (!acc) {
+				acc = map[t];
+			}
+
+			return acc;
+		}, null);
 	},
 
 
