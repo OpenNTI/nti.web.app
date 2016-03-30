@@ -1,8 +1,9 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../../../util/Content');
-var MixinsRouter = require('../../../../mixins/Router');
-var TypesContent = require('./types/Content');
-var TypesToc = require('./types/Toc');
+const Ext = require('extjs');
+const ContentUtils = require('../../../../util/Content');
+
+require('../../../../mixins/Router');
+require('./types/Content');
+require('./types/Toc');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.Lesson', {
@@ -55,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		var me = this;
 
-		return me.currentNode.getProgress()
+		me.currentNode.getProgress()
 					.then(function (progress) {
 						me.items.each(function (item) {
 							if (item.setProgress) {
@@ -73,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		var me = this;
 
-		return me.currentNode.getCommentCounts()
+		me.currentNode.getCommentCounts()
 			.then(function (counts) {
 				me.items.each(function (item) {
 					if (item.setCommentCounts) {
@@ -116,7 +117,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		if (me.currentOverview && me.currentOverview.record.getId() === record.getId() && !doNotCache) {
 			if (me.currentOverview.refresh) {
-				 return me.currentOverview.refresh()
+				return me.currentOverview.refresh()
 							.then(me.__updateProgress.bind(me))
 							.then(me.__updateCounts.bind(me))
 							.always(me.maybeUnmask.bind(me));
