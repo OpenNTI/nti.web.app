@@ -129,28 +129,36 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 
 	setTops: function () {
-		var upcoming = this.down('[category=upcoming]'),
-			current = this.down('[category=current]'),
-			archived = this.down('[category=archived]'),
-			first = this.down('[category]'),
-			defaulTop = 0;
+		let upcoming = this.down('[category=upcoming]');
+		let	current = this.down('[category=current]');
+		let	archived = this.down('[category=archived]');
+		let	first = this.down('[category]');
+		let	defaulTop = 0;
 
-		this.scrollTops = {};
-		if (first) {
-			defaulTop = first.el.getTop();
-		}
+		Promise.all([
+			upcoming && upcoming.onceRendered,
+			current && current.onceRendered,
+			archived && archived.onceRendered,
+			first && first.onceRendered
+		]).then(() => {
+			this.scrollTops = {};
 
-		if (upcoming) {
-			this.scrollTops['upcoming'] = upcoming.el.getTop() - defaulTop;
-		}
-		if (current) {
-			this.scrollTops['current'] = current.el.getTop() - defaulTop;
-		}
-		if (archived) {
-			this.scrollTops['archived'] = archived.el.getTop() - defaulTop;
-		}
+			if (first) {
+				defaulTop = first.el.getTop();
+			}
 
-		this.setPageHeight();
+			if (upcoming) {
+				this.scrollTops['upcoming'] = upcoming.el.getTop() - defaulTop;
+			}
+			if (current) {
+				this.scrollTops['current'] = current.el.getTop() - defaulTop;
+			}
+			if (archived) {
+				this.scrollTops['archived'] = archived.el.getTop() - defaulTop;
+			}
+
+			this.setPageHeight();
+		});
 	},
 
 
