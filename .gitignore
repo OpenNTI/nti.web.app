@@ -3,6 +3,8 @@
 src/main/resources/css
 src/main/resources/images/elements-*png
 src/main/resources/images/icons-*png
+src/main/resources/images/sprite.png
+src/main/resources/scss/_icons.scss
 
 #ignore minification byproducts
 stage

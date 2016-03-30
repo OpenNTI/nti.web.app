@@ -27,6 +27,7 @@ build: compile deploy
 
 
 compile: clean-stage stage $(STAGE)server
+	@spritesmith
 	@compass compile
 ## copy static assets
 	@(cd $(SRC)main; rsync -Rr . ../../$(STAGE)client)
@@ -62,3 +63,5 @@ clean-stage:
 
 clean: clean-stage clean-dist
 	@compass clean
+	@rm src/main/resources/scss/_icons.scss
+	@rm src/main/resources/images/sprite.png
