@@ -1,5 +1,5 @@
 $accessibility_mode: true;
-	
-@import "variables-accessible";
 
-@import "main";
+@import "utils/variables-accessible";
+
+@import "legacy";

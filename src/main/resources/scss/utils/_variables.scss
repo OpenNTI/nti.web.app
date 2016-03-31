@@ -1,8 +1,3 @@
-$icons: sprite-map("icons/*.png",$layout:smart) !default;
-$elements: sprite-map("elements/*.png",$layout:smart) !default;
-
-$disable-magic-sprite-selectors: true !default;
-
 $font: 'Open Sans', sans-serif !default;
 $condensed-font: 'Open Sans Condensed', $font !default;
 $icon-font: 'icomoon';

@@ -1,102 +1,104 @@
 $accessibility_mode: false;
 
-@import "compass";
-@import "variables";
-@import "animate";
+
+@import
+	"base/fonts",
+	"utils/variables",
+	"utils/animate",
+	"layout/main-layout";
 
 @import "nti-override.css";
 
-@import "reader";
+@import
+	"debris/reader",
 
-@import "main-layout";
+	"debris/nav-panel",
+	"debris/navbar",
+	"debris/dnd",
+	"debris/transitions",
 
-@import "nav-panel";
-@import "navbar";
-@import "dnd";
-@import "transitions";
+	"debris/branding-defaults",
+	"debris/containers",
+	"debris/charts",
+	"debris/grid",
+	"debris/editor",
+	"debris/window-treatments",
+	"debris/chat",
+	"debris/whiteboard",
+	"debris/notes",
+	"debris/dictionary",
+	"debris/coppa-specific",
+	"debris/lightbox",
+	"debris/videopopup",
+	"debris/account-window",
+	"debris/profiles",
+	"debris/forums",
+	"debris/blog",
+	"debris/prompt",
+	"debris/image-cropping",
 
-@import "branding-defaults";
-@import "containers";
-@import "charts";
-@import "grid";
-@import "editor";
-@import "window-treatments";
-@import "chat";
-@import "whiteboard";
-@import "notes";
-@import "dictionary";
-@import "coppa-specific";
-@import "lightbox";
-@import "videopopup";
-@import "account-window";
-@import "profiles";
-@import "forums";
-@import "blog";
-@import "prompt";
-@import "image-cropping";
+	"debris/notifications",
+	"debris/stream",
 
-@import "notifications";
-@import "stream";
-
-@import "tabbars";
-@import "buttons";
-@import "token";
-@import "header";
-@import "content";
-@import "library";
-@import "navigation-menu";
-@import "masks-and-tips";
-@import "form-fields";
-@import "menu-items";
-@import "video";
-@import "context";
+	"debris/tabbars",
+	"debris/buttons",
+	"debris/token",
+	"debris/header",
+	"debris/content",
+	"debris/library",
+	"debris/navigation-menu",
+	"debris/masks-and-tips",
+	"debris/form-fields",
+	"debris/menu-items",
+	"debris/video",
+	"debris/context",
 
 
-@import "contact-search";
-@import "contacts";
-@import "oobe-contacts";
-@import "activity";
+	"debris/contact-search",
+	"debris/contacts",
+	"debris/oobe-contacts",
+	"debris/activity",
 
-@import "nav-outline";
-@import "content-nav";
-@import "annotations";
-@import "myaccount";
-@import "file-uploader";
-@import "link-styles";
+	"debris/nav-outline",
+	"debris/content-nav",
+	"debris/annotations",
+	"debris/myaccount",
+	"debris/file-uploader",
+	"debris/link-styles",
 
-@import "sidebar";
-@import "search";
-@import "assessments";
-@import "identity";
+	"debris/sidebar",
+	"debris/search",
+	"debris/assessments",
+	"debris/identity",
 
-@import "history-view";
-@import "user-data-panel";
+	"debris/history-view",
+	"debris/user-data-panel",
 
-@import "slidedeck";
+	"debris/slidedeck",
 
-@import "avatar-choices";
-@import "random-gravatar-picker";
-@import "toast";
-@import "nti-welcome";
+	"debris/avatar-choices",
+	"debris/random-gravatar-picker",
+	"debris/toast",
+	"debris/nti-welcome",
 
-@import "store";
-@import "course-dashboard";
-@import "course-nav";
-@import "course-info";
-@import "course-assessment";
-@import "course-reports";
-@import "course-admission";
-@import "course-email";
-@import "content-editing";
+	"debris/store",
+	"debris/course-dashboard",
+	"debris/course-nav",
+	"debris/course-info",
+	"debris/course-assessment",
+	"debris/course-reports",
+	"debris/course-admission",
+	"debris/course-email",
+	"debris/content-editing",
 
-@import "pointer";
+	"debris/pointer",
 
-@import "fullscreen-rules";
+	"debris/fullscreen-rules",
 
-@import "static-resources";
+	"debris/static-resources",
 
-@import "ipad";
-@import "auditlog";
+	"debris/ipad",
+	"debris/auditlog";
 
 .x-panel-default,
 .x-border-layout-ct { background: inherit; }

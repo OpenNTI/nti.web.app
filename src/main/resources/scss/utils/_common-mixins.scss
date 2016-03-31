@@ -354,36 +354,6 @@
 		$track: #fff;
 	}
 	scrollbar-track-color: $track;
-
-	//::-webkit-scrollbar
-	//::-webkit-scrollbar-button
-	//::-webkit-scrollbar-track
-	//::-webkit-scrollbar-track-piece
-	//::-webkit-scrollbar-thumb
-	//::-webkit-scrollbar-corner
-	//::-webkit-resizer
-	//
-	//
-	//:horizontal
-	//:vertical
-	//:decrement
-	//:increment
-	//:start
-	//:end
-	//:double-button
-	//:single-button
-	//:no-button
-	//:corner-present
-	//:window-inactive
-	//
-	//IE
-	//scrollbar-face-color
-	//scrollbar-highlight-color
-	//scrollbar-3dlight-color
-	//scrollbar-darkshadow-color
-	//scrollbar-shadow-color
-	//scrollbar-arrow-color
-	//scrollbar-track-color
 }
 
 
@@ -502,22 +472,22 @@
 		font-style: italic;
 		font-weight: 600;
 		@include icon('like',$top:1px, $left:3px);
-        &:hover, &.on{
+		&:hover, &.on{
 			&:after{
 				@include sprite($icons,'like_active');
 			}
-        }
+		}
 	}
 	.favorite{
 		margin: -1px 10px 0 0;
 		width: 18px;
 		height: 24px;
 		@include icon('bookmark',$left: 3px);
-        &:hover, &.on {
+		&:hover, &.on {
 			&:after{
 				@include sprite($icons,'bookmark_active');
 			}
-        }
+		}
 	}
 
 	.favorite-spacer{
@@ -702,11 +672,11 @@
 }
 
 @mixin grayscale{
-    filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); // Firefox 10+
-    filter: gray; // IE6-9
-    -webkit-filter: grayscale(100%); // Chrome 19+ & Safari 6+
-    -webkit-transition: all .6s ease; // Fade to color for Chrome and Safari
-    -webkit-backface-visibility: hidden; // Fix for transition flickering
+	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); // Firefox 10+
+	filter: gray; // IE6-9
+	-webkit-filter: grayscale(100%); // Chrome 19+ & Safari 6+
+	-webkit-transition: all .6s ease; // Fade to color for Chrome and Safari
+	-webkit-backface-visibility: hidden; // Fix for transition flickering
 
 	&:hover {
 		filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/></filter></svg>#grayscale");
@@ -753,27 +723,27 @@
 }
 
 @mixin flexbox() {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
 }
 
 @mixin flex($values) {
-  -webkit-box-flex: $values;
-  -moz-box-flex:  $values;
-  -webkit-flex:  $values;
-  -ms-flex:  $values;
-  flex:  $values;
+	-webkit-box-flex: $values;
+	-moz-box-flex:  $values;
+	-webkit-flex:  $values;
+	-ms-flex:  $values;
+	flex:  $values;
 }
 
 @mixin order($val) {
-  -webkit-box-ordinal-group: $val;
-  -moz-box-ordinal-group: $val;
-  -ms-flex-order: $val;
-  -webkit-order: $val;
-  order: $val;
+	-webkit-box-ordinal-group: $val;
+	-moz-box-ordinal-group: $val;
+	-ms-flex-order: $val;
+	-webkit-order: $val;
+	order: $val;
 }
 
 @mixin containFloats() {
