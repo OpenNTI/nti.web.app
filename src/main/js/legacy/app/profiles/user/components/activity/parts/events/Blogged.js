@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../../../../cache/UserRepository');
+const Ext = require('extjs');
+const UserRepository = require('../../../../../../../cache/UserRepository');
+
+require('legacy/app/blog/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Blogged', {
@@ -23,6 +25,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 	initComponent: function () {
 		this.callParent(arguments);
+
+		this.BlogStateStore = NextThought.app.blog.StateStore.getInstance();
+
+		this.mon(this.BlogStateStore, {
+			'blog-deleted': () => this.destroy()
+		});
+
 		this.mon(this.record, 'destroy', this.destroy, this);
 	},
 
@@ -84,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
-	onClick: function (e) {
+	onClick: function (/*e*/) {
 		this.navigateToObject(this.record);
 	}
 });

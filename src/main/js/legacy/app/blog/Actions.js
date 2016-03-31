@@ -1,10 +1,12 @@
 var Ext = require('extjs');
 var UserRepository = require('../../cache/UserRepository');
 var ParseUtils = require('../../util/Parsing');
-var CommonActions = require('../../common/Actions');
-var ForumsPersonalBlogComment = require('../../model/forums/PersonalBlogComment');
-var ForumsPersonalBlogEntryPost = require('../../model/forums/PersonalBlogEntryPost');
-var UserdataActions = require('../userdata/Actions');
+
+require('../../common/Actions');
+require('../../model/forums/PersonalBlogComment');
+require('../../model/forums/PersonalBlogEntryPost');
+require('../userdata/Actions');
+require('./StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
@@ -14,6 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		this.callParent(arguments);
 
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
+		this.BlogStateStore = NextThought.app.blog.StateStore.getInstance();
 	},
 
 	__parseSharingInfo: function (sharingInfo) {
@@ -62,7 +65,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 			post.save({
 				url: isEdit ? undefined : blog && blog.getLink('add'),
 				scope: me,
-				success: function (post, operation) {
+				success: function (p, operation) {
 					//the first argument is the record...problem is, it was a post, and the response from the server is
 					// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
 					// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
@@ -102,22 +105,19 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 	 * If we are going from #3 to #4 we need to move the entities to the tags
 	 * If we are Going from #4 to #3 we need to move the entities to the sharedWith.
 	 *
-	 * @param {NextThought.model.forums.PersonalBlogEntry} blogEntry
-	 * @param {Object} sharingInfo
-	 * @param {String[]} entities
-	 * @param {Function} cb
-	 * @param {Ext.Component} cmp
-	 * @param {Boolean} resolved
+	 * @param {NextThought.model.forums.PersonalBlogEntry} blogEntry the blogEntry to update
+	 * @param {Object} sharingInfo who to share with
+	 * @return {Promise} Fulfill after updating the sharing and publish states
 	 */
-	handleShareAndPublishState: function (blogEntry, sharingInfo, resolved) {
-			if (!blogEntry) {
+	handleShareAndPublishState: function (blogEntry, sharingInfo) {
+		if (!blogEntry) {
 			return Promise.resolve();
 		}
 
-			var isPublic = sharingInfo.isPublic,
+		var isPublic = sharingInfo.isPublic,
 			resolveEntities, publish;
 
-			if (isPublic) {
+		if (isPublic) {
 			resolveEntities = UserRepository.getUser(sharingInfo.entities)
 				.then(function (users) {
 					return users.map(function (u) { return u.get('NTIID'); });
@@ -127,8 +127,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		}
 
 
-			if (blogEntry.isPublished() !== isPublic) {
-			publish = new Promise(function (fulfill, reject) {
+		if (blogEntry.isPublished() !== isPublic) {
+			publish = new Promise(function (fulfill) {
 				//This function (publish) is poorly named. It toggles.
 				blogEntry.publish(null, fulfill, this);
 			});
@@ -137,7 +137,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		}
 
 
-			return Promise.all([
+		return Promise.all([
 			resolveEntities,
 			publish
 		]).then(function (results) {
@@ -149,14 +149,14 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 
 			object.set(name, action(entities, object.get(name)));
 
-			return new Promise(function (fulfill, reject) {
+			return new Promise(function (fulfill) {
 				object.save({callback: fulfill});
 			});
 		}).then(function () {
 			return blogEntry;
 		});
 
-		},
+	},
 
 	saveBlogComment: function (record, blogPost, valueObject) {
 		var isEdit = Boolean(record && !record.phantom),
@@ -218,6 +218,8 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 					Ext.StoreManager.each(function (s) {
 						maybeDeleteFromStore(null, s);
 					}, me);
+
+					me.BlogStateStore.onBlogDeleted(record);
 
 					fulfill();
 				},

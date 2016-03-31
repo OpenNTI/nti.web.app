@@ -212,8 +212,13 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 	},
 
 	fireDeleteEvent: function () {
+		this.el.mask('Deleting...');
+
 		this.BlogActions.deleteBlogPost(this.record)
-			.then(this.fireEvent.bind(this, 'record-deleted'));
+			.then(this.fireEvent.bind(this, 'record-deleted'))
+			.fail(() => {
+				this.el.unmask();
+			});
 	},
 
 	destroyWarningMessage: function () {
