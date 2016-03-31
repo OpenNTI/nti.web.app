@@ -8,12 +8,7 @@
 	.logo{
 		display: inline-block;
 		&::after{
-			//This file isn't publically referenced by its path on the system.
-			// The browsers will see it as "domain/resources/css/site.css" not
-			// "domain/resources/css/domain/site.css" And since CSS paths are
-			// relative to their url, "../.." would make "images" have to be
-			// unnecessarily symlinked at the root.
-			content: url(../images/platform.ou.edu/ou_janux_logo.png);
+			content: url(ou_janux_logo.png);
 			height: 38px;
 			width: 148px;
 			display: block;
@@ -31,55 +26,19 @@
 
 	.branding{
 		display: block;
-		background: url(../images/platform.ou.edu/ou_cover.png) center center no-repeat;
+		background: url(ou_cover.png) center center no-repeat;
 	}
 
 	&.dark-nav .branding {
 		display: block;
-		background: url(../images/platform.ou.edu/ou_janux_home_white.png) center center no-repeat;
+		background: url(ou_janux_home_white.png) center center no-repeat;
 		background-size: contain !important;
 		margin: 17px 0 17px 30px;
 		width: 149px;
 		height: 39px;
 	}
 
-	.content {
-		// .image::after {
-		// 	content: '';
-		// 	position: absolute;
-		// 	top: 0; bottom: 0; left: 0;
-		// 	width: 10px;
-		// 	background: url(../images/platform.ou.edu/ou_cover.png) 0 0 no-repeat;
-		// }
-		// .wrap {
-		// 	.provider {
-		// 		text-indent: -1000px;
-		// 		&::before {content:':';}//force there to be some text (the text indent hides it)
-		// 		&::after {
-		// 			content: 'The University of Oklahoma';
-		// 			position: absolute;
-		// 			left: 0;
-		// 			top: 0;
-		// 			text-indent: 0;
-		// 		}
-		// 	}
-		// }
-	}
-}
-
-
-.x-panel-content-switcher {
-	.x-component-content-switcher {
-		div.item:first-of-type {
-			// .image::after {
-			// 		content: '';
-			// 		position: absolute;
-			// 		top: 0; bottom: 0; left: 0;
-			// 		width: 10px;
-			// 		background: url(../images/platform.ou.edu/ou_cover.png) 0 0 no-repeat;
-			// 	}
-		}
-	}
+	.content {}
 }
 
 .x-component-purchasecomplete-panel{

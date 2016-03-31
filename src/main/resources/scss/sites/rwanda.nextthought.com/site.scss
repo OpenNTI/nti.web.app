@@ -8,7 +8,7 @@
 	.logo{
 		//top: 10%;
 		&::after{
-			content: url(../../images/rwanda.nextthought.com/cmu_wordmark.png);
+			content: url(cmu_wordmark.png);
 		}
 	}
 
@@ -23,7 +23,7 @@
 
 	.branding{
 		display: block;
-		background: url(../../images/rwanda.nextthought.com/cmu_cover.png) center center no-repeat;
+		background: url(cmu_cover.png) center center no-repeat;
 	}
 
 	.content {
@@ -32,7 +32,7 @@
 			position: absolute;
 			top: 0; bottom: 0; left: 0;
 			width: 10px;
-			background: url(../../images/rwanda.nextthought.com/cmu_cover.png) 0 0 no-repeat;
+			background: url(cmu_cover.png) 0 0 no-repeat;
 		}
 		.wrap {
 			.provider {
@@ -59,7 +59,7 @@
 				position: absolute;
 				top: 0; bottom: 0; left: 0;
 				width: 10px;
-				background: url(../../images/rwanda.nextthought.com/cmu_cover.png) 0 0 no-repeat;
+				background: url(cmu_cover.png) 0 0 no-repeat;
 			}
 		}
 	}

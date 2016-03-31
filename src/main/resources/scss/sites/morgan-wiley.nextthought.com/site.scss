@@ -7,12 +7,7 @@
 	.logo{
 		display: inline-block;
 		&::after{
-			//This file isn't publically referenced by its path on the system.
-			// The browsers will see it as "domain/resources/css/site.css" not
-			// "domain/resources/css/domain/site.css" And since CSS paths are
-			// relative to their url, "../.." would make "images" have to be
-			// unnecessarily symlinked at the root.
-			content: url(../images/morgan-wiley.nextthought.com/ms_logo.png);
+			content: url(ms_logo.png);
 			height: 40px;
 			width: 274px;
 			display: block;
@@ -29,7 +24,7 @@
 
 	.branding{
 		display: block;
-		background: url(../images/morgan-wiley.nextthought.com/cover.png) center center no-repeat;
+		background: url(cover.png) center center no-repeat;
 	}
 }
 
