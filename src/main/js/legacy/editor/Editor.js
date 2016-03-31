@@ -4,13 +4,14 @@ var DomUtils = require('../util/Dom');
 var ParseUtils = require('../util/Parsing');
 var RangeUtils = require('../util/Ranges');
 var SharingUtils = require('../util/Sharing');
-var UtilRanges = require('../util/Ranges');
-var FieldsTagField = require('../common/form/fields/TagField');
-var ComponentsUserTokenField = require('../app/sharing/components/UserTokenField');
-var UtilSharing = require('../util/Sharing');
-var EmbedvideoWindow = require('./embedvideo/Window');
 var {guidGenerator} = require('legacy/util/Globals');
 const Globals = require('legacy/util/Globals');
+
+require('../util/Ranges');
+require('../common/form/fields/TagField');
+require('../app/sharing/components/UserTokenField');
+require('../util/Sharing');
+require('./embedvideo/Window');
 require('legacy/common/form/fields/FilePicker');
 
 Ext.define('NextThought.editor.AbstractEditor', {
@@ -1346,18 +1347,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 	insertPartAtSelection: function (html) {
-		var sel,
-			range,
-			beforeRange,
-			afterRange,
-			beforeContent,
-			afterContent,
-			el,
-			frag,
-			node,
-			lastNode,
+		var content = this.el.down('.content', true),
+			sel, range, el,
 			i, length,
-			content = this.el.down('.content', true), sameNode;
+			part;
 
 		if (window.getSelection) {
 			// IE9 and non-IE
