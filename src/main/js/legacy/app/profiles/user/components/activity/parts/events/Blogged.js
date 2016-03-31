@@ -26,13 +26,19 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	initComponent: function () {
 		this.callParent(arguments);
 
-		this.BlogStateStore = NextThought.app.blog.StateStore.getInstance();
+		var me = this;
 
-		this.mon(this.BlogStateStore, {
-			'blog-deleted': () => this.destroy()
+		me.BlogStateStore = NextThought.app.blog.StateStore.getInstance();
+
+		me.mon(me.BlogStateStore, {
+			'blog-deleted': function (id) {
+				if (me.record.getId() === id) {
+					me.destroy();
+				}
+			}
 		});
 
-		this.mon(this.record, 'destroy', this.destroy, this);
+		me.mon(me.record, 'destroy', me.destroy, me);
 	},
 
 	beforeRender: function () {
