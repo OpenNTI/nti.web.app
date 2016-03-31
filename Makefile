@@ -21,9 +21,10 @@ setup:
 check:
 	@eslint --ext .js,.jsx . || true
 
-styles:
+styles: clean-styles
 	@spritesmith
 	@node-sass $(SRC)main/resources/scss -o $(SRC)main/resources/css
+	@postcss --use autoprefixer -r $(SRC)main/resources/css/*.css
 
 
 build: compile deploy
@@ -64,7 +65,7 @@ clean-stage:
 
 clean-styles:
 	@rm -rf $(SRC)main/resources/css
-	@rm $(SRC)main/resources/scss/utils/_icons.scss
-	@rm $(SRC)main/resources/images/sprite.png
+	@rm -f $(SRC)main/resources/scss/utils/_icons.scss
+	@rm -f $(SRC)main/resources/images/sprite.png
 
 clean: clean-stage clean-dist clean-styles
