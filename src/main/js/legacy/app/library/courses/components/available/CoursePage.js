@@ -31,7 +31,8 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 
 
 	renderSelectors: {
-		tabsEl: '.tabs'
+		tabsEl: '.tabs',
+		bodyContainerEl: '.body-container'
 	},
 
 
@@ -49,7 +50,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		var me = this;
 
 		this.setPageHeight();
-		this.bufferedScroll = Ext.Function.createBuffered(this.onScroll, 100);
+		this.bufferedScroll = Ext.Function.createBuffered(this.onScroll, 50);
 		this.mon(this.getTargetEl(), 'scroll', this.bufferedScroll.bind(this));
 		this.mon(this.tabsEl, 'click', this.onTabClick.bind(this));
 		Ext.EventManager.onWindowResize(this.setPageHeight, this);
@@ -133,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 		let	current = this.down('[category=current]');
 		let	archived = this.down('[category=archived]');
 		let	first = this.down('[category]');
-		let	defaulTop = 0;
+		let	defaultTop = 0;
 
 		Promise.all([
 			upcoming && upcoming.onceRendered,
@@ -141,20 +142,24 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			archived && archived.onceRendered,
 			first && first.onceRendered
 		]).then(() => {
+			//Since the components are Ext.views, wait an event pump for the items
+			//to get rendered
+			return wait();
+		}).then(() => {
 			this.scrollTops = {};
 
-			if (first) {
-				defaulTop = first.el.getTop();
+			if (this.bodyContainerEl) {
+				defaultTop = this.bodyContainerEl.dom.getBoundingClientRect().top;
 			}
 
 			if (upcoming) {
-				this.scrollTops['upcoming'] = upcoming.el.getTop() - defaulTop;
+				this.scrollTops['upcoming'] = upcoming.el.getTop() - defaultTop;
 			}
 			if (current) {
-				this.scrollTops['current'] = current.el.getTop() - defaulTop;
+				this.scrollTops['current'] = current.el.getTop() - defaultTop;
 			}
 			if (archived) {
-				this.scrollTops['archived'] = archived.el.getTop() - defaulTop;
+				this.scrollTops['archived'] = archived.el.getTop() - defaultTop;
 			}
 
 			this.setPageHeight();
@@ -173,7 +178,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 			this.scrollTops = {};
 		}
 
-		for(key in this.scrollTops) {
+		for (key in this.scrollTops) {
 			if (this.scrollTops.hasOwnProperty(key)) {
 				if (!selectTab) {
 					selectTab = key;
