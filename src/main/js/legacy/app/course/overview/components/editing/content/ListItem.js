@@ -1,9 +1,10 @@
-var Ext = require('extjs');
-var DndOrderingItem = require('../../../../../../mixins/dnd/OrderingItem');
-var MixinsTransition = require('../../../../../../mixins/Transition');
-var ControlsEdit = require('../controls/Edit');
-var EditingControls = require('../Controls');
-var ContentPrompt = require('./Prompt');
+const Ext = require('extjs');
+
+require('../../../../../../mixins/dnd/OrderingItem');
+require('../../../../../../mixins/Transition');
+require('../controls/Edit');
+require('../Controls');
+require('./Prompt');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.ListItem', {
@@ -37,10 +38,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	updateRecord: function (record) {
-		this.setRecord(record);
+		var enableDragging = this.Draggable && this.Draggable.isEnabled;
+
+		this.disableDragging();
+		this.setRecord(record, enableDragging);
 	},
 
-	setRecord: function (record) {
+	setRecord: function (record, enableDragging) {
 		this.removeAll(true);
 
 		var preview = this.getPreview(record),
@@ -68,7 +72,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.add(items);
 
-		if (this.Draggable && this.Draggable.isEnabled) {
+		if (enableDragging || (this.Draggable && this.Draggable.isEnabled)) {
 			this.enableDragging();
 		}
 	},
@@ -77,7 +81,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return this.el && this.el.dom && this.el.dom.querySelector('.controls');
 	},
 
-	getPreviewType: function (record) {},
+	getPreviewType: function (/*record*/) {},
 
 	getPreview: function (record) {
 		var item = record.getRaw(),

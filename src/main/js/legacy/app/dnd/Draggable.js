@@ -11,7 +11,7 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 		if (config.getDragTarget) {
 			this.getDragTarget = config.getDragTarget;
 		} else {
-			throw 'No getDragTarget passed!';
+			throw new Error('No getDragTarget passed!');
 		}
 
 		this.getDragBoundingClientRect = config.getDragBoundingClientRect;
@@ -107,6 +107,8 @@ module.exports = exports = Ext.define('NextThought.app.dnd.Draggable', {
 		} else {
 			console.error('Invalid drag handle.');
 		}
+
+		this.isEnabled = !remove;
 	},
 
 	enableDragging: function () {
