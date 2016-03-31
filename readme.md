@@ -1,28 +1,24 @@
-# Web App
 
-	All commands are assuming the path is relative to this checkout.
 
-- **Build Dependencies:** `bundler`, `npm`, `make`
-- **Run-Time Dependencies:** Login, Data Server
+### Requirements
 
-(FYI: If you do not already have `Ruby` and the `gem` command… I will leave you to figure out how to install it :] It seems to be bundled with MacOS, or XCode, so you should already have it.)
+You'll need to have the following items installed before continuing.
 
-### Getting Started
+  * [Node.js](http://nodejs.org):
+    * Use [nvm](https://github.com/creationix/nvm) to install NodeJS.
+        * `nvm install v5.5.0`
+        * Setup default node:
+          ```bash
+          echo v5.5.0 > ~/.nvmrc
+          ```
+          or
+          ```
+          nvm alias default 5.5.0
+          ```
+  * [Karma](http://karma-runner.github.io): Run `npm install -g karma-cli`
 
-(work is being done to remove the ruby dependency and only have npm dependencies)
-
-1. Setup CSS Compiler…
-  1. Setup Ruby environment: `~/.gemrc`:
-     * In your `~/.profile`, `~/.bash_profile`, or `~/.bashrc` and add a new environment variable called `GEM_HOME` with a value of: `~/.gem/ruby/<ruby version>` (on MacOS 10.9, the ruby version is `2.0.0`)
-     * Add `$GEM_HOME/bin` to your path.
-     * Create the `~/.gemrc` file:
-         - In your terminal type: `echo "gem: --no-document --user-install" > ~/.gemrc`  
-         This will instruct the ruby package manager to install gems in your local user directory instead of they system directory. (lets not muddy the OS shall we?) The `--no-document` argument is an optimization for not generating the docs and debugging symbols. (it installs much faster)
-     * Now type: `gem install bundler`
-  2. Install our bundle.
-     * type: `bundle install`
-  3. you can now compile the styles: `compass compile`
-
+Optional:
+  * Node Inspector: `npm install -g node-inspector`
 
 #### private npm
 All internal projects at NextThought are published into a private npm instance. You will need to configure npm to point to it before you can continue. It is located at https://npm.nextthought.com. For read-only access use the support credentials. When/if you need publishing (write) permissions, we can create a unique user for you.
@@ -32,6 +28,38 @@ npm set registry https://npm.nextthought.com
 npm login --registry https://npm.nextthought.com
 ```
 
+## Quickstart
+
+```bash
+git clone ssh://repos.nextthought.com/nti.web.app
+cd nti.web.app
+npm install
+```
+
+While you're working on this project, run:
+
+```bash
+npm start
+```
+
+##### Building:
+```bash
+$ make
+```
+
+##### Running Tests:
+```bash
+#for continuous integration (calls karma with extra reports, see package.json)
+$ npm test
+
+# for dev (single run, basic report)
+$ karma start
+
+# for dev (watch mode)
+$ karma start --auto-watch --no-single-run --reporters dots
+```
+
+---
 
 ### Recommended
 
@@ -49,3 +77,63 @@ git config branch.develop.rebase true
 I can't make this change centrally. It must be made per-clone.  This explains why you would want to rebase on pull: http://stevenharman.net/git-pull-with-automatic-rebase
 
 It basically simplifies your interactions. so you can simply `git pull` to get updated code, instead of `git pull -r` or `git fetch && git rebase... ` etc. With out this change, a `git pull` will make a merge bubble, and thats just ugly.
+
+
+---
+
+
+## Working on dependent projects:
+
+Clone the library, install its dependent modules, and `npm-link` it.
+
+```bash
+git clone {repository:source} {dependency-name}
+cd {dependency-name}
+npm install
+npm link
+```
+
+from `nti.web.app`:
+
+```bash
+npm link {dependency-name}
+```
+
+| dependency-name        | repository:source                                        |
+|------------------------|----------------------------------------------------------|
+| nti-lib-anchorjs       | ssh://repos.nextthought.com/nti.lib.anchorjs             |
+| nti-lib-dom            | ssh://repos.nextthought.com/nti.lib.domjs                |
+| nti-lib-interfaces     | ssh://repos.nextthought.com/nti.lib.interfaces           |
+| nti-lib-ranges         | ssh://repos.nextthought.com/nti.lib.ranges               |
+| nti-lib-whiteboardjs   | ssh://repos.nextthought.com/nti.lib.whiteboardjs         |
+| react-editor-component | git@github.com:NextThought/react-editor-component.git    |
+
+
+---
+
+### Text Editor
+
+[Atom](https://atom.io/) is the main editor editor used. Built on open web tech, for web tech :)
+
+You can use the package manger either in app on on the command line with `apm` (like `npm`)
+
+#### These packages are a **must**:
+ * `linter` - shows errors in files as you type/save.
+ * `linter-eslint` - linter plugin to run eslint on files.
+
+#### These are helpfull:
+ * `project-quick-open` - quickly open/switch to projects.
+ * `merge-conflicts` - a merge conflict ui
+ * `docblockr` - auto formats jsdoc comment blocks. as well as sippets.
+ * `autocomplete-modules` - adds autocomplete suggestions your resolvable packages.
+ * `git-plus` - an awesome git command pallet (branch, checkout/revert, commit, push, pull, etc)
+ * `git-history` - search git history and show the diff.
+ * `language-gitignore` - makes commit messages colored
+
+#### These are fun:
+ * `autocomplete-emojis` - self explanatory
+ * `file-icons` - makes file icons code-type specific.
+
+[Visual Studio Code](http://code.visualstudio.com/) (also built on Electron -- like atom) is a nice alternative.  [Sublime Text](http://www.sublimetext.com/) is another text editor available. As well as [TextMate](http://macromates.com/download).
+
+As long as you can have a LIVE eslint plugin with your editor, you should be good to go. If you prefer an editor that can't do that, you need to run `make check` pretty regularly.
