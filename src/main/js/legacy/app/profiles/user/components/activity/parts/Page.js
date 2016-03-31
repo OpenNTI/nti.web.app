@@ -1,16 +1,17 @@
-var Ext = require('extjs');
-var EventsActivityItem = require('./events/ActivityItem');
-var EventsActivityItemReply = require('./events/ActivityItemReply');
-var EventsBadge = require('./events/Badge');
-var EventsBlogged = require('./events/Blogged');
-var EventsBlogReply = require('./events/BlogReply');
-var EventsForumActivityItem = require('./events/ForumActivityItem');
-var EventsHighlightContainer = require('./events/HighlightContainer');
-var EventsJoined = require('./events/Joined');
-var EventsNoteReply = require('./events/NoteReply');
-var EventsPostReply = require('./events/PostReply');
-var EventsTopicReply = require('./events/TopicReply');
-var EventsTranscriptSummaryItem = require('./events/TranscriptSummaryItem');
+const Ext = require('extjs');
+
+require('./events/ActivityItem');
+require('./events/ActivityItemReply');
+require('./events/Badge');
+require('./events/Blogged');
+require('./events/BlogReply');
+require('./events/ForumActivityItem');
+require('./events/HighlightContainer');
+require('./events/Joined');
+require('./events/NoteReply');
+require('./events/PostReply');
+require('./events/TopicReply');
+require('./events/TranscriptSummaryItem');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.Page', {
@@ -86,5 +87,19 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 
 		return cmps;
+	},
+
+
+	prependItems: function (records) {
+		records.reverse().forEach((record) => this.prependItem(record));
+	},
+
+
+	prependItem: function (record) {
+		var cmp = this.cmpsFromRecords([record])[0];
+
+		if (cmp) {
+			this.insert(0, cmp);
+		}
 	}
 });

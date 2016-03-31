@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ComponentsBasePage = require('./BasePage');
-var ListTilesNote = require('./listTiles/Note');
+const Ext = require('extjs');
+
+require('./BasePage');
+require('./listTiles/Note');
 
 
 module.exports = exports = Ext.define('NextThought.app.stream.components.ListPage', {

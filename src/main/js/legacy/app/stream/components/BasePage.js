@@ -36,5 +36,13 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.BasePag
 
 	getForMimeType: function (mimeType) {
 		return this.self.MIME_TO_CMP[mimeType];
-	}
+	},
+
+
+	prependItems: function(records) {
+		records.reverse().forEach((record) => this.prependItem(record));
+	},
+
+
+	prependItem: function(/*record*/) {}
 });

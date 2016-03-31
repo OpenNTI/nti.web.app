@@ -1,10 +1,12 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../../../util/Parsing');
-var PartsStream = require('./parts/Stream');
-var PartsNewPost = require('./parts/NewPost');
-var WindowsActions = require('../../../../windows/Actions');
-var BlogWindow = require('../../../../blog/Window');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const ParseUtils = require('../../../../../util/Parsing');
+const {isMe} = require('legacy/util/Globals');
+
+require('./parts/Stream');
+require('./parts/NewPost');
+require('../../../../windows/Actions');
+require('../../../../blog/Window');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.Body', {
@@ -36,18 +38,22 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
+
 	onActivate: function () {
 		this.activityCmp.fireEvent('activate');
 	},
+
 
 	onDeactivate: function () {
 		this.activityCmp.fireEvent('deactivate');
 	},
 
+
 	setUpComponents: function () {
 		this.newPostCmp = this.down('profile-user-newpost');
 		this.activityCmp = this.down('profile-user-activity-stream');
 	},
+
 
 	onNewPost: function () {
 		if (this.postContainer && this.postContainer.getLink('add')) {
@@ -57,6 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
+
 	onPostSaved: function (record) {
 		var store = this.activityCmp && this.activityCmp.store;
 
@@ -64,6 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			store.insert(0, record);
 		}
 	},
+
 
 	userChanged: function (entity) {
 		this.activeEntity = entity;
@@ -95,13 +103,21 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			});
 	},
 
+
 	setStreamSource: function (store, entity) {
 		this.activityCmp.setStreamSource(store, entity);
 	},
 
+
 	setStreamParams: function (params) {
 		this.activityCmp.setStreamParams(params);
 	},
+
+
+	fetchNewItems: function () {
+		return this.activityCmp.fetchNewItems();
+	},
+
 
 	navigateToActivityItem: function (item, monitors) {
 		if (this.navigateToObject) {

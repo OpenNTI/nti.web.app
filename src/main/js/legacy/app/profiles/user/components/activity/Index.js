@@ -57,6 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
+
 	startResourceViewed: function () {
 		var id = this.activeUser && this.activeUser.getId();
 
@@ -70,6 +71,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
+
 	stopResourceViewed: function () {
 		var id = this.activeUser && this.activeUser.getId();
 
@@ -79,11 +81,13 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
+
 	getSuggestedSharing: function () {
 		var community = Service.getFakePublishCommunity();
 
 		return NextThought.model.UserSearch.create(community.getData());
 	},
+
 
 	onActivate: function () {
 		this.startResourceViewed();
@@ -92,6 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
+
 	onDeactivate: function () {
 		this.stopResourceViewed();
 		this.items.each(function (item) {
@@ -99,10 +104,12 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		});
 	},
 
+
 	initChildComponentRefs: function () {
 		this.streamCmp = this.down('profile-user-activity-body');
 		this.sidebarCmp = this.down('profile-user-activity-sidebar');
 	},
+
 
 	userChanged: function (user, isMe) {
 		if (this.activeUser === user) {
@@ -127,6 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			});
 	},
 
+
 	applyState: function (state) {
 		this.sidebarCmp.setFilterFromQueryParams(state);
 
@@ -138,18 +146,24 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		return Promise.resolve();
 	},
 
+
 	restoreState: function () {
 		var state = this.getCurrentState() || {};
 		return this.applyState(state);
 	},
 
+
 	updateFilter: function (filter) {
 		this.setState(filter);
 	},
 
+
 	onRoute: function (/*route, subRoute*/) {
 		this.setTitle('Activity');
+
+		return this.streamCmp.fetchNewItems();
 	},
+
 
 	navigateToActivityItem: function (item) {
 		this.Router.root.attemptToNavigateToObject(item);

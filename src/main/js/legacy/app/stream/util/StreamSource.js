@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var StoreBatchInterface = require('../../../store/BatchInterface');
+const Ext = require('extjs');
+
+require('../../../store/BatchInterface');
 
 
 /**
@@ -16,27 +17,28 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 	 *
 	 * @memberOf NextThought.app.stream.util.StreamSource#
 	 *
-	 * @param {Object} config - values to set up the stream source with
-	 * @param {String} config.batch - which batch to start on
-	 * @param {String} config.batchParam - the value to key the batch on
-	 * @param {Array} config.filters - filters to apply to the batch
-	 * @param {String} config.filterParam - the value to key the filters on
-	 * @param {Number} config.pageSize - the size of the batch
-	 * @param {String} config.sizeParam - the value to key the size on
-	 * @param {String|Object} config.sort - the field to sort the items on, or an object
-	 * @param {String} config.sort.on - the field to sort the items on
-	 * @param {String} config.sort.order - the order to sort on
-	 * @param {String} config.sortParam - the value to key the sort on
-	 * @param {String} config.sortOrder - the order to sort on
-	 * @param {Strin} config.sortOrderParam - the value to key the sort order on
-	 * @param {String} config.context - an ntiid to filter to items contained in it
-	 * @param {String} config.contextParam - the value to key the context on
+	 * @param {Object} config values to set up the stream source with
+	 * @param {String} config.batch which batch to start on
+	 * @param {String} config.batchParam the value to key the batch on
+	 * @param {Array} config.filters filters to apply to the batch
+	 * @param {String} config.filterParam the value to key the filters on
+	 * @param {Number} config.pageSize the size of the batch
+	 * @param {String} config.sizeParam the value to key the size on
+	 * @param {String|Object} config.sort the field to sort the items on, or an object
+	 * @param {String} config.sort.on the field to sort the items on
+	 * @param {String} config.sort.order the order to sort on
+	 * @param {String} config.sortParam the value to key the sort on
+	 * @param {String} config.sortOrder the order to sort on
+	 * @param {Strin} config.sortOrderParam the value to key the sort order on
+	 * @param {String} config.context an ntiid to filter to items contained in it
+	 * @param {String} config.contextParam the value to key the context on
+	 * @return {void}
 	 */
 	constructor: function (config) {
 		this.callParent(arguments);
 
 		if (!config.url) {
-			throw 'No URL given for stream source';
+			throw new Error('No URL given for stream source');
 		}
 
 		this.url = config.url;
@@ -136,10 +138,10 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 			batch = me.__getBatch();
 
 		return batch.getNextBatch()
-			.then(function (batch) {
-				me.currentBatch = batch;
+			.then(function (b) {
+				me.currentBatch = b;
 
-				return batch.getBatch();
+				return b.getBatch();
 			});
 	},
 
@@ -148,14 +150,25 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 			batch = me.__getBatch();
 
 		return batch.getPreviousBatch()
-			.then(function (batch) {
-				me.currentBatch = batch;
+			.then(function (b) {
+				me.currentBatch = b;
 
-				return batch.getBatch();
+				return b.getBatch();
 			});
 	},
 
 	reset: function () {
 		delete this.currentBatch;
+	},
+
+
+	fetchNewItems: function () {
+		var batch = this.__getBatch();
+
+		if (!batch) {
+			return Promise.resolve([]);
+		}
+
+		return batch.fetchNewItems();
 	}
 });
