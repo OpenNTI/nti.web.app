@@ -25,6 +25,7 @@ styles: clean-styles
 	@spritesmith
 	@node-sass $(SRC)main/resources/scss -o $(SRC)main/resources/css
 	@postcss --use autoprefixer -r $(SRC)main/resources/css/*.css
+	@(cd $(SRC)main/resources/scss/sites; rsync -Rr . ../../css/sites)
 
 
 build: compile deploy
