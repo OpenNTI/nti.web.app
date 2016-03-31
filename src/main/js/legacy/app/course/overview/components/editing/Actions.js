@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../../../../util/Parsing');
-var CommonActions = require('../../../../../common/Actions');
+const Ext = require('extjs');
+const ParseUtils = require('../../../../../util/Parsing');
+
+require('../../../../../common/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.Actions', {
@@ -130,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return Service.put(link, values)
 				.then(function (response) {
 					var rec = ParseUtils.parseItems(response)[0];
-					
+
 					record.syncWith(rec);
 					return record;
 				});
@@ -144,7 +145,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	__getPosition: function (position, record) {
+	__getPosition: function (position/*, record*/) {
 		if (!position.isModel) { return position; }
 
 		return {
@@ -186,6 +187,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * @param  {Object} originalPosition the parent and index the record started at
 	 * @param  {Object} newPosition		 the parent and index the record is moving to
 	 * @param  {Object} root		   the root of both parents
+	 * @param {Object} visibilityCmp the cmp used to control visibility
 	 * @return {Promise}			   fulfill when successful, reject when fail
 	 */
 	saveEditorForm: function (form, record, originalPosition, newPosition, root, visibilityCmp) {
@@ -227,7 +229,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	 * and then we edit the AvailableBeginning date and then post to the edit link.
 	 *
 	 * @param  {CourseOutlineNode} record		A record with a publish link.
-	 * @param  {TimeStamp} optionalDate Optional date to publish a date on
+	 * @param  {TimeStamp} date Optional date to publish a date on
 	 * @return {Promise}  fulfills when successfully published, reject when it failed.
 	 */
 	publishOnDate: function (record, date) {
@@ -242,7 +244,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				return ParseUtils.parseItems(response)[0];
 			})
 			.then(function (rec) {
-				record.syncWith(rec);
+				record.syncWith(rec, true);
 				return record;
 			});
 	},
@@ -259,7 +261,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				return ParseUtils.parseItems(response)[0];
 			})
 			.then(function (rec) {
-				record.syncWith(rec);
+				record.syncWith(rec, true);
 				return record;
 			});
 	},
@@ -283,7 +285,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				return ParseUtils.parseItems(response)[0];
 			})
 			.then(function (rec) {
-				record.syncWith(rec);
+				record.syncWith(rec, true);
 				return record;
 			});
 	},

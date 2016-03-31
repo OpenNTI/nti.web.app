@@ -208,9 +208,10 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 	 * Given another instance of the same class, update this values.
 	 *
 	 * @param  {Model} record the instance to update with
+	 * @param {Boolean} silent do not fire the update event
 	 * @returns {void}
 	 */
-	syncWith: function (record) {
+	syncWith: function (record, silent) {
 		if (!this.self.isInstanceOf(record)) {
 			console.error('Trying to sync records or two different classes');
 			return;
@@ -228,15 +229,19 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 			this.onSync();
 		}
 
-		this.fireEvent('update', this);
+		if (!silent) {
+			this.fireEvent('update', this);
+		}
 	},
 
 	/**
 	 * Given a response from the server, update my values
+	 *
 	 * @param  {String} response server response
+	 * @param {Boolean} silent do not fire the update event
 	 * @returns {void}
 	 */
-	syncWithResponse: function (response) {
+	syncWithResponse: function (response, silent) {
 		var json = JSON.parse(response),
 			newRecord;
 
@@ -244,7 +249,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 
 		newRecord = ParseUtils.parseItems([json])[0];
 
-		this.syncWith(newRecord);
+		this.syncWith(newRecord, silent);
 	},
 
 	/**

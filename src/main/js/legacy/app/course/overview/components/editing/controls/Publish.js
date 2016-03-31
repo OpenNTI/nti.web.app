@@ -1,4 +1,6 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+
+require('../publishing/Menu');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.controls.Publish', {
@@ -46,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	/**
+	/*
 	 * Set the initial publication state of the lesson control.
 	 * Since publishing affects both the outline node and the lesson overview,
 	 * we will take into account both to make sure they follow the intended business logic.
@@ -76,6 +78,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	setPublished: function () {
+		if (!this.rendered) { return; }
+
 		var label = this.labelEl,
 			el = this.el;
 
@@ -90,11 +94,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	setWillPublishOn: function () {
+		if (!this.rendered) { return; }
+
 		var label = this.labelEl,
 			rec = this.contents,
 			value = rec && rec.get('publishBeginning'),
 			date = new Date(value),
-			el = this.el, parts, m;
+			el = this.el;
 
 		if (value) {
 			// Format i.e. Dec 12
@@ -113,6 +119,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 
 	setNotPublished: function () {
+		if (!this.rendered) { return; }
+
 		var label = this.labelEl,
 			el = this.el;
 
@@ -154,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (this.el.hasCls('closed')) {
 			return;
 		}
-		
+
 		this.el.addCls('closed');
 		this.setPublishState();
 		this.publishMenu.reset();

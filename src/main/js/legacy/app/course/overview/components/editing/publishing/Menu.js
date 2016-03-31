@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var FieldsDatePicker = require('../../../../../../common/form/fields/DatePicker');
-var EditingActions = require('../Actions');
+const Ext = require('extjs');
+
+require('../../../../../../common/form/fields/DatePicker');
+require('../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.publishing.Menu', {
@@ -92,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			buttonRect = button && button.getBoundingClientRect(),
 			buttonRelativeTop = buttonRect.top - bodyRect.top,
 			buttonRelativeBottom = buttonRelativeTop + buttonRect.height,
-			viewHeight = Ext.Element.getViewportHeight(),
+			// viewHeight = Ext.Element.getViewportHeight(),
 			viewWidth = Ext.Element.getViewportWidth(),
 			positions = {
 				below: {
@@ -188,8 +189,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	handleSelectionClick: function (e) {
-		var el = Ext.get(e.target),
-			me = this;
+		var el = Ext.get(e.target);
 
 		e.stopEvent();
 		this.select(el);
@@ -216,7 +216,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			if (this.datepicker && this.datepicker.isValid && this.datepicker.isValid() === false) {
 				if (this.datepicker.showErrors) {
 					this.datepicker.showErrors();
-				}	
+				}
 			}
 			else {
 				this.publishOnDateSave();
@@ -238,7 +238,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			me.EditingActions.publish(me.contents)
 		])
 		.then(function (o) {
-			var node = o[0], lesson = o[1];
+			var lesson = o[1];
+
 			if (me.setPublished) {
 				me.setPublished(lesson);
 			}
@@ -256,7 +257,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			me.EditingActions.publishOnDate(me.contents, dateValue)
 		])
 		.then(function (o) {
-			var node = o[0], lesson = o[1];
+			var lesson = o[1];
 
 			if (me.setWillPublishOn) {
 				me.setWillPublishOn(lesson);
@@ -272,7 +273,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			me.EditingActions.unpublish(me.contents)
 		])
 		.then(function (o) {
-			var node = o[0], lesson = o[1];
+			var lesson = o[1];
 			if (me.setNotPublished) {
 				me.setNotPublished(lesson);
 			}
@@ -337,7 +338,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 	getDisplayDateValue: function (date) {
 		var hour, minutes,
-			meridiemVal, date;
+			meridiemVal;
 
 		if (date instanceof Date) {
 			hour = date.getHours();
