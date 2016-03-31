@@ -53,9 +53,8 @@
 			//	position: absolute;
 			//	top: 15px;
 			//	left: 0;
-			//	background: $icons no-repeat;
 			//}
-			
+
 			&.deleted{
 				cursor: default;
 			}
@@ -78,13 +77,13 @@
 				}
 			}
 
-			//&.user::after{ @include sprite($icons, 'add-contact-14x14', $dimensions: true); }
+			//&.user::after{ @include sprite($add-contact-14x14); }
 			//&.comment, &.personalblogcomment, &.generalforumcomment{
-			//	&::after{ @include sprite($icons, 'activity-comment', $dimensions: true); }
+			//	&::after{ @include sprite($activity-comment); }
 			//}
-			//&.highlight::after { @include sprite($icons, 'activity-highlight', $dimensions: true); }
+			//&.highlight::after { @include sprite($activity-highlight); }
 			&.note,&.personalblogentry, &.communityheadlinetopic{
-				//&::after{ @include sprite($icons, 'activity-note', $dimensions: true); }
+				//&::after{ @include sprite($activity-note); }
 				font-style: italic;
 			}
 
@@ -125,15 +124,15 @@
 
 
 .activity-popout{
-	&.x-layer {
-      overflow: hidden;
-    }
-
 	background-color: #fff;
-	@include box-shadow(0 2px 4px 1px rgba(0,0,0,.14),
-						inset 0 2px rgba(255,255,255,.5));
+	box-shadow: 0 2px 4px 1px rgba(0,0,0,.14), inset 0 2px rgba(255,255,255,.5);
 	border: solid 1px #cecece;
 	outline: 0;
+
+	&.x-layer {
+		overflow: hidden;
+	}
+
 
 	.activity-preview {
 
@@ -227,11 +226,11 @@
 					padding-left: 10px;
 					.commentAvatar{
 						left: 35px;
-					} 
+					}
 				}
 
 				&[data-depth='1'], &[data-depth='0']{
-					
+
 					border: 0 solid #f5f5f5;
 					border-top-width: 1px;
 					padding-left: 0px;
@@ -241,7 +240,7 @@
 					}
 				}
 
-				
+
 			}
 		}
 
@@ -340,7 +339,7 @@
 					position: absolute;
 					left: 0; right: 0;
 					bottom: 0; height: 10px;
-					@include background-image(linear-gradient(top,  rgba(251,251,251,0) 0%,rgba(251,251,251,1) 100%));
+					background-image: linear-gradient(to bottom, rgba(251, 251, 251, 0) 0%, #fbfbfb 100%);
 				}
 			}
 		}
@@ -555,7 +554,7 @@
 					font-size: 0.8em;
 					@include dot-separated-list;
 
-                	.link{
+					.link{
 						display: none;
 						cursor: pointer;
 
@@ -563,7 +562,7 @@
 							color: $primary-red;
 							display: block;
 						}
-                  	}
+				  	}
 				}
 
 				&:hover{
@@ -721,7 +720,7 @@
 			margin-right: 10px;
 			float: left;
 
-			@include icon('assignment_ontime');
+			@include icon($assignment_ontime);
 		}
 
 		.meta {
@@ -741,7 +740,7 @@
 
 		&.late {
 			.status {
-				@include icon('assignment_late');
+				@include icon($assignment_late);
 			}
 
 			.meta .turned-in {
@@ -749,7 +748,7 @@
 			}
 		}
 
-		&::after {			
+		&::after {
 			content: '';
 			position: absolute;
 			bottom: 2px;
@@ -768,7 +767,7 @@
 		color: $primary-blue;
 		font: normal 500 0.8em/20px $font;
 		padding: 10px 0 0 20px;
-		
+
 		.more-text {
 			cursor: pointer;
 		}

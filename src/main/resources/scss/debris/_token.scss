@@ -39,7 +39,6 @@
 				content: '';
 				position: absolute;
 				top: 3px; left:6px;
-				background: $icons no-repeat;
 				vertical-align: middle;
 			}
 		}
@@ -48,7 +47,7 @@
 		&.public {
 			padding-left: 22px !important;
 			&::after{
-				@include sprite($icons,'light-globe-13x13',$dimensions: true);
+				@include sprite($light-globe-13x13);
 			}
 		}
 		&.group {
@@ -56,7 +55,7 @@
 
 			&::after{
 				top: 5px; left: 5px;
-				@include sprite($icons,'light-groups-12x9',$dimensions: true);
+				@include sprite($light-groups-12x9);
 			}
 		}
 		&.list {
@@ -64,7 +63,7 @@
 
 			&::after{
 				top: 5px; left: 5px;
-				@include sprite($icons,'lists-white_hover',$dimensions: true);
+				@include sprite($lists-white_hover);
 			}
 		}
 
@@ -104,8 +103,8 @@
 				content: '';
 				display: block;
 				position: absolute;
-				background: $icons no-repeat;
-				@include sprite($icons,'light-x_hover',$dimensions: true);
+
+				@include sprite($light-x_hover);
 				top: 6px; left: 6px;
 				cursor: pointer;
 			}
@@ -186,12 +185,12 @@
 				}
 			}
 		}
-		
+
 		.control.disabled{
 			cursor: default;
 			opacity: .3;
 		}
-		
+
 		.tokens{
 			position: relative;
 			padding-left: 3px;
@@ -218,8 +217,8 @@
 						position: absolute;
 						left: 0; top: -7px;
 						outline: 0;
-						background: $icons no-repeat;
-						@include sprite($icons, 'ico_plus', $dimensions:true);
+
+						@include sprite($ico_plus);
 					}
 				}
 
@@ -288,12 +287,11 @@
 				position: absolute;
 				left: 0; top: 5px;
 				outline: 0;
-				background: $elements no-repeat;
-				@include sprite($elements,'btn_toggle_private',$dimensions: true);
+				@include sprite($btn_toggle_private);
 			}
 
 			&.on::after{
-				@include sprite($elements,'btn_toggle_public',$dimensions: true);
+				@include sprite($btn_toggle_public);
 			}
 		}
 

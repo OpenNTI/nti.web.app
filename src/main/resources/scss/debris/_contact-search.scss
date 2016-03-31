@@ -120,7 +120,7 @@
 				background-color: #f1f1f1;
 
 				.add {
-					@include sprite($icons,'add-contact_active');
+					@include sprite($add-contact_active);
 				}
 			}
 		}
@@ -132,10 +132,9 @@
 				margin-top: 7px;
 				float: right;
 				cursor: pointer;
-				background: transparent $icons no-repeat;
-				@include sprite($icons,'add-contact',$dimensions: true);
+				@include sprite($add-contact);
 				&:hover {
-					@include sprite($icons,'add-contact_active',$dimensions: true);
+					@include sprite($add-contact_active);
 				}
 			}
 
@@ -146,10 +145,9 @@
 			&.my-contact {
 				.add {
 					margin-top: 5px;
-					background: $icons no-repeat;
-					@include sprite($icons,'options',$dimensions: true);
+					@include sprite($options);
 					&:hover{
-						@include sprite($icons,'options_active');
+						@include sprite($options_active);
 					}
 				}
 				.text-wrap {
@@ -295,32 +293,31 @@
 					position: absolute;
 					left: 17px; top: 13px;
 					outline: 0;
-					background: $icons no-repeat;
 				}
 
 				&.lists{
 					&::after{
 						left:15px;
-						@include sprite($icons, 'rhp-contact-flyout-lists', $dimensions:true);
+						@include sprite($rhp-contact-flyout-lists);
 					}
 
 					&:hover{
 						background-color: #fff;
 						&::after{
-							@include sprite($icons, 'rhp-contact-flyout-lists_hover', $dimensions:true);
+							@include sprite($rhp-contact-flyout-lists_hover);
 						}
 					}
 				}
 
 				&.options{
 					&::after{
-						@include sprite($icons, 'rhp-contact-flyout-settings', $dimensions:true);
+						@include sprite($rhp-contact-flyout-settings);
 					}
 
 					&:hover{
 						background-color: #fff;
 						&::after{
-							@include sprite($icons, 'rhp-contact-flyout-settings_hover', $dimensions:true);
+							@include sprite($rhp-contact-flyout-settings_hover);
 						}
 					}
 				}

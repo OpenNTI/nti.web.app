@@ -74,9 +74,9 @@
 			padding: 10px 30px;
 			z-index: 100000;
 
-			@include transition(all 0.3s ease-in);
+			transition: all 0.3s ease-in;
 			.x-safari5 & {
-				-WebKit-transition: none;
+				transition: none;
 			}
 
 			&::after {
@@ -85,8 +85,7 @@
 				z-index: 1;
 				bottom: -14px;
 				left: $pointer-left;
-				background: $elements no-repeat;
-				@include sprite($elements, 'window-nib-south', $dimensions: true);
+				@include sprite($window-nib-south);
 			}
 
 			&.shown {
@@ -226,8 +225,8 @@
 				top: 10px;
 				right: 10px;
 				opacity: 0.6;
-				background: $icons no-repeat;
-				@include sprite($icons, 'window-control-close', $dimensions: true);
+
+				@include sprite($window-control-close);
 
 				&:hover {
 					opacity: 1;
@@ -311,11 +310,11 @@
 						content: '';
 						top: 14px;
 						left: 15px;
-						background: $icons no-repeat;
-						@include sprite($icons, 'check_progress', $dimensions: true);
+
+						@include sprite($check_progress);
 					}
 					&[data-order].active::after {
-						@include sprite($icons, 'check_progress_grn', $dimensions: true);
+						@include sprite($check_progress_grn);
 					}
 				}
 
@@ -483,21 +482,20 @@
 					&::before {
 						position: absolute;
 						content: '';
-						background: $icons no-repeat;
 						top: 16px;
 						left: 15px;
-						@include sprite($icons, 'checkbox-14', $dimensions: true);
+						@include sprite($checkbox-14);
 					}
 
 					&:hover::before {
-						@include sprite($icons, 'checkbox-14_hover', $dimensions: true);
+						@include sprite($checkbox-14_hover);
 					}
 				}
 
 				&:checked + div {
 					&, &:hover {
 						&::before {
-							@include sprite($icons, 'checkbox-14_active', $dimensions: true);
+							@include sprite($checkbox-14_active);
 						}
 					}
 				}
@@ -620,8 +618,8 @@
 				&::after {
 					content: '';
 					top: 9px;
-					background: $icons no-repeat;
-					@include sprite($icons, 'red-x-10', $dimensions: true);
+
+					@include sprite($red-x-10);
 				}
 			}
 
@@ -682,13 +680,13 @@
 						top: -20px;
 						position: absolute;
 						content: '';
-						background: $icons no-repeat;
-						@include sprite($icons, 'purchase-history-single-user', $dimensions: true);
+
+						@include sprite($purchase-history-single-user);
 					}
 				}
 
 				&.bulk td:first-of-type div::after {
-					@include sprite($icons, 'purchase-history-activation-key', $dimensions: true);
+					@include sprite($purchase-history-activation-key);
 				}
 
 			}
@@ -785,15 +783,15 @@
 				left: -35px;
 
 				content: '';
-				background: $icons no-repeat;
-				@include sprite($icons, 'credit_card', $dimensions: true);
+
+				@include sprite($credit_card);
 			}
 		}
 
 		&.location::before {
 			top: 0;
 			left: -25px;
-			@include sprite($icons, 'location_pin', $dimensions: true);
+			@include sprite($location_pin);
 		}
 	}
 
@@ -821,21 +819,21 @@
 				&::before {
 					position: absolute;
 					content: '';
-					background: $icons no-repeat;
+
 					top: 7px;
 					left: 0;
-					@include sprite($icons, 'radio-button-16', $dimensions: true);
+					@include sprite($radio-button-16);
 				}
 
 				&:hover::before {
-					@include sprite($icons, 'radio-button-16_hover', $dimensions: true);
+					@include sprite($radio-button-16_hover);
 				}
 			}
 
 			&:checked + div {
 				&:hover, & {
 					&::before {
-						@include sprite($icons, 'radio-button-16_active', $dimensions: true);
+						@include sprite($radio-button-16_active);
 					}
 				}
 			}

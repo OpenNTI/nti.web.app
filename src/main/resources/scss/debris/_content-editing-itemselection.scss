@@ -69,7 +69,7 @@
 				top: 0; right: 0;
 				cursor: pointer;
 
-				@include icon('rhp-search', $top: 8px, $left: 9px, $position: absolute);
+				@include icon($rhp-search, $top: 8px, $left: 9px, $position: absolute);
 			}
 		}
 	}
@@ -341,11 +341,11 @@
 			margin-right: 5px;
 
 			&.folder {
-				@include icon('library-folder', $top: 13px, $left: 2px);
+				@include icon($library-folder, $top: 13px, $left: 2px);
 			}
 
 			&.file {
-				@include icon('file-icon', $top: 11px, $left: 4px);
+				@include icon($file-icon, $top: 11px, $left: 4px);
 			}
 		}
 	}
@@ -363,11 +363,11 @@
 
 			.icon {
 				&.folder {
-					@include icon('library-folder-white', $top: 13px, $left: 2px);
+					@include icon($library-folder-white, $top: 13px, $left: 2px);
 				}
 
 				&.file {
-					@include icon('file-icon-white', $top: 11px, $left: 4px);
+					@include icon($file-icon-white, $top: 11px, $left: 4px);
 				}
 			}
 		}
@@ -396,7 +396,7 @@
 			}
 
 			&:not(:last-of-type) {
-				@include icon('mv-dropdown-arrow_hover', $side: 'after', $top: 13px, $left: auto, $right: 0);
+				@include icon($mv-dropdown-arrow_hover, $side: 'after', $top: 13px, $left: auto, $right: 0);
 
 				&::after {
 					@include experimental(transform, rotate(270deg));
@@ -405,12 +405,12 @@
 
 			&.file {
 				padding-left: 18px;
-				@include icon('file-icon', $side: before, $top: 9px, $left: 0);
+				@include icon($file-icon, $side: before, $top: 9px, $left: 0);
 			}
 
 			&.folder {
 				padding-left: 22px;
-				@include icon('library-folder', $side: before, $top: 11px, $left: 0);
+				@include icon($library-folder, $side: before, $top: 11px, $left: 0);
 			}
 		}
 	}

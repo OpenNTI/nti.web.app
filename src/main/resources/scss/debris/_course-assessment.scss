@@ -61,7 +61,7 @@ canvas.x-component-course-assessment {
 		}
 
 		.message-container {
-			@include icon('assignment-timed', $top: -5px, $left: 25px);
+			@include icon($assignment-timed, $top: -5px, $left: 25px);
 		}
 
 		.title {
@@ -140,7 +140,7 @@ canvas.x-component-course-assessment {
 							border-bottom-width: 0;
 						}
 
-						@include icon('radio-button-16', $side: before, $top: 11px, $left: 10px);
+						@include icon($radio-button-16, $side: before, $top: 11px, $left: 10px);
 
 						&::after {
 							content: '';
@@ -441,16 +441,16 @@ canvas.x-component-course-assessment {
 		}
 
 		.item {
-			@include icon('assignment_due_small', $top: 17px, $left: 16px);
+			@include icon($assignment_due_small, $top: 17px, $left: 16px);
 
 			&.late {
 				&::after {
-					@include sprite($icons,'assignment_late_small');
+					@include sprite($assignment_late_small);
 				}
 			}
 			&.nosubmit {
 				&::after {
-					@include sprite($icons, 'assignment_due_small');
+					@include sprite($assignment_due_small);
 				}
 			}
 
@@ -471,7 +471,7 @@ canvas.x-component-course-assessment {
 			box-shadow: 0 -1px 0 0 #f2f2f2, 0 1px 0 0 #f7f7f7;
 		}
 
-		@include icon('check_gray', $top: 22px, $left: 25px);
+		@include icon($check_gray, $top: 22px, $left: 25px);
 
 		&.no_submit {
 			&, &:hover, &.selected { cursor: default !important; }
@@ -498,7 +498,7 @@ canvas.x-component-course-assessment {
 			.status time.due { display: none; }
 
 			&::after {
-				@include sprite($icons,'check_green');
+				@include sprite($check_green);
 			}
 
 		}
@@ -552,10 +552,10 @@ canvas.x-component-course-assessment {
 			display: none;
 			top: 22px;//60/2 - 16/2
 			right: 31px;
-			@include icon('reports-gray_hover', $position:absolute);
+			@include icon($reports-gray_hover, $position:absolute);
 
 			&:hover {
-				@include icon('reports-blue_hover', $position:absolute);
+				@include icon($reports-blue_hover, $position:absolute);
 			}
 		}
 
@@ -678,11 +678,11 @@ canvas.x-component-course-assessment {
 		padding-left: 40px;
 
 		&.x-menu-item-unchecked {
-			@include icon('checkbox-light-unchecked', $position: relative, $side: before, $top: 5px, $left: 15px);
+			@include icon($checkbox-light-unchecked, $position: relative, $side: before, $top: 5px, $left: 15px);
 		}
 
 		&.x-menu-item-checked {
-			@include icon('checkbox-light-checked', $position: relative, $side: before, $top: 5px, $left: 15px);
+			@include icon($checkbox-light-checked, $position: relative, $side: before, $top: 5px, $left: 15px);
 		}
 	}
 }
@@ -829,26 +829,26 @@ canvas.x-component-course-assessment {
 			}
 
 			.request {
-				@include icon('mail', $position: relative, $top: 10px, $left: 10px);
+				@include icon($mail, $position: relative, $top: 10px, $left: 10px);
 
 				&:hover {
-					@include icon('mail_hover', $position: relative, $top: 10px, $left: 10px);
+					@include icon($mail_hover, $position: relative, $top: 10px, $left: 10px);
 				}
 			}
 
 			.export {
-				@include icon('download', $position: relative, $top: 8px, $left: 10px);
+				@include icon($download, $position: relative, $top: 8px, $left: 10px);
 
 				&:hover {
-					@include icon('download_hover', $position: relative, $top: 8px, $left: 10px);
+					@include icon($download_hover, $position: relative, $top: 8px, $left: 10px);
 				}
 			}
 
 			.settings {
-				@include icon('settings-28x17', $position: relative, $top: 9px, $left: 10px);
+				@include icon($settings-28x17, $position: relative, $top: 9px, $left: 10px);
 
 				&:hover {
-					@include icon('settings-28x17_hover', $position: relative, $top: 9px, $left: 10px);
+					@include icon($settings-28x17_hover, $position: relative, $top: 9px, $left: 10px);
 				}
 			}
 		}
@@ -895,11 +895,11 @@ canvas.x-component-course-assessment {
 					}
 				}
 
-				@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 16px, $left: auto, $right: 15px);
+				@include icon($mv-dropdown-arrow_hover, $position: relative, $side: after, $top: 16px, $left: auto, $right: 15px);
 
 				&:hover {
 					color: $primary-grey;
-					@include icon('mv-dropdown-arrow', $position: relative, $side: after, $top: 16px, $left: auto, $right: 15px);
+					@include icon($mv-dropdown-arrow, $position: relative, $side: after, $top: 16px, $left: auto, $right: 15px);
 				}
 			}
 		}
@@ -913,12 +913,12 @@ canvas.x-component-course-assessment {
 		font-size: 1.25em;
 		cursor: pointer;
 
-		@include icon('arrow-next_hover', $position: relative, $side: after);
+		@include icon($arrow-next_hover, $position: relative, $side: after);
 
 		&:hover {
 			color: $secondary-grey;
 
-			@include icon('arrow-next', $position: relative, $side: after);
+			@include icon($arrow-next, $position: relative, $side: after);
 		}
 
 		&.nextPage {
@@ -1224,12 +1224,12 @@ canvas.x-component-course-assessment {
 
 	.dropmenu {
 		cursor: pointer;
-		@include icon('arrow-course-dropdown-light', $top:1.5em, $left:auto, $right:1em);
+		@include icon($arrow-course-dropdown-light, $top:1.5em, $left:auto, $right:1em);
 
 		&:hover {
 			color: $primary-grey;
 			&::after {
-				@include sprite($icons, 'arrow-course-dropdown');
+				@include sprite($arrow-course-dropdown);
 			}
 		}
 
@@ -1241,7 +1241,7 @@ canvas.x-component-course-assessment {
 			&:hover {
 				color: inherit;
 				&::after{
-					@include sprite($icons, 'arrow-course-dropdown-light');
+					@include sprite($arrow-course-dropdown-light);
 				}
 			}
 		}
@@ -1249,7 +1249,7 @@ canvas.x-component-course-assessment {
 
 	.search {
 		padding-left: 3em;
-		@include icon('rhp-search', $top:1.1em, $left:1.5em);
+		@include icon($rhp-search, $top:1.1em, $left:1.5em);
 		&:hover {
 			color: $primary-grey;
 		}
@@ -1265,8 +1265,7 @@ canvas.x-component-course-assessment {
 			cursor: pointer;
 			top: 1.2em; right: 1em;
 			position: absolute;
-			background: $icons no-repeat;
-			@include sprite($icons,'clear_line',$dimensions: true);
+			@include sprite($clear_line);
 		}
 	}
 
@@ -1290,7 +1289,7 @@ canvas.x-component-course-assessment {
 				background: $primary-blue !important;
 				box-shadow: inset 0px 0 1px 1px $border-blue,
 					inset 3px 0 0 0 $border-blue;
-				@include icon('arrow-course-dropdown-white', $top:1.5em, $left:auto, $right:1em);
+				@include icon($arrow-course-dropdown-white, $top:1.5em, $left:auto, $right:1em);
 
 				&.x-menu-item-active {
 					background: $primary-blue !important;
@@ -1502,7 +1501,7 @@ canvas.x-component-course-assessment {
 				display: inline-block;
 				padding-left: 35px;
 
-				@include icon('timer-white', $position: relative, $top: 16px);
+				@include icon($timer-white, $position: relative, $top: 16px);
 
 				&::after {
 					opacity: 1;
@@ -1722,18 +1721,18 @@ canvas.x-component-course-assessment {
 			}
 
 			.up {
-				@include icon('arrow-up', $top: 19px, $left: 10px);
+				@include icon($arrow-up, $top: 19px, $left: 10px);
 
 				&.disabled::after {
-					@include sprite($icons, 'arrow-up_inactive');
+					@include sprite($arrow-up_inactive);
 				}
 			}
 
 			.down {
-				@include icon('arrow-down', $top: 19px, $left: 10px);
+				@include icon($arrow-down, $top: 19px, $left: 10px);
 
 				&.disabled::after {
-					@include sprite($icons, 'arrow-down_inactive');
+					@include sprite($arrow-down_inactive);
 				}
 			}
 		}
@@ -1750,13 +1749,13 @@ canvas.x-component-course-assessment {
 
 			&.ontime{
 				.header::before{
-					@include sprite($icons,'assignment_ontime');
+					@include sprite($assignment_ontime);
 				}
 			}
 
 			&.nosubmit{
 				.header::before{
-					@include sprite($icons, 'assignment_due');
+					@include sprite($assignment_due);
 				}
 			}
 
@@ -1766,7 +1765,7 @@ canvas.x-component-course-assessment {
 				display: none;
 				overflow: hidden;
 
-				@include icon('assignment_late', $side:'before', $top:16px, $left:30px);
+				@include icon($assignment_late, $side:'before', $top:16px, $left:30px);
 
 				.quiz-container{
 					width: 525px;
@@ -1941,14 +1940,14 @@ canvas.x-component-course-assessment {
 				@include experimental('transform', translateY(-50%));
 				cursor: pointer;
 
-				@include icon('more-options', $position: absolute);
+				@include icon($more-options, $position: absolute);
 
 				&.disabled {
 					display: none;
 				}
 
 				&:hover {
-					@include icon('more-options_active', $position: absolute);
+					@include icon($more-options_active, $position: absolute);
 				}
 			}
 
@@ -2019,7 +2018,7 @@ canvas.x-component-course-assessment {
 
 				.label {
 					padding-right: 5px;
-					@include icon('info', $left: auto, $right: -12px, $top: 7px);
+					@include icon($info, $left: auto, $right: -12px, $top: 7px);
 				}
 
 				&.hidden {
@@ -2088,11 +2087,35 @@ canvas.x-component-course-assessment {
 				white-space: nowrap;
 
 				&.email {
-					@include icon('mail', $left: 10px, $top: 10px, $hover:true, $active:true);
+					@include icon($mail, $left: 10px, $top: 10px);
+					&:target,
+					&:hover {
+						&::after {
+							@include sprite-position($mail_hover);
+						}
+					}
+					&:active{
+						&::after {
+							@include sprite-position($mail_active);
+						}
+					}
 				}
 
+
+
 				&.download {
-					@include icon('download', $left: 11px, $top: 8px, $hover:true, $active:true);
+					@include icon($download, $left: 11px, $top: 8px);
+					&:target,
+					&:hover {
+						&::after {
+							@include sprite-position($download_hover);
+						}
+					}
+					&:active{
+						&::after {
+							@include sprite-position($download_active);
+						}
+					}
 				}
 			}
 
@@ -2128,7 +2151,7 @@ canvas.x-component-course-assessment {
 			width: 16px;
 			height: 18px;
 			display: inline-block;
-			@include icon('info', $top: -7px, $position: absolute);
+			@include icon($info, $top: -7px, $position: absolute);
 		}
 	}
 

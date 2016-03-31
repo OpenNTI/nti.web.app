@@ -44,7 +44,7 @@
 			position: relative;
 			font-size: 0.875em;
 
-			@include icon('rotate-white', $side: after, $top: 50%, $left: 20px);
+			@include icon($rotate-white, $side: after, $top: 50%, $left: 20px);
 
 			&::after {
 				margin-top: -7px

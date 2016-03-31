@@ -161,7 +161,7 @@
 		max-width: 400px;
 		z-index: 2;
 
-		@include icon('arrow-course-dropdown', $top: 25px, $left: auto, $right: 15px);
+		@include icon($arrow-course-dropdown, $top: 25px, $left: auto, $right: 15px);
 		&::after{
 			z-index: 1;
 		}
@@ -175,47 +175,47 @@
 	}
 
 	.library {
-		@include icon('course-nav-library',$top: 14px, $left: 24px);
+		@include icon($course-nav-library,$top: 14px, $left: 24px);
 		&:hover::after{
-			@include sprite($icons,'course-nav-library_hover');
+			@include sprite($course-nav-library_hover);
 		}
 		&.active::after{
-			@include sprite($icons,'course-nav-library_active');
+			@include sprite($course-nav-library_active);
 		}
 	}
 
 	.forums {
-		@include icon('course-nav-forum',$top: 14px, $left: 20px);
+		@include icon($course-nav-forum,$top: 14px, $left: 20px);
 
 		&:hover::after{
-			@include sprite($icons,'course-nav-forum_hover');
+			@include sprite($course-nav-forum_hover);
 		}
 		&.active::after{
-			@include sprite($icons,'course-nav-forum_active');
+			@include sprite($course-nav-forum_active);
 		}
 	}
 
 	.contacts {
-		@include icon('course-nav-contacts',$top: 16px, $left: 17px);
+		@include icon($course-nav-contacts,$top: 16px, $left: 17px);
 
 		&:hover::after{
-			@include sprite($icons,'course-nav-contacts_hover');
+			@include sprite($course-nav-contacts_hover);
 		}
 
 		&.active::after{
-			@include sprite($icons,'course-nav-contacts_active');
+			@include sprite($course-nav-contacts_active);
 		}
 	}
 
 	.search {
-		@include icon('course-nav-search',$top: 15px, $left: 22px);
+		@include icon($course-nav-search,$top: 15px, $left: 22px);
 
 		&:hover::after{
-			@include sprite($icons,'course-nav-search_hover');
+			@include sprite($course-nav-search_hover);
 		}
 
 		&.active::after{
-			@include sprite($icons,'course-nav-search_active');
+			@include sprite($course-nav-search_active);
 		}
 	}
 }
@@ -231,7 +231,7 @@
 
 		&:first-of-type {
 			background: #fff;
-			@include icon('arrow-course-dropdown', $top: 25px, $left: auto, $right: 15px);
+			@include icon($arrow-course-dropdown, $top: 25px, $left: auto, $right: 15px);
 		}
 
 		&:not(:first-of-type){

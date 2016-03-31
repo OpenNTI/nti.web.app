@@ -1,22 +1,21 @@
 
 
 .dictionary-window {
-    @extend .nti-window;
-
-    .nti-window-header {
- 		border-bottom: 1px solid #E7E7E7;
-    }
-
+	@extend .nti-window;
 	padding-bottom: 3px;
 	overflow: visible;
+
+	.nti-window-header {
+		border-bottom: 1px solid #E7E7E7;
+	}
+
 	&.north::before {
 		content: "";
 		position: absolute;
 		z-index: 1;
 		top: -15px;
 		left: 45%;
-		background: $elements no-repeat;
-		@include sprite($elements,'window-nib-north',$dimensions: true);
+		@include sprite($window-nib-north);
 	}
 
 	&.south::before{
@@ -25,7 +24,6 @@
 		z-index: 1;
 		bottom: -14px;
 		left: 45%;
-		background: $elements no-repeat;
-		@include sprite($elements,'window-nib-south',$dimensions: true);
+		@include sprite($window-nib-south);
 	}
 }

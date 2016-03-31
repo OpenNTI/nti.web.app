@@ -49,12 +49,12 @@
 
 	.previous {
 		left: 0;
-		@include icon('arrow-left_inactive', $position: absolute, $top: 50%, $left: 4px);
+		@include icon($arrow-left_inactive, $position: absolute, $top: 50%, $left: 4px);
 	}
 
 	.next {
 		right: 0;
-		@include icon('arrow-right_inactive', $position: absolute, $top: 50%, $left: 4px);
+		@include icon($arrow-right_inactive, $position: absolute, $top: 50%, $left: 4px);
 	}
 
 	.footer {

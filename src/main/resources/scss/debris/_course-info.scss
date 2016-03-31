@@ -41,7 +41,7 @@
 
 	.registered {
 		padding-left: 50px;
-		@include icon('circle-check-white-large');
+		@include icon($circle-check-white-large);
 
 		.edit {
 			font-size: 0.65em;
@@ -53,7 +53,7 @@
 	}
 
 	a.enroll {
-		@include icon('enroll', $position: absolute, $top: 10px, $left: 10px);
+		@include icon($enroll, $position: absolute, $top: 10px, $left: 10px);
 		display: block;
 		z-index: 10;
 		background: $primary-green;
@@ -129,7 +129,7 @@
 			bottom: 0;
 			left: 0;
 			right: 0;
-			@include icon('play',$position: absolute, $top: 50%, $left: 50%);
+			@include icon($play,$position: absolute, $top: 50%, $left: 50%);
 			&::after {
 				margin-left: -22px;
 				margin-top: -21px;
@@ -326,7 +326,7 @@
 			color: $primary-green;
 			font-weight: 500;
 			padding-left: 30px;
-			@include icon('circle-check-green',$top: 1em);
+			@include icon($circle-check-green,$top: 1em);
 		}
 
 		.edit {
@@ -439,7 +439,7 @@
 
 					    &::before {
 					    	content: none;
-					    	@include icon('mail-white', $top: 7px, $left: 5px);
+					    	@include icon($mail-white, $top: 7px, $left: 5px);
 					    }
 					}
 				}
@@ -585,7 +585,7 @@
 				text-transform: uppercase;
 			}
 
-			@include icon('arrow-next_hover', $side: after, $left: auto, $right: 5px, $top: 10px);
+			@include icon($arrow-next_hover, $side: after, $left: auto, $right: 5px, $top: 10px);
 
 		}
 
@@ -677,7 +677,7 @@
 
 			&.enrolled {
 				padding-right: 40px;
-				@include icon('ico_enrollment_circhlecheck', $top: 20px, $right: 10px, $left: auto);
+				@include icon($ico_enrollment_circhlecheck, $top: 20px, $right: 10px, $left: auto);
 
 				.title {
 					width: 100%;
@@ -774,7 +774,7 @@
 				cursor: default;
 				padding-left: 35px;
 
-				@include icon('checkbox-14', $top: 15px, $left: 13px);
+				@include icon($checkbox-14, $top: 15px, $left: 13px);
 
 				&::after {
 					opacity: 0.75;
@@ -786,10 +786,10 @@
 				cursor: pointer;
 				padding-left: 35px;
 
-				@include icon('checkbox-14_hover', $top: 15px, $left: 13px);
+				@include icon($checkbox-14_hover, $top: 15px, $left: 13px);
 
 				&.checked {
-					@include icon('checkbox-14_active', $top: 15px, $left: 13px);
+					@include icon($checkbox-14_active, $top: 15px, $left: 13px);
 				}
 			}
 		}

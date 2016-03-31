@@ -6,8 +6,8 @@
 		top: 0; bottom: 0;
 		left: 0; right: 0;
 		background-size: cover;
- 	  	background-position: center center;
-  		background-repeat: no-repeat;
+		background-position: center center;
+		background-repeat: no-repeat;
 	}
 
 	.fallback {
@@ -72,7 +72,7 @@
 
 			&.edit {
 				background-color: $primary-blue;
-				@include icon('notepad_active_white', $top: 8px, $left: 1.5em);
+				@include icon($notepad_active_white, $top: 8px, $left: 1.5em);
 			}
 
 			&.save {
@@ -91,13 +91,7 @@
 			}
 
 		 	&.leave, &.settings {
-				background: -moz-linear-gradient(top, rgba(35,35,35,0.65) 0%, rgba(0,0,0,0.65) 100%);
-				background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(35,35,35,0.65)), color-stop(100%,rgba(0,0,0,0.65)));
-				background: -webkit-linear-gradient(top, rgba(35,35,35,0.65) 0%,rgba(0,0,0,0.65) 100%);
-				background: -o-linear-gradient(top, rgba(35,35,35,0.65) 0%,rgba(0,0,0,0.65) 100%);
-				background: -ms-linear-gradient(top, rgba(35,35,35,0.65) 0%,rgba(0,0,0,0.65) 100%);
 				background: linear-gradient(to bottom, rgba(35,35,35,0.65) 0%,rgba(0,0,0,0.65) 100%);
-				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6232323', endColorstr='#a6000000',GradientType=0 );
 		 	}
 
 			&.leave {
@@ -108,23 +102,23 @@
 				padding: 0 1.5em;
 				height: 40px;
 
-				@include icon('settings-white', $top: 12px, $left: 13px);
+				@include icon($settings-white, $top: 12px, $left: 13px);
 			}
 
 			&.follow {
 				background-color: $secondary-green;
-				@include icon('add_contact', $top: 9px, $left: 1.5em);
+				@include icon($add_contact, $top: 9px, $left: 1.5em);
 			}
 
 			&.unfollow {
 				background-color: $primary-red;
-				@include icon('rhp-delete-contact_hover', $top: 10px, $left: 1.5em);
+				@include icon($rhp-delete-contact_hover, $top: 10px, $left: 1.5em);
 			}
 
 			&.presence {
 				background-color: $primary-blue;
 				padding-left: 50px;//1.5em + with of icon + padding
-				@include icon('chat_active', $top: 10px, $left: 1.5em);
+				@include icon($chat_active, $top: 10px, $left: 1.5em);
 
 				&.unavailable {
 					cursor: pointer;
@@ -133,7 +127,7 @@
 					padding-left: 60px;
 					opacity: 0.7;
 
-					@include icon('chat-32', $top: 7px, $left: 1.5em);
+					@include icon($chat-32, $top: 7px, $left: 1.5em);
 				}
 			}
 
@@ -144,9 +138,9 @@
 				.action {
 					cursor: pointer;
 					background-color: $secondary-green;
-    				padding: 11px 10px;
-    				border-radius: 3px;
-    				margin-left: 10px;
+					padding: 11px 10px;
+					border-radius: 3px;
+					margin-left: 10px;
 				}
 			}
 		}
@@ -198,7 +192,7 @@
 
 		&.editing {
 			cursor: pointer;
-			@include icon('edit-15-white', $left:auto, $top: 10px, $right: 10px);
+			@include icon($edit-15-white, $left:auto, $top: 10px, $right: 10px);
 
 			&::before {
 				content: '';
@@ -235,7 +229,7 @@
 					margin-bottom: 6px;
 				}
 				&.position {
-				    margin-bottom: 4px;
+					margin-bottom: 4px;
 				}
 			}
 		}
@@ -264,19 +258,19 @@
 			}
 
 			.facebook {
-				@include icon('social-facebook');
+				@include icon($social-facebook);
 			}
 
 			.linked-in {
-				@include icon('social-linkedin');
+				@include icon($social-linkedin);
 			}
 
 			.twitter {
-				@include icon('social-twitter');
+				@include icon($social-twitter);
 			}
 
 			.google-plus {
-				@include icon('social-google');
+				@include icon($social-google);
 			}
 		}
 
@@ -485,7 +479,7 @@
 		&.editing {
 			.avatar {
 				cursor: pointer;
-				@include icon('edit-15-white', $left:auto, $top: 10px, $right: 10px);
+				@include icon($edit-15-white, $left:auto, $top: 10px, $right: 10px);
 
 				&::before {
 					content: '';
@@ -512,7 +506,7 @@
 					display: none;
 				}
 
-				@include icon('edit-15_hover', $left:auto, $top: 12px, $right: 2px, $position: absolute);
+				@include icon($edit-15_hover, $left:auto, $top: 12px, $right: 2px, $position: absolute);
 			}
 
 			.about {
@@ -622,7 +616,7 @@
 				color: $secondary-grey;
 				padding: 0 20px 0 45px;
 
-				@include icon('notepad_active', $top: 10px, $left: 20px);
+				@include icon($notepad_active, $top: 10px, $left: 20px);
 			}
 
 			.save {
@@ -637,7 +631,7 @@
 				margin-right: 10px;
 				width: 50px;
 				height: 40px;
-				@include icon('ico_profile_contact', $top: 9px, $left: 10px);
+				@include icon($ico_profile_contact, $top: 9px, $left: 10px);
 
 				&::before{
 					content: '';
@@ -654,7 +648,7 @@
 				border-radius: 5px 0 0 5px;
 				border-right-width: 0;
 				display: none;
-				@include icon('mail', $top: 11px, $left: 13px)
+				@include icon($mail, $top: 11px, $left: 13px)
 			}
 
 			.chat {
@@ -662,7 +656,7 @@
 				height: 40px;
 				//border-radius: 0 5px 5px 0;
 				// border-left-width: 0;
-				@include icon('chat-32', $top: 9px, $left: 9px)
+				@include icon($chat-32, $top: 9px, $left: 9px)
 			}
 
 			.add-contact {
@@ -670,7 +664,7 @@
 				background-color: $primary-green;
 				color: white;
 				padding-left: 50px;
-				@include icon('ico_profile_add_contact', $top: 12px, $left: 25px)
+				@include icon($ico_profile_add_contact, $top: 12px, $left: 25px)
 			}
 		}
 
@@ -801,8 +795,7 @@
 				top: 38px;
 				right: 20px;
 				opacity: 1;
-				background: $icons no-repeat;
-				@include sprite($icons,'arrow-next',$dimensions: true);
+				@include sprite($arrow-next);
 			}
 		}
 	}
@@ -937,7 +930,7 @@
 
 		.wrap {
 			color: $primary-grey;
-    		padding-left: 26px;
+			padding-left: 26px;
 			margin-bottom: 15px;
 			width: 620px;
 			font: normal 500 1em/1 $font;
@@ -1086,8 +1079,7 @@
 					top: 38px;
 					right: 20px;
 					opacity: 1;
-					background: $icons no-repeat;
-					@include sprite($icons,'arrow-next',$dimensions: true);
+					@include sprite($arrow-next);
 				}
 			}
 
@@ -1097,8 +1089,7 @@
 				bottom: -1px;
 				left: 90px;
 				z-index: 20;
-				background: $elements no-repeat;
-				@include sprite($elements,'up-border-arrow',$dimensions: true);
+				@include sprite($up-border-arrow);
 			}
 		}
 
@@ -1111,20 +1102,20 @@
 			background: white;
 
 			&.context .meta {
-			    position: relative;
-			    overflow: hidden;
-			    font: normal 400 20px "Open Sans",sans-serif;
-			    color: #494949;
-			    display: block;
-			    height: 50px;
-			    bottom: 5px;
+				position: relative;
+				overflow: hidden;
+				font: normal 400 20px "Open Sans",sans-serif;
+				color: #494949;
+				display: block;
+				height: 50px;
+				bottom: 5px;
 
 				.message {
-				    font-size: 12px;
+					font-size: 12px;
 				}
 
 				.action.button {
-				    display: none;
+					display: none;
 				}
 			}
 
@@ -1209,7 +1200,7 @@
 					position: absolute;
 					left: 0; right: 0;
 					bottom: 0; height: 10px;
-					@include background-image(linear-gradient(top, rgba(251,251,251,0) 0%, rgba(251,251,251,1) 100%));
+					background-image: linear-gradient(to bottom, rgba(251, 251, 251, 0) 0%, #fbfbfb 100%);
 				}
 			}
 		}
@@ -1524,8 +1515,7 @@
 				position: absolute;
 				overflow: hidden;
 				top: 30px; left: 5px;
-				background: $icons no-repeat;
-				@include sprite($icons,'reply_arrow',$dimensions: true);
+				@include sprite($reply_arrow);
 			}
 		}
 		.note-container.child > .reply {
@@ -1784,7 +1774,7 @@
 				display: inline-block;
 				margin-left: 5px;
 
-				@include icon('ico_enrollment_circhlecheck', $top: 9px, $right: 5px, $left: auto);
+				@include icon($ico_enrollment_circhlecheck, $top: 9px, $right: 5px, $left: auto);
 			}
 
 			.email-not-verified {
@@ -1796,7 +1786,7 @@
 			.info {
 				width: 40px;
 				height: 30px;
-				@include icon('info_active', $top: 3px, $left: 0);
+				@include icon($info_active, $top: 3px, $left: 0);
 			}
 
 			.x-mask {
@@ -1990,10 +1980,10 @@
 			height: 30px;
 			display: none;
 
-			@include icon('download_hover', $top: 5px, $left: 5px);
+			@include icon($download_hover, $top: 5px, $left: 5px);
 
 			&:active, &:hover {
-				@include icon('download_active', $top: 5px, $left: 5px);
+				@include icon($download_active, $top: 5px, $left: 5px);
 			}
 		}
 
@@ -2168,7 +2158,7 @@
 			padding-right: 20px;
 			cursor: pointer;
 
-			@include icon('edit-15', $left:auto, $top: 0, $right: 0);
+			@include icon($edit-15, $left:auto, $top: 0, $right: 0);
 		}
 
 		.field.about {
@@ -2242,7 +2232,7 @@
 				opacity: 0.7;
 				cursor: pointer;
 
-				@include icon('message_box_close', $position: absolute);
+				@include icon($message_box_close, $position: absolute);
 
 				&:hover {
 					opacity: 1;
@@ -2273,7 +2263,7 @@
 			top: 0; right: -20px;
 			cursor: pointer;
 
-			@include icon('message_box_close', $position: absolute);
+			@include icon($message_box_close, $position: absolute);
 		}
 
 		.school, .company {
@@ -2369,7 +2359,7 @@
 	padding: 20px;
 
 	&.admin .entry .avatar{
-		@include icon('admin_badge', $top: auto, $left: auto, $side: after);
+		@include icon($admin_badge, $top: auto, $left: auto, $side: after);
 		&::after{
 			z-index: 10;
 			bottom: 2px;
@@ -2378,7 +2368,7 @@
 	}
 
 	.entry.admin{
-		@include icon('admin_badge', $top: auto, $left: auto, $side: after);
+		@include icon($admin_badge, $top: auto, $left: auto, $side: after);
 		&::after{
 			z-index: 10;
 			bottom: 0px;
@@ -2782,10 +2772,10 @@
 
 			.x-btn-icon-el{
 				&.export-icon{
-					@include icon('download_hover', $top: 0, $left: 0);
+					@include icon($download_hover, $top: 0, $left: 0);
 
 					&:active, &:hover {
-						@include icon('download_active', $top: 0, $left: 0);
+						@include icon($download_active, $top: 0, $left: 0);
 					}
 				}
 			}
@@ -2811,33 +2801,33 @@
 			position: relative;
 
 			select {
-				-webkit-appearance: none; 
+				-webkit-appearance: none;
 				-moz-appearance: none;
-	    		appearance: none;
-	    		background-color: white;
-	    		width: 220px;
-	    		padding-left: 10px;
-	    		margin: 0 15px;
-			    font: normal 400 14px/36px $font;
-			    color: $primary-grey;
-			    border: 1px solid #dbdbdb;
-    			border-radius: 3px;
-    			cursor: pointer;
+				appearance: none;
+				background-color: white;
+				width: 220px;
+				padding-left: 10px;
+				margin: 0 15px;
+				font: normal 400 14px/36px $font;
+				color: $primary-grey;
+				border: 1px solid #dbdbdb;
+				border-radius: 3px;
+				cursor: pointer;
 			}
 
-    		@include icon('mv-dropdown-arrow_hover', $top: 14px, $right: 27px, $left: auto);
+			@include icon($mv-dropdown-arrow_hover, $top: 14px, $right: 27px, $left: auto);
 
-    		&::after {
-    			pointer-events: none;
-    		}
+			&::after {
+				pointer-events: none;
+			}
 		}
 
 		label {
 			display: block;
 			border-top: 1px solid #dbdbdb;
-		    color: #494949;
-		    font: normal 400 14px/44px $font;
-		    cursor: pointer;
+			color: #494949;
+			font: normal 400 14px/44px $font;
+			cursor: pointer;
 
 			& > span {
 				padding-left: 10px;
@@ -2870,26 +2860,26 @@
 			&.active {
 				display: block;
 			}
-			
+
 			.option {
 				font: normal 400 14px/44px $font;
-    			padding-left: 10px;
-    			border-left: 5px solid white;
-    			cursor: pointer;
+				padding-left: 10px;
+				border-left: 5px solid white;
+				cursor: pointer;
 
-    			&.selected {
-    				background: rgba(63,179,246, 0.15);
-    				border-left-color: #168FE7;
-    				color: $primary-blue;
-    				font-weight: 600;
-    			}
+				&.selected {
+					background: rgba(63,179,246, 0.15);
+					border-left-color: #168FE7;
+					color: $primary-blue;
+					font-weight: 600;
+				}
 
-    			&:hover {
-    				&:not(.selected) {
+				&:hover {
+					&:not(.selected) {
 						background-color: #f0f0f0;
-    					border-left-color: #cfcfcf;	
-    				}
-    			}
+						border-left-color: #cfcfcf;
+					}
+				}
 			}
 		}
 	}
@@ -2915,14 +2905,14 @@
 		background-color: white;
 		padding: 10px 15px;
 		display: none;
-	    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.2);
 
-	    li {
-	    	cursor: pointer;
+		li {
+			cursor: pointer;
 
-	    	&.active, &:hover {
-	    		color: $primary-blue;
-	    	}
-	    }
+			&.active, &:hover {
+				color: $primary-blue;
+			}
+		}
 	}
 }

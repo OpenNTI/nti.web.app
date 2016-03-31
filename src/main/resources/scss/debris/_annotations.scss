@@ -18,7 +18,7 @@
 			z-index: 2;
 		}
 	}
-	
+
 	.bar {
 		cursor: default;
 		display: block;
@@ -76,14 +76,13 @@
 					overflow: hidden;
 					position: absolute;
 					top: 0; left: 3px;
-					background: $icons no-repeat;
-					@include sprite($icons,'add-comment-19x17',$dimensions:true);
+					@include sprite($add-comment-19x17);
 				}
 
 				&:hover {
 					color: $secondary-grey-alt;
 					&::after {
-						@include sprite($icons,'add-comment-19x17_hover',$dimensions:true);
+						@include sprite($add-comment-19x17_hover);
 					}
 				}
 			}
@@ -106,16 +105,16 @@
 					overflow: hidden;
 					position: absolute;
 					top: 44%;
-					@include experimental-value(top, calc(50% - 9px));
+					top: calc(50% - 9px);
 
 					left: 17px;
-					background: $icons no-repeat;
-					@include sprite($icons,'presentation-view',$dimensions:true);
+
+					@include sprite($presentation-view);
 				}
 
 				&:hover {
 					&::after{
-						@include sprite($icons,'presentation-view',$dimensions:true);
+						@include sprite($presentation-view);
 					}
 				}
 			}
@@ -397,13 +396,13 @@
 		padding: 0 0 0 25px;
 
 		.comment & {
-			@include icon('activity-comment', $left: 2px);
+			@include icon($activity-comment, $left: 2px);
 		}
 		.highlight & {
-			@include icon('activity-highlight', $left: 3px);
+			@include icon($activity-highlight, $left: 3px);
 		}
 		.note & {
-			@include icon('activity-note', $left: 6px);
+			@include icon($activity-note, $left: 6px);
 		}
 	}
 }
@@ -474,8 +473,7 @@
 		right: -34px;
 		position: absolute;
 
-		background: transparent $icons no-repeat;
-		@include sprite($icons,'close_popup',$dimensions: true);
+		@include sprite($close_popup);
 		cursor: pointer;
 		border-radius: 90px;
 	}
@@ -739,9 +737,9 @@
 					position: absolute;
 
 				}
-				&.edit{ @include icon('redactions-edit',$top: 6px, $left: 6px); }
-				&.share{ @include icon('redactions-share',$top: 6px, $left: 6px); }
-				&.delete{ @include icon('redactions-trashcan',$top: 5px, $left: 7px); }
+				&.edit{ @include icon($redactions-edit,$top: 6px, $left: 6px); }
+				&.share{ @include icon($redactions-share,$top: 6px, $left: 6px); }
+				&.delete{ @include icon($redactions-trashcan,$top: 5px, $left: 7px); }
 
 				&.edit.save{
 					box-shadow: inset 0 0 0 1px #369AD3;
@@ -771,10 +769,10 @@
 					&.delete{
 						background-color: $primary-red;
 						box-shadow: inset 0 0 0 1px #D14646 !important;
-						&::after{ @include sprite($icons,'redactions-trashcan_hover'); }
+						&::after{ @include sprite($redactions-trashcan_hover); }
 					}
-					&.edit::after{ @include sprite($icons,'redactions-edit_hover'); }
-					&.share::after{ @include sprite($icons,'redactions-share_hover'); }
+					&.edit::after{ @include sprite($redactions-edit_hover); }
+					&.share::after{ @include sprite($redactions-share_hover); }
 
 				}
 			}
@@ -799,7 +797,7 @@
 		// 		&::before, &::after { color: #ffffff; }
 		// 	}
 		// }
-		
+
 		&.plain {
 
 			&, * {
@@ -942,7 +940,7 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 	opacity: 0.01; // so we can show the menu, compute its width, and center it. (can't get the width until it's rendered in the dom.)
 	&.visible {
 		opacity: 1;
-		@include single-transition(all,$transition-duration,ease-in,0);
+		transition: all $transition-duration 0;
 	}
 
 	overflow: visible;
@@ -973,22 +971,22 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 	  	&.icon {
 		}
 		&.add-note {
-			@include icon('comment_white', $left: 2px, $top: 3px);
+			@include icon($comment_white, $left: 2px, $top: 3px);
 			text-indent:-100em;
 		}
 		&.define {
-			@include icon('search-white',$top:8px,$left:5px);
+			@include icon($search-white,$top:8px,$left:5px);
 			text-indent:-100em;
 		}
 
 		&:after {
 			opacity:.75;
-			@include single-transition(opacity,$transition-duration,ease-in,0);
+			transition: opacity $transition-duration 0;
 		}
 
 		&:hover:after {
 			opacity:1.0;
-			@include single-transition(opacity,$transition-duration,ease-in,0);
+			transition: opacity $transition-duration 0;
 		}
 	}
 
@@ -1035,18 +1033,18 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 				border-radius:$swatchSize/2;
 				margin:.5em .2em;
 				position:relative;
-				@include transform(scale(1,1)); // so the transform will animate on mouseout.
-				@include single-transition(all,$transition-duration,ease-in,0);
+				transform: scale(1,1); // so the transform will animate on mouseout.
+				transition: all $transition-duration 0;
 				&::after {
 					content:'';
 					position:absolute;
 					top:0;
 					left:0;
-					background:url('../images/icons/rhp-status-checkmark.png') center no-repeat transparent;
+					background: url('../images/icons/rhp-status-checkmark.png') center no-repeat transparent;
 					width:100%;
 					height:100%;
 					opacity:0;
-					@include single-transition(opacity,$transition-duration,ease-in,0); // fade out the checkmark
+					transition: opacity $transition-duration 0; // fade out the checkmark
 				}
 			}
 		}
@@ -1056,11 +1054,11 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 			border:none;
 			span {
 				border-color:white;
-				@include single-transition(all,$transition-duration,ease-in,0);
-				@include transform(scale(1.2,1.2));
+				transition: all $transition-duration 0;
+				transform: scale(1.2,1.2);
 				&::after {
 					opacity: 1.0;
-					@include single-transition(opacity,$transition-duration,ease-in,0); // fade up the checkmark
+					transition: opacity $transition-duration 0; // fade up the checkmark
 				}
 			}
 		}

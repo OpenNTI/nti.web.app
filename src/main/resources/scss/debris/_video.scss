@@ -99,13 +99,13 @@
 			bottom: 0;
 			width: 50px;
 			border-radius: 50px;
-			@include icon('play', $position:absolute, $top:2px, $left:5px);
+			@include icon($play, $position:absolute, $top:2px, $left:5px);
 		}
 
 		&.transcripts {
 			.label{
 				padding-right: 60px;
-				@include icon('play-transcript',$top:3px,$right:3px, $left:auto);
+				@include icon($play-transcript,$top:3px,$right:3px, $left:auto);
 			}
 		}
 	}
@@ -138,7 +138,7 @@
 			background: rgba(0, 0, 0, 0.68);
 			box-shadow: 0 0 3px 0 #000;
 			border-radius: 48px;
-			@include icon('play', $position: absolute, $side: after, $top: 50%, $left: 50%);
+			@include icon($play, $position: absolute, $side: after, $top: 50%, $left: 50%);
 
 			&::after {
 				margin: -21px 0 0 -21px;
@@ -165,7 +165,7 @@
 			width: 26px;
 			height: 26px;
 			display: inline-block;
-			@include icon('close_popup', $position: absolute);
+			@include icon($close_popup, $position: absolute);
 
 		}
 	}

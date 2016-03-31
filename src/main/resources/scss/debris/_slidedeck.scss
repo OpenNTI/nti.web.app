@@ -15,7 +15,9 @@ $experimental-support-for-svg: true;
 	border-radius: 3px;
 	border: 1px solid black;
 	color: $tertiary-grey;
-	@include background-image(linear-gradient(top, $slidedeck-exit-button-gradient-top 0%, $slidedeck-exit-button-gradient-bottom 100%));
+	background-image: linear-gradient(to bottom,
+						$slidedeck-exit-button-gradient-top 0%,
+						$slidedeck-exit-button-gradient-bottom 100%);
 
 	box-shadow: inset 0 1px 0px 0px rgba(255, 255, 255, 0.13), 0 1px 0px 0px rgba(255, 255, 255, 0.12);
 
@@ -25,7 +27,9 @@ $experimental-support-for-svg: true;
 	}
 
 	&:active:not(.disabled) {
-		@include background-image(linear-gradient(top, $slidedeck-exit-button-gradient-bottom 0%, $slidedeck-exit-button-gradient-top 100%));
+		background-image: linear-gradient(to bottom,
+							$slidedeck-exit-button-gradient-bottom 0%,
+							$slidedeck-exit-button-gradient-top 100%);
 	}
 }
 
@@ -45,11 +49,11 @@ $experimental-support-for-svg: true;
 				.publish{
 					background-color: #161616;
 					&::after{
-						@include sprite($elements,'btn_toggle_private_dark',$dimensions: true);
+						@include sprite($btn_toggle_private_dark);
 					}
 
 					&.on::after{
-						@include sprite($elements,'btn_toggle_public_dark',$dimensions: true);
+						@include sprite($btn_toggle_public_dark);
 					}
 				}
 
@@ -98,7 +102,7 @@ $experimental-support-for-svg: true;
 						border-width: 1px;
 						background-color: #393939;
 
-						&::after{ @include sprite($icons,'font_styles_default',$dimensions: true); }
+						&::after{ @include sprite($font_styles_default); }
 					}
 					.popover{
 						background-color: #2b2b2b;
@@ -106,44 +110,44 @@ $experimental-support-for-svg: true;
 						border: 1px solid #141414;
 
 						&::after{
-							@include sprite($icons,'font_style_pointer_dark',$dimensions: true);
+							@include sprite($font_style_pointer_dark);
 						}
 
 						.control{
 
 							&.bold {
-								&::after{ @include sprite($icons,'bold-dark',$dimensions: true); }
-								&.selected::after{ @include sprite($icons,'bold-dark_active',$dimensions: true); }
+								&::after{ @include sprite($bold-dark); }
+								&.selected::after{ @include sprite($bold-dark_active); }
 							}
 							&.italic {
-								&::after{ @include sprite($icons,'italic-dark',$dimensions: true); }
-								&.selected::after{ @include sprite($icons,'italic-dark_active',$dimensions: true); }
+								&::after{ @include sprite($italic-dark); }
+								&.selected::after{ @include sprite($italic-dark_active); }
 							}
 							&.underline {
-								&::after{ @include sprite($icons,'underline-dark',$dimensions: true); }
-								&.selected::after{ @include sprite($icons,'underline-dark_active',$dimensions: true); }
+								&::after{ @include sprite($underline-dark); }
+								&.selected::after{ @include sprite($underline-dark_active); }
 							}
 							&.whiteboard {
-								@include icon('editor-insert-image_hover', $top:10px);
+								@include icon($editor-insert-image_hover, $top:10px);
 								&:hover::after{
-									@include sprite($icons,'editor-insert-image',$dimensions: true);
+									@include sprite($editor-insert-image);
 								}
 							}
 
 							&.video {
-								@include icon('editor-insert-video_hover', $top:9px);
+								@include icon($editor-insert-video_hover, $top:9px);
 								&:hover::after{
-									@include sprite($icons,'editor-insert-video',$dimensions: true);
+									@include sprite($editor-insert-video);
 								}
 							}
 						}
 					}
 				}
 				.action.object-controls{
-					@include icon('editor-attach', $top:10px, $left:10px);
+					@include icon($editor-attach, $top:10px, $left:10px);
 					&.selected{
 						&::after{
-							@include sprite($icons,'editor-attach',$dimensions: true);
+							@include sprite($editor-attach);
 						}
 					}
 				}
@@ -211,8 +215,9 @@ $experimental-support-for-svg: true;
 						position: absolute;
 						top: 6px;
 						left: 12px;
-						background: transparent $icons no-repeat;
-						@include sprite($icons, 'arrow-previous', $dimensions: true);
+						background-color: transparent;
+						background-repeat: no-repeat;
+						@include sprite($arrow-previous);
 
 					}
 					&::before {
@@ -222,23 +227,24 @@ $experimental-support-for-svg: true;
 						top: 0;
 						left: 36px;
 						z-index: 3;
-						background: transparent $elements no-repeat;
-						@include sprite($elements, 'dark-button-divider', $dimensions: true);
+						background-color: transparent;
+						background-repeat: no-repeat;
+						@include sprite($dark-button-divider);
 					}
 				}
 				.prev {
 					border-radius: 3px 0 0 3px;
 					border-right-width: 0;
 					&::after {
-						@include sprite($icons, 'arrow-previous', $dimensions: true);
+						@include sprite($arrow-previous);
 					}
 					&:hover::after {
-						@include sprite($icons, 'arrow-previous_hover', $dimensions: true);
+						@include sprite($arrow-previous_hover);
 					}
 					&.disabled {
 						&, &:hover {
 							&::after {
-								@include sprite($icons, 'arrow-previous_disabled', $dimensions: true);
+								@include sprite($arrow-previous_disabled);
 							}
 						}
 					}
@@ -247,15 +253,15 @@ $experimental-support-for-svg: true;
 					border-radius: 0 3px 3px 0;
 					border-left-width: 0;
 					&::after {
-						@include sprite($icons, 'arrow-next', $dimensions: true);
+						@include sprite($arrow-next);
 					}
 					&:hover::after {
-						@include sprite($icons, 'arrow-next_hover', $dimensions: true);
+						@include sprite($arrow-next_hover);
 					}
 					&.disabled {
 						&, &:hover {
 							&::after {
-								@include sprite($icons, 'arrow-next_disabled', $dimensions: true);
+								@include sprite($arrow-next_disabled);
 							}
 						}
 					}
@@ -282,8 +288,9 @@ $experimental-support-for-svg: true;
 				position: absolute;
 				top: 15px;
 				left: 20px;
-				background: transparent $icons no-repeat;
-				@include sprite($icons, 'checkbox-dark', $dimensions: true);
+				background-color: transparent;
+				background-repeat: no-repeat;
+				@include sprite($checkbox-dark);
 			}
 
 			&:focus {
@@ -293,16 +300,16 @@ $experimental-support-for-svg: true;
 			&:target,
 			&:hover {
 				&::after {
-					@include sprite($icons, 'checkbox-dark_hover', $dimensions: true);
+					@include sprite($checkbox-dark_hover);
 				}
 			}
 
 			&.checked {
 				&::after {
-					@include sprite($icons, 'checkbox-dark-checked', $dimensions: true);
+					@include sprite($checkbox-dark-checked);
 				}
 				&:hover::after {
-					@include sprite($icons, 'checkbox-dark-checked_hover', $dimensions: true);
+					@include sprite($checkbox-dark-checked_hover);
 				}
 			}
 		}
@@ -412,14 +419,13 @@ $experimental-support-for-svg: true;
 				width: 35px;
 				height: 70px;
 				top: 46%;
-				@include experimental-value(top, calc(50% - 45px));
+				top: calc(50% - 45px);
 
 				&::after {
 					content: ' ';
 					position: absolute;
 					overflow: hidden;
 					top: 25px;
-					background: $icons no-repeat;
 				}
 			}
 
@@ -431,16 +437,16 @@ $experimental-support-for-svg: true;
 				border-radius: 90px 0 0 90px;
 				&::after {
 					right: 7px;
-					@include sprite($icons, 'arrow-next', $dimensions: true);
+					@include sprite($arrow-next);
 				}
 				&:hover::after {
-					@include sprite($icons, 'arrow-next_hover', $dimensions: true);
+					@include sprite($arrow-next_hover);
 				}
 				&.disabled {
 					&, &:hover {
 						cursor: default;
 						&::after {
-							@include sprite($icons, 'arrow-next_disabled', $dimensions: true);
+							@include sprite($arrow-next_disabled);
 						}
 					}
 				}
@@ -453,16 +459,16 @@ $experimental-support-for-svg: true;
 				border-radius: 0 90px 90px 0;
 				&::after {
 					left: 7px;
-					@include sprite($icons, 'arrow-previous', $dimensions: true);
+					@include sprite($arrow-previous);
 				}
 				&:hover::after {
-					@include sprite($icons, 'arrow-previous_hover', $dimensions: true);
+					@include sprite($arrow-previous_hover);
 				}
 				&.disabled {
 					&, &:hover {
 						cursor: default;
 						&::after {
-							@include sprite($icons, 'arrow-previous_disabled', $dimensions: true);
+							@include sprite($arrow-previous_disabled);
 						}
 					}
 				}
@@ -520,7 +526,7 @@ $experimental-support-for-svg: true;
 					border: 1px solid #323232;
 
 					$value: margin-right 0.5s;
-					@include experimental(transition, $value);
+					transition: $value;
 				}
 				.count {
 					padding-right: 48px;
@@ -530,8 +536,8 @@ $experimental-support-for-svg: true;
 					opacity: 0;
 					visibility: hidden;
 					$value: opacity 0.5s;
-					@include experimental(transition, $value);
-					@include experimental(transition-delay, 0.3s);
+					transition: $value;
+					transition-delay: 0.3s;
 				}
 
 				&.has-count {
@@ -761,18 +767,18 @@ $experimental-support-for-svg: true;
 		}
 	}
 
-    .x-mask{
-        background: rgba(0,0,0,0.65) !important;
-    }
+	.x-mask{
+		background: rgba(0,0,0,0.65) !important;
+	}
 
-    .x-mask-msg{
-        left: 50% !important;
-        top: 40% !important;
+	.x-mask-msg{
+		left: 50% !important;
+		top: 40% !important;
 
-        .x-mask-msg-text{
-            color: white !important;
-        }
-    }
+		.x-mask-msg-text{
+			color: white !important;
+		}
+	}
 }
 
 .content-video-navigation{
@@ -791,14 +797,13 @@ $experimental-support-for-svg: true;
 				&:hover{
 					.arrow{
 						&::after{
-							@include sprite($icons, 'video-back-arrow_hover', $dimensions:true);
+							@include sprite($video-back-arrow_hover);
 						}
 					}
 				}
 				.arrow{
 					&::after{
-						background: $icons no-repeat;
-						@include sprite($icons, 'video-back-arrow', $dimensions:true);
+						@include sprite($video-back-arrow);
 					}
 				}
 			}
@@ -813,7 +818,7 @@ $experimental-support-for-svg: true;
 				&:hover{
 					.arrow{
 						&::after{
-							@include sprite($icons, 'video-next-arrow_hover', $dimensions:true);
+							@include sprite($video-next-arrow_hover);
 						}
 					}
 				}
@@ -823,8 +828,7 @@ $experimental-support-for-svg: true;
 					&::after{
 						left: auto;
 						right: 10px;
-						background: $icons no-repeat;
-						@include sprite($icons, 'video-next-arrow', $dimensions:true);
+						@include sprite($video-next-arrow);
 					}
 				}
 
@@ -877,7 +881,7 @@ $experimental-support-for-svg: true;
 				background-color: rgba(0,0,0,0.5);
 				cursor: pointer;
 				float: left;
-				
+
 				&::after{
 					content: '';
 					position: absolute;
@@ -930,7 +934,7 @@ $experimental-support-for-svg: true;
 			}
 
 		}
-		
+
 	}
 }
 
@@ -944,7 +948,7 @@ $experimental-support-for-svg: true;
 	background: $slidedeck-controls-background !important;
 	display: none;
 	z-index: 199 !important;
-	@include experimental(backface-visibility, hidden);	
+	backface-visibility: hidden;
 
 	&.ready {
 		display: block;
@@ -1001,13 +1005,12 @@ $experimental-support-for-svg: true;
 						top: 17px;
 						left: auto;
 						right: 23px;
-						background: $icons no-repeat;
-						@include sprite($icons, 'mv-back-arrow', $dimensions:true);
+						@include sprite($mv-back-arrow);
 					}
 
 					&:hover{
 						&::after{
-							@include sprite($icons, 'mv-back-arrow_hover', $dimensions:true);
+							@include sprite($mv-back-arrow_hover);
 						}
 					}
 				}
@@ -1081,12 +1084,11 @@ $experimental-support-for-svg: true;
 							top: 10px;
 							left: auto;
 							right: 15px;
-							background: $icons no-repeat;
-							@include sprite($icons, 'mv-grid-view', $dimensions:true);
+							@include sprite($mv-grid-view);
 						}
 						&.active::after,
 						&:hover::after{
-							@include sprite($icons, 'mv-grid-view_active', $dimensions:true);
+							@include sprite($mv-grid-view_active);
 						}
 						&:not(.active):hover{ opacity: 0.8; }
 						&.active:hover{ opacity: 1; }
@@ -1103,7 +1105,7 @@ $experimental-support-for-svg: true;
 						text-transform: uppercase;
 						padding-top: 30px;
 
-						
+
 						&.hasTranscript{
 							cursor: pointer;
 
@@ -1114,15 +1116,14 @@ $experimental-support-for-svg: true;
 								top: 35px;
 								left: auto;
 								right: 15px;
-								background: $icons no-repeat;
-								@include sprite($icons,'arrow-course-dropdown',$dimensions: true);
+								@include sprite($arrow-course-dropdown);
 							}
 
 							&:active, &:hover{
 								color: #ababab;
 
 								&::before{
-									@include sprite($icons,'arrow-course-dropdown-light',$dimensions: true);
+									@include sprite($arrow-course-dropdown-light);
 								}
 							}
 						}
@@ -1134,42 +1135,41 @@ $experimental-support-for-svg: true;
 							top: 26px;
 							left: 15px;
 							right: auto;
-							background: $icons no-repeat;
 						}
 
 						&.transcript-focus{
 							&::after{
-								@include sprite($icons,'mv-transcript-focus',$dimensions: true);
+								@include sprite($mv-transcript-focus);
 							}
 
 							&:hover, &:active{
 								&::after{
-									@include sprite($icons,'mv-transcript-focus_active',$dimensions: true);
+									@include sprite($mv-transcript-focus_active);
 								}
 							}
 						}
 
 						&.video-focus{
 							&::after{
-								@include sprite($icons,'mv-video-focus',$dimensions: true);
+								@include sprite($mv-video-focus);
 							}
 
 							&:hover, &:active{
 								&::after{
-									@include sprite($icons,'mv-video-focus_active',$dimensions: true);
+									@include sprite($mv-video-focus_active);
 								}
 							}
 						}
 
 						&.full-video{
 							&::after{
-								@include sprite($icons,'mv-full-view',$dimensions: true);
+								@include sprite($mv-full-view);
 							}
 
 							&.hasTranscript{
 								&:hover, &:active {
 									&::after{
-										@include sprite($icons,'mv-full-view_active',$dimensions: true);
+										@include sprite($mv-full-view_active);
 									}
 								}
 							}
@@ -1277,32 +1277,32 @@ $experimental-support-for-svg: true;
 				}
 			}
 
-            &.viewed {
-                @include icon('circle-check-white-small', $top: 7px, $left: auto, $right: 58px);
+			&.viewed {
+				@include icon($circle-check-white-small, $top: 7px, $left: auto, $right: 58px);
 
-                &::after {
-                    z-index: 2;
-                }
+				&::after {
+					z-index: 2;
+				}
 
-                &::before {
-                    content: 'viewed';
-                    text-transform: uppercase;
-                    font: normal 500 0.6em/24px "Open Sans",sans-serif;
-                    position: absolute;
-                    top: 5px;
-                    right: 5px;
-                    padding: 0px 10px 0 30px;
-                    color: white;
-                    background-color: $secondary-green;
-                    z-index: 1;
-                    border-radius: 20px;
-                }
-            }
+				&::before {
+					content: 'viewed';
+					text-transform: uppercase;
+					font: normal 500 0.6em/24px "Open Sans",sans-serif;
+					position: absolute;
+					top: 5px;
+					right: 5px;
+					padding: 0px 10px 0 30px;
+					color: white;
+					background-color: $secondary-green;
+					z-index: 1;
+					border-radius: 20px;
+				}
+			}
 
 			&.selected,
 			&:hover {
 				.thumbnail {
-					@include icon('play',$top:68px,$left:138px);
+					@include icon($play,$top:68px,$left:138px);
 					&::after {
 						opacity: 0.6;
 					}
@@ -1317,153 +1317,153 @@ $experimental-support-for-svg: true;
 		}
 	}
 
-    .x-container-media-viewer{
-        position: relative;
-        overflow: hidden;
-        @include flexContainer();
-        flex-flow : row;
+	.x-container-media-viewer{
+		position: relative;
+		overflow: hidden;
+		@include flexContainer();
+		flex-flow : row;
 
-        .sync-button {
-            position: absolute;
-            top: 15px;
-            z-index: 1;
-            text-align: center;
+		.sync-button {
+			position: absolute;
+			top: 15px;
+			z-index: 1;
+			text-align: center;
 
-            span {
-                font: normal 600 0.65em/1 $font;
-                background-color: #2a2a2a;
-                color: $tertiary-grey;
-                cursor: pointer;
-                z-index: 1;
-                text-transform: uppercase;
-                border-radius: 15px;
-                padding: 10px 15px;
-            }
+			span {
+				font: normal 600 0.65em/1 $font;
+				background-color: #2a2a2a;
+				color: $tertiary-grey;
+				cursor: pointer;
+				z-index: 1;
+				text-transform: uppercase;
+				border-radius: 15px;
+				padding: 10px 15px;
+			}
 
-        }
+		}
 
-        &.inactive{
-            display: none !important;
-        }
+		&.inactive{
+			display: none !important;
+		}
 
-        .video-player{
-            top: 20px;
-            left: 10px;
-            @include flexItem($flex: 0 0 67%);
-            position: relative;
-        }
+		.video-player{
+			top: 20px;
+			left: 10px;
+			@include flexItem($flex: 0 0 67%);
+			position: relative;
+		}
 
-        .body{
-            @include scrollbar($track:$slidedeck-controls-background, $nib:$secondary-grey);
-         	@include flexItem($flex: 1 1 auto);   
-            /*margin: 10px 0 0 1000px;*/
-            overflow:{
-                y: auto; //scroll;
-                x: hidden;
-            }
-            position: relative;
+		.body{
+			@include scrollbar($track:$slidedeck-controls-background, $nib:$secondary-grey);
+		 	@include flexItem($flex: 1 1 auto);
+			/*margin: 10px 0 0 1000px;*/
+			overflow:{
+				y: auto; //scroll;
+				x: hidden;
+			}
+			position: relative;
 
-            .x-container-transcript{
-                width: auto !important;
-                position: relative;
-                overflow-y: hidden !important;
-                margin-right: 75px;
+			.x-container-transcript{
+				width: auto !important;
+				position: relative;
+				overflow-y: hidden !important;
+				margin-right: 75px;
 
-                .searchHit-overlay{
-                    pointer-events: none;
-                }
+				.searchHit-overlay{
+					pointer-events: none;
+				}
 
-                .note-gutter{
-                    left: auto !important;
-                    right: 20px !important;
-                }
+				.note-gutter{
+					left: auto !important;
+					right: 20px !important;
+				}
 
-                .content-video-transcript{
-                    margin: 0 !important;
-                    /*max-width: 390px !important;*/
+				.content-video-transcript{
+					margin: 0 !important;
+					/*max-width: 390px !important;*/
 
-                    .row-item{
-                        .timestamp{
-                            visibility: hidden;
-                        }
-                    }
-                }
+					.row-item{
+						.timestamp{
+							visibility: hidden;
+						}
+					}
+				}
 
-                &.no-transcript-view{
-                    height: 60px;
-                    margin-top: -10px;
+				&.no-transcript-view{
+					height: 60px;
+					margin-top: -10px;
 
-                    .note-gutter{
-                        right: auto !important;
-                    }
-                }
-            }
-        }
+					.note-gutter{
+						right: auto !important;
+					}
+				}
+			}
+		}
 
-        &.small-video-player{
-            .video-player{
-                @include flexItem($flex: 0 0 512px);
-            }
+		&.small-video-player{
+			.video-player{
+				@include flexItem($flex: 0 0 512px);
+			}
 
-            .body{
-                margin-left: 40px;
-                .x-container-transcript{
-                    .content-video-transcript{
-                        padding-left: 70px !important;
+			.body{
+				margin-left: 40px;
+				.x-container-transcript{
+					.content-video-transcript{
+						padding-left: 70px !important;
 
-                        .row-item{
-                            .timestamp{
-                                visibility: visible;
-                            }
-                        }
-                    }
+						.row-item{
+							.timestamp{
+								visibility: visible;
+							}
+						}
+					}
 
-                    .x-component-slide {
-	                	padding-left: 90px;
-	                }
-                }
-            }
-        }
+					.x-component-slide {
+						padding-left: 90px;
+					}
+				}
+			}
+		}
 
-        &.full-video-player{
-            right: 0 !important;
-            display: block;
+		&.full-video-player{
+			right: 0 !important;
+			display: block;
 
-            .video-player{
-                position: relative;
-                left: 0;
-                top: 0;
-                margin: 10px auto;
+			.video-player{
+				position: relative;
+				left: 0;
+				top: 0;
+				margin: 10px auto;
 
-                .content-video{
-                    margin: 10px auto;
-                }
-            }
+				.content-video{
+					margin: 10px auto;
+				}
+			}
 
-            .body{
-                display: none;
-            }
+			.body{
+				display: none;
+			}
 
-            &.has-gutter-view{
-                .video-player{
-                    position: absolute;
-                }
-                .body{
-                    display: block;
-                }
-            }
-        }
-    }
+			&.has-gutter-view{
+				.video-player{
+					position: absolute;
+				}
+				.body{
+					display: block;
+				}
+			}
+		}
+	}
 
-    .x-mask{
-        background: rgba(0,0,0,0.65) !important;
-    }
+	.x-mask{
+		background: rgba(0,0,0,0.65) !important;
+	}
 
-    .x-mask-msg{
-        .x-mask-msg-text{
-            color: white !important;
-        }
-    }
+	.x-mask-msg{
+		.x-mask-msg-text{
+			color: white !important;
+		}
+	}
 }
 
 
@@ -1561,7 +1561,7 @@ $experimental-support-for-svg: true;
 			&.active, &.current, &:active, &:hover{
 				background: #313233;
 				border-radius: 3px;
-                color: $tertiary-grey;
+				color: $tertiary-grey;
 			}
 		}
 
@@ -1579,8 +1579,8 @@ $experimental-support-for-svg: true;
 					display: none;
 				}
 
-				@include icon('comment-small-dark',$position: absolute, $top:-4px);
-				&:hover::after { @include sprite($icons,'comment-small-dark_hover'); }
+				@include icon($comment-small-dark,$position: absolute, $top:-4px);
+				&:hover::after { @include sprite($comment-small-dark_hover); }
 			}
 		}
 
@@ -1595,7 +1595,7 @@ $experimental-support-for-svg: true;
 				position: relative;
 				left: -70px;
 				top: 30px;
-                cursor: pointer;
+				cursor: pointer;
 
 				&:hover {
 					color: #494949 !important;
@@ -1610,7 +1610,7 @@ $experimental-support-for-svg: true;
 	}
 
 	.x-component-slide{
-        padding: 50px 90px 0 0;
+		padding: 50px 90px 0 0;
 
 		.image-wrap{
 			position: relative;
@@ -1628,8 +1628,8 @@ $experimental-support-for-svg: true;
 						display: none;
 					}
 
-					@include icon('comment-small-dark',$position: absolute, $top:-4px);
-					&:hover::after { @include sprite($icons,'comment-small-dark_hover'); }
+					@include icon($comment-small-dark,$position: absolute, $top:-4px);
+					&:hover::after { @include sprite($comment-small-dark_hover); }
 				}
 			}
 
@@ -1663,14 +1663,14 @@ $experimental-support-for-svg: true;
 					display: none;
 				}
 
-				@include icon('comment-small-dark',$position: absolute, $top:-4px);
-				&:hover::after { @include sprite($icons,'comment-small-dark_hover'); }
+				@include icon($comment-small-dark,$position: absolute, $top:-4px);
+				&:hover::after { @include sprite($comment-small-dark_hover); }
 			}
 		}
 
-        &.no-transcript{
-            width: 60px;
-        }
+		&.no-transcript{
+			width: 60px;
+		}
 
 	}
 }
@@ -1714,15 +1714,14 @@ $experimental-support-for-svg: true;
 					top: 35px;
 					left: auto;
 					right: 15px;
-					background: $icons no-repeat;
-					@include sprite($icons,'arrow-course-dropdown',$dimensions: true);
+					@include sprite($arrow-course-dropdown);
 				}
 
 				&:active, &:hover{
 					color: #ababab;
 
 					&::before{
-						@include sprite($icons,'arrow-course-dropdown-light',$dimensions: true);
+						@include sprite($arrow-course-dropdown-light);
 					}
 				}
 			}
@@ -1734,40 +1733,39 @@ $experimental-support-for-svg: true;
 				top: 26px;
 				left: 15px;
 				right: auto;
-				background: $icons no-repeat;
 			}
 
 			&.video-focus{
 				&::after{
-					@include sprite($icons,'mv-video-focus',$dimensions: true);
+					@include sprite($mv-video-focus);
 				}
 
 				&:hover, &:active{
 					&::after{
-						@include sprite($icons,'mv-video-focus_active',$dimensions: true);
+						@include sprite($mv-video-focus_active);
 					}
 				}
 			}
 
 			&.transcript-focus{
 				&::after{
-					@include sprite($icons,'mv-transcript-focus',$dimensions: true);
+					@include sprite($mv-transcript-focus);
 				}
 
 				&:hover, &:active{
 					&::after{
-						@include sprite($icons,'mv-transcript-focus_active',$dimensions: true);
+						@include sprite($mv-transcript-focus_active);
 					}
 				}
 			}
 			&.full-video{
 				&::after{
-					@include sprite($icons,'mv-full-view',$dimensions: true);
+					@include sprite($mv-full-view);
 				}
 
 				&:hover, &:active {
 					&::after{
-						@include sprite($icons,'mv-full-view_active',$dimensions: true);
+						@include sprite($mv-full-view_active);
 					}
 				}
 			}
@@ -1785,10 +1783,10 @@ body.media-viewer-open{
 
 	.media-toolbar .x-component.identity{
 		display: block;
-	  	top: 2px !important;
-	  	width: 70px;
-	  	position: absolute;
-	  	right: 0px;
+		top: 2px !important;
+		width: 70px;
+		position: absolute;
+		right: 0px;
 	}
 
 	.media-toolbar .notifications-icon {

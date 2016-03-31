@@ -4,8 +4,7 @@
 	overflow: hidden;
 
 	.x-menu-item-icon.upload{
-		background: transparent $icons no-repeat;
-		@include sprite($icons,'upload',$dimensions: true);
+		@include sprite($upload);
 	}
 
 	.file-input {
@@ -94,7 +93,7 @@ label.x-menu-item-cmp {
 	}
 
 	&.x-menu-item-checked {
-		@include icon('menu_check', $top: 50%, $left: 10px);
+		@include icon($menu_check, $top: 50%, $left: 10px);
 		&::after {
 			margin-top: -5px;
 		}
@@ -174,7 +173,7 @@ label.x-menu-item-cmp {
 	.x-menu-scroll-bottom {
 		background: #fff;
 		opacity: 0.5;
-		@include element('menu-arrow-down-active', $top: 0, $left: 50%);
+		@include icon($menu-arrow-down-active, $top: 0, $left: 50%);
 		&::after {margin-left: -4px;}
 		&.x-menu-scroll-bottom-hover {
 			opacity: 1;
@@ -189,7 +188,7 @@ label.x-menu-item-cmp {
 	background: #fff;
 	opacity: 0.5;
 
-	@include element('menu-arrow-up-active', $top: 3px, $left: 50%);
+	@include icon($menu-arrow-up-active, $top: 3px, $left: 50%);
 	&::after {margin-left: -4px;}
 
 	&.x-menu-scroll-top-hover {
@@ -243,7 +242,7 @@ label.x-menu-item-cmp {
 	background: #f8f8f8;
 	height: 61px;
 	overflow: hidden;
-	@include icon('rhp-search',$top:21px,$left:19px);
+	@include icon($rhp-search,$top:21px,$left:19px);
 
 	input {
 		margin: 10px;
@@ -264,7 +263,7 @@ label.x-menu-item-cmp {
 
 	.clear {
 		display: none;
-		@include icon('clear_line');
+		@include icon($clear_line);
 		position: absolute;
 		top: 22px;
 		right: 15px;

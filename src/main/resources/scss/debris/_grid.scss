@@ -118,7 +118,7 @@
 	.disclaimer-header {
 		display: inline-block;
 		padding-right: 12px;
-		@include icon('info', $left: auto, $right: -6px, $top: 7px);
+		@include icon($info, $left: auto, $right: -6px, $top: 7px);
 	}
 }
 
@@ -173,11 +173,11 @@
 		}
 
 		&.x-grid-row .x-grid-cell .disclosure::after {
-			background-position: sprite-position($icons, 'options-menu-card_hover');
+			background-position: sprite-position($options-menu-card_hover);
 		}
 
 		&.x-grid-row .x-grid-cell .disclosure.report::after {
-			background-position: sprite-position($icons, 'reports-gray-card_hover');
+			background-position: sprite-position($reports-gray-card_hover);
 		}
 	}
 
@@ -216,47 +216,54 @@
 		.check {
 			text-indent: -100px;
 			overflow: hidden;
-			@include icon('check_gray', $top: 1em, $left: 1.6em);
+			@include icon($check_gray, $top: 1em, $left: 1.6em);
 		}
 
 		.actions {
 			cursor: pointer;
 			width: 40px;
 			height: 40px;
-			@include icon('more-options', $top: 15px, $left: 9px);
+			@include icon($more-options, $top: 15px, $left: 9px);
 		}
 
-        &.feedback{
-            padding-left: 10px;
+		&.feedback{
+			padding-left: 10px;
 
-            .x-grid-cell-inner {
-                line-height: 30px;
+			.x-grid-cell-inner {
+				line-height: 30px;
 
-                .grade-excused{
-                    &.off{
-                        display: none;
-                    }
+				.grade-excused{
+					&.off{
+						display: none;
+					}
 
-                    &.on{
-                        display: block;
-                        color: $primary-red;
-                    }
-                }
-            }
+					&.on{
+						display: block;
+						color: $primary-red;
+					}
+				}
+			}
 
-        }
+		}
 
 		.disclosure {
 			cursor: pointer;
 			width: 40px;
 			height: 40px;
-			@include icon('options-menu', $top: 6px, $left: 5.5px, $hover: true);
+			@include icon($options-menu, $top: 6px, $left: 5.5px);
+
+			&:target,
+			&:hover {
+				&::after {
+					@include sprite-position($options-menu_hover);
+				}
+			}
 
 			&.report {
-				@include icon('reports-gray_default', $top: 12px, $left: 12px);
+				@include icon($reports-gray_default, $top: 12px, $left: 12px);
 
 				&:hover::after {
-					background-position: sprite-position($icons, 'reports-blue_hover');
+					background-position: sprite-position($reports-blue_hover);
 				}
 			}
 		}
@@ -325,18 +332,18 @@
 
 			.controls {
 				position: absolute;
-    			top: 17px;
-    			left: 75px;
-    			font-weight: 400;
-    			cursor: pointer;
-    			display: none;
+				top: 17px;
+				left: 75px;
+				font-weight: 400;
+				cursor: pointer;
+				display: none;
 			}
 
 			&:hover {
 				.controls {
-    				display: block;
+					display: block;
 				}
-    		}
+			}
 		}
 	}
 }

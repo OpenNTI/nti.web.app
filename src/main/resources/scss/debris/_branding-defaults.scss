@@ -35,14 +35,7 @@
 			width: 1px;
 			opacity: 0.2;
 			//background: #fff;
-
-			$experimental-support-for-svg: true;
-			@include background-image(linear-gradient(top,
-				rgba(255,255,255,0.5) 0%,
-				rgba(255,255,255,1) 30%,
-				rgba(255,255,255,1) 70%,
-				rgba(255,255,255,0.5) 100%));
-
+			background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.5) 0%, #ffffff 30%, #ffffff 70%, rgba(255, 255, 255, 0.5) 100%);
 		}
 
 		&::after {

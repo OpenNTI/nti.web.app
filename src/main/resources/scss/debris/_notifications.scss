@@ -3,7 +3,7 @@
 	cursor: pointer;
 	height: $header-height;
 
-	@include icon('rhp-notification', $side: after, $top: 50%, $left: 50%);
+	@include icon($rhp-notification, $side: after, $top: 50%, $left: 50%);
 
 	&::after {
 		margin-top: -12px;
@@ -11,7 +11,7 @@
 	}
 
 	&:hover, &.menu-showing {
-		@include icon('rhp-notification_active', $side: after, $top: 50%, $left: 50%);
+		@include icon($rhp-notification_active, $side: after, $top: 50%, $left: 50%);
 	}
 
 	&[data-badge]:not([data-badge="0"])::before {
@@ -37,7 +37,7 @@
 	}
 
 	.main-navigation.dark-nav & {
-		@include icon('rhp-notifications_white', $side: after, $top: 50%, $left: 50%);
+		@include icon($rhp-notifications_white, $side: after, $top: 50%, $left: 50%);
 
 		&::after {
 			opacity: 0.8;

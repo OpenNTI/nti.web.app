@@ -47,7 +47,7 @@
 
 		}
 
-		@include icon('modal-yellow-sign',$top: 12px,$left: 20px);
+		@include icon($modal-yellow-sign,$top: 12px,$left: 20px);
 
 		.heading{
 			color: $tertiary-grey;

@@ -45,12 +45,11 @@
 	em.button,
 	.whiteboard-color-button{
 		@include color-button-base;
-		$g: linear-gradient(left top,
-			rgba(249,249,249,1) 45%,
-			rgba(244,82,82,.7) 50%,
-			rgba(249,249,249,1) 55%);
-		$experimental-support-for-svg: true;
-		@include background-image($g);
+		background-image: linear-gradient(to right bottom,
+							#f9f9f9 45%,
+							rgba(244, 82, 82, 0.7) 50%,
+							#f9f9f9 55%
+						);
 
 		span.whiteboard-color-inner{display: none;}
 		span.whiteboard-color-icon{display: none;}
@@ -58,16 +57,15 @@
 			@include color-button-base;
 			position: absolute;
 			top: 0; left: 0;
-            text-indent: -1em;
+			text-indent: -1em;
 			border-width: 0;
 			opacity: 0.5;
-			$g: linear-gradient(107deg,
-				rgba(0,0,0,0) 0%,
-				rgba(255,255,255,0) 42%,
-				rgba(255,255,255,0.21) 51%,
-				rgba(255,255,255,1) 100%);
-            $experimental-support-for-svg: true;
-			@include experimental-value(background, $g);
+			background-image: linear-gradient(107deg,
+								rgba(0, 0, 0, 0) 0%,
+								rgba(255, 255, 255, 0) 42%,
+								rgba(255, 255, 255, 0.21) 51%,
+								#ffffff 100%
+							);
 		}
 
 	}
@@ -76,7 +74,7 @@
 	&.grey1 {em.button,.whiteboard-color-button  { background: #858585; border-color: #707070; }}
 	&.grey2 {em.button,.whiteboard-color-button  { background: #e1e1e1; border-color: #acacac; }}
 	&.white {em.button,.whiteboard-color-button  { background: #ffffff; border-color: #b3b3b3; div {opacity: 0.9;} }}
-	&.red {em.button,.whiteboard-color-button    { background: #d34f39; border-color: #c6452f; }}
+	&.red {em.button,.whiteboard-color-button	{ background: #d34f39; border-color: #c6452f; }}
 	&.blue {em.button,.whiteboard-color-button   { background: #2b89c5; border-color: #2880b9; }}
 	&.green {em.button,.whiteboard-color-button  { background: #a0c94c; border-color: #82a835; }}
 	&.orange {em.button,.whiteboard-color-button { background: #fa8700; border-color: #d97704; }}
@@ -183,9 +181,9 @@
 		padding-bottom: 58px;
 	}
 
-	canvas { 
+	canvas {
 		cursor: crosshair;
-		
+
 		&.moveSelected{
 			cursor: default !important;
 		}
@@ -647,7 +645,6 @@
 					content: ' ';
 					overflow: hidden;
 					position: absolute;
-					background: $icons no-repeat;
 					top: 10px;
 				}
 			}
@@ -655,19 +652,19 @@
 			.include {
 				display: none;
 				&::after{
-					@include sprite($icons,'checkbox-light-unchecked',$dimensions:true);
+					@include sprite($checkbox-light-unchecked);
 					left: 6px;
 					top: 7px;
 				}
 
 				&:hover {
-					&::after{ @include sprite($icons,'checkbox-light-unchecked_hover',$dimensions:true); }
+					&::after{ @include sprite($checkbox-light-unchecked_hover); }
 				}
 
 				&.checked {
-					&::after{ @include sprite($icons,'checkbox-light-checked',$dimensions:true); }
+					&::after{ @include sprite($checkbox-light-checked); }
 					&:hover::after {
-						@include sprite($icons,'checkbox-light-checked_hover',$dimensions:true);
+						@include sprite($checkbox-light-checked_hover);
 					}
 				}
 			}
@@ -678,7 +675,7 @@
 
 				&::after{
 					left: 8px;
-					@include sprite($icons,'reply',$dimensions:true);
+					@include sprite($reply);
 				}
 			}
 

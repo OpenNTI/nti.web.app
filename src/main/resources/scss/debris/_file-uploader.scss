@@ -6,7 +6,6 @@
 	}
 
 	.upload-icon{
-		background: transparent $icons no-repeat;
-		@include sprite($icons,'upload',$dimensions: true);
+		@include sprite($upload);
 	}
 }

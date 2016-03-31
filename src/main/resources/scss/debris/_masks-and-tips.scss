@@ -186,21 +186,20 @@ body > .x-mask {
 	.x-tip-anchor {
 		border-width: 0;
 		border-color: transparent;
-		background: transparent $elements no-repeat;
 		visibility: visible !important;
 	}
 
 	.x-tip-anchor-top{
-		@include sprite($elements,'tooltip-pointer-black-top',$dimensions: true);
+		@include sprite($tooltip-pointer-black-top);
 	}
 	.x-tip-anchor-right{
-		@include sprite($elements,'tooltip-pointer-black-right',$dimensions: true);
+		@include sprite($tooltip-pointer-black-right);
 	}
 	.x-tip-anchor-bottom{
-		@include sprite($elements,'tooltip-pointer-black-bottom',$dimensions: true);
+		@include sprite($tooltip-pointer-black-bottom);
 	}
 	.x-tip-anchor-left{
-		@include sprite($elements,'tooltip-pointer-black-left',$dimensions: true);
+		@include sprite($tooltip-pointer-black-left);
 	}
 }
 
@@ -254,20 +253,20 @@ body > .x-mask {
 			content: ' ';
 			position: absolute;
 			top: 6px; left: 0;
-			background: $icons no-repeat;
-			@include sprite($icons, 'checkbox-light-unchecked', $dimensions: true);
+
+			@include sprite($checkbox-light-unchecked);
 		}
 
 		&:hover::after{
-			@include sprite($icons, 'checkbox-light-unchecked_hover', $dimensions: true);
+			@include sprite($checkbox-light-unchecked_hover);
 		}
 
 		&.checked{
 			&::after{
-				@include sprite($icons, 'checkbox-light-checked', $dimensions: true);
+				@include sprite($checkbox-light-checked);
 			}
 			&:hover::after{
-				@include sprite($icons, 'checkbox-light-checked_hover', $dimensions: true);
+				@include sprite($checkbox-light-checked_hover);
 			}
 		}
 	}
@@ -275,12 +274,12 @@ body > .x-mask {
 }
 
 .purchasable-mask {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255,255,255,.6);
-  z-index: 10;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(255,255,255,.6);
+	z-index: 10;
 }
 
 .nti-mask-element {
@@ -303,7 +302,7 @@ body > .x-mask {
 		top: 100px;
 		left: 327px;
 	}
-} 
+}
 
 .container-loading-mask {
 		position: absolute;

@@ -1,4 +1,4 @@
-.PHONY: all setup check build compile stage deploy clean-dist clean-stage clean
+.PHONY: all setup check build compile styles stage deploy clean-dist clean-stage clean-styles clean
 
 DIST=./dist/
 STAGE=./stage/
@@ -21,14 +21,16 @@ setup:
 check:
 	@eslint --ext .js,.jsx . || true
 
+styles:
+	@spritesmith
+	@node-sass $(SRC)main/resources/scss -o $(SRC)main/resources/css
+
 
 build: compile deploy
 	@rm -rf $(STAGE)
 
 
-compile: clean-stage stage $(STAGE)server
-	@spritesmith
-	@compass compile
+compile: clean-stage stage $(STAGE)server styles
 ## copy static assets
 	@(cd $(SRC)main; rsync -Rr . ../../$(STAGE)client)
 	@rm -r $(STAGE)client/js
@@ -60,8 +62,9 @@ clean-dist:
 clean-stage:
 	@rm -rf $(STAGE)
 
+clean-styles:
+	@rm -rf $(SRC)main/resources/css
+	@rm $(SRC)main/resources/scss/utils/_icons.scss
+	@rm $(SRC)main/resources/images/sprite.png
 
-clean: clean-stage clean-dist
-	@compass clean
-	@rm src/main/resources/scss/_icons.scss
-	@rm src/main/resources/images/sprite.png
+clean: clean-stage clean-dist clean-styles

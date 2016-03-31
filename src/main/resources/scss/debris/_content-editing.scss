@@ -121,7 +121,7 @@
 			top: 10px;
 			right: 10px;
 			width: 16px; height: 16px;
-			@include icon('message_box_close', $top: 3px, $left: 3px, $position: absolute);
+			@include icon($message_box_close, $top: 3px, $left: 3px, $position: absolute);
 		}
 	}
 }
@@ -470,20 +470,20 @@ input[type=number]{
 	}
 
 	.edit {
-		@include icon('edit-12', $top: 4px, $left: 4px);
+		@include icon($edit-12, $top: 4px, $left: 4px);
 	}
 
 	.add {
-		@include icon('editor-attach_hover', $top: 4px, $left: 4px);
+		@include icon($editor-attach_hover, $top: 4px, $left: 4px);
 	}
 
 	.publish {
 		&.unpublished {
-			@include icon('publishing-visible', $top: 4px, $left: 4px);
+			@include icon($publishing-visible, $top: 4px, $left: 4px);
 		}
 
 		&.published {
-			@include icon('publishing-invisible', $top: 4px, $left: 4px);
+			@include icon($publishing-invisible, $top: 4px, $left: 4px);
 		}
 	}
 }
@@ -804,7 +804,7 @@ input[type=number]{
 	height: 40px;
 	display: block;
 
-	@include icon('dropdown-am-pm-icon', $side: after, $top: 20px, $left: auto, $right: 3px);
+	@include icon($dropdown-am-pm-icon, $side: after, $top: 20px, $left: auto, $right: 3px);
 
 	.date {
 		cursor: pointer;
@@ -841,7 +841,7 @@ input[type=number]{
 			}
 
 			.day {
-				@include icon('empty-calendar', $side: after, $top: 2px, $left: 4px);
+				@include icon($empty-calendar, $side: after, $top: 2px, $left: 4px);
 			}
 		}
 	}
@@ -874,7 +874,7 @@ input[type=number]{
 				cursor: pointer;
 				border: 1px solid $tertiary-grey-alt;
 
-				@include icon('dropdown-white', $side: after, $top: 10px, $left: auto, $right: 10px);
+				@include icon($dropdown-white, $side: after, $top: 10px, $left: auto, $right: 10px);
 			}
 		}
 
@@ -882,7 +882,7 @@ input[type=number]{
 			.label {
 				color: $primary-blue;
 				background: #f8f8f8;
-				@include icon('dropdown-blue', $side: after, $top: 10px, $left: auto, $right: 10px);
+				@include icon($dropdown-blue, $side: after, $top: 10px, $left: auto, $right: 10px);
 			}
 		}
 
@@ -930,14 +930,14 @@ input[type=number]{
 						font-size: 14px;
 						position: relative;
 
-						@include icon('radio-unfilled', $side: after, $top: 12px, $left: 10px);
+						@include icon($radio-unfilled, $side: after, $top: 12px, $left: 10px);
 					}
 
 					&.selected {
 						.text {
 							position: relative;
 							padding-bottom: 0;
-							@include icon('radio-filled', $side: after, $top: 12px, $left: 10px);
+							@include icon($radio-filled, $side: after, $top: 12px, $left: 10px);
 						}
 
 						.subtext {
@@ -1006,11 +1006,8 @@ input[type=number]{
 
 					.part {
 						@include experimental(flex, 1 1 auto);
-						background: #ffffff; /* Old browsers */
-						background: -moz-linear-gradient(top,  #ffffff 0%, #f2f2f2 100%); /* FF3.6-15 */
-						background: -webkit-linear-gradient(top,  #ffffff 0%,#f2f2f2 100%); /* Chrome10-25,Safari5.1-6 */
-						background: linear-gradient(to bottom,  #ffffff 0%,#f2f2f2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-						filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f2f2f2',GradientType=0 ); /* IE6-9 */
+						background: #ffffff;
+						background-image: linear-gradient(to bottom,  #ffffff 0%,#f2f2f2 100%);
 
 						border: 1px solid rgba(150,150,150,0.3);
 						text-align: center;
@@ -1065,7 +1062,7 @@ input[type=number]{
 					cursor: pointer;
 					font: italic 500 12px/32px $font;
 
-					@include icon('dropdown-am-pm-icon', $side: after, $top: 14px, $left: auto, $right: -13px);
+					@include icon($dropdown-am-pm-icon, $side: after, $top: 14px, $left: auto, $right: -13px);
 				}
 
 				.clear {
@@ -1280,7 +1277,7 @@ input[type=number]{
 			position: relative;
 			color: $secondary-grey;
 
-			@include icon('dropdown-am-pm-icon', $side: after, $top: 11px, $left: auto, $right: 5px);
+			@include icon($dropdown-am-pm-icon, $side: after, $top: 11px, $left: auto, $right: 5px);
 		}
 	}
 }
@@ -1485,7 +1482,7 @@ input[type=number]{
 			right: 10px;
 			cursor: pointer;
 			width: 16px; height: 16px;
-			@include icon('message_box_close', $top: 3px, $left: 3px, $position: absolute);
+			@include icon($message_box_close, $top: 3px, $left: 3px, $position: absolute);
 		}
 
 		.thumbnail {

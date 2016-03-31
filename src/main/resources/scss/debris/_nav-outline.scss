@@ -60,7 +60,7 @@
 		box-shadow: inset 0 -1px 0 0 #eaeaea;
 		z-index: 2;
 
-		@include icon('topic', $top:15px, $left: 18px);
+		@include icon($topic, $top:15px, $left: 18px);
 	}
 
 	.outline-row:not(.disabled), &.editing .outline-row.disabled {
@@ -73,7 +73,7 @@
 				display: block;
 
 				&:hover::after {
-					background-position: sprite-position($icons, 'reports-gray_hover');
+					background-position: sprite-position($reports-gray_hover);
 				}
 			}
 		}
@@ -88,11 +88,11 @@
 				display: block;
 
 				&::after {
-					background-position: sprite-position($icons, 'reports-white_default');
+					background-position: sprite-position($reports-white_default);
 				}
 
 				&:hover::after {
-					background-position: sprite-position($icons, 'reports-white_hover');
+					background-position: sprite-position($reports-white_hover);
 				}
 			}
 		}
@@ -136,7 +136,7 @@
 
 			display: none;
 
-			@include icon('reports-gray-card_hover', $top: 12px, $left: 12px);
+			@include icon($reports-gray-card_hover, $top: 12px, $left: 12px);
 		}
 
 		&.disabled {

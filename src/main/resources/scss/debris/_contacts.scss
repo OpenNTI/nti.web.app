@@ -31,14 +31,14 @@ $over-color: #f4f3f3;
 
 		.nib {
 			display: none;
-			@include icon('add-contact');
+			@include icon($add-contact);
 			cursor: pointer;
 			position: absolute;
 			right: 8px;
 			top: 17px;
 			width: 18px;
 			height: 17px;
-			&:hover::after { @include sprite($icons,'add-contact_active'); }
+			&:hover::after { @include sprite($add-contact_active); }
 		}
 
 		&.not-contact {
@@ -78,8 +78,7 @@ $over-color: #f4f3f3;
 		margin-left: 0;
 		img {
 			&.nib {
-				background: transparent $icons no-repeat;
-				@include sprite($icons,'add',$dimensions: true);
+				@include sprite($add);
 				margin-top: 10px;
 				border: none !important;
 				float: right;
@@ -108,8 +107,7 @@ $over-color: #f4f3f3;
 		cursor: pointer;
 
 		&.nib {
-			background: transparent $icons no-repeat;
-			@include sprite($icons,'options',$dimensions: true);
+			@include sprite($options);
 			display: none;
 			margin-top: 7px;
 			border: none !important;
@@ -136,7 +134,6 @@ $over-color: #f4f3f3;
 		&.group,
 		&.list{
 			&::after{
-				background: $icons no-repeat;
 				content: ' ';
 				top: 0;
 				left: 0;
@@ -145,15 +142,15 @@ $over-color: #f4f3f3;
 		}
 
 		&.public::after{
-			@include sprite($icons, 'dark-globe-26x26', $dimensions: true);
+			@include sprite($dark-globe-26x26);
 		}
 
 		&.group::after{
-			@include sprite($icons, 'dark-groups-32x22', $dimensions: true);
+			@include sprite($dark-groups-32x22);
 		}
 
 		&.list::after{
-			@include sprite($icons, 'dark-lists-31x21', $dimensions: true);
+			@include sprite($dark-lists-31x21);
 		}
 	}
 
@@ -166,7 +163,7 @@ $over-color: #f4f3f3;
 		img.nib{
 			display: block;
 			&:active,&:hover {
-				@include sprite($icons,'options_active',$dimensions: true);
+				@include sprite($options_active);
 			}
 		}
 	}
@@ -205,8 +202,7 @@ $over-color: #f4f3f3;
 				left: 10px;
 				top: 9px;
 				outline: 0;
-				background: $icons no-repeat;
-				@include sprite($icons, 'checkbox-14', $dimensions:true);
+				@include sprite($checkbox-14);
 			}
 		}
 
@@ -221,8 +217,7 @@ $over-color: #f4f3f3;
 				position: absolute;
 				left: 10px; top: 6px;
 				outline: 0;
-				background: $icons no-repeat;
-				@include sprite($icons, 'rhp-contact-flyout-settings', $dimensions:true);
+				@include sprite($rhp-contact-flyout-settings);
 			}
 		}
 
@@ -247,8 +242,7 @@ $over-color: #f4f3f3;
 			position: absolute;
 			top: 10px; right: 10px;
 			content: '';
-			background: $icons no-repeat;
-			@include sprite($icons, 'rhp-close-lists', $dimensions:true);
+			@include sprite($rhp-close-lists);
 		}
 	}
 }
@@ -281,8 +275,7 @@ $over-color: #f4f3f3;
 				left: 7px;
 				top: 12px;
 				outline: 0;
-				background: $icons no-repeat;
-				@include sprite($icons, 'rhp-contact-flyout-lists', $dimensions:true);
+				@include sprite($rhp-contact-flyout-lists);
 			}
 		}
 
@@ -302,8 +295,7 @@ $over-color: #f4f3f3;
 				top: 7px; left: 14px;
 				content: '';
 
-				background: $icons no-repeat;
-				@include sprite($icons, 'rhp-close-lists', $dimensions:true);
+				@include sprite($rhp-close-lists);
 			}
 		}
 	}
@@ -330,7 +322,7 @@ $over-color: #f4f3f3;
 			li.selection-list-item {
 				padding: 5px 5px 5px 35px;
 				color: $secondary-grey !important;
-				@include icon('check_box', $top: 7px, $left: 12px);
+				@include icon($check_box, $top: 7px, $left: 12px);
 
 				&.selection-item-over{
 					background-color: $over-color;
@@ -340,9 +332,9 @@ $over-color: #f4f3f3;
 
 
 				&.selection-selected {
-					@include icon('check_mark_a', $top: 10px, $left: 15px);
+					@include icon($check_mark_a, $top: 10px, $left: 15px);
 					&:active::after {
-						@include sprite($icons, 'check_mark_b');
+						@include sprite($check_mark_b);
 					}
 				}
 
@@ -379,11 +371,10 @@ $over-color: #f4f3f3;
 					height: auto;
 
 					$value: text-shadow 0.5s, color 0.5s;
-
-					@include experimental(transition, $value);
+					transition: $value;
 
 					&.error {
-						@include experimental(transition, $value);
+						transition: $value;
 						@include animate(shake);
 						color: red;
 						text-shadow: 2px 2px 2px #ffc0c0;
@@ -392,8 +383,7 @@ $over-color: #f4f3f3;
 
 				img.delete-group {
 					display: none;
-					background: transparent $icons no-repeat;
-					@include sprite($icons,'remove',$dimensions: true);
+					@include sprite($remove);
 					margin-top: 3px;
 					border: none !important;
 					float: right;
@@ -438,14 +428,14 @@ $over-color: #f4f3f3;
 				top: 10px; right: 10px;
 				width: 20px;
 				height: 20px;
-				&::after{ @include sprite($icons,'checkbox-light-unchecked',$dimensions: true);}
-				&:hover::after { @include sprite($icons,'checkbox-light-unchecked_hover'); }
+				&::after{ @include sprite($checkbox-light-unchecked);}
+				&:hover::after { @include sprite($checkbox-light-unchecked_hover); }
 			}
 
 			&.checked {
 				.nib {
-					&::after{ @include sprite($icons,'checkbox-light-checked',$dimensions: true);}
-					&:hover::after { @include sprite($icons,'checkbox-light-checked_hover'); }
+					&::after{ @include sprite($checkbox-light-checked);}
+					&:hover::after { @include sprite($checkbox-light-checked_hover); }
 				}
 			}
 		}
@@ -615,7 +605,7 @@ $over-color: #f4f3f3;
 				left: 0;
 				border-left-width: 0;
 				padding-left: 35px;
-				@include icon('rhp-search',$top:11px,$left:9px);
+				@include icon($rhp-search,$top:11px,$left:9px);
 				&::after{ opacity: 0.6; }
 
 				input {
@@ -632,7 +622,7 @@ $over-color: #f4f3f3;
 					opacity: 0;
 				}
 				.clear {
-					@include icon('clear_line');
+					@include icon($clear_line);
 					position: absolute;
 					top: 14px;
 					right: 10px;
@@ -648,9 +638,9 @@ $over-color: #f4f3f3;
 
 			&.group-chat {
 				right: 0;
-				@include icon('rhp-group-chat',$top:11px,$left:7px);
+				@include icon($rhp-group-chat,$top:11px,$left:7px);
 				&:hover::after {
-					@include sprite($icons,'rhp-group-chat_hover');
+					@include sprite($rhp-group-chat_hover);
 				}
 			}
 		}
@@ -746,9 +736,9 @@ div.contact-buttons {
 	}
 
 	div.join-group {
-		@include icon('add-contact-14x14');
+		@include icon($add-contact-14x14);
 		&:hover::after{
-			@include sprite($icons,'add-contact-14x14_hover',$dimensions: true);
+			@include sprite($add-contact-14x14_hover);
 		}
 	}
 
@@ -757,11 +747,11 @@ div.contact-buttons {
 			content: ' ';
 			position: absolute;
 			top: 1px; left: 0;
-			background: transparent $icons no-repeat;
-			@include sprite($icons,'create-group-14x10',$dimensions: true);
+
+			@include sprite($create-group-14x10);
 		}
 		&:hover::after{
-			@include sprite($icons,'create-group-14x10_hover',$dimensions: true);
+			@include sprite($create-group-14x10_hover);
 		}
 	}
 
@@ -770,11 +760,10 @@ div.contact-buttons {
 			content: ' ';
 			position: absolute;
 			top: 1px; left: 0;
-			background: transparent $icons no-repeat;
-			@include sprite($icons,'create-list',$dimensions: true);
+			@include sprite($create-list);
 		}
 		&:hover::after{
-			@include sprite($icons,'create-list_hover',$dimensions: true);
+			@include sprite($create-list_hover);
 		}
 	}
 }
@@ -979,7 +968,7 @@ div.contact-buttons {
 
                             &.upload{
 								cursor: pointer;
-								@include icon('edit-15-white', $left:auto, $top: 7px, $right: 6px);
+								@include icon($edit-15-white, $left:auto, $top: 7px, $right: 6px);
                             }
                         }
 
@@ -1056,7 +1045,7 @@ div.contact-buttons {
 							position: absolute;
 							top: 0;
 							left: 0;
-							@include sprite($icons,'rotate',$dimensions: true);
+							@include sprite($rotate);
 						}
 					}
 
@@ -1103,7 +1092,7 @@ div.contact-buttons {
                 }
 
 				&.locked{
-					@include icon('lock', $left:auto, $top: 13px, $right: 67px);
+					@include icon($lock, $left:auto, $top: 13px, $right: 67px);
 					&::after{
 						position: absolute;
 						display: block;
@@ -1140,8 +1129,8 @@ div.contact-buttons {
 				position: absolute;
 				top: 17px;
 				right: 11px;
-				background: transparent $icons no-repeat;
-				@include sprite($icons,'search',$dimensions: true);
+
+				@include sprite($search);
 			}
 
 			&::before{
@@ -1170,7 +1159,7 @@ div.contact-buttons {
 		&:first-of-type { border-top-width: 0; }
 
 		.contact-card{
-			
+
 		}
 	}
 
@@ -1192,13 +1181,13 @@ div.contact-buttons {
 			box-shadow: 0 0 3.5px 0.5px rgba(30, 30, 30, 1);
 		}
 
-		.nib{		
+		.nib{
 			top: 40%;
 			right: 20px;
 			float: none;
 			display: none;
 
-			@include icon('options_active',$top: auto, $left: auto);
+			@include icon($options_active,$top: auto, $left: auto);
 			position: absolute;
 			margin-top: 10px;
 			width: 20px;
@@ -1253,22 +1242,21 @@ div.contact-buttons {
 						content: ' ';
 						position: absolute;
 						top: 4px; left: 0;
-						background: $icons no-repeat;
 					}
 				}
 
 				.chat{
 					padding-left:25px;
 					&::after {
-						@include sprite($icons,'activity-chat',$dimensions: true);
+						@include sprite($activity-chat);
 					}
 				}
 				.email::after {
-					@include sprite($icons,'account-email',$dimensions: true);
+					@include sprite($account-email);
 				}
 				.message::after {
 					left: 2px;
-					@include sprite($icons,'activity-comment',$dimensions: true);
+					@include sprite($activity-comment);
 				}
 
 			}
@@ -1294,7 +1282,7 @@ div.contact-buttons {
 		overflow: hidden;
 
 		&:hover .x-component-nti-tool-action:not(.disabled) {
-			.icon.options::after{ @include sprite($icons,'options-menu-card_hover'); }
+			.icon.options::after{ @include sprite($options-menu-card_hover); }
 		}
 
 
@@ -1302,13 +1290,13 @@ div.contact-buttons {
 			margin: 0 0 0 20px;
 			.icon {
 				&.options::after{
-					@include sprite($icons,'options-menu',$dimensions: true);
+					@include sprite($options-menu);
 				}
 			}
 			&:hover,&.over {
 				&:not(.disabled){
 					.icon {
-						&.options::after{ @include sprite($icons,'options-menu_hover'); }
+						&.options::after{ @include sprite($options-menu_hover); }
 					}
 				}
 			}
@@ -1411,7 +1399,7 @@ div.contact-buttons {
 					bottom: 8px;
 					right: 5px;
 
-					@include icon('share-options-gear_hover');
+					@include icon($share-options-gear_hover);
 					position: absolute;
 
 					width: 13px;
@@ -1545,13 +1533,13 @@ div.contact-buttons {
 							box-shadow: -1px 0 0 0 #f2f2f2;
 						}
 						&.join {
-							@include icon('reply', $top: 13px, $left: 7px);
+							@include icon($reply, $top: 13px, $left: 7px);
 							&::after {
 								opacity: 0.6;
 							}
 						}
 						&.create, &.suggest {
-							@include icon('editor-attach', $top: 14px, $left: 10px);
+							@include icon($editor-attach, $top: 14px, $left: 10px);
 						}
 
 						&.search{
@@ -1559,7 +1547,7 @@ div.contact-buttons {
 							left: 0;
 							border-left-width: 0;
 							padding-left: 35px;
-							@include icon('rhp-search',$top:11px,$left:9px);
+							@include icon($rhp-search,$top:11px,$left:9px);
 							&::after{ opacity: 0.6; }
 
                             &.half{
@@ -1582,7 +1570,7 @@ div.contact-buttons {
 							}
 
 							.clear {
-								@include icon('clear_line');
+								@include icon($clear_line);
 								position: absolute;
 								top: 14px;
 								right: 10px;
@@ -1648,6 +1636,3 @@ div.contact-buttons {
 		}
 	}
 }
-
-
-

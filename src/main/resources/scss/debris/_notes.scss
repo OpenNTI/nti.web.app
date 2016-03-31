@@ -37,8 +37,8 @@
 @mixin note-control-box{
 	.note-here-control-box {
 		@include animate(fadeIn,0.1s);
-		@include icon('add-note',$position: absolute, $top:-4px);
-		&:hover::after { @include sprite($icons,'add-note_active'); }
+		@include icon($add-note,$position: absolute, $top:-4px);
+		&:hover::after { @include sprite($add-note_active); }
 
 		display: block;
 		left: 20px;
@@ -90,23 +90,22 @@
 				position: absolute;
 				top: 8px; left: 0;
 				overflow: hidden;
-				background: $icons no-repeat;
 			}
 		}
 
 		.reply::after {
-			@include sprite($icons,'reply',$dimensions: true);
+			@include sprite($reply);
 		}
 
-	  	.share::after {
-			@include sprite($icons,'share',$dimensions: true);
+		.share::after {
+			@include sprite($share);
 		}
 
 		//.chat {
 		//	display: none;
 		//	padding-left: 28px;
 		//	&::after {
-		//		@include sprite($icons,'start-chat',$dimensions: true);
+		//		@include sprite($start-chat);
 		//	}
 		//}
 
@@ -122,8 +121,7 @@
 				overflow: hidden;
 				position: absolute;
 				top: 10px; left: 5px;
-				background: $icons no-repeat;
-				@include sprite($icons,'more-options',$dimensions: true);
+				@include sprite($more-options);
 			}
 
 			&.active {
@@ -131,7 +129,7 @@
 				background-color: #ffffff;
 				box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.09);
 				&::after {
-					@include sprite($icons,'more-options_active',$dimensions: true);
+					@include sprite($more-options_active);
 				}
 			}
 		}
@@ -149,17 +147,17 @@
 			.x-menu-item {
 				color: $secondary-grey !important;
 
-				&.edit::after{ @include sprite($icons,'edit-dark',$dimensions: true); }
-				&.flag::after{ @include sprite($icons,'flag-dark',$dimensions: true); }
-				&.delete::after{ @include sprite($icons,'trash-can-dark',$dimensions: true); }
+				&.edit::after{ @include sprite($edit-dark); }
+				&.flag::after{ @include sprite($flag-dark); }
+				&.delete::after{ @include sprite($trash-can-dark); }
 
 				&.x-menu-item-active {
 					color: $tertiary-grey !important;
 					background: #3d3d3d !important;
 
-					&.edit::after{ @include sprite($icons,'edit-dark_hover',$dimensions: true); }
-					&.flag::after{ @include sprite($icons,'flag-dark_hover',$dimensions: true); }
-					&.delete::after{ @include sprite($icons,'trash-can-dark_hover',$dimensions: true); }
+					&.edit::after{ @include sprite($edit-dark_hover); }
+					&.flag::after{ @include sprite($flag-dark_hover); }
+					&.delete::after{ @include sprite($trash-can-dark_hover); }
 				}
 
 			}
@@ -179,30 +177,29 @@
 			&::after{
 				content: '';
 				overflow: hidden;
-				background: $icons no-repeat;
 				position: absolute;
 				top: 8px;
 				left: 13px;
 			}
 
-			&.edit::after{ @include sprite($icons,'edit-15',$dimensions: true); }
-			&.flag::after{ @include sprite($icons,'flag-13x15',$dimensions: true); }
-			&.add-contact::after{ @include sprite($icons,'add-contact-14x14',$dimensions: true); }
-			&.chat::after { @include sprite($icons,'chat-18x12',$dimensions: true); }
-			&.follow::after{ @include sprite($icons,'follow',$dimensions: true); }
-			&.block::after{ @include sprite($icons,'block',$dimensions: true); }
-			&.mute::after{ @include sprite($icons,'mute-14x13',$dimensions: true); }
-			&.delete::after{ @include sprite($icons,'trash-can-11x14',$dimensions: true); }
+			&.edit::after{ @include sprite($edit-15); }
+			&.flag::after{ @include sprite($flag-13x15); }
+			&.add-contact::after{ @include sprite($add-contact-14x14); }
+			&.chat::after { @include sprite($chat-18x12); }
+			&.follow::after{ @include sprite($follow); }
+			&.block::after{ @include sprite($block); }
+			&.mute::after{ @include sprite($mute-14x13); }
+			&.delete::after{ @include sprite($trash-can-11x14); }
 
 			&.x-menu-item-active {
-				&.edit::after{ @include sprite($icons,'edit-15_hover',$dimensions: true); }
-				&.flag::after{ @include sprite($icons,'flag-13x15_hover',$dimensions: true); }
-				&.add-contact::after{ @include sprite($icons,'add-contact-14x14_hover',$dimensions: true); }
-				&.chat::after { @include sprite($icons,'chat-18x12_hover',$dimensions: true); }
-				&.follow::after{ @include sprite($icons,'follow_hover',$dimensions: true); }
-				&.block::after{ @include sprite($icons,'block_hover',$dimensions: true); }
-				&.mute::after{ @include sprite($icons,'mute-14x13_hover',$dimensions: true); }
-				&.delete::after{ @include sprite($icons,'trash-can-11x14_hover',$dimensions: true); }
+				&.edit::after{ @include sprite($edit-15_hover); }
+				&.flag::after{ @include sprite($flag-13x15_hover); }
+				&.add-contact::after{ @include sprite($add-contact-14x14_hover); }
+				&.chat::after { @include sprite($chat-18x12_hover); }
+				&.follow::after{ @include sprite($follow_hover); }
+				&.block::after{ @include sprite($block_hover); }
+				&.mute::after{ @include sprite($mute-14x13_hover); }
+				&.delete::after{ @include sprite($trash-can-11x14_hover); }
 			}
 		}
 	}
@@ -256,8 +253,8 @@
 				position: absolute;
 				overflow: hidden;
 				top: 15px; left: 18px;
-				background: $icons no-repeat;
-				@include sprite($icons,'reply_arrow',$dimensions: true);
+
+				@include sprite($reply_arrow);
 			}
 		}
 
@@ -312,11 +309,11 @@
 			height: 32px;
 			cursor: pointer;
 			margin-left: 4px;
-			
+
 			.avatar-pic {
 				background-size: cover;
-				border-radius: 2px;	
-			}	
+				border-radius: 2px;
+			}
 		}
 
 		@include meta-row-window;
@@ -456,8 +453,8 @@
 
 		.avatar-container {
 			.avatar-pic {
-				border-radius: 6px;	
-			}	
+				border-radius: 6px;
+			}
 		}
 
 		& > .meta {
@@ -519,7 +516,7 @@
 						padding: 0 0.5em;
 						background: none;
 					}
-				}				
+				}
 			}
 
 		}
@@ -543,7 +540,7 @@
 				position: relative;
 				bottom: -20px;
 				cursor: pointer;
-				
+
 				&.hidden {
 					display: none;
 				}
@@ -629,7 +626,7 @@
 							.action {
 								  	background-color: #3fb34f;
   									width: 120px;
-  									
+
 								&.button {
 								  	line-height: 42px;
 								  	text-align: center;
@@ -691,11 +688,6 @@
 
 
 	.note-here{
-
-		&.hidden {
-			display: none;
-		}
-
 		top: -50px;
 		left: 0 !important;
 		right: 0 !important;
@@ -706,7 +698,12 @@
 		color: $tertiary-grey;
 		background: #fff;
 		z-index: 2;
-		@include experimental(box-sizing, content-box);
+		box-sizing: content-box;
+
+		&.hidden {
+			display: none;
+		}
+
 	}
 
 
@@ -741,8 +738,7 @@
 				overflow: visible;
 				height: auto !important;
 				z-index: 10;
-
-				@include background-image(linear-gradient(top, rgba(255,255,255,1) 0%, rgba(251,251,251,0) 70%));
+				background-image: linear-gradient(to bottom, #ffffff 0%, rgba(251, 251, 251, 0) 70%);
 
 				&::after {
 					bottom: 1px;
@@ -757,7 +753,7 @@
 
 			//make sure nodes are sorted
 			& + .x-component-notepad-item {
-				@include background-image(linear-gradient(top, rgba(255,255,255,1) 0%, rgba(251,251,251,0) 70%));
+				background-image: linear-gradient(to bottom, #ffffff 0%, rgba(251, 251, 251, 0) 70%);
 			}
 		}
 	}

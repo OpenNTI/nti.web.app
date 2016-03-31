@@ -23,7 +23,7 @@
 			left: 0;
 			transition: opacity 0.5s, left 0.5s;
 
-			@include icon('overlay_close_x_dark', $top: 50%, $left: 50%);
+			@include icon($overlay_close_x_dark, $top: 50%, $left: 50%);
 
 			&::after {
 				margin-top: -16px;
@@ -93,7 +93,7 @@
 					height: 70px;
 					width: 50px;
 
-					@include icon('rhp-search', $side: after, $top: 50%, $left: 50%);
+					@include icon($rhp-search, $side: after, $top: 50%, $left: 50%);
 
 					&::after {
 						margin-top: -9px;
@@ -218,7 +218,7 @@
 			display: block;
 			top: 10px;
 			left: 15px;
-			@include icon('warning-icon-red', $side: after, $position: absolute);
+			@include icon($warning-icon-red, $side: after, $position: absolute);
 
 			& + .msg {
 				margin-left: 40px;
@@ -270,7 +270,7 @@
 	}
 
 	.close{
-		@include icon('note-window-x', $side: after, $position: absolute);
+		@include icon($note-window-x, $side: after, $position: absolute);
 		top: 10px;
 		right: 10px;
 		cursor: pointer;
@@ -278,7 +278,7 @@
 		height: 24px;
 
 		&:hover{
-			@include icon('note-window-x_hover', $side: after, $position: absolute);
+			@include icon($note-window-x_hover, $side: after, $position: absolute);
 		}
 	}
 }

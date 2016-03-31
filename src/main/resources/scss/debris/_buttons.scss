@@ -62,17 +62,14 @@ $button-text-weights: 500,500,600,500;
 			box-shadow: inset 0px 1px 1px $shadow;
 			padding: (4px*$i) 10px+(5px*$i);
 
-			@include background-image( linear-gradient(top,
-					$startColor 0%,
-					$endColor 100%
-					));
+			background-image: linear-gradient(to bottom, $startColor 0%, $endColor 100%);
 
 			&.x-over {}
 			&.x-disabled{
 				box-shadow: none;
 				background: #e4e4e4;
 				border-color: #e4e4e4;
-                cursor: default;
+				cursor: default;
 				//color: #adadad;
 
 				.x-btn-inner{
@@ -84,10 +81,7 @@ $button-text-weights: 500,500,600,500;
 			}
 			&.x-pressed {
 				box-shadow: inset 0px -1px 1px $shadow;
-				@include background-image( linear-gradient(top,
-									$endColor 0%,
-									$startColor 100%
-									));
+				background-image: linear-gradient(to bottom, $endColor 0%, $startColor 100%);
 			}
 
 			.x-btn-inner {
@@ -155,14 +149,12 @@ $button-text-weights: 500,500,600,500;
 		padding: 5px 11px 5px 22px;
 		cursor: pointer;
 
-		@include icon('pencil-gray', $top: 50%, $left: 7px, $side: after);
+		@include icon($pencil-gray, $top: 50%, $left: 7px, $side: after);
 
 		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,000000+100&0.1+0,0.15+100 */
-		background: -moz-linear-gradient(top,  rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.15) 100%); /* FF3.6-15 */
-		background: -webkit-linear-gradient(top,  rgba(255,255,255,0.1) 0%,rgba(0,0,0,0.15) 100%); /* Chrome10-25,Safari5.1-6 */
-		background: linear-gradient(to bottom,  rgba(255,255,255,0.1) 0%,rgba(0,0,0,0.15) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1affffff', endColorstr='#26000000',GradientType=0 ); /* IE6-9 */
-	
+		background: linear-gradient(to bottom,  rgba(255,255,255,0.1) 0%,rgba(0,0,0,0.15) 100%);
+
+
 		&::after {
 			margin-top: -6px;
 		}
@@ -170,7 +162,7 @@ $button-text-weights: 500,500,600,500;
 		&.white {
 			color: white;
 
-			@include icon('pencil-white', $top: 50%, $left: 7px, $side: after);
+			@include icon($pencil-white, $top: 50%, $left: 7px, $side: after);
 		}
 	}
 
@@ -192,11 +184,10 @@ $button-text-weights: 500,500,600,500;
 		line-height: 40px;
 		padding: 0 1em 0 32px;
 
-		@include icon('redactions-trashcan_hover', $top: 50%, $left: 1em, $side: before);
+		@include icon($redactions-trashcan_hover, $top: 50%, $left: 1em, $side: before);
 
 		&::before {
 			margin-top: -7px;
 		}
 	}
 }
-

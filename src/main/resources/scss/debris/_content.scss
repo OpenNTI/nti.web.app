@@ -39,9 +39,8 @@
 				content: '';
 				display: inline-block;
 				vertical-align: middle;
-				background: $icons no-repeat;
-				$disable-magic-sprite-selectors: true;
-				@include sprite($icons, 'arrow-dropdown-small', $dimensions: true);
+
+				@include sprite($arrow-dropdown-small);
 			}
 
 			&::before {
@@ -294,7 +293,7 @@
 				text-transform: uppercase;
 				color: $secondary-grey-alt;
 				margin-bottom: -3px;
-				
+
 				.preview {
 					padding-left: 10px;
 					color: #FFA500;

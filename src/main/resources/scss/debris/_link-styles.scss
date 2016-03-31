@@ -15,7 +15,7 @@
 		top: 0;
 		right: 0;
 		@include like-and-favorite;
-		
+
 		.edit {
 			padding: 5px 10px;
     		color: #3fb3f6;
@@ -115,8 +115,7 @@ a[href] {
 					position: absolute;
 					top: 6px;
 					left: 10px;
-					background: $icons no-repeat;
-					@include sprite($icons,'presentation-view',$dimensions: true);
+					@include sprite($presentation-view);
 				}
 
 				&.video-transcript-button{
@@ -179,8 +178,8 @@ a[href] {
 				position: absolute;
 				top: 0; left: 0;
 				content: '';
-				background: $icons no-repeat;
-				@include sprite($icons,'profile_back_arrow',$dimensions: true);
+
+				@include sprite($profile_back_arrow);
 			}
 		}
 	}
@@ -211,7 +210,7 @@ a[href] {
 			height: 0.5em;
 			top: 0em;
 			right: -0.9em;
-			@include experimental(transform, rotate(-90deg));
+			transform: rotate(-90deg);
 		}
 	}
 }

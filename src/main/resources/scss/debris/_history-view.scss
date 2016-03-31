@@ -21,7 +21,7 @@
 				.tab{
 				
 					&.from{
-						@include icon('arrow-course-dropdown', $top: 16px, $left: 195px, $side:'after');
+						@include icon($arrow-course-dropdown, $top: 16px, $left: 195px, $side:'after');
 
 						width: 218px;
 						height: 40px;
@@ -35,7 +35,7 @@
 					}
 
 					&.types{
-						@include icon('rhp-contact-flyout-settings_hover', $top: 10px, $left: 12px, $side:'after');
+						@include icon($rhp-contact-flyout-settings_hover, $top: 10px, $left: 12px, $side:'after');
 
 						width: 42px;
 						height: 40px;

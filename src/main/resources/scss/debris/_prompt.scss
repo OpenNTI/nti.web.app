@@ -72,7 +72,7 @@
 
 			@include flexItem(0 0 150px);
 
-			@include icon('arrow-left', $top: 9px);
+			@include icon($arrow-left, $top: 9px);
 		}
 
 		.title {
@@ -103,10 +103,10 @@
 				width: 40px;
 				height: 40px;
 
-				@include icon('note-window-x', $top: 8px, $left: 8px);
+				@include icon($note-window-x, $top: 8px, $left: 8px);
 
 				&:hover {
-					@include icon('note-window-x_hover', $top: 8px, $left: 8px);
+					@include icon($note-window-x_hover, $top: 8px, $left: 8px);
 				}
 			}
 		}

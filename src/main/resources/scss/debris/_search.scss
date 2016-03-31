@@ -68,19 +68,19 @@
 		cursor: pointer;
 
 		&.video {
-			@include icon('search-video', $top: 18px, $left: 50px);
+			@include icon($search-video, $top: 18px, $left: 50px);
 		}
 
 		&.reading {
-			@include icon('search-reading', $top: 18px, $left: 50px);
+			@include icon($search-reading, $top: 18px, $left: 50px);
 		}
 
 		&.topic, &.note, &.topic-comment, &.thought, &.thought-comment, &.chat {
-			@include icon('comment-small-dark_hover', $top: 18px, $left: 50px);
+			@include icon($comment-small-dark_hover, $top: 18px, $left: 50px);
 		}
 
 		&.highlight {
-			@include icon('search-highlight', $top: 18px, $left: 50px);
+			@include icon($search-highlight, $top: 18px, $left: 50px);
 		}
 
 		&.topic-comment {
@@ -188,7 +188,7 @@
 				padding: 10px 25px 10px 15px;
 				box-shadow: 0 1px 0 0 rgba(151,151,151,0.19);
 
-				@include icon('mv-dropdown-arrow_hover', $side: after, $top: 14px, $left: auto, $right: 20px);
+				@include icon($mv-dropdown-arrow_hover, $side: after, $top: 14px, $left: auto, $right: 20px);
 
 				&::after {
 					transform: rotate(-90deg);
@@ -196,7 +196,7 @@
 				}
 
 				&:hover {
-					@include icon('mv-dropdown-arrow', $side: after, $top: 14px, $left: auto, $right: 20px);
+					@include icon($mv-dropdown-arrow, $side: after, $top: 14px, $left: auto, $right: 20px);
 				}
 
 				&:last-of-type {
@@ -282,7 +282,7 @@
 				border-left: none;
 				background-color: #595959;
 
-				@include icon('search-white-16x16', $side: after, $position: absolute, $top: 10px, $left: 10px);
+				@include icon($search-white-16x16, $side: after, $position: absolute, $top: 10px, $left: 10px);
 			}
 		}
 
@@ -322,7 +322,7 @@
 			background-color: white;
 			border-left: 1px solid #e7e7e7;
 
-			@include icon('search', $side: after, $position: absolute, $top: 10px, $left: 10px);
+			@include icon($search, $side: after, $position: absolute, $top: 10px, $left: 10px);
 
 			&::after {
 				opacity: 0.7;

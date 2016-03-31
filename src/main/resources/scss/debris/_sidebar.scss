@@ -10,7 +10,7 @@
 	height: 100px;
 	font: italic 300 14px/18px $font !important;
 	color: $tertiary-grey !important;
-	@include element('add_contacts_card');
+	@include icon($add_contacts_card);
 
 	* { position: relative; z-index: 1; }
 
@@ -155,13 +155,12 @@
 
 	span.x-tab-icon-el {
 		top: 18px;
-		background: $icons no-repeat;
 
-		&.contacts { left: 7px; @include sprite($icons, 'rhp-contacts', $dimensions: true); }
-		&.activity { left: 9px; @include sprite($icons, 'rhp-activity', $dimensions: true); }
-		&.inbox { left: 14px; top: 16px; @include sprite($icons, 'rhp-notification', $dimensions: true); }
+		&.contacts { left: 7px; @include sprite($rhp-contacts); }
+		&.activity { left: 9px; @include sprite($rhp-activity); }
+		&.inbox { left: 14px; top: 16px; @include sprite($rhp-notification); }
 
-		&.history { left: 10px; @include sprite($icons, 'rhp-history', $dimensions: true); }
+		&.history { left: 10px; @include sprite($rhp-history); }
 	}
 
 
@@ -169,11 +168,11 @@
 		background: none;
 		button span.x-tab-inner{ color: #b1b1b1; }
 		span.x-tab-icon-el{
-			&.contacts { @include sprite($icons, 'rhp-contacts_active', $dimensions: true); }
-			&.activity { @include sprite($icons, 'rhp-activity_active', $dimensions: true); }
-			&.inbox { @include sprite($icons, 'rhp-notification_active', $dimensions: true); }
+			&.contacts { @include sprite($rhp-contacts_active); }
+			&.activity { @include sprite($rhp-activity_active); }
+			&.inbox { @include sprite($rhp-notification_active); }
 
-			&.history { @include sprite($icons, 'rhp-history_active', $dimensions: true); }
+			&.history { @include sprite($rhp-history_active); }
 		}
 	}
 }

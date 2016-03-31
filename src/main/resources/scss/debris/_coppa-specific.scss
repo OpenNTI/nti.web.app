@@ -42,8 +42,8 @@
 				z-index: 1999;
 				bottom: -9px;
 				right: -9px;
-				background: transparent $icons no-repeat;
-				@include sprite($icons,'green_check',$dimensions: true);
+
+				@include sprite($green_check);
 			}
 
 		}
@@ -122,8 +122,8 @@
 					content: '';
 					position: absolute;
 					top: 15px; right: 15px;
-					background: $icons transparent no-repeat;
-					@include sprite($icons,'collapse', $dimensions: true);
+
+					@include sprite($collapse);
 				}
 			}
 
@@ -202,9 +202,9 @@
 					height: auto;
 					line-height: 3em;
 					color: #ffffff;
-			        outline: 1px solid #69a92b;
-			        border: none;
-			        background: #75bc30;
+					outline: 1px solid #69a92b;
+					border: none;
+					background: #75bc30;
 				}
 			}
 
@@ -213,36 +213,35 @@
 				font: normal normal 11px/45px $font;
 
 				input[type=checkbox] {
-	        		position: absolute;
-	        		clip: rect(0, 0, 0, 0);
-	        		clip: rect(0 0 0 0);
+					position: absolute;
+					clip: rect(0, 0, 0, 0);
+					clip: rect(0 0 0 0);
 
-	        		& + div {
-		          		position: relative;
-		          		padding-left: 35px;
+					& + div {
+						position: relative;
+						padding-left: 35px;
 
-		          		&::before {
-		            		position: absolute;
-		            		content: '';
-		            		background: $icons no-repeat;
-		            		top: 16px;
-		            		left: 15px;
-		            		@include sprite($icons, 'checkbox-14', $dimensions: true);
-		          		}
+						&::before {
+							position: absolute;
+							content: '';
+							top: 16px;
+							left: 15px;
+							@include sprite($checkbox-14);
+						}
 
-		          		&:hover::before {
-		            		@include sprite($icons, 'checkbox-14_hover', $dimensions: true);
-		          		}
-	        		}
+						&:hover::before {
+							@include sprite($checkbox-14_hover);
+						}
+					}
 
-	        		&:checked + div {
-	          			&, &:hover {
-	            			&::before {
-	              				@include sprite($icons, 'checkbox-14_active', $dimensions: true);
-	            			}
-	          			}
-	        		}
-	        	}
+					&:checked + div {
+						&, &:hover {
+							&::before {
+								@include sprite($checkbox-14_active);
+							}
+						}
+					}
+				}
 			}
 			.fields{
 				& > div{
@@ -329,8 +328,7 @@
 				cursor: pointer;
 				position: absolute;
 				display: none;
-				background: transparent $icons no-repeat;
-				@include sprite($icons,'clear_line',$dimensions: true);
+				@include sprite($clear_line);
 			}
 
 			.placeholder {
@@ -515,8 +513,8 @@
 		position: absolute;
 		top: 10px;
 		right: 10px;
-		background: $icons no-repeat;
-		@include sprite($icons,'window-control-close',$dimensions: true);
+
+		@include sprite($window-control-close);
 
 		&:hover{
 			opacity: 1;

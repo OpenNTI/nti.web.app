@@ -39,7 +39,7 @@
 .input-wrap,
 .textbox-base {
 	position: relative;
-	
+
 	input {
 		@include text-box-style();
 		padding-right: 20px;
@@ -59,8 +59,7 @@
 		display: none;
 		right: 4px;
 		top: 7px;
-		background: transparent $icons no-repeat;
-		@include sprite($icons,'clear_line',$dimensions: true);
+		@include sprite($clear_line);
 	}
 }
 
@@ -76,7 +75,7 @@
 	}
 
 	input {
-		@include experimental-value(width, calc(100% - 50px));
+		width: calc(100% - 50px);
 		.x-opera &,
 		.x-safari5 & {
 			width: 77%;
@@ -176,11 +175,11 @@
 	}
 
 	input[type='radio']:checked + label {
-		@include icon('radio-button-16_active', $side: 'after', $top: 50%, $left: 0);
+		@include icon($radio-button-16_active, $side: 'after', $top: 50%, $left: 0);
 	}
 
 	input[type='radio']:not(:checked) + label:hover {
-		@include icon('radio-button-16_hover', $side: 'after', $top: 50%, $left: 0);
+		@include icon($radio-button-16_hover, $side: 'after', $top: 50%, $left: 0);
 	}
 
 	label {
@@ -189,7 +188,7 @@
 		display: inline-block;
 		cursor: pointer;
 
-		@include icon('radio-button-16', $side: 'after', $top: 50%, $left: 0);
+		@include icon($radio-button-16, $side: 'after', $top: 50%, $left: 0);
 
 		&::after {
 			margin-top: -8px;
@@ -206,11 +205,11 @@
 	}
 
 	input[type='checkbox']:checked + label {
-		@include icon('checkbox-14_active', $side: 'after', $top: 50%, $left: 0);
+		@include icon($checkbox-14_active, $side: 'after', $top: 50%, $left: 0);
 	}
 
 	input[type='checkbox']:not(:checked) + label:hover {
-		@include icon('checkbox-14_hover', $top: 50%, $left: 0);
+		@include icon($checkbox-14_hover, $top: 50%, $left: 0);
 	}
 
 	label {
@@ -219,7 +218,7 @@
 		display: inline-block;
 		cursor: pointer;
 
-		@include icon('checkbox-14', $side: 'after', $top: 50%, $left: 0);
+		@include icon($checkbox-14, $side: 'after', $top: 50%, $left: 0);
 
 		&::after {
 			margin-top: -7px;
@@ -241,14 +240,14 @@ span.nti-checkbox {
 	}
 
 	&::after { margin-top: -7px; }
-	@include icon('checkbox-14', $top:50%, $left:0);
+	@include icon($checkbox-14, $top:50%, $left:0);
 
 	&:not(.checked):hover::after {
-		@include sprite($icons, 'checkbox-14_hover');
+		@include sprite($checkbox-14_hover);
 	}
 
 	&.checked::after {
-		@include sprite($icons, 'checkbox-14_active');
+		@include sprite($checkbox-14_active);
 	}
 }
 
@@ -266,14 +265,14 @@ span.nti-radiobutton {
 	}
 
 	&::after { margin-top: -7px; }
-	@include icon('radio-button-16', $top:50%, $left:0);
+	@include icon($radio-button-16, $top:50%, $left:0);
 
 	&:not(.checked):hover::after {
-		@include sprite($icons, 'radio-button-16_hover');
+		@include sprite($radio-button-16_hover);
 	}
 
 	&.checked::after {
-		@include sprite($icons, 'radio-button-16_active');
+		@include sprite($radio-button-16_active);
 	}
 }
 
@@ -321,7 +320,7 @@ span.nti-radiobutton {
 	}
 
 	.options {
-		
+
 		position: fixed;
 		top: 100%;
 		background-color: white;
@@ -330,7 +329,7 @@ span.nti-radiobutton {
 		z-index: 3;
 		overflow: auto;
 		color: $primary-grey;
-		
+
 		ul {
 			margin: 0;
 			padding: 0;
@@ -364,7 +363,7 @@ span.nti-radiobutton {
 		position: absolute;
 		z-index: 2;
 
-		//@include icon('arrow-course-dropdown-light', $side: 'after', $position: absolute, $left: 4px, $top: 50%);
+		//@include icon($arrow-course-dropdown-light, $side: 'after', $position: absolute, $left: 4px, $top: 50%);
 
 		&::after {
 			content: '';
@@ -539,7 +538,7 @@ form.common-form {
 				font-size: 0.875em;
 				margin-bottom: 0.7em;
 
-				@include icon('file-drop', $side: before);
+				@include icon($file-drop, $side: before);
 
 				&::before {
 					position: static;
@@ -578,7 +577,7 @@ form.common-form {
 .image-picker {
 	position: relative;
 
-	@include icon('image-upload', $side: after, $position: relative, $top: 6px, $left: 6px);
+	@include icon($image-upload, $side: after, $position: relative, $top: 6px, $left: 6px);
 
 	&::after {
 		z-index: 2;
@@ -666,7 +665,7 @@ form.common-form {
 			pointer-events: all;
 			color: $primary-blue;
 
-			@include icon('preview-blue', $side: after, $top: 50%, $left: auto, $right: 1em);
+			@include icon($preview-blue, $side: after, $top: 50%, $left: auto, $right: 1em);
 		}
 	}
 
@@ -708,14 +707,10 @@ form.common-form {
 		text-decoration: none;
 		box-shadow: inset -1px 0 0 #d8d8d8, inset 0 1px 0 #d8d8d8, inset 0 -1px 0 #d8d8d8;
 		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f2f2f2+100 */
-		background: #ffffff; /* Old browsers */
-		background: -moz-linear-gradient(top,  #ffffff 0%, #f2f2f2 100%); /* FF3.6-15 */
-		background: -webkit-linear-gradient(top,  #ffffff 0%,#f2f2f2 100%); /* Chrome10-25,Safari5.1-6 */
-		background: linear-gradient(to bottom,  #ffffff 0%,#f2f2f2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f2f2f2',GradientType=0 ); /* IE6-9 */
+		background: #ffffff;
+		background-image: linear-gradient(to bottom,  #ffffff 0%,#f2f2f2 100%);
 
-
-		@include icon('preview-gray', $side: after, $top: 50%, $left: auto, $right: 1em);
+		@include icon($preview-gray, $side: after, $top: 50%, $left: auto, $right: 1em);
 
 		&::after {
 			margin-top: -4px;
@@ -766,7 +761,7 @@ form.common-form {
 		border: none;
 		box-shadow: 0 0 0 1px $tertiary-grey;
 
-		
+
 		&:focus {
 			box-shadow: inset 0 0 1px 0 $primary-blue, 0 0 0 1px $primary-blue;
 			position: relative;

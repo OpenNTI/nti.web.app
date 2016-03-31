@@ -4,30 +4,30 @@
 	display: -ms-flexbox;
 	-ms-box-orient: horizontal;
 
-	@include experimental-value(display, flex);
-	@include experimental(flex-wrap, nowrap);
+	display: flex;
+	flex-wrap: nowrap;
 
 	text-transform: uppercase;
 
 	.tabs {
-		@include experimental(flex, none);
+		flex: none;
 		cursor: pointer;
 
 		&.go-up {
-			@include icon('profile_back_arrow', $top: 23px, $left: 35px);
+			@include icon($profile_back_arrow, $top: 23px, $left: 35px);
 			width: 60px;
 			cursor: pointer;
 
 			&:hover {
 				&::after {
-					@include sprite($icons,'profile_back_arrow_active');
+					@include sprite($profile_back_arrow_active);
 				}
 			}
 		}
 	}
 
 	.toc {
-		@include experimental(flex, none);
+		flex: none;
 		padding: 0 0 0 20px;
 		font: normal 500 1.2em/59px $font;
 
@@ -40,19 +40,19 @@
 			width: 20px;
 		}
 
-		@include experimental-value(display, flex);
-		@include experimental(flex-wrap, nowrap);
-		@include experimental(align-items, center);
-		@include experimental(align-content, center);
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		align-content: center;
 
 		.icon {
 			border-radius: 5px;
 			box-shadow: 0 0 0 1px #e5e5e5;
-			@include background-image(linear-gradient(top, #ffffff 0%,#f8f8f8 100%));
+			background-image: linear-gradient(to bottom, #ffffff 0%, #f8f8f8 100%);
 
 			padding: 8px 18px 8px 18px;
 			display: inline-block;
-			@include icon('topic-blue', $position: none);
+			@include icon($topic-blue, $position: none);
 			line-height: 0;
 			&::after {margin-right: 0;}
 		}
@@ -69,11 +69,11 @@
 	}
 
 	.breadcrumb {
-		@include experimental(flex, 1 1 auto);
+		flex: 1 1 auto;
 		display: -ms-flexbox;
 		-ms-box-orient: horizontal;
-		@include experimental-value(display, inline-flex);
-		@include experimental(flex-wrap, nowrap);
+		display: inline-flex;
+		flex-wrap: nowrap;
 		font: normal 500 1em/59px $font;
 
 		&, * {
@@ -89,10 +89,10 @@
 		}
 
 		.part {
-			@include experimental(flex, 0 1 auto);
+			flex: 0 1 auto;
 			cursor: pointer;
 
-			&:last-of-type { @include experimental(flex, 1 1 auto); }
+			&:last-of-type { flex: 1 1 auto; }
 
 			&:hover,
 			&:last-of-type:not(.no-children) {
@@ -139,8 +139,7 @@
 						top: 18px;
 						left: -4px;
 						content: '';
-						background: $elements;
-						@include sprite($elements,'tooltip-pointer-black-bottom',$dimensions: true);
+						@include sprite($tooltip-pointer-black-bottom);
 					}
 				}
 			}
@@ -164,32 +163,32 @@
 		-ms-box-orient: horizontal;
 		-ms-flex-align: center;
 
-		@include experimental-value(display, flex);
-		@include experimental(flex-wrap, nowrap);
-		@include experimental(align-items, center);
-		@include experimental(align-content, center);
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		align-content: center;
 	}
 
 	.button {
-		@include experimental(flex, none);
+		flex: none;
 		display: inline-block;
 		line-height: 36px;
 		padding: 0 0.9em;
 		border-radius: 5px;
 		cursor: pointer;
 		box-shadow: 0 0 0 1px #e5e5e5;
-		@include background-image(linear-gradient(top, #ffffff 0%,#f8f8f8 100%));
+		background-image: linear-gradient(to bottom, #ffffff 0%, #f8f8f8 100%);
 		color: $primary-blue;
 	}
 
 	.search {
 		margin-left: 10px;
 		overflow: hidden;
-		@include experimental(flex, 1 1 auto);
+		flex: 1 1 auto;
 		background: #fafafa;
 		border-radius: 5px;
 		box-shadow: 0 0 0 1px #eaeaea;
-		@include icon('rhp-search',$top:10px,$left:9px);
+		@include icon($rhp-search,$top:10px,$left:9px);
 
 		line-height: 38px;
 		&::after{ cursor: text; }
@@ -210,7 +209,7 @@
 			}
 		}
 		.clear {
-			@include icon('clear_line', $position: absolute);
+			@include icon($clear_line, $position: absolute);
 			background: none;
 			transition: opacity 0.5s;
 			opacity: 1;
@@ -347,18 +346,18 @@
 	}
 
 	.prev {
-		@include icon('arrow-up', $top: 24px, $left: 10px);
+		@include icon($arrow-up, $top: 24px, $left: 10px);
 
 		&.disabled::after {
-			@include sprite($icons, 'arrow-up_inactive');
+			@include sprite($arrow-up_inactive);
 		}
 	}
 
 	.next {
-		@include icon('arrow-down', $top: 24px, $left: 10px);
+		@include icon($arrow-down, $top: 24px, $left: 10px);
 
 		&.disabled::after {
-			@include sprite($icons, 'arrow-down_inactive');
+			@include sprite($arrow-down_inactive);
 		}
 	}
 
@@ -397,12 +396,12 @@
 			left: 15px;
 
 			&.notepad {
-				@include icon('notepad',$position:absolute);
+				@include icon($notepad,$position:absolute);
 			}
 
 			&.discuss {
 				top: 22px;
-				@include icon('discussions',$position:absolute);
+				@include icon($discussions,$position:absolute);
 			}
 		}
 
@@ -416,8 +415,8 @@
 			color: $secondary-grey;
 
 			.x-tab-icon-el {
-				&.notepad::after { @include sprite($icons,'notepad_active'); }
-				&.discuss::after { @include sprite($icons,'discussions_active'); }
+				&.notepad::after { @include sprite($notepad_active); }
+				&.discuss::after { @include sprite($discussions_active); }
 			}
 		}
 	}

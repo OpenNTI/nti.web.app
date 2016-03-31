@@ -14,16 +14,16 @@
 
 .nti-window {
 	@include reset-window-border-radius(5px);
-    background-color: #fcfcfc;
+	background-color: #fcfcfc;
 	box-shadow: 3px 3px 3px 0 rgba(0,0,0,0.1);
 	border: 1px solid $border-grey;
 	overflow: hidden;
 	position: fixed !important;
 
 	iframe {
-        &.padded {
-            margin: 15px;
-        }
+		&.padded {
+			margin: 15px;
+		}
 	}
 
 	.x-window-body {
@@ -71,8 +71,7 @@
 						position: absolute;
 						overflow: hidden;
 						top: 4px; left: 0;
-						background: $elements no-repeat;
-						@include sprite($elements,'window-control-divider',$dimensions: true);
+						@include sprite($window-control-divider);
 					}
 				}
 
@@ -84,15 +83,14 @@
 					cursor: pointer;
 
 
-					background: $icons no-repeat;
 					&.close {
-						@include sprite($icons,'window-control-close',$dimensions: true);
+						@include sprite($window-control-close);
 					}
 					&.minimize {
-						@include sprite($icons,'window-control-minimize',$dimensions: true);
+						@include sprite($window-control-minimize);
 					}
 					&.popout {
-						@include sprite($icons,'window-control-maximize',$dimensions: true);
+						@include sprite($window-control-maximize);
 					}
 				}
 			}
@@ -168,7 +166,7 @@
 			opacity: 1;
 		}
 
-		@include icon('message_box_close', $position: absolute);
+		@include icon($message_box_close, $position: absolute);
 	}
 
 	.message-container {
@@ -187,14 +185,14 @@
 			font-size: 0.9em;
 		}
 
-		@include icon('modal-yellow-sign', $left: 10px, $top: -5px);
+		@include icon($modal-yellow-sign, $left: 10px, $top: -5px);
 
 		&.error, &.warning-red {
-			@include icon('modal-red-sign', $left: 10px, $top: -5px);
+			@include icon($modal-red-sign, $left: 10px, $top: -5px);
 		}
 
 		&.success {
-			@include icon('assignment_ontime', $left: 10px, $top: -5px);
+			@include icon($assignment_ontime, $left: 10px, $top: -5px);
 		}
 
 		a {
@@ -231,7 +229,7 @@
 				margin-left: 5px;
 			}
 		}
-	
+
 		.button {
 			float: right;
 			padding: 0 20px;
@@ -254,7 +252,7 @@
 				}
 
 				&.decline, &.caution {
-					box-shadow: inset 1px 0 0 0 #dd4845; 
+					box-shadow: inset 1px 0 0 0 #dd4845;
 				}
 			}
 
@@ -280,12 +278,12 @@
 			&.decline, &.caution {
 				background-color: $primary-red;
 			}
-			
+
 		}
 	}
 
 	&.error .message-container {
-	 	@include icon('modal-red-sign', $left: 10px);
+	 	@include icon($modal-red-sign, $left: 10px);
 	}
 
 	&::after {
@@ -376,57 +374,57 @@
 	}
 
 	.footer {
-    	height: 45px;
-    	white-space: nowrap;
-    	background-color: #efefef;
-    	border-top: 1px solid #dcdcdc;
-    	color: $secondary-grey;
-    	font: normal 600 14px/42px $font;
-    	position: relative;
-    	margin-top: 10px; 
+		height: 45px;
+		white-space: nowrap;
+		background-color: #efefef;
+		border-top: 1px solid #dcdcdc;
+		color: $secondary-grey;
+		font: normal 600 14px/42px $font;
+		position: relative;
+		margin-top: 10px;
 
-    	&::after {
-    		content: '';
-    		position: absolute;
-		    top: -8px;
-		    left: 0;
-		    right: 0;
-		    height: 8px;
-		    box-shadow: 0 3px 8px -3px rgba(0,0,0,0.25);
-    	}
+		&::after {
+			content: '';
+			position: absolute;
+			top: -8px;
+			left: 0;
+			right: 0;
+			height: 8px;
+			box-shadow: 0 3px 8px -3px rgba(0,0,0,0.25);
+		}
 
-    	.btn {
-    		position: relative;
-    		height: 45px;
-    		width: 45px;
-    		line-height: 45px;
-    		font-size: 14px;
-    		text-align: center;
-    		color: $secondary-grey;
-    		cursor: pointer;
-    	}
+		.btn {
+			position: relative;
+			height: 45px;
+			width: 45px;
+			line-height: 45px;
+			font-size: 14px;
+			text-align: center;
+			color: $secondary-grey;
+			cursor: pointer;
+		}
 
-    	.left {
-    		float: left;
+		.left {
+			float: left;
 
-    		.export {
-				@include icon('download_hover', $top: 10px, $left: 25px);
+			.export {
+				@include icon($download_hover, $top: 10px, $left: 25px);
 
 				&:active, &:hover {
-					@include icon('download_active', $top: 10px, $left: 25px);
+					@include icon($download_active, $top: 10px, $left: 25px);
 				}
-    		}
-    	}
+			}
+		}
 
-    	.right {
-    		float: right;
+		.right {
+			float: right;
 
-    		.btn {
-    			width: 85px;
-    			margin: 0;
-    			border-left: 1px solid #d0d0d0;
-    		}
-    	}
+			.btn {
+				width: 85px;
+				margin: 0;
+				border-left: 1px solid #d0d0d0;
+			}
+		}
 	}
 }
 
@@ -492,7 +490,7 @@
 		}
 
 		.close{
-			@include icon('note-window-x', $side: after, $position: absolute);
+			@include icon($note-window-x, $side: after, $position: absolute);
 			top: 10px;
 			right: 10px;
 			cursor: pointer;
@@ -500,7 +498,7 @@
 			height: 24px;
 
 			&:hover{
-				@include icon('note-window-x_hover', $side: after, $position: absolute);
+				@include icon($note-window-x_hover, $side: after, $position: absolute);
 			}
 		}
 	}
@@ -524,12 +522,10 @@
 				top: 13px;
 				width: 24px;
 				height: 24px;
-				background: $icons no-repeat;
-				$disable-magic-sprite-selectors: true;
-				@include sprite($icons, 'note-window-x', $dimensions: true);
+				@include sprite($note-window-x);
 
 				&:hover {
-					@include sprite($icons, 'note-window-x_hover', $dimensions: true);
+					@include sprite($note-window-x_hover);
 				}
 			}
 		}
@@ -571,4 +567,3 @@
 		background-color: rgba(0,0,0,0.5);
 	}
 }
-

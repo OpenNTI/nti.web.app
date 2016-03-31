@@ -17,11 +17,11 @@
 		display: inline-block;
 		cursor: pointer;
 
-		@include icon('checkbox-14', $top: 13px, $left: 18px);
+		@include icon($checkbox-14, $top: 13px, $left: 18px);
 	}
 
 	input[type=checkbox]:checked + label {
-		@include icon('checkbox-14_active', $top: 13px, $left: 18px);
+		@include icon($checkbox-14_active, $top: 13px, $left: 18px);
 	}
 
 	.email-editor {

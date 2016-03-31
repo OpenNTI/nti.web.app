@@ -16,10 +16,10 @@
 		}
 
 		&:hover{
-			&::after{
-				@include sprite($icons,'drag-controls-hover',$dimensions: true);
-			}
 			outline: 1px solid $tertiary-grey;
+			&::after{
+				@include sprite($drag-controls-hover);
+			}
 		}
 
 		.controls{
@@ -29,8 +29,7 @@
 				position: absolute;
 				top: 20px;
 				right: 20px;
-				background: $icons no-repeat;
-				@include sprite($icons,'drag-controls',$dimensions: true);
+				@include sprite($drag-controls);
 			}
 		}
 	}
@@ -44,7 +43,7 @@
 		margin: 0 10px 10px 0;
 		border: 1px solid $primary-blue;
 		border-radius: 3px;
-		@include box-shadow(1px 1px 2px rgba(0,0,0,.09));
+		box-shadow: 1px 1px 2px rgba(0,0,0,.09);
 		cursor: move;
 		font-weight: 600;
 		color: $primary-blue;
@@ -73,8 +72,7 @@
 				content: '';
 				display: block;
 				position: absolute;
-				background: $icons no-repeat;
-				@include sprite($icons,'light-x_hover',$dimensions: true);
+				@include sprite($light-x_hover);
 				top: 6px; left: 9px;
 				cursor: pointer;
 			}
@@ -83,10 +81,6 @@
 }
 
 body.dragging * {
-	cursor: -webkit-grabbing !important;
-	cursor: -moz-grabbing !important;
-	cursor: -ms-grabbing !important;
-	cursor: -o-grabbing !important;
 	cursor: grabbing !important;
 }
 
@@ -188,7 +182,7 @@ body.dragging * {
 		color: #fff;
 		background: $primary-blue;
 
-		@include experimental-value(cursor,grabbing);
+		cursor: grabbing;
 	}
 
 }
@@ -429,8 +423,7 @@ body.dragging * {
 						top: 2px;
 
 						content: ' ';
-						background: $icons no-repeat;
-						@include sprite($icons,'video',$dimensions: true);
+						@include sprite($video);
 					}
 				}
 			}
@@ -448,9 +441,9 @@ body.dragging * {
 		font-weight: 500;
 
 		.target.drag {
-			@include experimental(transition, padding-right 0.5s ease);
+			transition: padding-right 0.5s ease;
 			.reset {
-				@include experimental(transition, all 0.5s ease);
+				transition: all 0.5s ease;
 				display: inline-block;
 				float: right;
 				width: 0;
@@ -460,9 +453,9 @@ body.dragging * {
 				top: 0;
 				left: 0;
 				cursor: pointer;
-				@include icon('light-x',10px,6px);
+				@include icon($light-x,10px,6px);
 				&:hover::after{
-					@include sprite($icons,'light-x_hover');
+					@include sprite($light-x_hover);
 				}
 			}
 			&:hover {
@@ -527,7 +520,7 @@ body.dragging * {
 
 		&.correct {
 			cursor: pointer;
-			@include icon('circle-check-green-18',26px,11px);
+			@include icon($circle-check-green-18,26px,11px);
 			.target.drag {
 				background: #8eb737;
 				border-color: #8eb737;
@@ -539,7 +532,7 @@ body.dragging * {
 
 		&.incorrect {
 			cursor: pointer;
-			@include icon('circle-x-red-18',26px,11px);
+			@include icon($circle-x-red-18,26px,11px);
 			.target.drag {
 				background: #f35252;
 				border-color: #f35252;
@@ -691,10 +684,10 @@ body.dragging * {
 				&.questions{ padding: 0; color: $tertiary-grey; font-weight: 400; }
 
 				&.correct {
-					@include icon('check_progress_grn',$top: 3px);
+					@include icon($check_progress_grn,$top: 3px);
 				}
 				&.incorrect {
-					@include icon('red-x-10',$top: 3px);
+					@include icon($red-x-10,$top: 3px);
 				}
 			}
 		}
@@ -776,7 +769,7 @@ body.dragging * {
 			color: $primary-grey;
 			min-height: 38px;
 
-			@include icon('circle-x-red-18',$top: 10px, $left: 10px);
+			@include icon($circle-x-red-18,$top: 10px, $left: 10px);
 			&::after{
 				display: none;
 			}
@@ -827,7 +820,7 @@ body.dragging * {
 
 			&.incorrect {
 				&, input.answer-field { color: #f35252; }
-				&::after { @include sprite($icons, 'circle-x-red-18'); }
+				&::after { @include sprite($circle-x-red-18); }
 			}
 
 			&.correct{
@@ -837,7 +830,7 @@ body.dragging * {
 				}
 
 				&::after {
-					@include sprite($icons,'circle-check-green-18');
+					@include sprite($circle-check-green-18);
 				}
 			}
 
@@ -874,8 +867,7 @@ body.dragging * {
 
 			&::after{
 				content: ' ';
-				background: $icons no-repeat;
-				@include sprite($icons,'answer-history',$dimensions: true);
+				@include sprite($answer-history);
 				position: absolute;
 				top: 0;
 				left: 0;
@@ -883,7 +875,7 @@ body.dragging * {
 
 			&:hover{
 				&::after{
-					@include sprite($icons,'answer-history_active',$dimensions: true);
+					@include sprite($answer-history_active);
 				}
 			}
 		}
@@ -940,14 +932,14 @@ body.dragging * {
 				&.correct .control {
 					&,&.checked{
 						border-color: #9ac73c;
-						@include icon('circle-check-green-18',$top:10px,$left:9px, $position:absolute);
+						@include icon($circle-check-green-18,$top:10px,$left:9px, $position:absolute);
 					}
 				}
 
 				&.incorrect .control{
 					&,&.checked{
 						border-color: #f35252;
-						@include icon('circle-x-red-18',$top:10px,$left:9px, $position:absolute);
+						@include icon($circle-x-red-18,$top:10px,$left:9px, $position:absolute);
 					}
 				}
 			}
@@ -955,27 +947,27 @@ body.dragging * {
 
 		.multi .choice {
 			.control {
-				@include icon('checkbox-14', $top:12px,$left:20px, $position:absolute);
-				&.checked::after { @include sprite($icons,'checkbox-14_active'); }
+				@include icon($checkbox-14, $top:12px,$left:20px, $position:absolute);
+				&.checked::after { @include sprite($checkbox-14_active); }
 			}
 
 			&:hover .control{
-				&::after { @include sprite($icons,'checkbox-14_hover'); }
+				&::after { @include sprite($checkbox-14_hover); }
 				&.checked::after{
-					@include sprite($icons,'checkbox-14_active');
+					@include sprite($checkbox-14_active);
 				}
 			}
 		}
 
 		.single .choice {
 			.control {
-				@include icon('radio-button-16', $top:10px,$left:10px, $position:absolute);
-				&.checked::after { @include sprite($icons,'radio-button-16_active'); }
+				@include icon($radio-button-16, $top:10px,$left:10px, $position:absolute);
+				&.checked::after { @include sprite($radio-button-16_active); }
 			}
 			&:hover .control{
-				&::after { @include sprite($icons,'radio-button-16_hover'); }
+				&::after { @include sprite($radio-button-16_hover); }
 				&.checked::after{
-					@include sprite($icons,'radio-button-16_active');
+					@include sprite($radio-button-16_active);
 				}
 			}
 		}
@@ -1055,8 +1047,7 @@ body.dragging * {
 								position: absolute;
 								left: 0px; top: 10px;
 								content: ' ';
-								background: $icons no-repeat;
-								@include sprite($icons,'circle-check-green-18',$dimensions: true);
+								@include sprite($circle-check-green-18);
 							}
 						}
 
@@ -1080,7 +1071,7 @@ body.dragging * {
 
 					&.incorrect .controls .control{
 						&::after{
-							@include sprite($icons,'circle-x-red-18',$dimensions: true);
+							@include sprite($circle-x-red-18);
 						}
 					}
 				}
@@ -1096,8 +1087,7 @@ body.dragging * {
 				cursor: pointer;
 				position: absolute;
 				right: 17px; top: 16px;
-				background: $icons no-repeat;
-				@include sprite($icons,'window-control-close',$dimensions: true);
+				@include sprite($window-control-close);
 				&:hover{
 					opacity: 1;
 				}
@@ -1173,15 +1163,15 @@ body.dragging * {
 				&.pi { background-position: -162px -2px; }
 				&.leq {
 					background: none;
-					@include icon('symbols-leq');
+					@include icon($symbols-leq);
 				}
 				&.geq {
 					background: none;
-					@include icon('symbols-geq');
+					@include icon($symbols-geq);
 				}
 				&.neq {
 					background: none;
-					@include icon('symbols-neq');
+					@include icon($symbols-neq);
 				}
 			}
 
@@ -1218,7 +1208,7 @@ body.dragging * {
 				}
 
 				&.report {
-					@include icon('reports-gray_hover', $top: 12px);
+					@include icon($reports-gray_hover, $top: 12px);
 				}
 
 			}
@@ -1279,7 +1269,7 @@ body.dragging * {
 		padding: 20px 5px 20px 90px;
 		min-height: 85px;
 
-		@include icon('assignment_due', $top: 20px, $left: 30px);
+		@include icon($assignment_due, $top: 20px, $left: 30px);
 
 		.label-container {
 			float: left;
@@ -1314,7 +1304,7 @@ body.dragging * {
 		&.late {
 			.due {color: $primary-red;}
 			&::after {
-				@include sprite($icons,'assignment_late');
+				@include sprite($assignment_late);
 			}
 		}
 		&.good {
@@ -1322,7 +1312,7 @@ body.dragging * {
 				color: $primary-green;
 			}
 			&::after {
-				@include sprite($icons, 'assignment_ontime');
+				@include sprite($assignment_ontime);
 			}
 		}
 
@@ -1596,13 +1586,14 @@ input.preview[readonly] {
 	margin-right: 8px;
 	vertical-align: text-bottom;//looks good so far
 
-	@include icon('audio-icon');
-	@include sprite-dimensions($icons, 'audio-icon');
+	@include icon($audio-icon);
+	@include sprite-width($audio-icon);
+	@include sprite-height($audio-icon);
 
 	&.playing {
 		opacity: 0.7;
 		&::after {
-			background-position: sprite-position($icons, 'audio-icon_hover');
+			background-position: sprite-position($audio-icon_hover);
 		}
 	}
 
@@ -1612,19 +1603,19 @@ input.preview[readonly] {
 		}
 
 		&:not(.noplay)::after {
-			background-position: sprite-position($icons, 'audio-icon_hover');
+			background-position: sprite-position($audio-icon_hover);
 		}
 	}
 
 	&:active{
 		&:not(.noplay)::after {
-			background-position: sprite-position($icons, 'audio-icon_hover');
+			background-position: sprite-position($audio-icon_hover);
 		}
 	}
 
 	&.noplay::after {
 		cursor: default;
-		background-position: sprite-position($icons, 'audio-icon_error');
+		background-position: sprite-position($audio-icon_error);
 	}
 
 
@@ -1636,7 +1627,7 @@ input.preview[readonly] {
 			opacity: 1;
 		}
 		&::after {
-			background-position: sprite-position($icons, 'audio-icon_white');
+			background-position: sprite-position($audio-icon_white);
 		}
 	}
 }
@@ -1654,15 +1645,15 @@ input.preview[readonly] {
 		background: #ffffff;
 		border: solid 1px #3fb3f6;
 		background-color: #fff;
-		@include box-shadow(0 0 5px rgba(63,179,246,.23), 0 3px 8px rgba(0,0,0,.22));
+		box-shadow: 0 0 5px rgba(63,179,246,.23), 0 3px 8px rgba(0,0,0,.22);
 
 		.text{
+			white-space: normal;
 			font: {
 				size: 14px;
 				style: normal;
 				weight: normal;
 			}
-			white-space: normal;
 		}
 	}
 
@@ -1674,8 +1665,8 @@ input.preview[readonly] {
 		border: 1px solid $primary-blue;
 		background-color: $primary-blue;
 		line-height: 26px;
-		@include border-radius(3px);
-		@include box-shadow(0 3px 8px rgba(0,0,0,.22));
+		border-radius: 3px;
+		box-shadow: 0 3px 8px rgba(0,0,0,.22);
 
 		font: {
 			size: 14px;
@@ -1745,7 +1736,7 @@ input.preview[readonly] {
 		cursor: pointer;
 		font-weight: 600;
 
-		@include icon('reports-blue_hover', $side: after);
+		@include icon($reports-blue_hover, $side: after);
 
 		&:hover {
 			opacity: 1;
@@ -1982,18 +1973,18 @@ input.preview[readonly] {
 
 	.prev-arrow {
 		margin: 0 1em 0 3em;
-		@include icon('arrow-up');
+		@include icon($arrow-up);
 
 		&.disabled {
-			@include icon('arrow-up_inactive');
+			@include icon($arrow-up_inactive);
 		}
 	}
 
 	.next-arrow {
-		@include icon('arrow-down');
+		@include icon($arrow-down);
 
 		&.disabled {
-			@include icon('arrow-down_inactive');
+			@include icon($arrow-down_inactive);
 		}
 	}
 

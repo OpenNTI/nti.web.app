@@ -70,9 +70,7 @@
 			right: 0;
 			margin-top: -4px;
 
-			background: $icons no-repeat;
-			$disable-magic-sprite-selectors: true;
-			@include sprite($icons,'arrow-course-dropdown',$dimensions: true);
+			@include sprite($arrow-course-dropdown);
 		}
 
 	}
@@ -191,7 +189,7 @@ li.library-grid-item {
 	}
 
 	.sample {
-		@include element('sample-banner', $position: absolute);
+		@include icon($sample-banner, $position: absolute);
 	}
 
 	.meta {
@@ -243,7 +241,7 @@ li.library-grid-item {
 		background: rgba(0,0,0,0.6);
 		border-radius: 5px;
 		display: none;
-		@include icon('library-gear', $side: after, $top: 50%, $left: 50%, $position: absolute);
+		@include icon($library-gear, $side: after, $top: 50%, $left: 50%, $position: absolute);
 
 		&::after {
 			margin-left: -7px;//14/2
@@ -265,12 +263,12 @@ li.library-grid-item {
 		border-radius: 3px;
 		display: none;
 	}
-	
+
 	.controls {
 		position: absolute;
 		top: 10px;
 		left: 10px;
-		
+
 		.badge {
 			height: 27px;
 			color: white;
@@ -279,12 +277,12 @@ li.library-grid-item {
 			padding: 0 7px;
 			display: none;
 			display: inline-block;
-			
+
 			& + .preview {
 				margin-left: 10px;
 			}
 		}
-		
+
 		.preview {
 			background-color: #FFA500;
 			color: #fff;
@@ -293,7 +291,7 @@ li.library-grid-item {
 			text-transform: uppercase;
 			font: normal 600 10px/27px $font;
 			display: inline-block;
-			
+
 			& + .badge {
 				margin-left: 7px;
 			}
@@ -319,7 +317,7 @@ li.library-grid-item {
 			padding-left: 25px;
 			position: relative !important;
 
-			@include icon('archived-library', $side: after, $top: 50%, $left: 7px, $position: absolute);
+			@include icon($archived-library, $side: after, $top: 50%, $left: 7px, $position: absolute);
 
 			&::after {
 				margin-top: -7px;
@@ -405,7 +403,7 @@ li.library-grid-item {
 				height: 50px;
 				border-radius: 3px;
 				background-color: #505050;
-				@include background-image(linear-gradient(top, #505050 0%,#474747 100%));
+				background-image: linear-gradient(to bottom, #505050 0%, #474747 100%);
 				box-shadow: 0 1px 3px 0 rgba(0,0,0,0.35), inset 0 1px 0 0 rgba(255,255,255,0.1);
 
 				.dropdown {
@@ -487,7 +485,7 @@ li.library-grid-item {
 					&::after {
 						z-index: -1;
 						opacity: 0.3;
-						@include background-image(linear-gradient(top, rgba(255,255,255,0.25) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0) 100%));
+						background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 75%, rgba(255, 255, 255, 0) 100%);
 					}
 
 					&:active {
@@ -583,7 +581,7 @@ li.library-grid-item {
 			}
 
 			.sample {
-				@include element('sample-banner', $position: absolute);
+				@include icon($sample-banner, $position: absolute);
 			}
 
 			.meta {
@@ -632,7 +630,7 @@ li.library-grid-item {
 				background: rgba(0,0,0,0.6);
 				border-radius: 5px;
 				display: none;
-				@include icon('rhp-contact-flyout-settings', $top: 7px, $left: 7px, $position: absolute);
+				@include icon($rhp-contact-flyout-settings, $top: 7px, $left: 7px, $position: absolute);
 			}
 		}
 
@@ -743,7 +741,7 @@ li.library-grid-item {
 		}
 
 		.sample {
-			@include element('sample-banner', $position: absolute);
+			@include icon($sample-banner, $position: absolute);
 		}
 
 		.enrollment {
@@ -764,7 +762,7 @@ li.library-grid-item {
 				white-space: nowrap;
 				padding: 0 10px 0 26px;
 
-				@include icon('circle-check-green', $top: 2px, $left: 2px);
+				@include icon($circle-check-green, $top: 2px, $left: 2px);
 			}
 		}
 
@@ -893,10 +891,10 @@ li.library-grid-item {
 			left: auto;
 			width: 24px;
 			height: 24px;
-			@include icon('note-window-x', $top: 0, $right: 0, $position: absolute);
+			@include icon($note-window-x, $top: 0, $right: 0, $position: absolute);
 
 			&:hover {
-				@include icon('note-window-x_hover', $top: 0, $right: 0, $position: absolute);
+				@include icon($note-window-x_hover, $top: 0, $right: 0, $position: absolute);
 			}
 		}
 
@@ -998,7 +996,7 @@ li.library-grid-item {
 				padding-left: 22px;
 				cursor: pointer;
 
-				@include icon('arrow-left', $top: 8px);
+				@include icon($arrow-left, $top: 8px);
 			}
 		}
 	}
@@ -1053,7 +1051,13 @@ li.library-grid-item {
 			width: 10px;
 			cursor: pointer;
 
-			@include icon('light-x', $position: absolute, $hover: true, $top: 2px, $left: 1px);
+			@include icon($light-x, $position: absolute, $top: 2px, $left: 1px);
+			&:target,
+			&:hover {
+				&::after {
+					@include sprite-position($light-x_hover);
+				}
+			}
 		}
 	}
 
@@ -1145,7 +1149,7 @@ li.library-grid-item {
 		font-size: 0.9em;
 		color: $secondary-grey;
 
-		@include icon('courseinfo-circle-check-gray', $side: before, $left: -25px, $top: 2px);
+		@include icon($courseinfo-circle-check-gray, $side: before, $left: -25px, $top: 2px);
 	}
 
 	.contact, .support, .report, .drop {
@@ -1330,7 +1334,7 @@ li.library-grid-item {
 		& > .header {
 			@include flexContainer();
 			align-items: baseline;
-			
+
 			.title, .add, .see-all {
 				@include flexItem($flex: 0 0 auto);
 

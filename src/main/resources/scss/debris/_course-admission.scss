@@ -180,7 +180,7 @@
 
 			&.enabled.number {
 				color: $secondary-grey;
-				@include icon('check_progress', $side: after, $top: 13px, $left: 11px);
+				@include icon($check_progress, $side: after, $top: 13px, $left: 11px);
 
 				&::before {
 					border-color: $secondary-grey;
@@ -346,7 +346,7 @@
 		margin-bottom: 0;
 		position: relative;
 
-		@include icon('gift', $position: relative, $right: 13px, $top: 5px, $left: auto);
+		@include icon($gift, $position: relative, $right: 13px, $top: 5px, $left: auto);
 
 		.label {
 			color: #52b85f;
@@ -518,7 +518,7 @@
 					cursor: pointer;
 					top: 10px;
 					right: 20px;
-					@include icon('message_box_close', $position: absolute);
+					@include icon($message_box_close, $position: absolute);
 				}
 			}
 
@@ -596,7 +596,7 @@
 				}
 
 				.information:not(.hidden) + .icon {
-					@include icon('info_active', $position: absolute);
+					@include icon($info_active, $position: absolute);
 				}
 
 				.icon {
@@ -604,10 +604,10 @@
 					top: 13px;
 					left: 12px;
 
-					@include icon('info', $position: absolute);
+					@include icon($info, $position: absolute);
 
 					&:hover {
-						@include icon('info_active', $position: absolute);
+						@include icon($info_active, $position: absolute);
 					}
 				}
 			}
@@ -654,7 +654,7 @@
 							}
 
 							input[type=checkbox]:checked + label {
-								@include icon('checkbox-14', $top: 13px, $left: 18px);
+								@include icon($checkbox-14, $top: 13px, $left: 18px);
 
 								&::before{
 									display: none;
@@ -662,7 +662,7 @@
 							}
 
 							&:hover input[type=checkbox]:not(:checked) + label {
-								@include icon('checkbox-14', $top: 13px, $left: 18px);
+								@include icon($checkbox-14, $top: 13px, $left: 18px);
 							}
 						}
 					}
@@ -789,7 +789,7 @@
 					padding: 10px 15px 10px 45px;
 					display: block;
 					cursor: pointer;
-					@include icon('radio-button-16', $top: 12px, $left: 18px);
+					@include icon($radio-button-16, $top: 12px, $left: 18px);
 
 					&.input {
 						padding: 0 15px 0 45px;
@@ -797,7 +797,7 @@
 				}
 
 				input[type=radio]:checked + label {
-					@include icon('radio-button-16_active', $top: 12px, $left: 18px);
+					@include icon($radio-button-16_active, $top: 12px, $left: 18px);
 
 					&::before {
 						content: '';
@@ -811,7 +811,7 @@
 				}
 
 				&:hover input[type=radio]:not(:checked) + label {
-					@include icon('radio-button-16_hover', $top: 12px, $left: 18px);
+					@include icon($radio-button-16_hover, $top: 12px, $left: 18px);
 				}
 
 				&:not(.error) {
@@ -878,11 +878,11 @@
 						}
 					}
 
-					@include icon('checkbox-14', $top: 13px, $left: 18px);
+					@include icon($checkbox-14, $top: 13px, $left: 18px);
 				}
 
 				input[type=checkbox]:checked + label {
-					@include icon('checkbox-14_active', $top: 13px, $left: 18px);
+					@include icon($checkbox-14_active, $top: 13px, $left: 18px);
 
 					&.long::after {
 						top: 22px;
@@ -900,7 +900,7 @@
 				}
 
 				&:hover input[type=checkbox]:not(:checked) + label {
-					@include icon('checkbox-14_hover', $top: 13px, $left: 18px);
+					@include icon($checkbox-14_hover, $top: 13px, $left: 18px);
 
 					&.long::after {
 						top: 22px;
@@ -1306,7 +1306,7 @@
 		color: $secondary-green;
 		margin-bottom: 10px;
 
-		@include icon('assignment_ontime_small', $left: -35px);
+		@include icon($assignment_ontime_small, $left: -35px);
 	}
 
 	.iframe-container {
@@ -1421,11 +1421,11 @@
 				}
 			}
 
-			@include icon('checkbox-14', $top: 13px, $left: 18px);
+			@include icon($checkbox-14, $top: 13px, $left: 18px);
 		}
 
 		input[type=checkbox]:checked + label {
-			@include icon('checkbox-14_active', $top: 13px, $left: 18px);
+			@include icon($checkbox-14_active, $top: 13px, $left: 18px);
 
 			&.long::after {
 				top: 22px;
@@ -1443,7 +1443,7 @@
 		}
 
 		&:hover input[type=checkbox]:not(:checked) + label {
-			@include icon('checkbox-14_hover', $top: 13px, $left: 18px);
+			@include icon($checkbox-14_hover, $top: 13px, $left: 18px);
 
 			&.long::after {
 				top: 22px;

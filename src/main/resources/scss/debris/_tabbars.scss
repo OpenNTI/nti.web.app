@@ -78,17 +78,6 @@
 
 .nti-secondary-tabbar {
 	.x-tab {
-		&.x-tab-top-active {
-			$experimental-support-for-svg: true;
-			@include background-image(linear-gradient(top, #6dae1d 0%,#8fd03f 100%));
-
-			box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.5);
-
-			.x-tab-inner {
-				color: #ffffff;
-			}
-		}
-
 		margin: 0 0 20px 0;
 		height: 31px;
 
@@ -98,9 +87,21 @@
 
 
 		background: #ebebeb;
-		$experimental-support-for-svg: true;
-		@include background-image(linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.65) 100%));
+
+		background-image: linear-gradient(to bottom, #ffffff 0%, rgba(255, 255, 255, 0.65) 100%);
 		box-shadow: 0 1px 0 0 #ffffff, inset 0 2px 0 0 rgba(255,255,255,0.4);
+
+		&.x-tab-top-active {
+			$experimental-support-for-svg: true;
+			background-image: linear-gradient(to bottom, #6dae1d 0%, #8fd03f 100%);
+
+			box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.5);
+
+			.x-tab-inner {
+				color: #ffffff;
+			}
+		}
+
 
 		.x-tab-wrap {padding: 0;}
 

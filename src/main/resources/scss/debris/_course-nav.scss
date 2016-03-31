@@ -175,7 +175,7 @@
 		margin-top: 10px;
 
 
-		@include icon('survey', $side: after, $top: 50%, $left: 18px);
+		@include icon($survey, $side: after, $top: 50%, $left: 18px);
 
 		&::after {
 			margin-top: -27px;//54/2
@@ -410,7 +410,7 @@
 					border-top: 1px solid #e3e3e3;
 				}
 			}
-			
+
 			.assignment-due-date-editor {
 				& > .contents {
 					padding: 25px 0 0 90px;
@@ -432,7 +432,7 @@
 			}
 
 			.assignment-box {
-				@include icon('assignment_due', $side:'before');
+				@include icon($assignment_due, $side:'before');
 
 				&::before {
 					position: relative;
@@ -445,14 +445,14 @@
 			}
 
 			&.ontime .assignment-box::before{
-				@include sprite($icons, 'assignment_ontime');
+				@include sprite($assignment_ontime);
 			}
 
 			&.late .assignment-box::before{
-				@include sprite($icons, 'assignment_late');
+				@include sprite($assignment_late);
 			}
 			&.nosubmit .assignment-box::before{
-				@include sprite($icons, 'assignment_due');
+				@include sprite($assignment_due);
 			}
 		}
 	}
@@ -482,7 +482,7 @@
 			}
 
 			&.viewed {
-				@include icon('circle-check-white-small', $top: 7px, $left: auto, $right: 58px);
+				@include icon($circle-check-white-small, $top: 7px, $left: auto, $right: 58px);
 
 				&::after {
 					z-index: 2;
@@ -565,7 +565,7 @@
 						.video-row {
 						    padding-left: 35px;
 						    position: relative;
-							@include icon('circle-check-white-small', $top: 10px, $left: 12px);
+							@include icon($circle-check-white-small, $top: 10px, $left: 12px);
 							.viewed {
 							    display: block;
 							}
@@ -676,7 +676,7 @@
 
 	.group-container {
 		clear: both;
-	
+
 		&::after {
 			content: '';
 			display: block;
@@ -707,13 +707,13 @@
 
 .content-link,
 .content-card {
-	a .thumbnail { @include icon('extern-link',$top:0,$left:auto,$right:0); }
+	a .thumbnail { @include icon($extern-link,$top:0,$left:auto,$right:0); }
 	&:hover a .thumbnail::after {
-		@include sprite($icons,'extern-link_hover');
+		@include sprite($extern-link_hover);
 	}
 
 	&.viewed {
-		@include icon('circle-check-white-large', $top: 50%, $left: 50px);
+		@include icon($circle-check-white-large, $top: 50%, $left: 50px);
 
 		&::after {
 			margin-left: -20px;

@@ -13,7 +13,7 @@ span.tab{
 	}
 
 	#{$selector} {
-		@include hardware-accelerate();	 
+		@include hardware-accelerate();
 		position: relative;//default
 
 		&.active {
@@ -93,7 +93,7 @@ span.tab{
 
 			.aux {
 				background: #fff;
-				@include experimental(transition, all 0.5s);
+				transition: all 0.5s;
 				position: relative;
 				border: 0 solid #f2f2f2;
 				border-bottom-width: 1px;
@@ -120,12 +120,11 @@ span.tab{
 							position: absolute;
 							left: 0; top: 5px;
 							outline: 0;
-							background: $elements no-repeat;
-							@include sprite($elements,'btn_toggle_private',$dimensions: true);
+							@include sprite($btn_toggle_private);
 						}
 
 						&.on::after{
-							@include sprite($elements,'btn_toggle_public',$dimensions: true);
+							@include sprite($btn_toggle_public);
 						}
 					}
 				}
@@ -172,12 +171,12 @@ span.tab{
 					height: 75px;
 					width: 55px;
 					cursor: pointer;
-					@include icon('filetype-video', $top:20px, $left:10px);
+					@include icon($filetype-video, $top:20px, $left:10px);
 				}
 
 				.unknown{
 					cursor: default;
-					@include icon('filetype-unknown', $top:20px, $left:10px);
+					@include icon($filetype-unknown, $top:20px, $left:10px);
 				}
 			}
 		}
@@ -229,15 +228,15 @@ span.tab{
 						position: absolute;
 						top: 9px; left: 5px;
 						outline: none;
-						background: $icons no-repeat;
-						@include sprite($icons,'font_styles_default',$dimensions: true);
+
+						@include sprite($font_styles_default);
 					}
 
 					&.selected{
 						box-shadow: inset 0 0 0 1px #dcdcdc;
 						background-color: #ffffff;
 
-						&::after{ @include sprite($icons,'font_styles_active',$dimensions: true); }
+						&::after{ @include sprite($font_styles_active); }
 						.popover{
 							display: block;
 						}
@@ -267,8 +266,8 @@ span.tab{
 							top:32px;
 							left: 16%;//safar5
 							@include experimental-value(left, calc(25% - 6px));
-							background: $icons no-repeat;
-							@include sprite($icons,'font_style_pointer',$dimensions: true);
+
+							@include sprite($font_style_pointer);
 						}
 
 						.control{
@@ -289,34 +288,33 @@ span.tab{
 									content: '';
 									position: absolute;
 									top: 5px; left: 2px;
-									background: $icons no-repeat;
 								}
 							}
 
 							&.bold {
-								&::after{ @include sprite($icons,'bold',$dimensions: true); }
-								&.selected::after{ @include sprite($icons,'bold_active',$dimensions: true); }
+								&::after{ @include sprite($bold); }
+								&.selected::after{ @include sprite($bold_active); }
 							}
 							&.italic {
-								&::after{ @include sprite($icons,'italic',$dimensions: true); }
-								&.selected::after{ @include sprite($icons,'italic_active',$dimensions: true); }
+								&::after{ @include sprite($italic); }
+								&.selected::after{ @include sprite($italic_active); }
 							}
 							&.underline {
-								&::after{ @include sprite($icons,'underline',$dimensions: true); }
-								&.selected::after{ @include sprite($icons,'underline_active',$dimensions: true); }
+								&::after{ @include sprite($underline); }
+								&.selected::after{ @include sprite($underline_active); }
 							}
 
 							&.whiteboard {
-								@include icon('editor-insert-image', $top:10px);
+								@include icon($editor-insert-image, $top:10px);
 								&:hover::after{
-									@include sprite($icons,'editor-insert-image_hover',$dimensions: true);
+									@include sprite($editor-insert-image_hover);
 								}
 							}
 
 							&.video {
-								@include icon('editor-insert-video', $top:9px);
+								@include icon($editor-insert-video, $top:9px);
 								&:hover::after{
-									@include sprite($icons,'editor-insert-video_hover',$dimensions: true);
+									@include sprite($editor-insert-video_hover);
 								}
 							}
 
@@ -349,10 +347,10 @@ span.tab{
 				}
 
 				&.object-controls{
-					@include icon('editor-attach', $top:10px, $left:10px);
+					@include icon($editor-attach, $top:10px, $left:10px);
 					&.selected{
 						&::after{
-							@include sprite($icons,'editor-attach_active',$dimensions: true);
+							@include sprite($editor-attach_active);
 						}
 					}
 				}
@@ -378,8 +376,8 @@ span.tab{
 						overflow: hidden;
 						position: absolute;
 						top: 8px; left: 15px;
-						background: $icons no-repeat;
-						@include sprite($icons,'comment_white',$dimensions: true);
+
+						@include sprite($comment_white);
 						outline: 0;
 					}
 
@@ -515,7 +513,7 @@ span.tab{
 	}
 
 	.contact-card.marked {
-		@include icon('check_gray', $side: after, $top: 23px, $left: 31px);//top: 7 + 32/2, left: 15 + 32/2
+		@include icon($check_gray, $side: after, $top: 23px, $left: 31px);//top: 7 + 32/2, left: 15 + 32/2
 
 		&::after {
 			z-index: 4;

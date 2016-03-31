@@ -35,8 +35,8 @@
 				z-index: 1999;
 				top: -9px;
 				right: -9px;
-				background: transparent $icons no-repeat;
-				@include sprite($icons,'green_check',$dimensions: true);
+
+				@include sprite($green_check);
 			}
 		}
 	}

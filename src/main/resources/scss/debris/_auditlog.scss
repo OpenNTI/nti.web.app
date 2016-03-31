@@ -93,7 +93,7 @@
 .audit-log-header {
     padding-bottom: 1rem;
 
-    @include icon('change-log', $top: 2px);
+    @include icon($change-log, $top: 2px);
 
     .change-log {
         font-weight: 600;
@@ -116,5 +116,5 @@
     color: white;
     padding-left: 40px;
     
-    @include icon('change-white', $top: 11px, $left: 15px);
+    @include icon($change-white, $top: 11px, $left: 15px);
 }

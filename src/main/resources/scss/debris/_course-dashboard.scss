@@ -94,18 +94,14 @@
 			cursor: pointer;
 
 			&.assignment-tile {
-				background-image: -moz-linear-gradient( 125deg, rgba(60,206,220,0.6) 0%, rgb(73,208,172) 100%);
-				background-image: -webkit-linear-gradient( 125deg, rgba(60,206,220,0.6) 0%, rgb(73,208,172) 100%);
-				background-image: -ms-linear-gradient( 125deg, rgba(60,206,220,0.6) 0%, rgb(73,208,172) 100%);
+				background-image: linear-gradient( 125deg, rgba(60,206,220,0.6) 0%, rgb(73,208,172) 100%);
 				box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.25), inset 0px -43px 0px 0px rgba(30, 60, 64, 0.5);
 
 				.path, .bullets { color: #9bf2de; }
 				.footer { color: #70bcb1; }
 
 				&.late {
-					background-image: -moz-linear-gradient( 125deg, rgba(221,62,81,0.6) 0%, rgb(250,103,92) 100%);
- 					background-image: -webkit-linear-gradient( 125deg, rgba(221,62,81,0.6) 0%, rgb(250,103,92) 100%);
-					background-image: -ms-linear-gradient( 125deg, rgba(221,62,81,0.6) 0%, rgb(250,103,92) 100%);
+					background-image: linear-gradient( 125deg, rgba(221,62,81,0.6) 0%, rgb(250,103,92) 100%);
 					box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.5), inset 0px -43px 0px 0px rgba(103, 27, 34, 0.5);
 
 					.path, .bullets { color: #ffbea7; }
@@ -114,9 +110,7 @@
 			}
 
 			&.lesson-tile {
-				background-image: -moz-linear-gradient( 125deg, rgba(76,143,219,0.6) 0%, rgb(83,186,246) 100%);
-				background-image: -webkit-linear-gradient( 125deg, rgba(76,143,219,0.6) 0%, rgb(83,186,246) 100%);
-				background-image: -ms-linear-gradient( 125deg, rgba(76,143,219,0.6) 0%, rgb(83,186,246) 100%);
+				background-image: linear-gradient( 125deg, rgba(76,143,219,0.6) 0%, rgb(83,186,246) 100%);
 				box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.5), inset 0px -43px 0px 0px rgba(24, 82, 116, 0.5);
 
 				.path, .bullets { color: #bbe5fd; }
@@ -175,7 +169,7 @@
 				.path {
 					overflow: hidden;
 					@include ellipsis;
-					
+
 					&.has-current::after {
 						content: '\a0/';
 					}
@@ -217,7 +211,7 @@
 					@include ellipsis;
 					padding: 0 10px 0 50px;
 
-					@include icon('play-small', $position: absolute, $top: 3px, $left: 3px);
+					@include icon($play-small, $position: absolute, $top: 3px, $left: 3px);
 				}
 
 				&.word-context {
@@ -423,6 +417,3 @@
 		}
 	}
 }
-
-
-

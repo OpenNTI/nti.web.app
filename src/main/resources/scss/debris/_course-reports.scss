@@ -33,8 +33,8 @@
 			color: $primary-grey;
 
 			.thumbnail {
-				background: $elements;
-				background-position: sprite-position($elements, 'reports-image');
+				@include sprite-image($reports-image);
+				@include sprite-position($reports-image);
 			}
 
 			.sub-heading {

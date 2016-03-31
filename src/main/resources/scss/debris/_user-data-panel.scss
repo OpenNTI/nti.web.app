@@ -179,16 +179,14 @@
 						overflow: hidden;
 						position: absolute;
 						top: 0; left: 15px;
-						background: transparent $icons no-repeat;
-						@include sprite($icons,'ldquo',$dimensions: true);
+						@include sprite($ldquo);
 					}
 
 					&::after{
 						content: ' ';
 						display: inline-block;
 						margin-left: 5px;
-						background: transparent $icons no-repeat;
-						@include sprite($icons,'rdquo',$dimensions: true);
+						@include sprite($rdquo);
 					}
 				}
 			}
