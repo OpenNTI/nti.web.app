@@ -155,12 +155,23 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		Ext.defer(this.updateLayout, 700, this, []);
 	},
 
+
+	getMimeType: function () {
+		return this.record ? this.record.get('MimeType') :  NextThought.model.forums.Post.mimeType;
+	},
+
+
 	onSave: function (e) {
 		e.stopEvent();
 		var me = this,
 			v = me.getValue(),
 			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
 			trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
+
+		if (v instanceof FormData) {
+			me.ForumActions.saveTopicWithFormData(me, me.record, me.forum, v);
+			return;
+		}
 
 		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
 			console.error('bad forum post');
@@ -216,6 +227,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 				alert('There was trouble saving the discussion');
 			});
 	},
+
 
 	onSaveSuccess: function (record, isEdit) {
 		this.savedSuccess = true;

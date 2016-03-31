@@ -68,7 +68,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		[
 			'{header}',
 			{tag: 'form', cls: 'common-form', enctype: '{enctype}', autocomplete: '{autocomplete}', 'novalidate': true, name: '{name}', cn: [
-				{cls: 'input', type: 'hidden', name: '__json__'},
+				{cls: 'input', type: 'hidden', name: 'json'},
 				{
 					cls: 'main',
 					cn: [
@@ -232,11 +232,14 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				]},
 				{ cls: 'controls', cn: [
 					{ tag: 'span', cls: 'view', html: 'Preview'},
-					{ tag: 'span', cls: 'change', html: 'Change'}
+					{ tag: 'span', cls: 'change', html: 'Change'},
+					{ tag: 'span', cls: 'delete', html: 'Delete'}
 				]}
 			]}
 		]}
 	])),
+
+	AttachmentMap: {},
 
 	onClassExtended: function (cls, data) {
 		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
@@ -620,12 +623,17 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	onFileChange: function (file) {
+		var guid = guidGenerator();
+
+		// Add the file to the attachment map
+		this.AttachmentMap[guid] = file;
+
 		// TODO: Check and warn about the size
-		this.setPreviewFromInput(file);
+		this.setPreviewFromInput(file, guid);
 	},
 
 
-	setPreviewFromInput: function (file) {
+	setPreviewFromInput: function (file, name) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setPreviewFromInput.bind(this, file));
 			return;
@@ -635,10 +643,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			tpl = this.attachmentPreviewTpl,
 			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(file.size, 1),
 			href = this.createObjectURL(file),
-			placeholder = Ext.DomHelper.createTemplate({html: this.defaultValue}),
-			guid = guidGenerator();
+			placeholder = Ext.DomHelper.createTemplate({html: this.defaultValue});
 
-		tpl.append(content, {size: size, href: href, fileName: file.name, name: guid});
+		tpl.append(content, {size: size, href: href, fileName: file.name, name: name});
 
 		// Add a placeholder to allow adding text.
 		placeholder.append(content);
@@ -1622,6 +1629,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				}
 			}
 
+			// if it's an attachment, handle it appropriately
+			if (part instanceof Object && part.MimeType) {
+				p = part;
+				r.push(p);
+			}
+
 			if (!p) {
 				part = stripTrailingBreak(part);
 				//if this is the first part or the thing before us
@@ -1850,7 +1863,22 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
+	/**
+	 * Returns the value of the editor.
+	 * If it has file attached to it, it will return a FormData
+	 * Otherwise, it will return the regular json object.
+	 *
+	 */
 	getValue: function () {
+		if (this.hasFiles()) {
+			return this.getFormData();
+		}
+
+		return this.getJSONData();
+	},
+
+
+	getJSONData: function () {
 		return {
 			body: this.getBody(this.getBodyValue()),
 			sharingInfo: this.sharedList ? this.sharedList.getValue() : null,
@@ -1861,15 +1889,47 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
+	/**
+	 * build a FormData object.
+	 * To handle file attachment in the editors, the multipart form will follow this pattern:
+	 *
+	 * '__json__' will contain the regular json object with the values of the record.
+	 *  Append files object for the other parts.
+	 */
 	getFormData: function () {
 		var dom = this.el.dom,
 			form = dom && dom.querySelector('form'),
-			formData;
+			json = this.getJSONData(),
+			mimeType = this.getMimeType();
 
 		if (!form) { return; }
 
-		formData = new FormData(form);
+		let formData = new FormData(form);
 
+		if (mimeType) {
+			json.MimeType = mimeType;
+		}
+
+		// NOTE: To support submitting a multi-part form,
+		// the regular content of a note will be set in a json field.
+		formData.append('__json__', JSON.stringify(json));
+
+		// Append the files uploaded to the formData
+		for (let key in this.AttachmentMap) {
+			if (this.AttachmentMap.hasOwnProperty(key)) {
+				formData.append(key, this.AttachmentMap[key], this.AttachmentMap[key].name);
+			}
+		}
+		return formData;
+	},
+
+
+	// TO BE overriden but subclasses
+	getMimeType: function () {},
+
+
+	hasFiles: function () {
+		return Object.keys(this.AttachmentMap).length > 0;
 	},
 
 

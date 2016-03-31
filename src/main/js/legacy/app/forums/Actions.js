@@ -108,6 +108,47 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		});
 	},
 
+
+	saveTopicWithFormData: function (editorCmp, record, forum,formData, autoPublish) {
+		var isEdit = Boolean(record),
+			headline = record &&  record.get('headline'),
+			url = isEdit ? headline && headline.getLink('edit') : forum && forum.getLink('add'),
+			method = isEdit ? 'PUT' : 'POST',
+			me = this;
+
+		// TODO: Re-add the autoPublish
+		return new Promise(function (fulfill, reject) {
+			var xhr = me.__buildXHR(url, method, fulfill, reject);
+
+			xhr.send(formData);
+		});
+	},
+
+
+	__buildXHR: function (url, method, success, failure) {
+		var xhr = new XMLHttpRequest();
+
+		xhr.open(method || 'POST', url, true);
+
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState === 4) {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					success(xhr.responseText);
+				} else {
+					failure({
+						status: xhr.status,
+						responseText: xhr.responseText
+					});
+				}
+			}
+		};
+
+		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+		return xhr;
+	},
+
+
 	deleteObject: function (record, cmp, callback) {
 		var idToDestroy, me = this;
 		if (!record.get('href')) {
