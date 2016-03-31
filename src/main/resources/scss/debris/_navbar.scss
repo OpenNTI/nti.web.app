@@ -1,0 +1,284 @@
+.main-navigation {
+	@include flexContainer();
+
+	.branding {
+		cursor: pointer;
+		height: $header-height;
+		background-size: cover !important;
+		background: url(../images/elements/nav-asset.png) center center no-repeat;
+		width: 72px;
+		margin-right: 15px;
+	}
+
+	.back-container {
+		@include flexItem(0 0 auto);
+
+		.back {
+			display: none;
+			width: 70px;
+			height: 70px;
+			float: left;
+			cursor: pointer;
+			opacity: 1;
+			left: 0;
+			transition: opacity 0.5s, left 0.5s;
+
+			@include icon($overlay_close_x_dark, $top: 50%, $left: 50%);
+
+			&::after {
+				margin-top: -16px;
+				margin-left: -12px;
+				opacity: 0.7
+			}
+
+			&.disabled {
+				cursor: defalut;
+
+				&::after {
+					opacity: 0.5;
+				}
+
+				&::hover::after {
+					opacity: 0.5;
+				}
+			}
+
+			&:hover::after {
+				opacity: 1;
+			}
+		}
+	}
+
+	.nav-container {
+		@include flexItem(1 1 100px);
+		transition: opacity 0.5s, width 0.5s;
+		position: relative;
+		left: 0;
+		min-width: 0;
+	}
+
+	.search-container {
+		@include flexItem(1 1 auto);
+		position: relative;
+
+		.search-field-wrap {
+			position: absolute;
+			top: 0; bottom: 0;
+			right: 0;
+			width: 100%;
+			transition: width 0.5s;
+		}
+
+		&.collapsed {
+			.search-field-wrap {
+				width: 50px;
+				height: 70px;
+				text-align: right;
+
+				input {
+					display: none;
+				}
+
+				.search-field {
+					height: 70px;
+					width: 50px;
+					margin: 0;
+					border: none;
+					background: none;
+				}
+
+				.search-icon {
+					border: none;
+					background: none;
+					height: 70px;
+					width: 50px;
+
+					@include icon($rhp-search, $side: after, $top: 50%, $left: 50%);
+
+					&::after {
+						margin-top: -9px;
+						margin-left: -9px;
+					}
+				}
+			}
+		}
+	}
+
+	.icons {
+		@include flexItem(0 0 auto);
+		@include flexContainer();
+		justify-content: flex-end;
+		-webkit-box-pack: end;
+		-webkit-justify-content: flex-end;
+        -ms-flex-pack: end;
+
+
+		& > div {
+			@include flexItem(0 0 auto);
+		}
+
+		.chat-notification-container {
+			display: none;
+			@media #{$hide-chat-break-point} {
+				display: block;
+			}
+		}
+	}
+
+	&.hide-branding {
+		.back-container {
+			.branding {
+				display: none;
+			}
+
+			.back {
+				display: block;
+			}
+		}
+	}
+
+	&.removing-nav {
+		.nav-container {
+			position: absolute;
+			transition: left 0.3s;
+			left: -1000px;
+			flex-grow: 0;
+		}
+
+		.search-container {
+			.search-field-wrap {
+				width: 100%;
+			}
+		}
+	}
+}
+
+.main-navigation.no-nav {
+	.nav-container {
+		opacity: 0;
+		left: 0;
+		display: none;
+		@include flexBasis(0px);
+		@include flexItem(0 1 100px);
+	}
+
+	.back-container, .icons {
+		@include flexBasis(190px);
+	}
+
+	.icons {
+		@media #{$hide-chat-break-point} {
+			& {
+				@include flexBasis(190px !important);
+			}
+		}
+	}
+
+	.search-container {
+		.search-field-wrap {
+			width: 100%;
+		}
+	}
+}
+
+.main-navigation.has-nav {
+	.search-container {
+		@include flexBasis(150px);
+		max-width: 200px;
+
+		.search-field-wrap {
+			max-width: 200px;
+
+			.search-field {
+				width: 100%;
+			}
+		}
+
+		&.collapsed {
+			@include flexItem(0 0 50px);
+			.search-field-wrap {
+				.search-field {
+					width: 50px;
+				}
+			}
+		}
+	}
+}
+
+.main-message-bar {
+	background-color: #f7f2d6;
+	border-bottom: 1px solid #e1e1e1 !important;
+
+	.icon {
+		display: none;
+		width: 30px;
+		margin-right: 5px;
+
+		&.warning {
+			display: block;
+			top: 10px;
+			left: 15px;
+			@include icon($warning-icon-red, $side: after, $position: absolute);
+
+			& + .msg {
+				margin-left: 40px;
+			}	
+		}
+	}
+
+	.msg {
+		display: inline-block;
+		font-size: 14px;
+		line-height: 40px;
+		margin-right: 10px;
+    	vertical-align: top;
+    	font-weight: 500;
+    	margin: 0 10px 0 20px;
+	}
+
+	.buttons {
+		display: inline-block;
+
+		.button {
+			float: left;
+			padding: 0 13px 0 15px;
+			color: $primary-blue;
+			font-size: 14px;
+			line-height: 40px;
+			cursor: pointer;
+			position: relative;
+
+			&::after{
+				content: "|";
+				position: absolute;
+				right: 0;
+				color: $tertiary-grey;
+				width: 3px;
+				font-size: 14px;
+			}
+
+			&:last-of-type {
+					&::after {
+						content: none;
+					}
+				}
+
+				&:first-of-type {
+					padding-left: 0;
+				}
+		}
+	}
+
+	.close{
+		@include icon($note-window-x, $side: after, $position: absolute);
+		top: 10px;
+		right: 10px;
+		cursor: pointer;
+		width: 24px;
+		height: 24px;
+
+		&:hover{
+			@include icon($note-window-x_hover, $side: after, $position: absolute);
+		}
+	}
+}

@@ -1,0 +1,318 @@
+
+
+.x-component-tokens{
+	position: relative;
+	overflow: hidden;
+
+	font: normal 400 12px/30px $font;
+
+	.x-gecko & {
+		padding-top: 1px;
+		& > * {
+			float: left;
+		}
+	}
+
+	.readOnly {
+		.token {
+			.x {
+				display: none;
+			}
+		}
+	}
+
+	.token {
+		font: normal 400 10px/17px $font;
+		display: inline-block;
+		white-space: normal;
+		padding: 0 10px 0 10px;
+		margin: 3px 3px 3px 0;
+		border-radius: 90px;
+		text-transform: uppercase;
+		border: 1px solid #ececec;
+		background: #ececec;
+		color: $secondary-grey;
+		vertical-align: middle;
+
+		&.person, &.public, &.group, &.list{
+			&::after{
+				content: '';
+				position: absolute;
+				top: 3px; left:6px;
+				vertical-align: middle;
+			}
+		}
+
+		&.person { &::after{display: none;}}
+		&.public {
+			padding-left: 22px !important;
+			&::after{
+				@include sprite($light-globe-13x13);
+			}
+		}
+		&.group {
+			padding-left: 22px !important;
+
+			&::after{
+				top: 5px; left: 5px;
+				@include sprite($light-groups-12x9);
+			}
+		}
+		&.list {
+			padding-left: 22px !important;
+
+			&::after{
+				top: 5px; left: 5px;
+				@include sprite($lists-white_hover);
+			}
+		}
+
+		.value,.x{
+			position: relative;
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		&.active {
+			color: #fff;
+			border-color: $border-blue;
+			background: $primary-blue;
+		}
+
+		&:hover {
+			color: #fff;
+			border-color: $border-blue;
+			background: $primary-blue;
+
+			padding: 0 7px 0 10px;
+			margin-right: -9px;
+			position: relative;
+			z-index: 2;
+
+			.x {
+				display: inline-block;
+			}
+		}
+		.x{
+			position: relative;
+			width: 15px;
+			height: 18px;
+			display: none;
+
+			&::after{
+				content: '';
+				display: block;
+				position: absolute;
+
+				@include sprite($light-x_hover);
+				top: 6px; left: 6px;
+				cursor: pointer;
+			}
+		}
+	}
+
+	.token-input-wrap{
+		vertical-align: middle;
+		position: relative;
+		overflow: hidden;
+		display: inline-block;
+
+		input{
+			padding: 0;
+			padding-left: -3px;
+			text-indent: 3px;
+			font: normal 700 10px/20px $font !important;
+			position: absolute;
+			background: #fff;
+			top: 0; left: 0;
+			bottom: 0; right: 0;
+			margin: 0;
+			border: 0;
+			width: 100%;
+			height: 100%;
+
+			.x-ie10 &,
+			.x-ie & {
+				height: 30px;//for IE
+				bottom: inherit;
+				width: 100%;
+			}
+
+			.x-gecko &{
+				width: 100%;
+				height: 30px;
+			}
+
+			text-transform: uppercase;
+
+			&.empty{
+				text-transform: none;
+				//font-style: italic;
+			}
+		}
+		.placeholder {
+			position: absolute;
+			top: 0; left: 0;
+		}
+
+		span.token-input-sizer{
+			display: inline-block;
+			font: normal 700 10px/30px $font;
+			visibility: hidden;
+			background: #fff;
+			color: #fff;
+			white-space: nowrap;
+			padding: 0 0.2em;
+			min-width: 50px;
+		}
+	}
+
+	&.user-token-field{
+		&.readOnly{
+			.control.publish{
+				cursor: default;
+			}
+
+			&.email-token-field {
+				.token-input-wrap {
+					display: none;
+				}
+
+				.token {
+					.x {
+						display: none !important;
+					}
+				}
+			}
+		}
+
+		.control.disabled{
+			cursor: default;
+			opacity: .3;
+		}
+
+		.tokens{
+			position: relative;
+			padding-left: 3px;
+
+			.token + .inputArea{
+				.plus {
+					margin-left: 5px;
+				}
+			}
+
+			.inputArea{
+				white-space: nowrap;
+				display: inline-block;
+				position: relative;
+
+				.plus{
+					position: relative;
+					display: inline-block;
+					margin: 0 2px 0 0;
+					width: 8px;
+
+					&::after{
+						content: '';
+						position: absolute;
+						left: 0; top: -7px;
+						outline: 0;
+
+						@include sprite($ico_plus);
+					}
+				}
+
+				.placeholder {
+					position: absolute;
+					top: 7px;
+					font: italic normal 14px/20px $font !important;
+					padding-left: 5px;
+					display: inline-block;
+					max-width: 256px;
+					white-space: normal;
+
+					&.hidden {
+						display: none;
+					}
+
+				}
+
+				.token-input-wrap{
+					position: relative;
+					input {
+						font: italic normal 14px/20px $font !important;
+						text-transform: none;
+						background: transparent;
+						//padding: 5px 0;
+					}
+					.token-input-sizer{
+						position: relative;
+						font: italic normal 14px/30px $font !important;
+						margin-left: 10px;
+						font-style: italic;
+						text-transform: none;
+					}
+				}
+			}
+
+			.x-gecko &{
+				float: none !important;
+			}
+
+			.token{
+				font: normal 700 10px/18px $font;
+				text-transform: none;
+				color: #fff;
+				border-color: #39a1dd;
+				background: #3fb3f6;
+				position: relative;
+				z-index: 2;
+
+				&:hover{
+					z-index: 10;
+				}
+			}
+		}
+
+		.control.publish{
+			position: relative;
+			float: right;
+			width: 85px;
+			height: 30px;
+			cursor: pointer;
+			z-index: 10;
+
+			&::after{
+				content: '';
+				position: absolute;
+				left: 0; top: 5px;
+				outline: 0;
+				@include sprite($btn_toggle_private);
+			}
+
+			&.on::after{
+				@include sprite($btn_toggle_public);
+			}
+		}
+
+		&.readOnly{
+			.tokens{
+				.token{
+					&:hover{
+						padding: 0 10px 0 10px;
+						margin: 3px 3px 3px 0;
+						.x{ display: none;}
+					}
+				}
+
+				.plus{
+					display: none;
+				}
+				.token-input-wrap{
+					display: none;
+				}
+			}
+
+		}
+	}
+}

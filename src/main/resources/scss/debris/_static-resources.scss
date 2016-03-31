@@ -1,0 +1,66 @@
+.resource-not-found{
+	position: relative;
+	background-color: $quad-grey;
+	border: 1px solid $border-grey;
+	border-radius: 3px;
+	.body{
+		padding-top: 6px;
+		padding-left: 90px;
+
+		.actions{
+			padding-top: 8px;
+			padding-bottom: 8px;
+			position: relative;
+
+			a{
+				position: relative;
+				padding-right: 18px;
+			    &, a:link, a:visited, a:active {
+			   	   color: $primary-blue;
+			   	   font-style: normal !important;
+			   	   font: 14px $font !important;
+			   	   font-weight: 300 !important;
+			   	   text-decoration: none;
+			 	   &:hover {
+			   	      text-decoration: underline;
+			   		  cursor: pointer;
+			   	   }
+				}
+
+				&::after{
+					color: $tertiary-grey;
+					font: 24px $font !important;
+					font-weight: 300 !important;
+					font-style: italic !important;
+					content: ".";
+					position: absolute;
+					bottom: 0;
+					right: 5px;
+				}
+
+				&:last-child::after{
+					content: " ";
+				}
+			}
+
+
+
+		}
+
+		@include icon($modal-yellow-sign,$top: 12px,$left: 20px);
+
+		.heading{
+			color: $tertiary-grey;
+			font: 24px $font !important;
+			font-weight: 300 !important;
+			font-style: italic !important;
+		}
+
+		.subtext{
+			color: $primary-grey;
+			font: 14px $font !important;
+			font-style: normal !important;
+		}
+	}
+
+}

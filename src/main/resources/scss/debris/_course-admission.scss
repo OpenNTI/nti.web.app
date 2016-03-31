@@ -1,0 +1,1551 @@
+.enrollment-credit {
+	height: 100% !important;
+	overflow: hidden;
+
+	.enrollment-pricing {
+		pointer-events: none;
+		position: absolute;
+		right: 30px;
+		top: 50px;
+		width: 230px;
+		box-shadow: 0 0 1px 0 rgba(0,0,0,0.35);
+
+		&.stick_bottom {
+			bottom: 15px;
+			top: auto !important;
+		}
+
+		.info {
+			height: 170px;
+			position: relative;
+
+			.meta {
+				position: absolute;
+				text-transform: uppercase;
+				width: 100%;
+				padding: 10px 15px;
+				bottom: 0;
+				color: white;
+				background-color: rgba(0, 0, 0, 0.6);
+				font: normal 400 0.9em/1.2em $font;
+
+				.number {
+					font-size: 0.7em;
+					line-height: 1.1em;
+				}
+
+				.title {
+					font: normal 600 1.2em/1.2em "Open Sans Condensed", $font;
+					overflow: hidden;
+					@include ellipsis();
+				}
+
+				.author {
+					font-size: 0.7em;
+					line-height: 1.1em;
+					color: $primary-blue;
+				}
+			}
+		}
+
+		.details {
+			font: normal 300 0.75em/1.6em $font;
+			padding: 15px;
+
+			.detail {
+				color: $secondary-grey;
+				.label {
+					font-weight: 600;
+					margin-right: 0.5em;
+				}
+			}
+
+			.type {
+				margin-bottom: 5px;
+
+				.label {
+					display: block;
+					color: $tertiary-grey;
+					text-transform: uppercase;
+					font-size: 0.8em;
+					line-height: 1.3em;
+				}
+
+				span:not(.label) {
+					color: $primary-grey;
+					font-size: 1.5em;
+				}
+			}
+
+			.coupon {
+				margin-top: 10px;
+				.label {
+					display: block;
+					font-size: 0.8em;
+					text-transform: uppercase;
+					color: $tertiary-grey;
+
+					&.invalid {
+						color: $primary-red;
+					}
+
+					&.success {
+						color: $secondary-green;
+					}
+
+					&.loading {
+						@include loadingEllipse($animation-delay: 0.2s);
+					}
+				}
+
+				.coupon-container {
+					pointer-events: all;
+
+					input {
+						box-shadow: none;
+						border-radius: 0;
+						border: 1px solid #b8b8b8;
+						font-size: 1.1em;
+					}
+				}
+			}
+
+			.refund {
+				color: $primary-red;
+			}
+
+			.price {
+				border-top: 1px solid #efefef;
+				margin-top: 15px;
+				padding-top: 10px;
+
+				.label {
+					display: block;
+					color: $tertiary-grey;
+					text-transform: uppercase;
+					font-size: 0.8em;
+					line-height: 1.5em;
+				}
+
+				.old-amount {
+					margin-right: 5px;
+					font-size: 1.5em;
+					color: $tertiary-grey;
+					font-weight: 300;
+					text-decoration: line-through;
+
+					&:empty {
+						display: none;
+					}
+				}
+
+				.amount {
+					font-size: 1.5em;
+					font-weight: 400;
+					color: $secondary-green;
+				}
+			}
+		}
+	}
+
+	.header {
+		background-color: #efefef;
+		font: normal 600 0.6em/35px $font;
+		text-transform: uppercase;
+		color: $tertiary-grey;
+		height: 36px;
+		padding: 0;
+		z-index: 1;
+
+		div {
+			float: left;
+			position: relative;
+			padding: 0 15px 0 29px;
+
+			&.number::before {
+				content: '';
+				position: absolute;
+				top: 8px;
+				left: 7px;
+				padding: 7px;
+				border: 2px solid $tertiary-grey;
+				border-radius: 13px;
+				font-weight:700;
+				line-height: 1em;
+			}
+
+			&.enabled {
+				color: $secondary-grey;
+			}
+
+			&.enabled.number {
+				color: $secondary-grey;
+				@include icon($check_progress, $side: after, $top: 13px, $left: 11px);
+
+				&::before {
+					border-color: $secondary-grey;
+				}
+			}
+
+			&.failed {
+				color: $primary-red;
+
+				&.number::before {
+					border-color: $primary-red;
+				}
+			}
+
+			&.active {
+				background-color: white;
+				border: 0px solid #e5e5e5;
+				border-left-width: 1px;
+				border-right-width: 1px;
+
+				&:not(.failed) {
+					color: $secondary-green;
+
+					&::before {
+						border-color: $secondary-green;
+					}
+				}
+			}
+
+			&.number:not(.enabled)::after {
+				content: attr(data-number);
+				position: absolute;
+				top: 0;
+				left: 13px;
+			}
+		}
+	}
+
+	.enrollment-container {
+		padding: 70px 0px 30px 50px;
+		overflow: auto;
+		background-color: white;
+		height: 90%;
+		@include experimental-value(height, calc(100% - 36px));
+	}
+
+	.body-container {
+		background-color: white;
+		&.error {
+			box-shadow: 0 0 0 1px $primary-red;
+		}
+	}
+
+	.admission-group {
+		padding-right: 280px;
+		.label {
+			font: normal 300 1.7em/2em $font;
+			color: $tertiary-grey;
+
+			&.error {
+				color: $primary-red;
+			}
+		}
+		.error-detail {
+			background-color:transparentize($primary-red,.85);
+			border-radius:3px;
+			p {
+				padding:.5em 1em;
+			}
+		}
+	}
+
+	.admission-set.gift-recipient {
+		padding: 15px;
+		background-color: #f7fdf8;
+		border: 1px solid #d6f1d9;
+		margin-bottom: 0;
+
+		.label {
+			color: #52b85f;
+			margin-bottom: 10px;
+		}
+
+		.body-container {
+			width: 652px;
+			background: none;
+
+			.large.left {
+				width: 212px;
+				&.last {
+					margin-right: 0;
+				}
+			}
+		}
+	}
+
+	.admission-set.gift-message {
+		padding: 15px;
+		padding-bottom: 10px;
+		border: 1px solid #d6f1d9;
+		border-top-width: 0;
+
+		.body-container {
+			width: 652px;
+		}
+
+		.enrollment-input {
+			width: 100%;
+		}
+
+		textarea {
+			width: 100%;
+			min-height: 100px;
+			resize: vertical;
+			max-height: 200px;
+			font-size: 1.1em;
+			font-weight: 200;
+			padding: 5px;
+			border-color: #efefef;
+		}
+	}
+
+	.admission-set {
+		&.gift-from,
+		&.gift-message,
+		&.gift-recipient {
+			.enrollment-input-container.disabled {
+				.enrollment-input input,
+				.enrollment-input textarea {
+					border-color: $tertiary-grey-alt;
+					opacity: 0.7
+				}
+
+				.enrollment-input.required input {
+					box-shadow: none;
+					border-left-width: 1px;
+				}
+			}
+		}
+	}
+
+	.admission-set.gift-from {
+		border: 1px solid #d6f1d9;
+		border-top-width: 0;
+		padding: 15px;
+
+		.label {
+			color: #52b85f;
+			margin-bottom: 10px;
+		}
+
+		.body-container .large {
+			width: 212px;
+		}
+	}
+
+
+	.admission-set.gift-recipient {
+		padding: 0px 15px 5px 15px;
+		background-color: #f7fdf8;
+		border: 1px solid #d6f1d9;
+		border-bottom-width: 0;
+		margin-bottom: 0;
+		position: relative;
+
+		@include icon($gift, $position: relative, $right: 13px, $top: 5px, $left: auto);
+
+		.label {
+			color: #52b85f;
+			margin-bottom: 10px;
+		}
+
+		.body-container {
+			width: 652px;
+			background: none;
+
+			.large.left {
+				width: 212px;
+				&.last {
+					margin-right: 0;
+				}
+			}
+		}
+
+		.enrollment-input.checkbox {
+			background-color: #f7fdf8;
+
+			&:hover {
+				input[type=checkbox]:not(:checked) + label::after {
+					left: 0;
+				}
+			}
+
+			input[type=checkbox] + label {
+				padding-left: 25px;
+				color: #52b85f;
+
+				&::after {
+					left: 0;
+				}
+
+				&::before {
+					display: none;
+				}
+
+			}
+
+			input[type=checkbox]:checked + label::after {
+				left: 0;
+			}
+
+			input[type=checkbox]:focus + label {
+				box-shadow: none;
+			}
+		}
+	}
+
+	.admission-set.gift-message {
+		padding: 0 15px 10px 15px;
+		background-color: #f7fdf8;
+		border: 1px solid #d6f1d9;
+		border-top-width: 0;
+		margin-bottom: 0;
+
+		.body-container {
+			width: 652px;
+			padding-bottom: 0;
+		}
+
+		.enrollment-input {
+			width: 100%;
+			background-color: #f7fdf8;
+			margin: 0;
+
+			&.full {
+				width: 652px;
+			}
+		}
+
+		textarea {
+			background-color: white;
+			font-family: $font;
+		}
+
+		textarea::-webkit-input-placeholder {
+		    font-weight: 300;
+		}
+
+		textarea:-moz-placeholder {
+		    /* FF 4-18 */
+	    font: normal 300 1.3em/1 $font;
+		}
+
+		textarea::-moz-placeholder {
+		    /* FF 19+ */
+		    font: normal 300 1.3em/1 $font;
+		}
+
+		textarea:-ms-input-placeholder {
+		    /* IE 10+ */
+		    font: normal 300 1em/1 $font;
+		}
+
+
+		textarea {
+			color: $secondary-grey;
+			width: 100%;
+			min-height: 100px;
+			resize: vertical;
+			max-height: 200px;
+			font-size: 1em;
+			font-weight: 200;
+			padding: 6px 10px;
+			border: 1px solid #b8b8b8;
+
+			&:focus {
+				border-color: $primary-blue;
+			}
+		}
+	}
+
+	.admission-set {
+		height: auto;
+		overflow: hidden;
+		margin-bottom: 40px;
+		margin-left: -5px;
+		padding-left: 5px;
+		padding-bottom: 2px;
+
+		.label {
+			color: $primary-grey;
+			font-size: 0.9em;
+			line-height: 1em;
+			font-weight: 500;
+			margin-bottom: 20px;
+
+			&:empty {
+				margin-bottom: 0;
+			}
+		}
+
+		.body-container {
+			width: 675px;
+			float: left;
+			padding-bottom: 2px;
+		}
+
+		.help-popover {
+				position: relative;
+				clear: both;
+				background-color: #f7fcff;
+				width: 650px;
+				top: -220px;
+				left: 15px;
+				padding: 10px;
+				border: 2px solid $primary-blue;
+				border-radius: 5px;
+				box-shadow: 0 0 15px 0 rgba(0,0,0,0.3);
+				font: normal 300 1em/1 $font;
+
+				.title {
+					font-size: 1.3em;
+					line-height: 1.5em;
+					margin-top: 10px;
+					padding-right: 20px;
+				}
+
+				.body {
+					line-height: 28px;
+					font-size: 0.9em;
+					font-weight: 400;
+				}
+
+				.close {
+					cursor: pointer;
+					top: 10px;
+					right: 20px;
+					@include icon($message_box_close, $position: absolute);
+				}
+			}
+
+		.enrollment-input-container {
+			position: relative;
+
+			&.nested {
+				display: inline-block;
+				padding-right: 20px;
+				background-color: #f9f9f9;
+
+				.enrollment-input {
+					width: 675px;
+					padding-left: 30px;
+				}
+
+				.enrollment-input:not(.text) {
+					padding-left: 50px;
+					margin: 0;
+				}
+
+				.label {
+					background-color: #f9f9f9;
+					margin: 0;
+					line-height: 40px;
+					padding-left: 40px;
+				}
+
+				.enrollment-input.radio label {
+					width: 615px;
+					background-color: #f2f2f2;
+					margin-bottom: 4px;
+				}
+
+				.full {
+					width: 655px;
+				}
+			}
+
+			.large + .help {
+				width: 420px;
+			}
+
+			.help {
+				float: left;
+				width: 485px;
+				padding-left: 20px;
+				position: relative;
+
+				a {
+					text-decoration: none;
+					color: $primary-blue;
+				}
+
+				.token-help {
+					width: 690px;
+					margin-left: -10px;
+					color: $secondary-grey;
+					font-style: italic;
+
+					.bold {
+						font-weight: 500;
+					}
+				}
+
+				.information {
+					padding-top: 10px;
+					font-size: 0.9em;
+					font-weight: 300;
+					color: $tertiary-grey;
+				}
+
+				.information.hidden {
+					display: none;
+				}
+
+				.information:not(.hidden) + .icon {
+					@include icon($info_active, $position: absolute);
+				}
+
+				.icon {
+					//cursor: pointer;
+					top: 13px;
+					left: 12px;
+
+					@include icon($info, $position: absolute);
+
+					&:hover {
+						@include icon($info_active, $position: absolute);
+					}
+				}
+			}
+		}
+
+		.enrollment-checkbox-group {
+
+			.yes {
+				position: relative;
+			}
+
+			.options {
+				padding-left: 20px;
+				overflow: hidden;
+				font-size: 1.1em;
+				width: 98%;
+				@include experimental-value(width, calc(100% - 20px));
+				position: absolute;
+				bottom: 1px;
+
+				.enrollment-input {
+					margin: 0;
+				}
+
+				.enrollment-input.checkbox {
+					input[type=checkbox]:focus + label {
+						box-shadow: none;
+					}
+
+					input[type=checkbox]:checked + label::before {
+						display: none;
+					}
+				}
+
+				&.disabled {
+					cursor: default;
+					.enrollment-input {
+						cursor: default;
+						color: $tertiary-grey;
+
+						&.checkbox {
+							input[type=checkbox]:focus + label {
+								box-shadow: none;
+							}
+
+							input[type=checkbox]:checked + label {
+								@include icon($checkbox-14, $top: 13px, $left: 18px);
+
+								&::before{
+									display: none;
+								}
+							}
+
+							&:hover input[type=checkbox]:not(:checked) + label {
+								@include icon($checkbox-14, $top: 13px, $left: 18px);
+							}
+						}
+					}
+				}
+
+			}
+		}
+
+		.enrollment-input-container.error {
+			position: relative;
+			overflow: hidden;
+			height: auto;
+
+			box-shadow: 0 0 0px 1px $primary-red;
+		}
+
+		.enrollment-input {
+			font: normal 600 0.9em/20px $font;
+			display: inline-block;
+			color: $primary-grey;
+			margin: 2px 0;
+			float: left;
+			min-height: 40px;
+
+			a {
+				color: $primary-blue;
+				text-decoration: none;
+				position: relative;
+			}
+
+			&.nested {
+				margin: 0;
+				padding-left: 20px;
+			}
+
+			&.card-name {
+				width: 406px;
+				margin-right: 200px; //wrap to the next line
+			}
+
+			&.card-number {
+				width: 200px;
+			}
+
+			&.card-code {
+				width: 95px;
+			}
+
+			&.full{
+				width: 675px;
+			}
+
+			&.dark {
+				background-color: #f9f9f9;
+			}
+
+			&.error {
+				background-color: rgba(243, 82, 82, 0.05);
+				border-color: $primary-red;
+
+				label {
+					border-color: $primary-red;
+
+					&::before {
+						background-color: $primary-red !important;
+					}
+				}
+			}
+
+			&.radio {
+				cursor: pointer;
+
+				.input-container {
+					display: inline-block;
+					position: relative;
+					margin: 0 5px;
+
+					&.dropdown {
+						width: 300px;
+					}
+
+					&.disabled::after {
+						content: '';
+						position: absolute;
+						top: 0; bottom: 0;
+						left: 0; right: 0;
+						background-color: #efefef;
+						opacity: 0.5;
+					}
+				}
+
+				input[type=text] {
+					box-shadow: none;
+					font-size: 14px;
+					font-weight: 500;
+					line-height: 25px;
+					border: 1px solid $tertiary-grey;
+					background: #ffffff;
+					padding: 6px 10px;
+				}
+
+				.content {
+					padding: 5px 0 15px 0;
+					font-weight: 400;
+					font-style: italic;
+
+					a {
+						text-decoration: none;
+						color: $primary-blue;
+					}
+
+					&.hidden {
+						display: none;
+					}
+				}
+
+				input[type=radio] {
+					opacity: 0;
+					position: absolute;
+				}
+
+				input[type=radio] + label {
+					min-height: 40px;
+					padding: 10px 15px 10px 45px;
+					display: block;
+					cursor: pointer;
+					@include icon($radio-button-16, $top: 12px, $left: 18px);
+
+					&.input {
+						padding: 0 15px 0 45px;
+					}
+				}
+
+				input[type=radio]:checked + label {
+					@include icon($radio-button-16_active, $top: 12px, $left: 18px);
+
+					&::before {
+						content: '';
+						position: absolute;
+						width: 4px;
+						background-color: $primary-blue;
+						top: 0;
+						left: 0px;
+						bottom: 0;
+					}
+				}
+
+				&:hover input[type=radio]:not(:checked) + label {
+					@include icon($radio-button-16_hover, $top: 12px, $left: 18px);
+				}
+
+				&:not(.error) {
+					input[type=radio]:focus + label {
+						box-shadow: inset 0 0 0 1px $primary-blue;
+					}
+				}
+
+				&.error {
+					input[type=radio]:focus + label {
+						box-shadow: inset 0 0 0 1px $primary-red;
+					}
+
+					input[type=radio]:not(:checked) + label {
+						background-color: #f9f9f9;
+					}
+				}
+				label {
+					.help {
+						margin-bottom:1em;
+						padding-left:0;
+					}
+				}
+			}
+
+			&.checkbox {
+				cursor: pointer;
+
+				.help {
+					font-size: 0.84em;
+					line-height: 1.4em;
+					font-weight: 300;
+					color: #757474;
+					padding: 4px 10px 10px 46px;
+
+					a {
+						color: $primary-blue;
+						text-decoration: none;
+					}
+
+					&:empty {
+						display: none;
+					}
+				}
+
+				input[type=checkbox] {
+					opacity: 0;
+					position: absolute;
+				}
+
+				input[type=checkbox] + label {
+					min-height: 40px;
+					padding: 10px 15px 10px 46px;
+					display: block;
+					cursor: pointer;
+
+					&.long {
+						line-height: 28px;
+						padding: 15px 25px 15px 46px;
+						font-weight: 400;
+
+						&::after {
+							top: 22px;
+						}
+					}
+
+					@include icon($checkbox-14, $top: 13px, $left: 18px);
+				}
+
+				input[type=checkbox]:checked + label {
+					@include icon($checkbox-14_active, $top: 13px, $left: 18px);
+
+					&.long::after {
+						top: 22px;
+					}
+
+					&::before {
+						content: '';
+						position: absolute;
+						width: 4px;
+						background-color: $primary-blue;
+						top: 0;
+						left: 0px;
+						bottom: 0;
+					}
+				}
+
+				&:hover input[type=checkbox]:not(:checked) + label {
+					@include icon($checkbox-14_hover, $top: 13px, $left: 18px);
+
+					&.long::after {
+						top: 22px;
+					}
+				}
+
+				input[type=checkbox]:focus + label {
+					box-shadow: inset 0 0 0 1px $primary-blue;
+				}
+			}
+
+			&.date-input {
+				input {
+					position: relative;
+					height: 40px;//because IE sucks.
+				}
+				input:focus {
+					border-color: $primary-blue;
+					box-shadow: -1px 0 0 0 $primary-blue;
+					z-index: 1;
+				}
+
+				&.required {
+					.month input {
+						box-shadow: inset 4px 0 0 0 $tertiary-grey;
+						border-left-width: 0;
+
+						&:focus {
+							box-shadow: inset 4px 0 0 0 $primary-blue;
+						}
+					}
+				}
+			}
+
+			&.text, &.select{
+				input {
+					box-shadow: none;
+					border-radius: 0;
+					font-size: 14px;
+					font-weight: 500;
+					line-height: 25px;
+					border: 1px solid $tertiary-grey;
+					background: #ffffff;
+					padding: 6px 30px 6px 10px;
+					margin: 0;
+					min-height: 39px;
+					width: 100%;
+
+					&:focus {
+						border-color: $primary-blue;
+					}
+
+					&.error {
+						border-color: $primary-red;
+						box-shadow: inset 4px 0 0 0 $primary-red;
+
+						&:focus {
+							border-color: $primary-red;
+							box-shadow: inset 4px 0 0 0 $primary-red;
+						}
+					}
+				}
+
+				.clear {
+					top: 11px;
+					right: 8px;
+				}
+
+				&.required {
+					input {
+						box-shadow: inset 4px 0 0 0 $tertiary-grey;
+						border-left-width: 0;
+
+						&:focus {
+							box-shadow: inset 4px 0 0 0 $primary-blue;
+						}
+					}
+				}
+
+				&.error {
+					input {
+						border-color: $primary-red;
+
+						&:focus {
+							border-color: $primary-red;
+						}
+					}
+
+					&.required input {
+						box-shadow: inset 4px 0 0 0 $primary-red;
+
+						&:focus {
+							box-shadow: inset 4px 0 0 0 $primary-red;
+						}
+					}
+				}
+
+				&.left {
+					float: left;
+					margin-right: 8px;
+					&.last {
+						margin-right: 0;
+					}
+				}
+
+				&.third {
+					width: 219px;
+				}
+
+				&.large {
+					width: 255px;
+				}
+
+				&.small {
+					width: 155px;
+				}
+
+				&.one-line {
+					margin-right: 400px;
+				}
+			}
+
+			&.button .button-text {
+				display: inline-block;
+				line-height: 20px;
+				padding: 10px 20px;
+				background-color: $primary-blue;
+				float: right;
+				border-radius: 5px;
+				color: white;
+				cursor: pointer;
+			}
+		}
+	}
+
+	.enrollment-description {
+
+		&.nested {
+			padding: 20px;
+			background-color: #f9f9f9;
+		}
+
+		p {
+			margin: 10px 0 0 0;
+			font: normal 300 1em/1.5em $font;
+			color: $secondary-grey;
+		}
+
+		a {
+			text-decoration: none;
+			color: $primary-blue;
+		}
+	}
+
+	.enrollment-link {
+		font: normal 400 0.9em/40px $font;
+		color: $primary-blue;
+		cursor: pointer;
+		display: inline;
+
+		&.nested {
+			display: inline-block;
+			background-color: #f9f9f9;
+			margin-top: -5px;
+			width: 675px;
+			padding: 0 30px;
+		}
+	}
+}
+
+.enroll-for-credit-confirmation {
+	color: $primary-grey;
+	padding: 0 230px 110px 0;
+	position: relative;
+	font: normal 300 1em/1 $font;
+
+	.subscribe-container {
+		right: 230px;
+	}
+
+	.main {
+		color: $secondary-green;
+		font-size: 1.5em;
+		line-height: 1.7em;
+		font-weight: 300;
+
+		&.error {
+			color: $primary-red;
+		}
+	}
+
+	.text {
+		margin: 8px 0;
+	}
+
+	.confirm {
+		margin: 40px 0 20px 0;
+
+		a {
+			color: $primary-blue;
+			cursor: pointer;
+		}
+	}
+
+	.info {
+		background-color: $panel-background;
+		border: 1px solid #efefef;
+
+		&.hidden {
+			display: none;
+		}
+
+		.line {
+			padding: 15px;
+
+			&:not(.course-info) {
+				position: relative;
+				background-color: white;
+			}
+
+			.course-number {
+				font-size: 0.75em;
+				font-weight: 600;
+				text-transform: uppercase;
+				color: $tertiary-grey;
+				margin-bottom: 5px;
+			}
+
+			.title {
+				font-size: 1.5em;
+				font-weight: 300;
+				max-width: 615px;
+			}
+
+			.instructor {
+				font-size: 0.6em;
+				text-transform: uppercase;
+				font-weight: 600;
+				margin-top: 5px;
+				color: $primary-blue;
+			}
+
+			.enroll-now {
+				position: absolute;
+				line-height: 40px;
+				color: white;
+				background-color: $secondary-green;
+				font-size: 1.2em;
+				right: 20px;
+				top: 24px;
+				padding: 0 10px;
+				border-radius: 5px;
+			}
+
+			&.course-info {
+				margin: 0 40px 0 10px;
+				border-bottom: 1px solid #efefef;
+				height: auto;
+				overflow: hidden;
+				padding-right: 0;
+				padding-left: 0;
+			}
+
+			.name {
+				font-size: 0.6em;
+				font-weight: 600;
+				text-transform: uppercase;
+				color: $tertiary-grey;
+			}
+
+			.field {
+				float: left;
+
+				&.long {
+					width: 350px;
+					margin-right: 10px;
+				}
+
+				&.medium {
+					width: 240px;
+				}
+
+				&.fourth {
+					margin-right: 95px;
+
+					&:last-of-type {
+						margin-right: 0;
+					}
+				}
+
+				.value {
+					margin-top: 10px;
+					font-size: 0.9em;
+					line-height: 1.5em;
+
+					&.green {
+						color: $secondary-green;
+						font-weight: 600;
+					}
+				}
+			}
+		}
+	}
+
+	.payment-details {
+		position: relative;
+		overflow: hidden;
+		margin-top: 20px;
+
+		.edit {
+			position: absolute;
+			right: 0;
+			z-index: 2;
+		}
+
+		.header {
+			background: none;
+			border: none;
+			font-size: 1.5em;
+			font-weight: 300;
+			text-transform: none;
+			color: #494949;
+			height: auto;
+		}
+
+		.card {
+			&:before {
+				content: '**** **** **** ';
+			}
+		}
+	}
+
+}
+
+.enrollment-gift-confirmation {
+	.bold {
+		font-weight: 500;
+	}
+
+	.prompt {
+		line-height: 1.3em;
+	}
+
+	.gift-info {
+		margin: 1em 0;
+		line-height: 1.3em;
+
+		a {
+			display: inline;
+			font-size: 1em;
+		}
+
+		p {
+			margin-top: 0;
+		}
+	}
+
+	.token, .transaction {
+		margin-top: 1em;
+		overflow: hidden;
+
+		.label {
+			float: left;
+			font-weight: 600;
+			line-height: 30px;
+			margin-right: 0.5em;
+		}
+
+		.textbox-base {
+			float: left;
+		}
+
+		input {
+			box-shadow: none;
+			font-size: 1em;
+			font-weight: 300;
+			color: #494949;
+			margin-left: 10px;
+			width: 140px;
+			border-radius: 0;
+		}
+	}
+}
+
+.enrollment-container .enrollment-credit-purchase {
+	.support {
+		line-height: 1em;
+
+		a {
+			display: block;
+		}
+	}
+}
+
+.enrollment-credit-purchase,
+.enrollment-gift-confirmation {
+	padding-right: 280px;
+	color: $primary-grey;
+	font: normal 300 1em/1 $font;
+
+	.title {
+		font-size: 1.5em;
+		color: $secondary-green;
+		margin-bottom: 10px;
+
+		@include icon($assignment_ontime_small, $left: -35px);
+	}
+
+	.iframe-container {
+		display: none;
+	}
+
+	.things-to-do {
+		margin-bottom: 30px;
+		.prompt {
+			margin-bottom: 30px;
+			line-height: 1.5em;
+
+			.bold {
+				font-weight: 600;
+			}
+		}
+	}
+
+	.transaction {
+		margin-bottom: 1em;
+		overflow: hidden;
+
+		.label {
+			float: left;
+			font-weight: 600;
+			line-height: 30px;
+			margin-right: 0.5em;
+		}
+
+		.textbox-base {
+			float: left;
+		}
+
+		input {
+			box-shadow: none;
+			font-size: 1em;
+			font-weight: 300;
+			color: #494949;
+			margin-left: 10px;
+			width: 140px;
+			border-radius: 0;
+		}
+	}
+
+	a {
+		display: block;
+		text-decoration: none;
+		color: $primary-blue;
+		margin: 10px 0;
+		font-size: 0.9em;
+	}
+
+	.support{
+		line-height: 40px;
+		margin-top: 1em;
+
+		a {
+			display: inline;
+		}
+	}
+
+	.phone {
+		font-size: 0.9em;
+		margin-top: 0.9em;
+	}
+}
+
+.payment-verification, .enroll-for-credit-confirmation {
+	.subscribe-container {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		background-color: #f9f9f9;
+	}
+
+	.legal {
+		font-size: 0.74em;
+		line-height: 1.4em;
+		color: #757474;
+		padding: 4px 10px 10px 46px;
+
+		a {
+			color: $primary-blue;
+			text-decoration: none;
+		}
+	}
+
+	.subscribe {
+		font: normal 600 0.9em/20px $font;
+		background-color: #f9f9f9;
+		clear: both;
+		cursor: pointer;
+
+		input[type=checkbox] {
+			opacity: 0;
+			position: absolute;
+		}
+
+		input[type=checkbox] + label {
+			min-height: 40px;
+			padding: 10px 15px 10px 46px;
+			display: block;
+			cursor: pointer;
+
+			&.long {
+				line-height: 28px;
+				padding: 15px 25px 15px 46px;
+				font-weight: 400;
+
+				&::after {
+					top: 22px;
+				}
+			}
+
+			@include icon($checkbox-14, $top: 13px, $left: 18px);
+		}
+
+		input[type=checkbox]:checked + label {
+			@include icon($checkbox-14_active, $top: 13px, $left: 18px);
+
+			&.long::after {
+				top: 22px;
+			}
+
+			&::before {
+				content: '';
+				position: absolute;
+				width: 4px;
+				background-color: $primary-blue;
+				top: 0;
+				left: 0px;
+				bottom: 0;
+			}
+		}
+
+		&:hover input[type=checkbox]:not(:checked) + label {
+			@include icon($checkbox-14_hover, $top: 13px, $left: 18px);
+
+			&.long::after {
+				top: 22px;
+			}
+		}
+
+		input[type=checkbox]:focus + label {
+			box-shadow: inset 0 0 0 1px $primary-blue;
+		}
+	}
+}
+
+.payment-verification {
+	font: normal 300 1em/1 $font;
+	color: $primary-grey;
+	overflow: hidden;
+	padding: 0 300px 140px 0;
+	position: relative;
+
+	.warning {
+		margin-top: 10px;
+	}
+
+	.info {
+		.title {
+			font-size: 1.7em;
+			line-height: 2em;
+			font-weight: 300;
+			color: $tertiary-grey;
+		}
+	}
+
+	.subscribe-container {
+		right: 275px;
+	}
+
+	.payment-info, .billing-info, .gift-info {
+		position: relative;
+		float: left;
+		margin: 20px 380px 0 0;
+		padding-right: 30px;
+
+		.title {
+			float: left;
+			font-size: 1.3em;
+			line-height: 1.5em;
+			font-weight: 300;
+			color: $tertiary-grey;
+			margin-right: 10px;
+
+			span {
+				float: left;
+			}
+
+			.edit {
+				position: relative;
+				float: left;
+				padding-left: 9px;
+				top: -6px;
+				color: $primary-blue;
+				cursor: pointer;
+				text-transform: uppercase;
+				font-size: 0.55em;
+			}
+		}
+
+		.info {
+			font-size: 0.9em;
+			line-height: 1.4em;
+
+			.label {
+				font-weight: 600;
+				margin-right: 0.5em;
+
+				&::after {
+					content: ':'
+				}
+			}
+
+			&.card .last-four::before {
+				content: '**** **** **** '
+			}
+
+			.city {
+				margin-right: 0.5em;
+
+				&:empty {
+					display: none;
+				}
+			}
+
+			.state {
+				margin-right: 0.5em;
+
+				&:empty {
+					display: none;
+				}
+			}
+		}
+
+		.street {
+			clear: both;
+		}
+	}
+}

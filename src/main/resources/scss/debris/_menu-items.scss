@@ -1,0 +1,298 @@
+
+
+.file-browser-menu {
+	overflow: hidden;
+
+	.x-menu-item-icon.upload{
+		@include sprite($upload);
+	}
+
+	.file-input {
+		display: block;
+		position: absolute;
+		//top: -4px;
+		top: -15px;
+		right: -2px;
+		//height: 30px;
+		height: 50px;
+		filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+		opacity: 0;
+
+		font-size: 200px;
+		cursor: pointer;
+	}
+
+}
+
+
+
+.x-menu-nt { //the combobox drop list uses this class,
+//don't combine with x-panel-nt to reduce css size.
+	@include animate(fadeIn,0.3s);
+	//This looks suspicious, but this is the only real way to get the
+	//crisp edges on the top/left while still giving a soft shadow to the right & bottom.
+	box-shadow: 3px 3px 3px -3px rgba(0,0,0,0.3);
+}
+
+.x-panel-nt {
+	@include animate(fadeIn,0.3s);
+	//This looks suspicious, but this is the only real way to get the
+	//crisp edges on the top/left while still giving a soft shadow to the right & bottom.
+	box-shadow: 3px 3px 3px -3px rgba(0,0,0,0.3);
+	position: fixed !important;
+
+	.x-menu-body {
+		padding: 0 0 10px 0;
+	}
+
+	&.no-footer .x-menu-body {
+		padding: 0;
+	}
+}
+
+.annotation-menu {
+	position: fixed !important;
+}
+
+
+.x-menu-list-ct, //the combobox drop list uses this class
+.x-menu-body {
+	border: 1px solid #dcdcdc;
+	background: #ffffff;
+}
+
+li.x-menu-item {
+	border-bottom: 1px solid #dcdcdc;
+	&.no-border,
+	&:last-of-type {
+		border-bottom-width: 0px;
+	}
+}
+
+label.x-menu-item-cmp {
+	text-transform: uppercase;
+	color: $tertiary-grey;
+	font: normal 700 0.6em/1 $font;
+	padding: 12px 10px 8px 15px;
+}
+
+.x-menu-item {
+	color: $secondary-grey !important;
+	font-size: 1em;
+	font-weight: 400;
+	background: none;
+	padding: 7px 15px;
+	margin: 0 !important;
+	cursor: pointer;
+	overflow: hidden;
+	@include ellipse;
+
+	&.label{
+		@include menu-label-text-treatment;
+		padding: 15px 10px 5px 30px;
+	}
+
+	&.x-menu-item-checked {
+		@include icon($menu_check, $top: 50%, $left: 10px);
+		&::after {
+			margin-top: -5px;
+		}
+	}
+
+	&.x-menu-item-checked,
+	&.x-menu-item-unchecked{
+		padding: 5px 10px 5px 30px;
+	}
+
+	&.current,
+	&.x-menu-item-over,
+	&.x-menu-item-active {
+		border:{
+			radius: 0;
+			width: 0;
+			style: none;
+		}
+		background: #efefef !important;
+		color: #3c3c3c !important;
+	}
+
+	&.x-menu-item-separator{
+		background: #dcdcdc !important;
+		height: 1px;
+		padding: 0 !important;
+		margin-top: 8px !important;
+		margin-bottom: 18px !important;
+		overflow: visible;
+
+		.label {
+			background: none;
+			position: relative;
+			span {
+				color: #d0d0d0;
+				background: #ffffff;
+				top: -6px;
+				left: 25px;
+				padding: 0 5px;
+				position: absolute;
+				display: block;
+				font-size: 10px;
+				text-transform: uppercase;
+				font-weight: 600;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+		}
+
+		&.doublespaced{
+			margin-bottom: 37px !important;
+
+			.label span {
+				top: 10px;
+				color: #8a8989;
+				font-size: 10px;
+				font-weight: bold;
+			}
+		}
+
+		&.noline{
+			height: 0px;
+		}
+	}
+}
+
+.x-nlg .x-menu-item-active {
+	background-image: none;
+}
+
+.x-box-scroller-bottom {
+	position: absolute;
+	left: 0; right: 0;
+	top: auto; height: 8px;
+	bottom: 0;
+
+	.x-menu-scroll-bottom {
+		background: #fff;
+		opacity: 0.5;
+		@include icon($menu-arrow-down-active, $top: 0, $left: 50%);
+		&::after {margin-left: -4px;}
+		&.x-menu-scroll-bottom-hover {
+			opacity: 1;
+		}
+		&.x-menu-scroll-bottom-disabled {
+			opacity: 0 !important;
+		}
+	}
+}
+
+.x-box-scroller-top .x-menu-scroll-top {
+	background: #fff;
+	opacity: 0.5;
+
+	@include icon($menu-arrow-up-active, $top: 3px, $left: 50%);
+	&::after {margin-left: -4px;}
+
+	&.x-menu-scroll-top-hover {
+		opacity: 1;
+	}
+	&.x-menu-scroll-top-disabled {
+		opacity: 0 !important;
+	}
+}
+
+
+.no-checkboxes {
+
+	label.x-menu-item-cmp {
+		padding-left: 15px;
+	}
+
+	.selection-list-item,
+	.x-menu-item {
+
+		&.selection-selected,
+		&.x-menu-item-checked {
+			&::after { content: none; }
+		}
+
+		padding-left: 15px;
+		&.label{
+			padding-left: 15px;
+		}
+	}
+}
+
+
+.blue-menu-items {
+	&.no-checkboxes .x-menu-item-checked,
+	&:not(.no-checkboxes) .x-menu-item-active {
+		background: $primary-blue;
+		color: #fff !important;
+		font-weight: 600;
+	}
+
+	.x-menu-item-active {
+		background: #f0f0f0;
+	}
+}
+
+
+
+.x-menu-item-cmp.search-box {
+	border-top: 1px solid #F1F1F1;
+	background: #f8f8f8;
+	height: 61px;
+	overflow: hidden;
+	@include icon($rhp-search,$top:21px,$left:19px);
+
+	input {
+		margin: 10px;
+		padding: 0 26px 0 30px;
+
+		background: #fff;
+		border: 1px solid #dcdcdc;
+
+		font: normal 400 1em/1.5 $font;
+		color: $primary-grey;
+
+		height: 40px;
+		width: 92%;//fallback...
+		@include experimental-value(width, calc(100% - 20px));
+	}
+
+	input:not(:empty) > .clear {display: block;}
+
+	.clear {
+		display: none;
+		@include icon($clear_line);
+		position: absolute;
+		top: 22px;
+		right: 15px;
+		left: auto;
+
+		margin: 0;
+		width: 16px;
+		height: 16px;
+		padding: 0;
+		border-width: 0;
+	}
+}
+
+
+//Custom filter Menu
+.x-panel-nt.no-checkboxes.filter-search {
+	font-size: 0.9em;
+
+	label.x-menu-item-cmp,
+	.x-menu-item{
+		padding-left: 10px;
+	}
+
+	.filter-menu-item-with-count {
+		position: relative;
+		overflow: hidden;
+
+		.count {
+			float: right;
+		}
+	}
+}

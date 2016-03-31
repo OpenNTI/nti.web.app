@@ -1,0 +1,1118 @@
+
+
+.chat-window {
+	@extend .nti-window;
+
+	right: 80px !important;
+	left: auto !important;
+	top: 100px !important;
+	border: none;
+	background-color: rgba(255,255,255, 0.0);
+
+	&.gutter-list-open {
+		right: 240px !important;
+	}
+
+	.nti-window-header {
+		height: 42px;
+		background-color: #2d2d2d;
+		border: none;
+  		box-shadow: none;
+
+		.header-body {
+			> span {
+				color: #ffffff;
+				font-size: 16px;
+				font-weight: 600;
+				text-transform: capitalize;
+				cursor: pointer;
+			}
+
+			.controls {
+				.tool {
+					&.close {
+						margin-top: 12px;
+					}
+
+					&.minimize {
+						display: none;
+					}
+
+
+				}
+
+				&.has-tools {
+					padding-left: 5px;
+					&:after {
+						content: none;
+					}
+				}
+			}
+
+			.tools {
+				padding-right: 0;
+				img.tool{
+					&.settings {
+						opacity: 0.6;
+						margin-right: 5px;
+						@include sprite($chat_options);
+
+						&:hover{
+							opacity: 1;
+						}
+					}
+
+					&.add-people {
+						display: none; //turned off until this is possible in the server...
+						opacity: 0.6;
+						margin-right: 5px;
+						@include sprite($add_people);
+						&:hover{
+							opacity: 1;
+						}
+					}
+					&.flag-for-moderation {
+						display: none;
+						margin-right: 5px;
+						@include sprite($flag-chat-13);
+						&:hover{
+							@include sprite($flag-chat-13_hover);
+						}
+						&.moderating {
+							&,&:hover{
+								@include sprite($flag-chat-13_active);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.gutter {
+		overflow: hidden;
+		background: #f4f3f3;
+
+		&.x-docked-left {
+			padding-top: 2px;
+			border-radius: 5px 0 0 5px;
+			border: 1px solid $border-grey;
+			border-width: 0;
+			border-right-width: 1px !important;
+		}
+
+		& > div.gutter-entry:first-child {
+			border-radius: 5px 0 0 0;
+		}
+		.gutter-entry {
+			overflow: hidden;
+			position: relative;
+
+			@include bottom-etch;
+
+			img {
+				border-radius: 1px;
+				border: 1px solid #c7c6c6;
+				width: 36px;
+				height: auto;
+				float: left;
+				margin: 3px 10px 3px 6px;
+			}
+			.wrapper {
+				margin: 6px 0 10px 53px;
+				width: 115px;
+
+				.name {
+					@include menu-label-text-treatment;
+				}
+				.status {
+					@include menu-label-text-treatment;
+					text-transform: none;
+					font-weight: 500;
+					font-style: italic;
+					font-size: 8pt;
+				}
+			}
+		}
+	}
+
+	.chat-view {
+		background-color: rgba(35, 35, 35, 0.98);
+
+		.error-box {
+			position: relative;
+			overflow: hidden;
+			background-color: $primary-red;
+			font-weight: 600;
+			font-size: 12px;
+
+			.error-desc {
+				color: white;
+				padding: 5px;
+			}
+		}
+	}
+
+	&.no-gutter {
+		.chat-log-view {
+			.log-entry-wrapper {
+				img {
+					display: inline-block;
+				}
+
+				div.message-bounding-box {
+					margin-left: 40px;
+					overflow: hidden;
+					position: relative;
+				}
+
+				.log-entry {
+					.name {
+						display: none;
+					}
+				}
+			}
+			&.moderating {
+				.log-entry-wrapper {
+					div.message-bounding-box {
+						margin-left: 75px;
+					}
+				}
+			}
+		}
+
+	}
+
+	.chat-log-view {
+		overflow:{
+			x: hidden;
+			y: auto; //scroll;
+		}
+
+		//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+		// REFRESHER: box-shadow syntax is:
+		// box-shadow:  none | <shadow> [,<shadow>]*
+		//	where <shadow> is defined as:
+		//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
+		//
+
+		.x-mask {
+			background: rgba(245,245,245,0); // Make it transparent
+		}
+
+		.control {
+			display: none;
+		}
+
+		&.moderating {
+			.control {
+				top: 15px; left: 7px;
+				float: left;
+				display: inline-block;
+				width: 15px;
+				height: 15px;
+				@include icon($checkbox-14);
+				&:hover {
+					&::after{
+						@include sprite($checkbox-14_hover);
+					}
+				}
+				&.checked{
+					&,&:hover {
+						&::after{
+							@include sprite($checkbox-14_active);
+						}
+					}
+				}
+				&.confirmFlagged {
+					display: none;
+				}
+			}
+			.log-entry-wrapper {
+				div.message-bounding-box {
+					margin-left: 25px;
+				}
+			}
+		}
+
+		.log-notification-wrapper {
+			clear: both;
+			text-align: center;
+			color: #cacaca;
+			font-size: 12px;
+			font-style: italic;
+			font-weight: 600;
+
+			.message{
+				word-wrap: break-word;
+
+				&.more {
+					padding: 10px 10px;
+    				background-color: #3f3f3f;
+				    font-size: 14px;
+				    width: 160px;
+				    margin: 8px auto;
+				    border-radius: 5px;
+				    cursor: pointer;
+				}
+			}
+		}
+
+		.log-entry-wrapper {
+			overflow: hidden;
+			position: relative;
+
+			&.me {
+				.name,
+				.avatar {
+					display: none;
+				}
+				.control{
+					display: none;
+				}
+
+			}
+
+			.avatar-container {
+				width: 42px;
+				height: 42px;
+				float: left;
+				margin: 2px 3px 2px 5px;
+
+				.avatar-pic {
+					border-radius: 21px;
+				}
+			}
+
+			.log-entry {
+				background: $primary-blue;
+				border-radius: 5px;
+				float: left;
+				overflow: visible;
+				margin: 12px;
+				padding: 8px;
+				clear: right;
+				position: relative;
+
+				&.confirmFlagged,
+				&.flagged {
+					border: 1px solid #fd9191;
+					background: #fefefe;
+					.name{
+						color: #fd817f;
+					}
+					.body-text {
+						color: #fec1bf;
+						text-decoration: line-through;
+					}
+					&::before {
+						content: url(../images/elements/other-bubble-tip-flagged.png);
+					}
+				}
+
+				//whiteboards inside chat:
+				img {
+					display: inline-block;
+					width: 100px;
+					margin: 0;
+					padding: 0;
+				}
+
+				&::before {
+					top: 0;
+					left: -9px;
+					position: absolute;
+					content: url(../images/elements/other-bubble-tip.png);
+				}
+
+				&.me {
+					float: right;
+					clear: left;
+					box-shadow: none;
+					background: #fefefe;
+					border: 1px solid #e3e3e3;
+					margin: 14px;
+					.name {
+						display: none;
+					}
+					.body-text {
+						color: $secondary-grey;
+					}
+					&::before {
+						left: inherit;
+						top: inherit;
+						bottom: 4px;
+						right: -8px;
+						content: url(../images/elements/my-bubble-tip.png);
+					}
+				}
+
+				.name {
+					color: #d8f0fe;
+					font-weight: 800;
+					font-size: 10px;
+					margin-bottom: 3px;
+					text-transform: uppercase;
+					@include ellipse;
+					overflow: hidden;
+					max-width: 210px;
+				}
+				.body-text {
+					font-size: 10pt;
+					font-weight: 700;
+					color: #ffffff;
+
+					// break-word for most browsers works fine, but need to insert
+					// hyphens for longer bits of text, and ms workaround
+					word-wrap: break-word;
+					word-break: normal;
+					word-break: break-word; // safari
+					// if long words/links still a problem in ie, uncomment:
+					-ms-word-break: break-all;
+					hyphens: auto;
+				}
+			}
+		}
+	}
+
+	.entry-card {
+		border: none;
+		.mod-buttons {
+			// border-radius: 0 0 5px 5px;
+			padding: 4px 12px;
+
+			.x-btn-caution-large {
+				margin-left: 0;
+			}
+		}
+
+		.x-panel-body {
+			background: rgba(35, 35, 35, 0); // transparent
+		}
+
+		.chat-entry {
+			position: absolute;
+			background-color: rgba(35, 35, 35, 0.0); //transparent
+			bottom: 0px;
+	  		right: 0px;
+	  		left: 0px;
+	  		z-index: 10;
+	  		border: none;
+
+	  		.x-mask {
+	  			background: rgba(63,63,63, 0.9); //TODO: find a better color.
+	  		}
+
+			.entry-wrapper {
+				margin: 10px 8px 10px 8px;
+				background-color: #3f3f3f;
+				border-radius: 5px;
+				height: 42px;
+
+				.add-whiteboard {
+					float: right;
+					margin: 10px 4px;
+					@include sprite($whiteboard);
+					cursor: pointer;
+					opacity: 0.6;
+
+					&:hover {
+						opacity: 1.0;
+					}
+				}
+
+				div {
+					margin: 0 37px 0 0;
+					padding: 6px 4px 0 8px;
+
+					input {
+						padding: 5px;
+						color: $tertiary-grey;
+
+						//Make it transparent
+						background-color: rgba(35,35,35,0.0);
+						height: 30px;
+						font-family: $font;
+						font-size: 14px;
+						width: 100%;
+						border: none;
+						//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+						// REFRESHER: box-shadow syntax is:
+						// box-shadow:  none | <shadow> [,<shadow>]*
+						//	where <shadow> is defined as:
+						//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
+					}
+				}
+			}
+		}
+	}
+}
+
+.chat-transcript-window {
+	position: static !important;
+}
+
+.chat-transcript {
+	@include divider;
+	.divider {
+		margin: 20px 15px;
+		&::after {
+			border-bottom: none;
+		}
+		span {
+			color: $tertiary-grey;
+		}
+	}
+
+	&.moderating {
+		.message:not(.moderated) {
+			.control {
+				position: relative;
+				top: 15px; left: 7px;
+				float: left;
+				display: inline-block;
+				width: 15px;
+				height: 15px;
+				@include icon($checkbox-14);
+				&:hover {
+					&::after{
+						@include sprite($checkbox-14_hover);
+					}
+				}
+				&.checked{
+					&,&:hover {
+						&::after{
+							@include sprite($checkbox-14_active);
+						}
+					}
+				}
+				&.confirmFlagged {
+					display: none;
+				}
+			}
+
+			.time {
+				margin-left: 30px;
+			}
+			.wrap {
+				margin-left: 100px;
+
+				.body .body-divider {
+						margin-right: 0;
+				}
+			}
+		}
+	}
+
+	.message {
+		margin: 20px 15px;
+		overflow: hidden;
+		position: relative;
+
+		.time {
+			@include menu-label-text-treatment;
+			position: absolute;
+			width: 60px;
+			top: 1.5em;
+			left: 0;
+			text-align: right;
+			font-weight: normal;
+			color: $primary-grey;
+		}
+
+		.wrap {
+			margin-left: 70px;
+			.name {
+				@include menu-label-text-treatment;
+				color: $primary-blue;
+				.me {
+					color: $tertiary-grey;
+				}
+			}
+
+			.body {
+				color: $primary-grey;
+				word-wrap: break-word;
+				word-break: break-word;
+				.body-divider {
+					margin-right: 30px;
+
+					.whiteboard-container {
+						.overlay {bottom: 0;}
+						.toolbar {
+							display: none !important;
+						}
+					}
+				}
+			}
+		}
+
+		&.moderated {
+			.name,
+			.body,
+			.time {
+				color: $tertiary_grey;
+			}
+		}
+
+		&.flagged,
+		&.confirmFlagged {
+			background: #fefefe;
+			.name{
+				color: #fd817f;
+			}
+			.body {
+				color: #fec1bf;
+				text-decoration: line-through;
+			}
+		}
+	}
+
+
+}
+
+#chat-dock-placeholder { cursor: pointer; }
+
+#chat-dock-placeholder,
+#chat-dock > .x-panel-header{
+	background-color: $panel-background;
+	box-shadow: 0 -1px #dbdbdb, inset 0 1px #fcfcfc;
+	border-bottom: 1px solid #dfdfdf;
+	border-bottom-width: 1px !important;
+	color: $secondary-grey;
+	text-shadow: 0 1px rgba(255,255,255,0.7);
+	font: italic 700 14px/36px $font;
+	background-image: linear-gradient(to top, #d3d3d3 0%, #f3f3f3 100%);
+
+	.x-header-text-container {
+		padding: 0 60px 0 20px;
+		@include icon($rhp-arrow-open-dark, $top: 14px, $left:8px);
+	}
+
+	.x-tool {
+		display: none;
+	}
+
+	.count {
+		position: absolute;
+		top: 9px; right: 10px;
+		padding: 0 4px;
+		text-align: center;
+		min-width: 29px;
+		border-radius: 8px;
+		background: #299bdc;
+		font: normal 600 12px/17px $font;
+		color: #ffffff;
+		box-shadow: 0 1px rgba(255,255,255,0.3),
+				inset 0 1px rgba(0,0,0,0.15),
+				inset 0 0 1px rgba(0,0,0,0.15);
+	}
+
+}
+
+#chat-dock-placeholder {
+	.x-header-text-container {
+		@include icon($rhp-arrow-closed-dark, $top: 14px, $left:8px);
+	}
+}
+
+#chat-dock-placeholder.notice-me,
+#chat-dock.notice-me > .x-panel-header
+{
+	background-color: #3fb3f6;
+	box-shadow: 0 -1px #d9d9d9, inset 0 1px #95ddfb;
+	border-bottom-color: #30a1f4;
+	background-image: linear-gradient(to top, #30a1f4 0%, #4ec6f8 100%);
+
+	color: #ffffff;
+	text-shadow: 0 -1px #33a4f4;
+	font-weight: 600;
+
+	.x-header-text-container {
+		@include icon($rhp-arrow-opened, $top: 14px, $left:8px);
+	}
+}
+
+#chat-dock-placeholder.notice-me{
+	.x-header-text-container {
+		@include icon($rhp-arrow-closed, $top: 14px, $left:8px);
+	}
+}
+
+#chat-dock-placeholder.hide-arrow,
+#chat-dock.hide-arrow .x-panel-header{
+	cursor: default;
+	.x-header-text-container {
+		&::after {
+			display: none !important;
+		}
+	}
+}
+
+.chat-dock-item{
+	position: relative;
+	overflow: hidden;
+	min-height: 50px;
+
+	div {
+		$val: opacity 0.5s, color 0.5s, background 0.5s;
+		@include experimental(transition, $val);
+	}
+
+	background: #ffffff;
+
+	.avatars{
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 50px;
+		height: 50px;
+
+		.avatar{
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-size: cover;
+			background-position: center;
+
+			&.img2,&.img3,&.img4{
+				display: none;
+			}
+		}
+
+		&.quad{
+			.avatar{
+				width: 50%;
+				height: 50%;
+
+				&.img2,&.img4{
+					left: 50%;
+				}
+
+				&.img3,&.img4{
+					top: 50%;
+				}
+
+				&.img2,&.img3,&.img4{
+					display: block;
+				}
+			}
+		}
+	}
+
+	.count,.close{
+		position: absolute;
+	}
+
+	.count {
+		padding: 0 4px;
+		top: 17px; right: 10px;
+		text-align: center;
+		min-width: 24px;
+		border-radius: 8px;
+		background: #299bdc;
+		font: normal 600 12px/17px $font;
+		color: #ffffff;
+	}
+
+	.close{
+		top: 0;
+		bottom: 0;
+		right: 0;
+		width: 50px;
+		background: #f6f6f6;
+		opacity: 0;
+		visibility: hidden;
+		@include icon($rhp-close-chat,$top:19px,$left:19px);
+
+		position: absolute;
+
+		&::before {
+			content: '';
+			top: 0; bottom: 0;
+			left: -1px; width: 1px;
+			overflow: hidden;
+			position: absolute;
+			z-index: 2;
+			background: #dfdfdf;
+		}
+
+		&:hover {
+			background: $primary-red;
+
+			&::after{ @include sprite($rhp-close-chat_hover); }
+			&::before {display: none;}
+
+			& ~ .avatars { opacity: 0.25; }
+			& ~ .wrap {
+				background: #feeeee;
+				.names{ color: #df9b9b; }
+				.status { color: #f4c3c3; }
+			}
+		}
+	}
+
+	.wrap{
+		padding: 10px 40px 0 60px;
+		height: 50px;
+
+		.status {
+			font: italic normal 12px/16px $font;
+			color: $tertiary-grey;
+		}
+
+		.names{
+			@include ellipse;
+			overflow: hidden;
+			font: normal 600 12px/16px $font;
+			color: $primary-grey;
+
+			&.overflown::before{
+				content: "(" attr(data-count) ")";
+				display: block;
+				float: left;
+				padding-right: 4px;
+			}
+		}
+
+	}
+
+	&:hover{
+		background: #f6f6f6;
+		box-shadow: 0 0 2px rgba(0,0,0,0.15), inset 0 1px rgba(255,255,255,0.1);
+
+		.wrap {
+			&:hover {
+				background: #f0f0f0;
+			}
+		}
+
+		.count { opacity: 0; }
+		.close {
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+}
+
+
+#chat-history {
+	.x-panel-header{
+		background: #f1f1f1;
+		color: $primary-grey;
+		text-transform: uppercase;
+		font: normal 700 10px/30px $font;
+
+		.x-header-text-container {
+			padding: 0 0 0 10px;
+		}
+	}
+
+	#chat-history-body{
+		.more{
+			background-color: white;
+			text-align: center;
+			font-size: 14px;
+			padding: 5px 0px 5px 0px;
+			color: #3fb3f6;
+			cursor: pointer;
+
+			&::after{
+				content: '...';
+			}
+		}
+
+		.no-history{
+			background-color: white;
+			padding: 5px 0px 5px 0px;
+			font: italic 300 14px/28px $font;
+			text-align: center;
+			color: $tertiary-grey;
+		}
+
+	}
+}
+
+.chat-container {
+	.chat-gutter-window {
+		display: block;
+	}
+
+	.chat-gutter-list-window {
+		display: none;
+	}
+
+	&.show-all {
+		.chat-gutter-window {
+			display: none;
+		}
+
+		.chat-gutter-list-window {
+			display: block;
+		}
+	}
+}
+
+.chat-gutter-window, .chat-gutter-list-window {
+	position: fixed;
+	top: 100px;
+	bottom: 60px;
+	right: 15px;
+	z-index: 200;
+  	width: 60px;
+  	background-color: rgba(35, 35, 35, 0.70);
+	border-radius: 5px;
+	padding-bottom: 60px;
+
+	html.msg-bar-open & {
+		top: 140px;
+	}
+
+	@media #{$hide-chat-break-point} {
+		.chat-container:not(.show-gutter) & {
+			display: none;
+		}
+	}
+
+  	.presence-gutter-entry {
+  		margin: 8px auto;
+  		width: 45px;
+  		height: 45px;
+  		cursor: pointer;
+
+  		&.show-contacts {
+  			position: absolute !important;
+  			bottom: 0;
+  			left: 8px;
+  			@include icon($contacts-2,$top:1px,$left:1px);
+  			opacity: 0.6;
+  			&:hover {
+  				opacity: 1.0;
+  			}
+  		}
+
+  		&.other-contacts {
+			position: absolute !important;
+			color: #ffffff;
+			bottom: 55px;
+			left: 8px;
+			@include icon($more,$top:1px,$left:1px);
+			opacity: 0.6;
+  			&:hover {
+  				opacity: 1.0;
+  			}
+		}
+
+  		.profile-pic, &.other-contacts {
+  			&[data-badge]:not([data-badge="0"]) {
+  				&::before {
+					content: attr(data-badge);
+					background-color: $primary-red;
+					font-size: 0.55em;
+					font-weight: 500;
+					color: white;
+					padding: 0.3em 0.3em;
+					border: 2px solid white;
+					position: absolute;
+					top: -4px;
+  					left: -4px;
+					border-radius: 12em;
+					z-index: 100;
+					text-indent: 0;
+					line-height: 1.0em;
+					width: auto;
+				}
+  			}
+  		}
+
+  		&.active {
+  			.profile-pic{
+  				.avatar-pic {
+  					border: 2px solid #747474;
+  				}
+
+  				&.Online,&.online,&.available {
+					.avatar-pic {
+	  					border: 2px solid #8eb737;
+	  				}
+
+				}
+				&.idle {}
+				&.away{
+					.avatar-pic {
+						border: 2px solid #ebcd25;
+					}
+				}
+				&.DnD,&.dnd {
+					.avatar-pic {
+						border: 2px solid #F35252;
+					}
+				}
+  			}
+  		}
+  	}
+
+
+  	&.chat-gutter-list-window {
+		right: 10px;
+		width: 220px;
+
+		.header {
+			border-bottom: 1px solid $primary-grey;
+			padding: 5px 10px;
+			position: relative;
+
+			.title {
+				color: #ffffff;
+				font-size: 14px;
+				font-weight: 200;
+			}
+
+			.close {
+				position: absolute !important;
+				right: 20px;
+				top: 10px;
+				@include icon($window-control-close, $top:0, $left:0);
+				cursor: pointer;
+			}
+		}
+
+		.list {
+			position: absolute;
+			bottom: 62px;
+			top: 33px;
+			left: 10px;
+			right: 0;
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+
+		.presence-gutter-entry {
+			padding: 0px;
+			width: 200px;
+			position: relative;
+
+			.profile-pic{
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 42px;
+
+				// .presence {
+				// 	background-color: #232323;
+				// }
+			}
+
+			.name {
+				margin-left: 48px;
+				position: relative;
+				width: 150px;
+				height: 42px;
+				color: #ffffff;
+				padding: 12px 4px 0 4px;
+				overflow: hidden;
+				font-size: 14px;
+				font-weight: 200;
+				@include ellipsis;
+			}
+
+			&.active {
+				.profile-pic {
+					.avatar-pic {
+						// border: 2px solid $primary-blue;
+					}
+				}
+			}
+		}
+
+		.footer {
+			position: absolute !important;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			border-top: 1px solid $primary-grey;
+			padding: 0;
+
+			.show-contacts {
+				position: relative !important;
+				left: 0;
+
+			}
+		}
+
+	}
+}
+
+
+.chat-notifications-icon {
+	width: 50px;
+	cursor: pointer;
+	height: $header-height;
+
+	.media-toolbar & {
+		position: absolute !important;
+		right: 125px;
+		top: 0;
+	}
+
+	@media #{$hide-chat-break-point} {
+		.media-toolbar & {
+			display: block;
+		}
+	}
+
+	@media #{$show-chat-break-point} {
+		.media-toolbar & {
+			display: none;
+		}
+	}
+
+	@include icon($rhp-contacts, $side: after, $top: 50%, $left: 50%);
+
+	&::after {
+		margin-top: -10px;
+		margin-left: -15px;
+	}
+
+	&:hover, &.gutter-showing {
+		@include icon($rhp-contacts_active, $side: after, $top: 50%, $left: 50%);
+	}
+
+	&[data-badge]:not([data-badge="0"])::before {
+		content: attr(data-badge);
+		background-color: $primary-red;
+		font-size: 0.55em;
+		font-weight: 500;
+		color: white;
+		padding: 0.3em 0.5em;
+		border: 2px solid white;
+		position: absolute;
+		top: 13px;
+		left: 34px;
+		border-radius: 10em;
+		z-index: 2;
+		text-indent: 0;
+		line-height: 1em;
+		width: auto;
+	}
+
+	&.menu-showing {
+		transition: background-color 0.3s, box-shadow 0.3s;
+	}
+
+	.main-navigation.dark-nav & {
+		@include icon($rhp-contacts-white, $side: after, $top: 50%, $left: 50%);
+
+		&::after {
+			opacity: 0.8;
+		}
+
+		&:hover, &.gutter-showing {
+			&::after {
+				opacity: 1;
+			}
+		}
+	}
+}

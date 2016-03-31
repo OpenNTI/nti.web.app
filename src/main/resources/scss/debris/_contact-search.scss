@@ -1,0 +1,408 @@
+
+
+@mixin contact-card {
+	overflow: hidden;
+	padding: 5px 8px 3px 20px;
+	margin: 10px;
+
+	.avatar {
+		width: 100px;
+		height: 100px;
+		float: left;
+	}
+
+	.text-wrap {
+		margin: 0 20px 0 100px;
+
+		.name {
+			@include menu-label-text-treatment;
+			color: $primary-blue;
+		}
+		.affiliation {
+			color: $secondary-grey;
+			font: { size: 12px; weight: 400; }
+			margin-left: 2px;
+		}
+	}
+}
+
+
+@mixin contact-card-large {
+	position: relative;
+	overflow: hidden;
+	padding: 5px 8px 3px 20px;
+	min-height: 150px;
+	margin: 0 10px 0;
+
+	img:not(.add) {
+		top: 3px;
+		left: 3px;
+		width: 140px;
+		height: 140px;
+		position: absolute;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+		box-shadow: 0 0 3.5px 0.5px rgba(30, 30, 30, 1);
+	}
+
+	.text-wrap {
+		margin: 15px 0 0 140px;
+
+		.name {
+			padding-left: 10px;
+			margin-left: -10px;//these two left margin/paddings allow overflow:hidden and still to get the decenders
+			margin-bottom: 5px;
+			font: italic 300 30px/40px $font;
+			color: $primary-blue;
+			overflow: hidden;
+			@include ellipse;
+			text-transform: none;
+			display:block;
+			max-width: 400px;
+		}
+
+		.affiliation {
+			color: $primary-grey;
+			font: normal 500 14px/25px $font;
+			margin-left: 2px;
+		}
+	}
+}
+
+
+
+.contact-search {
+	box-shadow: 0 1px 1px -1px rgba(0,0,0,0.2);
+
+	&.x-box-layout-ct {
+		&, & > .x-box-inner {
+			overflow: visible;
+		}
+	}
+
+	background: #ffffff;
+
+	.search-field {
+		background: #ffffff;
+		border: 0 solid #ededed;
+		border-width: 1px 0;
+		box-shadow: 0 1px 1px -1px rgba(0,0,0,0.2);
+		padding: 10px;
+
+		&::after{
+			content: ' ';
+			position: absolute;
+			width: 158px;
+			height: 1px;
+			background: #ffffff;
+			top: -1px;
+			right: 0;
+		}
+	}
+
+	.empty-list{
+		padding: 20px 0;
+		font: italic 300 14px/28px "Open Sans", sans-serif;
+		text-align: center;
+		color: $tertiary-grey;
+	}
+
+	.search-results {
+		box-shadow: inset 0 0 0 -1px #ffffff;
+		//border: 1px solid #cacaca;
+
+		.x-item-selected,
+		.over {
+			.item {
+				border-radius: 1px;
+				box-shadow: 0 0 0 4px #f1f1f1;
+				background-color: #f1f1f1;
+
+				.add {
+					@include sprite($add-contact_active);
+				}
+			}
+		}
+
+		.item {
+			@include contact-card;
+
+			.add {
+				margin-top: 7px;
+				float: right;
+				cursor: pointer;
+				@include sprite($add-contact);
+				&:hover {
+					@include sprite($add-contact_active);
+				}
+			}
+
+			.not-in-contacts {
+
+			}
+
+			&.my-contact {
+				.add {
+					margin-top: 5px;
+					@include sprite($options);
+					&:hover{
+						@include sprite($options_active);
+					}
+				}
+				.text-wrap {
+					margin-right: 36px;
+				}
+			}
+		}
+
+	}
+
+
+	&.large{
+		.search-field {
+			border-width: 1px;
+		}
+
+		.search-results {
+			.item {
+				@include contact-card-large;
+				img.add {
+					margin-top: 7px;
+				}
+
+				&.my-contact {
+					img.add {
+						margin-top: 5px;
+					}
+					.text-wrap {
+						margin-right: 36px;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+.contact-popout {
+	position: fixed !important;
+	&.x-layer {
+		overflow: visible;
+	}
+
+	background: #f8f8f8;
+	border: 1px solid #cecece;
+	//box-shadow: 0 2px 10px 0 rgba(0,0,0,0.14), inset 0 2px 0 0 rgba(255,255,255,0.5);
+	box-shadow: 0 2px 4px 1px rgba(0,0,0,0.14);
+
+	.person-card, .header {
+
+		.contact-card{
+			@include contact-card;
+			margin: 0 0 0 0;
+			padding: 0;
+			background-color: #ffffff;
+			border-bottom: 1px solid #e6e6e6;
+
+			.text-wrap {
+				margin: 10px 0 0 100px;
+				padding-left: 15px;
+
+				.name {
+					font: normal 300 22px/26px "Open Sans Condensed", "Open Sans", sans-serif !important;
+					text-transform: none;
+					line-height: 30px !important;
+				}
+				.affiliation {
+					color:$primary-grey !important;
+					font: { size: 12px; weight: 400; }
+					margin-left: 2px;
+				}
+				.meta-role{
+					color:$primary-grey;
+					font-size: 12px;
+					font-weight: 400;
+					overflow: hidden;
+					@include ellipse;
+					padding-right: 10px;
+				}
+				.location{
+					color:$primary-grey;
+					font-size: 12px;
+					font-weight: 400;
+					padding-right: 10px;
+				}
+
+			}
+
+			img {
+				width: 100px; height: 100px;
+				margin: 0;
+				padding: 0;
+			}
+		}
+
+		.person-card-body ul{
+			max-height: 300px;
+			overflow:{
+				x: hidden;
+				y: auto; //scroll;
+			}
+		}
+	}
+
+	.footer{
+		position: relative;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 45px;
+		background-color: #f9f9f9;
+		border: 0 solid #cecece;
+		border-top-width: 1px;
+		text-align: right;
+		border-radius: 0 0 3px 3px;
+		margin-top: -1px;
+
+		&::after {
+			content: '';
+			position: absolute;
+			top: -8px;
+			left: 0;
+			right: 0;
+			height: 8px;
+			box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.14);
+		}
+
+		.left{
+			position: relative;
+			margin-right: 105px;
+			display: block;
+			text-align: left;
+
+			.control{
+				position: relative;
+				width: 50px;
+				height: 44px;
+				display: inline-block;
+				border-right: 1px solid #e6e6e6;
+
+				&::after{
+					content: '';
+					position: absolute;
+					left: 17px; top: 13px;
+					outline: 0;
+				}
+
+				&.lists{
+					&::after{
+						left:15px;
+						@include sprite($rhp-contact-flyout-lists);
+					}
+
+					&:hover{
+						background-color: #fff;
+						&::after{
+							@include sprite($rhp-contact-flyout-lists_hover);
+						}
+					}
+				}
+
+				&.options{
+					&::after{
+						@include sprite($rhp-contact-flyout-settings);
+					}
+
+					&:hover{
+						background-color: #fff;
+						&::after{
+							@include sprite($rhp-contact-flyout-settings_hover);
+						}
+					}
+				}
+			}
+		}
+
+		.right{
+			position: relative;
+			width: 105px;
+			float: right;
+			display: block;
+
+			a.button {
+				cursor: pointer;
+				display: block;
+				height: 44px;
+				line-height: 45px;
+				font: italic 500 14px/45px $font;
+				text-align: center;
+				color: #ffffff;
+				width: 105px;
+			}
+
+			&.add-contact{
+				a.button{
+					outline: 1px solid #69a92b;
+					background: #75bc30;
+				}
+			}
+
+			&.chat{
+				width: 90px;
+				a.button{
+					width: 90px;
+					outline: 1px solid $border-blue;
+					background: $primary-blue;
+				}
+				&.disabled a.button{
+					cursor: default;
+					outline: 1px solid #d0d0d0;
+					background: rgba(184,184,184,0.5);
+					color: rgba(255,255,255,0.7);
+				}
+			}
+		}
+	}
+
+
+	.add-button.x-container{
+		border-top: 1px solid #e6e6e6;
+		box-shadow: inset 0 1px 0 0 #fdfdfd;
+		padding: 12px;
+
+		.x-btn-nt-large,
+		.x-btn-primary-large,
+		.x-btn-secondary-large,
+		.x-btn-caution-large,
+		.x-btn-tertiary-large{
+			margin: 0;
+			.x-btn-inner{
+				font-style: italic;
+			}
+		}
+	}
+}
+
+
+.user-search-suggestion {
+	position: relative;
+	overflow: hidden;
+	clear: both;
+	line-height: 34px;
+
+	img {
+		width: 24px;
+		height: auto;
+		vertical-align: middle;
+		float: left;
+		margin: 5px;
+	}
+	span {
+		display: block;
+		margin-left: 40px;
+		font-weight: bold;
+		overflow: hidden;
+		@include ellipse;
+	}
+}

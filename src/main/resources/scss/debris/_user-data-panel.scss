@@ -1,0 +1,280 @@
+
+
+@mixin chat-history-item {
+	margin: 15px;
+	padding-left: 30px;
+	position: relative;
+	overflow: hidden;
+
+	&::after{
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		content: ' ';
+		height: 14px;
+		width: 18px;
+		background: url(../images/old_sprites/spr_activity_icons.png) -2px -24px no-repeat;
+	}
+
+	.occupants {
+		@include menu-label-text-treatment;
+		color: $primary-blue;
+		line-height: 20px;
+	}
+
+	.time {
+		font-size: 12px;
+		font-family: $font;
+		font-weight: normal;
+		color: $secondary-grey;
+	}
+}
+
+.nti-alert {
+	.history {
+		&.chat {
+			@include chat-history-item;
+			background: $panel-background;
+			border: 1px solid #eaeaea;
+			border-radius: 6px;
+			padding: 10px 20px 10px 30px;
+			margin-left: 0;
+			&::after {
+				top: 13px;
+				left: 10px;
+			}
+
+			.occupants{
+				font-weight: 700;
+				font-size: 9px;
+			}
+			.time {
+				font-weight: 700;
+				font-size: 9px;
+				.started { display: none; }
+			}
+		}
+	}
+}
+
+.user-data-panel {
+	@include scrollbar(#ffffff, $tertiary-grey);
+
+	@include divider;
+
+	overflow:{
+		y: auto; //scroll;
+		x: hidden;
+	}
+	//add some space between all dividers and the first history
+	.divider + .history {
+		padding-top: 12px;
+	}
+
+	.divider + .post, .divider + .comment{
+		box-shadow: none !important;
+		border-top: none !important;
+	}
+
+	div.history:first-of-type{ margin-top: 10px; }
+
+	.divider + div.history:first-of-type{ margin-top: 0; }
+
+	.history{
+
+		&:first-of-type:not(.notification) {
+			padding-top: 10px;
+		}
+
+		&.notification {
+			text-transform: uppercase;
+			padding: 3px 12px 20px 20px;
+			font: normal 700 0.65em $font;
+			color: $tertiary-grey;
+
+			.verb {
+				&::before{
+					content: ' '
+				}
+
+				&::after{
+					content: ' '
+				}
+			}
+
+			.preview {
+				font-size: 1.11em;
+				font-weight: 500;
+				text-transform: none;
+				word-break: break-all;
+
+				&:not(.link) {
+					color: $primary-grey;
+					font-style: italic;
+				}
+
+				&.quote::before, &.quote::after{
+					content: '"';//"
+				}
+			}
+
+			.link {
+				color: $primary-blue;
+			}
+		}
+
+		&:not(.notification) {
+			&.chat{
+				@include chat-history-item;
+				.time {
+						.date { display: none; }
+				}
+			}
+
+			&.note,
+			&.post,
+			&.highlight,
+			&.favorite{
+				margin: 0 20px;
+
+				.path,.location, .tags, .title{
+					color: $tertiary-grey;
+					font-family: $font;
+				}
+
+				.path, .title{
+					font-size: 10px;
+					font-weight: 600;
+					text-transform: uppercase;
+					@include ellipse;
+					overflow: hidden;
+				}
+
+				.location, .text, .tags{
+					font-size: 14px;
+					font-weight: 500;
+					font-style: italic;
+					margin: 2px 0 8px;
+				}
+
+				.body {
+					padding: 0 15px 32px 32px;
+					margin-left: -20px;
+					font-family: $font;
+					font-size: 14px;
+					font-weight: normal;
+					color: $primary-grey;
+					word-wrap: break-word;
+
+					position: relative;
+
+					.whiteboard-container {
+						.toolbar {
+							display: none;
+						}
+					}
+
+					&::before {
+						content: ' ';
+						overflow: hidden;
+						position: absolute;
+						top: 0; left: 15px;
+						@include sprite($ldquo);
+					}
+
+					&::after{
+						content: ' ';
+						display: inline-block;
+						margin-left: 5px;
+						@include sprite($rdquo);
+					}
+				}
+			}
+
+			&.post{
+				cursor: pointer;
+				position: relative;
+				border-top: 1px solid #eaeaea;
+				box-shadow: inset 0 1px 0 0 #ffffff;
+
+
+				padding: 12px 0 12px 0;
+				font-size: 12px;
+				color: $secondary-grey;
+				overflow: hidden;
+
+				.author{
+					font-style: normal;
+					font-size: 10px;
+					font-weight: bold;
+					color: $primary-blue;
+					text-transform: uppercase;
+				}
+
+				.title, .tags{
+					font-size: 12px;
+				}
+			}
+
+			&.comment {
+				text-transform: uppercase;
+				padding: 3px 12px 20px 20px;
+				font: normal 700 0.65em $font;
+				color: $tertiary-grey;
+
+				.link {
+					color: $primary-blue;
+					text-transform: uppercase !important;
+				}
+
+				.body {
+					font-size: 1.11em;
+					font-weight: 500;
+					text-transform: none;
+					color: $primary-grey;
+					font-style: italic;
+				}
+			}
+
+			&.grade {
+				text-transform: uppercase;
+				padding: 3px 12px 20px 20px;
+				font: normal 700 0.65em $font;
+				color: $tertiary-grey;
+
+				.link {
+					font-size: 1.11em;
+					font-weight: 500;
+					text-transform: none;
+					color: $primary-blue;
+				}
+			}
+
+			&.highlight{
+				.body {
+					span {
+						color: #136ea5;
+						background: #e1f2fc;
+						line-height: 25px;
+						padding: .25em;
+					}
+
+					background: none;
+					&::before, &::after{
+						display: none;
+					}
+				}
+			}
+
+		}
+
+		&.nothing{
+			color: $tertiary-grey;
+			text-align: center;
+			font-family: $font;
+			font-size: 10px;
+			font-weight: 600;
+		}
+
+	}
+}

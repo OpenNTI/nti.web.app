@@ -1,0 +1,261 @@
+@mixin content-item-row{
+	height: 57px;
+	cursor: pointer;
+	margin-right: 0;
+	padding-right: 40px;
+	position: relative;
+
+	.image {
+		position: absolute;
+		top: 0; bottom: 0; left: 0;
+		width: 60px;
+		z-index: 2;
+		background-size: cover;
+		background-position: center;
+
+		&.is-book{
+			//background-size: contain;
+			background-repeat: no-repeat;
+		}
+	}
+
+	.wrap {
+		z-index: 2;
+		position: relative;
+		margin-left: 70px;
+		padding-top: 5px;
+
+		.courseName,
+		.provider,
+		.provider-bottom {
+			position: relative;
+			text-transform: uppercase;
+			font: normal bold 0.6em/1.3em $font;
+			color: $secondary-grey;
+			overflow: hidden;
+			@include ellipse();
+		}
+
+		.title {
+			margin-top: -0.2em;
+			font: normal 700 1.1em/1.5 'Open Sans Condensed';
+			text-transform: uppercase;
+			color: $primary-grey;
+			overflow: hidden;
+			@include ellipse();
+		}
+	}
+}
+
+
+.browser-warning {
+    .x-panel-body{
+        height: auto;
+		padding: 0.5em 0.5em 0.5em 3em;
+		background: {
+			color: #F9DD0A;
+		}
+		font-size: 2em;
+	}
+}
+
+//TODO: get rid of this
+.x-main-navigation {
+	.x-masked & {z-index: 99;}//below the extjs mask z-index
+
+	background: #ebebec;
+	padding-left: 100px;
+	height: 57px;
+	z-index: 150;//keep this above dashboard
+
+
+	& > div {
+		width: 70px;
+		height: 57px;
+		cursor: pointer;
+		float: left;
+		position: relative;
+		//the wrapper div of the content menu and the branding badge
+		&:first-child {
+			position: relative;
+			width: auto;
+			&:hover {
+				.branding {
+					z-index: 1;
+				}
+			}
+		}
+
+		.box {
+			position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+			z-index: 1;
+		}
+
+		&::after{
+			z-index: 3;
+		}
+
+		//etch
+		&::before {
+			content: '';
+			position: absolute;
+			right: 0;
+			top: 10px; bottom: 10px;
+			width: 1px;
+
+			background: #f6f6f6;
+			box-shadow: -1px 0 0 0 #e2e2e2;
+		}
+
+		&.active .box,
+		 .active .box{
+			$width: 10px;
+			background: #ffffff;
+
+			&::before, &::after {
+				content: '';
+				position: absolute;
+				top: 0; bottom: 0;
+				width: $width;
+				z-index: 1;
+
+				border-radius: 3px / 50%;
+				box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.8);
+			}
+
+			&::before{
+				clip: rect(0px, ($width*2), auto, $width);
+				right: 0;
+			}
+			&::after{
+				clip: rect(0px, 0px, auto, -$width);
+				left: 0;
+			}
+		}
+	}
+
+
+	.branding {
+		background-position: center center;
+		background-repeat: no-repeat;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		width: 60px;
+		//background: red;
+		z-index: 10;
+
+		&.custom-vendor {
+			background-color: #ebebec;
+			width: 120px;
+			left: -60px;
+		}
+	}
+
+	.content {
+		@include content-item-row;
+		height: 57px;
+		width: initial;
+		min-width: 275px;
+		max-width: 400px;
+		z-index: 2;
+
+		@include icon($arrow-course-dropdown, $top: 25px, $left: auto, $right: 15px);
+		&::after{
+			z-index: 1;
+		}
+
+		opacity: 0.5;
+		&.active, &:hover {
+			opacity: 1;
+		}
+
+
+	}
+
+	.library {
+		@include icon($course-nav-library,$top: 14px, $left: 24px);
+		&:hover::after{
+			@include sprite($course-nav-library_hover);
+		}
+		&.active::after{
+			@include sprite($course-nav-library_active);
+		}
+	}
+
+	.forums {
+		@include icon($course-nav-forum,$top: 14px, $left: 20px);
+
+		&:hover::after{
+			@include sprite($course-nav-forum_hover);
+		}
+		&.active::after{
+			@include sprite($course-nav-forum_active);
+		}
+	}
+
+	.contacts {
+		@include icon($course-nav-contacts,$top: 16px, $left: 17px);
+
+		&:hover::after{
+			@include sprite($course-nav-contacts_hover);
+		}
+
+		&.active::after{
+			@include sprite($course-nav-contacts_active);
+		}
+	}
+
+	.search {
+		@include icon($course-nav-search,$top: 15px, $left: 22px);
+
+		&:hover::after{
+			@include sprite($course-nav-search_hover);
+		}
+
+		&.active::after{
+			@include sprite($course-nav-search_active);
+		}
+	}
+}
+
+.x-panel-content-switcher{
+	box-shadow: 0 0 8px rgba(0,0,0,0.5);
+
+	.x-menu-body{ padding: 0; background: #eae9e9; border: none; }
+
+	.item {
+		@include content-item-row;
+		border-bottom: 1px solid #eae9e9;
+
+		&:first-of-type {
+			background: #fff;
+			@include icon($arrow-course-dropdown, $top: 25px, $left: auto, $right: 15px);
+		}
+
+		&:not(:first-of-type){
+			background: #fff;
+			opacity: 0.5;
+			&:hover {
+				opacity: 1;
+			}
+		}
+
+	}
+
+	.more {
+		height: 37px;
+		text-align: center;
+		cursor: pointer;
+
+		div {
+			display: inline-block;
+			background: $secondary-grey;
+			border-radius: 5px;
+			width: 5px;
+			height: 5px;
+			margin: 15px 3px;
+		}
+	}
+}

@@ -1,9 +1,7 @@
-@import "compass";
-
-@import "variables";
-
-@import "fonts";
-@import "animate";
+@import "base/fonts";
+@import
+	"utils/variables",
+	"utils/animate";
 
 .x-gecko li {
 	margin-top: 0.5em;
@@ -43,7 +41,7 @@
 body.x-body {margin:0;}
 #NTIContent {
 	-webkit-font-smoothing: antialiased;
-	
+
 	padding-bottom: 10em;
 
 	&, * {

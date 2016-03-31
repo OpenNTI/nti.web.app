@@ -1,0 +1,1066 @@
+@mixin image-bar {
+
+	.wrapper {
+		position: relative !important;
+		line-height: 0;
+		overflow: hidden;
+		display: block;
+	}
+
+	a {
+		pointer-events: all;
+		text-decoration: none;
+		&.disabled { &, &:hover { display:none; opacity: 0.5; cursor: default; pointer-events: none; } }
+		&.zoom, &.unzoom {
+			display: block;
+			position: absolute;
+			top: 0; left: 0; right: 0; bottom: 0;
+			z-index: 2;
+		}
+	}
+
+	.bar {
+		cursor: default;
+		display: block;
+		position: relative;
+		z-index: 3;
+		width: 100%;
+		border-top: 1px solid #dadada;
+		padding: 0 14px 20px 14px;
+		background: #fafafa;
+		min-height: 37px;
+
+		.image-caption,.image-title {
+			line-height: 1.2em;
+			display: block;
+			font-size: 16px;
+			font-weight: 600;
+			color: $primary-grey;
+		}
+
+		.image-caption {
+			font-size: 14px;
+			font-weight: normal;
+			color: $secondary-grey;
+		}
+
+		.bar-cell {
+			display: block;
+			& > span:first-child { margin-top: 14px; }
+		}
+
+		a.bar-cell {
+			border-left: 1px solid #dadada;
+			& ~ .bar-cell {
+				margin-right: 45px;
+			}
+		}
+
+		a {
+			pointer-events: all;
+
+			&.mark {
+				position: relative;
+				width: 90px;
+				height: 19px;
+				line-height: 19px;
+				font-size: 12px;
+				font-weight: bold;
+				color: $tertiary-grey-alt;
+				padding-left: 24px;
+				display: block;
+				margin: 10px 0 -13px 0;
+
+				&::after {
+					content: ' ';
+					overflow: hidden;
+					position: absolute;
+					top: 0; left: 3px;
+					@include sprite($add-comment-19x17);
+				}
+
+				&:hover {
+					color: $secondary-grey-alt;
+					&::after {
+						@include sprite($add-comment-19x17_hover);
+					}
+				}
+			}
+
+
+
+			&.slide {
+				display: none;
+				width: 54px;
+				background: $primary-blue;
+				border-color: $border-blue;
+
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+
+				&::after{
+					content: ' ';
+					overflow: hidden;
+					position: absolute;
+					top: 44%;
+					top: calc(50% - 9px);
+
+					left: 17px;
+
+					@include sprite($presentation-view);
+				}
+
+				&:hover {
+					&::after{
+						@include sprite($presentation-view);
+					}
+				}
+			}
+		}
+	}
+}
+
+
+@mixin highlight-tip {
+	position: relative;
+	top: 0;
+
+	vertical-align: baseline;
+//vertical-align: initial;
+	display: inline-block;
+	width: 5px;
+	width: 0px;
+	overflow: hidden;
+	//line-height: 23px;
+	//height: 24px;
+	text-align: center;
+	padding: 0 0 0 4px;
+}
+
+
+.annotation-gutter {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 60px;
+
+	overflow: visible;
+	z-index: 4;
+
+	&.debug {
+		bottom: 0;
+		background: rgba(255,0,0,0.3);
+	}
+
+	.column {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		overflow: visible;
+
+		.controlContainer {
+			direction: rtl;
+			text-align: right;
+			position: absolute;
+			white-space: nowrap;
+			left: -5px;
+			border-radius: 5px;
+			cursor: pointer;
+
+			* {
+				text-align: initial;
+				direction: ltr;
+			}
+
+			.count {
+				font: normal bold 9px/19px $font;
+				color: $primary-blue;
+				margin: 0 10px;
+			}
+
+			&:hover,
+			&.active {
+				background: $primary-blue;
+				.count {
+					color: #fff;
+				}
+			}
+		}
+	}
+}
+
+@media screen and (max-device-width: 768px) { // iPad
+	.annotation-gutter{
+		width: 25px;
+		right: 35px;
+
+		.column {
+			right: 35px;
+		}
+	}
+}
+
+.x-panel-notes-and-discussion .x-panel-body-notes-and-discussion{
+	position: absolute !important;
+	top: 60px;
+	bottom: 0;
+	height: auto !important;
+
+	& > .x-component {
+		position: absolute; top: 0; bottom: 0; height: auto !important;
+	}
+}
+
+.x-component-annotation-view {
+	@include scrollbar(#fbfbfb, $tertiary-grey);
+	overflow: {
+		x: hidden;
+		y: auto; //scroll;
+	}
+	.row {
+		cursor: pointer;
+		margin: 0 1px;
+		padding: 10px 15px;
+		border-bottom: 1px solid #ededed;
+
+		&.x-item-selected{
+			&, &.over{
+				.name,.footer{
+					color: #c5eaff;
+				}
+				.snippet{color: #ffffff;}
+				background: $primary-blue;
+				box-shadow: inset -1px 0 0 1px #107eed,1px 0 0 0px #107eed;
+			}
+		}
+
+		&.over{
+			background: #fff;
+			border-bottom-color: #cfcfcf;
+			box-shadow: 0 -1px 0 0 #cfcfcf;
+		}
+
+		.name {
+			font: normal 600 10px/15px $font;
+			text-transform: uppercase;
+			color: $primary-blue;
+			overflow: hidden;
+			@include ellipse;
+		}
+		.snippet {
+			min-height: 50px;
+			max-height: 5em;
+			overflow: hidden;//because this is allowing line wrapping, we can't ellipse the text overflow.
+			font: italic 400 16px/25px $font;
+			margin: 0 0 10px -10px;
+			padding-left: 10px;
+			color: $primary-grey;
+			text-overflow: ellipsis;
+			word-wrap: break-word;
+
+			.body-divider .whiteboard-container {
+				.whiteboard-wrapper .overlay{bottom: 0;}
+				.toolbar {display: none;}
+			}
+
+			p {
+				margin: 0;
+			}
+		}
+		.footer {
+			font: normal 400 10px/15px $font;
+			color: $tertiary-grey;
+
+			span{
+				&::after{
+					text-decoration: none !important;
+					position: static;
+					content: '\00B7';
+					padding: 0 0.5em;
+					background: none;
+				}
+				&:last-of-type::after {
+					content: '';
+					display: none;
+				}
+			}
+		}
+	}
+
+	&.dark{
+		background-color: #292929;
+		box-shadow: -1px 0 0 0 #191919;
+
+		.row{
+			border-bottom-color: #222;
+
+			&.over:not(.x-item-selected){
+				background-color: #343434;
+				border-bottom-color: #222;
+				box-shadow: none;
+
+				.name{
+					color: $tertiary-grey;
+				}
+
+				.snippet{
+					color: #fff;
+				}
+
+				.footer{
+					color: $tertiary-grey;
+				}
+			}
+
+			&.x-item-selected{
+				box-shadow: none;
+				.name{
+					color: #E2F3FE;
+				}
+
+				.snippet{
+					color: #fff;
+				}
+
+				.footer{
+					color: #E2F3FE;
+				}
+			}
+
+			.name{
+				font-weight: 700 !important;
+				color: $secondary-grey;
+			}
+
+			.snippet{
+				font-weight: 600 !important;
+				color: $tertiary-grey;
+			}
+
+			.footer{
+				font-weight: 700 !important;
+				color: #bababa;
+			}
+		}
+	}
+}
+
+
+.share-with-data {
+
+	.title {
+		font-size: 32px;
+		font-weight: normal;
+		line-height: 48px;
+
+		.avatarContainer {
+			display: inline-block;
+			width: 48px;
+			height: 48px;
+			vertical-align: middle;
+			margin: 10px;
+			margin-right: 15px;
+
+			.avatar-container {
+				position: relative;
+				height: 48px;
+				width: auto;
+
+				.initials {
+				  border-radius: 4px;
+				}
+				.avatar-pic{
+				  border-radius: 4px;
+				}
+			}
+		}
+	}
+
+	.description {
+		margin: 10px;
+		font-size: 14px;
+		display: inline-block;
+		overflow: hidden;
+		@include ellipse;
+		max-width: 80%;
+	}
+
+	.snippet {
+		margin: 10px;
+		font-size: 8pt;
+		color: $tertiary-grey;
+		padding: 0 0 0 25px;
+
+		.comment & {
+			@include icon($activity-comment, $left: 2px);
+		}
+		.highlight & {
+			@include icon($activity-highlight, $left: 3px);
+		}
+		.note & {
+			@include icon($activity-note, $left: 6px);
+		}
+	}
+}
+
+
+.x-dd-drag-proxy {
+
+	.x-dd-drop-icon{
+		display: none;
+		opacity: 0.3;
+	}
+
+	&.x-dd-drop-ok {
+		//ok state
+		//.x-dd-drag-ghost {opacity: 1;}
+	}
+
+	.x-dd-drag-ghost {
+		padding: 0;
+		border: none;
+
+		img {
+			max-width: 48px;
+
+			&.action {
+				position: static;
+			}
+		}
+	}
+}
+
+
+.body-divider {
+	@include no-select;
+	position: relative;
+	overflow: hidden;
+	text-align: left;
+	//margin: 10px;
+	//padding: 5px;
+}
+
+
+.x-component-zoom {
+	img {width: 100%;}
+	@include image-bar;
+
+}
+
+
+// Styles below are intended to target things inside the content iframe
+
+
+.note-window .main-view .context [itemprop~="nti-data-markupenabled"] {}
+
+.x-component-image-zoom-view {
+	overflow: visible;
+	border: 1px solid #bcbcbc;
+	border-radius: 1px;
+	box-shadow: 0 10px 40px 0 rgba(0,0,0,0.45);
+	background: #fafafa;
+	position: fixed !important;
+	margin-top: 35px;//account for the close button
+
+	@include image-bar;
+
+	a.close {
+		top: -34px;
+		right: -34px;
+		position: absolute;
+
+		@include sprite($close_popup);
+		cursor: pointer;
+		border-radius: 90px;
+	}
+
+	.wrapper {
+		img {
+			width: 100% !important;
+			height: auto !important;
+		}
+	}
+}
+
+.note-window .note.main-view .context {
+	[itemprop~="nti-data-markupenabled"],[itemprop~="nti-slide-video"]{
+		&:hover {
+			a.zoom {
+				display: none !important;
+			}
+		}
+	}
+
+	.content-launcher {
+		margin-bottom: 10px;
+
+		.meta .launcher-button {
+			display: none;
+		}
+	}
+
+	&.purchasable {
+		.bookcover {
+			background: {
+				color: #f9f9f9;
+				size: cover;
+				position: center-center;
+				repeat: no-repeat;
+			}
+			box-shadow: -1px 1px 3px 0 rgba(0, 0, 0, 0.35);
+			border-radius: 1px;
+			float: left;
+			width: 55px;
+			height: 70px;
+		}
+
+		.meta {
+			float: left;
+			margin-left: 15px;
+
+			.title {
+				font-size: 2em;
+				height: auto;
+			}
+
+			.byline {
+				font-weight: 600;
+				color: $tertiary-grey;
+			}
+
+			.button {
+				color: $primary-blue;
+				cursor: pointer;
+				font-weight: 600;
+			}
+		}
+
+		.no-access {
+			font: normal 500 0.9em/1 $font;
+			color: #FD817F;
+		}
+	}
+}
+
+.note-window .main-view .context,
+#NTIContent {
+
+	.no-details {
+		.bar {
+			display: none;
+		}
+	}
+
+	[itemprop*="nti-data-markup"]:not(.no-details),
+	[itemprop~="nti-slide-video"]{
+		@include hardware-accelerate();
+		display: inline-block;
+		//overflow: hidden;
+		position: relative;
+		border: 1px solid #dadada;
+		border-radius: 3px;
+
+		@include image-bar;
+
+		a.zoom {
+			//display: none;
+			box-shadow: inset 0 0 0 10px white;
+			background: rgba(63, 179, 246, 0.05);
+			display: none;
+			@include animate($name: fadeZoomIn, $duration: 0.5s, $delay: 0s);
+		}
+
+		&:hover {
+			a.zoom {
+				display: block;
+			}
+		}
+	}
+
+	object[type$=slide],object[type$=slidevideo] {
+		.bar a.slide { display: block; }
+	}
+
+	object[type$=slidevideo] .bar a.mark {display: none;}
+
+	//Sometimes footnotes are redacted, this will hide the actual footnote when that is the case
+	li.footnote{
+		&.redacted {
+			span, a {
+				display: none;
+			}
+		}
+	}
+
+	#footnotes{
+		.redacted-text{
+			color: $tertiary_grey;
+			text-decoration: line-through;
+			display: none;
+		}
+		li.footnote.redacted {
+			.redacted-text{
+				display: inline;
+			}
+		}
+	}
+
+
+	.block-redaction {
+		display: block;
+		clear: both;
+		width: 100%;
+		margin: 25px 0;
+
+		&.head{
+			position: relative;
+			border-top: 1px solid $border-grey;
+			overflow: visible;
+
+			&.redacted {
+				border-color: white;
+				&::after {
+					position: absolute;
+					content: '';
+					background: url(../images/elements/div_block_redaction.png) 0 0 repeat-x;
+					top: -6px; left: 0;
+					width: 100%;
+					height: 11px;
+				}
+			}
+		}
+
+		&.redacted .redactionAction{
+			.controls{
+				display: none;
+			}
+			span.editableSpan{ border-right-width: 1px; }
+		}
+	}
+
+	.block-redaction, .redactionAction {
+		&.editing {
+			span.editableSpan {
+				cursor: text;
+			}
+			.controls {
+				span {
+					&.share,&.delete{
+						display: none;
+					}
+				}
+			}
+		}
+	}
+
+	.redactionAction {
+
+		&.block {
+			position: absolute;
+			top: -12px;
+			left: -20px;
+			z-index: 5;
+		}
+
+		&.searchHitInside {
+			span.editableSpan{
+				background-color: #fcff13;
+			}
+		}
+
+		font-size: 10px;
+		line-height: 14px;
+
+		vertical-align: top;//fix alignment in firefox
+		margin: 0 2px 0 2px;
+		overflow: hidden;
+		vertical-align: middle;
+		display: inline-block;
+
+		* {
+			vertical-align: middle;
+		}
+
+		&.redacted{
+			.controls{display: none;}
+			span.editableSpan{ border-right-width: 1px; }
+		}
+
+
+		span.editableSpan {
+			display: inline-block;
+			position: relative;
+			border: 1px solid $border-grey;
+			background: white;
+			//text-transform: uppercase;
+			color: $secondary-grey;
+			font-weight: 600;
+			margin-left: 3px;
+			padding: 4px 6px;
+			//font-style: italic;
+			height: 24px;
+			overflow: hidden;
+			@include ellipse;
+			max-width: 600px;
+			cursor: pointer;
+
+			&:focus {
+				outline: none;
+			}
+		}
+
+		.controls {
+			display: inline-block;
+			margin-right: 3px;
+			position: relative;
+
+			span {
+				position: relative;
+				margin-left: -1px;
+				//margin-top: 1px;
+				display: inline-block;
+				height: 24px;
+				width: 25px;
+				cursor: pointer;
+				background: #ffffff;
+				box-shadow: inset 0 0 0 1px $border-grey;
+
+				&::after {
+					background: url(../images/old_sprites/spr_redaction.png) 0 0 no-repeat;
+					content: ' ';
+					width: 16px;
+					height: 16px;
+					position: absolute;
+
+				}
+				&.edit{ @include icon($redactions-edit,$top: 6px, $left: 6px); }
+				&.share{ @include icon($redactions-share,$top: 6px, $left: 6px); }
+				&.delete{ @include icon($redactions-trashcan,$top: 5px, $left: 7px); }
+
+				&.edit.save{
+					box-shadow: inset 0 0 0 1px #369AD3;
+					background-color: $primary-blue;
+					width:90px;
+					&::after{
+						width: auto;
+						content: 'Save Title';
+						background: none;
+						font-family: $font !important;
+						font-size: 10px;
+						font-weight: 700;
+						line-height: 14px;
+						text-transform: uppercase;
+						color: white;
+						top: 4px;
+						margin: 0 0 0 13px;
+					}
+				}
+
+				&:hover {
+					background-color: $primary-blue;
+					box-shadow: inset 0 0 0 1px #369AD3 !important;
+					outline: #369AD3;
+					z-index: 1;
+
+					&.delete{
+						background-color: $primary-red;
+						box-shadow: inset 0 0 0 1px #D14646 !important;
+						&::after{ @include sprite($redactions-trashcan_hover); }
+					}
+					&.edit::after{ @include sprite($redactions-edit_hover); }
+					&.share::after{ @include sprite($redactions-share_hover); }
+
+				}
+			}
+		}
+	}
+
+	.math .application-highlight.plain {
+		display: inline-block;
+	}
+
+	.application-highlight {
+		&.suppressed {
+			//do nothing special when range is suppressed.
+		}
+
+		& + li.part,
+		& + li.exercise {
+			&::before, &::after { z-index: 1; color: #076da7 }
+		}
+		// &.highlight-mouse-over {
+		// 	& + li.part, & + li.exercise {
+		// 		&::before, &::after { color: #ffffff; }
+		// 	}
+		// }
+
+		&.plain {
+
+			&, * {
+				position: relative;
+				z-index: 1;
+			}
+
+			// color: #076da7;
+			background-color: #e1f4fe;
+			overflow: hidden;
+
+			@include highlight-colors();
+
+			&.shared-with-me {
+				&,.math {
+					background: none;
+					color: $primary-grey;
+					border-bottom: 1px solid #9fd9fa;
+				}
+
+
+				// &.highlight-mouse-over {
+				// 	&,.math {
+				// 		color: #ffffff;
+				// 		background-color: $primary-blue;
+				// 	}
+				// }
+
+				.application-highlight.shared-with-me {
+					&,.math {
+						border-bottom: none;
+					}
+				}
+			}
+
+			&.highlight-mouse-over{
+				&,a {
+					// color: #ffffff;
+					// background-color: $primary-blue;
+					.application-highlight {
+						background-color: transparent;
+					}
+				}
+
+				&.counter {
+					background: transparent;
+				}
+			}
+
+			&.redaction {
+				&.redacted {
+					display: none;
+				}
+				background: #efefef;
+				color: $secondary-grey;
+				border-bottom: 0px;
+			}
+
+			&.counter {
+				color: $secondary-grey;
+				font-family: $font !important;
+				font-weight: bold;
+
+				background: transparent;
+
+				@include highlight-tip;
+
+				//this is adding a space between letters when the highlight ends in a word
+				padding-left: 0;
+
+				&.with-count {
+					overflow: hidden;
+					width: 30px;
+					background-image: url(../images/counter_tip_default.png);
+
+
+					&.highlight-mouse-over{
+						color: #ffffff;
+						background-image: url(../images/counter_tip_hover.png);
+					}
+
+					span {
+						display: block;
+						text-align: center;
+						margin-left: 5px;
+						overflow: hidden;
+						@include ellipse;
+					}
+				}
+			}
+		}
+	}
+}
+
+#NTIContent {
+
+	[itemprop~="nti-data-markupenabled"],
+	[itemprop~="nti-slide-video"]{
+		&[itemprop~="nti-data-resizeable"]{
+			.bar .image-title {
+				overflow: hidden;
+				@include ellipse;
+			}
+		}
+	}
+
+	[itemprop~="nti-data-resizeable"]{
+		img{
+			max-width: 100%;
+			height: auto !important;
+		}
+	}
+}
+
+div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
+
+
+#NTIContent ol.parts > li.part::before {
+	z-index: 2;
+}
+
+
+#annotation-container {
+	&, .highlight-canvas {
+		position: absolute;
+		z-index: 1;
+		pointer-events: none;
+
+		.x-ie9 & {
+			z-index: 0;
+		}
+	}
+}
+
+.nt-annotation-menu {
+	$transition-duration:.1s;
+	background: $annotations-menu-bg;
+	border-radius:6px;
+	position: fixed !important;
+	opacity: 0.01; // so we can show the menu, compute its width, and center it. (can't get the width until it's rendered in the dom.)
+	&.visible {
+		opacity: 1;
+		transition: all $transition-duration 0;
+	}
+
+	overflow: visible;
+
+	// the pointer/arrow
+	&::after {
+		$arrow-size:.5em;
+		content: '';
+		position: absolute;
+		width: 0;
+		height: 0;
+		background: none;
+		border: $arrow-size solid transparent;
+		border-top-color: $annotations-menu-bg;
+		left: 50%;
+		margin-left: -$arrow-size;
+		bottom: -($arrow-size * 2);
+		z-index: 9999;
+		margin-bottom: 1px;
+	}
+
+	.x-panel-body-nt-annotation {
+		background: none;
+		border:none;
+		padding:0;
+	}
+	.x-menu-item {
+	  	&.icon {
+		}
+		&.add-note {
+			@include icon($comment_white, $left: 2px, $top: 3px);
+			text-indent:-100em;
+		}
+		&.define {
+			@include icon($search-white,$top:8px,$left:5px);
+			text-indent:-100em;
+		}
+
+		&:after {
+			opacity:.75;
+			transition: opacity $transition-duration 0;
+		}
+
+		&:hover:after {
+			opacity:1.0;
+			transition: opacity $transition-duration 0;
+		}
+	}
+
+	.x-menu-item-active {
+		background:none !important;
+	}
+
+	.x-component {
+		&:before { // divider line between items
+			content: "";
+			border-right: 2px solid rgba(128,128,128,0.2);
+			position: absolute;
+			height: 75%;
+			top: 5px;
+			right: 0;
+		}
+		&:last-child {
+			padding-right:1.5em;
+			&:before {
+				content:none; // no divider following the last item.
+			}
+		}
+	}
+
+	.nt-highlight-picker {
+		background:none;
+		height:auto;
+		width:auto;
+		padding-left:.5em;
+		padding-right:.5em;
+		white-space: nowrap;
+
+		&.x-component:last-child{
+			padding-right:.5em;
+		}
+
+		a {
+			span { // the color swatches
+				$swatchSize:1.25em;
+				display:inline-block;
+				width:$swatchSize;
+				height:$swatchSize;
+				border:2px solid transparent;
+				border-radius:$swatchSize/2;
+				margin:.5em .2em;
+				position:relative;
+				transform: scale(1,1); // so the transform will animate on mouseout.
+				transition: all $transition-duration 0;
+				&::after {
+					content:'';
+					position:absolute;
+					top:0;
+					left:0;
+					background: url('../images/icons/rhp-status-checkmark.png') center no-repeat transparent;
+					width:100%;
+					height:100%;
+					opacity:0;
+					transition: opacity $transition-duration 0; // fade out the checkmark
+				}
+			}
+		}
+
+		a:hover, a.x-color-picker-selected {
+			background:none;
+			border:none;
+			span {
+				border-color:white;
+				transition: all $transition-duration 0;
+				transform: scale(1.2,1.2);
+				&::after {
+					opacity: 1.0;
+					transition: opacity $transition-duration 0; // fade up the checkmark
+				}
+			}
+		}
+	}
+}

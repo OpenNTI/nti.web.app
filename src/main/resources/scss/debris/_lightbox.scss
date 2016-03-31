@@ -1,0 +1,62 @@
+
+.x-panel-lightbox {
+	overflow: visible;
+	background: #fff;
+	box-shadow: 0 0 30px 5px rgba(0, 0, 0, 0.6);
+	position: fixed !important;
+
+	.close {
+		top: 10px;
+		right: 10px;
+		position: absolute;
+
+
+		@include sprite($note-window-x);
+		cursor: pointer;
+
+		&:hover {
+			@include sprite($note-window-x_hover);
+		}
+
+	}
+
+	.content {
+		padding: 25px 30px;
+		height: 100%;
+
+		&.loading{
+			&::after {
+				@include loadingSpinner($top:50%,$left:50%);
+				margin-top: -12px;
+				margin-left: -12px;
+			}
+		}
+
+		.page-contents {
+			display: -ms-flexbox;
+			-ms-box-orient: vertical;
+
+			display: flex;
+			flex-wrap: nowrap;
+			flex-direction: column;
+			height: 100%;
+		}
+
+		h3 {
+			flex: none;
+			font-family: monospace;
+			font-weight: 100;
+		}
+
+		pre {
+			flex: 1 1 auto;
+			font: normal normal 1em/1 monospace;
+			background: #f9f9f9;
+			border: 1px solid #ddd;
+			padding: 18px 20px;
+			margin: 0;
+			overflow: auto;
+			-webkit-overflow-scrolling: touch;
+		}
+	}
+}

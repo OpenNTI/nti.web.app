@@ -1,0 +1,120 @@
+.audit-log {
+    padding-top: 2em;
+
+    .load-more{
+        background: #3fb3f6;
+        color: #fff;
+        cursor: pointer;
+        font-size: 0.875em;
+        font-weight: 600;
+        line-height: 1em;
+        text-transform: uppercase;
+        padding: 18px;
+        height: auto;
+        text-align: center;
+    }
+
+    .loading-container {
+    	height: 75px;
+		line-height: 75px;
+		text-align: center;
+		position: relative;
+
+		.loading {
+			position: absolute;
+			color: $primary-grey;
+			line-height: 24px;//height of the spinner
+			padding-left: 30px;//width of the spinner + 6px
+			top: 50%; left: 50%;
+			margin-top: -12px;
+			margin-left: -51px;
+
+			&::before {
+				@include loadingSpinner($top: 0, $left: 0);
+			}
+		}
+	}
+}
+
+.auditlog-item {
+	.content {
+	    background: white;
+	    overflow: hidden;
+	    max-width: 775px;
+	    margin-bottom: 10px;
+	    padding: 15px 14px;
+	    box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
+
+	    @include flexContainer();
+	}
+
+	.avatar-wrapper {
+		width: 40px;
+		height: 40px;
+		margin-right: 14px;
+		@include flexItem(0 0 auto);
+		
+		.avatar-container {
+			width: 40px;
+			height: 40px;
+
+			.avatar-pic {
+				border-radius: 4px;
+			}
+		}
+	}
+
+	.meta {
+		@include flexItem(1 1 auto);
+	}
+
+	.username, .message {
+		font: normal 400 0.875em/1.36 $font;
+	}
+
+
+	.username {
+		color: $primary-blue;
+		margin-right: 5px;
+	}
+
+	.message {
+	    color: grey;
+	}
+
+	.date {
+		font: normal 600 0.625em/1 "Open Sans", sans-serif;
+		margin-top: 0.6em;
+		text-transform: uppercase;
+		color: $tertiary-grey;
+	}
+}
+
+.audit-log-header {
+    padding-bottom: 1rem;
+
+    @include icon($change-log, $top: 2px);
+
+    .change-log {
+        font-weight: 600;
+        color: #757474;
+        margin-left: 25px;
+    }
+}
+
+.audit-log-prompt {
+    .audit-log {
+        padding: 1em;
+        width: 807px;//1em + 775px + 1em
+    }
+}
+
+
+.course-overview .editing-controls .buttons .button.auditLog {
+    background-color: rgba(0,0,0,0.6);
+    margin-right: 10px;
+    color: white;
+    padding-left: 40px;
+    
+    @include icon($change-white, $top: 11px, $left: 15px);
+}

@@ -1,0 +1,368 @@
+//@mixin grid-def($useParent:false, $gridSpacing: 10px){
+@mixin grid-def($gridSpacing: 10px){
+	$selector: '.grid';
+
+	//@if $useParent == true {
+	//	$selector: '&.editor';
+	//}
+
+	#{$selector} {
+		position: relative;
+		margin-right: -20px;//scrollbar buffer
+
+		&::after, &::before {
+			content: '';
+			display: block;
+			clear: both;
+		}
+
+		.grid-item {
+			box-shadow: 0 0 3px rgba(0,0,0,0.5);
+			position: relative;
+			float: left;
+			margin: 0 $gridSpacing $gridSpacing 0;
+			//to see WIP cells.
+			background: rgba(255,0,0,0.6);
+
+			@for $i from 1 through 8 {
+				$s: (128px * $i) - $gridSpacing;
+				$h: (100px * $i);
+				$m: (145px * $i) - $gridSpacing;
+
+				&.col-#{$i} { width: $s; }
+
+				&.allow-flex.col-#{$i}{
+					max-width: $m;
+					@include experimental-value(width, calc(#{(12.5% * $i)} - #{$gridSpacing}));
+				}
+
+				&.row-#{$i} { height: $h; }
+			}
+		}
+	}
+}
+
+@include grid-def();
+
+
+
+//Grid components (tables)
+
+
+.x-grid-header-ct {
+	background: none !important;
+	border: 0 none !important;
+}
+
+.x-column-header {
+	padding: 0;
+	border: 0 none;
+	border-bottom: {
+		color: #f1f1f1;
+		style: solid;
+		width: 1px !important;
+	}
+	text-shadow: none;
+	color: $tertiary-grey;
+	font: normal 700 0.6em/3 $font;
+	text-transform: uppercase;
+	background: none !important;
+
+	&.sortable {
+		cursor: pointer;
+	}
+
+	&.x-column-header-sort-ASC,
+	&.x-column-header-sort-DESC {
+		overflow: visible;
+
+		.x-column-header-text {
+			color: $primary-grey;
+			background: none;
+			padding-right: 0;
+
+			&::after {
+				content: '';
+				margin-left: 1em;
+			}
+		}
+	}
+
+	&.x-column-header-sort-ASC {
+		.x-column-header-text::after {
+			vertical-align: text-top;
+			@include arrow($width: 8px, $height: 5px);
+		}
+	}
+	&.x-column-header-sort-DESC {
+		.x-column-header-text::after {
+			vertical-align: text-bottom;
+			@include arrow($pointFrom: top, $width: 8px, $height: 5px);
+		}
+	}
+
+	.x-column-header-inner {
+		padding: 0;
+
+		&.x-column-header-over {
+			background: none;
+		}
+	}
+
+	&.sortable {
+		.x-column-header-inner.x-column-header-over {
+			color: $primary-grey;
+		}
+	}
+
+	.disclaimer-header {
+		display: inline-block;
+		padding-right: 12px;
+		@include icon($info, $left: auto, $right: -6px, $top: 7px);
+	}
+}
+
+.x-grid-body {
+	border: 0 none;
+
+	.x-grid-view {
+		overflow: {
+			y: auto;//scroll
+			x: hidden;
+		}
+
+		.x-grid-table{
+			position: relative !important;
+		}
+	}
+
+	.x-grid-row-over {
+		.text {
+			position: relative;
+			overflow: visible;
+			display: block;
+
+			input {
+				border-color: #b8b8b8;
+			}
+		}
+
+	}
+
+	.x-grid-td {
+		border-width: 0;
+		background: none;
+		vertical-align: middle;
+	}
+
+	.x-grid-row-selected,
+	.x-grid-row-focused {
+		.x-grid-td {
+			border: {
+				top-width: 0 !important;
+				bottom-width: 0 !important;
+			}
+			background: none;
+			background-color: initial !important;
+		}
+	}
+
+	.x-grid-row-over {
+		.x-grid-td, .x-grid-td.x-grid-cell.x-grid-cell-selected {
+			background: #fafafa !important;
+		}
+
+		&.x-grid-row .x-grid-cell .disclosure::after {
+			background-position: sprite-position($options-menu-card_hover);
+		}
+
+		&.x-grid-row .x-grid-cell .disclosure.report::after {
+			background-position: sprite-position($reports-gray-card_hover);
+		}
+	}
+
+	.x-grid-cell-inner {
+		padding: 0;
+		line-height: 60px;
+	}
+
+	input {
+		border: 1px solid #fff;
+	}
+
+	.x-grid-row .x-grid-cell {
+		font: normal 300 0.85em/3 $font;
+		color: $secondary-grey;
+
+
+		&.x-grid-cell-selected {
+			background-color: inherit !important;
+		}
+
+		&.sortedOn,
+		&.x-grid-cell-first {
+			color: $primary-grey;
+			font-weight: 600;
+		}
+		&.x-grid-cell-first {
+			color: $primary-blue;
+			cursor: pointer;
+		}
+
+		.right-aligned{
+			text-align: right;
+		}
+
+		.check {
+			text-indent: -100px;
+			overflow: hidden;
+			@include icon($check_gray, $top: 1em, $left: 1.6em);
+		}
+
+		.actions {
+			cursor: pointer;
+			width: 40px;
+			height: 40px;
+			@include icon($more-options, $top: 15px, $left: 9px);
+		}
+
+		&.feedback{
+			padding-left: 10px;
+
+			.x-grid-cell-inner {
+				line-height: 30px;
+
+				.grade-excused{
+					&.off{
+						display: none;
+					}
+
+					&.on{
+						display: block;
+						color: $primary-red;
+					}
+				}
+			}
+
+		}
+
+		.disclosure {
+			cursor: pointer;
+			width: 40px;
+			height: 40px;
+			@include icon($options-menu, $top: 6px, $left: 5.5px);
+
+			&:target,
+			&:hover {
+				&::after {
+					@include sprite-position($options-menu_hover);
+				}
+			}
+
+			&.report {
+				@include icon($reports-gray_default, $top: 12px, $left: 12px);
+
+				&:hover::after {
+					background-position: sprite-position($reports-blue_hover);
+				}
+			}
+		}
+
+
+		div.padded-cell,
+		&.padded-cell .x-grid-cell-inner{
+			margin-left: 30px;
+		}
+
+		&.text {
+			cursor: text;
+			overflow: visible;
+			.x-grid-cell-inner {
+				overflow: visible;
+			}
+
+			input {
+				font: normal normal 1em/1 'Open Sans';
+				width: 45%;
+				padding: 0.7em 0.3em 0.7em 1.0em;
+				margin-left: -0.3em;
+				&:hover,
+				&:focus {
+					border-color: #b8b8b8;
+				}
+			}
+
+			.grade-excused{
+				color: $primary-red;
+				padding-left: 5px;
+				width: 45%;
+			}
+		}
+
+		.user-cell {
+			overflow: hidden;
+			position: relative;
+
+			.avatar {
+				float: left;
+				display: inline-block;
+				line-height: 0;
+				width: 60px; height: 60px;
+				background: {
+					size: cover;
+					position: center center;
+					repeat: no-repeat;
+				}
+			}
+			.name {
+				margin-left: 75px;
+				line-height: 60px;
+				max-width: 100%;
+				overflow: hidden;
+				@include ellipse;
+				color: $primary-grey;
+
+				.accent-name{
+					font-weight: normal;
+					padding-right: 0.5em;
+					overflow: hidden;
+					@include ellipse;
+				}
+			}
+
+			.controls {
+				position: absolute;
+				top: 17px;
+				left: 75px;
+				font-weight: 400;
+				cursor: pointer;
+				display: none;
+			}
+
+			&:hover {
+				.controls {
+					display: block;
+				}
+			}
+		}
+	}
+}
+
+
+//Grid Views:
+.x-grid {
+	.x-grid-cell-editor{
+		input{
+			font: normal 300 0.8em/1 $font;
+			height: 40px !important;
+			border: 1px solid #dcdcdc;
+			background-image: none;
+		}
+	}
+
+	&.fixed-table{
+		table {
+			table-layout: fixed !important;
+		}
+	}
+}

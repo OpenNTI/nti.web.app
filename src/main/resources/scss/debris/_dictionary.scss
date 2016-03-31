@@ -1,0 +1,29 @@
+
+
+.dictionary-window {
+	@extend .nti-window;
+	padding-bottom: 3px;
+	overflow: visible;
+
+	.nti-window-header {
+		border-bottom: 1px solid #E7E7E7;
+	}
+
+	&.north::before {
+		content: "";
+		position: absolute;
+		z-index: 1;
+		top: -15px;
+		left: 45%;
+		@include sprite($window-nib-north);
+	}
+
+	&.south::before{
+		content: "";
+		position: absolute;
+		z-index: 1;
+		bottom: -14px;
+		left: 45%;
+		@include sprite($window-nib-south);
+	}
+}

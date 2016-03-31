@@ -1,0 +1,883 @@
+
+
+.nt-combobox {
+	.x-form-trigger-wrap {
+		border-collapse: separate;
+		padding: 0 15px 0 0;
+		border-radius: 5px;
+		border: 1px solid #a0a0a0;
+		box-shadow: inset 1px 1px 0 0 #cccccc;
+		background: #ffffff;
+		position: relative;
+
+	}
+
+	.x-trigger-cell {width: 0 !important; display: inline;}
+	.x-form-trigger {
+		position: absolute;
+		right: 6px;
+		top: 12px;
+		width: 8px;
+		height: 5px;
+		border-width: 0 !important;
+		background: url(../images/elements/search-nib.png) 0 0 no-repeat;
+	}
+
+	.x-form-field.x-form-text{
+		padding: 13px 0 13px 10px;
+		border: none;
+		border-radius: 5px;
+		background: none;
+		color: #909090;
+		font-size: 13px;
+		font-weight: 600;
+	}
+
+}
+
+
+.input-wrap,
+.textbox-base {
+	position: relative;
+
+	input {
+		@include text-box-style();
+		padding-right: 20px;
+	}
+
+	.placeholder {
+		@include placeholder-style();
+		position: absolute;
+		top: 0;
+		left: 0;
+		padding: 7px 0 0 6px;
+	}
+
+	.clear {
+		cursor: pointer;
+		position: absolute;
+		display: none;
+		right: 4px;
+		top: 7px;
+		@include sprite($clear_line);
+	}
+}
+
+.input-wrap {
+	.clear {
+		display: block;
+		top: 5px;
+		right: 54px;
+		.x-opera &,
+		.x-safari5 & {
+			right: 60px;
+		}
+	}
+
+	input {
+		width: calc(100% - 50px);
+		.x-opera &,
+		.x-safari5 & {
+			width: 77%;
+		}
+		line-height: 20px;
+		padding: 2px 25px 2px 5px;
+		height: 26px !important;;
+		border: 1px solid $tertiary-grey;
+		border-right-width: 0;
+		border-radius: 1px 0 0 1px;
+		vertical-align: top;
+	}
+
+	.save-button {
+		cursor: pointer;
+		font-size: 12px;
+		font-weight: 600;
+		padding: 0 10px;
+		vertical-align: top;
+		height: 26px !important;
+		line-height: 24px;
+		display: inline-block;
+		background: $primary-blue;
+		border: 1px solid $border-blue;
+		color: #fff;
+
+		&.save-button-disabled {
+			background-color: #E4E4E4;
+			color: $tertiary-grey;
+			cursor: default;
+			border: 1px solid #E4E4E4;
+		}
+	}
+}
+
+
+.error-tip {
+	position: relative;
+	overflow: visible !important;
+
+	&[data-error-tip]{
+		&::before {
+			display: block;
+
+			position: absolute;
+			top: -16px; left: 5px;
+			z-index: 999;
+
+			content: attr(data-error-tip);
+			color: $quad-grey;
+			background: $primary-red;
+			border: 1px solid $secondary-red;
+			box-shadow: 2px 2px 5px 0 rgba(0,0,0,0.1);
+
+			padding: 1px 5px 1px 3px;
+			font-size: 11px;
+			font-style: italic;
+			font-weight: 500;
+
+			text-align: left;
+			text-shadow: 0 1px 0 $primary-red;
+			text-transform: uppercase;
+		}
+
+		&::after {
+			//TODO: put a triangle tip here
+			content: '';
+			//content: url(../images/tooltip_pointer.png);
+			display: block;
+			position: absolute;
+
+			top: 7px;
+			left: 10px;
+			z-index: 9999;
+		}
+
+
+		&.error-on-bottom {
+			&::before {
+				top: auto;
+				bottom: -16px;
+			}
+			&::after {
+				//TODO: put a triangle tip here thats flipped
+			}
+		}
+
+	}
+}
+
+.nti-radio {
+	position: relative;
+
+	input[type='radio'] {
+		visibility: hidden;
+		position: absolute;
+	}
+
+	input[type='radio']:checked + label {
+		@include icon($radio-button-16_active, $side: 'after', $top: 50%, $left: 0);
+	}
+
+	input[type='radio']:not(:checked) + label:hover {
+		@include icon($radio-button-16_hover, $side: 'after', $top: 50%, $left: 0);
+	}
+
+	label {
+		min-width: 16px;
+		min-height: 16px;
+		display: inline-block;
+		cursor: pointer;
+
+		@include icon($radio-button-16, $side: 'after', $top: 50%, $left: 0);
+
+		&::after {
+			margin-top: -8px;
+		}
+	}
+}
+
+.nti-checkbox {
+	position: relative;
+
+	input[type='checkbox'] {
+		visibility: hidden;
+		position: absolute;
+	}
+
+	input[type='checkbox']:checked + label {
+		@include icon($checkbox-14_active, $side: 'after', $top: 50%, $left: 0);
+	}
+
+	input[type='checkbox']:not(:checked) + label:hover {
+		@include icon($checkbox-14_hover, $top: 50%, $left: 0);
+	}
+
+	label {
+		min-width: 14px;
+		min-height: 14px;
+		display: inline-block;
+		cursor: pointer;
+
+		@include icon($checkbox-14, $side: 'after', $top: 50%, $left: 0);
+
+		&::after {
+			margin-top: -7px;
+		}
+	}
+}
+
+
+span.nti-checkbox {
+	display: inline-block;
+	position: relative;
+	padding-left: 25px;
+	margin: 0.5em;
+	cursor: pointer;
+
+	&.disabled {
+		cursor: default;
+		opacity: 0.5;
+	}
+
+	&::after { margin-top: -7px; }
+	@include icon($checkbox-14, $top:50%, $left:0);
+
+	&:not(.checked):hover::after {
+		@include sprite($checkbox-14_hover);
+	}
+
+	&.checked::after {
+		@include sprite($checkbox-14_active);
+	}
+}
+
+
+span.nti-radiobutton {
+	display: inline-block;
+	position: relative;
+	padding-left: 25px;
+	margin: 0.5em;
+	cursor: pointer;
+
+	&.disabled {
+		cursor: default;
+		opacity: 0.5;
+	}
+
+	&::after { margin-top: -7px; }
+	@include icon($radio-button-16, $top:50%, $left:0);
+
+	&:not(.checked):hover::after {
+		@include sprite($radio-button-16_hover);
+	}
+
+	&.checked::after {
+		@include sprite($radio-button-16_active);
+	}
+}
+
+
+.searchcombobox {
+	position: relative;
+
+
+	input {
+		font-size: 14px;
+		font-weight: 500;
+		border-radius: 0;
+		line-height: 25px;
+		padding: 6px 10px;
+		width: 100%;
+		height: 100%;
+		box-shadow: none;
+		border: 1px solid $tertiary-grey;
+		background: none;
+		position: relative;
+		z-index: 1;
+	}
+
+	.preview {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		font-size: 14px;
+		font-weight: 500;
+		line-height: 25px;
+		padding: 6px 10px;
+		background: #fff;
+		border: 1px solid white;
+		color: $tertiary-grey;
+
+		.hidden {
+			visibility: hidden;
+		}
+	}
+
+	&.error input, input.error {
+		border-color: $primary-red;
+	}
+
+	.options {
+
+		position: fixed;
+		top: 100%;
+		background-color: white;
+		border: 1px solid $tertiary-grey;
+		border-top-width: 0;
+		z-index: 3;
+		overflow: auto;
+		color: $primary-grey;
+
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+
+			li {
+				padding: 0 10px;
+				cursor: pointer;
+
+				&.filtered {
+					display: none;
+				}
+
+				&.active, &:hover {
+					background-color: #efefef
+				}
+			}
+		}
+
+		&.hidden {
+			display: none;
+		}
+	}
+
+	.arrow {
+		right: 0;
+		top: 0;
+		bottom: 0;
+		width: 21px;
+		cursor: pointer;
+		position: absolute;
+		z-index: 2;
+
+		//@include icon($arrow-course-dropdown-light, $side: 'after', $position: absolute, $left: 4px, $top: 50%);
+
+		&::after {
+			content: '';
+			@include arrow($pointFrom: top, $color: $tertiary-grey);
+			position: absolute;
+			top: 50%;
+			margin-top: -2px;
+			right: 6px;
+		}
+
+		&:hover::after {
+			border-top-color: $secondary-grey;
+		}
+	}
+}
+
+form.common-form {
+	input, textarea {
+		outline: none;
+		border: none;
+
+		&.simple {
+			&:focus {
+				background: white;
+				box-shadow: 0 0 3px 0 $primary-blue, 0 0 0 1px #d8d8d8;
+			}
+
+			&.error {
+				box-shadow: 0 0 0 1px $primary-red;
+			}
+		}
+	}
+
+	&.saving {
+		position: relative;
+
+		&::before {
+			position: absolute;
+			top: 0; bottom: 0;
+			left: 0; right: 0;
+		}
+	}
+}
+
+.datefield {
+	height: auto;
+	overflow: hidden;
+
+	.month {
+		width: 110px;
+		float: left;
+	}
+
+	.date-field-input {
+		float: left;
+		font-size: 14px;
+		font-weight: 500;
+		border-radius: 0;
+		line-height: 25px;
+		padding: 6px 10px;
+		height: 100%;
+		box-shadow: none;
+		border: 1px solid $tertiary-grey;
+		background: #ffffff;
+	}
+	input.date-field-input {
+		border-left-width: 0;
+	}
+
+	.day {
+		width: 60px;
+	}
+
+	.year {
+		width: 75px;
+	}
+}
+
+.file-picker {
+	&.no-file {
+		.preview {
+			display: none;
+		}
+
+		.input-container {
+			.has-file {
+				display: none;
+			}
+		}
+	}
+
+	&.has-file {
+		background: white;
+		line-height: 2.375em;
+		padding: 0 0.5em;
+
+		.input-container {
+			display: inline-block;
+			.no-file {
+				display: none;
+			}
+		}
+	}
+
+	.preview {
+		display: inline-block;
+		font-size: 0.874em;
+
+		.name, .size, .preview-link {
+			display: inline-block;
+			margin-right: 0.5em;
+			vertical-align: middle;
+		}
+
+		.name {
+			font-weight: 700;
+			max-width: 300px;
+			overflow: hidden;
+			@include ellipse();
+		}
+
+		.size {
+			font-weight: 600;
+			color: $secondary-grey;
+		}
+
+		.preview-link {
+			font-weight: 600;
+			color: $primary-blue;
+		}
+
+		&::after {
+			content: '';
+			display: inline-block;
+			vertical-align: middle;
+			margin-right: 0.5em;
+			width: 1px;
+			height: 20px;
+			background: $tertiary-grey;
+		}
+	}
+
+	.input-container {
+		position: relative;
+
+		&.file-over {
+			.no-file {
+				background: #d9d9d9;
+			}
+		}
+
+		.has-file {
+			.change {
+				display: inline-block;
+				vertical-align: middle;
+				font-size: 0.875em;
+				font-weight: 600;
+				color: $primary-blue;
+				text-decoration: underline;
+			}
+		}
+
+		.no-file {
+			padding: 100px 0;
+			border: 2px dashed #b8b8b8;
+			border-radius: 5px;
+
+			.drop {
+				text-align: center;
+				color: $secondary-grey-alt;
+				font-weight: 600;
+				font-size: 0.875em;
+				margin-bottom: 0.7em;
+
+				@include icon($file-drop, $side: before);
+
+				&::before {
+					position: static;
+					display: block;
+					margin: 0 auto 0.3em;
+				}
+			}
+
+			.choose {
+				width: 100px;
+				margin: auto;
+				text-align: center;
+				font-size: 0.875em;
+				line-height: 2em;
+				color: white;
+				border-radius: 5px;
+				background: $primary-blue;
+				text-transform: capitalize;
+			}
+		}
+
+		input[type=file] {
+			position: absolute;
+			top: 0; bottom: 0;
+			left: 0; right: 0;
+			opacity: 0;
+			margin: 0;
+			border: 0;
+			padding: 0;
+			cursor: pointer;
+			width: 100%;
+		}
+	}
+}
+
+.image-picker {
+	position: relative;
+
+	@include icon($image-upload, $side: after, $position: relative, $top: 6px, $left: 6px);
+
+	&::after {
+		z-index: 2;
+	}
+
+	&.focused {
+		box-shadow: 0 0 0 1px $primary-blue;
+	}
+
+	&.no-file {
+		.has-file {
+			display: none;
+		}
+	}
+
+	&.has-file {
+		.no-file {
+			display: none;
+		}
+	}
+
+	&.file-over {
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0; bottom: 0;
+			left: 0; right: 0;
+			z-index: 2;
+			background: rgba(0, 0, 0, 0.3);
+		}
+	}
+
+	.preview {
+		position: absolute;
+		top: 0; bottom: 0;
+		left: 0; right: 0;
+		z-index: 1;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+	}
+
+	input[type=file] {
+		position: absolute;
+		top: 0; bottom: 0;
+		left: 0; right: 0;
+		z-index: 3;
+		opacity: 0;
+		width: 100%;
+		cursor: pointer;
+	}
+
+	.clear {
+		position: absolute;
+		cursor: pointer;
+		bottom: 0;
+		left: 0; right: 0;
+		z-index: 4;
+		line-height: 2.1em;
+		padding-top: 0.1em;
+		font-size: 0.625em;
+		text-transform: uppercase;
+		text-align: center;
+		color: white;
+		background: black;
+		opacity: 0.8;
+
+		&::before {
+			content: '';
+			position: absolute;
+			top: 1px;
+			left: 1px; right: 1px;
+			height: 1px;
+			background-color: rgba(255, 255, 255, 0.5);
+		}
+	}
+}
+
+
+.url-field {
+	@include flexContainer();
+
+	&.valid {
+		a {
+			pointer-events: all;
+			color: $primary-blue;
+
+			@include icon($preview-blue, $side: after, $top: 50%, $left: auto, $right: 1em);
+		}
+	}
+
+	&.error {
+		input[type=text] {
+			box-shadow: inset 0 0 0 1px $primary-red;
+		}
+
+		a {
+			box-shadow: inset -1px 0 0 $primary-red, inset 0 1px 0 $primary-red, inset 0 -1px 0 $primary-red;
+		}
+	}
+
+	&.focused {
+		box-shadow: 0 0 1px 0 $primary-blue;
+	}
+
+	input[type=url] { display: none; }
+
+	input[type=text] {
+		@include flexItem(1 1 auto);
+		line-height: 35px;
+		font-size: 1em;
+		box-shadow: inset 0 0 0 1px #d8d8d8;
+		border: none;
+		padding: 0 0.5em;
+	}
+
+	a {
+		@include flexItem(0 0 auto);
+		pointer-events: none;
+		width: 93px;
+		color: $primary-grey;
+		font-size: 0.75em;
+		font-weight: 700;
+		line-height: 35px;
+		padding-right: 1.5em;
+		text-align: center;
+		text-decoration: none;
+		box-shadow: inset -1px 0 0 #d8d8d8, inset 0 1px 0 #d8d8d8, inset 0 -1px 0 #d8d8d8;
+		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f2f2f2+100 */
+		background: #ffffff;
+		background-image: linear-gradient(to bottom,  #ffffff 0%,#f2f2f2 100%);
+
+		@include icon($preview-gray, $side: after, $top: 50%, $left: auto, $right: 1em);
+
+		&::after {
+			margin-top: -4px;
+		}
+	}
+}
+
+
+.save-progress {
+	.progress-bar {
+		height: 10px;
+		background: #e5e5e5;
+		margin-bottom: 10px;
+
+		.bar {
+			height: 10px;
+			background-color: $primary-blue;
+			width: 0;
+			transition: width 0.3s;
+		}
+	}
+
+	.out-of {
+		font-size: 0.625rem;
+		color: $tertiary-grey;
+
+		span {
+			margin-right: 0.3em;
+		}
+	}
+}
+
+
+.date-time-field {
+
+	&.disabled {
+		opacity: 0.5;
+		pointer-events: none;
+
+		input {
+			color: $secondary-grey;
+		}
+	}
+
+	input {
+		font-family: $font;
+		background: white;
+		border: none;
+		box-shadow: 0 0 0 1px $tertiary-grey;
+
+
+		&:focus {
+			box-shadow: inset 0 0 1px 0 $primary-blue, 0 0 0 1px $primary-blue;
+			position: relative;
+			z-index: 2;
+		}
+	}
+
+	.date .container, .time .container {
+		@include flexContainer();
+		-webkit-justify-content: space-between;
+		-ms-flex-pack: justify;
+		justify-content: space-between;
+	}
+
+	.date .container {
+		max-width: 265px;
+	}
+
+	.time .container {
+		max-width: 165px;
+	}
+
+
+	.select-current-date {
+		display: inline-block;
+		margin-top: 21px;
+		line-height: 40px;
+		font-size: 0.75em;
+		font-weight: 600;
+		padding-left: 0.5em;
+
+		.link {
+			color: $primary-blue;
+			cursor: pointer;
+		}
+	}
+
+	.hour-input, .minute-input {
+		font-size: 0.875rem;
+		font-weight: 500;
+		border-radius: 0;
+		line-height: 25px;
+		padding: 6px;
+		background: #ffffff;
+		height: 37px;
+
+		&.error {
+			border-color: $primary-red;
+		}
+	}
+
+	.date, .time {
+		display: inline-block;
+		vertical-align: top;
+
+		& > .error {
+			font-size: 0.875rem;
+			color: $primary-red;
+		}
+	}
+
+	.date {
+		margin-right: 3%;
+	}
+
+	.month {
+		@include flexItem(0 0 140px);
+
+		input {
+			border-right: none;
+		}
+	}
+
+	.day {
+		@include flexItem(0 0 55px);
+	}
+
+	.year {
+		@include flexItem(0 0 70px);
+
+		input {
+			border-left: none;
+		}
+	}
+
+	.hour-input {
+		@include flexItem(0 0 40px);
+		width: 40px;
+		max-width: 40px;
+	}
+
+	.seperator {
+		@include flexItem(0 0 6px);
+		line-height: 40px;
+		text-align: center;
+	}
+
+	.minute-input {
+		@include flexItem(0 0 40px);
+		width: 40px;
+		max-width: 40px;
+	}
+
+	.meridiem-input {
+		@include flexItem(0 0 60px);
+	}
+
+	.label {
+		text-transform: uppercase;
+		font-size: 0.625rem;
+		font-weight: 600;
+		color: $secondary-grey;
+
+		&.error {
+			font-size: 0.625rem;
+			color: $primary-red;
+		}
+	}
+}

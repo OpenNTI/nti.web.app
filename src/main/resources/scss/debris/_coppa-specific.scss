@@ -1,0 +1,581 @@
+.contact-us-window,
+.code-window,
+.codecreation-window,
+.createlist-window,
+.coderetrieval-window,
+.recovery-email-window,
+.embedvideo-window,
+.forumcreation-window,
+.coppa-window {
+	@extend .nti-window;
+
+	@include reset-window-border-radius(3px);
+
+	box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3),
+	0 0 0 110px transparent;
+
+	background-color: $quad-grey;
+
+	.account-header-view {
+		margin: 24px 0;
+		.avatar {
+			position: relative;
+			box-shadow: 0 0 0 1px #e5e5e5;
+			border-radius: 5px;
+			margin-left: 20px;
+			margin-top: 5px;
+			float: left;
+			display: block;
+			border: 4px solid white;
+			height: 62px;
+			width: 62px;
+
+			img {
+				border-radius: 5px;
+				height: 100%;
+				width: 100%;
+			}
+
+			&:after {
+				content: ' ';
+				position: absolute;
+				z-index: 1999;
+				bottom: -9px;
+				right: -9px;
+
+				@include sprite($green_check);
+			}
+
+		}
+		.text{
+			&.full-width {
+				margin-left: 34px;
+				margin-right: 34px;
+			}
+
+			color: $secondary-grey;
+			margin-right: 25px;
+			margin-left: 100px;
+
+			.title {
+				font-weight: 400;
+				font-size: 20px;
+				font-style: italic;
+			}
+			.detail {
+				font-size: 14px;
+			}
+		}
+	}
+
+	.coppa-form{
+		margin: 0 10px 20px 100px;
+
+		.legend{
+			font: normal 400 14px/22px $font;
+			margin-bottom: 5px;
+		}
+		.fields{
+
+			.birthdate input{
+				border-left-width: 0 !important;
+			}
+
+			.realname {
+				white-space: nowrap;
+			}
+
+			input, .selectbox{
+				vertical-align: bottom;
+				color: #757474;
+				font: italic 500 14px/25px $font;
+				border: 1px solid #dcdcdc;
+				background: #ffffff;
+				padding: 6px 10px;
+				margin: 0;
+				min-height: 39px;
+
+				&[size='3']{
+					width: 75px;
+				}
+				&[size='2']{
+					width: 60px;
+				}
+				&[size='4']{
+					width: 137px;
+				}
+				&[size='5']{
+					width: 285px;
+				}
+			}
+
+			.selectbox{
+				cursor: pointer;
+				display: inline-block;
+				width: 150px;
+				padding: 6px 0 6px 20px;
+				border-left-width: 0;
+				box-shadow: inset 5px 0 0 0 #a0a0a0;
+				position: relative;
+
+				&::after{
+					content: '';
+					position: absolute;
+					top: 15px; right: 15px;
+
+					@include sprite($collapse);
+				}
+			}
+
+			& > div{
+				span, .validation-message{
+					padding-left: 20px;
+					display: inline-block;
+					vertical-align: top;
+					position: relative;
+					padding-top: 10px;
+					font-style: italic;
+					color: #757474;
+
+					&.long{
+						width: 260px;
+						padding-top: 0;
+					}
+				}
+
+				&.invalid{
+					span, .validation-message{ color: $primary-red; }
+					input[data-required=true], .selectbox{
+						box-shadow: inset 5px 0 0 0 $primary-red !important;
+					}
+				}
+				&.valid{
+					span, .validation-message{ color: $primary-green; }
+					input[data-required=true], .selectbox{
+						box-shadow: inset 5px 0 0 0 $primary-green !important;
+					}
+				}
+			}
+		}
+
+		.continue, .save {
+			display: inline-block;
+			cursor: pointer;
+			vertical-align: bottom;
+			height: 39px;
+			line-height: 39px;
+			padding: 0 20px;
+			margin-left: 5px;
+			white-space: nowrap;
+			color: #ffffff;
+			background: #37b2f9;
+			border: 1px solid #31a0e0;
+			font-size: 14px;
+			font-style: italic;
+			font-weight: bold;
+
+			&.submitted{
+				background: none;
+				border: none;
+				color: $primary-green;
+			}
+
+			&.disabled{
+				background: $tertiary-grey;
+				border: 1px solid $tertiary-grey;
+			}
+		}
+
+		.account-info{
+			margin-top: 15px;
+
+			.submit {
+				position: relative;
+				min-height: 48px;
+				margin: 10px -10px -20px -100px;
+
+				.save {
+					position: absolute;
+					top: 0;
+					right: 0;
+					bottom: 0;
+					height: auto;
+					line-height: 3em;
+					color: #ffffff;
+					outline: 1px solid #69a92b;
+					border: none;
+					background: #75bc30;
+				}
+			}
+
+			label {
+				position: relative;
+				font: normal normal 11px/45px $font;
+
+				input[type=checkbox] {
+					position: absolute;
+					clip: rect(0, 0, 0, 0);
+					clip: rect(0 0 0 0);
+
+					& + div {
+						position: relative;
+						padding-left: 35px;
+
+						&::before {
+							position: absolute;
+							content: '';
+							top: 16px;
+							left: 15px;
+							@include sprite($checkbox-14);
+						}
+
+						&:hover::before {
+							@include sprite($checkbox-14_hover);
+						}
+					}
+
+					&:checked + div {
+						&, &:hover {
+							&::before {
+								@include sprite($checkbox-14_active);
+							}
+						}
+					}
+				}
+			}
+			.fields{
+				& > div{
+					&.hidden{ display: none; }
+
+					input{
+						&[data-required=true]{
+							display: inline-block;
+							margin-bottom: 10px;
+							border-left-width: 0;
+							box-shadow: inset 5px 0 0 0 #a0a0a0;
+						}
+						&[name=last]{
+							margin-bottom: 10px;
+							margin-left: 10px;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.code-main-view,
+	.createlist-main-view,
+	.codecreation-main-view,
+	.coderetrieval-main-view,
+	.recovery-email-view,
+	.contact-main-view,
+	.embedvideo-main-view,
+	.forumcreation-main-view,
+	.coppa-main-view {
+		color: $secondary-grey;
+
+		* {
+			font-size: 14px;
+		}
+
+		h3 {
+			margin-bottom: 5px;
+		}
+
+		h3, .what-school {
+			margin-top: 40px;
+		}
+
+		.input-wrapper {
+			margin-left: 100px;
+			margin-right: 75px;
+			margin-bottom: 40px;
+		}
+
+		.input-box {
+			position: relative;
+		}
+
+		.hidden {display: none;}
+
+		textarea.input-box.error{
+			box-shadow: -4px 0 0 0 $primary-red;
+		}
+
+		.input-box, .combo-box {
+			margin: 5px 0;
+			&, input, .x-form-item { font-size: 14px;}
+
+			.x-form-cb-label-after {
+				margin-left: 10px;
+			}
+
+			&.error {
+				input, input:focus {
+					box-shadow: -4px 0 0 0 $primary-red;
+				}
+			}
+
+			border: 1px solid $border-grey;//#dcdcdc;
+			padding-right: 30px;
+			background: #ffffff;
+
+			.clear {
+				top: 10px;
+				right: 15px;
+
+				cursor: pointer;
+				position: absolute;
+				display: none;
+				@include sprite($clear_line);
+			}
+
+			.placeholder {
+				@include placeholder-style;
+				position: absolute;
+				top: 0;
+				left: 0;
+				font-weight: 500;
+				line-height: 25px;
+				padding: 7px 14px;
+
+			}
+		}
+
+		textarea.input-box, .input-box input, textarea.combo-box, .combo-box input{
+			&::-ms-clear{
+				display: none;
+			}
+
+			&:focus {
+				outline: none;
+				box-shadow: -4px 0 0 0 $primary-blue;
+			}
+
+			&.empty,
+			&.x-form-empty-field {
+				font-style: italic !important;
+			}
+
+			//vertical-align: bottom;
+			color: $secondary-grey;
+			font: normal 500 14px/25px $font;
+
+			border: 0;
+
+			background: #ffffff;
+			padding: 6px 10px;
+			margin: 0;
+			min-height: 39px;
+			@include experimental-value(width, calc(100% - 8px));
+			.x-opera &,
+			.x-safari5 & {
+				width: 291px;
+				&[placeholder$="Name"] { width: 145px; }
+			}
+			position: relative;
+			left: 4px;
+			box-shadow: -4px 0 0 0 $border-grey;
+		}
+
+		.combo-box {
+			input {
+				box-shadow: none;
+				left: 0;
+				border-left-width: 1px;
+
+				&:focus {
+					outline: none;
+					box-shadow: none;
+				}
+			}
+		}
+
+		.error-box {
+			position: relative;
+			overflow: hidden;
+			background-color: $primary-red;
+			margin-top: 40px;
+			font-weight: 600;
+			font-size: 14px;
+
+			.error-field {
+				text-transform: capitalize;
+				color: $secondary-red;
+				text-align: right;
+				float: left;
+				width: 85px;
+				height: 70px;
+				padding: 20px 0 0 3px;
+
+				&::after{
+					content: ':';
+				}
+			}
+
+			.error-desc {
+				margin-left: 100px;
+				color: white;
+				padding: 20px 10px 0 0;
+			}
+		}
+
+		.submit {
+			@include top-etch($dark: #e2e2e2, $light: #fafafa);
+			background-color: #f3f3f3;
+			padding: 15px 10px;
+			overflow: hidden;
+
+			.privacyLink, .policy-link{
+				text-decoration: none;
+				color: #3FB3F6;
+				font-size: 12px;
+				top:5px !important;
+				cursor: pointer;
+				padding-left: 10px;
+			}
+		}
+	}
+
+	.code-main-view,
+	.codecreation-main-view,
+	.coderetrieval-main-view,
+	.createlist-main-view,
+	.embedvideo-main-view,
+	.forumcreation-main-view,
+	.contact-main-view {
+		.input-wrapper {
+			margin-left: 34px;
+			margin-right: 34px;
+		}
+		textarea,
+
+		.input-box {
+			input {
+				outline: none;
+				box-shadow: -4px 0 0 0 $border-grey;
+				&:focus{
+					box-shadow: -4px 0 0 0 $border-grey;
+				}
+			}
+		}
+
+		textarea.input-box{
+			resize: none;
+			width: 402px;
+			height: 134px;
+			outline: none;
+			box-shadow: -4px 0 0 0 $border-grey;
+			border: solid 1px $border-grey;
+			border-left: 0px;
+			&:focus{
+				box-shadow: -4px 0 0 0 $border-grey;
+			}
+		}
+	}
+
+	.contact-main-view,
+	.forumcreation-main-view,
+	.embedvideo-main-view{
+		.input-box{
+			width: 99%;
+		}
+	}
+
+}
+
+.forumcreation-main-view{
+	.submit{
+		.sharing-checkbox{
+			position: absolute;
+			top: 8px !important;
+			left: 5px !important;
+		}
+	}
+}
+
+.x-menu{
+	&.month-picker-list{
+		.x-menu-item{
+			border-bottom-width: 0 !important;
+		}
+	}
+}
+
+.codecreation-window,
+.createlist-window,
+.coderetrieval-window{
+
+	.close {
+		opacity: 0.5;
+		cursor: pointer;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+
+		@include sprite($window-control-close);
+
+		&:hover{
+			opacity: 1;
+		}
+	}
+
+	.codecreation-main-view,
+	.coderetrieval-main-view,
+	.createlist-main-view{
+		.input-box.group-name {
+			.x-mask{
+				background-color: white;
+				opacity: 0;
+			}
+			&.x-masked{
+				.clear{
+					display: none !important;
+				}
+			}
+
+			input {
+				box-shadow: -4px 0 0 0 $primary_green;
+			}
+			input.empty{
+				box-shadow: -4px 0 0 0 $border_grey;
+			}
+		}
+
+		.group-code{
+			background-color: $quad-grey;
+
+			input{
+				cursor: text;
+			}
+
+			input, input:focus{
+				background-color: $quad-grey;
+				box-shadow: -4px 0 0 0 $primary_green;
+			}
+		}
+
+		.label{
+			text-transform: uppercase;
+			font-weight: 700;
+			font-size: 10px;
+			font-style: normal; //Even marking this important won't work
+			padding-left: 4px;
+			margin-bottom: -2px;
+		}
+
+		.error-box {
+			margin-top: 0px;
+			font-weight: 600;
+			font-size: 14px;
+
+			.error-desc {
+				margin-left: 10px;
+				color: white;
+				padding: 20px 10px 20px 10px;
+			}
+		}
+
+	}
+}

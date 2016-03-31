@@ -1,0 +1,1374 @@
+.library-view {
+	margin: 2em 0 2.5em;
+	max-width: 100%;
+
+	.empty-text {
+		color: $tertiary-grey;
+		font: normal 300 2em $font;
+		margin: 2em auto;
+		width: 530px;
+		text-align: center;
+
+		a {
+			color: white;
+			font-size: 0.8em;
+			cursor: pointer;
+		}
+	}
+}
+
+.x-component-library-collection {
+	  margin: 2em 0 2.5em;
+}
+
+.library-navigation {
+	height: 100%;
+	opacity: 1;
+	transition: opacity 0.5s;
+
+	&.showing {
+		opacity: 0;
+	}
+
+	&.removing {
+		opacity: 0;
+	}
+
+	.branding {
+		height: 100%;
+		width: 100px;
+		float: left;
+	}
+
+	.dropdown {
+		height: 100%;
+		float: left;
+		position: relative;
+
+		&.disabled {
+			.label {
+				cursor: default;
+
+				&::after {
+					display: none;
+				}
+			}
+		}
+	}
+
+	.label {
+		font: normal 300 1.5em/#{$header-height} $font;
+		padding: 0 0.875em 0 0;
+		cursor: pointer;
+		color: $secondary-grey;
+
+		&::after {
+			content: '';
+			display: block;
+			position: absolute;
+			top: 50%;
+			right: 0;
+			margin-top: -4px;
+
+			@include sprite($arrow-course-dropdown);
+		}
+
+	}
+
+	.available {
+		cursor: pointer;
+		position: absolute;
+		left: 100%;
+		top: 50%;
+		min-width: 110px;
+		margin-top: -15px;
+		margin-left: 15px;
+		font: normal 400 0.875em/30px $font;
+		color: white;
+		text-align: center;
+		border-radius: 5px;
+		padding: 0 0.5em;
+		background-color: $secondary-green;
+
+		&.hidden {
+			display: none;
+		}
+
+		&::before {
+			content: '';
+			display: block;
+			width: 0;
+			height: 0;
+			border-style: solid;
+			border-width: 5px 5px 5px 0;
+			border-color: transparent $secondary-green transparent transparent;
+			position: absolute;
+			left: -5px;
+			top: 50%;
+			margin-top: -5px;
+		}
+	}
+
+
+}
+
+ul.library-grid {
+	list-style: none;
+	padding: 0;
+	margin: 0 -8px;
+
+	&::after {
+		content: '';
+		display: block;
+		clear: both;
+	}
+}
+
+li.community-grid-item {
+	float: left;
+	width: 242px;
+	height: 70px;
+	margin: 7px 9px;
+	cursor: pointer;
+	background: white;
+	position: relative;
+	padding-left: 70px;
+
+	.avatar-container {
+		position: absolute;
+		top: 0;	bottom: 0;
+		left: 0;
+		width: 70px;
+	}
+
+	.title-container {
+		position: relative;
+		height: 70px;
+	}
+
+	.title {
+		padding: 0 10px;
+		text-transform: uppercase;
+		font: normal 700 1em/1em $condensed-font;
+		color: $primary-grey;
+		max-height: 4em;
+		overflow: hidden;
+		position: absolute;
+		top: 50%;
+		@include experimental(transform, translateY(-50%));
+	}
+}
+
+.books li.library-grid-item {
+	.author:not(:empty)::before {
+		content: 'By ';
+	}
+}
+
+li.library-grid-item {
+	float: left;
+	width: 242px;
+	height: 290px;
+	margin: 7px 9px;
+	cursor: pointer;
+	background: white;
+	position: relative;
+
+	.cover {
+		width: 232px;
+		height: 170px;
+		margin: 5px;
+		overflow: hidden;
+
+		img {
+			display: block;
+			height: 100%;
+			@include experimental(transform, scale(1,1));
+			@include experimental(transition, all 0.5s);
+		}
+	}
+
+	.sample {
+		@include icon($sample-banner, $position: absolute);
+	}
+
+	.meta {
+		overflow: hidden;
+		color: $primary-grey;
+		padding: 0 10px;
+	}
+
+	.author,.courseName, .semester {
+		text-transform: uppercase;
+		font: normal bold 0.6em/1.6em $font;
+		overflow: hidden;
+		@include ellipse();
+	}
+
+	.courseName, .semester {
+		text-transform: uppercase;
+		color: $tertiary-grey;
+		display: inline-block;
+	}
+
+	.courseName {
+		margin-right: 0.5em;
+	}
+
+	.author {
+		color: $primary-blue;
+	}
+
+	.title {
+		font: normal 700 1em/1.1em "Open Sans Condensed";
+		color: $secondary-grey;
+		max-height: 2.2em;
+		margin-bottom: 10px;
+		text-transform: uppercase;
+		overflow: hidden;
+	}
+
+	.description {
+		overflow: hidden;
+		display: none;
+	}
+
+	.settings {
+		top: 10px;
+		right: 10px;
+		width: 27px;
+		height: 27px;
+		background: rgba(0,0,0,0.6);
+		border-radius: 5px;
+		display: none;
+		@include icon($library-gear, $side: after, $top: 50%, $left: 50%, $position: absolute);
+
+		&::after {
+			margin-left: -7px;//14/2
+			margin-top: -7px;//14/2
+		}
+	}
+
+	.archived {
+		position: absolute;
+		top: 85px; left: 50%;
+		margin: -25px 0 0 -75px;
+		height: 50px;
+		width: 150px;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: white;
+		line-height: 50px;
+		text-align: center;
+		padding-left: 40px;
+		border-radius: 3px;
+		display: none;
+	}
+
+	.controls {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+
+		.badge {
+			height: 27px;
+			color: white;
+			text-transform: uppercase;
+			font: normal 600 0.625em/27px $font;
+			padding: 0 7px;
+			display: none;
+			display: inline-block;
+
+			& + .preview {
+				margin-left: 10px;
+			}
+		}
+
+		.preview {
+			background-color: #FFA500;
+			color: #fff;
+			padding: 0 7px;
+			border-radius: 3px;
+			text-transform: uppercase;
+			font: normal 600 10px/27px $font;
+			display: inline-block;
+
+			& + .badge {
+				margin-left: 7px;
+			}
+		}
+	}
+
+
+	&.allow-zoom:hover {
+		.cover img {
+			@include experimental(transform, scale(1.05,1.05));
+			opacity: 0.7;
+		}
+
+		.settings {
+			display: block;
+		}
+	}
+
+	&.archived {
+		.badge {
+			background: rgba(0, 0, 0, 0.6);
+			border-radius: 4px;
+			padding-left: 25px;
+			position: relative !important;
+
+			@include icon($archived-library, $side: after, $top: 50%, $left: 7px, $position: absolute);
+
+			&::after {
+				margin-top: -7px;
+			}
+		}
+	}
+
+	&.upcoming {
+		.badge {
+			background: rgba(63, 179, 246, 0.95);
+			letter-spacing: 0.06em;
+
+			&::after {
+				content: '';
+				position: absolute;
+				right: -5px;
+				width: 0;
+				height: 0;
+				border-style: solid;
+				border-width: 0 0 24px 5px;
+				border-color: transparent transparent transparent rgba(63, 179, 246, 0.95);
+			}
+		}
+	}
+}
+
+.library-group-header{
+	height: 20px;
+	margin-bottom: 10px;
+
+	div {
+		float: left;
+		color: white;
+		font: normal 300 1.125em/1 $font;
+	}
+
+	.group {
+		margin-left: 0.5em;
+		color: rgba(255,255,255, 0.30);
+	}
+}
+
+//TODO: Clean up unused styles here
+#library {
+
+	margin-top: -105px;
+
+	.page {
+		@include scrollbar($track:transparent,$nib:rgba(0,0,0,0.3));
+		// overflow: {
+		// 	x: hidden;
+		// 	y: auto; //scroll;
+		// }
+//		margin-left: -5px;
+//		padding-left: 5px;
+	}
+
+	.library-panel {
+		overflow-y: auto;
+
+
+		.library-navigation {
+			width: 1024px !important;
+
+			&.fixed .nav-bar {
+				position: fixed;
+				top: 57px;
+				width: 1024px;
+				z-index: 9;
+			}
+
+			.x-component-branding {
+				min-height: 50px;
+				display: block;
+
+				.box {
+					display: none;
+				}
+			}
+
+			.nav-bar {
+				//-webkit-font-smoothing: antialiased;
+				height: 50px;
+				border-radius: 3px;
+				background-color: #505050;
+				background-image: linear-gradient(to bottom, #505050 0%, #474747 100%);
+				box-shadow: 0 1px 3px 0 rgba(0,0,0,0.35), inset 0 1px 0 0 rgba(255,255,255,0.1);
+
+				.dropdown {
+					float: left;
+					background-color: rgba(255,255,255, 0.15);
+					color: rgba(255,255,255,0.8);
+					font: normal 300 1.3em/50px $font;
+					padding: 0 20px 0 15px;
+					letter-spacing: 1px;
+
+					&:not(.disabled) {
+						cursor: pointer;
+
+						&::after {
+							content: '\2039';
+							line-height: 0.4;
+							display: inline-block;
+							font-size: 1em;
+							position: relative;
+							top: -3px;
+							left: 2px;
+							font-weight: 300;
+							width: 0.5em;
+							height: 0.5em;
+							@include experimental(transform, rotate(-90deg));
+						}
+					}
+				}
+
+				.nav {
+					float: left;
+					padding-left: 20px;
+
+					.outline-row {
+						cursor: pointer;
+						float: left;
+
+						@include accessibility-option(color, $tertiary-grey, #fff);
+
+						margin: 11px 5px;
+						height: 28px;
+						font: normal 500 0.9em/28px $font;
+						padding: 0 20px;
+						border-radius: 15px;
+
+						&.over, &.selected {
+							background-color: rgba(255,255,255, 0.15);
+							@include accessibility-option(color, rgba(255,255,255,0.8), #fff);
+						}
+					}
+				}
+
+				.add-courses {
+					position: relative;
+					margin: 6px 5px 0;
+					border-radius: 5px;
+					color: white;
+					float: right;
+					z-index: 3;
+					overflow: hidden;
+					padding: 0 20px;
+					cursor: pointer;
+					font: normal 300 0.85em/36px $font;
+					border: 1px solid rgba(0,0,0, 0.7);
+					box-shadow: 0 1px 0 0 rgba(255,255,255, 0.1);
+
+					&::before, &::after {
+						content: '';
+						position: absolute;
+						top: 0; left: 0;
+						right: 0; bottom: 0;
+					}
+
+					&::before {
+						background-color: #3fb34f;
+						box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.35);
+						z-index: -2;
+					}
+					&::after {
+						z-index: -1;
+						opacity: 0.3;
+						background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 75%, rgba(255, 255, 255, 0) 100%);
+					}
+
+					&:active {
+						&::before, &::after {
+							@include experimental(transform, rotate(180deg));
+						}
+					}
+				}
+			}
+		}
+
+		.library-body {
+			width: 1024px !important;
+
+			.empty-text {
+				color: $tertiary-grey;
+				font: normal 300 2em $font;
+				margin: 2em auto;
+				width: 530px;
+				text-align: center;
+
+				a {
+					color: white;
+					font-size: 0.8em;
+					cursor: pointer;
+				}
+			}
+		}
+
+		.library-group-header{
+			height: 20px;
+			margin-bottom: 10px;
+
+			div {
+				float: left;
+				color: rgba(255,255,255,0.8);
+				text-transform: uppercase;
+				font: normal 500 0.9em/1 $font;
+			}
+
+			.group {
+				margin-left: 0.5em;
+				color: rgba(255,255,255, 0.30);
+			}
+		}
+	}
+
+	@include grid-def($gridSpacing: 6px);
+
+
+	.x-component-library-collection{
+		margin: 2em 0 2.5em;
+		.collection-name {
+			font: normal 300 1.75em/2.2em $font;
+			color: #fff;
+			.count {
+				color: $secondary-grey;
+				margin-left: 0.5em;
+				display: inline-block;
+			}
+		}
+
+		.grid {
+			width: 100%;
+		}
+
+		.grid .grid-item {background: none;}
+
+		.grid-item.item {
+			background: white !important;
+			width: 242px !important;
+			height: 290px !important;
+			cursor: pointer;
+			margin: 0 18px 18px 0;
+
+			&:nth-child(4n) {
+				margin-right: 0;
+			}
+
+			.cover {
+				width: 232px;
+				height: 170px;
+				margin: 5px;
+				overflow: hidden;
+
+
+				img {
+					display: block;
+					height: 100%;
+					@include experimental(transform, scale(1,1));
+					@include experimental(transition, all 0.5s);
+				}
+			}
+
+			.sample {
+				@include icon($sample-banner, $position: absolute);
+			}
+
+			.meta {
+				overflow: hidden;
+				color: $primary-grey;
+				padding: 0 10px;
+
+				.author,.courseName {
+					text-transform: uppercase;
+					font: normal bold 0.6em/1.6em $font;
+					overflow: hidden;
+				}
+				.courseName {
+					text-transform: uppercase;
+					color: $tertiary-grey;
+					@include ellipse();
+				}
+
+				.author {
+					color: $primary-blue;
+					margin-bottom: 5px;
+				}
+
+				.author:not(:empty):not(.provider-id)::before{content: 'By ';}
+
+				.title {
+					font: normal 700 1em/1.1em "Open Sans Condensed";
+					color: $secondary-grey;
+					max-height: 2.2em;
+					margin-bottom: 10px;
+					text-transform: uppercase;
+					overflow: hidden;
+				}
+
+				.description{
+					overflow: hidden;
+					display: none;
+				}
+			}
+
+			.settings {
+				top: 10px;
+				right: 10px;
+				width: 30px;
+				height: 30px;
+				background: rgba(0,0,0,0.6);
+				border-radius: 5px;
+				display: none;
+				@include icon($rhp-contact-flyout-settings, $top: 7px, $left: 7px, $position: absolute);
+			}
+		}
+
+		&.allow-zoom {
+			.grid-item.item:hover {
+				.cover img{
+					@include experimental(transform, scale(1.05,1.05));
+					opacity: 0.7;
+				}
+
+				.settings {
+					display: block;
+				}
+			}
+		}
+
+		&.books {
+			.grid {
+				.item {
+					.cover {
+						img {
+							width: 100%;
+							height: auto;
+						}
+					}
+				}
+			}
+		}
+
+		.activated {
+			opacity: 0.3;
+		}
+
+		&.purchasables {
+			.history{
+				border-top: 1px solid #e6e6e6;
+				clear: both;
+				text-align: center;
+				padding: 7px;
+				background: white;
+				color: #ababab;
+				font-size: 0.75em;
+				line-height: 1.3em;
+				font-weight: bold;
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+			}
+		}
+	}
+}
+
+.available-catalog, .purchasables {
+	padding: 20px 34px;
+	.collection-name {
+		display: none;
+	}
+
+	.grid-item.item {
+		background: white !important;
+		width: 230px !important;
+		height: 250px !important;
+		cursor: pointer;
+		margin: 0 9px 9px 0;
+
+		&.changing {
+			position: relative;
+			.enrollment { display: none; }
+
+			&::before {
+				position: absolute;
+				top: 0; left: 0;
+				bottom: 0; right: 0;
+				background-color: black;
+				opacity: 0.5;
+				z-index: 1;
+				content: '';
+			}
+
+			&::after {
+				z-index: 2;
+				@include loadingSpinner($top: 113px, $left: 103px);
+			}
+		}
+
+		.cover {
+			width: 220px;
+			height: 160px;
+			margin: 5px;
+			overflow: hidden;
+
+
+			img {
+				display: block;
+				height: 100%;
+				@include experimental(transform, scale(1,1));
+				@include experimental(transition, all 0.5s);
+			}
+		}
+
+
+		&:hover {
+			.cover img {
+				@include experimental(transform, scale(1.05,1.05));
+				opacity: 0.7;
+			}
+		}
+
+		.sample {
+			@include icon($sample-banner, $position: absolute);
+		}
+
+		.enrollment {
+			position: absolute;
+			float: left;
+			top: 70px;
+			left: 50%;
+			font: normal 500 0.9em/1 $font;
+			color: #40ac4f;
+
+			.enrollment-text {
+				float: left;
+				left: -50%;
+				background-color: white;
+				border-radius: 20px;
+				display: inline-block;
+				line-height: 24px;
+				white-space: nowrap;
+				padding: 0 10px 0 26px;
+
+				@include icon($circle-check-green, $top: 2px, $left: 2px);
+			}
+		}
+
+		.meta {
+			overflow: hidden;
+			color: $primary-grey;
+			padding: 0 10px;
+			max-height: 80px;
+
+			.author,.courseName {
+				text-transform: uppercase;
+				font: normal bold 0.6em/1.6em $font;
+				overflow: hidden;
+			}
+			.courseName {
+				text-transform: uppercase;
+				color: $tertiary-grey;
+				@include ellipse();
+			}
+
+			.author {
+				color: $primary-blue;
+				@include ellipse();
+			}
+
+			.author:not(:empty):not(.provider-id)::before{content: 'By ';}
+
+			.title {
+				font: normal 700 1em/1.1em "Open Sans Condensed";
+				color: $secondary-grey;
+				max-height: 2.2em;
+				margin-bottom: 10px;
+				text-transform: uppercase;
+				overflow: hidden;
+				vertical-align: top;
+				padding: 0;
+			}
+
+			.description{
+				overflow: hidden;
+				display: none;
+			}
+		}
+	}
+}
+
+.library-view-menu {
+
+	.x-menu-body {
+		border: none;
+		padding: 0;
+	}
+
+	div.group-by-option {
+		background-color: #646464;
+		color: rgba(255,255,255,0.8) !important;
+		font: normal 300 1.3em/50px $font;
+		padding: 0 20px 0 15px;
+		letter-spacing: 1px;
+
+		&.x-menu-item-active {
+			background-color: rgba(255,255,255,0.8) !important;
+			color: #646464 !important;
+		}
+
+		&.x-menu-item-checked::after {
+			content: '\2039';
+			line-height: 0.4;
+			display: inline-block;
+			font-size: 1em;
+			position: relative;
+			top: -3px;
+			left: 2px;
+			font-weight: 300;
+			width: 0.5em;
+			height: 0.5em;
+			background: none;
+			@include experimental(transform, rotate(-90deg));
+		}
+	}
+}
+
+.course-settings-window {
+	position: absolute;
+	top: -55px;
+	left: -53px;
+	z-index: 1;
+}
+
+.available-courses {
+	overflow: visible;
+	.x-mask, .x-mask-msg {
+		@include animate($name: fadeIn, $duration: 1s);
+
+		&.removing {
+			@include animate($name: fadeOut, $duration: 1s);
+		}
+	}
+}
+
+.available-courses, .available-books {
+	position: fixed !important;
+}
+
+.course-settings-window, .available-courses, .available-books {
+	box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
+	background-color: white;
+
+	// &.object-window {
+	// 	top: 110px !important;
+	// }
+
+	.header{
+		position: relative;
+		background-color: $quad-grey;
+		font: normal 600 1em/1.2em $font;
+		padding: 10px 50px 10px 10px;
+		border-bottom: 1px solid #e5e5e5;
+		text-transform: uppercase;
+		z-index: 12;
+
+		.close {
+			cursor: pointer;
+			position: absolute;
+			top: 15px; right: 15px;
+			left: auto;
+			width: 24px;
+			height: 24px;
+			@include icon($note-window-x, $top: 0, $right: 0, $position: absolute);
+
+			&:hover {
+				@include icon($note-window-x_hover, $top: 0, $right: 0, $position: absolute);
+			}
+		}
+
+		.label {
+			font-size: 0.7em;
+			color: $tertiary-grey;
+		}
+
+		.name {
+			color: $secondary-grey;
+		}
+	}
+
+	.footer {
+		height: 40px;
+		background-color: $quad-grey;
+		position: relative;
+
+		.button {
+			cursor: pointer;
+			float: right;
+			background-color: $primary-blue;
+			color: white;
+			padding: 0 30px;
+			font: normal 500 0.9em/40px $font;
+
+			&.disabled {
+				cursor: default;
+				opacity: 0.5;
+			}
+
+			&.secondary {
+				background-color: $quad-grey;
+				color: $primary-grey;
+				font-style: italic;
+			}
+		}
+
+		&:not(.admission) {
+			.admission {
+				display: none;
+			}
+		}
+
+		&:not(.enroll) {
+			.enroll {
+				display: none;
+			}
+		}
+
+		&:not(.error) {
+			.error {
+				display: none;
+			}
+		}
+
+		&:not(.payconfirm) {
+			.payconfirm {
+				display: none;
+			}
+		}
+
+		&.enroll, &.admission, &.payment, &.error {
+			.detail {
+				display: none;
+			}
+		}
+
+		&::after {
+			content: '';
+			position: absolute;
+			top: -10px;
+			height: 10px;
+			left: 0;
+			right: 0;
+			background-color: rgba(0,0,0,0.35);
+			box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
+			clip: rect(10px, auto, 20px, auto);
+			border-radius: 335em / 2em;
+		}
+	}
+}
+
+.available-courses, .available-books {
+	.header {
+		height: 60px;
+		padding-top: 15px;
+		padding-left: 15px;
+		.name {
+			line-height: 1.5em;
+			font-weight: 300;
+			font-size: 1.5em;
+			text-transform: none;
+			overflow: hidden;
+			@include ellipsis();
+
+			&.back {
+				color: $primary-blue;
+				padding-left: 22px;
+				cursor: pointer;
+
+				@include icon($arrow-left, $top: 8px);
+			}
+		}
+	}
+
+	&::after {
+		content: '';
+		position: fixed;
+		top: 0; bottom: 0;
+		right: 0; left: 0;
+		background-color: black;
+		opacity: 0.5;
+		z-index: -1;
+	}
+
+	.msg-container {
+		position: absolute;
+		top: 28px;
+		opacity: 0;
+		left: 0; right: 0px;
+		font: normal 500 1em/2em $font;
+		padding: 0 25px;
+		background-color: $secondary-green;
+		color: white;
+		max-height: 2em;
+		z-index: 11;
+		@include experimental(transition, all 0.5s);
+
+
+		&.show {
+			opacity: 1;
+			top: 60px;
+			max-height: 100%;
+		}
+
+		&.error {
+			background-color: $primary-red;
+		}
+
+		&.link {
+			cursor: pointer;
+		}
+
+		.msg {
+			text-align: center;
+		}
+
+
+		.close-msg {
+			right: 15px;
+			top: 11px;
+			height: 10px;
+			width: 10px;
+			cursor: pointer;
+
+			@include icon($light-x, $position: absolute, $top: 2px, $left: 1px);
+			&:target,
+			&:hover {
+				&::after {
+					@include sprite-position($light-x_hover);
+				}
+			}
+		}
+	}
+
+	.empty-text {
+		color: $tertiary-grey;
+		font: normal 300 2em $font;
+		text-align: center;
+		padding-top: 2em;
+	}
+
+	.footer {
+		position: absolute;
+		bottom: 0;
+		left: 0; right: 0;
+	}
+
+	& > .body-container {
+		height: 90%;
+		@include experimental-value(height, calc(100% - 100px));
+		background-color: $panel-background;
+		position: relative;
+		z-index: 10 !important;
+		overflow: hidden;
+
+		.page {
+			overflow: hidden;
+			position: relative;
+
+			& > .body-container {
+				overflow-y: auto;
+				height: 100%;
+				max-height: 95%;
+				margin-top: 40px;
+				@include experimental-value(max-height, calc(100% - 40px));
+			}
+
+			.x-component-library-collection {
+				.library-group-header {
+					& > div {
+						color: $primary-grey;
+					}
+				}
+			}
+
+			.tabs {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 40px;
+				background-color: #efefef;
+				box-shadow: inset 0 0 0 1px #e3e3e3;
+				z-index: 10;
+
+				.tab {
+					color: $secondary-grey;
+					cursor: pointer;
+					padding: 0 20px;
+					border-radius: 0;
+					height: 40px;
+					box-shadow: 1px 0 0 0 #e3e3e3;
+					font: normal 500 0.9em/40px $font;
+					text-transform: uppercase;
+					float: left;
+
+					&.active, &.active:hover{
+						color: white;
+						background-color: $primary-blue;
+						box-shadow: -1px 0 0 0 #e3e3e3,
+							1px 0 0 0 #e3e3e3;
+					}
+
+					&:hover {
+						background-color: #fafafa;
+						box-shadow: inset 0 0 0 1px #e3e3e3;
+					}
+				}
+			}
+		}
+	}
+}
+
+.course-setting-options {
+	padding: 20px 40px;
+	color: $primary-blue;
+	font: normal 500 1em/1.5em $font;
+
+	.enrollment {
+		font-size: 0.9em;
+		color: $secondary-grey;
+
+		@include icon($courseinfo-circle-check-gray, $side: before, $left: -25px, $top: 2px);
+	}
+
+	.contact, .support, .report, .drop {
+		display: block;
+		cursor: pointer;
+		color: $primary-blue;
+		font-size: 0.8em;
+		text-decoration: none;
+	}
+
+	.drop {
+		color: $primary-red;
+	}
+}
+
+.available-books {
+	.available-courses-tabbar {
+		display: none;
+	}
+}
+
+.available-courses-tabpanel {
+	background-color: $panel-background;
+	max-height: 100%;
+
+	.available-courses-tabbar {
+		height: 40px;
+		background-color: #efefef;
+		// border-right: 1px solid #e3e3e3;
+		box-shadow: inset 0 0 0 1px #e3e3e3;
+
+		.x-tab {
+			color: $secondary-grey;
+			cursor: pointer;
+			padding: 0 20px;
+			border-radius: 0;
+			height: 40px;
+			box-shadow: 1px 0 0 0 #e3e3e3;
+
+			.x-tab-inner {
+				font: normal 500 0.9em/40px $font;
+				text-transform: uppercase;
+			}
+
+			&.x-tab-active, &.x-tab-active:hover{
+				color: white;
+				background-color: $primary-blue;
+				box-shadow: -1px 0 0 0 #e3e3e3,
+					1px 0 0 0 #e3e3e3;
+			}
+
+			&:hover {
+				background-color: #fafafa;
+				box-shadow: inset 0 0 0 1px #e3e3e3;
+			}
+		}
+	}
+
+	.x-panel-body {
+		overflow-y: auto;
+		max-height: 95%;
+		@include experimental-value(max-height, calc(100% - 40px));
+	}
+
+}
+
+
+.library-page {
+	position: relative;
+	min-height: 200px;
+	max-width: 100%;
+
+	.empty-text {
+		color: $tertiary-grey;
+		font: normal 300 2em $font;
+		margin: 2em auto;
+		width: 530px;
+		text-align: center;
+
+		a {
+			color: white;
+			font-size: 0.8em;
+			cursor: pointer;
+		}
+	}
+
+	& > .title-container {
+		@include flexContainer();
+		align-items: baseline;
+		padding-bottom: 10px;
+		margin-bottom: 40px;
+		box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.2), 0 1px 0 0 rgba(255, 255, 255, 0.08);
+
+		.home, .title, .add-more-link {
+			@include flexItem(0 0 auto);
+		}
+
+		.home, .title {
+			color: white;
+			font: normal 400 0.875em/2em $font;
+		}
+
+		.title{
+			opacity: 0.5;
+
+			&::before {
+				content: '\203A';
+				margin: 0 0.5em;
+				font-size: 1.3em;
+				font-weight: 300;
+			}
+		}
+
+
+		.home {
+			cursor: pointer;
+		}
+
+		.spacer {
+			@include flexItem(1 1 auto);
+		}
+
+		.add-more-link {
+			cursor: pointer;
+			font: normal 300 0.875em/35px $font;
+			color: white;
+			text-align: center;
+			border-radius: 5px;
+			padding: 0 1.5em;
+			background-color: $secondary-green;
+
+			&.hidden {
+				display: none;
+			}
+		}
+	}
+
+
+	.loading-mask {
+		position: absolute;
+		top: 0; bottom: 0;
+		right: 0; left: 0;
+		background: rgba(52, 52, 52, 0.5);
+		z-index: 5;
+		min-height: 50px;
+
+		.load-text {
+			position: absolute;
+			top: 10%;
+			left: 50%;
+			margin-left: -25px;
+			color: white;
+
+			&::after {
+				@include loadingSpinner($top: 0, $left: -30px);
+			}
+		}
+	}
+
+	.error-cmp {
+		text-align: center;
+		color: $primary-red;
+		font-size: 1.25em;
+	}
+}
+
+
+.library-homepage {
+	.library-group-header { display: none; }
+
+	.x-component-library-collection {
+		margin: 0;
+	}
+
+	.current-collection {
+		margin-bottom: 40px;
+
+		.empty-text {
+			margin: 1em auto;
+		}
+
+		& > .header {
+			@include flexContainer();
+			align-items: baseline;
+
+			.title, .add, .see-all {
+				@include flexItem($flex: 0 0 auto);
+
+				&.hidden {
+					display: none;
+				}
+			}
+
+			.space {
+				@include flexItem($flex: 1 1 auto);
+			}
+
+			.title {
+				font: normal 300 1.25em/2em $font;
+				color: white;
+				margin-right: 0.8em;
+			}
+
+			.add {
+				color: $primary-blue;
+				cursor: pointer;
+				font: normal 600 0.875em/2em $font;
+
+				&::before {
+					content: '+';
+					margin-right: 0.1em;
+				}
+			}
+
+			.see-all {
+				color: white;
+				font: normal 300 0.875em/2em $font;
+				cursor: pointer;
+			}
+		}
+	}
+}

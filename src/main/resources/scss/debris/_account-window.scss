@@ -1,0 +1,754 @@
+
+
+.account-window {
+	@extend .nti-window;
+	border: 1px solid #c2c2c2;
+
+	.x-window-body {
+		overflow: hidden;
+		border-radius: 5px;
+	}
+
+	.close {
+		opacity: 0.5;
+		cursor: pointer;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		@include sprite($window-control-close);
+
+		&:hover{
+			opacity: 1;
+		}
+	}
+
+	.button-wrapper {
+		 border-bottom: 1px solid #ebebeb !important;
+	}
+
+	.x-btn-account-small {
+		&, .x-btn-button {
+			height: 35px;
+		}
+
+		&.placeholder {
+			width: 5px !important;
+		}
+
+		& + .x-btn-account-small {
+			border-left: 1px solid #ebebeb !important;
+		}
+
+		&.x-pressed {
+			.x-btn-inner {
+				color: white;
+				background-color: $primary-blue;
+			}
+		}
+
+		.x-btn-inner {
+			text-transform: uppercase;
+			font: normal 600 12px/35px $font;
+			color: $secondary-grey;
+			padding: 0 10px;
+		}
+	}
+
+	.picture-editor {
+		border-radius: 0 0 5px 5px;
+		background: #ffffff;
+		.footer {
+			border-top: 1px solid #e7e7e7;
+		}
+
+		&::after {
+			content: url(../images/backdrops/choose_file.png);
+			position: absolute;
+			top: 50px;
+			left: 66px;
+			z-index: 0;
+		}
+
+		&.no-dd::before {
+			content: "";
+			position: absolute;
+			top: 234px;
+			left: 155px;
+			width: 132px;
+			height: 1px;
+			background: #b8b8b8;
+			display: block;
+			overflow: hidden;
+			z-index: 1;
+		}
+
+		canvas {
+			width: 100%;
+			z-index: 2;
+			position: relative;
+
+			&.withImage {
+				background: #d5d5d5;
+			}
+		}
+
+		.file-input {
+			display: block;
+			position: absolute;
+			top: 0;
+			left: 0;
+			filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+			opacity: 0;
+			font-size: 200px;
+			cursor: pointer;
+			width: 600px;
+			height: 400px;
+			z-index: 4;
+		}
+
+		.footer-btn {
+			float: right;
+		}
+	}
+
+	.identity {
+		border-radius: 5px 5px 0 0;
+		background: #ffffff;
+		border-bottom: 1px solid #ebebeb !important;
+		position: relative;
+		overflow: hidden;
+		padding: 15px 15px 18px 15px;
+
+		.avatar-wrapper {
+			float: left;
+			width: 81px;
+			height: 81px;
+			border-radius: 3px;
+			border: 1px solid #e5e5e5;
+
+			.avatar {
+				height: 100%;
+				width: 100%;
+			}
+		}
+
+		.wrap {
+			margin: 15px 0 0 100px;
+			font-size: 14px;
+			font-weight: 400;
+			color: $secondary-grey;
+
+			.name {
+				font-size: 18px;
+				font-weight: 600;
+				color: $primary-grey;
+			}
+
+			.identities{
+				overflow: hidden;
+				@include ellipse;
+			}
+
+			.username, .email {
+				max-width: 150px;
+				display: inline-block;
+				position: relative;
+				overflow: hidden;
+				@include ellipse;
+				padding-left: 20px;
+
+				&:empty{ display: none; }
+				&::after{
+					content: ' ';
+					position: absolute;
+					top: 3px; left: 0;
+					@include sprite($account-username);
+				}
+			}
+
+			.email {
+				max-width: 198px;
+				width: 198px;
+				margin-left: 40px;
+				padding-left: 25px;
+
+				&::after {
+					top: 4px;
+					@include sprite($account-email);
+				}
+			}
+		}
+	}
+
+	.footer {
+		.x-btn-flat-medium {
+			cursor: pointer;
+			.x-btn-button {
+				background: none;
+				border: none;
+				padding: 12px 20px;
+
+				.x-btn-inner{
+					font: {
+						size: 14px;
+						style: normal;
+						weight: normal;
+					}
+					color: $primary-grey;
+					padding-right: 2px;
+				}
+
+				.rotate {
+					@include sprite($rotate);
+					left: 0;
+					top: 13px;
+				}
+			}
+		}
+
+		.x-btn-flat-blue-medium {
+			&.footer-btn {
+				float: right;
+			}
+
+			&, .x-btn-button{
+				border-radius: 0 0 3px 0;
+			}
+			cursor: pointer;
+			.x-btn-button {
+				background: $primary-blue;
+				border: 1px solid $border-blue;
+				padding: 12px 20px;
+
+				.x-btn-inner{
+					font: {
+						size: 14px;
+						style: italic;
+						weight: 700;
+					}
+					color: #ffffff;
+					padding-right: 2px;
+				}
+			}
+
+
+			&.x-btn-disabled {
+				.x-btn-button {
+					span { opacity: 1; }
+
+					cursor: default;
+					border-color: #d0d0d0;
+					background: rgba(184,184,184,0.5);
+					.x-btn-inner {
+						color: rgba(255,255,255,0.7);
+					}
+				}
+			}
+		}
+	}
+
+	.reset-password {
+		margin: 25px;
+
+		.password-box {
+			position: relative;
+		}
+
+		.password-box, .x-container {
+
+			margin: 5px 0;
+			&, input { font-size: 14px;}
+
+			input {
+				&:focus {
+					outline: none;
+					box-shadow: -4px 0 0 0 $primary-blue;
+				}
+
+				&.error {
+					&, &:focus {
+						box-shadow: -4px 0 0 0 $primary-red;
+					}
+				}
+				//TODO - is not working
+				&.valid {
+					&, &:focus {
+						box-shadow: -4px 0 0 0 $primary-green;
+					}
+				}
+
+				&.empty,
+				&.x-form-empty-field {
+					font-style: italic !important;
+				}
+
+				//vertical-align: bottom;
+				color: $secondary-grey;
+				font-size: 14px;
+				font-weight: 500;
+				line-height: 25px;
+
+				border: 1px solid $border-grey;//#dcdcdc;
+				border-left-width: 0px;
+				background: #ffffff;
+				padding: 6px 10px;
+				margin: 0;
+				min-height: 39px;
+				width: calc(100% - 4px);
+				.x-opera &,
+				.x-safari5 & {
+					width: 90%;
+				}
+
+				position: relative;
+				left: 4px;
+				box-shadow: -4px 0 0 0 $border-grey;
+			}
+			.clear {
+				top: 10px;
+				right: 5px;
+
+				cursor: pointer;
+				position: absolute;
+				display: none;
+				@include sprite($clear_line);
+			}
+
+			.placeholder {
+				@include placeholder-style();
+				position: absolute;
+				top: 0;
+				left: 0;
+				line-height: 25px;
+				padding: 7px 14px;
+			}
+		}
+
+		.message-box {
+			margin: 0 10px 0 35px;
+			display: table;
+			.text {
+				display: table-cell;
+				text-align: center;
+				color: $primary-green;
+				vertical-align: middle;
+				&.error {
+					color: $primary-red;
+				}
+			}
+
+		}
+
+		.footer {
+			margin-top: 40px;
+			border-top: 1px solid $border-grey !important;
+			overflow: hidden;
+		}
+
+		.cant-change{
+			color: $primary-grey;
+			font-size: 24px;
+			font-weight: 400;
+			font-style: italic;
+
+			.subtext{
+				font-size: 14px;
+				font-style: normal;
+				font-weight: 300;
+			}
+		}
+	}
+
+
+	.account-preferences{
+		padding: 1px 20px;
+
+		.nti-checkbox {
+			&.not-ready {
+				opacity: 0.5;
+				cursor: default;
+			}
+
+			color: $secondary-grey;
+			font: normal normal 0.9em/2 $font;
+		}
+
+		fieldset {
+			border: 1px solid $border-grey;
+			margin: 20px 0 40px;
+		}
+
+		legend {
+			color: $secondary-grey;
+			font: normal 600 0.9em $font;
+		}
+	}
+
+}
+
+.email-verification-window {
+	@extend .nti-window;
+	outline: 0;
+	border-radius: 0;
+	min-height: 204px;
+
+	&.info {
+		min-height: 150px;
+		height: 160px;
+		background-color: #fcfcfc;
+		border: 1px solid rgb(206, 206, 206);
+		box-shadow: rgba(0, 0, 0, 0.137255) 0px 2px 4px 1px, rgba(255, 255, 255, 0.498039) 0px 2px inset;
+	}
+
+	.email-verify-wrapper {
+		position: absolute;
+		top: 1px;
+		right: 0;
+		left: 0;
+		bottom: 40px;
+		background: #fff;
+
+		.header {
+			margin: 16px 26px 5px 26px;
+			color: $secondary-grey;
+
+			.title {
+				font: normal 300 19px/normal $font;
+			}
+
+			.sub{
+				font: normal 300 14px/normal $font;
+			}
+		}
+
+		.meta {
+			margin: 20px 34px;
+			color: $secondary-grey;
+			font: normal 300 18px/24px $font;
+
+			.link {
+				color: $primary-blue;
+				padding: 0 7px;
+				cursor: pointer;
+			}
+
+			.info {
+				width: 40px;
+				height: 30px;
+				@include icon($info_active, $top: 3px, $left: 0);
+			}
+		}
+	}
+
+	background-color: rgba(1,1,1,0); // Make it clear.
+	border: none;
+	box-shadow: none;
+}
+
+.email-verify-view {
+	width: 450px;
+
+	.header {
+		margin: 10px 15px;
+		color: $secondary-grey;
+		font: normal 400 14px/normal $font;
+
+		.title {
+			font: normal 300 18px/normal $font;
+			color: $primary-grey;
+		}
+
+		.email {
+			font-style: italic;
+			margin: 0 0 5px 0;
+			color: $tertiary-grey;
+		}
+
+		.sub {
+			font-weight: 300;
+			color: $primary-grey;
+			margin-top: 15px;
+			display: inline-block;
+			margin-bottom: 5px;
+
+			.support {
+				.link a{
+					text-decoration: none;
+					color: $primary-blue;
+				}
+			}
+		}
+
+		.buttons{
+			display: inline-block;
+			margin: 0;
+
+			.link{
+				float: left;
+				padding: 0 7px 0 9px;
+				color: $primary-blue;
+				cursor: pointer;
+				font: normal 300 14px/normal $font;
+				position: relative;
+
+				&.sending {
+					color: $tertiary-grey;
+				}
+
+				&.error {
+					color: $primary-red;
+					cursor: default;
+					font-style: italic;
+				}
+
+				&::after{
+					content: "|";
+					position: absolute;
+					right: 0;
+					color: $tertiary-grey;
+					width: 3px;
+					font-size: 14px;
+				}
+
+				&:last-of-type {
+					&::after {
+						content: none;
+					}
+				}
+
+				&:first-of-type {
+					padding-left: 0;
+				}
+			}
+		}
+	}
+
+	.input-box {
+		border: 1px solid $tertiary-grey;
+		padding-right: 30px;
+		background: #ffffff;
+		margin: 0 34px 0 15px;
+		position: relative;
+
+		input{
+			color: $secondary-grey;
+			font: normal 500 14px/25px $font;
+			border: 0;
+			background: #ffffff;
+			padding: 6px 10px;
+			margin: 0;
+			min-height: 39px;
+			width: calc(100% - 8px);
+			position: relative;
+			left: 4px;
+			box-shadow: -4px 0 0 0 $tertiary-grey;
+			outline: none;
+
+			&:focus {
+				outline: none;
+				box-shadow: -4px 0 0 0 $tertiary-grey;
+				color: $secondary-grey;
+			}
+		}
+
+		.clear {
+			top: 10px;
+			right: 5px;
+			cursor: pointer;
+			position: absolute;
+			display: none;
+			@include sprite($clear_line);
+		}
+
+		&.error {
+			border-color: $primary-red;
+
+			input {
+				color: $primary-red;
+				box-shadow: -4px 0 0 0 $primary-red;
+			}
+		}
+	}
+
+	.error-msg {
+		visibility: hidden;
+		color: $primary-red;
+		margin: 10px 15px;
+		font: normal 300 15px/normal $font;
+		line-height: 20px;
+		min-height: 20px;
+
+		&.visible {
+			visibility: visible;
+		}
+
+		&.success {
+			color: $primary-green;
+		}
+	}
+
+	.footer{
+		background-color: #f8f8f8;
+		overflow: hidden;
+		bottom: 0;
+		left: 0;
+		right: 0;
+
+		&::before {
+			content: '';
+			position: absolute;
+			bottom: 40px;
+			height: 300px;
+			left: 0;
+			right: 0;
+			background-color: #f0f0f0;
+			box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
+			clip: rect(300px, auto, 310px, auto);
+			border-radius: 350em / 4em;
+		}
+
+		a.button {
+			float: right;
+			padding: 0 20px;
+			cursor: pointer;
+			font: normal 400 0.9em/40px $font;
+			text-align: center;
+			min-width: 90px;
+			color: $primary-grey;
+
+			&.confirm {
+				background-color: $primary-blue;
+				color: white;
+				box-shadow: inset 1px 0 0 0 $border-blue;
+
+				&:hover {
+					opacity: 0.9;
+				}
+
+				&.decline, &.caution {
+					box-shadow: inset 1px 0 0 0 #dd4845;
+				}
+			}
+
+			&.disabled {
+				background-color: $tertiary-grey-alt;
+				box-shadow: inset 1px 0 0 0 $border-grey;
+			}
+		}
+	}
+
+	.congrats-wrapper, .pending-wrapper {
+		position: absolute;
+		top: 1px;
+		right: 0;
+		left: 0;
+		bottom: 40px;
+		background: #fff;
+
+		.text{
+			text-align: center;
+			margin-top: 30px;
+			color: $secondary-green;
+			position: relative;
+			padding: 48px 20px 5px 20px;
+			font: normal 300 16px/normal $font;
+
+			.title{
+				font: normal 300 21px/normal $font;
+			}
+
+			&::after{
+				content: ' ';
+				position: absolute;
+				top: 3px; left: 45%;
+				@include sprite($assignment_ontime);
+			}
+		}
+
+		&.pending-wrapper{
+			.text{
+				color: $secondary-grey;
+
+				.title{
+					color: $primary-red;
+				}
+
+				&::after {
+					@include sprite($modal-red-sign);
+				}
+			}
+		}
+	}
+
+	&.has-time-error{
+		.card {
+			min-height: 270px;
+		}
+	}
+	perspective: 800;
+
+	.card {
+		width: 100%;
+		height: 100%;
+		min-height: 215px;
+		transform-style: preserve-3d;
+		transition: 0.7s;
+
+		&.flipped {
+			transform: rotateY(180deg);
+		}
+
+		.face {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			z-index: 2;
+			background-color: #fcfcfc;
+			border: 1px solid rgb(206, 206, 206);
+			box-shadow: rgba(0, 0, 0, 0.137255) 0px 2px 4px 1px, rgba(255, 255, 255, 0.498039) 0px 2px inset;
+			backface-visibility: hidden;
+
+			&.front {
+				position: absolute;
+				z-index: 1;
+			}
+
+			&.back {
+				transform: rotateY(180deg);
+			}
+
+			.footer {
+				position: absolute;
+			}
+		}
+	}
+}
+
+.badge-prompt {
+	.email-verify-view {
+		width: inherit;
+
+		.card {
+			.face {
+				box-shadow: none;
+				border: none;
+			}
+		}
+	}
+
+	.badge-lock {
+		padding: 20px;
+    	background: white;
+    	border-bottom: 1px solid #d9d9d9;
+
+    	.msg {
+    		color: $secondary-grey;
+    	}
+
+    	.email {
+    		color: $primary-grey;
+    		padding: 5px 0;
+    		font-style: italic;
+    	}
+	}
+}
