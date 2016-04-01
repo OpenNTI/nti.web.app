@@ -1,6 +1,8 @@
 var Ext = require('extjs');
 var {isFeature} = require('legacy/util/Globals');
 
+require('legacy/common/form/fields/select');
+
 
 module.exports = exports = Ext.define('NextThought.app.stream.components.Filter', {
 	extend: 'Ext.Component',
@@ -29,14 +31,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 	GROUP_TYPES: {
 		sort: new Ext.XTemplate(Ext.DomHelper.markup([
 			{cls: 'group {cls} ', 'data-key': '{type}', cn: [
-				{cls: 'name', html: '{displayText}'},
-				{cls: 'select-wrapper', cn: [
-					{tag: 'select', name: '{name}', cn: [
-						{tag: 'tpl', 'for': 'items', cn:[
-							{tag: 'option', value: '{value}', 'data-value': '{value}', html: '{displayText}'}
-						]}
-					]}
-				]}
+				{cls: 'name', html: '{displayText}'}
 			]}
 		])),
 
@@ -65,6 +60,13 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 
 	renderSelectors: {
 		groupsEl: 'ul.groups'
+	},
+
+
+	initComponent: function () {
+		this.callParent(arguments);
+
+		this.selectComponents = this.selectComponents || {};
 	},
 
 
@@ -101,7 +103,8 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 		}
 
 		if (type === 'sort') {
-			this.mon(el, 'change', this.handleClick.bind(this));
+			this.__addSelect(group, items, el);
+			// this.mon(el, 'change', this.handleClick.bind(this));
 			this.__addModifierGroup(group);
 		}
 		else {
@@ -120,14 +123,39 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 
 		this.filterGroups.forEach(function (group) {
 			var type = group.type,
-				g = dom.querySelector('[data-key=' + type + ']');
+				g = dom.querySelector('[data-key=' + type + ']'),
+				select = me.selectComponents[group.name];
 
 			if (group.setActiveItem) {
 				group.setActiveItem(g, group.activeItems);
-			}
-			else {
+			} else if (select) {
+				select.selectValue(group.activeItem || group.defaultItem);
+			} else {
 				me.__updateGroup(group, g);
 			}
+		});
+	},
+
+
+	__addSelect: function (group, items, el) {
+
+		let select = NextThought.common.form.fields.Select.create({
+			name: group.name,
+			options: items,
+			renderTo: el,
+			onChange: this.handleClick.bind(this)
+		});
+
+		let oldSelect = this.selectComponents[group.name];
+
+		if (oldSelect && !oldSelect.isDestroyed) {
+			oldSelect.destroy();
+		}
+
+		this.selectComponents[group.name] = select;
+
+		this.on('destroy', () => {
+			select.destroy();
 		});
 	},
 
@@ -165,11 +193,10 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 
 
 	__updateGroup: function (group, dom) {
-		var me = this,
-			activeItem = group && (group.activeItem || group.defaultItem),
+		var activeItem = group && (group.activeItem || group.defaultItem),
 			item = group && group.items && group.items[activeItem],
 			hasModifier = Boolean(group && group.modifierParam),
-			d, el = this.el.dom;
+			d;
 
 		if (activeItem && dom) {
 			d = dom.querySelector('[data-value=' + activeItem + ']');
@@ -184,7 +211,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 	},
 
 
-	__updateModifier: function (item, group) {
+	__updateModifier: function (item/*, group*/) {
 		var dom = this.el.dom,
 			current = dom.querySelector('[data-item=' + item.value + ']'),
 			prev = dom.querySelector('.active[data-item]'),

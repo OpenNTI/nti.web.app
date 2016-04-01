@@ -2797,29 +2797,9 @@
 		position: relative;
 		margin-bottom: 5px;
 
-		.select-wrapper {
-			position: relative;
-
-			select {
-				-webkit-appearance: none;
-				-moz-appearance: none;
-				appearance: none;
-				background-color: white;
-				width: 220px;
-				padding-left: 10px;
-				margin: 0 15px;
-				font: normal 400 14px/36px $font;
-				color: $primary-grey;
-				border: 1px solid #dbdbdb;
-				border-radius: 3px;
-				cursor: pointer;
-			}
-
-			@include icon($mv-dropdown-arrow_hover, $top: 14px, $right: 27px, $left: auto);
-
-			&::after {
-				pointer-events: none;
-			}
+		.nt-select {
+			width: 220px;
+			margin: 0 15px;
 		}
 
 		label {
