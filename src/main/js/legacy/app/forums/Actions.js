@@ -1,10 +1,10 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var CommonActions = require('../../common/Actions');
-var UserdataActions = require('../userdata/Actions');
-var UserdataStateStore = require('../userdata/StateStore');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const ParseUtils = require('../../util/Parsing');
+const {isMe} = require('legacy/util/Globals');
 
+require('../../common/Actions');
+require('../userdata/Actions');
+require('../userdata/StateStore');
 
 module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 	extend: 'NextThought.common.Actions',
@@ -95,8 +95,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 				failure: reject
 			});
 		}).then(function (entry) {
-			var record;
-
 			//This is how the views are reading the display name... pre-set the Creator as your userObject.
 			if (isMe(entry.get('Creator'))) {
 				entry.set('Creator', $AppConfig.userObject);
@@ -113,13 +111,48 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		var isEdit = Boolean(record),
 			headline = record &&  record.get('headline'),
 			url = isEdit ? headline && headline.getLink('edit') : forum && forum.getLink('add'),
-			method = isEdit ? 'PUT' : 'POST',
-			me = this;
+			method = isEdit ? 'PUT' : 'POST', me = this;
 
 		// TODO: Re-add the autoPublish
+		return this.submitFormData(formData, url, method)
+			.then(function (response) {
+				var entry = isEdit ? record : ParseUtils.parseItems(response)[0];
+
+				if (autoPublish !== undefined) {
+					if (autoPublish !== entry.isPublished()) {
+						return new Promise(function (fulfill, reject) {
+							entry.publish(editorCmp, fulfill, me);
+						});
+					}
+				}
+
+				//we have nested objects here. The entry contains a headline whose body, title, and tags
+				//have been updates. Our magic multi object setter won't find the nested object in the store
+				//so we set it back on the original record to trigger other instance of the entry to be updated.
+				//Not doing this reflects itself by the body of the topic not updating in the activity view
+				if (isEdit && record) {
+					record.afterEdit('headline');
+				}
+
+				return Promise.resolve(entry);
+			})
+			.then(function (entry) {
+				//This is how the views are reading the display name... pre-set the Creator as your userObject.
+				if (isMe(entry.get('Creator'))) {
+					entry.set('Creator', $AppConfig.userObject);
+				}
+
+				me.applyTopicToStores(entry);
+				return entry;
+			});
+	},
+
+
+	submitFormData: function (formData, url, method) {
+		var me = this;
+
 		return new Promise(function (fulfill, reject) {
 			var xhr = me.__buildXHR(url, method, fulfill, reject);
-
 			xhr.send(formData);
 		});
 	},

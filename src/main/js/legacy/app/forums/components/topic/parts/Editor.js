@@ -161,34 +161,22 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	},
 
 
-	onSave: function (e) {
-		e.stopEvent();
+	isValid: function () {
 		var me = this,
-			v = me.getValue(),
-			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
-			trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
-
-		if (v instanceof FormData) {
-			me.ForumActions.saveTopicWithFormData(me, me.record, me.forum, v);
-			return;
-		}
+			v = this.getJSONData(),
+			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
 
 		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
 			console.error('bad forum post');
 			me.markError(me.contentEl, getString('NextThought.view.forums.topic.parts.Editor.emptycontent'));
-			return;
-		}
-
-		l = v.body.length;
-		if (l > 0 && v.body[l - 1].replace) {
-			v.body[l - 1] = v.body[l - 1].replace(trimEndRe, '');
+			return false;
 		}
 
 		if (Ext.isEmpty(v.title)) {
 			console.error('You need a title');
 			me.markError(me.titleWrapEl, getString('NextThought.view.forums.topic.parts.Editor.emptytitle'));
 			me.titleWrapEl.addCls('error-on-bottom');
-			return;
+			return false;
 		}
 
 		/*if (/^[^a-z0-9]+$/i.test(v.title)) {
@@ -202,8 +190,17 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			console.error('Title cant start with @');
 			me.markError(me.titleWrapEl, getString('NextThought.view.forums.topic.parts.Editor.attitle'));
 			me.titleWrapEl.addCls('error-on-bottom');
-			return;
+			return false;
 		}
+	},
+
+
+	onSave: function (e) {
+		e.stopEvent();
+
+		let me = this,
+			v = me.getValue(),
+			trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
 
 		function unmask () {
 			if (me.el) {
@@ -211,21 +208,48 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			}
 		}
 
-		if (me.el) {
-			me.el.mask('Saving...');
+		if (this.isValid() === false) {
+			return;
 		}
 
-		me.ForumActions.saveTopic(me, me.record, me.forum, v.title, v.tags, v.body, v.publish)
-			.then(function (record) {
-				unmask();
+		if (v instanceof FormData) {
+			if (me.el) {
+				me.el.mask('Saving...');
+			}
 
-				me.fireEvent('after-save', record);
-			})
-			.fail(function (reason) {
-				unmask();
-				console.error('Failed to save the discussion: ', reason);
-				alert('There was trouble saving the discussion');
-			});
+			return me.ForumActions.saveTopicWithFormData(me, me.record, me.forum, v)
+				.then(function (record) {
+					unmask();
+					me.fireEvent('after-save', record);
+				})
+				.fail( function (reason) {
+					unmask();
+					console.error('Failed to save the discussion: ', reason);
+					alert('There was trouble saving the discussion');
+				});
+		}
+		else {
+			l = v.body.length;
+			if (l > 0 && v.body[l - 1].replace) {
+				v.body[l - 1] = v.body[l - 1].replace(trimEndRe, '');
+			}
+
+			if (me.el) {
+				me.el.mask('Saving...');
+			}
+
+			me.ForumActions.saveTopic(me, me.record, me.forum, v.title, v.tags, v.body, v.publish)
+				.then(function (record) {
+					unmask();
+
+					me.fireEvent('after-save', record);
+				})
+				.fail(function (reason) {
+					unmask();
+					console.error('Failed to save the discussion: ', reason);
+					alert('There was trouble saving the discussion');
+				});
+		}
 	},
 
 

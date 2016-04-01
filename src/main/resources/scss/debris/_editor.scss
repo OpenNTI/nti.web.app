@@ -335,7 +335,7 @@ span.tab{
 							position: absolute;
 							top:32px;
 							left: 16%;//safar5
-							@include experimental-value(left, calc(25% - 6px));
+							left: calc(25% - 6px);
 
 							@include sprite($font_style_pointer);
 						}
@@ -389,9 +389,9 @@ span.tab{
 							}
 
 							&.upload {
-								@include icon('editor-insert-link', $top:9px);
+								@include icon($editor-insert-link, $top:9px);
 								&:hover::after{
-									@include sprite($icons,'editor-insert-link_hover',$dimensions: true);
+									@include sprite($editor-insert-link_hover);
 								}
 							}
 
