@@ -187,6 +187,10 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 				me.editor.deactivate();
 				me.editor.setValue('');
 				me.editor.reset();
+			}).always(function () {
+				if (me.editor.el) {
+					me.editor.el.unmask();
+				}
 			});
 	},
 
