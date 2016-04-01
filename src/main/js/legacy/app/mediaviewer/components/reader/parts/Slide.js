@@ -4,6 +4,9 @@ var MixinsAnnotationsMixin = require('../mixins/AnnotationsMixin');
 var UserdataActions = require('../../../../userdata/Actions');
 var MediaviewerStateStore = require('../../../StateStore');
 
+const lazy = require('legacy/util/lazy-require')
+				.get('Anchors', () => require('legacy/util/Anchors'));
+
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.parts.Slide', {
 	extend: 'Ext.Component',
@@ -152,7 +155,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	},
 
 	getAnchorResolver: function () {
-		return Anchors;
+		return lazy.Anchors;
 	},
 
 	createDomRange: function () {
