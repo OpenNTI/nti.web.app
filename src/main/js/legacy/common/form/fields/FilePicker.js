@@ -1,8 +1,9 @@
-var Ext = require('extjs');
-var Globals = require('../../../util/Globals');
-var ParseUtils = require('../../../util/Parsing');
-var ModelContentBlobFile = require('../../../model/ContentBlobFile');
+const Ext = require('extjs');
+const Globals = require('../../../util/Globals');
+const ParseUtils = require('../../../util/Parsing');
 
+require('../../../model/ContentBlobFile');
+require('../../../model/courseware/ContentFile');
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker', {
 	extend: 'Ext.Component',
@@ -268,8 +269,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 			return;
 		}
 
-		var size = this.self.getHumanReadableFileSize(blob.get('size') || 0, 1),
-			href = blob.get('url');
+		var size = this.self.getHumanReadableFileSize(blob.get('size') || 0, 1);
 
 		this.nameEl.update(blob.get('filename'));
 		this.sizeEl.update('(' + size + ')');
