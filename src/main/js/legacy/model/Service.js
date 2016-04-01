@@ -51,9 +51,11 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		});
 	},
 
+
 	requestDelete: function (url) {
 		return this.request({url: url, method: 'DELETE'});
 	},
+
 
 	post: function (urlOrConfig, data) {
 		var config;
@@ -71,6 +73,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return this.request(config);
 	},
 
+
 	postAndExit: function (url, data) {
 		var id = guidGenerator(),
 			tpl = new Ext.XTemplate(
@@ -80,6 +83,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		tpl.append(Ext.getBody(), data).submit();
 	},
 
+
 	put: function (url, data) {
 		return this.request({
 			url: url,
@@ -87,6 +91,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			jsonData: data
 		});
 	},
+
 
 	getUserSearchURL: function (username) {
 		var w = this.getWorkspace('Global') || {},
@@ -96,6 +101,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		}
 		return getURL(this.forceTrailingSlash(l) + (username ? encodeURIComponent(username) : ''));
 	},
+
 
 	getResolveUserURL: function (username) {
 		var w = this.getWorkspace('Global') || {},
@@ -107,6 +113,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return getURL(this.forceTrailingSlash(l) + (username ? encodeURIComponent(username) : ''));
 	},
 
+
 	getBulkResolveUserURL: function () {
 		var w = this.getWorkspace('Global') || {},
 			l = this.getLinkFrom(w.Links || [], Globals.BULK_USER_RESOLVE_REL);
@@ -117,6 +124,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return getURL(this.forceTrailingSlash(l));
 	},
 
+
 	getHighlightColors: function () {
 		return [
 			{name: 'yellow', color: 'EDE619'},
@@ -124,6 +132,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			{name: 'blue', color: '3FB3F6'}
 		];
 	},
+
 
 	getUserUnifiedSearchURL: function () {
 		var w = this.getWorkspace($AppConfig.username) || {},
@@ -136,14 +145,17 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return getURL(this.forceTrailingSlash(l));
 	},
 
+
 	getPurchasableItemURL: function () {
 		//Until we get this hung off some workspace
 		return getURL('/dataserver2/store/get_purchasables');
 	},
 
+
 	getStoreActivationURL: function () {
 		return getURL('/dataserver2/store/redeem_purchase_code');
 	},
+
 
 	forceTrailingSlash: function (uri) {
 		if (uri.charAt(uri.length - 1) === '/') {
@@ -152,6 +164,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 		return uri + '/';
 	},
+
 
 	getLinkFrom: function (links, rel) {
 		var i = links.length - 1, o;
@@ -164,6 +177,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 		return null;
 	},
+
 
 	getWorkspace: function (name) {
 		var items = this.get('Items') || [],
@@ -180,6 +194,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 		return workspace;
 	},
+
 
 	getLibrary: function (name) {
 		var libs = this.getWorkspace('Library') || {},
@@ -198,9 +213,11 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return library;
 	},
 
+
 	getMainLibrary: function () {
 		return this.getLibrary('Main') || {};
 	},
+
 
 	/**
 	 *
@@ -235,6 +252,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return Ext.clone(collection);
 	},
 
+
 	getCollection: function (title, workspaceName) {
 		var workspace = this.getWorkspace(workspaceName || $AppConfig.username) || {},
 			items = workspace.Items || [],
@@ -255,6 +273,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return Ext.clone(collection);
 	},
 
+
 	getObjectURL: function (ntiid, field) {
 		var f = '',
 			collection = this.getCollection('Objects', 'Global') || {};
@@ -268,12 +287,14 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			f));
 	},
 
+
 	getContainerUrl: function (ntiid, type) {
 		var pid = 'Pages(' + ntiid + ')',
 			u = $AppConfig.userObject.get('href').split('?')[0];
 
 		return getURL(Ext.String.format('{0}/{1}/{2}', u, encodeURIComponent(pid || ''), type || ''));
 	},
+
 
 	urlWithQueryParams: function (base, obj) {
 		if (!Ext.isObject(obj)) {
@@ -282,6 +303,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 		return [base, Ext.Object.toQueryString(obj)].join(base.indexOf('?') < 0 ? '?' : '&');
 	},
+
 
 	getObjectRaw: function (url, mime, forceMime, targetBundle) {
 		var headers = {}, opts = {},
@@ -339,6 +361,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		});
 	},
 
+
 	dropPageInfosForPrefix: function (prefix) {
 		var url = this.getObjectURL(prefix),
 			k, o = this.pageInfoCache;
@@ -352,7 +375,9 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		}
 	},
 
+
 	FAKE_PUBLISH_COMMUNITY_NAME: 'client:publish',
+
 
 	getFakePublishCommunity: function () {
 		if (!this.__fakePublishCommunity) {
@@ -365,11 +390,13 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return this.__fakePublishCommunity;
 	},
 
+
 	isFakePublishCommunity: function (community) {
 		community = community.isModel ? community.get('Username') : community;
 
 		return community === this.FAKE_PUBLISH_COMMUNITY_NAME;
 	},
+
 
 	getGroupsMap: function () {
 		if (this.__loadUserGroups) { return this.__loadUserGroups; }
@@ -397,6 +424,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return this.__loadUserGroups;
 	},
 
+
 	getCommunitiesMap: function () {
 		if (this.__loadUserCommunities) { return this.__loadUserCommunities; }
 
@@ -423,6 +451,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return this.__loadUserCommunities;
 	},
 
+
 	getGroupsList: function () {
 		return this.getGroupsMap()
 			.then(function (items) {
@@ -434,6 +463,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 			});
 	},
 
+
 	getCommunitiesList: function () {
 		return this.getCommunitiesMap()
 			.then(function (items) {
@@ -444,6 +474,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 				});
 			});
 	},
+
 
 	getPageInfo: function (ntiid, success, failure, scope, targetBundle) {
 		var url, me = this,
@@ -544,6 +575,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 				.fail(onFailure);
 	},
 
+
 	getPathToObjectLink: function (id) {
 		var collection = this.getCollection('LibraryPath', 'Global'),
 			url = collection && collection.href,
@@ -559,6 +591,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 		return url;
 	},
+
 
 	getObject: function (ntiid, success, failure, scope, safe, targetBundle) {
 		var url, result;
@@ -597,6 +630,12 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return result;
 	},
 
+
+	getObjectWithinBundle: function (ntiid, bundle) {
+		return this.getObject(ntiid, null, null, null, false, bundle);
+	},
+
+
 	getObjects: function (ntiids, success, failure, scope, safe) {
 		var me = this;
 		if (!Ext.isArray(ntiids)) {
@@ -619,6 +658,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 	},
 
+
 	getSupportLinks: function () {
 		var aboutLink = getString('NextThought.view.menus.Settings.about.href', null, true) || 'http://nextthought.com';
 		var supportEmailLink = getString('NextThought.view.menus.Settings.supportEmail', null, true) || null;
@@ -632,10 +672,12 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		});
 	},
 
+
 	overrideServiceLink: function (link, value) {
 		var o = {}; o[link] = value || undefined;
 		this.supportLinks = Ext.apply(this.supportLinks || {}, o);
 	},
+
 
 	__resolveBoards: function (link, community) {
 		return Service.request(link)
@@ -659,6 +701,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 				});
 	},
 
+
 	getRootBoardLink: function () {
 		var collection = this.getCollection('Boards', $AppConfig.username),
 			links = collection && collection.Links,
@@ -666,6 +709,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 
 		return link;
 	},
+
 
 	resolveRootBoards: function () {
 		var me = this,
@@ -696,66 +740,81 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		 *	The following methods are for deciding when things can or cannot happen
 		 */
 
+
 	canUploadAvatar: function () {
 		return this.hasCapability('nti.platform.customization.avatar_upload');
 	},
+
 
 	canBlog: function () {
 		return this.hasCapability('nti.platform.blogging.createblogentry');
 	},
 
+
 	canChat: function () {
 		return this.hasCapability('nti.platform.p2p.chat');
 	},
+
 
 	canShare: function () {
 		return this.hasCapability('nti.platform.p2p.sharing');
 	},
 
+
 	canFriend: function () {
 		return this.hasCapability('nti.platform.p2p.friendslists');
 	},
+
 
 	canHaveForum: function () {
 		return this.hasCapability('nti.platform.forums.communityforums');
 	},
 
+
 	canChangePassword: function () {
 		return this.hasCapability('nti.platform.customization.can_change_password');
 	},
+
 
 	//Removed crazy filter logic after consoluting Greg and Jason on 1/16/2014. -cutz
 	canCreateDynamicGroups: function () {
 		return this.hasCapability('nti.platform.p2p.dynamicfriendslists');
 	},
 
+
 	canDoAdvancedEditing: function () {
 		return this.hasCapability('nti.platform.courseware.advanced_editing');
 	},
+
 
 	hasCapability: function (c) {
 		var caps = this.get('CapabilityList') || [];
 		return Ext.Array.contains(caps, c);
 	},
 
+
 	canCanvasURL: function () {
 		var coll = Service.getCollectionFor('application/vnd.nextthought.canvasurlshape', 'Pages');
 		return !!coll;
 	},
+
 
 	canEmbedVideo: function () {
 		var coll = Service.getCollectionFor('application/vnd.nextthought.embeddedvideo', 'Pages');
 		return !!coll;
 	},
 
+
 	canShareRedaction: function () {
 		return false;
 	},
+
 
 	canRedact: function () {
 		var coll = Service.getCollectionFor('application/vnd.nextthought.redaction', 'Pages');
 		return !!coll;
 	},
+
 
 	//endregion
 	canWorkspaceBlog: function () {
