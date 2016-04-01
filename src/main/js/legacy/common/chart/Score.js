@@ -1,4 +1,5 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+const {wait} = require('legacy/util/Promise');
 
 
 module.exports = exports = Ext.define('NextThought.common.chart.Score', {
@@ -9,7 +10,7 @@ module.exports = exports = Ext.define('NextThought.common.chart.Score', {
 
 	autoEl: {
 		tag: 'canvas',
-		style: {width: '75px', height: 'auto'}
+		style: {width: '75px', height: '75px'}
 	},
 
 
