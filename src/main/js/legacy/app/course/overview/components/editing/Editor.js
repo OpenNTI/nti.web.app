@@ -1,9 +1,10 @@
-var Ext = require('extjs');
-var FormForm = require('../../../../../common/form/Form');
-var PromptActions = require('../../../../prompt/Actions');
-var EditingActions = require('./Actions');
-var ControlsDelete = require('./controls/Delete');
-var AuditlogIndex = require('./auditlog/Index');
+const Ext = require('extjs');
+
+require('../../../../../common/form/Form');
+require('../../../../prompt/Actions');
+require('./Actions');
+require('./controls/Delete');
+require('./auditlog/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.Editor', {
@@ -143,7 +144,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var me = this;
 
 		if (!this.record || !this.record.getLink('schema')) {
-			return Promise.resolve();
+			return Promise.reject();
 		}
 
 		if (this.schema) {
@@ -161,8 +162,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var defaultSchema = this.getFormSchema();
 
 		this.schema = schema;
-		// TODO: Apply schema data from the server 
-		
+		// TODO: Apply schema data from the server
+
 		return defaultSchema;
 	},
 
