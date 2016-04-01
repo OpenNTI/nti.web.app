@@ -1,5 +1,5 @@
-var Ext = require('extjs');
-var MixinsAnnotationsMixin = require('../mixins/AnnotationsMixin');
+const Ext = require('extjs');
+require('../mixins/AnnotationsMixin');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.parts.VideoTitle', {
@@ -114,12 +114,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	},
 
 
-	domRangeForRecord: function (rec) {
+	domRangeForRecord: function (/*rec*/) {
 		return this.createDomRange();
 	},
 
 
-	getDomContextForRecord: function (r) {
+	getDomContextForRecord: function (/*r*/) {
 		return Ext.DomHelper.createDom({html: this.video.get('title')});
 	}
 

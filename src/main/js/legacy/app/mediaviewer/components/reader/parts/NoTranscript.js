@@ -1,5 +1,5 @@
-var Ext = require('extjs');
-var PartsVideoTitle = require('./VideoTitle');
+const Ext = require('extjs');
+require('./VideoTitle');
 
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.parts.NoTranscript', {
