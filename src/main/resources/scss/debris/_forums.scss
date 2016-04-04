@@ -459,6 +459,26 @@
 			color: $primary-blue;
 			text-decoration: none;
 		}}
+
+		@include attachment();
+
+		.attachment-part {
+			.meta {
+				margin-left: 0;
+				line-height: 1.2em;
+				padding: 0 10px;
+
+				.text {
+					.title {
+						margin-left: 0;
+					}
+				}
+				.controls {
+					position: relative;
+					margin: 5px 0 0 5px;
+				}
+			}
+		}
 	}
 
 	.comment-box {

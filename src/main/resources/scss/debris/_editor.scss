@@ -5,6 +5,80 @@ span.tab{
 	height: 1em;
 }
 
+@mixin attachment() {
+	$selector: '.attachment-part';
+
+	#{$selector} {
+		box-shadow: 0 0 1px 0 rgba(0,0,0,0.3);
+		cursor: pointer;
+		margin: 3px 0;
+		@include flexContainer();
+
+		.thumbnail {
+			@include flexItem(0 0 auto);
+			padding-left: 1px;
+			box-shadow: inset 1px 0 0 0 #d8d8d8, 0 1px 0 0 #d8d8d8, 0 -1px 0 0 #d8d8d8;
+			width: 100px;
+			height: 125px;
+			padding: 10px 0 0 10px;
+			position: relative;
+
+			.preview {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				z-index: 1;
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+			}
+		}
+
+		.meta {
+			position: relative;
+			@include flexItem(1 1 auto);
+			padding: 10px 11px;
+			background-color: #fff;
+			box-shadow: inset -1px 0 0 0 #d8d8d8, inset 1px 0 0 0 #d8d8d8, 0 1px 0 0 #d8d8d8, 0 -1px 0 0 #d8d8d8;
+
+			.controls, .text {
+				display: block;
+
+				& > span {
+					padding-right: 15px;
+					padding-left: 0;
+
+					&:last-of-type {
+						padding-right: 0;
+					}
+				}
+			}
+
+
+			.text {
+				border: 0 solid #f2f2f2;
+				border-bottom-width: 1px;
+
+				.title {
+					color: $primary-grey;
+					border-bottom: none;
+					font-size: 1.2em;
+					font-weight: 800;
+				}
+				.size {
+					color: $secondary-grey;
+				}
+			}
+
+			.controls {
+				color: $primary-blue;
+			}
+		}
+	}
+}
+
 @mixin editor($useParent:false) {
 	$selector: '.editor';
 
@@ -179,75 +253,7 @@ span.tab{
 					@include icon($filetype-unknown, $top:20px, $left:10px);
 				}
 
-				.attachment-part {
-					box-shadow: 0 0 1px 0 rgba(0,0,0,0.3);
-					cursor: pointer;
-					margin: 3px 0;
-					@include flexContainer();
-
-					.thumbnail {
-						@include flexItem(0 0 auto);
-    					padding-left: 1px;
-    					box-shadow: inset 1px 0 0 0 #d8d8d8, 0 1px 0 0 #d8d8d8, 0 -1px 0 0 #d8d8d8;
-						width: 100px;
-						height: 125px;
-						padding: 10px 0 0 10px;
-						position: relative;
-
-						.preview {
-							position: absolute;
-							top: 0;
-							left: 0;
-							right: 0;
-							bottom: 0;
-							z-index: 1;
-							background-size: cover;
-							background-position: center;
-							background-repeat: no-repeat;
-						}
-					}
-
-					.meta {
-						position: relative;
-						@include flexItem(1 1 auto);
-						padding: 10px 11px;
-    					background-color: #fff;
-    					box-shadow: inset -1px 0 0 0 #d8d8d8, inset 1px 0 0 0 #d8d8d8, 0 1px 0 0 #d8d8d8, 0 -1px 0 0 #d8d8d8;
-
-						.controls, .text {
-							display: block;
-
-							& > span {
-								padding-right: 15px;
-								padding-left: 0;
-
-								&:last-of-type {
-									padding-right: 0;
-								}
-							}
-						}
-
-
-						.text {
-							border: 0 solid #f2f2f2;
-    						border-bottom-width: 1px;
-
-							.title {
-								color: $primary-grey;
-								border-bottom: none;
-								font-size: 1.2em;
-								font-weight: 800;
-							}
-							.size {
-								color: $secondary-grey;
-							}
-						}
-
-						.controls {
-							color: $primary-blue;
-						}
-					}
-				}
+				@include attachment();
 			}
 		}
 
@@ -526,6 +532,7 @@ span.tab{
 		}
 	}
 }
+
 
 @include editor();
 

@@ -223,11 +223,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	attachmentPreviewTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ cls: 'attachment-part preview', contentEditable: 'false', 'data-fileName': '{fileName}', 'name': '{name}', cn: [
 			{ cls: 'thumbnail', cn: [
-				{ cls: 'preview', style: 'background-image: url({href});'}
+				{ cls: 'preview', style: 'background-image: url({url});'}
 			]},
 			{ cls: 'meta', cn: [
 				{ cls: 'text', cn: [
-					{ tag: 'span', cls: 'title', html: '{fileName}'},
+					{ tag: 'span', cls: 'title', html: '{filename}'},
 					{ tag: 'span', cls: 'size', html: '{size}'}
 				]},
 				{ cls: 'controls', cn: [
@@ -645,7 +645,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			href = this.createObjectURL(file),
 			placeholder = Ext.DomHelper.createTemplate({html: this.defaultValue});
 
-		tpl.append(content, {size: size, href: href, fileName: file.name, name: name});
+		tpl.append(content, {size: size, url: href, filename: file.name, name: name});
 
 		// Add a placeholder to allow adding text.
 		placeholder.append(content);
