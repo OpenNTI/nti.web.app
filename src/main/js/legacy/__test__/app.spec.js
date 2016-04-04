@@ -652,11 +652,9 @@ describe('All Classes Exist', function () {
 		'NextThought.app.store.Collection': [],
 		'NextThought.app.store.StateStore': [],
 		'NextThought.app.stream.Base': [],
-		'NextThought.app.stream.Grid': [],
 		'NextThought.app.stream.List': [],
 		'NextThought.app.stream.components.BasePage': [],
 		'NextThought.app.stream.components.Filter': [],
-		'NextThought.app.stream.components.GridPage': [],
 		'NextThought.app.stream.components.ListPage': [],
 		'NextThought.app.stream.components.listTiles.Note': [],
 		'NextThought.app.stream.components.parts.AddComment': [],
@@ -676,7 +674,6 @@ describe('All Classes Exist', function () {
 		'NextThought.app.video.roll.Roll': [],
 		'NextThought.app.video.window.Window': [],
 		'NextThought.app.whiteboard.Canvas': [],
-		'NextThought.app.whiteboard.CollisionDetection': [],
 		'NextThought.app.whiteboard.Editor': [],
 		'NextThought.app.whiteboard.Matrix': [
 			'NTMatrix'
@@ -746,7 +743,6 @@ describe('All Classes Exist', function () {
 		'NextThought.common.form.fields.ImagePicker': [],
 		'NextThought.common.form.fields.LegacySearchComboBox': [],
 		'NextThought.common.form.fields.Progress': [],
-		'NextThought.common.form.fields.SearchComboBox': [],
 		'NextThought.common.form.fields.SimpleTextField': [],
 		'NextThought.common.form.fields.TagField': [
 			'NextThought.common.form.fields.TokenField'
@@ -793,12 +789,6 @@ describe('All Classes Exist', function () {
 			'NextThought.FilterGroup'
 		],
 		'NextThought.filter.FilterManager': [],
-		'NextThought.filter.ValueContainedFilter': [
-			'NextThought.ValueContainedFilter'
-		],
-		'NextThought.filter.ValueContainsFilter': [
-			'NextThought.ValueContainsFilter'
-		],
 		'NextThought.layout.component.CustomTemplate': [],
 		'NextThought.layout.component.Natural': [],
 		'NextThought.layout.container.None': [],
@@ -1143,7 +1133,6 @@ describe('All Classes Exist', function () {
 		'NextThought.store.Hit': [],
 		'NextThought.store.NTI': [],
 		'NextThought.store.PageItem': [],
-		'NextThought.store.Stream': [],
 		'NextThought.store.UserSearch': [],
 		'NextThought.store.courseware.AssignmentHistoryItems': [],
 		'NextThought.store.courseware.GradeBookSummaries': [],
