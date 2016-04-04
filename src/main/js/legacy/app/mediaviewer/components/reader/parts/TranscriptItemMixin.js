@@ -2,6 +2,10 @@ const Ext = require('extjs');
 const UserDataActions = require('legacy/app/userdata/Actions');
 
 
+/*
+ * This appears to be leftover from a refactor. Nothing references this.
+ */
+
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.parts.TranscriptItemMixin', {
 	isPresentationPartReady: false,
 
