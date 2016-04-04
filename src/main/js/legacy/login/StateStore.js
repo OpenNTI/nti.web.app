@@ -78,14 +78,18 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		var fakeService = window.Service || ModelService.create({}),
 			links = handshake.Links;
 
-		if (fakeService.getLink(links, 'account.profile.needs.updated')) {
+		if (fakeService.getLinkFrom(links, 'account.profile.needs.updated')) {
 			this.actions['show-coppa-window'] = true;
-		} else if (fakeService.getLink(links, 'state-bounced-contact-email')) {
+		} else if (fakeService.getLinkFrom(links, 'state-bounced-contact-email')) {
 			this.actions['bounced-contact'] = true;
-		} else if (fakeService.getLink(links, 'state-bounced-email')) {
-			this.actions['bounced-email'];
-		} else if (fakeService.getLink('coppa.upgraded.rollbacked')) {
-			this.actions['confirm-birthday-coppa'];
+		} else if (fakeService.getLinkFrom(links, 'state-bounced-email')) {
+			this.actions['bounced-email'] = true;
+		} else if (fakeService.getLinkFrom('coppa.upgraded.rollbacked')) {
+			this.actions['confirm-birthday-coppa'] = true;
+		}
+
+		if (fakeService.getLinkFrom(links, 'SubmitRegistration')) {
+			this.actions['submit-registration'] = true;
 		}
 	},
 
@@ -107,6 +111,10 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 
 		if (this.actions['confirm-birthday-coppa']) {
 			this.AccountActions.showCoppaConfirmWindow();
+		}
+
+		if (this.actions['submit-registration']) {
+			//TODO: fill this in
 		}
 
 		//What is the exact relationships between these windows?
