@@ -235,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 
 		return Service.getObjectWithinBundle(assignmentId, this.get('bundle'))
 			.then(function (response) {
-				assignment.syncWithResponse(response);
+				assignment.syncWith(response);
 
 				return assignment;
 			});
