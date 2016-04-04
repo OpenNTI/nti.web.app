@@ -1,6 +1,6 @@
 const Logger = require('nti-util-logger').default;
 
-const logger = Logger.get('server-side:mobile');
+const logger = Logger.get('server-side:webapp');
 
 module.exports = {
 
