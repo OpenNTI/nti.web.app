@@ -215,7 +215,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	partRenderer: {
 		'application/vnd.nextthought.canvas': 'addWhiteboard',
-		'application/vnd.nextthought.embeddedvideo': 'addVideo'
+		'application/vnd.nextthought.embeddedvideo': 'addVideo',
+		'application/vnd.nextthought.contentfile': 'setAttachmentPreviewFromModel'
 	},
 
 	tabTpl: Ext.DomHelper.createTemplate({html: '\t'}).compile(),
@@ -629,13 +630,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.AttachmentMap[guid] = file;
 
 		// TODO: Check and warn about the size
-		this.setPreviewFromInput(file, guid);
+		this.setAttachmentPreviewFromInput(file, guid);
 	},
 
 
-	setPreviewFromInput: function (file, name) {
+	setAttachmentPreviewFromInput: function (file, name) {
 		if (!this.rendered) {
-			this.on('afterrender', this.setPreviewFromInput.bind(this, file));
+			this.on('afterrender', this.setAttachmentPreviewFromInput.bind(this, file));
 			return;
 		}
 
@@ -652,6 +653,25 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
+	setAttachmentPreviewFromModel: function (model) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setAttachmentPreviewFromModel.bind(this, model));
+			return;
+		}
+
+		let data = model && model.isModel ? model.getData() : model,
+			content = this.el.down('.content'),
+			tpl = this.attachmentPreviewTpl,
+			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(data.size, 1);
+
+		if (size) {
+			data.size = size;
+		}
+
+		tpl.append(content, data);
+	},
+
+
 	createObjectURL: function (file) {
 		var url = Globals.getURLObject();
 
@@ -663,6 +683,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		return this.objectURL;
 	},
+
 
 	cleanUpObjectURL: function () {
 		var url = Globals.getURLObject();
@@ -1557,7 +1578,17 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				w.destroy();
 			}
 		});
+
+		this.clearAttachmentFilesParts();
 	},
+
+
+	clearAttachmentFilesParts: function () {
+		// Empty the map.
+		this.AttachmentMap = {};
+		this.cleanUpObjectURL();
+	},
+
 
 	whiteboardPart: function (wp) {
 		var me = this,
@@ -1855,10 +1886,27 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	getAttachmentPart: function (el) {
+		var name = el && el.getAttribute && el.getAttribute('name');
+
+		if (this.record) {
+			let headline = this.record.get('headline'),
+				body = headline && headline.get('body') || [],
+				part;
+
+			body.forEach(function (p) {
+				if (p.name === name) {
+					part = p;
+					return false;
+				}
+			});
+
+			return part;
+		}
+
 		return {
 			MimeType: 'application/vnd.nextthought.contentfile',
 			fileName: el && el.getAttribute && el.getAttribute('data-fileName'),
-			name: el && el.getAttribute && el.getAttribute('name')
+			name: name
 		};
 	},
 

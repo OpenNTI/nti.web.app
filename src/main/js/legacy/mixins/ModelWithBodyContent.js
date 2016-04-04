@@ -3,8 +3,6 @@ var Globals = require('../util/Globals');
 var {guidGenerator} = Globals;
 
 require('../app/video/Video');
-require('legacy/common/components/ContentFile');
-
 
 module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent', {
 	statics: {
