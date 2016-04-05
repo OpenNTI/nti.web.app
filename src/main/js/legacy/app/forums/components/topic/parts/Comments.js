@@ -168,7 +168,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			scrollEl.el.mask();
 		}
 
-		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null, enableVideo: true});
+		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null, enableVideo: true, enableFileUpload: true});
 		me.relayEvents(me.editor, ['activated-editor', 'deactivated-editor']);
 		me.editor.addCls('threaded-forum-editor');
 		me.el.selectable();

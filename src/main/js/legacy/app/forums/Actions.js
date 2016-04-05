@@ -14,9 +14,19 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
 	},
 
+
+	/**
+	 * Save a topic comment
+	 *
+	 * When the we have a form data, we will save it as such othewise we will do the default save.
+	 */
 	saveTopicComment: function (topic, comment, values) {
 		var isEdit = Boolean(comment) && !comment.phantom,
 			postLink = topic.getLink('add');
+
+		if (values instanceof FormData) {
+			return this.saveTopicCommentWithFormData(topic, comment, values);
+		}
 
 		comment = comment || NextThought.model.forums.Post.create();
 
@@ -48,6 +58,35 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 			});
 		});
 	},
+
+
+	saveTopicCommentWithFormData: function (topic, comment, formData) {
+		var isEdit = Boolean(comment) && !comment.phantom,
+			postLink = isEdit ? comment.getLink('edit') : topic.getLink('add'),
+			method = isEdit ? 'PUT' : 'POST';
+
+		return this.submitFormData(formData, postLink, method)
+			.then(function (response) {
+				var rec = ParseUtils.parseItems(response)[0];
+
+				//TODO: increment PostCount in topic the same way we increment reply count in notes.
+				if (!isEdit) {
+					topic.set('PostCount', topic.get('PostCount') + 1);
+				}
+				else {
+					// Update the record that was edited.
+					comment.syncWith(rec);
+					rec = comment;
+				}
+
+				return Promise.resolve(rec);
+			})
+			.catch(function () {
+				console.error('Failed to save topic comment:', arguments);
+				return Promise.reject();
+			});
+	},
+
 
 	saveTopic: function (editorCmp, record, forum, title, tags, body, autoPublish) {
 		var isEdit = Boolean(record),

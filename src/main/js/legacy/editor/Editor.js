@@ -222,7 +222,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	tabTpl: Ext.DomHelper.createTemplate({html: '\t'}).compile(),
 
 	attachmentPreviewTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{ cls: 'attachment-part preview', contentEditable: 'false', 'data-fileName': '{fileName}', 'name': '{name}', cn: [
+		{ cls: 'attachment-part preview', contentEditable: 'false', 'data-fileName': '{filename}', 'name': '{name}', cn: [
 			{ cls: 'thumbnail', cn: [
 				{ cls: 'preview', style: 'background-image: url({url});'}
 			]},
@@ -1931,7 +1931,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		if (!part) {
 			part = {
 				MimeType: 'application/vnd.nextthought.contentfile',
-				fileName: el && el.getAttribute && el.getAttribute('data-fileName'),
+				filename: el && el.getAttribute && el.getAttribute('data-fileName'),
 				name: name
 			};
 		}
