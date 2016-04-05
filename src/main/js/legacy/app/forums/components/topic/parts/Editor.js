@@ -261,7 +261,12 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 				expected = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.max_bytes);
 
 			msg = current && expected ? 'Maximum Size Allowed: ' + expected + ', Your uploaded file size: ' + current : '';
-			alert({title: error.message, msg: msg,  icon: 'warning-red'});
+			msg = (error.message || '') + ' ' + msg;
+			alert({title: 'Attention', msg: msg,  icon: 'warning-red'});
+		}
+		else if (error.code === 'MaxAttachmentsExceeded') {
+			msg = (error.message || '') + ' ' + 'Maximum Files Allowed: ' + error.constraint;
+			alert({title: 'Attention', msg: msg,  icon: 'warning-red'});
 		}
 		else if (error.code === 'TooLong') {
 			msg = getString('NextThought.view.forums.topic.parts.Editor.longtitle');
