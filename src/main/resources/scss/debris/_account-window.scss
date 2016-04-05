@@ -752,3 +752,17 @@
     	}
 	}
 }
+
+
+.registration-prompt {
+	width: calc(100vw - 150px);
+    height: calc(100vh - 145px);
+    max-width: 775px;
+    overflow: hidden;
+
+	iframe {
+		border: none;
+		width: 100%;
+		height:100%;
+	}
+}

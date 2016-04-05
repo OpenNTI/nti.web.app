@@ -1,15 +1,16 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var ContentProxy = require('../../proxy/JSONP');
-var CommonActions = require('../../common/Actions');
-var LibraryStateStore = require('./StateStore');
-var CoursesActions = require('./courses/Actions');
-var CoursesStateStore = require('./courses/StateStore');
-var ContentActions = require('./content/Actions');
-var ContentStateStore = require('./content/StateStore');
-var LoginStateStore = require('../../login/StateStore');
-var ProxyJSONP = require('../../proxy/JSONP');
-var {getURL} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const ParseUtils = require('../../util/Parsing');
+const ContentProxy = require('../../proxy/JSONP');
+const {getURL} = require('legacy/util/Globals');
+
+require('../../common/Actions');
+require('./StateStore');
+require('./courses/Actions');
+require('./courses/StateStore');
+require('./content/Actions');
+require('./content/StateStore');
+require('../../login/StateStore');
+require('../../proxy/JSONP');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.Actions', {
@@ -36,26 +37,30 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 		}
 	},
 
-	onLogin: function () {
-		var s = window.Service,
-			store = this.LibraryStore,
-			courseStore = this.CourseStore,
-			contentStore = this.ContentStore;
+
+	onLogin () {
+		this.LibraryStore.setLoading();
+
+		this.reload()
+			.then(() => {
+				this.LibraryStore.setLoaded();
+				this.CourseStore.setLoaded();
+				this.ContentStore.setLoaded();
+			});
+	},
 
 
-		store.setLoading();
+	reload () {
+		let s = window.Service;
 
-		Promise.all([
+		return Promise.all([
 			this.CourseActions.loadCourses(s),
 			this.ContentActions.loadContent(s)
-		])
-		.then(this.deDupContentPackages.bind(this))
-		.then(function () {
-			store.setLoaded();
-			courseStore.setLoaded();
-			contentStore.setLoaded();
+		]).then(() => {
+			this.deDupContentPackages();
 		});
 	},
+
 
 	/**
 	 * Iterate the courses, admin courses, and content bundles, adding the content packages
@@ -63,6 +68,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 	 * list
 	 *
 	 * TODO: needs unit tests
+	 * @return {void}
 	 */
 	deDupContentPackages: function () {
 		var courses = this.CourseStore.getEnrolledCourses(),
@@ -130,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 			});
 	},
 
-	findBundleBy: function (fn) {
+	findBundleBy: function (/*fn*/) {
 
 	},
 
@@ -175,7 +181,6 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 				toc = tocs[0];
 
 				var content = bundle.getContentPackages()[0],
-					url, req,
 					ref = toc && toc.querySelector('reference[type="application/vnd.nextthought.videoindex"]');
 
 				root = content && content.get('root');

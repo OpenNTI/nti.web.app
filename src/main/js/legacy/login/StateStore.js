@@ -89,7 +89,10 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		}
 
 		if (fakeService.getLinkFrom(links, 'SubmitRegistration')) {
-			this.actions['submit-registration'] = true;
+			this.actions['submit-registration'] = {
+				'submit-registration': fakeService.getLinkFrom(links, 'SubmitRegistration'),
+				'registration-rules': fakeService.getLinkFrom(links, 'RegistrationEnrollRules')
+			};
 		}
 	},
 
@@ -113,10 +116,6 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 			this.AccountActions.showCoppaConfirmWindow();
 		}
 
-		if (this.actions['submit-registration']) {
-			//TODO: fill this in
-		}
-
 		//What is the exact relationships between these windows?
 		//currently above and below are piling on top of one another
 		if (this.__shouldShowContentFor('content.initial_welcome_page')) {
@@ -130,6 +129,10 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		//NOTE we show the ToS last so it stacks on top. Need a better solution for this
 		if (this.__shouldShowContentFor('content.initial_tos_page')) {
 			this.AccountActions.showNewTermsOfService(user.getLink('content.initial_tos_page'));
+		}
+
+		if (this.actions['submit-registration']) {
+			this.AccountActions.showRegistrationForm(this.actions['submit-registration']);
 		}
 	},
 

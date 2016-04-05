@@ -1,6 +1,8 @@
 var Ext = require('extjs');
 var Globals = require('../../util/Globals');
 var {getURL} = Globals;
+
+require('legacy/app/prompt/Actions');
 require('../../common/Actions');
 require('../../common/ux/WelcomeGuide');
 require('../../common/ux/IframeConfirmWindow');
@@ -11,6 +13,8 @@ require('./contact/Window');
 require('./coppa/Window');
 require('./coppa/upgraded/Window');
 require('./recovery/Window');
+require('./registration/Prompt');
+require('legacy/app/library/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.Actions', {
@@ -76,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 	showResearchAgreement: function () {
 		var user = $AppConfig.userObject,
 			html = user.getLink('irb_html'),
-			pdf = user.getLink('irb_pdf'),
+			// pdf = user.getLink('irb_pdf'),
 			post = user.getLink('SetUserResearch');
 
 		function sendRequest (agreed) {
@@ -85,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 			}
 
 			return Service.post(post, {
-				allow_research: agreed
+				'allow_research': agreed
 			});
 		}
 
@@ -208,9 +212,9 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 			fieldName = values.fieldName,
 			optionalLinkName;
 
-		if (value.linkName === 'contact-email-sends-consent-request') {
+		if (values.linkName === 'contact-email-sends-consent-request') {
 			linkToDelete = null;
-			opetionalLinkName = values.linkName;
+			optionalLinkName = values.linkName;
 		}
 
 		if (fieldName && email) {
@@ -353,5 +357,16 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 				}
 			});
 		});
+	},
+
+
+	showRegistrationForm (links) {
+		let PromptActions = NextThought.app.prompt.Actions.create();
+		let LibraryActions = NextThought.app.library.Actions.create();
+
+		PromptActions.prompt('account-registration', links)
+			.then(() => {
+				LibraryActions.reload();
+			});
 	}
 });

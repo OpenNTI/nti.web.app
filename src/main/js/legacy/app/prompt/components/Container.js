@@ -1,6 +1,7 @@
-var Ext = require('extjs');
-var ComponentsHeader = require('./Header');
-var ComponentsFooter = require('./Footer');
+const Ext = require('extjs');
+
+require('./Header');
+require('./Footer');
 
 
 module.exports = exports = Ext.define('NextThought.app.prompt.components.Container', {
@@ -47,6 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 		this.fireEvent('setup-complete');
 	},
 
+
 	onCovered: function () {
 		this.addCls('covered');
 
@@ -54,6 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 			this.bodyCmp.onCovered();
 		}
 	},
+
 
 	onUncovered: function () {
 		this.removeCls('covered');
@@ -63,6 +66,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 		}
 	},
 
+
 	getBodyConfig: function () {
 		return {
 			Prompt: {
@@ -70,7 +74,12 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 				type: this.promptType,
 				doClose: this.doCancel.bind(this),
 				doSave: this.doSave.bind(this),
+				allowFullScreen: this.allowFullScreen.bind(this),
 				Header: {
+					hide: this.header.hide.bind(this.header),
+					show: this.header.show.bind(this.header),
+					disableClose: this.header.disableClose.bind(this.header),
+					enableClose: this.header.enableClose.bind(this.header),
 					enableBack: this.header.enableBack.bind(this.header),
 					disableBack: this.header.disableBack.bind(this.header),
 					setTitle: this.header.setTitle.bind(this.header),
@@ -80,6 +89,8 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 					showMessage: this.header.showMessage.bind(this.header)
 				},
 				Footer: {
+					hide: this.footer.hide.bind(this.footer),
+					show: this.footer.show.bind(this.footer),
 					enableSave: this.footer.enableSave.bind(this.footer),
 					disableSave: this.footer.disableSave.bind(this.footer),
 					setSaveText: this.footer.setSaveText.bind(this.footer),
@@ -90,11 +101,18 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 
 	},
 
+
+	allowFullScreen: function () {
+		this.bodyContainer.addCls('full-screen');
+	},
+
+
 	doBack: function () {
 		if (this.bodyCmp.onBack) {
 			this.bodyCmp.onBack();
 		}
 	},
+
 
 	onSaveSuccess: function (value) {
 		if (this.onSubmit) {
@@ -102,9 +120,11 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 		}
 	},
 
+
 	onSaveFailure: function (reason) {
 		this.bodyCmp.onSaveFailure(reason);
 	},
+
 
 	__validate: function () {
 		if (this.bodyCmp.doValidation) {
@@ -114,6 +134,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 		return Promise.resolve();
 	},
 
+
 	__save: function () {
 		if (this.bodyCmp.onSave) {
 			this.bodyCmp.onSave()
@@ -122,10 +143,12 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 		}
 	},
 
+
 	doSave: function () {
 		this.__validate()
 			.then(this.__save.bind(this));
 	},
+
 
 	allowCancel: function () {
 		if (this.bodyCmp.allowCancel) {
@@ -134,6 +157,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 
 		return Promise.resolve();
 	},
+
 
 	doCancel: function (action) {
 		this.onCancel(action);

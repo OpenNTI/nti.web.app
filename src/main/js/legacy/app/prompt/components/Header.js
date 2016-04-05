@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Header'
 		}
 
 		if (this.error) {
-			this.showError(error);
+			this.showError(this.error);
 		}
 
 		if (this.warning) {
@@ -181,5 +181,15 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Header'
 
 	showMessage: function (message) {
 		return this.__addMessage(message, 'message');
+	},
+
+
+	disableClose: function () {
+		this.addCls('close-disabled');
+	},
+
+
+	enableClose: function () {
+		this.removeCls('close-disabled');
 	}
 });
