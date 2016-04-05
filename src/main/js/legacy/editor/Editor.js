@@ -232,9 +232,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 					{ tag: 'span', cls: 'size', html: '{size}'}
 				]},
 				{ cls: 'controls', cn: [
-					{ tag: 'span', cls: 'view', html: 'Preview'},
-					{ tag: 'span', cls: 'change', html: 'Change'},
-					{ tag: 'span', cls: 'delete', html: 'Delete'}
+					{ tag: 'span', cls: 'view', 'data-action': 'preview', html: 'Preview'},
+					{ tag: 'span', cls: 'change', 'data-action': 'change', html: 'Change'},
+					{ tag: 'span', cls: 'delete', 'data-action': 'delete', html: 'Delete'}
 				]}
 			]}
 		]}
@@ -325,6 +325,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		if (!this.enableSaveControls) {
 			this.saveControlsEl.hide();
+		}
+		if (this.enableFileUpload) {
+			this.on('destroy', this.clearAttachmentFilesParts.bind(this));
 		}
 	},
 
@@ -1160,12 +1163,17 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	handleClick: function (e) {
 		var guid, p, fnName, mime,
 			content = e.getTarget('.content'),
-			t = e.getTarget('.object-part') || e.getTarget('.whiteboard-wrapper');
+			t = e.getTarget('.object-part') || e.getTarget('.whiteboard-wrapper') || e.getTarget('.attachment-part');
 
 		//make sure the content el gets focus when you click it, if its not already active
 		//fixs issue where it would take two clicks to focus content from the usertokenfield
 		if (content && content !== document.activeElement) {
 			this.focus(true);
+		}
+
+		if (t && t.classList.contains('attachment-part')) {
+			this.handleAttachmentPartAction(t, e);
+			return;
 		}
 
 		if (t) {
@@ -1177,9 +1185,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			p = this.trackedParts[guid];
 			if (p) {
 				if (!p.isDestroyed && p.show) {
-		  			if (Ext.is.iOS) {
-			content.blur();
-		  }
+					if (Ext.is.iOS) {
+						content.blur();
+					}
 					p.show();
 				}
 				return;
@@ -1201,6 +1209,21 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			this.detectTypingAttributes(e);
 		}
 	},
+
+
+	handleAttachmentPartAction: function (parent, event) {
+		var e = event.getTarget(),
+			action = e && e.getAttribute && e.getAttribute('data-action'),
+			name = parent && parent.getAttribute && parent.getAttribute('name');
+
+		event.stopEvent();
+
+		if (action === 'delete' && name) {
+			delete this.AttachmentMap[name];
+			parent.remove();
+		}
+	},
+
 
 	checkTrackedParts: function () {
 		var me = this;
@@ -1585,7 +1608,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	clearAttachmentFilesParts: function () {
 		// Empty the map.
-		this.AttachmentMap = {};
+		// this.AttachmentMap = {};
+		for (let k in this.AttachmentMap) {
+			if (this.AttachmentMap.hasOwnProperty(k)) {
+				delete this.AttachmentMap[k];
+			}
+		}
 		this.cleanUpObjectURL();
 	},
 
@@ -1886,12 +1914,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	getAttachmentPart: function (el) {
-		var name = el && el.getAttribute && el.getAttribute('name');
+		var name = el && el.getAttribute && el.getAttribute('name'), part;
 
 		if (this.record) {
 			let headline = this.record.get('headline'),
-				body = headline && headline.get('body') || [],
-				part;
+				body = headline && headline.get('body') || [];
 
 			body.forEach(function (p) {
 				if (p.name === name) {
@@ -1899,15 +1926,16 @@ Ext.define('NextThought.editor.AbstractEditor', {
 					return false;
 				}
 			});
-
-			return part;
 		}
 
-		return {
-			MimeType: 'application/vnd.nextthought.contentfile',
-			fileName: el && el.getAttribute && el.getAttribute('data-fileName'),
-			name: name
-		};
+		if (!part) {
+			part = {
+				MimeType: 'application/vnd.nextthought.contentfile',
+				fileName: el && el.getAttribute && el.getAttribute('data-fileName'),
+				name: name
+			};
+		}
+		return part;
 	},
 
 

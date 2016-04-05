@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		// TODO: Re-add the autoPublish
 		return this.submitFormData(formData, url, method)
 			.then(function (response) {
-				var entry = isEdit ? record : ParseUtils.parseItems(response)[0];
+				var entry = ParseUtils.parseItems(response)[0];
 
 				if (autoPublish !== undefined) {
 					if (autoPublish !== entry.isPublished()) {
@@ -131,7 +131,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 				//so we set it back on the original record to trigger other instance of the entry to be updated.
 				//Not doing this reflects itself by the body of the topic not updating in the activity view
 				if (isEdit && record) {
+					headline.syncWith(entry);
 					record.afterEdit('headline');
+
+					return Promise.resolve(record);
 				}
 
 				return Promise.resolve(entry);
