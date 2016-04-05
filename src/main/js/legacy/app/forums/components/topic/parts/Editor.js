@@ -224,8 +224,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 				})
 				.fail( function (reason) {
 					unmask();
-					console.error('Failed to save the discussion: ', reason);
-					alert('There was trouble saving the discussion');
+					me.onHandleSaveFailure(reason);
 				});
 		}
 		else {
@@ -246,9 +245,30 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 				})
 				.fail(function (reason) {
 					unmask();
-					console.error('Failed to save the discussion: ', reason);
-					alert('There was trouble saving the discussion');
+					me.onHandleSaveFailure(reason);
 				});
+		}
+	},
+
+
+	onHandleSaveFailure: function (reason) {
+		var error = reason && JSON.parse(reason && reason.responseText) || {},
+			msg;
+
+		console.error('Failed to save the discussion: ', reason);
+		if (error.code === 'MaxFileSizeUploadLimitError') {
+			let current = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.provided_bytes),
+				expected = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(error.max_bytes);
+
+			msg = current && expected ? 'Maximum Size Allowed: ' + expected + ', Your uploaded file size: ' + current : '';
+			alert({title: error.message, msg: msg,  icon: 'warning-red'});
+		}
+		else if (error.code === 'TooLong') {
+			msg = getString('NextThought.view.forums.topic.parts.Editor.longtitle');
+			alert({title: getString('NextThought.view.forums.topic.parts.Editor.error'), msg: msg, icon: 'warning-red'});
+		}
+		else {
+			alert('There was trouble saving the discussion');
 		}
 	},
 
@@ -260,16 +280,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 	},
 
 	onSaveFailure: function (proxy, response, operation) {
-		var msg = 'An unknown error occurred saving your Discussion.', error;
-
-		if (response && response.responseText) {
-			error = Ext.JSON.decode(response.responseText, true) || {};
-			if (error.code === 'TooLong') {
-				msg = getString('NextThought.view.forums.topic.parts.Editor.longtitle');
-			}
-		}
-		alert({title: getString('NextThought.view.forums.topic.parts.Editor.error'), msg: msg, icon: 'warning-red'});
-		console.debug(arguments);
+		this.onHandleSaveFailure(response);
 	},
 
 	onCancel: function (e) {
