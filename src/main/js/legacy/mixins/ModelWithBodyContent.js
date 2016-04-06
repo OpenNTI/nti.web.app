@@ -208,11 +208,9 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 	attachmentRenderer: function (o, clickHandlerMaker, size, callback, scope, config) {
 		var p;
 
-		size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(o && o.size, 1);
-		if (size) {
-			o.size = size;
+		if (!isNaN(parseFloat(o.size))) {
+			o.size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(parseFloat(o.size), 1);
 		}
-
 		p = this.CONTENT_FILE_TPL.apply(o);
 		Ext.callback(callback, scope, [p]);
 	},
@@ -305,5 +303,58 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 		}
 
 		return found;
+	},
+
+
+	getFormData: function () {
+		if (this.hasFiles()) {
+			return this.buildFormData();
+		}
+
+		return false;
+	},
+
+
+	hasFiles: function () {
+		var body = this.get('body') || [],
+			hasFiles = false, part;
+
+		for(let i = 0; i < body.length && !hasFiles; i++) {
+			part = body[i];
+			if (part && part.file) {
+				hasFiles = true;
+			}
+		}
+
+		return hasFiles;
+	},
+
+
+	/**
+	 * @private
+	 * Builds and retuns a FormData object
+	 */
+	buildFormData: function () {
+		var body = this.get('body') || [],
+			formData = new FormData();
+
+		// Loop through the body and append all the file to the formData
+		body.forEach(function (part) {
+			if (part && part.file) {
+				formData.append(part.name, part.file, (part.file || {}).name);
+
+				// NOTE: We need to clean up the File part, since we don't want to be part of the __json__ key
+				// Note that we only needed to use it above where we append it to the formData object.
+				delete part.file;
+			}
+		});
+
+		let data = this.asJSON() || {};
+
+		// NOTE: To support submitting a multi-part form,
+		// the regular content of a note will be set in a json field.
+		formData.append('__json__', JSON.stringify(data));
+
+		return formData;
 	}
 });

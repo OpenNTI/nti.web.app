@@ -163,7 +163,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 	isValid: function () {
 		var me = this,
-			v = this.getJSONData(),
+			v = this.getValue(),
 			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
 
 		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {

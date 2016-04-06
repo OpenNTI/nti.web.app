@@ -24,10 +24,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		var isEdit = Boolean(comment) && !comment.phantom,
 			postLink = topic.getLink('add');
 
-		if (values instanceof FormData) {
-			return this.saveTopicCommentWithFormData(topic, comment, values);
-		}
-
 		comment = comment || NextThought.model.forums.Post.create();
 
 		comment.set({body: values.body});
@@ -38,53 +34,21 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 			postLink = undefined;
 		}
 
-		return new Promise(function (fulfill, reject) {
-			comment.save({
-				url: postLink,
-				success: function (_, operation) {
-					var rec = isEdit ? comment : ParseUtils.parseItems(operation.response.responseText)[0];
+		return comment.saveData({url: postLink})
+				.then(function (response) {
+					var rec = isEdit ? comment : ParseUtils.parseItems(response)[0];
 
 					//TODO: increment PostCount in topic the same way we increment reply count in notes.
 					if (!isEdit) {
 						topic.set('PostCount', topic.get('PostCount') + 1);
 					}
 
-					fulfill(rec);
-				},
-				failure: function () {
+					return rec;
+				})
+				.catch(function (reason) {
 					console.error('Failed to save topic comment:', arguments);
-					reject();
-				}
-			});
-		});
-	},
-
-
-	saveTopicCommentWithFormData: function (topic, comment, formData) {
-		var isEdit = Boolean(comment) && !comment.phantom,
-			postLink = isEdit ? comment.getLink('edit') : topic.getLink('add'),
-			method = isEdit ? 'PUT' : 'POST';
-
-		return this.submitFormData(formData, postLink, method)
-			.then(function (response) {
-				var rec = ParseUtils.parseItems(response)[0];
-
-				//TODO: increment PostCount in topic the same way we increment reply count in notes.
-				if (!isEdit) {
-					topic.set('PostCount', topic.get('PostCount') + 1);
-				}
-				else {
-					// Update the record that was edited.
-					comment.syncWith(rec);
-					rec = comment;
-				}
-
-				return Promise.resolve(rec);
-			})
-			.catch(function () {
-				console.error('Failed to save topic comment:', arguments);
-				return Promise.reject();
-			});
+					return Promise.reject(reason);
+				});
 	},
 
 
@@ -106,43 +70,37 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 			record.set({'title': title});
 		}
 
-		return new Promise(function (fulfill, reject) {
-			post.getProxy().on('exception', reject, null, {single: true});
-			post.save({
-				url: isEdit ? undefined : forum && forum.getLink('add'),//only use post record if its a new post
-				scope: this,
-				success: function (post, operation) {
-					var entry = isEdit ? record : ParseUtils.parseItems(operation.response.responseText)[0];
+		return post.saveData({url: isEdit ? undefined : forum && forum.getLink('add')})
+			.then (function (response) {
+				var entry = isEdit ? record : ParseUtils.parseItems(response)[0];
 
-					if (autoPublish !== undefined) {
-						if (autoPublish !== entry.isPublished()) {
-							entry.publish(editorCmp, fulfill, this);
-							return;
-						}
+				if (autoPublish !== undefined) {
+					if (autoPublish !== entry.isPublished()) {
+						return new Promise(function (fulfill, reject) {
+							entry.publish(editorCmp, fulfill, me);
+						});
 					}
+				}
 
-					//we have nested objects here. The entry contains a headline whose body, title, and tags
-					//have been updates. Our magic multi object setter won't find the nested object in the store
-					//so we set it back on the original record to trigger other instance of the entry to be updated.
-					//Not doing this reflects itself by the body of the topic not updating in the activity view
-					if (isEdit && record) {
-						record.afterEdit('headline');
-					}
+				//we have nested objects here. The entry contains a headline whose body, title, and tags
+				//have been updates. Our magic multi object setter won't find the nested object in the store
+				//so we set it back on the original record to trigger other instance of the entry to be updated.
+				//Not doing this reflects itself by the body of the topic not updating in the activity view
+				if (isEdit && record) {
+					record.afterEdit('headline');
+				}
 
-					fulfill(entry);
-				},
-				failure: reject
+				return entry;
+			})
+			.then(function (entry) {
+				//This is how the views are reading the display name... pre-set the Creator as your userObject.
+				if (isMe(entry.get('Creator'))) {
+					entry.set('Creator', $AppConfig.userObject);
+				}
+
+				me.applyTopicToStores(entry);
+				return entry;
 			});
-		}).then(function (entry) {
-			//This is how the views are reading the display name... pre-set the Creator as your userObject.
-			if (isMe(entry.get('Creator'))) {
-				entry.set('Creator', $AppConfig.userObject);
-			}
-
-			me.applyTopicToStores(entry);
-
-			return entry;
-		});
 	},
 
 

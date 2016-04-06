@@ -1932,7 +1932,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			part = {
 				MimeType: 'application/vnd.nextthought.contentfile',
 				filename: el && el.getAttribute && el.getAttribute('data-fileName'),
-				name: name
+				name: name,
+				file: this.AttachmentMap[name]
 			};
 		}
 		return part;
@@ -1946,15 +1947,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	 *
 	 */
 	getValue: function () {
-		if (this.hasFiles()) {
-			return this.getFormData();
-		}
-
-		return this.getJSONData();
-	},
-
-
-	getJSONData: function () {
 		return {
 			body: this.getBody(this.getBodyValue()),
 			sharingInfo: this.sharedList ? this.sharedList.getValue() : null,
