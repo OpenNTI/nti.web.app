@@ -746,16 +746,15 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 		var me = this,
 			gradeBook = me.get('GradeBook');
 
-		if (!me.getLink('AssignmentsByOutlineNode')) {
-			return Promise.resolve(NextThought.model.courses.AssignmentCollection.fromJson(
-				{},{},null, null, me.getLink('AssignmentHistory')));
-		}
-
 		me.__getAssignmentsPromise = Promise.all([
 			me.getWrapper()
 				.fail(function () { return {}; }),
-			me.__getAssignmentsByOutline(),
-			me.__getNonAssignmentsByOutline(),
+			me.__getAssignmentsByOutline().fail(() => {
+				return {};
+			}),
+			me.__getNonAssignmentsByOutline().fail(() => {
+				return {};
+			}),
 			me.__getAssignmentHistoryLink()
 		])
 			.then(function (results) {
