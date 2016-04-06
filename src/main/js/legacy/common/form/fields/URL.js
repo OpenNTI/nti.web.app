@@ -75,9 +75,15 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.URL', {
 
 
 	getValue: function () {
-		var input = this.getValidator();
+		let validator = this.getValidator();
+		let input = this.getInput();
+		let value = validator.value;
 
-		return input && input.value;
+		if (input.value === this.defaultValue) {
+			value = input.value;
+		}
+
+		return value;
 	},
 
 
