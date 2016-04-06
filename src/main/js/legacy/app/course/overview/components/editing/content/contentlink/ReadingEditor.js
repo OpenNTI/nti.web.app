@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../../../../../../util/Content');
-var TypesBase = require('./types/Base');
-var ModelRelatedWork = require('../../../../../../../model/RelatedWork');
+const Ext = require('extjs');
+const ContentUtils = require('../../../../../../../util/Content');
+
+require('./types/Base');
+require('../../../../../../../model/RelatedWork');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.ReadingEditor', {
@@ -86,6 +87,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var schema = this.callParent(arguments);
 
 		schema.unshift({type: 'hidden', name: 'href'});
+		schema.unshift({type: 'hidden', name: 'target'});
 		schema.unshift({type: 'hidden', name: 'type'});
 
 		return schema;
@@ -98,6 +100,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		if (!this.record && selectedItem) {
 			values.label = selectedItem.getAttribute('label');
 			values.href = selectedItem.getAttribute('ntiid');
+			values.target = values.href;
 		}
 
 		values.type = NextThought.model.RelatedWork.CONTENT_TYPE;

@@ -38,6 +38,11 @@
 		background: #ededed;
 		overflow-y: auto;
 		overflow-x: hidden;
+
+		&.full-screen {
+			max-height: 100vh;
+			max-width: 100vw;
+		}
 	}
 
 	.prompt-header {
@@ -60,6 +65,12 @@
 
 			.close {
 				@include flexBasis(auto);
+			}
+		}
+
+		&.close-disabled {
+			.close {
+				visibility: hidden;
 			}
 		}
 

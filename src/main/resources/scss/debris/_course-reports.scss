@@ -33,6 +33,7 @@
 			color: $primary-grey;
 
 			.thumbnail {
+				background-size: initial;
 				@include sprite-image($reports-image);
 				@include sprite-position($reports-image);
 			}

@@ -45,6 +45,7 @@ module.exports = exports = Ext.define('NextThought.common.StateStore', {
 
 	setLoading: function () {
 		this.loading = true;
+		this.fireEvent('loading');
 	},
 
 
@@ -66,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.common.StateStore', {
 
 		var me = this;
 
-		return new Promise(function (fulfill, reject) {
+		return new Promise(function (fulfill) {
 			me.on({
 				single: true,
 				'loaded': fulfill.bind(null, me)

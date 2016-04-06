@@ -45,10 +45,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.mon(this.scopeEl, 'click', this.toggleMenu.bind(this));
 		this.textEl.update(this.getDefaultValue());
-		
+
 		if (this.defaultValue) {
 			this.selected = this.defaultValue;
-			selection = this.el.down('.option[data-scope=' + this.defaultValue + ']');	
+			selection = this.el.down('.option[data-scope=' + this.defaultValue + ']');
 			this.selectOption(selection);
 		}
 
@@ -80,7 +80,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		if (newItem) {
-			Ext.fly(newItem).addCls('selected');	
+			Ext.fly(newItem).addCls('selected');
 		}
 	},
 
@@ -105,7 +105,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 
-	toggleMenu: function (e) {		
+	toggleMenu: function () {
 		this.menuContainer.toggleCls('open');
 	}
 });

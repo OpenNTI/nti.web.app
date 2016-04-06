@@ -78,14 +78,21 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		var fakeService = window.Service || ModelService.create({}),
 			links = handshake.Links;
 
-		if (fakeService.getLink(links, 'account.profile.needs.updated')) {
+		if (fakeService.getLinkFrom(links, 'account.profile.needs.updated')) {
 			this.actions['show-coppa-window'] = true;
-		} else if (fakeService.getLink(links, 'state-bounced-contact-email')) {
+		} else if (fakeService.getLinkFrom(links, 'state-bounced-contact-email')) {
 			this.actions['bounced-contact'] = true;
-		} else if (fakeService.getLink(links, 'state-bounced-email')) {
-			this.actions['bounced-email'];
-		} else if (fakeService.getLink('coppa.upgraded.rollbacked')) {
-			this.actions['confirm-birthday-coppa'];
+		} else if (fakeService.getLinkFrom(links, 'state-bounced-email')) {
+			this.actions['bounced-email'] = true;
+		} else if (fakeService.getLinkFrom('coppa.upgraded.rollbacked')) {
+			this.actions['confirm-birthday-coppa'] = true;
+		}
+
+		if (fakeService.getLinkFrom(links, 'SubmitRegistration')) {
+			this.actions['submit-registration'] = {
+				'submit-registration': fakeService.getLinkFrom(links, 'SubmitRegistration'),
+				'registration-rules': fakeService.getLinkFrom(links, 'RegistrationEnrollRules')
+			};
 		}
 	},
 
@@ -122,6 +129,10 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 		//NOTE we show the ToS last so it stacks on top. Need a better solution for this
 		if (this.__shouldShowContentFor('content.initial_tos_page')) {
 			this.AccountActions.showNewTermsOfService(user.getLink('content.initial_tos_page'));
+		}
+
+		if (this.actions['submit-registration']) {
+			this.AccountActions.showRegistrationForm(this.actions['submit-registration']);
 		}
 	},
 

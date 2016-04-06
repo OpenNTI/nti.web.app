@@ -1,7 +1,8 @@
 var Ext = require('extjs');
-var ComponentsCurrent = require('../components/Current');
-var CoursesStateStore = require('./StateStore');
-var ComponentsCollection = require('./components/Collection');
+
+require('../components/Current');
+require('./StateStore');
+require('./components/Collection');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.courses.Current', {
@@ -38,7 +39,14 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 			.then(this.showCurrentItems.bind(this));
 
 		//update the list every time you enroll or drop a course in a course
-		this.mon(this.CourseStore, 'enrolled-courses-set', this.showCurrentItems.bind(this));
+		this.mon(this.CourseStore, {
+			'loading': () => {
+				if (this.el) {
+					this.el.mask('Loading...');
+				}
+			},
+			'enrolled-courses-set': this.showCurrentItems.bind(this)
+		});
 	},
 
 	afterRender: function () {
@@ -96,6 +104,10 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Current',
 			this.showSeeAll();
 		} else {
 			this.hideSeeAll();
+		}
+
+		if (this.el) {
+			this.el.unmask();
 		}
 
 

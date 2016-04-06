@@ -1,7 +1,8 @@
-var Ext = require('extjs');
-var FieldsFilePicker = require('./FilePicker');
-var PromptActions = require('../../../app/prompt/Actions');
-var CroppingPrompt = require('../../../app/image/cropping/Prompt');
+const Ext = require('extjs');
+
+require('./FilePicker');
+require('../../../app/prompt/Actions');
+require('../../../app/image/cropping/Prompt');
 
 
 module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicker', {
@@ -170,6 +171,8 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 
 	onClearImage: function () {
 		delete this.defaultValue;
+		delete this.croppedImage;
+
 		this.clearInput();
 
 		this.showPreviewFromSchema();

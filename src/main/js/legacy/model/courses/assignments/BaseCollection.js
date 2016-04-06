@@ -1,8 +1,9 @@
 var Ext = require('extjs');
-var ModelBase = require('../../Base');
-var MixinsDurationCache = require('../../../mixins/DurationCache');
-var CoursewareUsersCourseAssignmentHistory = require('../../courseware/UsersCourseAssignmentHistory');
-var CoursewareUsersCourseAssignmentHistoryItem = require('../../courseware/UsersCourseAssignmentHistoryItem');
+
+require('../../Base');
+require('../../../mixins/DurationCache');
+require('../../courseware/UsersCourseAssignmentHistory');
+require('../../courseware/UsersCourseAssignmentHistoryItem');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.assignments.BaseCollection', {
@@ -90,7 +91,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 		},
 
 
-		fromJson: function (assignments, nonAssignments, gradeBook, historyURL) {
+		fromJson: function (assignments, nonAssignments, gradeBook, historyURL, isAdmin, bundle) {
 			if (!assignments) { return null; }
 
 			var itemData = this.parseData(assignments, nonAssignments);
@@ -106,7 +107,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 				AssignmentsRaw: assignments,
 				NonAssignmentsRaw: nonAssignments,
 				GradeBook: gradeBook,
-				HistoryURL: historyURL
+				HistoryURL: historyURL,
+				bundle: bundle
 			});
 		}
 	},
@@ -121,7 +123,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 		{name: 'AssignmentToOutlineNodes', type: 'auto'},
 		{name: 'AssignmentsLink', type: 'string'},
 		{name: 'AssignmentsRaw', type: 'auto'},
-		{name: 'NonAssignmentsRaw', type: 'auto'}
+		{name: 'NonAssignmentsRaw', type: 'auto'},
+		{name: 'bundle', type: 'auto'}
 	],
 
 	constructor: function () {
@@ -158,8 +161,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 	updateAssignments: function () {
 		var me = this,
 			key = me.assignmentUpdateKey,
-			load, link = me.get('AssignmentsLink'),
-			cache;
+			load, link = me.get('AssignmentsLink');
 
 		load = me.getFromCache(key);
 
@@ -224,13 +226,19 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 	},
 
 	fetchAssignment: function (id) {
-		var assignment = this.getItem(id);
+		var assignment = this.getItem(id),
+			assignmentId = assignment && assignment.getId();
 
-		if (!assignment) {
+		if (!assignmentId) {
 			return Promise.reject('No assignment found');
 		}
 
-		return assignment.updateFromServer();
+		return Service.getObjectWithinBundle(assignmentId, this.get('bundle'))
+			.then(function (response) {
+				assignment.syncWith(response);
+
+				return assignment;
+			});
 	},
 
 	getCount: function () {
@@ -263,9 +271,9 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Bas
 	},
 
 	//override these
-	getGradeBookEntry: function (assignment) { return Promise.resolve(null); },
+	getGradeBookEntry: function (/*assignment*/) { return Promise.resolve(null); },
 
-	getGradeFor: function (assignment, user) { return Promise.resolve(null); },
+	getGradeFor: function (/*assignment, user*/) { return Promise.resolve(null); },
 
 	/**
 	 * Get the no submit assignment that has a title of Final Grade if there is one

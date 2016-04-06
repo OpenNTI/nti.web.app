@@ -1,21 +1,22 @@
-var Ext = require('extjs');
-var ComponentsBoundCollection = require('../../../../../../../common/components/BoundCollection');
-var DndOrderingContainer = require('../../../../../../../mixins/dnd/OrderingContainer');
-var DndOrderingItem = require('../../../../../../../mixins/dnd/OrderingItem');
-var MixinsTransition = require('../../../../../../../mixins/Transition');
-var AppMoveInfo = require('../../../../../../../model/app/MoveInfo');
-var ControlsAdd = require('../../controls/Add');
-var ControlsEdit = require('../../controls/Edit');
-var OverviewgroupPreview = require('./Preview');
-var ContentlinkListItem = require('../contentlink/ListItem');
-var DiscussionListItem = require('../discussion/ListItem');
-var PollListItem = require('../poll/ListItem');
-var QuestionsetListItem = require('../questionset/ListItem');
-var SurveyListItem = require('../survey/ListItem');
-var TimelineListItem = require('../timeline/ListItem');
-var VideoListItem = require('../video/ListItem');
-var VideorollListItem = require('../videoroll/ListItem');
-var WindowsActions = require('../../../../../../windows/Actions');
+const Ext = require('extjs');
+
+require('../../../../../../../common/components/BoundCollection');
+require('../../../../../../../mixins/dnd/OrderingContainer');
+require('../../../../../../../mixins/dnd/OrderingItem');
+require('../../../../../../../mixins/Transition');
+require('../../../../../../../model/app/MoveInfo');
+require('../../controls/Add');
+require('../../controls/Edit');
+require('./Preview');
+require('../contentlink/ListItem');
+require('../discussion/ListItem');
+require('../poll/ListItem');
+require('../questionset/ListItem');
+require('../survey/ListItem');
+require('../timeline/ListItem');
+require('../video/ListItem');
+require('../videoroll/ListItem');
+require('../../../../../../windows/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.overviewgroup.ListItem', {
@@ -85,6 +86,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
 	afterRender: function () {
 		this.callParent(arguments);
 
@@ -92,6 +94,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			this.setActiveGroup(this.activeGroup);
 		}
 	},
+
 
 	setActiveGroup: function (group) {
 		var color = group && group.get('accentColor');
@@ -103,6 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
 	getOrderingItems: function () {
 		var body = this.getBodyContainer(),
 			items = body && body.items && body.items.items;
@@ -110,15 +114,18 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return items || [];
 	},
 
+
 	getDropzoneTarget: function () {
 		var body = this.getBodyContainer();
 
 		return body && body.el && body.el.dom;
 	},
 
+
 	getDragHandle: function () {
 		return this.el && this.el.dom && this.el.dom.querySelector('.overview-group-header');
 	},
+
 
 	cacheHeight: function () {
 		var el = this.el && this.el.dom,
@@ -129,6 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
 	uncacheHeight: function () {
 		var el = this.el && this.el.dom;
 
@@ -137,8 +145,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
 	beforeSetCollection: function (collection) {
+		this.reenableDragging = this.Draggable.isEnabled;
+
 		this.disableOrderingContainer();
+		this.disableDragging();
 
 		this.activeGroup = collection;
 
@@ -148,10 +160,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
 	afterSetCollection: function () {
 		this.enableOrderingContainer();
 		this.uncacheHeight();
+
+		if (this.reenableDragging) {
+			delete this.reenableDragging;
+			this.enableDragging();
+		}
 	},
+
 
 	buildHeader: function (collection) {
 
@@ -173,6 +192,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		};
 	},
 
+
 	buildFooter: function () {
 		return {
 			xtype: 'container',
@@ -191,6 +211,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			]
 		};
 	},
+
 
 	getCmpForRecord: function (record, transition, initialState) {
 		var mimeType = record.mimeType,
@@ -220,6 +241,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 
 	},
+
 
 	onCardDrop: function (card, newIndex, moveInfo) {
 		this.movedCard = card;

@@ -1,9 +1,10 @@
-var Ext = require('extjs');
-var FormForm = require('../../../../../common/form/Form');
-var PromptActions = require('../../../../prompt/Actions');
-var EditingActions = require('./Actions');
-var ControlsDelete = require('./controls/Delete');
-var AuditlogIndex = require('./auditlog/Index');
+const Ext = require('extjs');
+
+require('../../../../../common/form/Form');
+require('../../../../prompt/Actions');
+require('./Actions');
+require('./controls/Delete');
+require('./auditlog/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.Editor', {
@@ -110,6 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.showEditor();
 	},
 
+
 	showEditor: function () {
 		this.parentSelection = this.addParentSelection(this.record, this.parentRecord, this.rootRecord, this.onFormChange.bind(this));
 
@@ -124,9 +126,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
 	getSaveText: function () {
 		return this.saveText;
 	},
+
 
 	getHeaderTitle: function () {
 		var types = this.self.getTypes(),
@@ -135,19 +139,47 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return type ? type.title : this.headerTitle;
 	},
 
+
 	getFormSchema: function () {
 		return this.FORM_SCHEMA;
 	},
 
+
+	__getSchemaFromParent: function() {
+		let mimeTypes = this.self.getHandledMimeTypes() || [];
+
+		if (!this.parentRecord || !this.parentRecord.getLink('schema')) {
+			return Promise.reject();
+		}
+
+		return this.EditingActions.getSchema(this.parentRecord)
+			.then((schema) => {
+				let accepts = (schema && schema.Accepts) || {};
+
+				let typeSchema = mimeTypes.reduce((acc, type) => {
+					if (acc) {
+						console.error('More than one valid type');
+					} else {
+						acc = accepts[type];
+					}
+
+					return acc;
+				}, null);
+
+				return typeSchema ?  {Fields: typeSchema} : {};
+			});
+	},
+
+
 	getSchema: function () {
 		var me = this;
 
-		if (!this.record || !this.record.getLink('schema')) {
-			return Promise.resolve();
-		}
-
 		if (this.schema) {
 			return Promise.resolve(this.schema);
+		}
+
+		if (!this.record || !this.record.getLink('schema')) {
+			return this.__getSchemaFromParent();
 		}
 
 		return this.EditingActions.getSchema(this.record)
@@ -157,17 +189,20 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			});
 	},
 
+
 	applySchema: function (schema) {
 		var defaultSchema = this.getFormSchema();
 
 		this.schema = schema;
-		// TODO: Apply schema data from the server 
-		
+		// TODO: Apply schema data from the server
+
 		return defaultSchema;
 	},
 
+
 	addPreview: function () {},
 	addParentSelection: function (record, parentRecord, rootRecord, onChange) {},
+
 
 	addFormCmp: function () {
 		var values = this.getDefaultValues();
@@ -184,6 +219,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
+
 	addDeleteButton: function () {
 		if (this.record.getLink('edit')) {
 			return this.add({
@@ -196,6 +232,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
 	addAuditLog: function () {
 		return this.add({
 			xtype: 'overview-editing-audit-log',
@@ -203,11 +240,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		});
 	},
 
+
 	onDelete: function () {
 		if (this.el) {
 			this.el.mask('Deleting...');
 		}
 	},
+
 
 	afterDelete: function (success) {
 		if (this.el) {
@@ -221,7 +260,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
 	getDefaultValues: function () {},
+
 
 	getFormAction: function () {
 		if (this.record) {
@@ -232,13 +273,16 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return null;
 	},
 
+
 	//TODO: once the parent selection stuff is up, we'll need to
 	//figure out how to get the href for creating, or moving to a new spot
 	updateFormAction: function () {},
 
+
 	getFormMethod: function () {
 		return this.record ? 'PUT' : 'POST';
 	},
+
 
 	isValid: function () {
 		var valid = true;
@@ -256,9 +300,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return valid;
 	},
 
+
 	isEmpty: function () {
 		return this.formCmp && this.formCmp.isEmpty();
 	},
+
 
 	onFormChange: function (values) {
 		if (!this.isEmpty()) {
@@ -272,11 +318,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
 	enableSubmission: function () {
 		if (this.enableSave) {
 			this.enableSave();
 		}
 	},
+
 
 	disableSubmission: function () {
 		if (this.disableSave) {
@@ -284,10 +332,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 	},
 
+
 	allowCancel: function () {
 		//TODO: fill this out
 		return Promise.resolve();
 	},
+
 
 	getFormErrors: function () {
 		var errors = this.formCmp && this.formCmp.getErrors(),
@@ -322,9 +372,11 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return msgs;
 	},
 
+
 	getErrors: function () {
 		return this.getFormErrors();
 	},
+
 
 	maybeClearErrors: function () {
 		var form = this.formCmp;
@@ -355,6 +407,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}, []);
 	},
 
+
 	clearErrors: function () {
 		var form = this.formCmp;
 
@@ -368,6 +421,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			}
 		}, []);
 	},
+
 
 	setErrorOn: function (field, msg) {
 		var form = this.formCmp,
@@ -390,6 +444,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		this.activeErrors = activeErrors;
 	},
 
+
 	doValidation: function () {
 		var me = this,
 			form = me.formCmp,
@@ -410,6 +465,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return errors.length > 0 ? Promise.reject() : Promise.resolve();
 	},
 
+
 	onSaveFailure: function (reason) {
 		if (!reason || typeof reason === 'string') { return this.setErrorOn(null, this.UNKNOWN_ERROR); }
 
@@ -429,6 +485,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		return this.setErrorOn(field, msg);
 	},
 
+
 	onSave: function () {
 		var me = this,
 			parentSelection = me.parentSelection,
@@ -446,6 +503,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				return Promise.reject(reason);
 			});
 	},
+
 
 	onFormSubmit: function () {
 		if (this.doSave) {

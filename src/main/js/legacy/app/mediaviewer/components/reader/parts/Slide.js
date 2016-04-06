@@ -1,9 +1,13 @@
-var Ext = require('extjs');
-var SharingUtils = require('../../../../../util/Sharing');
-var MixinsAnnotationsMixin = require('../mixins/AnnotationsMixin');
-var UserdataActions = require('../../../../userdata/Actions');
-var MediaviewerStateStore = require('../../../StateStore');
+const Ext = require('extjs');
+const SharingUtils = require('legacy/util/Sharing');
+const UserDataActions = require('legacy/app/userdata/Actions');
+const MediaViewerStateStore = require('legacy/app/mediaviewer/StateStore');
+require('../mixins/AnnotationsMixin');
 
+const lazy = require('legacy/util/lazy-require')
+				.get('Anchors', () => require('legacy/util/Anchors'));
+
+const {wait} = require('legacy/util/Promise');
 
 module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.reader.parts.Slide', {
 	extend: 'Ext.Component',
@@ -17,8 +21,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		{cls: 'image-wrap', cn: [
 			{tag: 'img', cls: 'slide'},
 			{tag: 'span', cls: 'add-note-here', cn: {cls: 'note-here-control-box hidden', tag: 'span'}}
-			//			{cls: 'left', cn:[{cls: 'prev'}]},
-	  //			{cls: 'right',cn:[{cls: 'next'}]}
+			//		{cls: 'left', cn:[{cls: 'prev'}]},
+			//	{cls: 'right',cn:[{cls: 'next'}]}
 		]}
 	]),
 
@@ -42,8 +46,8 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 
 		this.mixins.transcriptItem.constructor.apply(this, arguments);
 		this.enableBubble(['register-records', 'unregister-records']);
-		this.UserDataActions = NextThought.app.userdata.Actions.create();
-		this.MediaViewerStore = NextThought.app.mediaviewer.StateStore.getInstance();
+		this.UserDataActions = UserDataActions.create();
+		this.MediaViewerStore = MediaViewerStateStore.getInstance();
 	},
 
 	containerIdForData: function () {
@@ -152,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 	},
 
 	getAnchorResolver: function () {
-		return Anchors;
+		return lazy.Anchors;
 	},
 
 	createDomRange: function () {
@@ -170,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return start <= time && time <= end;
 	},
 
-	getElementAtTime: function (time) {
+	getElementAtTime: function (/*time*/) {
 		return this.slideImage;
 	},
 
@@ -187,11 +191,11 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 		return result;
 	},
 
-	domRangeForRecord: function (rec) {
+	domRangeForRecord: function (/*rec*/) {
 		return this.createDomRange();
 	},
 
-	getDomContextForRecord: function (r) {
+	getDomContextForRecord: function (/*r*/) {
 		return Ext.clone(this.el.down('img').dom);
 	}
 });

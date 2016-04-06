@@ -1,5 +1,5 @@
 const Ext = require('extjs');
-const PlaylistItem = require('legacy/model/transcript/TranscriptItem');
+const PlaylistItem = require('legacy/model/PlaylistItem');
 const MediaViewerActions = require('legacy/app/mediaviewer/Actions');
 const AnchorResolver = require('legacy/app/mediaviewer/components/reader/AnchorResolver');
 const PathActions = require('legacy/app/navigation/path/Actions');

@@ -1,8 +1,9 @@
-var Ext = require('extjs');
-var ParseUtils = require('../util/Parsing');
-var ModelBase = require('./Base');
-var MixinsGroupLike = require('../mixins/GroupLike');
-var MixinsAvatar = require('../mixins/Avatar');
+const Ext = require('extjs');
+const ParseUtils = require('../util/Parsing');
+
+require('./Base');
+require('../mixins/GroupLike');
+require('../mixins/Avatar');
 
 
 /**
@@ -55,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 	getProfileUrl: function () {
 		var id = this.get('Username');
 		if (id && this.getLink('Activity')) {
-			return '/community/' + ParseUtils.encodeForURI(id);
+			return '/community/' + encodeURIComponent(id);
 		}
 
 		return null;

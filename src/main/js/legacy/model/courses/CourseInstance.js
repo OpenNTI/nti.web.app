@@ -743,19 +743,20 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 	getAssignments: function () {
 		if (this.__getAssignmentsPromise) { return this.__getAssignmentsPromise; }
 
-		var gradeBook = this.get('GradeBook');
+		var me = this,
+			gradeBook = me.get('GradeBook');
 
-		if (!this.getLink('AssignmentsByOutlineNode')) {
+		if (!me.getLink('AssignmentsByOutlineNode')) {
 			return Promise.resolve(NextThought.model.courses.AssignmentCollection.fromJson(
-				{},{},null, null, this.getLink('AssignmentHistory')));
+				{},{},null, null, me.getLink('AssignmentHistory')));
 		}
 
-		this.__getAssignmentsPromise = Promise.all([
-			this.getWrapper()
+		me.__getAssignmentsPromise = Promise.all([
+			me.getWrapper()
 				.fail(function () { return {}; }),
-			this.__getAssignmentsByOutline(),
-			this.__getNonAssignmentsByOutline(),
-			this.__getAssignmentHistoryLink()
+			me.__getAssignmentsByOutline(),
+			me.__getNonAssignmentsByOutline(),
+			me.__getAssignmentHistoryLink()
 		])
 			.then(function (results) {
 				var wrapper = results[0],
@@ -763,10 +764,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 					nonAssignments = results[2],
 					historyURL = results[3];
 
-				return NextThought.model.courses.AssignmentCollection.fromJson(assignments, nonAssignments, gradeBook, historyURL, wrapper.isAdministrative);
+				return NextThought.model.courses.AssignmentCollection.fromJson(assignments, nonAssignments, gradeBook, historyURL, wrapper.isAdministrative, me);
 			});
 
-		return this.__getAssignmentsPromise;
+		return me.__getAssignmentsPromise;
 	},
 
 	getAssignmentSavePoints: function () {

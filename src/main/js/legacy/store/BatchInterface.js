@@ -191,7 +191,9 @@ module.exports = exports = Ext.define('NextThought.store.BatchInterface', {
 		params.batchAfter = Math.floor(this.lastLoaded.getTime() / 1000);
 
 		return this.__loadBatch(url, params)
-			.then(function (batch) {
+			.then((batch) =>{
+				this.lastLoaded = new Date();
+
 				return batch.Items;
 			});
 	}

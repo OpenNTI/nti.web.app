@@ -1,10 +1,11 @@
-var Ext = require('extjs');
-var ContentEditor = require('../../Editor');
-var ModelRelatedWork = require('../../../../../../../../model/RelatedWork');
-var EditingActions = require('../../../Actions');
-var ContentParentSelection = require('../../ParentSelection');
-var ControlsAdvanced = require('../../../controls/Advanced');
-var SettingsWindow = require('../../../settings/Window');
+const Ext = require('extjs');
+
+require('../../Editor');
+require('../../../../../../../../model/RelatedWork');
+require('../../../Actions');
+require('../../ParentSelection');
+require('../../../controls/Advanced');
+require('../../../settings/Window');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.contentlink.types.Base', {
