@@ -1957,41 +1957,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
-	/**
-	 * build a FormData object.
-	 * To handle file attachment in the editors, the multipart form will follow this pattern:
-	 *
-	 * '__json__' will contain the regular json object with the values of the record.
-	 *  Append files object for the other parts.
-	 */
-	getFormData: function () {
-		var dom = this.el.dom,
-			form = dom && dom.querySelector('form'),
-			json = this.getJSONData(),
-			mimeType = this.getMimeType();
-
-		if (!form) { return; }
-
-		let formData = new FormData(form);
-
-		if (mimeType) {
-			json.MimeType = mimeType;
-		}
-
-		// NOTE: To support submitting a multi-part form,
-		// the regular content of a note will be set in a json field.
-		formData.append('__json__', JSON.stringify(json));
-
-		// Append the files uploaded to the formData
-		for (let key in this.AttachmentMap) {
-			if (this.AttachmentMap.hasOwnProperty(key)) {
-				formData.append(key, this.AttachmentMap[key], this.AttachmentMap[key].name);
-			}
-		}
-		return formData;
-	},
-
-
 	// TO BE overriden but subclasses
 	getMimeType: function () {},
 
