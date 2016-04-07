@@ -16,6 +16,8 @@ let prompt = module.exports = exports = Ext.define('NextThought.app.account.regi
 	initComponent () {
 		this.callParent(arguments);
 
+		let src = this.Prompt.data.link;
+
 		this.Prompt.Header.disableClose();
 		this.Prompt.Header.setTitle(this.title);
 
@@ -26,7 +28,7 @@ let prompt = module.exports = exports = Ext.define('NextThought.app.account.regi
 			xtype: 'box',
 			autoEl: {
 				tag: 'iframe',
-				src: '/mobile/onboarding/i2-survey'
+				src: src
 			}
 		});
 

@@ -360,11 +360,11 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 	},
 
 
-	showRegistrationForm (links) {
+	showRegistrationForm (link) {
 		let PromptActions = NextThought.app.prompt.Actions.create();
 		let LibraryActions = NextThought.app.library.Actions.create();
 
-		PromptActions.prompt('account-registration', links)
+		PromptActions.prompt('account-registration', {link: link})
 			.then(() => {
 				LibraryActions.reload();
 			});

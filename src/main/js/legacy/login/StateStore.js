@@ -88,11 +88,8 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 			this.actions['confirm-birthday-coppa'] = true;
 		}
 
-		if (fakeService.getLinkFrom(links, 'SubmitRegistration')) {
-			this.actions['submit-registration'] = {
-				'submit-registration': fakeService.getLinkFrom(links, 'SubmitRegistration'),
-				'registration-rules': fakeService.getLinkFrom(links, 'RegistrationEnrollRules')
-			};
+		if (fakeService.getLinkFrom(links, 'RegistrationSurvey')) {
+			this.actions['submit-registration'] = fakeService.getLinkFrom(links, 'RegistrationSurvey');
 		}
 	},
 
