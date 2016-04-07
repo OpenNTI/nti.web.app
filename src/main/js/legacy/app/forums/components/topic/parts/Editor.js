@@ -212,42 +212,25 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			return;
 		}
 
-		if (v instanceof FormData) {
-			if (me.el) {
-				me.el.mask('Saving...');
-			}
-
-			return me.ForumActions.saveTopicWithFormData(me, me.record, me.forum, v)
-				.then(function (record) {
-					unmask();
-					me.fireEvent('after-save', record);
-				})
-				.fail( function (reason) {
-					unmask();
-					me.onHandleSaveFailure(reason);
-				});
+		l = v.body.length;
+		if (l > 0 && v.body[l - 1].replace) {
+			v.body[l - 1] = v.body[l - 1].replace(trimEndRe, '');
 		}
-		else {
-			l = v.body.length;
-			if (l > 0 && v.body[l - 1].replace) {
-				v.body[l - 1] = v.body[l - 1].replace(trimEndRe, '');
-			}
 
-			if (me.el) {
-				me.el.mask('Saving...');
-			}
-
-			me.ForumActions.saveTopic(me, me.record, me.forum, v.title, v.tags, v.body, v.publish)
-				.then(function (record) {
-					unmask();
-
-					me.fireEvent('after-save', record);
-				})
-				.fail(function (reason) {
-					unmask();
-					me.onHandleSaveFailure(reason);
-				});
+		if (me.el) {
+			me.el.mask('Saving...');
 		}
+
+		me.ForumActions.saveTopic(me, me.record, me.forum, v.title, v.tags, v.body, v.publish)
+			.then(function (record) {
+				unmask();
+
+				me.fireEvent('after-save', record);
+			})
+			.fail(function (reason) {
+				unmask();
+				me.onHandleSaveFailure(reason);
+			});
 	},
 
 

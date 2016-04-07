@@ -241,6 +241,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	])),
 
 	AttachmentMap: {},
+	ObjectURLMap: {},
 
 	onClassExtended: function (cls, data) {
 		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
@@ -646,7 +647,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		let content = this.el.down('.content'),
 			tpl = this.attachmentPreviewTpl,
 			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(file.size, 1),
-			href = this.createObjectURL(file),
+			href = this.createObjectURL(file, name),
 			placeholder = Ext.DomHelper.createTemplate({html: this.defaultValue});
 
 		tpl.append(content, {size: size, url: href, filename: file.name, name: name});
@@ -675,25 +676,40 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
-	createObjectURL: function (file) {
+	createObjectURL: function (file, name) {
 		var url = Globals.getURLObject();
 
-		this.cleanUpObjectURL();
+		this.cleanUpObjectURL(name);
 
 		if (!url) { return null; }
 
-		this.objectURL = url.createObjectURL(file);
+		this.ObjectURLMap[name] = url.createObjectURL(file);
 
-		return this.objectURL;
+		return this.ObjectURLMap[name];
 	},
 
 
-	cleanUpObjectURL: function () {
-		var url = Globals.getURLObject();
+	cleanUpObjectURL: function (name) {
+		var url = Globals.getURLObject(),
+			objectURL;
 
-		if (this.objectURL && url) {
-			url.revokeObjectURL(this.objectURL);
-			delete this.objectURL;
+		if (name) {
+			objectURL = this.ObjectURLMap[name];
+			if (objectURL && url) {
+				url.revokeObjectURL(objectURL);
+				delete this.ObjectURLMap[name];
+			}
+		}
+		else {
+			for (let key in this.ObjectURLMap) {
+				if (this.ObjectURLMap.hasOwnProperty(key)) {
+					objectURL = this.ObjectURLMap[key];
+					if (objectURL && url) {
+						url.revokeObjectURL(objectURL);
+					}
+					delete this.ObjectURLMap[key];
+				}
+			}
 		}
 	},
 
@@ -1214,13 +1230,19 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	handleAttachmentPartAction: function (parent, event) {
 		var e = event.getTarget(),
 			action = e && e.getAttribute && e.getAttribute('data-action'),
-			name = parent && parent.getAttribute && parent.getAttribute('name');
+			name = parent && parent.getAttribute && parent.getAttribute('name'),
+			dom = this.el && this.el.dom,
+			input = dom && dom.querySelector('.control.upload input');
 
 		event.stopEvent();
 
 		if (action === 'delete' && name) {
 			delete this.AttachmentMap[name];
 			parent.remove();
+			this.cleanUpObjectURL(name);
+			if (input) {
+				input.value = null;
+			}
 		}
 	},
 
