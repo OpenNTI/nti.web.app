@@ -228,7 +228,9 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 					return;
 				}
 
-				body.beforeRouteChange();
+				if (body.isRouteDifferent(r)) {
+					body.beforeRouteChange();
+				}
 
 				body.handleRoute(r, p)
 					.then(fulfill, reject);
