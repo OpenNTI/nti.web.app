@@ -67,7 +67,7 @@
     "sass-loader": "^3.0.0",
     "script-loader": "^0.6.0",
     "source-map-loader": "^0.1.5",
-    "spritesmith-cli": "^1.1.1",
+    "spritesmith-cli": "bevacqua/spritesmith-cli#2eed040ee9d",
     "stats-webpack-plugin": "^0.3.1",
     "style-loader": "^0.13.0",
     "url": "^0.11.0",
