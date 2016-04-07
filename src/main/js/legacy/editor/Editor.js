@@ -648,9 +648,22 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			tpl = this.attachmentPreviewTpl,
 			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(file.size, 1),
 			href = this.createObjectURL(file, name),
-			placeholder = Ext.DomHelper.createTemplate({html: this.defaultValue});
+			placeholder = Ext.DomHelper.createTemplate({html: this.defaultValue}),
+			data = {size: size, url: href, filename: file.name, name: name},
+			focusNode, isSelectionInContent;
 
-		tpl.append(content, {size: size, url: href, filename: file.name, name: name});
+		//Need to see if we have a selection and it is in our content element
+		if (document && document.getSelection) {
+			focusNode = document.getSelection().focusNode;
+			focusNode = focusNode ? Ext.fly(focusNode) : null;
+			isSelectionInContent = focusNode && (focusNode.is('.content') || focusNode.parent('.content', true));
+		}
+
+		if (focusNode && isSelectionInContent) {
+			this.insertPartAtSelection(tpl.apply(data));
+		} else {
+			tpl.append(content, data);
+		}
 
 		// Add a placeholder to allow adding text.
 		placeholder.append(content);
