@@ -193,7 +193,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 			return Promise.reject();
 		})).then(me.__handleObjectRoute.bind(me))
 			.fail(function () {
-				me.replaceRootState('', '/');
+				me.replaceRootRoute('', '/');
 			});
 	},
 
