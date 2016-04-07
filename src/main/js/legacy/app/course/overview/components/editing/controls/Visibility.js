@@ -44,9 +44,9 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		var selection;
 
 		this.mon(this.scopeEl, 'click', this.toggleMenu.bind(this));
-		this.textEl.update(this.getDefaultValue());
 
 		if (this.defaultValue) {
+			this.textEl.update(this.getDefaultValue());
 			this.selected = this.defaultValue;
 			selection = this.el.down('.option[data-scope=' + this.defaultValue + ']');
 			this.selectOption(selection);
