@@ -2,12 +2,12 @@
 var Ext = require('extjs');
 Ext.Loader.setConfig({enabled: false});
 
-require('legacy/util/Globals');
-require('legacy/util/Localization');
-require('legacy/overrides');
-require('legacy/controller/Application');
+// require('legacy/util/Globals');
+// require('legacy/util/Localization');
+// require('legacy/overrides');
+// require('legacy/controller/Application');
 
-describe('All Classes Exist', function () {
+xdescribe('All Classes Exist', function () {
 	var bootstrap = {
 		'NextThought.app.Body': [],
 		'NextThought.app.Index': [],

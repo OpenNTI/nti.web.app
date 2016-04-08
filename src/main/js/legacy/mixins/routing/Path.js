@@ -172,9 +172,12 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 			object.parts = parts.slice(-2);
 
 			parts = parts.slice(0, -2);
+		//no object part
+		} else {
+			object = null;
 		}
 
-		if (object.parts) {
+		if (object && object.parts) {
 			object.path = object.parts.join('/');
 		}
 
@@ -182,8 +185,9 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 			route: {
 				path: parts.join('/'),
 				parts: parts,
-				search: urlParts.search,
-				hash: urlParts.hash
+				query: urlParts.query,
+				hash: urlParts.hash,
+				params: {}
 			},
 			object: object
 		};
@@ -196,7 +200,106 @@ module.exports = exports = Ext.define('NextThought.mixins.routing.Path', {
 	 * @param {Object} precache a map of keys to precached objects
 	 * @return {Promise} fulfills with the return value of the handler
 	 */
-	handleRoute: function (path, precache) {
+	handleRoute (path, precache) {
+		this.beforeRoute();
+
+		let routeParts = this.getRouteParts(path);
+		let route = routeParts.route;
+		let object = routeParts.object;
+		let sub = this.__routeMap;
+		let varKey = this.VARIABLE_KEY;
+		let currentRoute = '';
+		let subRoute = '';
+		let key = '';
+		let i = 0;
+
+		precache = precache || {};
+
+		//for each part in the url
+		for (i = 0; i < route.parts.length; i++) {
+			key = route.parts[i];
+
+			if (key === '') { key = '/'; }
+
+			//if the sub route has a key use that sub route
+			if (sub[key]) {
+				sub = sub[key];
+			//else if the sub route has a variable sub route and the part is not empty
+			//add the part to the params and use the sub route
+			} else if (sub[varKey] && route.parts[i]) {
+				route.params[sub[varKey].varName] = route.parts[i];
+				sub = sub[varKey];
+			//otherwise stop looking at the parts
+			} else {
+				break;
+			}
+
+			currentRoute = currentRoute + '/' + key;
+		}
+
+		subRoute = route.parts.slice(i).join('/');
+
+		if (object) {
+			subRoute += '/' + object.parts.join('/');
+		}
+
+		if (route.query) {
+			subRoute += '?' + route.query;
+		}
+
+		if (route.hash) {
+			subRoute += '#' + route.hash;
+		}
+
+		this.currentFullRoute = path;
+		this.currentRoute = currentRoute;
+
+		let val = null;
+
+		//if the sub route has a handler call it
+		if (sub.handler) {
+			val = sub.handler.call(null, {
+				path: '/' + route.path,
+				params: route.params,
+				hash: route.hash,
+				queryParams: Ext.Object.fromQueryString(route.query || ''),
+				precache: precache,
+				object: {
+					id: (object && object.id) || null,
+					mimeType: (object && object.mimeType) || null
+				}
+			}, '/' + subRoute);
+		//if there is no handler but we have a default handler call that
+		} else if (this.defaultRouteHandler) {
+			val = this.defaultRouteHandler.call(null, {
+				path: '/' + route.path,
+				precache: precache
+			});
+		} else if (this.defaultRoutePath) {
+			val = this.handleRoute(this.defaultRoutePath, precache);
+		} else {
+			console.warn('No Handler for route', route);
+		}
+
+		if (!(val instanceof Promise)) {
+			val = Promise.resolve(val);
+		}
+
+		val
+			.then(this.afterRoute.bind(this, path))
+			.then(this.onRouteActivate.bind(this));
+
+		return val;
+	},
+
+
+	/**
+	 * Given a route call a handler if we have one for it
+	 * @param  {String} path the route to handle
+	 * @param {Object} precache a map of keys to precached objects
+	 * @return {Promise} fulfills with the return value of the handler
+	 */
+	xhandleRoute: function (path, precache) {
 		path = this.trimRoute(path);
 
 		this.beforeRoute();

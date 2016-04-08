@@ -7,7 +7,11 @@ module.exports = function (config) {
 	const webpack = baseConfig.webpack;
 	const externals = webpack.externals || [];
 
-	Object.assign(webpack, {externals});
+	// Object.assign(webpack, {externals});
+
+	Object.assign(webpack, {externals, devtool: 'source-map'});
+	webpack.module.preLoaders = [];
+
 
 	webpack.plugins.push(Progress.getPlugin());
 
