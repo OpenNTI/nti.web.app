@@ -337,6 +337,8 @@
 
 			color: $primary-grey;
 			@include note-body;
+			@include attachment();
+
 		}
 
 

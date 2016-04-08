@@ -33,10 +33,10 @@ module.exports = exports = Ext.define('NextThought.model.Note', {
 
 	fields: [
 		{ name: 'ReferencedByCount', type: 'int'},
-		{ name: 'inReplyTo', type: 'string' },
+		{ name: 'inReplyTo', type: 'string', defaultValue: null},
 		{ name: 'references', type: 'auto', defaultValue: [] },
 		{ name: 'AutoTags', type: 'Auto'},
-		{ name: 'tags', type: 'Auto'},
+		{ name: 'tags', type: 'auto', defaultValue: []},
 		{ name: 'applicableRange', type: 'ContentRangeDescription'},
 		{ name: 'body', type: 'auto' },
 		{ name: 'title', type: 'auto' },

@@ -222,6 +222,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 				floating: true,
 				renderTo: targetEl,
 				enableShareControls: true,
+				enableFileUpload: true,
 				enableTitle: true,
 				preventBringToFront: true,
 				listeners: {

@@ -738,17 +738,18 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 			}
 		}
 
-		return new Promise(function (fulfill, reject) {
-			noteRecord.getProxy().on('exception', function (proxy, response) {
-				reject({proxy: proxy, repsonse: response});
-			}, null, {single: true});
+		return noteRecord.saveData({url: url})
+					.then(function (response) {
+						var rec = ParseUtils.parseItems(response)[0];
+						me.incomingCreatedChange({}, rec, {});
+						return rec;
+					})
+					.catch(function (err) {
+						console.error('Something went terribly wrong...', err.stack || err.message);
+						return Promise.reject(err);
+					});
 
-			if (url) {
-				noteRecord.save({url: url, callback: me.getSaveCallback(fulfill, reject)});
-			} else {
-				noteRecord.save({callback: me.getSaveCallback(fulfill, reject)});
-			}
-		});
+
 	},
 
 	saveNewNote: function (title, body, range, container, shareWith, style, callback) {
