@@ -2815,6 +2815,7 @@
 
 			& > input[type=checkbox] {
 				margin-left: 15px;
+				pointer-events: none;
 			}
 		}
 
