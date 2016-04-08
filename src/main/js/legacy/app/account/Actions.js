@@ -14,6 +14,7 @@ require('./coppa/Window');
 require('./coppa/upgraded/Window');
 require('./recovery/Window');
 require('./registration/Prompt');
+require('./emailverify/Actions');
 
 const lazy = require('legacy/util/lazy-require')
 				.get('LibraryActions', ()=> require('legacy/app/library/Actions'));
@@ -21,6 +22,12 @@ const lazy = require('legacy/util/lazy-require')
 
 module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 	extend: 'NextThought.common.Actions',
+
+	constructor () {
+		this.callParent(arguments);
+
+		NextThought.app.account.emailverify.Actions.create();
+	},
 
 	maybeShowCoppaWindow: function () {
 		var user = $AppConfig.userObject,

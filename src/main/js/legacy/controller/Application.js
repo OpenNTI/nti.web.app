@@ -13,7 +13,6 @@ var GroupActions = require('../app/groups/Actions');
 var ContextStore = require('../app/context/StateStore');
 var NotificationActions = require('../app/notifications/Actions');
 var StateActions = require('../common/state/Actions');
-var UserActions = require('../app/profiles/user/Actions');
 var NavigationActions = require('../app/navigation/Actions');
 var Globals = require('../util/Globals');
 
@@ -60,7 +59,6 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		me.ContextStore = ContextStore.getInstance();
 		me.NotificationActions = NotificationActions.create();
 		me.NavigationActions = NavigationActions.create();
-		me.UserProfileActions = UserActions.create();
 
 		window.addEventListener('popstate', function (e) {
 			me.handleCurrentState();

@@ -75,6 +75,8 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 				doClose: this.doCancel.bind(this),
 				doSave: this.doSave.bind(this),
 				allowFullScreen: this.allowFullScreen.bind(this),
+				addCls: this.addCls.bind(this),
+				removeCls: this.removeCls.bind(this),
 				Header: {
 					hide: this.header.hide.bind(this.header),
 					show: this.header.show.bind(this.header),

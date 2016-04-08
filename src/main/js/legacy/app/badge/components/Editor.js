@@ -1,5 +1,7 @@
 var Ext = require('extjs');
-var EmailverifyMain = require('../../profiles/user/components/emailverify/Main');
+
+require('legacy/app/account/emailverify/verify/Index');
+// var EmailverifyMain = require('../../profiles/user/components/emailverify/Main');
 
 
 module.exports = exports = Ext.define('NextThought.app.badge.components.Editor', {
@@ -65,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 	 * Handles the save event on the email token view.
 	 * When it succeeds, it triggers the doSave call on the prompt object
 	 * to perform the fulfill action.
-	 * 
+	 *
 	 */
 	onSaveEmailToken: function () {
 		var token = this.activeEditor && this.activeEditor.getValue(),
@@ -84,8 +86,8 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 	},
 
 	/**
-	 * Lock the badge 
-	 * 
+	 * Lock the badge
+	 *
 	 * @return {Promise} the promise to lock the badge.
 	 */
 	onSave: function () {

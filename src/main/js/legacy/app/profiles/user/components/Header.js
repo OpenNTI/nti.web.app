@@ -4,7 +4,7 @@ var ComponentsHeader = require('../../components/Header');
 var ChatActions = require('../../../chat/Actions');
 var ChatStateStore = require('../../../chat/StateStore');
 var SettingsWindow = require('../../../account/settings/Window');
-var EmailverifyWindow = require('./emailverify/Window');
+// var EmailverifyWindow = require('./emailverify/Window');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.Header', {
