@@ -68,7 +68,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		[
 			'{header}',
 			{tag: 'form', cls: 'common-form', enctype: '{enctype}', autocomplete: '{autocomplete}', 'novalidate': true, name: '{name}', cn: [
-				{cls: 'input', type: 'hidden', name: 'json'},
 				{
 					cls: 'main',
 					cn: [
@@ -85,7 +84,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 									html: '\u2060'
 								}
 							]
-						}
+						},
+						{tag: 'input', type: 'file'}
 					]
 				}
 			]}
@@ -605,13 +605,17 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		if (!this.enableFileUpload) { return; }
 
 		let dom = this.el.dom,
-			input = dom && dom.querySelector('.control.upload input');
+			input = dom && dom.querySelector('.control.upload input'),
+			dragInput = dom && dom.querySelector('.main > input[type=file]');
 
 		if (input) {
 			input.addEventListener('change', this.onFileInputChange.bind(this));
-			input.addEventListener('dragenter', this.onDragEnter.bind(this));
-			input.addEventListener('dragleave', this.onDragLeave.bind(this));
-			input.addEventListener('drop', this.onDragLeave.bind(this));
+		}
+		if (dragInput) {
+			dragInput.addEventListener('change', this.onFileInputChange.bind(this));
+			dragInput.addEventListener('dragenter', this.onDragEnter.bind(this));
+			dragInput.addEventListener('dragleave', this.onDragLeave.bind(this));
+			dragInput.addEventListener('drop', this.onDragLeave.bind(this));
 		}
 	},
 
@@ -663,10 +667,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			this.insertPartAtSelection(tpl.apply(data));
 		} else {
 			tpl.append(content, data);
+			// Add a placeholder to allow adding text.
+			placeholder.append(content);
 		}
-
-		// Add a placeholder to allow adding text.
-		placeholder.append(content);
 	},
 
 
@@ -728,12 +731,22 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	onDragEnter: function () {
-		// TODO: Not Implemented yet
+		let dom = this.el && this.el.dom,
+			dragInput = dom && dom.querySelector('.main > input[type-file]');
+
+		if (dragInput) {
+			dragInput.classList.add(' active');
+		}
 	},
 
 
 	onDragLeave: function () {
-		// TODO: Not Implemented yet
+		let dom = this.el && this.el.dom,
+			dragInput = dom && dom.querySelector('.main > input[type-file]');
+
+		if (dragInput) {
+			dragInput.classList.remove(' active');
+		}
 	},
 
 
