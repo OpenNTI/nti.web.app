@@ -70,11 +70,15 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 
 		if (!link) { return Promise.reject(); }
 
-	  	return Service.request(link)
-		  .then(function (response) {
-			  return ParseUtils.parseItems(response)[0];
-		  });
-  	},
+		return Service.request(link)
+			.then(function (response) {
+				return ParseUtils.parseItems(response)[0];
+			});
+	},
+
+	hasHistoryLink: function () {
+		return !!(this.historyLink || this.getLink('History'));
+	},
 
 	getDueDate: function () {
 		return this.get('availableEnding');

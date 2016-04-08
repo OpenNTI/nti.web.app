@@ -90,11 +90,12 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 			readerAssessment = reader && reader.getAssessment(),
 			assignment = me.assignment,
 			savepoint = assignment && assignment.getSavePoint(),
-			assignmentHistory = assignment ? assignment.getHistory() : me.assignmentHistory;
+			assignmentHistory = assignment && assignment.hasHistoryLink() ? assignment.getHistory() : me.assignmentHistory;
 
 		if (!reader) {
 			return;
 		}
+
 
 		reader.getScroll().lock();
 		reader.hidePageWidgets();
