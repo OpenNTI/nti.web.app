@@ -131,6 +131,7 @@ span.tab{
 		.main {
 			background: #fff;
 			padding: 0 0 46px;
+			position: relative;
 
 			.title {
 				@include experimental(transition, all 0.5s);
@@ -256,15 +257,19 @@ span.tab{
 				@include attachment();
 			}
 
-			& > input[type=file] {
+			.dropzone {
 				position: absolute;
 				top: 0;
 				left: 0;
 				right: 0;
 				bottom: 0;
-				opacity: 0;
 				z-index: -1;
-				width: 100%;
+
+				input[type=file] {
+					height: 100%;
+					opacity: 0;
+					width: 100%;
+				}
 
 				&.active {
 					z-index: 10;

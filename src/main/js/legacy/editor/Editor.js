@@ -85,7 +85,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 								}
 							]
 						},
-						{tag: 'input', type: 'file'}
+						{cls: 'dropzone', cn: [
+							{tag: 'input', type: 'file'}
+						]}
 					]
 				}
 			]}
@@ -606,23 +608,30 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		let dom = this.el.dom,
 			input = dom && dom.querySelector('.control.upload input'),
-			dragInput = dom && dom.querySelector('.main > input[type=file]');
+			dragInput = dom && dom.querySelector('.main'),
+			dropzone = dom && dom.querySelector('.dropzone input');
 
 		if (input) {
 			input.addEventListener('change', this.onFileInputChange.bind(this));
 		}
 		if (dragInput) {
-			dragInput.addEventListener('change', this.onFileInputChange.bind(this));
 			dragInput.addEventListener('dragenter', this.onDragEnter.bind(this));
-			dragInput.addEventListener('dragleave', this.onDragLeave.bind(this));
-			dragInput.addEventListener('drop', this.onDragLeave.bind(this));
+			dragInput.addEventListener('dragend', this.onDragLeave.bind(this));
+		}
+		if (dropzone) {
+			dropzone.addEventListener('change', this.onFileInputChange.bind(this));
 		}
 	},
 
 
 	onFileInputChange: function (e) {
 		var input = e.target,
-			file = input && input.files && input.files[0];
+			file = input && input.files && input.files[0],
+			parentEl = Ext.fly(input).up('.dropzone');
+
+		if (parentEl) {
+			parentEl.removeCls('active');
+		}
 
 		e.preventDefault();
 		if (file && (!this.accepts || file.type.match(this.accepts))) {
@@ -730,23 +739,34 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
-	onDragEnter: function () {
+	onDragEnter: function (e) {
 		let dom = this.el && this.el.dom,
-			dragInput = dom && dom.querySelector('.main > input[type-file]');
+			dragInput = dom && dom.querySelector('.dropzone');
+
+		e.preventDefault();
+		e.stopPropagation();
 
 		if (dragInput) {
-			dragInput.classList.add(' active');
+			Ext.fly(dragInput).addCls('active');
 		}
 	},
 
 
-	onDragLeave: function () {
+	onDragLeave: function (e) {
 		let dom = this.el && this.el.dom,
-			dragInput = dom && dom.querySelector('.main > input[type-file]');
+			dragInput = dom && dom.querySelector('.dropzone');
+
+		e.preventDefault();
+		e.stopPropagation();
 
 		if (dragInput) {
-			dragInput.classList.remove(' active');
+			Ext.fly(dragInput).removeCls('active');
 		}
+	},
+
+
+	onDrop: function (e) {
+		e.preventDefault();
 	},
 
 
