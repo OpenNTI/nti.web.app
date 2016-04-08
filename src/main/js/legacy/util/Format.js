@@ -1,7 +1,7 @@
 const Ext = require('extjs');
-const Duration = require('durationjs');
 const User = require('../model/User');
 const {isMe} = require('legacy/util/Globals');
+const moment = require('moment');
 
 const NTIFormat =
 module.exports = exports = Ext.define('NextThought.util.Format', {
@@ -24,10 +24,7 @@ module.exports = exports = Ext.define('NextThought.util.Format', {
 	},
 
 	ago: function (value, max, format) {
-		var d = new Duration(Math.ceil(Math.abs(value - new Date()) / 1000));
-		d = d.ago();
-		//if (/^4 weeks/i.test(d)) { d = '1 month ago'; }
-		return d;
+		return moment(value).fromNow();
 	},
 
 
