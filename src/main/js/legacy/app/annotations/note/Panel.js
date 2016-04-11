@@ -273,7 +273,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 
 	createEditor: function () {
 		//TODO: clean this up! We should be relying on the editor's events, not digging into its dom.
-		this.editor = Ext.widget({xtype: 'nti-editor', ownerCt: this, renderTo: this.responseBox, enableTitle: this.enableTitle});
+		this.editor = Ext.widget({
+			xtype: 'nti-editor',
+			ownerCt: this,
+			renderTo: this.responseBox,
+			enableTitle: this.enableTitle,
+			enableFileUpload: true
+		});
 	},
 
 	disable: function () {

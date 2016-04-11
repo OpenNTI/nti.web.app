@@ -725,18 +725,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 				style: style,
 				ContainerId: ContainerId
 			}),
-			context = this.ContextStore.getContext(),
-			url, i, c;
-
-
-		for (i = context.length - 1; i >= 0; i--) {
-			c = context[i];
-
-			if (c && c.obj && c.obj.getLink && c.obj.getLink('Pages')) {
-				url = c.obj.getLink('Pages');
-				break;
-			}
-		}
+			url = this.___getPagesURL();
 
 		return noteRecord.saveData({url: url})
 					.then(function (response) {
@@ -751,6 +740,24 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 
 
 	},
+
+
+	__getPagesURL: function () {
+		let context = this.ContextStore.getContext(),
+			url, i, c;
+
+		for (i = context.length - 1; i >= 0; i--) {
+			c = context[i];
+
+			if (c && c.obj && c.obj.getLink && c.obj.getLink('Pages')) {
+				url = c.obj.getLink('Pages');
+				break;
+			}
+		}
+
+		return url;
+	},
+
 
 	saveNewNote: function (title, body, range, container, shareWith, style, callback) {
 		if (!body || (Array.isArray(body) && body.length < 1)) {
@@ -805,19 +812,24 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 		}
 
 		let me = this;
-		let replyRecord = recordRepliedTo.makeReply();
+		let replyRecord = recordRepliedTo.makeReply(),
+			url = this.__getPagesURL();
 		// let root = AnnotationUtils.getNoteRoot(recordRepliedTo);
 
 		replyRecord.set('body', replyBody);
 		console.log('Saving reply', replyRecord, ' to ', recordRepliedTo);
 
-		return new Promise(function (fulfill, reject) {
-			replyRecord.save({scope: me, callback: me.getSaveCallback(fulfill, reject)});
-		}).then(function (record) {
-			recordRepliedTo.fireEvent('child-added', record);
-
-			return record;
-		});
+		return replyRecord.saveData({url: url})
+				.then(function (response) {
+					var rec = ParseUtils.parseItems(response)[0];
+					me.incomingCreatedChange({}, rec, {});
+					recordRepliedTo.fireEvent('child-added', rec);
+					return rec;
+				})
+				.catch(function (err) {
+					console.error('Something went terribly wrong...', err.stack || err.message);
+					return Promise.reject(err);
+				});
 	},
 
 	savePhantomAnnotation: function (record, applySharing/*, successFn, failureFn*/) {
