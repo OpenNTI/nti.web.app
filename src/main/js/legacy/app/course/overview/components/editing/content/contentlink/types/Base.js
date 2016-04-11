@@ -57,9 +57,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	showEditor: function () {
 		this.callParent(arguments);
 
-		if (Service.canDoAdvancedEditing()) {
-			this.addAdvancedDisclosure();
-		}
+		this.addAdvancedDisclosure();
 	},
 
 	addAdvancedDisclosure: function () {
