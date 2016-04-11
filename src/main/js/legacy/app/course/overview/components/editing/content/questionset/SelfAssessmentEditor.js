@@ -16,9 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				{cls: 'question-count', html: Ext.util.Format.plural(questionCount, 'Question')}
 			];
 
-		if (Service.canDoAdvancedEditing()) {
-			parts.push({cls: 'remove'});
-		}
+		parts.push({cls: 'remove'});
 
 		me.add({
 			xtype: 'box',

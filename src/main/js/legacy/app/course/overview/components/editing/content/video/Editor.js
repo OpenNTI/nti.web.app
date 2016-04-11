@@ -23,7 +23,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return [
 				{
 					title: 'Pick a Video',
-					advanced: true,
+					advanced: false,
 					category: 'Video',
 					iconCls: 'video',
 					description: '',

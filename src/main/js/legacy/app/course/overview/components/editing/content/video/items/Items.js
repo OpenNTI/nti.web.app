@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			xtype: 'box',
 			autoEl: {
 				cls: 'video-items-header',
-				cn: Service.canDoAdvancedEditing() ? parts : []
+				cn: parts
 			},
 			listeners: {
 				click: {
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			};
 		}));
 
-		if (!single && Service.canDoAdvancedEditing()) {
+		if (!single) {
 			me.enableOrderingContainer();
 		}
 	},

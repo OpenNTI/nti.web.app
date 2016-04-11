@@ -20,7 +20,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				{
 					title: 'Assignment',
 					category: 'question-set',
-					advanced: true,
+					advanced: false,
 					iconCls: 'assignment',
 					description: '',
 					editor: this
