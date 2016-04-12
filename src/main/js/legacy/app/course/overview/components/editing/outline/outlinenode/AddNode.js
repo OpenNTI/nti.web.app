@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var EditingActions = require('../../Actions');
+const Ext = require('extjs');
+const {wait} = require('legacy/util/Promise');
+require('../../Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.outline.outlinenode.AddNode', {
@@ -73,10 +74,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	showEditor: function () {
 		this.inlineEditorEl.show();
 
-		//TODO: instead of checking the owner ct, have the owner pass
-		//an onShow or something that gets called here
-		if (this.ownerCt) {
-			this.ownerCt.el.addCls('editor-open');
+		if (this.onEditorShow) {
+			this.onEditorShow();
 		}
 
 		if (this.editor.setSuggestTitle) {
@@ -85,15 +84,13 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	hideEditor: function () {
+		if (this.onEditorHide) {
+			this.onEditorHide();
+		}
+
 		if (!this.rendered) { return; }
 
 		this.inlineEditorEl.hide();
-
-		//TODO: instead of checking the owner ct, have the owner pass
-		//an onClose or something that gets called here
-		if (this.ownerCt) {
-			this.ownerCt.el.removeCls('editor-open');
-		}
 	},
 
 	isValid: function () {
@@ -133,6 +130,10 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			return Promise.reject();
 		}
 
+		if (this.editor.el) {
+			this.editor.el.mask('Saving');
+		}
+
 		//In case the outline node changed, reset it.
 		//This ensures that we have the right set of listeners set.
 		if (outline && this.parentRecord !== outline && this.parentRecord.getId() === outline.getId()) {
@@ -147,13 +148,12 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					me.EditingActions.publish(rec);
 				}
 
-				if (shouldNavigate) {
-					me.hideEditor();
-
-					if (me.doSelectNode) {
-						me.doSelectNode(rec);
-					}
-				} else {
+				me.editor.el.unmask();
+				me.hideEditor();
+				if (shouldNavigate && me.doSelectNode) {
+					me.doSelectNode(rec);
+				}
+				else {
 					wait()
 						.then(function () {
 							if (me.editor.setSuggestTitle) {
