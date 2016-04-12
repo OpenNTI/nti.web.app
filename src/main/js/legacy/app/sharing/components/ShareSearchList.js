@@ -1,5 +1,7 @@
-var Ext = require('extjs');
-var NTIFormat = require('../../../util/Format');
+const Ext = require('extjs');
+const {toCSSClassName} = require('nti-lib-dom');
+const cx = require('classnames');
+const NTIFormat = require('legacy/util/Format');
 
 
 module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareSearchList', {
@@ -54,8 +56,8 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareS
 			return '';
 		},
 
-		getTypeCls: function (model) {
-			return ' ' + this.getType(model);
+		getTypeCls (model) {
+			return cx(this.getType(model), toCSSClassName(this.getDisplayName(model)));
 		},
 
 		getMarkedCls: function (model) {
