@@ -199,29 +199,31 @@
 .nti-checkbox {
 	position: relative;
 
-	input[type='checkbox'] {
-		visibility: hidden;
-		position: absolute;
-	}
+	&:not(.native) {
+		input[type='checkbox'] {
+			visibility: hidden;
+			position: absolute;
+		}
 
-	input[type='checkbox']:checked + label {
-		@include icon($checkbox-14_active, $side: 'after', $top: 50%, $left: 0);
-	}
+		input[type='checkbox']:checked + label {
+			@include icon($checkbox-14_active, $side: 'after', $top: 50%, $left: 0);
+		}
 
-	input[type='checkbox']:not(:checked) + label:hover {
-		@include icon($checkbox-14_hover, $top: 50%, $left: 0);
-	}
+		input[type='checkbox']:not(:checked) + label:hover {
+			@include icon($checkbox-14_hover, $top: 50%, $left: 0);
+		}
 
-	label {
-		min-width: 14px;
-		min-height: 14px;
-		display: inline-block;
-		cursor: pointer;
+		label {
+			min-width: 14px;
+			min-height: 14px;
+			display: inline-block;
+			cursor: pointer;
 
-		@include icon($checkbox-14, $side: 'after', $top: 50%, $left: 0);
+			@include icon($checkbox-14, $side: 'after', $top: 50%, $left: 0);
 
-		&::after {
-			margin-top: -7px;
+			&::after {
+				margin-top: -7px;
+			}
 		}
 	}
 }

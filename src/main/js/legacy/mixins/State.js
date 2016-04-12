@@ -7,7 +7,7 @@ module.exports = exports = Ext.define('NextThought.mixins.State', {
 	state_key: 'default',
 
 	getStateKey: function () {
-		return this.state_key;
+		return this.STATE_KEY || this.state_key;
 	},
 
 	__getStateActions: function () {

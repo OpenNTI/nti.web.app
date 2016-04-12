@@ -136,8 +136,10 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 
 
 	fetchNewItems: function () {
-		this.StreamSource.fetchNewItems()
-			.then((items) => this.prependItems(items));
+		if (this.StreamSource) {
+			this.StreamSource.fetchNewItems()
+				.then((items) => this.prependItems(items));
+		}
 	},
 
 
@@ -270,6 +272,16 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 					]}
 				]}
 			});
+		}
+	},
+
+
+	removeError: function () {
+		var cmp = this.getGroupContainer();
+
+		if (this.errorCmp) {
+			cmp.remove(this.errorCmp, true);
+			delete this.errorCmp;
 		}
 	},
 

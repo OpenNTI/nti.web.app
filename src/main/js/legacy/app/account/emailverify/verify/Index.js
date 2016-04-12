@@ -214,7 +214,7 @@ module.exports = exports = Ext.define('NextThought.app.account.emailverify.verif
 			return this.user.verifyEmailToken(tokenVal)
 				.then(function (resp) {
 					me.showCongrats();
-					debugger;
+
 					if (me.onVerificationComplete) {
 						me.onVerificationComplete();
 					}

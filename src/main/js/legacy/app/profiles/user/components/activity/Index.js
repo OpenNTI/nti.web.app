@@ -13,11 +13,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-user-activity',
 
-	state_key: 'profile_activity',
+	STATE_KEY: 'profile_activity',
 
 	mixins: {
-		Router: 'NextThought.mixins.Router',
-		State: 'NextThought.mixins.State'
+		Router: 'NextThought.mixins.Router'
 	},
 
 	cls: 'activity-page',
@@ -41,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		this.streamCmp.navigateToObject = this.navigateToActivityItem.bind(this);
 
-		this.sidebarCmp.updateFilter = this.updateFilter.bind(this);
+		this.sidebarCmp.setStreamCmp(this.streamCmp.getStreamCmp());
 
 		this.initRouter();
 
@@ -123,38 +122,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		this.startResourceViewed();
 
-		let me = this;
-
 		return Promise.all([
 			this.streamCmp.userChanged.apply(this.streamCmp, arguments),
 			this.sidebarCmp.userChanged.apply(this.sidebarCmp, arguments)
-		])
-			.then(function () {
-				return me.restoreState();
-			});
-	},
-
-
-	applyState: function (state) {
-		this.sidebarCmp.setFilterFromQueryParams(state);
-
-		let streamParams = this.sidebarCmp.getStreamParams();
-
-		streamParams.url = this.activeUser.getLink('Activity');
-		this.streamCmp.setStreamParams(streamParams);
-
-		return Promise.resolve();
-	},
-
-
-	restoreState: function () {
-		var state = this.getCurrentState() || {};
-		return this.applyState(state);
-	},
-
-
-	updateFilter: function (filter) {
-		this.setState(filter);
+		]);
 	},
 
 

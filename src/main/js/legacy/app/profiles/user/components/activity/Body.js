@@ -39,6 +39,11 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 	},
 
 
+	getStreamCmp () {
+		return this.activityCmp;
+	},
+
+
 	onActivate: function () {
 		this.activityCmp.fireEvent('activate');
 	},

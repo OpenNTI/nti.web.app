@@ -20,6 +20,8 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 	 * @param {Object} config values to set up the stream source with
 	 * @param {String} config.batch which batch to start on
 	 * @param {String} config.batchParam the value to key the batch on
+	 * @param {String} config.batchAfter which batch to start on after a value
+	 * @param {String} config.batchAfterParam the value to key the batchAfter on
 	 * @param {Array} config.filters filters to apply to the batch
 	 * @param {String} config.filterParam the value to key the filters on
 	 * @param {Number} config.pageSize the size of the batch
@@ -51,6 +53,11 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 		this.batch = {
 			param: config.batchParam || 'batchStart',
 			value: config.batch
+		};
+
+		this.batchAfter = {
+			param: config.batchAfterParam || 'batchAfter',
+			value: config.batchAfter
 		};
 
 		this.filters = {
@@ -99,6 +106,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 		var params,
 			knownParams = [
 				this.batch,
+				this.batchAfter,
 				this.filters,
 				this.size,
 				this.sort,
