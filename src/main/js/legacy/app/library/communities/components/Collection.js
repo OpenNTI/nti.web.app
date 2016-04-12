@@ -1,6 +1,8 @@
-var Ext = require('extjs');
-var NTIFormat = require('../../../../util/Format');
-var MixinsEllipsisText = require('../../../../mixins/EllipsisText');
+const Ext = require('extjs');
+
+
+const NTIFormat = require('legacy/util/Format');
+require('legacy/mixins/EllipsisText');
 
 
 module.exports = exports = Ext.define('NextThought.app.library.communities.components.Collection', {
