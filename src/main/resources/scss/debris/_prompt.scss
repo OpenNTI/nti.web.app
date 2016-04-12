@@ -22,6 +22,18 @@
 		}
 	}
 
+	&.clear {
+		.body-container {
+			background: none;
+			overflow: visible;
+		}
+
+		.prompt {
+			background: none;
+			box-shadow: none;
+		}
+	}
+
 	.prompt {
 		@include flexItem();
 		background: white;

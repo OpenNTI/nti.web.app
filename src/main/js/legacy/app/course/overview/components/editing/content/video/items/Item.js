@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			providers: sources.map(function (source) {
 				return {label: source.service};
 			}),
-			isAdvanced: Service.canDoAdvancedEditing()
+			isAdvanced: true
 		});
 	},
 

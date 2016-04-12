@@ -2793,7 +2793,7 @@
 	}
 
 	.group {
-		padding: 10px 0;
+		padding: 10px 0 0 0;
 		position: relative;
 		margin-bottom: 5px;
 
@@ -2815,6 +2815,7 @@
 
 			& > input[type=checkbox] {
 				margin-left: 15px;
+				pointer-events: none;
 			}
 		}
 

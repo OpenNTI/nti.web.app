@@ -1,10 +1,9 @@
-var Ext = require('extjs');
-var User = require('../../../../../model/User');
-var ParseUtils = require('../../../../../util/Parsing');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const ParseUtils = require('legacy/util/Parsing');
+const {isMe} = require('legacy/util/Globals');
 
 
-module.exports = exports = Ext.define('NextThought.app.profiles.user.components.emailverify.Main', {
+module.exports = exports = Ext.define('NextThought.app.account.emailverify.verify.Index', {
 	extend: 'Ext.Component',
 	alias: 'widget.email-verify-view',
 
@@ -200,8 +199,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 
 	onClose: function () {
-		if(this.ownerCt && this.ownerCt.close) {
-			this.ownerCt.close();
+		if(this.doClose) {
+			this.doClose();
 		}
 		else {
 			this.destroy();
@@ -215,8 +214,9 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			return this.user.verifyEmailToken(tokenVal)
 				.then(function (resp) {
 					me.showCongrats();
-					if (me.ownerCt && me.ownerCt.onVerificationComplete) {
-						me.ownerCt.onVerificationComplete();
+					debugger;
+					if (me.onVerificationComplete) {
+						me.onVerificationComplete();
 					}
 				});
 		}

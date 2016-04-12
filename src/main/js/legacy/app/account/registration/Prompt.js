@@ -1,7 +1,18 @@
 const Ext = require('extjs');
+const Url = require('url');
 const PromptStateStore = require('legacy/app/prompt/StateStore');
 
 const SURVEY_COMPLETE = 'survey-complete';
+
+function getData ({data}) {
+	try {
+		return JSON.parse(data);
+	} catch (e) {
+		//don't care
+	}
+	return {};
+}
+
 
 let prompt = module.exports = exports = Ext.define('NextThought.app.account.registration.Prompt', {
 	extend: 'Ext.container.Container',
@@ -16,6 +27,10 @@ let prompt = module.exports = exports = Ext.define('NextThought.app.account.regi
 	initComponent () {
 		this.callParent(arguments);
 
+		let src = this.Prompt.data.link;
+		this.postMessageSourceId = Url.resolve(location.href, src);
+
+
 		this.Prompt.Header.disableClose();
 		this.Prompt.Header.setTitle(this.title);
 
@@ -26,7 +41,7 @@ let prompt = module.exports = exports = Ext.define('NextThought.app.account.regi
 			xtype: 'box',
 			autoEl: {
 				tag: 'iframe',
-				src: '/mobile/onboarding/i2-survey'
+				src: src
 			}
 		});
 
@@ -41,9 +56,11 @@ let prompt = module.exports = exports = Ext.define('NextThought.app.account.regi
 
 
 	onPostMessage (event) {
-		if (event.origin !== window.location.origin) { return; }
+		if (event.origin !== location.origin) { return; }
 
-		if (event.data === SURVEY_COMPLETE) {
+		const data = getData(event);
+
+		if (data.id === this.postMessageSourceId && data.method === SURVEY_COMPLETE) {
 			this.Prompt.doSave();
 		}
 	},

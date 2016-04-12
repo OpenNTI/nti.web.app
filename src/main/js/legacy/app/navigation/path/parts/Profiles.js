@@ -1,9 +1,11 @@
-var Ext = require('extjs');
-var User = require('../../../../model/User');
-var ModelUser = require('../../../../model/User');
-var OpenbadgesBadge = require('../../../../model/openbadges/Badge');
-var ContextStateStore = require('../../../context/StateStore');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {isFeature} = require('legacy/util/Globals');
+
+require('../../../../model/User');
+require('../../../../model/openbadges/Badge');
+require('../../../context/StateStore');
+require('legacy/model/DynamicFriendsList');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Profiles', {

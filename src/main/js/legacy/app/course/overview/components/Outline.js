@@ -147,7 +147,17 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					InlineEditor: inlineEditor,
 					parentRecord: me.outline,
 					doSelectNode: me.doSelectNode.bind(me),
-					outlineCmp: me
+					outlineCmp: me,
+					onEditorShow: function () {
+						if (me.rendered) {
+							me.el.addCls('editor-open');
+						}
+					},
+					onEditorHide: function () {
+						if (me.rendered) {
+							me.el.removeCls('editor-open');
+						}
+					}
 				};
 			}, null);
 

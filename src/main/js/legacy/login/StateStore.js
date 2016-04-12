@@ -6,7 +6,10 @@ require('legacy/common/StateStore');
 const ModelService = require('legacy/model/Service');
 const PreferenceManager = require('legacy/preference/Manager');
 
-const AccountActions = require('legacy/app/account/Actions');
+const lazy = require('legacy/util/lazy-require')
+				.get('AccountActions', ()=> require('legacy/app/account/Actions'));
+
+// const AccountActions = require('legacy/app/account/Actions');
 
 const {wait} = require('legacy/util/Promise');
 const {TemporaryStorage} = require('legacy/cache/AbstractStorage');
@@ -21,8 +24,6 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 
 		this.onLoginActions = [];
 		this.loginActionsNames = {};
-
-		this.AccountActions = AccountActions.create();
 
 		//Make sure the session is still valid when the window is focused
 		this.mon(Ext.get(window), {
@@ -88,11 +89,8 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 			this.actions['confirm-birthday-coppa'] = true;
 		}
 
-		if (fakeService.getLinkFrom(links, 'SubmitRegistration')) {
-			this.actions['submit-registration'] = {
-				'submit-registration': fakeService.getLinkFrom(links, 'SubmitRegistration'),
-				'registration-rules': fakeService.getLinkFrom(links, 'RegistrationEnrollRules')
-			};
+		if (fakeService.getLinkFrom(links, 'RegistrationSurvey')) {
+			this.actions['submit-registration'] = fakeService.getLinkFrom(links, 'RegistrationSurvey');
 		}
 	},
 
@@ -103,36 +101,37 @@ module.exports = exports = Ext.define('NextThought.login.StateStore', {
 	//TODO: Fill this in from controller/Session
 	takeImmediateAction: function () {
 		var user = $AppConfig.userObject;
+		let AccountActions = lazy.AccountActions.create();
 
 		if (this.actions['show-coppa-window']) {
-			this.AccountActions.maybeShowCoppaWindow();
+			AccountActions.maybeShowCoppaWindow();
 		} else if (this.actions['bounced-contact']) {
-			this.AccountActions.showEmailRecoveryWindow('contact_email', 'state-bounced-contact-email');
+			AccountActions.showEmailRecoveryWindow('contact_email', 'state-bounced-contact-email');
 		} else if (this.actions['bounced-email']) {
-			this.AccountActions.showEmailRecoveryWindow('email', 'state-bounced-email');
+			AccountActions.showEmailRecoveryWindow('email', 'state-bounced-email');
 		}
 
 		if (this.actions['confirm-birthday-coppa']) {
-			this.AccountActions.showCoppaConfirmWindow();
+			AccountActions.showCoppaConfirmWindow();
 		}
 
 		//What is the exact relationships between these windows?
 		//currently above and below are piling on top of one another
 		if (this.__shouldShowContentFor('content.initial_welcome_page')) {
-			this.AccountActions.showWelcomePage(user.getLink('content.initial_welcome_page'));
+			AccountActions.showWelcomePage(user.getLink('content.initial_welcome_page'));
 		}
 
 		if (this.__shouldShowContentFor('irb_html')) {
-			this.AccountActions.showResearchAgreement();
+			AccountActions.showResearchAgreement();
 		}
 
 		//NOTE we show the ToS last so it stacks on top. Need a better solution for this
 		if (this.__shouldShowContentFor('content.initial_tos_page')) {
-			this.AccountActions.showNewTermsOfService(user.getLink('content.initial_tos_page'));
+			AccountActions.showNewTermsOfService(user.getLink('content.initial_tos_page'));
 		}
 
 		if (this.actions['submit-registration']) {
-			this.AccountActions.showRegistrationForm(this.actions['submit-registration']);
+			AccountActions.showRegistrationForm(this.actions['submit-registration']);
 		}
 	},
 

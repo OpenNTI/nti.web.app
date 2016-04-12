@@ -158,6 +158,10 @@
 		    .scope {
 		    	display: inline-block;
 		    	line-height: 34px;
+		    	min-width: 54px;
+		    	min-height: 34px;
+		    	text-align: left;
+		    	vertical-align: middle;
 			    background: white;
 			    box-shadow: 0 0 3px 0px rgba(0,0,0,0.3);
 			    margin: 2px 0 2px 9px;

@@ -1,5 +1,6 @@
-var Ext = require('extjs');
-var ItemselectionIndex = require('../../itemselection/Index');
+const Ext = require('extjs');
+
+require('../../itemselection/Index');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.overview.components.editing.content.questionset.AssignmentSelection', {
@@ -11,19 +12,27 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{cls: 'assignment-item {cls}', cn: [
 			{cls: 'title', html: '{title}'},
-			{cls: 'due-date', html: 'Due {dueDate}'}
+			{cls: 'due-date', html: '{status}'}
 		]}
 	)),
 
 
 	getItemData: function (item) {
-		var now = new Date(),
-			dueDate = item.getDueDate();
+		let now = new Date();
+		let dueDate = item.getDueDate();
+		let available = item.get('availableBeginning');
+		let status = 'No Dates Set';
+
+		if (dueDate) {
+			status = `Due ${Ext.Date.format(dueDate, 'l, F j, g:i a T')}`;
+		} else if (available) {
+			status = `Available ${Ext.Date.format(available, 'l, F j, g:i a T')}`;
+		}
 
 		return {
-			cls: now < dueDate ? 'ontime' : 'overdue',
+			cls: !dueDate || now < dueDate ? 'ontime' : 'overdue',
 			title: item.get('title'),
-			dueDate: Ext.Date.format(dueDate, 'l, F j, g:i a T')
+			status: status
 		};
 	},
 

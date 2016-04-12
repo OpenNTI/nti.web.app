@@ -1,24 +1,33 @@
-var Ext = require('extjs');
-var Globals = require('../../util/Globals');
-var {getURL} = Globals;
+const Ext = require('extjs');
+const Globals = require('legacy/util/Globals');
 
-require('legacy/app/prompt/Actions');
-require('../../common/Actions');
-require('../../common/ux/WelcomeGuide');
-require('../../common/ux/IframeConfirmWindow');
-require('../../common/ux/UpdatedTos');
-require('../../common/ux/IframeWindow');
-require('../../model/UserPasswordSet');
+const PromptActions = require('legacy/app/prompt/Actions');
+require('legacy/common/Actions');
+require('legacy/common/ux/WelcomeGuide');
+require('legacy/common/ux/IframeConfirmWindow');
+require('legacy/common/ux/UpdatedTos');
+require('legacy/common/ux/IframeWindow');
+require('legacy/model/UserPasswordSet');
+
 require('./contact/Window');
 require('./coppa/Window');
 require('./coppa/upgraded/Window');
 require('./recovery/Window');
 require('./registration/Prompt');
-require('legacy/app/library/Actions');
+require('./emailverify/Actions');
+
+const lazy = require('legacy/util/lazy-require')
+				.get('LibraryActions', ()=> require('legacy/app/library/Actions'));
 
 
 module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 	extend: 'NextThought.common.Actions',
+
+	constructor () {
+		this.callParent(arguments);
+
+		NextThought.app.account.emailverify.Actions.create();
+	},
 
 	maybeShowCoppaWindow: function () {
 		var user = $AppConfig.userObject,
@@ -31,7 +40,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 		}
 
 		req = {
-			url: getURL(url),
+			url: Globals.getURL(url),
 			timeout: 20000,
 			scope: this,
 			callback: function (q, success, r) {
@@ -188,7 +197,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 					} else {
 						//we need to delete the link now.
 						Ext.Ajax.request({
-							url: getURL(linkToDelete),
+							url: Globals.getURL(linkToDelete),
 							timeout: 20000,
 							method: 'DELETE',
 							callback: function (q, success2) {
@@ -223,7 +232,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 					if (linkToDelete) {
 						//we need to delete the link now
 						Ext.Ajax.request({
-							url: getURL(linkToDelete),
+							url: Globals.getURL(linkToDelete),
 							timeout: 20000,
 							scope: this,
 							method: 'DELETE',
@@ -284,7 +293,7 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 
 	submitContactForm: function (values, role) {
 		var feedbackLink = $AppConfig.userObject.getLink('send-feedback'),
-			url = getURL(feedbackLink),
+			url = Globals.getURL(feedbackLink),
 			body,
 			bodyFormatters = {
 				contact: this.__contactUsBodyForMessage,
@@ -360,11 +369,11 @@ module.exports = exports = Ext.define('NextThought.app.account.Actions', {
 	},
 
 
-	showRegistrationForm (links) {
-		let PromptActions = NextThought.app.prompt.Actions.create();
-		let LibraryActions = NextThought.app.library.Actions.create();
+	showRegistrationForm (link) {
+		let PromptActionsInst = PromptActions.create();
+		let LibraryActions = lazy.LibraryActions.create();
 
-		PromptActions.prompt('account-registration', links)
+		PromptActionsInst.prompt('account-registration', {link: link})
 			.then(() => {
 				LibraryActions.reload();
 			});

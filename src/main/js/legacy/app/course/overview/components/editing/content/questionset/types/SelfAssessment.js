@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				{
 					title: 'Self Assessment',
 					category: 'question-set',
-					advanced: true,
+					advanced: false,
 					iconCls: 'assessment',
 					description: '',
 					editor: this

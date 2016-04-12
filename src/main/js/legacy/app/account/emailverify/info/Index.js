@@ -1,7 +1,7 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
 
 
-module.exports = exports = Ext.define('NextThought.app.profiles.user.components.emailverify.info.View', {
+module.exports = exports = Ext.define('NextThought.app.account.emailverify.info.Index', {
 	extend: 'Ext.Component',
 	alias: 'widget.email-verify-info-view',
 
@@ -36,8 +36,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 
 	close: function () {
-		if (this.ownerCt && this.ownerCt.close) {
-			this.ownerCt.close();
+		if (this.onClose) {
+			this.onClose();
 		}
 	}
 });

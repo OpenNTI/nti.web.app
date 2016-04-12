@@ -4,9 +4,9 @@ var AnnotationUtils = require('../../util/Annotations');
 var Globals = require('../../util/Globals');
 var RangeUtils = require('../../util/Ranges');
 var RectUtils = require('../../util/Rects');
-var AnnotationsBase = require('./Base');
-var UtilAnchors = require('../../util/Anchors');
-var UtilRects = require('../../util/Rects');
+
+require('./Base');
+
 var lazyResolve = {
 	get ReaderPanel () {
 		delete this.ReaderPanel;
@@ -27,7 +27,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 	highlightCls: 'application-highlight',
 	mouseOverCls: 'highlight-mouse-over',
 
-	constructor: function (config) {
+	constructor: function (/*config*/) {
 		this.callParent(arguments);
 
 		//TODO hook up browser range for speed, throw away after render
@@ -162,7 +162,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 	},
 
 	resolveVerticalLocation: function () {
-		var r, rect, node;
+		var r, rect;
 
 		if (this.rendered) {
 			r = this.buildRange();
@@ -191,7 +191,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 			boundingLeft,
 			boundingHeight,
 			boundingWidth,
-			width = me.content ? me.content.getWidth() : 700, // Didn't seem appropriate for how it was used
+			//width = me.content ? me.content.getWidth() : 700, // Didn't seem appropriate for how it was used
 			topOffset = 10,
 			leftOffset = 5,
 			fakeRectRange,
@@ -263,13 +263,13 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		boundingHeight = Math.ceil(bounds.height);
 		boundingWidth = Math.ceil(bounds.width); // Seemed more appropriate than content width
 		Ext.fly(me.canvas).setXY([
-				boundingLeft - leftOffset,
-				boundingTop - topOffset
-			]);
+			boundingLeft - leftOffset,
+			boundingTop - topOffset
+		]);
 		Ext.fly(me.canvas).set({
-						width: boundingWidth + (leftOffset * 2),
-						height: boundingHeight + (topOffset * 2)
-					});
+			width: boundingWidth + (leftOffset * 2),
+			height: boundingHeight + (topOffset * 2)
+		});
 
 
 		if (me.compElements.first().hasCls(me.mouseOverCls)) {
@@ -306,8 +306,8 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 		var colorSpec = AnnotationUtils.colorsForName(this.highlightColorName);
 
 		boundingTop = AnnotationUtils.drawCanvas(me.canvas,
-												 me.content, fakeRectRange, colorSpec || me.self.bgcolor[me.record.get('Class')][state],
-												 [leftOffset, topOffset]);
+												me.content, fakeRectRange, colorSpec || me.self.bgcolor[me.record.get('Class')][state],
+												[leftOffset, topOffset]);
 
 
 		me.range = range;
@@ -411,8 +411,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.Highlight', {
 			SAME = 0,
 			AFTER = 1,
 
-			valid,
-			display;
+			valid;
 
 		nodeRange.selectNodeContents(node);
 		startToStart = nodeRange.compareBoundaryPoints(Range.START_TO_START, range);

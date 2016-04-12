@@ -1,4 +1,5 @@
-var Ext = require('extjs');
+const Ext = require('extjs');
+const {getString} = require('legacy/util/Localization');
 
 
 module.exports = exports = Ext.define('NextThought.app.account.contact.Main', {

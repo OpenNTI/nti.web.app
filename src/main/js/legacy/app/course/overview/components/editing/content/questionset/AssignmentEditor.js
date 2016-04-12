@@ -28,9 +28,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 				{cls: 'due-date', html: Ext.Date.format(dueDate, 'l, F j, g:i a T')}
 			];
 
-		if (Service.canDoAdvancedEditing()) {
-			parts.push({cls: 'remove'});
-		}
+		parts.push({cls: 'remove'});
 
 		me.add({
 			xtype: 'box',
