@@ -6,13 +6,8 @@ var RangeUtils = require('../util/Ranges');
 var SharingUtils = require('../util/Sharing');
 var {guidGenerator} = require('legacy/util/Globals');
 const Globals = require('legacy/util/Globals');
-
-require('../util/Ranges');
-require('../common/form/fields/TagField');
-require('../app/sharing/components/UserTokenField');
-require('../util/Sharing');
-require('./embedvideo/Window');
 require('legacy/common/form/fields/FilePicker');
+
 
 Ext.define('NextThought.editor.AbstractEditor', {
 	extend: 'Ext.Component',

@@ -415,9 +415,9 @@ span.tab{
 							}
 
 							&.upload {
-								@include icon($editor-insert-link, $top:9px);
+								@include icon($editor-upload-file, $top:3px);
 								&:hover::after{
-									@include sprite($editor-insert-link_hover);
+									@include sprite($editor-upload-file-hover);
 								}
 							}
 
@@ -473,7 +473,7 @@ span.tab{
 					@include icon($editor-attach, $top:10px, $left:10px);
 					&.selected{
 						&::after{
-							@include sprite($editor-attach_active);
+							@include sprite($editor-attach-hover);
 						}
 					}
 				}
