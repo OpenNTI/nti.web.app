@@ -116,11 +116,15 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.filters
 
 	getParamFromState (state) {
 		if (state === 'all') {
-			return null;
+			return this.allParam;
 		}
 
 		if (!Array.isArray(state)) {
 			state = [state];
+		}
+
+		if (!state.length) {
+			return null;
 		}
 
 		return state.map((s) => this.getParamValue(s));

@@ -123,6 +123,8 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 				type: 'multi-select',
 				cls: 'activities',
 				key: 'accepts',
+				allParam: '*/*',
+				paramRequired: true,
 				items: [
 					{
 						displayText: 'Discussions',

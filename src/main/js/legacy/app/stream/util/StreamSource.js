@@ -86,9 +86,17 @@ module.exports = exports = Ext.define('NextThought.app.stream.util.StreamSource'
 			value: config.context
 		};
 
+		let accepts = config.accepts;
+
+		if (accepts && accepts.join) {
+			accepts = accepts.join(',');
+		} else if (accepts === '*/*') {
+			accepts = null;
+		}
+
 		this.accepts = {
 			param: config.acceptsParam || 'accept',
-			value: config.accepts && config.accepts.join(',')
+			value: accepts
 		};
 	},
 

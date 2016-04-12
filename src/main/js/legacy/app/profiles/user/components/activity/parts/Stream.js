@@ -1,13 +1,15 @@
-var Ext = require('extjs');
-var Globals = require('../../../../../../util/Globals');
-var StreamList = require('../../../../../stream/List');
-var PartsPage = require('./Page');
-var EventsEmpty = require('./events/Empty');
+const Ext = require('extjs');
+
+require('../../../../../../util/Globals');
+require('../../../../../stream/List');
+require('./Page');
+require('./events/Empty');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.Stream', {
 	extend: 'NextThought.app.stream.List',
 	alias: 'widget.profile-user-activity-stream',
+
 
 	userChanged: function (user) {
 		var joined;
@@ -21,13 +23,16 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
+
 	initialWidgetConfig: function () {
 		return { xtype: 'joined-event', username: this.user };
 	},
 
+
 	hasInitialWidget: function () {
 		return !!this.down('joined-event');
 	},
+
 
 	getPageConfig: function (items) {
 		return {
@@ -37,6 +42,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			navigateToObject: this.navigateToObject.bind(this)
 		};
 	},
+
 
 	loadBatch: function (batch) {
 		if (batch.Items.length) {
@@ -52,6 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
+
 	onDone: function (streamSource) {
 		var config = this.initialWidgetConfig();
 
@@ -64,10 +71,10 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		}
 	},
 
+
 	onEmpty: function (batch) {
 		var cmp = this.getGroupContainer(),
-			hasFilters = this.hasFiltersApplied(batch),
-			title, subtitle;
+			hasFilters = this.hasFiltersApplied(batch);
 
 		if (!this.emptyCmp) {
 			this.emptyCmp = cmp.add({
@@ -76,6 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 			});
 		}
 	},
+
 
 	hasFiltersApplied: function (batch) {
 		var s = this.StreamSource;
@@ -90,6 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 		return false;
 	},
+
 
 	shouldAddJoinedEvent: function (source) {
 		var extra = source && source.extraParams,

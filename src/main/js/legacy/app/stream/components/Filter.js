@@ -73,10 +73,10 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 
 		let filterMap = this.filterMap;
 		let keys = Object.keys(filterMap);
+		let isValid = true;
 		let params = {
 			url: state.url
 		};
-
 
 		for (let key of keys) {
 			let cmp = key && filterMap[key];
@@ -89,11 +89,15 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 
 			if (param) {
 				params[key] = param;
+			} else if (cmp.paramRequired) {
+				isValid = false;
 			}
 		}
 
-		if (this.stream) {
+		if (this.stream && isValid) {
 			this.stream.setStreamParams(params);
+		} else if (this.stream) {
+			this.stream.onInvalidFilters();
 		}
 	},
 

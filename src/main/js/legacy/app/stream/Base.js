@@ -135,6 +135,12 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 	},
 
 
+	onInvalidFilters: function () {
+		this.clearPages();
+		this.onEmpty();
+	},
+
+
 	fetchNewItems: function () {
 		if (this.StreamSource) {
 			this.StreamSource.fetchNewItems()
@@ -219,7 +225,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 
 
 	loadNextPage: function () {
-		if (!this.isOnLastBatch && !this.isLoading) {
+		if (!this.isOnLastBatch && !this.isLoading && this.StreamSource) {
 			this.showLoading();
 			this.StreamSource.getNextBatch()
 				.then(this.loadBatch.bind(this))
