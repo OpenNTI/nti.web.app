@@ -1,5 +1,6 @@
 const Ext = require('extjs');
 
+const {toCSSClassName} = require('nti-lib-dom');
 
 const NTIFormat = require('legacy/util/Format');
 require('legacy/mixins/EllipsisText');
@@ -21,12 +22,16 @@ module.exports = exports = Ext.define('NextThought.app.library.communities.compo
 				{tag: 'li', cls: 'community-grid-item', cn: [
 					'{[this.getAvatar(values)]}',
 					{cls: 'title-container', cn: [
-						{cls: 'title', html: '{displayName}'}
+						{cls: '{[this.getCls(values.displayName)]}', html: '{displayName}'}
 					]}
 				]}
 			]}
 		]
 	}), {
+		getCls (displayName) {
+			return `title ${toCSSClassName(displayName)}`;
+		},
+
 		getAvatar: function (model) {
 			return NTIFormat.avatar(model);
 		}
