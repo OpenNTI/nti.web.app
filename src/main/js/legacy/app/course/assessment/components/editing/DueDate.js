@@ -293,6 +293,12 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 		me.EditingActions.updateAssignmentDates(me.assignment, availableDate, dueDate)
 			.then(Promise.minWait(Globals.WAIT_TIMES.SHORT))
 			.then(function (response) {
+				// Keep everythign in sync.
+				availableDate = me.assignment.get('availableBeginning'),
+				dueDate = me.assignment.get('availableEnding');
+				me.selectAvailableDate(availableDate);
+				me.selectDueDate(dueDate);
+
 				if (response && me.onSave) {
 					me.onSave();
 				}
