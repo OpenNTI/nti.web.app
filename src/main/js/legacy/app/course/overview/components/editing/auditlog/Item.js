@@ -42,7 +42,8 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		availablebeginning: 'Avaiable Date',
 		availableending: 'Avaiable End Date',
 		visability: 'visability',
-		accentcolor: 'section color'
+		accentcolor: 'section color',
+		targetmimetype: 'type'
 	},
 
 	beforeRender: function () {
