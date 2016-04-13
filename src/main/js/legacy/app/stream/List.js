@@ -36,8 +36,13 @@ module.exports = exports = Ext.define('NextThought.app.stream.List', {
 	prependItems: function (items) {
 		var firstPage = this.PAGES[0];
 
-		if (!firstPage || !items.length) { return; }
+		if (!items.length) { return; }
 
-		firstPage.prependItems(items);
+		if(firstPage) {
+			firstPage.prependItems(items);
+		} else {
+			this.fillInItems(items);
+			this.removeEmpty();
+		}
 	}
 });
