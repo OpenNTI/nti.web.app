@@ -1,19 +1,21 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../../../../cache/UserRepository');
-var DomUtils = require('../../../../../../../util/Dom');
-var MixinsFlagActions = require('../../../../../../../mixins/FlagActions');
-var MixinsLikeFavoriteActions = require('../../../../../../../mixins/LikeFavoriteActions');
-var MixinsProfileLinks = require('../../../../../../../mixins/ProfileLinks');
-var MixinsProfileLinks = require('../../../../../../../mixins/ProfileLinks');
-var MixinsLikeFavoriteActions = require('../../../../../../../mixins/LikeFavoriteActions');
-var MixinsFlagActions = require('../../../../../../../mixins/FlagActions');
-var EditorEditor = require('../../../../../../../editor/Editor');
-var ComponentNatural = require('../../../../../../../layout/component/Natural');
-var PathActions = require('../../../../../../navigation/path/Actions');
-var ForumsActions = require('../../../../../../forums/Actions');
-var WindowsActions = require('../../../../../../windows/Actions');
-var ForumsActions = require('../../../../../../forums/Actions');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const UserRepository = require('../../../../../../../cache/UserRepository');
+const DomUtils = require('../../../../../../../util/Dom');
+const {isMe} = require('legacy/util/Globals');
+const ForumStore = require('legacy/app/forums/StateStore');
+
+require('../../../../../../../mixins/FlagActions');
+require('../../../../../../../mixins/LikeFavoriteActions');
+require('../../../../../../../mixins/ProfileLinks');
+require('../../../../../../../mixins/ProfileLinks');
+require('../../../../../../../mixins/LikeFavoriteActions');
+require('../../../../../../../mixins/FlagActions');
+require('../../../../../../../editor/Editor');
+require('../../../../../../../layout/component/Natural');
+require('../../../../../../navigation/path/Actions');
+require('../../../../../../forums/Actions');
+require('../../../../../../windows/Actions');
+require('../../../../../../forums/Actions');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItem', {
@@ -140,6 +142,14 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 		me.PathActions = NextThought.app.navigation.path.Actions.create();
 		me.ForumActions = NextThought.app.forums.Actions.create();
 		me.WindowActions = NextThought.app.windows.Actions.create();
+		me.ForumStore = ForumStore.getInstance();
+
+
+		me.mon(me.ForumStore, 'topic-deleted', (id) => {
+			if (id === r.getId()) {
+				me.destroy();
+			}
+		});
 
 		me.callParent(arguments);
 		me.mixins.likeAndFavoriteActions.constructor.call(me);

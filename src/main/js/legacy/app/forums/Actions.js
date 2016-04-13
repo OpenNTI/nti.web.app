@@ -1,9 +1,11 @@
-var Ext = require('extjs');
-var ParseUtils = require('../../util/Parsing');
-var CommonActions = require('../../common/Actions');
-var UserdataActions = require('../userdata/Actions');
-var UserdataStateStore = require('../userdata/StateStore');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const ParseUtils = require('../../util/Parsing');
+const {isMe} = require('legacy/util/Globals');
+const ForumStore = require('./StateStore');
+
+require('../../common/Actions');
+require('../userdata/Actions');
+require('../userdata/StateStore');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
@@ -12,6 +14,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 	constructor: function () {
 		this.callParent(arguments);
 		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
+
+		this.ForumStore = ForumStore.getInstance();
 	},
 
 	saveTopicComment: function (topic, comment, values) {
@@ -132,6 +136,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.Actions', {
 		return new Promise(function (fulfill, reject) {
 			record.destroy({
 				success: function () {
+					me.ForumStore.onTopicDeleted(record);
+
 					me.UserDataStore.applyToStoresThatWantItem(maybeDeleteFromStore, record);
 
 					//Delete anything left that we know of
