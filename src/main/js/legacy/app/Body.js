@@ -240,7 +240,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		return courseView.setActiveCourse(ntiid, course)
 			.then(courseView.handleRoute.bind(courseView, subRoute, route.precache))
-			.fail(function () {
+			.catch(function () {
 				//If we have a sub route that fails try setting the root of the course
 				if (Globals.trimRoute(subRoute)) {
 					me.replaceRoute('', '/course/' + route.params.id);
@@ -260,7 +260,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		return bundleView.setActiveBundle(ntiid, bundle)
 			.then(bundleView.handleRoute.bind(bundleView, subRoute, route.precache))
-			.fail(function () {
+			.catch(function () {
 				me.replaceRoute('', '/library');
 			});
 	},
@@ -290,7 +290,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		return userView.setActiveEntity(id, user)
 			.then(userView.handleRoute.bind(userView, subRoute, route.precache))
-			.fail(function () {
+			.catch(function () {
 				me.replaceRoute('', '/library');
 			});
 	},
@@ -305,7 +305,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		return communityView.setActiveEntity(id, community)
 			.then(communityView.handleRoute.bind(communityView, subRoute, route.precache))
-			.fail(function () {
+			.catch(function () {
 				me.replaceRoute('', '/library');
 			});
 	},
@@ -391,7 +391,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 					onFailedToGetFullPath: failedNavigate
 				});
 			})
-			.fail(function () {
+			.catch(function () {
 				failedNavigate();
 			});
 	},
@@ -482,7 +482,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 				return path;
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error(('Unable to find path for: ', obj, reason));
 				return {
 					title: 'Library',

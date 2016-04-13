@@ -83,7 +83,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.Actions', {
 		.then(function (blogEntry) {
 			return me.handleShareAndPublishState(blogEntry, sharingInfo);
 		})
-		.fail(function (reason) {
+		.catch(function (reason) {
 			console.error('Failed to save blog: ', reason);
 			return Promise.reject(reason);
 		});

@@ -141,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.prompt.components.Contain
 		if (this.bodyCmp.onSave) {
 			this.bodyCmp.onSave()
 				.then(this.onSaveSuccess.bind(this))
-				.fail(this.onSaveFailure.bind(this));
+				.catch(this.onSaveFailure.bind(this));
 		}
 	},
 

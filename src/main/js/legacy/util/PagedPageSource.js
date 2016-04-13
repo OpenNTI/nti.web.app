@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.util.PagedPageSource', {
 				return items[0];
 			})
 			.then(this.fillInRecord.bind(this))
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to load record', reason);
 				return null;
 			});

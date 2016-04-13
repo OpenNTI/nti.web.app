@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Ass
 			.then(function (path) {
 				return path.concat([grade]);
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to get path for grade: ', reason);
 				return Promise.resolve([]);
 			});
@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Ass
 			.then(function (path) {
 				return path.concat([feedback]);
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to get path for feedback: ', reason);
 				return Promise.resolve([]);
 			});

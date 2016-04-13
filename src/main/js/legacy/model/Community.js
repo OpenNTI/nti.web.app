@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.model.Community', {
 
 				return ParseUtils.parseItems(json.Items);
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to load forum list for community:', reason);
 
 				return [];

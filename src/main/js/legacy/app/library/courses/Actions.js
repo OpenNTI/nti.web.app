@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.Actions',
 					//if its successful fulfill with the course enrollment
 					.then(function () { return item;})
 					//otherwise fulfill with null so it can be filtered out
-					.fail(function () { return null;});
+					.catch(function () { return null;});
 			}
 
 			return Promise.resolve(null);

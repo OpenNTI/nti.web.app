@@ -411,13 +411,13 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			assignments.updateAssignments(),
 			outlineInterface.onceBuilt()
 		]).then(finish)
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to get course outline!', reason);
 			});
 
 		return	outlineInterface.onceBuilt()
 			.then(finish)
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to get course outline!', reason);
 			});
 	},
@@ -478,7 +478,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			var id = assignment.getId();
 
 			waitsOn.push(Promise.all([
-				assignments.getHistoryItem(id, true).fail(function () { return; }),
+				assignments.getHistoryItem(id, true).catch(function () { return; }),
 				assignments.getGradeBookEntry(id),
 				findOutlineNodes(id)
 			])

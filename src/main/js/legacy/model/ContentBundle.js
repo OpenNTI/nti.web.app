@@ -285,7 +285,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentBundle', {
 					return items[0];
 				})
 					//if we fail, delete the cached promise, and resume failure. :P
-				.fail(function (reason) {
+				.catch(function (reason) {
 					delete me.__BoardResolver;
 					return Promise.reject(reason);
 				}));

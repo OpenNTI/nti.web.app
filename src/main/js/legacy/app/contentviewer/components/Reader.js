@@ -311,7 +311,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 		return this.setLocation(pageInfo, bundle)
 			.then(me.loadPageInfo.bind(me, pageInfo))
 			.then(me.fireEvent.bind(me, 'navigateComplete'))
-			.fail(me.fireEvent.bind(me, 'navigateAbort'))
+			.catch(me.fireEvent.bind(me, 'navigateAbort'))
 			.always(function () {
 				maskTarget.unmask();
 				me.splash.removeCls('initial');

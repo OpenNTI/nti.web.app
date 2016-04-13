@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			})
 			.then(this.addNewItem.bind(this))
 			.then(this.unMask.bind(this))
-			.fail(function (error) {
+			.catch(function (error) {
 				me.unMask();
 				me.errorEl.setHTML('Unable to create section');
 				if (error) {

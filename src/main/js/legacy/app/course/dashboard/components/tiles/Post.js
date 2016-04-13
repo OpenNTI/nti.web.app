@@ -289,7 +289,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 	showComments: function () {
 		this.loadComments()
 			.then(this.addComments.bind(this))
-			.fail(this.showCommentError.bind(this));
+			.catch(this.showCommentError.bind(this));
 	},
 
 	hasComments: function () {},

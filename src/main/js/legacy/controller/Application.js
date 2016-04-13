@@ -335,7 +335,7 @@ module.exports = exports = Ext.define('NextThought.controller.Application', {
 		if (allow instanceof Promise) {
 			allow
 				.then(finish)
-				.fail(stopNav);
+				.catch(stopNav);
 		} else if (allow === false) {
 			stopNav();
 		} else {

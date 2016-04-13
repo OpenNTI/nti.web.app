@@ -292,7 +292,7 @@ module.exports = exports = Ext.define('NextThought.model.Base', {
 		}
 
 		return update
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to update record from server.', reason);
 
 				return me;

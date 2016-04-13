@@ -167,7 +167,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		me.addCls('in-buffer');
 
 		//if we fail to load tiles, or already have tiles
-		return load.fail(function () {
+		return load.catch(function () {
 
 			if (me.__shouldReload(containerPos.refreshDate, containerPos.force)) {
 				me.reloadTiles()

@@ -109,6 +109,6 @@ module.exports = exports = Ext.define('NextThought.app.account.contact.Main', {
 
 		this.handleSubmit(values,win.role)
 			.then(win.close.bind(win))
-			.fail(this.setError.bind(this));
+			.catch(this.setError.bind(this));
 	}
 });

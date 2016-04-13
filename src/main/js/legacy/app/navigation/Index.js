@@ -190,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Index', {
 		} else {
 			bundle.getVendorIconImage()
 				.then(this.__setVendorIcon.bind(this))
-				.fail(this.__removeVendorIcon.bind(this));
+				.catch(this.__removeVendorIcon.bind(this));
 		}
 	},
 

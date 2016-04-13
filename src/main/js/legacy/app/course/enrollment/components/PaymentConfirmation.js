@@ -322,7 +322,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				me.clearProcessStorage();
 				me.done(me);
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				me.submitButton.disabled = false;
 				me.fireEvent('update-buttons');
 				me.showStripeError(reason);

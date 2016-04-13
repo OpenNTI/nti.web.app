@@ -7,11 +7,6 @@ Object.assign(Promise.prototype, {
 		return this.then(fn);
 	},
 
-	fail (fn) {
-		console.error('Depricated: use Promise#catch() instead');
-		return this.catch(fn);
-	},
-
 	always (fn) {
 		return this.then(fn, fn);
 	}
@@ -131,7 +126,7 @@ Promise.first = Promise.first || function (values) {
 			if (val instanceof Promise) {
 				val
 					.then(fulfill)
-					.fail(function (reason) {
+					.catch(function (reason) {
 						console.error('Promise in chain failed: ', reason);
 						add(index + 1);
 					});

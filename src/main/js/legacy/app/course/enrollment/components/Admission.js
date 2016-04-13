@@ -738,7 +738,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 							.then(function (response) {
 								fulfill();
 							})
-							.fail(function (response) {
+							.catch(function (response) {
 								var json = Ext.JSON.decode(response && response.responseText, true);
 
 								me.showError(json);
@@ -884,7 +884,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 
 				me[groupConfig.handler].call(me, json, true);
 			})
-			.fail(function (response) {
+			.catch(function (response) {
 				me.removeMask();
 
 				if (!isValid) {

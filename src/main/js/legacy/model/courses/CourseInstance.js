@@ -748,11 +748,11 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 		me.__getAssignmentsPromise = Promise.all([
 			me.getWrapper()
-				.fail(function () { return {}; }),
-			me.__getAssignmentsByOutline().fail(() => {
+				.catch(function () { return {}; }),
+			me.__getAssignmentsByOutline().catch(() => {
 				return {};
 			}),
-			me.__getNonAssignmentsByOutline().fail(() => {
+			me.__getNonAssignmentsByOutline().catch(() => {
 				return {};
 			}),
 			me.__getAssignmentHistoryLink()
@@ -784,7 +784,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 							.then(function (response) {
 								return ParseUtils.parseItems(response)[0];
 							})
-							.fail(function () {
+							.catch(function () {
 								return NextThought.model.assessment.UsersCourseAssignmentSavepoint.create();
 							});
 					}
@@ -852,7 +852,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 
 				return ParseUtils.parseItems(json.Items);
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to load assets: ', reason, type);
 
 				return [];
@@ -889,7 +889,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 				}
 
 				return ParseUtils.parseItems(items);
-			}).fail(function (reason) {
+			}).catch(function (reason) {
 				console.error('Failed to load Discussions: ', reason);
 
 				return [];
@@ -1197,7 +1197,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 					sectionContents = null;
 				}
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Section contents fail: ', reason);
 			})
 			.then(me.getDiscussionContents.bind(me, 'ParentDiscussions'))
@@ -1218,7 +1218,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 					parentContents = null;
 				}
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Parent contents fail: ', reason);
 			})
 			.then(function () {//bin the forums

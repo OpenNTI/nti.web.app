@@ -346,7 +346,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Question', {
 			.then(function (result) {
 				me.updateWithResults(result);
 			})
-			.fail(function () {
+			.catch(function () {
 				alert('There was a problem grading your question.');
 			})
 			.always(function () {

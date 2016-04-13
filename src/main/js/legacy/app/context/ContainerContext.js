@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 		})
 				.then(this.__parseResponse.bind(this))
 				.then(this.__parseContext.bind(this, type))
-				.fail(this.__handle403Response.bind(this));
+				.catch(this.__handle403Response.bind(this));
 	},
 
 	__parseResponse: function (response) {
@@ -47,7 +47,7 @@ module.exports = exports = Ext.define('NextThought.app.context.ContainerContext'
 			parse = ParseUtils.parseItems(response)[0];
 			fulfill(parse || Ext.decode(response, true));
 		})
-		.fail(function () {
+		.catch(function () {
 			var xml = (new DOMParser()).parseFromString(response, 'text/xml');
 
 			if (xml.querySelector('parsererror')) {

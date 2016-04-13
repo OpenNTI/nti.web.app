@@ -335,7 +335,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Gr
 					}
 				});
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.log('Could not load the video progress: ' + reason);
 			});
 	},

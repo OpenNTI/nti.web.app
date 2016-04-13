@@ -572,7 +572,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 		return this.getObjectRaw({url: url, ntiid: ntiid}, mime + '+json', true)
 				// .then(cacheWrapper)
 				.then(onSuccess)
-				.fail(onFailure);
+				.catch(onFailure);
 	},
 
 
@@ -620,7 +620,7 @@ module.exports = exports = Ext.define('NextThought.model.Service', {
 				.then(function (o) {
 					Ext.callback(success, scope, [o]);
 				})
-				.fail(function (reason) {
+				.catch(function (reason) {
 					if (!Ext.isArray(reason)) {
 						reason = [reason];
 					}

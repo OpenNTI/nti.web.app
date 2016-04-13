@@ -81,6 +81,6 @@ module.exports = exports = Ext.define('NextThought.app.account.recovery.Email', 
 
 		this.handleSubmit(values)
 			.then(win.close.bind(win))
-			.fail(this.setError.bind(this));
+			.catch(this.setError.bind(this));
 	}
 });

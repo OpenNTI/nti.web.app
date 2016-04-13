@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 				return ParseUtils.parseItems(json[0]);
 			});
 
-		cache.fail(this.PathStore.removeFromCache.bind(this.PathStore, link));
+		cache.catch(this.PathStore.removeFromCache.bind(this.PathStore, link));
 
 		return this.PathStore.setInCache(link, cache);
 	},
@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 
 		cache = fn.call(null, obj, this.getPathToObject.bind(this));
 
-		cache.fail(this.PathStore.removeFromCache.bind(this.PathStore, id));
+		cache.catch(this.PathStore.removeFromCache.bind(this.PathStore, id));
 
 		return this.PathStore.setInCache(id, cache);
 	},
@@ -210,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 
 				return titles;
 			})
-			.fail(function (error) {
+			.catch(function (error) {
 				//if we fail to get the path to the item, try to get the container
 				//and show its title
 				var containerId = record && record.get('ContainerId');
@@ -229,7 +229,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.Actions',
 
 						return Promise.reject();
 					})
-					.fail(function (reason) {
+					.catch(function (reason) {
 						//If the container fails, check if it 403s. If it did
 						//the response text should be an object the user needs
 						//to gain access to, so show it in the breadcrumb

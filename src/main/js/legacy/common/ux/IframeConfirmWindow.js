@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeConfirmWindow
 			this.el.mask('Loading...');
 			this.confirmAction()
 				.then(this.close.bind(this))
-				.fail(this.handleFailure.bind(this));
+				.catch(this.handleFailure.bind(this));
 		} else {
 			this.close();
 		}
@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.common.ux.IframeConfirmWindow
 			this.el.mask('Loading...');
 			this.denyAction()
 				.then(this.close.bind(this))
-				.fail(this.handleFailure.bind(this));
+				.catch(this.handleFailure.bind(this));
 		} else {
 			this.close();
 		}

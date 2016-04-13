@@ -46,7 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 			//	var contentsLink = forum.getLink('contents');
 
 			//	return StoreUtils.loadItems(contentsLink, params)
-			//				.fail(function() {
+			//				.catch(function() {
 			//					return [];
 			//				});
 			//}

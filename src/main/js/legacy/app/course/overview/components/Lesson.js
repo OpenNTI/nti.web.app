@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 							}
 						});
 					})
-					.fail(function (reason) {
+					.catch(function (reason) {
 						console.error('Failed to load progress:', reason);
 					});
 	},
@@ -82,7 +82,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					}
 				});
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to load comment counts: ', reason);
 			});
 	},
@@ -174,7 +174,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				return me.currentOverview.onceLoaded();
 			})
-			.fail(function (reason) { console.error(reason); })
+			.catch(function (reason) { console.error(reason); })
 			.then(me.__updateProgress.bind(me))
 			.then(me.__updateCounts.bind(me))
 			.then(me.maybeUnmask.bind(me));

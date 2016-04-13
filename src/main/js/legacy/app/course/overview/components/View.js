@@ -180,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 						me.pushRoute('', '');
 					}
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Unable to stop editing because: ' + reason);
 			});
 	},

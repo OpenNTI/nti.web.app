@@ -179,7 +179,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 					w.show();
 				}
 			})
-			.fail(function () {
+			.catch(function () {
 				// TODO: Check if this comment below is still valid
 				//because we are using this callback for both the button and window close callback.	 There are 2 signatures,
 				//we ignore one so we dont try to exit a room twice.
@@ -222,7 +222,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 					}
 					fulfill(obj);
 				})
-				.fail( function () {
+				.catch( function () {
 					console.debug('Could not resolve roomInfo for: ', roomInfoId);
 					reject();
 				});
@@ -373,7 +373,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			// NOTE: If the getObject call on the roomInfoId fails, go ahead and create a new chat room
 			this.resolveWindowForUsers(cid, occupants)
 				.then(me.onMessage.bind(me, msg, opts))
-				.fail(me.startChat.bind(me, occupants, {silent: true}));
+				.catch(me.startChat.bind(me, occupants, {silent: true}));
 			return;
 		}
 
@@ -660,7 +660,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.Actions', {
 			.then(function (historyItems) {
 				me.addMessagesForTranscript(win, historyItems);
 			})
-			.fail(function () {
+			.catch(function () {
 				console.warn('Failed to load one of the chat transcripts: ', arguments);
 			});
 	},

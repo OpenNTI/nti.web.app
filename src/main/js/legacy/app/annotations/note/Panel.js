@@ -420,7 +420,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 			try {
 				me.UserDataActions.saveNewReply(r, v.body, [])
 					.then(callback.bind(this, true))
-					.fail(callback.bind(this, false));
+					.catch(callback.bind(this, false));
 			}
 			catch (e) {
 				console.error(Globals.getError(e));

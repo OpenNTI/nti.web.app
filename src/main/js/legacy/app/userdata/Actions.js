@@ -356,7 +356,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 						.then(function (ci) {
 							return {sharing: {sharedWith: ci.getDefaultSharing()}};
 						})
-						.fail(function () {
+						.catch(function () {
 							return {sharing: {}};
 						});
 				}
@@ -881,7 +881,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 					});
 				});
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('failed to save default sharing, ', reason);
 			});
 

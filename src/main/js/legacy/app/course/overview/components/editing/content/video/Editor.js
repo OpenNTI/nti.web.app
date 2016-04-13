@@ -188,7 +188,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		me.disableSubmission();
 		return me.videoEditorCmp.onSave()
-			.fail(function (reason) {
+			.catch(function (reason) {
 				me.enableSubmission();
 				return Promise.reject(reason);
 			});

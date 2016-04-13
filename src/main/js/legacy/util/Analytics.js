@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 					me.session_started = true;
 					console.log('Analytics session started.');
 				})
-				.fail(function () {
+				.catch(function () {
 					console.error('Failed to start analytic session: ', arguments);
 				});
 		} else {
@@ -312,7 +312,7 @@ module.exports = exports = Ext.define('NextThought.util.Analytics', {
 			.then(function () {
 				me.batch = [];
 			})
-			.fail(function (response) {
+			.catch(function (response) {
 				console.error('Failed to save the analytic batch', response, me.batch);
 			});
 	},

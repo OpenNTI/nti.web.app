@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 			.then(function () {
 				return url;
 			})
-			.fail(function () {
+			.catch(function () {
 				return Promise.reject(name + ' asset not found');
 			});
 		} else {

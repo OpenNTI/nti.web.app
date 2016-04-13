@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 				if (pref || c) {
 					return Globals.loadStyleSheetPromise('/app/resources/css/accessibility.css', 'main-stylesheet')
-						.fail(function () {
+						.catch(function () {
 							throw new Error('Failed to load the accessibility style sheet');
 						});
 				}
@@ -189,7 +189,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 			}
 
 			return response;
-		}).fail(function (reason) {
+		}).catch(function (reason) {
 			if (reason && reason.timedout) {
 				console.log('Request timedout: ', reason.request.options.url);
 			}
@@ -290,7 +290,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 					return me.attemptLoginCallback(doc);
 				}
 			})
-			.fail(function (r) {
+			.catch(function (r) {
 				if (unauthed[r.status]) {
 					//Just let this fall through and reject. we can't
 					//logout because we never logged in, when we reject
@@ -344,7 +344,7 @@ module.exports = exports = Ext.define('NextThought.login.Actions', {
 
 				return user;
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.log('could not resolve app user', reason);
 				return Promise.reject(['failed loading profile', reason]);
 			});

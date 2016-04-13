@@ -314,7 +314,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 				me.mon(me.suggestContactsWin, 'destroy', onComplete);
 				me.mon(me.suggestContactsWin, 'destroy', 'refresh');
 			})
-			.fail(function () {
+			.catch(function () {
 				onComplete.call(me);
 			});
 	},

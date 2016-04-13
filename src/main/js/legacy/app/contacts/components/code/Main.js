@@ -96,7 +96,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.code.
 			.then(function () {
 				w.close();
 			})
-			.fail(function (error) {
+			.catch(function (error) {
 				if (!me.isDestroyed) {
 					me.setError(error);
 				}

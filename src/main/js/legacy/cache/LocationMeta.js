@@ -128,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.cache.LocationMeta', {
 								return Ext.isArray(infos) ? infos[0] : infos;
 							});
 				})
-				.fail(function (reason) {
+				.catch(function (reason) {
 					if (reason && reason.status === 403) {
 						console.log('Unauthorized when requesting page info', ntiid);
 						return me.handleUnauthorized(ntiid, reason);

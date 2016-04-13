@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Home', {
 					}
 				});
 			})
-			.fail(function () {
+			.catch(function () {
 				me.remove(loadingCmp, true);
 
 				me.add({

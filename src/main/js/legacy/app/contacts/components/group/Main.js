@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.group
 				btn.setDisabled(false);
 				w.showCreatedGroupCode(code);
 			})
-			.fail(function (errorText) {
+			.catch(function (errorText) {
 				console.error('An error occured', errorText);
 				me.showError(errorText);
 				btn.setDisabled(false);

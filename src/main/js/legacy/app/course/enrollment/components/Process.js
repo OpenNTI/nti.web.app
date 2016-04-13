@@ -333,7 +333,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 					console.error('Last step must have a component to go with it');
 				}
 			})
-			.fail(function () {//if we aren't compeleted
+			.catch(function () {//if we aren't compeleted
 				//if we have an cmp for this step
 				if (item) {
 					setItem();

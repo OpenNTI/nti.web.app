@@ -255,7 +255,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 						.then(function (u) {
 							maybeFinish(name, me.cacheUser(u, true));
 						})
-						.fail(function () {
+						.catch(function () {
 							maybeFinish(name);
 						});
 
@@ -294,7 +294,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 							maybeFinish();
 						}
 					})
-					.fail(function (reason) {
+					.catch(function (reason) {
 						console.error('Failed to bulk resolve: %o %o', toResolve, reason);
 						reject(reason);
 						fulfill = Ext.emptyFn;
@@ -336,7 +336,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 								}
 							});
 						})
-						.fail(function (v) {
+						.catch(function (v) {
 							job.forEach(function (p) {
 								try {
 									p.reject(v);
@@ -397,7 +397,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 
 		return Promise.all(usernames.chunk(chunkSize).map(me.chunkBulkRequest.bind(me)))
 				.done(rebuild)
-				.fail(function failed (reason) {
+				.catch(function failed (reason) {
 					console.error('Failed: %o', reason);
 					return Promise.reject(reason);
 				});
@@ -454,7 +454,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 			.done(function (lists) {
 				return me.recompose(names, lists);
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed: %o', reason);
 				return Promise.reject(reason);
 			});

@@ -107,7 +107,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			.then(function (rec) {
 
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				me.enableSubmission();
 
 				return Promise.reject(reason);

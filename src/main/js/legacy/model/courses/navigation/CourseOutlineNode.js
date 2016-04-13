@@ -215,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.navigation.Cour
 			}
 		}).then(function (resp) {
 			return JSON.parse(resp);
-		}).fail(function (reason) {
+		}).catch(function (reason) {
 			console.error('Failed to load overview summary: ', reason);
 		});
 	},

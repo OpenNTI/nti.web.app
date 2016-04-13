@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.app.chat.transcript.Pager', {
 			.then(this.insertBulkMessages.bind(this))
 			.then(this.maybeAddMoreEntry.bind(this, records))
 			.then(win.unmaskWindow.bind(win))
-			.fail(win.unmaskWindow.bind(win));
+			.catch(win.unmaskWindow.bind(win));
 	},
 
 	loadTranscripts: function (records) {

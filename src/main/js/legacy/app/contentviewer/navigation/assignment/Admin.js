@@ -299,7 +299,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 
 		historyItem.saveGrade(number, letter)
 			.then(me.fireEvent.bind(me, 'grade-saved'))
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to save Grade:', reason);
 				Error.raiseForReport(reason);
 			})

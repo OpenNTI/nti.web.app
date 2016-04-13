@@ -210,7 +210,7 @@ module.exports = exports = Ext.define('NextThought.model.ContentPackage', {
 					return ParseUtils.parseItems(item)[0];
 				});
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to get videos: ', reason);
 
 				return [];

@@ -222,6 +222,6 @@ module.exports = exports = Ext.define('NextThought.app.account.coppa.Main', {
 
 		this.handleSubmit(values)
 			.always(win.close.bind(win))
-			.fail(this.setError.bind(this));
+			.catch(this.setError.bind(this));
 	}
 });

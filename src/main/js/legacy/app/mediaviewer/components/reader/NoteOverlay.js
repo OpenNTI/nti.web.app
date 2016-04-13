@@ -240,7 +240,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 					.then(function () {
 						editor.unmask();
 						me.deactivateEditor();
-					}).fail(function () {
+					}).catch(function () {
 						editor.unmask();
 					});
 			}
@@ -249,7 +249,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 					.then(function () {
 						editor.unmask();
 						me.deactivateEditor();
-					}).fail(function () {
+					}).catch(function () {
 						editor.unmask();
 					});
 			}

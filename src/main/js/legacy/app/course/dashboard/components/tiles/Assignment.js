@@ -16,7 +16,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 		this.callParent(arguments);
 
 		this.getHistory()
-			.fail(this.callWhenRendered.bind(this, 'setLate'));
+			.catch(this.callWhenRendered.bind(this, 'setLate'));
 	},
 
 
@@ -88,7 +88,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 				//cause a fail so the next fail handler can return the due date
 				return Promise.reject();
 			})
-			.fail(function () {
+			.catch(function () {
 				var now = new Date();
 				if (due.isSame(now, 'day') && due.isSame(now, 'month') && due.isSame(now, 'year')) {
 					return 'Due Today';

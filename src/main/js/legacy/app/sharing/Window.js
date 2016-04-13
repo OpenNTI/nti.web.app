@@ -195,6 +195,6 @@ module.exports = exports = Ext.define('NextThought.app.sharing.Window', {
 
 		this.UserDataActions.updateShareWith(this.record, this.getValue(), checkbox.checked, this.bundle)
 			.then(this.close.bind(this))
-			.fail(this.el.unmask.bind(this.el));
+			.catch(this.el.unmask.bind(this.el));
 	}
 });

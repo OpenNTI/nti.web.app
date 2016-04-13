@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 						}
 						fulfill(p);
 					})
-					.fail(reject);
+					.catch(reject);
 			}
 		});
 	},
@@ -102,7 +102,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 					t = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
 					return Promise.resolve(t);
 				})
-				.fail(function () {
+				.catch(function () {
 					t = NextThought.model.transcript.TranscriptItem.fromVideo(video);
 					return Promise.resolve(t);
 				})
@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Video', {
 
 								return Promise.resolve(cmp);
 							})
-							.fail(function (/*reason*/) {
+							.catch(function (/*reason*/) {
 								cmp = Ext.widget('context-video', {
 									type: me.self.type,
 									containerId: me.container,

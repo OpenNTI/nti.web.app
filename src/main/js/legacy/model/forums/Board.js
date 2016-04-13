@@ -64,7 +64,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 
 			return link && link.ntiid === me.getId();
 		})
-		.fail(function (reason) {
+		.catch(function (reason) {
 			return me.findCourse();
 		});
 	},
@@ -101,7 +101,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 			course = course.get('CourseInstance');
 			me.course = course;
 			return course;
-		}).fail(function (reason) {
+		}).catch(function (reason) {
 			console.error(reason);
 			me.course = false;
 			return false;
@@ -131,7 +131,7 @@ module.exports = exports = Ext.define('NextThought.model.forums.Board', {
 					store: store
 				}];
 			})
-			.fail(function (response) {
+			.catch(function (response) {
 				console.error('failed to load board contents: ', response);
 
 				return {};

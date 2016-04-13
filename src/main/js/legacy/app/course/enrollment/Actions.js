@@ -53,10 +53,10 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 					var success = results[1];
 
 					callback.call(null, success, true);
-				}).fail(function (reason) {
+				}).catch(function (reason) {
 					console.error('Failed to enroll in course: ', reason);
 				});
-			}).fail(function (reason) {
+			}).catch(function (reason) {
 				console.error('Failed to enroll in course: ', reason);
 
 				callback.call(null, false, false);
@@ -111,11 +111,11 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 					var success = results[1];
 
 					callback.call(null, success, true);
-				}).fail(function (reason) {
+				}).catch(function (reason) {
 					console.error('Failed to enroll in course: ', reason);
 				});
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to enroll in course: ', reason);
 
 				callback.call(null, false, false);
@@ -141,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Actions
 
 		me.CourseActions.setUpEnrolledCourses(collection)
 			.then(fulfill)
-			.fail(reject);
+			.catch(reject);
 	},
 
 	courseDropped: function (catalogEntry) {

@@ -209,7 +209,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 				me.fireEvent('after-save', record);
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				unmask();
 				console.error('Failed to save the discussion: ', reason);
 				alert('There was trouble saving the discussion');

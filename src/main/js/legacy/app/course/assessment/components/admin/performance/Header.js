@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		if (me.historyItem.shouldSaveGrade(number, letter)) {
 			me.historyItem.saveGrade(number, letter)
-				.fail(function (reason) {
+				.catch(function (reason) {
 					console.error('Failed to save final grade:', arguments);
 				});
 		}

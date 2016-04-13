@@ -265,7 +265,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 					me.buildNotMe(completed, achievements);
 				}
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error(reason);
 
 				//if the request fails and it is me, build the me state with no badges

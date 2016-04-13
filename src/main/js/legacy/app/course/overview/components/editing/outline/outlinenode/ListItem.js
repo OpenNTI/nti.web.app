@@ -157,7 +157,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					beforeShowMenu: me.beforeShowMenuControl
 				};
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.log('Failed to load contents for: ', record.getTitle(), ' ', reason);
 			});
 	}

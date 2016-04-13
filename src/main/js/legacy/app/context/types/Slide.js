@@ -44,7 +44,7 @@ module.exports = exports = Ext.define('NextThought.app.context.types.Slide', {
 				.then(function (basePath) {
 					return Promise.resolve(basePath);
 				})
-				.fail(function () {
+				.catch(function () {
 					console.log(arguments);
 					return Promise.resolve();
 				})

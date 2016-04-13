@@ -115,7 +115,7 @@ module.exports = exports = Ext.define('NextThought.cache.SharedInstance', {
 
 		Service.request(href)
 			.then(this.__updateRecord.bind(this, key))
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to get record for sync', reason);
 				return Promise.reject();
 			});

@@ -39,7 +39,7 @@ module.exports = exports = Ext.define('NextThought.util.BatchExecution', {
 				if (resp instanceof Promise) {
 					resp = resp.then(function (val) {
 						fulfill(val);
-					}).fail(function (reason) {
+					}).catch(function (reason) {
 						console.warn('Batch Execution failed: ', reason);
 					});
 				} else {

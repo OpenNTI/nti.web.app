@@ -35,7 +35,7 @@ module.exports = exports = Ext.define('NextThought.app.course.editing.Actions', 
 				assignment.syncWithResponse(response);
 
 				return assignment;
-			}).fail(function (response) {
+			}).catch(function (response) {
 				var conflict = response && response.status === 409 && response.responseText && ParseUtils.parseItems(response.responseText)[0];
 
 				if (conflict) {

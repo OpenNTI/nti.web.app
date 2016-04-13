@@ -122,7 +122,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.panels.assi
 
 		assignmentHistory.then(function (h) {
 			return h;
-		}).fail(function () {
+		}).catch(function () {
 			return null;
 		}).then(function (h) {
 			readerAssessment.setAssignmentFromStudentProspective(assignment, h);

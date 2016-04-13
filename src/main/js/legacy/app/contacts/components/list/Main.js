@@ -108,7 +108,7 @@ module.exports = exports = Ext.define('NextThought.app.contacts.components.list.
 			.then( function (record) {
 				w.close();
 			})
-			.fail( function (errorText) {
+			.catch( function (errorText) {
 				console.error('An error occured', errorText);
 				me.showError(errorText);
 				btn.setDisabled(false);

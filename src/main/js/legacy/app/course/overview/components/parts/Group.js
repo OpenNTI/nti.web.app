@@ -159,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 									return item;
 								})
-								.fail(function (reason) {
+								.catch(function (reason) {
 									console.error('Unable to update assignment: ', reason);
 
 									item.assignment = assignments.getItem(item['target-ntiid']);

@@ -249,7 +249,7 @@ module.exports = exports = Ext.define('NextThought.mixins.dnd.OrderingContainer'
 		}
 
 		move
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to move: ', reason);
 
 				placeholder.innerHTML = '<span>Error</span>';

@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 				.done(function (o) {
 					me.fillIn(o);
 				})
-				.fail(function (e) {
+				.catch(function (e) {
 					me.destroy();
 					alert(getString('NextThought.view.definition.Window.error'));
 					Error.raiseForReport(e);

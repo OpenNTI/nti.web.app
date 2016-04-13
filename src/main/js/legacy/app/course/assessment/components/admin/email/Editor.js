@@ -456,7 +456,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					me.presentSuccessMessage();
 					me.fireEvent('after-save');
 				})
-				.fail(function (e) {
+				.catch(function (e) {
 					if (me.el) {
 						me.el.unmask();
 					}

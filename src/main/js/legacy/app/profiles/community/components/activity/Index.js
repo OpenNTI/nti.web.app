@@ -310,7 +310,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 					me.onBatchLoad(batch, feedUrl);
 				}
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				if (feedUrl !== me.feedUrl) {
 					console.warn('Failed to loaded batch for a different feedurl than the active, drop it on the floor');
 				} else {

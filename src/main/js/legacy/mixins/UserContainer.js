@@ -320,7 +320,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 				var win = Ext.widget('coderetrieval-window', {groupName: dn, code: code});
 				win.show();
 			})
-			.fail(function (errorText) {
+			.catch(function (errorText) {
 				alert(errorText);
 			});
 	},
@@ -331,7 +331,7 @@ module.exports = exports = Ext.define('NextThought.mixins.UserContainer', {
 				.then(function () {
 					console.log('successfully left the group');
 				})
-				.fail(function (errorText) {
+				.catch(function (errorText) {
 					alert(errorText);
 				});
 		}

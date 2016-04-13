@@ -43,7 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 		this.PromptActions.prompt(this.promptName, {record: this.record, parent: this.parentRecord, root: this.root, bundle: this.bundle})
 			.then(this.onPromptSuccess.bind(this))
-			.fail(this.onPromptCancel.bind(this));
+			.catch(this.onPromptCancel.bind(this));
 	},
 
 	onPromptSuccess: function (action) {

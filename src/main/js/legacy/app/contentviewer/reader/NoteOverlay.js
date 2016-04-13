@@ -295,7 +295,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 
 		return this.UserDataActions.getPreferences(pageId, currentBundle)
 			.then(work.bind(this))
-			.fail(function () { return null; });
+			.catch(function () { return null; });
 	},
 
 	syncEditorWidth: function (c, w) {
@@ -352,7 +352,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		).then(function () {
 			editor.unmask();
 			editor.deactivate();
-		}).fail(function () {
+		}).catch(function () {
 			editor.unmask();
 		});
 
@@ -375,7 +375,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Note
 		this.positionInputBox(Ext.apply(this.lineInfoForRangeAndRect(range, rect), {style: style}));
 
 		return this.openEditor(top)
-			.fail(function () {
+			.catch(function () {
 				alert(getString('NextThought.view.content.reader.NoteOverlay.inprogress'));
 				return Promise.reject();
 			});

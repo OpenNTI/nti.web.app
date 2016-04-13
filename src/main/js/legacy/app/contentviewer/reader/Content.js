@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Cont
 					Ext.fly(container).remove();
 				}
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.warn('Could not insert related links due to: ', e.stack || e.message || e);
 				return;
 			});

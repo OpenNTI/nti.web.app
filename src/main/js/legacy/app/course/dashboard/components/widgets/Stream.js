@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 
 					return Promise.all(tiles);
 				})
-				.fail(function (reason) {
+				.catch(function (reason) {
 					console.error('failed to load dashboard stream:', reason);
 					return [];
 				});

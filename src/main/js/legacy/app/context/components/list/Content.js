@@ -98,7 +98,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.list.C
 				});
 
 			})
-			.fail(function () {
+			.catch(function () {
 				me.iconEl.hide();
 			});
 	},

@@ -59,7 +59,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.Actions', {
 						//the first item with a cmp that implements navigateToObject
 						//Ext.getBody().el.unmask()
 					})
-					.fail(function (reason) {
+					.catch(function (reason) {
 						console.error('Failed to navigate to href: ', href, reason);
 						alert('Unable to navigate to link.');
 						Ext.getBody().el.unmask();

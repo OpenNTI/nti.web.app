@@ -74,7 +74,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 					var showRoster = !!e.isAdministrative && !(e.isContentEditor && e.isContentEditor());
 					update(catalogEntry, e.get('Status'), showRoster, me.infoOnly);
 				})
-				.fail(function () {
+				.catch(function () {
 					//hide tab?
 				});
 		}

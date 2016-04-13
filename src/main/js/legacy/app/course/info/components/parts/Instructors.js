@@ -49,7 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 			var url = Ext.String.format(photo, root, Ext.String.leftPad(i + 1, 2, '0'));
 
 			o.set('photo', url);
-			Service.request({method: 'HEAD', url: url}).fail(o.set.bind(o, 'photo', User.BLANK_AVATAR));
+			Service.request({method: 'HEAD', url: url}).catch(o.set.bind(o, 'photo', User.BLANK_AVATAR));
 		});
 
 		return new Ext.data.Store({

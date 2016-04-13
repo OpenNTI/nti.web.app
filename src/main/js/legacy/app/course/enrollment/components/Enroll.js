@@ -177,7 +177,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 					});
 				}
 			})
-			.fail(function (response) {
+			.catch(function (response) {
 				var json = Ext.JSON.decode(response, true);
 
 				console.error('Enroll and pay failed', response);

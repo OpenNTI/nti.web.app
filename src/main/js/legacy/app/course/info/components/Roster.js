@@ -231,7 +231,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Ro
 		Service.request(smallRequestURLToGetCounts)
 				.then(JSON.parse)
 				.then(this.fillCounts.bind(this))
-				.fail(this.clearCounts.bind(this));
+				.catch(this.clearCounts.bind(this));
 	},
 
 	buildStore: function (url) {

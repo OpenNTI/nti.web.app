@@ -63,7 +63,7 @@ module.exports = exports = Ext.define('NextThought.app.course.dashboard.componen
 							context: Promise.resolve(context)
 						}
 					};
-				}).fail(function () {
+				}).catch(function () {
 					return {
 						xtype: me.xtype,
 						baseHeight: me.HEIGHT,

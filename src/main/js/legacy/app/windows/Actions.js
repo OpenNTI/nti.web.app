@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 		return fetchObject.then(function (result) {
 			me.WindowStore.removeCache(id);
 			me.WindowStore.fireShowWindow(result, state, el, monitors, precache);
-		}).fail(function (error) {
+		}).catch(function (error) {
 			me.WindowStore.fireShowWindow(error, state, el, monitors, precache);
 		});
 	},
@@ -128,7 +128,7 @@ module.exports = exports = Ext.define('NextThought.app.windows.Actions', {
 			.then(function (result) {
 				me.WindowStore.fireShowWindow(result, state);
 			})
-			.fail(function (error) {
+			.catch(function (error) {
 				me.WindowStore.fireShowWindow(error);
 			});
 	}

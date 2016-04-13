@@ -546,7 +546,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 			.then(function () {
 				return me.state;
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to load enrollment details', reason);
 				me.__showError();
 				return Promise.reject();//keep the failure going
@@ -829,7 +829,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 										done(true, changed);
 									}
 								})
-								.fail(function (reason) {
+								.catch(function (reason) {
 									var msg;
 
 									if (reason === 404) {
@@ -881,7 +881,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 										win.close();
 									}
 								})
-								.fail(function (reason) {
+								.catch(function (reason) {
 									alert('Unable to find course.');
 									console.error('Unable to find course.', reason);
 								});
@@ -896,7 +896,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 						}
 						done(true, changed);
 					})
-					.fail(function (reason) {
+					.catch(function (reason) {
 						if (reason === 409) {
 							console.error('failed to enroll in course', reason);
 							me.showMessage(getString('NextThought.view.courseware.enrollment.Details.AlreadyEnrolled'), true);
@@ -967,7 +967,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.Details
 							me.mon(me.suggestContactsWin, 'destroy', onComplete);
 							me.mon(me.suggestContactsWin, 'destroy', 'refresh');
 						})
-						.fail(function () {
+						.catch(function () {
 							me.mon(Ext.widget('oobe-contact-window'), 'destroy', onComplete);
 						});
 				}

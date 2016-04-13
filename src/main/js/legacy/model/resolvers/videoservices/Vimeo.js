@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.model.resolvers.videoservices
 
 					return json;
 				})
-				.fail(function (reason) {
+				.catch(function (reason) {
 					console.log('Unable to resolve vimeo poster: ', reason);
 					return {
 						poster: Globals.CANVAS_BROKEN_IMAGE.src,

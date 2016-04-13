@@ -246,7 +246,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 						me.contextEl.select('input').addCls('preview').set({readonly: true});
 					}
 				})
-				.fail(function (error) {
+				.catch(function (error) {
 					if (me.contextEl) {
 						me.contextEl.unmask();
 					}

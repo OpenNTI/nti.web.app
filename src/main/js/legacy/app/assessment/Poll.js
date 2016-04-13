@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.Poll', {
 				me.poll.setResults(result.get('Aggregated'));
 				me.updateWithResults(result.get('Submission').get('Submission'));
 			})
-			.fail(function () {
+			.catch(function () {
 				alert('Failed to submit your poll');
 			})
 			.always(function () {

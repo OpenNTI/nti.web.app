@@ -323,7 +323,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 				me.enrollmentOption.tokenObject = result.tokenObject;
 				me.done(me);
 			})
-			.fail(function (error) {
+			.catch(function (error) {
 				if (!invalid) {
 					console.error('failed to create token', arguments);
 					me.removeMask();

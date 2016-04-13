@@ -90,7 +90,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					}
 					return Promise.resolve(me.record);
 				})
-				.fail(function (error) {
+				.catch(function (error) {
 					console.error('Unable to Resolve Video: ' + error);
 					return Promise.resolve(me.record);
 				});

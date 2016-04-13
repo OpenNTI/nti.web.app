@@ -71,7 +71,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 				.then(function () {
 					me.triggerFileDownload(record);
 				})
-				.fail(function () {
+				.catch(function () {
 					console.warn('Failed to lock badge...', arguments);
 					me.askForEmailVerification('downloadBadge', record, targetEl);
 				});
@@ -87,13 +87,13 @@ module.exports = exports = Ext.define('NextThought.mixins.ExportBadge', {
 						.then(function (successes) {
 							console.log('Congratulations, your badge was sent to backpack: ' + successes);
 						})
-						.fail(function (errors) {
+						.catch(function (errors) {
 							Ext.each(errors, function (err) {
 								console.warn('Failed Assertion: ' + err.assertion + ' Reason: ' + err.reason);
 							});
 						});
 				})
-				.fail(function () {
+				.catch(function () {
 					me.askForEmailVerification('exportToBackPack', record, targetEl);
 				});
 	},

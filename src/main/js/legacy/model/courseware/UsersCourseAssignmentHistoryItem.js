@@ -182,7 +182,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 								url: url,
 								method: 'DELETE'
 							})
-								.fail(function () {
+								.catch(function () {
 									console.error('Failed to reset assignment: ', arguments);
 									reject('Request Failed');
 								})
@@ -252,7 +252,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 					Service.request({
 						url: record.getLink('UsersCourseAssignmentHistoryItem') || record.get('href'),
 						method: 'DELETE'})
-							.fail(function () {
+							.catch(function () {
 								alert('Sorry, I could not do that.');
 								console.error(arguments);
 							})
@@ -311,7 +311,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 					}
 					me.fireEvent('excused-changed', newGrade);
 				})
-				.fail(function (err) {
+				.catch(function (err) {
 					console.log('Excusing grade failed: ' + err);
 				});
 		}

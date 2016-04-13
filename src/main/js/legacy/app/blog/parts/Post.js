@@ -220,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.app.blog.parts.Post', {
 
 		this.BlogActions.deleteBlogPost(this.record)
 			.then(this.fireEvent.bind(this, 'record-deleted'))
-			.fail(() => {
+			.catch(() => {
 				this.el.unmask();
 			});
 	},

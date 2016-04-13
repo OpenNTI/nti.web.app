@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.components.Sugge
 					me.hide();
 				}
 			})
-			.fail(function () {
+			.catch(function () {
 				me.hide();
 			});
 	},

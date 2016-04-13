@@ -125,7 +125,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 				assignments.getHistory(true);
 
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to load assignments:', reason);
 				resetView(false);
 			});

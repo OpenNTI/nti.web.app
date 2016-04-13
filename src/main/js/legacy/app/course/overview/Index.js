@@ -176,7 +176,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 			.then(function () {
 				if (route.object.id) {
 					return Service.getObject(ParseUtils.decodeFromURI(route.object.id))
-						.fail(function (reason) {
+						.catch(function (reason) {
 							console.log('Failed to resolve note: ', reason);
 						});
 				}
@@ -258,7 +258,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.Index', {
 				if (me.el) {
 					me.el.unmask();
 				}
-			}).fail(function (reason) {
+			}).catch(function (reason) {
 				alert('Failed to load reading.');
 
 				if (me.el) {

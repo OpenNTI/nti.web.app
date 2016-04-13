@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 				url: url,
 				method: 'POST'
 			})
-			.fail(function () {
+			.catch(function () {
 				console.error('Failed to excuse grade: ', arguments);
 				reject('Request Failed');
 			})
@@ -254,7 +254,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 
 			return response;
 		})
-		.fail(function (reason) {
+		.catch(function (reason) {
 			me.set('value', null);
 
 			Ext.MessageBox.alert({

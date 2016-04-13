@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 						me.__presentVideo(me.mediaId, basePath, options);
 					}
 				})
-				.fail(function () {
+				.catch(function () {
 					me.__presentSlidedeck(me.mediaId, null, options);
 				});
 		}
@@ -183,7 +183,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 		var me = this;
 
 		return me.resolveVideo(me.mediaId)
-				.fail(function () {
+				.catch(function () {
 					if (me.slidedeck && me.slidedeck.getId() === me.mediaId) {
 						return me.slidedeck;
 					}
@@ -232,7 +232,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 			mediaId = this.videoId || this.slidedeckId;
 
 		this.goToParentLesson()
-			.fail(function () {
+			.catch(function () {
 				me.PathActions.getPathToObject(mediaId)
 					.then(function (path) {
 						var i,
@@ -248,10 +248,10 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 
 						me.Router.root.attemptToNavigateToPath(parentPath);
 					})
-					.fail(function () {
+					.catch(function () {
 						return Ext.isEmpty(me.parentLesson) ? Promise.reject() : me.__navigateToParent(me.parentLesson);
 					})
-					.fail(function () {
+					.catch(function () {
 						me.pushRootRoute('Library', '/library');
 					});
 			});
@@ -271,7 +271,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 						fulfill();
 					}
 				})
-				.fail(reject);
+				.catch(reject);
 		});
 	},
 

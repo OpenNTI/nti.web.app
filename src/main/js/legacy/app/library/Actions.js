@@ -112,12 +112,12 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 
 	findBundle: function (id) {
 		return this.CourseActions.findCourseInstance(id)
-				.fail(this.ContentActions.findContent.bind(this.ContentActions, id));
+				.catch(this.ContentActions.findContent.bind(this.ContentActions, id));
 	},
 
 	findBundleForNTIID: function (id) {
 		return this.CourseActions.findForNTIID(id)
-			.fail(this.ContentActions.findForNTIID.bind(this.ContentActions, id));
+			.catch(this.ContentActions.findForNTIID.bind(this.ContentActions, id));
 	},
 
 	findContentPackage: function (id) {
@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 
 				return bundles;
 			})
-			.fail(this.ContentActions.findContentByPriority.bind(this.ContentActions, fn));
+			.catch(this.ContentActions.findContentByPriority.bind(this.ContentActions, fn));
 	},
 
 	getVideoIndex: function (bundle) {
@@ -241,7 +241,7 @@ module.exports = exports = Ext.define('NextThought.app.library.Actions', {
 				return vi;
 			});
 
-		cache[index].fail(function (reason) {
+		cache[index].catch(function (reason) {
 			console.error('Failed to load video index', reason);
 			//it fails, remove the cached promise so it can retry.
 			delete cache[index];

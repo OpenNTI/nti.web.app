@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 			.then(function () {
 				return true;
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to delete content: ', reason);
 				return false;
 			})

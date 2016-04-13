@@ -75,7 +75,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.For
 			.then(function (path) {
 				return path.concat([topic]);
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to get path to topic:', reason);
 				return Promise.reject();
 			});
@@ -89,7 +89,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.For
 			.then(function (path) {
 				return path;
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to get path to topic post: ', reason);
 				return Promise.reject();
 			});
@@ -103,7 +103,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.For
 			.then(function (path) {
 				return path.concat([comment]);
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to get path to topic comment: ', reason);
 				return Promise.reject();
 			});

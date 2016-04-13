@@ -22,7 +22,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		return parent.insertForm(form, position.index)
-			.fail(this.parseError.bind(this));
+			.catch(this.parseError.bind(this));
 	},
 
 
@@ -37,7 +37,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		return parent.insertContent(values, position.index)
-			.fail(this.parseError.bind(this));
+			.catch(this.parseError.bind(this));
 	},
 
 
@@ -100,7 +100,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 		}
 
 		return newParent.moveToFromContainer(record, newPosition.index, originalPosition.index, originalParent, root)
-			.fail(function (reason) {
+			.catch(function (reason) {
 				return Promise.reject({
 					msg: 'Unable to move record.',
 					error: reason
@@ -112,7 +112,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	__updateRecord: function (form, record, originalPosition, newPosition, root) {
 		return this.__saveRecord(form, record)
 			.then(this.__moveRecord.bind(this, record, originalPosition, newPosition, root))
-			.fail(this.parseError.bind(this));
+			.catch(this.parseError.bind(this));
 	},
 
 
@@ -141,7 +141,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	__updateRecordValues: function (values, record, originalPosition, newPosition, root) {
 		return this.__saveRecordValues(values, record)
 			.then(this.__moveRecord.bind(this, record, originalPosition, newPosition, root))
-			.fail(this.parseError.bind(this));
+			.catch(this.parseError.bind(this));
 	},
 
 

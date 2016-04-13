@@ -93,7 +93,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 	navigateToObject: function (object, fragment) {
 		return this.mixins.Object.handleObject.call(this, object)
 			.then(this.__handleObjectNav.bind(this, fragment))
-			.fail(this.__handleNoObjectNavigation.bind(this, object, fragment));
+			.catch(this.__handleNoObjectNavigation.bind(this, object, fragment));
 	},
 
 
@@ -192,7 +192,7 @@ module.exports = exports = Ext.define('NextThought.mixins.Router', {
 
 			return Promise.reject();
 		})).then(me.__handleObjectRoute.bind(me))
-			.fail(function () {
+			.catch(function () {
 				me.replaceRootRoute('', '/');
 			});
 	},

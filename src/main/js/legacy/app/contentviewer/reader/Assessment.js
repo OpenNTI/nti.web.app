@@ -239,7 +239,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.reader.Asse
 			.then(function () {
 				me.reader.fireEvent('navigate-to-assignment', assignment.getId());
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to go back to assignment', reason);
 			});
 	},

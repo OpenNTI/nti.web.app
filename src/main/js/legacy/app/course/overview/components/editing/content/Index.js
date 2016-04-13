@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 
 				return me.currentOverview.onceLoaded();
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error(reason);
 			})
 			.then(me.maybeUnmask.bind(me));

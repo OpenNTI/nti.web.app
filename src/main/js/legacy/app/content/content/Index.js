@@ -264,7 +264,7 @@ module.exports = exports = Ext.define('NextThought.app.content.content.Index', {
 			.then(function (pageInfo) {
 				me.showReader(pageInfo, null, route.hash, route.precache.note);
 			})
-			.fail(this.__onFail.bind(this));
+			.catch(this.__onFail.bind(this));
 	},
 
 	showNote: function (note) {

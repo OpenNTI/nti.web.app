@@ -180,7 +180,7 @@ module.exports = exports = Ext.define('NextThought.app.content.Index', {
 					updateInactive();
 					return item;
 				})
-				.fail(function (reason) {
+				.catch(function (reason) {
 					me.replaceRoute('Info', 'info');
 				});
 	},

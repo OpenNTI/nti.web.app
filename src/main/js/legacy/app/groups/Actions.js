@@ -347,7 +347,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 				.then(function (record) {
 					fulfill(record);
 				})
-				.fail(function (record, operation, response) {
+				.catch(function (record, operation, response) {
 					var msg = response.message,
 						field = response.field,
 						code = response.code;
@@ -390,7 +390,7 @@ module.exports = exports = Ext.define('NextThought.app.groups.Actions', {
 					.then(function (code) {
 						fulfill(code);
 					})
-					.fail(function (rec, operation, response) {
+					.catch(function (rec, operation, response) {
 						var msg = response && response.message,
 							field = response && response.field,
 							code = response && response.code;

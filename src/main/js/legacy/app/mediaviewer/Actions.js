@@ -73,7 +73,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 
 						return Promise.reject();
 					})
-					.fail(function () {
+					.catch(function () {
 						return Promise.reject();
 					});
 			}
@@ -158,7 +158,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 
 					fulfill(cueList);
 				})
-				.fail(function () {
+				.catch(function () {
 					console.log('Failure to load transcripts... ', arguments);
 					reject(arguments);
 				});
@@ -217,7 +217,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Actions', {
 					}
 					fulfill(p);
 				})
-				.fail(reject);
+				.catch(reject);
 		});
 	},
 

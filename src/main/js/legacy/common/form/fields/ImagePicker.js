@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.ImagePicke
 				me.croppedImage = blob;
 				me.setPreviewFromCrop(blob);
 			})
-			.fail(function () {
+			.catch(function () {
 				me.onClearImage();
 			})
 			.always(function () {

@@ -120,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.compon
 
 		StoreUtils.loadBatch(this.membersLink, params)
 			.then(this.onBatchLoad.bind(this))
-			.fail(this.onBatchError.bind(this));
+			.catch(this.onBatchError.bind(this));
 	},
 
 	onLoadMore: function () {

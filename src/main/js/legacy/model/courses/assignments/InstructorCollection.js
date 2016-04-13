@@ -149,7 +149,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.assignments.Ins
 					.then(function (response) {
 						return ParseUtils.parseItems(response)[0];
 					})
-					.fail(function (reason) {
+					.catch(function (reason) {
 						if (reason && reason.status === 404) {
 							return NextThought.model.courseware.UsersCourseAssignmentHistory.getEmpty();
 						}

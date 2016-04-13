@@ -196,7 +196,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 						success.call(null, result);
 					}
 				})
-				.fail(function (reason) {
+				.catch(function (reason) {
 					console.error('Error processing price,', reason);
 
 					if (reason && reason.responseText) {
@@ -338,11 +338,11 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 					wait(delay)
 						.then(poll.bind(me, attempt))
 						.then(process.bind(me, pollingIntervalInMillis))
-						.fail(reject);
+						.catch(reject);
 				} else {
 					poll(attempt)
 						.then(process.bind(me, pollingIntervalInMillis))
-						.fail(reject);
+						.catch(reject);
 				}
 			}
 
@@ -387,7 +387,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 					purchaseAttempt: attempt
 				});
 			})
-			.fail(function (attempt) {
+			.catch(function (attempt) {
 				done();
 
 				if (attempt && attempt.isPurchaseAttempt) {
@@ -441,7 +441,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 					purchaseAttempt: attempt
 				});
 			})
-			.fail(function (attempt) {
+			.catch(function (attempt) {
 				done();
 
 				if (attempt && attempt.isPurchaseAttempt) {
@@ -501,7 +501,7 @@ module.exports = exports = Ext.define('NextThought.app.store.Actions', {
 				done();
 				success.call(null, courseInstance);
 			})
-			.fail(function (response) {
+			.catch(function (response) {
 				done();
 
 				var json = Ext.decode(response && response.responseText, true);

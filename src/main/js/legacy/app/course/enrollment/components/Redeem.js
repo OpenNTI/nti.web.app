@@ -135,7 +135,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.compone
 			.then(function (result) {
 				me.done(me);
 			})
-			.fail(function (error) {
+			.catch(function (error) {
 				if (!invalid) {
 					me.submitBtnCfg.disabled = false;
 					me.fireEvent('update-buttons');

@@ -194,6 +194,6 @@ module.exports = exports = Ext.define('NextThought.app.account.settings.componen
 
 		this.AccountActions.changePassword(values)
 			.then(this.setSuccess.bind(this))
-			.fail(this.setError.bind(this));
+			.catch(this.setError.bind(this));
 	}
 });

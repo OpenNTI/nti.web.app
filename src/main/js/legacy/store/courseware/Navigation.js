@@ -31,7 +31,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Navigation',
 			config.tocPromise
 		])
 			.then(this.fillFromOutline.bind(this))
-			.fail(this.failedToBuild.bind(this));
+			.catch(this.failedToBuild.bind(this));
 
 		this.callParent(arguments);
 	},

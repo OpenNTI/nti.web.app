@@ -724,7 +724,7 @@ module.exports = exports = Ext.define('NextThought.common.form.Form', {
 				me.el.unmask();
 				return results;
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				if (progress) {
 					progress.showError();
 					me.removeCls('saving');

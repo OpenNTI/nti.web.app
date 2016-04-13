@@ -304,7 +304,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 							.then(function () {
 								me.setState(me.activeTab);
 							})
-							.fail(function () {
+							.catch(function () {
 								me.setState(me.activeTab);
 								alert('There was trouble deleting your contact.');
 							});
@@ -324,7 +324,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.Index', {
 			.then(function (something) {
 				me.setState(me.activeTab);
 			})
-			.fail(function () {
+			.catch(function () {
 				me.setState(me.activeTab);
 				alert('There was trouble adding your contact.');
 			});

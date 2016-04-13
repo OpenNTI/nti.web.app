@@ -238,7 +238,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.re
 					.then(function () {
 						wait(10).then(me.fireEvent.bind(me, 'sync-height'));
 					})
-					.fail(function () {
+					.catch(function () {
 						console.error('*****FAILED to load UserData in the Media Viewer: ', arguments);
 					});
 			}

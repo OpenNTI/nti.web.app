@@ -38,7 +38,7 @@ module.exports = exports = Ext.define('NextThought.app.navigation.path.parts.Con
 			.then(function (path) {
 				return path.concat([note]);
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to get path to note: ', reason);
 				return Promise.reject();
 			});

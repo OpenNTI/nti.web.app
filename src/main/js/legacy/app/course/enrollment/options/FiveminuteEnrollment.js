@@ -295,7 +295,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 						}
 					}
 				})
-				.fail(function (reason) {
+				.catch(function (reason) {
 					console.error('course detail request failed:', reason);
 
 					option.API_DOWN = true;

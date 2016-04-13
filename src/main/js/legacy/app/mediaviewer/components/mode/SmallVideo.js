@@ -290,7 +290,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.mo
 							fulfill(location);
 						});
 				})
-				.fail(reject);
+				.catch(reject);
 		});
 	},
 

@@ -143,7 +143,7 @@ module.exports = exports = Ext.define('NextThought.model.FriendsList', {
 
 				return ParseUtils.parseItems(json.Items);
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Faild to load forum list for group, ', reason);
 
 				return [];

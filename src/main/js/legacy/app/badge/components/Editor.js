@@ -79,7 +79,7 @@ module.exports = exports = Ext.define('NextThought.app.badge.components.Editor',
 						me.doSave();
 					}
 				})
-				.fail(function () {
+				.catch(function () {
 					me.activeEditor.showError();
 				});
 		}

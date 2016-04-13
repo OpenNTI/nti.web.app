@@ -120,7 +120,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 			this.StreamSource.getCurrentBatch()
 				.then(this.loadBatch.bind(this))
 				.then(this.maybeLoadMoreItems.bind(this))
-				.fail(this.showError.bind(this))
+				.catch(this.showError.bind(this))
 				.always(this.removeLoading.bind(this));
 		} else {
 			this.onEmpty();
@@ -230,7 +230,7 @@ module.exports = exports = Ext.define('NextThought.app.stream.Base', {
 			this.StreamSource.getNextBatch()
 				.then(this.loadBatch.bind(this))
 				.then(this.maybeLoadMoreItems.bind(this))
-				.fail(this.showError.bind(this))
+				.catch(this.showError.bind(this))
 				.always(this.removeLoading.bind(this));
 		}
 	},

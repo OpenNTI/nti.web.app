@@ -67,7 +67,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					};
 				} else {
 					data = resolver.resolveForSource(source)
-						.fail(function () {
+						.catch(function () {
 							return null;
 						});
 				}

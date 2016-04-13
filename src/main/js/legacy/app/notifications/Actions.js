@@ -45,7 +45,7 @@ module.exports = exports = Ext.define('NextThought.app.notifications.Actions', {
 						//we get this back in seconds so convert it to millis
 						lastViewed = new Date(parseFloat(_lastViewed) * 1000);
 					})
-					.fail(function () {
+					.catch(function () {
 						console.warn('Could not resolve notifications lastViewed');
 					})
 					.always(function () {

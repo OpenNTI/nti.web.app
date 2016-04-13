@@ -138,7 +138,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			} else {
 				ready();
 			}
-		}).fail(function (error) {
+		}).catch(function (error) {
 			console.error('Failure to load Comments store. Error: ', error);
 		});
 	},
@@ -307,7 +307,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 						'avatarChanged': me.setAvatar.bind(me, user, record)
 					});
 				})
-				.fail(function (reason) {
+				.catch(function (reason) {
 					console.error(reason);
 				});
 		} else {
@@ -510,7 +510,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 						me.fireEvent('show-profile', u);
 					}
 				})
-				.fail(function (reason) {
+				.catch(function (reason) {
 					console.error(reason);
 				});
 			return;
@@ -590,7 +590,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 							'Deleted': true
 						});
 
-					}).fail(function (reason) {
+					}).catch(function (reason) {
 						console.error(reason);
 					});
 
@@ -765,7 +765,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 					}
 				}
 			})
-			.fail(function () {
+			.catch(function () {
 				editor.markError(editor.getEl(), 'Could not save comment');
 				unmask();
 			});

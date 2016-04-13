@@ -68,7 +68,7 @@ module.exports = exports = Ext.define('NextThought.common.components.BoundCollec
 			.then(function (json) {
 				me.setCollection(json);
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to load outline contents: ', reason);
 				//TODO: Show an error state
 			});

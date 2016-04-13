@@ -266,7 +266,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.options
 								course.set('EnrollmentOptions', catalogEntry.get('EnrollmentOptions'));
 								me.CourseEnrollmentActions.refreshEnrolledCourses(fulfill, reject);
 							})
-							.fail(reject);
+							.catch(reject);
 					});
 				});
 			}

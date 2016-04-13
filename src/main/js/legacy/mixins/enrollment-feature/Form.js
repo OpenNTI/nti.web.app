@@ -291,7 +291,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 						updateInputs();
 					}
 				})
-				.fail(function (reason) {
+				.catch(function (reason) {
 					console.error('Failed to load nation list ', reason);
 				});
 		}
@@ -329,7 +329,7 @@ module.exports = exports = Ext.define('NextThought.mixins.enrollment-feature.For
 						updateInputs();
 					}
 				})
-				.fail(function (reason) {
+				.catch(function (reason) {
 					console.error('Failed to load state list: ', reaseon);
 				});
 		}

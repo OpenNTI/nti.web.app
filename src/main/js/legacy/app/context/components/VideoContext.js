@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.context.components.VideoC
 
 			if (me.doNavigate) {
 				me.isInPageContext()
-					.fail(function () {
+					.catch(function () {
 						me.seeMoreEl.removeCls('hidden');
 						me.mon(me.seeMoreEl, 'click', me.doNavigate.bind(me, me.record));
 					});

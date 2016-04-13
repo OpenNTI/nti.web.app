@@ -124,7 +124,7 @@ module.exports = exports = Ext.define('NextThought.app.library.courses.component
 							finish(course.getCourseCatalogEntry(), fulfill);
 						}
 					})
-					.fail(function (reason) {
+					.catch(function (reason) {
 						if (!state.cce) {
 							return Promise.reject('No most recent enrollment, or cce to return to');
 						} else {

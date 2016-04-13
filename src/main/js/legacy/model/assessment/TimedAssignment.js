@@ -92,7 +92,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.TimedAssignm
 
 					return json.TimeRemaining * 1000;
 				})
-				.fail(fail);
+				.catch(fail);
 	},
 
 

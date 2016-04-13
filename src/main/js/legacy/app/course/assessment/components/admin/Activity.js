@@ -110,7 +110,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 				rec.set('suffix', ' for ' + u);
 
-			}).fail(function (r) {
+			}).catch(function (r) {
 				console.error(
 					'Failed associate instructor feedback activity to a students assignment.',
 					' Clicking on this feedback item will just take you to the assignment overview of all students, not a particular one, because:\n',
@@ -159,7 +159,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					user: user
 				});
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.log('Couldn\'t get user because ' + reason);
 			});
 	}

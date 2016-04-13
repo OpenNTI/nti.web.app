@@ -285,7 +285,7 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.TabPanel',
 				me.mon(me.suggestContactsWin, 'destroy', onComplete);
 				me.mon(me.suggestContactsWin, 'destroy', 'refresh');
 			})
-			.fail(function () {
+			.catch(function () {
 				onComplete.call(me);
 			});
 	},

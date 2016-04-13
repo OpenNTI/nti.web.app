@@ -220,7 +220,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		this.SearchActions.loadSearchPage(search.term, accepts, search.bundle, search.page, page)
 			.then(this.onLoadResults.bind(this, this.lock))
-			.fail(this.onLoadFail.bind(this, this.lock));
+			.catch(this.onLoadFail.bind(this, this.lock));
 	},
 
 	loadNextPage: function () {
@@ -235,7 +235,7 @@ module.exports = exports = Ext.define('NextThought.app.search.Index', {
 
 		StoreUtils.loadBatch(this.nextPageLink)
 			.then(this.onLoadResults.bind(this, this.lock))
-			.fail(this.onLoadFail.bind(this, this.lock));
+			.catch(this.onLoadFail.bind(this, this.lock));
 	},
 
 	onLoadResults: function (lock, batch) {

@@ -123,7 +123,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 			me.addMask();
 			store.load();
 			me.removeMask();
-		}).fail(function (reason) {
+		}).catch(function (reason) {
 			console.error('faild to save feedback', reason);
 		});
 

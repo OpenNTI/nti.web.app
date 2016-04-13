@@ -53,7 +53,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.results.Poll',
 
 		this.getResults()
 			.then(this.showResults.bind(this))
-			.fail(this.showError.bind(this))
+			.catch(this.showError.bind(this))
 			.always(this.resize.bind(this));
 	},
 

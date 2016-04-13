@@ -60,7 +60,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 				.then(function (json) {
 					me.__binItems(json.Items);
 				})
-				.fail(function (reason) {
+				.catch(function (reason) {
 					console.log('Failed to load stream: ', reason);
 					return Promise.reject();
 				});
@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.store.courseware.Stream', {
 			.then(function () {
 				return me.__getOrLoadBin(date);
 			})
-			.fail(function () {
+			.catch(function () {
 				return Ext.clone(me.EMPTY_BIN);
 			});
 	},

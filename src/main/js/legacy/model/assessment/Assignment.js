@@ -56,7 +56,7 @@ module.exports = exports = Ext.define('NextThought.model.assessment.Assignment',
 			.then(function (response) {
 				return ParseUtils.parseItems(response)[0];
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Failed to get the assignment save point: ', reason);
 			});
 	},

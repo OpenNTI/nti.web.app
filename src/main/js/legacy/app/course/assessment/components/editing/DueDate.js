@@ -303,7 +303,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 					me.onSave();
 				}
 			})
-			.fail(function (response) {
+			.catch(function (response) {
 				//Show an error
 				var error = Globals.parseError(response);
 

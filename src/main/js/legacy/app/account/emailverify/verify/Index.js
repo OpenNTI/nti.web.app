@@ -192,7 +192,7 @@ module.exports = exports = Ext.define('NextThought.app.account.emailverify.verif
 			me = this;
 
 		me.saveToken(tokenVal)
-			.fail(function () {
+			.catch(function () {
 				me.showError();
 			});
 	},
@@ -436,7 +436,7 @@ module.exports = exports = Ext.define('NextThought.app.account.emailverify.verif
 						delete me.isVerifyingEmail;
 					});
 			})
-			.fail(function (resp) {
+			.catch(function (resp) {
 				var e = Ext.decode(resp.responseText);
 				if (resp.status === 422) {
 					me.presentPendingVerification(e && e.seconds);

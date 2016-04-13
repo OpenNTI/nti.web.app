@@ -260,7 +260,7 @@ module.exports = exports = Ext.define('NextThought.common.form.fields.FilePicker
 
 		Service.getObject(value)
 			.then(this.setPreviewFromBlob.bind(this))
-			.fail(this.onFailToLoadPreview.bind(this));
+			.catch(this.onFailToLoadPreview.bind(this));
 	},
 
 	setPreviewFromBlob: function (blob) {

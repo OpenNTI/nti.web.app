@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.app.course.enrollment.StateSt
 						catalogData.EnrolledStartDate = instance.get('CreatedTime');
 					}
 				})
-				.fail(function (reason) {
+				.catch(function (reason) {
 					console.error('Failed to find course instance', reason);
 				});
 		} else {

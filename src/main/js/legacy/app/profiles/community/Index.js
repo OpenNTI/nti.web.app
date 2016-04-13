@@ -195,7 +195,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 
 					return topic;
 				})
-				.fail(function (reason) {
+				.catch(function (reason) {
 					console.error('failed to load forum: ', reason);
 
 					cmp.setSourceURL(entity.getLink('Activity'));
@@ -270,7 +270,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 				me.activeCommunity = ParseUtils.parseItems(response)[0];
 				me.updateCommunity();
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Error joining community: ', reason);
 				alert('Unable to join community at this time.');
 			});
@@ -292,7 +292,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 				me.activeCommunity = ParseUtils.parseItems(response)[0];
 				me.updateCommunity();
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Error leaving community: ', reason);
 				alert('Unable to leave community at this time.');
 			});
@@ -313,7 +313,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 				me.activeCommunity = ParseUtils.parseItems(response)[0];
 				me.updateCommunity();
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Error hiding community: ', reason);
 				alert('Unable to show community at this time.');
 			});
@@ -334,7 +334,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.community.Index'
 				me.activeCommunity = ParseUtils.parseItems(response)[0];
 				me.updateCommunity();
 			})
-			.fail(function (reason) {
+			.catch(function (reason) {
 				console.error('Error hiding community: ', reason);
 				alert('Unable to hide community at this time.');
 			});
