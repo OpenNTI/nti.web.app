@@ -18,7 +18,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 	},
 
 
-	initComponent: function () {
+	initComponent () {
 		this.callParent(arguments);
 
 		this.add([
@@ -31,11 +31,16 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 	},
 
 
-	userChanged: function (entity) {
+	userChanged (entity) {
 		var me = this;
+
+		this.activeEntity = entity;
+
 		return Promise.all([
 			me.membershipCmp.setUser(entity),
 			me.suggestedCmp.setEntity(entity)
-		]);
+		]).then(() => {
+			this.restoreState();
+		});
 	}
 });
