@@ -275,7 +275,7 @@ module.exports = exports = Ext.define('NextThought.app.Body', {
 
 		return userView.setActiveEntity(id, user)
 			.then(userView.handleRoute.bind(userView, subRoute, route.precache))
-			.fail(function () {
+			.catch(function (error) {
 				me.replaceRoute('', '/library');
 			});
 	},

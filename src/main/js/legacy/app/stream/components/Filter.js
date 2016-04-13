@@ -16,8 +16,9 @@ module.exports = exports = Ext.define('NextThought.app.stream.components.Filter'
 	initComponent () {
 		this.callParent(arguments);
 
-		if (!this.filters.length) {
+		if (!this.filters || !this.filters.length) {
 			this.hide();
+			this.filters = [];
 		}
 
 		this.filterMap = this.setUpFilterMap(this.filters);
