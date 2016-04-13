@@ -70,7 +70,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.Index', {
 
 		if (bundle && bundle.getWrapper) {
 			return bundle.getWrapper()
-				.done(function (e) {
+				.then(function (e) {
 					var showRoster = !!e.isAdministrative && !(e.isContentEditor && e.isContentEditor());
 					update(catalogEntry, e.get('Status'), showRoster, me.infoOnly);
 				})

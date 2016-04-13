@@ -319,7 +319,7 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 			record.commit();
 		}
 		this.addAll(records)
-				.done(function () {operation.setSuccessful();})
+				.then(function () {operation.setSuccessful();})
 				.always(function () {
 					operation.setCompleted();
 					if (typeof callback === 'function') {
@@ -364,13 +364,13 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 		//read a single record
 		if (operation.id) {
 			me.get(operation.id)
-					.done(function (v) {operation.setSuccessful(); return v;})
+					.then(function (v) {operation.setSuccessful(); return v;})
 					.always(finish);
 			return;
 		}
 
 		me.getRange(operation.start, operation.limit)
-				.done(function (v) {operation.setSuccessful(); return v;})
+				.then(function (v) {operation.setSuccessful(); return v;})
 				.always(finish);
 	},
 
@@ -388,7 +388,7 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 		}
 
 		this.putAll(records)
-				.done(function () {operation.setSuccessful();})
+				.then(function () {operation.setSuccessful();})
 				.always(function () {
 					operation.setCompleted();
 					if (typeof callback === 'function') {
@@ -405,7 +405,7 @@ module.exports = exports = Ext.define('NextThought.proxy.IndexedDB', {
 		operation.setStarted();
 
 		me.removeAll(records.map(function (r) {return r.getId();}))
-				.done(function () {operation.setSuccessful();})
+				.then(function () {operation.setSuccessful();})
 				.always(function () {
 					operation.setCompleted();
 					if (typeof callback === 'function') {

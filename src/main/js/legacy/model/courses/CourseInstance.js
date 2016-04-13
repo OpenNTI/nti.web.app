@@ -620,7 +620,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 				me = this;
 
 			this._outlinePromise = o.getContents()
-					.done(function () {
+					.then(function () {
 						o.bundle = me;
 						o.navStore = me.getNavigationStore();
 						return o;

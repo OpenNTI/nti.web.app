@@ -129,7 +129,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 								return o;
 							});
 				})
-				.done(function (o) {
+				.then(function (o) {
 					me.fillIn(o);
 				})
 				.catch(function (e) {
@@ -224,7 +224,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.components.
 								return me._ieBuildProcessor(text);
 							});
 				})
-				.done(function (p) {
+				.then(function (p) {
 					me.self.xsltProcessor = p;
 					return p;
 				});

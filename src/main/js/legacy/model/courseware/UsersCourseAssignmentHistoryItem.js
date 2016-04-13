@@ -186,7 +186,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 									console.error('Failed to reset assignment: ', arguments);
 									reject('Request Failed');
 								})
-								.done(function () {
+								.then(function () {
 									var user = record.get('Creator'),
 										item = record.get('item'),
 										grade = null;
@@ -256,7 +256,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.UsersCourseA
 								alert('Sorry, I could not do that.');
 								console.error(arguments);
 							})
-							.done(function () {
+							.then(function () {
 								var user = record.get('Creator'),
 									item = record.get('item'),
 									grade = null;

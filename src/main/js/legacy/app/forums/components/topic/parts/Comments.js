@@ -131,9 +131,9 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			me.fireEvent('ready');
 		}
 
-		me.initialLoad.done(function () {
+		me.initialLoad.then(function () {
 			if (me.activeComment) {
-				me.goToComment(me.activeComment).done(ready);
+				me.goToComment(me.activeComment).then(ready);
 				delete me.store.proxy.extraParams.batchContaining;
 			} else {
 				ready();
@@ -408,7 +408,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			container = e.getTarget('.reply:not(.thread-reply)', null, true);
 			if (container) {
 				me.replyTo(record, el)
-					.done(function () {
+					.then(function () {
 						me.editor.addWhiteboard(Ext.clone(me.wbData[guid]), guid + '-reply');
 					});
 			} else {
@@ -504,7 +504,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 
 		if (e.getTarget('.name')) {
 			UserRepository.getUser(record.get('Creator'))
-				.done(function (u) {
+				.then(function (u) {
 					me.mixins.profileLinks.navigateToProfile(u);
 					if (!isMe(u)) {
 						me.fireEvent('show-profile', u);
@@ -582,7 +582,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 					Service.request({
 						url: href,
 						method: 'DELETE'
-					}).done(function () {
+					}).then(function () {
 						record.convertToPlaceholder();
 						record.set({
 							'depth': depth,
@@ -783,7 +783,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 			var refs = comment.get('references');
 
 			if (Ext.isEmpty(refs)) {
-				me.initialLoad.done(function () {
+				me.initialLoad.then(function () {
 					me.scrollCommentIntoView(comment);
 					fulfill();
 				});
@@ -791,7 +791,7 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 				return;
 			}
 
-			me.initialLoad.done(function () {
+			me.initialLoad.then(function () {
 				refs.forEach(function (ref) {
 					var rec = me.store.getById(ref);
 

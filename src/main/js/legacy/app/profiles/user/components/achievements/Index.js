@@ -156,7 +156,7 @@ module.exports = exports = Ext.define('NextThought.app.profiles.user.components.
 
 			if (link) {
 				Service.request(link)
-					.done(this.loadWorkSpace.bind(this));
+					.then(this.loadWorkSpace.bind(this));
 			} else {
 				this.finishLoading();
 				this.setEmptyState();

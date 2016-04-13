@@ -1,12 +1,6 @@
 var Ext = require('extjs');
 
 Object.assign(Promise.prototype, {
-
-	done (fn) {
-		console.error('Depricated: use Promise#then() instead');
-		return this.then(fn);
-	},
-
 	always (fn) {
 		return this.then(fn, fn);
 	}

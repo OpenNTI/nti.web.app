@@ -277,7 +277,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 
 		if (r) {
 			if (!isMe(c)) {
-				UserRepository.getUser(c).done(function (u) {
+				UserRepository.getUser(c).then(function (u) {
 					r.set({
 						label: getFormattedString('NextThought.view.courseware.assessment.Activity.theyfeedback', {name: u}),
 						user: u

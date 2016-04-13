@@ -58,7 +58,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 	loadPage: function () {
 		var me = this;
 		me.mask();
-		return Service.request(me.nextPageURL).done(function (json) {
+		return Service.request(me.nextPageURL).then(function (json) {
 			if (me.isDestroyed) {return;}
 
 			json = Ext.decode(json, true);
@@ -99,7 +99,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			path = (f.get('href') || '').split('/').slice(0, -2).join('/');//EWWW... url nastyness
 
 		if (rec && isMe(rec.get('user'))) {
-			Service.request(path).done(function (submission) {
+			Service.request(path).then(function (submission) {
 				submission = ParseUtils.parseItems(submission)[0];
 				var user = submission.get('Creator');
 				rec.set('user', user);
@@ -126,7 +126,7 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.compone
 			str = ' submitted',
 			r = this.addEvent(this.getEventConfig('--' + str, s.get('assignmentId'), s.get('CreatedTime')));
 		if (r) {
-			UserRepository.getUser(c).done(function (u) {
+			UserRepository.getUser(c).then(function (u) {
 				r.set({
 					label: u + str,
 					user: u

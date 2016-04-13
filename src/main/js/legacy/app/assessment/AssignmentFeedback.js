@@ -116,7 +116,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 			url: feedback.get('href'),
 			method: 'POST',
 			jsonData: item.getData()
-		}).done(function () {
+		}).then(function () {
 			console.log('Saved feedback');
 			editor.deactivate();
 			editor.setValue('');
@@ -215,7 +215,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		}
 
 		UserRepository.getUser(pluck(pluck(records, 'data'), 'Creator'))
-				.done(fill);
+				.then(fill);
 
 	},
 

@@ -104,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.model.courseware.Grade', {
 				console.error('Failed to excuse grade: ', arguments);
 				reject('Request Failed');
 			})
-			.done(function (responseText) {
+			.then(function (responseText) {
 				var o = Ext.JSON.decode(responseText, true);
 
 				record.set(o);

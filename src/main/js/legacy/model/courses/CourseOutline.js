@@ -119,7 +119,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 			me.__promiseToLoadContents = Service.request(l)
 					.then(function (text) { return Ext.decode(text); })
 					.then(function (json) { return ParseUtils.parseItems(json); })
-					.done(function (items) {
+					.then(function (items) {
 						me.set('Items', items);
 						console.timeEnd('Requesting Course Outline: ' + l);
 						return me;
@@ -136,7 +136,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseOutline',
 
 		return this.getContents()
 				.then(function (me) { return me.getNode(id); })
-				.done(function (node) {
+				.then(function (node) {
 					if (!node) {
 						throw 'Not found';
 					}

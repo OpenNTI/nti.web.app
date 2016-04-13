@@ -285,7 +285,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 
 			if (toResolve.length > 0 && canBulkResolve) {
 				me.bulkResolve(toResolve)
-					.done(function (users) {
+					.then(function (users) {
 						//Note we recache the user here no matter what
 						//if we requestsd it we cache the new values
 						users.forEach(function (u) { maybeFinish(u.getId(), me.cacheUser(u, true)); });
@@ -327,7 +327,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 				console.debug('Resolving in bulk...', load.length);
 
 				this.makeBulkRequest(load)
-						.done(function (v) {
+						.then(function (v) {
 							job.forEach(function (p) {
 								try {
 									p.fulfill(v);
@@ -396,7 +396,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		}
 
 		return Promise.all(usernames.chunk(chunkSize).map(me.chunkBulkRequest.bind(me)))
-				.done(rebuild)
+				.then(rebuild)
 				.catch(function failed (reason) {
 					console.error('Failed: %o', reason);
 					return Promise.reject(reason);
@@ -451,7 +451,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 		}
 
 		return Promise.all(divert)
-			.done(function (lists) {
+			.then(function (lists) {
 				return me.recompose(names, lists);
 			})
 			.catch(function (reason) {
@@ -519,7 +519,7 @@ module.exports = exports = Ext.define('NextThought.cache.UserRepository', {
 					});
 				})
 				.always(recieve)
-				.done(fulfill);
+				.then(fulfill);
 		}
 
 		p = new Promise(function (fulfill, reject) {
