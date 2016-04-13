@@ -1,8 +1,9 @@
-var Ext = require('extjs');
-var ActivitySidebar = require('../../../user/components/activity/Sidebar');
-var PartsUsers = require('./parts/Users');
-var ComponentsSuggestedContacts = require('../../../components/SuggestedContacts');
-var ComponentsFilter = require('../../../../stream/components/Filter');
+const Ext = require('extjs');
+
+require('../../../user/components/activity/Sidebar');
+require('./parts/Users');
+require('../../../components/SuggestedContacts');
+require('../../../../stream/components/Filter');
 
 
 module.exports = exports = Ext.define('NextThought.app.profiles.group.components.activity.Sidebar', {
@@ -11,17 +12,24 @@ module.exports = exports = Ext.define('NextThought.app.profiles.group.components
 	layout: 'none',
 	cls: 'activity-sidebar',
 
-	items: [
-		{xtype: 'stream-filter'},
-		{xtype: 'profile-group-membership-condensed'},
-		{xtype: 'profile-suggested-contacts'}
-	],
+
+	getFilters () {
+		return [];
+	},
+
 
 	initComponent: function () {
 		this.callParent(arguments);
+
+		this.add([
+			{xtype: 'profile-group-membership-condensed'},
+			{xtype: 'profile-suggested-contacts'}
+		]);
+
 		this.membershipCmp = this.down('profile-group-membership-condensed');
 		this.suggestedCmp = this.down('profile-suggested-contacts');
 	},
+
 
 	userChanged: function (entity) {
 		var me = this;
