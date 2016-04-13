@@ -1,33 +1,35 @@
-var Ext = require('extjs');
-var ContentUtils = require('../../util/Content');
-var ObjectUtils = require('../../util/Object');
-var ParseUtils = require('../../util/Parsing');
-var ModelBase = require('../Base');
-var MixinsBundleLike = require('../../mixins/BundleLike');
-var MixinsPresentationResources = require('../../mixins/PresentationResources');
-var MixinsDurationCache = require('../../mixins/DurationCache');
-var MixinsAuditLog = require('../../mixins/AuditLog');
-var CoursesAssignmentCollection = require('./AssignmentCollection');
-var CoursesCourseInstanceBoard = require('./CourseInstanceBoard');
-var AssessmentUsersCourseAssignmentSavepoint = require('../assessment/UsersCourseAssignmentSavepoint');
-var CoursewareOutlineInterface = require('../../store/courseware/OutlineInterface');
-var CoursewareNavigation = require('../../store/courseware/Navigation');
-var CoursewareToCBasedOutline = require('../../store/courseware/ToCBasedOutline');
-var CoursewareStream = require('../../store/courseware/Stream');
-var CoursesCourseVideoProgress = require('./CourseVideoProgress');
-var CoursesCourseOutline = require('./CourseOutline');
-var CoursesCourseInstanceSharingScopes = require('./CourseInstanceSharingScopes');
-var CoursesCourseCatalogEntry = require('./CourseCatalogEntry');
-var CoursewareGradeBook = require('../courseware/GradeBook');
-var ModelContentBundle = require('../ContentBundle');
-var ForumsCommunityBoard = require('../forums/CommunityBoard');
-var ForumsCommunityForum = require('../forums/CommunityForum');
-var ModelUserSearch = require('../UserSearch');
-var ModelVideo = require('../Video');
-var AssessmentAssignment = require('../assessment/Assignment');
-var AssessmentQuestionSet = require('../assessment/QuestionSet');
-var MixinsAuditLog = require('../../mixins/AuditLog');
-var {getURL, isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const ContentUtils = require('../../util/Content');
+const ObjectUtils = require('../../util/Object');
+const ParseUtils = require('../../util/Parsing');
+const {getURL, isFeature} = require('legacy/util/Globals');
+const {getString} = require('legacy/util/Localization');
+
+require('../Base');
+require('../../mixins/BundleLike');
+require('../../mixins/PresentationResources');
+require('../../mixins/DurationCache');
+require('../../mixins/AuditLog');
+require('./AssignmentCollection');
+require('./CourseInstanceBoard');
+require('../assessment/UsersCourseAssignmentSavepoint');
+require('../../store/courseware/OutlineInterface');
+require('../../store/courseware/Navigation');
+require('../../store/courseware/ToCBasedOutline');
+require('../../store/courseware/Stream');
+require('./CourseVideoProgress');
+require('./CourseOutline');
+require('./CourseInstanceSharingScopes');
+require('./CourseCatalogEntry');
+require('../courseware/GradeBook');
+require('../ContentBundle');
+require('../forums/CommunityBoard');
+require('../forums/CommunityForum');
+require('../UserSearch');
+require('../Video');
+require('../assessment/Assignment');
+require('../assessment/QuestionSet');
+require('../../mixins/AuditLog');
 
 
 module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance', {
@@ -189,10 +191,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			},
 			friendlyNames: {
 				Default: 'Default Scope',
-				Public: 'All Students in {sectionName}',
-				Purchased: 'Life Long Learn Students in {sectionName}',
-				ForCredit: 'For Credit Students in {sectionName}',
-				ForCreditNonDegree: 'Five Minute Enrollment Students in {sectionName}'
+				Public: getString('sharing-scopes.admin.public', 'All Students in {sectionName}'),
+				Purchased: getString('sharing-scopes.admin.purchased', 'Life Long Learn Students in {sectionName}'),
+				ForCredit: getString('sharing-scopes.admin.forcredit', 'For Credit Students in {sectionName}'),
+				ForCreditNonDegree: getString('sharing-scopes.admin.forcreditnondegree', 'Five Minute Enrollment Students in {sectionName}')
 			}
 		},
 		STUDENT: {
@@ -203,10 +205,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseInstance'
 			},
 			friendlyNames: {
 				Default: 'Default Scope',
-				Public: 'All Students in {sectionName}',
-				Purchased: 'All Students in {sectionName}',
-				ForCredit: 'For Credit Students in {sectionName}',
-				ForCreditNonDegree: 'For Credit Students in {sectionName}'
+				Public: getString('sharing-scopes.student.public', 'All Students in {sectionName}'),
+				Purchased: getString('sharing-scopes.student.purchased', 'All Students in {sectionName}'),
+				ForCredit: getString('sharing-scopes.student.forcredit', 'For Credit Students in {sectionName}'),
+				ForCreditNonDegree: getString('sharing-scopes.student.forcreditnondegree', 'For Credit Students in {sectionName}'),
 			}
 		}
 	},

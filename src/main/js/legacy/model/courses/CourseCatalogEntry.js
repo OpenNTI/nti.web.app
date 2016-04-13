@@ -225,6 +225,8 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 			} else if (fmaepOption && fmaepOption.IsEnrolled) {
 				//treat the fmaep enrollment as for credit
 				isOpen = false;
+			} else if (openOption) {
+				isOpen = true;
 			}
 		}
 

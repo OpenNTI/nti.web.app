@@ -1,5 +1,8 @@
-var Ext = require('extjs');
-var StoreCollection = require('../../store/Collection');
+const Ext = require('extjs');
+const {getString} = require('legacy/util/Localization');
+
+require('../../store/Collection');
+
 
 
 module.exports = exports = Ext.define('NextThought.app.course.catalog.Collection', {
@@ -44,13 +47,17 @@ module.exports = exports = Ext.define('NextThought.app.course.catalog.Collection
 
 	prepareData: function (data, index, record) {
 
-		var i = Ext.Object.chain(this.callParent(arguments)),
-			isOpen = record.get('isOpen'),
-			isAdmin = record.get('isAdmin');
+		let i = Ext.Object.chain(this.callParent(arguments));
+		let	isOpen = record.get('isOpen');
+		let	isAdmin = record.get('isAdmin');
+		let administering = getString('course-enrollment.administering', 'Administering');
+		let open = getString('course-enrollment.open', 'Not For Credit');
+		let forCredit = getString('course-enrollment.forcredit', 'For Credit');
+
 
 		i.author = record.getAuthorLine();
 		i.isCourse = true;
-		i.enrolledText = isAdmin ? 'Administering' : isOpen ? 'Not For Credit' : 'For Credit';
+		i.enrolledText = isAdmin ? administering : isOpen ? open : forCredit;
 
 		if (record.getIconImage) {
 			record.getIconImage();
