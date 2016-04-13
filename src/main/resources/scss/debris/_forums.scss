@@ -1595,12 +1595,12 @@
 				font: normal 500 0.9em/50px $font;
 				height: 50px;
 				padding-left: 40px;
-				@include icon($editor-attach_hover, $top: 19px, $left: 22px);
+				@include icon($editor-attach_hover, $top: 10px, $left: 10px);
 
 				&:hover{
 					color: $primary-blue;
 
-					@include icon($editor-attach_blue, $top: 19px, $left: 22px);
+					@include icon($editor-attach, $top: 10px, $left: 10px);
 				}
 			}
 		}
