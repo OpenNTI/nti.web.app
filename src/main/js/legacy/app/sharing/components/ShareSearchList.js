@@ -28,12 +28,12 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareS
 			]},
 			{ tag: 'tpl', 'if': '!isLabel', cn: [
 				{
-					cls: 'x-menu-item contact-card{[this.getTypeCls(values)]}{[this.getMarkedCls(values)]}',
+					cls: '{[this.getItemClass(values)]}',
 					cn: [
 						'{[this.getAvatar(values)]}',
 						{cls: 'avatar icon {[this.getType(values)]}', style: '{[this.getIcon(values)]}'},
 						{cls: 'card-body {[this.getType(values)]}', cn: [
-							{cls: 'name', html: '{[this.getDisplayName(values)]}'},
+							{cls: '{[this.getNameClass(values)]}', html: '{[this.getDisplayName(values)]}'},
 							{cls: 'status', html: '{[this.getDisplayTypeValue(values)]}'}
 						]}
 					]
@@ -46,7 +46,11 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareS
 			return a;
 		},
 
-		isUser: function (model) {
+		getNameClass (model) {
+			return cx('name', toCSSClassName(this.getDisplayName(model)));
+		},
+
+		isUser (model) {
 			var t = this.getType(model);
 			return t === 'person';
 		},
@@ -56,12 +60,15 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareS
 			return '';
 		},
 
-		getTypeCls (model) {
-			return cx(this.getType(model), toCSSClassName(this.getDisplayName(model)));
-		},
-
-		getMarkedCls: function (model) {
-			return model.isMarked ? ' marked' : '';
+		getItemClass (model) {
+			return cx(
+				'x-menu-item',
+				'contact-card',
+				this.getType(model),
+				{
+					'marked': model.isMarked
+				}
+			);
 		},
 
 		getType: function (modelData) {
