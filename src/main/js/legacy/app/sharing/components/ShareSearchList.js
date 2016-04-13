@@ -41,7 +41,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareS
 			]}
 		]}
 	), {
-		getAvatar: function (model) {
+		getAvatar (model) {
 			var a = NTIFormat.avatar(model);
 			return a;
 		},
@@ -55,7 +55,7 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareS
 			return t === 'person';
 		},
 
-		getIcon: function (/*model*/) {
+		getIcon (/*model*/) {
 			// var t = this.getType(model);
 			return '';
 		},
@@ -71,15 +71,15 @@ module.exports = exports = Ext.define('NextThought.app.sharing.components.ShareS
 			);
 		},
 
-		getType: function (modelData) {
+		getType (modelData) {
 			return NextThought.model.UserSearch.getType(modelData);
 		},
 
-		getDisplayName: function (modelData) {
+		getDisplayName (modelData) {
 			return modelData.friendlyName || modelData.displayName;
 		},
 
-		getDisplayTypeValue: function (model) {
+		getDisplayTypeValue (model) {
 			var t = this.getType(model),
 				map = {
 					'list': 'List',
