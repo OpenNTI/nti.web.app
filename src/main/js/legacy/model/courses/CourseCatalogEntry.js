@@ -1,6 +1,7 @@
 const Ext = require('extjs');
 const Duration = require('durationjs');
 const {getURL} = require('legacy/util/Globals');
+const {wait} = require('legacy/util/Promise');
 
 require('legacy/mixins/PresentationResources');
 require('legacy/model/Base');
@@ -133,7 +134,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 		return this.getAsset('icon', 'landing');
 	},
 
-	/**
+	/*
 	 * Get the catalog family for this catalog entry
 	 * @return {CatalogFamily}
 	 */
@@ -189,7 +190,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 		});
 	},
 
-	/**
+	/*
 	 * Mark the appropriate enrollment option as enrolled
 	 * @param  {String} status the scope they are enrolled in
 	 * @param  {Boolean} open	if they are open enrolled
@@ -356,16 +357,20 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 
 	getSemester: function () {
 		var start = this.get('StartDate'),
-			month = start.getMonth(),
-			s = getString('months')[month + 1];
+			month = start && start.getMonth(),
+			s = month && getString('months')[month + 1];
 
-		return s;
+		return s || '';
 	},
 
 	getSemesterBadge: function () {
 		var start = this.get('StartDate'),
-			year = start.getFullYear(),
+			year = start && start.getFullYear(),
 			semester = this.getSemester();
+
+		if (!start) {
+			return '';
+		}
 
 		return semester + ' ' + year;
 	},
