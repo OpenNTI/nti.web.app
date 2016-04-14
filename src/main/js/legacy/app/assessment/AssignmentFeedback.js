@@ -1,8 +1,8 @@
-var Ext = require('extjs');
-var UserRepository = require('../../cache/UserRepository');
-var OverlayPanel = require('../contentviewer/overlay/Panel');
-var EditorEditor = require('../../editor/Editor');
-var {isMe} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const {isMe} = require('legacy/util/Globals');
+require('../contentviewer/overlay/Panel');
+require('../../editor/Editor');
+require('./components/feedback/List');
 
 
 module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeedback', {
@@ -29,28 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 			}
 		},
 		{
-			xtype: 'dataview',
-			loadMask: false,
-			ui: 'feedback-box',
-			itemSelector: '.feedback-item',
-			tpl: Ext.DomHelper.markup([
-				{tag: 'tpl', 'for': '.', cn: {
-					cls: 'feedback-item', cn: [
-						'{Creator:avatar}',
-						{ cls: 'wrap', cn: [
-							{ cls: 'meta', cn: [
-								{ tag: 'span', cls: 'name', html: '{Creator}'},
-								{ tag: 'time', datetime: '{CreatedTime:date("c")}', html: '{CreatedTime:ago()}'}
-							]},
-							{ cls: 'message', html: '{body}'},
-							{tag: 'tpl', 'if': 'isMine', cn: { cls: 'footer', cn: [
-								{ tag: 'span', cls: 'link edit', html: '{{{NextThought.view.assessment.AssignmentFeedback.edit}}}'},
-								{ tag: 'span', cls: 'link delete', html: '{{{NextThought.view.assessment.AssignmentFeedback.delete}}}'}
-							]}}
-						]}
-					]
-				}}
-			])
+			xtype: 'assignment-feedback-list'
 		},
 		{
 			xtype: 'box',
@@ -69,7 +48,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		this.callParent(arguments);
 
 		var commentBox;
-		this.feedbackList = this.down('dataview');
+		this.feedbackList = this.down('assignment-feedback-list');
 		this.comment = this.down('box[name=comment]');
 
 		commentBox = this.comment.feedbackBox;
@@ -87,7 +66,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		this.editor = Ext.widget('nti-editor', {
 			ownerCt: this,
 			renderTo: this.comment.feedbackBox,
-			enableObjectControls: false //lets not open too much complexity yet.
+			enableObjectControls: true, //lets not open too much complexity yet.
+			enableFileUpload: true
 		});
 
 		this.mon(this.editor, {
@@ -112,21 +92,18 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 			feedback = this.history.get('Feedback'),
 			store = this.store;
 
-		Service.request({
-			url: feedback.get('href'),
-			method: 'POST',
-			jsonData: item.getData()
-		}).done(function () {
-			console.log('Saved feedback');
-			editor.deactivate();
-			editor.setValue('');
-			me.addMask();
-			store.load();
-			me.removeMask();
-		}).fail(function (reason) {
-			console.error('faild to save feedback', reason);
-		});
-
+		item.saveData({url: feedback.get('href')})
+			.then(function (response) {
+				console.log('Saved feedback:', response);
+				editor.deactivate();
+				editor.setValue('');
+				me.addMask();
+				store.load();
+				me.removeMask();
+			})
+			.catch(function (reason) {
+				console.error('faild to save feedback', reason);
+			});
 	},
 
 	setHistory: function (history) {
@@ -156,16 +133,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 			]
 		});
 
-		this.mon(this.store, 'load', 'resolveUsers');
-
 		if (this.history.fields.get('feedback')) {
 			this.mon(this.store, 'load', 'updateFeedback');
 		}
 
 		this.feedbackList.bindStore(this.store);
 		this.store.load();
-
-		this.mon(this.feedbackList, 'itemclick', 'onFeedbackClick');
 
 		header.messageEl.update(
 			Ext.String.format(
@@ -196,103 +169,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		this.history.afterEdit(['feedback']);
 	},
 
-	resolveUsers: function (store) {
-		var pluck = Ext.Array.pluck,
-			list = this.feedbackList,
-			records = store.getRange();
-
-		function fill (users) {
-			users.forEach(function (u, i) {
-				var r = records[i],
-					c = r && r.get('Creator');
-				if (c && typeof c === 'string' && u.getId() === c) {
-					r.set('Creator', u);
-				} else {
-					console.warn('Did not resolve', c, 'for:', r, '. Got:', u);
-				}
-			});
-			list.refresh();
-		}
-
-		UserRepository.getUser(pluck(pluck(records, 'data'), 'Creator'))
-				.done(fill);
-
-	},
-
-	openEditorFor: function (record, el) {
-		var me = this;
-
-
-		el.select('.message,.footer').remove();
-		Ext.destroy(me.editEditor);
-		me.editEditor = Ext.widget('nti-editor', {
-			ownerCt: this,
-			renderTo: el.down('.wrap'),
-			record: record,
-			enableObjectControls: false, //lets not open too much complexity yet.
-			listeners: {
-				save: function (editor, record, value) {
-					editor.mask(getString('NextThought.view.assessment.AssignmentFeedback.editor-mask'));
-					if (!record) {
-						console.error('No record!');
-						return;
-					}
-					record.suspendEvents();
-					record.set('body', value.body);
-					record.save({
-						callback: function (q, s, r) {
-							record.resumeEvents();
-							editor.unmask();
-							if (!s) {
-								alert({
-									title: getString('NextThought.view.assessment.AssignmentFeedback.error-title'),
-									msg: getString('NextThought.view.assessment.AssignmentFeedback.error-msg')
-								});
-								console.error('Failled to update feedback');
-								return;
-							}
-							Ext.destroy(editor);
-
-							try {
-								var view = me.down('dataview');
-								if (view) {
-									view.refresh();
-								}
-							} catch (e) {
-								console.error(e.message);
-							}
-						}
-					});
-				},
-				'deactivated-editor': function () {
-					var view = me.down('dataview');
-
-					if (view) {
-						view.refresh();
-					}
-				}
-			}
-		});
-
-		me.editEditor.editBody(record.get('body'));
-
-		me.editEditor.activate();
-	},
-
-	onFeedbackClick: function (s, record, item, index, e) {
-		var c = record.get('Creator'),
-			store = this.store;
-
-		if ((e.getTarget('.avatar') || e.getTarget('.name')) && c && c.getProfileUrl) {
-			this.fireEvent('show-profile', c);
-		} else if (e.getTarget('.link.edit')) {
-			this.openEditorFor(record, Ext.get(item));
-		} else if (e.getTarget('.link.delete')) {
-			record.destroy({callback: function () {
-				store.load();
-			}});
-		}
-	},
 
 	addMask: function () {
 		if(this.feedbackList) {

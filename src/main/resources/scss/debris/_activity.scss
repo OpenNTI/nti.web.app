@@ -776,7 +776,8 @@
 	.replies {
 		font-size: 0.7em;
 
-		.feedback-panel .x-component-feedback-box .feedback-item {
+		.feedback-panel .x-component-feedback-box .feedback-item,
+		.feedback-panel .x-container-feedback-box .feedback-item {
 			padding: 10px 20px;
 		}
 	}
