@@ -207,4 +207,4 @@ module.exports = exports = Ext.define('NextThought.util.Search', {
 	}
 
 
-});
+}).create();
