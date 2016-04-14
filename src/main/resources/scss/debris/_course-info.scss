@@ -509,6 +509,10 @@
 		}
 
 		.title-box {
+			&.no-video.has-image .curtain {
+				bottom: 0;
+			}
+
 			.title {
 				display: none;
 			}
