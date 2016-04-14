@@ -360,7 +360,7 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 	getSemester: function () {
 		var start = this.get('StartDate'),
 			month = start && start.getMonth(),
-			s = month && getString('months')[month + 1];
+			s = start && getString('months')[month + 1];
 
 		return s || '';
 	},
