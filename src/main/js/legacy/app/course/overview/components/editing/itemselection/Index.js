@@ -29,7 +29,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 					cn: [
 						{tag: 'span', cls: 'has-search', html: 'Search Results'},
 						{cls: 'input-container', cn: [
-							{tag: 'input', type: 'text', placeholder: 'Search or enter NTIID'},
+							{tag: 'input', type: 'text', placeholder: 'Search'},
 							{tag: 'span', cls: 'clear', html: 'clear'},
 							{tag: 'span', cls: 'do-search'}
 						]}
