@@ -1,8 +1,9 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../../../cache/UserRepository');
-var TimeUtils = require('../../../../../util/Time');
-var MixinsUIHelpers = require('../../../../../mixins/UIHelpers');
-var {isFeature} = require('legacy/util/Globals');
+const Ext = require('extjs');
+const UserRepository = require('../../../../../cache/UserRepository');
+const TimeUtils = require('../../../../../util/Time');
+const {isFeature, WAIT_TIMES} = require('legacy/util/Globals');
+
+require('../../../../../mixins/UIHelpers');
 
 
 module.exports = exports = Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
@@ -18,10 +19,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		'NextThought.app.windows.Actions'
 	],
 
-	loadMask: {
-		hideMode: 'display',
-		msg: 'Loading...'
-	},
+	// loadMask: {
+	// 	hideMode: 'display',
+	// 	msg: 'Loading...'
+	// },
 
 	cls: 'topic-list list scrollable',
 	itemSelector: '.topic-list-item',
@@ -281,6 +282,8 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 
 
 	setGrouper: function (by) {
+		var me = this, headers = [],
+			grouper = this.groupers[by];
 
 		function getHeader (name, value) {
 			var header = NextThought.model.forums.CommunityHeadlineTopic.create();
@@ -291,9 +294,6 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 
 			return header;
 		}
-
-		var me = this, headers = [],
-			grouper = this.groupers[by];
 
 		me.store.clearGrouping();
 
@@ -389,10 +389,10 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 		me.setGrouper('');
 		me.store.sorters.removeAll();
 
-		return new Promise(function (fulfill, reject) {
+		return new Promise(function (fulfill) {
 			me.mon(store, {
 				single: true,
-				load: function (store, records) {
+				load: function (s, records) {
 					delete params.batchAround;
 
 					me.fillInData(records, state.search);
@@ -412,12 +412,22 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.forum.p
 				}
 			});
 
+			if (me.el) {
+				me.el.mask('Loading...');
+			}
+
 			if (params.batchAround) {
 				store.load();
 			} else if (currentPage) {
 				store.loadPage(currentPage);
 			} else {
 				store.loadPage(1);
+			}
+		})
+		.then(Promise.minWait(WAIT_TIMES.SHORT))
+		.then(() => {
+			if (me.el) {
+				me.el.unmask();
 			}
 		});
 	},
