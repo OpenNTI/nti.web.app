@@ -117,9 +117,14 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 
 	__setImage: function () {
 		var me = this;
+
 		me.getBackgroundImage();
 		me.getThumbnail();
 		me.getIconImage();
+
+		if (!me.get('Video')) {
+			me.getPromoImage();
+		}
 	},
 
 	getBackgroundImage: function () {
@@ -132,6 +137,10 @@ module.exports = exports = Ext.define('NextThought.model.courses.CourseCatalogEn
 
 	getIconImage: function () {
 		return this.getAsset('icon', 'landing');
+	},
+
+	getPromoImage: function () {
+		return this.getAsset('promoImage');
 	},
 
 	/*

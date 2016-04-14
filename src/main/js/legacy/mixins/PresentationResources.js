@@ -19,11 +19,15 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 		vendorIcon: {
 			check: true,
 			name: 'vendoroverrideicon.png'
+		},
+		promoImage: {
+			check: true,
+			name: 'course-promo-large-16x9.png'
 		}
 	},
 
 
-	/**
+	/*
 	 * return the root that should be used if PlatforPresentationResources isn't defined
 	 * @return {string} default root to use
 	 * @override
@@ -100,7 +104,7 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 		existing = this.__assetPromises[key];
 
 		if (!existing) {
-			existing = this.getImgAsset(asset || key).then(function (url) { me.set(key, url); }, me.set.bind(me, [key, null]));
+			existing = this.getImgAsset(asset || key).then(function (url) { me.set(key, url); return url; }, me.set.bind(me, [key, null]));
 			this.__assetPromises[key] = existing;
 		}
 
@@ -115,6 +119,6 @@ module.exports = exports = Ext.define('NextThought.mixins.PresentationResources'
 	 * @return {Promise}	  fulfills with the url to the asset if it exists
 	 */
 	getAsset: function (key, asset) {
-		return this.__ensureAsset(key, asset).then(this.get.bind(this, key));
+		return this.__ensureAsset(key, asset);
 	}
 });

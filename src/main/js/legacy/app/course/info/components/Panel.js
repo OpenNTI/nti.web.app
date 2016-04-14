@@ -43,6 +43,7 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.Pa
 		toAdd.push({
 			xtype: 'course-info-title',
 			title: content.get('Title'),
+			course: content,
 			videoUrl: content.get('Video'),
 			videoWidth: this.videoWidth || 764,
 			videoHeight: this.videoHeight

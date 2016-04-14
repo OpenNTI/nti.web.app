@@ -11,7 +11,7 @@
 
 .course-info-header-bar {
 	padding-bottom: 20px;
-	
+
 	& > div {
 		padding: 10px 15px;
 		background: rgba(0,0,0,0.2);
@@ -133,6 +133,26 @@
 			&::after {
 				margin-left: -22px;
 				margin-top: -21px;
+			}
+		}
+
+		&.no-video {
+			.title {
+				font-size: 1.25rem;
+				line-height: 40px;
+			}
+
+			.curtain::after {
+				display: none;
+			}
+		}
+
+		&.no-video.has-image {
+			padding-top: 56%;
+
+			.curtain {
+				bottom:40px;
+				background-size: cover;
 			}
 		}
 
@@ -532,7 +552,7 @@
 			margin: 0;
 			background-color: white;
 			padding: 0 10px;
-			border-bottom: 1px solid #efefef;	
+			border-bottom: 1px solid #efefef;
 		}
 
 		.enrollment-confirm {
@@ -780,7 +800,7 @@
 					opacity: 0.75;
 				}
 			}
-		
+
 
 			&.checkbox:not(.full):not(.loading) {
 				cursor: pointer;

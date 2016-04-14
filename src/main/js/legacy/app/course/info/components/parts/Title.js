@@ -30,7 +30,9 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 
 	afterRender: function () {
 		this.callParent(arguments);
+
 		this.buildVideo();
+
 		if (!Ext.isEmpty(this.videoUrl)) {
 			this.videoEl.setStyle({
 				minHeight: this.videoHeight ? this.videoHeight + 'px' : '430px'
@@ -38,8 +40,21 @@ module.exports = exports = Ext.define('NextThought.app.course.info.components.pa
 
 			this.mon(this.curtainEl, 'click', 'curtainClicked', this);
 		} else {
-			this.curtainEl.remove();
 			this.videoEl.remove();
+			this.addCls('no-video');
+
+			this.course.getPromoImage()
+				.then((url) => {
+					if (url) {
+						this.addCls('has-image');
+						this.curtainEl.dom.style.backgroundImage = `url(${url})`;
+					} else {
+						return Promise.reject();
+					}
+				})
+				.catch(() => {
+					this.addCls('no-image');
+				});
 		}
 	},
 
