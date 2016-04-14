@@ -1,12 +1,12 @@
-var Ext = require('extjs');
-var UserRepository = require('../../../cache/UserRepository');
-var User = require('../../../model/User');
-var ParseUtils = require('../../../util/Parsing');
-var MixinsRouter = require('../../../mixins/Router');
-var ComponentsView = require('./components/View');
-var ComponentsAssignment = require('./components/Assignment');
-var UtilPageSource = require('../../../util/PageSource');
-var UtilPagedPageSource = require('../../../util/PagedPageSource');
+const Ext = require('extjs');
+const UserRepository = require('../../../cache/UserRepository');
+const ParseUtils = require('../../../util/Parsing');
+
+require('../../../mixins/Router');
+require('./components/View');
+require('./components/Assignment');
+require('../../../util/PageSource');
+require('../../../util/PagedPageSource');
 
 
 module.exports = exports = Ext.define('NextThought.app.course.assessment.Index', {
@@ -216,7 +216,10 @@ module.exports = exports = Ext.define('NextThought.app.course.assessment.Index',
 				previous: prev && prev.getId(),
 				previousTitle: prev && prev.get('title'),
 				currentIndex: index,
-				total: assignments.length
+				total: assignments.length,
+				getRoute: function (id) {
+					return id && ParseUtils.encodeForURI(id);
+				}
 			});
 
 			return {

@@ -298,7 +298,7 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.navigation.
 			title = this.pageSource.getPreviousTitle(),
 			precache = this.pageSource.getPreviousPrecache();
 
-		this.doNavigation(title, previous);
+		this.doNavigation(title, previous, precache);
 	},
 
 	onNext: function (e) {

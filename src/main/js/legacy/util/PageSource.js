@@ -19,6 +19,10 @@ module.exports = exports = Ext.define('NextThought.util.PageSource', {
 		this.previous = config.previous;
 		this.nextTitle = config.nextTitle;
 		this.previousTitle = config.previousTitle;
+
+		if (config.getRoute) {
+			this.getRoute = config.getRoute;
+		}
 	},
 
 	getPageNumber: function () {
