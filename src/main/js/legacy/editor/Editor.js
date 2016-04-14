@@ -7,6 +7,7 @@ var SharingUtils = require('../util/Sharing');
 var {guidGenerator} = require('legacy/util/Globals');
 const Globals = require('legacy/util/Globals');
 require('legacy/common/form/fields/FilePicker');
+require('legacy/model/RelatedWork');
 
 
 Ext.define('NextThought.editor.AbstractEditor', {
@@ -655,7 +656,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		let content = this.el.down('.content'),
 			tpl = this.attachmentPreviewTpl,
 			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(file.size, 1),
-			href = this.createObjectURL(file, name),
+			href = this.getFileIconURLFromFile(file, name),
 			placeholder = Ext.DomHelper.createTemplate({html: this.defaultValue}),
 			data = {size: size, url: href, filename: file.name, name: name},
 			focusNode, isSelectionInContent;
@@ -677,6 +678,42 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
+	isImage: function (type) {
+		return (/[\/\.](gif|jpg|jpeg|tiff|png)$/i).test(type);
+	},
+
+
+	getFileIconURLFromFile: function (file, name) {
+		let type = file && file.type,
+			isImage = this.isImage(type),
+			href;
+
+		if (isImage) {
+			href = this.createObjectURL(file, name);
+		}
+		else {
+			href = NextThought.model.RelatedWork.getIconForMimeType(type);
+		}
+
+		return href;
+	},
+
+
+	getFileIconURLFromValue: function (model) {
+		let data = model && model.isModel ? model.getData() : model,
+			type = data.contentType || data.FileMimeType,
+			isImage = this.isImage(type), href;
+
+		if (isImage) {
+			href = data.url;
+		} else {
+			href = NextThought.model.RelatedWork.getIconForMimeType(type);
+		}
+
+		return href;
+	},
+
+
 	setAttachmentPreviewFromModel: function (model) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setAttachmentPreviewFromModel.bind(this, model));
@@ -686,8 +723,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		let data = model && model.isModel ? model.getData() : model,
 			content = this.el.down('.content'),
 			tpl = this.attachmentPreviewTpl,
-			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(data.size, 1);
+			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(data.size, 1),
+			url = this.getFileIconURLFromValue(data);
 
+		data = Ext.clone(data);
+		data.url = url;
 		if (size) {
 			data.size = size;
 		}

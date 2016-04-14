@@ -725,7 +725,7 @@ module.exports = exports = Ext.define('NextThought.app.userdata.Actions', {
 				style: style,
 				ContainerId: ContainerId
 			}),
-			url = this.___getPagesURL();
+			url = this.__getPagesURL();
 
 		return noteRecord.saveData({url: url})
 					.then(function (response) {

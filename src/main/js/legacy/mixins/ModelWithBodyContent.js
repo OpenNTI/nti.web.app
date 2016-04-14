@@ -3,6 +3,7 @@ var Globals = require('../util/Globals');
 var {guidGenerator} = Globals;
 
 require('../app/video/Video');
+require('legacy/model/RelatedWork');
 
 module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent', {
 	statics: {
@@ -28,6 +29,10 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 			}
 
 			return text.join('');
+		},
+
+		isImageFile: function (type) {
+			return (/[\.\/](gif|jpg|jpeg|tiff|png)$/i).test(type);
 		}
 	},
 
@@ -211,8 +216,26 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 		if (!isNaN(parseFloat(o.size))) {
 			o.size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(parseFloat(o.size), 1);
 		}
+
+		o = Ext.clone(o);
+		o.url = this.getIconForAttachment(o);
 		p = this.CONTENT_FILE_TPL.apply(o);
 		Ext.callback(callback, scope, [p]);
+	},
+
+
+	getIconForAttachment: function (data) {
+		let type = data.contentType || data.FileMimeType,
+			isImage = NextThought.mixins.ModelWithBodyContent.isImageFile(type), url;
+
+		if (isImage) {
+			url = data.url || data.href || data.value;
+		}
+		else {
+			url = NextThought.model.RelatedWork.getIconForMimeType(type);
+		}
+
+		return url;
 	},
 
 
