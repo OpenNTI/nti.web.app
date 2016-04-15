@@ -409,6 +409,12 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.components.Vi
 			});
 	},
 
+
+	hideGridViewer () {
+		this.showGridViewer('hide');
+	},
+
+
 	showGridViewer: function (action) {
 		var me = this,
 			allow = Promise.resolve();

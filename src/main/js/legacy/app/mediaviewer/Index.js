@@ -46,6 +46,7 @@ module.exports = exports = Ext.define('NextThought.app.mediaviewer.Index', {
 
 		if (this.activeMediaView && (this.mediaId === id)) {
 			// We are already there.
+			this.activeMediaView.hideGridViewer();
 			return Promise.resolve();
 		}
 
