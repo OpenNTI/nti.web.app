@@ -51,7 +51,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 
 		this.getBody()
 			.then(function (html) {
-				me.messageEl.update(html);
+				me.messageEl.setHTML(html);
 			});
 	},
 
@@ -69,63 +69,68 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 
 
 	openEditorFor: function (record, el) {
-		var me = this;
-
+		var me = this,
+			editorBox = this.el.down('.wrap');
 
 		el.select('.message,.footer').remove();
-		Ext.destroy(me.editEditor);
-		me.editEditor = Ext.widget('nti-editor', {
+		if (this.editor) {
+			this.editor.activate();
+			Ext.defer(this.editor.focus, 350, this.editor);
+			this.updateLayout();
+			return;
+		}
+
+		this.editor = Ext.widget('nti-editor', {
 			ownerCt: this,
-			renderTo: el.down('.wrap'),
+			renderTo: editorBox,
 			record: record,
-			enableObjectControls: false, //lets not open too much complexity yet.
-			listeners: {
-				save: function (editor, record, value) {
-					editor.mask(getString('NextThought.view.assessment.AssignmentFeedback.editor-mask'));
-					if (!record) {
-						console.error('No record!');
-						return;
-					}
-					record.suspendEvents();
-					record.set('body', value.body);
-					record.save({
-						callback: function (q, s, r) {
-							record.resumeEvents();
-							editor.unmask();
-							if (!s) {
-								alert({
-									title: getString('NextThought.view.assessment.AssignmentFeedback.error-title'),
-									msg: getString('NextThought.view.assessment.AssignmentFeedback.error-msg')
-								});
-								console.error('Failled to update feedback');
-								return;
-							}
-							Ext.destroy(editor);
+			enableObjectControls: true, //lets not open too much complexity yet.
+			enableFileUpload: true
+		});
 
-							try {
-								var view = me.down('dataview');
-								if (view) {
-									view.refresh();
-								}
-							} catch (e) {
-								console.error(e.message);
-							}
-						}
-					});
-				},
-				'deactivated-editor': function () {
-					var view = me.down('dataview');
-
-					if (view) {
-						view.refresh();
-					}
-				}
+		this.mon(this.editor, {
+			'save': 'onSave',
+			'no-body-content': function (editor, el) {
+				me.editor.markError(el, getString('NextThought.view.assessment.AssignmentFeedback.empty-editor'));
+				return false;
+			},
+			'activated-editor': function () {
+				editorBox.addCls('editor-active');
+			},
+			'deactivated-editor': function () {
+				editorBox.removeCls('editor-active');
 			}
 		});
 
-		me.editEditor.editBody(record.get('body'));
+		this.editor.editBody(this.record.get('body'));
+		this.editor.activate();
+	},
 
-		me.editEditor.activate();
+
+	onSave: function (editor, record, value) {
+		var me = this;
+		editor.mask(getString('NextThought.view.assessment.AssignmentFeedback.editor-mask'));
+		if (!record) {
+			console.error('No record!');
+			return;
+		}
+
+		record.set('body', value.body);
+		record.saveData()
+				.then(function () {
+					editor.deactivate();
+					editor.setValue('');
+					editor.unmask();
+					me.update();
+				})
+				.catch(function (reason) {
+					editor.unmask();
+					alert({
+						title: getString('NextThought.view.assessment.AssignmentFeedback.error-title'),
+						msg: getString('NextThought.view.assessment.AssignmentFeedback.error-msg')
+					});
+					console.error('Failled to update feedback: ' + reason);
+				});
 	},
 
 
@@ -135,7 +140,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 		if ((e.getTarget('.avatar') || e.getTarget('.name')) && c && c.getProfileUrl) {
 			this.navigateToProfile(c);
 		} else if (e.getTarget('.link.edit')) {
-			this.openEditorFor(this.editor, this.el);
+			this.openEditorFor(this.record, this.el);
 		} else if (e.getTarget('.link.delete')) {
 			if (this.doDelete) {
 				this.doDelete(this.record);
