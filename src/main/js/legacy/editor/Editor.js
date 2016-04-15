@@ -226,13 +226,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			]},
 			{ cls: 'meta', cn: [
 				{ cls: 'text', cn: [
-					{ tag: 'span', cls: 'title', html: '{filename}'},
-					{ tag: 'span', cls: 'size', html: '{size}'}
+					{ tag: 'span', cls: 'title', html: '{filename}'}
 				]},
 				{ cls: 'controls', cn: [
-					{ tag: 'span', cls: 'view', 'data-action': 'preview', html: 'Preview'},
-					{ tag: 'span', cls: 'change', 'data-action': 'change', html: 'Change'},
-					{ tag: 'span', cls: 'delete', 'data-action': 'delete', html: 'Delete'}
+					{ tag: 'span', cls: 'delete', 'data-action': 'delete', html: 'Delete'},
+					{ tag: 'span right', cls: 'size', html: '{size}'}
 				]}
 			]}
 		]}

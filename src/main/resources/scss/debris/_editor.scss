@@ -12,15 +12,13 @@ span.tab{
 		box-shadow: 0 0 1px 0 rgba(0,0,0,0.3);
 		cursor: pointer;
 		margin: 3px 0;
-		@include flexContainer();
+		display: block;
+		width: 250px;
 
 		.thumbnail {
-			@include flexItem(0 0 auto);
-			padding-left: 1px;
-			box-shadow: inset 1px 0 0 0 #d8d8d8, 0 1px 0 0 #d8d8d8, 0 -1px 0 0 #d8d8d8;
-			width: 100px;
-			height: 125px;
-			padding: 10px 0 0 10px;
+			padding: 0px;
+			margin: 0 auto;
+			height: 120px;
 			position: relative;
 
 			.preview {
@@ -38,10 +36,12 @@ span.tab{
 
 		.meta {
 			position: relative;
-			@include flexItem(1 1 auto);
 			padding: 10px 11px;
 			background-color: #fff;
 			box-shadow: inset -1px 0 0 0 #d8d8d8, inset 1px 0 0 0 #d8d8d8, 0 1px 0 0 #d8d8d8, 0 -1px 0 0 #d8d8d8;
+			margin-left: 0;
+			margin-top: 0;
+			display: block;
 
 			.controls, .text {
 				display: block;
@@ -58,22 +58,41 @@ span.tab{
 
 
 			.text {
+				position: relative;
 				border: 0 solid #f2f2f2;
 				border-bottom-width: 1px;
+    			overflow: hidden;
+    			text-overflow: ellipsis;
 
 				.title {
+					display: block;
 					color: $primary-grey;
 					border-bottom: none;
-					font-size: 1.2em;
-					font-weight: 800;
-				}
-				.size {
-					color: $secondary-grey;
+					font-size: 11px;
+					font-weight: 600;
+					line-height: 27px;
+					white-space: nowrap;
+					margin-left: 0;
 				}
 			}
 
 			.controls {
+				position: relative;
 				color: $primary-blue;
+				cursor: pointer;
+				font-size: 10px;
+				line-height: 24px;
+				margin: 0 !important;
+
+				.size {
+					color: $secondary-grey;
+					font-size: 10px;
+					text-align: right;
+
+					&.size {
+						float: right;
+					}
+				}
 			}
 		}
 	}
@@ -255,6 +274,10 @@ span.tab{
 				}
 
 				@include attachment();
+
+				.attachment-part {
+					margin: 3px;
+				}
 			}
 
 			.dropzone {

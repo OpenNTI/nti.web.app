@@ -270,6 +270,7 @@ body.dragging * {
 
 				.message {
 					@include note-body;
+					@include attachment();
 				}
 
 				.footer {
