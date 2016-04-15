@@ -132,7 +132,7 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 	CONTENT_FILE_TPL: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ cls: 'attachment-part preview', contentEditable: 'false', 'data-fileName': '{filename}', 'name': '{name}', cn: [
 			{ cls: 'thumbnail', cn: [
-				{ cls: 'preview', style: 'background-image: url({url});'}
+				{ cls: 'preview {type}', style: 'background-image: url(\'{url}\');'}
 			]},
 			{ cls: 'meta', cn: [
 				{ cls: 'text', cn: [
@@ -140,7 +140,9 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 				]},
 				{ cls: 'controls', cn: [
 					{ tag: 'span', cls: 'view', html: 'Preview'},
-					{ tag: 'span', cls: 'download', html: 'Download'},
+					{ tag: 'span', cls: 'download', cn: [
+						{tag: 'a', href: '{download_url}', html: 'Download', target:'_self'}
+					]},
 					{ tag: 'span right', cls: 'size', html: '{size}'}
 				]}
 			]}
@@ -211,13 +213,15 @@ module.exports = exports = Ext.define('NextThought.mixins.ModelWithBodyContent',
 
 
 	attachmentRenderer: function (o, clickHandlerMaker, size, callback, scope, config) {
-		var p;
+		var type = (o && o.contentType || o.FileMimeType) || '',
+			p;
 
 		if (!isNaN(parseFloat(o.size))) {
 			o.size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(parseFloat(o.size), 1);
 		}
 
 		o = Ext.clone(o);
+		o.type = type.split('/').last() || '';
 		o.url = this.getIconForAttachment(o);
 		p = this.CONTENT_FILE_TPL.apply(o);
 		Ext.callback(callback, scope, [p]);

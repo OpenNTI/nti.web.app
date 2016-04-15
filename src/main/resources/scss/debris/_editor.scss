@@ -27,10 +27,14 @@ span.tab{
 				left: 0;
 				right: 0;
 				bottom: 0;
-				z-index: 1;
+				z-index: 0;
 				background-size: cover;
 				background-position: center;
 				background-repeat: no-repeat;
+
+				&.pdf, &.docx, &.x-pdf, &.zip {
+					background-size: contain;
+				}
 			}
 		}
 
@@ -83,6 +87,11 @@ span.tab{
 				font-size: 10px;
 				line-height: 24px;
 				margin: 0 !important;
+
+				a {
+					text-decoration: none;
+					color: $primary-blue;
+				}
 
 				.size {
 					color: $secondary-grey;

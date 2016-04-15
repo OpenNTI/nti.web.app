@@ -222,7 +222,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	attachmentPreviewTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ cls: 'attachment-part preview', contentEditable: 'false', 'data-fileName': '{filename}', 'name': '{name}', cn: [
 			{ cls: 'thumbnail', cn: [
-				{ cls: 'preview', style: 'background-image: url({url});'}
+				{ cls: 'preview {type}', style: 'background-image: url(\'{url}\');'}
 			]},
 			{ cls: 'meta', cn: [
 				{ cls: 'text', cn: [
@@ -656,7 +656,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(file.size, 1),
 			href = this.getFileIconURLFromFile(file, name),
 			placeholder = Ext.DomHelper.createTemplate({html: this.defaultValue}),
-			data = {size: size, url: href, filename: file.name, name: name},
+			type = file.type.split('/').last() || '',
+			data = {size: size, url: href, filename: file.name, name: name, type: type},
 			focusNode, isSelectionInContent;
 
 		//Need to see if we have a selection and it is in our content element
@@ -722,10 +723,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			content = this.el.down('.content'),
 			tpl = this.attachmentPreviewTpl,
 			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(data.size, 1),
-			url = this.getFileIconURLFromValue(data);
+			url = this.getFileIconURLFromValue(data),
+			type = data.contentType || data.FileMimeType || '';
 
 		data = Ext.clone(data);
 		data.url = url;
+		data.type = type.split('/').last() || '';
+
 		if (size) {
 			data.size = size;
 		}
