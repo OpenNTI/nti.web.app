@@ -194,6 +194,32 @@ module.exports = exports = Ext.define('NextThought.app.forums.components.topic.p
 		}
 	},
 
+	getAttachmentPart: function (el) {
+		var name = el && el.getAttribute && el.getAttribute('name'), part;
+
+		if (this.record) {
+			let headline = this.record.get('headline'),
+				body = headline && headline.get('body') || [];
+
+			body.forEach(function (p) {
+				if (p.name === name) {
+					part = p;
+					return false;
+				}
+			});
+		}
+
+		if (!part) {
+			part = {
+				MimeType: 'application/vnd.nextthought.contentfile',
+				filename: el && el.getAttribute && el.getAttribute('data-fileName'),
+				name: name,
+				file: this.AttachmentMap[name]
+			};
+		}
+		return part;
+	},
+
 
 	onSave: function (e) {
 		e.stopEvent();

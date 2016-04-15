@@ -2022,8 +2022,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		var name = el && el.getAttribute && el.getAttribute('name'), part;
 
 		if (this.record) {
-			let headline = this.record.get('headline'),
-				body = headline && headline.get('body') || [];
+			let body = this.record.get('body') || [];
 
 			body.forEach(function (p) {
 				if (p.name === name) {
