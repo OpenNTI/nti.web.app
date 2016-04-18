@@ -72,7 +72,6 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 		var me = this,
 			editorBox = this.el.down('.wrap');
 
-		el.select('.message,.footer').remove();
 		if (this.editor) {
 			this.editor.activate();
 			Ext.defer(this.editor.focus, 350, this.editor);
@@ -95,9 +94,12 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 				return false;
 			},
 			'activated-editor': function () {
+				el.select('.wrap > .message,.wrap > .footer').setVisibilityMode(Ext.dom.Element.DISPLAY);
+				el.select('.wrap > .message,.wrap > .footer').hide();
 				editorBox.addCls('editor-active');
 			},
 			'deactivated-editor': function () {
+				el.select('.wrap > .message,.wrap > .footer').show();
 				editorBox.removeCls('editor-active');
 			}
 		});
