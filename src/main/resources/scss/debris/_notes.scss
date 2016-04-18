@@ -339,6 +339,10 @@
 			@include note-body;
 			@include attachment();
 
+			.attachment-part {
+				margin: 7px 0;
+			}
+
 		}
 
 

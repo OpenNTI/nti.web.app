@@ -220,6 +220,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	tabTpl: Ext.DomHelper.createTemplate({html: '\t'}).compile(),
 
 	attachmentPreviewTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{ cls: 'space', html: '{placeholder}'},
 		{ cls: 'attachment-part preview', contentEditable: 'false', 'data-fileName': '{filename}', 'name': '{name}', cn: [
 			{ cls: 'thumbnail', cn: [
 				{ cls: 'preview {type}', style: 'background-image: url(\'{url}\');'}
@@ -233,7 +234,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 					{ tag: 'span right', cls: 'size', html: '{size}'}
 				]}
 			]}
-		]}
+		]},
+		{ cls: 'space', html: '{placeholder}'}
 	])),
 
 	AttachmentMap: {},
@@ -655,9 +657,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			tpl = this.attachmentPreviewTpl,
 			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(file.size, 1),
 			href = this.getFileIconURLFromFile(file, name),
-			placeholder = Ext.DomHelper.createTemplate({html: this.defaultValue}),
 			type = file.type.split('/').last() || '',
-			data = {size: size, url: href, filename: file.name, name: name, type: type},
+			data = {size: size, url: href, filename: file.name, name: name, type: type, placeholder: this.defaultValue},
 			focusNode, isSelectionInContent;
 
 		//Need to see if we have a selection and it is in our content element
@@ -671,8 +672,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			this.insertPartAtSelection(tpl.apply(data));
 		} else {
 			tpl.append(content, data);
-			// Add a placeholder to allow adding text.
-			placeholder.append(content);
 		}
 	},
 
@@ -729,6 +728,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		data = Ext.clone(data);
 		data.url = url;
 		data.type = type.split('/').last() || '';
+		data.placeholder = this.defaultValue;
 
 		if (size) {
 			data.size = size;
