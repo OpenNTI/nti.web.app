@@ -1,6 +1,6 @@
 var Ext = require('extjs');
 var DomUtils = require('../../../util/Dom');
-var UtilAnchors = require('../../../util/Anchors');
+require('../../../util/Anchors');
 
 
 module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Panel', {
@@ -49,15 +49,15 @@ module.exports = exports = Ext.define('NextThought.app.contentviewer.overlay.Pan
 
 			//TODO: ensure its a 'type=application/vnd.nextthought.*'
 				if (this.appendPlaceholder) {
-				insert = 'insertAfter';
-				ix = d.length - 1;
-			}
+					insert = 'insertAfter';
+					ix = d.length - 1;
+				}
 
 				el = d[ix];
 
 				if (!el && this.forceInsert) {
-				el = this.reader.getDocumentElement().querySelector('#NTIContent .page-contents');
-			}
+					el = this.reader.getDocumentElement().querySelector('#NTIContent .page-contents');
+				}
 
 				this.contentElement = this.placementHolderTpl[insert](el);
 			} catch (e) {
