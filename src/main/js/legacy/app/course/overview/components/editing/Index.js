@@ -111,7 +111,7 @@ module.exports = exports = Ext.define('NextThought.app.course.overview.component
 	},
 
 	navigate: function (obj) {
-		obj.parent = this.currentNode;
+		obj.parent = this.activeRecord;
 		this.navigateToObject(obj);
 	}
 });
