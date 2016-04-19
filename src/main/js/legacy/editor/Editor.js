@@ -673,6 +673,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		} else {
 			tpl.append(content, data);
 		}
+
+		this.maybeEnableSave();
 	},
 
 
@@ -1326,6 +1328,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			if (input) {
 				input.value = null;
 			}
+
+			this.maybeEnableSave();
 		}
 	},
 
