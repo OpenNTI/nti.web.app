@@ -227,11 +227,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			]},
 			{ cls: 'meta', cn: [
 				{ cls: 'text', cn: [
-					{ tag: 'span', cls: 'title', html: '{filename}'}
+					{ tag: 'span', cls: 'title', html: '{filename}'},
+					{ tag: 'span right', cls: 'size', html: '{size}'}
 				]},
 				{ cls: 'controls', cn: [
-					{ tag: 'span', cls: 'delete', 'data-action': 'delete', html: 'Delete'},
-					{ tag: 'span right', cls: 'size', html: '{size}'}
+					{ tag: 'span', cls: 'delete', 'data-action': 'delete', html: 'Delete'}
 				]}
 			]}
 		]},
@@ -655,7 +655,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		let content = this.el.down('.content'),
 			tpl = this.attachmentPreviewTpl,
-			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(file.size, 1),
+			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(parseFloat(file.size), 1),
 			href = this.getFileIconURLFromFile(file, name),
 			type = file.type.split('/').last() || '',
 			data = {size: size, url: href, filename: file.name, name: name, type: type, placeholder: this.defaultValue},
@@ -721,7 +721,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		let data = model && model.isModel ? model.getData() : model,
 			content = this.el.down('.content'),
 			tpl = this.attachmentPreviewTpl,
-			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(data.size, 1),
+			size = NextThought.common.form.fields.FilePicker.getHumanReadableFileSize(parseFloat(data.size), 1),
 			url = this.getFileIconURLFromValue(data),
 			type = data.contentType || data.FileMimeType || '';
 
