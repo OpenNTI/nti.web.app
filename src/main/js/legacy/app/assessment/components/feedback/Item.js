@@ -52,6 +52,9 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 		this.getBody()
 			.then(function (html) {
 				me.messageEl.setHTML(html);
+				if (me.syncElementHeight) {
+					me.syncElementHeight();
+				}
 			});
 	},
 

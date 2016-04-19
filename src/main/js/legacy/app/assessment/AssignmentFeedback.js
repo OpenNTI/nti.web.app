@@ -49,6 +49,7 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 
 		var commentBox;
 		this.feedbackList = this.down('assignment-feedback-list');
+		this.feedbackList.syncElementHeight = this.syncElementHeight.bind(this);
 		this.comment = this.down('box[name=comment]');
 
 		commentBox = this.comment.feedbackBox;
@@ -180,5 +181,16 @@ module.exports = exports = Ext.define('NextThought.app.assessment.AssignmentFeed
 		if(this.feedbackList) {
 			this.feedbackList.el.unmask();
 		}
+	},
+
+	getHeight: function () {
+		let items = this.items && this.items.items || [],
+			height = 0;
+
+		items.forEach(function (element) {
+			height += element.getHeight ? element.getHeight() : 0;
+		}, this);
+
+		return height;
 	}
 });

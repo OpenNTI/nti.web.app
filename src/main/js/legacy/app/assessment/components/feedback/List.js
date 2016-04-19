@@ -48,7 +48,8 @@ module.exports = exports = Ext.define('NextThought.app.assessment.components.fee
 			cmps.push({
 				xtype: 'assignment-feedback-item',
 				doDelete: me.deleteRecord.bind(me),
-				record: record
+				record: record,
+				syncElementHeight: me.syncElementHeight
 			});
 		});
 
