@@ -478,7 +478,7 @@ input[type=number]{
 	}
 
 	.add {
-		@include icon($editor-attach_hover, $top: 4px, $left: 4px);
+		@include icon($editor-add_hover, $top: 4px, $left: 4px);
 	}
 
 	.publish {
