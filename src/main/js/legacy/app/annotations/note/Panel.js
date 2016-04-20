@@ -1,26 +1,27 @@
-var Ext = require('extjs');
-var TemplatesForNotes = require('./Templates');
-var IdCache = require('../../../cache/IdCache');
-var UserRepository = require('../../../cache/UserRepository');
-var AnalyticsUtil = require('../../../util/Analytics');
-var AnnotationUtils = require('../../../util/Annotations');
-var DomUtils = require('../../../util/Dom');
-var Globals = require('../../../util/Globals');
-var SharingUtils = require('../../../util/Sharing');
-var MixinsProfileLinks = require('../../../mixins/ProfileLinks');
-var MixinsLikeFavoriteActions = require('../../../mixins/LikeFavoriteActions');
-var MixinsFlagActions = require('../../../mixins/FlagActions');
-var CacheUserRepository = require('../../../cache/UserRepository');
-var NoteTemplates = require('./Templates');
-var ComponentNatural = require('../../../layout/component/Natural');
-var UserdataActions = require('../../userdata/Actions');
-var SharingWindow = require('../../sharing/Window');
-var ContextStateStore = require('../../context/StateStore');
-var CardsContent = require('../../context/components/cards/Content');
-var CardsQuestion = require('../../context/components/cards/Question');
-var CardsRelatedWork = require('../../context/components/cards/RelatedWork');
-var CardsSlide = require('../../context/components/cards/Slide');
-var CardsVideo = require('../../context/components/cards/Video');
+const Ext = require('extjs');
+const TemplatesForNotes = require('./Templates');
+const IdCache = require('legacy/cache/IdCache');
+const UserRepository = require('legacy/cache/UserRepository');
+const AnalyticsUtil = require('legacy/util/Analytics');
+const AnnotationUtils = require('legacy/util/Annotations');
+const DomUtils = require('legacy/util/Dom');
+const Globals = require('legacy/util/Globals');
+const SharingUtils = require('legacy/util/Sharing');
+const ParseUtils = require('legacy/util/Parsing');
+const {wait} = require('legacy/util/Promise');
+require('legacy/mixins/ProfileLinks');
+require('legacy/mixins/LikeFavoriteActions');
+require('legacy/mixins/FlagActions');
+require('legacy/cache/UserRepository');
+require('legacy/layout/component/Natural');
+require('../../userdata/Actions');
+require('../../sharing/Window');
+require('../../context/StateStore');
+require('../../context/components/cards/Content');
+require('../../context/components/cards/Question');
+require('../../context/components/cards/RelatedWork');
+require('../../context/components/cards/Slide');
+require('../../context/components/cards/Video');
 
 
 module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', {
@@ -277,6 +278,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 			xtype: 'nti-editor',
 			ownerCt: this,
 			renderTo: this.responseBox,
+			record: this.record,
 			enableTitle: this.enableTitle,
 			enableFileUpload: true
 		});
@@ -406,32 +408,33 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 
 		function save () {
-			//var currentShare = r.get('sharedWith')||[];
+			let p;
 			if (me.editMode) {
 				r.set('body', v.body);
 				r.set('title', v.title);
 
-				r.save({callback: function (record, request) {
-					var success = request.success,
-						rec = success ? request.records[0] : null;
-					if (success) {
-						r.fireEvent('updated', rec);
-						me.setRecord(rec);
-					}
-					Ext.callback(callback, me, [success, rec]);
-				}});
-				return;
+				p = r.saveData()
+						.then(function (response) {
+							let rec = ParseUtils.parseItems(response)[0];
+							r.fireEvent('updated', rec);
+							callback(true, rec);
+						})
+						.catch(function (e) {
+							console.error(Globals.getError(e));
+							me.editorEl.unmask();
+						});
+				return p;
 			}
-
-			try {
-				me.UserDataActions.saveNewReply(r, v.body, [])
-					.then(callback.bind(this, true))
-					.fail(callback.bind(this, false));
-			}
-			catch (e) {
-				console.error(Globals.getError(e));
-				//me.el.unmask();
-				me.editorEl.unmask();
+			else {
+				try {
+					me.UserDataActions.saveNewReply(r, v.body, [])
+						.then(callback.bind(this, true))
+						.fail(callback.bind(this, false));
+				}
+				catch (e) {
+					console.error(Globals.getError(e));
+					me.editorEl.unmask();
+				}
 			}
 		}
 
@@ -441,7 +444,7 @@ module.exports = exports = Ext.define('NextThought.app.annotations.note.Panel', 
 		}
 		me.editorEl.mask('Saving...');
 		me.updateLayout();
-		Ext.defer(save, 1);
+		return wait().then(save);
 	},
 
 	updateToolState: function () {
