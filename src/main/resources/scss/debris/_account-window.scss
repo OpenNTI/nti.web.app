@@ -413,11 +413,11 @@
 			color: $secondary-grey;
 
 			.title {
-				font: normal 300 19px/normal $font;
+				font: normal 300 19px/1 $font;
 			}
 
 			.sub{
-				font: normal 300 14px/normal $font;
+				font: normal 300 14px/1 $font;
 			}
 		}
 
@@ -451,10 +451,10 @@
 	.header {
 		margin: 10px 15px;
 		color: $secondary-grey;
-		font: normal 400 14px/normal $font;
+		font: normal 400 14px/1 $font;
 
 		.title {
-			font: normal 300 18px/normal $font;
+			font: normal 300 18px/1 $font;
 			color: $primary-grey;
 		}
 
@@ -488,7 +488,7 @@
 				padding: 0 7px 0 9px;
 				color: $primary-blue;
 				cursor: pointer;
-				font: normal 300 14px/normal $font;
+				font: normal 300 14px/1 $font;
 				position: relative;
 
 				&.sending {
@@ -574,7 +574,7 @@
 		visibility: hidden;
 		color: $primary-red;
 		margin: 10px 15px;
-		font: normal 300 15px/normal $font;
+		font: normal 300 15px/1 $font;
 		line-height: 20px;
 		min-height: 20px;
 
@@ -651,10 +651,10 @@
 			color: $secondary-green;
 			position: relative;
 			padding: 48px 20px 5px 20px;
-			font: normal 300 16px/normal $font;
+			font: normal 300 16px/1 $font;
 
 			.title{
-				font: normal 300 21px/normal $font;
+				font: normal 300 21px/1 $font;
 			}
 
 			&::after{
